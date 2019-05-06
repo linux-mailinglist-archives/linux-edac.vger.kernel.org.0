@@ -2,34 +2,34 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2ABAA14FDF
-	for <lists+linux-edac@lfdr.de>; Mon,  6 May 2019 17:17:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B3B3514FE0
+	for <lists+linux-edac@lfdr.de>; Mon,  6 May 2019 17:17:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726236AbfEFPRT (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Mon, 6 May 2019 11:17:19 -0400
-Received: from mail.kernel.org ([198.145.29.99]:44362 "EHLO mail.kernel.org"
+        id S1726401AbfEFPR6 (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Mon, 6 May 2019 11:17:58 -0400
+Received: from mail.kernel.org ([198.145.29.99]:44706 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726229AbfEFPRS (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Mon, 6 May 2019 11:17:18 -0400
+        id S1726229AbfEFPR5 (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Mon, 6 May 2019 11:17:57 -0400
 Received: from [192.168.1.28] (cpe-70-114-128-244.austin.res.rr.com [70.114.128.244])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 6D2A32087F;
-        Mon,  6 May 2019 15:17:16 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id CC77D2053B;
+        Mon,  6 May 2019 15:17:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1557155837;
-        bh=p7KCAm/oYWbtDSTtBkxdujSa7bm4o0tJ0Aw+QwihImM=;
+        s=default; t=1557155876;
+        bh=zk2JnfKBU3rV00PnBLjkT50Qu1WKEQZM9GkFQ0r2KdQ=;
         h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=MvpKyEGhjid80YlL2VYVtK+DNLqXwKEChDlE8YF1purFdjKnasSSysVhwp3oIndDo
-         wrVTjazl6vBJET/kzXQGVC50GGwZGdeUkSjPbp3BHTEUFjfqXIlV+vNvdjGKXXm7s7
-         GggC4cvTkI/6tfC0AhoEW0NMqWdZ4KOrWWp/WuRI=
-Subject: Re: [PATCH 2/4] arm64: dts: stratix10: Add OCRAM EDAC node
+        b=wqJGCqHl8Va68JIvzms/Yve+Ty2KsrATKfsJ3Nn81ipVwaUQQw7Jt9Kzz6ipVO4TC
+         WGnvuhEzlrtUILGMR2lToT4dMyV3sjSYGBXH1XhaIY2T/QoVKfu/B6ydI2vUnf51sa
+         ERIO4Bn6eh8n+/lQWlrlpqB9Z0paBGAaoOl4smHE=
+Subject: Re: [PATCH 4/4] arm64: dts: stratix10: Add SDMMC EDAC node
 To:     thor.thayer@linux.intel.com, bp@alien8.de, mchehab@kernel.org,
         james.morse@arm.com, robh+dt@kernel.org, mark.rutland@arm.com
 Cc:     devicetree@vger.kernel.org, linux-edac@vger.kernel.org,
         linux-kernel@vger.kernel.org
 References: <1556030197-24534-1-git-send-email-thor.thayer@linux.intel.com>
- <1556030197-24534-3-git-send-email-thor.thayer@linux.intel.com>
+ <1556030197-24534-5-git-send-email-thor.thayer@linux.intel.com>
 From:   Dinh Nguyen <dinguyen@kernel.org>
 Openpgp: preference=signencrypt
 Autocrypt: addr=dinguyen@kernel.org; prefer-encrypt=mutual; keydata=
@@ -74,12 +74,12 @@ Autocrypt: addr=dinguyen@kernel.org; prefer-encrypt=mutual; keydata=
  cJEJNezizexE0dVclt9OS2U9Xwb3VOjs1ITMEYUf8T1j83iiCCFuXqH4U3Eji0nDEiEN5Ac0
  Jn/EGOBG2qGyKZ4uOec9j5ABF7J6hyO7H6LJaX5bLtp0Z7wUbyVaR4UIGdIOchNgNQk4stfm
  JiyuXyoFl/1ihREfvUG/e7+VAAoOBnMjitE5/qUERDoEkkuQkMcAHyEyd+XZMyXY
-Message-ID: <f14ad8aa-04b6-0c30-6a54-97042881d138@kernel.org>
-Date:   Mon, 6 May 2019 10:17:15 -0500
+Message-ID: <bfbc2ce8-675e-fba0-5d01-cc0c9e76895d@kernel.org>
+Date:   Mon, 6 May 2019 10:17:54 -0500
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.6.1
 MIME-Version: 1.0
-In-Reply-To: <1556030197-24534-3-git-send-email-thor.thayer@linux.intel.com>
+In-Reply-To: <1556030197-24534-5-git-send-email-thor.thayer@linux.intel.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -93,32 +93,35 @@ X-Mailing-List: linux-edac@vger.kernel.org
 On 4/23/19 9:36 AM, thor.thayer@linux.intel.com wrote:
 > From: Thor Thayer <thor.thayer@linux.intel.com>
 > 
-> Add the OCRAM ECC node with Stratix10 compatible string.
+> Add the Stratix10 SDMMC EDAC node.
 > 
 > Signed-off-by: Thor Thayer <thor.thayer@linux.intel.com>
 > ---
->  arch/arm64/boot/dts/altera/socfpga_stratix10.dtsi | 8 ++++++++
->  1 file changed, 8 insertions(+)
+>  arch/arm64/boot/dts/altera/socfpga_stratix10_socdk.dts | 11 +++++++++++
+>  1 file changed, 11 insertions(+)
 > 
-> diff --git a/arch/arm64/boot/dts/altera/socfpga_stratix10.dtsi b/arch/arm64/boot/dts/altera/socfpga_stratix10.dtsi
-> index 41109995563c..c28310ff70a0 100644
-> --- a/arch/arm64/boot/dts/altera/socfpga_stratix10.dtsi
-> +++ b/arch/arm64/boot/dts/altera/socfpga_stratix10.dtsi
-> @@ -547,6 +547,14 @@
->  				interrupts = <16 4>;
+> diff --git a/arch/arm64/boot/dts/altera/socfpga_stratix10_socdk.dts b/arch/arm64/boot/dts/altera/socfpga_stratix10_socdk.dts
+> index 2e3863ee12b3..91fed85cf8e5 100644
+> --- a/arch/arm64/boot/dts/altera/socfpga_stratix10_socdk.dts
+> +++ b/arch/arm64/boot/dts/altera/socfpga_stratix10_socdk.dts
+> @@ -67,6 +67,17 @@
+>  				clock-frequency = <25000000>;
 >  			};
->  
-> +			ocram-ecc@ff8cc000 {
-> +				compatible = "altr,socfpga-s10-ocram-ecc",
-> +					     "altr,socfpga-a10-ocram-ecc";
-> +				reg = <0xff8cc000 0x100>;
-> +				altr,ecc-parent = <&ocram>;
-> +				interrupts = <1 4>;
-> +			};
+>  		};
 > +
->  			usb0-ecc@ff8c4000 {
->  				compatible = "altr,socfpga-s10-usb-ecc",
->  					     "altr,socfpga-usb-ecc";
+> +		eccmgr {
+> +			sdmmca-ecc@ff8c8c00 {
+> +				compatible = "altr,socfpga-s10-sdmmc-ecc",
+> +					     "altr,socfpga-sdmmc-ecc";
+> +				reg = <0xff8c8c00 0x100>;
+> +				altr,ecc-parent = <&mmc>;
+> +				interrupts = <14 4>,
+> +					     <15 4>;
+> +			};
+> +		};
+>  	};
+>  };
+>  
 > 
 
 Acked-by: Dinh Nguyen <dinguyen@kernel.org>
