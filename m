@@ -2,38 +2,38 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D268D1766A
-	for <lists+linux-edac@lfdr.de>; Wed,  8 May 2019 13:05:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 625551766C
+	for <lists+linux-edac@lfdr.de>; Wed,  8 May 2019 13:08:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726735AbfEHLFE (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Wed, 8 May 2019 07:05:04 -0400
-Received: from mail.skyhub.de ([5.9.137.197]:58040 "EHLO mail.skyhub.de"
+        id S1726254AbfEHLIS (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Wed, 8 May 2019 07:08:18 -0400
+Received: from mail.skyhub.de ([5.9.137.197]:58466 "EHLO mail.skyhub.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726608AbfEHLFD (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Wed, 8 May 2019 07:05:03 -0400
+        id S1725891AbfEHLIS (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Wed, 8 May 2019 07:08:18 -0400
 Received: from zn.tnic (p2E584D41.dip0.t-ipconnect.de [46.88.77.65])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id CD4FA1EC0C09;
-        Wed,  8 May 2019 13:05:01 +0200 (CEST)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 6759D1EC0C12;
+        Wed,  8 May 2019 13:08:16 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1557313501;
+        t=1557313696;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=o7NDZ8O3Gbdptbt9b7o+h4iD6eziklREAki3blIrTDs=;
-        b=QYBfw7s0l1XyJ+2GTNrw/PdH4LkRT5Fm6B9TAjnLNntc4z2D2OS9LTxN6PAgvT/9VDGGno
-        JGEwE5nFPkXYKjEDStBkIgI3F0+sZbAlNl6rfN1PP9lr3isGO43Y/iC8hgyw7xo/LBBdSc
-        qkB5HZlwyomqzqTZizclT3XIKNLF07s=
-Date:   Wed, 8 May 2019 13:02:50 +0200
+        bh=VAvkdEAhjrbk9stbIW++ThlQ9foWSny29PRehsUDR34=;
+        b=KhU+nnqH2ORWxbl99Wg34QsRvs7ky5ml1GVvrpb322vb4KEBZGi5r5V9GEkV3kSbeGLnxQ
+        e82bNOQ2QVQ54BX3oNZQukImRqe82pDQaSh5S1vBRT8kgPW986gRaWBkV7UyP4UM356XOW
+        ezL2hludxFYrlSfFkcXPebJPTYUKQ5o=
+Date:   Wed, 8 May 2019 13:06:05 +0200
 From:   Borislav Petkov <bp@alien8.de>
 To:     Greg KH <gregkh@linuxfoundation.org>
 Cc:     PanBian <bianpan2016@163.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         James Morse <james.morse@arm.com>, linux-edac@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 1/2] EDAC/sysfs: Fix memory leak when creating a csrow object
-Message-ID: <20190508110250.GD19015@zn.tnic>
+Subject: [PATCH 2/2] EDAC/sysfs: Drop device references properly
+Message-ID: <20190508110605.GE19015@zn.tnic>
 References: <1555554438-103953-1-git-send-email-bianpan2016@163.com>
  <20190418172548.GL27160@zn.tnic>
  <20190419003536.GA57795@bianpan2016@163.com>
@@ -49,51 +49,57 @@ Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-From 28e7f23939208bea639d6cd3d492cde3f65a7e4f Mon Sep 17 00:00:00 2001
-From: Pan Bian <bianpan2016@163.com>
-Date: Thu, 18 Apr 2019 10:27:18 +0800
+--
+From: Greg KH <gregkh@linuxfoundation.org>
 
-In edac_create_csrow_object(), the reference to the object is not
-released when adding the device to the device hierarchy fails
-(device_add()). This may result in a memory leak.
+Do put_device() if device_add() fails.
 
-Signed-off-by: Pan Bian <bianpan2016@163.com>
+ [ bp: do device_del() for the successfully created devices in
+   edac_create_csrow_objects(), on the unwind path. ]
+
+Signed-off-by: Greg KH <gregkh@linuxfoundation.org>
 Signed-off-by: Borislav Petkov <bp@suse.de>
-Cc: Greg KH <gregkh@linuxfoundation.org>
-Cc: James Morse <james.morse@arm.com>
-Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc: linux-edac <linux-edac@vger.kernel.org>
-Link: https://lkml.kernel.org/r/1555554438-103953-1-git-send-email-bianpan2016@163.com
+Link: https://lkml.kernel.org/r/20190427214925.GE16338@kroah.com
 ---
- drivers/edac/edac_mc_sysfs.c | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+ drivers/edac/edac_mc_sysfs.c | 10 +++++++---
+ 1 file changed, 7 insertions(+), 3 deletions(-)
 
 diff --git a/drivers/edac/edac_mc_sysfs.c b/drivers/edac/edac_mc_sysfs.c
-index 464174685589..9b7d396f26e9 100644
+index 9b7d396f26e9..7c01e1cc030c 100644
 --- a/drivers/edac/edac_mc_sysfs.c
 +++ b/drivers/edac/edac_mc_sysfs.c
-@@ -404,6 +404,8 @@ static inline int nr_pages_per_csrow(struct csrow_info *csrow)
- static int edac_create_csrow_object(struct mem_ctl_info *mci,
- 				    struct csrow_info *csrow, int index)
- {
-+	int err;
+@@ -449,7 +449,8 @@ static int edac_create_csrow_objects(struct mem_ctl_info *mci)
+ 		csrow = mci->csrows[i];
+ 		if (!nr_pages_per_csrow(csrow))
+ 			continue;
+-		put_device(&mci->csrows[i]->dev);
 +
- 	csrow->dev.type = &csrow_attr_type;
- 	csrow->dev.groups = csrow_dev_groups;
- 	device_initialize(&csrow->dev);
-@@ -415,7 +417,11 @@ static int edac_create_csrow_object(struct mem_ctl_info *mci,
- 	edac_dbg(0, "creating (virtual) csrow node %s\n",
- 		 dev_name(&csrow->dev));
++		device_del(&mci->csrows[i]->dev);
+ 	}
  
--	return device_add(&csrow->dev);
-+	err = device_add(&csrow->dev);
+ 	return err;
+@@ -651,9 +652,11 @@ static int edac_create_dimm_object(struct mem_ctl_info *mci,
+ 	dev_set_drvdata(&dimm->dev, dimm);
+ 	pm_runtime_forbid(&mci->dev);
+ 
+-	err =  device_add(&dimm->dev);
++	err = device_add(&dimm->dev);
 +	if (err)
-+		put_device(&csrow->dev);
-+
-+	return err;
- }
++		put_device(&dimm->dev);
  
- /* Create a CSROW object under specifed edac_mc_device */
+-	edac_dbg(0, "creating rank/dimm device %s\n", dev_name(&dimm->dev));
++	edac_dbg(0, "created rank/dimm device %s\n", dev_name(&dimm->dev));
+ 
+ 	return err;
+ }
+@@ -934,6 +937,7 @@ int edac_create_sysfs_mci_device(struct mem_ctl_info *mci,
+ 	err = device_add(&mci->dev);
+ 	if (err < 0) {
+ 		edac_dbg(1, "failure: create device %s\n", dev_name(&mci->dev));
++		put_device(&mci->dev);
+ 		goto out;
+ 	}
+ 
 -- 
 2.21.0
 
