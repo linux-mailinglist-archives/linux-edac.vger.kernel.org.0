@@ -2,64 +2,62 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DE201800E
-	for <lists+linux-edac@lfdr.de>; Wed,  8 May 2019 20:50:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E34018254
+	for <lists+linux-edac@lfdr.de>; Thu,  9 May 2019 00:42:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726700AbfEHSuS (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Wed, 8 May 2019 14:50:18 -0400
-Received: from mail.skyhub.de ([5.9.137.197]:41652 "EHLO mail.skyhub.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725910AbfEHSuS (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Wed, 8 May 2019 14:50:18 -0400
-Received: from zn.tnic (p200300EC2F0F5800C5ADF1C39910BD59.dip0.t-ipconnect.de [IPv6:2003:ec:2f0f:5800:c5ad:f1c3:9910:bd59])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 4F1C61EC0235;
-        Wed,  8 May 2019 20:50:17 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1557341417;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=hmUZn3xegPKbeKM49ymYgt6RrEMncxgci4HJk+S/yic=;
-        b=nEg6COYvY0pLSQLlOSybiKiYfzc+YwwXngwo6C/2enUwRcBSxnntsYogNtqyj8e2rTu/iS
-        Fs827fkeO4DDvDM/cI/3/PXQ4sTowOG+5iCHZyZ2pjCwlCeXTkrweMBmRwwJJpiEdLUO5Q
-        ZOCzs1/zoFaall43ABAlfqUrr6xQJNA=
-Date:   Wed, 8 May 2019 20:50:07 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     PanBian <bianpan2016@163.com>,
+        id S1727572AbfEHWmG (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Wed, 8 May 2019 18:42:06 -0400
+Received: from youngberry.canonical.com ([91.189.89.112]:54410 "EHLO
+        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726986AbfEHWmG (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Wed, 8 May 2019 18:42:06 -0400
+Received: from 1.general.cking.uk.vpn ([10.172.193.212] helo=localhost)
+        by youngberry.canonical.com with esmtpsa (TLS1.0:RSA_AES_256_CBC_SHA1:32)
+        (Exim 4.76)
+        (envelope-from <colin.king@canonical.com>)
+        id 1hOVGD-0001vy-DE; Wed, 08 May 2019 22:42:01 +0000
+From:   Colin King <colin.king@canonical.com>
+To:     Tony Luck <tony.luck@intel.com>, Qiuxu Zhuo <qiuxu.zhuo@intel.com>,
+        Borislav Petkov <bp@alien8.de>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        James Morse <james.morse@arm.com>, linux-edac@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: EDAC: Fix memory leak in creating CSROW object
-Message-ID: <20190508185007.GH19015@zn.tnic>
-References: <1555554438-103953-1-git-send-email-bianpan2016@163.com>
- <20190418172548.GL27160@zn.tnic>
- <20190419003536.GA57795@bianpan2016@163.com>
- <20190419004516.GC559@zn.tnic>
- <20190427214925.GE16338@kroah.com>
- <20190508105743.GC19015@zn.tnic>
- <20190508124754.GD8646@kroah.com>
+        James Morse <james.morse@arm.com>, linux-edac@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] EDAC, sb_edac: remove redundant update of tad_base
+Date:   Wed,  8 May 2019 23:42:01 +0100
+Message-Id: <20190508224201.27120-1-colin.king@canonical.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20190508124754.GD8646@kroah.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Wed, May 08, 2019 at 02:47:54PM +0200, Greg KH wrote:
-> Looks good to me, ship it!
+From: Colin Ian King <colin.king@canonical.com>
 
-Thx, done!
+The variable tad_base is being set to a value that is never read
+and is being over-written on the next iteration of a for-loop.
+This assignment is therefore redundant and can be removed.
 
-:-)
+Addresses-Coverity: ("Unused value")
+Signed-off-by: Colin Ian King <colin.king@canonical.com>
+---
+ drivers/edac/sb_edac.c | 1 -
+ 1 file changed, 1 deletion(-)
 
+diff --git a/drivers/edac/sb_edac.c b/drivers/edac/sb_edac.c
+index 9353c3fc7c05..6aa4b1b73a15 100644
+--- a/drivers/edac/sb_edac.c
++++ b/drivers/edac/sb_edac.c
+@@ -1513,7 +1513,6 @@ static int knl_get_dimm_capacity(struct sbridge_pvt *pvt, u64 *mc_sizes)
+ 						sad_actual_size[mc] += tad_size;
+ 					}
+ 				}
+-				tad_base = tad_limit+1;
+ 			}
+ 		}
+ 
 -- 
-Regards/Gruss,
-    Boris.
+2.20.1
 
-Good mailing practices for 400: avoid top-posting and trim the reply.
