@@ -2,37 +2,37 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C98CE18FFC
-	for <lists+linux-edac@lfdr.de>; Thu,  9 May 2019 20:10:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 71C1818FF9
+	for <lists+linux-edac@lfdr.de>; Thu,  9 May 2019 20:10:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726796AbfEISK0 (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Thu, 9 May 2019 14:10:26 -0400
-Received: from mail.skyhub.de ([5.9.137.197]:36986 "EHLO mail.skyhub.de"
+        id S1726977AbfEISKO (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Thu, 9 May 2019 14:10:14 -0400
+Received: from mail.skyhub.de ([5.9.137.197]:36996 "EHLO mail.skyhub.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726776AbfEISJf (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Thu, 9 May 2019 14:09:35 -0400
+        id S1726796AbfEISJh (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Thu, 9 May 2019 14:09:37 -0400
 Received: from zn.tnic (p200300EC2F0F5F0071783F241746291C.dip0.t-ipconnect.de [IPv6:2003:ec:2f0f:5f00:7178:3f24:1746:291c])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 0AA5E1EC0AB1;
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 03FE61EC0AD6;
         Thu,  9 May 2019 20:09:34 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1557425374;
+        t=1557425375;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=eQIw58k+eEPmTVMVyeW+llFdInLpPxrAvnDisAsfgsM=;
-        b=dV8VBoqbv/fffXxyP+w7pMlz5cf/6yFSRqzGbOdIpKZNu/BTMg6PbQPmeK28I4i+rAv2gP
-        IhZAd38eUJRqOH0plBA31zPPQ2j0aqj3rnlCPsYl2Hl3BGiTyAVMiCfsQMB2qKbSqeSjyL
-        wh2lHU6HUU8mCKAruyLSEFsAvQCCsKY=
+        bh=NkEC4473CGa7e8fIjNoC3X1SUXgaP3E6j+KdsWZpwGI=;
+        b=k1m3b2saVzeK70i0Zc+svzcsCMtLoz9u/6G0XhnNTuEjjBqaPgdeZdOLSwkAtok3vOMT9x
+        jzlXXcpyFlWLaTYeD49uG6SdwoL+UKtkVB6uKF0psIVjtbY9kzJFknqbLnScN5lCIl0BFI
+        LGOml0JVdm+uTsrhRAzo+MzzTJjSKCs=
 From:   Borislav Petkov <bp@alien8.de>
 To:     Tony Luck <tony.luck@intel.com>
 Cc:     linux-edac <linux-edac@vger.kernel.org>,
         LKML <linux-kernel@vger.kernel.org>
-Subject: [PATCH 03/11] RAS/CEC: Fix pfn insertion
-Date:   Thu,  9 May 2019 20:09:18 +0200
-Message-Id: <20190509180926.31932-4-bp@alien8.de>
+Subject: [PATCH 04/11] RAS/CEC: Check count_threshold unconditionally
+Date:   Thu,  9 May 2019 20:09:19 +0200
+Message-Id: <20190509180926.31932-5-bp@alien8.de>
 X-Mailer: git-send-email 2.21.0
 In-Reply-To: <20190509180926.31932-1-bp@alien8.de>
 References: <20190509180926.31932-1-bp@alien8.de>
@@ -45,84 +45,83 @@ X-Mailing-List: linux-edac@vger.kernel.org
 
 From: Borislav Petkov <bp@suse.de>
 
-When inserting random PFNs for debugging the CEC through
-(debugfs)/ras/cec/pfn, depending on the return value of pfn_set(),
-multiple values get inserted per a single write.
+The count_threshold should be checked unconditionally, after insertion
+too, so that a count_threshold value of 1 can cause an immediate
+offlining. I.e., offline the page on the *first* error encountered.
 
-That is because simple_attr_write() interprets a retval of 0 as
-success and claims the whole input. However, pfn_set() returns the
-cec_add_elem() value, which, if > 0 and smaller than the whole input
-length, makes glibc continue issuing the write syscall until there's
-input left:
+Add comments to make it clear what cec_add_elem() does, while at it.
 
-  pfn_set
-  simple_attr_write
-  debugfs_attr_write
-  full_proxy_write
-  vfs_write
-  ksys_write
-  do_syscall_64
-  entry_SYSCALL_64_after_hwframe
-
-leading to those repeated calls.
-
-Return 0 to fix that.
-
-Rename u64_get() to pfn_get() while at it.
-
+Reported-by: WANG Chao <chao.wang@ucloud.cn>
 Signed-off-by: Borislav Petkov <bp@suse.de>
 Cc: Tony Luck <tony.luck@intel.com>
-Cc: linux-edac <linux-edac@vger.kernel.org>
+Cc: linux-edac@vger.kernel.org
+Link: https://lkml.kernel.org/r/20190418034115.75954-3-chao.wang@ucloud.cn
 ---
- drivers/ras/cec.c | 12 +++++++-----
- 1 file changed, 7 insertions(+), 5 deletions(-)
+ drivers/ras/cec.c | 27 ++++++++++-----------------
+ 1 file changed, 10 insertions(+), 17 deletions(-)
 
 diff --git a/drivers/ras/cec.c b/drivers/ras/cec.c
-index 673f8a128397..1275907ff21c 100644
+index 1275907ff21c..73216b7f67be 100644
 --- a/drivers/ras/cec.c
 +++ b/drivers/ras/cec.c
-@@ -358,7 +358,7 @@ int cec_add_elem(u64 pfn)
- 	return ret;
- }
+@@ -294,6 +294,7 @@ int cec_add_elem(u64 pfn)
  
--static int u64_get(void *data, u64 *val)
-+static int pfn_get(void *data, u64 *val)
- {
- 	*val = *(u64 *)data;
+ 	ca->ces_entered++;
  
-@@ -369,10 +369,12 @@ static int pfn_set(void *data, u64 val)
- {
- 	*(u64 *)data = val;
++	/* Array full, free the LRU slot. */
+ 	if (ca->n == MAX_ELEMS)
+ 		WARN_ON(!del_lru_elem_unlocked(ca));
  
--	return cec_add_elem(val);
-+	cec_add_elem(val);
-+
-+	return 0;
- }
+@@ -306,24 +307,17 @@ int cec_add_elem(u64 pfn)
+ 			(void *)&ca->array[to],
+ 			(ca->n - to) * sizeof(u64));
  
--DEFINE_DEBUGFS_ATTRIBUTE(pfn_ops, u64_get, pfn_set, "0x%llx\n");
-+DEFINE_DEBUGFS_ATTRIBUTE(pfn_ops, pfn_get, pfn_set, "0x%llx\n");
+-		ca->array[to] = (pfn << PAGE_SHIFT) |
+-				(DECAY_MASK << COUNT_BITS) | 1;
+-
++		ca->array[to] = pfn << PAGE_SHIFT;
+ 		ca->n++;
+-
+-		ret = 0;
+-
+-		goto decay;
+ 	}
  
- static int decay_interval_set(void *data, u64 val)
- {
-@@ -389,7 +391,7 @@ static int decay_interval_set(void *data, u64 val)
- 	cec_mod_work(decay_interval);
- 	return 0;
- }
--DEFINE_DEBUGFS_ATTRIBUTE(decay_interval_ops, u64_get, decay_interval_set, "%lld\n");
-+DEFINE_DEBUGFS_ATTRIBUTE(decay_interval_ops, pfn_get, decay_interval_set, "%lld\n");
+-	count = COUNT(ca->array[to]);
+-
+-	if (count < count_threshold) {
+-		ca->array[to] |= (DECAY_MASK << COUNT_BITS);
+-		ca->array[to]++;
++	/* Add/refresh element generation and increment count */
++	ca->array[to] |= DECAY_MASK << COUNT_BITS;
++	ca->array[to]++;
  
- static int count_threshold_set(void *data, u64 val)
- {
-@@ -402,7 +404,7 @@ static int count_threshold_set(void *data, u64 val)
+-		ret = 0;
+-	} else {
++	/* Check action threshold and soft-offline, if reached. */
++	count = COUNT(ca->array[to]);
++	if (count >= count_threshold) {
+ 		u64 pfn = ca->array[to] >> PAGE_SHIFT;
  
- 	return 0;
- }
--DEFINE_DEBUGFS_ATTRIBUTE(count_threshold_ops, u64_get, count_threshold_set, "%lld\n");
-+DEFINE_DEBUGFS_ATTRIBUTE(count_threshold_ops, pfn_get, count_threshold_set, "%lld\n");
+ 		if (!pfn_valid(pfn)) {
+@@ -338,15 +332,14 @@ int cec_add_elem(u64 pfn)
+ 		del_elem(ca, to);
  
- static int array_dump(struct seq_file *m, void *v)
- {
+ 		/*
+-		 * Return a >0 value to denote that we've reached the offlining
+-		 * threshold.
++		 * Return a >0 value to callers, to denote that we've reached
++		 * the offlining threshold.
+ 		 */
+ 		ret = 1;
+ 
+ 		goto unlock;
+ 	}
+ 
+-decay:
+ 	ca->decay_count++;
+ 
+ 	if (ca->decay_count >= CLEAN_ELEMS)
 -- 
 2.21.0
 
