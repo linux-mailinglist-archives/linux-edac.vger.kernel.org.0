@@ -2,37 +2,37 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DFD6018FF5
-	for <lists+linux-edac@lfdr.de>; Thu,  9 May 2019 20:10:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A40F018FED
+	for <lists+linux-edac@lfdr.de>; Thu,  9 May 2019 20:09:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726686AbfEISKB (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Thu, 9 May 2019 14:10:01 -0400
-Received: from mail.skyhub.de ([5.9.137.197]:37058 "EHLO mail.skyhub.de"
+        id S1726927AbfEISJw (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Thu, 9 May 2019 14:09:52 -0400
+Received: from mail.skyhub.de ([5.9.137.197]:36996 "EHLO mail.skyhub.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726853AbfEISJl (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Thu, 9 May 2019 14:09:41 -0400
+        id S1726686AbfEISJm (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Thu, 9 May 2019 14:09:42 -0400
 Received: from zn.tnic (p200300EC2F0F5F0071783F241746291C.dip0.t-ipconnect.de [IPv6:2003:ec:2f0f:5f00:7178:3f24:1746:291c])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id D59AB1EC0B5A;
-        Thu,  9 May 2019 20:09:39 +0200 (CEST)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id C5E8A1EC0AB1;
+        Thu,  9 May 2019 20:09:40 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1557425380;
+        t=1557425381;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=bjoT5H/0RHJtPrfKOdxqo1+v6wrnm32aUYqpwZ/kErQ=;
-        b=DgXofduM+JsO1k/SIyrJAIC9UJHeiRLyUe6qVanWa2jE26LniFpEyJzHoAe87isvcvKakp
-        j2ja5hCLcPe2KLOl4jlr8fFMoN6xQ6PGpWJrVGPvnudzB/wzP4uKzobKSKP356CBS2i1/r
-        bOXGkNMF6vK5J7nOWukUTfC0sm2yPNI=
+        bh=yT6UDLNwTwdWvAssPx4cqJ9QuilTsvk/SQF0VjYpQSc=;
+        b=Ty+mA9f2PNbXmL3/gFdWmxaKFTKd1wUCwoYxq9dV6Hl54wMWvjQYiN0E/A/n4cdeDvaE3+
+        HBGISidm5nMUT0STP2lq83k1IeEliHlNBjAZ6dlToGtt1KOXUFLCy4boki88iOHcgQr3/P
+        aYx025XzQHbSQV5w6YfdjFBZch6rhXg=
 From:   Borislav Petkov <bp@alien8.de>
 To:     Tony Luck <tony.luck@intel.com>
 Cc:     linux-edac <linux-edac@vger.kernel.org>,
         LKML <linux-kernel@vger.kernel.org>
-Subject: [PATCH 09/11] RAS/CEC: Dump the different array element sections
-Date:   Thu,  9 May 2019 20:09:24 +0200
-Message-Id: <20190509180926.31932-10-bp@alien8.de>
+Subject: [PATCH 10/11] RAS/CEC: Add CONFIG_RAS_CEC_DEBUG and move CEC debug features there
+Date:   Thu,  9 May 2019 20:09:25 +0200
+Message-Id: <20190509180926.31932-11-bp@alien8.de>
 X-Mailer: git-send-email 2.21.0
 In-Reply-To: <20190509180926.31932-1-bp@alien8.de>
 References: <20190509180926.31932-1-bp@alien8.de>
@@ -43,44 +43,83 @@ Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-From: Borislav Petkov <bp@suse.de>
+From: Tony Luck <tony.luck@intel.com>
 
-When dumping the array elements, print them in the following format:
+The pfn and array files in (debugfs)/ras/cec are intended for debugging
+the CEC code itself. They are not needed on production systems, so the
+default setting for this CONFIG option is "n".
 
-  [ PFN | generation in binary | count ]
+ [ bp: Have it with less ifdeffery by using IS_ENABLED(). ]
 
-to be perfectly clear what all those sections are.
-
+Signed-off-by: Tony Luck <tony.luck@intel.com>
 Signed-off-by: Borislav Petkov <bp@suse.de>
-Cc: Tony Luck <tony.luck@intel.com>
-Cc: linux-edac <linux-edac@vger.kernel.org>
 ---
- drivers/ras/cec.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ arch/x86/ras/Kconfig | 10 ++++++++++
+ drivers/ras/cec.c    | 26 ++++++++++++++------------
+ 2 files changed, 24 insertions(+), 12 deletions(-)
 
+diff --git a/arch/x86/ras/Kconfig b/arch/x86/ras/Kconfig
+index a9c3db125222..9ad6842de4b4 100644
+--- a/arch/x86/ras/Kconfig
++++ b/arch/x86/ras/Kconfig
+@@ -11,3 +11,13 @@ config RAS_CEC
+ 
+ 	  Bear in mind that this is absolutely useless if your platform doesn't
+ 	  have ECC DIMMs and doesn't have DRAM ECC checking enabled in the BIOS.
++
++config RAS_CEC_DEBUG
++	bool "CEC debugging machinery"
++	default n
++	depends on RAS_CEC
++	help
++	  Add extra files to (debugfs)/ras/cec to test the correctable error
++	  collector feature. "pfn" is a writable file that allows user to
++	  simulate an error in a particular page frame. "array" is a read-only
++	  file that dumps out the current state of all pages logged so far.
 diff --git a/drivers/ras/cec.c b/drivers/ras/cec.c
-index 1cbc1ed82afe..71f3e14c35d8 100644
+index 71f3e14c35d8..c4505c0893a7 100644
 --- a/drivers/ras/cec.c
 +++ b/drivers/ras/cec.c
-@@ -429,6 +429,8 @@ static int action_threshold_set(void *data, u64 val)
- }
- DEFINE_DEBUGFS_ATTRIBUTE(action_threshold_ops, pfn_get, action_threshold_set, "%lld\n");
- 
-+static const char * const bins[] = { "00", "01", "10", "11" };
-+
- static int array_dump(struct seq_file *m, void *v)
- {
- 	struct ce_array *ca = &ce_arr;
-@@ -440,7 +442,8 @@ static int array_dump(struct seq_file *m, void *v)
- 	for (i = 0; i < ca->n; i++) {
- 		u64 this = PFN(ca->array[i]);
- 
--		seq_printf(m, " %03d: [%016llx|%03llx]\n", i, this, FULL_COUNT(ca->array[i]));
-+		seq_printf(m, " %3d: [%016llx|%s|%03llx]\n",
-+			   i, this, bins[DECAY(ca->array[i])], COUNT(ca->array[i]));
+@@ -486,18 +486,6 @@ static int __init create_debugfs_nodes(void)
+ 		return -1;
  	}
  
- 	seq_printf(m, "}\n");
+-	pfn = debugfs_create_file("pfn", S_IRUSR | S_IWUSR, d, &dfs_pfn, &pfn_ops);
+-	if (!pfn) {
+-		pr_warn("Error creating pfn debugfs node!\n");
+-		goto err;
+-	}
+-
+-	array = debugfs_create_file("array", S_IRUSR, d, NULL, &array_ops);
+-	if (!array) {
+-		pr_warn("Error creating array debugfs node!\n");
+-		goto err;
+-	}
+-
+ 	decay = debugfs_create_file("decay_interval", S_IRUSR | S_IWUSR, d,
+ 				    &decay_interval, &decay_interval_ops);
+ 	if (!decay) {
+@@ -512,6 +500,20 @@ static int __init create_debugfs_nodes(void)
+ 		goto err;
+ 	}
+ 
++	if (!IS_ENABLED(CONFIG_RAS_CEC_DEBUG))
++		return 0;
++
++	pfn = debugfs_create_file("pfn", S_IRUSR | S_IWUSR, d, &dfs_pfn, &pfn_ops);
++	if (!pfn) {
++		pr_warn("Error creating pfn debugfs node!\n");
++		goto err;
++	}
++
++	array = debugfs_create_file("array", S_IRUSR, d, NULL, &array_ops);
++	if (!array) {
++		pr_warn("Error creating array debugfs node!\n");
++		goto err;
++	}
+ 
+ 	return 0;
+ 
 -- 
 2.21.0
 
