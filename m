@@ -2,87 +2,79 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B74619B46
-	for <lists+linux-edac@lfdr.de>; Fri, 10 May 2019 12:16:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A0CD219BF0
+	for <lists+linux-edac@lfdr.de>; Fri, 10 May 2019 12:51:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727569AbfEJKPq (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Fri, 10 May 2019 06:15:46 -0400
-Received: from gate2.alliedtelesis.co.nz ([202.36.163.20]:47701 "EHLO
-        gate2.alliedtelesis.co.nz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727553AbfEJKPp (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Fri, 10 May 2019 06:15:45 -0400
-Received: from mmarshal3.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client did not present a certificate)
-        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 38849891B2;
-        Fri, 10 May 2019 22:15:42 +1200 (NZST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
-        s=mail181024; t=1557483342;
-        bh=ffRELwKP+lmaW7DRibXwng9k8MESZ0Zds5N5g4/LNT0=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=kwzPLkoKxhfm7KT+AAYnowDRsjbT/nzy5FRPrhow1LwDqWzZIk/4b0Tx5YOBZMS9F
-         91RFBN36v0+EX4HUF3MsNca/EHGHY7ysWXcK6deXtv8+MV+MrSOlojDalIeIawiThR
-         jlrxoxNgeB9m+s9abNT94Y3wXwkrWcFwQcf/wkFZH1xR1vKKMxsEU3j0k9frtOOpTS
-         +BT6/jAGKpbj2/SlXCa3zzypckMSXtC9tF6IztP8WjoySbY9PUAcD6mif6R3TWKvcj
-         B0idDD3dHg33j1VZTOkMT/URwX6tFeKMxM4kqerK4r4+N7fkdUG9RDPjvut0wuP5Ek
-         FdnPS2xe19eXA==
-Received: from smtp (Not Verified[10.32.16.33]) by mmarshal3.atlnz.lc with Trustwave SEG (v7,5,8,10121)
-        id <B5cd54f4d0004>; Fri, 10 May 2019 22:15:41 +1200
-Received: from chrisp-dl.ws.atlnz.lc (chrisp-dl.ws.atlnz.lc [10.33.22.30])
-        by smtp (Postfix) with ESMTP id C9B4113EEF9;
-        Fri, 10 May 2019 22:15:40 +1200 (NZST)
-Received: by chrisp-dl.ws.atlnz.lc (Postfix, from userid 1030)
-        id 5EA1C1E1D5B; Fri, 10 May 2019 22:15:40 +1200 (NZST)
-From:   Chris Packham <chris.packham@alliedtelesis.co.nz>
-To:     linux@armlinux.org.uk, bp@alien8.de, mark.rutland@arm.com,
-        robh+dt@kernel.org, mchehab@kernel.org, james.morse@arm.com,
-        jlu@pengutronix.de, gregory.clement@bootlin.com
-Cc:     linux-arm-kernel@lists.infradead.org, linux-edac@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Chris Packham <chris.packham@alliedtelesis.co.nz>
-Subject: [PATCH v8 9/9] EDAC: armada_xp: Add support for more SoCs
-Date:   Fri, 10 May 2019 22:15:36 +1200
-Message-Id: <20190510101536.6724-10-chris.packham@alliedtelesis.co.nz>
-X-Mailer: git-send-email 2.21.0
-In-Reply-To: <20190510101536.6724-1-chris.packham@alliedtelesis.co.nz>
-References: <20190510101536.6724-1-chris.packham@alliedtelesis.co.nz>
+        id S1727398AbfEJKuz (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Fri, 10 May 2019 06:50:55 -0400
+Received: from ozlabs.org ([203.11.71.1]:35787 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727049AbfEJKuz (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Fri, 10 May 2019 06:50:55 -0400
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 450n7J1Wj0z9s4V;
+        Fri, 10 May 2019 20:50:51 +1000 (AEST)
+From:   Michael Ellerman <mpe@ellerman.id.au>
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     Johannes Thumshirn <morbidrsa@gmail.com>,
+        linux-edac@vger.kernel.org, mchehab@kernel.org,
+        james.morse@arm.com, linux-kernel@vger.kernel.org,
+        linuxppc-dev@ozlabs.org
+Subject: Re: [PATCH] EDAC, mpc85xx: Prevent building as a module
+In-Reply-To: <20190509180220.GH17053@zn.tnic>
+References: <20190502141941.12927-1-mpe@ellerman.id.au> <20190506065045.GA3901@x250> <20190508101238.GB19015@zn.tnic> <87o94bvfxm.fsf@concordia.ellerman.id.au> <20190509145534.GD17053@zn.tnic> <20190509180220.GH17053@zn.tnic>
+Date:   Fri, 10 May 2019 20:50:52 +1000
+Message-ID: <87bm0avb03.fsf@concordia.ellerman.id.au>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-x-atlnz-ls: pat
+Content-Type: text/plain
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-The Armada 38x and other integrated SoCs use a reduced pin count so the
-width of the SDRAM interface is smaller than the Armada XP SoCs. This
-means that the definition of "full" and "half" width is reduced from
-64/32 to 32/16.
+Borislav Petkov <bp@alien8.de> writes:
 
-Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
----
- drivers/edac/armada_xp_edac.c | 5 +++++
- 1 file changed, 5 insertions(+)
+> On Thu, May 09, 2019 at 04:55:34PM +0200, Borislav Petkov wrote:
+>> On Fri, May 10, 2019 at 12:52:05AM +1000, Michael Ellerman wrote:
+>> > Thanks. It would be nice if you could send it as a fix for 5.2, it's the
+>> > last thing blocking one of my allmodconfig builds. But if you don't
+>> > think it qualifies as a fix that's fine too, it can wait.
+>> 
+>> Sure, no problem. Will do a pull request later.
+>
+> Hmm, so looking at this more, I was able to produce this config with my
+> ancient cross-compiler:
+>
+> CONFIG_EDAC_SUPPORT=y
+> CONFIG_EDAC=m
+> CONFIG_EDAC_LEGACY_SYSFS=y
+> CONFIG_EDAC_MPC85XX=y
 
-diff --git a/drivers/edac/armada_xp_edac.c b/drivers/edac/armada_xp_edac.=
-c
-index 3759a4fbbdee..7f227bdcbc84 100644
---- a/drivers/edac/armada_xp_edac.c
-+++ b/drivers/edac/armada_xp_edac.c
-@@ -332,6 +332,11 @@ static int axp_mc_probe(struct platform_device *pdev=
-)
-=20
- 	axp_mc_read_config(mci);
-=20
-+	/* These SoCs have a reduced width bus */
-+	if (of_machine_is_compatible("marvell,armada380") ||
-+	    of_machine_is_compatible("marvell,armadaxp-98dx3236"))
-+		drvdata->width /=3D 2;
-+
- 	/* configure SBE threshold */
- 	/* it seems that SBEs are not captured otherwise */
- 	writel(1 << SDRAM_ERR_CTRL_THR_OFFSET, drvdata->base + SDRAM_ERR_CTRL_R=
-EG);
---=20
-2.21.0
+Oh yeah good point.
 
+> Now, mpc85xx_edac is built-in and edac_core.ko is a module
+> (CONFIG_EDAC=m) and that should not work - i.e., builtin code calling
+> module functions. But my cross-compiler is happily building this without
+> complaint. Or maybe I'm missing something.
+
+That's weird.
+
+> In any case, I *think* the proper fix should be to do:
+>
+> config EDAC_MPC85XX
+>         bool "Freescale MPC83xx / MPC85xx"
+>         depends on FSL_SOC && EDAC=y
+>
+> so that you can't even produce the above invalid .config snippet.
+>
+> Hmmm?
+
+Yeah that looks better to me. I didn't think about the case where EDAC
+core is modular.
+
+Do you want me to send a new patch?
+
+cheers
