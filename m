@@ -2,76 +2,73 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F78C1A2F3
-	for <lists+linux-edac@lfdr.de>; Fri, 10 May 2019 20:25:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DCF211C074
+	for <lists+linux-edac@lfdr.de>; Tue, 14 May 2019 04:05:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727618AbfEJSZN (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Fri, 10 May 2019 14:25:13 -0400
-Received: from mail.skyhub.de ([5.9.137.197]:38840 "EHLO mail.skyhub.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727535AbfEJSZN (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Fri, 10 May 2019 14:25:13 -0400
-Received: from zn.tnic (p200300EC2F0F4000329C23FFFEA6A903.dip0.t-ipconnect.de [IPv6:2003:ec:2f0f:4000:329c:23ff:fea6:a903])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 753011EC0AB0;
-        Fri, 10 May 2019 20:25:12 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1557512712;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=wbJqN8BDou+FYSJ+nPq4MO6fRTRxmjFCtFcdN3ttYwM=;
-        b=YsCbwMORzUVovHKrA9SYFUFxy1jzmMWZVQ6LbCmuKBYwyNcMWhKkBo9VdLFTMB95epYwC7
-        vgBrSs9JVHyMRZiWEueTAkxxcxl6j7L1XI10fYkqI637Z1DBInIeG+H0zgLTT1QPMbVfGO
-        BtQVFrbVBo3RdkOXQZuXozTYqnYBOrE=
-Date:   Fri, 10 May 2019 20:25:12 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Michael Ellerman <mpe@ellerman.id.au>
-Cc:     Johannes Thumshirn <morbidrsa@gmail.com>,
-        linux-edac@vger.kernel.org, mchehab@kernel.org,
-        james.morse@arm.com, linux-kernel@vger.kernel.org,
-        linuxppc-dev@ozlabs.org
-Subject: Re: [PATCH] EDAC, mpc85xx: Prevent building as a module
-Message-ID: <20190510182512.GG29927@zn.tnic>
-References: <20190502141941.12927-1-mpe@ellerman.id.au>
- <20190506065045.GA3901@x250>
- <20190508101238.GB19015@zn.tnic>
- <87o94bvfxm.fsf@concordia.ellerman.id.au>
- <20190509145534.GD17053@zn.tnic>
- <20190509180220.GH17053@zn.tnic>
- <87bm0avb03.fsf@concordia.ellerman.id.au>
- <20190510141320.GB29927@zn.tnic>
+        id S1726566AbfENCFb (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Mon, 13 May 2019 22:05:31 -0400
+Received: from szxga05-in.huawei.com ([45.249.212.191]:7749 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726327AbfENCFb (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Mon, 13 May 2019 22:05:31 -0400
+Received: from DGGEMS404-HUB.china.huawei.com (unknown [172.30.72.58])
+        by Forcepoint Email with ESMTP id 6A62EF73079E742C9E90;
+        Tue, 14 May 2019 10:05:28 +0800 (CST)
+Received: from huawei.com (10.175.104.225) by DGGEMS404-HUB.china.huawei.com
+ (10.3.19.204) with Microsoft SMTP Server id 14.3.439.0; Tue, 14 May 2019
+ 10:05:19 +0800
+From:   Ying Lv <lvying6@huawei.com>
+To:     <mchehab@s-opensource.com>, <linux-edac@vger.kernel.org>
+CC:     <shanshishi@huawei.com>, <hehuazhen@huawei.com>,
+        <chenjialong@huawei.com>, <xiezhipeng1@huawei.com>,
+        <xuchunmei@huawei.com>
+Subject: [PATCH] fix rasdaemon high CPU usage when part of CPUs offline
+Date:   Tue, 14 May 2019 06:16:11 +0800
+Message-ID: <20190513221611.10851-1-lvying6@huawei.com>
+X-Mailer: git-send-email 2.21.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20190510141320.GB29927@zn.tnic>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.104.225]
+X-CFilter-Loop: Reflected
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Fri, May 10, 2019 at 04:13:20PM +0200, Borislav Petkov wrote:
-> On Fri, May 10, 2019 at 08:50:52PM +1000, Michael Ellerman wrote:
-> > Yeah that looks better to me. I didn't think about the case where EDAC
-> > core is modular.
-> > 
-> > Do you want me to send a new patch?
-> 
-> Nah, I'll fix it up.
+When we set part of CPU core offline, such as by setting the kernel cmdline
+maxcpus = N(N is less than the total number of system CPU cores).
+And then, we will observe that the CPU usage of some rasdaemon threads
+is very close to 100.
 
-I've pushed it here:
+This is because when part of CPU offline, poll in read_ras_event_all_cpus func
+will fallback to pthread way.
+Offlined CPU thread will return negative value when read trace_pipe_raw,
+negative return value will covert to positive value because of 'unsigned size'.
+So code will always go into 'size > 0' branch, and the CPU usage is too high.
 
-https://git.kernel.org/pub/scm/linux/kernel/git/bp/bp.git/commit/?h=edac-fix-for-5.2
+Here, variable size uses int type will go to the right branch.
 
-in case you wanna throw your build tests on it. My dingy cross-compiler
-can't do much really.
+Fiexs: eff7c9e0("ras-events: Only use pthreads for collect if poll() not available")
+Reported-by: Zhipeng Xie <xiezhipeng1@huawei.com>
+Signed-off-by: Ying Lv <lvying6@huawei.com>
+---
+ ras-events.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Thx.
-
+diff --git a/ras-events.c b/ras-events.c
+index 9395f6f..1094df0 100644
+--- a/ras-events.c
++++ b/ras-events.c
+@@ -421,7 +421,7 @@ static int read_ras_event(int fd,
+ 			  struct kbuffer *kbuf,
+ 			  void *page)
+ {
+-	unsigned size;
++	int size;
+ 	unsigned long long time_stamp;
+ 	void *data;
+ 
 -- 
-Regards/Gruss,
-    Boris.
+2.21.0
 
-Good mailing practices for 400: avoid top-posting and trim the reply.
