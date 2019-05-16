@@ -2,110 +2,73 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 351CC1ED73
-	for <lists+linux-edac@lfdr.de>; Wed, 15 May 2019 13:10:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E3B0B2038D
+	for <lists+linux-edac@lfdr.de>; Thu, 16 May 2019 12:36:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728747AbfEOLJd (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Wed, 15 May 2019 07:09:33 -0400
-Received: from mail.kernel.org ([198.145.29.99]:42566 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728810AbfEOLJc (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Wed, 15 May 2019 07:09:32 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 2FAED2084F;
-        Wed, 15 May 2019 11:09:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1557918571;
-        bh=Pv+cuU1oQq8sv5bQHcuM70TsMYPx2umA4E6VGL4RuXw=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=zykT1a+jGj3zbveM0ZR/7QzYYXnzA4xkUDp7ZLbjV9knpe+LTDqwCMr7T2NR6kIUG
-         r45C8QLo9xOrElHHW7kbymqhYcHzdNfNof1q2QN12SGgIdA2jKwSkfBKKnBT8sZK7M
-         eqTWr7Gyh1Sx8w14UpMmYr4YC15gkrbgNHBjyZtk=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Tony Luck <tony.luck@intel.com>,
-        Borislav Petkov <bp@suse.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Yazen Ghannam <yazen.ghannam@amd.com>,
-        linux-edac <linux-edac@vger.kernel.org>,
-        Ben Hutchings <ben@decadent.org.uk>
-Subject: [PATCH 4.4 183/266] x86/MCE: Save microcode revision in machine check records
-Date:   Wed, 15 May 2019 12:54:50 +0200
-Message-Id: <20190515090729.120763201@linuxfoundation.org>
-X-Mailer: git-send-email 2.21.0
-In-Reply-To: <20190515090722.696531131@linuxfoundation.org>
-References: <20190515090722.696531131@linuxfoundation.org>
-User-Agent: quilt/0.66
+        id S1727037AbfEPKgC (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Thu, 16 May 2019 06:36:02 -0400
+Received: from mx2.suse.de ([195.135.220.15]:54250 "EHLO mx1.suse.de"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726864AbfEPKgB (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Thu, 16 May 2019 06:36:01 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx1.suse.de (Postfix) with ESMTP id BA572AE9F;
+        Thu, 16 May 2019 10:36:00 +0000 (UTC)
+Date:   Thu, 16 May 2019 12:35:53 +0200
+From:   Borislav Petkov <bp@suse.de>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-edac <linux-edac@vger.kernel.org>,
+        lkml <linux-kernel@vger.kernel.org>
+Subject: [GIT PULL] EDAC fixes for 5.2
+Message-ID: <20190516103553.GA21457@zn.tnic>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-From: Tony Luck <tony.luck@intel.com>
+Hi Linus,
 
-commit fa94d0c6e0f3431523f5701084d799c77c7d4a4f upstream.
+please pull two EDAC fixes, as below.
 
-Updating microcode used to be relatively rare. Now that it has become
-more common we should save the microcode version in a machine check
-record to make sure that those people looking at the error have this
-important information bundled with the rest of the logged information.
+Thx.
 
-[ Borislav: Simplify a bit. ]
-
-Signed-off-by: Tony Luck <tony.luck@intel.com>
-Signed-off-by: Borislav Petkov <bp@suse.de>
-Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-Cc: Yazen Ghannam <yazen.ghannam@amd.com>
-Cc: linux-edac <linux-edac@vger.kernel.org>
-Link: http://lkml.kernel.org/r/20180301233449.24311-1-tony.luck@intel.com
-[bwh: Backported to 4.4:
- - Also add earlier fields to struct mce, to match upstream UAPI
- - Adjust context]
-Signed-off-by: Ben Hutchings <ben@decadent.org.uk>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/x86/include/uapi/asm/mce.h  |    4 ++++
- arch/x86/kernel/cpu/mcheck/mce.c |    4 +++-
- 2 files changed, 7 insertions(+), 1 deletion(-)
+The following changes since commit 275b103a26e218b3d739e5ab15be6b40303a1428:
 
---- a/arch/x86/include/uapi/asm/mce.h
-+++ b/arch/x86/include/uapi/asm/mce.h
-@@ -26,6 +26,10 @@ struct mce {
- 	__u32 socketid;	/* CPU socket ID */
- 	__u32 apicid;	/* CPU initial apic ID */
- 	__u64 mcgcap;	/* MCGCAP MSR: machine check capabilities of CPU */
-+	__u64 synd;	/* MCA_SYND MSR: only valid on SMCA systems */
-+	__u64 ipid;	/* MCA_IPID MSR: only valid on SMCA systems */
-+	__u64 ppin;	/* Protected Processor Inventory Number */
-+	__u32 microcode;/* Microcode revision */
- };
- 
- #define MCE_GET_RECORD_LEN   _IOR('M', 1, int)
---- a/arch/x86/kernel/cpu/mcheck/mce.c
-+++ b/arch/x86/kernel/cpu/mcheck/mce.c
-@@ -138,6 +138,8 @@ void mce_setup(struct mce *m)
- 	m->socketid = cpu_data(m->extcpu).phys_proc_id;
- 	m->apicid = cpu_data(m->extcpu).initial_apicid;
- 	rdmsrl(MSR_IA32_MCG_CAP, m->mcgcap);
-+
-+	m->microcode = boot_cpu_data.microcode;
- }
- 
- DEFINE_PER_CPU(struct mce, injectm);
-@@ -258,7 +260,7 @@ static void print_mce(struct mce *m)
- 	 */
- 	pr_emerg(HW_ERR "PROCESSOR %u:%x TIME %llu SOCKET %u APIC %x microcode %x\n",
- 		m->cpuvendor, m->cpuid, m->time, m->socketid, m->apicid,
--		cpu_data(m->extcpu).microcode);
-+		m->microcode);
- 
- 	/*
- 	 * Print out human-readable details about the MCE error,
+  Merge tag 'edac_for_5.2' of git://git.kernel.org/pub/scm/linux/kernel/git/bp/bp (2019-05-06 19:53:11 -0700)
 
+are available in the Git repository at:
 
+  git://git.kernel.org/pub/scm/linux/kernel/git/bp/bp.git tags/edac_fixes_for_5.2
+
+for you to fetch changes up to 29a0c843973bc385918158c6976e4dbe891df969:
+
+  EDAC/mc: Fix edac_mc_find() in case no device is found (2019-05-14 17:08:46 +0200)
+
+----------------------------------------------------------------
+* Do not build mpc85_edac as a module			(Michael Ellerman)
+
+* Correct edac_mc_find()'s return value on error	(Robert Richter)
+
+----------------------------------------------------------------
+Michael Ellerman (1):
+      EDAC/mpc85xx: Prevent building as a module
+
+Robert Richter (1):
+      EDAC/mc: Fix edac_mc_find() in case no device is found
+
+ drivers/edac/Kconfig   |  4 ++--
+ drivers/edac/edac_mc.c | 12 ++++--------
+ 2 files changed, 6 insertions(+), 10 deletions(-)
+
+-- 
+Regards/Gruss,
+    Boris.
+
+SUSE Linux GmbH, GF: Felix Imendörffer, Mary Higgins, Sri Rasiah, HRB 21284 (AG Nürnberg)
