@@ -2,73 +2,74 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E3B0B2038D
-	for <lists+linux-edac@lfdr.de>; Thu, 16 May 2019 12:36:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BB4420B91
+	for <lists+linux-edac@lfdr.de>; Thu, 16 May 2019 17:52:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727037AbfEPKgC (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Thu, 16 May 2019 06:36:02 -0400
-Received: from mx2.suse.de ([195.135.220.15]:54250 "EHLO mx1.suse.de"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726864AbfEPKgB (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Thu, 16 May 2019 06:36:01 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id BA572AE9F;
-        Thu, 16 May 2019 10:36:00 +0000 (UTC)
-Date:   Thu, 16 May 2019 12:35:53 +0200
-From:   Borislav Petkov <bp@suse.de>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-edac <linux-edac@vger.kernel.org>,
-        lkml <linux-kernel@vger.kernel.org>
-Subject: [GIT PULL] EDAC fixes for 5.2
-Message-ID: <20190516103553.GA21457@zn.tnic>
+        id S1726462AbfEPPwE (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Thu, 16 May 2019 11:52:04 -0400
+Received: from mga14.intel.com ([192.55.52.115]:55405 "EHLO mga14.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726381AbfEPPwE (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Thu, 16 May 2019 11:52:04 -0400
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+X-Amp-File-Uploaded: False
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 16 May 2019 08:52:03 -0700
+X-ExtLoop1: 1
+Received: from agluck-desk.sc.intel.com (HELO agluck-desk) ([10.3.52.160])
+  by orsmga005.jf.intel.com with ESMTP; 16 May 2019 08:52:02 -0700
+Date:   Thu, 16 May 2019 08:52:02 -0700
+From:   "Luck, Tony" <tony.luck@intel.com>
+To:     "Ghannam, Yazen" <Yazen.Ghannam@amd.com>
+Cc:     "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "bp@suse.de" <bp@suse.de>, "x86@kernel.org" <x86@kernel.org>
+Subject: Re: [PATCH v3 5/6] x86/MCE: Save MCA control bits that get set in
+ hardware
+Message-ID: <20190516155202.GA11517@agluck-desk>
+References: <20190430203206.104163-1-Yazen.Ghannam@amd.com>
+ <20190430203206.104163-6-Yazen.Ghannam@amd.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20190430203206.104163-6-Yazen.Ghannam@amd.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-Hi Linus,
+On Tue, Apr 30, 2019 at 08:32:20PM +0000, Ghannam, Yazen wrote:
+> diff --git a/arch/x86/kernel/cpu/mce/core.c b/arch/x86/kernel/cpu/mce/core.c
+> index 986de830f26e..551366c155ef 100644
+> --- a/arch/x86/kernel/cpu/mce/core.c
+> +++ b/arch/x86/kernel/cpu/mce/core.c
+> @@ -1567,10 +1567,13 @@ static void __mcheck_cpu_init_clear_banks(void)
+>  	for (i = 0; i < this_cpu_read(mce_num_banks); i++) {
+>  		struct mce_bank *b = &mce_banks[i];
+>  
+> -		if (!b->init)
+> -			continue;
+> -		wrmsrl(msr_ops.ctl(i), b->ctl);
+> -		wrmsrl(msr_ops.status(i), 0);
+> +		if (b->init) {
+> +			wrmsrl(msr_ops.ctl(i), b->ctl);
+> +			wrmsrl(msr_ops.status(i), 0);
+> +		}
+> +
+> +		/* Save bits set in hardware. */
+> +		rdmsrl(msr_ops.ctl(i), b->ctl);
+>  	}
+>  }
 
-please pull two EDAC fixes, as below.
+This looks like it will be a problem for Intel CPUs. If
+we take a CPU offline, and then bring it back again, we
+ues "b->ctl" to reinitialize the register in mce_reenable_cpu().
 
-Thx.
+But Intel SDM says at the end of section "15.3.2.1 IA32_MCi_CTL_MSRs"
 
----
-The following changes since commit 275b103a26e218b3d739e5ab15be6b40303a1428:
+	"P6 family processors only allow the writing of all 1s or all
+	0s to the IA32_MCi_CTL MSR."
 
-  Merge tag 'edac_for_5.2' of git://git.kernel.org/pub/scm/linux/kernel/git/bp/bp (2019-05-06 19:53:11 -0700)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/bp/bp.git tags/edac_fixes_for_5.2
-
-for you to fetch changes up to 29a0c843973bc385918158c6976e4dbe891df969:
-
-  EDAC/mc: Fix edac_mc_find() in case no device is found (2019-05-14 17:08:46 +0200)
-
-----------------------------------------------------------------
-* Do not build mpc85_edac as a module			(Michael Ellerman)
-
-* Correct edac_mc_find()'s return value on error	(Robert Richter)
-
-----------------------------------------------------------------
-Michael Ellerman (1):
-      EDAC/mpc85xx: Prevent building as a module
-
-Robert Richter (1):
-      EDAC/mc: Fix edac_mc_find() in case no device is found
-
- drivers/edac/Kconfig   |  4 ++--
- drivers/edac/edac_mc.c | 12 ++++--------
- 2 files changed, 6 insertions(+), 10 deletions(-)
-
--- 
-Regards/Gruss,
-    Boris.
-
-SUSE Linux GmbH, GF: Felix Imendörffer, Mary Higgins, Sri Rasiah, HRB 21284 (AG Nürnberg)
+-Tony
