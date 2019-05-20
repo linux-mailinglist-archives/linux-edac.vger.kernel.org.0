@@ -2,27 +2,27 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B964823467
-	for <lists+linux-edac@lfdr.de>; Mon, 20 May 2019 14:42:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E7D29235E6
+	for <lists+linux-edac@lfdr.de>; Mon, 20 May 2019 14:45:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389319AbfETM0a (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Mon, 20 May 2019 08:26:30 -0400
-Received: from mail.kernel.org ([198.145.29.99]:41828 "EHLO mail.kernel.org"
+        id S2390890AbfETMlE (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Mon, 20 May 2019 08:41:04 -0400
+Received: from mail.kernel.org ([198.145.29.99]:48582 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2389185AbfETM01 (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Mon, 20 May 2019 08:26:27 -0400
+        id S2389946AbfETMbw (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Mon, 20 May 2019 08:31:52 -0400
 Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 6B27720675;
-        Mon, 20 May 2019 12:26:25 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id B178521479;
+        Mon, 20 May 2019 12:31:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1558355185;
-        bh=222lOGZnc6Erzc2cuHRFDpbQ9VQq7bThTW3zdQNpgXU=;
+        s=default; t=1558355511;
+        bh=VULUz7VOMABH6Ci++gMoVwRwZO6JSd7hSO3oluI7m2o=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=z6iGfwS4i3qLTyoWLu7tJrYprdQKRihwiZDYuGlOI+Rb3nTToAJIsJpcoWAIPBpMW
-         eV5iBEOlgSeIkqPNfn3lve3IgdrV4tKkRexL4RGQcF6SG/IJX69DhEwBdM5cACWaYl
-         L5o8QqNjT09Q81pwIZZm3RRHTdiqB7FIs7NfXR1o=
+        b=APJSwdRbAfF6+RS9slmlPB4AUHoX3ZgSas4nodbKmGjkOEJ4plTmQUKpPXjHk0/g9
+         JYuhgFkYA+IyPDANy7E+hJGqQM8vTrgW1/6JVXezYgvbaNZoKziO1vikixC4l/ugK2
+         4vkux6zH7tQ9l2Ttw6aKLydfuvW/yrKWeA6jJs58=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -41,12 +41,12 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Tony Luck <tony.luck@intel.com>,
         Vishal Verma <vishal.l.verma@intel.com>,
         linux-edac <linux-edac@vger.kernel.org>, x86-ml <x86@kernel.org>
-Subject: [PATCH 5.0 024/123] x86/MCE/AMD: Dont report L1 BTB MCA errors on some family 17h models
-Date:   Mon, 20 May 2019 14:13:24 +0200
-Message-Id: <20190520115246.430127680@linuxfoundation.org>
+Subject: [PATCH 5.1 022/128] x86/MCE/AMD: Dont report L1 BTB MCA errors on some family 17h models
+Date:   Mon, 20 May 2019 14:13:29 +0200
+Message-Id: <20190520115251.036216224@linuxfoundation.org>
 X-Mailer: git-send-email 2.21.0
-In-Reply-To: <20190520115245.439864225@linuxfoundation.org>
-References: <20190520115245.439864225@linuxfoundation.org>
+In-Reply-To: <20190520115249.449077487@linuxfoundation.org>
+References: <20190520115249.449077487@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -115,7 +115,7 @@ Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
 --- a/arch/x86/kernel/cpu/mce/amd.c
 +++ b/arch/x86/kernel/cpu/mce/amd.c
-@@ -545,33 +545,59 @@ out:
+@@ -563,33 +563,59 @@ out:
  	return offset;
  }
  
@@ -186,7 +186,7 @@ Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
  		msr_clear_bit(msrs[i], 62);
  
  	/* restore old settings */
-@@ -586,12 +612,12 @@ void mce_amd_feature_init(struct cpuinfo
+@@ -604,12 +630,12 @@ void mce_amd_feature_init(struct cpuinfo
  	unsigned int bank, block, cpu = smp_processor_id();
  	int offset = -1;
  
@@ -228,7 +228,7 @@ Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
  #endif /* __X86_MCE_INTERNAL_H__ */
 --- a/drivers/edac/mce_amd.c
 +++ b/drivers/edac/mce_amd.c
-@@ -914,7 +914,7 @@ static inline void amd_decode_err_code(u
+@@ -1004,7 +1004,7 @@ static inline void amd_decode_err_code(u
  /*
   * Filter out unwanted MCE signatures here.
   */
@@ -237,7 +237,7 @@ Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
  {
  	/*
  	 * NB GART TLB error reporting is disabled by default.
-@@ -948,7 +948,7 @@ amd_decode_mce(struct notifier_block *nb
+@@ -1038,7 +1038,7 @@ amd_decode_mce(struct notifier_block *nb
  	unsigned int fam = x86_family(m->cpuid);
  	int ecc;
  
