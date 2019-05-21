@@ -2,109 +2,84 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F37923B87
-	for <lists+linux-edac@lfdr.de>; Mon, 20 May 2019 17:05:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A9DD2478A
+	for <lists+linux-edac@lfdr.de>; Tue, 21 May 2019 07:31:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733110AbfETPFP (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Mon, 20 May 2019 11:05:15 -0400
-Received: from sauhun.de ([88.99.104.3]:51558 "EHLO pokefinder.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730766AbfETPFP (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Mon, 20 May 2019 11:05:15 -0400
-Received: from localhost (p54B333DA.dip0.t-ipconnect.de [84.179.51.218])
-        by pokefinder.org (Postfix) with ESMTPSA id 3853E2C2761;
-        Mon, 20 May 2019 17:05:11 +0200 (CEST)
-Date:   Mon, 20 May 2019 17:05:10 +0200
-From:   Wolfram Sang <wsa@the-dreams.de>
-To:     Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
-Cc:     Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        Mauro Carvalho Chehab <mchehab@infradead.org>,
-        linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
-        x86@kernel.org, linux-acpi@vger.kernel.org,
-        linux-edac@vger.kernel.org, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-arm-msm@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, xen-devel@lists.xenproject.org,
-        platform-driver-x86@vger.kernel.org, devel@driverdev.osuosl.org,
-        kvm@vger.kernel.org, virtualization@lists.linux-foundation.org,
-        devel@acpica.org, linux-mm@kvack.org,
-        linux-security-module@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH 10/10] docs: fix broken documentation links
-Message-ID: <20190520150510.GA2606@kunai>
-References: <cover.1558362030.git.mchehab+samsung@kernel.org>
- <4fd1182b4a41feb2447c7ccde4d7f0a6b3c92686.1558362030.git.mchehab+samsung@kernel.org>
+        id S1725794AbfEUFbj (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Tue, 21 May 2019 01:31:39 -0400
+Received: from mail-lf1-f66.google.com ([209.85.167.66]:44883 "EHLO
+        mail-lf1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725982AbfEUFbi (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Tue, 21 May 2019 01:31:38 -0400
+Received: by mail-lf1-f66.google.com with SMTP id n134so11987097lfn.11
+        for <linux-edac@vger.kernel.org>; Mon, 20 May 2019 22:31:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=sifive.com; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=BtJH/XFatQoBOkqt6CnXFYn8cVFYIMDvg7sFFa+676w=;
+        b=kyLq6vqxe11UGM5dCp65/VIEmlD+ACNL83MCfoFC4CUz1LW2/BkZq4jQPkPHtoH8Ze
+         tbExs1uaTjddyOv7pHBFTilzgdvXBRGSZKZXcpcn8xDRUGBmna44cQXLRF96xO5UXA4u
+         eYGAysbsIfGMw15tyeUOW4868nK5HtjkxNHYDXZkLaE0/bvwzSKsmyMn1g8Y97f7epr5
+         QPgL7TJOZ7IO8L2Aff3vxpQwf56lh+FleBOwoZLtOZ0xtS8nWiBooOlgBkDp+5b0SYgW
+         JtV2bfR2aAL4pJj7ygZJl1GuzifomEgI2FgLpQehqn/Cpw+fhIjwKraPQ3DYgPxGcaM3
+         8xHg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=BtJH/XFatQoBOkqt6CnXFYn8cVFYIMDvg7sFFa+676w=;
+        b=BozOkRve6V8z1puzdGgnv21Gq43a2L8EVrfqLg70dSMEhkHyQPgnhfs0V7NMI9veS6
+         z/du6pAjwVIxJchxc6kM4F8S9txGgMzTOH2OuLzkspPJsjT2I/0hryqNEuVwIVs9HjCN
+         4EFH/fcRNGmLApvO0/IZ8jVYj9b81h8HkuVJNGAHYYW3+VvMFDTjK7SNGry0HH0qcC+r
+         Hc5KX7gK0S9Uex80obFVQ7V3sa0kMNCpa8DUrTLz6Z9/qU/7njNcMcOFSdGf7VrCRQ7h
+         laeA3poSxikNV1m9UeJkrbTJ1aoA60aNZUasuE3s9mZ9MvhtQX+LpG3C6P3XFA57JGFU
+         ChPg==
+X-Gm-Message-State: APjAAAVyIJ/PEJi0hHeGoEl0Cn44+2t2yGxcb6o16V0L2koy+VBpZuBe
+        yfXrbkxVngjq9XUx1C3rOe/olgKN7RfvT6aK8l99Snh+
+X-Google-Smtp-Source: APXvYqwTO5cDb3MVcX3rsZTp5AzbDa+LWhvMDys5bBDQIRDcxlANQjUTioD3NEoxscJG3c+mMbm/QAYAZESzHIp/t1k=
+X-Received: by 2002:a19:c60f:: with SMTP id w15mr39497034lff.61.1558416695999;
+ Mon, 20 May 2019 22:31:35 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="6c2NcOVqGQ03X4Wi"
-Content-Disposition: inline
-In-Reply-To: <4fd1182b4a41feb2447c7ccde4d7f0a6b3c92686.1558362030.git.mchehab+samsung@kernel.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <1557142026-15949-1-git-send-email-yash.shah@sifive.com> <1557142026-15949-2-git-send-email-yash.shah@sifive.com>
+In-Reply-To: <1557142026-15949-2-git-send-email-yash.shah@sifive.com>
+From:   Yash Shah <yash.shah@sifive.com>
+Date:   Tue, 21 May 2019 11:00:59 +0530
+Message-ID: <CAJ2_jOG9Ag0spbh3YCxavUE5XEAUP1pHcgCZ56Nu2u4TqfrzHQ@mail.gmail.com>
+Subject: Re: [PATCH v2] edac: sifive: Add EDAC platform driver for SiFive SoCs
+To:     linux-edac@vger.kernel.org, linux-riscv@lists.infradead.org,
+        Palmer Dabbelt <palmer@sifive.com>,
+        Borislav Petkov <bp@alien8.de>,
+        James Morse <james.morse@arm.com>
+Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
+        linux-kernel@vger.kernel.org, aou@eecs.berkeley.edu,
+        mchehab@kernel.org, Sachin Ghadi <sachin.ghadi@sifive.com>,
+        davem@davemloft.net, gregkh@linuxfoundation.org,
+        nicolas.ferre@microchip.com, paulmck@linux.ibm.com
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
+On Mon, May 6, 2019 at 4:57 PM Yash Shah <yash.shah@sifive.com> wrote:
+>
+> The initial ver of EDAC driver supports:
+> - ECC event monitoring and reporting through the EDAC framework for SiFive
+>   L2 cache controller.
+>
+> The EDAC driver registers for notifier events from the L2 cache controller
+> driver (arch/riscv/mm/sifive_l2_cache.c) for L2 ECC events
+>
+> Signed-off-by: Yash Shah <yash.shah@sifive.com>
+> Reviewed-by: James Morse <james.morse@arm.com>
+> ---
+> This patch depends on patch
+> 'RISC-V: sifive_l2_cache: Add L2 cache controller driver for SiFive SoCs'
+> https://lkml.org/lkml/2019/5/6/255
 
---6c2NcOVqGQ03X4Wi
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+The prerequisite patch (sifive_l2_cache driver) has been merged into
+mainline v5.2-rc1
+It should be OK to merge this edac driver now.
 
-On Mon, May 20, 2019 at 11:47:39AM -0300, Mauro Carvalho Chehab wrote:
-> Mostly due to x86 and acpi conversion, several documentation
-> links are still pointing to the old file. Fix them.
->=20
-> Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
-
-Thanks, didn't notice that.
-
->  Documentation/i2c/instantiating-devices          |  2 +-
-
-=2E..
-
-> diff --git a/Documentation/i2c/instantiating-devices b/Documentation/i2c/=
-instantiating-devices
-> index 0d85ac1935b7..5a3e2f331e8c 100644
-> --- a/Documentation/i2c/instantiating-devices
-> +++ b/Documentation/i2c/instantiating-devices
-> @@ -85,7 +85,7 @@ Method 1c: Declare the I2C devices via ACPI
->  -------------------------------------------
-> =20
->  ACPI can also describe I2C devices. There is special documentation for t=
-his
-> -which is currently located at Documentation/acpi/enumeration.txt.
-> +which is currently located at Documentation/firmware-guide/acpi/enumerat=
-ion.rst.
-> =20
-> =20
->  Method 2: Instantiate the devices explicitly
-
-For this I2C part:
-
-Reviewed-by: Wolfram Sang <wsa@the-dreams.de>
-
-
---6c2NcOVqGQ03X4Wi
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAlziwiIACgkQFA3kzBSg
-Kbb/+hAArOEJ2RcuEqvOP7Ge80J7VxtEVTCR0sWRFg/7cpRGLnwf1qLSAUlfAJYj
-fUhZ9ANfeB4Y4ZltOPwJ34KNtZy/kYzYyoy/WgiNfJUrf+s7auOF+dMXRvBe8VyX
-v/pHpAMzTf8rtNkaESOahPExL1lgrI2dShZa3Mxofm2eb3Kam0OJRr6Cvj7mA/Rq
-PHq1QUlG+Y3hZdvAHjQ6GN6wr+pNnhqeSSAd3BZg5MZQpPRiaK+C4tPkqOD/TNwX
-9+iPJTMPhWsdei4UO1POHGCOclFatxkPOQm9JjsTD1h1lEJK7Afs1cTCd0crwpzW
-nQuj+MSjKTqcOwQ4hF1x6PwlbJm4Hq/+r6b50UsnQYai6pt7Khp9OISmYTxPQhgI
-8aXZbjsMB3k9ebYulULGdF0f3p/IPoqneTUf3yi5OxNbhJ8eyNcQ4l35MP9hEyYb
-H/9a/G4GXP7CLyCtKd53OtNeE1tTF4zGKIhe7v9OInHolA3gLx1R1rxiBeQB+XyA
-NO/4FdEIZ1QWAyl7m1aWBtYpar2uvFyEhZWG3sVhZYsA9dQNBfgzFSu60wus7hy4
-D9FxYijaEnHZvPivrTwfcp8ittAvsIrM3xANcOhWXEU6eC6w0KX15QiiyPQUbssL
-H3fPVUBxQlwicyY98Dvh7eJmnD1WEsMcDmDI5RqrAxhdD/bxbN0=
-=b4+p
------END PGP SIGNATURE-----
-
---6c2NcOVqGQ03X4Wi--
+- Yash
