@@ -2,92 +2,71 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F416025AA8
-	for <lists+linux-edac@lfdr.de>; Wed, 22 May 2019 01:08:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3085026031
+	for <lists+linux-edac@lfdr.de>; Wed, 22 May 2019 11:14:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726440AbfEUXI6 (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Tue, 21 May 2019 19:08:58 -0400
-Received: from mail.skyhub.de ([5.9.137.197]:39760 "EHLO mail.skyhub.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726434AbfEUXI6 (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Tue, 21 May 2019 19:08:58 -0400
-Received: from cz.tnic (ip65-44-65-130.z65-44-65.customer.algx.net [65.44.65.130])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id DC62D1EC0985;
-        Wed, 22 May 2019 01:08:55 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1558480136;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=EIdRJ7cchJzsPWh8oSXAVoiBUsWWI7yDYXgxiIhpyks=;
-        b=c+DcKV1+rSvE2Q38daXtOHBxG2l0GNIbdFOl/CLuMqxlXh1bd0bzNx/9AS+Hv0wajENYrD
-        Atz7iMEi8/uWurpgeOpu7o7IdxCdSJVZ4xQUZsshemzDUlLXPoTi6EB0kuvmHie/ehnyhG
-        S9o6nciWAc+CC2dslomEGDzSOR9GjhI=
-Date:   Wed, 22 May 2019 01:09:27 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     "Luck, Tony" <tony.luck@intel.com>
-Cc:     "Ghannam, Yazen" <Yazen.Ghannam@amd.com>,
-        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "x86@kernel.org" <x86@kernel.org>
-Subject: Re: [PATCH v3 4/6] x86/MCE: Make number of MCA banks per_cpu
-Message-ID: <20190521230927.GB2435@cz.tnic>
-References: <20190430203206.104163-1-Yazen.Ghannam@amd.com>
- <20190430203206.104163-5-Yazen.Ghannam@amd.com>
- <20190518112530.GA26276@zn.tnic>
- <SN6PR12MB2639571E33EBC7342A0607F8F8070@SN6PR12MB2639.namprd12.prod.outlook.com>
- <20190521202902.GC7793@cz.tnic>
- <20190521204239.GA11029@agluck-desk>
+        id S1728547AbfEVJOD (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Wed, 22 May 2019 05:14:03 -0400
+Received: from usa-sjc-mx-foss1.foss.arm.com ([217.140.101.70]:45564 "EHLO
+        foss.arm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726552AbfEVJOD (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Wed, 22 May 2019 05:14:03 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.72.51.249])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id CB9F3374;
+        Wed, 22 May 2019 02:14:02 -0700 (PDT)
+Received: from [10.1.196.105] (eglon.cambridge.arm.com [10.1.196.105])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 8CF653F575;
+        Wed, 22 May 2019 02:14:00 -0700 (PDT)
+Subject: Re: [PATCH v2] edac: sifive: Add EDAC platform driver for SiFive SoCs
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     Yash Shah <yash.shah@sifive.com>, linux-edac@vger.kernel.org,
+        linux-riscv@lists.infradead.org,
+        Palmer Dabbelt <palmer@sifive.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        linux-kernel@vger.kernel.org, aou@eecs.berkeley.edu,
+        mchehab@kernel.org, Sachin Ghadi <sachin.ghadi@sifive.com>,
+        davem@davemloft.net, gregkh@linuxfoundation.org,
+        nicolas.ferre@microchip.com, paulmck@linux.ibm.com
+References: <1557142026-15949-1-git-send-email-yash.shah@sifive.com>
+ <1557142026-15949-2-git-send-email-yash.shah@sifive.com>
+ <CAJ2_jOG9Ag0spbh3YCxavUE5XEAUP1pHcgCZ56Nu2u4TqfrzHQ@mail.gmail.com>
+ <20190521182132.GB7793@cz.tnic>
+From:   James Morse <james.morse@arm.com>
+Message-ID: <1c7eb8ab-6f48-c41a-1d3a-a9b0f5ce8a7f@arm.com>
+Date:   Wed, 22 May 2019 10:13:59 +0100
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:60.0) Gecko/20100101
+ Thunderbird/60.6.1
 MIME-Version: 1.0
+In-Reply-To: <20190521182132.GB7793@cz.tnic>
 Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20190521204239.GA11029@agluck-desk>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Language: en-GB
+Content-Transfer-Encoding: 7bit
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Tue, May 21, 2019 at 01:42:40PM -0700, Luck, Tony wrote:
-> On Tue, May 21, 2019 at 10:29:02PM +0200, Borislav Petkov wrote:
-> > 
-> > Can we do instead:
-> > 
-> > -static DEFINE_PER_CPU_READ_MOSTLY(struct mce_bank *, mce_banks_array);
-> > +static DEFINE_PER_CPU_READ_MOSTLY(struct mce_bank, mce_banks_array[MAX_NR_BANKS]);
-> > 
-> > which should be something like 9*32 = 288 bytes per CPU.
-> > 
+Hi Boris,
+
+On 21/05/2019 19:21, Borislav Petkov wrote:
+> On Tue, May 21, 2019 at 11:00:59AM +0530, Yash Shah wrote:
+>> The prerequisite patch (sifive_l2_cache driver) has been merged into
+>> mainline v5.2-rc1
+>> It should be OK to merge this edac driver now.
 > 
-> Where did you get the "9" from?  struct mce_bank looks to
-> be over 50 bytes.
+> James?
 
-Patch 2/6 changes that:
+Still fine by me:
+Reviewed-by: James Morse <james.morse@arm.com>
 
- struct mce_bank {
-        u64                     ctl;                    /* subevents to enable */
-        bool                    init;                   /* initialise bank? */
-+};
-+static DEFINE_PER_CPU_READ_MOSTLY(struct mce_bank *, mce_banks_percpu);
-+
-+#define ATTR_LEN               16
-+/* One object for each MCE bank, shared by all CPUs */
-+struct mce_bank_dev {
-        struct device_attribute attr;                   /* device attribute */
-        char                    attrname[ATTR_LEN];     /* attribute name */
-+       u8                      bank;                   /* bank number */
- };
-+static struct mce_bank_dev mce_bank_devs[MAX_NR_BANKS];
+(...this patch already has my reviewed-by on it...)
 
-> Still only 1.5K per cpu though.
+I commented that it couldn't be merged in pieces here:
+https://lore.kernel.org/lkml/4072c812-d3bf-9ad5-2b30-6b2a5060bb55@arm.com/T/#u
 
-Yah, I think that using static per-CPU memory should be better than
-GFP_ATOMIC.
+which is what Yash is replying to.
 
--- 
-Regards/Gruss,
-    Boris.
 
-ECO tip #101: Trim your mails when you reply. Srsly.
+Thanks,
+
+James
