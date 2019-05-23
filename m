@@ -2,186 +2,117 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CD142854E
-	for <lists+linux-edac@lfdr.de>; Thu, 23 May 2019 19:52:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F35E928830
+	for <lists+linux-edac@lfdr.de>; Thu, 23 May 2019 21:40:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731264AbfEWRvz (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Thu, 23 May 2019 13:51:55 -0400
-Received: from mail-eopbgr730090.outbound.protection.outlook.com ([40.107.73.90]:11392
-        "EHLO NAM05-DM3-obe.outbound.protection.outlook.com"
+        id S2389969AbfEWTXL (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Thu, 23 May 2019 15:23:11 -0400
+Received: from mail-eopbgr760043.outbound.protection.outlook.com ([40.107.76.43]:61504
+        "EHLO NAM02-CY1-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1730928AbfEWRvy (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Thu, 23 May 2019 13:51:54 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=testarcselector01; d=microsoft.com; cv=none;
- b=yOwyZSUksOx9KxLIo5CrD+4bl8GF+yuZ+EOu9t2BKcr17jHiH5Q3U5fCLJjuSDqQdwl3LFGCzkr1Jro5KO2wz90jP1j8SS5LvZo8akHDp18STSjx/+YKJS/LCm47SziKCokc92C6CnJPibWXMzuVU0QO4GyOdWZ5bK0OGwB5wco=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=testarcselector01;
+        id S2389460AbfEWTXL (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Thu, 23 May 2019 15:23:11 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=amdcloud.onmicrosoft.com; s=selector1-amdcloud-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=O1gtWwZvKHrCTwBPtZVN+DvvUZS0a8xh+/uzA+bC2nk=;
- b=uAHTmHYPDvhpZZo4rJPjh0OCnnOz8KGT7yagN+cj+X8EEivi6hbFL2tQi+cettfNID6dex7U3Mb19FPhxK3/gW6vKlDYwBNW2tkUNvQD3noyQmmFanuJ0qTMPhDKLowL7VphYwJEJJhHx1XpeaYHr8qVoIjInj3f4R9kamc9WjQ=
-ARC-Authentication-Results: i=1; test.office365.com
- 1;spf=none;dmarc=none;dkim=none;arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=O1gtWwZvKHrCTwBPtZVN+DvvUZS0a8xh+/uzA+bC2nk=;
- b=kdt5X+qn6hWsnOW6I5P043tmlmqErOJwmHmoOgrfIdfJJ3jmglhYx3oTAZps7b2/dsM+Jhy6kmtwRKVpgA6Byl81LZ6pe0IBlpZNKskH8mefRgF/TvxRJPRsKzwCs/Qbv7Qo5Soa2FifR2/4hJDCFgYZwZHytkEScCFe5WMCH6k=
-Received: from BYAPR21MB1319.namprd21.prod.outlook.com (2603:10b6:a03:115::9)
- by BYAPR21MB1191.namprd21.prod.outlook.com (2603:10b6:a03:105::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.1922.3; Thu, 23 May
- 2019 17:51:49 +0000
-Received: from BYAPR21MB1319.namprd21.prod.outlook.com
- ([fe80::e9a9:224d:3961:2088]) by BYAPR21MB1319.namprd21.prod.outlook.com
- ([fe80::e9a9:224d:3961:2088%8]) with mapi id 15.20.1943.006; Thu, 23 May 2019
- 17:51:49 +0000
-From:   "Lei Wang (BSP)" <Wang.Lei@microsoft.com>
-To:     Mark Rutland <mark.rutland@arm.com>,
-        Lei Wang <leiwang_git@outlook.com>
-CC:     "bp@alien8.de" <bp@alien8.de>,
-        "james.morse@arm.com" <james.morse@arm.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+ bh=fCDZMuUUil3qAfa90IjUvYGWAyiWyFtz2Vh79mKPCEY=;
+ b=owBfUmO4vJCtIW9ZxVGi51BClxsfOYoQha8VC24d1KatBkyBtaNZFnZb48UjqkavJsWYECdqy8NPWy5WujLooAWcnMTTL+sX8hfHo9KWy6NLYYQbJCnnuO/Ya+17CAZE2Ba3J36Avjj0ZlrpQX1PlZMrYdLEpzBhOhPxsNU5tTQ=
+Received: from SN6PR12MB2639.namprd12.prod.outlook.com (52.135.103.16) by
+ SN6PR12MB2622.namprd12.prod.outlook.com (52.135.103.11) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.1922.15; Thu, 23 May 2019 19:23:09 +0000
+Received: from SN6PR12MB2639.namprd12.prod.outlook.com
+ ([fe80::69b5:19ac:b63d:2b82]) by SN6PR12MB2639.namprd12.prod.outlook.com
+ ([fe80::69b5:19ac:b63d:2b82%3]) with mapi id 15.20.1922.017; Thu, 23 May 2019
+ 19:23:09 +0000
+From:   "Ghannam, Yazen" <Yazen.Ghannam@amd.com>
+To:     Borislav Petkov <bp@alien8.de>
+CC:     "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
-        Rui Zhao <ruizhao@microsoft.com>,
-        Hang Li <hangl@microsoft.com>,
-        Sasha Levin <Alexander.Levin@microsoft.com>
-Subject: RE: [PATCH v3 1/2] dt-bindings: edac: arm-dmc520.txt
-Thread-Topic: [PATCH v3 1/2] dt-bindings: edac: arm-dmc520.txt
-Thread-Index: AQHVC5AR4+AcLYu1eESQ1uQyoWKNiaZ4+muAgAAKjAA=
-Date:   Thu, 23 May 2019 17:51:49 +0000
-Message-ID: <BYAPR21MB1319BC4D079B918AB038A4D590010@BYAPR21MB1319.namprd21.prod.outlook.com>
-References: <CY1PR0401MB1244062C1738B09D6100F202860A0@CY1PR0401MB1244.namprd04.prod.outlook.com>
- <20190523165841.GD7523@lakrids.cambridge.arm.com>
-In-Reply-To: <20190523165841.GD7523@lakrids.cambridge.arm.com>
+        "tony.luck@intel.com" <tony.luck@intel.com>,
+        "x86@kernel.org" <x86@kernel.org>
+Subject: RE: [PATCH] x86/MCE: Statically allocate mce_banks_array
+Thread-Topic: [PATCH] x86/MCE: Statically allocate mce_banks_array
+Thread-Index: AQHVEXi9HxUns8k6CEy4muazlWUkLKZ5KSmA///sF1A=
+Date:   Thu, 23 May 2019 19:23:08 +0000
+Message-ID: <SN6PR12MB2639AAC20E9F01D1DE810E17F8010@SN6PR12MB2639.namprd12.prod.outlook.com>
+References: <20190523150345.42906-1-Yazen.Ghannam@amd.com>
+ <20190523202754.GA3980@cz.tnic>
+In-Reply-To: <20190523202754.GA3980@cz.tnic>
 Accept-Language: en-US
 Content-Language: en-US
 X-MS-Has-Attach: 
 X-MS-TNEF-Correlator: 
-msip_labels: MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Enabled=True;
- MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SiteId=72f988bf-86f1-41af-91ab-2d7cd011db47;
- MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Owner=lewan@microsoft.com;
- MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SetDate=2019-05-23T17:51:47.9288836Z;
- MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Name=General;
- MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Application=Microsoft Azure
- Information Protection;
- MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ActionId=12189b5c-1702-4376-aa08-110460eab1f4;
- MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Extended_MSFT_Method=Automatic
 authentication-results: spf=none (sender IP is )
- smtp.mailfrom=Wang.Lei@microsoft.com; 
-x-originating-ip: [2001:4898:80e8:0:74f8:b538:8cb0:8ca0]
+ smtp.mailfrom=Yazen.Ghannam@amd.com; 
+x-originating-ip: [165.204.84.11]
 x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: ec2f4537-2761-43cc-1b08-08d6dfa754b8
+x-ms-office365-filtering-correlation-id: 4c366881-2c4e-41be-8d7f-08d6dfb416da
 x-ms-office365-filtering-ht: Tenant
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600141)(711020)(4605104)(4618075)(2017052603328)(7193020);SRVR:BYAPR21MB1191;
-x-ms-traffictypediagnostic: BYAPR21MB1191:
-x-microsoft-antispam-prvs: <BYAPR21MB1191D206046F24D18444C6D090010@BYAPR21MB1191.namprd21.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:7691;
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600141)(711020)(4605104)(4618075)(2017052603328)(7193020);SRVR:SN6PR12MB2622;
+x-ms-traffictypediagnostic: SN6PR12MB2622:
+x-microsoft-antispam-prvs: <SN6PR12MB2622B8090E57BD9E581DEB28F8010@SN6PR12MB2622.namprd12.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:9508;
 x-forefront-prvs: 00462943DE
-x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(39860400002)(366004)(376002)(136003)(346002)(396003)(199004)(189003)(13464003)(8990500004)(6246003)(22452003)(10290500003)(107886003)(5660300002)(53936002)(52536014)(76176011)(7696005)(4326008)(2906002)(102836004)(68736007)(52396003)(6116002)(99286004)(6506007)(53546011)(229853002)(72206003)(86612001)(8676002)(486006)(478600001)(54906003)(25786009)(256004)(110136005)(6436002)(316002)(8936002)(186003)(55016002)(10090500001)(11346002)(9686003)(7736002)(476003)(446003)(305945005)(14454004)(71190400001)(71200400001)(81156014)(46003)(81166006)(86362001)(73956011)(66946007)(66446008)(76116006)(33656002)(64756008)(66556008)(66476007)(74316002);DIR:OUT;SFP:1102;SCL:1;SRVR:BYAPR21MB1191;H:BYAPR21MB1319.namprd21.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
-received-spf: None (protection.outlook.com: microsoft.com does not designate
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(39860400002)(396003)(366004)(376002)(346002)(136003)(13464003)(189003)(199004)(55016002)(9686003)(25786009)(53936002)(476003)(256004)(14444005)(6436002)(33656002)(446003)(11346002)(99286004)(486006)(4326008)(74316002)(26005)(81166006)(81156014)(66066001)(6246003)(54906003)(8676002)(229853002)(316002)(6916009)(76116006)(8936002)(73956011)(66946007)(64756008)(305945005)(7736002)(68736007)(186003)(66556008)(76176011)(66446008)(66476007)(86362001)(53546011)(6506007)(71200400001)(71190400001)(52536014)(72206003)(2906002)(478600001)(3846002)(7696005)(6116002)(102836004)(14454004)(5660300002);DIR:OUT;SFP:1101;SCL:1;SRVR:SN6PR12MB2622;H:SN6PR12MB2639.namprd12.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
+received-spf: None (protection.outlook.com: amd.com does not designate
  permitted sender hosts)
 x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: NRZGK2QaAq79EuKfAN4cXWfPDYw2vu/o6hgBvfJy5ULU9ICrN3P+llWqP/lt//h8XD2vGGpqt+Dxf1Auc+apTP66+i8jKDhuni7RqJB6HLvgAlJn+dQqo6J9gxpUgnglw2z9/Sc0mPD7RN+7+Dx8aN32F8hNlWyANkVAhE9xONlOH4t6pRTdMgoSgxGSE6PfwK83J/UvP2o81MBMpzeOYEfZdsJ//diRDFpdgpf19KrD29G3udyFIH9XAlTOearUS71zxg+gKGLpkwZB59MlToDIXqe/JxFvdWjmvzoGut7UsKuIUckWeJ/z2E5wlGLu2XiZpeK3hskA3PBoF7f7gGeYxnuKfF8gbsmkP11IwiXyBTlh5E42pLk7b4Cjvfa46ucxUE1R2MggdPtGa94Txx2tXxOvzh7/HYkyH6tMxDk=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+x-microsoft-antispam-message-info: ffLrzcdapK9OXTBNjozjlg0oSOYAesCUwzqUOiZHjuq6MpoglCprfPhwoiHyvmYN88m1dTtgfp8W/7srnK9pkrgfLfr+E+cKDo6QHoFDS4hiijvJakX/6Y3oxav4C4IV0uzMMdJIL7ipfl5ZFkrQPpNhDTFNnXSSDQmX5IB9aL998NZCav1cU6fCcbaqsKWbTjSaJ0T+zYcZh0LRiO+rwpUUNa9gkieBF3S5YNEU65MH9oqnOuwq94ApumAiAw+2Str2xY70Doy1g5rjSxgvi2isp7EpXsPyE1JHFFSwRgo1BrVxRDCAL9507G5dUauwd49l787BuXan/pAABADLr8CBQdRrU5iSHgV3GwH6fmi4FY/zmXR1GchhT2gGd2ObGEA8krPOhxgq/Z6Wruj0/Wma/0fSd9lUwtMKFj4/RSI=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-X-OriginatorOrg: microsoft.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: ec2f4537-2761-43cc-1b08-08d6dfa754b8
-X-MS-Exchange-CrossTenant-originalarrivaltime: 23 May 2019 17:51:49.1715
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4c366881-2c4e-41be-8d7f-08d6dfb416da
+X-MS-Exchange-CrossTenant-originalarrivaltime: 23 May 2019 19:23:08.8573
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 72f988bf-86f1-41af-91ab-2d7cd011db47
+X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: lewan@microsoft.com
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR21MB1191
+X-MS-Exchange-CrossTenant-userprincipalname: yghannam@amd.com
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN6PR12MB2622
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-(+Rui/Hang/Sasha)
-
-Hi Mark, please see inline with "[Lei]" tag. Thanks! -Lei
-
------Original Message-----
-From: Mark Rutland <mark.rutland@arm.com>=20
-Sent: Thursday, May 23, 2019 9:59 AM
-To: Lei Wang <leiwang_git@outlook.com>
-Cc: bp@alien8.de; james.morse@arm.com; robh+dt@kernel.org; devicetree@vger.=
-kernel.org; linux-kernel@vger.kernel.org; linux-edac@vger.kernel.org; Lei W=
-ang (BSP) <Wang.Lei@microsoft.com>
-Subject: Re: [PATCH v3 1/2] dt-bindings: edac: arm-dmc520.txt
-
-On Thu, May 16, 2019 at 02:35:47AM +0000, Lei Wang wrote:
-> From: Lei Wang <leiwang_git@outlook.com>
->=20
-> This is the device tree bindings for new EDAC driver dmc520_edac.c.
->=20
-> Signed-off-by: Lei Wang <leiwang_git@outlook.com>
-> ---
->  .../devicetree/bindings/edac/arm-dmc520.txt        | 26 ++++++++++++++++=
-++++++
->  1 file changed, 26 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/edac/arm-dmc520.txt
->=20
-> diff --git a/Documentation/devicetree/bindings/edac/arm-dmc520.txt b/Docu=
-mentation/devicetree/bindings/edac/arm-dmc520.txt
-> new file mode 100644
-> index 0000000..71e7aa3
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/edac/arm-dmc520.txt
-> @@ -0,0 +1,26 @@
-> +* ARM DMC-520 EDAC node
-> +
-> +Required properties:
-> +- compatible		: "brcm,dmc-520", "arm,dmc-520".
-> +- reg			: Address range of the DMC-520 registers.
-> +- interrupts		: DMC-520 interrupt numbers. The example below specifies
-> +			  two interrupt lines for dram_ecc_errc_int and
-> +			  dram_ecc_errd_int.
-> +- interrupt-config	: This is an array of interrupt masks. For each of th=
-e
-> +			  above interrupt line, add one interrupt mask element to
-> +			  it. That is, there is a 1:1 mapping from each interrupt
-> +			  line to an interrupt mask. An interrupt mask can represent
-> +			  multiple interrupts being enabled. Refer to interrupt_control
-> +			  register in DMC-520 TRM for interrupt mapping. In the example
-> +			  below, the interrupt configuration enables dram_ecc_errc_int
-> +			  and dram_ecc_errd_int. And each interrupt is connected to
-> +			  a separate interrupt line.
-
-Generally we use interrupt-names to distinguish interrupts.
-
-Do you really have arbitary subsets of lines muxed together?
-
------------------------------------------------
-[Lei] Yes it is possible to mux multiple interrupt sources into one interru=
-pt line for dmc520. For example, in this particular brcm implementation,=20
-
-Line 841: source dram_ecc_errc_int
-Line 843: source dram_ecc_errd_int
-Line 839: source dram_ecc_errc_int and dram_ecc_errd_int
-
-There are two possibilities for implementing ecc counts for ce/ue. And we c=
-hose to use the single source line. But it's possible to implement using th=
-e combined-source line too. This dt binding can support both by modifying t=
-he properties.
--------------------------------------------------
-
-Thanks,
-Mark.
-
-> +
-> +Example:
-> +
-> +dmc0: dmc@200000 {
-> +	compatible =3D "brcm,dmc-520", "arm,dmc-520";
-> +	reg =3D <0x200000 0x80000>;
-> +	interrupts =3D <0x0 0x349 0x4>, <0x0 0x34B 0x4>;
-> +	interrupt-config =3D <0x4>, <0x8>;
-> +};
-> --=20
-> 2.7.4
->=20
+PiAtLS0tLU9yaWdpbmFsIE1lc3NhZ2UtLS0tLQ0KPiBGcm9tOiBCb3Jpc2xhdiBQZXRrb3YgPGJw
+QGFsaWVuOC5kZT4NCj4gU2VudDogVGh1cnNkYXksIE1heSAyMywgMjAxOSAzOjI4IFBNDQo+IFRv
+OiBHaGFubmFtLCBZYXplbiA8WWF6ZW4uR2hhbm5hbUBhbWQuY29tPg0KPiBDYzogbGludXgtZWRh
+Y0B2Z2VyLmtlcm5lbC5vcmc7IGxpbnV4LWtlcm5lbEB2Z2VyLmtlcm5lbC5vcmc7IHRvbnkubHVj
+a0BpbnRlbC5jb207IHg4NkBrZXJuZWwub3JnDQo+IFN1YmplY3Q6IFJlOiBbUEFUQ0hdIHg4Ni9N
+Q0U6IFN0YXRpY2FsbHkgYWxsb2NhdGUgbWNlX2JhbmtzX2FycmF5DQo+IA0KPiANCj4gT24gVGh1
+LCBNYXkgMjMsIDIwMTkgYXQgMDM6MDM6NTVQTSArMDAwMCwgR2hhbm5hbSwgWWF6ZW4gd3JvdGU6
+DQo+ID4gRnJvbTogWWF6ZW4gR2hhbm5hbSA8eWF6ZW4uZ2hhbm5hbUBhbWQuY29tPg0KPiA+DQo+
+ID4gVGhlIE1DRSBjb250cm9sIGRhdGEgaXMgc3RvcmVkIGluIGFuIGFycmF5IG9mIHN0cnVjdCBt
+Y2VfYmFua3MuIFRoaXMNCj4gPiBhcnJheSBoYXMgaGlzdG9yaWNhbGx5IGJlZW4gc2hhcmVkIGJ5
+IGFsbCBDUFVzIGFuZCBpdCB3YXMgYWxsb2NhdGVkDQo+ID4gZHluYW1pY2FsbHkgZHVyaW5nIHRo
+ZSBmaXJzdCBDUFUncyBpbml0IHNlcXVlbmNlLg0KPiA+DQo+ID4gSG93ZXZlciwgc3RhcnRpbmcg
+d2l0aA0KPiA+DQo+ID4gICAgICAgNWIwODgzZjVjN2JlICgieDg2L01DRTogTWFrZSBtY2VfYmFu
+a3MgYSBwZXItQ1BVIGFycmF5IikNCj4gPg0KPiA+IHRoZSBhcnJheSB3YXMgY2hhbmdlZCB0byBi
+ZWNvbWUgYSBwZXItQ1BVIGFycmF5LiBFYWNoIENQVSB3b3VsZA0KPiA+IGR5bmFtaWNhbGx5IGFs
+bG9jYXRlIHRoZSBhcnJheSBkdXJpbmcgaXRzIG93biBpbml0IHNlcXVlbmNlLg0KPiA+DQo+ID4g
+VGhpcyBzZWVtcyBiZW5pZ24gZXhwZWN0IHdoZW4gIkxvY2sgRGVidWdnaW5nIiBjb25maWcgb3B0
+aW9ucyBhcmUNCj4gPiBlbmFibGVkIGluIHdoaWNoIGNhc2UgdGhlIGZvbGxvd2luZyBtZXNzYWdl
+IGFwcGVhcnMuDQo+ID4NCj4gPiAgICAgICBCVUc6IHNsZWVwaW5nIGZ1bmN0aW9uIGNhbGxlZCBm
+cm9tIGludmFsaWQgY29udGV4dCBhdCBtbS9zbGFiLmg6NDE4DQo+ID4NCj4gPiBUaGUgbWVzc2Fn
+ZSBhcHBlYXJzIGR1cmluZyB0aGUgc2Vjb25kYXJ5IENQVXMnIGluaXQgc2VxdWVuY2VzLiBUaGlz
+IHNlZW1zDQo+ID4gdG8gYmUgYmVjYXVzZSB0aGVzZSBDUFVzIGFyZSBpbiBzeXN0ZW1fc3RhdGU9
+U1lTVEVNX1NDSEVEVUxJTkcgY29tcGFyZWQNCj4gPiB0byB0aGUgcHJpbWFyeSBDUFUgd2hpY2gg
+aXMgaW4gc3lzdGVtX3N0YXRlPVNZU1RFTV9CT09USU5HLg0KPiA+DQo+ID4gQWxsb2NhdGUgdGhl
+IG1jZV9iYW5rc19hcnJheSBzdGF0aWNhbGx5IHNvIHRoYXQgdGhpcyBpc3N1ZSBjYW4gYmUNCj4g
+PiBhdm9pZGVkLg0KPiA+DQo+ID4gQWxzbywgcmVtb3ZlIHRoZSBub3cgdW5uZWNlc3NhcnkgcmV0
+dXJuIHZhbHVlcyBmcm9tDQo+ID4gX19tY2hlY2tfY3B1X21jZV9iYW5rc19pbml0KCkgYW5kIF9f
+bWNoZWNrX2NwdV9jYXBfaW5pdCgpLg0KPiA+DQo+ID4gRml4ZXM6IDViMDg4M2Y1YzdiZSAoIng4
+Ni9NQ0U6IE1ha2UgbWNlX2JhbmtzIGEgcGVyLUNQVSBhcnJheSIpDQo+ID4gUmVwb3J0ZWQtYnk6
+IGtlcm5lbCB0ZXN0IHJvYm90IDxyb25nLmEuY2hlbkBpbnRlbC5jb20+DQo+ID4gU3VnZ2VzdGVk
+LWJ5OiBCb3Jpc2xhdiBQZXRrb3YgPGJwQHN1c2UuZGU+DQo+ID4gU2lnbmVkLW9mZi1ieTogWWF6
+ZW4gR2hhbm5hbSA8eWF6ZW4uZ2hhbm5hbUBhbWQuY29tPg0KPiA+IC0tLQ0KPiA+ICBhcmNoL3g4
+Ni9rZXJuZWwvY3B1L21jZS9jb3JlLmMgfCAzOSArKysrKysrKysrKystLS0tLS0tLS0tLS0tLS0t
+LS0tLS0tDQo+ID4gIDEgZmlsZSBjaGFuZ2VkLCAxNCBpbnNlcnRpb25zKCspLCAyNSBkZWxldGlv
+bnMoLSkNCj4gDQo+IENhbiB5b3UgcmVkaWZmIHRoaXMgcGF0Y2ggYWdhaW5zdCB0aXAvbWFzdGVy
+IHBsZWFzZT8NCj4gDQo+IEl0IGZpeGVzIGEgcGF0Y2ggd2hpY2ggaXMgYWxyZWFkeSBpbiAtcmMx
+IHNvIGl0IG5lZWRzIHRvIGdvIGZpcnN0LCBpbnRvDQo+IHVyZ2VudCwgYmVmb3JlIHlvdXIgcGF0
+Y2hzZXQuDQo+IA0KDQpTdXJlLCBidXQgd2hpY2ggcGF0Y2ggYXJlIHlvdSByZWZlcnJpbmcgdG8/
+DQoNClRoaXMgc2VlbXMgdG8gZml4IGEgcGF0Y2ggaW4gdGhlIHNldCBpbiBicC9yYzArMy1yYXMu
+DQoNClRoYW5rcywNCllhemVuDQo=
