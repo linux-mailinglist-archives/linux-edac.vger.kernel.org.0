@@ -2,62 +2,74 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E4972A45D
-	for <lists+linux-edac@lfdr.de>; Sat, 25 May 2019 14:17:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CB3D2A4EC
+	for <lists+linux-edac@lfdr.de>; Sat, 25 May 2019 16:42:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726812AbfEYMRR (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Sat, 25 May 2019 08:17:17 -0400
-Received: from mail-wr1-f65.google.com ([209.85.221.65]:36804 "EHLO
-        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726808AbfEYMRQ (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Sat, 25 May 2019 08:17:16 -0400
-Received: by mail-wr1-f65.google.com with SMTP id s17so12465653wru.3
-        for <linux-edac@vger.kernel.org>; Sat, 25 May 2019 05:17:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=message-id:from:mime-version:content-transfer-encoding
-         :content-description:subject:to:date:reply-to:return-receipt-to;
-        bh=47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=;
-        b=HJASABfUYkLvGxWn89vX01etXntHp067k7tzKeqCrcLVqFNWdjWN2jdHyhccYpsa5o
-         m8N184fFlpATfDXLZgip/2MhEdvNKLofTugnze5c93qAp5eKgg0QnfnMATrZTPpm9nkS
-         mwnK/gk4g/X++k8zOuDB8TvB4D3kDRf7jcUiCWM2yzN9ngCIzMh+qjQKCmjXI5aVNBJj
-         OxkJqiiKu21SMwv3JhCLdXGk7HMMvSBsK0FzgdTvMK6p5Ek3QPkKl70572pHTzdQoHqD
-         yi0ac0yxDVwW5JauvocKMOioL5xSzfaaXDhtNoMxl+6Ddt5HS/dVjDD2QjvequWubiTn
-         MZKw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:from:mime-version
-         :content-transfer-encoding:content-description:subject:to:date
-         :reply-to:return-receipt-to;
-        bh=47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=;
-        b=rIKmAPHT8LaMlBrEKDkMuH/Id9OWWWj78AOw9MgzuJNw9ihqN6uAkt6izIuk4jFDI+
-         YbwIiGAsN+9Vjh8wInQI2vWkbgh53zaDn3vj1KcpEybQLqeiIIH+/rvGDAqtHs11iXRm
-         lfsxn14D6VeRi5CULr43H7d/PPMjos1l/LzD42N/R9ECaklm3TjGSQ2JUQ2mNcxa7rzX
-         3n0+Nv97NwFTbJBQgqoolX6eAUvntCtbnRouV2rxklsgOdYpN/u5hcmo2neg8iEV3gNN
-         x4pnBSNatu4JHUDNIUqIhFt+OdZJvWqx9h58COB02JeCb+mPiy3kjFE0T+9/TZH23B28
-         36YA==
-X-Gm-Message-State: APjAAAUsilyfyzxPGWzDENWmfp9zLMNO5i0n2/McpViBjUktftD45BvJ
-        e9qYPwFunyVAHh6GvcQfo6iDNh224D8=
-X-Google-Smtp-Source: APXvYqwsPaIvB2MzvriPhFB2RADzwjXZMOOJDOGg4k2wNL+eV+U41jf3i1djh1Do7U4R5y40kYDr1A==
-X-Received: by 2002:adf:d4c8:: with SMTP id w8mr8882600wrk.2.1558786635551;
-        Sat, 25 May 2019 05:17:15 -0700 (PDT)
-Received: from SAMSUNG-PC.Home ([196.170.233.164])
-        by smtp.gmail.com with ESMTPSA id m206sm8377670wmf.21.2019.05.25.05.17.11
-        (version=TLS1 cipher=AES128-SHA bits=128/128);
-        Sat, 25 May 2019 05:17:14 -0700 (PDT)
-Message-ID: <5ce9324a.1c69fb81.08a0.ee4d@mx.google.com>
-From:   Katie Higgins <janehemssusan1958@gmail.com>
-X-Google-Original-From: "Katie Higgins" <katiehiggins144@gmail.com>
-Content-Type: text/plain; charset="iso-8859-1"
+        id S1727025AbfEYOmN (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Sat, 25 May 2019 10:42:13 -0400
+Received: from szxga05-in.huawei.com ([45.249.212.191]:17160 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726126AbfEYOmN (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Sat, 25 May 2019 10:42:13 -0400
+Received: from DGGEMS406-HUB.china.huawei.com (unknown [172.30.72.60])
+        by Forcepoint Email with ESMTP id F199C4B7FDF832421FFA;
+        Sat, 25 May 2019 22:42:10 +0800 (CST)
+Received: from localhost (10.177.31.96) by DGGEMS406-HUB.china.huawei.com
+ (10.3.19.206) with Microsoft SMTP Server id 14.3.439.0; Sat, 25 May 2019
+ 22:42:02 +0800
+From:   YueHaibing <yuehaibing@huawei.com>
+To:     <sschaeck@cisco.com>, <bp@alien8.de>, <mchehab@kernel.org>,
+        <james.morse@arm.com>, <joel@jms.id.au>, <andrew@aj.id.au>
+CC:     <linux-kernel@vger.kernel.org>, <linux-aspeed@lists.ozlabs.org>,
+        <linux-edac@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        YueHaibing <yuehaibing@huawei.com>
+Subject: [PATCH -next] EDAC: aspeed: Remove set but not used variable 'np'
+Date:   Sat, 25 May 2019 22:41:53 +0800
+Message-ID: <20190525144153.2028-1-yuehaibing@huawei.com>
+X-Mailer: git-send-email 2.10.2.windows.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Description: Mail message body
-Subject: Re: Can we talk please?
-To:     Recipients <katiehiggins144@gmail.com>
-Date:   Sat, 25 May 2019 05:17:05 -0700
-Reply-To: katiehiggins144@gmail.com
+Content-Type: text/plain
+X-Originating-IP: [10.177.31.96]
+X-CFilter-Loop: Reflected
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
+
+Fixes gcc '-Wunused-but-set-variable' warning:
+
+drivers/edac/aspeed_edac.c: In function aspeed_probe:
+drivers/edac/aspeed_edac.c:284:22: warning: variable np set but not used [-Wunused-but-set-variable]
+
+It is never used and can be removed.
+
+Signed-off-by: YueHaibing <yuehaibing@huawei.com>
+---
+ drivers/edac/aspeed_edac.c | 4 ----
+ 1 file changed, 4 deletions(-)
+
+diff --git a/drivers/edac/aspeed_edac.c b/drivers/edac/aspeed_edac.c
+index 11833c0a5d07..5634437bb39d 100644
+--- a/drivers/edac/aspeed_edac.c
++++ b/drivers/edac/aspeed_edac.c
+@@ -281,15 +281,11 @@ static int aspeed_probe(struct platform_device *pdev)
+ 	struct device *dev = &pdev->dev;
+ 	struct edac_mc_layer layers[2];
+ 	struct mem_ctl_info *mci;
+-	struct device_node *np;
+ 	struct resource *res;
+ 	void __iomem *regs;
+ 	u32 reg04;
+ 	int rc;
+ 
+-	/* setup regmap */
+-	np = dev->of_node;
+-
+ 	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+ 	if (!res)
+ 		return -ENOENT;
+-- 
+2.17.1
+
 
