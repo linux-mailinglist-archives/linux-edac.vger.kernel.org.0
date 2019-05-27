@@ -2,78 +2,101 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B6DF22B086
-	for <lists+linux-edac@lfdr.de>; Mon, 27 May 2019 10:44:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C78B62BC55
+	for <lists+linux-edac@lfdr.de>; Tue, 28 May 2019 01:29:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726408AbfE0Inw (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Mon, 27 May 2019 04:43:52 -0400
-Received: from mail-ot1-f67.google.com ([209.85.210.67]:41282 "EHLO
-        mail-ot1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725908AbfE0Inv (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Mon, 27 May 2019 04:43:51 -0400
-Received: by mail-ot1-f67.google.com with SMTP id l25so14128128otp.8;
-        Mon, 27 May 2019 01:43:50 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=SPyeTzPFoh+1jcHD1T6EeO+I9ugNzJgCyHNSVSPB+Tc=;
-        b=CurKgiqG1W2/kcwqKQGypZEHcqAaKeeiBvQOmycmxO1M+JUNpY1wcado5riTLx4FgG
-         KoAuupXk1Co0lLXoLzVZk0CvOYk7xlutqqlEq5DZk3/LMCHkjffnoinnb9e32YvycQy8
-         ziXuqUmjx/p/KoWMf47CE+jo966cTxXZ/QZn2/qErM/uzZ6ujgEDVfRRgopAaD6kJKZj
-         Thp50xWIEhTq1yDoPNKmKuhGmOQDuMveeVlMnKE+WWRL4hBg2kwXBkVZQse0hRHudESs
-         DyuBbNdhcgcC++eX5TnpHOy8uFHrP2P0257cxe/WUfISunfz2lJjT6b48Se2N812QYc+
-         6YIQ==
-X-Gm-Message-State: APjAAAUPr7GH+9lLtlo50P8cRh7osBh4bF0CR5KFM/Npp13or1BEUC//
-        VGOAIkJoib2ZcJWVVgLKoZZY7j4ThLNydZb6Nnw=
-X-Google-Smtp-Source: APXvYqxIlLFH84yhUFerMj/YlUDBNDBRTGJTxhPDFRXnfvuo7mYZbz39ugxbhoZlfat/iRijWwRpROWfadWrjYSeMCE=
-X-Received: by 2002:a9d:7dd5:: with SMTP id k21mr43860970otn.167.1558946630255;
- Mon, 27 May 2019 01:43:50 -0700 (PDT)
+        id S1727090AbfE0X24 (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Mon, 27 May 2019 19:28:56 -0400
+Received: from mail.skyhub.de ([5.9.137.197]:48212 "EHLO mail.skyhub.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726772AbfE0X24 (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Mon, 27 May 2019 19:28:56 -0400
+Received: from cz.tnic (ip65-44-65-130.z65-44-65.customer.algx.net [65.44.65.130])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 0FB4F1EC014A;
+        Tue, 28 May 2019 01:28:53 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1558999734;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=4boZRYbDewKcWSBP8hW7Mh603R2vEYr8FGHA70RdWpM=;
+        b=B9Jl0kyItn6ITDRm37alHV7lzQzKkoUMJxw//AVu8ZBRTag8eo10IKCexB/JGcL71NutXU
+        Sh/9lGg813kZ78dsc1xwQwBWxmTvsn5zxMB8phDxFF0mRYHcso3JN08elS7JAYuUk9WTt9
+        06FiYBPQ5W6PnVTWxU2Ko+WosaMyEDU=
+Date:   Tue, 28 May 2019 01:28:50 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     "Ghannam, Yazen" <Yazen.Ghannam@amd.com>
+Cc:     "Luck, Tony" <tony.luck@intel.com>,
+        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "x86@kernel.org" <x86@kernel.org>
+Subject: Re: [PATCH v3 5/6] x86/MCE: Save MCA control bits that get set in
+ hardware
+Message-ID: <20190527232849.GC8209@cz.tnic>
+References: <20190517101006.GA32065@zn.tnic>
+ <SN6PR12MB26391A0C3979030082EE38F8F80B0@SN6PR12MB2639.namprd12.prod.outlook.com>
+ <20190517163729.GE13482@zn.tnic>
+ <20190517172648.GA18164@agluck-desk>
+ <20190517174817.GG13482@zn.tnic>
+ <20190517180607.GA21710@agluck-desk>
+ <20190517193431.GI13482@zn.tnic>
+ <SN6PR12MB2639C5427366AC3004C35CC0F80B0@SN6PR12MB2639.namprd12.prod.outlook.com>
+ <20190517200225.GK13482@zn.tnic>
+ <SN6PR12MB26390759DB43763D3A482918F8010@SN6PR12MB2639.namprd12.prod.outlook.com>
 MIME-Version: 1.0
-References: <cover.1558362030.git.mchehab+samsung@kernel.org> <4fd1182b4a41feb2447c7ccde4d7f0a6b3c92686.1558362030.git.mchehab+samsung@kernel.org>
-In-Reply-To: <4fd1182b4a41feb2447c7ccde4d7f0a6b3c92686.1558362030.git.mchehab+samsung@kernel.org>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 27 May 2019 10:43:39 +0200
-Message-ID: <CAJZ5v0iiSo=yoyZTt6ddf5fBRGy1wSvzmA-ZaHH33nivkSp22Q@mail.gmail.com>
-Subject: Re: [PATCH 10/10] docs: fix broken documentation links
-To:     Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
-Cc:     Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        Mauro Carvalho Chehab <mchehab@infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        "open list:EDAC-CORE" <linux-edac@vger.kernel.org>,
-        netdev <netdev@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        Linux PCI <linux-pci@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-amlogic@lists.infradead.org,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        linux-gpio@vger.kernel.org, linux-i2c <linux-i2c@vger.kernel.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        xen-devel@lists.xenproject.org,
-        Platform Driver <platform-driver-x86@vger.kernel.org>,
-        devel@driverdev.osuosl.org, kvm@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        "open list:ACPI COMPONENT ARCHITECTURE (ACPICA)" <devel@acpica.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        linux-security-module@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <SN6PR12MB26390759DB43763D3A482918F8010@SN6PR12MB2639.namprd12.prod.outlook.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Mon, May 20, 2019 at 4:48 PM Mauro Carvalho Chehab
-<mchehab+samsung@kernel.org> wrote:
->
-> Mostly due to x86 and acpi conversion, several documentation
-> links are still pointing to the old file. Fix them.
->
-> Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
+On Thu, May 23, 2019 at 08:00:33PM +0000, Ghannam, Yazen wrote:
+> I did a bit more testing and I noticed that writing "0" disables a bank with no way to reenable it.
+> 
+> For example:
+> 1) Read bank10.
+> 	a) Succeeds; returns "fffffffffffffff".
+> 2) Write "0" to bank10.
+> 	a) Succeeds; hardware register is set to "0".
+> 	b) Hardware register is checked, and b->init=0.
+> 3) Read bank10.
+> 	a) Fails, because b->init=0.
+> 4) Write non-zero value to bank10 to reenable it.
+> 	a) Fails, because b->init=0.
+> 5) Reboot needed to reset bank.
+> 
+> Is that okay?
 
-For the ACPI part:
+Nope, that doesn't sound correct to me.
 
-Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+I guess the cleanest way to handle his properly would be to have a
+function called something like __mcheck_cpu_init_banks() which gets
+called in mcheck_cpu_init() after the quirks have run and then does the
+final poking of the banks and sets b->init properly.
+
+__mcheck_cpu_init_clear_banks() should then be renamed to
+__mcheck_cpu_clear_banks() to denote that it only clears the banks and
+would only do:
+
+                if (!b->init)
+                        continue;
+
+                wrmsrl(msr_ops.ctl(i), b->ctl);
+                wrmsrl(msr_ops.status(i), 0);
+
+And then sprinkle some commenting to not forget the scheme again.
+
+Yeah, this sounds clean to me but you guys might have a better idea...
+
+Thx.
+
+-- 
+Regards/Gruss,
+    Boris.
+
+ECO tip #101: Trim your mails when you reply. Srsly.
