@@ -2,67 +2,62 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 420FF2DA25
-	for <lists+linux-edac@lfdr.de>; Wed, 29 May 2019 12:13:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E5B12E03C
+	for <lists+linux-edac@lfdr.de>; Wed, 29 May 2019 16:55:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726140AbfE2KNV convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-edac@lfdr.de>); Wed, 29 May 2019 06:13:21 -0400
-Received: from ZXSHCAS2.zhaoxin.com ([203.148.12.82]:58568 "EHLO
-        ZXSHCAS2.zhaoxin.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726024AbfE2KNV (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Wed, 29 May 2019 06:13:21 -0400
-X-Greylist: delayed 903 seconds by postgrey-1.27 at vger.kernel.org; Wed, 29 May 2019 06:13:20 EDT
-Received: from zxbjmbx2.zhaoxin.com (10.29.252.164) by ZXSHCAS2.zhaoxin.com
- (10.28.252.162) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1261.35; Wed, 29 May
- 2019 17:58:09 +0800
-Received: from zxbjmbx1.zhaoxin.com (10.29.252.163) by zxbjmbx2.zhaoxin.com
- (10.29.252.164) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1261.35; Wed, 29 May
- 2019 17:58:08 +0800
-Received: from zxbjmbx1.zhaoxin.com ([fe80::b41a:737:a784:b70d]) by
- zxbjmbx1.zhaoxin.com ([fe80::b41a:737:a784:b70d%16]) with mapi id
- 15.01.1261.035; Wed, 29 May 2019 17:58:08 +0800
-From:   Tony W Wang-oc <TonyWWang-oc@zhaoxin.com>
-To:     "tipbot@zytor.com" <tipbot@zytor.com>
-CC:     "ashok.raj@intel.com" <ashok.raj@intel.com>,
-        "bp@suse.de" <bp@suse.de>, "hpa@zytor.com" <hpa@zytor.com>,
+        id S1726087AbfE2OzB (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Wed, 29 May 2019 10:55:01 -0400
+Received: from mail.skyhub.de ([5.9.137.197]:50834 "EHLO mail.skyhub.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726068AbfE2OzA (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Wed, 29 May 2019 10:55:00 -0400
+Received: from cz.tnic (unknown [207.225.69.115])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id D01DB1EC01AD;
+        Wed, 29 May 2019 16:54:58 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1559141699;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=vEYbKqClcQsPDtUPPoQEYm3CxV8887wcrSdsYDhcWaQ=;
+        b=kbEKr11SEILkfdZ6XaMFVswCRxLz/lhovyPg7TT6Ov52/679LP6oB5x3UnTFfS/RimjhMT
+        La8PCP4x9DX0I6CrwWZzFmAGzd5jLvxcmrkOuchjdXc2l6hJSguSi+jmEpFAJfCShrqlQh
+        b2w76nGKhYCaSUo7/usepcrZkd7zZUw=
+Date:   Wed, 29 May 2019 16:54:52 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Robert Richter <rrichter@marvell.com>
+Cc:     Tony Luck <tony.luck@intel.com>, James Morse <james.morse@arm.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
         "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-tip-commits@vger.kernel.org" 
-        <linux-tip-commits@vger.kernel.org>,
-        "mingo@kernel.org" <mingo@kernel.org>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "tony.luck@intel.com" <tony.luck@intel.com>,
-        "torvalds@linux-foundation.org" <torvalds@linux-foundation.org>,
-        David Wang <DavidWang@zhaoxin.com>
-Subject: Re: [tip:x86/urgent] x86/mce: Ensure offline CPUs don' t participate
- in rendezvous process
-Thread-Topic: Re: [tip:x86/urgent] x86/mce: Ensure offline CPUs don' t
- participate in rendezvous process
-Thread-Index: AdUV/LHofhz829fxQm+1FlrtATZuKw==
-Date:   Wed, 29 May 2019 09:58:08 +0000
-Message-ID: <ff0c714d200c487fac15da7e4003c1b4@zhaoxin.com>
-Accept-Language: en-US, zh-CN
-Content-Language: zh-CN
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.32.64.23]
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 8BIT
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 00/21] EDAC, mc, ghes: Fixes and updates to improve
+ memory error reporting
+Message-ID: <20190529145452.GD2951@cz.tnic>
+References: <20190529084344.28562-1-rrichter@marvell.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20190529084344.28562-1-rrichter@marvell.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-Hi,
-	This patch requires all #MC exception errors set MCG_STATUS_RIPV = 1?
-Because on offline CPUs, for #MC exception errors set MCG_STATUS_RIPV = 0
-(like "Recoverable-not-continuable SRAR Type" Errors), this patch doesn't seem
-to work. if this patch's "return; " in a wrong place?
+On Wed, May 29, 2019 at 08:44:01AM +0000, Robert Richter wrote:
+> Patch #1: Repost of an already accepted patch sent to the ml. Adding
+> it here for completeness as I did not find it in a repository yet.
 
-Thanks
-Tony W Wang-oc
+Try mainline:
+
+29a0c843973b ("EDAC/mc: Fix edac_mc_find() in case no device is found")
+
+:-)
+
+-- 
+Regards/Gruss,
+    Boris.
+
+ECO tip #101: Trim your mails when you reply. Srsly.
