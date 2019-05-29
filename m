@@ -2,111 +2,301 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 870752E102
-	for <lists+linux-edac@lfdr.de>; Wed, 29 May 2019 17:26:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 326872E3E9
+	for <lists+linux-edac@lfdr.de>; Wed, 29 May 2019 19:51:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726062AbfE2P0r (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Wed, 29 May 2019 11:26:47 -0400
-Received: from foss.arm.com ([217.140.101.70]:48154 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725936AbfE2P0r (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Wed, 29 May 2019 11:26:47 -0400
+        id S1725956AbfE2RvD (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Wed, 29 May 2019 13:51:03 -0400
+Received: from usa-sjc-mx-foss1.foss.arm.com ([217.140.101.70]:50288 "EHLO
+        foss.arm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725917AbfE2RvD (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Wed, 29 May 2019 13:51:03 -0400
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.72.51.249])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B3034341;
-        Wed, 29 May 2019 08:26:46 -0700 (PDT)
-Received: from eglon.cambridge.arm.com (eglon.cambridge.arm.com [10.1.196.105])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 7FA653F5AF;
-        Wed, 29 May 2019 08:26:45 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id CF5A2341;
+        Wed, 29 May 2019 10:51:02 -0700 (PDT)
+Received: from [10.1.196.105] (eglon.cambridge.arm.com [10.1.196.105])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id BB20E3F5AF;
+        Wed, 29 May 2019 10:51:01 -0700 (PDT)
+Subject: Re: [PATCH 14/21] EDAC, ghes: Extract numa node information for each
+ dimm
+To:     Robert Richter <rrichter@marvell.com>
+Cc:     Borislav Petkov <bp@alien8.de>, Tony Luck <tony.luck@intel.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20190529084344.28562-1-rrichter@marvell.com>
+ <20190529084344.28562-15-rrichter@marvell.com>
 From:   James Morse <james.morse@arm.com>
-To:     linux-edac@vger.kernel.org
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Borislav Petkov <bp@alien8.de>,
-        James Morse <james.morse@arm.com>,
-        Robert Richter <rrichter@marvell.com>,
-        Toshi Kani <toshi.kani@hpe.com>
-Subject: [PATCH] EDAC, ghes: Fix grain calculation
-Date:   Wed, 29 May 2019 16:22:32 +0100
-Message-Id: <20190529152232.187580-1-james.morse@arm.com>
-X-Mailer: git-send-email 2.20.1
+Message-ID: <42d1cb7f-de7a-31e8-eb89-8d0651a3501a@arm.com>
+Date:   Wed, 29 May 2019 18:51:00 +0100
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20190529084344.28562-15-rrichter@marvell.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-GB
+Content-Transfer-Encoding: 7bit
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-ghes_edac_report_mem_error() attempts to calculate the 'grain' or
-granule affected by the error from the firmware-provided 'physical address
-mask'. This mask tells us which bits of the physical address are valid.
+Hi Robert,
 
-The current calculation:
-| e->grain = ~(mem_err->physical_addr_mask & ~PAGE_MASK);
-will always cause the top bits to be set as they are cleared by &,
-then set again by ~. For a hypervisor reporting its page-size as the
-region affected by the error:
-| {1}[Hardware Error]:   physical_address: 0x00000000deadbeef
-| {1}[Hardware Error]:   physical_address_mask: 0xfffffffffffff000
-| {1}[Hardware Error]:   error_type: 6, master abort
-| EDAC MC0: 1 CE Master abort on unknown label ( page:0xdead offset:0xbeef
-| grain:-61441 syndrome:0x0 - status(0x0000000000000001): reserved)
+On 29/05/2019 09:44, Robert Richter wrote:
+> In a later patch we want to have one mc device per node. This patch
+> extracts the numa node information for each dimm. This is done by
+> collecting the physical address ranges from the DMI table (Memory
+> Array Mapped Address - Type 19 of SMBIOS spec). The node information> for a physical address is already know to a numa aware system (e.g. by
+> using the ACPI _PXM method or the ACPI SRAT table), so based on the PA
+> we can assign the node id to the dimms.
 
-Here the grain has been miscalculated as the hypervisor reported a 4K
-size granule, due to its page size, whereas the guest kernel uses 64K.
-This gives us e->grain of 0xffffffffffff0fff
+I think you're letting the smbios information drive you here. We'd like to do as much as
+possible without it, all its really good for is telling us the label on the PCB.
 
-Fix this, calculating grain_bits directly from ~physical_address_mask,
-and setting e->grain from that. In the same example we now get:
-| EDAC MC0: 1 CE Master abort on unknown label ( page:0xdead offset:0xbeef
-| grain:4096 syndrome:0x0 - status(0x0000000000000001): reserved)
+With this approach, you only get numa information by parsing more smbios, which we have to
+try and validate, and fall back to some error path if it smells wrong. We end up needing
+things like a 'fallback memory controller' in the case the firmware fault-time value is
+missing, or nuts.
 
-Cc: Robert Richter <rrichter@marvell.com>
-Cc: Toshi Kani <toshi.kani@hpe.com>
-Signed-off-by: James Morse <james.morse@arm.com>
----
-This has always been broken, so I suspect no-one cares about this, it was
-added by:
-Fixes: f04c62a7036a ("ghes_edac: add support for reporting errors via EDAC")
+What bugs me is we already know the numa information from the address. We could expose
+that without the smbios tables at all, and it would be useful to someone playing the
+dimm-bisect game. Not making it depend on smbios means there is a good chance it can
+become common with other edac drivers.
 
-I've only tested this with firmware I've written.
+I don't think we need to know the dimm->node mapping up front. When we get an error,
+pfn_to_nid() on the address tells us which node that memory is attached to. This should be
+the only place nid information comes from, that way we don't need to check it. Trying to
+correlate it with smbios tables is much more code. If the CPER comes with a DIMM handle,
+we know the DIMM too.
 
- drivers/edac/ghes_edac.c | 9 +++++----
- 1 file changed, 5 insertions(+), 4 deletions(-)
+So all we really need is to know at setup time is how many numa-nodes there are, and the
+maximum DIMM per node if we don't want phantom-dimms. Type-17 already has a
+Physical-Memory-Array-Handle, which points at Type-19... but we don't need to read it,
+just count them and find the biggest.
 
-diff --git a/drivers/edac/ghes_edac.c b/drivers/edac/ghes_edac.c
-index 49396bf6ad88..fac96ff45b7e 100644
---- a/drivers/edac/ghes_edac.c
-+++ b/drivers/edac/ghes_edac.c
-@@ -202,8 +202,8 @@ void ghes_edac_report_mem_error(int sev, struct cper_sec_mem_err *mem_err)
- 	struct mem_ctl_info *mci;
- 	struct ghes_edac_pvt *pvt = ghes_pvt;
- 	unsigned long flags;
-+	u8 grain_bits = 0;
- 	char *p;
--	u8 grain_bits;
- 
- 	if (!pvt)
- 		return;
-@@ -318,8 +318,10 @@ void ghes_edac_report_mem_error(int sev, struct cper_sec_mem_err *mem_err)
- 	}
- 
- 	/* Error grain */
--	if (mem_err->validation_bits & CPER_MEM_VALID_PA_MASK)
--		e->grain = ~(mem_err->physical_addr_mask & ~PAGE_MASK);
-+	if (mem_err->validation_bits & CPER_MEM_VALID_PA_MASK) {
-+		grain_bits = fls_long(~mem_err->physical_addr_mask);
-+		e->grain = 1UL<<grain_bits;
-+	}
- 
- 	/* Memory error location, mapped on e->location */
- 	p = e->location;
-@@ -436,7 +438,6 @@ void ghes_edac_report_mem_error(int sev, struct cper_sec_mem_err *mem_err)
- 		*(p - 1) = '\0';
- 
- 	/* Generate the trace event */
--	grain_bits = fls_long(e->grain);
- 	snprintf(pvt->detail_location, sizeof(pvt->detail_location),
- 		 "APEI location: %s %s", e->location, e->other_detail);
- 	trace_mc_event(type, e->msg, e->label, e->error_count,
--- 
-2.20.1
+If the type-19 information is missing from smbios, or not linked up properly, or the
+values provided at fault-time don't overlap with the values in the table, or there is no
+fault-time node information: you still get the numa-node information based on the address.
 
+Using the minimum information should give us the least code, and the least exposure to
+misdescribed tables.
+
+
+> A fallback that disables numa is implemented in case the node
+> information is inconsistent.
+
+> diff --git a/drivers/edac/ghes_edac.c b/drivers/edac/ghes_edac.c
+> index 50f4ee36b755..083452a48b42 100644
+> --- a/drivers/edac/ghes_edac.c
+> +++ b/drivers/edac/ghes_edac.c
+> @@ -67,14 +67,34 @@ struct memdev_dmi_entry {
+>  	u16 conf_mem_clk_speed;
+>  } __attribute__((__packed__));
+>  
+> +/* Memory Array Mapped Address - Type 19 of SMBIOS spec */
+> +struct memarr_dmi_entry {
+> +	u8		type;
+> +	u8		length;
+> +	u16		handle;
+> +	u32		start;
+> +	u32		end;
+> +	u16		phys_mem_array_handle;
+> +	u8		partition_width;
+> +	u64		ext_start;
+> +	u64		ext_end;
+> +} __attribute__((__packed__));
+
+Any chance we could collect the structures from the smbios spec in a header file somewhere?
+
+I'd prefer not to read this thing at all if we can help it.
+
+>  struct ghes_dimm_info {
+>  	struct dimm_info dimm_info;
+>  	int		idx;
+> +	int		numa_node;
+
+(I thought nid was the preferred term)
+
+
+> +	phys_addr_t	start;
+> +	phys_addr_t	end;
+
+I think start and end are deceptive as they overlap with other DIMMs on systems with
+interleaving memory controllers. I'd prefer not to keep these values around.
+
+
+> +	u16		phys_handle;
+>  };
+>  
+>  struct ghes_mem_info {
+> -	int num_dimm;
+> +	int		num_dimm;
+>  	struct ghes_dimm_info *dimms;
+> +	int		num_nodes;
+
+> +	int		num_per_node[MAX_NUMNODES];
+
+Number of what?
+
+
+> +	bool		enable_numa;
+
+This is used locally in mem_info_setup(), but its not read from here by any of the later
+patches in the series. Is it needed?
+
+I don't like the idea that this is behaviour that is turned on/off. Its a property of the
+system. I think it would be better if CONFIG_NUMA causes you to get multiple
+memory-controllers created, but if its not actually a NUMA machine there would only be
+one. This lets us test that code on not-really-numa systems.
+
+
+>  };
+>  
+>  struct ghes_mem_info mem_info;
+> @@ -97,10 +117,50 @@ static void ghes_dimm_info_init(void)
+>  
+>  	for_each_dimm(dimm) {
+>  		dimm->idx	= idx;
+> +		dimm->numa_node	= NUMA_NO_NODE;
+>  		idx++;
+>  	}
+>  }
+>  
+> +static void ghes_edac_set_nid(const struct dmi_header *dh, void *arg)
+> +{
+> +	struct memarr_dmi_entry *entry = (struct memarr_dmi_entry *)dh;
+> +	struct ghes_dimm_info *dimm;
+> +	phys_addr_t start, end;
+> +	int nid;
+> +
+> +	if (dh->type != DMI_ENTRY_MEM_ARRAY_MAPPED_ADDR)
+> +		return;
+
+> +	/* only support SMBIOS 2.7+ */
+> +	if (entry->length < sizeof(*entry))
+> +		return;
+
+Lovely. I still hope we can get away without parsing this table.
+
+
+> +	if (entry->start == 0xffffffff)
+> +		start = entry->ext_start;
+> +	else
+> +		start = entry->start;
+> +	if (entry->end == 0xffffffff)
+> +		end = entry->ext_end;
+> +	else
+> +		end = entry->end;
+
+
+> +	if (!pfn_valid(PHYS_PFN(start)))
+> +		return;
+
+Eh? Just because there is no struct page doesn't mean firmware won't report errors for it.
+This is going to bite on arm64 if the 'start' page happens to have been reserved by
+firmware, and thus doesn't have a struct page. Bottom-up allocation doesn't sound unlikely.
+
+
+> +	nid = pfn_to_nid(PHYS_PFN(start));
+
+... Ugh, because pfn_to_nid() goes via struct page.
+
+You can make this robust by scanning start->end looking for a pfn_valid() you can pull the
+nid out of. (no, I don't think its a good idea either!)
+
+I'd like to see if we can get rid of the 'via address' part of this.
+
+
+> +	if (nid < 0 || nid >= MAX_NUMNODES || !node_possible(nid))
+> +		nid = NUMA_NO_NODE;
+
+Can this happen? Does this indicate the firmware tables are wrong, or mm is about derail?
+
+
+> +	for_each_dimm(dimm) {
+> +		if (entry->phys_mem_array_handle == dimm->phys_handle) {
+> +			dimm->numa_node	= nid;
+> +			dimm->start	= start;
+> +			dimm->end	= end;
+> +		}
+> +	}
+> +}
+> +
+>  static int get_dimm_smbios_index(u16 handle)
+>  {
+>  	struct mem_ctl_info *mci = ghes_pvt->mci;
+> @@ -213,8 +273,25 @@ static void ghes_edac_dmidecode(const struct dmi_header *dh, void *arg)
+>  	}
+>  }
+>  
+> +static void mem_info_disable_numa(void)
+> +{
+> +	struct ghes_dimm_info *dimm;
+> +
+> +	for_each_dimm(dimm) {
+> +		if (dimm->numa_node != NUMA_NO_NODE)
+> +			mem_info.num_per_node[dimm->numa_node] = 0;
+
+> +		dimm->numa_node = 0;
+
+NUMA_NO_NODE?
+
+> +	}
+> +
+> +	mem_info.num_per_node[0] = mem_info.num_dimm;
+> +	mem_info.num_nodes = 1;
+> +	mem_info.enable_numa = false;
+> +}
+> +
+>  static int mem_info_setup(void)
+>  {
+> +	struct ghes_dimm_info *dimm;
+> +	bool enable_numa = true;
+>  	int idx = 0;
+>  
+>  	memset(&mem_info, 0, sizeof(mem_info));
+> @@ -231,6 +308,29 @@ static int mem_info_setup(void)
+>  
+>  	ghes_dimm_info_init();
+>  	dmi_walk(ghes_edac_dmidecode, &idx);
+> +	dmi_walk(ghes_edac_set_nid, NULL);
+> +
+> +	for_each_dimm(dimm) {
+> +		if (dimm->numa_node == NUMA_NO_NODE) {
+> +			enable_numa = false;
+> +		} else {
+
+> +			if (!mem_info.num_per_node[dimm->numa_node])
+> +				mem_info.num_nodes++;
+
+This is to try and hide empty nodes?
+
+
+> +			mem_info.num_per_node[dimm->numa_node]++;
+
+Could you do these two in your previous for_each_dimm() walk?
+
+
+> +		}
+> +
+> +		edac_dbg(1, "DIMM%i: Found mem range [%pa-%pa] on node %d\n",
+> +			dimm->idx, &dimm->start, &dimm->end, dimm->numa_node);
+> +	}
+
+
+> +	mem_info.enable_numa = enable_numa;
+> +	if (enable_numa)
+> +		return 0;
+> +
+> +	/* something went wrong, disable numa */
+> +	if (num_possible_nodes() > 1)
+> +		pr_warn("Can't get numa info, disabling numa\n");
+> +	mem_info_disable_numa();
+
+I'd like to find a way of doing this where we don't need this sort of thing!
+
+
+Thanks,
+
+James
