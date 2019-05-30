@@ -2,106 +2,64 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 99EFC3008E
-	for <lists+linux-edac@lfdr.de>; Thu, 30 May 2019 19:10:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 98356301AC
+	for <lists+linux-edac@lfdr.de>; Thu, 30 May 2019 20:19:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726487AbfE3RKq (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Thu, 30 May 2019 13:10:46 -0400
-Received: from mga14.intel.com ([192.55.52.115]:64258 "EHLO mga14.intel.com"
+        id S1726442AbfE3STe (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Thu, 30 May 2019 14:19:34 -0400
+Received: from mail.skyhub.de ([5.9.137.197]:35080 "EHLO mail.skyhub.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725961AbfE3RKq (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Thu, 30 May 2019 13:10:46 -0400
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-X-Amp-File-Uploaded: False
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 30 May 2019 10:10:45 -0700
-X-ExtLoop1: 1
-Received: from araj-mobl1.jf.intel.com ([10.251.6.93])
-  by fmsmga005.fm.intel.com with ESMTP; 30 May 2019 10:10:44 -0700
-Date:   Thu, 30 May 2019 10:10:44 -0700
-From:   "Raj, Ashok" <ashok.raj@intel.com>
-To:     Tony W Wang-oc <TonyWWang-oc@zhaoxin.com>
-Cc:     "tipbot@zytor.com" <tipbot@zytor.com>, "bp@suse.de" <bp@suse.de>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-tip-commits@vger.kernel.org" 
-        <linux-tip-commits@vger.kernel.org>,
-        "mingo@kernel.org" <mingo@kernel.org>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "tony.luck@intel.com" <tony.luck@intel.com>,
-        "torvalds@linux-foundation.org" <torvalds@linux-foundation.org>,
-        David Wang <DavidWang@zhaoxin.com>,
-        Ashok Raj <ashok.raj@intel.com>
-Subject: Re: =?utf-8?B?562U5aSNOiBSZTogW3RpcDp4ODYv?=
- =?utf-8?Q?urgent=5D_x86=2Fmce=3A_Ensur?= =?utf-8?Q?e?= offline CPUs don' t
- participate in rendezvous process
-Message-ID: <20190530171044.GA18559@araj-mobl1.jf.intel.com>
-References: <985acf114ab245fbab52caabf03bd280@zhaoxin.com>
+        id S1725961AbfE3STe (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Thu, 30 May 2019 14:19:34 -0400
+Received: from [172.20.8.77] (unknown [207.225.69.115])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id F1E911EC033F;
+        Thu, 30 May 2019 20:19:31 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1559240372;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=+FySjQvkw3gub2985lSwYfwdxjK48qhJJdaawn7bwWw=;
+        b=cOO6KmApd03PNn2XMw3Tn6baTYU4r7UAS1R913nuS0nHijjQ6j8BDkFWp6voJjGQEy3tgO
+        3fs7DJOfmS6pj8ZteGTAFM2et+0JKArhtHQvmGZi3eS3W4vzKN4WQoBTZmnac5oF95KgHh
+        IiUG2E6k9av3XSOGh2eYfXobE1A7Tr4=
+Date:   Thu, 30 May 2019 11:19:27 -0700
+User-Agent: K-9 Mail for Android
+In-Reply-To: <1559211329-13098-3-git-send-email-hhhawa@amazon.com>
+References: <1559211329-13098-1-git-send-email-hhhawa@amazon.com> <1559211329-13098-3-git-send-email-hhhawa@amazon.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <985acf114ab245fbab52caabf03bd280@zhaoxin.com>
-User-Agent: Mutt/1.9.1 (2017-09-22)
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH 2/2] edac: add support for Amazon's Annapurna Labs EDAC
+To:     Hanna Hawa <hhhawa@amazon.com>, robh+dt@kernel.org,
+        mark.rutland@arm.com, mchehab@kernel.org, james.morse@arm.com,
+        davem@davemloft.net, gregkh@linuxfoundation.org,
+        nicolas.ferre@microchip.com, paulmck@linux.ibm.com,
+        dwmw@amazon.co.uk, benh@amazon.com
+CC:     ronenk@amazon.com, talel@amazon.com, jonnyc@amazon.com,
+        hanochu@amazon.com, hhhawa@amazon.com, linux-edac@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+From:   Boris Petkov <bp@alien8.de>
+Message-ID: <DB09EE2A-7397-4063-B925-66658D0105A5@alien8.de>
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Thu, May 30, 2019 at 09:13:39AM +0000, Tony W Wang-oc wrote:
-> On Thu, May 30, 2019, Tony W Wang-oc wrote:
-> > Hi Ashok,
-> > I have two questions about this patch, could you help to check:
-> > 
-> > 1, for broadcast #MC exceptions, this patch seems require #MC exception
-> > errors
-> > set MCG_STATUS_RIPV = 1.
-> > But for Intel CPU, some #MC exception errors set MCG_STATUS_RIPV = 0
-> > (like "Recoverable-not-continuable SRAR Type" Errors), for these errors
-> > the patch doesn't seem to work, is that okay?
-> > 
-> > 2, for LMCE exceptions, this patch seems require #MC exception errors
-> > set MCG_STATUS_RIPV = 0 to make sure LMCE be handled normally even
-> > on offline CPU.
-> > For LMCE errors set MCG_STAUS_RIPV = 1, the patch prevents offline CPU
-> > handle these LMCE errors, is that okay?
-> > 
-> 
-> More specifically, this patch seems require #MC exceptions meet the condition
-> "MCG_STATUS_RIPV ^ MCG_STATUS_LMCES == 1"; But on a Xeon X5650 machine (SMP), 
+On May 30, 2019 3:15:29 AM PDT, Hanna Hawa <hhhawa@amazon=2Ecom> wrote:
+>Add support for error detection and correction for Amazon's Annapurna
+>Labs SoCs for L1/L2 caches=2E
 
-The offline CPU will never get a LMCE=1, since those only happen on the CPU 
-that's doing active work. Offline CPUs just sitting in idle.
 
-The specific error here is a PCC=1, so irrespective of what happens
-We do capture the errors in the per-cpu log, and kernel would panic. 
+So this should be a driver for the whole annapurna platform and not only a=
+bout the RAS functionality in an IP like the caches=2E See other ARM EDAC d=
+rivers in drivers/edac/ for an example=2E
 
-What specifically this patch tries to achieve is to leave an error
-sitting with MCG-STATUS.MCIP=1 and another recoverable error would shut the 
-system dowm. 
+Thx=2E
 
-I don't see anything wrong with what this patch does.. 
-
-> "Data CACHE Level-2 Generic Error" does not meet this condition.
-> 
-> I got below message from: https://www.centos.org/forums/viewtopic.php?p=292742
-> 
-> Hardware event. This is not a software error.
-> MCE 0
-> CPU 4 BANK 6 TSC b7065eeaa18b0 
-> TIME 1545643603 Mon Dec 24 10:26:43 2018
-> MCG status:MCIP 
-> MCi status:
-> Uncorrected error
-> Error enabled
-> Processor context corrupt
-> MCA: Data CACHE Level-2 Generic Error
-> STATUS b200000080000106 MCGSTATUS 4
-> MCGCAP 1c09 APICID 4 SOCKETID 0 
-> CPUID Vendor Intel Family 6 Model 44
-> 
-> > Thanks
-> > Tony W Wang-oc
+--=20
+Sent from a small device: formatting sux and brevity is inevitable=2E 
