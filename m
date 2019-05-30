@@ -2,27 +2,27 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C50CC2EEA3
-	for <lists+linux-edac@lfdr.de>; Thu, 30 May 2019 05:49:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BCB072EDD1
+	for <lists+linux-edac@lfdr.de>; Thu, 30 May 2019 05:42:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728539AbfE3DtO (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Wed, 29 May 2019 23:49:14 -0400
-Received: from mail.kernel.org ([198.145.29.99]:57748 "EHLO mail.kernel.org"
+        id S1728356AbfE3Dlb (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Wed, 29 May 2019 23:41:31 -0400
+Received: from mail.kernel.org ([198.145.29.99]:34114 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729827AbfE3DUD (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Wed, 29 May 2019 23:20:03 -0400
+        id S1732511AbfE3DVT (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Wed, 29 May 2019 23:21:19 -0400
 Received: from localhost (ip67-88-213-2.z213-88-67.customer.algx.net [67.88.213.2])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 9B83F24908;
-        Thu, 30 May 2019 03:20:02 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id C13BE249E6;
+        Thu, 30 May 2019 03:21:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1559186402;
-        bh=s6gkeyv+vOhrrTJlNoeVWCKqxkTCnhUdxoSHnP7Ihtc=;
+        s=default; t=1559186478;
+        bh=DU2lb/T5lGZcyTlQNAmsuw6JM1ERt1KKN1Iwg5cX+IE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=MFiufwXZo73TTSTLIQ7ITixOZf/DI9WxsSaHWpZj94OZmxMw4TUXkZYqsot7XD8yi
-         GtV97Uva1bxsIOrDthu7HyaPoD6n4zXriQfAD8wp8C/sNHJNb8tslPcXBVPjOi7mlG
-         i0pKdK2aKE9AID0ZRtyzpZ7H/MN9klEVd6BEUHeA=
+        b=1rUOgyz43VjhUWNYjTiqD3oH0HC4K1uTL+9MDJV7yfElK032eCJUaGYocaN//9wOh
+         6t9gaPoP5qWrG230gQ0plRkjUZsLzFkqL/quxMaCwdTFHwrVh7HOc96kVZKkedCcue
+         OsaV63hsmrRWtvuhVRseq1rMu2tXKFBEED8E3xAQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -33,12 +33,12 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Thomas Gleixner <tglx@linutronix.de>, x86-ml <x86@kernel.org>,
         Yazen Ghannam <Yazen.Ghannam@amd.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 169/193] x86/mce: Fix machine_check_poll() tests for error types
-Date:   Wed, 29 May 2019 20:07:03 -0700
-Message-Id: <20190530030511.533950292@linuxfoundation.org>
+Subject: [PATCH 4.9 113/128] x86/mce: Fix machine_check_poll() tests for error types
+Date:   Wed, 29 May 2019 20:07:25 -0700
+Message-Id: <20190530030454.822261528@linuxfoundation.org>
 X-Mailer: git-send-email 2.21.0
-In-Reply-To: <20190530030446.953835040@linuxfoundation.org>
-References: <20190530030446.953835040@linuxfoundation.org>
+In-Reply-To: <20190530030432.977908967@linuxfoundation.org>
+References: <20190530030432.977908967@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -86,10 +86,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 37 insertions(+), 7 deletions(-)
 
 diff --git a/arch/x86/kernel/cpu/mcheck/mce.c b/arch/x86/kernel/cpu/mcheck/mce.c
-index 54874e2b1d325..4f3be91f0b0bc 100644
+index d9ad49ca3cbe2..e348bee411e35 100644
 --- a/arch/x86/kernel/cpu/mcheck/mce.c
 +++ b/arch/x86/kernel/cpu/mcheck/mce.c
-@@ -701,19 +701,49 @@ bool machine_check_poll(enum mcp_flags flags, mce_banks_t *b)
+@@ -673,20 +673,50 @@ bool machine_check_poll(enum mcp_flags flags, mce_banks_t *b)
  
  		barrier();
  		m.status = mce_rdmsrl(msr_ops.status(i));
@@ -97,6 +97,7 @@ index 54874e2b1d325..4f3be91f0b0bc 100644
 +		/* If this entry is not valid, ignore it */
  		if (!(m.status & MCI_STATUS_VAL))
  			continue;
+ 
  
  		/*
 -		 * Uncorrected or signalled events are handled by the exception
