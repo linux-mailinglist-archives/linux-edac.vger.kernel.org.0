@@ -2,26 +2,30 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3868B2EEE5
-	for <lists+linux-edac@lfdr.de>; Thu, 30 May 2019 05:51:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 48EFA2FA07
+	for <lists+linux-edac@lfdr.de>; Thu, 30 May 2019 12:13:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732295AbfE3Dut convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-edac@lfdr.de>); Wed, 29 May 2019 23:50:49 -0400
-Received: from ZXSHCAS1.zhaoxin.com ([203.148.12.81]:10209 "EHLO
+        id S1727994AbfE3KNK (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Thu, 30 May 2019 06:13:10 -0400
+Received: from ZXSHCAS1.zhaoxin.com ([203.148.12.81]:15394 "EHLO
         ZXSHCAS1.zhaoxin.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1728419AbfE3Dus (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Wed, 29 May 2019 23:50:48 -0400
-Received: from zxbjmbx2.zhaoxin.com (10.29.252.164) by ZXSHCAS1.zhaoxin.com
+        with ESMTP id S1726515AbfE3KNJ (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Thu, 30 May 2019 06:13:09 -0400
+Received: from ZXBJCAS.zhaoxin.com (10.29.252.3) by ZXSHCAS1.zhaoxin.com
  (10.28.252.161) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1261.35; Thu, 30 May
- 2019 11:50:39 +0800
-Received: from zxbjmbx1.zhaoxin.com (10.29.252.163) by zxbjmbx2.zhaoxin.com
- (10.29.252.164) with Microsoft SMTP Server (version=TLS1_2,
+ 2019 18:10:27 +0800
+Received: from zxbjmbx1.zhaoxin.com (10.29.252.163) by ZXBJCAS.zhaoxin.com
+ (10.29.252.3) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1261.35; Thu, 30 May
- 2019 11:50:39 +0800
+ 2019 17:13:39 +0800
+Received: from zxbjmbx1.zhaoxin.com (10.29.252.163) by zxbjmbx1.zhaoxin.com
+ (10.29.252.163) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1261.35; Thu, 30 May
+ 2019 17:13:39 +0800
 Received: from zxbjmbx1.zhaoxin.com ([fe80::b41a:737:a784:b70d]) by
  zxbjmbx1.zhaoxin.com ([fe80::b41a:737:a784:b70d%16]) with mapi id
- 15.01.1261.035; Thu, 30 May 2019 11:50:39 +0800
+ 15.01.1261.035; Thu, 30 May 2019 17:13:39 +0800
 From:   Tony W Wang-oc <TonyWWang-oc@zhaoxin.com>
 To:     "tipbot@zytor.com" <tipbot@zytor.com>,
         "ashok.raj@intel.com" <ashok.raj@intel.com>
@@ -37,40 +41,50 @@ CC:     "bp@suse.de" <bp@suse.de>, "hpa@zytor.com" <hpa@zytor.com>,
         "tony.luck@intel.com" <tony.luck@intel.com>,
         "torvalds@linux-foundation.org" <torvalds@linux-foundation.org>,
         David Wang <DavidWang@zhaoxin.com>
-Subject: Re: [tip:x86/urgent] x86/mce: Ensure offline CPUs don' t participate
- in rendezvous process
+Subject: =?gb2312?B?tPC4tDogUmU6IFt0aXA6eDg2L3VyZ2VudF0geDg2L21jZTogRW5zdXJlIG9m?=
+ =?gb2312?B?ZmxpbmUgQ1BVcyBkb24nIHQgcGFydGljaXBhdGUgaW4gcmVuZGV6dm91cyBw?=
+ =?gb2312?Q?rocess?=
 Thread-Topic: Re: [tip:x86/urgent] x86/mce: Ensure offline CPUs don' t
  participate in rendezvous process
-Thread-Index: AdUWlGl+Ivql5y3zT0ybuVHbqcI6gA==
-Date:   Thu, 30 May 2019 03:50:39 +0000
-Message-ID: <036f5f6f2d8a4a768309b61540857393@zhaoxin.com>
+Thread-Index: AdUWlGl+Ivql5y3zT0ybuVHbqcI6gAAJtEFg
+Date:   Thu, 30 May 2019 09:13:39 +0000
+Message-ID: <985acf114ab245fbab52caabf03bd280@zhaoxin.com>
 Accept-Language: en-US, zh-CN
 Content-Language: zh-CN
 X-MS-Has-Attach: 
 X-MS-TNEF-Correlator: 
 x-originating-ip: [10.32.64.23]
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain; charset="gb2312"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-Hi Ashok,
-I have two questions about this patch, could you help to check:
-
-1, for broadcast #MC exceptions, this patch seems require #MC exception errors
-set MCG_STATUS_RIPV = 1. 
-But for Intel CPU, some #MC exception errors set MCG_STATUS_RIPV = 0 
-(like "Recoverable-not-continuable SRAR Type" Errors), for these errors
-the patch doesn't seem to work, is that okay?
-
-2, for LMCE exceptions, this patch seems require #MC exception errors
-set MCG_STATUS_RIPV = 0 to make sure LMCE be handled normally even
-on offline CPU. 
-For LMCE errors set MCG_STAUS_RIPV = 1, the patch prevents offline CPU
-handle these LMCE errors, is that okay?
-
-Thanks
-Tony W Wang-oc
+T24gVGh1LCBNYXkgMzAsIDIwMTksIFRvbnkgVyBXYW5nLW9jIHdyb3RlOg0KPiBIaSBBc2hvaywN
+Cj4gSSBoYXZlIHR3byBxdWVzdGlvbnMgYWJvdXQgdGhpcyBwYXRjaCwgY291bGQgeW91IGhlbHAg
+dG8gY2hlY2s6DQo+IA0KPiAxLCBmb3IgYnJvYWRjYXN0ICNNQyBleGNlcHRpb25zLCB0aGlzIHBh
+dGNoIHNlZW1zIHJlcXVpcmUgI01DIGV4Y2VwdGlvbg0KPiBlcnJvcnMNCj4gc2V0IE1DR19TVEFU
+VVNfUklQViA9IDEuDQo+IEJ1dCBmb3IgSW50ZWwgQ1BVLCBzb21lICNNQyBleGNlcHRpb24gZXJy
+b3JzIHNldCBNQ0dfU1RBVFVTX1JJUFYgPSAwDQo+IChsaWtlICJSZWNvdmVyYWJsZS1ub3QtY29u
+dGludWFibGUgU1JBUiBUeXBlIiBFcnJvcnMpLCBmb3IgdGhlc2UgZXJyb3JzDQo+IHRoZSBwYXRj
+aCBkb2Vzbid0IHNlZW0gdG8gd29yaywgaXMgdGhhdCBva2F5Pw0KPiANCj4gMiwgZm9yIExNQ0Ug
+ZXhjZXB0aW9ucywgdGhpcyBwYXRjaCBzZWVtcyByZXF1aXJlICNNQyBleGNlcHRpb24gZXJyb3Jz
+DQo+IHNldCBNQ0dfU1RBVFVTX1JJUFYgPSAwIHRvIG1ha2Ugc3VyZSBMTUNFIGJlIGhhbmRsZWQg
+bm9ybWFsbHkgZXZlbg0KPiBvbiBvZmZsaW5lIENQVS4NCj4gRm9yIExNQ0UgZXJyb3JzIHNldCBN
+Q0dfU1RBVVNfUklQViA9IDEsIHRoZSBwYXRjaCBwcmV2ZW50cyBvZmZsaW5lIENQVQ0KPiBoYW5k
+bGUgdGhlc2UgTE1DRSBlcnJvcnMsIGlzIHRoYXQgb2theT8NCj4gDQoNCk1vcmUgc3BlY2lmaWNh
+bGx5LCB0aGlzIHBhdGNoIHNlZW1zIHJlcXVpcmUgI01DIGV4Y2VwdGlvbnMgbWVldCB0aGUgY29u
+ZGl0aW9uDQoiTUNHX1NUQVRVU19SSVBWIF4gTUNHX1NUQVRVU19MTUNFUyA9PSAxIjsgQnV0IG9u
+IGEgWGVvbiBYNTY1MCBtYWNoaW5lIChTTVApLCANCiJEYXRhIENBQ0hFIExldmVsLTIgR2VuZXJp
+YyBFcnJvciIgZG9lcyBub3QgbWVldCB0aGlzIGNvbmRpdGlvbi4NCg0KSSBnb3QgYmVsb3cgbWVz
+c2FnZSBmcm9tOiBodHRwczovL3d3dy5jZW50b3Mub3JnL2ZvcnVtcy92aWV3dG9waWMucGhwP3A9
+MjkyNzQyDQoNCkhhcmR3YXJlIGV2ZW50LiBUaGlzIGlzIG5vdCBhIHNvZnR3YXJlIGVycm9yLg0K
+TUNFIDANCkNQVSA0IEJBTksgNiBUU0MgYjcwNjVlZWFhMThiMCANClRJTUUgMTU0NTY0MzYwMyBN
+b24gRGVjIDI0IDEwOjI2OjQzIDIwMTgNCk1DRyBzdGF0dXM6TUNJUCANCk1DaSBzdGF0dXM6DQpV
+bmNvcnJlY3RlZCBlcnJvcg0KRXJyb3IgZW5hYmxlZA0KUHJvY2Vzc29yIGNvbnRleHQgY29ycnVw
+dA0KTUNBOiBEYXRhIENBQ0hFIExldmVsLTIgR2VuZXJpYyBFcnJvcg0KU1RBVFVTIGIyMDAwMDAw
+ODAwMDAxMDYgTUNHU1RBVFVTIDQNCk1DR0NBUCAxYzA5IEFQSUNJRCA0IFNPQ0tFVElEIDAgDQpD
+UFVJRCBWZW5kb3IgSW50ZWwgRmFtaWx5IDYgTW9kZWwgNDQNCg0KPiBUaGFua3MNCj4gVG9ueSBX
+IFdhbmctb2MNCg==
