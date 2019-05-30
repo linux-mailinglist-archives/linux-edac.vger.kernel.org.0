@@ -2,301 +2,152 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 326872E3E9
-	for <lists+linux-edac@lfdr.de>; Wed, 29 May 2019 19:51:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 86F732F52C
+	for <lists+linux-edac@lfdr.de>; Thu, 30 May 2019 06:46:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725956AbfE2RvD (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Wed, 29 May 2019 13:51:03 -0400
-Received: from usa-sjc-mx-foss1.foss.arm.com ([217.140.101.70]:50288 "EHLO
-        foss.arm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725917AbfE2RvD (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Wed, 29 May 2019 13:51:03 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.72.51.249])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id CF5A2341;
-        Wed, 29 May 2019 10:51:02 -0700 (PDT)
-Received: from [10.1.196.105] (eglon.cambridge.arm.com [10.1.196.105])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id BB20E3F5AF;
-        Wed, 29 May 2019 10:51:01 -0700 (PDT)
-Subject: Re: [PATCH 14/21] EDAC, ghes: Extract numa node information for each
- dimm
-To:     Robert Richter <rrichter@marvell.com>
-Cc:     Borislav Petkov <bp@alien8.de>, Tony Luck <tony.luck@intel.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20190529084344.28562-1-rrichter@marvell.com>
- <20190529084344.28562-15-rrichter@marvell.com>
-From:   James Morse <james.morse@arm.com>
-Message-ID: <42d1cb7f-de7a-31e8-eb89-8d0651a3501a@arm.com>
-Date:   Wed, 29 May 2019 18:51:00 +0100
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.0
+        id S1728782AbfE3DMA (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Wed, 29 May 2019 23:12:00 -0400
+Received: from mail.kernel.org ([198.145.29.99]:52812 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728777AbfE3DL7 (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Wed, 29 May 2019 23:11:59 -0400
+Received: from localhost (ip67-88-213-2.z213-88-67.customer.algx.net [67.88.213.2])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 4769E244E8;
+        Thu, 30 May 2019 03:11:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1559185919;
+        bh=P0OgvO6kvj4Bw0/nhCGmIl7BjnU0aqdrFCMdjycaGWI=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=rl/2ortcc02Uw3ColjMKlKUaH9VENesDFJk4xDRTPWH0mAk+epbLg6+S/SzuHV74e
+         txkEYEHVfR7xp6+dTlsFq98ZZ7FU7pXl5ahb8yAs1KeScOaUDc18aYrfxzLOSejazq
+         xbFThNn36+vYFAIiHH6xFQI160A2FWf5ue1RYp2Q=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org, Ashok Raj <ashok.raj@intel.com>,
+        Tony Luck <tony.luck@intel.com>, Borislav Petkov <bp@suse.de>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
+        linux-edac <linux-edac@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>, x86-ml <x86@kernel.org>,
+        Yazen Ghannam <Yazen.Ghannam@amd.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.1 305/405] x86/mce: Fix machine_check_poll() tests for error types
+Date:   Wed, 29 May 2019 20:05:03 -0700
+Message-Id: <20190530030556.244205668@linuxfoundation.org>
+X-Mailer: git-send-email 2.21.0
+In-Reply-To: <20190530030540.291644921@linuxfoundation.org>
+References: <20190530030540.291644921@linuxfoundation.org>
+User-Agent: quilt/0.66
 MIME-Version: 1.0
-In-Reply-To: <20190529084344.28562-15-rrichter@marvell.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-GB
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-Hi Robert,
+[ Upstream commit f19501aa07f18268ab14f458b51c1c6b7f72a134 ]
 
-On 29/05/2019 09:44, Robert Richter wrote:
-> In a later patch we want to have one mc device per node. This patch
-> extracts the numa node information for each dimm. This is done by
-> collecting the physical address ranges from the DMI table (Memory
-> Array Mapped Address - Type 19 of SMBIOS spec). The node information> for a physical address is already know to a numa aware system (e.g. by
-> using the ACPI _PXM method or the ACPI SRAT table), so based on the PA
-> we can assign the node id to the dimms.
+There has been a lurking "TBD" in the machine check poll routine ever
+since it was first split out from the machine check handler. The
+potential issue is that the poll routine may have just begun a read from
+the STATUS register in a machine check bank when the hardware logs an
+error in that bank and signals a machine check.
 
-I think you're letting the smbios information drive you here. We'd like to do as much as
-possible without it, all its really good for is telling us the label on the PCB.
+That race used to be pretty small back when machine checks were
+broadcast, but the addition of local machine check means that the poll
+code could continue running and clear the error from the bank before the
+local machine check handler on another CPU gets around to reading it.
 
-With this approach, you only get numa information by parsing more smbios, which we have to
-try and validate, and fall back to some error path if it smells wrong. We end up needing
-things like a 'fallback memory controller' in the case the firmware fault-time value is
-missing, or nuts.
+Fix the code to be sure to only process errors that need to be processed
+in the poll code, leaving other logged errors alone for the machine
+check handler to find and process.
 
-What bugs me is we already know the numa information from the address. We could expose
-that without the smbios tables at all, and it would be useful to someone playing the
-dimm-bisect game. Not making it depend on smbios means there is a good chance it can
-become common with other edac drivers.
+ [ bp: Massage a bit and flip the "== 0" check to the usual !(..) test. ]
 
-I don't think we need to know the dimm->node mapping up front. When we get an error,
-pfn_to_nid() on the address tells us which node that memory is attached to. This should be
-the only place nid information comes from, that way we don't need to check it. Trying to
-correlate it with smbios tables is much more code. If the CPER comes with a DIMM handle,
-we know the DIMM too.
+Fixes: b79109c3bbcf ("x86, mce: separate correct machine check poller and fatal exception handler")
+Fixes: ed7290d0ee8f ("x86, mce: implement new status bits")
+Reported-by: Ashok Raj <ashok.raj@intel.com>
+Signed-off-by: Tony Luck <tony.luck@intel.com>
+Signed-off-by: Borislav Petkov <bp@suse.de>
+Cc: Ashok Raj <ashok.raj@intel.com>
+Cc: "H. Peter Anvin" <hpa@zytor.com>
+Cc: Ingo Molnar <mingo@redhat.com>
+Cc: linux-edac <linux-edac@vger.kernel.org>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: x86-ml <x86@kernel.org>
+Cc: Yazen Ghannam <Yazen.Ghannam@amd.com>
+Link: https://lkml.kernel.org/r/20190312170938.GA23035@agluck-desk
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ arch/x86/kernel/cpu/mce/core.c | 44 ++++++++++++++++++++++++++++------
+ 1 file changed, 37 insertions(+), 7 deletions(-)
 
-So all we really need is to know at setup time is how many numa-nodes there are, and the
-maximum DIMM per node if we don't want phantom-dimms. Type-17 already has a
-Physical-Memory-Array-Handle, which points at Type-19... but we don't need to read it,
-just count them and find the biggest.
-
-If the type-19 information is missing from smbios, or not linked up properly, or the
-values provided at fault-time don't overlap with the values in the table, or there is no
-fault-time node information: you still get the numa-node information based on the address.
-
-Using the minimum information should give us the least code, and the least exposure to
-misdescribed tables.
-
-
-> A fallback that disables numa is implemented in case the node
-> information is inconsistent.
-
-> diff --git a/drivers/edac/ghes_edac.c b/drivers/edac/ghes_edac.c
-> index 50f4ee36b755..083452a48b42 100644
-> --- a/drivers/edac/ghes_edac.c
-> +++ b/drivers/edac/ghes_edac.c
-> @@ -67,14 +67,34 @@ struct memdev_dmi_entry {
->  	u16 conf_mem_clk_speed;
->  } __attribute__((__packed__));
->  
-> +/* Memory Array Mapped Address - Type 19 of SMBIOS spec */
-> +struct memarr_dmi_entry {
-> +	u8		type;
-> +	u8		length;
-> +	u16		handle;
-> +	u32		start;
-> +	u32		end;
-> +	u16		phys_mem_array_handle;
-> +	u8		partition_width;
-> +	u64		ext_start;
-> +	u64		ext_end;
-> +} __attribute__((__packed__));
-
-Any chance we could collect the structures from the smbios spec in a header file somewhere?
-
-I'd prefer not to read this thing at all if we can help it.
-
->  struct ghes_dimm_info {
->  	struct dimm_info dimm_info;
->  	int		idx;
-> +	int		numa_node;
-
-(I thought nid was the preferred term)
-
-
-> +	phys_addr_t	start;
-> +	phys_addr_t	end;
-
-I think start and end are deceptive as they overlap with other DIMMs on systems with
-interleaving memory controllers. I'd prefer not to keep these values around.
-
-
-> +	u16		phys_handle;
->  };
->  
->  struct ghes_mem_info {
-> -	int num_dimm;
-> +	int		num_dimm;
->  	struct ghes_dimm_info *dimms;
-> +	int		num_nodes;
-
-> +	int		num_per_node[MAX_NUMNODES];
-
-Number of what?
-
-
-> +	bool		enable_numa;
-
-This is used locally in mem_info_setup(), but its not read from here by any of the later
-patches in the series. Is it needed?
-
-I don't like the idea that this is behaviour that is turned on/off. Its a property of the
-system. I think it would be better if CONFIG_NUMA causes you to get multiple
-memory-controllers created, but if its not actually a NUMA machine there would only be
-one. This lets us test that code on not-really-numa systems.
+diff --git a/arch/x86/kernel/cpu/mce/core.c b/arch/x86/kernel/cpu/mce/core.c
+index 1a7084ba9a3b6..0d47306cec7ae 100644
+--- a/arch/x86/kernel/cpu/mce/core.c
++++ b/arch/x86/kernel/cpu/mce/core.c
+@@ -712,19 +712,49 @@ bool machine_check_poll(enum mcp_flags flags, mce_banks_t *b)
+ 
+ 		barrier();
+ 		m.status = mce_rdmsrl(msr_ops.status(i));
++
++		/* If this entry is not valid, ignore it */
+ 		if (!(m.status & MCI_STATUS_VAL))
+ 			continue;
+ 
+ 		/*
+-		 * Uncorrected or signalled events are handled by the exception
+-		 * handler when it is enabled, so don't process those here.
+-		 *
+-		 * TBD do the same check for MCI_STATUS_EN here?
++		 * If we are logging everything (at CPU online) or this
++		 * is a corrected error, then we must log it.
+ 		 */
+-		if (!(flags & MCP_UC) &&
+-		    (m.status & (mca_cfg.ser ? MCI_STATUS_S : MCI_STATUS_UC)))
+-			continue;
++		if ((flags & MCP_UC) || !(m.status & MCI_STATUS_UC))
++			goto log_it;
++
++		/*
++		 * Newer Intel systems that support software error
++		 * recovery need to make additional checks. Other
++		 * CPUs should skip over uncorrected errors, but log
++		 * everything else.
++		 */
++		if (!mca_cfg.ser) {
++			if (m.status & MCI_STATUS_UC)
++				continue;
++			goto log_it;
++		}
++
++		/* Log "not enabled" (speculative) errors */
++		if (!(m.status & MCI_STATUS_EN))
++			goto log_it;
++
++		/*
++		 * Log UCNA (SDM: 15.6.3 "UCR Error Classification")
++		 * UC == 1 && PCC == 0 && S == 0
++		 */
++		if (!(m.status & MCI_STATUS_PCC) && !(m.status & MCI_STATUS_S))
++			goto log_it;
++
++		/*
++		 * Skip anything else. Presumption is that our read of this
++		 * bank is racing with a machine check. Leave the log alone
++		 * for do_machine_check() to deal with it.
++		 */
++		continue;
+ 
++log_it:
+ 		error_seen = true;
+ 
+ 		mce_read_aux(&m, i);
+-- 
+2.20.1
 
 
->  };
->  
->  struct ghes_mem_info mem_info;
-> @@ -97,10 +117,50 @@ static void ghes_dimm_info_init(void)
->  
->  	for_each_dimm(dimm) {
->  		dimm->idx	= idx;
-> +		dimm->numa_node	= NUMA_NO_NODE;
->  		idx++;
->  	}
->  }
->  
-> +static void ghes_edac_set_nid(const struct dmi_header *dh, void *arg)
-> +{
-> +	struct memarr_dmi_entry *entry = (struct memarr_dmi_entry *)dh;
-> +	struct ghes_dimm_info *dimm;
-> +	phys_addr_t start, end;
-> +	int nid;
-> +
-> +	if (dh->type != DMI_ENTRY_MEM_ARRAY_MAPPED_ADDR)
-> +		return;
 
-> +	/* only support SMBIOS 2.7+ */
-> +	if (entry->length < sizeof(*entry))
-> +		return;
-
-Lovely. I still hope we can get away without parsing this table.
-
-
-> +	if (entry->start == 0xffffffff)
-> +		start = entry->ext_start;
-> +	else
-> +		start = entry->start;
-> +	if (entry->end == 0xffffffff)
-> +		end = entry->ext_end;
-> +	else
-> +		end = entry->end;
-
-
-> +	if (!pfn_valid(PHYS_PFN(start)))
-> +		return;
-
-Eh? Just because there is no struct page doesn't mean firmware won't report errors for it.
-This is going to bite on arm64 if the 'start' page happens to have been reserved by
-firmware, and thus doesn't have a struct page. Bottom-up allocation doesn't sound unlikely.
-
-
-> +	nid = pfn_to_nid(PHYS_PFN(start));
-
-... Ugh, because pfn_to_nid() goes via struct page.
-
-You can make this robust by scanning start->end looking for a pfn_valid() you can pull the
-nid out of. (no, I don't think its a good idea either!)
-
-I'd like to see if we can get rid of the 'via address' part of this.
-
-
-> +	if (nid < 0 || nid >= MAX_NUMNODES || !node_possible(nid))
-> +		nid = NUMA_NO_NODE;
-
-Can this happen? Does this indicate the firmware tables are wrong, or mm is about derail?
-
-
-> +	for_each_dimm(dimm) {
-> +		if (entry->phys_mem_array_handle == dimm->phys_handle) {
-> +			dimm->numa_node	= nid;
-> +			dimm->start	= start;
-> +			dimm->end	= end;
-> +		}
-> +	}
-> +}
-> +
->  static int get_dimm_smbios_index(u16 handle)
->  {
->  	struct mem_ctl_info *mci = ghes_pvt->mci;
-> @@ -213,8 +273,25 @@ static void ghes_edac_dmidecode(const struct dmi_header *dh, void *arg)
->  	}
->  }
->  
-> +static void mem_info_disable_numa(void)
-> +{
-> +	struct ghes_dimm_info *dimm;
-> +
-> +	for_each_dimm(dimm) {
-> +		if (dimm->numa_node != NUMA_NO_NODE)
-> +			mem_info.num_per_node[dimm->numa_node] = 0;
-
-> +		dimm->numa_node = 0;
-
-NUMA_NO_NODE?
-
-> +	}
-> +
-> +	mem_info.num_per_node[0] = mem_info.num_dimm;
-> +	mem_info.num_nodes = 1;
-> +	mem_info.enable_numa = false;
-> +}
-> +
->  static int mem_info_setup(void)
->  {
-> +	struct ghes_dimm_info *dimm;
-> +	bool enable_numa = true;
->  	int idx = 0;
->  
->  	memset(&mem_info, 0, sizeof(mem_info));
-> @@ -231,6 +308,29 @@ static int mem_info_setup(void)
->  
->  	ghes_dimm_info_init();
->  	dmi_walk(ghes_edac_dmidecode, &idx);
-> +	dmi_walk(ghes_edac_set_nid, NULL);
-> +
-> +	for_each_dimm(dimm) {
-> +		if (dimm->numa_node == NUMA_NO_NODE) {
-> +			enable_numa = false;
-> +		} else {
-
-> +			if (!mem_info.num_per_node[dimm->numa_node])
-> +				mem_info.num_nodes++;
-
-This is to try and hide empty nodes?
-
-
-> +			mem_info.num_per_node[dimm->numa_node]++;
-
-Could you do these two in your previous for_each_dimm() walk?
-
-
-> +		}
-> +
-> +		edac_dbg(1, "DIMM%i: Found mem range [%pa-%pa] on node %d\n",
-> +			dimm->idx, &dimm->start, &dimm->end, dimm->numa_node);
-> +	}
-
-
-> +	mem_info.enable_numa = enable_numa;
-> +	if (enable_numa)
-> +		return 0;
-> +
-> +	/* something went wrong, disable numa */
-> +	if (num_possible_nodes() > 1)
-> +		pr_warn("Can't get numa info, disabling numa\n");
-> +	mem_info_disable_numa();
-
-I'd like to find a way of doing this where we don't need this sort of thing!
-
-
-Thanks,
-
-James
