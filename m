@@ -2,175 +2,147 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B0992330AE
-	for <lists+linux-edac@lfdr.de>; Mon,  3 Jun 2019 15:10:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AB27339CF
+	for <lists+linux-edac@lfdr.de>; Mon,  3 Jun 2019 22:36:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728026AbfFCNKh (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Mon, 3 Jun 2019 09:10:37 -0400
-Received: from mx0b-0016f401.pphosted.com ([67.231.156.173]:52480 "EHLO
-        mx0b-0016f401.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726516AbfFCNKh (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Mon, 3 Jun 2019 09:10:37 -0400
-Received: from pps.filterd (m0045851.ppops.net [127.0.0.1])
-        by mx0b-0016f401.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x53D9vcZ019660;
-        Mon, 3 Jun 2019 06:10:21 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
- subject : date : message-id : references : in-reply-to : content-type :
- content-id : content-transfer-encoding : mime-version; s=pfpt0818;
- bh=mMuYUTXxhkvSa7o3KsMxKIeQkGKVvB/3RaY4YQf4/vE=;
- b=LklHOXvWzRtyoLFcDuy7TATCtPPUPv42MBsIb2GdH5y+cLqHRuvBIuyDy1APvv5ywJ0d
- m3jRIyEqVSRKpSXH9jX+w7vj3zRuu/eD0tV/zCRBAeH+vV8GROAqMRuPCD3Mpf1+HT9r
- 5sPQrostqppg7toYE4cXlpuCKlbDRMYgirwgW6LxllI2XwiQdKEzhewR/YXtY8QVQZQ2
- TLwnwdJmXiV0WqSurBPyVPqzJNtQnNOChTVMtQSoFlzBvInVx5ukCfFTbSH9czFfgF/X
- Q6ZuTzdcMMT4l8catNPOW5t5358k43ymUIlDVWYzZxfCFnC2+tvmWdBsdjDVVWPhNu39 tA== 
-Received: from sc-exch03.marvell.com ([199.233.58.183])
-        by mx0b-0016f401.pphosted.com with ESMTP id 2survk876a-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
-        Mon, 03 Jun 2019 06:10:21 -0700
-Received: from SC-EXCH03.marvell.com (10.93.176.83) by SC-EXCH03.marvell.com
- (10.93.176.83) with Microsoft SMTP Server (TLS) id 15.0.1367.3; Mon, 3 Jun
- 2019 06:10:19 -0700
-Received: from NAM01-SN1-obe.outbound.protection.outlook.com (104.47.32.55) by
- SC-EXCH03.marvell.com (10.93.176.83) with Microsoft SMTP Server (TLS) id
- 15.0.1367.3 via Frontend Transport; Mon, 3 Jun 2019 06:10:19 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=marvell.onmicrosoft.com; s=selector2-marvell-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=mMuYUTXxhkvSa7o3KsMxKIeQkGKVvB/3RaY4YQf4/vE=;
- b=dAenBoTR+sPZOfoY5a69WaVFe5Oox1qLoZNeoGPArBKEOR9d0J6hOB8np5/5gU2T02Wuk/vepciT+IOhvks3XIW35MeRda501NtdJd4o1d9i8mvuLxybd/pwhH8Brb+qR2eYPuddHv1M2QRsx4FhT/fhl7ILuBFJqRzi+wDKvYM=
-Received: from MN2PR18MB3408.namprd18.prod.outlook.com (10.255.238.217) by
- MN2PR18MB2927.namprd18.prod.outlook.com (20.179.22.146) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.1943.22; Mon, 3 Jun 2019 13:10:15 +0000
-Received: from MN2PR18MB3408.namprd18.prod.outlook.com
- ([fe80::d3:794c:1b94:cf3]) by MN2PR18MB3408.namprd18.prod.outlook.com
- ([fe80::d3:794c:1b94:cf3%4]) with mapi id 15.20.1943.018; Mon, 3 Jun 2019
- 13:10:15 +0000
-From:   Robert Richter <rrichter@marvell.com>
-To:     James Morse <james.morse@arm.com>
-CC:     Borislav Petkov <bp@alien8.de>, Tony Luck <tony.luck@intel.com>,
-        "Mauro Carvalho Chehab" <mchehab@kernel.org>,
-        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 11/21] EDAC, ghes: Unify trace_mc_event() code with
- edac_mc driver
-Thread-Topic: [PATCH 11/21] EDAC, ghes: Unify trace_mc_event() code with
- edac_mc driver
-Thread-Index: AQHVGg2utY7ow9FP/UmzxlJzP5JN7A==
-Date:   Mon, 3 Jun 2019 13:10:13 +0000
-Message-ID: <20190603131005.e23lovwyvii53vzo@rric.localdomain>
-References: <20190529084344.28562-1-rrichter@marvell.com>
- <20190529084344.28562-12-rrichter@marvell.com>
- <37d47356-a40b-2739-10df-f5ab83fa2b36@arm.com>
-In-Reply-To: <37d47356-a40b-2739-10df-f5ab83fa2b36@arm.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-clientproxiedby: AM6P194CA0007.EURP194.PROD.OUTLOOK.COM
- (2603:10a6:209:90::20) To MN2PR18MB3408.namprd18.prod.outlook.com
- (2603:10b6:208:16c::25)
-x-ms-exchange-messagesentrepresentingtype: 1
-x-originating-ip: [77.11.168.156]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 68c86029-88a2-4cb9-064a-08d6e824cfbe
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(1401327)(2017052603328)(7193020);SRVR:MN2PR18MB2927;
-x-ms-traffictypediagnostic: MN2PR18MB2927:
-x-microsoft-antispam-prvs: <MN2PR18MB2927AA5F189A6E3E3CC89D55D9140@MN2PR18MB2927.namprd18.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:10000;
-x-forefront-prvs: 0057EE387C
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(396003)(376002)(39850400004)(366004)(136003)(346002)(199004)(189003)(6116002)(3846002)(316002)(68736007)(7736002)(2906002)(73956011)(66946007)(64756008)(66446008)(305945005)(8676002)(476003)(11346002)(66476007)(66556008)(81166006)(81156014)(486006)(446003)(256004)(8936002)(14444005)(53936002)(52116002)(6246003)(76176011)(1076003)(186003)(102836004)(6916009)(4326008)(71190400001)(71200400001)(53546011)(14454004)(386003)(6506007)(66066001)(26005)(6486002)(25786009)(54906003)(6436002)(99286004)(5660300002)(6512007)(229853002)(9686003)(478600001)(86362001);DIR:OUT;SFP:1101;SCL:1;SRVR:MN2PR18MB2927;H:MN2PR18MB3408.namprd18.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
-received-spf: None (protection.outlook.com: marvell.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: vx5D3G6PRGK1CF3kKRzjGvRuTtt7uun+K3UU4VQcl7dMu2c+vW3nvusbsdKcyvEtcQ0PPsYJoirt/Brce4PnJvRlHYiPgBQCP1OtxMPh8YGZqUsKno3fxB4vG9AxUiugisW8O5LpqIhWT6L+0o6m9Y3/anNTVpRDdWPQ6toBgTZIAKWw073zj72A4X+kF5kbFzBUzsDah2hEpBGdMvqSntBXtEbb3g+ZQ5Ey7PejrfgbjWtD3e1n4TiqFfc7g+TKMln3Lu3QnZ+nXr/CkZJ7pGTeVpZ9CV7ILRJiMA+uje9pUkJt0MnFKvUUh8R/J4Df/KOXjoEp/EFjs7GArC+SbyBHnf1Y0LEY4HCApi1pz0fHLw9M8iVZ2ptynJDrZTIeO3bWHGkolEEpr+zJc7YHpY5nQ+DY74YnmLDWaZuczw4=
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <7D6DA12C01431747AEA06792360A13F5@namprd18.prod.outlook.com>
-Content-Transfer-Encoding: quoted-printable
-MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-Network-Message-Id: 68c86029-88a2-4cb9-064a-08d6e824cfbe
-X-MS-Exchange-CrossTenant-originalarrivaltime: 03 Jun 2019 13:10:15.0880
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 70e1fb47-1155-421d-87fc-2e58f638b6e0
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: rrichter@marvell.com
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR18MB2927
-X-OriginatorOrg: marvell.com
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-06-03_10:,,
- signatures=0
+        id S1726076AbfFCUgM (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Mon, 3 Jun 2019 16:36:12 -0400
+Received: from mga18.intel.com ([134.134.136.126]:21498 "EHLO mga18.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726055AbfFCUgM (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Mon, 3 Jun 2019 16:36:12 -0400
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga106.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 03 Jun 2019 13:36:11 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.60,548,1549958400"; 
+   d="scan'208";a="181288485"
+Received: from tthayer-hp-z620.an.intel.com ([10.122.105.146])
+  by fmsmga002.fm.intel.com with ESMTP; 03 Jun 2019 13:36:10 -0700
+From:   thor.thayer@linux.intel.com
+To:     bp@alien8.de, mchehab@kernel.org, james.morse@arm.com
+Cc:     linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Thor Thayer <thor.thayer@linux.intel.com>
+Subject: [PATCH] EDAC/altera: Warm Reset option for Stratix10 peripheral DBE
+Date:   Mon,  3 Jun 2019 15:37:49 -0500
+Message-Id: <1559594269-10077-1-git-send-email-thor.thayer@linux.intel.com>
+X-Mailer: git-send-email 2.7.4
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On 29.05.19 16:12:38, James Morse wrote:
-> Hi Robert,
->=20
-> On 29/05/2019 09:44, Robert Richter wrote:
-> > Almost duplicate code, remove it.
->=20
-> almost?
+From: Thor Thayer <thor.thayer@linux.intel.com>
 
-The grain ... as noted below.
+The Stratix10 peripheral FIFO memories can recover from double
+bit errors with a warm reset instead of a cold reset.
+Add the option of a warm reset for peripheral (USB, Ethernet)
+memories.
 
->=20
->=20
-> > Note: there is a difference in the calculation of the grain_bits,
-> > using the edac_mc's version here.
->=20
-> But is it the right thing to do?
->=20
-> Is this an off-by-one bug being papered over as some cleanup?
-> If so could you post a separate fix that can be picked up for an rc.
->=20
-> Do Marvell have firmware that populates this field?
->=20
-> ...
->=20
-> Unless the argument is no one cares about this...
->=20
-> >From ghes_edac_report_mem_error():
-> |	/* Error grain */
-> |	if (mem_err->validation_bits & CPER_MEM_VALID_PA_MASK)
-> |		e->grain =3D ~(mem_err->physical_addr_mask & ~PAGE_MASK);
->=20
-> Fishy, why would the kernel page-size be relevant here?
+CPU memories such as SDRAM and OCRAM require a cold reset for
+DBEs.
+Filter on whether the error is a SDRAM/OCRAM or a peripheral
+FIFO memory to determine which reset to use when the warm
+reset option is configured.
 
-That looked broken to me too, I did not put to much effort in fixing
-the grain yet. So I just took the edac_mc version first in the
-assumption, that one is working.
+Signed-off-by: Thor Thayer <thor.thayer@linux.intel.com>
+---
+ drivers/edac/Kconfig       |  9 +++++++++
+ drivers/edac/altera_edac.c | 31 +++++++++++++++++++++++++++++--
+ drivers/edac/altera_edac.h |  4 ++++
+ 3 files changed, 42 insertions(+), 2 deletions(-)
 
-It looks like the intention here is to limit the grain to the page
-size. But right, the calculation is wrong here. I am also going to
-reply to your patch you sent on this.
+diff --git a/drivers/edac/Kconfig b/drivers/edac/Kconfig
+index 47eb4d13ed5f..e47c428d485d 100644
+--- a/drivers/edac/Kconfig
++++ b/drivers/edac/Kconfig
+@@ -394,6 +394,15 @@ config EDAC_ALTERA
+ 	  Altera SOCs. This is the global enable for the
+ 	  various Altera peripherals.
+ 
++config EDAC_ALTERA_ARM64_WARM_RESET
++	bool "Altera ARM64 Peripheral Warm Reset"
++	depends on EDAC_ALTERA=y && ARM64
++	help
++	  Support for Warm Reset on peripheral FIFO double bit errors
++	  on SoCFPGA ARM64 platforms. Otherwise a peripheral FIFO DBE
++	  will cause a cold reset. SDRAM and OCRAM DBEs always cause
++	  a cold reset.
++
+ config EDAC_ALTERA_SDRAM
+ 	bool "Altera SDRAM ECC"
+ 	depends on EDAC_ALTERA=y
+diff --git a/drivers/edac/altera_edac.c b/drivers/edac/altera_edac.c
+index 8816f74a22b4..179601f14b48 100644
+--- a/drivers/edac/altera_edac.c
++++ b/drivers/edac/altera_edac.c
+@@ -2036,6 +2036,19 @@ static const struct irq_domain_ops a10_eccmgr_ic_ops = {
+ /* panic routine issues reboot on non-zero panic_timeout */
+ extern int panic_timeout;
+ 
++#ifdef CONFIG_EDAC_ALTERA_ARM64_WARM_RESET
++/* EL3 SMC call to setup CPUs for warm reset */
++void panic_smp_self_stop(void)
++{
++	struct arm_smccc_res result;
++
++	__cpu_disable();
++	cpu_relax();
++	arm_smccc_smc(INTEL_SIP_SMC_ECC_DBE, S10_WARM_RESET_WFI_FLAG,
++		      S10_WARM_RESET_WFI_FLAG, 0, 0, 0, 0, 0, &result);
++}
++#endif
++
+ /*
+  * The double bit error is handled through SError which is fatal. This is
+  * called as a panic notifier to printout ECC error info as part of the panic.
+@@ -2067,14 +2080,28 @@ static int s10_edac_dberr_handler(struct notifier_block *this,
+ 			regmap_write(edac->ecc_mgr_map,
+ 				     S10_SYSMGR_UE_ADDR_OFST, err_addr);
+ 			edac_printk(KERN_ERR, EDAC_DEVICE,
+-				    "EDAC: [Fatal DBE on %s @ 0x%08X]\n",
+-				    ed->edac_dev_name, err_addr);
++				    "EDAC: [Fatal DBE on %s [CPU=%d] @ 0x%08X]\n",
++				    ed->edac_dev_name, raw_smp_processor_id(),
++				    err_addr);
+ 			break;
+ 		}
+ 		/* Notify the System through SMC. Reboot delay = 1 second */
++#ifdef CONFIG_EDAC_ALTERA_ARM64_WARM_RESET
++		/* Handle peripheral FIFO DBE as Warm Resets */
++		if (dberror & S10_COLD_RESET_MASK) {
++			panic_timeout = 1;
++			arm_smccc_smc(INTEL_SIP_SMC_ECC_DBE, dberror, 0, 0, 0,
++				      0, 0, 0, &result);
++		} else {
++			arm_smccc_smc(INTEL_SIP_SMC_ECC_DBE,
++				      S10_WARM_RESET_WFI_FLAG | dberror, 0, 0,
++				      0, 0, 0, 0, &result);
++		}
++#else
+ 		panic_timeout = 1;
+ 		arm_smccc_smc(INTEL_SIP_SMC_ECC_DBE, dberror, 0, 0, 0, 0,
+ 			      0, 0, &result);
++#endif
+ 	}
+ 
+ 	return NOTIFY_DONE;
+diff --git a/drivers/edac/altera_edac.h b/drivers/edac/altera_edac.h
+index 55654cc4bcdf..e5936fbe3964 100644
+--- a/drivers/edac/altera_edac.h
++++ b/drivers/edac/altera_edac.h
+@@ -327,6 +327,10 @@ struct altr_sdram_mc_data {
+ #define ECC_READ_EOVR                     0x2
+ #define ECC_READ_EDOVR                    0x3
+ 
++/* DRAM and OCRAM require cold reset */
++#define S10_COLD_RESET_MASK               0x30002
++#define S10_WARM_RESET_WFI_FLAG           BIT(31)
++
+ struct altr_edac_device_dev;
+ 
+ struct edac_device_prv_data {
+-- 
+2.7.4
 
->=20
-> If physical_addr_mask were the same as PAGE_MASK this wouldn't this alway=
-s give ~0?
-> (masking logic like this always does my head in)
->=20
-> /me gives it ago:
-> | {1}[Hardware Error]:   physical_address: 0x00000000deadbeef
-> | {1}[Hardware Error]:   physical_address_mask: 0xffffffffffff0000
-> | {1}[Hardware Error]:   error_type: 6, master abort
-> | EDAC MC0: 1 CE Master abort on unknown label ( page:0xdead offset:0xbee=
-f
-> | grain:-1 syndrome:0x0 - status(0x0000000000000001): reserved)
->=20
-> That 'grain:-1' is because the calculated e->grain was an unlikely 0xffff=
-ffffffffffff.
-> Patch incoming, if you could test it on your platform that'd be great.
->=20
-> I don't think ghes_edac.c wants this '+1'.
-
-The +1 looks odd to me also for the edac_mc driver, but I need to take
-a closer look here as well as some logs suggest the grain is
-calculated correctly.
-
-I will do some further examination here and also respond to your
-patch.
-
-Thank you for review.
-
--Robert
