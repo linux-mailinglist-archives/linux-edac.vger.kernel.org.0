@@ -2,102 +2,110 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DE63931DF7
-	for <lists+linux-edac@lfdr.de>; Sat,  1 Jun 2019 15:33:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A8BC9328FE
+	for <lists+linux-edac@lfdr.de>; Mon,  3 Jun 2019 08:57:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728337AbfFANdL (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Sat, 1 Jun 2019 09:33:11 -0400
-Received: from mail.kernel.org ([198.145.29.99]:54694 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729266AbfFANYi (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Sat, 1 Jun 2019 09:24:38 -0400
-Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id DF57727358;
-        Sat,  1 Jun 2019 13:24:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1559395478;
-        bh=a1/59yPA5qvkX/IzatJ1mZxQdqXMcsdATBRZAsjQNgc=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=cgkYysJRDS30p67Vc0FTWLwjdC7VgtahZpOE9nxUoXn7CjY1AKRqzlTxIUOqBbFm6
-         hZGIzDRF/Ttln6alw2oADiwgFflXoRje6LI3qPCr7cT9x8oJv2g4AIceVhP84Hi3Hi
-         WkeNby3YXZwws+yWPJfvf79+Vx9UcfeKDMFmsGI0=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Michael Ellerman <mpe@ellerman.id.au>,
-        Borislav Petkov <bp@suse.de>,
-        Johannes Thumshirn <jth@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-edac <linux-edac@vger.kernel.org>, linuxppc-dev@ozlabs.org,
-        morbidrsa@gmail.com, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH AUTOSEL 4.14 23/99] EDAC/mpc85xx: Prevent building as a module
-Date:   Sat,  1 Jun 2019 09:22:30 -0400
-Message-Id: <20190601132346.26558-23-sashal@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190601132346.26558-1-sashal@kernel.org>
-References: <20190601132346.26558-1-sashal@kernel.org>
+        id S1726803AbfFCG5E (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Mon, 3 Jun 2019 02:57:04 -0400
+Received: from smtp-fw-6002.amazon.com ([52.95.49.90]:56410 "EHLO
+        smtp-fw-6002.amazon.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726565AbfFCG5E (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Mon, 3 Jun 2019 02:57:04 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1559545022; x=1591081022;
+  h=subject:to:cc:references:from:message-id:date:
+   mime-version:in-reply-to:content-transfer-encoding;
+  bh=28ubXn7tIxBtQaVuAwhyLsuJAMZSspzvIGvKhunz4Ug=;
+  b=LDZ3aPZPSYJn7p5wjgCoYuxgzyYs9SUDXLoXceSaYUdDlWrBCtcsNvlK
+   BkOZi/kV03VE4hD0M00ql51YzMlvSz7KMPdNAT38RdmCFsVePQi0e6rB/
+   rfTrCH1DYnfhtRZC/G4R22dvzi8Dp/eb0R3R87s6oSMnhZO9a1XfgQkOT
+   8=;
+X-IronPort-AV: E=Sophos;i="5.60,545,1549929600"; 
+   d="scan'208";a="404727797"
+Received: from iad6-co-svc-p1-lb1-vlan3.amazon.com (HELO email-inbound-relay-2a-d0be17ee.us-west-2.amazon.com) ([10.124.125.6])
+  by smtp-border-fw-out-6002.iad6.amazon.com with ESMTP; 03 Jun 2019 06:56:57 +0000
+Received: from EX13MTAUEA001.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan2.pdx.amazon.com [10.236.137.194])
+        by email-inbound-relay-2a-d0be17ee.us-west-2.amazon.com (Postfix) with ESMTPS id 582BDA22F8;
+        Mon,  3 Jun 2019 06:56:56 +0000 (UTC)
+Received: from EX13D08UEE001.ant.amazon.com (10.43.62.126) by
+ EX13MTAUEA001.ant.amazon.com (10.43.61.243) with Microsoft SMTP Server (TLS)
+ id 15.0.1367.3; Mon, 3 Jun 2019 06:56:56 +0000
+Received: from EX13MTAUEE001.ant.amazon.com (10.43.62.200) by
+ EX13D08UEE001.ant.amazon.com (10.43.62.126) with Microsoft SMTP Server (TLS)
+ id 15.0.1367.3; Mon, 3 Jun 2019 06:56:55 +0000
+Received: from [10.95.119.163] (10.95.119.163) by mail-relay.amazon.com
+ (10.43.62.226) with Microsoft SMTP Server (TLS) id 15.0.1367.3 via Frontend
+ Transport; Mon, 3 Jun 2019 06:56:50 +0000
+Subject: Re: [PATCH 2/2] edac: add support for Amazon's Annapurna Labs EDAC
+To:     "Herrenschmidt, Benjamin" <benh@amazon.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "Woodhouse, David" <dwmw@amazon.co.uk>,
+        "paulmck@linux.ibm.com" <paulmck@linux.ibm.com>,
+        "james.morse@arm.com" <james.morse@arm.com>,
+        "mchehab@kernel.org" <mchehab@kernel.org>,
+        "mark.rutland@arm.com" <mark.rutland@arm.com>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "nicolas.ferre@microchip.com" <nicolas.ferre@microchip.com>
+CC:     "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "Shenhar, Talel" <talel@amazon.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Chocron, Jonathan" <jonnyc@amazon.com>,
+        "Krupnik, Ronen" <ronenk@amazon.com>,
+        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
+        "Hanoch, Uri" <hanochu@amazon.com>
+References: <1559211329-13098-1-git-send-email-hhhawa@amazon.com>
+ <1559211329-13098-3-git-send-email-hhhawa@amazon.com>
+ <DB09EE2A-7397-4063-B925-66658D0105A5@alien8.de>
+ <bfbc12fb68eea9d8d4cc257c213393fd4e92c33a.camel@amazon.com>
+From:   "Hawa, Hanna" <hhhawa@amazon.com>
+Message-ID: <c608e269-e409-cd2b-d421-f185a706bbc5@amazon.com>
+Date:   Mon, 3 Jun 2019 09:56:44 +0300
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.6.1
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <bfbc12fb68eea9d8d4cc257c213393fd4e92c33a.camel@amazon.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-From: Michael Ellerman <mpe@ellerman.id.au>
 
-[ Upstream commit 2b8358a951b1e2a534a54924cd8245e58a1c5fb8 ]
 
-The mpc85xx EDAC driver can be configured as a module but then fails to
-build because it uses two unexported symbols:
+On 5/31/2019 4:15 AM, Herrenschmidt, Benjamin wrote:
+> On Thu, 2019-05-30 at 11:19 -0700, Boris Petkov wrote:
+>> On May 30, 2019 3:15:29 AM PDT, Hanna Hawa <hhhawa@amazon.com> wrote:
+>>> Add support for error detection and correction for Amazon's
+>>> Annapurna
+>>> Labs SoCs for L1/L2 caches.
+>>
+>>
+>> So this should be a driver for the whole annapurna platform and not
+>> only about the RAS functionality in an IP like the caches. See other
+>> ARM EDAC drivers in drivers/edac/ for an example.
+> 
+> This isn't terribly helpful, there's nothing telling anybody which of
+> those files corresponds to an ARM SoC :-)
+> 
+> That said ...
+> 
+> You really want a single EDAC driver that contains all the stuff for
+> the caches, the memory controller, etc... ?
+> 
+> The idea here was to separate the core L1/L2 EDAC from the memory
+> controller EDAC I think ... Roben, Hanna, can you describe the long run
+> strategy here ?
+Correct our target to separate the L1/L2 EDAC from mc, and to maintain 
+both in separate drivers.
 
-  ERROR: ".pci_find_hose_for_OF_device" [drivers/edac/mpc85xx_edac_mod.ko] undefined!
-  ERROR: ".early_find_capability" [drivers/edac/mpc85xx_edac_mod.ko] undefined!
-
-We don't want to export those symbols just for this driver, so make the
-driver only configurable as a built-in.
-
-This seems to have been broken since at least
-
-  c92132f59806 ("edac/85xx: Add PCIe error interrupt edac support")
-
-(Nov 2013).
-
- [ bp: make it depend on EDAC=y so that the EDAC core doesn't get built
-   as a module. ]
-
-Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
-Signed-off-by: Borislav Petkov <bp@suse.de>
-Acked-by: Johannes Thumshirn <jth@kernel.org>
-Cc: James Morse <james.morse@arm.com>
-Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc: linux-edac <linux-edac@vger.kernel.org>
-Cc: linuxppc-dev@ozlabs.org
-Cc: morbidrsa@gmail.com
-Link: https://lkml.kernel.org/r/20190502141941.12927-1-mpe@ellerman.id.au
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/edac/Kconfig | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/edac/Kconfig b/drivers/edac/Kconfig
-index 96afb2aeed18a..aaaa8ce8d3fdd 100644
---- a/drivers/edac/Kconfig
-+++ b/drivers/edac/Kconfig
-@@ -246,8 +246,8 @@ config EDAC_PND2
- 	  micro-server but may appear on others in the future.
- 
- config EDAC_MPC85XX
--	tristate "Freescale MPC83xx / MPC85xx"
--	depends on FSL_SOC
-+	bool "Freescale MPC83xx / MPC85xx"
-+	depends on FSL_SOC && EDAC=y
- 	help
- 	  Support for error detection and correction on the Freescale
- 	  MPC8349, MPC8560, MPC8540, MPC8548, T4240
--- 
-2.20.1
-
+Thanks,
+Hanna
+> 
+> Cheers,
+> Ben.
+> 
