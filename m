@@ -2,127 +2,74 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1976035238
-	for <lists+linux-edac@lfdr.de>; Tue,  4 Jun 2019 23:50:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6323035973
+	for <lists+linux-edac@lfdr.de>; Wed,  5 Jun 2019 11:14:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726538AbfFDVuE (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Tue, 4 Jun 2019 17:50:04 -0400
-Received: from mga11.intel.com ([192.55.52.93]:41447 "EHLO mga11.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726537AbfFDVuE (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Tue, 4 Jun 2019 17:50:04 -0400
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 04 Jun 2019 14:50:04 -0700
-X-ExtLoop1: 1
-Received: from tthayer-hp-z620.an.intel.com (HELO [10.122.105.146]) ([10.122.105.146])
-  by orsmga004.jf.intel.com with ESMTP; 04 Jun 2019 14:50:03 -0700
-Reply-To: thor.thayer@linux.intel.com
-Subject: Re: [PATCH] EDAC/altera: Warm Reset option for Stratix10 peripheral
- DBE
-To:     Sudeep Holla <sudeep.holla@arm.com>,
-        James Morse <james.morse@arm.com>
-Cc:     bp@alien8.de, mchehab@kernel.org, linux-edac@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Lorenzo Pieralisi <Lorenzo.Pieralisi@arm.com>,
-        Mark Rutland <Mark.Rutland@arm.com>
-References: <1559594269-10077-1-git-send-email-thor.thayer@linux.intel.com>
- <9de1152b-25e0-3fb1-bf96-c8e45363942c@arm.com>
- <20190604173848.GA28613@e107155-lin>
-From:   Thor Thayer <thor.thayer@linux.intel.com>
-Message-ID: <45390f41-9b8c-de83-a092-befa3d1f7f0f@linux.intel.com>
-Date:   Tue, 4 Jun 2019 16:52:08 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.0
+        id S1727019AbfFEJN2 (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Wed, 5 Jun 2019 05:13:28 -0400
+Received: from mail-qt1-f196.google.com ([209.85.160.196]:38771 "EHLO
+        mail-qt1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727028AbfFEJNG (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Wed, 5 Jun 2019 05:13:06 -0400
+Received: by mail-qt1-f196.google.com with SMTP id l3so17129019qtj.5
+        for <linux-edac@vger.kernel.org>; Wed, 05 Jun 2019 02:13:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:sender:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=sv8woPWiAbjxWzmpuWgiIz6XXVPPUbgAbEyIUn1xXv4=;
+        b=TkW4hfe5pUqsG+DiOW/uicLenisQaGg79OoQVzePrwEr2YF5atpKQ0nrhkDBn620d3
+         VFxcvNt2R/zUhCXXiHwyGNQHcDS6Om3zY1vt9G6lOg/u2lNf5lvCLIwcygyTDYWHN2fW
+         bScEwQoC1MOKZfShjovwPlxha1uMI+pQmkeDfPVy/k0JJvCe2pZav9jqUIiFiym4jkLy
+         uaxs7Ic5FHyvjIbIRLWbHh3iGCJ8WR4v1t9rZ+PxBe5JkHATgII1J7/40nmgVjeHl/Pu
+         Zof888scaxgKlseaIokGPW6fVpesuVMimkCpo2HdFwT/15Om+C49GK9EmNKT99oAlyoc
+         2AlQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:sender:from:date
+         :message-id:subject:to:content-transfer-encoding;
+        bh=sv8woPWiAbjxWzmpuWgiIz6XXVPPUbgAbEyIUn1xXv4=;
+        b=mal14tK+ht6zgoM7b2a3VYA8XVPgavngRHADCsRRXdTTquxTI2KM3sbgr/Dq2ny7eU
+         QVy6pB1q6ex9rwoev1MySRGqWqcFGXASs4fJ+R8dnJmWHGjcMWWZIsPRKYfd/8v7y5WY
+         F9rVx7iypqnLQKosDXFpm3Y/5GtTOtpVmzYnbsHR+rIGM59X6Jh2ECwtW5iM5ldJAKDG
+         lxvS2qdv2sUUX81GTFqAURJLyRU7H0uplgQmNT0Q+kzw6W1Ow9ZPNvQNUr+Naee+sN5S
+         NziIOYkix6UA2/J8qahrqYajYmJMIyOT1MU36zh7GaxvYV3OmxpAZLcnVyv1izsa5guf
+         PMUw==
+X-Gm-Message-State: APjAAAX+oPDfF/Z3Np6dotNwTVpfhlJWvhXoDpvbp0OGKcDl9bZcydXp
+        UIHJp9ipPX34WRNacZcIfK4lj3SqMfNXGTaZTWw=
+X-Google-Smtp-Source: APXvYqwYjoRXwjkzukhHG9GujD90S435+MiEX+aMqt//jVh0slBpi9T/ClNpBr3AhOL24s+u0p1fEoYlEB/TdJ7lhh0=
+X-Received: by 2002:ac8:4442:: with SMTP id m2mr10786957qtn.107.1559725985588;
+ Wed, 05 Jun 2019 02:13:05 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20190604173848.GA28613@e107155-lin>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Reply-To: zia412@outlook.com
+Received: by 2002:ac8:29ae:0:0:0:0:0 with HTTP; Wed, 5 Jun 2019 02:13:04 -0700 (PDT)
+From:   Ahmed Ahmed <zaaama250@gmail.com>
+Date:   Wed, 5 Jun 2019 11:13:04 +0200
+X-Google-Sender-Auth: O4ECdhXyD9RZiYQtNPazjfhOc6g
+Message-ID: <CABCrZePnkaYktrPk-U3x2BTPqQZnfOs52gz-wB655Hk58H_K0Q@mail.gmail.com>
+Subject: OK
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-Hi Sudeep,
+Greetings,
 
-On 6/4/19 12:38 PM, Sudeep Holla wrote:
-> On Tue, Jun 04, 2019 at 06:23:15PM +0100, James Morse wrote:
->> Hi Thor,
->>
->> (CC: +Mark, Lorenzo and Sudeep for PSCI.
->> How should SYSTEM_RESET2 be used for a vendor-specific reset?
->>
-> 
-> Initially it was indented to be used by passing command line argument
-> "reboot=w" or "reboot=warm" as specified in kernel document[1]
-> 
-> However it was enhanced and enabled specifically for panic by
-> Commit b287a25a7148 ("panic/reboot: allow specifying reboot_mode for panic only")
-> 
-> IIUC you can now pass "reboot=panic_warm" to just set reboot_mode to
-> WARM when there's a panic. SYSTEM_RESET2 gets called whenever reboot_mode
-> is set to WARM/SOFT
-> 
-Thanks. I missed that SYSTEM_RESET2 had been implemented.
+I humbly solicit for your partnership to transfer =E2=82=AC15 million Euros
+into your personal or company=E2=80=99s account .Contact me for more detail=
+ed
+explanation.
 
->> The original patch is:
->> lore.kernel.org/r/1559594269-10077-1-git-send-email-thor.thayer@linux.intel.com
->> )
->>
->> On 03/06/2019 21:37, thor.thayer@linux.intel.com wrote:
->>> From: Thor Thayer <thor.thayer@linux.intel.com>
->>>
->>> The Stratix10 peripheral FIFO memories can recover from double
->>> bit errors with a warm reset instead of a cold reset.
->>> Add the option of a warm reset for peripheral (USB, Ethernet)
->>> memories.
->>>
->>> CPU memories such as SDRAM and OCRAM require a cold reset for
->>> DBEs.
->>> Filter on whether the error is a SDRAM/OCRAM or a peripheral
->>> FIFO memory to determine which reset to use when the warm
->>> reset option is configured.
->>
->> ... so you want to make different SMC calls on each CPU after panic()?
->>
->>
->>> diff --git a/drivers/edac/altera_edac.c b/drivers/edac/altera_edac.c
->>> index 8816f74a22b4..179601f14b48 100644
->>> --- a/drivers/edac/altera_edac.c
->>> +++ b/drivers/edac/altera_edac.c
->>> @@ -2036,6 +2036,19 @@ static const struct irq_domain_ops a10_eccmgr_ic_ops = {
->>>   /* panic routine issues reboot on non-zero panic_timeout */
->>>   extern int panic_timeout;
->>>
->>> +#ifdef CONFIG_EDAC_ALTERA_ARM64_WARM_RESET
->>> +/* EL3 SMC call to setup CPUs for warm reset */
->>> +void panic_smp_self_stop(void)
->>> +{
->>> +	struct arm_smccc_res result;
->>> +
->>> +	__cpu_disable();
->>> +	cpu_relax();
->>> +	arm_smccc_smc(INTEL_SIP_SMC_ECC_DBE, S10_WARM_RESET_WFI_FLAG,
->>> +		      S10_WARM_RESET_WFI_FLAG, 0, 0, 0, 0, 0, &result);
-> 
-> Please use SYSTEM_RESET2 or let us know why it can't be used to understand
-> the requirement better. There are options to use vendor extentions with
-> the SYSTEM_RESET2 PSCI command if you really have to. However the mainline
-> supports only architectural warm reset.
-> 
-I need to decide between warm reset and cold reset based on the 
-peripheral type but maybe that decision can be done by firmware as James 
-pointed out.
+Kindly send me the followings
 
-Thanks for the links and the comments!
+Full Names
+Address
+Occupation
+Direct Mobile Telephone Lines
+Nationality
 
-Thor
-> --
-> Regards,
-> Sudeep
-> 
-> [1] Documentation/admin-guide/kernel-parameters.txt
-> 
-
+Ahmed Zama
++22675844869
