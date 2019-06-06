@@ -2,46 +2,35 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E4AF636DD4
-	for <lists+linux-edac@lfdr.de>; Thu,  6 Jun 2019 09:53:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9594D37134
+	for <lists+linux-edac@lfdr.de>; Thu,  6 Jun 2019 12:03:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726103AbfFFHxx (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Thu, 6 Jun 2019 03:53:53 -0400
-Received: from smtp-fw-6001.amazon.com ([52.95.48.154]:43781 "EHLO
-        smtp-fw-6001.amazon.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725267AbfFFHxw (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Thu, 6 Jun 2019 03:53:52 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1559807632; x=1591343632;
-  h=subject:to:cc:references:from:message-id:date:
-   mime-version:in-reply-to:content-transfer-encoding;
-  bh=4rKMDgk0idWhZbYe/MH2P9996yrzfb/TgPhooH3LB20=;
-  b=A4Tz+HeUgJv+KhXGNR8ov3D9CQ6eB32ywTpXglB2b28lRirIIKm9ImXv
-   jbuhUf6jZ+hOe03o1tKfzletybDDgEL0DbJPB/68Im6kcG6bBgDUjfUwy
-   sr4aE32vZpViHiflo1WsSLiT9O62N1DiqMEgNQAgbwMOPfHMv1uxIBsui
-   A=;
-X-IronPort-AV: E=Sophos;i="5.60,558,1549929600"; 
-   d="scan'208";a="399612691"
-Received: from iad6-co-svc-p1-lb1-vlan3.amazon.com (HELO email-inbound-relay-2b-3714e498.us-west-2.amazon.com) ([10.124.125.6])
-  by smtp-border-fw-out-6001.iad6.amazon.com with ESMTP; 06 Jun 2019 07:53:49 +0000
-Received: from EX13MTAUWB001.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan3.pdx.amazon.com [10.236.137.198])
-        by email-inbound-relay-2b-3714e498.us-west-2.amazon.com (Postfix) with ESMTPS id 0F26AA27E5;
-        Thu,  6 Jun 2019 07:53:49 +0000 (UTC)
-Received: from EX13D21UWB001.ant.amazon.com (10.43.161.108) by
- EX13MTAUWB001.ant.amazon.com (10.43.161.207) with Microsoft SMTP Server (TLS)
- id 15.0.1367.3; Thu, 6 Jun 2019 07:53:48 +0000
-Received: from EX13MTAUWB001.ant.amazon.com (10.43.161.207) by
- EX13D21UWB001.ant.amazon.com (10.43.161.108) with Microsoft SMTP Server (TLS)
- id 15.0.1367.3; Thu, 6 Jun 2019 07:53:48 +0000
-Received: from [10.107.3.17] (10.107.3.17) by mail-relay.amazon.com
- (10.43.161.249) with Microsoft SMTP Server (TLS) id 15.0.1367.3 via Frontend
- Transport; Thu, 6 Jun 2019 07:53:43 +0000
-Subject: Re: [PATCH 2/2] edac: add support for Amazon's Annapurna Labs EDAC
-To:     Borislav Petkov <bp@alien8.de>,
-        "Herrenschmidt, Benjamin" <benh@amazon.com>,
-        "james.morse@arm.com" <james.morse@arm.com>
-CC:     "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        id S1727959AbfFFKDU (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Thu, 6 Jun 2019 06:03:20 -0400
+Received: from mail.skyhub.de ([5.9.137.197]:51288 "EHLO mail.skyhub.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726972AbfFFKDU (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Thu, 6 Jun 2019 06:03:20 -0400
+Received: from zn.tnic (p200300EC2F1EFA00C5555FEB083E0D5D.dip0.t-ipconnect.de [IPv6:2003:ec:2f1e:fa00:c555:5feb:83e:d5d])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id F008C1EC02FE;
+        Thu,  6 Jun 2019 12:03:17 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1559815398;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=gY7wo5tn+Q6xuDLRFIE/jPyAZiFytadxsFIYa94a7Xg=;
+        b=cAtCEzCXTH50n+mSHu26/2RPN9U0/FM0abQbzcs68cQvcwFuwUoHCIoUi4NOe00kr5G8oW
+        af88+35wfOFlo9OMy23Rug6cKERrEBIeHoi/zS7TZGj2Wwuux0p/EROmUW9QX8eJhjc5Mx
+        w7Yjwi4RLHRtXbEUyf+htu9TVGIX+CI=
+Date:   Thu, 6 Jun 2019 12:03:12 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     "Hawa, Hanna" <hhhawa@amazon.com>
+Cc:     "Herrenschmidt, Benjamin" <benh@amazon.com>,
+        "james.morse@arm.com" <james.morse@arm.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
         "Woodhouse, David" <dwmw@amazon.co.uk>,
         "paulmck@linux.ibm.com" <paulmck@linux.ibm.com>,
         "mchehab@kernel.org" <mchehab@kernel.org>,
@@ -56,49 +45,38 @@ CC:     "robh+dt@kernel.org" <robh+dt@kernel.org>,
         "Krupnik, Ronen" <ronenk@amazon.com>,
         "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
         "Hanoch, Uri" <hanochu@amazon.com>
+Subject: Re: [PATCH 2/2] edac: add support for Amazon's Annapurna Labs EDAC
+Message-ID: <20190606100312.GD26146@zn.tnic>
 References: <1559211329-13098-1-git-send-email-hhhawa@amazon.com>
  <1559211329-13098-3-git-send-email-hhhawa@amazon.com>
  <DB09EE2A-7397-4063-B925-66658D0105A5@alien8.de>
  <bfbc12fb68eea9d8d4cc257c213393fd4e92c33a.camel@amazon.com>
  <20190531051400.GA2275@cz.tnic>
-From:   "Hawa, Hanna" <hhhawa@amazon.com>
-Message-ID: <ce01a2bc-7973-5978-b033-a6bdc61b9d4b@amazon.com>
-Date:   Thu, 6 Jun 2019 10:53:42 +0300
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.0
+ <ce01a2bc-7973-5978-b033-a6bdc61b9d4b@amazon.com>
 MIME-Version: 1.0
-In-Reply-To: <20190531051400.GA2275@cz.tnic>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <ce01a2bc-7973-5978-b033-a6bdc61b9d4b@amazon.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
+On Thu, Jun 06, 2019 at 10:53:42AM +0300, Hawa, Hanna wrote:
+> Disagree. The various drivers don't depend on each other.
+> I think we should keep the drivers separated as they are distinct and
+> independent IP blocks.
 
+This topic comes up each time someone submits a new ARM EDAC driver:
+EDAC can't support different drivers because of the limitations it has.
+And a single platform driver works - see altera_edac.
 
-On 5/31/2019 8:14 AM, Borislav Petkov wrote:
-> On Fri, May 31, 2019 at 01:15:33AM +0000, Herrenschmidt, Benjamin wrote:
->> This isn't terribly helpful, there's nothing telling anybody which of
->> those files corresponds to an ARM SoC :-)
-> 
-> drivers/edac/altera_edac.c is one example.
-> 
-> Also, James and I have a small writeup on how an arm driver should look
-> like, we just need to polish it up and post it.
-> 
-> James?
-> 
->> That said ...
->>
->> You really want a single EDAC driver that contains all the stuff for
->> the caches, the memory controller, etc... ?
-> 
-> Yap.
+Again, James has a good write up with example how this can work so be
+patient.
 
-Disagree. The various drivers don't depend on each other.
-I think we should keep the drivers separated as they are distinct and 
-independent IP blocks.
+-- 
+Regards/Gruss,
+    Boris.
 
-> 
+Good mailing practices for 400: avoid top-posting and trim the reply.
