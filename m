@@ -2,118 +2,58 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C521036D83
-	for <lists+linux-edac@lfdr.de>; Thu,  6 Jun 2019 09:42:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A9AF36DC5
+	for <lists+linux-edac@lfdr.de>; Thu,  6 Jun 2019 09:50:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726140AbfFFHmP (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Thu, 6 Jun 2019 03:42:15 -0400
-Received: from mail-io1-f67.google.com ([209.85.166.67]:40310 "EHLO
-        mail-io1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725267AbfFFHmP (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Thu, 6 Jun 2019 03:42:15 -0400
-Received: by mail-io1-f67.google.com with SMTP id n5so560489ioc.7;
-        Thu, 06 Jun 2019 00:42:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=J2P7+9BrsV7BFobAF6Gcf5hOBXDyVsf7Cw11pqeBfG0=;
-        b=lhHIkf2p/bhc9lWToqafMcafzKV+1jJqbUCG7KNnGqFyzeGt/DTmAF2+xs4d33W5/v
-         7iBI9jnRJGEJ4oFuU42IfmcB1VjOoRLb86BoiUrqPN5UlJ+h1zk5dVfF8Htjh3rcE2yv
-         A89dNT+HybPHVCM0z+ynLI1HEYDQ3s4ZlPXi3gzGp3y+kFW3SKAkMaMtmrxXWbZQbXaB
-         qEDcCsrPo8rcVxCEbcxqpYw5gyTNNnfjI46gezgvpGnRj0lhgO2iQLJjbz2T6Qhyjg/a
-         xtjIzO6o4JywE81qxr5HEgraSdy2BM5Ko6Gx3GzaV6FndQOGynmNEy4negaMR6caGjel
-         24QA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=J2P7+9BrsV7BFobAF6Gcf5hOBXDyVsf7Cw11pqeBfG0=;
-        b=Bccff4a02kI+fsnSgs544EzMSxo6ipGBq9abL5sc+qL2JqCSjg/+Q+TI3yy6wCOP0m
-         QcuJkQ8V2kazbC/a8JlHzobKFO4Q9OMGp5Yn4K9vlNrayunGLc3CgiL2PEgpO1o4/UCJ
-         2OHGznYFlA6Dtzng7coVsaZzSPFj1MEUnTz/4SINSzWS1GEZjRbZ7NLTD+WhkthktDDz
-         NsA90fwEj3VD8O89XzxOCpAqFmITk8tfBD0IIdzjea1Okjz6JydpG0oRBmtzyWQ3AVXn
-         PQ7ypcnIbdjYXfueBrWH48sd49snCCR8n/gdEpwIw/mwIXO3U7xJ3cY6XX59N2IDBc8r
-         aBHA==
-X-Gm-Message-State: APjAAAV7f0zdp6AD6FoNmhCMi68jhFr9nc+9aa1iSNz3uiCaJMYA5CTN
-        nnM7ngChwULADBagZAbIYqilILF3w7rdhgZ1Uw==
-X-Google-Smtp-Source: APXvYqy6Ko9syXmU0XkEyDc/Q2Tk12TRz8+zmvPobBbovp2+NfN8I44+rRcRfj31jwt3e23eYV98CO+eDjREb/FXK1w=
-X-Received: by 2002:a5d:9251:: with SMTP id e17mr8467626iol.21.1559806934290;
- Thu, 06 Jun 2019 00:42:14 -0700 (PDT)
+        id S1726014AbfFFHuX (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Thu, 6 Jun 2019 03:50:23 -0400
+Received: from mail.skyhub.de ([5.9.137.197]:58834 "EHLO mail.skyhub.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725769AbfFFHuX (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Thu, 6 Jun 2019 03:50:23 -0400
+Received: from zn.tnic (p200300EC2F1EFA008DFA61B32E935F4C.dip0.t-ipconnect.de [IPv6:2003:ec:2f1e:fa00:8dfa:61b3:2e93:5f4c])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 18CEA1EC0249;
+        Thu,  6 Jun 2019 09:50:22 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1559807422;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=yv5Jyf2/aHF2MK724YeYv/G4bYAcwOm2MJNBI2PllQU=;
+        b=MPE1somu2iyfymhz5QPSlfO4vY8gAn+MU40tBZLYjDo6wEJ8AGmNSar897xHgxVQAyy3TV
+        SShoDlG71WQI53MbwI7g6KcnxFDslYTytyEXZzaaIh29wAnIXVt9T4zzVOWcLKs36lrfbs
+        DnKPn+ttugDqi/g1hre848w4rQhLx54=
+Date:   Thu, 6 Jun 2019 09:50:15 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     luanshi <zhangliguang@linux.alibaba.com>
+Cc:     Tony Luck <tony.luck@intel.com>, linux-edac@vger.kernel.org
+Subject: Re: [PATCH] x86/mce: Fix memleak in mce_banks
+Message-ID: <20190606075015.GC26146@zn.tnic>
+References: <1559804967-46320-1-git-send-email-zhangliguang@linux.alibaba.com>
 MIME-Version: 1.0
-References: <20190605141253.38554-1-ghung.quanta@gmail.com> <20190605141253.38554-2-ghung.quanta@gmail.com>
-In-Reply-To: <20190605141253.38554-2-ghung.quanta@gmail.com>
-From:   Avi Fishman <avifishman70@gmail.com>
-Date:   Thu, 6 Jun 2019 10:41:46 +0300
-Message-ID: <CAKKbWA71P+afSiWPoth90-Ydq4DBmxSK_yTRWSN+FPw10CqFAQ@mail.gmail.com>
-Subject: Re: [PATCH 5.2 v2 2/2] dt-binding: edac: add NPCM ECC documentation
-To:     George Hung <ghung.quanta@gmail.com>
-Cc:     linux-edac <linux-edac@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        devicetree <devicetree@vger.kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Benjamin Fair <benjaminfair@google.com>, paulmck@linux.ibm.com,
-        Patrick Venture <venture@google.com>,
-        OpenBMC Maillist <openbmc@lists.ozlabs.org>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Tali Perry <tali.perry1@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Borislav Petkov <bp@alien8.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        James Morse <james.morse@arm.com>,
-        "William A. Kennington III" <wak@google.com>, davem@davemloft.net,
-        Tomer Maimon <tomer.maimon@nuvoton.com>,
-        Avi Fishman <Avi.Fishman@nuvoton.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <1559804967-46320-1-git-send-email-zhangliguang@linux.alibaba.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Wed, Jun 5, 2019 at 5:19 PM George Hung <ghung.quanta@gmail.com> wrote:
->
-> Add device tree documentation for Nuvoton BMC ECC
->
-> Signed-off-by: George Hung <ghung.quanta@gmail.com>
+On Thu, Jun 06, 2019 at 03:09:27PM +0800, luanshi wrote:
+> From: zhangliguang <zhangliguang@linux.alibaba.com>
+> 
+> The mce_banks is leaked in the error out cases during
+> __mcheck_cpu_apply_quirks and mce_gen_pool_init. This patch fixes it.
 
-Reviewed-by: Avi Fishman <avifishman70@gmail.com>
-
-> ---
->  .../bindings/edac/npcm7xx-sdram-edac.txt        | 17 +++++++++++++++++
->  1 file changed, 17 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/edac/npcm7xx-sdram-edac.txt
->
-> diff --git a/Documentation/devicetree/bindings/edac/npcm7xx-sdram-edac.txt b/Documentation/devicetree/bindings/edac/npcm7xx-sdram-edac.txt
-> new file mode 100644
-> index 000000000000..dd4dac59a5bd
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/edac/npcm7xx-sdram-edac.txt
-> @@ -0,0 +1,17 @@
-> +Nuvoton NPCM7xx SoC EDAC device driver
-> +
-> +The Nuvoton NPCM7xx SoC supports DDR4 memory with/without ECC and the driver
-> +uses the EDAC framework to implement the ECC detection and corrtection.
-> +
-> +Required properties:
-> +- compatible:  should be "nuvoton,npcm7xx-sdram-edac"
-> +- reg:         Memory controller register set should be <0xf0824000 0x1000>
-> +- interrupts:  should be MC interrupt #25
-> +
-> +Example:
-> +
-> +       mc: memory-controller@f0824000 {
-> +               compatible = "nuvoton,npcm7xx-sdram-edac";
-> +               reg = <0xf0824000 0x1000>;
-> +               interrupts = <0 25 4>;
-> +       };
-> --
-> 2.21.0
->
-
+Maybe my reply from last night wasn't clear so lemme repeat it again:
+this patch is not needed because we're removing the kcalloc call there
+and the banks will be allocated statically in the future.
 
 -- 
-Regards,
-Avi
+Regards/Gruss,
+    Boris.
+
+Good mailing practices for 400: avoid top-posting and trim the reply.
