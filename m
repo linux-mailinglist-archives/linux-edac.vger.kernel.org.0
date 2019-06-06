@@ -2,148 +2,122 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CCE23730E
-	for <lists+linux-edac@lfdr.de>; Thu,  6 Jun 2019 13:38:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E0593743F
+	for <lists+linux-edac@lfdr.de>; Thu,  6 Jun 2019 14:37:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727113AbfFFLiB (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Thu, 6 Jun 2019 07:38:01 -0400
-Received: from smtp-fw-4101.amazon.com ([72.21.198.25]:17325 "EHLO
-        smtp-fw-4101.amazon.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727064AbfFFLiB (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Thu, 6 Jun 2019 07:38:01 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1559821080; x=1591357080;
-  h=subject:to:cc:references:from:message-id:date:
-   mime-version:in-reply-to:content-transfer-encoding;
-  bh=Ce2wemERCNuhe1r8FDKdwgvoDhrRfIiwIFwMCaHmYng=;
-  b=GeGeXRa4xrreIU0xvVwTJV2SqBYxzEbea3CxlpvhLNKaXlHHD/dumdAQ
-   sfY5ogRjdcO/Qx577b1Kra6KVIP8oQLkVWJ1d3J3cwm9cKY3BOyFIVRlf
-   I37zYW6wg9ZaxiZmKPjVnzz7SmlX3k1cRsE3ukPzCExwre157e5J3Tgfn
-   Y=;
-X-IronPort-AV: E=Sophos;i="5.60,559,1549929600"; 
-   d="scan'208";a="769248080"
-Received: from iad6-co-svc-p1-lb1-vlan3.amazon.com (HELO email-inbound-relay-2a-f14f4a47.us-west-2.amazon.com) ([10.124.125.6])
-  by smtp-border-fw-out-4101.iad4.amazon.com with ESMTP; 06 Jun 2019 11:37:57 +0000
-Received: from EX13MTAUEA001.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan3.pdx.amazon.com [10.236.137.198])
-        by email-inbound-relay-2a-f14f4a47.us-west-2.amazon.com (Postfix) with ESMTPS id DB23CA2881;
-        Thu,  6 Jun 2019 11:37:56 +0000 (UTC)
-Received: from EX13D01EUB001.ant.amazon.com (10.43.166.194) by
- EX13MTAUEA001.ant.amazon.com (10.43.61.243) with Microsoft SMTP Server (TLS)
- id 15.0.1367.3; Thu, 6 Jun 2019 11:37:56 +0000
-Received: from [10.125.238.52] (10.43.160.177) by EX13D01EUB001.ant.amazon.com
- (10.43.166.194) with Microsoft SMTP Server (TLS) id 15.0.1367.3; Thu, 6 Jun
- 2019 11:37:48 +0000
-Subject: Re: [PATCH 2/2] edac: add support for Amazon's Annapurna Labs EDAC
-To:     James Morse <james.morse@arm.com>,
-        "Hawa, Hanna" <hhhawa@amazon.com>, Borislav Petkov <bp@alien8.de>,
-        "Herrenschmidt, Benjamin" <benh@amazon.com>
-CC:     "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "Woodhouse, David" <dwmw@amazon.co.uk>,
-        "paulmck@linux.ibm.com" <paulmck@linux.ibm.com>,
-        "mchehab@kernel.org" <mchehab@kernel.org>,
-        "mark.rutland@arm.com" <mark.rutland@arm.com>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "nicolas.ferre@microchip.com" <nicolas.ferre@microchip.com>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Chocron, Jonathan" <jonnyc@amazon.com>,
-        "Krupnik, Ronen" <ronenk@amazon.com>,
-        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
-        "Hanoch, Uri" <hanochu@amazon.com>
-References: <1559211329-13098-1-git-send-email-hhhawa@amazon.com>
- <1559211329-13098-3-git-send-email-hhhawa@amazon.com>
- <DB09EE2A-7397-4063-B925-66658D0105A5@alien8.de>
- <bfbc12fb68eea9d8d4cc257c213393fd4e92c33a.camel@amazon.com>
- <20190531051400.GA2275@cz.tnic>
- <ce01a2bc-7973-5978-b033-a6bdc61b9d4b@amazon.com>
- <32431fa2-2285-6c41-ce32-09630205bb54@arm.com>
-From:   "Shenhar, Talel" <talel@amazon.com>
-Message-ID: <71da083e-1a74-cf86-455d-260a34ee01fd@amazon.com>
-Date:   Thu, 6 Jun 2019 14:37:43 +0300
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.0
+        id S1727368AbfFFMhX (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Thu, 6 Jun 2019 08:37:23 -0400
+Received: from szxga05-in.huawei.com ([45.249.212.191]:18107 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726877AbfFFMhX (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Thu, 6 Jun 2019 08:37:23 -0400
+Received: from DGGEMS413-HUB.china.huawei.com (unknown [172.30.72.58])
+        by Forcepoint Email with ESMTP id CD0E381C6E43ED1BC2B1;
+        Thu,  6 Jun 2019 20:37:17 +0800 (CST)
+Received: from lhrphicprd00229.huawei.com (10.123.41.22) by
+ DGGEMS413-HUB.china.huawei.com (10.3.19.213) with Microsoft SMTP Server id
+ 14.3.439.0; Thu, 6 Jun 2019 20:37:08 +0800
+From:   Jonathan Cameron <Jonathan.Cameron@huawei.com>
+To:     <linux-edac@vger.kernel.org>, <linux-acpi@vger.kernel.org>,
+        <linux-efi@vger.kernel.org>
+CC:     <linuxarm@huawei.com>, <rjw@rjwysocki.net>, <tony.luck@intel.com>,
+        <bp@alien8.de>, <james.morse@arm.com>, <ard.beisheuvel@linaro.org>,
+        <nariman.poushin@linaro.org>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Subject: [RFC PATCH 0/6] CCIX Protocol Error reporting
+Date:   Thu, 6 Jun 2019 20:36:48 +0800
+Message-ID: <20190606123654.78973-1-Jonathan.Cameron@huawei.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-In-Reply-To: <32431fa2-2285-6c41-ce32-09630205bb54@arm.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-Originating-IP: [10.43.160.177]
-X-ClientProxiedBy: EX13D14UWC003.ant.amazon.com (10.43.162.19) To
- EX13D01EUB001.ant.amazon.com (10.43.166.194)
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.123.41.22]
+X-CFilter-Loop: Reflected
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
+UEFI 2.8 defines a new CPER record Appendix N for CCIX Protocol Error Records
+(PER). www.uefi.org
 
->> Disagree. The various drivers don't depend on each other.
->> I think we should keep the drivers separated as they are distinct and independent IP blocks.
-> But they don't exist in isolation, they both depend on the integration-choices/firmware
-> that makes up your platform.
->
-> Other platforms may have exactly the same IP blocks, configured differently, or with
-> different features enabled in firmware. This means we can't just probe the driver based on
-> the presence of the IP block, we need to know the integration choices and firmware
-> settings match what the driver requires.
->
-> (Case in point, that A57 ECC support is optional, another A57 may not have it)
->
-> Descriptions of what firmware did don't really belong in the DT. Its not a hardware property.
->
-> This is why its better to probe this stuff based on the machine-compatible/platform-name,
-> not the presence of the IP block in the DT.
->
->
-> Will either of your separate drivers ever run alone? If they're probed from the same
-> machine-compatible this won't happen.
->
->
-> How does your memory controller report errors? Does it send back some data with an invalid
-> checksum, or a specific poison/invalid flag? Will the cache report this as a cache error
-> too, if its an extra signal, does the cache know what it is?
->
-> All these are integration choices between the two IP blocks, done as separate drivers we
-> don't have anywhere to store that information. Even if you don't care about this, making
-> them separate drivers should only be done to make them usable on other platforms, where
-> these choices may have been different.
+These include Protocol Error Record logs which are defined in the
+CCIX 1.0 Base Specification www.ccixconsortium.com.
 
-James,
+Handling of coherency protocol errors is complex and how Linux does this
+will take some time to evolve.  For now, fatal errors are handled via the
+usual means and everything else is reported.
 
-Thanks for the prompt responses.
+There are 6 types of error defined, covering:
+* Memory errors
+* Cache errors
+* Address translation unit errors
+* CCIX port errors 
+* CCIX link errors
+* Agent internal errors.
 
- From our perspective, l1/l2 has nothing to do with the ddr memory 
-controller.
+The set includes tracepoints to report the errors to RAS Daemon and a patch
+set for RAS Daemon will follow shortly.
 
-Its right that they both use same edac subsystem but they are using 
-totally different APIs of it.
+There are several open questions for this RFC.
+1. Reporting of vendor data.  We have little choice but to do this via a
+   dynamic array as these blocks can take arbitrary size. I had hoped
+   no one would actually use these given the odd mismatch between a
+   standard error structure and non standard element, but there are
+   already designs out there that do use it.
+2. The trade off between explicit tracepoint fields, on which we might
+   want to filter, and the simplicity of a blob. I have gone for having
+   the whole of the block specific to the PER error type in an opaque blob.
+   Perhaps this is not the right balance?
+3. Whether defining 6 new tracepoints is sensible. I think it is:
+   * They are all defined by the CCIX specification as independant error
+     classes.
+   * Many of them can only be generated by particular types of agent.
+   * The handling required will vary widely depending on types.
+     In the kernel some map cleanly onto existing handling. Keeping the
+     whole flow separate will aide this. They vary by a similar amount
+     in scope to the RAS errors found on an existing system which have
+     independent tracepoints.
+   * Separating them out allows for filtering on the tracepoints by
+     elements that are not shared between them.
+   * Muxing the lot into one record type can lead to ugly code both in
+     kernel and in userspace.
 
-We also even want to have separate control for enabling/disabling l1/l2 
-edac vs memory controller edac.
+Rasdaemon patches will follow shortly.
 
-Even from technical point-of-view L1/L2 UE collection method is totally 
-different from collecting memory-controller UE. (CPU exception vs actual 
-interrupts).
+This patch is being distributed by the CCIX Consortium, Inc. (CCIX) to
+you and other parties that are paticipating (the "participants") in the
+Linux kernel with the understanding that the participants will use CCIX's
+name and trademark only when this patch is used in association with the
+Linux kernel and associated user space.
 
-So there is less reason why to combine them vs giving each one its own 
-file, e.g. al_mc_edac, al_l1_l2_edac (I even don't see why Hanna 
-combined l1 and l2...)
+CCIX is also distributing this patch to these participants with the
+understanding that if any portion of the CCIX specification will be
+used or referenced in the Linux kernel, the participants will not modify
+the cited portion of the CCIX specification and will give CCIX propery
+copyright attribution by including the following copyright notice with
+the cited part of the CCIX specification:
+"© 2019 CCIX CONSORTIUM, INC. ALL RIGHTS RESERVED."
 
-As we don't have any technical relation between the two we would rather 
-avoid this combination.
+Jonathan Cameron (6):
+  efi / ras: CCIX Memory error reporting
+  efi / ras: CCIX Cache error reporting
+  efi / ras: CCIX Address Translation Cache error reporting
+  efi / ras: CCIX Port error reporting
+  efi / ras: CCIX Link error reporting
+  efi / ras: CCIX Agent internal error reporting
 
-Also, Lets assume we have different setups with different memory 
-controllers, having a dt binding to control the difference is super easy 
-and flexible.
+ drivers/acpi/apei/Kconfig        |   8 +
+ drivers/acpi/apei/ghes.c         |  59 ++
+ drivers/firmware/efi/Kconfig     |   5 +
+ drivers/firmware/efi/Makefile    |   1 +
+ drivers/firmware/efi/cper-ccix.c | 916 +++++++++++++++++++++++++++++++
+ drivers/firmware/efi/cper.c      |   6 +
+ include/linux/cper.h             | 333 +++++++++++
+ include/ras/ras_event.h          | 405 ++++++++++++++
+ 8 files changed, 1733 insertions(+)
+ create mode 100644 drivers/firmware/efi/cper-ccix.c
 
-Would having a dedicated folder for amazon ease the move to separate files?
+-- 
+2.20.1
 
-Thanks,
-
-Talel.
-
->
-> Thanks,
->
-> James
