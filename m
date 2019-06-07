@@ -2,108 +2,178 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 12F7438DFE
-	for <lists+linux-edac@lfdr.de>; Fri,  7 Jun 2019 16:49:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1A8738E9F
+	for <lists+linux-edac@lfdr.de>; Fri,  7 Jun 2019 17:12:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728887AbfFGOtp (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Fri, 7 Jun 2019 10:49:45 -0400
-Received: from mail-eopbgr730067.outbound.protection.outlook.com ([40.107.73.67]:32448
-        "EHLO NAM05-DM3-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1728446AbfFGOtp (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Fri, 7 Jun 2019 10:49:45 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amdcloud.onmicrosoft.com; s=selector1-amdcloud-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=b0hjsscWqNJJ5vRHA6SBePtSA7WR1luZIOLFq/NYB6c=;
- b=ePbaYKCUo+ywPdzZlo860wOXWYIGfgbVXXsBjAsuhCR/8sgOBVKcbfhuX3y3yV+v0BVA8XPNFF511PPONOqDdf+Ijf7J1cRb8bWojXLiHyMsGT+AIn20ScCdObQ2deBbuWrVr6aXv0P9NOP4PirU+RwDGM5HSWmMao9H1kh9Hkg=
-Received: from SN6PR12MB2639.namprd12.prod.outlook.com (52.135.103.16) by
- SN6PR12MB2784.namprd12.prod.outlook.com (52.135.107.147) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.1943.22; Fri, 7 Jun 2019 14:49:42 +0000
-Received: from SN6PR12MB2639.namprd12.prod.outlook.com
- ([fe80::69b5:19ac:b63d:2b82]) by SN6PR12MB2639.namprd12.prod.outlook.com
- ([fe80::69b5:19ac:b63d:2b82%3]) with mapi id 15.20.1965.011; Fri, 7 Jun 2019
- 14:49:42 +0000
-From:   "Ghannam, Yazen" <Yazen.Ghannam@amd.com>
-To:     Borislav Petkov <bp@alien8.de>
-CC:     "Luck, Tony" <tony.luck@intel.com>,
-        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
+        id S1729690AbfFGPLr (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Fri, 7 Jun 2019 11:11:47 -0400
+Received: from foss.arm.com ([217.140.110.172]:42296 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729173AbfFGPLr (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Fri, 7 Jun 2019 11:11:47 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 84117C0A;
+        Fri,  7 Jun 2019 08:11:46 -0700 (PDT)
+Received: from [10.1.196.105] (eglon.cambridge.arm.com [10.1.196.105])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 3F8053F718;
+        Fri,  7 Jun 2019 08:11:44 -0700 (PDT)
+Subject: Re: [PATCH 2/2] edac: add support for Amazon's Annapurna Labs EDAC
+To:     "Shenhar, Talel" <talel@amazon.com>
+Cc:     "Hawa, Hanna" <hhhawa@amazon.com>, Borislav Petkov <bp@alien8.de>,
+        "Herrenschmidt, Benjamin" <benh@amazon.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "Woodhouse, David" <dwmw@amazon.co.uk>,
+        "paulmck@linux.ibm.com" <paulmck@linux.ibm.com>,
+        "mchehab@kernel.org" <mchehab@kernel.org>,
+        "mark.rutland@arm.com" <mark.rutland@arm.com>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "nicolas.ferre@microchip.com" <nicolas.ferre@microchip.com>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "x86@kernel.org" <x86@kernel.org>
-Subject: RE: [PATCH v3 5/6] x86/MCE: Save MCA control bits that get set in
- hardware
-Thread-Topic: [PATCH v3 5/6] x86/MCE: Save MCA control bits that get set in
- hardware
-Thread-Index: AQHU/5PPbonhoiIaT0+tpMBUt0fOpKZt/3MAgAAEtbCAAA1jAIAAAELggAAGlYCAADB8kIAABZ8AgAAG7YCAANzUAIAAUaUwgAAal4CAAA3JgIAABf+AgAAE/ICAABizgIAAAygAgAAEo4CACWuboIAGhWIAgBC3iXA=
-Date:   Fri, 7 Jun 2019 14:49:42 +0000
-Message-ID: <SN6PR12MB263998ECCDF1E345FEB0869AF8100@SN6PR12MB2639.namprd12.prod.outlook.com>
-References: <20190517101006.GA32065@zn.tnic>
- <SN6PR12MB26391A0C3979030082EE38F8F80B0@SN6PR12MB2639.namprd12.prod.outlook.com>
- <20190517163729.GE13482@zn.tnic> <20190517172648.GA18164@agluck-desk>
- <20190517174817.GG13482@zn.tnic> <20190517180607.GA21710@agluck-desk>
- <20190517193431.GI13482@zn.tnic>
- <SN6PR12MB2639C5427366AC3004C35CC0F80B0@SN6PR12MB2639.namprd12.prod.outlook.com>
- <20190517200225.GK13482@zn.tnic>
- <SN6PR12MB26390759DB43763D3A482918F8010@SN6PR12MB2639.namprd12.prod.outlook.com>
- <20190527232849.GC8209@cz.tnic>
-In-Reply-To: <20190527232849.GC8209@cz.tnic>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=Yazen.Ghannam@amd.com; 
-x-originating-ip: [165.204.84.11]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: ece35cb9-9527-4cb4-3728-08d6eb576046
-x-ms-office365-filtering-ht: Tenant
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(1401327)(4618075)(2017052603328)(7193020);SRVR:SN6PR12MB2784;
-x-ms-traffictypediagnostic: SN6PR12MB2784:
-x-microsoft-antispam-prvs: <SN6PR12MB2784B80BBE025AE0D5137105F8100@SN6PR12MB2784.namprd12.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:8273;
-x-forefront-prvs: 0061C35778
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(366004)(136003)(376002)(346002)(39860400002)(396003)(189003)(199004)(13464003)(102836004)(229853002)(6506007)(53546011)(5660300002)(6436002)(316002)(76176011)(74316002)(256004)(6916009)(54906003)(72206003)(99286004)(52536014)(71190400001)(7696005)(478600001)(71200400001)(68736007)(186003)(86362001)(2906002)(66066001)(486006)(26005)(8676002)(33656002)(14454004)(6246003)(305945005)(4326008)(9686003)(66446008)(66476007)(11346002)(476003)(64756008)(66556008)(66946007)(446003)(7736002)(3846002)(6116002)(53936002)(73956011)(81156014)(76116006)(8936002)(25786009)(55016002)(81166006);DIR:OUT;SFP:1101;SCL:1;SRVR:SN6PR12MB2784;H:SN6PR12MB2639.namprd12.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
-received-spf: None (protection.outlook.com: amd.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: Cfnd7yfoVWUY/9B+6maghkkL1i8VqEX/eICo03/HJ2vxVfSQAXnA+HevAVVaVxkmwk1iRtkkwhQSy8Fq28GiTNCP0jI2sS22aUDNKuP1nCl/6Q/wus2rus3dRSIn1kBnzgREXbwyPCsqFViDgwHsZJ6TEw2Hoh4xfZPJQoP1GDZzjBB72LlrEWS3lpNCE66A2apWaH6XhgVT/jbg3OcjUxK8UjF8vcEfeNVGrCxKClrcwOJIdzLxPlS9k074plZdbTF7nQKp6c5uRPpMbw9gCxAVrli4RlSoQU2dzGWo0MqxhHDSjM+9/ssZH4LviH2K1l0QPRL5u7zsfLKoRHZ/6XjgoiCRCFkYhnXRKKFOdWgmcn2jPFJNcWBMARAlGTHBmuOv4gTJeCy4P1zsFq1+uaR5B8FXzKI/ei8pR5cMDEc=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        "Chocron, Jonathan" <jonnyc@amazon.com>,
+        "Krupnik, Ronen" <ronenk@amazon.com>,
+        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
+        "Hanoch, Uri" <hanochu@amazon.com>
+References: <1559211329-13098-1-git-send-email-hhhawa@amazon.com>
+ <1559211329-13098-3-git-send-email-hhhawa@amazon.com>
+ <DB09EE2A-7397-4063-B925-66658D0105A5@alien8.de>
+ <bfbc12fb68eea9d8d4cc257c213393fd4e92c33a.camel@amazon.com>
+ <20190531051400.GA2275@cz.tnic>
+ <ce01a2bc-7973-5978-b033-a6bdc61b9d4b@amazon.com>
+ <32431fa2-2285-6c41-ce32-09630205bb54@arm.com>
+ <71da083e-1a74-cf86-455d-260a34ee01fd@amazon.com>
+From:   James Morse <james.morse@arm.com>
+Message-ID: <25efb27c-b725-137d-5735-b3ab88323846@arm.com>
+Date:   Fri, 7 Jun 2019 16:11:42 +0100
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.0
 MIME-Version: 1.0
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: ece35cb9-9527-4cb4-3728-08d6eb576046
-X-MS-Exchange-CrossTenant-originalarrivaltime: 07 Jun 2019 14:49:42.8910
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: yghannam@amd.com
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN6PR12MB2784
+In-Reply-To: <71da083e-1a74-cf86-455d-260a34ee01fd@amazon.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-GB
+Content-Transfer-Encoding: 7bit
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-PiAtLS0tLU9yaWdpbmFsIE1lc3NhZ2UtLS0tLQ0KPiBGcm9tOiBCb3Jpc2xhdiBQZXRrb3YgPGJw
-QGFsaWVuOC5kZT4NCj4gU2VudDogTW9uZGF5LCBNYXkgMjcsIDIwMTkgNjoyOSBQTQ0KPiBUbzog
-R2hhbm5hbSwgWWF6ZW4gPFlhemVuLkdoYW5uYW1AYW1kLmNvbT4NCj4gQ2M6IEx1Y2ssIFRvbnkg
-PHRvbnkubHVja0BpbnRlbC5jb20+OyBsaW51eC1lZGFjQHZnZXIua2VybmVsLm9yZzsgbGludXgt
-a2VybmVsQHZnZXIua2VybmVsLm9yZzsgeDg2QGtlcm5lbC5vcmcNCj4gU3ViamVjdDogUmU6IFtQ
-QVRDSCB2MyA1LzZdIHg4Ni9NQ0U6IFNhdmUgTUNBIGNvbnRyb2wgYml0cyB0aGF0IGdldCBzZXQg
-aW4gaGFyZHdhcmUNCj4gDQo+IA0KPiBJIGd1ZXNzIHRoZSBjbGVhbmVzdCB3YXkgdG8gaGFuZGxl
-IGhpcyBwcm9wZXJseSB3b3VsZCBiZSB0byBoYXZlIGENCj4gZnVuY3Rpb24gY2FsbGVkIHNvbWV0
-aGluZyBsaWtlIF9fbWNoZWNrX2NwdV9pbml0X2JhbmtzKCkgd2hpY2ggZ2V0cw0KPiBjYWxsZWQg
-aW4gbWNoZWNrX2NwdV9pbml0KCkgYWZ0ZXIgdGhlIHF1aXJrcyBoYXZlIHJ1biBhbmQgdGhlbiBk
-b2VzIHRoZQ0KPiBmaW5hbCBwb2tpbmcgb2YgdGhlIGJhbmtzIGFuZCBzZXRzIGItPmluaXQgcHJv
-cGVybHkuDQo+IA0KPiBfX21jaGVja19jcHVfaW5pdF9jbGVhcl9iYW5rcygpIHNob3VsZCB0aGVu
-IGJlIHJlbmFtZWQgdG8NCj4gX19tY2hlY2tfY3B1X2NsZWFyX2JhbmtzKCkgdG8gZGVub3RlIHRo
-YXQgaXQgb25seSBjbGVhcnMgdGhlIGJhbmtzIGFuZA0KPiB3b3VsZCBvbmx5IGRvOg0KPiANCj4g
-ICAgICAgICAgICAgICAgIGlmICghYi0+aW5pdCkNCj4gICAgICAgICAgICAgICAgICAgICAgICAg
-Y29udGludWU7DQo+IA0KPiAgICAgICAgICAgICAgICAgd3Jtc3JsKG1zcl9vcHMuY3RsKGkpLCBi
-LT5jdGwpOw0KPiAgICAgICAgICAgICAgICAgd3Jtc3JsKG1zcl9vcHMuc3RhdHVzKGkpLCAwKTsN
-Cj4gDQoNCldvdWxkIHlvdSBtaW5kIGlmIHRoZSBmdW5jdGlvbiBuYW1lIHN0YXllZCB0aGUgc2Ft
-ZT8gVGhlIHJlYXNvbiBpcyB0aGF0IE1DQV9DVEwgaXMgd3JpdHRlbiBoZXJlLCB3aGljaCBpcyB0
-aGUgImluaXQiIHBhcnQsIGFuZCBNQ0FfU1RBVFVTIGlzIGNsZWFyZWQuDQoNCkkgY2FuIHVzZSBh
-bm90aGVyIG5hbWUgZm9yIHRoZSBjaGVjaywgZS5nLiBfX21jaGVja19jcHVfY2hlY2tfYmFua3Mo
-KSBvciBfX21jaGVja19jcHVfYmFua3NfY2hlY2tfaW5pdCgpLg0KDQpUaGFua3MsDQpZYXplbg0K
+Hi guys,
+
+On 06/06/2019 12:37, Shenhar, Talel wrote:
+>>> Disagree. The various drivers don't depend on each other.
+>>> I think we should keep the drivers separated as they are distinct and independent IP
+>>> blocks.
+>> But they don't exist in isolation, they both depend on the integration-choices/firmware
+>> that makes up your platform.
+>>
+>> Other platforms may have exactly the same IP blocks, configured differently, or with
+>> different features enabled in firmware. This means we can't just probe the driver based on
+>> the presence of the IP block, we need to know the integration choices and firmware
+>> settings match what the driver requires.
+>>
+>> (Case in point, that A57 ECC support is optional, another A57 may not have it)
+>>
+>> Descriptions of what firmware did don't really belong in the DT. Its not a hardware
+>> property.
+>>
+>> This is why its better to probe this stuff based on the machine-compatible/platform-name,
+>> not the presence of the IP block in the DT.
+>>
+>>
+>> Will either of your separate drivers ever run alone? If they're probed from the same
+>> machine-compatible this won't happen.
+>>
+>>
+>> How does your memory controller report errors? Does it send back some data with an invalid
+>> checksum, or a specific poison/invalid flag? Will the cache report this as a cache error
+>> too, if its an extra signal, does the cache know what it is?
+>>
+>> All these are integration choices between the two IP blocks, done as separate drivers we
+>> don't have anywhere to store that information. Even if you don't care about this, making
+>> them separate drivers should only be done to make them usable on other platforms, where
+>> these choices may have been different.
+
+> From our perspective, l1/l2 has nothing to do with the ddr memory controller.
+
+I understand you're coming from the position that these things have counters, you want
+something to read and export them.
+
+I'm coming at this from somewhere else. This stuff has to be considered all the way
+through the system. Just because each component supports error detection, doesn't mean you
+aren't going to get silent corruption. Likewise if another platform picks up two piecemeal
+edac drivers for hardware it happens to have in common with yours, it doesn't mean we're
+counting all the errors. This stuff has to be viewed for the whole platform.
+
+
+> Its right that they both use same edac subsystem but they are using totally different APIs
+> of it.
+> 
+> We also even want to have separate control for enabling/disabling l1/l2 edac vs memory
+> controller edac.
+
+Curious, what for? Surely you either care about counting errors, or you don't.
+
+
+> Even from technical point-of-view L1/L2 UE collection method is totally different from
+> collecting memory-controller UE. (CPU exception vs actual interrupts).
+> 
+> So there is less reason why to combine them vs giving each one its own file, e.g.
+> al_mc_edac, al_l1_l2_edac (I even don't see why Hanna combined l1 and l2...)
+
+> As we don't have any technical relation between the two we would rather avoid this
+> combination.
+> 
+> Also, Lets assume we have different setups with different memory controllers, having a dt
+> binding to control the difference is super easy and flexible.
+
+If the hardware is different you should describe this in the DT. I'm not suggesting you
+don't describe it.
+
+The discussion here is whether we should probe the driver based on a dummy-node
+compatible, (which this 'edac_l1_l2' is) or based on the machine compatible.
+
+At the extreme end: you should paint the CPU and cache nodes with a compatible describing
+your integration. (I've mangled Juno's DT here:)
+| A57_0: cpu@0 {
+| 	compatible = "amazon-al,cortex-a57", "arm,cortex-a57";
+| 	reg = <0x0 0x0>;
+| 	device_type = "cpu";
+| 	next-level-cache = <&A57_L2>;
+| };
+|
+[...]
+|
+| A57_L2: l2-cache0 {
+| 	compatible = "amazon-al,cache", "cache";
+|	cpu_map = <A57_0, A57_1>
+| };
+
+
+This is the most accurate way to describe what you have here. The driver can use this to
+know that this integration of CPU and Cache support the edac registers. (This doesn't tell
+us anything about whether firmware enabled this stuff, or made/left it all secure-only)
+
+But this doesn't give you a device you can bind a driver to, to kick this stuff off.
+This (I assume) is why you added a dummy 'edac_l1_l2' node, that just probes the driver.
+The hardware is to do with the CPU and caches, 'edac_l1'_l2' doesn't correspond to any
+distinct part of the soc.
+
+The request is to use the machine compatible, not a dummy node. This wraps up the firmware
+properties too, and any other platform property we don't know about today.
+
+Once you have this, you don't really need the cpu/cache integration annotations, and your
+future memory-controller support can be picked up as part of the platform driver.
+If you have otherwise identical platforms with different memory controllers, OF gives you
+the API to match the node in the DT.
+
+
+> Would having a dedicated folder for amazon ease the move to separate files?
+
+I don't think anyone cares about the number of files. Code duplication and extra
+boiler-plate, maybe.
+
+
+Thanks,
+
+James
