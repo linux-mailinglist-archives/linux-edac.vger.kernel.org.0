@@ -2,178 +2,76 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E1A8738E9F
-	for <lists+linux-edac@lfdr.de>; Fri,  7 Jun 2019 17:12:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD46839238
+	for <lists+linux-edac@lfdr.de>; Fri,  7 Jun 2019 18:37:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729690AbfFGPLr (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Fri, 7 Jun 2019 11:11:47 -0400
-Received: from foss.arm.com ([217.140.110.172]:42296 "EHLO foss.arm.com"
+        id S1729953AbfFGQh0 (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Fri, 7 Jun 2019 12:37:26 -0400
+Received: from mail.skyhub.de ([5.9.137.197]:58232 "EHLO mail.skyhub.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729173AbfFGPLr (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Fri, 7 Jun 2019 11:11:47 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 84117C0A;
-        Fri,  7 Jun 2019 08:11:46 -0700 (PDT)
-Received: from [10.1.196.105] (eglon.cambridge.arm.com [10.1.196.105])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 3F8053F718;
-        Fri,  7 Jun 2019 08:11:44 -0700 (PDT)
-Subject: Re: [PATCH 2/2] edac: add support for Amazon's Annapurna Labs EDAC
-To:     "Shenhar, Talel" <talel@amazon.com>
-Cc:     "Hawa, Hanna" <hhhawa@amazon.com>, Borislav Petkov <bp@alien8.de>,
-        "Herrenschmidt, Benjamin" <benh@amazon.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "Woodhouse, David" <dwmw@amazon.co.uk>,
-        "paulmck@linux.ibm.com" <paulmck@linux.ibm.com>,
-        "mchehab@kernel.org" <mchehab@kernel.org>,
-        "mark.rutland@arm.com" <mark.rutland@arm.com>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "nicolas.ferre@microchip.com" <nicolas.ferre@microchip.com>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Chocron, Jonathan" <jonnyc@amazon.com>,
-        "Krupnik, Ronen" <ronenk@amazon.com>,
+        id S1728595AbfFGQhZ (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Fri, 7 Jun 2019 12:37:25 -0400
+Received: from zn.tnic (p200300EC2F066300951FA2F4E0AD5C5F.dip0.t-ipconnect.de [IPv6:2003:ec:2f06:6300:951f:a2f4:e0ad:5c5f])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id D8A1E1EC051F;
+        Fri,  7 Jun 2019 18:37:23 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1559925444;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=7WjY5qaAv27ValKhUMq1yIoenSZ2j62xBkezoiC69Zs=;
+        b=jMmWqc0rhKCK86ZQ6PX3bL6zsRp1FkI1o6MsFq1LkWHQN3VXu8MgR7qG6uhMI1Qd1WW6IY
+        wrhpnqzTi5Fnz0OHUP4vpXcC9ZmMhi1YlKqMq5A2dr+AQYO2XAvlnVSeGCKwFcIS/nRYMV
+        umWHi4erwF+jEu6tg26waThTvyjfIdE=
+Date:   Fri, 7 Jun 2019 18:37:23 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     "Ghannam, Yazen" <Yazen.Ghannam@amd.com>
+Cc:     "Luck, Tony" <tony.luck@intel.com>,
         "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
-        "Hanoch, Uri" <hanochu@amazon.com>
-References: <1559211329-13098-1-git-send-email-hhhawa@amazon.com>
- <1559211329-13098-3-git-send-email-hhhawa@amazon.com>
- <DB09EE2A-7397-4063-B925-66658D0105A5@alien8.de>
- <bfbc12fb68eea9d8d4cc257c213393fd4e92c33a.camel@amazon.com>
- <20190531051400.GA2275@cz.tnic>
- <ce01a2bc-7973-5978-b033-a6bdc61b9d4b@amazon.com>
- <32431fa2-2285-6c41-ce32-09630205bb54@arm.com>
- <71da083e-1a74-cf86-455d-260a34ee01fd@amazon.com>
-From:   James Morse <james.morse@arm.com>
-Message-ID: <25efb27c-b725-137d-5735-b3ab88323846@arm.com>
-Date:   Fri, 7 Jun 2019 16:11:42 +0100
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.0
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "x86@kernel.org" <x86@kernel.org>
+Subject: Re: [PATCH v3 5/6] x86/MCE: Save MCA control bits that get set in
+ hardware
+Message-ID: <20190607163723.GG20269@zn.tnic>
+References: <20190517163729.GE13482@zn.tnic>
+ <20190517172648.GA18164@agluck-desk>
+ <20190517174817.GG13482@zn.tnic>
+ <20190517180607.GA21710@agluck-desk>
+ <20190517193431.GI13482@zn.tnic>
+ <SN6PR12MB2639C5427366AC3004C35CC0F80B0@SN6PR12MB2639.namprd12.prod.outlook.com>
+ <20190517200225.GK13482@zn.tnic>
+ <SN6PR12MB26390759DB43763D3A482918F8010@SN6PR12MB2639.namprd12.prod.outlook.com>
+ <20190527232849.GC8209@cz.tnic>
+ <SN6PR12MB263998ECCDF1E345FEB0869AF8100@SN6PR12MB2639.namprd12.prod.outlook.com>
 MIME-Version: 1.0
-In-Reply-To: <71da083e-1a74-cf86-455d-260a34ee01fd@amazon.com>
 Content-Type: text/plain; charset=utf-8
-Content-Language: en-GB
-Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+In-Reply-To: <SN6PR12MB263998ECCDF1E345FEB0869AF8100@SN6PR12MB2639.namprd12.prod.outlook.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-Hi guys,
+On Fri, Jun 07, 2019 at 02:49:42PM +0000, Ghannam, Yazen wrote:
+> Would you mind if the function name stayed the same? The reason is
+> that MCA_CTL is written here, which is the "init" part, and MCA_STATUS
+> is cleared.
+>
+> I can use another name for the check, e.g. __mcheck_cpu_check_banks()
+> or __mcheck_cpu_banks_check_init().
 
-On 06/06/2019 12:37, Shenhar, Talel wrote:
->>> Disagree. The various drivers don't depend on each other.
->>> I think we should keep the drivers separated as they are distinct and independent IP
->>> blocks.
->> But they don't exist in isolation, they both depend on the integration-choices/firmware
->> that makes up your platform.
->>
->> Other platforms may have exactly the same IP blocks, configured differently, or with
->> different features enabled in firmware. This means we can't just probe the driver based on
->> the presence of the IP block, we need to know the integration choices and firmware
->> settings match what the driver requires.
->>
->> (Case in point, that A57 ECC support is optional, another A57 may not have it)
->>
->> Descriptions of what firmware did don't really belong in the DT. Its not a hardware
->> property.
->>
->> This is why its better to probe this stuff based on the machine-compatible/platform-name,
->> not the presence of the IP block in the DT.
->>
->>
->> Will either of your separate drivers ever run alone? If they're probed from the same
->> machine-compatible this won't happen.
->>
->>
->> How does your memory controller report errors? Does it send back some data with an invalid
->> checksum, or a specific poison/invalid flag? Will the cache report this as a cache error
->> too, if its an extra signal, does the cache know what it is?
->>
->> All these are integration choices between the two IP blocks, done as separate drivers we
->> don't have anywhere to store that information. Even if you don't care about this, making
->> them separate drivers should only be done to make them usable on other platforms, where
->> these choices may have been different.
+Nevermind, leave it as is. I'll fix it up ontop. I don't like that
+"__mcheck_cpu_init" prefixing there which is a mouthful and should
+simply be "mce_cpu_<do_stuff>" to denote that it is a function which is
+run on a CPU to setup stuff.
 
-> From our perspective, l1/l2 has nothing to do with the ddr memory controller.
+Thx.
 
-I understand you're coming from the position that these things have counters, you want
-something to read and export them.
+-- 
+Regards/Gruss,
+    Boris.
 
-I'm coming at this from somewhere else. This stuff has to be considered all the way
-through the system. Just because each component supports error detection, doesn't mean you
-aren't going to get silent corruption. Likewise if another platform picks up two piecemeal
-edac drivers for hardware it happens to have in common with yours, it doesn't mean we're
-counting all the errors. This stuff has to be viewed for the whole platform.
-
-
-> Its right that they both use same edac subsystem but they are using totally different APIs
-> of it.
-> 
-> We also even want to have separate control for enabling/disabling l1/l2 edac vs memory
-> controller edac.
-
-Curious, what for? Surely you either care about counting errors, or you don't.
-
-
-> Even from technical point-of-view L1/L2 UE collection method is totally different from
-> collecting memory-controller UE. (CPU exception vs actual interrupts).
-> 
-> So there is less reason why to combine them vs giving each one its own file, e.g.
-> al_mc_edac, al_l1_l2_edac (I even don't see why Hanna combined l1 and l2...)
-
-> As we don't have any technical relation between the two we would rather avoid this
-> combination.
-> 
-> Also, Lets assume we have different setups with different memory controllers, having a dt
-> binding to control the difference is super easy and flexible.
-
-If the hardware is different you should describe this in the DT. I'm not suggesting you
-don't describe it.
-
-The discussion here is whether we should probe the driver based on a dummy-node
-compatible, (which this 'edac_l1_l2' is) or based on the machine compatible.
-
-At the extreme end: you should paint the CPU and cache nodes with a compatible describing
-your integration. (I've mangled Juno's DT here:)
-| A57_0: cpu@0 {
-| 	compatible = "amazon-al,cortex-a57", "arm,cortex-a57";
-| 	reg = <0x0 0x0>;
-| 	device_type = "cpu";
-| 	next-level-cache = <&A57_L2>;
-| };
-|
-[...]
-|
-| A57_L2: l2-cache0 {
-| 	compatible = "amazon-al,cache", "cache";
-|	cpu_map = <A57_0, A57_1>
-| };
-
-
-This is the most accurate way to describe what you have here. The driver can use this to
-know that this integration of CPU and Cache support the edac registers. (This doesn't tell
-us anything about whether firmware enabled this stuff, or made/left it all secure-only)
-
-But this doesn't give you a device you can bind a driver to, to kick this stuff off.
-This (I assume) is why you added a dummy 'edac_l1_l2' node, that just probes the driver.
-The hardware is to do with the CPU and caches, 'edac_l1'_l2' doesn't correspond to any
-distinct part of the soc.
-
-The request is to use the machine compatible, not a dummy node. This wraps up the firmware
-properties too, and any other platform property we don't know about today.
-
-Once you have this, you don't really need the cpu/cache integration annotations, and your
-future memory-controller support can be picked up as part of the platform driver.
-If you have otherwise identical platforms with different memory controllers, OF gives you
-the API to match the node in the DT.
-
-
-> Would having a dedicated folder for amazon ease the move to separate files?
-
-I don't think anyone cares about the number of files. Code duplication and extra
-boiler-plate, maybe.
-
-
-Thanks,
-
-James
+Good mailing practices for 400: avoid top-posting and trim the reply.
