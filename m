@@ -2,91 +2,76 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F5CA3859B
-	for <lists+linux-edac@lfdr.de>; Fri,  7 Jun 2019 09:46:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D6D73848A
+	for <lists+linux-edac@lfdr.de>; Fri,  7 Jun 2019 08:43:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726668AbfFGHqe (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Fri, 7 Jun 2019 03:46:34 -0400
-Received: from smtp4.iitb.ac.in ([103.21.127.18]:50030 "EHLO smtp1.iitb.ac.in"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1727677AbfFGHqe (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Fri, 7 Jun 2019 03:46:34 -0400
-Received: from ldns2.iitb.ac.in (ldns2.iitb.ac.in [10.200.12.2])
-        by smtp1.iitb.ac.in (Postfix) with SMTP id 1886B1050DD9
-        for <linux-edac@vger.kernel.org>; Fri,  7 Jun 2019 12:01:54 +0530 (IST)
-Received: (qmail 29995 invoked by uid 510); 7 Jun 2019 12:01:34 +0530
-X-Qmail-Scanner-Diagnostics: from 10.200.1.25 by ldns2 (envelope-from <rws@aero.iitb.ac.in>, uid 501) with qmail-scanner-2.11
- spamassassin: 3.4.1. mhr: 1.0. {clamdscan: 0.100.0/25472} 
- Clear:RC:1(10.200.1.25):SA:0(1.5/7.0):. Processed in 3.224183 secs; 07 Jun 2019 12:01:34 +0530
-X-Spam-Checker-Version: SpamAssassin 3.4.1 (2015-04-28) on ldns2.iitb.ac.in
-X-Spam-Level: *
-X-Spam-Status: No, score=1.5 required=7.0 tests=BAYES_50,IITB_ORIG,
-        MISSING_HEADERS,PROPER_IITB_MSGID autolearn=disabled version=3.4.1
-X-Spam-Pyzor: Reported 1 times.
-X-Envelope-From: rws@aero.iitb.ac.in
-X-Qmail-Scanner-Mime-Attachments: |
-X-Qmail-Scanner-Zip-Files: |
-Received: from unknown (HELO ldns2.iitb.ac.in) (10.200.1.25)
-  by ldns2.iitb.ac.in with SMTP; 7 Jun 2019 12:01:31 +0530
-Received: from vayu.aero.iitb.ac.in (vayu.aero.iitb.ac.in [10.101.1.1])
-        by ldns2.iitb.ac.in (Postfix) with ESMTP id CB958341965;
-        Fri,  7 Jun 2019 12:01:17 +0530 (IST)
-Received: from localhost (localhost [127.0.0.1])
-        by vayu.aero.iitb.ac.in (Postfix) with ESMTP id 9509A8902E52F;
-        Fri,  7 Jun 2019 12:01:17 +0530 (IST)
-Received: from vayu.aero.iitb.ac.in ([127.0.0.1])
-        by localhost (vayu.aero.iitb.ac.in [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id 3VnK-_U7b-vs; Fri,  7 Jun 2019 12:01:17 +0530 (IST)
-Received: from localhost (localhost [127.0.0.1])
-        by vayu.aero.iitb.ac.in (Postfix) with ESMTP id 5DAB88902E54D;
-        Fri,  7 Jun 2019 12:01:14 +0530 (IST)
-X-Virus-Scanned: amavisd-new at aero.iitb.ac.in
-Received: from vayu.aero.iitb.ac.in ([127.0.0.1])
-        by localhost (vayu.aero.iitb.ac.in [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id TgJiwoMo_EHZ; Fri,  7 Jun 2019 12:01:14 +0530 (IST)
-Received: from vayu.aero.iitb.ac.in (vayu.aero.iitb.ac.in [10.101.1.1])
-        by vayu.aero.iitb.ac.in (Postfix) with ESMTP id 0EEE684310111;
-        Fri,  7 Jun 2019 12:01:10 +0530 (IST)
-Date:   Fri, 7 Jun 2019 12:01:09 +0530 (IST)
-From:   Martins Henry <rws@aero.iitb.ac.in>
-Message-ID: <412557711.60336.1559889069980.JavaMail.zimbra@aero.iitb.ac.in>
-Subject: Thanks and I wait for your answer
+        id S1727023AbfFGGnJ (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Fri, 7 Jun 2019 02:43:09 -0400
+Received: from mail.skyhub.de ([5.9.137.197]:49856 "EHLO mail.skyhub.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726711AbfFGGnJ (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Fri, 7 Jun 2019 02:43:09 -0400
+Received: from zn.tnic (p200300EC2F066300E4B954D67B383BA9.dip0.t-ipconnect.de [IPv6:2003:ec:2f06:6300:e4b9:54d6:7b38:3ba9])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 10C431EC0997;
+        Fri,  7 Jun 2019 08:43:08 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1559889788;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=FIRsXlvkn4IbYLUoughk3PTq9Sf/ybYYaQGniFuSkhg=;
+        b=BDiMYDHUa1WuQ+ZlX/VirkDu50nNmmSm5oWa9kzkeBU7yzlC0ReYRpi47fbdpROKtRrhWj
+        OSY+rtkp4Lj+uRbA0zXNxeG2sAiGh9VARRiw9WO9dzn3dweSgrkx6qxWER4qhq4MTQq1Aj
+        jEGoJkXUbh0InhEIkz5cOH9vTBrkJsc=
+Date:   Fri, 7 Jun 2019 08:43:00 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     James Morse <james.morse@arm.com>, Yash Shah <yash.shah@sifive.com>
+Cc:     linux-edac@vger.kernel.org, linux-riscv@lists.infradead.org,
+        Palmer Dabbelt <palmer@sifive.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        linux-kernel@vger.kernel.org, aou@eecs.berkeley.edu,
+        mchehab@kernel.org, Sachin Ghadi <sachin.ghadi@sifive.com>,
+        davem@davemloft.net, gregkh@linuxfoundation.org,
+        nicolas.ferre@microchip.com, paulmck@linux.ibm.com
+Subject: Re: [PATCH v2] edac: sifive: Add EDAC platform driver for SiFive SoCs
+Message-ID: <20190607064300.GB20269@zn.tnic>
+References: <1557142026-15949-1-git-send-email-yash.shah@sifive.com>
+ <1557142026-15949-2-git-send-email-yash.shah@sifive.com>
+ <CAJ2_jOG9Ag0spbh3YCxavUE5XEAUP1pHcgCZ56Nu2u4TqfrzHQ@mail.gmail.com>
+ <20190521182132.GB7793@cz.tnic>
+ <1c7eb8ab-6f48-c41a-1d3a-a9b0f5ce8a7f@arm.com>
+ <ABA6726C-CC1D-4092-887E-7D5A5B90509B@alien8.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.101.1.5]
-X-Mailer: Zimbra 8.8.12_GA_3803 (ZimbraWebClient - FF11 (Win)/8.8.12_GA_3794)
-Thread-Index: SsslhYkcLNFU69da/wYft5cO9/ZYnA==
-Thread-Topic: Thanks and I wait for your answer
-To:     unlisted-recipients:; (no To-header on input)
+Content-Disposition: inline
+In-Reply-To: <ABA6726C-CC1D-4092-887E-7D5A5B90509B@alien8.de>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-Hello,
+On Wed, May 22, 2019 at 04:34:38AM -0500, Boris Petkov wrote:
+> >Still fine by me:
+> >Reviewed-by: James Morse <james.morse@arm.com>
+> >
+> >(...this patch already has my reviewed-by on it...)
+> >
+> >I commented that it couldn't be merged in pieces here:
+> >https://lore.kernel.org/lkml/4072c812-d3bf-9ad5-2b30-6b2a5060bb55@arm.com/T/#u
+> >
+> >which is what Yash is replying to.
+> 
+> Ok, I'll take it when I get back. Thanks for clarifying.
 
-I am Martin Henry, An American Citizen; I am the personal secretary to
-Mr. Donald Railton, the controller of a Lottery Company. Please I am
-having big problem now, I have a 6yrs old daughter who has leukemia, a
-disease of the blood, and she needs a bone marrow transplant or she
-will die.
+Now queued.
 
-Please I am only asking for your help and you will benefit from it
-also. As an insider with Lottery Firm, working as the personal
-secretary to the controller, I want you to send me your name to play,
-I have some numbers that are going to win, stored in his secret data
-system in the office. The Lottery is an online entry with credit card
-anywhere with a name and address. All I want you to do is to send your
-name to play it and I will send confirmation to you.
+Thx.
 
-I will play with my card on your name and the Prize will be shared
-equally between us. Immediately the results are released they will
-contact you for payment as the oversea winner. The lotto can be played
-with 9.00 dollars, or 50 dollars but the prize will be Millions.
-Remember that I am playing on your name with my card; I just want to
-front you for this, because I need this money to save the life of my
-little daughter.
+-- 
+Regards/Gruss,
+    Boris.
 
-Thanks and I wait for your answer
-Martin Henry.
+Good mailing practices for 400: avoid top-posting and trim the reply.
