@@ -2,45 +2,45 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 358403A223
-	for <lists+linux-edac@lfdr.de>; Sat,  8 Jun 2019 23:25:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8885C3A225
+	for <lists+linux-edac@lfdr.de>; Sat,  8 Jun 2019 23:26:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727489AbfFHVZi (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Sat, 8 Jun 2019 17:25:38 -0400
-Received: from terminus.zytor.com ([198.137.202.136]:49715 "EHLO
+        id S1727522AbfFHV04 (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Sat, 8 Jun 2019 17:26:56 -0400
+Received: from terminus.zytor.com ([198.137.202.136]:38447 "EHLO
         terminus.zytor.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727456AbfFHVZi (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Sat, 8 Jun 2019 17:25:38 -0400
+        with ESMTP id S1727456AbfFHV04 (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Sat, 8 Jun 2019 17:26:56 -0400
 Received: from terminus.zytor.com (localhost [127.0.0.1])
-        by terminus.zytor.com (8.15.2/8.15.2) with ESMTPS id x58LPMCZ3145335
+        by terminus.zytor.com (8.15.2/8.15.2) with ESMTPS id x58LQlos3145401
         (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NO);
-        Sat, 8 Jun 2019 14:25:23 -0700
-DKIM-Filter: OpenDKIM Filter v2.11.0 terminus.zytor.com x58LPMCZ3145335
+        Sat, 8 Jun 2019 14:26:48 -0700
+DKIM-Filter: OpenDKIM Filter v2.11.0 terminus.zytor.com x58LQlos3145401
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
-        s=2019051801; t=1560029123;
-        bh=MMmHenzU+5IrNoyGGBxCHHd2b5T4fMqT4M2UFQgsUWE=;
+        s=2019051801; t=1560029208;
+        bh=Li539FWuRHtIQmBZ9m/rWGKt7iOjh+Jy+OQa3lbrGD4=;
         h=Date:From:Cc:Reply-To:To:Subject:From;
-        b=R9ysOLn1veKpgtbyY89MViR+qwzM6YXuQQFBlRlZotJ5BZhSJjyT11x9iwFSwyJhB
-         NUjV5lVBzmqEFudN+Hu+Owag9/5YSf8rtBOtEg8RX2hqZwL5rVe6diZS8FqiMkTQTl
-         PXOhGcAH8hrBIjrl14Fnq2o8Tnzpp9Yyh+49Gbc0/m7y4dPBr6RjZVHjIwiCTkbxeS
-         Xl+JzSrxa5VdeHSXMM4tbg6Rm4dgVrOrgL7P+eVCC5o0XWZ9Ex3zgAxOyn5LrtyQMk
-         kZimnqpsRaMYsFlzz5fe2P8/qBtMnISBYFikJO8v3O7ZvH5XzeES6WHaS8U1N92Yy6
-         SqCxbXUtJIkUQ==
+        b=mcrnjnZ4y0/KQJaYiNIRspZkTwQqedt+VlLnSi4WIoKwtXVoGxRUttEdJTnCErbGj
+         Te/NSeujMAb6R4HRKXb+hzN9O+joRiJEutZXiuvUX4NGfdFdB5LBQD6FA6AfPFgc0k
+         4gcKaeXh9KdwTgfbisedBZccpQiVvWpviMtb0y2bA8vGxbxRQHRLkEVvD4YKTZwQos
+         g/IM0PPinCCtIaXNkxt3sFZT9r+iSvsmSip3UxriedYtMiH9PWfRUcte8P5XpYHHaK
+         Ew3sSM2VoMAQDz1hiEwLqb2m6uLbR/k9/RvuMDYxcv3J/V+36HRjLP5fo8Dwcbowe2
+         u1prrlsQRlF/g==
 Received: (from tipbot@localhost)
-        by terminus.zytor.com (8.15.2/8.15.2/Submit) id x58LPM3D3145332;
-        Sat, 8 Jun 2019 14:25:22 -0700
-Date:   Sat, 8 Jun 2019 14:25:22 -0700
+        by terminus.zytor.com (8.15.2/8.15.2/Submit) id x58LQlDd3145398;
+        Sat, 8 Jun 2019 14:26:47 -0700
+Date:   Sat, 8 Jun 2019 14:26:47 -0700
 X-Authentication-Warning: terminus.zytor.com: tipbot set sender to tipbot@zytor.com using -f
 From:   tip-bot for Borislav Petkov <tipbot@zytor.com>
-Message-ID: <tip-6d8e294bf5f0e85c34e8b14b064e2965f53f38b0@git.kernel.org>
-Cc:     tony.luck@intel.com, hpa@zytor.com, bp@suse.de, tglx@linutronix.de,
-        mingo@kernel.org, linux-edac@vger.kernel.org
-Reply-To: hpa@zytor.com, linux-kernel@vger.kernel.org, bp@suse.de,
-          tglx@linutronix.de, tony.luck@intel.com, mingo@kernel.org,
+Message-ID: <tip-5cc6b16ea1313d05956b55e83a1f753c604282a8@git.kernel.org>
+Cc:     tony.luck@intel.com, mingo@kernel.org, tglx@linutronix.de,
+        linux-edac@vger.kernel.org, bp@suse.de, hpa@zytor.com
+Reply-To: bp@suse.de, hpa@zytor.com, linux-kernel@vger.kernel.org,
+          mingo@kernel.org, tony.luck@intel.com, tglx@linutronix.de,
           linux-edac@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip:ras/core] RAS/CEC: Fix pfn insertion
-Git-Commit-ID: 6d8e294bf5f0e85c34e8b14b064e2965f53f38b0
+Subject: [tip:ras/core] RAS/CEC: Do not set decay value on error
+Git-Commit-ID: 5cc6b16ea1313d05956b55e83a1f753c604282a8
 X-Mailer: tip-git-log-daemon
 Robot-ID: <tip-bot.git.kernel.org>
 Robot-Unsubscribe: Contact <mailto:hpa@kernel.org> to get blacklisted from
@@ -58,57 +58,50 @@ Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-Commit-ID:  6d8e294bf5f0e85c34e8b14b064e2965f53f38b0
-Gitweb:     https://git.kernel.org/tip/6d8e294bf5f0e85c34e8b14b064e2965f53f38b0
+Commit-ID:  5cc6b16ea1313d05956b55e83a1f753c604282a8
+Gitweb:     https://git.kernel.org/tip/5cc6b16ea1313d05956b55e83a1f753c604282a8
 Author:     Borislav Petkov <bp@suse.de>
-AuthorDate: Sat, 20 Apr 2019 12:53:05 +0200
+AuthorDate: Sat, 20 Apr 2019 21:33:08 +0200
 Committer:  Borislav Petkov <bp@suse.de>
-CommitDate: Sat, 8 Jun 2019 17:32:00 +0200
+CommitDate: Sat, 8 Jun 2019 17:34:36 +0200
 
-RAS/CEC: Fix pfn insertion
+RAS/CEC: Do not set decay value on error
 
-When inserting random PFNs for debugging the CEC through
-(debugfs)/ras/cec/pfn, depending on the return value of pfn_set(),
-multiple values get inserted per a single write.
+When the value requested doesn't match the allowed (min,max) range,
+the @data buffer should not be modified with the invalid value because
+reading "decay_interval" shows it otherwise as if the previous write
+succeeded.
 
-That is because simple_attr_write() interprets a retval of 0 as
-success and claims the whole input. However, pfn_set() returns the
-cec_add_elem() value, which, if > 0 and smaller than the whole input
-length, makes glibc continue issuing the write syscall until there's
-input left:
-
-  pfn_set
-  simple_attr_write
-  debugfs_attr_write
-  full_proxy_write
-  vfs_write
-  ksys_write
-  do_syscall_64
-  entry_SYSCALL_64_after_hwframe
-
-leading to those repeated calls.
-
-Return 0 to fix that.
+Move the data write after the check.
 
 Signed-off-by: Borislav Petkov <bp@suse.de>
 Cc: Tony Luck <tony.luck@intel.com>
 Cc: linux-edac <linux-edac@vger.kernel.org>
 ---
- drivers/ras/cec.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ drivers/ras/cec.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/ras/cec.c b/drivers/ras/cec.c
-index 673f8a128397..f5795adc5a6e 100644
+index 73a975c26f9f..31868bd99e8d 100644
 --- a/drivers/ras/cec.c
 +++ b/drivers/ras/cec.c
-@@ -369,7 +369,9 @@ static int pfn_set(void *data, u64 val)
+@@ -371,17 +371,17 @@ DEFINE_DEBUGFS_ATTRIBUTE(pfn_ops, u64_get, pfn_set, "0x%llx\n");
+ 
+ static int decay_interval_set(void *data, u64 val)
  {
- 	*(u64 *)data = val;
+-	*(u64 *)data = val;
+-
+ 	if (val < CEC_DECAY_MIN_INTERVAL)
+ 		return -EINVAL;
  
--	return cec_add_elem(val);
-+	cec_add_elem(val);
+ 	if (val > CEC_DECAY_MAX_INTERVAL)
+ 		return -EINVAL;
+ 
++	*(u64 *)data   = val;
+ 	decay_interval = val;
+ 
+ 	cec_mod_work(decay_interval);
 +
-+	return 0;
+ 	return 0;
  }
- 
- DEFINE_DEBUGFS_ATTRIBUTE(pfn_ops, u64_get, pfn_set, "0x%llx\n");
+ DEFINE_DEBUGFS_ATTRIBUTE(decay_interval_ops, u64_get, decay_interval_set, "%lld\n");
