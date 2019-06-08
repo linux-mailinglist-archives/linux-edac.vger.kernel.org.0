@@ -2,118 +2,152 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F68239BF8
-	for <lists+linux-edac@lfdr.de>; Sat,  8 Jun 2019 11:06:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 037F43A070
+	for <lists+linux-edac@lfdr.de>; Sat,  8 Jun 2019 17:28:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726486AbfFHJGF (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Sat, 8 Jun 2019 05:06:05 -0400
-Received: from mail.skyhub.de ([5.9.137.197]:46438 "EHLO mail.skyhub.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726448AbfFHJGE (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Sat, 8 Jun 2019 05:06:04 -0400
-Received: from zn.tnic (p200300EC2F288A00DCF654BEDE068B01.dip0.t-ipconnect.de [IPv6:2003:ec:2f28:8a00:dcf6:54be:de06:8b01])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 095CF1EC0235;
-        Sat,  8 Jun 2019 11:06:03 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1559984763;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=znhinQl17PEsTheLSRwexWszGv20Z4hEeaGt0gI6Nko=;
-        b=rDiolTE6ydti3CyGiAtroz5OJOVaWOubsBimpUVEegmDId1qWwoJ7x+iP551w4VLHzKBTd
-        dg2oefQPYs6UbnPnx7TV/Vc0PwiHgZtr+eKPnxLqA+dswznVYCOu6beQjP7s07I3zHcVn6
-        GSxxdYgVnWYG5OXTBzYlMbIff5gVbak=
-Date:   Sat, 8 Jun 2019 11:05:56 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Benjamin Herrenschmidt <benh@kernel.crashing.org>
-Cc:     James Morse <james.morse@arm.com>,
-        "Hawa, Hanna" <hhhawa@amazon.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "Woodhouse, David" <dwmw@amazon.co.uk>,
-        "paulmck@linux.ibm.com" <paulmck@linux.ibm.com>,
-        "mchehab@kernel.org" <mchehab@kernel.org>,
-        "mark.rutland@arm.com" <mark.rutland@arm.com>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "nicolas.ferre@microchip.com" <nicolas.ferre@microchip.com>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "Shenhar, Talel" <talel@amazon.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Chocron, Jonathan" <jonnyc@amazon.com>,
-        "Krupnik, Ronen" <ronenk@amazon.com>,
-        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
-        "Hanoch, Uri" <hanochu@amazon.com>
-Subject: Re: [PATCH 2/2] edac: add support for Amazon's Annapurna Labs EDAC
-Message-ID: <20190608090556.GA32464@zn.tnic>
-References: <1559211329-13098-1-git-send-email-hhhawa@amazon.com>
- <1559211329-13098-3-git-send-email-hhhawa@amazon.com>
- <DB09EE2A-7397-4063-B925-66658D0105A5@alien8.de>
- <bfbc12fb68eea9d8d4cc257c213393fd4e92c33a.camel@amazon.com>
- <20190531051400.GA2275@cz.tnic>
- <ce01a2bc-7973-5978-b033-a6bdc61b9d4b@amazon.com>
- <32431fa2-2285-6c41-ce32-09630205bb54@arm.com>
- <9a2aaf4a9545ed30568a0613e64bc3f57f047799.camel@kernel.crashing.org>
+        id S1727174AbfFHP2b (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Sat, 8 Jun 2019 11:28:31 -0400
+Received: from terminus.zytor.com ([198.137.202.136]:50071 "EHLO
+        terminus.zytor.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727015AbfFHP2b (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Sat, 8 Jun 2019 11:28:31 -0400
+Received: from terminus.zytor.com (localhost [127.0.0.1])
+        by terminus.zytor.com (8.15.2/8.15.2) with ESMTPS id x58FSFKJ3028605
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NO);
+        Sat, 8 Jun 2019 08:28:15 -0700
+DKIM-Filter: OpenDKIM Filter v2.11.0 terminus.zytor.com x58FSFKJ3028605
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
+        s=2019051801; t=1560007696;
+        bh=c9Lj03tdATnTc0fKIKCyjddlW6NedJjqHOO2I4x8uWk=;
+        h=Date:From:Cc:Reply-To:To:Subject:From;
+        b=tEvBOCMWE5qFqQmF6CPjQZMi1UiUWA5WzP+hBkgptc8AoFCUvc2E4z7cc4RpvaAtC
+         R2G4vV/RUbuEL+D2z5eyNZcAaVN+suuGkrB9MVFePAZwKifhdNwAU2fAo5rlMHMX5E
+         C9kAg0fEo8xlsEYa98M9K3T85w3xyveiHLkf0b2QWmjPCqiuI5APjQcCpMyDRmTDA+
+         WAO66wsfpqDgB0y/EFuQk9HeiSpENQI93rvMsAWQi02PGGcIz0y0dbEgWxO72zeMKE
+         B5zqI6BouTHNjFs5gSPX0BnOa0SwgdVyDg19/+zjpViDH1nVyCBYJV7P3qt6C/Dcpk
+         3m2lyDSVJmJEw==
+Received: (from tipbot@localhost)
+        by terminus.zytor.com (8.15.2/8.15.2/Submit) id x58FSEai3028600;
+        Sat, 8 Jun 2019 08:28:14 -0700
+Date:   Sat, 8 Jun 2019 08:28:14 -0700
+X-Authentication-Warning: terminus.zytor.com: tipbot set sender to tipbot@zytor.com using -f
+From:   tip-bot for Borislav Petkov <tipbot@zytor.com>
+Message-ID: <tip-f3c74b38a55aefe1004200d15a83f109b510068c@git.kernel.org>
+Cc:     linux-edac@vger.kernel.org, tglx@linutronix.de,
+        xiyou.wangcong@gmail.com, bp@suse.de, mingo@kernel.org,
+        hpa@zytor.com, stable@vger.kernel.org, tony.luck@intel.com
+Reply-To: linux-edac@vger.kernel.org, bp@suse.de, tglx@linutronix.de,
+          xiyou.wangcong@gmail.com, mingo@kernel.org, hpa@zytor.com,
+          stable@vger.kernel.org, linux-kernel@vger.kernel.org,
+          tony.luck@intel.com
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip:ras/urgent] RAS/CEC: Fix binary search function
+Git-Commit-ID: f3c74b38a55aefe1004200d15a83f109b510068c
+X-Mailer: tip-git-log-daemon
+Robot-ID: <tip-bot.git.kernel.org>
+Robot-Unsubscribe: Contact <mailto:hpa@kernel.org> to get blacklisted from
+ these emails
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=UTF-8
 Content-Disposition: inline
-In-Reply-To: <9a2aaf4a9545ed30568a0613e64bc3f57f047799.camel@kernel.crashing.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-0.3 required=5.0 tests=ALL_TRUSTED,BAYES_00,
+        DATE_IN_FUTURE_96_Q,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        FREEMAIL_FORGED_REPLYTO autolearn=no autolearn_force=no version=3.4.2
+X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on terminus.zytor.com
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Sat, Jun 08, 2019 at 10:16:11AM +1000, Benjamin Herrenschmidt wrote:
-> Those IP blocks don't need any SW coordination at runtime. The drivers
-> don't share data nor communicate with each other. There is absolultely
-> no reason to go down that path.
+Commit-ID:  f3c74b38a55aefe1004200d15a83f109b510068c
+Gitweb:     https://git.kernel.org/tip/f3c74b38a55aefe1004200d15a83f109b510068c
+Author:     Borislav Petkov <bp@suse.de>
+AuthorDate: Sat, 20 Apr 2019 13:27:51 +0200
+Committer:  Borislav Petkov <bp@suse.de>
+CommitDate: Fri, 7 Jun 2019 23:18:26 +0200
 
-Let me set one thing straight: the EDAC "subsystem" if you will - or
-that pile of code which does error counting and reporting - has its
-limitations in supporting one EDAC driver per platform. And whenever we
-have two drivers loadable on a platform, we have to do dirty hacks like
+RAS/CEC: Fix binary search function
 
-  301375e76432 ("EDAC: Add owner check to the x86 platform drivers")
+Switch to using Donald Knuth's binary search algorithm (The Art of
+Computer Programming, vol. 3, section 6.2.1). This should've been done
+from the very beginning but the author must've been smoking something
+very potent at the time.
 
-What that means is, that if you need to call EDAC logging routines or
-whatnot from two different drivers, there's no locking, no nothing. So
-it might work or it might set your cat on fire.
+The problem with the current one was that it would return the wrong
+element index in certain situations:
 
-IOW, having multiple separate "drivers" or representations of RAS
-functionality using EDAC facilities is something that hasn't been
-done. Well, almost. highbank_mc_edac.c and highbank_l2_edac.c is one
-example but they make sure they don't step on each other's toes by using
-different EDAC pieces - a device vs a memory controller abstraction.
+  https://lkml.kernel.org/r/CAM_iQpVd02zkVJ846cj-Fg1yUNuz6tY5q1Vpj4LrXmE06dPYYg@mail.gmail.com
 
-And now the moment all of a sudden you decide you want for those
-separate "drivers" to synchronize on something, you need to do something
-hacky like the amd_register_ecc_decoder() thing, for example, because we
-need to call into the EDAC memory controller driver to decode a DRAM ECC
-error properly, while the rest of the error types get decoded somewhere
-else...
+and the noodling code after the loop was fishy at best.
 
-Then there comes the issue with code reuse - wouldn't it be great if a
-memory controller driver can be shared between platform drivers instead of
-copying it in both?
+So switch to using Knuth's binary search. The final result is much
+cleaner and straightforward.
 
-We already do that - see fsl_ddr_edac.c which gets shared between PPC
-*and* ARM. drivers/edac/skx_common.c is another example for Intel chips.
+Fixes: 011d82611172 ("RAS: Add a Corrected Errors Collector")
+Reported-by: Cong Wang <xiyou.wangcong@gmail.com>
+Signed-off-by: Borislav Petkov <bp@suse.de>
+Cc: Tony Luck <tony.luck@intel.com>
+Cc: linux-edac <linux-edac@vger.kernel.org>
+Cc: <stable@vger.kernel.org>
+---
+ drivers/ras/cec.c | 34 ++++++++++++++++++++--------------
+ 1 file changed, 20 insertions(+), 14 deletions(-)
 
-Now, if you have a platform with 10 IP blocks which each have RAS
-functionality, are you saying you'll do 10 different pieces called
-
-<platform_name>_<ip_block#>_edac.c
-
-?
-
-And if <next_platform> has an old IP block with the old RAS
-functionality, you load <platform_name>_<ip_block>_edac.c on the new
-platform too?
-
--- 
-Regards/Gruss,
-    Boris.
-
-Good mailing practices for 400: avoid top-posting and trim the reply.
+diff --git a/drivers/ras/cec.c b/drivers/ras/cec.c
+index 88e4f3ff0cb8..dbfe3e61d2c2 100644
+--- a/drivers/ras/cec.c
++++ b/drivers/ras/cec.c
+@@ -183,32 +183,38 @@ static void cec_timer_fn(struct timer_list *unused)
+  */
+ static int __find_elem(struct ce_array *ca, u64 pfn, unsigned int *to)
+ {
++	int min = 0, max = ca->n - 1;
+ 	u64 this_pfn;
+-	int min = 0, max = ca->n;
+ 
+-	while (min < max) {
+-		int tmp = (max + min) >> 1;
++	while (min <= max) {
++		int i = (min + max) >> 1;
+ 
+-		this_pfn = PFN(ca->array[tmp]);
++		this_pfn = PFN(ca->array[i]);
+ 
+ 		if (this_pfn < pfn)
+-			min = tmp + 1;
++			min = i + 1;
+ 		else if (this_pfn > pfn)
+-			max = tmp;
+-		else {
+-			min = tmp;
+-			break;
++			max = i - 1;
++		else if (this_pfn == pfn) {
++			if (to)
++				*to = i;
++
++			return i;
+ 		}
+ 	}
+ 
++	/*
++	 * When the loop terminates without finding @pfn, min has the index of
++	 * the element slot where the new @pfn should be inserted. The loop
++	 * terminates when min > max, which means the min index points to the
++	 * bigger element while the max index to the smaller element, in-between
++	 * which the new @pfn belongs to.
++	 *
++	 * For more details, see exercise 1, Section 6.2.1 in TAOCP, vol. 3.
++	 */
+ 	if (to)
+ 		*to = min;
+ 
+-	this_pfn = PFN(ca->array[min]);
+-
+-	if (this_pfn == pfn)
+-		return min;
+-
+ 	return -ENOKEY;
+ }
+ 
