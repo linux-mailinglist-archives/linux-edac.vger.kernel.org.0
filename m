@@ -2,104 +2,107 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BEEB3A22B
-	for <lists+linux-edac@lfdr.de>; Sat,  8 Jun 2019 23:29:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA2833A463
+	for <lists+linux-edac@lfdr.de>; Sun,  9 Jun 2019 11:06:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727477AbfFHV3t (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Sat, 8 Jun 2019 17:29:49 -0400
-Received: from terminus.zytor.com ([198.137.202.136]:45273 "EHLO
-        terminus.zytor.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727456AbfFHV3t (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Sat, 8 Jun 2019 17:29:49 -0400
-Received: from terminus.zytor.com (localhost [127.0.0.1])
-        by terminus.zytor.com (8.15.2/8.15.2) with ESMTPS id x58LTfcb3145827
-        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NO);
-        Sat, 8 Jun 2019 14:29:41 -0700
-DKIM-Filter: OpenDKIM Filter v2.11.0 terminus.zytor.com x58LTfcb3145827
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
-        s=2019051801; t=1560029381;
-        bh=ggyYlir8gcf2gj4AxkHQrSsF3ZyY4XSgxOjurYhU5y4=;
-        h=Date:From:Cc:Reply-To:To:Subject:From;
-        b=v/tqO/DvuVKh9dhDD3bv8Cca7z6QjxnYiMUd5Jxu414OakKe54tmYIwPt1/uqsmq4
-         GaUV3hUO8e83+4UxLQQ+4JkduWWm7qm59CPQ5uFT+fGaKNYGBt7pNqanUcVyH/bfW/
-         z1AIm4PV0YYcP6TE8U9S6W+/jQkqlHtNe98jazi+zVjD1oL0aqrGHRZ6eEIVx2m3cb
-         rrDUPNxffbesRqL8WCH4HRooo3mQGK8nBTJCORHSY2L/Tt3JY33vMB2CC69ZpKvje0
-         CJIErOgodKSZDfhABJqf7T55cx4GVRgJTrJkrWf4ISlr0cW504jWeiro8JROiVoX1k
-         O92UwQzNkp3Ow==
-Received: (from tipbot@localhost)
-        by terminus.zytor.com (8.15.2/8.15.2/Submit) id x58LTfcE3145824;
-        Sat, 8 Jun 2019 14:29:41 -0700
-Date:   Sat, 8 Jun 2019 14:29:41 -0700
-X-Authentication-Warning: terminus.zytor.com: tipbot set sender to tipbot@zytor.com using -f
-From:   tip-bot for Borislav Petkov <tipbot@zytor.com>
-Message-ID: <tip-f57518cd56e2919afbcef3839122a75e291c7f85@git.kernel.org>
-Cc:     bp@suse.de, mingo@kernel.org, tglx@linutronix.de,
-        tony.luck@intel.com, linux-edac@vger.kernel.org, hpa@zytor.com
-Reply-To: bp@suse.de, mingo@kernel.org, tglx@linutronix.de,
-          tony.luck@intel.com, linux-edac@vger.kernel.org, hpa@zytor.com,
-          linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip:ras/core] RAS/CEC: Dump the different array element sections
-Git-Commit-ID: f57518cd56e2919afbcef3839122a75e291c7f85
-X-Mailer: tip-git-log-daemon
-Robot-ID: <tip-bot.git.kernel.org>
-Robot-Unsubscribe: Contact <mailto:hpa@kernel.org> to get blacklisted from
- these emails
+        id S1727853AbfFIJGn (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Sun, 9 Jun 2019 05:06:43 -0400
+Received: from mail-wm1-f65.google.com ([209.85.128.65]:34041 "EHLO
+        mail-wm1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726686AbfFIJGn (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Sun, 9 Jun 2019 05:06:43 -0400
+Received: by mail-wm1-f65.google.com with SMTP id w9so6922019wmd.1;
+        Sun, 09 Jun 2019 02:06:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=MGbF2zwewFao6V8gYmheCoVkiBGrE6w/oP1aoRraL0s=;
+        b=lifjidMxnNUyfeXsVR3ARiInR98xudKHtkgL05VFoeh7+nK4cN0hXa3CCqqav5kOA4
+         +Ztx0r5no6QXMVDrqWSYjBIt3y7tX7mrVeQ6CINj500LmkOaDQwBswGMASam7U1k0CLY
+         5+QO4NzGxhd1qfgcSqPJOGsb+PHLFad+tNOdm21U8y8lxelMjsVTpSIQ/+wpLlF0l9SW
+         zx8FYcVTOi4QXqn38/iLgaa0fw/D2H60YfRrFH+mj3I+nQKXRe0iAN7krjfZNFl6S1cH
+         Q/xBJQRlm9hPqth550eZ5S0Jdd6AeDkZyfsalJlQez0vyth5vhAZ3kel0Y1o3WsX4hu1
+         TV0Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to:user-agent;
+        bh=MGbF2zwewFao6V8gYmheCoVkiBGrE6w/oP1aoRraL0s=;
+        b=iyxVNi8QEq2oZZX2DObTpMdbzvJM3Zu0PfUUvYOxDXoXr3SeoTh9GHXF918RlfLlHG
+         B2pnVYJyvVsLZrjuyUCl1Iz5a6Cixh8hGXvDqdjYbshblNeVrvKQUmM2eQ1JHe0H440H
+         IV1hgjQ2tO5VAxK8Cbr1pHPOuwqhFGtlZgKlqzVNCUHD7ohx/eGIlAMrxvxu0X17k6f5
+         oy+6cv9ODLYttmt3kM7XlX/QsE78OyCRL0tahei/nBJxsT6JM8XvNVTO3kTXSKJLhkj5
+         1YG5FMdUAHtdBp1LZ5CfnVR3Exn6QKvFG6TsqPb2UGJOv8bqkiUlRXjJVgquiA7K0A2s
+         1lxQ==
+X-Gm-Message-State: APjAAAU+phi1T4YtPvF1bFHmDogvrNlBDgfO1FrD1vB2xzFcRuYruzKY
+        EQVj5vbUskdpWO07iaXvAPYpqXd8
+X-Google-Smtp-Source: APXvYqwRWaVxK5E+E6DAmqsWw2u/AD5MGLLSu4aQWfDF1P8Lu5EM3wkAemLZ6WLTo2YCNjAkqQrTgg==
+X-Received: by 2002:a1c:7c11:: with SMTP id x17mr2002837wmc.22.1560071200178;
+        Sun, 09 Jun 2019 02:06:40 -0700 (PDT)
+Received: from gmail.com (2E8B0CD5.catv.pool.telekom.hu. [46.139.12.213])
+        by smtp.gmail.com with ESMTPSA id w6sm8723440wro.71.2019.06.09.02.06.39
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Sun, 09 Jun 2019 02:06:39 -0700 (PDT)
+Date:   Sun, 9 Jun 2019 11:06:37 +0200
+From:   Ingo Molnar <mingo@kernel.org>
+To:     linux-edac@vger.kernel.org, hpa@zytor.com,
+        linux-kernel@vger.kernel.org, bp@suse.de, tony.luck@intel.com,
+        tglx@linutronix.de
+Cc:     linux-tip-commits@vger.kernel.org
+Subject: Re: [tip:ras/core] RAS/CEC: Rename count_threshold to
+ action_threshold
+Message-ID: <20190609090637.GA26453@gmail.com>
+References: <tip-b8b5ca6600dec2a4f1e50ca9d3cf9e1d032870cd@git.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-2.4 required=5.0 tests=ALL_TRUSTED,BAYES_00,
-        DATE_IN_FUTURE_96_Q,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF
-        autolearn=no autolearn_force=no version=3.4.2
-X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on terminus.zytor.com
+In-Reply-To: <tip-b8b5ca6600dec2a4f1e50ca9d3cf9e1d032870cd@git.kernel.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-Commit-ID:  f57518cd56e2919afbcef3839122a75e291c7f85
-Gitweb:     https://git.kernel.org/tip/f57518cd56e2919afbcef3839122a75e291c7f85
-Author:     Borislav Petkov <bp@suse.de>
-AuthorDate: Sat, 20 Apr 2019 23:01:03 +0200
-Committer:  Borislav Petkov <bp@suse.de>
-CommitDate: Sat, 8 Jun 2019 17:39:11 +0200
 
-RAS/CEC: Dump the different array element sections
+* tip-bot for Borislav Petkov <tipbot@zytor.com> wrote:
 
-When dumping the array elements, print them in the following format:
+> Commit-ID:  b8b5ca6600dec2a4f1e50ca9d3cf9e1d032870cd
+> Gitweb:     https://git.kernel.org/tip/b8b5ca6600dec2a4f1e50ca9d3cf9e1d032870cd
+> Author:     Borislav Petkov <bp@suse.de>
+> AuthorDate: Sat, 20 Apr 2019 21:30:11 +0200
+> Committer:  Borislav Petkov <bp@suse.de>
+> CommitDate: Sat, 8 Jun 2019 17:38:17 +0200
+> 
+> RAS/CEC: Rename count_threshold to action_threshold
+> 
+> ... which is the better, more-fitting name anyway.
+> 
+> Tony:
+>  - make action_threshold u64 due to debugfs accessors expecting u64.
+>  - rename the remaining: s/count_threshold/action_threshold/g
+> 
+> Co-developed-by: Tony Luck <tony.luck@intel.com>
+> Signed-off-by: Tony Luck <tony.luck@intel.com>
+> Signed-off-by: Borislav Petkov <bp@suse.de>
+> Cc: linux-edac <linux-edac@vger.kernel.org>
 
-  [ PFN | generation in binary | count ]
+JFYI, the SOB chain is a bit messed up here, the proper chain would be:
 
-to be perfectly clear what all those sections are.
+ Signed-off-by: Borislav Petkov <bp@suse.de>
+ Signed-off-by: Tony Luck <tony.luck@intel.com>
+ Signed-off-by: Borislav Petkov <bp@suse.de>
 
-Signed-off-by: Borislav Petkov <bp@suse.de>
-Cc: Tony Luck <tony.luck@intel.com>
-Cc: linux-edac <linux-edac@vger.kernel.org>
----
- drivers/ras/cec.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+This shows that the patch started out as your effort as a developer, then 
+Tony enhanced it and passed it to you as maintainer.
 
-diff --git a/drivers/ras/cec.c b/drivers/ras/cec.c
-index 364f7e1a6bad..dc08c705b493 100644
---- a/drivers/ras/cec.c
-+++ b/drivers/ras/cec.c
-@@ -429,6 +429,8 @@ static int action_threshold_set(void *data, u64 val)
- }
- DEFINE_DEBUGFS_ATTRIBUTE(action_threshold_ops, u64_get, action_threshold_set, "%lld\n");
- 
-+static const char * const bins[] = { "00", "01", "10", "11" };
-+
- static int array_dump(struct seq_file *m, void *v)
- {
- 	struct ce_array *ca = &ce_arr;
-@@ -440,7 +442,8 @@ static int array_dump(struct seq_file *m, void *v)
- 	for (i = 0; i < ca->n; i++) {
- 		u64 this = PFN(ca->array[i]);
- 
--		seq_printf(m, " %03d: [%016llx|%03llx]\n", i, this, FULL_COUNT(ca->array[i]));
-+		seq_printf(m, " %3d: [%016llx|%s|%03llx]\n",
-+			   i, this, bins[DECAY(ca->array[i])], COUNT(ca->array[i]));
- 	}
- 
- 	seq_printf(m, "}\n");
+See for example this commit for an example:
+
+  7675104990ed ("sched: Implement lockless wake-queues")
+
+Note that this pattern also signals the co-developed portion, so that tag 
+can be dropped - but it can be kept too for extra clarity.
+
+Thanks,
+
+	Ingo
