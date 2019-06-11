@@ -2,34 +2,34 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F4CF3CA84
-	for <lists+linux-edac@lfdr.de>; Tue, 11 Jun 2019 13:56:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 002813CA9A
+	for <lists+linux-edac@lfdr.de>; Tue, 11 Jun 2019 13:59:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390059AbfFKL4y (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Tue, 11 Jun 2019 07:56:54 -0400
-Received: from mail.skyhub.de ([5.9.137.197]:35390 "EHLO mail.skyhub.de"
+        id S2404448AbfFKL7D (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Tue, 11 Jun 2019 07:59:03 -0400
+Received: from mail.skyhub.de ([5.9.137.197]:35744 "EHLO mail.skyhub.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2389499AbfFKL4y (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Tue, 11 Jun 2019 07:56:54 -0400
+        id S2404428AbfFKL7C (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Tue, 11 Jun 2019 07:59:02 -0400
 Received: from zn.tnic (p200300EC2F0A6800DC92A88D55C2D513.dip0.t-ipconnect.de [IPv6:2003:ec:2f0a:6800:dc92:a88d:55c2:d513])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id CC9F21EC0467;
-        Tue, 11 Jun 2019 13:56:51 +0200 (CEST)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 4C0E71EC0467;
+        Tue, 11 Jun 2019 13:59:01 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1560254211;
+        t=1560254341;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=QukcMNGwZckUnii5x0hqUwmjRq1rlJQHMCtyQ0Z8UYY=;
-        b=pnpCqfjp/JTTeaGIsxUClj6wZjVmlGUmmX/r6HmRNnoLGEWgqXFfkDNSEqoXl1CwLtGWmG
-        3WXVYFeZWUgZdYROGprUTVIKezGTXxbqmTGfBYosVD6Xdf7H7DMDa0qHJYsVn7+MkJCOsn
-        bbSOc4P5r72saQcFPaXyQ50MzJz0mxU=
-Date:   Tue, 11 Jun 2019 13:56:51 +0200
+        bh=iNnk9/6P7T/k8AQINyRXHk11cIEx6L8h2+DPPx0wO4k=;
+        b=Wh/KHVsQ9bUOqeaAcjfDSYJrPs6waIC5LKKAZgTKFGpx5aodC12tnPE3PmoKXn+DbZKdc/
+        5n/CBZtHFU+xjx1sDfC3fi7bI1/M+HNYB9Jz5cbxW7SuPjhVHFUzCoOLzs9sDzvnO9PhAf
+        qlxABdtvKtyG0nO5+z6d0smeY1zEY2E=
+Date:   Tue, 11 Jun 2019 13:59:00 +0200
 From:   Borislav Petkov <bp@alien8.de>
-To:     Benjamin Herrenschmidt <benh@kernel.crashing.org>
-Cc:     James Morse <james.morse@arm.com>,
-        "Hawa, Hanna" <hhhawa@amazon.com>,
+To:     "Hawa, Hanna" <hhhawa@amazon.com>
+Cc:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        James Morse <james.morse@arm.com>,
         "robh+dt@kernel.org" <robh+dt@kernel.org>,
         "Woodhouse, David" <dwmw@amazon.co.uk>,
         "paulmck@linux.ibm.com" <paulmck@linux.ibm.com>,
@@ -46,7 +46,7 @@ Cc:     James Morse <james.morse@arm.com>,
         "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
         "Hanoch, Uri" <hanochu@amazon.com>
 Subject: Re: [PATCH 2/2] edac: add support for Amazon's Annapurna Labs EDAC
-Message-ID: <20190611115651.GD31772@zn.tnic>
+Message-ID: <20190611115900.GE31772@zn.tnic>
 References: <1559211329-13098-3-git-send-email-hhhawa@amazon.com>
  <DB09EE2A-7397-4063-B925-66658D0105A5@alien8.de>
  <bfbc12fb68eea9d8d4cc257c213393fd4e92c33a.camel@amazon.com>
@@ -56,39 +56,23 @@ References: <1559211329-13098-3-git-send-email-hhhawa@amazon.com>
  <9a2aaf4a9545ed30568a0613e64bc3f57f047799.camel@kernel.crashing.org>
  <20190608090556.GA32464@zn.tnic>
  <1ae5e7a3464f9d8e16b112cd371957ea20472864.camel@kernel.crashing.org>
- <68446361fd1e742b284555b96b638fe6b5218b8b.camel@kernel.crashing.org>
+ <07977a4a-0927-3427-e102-5a850b2f6dce@amazon.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <68446361fd1e742b284555b96b638fe6b5218b8b.camel@kernel.crashing.org>
+In-Reply-To: <07977a4a-0927-3427-e102-5a850b2f6dce@amazon.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Tue, Jun 11, 2019 at 05:21:39PM +1000, Benjamin Herrenschmidt wrote:
-> So looking again ... all the registration/removal of edac devices seem
-> to already be protected by mutexes, so that's not a problem.
-> 
-> Tell me more about what specific races you think we might have here,
-> I'm not sure I follow...
+On Tue, Jun 11, 2019 at 10:29:55AM +0300, Hawa, Hanna wrote:
+> In the near future we plan to push EDAC drivers for L1/L2 and memory
+> controller. There's no common resources/shared data between them.
 
-Well, as I said "it might work or it might set your cat on fire." For
-example, one of the error logging paths is edac_mc_handle_error() and
-that thing mostly operates using the *mci pointer which should be ok
-but then it calls the "trace_mc_event" tracepoint and I'd suppose that
-tracepoints can do lockless but I'm not sure.
-
-So what needs to happen is for paths which weren't called by multiple
-EDAC agents in parallel but need to get called in parallel now due to
-ARM drivers wanting to do that, to get audited that they're safe.
-
-Situation is easy if you have one platform driver where you can
-synchronize things in the driver but since you guys need to do separate
-drivers for whatever reason, then that would need to be done prior.
-
-Makes more sense?
+Ok, you should be safe then. If you need to do more involved interaction
+in the future, you know what the issues are.
 
 -- 
 Regards/Gruss,
