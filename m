@@ -2,77 +2,75 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 002813CA9A
-	for <lists+linux-edac@lfdr.de>; Tue, 11 Jun 2019 13:59:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D3493CCB5
+	for <lists+linux-edac@lfdr.de>; Tue, 11 Jun 2019 15:12:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2404448AbfFKL7D (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Tue, 11 Jun 2019 07:59:03 -0400
-Received: from mail.skyhub.de ([5.9.137.197]:35744 "EHLO mail.skyhub.de"
+        id S2390450AbfFKNMh (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Tue, 11 Jun 2019 09:12:37 -0400
+Received: from mail.skyhub.de ([5.9.137.197]:48274 "EHLO mail.skyhub.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2404428AbfFKL7C (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Tue, 11 Jun 2019 07:59:02 -0400
+        id S2389077AbfFKNMg (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Tue, 11 Jun 2019 09:12:36 -0400
 Received: from zn.tnic (p200300EC2F0A6800DC92A88D55C2D513.dip0.t-ipconnect.de [IPv6:2003:ec:2f0a:6800:dc92:a88d:55c2:d513])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 4C0E71EC0467;
-        Tue, 11 Jun 2019 13:59:01 +0200 (CEST)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id E82661EC0911;
+        Tue, 11 Jun 2019 15:12:34 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1560254341;
+        t=1560258755;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=iNnk9/6P7T/k8AQINyRXHk11cIEx6L8h2+DPPx0wO4k=;
-        b=Wh/KHVsQ9bUOqeaAcjfDSYJrPs6waIC5LKKAZgTKFGpx5aodC12tnPE3PmoKXn+DbZKdc/
-        5n/CBZtHFU+xjx1sDfC3fi7bI1/M+HNYB9Jz5cbxW7SuPjhVHFUzCoOLzs9sDzvnO9PhAf
-        qlxABdtvKtyG0nO5+z6d0smeY1zEY2E=
-Date:   Tue, 11 Jun 2019 13:59:00 +0200
+        bh=EJ7VR9sUEWWF+ZecbxZGX04se8PAYDXjUb4dY5s/kD8=;
+        b=KCHvj3ZYpkLfnoRKsXFvWYlmUSfvoaj1TEiKYWgNhqglSi/LYCDwov/V5k+8SIjqzvJoMI
+        qIddH3YStkbgi4BPh7zrK+4/pIcOUOr/iFNHx27X3sBpwtEhkx8MCdrSE3yRUHWd8GXORE
+        2cxFoWi7Lw3vA5Z/gUeITH0YYX8UOo0=
+Date:   Tue, 11 Jun 2019 15:12:29 +0200
 From:   Borislav Petkov <bp@alien8.de>
-To:     "Hawa, Hanna" <hhhawa@amazon.com>
-Cc:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        James Morse <james.morse@arm.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "Woodhouse, David" <dwmw@amazon.co.uk>,
-        "paulmck@linux.ibm.com" <paulmck@linux.ibm.com>,
-        "mchehab@kernel.org" <mchehab@kernel.org>,
-        "mark.rutland@arm.com" <mark.rutland@arm.com>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "nicolas.ferre@microchip.com" <nicolas.ferre@microchip.com>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "Shenhar, Talel" <talel@amazon.com>,
+To:     "Stefan Schaeckeler (sschaeck)" <sschaeck@cisco.com>
+Cc:     Andrew Jeffery <andrew@aj.id.au>,
+        YueHaibing <yuehaibing@huawei.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        "james.morse@arm.com" <james.morse@arm.com>,
+        Joel Stanley <joel@jms.id.au>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Chocron, Jonathan" <jonnyc@amazon.com>,
-        "Krupnik, Ronen" <ronenk@amazon.com>,
+        "linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>,
         "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
-        "Hanoch, Uri" <hanochu@amazon.com>
-Subject: Re: [PATCH 2/2] edac: add support for Amazon's Annapurna Labs EDAC
-Message-ID: <20190611115900.GE31772@zn.tnic>
-References: <1559211329-13098-3-git-send-email-hhhawa@amazon.com>
- <DB09EE2A-7397-4063-B925-66658D0105A5@alien8.de>
- <bfbc12fb68eea9d8d4cc257c213393fd4e92c33a.camel@amazon.com>
- <20190531051400.GA2275@cz.tnic>
- <ce01a2bc-7973-5978-b033-a6bdc61b9d4b@amazon.com>
- <32431fa2-2285-6c41-ce32-09630205bb54@arm.com>
- <9a2aaf4a9545ed30568a0613e64bc3f57f047799.camel@kernel.crashing.org>
- <20190608090556.GA32464@zn.tnic>
- <1ae5e7a3464f9d8e16b112cd371957ea20472864.camel@kernel.crashing.org>
- <07977a4a-0927-3427-e102-5a850b2f6dce@amazon.com>
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>
+Subject: Re: [PATCH -next] EDAC: aspeed: Remove set but not used variable 'np'
+Message-ID: <20190611131229.GF31772@zn.tnic>
+References: <20190525144153.2028-1-yuehaibing@huawei.com>
+ <04f103fb-54b1-4911-8164-44b20bfd1e72@www.fastmail.com>
+ <960D5667-41E7-47F3-9C0A-726CA919B82D@cisco.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <07977a4a-0927-3427-e102-5a850b2f6dce@amazon.com>
+In-Reply-To: <960D5667-41E7-47F3-9C0A-726CA919B82D@cisco.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Tue, Jun 11, 2019 at 10:29:55AM +0300, Hawa, Hanna wrote:
-> In the near future we plan to push EDAC drivers for L1/L2 and memory
-> controller. There's no common resources/shared data between them.
+On Wed, May 29, 2019 at 03:10:54AM +0000, Stefan Schaeckeler (sschaeck) wrote:
+> On  Tuesday, May 28, 2019 at 6:27 PM, Andrew Jeffery wrote:
+> > On Sun, 26 May 2019, at 00:12, YueHaibing wrote:
+> > > Fixes gcc '-Wunused-but-set-variable' warning:
+> > >
+> > > drivers/edac/aspeed_edac.c: In function aspeed_probe:
+> > > drivers/edac/aspeed_edac.c:284:22: warning: variable np set but not
+> > > used [-Wunused-but-set-variable]
+> > >
+> > > It is never used and can be removed.
+> > >
+> > > Signed-off-by: YueHaibing <yuehaibing@huawei.com>
+> >
+> > Reviewed-by: Andrew Jeffery <andrew@aj.id.au>
+> 
+> Reviewed-by: Stefan Schaeckeler <sschaeck@cisco.com>
 
-Ok, you should be safe then. If you need to do more involved interaction
-in the future, you know what the issues are.
+Applied, thanks.
 
 -- 
 Regards/Gruss,
