@@ -2,51 +2,51 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B01003D22A
-	for <lists+linux-edac@lfdr.de>; Tue, 11 Jun 2019 18:25:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 335A73D231
+	for <lists+linux-edac@lfdr.de>; Tue, 11 Jun 2019 18:27:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387610AbfFKQY4 (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Tue, 11 Jun 2019 12:24:56 -0400
-Received: from terminus.zytor.com ([198.137.202.136]:57237 "EHLO
+        id S2389575AbfFKQZu (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Tue, 11 Jun 2019 12:25:50 -0400
+Received: from terminus.zytor.com ([198.137.202.136]:58019 "EHLO
         terminus.zytor.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727225AbfFKQYz (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Tue, 11 Jun 2019 12:24:55 -0400
+        with ESMTP id S2388330AbfFKQZu (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Tue, 11 Jun 2019 12:25:50 -0400
 Received: from terminus.zytor.com (localhost [127.0.0.1])
-        by terminus.zytor.com (8.15.2/8.15.2) with ESMTPS id x5BGORFo281192
+        by terminus.zytor.com (8.15.2/8.15.2) with ESMTPS id x5BGPD5X281357
         (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NO);
-        Tue, 11 Jun 2019 09:24:27 -0700
-DKIM-Filter: OpenDKIM Filter v2.11.0 terminus.zytor.com x5BGORFo281192
+        Tue, 11 Jun 2019 09:25:13 -0700
+DKIM-Filter: OpenDKIM Filter v2.11.0 terminus.zytor.com x5BGPD5X281357
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
-        s=2019051801; t=1560270268;
-        bh=2R/qm8dOfX1IEArBEkYJmzTC5f9So52GY4H8rVT3QHQ=;
+        s=2019051801; t=1560270314;
+        bh=1YSEMLSFXBL0r9Y8s64bWxuBVG0X/upe09QEg6jbjZc=;
         h=Date:From:Cc:Reply-To:In-Reply-To:References:To:Subject:From;
-        b=uKvpmSrw7Z/UiiIYZEjQcek34vyV4EiA+ZAnKAoaBqUPtUONVVFqLW3aXPtIevbox
-         TJDAZJbZba3vjnC3/g3JcuRY9NT8y8McUNdRUR7i2VQQxuIDVdwC2MdVJx1AogeqvB
-         UVTgy6obIlqCAwzUMkcJOkBtr3fWURlRGsVrA/qdOE1aOd/u7zfLzjj65LMMMuqXfn
-         OmTH64uyrthtdwOnDrRHN/Exdm4gU6/iTiwZlml+1M967G4h75d+VFOgRk7dhv4Q9v
-         WmJLrCg/qYDKiqxvRfLkvZy7Ul6LaASc27cgrVa6agbevGGo54Rwfy8vL9k1pBQn2j
-         lxoNlh2dycw4A==
+        b=cPBGQ3cHTFArH4sbTUhxjX6meXY27D/JHaOUv3b5DoUF3RVyHn1i1ZJ/TllZj9qHK
+         z9yde1SexSMOPe9w8IQnqPCnr0crPvSX0G+yJA8494UlRcE2R/XvCWBmHsiHNf/FsY
+         w1Ju1dS4HacaQ3p9S43ErV7UK6DyAFKzddBpCTcIJr2jt8XQL+2QuT3SLHFhm0MITl
+         0XkBGd+6jLmT8YcWsrpZtiFKZ8sXzCQlzUNDIHt9g+OayTYZ/qLeDuoPd0ahTJdaTx
+         CEFWyXkfNVGXmGJSaF5qykRU8V4tGRzpGPxDpPI+WI3oxRaYclChrQ38RfZZeEo/RP
+         TkRLYirM9aF9A==
 Received: (from tipbot@localhost)
-        by terminus.zytor.com (8.15.2/8.15.2/Submit) id x5BGORls281185;
-        Tue, 11 Jun 2019 09:24:27 -0700
-Date:   Tue, 11 Jun 2019 09:24:27 -0700
+        by terminus.zytor.com (8.15.2/8.15.2/Submit) id x5BGPC8b281350;
+        Tue, 11 Jun 2019 09:25:12 -0700
+Date:   Tue, 11 Jun 2019 09:25:12 -0700
 X-Authentication-Warning: terminus.zytor.com: tipbot set sender to tipbot@zytor.com using -f
 From:   tip-bot for Yazen Ghannam <tipbot@zytor.com>
-Message-ID: <tip-95d057f54664f3c6e8f650faf5690b82b30a9e52@git.kernel.org>
-Cc:     mingo@kernel.org, bp@suse.de, yazen.ghannam@amd.com,
-        tglx@linutronix.de, x86@kernel.org, tony.luck@intel.com,
-        linux-edac@vger.kernel.org, mingo@redhat.com, hpa@zytor.com,
-        linux-kernel@vger.kernel.org
-Reply-To: linux-kernel@vger.kernel.org, mingo@redhat.com, hpa@zytor.com,
-          linux-edac@vger.kernel.org, tony.luck@intel.com,
-          yazen.ghannam@amd.com, tglx@linutronix.de, x86@kernel.org,
-          mingo@kernel.org, bp@suse.de
-In-Reply-To: <20190607201752.221446-4-Yazen.Ghannam@amd.com>
-References: <20190607201752.221446-4-Yazen.Ghannam@amd.com>
+Message-ID: <tip-c7d314f386e987be8b51eeb7dd947756ae23f6b6@git.kernel.org>
+Cc:     tony.luck@intel.com, mingo@redhat.com, yazen.ghannam@amd.com,
+        hpa@zytor.com, bp@suse.de, tglx@linutronix.de,
+        linux-kernel@vger.kernel.org, mingo@kernel.org,
+        linux-edac@vger.kernel.org, x86@kernel.org
+Reply-To: x86@kernel.org, linux-edac@vger.kernel.org, tony.luck@intel.com,
+          mingo@redhat.com, yazen.ghannam@amd.com, hpa@zytor.com,
+          bp@suse.de, tglx@linutronix.de, linux-kernel@vger.kernel.org,
+          mingo@kernel.org
+In-Reply-To: <20190607201752.221446-5-Yazen.Ghannam@amd.com>
+References: <20190607201752.221446-5-Yazen.Ghannam@amd.com>
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip:ras/core] x86/MCE/AMD: Don't cache block addresses on SMCA
- systems
-Git-Commit-ID: 95d057f54664f3c6e8f650faf5690b82b30a9e52
+Subject: [tip:ras/core] x86/MCE: Make the number of MCA banks a per-CPU
+ variable
+Git-Commit-ID: c7d314f386e987be8b51eeb7dd947756ae23f6b6
 X-Mailer: tip-git-log-daemon
 Robot-ID: <tip-bot.git.kernel.org>
 Robot-Unsubscribe: Contact <mailto:hpa@kernel.org> to get blacklisted from
@@ -64,30 +64,33 @@ Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-Commit-ID:  95d057f54664f3c6e8f650faf5690b82b30a9e52
-Gitweb:     https://git.kernel.org/tip/95d057f54664f3c6e8f650faf5690b82b30a9e52
+Commit-ID:  c7d314f386e987be8b51eeb7dd947756ae23f6b6
+Gitweb:     https://git.kernel.org/tip/c7d314f386e987be8b51eeb7dd947756ae23f6b6
 Author:     Yazen Ghannam <yazen.ghannam@amd.com>
-AuthorDate: Fri, 7 Jun 2019 20:18:04 +0000
+AuthorDate: Fri, 7 Jun 2019 20:18:05 +0000
 Committer:  Borislav Petkov <bp@suse.de>
-CommitDate: Tue, 11 Jun 2019 15:22:41 +0200
+CommitDate: Tue, 11 Jun 2019 15:23:09 +0200
 
-x86/MCE/AMD: Don't cache block addresses on SMCA systems
+x86/MCE: Make the number of MCA banks a per-CPU variable
 
-On legacy systems, the addresses of the MCA_MISC* registers need to be
-recursively discovered based on a Block Pointer field in the registers.
+The number of MCA banks is provided per logical CPU. Historically, this
+number has been the same across all CPUs, but this is not an
+architectural guarantee. Future AMD systems may have MCA bank counts
+that vary between logical CPUs in a system.
 
-On Scalable MCA systems, the register space is fixed, and particular
-addresses can be derived by regular offsets for bank and register type.
-This fixed address space includes the MCA_MISC* registers.
+This issue was partially addressed in
 
-MCA_MISC0 is always available for each MCA bank. MCA_MISC1 through
-MCA_MISC4 are considered available if MCA_MISC0[BlkPtr]=1.
+  006c077041dc ("x86/mce: Handle varying MCA bank counts")
 
-Cache the value of MCA_MISC0[BlkPtr] for each bank and per CPU. This
-needs to be done only during init. The values should be saved per CPU
-to accommodate heterogeneous SMCA systems.
+by allocating structures using the maximum number of MCA banks and by
+saving the maximum MCA bank count in a system as the global count. This
+means that some extra structures are allocated. Also, this means that
+CPUs will spend more time in the #MC and other handlers checking extra
+MCA banks.
 
-Redo smca_get_block_address() to directly return the block addresses.
+Thus, define the number of MCA banks as a per-CPU variable.
+
+ [ bp: Make mce_num_banks an unsigned int. ]
 
 Signed-off-by: Yazen Ghannam <yazen.ghannam@amd.com>
 Signed-off-by: Borislav Petkov <bp@suse.de>
@@ -97,149 +100,297 @@ Cc: "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>
 Cc: Thomas Gleixner <tglx@linutronix.de>
 Cc: Tony Luck <tony.luck@intel.com>
 Cc: "x86@kernel.org" <x86@kernel.org>
-Link: https://lkml.kernel.org/r/20190607201752.221446-4-Yazen.Ghannam@amd.com
+Link: https://lkml.kernel.org/r/20190607201752.221446-5-Yazen.Ghannam@amd.com
 ---
- arch/x86/kernel/cpu/mce/amd.c | 73 ++++++++++++++++++++++---------------------
- 1 file changed, 37 insertions(+), 36 deletions(-)
+ arch/x86/kernel/cpu/mce/amd.c      | 19 ++++++++--------
+ arch/x86/kernel/cpu/mce/core.c     | 45 +++++++++++++++++++++-----------------
+ arch/x86/kernel/cpu/mce/internal.h |  2 +-
+ 3 files changed, 36 insertions(+), 30 deletions(-)
 
 diff --git a/arch/x86/kernel/cpu/mce/amd.c b/arch/x86/kernel/cpu/mce/amd.c
-index d904aafe6409..d4d6e4b7f9dc 100644
+index d4d6e4b7f9dc..fb5c935af2c5 100644
 --- a/arch/x86/kernel/cpu/mce/amd.c
 +++ b/arch/x86/kernel/cpu/mce/amd.c
-@@ -101,11 +101,6 @@ static struct smca_bank_name smca_names[] = {
- 	[SMCA_PCIE]	= { "pcie",		"PCI Express Unit" },
- };
- 
--static u32 smca_bank_addrs[MAX_NR_BANKS][NR_BLOCKS] __ro_after_init =
--{
--	[0 ... MAX_NR_BANKS - 1] = { [0 ... NR_BLOCKS - 1] = -1 }
--};
--
- static const char *smca_get_name(enum smca_bank_types t)
- {
- 	if (t >= N_SMCA_BANK_TYPES)
-@@ -199,6 +194,9 @@ static char buf_mcatype[MAX_MCATYPE_NAME_LEN];
- static DEFINE_PER_CPU(struct threshold_bank **, threshold_banks);
- static DEFINE_PER_CPU(unsigned int, bank_map);	/* see which banks are on */
- 
-+/* Map of banks that have more than MCA_MISC0 available. */
-+static DEFINE_PER_CPU(u32, smca_misc_banks_map);
-+
- static void amd_threshold_interrupt(void);
- static void amd_deferred_error_interrupt(void);
- 
-@@ -208,6 +206,28 @@ static void default_deferred_error_interrupt(void)
- }
- void (*deferred_error_int_vector)(void) = default_deferred_error_interrupt;
- 
-+static void smca_set_misc_banks_map(unsigned int bank, unsigned int cpu)
-+{
-+	u32 low, high;
-+
-+	/*
-+	 * For SMCA enabled processors, BLKPTR field of the first MISC register
-+	 * (MCx_MISC0) indicates presence of additional MISC regs set (MISC1-4).
-+	 */
-+	if (rdmsr_safe(MSR_AMD64_SMCA_MCx_CONFIG(bank), &low, &high))
-+		return;
-+
-+	if (!(low & MCI_CONFIG_MCAX))
-+		return;
-+
-+	if (rdmsr_safe(MSR_AMD64_SMCA_MCx_MISC(bank), &low, &high))
-+		return;
-+
-+	if (low & MASK_BLKPTR_LO)
-+		per_cpu(smca_misc_banks_map, cpu) |= BIT(bank);
-+
-+}
-+
- static void smca_configure(unsigned int bank, unsigned int cpu)
- {
- 	unsigned int i, hwid_mcatype;
-@@ -245,6 +265,8 @@ static void smca_configure(unsigned int bank, unsigned int cpu)
- 		wrmsr(smca_config, low, high);
- 	}
- 
-+	smca_set_misc_banks_map(bank, cpu);
-+
- 	/* Return early if this bank was already initialized. */
- 	if (smca_banks[bank].hwid)
- 		return;
-@@ -455,42 +477,21 @@ static void deferred_error_interrupt_enable(struct cpuinfo_x86 *c)
- 	wrmsr(MSR_CU_DEF_ERR, low, high);
- }
- 
--static u32 smca_get_block_address(unsigned int bank, unsigned int block)
-+static u32 smca_get_block_address(unsigned int bank, unsigned int block,
-+				  unsigned int cpu)
- {
--	u32 low, high;
--	u32 addr = 0;
--
--	if (smca_get_bank_type(bank) == SMCA_RESERVED)
--		return addr;
--
- 	if (!block)
- 		return MSR_AMD64_SMCA_MCx_MISC(bank);
- 
--	/* Check our cache first: */
--	if (smca_bank_addrs[bank][block] != -1)
--		return smca_bank_addrs[bank][block];
--
--	/*
--	 * For SMCA enabled processors, BLKPTR field of the first MISC register
--	 * (MCx_MISC0) indicates presence of additional MISC regs set (MISC1-4).
--	 */
--	if (rdmsr_safe(MSR_AMD64_SMCA_MCx_CONFIG(bank), &low, &high))
--		goto out;
--
--	if (!(low & MCI_CONFIG_MCAX))
--		goto out;
--
--	if (!rdmsr_safe(MSR_AMD64_SMCA_MCx_MISC(bank), &low, &high) &&
--	    (low & MASK_BLKPTR_LO))
--		addr = MSR_AMD64_SMCA_MCx_MISCy(bank, block - 1);
-+	if (!(per_cpu(smca_misc_banks_map, cpu) & BIT(bank)))
-+		return 0;
- 
--out:
--	smca_bank_addrs[bank][block] = addr;
--	return addr;
-+	return MSR_AMD64_SMCA_MCx_MISCy(bank, block - 1);
- }
- 
- static u32 get_block_address(u32 current_addr, u32 low, u32 high,
--			     unsigned int bank, unsigned int block)
-+			     unsigned int bank, unsigned int block,
-+			     unsigned int cpu)
+@@ -495,7 +495,7 @@ static u32 get_block_address(u32 current_addr, u32 low, u32 high,
  {
  	u32 addr = 0, offset = 0;
  
-@@ -498,7 +499,7 @@ static u32 get_block_address(u32 current_addr, u32 low, u32 high,
+-	if ((bank >= mca_cfg.banks) || (block >= NR_BLOCKS))
++	if ((bank >= per_cpu(mce_num_banks, cpu)) || (block >= NR_BLOCKS))
  		return addr;
  
  	if (mce_flags.smca)
--		return smca_get_block_address(bank, block);
-+		return smca_get_block_address(bank, block, cpu);
+@@ -627,11 +627,12 @@ void disable_err_thresholding(struct cpuinfo_x86 *c, unsigned int bank)
+ /* cpu init entry point, called from mce.c with preempt off */
+ void mce_amd_feature_init(struct cpuinfo_x86 *c)
+ {
+-	u32 low = 0, high = 0, address = 0;
+ 	unsigned int bank, block, cpu = smp_processor_id();
++	u32 low = 0, high = 0, address = 0;
+ 	int offset = -1;
  
- 	/* Fall back to method we used for older processors: */
- 	switch (block) {
-@@ -637,7 +638,7 @@ void mce_amd_feature_init(struct cpuinfo_x86 *c)
- 		disable_err_thresholding(c, bank);
+-	for (bank = 0; bank < mca_cfg.banks; ++bank) {
++
++	for (bank = 0; bank < this_cpu_read(mce_num_banks); ++bank) {
+ 		if (mce_flags.smca)
+ 			smca_configure(bank, cpu);
  
- 		for (block = 0; block < NR_BLOCKS; ++block) {
--			address = get_block_address(address, low, high, bank, block);
-+			address = get_block_address(address, low, high, bank, block, cpu);
- 			if (!address)
- 				break;
+@@ -976,7 +977,7 @@ static void amd_deferred_error_interrupt(void)
+ {
+ 	unsigned int bank;
  
-@@ -1254,7 +1255,7 @@ static int allocate_threshold_blocks(unsigned int cpu, unsigned int bank,
- 	if (err)
- 		goto out_free;
- recurse:
--	address = get_block_address(address, low, high, bank, ++block);
-+	address = get_block_address(address, low, high, bank, ++block, cpu);
- 	if (!address)
+-	for (bank = 0; bank < mca_cfg.banks; ++bank)
++	for (bank = 0; bank < this_cpu_read(mce_num_banks); ++bank)
+ 		log_error_deferred(bank);
+ }
+ 
+@@ -1017,7 +1018,7 @@ static void amd_threshold_interrupt(void)
+ 	struct threshold_block *first_block = NULL, *block = NULL, *tmp = NULL;
+ 	unsigned int bank, cpu = smp_processor_id();
+ 
+-	for (bank = 0; bank < mca_cfg.banks; ++bank) {
++	for (bank = 0; bank < this_cpu_read(mce_num_banks); ++bank) {
+ 		if (!(per_cpu(bank_map, cpu) & (1 << bank)))
+ 			continue;
+ 
+@@ -1204,7 +1205,7 @@ static int allocate_threshold_blocks(unsigned int cpu, unsigned int bank,
+ 	u32 low, high;
+ 	int err;
+ 
+-	if ((bank >= mca_cfg.banks) || (block >= NR_BLOCKS))
++	if ((bank >= per_cpu(mce_num_banks, cpu)) || (block >= NR_BLOCKS))
  		return 0;
  
+ 	if (rdmsr_safe_on_cpu(cpu, address, &low, &high))
+@@ -1438,7 +1439,7 @@ int mce_threshold_remove_device(unsigned int cpu)
+ {
+ 	unsigned int bank;
+ 
+-	for (bank = 0; bank < mca_cfg.banks; ++bank) {
++	for (bank = 0; bank < per_cpu(mce_num_banks, cpu); ++bank) {
+ 		if (!(per_cpu(bank_map, cpu) & (1 << bank)))
+ 			continue;
+ 		threshold_remove_bank(cpu, bank);
+@@ -1459,14 +1460,14 @@ int mce_threshold_create_device(unsigned int cpu)
+ 	if (bp)
+ 		return 0;
+ 
+-	bp = kcalloc(mca_cfg.banks, sizeof(struct threshold_bank *),
++	bp = kcalloc(per_cpu(mce_num_banks, cpu), sizeof(struct threshold_bank *),
+ 		     GFP_KERNEL);
+ 	if (!bp)
+ 		return -ENOMEM;
+ 
+ 	per_cpu(threshold_banks, cpu) = bp;
+ 
+-	for (bank = 0; bank < mca_cfg.banks; ++bank) {
++	for (bank = 0; bank < per_cpu(mce_num_banks, cpu); ++bank) {
+ 		if (!(per_cpu(bank_map, cpu) & (1 << bank)))
+ 			continue;
+ 		err = threshold_create_bank(cpu, bank);
+diff --git a/arch/x86/kernel/cpu/mce/core.c b/arch/x86/kernel/cpu/mce/core.c
+index 49fac95d036b..10f9f140985e 100644
+--- a/arch/x86/kernel/cpu/mce/core.c
++++ b/arch/x86/kernel/cpu/mce/core.c
+@@ -65,6 +65,8 @@ static DEFINE_MUTEX(mce_sysfs_mutex);
+ 
+ DEFINE_PER_CPU(unsigned, mce_exception_count);
+ 
++DEFINE_PER_CPU_READ_MOSTLY(unsigned int, mce_num_banks);
++
+ struct mce_bank {
+ 	u64			ctl;			/* subevents to enable */
+ 	bool			init;			/* initialise bank? */
+@@ -701,7 +703,7 @@ bool machine_check_poll(enum mcp_flags flags, mce_banks_t *b)
+ 	if (flags & MCP_TIMESTAMP)
+ 		m.tsc = rdtsc();
+ 
+-	for (i = 0; i < mca_cfg.banks; i++) {
++	for (i = 0; i < this_cpu_read(mce_num_banks); i++) {
+ 		if (!mce_banks[i].ctl || !test_bit(i, *b))
+ 			continue;
+ 
+@@ -803,7 +805,7 @@ static int mce_no_way_out(struct mce *m, char **msg, unsigned long *validp,
+ 	char *tmp;
+ 	int i;
+ 
+-	for (i = 0; i < mca_cfg.banks; i++) {
++	for (i = 0; i < this_cpu_read(mce_num_banks); i++) {
+ 		m->status = mce_rdmsrl(msr_ops.status(i));
+ 		if (!(m->status & MCI_STATUS_VAL))
+ 			continue;
+@@ -1083,7 +1085,7 @@ static void mce_clear_state(unsigned long *toclear)
+ {
+ 	int i;
+ 
+-	for (i = 0; i < mca_cfg.banks; i++) {
++	for (i = 0; i < this_cpu_read(mce_num_banks); i++) {
+ 		if (test_bit(i, toclear))
+ 			mce_wrmsrl(msr_ops.status(i), 0);
+ 	}
+@@ -1141,7 +1143,7 @@ static void __mc_scan_banks(struct mce *m, struct mce *final,
+ 	struct mca_config *cfg = &mca_cfg;
+ 	int severity, i;
+ 
+-	for (i = 0; i < cfg->banks; i++) {
++	for (i = 0; i < this_cpu_read(mce_num_banks); i++) {
+ 		__clear_bit(i, toclear);
+ 		if (!test_bit(i, valid_banks))
+ 			continue;
+@@ -1482,9 +1484,10 @@ EXPORT_SYMBOL_GPL(mce_notify_irq);
+ static void __mcheck_cpu_mce_banks_init(void)
+ {
+ 	struct mce_bank *mce_banks = this_cpu_ptr(mce_banks_array);
++	u8 n_banks = this_cpu_read(mce_num_banks);
+ 	int i;
+ 
+-	for (i = 0; i < MAX_NR_BANKS; i++) {
++	for (i = 0; i < n_banks; i++) {
+ 		struct mce_bank *b = &mce_banks[i];
+ 
+ 		b->ctl = -1ULL;
+@@ -1503,10 +1506,14 @@ static void __mcheck_cpu_cap_init(void)
+ 	rdmsrl(MSR_IA32_MCG_CAP, cap);
+ 
+ 	b = cap & MCG_BANKCNT_MASK;
+-	if (WARN_ON_ONCE(b > MAX_NR_BANKS))
++
++	if (b > MAX_NR_BANKS) {
++		pr_warn("CPU%d: Using only %u machine check banks out of %u\n",
++			smp_processor_id(), MAX_NR_BANKS, b);
+ 		b = MAX_NR_BANKS;
++	}
+ 
+-	mca_cfg.banks = max(mca_cfg.banks, b);
++	this_cpu_write(mce_num_banks, b);
+ 
+ 	__mcheck_cpu_mce_banks_init();
+ 
+@@ -1545,7 +1552,7 @@ static void __mcheck_cpu_init_clear_banks(void)
+ 	struct mce_bank *mce_banks = this_cpu_ptr(mce_banks_array);
+ 	int i;
+ 
+-	for (i = 0; i < mca_cfg.banks; i++) {
++	for (i = 0; i < this_cpu_read(mce_num_banks); i++) {
+ 		struct mce_bank *b = &mce_banks[i];
+ 
+ 		if (!b->init)
+@@ -1596,7 +1603,7 @@ static int __mcheck_cpu_apply_quirks(struct cpuinfo_x86 *c)
+ 
+ 	/* This should be disabled by the BIOS, but isn't always */
+ 	if (c->x86_vendor == X86_VENDOR_AMD) {
+-		if (c->x86 == 15 && cfg->banks > 4) {
++		if (c->x86 == 15 && this_cpu_read(mce_num_banks) > 4) {
+ 			/*
+ 			 * disable GART TBL walk error reporting, which
+ 			 * trips off incorrectly with the IOMMU & 3ware
+@@ -1615,7 +1622,7 @@ static int __mcheck_cpu_apply_quirks(struct cpuinfo_x86 *c)
+ 		 * Various K7s with broken bank 0 around. Always disable
+ 		 * by default.
+ 		 */
+-		if (c->x86 == 6 && cfg->banks > 0)
++		if (c->x86 == 6 && this_cpu_read(mce_num_banks) > 0)
+ 			mce_banks[0].ctl = 0;
+ 
+ 		/*
+@@ -1637,7 +1644,7 @@ static int __mcheck_cpu_apply_quirks(struct cpuinfo_x86 *c)
+ 		 * valid event later, merely don't write CTL0.
+ 		 */
+ 
+-		if (c->x86 == 6 && c->x86_model < 0x1A && cfg->banks > 0)
++		if (c->x86 == 6 && c->x86_model < 0x1A && this_cpu_read(mce_num_banks) > 0)
+ 			mce_banks[0].init = 0;
+ 
+ 		/*
+@@ -1873,7 +1880,7 @@ static void __mce_disable_bank(void *arg)
+ 
+ void mce_disable_bank(int bank)
+ {
+-	if (bank >= mca_cfg.banks) {
++	if (bank >= this_cpu_read(mce_num_banks)) {
+ 		pr_warn(FW_BUG
+ 			"Ignoring request to disable invalid MCA bank %d.\n",
+ 			bank);
+@@ -1962,7 +1969,7 @@ static void mce_disable_error_reporting(void)
+ 	struct mce_bank *mce_banks = this_cpu_ptr(mce_banks_array);
+ 	int i;
+ 
+-	for (i = 0; i < mca_cfg.banks; i++) {
++	for (i = 0; i < this_cpu_read(mce_num_banks); i++) {
+ 		struct mce_bank *b = &mce_banks[i];
+ 
+ 		if (b->init)
+@@ -2073,7 +2080,7 @@ static ssize_t show_bank(struct device *s, struct device_attribute *attr,
+ 	u8 bank = attr_to_bank(attr)->bank;
+ 	struct mce_bank *b;
+ 
+-	if (bank >= mca_cfg.banks)
++	if (bank >= per_cpu(mce_num_banks, s->id))
+ 		return -EINVAL;
+ 
+ 	b = &per_cpu(mce_banks_array, s->id)[bank];
+@@ -2091,7 +2098,7 @@ static ssize_t set_bank(struct device *s, struct device_attribute *attr,
+ 	if (kstrtou64(buf, 0, &new) < 0)
+ 		return -EINVAL;
+ 
+-	if (bank >= mca_cfg.banks)
++	if (bank >= per_cpu(mce_num_banks, s->id))
+ 		return -EINVAL;
+ 
+ 	b = &per_cpu(mce_banks_array, s->id)[bank];
+@@ -2243,7 +2250,7 @@ static int mce_device_create(unsigned int cpu)
+ 		if (err)
+ 			goto error;
+ 	}
+-	for (j = 0; j < mca_cfg.banks; j++) {
++	for (j = 0; j < per_cpu(mce_num_banks, cpu); j++) {
+ 		err = device_create_file(dev, &mce_bank_devs[j].attr);
+ 		if (err)
+ 			goto error2;
+@@ -2275,7 +2282,7 @@ static void mce_device_remove(unsigned int cpu)
+ 	for (i = 0; mce_device_attrs[i]; i++)
+ 		device_remove_file(dev, mce_device_attrs[i]);
+ 
+-	for (i = 0; i < mca_cfg.banks; i++)
++	for (i = 0; i < per_cpu(mce_num_banks, cpu); i++)
+ 		device_remove_file(dev, &mce_bank_devs[i].attr);
+ 
+ 	device_unregister(dev);
+@@ -2305,7 +2312,7 @@ static void mce_reenable_cpu(void)
+ 
+ 	if (!cpuhp_tasks_frozen)
+ 		cmci_reenable();
+-	for (i = 0; i < mca_cfg.banks; i++) {
++	for (i = 0; i < this_cpu_read(mce_num_banks); i++) {
+ 		struct mce_bank *b = &mce_banks[i];
+ 
+ 		if (b->init)
+@@ -2493,8 +2500,6 @@ EXPORT_SYMBOL_GPL(mcsafe_key);
+ 
+ static int __init mcheck_late_init(void)
+ {
+-	pr_info("Using %d MCE banks\n", mca_cfg.banks);
+-
+ 	if (mca_cfg.recovery)
+ 		static_branch_inc(&mcsafe_key);
+ 
+diff --git a/arch/x86/kernel/cpu/mce/internal.h b/arch/x86/kernel/cpu/mce/internal.h
+index 35b3e5c02c1c..43031db429d2 100644
+--- a/arch/x86/kernel/cpu/mce/internal.h
++++ b/arch/x86/kernel/cpu/mce/internal.h
+@@ -118,7 +118,6 @@ struct mca_config {
+ 	      bios_cmci_threshold	: 1,
+ 	      __reserved		: 59;
+ 
+-	u8 banks;
+ 	s8 bootlog;
+ 	int tolerant;
+ 	int monarch_timeout;
+@@ -127,6 +126,7 @@ struct mca_config {
+ };
+ 
+ extern struct mca_config mca_cfg;
++DECLARE_PER_CPU_READ_MOSTLY(unsigned int, mce_num_banks);
+ 
+ struct mce_vendor_flags {
+ 	/*
