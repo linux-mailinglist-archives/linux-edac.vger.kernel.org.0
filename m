@@ -2,67 +2,132 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 037A83D40F
-	for <lists+linux-edac@lfdr.de>; Tue, 11 Jun 2019 19:28:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BDCD33D49F
+	for <lists+linux-edac@lfdr.de>; Tue, 11 Jun 2019 19:54:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2405960AbfFKR2g (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Tue, 11 Jun 2019 13:28:36 -0400
-Received: from mail.skyhub.de ([5.9.137.197]:56302 "EHLO mail.skyhub.de"
+        id S2406539AbfFKRyg (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Tue, 11 Jun 2019 13:54:36 -0400
+Received: from mail.kernel.org ([198.145.29.99]:48322 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2405786AbfFKR2g (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Tue, 11 Jun 2019 13:28:36 -0400
-Received: from zn.tnic (p200300EC2F0A6800C91F6799EDF090E8.dip0.t-ipconnect.de [IPv6:2003:ec:2f0a:6800:c91f:6799:edf0:90e8])
+        id S2405972AbfFKRyg (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Tue, 11 Jun 2019 13:54:36 -0400
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 16E6A1EC0467;
-        Tue, 11 Jun 2019 19:28:35 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1560274115;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=JHsL/2yRGNcuM0XgJZbs2DYkjnFPBd4EyIzkvA+Etl4=;
-        b=et0qxBvOaNc/WQ8z/JDCOwW8xWD3nv96heNnSEsEtSs4xw4YNXdeiF/K8q7pHsfZ65TRDQ
-        vjO/hunutbIc6ZDYkepwTVe0PkQ0qfXBdVg8hVuCnwlVO0eqjrDokCthOojfbouF2Dz5z2
-        dw0RlbZ7LYeGyJj+2YO+BQEH62W6V9w=
-Date:   Tue, 11 Jun 2019 19:28:30 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Robert Richter <rrichter@marvell.com>
-Cc:     Tony Luck <tony.luck@intel.com>, James Morse <james.morse@arm.com>,
+        by mail.kernel.org (Postfix) with ESMTPSA id 076352086D;
+        Tue, 11 Jun 2019 17:54:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1560275675;
+        bh=jbJnNmO9enRg4uIrsnreAbpALsd329VzH3q7BKkMg6s=;
+        h=Date:From:To:Cc:Subject:From;
+        b=VGCy7gT/gzyAg7YskBxQEVCwn8L0lSXUQitm9n9YK1aoPp7y9U3Qw3cNZ3r+RfiMt
+         KJ5BoyWIJEYycqok+8/Z0Rsv19kv5u0Vny8bwwxh5s8FyO0K78R337wPqCanPy8uUa
+         xHnVi8Rz8TgHdwDPgat4ATbovqfzQqUozw2Nq7nc=
+Date:   Tue, 11 Jun 2019 19:54:33 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Borislav Petkov <bp@alien8.de>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 02/21] EDAC: Fixes to use put_device() after device_add()
- errors
-Message-ID: <20190611172830.GI31772@zn.tnic>
-References: <20190529084344.28562-1-rrichter@marvell.com>
- <20190529084344.28562-3-rrichter@marvell.com>
+        James Morse <james.morse@arm.com>
+Cc:     linux-edac@vger.kernel.org
+Subject: [PATCH] edac: make edac_debugfs_create_x*() return void
+Message-ID: <20190611175433.GA5108@kroah.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20190529084344.28562-3-rrichter@marvell.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+User-Agent: Mutt/1.12.0 (2019-05-25)
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Wed, May 29, 2019 at 08:44:05AM +0000, Robert Richter wrote:
-> Always use put_device() after device_add() failed.
-> 
-> Signed-off-by: Robert Richter <rrichter@marvell.com>
-> ---
->  drivers/edac/edac_mc_sysfs.c | 36 +++++++++++++++++++-----------------
->  1 file changed, 19 insertions(+), 17 deletions(-)
+The return values of edac_debugfs_create_x16() and
+edac_debugfs_create_x8() are never checked (as they don't need to be),
+so no need to have them return anything, just make the functions return
+void instead.
 
-I already have a partial fix for that, you can send me the rest ontop:
+This is done with the goal of being able to change the debugfs_create_x*
+functions to also not return a value.
 
-https://git.kernel.org/pub/scm/linux/kernel/git/bp/bp.git/commit/?h=for-next&id=f5d59da9663d115b9cf62cce75a33382c880b560
+Cc: Borislav Petkov <bp@alien8.de>
+Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc: James Morse <james.morse@arm.com>
+Cc: <linux-edac@vger.kernel.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+---
+ drivers/edac/debugfs.c     | 12 ++++++------
+ drivers/edac/edac_module.h | 18 ++++++++----------
+ 2 files changed, 14 insertions(+), 16 deletions(-)
 
-Thx.
-
+diff --git a/drivers/edac/debugfs.c b/drivers/edac/debugfs.c
+index 6b8e484db851..1f943599a8ac 100644
+--- a/drivers/edac/debugfs.c
++++ b/drivers/edac/debugfs.c
+@@ -118,23 +118,23 @@ edac_debugfs_create_file(const char *name, umode_t mode, struct dentry *parent,
+ EXPORT_SYMBOL_GPL(edac_debugfs_create_file);
+ 
+ /* Wrapper for debugfs_create_x8() */
+-struct dentry *edac_debugfs_create_x8(const char *name, umode_t mode,
+-				       struct dentry *parent, u8 *value)
++void edac_debugfs_create_x8(const char *name, umode_t mode,
++			    struct dentry *parent, u8 *value)
+ {
+ 	if (!parent)
+ 		parent = edac_debugfs;
+ 
+-	return debugfs_create_x8(name, mode, parent, value);
++	debugfs_create_x8(name, mode, parent, value);
+ }
+ EXPORT_SYMBOL_GPL(edac_debugfs_create_x8);
+ 
+ /* Wrapper for debugfs_create_x16() */
+-struct dentry *edac_debugfs_create_x16(const char *name, umode_t mode,
+-				       struct dentry *parent, u16 *value)
++void edac_debugfs_create_x16(const char *name, umode_t mode,
++			     struct dentry *parent, u16 *value)
+ {
+ 	if (!parent)
+ 		parent = edac_debugfs;
+ 
+-	return debugfs_create_x16(name, mode, parent, value);
++	debugfs_create_x16(name, mode, parent, value);
+ }
+ EXPORT_SYMBOL_GPL(edac_debugfs_create_x16);
+diff --git a/drivers/edac/edac_module.h b/drivers/edac/edac_module.h
+index dd7d0b509aa3..bc4b806dc9cc 100644
+--- a/drivers/edac/edac_module.h
++++ b/drivers/edac/edac_module.h
+@@ -78,10 +78,10 @@ edac_debugfs_create_dir_at(const char *dirname, struct dentry *parent);
+ struct dentry *
+ edac_debugfs_create_file(const char *name, umode_t mode, struct dentry *parent,
+ 			 void *data, const struct file_operations *fops);
+-struct dentry *
+-edac_debugfs_create_x8(const char *name, umode_t mode, struct dentry *parent, u8 *value);
+-struct dentry *
+-edac_debugfs_create_x16(const char *name, umode_t mode, struct dentry *parent, u16 *value);
++void edac_debugfs_create_x8(const char *name, umode_t mode,
++			    struct dentry *parent, u8 *value);
++void edac_debugfs_create_x16(const char *name, umode_t mode,
++			     struct dentry *parent, u16 *value);
+ #else
+ static inline void edac_debugfs_init(void)					{ }
+ static inline void edac_debugfs_exit(void)					{ }
+@@ -92,12 +92,10 @@ edac_debugfs_create_dir_at(const char *dirname, struct dentry *parent)		{ return
+ static inline struct dentry *
+ edac_debugfs_create_file(const char *name, umode_t mode, struct dentry *parent,
+ 			 void *data, const struct file_operations *fops)	{ return NULL; }
+-static inline struct dentry *
+-edac_debugfs_create_x8(const char *name, umode_t mode,
+-		       struct dentry *parent, u8 *value)			{ return NULL; }
+-static inline struct dentry *
+-edac_debugfs_create_x16(const char *name, umode_t mode,
+-		       struct dentry *parent, u16 *value)			{ return NULL; }
++static inline void edac_debugfs_create_x8(const char *name, umode_t mode,
++					  struct dentry *parent, u8 *value)	{ }
++static inline void edac_debugfs_create_x16(const char *name, umode_t mode,
++					   struct dentry *parent, u16 *value)	{ }
+ #endif
+ 
+ /*
 -- 
-Regards/Gruss,
-    Boris.
+2.22.0
 
-Good mailing practices for 400: avoid top-posting and trim the reply.
