@@ -2,91 +2,126 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2451A3C350
-	for <lists+linux-edac@lfdr.de>; Tue, 11 Jun 2019 07:14:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 520A23C3A4
+	for <lists+linux-edac@lfdr.de>; Tue, 11 Jun 2019 07:52:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2391144AbfFKFOB (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Tue, 11 Jun 2019 01:14:01 -0400
-Received: from mail.skyhub.de ([5.9.137.197]:60420 "EHLO mail.skyhub.de"
+        id S2404005AbfFKFvN (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Tue, 11 Jun 2019 01:51:13 -0400
+Received: from gate.crashing.org ([63.228.1.57]:36313 "EHLO gate.crashing.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2390539AbfFKFOA (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Tue, 11 Jun 2019 01:14:00 -0400
-Received: from zn.tnic (p200300EC2F0A6800B9C6921F36B00F7C.dip0.t-ipconnect.de [IPv6:2003:ec:2f0a:6800:b9c6:921f:36b0:f7c])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 5F38C1EC0982;
-        Tue, 11 Jun 2019 07:13:59 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1560230039;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=/4qpiIwUDNEVZoOIA+81jIxl/aQaH5UW2wmLcI0lJNI=;
-        b=gCNOKqz+iDg5I9ne62GUb0I8Z9rBvZfwBX0dZ85/lH5d6XyuyBJYQeKxeM4UcopWn/aiNu
-        rYlatEt03HGZ2EPUm9eHtzFw8oDVkrE+zozxje6MEUf8IBZvMG5UdiDfYD9qIeFjNGirDF
-        YxjUWHUseHF5ysZVmxtukbjF2xb+yQA=
-Date:   Tue, 11 Jun 2019 07:13:54 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     "Ghannam, Yazen" <Yazen.Ghannam@amd.com>
-Cc:     "Luck, Tony" <tony.luck@intel.com>,
-        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
+        id S2403745AbfFKFvL (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Tue, 11 Jun 2019 01:51:11 -0400
+Received: from localhost (localhost.localdomain [127.0.0.1])
+        by gate.crashing.org (8.14.1/8.14.1) with ESMTP id x5B5oe0m029024;
+        Tue, 11 Jun 2019 00:50:41 -0500
+Message-ID: <1ae5e7a3464f9d8e16b112cd371957ea20472864.camel@kernel.crashing.org>
+Subject: Re: [PATCH 2/2] edac: add support for Amazon's Annapurna Labs EDAC
+From:   Benjamin Herrenschmidt <benh@kernel.crashing.org>
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     James Morse <james.morse@arm.com>,
+        "Hawa, Hanna" <hhhawa@amazon.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "Woodhouse, David" <dwmw@amazon.co.uk>,
+        "paulmck@linux.ibm.com" <paulmck@linux.ibm.com>,
+        "mchehab@kernel.org" <mchehab@kernel.org>,
+        "mark.rutland@arm.com" <mark.rutland@arm.com>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "nicolas.ferre@microchip.com" <nicolas.ferre@microchip.com>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "Shenhar, Talel" <talel@amazon.com>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "x86@kernel.org" <x86@kernel.org>
-Subject: Re: [PATCH v3 5/6] x86/MCE: Save MCA control bits that get set in
- hardware
-Message-ID: <20190611051354.GA31772@zn.tnic>
-References: <20190517172648.GA18164@agluck-desk>
- <20190517174817.GG13482@zn.tnic>
- <20190517180607.GA21710@agluck-desk>
- <20190517193431.GI13482@zn.tnic>
- <SN6PR12MB2639C5427366AC3004C35CC0F80B0@SN6PR12MB2639.namprd12.prod.outlook.com>
- <20190517200225.GK13482@zn.tnic>
- <SN6PR12MB26390759DB43763D3A482918F8010@SN6PR12MB2639.namprd12.prod.outlook.com>
- <20190527232849.GC8209@cz.tnic>
- <SN6PR12MB263998ECCDF1E345FEB0869AF8100@SN6PR12MB2639.namprd12.prod.outlook.com>
- <20190607163723.GG20269@zn.tnic>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20190607163723.GG20269@zn.tnic>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+        "Chocron, Jonathan" <jonnyc@amazon.com>,
+        "Krupnik, Ronen" <ronenk@amazon.com>,
+        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
+        "Hanoch, Uri" <hanochu@amazon.com>
+Date:   Tue, 11 Jun 2019 15:50:40 +1000
+In-Reply-To: <20190608090556.GA32464@zn.tnic>
+References: <1559211329-13098-1-git-send-email-hhhawa@amazon.com>
+         <1559211329-13098-3-git-send-email-hhhawa@amazon.com>
+         <DB09EE2A-7397-4063-B925-66658D0105A5@alien8.de>
+         <bfbc12fb68eea9d8d4cc257c213393fd4e92c33a.camel@amazon.com>
+         <20190531051400.GA2275@cz.tnic>
+         <ce01a2bc-7973-5978-b033-a6bdc61b9d4b@amazon.com>
+         <32431fa2-2285-6c41-ce32-09630205bb54@arm.com>
+         <9a2aaf4a9545ed30568a0613e64bc3f57f047799.camel@kernel.crashing.org>
+         <20190608090556.GA32464@zn.tnic>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.1 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Fri, Jun 07, 2019 at 06:37:23PM +0200, Borislav Petkov wrote:
-> On Fri, Jun 07, 2019 at 02:49:42PM +0000, Ghannam, Yazen wrote:
-> > Would you mind if the function name stayed the same? The reason is
-> > that MCA_CTL is written here, which is the "init" part, and MCA_STATUS
-> > is cleared.
-> >
-> > I can use another name for the check, e.g. __mcheck_cpu_check_banks()
-> > or __mcheck_cpu_banks_check_init().
+On Sat, 2019-06-08 at 11:05 +0200, Borislav Petkov wrote:
+> On Sat, Jun 08, 2019 at 10:16:11AM +1000, Benjamin Herrenschmidt wrote:
+> > Those IP blocks don't need any SW coordination at runtime. The drivers
+> > don't share data nor communicate with each other. There is absolultely
+> > no reason to go down that path.
 > 
-> Nevermind, leave it as is. I'll fix it up ontop. I don't like that
-> "__mcheck_cpu_init" prefixing there which is a mouthful and should
-> simply be "mce_cpu_<do_stuff>" to denote that it is a function which is
-> run on a CPU to setup stuff.
+> Let me set one thing straight: the EDAC "subsystem" if you will - or
+> that pile of code which does error counting and reporting - has its
+> limitations in supporting one EDAC driver per platform. And whenever we
+> have two drivers loadable on a platform, we have to do dirty hacks like
+> 
+>   301375e76432 ("EDAC: Add owner check to the x86 platform drivers")
+> 
+> What that means is, that if you need to call EDAC logging routines or
+> whatnot from two different drivers, there's no locking, no nothing. So
+> it might work or it might set your cat on fire.
 
-So I'm staring at this and I can't say that I'm getting any good ideas:
+Should we fix that then instead ? What are the big issues with adding
+some basic locking ? being called from NMIs ?
 
-I wanna get rid of that ugly "__mcheck_cpu_" prefix but the replacements
-I can think of right now, are crap:
+If the separate drivers operate on distinct counters I don't see a big
+problem there.
 
-* I can call them all "cpu_<bla>" but then they look like generic
-cpu-setup functions which come from kernel/cpu.c or so.
+> IOW, having multiple separate "drivers" or representations of RAS
+> functionality using EDAC facilities is something that hasn't been
+> done. Well, almost. highbank_mc_edac.c and highbank_l2_edac.c is one
+> example but they make sure they don't step on each other's toes by using
+> different EDAC pieces - a device vs a memory controller abstraction.
 
-* I can prefix them with "mce_cpu" but when you do them all, it becomes
-a block of "mce_cpu_" stuff which ain't more readable either. And
-besides, those are static functions so they shouldn't need the prefix.
-But I'd like the naming to denote that they're doing per-CPU setup
-stuff. Which brings me to the previous point.
+That sounds like a reasonable requirement.
 
-So no, don't have a good idea yet...
+> And now the moment all of a sudden you decide you want for those
+> separate "drivers" to synchronize on something, you need to do something
+> hacky like the amd_register_ecc_decoder() thing, for example, because we
+> need to call into the EDAC memory controller driver to decode a DRAM ECC
+> error properly, while the rest of the error types get decoded somewhere
+> else...
+> 
+> Then there comes the issue with code reuse - wouldn't it be great if a
+> memory controller driver can be shared between platform drivers instead of
+> copying it in both?
+> 
+> We already do that - see fsl_ddr_edac.c which gets shared between PPC
+> *and* ARM. drivers/edac/skx_common.c is another example for Intel chips.
+> 
+> Now, if you have a platform with 10 IP blocks which each have RAS
+> functionality, are you saying you'll do 10 different pieces called
+> 
+> <platform_name>_<ip_block#>_edac.c
+> 
+> ?
+> 
+> And if <next_platform> has an old IP block with the old RAS
+> functionality, you load <platform_name>_<ip_block>_edac.c on the new
+> platform too?
 
--- 
-Regards/Gruss,
-    Boris.
+I'n not sure why <platform_name> ...
 
-Good mailing practices for 400: avoid top-posting and trim the reply.
+Anyway, let's get back to the specific case of our Amazon platform here
+since it's a concrete example.
+
+Hanna, can you give us a reasonably exhaustive list of how many such
+"drivers" we'll want in the EDAC subsystem and whether you envision any
+coordination requirement between them or not ?
+
+Cheers,
+Ben.
+
+
+
