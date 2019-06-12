@@ -2,142 +2,266 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D590442F31
-	for <lists+linux-edac@lfdr.de>; Wed, 12 Jun 2019 20:41:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF76E447A0
+	for <lists+linux-edac@lfdr.de>; Thu, 13 Jun 2019 19:01:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726633AbfFLSlW (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Wed, 12 Jun 2019 14:41:22 -0400
-Received: from mx0b-0016f401.pphosted.com ([67.231.156.173]:42084 "EHLO
-        mx0b-0016f401.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728841AbfFLSlV (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>);
-        Wed, 12 Jun 2019 14:41:21 -0400
-Received: from pps.filterd (m0045851.ppops.net [127.0.0.1])
-        by mx0b-0016f401.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x5CIe553010654;
-        Wed, 12 Jun 2019 11:41:13 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
- subject : date : message-id : references : in-reply-to : content-type :
- content-id : content-transfer-encoding : mime-version; s=pfpt0818;
- bh=q69tUFXGTMDPBEuA65P4J8macASm8wq5wpAC3LFkPXw=;
- b=SWCbBqlOuRj6blSWnZjjC9VBX6eaSadMU4F3dfOdmzqBVdCUYQuucsi80051mNPpoR0X
- RteONXNihAwxTK8A+Mdl2EBUpkNeTQpS+KrFnhUjyRRHmNHDeWJT+6EULbh7/pe6iPYk
- VkCfNHYAreweUWNhbJmJFXDUFy2K3lmOzLW8Cn3AnieE3qaQOHcJyKb2pgaxyaZymWrO
- fm1eXwnLqd7+MBjCxwBCkYhmZ2eptAyerDRgcEsJcqXtp7TOqW64GVyQ00xtgxfZMMOJ
- H6oYWuKYFux+CXIsSNDChMxPe6abDg4Z7Ci9L5kAEtqEGP0dlQiYBxmSTSZ15SqoG4OO oA== 
-Received: from sc-exch02.marvell.com ([199.233.58.182])
-        by mx0b-0016f401.pphosted.com with ESMTP id 2t34ngrk97-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
-        Wed, 12 Jun 2019 11:41:13 -0700
-Received: from SC-EXCH04.marvell.com (10.93.176.84) by SC-EXCH02.marvell.com
- (10.93.176.82) with Microsoft SMTP Server (TLS) id 15.0.1367.3; Wed, 12 Jun
- 2019 11:41:11 -0700
-Received: from NAM02-CY1-obe.outbound.protection.outlook.com (104.47.37.51) by
- SC-EXCH04.marvell.com (10.93.176.84) with Microsoft SMTP Server (TLS) id
- 15.0.1367.3 via Frontend Transport; Wed, 12 Jun 2019 11:41:11 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=marvell.onmicrosoft.com; s=selector2-marvell-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=q69tUFXGTMDPBEuA65P4J8macASm8wq5wpAC3LFkPXw=;
- b=p86ox96eoceuLClEvLS2F2HuTNUnoqYN+exLCe6i+8LaFGViSw8jCjjEng8D5W6AiMTl7mOK4xJoqrbbEfJ7eVx1BY4+aD1A0LeRXXdmH80FExfD3rjJe8DgbEWYYr0Mzuq1LeEYDDXR42GXEVBzq6kHtqfhQknrupm1zzN+E/s=
-Received: from MN2PR18MB3408.namprd18.prod.outlook.com (10.255.238.217) by
- MN2PR18MB3087.namprd18.prod.outlook.com (20.179.20.25) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.1987.10; Wed, 12 Jun 2019 18:41:06 +0000
-Received: from MN2PR18MB3408.namprd18.prod.outlook.com
- ([fe80::d3:794c:1b94:cf3]) by MN2PR18MB3408.namprd18.prod.outlook.com
- ([fe80::d3:794c:1b94:cf3%4]) with mapi id 15.20.1965.017; Wed, 12 Jun 2019
- 18:41:06 +0000
-From:   Robert Richter <rrichter@marvell.com>
-To:     James Morse <james.morse@arm.com>
-CC:     Borislav Petkov <bp@alien8.de>, Tony Luck <tony.luck@intel.com>,
-        "Mauro Carvalho Chehab" <mchehab@kernel.org>,
+        id S1730181AbfFMRA6 (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Thu, 13 Jun 2019 13:00:58 -0400
+Received: from gate.crashing.org ([63.228.1.57]:42212 "EHLO gate.crashing.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729754AbfFLXyx (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Wed, 12 Jun 2019 19:54:53 -0400
+Received: from localhost (localhost.localdomain [127.0.0.1])
+        by gate.crashing.org (8.14.1/8.14.1) with ESMTP id x5CNsIen016686;
+        Wed, 12 Jun 2019 18:54:19 -0500
+Message-ID: <2a53690aa81a406b9a6290f70e47470d0f698f00.camel@kernel.crashing.org>
+Subject: Re: [PATCH 2/2] edac: add support for Amazon's Annapurna Labs EDAC
+From:   Benjamin Herrenschmidt <benh@kernel.crashing.org>
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     James Morse <james.morse@arm.com>,
+        "Hawa, Hanna" <hhhawa@amazon.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "Woodhouse, David" <dwmw@amazon.co.uk>,
+        "paulmck@linux.ibm.com" <paulmck@linux.ibm.com>,
+        "mchehab@kernel.org" <mchehab@kernel.org>,
+        "mark.rutland@arm.com" <mark.rutland@arm.com>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "nicolas.ferre@microchip.com" <nicolas.ferre@microchip.com>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "Shenhar, Talel" <talel@amazon.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Chocron, Jonathan" <jonnyc@amazon.com>,
+        "Krupnik, Ronen" <ronenk@amazon.com>,
         "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 12/21] EDAC, ghes: Add support for legacy API counters
-Thread-Topic: [PATCH 12/21] EDAC, ghes: Add support for legacy API counters
-Thread-Index: AQHVIU5kX5MqKG3rJEqHTaHdhQcplw==
-Date:   Wed, 12 Jun 2019 18:41:06 +0000
-Message-ID: <20190612184058.2plbdweri6bjmppr@rric.localdomain>
-References: <20190529084344.28562-1-rrichter@marvell.com>
- <20190529084344.28562-13-rrichter@marvell.com>
- <92eda11f-dad9-bb2b-3a87-80b6c8d8e228@arm.com>
-In-Reply-To: <92eda11f-dad9-bb2b-3a87-80b6c8d8e228@arm.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-clientproxiedby: HE1P189CA0027.EURP189.PROD.OUTLOOK.COM (2603:10a6:7:53::40)
- To MN2PR18MB3408.namprd18.prod.outlook.com (2603:10b6:208:16c::25)
-x-ms-exchange-messagesentrepresentingtype: 1
-x-originating-ip: [92.254.182.202]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: b267bb12-b4b4-4cde-e4cc-08d6ef658723
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(1401327)(2017052603328)(7193020);SRVR:MN2PR18MB3087;
-x-ms-traffictypediagnostic: MN2PR18MB3087:
-x-microsoft-antispam-prvs: <MN2PR18MB3087AF35AA34273B31632F07D9EC0@MN2PR18MB3087.namprd18.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:8882;
-x-forefront-prvs: 0066D63CE6
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(366004)(396003)(346002)(376002)(39860400002)(136003)(199004)(189003)(9686003)(6512007)(71190400001)(71200400001)(6436002)(7736002)(305945005)(66476007)(6486002)(66556008)(6916009)(229853002)(66946007)(64756008)(73956011)(476003)(26005)(186003)(11346002)(446003)(486006)(6116002)(3846002)(66446008)(2906002)(81156014)(4326008)(81166006)(8936002)(25786009)(53936002)(6246003)(66066001)(86362001)(102836004)(68736007)(99286004)(256004)(52116002)(1076003)(14454004)(6506007)(8676002)(316002)(5660300002)(76176011)(53546011)(54906003)(386003)(478600001);DIR:OUT;SFP:1101;SCL:1;SRVR:MN2PR18MB3087;H:MN2PR18MB3408.namprd18.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
-received-spf: None (protection.outlook.com: marvell.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: di3jjJa9CtGR/OeWpQeP1vXQeZa+w+q+s4r6XF7hAwm4D5havUBznWTMSJLjLAk14qk9wQ3Q3wS+adPBn3XKbba5r6v++qVQ3Ic8vCpX1BLjbeha/ObIhtmJOi9Ir6BZEknUt5eAr7ilaFKwE+pSdyWUomCHIm3Bp2j0vjSHvEHkTachCKs3xc84cDfVMs/IY84pm9rs11Rc+i/4uT73Nz9+7J5pHyWSDaf7bT2pLQrY9cA0DkawOv7vfWjlQ5trOPu+CyoGH6d4g5jlmjhwA30W7TUPFRNxIympq5w/WAOoGz7hYiKIE1+RxxtZoeetzm1PAOrUyVSPL7Z4GkzuKiDVYTkWgecnGztS5eD83vHjRKMSpUO9t4eIlVXFPJn5i4s3jxbxUdpms9UkYGA8uwQvrVaXBGkj/FJPNxKo/Gc=
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <D67A621340DCFF4590CB9B3CBC5583E0@namprd18.prod.outlook.com>
-Content-Transfer-Encoding: quoted-printable
-MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-Network-Message-Id: b267bb12-b4b4-4cde-e4cc-08d6ef658723
-X-MS-Exchange-CrossTenant-originalarrivaltime: 12 Jun 2019 18:41:06.2163
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 70e1fb47-1155-421d-87fc-2e58f638b6e0
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: rrichter@marvell.com
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR18MB3087
-X-OriginatorOrg: marvell.com
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-06-12_11:,,
- signatures=0
+        "Hanoch, Uri" <hanochu@amazon.com>
+Date:   Thu, 13 Jun 2019 09:54:18 +1000
+In-Reply-To: <20190612104238.GG32652@zn.tnic>
+References: <ce01a2bc-7973-5978-b033-a6bdc61b9d4b@amazon.com>
+         <32431fa2-2285-6c41-ce32-09630205bb54@arm.com>
+         <9a2aaf4a9545ed30568a0613e64bc3f57f047799.camel@kernel.crashing.org>
+         <20190608090556.GA32464@zn.tnic>
+         <1ae5e7a3464f9d8e16b112cd371957ea20472864.camel@kernel.crashing.org>
+         <68446361fd1e742b284555b96b638fe6b5218b8b.camel@kernel.crashing.org>
+         <20190611115651.GD31772@zn.tnic>
+         <6df5a17bb1c900dc69b991171e55632f40d9426f.camel@kernel.crashing.org>
+         <20190612034813.GA32652@zn.tnic>
+         <08bd58dc0045670223f8d3bbc8be774505bd3ddf.camel@kernel.crashing.org>
+         <20190612104238.GG32652@zn.tnic>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.1 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On 29.05.19 16:13:02, James Morse wrote:
-> On 29/05/2019 09:44, Robert Richter wrote:
-> > The ghes driver is not able yet to count legacy API counters in sysfs,
-> > e.g.:
-> >=20
-> >  /sys/devices/system/edac/mc/mc0/csrow2/ce_count
-> >  /sys/devices/system/edac/mc/mc0/csrow2/ch0_ce_count
-> >  /sys/devices/system/edac/mc/mc0/csrow2/ch1_ce_count
-> >=20
-> > Make counting csrows/channels generic so that the ghes driver can use
-> > it too.
->=20
-> What for?
+On Wed, 2019-06-12 at 12:42 +0200, Borislav Petkov wrote:
+> On Wed, Jun 12, 2019 at 06:29:26PM +1000, Benjamin Herrenschmidt wrote:
+> > I tend to disagree here. We've been down that rabbit hole in the past
+> > and we (Linux in general) are trying to move away from that sort of
+> > "platform" overarching driver as much as possible.
+> 
+> Why is a "platform" driver like that so bad?
 
-With EDAC_LEGACY_SYSFS enabled those counters are exposed to sysfs,
-but the numbers are wrong (all zero).
+It tends to be a slippery slope. Also in the ARM world, most SoC tend
+to re-use IP blocks, so you get a lot of code duplication, bug fixed in
+one and not the other etc...
 
-> Is this for an arm64 system? Surely we don't have any systems that used t=
-o work with these
-> legacy counters. Aren't they legacy because we want new software to stop =
-using them!
+I don't necessarily mind having a "platform" component that handles
+policies in case where userspace is really not an option, but it
+shouldn't be doing it by containing the actual drivers for the
+individual IP block error collection. It could however "use" them via
+in-kernel APIs.
 
-The option is to support legacy userland. If we want to provide a
-similar "user experience" as for x86 the counters should be correct.
-Of course it is not a real mapping to csrows, but it makes that i/f
-work.
+> > This is a policy. It should either belong to userspace,
+> 
+> For some errors you can't do userspace as it is too late for it - you
+> wanna address that before you return to it.
 
-In any case, this patch cleans up code as old API's counter code is
-isolated and moved to common code. Making the counter's work for ghes
-is actually a side-effect here. The cleanup is a prerequisit for
-follow on patches.
+Those are rare. At the end of the day, if you have a UE on memory, it's
+a matter of luck. It could have hit your kernel as well. You get lucky
+it only hit userspace but you can't make a general statement you "can't
+trust userspace".
 
--Robert
+Cache errors tend to be the kind that tend to have to be addressed
+immediately, but even then, that's often local to some architecture
+machine check handling, not even in EDAC.
 
->=20
->=20
-> Thanks,
->=20
-> James
+Do you have a concrete example of a type of error that
+
+ - Must be addressed in the kernel
+
+ - Relies on coordinating drivers for more than one IP block
+
+?
+
+Even then though, my argument would be that the right way to do that,
+assuming that's even platform specific, would be to have then the
+"platform RAS driver" just layout on top of the individual EDAC drivers
+and consume their output. Not contain the drivers themselves.
+
+> > or be in some generic RAS code in the kernel, there's no reason why
+> > these can't be abstracted.
+> 
+> Yes, we have this drivers/ras/cec.c thing which collects correctable
+> DRAM errors on x86. :-)
+
+Using machine checks, not EDAC. It's completely orghogonal at this
+point at least.
+
+That said, it would make sense to have an EDAC API to match that
+address back into a DIMM location and give user an informational
+message about failures happening on that DIMM. But that could be done
+via core EDAC MC APIs.
+
+Here too, no need for having an over-arching platform driver.
+
+> > Also in your specific example, it could be entirely local to the MC
+> > EDAC / DRAM controller path, we could have a generic way for EDAC to
+> > advertise that a given memory channel is giving lots of errors and
+> > have memory controller drivers listen to it but usually the EDAC MC
+> > driver *is* the only thing that looks like a MC driver to begin with,
+> > 
+> > so again, pretty much no overlap with L1/L2 caches RAS or PCIe RAS
+> > etc...
+> > 
+> > Unless I'm mistaken, that amd64 EDAC is just an MC one... but I only
+> > had a cursory glance at the code.
+> 
+> EDAC has historically been concentrating on DRAM errors as that is
+> what people have been paying attention to. But it isn't limited to
+> DRAM errors - there is some basic PCI errors functionality behind
+> edac_pci_create_generic_ctl() which polls for PCI parity errors.
+
+Right, somebody whacked the PCI stuff in the same driver. So what ?
+There's no coordination here not particular reason it has to be so.
+Those PCI bits could have moved to a sepatate driver easily. Maybe they
+didn't bcs they didn't have a good way to probe the two separately via
+ACPI ? I don't know. But it doesn't matter nor does it affect the
+situation with ARM.
+
+That said, x86 platforms tend to be less diverse in their selection of
+IP blocks, and tend to have more integrated chipsets where the
+distinction between the memory controller and PCI may be a bit less
+obvious. This isn't the case on ARM.
+
+I still think that doesn't prove or disprove anything.
+
+> So it still makes sense to me to have a single driver which takes care
+> of all things RAS for a platform. You just load one driver and it does
+> it all, including recovery actions.
+
+Why ? Because one or two historical drivers mix MC and PCI then "it
+makes sense" to do that for everybody ?
+
+And then you have 20 platforms and 20 drivers, with 50% or more code
+duplication, bugs fixed in one and not the other, gratuituous behaviour
+differences to confuse users etc... No. that doesn't make sense.
+
+> > Maybe because what you are promoting might not be the right path
+> > here... seriously, there's a reason why all vendors want to go down
+> > that path and in this case I don't think they are wrong.
+> > 
+> > This isn't about just another ARM vendor, in fact I'm rather new to the
+> > whole ARM thing, I used to maintain arch/powerpc :-)
+> 
+> What happened? :-P
+
+Long story :-) I handed it over to mpe a while ago, I left IBM earlire
+this year.
+
+> > The point is what you are trying to push for goes against everything
+> > we've been trying to do in Linux when it comes to splitting drivers to
+> > individual IP blocks.
+> 
+> Please do explain why is a driver-per-IP-block better and please don't
+> give me the DT argument - I've heard that one more than enough now.
+
+I have no idea what "the DT argument" is, and that's from the guy who
+created the FDT....
+
+I have difficulties understanding how you cannot see that having re-
+usable single drivers for a single piece of HW makes sense. If anything
+in term of avoiding duplication, bitrot, bugs being fixed in some and
+not others, etc etc... It also means more eyes on a given piece of code
+which is a good thing.
+
+Also you "have heard more than enough" is again a sign that a whole lot
+of people are trying to tell you something that you seem to refuse to
+hear. Whatever that "DT argument" is, did you just ignore it or had
+some good and solid arguments of your own to refute it ?
+
+> Like, for example, how do you deal with the case where you have a
+> platform which has a bunch of IP blocks with RAS functionality and they
+> all have a separate driver. Now, you want to do recovery and failover
+> actions depending on certain error count from a certain group of IP
+> blocks.
+>
+> You export those counts through sysfs from the separate drivers and you
+> have a userspace agent doing that policy?
+
+So mostly yes. Works fine for POWER9 :-) That said, you'll have to be
+more precise, because so far this is very hypothetical.
+
+> That cannot always fly because recovery actions for some errors need to
+> happen before we return to userspace - i.e., memory-failure.c types of
+> scenarios.
+
+How come ? Most memory failure type scenario tend to be handled via
+MCEs anyway and don't go through EDAC. Additionally, if they do, that
+can generally be constrained to the MC driver. But even then, what kind
+should be handled "before we return to userspace" ?
+
+However, if we want to create some overall policy then we should create
+some in-kernel APIs so that your magic "platform driver" can talk to
+the indidual EDAC drivers (or get notifed by them).
+
+Mangling everything together is definitely NOT the way to go here.
+
+However, what I see above is a lot of hand waving and hypothetical
+examples, nothing really concrete.
+
+> You add another "counting" layer which is yet another driver which
+> collects those errors and applies policy actions?
+
+No. Individual drivers count and report. Not sure what you mean here.
+
+> But then that layer needs to be made generic enough to be shared by the
+> other EDAC IP block drivers, otherwise every platform would need its own
+> counter layer driver. Which basically puts the problem somewhere else
+> but doesn't make it go away.
+
+Not sure what you mean by a "counter layer driver"...
+
+> Another way I'm not thinking of at the moment?
+> 
+> A single driver solves that problem as it has all the required
+> information in one place and deals with it then and there.
+
+We could also have the entire BSP of a platform as one giant driver
+that does all the RAS, netowrking, serial, and video .. why not ? That
+would make your policies a lot easier :-) Not seriously I really fail
+to see your points, and it looks like I'm not the only one.
+
+> I hear you that platform drivers are frowned upon but connecting it all
+> in one place for such purposes makes sense to me in this particular
+> case.
+
+What makes some amount of sense *if necessary* (and I yet have to be
+convinced it is) is to have the platform policy driver use internal
+kernel APIs to communicate with the individual IP block drivers via
+something reasonably standard.
+
+But even then, I yet have to see an actual need for this.
+
+> Btw, what is your final goal with these drivers? Dump decoded error
+> information in dmesg? Or something more sophisticated?
+
+I'll let Hanna respond to that one.
+
+Cheers,
+Ben.
+
+
