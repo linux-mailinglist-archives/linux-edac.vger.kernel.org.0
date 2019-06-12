@@ -2,118 +2,142 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 51E0D41B35
-	for <lists+linux-edac@lfdr.de>; Wed, 12 Jun 2019 06:34:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 666AA41F0F
+	for <lists+linux-edac@lfdr.de>; Wed, 12 Jun 2019 10:29:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729674AbfFLEeS (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Wed, 12 Jun 2019 00:34:18 -0400
-Received: from mail.skyhub.de ([5.9.137.197]:58108 "EHLO mail.skyhub.de"
+        id S2436862AbfFLI3y (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Wed, 12 Jun 2019 04:29:54 -0400
+Received: from gate.crashing.org ([63.228.1.57]:59839 "EHLO gate.crashing.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725280AbfFLEeS (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Wed, 12 Jun 2019 00:34:18 -0400
-Received: from zn.tnic (p200300EC2F0A6800EC6A653BF86B372A.dip0.t-ipconnect.de [IPv6:2003:ec:2f0a:6800:ec6a:653b:f86b:372a])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id CD5081EC0985;
-        Wed, 12 Jun 2019 06:34:16 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1560314057;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=4wdmF5v70+FZcs+sqWKM5Lxnhk+mJCMfROaaOTNV2m4=;
-        b=UgQIB1EfweGipI0w2l5z97jLULK08BUZYAC60VO3S1KffrkBafh9dYKpbnctWu6zPtnVCA
-        yxj76vaTdQeyMULb4w6xrazlDPVdbKoP9nldf8CvlvS5KbKpzo6+LSoNFubyMHVgJ8jzON
-        Ml4BRB4lZu090xlQPlQrWjOJOybRunU=
-Date:   Wed, 12 Jun 2019 06:34:10 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     James Morse <james.morse@arm.com>
-Cc:     linux-edac@vger.kernel.org,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Robert Richter <rrichter@marvell.com>,
-        Toshi Kani <toshi.kani@hpe.com>
-Subject: Re: [PATCH] EDAC, ghes: Fix grain calculation
-Message-ID: <20190612043410.GE32652@zn.tnic>
-References: <20190529152232.187580-1-james.morse@arm.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20190529152232.187580-1-james.morse@arm.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+        id S2405127AbfFLI3y (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Wed, 12 Jun 2019 04:29:54 -0400
+Received: from localhost (localhost.localdomain [127.0.0.1])
+        by gate.crashing.org (8.14.1/8.14.1) with ESMTP id x5C8TQFV008979;
+        Wed, 12 Jun 2019 03:29:28 -0500
+Message-ID: <08bd58dc0045670223f8d3bbc8be774505bd3ddf.camel@kernel.crashing.org>
+Subject: Re: [PATCH 2/2] edac: add support for Amazon's Annapurna Labs EDAC
+From:   Benjamin Herrenschmidt <benh@kernel.crashing.org>
+To:     Borislav Petkov <bp@alien8.de>, James Morse <james.morse@arm.com>
+Cc:     "Hawa, Hanna" <hhhawa@amazon.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "Woodhouse, David" <dwmw@amazon.co.uk>,
+        "paulmck@linux.ibm.com" <paulmck@linux.ibm.com>,
+        "mchehab@kernel.org" <mchehab@kernel.org>,
+        "mark.rutland@arm.com" <mark.rutland@arm.com>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "nicolas.ferre@microchip.com" <nicolas.ferre@microchip.com>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "Shenhar, Talel" <talel@amazon.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Chocron, Jonathan" <jonnyc@amazon.com>,
+        "Krupnik, Ronen" <ronenk@amazon.com>,
+        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
+        "Hanoch, Uri" <hanochu@amazon.com>
+Date:   Wed, 12 Jun 2019 18:29:26 +1000
+In-Reply-To: <20190612034813.GA32652@zn.tnic>
+References: <bfbc12fb68eea9d8d4cc257c213393fd4e92c33a.camel@amazon.com>
+         <20190531051400.GA2275@cz.tnic>
+         <ce01a2bc-7973-5978-b033-a6bdc61b9d4b@amazon.com>
+         <32431fa2-2285-6c41-ce32-09630205bb54@arm.com>
+         <9a2aaf4a9545ed30568a0613e64bc3f57f047799.camel@kernel.crashing.org>
+         <20190608090556.GA32464@zn.tnic>
+         <1ae5e7a3464f9d8e16b112cd371957ea20472864.camel@kernel.crashing.org>
+         <68446361fd1e742b284555b96b638fe6b5218b8b.camel@kernel.crashing.org>
+         <20190611115651.GD31772@zn.tnic>
+         <6df5a17bb1c900dc69b991171e55632f40d9426f.camel@kernel.crashing.org>
+         <20190612034813.GA32652@zn.tnic>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.1 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Wed, May 29, 2019 at 04:22:32PM +0100, James Morse wrote:
-> ghes_edac_report_mem_error() attempts to calculate the 'grain' or
-> granule affected by the error from the firmware-provided 'physical address
-> mask'. This mask tells us which bits of the physical address are valid.
+On Wed, 2019-06-12 at 05:48 +0200, Borislav Petkov wrote:
+> On Wed, Jun 12, 2019 at 08:25:52AM +1000, Benjamin Herrenschmidt wrote:
+> > Yes, we would be in a world of pain already if tracepoints couldn't
+> > handle concurrency :-)
 > 
-> The current calculation:
-> | e->grain = ~(mem_err->physical_addr_mask & ~PAGE_MASK);
-> will always cause the top bits to be set as they are cleared by &,
-> then set again by ~. For a hypervisor reporting its page-size as the
-> region affected by the error:
-> | {1}[Hardware Error]:   physical_address: 0x00000000deadbeef
-> | {1}[Hardware Error]:   physical_address_mask: 0xfffffffffffff000
-> | {1}[Hardware Error]:   error_type: 6, master abort
-> | EDAC MC0: 1 CE Master abort on unknown label ( page:0xdead offset:0xbeef
-> | grain:-61441 syndrome:0x0 - status(0x0000000000000001): reserved)
-> 
-> Here the grain has been miscalculated as the hypervisor reported a 4K
-> size granule, due to its page size, whereas the guest kernel uses 64K.
-> This gives us e->grain of 0xffffffffffff0fff
-> 
-> Fix this, calculating grain_bits directly from ~physical_address_mask,
-> and setting e->grain from that. In the same example we now get:
-> | EDAC MC0: 1 CE Master abort on unknown label ( page:0xdead offset:0xbeef
-> | grain:4096 syndrome:0x0 - status(0x0000000000000001): reserved)
-> 
-> Cc: Robert Richter <rrichter@marvell.com>
-> Cc: Toshi Kani <toshi.kani@hpe.com>
-> Signed-off-by: James Morse <james.morse@arm.com>
-> ---
-> This has always been broken, so I suspect no-one cares about this, it was
-> added by:
-> Fixes: f04c62a7036a ("ghes_edac: add support for reporting errors via EDAC")
-> 
-> I've only tested this with firmware I've written.
-> 
->  drivers/edac/ghes_edac.c | 9 +++++----
->  1 file changed, 5 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/edac/ghes_edac.c b/drivers/edac/ghes_edac.c
-> index 49396bf6ad88..fac96ff45b7e 100644
-> --- a/drivers/edac/ghes_edac.c
-> +++ b/drivers/edac/ghes_edac.c
-> @@ -202,8 +202,8 @@ void ghes_edac_report_mem_error(int sev, struct cper_sec_mem_err *mem_err)
->  	struct mem_ctl_info *mci;
->  	struct ghes_edac_pvt *pvt = ghes_pvt;
->  	unsigned long flags;
-> +	u8 grain_bits = 0;
->  	char *p;
-> -	u8 grain_bits;
->  
->  	if (!pvt)
->  		return;
-> @@ -318,8 +318,10 @@ void ghes_edac_report_mem_error(int sev, struct cper_sec_mem_err *mem_err)
->  	}
->  
->  	/* Error grain */
-> -	if (mem_err->validation_bits & CPER_MEM_VALID_PA_MASK)
-> -		e->grain = ~(mem_err->physical_addr_mask & ~PAGE_MASK);
-> +	if (mem_err->validation_bits & CPER_MEM_VALID_PA_MASK) {
-> +		grain_bits = fls_long(~mem_err->physical_addr_mask);
-> +		e->grain = 1UL<<grain_bits;
+> Right, lockless buffer and the whole shebang :)
 
-Do we need to set that e->grain at all?
+Yup.
 
-I mean, we set it now so that grain_bits can be computed but since
-you're doing that directly...
+> > Sort-of... I still don't see a race in what we propose but I might be
+> > missing something subtle. We are talking about two drivers for two
+> > different IP blocks updating different counters etc...
+> 
+> If you do only *that* you should be fine. That should technically be ok.
 
--- 
-Regards/Gruss,
-    Boris.
+Yes, that' the point.
 
-Good mailing practices for 400: avoid top-posting and trim the reply.
+> I still think, though, that the sensible thing to do is have one
+> platform driver which concentrates all RAS functionality. 
+
+I tend to disagree here. We've been down that rabbit hole in the past
+and we (Linux in general) are trying to move away from that sort of
+"platform" overarching driver as much as possible.
+
+> It is the
+> more sensible design and takes care of potential EDAC shortcomings and
+> the need to communicate between the different logging functionality,
+> as in, for example, "I had so many errors, lemme go and increase DRAM
+> scrubber frequency." For example. And all the other advantages of having
+> everything in a single driver.
+
+This is a policy. It should either belong to userspace, or be in some
+generic RAS code in the kernel, there's no reason why these can't be
+abstracted. Also in your specific example, it could be entirely local
+to the MC EDAC / DRAM controller path, we could have a generic way for
+EDAC to advertise that a given memory channel is giving lots of errors
+and have memory controller drivers listen to it but usually the EDAC MC
+driver *is* the only thing that looks like a MC driver to begin with,
+so again, pretty much no overlap with L1/L2 caches RAS or PCIe RAS
+etc...
+
+> And x86 already does that - we even have a single driver for all AMD
+> platforms - amd64_edac. Intel has a couple but there's still a lot of
+> sharing.
+
+Unless I'm mistaken, that amd64 EDAC is just an MC one... but I only
+had a cursory glance at the code.
+
+> But apparently ARM folks want to have one driver per IP block. And we
+> have this discussion each time a new vendor decides to upstream its
+> driver. And there's no shortage of vendors in ARM-land trying to do
+> that.
+
+For good reasons :-)
+
+> James and I have tried to come up with a nice scheme to make that work
+> on ARM and he has an example prototype here:
+> 
+> http://www.linux-arm.org/git?p=linux-jm.git;a=shortlog;h=refs/heads/edac_dummy/v1
+>
+> to show how it could look like.
+> 
+> But I'm slowly growing a serious aversion against having this very same
+> discussion each time an ARM vendor sends a driver. And that happens
+> pretty often nowadays.
+
+Maybe because what you are promoting might not be the right path
+here... seriously, there's a reason why all vendors want to go down
+that path and in this case I don't think they are wrong.
+
+This isn't about just another ARM vendor, in fact I'm rather new to the
+whole ARM thing, I used to maintain arch/powerpc :-) The point is what
+you are trying to push for goes against everything we've been trying to
+do in Linux when it comes to splitting drivers to individual IP blocks.
+
+Yes, in *some* cases coordination will be needed in which case there
+are ways to do that that don't necessarily involve matching a driver to
+the root of the DT, and a pseudo-device is in fact a very reasonable
+way to do it, it was a common practice in IEEE1275 before I invented
+the FDT, and we do that for a number of other things already.
+
+Cheers,
+Ben.
+
+
