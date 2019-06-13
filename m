@@ -2,27 +2,27 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7548144227
-	for <lists+linux-edac@lfdr.de>; Thu, 13 Jun 2019 18:20:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7617E44360
+	for <lists+linux-edac@lfdr.de>; Thu, 13 Jun 2019 18:30:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388879AbfFMQT5 (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Thu, 13 Jun 2019 12:19:57 -0400
-Received: from mail.kernel.org ([198.145.29.99]:57078 "EHLO mail.kernel.org"
+        id S1730937AbfFMQ3L (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Thu, 13 Jun 2019 12:29:11 -0400
+Received: from mail.kernel.org ([198.145.29.99]:53212 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731086AbfFMIje (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Thu, 13 Jun 2019 04:39:34 -0400
+        id S1730933AbfFMIf1 (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Thu, 13 Jun 2019 04:35:27 -0400
 Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 94BF321479;
-        Thu, 13 Jun 2019 08:39:33 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 113D120B7C;
+        Thu, 13 Jun 2019 08:35:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1560415174;
-        bh=xHK2yznNvP7abV7OQvqrwN/hV3EsN1/XtGCm2HbYo8c=;
+        s=default; t=1560414926;
+        bh=r/cQdU2vJehPtLKTUxVZzWc4VnWDJsWbAZXWsJZuhBw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=lkutTp2URsBZM1H1R1YxN7hr6dCGBQucHjHK1gt68BaY+M1PzI1kcuBpVn5OnRnsg
-         nRg590R7zeoeCdzy/Czc0+HniYXH1wwHzosuGH2Jm9xS0qgVuWoCj4Mzq3mBsh0ctL
-         fMD1EZX55ciriPehBfqyjuBLDMqxC12AqeIpkXSE=
+        b=EFa+4WGpWJc/koTHSq43Y2epWdWtqq6OPfQdBjI93XPa0fCROqOA0ZcftSPb9/zv+
+         OrrYvPIsQ2VQXCzdqxf96yCxTdvLucUspu0vkq8t17ozG45wbShSQeL1jox4WczzNV
+         QArYef2uYKZavSA/CedT2pY32wqzpMIgNdffaUck=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -33,12 +33,12 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         linux-edac <linux-edac@vger.kernel.org>, linuxppc-dev@ozlabs.org,
         morbidrsa@gmail.com, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 029/118] EDAC/mpc85xx: Prevent building as a module
-Date:   Thu, 13 Jun 2019 10:32:47 +0200
-Message-Id: <20190613075645.207725772@linuxfoundation.org>
+Subject: [PATCH 4.14 23/81] EDAC/mpc85xx: Prevent building as a module
+Date:   Thu, 13 Jun 2019 10:33:06 +0200
+Message-Id: <20190613075650.845289943@linuxfoundation.org>
 X-Mailer: git-send-email 2.22.0
-In-Reply-To: <20190613075643.642092651@linuxfoundation.org>
-References: <20190613075643.642092651@linuxfoundation.org>
+In-Reply-To: <20190613075649.074682929@linuxfoundation.org>
+References: <20190613075649.074682929@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -83,10 +83,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/edac/Kconfig b/drivers/edac/Kconfig
-index 57304b2e989f..b00cc03ad6b6 100644
+index 96afb2aeed18..aaaa8ce8d3fd 100644
 --- a/drivers/edac/Kconfig
 +++ b/drivers/edac/Kconfig
-@@ -250,8 +250,8 @@ config EDAC_PND2
+@@ -246,8 +246,8 @@ config EDAC_PND2
  	  micro-server but may appear on others in the future.
  
  config EDAC_MPC85XX
