@@ -2,103 +2,89 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7617E44360
-	for <lists+linux-edac@lfdr.de>; Thu, 13 Jun 2019 18:30:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 65EA2438DD
+	for <lists+linux-edac@lfdr.de>; Thu, 13 Jun 2019 17:09:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730937AbfFMQ3L (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Thu, 13 Jun 2019 12:29:11 -0400
-Received: from mail.kernel.org ([198.145.29.99]:53212 "EHLO mail.kernel.org"
+        id S1732522AbfFMPJK (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Thu, 13 Jun 2019 11:09:10 -0400
+Received: from mail.skyhub.de ([5.9.137.197]:51706 "EHLO mail.skyhub.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730933AbfFMIf1 (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Thu, 13 Jun 2019 04:35:27 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        id S1732365AbfFMN6d (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Thu, 13 Jun 2019 09:58:33 -0400
+Received: from zn.tnic (p200300EC2F06D50021762B7834B766B8.dip0.t-ipconnect.de [IPv6:2003:ec:2f06:d500:2176:2b78:34b7:66b8])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 113D120B7C;
-        Thu, 13 Jun 2019 08:35:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1560414926;
-        bh=r/cQdU2vJehPtLKTUxVZzWc4VnWDJsWbAZXWsJZuhBw=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=EFa+4WGpWJc/koTHSq43Y2epWdWtqq6OPfQdBjI93XPa0fCROqOA0ZcftSPb9/zv+
-         OrrYvPIsQ2VQXCzdqxf96yCxTdvLucUspu0vkq8t17ozG45wbShSQeL1jox4WczzNV
-         QArYef2uYKZavSA/CedT2pY32wqzpMIgNdffaUck=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Michael Ellerman <mpe@ellerman.id.au>,
-        Borislav Petkov <bp@suse.de>,
-        Johannes Thumshirn <jth@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-edac <linux-edac@vger.kernel.org>, linuxppc-dev@ozlabs.org,
-        morbidrsa@gmail.com, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 23/81] EDAC/mpc85xx: Prevent building as a module
-Date:   Thu, 13 Jun 2019 10:33:06 +0200
-Message-Id: <20190613075650.845289943@linuxfoundation.org>
-X-Mailer: git-send-email 2.22.0
-In-Reply-To: <20190613075649.074682929@linuxfoundation.org>
-References: <20190613075649.074682929@linuxfoundation.org>
-User-Agent: quilt/0.66
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 24D161EC0235;
+        Thu, 13 Jun 2019 15:58:31 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1560434311;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=Maz4qhAv7CzEe1mERK2XkKpnUOaeRk1rwNJ3zxGQF7I=;
+        b=N7WXUKUIVx0KgZifoTbCmMOS7qM3sPGf7X/zw2AGmVlrIytZIXqgLLPwJHp3m0cCWg4JHi
+        nb53PKNfplx9ToP2i9o/CXOlul4FRsMK1FcqRDiH11isM00a4NU99UpEom0qVpZyXq3aL9
+        bVXYL6LJaKzUkImk+V2fOArCJJkqHuE=
+Date:   Thu, 13 Jun 2019 15:58:22 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     "Ghannam, Yazen" <Yazen.Ghannam@amd.com>
+Cc:     "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 1/8] EDAC/amd64: Fix number of DIMMs and Chip Select
+ bases/masks on Family17h
+Message-ID: <20190613135822.GC11598@zn.tnic>
+References: <20190531234501.32826-1-Yazen.Ghannam@amd.com>
+ <20190531234501.32826-2-Yazen.Ghannam@amd.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20190531234501.32826-2-Yazen.Ghannam@amd.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-[ Upstream commit 2b8358a951b1e2a534a54924cd8245e58a1c5fb8 ]
+On Fri, May 31, 2019 at 11:45:11PM +0000, Ghannam, Yazen wrote:
+> From: Yazen Ghannam <yazen.ghannam@amd.com>
+> 
+> ...because AMD Family 17h systems support 2 DIMMs, 4 CS bases, and 2 CS
+> masks per channel.
+> 
+> Fixes: 07ed82ef93d6 ("EDAC, amd64: Add Fam17h debug output")
+> Signed-off-by: Yazen Ghannam <yazen.ghannam@amd.com>
+> ---
+>  drivers/edac/amd64_edac.c | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/edac/amd64_edac.c b/drivers/edac/amd64_edac.c
+> index 873437be86d9..9fa2f205f05c 100644
+> --- a/drivers/edac/amd64_edac.c
+> +++ b/drivers/edac/amd64_edac.c
+> @@ -810,7 +810,7 @@ static void debug_display_dimm_sizes_df(struct amd64_pvt *pvt, u8 ctrl)
+>  
+>  	edac_printk(KERN_DEBUG, EDAC_MC, "UMC%d chip selects:\n", ctrl);
+>  
+> -	for (dimm = 0; dimm < 4; dimm++) {
+> +	for (dimm = 0; dimm < 2; dimm++) {
+>  		size0 = 0;
+>  		cs0 = dimm * 2;
+>  
+> @@ -942,6 +942,9 @@ static void prep_chip_selects(struct amd64_pvt *pvt)
+>  	} else if (pvt->fam == 0x15 && pvt->model == 0x30) {
+>  		pvt->csels[0].b_cnt = pvt->csels[1].b_cnt = 4;
+>  		pvt->csels[0].m_cnt = pvt->csels[1].m_cnt = 2;
+> +	} else if (pvt->fam >= 0x17) {
+> +		pvt->csels[0].b_cnt = pvt->csels[1].b_cnt = 4;
+> +		pvt->csels[0].m_cnt = pvt->csels[1].m_cnt = 2;
 
-The mpc85xx EDAC driver can be configured as a module but then fails to
-build because it uses two unexported symbols:
+I guess it is about time that function gets turned into a switch-case so
+that the assignment lines do not get duplicated.
 
-  ERROR: ".pci_find_hose_for_OF_device" [drivers/edac/mpc85xx_edac_mod.ko] undefined!
-  ERROR: ".early_find_capability" [drivers/edac/mpc85xx_edac_mod.ko] undefined!
+Thx.
 
-We don't want to export those symbols just for this driver, so make the
-driver only configurable as a built-in.
-
-This seems to have been broken since at least
-
-  c92132f59806 ("edac/85xx: Add PCIe error interrupt edac support")
-
-(Nov 2013).
-
- [ bp: make it depend on EDAC=y so that the EDAC core doesn't get built
-   as a module. ]
-
-Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
-Signed-off-by: Borislav Petkov <bp@suse.de>
-Acked-by: Johannes Thumshirn <jth@kernel.org>
-Cc: James Morse <james.morse@arm.com>
-Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc: linux-edac <linux-edac@vger.kernel.org>
-Cc: linuxppc-dev@ozlabs.org
-Cc: morbidrsa@gmail.com
-Link: https://lkml.kernel.org/r/20190502141941.12927-1-mpe@ellerman.id.au
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/edac/Kconfig | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/edac/Kconfig b/drivers/edac/Kconfig
-index 96afb2aeed18..aaaa8ce8d3fd 100644
---- a/drivers/edac/Kconfig
-+++ b/drivers/edac/Kconfig
-@@ -246,8 +246,8 @@ config EDAC_PND2
- 	  micro-server but may appear on others in the future.
- 
- config EDAC_MPC85XX
--	tristate "Freescale MPC83xx / MPC85xx"
--	depends on FSL_SOC
-+	bool "Freescale MPC83xx / MPC85xx"
-+	depends on FSL_SOC && EDAC=y
- 	help
- 	  Support for error detection and correction on the Freescale
- 	  MPC8349, MPC8560, MPC8540, MPC8548, T4240
 -- 
-2.20.1
+Regards/Gruss,
+    Boris.
 
-
-
+Good mailing practices for 400: avoid top-posting and trim the reply.
