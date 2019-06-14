@@ -2,79 +2,91 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DA30C44F66
-	for <lists+linux-edac@lfdr.de>; Fri, 14 Jun 2019 00:41:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 88941451D1
+	for <lists+linux-edac@lfdr.de>; Fri, 14 Jun 2019 04:19:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725852AbfFMWlj (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Thu, 13 Jun 2019 18:41:39 -0400
-Received: from mail.skyhub.de ([5.9.137.197]:49688 "EHLO mail.skyhub.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725835AbfFMWlj (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Thu, 13 Jun 2019 18:41:39 -0400
-Received: from zn.tnic (p200300EC2F06D5002DB642DF7EFF7228.dip0.t-ipconnect.de [IPv6:2003:ec:2f06:d500:2db6:42df:7eff:7228])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id D9A3B1EC02FE;
-        Fri, 14 Jun 2019 00:41:37 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1560465698;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=WfzsL+AaFm5RhSxHdkxpaSHWOSODR4/juwvc4V00ep0=;
-        b=V2vmxWVLsxcTtuvpApEGbLr/SgLYjYwgCVAXL3WQHnNfVQl3WWoEt1LcglkN67VsWWwxRd
-        rrs4M/1LgF8htotxRFIBjwLNEYvjcm6WnmT6PftV4DnAeXmuuw9m9Mi5MVi20A5ojBQPTg
-        hoEVYd0oHd+OPi0RahL3Z/7ORRjcww4=
-Date:   Fri, 14 Jun 2019 00:41:30 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Robert Richter <rrichter@marvell.com>
-Cc:     James Morse <james.morse@arm.com>,
-        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Toshi Kani <toshi.kani@hpe.com>
-Subject: Re: [PATCH] EDAC, ghes: Fix grain calculation
-Message-ID: <20190613224130.GI11598@zn.tnic>
-References: <20190529152232.187580-1-james.morse@arm.com>
- <20190612043410.GE32652@zn.tnic>
- <9bda9613-09b3-aa6d-183f-3668ef9a99c6@arm.com>
- <20190613191843.GG11598@zn.tnic>
- <20190613210731.mehosgbqn2yak4ut@rric.localdomain>
+        id S1726688AbfFNCTA (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Thu, 13 Jun 2019 22:19:00 -0400
+Received: from spam01.hygon.cn ([110.188.70.11]:6781 "EHLO spam1.hygon.cn"
+        rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726167AbfFNCTA (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Thu, 13 Jun 2019 22:19:00 -0400
+Received: from MK-FE.hygon.cn ([172.23.18.61])
+        by spam1.hygon.cn with ESMTP id x5E2IEx0019126;
+        Fri, 14 Jun 2019 10:18:14 +0800 (GMT-8)
+        (envelope-from puwen@hygon.cn)
+Received: from cncheex02.Hygon.cn ([172.23.18.12])
+        by MK-FE.hygon.cn with ESMTP id x5E2I4gY029431;
+        Fri, 14 Jun 2019 10:18:04 +0800 (GMT-8)
+        (envelope-from puwen@hygon.cn)
+Received: from cncheex01.Hygon.cn (172.23.18.10) by cncheex02.Hygon.cn
+ (172.23.18.12) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1466.3; Fri, 14 Jun
+ 2019 10:18:11 +0800
+Received: from cncheex01.Hygon.cn ([172.23.18.10]) by cncheex01.Hygon.cn
+ ([172.23.18.10]) with mapi id 15.01.1466.003; Fri, 14 Jun 2019 10:18:11 +0800
+From:   Wen Pu <puwen@hygon.cn>
+To:     "mchehab@infradead.org" <mchehab@infradead.org>
+CC:     "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>
+Subject: Re: [PATCH] ras-mce-handler: Add support for Hygon Dhyana family 18h
+ processor
+Thread-Topic: [PATCH] ras-mce-handler: Add support for Hygon Dhyana family 18h
+ processor
+Thread-Index: AQHVEWeOgRtTd508eE2bfIzHStq9g6aaBeQA
+Date:   Fri, 14 Jun 2019 02:18:10 +0000
+Message-ID: <bdb9763a-b111-1927-9fd2-3fd933b3981d@hygon.cn>
+References: <1558616422-22997-1-git-send-email-puwen@hygon.cn>
+In-Reply-To: <1558616422-22997-1-git-send-email-puwen@hygon.cn>
+Accept-Language: zh-CN, en-US
+Content-Language: zh-CN
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [172.23.18.44]
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <648E66CB9E56B241A5E4276877D2714D@Hygon.cn>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20190613210731.mehosgbqn2yak4ut@rric.localdomain>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+X-MAIL: spam1.hygon.cn x5E2IEx0019126
+X-DNSRBL: 
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Thu, Jun 13, 2019 at 09:07:38PM +0000, Robert Richter wrote:
->  grain_bits = fls_long(e->grain) + 1;
-
-For 4K grain this makes grain_bits == 12.
-
-> In ras_event.h the grain then is calculated different to edac_mc
-> again:
-> 
->  1 << __entry->grain_bits
-
-and this makes it 4096.
-
-Looks ok to me.
-
-But if in James' example, physical_address_mask is 0xfffffffffffff000,
-doing
-
-  grain_bits = fls_long(~mem_err->physical_addr_mask);
-
-would make it 11 because ~mem_err->physical_addr_mask (negated) should
-be 0xfff.
-
-Is that what you mean?
-
--- 
-Regards/Gruss,
-    Boris.
-
-Good mailing practices for 400: avoid top-posting and trim the reply.
+RnJpZW5kbHkgcGluZy4uLg0KDQpPbiAyMDE5LzUvMjMgMjE6MDAsIFB1IFdlbiB3cm90ZToNCj4g
+VGhlIEh5Z29uIERoeWFuYSBmYW1pbHkgMThoIHByb2Nlc3NvciBpcyBkZXJpdmVkIGZyb20gQU1E
+IGZhbWlseSAxN2guDQo+IFRoZSBIeWdvbiBEaHlhbmEgc3VwcG9ydCB0byBMaW51eCBpcyBhbHJl
+YWR5IGFjY2VwdGVkIHVwc3RyZWFtWzFdLg0KPiANCj4gQWRkIEh5Z29uIERoeWFuYSBzdXBwb3J0
+IHRvIG1jZSBoYW5kbGVyIG9mIHJhc2RhZW1vbiBpbiBvcmRlciB0byBoYW5kbGUNCj4gTUNFIGV2
+ZW50cyBvbiBIeWdvbiBEaHlhbmEgcGxhdGZvcm1zLg0KPiANCj4gUmVmZXJlbmNlOg0KPiBbMV0g
+aHR0cHM6Ly9naXQua2VybmVsLm9yZy90aXAvZmVjOTgwNjlmYjcyZmI2NTYzMDRhM2U1MjI2NWUw
+YzJmYzlhZGY4Nw0KPiANCj4gU2lnbmVkLW9mZi1ieTogUHUgV2VuIDxwdXdlbkBoeWdvbi5jbj4N
+Cj4gLS0tDQo+ICAgcmFzLW1jZS1oYW5kbGVyLmMgfCA5ICsrKysrKysrLQ0KPiAgIHJhcy1tY2Ut
+aGFuZGxlci5oIHwgMSArDQo+ICAgMiBmaWxlcyBjaGFuZ2VkLCA5IGluc2VydGlvbnMoKyksIDEg
+ZGVsZXRpb24oLSkNCj4gDQo+IGRpZmYgLS1naXQgYS9yYXMtbWNlLWhhbmRsZXIuYyBiL3Jhcy1t
+Y2UtaGFuZGxlci5jDQo+IGluZGV4IGMxMWQ0ODkuLmViNTQ4YzYgMTAwNjQ0DQo+IC0tLSBhL3Jh
+cy1tY2UtaGFuZGxlci5jDQo+ICsrKyBiL3Jhcy1tY2UtaGFuZGxlci5jDQo+IEBAIC01NSw3ICs1
+NSw4IEBAIHN0YXRpYyBjaGFyICpjcHV0eXBlX25hbWVbXSA9IHsNCj4gICAJW0NQVV9LTklHSFRT
+X0xBTkRJTkddID0gIktuaWdodHMgTGFuZGluZyIsDQo+ICAgCVtDUFVfS05JR0hUU19NSUxMXSA9
+ICJLbmlnaHRzIE1pbGwiLA0KPiAgIAlbQ1BVX1NLWUxBS0VfWEVPTl0gPSAiU2t5bGFrZSBzZXJ2
+ZXIiLA0KPiAtCVtDUFVfTkFQTEVTXSA9ICJBTUQgRmFtaWx5IDE3aCBaZW4xIg0KPiArCVtDUFVf
+TkFQTEVTXSA9ICJBTUQgRmFtaWx5IDE3aCBaZW4xIiwNCj4gKwlbQ1BVX0RIWUFOQV0gPSAiSHln
+b24gRmFtaWx5IDE4aCBNb2tzaGEiDQo+ICAgfTsNCj4gICANCj4gICBzdGF0aWMgZW51bSBjcHV0
+eXBlIHNlbGVjdF9pbnRlbF9jcHV0eXBlKHN0cnVjdCByYXNfZXZlbnRzICpyYXMpDQo+IEBAIC0y
+MDAsNiArMjAxLDExIEBAIHN0YXRpYyBpbnQgZGV0ZWN0X2NwdShzdHJ1Y3QgcmFzX2V2ZW50cyAq
+cmFzKQ0KPiAgIAkJCXJldCA9IEVJTlZBTDsNCj4gICAJCX0NCj4gICAJCWdvdG8gcmV0Ow0KPiAr
+CX0gZWxzZSBpZiAoIXN0cmNtcChtY2UtPnZlbmRvciwiSHlnb25HZW51aW5lIikpIHsNCj4gKwkJ
+aWYgKG1jZS0+ZmFtaWx5ID09IDI0KSB7DQo+ICsJCQltY2UtPmNwdXR5cGUgPSBDUFVfREhZQU5B
+Ow0KPiArCQl9DQo+ICsJCWdvdG8gcmV0Ow0KPiAgIAl9IGVsc2UgaWYgKCFzdHJjbXAobWNlLT52
+ZW5kb3IsIkdlbnVpbmVJbnRlbCIpKSB7DQo+ICAgCQltY2UtPmNwdXR5cGUgPSBzZWxlY3RfaW50
+ZWxfY3B1dHlwZShyYXMpOw0KPiAgIAl9IGVsc2Ugew0KPiBAQCAtNDM2LDYgKzQ0Miw3IEBAIGlu
+dCByYXNfbWNlX2V2ZW50X2hhbmRsZXIoc3RydWN0IHRyYWNlX3NlcSAqcywNCj4gICAJCXJjID0g
+cGFyc2VfYW1kX2s4X2V2ZW50KHJhcywgJmUpOw0KPiAgIAkJYnJlYWs7DQo+ICAgCWNhc2UgQ1BV
+X05BUExFUzoNCj4gKwljYXNlIENQVV9ESFlBTkE6DQo+ICAgCQlyYyA9IHBhcnNlX2FtZF9zbWNh
+X2V2ZW50KHJhcywgJmUpOw0KPiAgIAkJYnJlYWs7DQo+ICAgCWRlZmF1bHQ6CQkJLyogQWxsIG90
+aGVyIENQVSB0eXBlcyBhcmUgSW50ZWwgKi8NCj4gZGlmZiAtLWdpdCBhL3Jhcy1tY2UtaGFuZGxl
+ci5oIGIvcmFzLW1jZS1oYW5kbGVyLmgNCj4gaW5kZXggOGFhZWNkMS4uOTQzOTVlYiAxMDA2NDQN
+Cj4gLS0tIGEvcmFzLW1jZS1oYW5kbGVyLmgNCj4gKysrIGIvcmFzLW1jZS1oYW5kbGVyLmgNCj4g
+QEAgLTUxLDYgKzUxLDcgQEAgZW51bSBjcHV0eXBlIHsNCj4gICAJQ1BVX0tOSUdIVFNfTUlMTCwN
+Cj4gICAJQ1BVX1NLWUxBS0VfWEVPTiwNCj4gICAJQ1BVX05BUExFUywNCj4gKwlDUFVfREhZQU5B
+LA0KPiAgIH07DQo+ICAgDQo+ICAgc3RydWN0IG1jZV9ldmVudCB7DQo+IA0K
