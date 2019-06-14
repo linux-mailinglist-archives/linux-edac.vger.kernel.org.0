@@ -2,87 +2,127 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D09545AE8
-	for <lists+linux-edac@lfdr.de>; Fri, 14 Jun 2019 12:49:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A16945AF4
+	for <lists+linux-edac@lfdr.de>; Fri, 14 Jun 2019 12:53:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726900AbfFNKtr (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Fri, 14 Jun 2019 06:49:47 -0400
-Received: from foss.arm.com ([217.140.110.172]:59482 "EHLO foss.arm.com"
+        id S1727083AbfFNKxL (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Fri, 14 Jun 2019 06:53:11 -0400
+Received: from mail.skyhub.de ([5.9.137.197]:43162 "EHLO mail.skyhub.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726767AbfFNKtr (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Fri, 14 Jun 2019 06:49:47 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 6C8EC2B;
-        Fri, 14 Jun 2019 03:49:46 -0700 (PDT)
-Received: from [10.1.196.105] (eglon.cambridge.arm.com [10.1.196.105])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D9D6C3F246;
-        Fri, 14 Jun 2019 03:51:27 -0700 (PDT)
+        id S1727153AbfFNKxL (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Fri, 14 Jun 2019 06:53:11 -0400
+Received: from zn.tnic (p200300EC2F097F00C4A032B92937AA15.dip0.t-ipconnect.de [IPv6:2003:ec:2f09:7f00:c4a0:32b9:2937:aa15])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id B61DD1EC08BF;
+        Fri, 14 Jun 2019 12:53:09 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1560509589;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=yzCmUlCjP9a7GEpaOHqX1nvhmFrkNCsaBbmvlBxEF5c=;
+        b=qM6xA9qOPjwVNkU21hNWRUr7MvFeIQC3OWWvSiZOPF4FaHtYc942B7yj11LC+PcVYc1mlK
+        KGATlePwCuIJ1OvpeRi5W3y+3jqKtVxhCcaqPy6j9/DmtgTtsczGVa4S7ITHxyzOln6jRM
+        Wv9mL0WGTAgB50AcnVKXGbQIpRyTcD0=
+Date:   Fri, 14 Jun 2019 12:53:01 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Benjamin Herrenschmidt <benh@kernel.crashing.org>
+Cc:     James Morse <james.morse@arm.com>,
+        "Hawa, Hanna" <hhhawa@amazon.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "Woodhouse, David" <dwmw@amazon.co.uk>,
+        "paulmck@linux.ibm.com" <paulmck@linux.ibm.com>,
+        "mchehab@kernel.org" <mchehab@kernel.org>,
+        "mark.rutland@arm.com" <mark.rutland@arm.com>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "nicolas.ferre@microchip.com" <nicolas.ferre@microchip.com>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "Shenhar, Talel" <talel@amazon.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Chocron, Jonathan" <jonnyc@amazon.com>,
+        "Krupnik, Ronen" <ronenk@amazon.com>,
+        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
+        "Hanoch, Uri" <hanochu@amazon.com>
 Subject: Re: [PATCH 2/2] edac: add support for Amazon's Annapurna Labs EDAC
-From:   James Morse <james.morse@arm.com>
-To:     "Hawa, Hanna" <hhhawa@amazon.com>
-Cc:     robh+dt@kernel.org, mark.rutland@arm.com, bp@alien8.de,
-        mchehab@kernel.org, davem@davemloft.net,
-        gregkh@linuxfoundation.org, nicolas.ferre@microchip.com,
-        paulmck@linux.ibm.com, dwmw@amazon.co.uk, benh@amazon.com,
-        ronenk@amazon.com, talel@amazon.com, jonnyc@amazon.com,
-        hanochu@amazon.com, linux-edac@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <1559211329-13098-1-git-send-email-hhhawa@amazon.com>
- <1559211329-13098-3-git-send-email-hhhawa@amazon.com>
- <3129ed19-0259-d227-0cff-e9f165ce5964@arm.com>
- <4514bfa2-68b2-2074-b817-2f5037650c4e@amazon.com>
- <fdc3b458-96eb-1734-c294-2463f37f2244@arm.com>
-Message-ID: <fb5c11b4-6fd1-830b-7a3a-ccf4b31ec337@arm.com>
-Date:   Fri, 14 Jun 2019 11:49:42 +0100
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.0
+Message-ID: <20190614105301.GB2586@zn.tnic>
+References: <9a2aaf4a9545ed30568a0613e64bc3f57f047799.camel@kernel.crashing.org>
+ <20190608090556.GA32464@zn.tnic>
+ <1ae5e7a3464f9d8e16b112cd371957ea20472864.camel@kernel.crashing.org>
+ <68446361fd1e742b284555b96b638fe6b5218b8b.camel@kernel.crashing.org>
+ <20190611115651.GD31772@zn.tnic>
+ <6df5a17bb1c900dc69b991171e55632f40d9426f.camel@kernel.crashing.org>
+ <20190612034813.GA32652@zn.tnic>
+ <08bd58dc0045670223f8d3bbc8be774505bd3ddf.camel@kernel.crashing.org>
+ <20190612104238.GG32652@zn.tnic>
+ <2a53690aa81a406b9a6290f70e47470d0f698f00.camel@kernel.crashing.org>
 MIME-Version: 1.0
-In-Reply-To: <fdc3b458-96eb-1734-c294-2463f37f2244@arm.com>
 Content-Type: text/plain; charset=utf-8
-Content-Language: en-GB
-Content-Transfer-Encoding: 8bit
+Content-Disposition: inline
+In-Reply-To: <2a53690aa81a406b9a6290f70e47470d0f698f00.camel@kernel.crashing.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-Hi Hawa,
+Reply part 2.
 
-On 13/06/2019 18:05, James Morse wrote:
-> On 11/06/2019 20:56, Hawa, Hanna wrote:
->> James Morse wrote:
->>> Hawa, Hanna wrote:
->>>> +        if (cluster != last_cluster) {
->>>> +            smp_call_function_single(cpu, al_a57_edac_l2merrsr,
->>>> +                         edac_dev, 0);
->>>> +            last_cluster = cluster;
->>>> +        }
->>> Here you depend on the CPUs being listed in cluster-order in the DT. I'm fairly sure the
->>> numbering is arbitrary: On my Juno 0,3,4,5 are the A53 cluster, and 1,2 are the A57
->>> cluster.
->>>
->>> If 1,3,5 were cluster-a and 2,4,6 were cluster-b, you would end up calling
->>> al_a57_edac_l2merrsr() for each cpu. As you don't wait, they could race.
->>>
->>> If you can get a cpu-mask for each cluster, smp_call_function_any() would to the
->>> pick-one-online-cpu work for you.
+On Thu, Jun 13, 2019 at 09:54:18AM +1000, Benjamin Herrenschmidt wrote:
+> Why ? Because one or two historical drivers mix MC and PCI then "it
+> makes sense" to do that for everybody ?
 
->> Again, I rely on that it's alpine SoC specific driver.
+Because it was like that. And now all of a sudden ARM wants something
+different. So we must at least talk about it before we do it, right?
 
-An example of where this goes wrong is kexec:
-If you offline CPU0, then kexec, the new kernel will start up on the lowest numbered
-online CPU, which won't be zero. But the new kernel will call it CPU0.
+Also, I don't know if you've noticed but RAS "architecture" on Linux is
+still a big WIP, to put it mildly. So before we do anything, we should
+have at least some rough idea of where it is all going to.
 
-Kdump is even better, as it starts up on whichever CPU called panic(), and calls it CPU0.
+> And then you have 20 platforms and 20 drivers, with 50% or more code
+> duplication, bugs fixed in one and not the other, gratuituous behaviour
+> differences to confuse users etc... No. that doesn't make sense.
 
+No different on ARM if you have a memory controller IP which is roughly
+the same IP but different vendors integrate it and they each tweak it
+a bit in their own way (registers, ECC support, etc) and you get an
+EDAC MC driver from every vendor and they all don't share the basic
+functionality.
 
-Thanks,
+> I have no idea what "the DT argument" is, and that's from the guy who
+> created the FDT....
+> 
+> I have difficulties understanding how you cannot see that having re-
+> usable single drivers for a single piece of HW makes sense. If anything
+> in term of avoiding duplication, bitrot, bugs being fixed in some and
+> not others, etc etc... It also means more eyes on a given piece of code
+> which is a good thing.
+> 
+> Also you "have heard more than enough" is again a sign that a whole lot
+> of people are trying to tell you something that you seem to refuse to
+> hear.
 
-James
+Hmm, I think I'm hearing it. But not without good arguments for why
+we're going to do it. I believe that became clear so far..
 
+> Whatever that "DT argument" is, did you just ignore it or had
+> some good and solid arguments of your own to refute it ?
 
->> How can I get cpu-mask for each cluster? from DT?
+I don't care about refuting it or not - all I care about is getting good
+arguments for why we should do this driver-per-IP-block thing. EDAC was
+was ok so far - I wasn't going to change it just because someone is
+sending me drivers per-IP block and not selling me the idea properly.
 
-> Its not cluster you want, its the L2. Cacheinfo has this for online CPUs, and you're
-> already holding the cpus_read_lock().
+And AFAIR I haven't heard a single good argument trying to convince me
+why it should be done this way. Only after this thread started and we
+started poking at it, I got some good arguments.
 
+So enough wasting time, I think we can try the per-IP things and see
+where it would get us.
+
+-- 
+Regards/Gruss,
+    Boris.
+
+Good mailing practices for 400: avoid top-posting and trim the reply.
