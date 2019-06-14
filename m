@@ -2,132 +2,87 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CD79D459FD
-	for <lists+linux-edac@lfdr.de>; Fri, 14 Jun 2019 12:09:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D09545AE8
+	for <lists+linux-edac@lfdr.de>; Fri, 14 Jun 2019 12:49:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726884AbfFNKJa (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Fri, 14 Jun 2019 06:09:30 -0400
-Received: from mail.skyhub.de ([5.9.137.197]:36520 "EHLO mail.skyhub.de"
+        id S1726900AbfFNKtr (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Fri, 14 Jun 2019 06:49:47 -0400
+Received: from foss.arm.com ([217.140.110.172]:59482 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726859AbfFNKJa (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Fri, 14 Jun 2019 06:09:30 -0400
-Received: from zn.tnic (p200300EC2F097F002DB642DF7EFF7228.dip0.t-ipconnect.de [IPv6:2003:ec:2f09:7f00:2db6:42df:7eff:7228])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id F39571EC08BF;
-        Fri, 14 Jun 2019 12:09:28 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1560506969;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=IQFZNxGDDog7n91wTOlHnkpmQS/cFnbsCmQ+ZaKMhl0=;
-        b=njaXCL17WLcEA0GaPTFUv/8mGFFNZCfzSJ68i+IorkerK6LnAo96JStVcxFhMrtpVhiSV8
-        MUvtEb+96ZjBO3U5VsAdo5UhVDt5DyHusXPRZ7q4gHYuMaNkLho8qCcQYtOeJDoiMONY4D
-        Hs/YgoN1vTiBPJuOdj6oJmsF8ApMwHs=
-Date:   Fri, 14 Jun 2019 12:09:18 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Robert Richter <rrichter@marvell.com>
-Cc:     James Morse <james.morse@arm.com>,
-        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Toshi Kani <toshi.kani@hpe.com>
-Subject: Re: [PATCH] EDAC, ghes: Fix grain calculation
-Message-ID: <20190614100918.GA2586@zn.tnic>
-References: <20190529152232.187580-1-james.morse@arm.com>
- <20190612043410.GE32652@zn.tnic>
- <9bda9613-09b3-aa6d-183f-3668ef9a99c6@arm.com>
- <20190613191843.GG11598@zn.tnic>
- <20190613210731.mehosgbqn2yak4ut@rric.localdomain>
- <20190613224130.GI11598@zn.tnic>
- <20190614072139.vzet6t5erl6uz6st@rric.localdomain>
+        id S1726767AbfFNKtr (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Fri, 14 Jun 2019 06:49:47 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 6C8EC2B;
+        Fri, 14 Jun 2019 03:49:46 -0700 (PDT)
+Received: from [10.1.196.105] (eglon.cambridge.arm.com [10.1.196.105])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D9D6C3F246;
+        Fri, 14 Jun 2019 03:51:27 -0700 (PDT)
+Subject: Re: [PATCH 2/2] edac: add support for Amazon's Annapurna Labs EDAC
+From:   James Morse <james.morse@arm.com>
+To:     "Hawa, Hanna" <hhhawa@amazon.com>
+Cc:     robh+dt@kernel.org, mark.rutland@arm.com, bp@alien8.de,
+        mchehab@kernel.org, davem@davemloft.net,
+        gregkh@linuxfoundation.org, nicolas.ferre@microchip.com,
+        paulmck@linux.ibm.com, dwmw@amazon.co.uk, benh@amazon.com,
+        ronenk@amazon.com, talel@amazon.com, jonnyc@amazon.com,
+        hanochu@amazon.com, linux-edac@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <1559211329-13098-1-git-send-email-hhhawa@amazon.com>
+ <1559211329-13098-3-git-send-email-hhhawa@amazon.com>
+ <3129ed19-0259-d227-0cff-e9f165ce5964@arm.com>
+ <4514bfa2-68b2-2074-b817-2f5037650c4e@amazon.com>
+ <fdc3b458-96eb-1734-c294-2463f37f2244@arm.com>
+Message-ID: <fb5c11b4-6fd1-830b-7a3a-ccf4b31ec337@arm.com>
+Date:   Fri, 14 Jun 2019 11:49:42 +0100
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.0
 MIME-Version: 1.0
+In-Reply-To: <fdc3b458-96eb-1734-c294-2463f37f2244@arm.com>
 Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20190614072139.vzet6t5erl6uz6st@rric.localdomain>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Language: en-GB
+Content-Transfer-Encoding: 8bit
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Fri, Jun 14, 2019 at 07:21:47AM +0000, Robert Richter wrote:
-> On 14.06.19 00:41:30, Borislav Petkov wrote:
-> > On Thu, Jun 13, 2019 at 09:07:38PM +0000, Robert Richter wrote:
-> > >  grain_bits = fls_long(e->grain) + 1;
-> > 
-> > For 4K grain this makes grain_bits == 12.
-> 
-> fls(0) == 0
-> fls(1) == 1
-> fls(2) == 2
-> fls(4) == 3
-> ...
-> fls(0x1000) == 13
+Hi Hawa,
 
-I believe the intent of the "+ 1" above is that e->grain was a mask of
-the type 0xfff so you have to + 1 since we count from bit 0.
+On 13/06/2019 18:05, James Morse wrote:
+> On 11/06/2019 20:56, Hawa, Hanna wrote:
+>> James Morse wrote:
+>>> Hawa, Hanna wrote:
+>>>> +        if (cluster != last_cluster) {
+>>>> +            smp_call_function_single(cpu, al_a57_edac_l2merrsr,
+>>>> +                         edac_dev, 0);
+>>>> +            last_cluster = cluster;
+>>>> +        }
+>>> Here you depend on the CPUs being listed in cluster-order in the DT. I'm fairly sure the
+>>> numbering is arbitrary: On my Juno 0,3,4,5 are the A53 cluster, and 1,2 are the A57
+>>> cluster.
+>>>
+>>> If 1,3,5 were cluster-a and 2,4,6 were cluster-b, you would end up calling
+>>> al_a57_edac_l2merrsr() for each cpu. As you don't wait, they could race.
+>>>
+>>> If you can get a cpu-mask for each cluster, smp_call_function_any() would to the
+>>> pick-one-online-cpu work for you.
 
-> Correct for edac_mc is:
-> 
->  grain_bits = fls_long(e->grain ? e->grain - 1 : 0);
+>> Again, I rely on that it's alpine SoC specific driver.
 
-First of all, you don't wanna do fls(0).
+An example of where this goes wrong is kexec:
+If you offline CPU0, then kexec, the new kernel will start up on the lowest numbered
+online CPU, which won't be zero. But the new kernel will call it CPU0.
 
-Then, we don't want to use PAGE_MASK for grain computation because as
-James showed, it causes problems.
+Kdump is even better, as it starts up on whichever CPU called panic(), and calls it CPU0.
 
-> James' calculation for ghes is correct in this particular case
-> (assuming a bit mask with (power of 2 - 1)).
 
-And this is the question that needs to be clarified first: from what do
-we compute the grain.
+Thanks,
 
-ghes_edac uses ~physical_addr_mask which can basically be:
+James
 
-	grain_bits = hweight_long(physical_addr_mask);
 
-which, in the 0xfff case gives you the correct 12 bits. It is assuming
-it is a contiguous mask though. It better be...
+>> How can I get cpu-mask for each cluster? from DT?
 
-Now, if you look at how the grain gets read out in edac_mc_handle_error(), it
-comes from dimm->grain. And that is defined as:
+> Its not cluster you want, its the L2. Cacheinfo has this for online CPUs, and you're
+> already holding the cpus_read_lock().
 
-        u32 grain;              /* granularity of reported error in bytes */
-
-in bytes!
-
-Now, if you grep for "grain" in drivers/edac/ you see most (if not all)
-initialized as bytes:
-
-i82975x_edac.c:415:                     dimm->grain = 1 << 7;   /* 128Byte cache-line resolution */
-pnd2_edac.c:1260:               dimm->grain = 32;
-skx_common.c:313:       dimm->grain = 32;
-highbank_mc_edac.c:223: dimm->grain = 8;
-...
-
-and so on.
-
-So actually I think that
-
-	grain_bits = fls_long(e->grain) + 1;
-
-is wrong in that case. It should simply hand down e->grain as it is
-already the number of bytes.
-
-Which we should simply dump in the tracepoint too - the number of bytes
-and not that silly shifting there:
-
-	1 << __entry->grain_bits,
-
-And once we've said that the grain is going to *everywhere* be the
-granularity of the error in number of bytes, then we should stick to
-that and fix all those drivers which don't do that.
-
-Ok?
-
--- 
-Regards/Gruss,
-    Boris.
-
-Good mailing practices for 400: avoid top-posting and trim the reply.
