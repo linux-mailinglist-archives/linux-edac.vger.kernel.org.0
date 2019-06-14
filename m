@@ -2,127 +2,98 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A16945AF4
-	for <lists+linux-edac@lfdr.de>; Fri, 14 Jun 2019 12:53:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D0F64605B
+	for <lists+linux-edac@lfdr.de>; Fri, 14 Jun 2019 16:16:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727083AbfFNKxL (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Fri, 14 Jun 2019 06:53:11 -0400
-Received: from mail.skyhub.de ([5.9.137.197]:43162 "EHLO mail.skyhub.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727153AbfFNKxL (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Fri, 14 Jun 2019 06:53:11 -0400
-Received: from zn.tnic (p200300EC2F097F00C4A032B92937AA15.dip0.t-ipconnect.de [IPv6:2003:ec:2f09:7f00:c4a0:32b9:2937:aa15])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id B61DD1EC08BF;
-        Fri, 14 Jun 2019 12:53:09 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1560509589;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=yzCmUlCjP9a7GEpaOHqX1nvhmFrkNCsaBbmvlBxEF5c=;
-        b=qM6xA9qOPjwVNkU21hNWRUr7MvFeIQC3OWWvSiZOPF4FaHtYc942B7yj11LC+PcVYc1mlK
-        KGATlePwCuIJ1OvpeRi5W3y+3jqKtVxhCcaqPy6j9/DmtgTtsczGVa4S7ITHxyzOln6jRM
-        Wv9mL0WGTAgB50AcnVKXGbQIpRyTcD0=
-Date:   Fri, 14 Jun 2019 12:53:01 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Benjamin Herrenschmidt <benh@kernel.crashing.org>
-Cc:     James Morse <james.morse@arm.com>,
-        "Hawa, Hanna" <hhhawa@amazon.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "Woodhouse, David" <dwmw@amazon.co.uk>,
-        "paulmck@linux.ibm.com" <paulmck@linux.ibm.com>,
-        "mchehab@kernel.org" <mchehab@kernel.org>,
-        "mark.rutland@arm.com" <mark.rutland@arm.com>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "nicolas.ferre@microchip.com" <nicolas.ferre@microchip.com>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "Shenhar, Talel" <talel@amazon.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Chocron, Jonathan" <jonnyc@amazon.com>,
-        "Krupnik, Ronen" <ronenk@amazon.com>,
-        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
-        "Hanoch, Uri" <hanochu@amazon.com>
-Subject: Re: [PATCH 2/2] edac: add support for Amazon's Annapurna Labs EDAC
-Message-ID: <20190614105301.GB2586@zn.tnic>
-References: <9a2aaf4a9545ed30568a0613e64bc3f57f047799.camel@kernel.crashing.org>
- <20190608090556.GA32464@zn.tnic>
- <1ae5e7a3464f9d8e16b112cd371957ea20472864.camel@kernel.crashing.org>
- <68446361fd1e742b284555b96b638fe6b5218b8b.camel@kernel.crashing.org>
- <20190611115651.GD31772@zn.tnic>
- <6df5a17bb1c900dc69b991171e55632f40d9426f.camel@kernel.crashing.org>
- <20190612034813.GA32652@zn.tnic>
- <08bd58dc0045670223f8d3bbc8be774505bd3ddf.camel@kernel.crashing.org>
- <20190612104238.GG32652@zn.tnic>
- <2a53690aa81a406b9a6290f70e47470d0f698f00.camel@kernel.crashing.org>
+        id S1728239AbfFNOOl (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Fri, 14 Jun 2019 10:14:41 -0400
+Received: from mail-eopbgr740053.outbound.protection.outlook.com ([40.107.74.53]:12334
+        "EHLO NAM01-BN3-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1728913AbfFNOOl (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Fri, 14 Jun 2019 10:14:41 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=amdcloud.onmicrosoft.com; s=selector1-amdcloud-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=l0wu9xDXyDtT7EogLA/yer6QhrmNMafCIf9keEIa8jE=;
+ b=oE82JbZX9l52a+zGaCbhvyCA715cFFC4P9zHQUNIgboNSUbtpDJrtZxQeIYPmQlgeYtzVsz+o4TX1LhJnZIKI+eXucDF88Bl5OTAoeORoaD+9O+Az1+FMAxVOC7mF/V+pHo9csXzACKyoqd1kbVkZXmXUIwgnGxqY46FZJDQ/pk=
+Received: from SN6PR12MB2639.namprd12.prod.outlook.com (52.135.103.16) by
+ SN6PR12MB2784.namprd12.prod.outlook.com (52.135.107.147) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.1965.17; Fri, 14 Jun 2019 14:14:39 +0000
+Received: from SN6PR12MB2639.namprd12.prod.outlook.com
+ ([fe80::69b5:19ac:b63d:2b82]) by SN6PR12MB2639.namprd12.prod.outlook.com
+ ([fe80::69b5:19ac:b63d:2b82%3]) with mapi id 15.20.1965.019; Fri, 14 Jun 2019
+ 14:14:39 +0000
+From:   "Ghannam, Yazen" <Yazen.Ghannam@amd.com>
+To:     Borislav Petkov <bp@alien8.de>
+CC:     "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH 2/8] EDAC/amd64: Support more than two controllers for
+ chip selects handling
+Thread-Topic: [PATCH 2/8] EDAC/amd64: Support more than two controllers for
+ chip selects handling
+Thread-Index: AQHVGArjP8ASCZySEUyWj7FP348Ui6aZtVCAgABvqsCAABgIgIABCSOg
+Date:   Fri, 14 Jun 2019 14:14:39 +0000
+Message-ID: <SN6PR12MB263902F373B6184FEB563B89F8EE0@SN6PR12MB2639.namprd12.prod.outlook.com>
+References: <20190531234501.32826-1-Yazen.Ghannam@amd.com>
+ <20190531234501.32826-3-Yazen.Ghannam@amd.com>
+ <20190613141715.GD11598@zn.tnic>
+ <SN6PR12MB263987AAB225A09527C4D736F8EF0@SN6PR12MB2639.namprd12.prod.outlook.com>
+ <20190613222255.GH11598@zn.tnic>
+In-Reply-To: <20190613222255.GH11598@zn.tnic>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=Yazen.Ghannam@amd.com; 
+x-originating-ip: [165.204.25.250]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: dfc3c572-9bd9-42b9-a289-08d6f0d2a36a
+x-ms-office365-filtering-ht: Tenant
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(1401327)(4618075)(2017052603328)(7193020);SRVR:SN6PR12MB2784;
+x-ms-traffictypediagnostic: SN6PR12MB2784:
+x-microsoft-antispam-prvs: <SN6PR12MB2784F61BB411EBED2A8CE6A0F8EE0@SN6PR12MB2784.namprd12.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:8273;
+x-forefront-prvs: 0068C7E410
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(396003)(346002)(376002)(136003)(366004)(39860400002)(13464003)(189003)(199004)(86362001)(4326008)(25786009)(2906002)(4744005)(6246003)(53936002)(71190400001)(54906003)(33656002)(256004)(102836004)(71200400001)(316002)(76176011)(66556008)(99286004)(7696005)(3846002)(66946007)(66476007)(73956011)(66066001)(66446008)(64756008)(6116002)(76116006)(6506007)(53546011)(9686003)(8936002)(81166006)(81156014)(8676002)(186003)(26005)(55016002)(6916009)(74316002)(5660300002)(229853002)(11346002)(446003)(305945005)(52536014)(7736002)(6436002)(486006)(68736007)(476003)(478600001)(14454004)(72206003);DIR:OUT;SFP:1101;SCL:1;SRVR:SN6PR12MB2784;H:SN6PR12MB2639.namprd12.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
+received-spf: None (protection.outlook.com: amd.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam-message-info: jg3hQzlxM+GjyKztjWZVhOY7RJZEGrPmtuwAFMvCBRpeGNAjtKJfRvmSoQEvH2AOxfcP5GFQ+EUwhQ5Q8lxHjPvlo4je7/R0c72x6iWpfoVQkhUZ/rs+3OLSpmhN+RBDyW6SVTkte9GlTAl7Lh+Th2GeOk6sIpX7+ZgihtiWatytZtr41a8BLSQYVk+fZivApQtlj1usxwEDwlG62yJ6VfCz+K1zqByC44P3n8HQGIHJWC25nNU/0dYLdEWrNuXtmHOAohqmvKv53OKTyfqlVEcFstANpA/wE1wJV3ptLE3gc0GKVYK3onUHyOjQWmOoaBk5Ua4/wK3hWzkFRsUR6EYmmBxbydznXAKMmMrf0p3fzKloxciD95X/lq+71jR9NgQkBikwVZf1StI/JSLx+JvjA2n0kQBy/nYXN41fqPA=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <2a53690aa81a406b9a6290f70e47470d0f698f00.camel@kernel.crashing.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: dfc3c572-9bd9-42b9-a289-08d6f0d2a36a
+X-MS-Exchange-CrossTenant-originalarrivaltime: 14 Jun 2019 14:14:39.2938
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: yghannam@amd.com
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN6PR12MB2784
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-Reply part 2.
-
-On Thu, Jun 13, 2019 at 09:54:18AM +1000, Benjamin Herrenschmidt wrote:
-> Why ? Because one or two historical drivers mix MC and PCI then "it
-> makes sense" to do that for everybody ?
-
-Because it was like that. And now all of a sudden ARM wants something
-different. So we must at least talk about it before we do it, right?
-
-Also, I don't know if you've noticed but RAS "architecture" on Linux is
-still a big WIP, to put it mildly. So before we do anything, we should
-have at least some rough idea of where it is all going to.
-
-> And then you have 20 platforms and 20 drivers, with 50% or more code
-> duplication, bugs fixed in one and not the other, gratuituous behaviour
-> differences to confuse users etc... No. that doesn't make sense.
-
-No different on ARM if you have a memory controller IP which is roughly
-the same IP but different vendors integrate it and they each tweak it
-a bit in their own way (registers, ECC support, etc) and you get an
-EDAC MC driver from every vendor and they all don't share the basic
-functionality.
-
-> I have no idea what "the DT argument" is, and that's from the guy who
-> created the FDT....
-> 
-> I have difficulties understanding how you cannot see that having re-
-> usable single drivers for a single piece of HW makes sense. If anything
-> in term of avoiding duplication, bitrot, bugs being fixed in some and
-> not others, etc etc... It also means more eyes on a given piece of code
-> which is a good thing.
-> 
-> Also you "have heard more than enough" is again a sign that a whole lot
-> of people are trying to tell you something that you seem to refuse to
-> hear.
-
-Hmm, I think I'm hearing it. But not without good arguments for why
-we're going to do it. I believe that became clear so far..
-
-> Whatever that "DT argument" is, did you just ignore it or had
-> some good and solid arguments of your own to refute it ?
-
-I don't care about refuting it or not - all I care about is getting good
-arguments for why we should do this driver-per-IP-block thing. EDAC was
-was ok so far - I wasn't going to change it just because someone is
-sending me drivers per-IP block and not selling me the idea properly.
-
-And AFAIR I haven't heard a single good argument trying to convince me
-why it should be done this way. Only after this thread started and we
-started poking at it, I got some good arguments.
-
-So enough wasting time, I think we can try the per-IP things and see
-where it would get us.
-
--- 
-Regards/Gruss,
-    Boris.
-
-Good mailing practices for 400: avoid top-posting and trim the reply.
+PiAtLS0tLU9yaWdpbmFsIE1lc3NhZ2UtLS0tLQ0KPiBGcm9tOiBsaW51eC1rZXJuZWwtb3duZXJA
+dmdlci5rZXJuZWwub3JnIDxsaW51eC1rZXJuZWwtb3duZXJAdmdlci5rZXJuZWwub3JnPiBPbiBC
+ZWhhbGYgT2YgQm9yaXNsYXYgUGV0a292DQo+IFNlbnQ6IFRodXJzZGF5LCBKdW5lIDEzLCAyMDE5
+IDU6MjMgUE0NCj4gVG86IEdoYW5uYW0sIFlhemVuIDxZYXplbi5HaGFubmFtQGFtZC5jb20+DQo+
+IENjOiBsaW51eC1lZGFjQHZnZXIua2VybmVsLm9yZzsgbGludXgta2VybmVsQHZnZXIua2VybmVs
+Lm9yZw0KPiBTdWJqZWN0OiBSZTogW1BBVENIIDIvOF0gRURBQy9hbWQ2NDogU3VwcG9ydCBtb3Jl
+IHRoYW4gdHdvIGNvbnRyb2xsZXJzIGZvciBjaGlwIHNlbGVjdHMgaGFuZGxpbmcNCj4gDQo+IE9u
+IFRodSwgSnVuIDEzLCAyMDE5IGF0IDA4OjU4OjE2UE0gKzAwMDAsIEdoYW5uYW0sIFlhemVuIHdy
+b3RlOg0KPiA+IFRoZSBmaXJzdCBwYXRjaCBpcyBtZWFudCBhcyBhIGZpeCBmb3IgZXhpc3Rpbmcg
+c3lzdGVtcywgYW5kIHRoaXMgcGF0Y2gNCj4gPiBpcyB0byBhZGQgbmV3IGZ1bmN0aW9uYWxpdHku
+DQo+ID4NCj4gPiBJIGNhbiBtZXJnZSB0aGVtIHRvZ2V0aGVyIGlmIHlvdSB0aGluayB0aGF0J3Mg
+bW9yZSBhcHByb3ByaWF0ZS4NCj4gDQo+IElzIGl0IGZpeGluZyBzdWNoIGEgY3JpdGljYWwgaXNz
+dWUgdGhhdCBpdCBuZWVkcyB0byBiZSBhIHNlcGFyYXRlIHBhdGNoPw0KPiBJZiBzbywgaXQgc2hv
+dWxkIGJlIENDOnN0YWJsZS4NCj4gDQo+IEJ1dCBJIHRoaW5rIHdlJ3ZlIHN1cnZpdmVkIHdpdGhv
+dXQgaXQganVzdCBmaW5lIHNvIHdoeSBib3RoZXIuIEJ1dCBtYXliZQ0KPiB0aGVyZSdzIGFuIGFz
+cGVjdCBJJ20gbWlzc2luZy4uLg0KPiANCg0KTm8sIHlvdSdyZSByaWdodC4gSXQncyBub3Qgc29t
+ZXRoaW5nIGNyaXRpY2FsLg0KDQpJIGNhbiBzcXVhc2ggdGhlc2UgdHdvIHBhdGNoZXMgdG9nZXRo
+ZXIgaWYgeW91J2QgbGlrZS4NCg0KVGhhbmtzLA0KWWF6ZW4NCg==
