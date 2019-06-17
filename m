@@ -2,61 +2,58 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E0924728F
-	for <lists+linux-edac@lfdr.de>; Sun, 16 Jun 2019 01:37:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B68A2477D2
+	for <lists+linux-edac@lfdr.de>; Mon, 17 Jun 2019 03:56:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726515AbfFOXhc (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Sat, 15 Jun 2019 19:37:32 -0400
-Received: from mail-lf1-f67.google.com ([209.85.167.67]:38256 "EHLO
-        mail-lf1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726434AbfFOXhc (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Sat, 15 Jun 2019 19:37:32 -0400
-Received: by mail-lf1-f67.google.com with SMTP id b11so4066704lfa.5
-        for <linux-edac@vger.kernel.org>; Sat, 15 Jun 2019 16:37:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=WHFut1jWrmk46BC+zB+PEWCqqRYxaTvVO752/+9e5v0=;
-        b=HMtCcvqBxg9H9pufYaUWYYZ/5bx2G8CjEmcB4EYySB7Xol7XqKudIugIY3zWdhssKG
-         egs3T15a4SrdqjmVMo6f7wzZPY9MQYjVpRX3OTCrL/7nwyQ/zarDG6o1Hul0DM8360nf
-         mjaRaIzzR6WDrKW5wK0xAaIgGatGCe1Itqy231Z8Ro57LvSPyldDIttcZyyVj7C2typZ
-         TsJ76sI79fH1B/MuMszRM9LHuPVqH71V73/Ol1e16isj7QsIkCU04sQ6aUW9IOOHbunP
-         ppj1meiz0zqp8U2ZjuoJIWGr6B/byDYvnicec903a/W1m+k57v3atnL7LyAiczx8xU0v
-         cZuw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=WHFut1jWrmk46BC+zB+PEWCqqRYxaTvVO752/+9e5v0=;
-        b=ThABcMpAw/Hh8k6U2UEBmhOPbAHq0mqtYB+3RYUhuiG3JioSZCvBIh+LFj7Vy4xwhv
-         f8TFJ2pt5W23aGpUuiDJUEQp8/ZkJRAn6CQNj+a/kiagc3XI+NrrY6QcCh8EVFSyaQbR
-         ScyKlXVkdWe7ikyBBDFlyBj4fa6v4iWD95fVTJY6P2WwBYcSWrYptftjXFfuwmo2oP3C
-         JYOCakI+GLXLFT0xQC6juV/eMLAMIfvjMgveqnatDz9h/XNPzm1wfp5d32c+2hKqgQEl
-         Uyvlpb3rnI4JqoWSQSS/w89nrmdK27I5YP7uX9rAfQJRbr/zOrAHLkx3BhoXi3c57daX
-         YClQ==
-X-Gm-Message-State: APjAAAXMUt2dQ4qqGnQ1ASlHFs37kHzZsp0469F4ROiklcOqg2d/R34X
-        Q4XfO0IPphf+SM2mlHMiJaqbVxtGicrb6NHPmSo=
-X-Google-Smtp-Source: APXvYqz19sXwfRhXGdIWY/1zC65L5zTba+KDImcazq8W8roBJ7JzxbRfPT3bGiGlY2XyNmH+NA9hae7faQ0Qt554P3Y=
-X-Received: by 2002:ac2:446b:: with SMTP id y11mr46347308lfl.158.1560641850893;
- Sat, 15 Jun 2019 16:37:30 -0700 (PDT)
+        id S1727440AbfFQB42 (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Sun, 16 Jun 2019 21:56:28 -0400
+Received: from qf-corp.com ([43.252.215.172]:56091 "EHLO server1.qf-corp.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1727322AbfFQB42 (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Sun, 16 Jun 2019 21:56:28 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=qf-corp.com
+        ; s=default; h=Message-ID:Reply-To:Subject:To:From:Date:
+        Content-Transfer-Encoding:Content-Type:MIME-Version:Sender:Cc:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=x+wk2oDUMoo/hQHPqS9UCKstzOaLw+EthDvW07j7+BE=; b=dVcBKQBVrKtHocj1vChjh2+ibT
+        hyN2uxmAmINBFBaGZxsACB/Xy8RdReKEyWHw+D4DXkcW4x0OTzvvNjxdKavcTRCqbm/Mu+rT9IR/R
+        v5twN/f9JM0y8oYGrRzi2svvGfbls6OvarV48verEHLR6aMacpB6elD17ENup6ZyOpsTDKLhauTUm
+        KtIDSecH/ApNgHmimyfLGHu93A/FbO6yupLdhePFBTjW+EyvNtCzi9Pv6tk/JxAtbtNGk6YDovhRI
+        SzzxBI5UYyEbTL8eEmS7u5areG6m0wdzOTd5VOqHArcxHpy97D5bDVSm6eU6glZxoFHQhU+peDxwo
+        SAm9HqcQ==;
+Received: from [::1] (port=44610 helo=server1.qf-corp.com)
+        by server1.qf-corp.com with esmtpa (Exim 4.92)
+        (envelope-from <admin@qf-corp.com>)
+        id 1hcgps-00070C-Sw; Mon, 17 Jun 2019 09:53:29 +0800
 MIME-Version: 1.0
-Received: by 2002:a2e:8310:0:0:0:0:0 with HTTP; Sat, 15 Jun 2019 16:37:30
- -0700 (PDT)
-Reply-To: buharimustafa2@gmail.com
-From:   buharimustafa <buharimustafa1@gmail.com>
-Date:   Sun, 16 Jun 2019 00:37:30 +0100
-Message-ID: <CAEzczHaJCu+41UQTnyzERnD4RzT_AEM+mcap4OCTwGm3h86HNw@mail.gmail.com>
-Subject: Thank you for your understanding
+Content-Type: text/plain; charset=UTF-8;
+ format=flowed
+Content-Transfer-Encoding: 8bit
+Date:   Mon, 17 Jun 2019 09:53:28 +0800
+From:   Herr David Williams <admin@qf-corp.com>
 To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Subject: dringender Kredit
+Reply-To: davidloaninvestment12@gmail.com
+Mail-Reply-To: davidloaninvestment12@gmail.com
+Message-ID: <7d2f25745674b8f7e7b680f9b472231f@qf-corp.com>
+X-Sender: admin@qf-corp.com
+User-Agent: Roundcube Webmail/1.3.8
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - server1.qf-corp.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - qf-corp.com
+X-Get-Message-Sender-Via: server1.qf-corp.com: authenticated_id: admin@qf-corp.com
+X-Authenticated-Sender: server1.qf-corp.com: admin@qf-corp.com
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-Hello, my name is Mustafa,
-I have a business proposal that will benefit us, it is a business
-worth 3.5million USD, Kindly get back to us if your interested for
-more details.
-Regards
-Mustafa
+
+
+-- 
+Benötigen Sie dringend einen Kredit? Wenn ja, antworten Sie für weitere 
+Details
