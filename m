@@ -2,142 +2,94 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CFD7F48356
-	for <lists+linux-edac@lfdr.de>; Mon, 17 Jun 2019 15:01:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4096B48435
+	for <lists+linux-edac@lfdr.de>; Mon, 17 Jun 2019 15:38:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726362AbfFQNA6 (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Mon, 17 Jun 2019 09:00:58 -0400
-Received: from smtp-fw-9102.amazon.com ([207.171.184.29]:11128 "EHLO
-        smtp-fw-9102.amazon.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726286AbfFQNA6 (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Mon, 17 Jun 2019 09:00:58 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1560776457; x=1592312457;
-  h=subject:to:cc:references:from:message-id:date:
-   mime-version:in-reply-to:content-transfer-encoding;
-  bh=KnynchamP1yl4uXc3vaUNVtHe8Iw/fDe/Wyl73exxdc=;
-  b=Cu8MzXfQZmqppH6Kpru2u9O0Hhe0lCwhVFWhikWS3ou39ezkF6ryo9i8
-   zhUfQOw5x+oYjsmivTcds01SfTRoUWQAdqkV+WvVKe1ucYMvPXS3jvNdl
-   AV7P7OdWmAkp0Tka3pUANU2zPiZLIotOC2w+YCCaJGFmiUYZLST6od9pJ
-   I=;
-X-IronPort-AV: E=Sophos;i="5.62,385,1554768000"; 
-   d="scan'208";a="680326438"
-Received: from sea3-co-svc-lb6-vlan2.sea.amazon.com (HELO email-inbound-relay-1e-c7c08562.us-east-1.amazon.com) ([10.47.22.34])
-  by smtp-border-fw-out-9102.sea19.amazon.com with ESMTP; 17 Jun 2019 13:00:54 +0000
-Received: from EX13MTAUEA001.ant.amazon.com (iad55-ws-svc-p15-lb9-vlan2.iad.amazon.com [10.40.159.162])
-        by email-inbound-relay-1e-c7c08562.us-east-1.amazon.com (Postfix) with ESMTPS id 085A2240FF7;
-        Mon, 17 Jun 2019 13:00:50 +0000 (UTC)
-Received: from EX13D08UEE004.ant.amazon.com (10.43.62.182) by
- EX13MTAUEA001.ant.amazon.com (10.43.61.82) with Microsoft SMTP Server (TLS)
- id 15.0.1367.3; Mon, 17 Jun 2019 13:00:50 +0000
-Received: from EX13MTAUEE001.ant.amazon.com (10.43.62.200) by
- EX13D08UEE004.ant.amazon.com (10.43.62.182) with Microsoft SMTP Server (TLS)
- id 15.0.1367.3; Mon, 17 Jun 2019 13:00:50 +0000
-Received: from [10.107.3.17] (10.107.3.17) by mail-relay.amazon.com
- (10.43.62.226) with Microsoft SMTP Server (TLS) id 15.0.1367.3 via Frontend
- Transport; Mon, 17 Jun 2019 13:00:46 +0000
-Subject: Re: [PATCH 2/2] edac: add support for Amazon's Annapurna Labs EDAC
-To:     James Morse <james.morse@arm.com>
-CC:     <robh+dt@kernel.org>, <mark.rutland@arm.com>, <bp@alien8.de>,
-        <mchehab@kernel.org>, <davem@davemloft.net>,
-        <gregkh@linuxfoundation.org>, <nicolas.ferre@microchip.com>,
-        <paulmck@linux.ibm.com>, <dwmw@amazon.co.uk>, <benh@amazon.com>,
-        <ronenk@amazon.com>, <talel@amazon.com>, <jonnyc@amazon.com>,
-        <hanochu@amazon.com>, <linux-edac@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <1559211329-13098-1-git-send-email-hhhawa@amazon.com>
- <1559211329-13098-3-git-send-email-hhhawa@amazon.com>
- <3129ed19-0259-d227-0cff-e9f165ce5964@arm.com>
- <4514bfa2-68b2-2074-b817-2f5037650c4e@amazon.com>
- <fdc3b458-96eb-1734-c294-2463f37f2244@arm.com>
-From:   "Hawa, Hanna" <hhhawa@amazon.com>
-Message-ID: <bbb9b41d-8ffa-d4c5-c199-2400695cce8d@amazon.com>
-Date:   Mon, 17 Jun 2019 16:00:45 +0300
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.1
+        id S1726961AbfFQNhp (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Mon, 17 Jun 2019 09:37:45 -0400
+Received: from mail.skyhub.de ([5.9.137.197]:46358 "EHLO mail.skyhub.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725973AbfFQNhp (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Mon, 17 Jun 2019 09:37:45 -0400
+Received: from zn.tnic (p200300EC2F061300646339CEC28800AD.dip0.t-ipconnect.de [IPv6:2003:ec:2f06:1300:6463:39ce:c288:ad])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 305971EC096B;
+        Mon, 17 Jun 2019 15:37:44 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1560778664;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=a/pVno4C9y6jXqKW+DQT3V6RDkIeS5XAS/FCv6w8vG8=;
+        b=mrQfIBePabx4vX7+fCMiV1S5cSrGOaOCrzNl0gLJjJABXxR06pcjJ4skpsZ+jYM84sepFJ
+        Sk+kKme+B2OAnNhSftO49r5gqgVwqcCVekTFLXMfCWyhE42/etzLz4DccuMDBIdwZIf73q
+        a0x1+s3iiDVxZRt60jlME5krBFzffPM=
+Date:   Mon, 17 Jun 2019 15:37:35 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     "Ghannam, Yazen" <Yazen.Ghannam@amd.com>
+Cc:     "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 1/8] EDAC/amd64: Fix number of DIMMs and Chip Select
+ bases/masks on Family17h
+Message-ID: <20190617133735.GJ27127@zn.tnic>
+References: <20190531234501.32826-1-Yazen.Ghannam@amd.com>
+ <20190531234501.32826-2-Yazen.Ghannam@amd.com>
+ <20190613135822.GC11598@zn.tnic>
+ <SN6PR12MB263988EC0AC99DA2D29B21F3F8EF0@SN6PR12MB2639.namprd12.prod.outlook.com>
 MIME-Version: 1.0
-In-Reply-To: <fdc3b458-96eb-1734-c294-2463f37f2244@arm.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <SN6PR12MB263988EC0AC99DA2D29B21F3F8EF0@SN6PR12MB2639.namprd12.prod.outlook.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
+On Thu, Jun 13, 2019 at 09:00:19PM +0000, Ghannam, Yazen wrote:
+> Do you have any tips on how to handle it? I'm thinking it may be
+> tricky because of the ranges and multiple variables.
 
->>>> +static void al_a57_edac_l2merrsr(void *arg)
->>>> +{
->>>
->>>> +    edac_device_handle_ce(edac_dev, 0, 0, "L2 Error");
->>>
->>> How do we know this is corrected?
-> 
->>> If looks like L2CTLR_EL1[20] might force fatal 1/0 to map to uncorrected/corrected. Is
->>> this what you are depending on here?
-> 
->> No - not on this. Reporting all the errors as corrected seems to be bad.
->>
->> Can i be depends on fatal field?
-> 
-> That is described as "set to 1 on the first memory error that caused a Data Abort". I
-> assume this is one of the parity-error external-aborts.
-> 
-> If the repeat counter shows, say, 2, and fatal is set, you only know that at least one of
-> these errors caused an abort. But it could have been all three. The repeat counter only
-> matches against the RAMID and friends, otherwise the error is counted in 'other'.
-> 
-> I don't think there is a right thing to do here, (other than increase the scrubbing
-> frequency). As you can only feed one error into edac at a time then:
-> 
->> if (fatal)
->>      edac_device_handle_ue(edac_dev, 0, 0, "L2 Error");
->> else
->>      edac_device_handle_ce(edac_dev, 0, 0, "L2 Error");
-> 
-> seems reasonable. You're reporting the most severe, and 'other/repeat' counter values just
-> go missing.
-I had print the values of 'other/repeat' to be noticed.
+It ain't pretty. It seems the if-else thing is still better, after all.
 
-> 
-> 
->> How can L2CTLR_EL1[20] force fatal?
-> 
-> I don't think it can, on a second reading, it looks to be even more complicated than I
-> thought! That bit is described as disabling forwarding of uncorrected data, but it looks
-> like the uncorrected data never actually reaches the other end. (I'm unsure what 'flush'
-> means in this context.)
-> I was looking for reasons you could 'know' that any reported error was corrected. This was
-> just a bad suggestion!
-Is there interrupt for un-correctable error?
-Does 'asynchronous errors' in L2 used to report UE?
+---
+diff --git a/drivers/edac/amd64_edac.c b/drivers/edac/amd64_edac.c
+index 873437be86d9..16235c0ef7e5 100644
+--- a/drivers/edac/amd64_edac.c
++++ b/drivers/edac/amd64_edac.c
+@@ -936,13 +936,25 @@ static void dump_misc_regs(struct amd64_pvt *pvt)
+  */
+ static void prep_chip_selects(struct amd64_pvt *pvt)
+ {
+-	if (pvt->fam == 0xf && pvt->ext_model < K8_REV_F) {
++	switch (pvt->fam) {
++	case 0xf:
++		if (pvt->ext_model >= K8_REV_F)
++			goto dflt;
++
+ 		pvt->csels[0].b_cnt = pvt->csels[1].b_cnt = 8;
+ 		pvt->csels[0].m_cnt = pvt->csels[1].m_cnt = 8;
+-	} else if (pvt->fam == 0x15 && pvt->model == 0x30) {
++		break;
++
++	case 0x15:
++		if (pvt->model != 0x30)
++			goto dflt;
++
+ 		pvt->csels[0].b_cnt = pvt->csels[1].b_cnt = 4;
+ 		pvt->csels[0].m_cnt = pvt->csels[1].m_cnt = 2;
+-	} else {
++		break;
++
++dflt:
++	default:
+ 		pvt->csels[0].b_cnt = pvt->csels[1].b_cnt = 8;
+ 		pvt->csels[0].m_cnt = pvt->csels[1].m_cnt = 4;
+ 	}
 
-In case no interrupt, can we use die-notifier subsystem to check if any 
-error had occur while system shutdown?
+-- 
+Regards/Gruss,
+    Boris.
 
->>>> +        cluster = topology_physical_package_id(cpu);
->>>
->>> Hmm, I'm not sure cluster==package is guaranteed to be true forever.
->>>
->>> If you describe the L2MERRSR_EL1 cpu mapping in your DT you could use that. Otherwise
->>> pulling out the DT using something like the arch code's parse_cluster().
-> 
->> I rely on that it's alpine SoC specific driver.
-> 
-> ... and that the topology code hasn't changed to really know what a package is:
-> https://lore.kernel.org/lkml/20190529211340.17087-2-atish.patra@wdc.com/T/#u
-> 
-> As what you really want to know is 'same L2?', and you're holding the cpu_read_lock(),
-> would struct cacheinfo's shared_cpu_map be a better fit?
-> 
-> This would be done by something like a cpu-mask of cache:shared_cpu_map's for the L2's
-> you've visited. It removes the dependency on package==L2, and insulates you from the
-> cpu-numbering not being exactly as you expect.
-I'll add dt property that point to L2-cache node (phandle), then it'll 
-be easy to create cpu-mask with all cores that point to same l2 cache.
-
-Thanks,
-Hanna
-
-
+Good mailing practices for 400: avoid top-posting and trim the reply.
