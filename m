@@ -2,28 +2,28 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F69348564
+	by mail.lfdr.de (Postfix) with ESMTP id 8930748565
 	for <lists+linux-edac@lfdr.de>; Mon, 17 Jun 2019 16:30:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726509AbfFQO3l (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Mon, 17 Jun 2019 10:29:41 -0400
-Received: from szxga07-in.huawei.com ([45.249.212.35]:50564 "EHLO huawei.com"
+        id S1726005AbfFQO3m (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Mon, 17 Jun 2019 10:29:42 -0400
+Received: from szxga07-in.huawei.com ([45.249.212.35]:50562 "EHLO huawei.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726005AbfFQO3l (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        id S1726920AbfFQO3l (ORCPT <rfc822;linux-edac@vger.kernel.org>);
         Mon, 17 Jun 2019 10:29:41 -0400
 Received: from DGGEMS407-HUB.china.huawei.com (unknown [172.30.72.60])
-        by Forcepoint Email with ESMTP id 22F0B19BA13493ADD92C;
+        by Forcepoint Email with ESMTP id 1F36236C7E016B04080B;
         Mon, 17 Jun 2019 22:29:39 +0800 (CST)
 Received: from DESKTOP-6T4S3DQ.china.huawei.com (10.202.226.53) by
  DGGEMS407-HUB.china.huawei.com (10.3.19.207) with Microsoft SMTP Server id
- 14.3.439.0; Mon, 17 Jun 2019 22:29:28 +0800
+ 14.3.439.0; Mon, 17 Jun 2019 22:29:30 +0800
 From:   Shiju Jose <shiju.jose@huawei.com>
 To:     <mchehab@kernel.org>, <linux-edac@vger.kernel.org>,
         <linuxarm@huawei.com>
 CC:     Shiju Jose <shiju.jose@huawei.com>
-Subject: [PATCH 2/6] rasdaemon: rearrange HiSilicon HIP07 decoding function table
-Date:   Mon, 17 Jun 2019 15:28:48 +0100
-Message-ID: <20190617142852.12140-3-shiju.jose@huawei.com>
+Subject: [PATCH 3/6] rasdaemon: update iteration logic for the non-standard error decoding functions
+Date:   Mon, 17 Jun 2019 15:28:49 +0100
+Message-ID: <20190617142852.12140-4-shiju.jose@huawei.com>
 X-Mailer: git-send-email 2.19.2.windows.1
 In-Reply-To: <20190617142852.12140-1-shiju.jose@huawei.com>
 References: <Shiju Jose>
@@ -38,58 +38,59 @@ Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-This patch rearranges the decoding function table for the
-HiSilicon HIP07 non-standard errors.
+This patch updates the iteration logic for the non-standard
+error decoding functions.
 
+Suggested-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 Signed-off-by: Shiju Jose <shiju.jose@huawei.com>
 ---
- non-standard-hisi_hip07.c | 26 ++++++++++++--------------
- 1 file changed, 12 insertions(+), 14 deletions(-)
+ non-standard-hisi_hip07.c  | 2 +-
+ ras-non-standard-handler.c | 2 +-
+ ras-non-standard-handler.h | 1 -
+ 3 files changed, 2 insertions(+), 3 deletions(-)
 
 diff --git a/non-standard-hisi_hip07.c b/non-standard-hisi_hip07.c
-index 3e9dabd..19a5c47 100644
+index 19a5c47..bb2576e 100644
 --- a/non-standard-hisi_hip07.c
 +++ b/non-standard-hisi_hip07.c
-@@ -24,20 +24,6 @@
- #define HISI_SAS_VALID_ERR_TYPE       BIT(2)
- #define HISI_SAS_VALID_AXI_ERR_INFO   BIT(3)
+@@ -134,11 +134,11 @@ struct ras_ns_dec_tab hisi_ns_dec_tab[] = {
+ 		.sec_type = "fbc2d923ea7a453dab132949f5af9e53",
+ 		.decode = decode_hip07_hns_error,
+ 	},
++	{ /* sentinel */ }
+ };
  
--static int decode_hip07_sas_error(struct trace_seq *s, const void *error);
--static int decode_hip07_hns_error(struct trace_seq *s, const void *error);
--
--struct ras_ns_dec_tab hisi_ns_dec_tab[] = {
--	{
--		.sec_type = "daffd8146eba4d8c8a91bc9bbf4aa301",
--		.decode = decode_hip07_sas_error,
--	},
--	{
--		.sec_type = "fbc2d923ea7a453dab132949f5af9e53",
--		.decode = decode_hip07_hns_error,
--	},
--};
--
- struct hisi_sas_err_sec {
- 	uint64_t   val_bits;
- 	uint64_t   physical_addr;
-@@ -138,6 +124,18 @@ static int decode_hip07_hns_error(struct trace_seq *s, const void *error)
- {
- 	return 0;
- }
-+
-+struct ras_ns_dec_tab hisi_ns_dec_tab[] = {
-+	{
-+		.sec_type = "daffd8146eba4d8c8a91bc9bbf4aa301",
-+		.decode = decode_hip07_sas_error,
-+	},
-+	{
-+		.sec_type = "fbc2d923ea7a453dab132949f5af9e53",
-+		.decode = decode_hip07_hns_error,
-+	},
-+};
-+
  __attribute__((constructor))
  static void hip07_init(void)
  {
+-	hisi_ns_dec_tab[0].len = ARRAY_SIZE(hisi_ns_dec_tab);
+ 	register_ns_dec_tab(hisi_ns_dec_tab);
+ }
+diff --git a/ras-non-standard-handler.c b/ras-non-standard-handler.c
+index d343a2a..392bb27 100644
+--- a/ras-non-standard-handler.c
++++ b/ras-non-standard-handler.c
+@@ -163,7 +163,7 @@ int ras_non_standard_event_handler(struct trace_seq *s,
+ 
+ 	for (count = 0; count < dec_tab_count && !dec_done; count++) {
+ 		dec_tab = ns_dec_tab[count];
+-		for (i = 0; i < dec_tab[0].len; i++) {
++		for (i = 0; dec_tab[i].decode; i++) {
+ 			if (uuid_le_cmp(ev.sec_type,
+ 					dec_tab[i].sec_type) == 0) {
+ 				dec_tab[i].decode(s, ev.error);
+diff --git a/ras-non-standard-handler.h b/ras-non-standard-handler.h
+index b9e9fb1..b2c9743 100644
+--- a/ras-non-standard-handler.h
++++ b/ras-non-standard-handler.h
+@@ -23,7 +23,6 @@
+ typedef struct ras_ns_dec_tab {
+ 	const char *sec_type;
+ 	int (*decode)(struct trace_seq *s, const void *err);
+-	size_t len;
+ } *p_ns_dec_tab;
+ 
+ int ras_non_standard_event_handler(struct trace_seq *s,
 -- 
 1.9.1
 
