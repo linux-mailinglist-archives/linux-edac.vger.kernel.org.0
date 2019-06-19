@@ -2,133 +2,59 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 180924936C
-	for <lists+linux-edac@lfdr.de>; Mon, 17 Jun 2019 23:30:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F6584B322
+	for <lists+linux-edac@lfdr.de>; Wed, 19 Jun 2019 09:33:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729933AbfFQV3v (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Mon, 17 Jun 2019 17:29:51 -0400
-Received: from mail.kernel.org ([198.145.29.99]:56956 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729963AbfFQV3q (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Mon, 17 Jun 2019 17:29:46 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id E69A7204FD;
-        Mon, 17 Jun 2019 21:29:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1560806986;
-        bh=PUNNahiVj8y47dRYhB1/uNkyF/LxS2ZbcuAPzyHaIyY=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=hcTgmcIMxdIYNr9x5AeghKhACW+HbWdZVg5uT/WV+VR69rp7dFX5dAqzbXDrXKXs0
-         bEhXSQz27CXioLw43004/wa3nl+OGAQwfCIJqdE3CohUbGSOW1sfaMl5omkQRAB/7k
-         BXqqZCcbqten8HQC7Stb/lHzayfy56uey/yU0AFo=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Cong Wang <xiyou.wangcong@gmail.com>,
-        Borislav Petkov <bp@suse.de>, Tony Luck <tony.luck@intel.com>,
-        linux-edac <linux-edac@vger.kernel.org>
-Subject: [PATCH 4.14 50/53] RAS/CEC: Fix binary search function
-Date:   Mon, 17 Jun 2019 23:10:33 +0200
-Message-Id: <20190617210752.550132533@linuxfoundation.org>
-X-Mailer: git-send-email 2.22.0
-In-Reply-To: <20190617210745.104187490@linuxfoundation.org>
-References: <20190617210745.104187490@linuxfoundation.org>
-User-Agent: quilt/0.66
+        id S1726195AbfFSHdU (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Wed, 19 Jun 2019 03:33:20 -0400
+Received: from mail.windriver.com ([147.11.1.11]:63418 "EHLO
+        mail.windriver.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725946AbfFSHdU (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Wed, 19 Jun 2019 03:33:20 -0400
+Received: from ALA-HCA.corp.ad.wrs.com ([147.11.189.40])
+        by mail.windriver.com (8.15.2/8.15.1) with ESMTPS id x5J7WxhF016777
+        (version=TLSv1 cipher=AES128-SHA bits=128 verify=FAIL);
+        Wed, 19 Jun 2019 00:32:59 -0700 (PDT)
+Received: from pek-lpggp2 (128.224.153.75) by ALA-HCA.corp.ad.wrs.com
+ (147.11.189.40) with Microsoft SMTP Server id 14.3.439.0; Wed, 19 Jun 2019
+ 00:32:58 -0700
+Received: by pek-lpggp2 (Postfix, from userid 20544)    id B7372720728; Wed, 19
+ Jun 2019 15:15:20 +0800 (CST)
+From:   Jiping Ma <jiping.ma2@windriver.com>
+To:     <jbaron@akamai.com>
+CC:     <linux-edac@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <mchehab@kernel.org>, <bp@alien8.de>, <jiping.ma2@windriver.com>
+Subject: Review request for edac: ie31200: Add Intel Corporation 3rd Gen Core processor
+Date:   Wed, 19 Jun 2019 15:15:17 +0800
+Message-ID: <1560928518-243100-1-git-send-email-jiping.ma2@windriver.com>
+X-Mailer: git-send-email 1.9.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-From: Borislav Petkov <bp@suse.de>
 
-commit f3c74b38a55aefe1004200d15a83f109b510068c upstream.
+Hi, Jason Baron
 
-Switch to using Donald Knuth's binary search algorithm (The Art of
-Computer Programming, vol. 3, section 6.2.1). This should've been done
-from the very beginning but the author must've been smoking something
-very potent at the time.
-
-The problem with the current one was that it would return the wrong
-element index in certain situations:
-
-  https://lkml.kernel.org/r/CAM_iQpVd02zkVJ846cj-Fg1yUNuz6tY5q1Vpj4LrXmE06dPYYg@mail.gmail.com
-
-and the noodling code after the loop was fishy at best.
-
-So switch to using Knuth's binary search. The final result is much
-cleaner and straightforward.
-
-Fixes: 011d82611172 ("RAS: Add a Corrected Errors Collector")
-Reported-by: Cong Wang <xiyou.wangcong@gmail.com>
-Signed-off-by: Borislav Petkov <bp@suse.de>
-Cc: Tony Luck <tony.luck@intel.com>
-Cc: linux-edac <linux-edac@vger.kernel.org>
-Cc: <stable@vger.kernel.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-
----
- drivers/ras/cec.c |   34 ++++++++++++++++++++--------------
- 1 file changed, 20 insertions(+), 14 deletions(-)
-
---- a/drivers/ras/cec.c
-+++ b/drivers/ras/cec.c
-@@ -185,32 +185,38 @@ static void cec_timer_fn(unsigned long d
-  */
- static int __find_elem(struct ce_array *ca, u64 pfn, unsigned int *to)
- {
-+	int min = 0, max = ca->n - 1;
- 	u64 this_pfn;
--	int min = 0, max = ca->n;
- 
--	while (min < max) {
--		int tmp = (max + min) >> 1;
-+	while (min <= max) {
-+		int i = (min + max) >> 1;
- 
--		this_pfn = PFN(ca->array[tmp]);
-+		this_pfn = PFN(ca->array[i]);
- 
- 		if (this_pfn < pfn)
--			min = tmp + 1;
-+			min = i + 1;
- 		else if (this_pfn > pfn)
--			max = tmp;
--		else {
--			min = tmp;
--			break;
-+			max = i - 1;
-+		else if (this_pfn == pfn) {
-+			if (to)
-+				*to = i;
-+
-+			return i;
- 		}
- 	}
- 
-+	/*
-+	 * When the loop terminates without finding @pfn, min has the index of
-+	 * the element slot where the new @pfn should be inserted. The loop
-+	 * terminates when min > max, which means the min index points to the
-+	 * bigger element while the max index to the smaller element, in-between
-+	 * which the new @pfn belongs to.
-+	 *
-+	 * For more details, see exercise 1, Section 6.2.1 in TAOCP, vol. 3.
-+	 */
- 	if (to)
- 		*to = min;
- 
--	this_pfn = PFN(ca->array[min]);
--
--	if (this_pfn == pfn)
--		return min;
--
- 	return -ENOKEY;
- }
- 
+Could you help to check if we can support Intel Corporation 3rd Gen Core processor in driver ie31200?
+It is tested by our customer. Test result is accepted by the customer.
 
 
+Summary: EDAC, ie31200: Add Intel Corporation 3rd Gen Core processor
+
+
+commit 9a5001c8840928c3b51bc330a078524dff4d9be5 (HEAD -> master)
+Author: Jiping Ma <jiping.ma2@windriver.com>
+Date:   Mon Jun 17 13:36:20 2019 +0800
+
+EDAC, ie31200: Add Intel Corporation 3rd Gen Core processor
+    
+3rd Gen Core seems to work just like Skylake.
+  
+Signed-off-by: Jiping Ma <jiping.ma2@windriver.com>
+
+
+Thanks,
+Jiping
