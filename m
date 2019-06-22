@@ -2,100 +2,65 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 062A84EF25
-	for <lists+linux-edac@lfdr.de>; Fri, 21 Jun 2019 20:56:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 247884F6EB
+	for <lists+linux-edac@lfdr.de>; Sat, 22 Jun 2019 18:29:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726277AbfFUS4G (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Fri, 21 Jun 2019 14:56:06 -0400
-Received: from bombadil.infradead.org ([198.137.202.133]:57856 "EHLO
-        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726163AbfFUS4G (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Fri, 21 Jun 2019 14:56:06 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
-        Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Subject:Cc:To:
-        From:Date:Sender:Reply-To:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=SyOfB2Xe5lSMwJ5Axvyuhm/8OhedEgUcL8u58j5Tx7A=; b=V4xG0Eg8pNZNXKiqjjBpCj5Dz
-        QlBAqqEdS0xHBpjyYreMP5n5aWXoohprLPrgIzvjtzfCS4KnnGTx77kZLWcz2bEeOL3reoM5nUdnZ
-        Onu99kv0CelFVOaWmrOptltNwyU/3xImEOnXJet5OThVVC9QAzfUZhj6Me+odYgNk4gRNidyOdkzI
-        JR80gl1rjyQyUinzJ8glzV/neniawLEedMJeVfkL+0qsPKBAr5fJEKiSLBZjjqP2CTHDrhCVOCgnD
-        M2H8pvRIxZiwk+ja1auj1ZMfeVfLOUdpDMf1+Fpzk9FX0Ip5zPJg+Wr9wNKOo9nI16CoCoCIiSv6K
-        m6wWgHixw==;
-Received: from [177.97.20.138] (helo=coco.lan)
-        by bombadil.infradead.org with esmtpsa (Exim 4.92 #3 (Red Hat Linux))
-        id 1heOhg-0008IF-Ge; Fri, 21 Jun 2019 18:56:04 +0000
-Date:   Fri, 21 Jun 2019 15:56:00 -0300
-From:   Mauro Carvalho Chehab <mchehab@kernel.org>
-To:     Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Cc:     <linux-edac@vger.kernel.org>, <linuxarm@huawei.com>,
-        <jcm@redhat.com>
-Subject: Re: [RFC PATCH 0/6] CCIX rasdaemon support
-Message-ID: <20190621155600.537b7e68@coco.lan>
-In-Reply-To: <20190614175517.58442-1-Jonathan.Cameron@huawei.com>
-References: <20190614175517.58442-1-Jonathan.Cameron@huawei.com>
-X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-redhat-linux-gnu)
+        id S1726418AbfFVQ2u (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Sat, 22 Jun 2019 12:28:50 -0400
+Received: from sonic301-3.consmr.mail.bf2.yahoo.com ([74.6.129.42]:39008 "EHLO
+        sonic301-3.consmr.mail.bf2.yahoo.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726351AbfFVQ2u (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>);
+        Sat, 22 Jun 2019 12:28:50 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1561220929; bh=3fXYToOZXvh5MOJ1JSawYDThjnynC/Ekt2gucIg6zZg=; h=Date:From:Reply-To:Subject:From:Subject; b=FwrBLUl7u665XwQeVPTq5hUQ4Ptv5qPcwgE0MfCyAxPjQW66W+sBKlTITy95Xiak8M/9mL3k87XvuhuNYmdzjOXFqAsXXJ7ZeR0tr0xQhaR4qpp9+I79zHB4JVXDeOtUnrv/ni1DEn3m49tSMIml9+1SbDvUcui/xLYzcB7mOtvlwJJC6bBkcbOwJW8drH7WnSKYQVlUvO9PRg8+IWYABo4m/HoTrmg3JSd7+tfq1bmdsTjreC9G6uwJClVG1p8XyGEOijmNqXv9Ivunj8UzUvxVldTIg/taTAKdSlSG3i+xbnz28LKLpxSK2+M63p52Vf+hNJ0OycyVj1TkO+H8OQ==
+X-YMail-OSG: BClZlNgVM1mJa1pSUAMlnjmDwJQUKDn0osVKNVIeZ6AC0JZQ8NzrV_.P2vPToBw
+ lk4l1yMYy0P1wu9iKWHPF1vwWtED.NCcY6jE.jXdELnZdUngnDzcX.f1Ik7TcPjN._6dUftCNvSG
+ 0ilPDIIh6JKut3rld3EDzfXqVTEprJFL10dLfXEmdNXy8_9HzWnLN9Uxxh6FWr8nj4DbExyF48M8
+ b8CzHn8AtWzh0fDjJqMRXb5UR1L1fHF.mq4wk_41bl8VHLLREhO8D9AiMB_Iou.TvP.xektI4Uzf
+ lBotEg54S8nbe5a5a2eamKaLSiD6XaCIzSQkrGwkgk9qzk7J4361PG1C2lAWhSULJjGYH.uKi9SH
+ 8omXh8MvwuZmVU7umqXbA4eIFWV8ruRR3qRFWtA.2B0Eer.D49EbNovsAu.wRPm8yYyL6YMdaoys
+ 3vYAkjype1yPgR0gHAH3zObnNPMrtMzQfsTzcaha59dNYsVWPRo5EvcFgAIKXVIUqnKnooWuODru
+ O4SgrdrM8PGEZGs5dJS.h.dJB3gwQ.0I1wf1Q_CLgJhbPMrumaMiWl3ifhN9G_CCxrGhRPRltqdB
+ RyAvAXGENXKEJswzM.sYWHkLQyblOWaGX5TLKzeDGaJCZVu7CtZvQ0aNcyWtqrf4SAtE7MK9SqUH
+ 7phABBxeBrGdyDkvdUQOX_EPh25.Hb3SncDKllMEIHjvEdwbQcMGmqMEDVCI8Jh0nfgpjh259ODl
+ q.bGW_sz63_QvjPWXygjUQ4RzfXiei1bHIkvbkPAHc04dS.Qr8LP1Jyxp2QD0wtNtJgo5RScK99X
+ P5NPqcNAR8eez8YgXpk3cKLQCR9JSylhL6QyUVACODhQSLMO_l73eEDpWzNQUeEQLrEwA53TFUO9
+ BXx4lR26gADp4OeWMANR3pTNDn8J7Oc5G1l.tF8AqVFtdsoB5vgCdw0tzoX9_22cJzNNteihaN9H
+ ktOSXaCeUY26x9DWNkYi7HTOCc9F4vHnioRwelB9Lv.KGDeGPUJBBPmfcn0xXC8MB2YTlUFeVHzN
+ FJsHhvFz9eJx.VwEAdhJs3DHW6xmbj9a_RSOf.BoLPiAvMAdoBe_1sVY8nFOqhuBwpkbj17TOzIW
+ ts0JEWafkyantIFw8kEnIr0AHDEAK4aB1fgOVS8TQpbEaj2tB4pKHPa4OOjXszQAPBozr7PYVj2f
+ 6AcwHFYhcmsrFfliX20p43dgFMRY8GMXgvUWeegBAeAuOTxCoUC9WvAdL
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic301.consmr.mail.bf2.yahoo.com with HTTP; Sat, 22 Jun 2019 16:28:49 +0000
+Date:   Sat, 22 Jun 2019 16:28:46 +0000 (UTC)
+From:   "Miss.Fatima Yusuf" <fatimayusuf5@outlook.fr>
+Reply-To: miss.fmayusuf11@gmail.com
+Message-ID: <270302503.296556.1561220926635@mail.yahoo.com>
+Subject: From:Miss: Fatima Yusuf.
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
+To:     unlisted-recipients:; (no To-header on input)
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-Em Sat, 15 Jun 2019 01:55:11 +0800
-Jonathan Cameron <Jonathan.Cameron@huawei.com> escreveu:
 
-> This is an RFC because the kernel side is currently under review and
-> may change with obvious follow through effects on this.
-> 
-> https://lore.kernel.org/linux-edac/20190606123654.78973-1-Jonathan.Cameron@huawei.com/
 
-Yeah, we should wait for it to be merged upstream before adding them to
-rasdaemon ;-)
+From:Miss: Fatima Yusuf.
 
-> 
-> There are a few additional questions around this:
-> 1. Divide between specifity of DB fields vs blobs.
->    Where possible I have tried to fully describe the contents via
->    separate fields rather than large blobs.
+For sure this mail would definitely come to you as a surprise, but do take your good time to go through it, My name is Ms. Fatima Yusuf,i am from Ivory Coast.
 
-OK!
+I lost my parents a year and couple of months ago. My father was a serving director of the Agro-exporting board until his death. He was assassinated by his business partners.Before his death, he made a deposit of US$9.7 Million Dollars here in Cote d'ivoire which was for the purchase of cocoa processing machine and development of another factory before his untimely death.
 
->    One common SQL convention
->    that doesn't seem to have been previously done in rasdaemon is to
->    use explicit NULL entries for elements where data is missing.
+Being that this part of the world experiences political and crises time without number, there is no guarantee of lives and properties. I cannot invest this money here any long, despite the fact it had been my late father's industrial plans.
 
-We tried to be a simple as possible when we added the dB option.
+I want you to do me a favor to receive this funds into your country or any safer place as the beneficiary, I have plans to invest this money in continuation with the investment vision of my late father, but not in this place again rather in your country. I have the vision of going into real estate and industrial production or any profitable business venture.
 
-We even opted to use sqllite, instead of having support for 
-MySQL or Postgres - Not only due to simplicity, but also because,
-if a machine has problems, a database at the same machine may crash.
+I will be ready to compensate you with 20% of the total Amount, now all my hope is banked on you and i really wants to invest this money in your country, where there is stability of Government, political and economic welfare.
 
-That's said, with MySQL/Postgres support, the logs could be done
-via a remote machine, with would be safer.
+My greatest worry now is how to move out of this country because my uncle is threatening to kill me as he killed my father,Please do not let anybody hear about this, it is between me and you alone because of my security reason.
 
--
-
-I don't see much problem on adding such things to new tables or even
-add optional support for other dB types, but Changing the existing dBs 
-can be a problem.
-
-Perhaps it could have a table somewhere storing the Rasdaemon version,
-in order to be able to detect if a table has missing something. If
-Rasdaemon version is bigger than the one at the server, it could do some
-database changes in order to support new features - including things like
-replacing empty fields by NULL.
-
-If you think such changes would be useful, feel free to submit patches.
-
-> 2. Should we split ras-record.c and have the ccix handling in a separate
->    ras-record-ccix.c file or similar as that one is getting rather large.
-
-Makes sense to me. As all projects, it started small. As things are
-getting bigger, it makes sense to split some features on separate
-files.
-
-Thanks,
-Mauro
+I am waiting to hear from you.
+Yours Sincerely,
+Miss.Fatima Yusuf.
