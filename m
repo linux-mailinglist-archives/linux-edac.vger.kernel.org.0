@@ -2,123 +2,113 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 49A1050AF1
-	for <lists+linux-edac@lfdr.de>; Mon, 24 Jun 2019 14:41:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 54FB050C49
+	for <lists+linux-edac@lfdr.de>; Mon, 24 Jun 2019 15:47:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727465AbfFXMlk (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Mon, 24 Jun 2019 08:41:40 -0400
-Received: from bombadil.infradead.org ([198.137.202.133]:57600 "EHLO
-        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727301AbfFXMlj (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Mon, 24 Jun 2019 08:41:39 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
-        Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Subject:Cc:To:
-        From:Date:Sender:Reply-To:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=yeZEN/lvAWBOBFz39npagodYTbEtl6pn+EI6Vjjk1so=; b=d6pYxJ/2Y3A0iX35rh9XmUfh0
-        gXVobml3SAEoakC8svIyjsbsFSbEYEuDjuVROZ1K9pi7rH3pgNWP4dID2i/Zx4YMmQm+8C05K07Yz
-        dRr60kGjU7pUmJfvt9BCnrG3ud6Z8IWw2sPCvJ5jouGkxhm8GBbCzwa1Ld3W6rORotKOu+n91Zc2j
-        aFKLCtkyZ5Av/eBHKMlE4j9C0d9WgkLJ6eyHvpLd1nq4n9VmzQpFWtex2EcxnXLMt5cSGEGuyf2jE
-        uFCQk01QXsH2bmJBCN+ZoK1GiyM8q61O3DP2/mgKhFm/lGz050ZjEIYm4N4vR/xRaNlQLmyMm+cWh
-        UC5umoOmA==;
-Received: from [179.95.45.115] (helo=coco.lan)
-        by bombadil.infradead.org with esmtpsa (Exim 4.92 #3 (Red Hat Linux))
-        id 1hfOHz-0001Mj-6U; Mon, 24 Jun 2019 12:41:39 +0000
-Date:   Mon, 24 Jun 2019 09:41:36 -0300
-From:   Mauro Carvalho Chehab <mchehab@infradead.org>
-To:     Wen Pu <puwen@hygon.cn>
-Cc:     "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>
-Subject: Re: [PATCH] ras-mce-handler: Add support for Hygon Dhyana family
- 18h processor
-Message-ID: <20190624094136.1017a6b6@coco.lan>
-In-Reply-To: <bdb9763a-b111-1927-9fd2-3fd933b3981d@hygon.cn>
-References: <1558616422-22997-1-git-send-email-puwen@hygon.cn>
-        <bdb9763a-b111-1927-9fd2-3fd933b3981d@hygon.cn>
-X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-redhat-linux-gnu)
+        id S1729954AbfFXNrr (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Mon, 24 Jun 2019 09:47:47 -0400
+Received: from userp2130.oracle.com ([156.151.31.86]:58764 "EHLO
+        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726505AbfFXNrq (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Mon, 24 Jun 2019 09:47:46 -0400
+Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
+        by userp2130.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x5ODd7QX174815;
+        Mon, 24 Jun 2019 13:47:28 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : mime-version : content-type; s=corp-2018-07-02;
+ bh=ru5BHNeWilfdn0D38ISTbXcMTHrw/PL5SmFYWLHmge8=;
+ b=yjMB6VlsgLV7STc9GzCICcenKC0/AXlXCRdw37mzEV8VfXiCBc2IcMB/qJ3a6tKBHGHp
+ C02+t1XNWa6TzPFT45XtLdVPFWAwkSUY1iWnNshYU2hShhcpztXmpZdoLiF9wIV7Q0rt
+ RnI6/OzrMoBCOchbuLqtYysCZrOUoSetV1lJZH4bXDl1b8QZAm1B2yn+dYXaugRtRco3
+ Yp5UfipeaQbtL8/YrMPxHsG+Jxn+KtjQMsSj+UuI0o59lpjMG9RFxQXbL7BtkEe1Qs7n
+ 8E4rJt1i79tTNTiJPsM75yultM5L9ltthTrlHzY1jUIMbjzhb3uyw+P8yffpkTl7oBAY Pg== 
+Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
+        by userp2130.oracle.com with ESMTP id 2t9brsxhxe-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 24 Jun 2019 13:47:28 +0000
+Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
+        by aserp3030.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x5ODlRFc169351;
+        Mon, 24 Jun 2019 13:47:28 GMT
+Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
+        by aserp3030.oracle.com with ESMTP id 2t9acbgxgh-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 24 Jun 2019 13:47:27 +0000
+Received: from abhmp0013.oracle.com (abhmp0013.oracle.com [141.146.116.19])
+        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id x5ODlPCU026291;
+        Mon, 24 Jun 2019 13:47:25 GMT
+Received: from mwanda (/41.57.98.10)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Mon, 24 Jun 2019 06:47:25 -0700
+Date:   Mon, 24 Jun 2019 16:47:17 +0300
+From:   Dan Carpenter <dan.carpenter@oracle.com>
+To:     Thor Thayer <thor.thayer@linux.intel.com>
+Cc:     Borislav Petkov <bp@alien8.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        James Morse <james.morse@arm.com>, linux-edac@vger.kernel.org,
+        kernel-janitors@vger.kernel.org
+Subject: [PATCH] EDAC/altera: Silence an endian warning
+Message-ID: <20190624134717.GA1754@mwanda>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-SRS-Rewrite: SMTP reverse-path rewritten from <mchehab@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Mailer: git-send-email haha only kidding
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9297 signatures=668687
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
+ phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=999
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.0.1-1810050000 definitions=main-1906240112
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9297 signatures=668687
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
+ suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1011
+ lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1810050000
+ definitions=main-1906240112
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-Em Fri, 14 Jun 2019 02:18:10 +0000
-Wen Pu <puwen@hygon.cn> escreveu:
+Smatch complains that we're casting a u32 pointer to unsigned long.
 
-> Friendly ping...
-> 
-> On 2019/5/23 21:00, Pu Wen wrote:
-> > The Hygon Dhyana family 18h processor is derived from AMD family 17h.
-> > The Hygon Dhyana support to Linux is already accepted upstream[1].
-> > 
-> > Add Hygon Dhyana support to mce handler of rasdaemon in order to handle
-> > MCE events on Hygon Dhyana platforms.
+    drivers/edac/altera_edac.c:1878 altr_edac_a10_irq_handler()
+    warn: passing casted pointer '&irq_status' to 'find_first_bit()'
 
-Applied, thanks!
+This code wouldn't work on a 64 bit big endian system because we would
+read past the end of &irq_status.
 
-> > 
-> > Reference:
-> > [1] https://git.kernel.org/tip/fec98069fb72fb656304a3e52265e0c2fc9adf87
-> > 
-> > Signed-off-by: Pu Wen <puwen@hygon.cn>
-> > ---
-> >   ras-mce-handler.c | 9 ++++++++-
-> >   ras-mce-handler.h | 1 +
-> >   2 files changed, 9 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/ras-mce-handler.c b/ras-mce-handler.c
-> > index c11d489..eb548c6 100644
-> > --- a/ras-mce-handler.c
-> > +++ b/ras-mce-handler.c
-> > @@ -55,7 +55,8 @@ static char *cputype_name[] = {
-> >   	[CPU_KNIGHTS_LANDING] = "Knights Landing",
-> >   	[CPU_KNIGHTS_MILL] = "Knights Mill",
-> >   	[CPU_SKYLAKE_XEON] = "Skylake server",
-> > -	[CPU_NAPLES] = "AMD Family 17h Zen1"
-> > +	[CPU_NAPLES] = "AMD Family 17h Zen1",
-> > +	[CPU_DHYANA] = "Hygon Family 18h Moksha"
-> >   };
-> >   
-> >   static enum cputype select_intel_cputype(struct ras_events *ras)
-> > @@ -200,6 +201,11 @@ static int detect_cpu(struct ras_events *ras)
-> >   			ret = EINVAL;
-> >   		}
-> >   		goto ret;
-> > +	} else if (!strcmp(mce->vendor,"HygonGenuine")) {
-> > +		if (mce->family == 24) {
-> > +			mce->cputype = CPU_DHYANA;
-> > +		}
-> > +		goto ret;
-> >   	} else if (!strcmp(mce->vendor,"GenuineIntel")) {
-> >   		mce->cputype = select_intel_cputype(ras);
-> >   	} else {
-> > @@ -436,6 +442,7 @@ int ras_mce_event_handler(struct trace_seq *s,
-> >   		rc = parse_amd_k8_event(ras, &e);
-> >   		break;
-> >   	case CPU_NAPLES:
-> > +	case CPU_DHYANA:
-> >   		rc = parse_amd_smca_event(ras, &e);
-> >   		break;
-> >   	default:			/* All other CPU types are Intel */
-> > diff --git a/ras-mce-handler.h b/ras-mce-handler.h
-> > index 8aaecd1..94395eb 100644
-> > --- a/ras-mce-handler.h
-> > +++ b/ras-mce-handler.h
-> > @@ -51,6 +51,7 @@ enum cputype {
-> >   	CPU_KNIGHTS_MILL,
-> >   	CPU_SKYLAKE_XEON,
-> >   	CPU_NAPLES,
-> > +	CPU_DHYANA,
-> >   };
-> >   
-> >   struct mce_event {
-> >   
+Fixes: 13ab8448d2c9 ("EDAC, altera: Add ECC Manager IRQ controller support")
+Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+---
+Static analysis obviously and I don't know this subsystem at all.
+Probably we're never going to run this on a 64 bit big endian system...
+Feel free to ignore this if you want.
 
+ drivers/edac/altera_edac.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
+diff --git a/drivers/edac/altera_edac.c b/drivers/edac/altera_edac.c
+index c2e693e34d43..bf024ec0116c 100644
+--- a/drivers/edac/altera_edac.c
++++ b/drivers/edac/altera_edac.c
+@@ -1866,6 +1866,7 @@ static void altr_edac_a10_irq_handler(struct irq_desc *desc)
+ 	struct altr_arria10_edac *edac = irq_desc_get_handler_data(desc);
+ 	struct irq_chip *chip = irq_desc_get_chip(desc);
+ 	int irq = irq_desc_get_irq(desc);
++	unsigned long bits;
+ 
+ 	dberr = (irq == edac->db_irq) ? 1 : 0;
+ 	sm_offset = dberr ? A10_SYSMGR_ECC_INTSTAT_DERR_OFST :
+@@ -1875,7 +1876,8 @@ static void altr_edac_a10_irq_handler(struct irq_desc *desc)
+ 
+ 	regmap_read(edac->ecc_mgr_map, sm_offset, &irq_status);
+ 
+-	for_each_set_bit(bit, (unsigned long *)&irq_status, 32) {
++	bits = irq_status;
++	for_each_set_bit(bit, &bits, 32) {
+ 		irq = irq_linear_revmap(edac->domain, dberr * 32 + bit);
+ 		if (irq)
+ 			generic_handle_irq(irq);
+-- 
+2.20.1
 
-Thanks,
-Mauro
