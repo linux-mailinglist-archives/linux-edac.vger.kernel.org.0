@@ -2,65 +2,123 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 247884F6EB
-	for <lists+linux-edac@lfdr.de>; Sat, 22 Jun 2019 18:29:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 49A1050AF1
+	for <lists+linux-edac@lfdr.de>; Mon, 24 Jun 2019 14:41:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726418AbfFVQ2u (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Sat, 22 Jun 2019 12:28:50 -0400
-Received: from sonic301-3.consmr.mail.bf2.yahoo.com ([74.6.129.42]:39008 "EHLO
-        sonic301-3.consmr.mail.bf2.yahoo.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726351AbfFVQ2u (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>);
-        Sat, 22 Jun 2019 12:28:50 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1561220929; bh=3fXYToOZXvh5MOJ1JSawYDThjnynC/Ekt2gucIg6zZg=; h=Date:From:Reply-To:Subject:From:Subject; b=FwrBLUl7u665XwQeVPTq5hUQ4Ptv5qPcwgE0MfCyAxPjQW66W+sBKlTITy95Xiak8M/9mL3k87XvuhuNYmdzjOXFqAsXXJ7ZeR0tr0xQhaR4qpp9+I79zHB4JVXDeOtUnrv/ni1DEn3m49tSMIml9+1SbDvUcui/xLYzcB7mOtvlwJJC6bBkcbOwJW8drH7WnSKYQVlUvO9PRg8+IWYABo4m/HoTrmg3JSd7+tfq1bmdsTjreC9G6uwJClVG1p8XyGEOijmNqXv9Ivunj8UzUvxVldTIg/taTAKdSlSG3i+xbnz28LKLpxSK2+M63p52Vf+hNJ0OycyVj1TkO+H8OQ==
-X-YMail-OSG: BClZlNgVM1mJa1pSUAMlnjmDwJQUKDn0osVKNVIeZ6AC0JZQ8NzrV_.P2vPToBw
- lk4l1yMYy0P1wu9iKWHPF1vwWtED.NCcY6jE.jXdELnZdUngnDzcX.f1Ik7TcPjN._6dUftCNvSG
- 0ilPDIIh6JKut3rld3EDzfXqVTEprJFL10dLfXEmdNXy8_9HzWnLN9Uxxh6FWr8nj4DbExyF48M8
- b8CzHn8AtWzh0fDjJqMRXb5UR1L1fHF.mq4wk_41bl8VHLLREhO8D9AiMB_Iou.TvP.xektI4Uzf
- lBotEg54S8nbe5a5a2eamKaLSiD6XaCIzSQkrGwkgk9qzk7J4361PG1C2lAWhSULJjGYH.uKi9SH
- 8omXh8MvwuZmVU7umqXbA4eIFWV8ruRR3qRFWtA.2B0Eer.D49EbNovsAu.wRPm8yYyL6YMdaoys
- 3vYAkjype1yPgR0gHAH3zObnNPMrtMzQfsTzcaha59dNYsVWPRo5EvcFgAIKXVIUqnKnooWuODru
- O4SgrdrM8PGEZGs5dJS.h.dJB3gwQ.0I1wf1Q_CLgJhbPMrumaMiWl3ifhN9G_CCxrGhRPRltqdB
- RyAvAXGENXKEJswzM.sYWHkLQyblOWaGX5TLKzeDGaJCZVu7CtZvQ0aNcyWtqrf4SAtE7MK9SqUH
- 7phABBxeBrGdyDkvdUQOX_EPh25.Hb3SncDKllMEIHjvEdwbQcMGmqMEDVCI8Jh0nfgpjh259ODl
- q.bGW_sz63_QvjPWXygjUQ4RzfXiei1bHIkvbkPAHc04dS.Qr8LP1Jyxp2QD0wtNtJgo5RScK99X
- P5NPqcNAR8eez8YgXpk3cKLQCR9JSylhL6QyUVACODhQSLMO_l73eEDpWzNQUeEQLrEwA53TFUO9
- BXx4lR26gADp4OeWMANR3pTNDn8J7Oc5G1l.tF8AqVFtdsoB5vgCdw0tzoX9_22cJzNNteihaN9H
- ktOSXaCeUY26x9DWNkYi7HTOCc9F4vHnioRwelB9Lv.KGDeGPUJBBPmfcn0xXC8MB2YTlUFeVHzN
- FJsHhvFz9eJx.VwEAdhJs3DHW6xmbj9a_RSOf.BoLPiAvMAdoBe_1sVY8nFOqhuBwpkbj17TOzIW
- ts0JEWafkyantIFw8kEnIr0AHDEAK4aB1fgOVS8TQpbEaj2tB4pKHPa4OOjXszQAPBozr7PYVj2f
- 6AcwHFYhcmsrFfliX20p43dgFMRY8GMXgvUWeegBAeAuOTxCoUC9WvAdL
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic301.consmr.mail.bf2.yahoo.com with HTTP; Sat, 22 Jun 2019 16:28:49 +0000
-Date:   Sat, 22 Jun 2019 16:28:46 +0000 (UTC)
-From:   "Miss.Fatima Yusuf" <fatimayusuf5@outlook.fr>
-Reply-To: miss.fmayusuf11@gmail.com
-Message-ID: <270302503.296556.1561220926635@mail.yahoo.com>
-Subject: From:Miss: Fatima Yusuf.
+        id S1727465AbfFXMlk (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Mon, 24 Jun 2019 08:41:40 -0400
+Received: from bombadil.infradead.org ([198.137.202.133]:57600 "EHLO
+        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727301AbfFXMlj (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Mon, 24 Jun 2019 08:41:39 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
+        Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Subject:Cc:To:
+        From:Date:Sender:Reply-To:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=yeZEN/lvAWBOBFz39npagodYTbEtl6pn+EI6Vjjk1so=; b=d6pYxJ/2Y3A0iX35rh9XmUfh0
+        gXVobml3SAEoakC8svIyjsbsFSbEYEuDjuVROZ1K9pi7rH3pgNWP4dID2i/Zx4YMmQm+8C05K07Yz
+        dRr60kGjU7pUmJfvt9BCnrG3ud6Z8IWw2sPCvJ5jouGkxhm8GBbCzwa1Ld3W6rORotKOu+n91Zc2j
+        aFKLCtkyZ5Av/eBHKMlE4j9C0d9WgkLJ6eyHvpLd1nq4n9VmzQpFWtex2EcxnXLMt5cSGEGuyf2jE
+        uFCQk01QXsH2bmJBCN+ZoK1GiyM8q61O3DP2/mgKhFm/lGz050ZjEIYm4N4vR/xRaNlQLmyMm+cWh
+        UC5umoOmA==;
+Received: from [179.95.45.115] (helo=coco.lan)
+        by bombadil.infradead.org with esmtpsa (Exim 4.92 #3 (Red Hat Linux))
+        id 1hfOHz-0001Mj-6U; Mon, 24 Jun 2019 12:41:39 +0000
+Date:   Mon, 24 Jun 2019 09:41:36 -0300
+From:   Mauro Carvalho Chehab <mchehab@infradead.org>
+To:     Wen Pu <puwen@hygon.cn>
+Cc:     "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>
+Subject: Re: [PATCH] ras-mce-handler: Add support for Hygon Dhyana family
+ 18h processor
+Message-ID: <20190624094136.1017a6b6@coco.lan>
+In-Reply-To: <bdb9763a-b111-1927-9fd2-3fd933b3981d@hygon.cn>
+References: <1558616422-22997-1-git-send-email-puwen@hygon.cn>
+        <bdb9763a-b111-1927-9fd2-3fd933b3981d@hygon.cn>
+X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-To:     unlisted-recipients:; (no To-header on input)
+X-SRS-Rewrite: SMTP reverse-path rewritten from <mchehab@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
+Em Fri, 14 Jun 2019 02:18:10 +0000
+Wen Pu <puwen@hygon.cn> escreveu:
+
+> Friendly ping...
+> 
+> On 2019/5/23 21:00, Pu Wen wrote:
+> > The Hygon Dhyana family 18h processor is derived from AMD family 17h.
+> > The Hygon Dhyana support to Linux is already accepted upstream[1].
+> > 
+> > Add Hygon Dhyana support to mce handler of rasdaemon in order to handle
+> > MCE events on Hygon Dhyana platforms.
+
+Applied, thanks!
+
+> > 
+> > Reference:
+> > [1] https://git.kernel.org/tip/fec98069fb72fb656304a3e52265e0c2fc9adf87
+> > 
+> > Signed-off-by: Pu Wen <puwen@hygon.cn>
+> > ---
+> >   ras-mce-handler.c | 9 ++++++++-
+> >   ras-mce-handler.h | 1 +
+> >   2 files changed, 9 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/ras-mce-handler.c b/ras-mce-handler.c
+> > index c11d489..eb548c6 100644
+> > --- a/ras-mce-handler.c
+> > +++ b/ras-mce-handler.c
+> > @@ -55,7 +55,8 @@ static char *cputype_name[] = {
+> >   	[CPU_KNIGHTS_LANDING] = "Knights Landing",
+> >   	[CPU_KNIGHTS_MILL] = "Knights Mill",
+> >   	[CPU_SKYLAKE_XEON] = "Skylake server",
+> > -	[CPU_NAPLES] = "AMD Family 17h Zen1"
+> > +	[CPU_NAPLES] = "AMD Family 17h Zen1",
+> > +	[CPU_DHYANA] = "Hygon Family 18h Moksha"
+> >   };
+> >   
+> >   static enum cputype select_intel_cputype(struct ras_events *ras)
+> > @@ -200,6 +201,11 @@ static int detect_cpu(struct ras_events *ras)
+> >   			ret = EINVAL;
+> >   		}
+> >   		goto ret;
+> > +	} else if (!strcmp(mce->vendor,"HygonGenuine")) {
+> > +		if (mce->family == 24) {
+> > +			mce->cputype = CPU_DHYANA;
+> > +		}
+> > +		goto ret;
+> >   	} else if (!strcmp(mce->vendor,"GenuineIntel")) {
+> >   		mce->cputype = select_intel_cputype(ras);
+> >   	} else {
+> > @@ -436,6 +442,7 @@ int ras_mce_event_handler(struct trace_seq *s,
+> >   		rc = parse_amd_k8_event(ras, &e);
+> >   		break;
+> >   	case CPU_NAPLES:
+> > +	case CPU_DHYANA:
+> >   		rc = parse_amd_smca_event(ras, &e);
+> >   		break;
+> >   	default:			/* All other CPU types are Intel */
+> > diff --git a/ras-mce-handler.h b/ras-mce-handler.h
+> > index 8aaecd1..94395eb 100644
+> > --- a/ras-mce-handler.h
+> > +++ b/ras-mce-handler.h
+> > @@ -51,6 +51,7 @@ enum cputype {
+> >   	CPU_KNIGHTS_MILL,
+> >   	CPU_SKYLAKE_XEON,
+> >   	CPU_NAPLES,
+> > +	CPU_DHYANA,
+> >   };
+> >   
+> >   struct mce_event {
+> >   
 
 
-From:Miss: Fatima Yusuf.
 
-For sure this mail would definitely come to you as a surprise, but do take your good time to go through it, My name is Ms. Fatima Yusuf,i am from Ivory Coast.
-
-I lost my parents a year and couple of months ago. My father was a serving director of the Agro-exporting board until his death. He was assassinated by his business partners.Before his death, he made a deposit of US$9.7 Million Dollars here in Cote d'ivoire which was for the purchase of cocoa processing machine and development of another factory before his untimely death.
-
-Being that this part of the world experiences political and crises time without number, there is no guarantee of lives and properties. I cannot invest this money here any long, despite the fact it had been my late father's industrial plans.
-
-I want you to do me a favor to receive this funds into your country or any safer place as the beneficiary, I have plans to invest this money in continuation with the investment vision of my late father, but not in this place again rather in your country. I have the vision of going into real estate and industrial production or any profitable business venture.
-
-I will be ready to compensate you with 20% of the total Amount, now all my hope is banked on you and i really wants to invest this money in your country, where there is stability of Government, political and economic welfare.
-
-My greatest worry now is how to move out of this country because my uncle is threatening to kill me as he killed my father,Please do not let anybody hear about this, it is between me and you alone because of my security reason.
-
-I am waiting to hear from you.
-Yours Sincerely,
-Miss.Fatima Yusuf.
+Thanks,
+Mauro
