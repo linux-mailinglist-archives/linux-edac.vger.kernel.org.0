@@ -2,140 +2,53 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E2D354DC3
-	for <lists+linux-edac@lfdr.de>; Tue, 25 Jun 2019 13:35:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A84F5578E
+	for <lists+linux-edac@lfdr.de>; Tue, 25 Jun 2019 21:14:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730756AbfFYLfN convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-edac@lfdr.de>); Tue, 25 Jun 2019 07:35:13 -0400
-Received: from szxga05-in.huawei.com ([45.249.212.191]:19107 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1730694AbfFYLfA (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Tue, 25 Jun 2019 07:35:00 -0400
-Received: from DGGEMS414-HUB.china.huawei.com (unknown [172.30.72.60])
-        by Forcepoint Email with ESMTP id A38EFC9436F1CFDD5FDA;
-        Tue, 25 Jun 2019 19:34:54 +0800 (CST)
-Received: from localhost (10.202.226.61) by DGGEMS414-HUB.china.huawei.com
- (10.3.19.214) with Microsoft SMTP Server id 14.3.439.0; Tue, 25 Jun 2019
- 19:34:44 +0800
-Date:   Tue, 25 Jun 2019 12:34:34 +0100
-From:   Jonathan Cameron <jonathan.cameron@huawei.com>
-To:     <linux-edac@vger.kernel.org>, <linux-acpi@vger.kernel.org>,
-        <linux-efi@vger.kernel.org>
-CC:     <linuxarm@huawei.com>, <rjw@rjwysocki.net>, <tony.luck@intel.com>,
-        <bp@alien8.de>, <james.morse@arm.com>, <ard.beisheuvel@linaro.org>,
-        <nariman.poushin@linaro.org>
-Subject: Re: [RFC PATCH 0/6] CCIX Protocol Error reporting
-Message-ID: <20190625123434.00005d50@huawei.com>
-In-Reply-To: <20190606123654.78973-1-Jonathan.Cameron@huawei.com>
-References: <20190606123654.78973-1-Jonathan.Cameron@huawei.com>
-Organization: Huawei
-X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; i686-w64-mingw32)
-MIME-Version: 1.0
-Content-Type: text/plain; charset="ISO-8859-1"
-Content-Transfer-Encoding: 8BIT
-X-Originating-IP: [10.202.226.61]
-X-CFilter-Loop: Reflected
+        id S1732001AbfFYTOK (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Tue, 25 Jun 2019 15:14:10 -0400
+Received: from mail-il-dmz.mellanox.com ([193.47.165.129]:48072 "EHLO
+        mellanox.co.il" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1730291AbfFYTOK (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Tue, 25 Jun 2019 15:14:10 -0400
+Received: from Internal Mail-Server by MTLPINE2 (envelope-from sramani@mellanox.com)
+        with ESMTPS (AES256-SHA encrypted); 25 Jun 2019 22:14:06 +0300
+Received: from farm-0002.mtbu.labs.mlnx (farm-0002.mtbu.labs.mlnx [10.15.2.32])
+        by mtbu-labmailer.labs.mlnx (8.14.4/8.14.4) with ESMTP id x5PJE4b8024022;
+        Tue, 25 Jun 2019 15:14:04 -0400
+Received: (from sramani@localhost)
+        by farm-0002.mtbu.labs.mlnx (8.14.7/8.13.8/Submit) id x5PJE2jI001851;
+        Tue, 25 Jun 2019 15:14:02 -0400
+From:   Shravan Kumar Ramani <sramani@mellanox.com>
+To:     Borislav Petkov <bp@alien8.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     Shravan Kumar Ramani <sramani@mellanox.com>,
+        Joe Perches <joe@perches.com>,
+        James Morse <james.morse@arm.com>,
+        Liming Sun <lsun@mellanox.com>, linux-edac@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v7 0/1] EDAC, mellanox: Add ECC support for BlueField DDR4
+Date:   Tue, 25 Jun 2019 15:13:58 -0400
+Message-Id: <cover.1561489514.git.sramani@mellanox.com>
+X-Mailer: git-send-email 2.1.2
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Thu, 6 Jun 2019 20:36:48 +0800
-Jonathan Cameron <Jonathan.Cameron@huawei.com> wrote:
+Changes since v6:
+Use FIELD_GET and GENMASK instead of shifting/masking using separate macros
 
-Hi All,
+Shravan Kumar Ramani (1):
+  EDAC, mellanox: Add ECC support for BlueField DDR4
 
-I'm looking for some reviews on this series if anyone has time to take
-a look.  Rasdaemon patches to match with this are on linux-edac but
-are waiting on the tracepoints merging.
+ MAINTAINERS                   |   5 +
+ drivers/edac/Kconfig          |   7 +
+ drivers/edac/Makefile         |   1 +
+ drivers/edac/bluefield_edac.c | 356 ++++++++++++++++++++++++++++++++++++++++++
+ 4 files changed, 369 insertions(+)
+ create mode 100644 drivers/edac/bluefield_edac.c
 
-I'm not currently planning to upstream the qemu injection patches
-used to test this but anyone would like those I can certainly put
-a public branch up somewhere.
-
-Thanks,
-
-Jonathan
-
-> UEFI 2.8 defines a new CPER record Appendix N for CCIX Protocol Error Records
-> (PER). www.uefi.org
-> 
-> These include Protocol Error Record logs which are defined in the
-> CCIX 1.0 Base Specification www.ccixconsortium.com.
-> 
-> Handling of coherency protocol errors is complex and how Linux does this
-> will take some time to evolve.  For now, fatal errors are handled via the
-> usual means and everything else is reported.
-> 
-> There are 6 types of error defined, covering:
-> * Memory errors
-> * Cache errors
-> * Address translation unit errors
-> * CCIX port errors 
-> * CCIX link errors
-> * Agent internal errors.
-> 
-> The set includes tracepoints to report the errors to RAS Daemon and a patch
-> set for RAS Daemon will follow shortly.
-> 
-> There are several open questions for this RFC.
-> 1. Reporting of vendor data.  We have little choice but to do this via a
->    dynamic array as these blocks can take arbitrary size. I had hoped
->    no one would actually use these given the odd mismatch between a
->    standard error structure and non standard element, but there are
->    already designs out there that do use it.
-> 2. The trade off between explicit tracepoint fields, on which we might
->    want to filter, and the simplicity of a blob. I have gone for having
->    the whole of the block specific to the PER error type in an opaque blob.
->    Perhaps this is not the right balance?
-> 3. Whether defining 6 new tracepoints is sensible. I think it is:
->    * They are all defined by the CCIX specification as independant error
->      classes.
->    * Many of them can only be generated by particular types of agent.
->    * The handling required will vary widely depending on types.
->      In the kernel some map cleanly onto existing handling. Keeping the
->      whole flow separate will aide this. They vary by a similar amount
->      in scope to the RAS errors found on an existing system which have
->      independent tracepoints.
->    * Separating them out allows for filtering on the tracepoints by
->      elements that are not shared between them.
->    * Muxing the lot into one record type can lead to ugly code both in
->      kernel and in userspace.
-> 
-> Rasdaemon patches will follow shortly.
-> 
-> This patch is being distributed by the CCIX Consortium, Inc. (CCIX) to
-> you and other parties that are paticipating (the "participants") in the
-> Linux kernel with the understanding that the participants will use CCIX's
-> name and trademark only when this patch is used in association with the
-> Linux kernel and associated user space.
-> 
-> CCIX is also distributing this patch to these participants with the
-> understanding that if any portion of the CCIX specification will be
-> used or referenced in the Linux kernel, the participants will not modify
-> the cited portion of the CCIX specification and will give CCIX propery
-> copyright attribution by including the following copyright notice with
-> the cited part of the CCIX specification:
-> "© 2019 CCIX CONSORTIUM, INC. ALL RIGHTS RESERVED."
-> 
-> Jonathan Cameron (6):
->   efi / ras: CCIX Memory error reporting
->   efi / ras: CCIX Cache error reporting
->   efi / ras: CCIX Address Translation Cache error reporting
->   efi / ras: CCIX Port error reporting
->   efi / ras: CCIX Link error reporting
->   efi / ras: CCIX Agent internal error reporting
-> 
->  drivers/acpi/apei/Kconfig        |   8 +
->  drivers/acpi/apei/ghes.c         |  59 ++
->  drivers/firmware/efi/Kconfig     |   5 +
->  drivers/firmware/efi/Makefile    |   1 +
->  drivers/firmware/efi/cper-ccix.c | 916 +++++++++++++++++++++++++++++++
->  drivers/firmware/efi/cper.c      |   6 +
->  include/linux/cper.h             | 333 +++++++++++
->  include/ras/ras_event.h          | 405 ++++++++++++++
->  8 files changed, 1733 insertions(+)
->  create mode 100644 drivers/firmware/efi/cper-ccix.c
-> 
-
+-- 
+2.1.2
 
