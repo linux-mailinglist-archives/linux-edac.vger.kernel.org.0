@@ -2,92 +2,140 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B7B851C42
-	for <lists+linux-edac@lfdr.de>; Mon, 24 Jun 2019 22:25:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E2D354DC3
+	for <lists+linux-edac@lfdr.de>; Tue, 25 Jun 2019 13:35:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728163AbfFXUZu (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Mon, 24 Jun 2019 16:25:50 -0400
-Received: from mga04.intel.com ([192.55.52.120]:25196 "EHLO mga04.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726393AbfFXUZt (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Mon, 24 Jun 2019 16:25:49 -0400
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 24 Jun 2019 13:25:50 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.63,413,1557212400"; 
-   d="scan'208";a="336613306"
-Received: from tthayer-hp-z620.an.intel.com (HELO [10.122.105.146]) ([10.122.105.146])
-  by orsmga005.jf.intel.com with ESMTP; 24 Jun 2019 13:25:48 -0700
-Reply-To: thor.thayer@linux.intel.com
-Subject: Re: [PATCH] EDAC/altera: Silence an endian warning
-To:     Dan Carpenter <dan.carpenter@oracle.com>
-Cc:     Borislav Petkov <bp@alien8.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        James Morse <james.morse@arm.com>, linux-edac@vger.kernel.org,
-        kernel-janitors@vger.kernel.org
-References: <20190624134717.GA1754@mwanda>
-From:   Thor Thayer <thor.thayer@linux.intel.com>
-Message-ID: <2baa5124-f0b0-a33e-256b-6a17867862c9@linux.intel.com>
-Date:   Mon, 24 Jun 2019 15:27:55 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.1
+        id S1730756AbfFYLfN convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-edac@lfdr.de>); Tue, 25 Jun 2019 07:35:13 -0400
+Received: from szxga05-in.huawei.com ([45.249.212.191]:19107 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1730694AbfFYLfA (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Tue, 25 Jun 2019 07:35:00 -0400
+Received: from DGGEMS414-HUB.china.huawei.com (unknown [172.30.72.60])
+        by Forcepoint Email with ESMTP id A38EFC9436F1CFDD5FDA;
+        Tue, 25 Jun 2019 19:34:54 +0800 (CST)
+Received: from localhost (10.202.226.61) by DGGEMS414-HUB.china.huawei.com
+ (10.3.19.214) with Microsoft SMTP Server id 14.3.439.0; Tue, 25 Jun 2019
+ 19:34:44 +0800
+Date:   Tue, 25 Jun 2019 12:34:34 +0100
+From:   Jonathan Cameron <jonathan.cameron@huawei.com>
+To:     <linux-edac@vger.kernel.org>, <linux-acpi@vger.kernel.org>,
+        <linux-efi@vger.kernel.org>
+CC:     <linuxarm@huawei.com>, <rjw@rjwysocki.net>, <tony.luck@intel.com>,
+        <bp@alien8.de>, <james.morse@arm.com>, <ard.beisheuvel@linaro.org>,
+        <nariman.poushin@linaro.org>
+Subject: Re: [RFC PATCH 0/6] CCIX Protocol Error reporting
+Message-ID: <20190625123434.00005d50@huawei.com>
+In-Reply-To: <20190606123654.78973-1-Jonathan.Cameron@huawei.com>
+References: <20190606123654.78973-1-Jonathan.Cameron@huawei.com>
+Organization: Huawei
+X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; i686-w64-mingw32)
 MIME-Version: 1.0
-In-Reply-To: <20190624134717.GA1754@mwanda>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="ISO-8859-1"
+Content-Transfer-Encoding: 8BIT
+X-Originating-IP: [10.202.226.61]
+X-CFilter-Loop: Reflected
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-Hi Dan,
+On Thu, 6 Jun 2019 20:36:48 +0800
+Jonathan Cameron <Jonathan.Cameron@huawei.com> wrote:
 
-On 6/24/19 8:47 AM, Dan Carpenter wrote:
-> Smatch complains that we're casting a u32 pointer to unsigned long.
-> 
->      drivers/edac/altera_edac.c:1878 altr_edac_a10_irq_handler()
->      warn: passing casted pointer '&irq_status' to 'find_first_bit()'
-> 
-> This code wouldn't work on a 64 bit big endian system because we would
-> read past the end of &irq_status.
-> 
-> Fixes: 13ab8448d2c9 ("EDAC, altera: Add ECC Manager IRQ controller support")
-> Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
-> ---
-> Static analysis obviously and I don't know this subsystem at all.
-> Probably we're never going to run this on a 64 bit big endian system...
-> Feel free to ignore this if you want.
-> 
->   drivers/edac/altera_edac.c | 4 +++-
->   1 file changed, 3 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/edac/altera_edac.c b/drivers/edac/altera_edac.c
-> index c2e693e34d43..bf024ec0116c 100644
-> --- a/drivers/edac/altera_edac.c
-> +++ b/drivers/edac/altera_edac.c
-> @@ -1866,6 +1866,7 @@ static void altr_edac_a10_irq_handler(struct irq_desc *desc)
->   	struct altr_arria10_edac *edac = irq_desc_get_handler_data(desc);
->   	struct irq_chip *chip = irq_desc_get_chip(desc);
->   	int irq = irq_desc_get_irq(desc);
-> +	unsigned long bits;
->   
->   	dberr = (irq == edac->db_irq) ? 1 : 0;
->   	sm_offset = dberr ? A10_SYSMGR_ECC_INTSTAT_DERR_OFST :
-> @@ -1875,7 +1876,8 @@ static void altr_edac_a10_irq_handler(struct irq_desc *desc)
->   
->   	regmap_read(edac->ecc_mgr_map, sm_offset, &irq_status);
->   
-> -	for_each_set_bit(bit, (unsigned long *)&irq_status, 32) {
-> +	bits = irq_status;
-> +	for_each_set_bit(bit, &bits, 32) {
->   		irq = irq_linear_revmap(edac->domain, dberr * 32 + bit);
->   		if (irq)
->   			generic_handle_irq(irq);
-> 
-You are correct that we shouldn't use this on a 64 bit machine but this 
-is a good fix. Thank you!
+Hi All,
 
-Reviewed-by: Thor Thayer <thor.thayer@linux.intel.com>
+I'm looking for some reviews on this series if anyone has time to take
+a look.  Rasdaemon patches to match with this are on linux-edac but
+are waiting on the tracepoints merging.
+
+I'm not currently planning to upstream the qemu injection patches
+used to test this but anyone would like those I can certainly put
+a public branch up somewhere.
+
+Thanks,
+
+Jonathan
+
+> UEFI 2.8 defines a new CPER record Appendix N for CCIX Protocol Error Records
+> (PER). www.uefi.org
+> 
+> These include Protocol Error Record logs which are defined in the
+> CCIX 1.0 Base Specification www.ccixconsortium.com.
+> 
+> Handling of coherency protocol errors is complex and how Linux does this
+> will take some time to evolve.  For now, fatal errors are handled via the
+> usual means and everything else is reported.
+> 
+> There are 6 types of error defined, covering:
+> * Memory errors
+> * Cache errors
+> * Address translation unit errors
+> * CCIX port errors 
+> * CCIX link errors
+> * Agent internal errors.
+> 
+> The set includes tracepoints to report the errors to RAS Daemon and a patch
+> set for RAS Daemon will follow shortly.
+> 
+> There are several open questions for this RFC.
+> 1. Reporting of vendor data.  We have little choice but to do this via a
+>    dynamic array as these blocks can take arbitrary size. I had hoped
+>    no one would actually use these given the odd mismatch between a
+>    standard error structure and non standard element, but there are
+>    already designs out there that do use it.
+> 2. The trade off between explicit tracepoint fields, on which we might
+>    want to filter, and the simplicity of a blob. I have gone for having
+>    the whole of the block specific to the PER error type in an opaque blob.
+>    Perhaps this is not the right balance?
+> 3. Whether defining 6 new tracepoints is sensible. I think it is:
+>    * They are all defined by the CCIX specification as independant error
+>      classes.
+>    * Many of them can only be generated by particular types of agent.
+>    * The handling required will vary widely depending on types.
+>      In the kernel some map cleanly onto existing handling. Keeping the
+>      whole flow separate will aide this. They vary by a similar amount
+>      in scope to the RAS errors found on an existing system which have
+>      independent tracepoints.
+>    * Separating them out allows for filtering on the tracepoints by
+>      elements that are not shared between them.
+>    * Muxing the lot into one record type can lead to ugly code both in
+>      kernel and in userspace.
+> 
+> Rasdaemon patches will follow shortly.
+> 
+> This patch is being distributed by the CCIX Consortium, Inc. (CCIX) to
+> you and other parties that are paticipating (the "participants") in the
+> Linux kernel with the understanding that the participants will use CCIX's
+> name and trademark only when this patch is used in association with the
+> Linux kernel and associated user space.
+> 
+> CCIX is also distributing this patch to these participants with the
+> understanding that if any portion of the CCIX specification will be
+> used or referenced in the Linux kernel, the participants will not modify
+> the cited portion of the CCIX specification and will give CCIX propery
+> copyright attribution by including the following copyright notice with
+> the cited part of the CCIX specification:
+> "© 2019 CCIX CONSORTIUM, INC. ALL RIGHTS RESERVED."
+> 
+> Jonathan Cameron (6):
+>   efi / ras: CCIX Memory error reporting
+>   efi / ras: CCIX Cache error reporting
+>   efi / ras: CCIX Address Translation Cache error reporting
+>   efi / ras: CCIX Port error reporting
+>   efi / ras: CCIX Link error reporting
+>   efi / ras: CCIX Agent internal error reporting
+> 
+>  drivers/acpi/apei/Kconfig        |   8 +
+>  drivers/acpi/apei/ghes.c         |  59 ++
+>  drivers/firmware/efi/Kconfig     |   5 +
+>  drivers/firmware/efi/Makefile    |   1 +
+>  drivers/firmware/efi/cper-ccix.c | 916 +++++++++++++++++++++++++++++++
+>  drivers/firmware/efi/cper.c      |   6 +
+>  include/linux/cper.h             | 333 +++++++++++
+>  include/ras/ras_event.h          | 405 ++++++++++++++
+>  8 files changed, 1733 insertions(+)
+>  create mode 100644 drivers/firmware/efi/cper-ccix.c
+> 
+
+
