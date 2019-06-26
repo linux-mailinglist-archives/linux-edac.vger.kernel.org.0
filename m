@@ -2,461 +2,209 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0010955791
-	for <lists+linux-edac@lfdr.de>; Tue, 25 Jun 2019 21:14:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 163D2561C9
+	for <lists+linux-edac@lfdr.de>; Wed, 26 Jun 2019 07:40:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732500AbfFYTOM (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Tue, 25 Jun 2019 15:14:12 -0400
-Received: from mail-il-dmz.mellanox.com ([193.47.165.129]:48074 "EHLO
-        mellanox.co.il" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1727684AbfFYTOL (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Tue, 25 Jun 2019 15:14:11 -0400
-Received: from Internal Mail-Server by MTLPINE2 (envelope-from sramani@mellanox.com)
-        with ESMTPS (AES256-SHA encrypted); 25 Jun 2019 22:14:06 +0300
-Received: from farm-0002.mtbu.labs.mlnx (farm-0002.mtbu.labs.mlnx [10.15.2.32])
-        by mtbu-labmailer.labs.mlnx (8.14.4/8.14.4) with ESMTP id x5PJE5fJ024025;
-        Tue, 25 Jun 2019 15:14:05 -0400
-Received: (from sramani@localhost)
-        by farm-0002.mtbu.labs.mlnx (8.14.7/8.13.8/Submit) id x5PJE59V001852;
-        Tue, 25 Jun 2019 15:14:05 -0400
-From:   Shravan Kumar Ramani <sramani@mellanox.com>
-To:     Borislav Petkov <bp@alien8.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     Shravan Kumar Ramani <sramani@mellanox.com>,
-        Joe Perches <joe@perches.com>,
-        James Morse <james.morse@arm.com>,
-        Liming Sun <lsun@mellanox.com>, linux-edac@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v7 1/1] EDAC, mellanox: Add ECC support for BlueField DDR4
-Date:   Tue, 25 Jun 2019 15:13:59 -0400
-Message-Id: <39e5ffcc50537139f716205276bb4c5ec54a2083.1561489514.git.sramani@mellanox.com>
-X-Mailer: git-send-email 2.1.2
-In-Reply-To: <cover.1561489514.git.sramani@mellanox.com>
-References: <cover.1561489514.git.sramani@mellanox.com>
-In-Reply-To: <cover.1561489514.git.sramani@mellanox.com>
-References: <cover.1561489514.git.sramani@mellanox.com>
+        id S1725876AbfFZFkg (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Wed, 26 Jun 2019 01:40:36 -0400
+Received: from mail-pg1-f194.google.com ([209.85.215.194]:44309 "EHLO
+        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725536AbfFZFkf (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Wed, 26 Jun 2019 01:40:35 -0400
+Received: by mail-pg1-f194.google.com with SMTP id n2so625184pgp.11
+        for <linux-edac@vger.kernel.org>; Tue, 25 Jun 2019 22:40:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=etsukata-com.20150623.gappssmtp.com; s=20150623;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=1Uj33jAIt5GZeZZQprloN6xbUK/Qk/3xj+XwqjOyyMA=;
+        b=JJVDLMoVQi5LJgeevxmw5i6yoh2Pqa5Vcnnnlp50HeKhJI9NK/pDy1KYa9ZmmA9oVI
+         xQkGBu0ZUsO5yxyysMB9yrOwdaT1pTSrgvJschsboV/j/Xlc8Usj6cDkL0Og7ndW2C+k
+         aPSkT970cYFVvxl4xMRfpaIIbv+gzRFij3e4pne9uvR4vuLPV72bVjiGPmc9P6apIJ7r
+         cXly+5a4cZzbuAVXEP5NBQNZSmEkGLzVZn5zn6kivy9BS0m2W9CdlKayfvCqWJu9vD2L
+         1Rx5l97R8weeZ5tOlth/g56GZyhRXGw/Jb5dHAr1qiCgUEGAohi+45XeuwcybfIZlX9p
+         t+kw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=1Uj33jAIt5GZeZZQprloN6xbUK/Qk/3xj+XwqjOyyMA=;
+        b=OpbIhRg/QPiVCDvoxzOxlwq2agb3aDeEb89kQPNmBuDWUlZerfmeNb0eqgSy125ths
+         WbkDSq67FfIcnoBiF+Qphir0l1ygqgXoiPGqhwqMGEBZP/SoOiDrzeZrJof5BllHgZ9d
+         BNNmz6dzyLE0FjZSgxxjfd/TRR91ZefC4gWfpTyS6LnelpGpxYKP5bJxcYFLUB+zOkmV
+         Yyu33GmE1AMHgg6JssiIrBv9Zpr91FDaaNIu6jbnFGwFJAoCrj6dxZ1HOaD5abUCeSZ4
+         RYeskhFBikACanA2vZkzcoIE4Rmae5qT0/ovWuWiZU4jcgOFfuMXZTwA4atU4lNdBEuZ
+         qe2g==
+X-Gm-Message-State: APjAAAWeC/rGQQikECftPU9HdM3xt0cBEulOGjDK6CZvPGr/v+kLFrY5
+        zVfttLnMko0dQer0oIn+wR3jBg==
+X-Google-Smtp-Source: APXvYqzd1+YwHq8nK/momI1hqzW7Xpry7ONQA+Y0zfmHPWh5OwmodQk5xJiphq4WBr9zRaw2bcUH4w==
+X-Received: by 2002:a17:90a:cb87:: with SMTP id a7mr2503628pju.130.1561527634600;
+        Tue, 25 Jun 2019 22:40:34 -0700 (PDT)
+Received: from localhost.localdomain (p2517222-ipngn21701marunouchi.tokyo.ocn.ne.jp. [118.7.246.222])
+        by smtp.gmail.com with ESMTPSA id f14sm21204884pfn.53.2019.06.25.22.40.32
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Tue, 25 Jun 2019 22:40:33 -0700 (PDT)
+From:   Eiichi Tsukata <devel@etsukata.com>
+To:     bp@alien8.de, mchehab@kernel.org, james.morse@arm.com,
+        linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Eiichi Tsukata <devel@etsukata.com>
+Subject: [PATCH] EDAC: Fix global-out-of-bounds write when setting edac_mc_poll_msec
+Date:   Wed, 26 Jun 2019 14:40:11 +0900
+Message-Id: <20190626054011.30044-1-devel@etsukata.com>
+X-Mailer: git-send-email 2.21.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-Add ECC support for Mellanox BlueField SoC DDR controller.
-This requires SMC to the running Arm Trusted Firmware to report
-what is the current memory configuration.
+Commit 9da21b1509d8 ("EDAC: Poll timeout cannot be zero, p2") assumes
+edac_mc_poll_msec to be unsigned long, but the type of the variable still
+remained as int. Setting edac_mc_poll_msec can trigger out-of-bounds
+write.
 
-Reviewed-by: James Morse <james.morse@arm.com>
-Signed-off-by: Shravan Kumar Ramani <sramani@mellanox.com>
+Reproducer:
+
+  # echo 1001 > /sys/module/edac_core/parameters/edac_mc_poll_msec
+
+KASAN report:
+
+  BUG: KASAN: global-out-of-bounds in edac_set_poll_msec+0x140/0x150
+  Write of size 8 at addr ffffffffb91b2d00 by task bash/1996
+
+  CPU: 1 PID: 1996 Comm: bash Not tainted 5.2.0-rc6+ #23
+  Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.12.0-2.fc30 04/01/2014
+  Call Trace:
+   dump_stack+0xca/0x13e
+   print_address_description.cold+0x5/0x246
+   __kasan_report.cold+0x75/0x9a
+   ? edac_set_poll_msec+0x140/0x150
+   kasan_report+0xe/0x20
+   edac_set_poll_msec+0x140/0x150
+   ? dimmdev_location_show+0x30/0x30
+   ? vfs_lock_file+0xe0/0xe0
+   ? _raw_spin_lock+0x87/0xe0
+   param_attr_store+0x1b5/0x310
+   ? param_array_set+0x4f0/0x4f0
+   module_attr_store+0x58/0x80
+   ? module_attr_show+0x80/0x80
+   sysfs_kf_write+0x13d/0x1a0
+   kernfs_fop_write+0x2bc/0x460
+   ? sysfs_kf_bin_read+0x270/0x270
+   ? kernfs_notify+0x1f0/0x1f0
+   __vfs_write+0x81/0x100
+   vfs_write+0x1e1/0x560
+   ksys_write+0x126/0x250
+   ? __ia32_sys_read+0xb0/0xb0
+   ? do_syscall_64+0x1f/0x390
+   do_syscall_64+0xc1/0x390
+   entry_SYSCALL_64_after_hwframe+0x49/0xbe
+  RIP: 0033:0x7fa7caa5e970
+  Code: 73 01 c3 48 8b 0d 28 d5 2b 00 f7 d8 64 89 01 48 83 c8 ff c3 66 0f 1f 44 00 00 83 3d 99 2d 2c 00 00 75 10 b8 01 00 00 00 04
+  RSP: 002b:00007fff6acfdfe8 EFLAGS: 00000246 ORIG_RAX: 0000000000000001
+  RAX: ffffffffffffffda RBX: 0000000000000005 RCX: 00007fa7caa5e970
+  RDX: 0000000000000005 RSI: 0000000000e95c08 RDI: 0000000000000001
+  RBP: 0000000000e95c08 R08: 00007fa7cad1e760 R09: 00007fa7cb36a700
+  R10: 0000000000000073 R11: 0000000000000246 R12: 0000000000000005
+  R13: 0000000000000001 R14: 00007fa7cad1d600 R15: 0000000000000005
+
+  The buggy address belongs to the variable:
+   edac_mc_poll_msec+0x0/0x40
+
+  Memory state around the buggy address:
+   ffffffffb91b2c00: 00 00 00 00 fa fa fa fa 00 00 00 00 fa fa fa fa
+   ffffffffb91b2c80: 00 00 00 00 fa fa fa fa 00 00 00 00 fa fa fa fa
+  >ffffffffb91b2d00: 04 fa fa fa fa fa fa fa 04 fa fa fa fa fa fa fa
+                     ^
+   ffffffffb91b2d80: 04 fa fa fa fa fa fa fa 00 00 00 00 00 00 00 00
+   ffffffffb91b2e00: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+
+Fix it by changing the type of edac_mc_poll_msec to unsigned int.
+The reason why this patch adopts unsigned int rather than unsigned long
+is msecs_to_jiffies() assumes arg to be unsigned int. We can avoid
+integer conversion bugs and unsigned int will be large enough for
+edac_mc_poll_msec.
+
+Fixes: 9da21b1509d8 ("EDAC: Poll timeout cannot be zero, p2")
+Signed-off-by: Eiichi Tsukata <devel@etsukata.com>
 ---
- MAINTAINERS                   |   5 +
- drivers/edac/Kconfig          |   7 +
- drivers/edac/Makefile         |   1 +
- drivers/edac/bluefield_edac.c | 356 ++++++++++++++++++++++++++++++++++++++++++
- 4 files changed, 369 insertions(+)
- create mode 100644 drivers/edac/bluefield_edac.c
+ drivers/edac/edac_mc_sysfs.c | 16 ++++++++--------
+ drivers/edac/edac_module.h   |  2 +-
+ 2 files changed, 9 insertions(+), 9 deletions(-)
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index d0ed735..a821587 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -5669,6 +5669,11 @@ S:	Supported
- F:	drivers/edac/aspeed_edac.c
- F:	Documentation/devicetree/bindings/edac/aspeed-sdram-edac.txt
+diff --git a/drivers/edac/edac_mc_sysfs.c b/drivers/edac/edac_mc_sysfs.c
+index 7c01e1cc030c..4386ea4b9b5a 100644
+--- a/drivers/edac/edac_mc_sysfs.c
++++ b/drivers/edac/edac_mc_sysfs.c
+@@ -26,7 +26,7 @@
+ static int edac_mc_log_ue = 1;
+ static int edac_mc_log_ce = 1;
+ static int edac_mc_panic_on_ue;
+-static int edac_mc_poll_msec = 1000;
++static unsigned int edac_mc_poll_msec = 1000;
  
-+EDAC-BLUEFIELD
-+M:	Shravan Kumar Ramani <sramani@mellanox.com>
-+S:	Supported
-+F:	drivers/edac/bluefield_edac.c
-+
- EDAC-CALXEDA
- M:	Robert Richter <rric@kernel.org>
- L:	linux-edac@vger.kernel.org
-diff --git a/drivers/edac/Kconfig b/drivers/edac/Kconfig
-index 5e2e034..43df551 100644
---- a/drivers/edac/Kconfig
-+++ b/drivers/edac/Kconfig
-@@ -504,4 +504,11 @@ config EDAC_ASPEED
- 	  First, ECC must be configured in the bootloader. Then, this driver
- 	  will expose error counters via the EDAC kernel framework.
+ /* Getter functions for above */
+ int edac_mc_get_log_ue(void)
+@@ -45,30 +45,30 @@ int edac_mc_get_panic_on_ue(void)
+ }
  
-+config EDAC_BLUEFIELD
-+	tristate "Mellanox BlueField Memory ECC"
-+	depends on ARM64 && ((MELLANOX_PLATFORM && ACPI) || COMPILE_TEST)
-+	help
-+	  Support for error detection and correction on the
-+	  Mellanox BlueField SoCs.
-+
- endif # EDAC
-diff --git a/drivers/edac/Makefile b/drivers/edac/Makefile
-index 89ad4a84..0294a67 100644
---- a/drivers/edac/Makefile
-+++ b/drivers/edac/Makefile
-@@ -84,3 +84,4 @@ obj-$(CONFIG_EDAC_XGENE)		+= xgene_edac.o
- obj-$(CONFIG_EDAC_TI)			+= ti_edac.o
- obj-$(CONFIG_EDAC_QCOM)			+= qcom_edac.o
- obj-$(CONFIG_EDAC_ASPEED)		+= aspeed_edac.o
-+obj-$(CONFIG_EDAC_BLUEFIELD)		+= bluefield_edac.o
-diff --git a/drivers/edac/bluefield_edac.c b/drivers/edac/bluefield_edac.c
-new file mode 100644
-index 0000000..e4736eb
---- /dev/null
-+++ b/drivers/edac/bluefield_edac.c
-@@ -0,0 +1,356 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Bluefield-specific EDAC driver.
-+ *
-+ * Copyright (c) 2019 Mellanox Technologies.
-+ */
-+
-+#include <linux/acpi.h>
-+#include <linux/arm-smccc.h>
-+#include <linux/bitfield.h>
-+#include <linux/edac.h>
-+#include <linux/io.h>
-+#include <linux/module.h>
-+#include <linux/platform_device.h>
-+
-+#include "edac_module.h"
-+
-+#define DRIVER_NAME		"bluefield-edac"
-+
-+/*
-+ * Mellanox BlueField EMI (External Memory Interface) register definitions.
-+ */
-+
-+#define MLXBF_ECC_CNT 0x340
-+#define MLXBF_ECC_CNT__SERR_CNT GENMASK(15, 0)
-+#define MLXBF_ECC_CNT__DERR_CNT GENMASK(31, 16)
-+
-+#define MLXBF_ECC_ERR 0x348
-+#define MLXBF_ECC_ERR__SECC BIT(0)
-+#define MLXBF_ECC_ERR__DECC BIT(16)
-+
-+#define MLXBF_ECC_LATCH_SEL 0x354
-+#define MLXBF_ECC_LATCH_SEL__START BIT(24)
-+
-+#define MLXBF_ERR_ADDR_0 0x358
-+
-+#define MLXBF_ERR_ADDR_1 0x37c
-+
-+#define MLXBF_SYNDROM 0x35c
-+#define MLXBF_SYNDROM__DERR BIT(0)
-+#define MLXBF_SYNDROM__SERR BIT(1)
-+#define MLXBF_SYNDROM__SYN GENMASK(25, 16)
-+
-+#define MLXBF_ADD_INFO 0x364
-+#define MLXBF_ADD_INFO__ERR_PRANK GENMASK(9, 8)
-+
-+#define MLXBF_EDAC_MAX_DIMM_PER_MC	2
-+#define MLXBF_EDAC_ERROR_GRAIN		8
-+
-+/*
-+ * Request MLNX_SIP_GET_DIMM_INFO
-+ *
-+ * Retrieve information about DIMM on a certain slot.
-+ *
-+ * Call register usage:
-+ * a0: MLNX_SIP_GET_DIMM_INFO
-+ * a1: (Memory controller index) << 16 | (Dimm index in memory controller)
-+ * a2-7: not used.
-+ *
-+ * Return status:
-+ * a0: MLXBF_DIMM_INFO defined below describing the DIMM.
-+ * a1-3: not used.
-+ */
-+#define MLNX_SIP_GET_DIMM_INFO		0x82000008
-+
-+/* Format for the SMC response about the memory information */
-+#define MLXBF_DIMM_INFO__SIZE_GB GENMASK_ULL(15, 0)
-+#define MLXBF_DIMM_INFO__IS_RDIMM BIT(16)
-+#define MLXBF_DIMM_INFO__IS_LRDIMM BIT(17)
-+#define MLXBF_DIMM_INFO__IS_NVDIMM BIT(18)
-+#define MLXBF_DIMM_INFO__RANKS GENMASK_ULL(23, 21)
-+#define MLXBF_DIMM_INFO__PACKAGE_X GENMASK_ULL(31, 24)
-+
-+struct bluefield_edac_priv {
-+	int dimm_ranks[MLXBF_EDAC_MAX_DIMM_PER_MC];
-+	void __iomem *emi_base;
-+	int dimm_per_mc;
-+};
-+
-+static u64 smc_call1(u64 smc_op, u64 smc_arg)
-+{
-+	struct arm_smccc_res res;
-+
-+	arm_smccc_smc(smc_op, smc_arg, 0, 0, 0, 0, 0, 0, &res);
-+
-+	return res.a0;
-+}
-+
-+/*
-+ * Gather the ECC information from the External Memory Interface registers
-+ * and report it to the edac handler.
-+ */
-+static void bluefield_gather_report_ecc(struct mem_ctl_info *mci,
-+					int error_cnt,
-+					int is_single_ecc)
-+{
-+	struct bluefield_edac_priv *priv = mci->pvt_info;
-+	u32 dram_additional_info, err_prank, edea0, edea1;
-+	u32 ecc_latch_select, dram_syndrom, serr, derr, syndrom;
-+	enum hw_event_mc_err_type ecc_type;
-+	u64 ecc_dimm_addr;
-+	int ecc_dimm;
-+
-+	ecc_type = is_single_ecc ? HW_EVENT_ERR_CORRECTED :
-+				   HW_EVENT_ERR_UNCORRECTED;
-+
-+	/*
-+	 * Tell the External Memory Interface to populate the relevant
-+	 * registers with information about the last ECC error occurrence.
-+	 */
-+	ecc_latch_select = MLXBF_ECC_LATCH_SEL__START;
-+	writel(ecc_latch_select, priv->emi_base + MLXBF_ECC_LATCH_SEL);
-+
-+	/*
-+	 * Verify that the ECC reported info in the registers is of the
-+	 * same type as the one asked to report. If not, just report the
-+	 * error without the detailed information.
-+	 */
-+	dram_syndrom = readl(priv->emi_base + MLXBF_SYNDROM);
-+	serr = FIELD_GET(MLXBF_SYNDROM__SERR, dram_syndrom);
-+	derr = FIELD_GET(MLXBF_SYNDROM__DERR, dram_syndrom);
-+	syndrom = FIELD_GET(MLXBF_SYNDROM__SYN, dram_syndrom);
-+
-+	if ((is_single_ecc && !serr) || (!is_single_ecc && !derr)) {
-+		edac_mc_handle_error(ecc_type, mci, error_cnt, 0, 0, 0,
-+				     0, 0, -1, mci->ctl_name, "");
-+		return;
-+	}
-+
-+	dram_additional_info = readl(priv->emi_base + MLXBF_ADD_INFO);
-+	err_prank = FIELD_GET(MLXBF_ADD_INFO__ERR_PRANK, dram_additional_info);
-+
-+	ecc_dimm = (err_prank >= 2 && priv->dimm_ranks[0] <= 2) ? 1 : 0;
-+
-+	edea0 = readl(priv->emi_base + MLXBF_ERR_ADDR_0);
-+	edea1 = readl(priv->emi_base + MLXBF_ERR_ADDR_1);
-+
-+	ecc_dimm_addr = ((u64)edea1 << 32) | edea0;
-+
-+	edac_mc_handle_error(ecc_type, mci, error_cnt,
-+			     PFN_DOWN(ecc_dimm_addr),
-+			     offset_in_page(ecc_dimm_addr),
-+			     syndrom, ecc_dimm, 0, 0, mci->ctl_name, "");
-+}
-+
-+static void bluefield_edac_check(struct mem_ctl_info *mci)
-+{
-+	struct bluefield_edac_priv *priv = mci->pvt_info;
-+	u32 ecc_count, single_error_count, double_error_count, ecc_error = 0;
-+
-+	/*
-+	 * The memory controller might not be initialized by the firmware
-+	 * when there isn't memory, which may lead to bad register readings.
-+	 */
-+	if (mci->edac_cap == EDAC_FLAG_NONE)
-+		return;
-+
-+	ecc_count = readl(priv->emi_base + MLXBF_ECC_CNT);
-+	single_error_count = FIELD_GET(MLXBF_ECC_CNT__SERR_CNT, ecc_count);
-+	double_error_count = FIELD_GET(MLXBF_ECC_CNT__DERR_CNT, ecc_count);
-+
-+	if (single_error_count) {
-+		ecc_error |= MLXBF_ECC_ERR__SECC;
-+
-+		bluefield_gather_report_ecc(mci, single_error_count, 1);
-+	}
-+
-+	if (double_error_count) {
-+		ecc_error |= MLXBF_ECC_ERR__DECC;
-+
-+		bluefield_gather_report_ecc(mci, double_error_count, 0);
-+	}
-+
-+	/* Write to clear reported errors. */
-+	if (ecc_count)
-+		writel(ecc_error, priv->emi_base + MLXBF_ECC_ERR);
-+}
-+
-+/* Initialize the DIMMs information for the given memory controller. */
-+static void bluefield_edac_init_dimms(struct mem_ctl_info *mci)
-+{
-+	struct bluefield_edac_priv *priv = mci->pvt_info;
-+	int mem_ctrl_idx = mci->mc_idx;
-+	struct dimm_info *dimm;
-+	u64 smc_info, smc_arg;
-+	int is_empty = 1, i;
-+
-+	for (i = 0; i < priv->dimm_per_mc; i++) {
-+		dimm = mci->dimms[i];
-+
-+		smc_arg = mem_ctrl_idx << 16 | i;
-+		smc_info = smc_call1(MLNX_SIP_GET_DIMM_INFO, smc_arg);
-+
-+		if (!FIELD_GET(MLXBF_DIMM_INFO__SIZE_GB, smc_info)) {
-+			dimm->mtype = MEM_EMPTY;
-+			continue;
-+		}
-+
-+		is_empty = 0;
-+
-+		dimm->edac_mode = EDAC_SECDED;
-+
-+		if (FIELD_GET(MLXBF_DIMM_INFO__IS_NVDIMM, smc_info))
-+			dimm->mtype = MEM_NVDIMM;
-+		else if (FIELD_GET(MLXBF_DIMM_INFO__IS_LRDIMM, smc_info))
-+			dimm->mtype = MEM_LRDDR4;
-+		else if (FIELD_GET(MLXBF_DIMM_INFO__IS_RDIMM, smc_info))
-+			dimm->mtype = MEM_RDDR4;
-+		else
-+			dimm->mtype = MEM_DDR4;
-+
-+		dimm->nr_pages =
-+			FIELD_GET(MLXBF_DIMM_INFO__SIZE_GB, smc_info) *
-+			(SZ_1G / PAGE_SIZE);
-+		dimm->grain = MLXBF_EDAC_ERROR_GRAIN;
-+
-+		/* Mem controller for BlueField only supports x4, x8 and x16 */
-+		switch (FIELD_GET(MLXBF_DIMM_INFO__PACKAGE_X, smc_info)) {
-+		case 4:
-+			dimm->dtype = DEV_X4;
-+			break;
-+		case 8:
-+			dimm->dtype = DEV_X8;
-+			break;
-+		case 16:
-+			dimm->dtype = DEV_X16;
-+			break;
-+		default:
-+			dimm->dtype = DEV_UNKNOWN;
-+		}
-+
-+		priv->dimm_ranks[i] =
-+			FIELD_GET(MLXBF_DIMM_INFO__RANKS, smc_info);
-+	}
-+
-+	if (is_empty)
-+		mci->edac_cap = EDAC_FLAG_NONE;
-+	else
-+		mci->edac_cap = EDAC_FLAG_SECDED;
-+}
-+
-+static int bluefield_edac_mc_probe(struct platform_device *pdev)
-+{
-+	struct bluefield_edac_priv *priv;
-+	struct device *dev = &pdev->dev;
-+	struct edac_mc_layer layers[1];
-+	struct mem_ctl_info *mci;
-+	struct resource *emi_res;
-+	unsigned int mc_idx, dimm_count;
-+	int rc, ret;
-+
-+	/* Read the MSS (Memory SubSystem) index from ACPI table. */
-+	if (device_property_read_u32(dev, "mss_number", &mc_idx)) {
-+		dev_warn(dev, "bf_edac: MSS number unknown\n");
-+		return -EINVAL;
-+	}
-+
-+	/* Read the DIMMs per MC from ACPI table. */
-+	if (device_property_read_u32(dev, "dimm_per_mc", &dimm_count)) {
-+		dev_warn(dev, "bf_edac: DIMMs per MC unknown\n");
-+		return -EINVAL;
-+	}
-+
-+	if (dimm_count > MLXBF_EDAC_MAX_DIMM_PER_MC) {
-+		dev_warn(dev, "bf_edac: DIMMs per MC not valid\n");
-+		return -EINVAL;
-+	}
-+
-+	emi_res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-+	if (!emi_res)
-+		return -EINVAL;
-+
-+	layers[0].type = EDAC_MC_LAYER_SLOT;
-+	layers[0].size = dimm_count;
-+	layers[0].is_virt_csrow = true;
-+
-+	mci = edac_mc_alloc(mc_idx, ARRAY_SIZE(layers), layers, sizeof(*priv));
-+	if (!mci)
-+		return -ENOMEM;
-+
-+	priv = mci->pvt_info;
-+
-+	priv->dimm_per_mc = dimm_count;
-+	priv->emi_base = devm_ioremap_resource(dev, emi_res);
-+	if (IS_ERR(priv->emi_base)) {
-+		dev_err(dev, "failed to map EMI IO resource\n");
-+		ret = PTR_ERR(priv->emi_base);
-+		goto err;
-+	}
-+
-+	mci->pdev = dev;
-+	mci->mtype_cap = MEM_FLAG_DDR4 | MEM_FLAG_RDDR4 |
-+			 MEM_FLAG_LRDDR4 | MEM_FLAG_NVDIMM;
-+	mci->edac_ctl_cap = EDAC_FLAG_SECDED;
-+
-+	mci->mod_name = DRIVER_NAME;
-+	mci->ctl_name = "BlueField_Memory_Controller";
-+	mci->dev_name = dev_name(dev);
-+	mci->edac_check = bluefield_edac_check;
-+
-+	/* Initialize mci with the actual populated DIMM information. */
-+	bluefield_edac_init_dimms(mci);
-+
-+	platform_set_drvdata(pdev, mci);
-+
-+	/* Register with EDAC core */
-+	rc = edac_mc_add_mc(mci);
-+	if (rc) {
-+		dev_err(dev, "failed to register with EDAC core\n");
-+		ret = rc;
-+		goto err;
-+	}
-+
-+	/* Only POLL mode supported so far. */
-+	edac_op_state = EDAC_OPSTATE_POLL;
-+
-+	return 0;
-+
-+err:
-+	edac_mc_free(mci);
-+
-+	return ret;
-+
-+}
-+
-+static int bluefield_edac_mc_remove(struct platform_device *pdev)
-+{
-+	struct mem_ctl_info *mci = platform_get_drvdata(pdev);
-+
-+	edac_mc_del_mc(&pdev->dev);
-+	edac_mc_free(mci);
-+
-+	return 0;
-+}
-+
-+static const struct acpi_device_id bluefield_mc_acpi_ids[] = {
-+	{"MLNXBF08", 0},
-+	{}
-+};
-+
-+MODULE_DEVICE_TABLE(acpi, bluefield_mc_acpi_ids);
-+
-+static struct platform_driver bluefield_edac_mc_driver = {
-+	.driver = {
-+		.name = DRIVER_NAME,
-+		.acpi_match_table = bluefield_mc_acpi_ids,
-+	},
-+	.probe = bluefield_edac_mc_probe,
-+	.remove = bluefield_edac_mc_remove,
-+};
-+
-+module_platform_driver(bluefield_edac_mc_driver);
-+
-+MODULE_DESCRIPTION("Mellanox BlueField memory edac driver");
-+MODULE_AUTHOR("Mellanox Technologies");
-+MODULE_LICENSE("GPL v2");
+ /* this is temporary */
+-int edac_mc_get_poll_msec(void)
++unsigned int edac_mc_get_poll_msec(void)
+ {
+ 	return edac_mc_poll_msec;
+ }
+ 
+ static int edac_set_poll_msec(const char *val, const struct kernel_param *kp)
+ {
+-	unsigned long l;
++	unsigned int i;
+ 	int ret;
+ 
+ 	if (!val)
+ 		return -EINVAL;
+ 
+-	ret = kstrtoul(val, 0, &l);
++	ret = kstrtouint(val, 0, &i);
+ 	if (ret)
+ 		return ret;
+ 
+-	if (l < 1000)
++	if (i < 1000)
+ 		return -EINVAL;
+ 
+-	*((unsigned long *)kp->arg) = l;
++	*((unsigned int *)kp->arg) = i;
+ 
+ 	/* notify edac_mc engine to reset the poll period */
+-	edac_mc_reset_delay_period(l);
++	edac_mc_reset_delay_period(i);
+ 
+ 	return 0;
+ }
+@@ -82,7 +82,7 @@ MODULE_PARM_DESC(edac_mc_log_ue,
+ module_param(edac_mc_log_ce, int, 0644);
+ MODULE_PARM_DESC(edac_mc_log_ce,
+ 		 "Log correctable error to console: 0=off 1=on");
+-module_param_call(edac_mc_poll_msec, edac_set_poll_msec, param_get_int,
++module_param_call(edac_mc_poll_msec, edac_set_poll_msec, param_get_uint,
+ 		  &edac_mc_poll_msec, 0644);
+ MODULE_PARM_DESC(edac_mc_poll_msec, "Polling period in milliseconds");
+ 
+diff --git a/drivers/edac/edac_module.h b/drivers/edac/edac_module.h
+index bc4b806dc9cc..b2f59ee76c22 100644
+--- a/drivers/edac/edac_module.h
++++ b/drivers/edac/edac_module.h
+@@ -36,7 +36,7 @@ extern int edac_mc_get_log_ue(void);
+ extern int edac_mc_get_log_ce(void);
+ extern int edac_mc_get_panic_on_ue(void);
+ extern int edac_get_poll_msec(void);
+-extern int edac_mc_get_poll_msec(void);
++extern unsigned int edac_mc_get_poll_msec(void);
+ 
+ unsigned edac_dimm_info_location(struct dimm_info *dimm, char *buf,
+ 				 unsigned len);
 -- 
-2.1.2
+2.21.0
 
