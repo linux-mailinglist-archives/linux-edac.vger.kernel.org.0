@@ -2,367 +2,742 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 728A65E0D9
-	for <lists+linux-edac@lfdr.de>; Wed,  3 Jul 2019 11:19:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F09105E0F9
+	for <lists+linux-edac@lfdr.de>; Wed,  3 Jul 2019 11:25:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727012AbfGCJS7 (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Wed, 3 Jul 2019 05:18:59 -0400
-Received: from foss.arm.com ([217.140.110.172]:42242 "EHLO foss.arm.com"
+        id S1727004AbfGCJZz (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Wed, 3 Jul 2019 05:25:55 -0400
+Received: from foss.arm.com ([217.140.110.172]:42394 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725820AbfGCJS6 (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Wed, 3 Jul 2019 05:18:58 -0400
+        id S1726930AbfGCJZz (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Wed, 3 Jul 2019 05:25:55 -0400
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A12DB344;
-        Wed,  3 Jul 2019 02:18:57 -0700 (PDT)
-Received: from [10.1.196.105] (eglon.cambridge.arm.com [10.1.196.105])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2D23B3F246;
-        Wed,  3 Jul 2019 02:18:56 -0700 (PDT)
-Subject: Re: [PATCH v4 2/2] EDAC: add EDAC driver for DMC520
-To:     Lei Wang <leiwang_git@outlook.com>,
-        "mark.rutland@arm.com" <mark.rutland@arm.com>
-Cc:     "bp@alien8.de" <bp@alien8.de>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 264D5344;
+        Wed,  3 Jul 2019 02:25:53 -0700 (PDT)
+Received: from localhost (unknown [10.37.6.20])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 4F1CA3F246;
+        Wed,  3 Jul 2019 02:25:52 -0700 (PDT)
+Date:   Wed, 3 Jul 2019 10:25:50 +0100
+From:   Andrew Murray <andrew.murray@arm.com>
+To:     Tyler Baicar OS <baicar@os.amperecomputing.com>
+Cc:     Open Source Submission <patches@amperecomputing.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "mchehab@kernel.org" <mchehab@kernel.org>,
+        "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
         "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
-        "sashal@kernel.org" <sashal@kernel.org>,
-        "hangl@microsoft.com" <hangl@microsoft.com>,
-        "lewan@microsoft.com" <lewan@microsoft.com>,
-        "ruizhao@microsoft.com" <ruizhao@microsoft.com>
-References: <BN6PR04MB11075E9070EE1A263E099A7386E60@BN6PR04MB1107.namprd04.prod.outlook.com>
-From:   James Morse <james.morse@arm.com>
-Message-ID: <65439e51-5356-ae93-dffb-5a87279f6c8b@arm.com>
-Date:   Wed, 3 Jul 2019 10:18:54 +0100
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.0
+        "james.morse@arm.com" <james.morse@arm.com>,
+        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
+        "will@kernel.org" <will@kernel.org>,
+        "lorenzo.pieralisi@arm.com" <lorenzo.pieralisi@arm.com>,
+        "guohanjun@huawei.com" <guohanjun@huawei.com>,
+        "sudeep.holla@arm.com" <sudeep.holla@arm.com>,
+        "rjw@rjwysocki.net" <rjw@rjwysocki.net>,
+        "lenb@kernel.org" <lenb@kernel.org>,
+        "mark.rutland@arm.com" <mark.rutland@arm.com>,
+        "tony.luck@intel.com" <tony.luck@intel.com>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "Matteo.Carlini@arm.com" <Matteo.Carlini@arm.com>
+Subject: Re: [PATCH RFC 1/4] ACPI/AEST: Initial AEST driver
+Message-ID: <20190703092549.GA51483@e119886-lin.cambridge.arm.com>
+References: <1562086280-5351-1-git-send-email-baicar@os.amperecomputing.com>
+ <1562086280-5351-2-git-send-email-baicar@os.amperecomputing.com>
 MIME-Version: 1.0
-In-Reply-To: <BN6PR04MB11075E9070EE1A263E099A7386E60@BN6PR04MB1107.namprd04.prod.outlook.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-GB
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1562086280-5351-2-git-send-email-baicar@os.amperecomputing.com>
+User-Agent: Mutt/1.10.1+81 (426a6c1) (2018-08-26)
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-Hi!
-
-On 22/06/2019 07:38, Lei Wang wrote:
-> New driver supports error detection and correction on the devices with ARM
-> DMC-520 memory controller.
-
-> diff --git a/drivers/edac/dmc520_edac.c b/drivers/edac/dmc520_edac.c
+On Tue, Jul 02, 2019 at 04:51:38PM +0000, Tyler Baicar OS wrote:
+> Add support for parsing the ARM Error Source Table and basic handling of
+> errors reported through both memory mapped and system register interfaces.
+> 
+> Signed-off-by: Tyler Baicar <baicar@os.amperecomputing.com>
+> ---
+>  arch/arm64/include/asm/ras.h |  41 +++++
+>  arch/arm64/kernel/Makefile   |   2 +-
+>  arch/arm64/kernel/ras.c      |  67 ++++++++
+>  drivers/acpi/arm64/Kconfig   |   3 +
+>  drivers/acpi/arm64/Makefile  |   1 +
+>  drivers/acpi/arm64/aest.c    | 362 +++++++++++++++++++++++++++++++++++++++++++
+>  include/linux/acpi_aest.h    |  94 +++++++++++
+>  7 files changed, 569 insertions(+), 1 deletion(-)
+>  create mode 100644 arch/arm64/include/asm/ras.h
+>  create mode 100644 arch/arm64/kernel/ras.c
+>  create mode 100644 drivers/acpi/arm64/aest.c
+>  create mode 100644 include/linux/acpi_aest.h
+> 
+> diff --git a/arch/arm64/include/asm/ras.h b/arch/arm64/include/asm/ras.h
 > new file mode 100644
-> index 000000000000..c23734c13933
+> index 0000000..36bfff4
 > --- /dev/null
-> +++ b/drivers/edac/dmc520_edac.c
-> @@ -0,0 +1,604 @@
+> +++ b/arch/arm64/include/asm/ras.h
+> @@ -0,0 +1,41 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +#ifndef __ASM_RAS_H
+> +#define __ASM_RAS_H
+> +
+> +#define ERR_STATUS_AV		BIT(31)
+> +#define ERR_STATUS_V		BIT(30)
+> +#define ERR_STATUS_UE		BIT(29)
+> +#define ERR_STATUS_ER		BIT(28)
+> +#define ERR_STATUS_OF		BIT(27)
+> +#define ERR_STATUS_MV		BIT(26)
+> +#define ERR_STATUS_CE_SHIFT	24
+> +#define ERR_STATUS_CE_MASK	0x3
+> +#define ERR_STATUS_DE		BIT(23)
+> +#define ERR_STATUS_PN		BIT(22)
+> +#define ERR_STATUS_UET_SHIFT	20
+> +#define ERR_STATUS_UET_MASK	0x3
+> +#define ERR_STATUS_IERR_SHIFT	8
+> +#define ERR_STATUS_IERR_MASK	0xff
+> +#define ERR_STATUS_SERR_SHIFT	0
+> +#define ERR_STATUS_SERR_MASK	0xff
 
-> +#include <linux/module.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/edac.h>
-> +#include <linux/io.h>
-> +#include <linux/of.h>
+Some of these (_ER, _OF, _CE*, _PN, _UET*) are not used anywhere in the series,
+I'd suggest you drop the unused ones.
+
+There may be some merit in renaming these to match the register names in the
+spec, e.g. ERXSTATUS_EL1 instead of ERR_STATUS.
+
+> +
+> +#define ERR_FR_CEC_SHIFT	12
+> +#define ERR_FR_CEC_MASK		0x7
+> +
+> +#define ERR_FR_8B_CEC		BIT(1)
+> +#define ERR_FR_16B_CEC		BIT(2)
+
+All of these ERR_FR_ defines aren't used anywhere either.
+
+> +
+> +struct ras_ext_regs {
+> +	u64 err_fr;
+> +	u64 err_ctlr;
+> +	u64 err_status;
+> +	u64 err_addr;
+> +	u64 err_misc0;
+> +	u64 err_misc1;
+> +	u64 err_misc2;
+> +	u64 err_misc3;
+> +};
+> +
+> +void arch_arm_ras_report_error(void);
+> +
+> +#endif	/* __ASM_RAS_H */
+> diff --git a/arch/arm64/kernel/Makefile b/arch/arm64/kernel/Makefile
+> index 9e7dcb2..294f602 100644
+> --- a/arch/arm64/kernel/Makefile
+> +++ b/arch/arm64/kernel/Makefile
+> @@ -19,7 +19,7 @@ obj-y			:= debug-monitors.o entry.o irq.o fpsimd.o		\
+>  			   return_address.o cpuinfo.o cpu_errata.o		\
+>  			   cpufeature.o alternative.o cacheinfo.o		\
+>  			   smp.o smp_spin_table.o topology.o smccc-call.o	\
+> -			   syscall.o
+> +			   syscall.o ras.o
+
+Given that arch_arm_ras_report_error depends on the ARM64_HAS_RAS_EXTN
+capability, which in turn depends on CONFIG_ARM64_RAS_EXTN - you should
+probably conditionally build ras.o only if CONFIG_ARM64_RAS_EXTN is defined
+(and provide a stub in the header for when it isn't defined).
+
+>  
+>  extra-$(CONFIG_EFI)			:= efi-entry.o
+>  
+> diff --git a/arch/arm64/kernel/ras.c b/arch/arm64/kernel/ras.c
+> new file mode 100644
+> index 0000000..ca47efa
+> --- /dev/null
+> +++ b/arch/arm64/kernel/ras.c
+> @@ -0,0 +1,67 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +
+> +#include <linux/kernel.h>
+> +#include <linux/cpu.h>
+> +#include <linux/smp.h>
+> +
+> +#include <asm/ras.h>
+> +
+> +void arch_arm_ras_report_error(void)
+> +{
+> +	u64 num_records;
+> +	unsigned int i, cpu_num;
+> +	bool fatal = false;
+> +	struct ras_ext_regs regs;
+> +
+> +	if (!this_cpu_has_cap(ARM64_HAS_RAS_EXTN))
+> +		return;
+> +
+> +	cpu_num = get_cpu();
+> +	num_records = read_sysreg_s(SYS_ERRIDR_EL1);
+
+This value should be masked to exclude the reserved bits. This will
+also prevent you writing to reserved bits in ERRSELR.
+
+> +
+> +	for (i = 0; i < num_records; i++) {
+> +		write_sysreg_s(i, SYS_ERRSELR_EL1);
+
+There should be an isb here, this will ensure the record selection has
+happened before reading the record.
+
+> +		regs.err_status = read_sysreg_s(SYS_ERXSTATUS_EL1);
+> +
+> +		if (!(regs.err_status & ERR_STATUS_V))
+> +			continue;
+> +
+> +		pr_err("CPU%u: ERR%uSTATUS: 0x%llx\n", cpu_num, i,
+> +		       regs.err_status);
+> +
+> +		if (regs.err_status & ERR_STATUS_AV) {
+> +			regs.err_addr = read_sysreg_s(SYS_ERXSTATUS_EL1);
+
+This should be SYS_ERXADDR_EL1 not SYS_ERXSTATUS_EL1!
+
+> +			pr_err("CPU%u: ERR%uADDR: 0x%llx\n", cpu_num, i,
+> +			       regs.err_addr);
+> +		} else
+> +			regs.err_addr = 0;
+
+Or perhaps set "regs = { }" at the start of the function instead?
+
+> +
+> +		regs.err_fr = read_sysreg_s(SYS_ERXFR_EL1);
+> +		pr_err("CPU%u: ERR%uFR: 0x%llx\n", cpu_num, i, regs.err_fr);
+> +		regs.err_ctlr = read_sysreg_s(SYS_ERXCTLR_EL1);
+> +		pr_err("CPU%u: ERR%uCTLR: 0x%llx\n", cpu_num, i, regs.err_ctlr);
+> +
+> +		if (regs.err_status & ERR_STATUS_MV) {
+> +			regs.err_misc0 = read_sysreg_s(SYS_ERXMISC0_EL1);
+> +			pr_err("CPU%u: ERR%uMISC0: 0x%llx\n", cpu_num, i,
+> +			       regs.err_misc0);
+> +			regs.err_misc1 = read_sysreg_s(SYS_ERXMISC1_EL1);
+> +			pr_err("CPU%u: ERR%uMISC1: 0x%llx\n", cpu_num, i,
+> +			       regs.err_misc1);
+> +		}
+> +
+> +		/*
+> +		 * In the future, we will treat UER conditions as potentially
+> +		 * recoverable.
+> +		 */
+> +		if (regs.err_status & ERR_STATUS_UE)
+> +			fatal = true;
+> +
+> +		write_sysreg_s(regs.err_status, SYS_ERXSTATUS_EL1);
+> +	}
+> +
+> +	if (fatal)
+> +		panic("uncorrectable error encountered");
+
+On the do_serror path, we will already panic if arm64_is_fatal_ras_serror
+indicates uncorrectable errors. Is this here for the other paths?
+
+> +
+> +	put_cpu();
+> +}
+
+Finally, should we clear the errors when we see them?
+
+> diff --git a/drivers/acpi/arm64/Kconfig b/drivers/acpi/arm64/Kconfig
+> index 6dba187..8d5cf99 100644
+> --- a/drivers/acpi/arm64/Kconfig
+> +++ b/drivers/acpi/arm64/Kconfig
+> @@ -8,3 +8,6 @@ config ACPI_IORT
+>  
+>  config ACPI_GTDT
+>  	bool
+> +
+> +config ACPI_AEST
+> +	bool "ARM Error Source Table Support"
+> diff --git a/drivers/acpi/arm64/Makefile b/drivers/acpi/arm64/Makefile
+> index 6ff50f4..ea1ba28 100644
+> --- a/drivers/acpi/arm64/Makefile
+> +++ b/drivers/acpi/arm64/Makefile
+> @@ -1,3 +1,4 @@
+>  # SPDX-License-Identifier: GPL-2.0-only
+>  obj-$(CONFIG_ACPI_IORT) 	+= iort.o
+>  obj-$(CONFIG_ACPI_GTDT) 	+= gtdt.o
+> +obj-$(CONFIG_ACPI_AEST) 	+= aest.o
+> diff --git a/drivers/acpi/arm64/aest.c b/drivers/acpi/arm64/aest.c
+> new file mode 100644
+> index 0000000..fd4f3b5
+> --- /dev/null
+> +++ b/drivers/acpi/arm64/aest.c
+> @@ -0,0 +1,362 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +
+> +/* ARM Error Source Table Support */
+> +
+> +#include <linux/acpi.h>
+> +#include <linux/acpi_aest.h>
+> +#include <linux/init.h>
 > +#include <linux/interrupt.h>
-> +#include <linux/bitfield.h>
-
-#include <linux/spinlock.h> ?
-
-It's best to keep this list sorted, it makes it easier for the maintainer to resolve
-conflicts when header files get split/moved-around.
-
-> +#include "edac_mc.h"
-
-[...]
-
-> +#define REG_OFFSET_FEATURE_CONTROL_NEXT		0x1F0
-
-Nothing uses this, do we need it?
-
-[...]
-
-> +#define REG_OFFSET_DECODE_CONTROL_NOW		0x1014
-
-Nothing uses this, do we need it?
-[...]
-
-> +/* DMC-520 types, masks and bitfields */
-> +#define DRAM_ECC_INT_CE_MASK			BIT(2)
-> +#define DRAM_ECC_INT_UE_MASK			BIT(3)
-
-(The 'MASK' suffix isn't really needed for a single bit, you can't confuse it with the value.)
-
-[...]
-
-> +#define SCRUB_CONTROL_MASK			GENMASK(1, 0)
-
-Isn't this field called TRIGGER0_NEXT? It would be good to use the names from the
-datasheet[0] as it makes it much easier for someone else to debug.
-
-
-> +#define DMC520_EDAC_ERR_GRAIN			1
-
-> +#define DMC520_BUS_WIDTH	8  /* Data bus width is 64bits/8Bytes */
-
-Can you point me to where this comes from in the datasheet[0]?
-I see it talk in "1.3 Features" of "either a 32-bit wide data SDRAM interface or a 64-bit
-wide data SDRAM interface".
-
-If this is a choice that was made on your platform it needs to be described in the DT.
-
-(I may be confused between SDRAM/DDR/DRAM, as 2.3.3. "PHY interface" seems to describe one
-connecting to the other.)
-
-
-
-> +/* memory type */
-> +enum dmc520_mem_type {
-> +	mem_type_ddr3 = 1,
-> +	mem_type_ddr4 = 2
-> +};
+> +#include <linux/io.h>
+> +#include <linux/irq.h>
+> +#include <linux/kernel.h>
+> +#include <linux/percpu.h>
+> +#include <linux/ratelimit.h>
 > +
-> +/* memory device width */
-> +enum dmc520_dev_width {
-> +	dev_width_x4 = 0,
-> +	dev_width_x8 = 1,
-> +	dev_width_x16 = 2
-> +};
-
-(Nit: the convention for enums members is all-caps. e.g. include/linux/edac.h)
-
-[...]
-
-> +static irqreturn_t
-> +dmc520_edac_dram_all_isr(int irq, void *data, u32 interrupt_mask);
-
-(You could avoid this by moving the user after definition of this function)
-
-[...]
-
-> +static bool dmc520_get_dram_ecc_error_info(struct dmc520_edac *edac,
-> +					   bool is_ce,
-> +					   struct ecc_error_info *info)
+> +#include <asm/ras.h>
+> +
+> +#undef pr_fmt
+> +#define pr_fmt(fmt) "ACPI AEST: " fmt
+> +
+> +static struct acpi_table_header *aest_table;
+> +
+> +static struct aest_node_data __percpu **ppi_data;
+> +static u8 num_ppi;
+> +static u8 ppi_idx;
+> +
+> +static void aest_print(struct aest_node_data *data, struct ras_ext_regs regs,
+> +		       int index)
 > +{
-> +	u32 reg_offset_low, reg_offset_high;
-> +	u32 reg_val_low, reg_val_high;
-> +	bool valid;
+> +	/* No more than 2 corrected messages every 5 seconds */
+> +	static DEFINE_RATELIMIT_STATE(ratelimit_corrected, 5*HZ, 2);
 > +
-> +	reg_offset_low = is_ce ? REG_OFFSET_DRAM_ECC_ERRC_INT_INFO_31_00 :
-> +				 REG_OFFSET_DRAM_ECC_ERRD_INT_INFO_31_00;
-> +	reg_offset_high = is_ce ? REG_OFFSET_DRAM_ECC_ERRC_INT_INFO_63_32 :
-> +				  REG_OFFSET_DRAM_ECC_ERRD_INT_INFO_63_32;
+> +	if (regs.err_status & ERR_STATUS_UE ||
+> +	    regs.err_status & ERR_STATUS_DE ||
+> +	    __ratelimit(&ratelimit_corrected)) {
+> +		switch (data->node_type) {
+> +		case AEST_NODE_TYPE_PROC:
+> +			pr_err("error from processor 0x%x\n",
+> +			       data->data.proc.id);
+> +			break;
+> +		case AEST_NODE_TYPE_MEM:
+> +			pr_err("error from memory domain 0x%x\n",
+> +			       data->data.mem.domain);
+> +			break;
+> +		case AEST_NODE_TYPE_VENDOR:
+> +			pr_err("error from vendor specific source 0x%x\n",
+> +			       data->data.vendor.id);
+> +		}
 > +
-> +	reg_val_low = dmc520_read_reg(edac, reg_offset_low);
-> +	reg_val_high = dmc520_read_reg(edac, reg_offset_high);
+> +		pr_err("ERR%dSTATUS = 0x%llx\n", index, regs.err_status);
+> +		if (regs.err_status & ERR_STATUS_AV)
+> +			pr_err("ERR%dADDR = 0x%llx\n", index, regs.err_addr);
 > +
-> +	valid = (FIELD_GET(REG_FIELD_ERR_INFO_LOW_VALID, reg_val_low) != 0) &&
-> +		(FIELD_GET(REG_FIELD_ERR_INFO_HIGH_VALID, reg_val_high) != 0);
-
-> +	if (valid) {
-> +		info->col = FIELD_GET(REG_FIELD_ERR_INFO_LOW_COL, reg_val_low);
-> +		info->row = FIELD_GET(REG_FIELD_ERR_INFO_LOW_ROW, reg_val_low);
-> +		info->rank = FIELD_GET(REG_FIELD_ERR_INFO_LOW_RANK, reg_val_low);
-> +		info->bank = FIELD_GET(REG_FIELD_ERR_INFO_HIGH_BANK, reg_val_high);
-> +	} else {
-> +		memset(info, 0, sizeof(struct ecc_error_info));
-> +	}
-
-> +	return valid;
-
-Nothing checks this return value.
-
-> +}
-
-> +static bool dmc520_get_scrub_type(struct dmc520_edac *edac)
-
-This function returns enum scrub_type, not bool.
-
-> +{
-> +	enum scrub_type type = SCRUB_NONE;
-> +	u32 reg_val, scrub_cfg;
+> +		pr_err("ERR%dFR = 0x%llx\n", index, regs.err_fr);
+> +		pr_err("ERR%dCTLR = 0x%llx\n", index, regs.err_ctlr);
 > +
-> +	reg_val = dmc520_read_reg(edac, REG_OFFSET_SCRUB_CONTROL0_NOW);
-> +	scrub_cfg = FIELD_GET(SCRUB_CONTROL_MASK, reg_val);
-> +
-> +	if (DMC520_SCRUB_TRIGGER_ERR_DETECT == scrub_cfg ||
-> +		DMC520_SCRUB_TRIGGER_IDLE == scrub_cfg)
-> +		type = SCRUB_HW_PROG;
-> +
-> +	return type;
-> +}
+> +		if (regs.err_status & ERR_STATUS_MV) {
+> +			pr_err("ERR%dMISC0 = 0x%llx\n", index, regs.err_misc0);
+> +			pr_err("ERR%dMISC1 = 0x%llx\n", index, regs.err_misc1);
+> +		}
 
+Given that we have a ras_ext_regs struct, can't we use a single function to
+print the error - rather than have duplicate pr_err's here and in
+arch_arm_ras_report_error?
 
-> +static void dmc520_handle_dram_ecc_errors(struct mem_ctl_info *mci,
-> +					  bool is_ce)
-> +{
-> +	struct ecc_error_info info;
-> +	struct dmc520_edac *edac;
-> +	u32 cnt;
-> +	char message[EDAC_MSG_BUF_SIZE];
-> +	unsigned long flags;
-> +
-> +	edac = mci->pvt_info;
-> +	dmc520_get_dram_ecc_error_info(edac, is_ce, &info);
-> +
-> +	cnt = dmc520_get_dram_ecc_error_count(edac, is_ce);
-> +
-> +	if (cnt > 0) {
-> +		snprintf(message, ARRAY_SIZE(message),
-> +			 "rank:%d bank:%d row:%d col:%d",
-> +			 info.rank, info.bank,
-> +			 info.row, info.col);
-> +
-> +		spin_lock_irqsave(&edac->ecc_lock, flags);
+Thanks,
 
-irqsave/irqrestore is overkill as this function is only called from an interrupt handler.
-There is no way for this to be called with interrupts unmasked.
+Andrew Murray
 
-
-> +		edac_mc_handle_error((is_ce ? HW_EVENT_ERR_CORRECTED :
-> +				     HW_EVENT_ERR_UNCORRECTED),
-> +				     mci, cnt, 0, 0, 0, info.rank, -1, -1,
-> +				     message, "");
-> +		spin_unlock_irqrestore(&edac->ecc_lock, flags);
 > +	}
 > +}
 > +
-> +static irqreturn_t dmc520_edac_dram_ecc_isr(int irq, void *data, bool is_ce)
-
-data here could be struct mem_ctl_info *, as it only has one caller.
-
+> +static void aest_proc(struct aest_node_data *data)
 > +{
-> +	u32 i_mask;
-> +	struct mem_ctl_info *mci;
-> +	struct dmc520_edac *edac;
+> +	struct ras_ext_regs *regs_p, regs;
+> +	int i;
+> +	bool fatal = false;
 > +
-> +	mci = data;
-> +	edac = mci->pvt_info;
+> +	/*
+> +	 * Currently SR based handling is done through the architected
+> +	 * discovery exposed through SRs. That may change in the future
+> +	 * if there is supplemental information in the AEST that is
+> +	 * needed.
+> +	 */
+> +	if (data->interface.type == AEST_SYSTEM_REG_INTERFACE) {
+> +		arch_arm_ras_report_error();
+> +		return;
+> +	}
 > +
-> +	i_mask = is_ce ? DRAM_ECC_INT_CE_MASK : DRAM_ECC_INT_UE_MASK;
-
-(The mask/bit here could be passed in directly, its the value you need most often)
-
-
-> +	dmc520_handle_dram_ecc_errors(mci, is_ce);
+> +	regs_p = data->interface.regs;
 > +
-> +	dmc520_write_reg(edac, i_mask, REG_OFFSET_INTERRUPT_CLR);
+> +	for (i = data->interface.start; i < data->interface.end; i++) {
+> +		regs.err_status = readq(&regs_p[i].err_status);
+> +		if (!(regs.err_status & ERR_STATUS_V))
+> +			continue;
+> +
+> +		if (regs.err_status & ERR_STATUS_AV)
+> +			regs.err_addr = readq(&regs_p[i].err_addr);
+> +		else
+> +			regs.err_addr = 0;
+> +
+> +		regs.err_fr = readq(&regs_p[i].err_fr);
+> +		regs.err_ctlr = readq(&regs_p[i].err_ctlr);
+> +
+> +		if (regs.err_status & ERR_STATUS_MV) {
+> +			regs.err_misc0 = readq(&regs_p[i].err_misc0);
+> +			regs.err_misc1 = readq(&regs_p[i].err_misc1);
+> +		} else {
+> +			regs.err_misc0 = 0;
+> +			regs.err_misc1 = 0;
+> +		}
+> +
+> +		aest_print(data, regs, i);
+> +
+> +		if (regs.err_status & ERR_STATUS_UE)
+> +			fatal = true;
+> +
+> +		writeq(regs.err_status, &regs_p[i].err_status);
+> +	}
+> +
+> +	if (fatal)
+> +		panic("AEST: uncorrectable error encountered");
+> +
+> +}
+> +
+> +static irqreturn_t aest_irq_func(int irq, void *input)
+> +{
+> +	struct aest_node_data *data = input;
+> +
+> +	aest_proc(data);
 > +
 > +	return IRQ_HANDLED;
 > +}
-
-[...]
-
-
-> +static int dmc520_edac_probe(struct platform_device *pdev)
+> +
+> +static int __init aest_register_gsi(u32 gsi, int trigger, void *data)
 > +{
-
-[...]
-
-> +	if (nintr > ARRAY_SIZE(dmc520_isr_array)) {
-> +		edac_printk(KERN_ERR, EDAC_MOD_NAME,
-> +			"Invalid device node configuration: # of interrupt config "
-> +			"elements (%d) can not exeed %ld.\n",
-
-(Nit: exceed)
-
-> +			nintr, ARRAY_SIZE(dmc520_isr_array));
+> +	int cpu, irq;
+> +
+> +	irq = acpi_register_gsi(NULL, gsi, trigger, ACPI_ACTIVE_HIGH);
+> +
+> +	if (irq == -EINVAL) {
+> +		pr_err("failed to map AEST GSI %d\n", gsi);
 > +		return -EINVAL;
 > +	}
-
-[...]
-
-> +	ret = of_property_read_u32_array(dev->of_node, "interrupt-config",
-> +			edac->interrupt_masks, nintr);
-> +	if (ret) {
-> +		edac_printk(KERN_ERR, EDAC_MOD_NAME,
-> +			"Failed to get interrupt-config arrays.\n");
-> +		goto err_free_mc;
-> +	}
-
-> +	for (intr_index = 0; intr_index < nintr; ++intr_index) {
-> +		if (edac->interrupt_mask_all & edac->interrupt_masks[intr_index]) {
-> +			edac_printk(KERN_ERR, EDAC_MC,
-> +				"interrupt-config error: "
-> +				"element %d's interrupt mask %d has overlap.\n",
-> +				intr_index, edac->interrupt_masks[intr_index]);
-> +			goto err_free_mc;
+> +
+> +	if (gsi < 16) {
+> +		pr_err("invalid GSI %d\n", gsi);
+> +		return -EINVAL;
+> +	} else if (gsi < 32) {
+> +		if (ppi_idx >= AEST_MAX_PPI) {
+> +			pr_err("Unable to register PPI %d\n", gsi);
+> +			return -EINVAL;
 > +		}
-> +
-> +		edac->interrupt_mask_all |= edac->interrupt_masks[intr_index];
+> +		enable_percpu_irq(irq, IRQ_TYPE_NONE);
+> +		for_each_possible_cpu(cpu) {
+> +			memcpy(per_cpu_ptr(ppi_data[ppi_idx], cpu), data,
+> +			       sizeof(struct aest_node_data));
+> +		}
+> +		if (request_percpu_irq(irq, aest_irq_func, "AEST",
+> +				       ppi_data[ppi_idx++])) {
+> +			pr_err("failed to register AEST IRQ %d\n", irq);
+> +			return -EINVAL;
+> +		}
+> +	} else if (gsi < 1020) {
+> +		if (request_irq(irq, aest_irq_func, IRQF_SHARED, "AEST",
+> +				data)) {
+> +			pr_err("failed to register AEST IRQ %d\n", irq);
+> +			return -EINVAL;
+> +		}
+> +	} else {
+> +		pr_err("invalid GSI %d\n", gsi);
+> +		return -EINVAL;
 > +	}
-
-Ah, so the driver doesn't support overlapping masks... but wasn't this the reason for
-describing the interrupts with these masks in the first place?
-(It looks like the DT-folk want this as named interrupts)
-
-lore.kernel.org/r/BYAPR21MB1319BC4D079B918AB038A4D590010@BYAPR21MB1319.namprd21.prod.outlook.com
-
-Would this driver support the configuration you gave there?
-
-
-> +	edac->interrupt_mask_all &= ALL_INT_MASK;
-
-This is to removed invalid interrupt fields? Shouldn't we print a warning instead? Either
-the DT is invalid, or its some future hardware that has an extra interrupt that this
-driver won't enable.
-
-
-[...]
-
-> +	/* Clear interrupts */
-> +	reg_val = dmc520_read_reg(edac, REG_OFFSET_INTERRUPT_CONTROL);
-> +	dmc520_write_reg(edac, reg_val & (~(edac->interrupt_mask_all)),
-> +			REG_OFFSET_INTERRUPT_CONTROL);
-> +	dmc520_write_reg(edac, edac->interrupt_mask_all, REG_OFFSET_INTERRUPT_CLR);
-
-[...]
-
-> +	/* Enable interrupts */
-> +	dmc520_write_reg(edac, edac->interrupt_mask_all, REG_OFFSET_INTERRUPT_CONTROL);
-
-Won't this disable any interrupts we weren't told about? You did a read-modify write
-above. Can we do the same here?
-
-
+> +
 > +	return 0;
+> +}
 > +
-> +err_free_irq:
-> +	for (intr_index = 0; intr_index < nintr_registered; ++intr_index) {
-> +		int irq_id = platform_get_irq(pdev, intr_index);
-> +		devm_free_irq(&pdev->dev, irq_id, mci);
+> +static int __init aest_init_interrupts(struct aest_type_header *node,
+> +				       struct aest_node_data *data)
+> +{
+> +	struct aest_interrupt *interrupt;
+> +	int i, trigger, ret = 0;
+> +
+> +	interrupt = ACPI_ADD_PTR(struct aest_interrupt, node,
+> +				 node->interrupt_offset);
+> +
+> +	for (i = 0; i < node->interrupt_size; i++, interrupt++) {
+> +		trigger = (interrupt->flags & AEST_INTERRUPT_MODE) ?
+> +			  ACPI_LEVEL_SENSITIVE : ACPI_EDGE_SENSITIVE;
+> +		if (aest_register_gsi(interrupt->gsiv, trigger, data))
+> +			ret = -EINVAL;
 > +	}
-> +	edac_mc_del_mc(&pdev->dev);
-> +err_free_mc:
-> +	edac_mc_free(mci);
 > +
 > +	return ret;
 > +}
 > +
-
-[...]
-
-> +static const struct of_device_id dmc520_edac_driver_id[] = {
-> +	{ .compatible = "brcm,dmc-520", },
-> +	{ .compatible = "arm,dmc-520", },
-
-You should only need the "arm,dmc-520" entry here. The additional compatible values are
-for quirking the driver when integration issues are discovered.
-The 'brcm' version should be in the DT from day-one, but the kernel only needs to pick it
-up when it needs to treat the brcm version differently.
-
-
-> +	{ /* end of table */ }
+> +static int __init aest_init_interface(struct aest_type_header *node,
+> +				       struct aest_node_data *data)
+> +{
+> +	struct aest_interface *interface;
+> +	struct resource *res;
+> +	int size;
+> +
+> +	interface = ACPI_ADD_PTR(struct aest_interface, node,
+> +				 node->interface_offset);
+> +
+> +	if (interface->type > AEST_MEMORY_MAPPED_INTERFACE) {
+> +		pr_err("invalid interface type: %d\n", interface->type);
+> +		return -EINVAL;
+> +	}
+> +
+> +	data->interface.type = interface->type;
+> +
+> +	/*
+> +	 * Currently SR based handling is done through the architected
+> +	 * discovery exposed through SRs. That may change in the future
+> +	 * if there is supplemental information in the AEST that is
+> +	 * needed.
+> +	 */
+> +	if (interface->type == AEST_SYSTEM_REG_INTERFACE)
+> +		return 0;
+> +
+> +	res = kzalloc(sizeof(struct resource), GFP_KERNEL);
+> +	if (!res)
+> +		return -ENOMEM;
+> +
+> +	size = interface->num_records * sizeof(struct ras_ext_regs);
+> +	res->name = "AEST";
+> +	res->start = interface->address;
+> +	res->end = res->start + size;
+> +	res->flags = IORESOURCE_MEM;
+> +	if (request_resource_conflict(&iomem_resource, res)) {
+> +		pr_err("unable to request region starting at 0x%llx\n",
+> +			res->start);
+> +		kfree(res);
+> +		return -EEXIST;
+> +	}
+> +
+> +	data->interface.start = interface->start_index;
+> +	data->interface.end = interface->start_index + interface->num_records;
+> +
+> +	data->interface.regs = ioremap(interface->address, size);
+> +	if (data->interface.regs == NULL)
+> +		return -EINVAL;
+> +
+> +	return 0;
+> +}
+> +
+> +static int __init aest_init_node(struct aest_type_header *node)
+> +{
+> +	struct aest_node_data *data;
+> +	union aest_node_spec *node_spec;
+> +	int ret;
+> +
+> +	data = kzalloc(sizeof(struct aest_node_data), GFP_KERNEL);
+> +	if (!data)
+> +		return -ENOMEM;
+> +
+> +	data->node_type = node->type;
+> +
+> +	node_spec = ACPI_ADD_PTR(union aest_node_spec, node, node->data_offset);
+> +
+> +	switch (node->type) {
+> +	case AEST_NODE_TYPE_PROC:
+> +		memcpy(&data->data, node_spec, sizeof(struct aest_proc_data));
+> +		break;
+> +	case AEST_NODE_TYPE_MEM:
+> +		memcpy(&data->data, node_spec, sizeof(struct aest_mem_data));
+> +		break;
+> +	case AEST_NODE_TYPE_VENDOR:
+> +		memcpy(&data->data, node_spec, sizeof(struct aest_vendor_data));
+> +		break;
+> +	default:
+> +		return -EINVAL;
+> +	}
+> +
+> +	ret = aest_init_interface(node, data);
+> +	if (ret) {
+> +		kfree(data);
+> +		return ret;
+> +	}
+> +
+> +	return aest_init_interrupts(node, data);
+> +}
+> +
+> +static void aest_count_ppi(struct aest_type_header *node)
+> +{
+> +	struct aest_interrupt *interrupt;
+> +	int i;
+> +
+> +	interrupt = ACPI_ADD_PTR(struct aest_interrupt, node,
+> +				 node->interrupt_offset);
+> +
+> +	for (i = 0; i < node->interrupt_size; i++, interrupt++) {
+> +		if (interrupt->gsiv >= 16 && interrupt->gsiv < 32)
+> +			num_ppi++;
+> +	}
+> +
+> +}
+> +
+> +int __init acpi_aest_init(void)
+> +{
+> +	struct acpi_table_aest *aest;
+> +	struct aest_type_header *aest_node, *aest_end;
+> +	int i, ret = 0;
+> +
+> +	if (acpi_disabled)
+> +		return 0;
+> +
+> +	if (ACPI_FAILURE(acpi_get_table(ACPI_SIG_AEST, 0, &aest_table)))
+> +		return -EINVAL;
+> +
+> +	aest = (struct acpi_table_aest *)aest_table;
+> +
+> +	/* Get the first AEST node */
+> +	aest_node = ACPI_ADD_PTR(struct aest_type_header, aest,
+> +				 sizeof(struct acpi_table_aest));
+> +	/* Pointer to the end of the AEST table */
+> +	aest_end = ACPI_ADD_PTR(struct aest_type_header, aest,
+> +				aest_table->length);
+> +
+> +	while (aest_node < aest_end) {
+> +		if (((u64)aest_node + aest_node->length) > (u64)aest_end) {
+> +			pr_err("AEST node pointer overflow, bad table\n");
+> +			return -EINVAL;
+> +		}
+> +
+> +		aest_count_ppi(aest_node);
+> +
+> +		aest_node = ACPI_ADD_PTR(struct aest_type_header, aest_node,
+> +					 aest_node->length);
+> +	}
+> +
+> +	if (num_ppi > AEST_MAX_PPI) {
+> +		pr_err("Limiting PPI support to %d PPIs\n", AEST_MAX_PPI);
+> +		num_ppi = AEST_MAX_PPI;
+> +	}
+> +
+> +	ppi_data = kcalloc(num_ppi, sizeof(struct aest_node_data *),
+> +			   GFP_KERNEL);
+> +
+> +	for (i = 0; i < num_ppi; i++) {
+> +		ppi_data[i] = alloc_percpu(struct aest_node_data);
+> +		if (!ppi_data[i]) {
+> +			ret = -ENOMEM;
+> +			break;
+> +		}
+> +	}
+> +
+> +	if (ret) {
+> +		pr_err("Failed percpu allocation\n");
+> +		for (i = 0; i < num_ppi; i++)
+> +			free_percpu(ppi_data[i]);
+> +		return ret;
+> +	}
+> +
+> +	aest_node = ACPI_ADD_PTR(struct aest_type_header, aest,
+> +				 sizeof(struct acpi_table_aest));
+> +
+> +	while (aest_node < aest_end) {
+> +		ret = aest_init_node(aest_node);
+> +		if (ret)
+> +			pr_err("failed to init node: %d", ret);
+> +
+> +		aest_node = ACPI_ADD_PTR(struct aest_type_header, aest_node,
+> +					 aest_node->length);
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +early_initcall(acpi_aest_init);
+> diff --git a/include/linux/acpi_aest.h b/include/linux/acpi_aest.h
+> new file mode 100644
+> index 0000000..376122b
+> --- /dev/null
+> +++ b/include/linux/acpi_aest.h
+> @@ -0,0 +1,94 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +#ifndef AEST_H
+> +#define AEST_H
+> +
+> +#include <acpi/actbl.h>
+> +
+> +#define ACPI_SIG_AEST			"AEST"	/* ARM Error Source Table */
+> +
+> +#define AEST_NODE_TYPE_PROC		0
+> +#define AEST_NODE_TYPE_MEM		1
+> +#define AEST_NODE_TYPE_VENDOR		2
+> +
+> +#define AEST_SYSTEM_REG_INTERFACE	0x0
+> +#define AEST_MEMORY_MAPPED_INTERFACE	0x1
+> +
+> +#define AEST_INTERRUPT_MODE		BIT(0)
+> +
+> +#define AEST_MAX_PPI			4
+> +
+> +#pragma pack(1)
+> +
+> +struct acpi_table_aest {
+> +	struct acpi_table_header header;
 > +};
-
-
-With the bool/enum and interrupt-disabling things fixed:
-Reviewed-by: James Morse <james.morse@arm.com>
-
-
-
-Thanks,
-
-James
-
-[0] https://static.docs.arm.com/100000/0200/corelink_dmc520_trm_100000_0200_01_en.pdf
+> +
+> +struct aest_type_header {
+> +	u8 type;
+> +	u16 length;
+> +	u8 reserved;
+> +	u32 revision;
+> +	u32 data_offset;
+> +	u32 interface_offset;
+> +	u32 interface_size;
+> +	u32 interrupt_offset;
+> +	u32 interrupt_size;
+> +	u64 timestamp_rate;
+> +	u64 timestamp_start;
+> +	u64 countdown_rate;
+> +};
+> +
+> +struct aest_proc_data {
+> +	u32 id;
+> +	u32 level;
+> +	u32 cache_type;
+> +};
+> +
+> +struct aest_mem_data {
+> +	u32 domain;
+> +};
+> +
+> +struct aest_vendor_data {
+> +	u32 id;
+> +	u32 data;
+> +};
+> +
+> +struct aest_interface {
+> +	u8 type;
+> +	u8 reserved[3];
+> +	u32 flags;
+> +	u64 address;
+> +	u16 start_index;
+> +	u16 num_records;
+> +};
+> +
+> +struct aest_interrupt {
+> +	u8 type;
+> +	u16 reserved;
+> +	u8 flags;
+> +	u32 gsiv;
+> +	u8 iort_id[20];
+> +};
+> +
+> +#pragma pack()
+> +
+> +struct aest_interface_data {
+> +	u8 type;
+> +	u16 start;
+> +	u16 end;
+> +	struct ras_ext_regs *regs;
+> +};
+> +
+> +union aest_node_spec {
+> +	struct aest_proc_data proc;
+> +	struct aest_mem_data mem;
+> +	struct aest_vendor_data vendor;
+> +};
+> +
+> +struct aest_node_data {
+> +	u8 node_type;
+> +	struct aest_interface_data interface;
+> +	union aest_node_spec data;
+> +};
+> +
+> +#endif /* AEST_H */
+> -- 
+> 1.8.3.1
+> 
