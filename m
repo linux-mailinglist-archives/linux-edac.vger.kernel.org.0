@@ -2,37 +2,38 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C9B13614CD
-	for <lists+linux-edac@lfdr.de>; Sun,  7 Jul 2019 13:58:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A1795614CF
+	for <lists+linux-edac@lfdr.de>; Sun,  7 Jul 2019 13:58:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726302AbfGGL6V (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Sun, 7 Jul 2019 07:58:21 -0400
-Received: from smtp-fw-4101.amazon.com ([72.21.198.25]:4688 "EHLO
-        smtp-fw-4101.amazon.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725981AbfGGL6V (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Sun, 7 Jul 2019 07:58:21 -0400
+        id S1726787AbfGGL62 (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Sun, 7 Jul 2019 07:58:28 -0400
+Received: from smtp-fw-9101.amazon.com ([207.171.184.25]:18729 "EHLO
+        smtp-fw-9101.amazon.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725981AbfGGL61 (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Sun, 7 Jul 2019 07:58:27 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1562500698; x=1594036698;
-  h=from:to:cc:subject:date:message-id:mime-version;
-  bh=AzRAD81nU2MwlCqn0AU1evNVTd1zGcE1O6MmxMHhUbc=;
-  b=GFC9qHnyD7oytVt8NNIq0OZ9KzASQKyzbCEPBow8lcxylNWJIZRR3+Lg
-   ydYRouHrvTGm6Lbw9CMjyJGhB0y/SmepzuPpEti5Gl+ddNO1vMfp27bB3
-   q8ecW/Bv7QOpOJP2mghfnk4pDZ9VH5kyjyjfJSbIkSEaCGb/JKFqyWQSY
-   c=;
+  t=1562500707; x=1594036707;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version;
+  bh=7Csmm4toitSG7pULM58RwQRjc3PcTsUBc9OzWJg0DuM=;
+  b=PXU7GCAnzr9lh/3fg83qqAI5gJpLaAbkiutCvnR5tyi+JQWahuFzSWSO
+   0HUloNaAN/7qki3PrthnOW7oBU3WRWkRe1kD0kRDt/R7zc6wh8hjjG9CK
+   tZoqR6bJIBkzztwlzLZFBi0Tg/BbeEhJ3AHtvD1BgYFj9EfhC0pBZ2h9h
+   I=;
 X-IronPort-AV: E=Sophos;i="5.62,462,1554768000"; 
-   d="scan'208";a="773526810"
-Received: from iad6-co-svc-p1-lb1-vlan3.amazon.com (HELO email-inbound-relay-2b-4ff6265a.us-west-2.amazon.com) ([10.124.125.6])
-  by smtp-border-fw-out-4101.iad4.amazon.com with ESMTP; 07 Jul 2019 11:58:15 +0000
-Received: from EX13MTAUEA001.ant.amazon.com (pdx4-ws-svc-p6-lb7-vlan3.pdx.amazon.com [10.170.41.166])
-        by email-inbound-relay-2b-4ff6265a.us-west-2.amazon.com (Postfix) with ESMTPS id D2DE8A230C;
-        Sun,  7 Jul 2019 11:58:15 +0000 (UTC)
+   d="scan'208";a="814727917"
+Received: from sea3-co-svc-lb6-vlan2.sea.amazon.com (HELO email-inbound-relay-2b-55156cd4.us-west-2.amazon.com) ([10.47.22.34])
+  by smtp-border-fw-out-9101.sea19.amazon.com with ESMTP; 07 Jul 2019 11:58:25 +0000
+Received: from EX13MTAUEA001.ant.amazon.com (pdx4-ws-svc-p6-lb7-vlan2.pdx.amazon.com [10.170.41.162])
+        by email-inbound-relay-2b-55156cd4.us-west-2.amazon.com (Postfix) with ESMTPS id 76F09A1793;
+        Sun,  7 Jul 2019 11:58:24 +0000 (UTC)
 Received: from EX13D19EUB003.ant.amazon.com (10.43.166.69) by
  EX13MTAUEA001.ant.amazon.com (10.43.61.243) with Microsoft SMTP Server (TLS)
- id 15.0.1367.3; Sun, 7 Jul 2019 11:58:15 +0000
+ id 15.0.1367.3; Sun, 7 Jul 2019 11:58:23 +0000
 Received: from ub6d44c9ce3e25c.ant.amazon.com (10.43.161.16) by
  EX13D19EUB003.ant.amazon.com (10.43.166.69) with Microsoft SMTP Server (TLS)
- id 15.0.1367.3; Sun, 7 Jul 2019 11:58:06 +0000
+ id 15.0.1367.3; Sun, 7 Jul 2019 11:58:15 +0000
 From:   Hanna Hawa <hhhawa@amazon.com>
 To:     <robh+dt@kernel.org>, <mark.rutland@arm.com>, <bp@alien8.de>,
         <mchehab@kernel.org>, <james.morse@arm.com>, <davem@davemloft.net>,
@@ -43,10 +44,12 @@ CC:     <dwmw@amazon.co.uk>, <benh@amazon.com>, <ronenk@amazon.com>,
         <talel@amazon.com>, <jonnyc@amazon.com>, <hanochu@amazon.com>,
         <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         <linux-edac@vger.kernel.org>, <hhhawa@amazon.com>
-Subject: [PATCH v2 0/4] Add support for Amazon's Annapurna Labs EDAC for L1/L2
-Date:   Sun, 7 Jul 2019 14:57:34 +0300
-Message-ID: <1562500658-14717-1-git-send-email-hhhawa@amazon.com>
+Subject: [PATCH v2 1/4] dt-bindings: EDAC: Add Amazon's Annapurna Labs L1 EDAC
+Date:   Sun, 7 Jul 2019 14:57:35 +0300
+Message-ID: <1562500658-14717-2-git-send-email-hhhawa@amazon.com>
 X-Mailer: git-send-email 2.7.4
+In-Reply-To: <1562500658-14717-1-git-send-email-hhhawa@amazon.com>
+References: <1562500658-14717-1-git-send-email-hhhawa@amazon.com>
 MIME-Version: 1.0
 Content-Type: text/plain
 X-Originating-IP: [10.43.161.16]
@@ -57,52 +60,34 @@ Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-This series adds L1 and L2 caches support for error detection and
-correction for Amazon's Annapurna Labs SoCs.
-Alpine SoCs support L1 and L2 single bit correction and two bits detection
-capability based on ARM implementation.
+Document Amazon's Annapurna Labs L1 EDAC SoC binding.
 
-Changes since v1:
------------------
-- Split into two drivers
-- Get cpu-mask according to l2-cache handler from devicetree
-- Remove parameter casting
-- Use GENMASK() in bit mask
-- Use FIELD_GET()
-- Update define description PLRU_RAM -> PF_RAM
-- Use sys_reg() and read_sysreg_s()
-- Remove all write/read wrappers
-- Check fatal field to set if the error correctable or not
-- Remove un-relevant information from error prints.
-- Update smp_call_function_single() call function to wait
-- remove usage of get_online_cpus/put_online_cpus
-- Use on_each_cpu() and smp_call_function_any() instead of loop with for_each_cpu.
-- use buffer for error prints and pass to edac API
-- Remove edac_op_state set
-- Add for loop to report on repeated errors of the same type
-- Fix error name of the TLB to be L2_TLB as written in ARM TRM
-- Minor change in Kconfig
-- Minor changes in commit message
-
-Hanna Hawa (4):
-  dt-bindings: EDAC: Add Amazon's Annapurna Labs L1 EDAC
-  edac: Add support for Amazon's Annapurna Labs L1 EDAC
-  dt-bindings: EDAC: Add Amazon's Annapurna Labs L2 EDAC
-  edac: Add support for Amazon's Annapurna Labs L2 EDAC
-
- .../devicetree/bindings/edac/amazon,al-l1-edac.txt |  14 ++
- .../devicetree/bindings/edac/amazon,al-l2-edac.txt |  20 +++
- MAINTAINERS                                        |  12 ++
- drivers/edac/Kconfig                               |  16 ++
- drivers/edac/Makefile                              |   2 +
- drivers/edac/al_l1_edac.c                          | 154 +++++++++++++++++
- drivers/edac/al_l2_edac.c                          | 185 +++++++++++++++++++++
- 7 files changed, 403 insertions(+)
+Signed-off-by: Hanna Hawa <hhhawa@amazon.com>
+---
+ .../devicetree/bindings/edac/amazon,al-l1-edac.txt         | 14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
  create mode 100644 Documentation/devicetree/bindings/edac/amazon,al-l1-edac.txt
- create mode 100644 Documentation/devicetree/bindings/edac/amazon,al-l2-edac.txt
- create mode 100644 drivers/edac/al_l1_edac.c
- create mode 100644 drivers/edac/al_l2_edac.c
 
+diff --git a/Documentation/devicetree/bindings/edac/amazon,al-l1-edac.txt b/Documentation/devicetree/bindings/edac/amazon,al-l1-edac.txt
+new file mode 100644
+index 0000000..2ae8370
+--- /dev/null
++++ b/Documentation/devicetree/bindings/edac/amazon,al-l1-edac.txt
+@@ -0,0 +1,14 @@
++* Amazon's Annapurna Labs L1 EDAC
++
++Amazon's Annapurna Labs SoCs supports L1 single bit correction and
++two bits detection capability based on ARM implementation.
++
++Required properties:
++- compatible:
++	should be "amazon,al-l1-edac".
++
++Example:
++
++	al_l1_edac {
++		compatible = "amazon,al-l1-edac";
++	};
 -- 
 2.7.4
 
