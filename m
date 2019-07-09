@@ -2,21 +2,21 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D31363DA4
-	for <lists+linux-edac@lfdr.de>; Tue,  9 Jul 2019 23:57:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B8DC863DA3
+	for <lists+linux-edac@lfdr.de>; Tue,  9 Jul 2019 23:57:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729039AbfGIV5S (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Tue, 9 Jul 2019 17:57:18 -0400
+        id S1729748AbfGIV5B (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Tue, 9 Jul 2019 17:57:01 -0400
 Received: from mail-eopbgr690059.outbound.protection.outlook.com ([40.107.69.59]:63872
         "EHLO NAM04-CO1-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1729747AbfGIV5B (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Tue, 9 Jul 2019 17:57:01 -0400
+        id S1727026AbfGIV5A (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Tue, 9 Jul 2019 17:57:00 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=amdcloud.onmicrosoft.com; s=selector1-amdcloud-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=GHVwckEF35iOrFCII3mv3LrZqfjHW6HxFdFak1/ewvc=;
- b=EViXgRQURrL9FQnX1c6N9jbeX0zqqvJDvYcVwxZROEakARwOXA5DeeWzwgm8t+BU5vhejAAz0nRX8k1OCmv9bXJDhSgPEu0XBfmIbcPnS4zSNsWnoblc5pKl4om6Nm4JE1pgVrdGQa36CYa5WaZ+mDnULgkXCsChZULajAZT8Rs=
+ bh=vhaUkSx0NsBBYsqXRQ6MDnkdji70rk7l3dlD1UaNmgM=;
+ b=VIMfhrTaemKEF8+RPAMXsJ9QmxH+zku8pKIAK49edBX8XEaP8voF4f2VAqf4CHs/oDFGcmg+1dhaBpfIdCLUqAVGJKfec8fLX8OXxwaRDlFFCNCy2pA4jb7aRsnR2P+Q8i0rleNYNBNaby4WdVdtw4kYT02vfJWc3gt8a8aSaGk=
 Received: from SN6PR12MB2639.namprd12.prod.outlook.com (52.135.103.16) by
  SN6PR12MB2718.namprd12.prod.outlook.com (52.135.103.139) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
@@ -30,11 +30,12 @@ To:     "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>
 CC:     "Ghannam, Yazen" <Yazen.Ghannam@amd.com>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
         "bp@alien8.de" <bp@alien8.de>
-Subject: [PATCH v2 6/7] EDAC/amd64: Cache secondary Chip Select registers
-Thread-Topic: [PATCH v2 6/7] EDAC/amd64: Cache secondary Chip Select registers
-Thread-Index: AQHVNqE6xKfZtgC1qUiNE6fs31rm+w==
+Subject: [PATCH v2 5/7] EDAC/amd64: Decode syndrome before translating address
+Thread-Topic: [PATCH v2 5/7] EDAC/amd64: Decode syndrome before translating
+ address
+Thread-Index: AQHVNqE6YZEPPaJGlkOX/sPL2pGVag==
 Date:   Tue, 9 Jul 2019 21:56:57 +0000
-Message-ID: <20190709215643.171078-7-Yazen.Ghannam@amd.com>
+Message-ID: <20190709215643.171078-6-Yazen.Ghannam@amd.com>
 References: <20190709215643.171078-1-Yazen.Ghannam@amd.com>
 In-Reply-To: <20190709215643.171078-1-Yazen.Ghannam@amd.com>
 Accept-Language: en-US
@@ -50,25 +51,25 @@ x-ms-exchange-messagesentrepresentingtype: 1
 x-mailer: git-send-email 2.17.1
 x-originating-ip: [165.204.78.2]
 x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 77f57db5-6a47-4337-b4e1-08d704b85cde
+x-ms-office365-filtering-correlation-id: 7f32ed1c-13bb-4a84-45a9-08d704b85c8d
 x-ms-office365-filtering-ht: Tenant
 x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(1401327)(4618075)(2017052603328)(7193020);SRVR:SN6PR12MB2718;
 x-ms-traffictypediagnostic: SN6PR12MB2718:
 x-ms-exchange-purlcount: 1
-x-microsoft-antispam-prvs: <SN6PR12MB2718A643FB5EF36D30FE409AF8F10@SN6PR12MB2718.namprd12.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:2733;
+x-microsoft-antispam-prvs: <SN6PR12MB27188F31CEB258FDFE39035DF8F10@SN6PR12MB2718.namprd12.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:8273;
 x-forefront-prvs: 0093C80C01
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(136003)(396003)(376002)(366004)(346002)(39860400002)(199004)(189003)(6506007)(53936002)(386003)(76176011)(26005)(2351001)(186003)(2501003)(256004)(6116002)(99286004)(52116002)(102836004)(6306002)(2906002)(6512007)(68736007)(1076003)(6916009)(305945005)(5660300002)(66066001)(3846002)(6436002)(50226002)(66446008)(66556008)(66476007)(66946007)(64756008)(71200400001)(36756003)(71190400001)(2616005)(8676002)(81166006)(966005)(25786009)(316002)(81156014)(446003)(4326008)(54906003)(11346002)(8936002)(14454004)(486006)(478600001)(86362001)(5640700003)(7736002)(6486002)(476003);DIR:OUT;SFP:1101;SCL:1;SRVR:SN6PR12MB2718;H:SN6PR12MB2639.namprd12.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(136003)(396003)(376002)(366004)(346002)(39860400002)(199004)(189003)(6506007)(53936002)(386003)(76176011)(26005)(2351001)(186003)(2501003)(14444005)(256004)(6116002)(99286004)(52116002)(102836004)(6306002)(2906002)(6512007)(68736007)(1076003)(6916009)(305945005)(5660300002)(66066001)(3846002)(6436002)(50226002)(66446008)(66556008)(66476007)(66946007)(64756008)(71200400001)(36756003)(71190400001)(2616005)(8676002)(81166006)(966005)(25786009)(316002)(81156014)(446003)(4326008)(54906003)(11346002)(8936002)(14454004)(486006)(478600001)(86362001)(5640700003)(7736002)(6486002)(476003);DIR:OUT;SFP:1101;SCL:1;SRVR:SN6PR12MB2718;H:SN6PR12MB2639.namprd12.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
 received-spf: None (protection.outlook.com: amd.com does not designate
  permitted sender hosts)
 x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: SCZE2SdySCk8r9Y1V0ErbePWoDhNroH2f6CiZk1NvetQXmC0q5gjhiSduiuRw5UHVbJ7xOCNN8EyLUf/MUFasraJNs389XiqmTjv1exlEEvO/eKL+IZsh80S575YPE5NkwVrKGF+7uMblEkh8UkW6ZMXl6/ky39a+VTAGoRiVQWiVJZjpWmY2/ihXqWqgdsrwE7bC6jrWSyCifL9fMQBKCqZNJCkZRkSsHj/OjXXjCu+JQBLiNAwHTIuTlO7jVRaY9dzjcybcpn8uEQebK0TWW3R8n9na4mYiBHaKKMf1cGvPmBrtZiFvsnv7Mni7WcAaUcAMLZJaU8F2KPjDsO1b3iJ1VfLyw57f9w1UPkLvMZTl4c2zbvckdY3Cx0neKcYe8hciKcWuuAse90ht9ph1FX0eusheM9/+iLC0DYau5E=
+x-microsoft-antispam-message-info: WbKmfGb1RygwzbV/dueYs85gIkapuoEZUa3muIyU20fDCBQIq9xQ3QLXOpLxmnL7mZY35cctLfUABv5m+VmRY3nw/1RUtOjybH73+YiKU/twPV6XMW1JggW7S8FfCjewGzaZAvnwmlepIkRt4EmhklBcfSzVUWxhVg0CEqPTTHNWXOm64xoMMGHhIHbV1o9wB9RSyjtzkLD/dLrCJXTm9qDjMaseA25kf+2m65D//HrPnKTJsgXRNTCHggbePK9MTDv6UonJ9PqqI3QjX5XIOHig9GANpvwQWS7QBS7wGek8zlqErk3mdiUwY1r0OurIMeEgRkGojUYrmLCCdfszsEQ39md8xlpPlcEkhlweKY5GA+J3opfo2dsGVjdz6rWfce0F8JBoMhG3SjjWiQxl4A6Yu/LtCgrrN95HhytHP74=
 Content-Type: text/plain; charset="iso-8859-1"
 Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 77f57db5-6a47-4337-b4e1-08d704b85cde
-X-MS-Exchange-CrossTenant-originalarrivaltime: 09 Jul 2019 21:56:57.7035
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7f32ed1c-13bb-4a84-45a9-08d704b85c8d
+X-MS-Exchange-CrossTenant-originalarrivaltime: 09 Jul 2019 21:56:57.1858
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
 X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
@@ -82,110 +83,68 @@ X-Mailing-List: linux-edac@vger.kernel.org
 
 From: Yazen Ghannam <yazen.ghannam@amd.com>
 
-AMD Family 17h systems have a set of secondary Chip Select Base
-Addresses and Address Masks. These do not represent unique Chip
-Selects, rather they are used in conjunction with the primary
-Chip Select registers in certain use cases.
+AMD Family 17h systems currently require address translation in order to
+report the system address of a DRAM ECC error. This is currently done
+before decoding the syndrome information. The syndrome information does
+not depend on the address translation, so the proper EDAC csrow/channel
+reporting can function without the address. However, the syndrome
+information will not be decoded if the address translation fails.
 
-Cache these secondary Chip Select registers for future use.
+Decode the syndrome information before doing the address translation.
+The syndrome information is architecturally defined in MCA_SYND and can
+be considered robust. The address translation is system-specific and may
+fail on newer systems without proper updates to the translation
+algorithm.
 
+Fixes: 713ad54675fd ("EDAC, amd64: Define and register UMC error decode fun=
+ction")
 Signed-off-by: Yazen Ghannam <yazen.ghannam@amd.com>
 ---
 Link:
-https://lkml.kernel.org/r/20190531234501.32826-8-Yazen.Ghannam@amd.com
+https://lkml.kernel.org/r/20190531234501.32826-7-Yazen.Ghannam@amd.com
 
 v1->v2:
 * No change.
 
- drivers/edac/amd64_edac.c | 23 ++++++++++++++++++++---
- drivers/edac/amd64_edac.h |  4 ++++
- 2 files changed, 24 insertions(+), 3 deletions(-)
+ drivers/edac/amd64_edac.c | 14 +++++++-------
+ 1 file changed, 7 insertions(+), 7 deletions(-)
 
 diff --git a/drivers/edac/amd64_edac.c b/drivers/edac/amd64_edac.c
-index 4058b24b8e04..006417cb79dc 100644
+index f0424c10cac0..4058b24b8e04 100644
 --- a/drivers/edac/amd64_edac.c
 +++ b/drivers/edac/amd64_edac.c
-@@ -943,34 +943,51 @@ static void prep_chip_selects(struct amd64_pvt *pvt)
+@@ -2567,13 +2567,6 @@ static void decode_umc_error(int node_id, struct mce=
+ *m)
 =20
- static void read_umc_base_mask(struct amd64_pvt *pvt)
- {
--	u32 umc_base_reg, umc_mask_reg;
--	u32 base_reg, mask_reg;
--	u32 *base, *mask;
-+	u32 umc_base_reg, umc_base_reg_sec;
-+	u32 umc_mask_reg, umc_mask_reg_sec;
-+	u32 base_reg, base_reg_sec;
-+	u32 mask_reg, mask_reg_sec;
-+	u32 *base, *base_sec;
-+	u32 *mask, *mask_sec;
- 	int cs, umc;
+ 	err.channel =3D find_umc_channel(m);
 =20
- 	for_each_umc(umc) {
- 		umc_base_reg =3D get_umc_base(umc) + UMCCH_BASE_ADDR;
-+		umc_base_reg_sec =3D get_umc_base(umc) + UMCCH_BASE_ADDR_SEC;
+-	if (umc_normaddr_to_sysaddr(m->addr, pvt->mc_node_id, err.channel, &sys_a=
+ddr)) {
+-		err.err_code =3D ERR_NORM_ADDR;
+-		goto log_error;
+-	}
+-
+-	error_address_to_page_and_offset(sys_addr, &err);
+-
+ 	if (!(m->status & MCI_STATUS_SYNDV)) {
+ 		err.err_code =3D ERR_SYND;
+ 		goto log_error;
+@@ -2590,6 +2583,13 @@ static void decode_umc_error(int node_id, struct mce=
+ *m)
 =20
- 		for_each_chip_select(cs, umc, pvt) {
- 			base =3D &pvt->csels[umc].csbases[cs];
-+			base_sec =3D &pvt->csels[umc].csbases_sec[cs];
+ 	err.csrow =3D m->synd & 0x7;
 =20
- 			base_reg =3D umc_base_reg + (cs * 4);
-+			base_reg_sec =3D umc_base_reg_sec + (cs * 4);
-=20
- 			if (!amd_smn_read(pvt->mc_node_id, base_reg, base))
- 				edac_dbg(0, "  DCSB%d[%d]=3D0x%08x reg: 0x%x\n",
- 					 umc, cs, *base, base_reg);
++	if (umc_normaddr_to_sysaddr(m->addr, pvt->mc_node_id, err.channel, &sys_a=
+ddr)) {
++		err.err_code =3D ERR_NORM_ADDR;
++		goto log_error;
++	}
 +
-+			if (!amd_smn_read(pvt->mc_node_id, base_reg_sec, base_sec))
-+				edac_dbg(0, "    DCSB_SEC%d[%d]=3D0x%08x reg: 0x%x\n",
-+					 umc, cs, *base_sec, base_reg_sec);
- 		}
-=20
- 		umc_mask_reg =3D get_umc_base(umc) + UMCCH_ADDR_MASK;
-+		umc_mask_reg_sec =3D get_umc_base(umc) + UMCCH_ADDR_MASK_SEC;
-=20
- 		for_each_chip_select_mask(cs, umc, pvt) {
- 			mask =3D &pvt->csels[umc].csmasks[cs];
-+			mask_sec =3D &pvt->csels[umc].csmasks_sec[cs];
-=20
- 			mask_reg =3D umc_mask_reg + (cs * 4);
-+			mask_reg_sec =3D umc_mask_reg_sec + (cs * 4);
-=20
- 			if (!amd_smn_read(pvt->mc_node_id, mask_reg, mask))
- 				edac_dbg(0, "  DCSM%d[%d]=3D0x%08x reg: 0x%x\n",
- 					 umc, cs, *mask, mask_reg);
++	error_address_to_page_and_offset(sys_addr, &err);
 +
-+			if (!amd_smn_read(pvt->mc_node_id, mask_reg_sec, mask_sec))
-+				edac_dbg(0, "    DCSM_SEC%d[%d]=3D0x%08x reg: 0x%x\n",
-+					 umc, cs, *mask_sec, mask_reg_sec);
- 		}
- 	}
+ log_error:
+ 	__log_ecc_error(mci, &err, ecc_type);
  }
-diff --git a/drivers/edac/amd64_edac.h b/drivers/edac/amd64_edac.h
-index 4dce6a2ac75f..68f12de6e654 100644
---- a/drivers/edac/amd64_edac.h
-+++ b/drivers/edac/amd64_edac.h
-@@ -259,7 +259,9 @@
-=20
- /* UMC CH register offsets */
- #define UMCCH_BASE_ADDR			0x0
-+#define UMCCH_BASE_ADDR_SEC		0x10
- #define UMCCH_ADDR_MASK			0x20
-+#define UMCCH_ADDR_MASK_SEC		0x28
- #define UMCCH_ADDR_CFG			0x30
- #define UMCCH_DIMM_CFG			0x80
- #define UMCCH_UMC_CFG			0x100
-@@ -312,9 +314,11 @@ struct dram_range {
- /* A DCT chip selects collection */
- struct chip_select {
- 	u32 csbases[NUM_CHIPSELECTS];
-+	u32 csbases_sec[NUM_CHIPSELECTS];
- 	u8 b_cnt;
-=20
- 	u32 csmasks[NUM_CHIPSELECTS];
-+	u32 csmasks_sec[NUM_CHIPSELECTS];
- 	u8 m_cnt;
- };
-=20
 --=20
 2.17.1
 
