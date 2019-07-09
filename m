@@ -2,101 +2,136 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B7F4A635E8
-	for <lists+linux-edac@lfdr.de>; Tue,  9 Jul 2019 14:31:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C5AF1638DB
+	for <lists+linux-edac@lfdr.de>; Tue,  9 Jul 2019 17:48:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725989AbfGIMbH (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Tue, 9 Jul 2019 08:31:07 -0400
-Received: from szxga05-in.huawei.com ([45.249.212.191]:2246 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725947AbfGIMbG (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Tue, 9 Jul 2019 08:31:06 -0400
-Received: from DGGEMS410-HUB.china.huawei.com (unknown [172.30.72.58])
-        by Forcepoint Email with ESMTP id 33CBD1F65E6AF96065CC;
-        Tue,  9 Jul 2019 20:31:02 +0800 (CST)
-Received: from localhost (10.45.141.82) by DGGEMS410-HUB.china.huawei.com
- (10.3.19.210) with Microsoft SMTP Server id 14.3.439.0; Tue, 9 Jul 2019
- 20:31:01 +0800
-Date:   Tue, 9 Jul 2019 13:30:56 +0100
-From:   Jonathan Cameron <jonathan.cameron@huawei.com>
-To:     "Hawa, Hanna" <hhhawa@amazon.com>
-CC:     <robh+dt@kernel.org>, <mark.rutland@arm.com>, <bp@alien8.de>,
-        <mchehab@kernel.org>, <james.morse@arm.com>, <davem@davemloft.net>,
-        <gregkh@linuxfoundation.org>, <linus.walleij@linaro.org>,
-        <nicolas.ferre@microchip.com>, <paulmck@linux.ibm.com>,
-        <dwmw@amazon.co.uk>, <benh@amazon.com>, <ronenk@amazon.com>,
-        <talel@amazon.com>, <jonnyc@amazon.com>, <hanochu@amazon.com>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-edac@vger.kernel.org>
-Subject: Re: [PATCH v2 2/4] edac: Add support for Amazon's Annapurna Labs L1
- EDAC
-Message-ID: <20190709133056.00001c57@huawei.com>
-In-Reply-To: <45e9ac35-9ffc-8f5f-cbdb-f85453227363@amazon.com>
-References: <1562500658-14717-1-git-send-email-hhhawa@amazon.com>
-        <1562500658-14717-3-git-send-email-hhhawa@amazon.com>
-        <20190709173229.0000135f@huawei.com>
-        <45e9ac35-9ffc-8f5f-cbdb-f85453227363@amazon.com>
-Organization: Huawei
-X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; i686-w64-mingw32)
+        id S1726229AbfGIPs2 (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Tue, 9 Jul 2019 11:48:28 -0400
+Received: from mail.kernel.org ([198.145.29.99]:40216 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726060AbfGIPs2 (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Tue, 9 Jul 2019 11:48:28 -0400
+Received: from mail-qt1-f169.google.com (mail-qt1-f169.google.com [209.85.160.169])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id B3E7721743;
+        Tue,  9 Jul 2019 15:48:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1562687306;
+        bh=8uRt2LckP8V6eOMg2L1MMuumGINZ1eU0bTBj8g3A81c=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=KON4ngr4Z1oJj/l8kSJhRwNeUk2R1NwwJID4TkmcPIl+MyUHNX7S9wJWmLi5kcXKR
+         9yQxDgx12Pr9RsOFxewTO1k23CslxM8Urly5NjQV84pjT6TLgiu+KpOv98L6F8TVW0
+         OXrssDvfqBv5JToN0eDMoLBPFu4Trx+79enV2b4E=
+Received: by mail-qt1-f169.google.com with SMTP id h18so14673216qtm.9;
+        Tue, 09 Jul 2019 08:48:26 -0700 (PDT)
+X-Gm-Message-State: APjAAAUBtqYLDPGN0x+RA9MmxX6sGsFbECumxVvTNbQEZvJTMgaDU/n7
+        spKsZz3u9SM/9FbyWgBKX43YQ61fZd4CvDhPeA==
+X-Google-Smtp-Source: APXvYqwUwZzNp9+krU8sgcmMHMgX3VqOxwtH/223QreLrdzSam3oenUJ5tLIk/dBBxOlEo8N5HAE7gFB0xXhMGeAItk=
+X-Received: by 2002:ac8:3908:: with SMTP id s8mr19233318qtb.224.1562687305930;
+ Tue, 09 Jul 2019 08:48:25 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.45.141.82]
-X-CFilter-Loop: Reflected
+References: <20190605141253.38554-1-ghung.quanta@gmail.com>
+ <20190605141253.38554-2-ghung.quanta@gmail.com> <20190709014058.GA30269@bogus>
+ <0c90f9376c0e425c9a226379f7e5bfad@quantatw.com>
+In-Reply-To: <0c90f9376c0e425c9a226379f7e5bfad@quantatw.com>
+From:   Rob Herring <robh@kernel.org>
+Date:   Tue, 9 Jul 2019 09:48:14 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqKf+Z9XJJvqcOw-0L-BLCt_Yv-qv-eu+zhoNFnk8rH8Og@mail.gmail.com>
+Message-ID: <CAL_JsqKf+Z9XJJvqcOw-0L-BLCt_Yv-qv-eu+zhoNFnk8rH8Og@mail.gmail.com>
+Subject: Re: [PATCH 5.2 v2 2/2] dt-binding: edac: add NPCM ECC documentation
+To:     =?UTF-8?B?R2VvcmdlIEh1bmcgKOa0quW/oOaVrCk=?= 
+        <George.Hung@quantatw.com>
+Cc:     George Hung <ghung.quanta@gmail.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Tali Perry <tali.perry1@gmail.com>,
+        "paulmck@linux.ibm.com" <paulmck@linux.ibm.com>,
+        "wak@google.com" <wak@google.com>,
+        "benjaminfair@google.com" <benjaminfair@google.com>,
+        "openbmc@lists.ozlabs.org" <openbmc@lists.ozlabs.org>,
+        "tomer.maimon@nuvoton.com" <tomer.maimon@nuvoton.com>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        Borislav Petkov <bp@alien8.de>,
+        "Avi.Fishman@nuvoton.com" <Avi.Fishman@nuvoton.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-edac <linux-edac@vger.kernel.org>,
+        Patrick Venture <venture@google.com>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "davem@davemloft.net" <davem@davemloft.net>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Tue, 9 Jul 2019 14:01:03 +0300
-"Hawa, Hanna" <hhhawa@amazon.com> wrote:
+On Tue, Jul 9, 2019 at 3:50 AM George Hung (=E6=B4=AA=E5=BF=A0=E6=95=AC)
+<George.Hung@quantatw.com> wrote:
+>
+> Hi Rob,
+>
+>
+> > -----Original Message-----
+> > From: openbmc
+> > [mailto:openbmc-bounces+george.hung=3Dquantatw.com@lists.ozlabs.org] On
+> > Behalf Of Rob Herring
+> > Sent: Tuesday, July 09, 2019 9:41 AM
+> > To: George Hung
+> > Cc: Mark Rutland; Linus Walleij; Tali Perry; paulmck@linux.ibm.com;
+> > wak@google.com; benjaminfair@google.com; openbmc@lists.ozlabs.org;
+> > tomer.maimon@nuvoton.com; devicetree@vger.kernel.org; Borislav Petkov;
+> > Avi.Fishman@nuvoton.com; Jonathan Cameron; Mauro Carvalho Chehab;
+> > linux-edac; Patrick Venture; Nicolas Ferre; linux-kernel; James Morse; =
+Greg
+> > Kroah-Hartman; davem@davemloft.net
+> > Subject: Re: [PATCH 5.2 v2 2/2] dt-binding: edac: add NPCM ECC
+> > documentation
+> >
+> > On Wed, Jun 05, 2019 at 10:12:53PM +0800, George Hung wrote:
+> > > Add device tree documentation for Nuvoton BMC ECC
+> > >
+> > > Signed-off-by: George Hung <ghung.quanta@gmail.com>
+> > > ---
+> > >  .../bindings/edac/npcm7xx-sdram-edac.txt        | 17
+> > +++++++++++++++++
+> > >  1 file changed, 17 insertions(+)
+> > >  create mode 100644
+> > > Documentation/devicetree/bindings/edac/npcm7xx-sdram-edac.txt
+> > >
+> > > diff --git
+> > > a/Documentation/devicetree/bindings/edac/npcm7xx-sdram-edac.txt
+> > > b/Documentation/devicetree/bindings/edac/npcm7xx-sdram-edac.txt
+> > > new file mode 100644
+> > > index 000000000000..dd4dac59a5bd
+> > > --- /dev/null
+> > > +++ b/Documentation/devicetree/bindings/edac/npcm7xx-sdram-edac.txt
+> > > @@ -0,0 +1,17 @@
+> > > +Nuvoton NPCM7xx SoC EDAC device driver
+> > > +
+> > > +The Nuvoton NPCM7xx SoC supports DDR4 memory with/without ECC and
+> > the
+> > > +driver uses the EDAC framework to implement the ECC detection and
+> > corrtection.
+> > > +
+> > > +Required properties:
+> > > +- compatible:      should be "nuvoton,npcm7xx-sdram-edac"
+> >
+> > Is this for the whole SDRAM controller or just ECC related registers?
+> > In the former case, the naming should just reflect the block name and n=
+ot a
+> > Linux term.
+>
+> Sorry for confused naming, the address space is for the whole memory cont=
+roller registers indeed,
+> but the driver only uses the ECC related registers.
+> Should I change the name to "nuvoton,npcm7xx-edac" ?
 
-> On 7/9/2019 12:32 PM, Jonathan Cameron wrote:
-> >> Signed-off-by: Hanna Hawa<hhhawa@amazon.com>  
-> > A quick drive by review as I was feeling curious.
-> > 
-> > Just a couple of trivial queries and observation on the fact it
-> > might be useful to add a few devm managed functions to cut down
-> > on edac driver boilerplate.
-> > 
-> > Thanks,
-> > 
-> > Jonathan
-> >   
-> >> +#define ARM_CA57_CPUMERRSR_VALID		GENMASK(31, 31)  
-> > For a single bit it's common to use BIT(31) rather than GENMASK to make
-> > it explicit.  
-> 
-> Will fix.
-> 
-> > 
-> >   
-> >> +	edac_dev->mod_name = dev_name(dev);  
-> > I'd admit I'm not that familiar with edac, but seems odd that a
-> > module name field would have the dev_name.  
-> 
-> Will fix when I got more inputs.
-> 
-> >   
-> >> +	edac_device_free_ctl_info(edac_dev);  
-> > More a passing observation than a suggestion for this driver, but if there was
-> > ever a place where it looked like a couple of devm_ allocation functions would
-> > be useful, this is it;)
-> > 
-> > edac_dev = devm_device_alloc_ctrl_info(dev, ...)
-> > ...
-> > devm_edac_device_add_device(dev, ...)  
-> 
-> I agree.
-> I can implement the devm_* functions in separate patches as this is not 
-> related to my patches (and not to delay this patches).
-> 
+No, you should drop the 'edac' part. The DT describes the h/w, not
+what one driver (currently) uses.
 
-Great.
-
-Jonathan
-
-> > 
-> >   
-
-
+Rob
