@@ -2,114 +2,108 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 33407625EA
-	for <lists+linux-edac@lfdr.de>; Mon,  8 Jul 2019 18:15:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BBB762D93
+	for <lists+linux-edac@lfdr.de>; Tue,  9 Jul 2019 03:42:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729011AbfGHQPw (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Mon, 8 Jul 2019 12:15:52 -0400
-Received: from mga12.intel.com ([192.55.52.136]:23211 "EHLO mga12.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727592AbfGHQPw (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Mon, 8 Jul 2019 12:15:52 -0400
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-X-Amp-File-Uploaded: False
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 08 Jul 2019 09:15:51 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.63,466,1557212400"; 
-   d="scan'208";a="363849116"
-Received: from agluck-desk2.sc.intel.com (HELO agluck-desk2.amr.corp.intel.com) ([10.3.52.68])
-  by fmsmga005.fm.intel.com with ESMTP; 08 Jul 2019 09:15:51 -0700
-Date:   Mon, 8 Jul 2019 09:15:51 -0700
-From:   "Luck, Tony" <tony.luck@intel.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-kernel@vger.kernel.org, linux-edac@vger.kernel.org
-Subject: [GIT PULL] EDAC driver changes for v5.3
-Message-ID: <20190708161550.GA23045@agluck-desk2.amr.corp.intel.com>
+        id S1726294AbfGIBlB (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Mon, 8 Jul 2019 21:41:01 -0400
+Received: from mail-io1-f68.google.com ([209.85.166.68]:38271 "EHLO
+        mail-io1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725857AbfGIBlA (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Mon, 8 Jul 2019 21:41:00 -0400
+Received: by mail-io1-f68.google.com with SMTP id j6so39689197ioa.5;
+        Mon, 08 Jul 2019 18:41:00 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=/fpLbSng1uN6X7o4b5xQuv3f/Fj2KEoI/i2jodHhjdM=;
+        b=IEIEf5+5vI41Gt3a2VyPVqnQI7JapuukjjmTZi1Lzk747APtM8MTAr/pYoPiyDDtMi
+         hdsS3liAMEfKjJR2hjslSepLuMeDZCEf4wPrqYQU8m19I3Bwba/rBvkgq6aukqex4JZE
+         uB+r35WO3a8f8J44jK4odgiT9um8lvvibSqYbtDvkb6RlUUUgLysLAM7GJu/yN968QE4
+         JJ/LQJNQHS2DyScQwZchfOWy+TxTgRpzXePNOLQ9SaUjqhq2XbrjfRruOeU5JHldzXTF
+         M3Cl+6907b1K+uVMChYOnaCqzzrWbX4SqK7SCQ3JhXB5Kn894X5OZuWBMxZ4oNfrUwU1
+         yBhA==
+X-Gm-Message-State: APjAAAXOxGSid3/yhgBNdNeUKEKhUKdUpLdjxPtqf2R407TmwsR+TJtQ
+        t85pd2SioUHDz4LN3YQZI+scbS4=
+X-Google-Smtp-Source: APXvYqwXjNg2CA80+uLWD4z0UL3VPDGz/jzUkMpvESID16KJ5KddPNLxNm0TuJc/0RtYi0YQQa3HZQ==
+X-Received: by 2002:a02:22c6:: with SMTP id o189mr23689060jao.35.1562636459755;
+        Mon, 08 Jul 2019 18:40:59 -0700 (PDT)
+Received: from localhost ([64.188.179.252])
+        by smtp.gmail.com with ESMTPSA id l2sm14566219ioh.20.2019.07.08.18.40.58
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Mon, 08 Jul 2019 18:40:59 -0700 (PDT)
+Date:   Mon, 8 Jul 2019 19:40:58 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     George Hung <ghung.quanta@gmail.com>
+Cc:     linux-edac <linux-edac@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        benjaminfair@google.com, wak@google.com, Avi.Fishman@nuvoton.com,
+        tomer.maimon@nuvoton.com, openbmc@lists.ozlabs.org,
+        Joel Stanley <joel@jms.id.au>,
+        Tali Perry <tali.perry1@gmail.com>,
+        Patrick Venture <venture@google.com>,
+        Nancy Yuen <yuenn@google.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        James Morse <james.morse@arm.com>, davem@davemloft.net,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        paulmck@linux.ibm.com, devicetree@vger.kernel.org,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Subject: Re: [PATCH 5.2 v2 2/2] dt-binding: edac: add NPCM ECC documentation
+Message-ID: <20190709014058.GA30269@bogus>
+References: <20190605141253.38554-1-ghung.quanta@gmail.com>
+ <20190605141253.38554-2-ghung.quanta@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-User-Agent: Mutt/1.11.3 (2019-02-01)
+In-Reply-To: <20190605141253.38554-2-ghung.quanta@gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-The following changes since commit 9e0babf2c06c73cda2c0cd37a1653d823adb40ec:
+On Wed, Jun 05, 2019 at 10:12:53PM +0800, George Hung wrote:
+> Add device tree documentation for Nuvoton BMC ECC
+> 
+> Signed-off-by: George Hung <ghung.quanta@gmail.com>
+> ---
+>  .../bindings/edac/npcm7xx-sdram-edac.txt        | 17 +++++++++++++++++
+>  1 file changed, 17 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/edac/npcm7xx-sdram-edac.txt
+> 
+> diff --git a/Documentation/devicetree/bindings/edac/npcm7xx-sdram-edac.txt b/Documentation/devicetree/bindings/edac/npcm7xx-sdram-edac.txt
+> new file mode 100644
+> index 000000000000..dd4dac59a5bd
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/edac/npcm7xx-sdram-edac.txt
+> @@ -0,0 +1,17 @@
+> +Nuvoton NPCM7xx SoC EDAC device driver
+> +
+> +The Nuvoton NPCM7xx SoC supports DDR4 memory with/without ECC and the driver
+> +uses the EDAC framework to implement the ECC detection and corrtection.
+> +
+> +Required properties:
+> +- compatible:	should be "nuvoton,npcm7xx-sdram-edac"
 
-  Linux 5.2-rc5 (2019-06-16 08:49:45 -1000)
+Is this for the whole SDRAM controller or just ECC related registers? 
+In the former case, the naming should just reflect the block name and 
+not a Linux term.
 
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/ras/ras.git tags/please-pull-for_5.3
-
-for you to fetch changes up to d8655e7630dafa88bc37f101640e39c736399771:
-
-  EDAC: Fix global-out-of-bounds write when setting edac_mc_poll_msec (2019-06-27 10:24:47 -0700)
-
-
-All the bits that Boris had queued in his tree plus four patches
-to add support for Intel Icelake Xeon and then fix a few corner
-cases.
-
-----------------------------------------------------------------
-EDAC changes for v5.3
-
-----------------------------------------------------------------
-Colin Ian King (1):
-      EDAC/sb_edac: Remove redundant update of tad_base
-
-Eiichi Tsukata (1):
-      EDAC: Fix global-out-of-bounds write when setting edac_mc_poll_msec
-
-Greg KH (1):
-      EDAC/sysfs: Drop device references properly
-
-Greg Kroah-Hartman (1):
-      EDAC: Make edac_debugfs_create_x*() return void
-
-Marco Elver (2):
-      EDAC/ie31200: Add Intel Coffee Lake CPU support
-      EDAC/ie31200: Reformat PCI device table
-
-Pan Bian (1):
-      EDAC/sysfs: Fix memory leak when creating a csrow object
-
-Qiuxu Zhuo (3):
-      EDAC, i10nm: Add Intel additional Ice-Lake support
-      EDAC, i10nm: Check ECC enabling status per channel
-      EDAC, skx, i10nm: Fix source ID register offset
-
-Thor Thayer (4):
-      EDAC/altera: Add Stratix10 OCRAM ECC support
-      arm64: dts: stratix10: Add OCRAM EDAC node
-      EDAC/altera: Add Stratix10 SDMMC support
-      arm64: dts: stratix10: Add SDMMC EDAC node
-
-Yash Shah (1):
-      EDAC/sifive: Add EDAC platform driver for SiFive SoCs
-
-YueHaibing (1):
-      EDAC/aspeed: Remove set but not used variable 'np'
-
- MAINTAINERS                                        |   6 ++
- arch/arm64/boot/dts/altera/socfpga_stratix10.dtsi  |   8 ++
- .../boot/dts/altera/socfpga_stratix10_socdk.dts    |  11 ++
- arch/riscv/Kconfig                                 |   1 +
- drivers/edac/Kconfig                               |   6 ++
- drivers/edac/Makefile                              |   1 +
- drivers/edac/altera_edac.c                         |  43 +++++++-
- drivers/edac/aspeed_edac.c                         |   4 -
- drivers/edac/debugfs.c                             |  12 +--
- drivers/edac/edac_mc_sysfs.c                       |  34 +++---
- drivers/edac/edac_module.h                         |  20 ++--
- drivers/edac/i10nm_base.c                          |  10 +-
- drivers/edac/ie31200_edac.c                        |  78 ++++++++------
- drivers/edac/sb_edac.c                             |   1 -
- drivers/edac/sifive_edac.c                         | 119 +++++++++++++++++++++
- drivers/edac/skx_base.c                            |   2 +-
- drivers/edac/skx_common.c                          |   4 +-
- drivers/edac/skx_common.h                          |   2 +-
- 18 files changed, 284 insertions(+), 78 deletions(-)
- create mode 100644 drivers/edac/sifive_edac.c
+> +- reg:		Memory controller register set should be <0xf0824000 0x1000>
+> +- interrupts:	should be MC interrupt #25
+> +
+> +Example:
+> +
+> +	mc: memory-controller@f0824000 {
+> +		compatible = "nuvoton,npcm7xx-sdram-edac";
+> +		reg = <0xf0824000 0x1000>;
+> +		interrupts = <0 25 4>;
+> +	};
+> -- 
+> 2.21.0
+> 
