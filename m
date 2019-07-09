@@ -2,301 +2,118 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 372E063378
-	for <lists+linux-edac@lfdr.de>; Tue,  9 Jul 2019 11:32:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 43015633CA
+	for <lists+linux-edac@lfdr.de>; Tue,  9 Jul 2019 11:59:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726284AbfGIJcu (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Tue, 9 Jul 2019 05:32:50 -0400
-Received: from szxga06-in.huawei.com ([45.249.212.32]:58928 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725961AbfGIJcu (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Tue, 9 Jul 2019 05:32:50 -0400
-Received: from DGGEMS403-HUB.china.huawei.com (unknown [172.30.72.60])
-        by Forcepoint Email with ESMTP id 0842599946FD24336839;
-        Tue,  9 Jul 2019 17:32:47 +0800 (CST)
-Received: from localhost (10.227.98.71) by DGGEMS403-HUB.china.huawei.com
- (10.3.19.203) with Microsoft SMTP Server id 14.3.439.0; Tue, 9 Jul 2019
- 17:32:43 +0800
-Date:   Tue, 9 Jul 2019 17:32:29 +0800
-From:   Jonathan Cameron <Jonathan.Cameron@huawei.com>
-To:     Hanna Hawa <hhhawa@amazon.com>
-CC:     <robh+dt@kernel.org>, <mark.rutland@arm.com>, <bp@alien8.de>,
-        <mchehab@kernel.org>, <james.morse@arm.com>, <davem@davemloft.net>,
-        <gregkh@linuxfoundation.org>, <linus.walleij@linaro.org>,
-        <nicolas.ferre@microchip.com>, <paulmck@linux.ibm.com>,
-        <dwmw@amazon.co.uk>, <benh@amazon.com>, <ronenk@amazon.com>,
-        <talel@amazon.com>, <jonnyc@amazon.com>, <hanochu@amazon.com>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-edac@vger.kernel.org>
-Subject: Re: [PATCH v2 2/4] edac: Add support for Amazon's Annapurna Labs L1
- EDAC
-Message-ID: <20190709173229.0000135f@huawei.com>
-In-Reply-To: <1562500658-14717-3-git-send-email-hhhawa@amazon.com>
-References: <1562500658-14717-1-git-send-email-hhhawa@amazon.com>
-        <1562500658-14717-3-git-send-email-hhhawa@amazon.com>
-Organization: Huawei R&D UK Ltd.
-X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; i686-w64-mingw32)
+        id S1726149AbfGIJ7Y (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Tue, 9 Jul 2019 05:59:24 -0400
+Received: from mx01.quantatw.com ([219.87.191.90]:31098 "EHLO
+        mx01.quantatw.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726126AbfGIJ7X (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Tue, 9 Jul 2019 05:59:23 -0400
+X-Greylist: delayed 619 seconds by postgrey-1.27 at vger.kernel.org; Tue, 09 Jul 2019 05:59:22 EDT
+Received: from unknown (HELO mailbx06.quanta.corp) ([10.243.91.101])
+  by mx01.quantatw.com with ESMTP; 09 Jul 2019 17:49:00 +0800
+Received: from mailbx05.quanta.corp (10.243.91.100) by mailbx06.quanta.corp
+ (10.243.91.101) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1713.5; Tue, 9 Jul 2019
+ 17:48:59 +0800
+Received: from mailbx05.quanta.corp ([192.168.0.5]) by mailbx05.quanta.corp
+ ([192.168.0.5]) with mapi id 15.01.1713.004; Tue, 9 Jul 2019 17:48:59 +0800
+From:   =?big5?B?R2VvcmdlIEh1bmcgKKx4qb63cSk=?= <George.Hung@quantatw.com>
+To:     Rob Herring <robh@kernel.org>, George Hung <ghung.quanta@gmail.com>
+CC:     Mark Rutland <mark.rutland@arm.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Tali Perry <tali.perry1@gmail.com>,
+        "paulmck@linux.ibm.com" <paulmck@linux.ibm.com>,
+        "wak@google.com" <wak@google.com>,
+        "benjaminfair@google.com" <benjaminfair@google.com>,
+        "openbmc@lists.ozlabs.org" <openbmc@lists.ozlabs.org>,
+        "tomer.maimon@nuvoton.com" <tomer.maimon@nuvoton.com>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        Borislav Petkov <bp@alien8.de>,
+        "Avi.Fishman@nuvoton.com" <Avi.Fishman@nuvoton.com>,
+        "Jonathan Cameron" <Jonathan.Cameron@huawei.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-edac <linux-edac@vger.kernel.org>,
+        "Patrick Venture" <venture@google.com>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "davem@davemloft.net" <davem@davemloft.net>
+Subject: RE: [PATCH 5.2 v2 2/2] dt-binding: edac: add NPCM ECC documentation
+Thread-Topic: [PATCH 5.2 v2 2/2] dt-binding: edac: add NPCM ECC documentation
+Thread-Index: AQHVNfd78GrHFC2ty02NT0e+R3uriabCCCsA
+Date:   Tue, 9 Jul 2019 09:48:59 +0000
+Message-ID: <0c90f9376c0e425c9a226379f7e5bfad@quantatw.com>
+References: <20190605141253.38554-1-ghung.quanta@gmail.com>
+ <20190605141253.38554-2-ghung.quanta@gmail.com>
+ <20190709014058.GA30269@bogus>
+In-Reply-To: <20190709014058.GA30269@bogus>
+Accept-Language: zh-TW, en-US
+Content-Language: zh-TW
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.243.91.252]
+x-tm-as-product-ver: SMEX-12.0.0.1727-8.200.1013-24746.005
+x-tm-as-result: No--21.007500-0.000000-31
+x-tm-as-matchedid: 140026-150567-700225-703140-701090-703503-704039-139010-1
+        39006-188199-702601-702887-702754-702304-702058-702617-823290-705012-703129
+        -106660-703408-700069-701429-702604-705249-110462-701342-704841-863519-1880
+        19-703017-702395-703213-701478-704585-701337-703958-700737-704384-704397-70
+        2392-700786-703880-148004-148133-20043-42000-42003-63
+x-tm-as-user-approved-sender: Yes
+x-tm-as-user-blocked-sender: No
+Content-Type: text/plain; charset="big5"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.227.98.71]
-X-CFilter-Loop: Reflected
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Sun, 7 Jul 2019 14:57:36 +0300
-Hanna Hawa <hhhawa@amazon.com> wrote:
-
-> Adds support for Amazon's Annapurna Labs L1 EDAC driver to detect and
-> report L1 errors.
-> 
-> Signed-off-by: Hanna Hawa <hhhawa@amazon.com>
-A quick drive by review as I was feeling curious.
-
-Just a couple of trivial queries and observation on the fact it
-might be useful to add a few devm managed functions to cut down
-on edac driver boilerplate.
-
-Thanks,
-
-Jonathan
-
-> ---
->  MAINTAINERS               |   6 ++
->  drivers/edac/Kconfig      |   8 +++
->  drivers/edac/Makefile     |   1 +
->  drivers/edac/al_l1_edac.c | 154 ++++++++++++++++++++++++++++++++++++++++++++++
->  4 files changed, 169 insertions(+)
->  create mode 100644 drivers/edac/al_l1_edac.c
-> 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 77eae44..fd29ea6 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -743,6 +743,12 @@ F:	drivers/tty/serial/altera_jtaguart.c
->  F:	include/linux/altera_uart.h
->  F:	include/linux/altera_jtaguart.h
->  
-> +AMAZON ANNAPURNA LABS L1 EDAC
-> +M:	Hanna Hawa <hhhawa@amazon.com>
-> +S:	Maintained
-> +F:	drivers/edac/al_l1_edac.c
-> +F:	Documentation/devicetree/bindings/edac/amazon,al-l1-edac.txt
-> +
->  AMAZON ANNAPURNA LABS THERMAL MMIO DRIVER
->  M:	Talel Shenhar <talel@amazon.com>
->  S:	Maintained
-> diff --git a/drivers/edac/Kconfig b/drivers/edac/Kconfig
-> index 200c04c..58b92bc 100644
-> --- a/drivers/edac/Kconfig
-> +++ b/drivers/edac/Kconfig
-> @@ -74,6 +74,14 @@ config EDAC_GHES
->  
->  	  In doubt, say 'Y'.
->  
-> +config EDAC_AL_L1
-> +	bool "Amazon's Annapurna Labs L1 EDAC"
-> +	depends on ARCH_ALPINE
-> +	help
-> +	  Support for L1 error detection and correction
-> +	  for Amazon's Annapurna Labs SoCs.
-> +	  This driver detects errors of L1 caches.
-> +
->  config EDAC_AMD64
->  	tristate "AMD64 (Opteron, Athlon64)"
->  	depends on AMD_NB && EDAC_DECODE_MCE
-> diff --git a/drivers/edac/Makefile b/drivers/edac/Makefile
-> index 165ca65e..caa2dc9 100644
-> --- a/drivers/edac/Makefile
-> +++ b/drivers/edac/Makefile
-> @@ -22,6 +22,7 @@ obj-$(CONFIG_EDAC_GHES)			+= ghes_edac.o
->  edac_mce_amd-y				:= mce_amd.o
->  obj-$(CONFIG_EDAC_DECODE_MCE)		+= edac_mce_amd.o
->  
-> +obj-$(CONFIG_EDAC_AL_L1)		+= al_l1_edac.o
->  obj-$(CONFIG_EDAC_AMD76X)		+= amd76x_edac.o
->  obj-$(CONFIG_EDAC_CPC925)		+= cpc925_edac.o
->  obj-$(CONFIG_EDAC_I5000)		+= i5000_edac.o
-> diff --git a/drivers/edac/al_l1_edac.c b/drivers/edac/al_l1_edac.c
-> new file mode 100644
-> index 0000000..f51a6c3
-> --- /dev/null
-> +++ b/drivers/edac/al_l1_edac.c
-> @@ -0,0 +1,154 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Copyright 2019 Amazon.com, Inc. or its affiliates. All Rights Reserved.
-> + */
-> +
-> +#include <linux/bitfield.h>
-> +
-> +#include "edac_device.h"
-> +#include "edac_module.h"
-> +
-> +/* Same bit assignments of CPUMERRSR_EL1 in ARM CA57/CA72 */
-> +#define ARM_CA57_CPUMERRSR_EL1			sys_reg(3, 1, 15, 2, 2)
-> +#define ARM_CA57_CPUMERRSR_RAM_ID		GENMASK(30, 24)
-> +#define  ARM_CA57_L1_I_TAG_RAM			0x00
-> +#define  ARM_CA57_L1_I_DATA_RAM			0x01
-> +#define  ARM_CA57_L1_D_TAG_RAM			0x08
-> +#define  ARM_CA57_L1_D_DATA_RAM			0x09
-> +#define  ARM_CA57_L2_TLB_RAM			0x18
-> +#define ARM_CA57_CPUMERRSR_VALID		GENMASK(31, 31)
-
-For a single bit it's common to use BIT(31) rather than GENMASK to make
-it explicit.
-
-
-> +#define ARM_CA57_CPUMERRSR_REPEAT		GENMASK(39, 32)
-> +#define ARM_CA57_CPUMERRSR_OTHER		GENMASK(47, 40)
-> +#define ARM_CA57_CPUMERRSR_FATAL		GENMASK(63, 63)
-> +
-> +#define AL_L1_EDAC_MSG_MAX			256
-> +
-> +static void al_l1_edac_cpumerrsr(void *arg)
-> +{
-> +	struct edac_device_ctl_info *edac_dev = arg;
-> +	int cpu, i;
-> +	u32 ramid, repeat, other, fatal;
-> +	u64 val = read_sysreg_s(ARM_CA57_CPUMERRSR_EL1);
-> +	char msg[AL_L1_EDAC_MSG_MAX];
-> +	int space, count;
-> +	char *p;
-> +
-> +	if (!(FIELD_GET(ARM_CA57_CPUMERRSR_VALID, val)))
-> +		return;
-> +
-> +	cpu = smp_processor_id();
-> +	ramid = FIELD_GET(ARM_CA57_CPUMERRSR_RAM_ID, val);
-> +	repeat = FIELD_GET(ARM_CA57_CPUMERRSR_REPEAT, val);
-> +	other = FIELD_GET(ARM_CA57_CPUMERRSR_OTHER, val);
-> +	fatal = FIELD_GET(ARM_CA57_CPUMERRSR_FATAL, val);
-> +
-> +	space = sizeof(msg);
-> +	p = msg;
-> +	count = snprintf(p, space, "CPU%d L1 %serror detected", cpu,
-> +			 (fatal) ? "Fatal " : "");
-> +	p += count;
-> +	space -= count;
-> +
-> +	switch (ramid) {
-> +	case ARM_CA57_L1_I_TAG_RAM:
-> +		count = snprintf(p, space, " RAMID='L1-I Tag RAM'");
-> +		break;
-> +	case ARM_CA57_L1_I_DATA_RAM:
-> +		count = snprintf(p, space, " RAMID='L1-I Data RAM'");
-> +		break;
-> +	case ARM_CA57_L1_D_TAG_RAM:
-> +		count = snprintf(p, space, " RAMID='L1-D Tag RAM'");
-> +		break;
-> +	case ARM_CA57_L1_D_DATA_RAM:
-> +		count = snprintf(p, space, " RAMID='L1-D Data RAM'");
-> +		break;
-> +	case ARM_CA57_L2_TLB_RAM:
-> +		count = snprintf(p, space, " RAMID='L2 TLB RAM'");
-> +		break;
-> +	default:
-> +		count = snprintf(p, space, " RAMID='unknown'");
-> +		break;
-> +	}
-> +
-> +	p += count;
-> +	space -= count;
-> +	count = snprintf(p, space,
-> +			 " repeat=%d, other=%d (CPUMERRSR_EL1=0x%llx)",
-> +			 repeat, other, val);
-> +
-> +	for (i = 0; i < repeat; i++) {
-> +		if (fatal)
-> +			edac_device_handle_ue(edac_dev, 0, 0, msg);
-> +		else
-> +			edac_device_handle_ce(edac_dev, 0, 0, msg);
-> +	}
-> +
-> +	write_sysreg_s(0, ARM_CA57_CPUMERRSR_EL1);
-> +}
-> +
-> +static void al_l1_edac_check(struct edac_device_ctl_info *edac_dev)
-> +{
-> +	on_each_cpu(al_l1_edac_cpumerrsr, edac_dev, 1);
-> +}
-> +
-> +static int al_l1_edac_probe(struct platform_device *pdev)
-> +{
-> +	struct edac_device_ctl_info *edac_dev;
-> +	struct device *dev = &pdev->dev;
-> +	int ret;
-> +
-> +	edac_dev = edac_device_alloc_ctl_info(0, (char *)dev_name(dev), 1, "L",
-> +					      1, 1, NULL, 0,
-> +					      edac_device_alloc_index());
-> +	if (IS_ERR(edac_dev))
-> +		return -ENOMEM;
-> +
-> +	edac_dev->edac_check = al_l1_edac_check;
-> +	edac_dev->dev = dev;
-> +	edac_dev->mod_name = dev_name(dev);
-
-I'd admit I'm not that familiar with edac, but seems odd that a
-module name field would have the dev_name. 
-
-> +	edac_dev->dev_name = dev_name(dev);
-> +	edac_dev->ctl_name = dev_name(dev);
-> +	platform_set_drvdata(pdev, edac_dev);
-> +
-> +	ret = edac_device_add_device(edac_dev);
-> +	if (ret) {
-> +		dev_err(dev, "Failed to add L1 edac device\n");
-> +		goto err;
-> +	}
-> +
-> +	return 0;
-> +err:
-> +	edac_device_free_ctl_info(edac_dev);
-> +
-> +	return ret;
-> +}
-> +
-> +static int al_l1_edac_remove(struct platform_device *pdev)
-> +{
-> +	struct edac_device_ctl_info *edac_dev = platform_get_drvdata(pdev);
-> +
-> +	edac_device_del_device(edac_dev->dev);
-> +	edac_device_free_ctl_info(edac_dev);
-
-More a passing observation than a suggestion for this driver, but if there was
-ever a place where it looked like a couple of devm_ allocation functions would
-be useful, this is it ;)
-
-edac_dev = devm_device_alloc_ctrl_info(dev, ...)
-...
-devm_edac_device_add_device(dev, ...)
-
-
-> +
-> +	return 0;
-> +}
-> +
-> +static const struct of_device_id al_l1_edac_of_match[] = {
-> +	{ .compatible = "amazon,al-l1-edac" },
-> +	{}
-> +};
-> +MODULE_DEVICE_TABLE(of, al_l1_edac_of_match);
-> +
-> +static struct platform_driver al_l1_edac_driver = {
-> +	.probe = al_l1_edac_probe,
-> +	.remove = al_l1_edac_remove,
-> +	.driver = {
-> +		.name = "al_l1_edac",
-> +		.of_match_table = al_l1_edac_of_match,
-> +	},
-> +};
-> +module_platform_driver(al_l1_edac_driver);
-> +
-> +MODULE_LICENSE("GPL v2");
-> +MODULE_AUTHOR("Hanna Hawa <hhhawa@amazon.com>");
-> +MODULE_DESCRIPTION("Amazon's Annapurna Lab's L1 EDAC Driver");
-
-
+SGkgUm9iLA0KDQoNCj4gLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCj4gRnJvbTogb3BlbmJt
+Yw0KPiBbbWFpbHRvOm9wZW5ibWMtYm91bmNlcytnZW9yZ2UuaHVuZz1xdWFudGF0dy5jb21AbGlz
+dHMub3psYWJzLm9yZ10gT24NCj4gQmVoYWxmIE9mIFJvYiBIZXJyaW5nDQo+IFNlbnQ6IFR1ZXNk
+YXksIEp1bHkgMDksIDIwMTkgOTo0MSBBTQ0KPiBUbzogR2VvcmdlIEh1bmcNCj4gQ2M6IE1hcmsg
+UnV0bGFuZDsgTGludXMgV2FsbGVpajsgVGFsaSBQZXJyeTsgcGF1bG1ja0BsaW51eC5pYm0uY29t
+Ow0KPiB3YWtAZ29vZ2xlLmNvbTsgYmVuamFtaW5mYWlyQGdvb2dsZS5jb207IG9wZW5ibWNAbGlz
+dHMub3psYWJzLm9yZzsNCj4gdG9tZXIubWFpbW9uQG51dm90b24uY29tOyBkZXZpY2V0cmVlQHZn
+ZXIua2VybmVsLm9yZzsgQm9yaXNsYXYgUGV0a292Ow0KPiBBdmkuRmlzaG1hbkBudXZvdG9uLmNv
+bTsgSm9uYXRoYW4gQ2FtZXJvbjsgTWF1cm8gQ2FydmFsaG8gQ2hlaGFiOw0KPiBsaW51eC1lZGFj
+OyBQYXRyaWNrIFZlbnR1cmU7IE5pY29sYXMgRmVycmU7IGxpbnV4LWtlcm5lbDsgSmFtZXMgTW9y
+c2U7IEdyZWcNCj4gS3JvYWgtSGFydG1hbjsgZGF2ZW1AZGF2ZW1sb2Z0Lm5ldA0KPiBTdWJqZWN0
+OiBSZTogW1BBVENIIDUuMiB2MiAyLzJdIGR0LWJpbmRpbmc6IGVkYWM6IGFkZCBOUENNIEVDQw0K
+PiBkb2N1bWVudGF0aW9uDQo+IA0KPiBPbiBXZWQsIEp1biAwNSwgMjAxOSBhdCAxMDoxMjo1M1BN
+ICswODAwLCBHZW9yZ2UgSHVuZyB3cm90ZToNCj4gPiBBZGQgZGV2aWNlIHRyZWUgZG9jdW1lbnRh
+dGlvbiBmb3IgTnV2b3RvbiBCTUMgRUNDDQo+ID4NCj4gPiBTaWduZWQtb2ZmLWJ5OiBHZW9yZ2Ug
+SHVuZyA8Z2h1bmcucXVhbnRhQGdtYWlsLmNvbT4NCj4gPiAtLS0NCj4gPiAgLi4uL2JpbmRpbmdz
+L2VkYWMvbnBjbTd4eC1zZHJhbS1lZGFjLnR4dCAgICAgICAgfCAxNw0KPiArKysrKysrKysrKysr
+KysrKw0KPiA+ICAxIGZpbGUgY2hhbmdlZCwgMTcgaW5zZXJ0aW9ucygrKQ0KPiA+ICBjcmVhdGUg
+bW9kZSAxMDA2NDQNCj4gPiBEb2N1bWVudGF0aW9uL2RldmljZXRyZWUvYmluZGluZ3MvZWRhYy9u
+cGNtN3h4LXNkcmFtLWVkYWMudHh0DQo+ID4NCj4gPiBkaWZmIC0tZ2l0DQo+ID4gYS9Eb2N1bWVu
+dGF0aW9uL2RldmljZXRyZWUvYmluZGluZ3MvZWRhYy9ucGNtN3h4LXNkcmFtLWVkYWMudHh0DQo+
+ID4gYi9Eb2N1bWVudGF0aW9uL2RldmljZXRyZWUvYmluZGluZ3MvZWRhYy9ucGNtN3h4LXNkcmFt
+LWVkYWMudHh0DQo+ID4gbmV3IGZpbGUgbW9kZSAxMDA2NDQNCj4gPiBpbmRleCAwMDAwMDAwMDAw
+MDAuLmRkNGRhYzU5YTViZA0KPiA+IC0tLSAvZGV2L251bGwNCj4gPiArKysgYi9Eb2N1bWVudGF0
+aW9uL2RldmljZXRyZWUvYmluZGluZ3MvZWRhYy9ucGNtN3h4LXNkcmFtLWVkYWMudHh0DQo+ID4g
+QEAgLTAsMCArMSwxNyBAQA0KPiA+ICtOdXZvdG9uIE5QQ003eHggU29DIEVEQUMgZGV2aWNlIGRy
+aXZlcg0KPiA+ICsNCj4gPiArVGhlIE51dm90b24gTlBDTTd4eCBTb0Mgc3VwcG9ydHMgRERSNCBt
+ZW1vcnkgd2l0aC93aXRob3V0IEVDQyBhbmQNCj4gdGhlDQo+ID4gK2RyaXZlciB1c2VzIHRoZSBF
+REFDIGZyYW1ld29yayB0byBpbXBsZW1lbnQgdGhlIEVDQyBkZXRlY3Rpb24gYW5kDQo+IGNvcnJ0
+ZWN0aW9uLg0KPiA+ICsNCj4gPiArUmVxdWlyZWQgcHJvcGVydGllczoNCj4gPiArLSBjb21wYXRp
+YmxlOglzaG91bGQgYmUgIm51dm90b24sbnBjbTd4eC1zZHJhbS1lZGFjIg0KPiANCj4gSXMgdGhp
+cyBmb3IgdGhlIHdob2xlIFNEUkFNIGNvbnRyb2xsZXIgb3IganVzdCBFQ0MgcmVsYXRlZCByZWdp
+c3RlcnM/DQo+IEluIHRoZSBmb3JtZXIgY2FzZSwgdGhlIG5hbWluZyBzaG91bGQganVzdCByZWZs
+ZWN0IHRoZSBibG9jayBuYW1lIGFuZCBub3QgYQ0KPiBMaW51eCB0ZXJtLg0KDQpTb3JyeSBmb3Ig
+Y29uZnVzZWQgbmFtaW5nLCB0aGUgYWRkcmVzcyBzcGFjZSBpcyBmb3IgdGhlIHdob2xlIG1lbW9y
+eSBjb250cm9sbGVyIHJlZ2lzdGVycyBpbmRlZWQsDQpidXQgdGhlIGRyaXZlciBvbmx5IHVzZXMg
+dGhlIEVDQyByZWxhdGVkIHJlZ2lzdGVycy4NClNob3VsZCBJIGNoYW5nZSB0aGUgbmFtZSB0byAi
+bnV2b3RvbixucGNtN3h4LWVkYWMiID8NCg0KPiANCj4gPiArLSByZWc6CQlNZW1vcnkgY29udHJv
+bGxlciByZWdpc3RlciBzZXQgc2hvdWxkIGJlIDwweGYwODI0MDAwDQo+IDB4MTAwMD4NCj4gPiAr
+LSBpbnRlcnJ1cHRzOglzaG91bGQgYmUgTUMgaW50ZXJydXB0ICMyNQ0KPiA+ICsNCj4gPiArRXhh
+bXBsZToNCj4gPiArDQo+ID4gKwltYzogbWVtb3J5LWNvbnRyb2xsZXJAZjA4MjQwMDAgew0KPiA+
+ICsJCWNvbXBhdGlibGUgPSAibnV2b3RvbixucGNtN3h4LXNkcmFtLWVkYWMiOw0KPiA+ICsJCXJl
+ZyA9IDwweGYwODI0MDAwIDB4MTAwMD47DQo+ID4gKwkJaW50ZXJydXB0cyA9IDwwIDI1IDQ+Ow0K
+PiA+ICsJfTsNCj4gPiAtLQ0KPiA+IDIuMjEuMA0KPiA+DQo=
