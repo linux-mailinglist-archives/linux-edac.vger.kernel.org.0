@@ -2,53 +2,41 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C32E63EAD
-	for <lists+linux-edac@lfdr.de>; Wed, 10 Jul 2019 02:50:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 85DDF63EB0
+	for <lists+linux-edac@lfdr.de>; Wed, 10 Jul 2019 02:52:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726613AbfGJAuj (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Tue, 9 Jul 2019 20:50:39 -0400
-Received: from mail-eopbgr690092.outbound.protection.outlook.com ([40.107.69.92]:63959
-        "EHLO NAM04-CO1-obe.outbound.protection.outlook.com"
+        id S1726776AbfGJAwE (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Tue, 9 Jul 2019 20:52:04 -0400
+Received: from mail-eopbgr790134.outbound.protection.outlook.com ([40.107.79.134]:38912
+        "EHLO NAM03-CO1-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726444AbfGJAuj (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Tue, 9 Jul 2019 20:50:39 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=MkTsn+pSgj1a7EQpft2Z7awkvRruTaRO2U2EWqLzpst12leHdty4qPg3ICNTXNx8zzgLHDmcYCuXwiQVdZTtVQBij+99hiisPBBNkGRUaxJ4uw/HV6RkQaC9GMTFq3LS2/xU6sTy2xL7vykHicQkczCTB+FDsIzzglYZeQLlgBekZPjW84skTgOOrEPlEmi7xKTWzL4c1k+Uzt/6diyvVNxFQPB51LK56rCiVqHvdM0Nlxj46lbUBoUN3ZNhS/OcI5HUL/j9VHcEgqDpJEzI6q5mF1usIqwF9J0qP+E2llyFhTet7S5SpE/8ivgar7zX6hjOF9fW8Bc6pdCFu44YUQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=C/MEdO4xKVJ/7QlENAs5nmXgKFkZBw/t9X5CO5f5ZqE=;
- b=U19wBf6pcLdRCyRCvQl7Uk7LJuVNnAfRy6xin9R1Xp5qfNHh+OVmOUeJwb7B0Z3NqVx8pqwwWIA3zIO70rKoXYQ7Gdk8Ae44CSAs+yvzB2ma6yf1BHDVTE9T78W5yQ4Z9IwVyI20V3yjk+sRm7mYz0gVa4eL2hnvlLn89nhOhfqtVTdcacK9PLKuSi852lCYvEVwL3OOjsQVwFbbZcfyPaTx9DEu1E9o3//iFjQrJQppdcwkCYZCnLkiaAODkjY2rqg2gZirHKQqykMc/Hcm821BRmmlkQFH+tTcCYutcv0ZxzDbbN+uDGsjzytgi/esF95/GftUXy7I7Plv2uaznA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1;spf=pass
- smtp.mailfrom=os.amperecomputing.com;dmarc=pass action=none
- header.from=os.amperecomputing.com;dkim=pass
- header.d=os.amperecomputing.com;arc=none
+        id S1726444AbfGJAwE (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Tue, 9 Jul 2019 20:52:04 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=os.amperecomputing.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=C/MEdO4xKVJ/7QlENAs5nmXgKFkZBw/t9X5CO5f5ZqE=;
- b=VeOxePKJuyAz88ECWJi5OkUm2UxW1qiQT6oKZq8iWisz+Y+ouOkFPSq26ZDxn0bh/ax77Vifm8swvczJM1qN867zzjdNg+M3wAuIrk5ZOxvqoXpnk6rJXp2evVJh/dQNbAFNi3e5UBPjxT6GDQAL8y9ma21OOr0MgV/G/2FGACg=
+ bh=W/V8qq8PcUyUzN3oeR2AWvs2EVdqbpns6QTeyy8uaYE=;
+ b=m4VommuXZD5Rp01D0G52i2O2rj7Mbg8qObWTHtYMilXfs0l6InlbGrVHzkrb6TT9taWVUD8FOOHtF1vN56M+mOw1y7wcOozl7hRxPq+Sb80FyYe+phWlytziopwMeMXU7GW08bfm8XqSDfqRKYX8sIeXdH60SJGOSd/VcbmCAhU=
 Received: from BYAPR01MB3975.prod.exchangelabs.com (52.135.201.14) by
- BYAPR01MB5335.prod.exchangelabs.com (20.179.61.202) with Microsoft SMTP
+ BYAPR01MB4790.prod.exchangelabs.com (20.177.226.83) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2073.10; Wed, 10 Jul 2019 00:49:56 +0000
+ 15.20.2052.18; Wed, 10 Jul 2019 00:51:47 +0000
 Received: from BYAPR01MB3975.prod.exchangelabs.com
  ([fe80::a81b:f1e7:a31f:d464]) by BYAPR01MB3975.prod.exchangelabs.com
  ([fe80::a81b:f1e7:a31f:d464%6]) with mapi id 15.20.2052.020; Wed, 10 Jul 2019
- 00:49:56 +0000
+ 00:51:46 +0000
 From:   Tyler Baicar OS <baicar@os.amperecomputing.com>
-To:     Shiju Jose <shiju.jose@huawei.com>,
-        Open Source Submission <patches@amperecomputing.com>,
+To:     James Morse <james.morse@arm.com>
+CC:     Open Source Submission <patches@amperecomputing.com>,
         "linux-arm-kernel@lists.infradead.org" 
         <linux-arm-kernel@lists.infradead.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
         "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
         "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
-        "james.morse@arm.com" <james.morse@arm.com>,
         "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
         "will@kernel.org" <will@kernel.org>,
         "lorenzo.pieralisi@arm.com" <lorenzo.pieralisi@arm.com>,
-        "Guohanjun (Hanjun Guo)" <guohanjun@huawei.com>,
+        "guohanjun@huawei.com" <guohanjun@huawei.com>,
         "sudeep.holla@arm.com" <sudeep.holla@arm.com>,
         "rjw@rjwysocki.net" <rjw@rjwysocki.net>,
         "lenb@kernel.org" <lenb@kernel.org>,
@@ -56,15 +44,17 @@ To:     Shiju Jose <shiju.jose@huawei.com>,
         "tony.luck@intel.com" <tony.luck@intel.com>,
         "bp@alien8.de" <bp@alien8.de>,
         "Matteo.Carlini@arm.com" <Matteo.Carlini@arm.com>,
-        "Andrew.Murray@arm.com" <andrew.murray@arm.com>
-Subject: Re: [PATCH RFC 1/4] ACPI/AEST: Initial AEST driver
-Thread-Topic: [PATCH RFC 1/4] ACPI/AEST: Initial AEST driver
-Thread-Index: AQHVMPZqphfhRm1STkOzQdqBSPqI3aa6dWVQgAibBEg=
-Date:   Wed, 10 Jul 2019 00:49:56 +0000
-Message-ID: <BYAPR01MB39758AB5AF4A67AF8278E361E3F00@BYAPR01MB3975.prod.exchangelabs.com>
+        "Andrew.Murray@arm.com" <Andrew.Murray@arm.com>
+Subject: Re: [PATCH RFC 2/4] arm64: mm: Add RAS extension system register
+ check to SEA handling
+Thread-Topic: [PATCH RFC 2/4] arm64: mm: Add RAS extension system register
+ check to SEA handling
+Thread-Index: AQHVMPZvV84yhcAYOk+DNBn1Cdw2C6bAhfiAgAKLP64=
+Date:   Wed, 10 Jul 2019 00:51:46 +0000
+Message-ID: <BYAPR01MB39754DFAF8130743448FDEC6E3F00@BYAPR01MB3975.prod.exchangelabs.com>
 References: <1562086280-5351-1-git-send-email-baicar@os.amperecomputing.com>
- <1562086280-5351-2-git-send-email-baicar@os.amperecomputing.com>,<86258A5CC0A3704780874CF6004BA8A6584514BF@lhreml523-mbs.china.huawei.com>
-In-Reply-To: <86258A5CC0A3704780874CF6004BA8A6584514BF@lhreml523-mbs.china.huawei.com>
+ <1562086280-5351-3-git-send-email-baicar@os.amperecomputing.com>,<df262b97-eda2-0556-d6ef-532a0d697131@arm.com>
+In-Reply-To: <df262b97-eda2-0556-d6ef-532a0d697131@arm.com>
 Accept-Language: en-US
 Content-Language: en-US
 X-MS-Has-Attach: 
@@ -73,89 +63,138 @@ authentication-results: spf=none (sender IP is )
  smtp.mailfrom=baicar@os.amperecomputing.com; 
 x-originating-ip: [107.15.51.194]
 x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 11b7165e-72d5-4b61-4309-08d704d08744
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(1401327)(2017052603328)(7193020);SRVR:BYAPR01MB5335;
-x-ms-traffictypediagnostic: BYAPR01MB5335:
-x-microsoft-antispam-prvs: <BYAPR01MB53356766A75F2327AD31CA2DE3F00@BYAPR01MB5335.prod.exchangelabs.com>
-x-ms-oob-tlc-oobclassifiers: OLM:9508;
+x-ms-office365-filtering-correlation-id: 25ea764d-2bad-4627-5263-08d704d0c91b
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(1401327)(2017052603328)(7193020);SRVR:BYAPR01MB4790;
+x-ms-traffictypediagnostic: BYAPR01MB4790:
+x-ms-exchange-purlcount: 1
+x-microsoft-antispam-prvs: <BYAPR01MB4790376A84B638F1C85378B7E3F00@BYAPR01MB4790.prod.exchangelabs.com>
+x-ms-oob-tlc-oobclassifiers: OLM:5516;
 x-forefront-prvs: 0094E3478A
-x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(4636009)(366004)(376002)(346002)(39850400004)(396003)(136003)(189003)(199004)(71200400001)(64756008)(53546011)(110136005)(52536014)(66476007)(66446008)(7696005)(5660300002)(14454004)(99286004)(66946007)(71190400001)(68736007)(91956017)(186003)(66066001)(6506007)(2906002)(76176011)(76116006)(74316002)(66556008)(26005)(305945005)(102836004)(8676002)(86362001)(446003)(229853002)(55016002)(33656002)(478600001)(2201001)(256004)(11346002)(486006)(7736002)(2501003)(6436002)(9686003)(3846002)(6116002)(81166006)(7416002)(81156014)(53936002)(8936002)(25786009)(6246003)(316002)(476003)(921003)(1121003);DIR:OUT;SFP:1102;SCL:1;SRVR:BYAPR01MB5335;H:BYAPR01MB3975.prod.exchangelabs.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:0;
+x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(4636009)(136003)(39830400003)(346002)(376002)(366004)(396003)(189003)(199004)(8676002)(7736002)(54906003)(81166006)(25786009)(8936002)(14454004)(14444005)(486006)(478600001)(186003)(102836004)(81156014)(11346002)(4326008)(966005)(3846002)(305945005)(446003)(68736007)(53546011)(99286004)(76176011)(6916009)(6436002)(6246003)(476003)(26005)(2906002)(7696005)(256004)(6116002)(316002)(66946007)(74316002)(91956017)(86362001)(52536014)(64756008)(71200400001)(9686003)(71190400001)(76116006)(66476007)(66446008)(33656002)(66066001)(7416002)(55016002)(53936002)(229853002)(6506007)(6306002)(5660300002)(66556008);DIR:OUT;SFP:1102;SCL:1;SRVR:BYAPR01MB4790;H:BYAPR01MB3975.prod.exchangelabs.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:0;
 received-spf: None (protection.outlook.com: os.amperecomputing.com does not
  designate permitted sender hosts)
 x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: NkfRPx5jW4m7iSKtG8mQFOGOt2LRr9M239mIYZjFCU8F+nRWpM6Hpz+HwVp83d5x/M4+7jvfPm0mXCOE/em7qCdDeYZ0dMlLtzDS5gqOGg8haeSVTnhhxBXsTRLsaYR7cXnaNwQdFv+G8jy1cEH/MfGx8Es10ZRpNCkXZeoEiUYJobAV+wFxbZufhp/PdkEiPn7hcXcMvJEXM71J9FUSu8F05+Ngh8+8pyya++5EKXr4kXW331rNK1Z9JoSC0vP05c6OroTzHCqhKiS+q+NFwGtQfNNaS/xGWxR60Cfd1xeUJBebWI5fgjU8IFvOnSr+tn1Ii0jAZPoAXZrb69RxJ+/HASpD9ovI3uZ50rIPe/25uEbYMPH39KEX9eQN4f0UWiMiAZchD+yy5FGN++V/NSVa1FwL616SlA7QELwMGRI=
+x-microsoft-antispam-message-info: fuXocvV0pWjEYBY40KX1ca3xre+GTKWzh4K20ho3PAsOCf1w6at7aBxLrmQBp7S+HPzCVIQcHj5LeMYT6jyg9Ow2ohYr0Z6FPYF4EpSAd3LquHO526RPojFh2SisZKdpONGjabaPuVF5zgi0Kb29y9wrTZyfLjxleQmtPCu7J9RZAmb+cP0SDY32fihTDglAPRBZitSFgQcyUk/7Icwwf8KFD8w7eYJHLKp8vaiSUrdZStVP1jkKIux4PuM4OQfyHiG4QrRi3+s2NqlQD40KQYotqyj+XlFJLUWXhG3TYCJ85IYodm53TP/1GquvuScuLo683t4+RwH05HXDXuLscFJ8q2nXUpN6WcKB1DL926DtQpVokkQjFjiX3NSW3EwxT72YBG7Z7bYHWftDvZI215IOx44tKQPT2eEzvQppKuw=
 Content-Type: text/plain; charset="iso-8859-1"
 Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
 X-OriginatorOrg: os.amperecomputing.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 11b7165e-72d5-4b61-4309-08d704d08744
-X-MS-Exchange-CrossTenant-originalarrivaltime: 10 Jul 2019 00:49:56.3561
+X-MS-Exchange-CrossTenant-Network-Message-Id: 25ea764d-2bad-4627-5263-08d704d0c91b
+X-MS-Exchange-CrossTenant-originalarrivaltime: 10 Jul 2019 00:51:46.8664
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
 X-MS-Exchange-CrossTenant-id: 3bc2b170-fd94-476d-b0ce-4229bdc904a7
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
 X-MS-Exchange-CrossTenant-userprincipalname: Baicar@os.amperecomputing.com
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR01MB5335
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR01MB4790
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-Hello Shiju,
-
-Thank you for the feedback!
-
-On Thu, Jul 4, 2019 at 12:03 PM Shiju Jose <shiju.jose@huawei.com> wrote:
-> >+struct ras_ext_regs {
-> >+      u64 err_fr;
-> >+      u64 err_ctlr;
-> >+      u64 err_status;
-> >+      u64 err_addr;
-> >+      u64 err_misc0;
-> >+      u64 err_misc1;
-> >+      u64 err_misc2;
-> >+      u64 err_misc3;
-> err_misc2 and err_misc3 are not used. Are they for the future purpose?
-
-Yes, these will be for future purpose once ARMv8.4 support is added. I'd li=
-ke
-to keep them in this structure define since that makes iterating through th=
-e
-memory mapped error records easier. Regardless of ARMv8.2 or ARMv8.4 suppor=
-t,
-each error record in memory mapped nodes are 64 bytes apart. Having these i=
+On Mon, Jul 8, 2019 at 10:10 AM James Morse <james.morse@arm.com> wrote:
+> On 02/07/2019 17:51, Tyler Baicar OS wrote:
+> > On systems that support the ARM RAS extension, synchronous external
+> > abort syndrome information could be captured in the core's RAS extensio=
 n
-the structure make the structure 64 bytes long making it possible for me to
-increment through error records with the increment ++ operation.
+> > system registers. So, when handling SEAs check the RAS system registers
+> > for error syndrome information.
+>
+> > diff --git a/arch/arm64/mm/fault.c b/arch/arm64/mm/fault.c
+> > index 2d11501..76b42ca 100644
+> > --- a/arch/arm64/mm/fault.c
+> > +++ b/arch/arm64/mm/fault.c
+> > @@ -37,6 +37,7 @@
+> >  #include <asm/pgtable.h>
+> >  #include <asm/tlbflush.h>
+> >  #include <asm/traps.h>
+> > +#include <asm/ras.h>
+> >=20
+> >  struct fault_info {
+> >       int     (*fn)(unsigned long addr, unsigned int esr,
+> > @@ -632,6 +633,8 @@ static int do_sea(unsigned long addr, unsigned int =
+esr, struct pt_regs *regs)
+> >=20
+> >       inf =3D esr_to_fault_info(esr);
+> >=20
+> > +     arch_arm_ras_report_error();
+> > +
+> >       /*
+> >        * Return value ignored as we rely on signal merging.
+> >        * Future patches will make this more robust.
+> >
+>
+> If we interrupted a preemptible context, do_sea() is preemptible too... T=
+his means we
+> can't know if we're still running on the same CPU as the one that took th=
+e external-abort.
+> (until this series, it hasn't mattered).
+>
+> Fixing this means cramming something into entry.S's el1_da, as this may u=
+nmask interrupts
+> before calling do_mem_abort(). But its going to be ugly because some of d=
+o_mem_abort()s
+> ESR values need to be preemptible because they sleep, e.g. page-faults ca=
+lling
+> handle_mm_fault().
+> For do_sea(), do_exit() will 'fix' the preempt count if we kill the threa=
+d, but if we
+> don't, it still needs to be balanced. Doing all this in assembly is going=
+ to be unreadable!
+>
+> Mark Rutland has a series to move the entry assembly into C [0]. Based on=
+ that that it
+> should be possible for the new el1_abort() to spot a Synchronous-External=
+-Abort ESR, and
+> wrap the do_mem_abort() with preempt enable/disable, before inheriting th=
+e flags. (which
+> for synchronous exceptions, I think we should always do)
+>
+> [0] https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git/log/?h=
+=3Darm64/entry-deasm
 
-If folks don't agree with that, I can change this structure to just have a
-reserved field at the end such as:
+Hey James,
 
-+ u64 res0[2];
+Good catch! I didn't think the synchronous route was preemptible.
 
-or
+I wasn't seeing this issue when testing this on emulation, but I was able t=
+o
+test and prove the issue on a Neoverse N1 SDP:
 
-+ u8 res0[8];
+root@genericarmv8:~# echo 0x100000000 > /proc/cached_read
+[   42.985622] Reading from address 0x100000000
+[   42.989893] WARNING: CPU: 0 PID: 2812 at /home/tyler/neoverse/arm-refere=
+nce-
+platforms/linux/arch/arm64/kernel/cpufeature.c:1940 this_cpu_has_cap+0x68/0=
+x78
+[..]
+[   43.119083] Call trace:
+[   43.121515]  this_cpu_has_cap+0x68/0x78
+[   43.125338]  do_sea+0x34/0x70
+[   43.128292]  do_mem_abort+0x3c/0x98
+[   43.131765]  el1_da+0x20/0x94
+[   43.134722]  cached_read+0x30/0x68
+[   43.138112]  simple_attr_write+0xbc/0x128
+[   43.142109]  proc_reg_write+0x60/0xa8
+[   43.145757]  __vfs_write+0x18/0x40
+[   43.149145]  vfs_write+0xa4/0x1b8
+[   43.152445]  ksys_write+0x64/0xe0
+[   43.155746]  __arm64_sys_write+0x14/0x20
+[   43.159654]  el0_svc_common.constprop.0+0xa8/0x100
+[   43.164430]  el0_svc_handler+0x28/0x78
+[   43.168165]  el0_svc+0x8/0xc
+[   43.171031] ---[ end trace 2c27619659261a1d ]---
+[   43.175647] Internal error: synchronous external abort: 96000410 [#1]
+PREEMPT SMP
+[..]
 
+That warning is because it's preemptible:
 
-> >+      ppi_data =3D kcalloc(num_ppi, sizeof(struct aest_node_data *),
-> >+                         GFP_KERNEL);
-> >+
-> >+      for (i =3D 0; i < num_ppi; i++) {
-> >+              ppi_data[i] =3D alloc_percpu(struct aest_node_data);
-> >+              if (!ppi_data[i]) {
-> >+                      ret =3D -ENOMEM;
-> >+                      break;
-> >+              }
-> >+      }
-> >+
-> >+      if (ret) {
-> >+              pr_err("Failed percpu allocation\n");
-> >+              for (i =3D 0; i < num_ppi; i++)
-> >+                      free_percpu(ppi_data[i]);
-> I think 'ppi_data' to be freed here?
+if (!WARN_ON(preemptible()) && n < ARM64_NCAPS) {
 
-Yes it should be! I'll add that in the next version.
+I'll pull Mark's series in and add the preempt enable/disable around the ca=
+ll
+to do_mem_abort() in el1_abort() and test that out!
 
 Thanks,
 Tyler=
