@@ -2,128 +2,233 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7810664AFE
-	for <lists+linux-edac@lfdr.de>; Wed, 10 Jul 2019 18:54:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF495650C1
+	for <lists+linux-edac@lfdr.de>; Thu, 11 Jul 2019 06:14:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726898AbfGJQyu (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Wed, 10 Jul 2019 12:54:50 -0400
-Received: from mail-eopbgr760045.outbound.protection.outlook.com ([40.107.76.45]:42695
-        "EHLO NAM02-CY1-obe.outbound.protection.outlook.com"
+        id S1726119AbfGKEOw (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Thu, 11 Jul 2019 00:14:52 -0400
+Received: from mail-eopbgr800123.outbound.protection.outlook.com ([40.107.80.123]:49024
+        "EHLO NAM03-DM3-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725994AbfGJQyt (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Wed, 10 Jul 2019 12:54:49 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=DULPBir/+tYkMTON1UL0p3b0ZZBg3xd6kFdzJuQJsB5vex+wlcGTrhHfglTQXja+t2TWzkdOYEKDGv/LC1g3E2MxXFe9Jxqj2ObdqHFoz3PFQETYNe0v3J/9DdqKymwSHzKAq++2fc09KwmRMiG1EjOpjLQoFCXdDsgYhS2vXzQ2Y3hYNm7kAAEXsvy2aPTR/xaCfkIgBO9Y/lg9TfxFZ6txxAY65ORyfbLA+jo1RZ4wmbas8PdaVgHzzmB9hcaPRfMjz/XPIh3WAJidb7kAABEpu3d7edGMERn/amH+8e+rold+G9I0xVH4PqxJ/6EWj9f/eev7PFqKXKeefKh6Lg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Hcg2xkKO7S8bjYqExqHRrS5JpU1ZC/lBganHueQipKQ=;
- b=LDg8yuNEcmJOZwN+txjPSq81bs/HkigtgSiNS39ynTwSpEASmFLfQOq/c1lu9NHlSUfbGa+nY0S/AAwqaQJRR73M9EKWXO+3wekM2TNEHLwOoE9IG6T+i/L/54PLpHbaSueEGrt7AN9pfQqEXDMCXdFMcl36THj41SfMks73ROoO87E8HU7bBu4n7HqM1YOc/TaKW4DAiQWi1adM4QTSe/uNQrFE8qB+RPBoPXNan+I9pRReBJgNmonyFvwtCdb+oYO03Q/xPlbS9VD9+bd7moKV2s65687FZ22OHjiZaeu54DiiHW7GuzZ4f5Uz51HyuMHSM53TeBxL60rvneIuag==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1;spf=pass
- smtp.mailfrom=amd.com;dmarc=pass action=none header.from=amd.com;dkim=pass
- header.d=amd.com;arc=none
+        id S1725963AbfGKEOw (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Thu, 11 Jul 2019 00:14:52 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amdcloud.onmicrosoft.com; s=selector1-amdcloud-onmicrosoft-com;
+ d=os.amperecomputing.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Hcg2xkKO7S8bjYqExqHRrS5JpU1ZC/lBganHueQipKQ=;
- b=NTXAJ/2AU2D+yHOcJ+Z7uBOHNgQdyi67zTmtHlVhNsoYNvQW+Tl8rUprYNasNfZkr/iEkfMbARJn4HrJfSzX/ZMvrfZxqgjegsEe+NOnUvm6CQijQIVaz9Rpx4SEwFqkxZQeUkPJtAaClMn3diJqA5sLQBCItTl/idhhe2RLqhc=
-Received: from MWHPR12MB1806.namprd12.prod.outlook.com (10.175.52.149) by
- MWHPR12MB1758.namprd12.prod.outlook.com (10.175.53.144) with Microsoft SMTP
+ bh=IA3sKgbQ+k41jBzSGwUGMMBaITX7KG1WOE4CXiFL330=;
+ b=iNlhZhw6eoxgnvOyOW+qE/K29FEwP/u3iAdqifASyjp8GSw1+jx9eqA8Wvld/d5VKg7SX/xGNdwnPA+rdc63KKYl0LkrQg6m8+rpkRRIPChIZ8PIYJ/92T+9wOEvgoi3A6X3wIkGcRxNJ/dc9eOwxd0XFZB18ZTU9AqMLVOEXHw=
+Received: from BYAPR01MB3975.prod.exchangelabs.com (52.135.201.14) by
+ BYAPR01MB4055.prod.exchangelabs.com (52.135.236.224) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2073.10; Wed, 10 Jul 2019 16:54:45 +0000
-Received: from MWHPR12MB1806.namprd12.prod.outlook.com
- ([fe80::2932:24d8:8742:e62a]) by MWHPR12MB1806.namprd12.prod.outlook.com
- ([fe80::2932:24d8:8742:e62a%2]) with mapi id 15.20.2052.020; Wed, 10 Jul 2019
- 16:54:45 +0000
-From:   "Phillips, Kim" <kim.phillips@amd.com>
-To:     "Ghannam, Yazen" <Yazen.Ghannam@amd.com>,
+ 15.20.2052.19; Thu, 11 Jul 2019 04:14:45 +0000
+Received: from BYAPR01MB3975.prod.exchangelabs.com
+ ([fe80::a81b:f1e7:a31f:d464]) by BYAPR01MB3975.prod.exchangelabs.com
+ ([fe80::a81b:f1e7:a31f:d464%6]) with mapi id 15.20.2052.020; Thu, 11 Jul 2019
+ 04:14:45 +0000
+From:   Tyler Baicar OS <baicar@os.amperecomputing.com>
+To:     James Morse <james.morse@arm.com>,
+        "mark.rutland@arm.com" <mark.rutland@arm.com>
+CC:     "lorenzo.pieralisi@arm.com" <lorenzo.pieralisi@arm.com>,
+        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
+        "sudeep.holla@arm.com" <sudeep.holla@arm.com>,
+        "rjw@rjwysocki.net" <rjw@rjwysocki.net>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Matteo.Carlini@arm.com" <Matteo.Carlini@arm.com>,
+        "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
+        "tony.luck@intel.com" <tony.luck@intel.com>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "guohanjun@huawei.com" <guohanjun@huawei.com>,
+        "Andrew.Murray@arm.com" <Andrew.Murray@arm.com>,
+        Open Source Submission <patches@amperecomputing.com>,
+        "lenb@kernel.org" <lenb@kernel.org>,
+        "will@kernel.org" <will@kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
         "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>
-CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "bp@alien8.de" <bp@alien8.de>
-Subject: Re: [PATCH v2 1/7] EDAC/amd64: Support more than two controllers for
- chip selects handling
-Thread-Topic: [PATCH v2 1/7] EDAC/amd64: Support more than two controllers for
- chip selects handling
-Thread-Index: AQHVN0Asc2CazzfP60GUzjiUo3pGLA==
-Date:   Wed, 10 Jul 2019 16:54:44 +0000
-Message-ID: <af8c4e5e-d1c1-b733-9303-014314aec9d5@amd.com>
-References: <20190709215643.171078-1-Yazen.Ghannam@amd.com>
- <20190709215643.171078-2-Yazen.Ghannam@amd.com>
-In-Reply-To: <20190709215643.171078-2-Yazen.Ghannam@amd.com>
+Subject: Re: [PATCH RFC 2/4] arm64: mm: Add RAS extension system register
+ check to SEA handling
+Thread-Topic: [PATCH RFC 2/4] arm64: mm: Add RAS extension system register
+ check to SEA handling
+Thread-Index: AQHVMPZvV84yhcAYOk+DNBn1Cdw2C6bAhfiAgAKLP66AAcNd4A==
+Date:   Thu, 11 Jul 2019 04:14:45 +0000
+Message-ID: <BYAPR01MB3975FB635454503D3BFBBD53E3F30@BYAPR01MB3975.prod.exchangelabs.com>
+References: <1562086280-5351-1-git-send-email-baicar@os.amperecomputing.com>
+ <1562086280-5351-3-git-send-email-baicar@os.amperecomputing.com>,
+ <df262b97-eda2-0556-d6ef-532a0d697131@arm.com>,<BYAPR01MB39754DFAF8130743448FDEC6E3F00@BYAPR01MB3975.prod.exchangelabs.com>
+In-Reply-To: <BYAPR01MB39754DFAF8130743448FDEC6E3F00@BYAPR01MB3975.prod.exchangelabs.com>
 Accept-Language: en-US
 Content-Language: en-US
 X-MS-Has-Attach: 
 X-MS-TNEF-Correlator: 
-x-clientproxiedby: SN6PR2101CA0017.namprd21.prod.outlook.com
- (2603:10b6:805:106::27) To MWHPR12MB1806.namprd12.prod.outlook.com
- (2603:10b6:300:10d::21)
 authentication-results: spf=none (sender IP is )
- smtp.mailfrom=kim.phillips@amd.com; 
-x-ms-exchange-messagesentrepresentingtype: 1
-x-originating-ip: [165.204.77.1]
+ smtp.mailfrom=baicar@os.amperecomputing.com; 
+x-originating-ip: [174.109.142.144]
 x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 9ede45b6-e7f9-4a75-9786-08d705574f45
-x-ms-office365-filtering-ht: Tenant
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(1401327)(4618075)(2017052603328)(7193020);SRVR:MWHPR12MB1758;
-x-ms-traffictypediagnostic: MWHPR12MB1758:
-x-microsoft-antispam-prvs: <MWHPR12MB1758EF86B2D73DFBD857034087F00@MWHPR12MB1758.namprd12.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:1824;
-x-forefront-prvs: 0094E3478A
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(346002)(396003)(136003)(376002)(366004)(39860400002)(199004)(189003)(3846002)(14454004)(8676002)(6486002)(6436002)(6116002)(52116002)(2501003)(8936002)(4326008)(26005)(5660300002)(2906002)(25786009)(256004)(6246003)(53936002)(66446008)(76176011)(64756008)(31696002)(66476007)(66556008)(229853002)(66946007)(81156014)(81166006)(6512007)(186003)(66066001)(54906003)(86362001)(110136005)(71200400001)(71190400001)(31686004)(478600001)(102836004)(486006)(316002)(305945005)(7736002)(446003)(11346002)(68736007)(386003)(53546011)(6506007)(36756003)(476003)(2616005)(99286004);DIR:OUT;SFP:1101;SCL:1;SRVR:MWHPR12MB1758;H:MWHPR12MB1806.namprd12.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
-received-spf: None (protection.outlook.com: amd.com does not designate
- permitted sender hosts)
+x-ms-office365-filtering-correlation-id: 26b1db25-433e-4007-7f84-08d705b64e9a
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(1401327)(2017052603328)(7193020);SRVR:BYAPR01MB4055;
+x-ms-traffictypediagnostic: BYAPR01MB4055:
+x-ms-exchange-purlcount: 1
+x-microsoft-antispam-prvs: <BYAPR01MB4055A29CA9895A7CE785F1B4E3F30@BYAPR01MB4055.prod.exchangelabs.com>
+x-ms-oob-tlc-oobclassifiers: OLM:2887;
+x-forefront-prvs: 0095BCF226
+x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(4636009)(366004)(136003)(39840400004)(396003)(376002)(346002)(189003)(199004)(966005)(76176011)(3846002)(478600001)(71190400001)(71200400001)(66446008)(76116006)(186003)(64756008)(66476007)(66556008)(66946007)(8936002)(99286004)(91956017)(14454004)(68736007)(6506007)(53546011)(14444005)(26005)(66066001)(86362001)(102836004)(25786009)(7696005)(6116002)(4326008)(256004)(55016002)(486006)(7736002)(7416002)(52536014)(229853002)(5660300002)(476003)(6436002)(446003)(2501003)(54906003)(110136005)(11346002)(316002)(2906002)(81166006)(81156014)(8676002)(305945005)(74316002)(6246003)(9686003)(6306002)(53936002)(33656002);DIR:OUT;SFP:1102;SCL:1;SRVR:BYAPR01MB4055;H:BYAPR01MB3975.prod.exchangelabs.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:0;
+received-spf: None (protection.outlook.com: os.amperecomputing.com does not
+ designate permitted sender hosts)
 x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: Pa9J3ZWM7CjaBIbDGWuKpDyvncEQouLtqDtBEhf/P35JRP0TpxAeMFymNO1cil0yQ2QQSSHOPnz9XGUgQEfFIddRiZywWnmFjPHxa00Lz12pOEvQ80HqdvF2Yp+hdaOj7pUlQy7VaselJczAiXFBL8Stxi/fk/xhIyjthTxqXZ0dkLWAFtH5duC3v/9r8vgAS35jRaUQR5Cx+tlvFrjBMLs8tBQjSQI6SHh9UwC46lJJk/w7m3B3wyR6NWVBj0D4xIKAS6LTAP9LvIXf67Lwx/W64LFjXlgPua5O8AFfnm62c8wxjeEjzyOSYicFmRVIIFUpiMDKlzXwNkl/b1fqrlmLzVyKMQinYGg3Cj7IujZRr1RwKVYOmr7nPfpSkLuacNtTmrd9U9Crrq4AD5ArbE6WlPatfoe6GUPkrKmQaFM=
-Content-Type: text/plain; charset="Windows-1252"
-Content-ID: <5B6D0F510AADE5429747A14E82A53C05@namprd12.prod.outlook.com>
+x-microsoft-antispam-message-info: KL+oScjiwncfzVQjXVLRwBmFA8lKFJN7qbVGMlqt9K4QQuxb/n/yk9G4c5QWHTkDybDyofbBi7lEZyBcB7yG4J9V3Zl0dz7iKamvW7W51V/ITvu6as6A9q3KRJS/awKJ+Bf5xt/4Zhmi90sobkrFWy0sKipydAaZ6twD9ZtdyM58G89tM8MEl0icH2xSa+h6nyY9VVMnCG8INIbd+J1vT+WtaRknlCGPUIFQC3ChEXpTq8yawy0dw4fS2MXOSOqEiACluoUAL8k/Fx4ClD0c/LLmiENDhKXDF2VNIpIdVhJbdmHDE6HtRgC7FmzsQZFdo2d3lbFDl6ekjXA2kFur5kaL299ZLk6aOlepBDDL5JG7rEkprKCz93o+xsqXiGJ0SzMxqFWx3QAsCaeCIhMI+6dopov0wUm3ki/H2jmmczw=
+Content-Type: text/plain; charset="iso-8859-1"
 Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9ede45b6-e7f9-4a75-9786-08d705574f45
-X-MS-Exchange-CrossTenant-originalarrivaltime: 10 Jul 2019 16:54:44.8840
+X-OriginatorOrg: os.amperecomputing.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 26b1db25-433e-4007-7f84-08d705b64e9a
+X-MS-Exchange-CrossTenant-originalarrivaltime: 11 Jul 2019 04:14:45.5520
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-id: 3bc2b170-fd94-476d-b0ce-4229bdc904a7
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: kphillips@amd.com
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR12MB1758
+X-MS-Exchange-CrossTenant-userprincipalname: Baicar@os.amperecomputing.com
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR01MB4055
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On 7/9/19 4:56 PM, Ghannam, Yazen wrote:
-> From: Yazen Ghannam <yazen.ghannam@amd.com>
->=20
-> The struct chip_select array that's used for saving chip select bases
-> and masks is fixed at length of two. There should be one struct
-> chip_select for each controller, so this array should be increased to
-> support systems that may have more than two controllers.
->=20
-> Increase the size of the struct chip_select array to eight, which is the
-> largest number of controllers per die currently supported on AMD
-> systems.
->=20
-> Fix number of DIMMs and Chip Select bases/masks on Family17h, because AMD
-> Family 17h systems support 2 DIMMs, 4 CS bases, and 2 CS masks per
-> channel.
->=20
-> Also, carve out the Family 17h+ reading of the bases/masks into a
-> separate function. This effectively reverts the original bases/masks
-> reading code to before Family 17h support was added.
->=20
-> This is a second version of a commit that was reverted.
->=20
-> Fixes: 07ed82ef93d6 ("EDAC, amd64: Add Fam17h debug output")
-> Fixes: 8de9930a4618 ("Revert "EDAC/amd64: Support more than two controlle=
-rs for chip select handling"")
-> Signed-off-by: Yazen Ghannam <yazen.ghannam@amd.com>
-> ---
+Hi James, Mark,
 
-For this and the rest of the series:
+On Tue, Jul 9, 2019 at 8:52 PM Tyler Baicar OS <baicar@os.amperecomputing.c=
+om> wrote:
+> On Mon, Jul 8, 2019 at 10:10 AM James Morse <james.morse@arm.com> wrote:
+> > On 02/07/2019 17:51, Tyler Baicar OS wrote:
+> > > @@ -632,6 +633,8 @@ static int do_sea(unsigned long addr, unsigned in=
+t esr, struct pt_regs *regs)
+> > >
+> > >       inf =3D esr_to_fault_info(esr);
+> > >
+> > > +     arch_arm_ras_report_error();
+> > > +
+> > >       /*
+> > >        * Return value ignored as we rely on signal merging.
+> > >        * Future patches will make this more robust.
+> > >
+> >
+> > If we interrupted a preemptible context, do_sea() is preemptible too...=
+ This means we
+> > can't know if we're still running on the same CPU as the one that took =
+the external-abort.
+> > (until this series, it hasn't mattered).
+> >
+> > Fixing this means cramming something into entry.S's el1_da, as this may=
+ unmask interrupts
+> > before calling do_mem_abort(). But its going to be ugly because some of=
+ do_mem_abort()s
+> > ESR values need to be preemptible because they sleep, e.g. page-faults =
+calling
+> > handle_mm_fault().
+> > For do_sea(), do_exit() will 'fix' the preempt count if we kill the thr=
+ead, but if we
+> > don't, it still needs to be balanced. Doing all this in assembly is goi=
+ng to be unreadable!
+> >
+> > Mark Rutland has a series to move the entry assembly into C [0]. Based =
+on that that it
+> > should be possible for the new el1_abort() to spot a Synchronous-Extern=
+al-Abort ESR, and
+> > wrap the do_mem_abort() with preempt enable/disable, before inheriting =
+the flags. (which
+> > for synchronous exceptions, I think we should always do)
+> >
+> > [0] https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git/log/=
+?h=3Darm64/entry-deasm
+>
+> Hey James,
+>
+> Good catch! I didn't think the synchronous route was preemptible.
+>
+> I wasn't seeing this issue when testing this on emulation, but I was able=
+ to
+> test and prove the issue on a Neoverse N1 SDP:
+>
+> root@genericarmv8:~# echo 0x100000000 > /proc/cached_read
+> [   42.985622] Reading from address 0x100000000
+> [   42.989893] WARNING: CPU: 0 PID: 2812 at /home/tyler/neoverse/arm-refe=
+rence-
+> platforms/linux/arch/arm64/kernel/cpufeature.c:1940 this_cpu_has_cap+0x68=
+/0x78
+> [..]
+> [   43.119083] Call trace:
+> [   43.121515]  this_cpu_has_cap+0x68/0x78
+> [   43.125338]  do_sea+0x34/0x70
+> [   43.128292]  do_mem_abort+0x3c/0x98
+> [   43.131765]  el1_da+0x20/0x94
+> [   43.134722]  cached_read+0x30/0x68
+> [   43.138112]  simple_attr_write+0xbc/0x128
+> [   43.142109]  proc_reg_write+0x60/0xa8
+> [   43.145757]  __vfs_write+0x18/0x40
+> [   43.149145]  vfs_write+0xa4/0x1b8
+> [   43.152445]  ksys_write+0x64/0xe0
+> [   43.155746]  __arm64_sys_write+0x14/0x20
+> [   43.159654]  el0_svc_common.constprop.0+0xa8/0x100
+> [   43.164430]  el0_svc_handler+0x28/0x78
+> [   43.168165]  el0_svc+0x8/0xc
+> [   43.171031] ---[ end trace 2c27619659261a1d ]---
+> [   43.175647] Internal error: synchronous external abort: 96000410 [#1]
+> PREEMPT SMP
+> [..]
+>
+> That warning is because it's preemptible:
+>
+> if (!WARN_ON(preemptible()) && n < ARM64_NCAPS) {
+>
+> I'll pull Mark's series in and add the preempt enable/disable around the =
+call
+> to do_mem_abort() in el1_abort() and test that out!
 
-Tested-by: Kim Phillips <kim.phillips@amd.com>
+I was able to pull in the series mentioned [0] and add a patch to wrap
+do_mem_abort with preempt disable/enable and the warning has gone away.
+
+diff --git a/arch/arm64/kernel/entry-common.c b/arch/arm64/kernel/entry-com=
+mon.c
+index 43aa78331e72..26cdf7db511a 100644
+--- a/arch/arm64/kernel/entry-common.c
++++ b/arch/arm64/kernel/entry-common.c
+@@ -118,7 +118,25 @@ static void el1_abort(struct pt_regs *regs, unsigned l=
+ong esr)
+ 	unsigned long far =3D read_sysreg(far_el1);
+ 	local_daif_inherit(regs);
+ 	far =3D untagged_addr(far);
+-	do_mem_abort(far, esr, regs);
++
++	switch (esr & ESR_ELx_FSC) {
++	case ESR_ELx_FSC_EXTABT:	// Synchronous External Abort
++	case 0x14:			// SEA level 0 translation table walk
++	case 0x15:			// SEA level 1 translation table walk
++	case 0x16:			// SEA level 2 translation table walk
++	case 0x17:			// SEA level 3 translation table walk
++	case 0x18:			// Synchronous ECC error
++	case 0x1c:			// SECC level 0 translation table walk
++	case 0x1d:			// SECC level 1 translation table walk
++	case 0x1e:			// SECC level 2 translation table walk
++	case 0x1f:			// SECC level 3 translation table walk
++		preempt_disable();
++		do_mem_abort(far, esr, regs);
++		preempt_enable();
++		break;
++	default:
++		do_mem_abort(far, esr, regs);
++	};
+ }
+=20
+ /* Stack or PC alignment exception handling */
+--=20
+
+
+Is that what you had in mind James?
+
+Has this series [0] been accepted and is just waiting to be pulled now?
+Do you want me to add tested-by?
 
 Thanks,
+Tyler
 
-Kim
+[0] https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git/log/?h=
+=3Darm64/entry-deasm=
