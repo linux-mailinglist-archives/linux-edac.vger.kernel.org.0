@@ -2,66 +2,113 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E525E687AF
-	for <lists+linux-edac@lfdr.de>; Mon, 15 Jul 2019 13:04:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B745968A65
+	for <lists+linux-edac@lfdr.de>; Mon, 15 Jul 2019 15:24:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729803AbfGOLDi (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Mon, 15 Jul 2019 07:03:38 -0400
-Received: from mail-pg1-f196.google.com ([209.85.215.196]:32916 "EHLO
-        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729661AbfGOLDh (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Mon, 15 Jul 2019 07:03:37 -0400
-Received: by mail-pg1-f196.google.com with SMTP id m4so7551621pgk.0
-        for <linux-edac@vger.kernel.org>; Mon, 15 Jul 2019 04:03:37 -0700 (PDT)
+        id S1730124AbfGONYk (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Mon, 15 Jul 2019 09:24:40 -0400
+Received: from smtp-fw-9102.amazon.com ([207.171.184.29]:6220 "EHLO
+        smtp-fw-9102.amazon.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730093AbfGONYj (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Mon, 15 Jul 2019 09:24:39 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:from:date:message-id:subject:to;
-        bh=at1U0zLzNGQlxAxn9clrRSHSPpGB2zlKGmciYViXmzQ=;
-        b=QRb1GBodFoBhFvJPBdxPE4VAqCl+I+T1SKUDc8YhKIcP8qXLNKmtBmeLwjLs/FO9lZ
-         75gCGAxY+YSs9c6HnUneWVQ5Kuc7cIu7HA1ZwTW36nCFWmVeEdZxTARPq/JJ6pFyLQCC
-         i5F57UJ0HSPfhhGiuIoSnyQ2CEuZZYzSvF/92SwjNSSKKvpKVbRgR8KxSyIf95yOdirX
-         vUpU9SAkZRrnMLlykrQni0TuHswl2ZAFQk4VFvbGPWK0ElKuMbgEj9smyMqgESRQW96Z
-         0AILN2JphlyIDpV3m3PpFXakYu3MGnxotH6bOcGMyGpkv5udFQwKTslRRPJv+1YEgJFw
-         GLhA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
-        bh=at1U0zLzNGQlxAxn9clrRSHSPpGB2zlKGmciYViXmzQ=;
-        b=UMl8tlz06o8g78iyL6ZSrccF1p9vpT2zW5C4zP/7wdmf3jQ426JUxnNfV3ctVi5l52
-         ugYUYido+yxrg+Ism+HytcozZhbj9eU2FTnr2FyZ2y/ODO16CCssregEdFAZD9uLOkuw
-         DaJ+WWdY3pcm+8lZtJm4Ux3vugH6Yht2nc8OSDbY1g+O3PXWC1Mg9txpQAaLz7pRvoso
-         AfC1jLKvDTRFSf0tf10BuLleew7jZ8E8H4T4pbVa8v9Mtx2QlJi6bnzZrVPIvK+4Bliv
-         PvVvbULKPwGt2smHtyyQdmPY47AdXzqT1cc3WQnvnBYDOgr0CwrnQnUS0SW4L7RlMgqw
-         8PhQ==
-X-Gm-Message-State: APjAAAW1idOS6C/at8kC5W1u45JVPhAgGlJ8KrZRzS00+yhLZQfdtocy
-        5LeCIp+KmPyQ1Ds9RuAJotHP7vGrkICBSg4szWs=
-X-Google-Smtp-Source: APXvYqzZtOEA+O4p1z4qZpCetbNMVF7GlYWpoUrGzFqj2Xbxoz/rNpVURYzRILo4We5FvCDz7WNaWyJleYBMiLbsRiY=
-X-Received: by 2002:a17:90a:9903:: with SMTP id b3mr28453816pjp.80.1563188616818;
- Mon, 15 Jul 2019 04:03:36 -0700 (PDT)
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1563197079; x=1594733079;
+  h=from:to:cc:subject:date:message-id:mime-version;
+  bh=jLT/6elo+nK0L5GVh/S6r9+jX5YDnfWgKIzyGhZRn9Q=;
+  b=iaCvS/wmrBFPXhq5mW827ggdq1yZSxpLYPXxLJJTjj5EvfxCmo6OZYn4
+   PFv71Z9oQs6QFAy2Mvgsc8rTqq8E4NyinwCeK5NhFQ6MTWbbturkB6yBK
+   ivabI12cv++t7i0ic+4Xx5LcTVUzdar2+svhdVwWBPdL2y1HJPDw9Yy8K
+   Q=;
+X-IronPort-AV: E=Sophos;i="5.62,493,1554768000"; 
+   d="scan'208";a="685555044"
+Received: from sea3-co-svc-lb6-vlan2.sea.amazon.com (HELO email-inbound-relay-1e-97fdccfd.us-east-1.amazon.com) ([10.47.22.34])
+  by smtp-border-fw-out-9102.sea19.amazon.com with ESMTP; 15 Jul 2019 13:24:32 +0000
+Received: from EX13MTAUEA001.ant.amazon.com (iad55-ws-svc-p15-lb9-vlan3.iad.amazon.com [10.40.159.166])
+        by email-inbound-relay-1e-97fdccfd.us-east-1.amazon.com (Postfix) with ESMTPS id 5B75BA21FA;
+        Mon, 15 Jul 2019 13:24:28 +0000 (UTC)
+Received: from EX13D19EUB003.ant.amazon.com (10.43.166.69) by
+ EX13MTAUEA001.ant.amazon.com (10.43.61.243) with Microsoft SMTP Server (TLS)
+ id 15.0.1367.3; Mon, 15 Jul 2019 13:24:27 +0000
+Received: from ub6d44c9ce3e25c.ant.amazon.com (10.43.162.137) by
+ EX13D19EUB003.ant.amazon.com (10.43.166.69) with Microsoft SMTP Server (TLS)
+ id 15.0.1367.3; Mon, 15 Jul 2019 13:24:18 +0000
+From:   Hanna Hawa <hhhawa@amazon.com>
+To:     <robh+dt@kernel.org>, <mark.rutland@arm.com>, <bp@alien8.de>,
+        <mchehab@kernel.org>, <james.morse@arm.com>, <davem@davemloft.net>,
+        <gregkh@linuxfoundation.org>, <linus.walleij@linaro.org>,
+        <Jonathan.Cameron@huawei.com>, <nicolas.ferre@microchip.com>,
+        <paulmck@linux.ibm.com>
+CC:     <dwmw@amazon.co.uk>, <benh@amazon.com>, <ronenk@amazon.com>,
+        <talel@amazon.com>, <jonnyc@amazon.com>, <hanochu@amazon.com>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-edac@vger.kernel.org>, <hhhawa@amazon.com>
+Subject: [PATCH v3 0/4] Add support for Amazon's Annapurna Labs EDAC for L1/L2
+Date:   Mon, 15 Jul 2019 16:24:05 +0300
+Message-ID: <1563197049-12679-1-git-send-email-hhhawa@amazon.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Received: by 2002:a17:90a:b78d:0:0:0:0 with HTTP; Mon, 15 Jul 2019 04:03:36
- -0700 (PDT)
-From:   Donald Douglas <ddouglasng@gmail.com>
-Date:   Mon, 15 Jul 2019 04:03:36 -0700
-Message-ID: <CALVR28EtFZG5M72gg5535c6GQgjUkrOmnToQem=_bwo5pu8tgQ@mail.gmail.com>
-Subject: Kindly Respond
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
+X-Originating-IP: [10.43.162.137]
+X-ClientProxiedBy: EX13D05UWC003.ant.amazon.com (10.43.162.226) To
+ EX13D19EUB003.ant.amazon.com (10.43.166.69)
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-Hello,
-I am Barr Fredrick Mbogo a business consultant i have a lucrative
-business to discuss with you from the Eastern part of Africa Uganda to
-be precise aimed at agreed percentage upon your acceptance of my hand
-in business and friendship. Kindly respond to me if you are interested
-to partner with me for an update. Very important.
+This series adds L1 and L2 caches support for error detection and
+correction for Amazon's Annapurna Labs SoCs.
+Alpine SoCs supports L1 and L2 single bit correction and two bits detection
+capability based on ARM implementation.
 
-Yours Sincerely,
-Donald Douglas,
-For,
-Barr Frederick Mbogo
-Legal Consultant.
-Reply to: barrfredmbogo@consultant.com
+Changes since v2:
+-----------------
+- Use BIT for single bit instead of GENMASK
+- Use BIT_ULL and GENMASK_ULL for 64bit vector
+- Fix the mod_name/ctrl_name.
+
+Changes since v1:
+-----------------
+- Split into two drivers
+- Get cpu-mask according to l2-cache handler from devicetree
+- Remove parameter casting
+- Use GENMASK() in bit mask
+- Use FIELD_GET()
+- Update define description PLRU_RAM -> PF_RAM
+- Use sys_reg() and read_sysreg_s()
+- Remove all write/read wrappers
+- Check fatal field to set if the error correctable or not
+- Remove un-relevant information from error prints.
+- Update smp_call_function_single() call function to wait
+- remove usage of get_online_cpus/put_online_cpus
+- Use on_each_cpu() and smp_call_function_any() instead of loop with for_each_cpu.
+- use buffer for error prints and pass to edac API
+- Remove edac_op_state set
+- Add for loop to report on repeated errors of the same type
+- Fix error name of the TLB to be L2_TLB as written in ARM TRM
+- Minor change in Kconfig
+- Minor changes in commit message
+
+Hanna Hawa (4):
+  dt-bindings: EDAC: Add Amazon's Annapurna Labs L1 EDAC
+  edac: Add support for Amazon's Annapurna Labs L1 EDAC
+  dt-bindings: EDAC: Add Amazon's Annapurna Labs L2 EDAC
+  edac: Add support for Amazon's Annapurna Labs L2 EDAC
+
+ .../devicetree/bindings/edac/amazon,al-l1-edac.txt |  14 ++
+ .../devicetree/bindings/edac/amazon,al-l2-edac.txt |  20 +++
+ MAINTAINERS                                        |  12 ++
+ drivers/edac/Kconfig                               |  16 ++
+ drivers/edac/Makefile                              |   2 +
+ drivers/edac/al_l1_edac.c                          | 156 +++++++++++++++++
+ drivers/edac/al_l2_edac.c                          | 187 +++++++++++++++++++++
+ 7 files changed, 407 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/edac/amazon,al-l1-edac.txt
+ create mode 100644 Documentation/devicetree/bindings/edac/amazon,al-l2-edac.txt
+ create mode 100644 drivers/edac/al_l1_edac.c
+ create mode 100644 drivers/edac/al_l2_edac.c
+
+-- 
+2.7.4
+
