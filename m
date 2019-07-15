@@ -2,35 +2,34 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B1C4E69671
-	for <lists+linux-edac@lfdr.de>; Mon, 15 Jul 2019 17:04:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E46936963D
+	for <lists+linux-edac@lfdr.de>; Mon, 15 Jul 2019 17:03:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733166AbfGOPE1 (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Mon, 15 Jul 2019 11:04:27 -0400
-Received: from mail.kernel.org ([198.145.29.99]:57050 "EHLO mail.kernel.org"
+        id S2389296AbfGOPDI (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Mon, 15 Jul 2019 11:03:08 -0400
+Received: from mail.kernel.org ([198.145.29.99]:39130 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2388219AbfGOOHw (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Mon, 15 Jul 2019 10:07:52 -0400
+        id S2388262AbfGOOKW (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Mon, 15 Jul 2019 10:10:22 -0400
 Received: from sasha-vm.mshome.net (unknown [73.61.17.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id A88D020868;
-        Mon, 15 Jul 2019 14:07:50 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id EB7C720868;
+        Mon, 15 Jul 2019 14:10:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1563199671;
-        bh=oPD6bOUlXEdTcnSJVgy5DPQWInMIKIvhk3WyIgRbzfs=;
+        s=default; t=1563199821;
+        bh=vcGn3ElHcdimtT8hx9eq+HzmedGg7CPrXqHkCAf/oPY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=tuoeG2Il32KuIThAUFzci446jxEmRqd+lxB1GhGq8r9KaaEBG/+94VwiRaOk1t49V
-         dLDK2AsNqUabELA5WTwbrcEATmtwVJcVRueklRiYzGEE/cdNqOzVCq9y6wvvbqbJOP
-         fxZ36kkfQUydIodiniFnhslmUU67NGQjna3Gt0iM=
+        b=wRQICuuvFXB/MTdwXfQLDXEpSi58RjFBmGTjjvfcFQkcprxJms7Mhi9476OIp56O6
+         o6QYvWyEWTqngQrNXoY/SeCDX22vlyJPdSJjsh9+YstB8izovULxOtfY/N/EExNPdP
+         9PeuA3iBxN7YDlTA6nULpAM69ow71D/WwL9Xru+U=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Borislav Petkov <bp@suse.de>, Tony Luck <tony.luck@intel.com>,
-        linux-edac <linux-edac@vger.kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH AUTOSEL 5.1 068/219] RAS/CEC: Fix pfn insertion
-Date:   Mon, 15 Jul 2019 10:01:09 -0400
-Message-Id: <20190715140341.6443-68-sashal@kernel.org>
+Cc:     Greg KH <gregkh@linuxfoundation.org>, Borislav Petkov <bp@suse.de>,
+        Sasha Levin <sashal@kernel.org>, linux-edac@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.1 116/219] EDAC/sysfs: Drop device references properly
+Date:   Mon, 15 Jul 2019 10:01:57 -0400
+Message-Id: <20190715140341.6443-116-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20190715140341.6443-1-sashal@kernel.org>
 References: <20190715140341.6443-1-sashal@kernel.org>
@@ -43,56 +42,59 @@ Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-From: Borislav Petkov <bp@suse.de>
+From: Greg KH <gregkh@linuxfoundation.org>
 
-[ Upstream commit 6d8e294bf5f0e85c34e8b14b064e2965f53f38b0 ]
+[ Upstream commit 7adc05d2dc3af95e4e1534841d58f736262142cd ]
 
-When inserting random PFNs for debugging the CEC through
-(debugfs)/ras/cec/pfn, depending on the return value of pfn_set(),
-multiple values get inserted per a single write.
+Do put_device() if device_add() fails.
 
-That is because simple_attr_write() interprets a retval of 0 as
-success and claims the whole input. However, pfn_set() returns the
-cec_add_elem() value, which, if > 0 and smaller than the whole input
-length, makes glibc continue issuing the write syscall until there's
-input left:
+ [ bp: do device_del() for the successfully created devices in
+   edac_create_csrow_objects(), on the unwind path. ]
 
-  pfn_set
-  simple_attr_write
-  debugfs_attr_write
-  full_proxy_write
-  vfs_write
-  ksys_write
-  do_syscall_64
-  entry_SYSCALL_64_after_hwframe
-
-leading to those repeated calls.
-
-Return 0 to fix that.
-
+Signed-off-by: Greg KH <gregkh@linuxfoundation.org>
 Signed-off-by: Borislav Petkov <bp@suse.de>
-Cc: Tony Luck <tony.luck@intel.com>
-Cc: linux-edac <linux-edac@vger.kernel.org>
+Link: https://lkml.kernel.org/r/20190427214925.GE16338@kroah.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/ras/cec.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ drivers/edac/edac_mc_sysfs.c | 10 +++++++---
+ 1 file changed, 7 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/ras/cec.c b/drivers/ras/cec.c
-index f85d6b7a1984..5d2b2c02cbbe 100644
---- a/drivers/ras/cec.c
-+++ b/drivers/ras/cec.c
-@@ -369,7 +369,9 @@ static int pfn_set(void *data, u64 val)
- {
- 	*(u64 *)data = val;
- 
--	return cec_add_elem(val);
-+	cec_add_elem(val);
+diff --git a/drivers/edac/edac_mc_sysfs.c b/drivers/edac/edac_mc_sysfs.c
+index 464174685589..bf9273437e3f 100644
+--- a/drivers/edac/edac_mc_sysfs.c
++++ b/drivers/edac/edac_mc_sysfs.c
+@@ -443,7 +443,8 @@ static int edac_create_csrow_objects(struct mem_ctl_info *mci)
+ 		csrow = mci->csrows[i];
+ 		if (!nr_pages_per_csrow(csrow))
+ 			continue;
+-		put_device(&mci->csrows[i]->dev);
 +
-+	return 0;
- }
++		device_del(&mci->csrows[i]->dev);
+ 	}
  
- DEFINE_DEBUGFS_ATTRIBUTE(pfn_ops, u64_get, pfn_set, "0x%llx\n");
+ 	return err;
+@@ -645,9 +646,11 @@ static int edac_create_dimm_object(struct mem_ctl_info *mci,
+ 	dev_set_drvdata(&dimm->dev, dimm);
+ 	pm_runtime_forbid(&mci->dev);
+ 
+-	err =  device_add(&dimm->dev);
++	err = device_add(&dimm->dev);
++	if (err)
++		put_device(&dimm->dev);
+ 
+-	edac_dbg(0, "creating rank/dimm device %s\n", dev_name(&dimm->dev));
++	edac_dbg(0, "created rank/dimm device %s\n", dev_name(&dimm->dev));
+ 
+ 	return err;
+ }
+@@ -928,6 +931,7 @@ int edac_create_sysfs_mci_device(struct mem_ctl_info *mci,
+ 	err = device_add(&mci->dev);
+ 	if (err < 0) {
+ 		edac_dbg(1, "failure: create device %s\n", dev_name(&mci->dev));
++		put_device(&mci->dev);
+ 		goto out;
+ 	}
+ 
 -- 
 2.20.1
 
