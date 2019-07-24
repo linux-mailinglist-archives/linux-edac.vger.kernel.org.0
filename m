@@ -2,27 +2,27 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id ABDBC73F68
-	for <lists+linux-edac@lfdr.de>; Wed, 24 Jul 2019 22:32:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BA8574680
+	for <lists+linux-edac@lfdr.de>; Thu, 25 Jul 2019 07:53:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729023AbfGXT2y (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Wed, 24 Jul 2019 15:28:54 -0400
-Received: from mail.kernel.org ([198.145.29.99]:47534 "EHLO mail.kernel.org"
+        id S2404260AbfGYFkD (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Thu, 25 Jul 2019 01:40:03 -0400
+Received: from mail.kernel.org ([198.145.29.99]:54352 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728886AbfGXT2w (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Wed, 24 Jul 2019 15:28:52 -0400
+        id S2404241AbfGYFj7 (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Thu, 25 Jul 2019 01:39:59 -0400
 Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 6541120659;
-        Wed, 24 Jul 2019 19:28:51 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id B155E22BEF;
+        Thu, 25 Jul 2019 05:39:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1563996531;
-        bh=q+ot2fxsXnPozpPYSz+QkVHJLk2RXJQAoDWjkYnihxE=;
+        s=default; t=1564033199;
+        bh=2SuPtkwPkO4qr1b97i+rzqWm8BJ7svTIjfYhjq5vB+M=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=mW8kXynhnlSX5OLjCEvoV/ND4zNX0iOJlmbJn9hkCc/JWqLoqMPfCtcDqf06tQrmI
-         f4LgYF3/TTTojMfbQQcX9bZ8RnOHjlziygwSzl6muX4a/yKZPoj/ZP495izmiB6xs/
-         bedA4GENImPrNba4O7NxCnVNrr+Dd9v14NquPHfA=
+        b=eFIuo+42wXpqauJqajL3D6jm3weUdM7ZmrZ/2xrlQPqxTksIW4HksC2KTN+vSvDfm
+         50uuOcVshjxcGAR6MhPPENPDL6z7I8JIPI/jrlfSLikWXLWh6b2cBNUA7f2VuY0mGh
+         GE4V87mGFUCQDsqHmMrjPE61/TlEEYr99elV6qYU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -32,12 +32,12 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         linux-edac <linux-edac@vger.kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.2 130/413] EDAC/sysfs: Fix memory leak when creating a csrow object
-Date:   Wed, 24 Jul 2019 21:17:01 +0200
-Message-Id: <20190724191744.373441644@linuxfoundation.org>
+Subject: [PATCH 4.19 086/271] EDAC/sysfs: Fix memory leak when creating a csrow object
+Date:   Wed, 24 Jul 2019 21:19:15 +0200
+Message-Id: <20190724191702.568005838@linuxfoundation.org>
 X-Mailer: git-send-email 2.22.0
-In-Reply-To: <20190724191735.096702571@linuxfoundation.org>
-References: <20190724191735.096702571@linuxfoundation.org>
+In-Reply-To: <20190724191655.268628197@linuxfoundation.org>
+References: <20190724191655.268628197@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -66,7 +66,7 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 7 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/edac/edac_mc_sysfs.c b/drivers/edac/edac_mc_sysfs.c
-index bf9273437e3f..7c01e1cc030c 100644
+index 20374b8248f0..e50610b5bd06 100644
 --- a/drivers/edac/edac_mc_sysfs.c
 +++ b/drivers/edac/edac_mc_sysfs.c
 @@ -404,6 +404,8 @@ static inline int nr_pages_per_csrow(struct csrow_info *csrow)
@@ -76,9 +76,9 @@ index bf9273437e3f..7c01e1cc030c 100644
 +	int err;
 +
  	csrow->dev.type = &csrow_attr_type;
+ 	csrow->dev.bus = mci->bus;
  	csrow->dev.groups = csrow_dev_groups;
- 	device_initialize(&csrow->dev);
-@@ -415,7 +417,11 @@ static int edac_create_csrow_object(struct mem_ctl_info *mci,
+@@ -416,7 +418,11 @@ static int edac_create_csrow_object(struct mem_ctl_info *mci,
  	edac_dbg(0, "creating (virtual) csrow node %s\n",
  		 dev_name(&csrow->dev));
  
