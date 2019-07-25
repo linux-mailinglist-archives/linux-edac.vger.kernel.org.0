@@ -2,97 +2,87 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BA8574680
-	for <lists+linux-edac@lfdr.de>; Thu, 25 Jul 2019 07:53:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 928CF74E73
+	for <lists+linux-edac@lfdr.de>; Thu, 25 Jul 2019 14:47:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2404260AbfGYFkD (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Thu, 25 Jul 2019 01:40:03 -0400
-Received: from mail.kernel.org ([198.145.29.99]:54352 "EHLO mail.kernel.org"
+        id S2389067AbfGYMrA (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Thu, 25 Jul 2019 08:47:00 -0400
+Received: from foss.arm.com ([217.140.110.172]:56622 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2404241AbfGYFj7 (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Thu, 25 Jul 2019 01:39:59 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id B155E22BEF;
-        Thu, 25 Jul 2019 05:39:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1564033199;
-        bh=2SuPtkwPkO4qr1b97i+rzqWm8BJ7svTIjfYhjq5vB+M=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=eFIuo+42wXpqauJqajL3D6jm3weUdM7ZmrZ/2xrlQPqxTksIW4HksC2KTN+vSvDfm
-         50uuOcVshjxcGAR6MhPPENPDL6z7I8JIPI/jrlfSLikWXLWh6b2cBNUA7f2VuY0mGh
-         GE4V87mGFUCQDsqHmMrjPE61/TlEEYr99elV6qYU=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Pan Bian <bianpan2016@163.com>,
-        Borislav Petkov <bp@suse.de>,
-        James Morse <james.morse@arm.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-edac <linux-edac@vger.kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 086/271] EDAC/sysfs: Fix memory leak when creating a csrow object
-Date:   Wed, 24 Jul 2019 21:19:15 +0200
-Message-Id: <20190724191702.568005838@linuxfoundation.org>
-X-Mailer: git-send-email 2.22.0
-In-Reply-To: <20190724191655.268628197@linuxfoundation.org>
-References: <20190724191655.268628197@linuxfoundation.org>
-User-Agent: quilt/0.66
+        id S2388497AbfGYMrA (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Thu, 25 Jul 2019 08:47:00 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 17377152D;
+        Thu, 25 Jul 2019 05:47:00 -0700 (PDT)
+Received: from [10.1.196.105] (eglon.cambridge.arm.com [10.1.196.105])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 4A80E3F71F;
+        Thu, 25 Jul 2019 05:46:59 -0700 (PDT)
+Subject: Re: [PATCHv2] EDAC, altera: Move Stratix10 SDRAM ECC to peripheral
+To:     thor.thayer@linux.intel.com
+Cc:     bp@alien8.de, mchehab@kernel.org, linux-edac@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <1562956123-23640-1-git-send-email-thor.thayer@linux.intel.com>
+From:   James Morse <james.morse@arm.com>
+Message-ID: <eb7a1e75-2de9-cb60-bf8f-77cd1e71255f@arm.com>
+Date:   Thu, 25 Jul 2019 13:46:57 +0100
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <1562956123-23640-1-git-send-email-thor.thayer@linux.intel.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-GB
+Content-Transfer-Encoding: 7bit
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-[ Upstream commit 585fb3d93d32dbe89e718b85009f9c322cc554cd ]
+Hi Thor,
 
-In edac_create_csrow_object(), the reference to the object is not
-released when adding the device to the device hierarchy fails
-(device_add()). This may result in a memory leak.
-
-Signed-off-by: Pan Bian <bianpan2016@163.com>
-Signed-off-by: Borislav Petkov <bp@suse.de>
-Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: James Morse <james.morse@arm.com>
-Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc: linux-edac <linux-edac@vger.kernel.org>
-Link: https://lkml.kernel.org/r/1555554438-103953-1-git-send-email-bianpan2016@163.com
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/edac/edac_mc_sysfs.c | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/edac/edac_mc_sysfs.c b/drivers/edac/edac_mc_sysfs.c
-index 20374b8248f0..e50610b5bd06 100644
---- a/drivers/edac/edac_mc_sysfs.c
-+++ b/drivers/edac/edac_mc_sysfs.c
-@@ -404,6 +404,8 @@ static inline int nr_pages_per_csrow(struct csrow_info *csrow)
- static int edac_create_csrow_object(struct mem_ctl_info *mci,
- 				    struct csrow_info *csrow, int index)
- {
-+	int err;
-+
- 	csrow->dev.type = &csrow_attr_type;
- 	csrow->dev.bus = mci->bus;
- 	csrow->dev.groups = csrow_dev_groups;
-@@ -416,7 +418,11 @@ static int edac_create_csrow_object(struct mem_ctl_info *mci,
- 	edac_dbg(0, "creating (virtual) csrow node %s\n",
- 		 dev_name(&csrow->dev));
- 
--	return device_add(&csrow->dev);
-+	err = device_add(&csrow->dev);
-+	if (err)
-+		put_device(&csrow->dev);
-+
-+	return err;
- }
- 
- /* Create a CSROW object under specifed edac_mc_device */
--- 
-2.20.1
+On 12/07/2019 19:28, thor.thayer@linux.intel.com wrote:
+> From: Thor Thayer <thor.thayer@linux.intel.com>
+> 
+> ARM32 SoCFPGAs had separate IRQs for SDRAM. ARM64 SoCFPGAs
+> send all DBEs to SError so filtering by source is necessary.
+> 
+> The Stratix10 SDRAM ECC is a better match with the generic
+> Altera peripheral ECC framework because the linked list can
+> be searched to find the ECC block offset and printout
+> the DBE Address.
 
 
+> diff --git a/drivers/edac/altera_edac.c b/drivers/edac/altera_edac.c
+> index c2e693e34d43..09a80b53acea 100644
+> --- a/drivers/edac/altera_edac.c
+> +++ b/drivers/edac/altera_edac.c
 
+> @@ -2231,13 +2275,15 @@ static int altr_edac_a10_probe(struct platform_device *pdev)
+>  		    of_device_is_compatible(child, "altr,socfpga-dma-ecc") ||
+>  		    of_device_is_compatible(child, "altr,socfpga-usb-ecc") ||
+>  		    of_device_is_compatible(child, "altr,socfpga-qspi-ecc") ||
+> +#ifdef CONFIG_EDAC_ALTERA_SDRAM
+> +		    of_device_is_compatible(child, "altr,sdram-edac-s10") ||
+> +#endif
+>  		    of_device_is_compatible(child, "altr,socfpga-sdmmc-ecc"))
+
+I'm just curious: This list looks suspiciously like the altr_edac_a10_device_of_match[]
+list. Is there a reason it can't use of_match_device() here?
+
+>  
+>  			altr_edac_a10_device_add(edac, child);
+>  
+>  #ifdef CONFIG_EDAC_ALTERA_SDRAM
+> -		else if ((of_device_is_compatible(child, "altr,sdram-edac-a10")) ||
+> -			 (of_device_is_compatible(child, "altr,sdram-edac-s10")))
+> +		else if (of_device_is_compatible(child, "altr,sdram-edac-a10"))
+>  			of_platform_populate(pdev->dev.of_node,
+>  					     altr_sdram_ctrl_of_match,
+>  					     NULL, &pdev->dev);
+
+
+Acked-by: James Morse <james.morse@arm.com>
+
+
+Thanks,
+
+James
