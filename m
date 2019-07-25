@@ -2,87 +2,76 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 928CF74E73
-	for <lists+linux-edac@lfdr.de>; Thu, 25 Jul 2019 14:47:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 458C8753B4
+	for <lists+linux-edac@lfdr.de>; Thu, 25 Jul 2019 18:17:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389067AbfGYMrA (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Thu, 25 Jul 2019 08:47:00 -0400
-Received: from foss.arm.com ([217.140.110.172]:56622 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2388497AbfGYMrA (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Thu, 25 Jul 2019 08:47:00 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 17377152D;
-        Thu, 25 Jul 2019 05:47:00 -0700 (PDT)
-Received: from [10.1.196.105] (eglon.cambridge.arm.com [10.1.196.105])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 4A80E3F71F;
-        Thu, 25 Jul 2019 05:46:59 -0700 (PDT)
-Subject: Re: [PATCHv2] EDAC, altera: Move Stratix10 SDRAM ECC to peripheral
-To:     thor.thayer@linux.intel.com
-Cc:     bp@alien8.de, mchehab@kernel.org, linux-edac@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <1562956123-23640-1-git-send-email-thor.thayer@linux.intel.com>
-From:   James Morse <james.morse@arm.com>
-Message-ID: <eb7a1e75-2de9-cb60-bf8f-77cd1e71255f@arm.com>
-Date:   Thu, 25 Jul 2019 13:46:57 +0100
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.0
+        id S1729238AbfGYQRq (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Thu, 25 Jul 2019 12:17:46 -0400
+Received: from bombadil.infradead.org ([198.137.202.133]:59382 "EHLO
+        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727852AbfGYQRq (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Thu, 25 Jul 2019 12:17:46 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=Sender:Content-Transfer-Encoding:
+        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Reply-To:Content-Type:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=YeWUVHzUnbVi15A0M7gIPQwXS4K0+cqPBBcbBnuSLlw=; b=GJEVo9syQdeELHFTQkzyUhcFo
+        b1IYW/CLBgY0wo0MBDlsvySWVjqqrZXoy3c27LHJvPJWyOPakF344QKnMtDStIJpuKlM4UCOVi1mP
+        P6ueXrcUROE/j1CX+4U1Yq8ZnX7xl3d7UxjdEesYCBdxKpM3B7yh4PGw9TUb3PlZn3ASr/MoYGLVk
+        3cvK/yzKa2t84HXndTT6jUkvwfQA6hhd23Bx727izcP/LTLF/Jbt7QMN6KSYYF+5I9m1tAYw96/4l
+        X9ybMqb05rj7KAXH/CQF1Sr+W42HwjjPaTOnmSZ1wIQ+RZiQrvhDecY96/9xT3byd4Ug5Wp/ZTiB0
+        Wh71Ed3NA==;
+Received: from [179.95.31.157] (helo=bombadil.infradead.org)
+        by bombadil.infradead.org with esmtpsa (Exim 4.92 #3 (Red Hat Linux))
+        id 1hqgR7-0007w4-BD; Thu, 25 Jul 2019 16:17:45 +0000
+Received: from mchehab by bombadil.infradead.org with local (Exim 4.92)
+        (envelope-from <mchehab@bombadil.infradead.org>)
+        id 1hqgR5-000APJ-3U; Thu, 25 Jul 2019 12:17:43 -0400
+From:   Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
+Cc:     Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
+        Linux Edac Mailing List <linux-edac@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Borislav Petkov <bp@alien8.de>, Tony Luck <tony.luck@intel.com>
+Subject: [PATCH] MAINTAINERS: update EDAC entry to reflect current tree and maintainers
+Date:   Thu, 25 Jul 2019 12:17:35 -0400
+Message-Id: <1eb2d09e58500bef18428e2b3f52b54d3cd707d5.1564071419.git.mchehab+samsung@kernel.org>
+X-Mailer: git-send-email 2.21.0
 MIME-Version: 1.0
-In-Reply-To: <1562956123-23640-1-git-send-email-thor.thayer@linux.intel.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-GB
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+To:     unlisted-recipients:; (no To-header on input)
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-Hi Thor,
+Tony will start to officially maintain EDAC trees. Also, we'll
+be using a single tree for the EDAC development.
 
-On 12/07/2019 19:28, thor.thayer@linux.intel.com wrote:
-> From: Thor Thayer <thor.thayer@linux.intel.com>
-> 
-> ARM32 SoCFPGAs had separate IRQs for SDRAM. ARM64 SoCFPGAs
-> send all DBEs to SError so filtering by source is necessary.
-> 
-> The Stratix10 SDRAM ECC is a better match with the generic
-> Altera peripheral ECC framework because the linked list can
-> be searched to find the ECC block offset and printout
-> the DBE Address.
+Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
+---
+ MAINTAINERS | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-
-> diff --git a/drivers/edac/altera_edac.c b/drivers/edac/altera_edac.c
-> index c2e693e34d43..09a80b53acea 100644
-> --- a/drivers/edac/altera_edac.c
-> +++ b/drivers/edac/altera_edac.c
-
-> @@ -2231,13 +2275,15 @@ static int altr_edac_a10_probe(struct platform_device *pdev)
->  		    of_device_is_compatible(child, "altr,socfpga-dma-ecc") ||
->  		    of_device_is_compatible(child, "altr,socfpga-usb-ecc") ||
->  		    of_device_is_compatible(child, "altr,socfpga-qspi-ecc") ||
-> +#ifdef CONFIG_EDAC_ALTERA_SDRAM
-> +		    of_device_is_compatible(child, "altr,sdram-edac-s10") ||
-> +#endif
->  		    of_device_is_compatible(child, "altr,socfpga-sdmmc-ecc"))
-
-I'm just curious: This list looks suspiciously like the altr_edac_a10_device_of_match[]
-list. Is there a reason it can't use of_match_device() here?
-
->  
->  			altr_edac_a10_device_add(edac, child);
->  
->  #ifdef CONFIG_EDAC_ALTERA_SDRAM
-> -		else if ((of_device_is_compatible(child, "altr,sdram-edac-a10")) ||
-> -			 (of_device_is_compatible(child, "altr,sdram-edac-s10")))
-> +		else if (of_device_is_compatible(child, "altr,sdram-edac-a10"))
->  			of_platform_populate(pdev->dev.of_node,
->  					     altr_sdram_ctrl_of_match,
->  					     NULL, &pdev->dev);
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 783569e3c4b4..7c22905b5aba 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -5781,10 +5781,10 @@ F:	drivers/edac/thunderx_edac*
+ EDAC-CORE
+ M:	Borislav Petkov <bp@alien8.de>
+ M:	Mauro Carvalho Chehab <mchehab@kernel.org>
++M:	Tony Luck <tony.luck@intel.com>
+ R:	James Morse <james.morse@arm.com>
+ L:	linux-edac@vger.kernel.org
+-T:	git git://git.kernel.org/pub/scm/linux/kernel/git/bp/bp.git for-next
+-T:	git git://git.kernel.org/pub/scm/linux/kernel/git/mchehab/linux-edac.git linux_next
++T:	git git://git.kernel.org/pub/scm/linux/kernel/git/ras/ras.git edac-for-next
+ S:	Supported
+ F:	Documentation/admin-guide/ras.rst
+ F:	Documentation/driver-api/edac.rst
+-- 
+2.21.0
 
 
-Acked-by: James Morse <james.morse@arm.com>
-
-
-Thanks,
-
-James
