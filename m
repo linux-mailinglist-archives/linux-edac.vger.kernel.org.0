@@ -2,217 +2,94 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B4086770F7
-	for <lists+linux-edac@lfdr.de>; Fri, 26 Jul 2019 20:08:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C8D6077ED6
+	for <lists+linux-edac@lfdr.de>; Sun, 28 Jul 2019 11:34:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727290AbfGZSIB (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Fri, 26 Jul 2019 14:08:01 -0400
-Received: from mga12.intel.com ([192.55.52.136]:34946 "EHLO mga12.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725899AbfGZSIB (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Fri, 26 Jul 2019 14:08:01 -0400
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 26 Jul 2019 11:08:00 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.64,311,1559545200"; 
-   d="scan'208";a="173110623"
-Received: from tthayer-hp-z620.an.intel.com ([10.122.105.146])
-  by orsmga003.jf.intel.com with ESMTP; 26 Jul 2019 11:07:59 -0700
-From:   thor.thayer@linux.intel.com
-To:     bp@alien8.de, mchehab@kernel.org, james.morse@arm.com
-Cc:     linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Thor Thayer <thor.thayer@linux.intel.com>
-Subject: [PATCHv3] EDAC, altera: Move Stratix10 SDRAM ECC to peripheral
-Date:   Fri, 26 Jul 2019 13:09:58 -0500
-Message-Id: <1564164598-20927-1-git-send-email-thor.thayer@linux.intel.com>
-X-Mailer: git-send-email 2.7.4
+        id S1725970AbfG1Jep (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Sun, 28 Jul 2019 05:34:45 -0400
+Received: from smtp-fw-9102.amazon.com ([207.171.184.29]:23333 "EHLO
+        smtp-fw-9102.amazon.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725937AbfG1Jep (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Sun, 28 Jul 2019 05:34:45 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1564306484; x=1595842484;
+  h=from:subject:to:cc:references:message-id:date:
+   mime-version:in-reply-to:content-transfer-encoding;
+  bh=HBEj87FM8520lmjB2CAs3MjRc7/bulRXak9RiLFobSE=;
+  b=Ohh6BbE3iaUrMzPYAFCdN2R6o/9zfPmhwuJKu2RUz712wxngd23FmXQo
+   9Ykyk0E2pYnIuFN2Bm/N8dqb6QC4ExLJ619Liae30bWD646U1GWVGdfZz
+   jOyRcpdJrHfR9+gO8PIHRdoCixOlFJ60xnxmMu3cB5q/0fH6sVmU+w2cA
+   4=;
+X-IronPort-AV: E=Sophos;i="5.64,317,1559520000"; 
+   d="scan'208";a="688518889"
+Received: from sea3-co-svc-lb6-vlan2.sea.amazon.com (HELO email-inbound-relay-2b-8cc5d68b.us-west-2.amazon.com) ([10.47.22.34])
+  by smtp-border-fw-out-9102.sea19.amazon.com with ESMTP; 28 Jul 2019 09:34:42 +0000
+Received: from EX13MTAUEA001.ant.amazon.com (pdx4-ws-svc-p6-lb7-vlan3.pdx.amazon.com [10.170.41.166])
+        by email-inbound-relay-2b-8cc5d68b.us-west-2.amazon.com (Postfix) with ESMTPS id D64F8A21E1;
+        Sun, 28 Jul 2019 09:34:41 +0000 (UTC)
+Received: from EX13D08UEE001.ant.amazon.com (10.43.62.126) by
+ EX13MTAUEA001.ant.amazon.com (10.43.61.82) with Microsoft SMTP Server (TLS)
+ id 15.0.1367.3; Sun, 28 Jul 2019 09:34:41 +0000
+Received: from EX13MTAUEE001.ant.amazon.com (10.43.62.200) by
+ EX13D08UEE001.ant.amazon.com (10.43.62.126) with Microsoft SMTP Server (TLS)
+ id 15.0.1367.3; Sun, 28 Jul 2019 09:34:41 +0000
+Received: from [10.107.3.19] (10.107.3.19) by mail-relay.amazon.com
+ (10.43.62.226) with Microsoft SMTP Server (TLS) id 15.0.1367.3 via Frontend
+ Transport; Sun, 28 Jul 2019 09:34:36 +0000
+From:   "Hawa, Hanna" <hhhawa@amazon.com>
+Subject: Re: [UNVERIFIED SENDER] Re: [RFC 1/1] edac: Add a counter parameter
+ for edac_device_handle_ue/ce()
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>
+CC:     <thor.thayer@linux.intel.com>, <bp@alien8.de>,
+        <james.morse@arm.com>, <rric@kernel.org>, <morbidrsa@gmail.com>,
+        <ralf@linux-mips.org>, <david.daney@cavium.com>,
+        <andy.gross@linaro.org>, <david.brown@linaro.org>,
+        <ckadabi@codeaurora.org>, <vnkgutta@codeaurora.org>,
+        <jglauber@cavium.com>, <khuong@os.amperecomputing.com>,
+        <dwmw@amazon.co.uk>, <benh@amazon.com>, <ronenk@amazon.com>,
+        <talel@amazon.com>, <jonnyc@amazon.com>, <hanochu@amazon.com>,
+        <linux-edac@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-mips@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>
+References: <1563187987-5847-1-git-send-email-hhhawa@amazon.com>
+ <20190725153658.084ea1aa@coco.lan>
+Message-ID: <355dc172-52f5-3d9c-883a-4ad1fd10d54c@amazon.com>
+Date:   Sun, 28 Jul 2019 12:34:35 +0300
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
+MIME-Version: 1.0
+In-Reply-To: <20190725153658.084ea1aa@coco.lan>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-From: Thor Thayer <thor.thayer@linux.intel.com>
 
-ARM32 SoCFPGAs had separate IRQs for SDRAM. ARM64 SoCFPGAs
-send all DBEs to SError so filtering by source is necessary.
 
-The Stratix10 SDRAM ECC is a better match with the generic
-Altera peripheral ECC framework because the linked list can
-be searched to find the ECC block offset and printout
-the DBE Address.
+On 7/25/2019 9:36 PM, Mauro Carvalho Chehab wrote:
+>>   	/* Propagate the count up the 'totals' tree */
+>> -	instance->counters.ue_count++;
+>> -	edac_dev->counters.ue_count++;
+>> +	instance->counters.ue_count += error_count;
+>> +	edac_dev->counters.ue_count += error_count;
+> Patch itself looks a good idea, but maybe it should rise a WARN()
+> if error_count == 0.
+Good point, shouldn't we use WARN_ONCE here? if the user call 
+edac_device_handle_ue() with error count == 0, it not be change in 
+run-time, only if the error count parameter is calculated somehow, and 
+it'll be the *caller* issue that didn't check the error count.
+What you think?
 
-Signed-off-by: Thor Thayer <thor.thayer@linux.intel.com>
-Acked-by: James Morse <james.morse@arm.com>
----
-v2 Use existing device tree bindings for SDRAM discovery.
-v3 Replace multiple of_device_is_compatible() with of_match_node()
----
- drivers/edac/altera_edac.c | 61 ++++++++++++++++++++++++++++++++++++----------
- drivers/edac/altera_edac.h | 25 ++++++++++++++++++-
- 2 files changed, 72 insertions(+), 14 deletions(-)
+> 
+> That applies for both CE and UE error logic.
+Sure.
 
-diff --git a/drivers/edac/altera_edac.c b/drivers/edac/altera_edac.c
-index c2e693e34d43..055eae1a8332 100644
---- a/drivers/edac/altera_edac.c
-+++ b/drivers/edac/altera_edac.c
-@@ -222,7 +222,6 @@ static unsigned long get_total_mem(void)
- static const struct of_device_id altr_sdram_ctrl_of_match[] = {
- 	{ .compatible = "altr,sdram-edac", .data = &c5_data},
- 	{ .compatible = "altr,sdram-edac-a10", .data = &a10_data},
--	{ .compatible = "altr,sdram-edac-s10", .data = &a10_data},
- 	{},
- };
- MODULE_DEVICE_TABLE(of, altr_sdram_ctrl_of_match);
-@@ -1170,6 +1169,24 @@ static int __init __maybe_unused altr_init_a10_ecc_device_type(char *compat)
- 	return 0;
- }
- 
-+/*********************** SDRAM EDAC Device Functions *********************/
-+
-+#ifdef CONFIG_EDAC_ALTERA_SDRAM
-+
-+static const struct edac_device_prv_data s10_sdramecc_data = {
-+	.setup = altr_check_ecc_deps,
-+	.ce_clear_mask = ALTR_S10_ECC_SERRPENA,
-+	.ue_clear_mask = ALTR_S10_ECC_DERRPENA,
-+	.ecc_enable_mask = ALTR_S10_ECC_EN,
-+	.ecc_en_ofst = ALTR_S10_ECC_CTRL_SDRAM_OFST,
-+	.ce_set_mask = ALTR_S10_ECC_TSERRA,
-+	.ue_set_mask = ALTR_S10_ECC_TDERRA,
-+	.set_err_ofst = ALTR_S10_ECC_INTTEST_OFST,
-+	.ecc_irq_handler = altr_edac_a10_ecc_irq,
-+	.inject_fops = &altr_edac_a10_device_inject_fops,
-+};
-+#endif /* CONFIG_EDAC_ALTERA_SDRAM */
-+
- /*********************** OCRAM EDAC Device Functions *********************/
- 
- #ifdef CONFIG_EDAC_ALTERA_OCRAM
-@@ -1759,6 +1776,9 @@ static const struct of_device_id altr_edac_a10_device_of_match[] = {
- #ifdef CONFIG_EDAC_ALTERA_SDMMC
- 	{ .compatible = "altr,socfpga-sdmmc-ecc", .data = &a10_sdmmcecca_data },
- #endif
-+#ifdef CONFIG_EDAC_ALTERA_SDRAM
-+	{ .compatible = "altr,sdram-edac-s10", .data = &s10_sdramecc_data },
-+#endif
- 	{},
- };
- MODULE_DEVICE_TABLE(of, altr_edac_a10_device_of_match);
-@@ -1889,6 +1909,10 @@ static int validate_parent_available(struct device_node *np)
- 	struct device_node *parent;
- 	int ret = 0;
- 
-+	/* SDRAM must be present for Linux (implied parent) */
-+	if (of_device_is_compatible(np, "altr,sdram-edac-s10"))
-+		return 0;
-+
- 	/* Ensure parent device is enabled if parent node exists */
- 	parent = of_parse_phandle(np, "altr,ecc-parent", 0);
- 	if (parent && !of_device_is_available(parent))
-@@ -1898,6 +1922,22 @@ static int validate_parent_available(struct device_node *np)
- 	return ret;
- }
- 
-+static int get_s10_sdram_edac_resource(struct device_node *np,
-+				       struct resource *res)
-+{
-+	struct device_node *parent;
-+	int ret;
-+
-+	parent = of_parse_phandle(np, "altr,sdr-syscon", 0);
-+	if (!parent)
-+		return -ENODEV;
-+
-+	ret = of_address_to_resource(parent, 0, res);
-+	of_node_put(parent);
-+
-+	return ret;
-+}
-+
- static int altr_edac_a10_device_add(struct altr_arria10_edac *edac,
- 				    struct device_node *np)
- {
-@@ -1925,7 +1965,11 @@ static int altr_edac_a10_device_add(struct altr_arria10_edac *edac,
- 	if (!devres_open_group(edac->dev, altr_edac_a10_device_add, GFP_KERNEL))
- 		return -ENOMEM;
- 
--	rc = of_address_to_resource(np, 0, &res);
-+	if (of_device_is_compatible(np, "altr,sdram-edac-s10"))
-+		rc = get_s10_sdram_edac_resource(np, &res);
-+	else
-+		rc = of_address_to_resource(np, 0, &res);
-+
- 	if (rc < 0) {
- 		edac_printk(KERN_ERR, EDAC_DEVICE,
- 			    "%s: no resource address\n", ecc_name);
-@@ -2224,20 +2268,11 @@ static int altr_edac_a10_probe(struct platform_device *pdev)
- 		if (!of_device_is_available(child))
- 			continue;
- 
--		if (of_device_is_compatible(child, "altr,socfpga-a10-l2-ecc") || 
--		    of_device_is_compatible(child, "altr,socfpga-a10-ocram-ecc") ||
--		    of_device_is_compatible(child, "altr,socfpga-eth-mac-ecc") ||
--		    of_device_is_compatible(child, "altr,socfpga-nand-ecc") ||
--		    of_device_is_compatible(child, "altr,socfpga-dma-ecc") ||
--		    of_device_is_compatible(child, "altr,socfpga-usb-ecc") ||
--		    of_device_is_compatible(child, "altr,socfpga-qspi-ecc") ||
--		    of_device_is_compatible(child, "altr,socfpga-sdmmc-ecc"))
--
-+		if (of_match_node(altr_edac_a10_device_of_match, child))
- 			altr_edac_a10_device_add(edac, child);
- 
- #ifdef CONFIG_EDAC_ALTERA_SDRAM
--		else if ((of_device_is_compatible(child, "altr,sdram-edac-a10")) ||
--			 (of_device_is_compatible(child, "altr,sdram-edac-s10")))
-+		else if (of_device_is_compatible(child, "altr,sdram-edac-a10"))
- 			of_platform_populate(pdev->dev.of_node,
- 					     altr_sdram_ctrl_of_match,
- 					     NULL, &pdev->dev);
-diff --git a/drivers/edac/altera_edac.h b/drivers/edac/altera_edac.h
-index 55654cc4bcdf..3727e72c8c2e 100644
---- a/drivers/edac/altera_edac.h
-+++ b/drivers/edac/altera_edac.h
-@@ -289,6 +289,29 @@ struct altr_sdram_mc_data {
- #define ALTR_A10_ECC_INIT_WATCHDOG_10US      10000
- 
- /************* Stratix10 Defines **************/
-+#define ALTR_S10_ECC_CTRL_SDRAM_OFST      0x00
-+#define ALTR_S10_ECC_EN                   BIT(0)
-+
-+#define ALTR_S10_ECC_ERRINTEN_OFST        0x10
-+#define ALTR_S10_ECC_ERRINTENS_OFST       0x14
-+#define ALTR_S10_ECC_ERRINTENR_OFST       0x18
-+#define ALTR_S10_ECC_SERRINTEN            BIT(0)
-+
-+#define ALTR_S10_ECC_INTMODE_OFST         0x1C
-+#define ALTR_S10_ECC_INTMODE              BIT(0)
-+
-+#define ALTR_S10_ECC_INTSTAT_OFST         0x20
-+#define ALTR_S10_ECC_SERRPENA             BIT(0)
-+#define ALTR_S10_ECC_DERRPENA             BIT(8)
-+#define ALTR_S10_ECC_ERRPENA_MASK         (ALTR_S10_ECC_SERRPENA | \
-+					   ALTR_S10_ECC_DERRPENA)
-+
-+#define ALTR_S10_ECC_INTTEST_OFST         0x24
-+#define ALTR_S10_ECC_TSERRA               BIT(0)
-+#define ALTR_S10_ECC_TDERRA               BIT(8)
-+#define ALTR_S10_ECC_TSERRB               BIT(16)
-+#define ALTR_S10_ECC_TDERRB               BIT(24)
-+
- #define ALTR_S10_DERR_ADDRA_OFST          0x2C
- 
- /* Stratix10 ECC Manager Defines */
-@@ -300,7 +323,7 @@ struct altr_sdram_mc_data {
- #define S10_SYSMGR_UE_ADDR_OFST           0x224
- 
- #define S10_DDR0_IRQ_MASK                 BIT(16)
--#define S10_DBE_IRQ_MASK                  0x3FE
-+#define S10_DBE_IRQ_MASK                  0x3FFFE
- 
- /* Define ECC Block Offsets for peripherals */
- #define ECC_BLK_ADDRESS_OFST              0x40
--- 
-2.7.4
+Thanks,
+Hanna
+> 
+> Thanks,
+> Mauro
 
