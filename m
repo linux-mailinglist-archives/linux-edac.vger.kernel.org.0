@@ -2,94 +2,100 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C8D6077ED6
-	for <lists+linux-edac@lfdr.de>; Sun, 28 Jul 2019 11:34:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 227FE7818B
+	for <lists+linux-edac@lfdr.de>; Sun, 28 Jul 2019 22:33:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725970AbfG1Jep (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Sun, 28 Jul 2019 05:34:45 -0400
-Received: from smtp-fw-9102.amazon.com ([207.171.184.29]:23333 "EHLO
-        smtp-fw-9102.amazon.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725937AbfG1Jep (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Sun, 28 Jul 2019 05:34:45 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1564306484; x=1595842484;
-  h=from:subject:to:cc:references:message-id:date:
-   mime-version:in-reply-to:content-transfer-encoding;
-  bh=HBEj87FM8520lmjB2CAs3MjRc7/bulRXak9RiLFobSE=;
-  b=Ohh6BbE3iaUrMzPYAFCdN2R6o/9zfPmhwuJKu2RUz712wxngd23FmXQo
-   9Ykyk0E2pYnIuFN2Bm/N8dqb6QC4ExLJ619Liae30bWD646U1GWVGdfZz
-   jOyRcpdJrHfR9+gO8PIHRdoCixOlFJ60xnxmMu3cB5q/0fH6sVmU+w2cA
-   4=;
-X-IronPort-AV: E=Sophos;i="5.64,317,1559520000"; 
-   d="scan'208";a="688518889"
-Received: from sea3-co-svc-lb6-vlan2.sea.amazon.com (HELO email-inbound-relay-2b-8cc5d68b.us-west-2.amazon.com) ([10.47.22.34])
-  by smtp-border-fw-out-9102.sea19.amazon.com with ESMTP; 28 Jul 2019 09:34:42 +0000
-Received: from EX13MTAUEA001.ant.amazon.com (pdx4-ws-svc-p6-lb7-vlan3.pdx.amazon.com [10.170.41.166])
-        by email-inbound-relay-2b-8cc5d68b.us-west-2.amazon.com (Postfix) with ESMTPS id D64F8A21E1;
-        Sun, 28 Jul 2019 09:34:41 +0000 (UTC)
-Received: from EX13D08UEE001.ant.amazon.com (10.43.62.126) by
- EX13MTAUEA001.ant.amazon.com (10.43.61.82) with Microsoft SMTP Server (TLS)
- id 15.0.1367.3; Sun, 28 Jul 2019 09:34:41 +0000
-Received: from EX13MTAUEE001.ant.amazon.com (10.43.62.200) by
- EX13D08UEE001.ant.amazon.com (10.43.62.126) with Microsoft SMTP Server (TLS)
- id 15.0.1367.3; Sun, 28 Jul 2019 09:34:41 +0000
-Received: from [10.107.3.19] (10.107.3.19) by mail-relay.amazon.com
- (10.43.62.226) with Microsoft SMTP Server (TLS) id 15.0.1367.3 via Frontend
- Transport; Sun, 28 Jul 2019 09:34:36 +0000
-From:   "Hawa, Hanna" <hhhawa@amazon.com>
-Subject: Re: [UNVERIFIED SENDER] Re: [RFC 1/1] edac: Add a counter parameter
- for edac_device_handle_ue/ce()
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>
-CC:     <thor.thayer@linux.intel.com>, <bp@alien8.de>,
-        <james.morse@arm.com>, <rric@kernel.org>, <morbidrsa@gmail.com>,
-        <ralf@linux-mips.org>, <david.daney@cavium.com>,
-        <andy.gross@linaro.org>, <david.brown@linaro.org>,
-        <ckadabi@codeaurora.org>, <vnkgutta@codeaurora.org>,
-        <jglauber@cavium.com>, <khuong@os.amperecomputing.com>,
-        <dwmw@amazon.co.uk>, <benh@amazon.com>, <ronenk@amazon.com>,
-        <talel@amazon.com>, <jonnyc@amazon.com>, <hanochu@amazon.com>,
-        <linux-edac@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-mips@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>
-References: <1563187987-5847-1-git-send-email-hhhawa@amazon.com>
- <20190725153658.084ea1aa@coco.lan>
-Message-ID: <355dc172-52f5-3d9c-883a-4ad1fd10d54c@amazon.com>
-Date:   Sun, 28 Jul 2019 12:34:35 +0300
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
-MIME-Version: 1.0
-In-Reply-To: <20190725153658.084ea1aa@coco.lan>
-Content-Type: text/plain; charset="utf-8"; format=flowed
+        id S1726203AbfG1UdI (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Sun, 28 Jul 2019 16:33:08 -0400
+Received: from gate2.alliedtelesis.co.nz ([202.36.163.20]:36664 "EHLO
+        gate2.alliedtelesis.co.nz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726151AbfG1UdI (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Sun, 28 Jul 2019 16:33:08 -0400
+Received: from mmarshal3.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client did not present a certificate)
+        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id B2C0F886BF;
+        Mon, 29 Jul 2019 08:33:04 +1200 (NZST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
+        s=mail181024; t=1564345984;
+        bh=E0biQ+0m4VEh6duf/uRWckBUO5MNN03zyLmL+pngf0o=;
+        h=From:To:CC:Subject:Date:References:In-Reply-To;
+        b=O9BBgdkvLs0DOfDMQIP+6dxYOMAD54G/WNPnI3MH1ky2alWaYLNz7eZTDJzLuJBbw
+         l7LHJXFoHfJIW4t2l/Zxmo9AnExE4VCtm5r9O4q652Eeywi6UP20AYdb1SZObl1JX3
+         0e+Wr+/ZAfaZWCszoEVAYC3N/0G8lHSGpMLvO0F6rSvOrnE3i5bE8x27Xgx39DzW2E
+         YziSq5rcC+e9XPzoPTTRfmjSguJaTu/1Avsh2/NrMI5zPelZkGzNz1SyajkLIWnsnw
+         +hNYnAxEaXj5nV3v/+DxkVQovZFsI43BKQJxeC58E7C1j82WrU7U9v+I9+W39e/URS
+         fzRX5Mx7rJLbA==
+Received: from svr-chch-ex1.atlnz.lc (Not Verified[10.32.16.77]) by mmarshal3.atlnz.lc with Trustwave SEG (v7,5,8,10121)
+        id <B5d3e06800001>; Mon, 29 Jul 2019 08:33:04 +1200
+Received: from svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8::77) by
+ svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8::77) with Microsoft SMTP Server
+ (TLS) id 15.0.1156.6; Mon, 29 Jul 2019 08:33:04 +1200
+Received: from svr-chch-ex1.atlnz.lc ([fe80::409d:36f5:8899:92e8]) by
+ svr-chch-ex1.atlnz.lc ([fe80::409d:36f5:8899:92e8%12]) with mapi id
+ 15.00.1156.000; Mon, 29 Jul 2019 08:33:04 +1200
+From:   Chris Packham <Chris.Packham@alliedtelesis.co.nz>
+To:     "james.morse@arm.com" <james.morse@arm.com>
+CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "linux@armlinux.org.uk" <linux@armlinux.org.uk>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "mchehab@kernel.org" <mchehab@kernel.org>,
+        "mark.rutland@arm.com" <mark.rutland@arm.com>,
+        "jlu@pengutronix.de" <jlu@pengutronix.de>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "patches@armlinux.org.uk" <patches@armlinux.org.uk>,
+        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>
+Subject: Re: [PATCH v9 0/8] EDAC drivers for Armada XP L2 and DDR
+Thread-Topic: [PATCH v9 0/8] EDAC drivers for Armada XP L2 and DDR
+Thread-Index: AQHVOGTGE5n98W5t/EG62Bvvhz+yG6bcSbyAgAODnoA=
+Date:   Sun, 28 Jul 2019 20:33:03 +0000
+Message-ID: <1564345983.9737.9.camel@alliedtelesis.co.nz>
+References: <20190712034904.5747-1-chris.packham@alliedtelesis.co.nz>
+         <d1dfe8ec-66e8-e2c8-5421-a18d7e7fc8fc@arm.com>
+In-Reply-To: <d1dfe8ec-66e8-e2c8-5421-a18d7e7fc8fc@arm.com>
+Accept-Language: en-NZ, en-US
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-mailer: Evolution 3.18.5.2-0ubuntu3.2 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [2001:df5:b000:22:3a2c:4aff:fe70:2b02]
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <D7D656BF95F90C47AFC63125E32B5778@atlnz.lc>
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-
-
-On 7/25/2019 9:36 PM, Mauro Carvalho Chehab wrote:
->>   	/* Propagate the count up the 'totals' tree */
->> -	instance->counters.ue_count++;
->> -	edac_dev->counters.ue_count++;
->> +	instance->counters.ue_count += error_count;
->> +	edac_dev->counters.ue_count += error_count;
-> Patch itself looks a good idea, but maybe it should rise a WARN()
-> if error_count == 0.
-Good point, shouldn't we use WARN_ONCE here? if the user call 
-edac_device_handle_ue() with error count == 0, it not be change in 
-run-time, only if the error count parameter is calculated somehow, and 
-it'll be the *caller* issue that didn't check the error count.
-What you think?
-
-> 
-> That applies for both CE and UE error logic.
-Sure.
-
-Thanks,
-Hanna
-> 
-> Thanks,
-> Mauro
-
+T24gRnJpLCAyMDE5LTA3LTI2IGF0IDE1OjUzICswMTAwLCBKYW1lcyBNb3JzZSB3cm90ZToNCj4g
+SGkgQ2hyaXMsDQo+IA0KPiBPbiAxMi8wNy8yMDE5IDA0OjQ4LCBDaHJpcyBQYWNraGFtIHdyb3Rl
+Og0KPiA+IA0KPiA+IEkgc3RpbGwgc2VlbSB0byBiZSBzdHJ1Z2dsaW5nIHRvIGdldCB0aGlzIG9u
+IGFueW9uZSdzIHJhZGFyLg0KPiBXaG9zZSByYWRhciBkb2VzIGl0IG5lZWQgdG8gY3Jvc3M/DQo+
+IA0KDQpUaGF0J3MgYSBnb29kIHF1ZXN0aW9uLiBUaGUgbGFzdCBzb2xpZCBndWlkYW5jZSBJIGhh
+ZCB3YXMgdGhhdCB0aGlzDQpzZXJpZXMgd2FzIGdvaW5nIGluIHZpYSB0aGUgQVJNIHRyZWUuIEJ1
+dCBhcyB5b3Ugc2F5IGJlbG93IHRoYXQgd2FzIHR3bw0KeWVhcnMgYWdvLg0KDQpJIG9ubHkgcmVh
+bGlzZWQgcmVjZW50bHkgdGhhdCB0aGUgQVJNIGNvcmUgc2VlbXMgdG8gaGF2ZSBhIGRpZmZlcmVu
+dA0Kd29ya2Zsb3cgdG8gb3RoZXIga2VybmVsIHN1YnN5c3RlbXMuDQoNCj4gDQo+ID4gDQo+ID4g
+VGhlIFJldmlld3MvQWNrcyBoYXZlIGJlZW4gZ2l2ZW4gc28gdGhpcyBzaG91bGQgYmUgZ29vZCB0
+byBnbyBpbg0KPiA+IHZpYSB0aGUgQVJNDQo+ID4gdHJlZSBhcyBwbGFubmVkLg0KPiA+IA0KPiA+
+IGh0dHA6Ly9saXN0cy5pbmZyYWRlYWQub3JnL3BpcGVybWFpbC9saW51eC1hcm0ta2VybmVsLzIw
+MTctQXVndXN0LzUNCj4gPiAyNTU2MS5odG1sDQo+IEZvciB5b3VyIHY4IEkgdG9vayB0aGlzIHRv
+IG1lYW4gdGhpcyBzZXJpZXMgd2FzIGRvbmUhDQo+IA0KPiBJZiBub3RoaW5nIGhhcyBjaGFuZ2Vk
+IHdpdGggQm9yaXMgYW5kIFJ1c3NlbGwncyBkZWNpc2lvbiAoaXQgd2FzIHR3bw0KPiB5ZWFycyBh
+Z28uLi4uKSwNCj4gZGV0YWlscyBvZiB0aGUgcGF0Y2ggc3lzdGVtIGFyZSBoZXJlOg0KPiANCj4g
+aHR0cHM6Ly9sb3JlLmtlcm5lbC5vcmcvbGludXgtYXJtLWtlcm5lbC8yMDE5MDYyNDE0MjM0Ni5w
+eGxqdjNtNG5wYXRkDQo+IGl5a0BzaGVsbC5hcm1saW51eC5vcmcudWsvDQo+IA0KDQpUaGFua3Mg
+Zm9yIHRoZSBsaW5rLiBJIHdvdWxkIGhhdmUgbmV2ZXIgZm91bmQgdGhhdC4gSSBkaWQgdHJ5IHRv
+IGZvbGxvdw0Kd2hhdCBJIGNvdWxkIGZpbmQgb27CoGh0dHBzOi8vd3d3LmFybWxpbnV4Lm9yZy51
+ay9kZXZlbG9wZXIvwqBidXQgYSBsb3QNCm9mIHRoYXQgc2VlbXMgdG8gYmUgb3V0IG9mIGRhdGUu
+DQoNCkkgZGlkIG1hbmFnZSB0byBzdWJtaXQgdjkgwqB0byB0aGUgQVJNIHBhdGNoIHRyYWNrZXIg
+YnV0IG5hdHVyYWxseSBJDQptZXNzZWQgaXQgdXAgdGhlIGZpcnN0IHRpbWXCoGh0dHBzOi8vd3d3
+LmFybWxpbnV4Lm9yZy51ay9kZXZlbG9wZXIvcGF0Y2gNCmVzL3ZpZXdwYXRjaC5waHA/aWQ9ODg3
+Ny8xwqBhbmQgSSdtIG5vdCBzdXJlIEkgZ290IHRoZSBzZWNvbmQgYXR0ZW1wdA0KcmlnaHQgZWl0
+aGVywqBodHRwczovL3d3dy5hcm1saW51eC5vcmcudWsvZGV2ZWxvcGVyL3BhdGNoZXMvdmlld3Bh
+dGNoLnBoDQpwP2lkPTg4ODUvMQ0KDQoNCj4gVGhhbmtzLA0KPiANCj4gSmFtZXM=
