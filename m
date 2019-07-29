@@ -2,73 +2,99 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A2EF17829E
-	for <lists+linux-edac@lfdr.de>; Mon, 29 Jul 2019 02:08:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF9937999B
+	for <lists+linux-edac@lfdr.de>; Mon, 29 Jul 2019 22:15:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726462AbfG2AIQ (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Sun, 28 Jul 2019 20:08:16 -0400
-Received: from mail-vs1-f67.google.com ([209.85.217.67]:33383 "EHLO
-        mail-vs1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726427AbfG2AIP (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Sun, 28 Jul 2019 20:08:15 -0400
-Received: by mail-vs1-f67.google.com with SMTP id m8so39718107vsj.0
-        for <linux-edac@vger.kernel.org>; Sun, 28 Jul 2019 17:08:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=BrTkYGT/CoRQ7U7g4N9efxmX5N2ln4oVBYUSCIHtobA=;
-        b=Hrbix6Ncwndj0/ZhLdg0qekQEb+2Kgjc0SeRBr4FoeMFiX6XHGMMMukOQcIKSRIyn6
-         1FLJR6mLR/vulQ1VtBLTJl0Lda2nbHDXGla8f4MZapoFNxChdOqG0oC2RV/IR5Di4VyD
-         grjfPw7UAkWugiyvS9Gl1hDt40Nvloz7Q8hFS7wLEsjTOSX4W7lFPW9PhND4JzOEZ+VX
-         SBGYCM0giRSd8L6L/uLWJrYqn2I37qhpbbuqonQi3s5AF+bCkD88dzpmwDbsGmVCx0VK
-         YxQyZe0oSBHMaPJJxMQFY+Lj0j7LLb7a1Ztlp5dpJ58wOiotopzo5wS6I3+UonrsS7ek
-         PqTQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=BrTkYGT/CoRQ7U7g4N9efxmX5N2ln4oVBYUSCIHtobA=;
-        b=qvUk24b/YI38jlxkKbGSkTxTQj2LOfjNra3+oUyrYMdOQdWGyXysDQ/YCB+5789ENm
-         Q2ZrfpgwUE5VRuLJgF54eCiBTrpCN6qip+fX75+AzY75r6c7gubt22VHd1SkmLnmA/oS
-         fUKcr6072rihIid7QdCvvp0DgCoK58ZczPQjq1BG3XAxIWVQLzUYs3m2VonyfSfJvgB2
-         WES1Sme0d3BaCUtE2uTMrcIk6h4Jk7lIcfaR04cdJpSXl7b71/J1PxMeIC6TAOEjXAlz
-         4/BfyW+0+nuiTHuzJv0+8dsIcFKad0Xho9XhkL4ozmsXPq3FPttbj7cUd5ns2ezZIuj9
-         F2zQ==
-X-Gm-Message-State: APjAAAVZJ1UzL6iqKRuhjEqNZlr9kKoPlvZs/hAEqooePUfrFtiGY6Ro
-        uEjwDA8U3KNIF6t7uy6QwBl5Ui9l+LUG63lg3Zw=
-X-Google-Smtp-Source: APXvYqz5Tv/G3ojzOIebxdxZc+D3VZ7ztK4AVBhaXkUwSAzoovp0N7wtTAf+Vftj4yT+nLwP2EIhs0O9djQd9MpIws8=
-X-Received: by 2002:a67:eb19:: with SMTP id a25mr65238884vso.109.1564358894898;
- Sun, 28 Jul 2019 17:08:14 -0700 (PDT)
+        id S2388284AbfG2TZW (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Mon, 29 Jul 2019 15:25:22 -0400
+Received: from mail.kernel.org ([198.145.29.99]:37636 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2388281AbfG2TZV (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Mon, 29 Jul 2019 15:25:21 -0400
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 0B1B920C01;
+        Mon, 29 Jul 2019 19:25:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1564428320;
+        bh=Tu2SmrOsQqUe9ACAyBEFF/lSAeSN+5gPhxezGHmRkwY=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=AlyfkWeStX+XCQuHAenWfRWAXcKIc9lltneRO5Ai8XGaWSD6byFIfarKqGGmYXkwH
+         P9wWTJ5n0gJwYqSp5mXpc7pc7cU4LhXXjfn4/44kwXxzxGpcNHw7BLQU8cpETtciV6
+         ufpiesH9HBj9PT8Whi/4zAngSG7chTganyeYIbUM=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org, Borislav Petkov <bp@suse.de>,
+        Tony Luck <tony.luck@intel.com>,
+        linux-edac <linux-edac@vger.kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.14 038/293] RAS/CEC: Fix pfn insertion
+Date:   Mon, 29 Jul 2019 21:18:49 +0200
+Message-Id: <20190729190825.269610232@linuxfoundation.org>
+X-Mailer: git-send-email 2.22.0
+In-Reply-To: <20190729190820.321094988@linuxfoundation.org>
+References: <20190729190820.321094988@linuxfoundation.org>
+User-Agent: quilt/0.66
 MIME-Version: 1.0
-Received: by 2002:a67:80c8:0:0:0:0:0 with HTTP; Sun, 28 Jul 2019 17:08:14
- -0700 (PDT)
-Reply-To: williamrobert416@gmail.com
-From:   "Mr. Robert William" <officialuse87@gmail.com>
-Date:   Mon, 29 Jul 2019 01:08:14 +0100
-Message-ID: <CAD00q0_sEF2SnzFkOGUBd7uFGZugFRAOygkgQE-c=-i01FWC-w@mail.gmail.com>
-Subject: Please listen
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
+[ Upstream commit 6d8e294bf5f0e85c34e8b14b064e2965f53f38b0 ]
+
+When inserting random PFNs for debugging the CEC through
+(debugfs)/ras/cec/pfn, depending on the return value of pfn_set(),
+multiple values get inserted per a single write.
+
+That is because simple_attr_write() interprets a retval of 0 as
+success and claims the whole input. However, pfn_set() returns the
+cec_add_elem() value, which, if > 0 and smaller than the whole input
+length, makes glibc continue issuing the write syscall until there's
+input left:
+
+  pfn_set
+  simple_attr_write
+  debugfs_attr_write
+  full_proxy_write
+  vfs_write
+  ksys_write
+  do_syscall_64
+  entry_SYSCALL_64_after_hwframe
+
+leading to those repeated calls.
+
+Return 0 to fix that.
+
+Signed-off-by: Borislav Petkov <bp@suse.de>
+Cc: Tony Luck <tony.luck@intel.com>
+Cc: linux-edac <linux-edac@vger.kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/ras/cec.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/ras/cec.c b/drivers/ras/cec.c
+index c7205cdcc11a..97cf40a522be 100644
+--- a/drivers/ras/cec.c
++++ b/drivers/ras/cec.c
+@@ -373,7 +373,9 @@ static int pfn_set(void *data, u64 val)
+ {
+ 	*(u64 *)data = val;
+ 
+-	return cec_add_elem(val);
++	cec_add_elem(val);
++
++	return 0;
+ }
+ 
+ DEFINE_DEBUGFS_ATTRIBUTE(pfn_ops, u64_get, pfn_set, "0x%llx\n");
 -- 
-Hello,
+2.20.1
 
-I am Eng. Robert William, a retired Marine Engineer residing in
-Trinidad & Tobago.
-Unfortunately i am admitted to the hospital for a cancer (Sickness)
-over a year now,my doctor reported that i have only few months to pass
-away. Please i need your consent to invest my money (USD$1.8 Million)
-in any business of your
 
-choice in your country before i die, i have no other relatives not
-even children because i lost my family in a fire disaster in 2005.
-Please i need your urgent and
 
-kind response to enable me send you more information on how to contact
-my bank as my next of kin to process the fund into your bank account.
-
-Mr Robert William
