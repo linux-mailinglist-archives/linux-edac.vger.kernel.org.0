@@ -2,97 +2,166 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B916579955
-	for <lists+linux-edac@lfdr.de>; Mon, 29 Jul 2019 22:15:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CEC17B1C6
+	for <lists+linux-edac@lfdr.de>; Tue, 30 Jul 2019 20:20:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729888AbfG2T1S (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Mon, 29 Jul 2019 15:27:18 -0400
-Received: from mail.kernel.org ([198.145.29.99]:39914 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729886AbfG2T1R (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Mon, 29 Jul 2019 15:27:17 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id C5A9F2171F;
-        Mon, 29 Jul 2019 19:27:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1564428437;
-        bh=WNEwlZmblCDELfMHFO9HduNW/EQ4DWBXMScy77tVMug=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=xjyZQIsTvBSAD/RzUmU8a/S6Ho7dYKDS5hk07ej/oXK+ks1uJ6g10HCnt53ZyO7vT
-         zOPJDv+wbFVXZI9fyqmE8efuYGG9cVpg1z2HibnbQG0wER8AMD5EYJl9gIqXJYZAs5
-         RpibLLEWTW7dEy1MGB5tDMnu8RgcBv5lT31HrVCs=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+        id S1728504AbfG3SUX (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Tue, 30 Jul 2019 14:20:23 -0400
+Received: from mail-pf1-f195.google.com ([209.85.210.195]:35683 "EHLO
+        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728877AbfG3SQJ (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Tue, 30 Jul 2019 14:16:09 -0400
+Received: by mail-pf1-f195.google.com with SMTP id u14so30282816pfn.2
+        for <linux-edac@vger.kernel.org>; Tue, 30 Jul 2019 11:16:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=Dycfr8v1fdba663pIpdzjcaqpiqeC9jW3WU7WRUspIM=;
+        b=TQZZoOLvt58dfKVYoj15whJcQ7tnhbLU89aCOVDpcoqllL3LKtld2+Q4MLeOghIXbF
+         Z0oHqm159YrVMrXWR7iUVI8WTDdJvDZe1RsBVUBXHQG8eIhHBrUG0s52gHmhK4GjESCv
+         YvAjtxLeiT3Nu3PuZP+vBz7AU16SXrtXmSth4=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=Dycfr8v1fdba663pIpdzjcaqpiqeC9jW3WU7WRUspIM=;
+        b=qRdGw5lqkMq8sytkVPDHT2L/C7a0yR1D1X7GeMpxqp0wA/tazI5MzDXADLBATyxiV2
+         gY2nJGcoaoatJC1PtV5ZZQv0AWNCkI9EFjf1d73yeCwIef4TL3YJKgkb5IEK/MXyf6dQ
+         0vucO05eBbiv8syrjDYaB1e4NbVfVHlr2ncD7N0FfQ0mJWIZxxpWYFZWQ2LT1sJa3Ezs
+         j2wLFQ1PK6/ewfXt/eiIptm8gK3awQsSsOono3ugNKJNR0TmIQ8Nj3HBfxm5ELjSrOZb
+         bw4LQ1rt3c19l+PyJgo84CQBE4CR3nseblXBY4JNlLg2FyMVQ4KegCfRzWEWy5BcXjR5
+         1S7A==
+X-Gm-Message-State: APjAAAUCMMDEKAsbzd0hbKZ0p+GgUVf0mIOzuHZ9aFlEVjxuqiky3/T8
+        bKis9KWcXtPJBUzo2MNkToR3og==
+X-Google-Smtp-Source: APXvYqxhgatm4ea/UR+LHTwGkQink6xwt7eAaph3+IuuaJMRKEdnT5Ph9WsXOO++1OHrj8aVKflyFA==
+X-Received: by 2002:a63:2006:: with SMTP id g6mr108309530pgg.287.1564510568689;
+        Tue, 30 Jul 2019 11:16:08 -0700 (PDT)
+Received: from smtp.gmail.com ([2620:15c:202:1:fa53:7765:582b:82b9])
+        by smtp.gmail.com with ESMTPSA id g1sm106744083pgg.27.2019.07.30.11.16.07
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Tue, 30 Jul 2019 11:16:08 -0700 (PDT)
+From:   Stephen Boyd <swboyd@chromium.org>
 To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Pan Bian <bianpan2016@163.com>,
-        Borislav Petkov <bp@suse.de>,
-        James Morse <james.morse@arm.com>,
+Cc:     Borislav Petkov <bp@alien8.de>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-edac <linux-edac@vger.kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 059/293] EDAC/sysfs: Fix memory leak when creating a csrow object
-Date:   Mon, 29 Jul 2019 21:19:10 +0200
-Message-Id: <20190729190828.825030264@linuxfoundation.org>
-X-Mailer: git-send-email 2.22.0
-In-Reply-To: <20190729190820.321094988@linuxfoundation.org>
-References: <20190729190820.321094988@linuxfoundation.org>
-User-Agent: quilt/0.66
+        James Morse <james.morse@arm.com>, linux-edac@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: [PATCH v6 11/57] edac: Remove dev_err() usage after platform_get_irq()
+Date:   Tue, 30 Jul 2019 11:15:11 -0700
+Message-Id: <20190730181557.90391-12-swboyd@chromium.org>
+X-Mailer: git-send-email 2.22.0.709.g102302147b-goog
+In-Reply-To: <20190730181557.90391-1-swboyd@chromium.org>
+References: <20190730181557.90391-1-swboyd@chromium.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-[ Upstream commit 585fb3d93d32dbe89e718b85009f9c322cc554cd ]
+We don't need dev_err() messages when platform_get_irq() fails now that
+platform_get_irq() prints an error message itself when something goes
+wrong. Let's remove these prints with a simple semantic patch.
 
-In edac_create_csrow_object(), the reference to the object is not
-released when adding the device to the device hierarchy fails
-(device_add()). This may result in a memory leak.
+// <smpl>
+@@
+expression ret;
+struct platform_device *E;
+@@
 
-Signed-off-by: Pan Bian <bianpan2016@163.com>
-Signed-off-by: Borislav Petkov <bp@suse.de>
-Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: James Morse <james.morse@arm.com>
+ret =
+(
+platform_get_irq(E, ...)
+|
+platform_get_irq_byname(E, ...)
+);
+
+if ( \( ret < 0 \| ret <= 0 \) )
+{
+(
+-if (ret != -EPROBE_DEFER)
+-{ ...
+-dev_err(...);
+-... }
+|
+...
+-dev_err(...);
+)
+...
+}
+// </smpl>
+
+While we're here, remove braces on if statements that only have one
+statement (manually).
+
+Cc: Borislav Petkov <bp@alien8.de>
 Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc: linux-edac <linux-edac@vger.kernel.org>
-Link: https://lkml.kernel.org/r/1555554438-103953-1-git-send-email-bianpan2016@163.com
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Cc: James Morse <james.morse@arm.com>
+Cc: linux-edac@vger.kernel.org
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Stephen Boyd <swboyd@chromium.org>
 ---
- drivers/edac/edac_mc_sysfs.c | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/edac/edac_mc_sysfs.c b/drivers/edac/edac_mc_sysfs.c
-index 79c13301bf41..148c4649b155 100644
---- a/drivers/edac/edac_mc_sysfs.c
-+++ b/drivers/edac/edac_mc_sysfs.c
-@@ -426,6 +426,8 @@ static inline int nr_pages_per_csrow(struct csrow_info *csrow)
- static int edac_create_csrow_object(struct mem_ctl_info *mci,
- 				    struct csrow_info *csrow, int index)
- {
-+	int err;
-+
- 	csrow->dev.type = &csrow_attr_type;
- 	csrow->dev.bus = mci->bus;
- 	csrow->dev.groups = csrow_dev_groups;
-@@ -438,7 +440,11 @@ static int edac_create_csrow_object(struct mem_ctl_info *mci,
- 	edac_dbg(0, "creating (virtual) csrow node %s\n",
- 		 dev_name(&csrow->dev));
+Please apply directly to subsystem trees
+
+ drivers/edac/altera_edac.c | 13 +++----------
+ drivers/edac/xgene_edac.c  |  1 -
+ 2 files changed, 3 insertions(+), 11 deletions(-)
+
+diff --git a/drivers/edac/altera_edac.c b/drivers/edac/altera_edac.c
+index c2e693e34d43..5405bd727731 100644
+--- a/drivers/edac/altera_edac.c
++++ b/drivers/edac/altera_edac.c
+@@ -347,11 +347,8 @@ static int altr_sdram_probe(struct platform_device *pdev)
+ 	}
  
--	return device_add(&csrow->dev);
-+	err = device_add(&csrow->dev);
-+	if (err)
-+		put_device(&csrow->dev);
-+
-+	return err;
- }
+ 	irq = platform_get_irq(pdev, 0);
+-	if (irq < 0) {
+-		edac_printk(KERN_ERR, EDAC_MC,
+-			    "No irq %d in DT\n", irq);
++	if (irq < 0)
+ 		return -ENODEV;
+-	}
  
- /* Create a CSROW object under specifed edac_mc_device */
+ 	/* Arria10 has a 2nd IRQ */
+ 	irq2 = platform_get_irq(pdev, 1);
+@@ -2177,10 +2174,8 @@ static int altr_edac_a10_probe(struct platform_device *pdev)
+ 	}
+ 
+ 	edac->sb_irq = platform_get_irq(pdev, 0);
+-	if (edac->sb_irq < 0) {
+-		dev_err(&pdev->dev, "No SBERR IRQ resource\n");
++	if (edac->sb_irq < 0)
+ 		return edac->sb_irq;
+-	}
+ 
+ 	irq_set_chained_handler_and_data(edac->sb_irq,
+ 					 altr_edac_a10_irq_handler,
+@@ -2212,10 +2207,8 @@ static int altr_edac_a10_probe(struct platform_device *pdev)
+ 	}
+ #else
+ 	edac->db_irq = platform_get_irq(pdev, 1);
+-	if (edac->db_irq < 0) {
+-		dev_err(&pdev->dev, "No DBERR IRQ resource\n");
++	if (edac->db_irq < 0)
+ 		return edac->db_irq;
+-	}
+ 	irq_set_chained_handler_and_data(edac->db_irq,
+ 					 altr_edac_a10_irq_handler, edac);
+ #endif
+diff --git a/drivers/edac/xgene_edac.c b/drivers/edac/xgene_edac.c
+index e4a1032ba0b5..cb26ce5d5798 100644
+--- a/drivers/edac/xgene_edac.c
++++ b/drivers/edac/xgene_edac.c
+@@ -1921,7 +1921,6 @@ static int xgene_edac_probe(struct platform_device *pdev)
+ 		for (i = 0; i < 3; i++) {
+ 			irq = platform_get_irq(pdev, i);
+ 			if (irq < 0) {
+-				dev_err(&pdev->dev, "No IRQ resource\n");
+ 				rc = -EINVAL;
+ 				goto out_err;
+ 			}
 -- 
-2.20.1
-
-
+Sent by a computer through tubes
 
