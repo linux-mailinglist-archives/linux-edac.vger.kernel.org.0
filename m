@@ -2,166 +2,208 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CEC17B1C6
-	for <lists+linux-edac@lfdr.de>; Tue, 30 Jul 2019 20:20:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 379127D740
+	for <lists+linux-edac@lfdr.de>; Thu,  1 Aug 2019 10:20:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728504AbfG3SUX (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Tue, 30 Jul 2019 14:20:23 -0400
-Received: from mail-pf1-f195.google.com ([209.85.210.195]:35683 "EHLO
-        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728877AbfG3SQJ (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Tue, 30 Jul 2019 14:16:09 -0400
-Received: by mail-pf1-f195.google.com with SMTP id u14so30282816pfn.2
-        for <linux-edac@vger.kernel.org>; Tue, 30 Jul 2019 11:16:09 -0700 (PDT)
+        id S1731093AbfHAIUl (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Thu, 1 Aug 2019 04:20:41 -0400
+Received: from smtp-fw-6001.amazon.com ([52.95.48.154]:50558 "EHLO
+        smtp-fw-6001.amazon.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729694AbfHAIUl (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Thu, 1 Aug 2019 04:20:41 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=Dycfr8v1fdba663pIpdzjcaqpiqeC9jW3WU7WRUspIM=;
-        b=TQZZoOLvt58dfKVYoj15whJcQ7tnhbLU89aCOVDpcoqllL3LKtld2+Q4MLeOghIXbF
-         Z0oHqm159YrVMrXWR7iUVI8WTDdJvDZe1RsBVUBXHQG8eIhHBrUG0s52gHmhK4GjESCv
-         YvAjtxLeiT3Nu3PuZP+vBz7AU16SXrtXmSth4=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=Dycfr8v1fdba663pIpdzjcaqpiqeC9jW3WU7WRUspIM=;
-        b=qRdGw5lqkMq8sytkVPDHT2L/C7a0yR1D1X7GeMpxqp0wA/tazI5MzDXADLBATyxiV2
-         gY2nJGcoaoatJC1PtV5ZZQv0AWNCkI9EFjf1d73yeCwIef4TL3YJKgkb5IEK/MXyf6dQ
-         0vucO05eBbiv8syrjDYaB1e4NbVfVHlr2ncD7N0FfQ0mJWIZxxpWYFZWQ2LT1sJa3Ezs
-         j2wLFQ1PK6/ewfXt/eiIptm8gK3awQsSsOono3ugNKJNR0TmIQ8Nj3HBfxm5ELjSrOZb
-         bw4LQ1rt3c19l+PyJgo84CQBE4CR3nseblXBY4JNlLg2FyMVQ4KegCfRzWEWy5BcXjR5
-         1S7A==
-X-Gm-Message-State: APjAAAUCMMDEKAsbzd0hbKZ0p+GgUVf0mIOzuHZ9aFlEVjxuqiky3/T8
-        bKis9KWcXtPJBUzo2MNkToR3og==
-X-Google-Smtp-Source: APXvYqxhgatm4ea/UR+LHTwGkQink6xwt7eAaph3+IuuaJMRKEdnT5Ph9WsXOO++1OHrj8aVKflyFA==
-X-Received: by 2002:a63:2006:: with SMTP id g6mr108309530pgg.287.1564510568689;
-        Tue, 30 Jul 2019 11:16:08 -0700 (PDT)
-Received: from smtp.gmail.com ([2620:15c:202:1:fa53:7765:582b:82b9])
-        by smtp.gmail.com with ESMTPSA id g1sm106744083pgg.27.2019.07.30.11.16.07
-        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Tue, 30 Jul 2019 11:16:08 -0700 (PDT)
-From:   Stephen Boyd <swboyd@chromium.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Borislav Petkov <bp@alien8.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        James Morse <james.morse@arm.com>, linux-edac@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: [PATCH v6 11/57] edac: Remove dev_err() usage after platform_get_irq()
-Date:   Tue, 30 Jul 2019 11:15:11 -0700
-Message-Id: <20190730181557.90391-12-swboyd@chromium.org>
-X-Mailer: git-send-email 2.22.0.709.g102302147b-goog
-In-Reply-To: <20190730181557.90391-1-swboyd@chromium.org>
-References: <20190730181557.90391-1-swboyd@chromium.org>
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1564647640; x=1596183640;
+  h=from:subject:to:cc:references:message-id:date:
+   mime-version:in-reply-to:content-transfer-encoding;
+  bh=sFJVYY4R0DtMFkdcM3gunR4WptMme/o4VaCvg83kd0A=;
+  b=IOrCLLlUbUdas+MMPlF29g/g4X/3ypZouP9kZ/+qLmNNlYIDStbiIM0K
+   s3Gf3j0IVSTpQXqzDKoXDHXORaIsl0l1o8z7qOVb2lu6S45uX8rQSUU8Q
+   F2wlw3/s0E4Mse8p2sBqh8ojFgQB7+LvgJT016IJIb8BEVnzt6nrPGt/3
+   g=;
+X-IronPort-AV: E=Sophos;i="5.64,333,1559520000"; 
+   d="scan'208";a="407593540"
+Received: from iad6-co-svc-p1-lb1-vlan3.amazon.com (HELO email-inbound-relay-1d-98acfc19.us-east-1.amazon.com) ([10.124.125.6])
+  by smtp-border-fw-out-6001.iad6.amazon.com with ESMTP; 01 Aug 2019 08:20:39 +0000
+Received: from EX13MTAUWA001.ant.amazon.com (iad55-ws-svc-p15-lb9-vlan3.iad.amazon.com [10.40.159.166])
+        by email-inbound-relay-1d-98acfc19.us-east-1.amazon.com (Postfix) with ESMTPS id 9AA64A1F5C;
+        Thu,  1 Aug 2019 08:20:34 +0000 (UTC)
+Received: from EX13D13UWA004.ant.amazon.com (10.43.160.251) by
+ EX13MTAUWA001.ant.amazon.com (10.43.160.58) with Microsoft SMTP Server (TLS)
+ id 15.0.1367.3; Thu, 1 Aug 2019 08:20:34 +0000
+Received: from EX13MTAUWA001.ant.amazon.com (10.43.160.58) by
+ EX13D13UWA004.ant.amazon.com (10.43.160.251) with Microsoft SMTP Server (TLS)
+ id 15.0.1367.3; Thu, 1 Aug 2019 08:20:33 +0000
+Received: from [10.107.3.19] (10.107.3.19) by mail-relay.amazon.com
+ (10.43.160.118) with Microsoft SMTP Server (TLS) id 15.0.1367.3 via Frontend
+ Transport; Thu, 1 Aug 2019 08:20:28 +0000
+From:   "Hawa, Hanna" <hhhawa@amazon.com>
+Subject: Re: [PATCH v3 2/4] edac: Add support for Amazon's Annapurna Labs L1
+ EDAC
+To:     James Morse <james.morse@arm.com>
+CC:     <robh+dt@kernel.org>, <mark.rutland@arm.com>, <bp@alien8.de>,
+        <mchehab@kernel.org>, <davem@davemloft.net>,
+        <gregkh@linuxfoundation.org>, <linus.walleij@linaro.org>,
+        <Jonathan.Cameron@huawei.com>, <nicolas.ferre@microchip.com>,
+        <paulmck@linux.ibm.com>, <dwmw@amazon.co.uk>, <benh@amazon.com>,
+        <ronenk@amazon.com>, <talel@amazon.com>, <jonnyc@amazon.com>,
+        <hanochu@amazon.com>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-edac@vger.kernel.org>
+References: <1563197049-12679-1-git-send-email-hhhawa@amazon.com>
+ <1563197049-12679-3-git-send-email-hhhawa@amazon.com>
+ <a2dc6760-50e2-6e98-5b61-002836d92dd2@arm.com>
+Message-ID: <59075138-f819-a59c-a72a-663062c78c86@amazon.com>
+Date:   Thu, 1 Aug 2019 11:20:26 +0300
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <a2dc6760-50e2-6e98-5b61-002836d92dd2@arm.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-We don't need dev_err() messages when platform_get_irq() fails now that
-platform_get_irq() prints an error message itself when something goes
-wrong. Let's remove these prints with a simple semantic patch.
 
-// <smpl>
-@@
-expression ret;
-struct platform_device *E;
-@@
+On 7/26/2019 7:49 PM, James Morse wrote:
+> Hi Hanna,
+> 
+> On 15/07/2019 14:24, Hanna Hawa wrote:
+>> Adds support for Amazon's Annapurna Labs L1 EDAC driver to detect and
+>> report L1 errors.
+> 
+>> diff --git a/drivers/edac/al_l1_edac.c b/drivers/edac/al_l1_edac.c
+>> new file mode 100644
+>> index 0000000..70510ea
+>> --- /dev/null
+>> +++ b/drivers/edac/al_l1_edac.c
+>> @@ -0,0 +1,156 @@
+> 
+>> +#include <linux/bitfield.h>
+> 
+> You need <linux/smp.h> for on-each_cpu().
+> 
+>> +#include "edac_device.h"
+>> +#include "edac_module.h"
+> 
+> You need <asm/sysreg.h> for the sys_reg() macro. The ARCH_ALPINE dependency doesn't stop
+> this from being built on 32bit arm, where this sys_reg() won't work/exist.
 
-ret =
-(
-platform_get_irq(E, ...)
-|
-platform_get_irq_byname(E, ...)
-);
+Will fix.
 
-if ( \( ret < 0 \| ret <= 0 \) )
-{
-(
--if (ret != -EPROBE_DEFER)
--{ ...
--dev_err(...);
--... }
-|
-...
--dev_err(...);
-)
-...
-}
-// </smpl>
+> 
+> [...]
+> 
+>> +static void al_l1_edac_cpumerrsr(void *arg)
+>> +{
+>> +	struct edac_device_ctl_info *edac_dev = arg;
+>> +	int cpu, i;
+>> +	u32 ramid, repeat, other, fatal;
+>> +	u64 val = read_sysreg_s(ARM_CA57_CPUMERRSR_EL1);
+>> +	char msg[AL_L1_EDAC_MSG_MAX];
+>> +	int space, count;
+>> +	char *p;
+>> +	if (!(FIELD_GET(ARM_CA57_CPUMERRSR_VALID, val)))
+>> +		return;
+>> +	space = sizeof(msg);
+>> +	p = msg;
+>> +	count = snprintf(p, space, "CPU%d L1 %serror detected", cpu,
+>> +			 (fatal) ? "Fatal " : "");
+>> +	p += count;
+>> +	space -= count;
+> 
+> snprintf() will return the number of characters it would have generated, even if that is
+> more than space. If this happen, space becomes negative, p points outside msg[] and msg[]
+> isn't NULL terminated...
+> 
+> It looks like you want scnprintf(), which returns the number of characters written to buf
+> instead. (I don't see how 256 characters would be printed by this code)
 
-While we're here, remove braces on if statements that only have one
-statement (manually).
+Will use scnprintf() instead.
 
-Cc: Borislav Petkov <bp@alien8.de>
-Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc: James Morse <james.morse@arm.com>
-Cc: linux-edac@vger.kernel.org
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Signed-off-by: Stephen Boyd <swboyd@chromium.org>
----
+> 
+> 
+>> +	switch (ramid) {
+>> +	case ARM_CA57_L1_I_TAG_RAM:
+>> +		count = snprintf(p, space, " RAMID='L1-I Tag RAM'");
+>> +		break;
+>> +	case ARM_CA57_L1_I_DATA_RAM:
+>> +		count = snprintf(p, space, " RAMID='L1-I Data RAM'");
+>> +		break;
+>> +	case ARM_CA57_L1_D_TAG_RAM:
+>> +		count = snprintf(p, space, " RAMID='L1-D Tag RAM'");
+>> +		break;
+>> +	case ARM_CA57_L1_D_DATA_RAM:
+>> +		count = snprintf(p, space, " RAMID='L1-D Data RAM'");
+>> +		break;
+>> +	case ARM_CA57_L2_TLB_RAM:
+>> +		count = snprintf(p, space, " RAMID='L2 TLB RAM'");
+>> +		break;
+>> +	default:
+>> +		count = snprintf(p, space, " RAMID='unknown'");
+>> +		break;
+>> +	}
+>> +
+>> +	p += count;
+>> +	space -= count;
+>> +	count = snprintf(p, space,
+>> +			 " repeat=%d, other=%d (CPUMERRSR_EL1=0x%llx)",
+>> +			 repeat, other, val);
+>> +
+>> +	for (i = 0; i < repeat; i++) {
+>> +		if (fatal)
+>> +			edac_device_handle_ue(edac_dev, 0, 0, msg);
+>> +		else
+>> +			edac_device_handle_ce(edac_dev, 0, 0, msg);
+>> +	}
+>> +
+>> +	write_sysreg_s(0, ARM_CA57_CPUMERRSR_EL1);
+> 
+> Writing 0 just after you've read the value would minimise the window where repeat could
+> have increased behind your back, or another error was counted as other, when it could have
+> been reported more accurately.
 
-Please apply directly to subsystem trees
+Good point, I will move the write after checking the valid bit.
 
- drivers/edac/altera_edac.c | 13 +++----------
- drivers/edac/xgene_edac.c  |  1 -
- 2 files changed, 3 insertions(+), 11 deletions(-)
+> 
+> 
+>> +}
+> 
+> 
+>> +static int al_l1_edac_probe(struct platform_device *pdev)
+>> +{
+>> +	struct edac_device_ctl_info *edac_dev;
+>> +	struct device *dev = &pdev->dev;
+>> +	int ret;
+>> +
+>> +	edac_dev = edac_device_alloc_ctl_info(0, (char *)dev_name(dev), 1, "L",
+>> +					      1, 1, NULL, 0,
+>> +					      edac_device_alloc_index());
+>> +	if (IS_ERR(edac_dev))
+> 
+> edac_device_alloc_ctl_info() returns NULL, or dev_ctl, which comes from kzalloc(). I think
+> you need to check for NULL here, IS_ERR() only catches the -errno range. (there is an
+> IS_ERR_OR_NULL() if you really needed both)
 
-diff --git a/drivers/edac/altera_edac.c b/drivers/edac/altera_edac.c
-index c2e693e34d43..5405bd727731 100644
---- a/drivers/edac/altera_edac.c
-+++ b/drivers/edac/altera_edac.c
-@@ -347,11 +347,8 @@ static int altr_sdram_probe(struct platform_device *pdev)
- 	}
- 
- 	irq = platform_get_irq(pdev, 0);
--	if (irq < 0) {
--		edac_printk(KERN_ERR, EDAC_MC,
--			    "No irq %d in DT\n", irq);
-+	if (irq < 0)
- 		return -ENODEV;
--	}
- 
- 	/* Arria10 has a 2nd IRQ */
- 	irq2 = platform_get_irq(pdev, 1);
-@@ -2177,10 +2174,8 @@ static int altr_edac_a10_probe(struct platform_device *pdev)
- 	}
- 
- 	edac->sb_irq = platform_get_irq(pdev, 0);
--	if (edac->sb_irq < 0) {
--		dev_err(&pdev->dev, "No SBERR IRQ resource\n");
-+	if (edac->sb_irq < 0)
- 		return edac->sb_irq;
--	}
- 
- 	irq_set_chained_handler_and_data(edac->sb_irq,
- 					 altr_edac_a10_irq_handler,
-@@ -2212,10 +2207,8 @@ static int altr_edac_a10_probe(struct platform_device *pdev)
- 	}
- #else
- 	edac->db_irq = platform_get_irq(pdev, 1);
--	if (edac->db_irq < 0) {
--		dev_err(&pdev->dev, "No DBERR IRQ resource\n");
-+	if (edac->db_irq < 0)
- 		return edac->db_irq;
--	}
- 	irq_set_chained_handler_and_data(edac->db_irq,
- 					 altr_edac_a10_irq_handler, edac);
- #endif
-diff --git a/drivers/edac/xgene_edac.c b/drivers/edac/xgene_edac.c
-index e4a1032ba0b5..cb26ce5d5798 100644
---- a/drivers/edac/xgene_edac.c
-+++ b/drivers/edac/xgene_edac.c
-@@ -1921,7 +1921,6 @@ static int xgene_edac_probe(struct platform_device *pdev)
- 		for (i = 0; i < 3; i++) {
- 			irq = platform_get_irq(pdev, i);
- 			if (irq < 0) {
--				dev_err(&pdev->dev, "No IRQ resource\n");
- 				rc = -EINVAL;
- 				goto out_err;
- 			}
--- 
-Sent by a computer through tubes
+Will fix.
 
+> 
+> 
+>> +		return -ENOMEM;
+> 
+> 
+> With the header-includes and edac_device_alloc_ctl_info() NULL check:
+> Reviewed-by: James Morse <james.morse@arm.com>
+
+Thanks James.
+
+Thanks,
+Hanna
+> 
+> 
+> Thanks,
+> 
+> James
+> 
