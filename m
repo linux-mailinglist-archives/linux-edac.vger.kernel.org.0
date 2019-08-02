@@ -2,143 +2,220 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AADB07FC7B
-	for <lists+linux-edac@lfdr.de>; Fri,  2 Aug 2019 16:46:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B51C7FD1B
+	for <lists+linux-edac@lfdr.de>; Fri,  2 Aug 2019 17:12:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2395017AbfHBOq3 (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Fri, 2 Aug 2019 10:46:29 -0400
-Received: from mail.skyhub.de ([5.9.137.197]:33270 "EHLO mail.skyhub.de"
+        id S1729357AbfHBPMA (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Fri, 2 Aug 2019 11:12:00 -0400
+Received: from foss.arm.com ([217.140.110.172]:53788 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727127AbfHBOq3 (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Fri, 2 Aug 2019 10:46:29 -0400
-Received: from zn.tnic (p200300EC2F0D9600E09105D62CCA3801.dip0.t-ipconnect.de [IPv6:2003:ec:2f0d:9600:e091:5d6:2cca:3801])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 757C91EC02FF;
-        Fri,  2 Aug 2019 16:46:27 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1564757187;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=3Riak9a7wYC5o1rshs04eW9FFUa8lyoZHTKtKkJRJBc=;
-        b=Q7ujHGeBtBO7TVI/+2dMnjVIaNTRiK/Q1dA6btQf8HgcRmK1HVPQo8LlmoIiO0SbYgBnom
-        pwlE8fq7YLj7xpBYCM1pq4XLL6fyTMC3tHItNHjBuSWO18xcmII5P0Zq/24tQHwGPdxHz9
-        adHYXKNAc2YtMObzAXnpl//aAcDpRdU=
-Date:   Fri, 2 Aug 2019 16:46:26 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     "Ghannam, Yazen" <Yazen.Ghannam@amd.com>
-Cc:     "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 0/7] AMD64 EDAC fixes
-Message-ID: <20190802144626.GD30661@zn.tnic>
-References: <20190709215643.171078-1-Yazen.Ghannam@amd.com>
+        id S1726044AbfHBPL7 (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Fri, 2 Aug 2019 11:11:59 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id CB7221596;
+        Fri,  2 Aug 2019 08:11:58 -0700 (PDT)
+Received: from [10.1.196.105] (eglon.cambridge.arm.com [10.1.196.105])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 007F83F575;
+        Fri,  2 Aug 2019 08:11:55 -0700 (PDT)
+Subject: Re: [PATCH v4 4/4] edac: Add support for Amazon's Annapurna Labs L2
+ EDAC
+To:     Hanna Hawa <hhhawa@amazon.com>
+Cc:     robh+dt@kernel.org, mark.rutland@arm.com, bp@alien8.de,
+        mchehab@kernel.org, davem@davemloft.net,
+        gregkh@linuxfoundation.org, linus.walleij@linaro.org,
+        Jonathan.Cameron@huawei.com, nicolas.ferre@microchip.com,
+        paulmck@linux.ibm.com, dwmw@amazon.co.uk, benh@amazon.com,
+        ronenk@amazon.com, talel@amazon.com, jonnyc@amazon.com,
+        hanochu@amazon.com, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-edac@vger.kernel.org
+References: <20190801130956.26388-1-hhhawa@amazon.com>
+ <20190801130956.26388-5-hhhawa@amazon.com>
+From:   James Morse <james.morse@arm.com>
+Message-ID: <a060cbce-14f3-0592-4998-0a900d3fe6e4@arm.com>
+Date:   Fri, 2 Aug 2019 16:11:53 +0100
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 MIME-Version: 1.0
+In-Reply-To: <20190801130956.26388-5-hhhawa@amazon.com>
 Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20190709215643.171078-1-Yazen.Ghannam@amd.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Language: en-GB
+Content-Transfer-Encoding: 7bit
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Tue, Jul 09, 2019 at 09:56:54PM +0000, Ghannam, Yazen wrote:
-> From: Yazen Ghannam <yazen.ghannam@amd.com>
-> 
-> Hi Boris,
-> 
-> This set contains a few fixes for some changes merged in v5.2. There
-> are also a couple of fixes for older issues. In addition, there are a
-> couple of patches to add support for Asymmetric Dual-Rank DIMMs.
-> 
-> Thanks,
-> Yazen
-> 
-> Link:
-> https://lkml.kernel.org/r/20190531234501.32826-1-Yazen.Ghannam@amd.com
-> 
-> v1->v2:
-> * Squash patches 1 and 2 together.
-> 
-> Yazen Ghannam (7):
->   EDAC/amd64: Support more than two controllers for chip selects
->     handling
->   EDAC/amd64: Recognize DRAM device type with EDAC_CTL_CAP
->   EDAC/amd64: Initialize DIMM info for systems with more than two
->     channels
->   EDAC/amd64: Find Chip Select memory size using Address Mask
->   EDAC/amd64: Decode syndrome before translating address
->   EDAC/amd64: Cache secondary Chip Select registers
->   EDAC/amd64: Support Asymmetric Dual-Rank DIMMs
-> 
->  drivers/edac/amd64_edac.c | 348 ++++++++++++++++++++++++--------------
->  drivers/edac/amd64_edac.h |   9 +-
->  2 files changed, 232 insertions(+), 125 deletions(-)
+Hi Hanna,
 
-So this still has this confusing reporting of unpopulated nodes:
+On 01/08/2019 14:09, Hanna Hawa wrote:
+> Adds support for Amazon's Annapurna Labs L2 EDAC driver to detect and
+> report L2 errors.
+> diff --git a/drivers/edac/al_l2_edac.c b/drivers/edac/al_l2_edac.c
+> new file mode 100644
+> index 000000000000..6c6d37cf82ab
+> --- /dev/null
+> +++ b/drivers/edac/al_l2_edac.c
+> @@ -0,0 +1,189 @@
 
-[    4.291774] EDAC MC1: Giving out device to module amd64_edac controller F17h: DEV 0000:00:19.3 (INTERRUPT)
-[    4.292021] EDAC DEBUG: ecc_enabled: Node 2: No enabled UMCs.
-[    4.292231] EDAC amd64: Node 2: DRAM ECC disabled.
-[    4.292405] EDAC amd64: ECC disabled in the BIOS or no ECC capability, module will not load.
-[    4.292859] EDAC DEBUG: ecc_enabled: Node 3: No enabled UMCs.
-[    4.292963] EDAC amd64: Node 3: DRAM ECC disabled.
-[    4.293063] EDAC amd64: ECC disabled in the BIOS or no ECC capability, module will not load.
-[    4.293347] AMD64 EDAC driver v3.5.0
+> +#include <asm/sysreg.h>
+> +#include <linux/bitfield.h>
 
-which needs fixing.
+#include <linux/cpumask.h> ?
 
-Regardless, still not good enough. The snowy owl box I have here has 16
-GB:
+> +#include <linux/of.h>
+> +#include <linux/smp.h>
 
-$ head -n1 /proc/meminfo
-MemTotal:       15715328 kB
+[...]
 
-and yet
+> +static void al_l2_edac_l2merrsr(void *arg)
+> +{
+> +	struct edac_device_ctl_info *edac_dev = arg;
+> +	int cpu, i;
+> +	u32 ramid, repeat, other, fatal;
+> +	u64 val = read_sysreg_s(ARM_CA57_L2MERRSR_EL1);
+> +	char msg[AL_L2_EDAC_MSG_MAX];
+> +	int space, count;
+> +	char *p;
+> +
+> +	if (!(FIELD_GET(ARM_CA57_L2MERRSR_VALID, val)))
+> +		return;
+> +
+> +	write_sysreg_s(0, ARM_CA57_L2MERRSR_EL1);
+> +
+> +	cpu = smp_processor_id();
+> +	ramid = FIELD_GET(ARM_CA57_L2MERRSR_RAMID, val);
+> +	repeat = FIELD_GET(ARM_CA57_L2MERRSR_REPEAT, val);
+> +	other = FIELD_GET(ARM_CA57_L2MERRSR_OTHER, val);
+> +	fatal = FIELD_GET(ARM_CA57_L2MERRSR_FATAL, val);
+> +
+> +	space = sizeof(msg);
+> +	p = msg;
+> +	count = scnprintf(p, space, "CPU%d L2 %serror detected", cpu,
+> +			  (fatal) ? "Fatal " : "");
+> +	p += count;
+> +	space -= count;
+> +
+> +	switch (ramid) {
+> +	case ARM_CA57_L2_TAG_RAM:
+> +		count = scnprintf(p, space, " RAMID='L2 Tag RAM'");
+> +		break;
+> +	case ARM_CA57_L2_DATA_RAM:
+> +		count = scnprintf(p, space, " RAMID='L2 Data RAM'");
+> +		break;
+> +	case ARM_CA57_L2_SNOOP_RAM:
+> +		count = scnprintf(p, space, " RAMID='L2 Snoop RAM'");
 
-[    4.282251] EDAC MC: UMC0 chip selects:
-[    4.282348] EDAC DEBUG: f17_addr_mask_to_cs_size: CS0 DIMM0 AddrMasks:
-[    4.282455] EDAC DEBUG: f17_addr_mask_to_cs_size:   Original AddrMask: 0x1fffffe
-[    4.282592] EDAC DEBUG: f17_addr_mask_to_cs_size:   Deinterleaved AddrMask: 0x1fffffe
-[    4.282732] EDAC DEBUG: f17_addr_mask_to_cs_size: CS1 DIMM0 AddrMasks:
-[    4.282839] EDAC DEBUG: f17_addr_mask_to_cs_size:   Original AddrMask: 0x1fffffe
-[    4.283060] EDAC DEBUG: f17_addr_mask_to_cs_size:   Deinterleaved AddrMask: 0x1fffffe
-[    4.283286] EDAC amd64: MC: 0:  8191MB 1:  8191MB
-				   ^^^^^^^^^^^^^^^^^
+Nit: The TRMs both call this 'L2 Snoop Tag RAM'. Could we include 'tag' in the
+description. 'tag' implies its some kind of metadata, so an uncorrected error here affect
+a now unknown location, its more series than a 'data RAM' error. v8.2 would term this kind
+of error 'uncontained'.
 
-[    4.283456] EDAC amd64: MC: 2:     0MB 3:     0MB
 
-...
+> +		break;
+> +	case ARM_CA57_L2_DIRTY_RAM:
+> +		count = scnprintf(p, space, " RAMID='L2 Dirty RAM'");
+> +		break;
+> +	case ARM_CA57_L2_INC_PF_RAM:
+> +		count = scnprintf(p, space, " RAMID='L2 internal metadat'");
 
-[    4.285379] EDAC MC: UMC1 chip selects:
-[    4.285476] EDAC DEBUG: f17_addr_mask_to_cs_size: CS0 DIMM0 AddrMasks:
-[    4.285583] EDAC DEBUG: f17_addr_mask_to_cs_size:   Original AddrMask: 0x1fffffe
-[    4.285721] EDAC DEBUG: f17_addr_mask_to_cs_size:   Deinterleaved AddrMask: 0x1fffffe
-[    4.285860] EDAC DEBUG: f17_addr_mask_to_cs_size: CS1 DIMM0 AddrMasks:
-[    4.285967] EDAC DEBUG: f17_addr_mask_to_cs_size:   Original AddrMask: 0x1fffffe
-[    4.286105] EDAC DEBUG: f17_addr_mask_to_cs_size:   Deinterleaved AddrMask: 0x1fffffe
-[    4.286244] EDAC amd64: MC: 0:  8191MB 1:  8191MB
-				   ^^^^^^^^^^^^^^^^^
+Nit: metadata
 
-[    4.286345] EDAC amd64: MC: 2:     0MB 3:     0MB
+> +		break;
+> +	default:
+> +		count = scnprintf(p, space, " RAMID='unknown'");
+> +		break;
+> +	}
+> +
+> +	p += count;
+> +	space -= count;
+> +
+> +	count = scnprintf(p, space,
+> +			  " repeat=%d, other=%d (L2MERRSR_EL1=0x%llx)",
+> +			  repeat, other, val);
+> +
+> +	for (i = 0; i < repeat; i++) {
+> +		if (fatal)
+> +			edac_device_handle_ue(edac_dev, 0, 0, msg);
+> +		else
+> +			edac_device_handle_ce(edac_dev, 0, 0, msg);
+> +	}
+> +}
 
-which shows 4 chip selects x 8Gb = 32G.
+[...]
 
-So something's still wrong. Before the patchset it says:
+> +static int al_l2_edac_probe(struct platform_device *pdev)
+> +{
+> +	struct edac_device_ctl_info *edac_dev;
+> +	struct al_l2_edac *al_l2;
+> +	struct device *dev = &pdev->dev;
+> +	int ret, i;
+> +
+> +	edac_dev = edac_device_alloc_ctl_info(sizeof(*al_l2),
+> +					      (char *)dev_name(dev), 1, "L", 1,
+> +					      2, NULL, 0,
+> +					      edac_device_alloc_index());
+> +	if (IS_ERR_OR_NULL(edac_dev))
+> +		return -ENOMEM;
+> +
+> +	al_l2 = edac_dev->pvt_info;
+> +	edac_dev->edac_check = al_l2_edac_check;
+> +	edac_dev->dev = dev;
+> +	edac_dev->mod_name = DRV_NAME;
+> +	edac_dev->dev_name = dev_name(dev);
+> +	edac_dev->ctl_name = "L2 cache";
+> +	platform_set_drvdata(pdev, edac_dev);
 
-EDAC MC: UMC0 chip selects:
-EDAC amd64: MC: 0:  8192MB 1:     0MB
-...
-EDAC MC: UMC1 chip selects:
-EDAC amd64: MC: 0:  8192MB 1:     0MB
+> +	for_each_online_cpu(i) {
 
-which is the correct output.
+for_each_possible_cpu()?
 
-Thx.
+If you boot with maxcpus= the driver's behaviour changes.
+But you are only parsing information from the DT, so you don't really need the CPUs to be
+online.
 
--- 
-Regards/Gruss,
-    Boris.
 
-Good mailing practices for 400: avoid top-posting and trim the reply.
+> +		struct device_node *cpu;
+> +		struct device_node *cpu_cache, *l2_cache;
+> +
+> +		cpu = of_get_cpu_node(i, NULL);
+
+(of_get_cpu_node() can return NULL, but I don't think it can ever happen like this)
+
+> +		cpu_cache = of_find_next_cache_node(cpu);
+> +		l2_cache = of_parse_phandle(dev->of_node, "l2-cache", 0);
+> +
+> +		if (cpu_cache == l2_cache)
+> +			cpumask_set_cpu(i, &al_l2->cluster_cpus);
+
+You need to of_node_put() these device_node pointers once you're done with them.
+
+
+> +	}
+> +
+> +	if (cpumask_empty(&al_l2->cluster_cpus)) {
+> +		dev_err(dev, "CPU mask is empty for this L2 cache\n");
+> +		ret = -EINVAL;
+> +		goto err;
+> +	}
+> +
+> +	ret = edac_device_add_device(edac_dev);
+> +	if (ret) {
+> +		dev_err(dev, "Failed to add L2 edac device\n");
+> +		goto err;
+> +	}
+> +
+> +	return 0;
+> +
+> +err:
+> +	edac_device_free_ctl_info(edac_dev);
+> +
+> +	return ret;
+> +}
+
+With the of_node_put()ing:
+Reviewed-by: James Morse <james.morse@arm.com>
+
+
+Thanks,
+
+James
