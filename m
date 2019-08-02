@@ -2,97 +2,143 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 05BB87F421
-	for <lists+linux-edac@lfdr.de>; Fri,  2 Aug 2019 12:05:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AADB07FC7B
+	for <lists+linux-edac@lfdr.de>; Fri,  2 Aug 2019 16:46:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2404923AbfHBJly (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Fri, 2 Aug 2019 05:41:54 -0400
-Received: from mail.kernel.org ([198.145.29.99]:43826 "EHLO mail.kernel.org"
+        id S2395017AbfHBOq3 (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Fri, 2 Aug 2019 10:46:29 -0400
+Received: from mail.skyhub.de ([5.9.137.197]:33270 "EHLO mail.skyhub.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2404918AbfHBJlx (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Fri, 2 Aug 2019 05:41:53 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        id S1727127AbfHBOq3 (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Fri, 2 Aug 2019 10:46:29 -0400
+Received: from zn.tnic (p200300EC2F0D9600E09105D62CCA3801.dip0.t-ipconnect.de [IPv6:2003:ec:2f0d:9600:e091:5d6:2cca:3801])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 76B782086A;
-        Fri,  2 Aug 2019 09:41:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1564738913;
-        bh=fGCeSEBzvf1nKJNtELjY/pPwIsiJlgax2LnW3Hs02WY=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=GsowGQqOD6sxtFNvsv2l5fQA4dsOy+ZM7QZWqaillBXOEFFtuQ6uAO24vhM50uk71
-         d+iwZ39a6Wl6Tikj0Z8cwXZ0KqAWJkZF8XptHtw0CILCLHnEI9sKJ1Ef9RZkER4TKF
-         ep6Yb1sCZxE6GfQuxj0Vq/g9Okxipzu24XZih7Bw=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Pan Bian <bianpan2016@163.com>,
-        Borislav Petkov <bp@suse.de>,
-        James Morse <james.morse@arm.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-edac <linux-edac@vger.kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.9 044/223] EDAC/sysfs: Fix memory leak when creating a csrow object
-Date:   Fri,  2 Aug 2019 11:34:29 +0200
-Message-Id: <20190802092241.820601377@linuxfoundation.org>
-X-Mailer: git-send-email 2.22.0
-In-Reply-To: <20190802092238.692035242@linuxfoundation.org>
-References: <20190802092238.692035242@linuxfoundation.org>
-User-Agent: quilt/0.66
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 757C91EC02FF;
+        Fri,  2 Aug 2019 16:46:27 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1564757187;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=3Riak9a7wYC5o1rshs04eW9FFUa8lyoZHTKtKkJRJBc=;
+        b=Q7ujHGeBtBO7TVI/+2dMnjVIaNTRiK/Q1dA6btQf8HgcRmK1HVPQo8LlmoIiO0SbYgBnom
+        pwlE8fq7YLj7xpBYCM1pq4XLL6fyTMC3tHItNHjBuSWO18xcmII5P0Zq/24tQHwGPdxHz9
+        adHYXKNAc2YtMObzAXnpl//aAcDpRdU=
+Date:   Fri, 2 Aug 2019 16:46:26 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     "Ghannam, Yazen" <Yazen.Ghannam@amd.com>
+Cc:     "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 0/7] AMD64 EDAC fixes
+Message-ID: <20190802144626.GD30661@zn.tnic>
+References: <20190709215643.171078-1-Yazen.Ghannam@amd.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20190709215643.171078-1-Yazen.Ghannam@amd.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-[ Upstream commit 585fb3d93d32dbe89e718b85009f9c322cc554cd ]
+On Tue, Jul 09, 2019 at 09:56:54PM +0000, Ghannam, Yazen wrote:
+> From: Yazen Ghannam <yazen.ghannam@amd.com>
+> 
+> Hi Boris,
+> 
+> This set contains a few fixes for some changes merged in v5.2. There
+> are also a couple of fixes for older issues. In addition, there are a
+> couple of patches to add support for Asymmetric Dual-Rank DIMMs.
+> 
+> Thanks,
+> Yazen
+> 
+> Link:
+> https://lkml.kernel.org/r/20190531234501.32826-1-Yazen.Ghannam@amd.com
+> 
+> v1->v2:
+> * Squash patches 1 and 2 together.
+> 
+> Yazen Ghannam (7):
+>   EDAC/amd64: Support more than two controllers for chip selects
+>     handling
+>   EDAC/amd64: Recognize DRAM device type with EDAC_CTL_CAP
+>   EDAC/amd64: Initialize DIMM info for systems with more than two
+>     channels
+>   EDAC/amd64: Find Chip Select memory size using Address Mask
+>   EDAC/amd64: Decode syndrome before translating address
+>   EDAC/amd64: Cache secondary Chip Select registers
+>   EDAC/amd64: Support Asymmetric Dual-Rank DIMMs
+> 
+>  drivers/edac/amd64_edac.c | 348 ++++++++++++++++++++++++--------------
+>  drivers/edac/amd64_edac.h |   9 +-
+>  2 files changed, 232 insertions(+), 125 deletions(-)
 
-In edac_create_csrow_object(), the reference to the object is not
-released when adding the device to the device hierarchy fails
-(device_add()). This may result in a memory leak.
+So this still has this confusing reporting of unpopulated nodes:
 
-Signed-off-by: Pan Bian <bianpan2016@163.com>
-Signed-off-by: Borislav Petkov <bp@suse.de>
-Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: James Morse <james.morse@arm.com>
-Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc: linux-edac <linux-edac@vger.kernel.org>
-Link: https://lkml.kernel.org/r/1555554438-103953-1-git-send-email-bianpan2016@163.com
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/edac/edac_mc_sysfs.c | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+[    4.291774] EDAC MC1: Giving out device to module amd64_edac controller F17h: DEV 0000:00:19.3 (INTERRUPT)
+[    4.292021] EDAC DEBUG: ecc_enabled: Node 2: No enabled UMCs.
+[    4.292231] EDAC amd64: Node 2: DRAM ECC disabled.
+[    4.292405] EDAC amd64: ECC disabled in the BIOS or no ECC capability, module will not load.
+[    4.292859] EDAC DEBUG: ecc_enabled: Node 3: No enabled UMCs.
+[    4.292963] EDAC amd64: Node 3: DRAM ECC disabled.
+[    4.293063] EDAC amd64: ECC disabled in the BIOS or no ECC capability, module will not load.
+[    4.293347] AMD64 EDAC driver v3.5.0
 
-diff --git a/drivers/edac/edac_mc_sysfs.c b/drivers/edac/edac_mc_sysfs.c
-index 40d792e96b75..203ebe348b77 100644
---- a/drivers/edac/edac_mc_sysfs.c
-+++ b/drivers/edac/edac_mc_sysfs.c
-@@ -426,6 +426,8 @@ static inline int nr_pages_per_csrow(struct csrow_info *csrow)
- static int edac_create_csrow_object(struct mem_ctl_info *mci,
- 				    struct csrow_info *csrow, int index)
- {
-+	int err;
-+
- 	csrow->dev.type = &csrow_attr_type;
- 	csrow->dev.bus = mci->bus;
- 	csrow->dev.groups = csrow_dev_groups;
-@@ -438,7 +440,11 @@ static int edac_create_csrow_object(struct mem_ctl_info *mci,
- 	edac_dbg(0, "creating (virtual) csrow node %s\n",
- 		 dev_name(&csrow->dev));
- 
--	return device_add(&csrow->dev);
-+	err = device_add(&csrow->dev);
-+	if (err)
-+		put_device(&csrow->dev);
-+
-+	return err;
- }
- 
- /* Create a CSROW object under specifed edac_mc_device */
+which needs fixing.
+
+Regardless, still not good enough. The snowy owl box I have here has 16
+GB:
+
+$ head -n1 /proc/meminfo
+MemTotal:       15715328 kB
+
+and yet
+
+[    4.282251] EDAC MC: UMC0 chip selects:
+[    4.282348] EDAC DEBUG: f17_addr_mask_to_cs_size: CS0 DIMM0 AddrMasks:
+[    4.282455] EDAC DEBUG: f17_addr_mask_to_cs_size:   Original AddrMask: 0x1fffffe
+[    4.282592] EDAC DEBUG: f17_addr_mask_to_cs_size:   Deinterleaved AddrMask: 0x1fffffe
+[    4.282732] EDAC DEBUG: f17_addr_mask_to_cs_size: CS1 DIMM0 AddrMasks:
+[    4.282839] EDAC DEBUG: f17_addr_mask_to_cs_size:   Original AddrMask: 0x1fffffe
+[    4.283060] EDAC DEBUG: f17_addr_mask_to_cs_size:   Deinterleaved AddrMask: 0x1fffffe
+[    4.283286] EDAC amd64: MC: 0:  8191MB 1:  8191MB
+				   ^^^^^^^^^^^^^^^^^
+
+[    4.283456] EDAC amd64: MC: 2:     0MB 3:     0MB
+
+...
+
+[    4.285379] EDAC MC: UMC1 chip selects:
+[    4.285476] EDAC DEBUG: f17_addr_mask_to_cs_size: CS0 DIMM0 AddrMasks:
+[    4.285583] EDAC DEBUG: f17_addr_mask_to_cs_size:   Original AddrMask: 0x1fffffe
+[    4.285721] EDAC DEBUG: f17_addr_mask_to_cs_size:   Deinterleaved AddrMask: 0x1fffffe
+[    4.285860] EDAC DEBUG: f17_addr_mask_to_cs_size: CS1 DIMM0 AddrMasks:
+[    4.285967] EDAC DEBUG: f17_addr_mask_to_cs_size:   Original AddrMask: 0x1fffffe
+[    4.286105] EDAC DEBUG: f17_addr_mask_to_cs_size:   Deinterleaved AddrMask: 0x1fffffe
+[    4.286244] EDAC amd64: MC: 0:  8191MB 1:  8191MB
+				   ^^^^^^^^^^^^^^^^^
+
+[    4.286345] EDAC amd64: MC: 2:     0MB 3:     0MB
+
+which shows 4 chip selects x 8Gb = 32G.
+
+So something's still wrong. Before the patchset it says:
+
+EDAC MC: UMC0 chip selects:
+EDAC amd64: MC: 0:  8192MB 1:     0MB
+...
+EDAC MC: UMC1 chip selects:
+EDAC amd64: MC: 0:  8192MB 1:     0MB
+
+which is the correct output.
+
+Thx.
+
 -- 
-2.20.1
+Regards/Gruss,
+    Boris.
 
-
-
+Good mailing practices for 400: avoid top-posting and trim the reply.
