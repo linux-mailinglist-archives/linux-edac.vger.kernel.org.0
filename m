@@ -2,88 +2,102 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C85357ECE0
-	for <lists+linux-edac@lfdr.de>; Fri,  2 Aug 2019 08:50:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 706837EDBB
+	for <lists+linux-edac@lfdr.de>; Fri,  2 Aug 2019 09:42:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389013AbfHBGuF (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Fri, 2 Aug 2019 02:50:05 -0400
-Received: from mail.skyhub.de ([5.9.137.197]:49350 "EHLO mail.skyhub.de"
+        id S2390003AbfHBHmb (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Fri, 2 Aug 2019 03:42:31 -0400
+Received: from mail.skyhub.de ([5.9.137.197]:56340 "EHLO mail.skyhub.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2388947AbfHBGuE (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Fri, 2 Aug 2019 02:50:04 -0400
+        id S1726601AbfHBHma (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Fri, 2 Aug 2019 03:42:30 -0400
 Received: from zn.tnic (p200300EC2F0D960039009D029409112E.dip0.t-ipconnect.de [IPv6:2003:ec:2f0d:9600:3900:9d02:9409:112e])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 721C81EC0B7A;
-        Fri,  2 Aug 2019 08:50:02 +0200 (CEST)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id B8DE51EC09A0;
+        Fri,  2 Aug 2019 09:42:28 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1564728602;
+        t=1564731748;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=ZoHS25hRNMnicnDGhWVhC+DXNpZvWLKJr/VOV1lJfWA=;
-        b=qv9aOIdBTTJJFHsk8glWcoEez7S0/g43QdSqvyxPmXZOdN1NGrbU7TN/fwKTdcWw7lRyw5
-        Fnw0W6J9qhzbSJpQC77QgJPqzQL/xvSQ08WKuvjQcJvibtpmXa+N2LBungpst3uO2EPSid
-        JCA+r/y0+NpXW1d7LB2yfZh7oScH+Bw=
-Date:   Fri, 2 Aug 2019 08:49:53 +0200
+        bh=/UtwsoWOHyCwYxaqkD7pCcazSZC5S1yzYUzg69yEA1M=;
+        b=kJbslpfjdHMYQSL1PgYVoW9RNvZQcoKYiWySwmslTXv4oKxSVM4nbSEX/OeXx7flgn6z99
+        L3Oqw893Fi6HQxDRMxwo5S1tO54d5FBEwvngTqs6HUJnvPqHsJX2tMb2VNJ+UXDRyZECEn
+        ySI8xUgVoJYTEQ2Pxri5B8wmQST7vxI=
+Date:   Fri, 2 Aug 2019 09:42:24 +0200
 From:   Borislav Petkov <bp@alien8.de>
 To:     "Ghannam, Yazen" <Yazen.Ghannam@amd.com>
 Cc:     "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 1/7] EDAC/amd64: Support more than two controllers for
- chip selects handling
-Message-ID: <20190802064953.GA30661@zn.tnic>
+Subject: Re: [PATCH v2 2/7] EDAC/amd64: Recognize DRAM device type with
+ EDAC_CTL_CAP
+Message-ID: <20190802074224.GB30661@zn.tnic>
 References: <20190709215643.171078-1-Yazen.Ghannam@amd.com>
- <20190709215643.171078-2-Yazen.Ghannam@amd.com>
+ <20190709215643.171078-3-Yazen.Ghannam@amd.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20190709215643.171078-2-Yazen.Ghannam@amd.com>
+In-Reply-To: <20190709215643.171078-3-Yazen.Ghannam@amd.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Tue, Jul 09, 2019 at 09:56:54PM +0000, Ghannam, Yazen wrote:
+On Tue, Jul 09, 2019 at 09:56:55PM +0000, Ghannam, Yazen wrote:
 > From: Yazen Ghannam <yazen.ghannam@amd.com>
 > 
-> The struct chip_select array that's used for saving chip select bases
-> and masks is fixed at length of two. There should be one struct
-> chip_select for each controller, so this array should be increased to
-> support systems that may have more than two controllers.
+> AMD Family 17h systems support x4 and x16 DRAM devices. However, the
+> device type is not checked when setting EDAC_CTL_CAP.
 > 
-> Increase the size of the struct chip_select array to eight, which is the
-> largest number of controllers per die currently supported on AMD
-> systems.
+> Set the appropriate EDAC_CTL_CAP flag based on the device type.
 > 
-> Fix number of DIMMs and Chip Select bases/masks on Family17h, because AMD
-> Family 17h systems support 2 DIMMs, 4 CS bases, and 2 CS masks per
-> channel.
+> Fixes: 2d09d8f301f5 ("EDAC, amd64: Determine EDAC MC capabilities on Fam17h")
+
+This is better: a patch which fixes a previous patch and is simple,
+small and clear. That you can tag with Fixes: just fine.
+
+> Signed-off-by: Yazen Ghannam <yazen.ghannam@amd.com>
+> ---
+> Link:
+> https://lkml.kernel.org/r/20190531234501.32826-4-Yazen.Ghannam@amd.com
 > 
-> Also, carve out the Family 17h+ reading of the bases/masks into a
-> separate function. This effectively reverts the original bases/masks
-> reading code to before Family 17h support was added.
+> v1->v2:
+> * No change.
 > 
-> This is a second version of a commit that was reverted.
+>  drivers/edac/amd64_edac.c | 13 ++++++++++---
+>  1 file changed, 10 insertions(+), 3 deletions(-)
 > 
-> Fixes: 07ed82ef93d6 ("EDAC, amd64: Add Fam17h debug output")
-> Fixes: 8de9930a4618 ("Revert "EDAC/amd64: Support more than two controllers for chip select handling"")
+> diff --git a/drivers/edac/amd64_edac.c b/drivers/edac/amd64_edac.c
+> index dd60cf5a3d96..125d6e2a828e 100644
+> --- a/drivers/edac/amd64_edac.c
+> +++ b/drivers/edac/amd64_edac.c
+> @@ -3150,12 +3150,15 @@ static bool ecc_enabled(struct pci_dev *F3, u16 nid)
+>  static inline void
+>  f17h_determine_edac_ctl_cap(struct mem_ctl_info *mci, struct amd64_pvt *pvt)
+>  {
+> -	u8 i, ecc_en = 1, cpk_en = 1;
+> +	u8 i, ecc_en = 1, cpk_en = 1, dev_x4 = 1, dev_x16 = 1;
+>  
+>  	for_each_umc(i) {
+>  		if (pvt->umc[i].sdp_ctrl & UMC_SDP_INIT) {
+>  			ecc_en &= !!(pvt->umc[i].umc_cap_hi & UMC_ECC_ENABLED);
+>  			cpk_en &= !!(pvt->umc[i].umc_cap_hi & UMC_ECC_CHIPKILL_CAP);
+> +
+> +			dev_x4 &= !!(pvt->umc[i].dimm_cfg & BIT(6));
+> +			dev_x16 &= !!(pvt->umc[i].dimm_cfg & BIT(7));
 
-I'm not sure about those Fixes: tags you're slapping everywhere. First
-of all, 8de9930a4618 is a revert so how can this be fixing a revert? If
-anything, it should be fixing the original commit
+Are those bits mutually exclusive?
 
-  0a227af521d6 ("EDAC/amd64: Support more than two controllers for chip select handling")
+I.e., so that you can do:
 
-which tried the more-than-2-memory-controllers thing.
+	if (dev_x4)
+		mci->edac_ctl_cap |= EDAC_FLAG_S4ECD4ED;
+	else
+		mci->edac_ctl_cap |= EDAC_FLAG_S16ECD16ED;
 
-But, it is not really a fix for that commit but a second attempt at it.
-Which is not really a fix but hw enablement.
-
-So I'm dropping those tags here. If you want them in stable, pls
-backport them properly and test them on the respective stable kernels
-before sending them to stable.
+?
 
 -- 
 Regards/Gruss,
