@@ -2,99 +2,91 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3226A7FF38
-	for <lists+linux-edac@lfdr.de>; Fri,  2 Aug 2019 19:05:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E732080530
+	for <lists+linux-edac@lfdr.de>; Sat,  3 Aug 2019 10:09:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2404075AbfHBRFK (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Fri, 2 Aug 2019 13:05:10 -0400
-Received: from foss.arm.com ([217.140.110.172]:55252 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2403954AbfHBRFJ (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Fri, 2 Aug 2019 13:05:09 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 120ED344;
-        Fri,  2 Aug 2019 10:05:09 -0700 (PDT)
-Received: from [10.1.196.105] (eglon.cambridge.arm.com [10.1.196.105])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 6082D3F575;
-        Fri,  2 Aug 2019 10:05:08 -0700 (PDT)
-Subject: Re: [PATCH v2 15/24] EDAC, ghes: Extract numa node information for
- each dimm
-To:     Robert Richter <rrichter@marvell.com>
-Cc:     Borislav Petkov <bp@alien8.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20190624150758.6695-1-rrichter@marvell.com>
- <20190624150758.6695-16-rrichter@marvell.com>
-From:   James Morse <james.morse@arm.com>
-Message-ID: <f878201f-f8fd-0f2a-5072-ba60c64eefaf@arm.com>
-Date:   Fri, 2 Aug 2019 18:05:07 +0100
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+        id S2387429AbfHCIJZ convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-edac@lfdr.de>); Sat, 3 Aug 2019 04:09:25 -0400
+Received: from za-smtp-delivery-112.mimecast.co.za ([41.74.205.112]:44599 "EHLO
+        za-smtp-delivery-112.mimecast.co.za" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S2387532AbfHCIJZ (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Sat, 3 Aug 2019 04:09:25 -0400
+X-Greylist: delayed 370 seconds by postgrey-1.27 at vger.kernel.org; Sat, 03 Aug 2019 04:09:23 EDT
+Received: from RAMDREXBACKEND.ramint.local (41.21.176.76 [41.21.176.76])
+ (Using TLS) by relay.mimecast.com with ESMTP id
+ za-mta-94-Uiro0CzMN2-GMBLw8iQEbw-1; Sat, 03 Aug 2019 10:03:08 +0200
+Received: from RAMEXFRONT02.ramint.local (10.0.21.73) by
+ RAMDREXBACKEND.ramint.local (10.0.201.71) with Microsoft SMTP Server (TLS) id
+ 15.0.847.32; Sat, 3 Aug 2019 10:03:07 +0200
+Received: from RAMCOLOSMTP02.ramint.local (10.0.20.215) by
+ RAMEXFRONT02.ramint.local (10.0.21.73) with Microsoft SMTP Server id
+ 15.0.1076.9 via Frontend Transport; Sat, 3 Aug 2019 10:03:07 +0200
+Received: from ramcolort01 ([10.0.20.105]) by RAMCOLOSMTP02.ramint.local with
+ Microsoft SMTPSVC(8.5.9600.16384);      Sat, 3 Aug 2019 10:03:07 +0200
+Received: from www-data by ramcolort01 with local (Exim 4.82)   (envelope-from
+ <www-data@ramisart01.ramint.local>)    id 1htp04-0000PG-Ue     for
+ linux-edac@vger.kernel.org; Sat, 03 Aug 2019 10:02:48 +0200
+Subject: [ram.helpdesk #502097] Contact Form Submission
+From:   Complaints <complaints@ram.co.za>
+Reply-To: <complaints@ram.co.za>
+In-Reply-To: <RAMCOLOSMTP023sl3xb00043542@RAMCOLOSMTP02.ramint.local>
+References: <RT-Ticket-502097@ramcolort01>
+ <RAMCOLOSMTP023sl3xb00043542@RAMCOLOSMTP02.ramint.local>
+Message-ID: <rt-4.0.19-26669-1564819350-1310.502097-3-0@ramcolort01>
+X-RT-Loop-Prevention: ram.helpdesk
+RT-Ticket: ram.helpdesk #502097
+Managed-BY: RT 4.0.19 (http://www.bestpractical.com/rt/)
+RT-Originator: linux-edac@vger.kernel.org
+Auto-Submitted: auto-replied
+To:     <linux-edac@vger.kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <20190624150758.6695-16-rrichter@marvell.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-GB
-Content-Transfer-Encoding: 7bit
+X-RT-Original-Encoding: utf-8
+Date:   Sat, 3 Aug 2019 10:02:30 +0200
+X-OriginalArrivalTime: 03 Aug 2019 08:03:07.0277 (UTC) FILETIME=[E26833D0:01D549D1]
+X-EXCLAIMER-MD-CONFIG: 3d868ac3-0b2b-4111-a52d-c138622af4d7
+X-MC-Unique: Uiro0CzMN2-GMBLw8iQEbw-1
+X-Mimecast-Spam-Score: 0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-Hi Robert,
+Thank you for making contact with us.
+This is an automated response and serves as confirmation that we have received your feedback/enquiry.
+Your reference number can be found in the subject line of this email.
 
-On 24/06/2019 16:09, Robert Richter wrote:
-> In a later patch we want to have one mc device per node. This patch
-> extracts the numa node information for each dimm. This is done by
-> collecting the physical address ranges from the DMI table (Memory
-> Array Mapped Address - Type 19 of SMBIOS spec). The node information
-> for a physical address is already know to a numa aware system (e.g. by
-> using the ACPI _PXM method or the ACPI SRAT table), so based on the PA
-> we can assign the node id to the dimms.
+We will respond as quickly as possible during our normal working hours (Mon to Fri between 08h00 and 17h00).
 
-I really don't like the way this depends on the rest of the kernel's NUMA support.
-mm's policies around the placement of data change with these settings, that shouldn't
-matter here. Reporting physical errors shouldn't be influenced by mm's placement policy.
+RAM Customer Support
+0861 726 726
 
-pfn_valid() is a sore subject on arm64, it will return false for random pages that the
-firmware is using, or wrote data to with unusual memory attributes. Depending on it makes
-this code fragile...
+SEE ORIGINAL MESSAGE BELOW:
+==========================
 
+Customer Support Submittion
 
-> A fallback that disables numa is implemented in case the node
-> information is inconsistent.
+A cutomer has make a request to your department. Please see the details below:
 
-... which is why you need a fallback.
+Name
 
-All this makes it difficult to explain why this things view of memory is as it is.
-Making the RAS/edac code unpredictable like this is a hard sell.
+Williamhoilk WilliamhoilkPZ
 
-You need to squint through Kconfig, SRAT and the UEFI memory map.
-(due to pfn_valid(): the behaviour here can change over a reboot)
+Email Address
 
+linux-edac@vger.kernel.org
 
-Can we 'just' use the type-16 handle to group the DIMMs?
+Telephone
 
-As an illustration:
-http://www.linux-arm.org/git?p=linux-jm.git;a=shortlog;h=refs/heads/edac_ghes_2level_dimms/v0
+86894961739
 
-This reflects the SMBIOS tables on my NUMA desktop, and doesn't depend on any of the
-above. I'd be interested to know what is missing from this approach.
+Waybill / Reference
 
-(which numa node? I don't think we need to know the mapping of mcX<->nid up front. We can
-find it from the faulting physical address when we get an error report).
+6833
 
+Comment
 
-N.B, your mail is still arriving base64 encoded. It looks like this:
-https://lore.kernel.org/linux-edac/20190624150758.6695-16-rrichter@marvell.com/raw
+Find Girls in Near Me Area for Sex:
+http://clevseskegin.tk/5uflz?&ougwu=JDG9H6FKvuSM
 
-Lei Wang found:
-> Ah I found if without explicit "--transfer-encoding=7bit" when do "git
-> send-mail", my ubuntu box sent out base64 by default.
-
-(but his mail didn't get archived for some reason)
-
-
-Thanks,
-
-James
