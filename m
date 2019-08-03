@@ -2,91 +2,98 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E732080530
-	for <lists+linux-edac@lfdr.de>; Sat,  3 Aug 2019 10:09:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 70FF4805A2
+	for <lists+linux-edac@lfdr.de>; Sat,  3 Aug 2019 12:08:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387429AbfHCIJZ convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-edac@lfdr.de>); Sat, 3 Aug 2019 04:09:25 -0400
-Received: from za-smtp-delivery-112.mimecast.co.za ([41.74.205.112]:44599 "EHLO
-        za-smtp-delivery-112.mimecast.co.za" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S2387532AbfHCIJZ (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Sat, 3 Aug 2019 04:09:25 -0400
-X-Greylist: delayed 370 seconds by postgrey-1.27 at vger.kernel.org; Sat, 03 Aug 2019 04:09:23 EDT
-Received: from RAMDREXBACKEND.ramint.local (41.21.176.76 [41.21.176.76])
- (Using TLS) by relay.mimecast.com with ESMTP id
- za-mta-94-Uiro0CzMN2-GMBLw8iQEbw-1; Sat, 03 Aug 2019 10:03:08 +0200
-Received: from RAMEXFRONT02.ramint.local (10.0.21.73) by
- RAMDREXBACKEND.ramint.local (10.0.201.71) with Microsoft SMTP Server (TLS) id
- 15.0.847.32; Sat, 3 Aug 2019 10:03:07 +0200
-Received: from RAMCOLOSMTP02.ramint.local (10.0.20.215) by
- RAMEXFRONT02.ramint.local (10.0.21.73) with Microsoft SMTP Server id
- 15.0.1076.9 via Frontend Transport; Sat, 3 Aug 2019 10:03:07 +0200
-Received: from ramcolort01 ([10.0.20.105]) by RAMCOLOSMTP02.ramint.local with
- Microsoft SMTPSVC(8.5.9600.16384);      Sat, 3 Aug 2019 10:03:07 +0200
-Received: from www-data by ramcolort01 with local (Exim 4.82)   (envelope-from
- <www-data@ramisart01.ramint.local>)    id 1htp04-0000PG-Ue     for
- linux-edac@vger.kernel.org; Sat, 03 Aug 2019 10:02:48 +0200
-Subject: [ram.helpdesk #502097] Contact Form Submission
-From:   Complaints <complaints@ram.co.za>
-Reply-To: <complaints@ram.co.za>
-In-Reply-To: <RAMCOLOSMTP023sl3xb00043542@RAMCOLOSMTP02.ramint.local>
-References: <RT-Ticket-502097@ramcolort01>
- <RAMCOLOSMTP023sl3xb00043542@RAMCOLOSMTP02.ramint.local>
-Message-ID: <rt-4.0.19-26669-1564819350-1310.502097-3-0@ramcolort01>
-X-RT-Loop-Prevention: ram.helpdesk
-RT-Ticket: ram.helpdesk #502097
-Managed-BY: RT 4.0.19 (http://www.bestpractical.com/rt/)
-RT-Originator: linux-edac@vger.kernel.org
-Auto-Submitted: auto-replied
-To:     <linux-edac@vger.kernel.org>
+        id S2388344AbfHCKIt (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Sat, 3 Aug 2019 06:08:49 -0400
+Received: from mail.skyhub.de ([5.9.137.197]:40076 "EHLO mail.skyhub.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2388201AbfHCKIt (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Sat, 3 Aug 2019 06:08:49 -0400
+Received: from zn.tnic (p200300EC2F2082007166E282E47B3C81.dip0.t-ipconnect.de [IPv6:2003:ec:2f20:8200:7166:e282:e47b:3c81])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 56E051EC04CD;
+        Sat,  3 Aug 2019 12:08:47 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1564826927;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=ddSwU1R0yyWs4XLmHgJ7K3+4ljBdUQ98umBmarQFLs4=;
+        b=LCcVlSoBqaYKny0xghcwy9UF6y6M0s4KR8hU2qjqQkMh+K6LIsaGqJTV9ShwmhzAXI7Uf2
+        46Lq+A7s/WS11dOR2++HqtP5DOByN18wVirV5065sGhWrw4QPXgMzVm1cMd8E26zl+IX62
+        JuVVv/1qxufQ9k/oszkz6gGgcT2yfKA=
+Date:   Sat, 3 Aug 2019 12:08:37 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Robert Richter <rrichter@marvell.com>
+Cc:     James Morse <james.morse@arm.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 01/24] EDAC, mc: Fix grain_bits calculation
+Message-ID: <20190803100837.GB2100@zn.tnic>
+References: <20190624150758.6695-1-rrichter@marvell.com>
+ <20190624150758.6695-2-rrichter@marvell.com>
 MIME-Version: 1.0
-X-RT-Original-Encoding: utf-8
-Date:   Sat, 3 Aug 2019 10:02:30 +0200
-X-OriginalArrivalTime: 03 Aug 2019 08:03:07.0277 (UTC) FILETIME=[E26833D0:01D549D1]
-X-EXCLAIMER-MD-CONFIG: 3d868ac3-0b2b-4111-a52d-c138622af4d7
-X-MC-Unique: Uiro0CzMN2-GMBLw8iQEbw-1
-X-Mimecast-Spam-Score: 0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20190624150758.6695-2-rrichter@marvell.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-Thank you for making contact with us.
-This is an automated response and serves as confirmation that we have received your feedback/enquiry.
-Your reference number can be found in the subject line of this email.
+On Mon, Jun 24, 2019 at 03:08:55PM +0000, Robert Richter wrote:
+> The grain in edac is defined as "minimum granularity for an error
+> report, in bytes". The following calculation of the grain_bits in
+> edac_mc is wrong:
+> 
+> 	grain_bits = fls_long(e->grain) + 1;
+> 
+> Where grain_bits is defined as:
+> 
+> 	grain = 1 << grain_bits
+> 
+> Example:
+> 
+> 	grain = 8	# 64 bit (8 bytes)
+> 	grain_bits = fls_long(8) + 1
+> 	grain_bits = 4 + 1 = 5
+> 
+> 	grain = 1 << grain_bits
+> 	grain = 1 << 5 = 32
+> 
+> Replacing it with the correct calculation:
+> 
+> 	grain_bits = fls_long(e->grain - 1);
+> 
+> The example gives now:
+> 
+> 	grain_bits = fls_long(8 - 1)
+> 	grain_bits = fls_long(8 - 1)
+> 	grain_bits = 3
+> 
+> 	grain = 1 << 3 = 8
+> 
+> Note: We need to check if the hardware reports a reasonable grain != 0
+> and fallback with a warn_once and 1 byte granularity otherwise.
+> 
+> Signed-off-by: Robert Richter <rrichter@marvell.com>
+> ---
+>  drivers/edac/edac_mc.c | 10 ++++++++--
+>  1 file changed, 8 insertions(+), 2 deletions(-)
 
-We will respond as quickly as possible during our normal working hours (Mon to Fri between 08h00 and 17h00).
+Applied to the new EDAC repo:
 
-RAM Customer Support
-0861 726 726
+https://git.kernel.org/pub/scm/linux/kernel/git/ras/ras.git/log/?h=edac-for-next
 
-SEE ORIGINAL MESSAGE BELOW:
-==========================
+Thx.
 
-Customer Support Submittion
+-- 
+Regards/Gruss,
+    Boris.
 
-A cutomer has make a request to your department. Please see the details below:
-
-Name
-
-Williamhoilk WilliamhoilkPZ
-
-Email Address
-
-linux-edac@vger.kernel.org
-
-Telephone
-
-86894961739
-
-Waybill / Reference
-
-6833
-
-Comment
-
-Find Girls in Near Me Area for Sex:
-http://clevseskegin.tk/5uflz?&ougwu=JDG9H6FKvuSM
-
+Good mailing practices for 400: avoid top-posting and trim the reply.
