@@ -2,94 +2,72 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id ABA5D8501E
-	for <lists+linux-edac@lfdr.de>; Wed,  7 Aug 2019 17:41:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B0A2A85635
+	for <lists+linux-edac@lfdr.de>; Thu,  8 Aug 2019 00:51:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388708AbfHGPlB (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Wed, 7 Aug 2019 11:41:01 -0400
-Received: from mail-ot1-f67.google.com ([209.85.210.67]:36199 "EHLO
-        mail-ot1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388636AbfHGPlA (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Wed, 7 Aug 2019 11:41:00 -0400
-Received: by mail-ot1-f67.google.com with SMTP id r6so106031029oti.3
-        for <linux-edac@vger.kernel.org>; Wed, 07 Aug 2019 08:41:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sifive.com; s=google;
-        h=date:from:to:cc:subject:in-reply-to:message-id:references
-         :user-agent:mime-version;
-        bh=HAXloeaOD6Dgz0TeHmNMEkOukZ7q9iclSHb8TPMnnoM=;
-        b=MpR6TPeY9ksExXbV1M0WZ4jh4/JwJ9vWGRF9Q289lrNZt6ApwrI38CI+eNBR2DkMNa
-         Z7kScwuTmiRNYxUCmrhHLisuDE7Jq6jOB6Uy5ZU+gWd24CE2XuQKs/7HOsVWT5q4QYua
-         0uVXOCj7D12af1thKryyrhhJNQYJeGuHuo6mHxA3Em5MvzfobH7So0FWtWQRRIAv9cpK
-         SKGbb+p6Gx21xSqHvNDTgXbWQ6wLvI8lAggwhl53uqM/EKM/49TBSh42hrAepJq0swFZ
-         IrsJjSxAGrDjL7077HKRQ9LC6pgVFEbioMkeUxrVjzA6YqVgZD5u3o5nUM0Nz6aGTkLd
-         KPNA==
+        id S1730280AbfHGWvt (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Wed, 7 Aug 2019 18:51:49 -0400
+Received: from outbound.smtp.vt.edu ([198.82.183.121]:50576 "EHLO
+        omr1.cc.vt.edu" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1729753AbfHGWvt (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Wed, 7 Aug 2019 18:51:49 -0400
+Received: from mr3.cc.vt.edu (mr3.cc.ipv6.vt.edu [IPv6:2607:b400:92:8500:0:7f:b804:6b0a])
+        by omr1.cc.vt.edu (8.14.4/8.14.4) with ESMTP id x77Mplie012336
+        for <linux-edac@vger.kernel.org>; Wed, 7 Aug 2019 18:51:47 -0400
+Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com [209.85.222.197])
+        by mr3.cc.vt.edu (8.14.7/8.14.7) with ESMTP id x77MpgH9014682
+        for <linux-edac@vger.kernel.org>; Wed, 7 Aug 2019 18:51:47 -0400
+Received: by mail-qk1-f197.google.com with SMTP id x17so80717638qkf.14
+        for <linux-edac@vger.kernel.org>; Wed, 07 Aug 2019 15:51:47 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:in-reply-to:message-id
-         :references:user-agent:mime-version;
-        bh=HAXloeaOD6Dgz0TeHmNMEkOukZ7q9iclSHb8TPMnnoM=;
-        b=enkiBmzs6rG3Nvo6ROm2CyRgko55DrEpu1sWc8CSD/5mo3uYwF9hNZALnohw/rcg1x
-         W1R/bWXsFawizAHCBLmhRMAK7gKHFA9gz2pwmoxgHG3snf09mOscIjOnWvl4NaGp4iZS
-         2gqRlUZHP4HM7awMS7fernMTxg7+yVkFNeheYWlc8neZg+u9Nc4qUJehcF9O7cJXmQJ9
-         syfXaTaZYx+TOZgby/6HPOjA5zFJutoQM20yU0eICD/a5CcyNoRXwCQpnJCgbw3OwEMo
-         9D2ke38xz+8IALtv+onr5ThiOWXSFi+3CbI4DdzdF4brPnvDKog/l6DZB9/CqS5KVG/e
-         W1eQ==
-X-Gm-Message-State: APjAAAW1Y3eBa6s+yhCHUIr+r43xk4viqVYPqvaRqbjBWsd7pqMwcWvg
-        DSCY9l5ejhH17YtH0KJBbe7ctg==
-X-Google-Smtp-Source: APXvYqwyIB1L+QiELH/YNHUY/Gf3N1VW1Uv2dDPLw4xrbndDgaWQH9vQgWS83jDCgfoU7TiFL406Bw==
-X-Received: by 2002:a5e:8e0d:: with SMTP id a13mr3602621ion.28.1565192459955;
-        Wed, 07 Aug 2019 08:40:59 -0700 (PDT)
-Received: from localhost (c-73-95-159-87.hsd1.co.comcast.net. [73.95.159.87])
-        by smtp.gmail.com with ESMTPSA id a1sm68914330ioo.5.2019.08.07.08.40.59
+        h=x-gm-message-state:sender:from:to:cc:subject:mime-version:date
+         :message-id;
+        bh=VVqj1RHavfLwN3oDC8GBFJV2upV3A569CWoZr0FMSAI=;
+        b=PuX4hU3Wce+hhk3F6Zt9fqjbTo18upcAA83yzN3SmXBQJRb50LkG1KlIxk5Q3+1XVl
+         pUXHLjkal9yao26CDq77DpAHL0VU29Y99blWEHoTMMNwio4Yxz9v6t+1LPptqHcsy9Lr
+         ig+ogQIgs2VEgH8kGBrJBYMXfstciIjqtaNekfNOWtI5PRnz7QJGXa5Bgi9Dmko+20ul
+         lKuYCcbUUZVfhiq0t7R3GIEkGzFMr9DWIKnNWLorDC8Qir5BiHG6Oe4rd5wSiNiN/mke
+         BS1XNrNdYAdHZ0jpjnzbXTyOsDkcEH6xQhHw/GtdXNVB93JN4mRdmGMYBU3iFMyJUXmK
+         cfpA==
+X-Gm-Message-State: APjAAAV9jlIX15iJyHeovDrn6kMrgEGZ56EeGmD5O8vYsHItDj09AlBW
+        KimL3m5Z1wfNCW82xxaNPVMeQ3hjcyWUGKhjQ5c+u44QruHKBNGU3MsYyFre+/2cQEjdSs0wnNf
+        Ho2eU/UHO+loklyHWXCqgwuaGw6GLpOXI
+X-Received: by 2002:ac8:194f:: with SMTP id g15mr10459995qtk.113.1565218302719;
+        Wed, 07 Aug 2019 15:51:42 -0700 (PDT)
+X-Google-Smtp-Source: APXvYqxFVSty23dhumB7bRuWQr1litmwZOB8e2hPR6QLdBsmY9Fdo6u3y1IL1k670uNq+n9spIELcg==
+X-Received: by 2002:ac8:194f:: with SMTP id g15mr10459984qtk.113.1565218302520;
+        Wed, 07 Aug 2019 15:51:42 -0700 (PDT)
+Received: from turing-police ([2601:5c0:c001:4341::359])
+        by smtp.gmail.com with ESMTPSA id u15sm1920864qtq.76.2019.08.07.15.51.41
         (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Wed, 07 Aug 2019 08:40:59 -0700 (PDT)
-Date:   Wed, 7 Aug 2019 08:40:58 -0700 (PDT)
-From:   Paul Walmsley <paul.walmsley@sifive.com>
-X-X-Sender: paulw@viisi.sifive.com
-To:     Christoph Hellwig <hch@lst.de>
-cc:     Greg KH <gregkh@linuxfoundation.org>, arnd@arndb.de,
-        palmer@sifive.com, linux-kernel@vger.kernel.org,
-        james.morse@arm.com, linux-riscv@lists.infradead.org,
-        mchehab@kernel.org, linux-edac@vger.kernel.org
-Subject: Re: [PATCH] riscv: move sifive_l2_cache.c to drivers/misc
-In-Reply-To: <20190807152438.GA16495@lst.de>
-Message-ID: <alpine.DEB.2.21.9999.1908070832500.13971@viisi.sifive.com>
-References: <20190807151009.31971-1-hch@lst.de> <20190807152215.GA26690@kroah.com> <20190807152438.GA16495@lst.de>
-User-Agent: Alpine 2.21.9999 (DEB 301 2018-08-15)
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+        Wed, 07 Aug 2019 15:51:41 -0700 (PDT)
+From:   "Valdis =?utf-8?Q?Kl=c4=93tnieks?=" <valdis.kletnieks@vt.edu>
+X-Google-Original-From: "Valdis =?utf-8?Q?Kl=c4=93tnieks?=" <Valdis.Kletnieks@vt.edu>
+X-Mailer: exmh version 2.9.0 11/07/2018 with nmh-1.7+dev
+To:     Tony Luck <tony.luck@intel.com>, Borislav Petkov <bp@alien8.de>
+cc:     linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2 0/2] drivers/ras cleanups
+Mime-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Date:   Wed, 07 Aug 2019 18:51:40 -0400
+Message-ID: <6559.1565218300@turing-police>
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Wed, 7 Aug 2019, Christoph Hellwig wrote:
+Two patches in this series.
 
-> On Wed, Aug 07, 2019 at 05:22:15PM +0200, Greg KH wrote:
-> > > Fixes: a967a289f169 ("RISC-V: sifive_l2_cache: Add L2 cache controller driver for SiFive SoCs")
-> > > Signed-off-by: Christoph Hellwig <hch@lst.de>
-> > > ---
-> > >  arch/riscv/mm/Makefile                            | 1 -
-> > >  drivers/misc/Makefile                             | 1 +
-> > >  {arch/riscv/mm => drivers/misc}/sifive_l2_cache.c | 0
-> > >  3 files changed, 1 insertion(+), 1 deletion(-)
-> > >  rename {arch/riscv/mm => drivers/misc}/sifive_l2_cache.c (100%)
-> > 
-> > Why isn't this in drivers/edac/ ?
-> > why is this a misc driver?  Seems like it should sit next to the edac
-> > stuff.
-> 
-> No idea.  EDAC maintainers, would you object to taking what is 
-> currently in arch/riscv/mm//sifive_l2_cache.c to drivers/edac/ ?
+1) There's no need to even build drivers/ras/debugfs.o if config doesn't
+include debugfs
 
-If this driver is moved out of arch/riscv/mm, it should ideally go into 
-some sort of common L2 cache controller driver directory, along 
-with other L2 cache controller drivers like arch/arm/mm/*l2c*. 
+2) Add proper includes to silence warnings building debugfs.o 
 
-Like many L2 cache controllers, this controller also supports cache 
-flushing operations and SoC-specific way operations.  We just don't use 
-those on RISC-V - yet.
+Changes since first version: deal with error when building without debugfs.
 
+ Makefile  |    5 ++++-
+ debugfs.c |    2 ++
+ 2 files changed, 6 insertions(+), 1 deletion(-)
 
-- Paul
+Signed-off-by: Valdis Kletnieks <valdis.kletnieks@vt.edu>
