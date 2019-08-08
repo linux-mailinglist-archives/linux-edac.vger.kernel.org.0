@@ -2,100 +2,124 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B36E986586
-	for <lists+linux-edac@lfdr.de>; Thu,  8 Aug 2019 17:19:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 77D8D86BE9
+	for <lists+linux-edac@lfdr.de>; Thu,  8 Aug 2019 22:52:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732477AbfHHPTE (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Thu, 8 Aug 2019 11:19:04 -0400
-Received: from outbound.smtp.vt.edu ([198.82.183.121]:43676 "EHLO
-        omr1.cc.vt.edu" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S2389876AbfHHPTD (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Thu, 8 Aug 2019 11:19:03 -0400
-Received: from mr2.cc.vt.edu (mr2.cc.vt.edu [IPv6:2607:b400:92:8400:0:90:e077:bf22])
-        by omr1.cc.vt.edu (8.14.4/8.14.4) with ESMTP id x78FJ2N5001435
-        for <linux-edac@vger.kernel.org>; Thu, 8 Aug 2019 11:19:02 -0400
-Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com [209.85.222.200])
-        by mr2.cc.vt.edu (8.14.7/8.14.7) with ESMTP id x78FIv3v010264
-        for <linux-edac@vger.kernel.org>; Thu, 8 Aug 2019 11:19:02 -0400
-Received: by mail-qk1-f200.google.com with SMTP id e18so82640760qkl.17
-        for <linux-edac@vger.kernel.org>; Thu, 08 Aug 2019 08:19:02 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:from:to:cc:subject:in-reply-to:references
-         :mime-version:content-transfer-encoding:date:message-id;
-        bh=Mz5YNJGQLxkAt1Yp0XvNK2J5Q+Yh19UsVBE0iVAb2wk=;
-        b=KjkLPM1wPO4R/QgF3DpdwiCwP7AmduGac3KAry5/Mxk1KjS9C6Bm6STDwTTSlTO4YL
-         VHydk+1pdBnCXnokGMnvXfHaBfokfnOc7sUrBCw/Mm56kc2/+PQ5Smhab1lkZwUhCUsC
-         HB2DGxDTtJt7Z2ecOFNczG5DTrTCmDPZZvnowSmmGYg9XFcdN8DkB0pcF25GIosGqhNP
-         YbnADIi2pkKm5I8XSMQzyJ97n0sgPEZQStU1YmU6gJvVzjv+WokGN59UDPUXUM/AvoiP
-         KeGGMh+l7q+LsLmQiU23Smgn0wwnx/ymZQRMaY0pjrr+hj18vdWttABkFneBZPj8xM32
-         qXuQ==
-X-Gm-Message-State: APjAAAV2InV6w+7Qd8EdHETBcC4VRdUewf0jGN9ZERO4RxQfmg3Wesd/
-        voL42ohtN6t6zrcMbZGh8c69yRcCHsvVJZq3xpVbtP4pwb0KF8Zp5UEP414Nu/CUbHtg6MtK8cJ
-        OMmabBb63liO7dJi6oroM9fERE02TrAQj
-X-Received: by 2002:a0c:8695:: with SMTP id 21mr14060203qvf.166.1565277537060;
-        Thu, 08 Aug 2019 08:18:57 -0700 (PDT)
-X-Google-Smtp-Source: APXvYqyVymH+HfDH06bY7DUoeXncYML+uxbN0G23FiFMn5CfIw4hXYiB6nmgG9Lap7VwuF9DPccieA==
-X-Received: by 2002:a0c:8695:: with SMTP id 21mr14060187qvf.166.1565277536837;
-        Thu, 08 Aug 2019 08:18:56 -0700 (PDT)
-Received: from turing-police ([2601:5c0:c001:4341::359])
-        by smtp.gmail.com with ESMTPSA id m5sm420174qtc.89.2019.08.08.08.18.55
-        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Thu, 08 Aug 2019 08:18:55 -0700 (PDT)
-From:   "Valdis Kl=?utf-8?Q?=c4=93?=tnieks" <valdis.kletnieks@vt.edu>
-X-Google-Original-From: "Valdis Kl=?utf-8?Q?=c4=93?=tnieks" <Valdis.Kletnieks@vt.edu>
-X-Mailer: exmh version 2.9.0 11/07/2018 with nmh-1.7+dev
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     Tony Luck <tony.luck@intel.com>, linux-edac@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] drivers/ras: Don't build debugfs.o if no debugfs in config
-In-Reply-To: <20190808151415.GH20745@zn.tnic>
-References: <7053.1565218556@turing-police> <20190808093101.GE20745@zn.tnic> <77171.1565269299@turing-police> <20190808142055.GF20745@zn.tnic> <84877.1565276929@turing-police>
- <20190808151415.GH20745@zn.tnic>
-Mime-Version: 1.0
-Content-Type: multipart/signed; boundary="==_Exmh_1565277534_4269P";
-         micalg=pgp-sha1; protocol="application/pgp-signature"
-Content-Transfer-Encoding: 7bit
-Date:   Thu, 08 Aug 2019 11:18:54 -0400
-Message-ID: <85385.1565277534@turing-police>
+        id S2390230AbfHHUwN (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Thu, 8 Aug 2019 16:52:13 -0400
+Received: from mail-eopbgr50103.outbound.protection.outlook.com ([40.107.5.103]:49433
+        "EHLO EUR03-VE1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1732786AbfHHUwM (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Thu, 8 Aug 2019 16:52:12 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=AnegIlsQOHkiibPYTJUiviHLFPVvnWitgI3LO0KDH39NpjPft50yyEU7XjcumNHtuzFZByyeCPA4cAiU5wuqRf4hXjdNZ2sRosnCyuoLDDOCgCref2M6Rh5iQqQZyX4JOTvWWHz1pO/igyOH/rNiFsOL3JaJ4BHbgwIyjI9/I+NTX8ZYqm90Uj63j4ZcA7uR6IK5hFA8Mop4ac+5bbg1rMDsLwj9RSpIQxUhIIbDDGXNfUJddfkgIon8lk+eunc5WoWqe7Te9lM/obgVlzgV/ActwoVjZ6I6Uo2MQjJJtw0qreLAi+uU7lIxpPGF8FHRSZHyh3XpUhMydP0/n+VxPg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ag3FytFXrQCXhtqyWgy3ljKB9c6k7gZR3P+5VjugJyU=;
+ b=HGlDBsIHNMxWJOjklCX4ndh0KOEjcZZcWt+8caq/we5c+3aSUXsjzwTY0iaYZCoXJpP7G+uBhX8FPFT2VgBa8y/emTveBoPD5U9NoOMlZ4wTJOvEF//gObpacSRIo5qdEnpiuTs3rT59o/pe3Vh/lmv1FsKqsC8PBHKBFzfQEd+FxdwmCNR3RbK4i8rzzdLqQhB/QeJ6MiNKrerz6MRTV81JDeOJ3RPVhGe3a2U2ARnm6GKoe/aUHezWWBWEheLEMQwc4GMpH1tDt6HQEBsF+1K3lp5QLJQ1PE1Yv98BAJsWzA8pgOKnOf5fkcRgnIJ4Tg1LJy4CePu/G7mkBfSEuA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=silicom-usa.com; dmarc=pass action=none
+ header.from=silicom-usa.com; dkim=pass header.d=silicom-usa.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=SILICOMLTD.onmicrosoft.com; s=selector2-SILICOMLTD-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ag3FytFXrQCXhtqyWgy3ljKB9c6k7gZR3P+5VjugJyU=;
+ b=HHXCHmVIuzzINROtiFAd1S1N7w2SpVxGIKPLjiFb0il02/pu/aeZ72Ejmpq+aFeP4Scc+ZtwIiYveJ4bUQOWG9W9kRzrA4O7AbtCooHkVZc+CTiuM+IKXHJ0Sd9qQNhScKS+mS+cU4BFDAs5yV8HFu6lYPaofASEqVRaE9GUpTU=
+Received: from VI1PR0402MB2717.eurprd04.prod.outlook.com (10.175.22.139) by
+ VI1PR0402MB2910.eurprd04.prod.outlook.com (10.175.23.140) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2157.15; Thu, 8 Aug 2019 20:52:09 +0000
+Received: from VI1PR0402MB2717.eurprd04.prod.outlook.com
+ ([fe80::eca9:e1f:eca7:8439]) by VI1PR0402MB2717.eurprd04.prod.outlook.com
+ ([fe80::eca9:e1f:eca7:8439%9]) with mapi id 15.20.2157.015; Thu, 8 Aug 2019
+ 20:52:09 +0000
+From:   Stephen Douthit <stephend@silicom-usa.com>
+To:     Tony Luck <tony.luck@intel.com>, Borislav Petkov <bp@alien8.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        James Morse <james.morse@arm.com>
+CC:     Stephen Douthit <stephend@silicom-usa.com>,
+        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: [PATCH] EDAC, pnd2: Fix ioremap() size in dnv_rd_reg() from 64K ->
+ 32K
+Thread-Topic: [PATCH] EDAC, pnd2: Fix ioremap() size in dnv_rd_reg() from 64K
+ -> 32K
+Thread-Index: AQHVTiskHjYyDh8ZF0eccCUFKX9IfQ==
+Date:   Thu, 8 Aug 2019 20:52:08 +0000
+Message-ID: <20190808205147.25547-1-stephend@silicom-usa.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-clientproxiedby: BN6PR22CA0041.namprd22.prod.outlook.com
+ (2603:10b6:404:37::27) To VI1PR0402MB2717.eurprd04.prod.outlook.com
+ (2603:10a6:800:b4::11)
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=stephend@silicom-usa.com; 
+x-ms-exchange-messagesentrepresentingtype: 1
+x-mailer: git-send-email 2.21.0
+x-originating-ip: [96.82.2.57]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 6f9bc469-1a39-4154-a4f7-08d71c424744
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(1401327)(2017052603328)(7193020);SRVR:VI1PR0402MB2910;
+x-ms-traffictypediagnostic: VI1PR0402MB2910:
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <VI1PR0402MB2910B14AE9743C527631B2CF94D70@VI1PR0402MB2910.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:1751;
+x-forefront-prvs: 012349AD1C
+x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(346002)(376002)(366004)(396003)(39850400004)(136003)(189003)(199004)(8936002)(66476007)(186003)(86362001)(2906002)(26005)(66066001)(54906003)(478600001)(6436002)(50226002)(316002)(52116002)(110136005)(4744005)(2616005)(99286004)(1076003)(102836004)(476003)(486006)(386003)(6506007)(6486002)(305945005)(64756008)(3846002)(81166006)(7736002)(14454004)(81156014)(66446008)(66556008)(25786009)(4326008)(66946007)(5660300002)(71200400001)(71190400001)(6512007)(6116002)(8676002)(36756003)(256004)(14444005)(53936002);DIR:OUT;SFP:1102;SCL:1;SRVR:VI1PR0402MB2910;H:VI1PR0402MB2717.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
+received-spf: None (protection.outlook.com: silicom-usa.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam-message-info: Vjq7+6tMlQTJZ/UUA0VLK/8K/0Mufo0uT0OXGHnrTKobuKJWg3SUgAbpPG0ZkmkyH4lqFAUDnKelnSNESL8DgzEniAlFeMwI0lu30bOoxfE/CPXtJLVJqPcahkaPbXt8rO2A777FEbhsXRj9MmCfOVayWKB8XE83f94u5a2YIh3i659Ou/6owRs5biTp9kL5HC3KtNWquyrmPFJ67cUb4trYdOgp4RqYr9FhdWL4stenmYA4TmAUKW8LbdaC3z1HIiL1R5UdeMSXj8W/exUTuB0BrwIQEpc2TYgwzL+hwBRZ4UXX74kNw6YrrY2lLmtQrhzarbBtxNxi95U8YbdIeslnYAtHYF0T92vD8C8wKx0N9vEW+lyP0if/VL2S8NyE1Z27rWmwsgTHTPcthV5gAZs7L8BsdcT+h74TiT5u5Zk=
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-OriginatorOrg: silicom-usa.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6f9bc469-1a39-4154-a4f7-08d71c424744
+X-MS-Exchange-CrossTenant-originalarrivaltime: 08 Aug 2019 20:52:09.0152
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: c9e326d8-ce47-4930-8612-cc99d3c87ad1
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: ie2srQZfxmyCf9tp+FjceuG8Bu70zNnt7sGDVirnpM0853iWQdeczNgFvaad7fbhylmdJaXmfKQu3pQJ6aRR+gddEYvCmm9IneqFgVZx7uo=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR0402MB2910
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
---==_Exmh_1565277534_4269P
-Content-Type: text/plain; charset=us-ascii
+BIOS has marked the 32K MCHBAR window as reserved, so when dnv_rd_reg()
+tries to ioremap() a 64KB region you get warnings like:
 
-On Thu, 08 Aug 2019 17:14:15 +0200, Borislav Petkov said:
+resource sanity check: requesting [mem 0xfed10000-0xfed1ffff], which spans =
+more than reserved [mem 0xfed10000-0xfed17fff]
+caller dnv_rd_reg+0xc8/0x240 [pnd2_edac] mapping multiple BARs
 
-> I'm build-testing a slightly different version of yours and I'll commit
-> it if it passes the build smoke tests:
+ioremap() the correct size on Denverton platforms to get rid of those
+warnings.
 
-> -obj-$(CONFIG_RAS)	+= ras.o debugfs.o
-> +obj-$(CONFIG_RAS)	+= ras.o
-> +obj-$(CONFIG_DEBUG_FS)	+= debugfs.o
+Signed-off-by: Stephen Douthit <stephend@silicom-usa.com>
+---
+ drivers/edac/pnd2_edac.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-OK. We'll do it that way then :)
+diff --git a/drivers/edac/pnd2_edac.c b/drivers/edac/pnd2_edac.c
+index 903a4f1fadcc..1d16f2ac776e 100644
+--- a/drivers/edac/pnd2_edac.c
++++ b/drivers/edac/pnd2_edac.c
+@@ -295,7 +295,7 @@ static int dnv_rd_reg(int port, int off, int op, void *=
+data, size_t sz, char *na
+ 			addr +=3D (port << 16);
+ 		}
+=20
+-		base =3D ioremap((resource_size_t)addr, 0x10000);
++		base =3D ioremap((resource_size_t)addr, 0x8000);
+ 		if (!base)
+ 			return -ENODEV;
+=20
+--=20
+2.21.0
 
---==_Exmh_1565277534_4269P
-Content-Type: application/pgp-signature
-
------BEGIN PGP SIGNATURE-----
-Comment: Exmh version 2.9.0 11/07/2018
-
-iQIVAwUBXUw9XQdmEQWDXROgAQKiLw/+N03ybWysPxHxlu+rJ250KrzIediZ0S9O
-ui1T3VeGQkbrt+nyVm/1KM89jI+T2g0fAPDYP3cQBobr0pEvikl4loD8NTg5Vrtk
-WaT9AfQov16DX/rvNmvDqVQSMwZNB7tR6tuLPMqQFQltRMEtr4wdltGABSaAQneB
-DSPtIj1LlEgwq42H/3T+6reJKHy/Qh7VJYshRWuW+BBiYpafXGkjSfEkVRqVW9rm
-p2P8QFqGwNa6X0Us1LTGC5PL4xpkYhel5RbEBUhAgM+AR5Dx1dsgh5/sn9wIwTNV
-I3q+OjwjmMPewbeu5em4xhcNJTwodJcfYG2tn3iZQryCGX1LnDWUGEXW6luVUxz6
-IaoO0ZM9LK36X1ir72WG05wjGSmBnIJ97soE438HnuHqxQgfzAVaSDjr/EzmKKKj
-KD021eyUam6gn2Gr9eGlDVFzJff8tT5gz94vjNS7Jz2/1OCI9G5g4Z3gR1nHJtdH
-cj4iyUHmhzGAK03Jz4S2lP9AB1AFb1ngb9VVIMDAekz3SzhmjTffKeHX7oX3G/w5
-tTxXCla4+uKuPRgBHGeEY6AzWRvHdFP/KKAr+hTrXixBJE+7ztoIRRIND7NXWUOe
-Auo3YAbmj2L6+q8caVC1XsQAt+QvWBAPV1fscogJkP/h3JFh8qNBUrLLN8jy9K91
-t8mM73k+lrA=
-=n3at
------END PGP SIGNATURE-----
-
---==_Exmh_1565277534_4269P--
