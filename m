@@ -2,76 +2,66 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A794B85809
-	for <lists+linux-edac@lfdr.de>; Thu,  8 Aug 2019 04:16:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AC6585C03
+	for <lists+linux-edac@lfdr.de>; Thu,  8 Aug 2019 09:50:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727888AbfHHCQu (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Wed, 7 Aug 2019 22:16:50 -0400
-Received: from szxga07-in.huawei.com ([45.249.212.35]:51488 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1727230AbfHHCQt (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Wed, 7 Aug 2019 22:16:49 -0400
-Received: from DGGEMS408-HUB.china.huawei.com (unknown [172.30.72.59])
-        by Forcepoint Email with ESMTP id DA486DBA3BB31A386D65;
-        Thu,  8 Aug 2019 10:16:47 +0800 (CST)
-Received: from localhost.localdomain (10.67.212.75) by
- DGGEMS408-HUB.china.huawei.com (10.3.19.208) with Microsoft SMTP Server id
- 14.3.439.0; Thu, 8 Aug 2019 10:16:37 +0800
-From:   Xiaofei Tan <tanxiaofei@huawei.com>
-To:     <mchehab@kernel.org>, <linux-edac@vger.kernel.org>
-CC:     Xiaofei Tan <tanxiaofei@huawei.com>, <linuxarm@huawei.com>,
-        <shiju.jose@huawei.com>
-Subject: [PATCH 1/1] rasdaemon: fix the issue of sqlite3 integer bind parameter mismatch
-Date:   Thu, 8 Aug 2019 10:14:30 +0800
-Message-ID: <1565230470-52916-1-git-send-email-tanxiaofei@huawei.com>
-X-Mailer: git-send-email 2.8.1
+        id S1731031AbfHHHud (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Thu, 8 Aug 2019 03:50:33 -0400
+Received: from verein.lst.de ([213.95.11.211]:44193 "EHLO verein.lst.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725796AbfHHHud (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Thu, 8 Aug 2019 03:50:33 -0400
+Received: by verein.lst.de (Postfix, from userid 2407)
+        id 32BFA68B02; Thu,  8 Aug 2019 09:50:30 +0200 (CEST)
+Date:   Thu, 8 Aug 2019 09:50:29 +0200
+From:   Christoph Hellwig <hch@lst.de>
+To:     Paul Walmsley <paul.walmsley@sifive.com>
+Cc:     Christoph Hellwig <hch@lst.de>,
+        Greg KH <gregkh@linuxfoundation.org>, arnd@arndb.de,
+        palmer@sifive.com, linux-kernel@vger.kernel.org,
+        james.morse@arm.com, linux-riscv@lists.infradead.org,
+        mchehab@kernel.org, linux-edac@vger.kernel.org
+Subject: Re: [PATCH] riscv: move sifive_l2_cache.c to drivers/misc
+Message-ID: <20190808075029.GB30308@lst.de>
+References: <20190807151009.31971-1-hch@lst.de> <20190807152215.GA26690@kroah.com> <20190807152438.GA16495@lst.de> <alpine.DEB.2.21.9999.1908070832500.13971@viisi.sifive.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.67.212.75]
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <alpine.DEB.2.21.9999.1908070832500.13971@viisi.sifive.com>
+User-Agent: Mutt/1.5.17 (2007-11-01)
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-Some interger fields of arm_event and mc_event are 8 bytes width,
-and sqlite3_bind_int64() should be used when restore the event to
-sqlite3. But we use sqlite3_bind_int() in current code. This will
-lead to an wrong value in sqlite3 DB.
+On Wed, Aug 07, 2019 at 08:40:58AM -0700, Paul Walmsley wrote:
+> On Wed, 7 Aug 2019, Christoph Hellwig wrote:
+> 
+> > On Wed, Aug 07, 2019 at 05:22:15PM +0200, Greg KH wrote:
+> > > > Fixes: a967a289f169 ("RISC-V: sifive_l2_cache: Add L2 cache controller driver for SiFive SoCs")
+> > > > Signed-off-by: Christoph Hellwig <hch@lst.de>
+> > > > ---
+> > > >  arch/riscv/mm/Makefile                            | 1 -
+> > > >  drivers/misc/Makefile                             | 1 +
+> > > >  {arch/riscv/mm => drivers/misc}/sifive_l2_cache.c | 0
+> > > >  3 files changed, 1 insertion(+), 1 deletion(-)
+> > > >  rename {arch/riscv/mm => drivers/misc}/sifive_l2_cache.c (100%)
+> > > 
+> > > Why isn't this in drivers/edac/ ?
+> > > why is this a misc driver?  Seems like it should sit next to the edac
+> > > stuff.
+> > 
+> > No idea.  EDAC maintainers, would you object to taking what is 
+> > currently in arch/riscv/mm//sifive_l2_cache.c to drivers/edac/ ?
+> 
+> If this driver is moved out of arch/riscv/mm, it should ideally go into 
+> some sort of common L2 cache controller driver directory, along 
+> with other L2 cache controller drivers like arch/arm/mm/*l2c*. 
+> 
+> Like many L2 cache controllers, this controller also supports cache 
+> flushing operations and SoC-specific way operations.  We just don't use 
+> those on RISC-V - yet.
 
-This patch is to fix the issue.
-
-Signed-off-by: Xiaofei Tan <tanxiaofei@huawei.com>
----
- ras-record.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/ras-record.c b/ras-record.c
-index 4c8b55b..0bf0080 100644
---- a/ras-record.c
-+++ b/ras-record.c
-@@ -94,9 +94,9 @@ int ras_store_mc_event(struct ras_events *ras, struct ras_mc_event *ev)
- 	sqlite3_bind_int (priv->stmt_mc_event,  7, ev->top_layer);
- 	sqlite3_bind_int (priv->stmt_mc_event,  8, ev->middle_layer);
- 	sqlite3_bind_int (priv->stmt_mc_event,  9, ev->lower_layer);
--	sqlite3_bind_int (priv->stmt_mc_event, 10, ev->address);
--	sqlite3_bind_int (priv->stmt_mc_event, 11, ev->grain);
--	sqlite3_bind_int (priv->stmt_mc_event, 12, ev->syndrome);
-+	sqlite3_bind_int64 (priv->stmt_mc_event, 10, ev->address);
-+	sqlite3_bind_int64 (priv->stmt_mc_event, 11, ev->grain);
-+	sqlite3_bind_int64 (priv->stmt_mc_event, 12, ev->syndrome);
- 	sqlite3_bind_text(priv->stmt_mc_event, 13, ev->driver_detail, -1, NULL);
- 	rc = sqlite3_step(priv->stmt_mc_event);
- 	if (rc != SQLITE_OK && rc != SQLITE_DONE)
-@@ -242,7 +242,7 @@ int ras_store_arm_record(struct ras_events *ras, struct ras_arm_event *ev)
- 	sqlite3_bind_text (priv->stmt_arm_record,  1,  ev->timestamp, -1, NULL);
- 	sqlite3_bind_int  (priv->stmt_arm_record,  2,  ev->error_count);
- 	sqlite3_bind_int  (priv->stmt_arm_record,  3,  ev->affinity);
--	sqlite3_bind_int  (priv->stmt_arm_record,  4,  ev->mpidr);
-+	sqlite3_bind_int64  (priv->stmt_arm_record,  4,  ev->mpidr);
- 	sqlite3_bind_int  (priv->stmt_arm_record,  5,  ev->running_state);
- 	sqlite3_bind_int  (priv->stmt_arm_record,  6,  ev->psci_state);
- 
--- 
-2.8.1
-
+Well, another reason to not have it under arch/riscv/ as it is a SOC
+specific driver, which we all have somewhere else, just like arm64
+and new arm ports do.  And especially not unconditionally built.
