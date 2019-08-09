@@ -2,60 +2,62 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B9B9988121
-	for <lists+linux-edac@lfdr.de>; Fri,  9 Aug 2019 19:25:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D848B88135
+	for <lists+linux-edac@lfdr.de>; Fri,  9 Aug 2019 19:31:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2406983AbfHIRZf (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Fri, 9 Aug 2019 13:25:35 -0400
-Received: from mga03.intel.com ([134.134.136.65]:35903 "EHLO mga03.intel.com"
+        id S2407204AbfHIRbe (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Fri, 9 Aug 2019 13:31:34 -0400
+Received: from mail.skyhub.de ([5.9.137.197]:55468 "EHLO mail.skyhub.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726216AbfHIRZf (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Fri, 9 Aug 2019 13:25:35 -0400
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-X-Amp-File-Uploaded: False
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga103.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 09 Aug 2019 10:25:34 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.64,366,1559545200"; 
-   d="scan'208";a="180197881"
-Received: from agluck-desk2.sc.intel.com (HELO agluck-desk2.amr.corp.intel.com) ([10.3.52.68])
-  by orsmga006.jf.intel.com with ESMTP; 09 Aug 2019 10:25:34 -0700
-Date:   Fri, 9 Aug 2019 10:25:33 -0700
-From:   "Luck, Tony" <tony.luck@intel.com>
-To:     Stephen Douthit <stephend@silicom-usa.com>
-Cc:     Borislav Petkov <bp@alien8.de>,
+        id S1726157AbfHIRbe (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Fri, 9 Aug 2019 13:31:34 -0400
+Received: from zn.tnic (p200300EC2F0BAF00B1329C581B3162A4.dip0.t-ipconnect.de [IPv6:2003:ec:2f0b:af00:b132:9c58:1b31:62a4])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 849F21EC0BED;
+        Fri,  9 Aug 2019 19:31:31 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1565371892;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=rq2nb0ENx8Jefs6h4lgzhs05Z7Ax75UhuZs4DDvd6iU=;
+        b=AnvQ3+HSdMQe4IlIgThxzxUSj5cWD4+6FGjGSUuxs1G1HC0nPP/gLyEZ+cW6eQ0bXhiSfY
+        7eV1IMQHqoLT0yEJiSnnqUKuBZ4OfkmnSrLTs5YV58LlT47FciTf/J20GMsnygZr3rc3TM
+        2L3C8aTdOfqq7eZlhupqy9f/RIE/Tjw=
+Date:   Fri, 9 Aug 2019 19:32:18 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     "Luck, Tony" <tony.luck@intel.com>
+Cc:     Stephen Douthit <stephend@silicom-usa.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         James Morse <james.morse@arm.com>,
         "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
 Subject: Re: [PATCH] EDAC, pnd2: Fix ioremap() size in dnv_rd_reg()
-Message-ID: <20190809172533.GA31823@agluck-desk2.amr.corp.intel.com>
+Message-ID: <20190809173218.GH2152@zn.tnic>
 References: <20190809141737.15580-1-stephend@silicom-usa.com>
+ <20190809172533.GA31823@agluck-desk2.amr.corp.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20190809141737.15580-1-stephend@silicom-usa.com>
-User-Agent: Mutt/1.11.3 (2019-02-01)
+In-Reply-To: <20190809172533.GA31823@agluck-desk2.amr.corp.intel.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Fri, Aug 09, 2019 at 02:18:02PM +0000, Stephen Douthit wrote:
-> Depending on how BIOS has marked the reserved region containing the 32KB
-> MCHBAR you can get warnings like:
-> 
-> resource sanity check: requesting [mem 0xfed10000-0xfed1ffff], which spans more than reserved [mem 0xfed10000-0xfed17fff]
-> caller dnv_rd_reg+0xc8/0x240 [pnd2_edac] mapping multiple BARs
-> 
-> Not all of the mmio regions used in dnv_rd_reg() are the same size.  The
-> MCHBAR window is 32KB and the sideband ports are 64KB.  Pass the correct
-> size to ioremap() depending on which resource we're reading from.
+On Fri, Aug 09, 2019 at 10:25:33AM -0700, Luck, Tony wrote:
+> [Boris/Mauro: I pushed to edac-for-next branch in ras tree
+>  git://git.kernel.org/pub/scm/linux/kernel/git/ras/ras.git]
 
-Applied. Thanks.
+Yap, this is the workflow. And from now on, we all should refresh
+our local copies of edac-for-next before applying stuff. And when we
+happen to push at the same time, we should be able to solve such seldom
+conflicts on IRC. :-)
 
--Tony
+-- 
+Regards/Gruss,
+    Boris.
 
-[Boris/Mauro: I pushed to edac-for-next branch in ras tree
- git://git.kernel.org/pub/scm/linux/kernel/git/ras/ras.git]
+Good mailing practices for 400: avoid top-posting and trim the reply.
