@@ -2,173 +2,71 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D615589B14
-	for <lists+linux-edac@lfdr.de>; Mon, 12 Aug 2019 12:13:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE4E289B1E
+	for <lists+linux-edac@lfdr.de>; Mon, 12 Aug 2019 12:15:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727642AbfHLKMk (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Mon, 12 Aug 2019 06:12:40 -0400
-Received: from szxga07-in.huawei.com ([45.249.212.35]:35576 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1727703AbfHLKMh (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Mon, 12 Aug 2019 06:12:37 -0400
-Received: from DGGEMS411-HUB.china.huawei.com (unknown [172.30.72.58])
-        by Forcepoint Email with ESMTP id 2AF2EF66CD59304F08B0;
-        Mon, 12 Aug 2019 18:12:35 +0800 (CST)
-Received: from DESKTOP-6T4S3DQ.china.huawei.com (10.202.226.45) by
- DGGEMS411-HUB.china.huawei.com (10.3.19.211) with Microsoft SMTP Server id
- 14.3.439.0; Mon, 12 Aug 2019 18:12:26 +0800
-From:   Shiju Jose <shiju.jose@huawei.com>
-To:     <linux-acpi@vger.kernel.org>, <linux-edac@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <rjw@rjwysocki.net>,
-        <lenb@kernel.org>, <james.morse@arm.com>, <tony.luck@intel.com>,
-        <bp@alien8.de>, <baicar@os.amperecomputing.com>
-CC:     <linuxarm@huawei.com>, <jonathan.cameron@huawei.com>,
-        <tanxiaofei@huawei.com>, Shiju Jose <shiju.jose@huawei.com>
-Subject: [PATCH RFC 4/4] ACPI: APEI: Add log_arm_hw_error to the new notification method
-Date:   Mon, 12 Aug 2019 11:11:49 +0100
-Message-ID: <20190812101149.26036-5-shiju.jose@huawei.com>
-X-Mailer: git-send-email 2.19.2.windows.1
-In-Reply-To: <20190812101149.26036-1-shiju.jose@huawei.com>
-References: <Shiju Jose>
- <20190812101149.26036-1-shiju.jose@huawei.com>
+        id S1727744AbfHLKPl (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Mon, 12 Aug 2019 06:15:41 -0400
+Received: from sonic315-15.consmr.mail.bf2.yahoo.com ([74.6.134.125]:37437
+        "EHLO sonic315-15.consmr.mail.bf2.yahoo.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727738AbfHLKPk (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>);
+        Mon, 12 Aug 2019 06:15:40 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1565604939; bh=tPdyM4f7Tq8kspt5syr9wxbiHLUxanV8lkCr2Pkkkas=; h=Date:From:Reply-To:Subject:From:Subject; b=EXujxIZQM3gbLSH5laqqNzMAaTxDbnnU/a8WaGtyhBvtaiB8HaPNNziW6L6nWOule+p+sPiAp2d/qwgwV4LFB1UdU8L87Y0t+8/DdXOf1VE4V2ilCT7rhtOR8vVcDJ7vA5D3NjiPJ1zVW6Wh0TmuHBYmzgt2HDWyb1BPXI1UlnO8jJunBf/BuNpQQjpiBwW3do2vaW7BRDk1JgS4HBket9/GYpJrGJiQ29aJDPMTARP0gTHknSNIT6SMOFBFNXo2H4pHHR6J8NkAEuZiNW7jwSLO/Bi5hxDSgEsjqFRQcBZ5xELgDYMqsSbec1BuM88uw14X1+DymH8L9BZSBR9rlQ==
+X-YMail-OSG: 7l55mJYVM1mC2fL_k.BG2wggnARqIXH9lSOBvS4RCDdpOrcqL2u6wKmmtlkbYe3
+ 8zG96a75I02RodMscBgOu3MBUz_4ixpAVSpc2H3PNTbUveMdV7xcPfb.ZtvX88EtUEF1xZ3RBmEy
+ MQ.GeUrjJ6GfY4gD0Jd11H2W1Ok761VfVGBpijJ17AWnAvuuGiwZ1tFaid.7k4RXxrI5rEliuq1C
+ uDXZpHAwlPO.gercT8LGsq7k46hEXElJJzmKwnVxkHHvl0t2ANl79PIIRZoSwO_3Y.slmw6wM5ww
+ QXWRohBGAtfGz3cnfkqNZw8NDvYS8n6swU0XCgcRhgL_X.h0Y9LqcYrEiCEoAFGp6EfWDPsaA4Qe
+ vk9wII4nZefI0IBw_scf3MOarvSarlN6b9QH7Vd08xHWEjw7nMR6yV99.SZHmAn6UBvKlTAvo3Dc
+ o1y7ujFj2Kbe7s8MMP5lMcyOpMHdDp3fsMfZZo858vk.9sqzQORZb5hsEt0.Ai7Xt36uXWXh5SMA
+ UPFvgB6ZmV2t1VC9lGZpAQS8x95gBefAWryx41Ag_g6nDLauepmhhGMOgGwEWbQQdKzTUz6kRvN5
+ fMEAIQHTkyRrIJFLCrgaTdYBUDR8mgHew2q9J2IcSf0Yi8KZG6nBLaLZNahu9mfEVoMOe6pLMWAm
+ pZu4SkkCCYZ7Ut4NjtdSvfdopa_eIavaGHBs70nNy4kHbLhl9QFyVGtICDEBwbsh6KyG5cjbMsdB
+ sKGzSi8adWhTyiPYl1aG.8yY5nOviXx6P4.qkqZgoeSGVqMkQ8rh0ZJbfLozvdkswJmMmIiV0v9g
+ zLBllY1Lx4Fq9J8Yc3WZ4fnjdPVHstfbq6JsFYGQRiOuR71tizd5qArKinnwSMHnnrqTCVqvQogV
+ 5F.XjVbNQMMNiDdYVrcjeBFkgvFroyvcGOvgd.S6zvCG4ASmgPCf_zEfKCapjlUGW7.i0KytoskO
+ 969PwbbjcLBIoFyq6PmxKs2QSpydsIkeBMf8d_t76y.kHnOUwCztQ_t1S0i2nF6Zg8_2ZyOUKNT.
+ 0Pp4UhRgGQfD1SEh7uxIKrM66NDyY_RdYP04rnUT3.KR3QtBV6o45i_6GjF2XyE_vPNR3yEi6wn_
+ Bq2srbJkHoHhknI7K2.DEioScd4Xotzn9sgMkfvWoHyKSXpxzBVpGJN5QyvTefwqFUGk5ea43nUO
+ OKnQ6XFUrwYyV69yp7OFx7b9vU2qb1VRqIEZUcdj7VnF5LMBwyzwI_Cp636dvQKmw6zGw_Diy9bU
+ 2d0GJtKgb0A--
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic315.consmr.mail.bf2.yahoo.com with HTTP; Mon, 12 Aug 2019 10:15:39 +0000
+Date:   Mon, 12 Aug 2019 10:15:35 +0000 (UTC)
+From:   Aisha Gaddafi <gaddafi661@gmail.com>
+Reply-To: gaisha983@gmail.com
+Message-ID: <300712006.2989078.1565604935757@mail.yahoo.com>
+Subject: Dear Friend,
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.202.226.45]
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+To:     unlisted-recipients:; (no To-header on input)
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-This patch adds log_arm_hw_error to the new error notification
-method.
+Dear Friend,
 
-Signed-off-by: Shiju Jose <shiju.jose@huawei.com>
----
- drivers/acpi/apei/ghes.c | 47 ++++++++++++++++++++++-------------------------
- drivers/ras/ras.c        |  5 ++++-
- include/linux/ras.h      |  7 +++++--
- 3 files changed, 31 insertions(+), 28 deletions(-)
+I came across your e-mail contact prior a private search while in need of 
+your assistance. My name is Aisha  Gaddafi a single Mother and a Widow with 
+three Children. I am the only biological Daughter of late Libyan President 
+(Late Colonel Muammar Gaddafi).
 
-diff --git a/drivers/acpi/apei/ghes.c b/drivers/acpi/apei/ghes.c
-index ffc309c..013fea0 100644
---- a/drivers/acpi/apei/ghes.c
-+++ b/drivers/acpi/apei/ghes.c
-@@ -574,34 +574,27 @@ static void ghes_do_proc(struct ghes *ghes,
- 		if (gdata->validation_bits & CPER_SEC_VALID_FRU_TEXT)
- 			fru_text = gdata->fru_text;
- 
--		if (guid_equal(sec_type, &CPER_SEC_PROC_ARM)) {
--			struct cper_sec_proc_arm *err = acpi_hest_get_payload(gdata);
--
--			log_arm_hw_error(err);
--		} else {
--			rcu_read_lock();
--			list_for_each_entry_rcu(err_notify,
--						&ghes_error_notify_list, list) {
--				if (guid_equal(&err_notify->sec_type,
--					       sec_type)) {
--					/* The notification is called in the
--					 * interrupt context, thus the handler
--					 * functions should be take care of it.
--					 */
--					err_notify->handle(gdata, sev,
--							   err_notify->data);
--					is_notify = 1;
--				}
-+		rcu_read_lock();
-+		list_for_each_entry_rcu(err_notify, &ghes_error_notify_list,
-+					list) {
-+			if (guid_equal(&err_notify->sec_type, sec_type)) {
-+				/* The notification is called in the
-+				 * interrupt context, thus the handler
-+				 * functions should be take care of it.
-+				 */
-+				err_notify->handle(gdata, sev,
-+						   err_notify->data);
-+				is_notify = 1;
- 			}
--			rcu_read_unlock();
-+		}
-+		rcu_read_unlock();
- 
--			if (!is_notify) {
--				void *err = acpi_hest_get_payload(gdata);
-+		if (!is_notify) {
-+			void *err = acpi_hest_get_payload(gdata);
- 
--				log_non_standard_event(sec_type, fru_id,
--						       fru_text, sec_sev, err,
--						       gdata->error_data_length);
--			}
-+			log_non_standard_event(sec_type, fru_id,
-+					       fru_text, sec_sev, err,
-+					       gdata->error_data_length);
- 		}
- 	}
- }
-@@ -1198,6 +1191,10 @@ struct ghes_err_handler_tab {
- 		.sec_type = CPER_SEC_PCIE,
- 		.handle = ghes_handle_aer,
- 	},
-+	{
-+		.sec_type = CPER_SEC_PROC_ARM,
-+		.handle = log_arm_hw_error,
-+	},
- 	{ /* sentinel */ }
- };
- 
-diff --git a/drivers/ras/ras.c b/drivers/ras/ras.c
-index 95540ea..7ec3eeb 100644
---- a/drivers/ras/ras.c
-+++ b/drivers/ras/ras.c
-@@ -21,8 +21,11 @@ void log_non_standard_event(const guid_t *sec_type, const guid_t *fru_id,
- 	trace_non_standard_event(sec_type, fru_id, fru_text, sev, err, len);
- }
- 
--void log_arm_hw_error(struct cper_sec_proc_arm *err)
-+void log_arm_hw_error(struct acpi_hest_generic_data *gdata,
-+		      int sev, void *data)
- {
-+	struct cper_sec_proc_arm *err = acpi_hest_get_payload(gdata);
-+
- 	trace_arm_event(err);
- }
- 
-diff --git a/include/linux/ras.h b/include/linux/ras.h
-index 7c3debb..05b662d 100644
---- a/include/linux/ras.h
-+++ b/include/linux/ras.h
-@@ -5,6 +5,7 @@
- #include <asm/errno.h>
- #include <linux/uuid.h>
- #include <linux/cper.h>
-+#include <acpi/ghes.h>
- 
- #ifdef CONFIG_DEBUG_FS
- int ras_userspace_consumers(void);
-@@ -29,7 +30,8 @@ static inline void __init cec_init(void)	{ }
- void log_non_standard_event(const guid_t *sec_type,
- 			    const guid_t *fru_id, const char *fru_text,
- 			    const u8 sev, const u8 *err, const u32 len);
--void log_arm_hw_error(struct cper_sec_proc_arm *err);
-+void log_arm_hw_error(struct acpi_hest_generic_data *gdata,
-+		      int sev, void *data);
- #else
- static inline void
- log_non_standard_event(const guid_t *sec_type,
-@@ -37,7 +39,8 @@ void log_non_standard_event(const guid_t *sec_type,
- 		       const u8 sev, const u8 *err, const u32 len)
- { return; }
- static inline void
--log_arm_hw_error(struct cper_sec_proc_arm *err) { return; }
-+log_arm_hw_error(struct acpi_hest_generic_data *gdata,
-+		 int sev, void *data) { return; }
- #endif
- 
- #endif /* __RAS_H__ */
--- 
-1.9.1
+I have investment funds worth Twenty Seven Million Five Hundred Thousand 
+United State Dollar ($27.500.000.00 ) and i need a trusted investment 
+Manager/Partner because of my current refugee status, however, I am 
+interested in you for investment project assistance in your country, may be 
+from there, we can build business relationship in the nearest future.
 
+I am willing to negotiate investment/business profit sharing ratio with you 
+base on the future investment earning profits.
 
+If you are willing to handle this project on my behalf kindly reply urgent 
+to enable me provide you more information about the investment funds.
+
+Your Urgent Reply Will Be Appreciated.
+
+Best Regards
+Mrs Aisha Gaddafi
+(gaisha983@gmail.com)
