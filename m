@@ -2,105 +2,113 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F02D98D627
-	for <lists+linux-edac@lfdr.de>; Wed, 14 Aug 2019 16:31:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A7CF8D699
+	for <lists+linux-edac@lfdr.de>; Wed, 14 Aug 2019 16:52:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726585AbfHNObs (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Wed, 14 Aug 2019 10:31:48 -0400
-Received: from userp2120.oracle.com ([156.151.31.85]:50312 "EHLO
-        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726121AbfHNObs (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Wed, 14 Aug 2019 10:31:48 -0400
-Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
-        by userp2120.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x7EEJ2uL099163;
-        Wed, 14 Aug 2019 14:31:45 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : mime-version : content-type; s=corp-2019-08-05;
- bh=4orpuPEli+qrXHM6zo8rys0+YwIGeeH6zxS6a5hqY3U=;
- b=Z90ytQvdaH9DkKNMflPcUiztIHwRt8WvxvgYS4ibFOpzymHhgduBnapTVEIofKaLpVeX
- LyQs2XhhpVUUQ60hotA/r+yUCfWN5Pw1kTM+KR9b9Ww1DFiwNFshC4yIhEjsdjWjJiKz
- xZ00PWN7Fnf0pa5EUyJ2gXbvmY5iIRaIWJJaKJXs4bVBki898zRd/R4XREGNX7QuAJnr
- gF+8TydYQ78dwpbr0Wm4xl2oBFWq/uI0wylUa7MSURcr7QGoPIK+U2V4/l4yENcUD9uk
- f+Afqi4xoyPr7Z/1DHQbHCDR8LoHBhz7kzG02OPymscfxhqhTGyH3h9YZGrCze4CWSOK Rg== 
-Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
-        by userp2120.oracle.com with ESMTP id 2u9pjqn2v9-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 14 Aug 2019 14:31:45 +0000
-Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
-        by aserp3030.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x7EEHeqh069373;
-        Wed, 14 Aug 2019 14:31:44 GMT
-Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
-        by aserp3030.oracle.com with ESMTP id 2ubwrhaee0-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 14 Aug 2019 14:31:44 +0000
-Received: from abhmp0001.oracle.com (abhmp0001.oracle.com [141.146.116.7])
-        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id x7EEVg8m027774;
-        Wed, 14 Aug 2019 14:31:42 GMT
-Received: from mwanda (/41.57.98.10)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Wed, 14 Aug 2019 07:31:41 -0700
-Date:   Wed, 14 Aug 2019 17:31:36 +0300
-From:   Dan Carpenter <dan.carpenter@oracle.com>
-To:     yash.shah@sifive.com
-Cc:     linux-edac@vger.kernel.org
-Subject: [bug report] EDAC/sifive: Add EDAC platform driver for SiFive SoCs
-Message-ID: <20190814143136.GA3226@mwanda>
+        id S1727847AbfHNOwJ (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Wed, 14 Aug 2019 10:52:09 -0400
+Received: from mail.skyhub.de ([5.9.137.197]:33424 "EHLO mail.skyhub.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726551AbfHNOwJ (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Wed, 14 Aug 2019 10:52:09 -0400
+Received: from zn.tnic (p200300EC2F0BD0000538F16F91702398.dip0.t-ipconnect.de [IPv6:2003:ec:2f0b:d000:538:f16f:9170:2398])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 98A761EC0554;
+        Wed, 14 Aug 2019 16:52:07 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1565794327;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=BskQ5DhIGKuIwHy1nktd9lNxwb4SfiRB6QlSE0m/dGg=;
+        b=LdIlYROee9QJn5dmedFuc/APWt+04NVXrE7HGkSFbSMJSzIy2kPkCLhPLZLkkyphnszX+u
+        hdWUayRHu3tgHxWSHq9TM24jG5/R7DHefUVi0zZGO6m5yvnv0JUwQHhlI0L2FcQz9ycjOm
+        H9DXhh7GCz+dVhCHzhqiLJ9oZWFclh0=
+Date:   Wed, 14 Aug 2019 16:52:52 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Robert Richter <rrichter@marvell.com>
+Cc:     James Morse <james.morse@arm.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 07/24] EDAC: Kill EDAC_DIMM_OFF() macro
+Message-ID: <20190814145252.GA1841@zn.tnic>
+References: <20190624150758.6695-1-rrichter@marvell.com>
+ <20190624150758.6695-8-rrichter@marvell.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
+In-Reply-To: <20190624150758.6695-8-rrichter@marvell.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9348 signatures=668684
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=1 malwarescore=0
- phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=925
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.0.1-1906280000 definitions=main-1908140149
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9348 signatures=668684
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
- suspectscore=1 phishscore=0 bulkscore=0 spamscore=0 clxscore=1011
- lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=975 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1906280000
- definitions=main-1908140149
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-Hello Yash Shah,
+On Mon, Jun 24, 2019 at 03:09:09PM +0000, Robert Richter wrote:
+> We do not need to calculate the offset in the mc's dimm array, let's
+> just store the index in struct dimm_info and we can get rid of this
+> macro.
+> 
+> Signed-off-by: Robert Richter <rrichter@marvell.com>
+> ---
+>  drivers/edac/edac_mc.c       | 13 ++++--------
+>  drivers/edac/edac_mc_sysfs.c | 20 ++++--------------
+>  include/linux/edac.h         | 41 ------------------------------------
+>  3 files changed, 8 insertions(+), 66 deletions(-)
 
-The patch 91abaeaaff35: "EDAC/sifive: Add EDAC platform driver for
-SiFive SoCs" from May 6, 2019, leads to the following static checker
-warning:
+I like this cleanup a lot. Good!
 
-	drivers/edac/sifive_edac.c:60 ecc_register()
-	warn: 'p->dci' can also be NULL
+> diff --git a/drivers/edac/edac_mc.c b/drivers/edac/edac_mc.c
+> index c959e8b1643c..c44bc83e8502 100644
+> --- a/drivers/edac/edac_mc.c
+> +++ b/drivers/edac/edac_mc.c
+> @@ -318,7 +318,7 @@ struct mem_ctl_info *edac_mc_alloc(unsigned mc_num,
+>  	unsigned size, tot_dimms = 1, count = 1;
+>  	unsigned tot_csrows = 1, tot_channels = 1, tot_errcount = 0;
+>  	void *pvt, *p, *ptr = NULL;
+> -	int i, j, row, chn, n, len, off;
+> +	int idx, i, j, row, chn, n, len;
+>  	bool per_rank = false;
+>  
+>  	BUG_ON(n_layers > EDAC_MAX_LAYERS || n_layers == 0);
+> @@ -426,20 +426,15 @@ struct mem_ctl_info *edac_mc_alloc(unsigned mc_num,
+>  	memset(&pos, 0, sizeof(pos));
+>  	row = 0;
+>  	chn = 0;
+> -	for (i = 0; i < tot_dimms; i++) {
+> +	for (idx = 0; idx < tot_dimms; idx++) {
+>  		chan = mci->csrows[row]->channels[chn];
+> -		off = EDAC_DIMM_OFF(layer, n_layers, pos[0], pos[1], pos[2]);
+> -		if (off < 0 || off >= tot_dimms) {
+> -			edac_mc_printk(mci, KERN_ERR, "EDAC core bug: EDAC_DIMM_OFF is trying to do an illegal data access\n");
+> -			goto error;
+> -		}
 
-drivers/edac/sifive_edac.c
-    43  static int ecc_register(struct platform_device *pdev)
-    44  {
-    45          struct sifive_edac_priv *p;
-    46  
-    47          p = devm_kzalloc(&pdev->dev, sizeof(*p), GFP_KERNEL);
-    48          if (!p)
-    49                  return -ENOMEM;
-    50  
-    51          p->notifier.notifier_call = ecc_err_event;
-    52          platform_set_drvdata(pdev, p);
-    53  
-    54          p->dci = edac_device_alloc_ctl_info(0, "sifive_ecc", 1, "sifive_ecc",
-    55                                              1, 1, NULL, 0,
-    56                                              edac_device_alloc_index());
-    57          if (IS_ERR(p->dci))
-                    ^^^^^^^^^^^^^^
-The edac_device_alloc_ctl_info() function never returns error pointers,
-it returns NULL.
+Btw, right around here there's a comment:
 
-    58                  return PTR_ERR(p->dci);
-    59  
-    60          p->dci->dev = &pdev->dev;
-    61          p->dci->mod_name = "Sifive ECC Manager";
-    62          p->dci->ctl_name = dev_name(&pdev->dev);
-    63          p->dci->dev_name = dev_name(&pdev->dev);
-    64  
+        /*
+         * Allocate and fill the dimm structs
+         */
 
-regards,
-dan carpenter
+and since you're cleaning up all this, can you please add another patch
+which takes all that code under the comment and see if you can carve it
+out into a separate helper edac_alloc_dimms() or so. Because that
+edac_mc_alloc() function is huuuge.
+
+Btw, the code under
+
+        /*
+         * Alocate and fill the csrow/channels structs
+         */
+
+begs to be a separate function too :-)
+
+Thx.
+
+-- 
+Regards/Gruss,
+    Boris.
+
+Good mailing practices for 400: avoid top-posting and trim the reply.
