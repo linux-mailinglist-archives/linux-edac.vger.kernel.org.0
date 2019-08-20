@@ -2,96 +2,182 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1799695721
-	for <lists+linux-edac@lfdr.de>; Tue, 20 Aug 2019 08:12:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C55A295A74
+	for <lists+linux-edac@lfdr.de>; Tue, 20 Aug 2019 10:57:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729172AbfHTGMV (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Tue, 20 Aug 2019 02:12:21 -0400
-Received: from mail-lf1-f67.google.com ([209.85.167.67]:38605 "EHLO
-        mail-lf1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728878AbfHTGMV (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Tue, 20 Aug 2019 02:12:21 -0400
-Received: by mail-lf1-f67.google.com with SMTP id h28so3175792lfj.5
-        for <linux-edac@vger.kernel.org>; Mon, 19 Aug 2019 23:12:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sifive.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=AVWwBfeeEc6ykP1yn9xAU0YHj4y8t5z69Vb4C4M4hMM=;
-        b=Ak1KPl2ruMueSxtLrtsk2/HCDb7HZSPVMHFJes7D6Z1B713y8fDQV/krKLsyza9bY6
-         WFmr4Wl4fUgERrYga+/eO5AawMmTfNntXSRGSs9rtGQfHjlHBpqyn2R9pNqrKj+/5JdN
-         C3wXAKUSbmN8APlzDES6eZSWSG0OeEDnwdNYxOPNvxm1gX6GWPblu+K83n3ylcQ8UrOo
-         gWv2Ma1vvO0VQCC4ZOZgDlCuLIdFrfpktl1bvGkVz/R0AFCPf94al/hWf5h+Fo9r0vAe
-         t0e1DzYQawnXhbFm5BMgPuDYPgE3GN6/Aq1q31ejOFFC7g9zo6te1tOTUwf6Tc/di12S
-         vAVQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=AVWwBfeeEc6ykP1yn9xAU0YHj4y8t5z69Vb4C4M4hMM=;
-        b=AZFpYGctCfgviIK1gxUVJBLLV4hcus7F3M1C/yIeda9oItYOey1Z9PKCLWEWup7zsE
-         zFH7lHtqT8by7IHamR+9N4hlHnJ8gnuv2QcsC9x0ViWNngc3uN4KXIJNZFJYYATNBdNA
-         0wuUL56t1p8feOu8ay1nA4IcdFitTZDmPeT4PPu0yW7tLXHJotg/GplE4E+GorJo5gQ5
-         ugevNf+apaA0ZBLMLjJP62nSkG9qq1W/Wodv/haowCY58lqWpPfE6Nnhwgj177q7Tt2/
-         7L7iZuf6ITjmAzCQJjpkoccMSYYtv9TeCZSn9o70/wcAvDYtTW8baAVN4s/GLsurWPR/
-         PH0g==
-X-Gm-Message-State: APjAAAWu6fWVcA5jHkbJ6rKcxttAjXhiJAgThu628WuToed6W2marPuU
-        JIRBD/EQCPwyodljZD/N11ZDj3U92n9pDJhXrTn9cA==
-X-Google-Smtp-Source: APXvYqzV9ocam7R0KX0h25q6wZG5L3RbMxVhpIEF0AhCwIEfcOv3/2UNAL1mhxVdOGFdkYJqlRLxEzVxWcbziV0wnPc=
-X-Received: by 2002:ac2:4309:: with SMTP id l9mr14044401lfh.65.1566281539133;
- Mon, 19 Aug 2019 23:12:19 -0700 (PDT)
+        id S1729185AbfHTI4v (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Tue, 20 Aug 2019 04:56:51 -0400
+Received: from mail.skyhub.de ([5.9.137.197]:55922 "EHLO mail.skyhub.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728426AbfHTI4v (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Tue, 20 Aug 2019 04:56:51 -0400
+Received: from zn.tnic (p200300EC2F0AD10001577AF918CCB8A8.dip0.t-ipconnect.de [IPv6:2003:ec:2f0a:d100:157:7af9:18cc:b8a8])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id DF4A61EC0419;
+        Tue, 20 Aug 2019 10:56:49 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1566291410;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=DTDawrUgs8m+8/GyOkLQsS8koeKs/F5X6jSkAeCSZm8=;
+        b=JqB1d+sbB1AuxVOahhbDpPfBNKfKYKnD5JMuHWCLmgM+fxtl9FVJNT1blKpz6ybee/MBg2
+        38zujtQt5i3kcei5441cdfRAadSxDB30BMBOAznXJVptBwxzciXOrn5o8Mbi/9AiZei5Hg
+        rwSOtYeUCrhyvL6d7YG/uyWU5b8rEhk=
+Date:   Tue, 20 Aug 2019 10:56:47 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Robert Richter <rrichter@marvell.com>
+Cc:     James Morse <james.morse@arm.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 14/24] EDAC, ghes: Rework memory hierarchy detection
+Message-ID: <20190820085647.GA31607@zn.tnic>
+References: <20190624150758.6695-1-rrichter@marvell.com>
+ <20190624150758.6695-15-rrichter@marvell.com>
 MIME-Version: 1.0
-References: <20190814143136.GA3226@mwanda>
-In-Reply-To: <20190814143136.GA3226@mwanda>
-From:   Yash Shah <yash.shah@sifive.com>
-Date:   Tue, 20 Aug 2019 11:41:42 +0530
-Message-ID: <CAJ2_jOH07XQrn3PfVpEt2eM5y44dc6rxrtbUUDSZ5oFBXAx3_A@mail.gmail.com>
-Subject: Re: [bug report] EDAC/sifive: Add EDAC platform driver for SiFive SoCs
-To:     Dan Carpenter <dan.carpenter@oracle.com>
-Cc:     linux-edac@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20190624150758.6695-15-rrichter@marvell.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Wed, Aug 14, 2019 at 8:01 PM Dan Carpenter <dan.carpenter@oracle.com> wrote:
->
-> Hello Yash Shah,
->
-> The patch 91abaeaaff35: "EDAC/sifive: Add EDAC platform driver for
-> SiFive SoCs" from May 6, 2019, leads to the following static checker
-> warning:
->
->         drivers/edac/sifive_edac.c:60 ecc_register()
->         warn: 'p->dci' can also be NULL
->
-> drivers/edac/sifive_edac.c
->     43  static int ecc_register(struct platform_device *pdev)
->     44  {
->     45          struct sifive_edac_priv *p;
->     46
->     47          p = devm_kzalloc(&pdev->dev, sizeof(*p), GFP_KERNEL);
->     48          if (!p)
->     49                  return -ENOMEM;
->     50
->     51          p->notifier.notifier_call = ecc_err_event;
->     52          platform_set_drvdata(pdev, p);
->     53
->     54          p->dci = edac_device_alloc_ctl_info(0, "sifive_ecc", 1, "sifive_ecc",
->     55                                              1, 1, NULL, 0,
->     56                                              edac_device_alloc_index());
->     57          if (IS_ERR(p->dci))
->                     ^^^^^^^^^^^^^^
-> The edac_device_alloc_ctl_info() function never returns error pointers,
-> it returns NULL.
->
+On Mon, Jun 24, 2019 at 03:09:24PM +0000, Robert Richter wrote:
+> In a later patch we want to add more information about the memory
+> hierarchy (NUMA topology, DIMM label information). Rework memory
+> hierarchy detection to make the code extendable for this.
+> 
+> The general approach is roughly like:
+> 
+> 	mem_info_setup();
+> 	for_each_node(nid) {
+> 		mci = edac_mc_alloc(nid);
+> 		mem_info_prepare_mci(mci);
+> 		edac_mc_add_mc(mci);
+> 	};
+> 
+> This patch introduces mem_info_setup() and mem_info_prepare_mci().
 
-Thanks for reporting this bug. Currently, a discussion is going on to
-move this code into some other directory. The patch for the same has
-been submitted [0].
-I will take care of this bug once that patch is accepted.
+Avoid having "This patch" or "This commit" in the commit message. It is
+tautologically useless.
 
-- Yash
+> All data of the memory hierarchy is collected in a local struct
+> ghes_mem_info.
+> 
+> Note: Per (NUMA) node registration will be implemented in a later
+> patch.
 
-[0] https://lkml.org/lkml/2019/8/18/39
+That sentence is not needed in the commit message.
+
+> Signed-off-by: Robert Richter <rrichter@marvell.com>
+> ---
+>  drivers/edac/ghes_edac.c | 166 ++++++++++++++++++++++++++++++---------
+>  1 file changed, 127 insertions(+), 39 deletions(-)
+> 
+> diff --git a/drivers/edac/ghes_edac.c b/drivers/edac/ghes_edac.c
+> index 8063996a311d..44bfb499b147 100644
+> --- a/drivers/edac/ghes_edac.c
+> +++ b/drivers/edac/ghes_edac.c
+> @@ -65,17 +65,53 @@ struct memdev_dmi_entry {
+>  	u16 conf_mem_clk_speed;
+>  } __attribute__((__packed__));
+>  
+> -struct ghes_edac_dimm_fill {
+> -	struct mem_ctl_info *mci;
+> -	unsigned count;
+
+All those "dimm" and "info" words everywhere are making my head spin.
+Let's make it more readable:
+
+> +struct ghes_dimm_info {
+> +	struct dimm_info dimm_info;
+> +	int		idx;
+> +};
+> +
+> +struct ghes_mem_info {
+> +	int num_dimm;
+> +	struct ghes_dimm_info *dimms;
+>  };
+>  
+> +static struct ghes_mem_info mem_info;
+
+/* A DIMM */
+struct ghes_dimm {
+        struct dimm_info dimm;
+        int idx;
+};
+
+/* The memory layout of the system */
+struct ghes_memory {
+        struct ghes_dimm *dimms;
+        int num_dimms;
+};
+
+static struct ghes_memory mem;
+
+> +
+> +#define for_each_dimm(dimm)				\
+> +	for (dimm = mem_info.dimms;			\
+> +	     dimm < mem_info.dimms + mem_info.num_dimm;	\
+> +	     dimm++)
+> +
+>  static void ghes_edac_count_dimms(const struct dmi_header *dh, void *arg)
+>  {
+> -	int *num_dimm = arg;
+> +	int *num = arg;
+>  
+>  	if (dh->type == DMI_ENTRY_MEM_DEVICE)
+> -		(*num_dimm)++;
+> +		(*num)++;
+> +}
+> +
+> +static int ghes_dimm_info_init(int num)
+
+ghes_dimm_init()
+
+... you get the idea - let's drop the _info crap.
+
+> +{
+> +	struct ghes_dimm_info *dimm;
+> +	int idx = 0;
+> +
+> +	memset(&mem_info, 0, sizeof(mem_info));
+> +
+> +	if (num <= 0)
+> +		return -EINVAL;
+
+Move that check into the caller mem_info_setup() so that you don't do
+the memset unnecessarily.
+
+> +
+> +	mem_info.dimms = kcalloc(num, sizeof(*mem_info.dimms), GFP_KERNEL);
+> +	if (!mem_info.dimms)
+> +		return -ENOMEM;
+> +
+> +	mem_info.num_dimm = num;
+> +
+> +	for_each_dimm(dimm) {
+> +		dimm->idx	= idx;
+> +		idx++;
+> +	}
+
+or simply
+
+	for_each_dimm(dimm)
+		dimm->idx = idx++;
+
+> +
+> +	return 0;
+>  }
+>  
+>  static int get_dimm_smbios_index(u16 handle)
+
+-- 
+Regards/Gruss,
+    Boris.
+
+Good mailing practices for 400: avoid top-posting and trim the reply.
