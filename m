@@ -2,182 +2,164 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C55A295A74
-	for <lists+linux-edac@lfdr.de>; Tue, 20 Aug 2019 10:57:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B6B99962F0
+	for <lists+linux-edac@lfdr.de>; Tue, 20 Aug 2019 16:49:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729185AbfHTI4v (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Tue, 20 Aug 2019 04:56:51 -0400
-Received: from mail.skyhub.de ([5.9.137.197]:55922 "EHLO mail.skyhub.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728426AbfHTI4v (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Tue, 20 Aug 2019 04:56:51 -0400
-Received: from zn.tnic (p200300EC2F0AD10001577AF918CCB8A8.dip0.t-ipconnect.de [IPv6:2003:ec:2f0a:d100:157:7af9:18cc:b8a8])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id DF4A61EC0419;
-        Tue, 20 Aug 2019 10:56:49 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1566291410;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=DTDawrUgs8m+8/GyOkLQsS8koeKs/F5X6jSkAeCSZm8=;
-        b=JqB1d+sbB1AuxVOahhbDpPfBNKfKYKnD5JMuHWCLmgM+fxtl9FVJNT1blKpz6ybee/MBg2
-        38zujtQt5i3kcei5441cdfRAadSxDB30BMBOAznXJVptBwxzciXOrn5o8Mbi/9AiZei5Hg
-        rwSOtYeUCrhyvL6d7YG/uyWU5b8rEhk=
-Date:   Tue, 20 Aug 2019 10:56:47 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Robert Richter <rrichter@marvell.com>
-Cc:     James Morse <james.morse@arm.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 14/24] EDAC, ghes: Rework memory hierarchy detection
-Message-ID: <20190820085647.GA31607@zn.tnic>
-References: <20190624150758.6695-1-rrichter@marvell.com>
- <20190624150758.6695-15-rrichter@marvell.com>
+        id S1729836AbfHTOtC (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Tue, 20 Aug 2019 10:49:02 -0400
+Received: from szxga07-in.huawei.com ([45.249.212.35]:43998 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1729260AbfHTOtB (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Tue, 20 Aug 2019 10:49:01 -0400
+Received: from DGGEMS414-HUB.china.huawei.com (unknown [172.30.72.58])
+        by Forcepoint Email with ESMTP id 6926CECB419C95654477;
+        Tue, 20 Aug 2019 22:47:58 +0800 (CST)
+Received: from lhrphicprd00229.huawei.com (10.123.41.22) by
+ DGGEMS414-HUB.china.huawei.com (10.3.19.214) with Microsoft SMTP Server id
+ 14.3.439.0; Tue, 20 Aug 2019 22:47:49 +0800
+From:   Jonathan Cameron <Jonathan.Cameron@huawei.com>
+To:     <linux-edac@vger.kernel.org>, <linux-acpi@vger.kernel.org>,
+        <linux-efi@vger.kernel.org>, Borislav Petkov <bp@alien8.de>,
+        "Mauro Carvalho Chehab" <mchehab@kernel.org>, <james.morse@arm.com>
+CC:     <rjw@rjwysocki.net>, <tony.luck@intel.com>, <linuxarm@huawei.com>,
+        <ard.biesheuvel@linaro.org>, <nariman.poushin@linaro.org>,
+        <jcm@redhat.com>, <linux-kernel@vger.kernel.org>,
+        <peter.maydell@linaro.org>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Subject: [PATCH 0/6 V2] CCIX Protocol error reporting.
+Date:   Tue, 20 Aug 2019 22:47:26 +0800
+Message-ID: <20190820144732.2370-1-Jonathan.Cameron@huawei.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20190624150758.6695-15-rrichter@marvell.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.123.41.22]
+X-CFilter-Loop: Reflected
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Mon, Jun 24, 2019 at 03:09:24PM +0000, Robert Richter wrote:
-> In a later patch we want to add more information about the memory
-> hierarchy (NUMA topology, DIMM label information). Rework memory
-> hierarchy detection to make the code extendable for this.
-> 
-> The general approach is roughly like:
-> 
-> 	mem_info_setup();
-> 	for_each_node(nid) {
-> 		mci = edac_mc_alloc(nid);
-> 		mem_info_prepare_mci(mci);
-> 		edac_mc_add_mc(mci);
-> 	};
-> 
-> This patch introduces mem_info_setup() and mem_info_prepare_mci().
+Note this will clash with:
+[PATCH RFC 0/4] ACPI: APEI: Add support to notify the vendor specific HW errors
+so a rebase will be needed.
 
-Avoid having "This patch" or "This commit" in the commit message. It is
-tautologically useless.
+Changes since V1:
 
-> All data of the memory hierarchy is collected in a local struct
-> ghes_mem_info.
-> 
-> Note: Per (NUMA) node registration will be implemented in a later
-> patch.
+Addressed comments from James Morse
+- Dropped kernel logging of vendor data. We just push it to the tracepoints.
+- Tidied up this cover letter and added information to address questions
+  raised. Includes removing questions where James and I agreed ;)
 
-That sentence is not needed in the commit message.
+Note, this initial series attempts no 'handling' of errors.
+That will follow later.
 
-> Signed-off-by: Robert Richter <rrichter@marvell.com>
-> ---
->  drivers/edac/ghes_edac.c | 166 ++++++++++++++++++++++++++++++---------
->  1 file changed, 127 insertions(+), 39 deletions(-)
-> 
-> diff --git a/drivers/edac/ghes_edac.c b/drivers/edac/ghes_edac.c
-> index 8063996a311d..44bfb499b147 100644
-> --- a/drivers/edac/ghes_edac.c
-> +++ b/drivers/edac/ghes_edac.c
-> @@ -65,17 +65,53 @@ struct memdev_dmi_entry {
->  	u16 conf_mem_clk_speed;
->  } __attribute__((__packed__));
->  
-> -struct ghes_edac_dimm_fill {
-> -	struct mem_ctl_info *mci;
-> -	unsigned count;
+EFI 2.8 defines a new CPER record Appendix N for CCIX Protocol Error Records
+(PER). www.uefi.org
 
-All those "dimm" and "info" words everywhere are making my head spin.
-Let's make it more readable:
+These include Protocol Error Record logs which are defined in the
+CCIX 1.0 Base Specification www.ccixconsortium.com.  A public evaluation
+version is now available.
 
-> +struct ghes_dimm_info {
-> +	struct dimm_info dimm_info;
-> +	int		idx;
-> +};
-> +
-> +struct ghes_mem_info {
-> +	int num_dimm;
-> +	struct ghes_dimm_info *dimms;
->  };
->  
-> +static struct ghes_mem_info mem_info;
+Handling of coherency protocol errors is complex and how Linux does this
+will take some time to evolve.  For now, fatal errors are handled via the
+usual means and everything else is reported.
 
-/* A DIMM */
-struct ghes_dimm {
-        struct dimm_info dimm;
-        int idx;
-};
+There are 6 types of error defined, covering:
+* Memory errors
+* Cache errors
+* Address translation unit errors
+* CCIX port errors
+* CCIX link errors
+* Agent internal errors.
 
-/* The memory layout of the system */
-struct ghes_memory {
-        struct ghes_dimm *dimms;
-        int num_dimms;
-};
+These errors are concerned (mostly) wth things happening in the CCIX
+protocol layer.  They are parallel to AER errors which should be only
+concerned with the PCIe layer (which is underneath CCIX).
+The ATS errors break this rule slightly. You may get an error
+occurring that results in problems at both layers of the protocol
+stack and hence have to handle AER and PER errors simultaneously.
 
-static struct ghes_memory mem;
+Some of these errors can 'almost' be mapped onto standard existing error
+types but only at the loss of information specific to CCIX such as
+where in the topology they occurred.
 
-> +
-> +#define for_each_dimm(dimm)				\
-> +	for (dimm = mem_info.dimms;			\
-> +	     dimm < mem_info.dimms + mem_info.num_dimm;	\
-> +	     dimm++)
-> +
->  static void ghes_edac_count_dimms(const struct dmi_header *dh, void *arg)
->  {
-> -	int *num_dimm = arg;
-> +	int *num = arg;
->  
->  	if (dh->type == DMI_ENTRY_MEM_DEVICE)
-> -		(*num_dimm)++;
-> +		(*num)++;
-> +}
-> +
-> +static int ghes_dimm_info_init(int num)
+The set includes tracepoints to report the errors to RAS Daemon and a patch
+set for RAS Daemon will follow shortly.
 
-ghes_dimm_init()
+Several design decisions that people may disagree with.
+1. Reporting of vendor data.  We have little choice but to do this via a
+   dynamic array as these blocks can take arbitrary size. I had hoped
+   no one would actually use these given the odd mismatch between a
+   standard error structure and non standard element, but there are
+   already designs out there that do use it. James suggested that
+   it made sense to put these in the tracepoints, but we shouldn't spam
+   the kernel log with them (done in V2).
+2. The trade off between explicit tracepoint fields, on which we might
+   want to filter in kernel, and the simplicity of a blob.
+   I have gone for having the whole of the block specific to the PER
+   error type in an opaque blob.
+   The key elements that may be filtered on are the physical address
+   and the source and component fields which allow you to identify
+   faulty devices. Note that you have to know how the devices were
+   enumerated to be able to do so.
+3. Defined 6 new tracepoints rather than cramming everything into one.
+   * They are all defined by the CCIX specification as independent error
+     classes.
+   * Many of them can only be generated by particular types of agent.
+   * The handling required will vary widely depending on types.
+     In the kernel some map cleanly onto existing handling. Keeping the
+     whole flow separate will aide this. They vary by a similar amount
+     in scope to the RAS errors found on an existing system which have
+     independent tracepoints.
+   * Separating them out allows for filtering on the tracepoints by
+     elements that are not shared between them.
+   * Muxing the lot into one record type can lead to ugly code both in
+     kernel and in userspace.
 
-... you get the idea - let's drop the _info crap.
+Rasdaemon patches posted.
+https://www.spinics.net/lists/linux-edac/msg10616.html
 
-> +{
-> +	struct ghes_dimm_info *dimm;
-> +	int idx = 0;
-> +
-> +	memset(&mem_info, 0, sizeof(mem_info));
-> +
-> +	if (num <= 0)
-> +		return -EINVAL;
+The following boilerplate is granting rights to the kernel.
+Note that I haven't applied the CCIX copyright notice anywhere in this
+series because we aren't quoting from the specification.  That is
+much more likely to happen in documentation patches than in code.
 
-Move that check into the caller mem_info_setup() so that you don't do
-the memset unnecessarily.
+Like anything else in this series it is open to comment.
 
-> +
-> +	mem_info.dimms = kcalloc(num, sizeof(*mem_info.dimms), GFP_KERNEL);
-> +	if (!mem_info.dimms)
-> +		return -ENOMEM;
-> +
-> +	mem_info.num_dimm = num;
-> +
-> +	for_each_dimm(dimm) {
-> +		dimm->idx	= idx;
-> +		idx++;
-> +	}
+This patch is being distributed by the CCIX Consortium, Inc. (CCIX) to
+you and other parties that are participating (the "participants") in the
+Linux kernel with the understanding that the participants will use CCIX's
+name and trademark only when this patch is used in association with the
+Linux kernel and associated user space.
 
-or simply
+CCIX is also distributing this patch to these participants with the
+understanding that if any portion of the CCIX specification will be
+used or referenced in the Linux kernel, the participants will not modify
+the cited portion of the CCIX specification and will give CCIX proper
+copyright attribution by including the following copyright notice with
+the cited part of the CCIX specification:
+"© 2019 CCIX CONSORTIUM, INC. ALL RIGHTS RESERVED."
 
-	for_each_dimm(dimm)
-		dimm->idx = idx++;
+Jonathan Cameron (6):
+  efi / ras: CCIX Memory error reporting
+  efi / ras: CCIX Cache error reporting
+  efi / ras: CCIX Address Translation Cache error reporting
+  efi / ras: CCIX Port error reporting
+  efi / ras: CCIX Link error reporting
+  efi / ras: CCIX Agent internal error reporting
 
-> +
-> +	return 0;
->  }
->  
->  static int get_dimm_smbios_index(u16 handle)
+ drivers/acpi/apei/Kconfig        |   8 +
+ drivers/acpi/apei/ghes.c         |  59 +++
+ drivers/firmware/efi/Kconfig     |   5 +
+ drivers/firmware/efi/Makefile    |   1 +
+ drivers/firmware/efi/cper-ccix.c | 817 +++++++++++++++++++++++++++++++
+ drivers/firmware/efi/cper.c      |   6 +
+ include/linux/cper.h             | 333 +++++++++++++
+ include/ras/ras_event.h          | 405 +++++++++++++++
+ 8 files changed, 1634 insertions(+)
+ create mode 100644 drivers/firmware/efi/cper-ccix.c
 
 -- 
-Regards/Gruss,
-    Boris.
+2.20.1
 
-Good mailing practices for 400: avoid top-posting and trim the reply.
