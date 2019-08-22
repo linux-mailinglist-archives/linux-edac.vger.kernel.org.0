@@ -2,66 +2,91 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 836BE99012
-	for <lists+linux-edac@lfdr.de>; Thu, 22 Aug 2019 11:56:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 78B67993D8
+	for <lists+linux-edac@lfdr.de>; Thu, 22 Aug 2019 14:34:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732454AbfHVJ4A (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Thu, 22 Aug 2019 05:56:00 -0400
-Received: from mail.skyhub.de ([5.9.137.197]:53470 "EHLO mail.skyhub.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1732459AbfHVJ4A (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Thu, 22 Aug 2019 05:56:00 -0400
-Received: from zn.tnic (p200300EC2F0DB400192DF49715E793F0.dip0.t-ipconnect.de [IPv6:2003:ec:2f0d:b400:192d:f497:15e7:93f0])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id A80841EC0819;
-        Thu, 22 Aug 2019 11:55:58 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1566467758;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=8VeWpv2h+H0NzeKdjodPTrcJtIQ9N9F7wR1pWa15SXY=;
-        b=jeYif56vB5EWS/KCP5ftkAsRS/F7tYvSGbqKAQLTkf24Pn08bv+adobZrRv/G0tQ2z1F+l
-        oeljkyzfZPATnbp7nGwftmaTvy+M+7Gvax8qnnMi/RjMcVRxCTszv3G5GtEX+esunho7jL
-        x586B0PC76oZE7e5fsXj4e2uNaKoN+4=
-Date:   Thu, 22 Aug 2019 11:55:55 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Adam Borowski <kilobyte@angband.pl>
-Cc:     "Ghannam, Yazen" <Yazen.Ghannam@amd.com>,
-        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v3 0/8] AMD64 EDAC fixes
-Message-ID: <20190822095554.GC11646@zn.tnic>
-References: <20190821235938.118710-1-Yazen.Ghannam@amd.com>
- <20190822005020.GA403@angband.pl>
- <20190822083548.GA11646@zn.tnic>
- <20190822094607.GA14667@angband.pl>
+        id S2387657AbfHVMeN (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Thu, 22 Aug 2019 08:34:13 -0400
+Received: from mail-lf1-f68.google.com ([209.85.167.68]:36221 "EHLO
+        mail-lf1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2388451AbfHVMeM (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Thu, 22 Aug 2019 08:34:12 -0400
+Received: by mail-lf1-f68.google.com with SMTP id j17so4412903lfp.3
+        for <linux-edac@vger.kernel.org>; Thu, 22 Aug 2019 05:34:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=aWwEGZ7IKPwlD1SyN53LweuoS+rG8j2WBRgPDxMagPA=;
+        b=qQwouDogyXJvS+YAsG7u3jI4chdOO2iCwbnUv4qV7/t3H0mpAnkar5BQ6W4yzvm3w4
+         MFy7lbM3I35ux+N13OWQLqMSp+JYBfamJOBS4Rv9YtwGFbdx/1nZ3P/IH2tA3AOy5PjU
+         kwMZko6qlgHP0UHJGHFvzgceOWtw4tjNefrQZ96MP6AChhfKt94B36gjTZhv6W5d2u3q
+         XLX/JEQ53zQai3qewoG2X6xDeNJ4HOzQU6TV4Cb4zGt4uQQf5AD05mnaufLgjsYbqLh0
+         X5GVMmJW05ufNL+28p6nLz0lCjVsZITmyIS1mIvW9/VAX3eTcLMat0TkK0bawj8l1wal
+         unaQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=aWwEGZ7IKPwlD1SyN53LweuoS+rG8j2WBRgPDxMagPA=;
+        b=okqf36TAUp9UHky+Ra9hDw5YATbtlyaHFSE5asn3bmXddniyJL6y8J4lgD/SXygRI9
+         TNgFqoDCGgHXZ/Hi1xcYHsqPk+08bXxNUJedwHGNC1dX32ZnGWM5e5uQE+tsttu3vijZ
+         7xKjHCL2Ms+SiDNQaW1hP2zcLh7wpwnH4nxKjQyVqiFrubPFeYf2P70gLheeA09bohWg
+         x33jsQS34MK74H+9GYvNgYYvkV5KRrk08LYgfgGqjVYUiUtVfafKFayAQL47cwsu7Ffa
+         9JoI1a0oaQkuIqCxigpJPrQeUaZQOdpg+95T54Y+6X4Q1WopB2agpe4Vap1K5MstwEuO
+         vSAQ==
+X-Gm-Message-State: APjAAAU1LI9xNgbd5gfaOPbMH5q+/BbetaMz1iqlXQ2ujI6F65yMvS51
+        yJqm0fmH4W7XbxsRttgHOQl02dr+ul+D0B9t2/U=
+X-Google-Smtp-Source: APXvYqyvt2RXzV9cZsTsiBwjcFFEoyd1HLlAwIQQPxXOemblWJ85A0QXgz94gt7tcllsT417ikCMvXpOU1ZxhrqMZqI=
+X-Received: by 2002:ac2:42c3:: with SMTP id n3mr13722899lfl.117.1566477250738;
+ Thu, 22 Aug 2019 05:34:10 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20190822094607.GA14667@angband.pl>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Received: by 2002:ab3:6a0f:0:0:0:0:0 with HTTP; Thu, 22 Aug 2019 05:34:10
+ -0700 (PDT)
+Reply-To: eku.lawfirm@gmail.com
+From:   "Law firm(Eku and Associates)" <ezeobodo1@gmail.com>
+Date:   Thu, 22 Aug 2019 12:34:10 +0000
+Message-ID: <CAN-_bTZ04fanuBw0m=mWQFHTKscwdYgns3LR19ZdaFDanOVNGQ@mail.gmail.com>
+Subject: MY $25,000,000.00 INVESTMENT PROPOSAL WITH YOU AND IN YOUR COUNTRY.
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Thu, Aug 22, 2019 at 11:46:07AM +0200, Adam Borowski wrote:
-> Yeah, some of messages are no longer emitted for memory-less nodes (NUMA 1
-> and 3).  Your patch set also overhauls the messages.
+--=20
+Dear,
+With due respect this is not spam or Scam mail, because I have
+contacted you before and there was no response from you,I apologise if
+the contents of this mail are contrary to your moral ethics, which I
+feel may be of great disturbance to your person, but please treat this
+with absolute confidentiality, believing that this email reaches you
+in good faith. My contacting you is not a mistake or a coincidence
+because God can use any person known or unknown to accomplish great
+things.
+I am a lawyer and I have an investment business proposal to offer you.
+It is not official but should be considered as legal and confidential
+business. I have a customer's deposit of $US25 million dollars ready
+to be moved for investment if you can partner with us. We are ready to
+offer you 10% of this total amount as your compensation for supporting
+the transaction to completion. If you are interested to help me please
+reply me with your full details as stated below:
+(1) Your full names:
+(2) Your address:
+(3) Your occupation:
+(4) Your mobile telephone number:
+(5) Your nationality:
+(6) Your present location:
+(7) Your age:
+So that I will provide you more details on what to do and what is
+required for successful completion.
+Note: DO NOT REPLY ME IF YOU ARE NOT INTERESTED AND WITHOUT THE ABOVE
+MENTIONED DETAILS
 
-Not my patchset - Yazen's.
-
-> But, the amount of redundant messages I'm complaining about has actually
-> increased:
-
-He's working on that - that still needs some love.
-
-Thanks for testing.
-
--- 
-Regards/Gruss,
-    Boris.
-
-Good mailing practices for 400: avoid top-posting and trim the reply.
+Sinc=C3=A8rement v=C3=B4tre,
+Avocat Etienne Eku Esq.(Lawfirm)
+Procureur principal. De Cabinet d=E2=80=99avocats de l=E2=80=99Afrique de l=
+=E2=80=99ouest.
+Skype:westafricalawfirm
