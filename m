@@ -2,71 +2,83 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 23DC19B384
-	for <lists+linux-edac@lfdr.de>; Fri, 23 Aug 2019 17:37:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0911A9B449
+	for <lists+linux-edac@lfdr.de>; Fri, 23 Aug 2019 18:10:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730756AbfHWPhs (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Fri, 23 Aug 2019 11:37:48 -0400
-Received: from mail.skyhub.de ([5.9.137.197]:53482 "EHLO mail.skyhub.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726964AbfHWPhs (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Fri, 23 Aug 2019 11:37:48 -0400
-Received: from zn.tnic (p200300EC2F0BC5003C7EECCB3B09C289.dip0.t-ipconnect.de [IPv6:2003:ec:2f0b:c500:3c7e:eccb:3b09:c289])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id AEF401EC0ABC;
-        Fri, 23 Aug 2019 17:37:42 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1566574662;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=tPd7cxcXtF6Z+Vts+kIedJB73gp3fadMQe5eBBiTFdE=;
-        b=B0eLQoA+9WuNOnW3WSnHEDtLu1fHqrDJNPmfsJfcOO5HhfuCMTgmMMhovAKvsgDageJFo9
-        L+gT/Gt/KchCGxZ+paP00XbphVe/1DT2RwOibkTuSQ+NKyx+GkUaSom9RTnS4KLBQHJvpJ
-        0Ce3QfPiezSDLesZQHnf3te02Tn8TuU=
-Date:   Fri, 23 Aug 2019 17:37:39 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     "Ghannam, Yazen" <Yazen.Ghannam@amd.com>
-Cc:     Adam Borowski <kilobyte@angband.pl>,
-        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v3 0/8] AMD64 EDAC fixes
-Message-ID: <20190823153739.GC28379@zn.tnic>
-References: <20190821235938.118710-1-Yazen.Ghannam@amd.com>
- <20190822005020.GA403@angband.pl>
- <SN6PR12MB2639CD6D755B6FFCF5C4B756F8A50@SN6PR12MB2639.namprd12.prod.outlook.com>
- <SN6PR12MB263989CCDCC0F74138B6B747F8A40@SN6PR12MB2639.namprd12.prod.outlook.com>
+        id S2388997AbfHWQKm (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Fri, 23 Aug 2019 12:10:42 -0400
+Received: from bombadil.infradead.org ([198.137.202.133]:57536 "EHLO
+        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732570AbfHWQKm (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Fri, 23 Aug 2019 12:10:42 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
+        Content-Type:MIME-Version:Message-ID:Subject:To:From:Date:Sender:Reply-To:Cc:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=owE6ZNynyIUnXS+Pkj9xw1pRzw4t/OvQGMYV9S2Mdgk=; b=JhvvxXG9dIP+GookOngtfC1ha
+        xztVWWamjRDd19oAMjklQWwJcEs2qKOc+xhE5Dgrq5QaqdbGiV1AgMwJ4iBm4T7mKUw/NK9Bwobg2
+        vCu6IK9xaeiFEQt+rF7Xr/ELoFIHtKanCS/NXP0cVfOLGtQumRoLD35Hi+x8mdnfeXV65zaP2s4/K
+        6mGi9xG3IVuEMTdWCFLWaeH5l0oBF+a8vuiYH7bPDvZuSP17McgInXeO3913LJjSMwv/eT5ND6/hU
+        tRo8NZzxn7QFo5rqVH2K6305o/Q7UNIrCjPF4sTuOcjLvESfFl5arE4a2gBVgzmwb6MVEkyzG//dy
+        7l8m9RwpA==;
+Received: from [177.133.63.56] (helo=coco.lan)
+        by bombadil.infradead.org with esmtpsa (Exim 4.92 #3 (Red Hat Linux))
+        id 1i1C9B-0002Xm-6g
+        for linux-edac@vger.kernel.org; Fri, 23 Aug 2019 16:10:41 +0000
+Date:   Fri, 23 Aug 2019 13:10:38 -0300
+From:   Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
+To:     linux-edac@vger.kernel.org
+Subject: [ANN] Rasdaemon version 0.6.3 released
+Message-ID: <20190823131020.7cfe87f6@coco.lan>
+X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <SN6PR12MB263989CCDCC0F74138B6B747F8A40@SN6PR12MB2639.namprd12.prod.outlook.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Fri, Aug 23, 2019 at 03:28:59PM +0000, Ghannam, Yazen wrote:
-> Boris, Do you think it'd be appropriate to change the return values
-> for some cases?
->
-> For example, ECC disabled is a hardware configuration. This doesn't
-> mean that the module failed any operations in this case.
->
-> In other words, the module checks for a feature. If the feature is not
-> present, then return without failure (and maybe give a message).
+Hi all,
 
-That makes sense but AFAICT if probe_one_instance() sees that ECC is not
-enabled, it returns 0.
+Just released today a new version of the rasdaemon with:
 
-The "if (!edac_has_mcs())" check later is to verify that at least once
-instance was loaded successfully and, if not, then return an error.
+	* Added support for ARM Scalable MCA
+	* Added support for HiSilicon HIP08
+	* Added support for Hygon Dhyana family 18h processor
+	* Added support for disk I/O error monitoring
+	* Added devlink events
+	* Integrate rasdaemon build tests with Travis CI
+	* Fixed asdaemon high CPU usage when part of CPUs offline
+	* Fixed mcgstatus message print
+	* Some other minor fixes
 
-So where does it return failure?
+Also, ./configure has gained a new option:
 
--- 
-Regards/Gruss,
-    Boris.
+	./configure --enable-all
 
-Good mailing practices for 400: avoid top-posting and trim the reply.
+With enables all features when building it at the tool. Very helpful 
+to test if everything is ok. Please notice that this option enables 
+arch-specific features for reports on both ARM and x86 architectures.
+It should still run fine - although it may report that some feats aren't
+available when you try to run it.
+
+The main git repository is hosted at:
+
+	https://github.com/mchehab/rasdaemon
+
+CI testing is available at:
+
+	https://travis-ci.org/mchehab/rasdaemon
+
+Source tarballs at:
+
+	https://www.infradead.org/~mchehab/rasdaemon/
+
+And Fedora packages (Fedora 30, 31 and rawhide) at:
+	https://koji.fedoraproject.org/koji/packageinfo?packageID=16220
+
+Thanks,
+Mauro
