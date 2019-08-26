@@ -2,85 +2,70 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 13F299D1F6
-	for <lists+linux-edac@lfdr.de>; Mon, 26 Aug 2019 16:49:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A32839D22A
+	for <lists+linux-edac@lfdr.de>; Mon, 26 Aug 2019 16:59:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731225AbfHZOte (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Mon, 26 Aug 2019 10:49:34 -0400
-Received: from smtp-fw-9102.amazon.com ([207.171.184.29]:6071 "EHLO
-        smtp-fw-9102.amazon.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730499AbfHZOte (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Mon, 26 Aug 2019 10:49:34 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1566830973; x=1598366973;
-  h=from:subject:to:cc:references:message-id:date:
-   mime-version:in-reply-to:content-transfer-encoding;
-  bh=cV++afZdVCdnVK5vWMAnee3Y5NbvfdxEOLMY1xSyQuY=;
-  b=pb7accaBtgIRuxawZzQCai/79IvcvKtrFjHRGE55GL3ui3rUt4/5qtoK
-   3NaWSWCfs9oaXplx1eEqCQyNNoN/40hzZR9F+puksbMC0SxY0IF5yeddf
-   GoWe1XZqsydcaGT7b0QLdytck/z9l1AN9I/X34LFkF+RLEQnbksegBJuY
-   Y=;
-X-IronPort-AV: E=Sophos;i="5.64,433,1559520000"; 
-   d="scan'208";a="697550575"
-Received: from sea3-co-svc-lb6-vlan3.sea.amazon.com (HELO email-inbound-relay-2a-90c42d1d.us-west-2.amazon.com) ([10.47.22.38])
-  by smtp-border-fw-out-9102.sea19.amazon.com with ESMTP; 26 Aug 2019 14:49:17 +0000
-Received: from EX13MTAUEA001.ant.amazon.com (pdx4-ws-svc-p6-lb7-vlan3.pdx.amazon.com [10.170.41.166])
-        by email-inbound-relay-2a-90c42d1d.us-west-2.amazon.com (Postfix) with ESMTPS id 364B3A2027;
-        Mon, 26 Aug 2019 14:49:16 +0000 (UTC)
-Received: from EX13D08UEE003.ant.amazon.com (10.43.62.118) by
- EX13MTAUEA001.ant.amazon.com (10.43.61.243) with Microsoft SMTP Server (TLS)
- id 15.0.1367.3; Mon, 26 Aug 2019 14:49:15 +0000
-Received: from EX13MTAUEA001.ant.amazon.com (10.43.61.82) by
- EX13D08UEE003.ant.amazon.com (10.43.62.118) with Microsoft SMTP Server (TLS)
- id 15.0.1367.3; Mon, 26 Aug 2019 14:49:15 +0000
-Received: from [10.107.3.18] (10.107.3.18) by mail-relay.amazon.com
- (10.43.61.243) with Microsoft SMTP Server (TLS) id 15.0.1367.3 via Frontend
- Transport; Mon, 26 Aug 2019 14:49:12 +0000
-From:   "Hawa, Hanna" <hhhawa@amazon.com>
-Subject: Re: [PATCH v5 1/4] dt-bindings: EDAC: Add Amazon's Annapurna Labs L1
- EDAC
-To:     Rob Herring <robh@kernel.org>
-CC:     <mark.rutland@arm.com>, <bp@alien8.de>, <mchehab@kernel.org>,
-        <james.morse@arm.com>, <davem@davemloft.net>,
-        <gregkh@linuxfoundation.org>, <linus.walleij@linaro.org>,
-        <Jonathan.Cameron@huawei.com>, <nicolas.ferre@microchip.com>,
-        <paulmck@linux.ibm.com>, <dwmw@amazon.co.uk>, <benh@amazon.com>,
-        <ronenk@amazon.com>, <talel@amazon.com>, <jonnyc@amazon.com>,
-        <hanochu@amazon.com>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-edac@vger.kernel.org>
-References: <20190805143911.12185-1-hhhawa@amazon.com>
- <20190805143911.12185-2-hhhawa@amazon.com> <20190821191704.GA32425@bogus>
-Message-ID: <1d23d7c5-cd7b-1512-5300-d43e82ba6dc1@amazon.com>
-Date:   Mon, 26 Aug 2019 17:49:11 +0300
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        id S1730753AbfHZO7J (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Mon, 26 Aug 2019 10:59:09 -0400
+Received: from mail.skyhub.de ([5.9.137.197]:46166 "EHLO mail.skyhub.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1730725AbfHZO7I (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Mon, 26 Aug 2019 10:59:08 -0400
+Received: from zn.tnic (p200300EC2F065700151C403A4EBA2CC9.dip0.t-ipconnect.de [IPv6:2003:ec:2f06:5700:151c:403a:4eba:2cc9])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 6FD251EC058B;
+        Mon, 26 Aug 2019 16:59:07 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1566831547;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=lyPGmPd5v4iVdl12WaU/uNVIbYt5hdCcXZcNjYUv204=;
+        b=SSLnQ5dVp+wvHtszCOowYsZbPTjQzECygWh6I30y3Ma9yHvj2Zq/MaSiPnAnuohbQJbNpv
+        qS/BBy3vWNxUjCvxBDZjngZW0j6sa2a8ifgEM/oCBBKv4RgwDY+fGl6WFhzL/RwDpmjrcm
+        KuXuiDPcDlWU+0PMS3g2IovTlrB2pf4=
+Date:   Mon, 26 Aug 2019 16:59:01 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     "Ghannam, Yazen" <Yazen.Ghannam@amd.com>
+Cc:     Adam Borowski <kilobyte@angband.pl>,
+        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v3 0/8] AMD64 EDAC fixes
+Message-ID: <20190826145901.GH27636@zn.tnic>
+References: <20190821235938.118710-1-Yazen.Ghannam@amd.com>
+ <20190822005020.GA403@angband.pl>
+ <SN6PR12MB2639CD6D755B6FFCF5C4B756F8A50@SN6PR12MB2639.namprd12.prod.outlook.com>
+ <SN6PR12MB263989CCDCC0F74138B6B747F8A40@SN6PR12MB2639.namprd12.prod.outlook.com>
+ <20190823153739.GC28379@zn.tnic>
+ <SN6PR12MB2639E02109E30165D4A37D8AF8A10@SN6PR12MB2639.namprd12.prod.outlook.com>
 MIME-Version: 1.0
-In-Reply-To: <20190821191704.GA32425@bogus>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <SN6PR12MB2639E02109E30165D4A37D8AF8A10@SN6PR12MB2639.namprd12.prod.outlook.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
+On Mon, Aug 26, 2019 at 02:19:18PM +0000, Ghannam, Yazen wrote:
+> I was tracking down the failure with ECC disabled, and that seems to be it.
+>
+> So I think we should return 0 "if (!edac_has_mcs())", because we'd only get
+> there if ECC is disabled on all nodes and there wasn't some other initialization
+> error.
+>
+> I'll send a patch for this soon.
+>
+> Adam, would you mind testing this patch?
 
+You can't return 0 when ECC is disabled on all nodes because then the
+driver remains loaded without driving anything. That silly userspace
+needs to understand that ENODEV means "stop trying to load this driver".
 
-On 8/21/2019 10:17 PM, Rob Herring wrote:
-> Why is this even in DT? AFAICT, this is all just CortexA57 core features
-> (i.e. nothing Amazon specific). The core type and the ECC capabilities
-> are discoverable.
+-- 
+Regards/Gruss,
+    Boris.
 
-Added to the DT in order to easily enable/disable the driver. You are 
-correct that they are CortexA57 core features and nothing Amazon 
-specific, but it's IMPLEMENTATION DEFINED, meaning that in different 
-cortex revisions (e.g. A57) the register bitmap may change. Because of 
-that we added an Amazon compatible which corresponds to the specific 
-core we are using.
-
-Thanks,
-Hanna
-
-> 
-> Rob
+Good mailing practices for 400: avoid top-posting and trim the reply.
