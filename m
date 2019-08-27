@@ -2,97 +2,97 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 73DF69E3BD
-	for <lists+linux-edac@lfdr.de>; Tue, 27 Aug 2019 11:13:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E2A19E6C8
+	for <lists+linux-edac@lfdr.de>; Tue, 27 Aug 2019 13:30:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726091AbfH0JNu (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Tue, 27 Aug 2019 05:13:50 -0400
-Received: from pandora.armlinux.org.uk ([78.32.30.218]:36048 "EHLO
-        pandora.armlinux.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725805AbfH0JNu (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Tue, 27 Aug 2019 05:13:50 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=4FZW6WpHVkghAQyfLmfyvtAtB0km+7CvKkK8paBRUnQ=; b=ju+ibQGosYVXbnQwwniWtU4Yp
-        0aVH7H+p9liw4K108OWpO6QcPYzxpix3Hcf1wcqaXgCte5xhe6jgLLmOUBVMdh/dHK/OTIZNvpZ09
-        H3KRlVUGA7QW1PLEXlY4l1FzF2dOpviRC4bODDpzzyJd+9BHkDsZERAAJ3fEs36lwX8TSZFMjDv7w
-        HEVRVzUVsoOWMuKspApzHVghJVBdbP4Ywsp8l8hLpRs9LQ6GkwTUt7gLRxXhEMDEiyoAPhlOjiuDg
-        vDqCLSvIyKIhQyvs4V8++WVrPAYzwZUwCrI1Mu0LQ6+rwcA2nEGG4ssqk2wCh/BwJrH1YI4diQXid
-        HSbh4dMuA==;
-Received: from shell.armlinux.org.uk ([2001:4d48:ad52:3201:5054:ff:fe00:4ec]:55136)
-        by pandora.armlinux.org.uk with esmtpsa (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384:256)
-        (Exim 4.90_1)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1i2XXq-0003S4-CF; Tue, 27 Aug 2019 10:13:42 +0100
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.92)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1i2XXk-0005dX-F0; Tue, 27 Aug 2019 10:13:36 +0100
-Date:   Tue, 27 Aug 2019 10:13:36 +0100
-From:   Russell King - ARM Linux admin <linux@armlinux.org.uk>
-To:     Chris Packham <Chris.Packham@alliedtelesis.co.nz>
-Cc:     "mark.rutland@arm.com" <mark.rutland@arm.com>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "jlu@pengutronix.de" <jlu@pengutronix.de>,
-        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "james.morse@arm.com" <james.morse@arm.com>,
-        "gregory.clement@free-electrons.com" 
-        <gregory.clement@free-electrons.com>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "mchehab@kernel.org" <mchehab@kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "patches@armlinux.org.uk" <patches@armlinux.org.uk>
-Subject: Re: [PATCH v9 1/8] ARM: aurora-l2: add prefix to MAX_RANGE_SIZE
-Message-ID: <20190827091336.GI13294@shell.armlinux.org.uk>
-References: <20190712034904.5747-1-chris.packham@alliedtelesis.co.nz>
- <20190712034904.5747-2-chris.packham@alliedtelesis.co.nz>
- <20190823104621.GY13294@shell.armlinux.org.uk>
- <20190823105020.GZ13294@shell.armlinux.org.uk>
- <836653f04f526333e8dbd45361329731f8dfe2ea.camel@alliedtelesis.co.nz>
+        id S1726539AbfH0Lav (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Tue, 27 Aug 2019 07:30:51 -0400
+Received: from szxga07-in.huawei.com ([45.249.212.35]:58570 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726527AbfH0Lav (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Tue, 27 Aug 2019 07:30:51 -0400
+Received: from DGGEMS413-HUB.china.huawei.com (unknown [172.30.72.60])
+        by Forcepoint Email with ESMTP id 02E8A79CFB4614B224A2;
+        Tue, 27 Aug 2019 19:30:49 +0800 (CST)
+Received: from lhrphicprd00229.huawei.com (10.123.41.22) by
+ DGGEMS413-HUB.china.huawei.com (10.3.19.213) with Microsoft SMTP Server id
+ 14.3.439.0; Tue, 27 Aug 2019 19:30:41 +0800
+From:   Jonathan Cameron <Jonathan.Cameron@huawei.com>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        <linux-edac@vger.kernel.org>
+CC:     <linuxarm@huawei.com>, <jcm@redhat.com>, <shiju.jose@huawei.com>,
+        "Jonathan Cameron" <Jonathan.Cameron@huawei.com>
+Subject: [PATCH V2 0/6] CCIX rasdaemon support
+Date:   Tue, 27 Aug 2019 19:30:04 +0800
+Message-ID: <20190827113010.50405-1-Jonathan.Cameron@huawei.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <836653f04f526333e8dbd45361329731f8dfe2ea.camel@alliedtelesis.co.nz>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.123.41.22]
+X-CFilter-Loop: Reflected
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Mon, Aug 26, 2019 at 12:46:44AM +0000, Chris Packham wrote:
-> Hi Russell,
-> 
-> On Fri, 2019-08-23 at 11:50 +0100, Russell King - ARM Linux admin
-> wrote:
-> > On Fri, Aug 23, 2019 at 11:46:21AM +0100, Russell King - ARM Linux
-> > admin wrote:
-> > > I can't apply this series - this file does not exist in my tree,
-> > > and
-> > > from what git tells me, it never has existed.  Maybe it's in
-> > > someone
-> > > elses tree?
-> > 
-> > I think the file is in my tree, just as arch/arm/mm/cache-aurora-l2.h
-> > which is where it has been since it was originally submitted in 2012.
-> 
-> Sorry there is a missing patch that moves it next to the
-> hardware/cache-*.h. I can send the missing patch or I can re-send the
-> whole series. If I do send the whole series do you want me to rebase it
-> against a particular tag/tree?
+Depends on the kernel patches being accepted:
+https://lore.kernel.org/linux-edac/20190820144732.2370-1-Jonathan.Cameron@huawei.com/T/#t
 
-Just send the single patch to the patch tracker - having it against
-5.3-rc is fine (I don't think anything has changed for a long time
-with that file.)
+Changes since v1:
+* Separated out the ras-record section into its own file.
+* Rebased on current rasdaemon tree.
 
-Thanks.
+This series introduced rasdaemon support to match against the above
+series which provides the tracepoints for CCIX PER error reporting from
+the kernel to userspace.
+
+These are errors which occur at the CCIX protocol layer which sits
+on top of PCIe (for which we have AER).  They are defined in the
+CCIX base specification v1.0 an evaluation version of which is available
+at www.ccixconsortium.org.
+
+Note the following is a trademark grant and doesn't prevent normal
+stuff covered under fair use.  Given this set doesn't quote from
+the spec (other than field names), there are no such copyright
+notices.
+
+This patch is being distributed by the CCIX Consortium, Inc. (CCIX) to
+you and other parties that are participating (the "participants") in
+rasdemon project with the understanding that the participants will use CCIX's
+name and trademark only when this patch is used in association with
+rasdaemon.
+
+CCIX is also distributing this patch to these participants with the
+understanding that if any portion of the CCIX specification will be
+used or referenced in rasdaemon, the participants will not modify
+the cited portion of the CCIX specification and will give CCIX proper
+copyright attribution by including the following copyright notice with
+the cited part of the CCIX specification:
+"© 2019 CCIX CONSORTIUM, INC. ALL RIGHTS RESERVED."
+
+Jonathan Cameron (6):
+  rasdaemon: CCIX: memory error support
+  rasdaemon: CCIX: Cache error support
+  rasdaemon: CCIX: ATC error support
+  rasdaemon: CCIX: Port error suppport
+  rasdaemon: CCIX: Link error support
+  rasdaemon: CCIX: Agent Internal error support
+
+ Makefile.am        |   8 +-
+ configure.ac       |  10 +
+ ras-ccix-handler.c | 648 +++++++++++++++++++++++++++++++++++++++++++++
+ ras-ccix-handler.h | 139 ++++++++++
+ ras-events.c       |  61 +++++
+ ras-record-ccix.c  | 596 +++++++++++++++++++++++++++++++++++++++++
+ ras-record.c       |  15 +-
+ ras-record.h       |  43 +++
+ ras-report.h       |   6 +-
+ 9 files changed, 1519 insertions(+), 7 deletions(-)
+ create mode 100644 ras-ccix-handler.c
+ create mode 100644 ras-ccix-handler.h
+ create mode 100644 ras-record-ccix.c
 
 -- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTC broadband for 0.8mile line in suburbia: sync at 12.1Mbps down 622kbps up
-According to speedtest.net: 11.9Mbps down 500kbps up
+2.20.1
+
