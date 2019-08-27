@@ -2,80 +2,97 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 617549E1F0
-	for <lists+linux-edac@lfdr.de>; Tue, 27 Aug 2019 10:17:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 73DF69E3BD
+	for <lists+linux-edac@lfdr.de>; Tue, 27 Aug 2019 11:13:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729273AbfH0Hxm (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Tue, 27 Aug 2019 03:53:42 -0400
-Received: from mail.skyhub.de ([5.9.137.197]:45502 "EHLO mail.skyhub.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729852AbfH0Hxl (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Tue, 27 Aug 2019 03:53:41 -0400
-Received: from zn.tnic (p200300EC2F0CD000E4ECF72BFDD79A39.dip0.t-ipconnect.de [IPv6:2003:ec:2f0c:d000:e4ec:f72b:fdd7:9a39])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 567081EC0965;
-        Tue, 27 Aug 2019 09:53:40 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1566892420;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=8p1J/zPTLAzb8JP6Pzlpwjulw1RiTNpv98AQ/qRNp1A=;
-        b=Ek/6sU/qfsfjFwI81AIhXWbsw/CibP44YJzq3iiM1ULP96lzq9ngzBvVpHQTgKxXWya37u
-        +RE51/ByIrjJHM/272sv7weTWlIICuu1CW6Nt1QnXcH9T3BwNNTMAwROMtzbS7e4mEuEjz
-        xv0kJO1hEwG0Dod9hcyOj4NN1XV6GmQ=
-Date:   Tue, 27 Aug 2019 09:53:36 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Lei Wang <leiwang_git@outlook.com>
-Cc:     "james.morse@arm.com" <james.morse@arm.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "mark.rutland@arm.com" <mark.rutland@arm.com>,
+        id S1726091AbfH0JNu (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Tue, 27 Aug 2019 05:13:50 -0400
+Received: from pandora.armlinux.org.uk ([78.32.30.218]:36048 "EHLO
+        pandora.armlinux.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725805AbfH0JNu (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Tue, 27 Aug 2019 05:13:50 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=4FZW6WpHVkghAQyfLmfyvtAtB0km+7CvKkK8paBRUnQ=; b=ju+ibQGosYVXbnQwwniWtU4Yp
+        0aVH7H+p9liw4K108OWpO6QcPYzxpix3Hcf1wcqaXgCte5xhe6jgLLmOUBVMdh/dHK/OTIZNvpZ09
+        H3KRlVUGA7QW1PLEXlY4l1FzF2dOpviRC4bODDpzzyJd+9BHkDsZERAAJ3fEs36lwX8TSZFMjDv7w
+        HEVRVzUVsoOWMuKspApzHVghJVBdbP4Ywsp8l8hLpRs9LQ6GkwTUt7gLRxXhEMDEiyoAPhlOjiuDg
+        vDqCLSvIyKIhQyvs4V8++WVrPAYzwZUwCrI1Mu0LQ6+rwcA2nEGG4ssqk2wCh/BwJrH1YI4diQXid
+        HSbh4dMuA==;
+Received: from shell.armlinux.org.uk ([2001:4d48:ad52:3201:5054:ff:fe00:4ec]:55136)
+        by pandora.armlinux.org.uk with esmtpsa (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384:256)
+        (Exim 4.90_1)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1i2XXq-0003S4-CF; Tue, 27 Aug 2019 10:13:42 +0100
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.92)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1i2XXk-0005dX-F0; Tue, 27 Aug 2019 10:13:36 +0100
+Date:   Tue, 27 Aug 2019 10:13:36 +0100
+From:   Russell King - ARM Linux admin <linux@armlinux.org.uk>
+To:     Chris Packham <Chris.Packham@alliedtelesis.co.nz>
+Cc:     "mark.rutland@arm.com" <mark.rutland@arm.com>,
         "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "mchehab@kernel.org" <mchehab@kernel.org>,
+        "jlu@pengutronix.de" <jlu@pengutronix.de>,
         "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
-        "sashal@kernel.org" <sashal@kernel.org>,
-        "hangl@microsoft.com" <hangl@microsoft.com>,
-        "lewan@microsoft.com" <lewan@microsoft.com>,
-        "ruizhao@microsoft.com" <ruizhao@microsoft.com>,
-        "scott.branden@broadcom.com" <scott.branden@broadcom.com>,
-        "yuqing.shen@broadcom.com" <yuqing.shen@broadcom.com>,
-        "ray.jui@broadcom.com" <ray.jui@broadcom.com>
-Subject: Re: [PATCH v5 2/2] EDAC: add EDAC driver for DMC520
-Message-ID: <20190827075336.GB29752@zn.tnic>
-References: <BN6PR04MB1107CE3C2D666A806E62851B86C10@BN6PR04MB1107.namprd04.prod.outlook.com>
- <20190807144016.GA24328@zn.tnic>
- <BY5PR04MB659914AC91EBB3EAF72977BD86D20@BY5PR04MB6599.namprd04.prod.outlook.com>
- <20190819093147.GE4841@zn.tnic>
- <BY5PR04MB65996BD47D541327F8F1BE4A86A00@BY5PR04MB6599.namprd04.prod.outlook.com>
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "james.morse@arm.com" <james.morse@arm.com>,
+        "gregory.clement@free-electrons.com" 
+        <gregory.clement@free-electrons.com>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "mchehab@kernel.org" <mchehab@kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "patches@armlinux.org.uk" <patches@armlinux.org.uk>
+Subject: Re: [PATCH v9 1/8] ARM: aurora-l2: add prefix to MAX_RANGE_SIZE
+Message-ID: <20190827091336.GI13294@shell.armlinux.org.uk>
+References: <20190712034904.5747-1-chris.packham@alliedtelesis.co.nz>
+ <20190712034904.5747-2-chris.packham@alliedtelesis.co.nz>
+ <20190823104621.GY13294@shell.armlinux.org.uk>
+ <20190823105020.GZ13294@shell.armlinux.org.uk>
+ <836653f04f526333e8dbd45361329731f8dfe2ea.camel@alliedtelesis.co.nz>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <BY5PR04MB65996BD47D541327F8F1BE4A86A00@BY5PR04MB6599.namprd04.prod.outlook.com>
+In-Reply-To: <836653f04f526333e8dbd45361329731f8dfe2ea.camel@alliedtelesis.co.nz>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Tue, Aug 27, 2019 at 01:49:29AM +0000, Lei Wang wrote:
-> Yes, this is to help open source developers who potentially might want 
-> to expand this driver, most likely colleagues, and possibly other 
-> developers.
+On Mon, Aug 26, 2019 at 12:46:44AM +0000, Chris Packham wrote:
+> Hi Russell,
+> 
+> On Fri, 2019-08-23 at 11:50 +0100, Russell King - ARM Linux admin
+> wrote:
+> > On Fri, Aug 23, 2019 at 11:46:21AM +0100, Russell King - ARM Linux
+> > admin wrote:
+> > > I can't apply this series - this file does not exist in my tree,
+> > > and
+> > > from what git tells me, it never has existed.  Maybe it's in
+> > > someone
+> > > elses tree?
+> > 
+> > I think the file is in my tree, just as arch/arm/mm/cache-aurora-l2.h
+> > which is where it has been since it was originally submitted in 2012.
+> 
+> Sorry there is a missing patch that moves it next to the
+> hardware/cache-*.h. I can send the missing patch or I can re-send the
+> whole series. If I do send the whole series do you want me to rebase it
+> against a particular tag/tree?
 
-Then please put that info in the comment at the beginning of the driver
-- not some random single sentences about what can be done, interspersed
-throughout the code. It needs to be visible at a first glance.
+Just send the single patch to the patch tracker - having it against
+5.3-rc is fine (I don't think anything has changed for a long time
+with that file.)
 
-Also, if you want this to be a longer doc, I wouldn't mind at all having
-it in Documentation/edac/ (which doesn't exist yet) and then point
-people to it from the comment at the beginning of the driver.
-
-Thx.
+Thanks.
 
 -- 
-Regards/Gruss,
-    Boris.
-
-Good mailing practices for 400: avoid top-posting and trim the reply.
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTC broadband for 0.8mile line in suburbia: sync at 12.1Mbps down 622kbps up
+According to speedtest.net: 11.9Mbps down 500kbps up
