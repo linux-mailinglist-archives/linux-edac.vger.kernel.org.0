@@ -2,85 +2,76 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FC26A8480
-	for <lists+linux-edac@lfdr.de>; Wed,  4 Sep 2019 15:49:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 892C8A89BB
+	for <lists+linux-edac@lfdr.de>; Wed,  4 Sep 2019 21:24:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730013AbfIDNdY (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Wed, 4 Sep 2019 09:33:24 -0400
-Received: from smtp-fw-6001.amazon.com ([52.95.48.154]:60094 "EHLO
-        smtp-fw-6001.amazon.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725911AbfIDNdX (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Wed, 4 Sep 2019 09:33:23 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1567604003; x=1599140003;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version;
-  bh=n6d55kUkaBFlUJHXxH7iZa0vx52buK+arnIMuA4U1tY=;
-  b=MCS5hxQRy5wGMNUYfO3uJ1RoB0OxFZfy/FfwjA7n9jPpHDMO4AlW8h98
-   iBEfjX4FTtEkItneoekTdINo2uKvEBHm+9ZwCcuxD8VNA47xRxfMyjV20
-   rsIdPi17PfB87kifpvcfBNEhzc2iSIqnczSTBumBnIXu0IrMXcW4YgP+j
-   E=;
-X-IronPort-AV: E=Sophos;i="5.64,467,1559520000"; 
-   d="scan'208";a="413537122"
-Received: from iad6-co-svc-p1-lb1-vlan3.amazon.com (HELO email-inbound-relay-1a-16acd5e0.us-east-1.amazon.com) ([10.124.125.6])
-  by smtp-border-fw-out-6001.iad6.amazon.com with ESMTP; 04 Sep 2019 13:33:20 +0000
-Received: from EX13MTAUEA001.ant.amazon.com (iad55-ws-svc-p15-lb9-vlan2.iad.amazon.com [10.40.159.162])
-        by email-inbound-relay-1a-16acd5e0.us-east-1.amazon.com (Postfix) with ESMTPS id A2B9EA2834;
-        Wed,  4 Sep 2019 13:33:16 +0000 (UTC)
-Received: from EX13D01EUB001.ant.amazon.com (10.43.166.194) by
- EX13MTAUEA001.ant.amazon.com (10.43.61.82) with Microsoft SMTP Server (TLS)
- id 15.0.1367.3; Wed, 4 Sep 2019 13:33:15 +0000
-Received: from udc4a3e82dbc15a031435.hfa15.amazon.com (10.43.161.82) by
- EX13D01EUB001.ant.amazon.com (10.43.166.194) with Microsoft SMTP Server (TLS)
- id 15.0.1367.3; Wed, 4 Sep 2019 13:33:07 +0000
-From:   Talel Shenhar <talel@amazon.com>
-To:     <bp@alien8.de>, <mchehab@kernel.org>, <james.morse@arm.com>,
-        <talel@amazon.com>, <davem@davemloft.net>,
-        <gregkh@linuxfoundation.org>, <nicolas.ferre@microchip.com>,
-        <robh+dt@kernel.org>, <mark.rutland@arm.com>,
-        <catalin.marinas@arm.com>, <will@kernel.org>,
-        <linux-edac@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>
-CC:     <hhhawa@amazon.com>, <ronenk@amazon.com>, <jonnyc@amazon.com>,
-        <hanochu@amazon.com>, <barakw@amazon.com>
-Subject: [PATCH 3/3] arm64: alpine: select EDAC_AL_MC
-Date:   Wed, 4 Sep 2019 16:32:23 +0300
-Message-ID: <1567603943-25316-4-git-send-email-talel@amazon.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1567603943-25316-1-git-send-email-talel@amazon.com>
-References: <1567603943-25316-1-git-send-email-talel@amazon.com>
+        id S1731475AbfIDPx3 (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Wed, 4 Sep 2019 11:53:29 -0400
+Received: from mail.skyhub.de ([5.9.137.197]:52012 "EHLO mail.skyhub.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1731465AbfIDPx2 (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Wed, 4 Sep 2019 11:53:28 -0400
+Received: from zn.tnic (p200300EC2F0A23007420D76C17796BA0.dip0.t-ipconnect.de [IPv6:2003:ec:2f0a:2300:7420:d76c:1779:6ba0])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 8378B1EC0528;
+        Wed,  4 Sep 2019 17:53:27 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1567612407;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=1wN5rIWmEF3eBwLzPPZZZ+UrG/kIZXE/7pS5w/Sbemo=;
+        b=TSEn5/o59iL21J1EnNRh8ctW7FwHQz8R4nABE+qcd4Yd60cfnI6jnoMVP4Kj9JpGWhx7EP
+        98DH5FqOzDTOizMdJXHqkJ8rGGonvq932AQ5l9cuNqKQgBc0+SXfuUj0z6kdoQ+RMFV9J9
+        VqrsNz4JqfnlvnZ4WGwRM1z5+QZ+cV8=
+Date:   Wed, 4 Sep 2019 17:53:21 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Robert Richter <rrichter@marvell.com>
+Cc:     Tony Luck <tony.luck@intel.com>, James Morse <james.morse@arm.com>,
+        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 0/5] EDAC: Small cleanups and fixes
+Message-ID: <20190904155321.GA31961@zn.tnic>
+References: <20190902123216.9809-1-rrichter@marvell.com>
+ <20190902171716.50c226d6@coco.lan>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.43.161.82]
-X-ClientProxiedBy: EX13D10UWA001.ant.amazon.com (10.43.160.216) To
- EX13D01EUB001.ant.amazon.com (10.43.166.194)
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20190902171716.50c226d6@coco.lan>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-Amazon's Annapurna Labs SoCs supports memory error detection and
-correction.
+On Mon, Sep 02, 2019 at 05:17:16PM -0300, Mauro Carvalho Chehab wrote:
+> > Robert Richter (5):
+> >   EDAC: Prefer 'unsigned int' to bare use of 'unsigned'
+> >   EDAC, mc_sysfs: Change dev_ch_attribute->channel to unsigned int
+> >   EDAC, mc_sysfs: Remove pointless gotos
+> >   EDAC, mc_sysfs: Make debug messages consistent
+> >   MAINTAINERS: update EDAC's reviewer entry
+> 
+> For the entire series:
+> 
+> Reviewed-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+> 
+> > 
+> >  MAINTAINERS                  |  1 +
+> >  drivers/edac/edac_mc.c       | 20 ++++----
+> >  drivers/edac/edac_mc.h       |  6 +--
+> >  drivers/edac/edac_mc_sysfs.c | 91 ++++++++++++++++--------------------
+> >  drivers/edac/ghes_edac.c     |  2 +-
+> >  drivers/edac/i5100_edac.c    | 16 ++++---
+> >  include/linux/edac.h         | 10 ++--
+> >  7 files changed, 69 insertions(+), 77 deletions(-)
 
-Signed-off-by: Talel Shenhar <talel@amazon.com>
----
- arch/arm64/Kconfig.platforms | 1 +
- 1 file changed, 1 insertion(+)
+Queued, thanks.
 
-diff --git a/arch/arm64/Kconfig.platforms b/arch/arm64/Kconfig.platforms
-index 4778c77..d2809b9 100644
---- a/arch/arm64/Kconfig.platforms
-+++ b/arch/arm64/Kconfig.platforms
-@@ -25,6 +25,7 @@ config ARCH_SUNXI
- config ARCH_ALPINE
- 	bool "Annapurna Labs Alpine platform"
- 	select ALPINE_MSI if PCI
-+	select EDAC_AL_MC
- 	help
- 	  This enables support for the Annapurna Labs Alpine
- 	  Soc family.
 -- 
-2.7.4
+Regards/Gruss,
+    Boris.
 
+https://people.kernel.org/tglx/notes-about-netiquette
