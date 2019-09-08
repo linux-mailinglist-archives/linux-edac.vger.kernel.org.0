@@ -2,162 +2,316 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E4058AC68F
-	for <lists+linux-edac@lfdr.de>; Sat,  7 Sep 2019 14:18:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 26BA2ACB6B
+	for <lists+linux-edac@lfdr.de>; Sun,  8 Sep 2019 09:59:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726407AbfIGMJX (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Sat, 7 Sep 2019 08:09:23 -0400
-Received: from mail-eopbgr810073.outbound.protection.outlook.com ([40.107.81.73]:35810
-        "EHLO NAM01-BY2-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726027AbfIGMJX (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Sat, 7 Sep 2019 08:09:23 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=IsEs7eAzWemWdFbaMwDpu78oR3cWrcGPW94QR5/+zN46fYAutZXQ/DSlfK7liTZ/Qya1pDqj5HeSxAsZWgwOrwNcIWqnbXy16OIBnYFzl7omKDD3uCN+nsXT6TDwyin4t7+wCkEE038UWUCIZjbarFC/NQOxGL3eyqr4KSa7CqQHy7O5LRbrVcH+Sjr+GCzDpp8+8aZQTYEPY9tiNFgHxK9zJED9oO55J3Xqu0GJ8TxJUKZi0iJWxzSh/02gM8W3WxkQ1T06XDNhkwweAUoqsvQL/6paItFRY40ED4ciW6Y+gIauTu5sgPmIZ0tBcwxDJ9GccSv+1dbGts37p45niA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=o3ivv34ffU0etiFSjpDTZMgKGGZ05g4C7pcAXOdARxg=;
- b=HpLFu5kOe4wR8LNn9R5Vz6XkTq+wGlbZHh7AFAo5OU8M9SpMHCG20Ixd+YeJ8ZYtoojr2j0IpJAWT2uyK8wRypfM+QWs6zg+NW0lqwyLhA0RlaS++Y8gsT9ZYveXAtCRkLo2S/JZ2BrF6ELb0Z5GSwhMvXTJ83a7ZnjbuJ9pQlIHBsiAWW9Fyg5beVZ0/Zir3npxQll4P24NzcbJy9oNHM54V1qHrWj+m4Ti0f5rez8dIx3sIvT4D66RNhLpS2GDLMh1FvsiwvRCK0AZmAoZHxl+hyr6fQhDkuKKq/boQyaMQ/EVMKNNOJlHYShFR/k2PW94cdML+d/Ft9ZyLdua8Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=knights.ucf.edu; dmarc=pass action=none
- header.from=knights.ucf.edu; dkim=pass header.d=knights.ucf.edu; arc=none
+        id S1726444AbfIHH7O (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Sun, 8 Sep 2019 03:59:14 -0400
+Received: from smtp-fw-9102.amazon.com ([207.171.184.29]:9624 "EHLO
+        smtp-fw-9102.amazon.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726108AbfIHH7O (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Sun, 8 Sep 2019 03:59:14 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=knightsucfedu39751.onmicrosoft.com;
- s=selector2-knightsucfedu39751-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=o3ivv34ffU0etiFSjpDTZMgKGGZ05g4C7pcAXOdARxg=;
- b=d9q1lutZzLIDLO228SCCdraX2BhUyVyWLfMuE39dVNuu+/u/+n/pj5UjtkFENt2MqmD/RGzd+8z0CEJKy7m0t+fnGo619VlFtxfVpHB5a+01O/HDd2VVQa9wPdhI92mZtvTD7h/KtiMaxXmHRkUq/+qaXoCE1k+fCwq1kCsQOT8=
-Received: from BN7PR07MB5186.namprd07.prod.outlook.com (20.176.176.155) by
- BN7PR07MB5156.namprd07.prod.outlook.com (20.176.26.77) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2241.15; Sat, 7 Sep 2019 12:09:15 +0000
-Received: from BN7PR07MB5186.namprd07.prod.outlook.com
- ([fe80::682e:801a:5227:668f]) by BN7PR07MB5186.namprd07.prod.outlook.com
- ([fe80::682e:801a:5227:668f%7]) with mapi id 15.20.2220.022; Sat, 7 Sep 2019
- 12:09:15 +0000
-From:   Isaac Vaughn <isaac.vaughn@Knights.ucf.edu>
-To:     Borislav Petkov <bp@alien8.de>
-CC:     Isaac Vaughn <isaac.vaughn@Knights.ucf.edu>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        James Morse <james.morse@arm.com>,
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1567929552; x=1599465552;
+  h=from:subject:to:cc:references:message-id:date:
+   mime-version:in-reply-to:content-transfer-encoding;
+  bh=95z+TopiVfICeaKBblrEU+S5vNus3UEMlJ3VR16Kq1w=;
+  b=uWCkiMYsQ4s2HcvvKVnhTl2NkQsfNSaRfHasGVPbgM0Vk7dnyuNg7Pwe
+   1XIezwPddAcsaJg57tGIBk7qwNeBoYxxo3Dp6sKBkuPP5WeQJMImoH8Vo
+   r87eYvHCM1DH68YdJJZ13ei+CAf76ARmVLuu6Xn9iauAhkPWzPPIfJbJg
+   M=;
+X-IronPort-AV: E=Sophos;i="5.64,479,1559520000"; 
+   d="scan'208";a="701348721"
+Received: from sea3-co-svc-lb6-vlan3.sea.amazon.com (HELO email-inbound-relay-2b-baacba05.us-west-2.amazon.com) ([10.47.22.38])
+  by smtp-border-fw-out-9102.sea19.amazon.com with ESMTP; 08 Sep 2019 07:58:37 +0000
+Received: from EX13MTAUEB001.ant.amazon.com (pdx4-ws-svc-p6-lb7-vlan2.pdx.amazon.com [10.170.41.162])
+        by email-inbound-relay-2b-baacba05.us-west-2.amazon.com (Postfix) with ESMTPS id 3815AA1E64;
+        Sun,  8 Sep 2019 07:58:36 +0000 (UTC)
+Received: from EX13D08UEB003.ant.amazon.com (10.43.60.11) by
+ EX13MTAUEB001.ant.amazon.com (10.43.60.96) with Microsoft SMTP Server (TLS)
+ id 15.0.1367.3; Sun, 8 Sep 2019 07:58:35 +0000
+Received: from EX13MTAUEA001.ant.amazon.com (10.43.61.82) by
+ EX13D08UEB003.ant.amazon.com (10.43.60.11) with Microsoft SMTP Server (TLS)
+ id 15.0.1367.3; Sun, 8 Sep 2019 07:58:35 +0000
+Received: from [10.107.3.19] (10.107.3.19) by mail-relay.amazon.com
+ (10.43.61.243) with Microsoft SMTP Server (TLS) id 15.0.1367.3 via Frontend
+ Transport; Sun, 8 Sep 2019 07:58:33 +0000
+From:   "Hawa, Hanna" <hhhawa@amazon.com>
+Subject: Re: [PATCH 1/1] edac: Add an API for edac device to report for
+ multiple errors
+To:     Robert Richter <rrichter@marvell.com>
+CC:     "bp@alien8.de" <bp@alien8.de>,
+        "mchehab@kernel.org" <mchehab@kernel.org>,
+        "james.morse@arm.com" <james.morse@arm.com>,
         "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] Add PCI device IDs for family 17h, model 70h
-Thread-Topic: [PATCH] Add PCI device IDs for family 17h, model 70h
-Thread-Index: AQHVZQnUh7Ebv130M0alIHUhtmAMhacfuLCAgABnVYA=
-Date:   Sat, 7 Sep 2019 12:09:15 +0000
-Message-ID: <20190907080907.d6214d7f628e543bca718bd2@knights.ucf.edu>
-References: <20190906192131.8ced0ca112146f32d82b6cae@knights.ucf.edu>
-        <20190907055917.GA10446@zn.tnic>
-In-Reply-To: <20190907055917.GA10446@zn.tnic>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-clientproxiedby: BN6PR0101CA0014.prod.exchangelabs.com
- (2603:10b6:405:2a::27) To BN7PR07MB5186.namprd07.prod.outlook.com
- (2603:10b6:408:2a::27)
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=isaac.vaughn@Knights.ucf.edu; 
-x-ms-exchange-messagesentrepresentingtype: 1
-x-mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-unknown-linux-gnu)
-x-originating-ip: [132.170.63.121]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 0e44023b-d800-45bb-445a-08d7338c338e
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600166)(711020)(4605104)(1401327)(2017052603328)(7193020);SRVR:BN7PR07MB5156;
-x-ms-traffictypediagnostic: BN7PR07MB5156:|BN7PR07MB5156:
-x-ms-exchange-purlcount: 2
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <BN7PR07MB5156A05093F94CC58BC2944BCEB50@BN7PR07MB5156.namprd07.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:7219;
-x-forefront-prvs: 0153A8321A
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(39860400002)(396003)(136003)(376002)(346002)(366004)(199004)(189003)(52314003)(3846002)(6116002)(88552002)(229853002)(50226002)(4326008)(7736002)(305945005)(8936002)(81166006)(81156014)(8676002)(966005)(6916009)(45080400002)(478600001)(6486002)(6436002)(256004)(5660300002)(71190400001)(66476007)(66556008)(64756008)(66446008)(25786009)(53936002)(6306002)(6246003)(71200400001)(66066001)(66946007)(6512007)(86362001)(99286004)(54906003)(1076003)(14454004)(186003)(6506007)(386003)(76176011)(786003)(316002)(52116002)(2906002)(75432002)(26005)(486006)(44832011)(476003)(2616005)(446003)(11346002)(102836004);DIR:OUT;SFP:1101;SCL:1;SRVR:BN7PR07MB5156;H:BN7PR07MB5186.namprd07.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:0;MX:1;
-received-spf: None (protection.outlook.com: Knights.ucf.edu does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: jkt9EzSl2tJ2n6l9Jsc8BTSLPOFP2nYcpuyS9pu5Pa7LSJovpVXxh1kjQeKAHfRkAyhRqsS964adIUqGVs9+FQPs2DUpsKCMj8aJZJAeY8eqLeOgCy9qCad0/Ko8Snd5rotBJc66pHj0yfG7btm0z4ZIX6z3e/Wn7nS5Q1nY7koN77jmXf12FVobg7hUQeoNbnDnD9o/fk9n0NHGb5IFKhZsOCu5sN+tOEVMoNK1vA/hNMOXBH+JuhHKXcdM1NwLNeaubQzYyMldWtA302mw6PCboM8qooezUgQKeehAXPczgRZnK1DPJ/PzS3m0zmJ57RLXHMxVSn49GfBjj7I5VJNcnmqLlGBvke2vlP4QXjkHfmjH7OtO3ubKDcIFgoFPXKJySsyoKOu/ZPNaxT+KSSku1VU453FHkNLfLRA94oI=
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <C46086C54B6C804D8AF6B318820BCDE8@namprd07.prod.outlook.com>
-Content-Transfer-Encoding: quoted-printable
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "dwmw@amazon.co.uk" <dwmw@amazon.co.uk>,
+        "benh@amazon.com" <benh@amazon.com>,
+        "ronenk@amazon.com" <ronenk@amazon.com>,
+        "talel@amazon.com" <talel@amazon.com>,
+        "jonnyc@amazon.com" <jonnyc@amazon.com>,
+        "hanochu@amazon.com" <hanochu@amazon.com>
+References: <20190905083745.6899-1-hhhawa@amazon.com>
+ <20190905095642.ohqkcllm7wufx6sc@rric.localdomain>
+Message-ID: <50f5bc27-98da-ee3e-59dd-7252c3ed7a0a@amazon.com>
+Date:   Sun, 8 Sep 2019 10:58:31 +0300
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-X-OriginatorOrg: knights.ucf.edu
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0e44023b-d800-45bb-445a-08d7338c338e
-X-MS-Exchange-CrossTenant-originalarrivaltime: 07 Sep 2019 12:09:15.3811
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 5b16e182-78b3-412c-9196-68342689eeb7
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: P7yxLc5+Gn2NWuBK5bJNbD156IOcTAWwOCNUGMgcaMGYZ8AeQa6mvKJQDInN4yh+AKqy/cDYkGrrx1zsMWdjQmf+Xr5C1o+qCjCnoQHidqg=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN7PR07MB5156
+In-Reply-To: <20190905095642.ohqkcllm7wufx6sc@rric.localdomain>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-> > Add the new Family 17h Model 70h PCI IDs (device 18h functions 0 and 6)
-> > to the AMD64 EDAC module.
-> >=20
-> > Cc: Borislav Petkov <bp@alien8.de> (maintainer:EDAC-AMD64)
-> > Cc: Mauro Carvalho Chehab <mchehab@kernel.org> (supporter:EDAC-CORE)
-> > Cc: James Morse <james.morse@arm.com> (reviewer:EDAC-CORE)
-> > Cc: linux-edac@vger.kernel.org (open list:EDAC-AMD64)
-> > Cc: linux-kernel@vger.kernel.org (open list)
-> > Signed-off-by: Isaac Vaughn <isaac.vaughn@knights.ucf.edu>
-> > ---
-> >  drivers/edac/amd64_edac.c | 13 +++++++++++++
-> >  drivers/edac/amd64_edac.h |  3 +++
-> >  2 files changed, 16 insertions(+)
-> >=20
-> > diff --git a/drivers/edac/amd64_edac.c b/drivers/edac/amd64_edac.c
-> > index 873437be86d9..a35c97f9100a 100644
-> > --- a/drivers/edac/amd64_edac.c
-> > +++ b/drivers/edac/amd64_edac.c
-> > @@ -2253,6 +2253,15 @@ static struct amd64_family_type family_types[] =
-=3D {
-> >  			.dbam_to_cs		=3D f17_base_addr_to_cs_size,
-> >  		}
-> >  	},
-> > +	[F17_M70H_CPUS] =3D {
-> > +		.ctl_name =3D "F17h_M70h",
-> > +		.f0_id =3D PCI_DEVICE_ID_AMD_17H_M70H_DF_F0,
-> > +		.f6_id =3D PCI_DEVICE_ID_AMD_17H_M70H_DF_F6,
-> > +		.ops =3D {
-> > +			.early_channel_count	=3D f17_early_channel_count,
-> > +			.dbam_to_cs		=3D f17_base_addr_to_cs_size,
->=20
-> You still have f17_base_addr_to_cs_size here. If you'd built it against
-> the branch I pointed you at:
->=20
-> https://nam02.safelinks.protection.outlook.com/?url=3Dhttps%3A%2F%2Fgit.k=
-ernel.org%2Fpub%2Fscm%2Flinux%2Fkernel%2Fgit%2Fras%2Fras.git%2Flog%2F%3Fh%3=
-Dedac-for-next&amp;data=3D02%7C01%7Cisaac.vaughn%40Knights.ucf.edu%7Ca142cf=
-f36aab414087c608d733588d1f%7C5b16e18278b3412c919668342689eeb7%7C0%7C0%7C637=
-034327751460625&amp;sdata=3DKy1T%2F9tWeNYEDcLftxU%2FQyVeN0zbrmRIrH5fHF2Mz8s=
-%3D&amp;reserved=3D0
->=20
-> it would have failed.
->=20
-> Anyway, I fixed it up and applied it.
->=20
-> Thx.
->=20
-> --=20
-> Regards/Gruss,
->     Boris.
->=20
-> https://nam02.safelinks.protection.outlook.com/?url=3Dhttps%3A%2F%2Fpeopl=
-e.kernel.org%2Ftglx%2Fnotes-about-netiquette&amp;data=3D02%7C01%7Cisaac.vau=
-ghn%40Knights.ucf.edu%7Ca142cff36aab414087c608d733588d1f%7C5b16e18278b3412c=
-919668342689eeb7%7C0%7C0%7C637034327751460625&amp;sdata=3DmOi8dnvpzomUvfX4F=
-AabgA5G0A8tr3bMcbUx%2BKB91r8%3D&amp;reserved=3D0
-
-Sorry about that, I didn't follow that edac-for-next was a branch and built=
- against ras master.
-
-Thanks again for all the help.
-
-Sincerely,
-Isaac Vaughn
 
 
+On 9/5/2019 12:56 PM, Robert Richter wrote:
+> Hi Hanna,
+> 
+> thanks for the update. See below.
+> 
+> On 05.09.19 09:37:45, Hanna Hawa wrote:
+>> Add an API for edac device to report multiple errors with same type.
+>>
+>> Signed-off-by: Hanna Hawa <hhhawa@amazon.com>
+>> ---
+>>   drivers/edac/edac_device.c | 66 +++++++++++++++++++++++++++++---------
+>>   drivers/edac/edac_device.h | 31 ++++++++++++++++--
+>>   2 files changed, 79 insertions(+), 18 deletions(-)
+>>
+>> diff --git a/drivers/edac/edac_device.c b/drivers/edac/edac_device.c
+>> index 65cf2b9355c4..bf6a4fd9831b 100644
+>> --- a/drivers/edac/edac_device.c
+>> +++ b/drivers/edac/edac_device.c
+>> @@ -555,12 +555,15 @@ static inline int edac_device_get_panic_on_ue(struct edac_device_ctl_info
+>>   	return edac_dev->panic_on_ue;
+>>   }
+>>   
+>> -void edac_device_handle_ce(struct edac_device_ctl_info *edac_dev,
+>> -			int inst_nr, int block_nr, const char *msg)
+>> +static void __edac_device_handle_ce(struct edac_device_ctl_info *edac_dev,
+>> +			   u16 error_count, int inst_nr, int block_nr,
+> 
+> Just curious, why u16, some register mask size? Maybe just use unsigned int?
+
+Wanted to be aligned with edac MC.
+I can change it to be u32.
+
+> 
+> I think the variable can be shortened to 'count', the meaning should
+> still be clear.
+
+I think more clear to include 'error'.
+maybe shorter name 'err_count'?
+
+> 
+>> +			   const char *msg)
+>>   {
+>>   	struct edac_device_instance *instance;
+>>   	struct edac_device_block *block = NULL;
+>>   
+>> +	WARN_ON(!error_count);
+> 
+> Should return in this case.
+> 
+> Better use WARN_ON_ONCE() to avoid flooding.
+
+In case of two drivers using this function with wrong error count, only 
+the first WARN_ON_ONCE will catch in this case, and other will miss 
+other wrong usage of other edac device drivers.
+
+> 
+> The check should be moved to edac_device_handle_ce_count().
+
+I'll move it to edac_device_handle_ce_count.
+
+> 
+>> +
+>>   	if ((inst_nr >= edac_dev->nr_instances) || (inst_nr < 0)) {
+>>   		edac_device_printk(edac_dev, KERN_ERR,
+>>   				"INTERNAL ERROR: 'instance' out of range "
+>> @@ -582,27 +585,44 @@ void edac_device_handle_ce(struct edac_device_ctl_info *edac_dev,
+>>   
+>>   	if (instance->nr_blocks > 0) {
+>>   		block = instance->blocks + block_nr;
+>> -		block->counters.ce_count++;
+>> +		block->counters.ce_count += error_count;
+>>   	}
+>>   
+>>   	/* Propagate the count up the 'totals' tree */
+>> -	instance->counters.ce_count++;
+>> -	edac_dev->counters.ce_count++;
+>> +	instance->counters.ce_count += error_count;
+>> +	edac_dev->counters.ce_count += error_count;
+>>   
+>>   	if (edac_device_get_log_ce(edac_dev))
+>>   		edac_device_printk(edac_dev, KERN_WARNING,
+>> -				"CE: %s instance: %s block: %s '%s'\n",
+>> +				"CE: %s instance: %s block: %s count: %d '%s'\n",
+>>   				edac_dev->ctl_name, instance->name,
+>> -				block ? block->name : "N/A", msg);
+>> +				block ? block->name : "N/A", error_count, msg);
+>> +}
+>> +
+>> +void edac_device_handle_ce(struct edac_device_ctl_info *edac_dev,
+>> +			   int inst_nr, int block_nr, const char *msg)
+>> +{
+>> +	__edac_device_handle_ce(edac_dev, 1, inst_nr, block_nr, msg);
+>>   }
+>>   EXPORT_SYMBOL_GPL(edac_device_handle_ce);
+> 
+> We could just export the __*() version of those functions and make
+> everything else inline in the header file? Though, better do this with
+> two patches to avoid an ABI breakage in case someone wants to backport
+> it. Let's see what others say here.
+
+Waiting for other reviewers.
+
+> 
+>>   
+>> -void edac_device_handle_ue(struct edac_device_ctl_info *edac_dev,
+>> -			int inst_nr, int block_nr, const char *msg)
+>> +void edac_device_handle_ce_count(struct edac_device_ctl_info *edac_dev,
+>> +				 u16 error_count, int inst_nr, int block_nr,
+>> +				 const char *msg)
+>> +{
+>> +	__edac_device_handle_ce(edac_dev, error_count, inst_nr, block_nr, msg);
+>> +}
+>> +EXPORT_SYMBOL_GPL(edac_device_handle_ce_count);
+>> +
+>> +static void __edac_device_handle_ue(struct edac_device_ctl_info *edac_dev,
+>> +			   u16 error_count, int inst_nr, int block_nr,
+>> +			   const char *msg)
+> 
+> All the above applies for this function too.
+> 
+>>   {
+>>   	struct edac_device_instance *instance;
+>>   	struct edac_device_block *block = NULL;
+>>   
+>> +	WARN_ON(!error_count);
+>> +
+>>   	if ((inst_nr >= edac_dev->nr_instances) || (inst_nr < 0)) {
+>>   		edac_device_printk(edac_dev, KERN_ERR,
+>>   				"INTERNAL ERROR: 'instance' out of range "
+>> @@ -624,22 +644,36 @@ void edac_device_handle_ue(struct edac_device_ctl_info *edac_dev,
+>>   
+>>   	if (instance->nr_blocks > 0) {
+>>   		block = instance->blocks + block_nr;
+>> -		block->counters.ue_count++;
+>> +		block->counters.ue_count += error_count;
+>>   	}
+>>   
+>>   	/* Propagate the count up the 'totals' tree */
+>> -	instance->counters.ue_count++;
+>> -	edac_dev->counters.ue_count++;
+>> +	instance->counters.ue_count += error_count;
+>> +	edac_dev->counters.ue_count += error_count;
+>>   
+>>   	if (edac_device_get_log_ue(edac_dev))
+>>   		edac_device_printk(edac_dev, KERN_EMERG,
+>> -				"UE: %s instance: %s block: %s '%s'\n",
+>> +				"UE: %s instance: %s block: %s count: %d '%s'\n",
+>>   				edac_dev->ctl_name, instance->name,
+>> -				block ? block->name : "N/A", msg);
+>> +				block ? block->name : "N/A", error_count, msg);
+>>   
+>>   	if (edac_device_get_panic_on_ue(edac_dev))
+>> -		panic("EDAC %s: UE instance: %s block %s '%s'\n",
+>> +		panic("EDAC %s: UE instance: %s block %s count: %d '%s'\n",
+>>   			edac_dev->ctl_name, instance->name,
+>> -			block ? block->name : "N/A", msg);
+>> +			block ? block->name : "N/A", error_count, msg);
+>> +}
+>> +
+>> +void edac_device_handle_ue(struct edac_device_ctl_info *edac_dev,
+>> +			   int inst_nr, int block_nr, const char *msg)
+>> +{
+>> +	__edac_device_handle_ue(edac_dev, 1, inst_nr, block_nr, msg);
+>>   }
+>>   EXPORT_SYMBOL_GPL(edac_device_handle_ue);
+>> +
+>> +void edac_device_handle_ue_count(struct edac_device_ctl_info *edac_dev,
+>> +				 u16 error_count, int inst_nr, int block_nr,
+>> +				 const char *msg)
+>> +{
+>> +	__edac_device_handle_ue(edac_dev, error_count, inst_nr, block_nr, msg);
+>> +}
+>> +EXPORT_SYMBOL_GPL(edac_device_handle_ue_count);
+>> diff --git a/drivers/edac/edac_device.h b/drivers/edac/edac_device.h
+>> index 1aaba74ae411..c8dc83eda64f 100644
+>> --- a/drivers/edac/edac_device.h
+>> +++ b/drivers/edac/edac_device.h
+>> @@ -287,7 +287,7 @@ extern struct edac_device_ctl_info *edac_device_del_device(struct device *dev);
+>>   
+>>   /**
+>>    * edac_device_handle_ue():
+>> - *	perform a common output and handling of an 'edac_dev' UE event
+>> + *	perform a common output and handling of an 'edac_dev' single UE event
+>>    *
+>>    * @edac_dev: pointer to struct &edac_device_ctl_info
+>>    * @inst_nr: number of the instance where the UE error happened
+>> @@ -298,7 +298,7 @@ extern void edac_device_handle_ue(struct edac_device_ctl_info *edac_dev,
+>>   				int inst_nr, int block_nr, const char *msg);
+>>   /**
+>>    * edac_device_handle_ce():
+>> - *	perform a common output and handling of an 'edac_dev' CE event
+>> + *	perform a common output and handling of an 'edac_dev' single CE event
+>>    *
+>>    * @edac_dev: pointer to struct &edac_device_ctl_info
+>>    * @inst_nr: number of the instance where the CE error happened
+>> @@ -308,6 +308,33 @@ extern void edac_device_handle_ue(struct edac_device_ctl_info *edac_dev,
+>>   extern void edac_device_handle_ce(struct edac_device_ctl_info *edac_dev,
+>>   				int inst_nr, int block_nr, const char *msg);
+>>   
+>> +/**
+>> + * edac_device_handle_ue_count():
+>> + *	perform a common output and handling of an 'edac_dev'
+>> + *
+>> + * @edac_dev: pointer to struct &edac_device_ctl_info
+>> + * @error_count: number of errors of the same type
+>> + * @inst_nr: number of the instance where the UE error happened
+>> + * @block_nr: number of the block where the UE error happened
+>> + * @msg: message to be printed
+>> + */
+>> +extern void edac_device_handle_ue_count(struct edac_device_ctl_info *edac_dev,
+>> +					u16 error_count, int inst_nr,
+>> +					int block_nr, const char *msg);
+>> +/**
+>> + * edac_device_handle_ce_count():
+>> + *	perform a common output and handling of an 'edac_dev'
+>> + *
+>> + * @edac_dev: pointer to struct &edac_device_ctl_info
+>> + * @error_count: number of errors of the same type
+>> + * @inst_nr: number of the instance where the CE error happened
+>> + * @block_nr: number of the block where the CE error happened
+>> + * @msg: message to be printed
+>> + */
+>> +extern void edac_device_handle_ce_count(struct edac_device_ctl_info *edac_dev,
+>> +					u16 error_count, int inst_nr,
+>> +					int block_nr, const char *msg);
+>> +
+> 
+> Looks otherwise good to me.
+
+Thanks!
+
+Thanks,
+Hanna
+
+> 
+> Thanks,
+> 
+> -Robert
+> 
+>>   /**
+>>    * edac_device_alloc_index: Allocate a unique device index number
+>>    *
+>> -- 
+>> 2.17.1
+>>
