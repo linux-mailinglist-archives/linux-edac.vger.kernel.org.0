@@ -2,30 +2,28 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B63CAE53E
-	for <lists+linux-edac@lfdr.de>; Tue, 10 Sep 2019 10:18:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B356AE544
+	for <lists+linux-edac@lfdr.de>; Tue, 10 Sep 2019 10:19:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2405076AbfIJISI (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Tue, 10 Sep 2019 04:18:08 -0400
-Received: from ZXSHCAS1.zhaoxin.com ([203.148.12.81]:17570 "EHLO
-        ZXSHCAS1.zhaoxin.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1731302AbfIJISI (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Tue, 10 Sep 2019 04:18:08 -0400
-Received: from zxbjmbx2.zhaoxin.com (10.29.252.164) by ZXSHCAS1.zhaoxin.com
- (10.28.252.161) with Microsoft SMTP Server (version=TLS1_2,
+        id S1731714AbfIJITO convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-edac@lfdr.de>); Tue, 10 Sep 2019 04:19:14 -0400
+Received: from ZXSHCAS2.zhaoxin.com ([203.148.12.82]:15622 "EHLO
+        ZXSHCAS2.zhaoxin.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1731155AbfIJITO (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Tue, 10 Sep 2019 04:19:14 -0400
+Received: from zxbjmbx3.zhaoxin.com (10.29.252.165) by ZXSHCAS2.zhaoxin.com
+ (10.28.252.162) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1261.35; Tue, 10 Sep
- 2019 16:17:59 +0800
-Received: from zxbjmbx1.zhaoxin.com (10.29.252.163) by zxbjmbx2.zhaoxin.com
- (10.29.252.164) with Microsoft SMTP Server (version=TLS1_2,
+ 2019 16:19:09 +0800
+Received: from zxbjmbx1.zhaoxin.com (10.29.252.163) by zxbjmbx3.zhaoxin.com
+ (10.29.252.165) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1261.35; Tue, 10 Sep
- 2019 16:17:58 +0800
+ 2019 16:19:08 +0800
 Received: from zxbjmbx1.zhaoxin.com ([fe80::b41a:737:a784:b70d]) by
  zxbjmbx1.zhaoxin.com ([fe80::b41a:737:a784:b70d%16]) with mapi id
- 15.01.1261.035; Tue, 10 Sep 2019 16:17:58 +0800
+ 15.01.1261.035; Tue, 10 Sep 2019 16:19:08 +0800
 From:   Tony W Wang-oc <TonyWWang-oc@zhaoxin.com>
-To:     kbuild test robot <lkp@intel.com>
-CC:     "kbuild-all@01.org" <kbuild-all@01.org>,
-        "tony.luck@intel.com" <tony.luck@intel.com>,
+To:     "tony.luck@intel.com" <tony.luck@intel.com>,
         "Borislav Petkov (bp@alien8.de)" <bp@alien8.de>,
         "tglx@linutronix.de" <tglx@linutronix.de>,
         "mingo@redhat.com" <mingo@redhat.com>,
@@ -34,72 +32,105 @@ CC:     "kbuild-all@01.org" <kbuild-all@01.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
         "yazen.ghannam@amd.com" <yazen.ghannam@amd.com>,
         "vishal.l.verma@intel.com" <vishal.l.verma@intel.com>,
-        "qiuxu.zhuo@intel.com" <qiuxu.zhuo@intel.com>,
-        David Wang <DavidWang@zhaoxin.com>,
+        "qiuxu.zhuo@intel.com" <qiuxu.zhuo@intel.com>
+CC:     David Wang <DavidWang@zhaoxin.com>,
         "Cooper Yan(BJ-RD)" <CooperYan@zhaoxin.com>,
         "Qiyuan Wang(BJ-RD)" <QiyuanWang@zhaoxin.com>,
         "Herry Yang(BJ-RD)" <HerryYang@zhaoxin.com>
-Subject: =?gb2312?B?tPC4tDogW1BBVENIIHYxIDMvNF0geDg2L21jZTogQWRkIFpoYW94aW4gQ01D?=
- =?gb2312?Q?I_support?=
-Thread-Topic: [PATCH v1 3/4] x86/mce: Add Zhaoxin CMCI support
-Thread-Index: AdVm9rhzHHwSHU0OR4CG5KfkCNKupP//x2QA//5YiOA=
-Date:   Tue, 10 Sep 2019 08:17:58 +0000
-Message-ID: <ba29d87f31f24f64b2e8c243ee4e539a@zhaoxin.com>
-References: <29e895912c2f4989937fa33d59e55dd9@zhaoxin.com>
- <201909092236.d2tP91A8%lkp@intel.com>
-In-Reply-To: <201909092236.d2tP91A8%lkp@intel.com>
+Subject: [PATCH v2 1/4] x86/mce: Add Zhaoxin MCE support
+Thread-Topic: [PATCH v2 1/4] x86/mce: Add Zhaoxin MCE support
+Thread-Index: AdVnqN8gcs/qr4n4QmGIov91NLhkWA==
+Date:   Tue, 10 Sep 2019 08:19:08 +0000
+Message-ID: <d2660f92baf04d1f9aef5fedc39d7360@zhaoxin.com>
 Accept-Language: en-US, zh-CN
 Content-Language: zh-CN
 X-MS-Has-Attach: 
 X-MS-TNEF-Correlator: 
 x-originating-ip: [10.32.64.75]
-Content-Type: text/plain; charset="gb2312"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 8BIT
 MIME-Version: 1.0
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-T24gTW9uLCA5IFNlcCAyMDE5LCBrYnVpbGQgdGVzdCByb2JvdCA8bGtwQGludGVsLmNvbT4gd3Jv
-dGU6DQo+SGkgVG9ueSwNCj4NCj5JIGxvdmUgeW91ciBwYXRjaCEgWWV0IHNvbWV0aGluZyB0byBp
-bXByb3ZlOg0KDQpHbGFkIHRvIGhlYXIsIHRoYW5rcy4NCg0KPg0KPlthdXRvIGJ1aWxkIHRlc3Qg
-RVJST1Igb24gbGludXMvbWFzdGVyXQ0KPltjYW5ub3QgYXBwbHkgdG8gdjUuMy1yYzggbmV4dC0y
-MDE5MDkwNF0NCj5baWYgeW91ciBwYXRjaCBpcyBhcHBsaWVkIHRvIHRoZSB3cm9uZyBnaXQgdHJl
-ZSwgcGxlYXNlIGRyb3AgdXMgYSBub3RlIHRvIGhlbHANCj5pbXByb3ZlIHRoZSBzeXN0ZW1dDQo+
-DQo+dXJsOg0KPmh0dHBzOi8vZ2l0aHViLmNvbS8wZGF5LWNpL2xpbnV4L2NvbW1pdHMvVG9ueS1X
-LVdhbmctb2MveDg2LW1jZS1BZGQtWmhhbw0KPnhpbi1NQ0Utc3VwcG9ydC8yMDE5MDkwOS0xOTA0
-MzUNCj5jb25maWc6IGkzODYtcmFuZGNvbmZpZy1iMDAyLTIwMTkzNiAoYXR0YWNoZWQgYXMgLmNv
-bmZpZykNCj5jb21waWxlcjogZ2NjLTcgKERlYmlhbiA3LjQuMC0xMSkgNy40LjANCj5yZXByb2R1
-Y2U6DQo+ICAgICAgICAjIHNhdmUgdGhlIGF0dGFjaGVkIC5jb25maWcgdG8gbGludXggYnVpbGQg
-dHJlZQ0KPiAgICAgICAgbWFrZSBBUkNIPWkzODYNCj4NCj5JZiB5b3UgZml4IHRoZSBpc3N1ZSwg
-a2luZGx5IGFkZCBmb2xsb3dpbmcgdGFnDQo+UmVwb3J0ZWQtYnk6IGtidWlsZCB0ZXN0IHJvYm90
-IDxsa3BAaW50ZWwuY29tPg0KPg0KPkFsbCBlcnJvcnMgKG5ldyBvbmVzIHByZWZpeGVkIGJ5ID4+
-KToNCj4NCj4+PiBhcmNoL3g4Ni9rZXJuZWwvY3B1L21jZS9jb3JlLmM6MTc4MDo2OiBlcnJvcjog
-cmVkZWZpbml0aW9uIG9mDQo+J21jZV96aGFveGluX2ZlYXR1cmVfaW5pdCcNCj4gICAgdm9pZCBt
-Y2Vfemhhb3hpbl9mZWF0dXJlX2luaXQoc3RydWN0IGNwdWluZm9feDg2ICpjKQ0KPiAgICAgICAg
-IF5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fg0KPiAgIEluIGZpbGUgaW5jbHVkZWQgZnJvbSBhcmNo
-L3g4Ni9rZXJuZWwvY3B1L21jZS9jb3JlLmM6NTA6MDoNCj4gICBhcmNoL3g4Ni9pbmNsdWRlL2Fz
-bS9tY2UuaDozNTY6MjA6IG5vdGU6IHByZXZpb3VzIGRlZmluaXRpb24gb2YNCj4nbWNlX3poYW94
-aW5fZmVhdHVyZV9pbml0JyB3YXMgaGVyZQ0KPiAgICBzdGF0aWMgaW5saW5lIHZvaWQgbWNlX3po
-YW94aW5fZmVhdHVyZV9pbml0KHN0cnVjdCBjcHVpbmZvX3g4NiAqYykgeyB9DQo+ICAgICAgICAg
-ICAgICAgICAgICAgICBefn5+fn5+fn5+fn5+fn5+fn5+fn5+fn4NCj4NCj52aW0gKy9tY2Vfemhh
-b3hpbl9mZWF0dXJlX2luaXQgKzE3ODAgYXJjaC94ODYva2VybmVsL2NwdS9tY2UvY29yZS5jDQo+
-DQo+ICAxNzc5DQo+PiAxNzgwCXZvaWQgbWNlX3poYW94aW5fZmVhdHVyZV9pbml0KHN0cnVjdCBj
-cHVpbmZvX3g4NiAqYykNCj4gIDE3ODEJew0KPiAgMTc4MgkJc3RydWN0IG1jZV9iYW5rICptY2Vf
-YmFua3MgPSB0aGlzX2NwdV9wdHIobWNlX2JhbmtzX2FycmF5KTsNCj4gIDE3ODMNCj4gIDE3ODQJ
-CS8qDQo+ICAxNzg1CQkgKiBUaGVzZSBDUFVzIGJhbms4IFNWQUQgZXJyb3IgbWF5IGJlIHRyaWdn
-ZXJlZCB1bmV4cGVjdGVkDQo+d2hlbg0KPiAgMTc4NgkJICogYnJpbmd1cCB2aXJ0dWFsIG1hY2hp
-bmUuIGl0IGlzIG5vdCBoYXJkd2FyZSBidWcuIEFsd2F5cyBkaXNhYmxlDQo+ICAxNzg3CQkgKiBi
-YW5rOCBTVkFEIGVycm9yIGJ5IGRlZmF1bHQuDQo+ICAxNzg4CQkgKi8NCj4gIDE3ODkJCWlmICgo
-Yy0+eDg2ID09IDYgJiYgYy0+eDg2X21vZGVsID09IDB4MTkgJiYNCj4gIDE3OTAJCQkoYy0+eDg2
-X3N0ZXBwaW5nID4gMyAmJiBjLT54ODZfc3RlcHBpbmcgPCA4KSkgfHwNCj4gIDE3OTEJCSAgICAo
-Yy0+eDg2ID09IDYgJiYgYy0+eDg2X21vZGVsID09IDB4MWYpIHx8DQo+ICAxNzkyCQkgICAgKGMt
-Png4NiA9PSA3ICYmIGMtPng4Nl9tb2RlbCA9PSAweDFiKSkgew0KPiAgMTc5MwkJCWlmICh0aGlz
-X2NwdV9yZWFkKG1jZV9udW1fYmFua3MpID4gOCkNCj4gIDE3OTQJCQkJbWNlX2JhbmtzWzhdLmN0
-bCA9IDA7DQo+ICAxNzk1CQl9DQo+ICAxNzk2DQo+ICAxNzk3CQlpbnRlbF9pbml0X2NtY2koKTsN
-Cj4gIDE3OTgJCW1jZV9hZGp1c3RfdGltZXIgPSBjbWNpX2ludGVsX2FkanVzdF90aW1lcjsNCj4g
-IDE3OTkJfQ0KPiAgMTgwMA0KPg0KDQpXaWxsIGZpeCB0aGlzIGlzc3VlIGluIFYyLg0KDQo+LS0t
-DQo+MC1EQVkga2VybmVsIHRlc3QgaW5mcmFzdHJ1Y3R1cmUgICAgICAgICAgICAgICAgT3BlbiBT
-b3VyY2UgVGVjaG5vbG9neQ0KPkNlbnRlcg0KPmh0dHBzOi8vbGlzdHMuMDEub3JnL3BpcGVybWFp
-bC9rYnVpbGQtYWxsICAgICAgICAgICAgICAgICAgIEludGVsIENvcnBvcmF0aW9uDQo=
+All Zhaoxin newer CPUs support MCE that compatible with Intel's
+"Machine-Check Architecture", so add support for Zhaoxin MCE in
+mce/core.c.
+
+Signed-off-by: Tony W Wang-oc <TonyWWang-oc@zhaoxin.com>
+---
+ arch/x86/kernel/cpu/mce/core.c | 30 ++++++++++++++++++++++++------
+ 1 file changed, 24 insertions(+), 6 deletions(-)
+
+diff --git a/arch/x86/kernel/cpu/mce/core.c b/arch/x86/kernel/cpu/mce/core.c
+index 743370e..3f878f6 100644
+--- a/arch/x86/kernel/cpu/mce/core.c
++++ b/arch/x86/kernel/cpu/mce/core.c
+@@ -488,8 +488,9 @@ int mce_usable_address(struct mce *m)
+ 	if (!(m->status & MCI_STATUS_ADDRV))
+ 		return 0;
+ 
+-	/* Checks after this one are Intel-specific: */
+-	if (boot_cpu_data.x86_vendor != X86_VENDOR_INTEL)
++	/* Checks after this one are Intel/Zhaoxin-specific: */
++	if (boot_cpu_data.x86_vendor != X86_VENDOR_INTEL &&
++	    boot_cpu_data.x86_vendor != X86_VENDOR_ZHAOXIN)
+ 		return 1;
+ 
+ 	if (!(m->status & MCI_STATUS_MISCV))
+@@ -510,7 +511,8 @@ bool mce_is_memory_error(struct mce *m)
+ 	if (m->cpuvendor == X86_VENDOR_AMD ||
+ 	    m->cpuvendor == X86_VENDOR_HYGON) {
+ 		return amd_mce_is_memory_error(m);
+-	} else if (m->cpuvendor == X86_VENDOR_INTEL) {
++	} else if (m->cpuvendor == X86_VENDOR_INTEL ||
++		   m->cpuvendor == X86_VENDOR_ZHAOXIN) {
+ 		/*
+ 		 * Intel SDM Volume 3B - 15.9.2 Compound Error Codes
+ 		 *
+@@ -1697,6 +1699,21 @@ static int __mcheck_cpu_apply_quirks(struct cpuinfo_x86 *c)
+ 		if (c->x86 == 6 && c->x86_model == 45)
+ 			quirk_no_way_out = quirk_sandybridge_ifu;
+ 	}
++
++	if (c->x86_vendor == X86_VENDOR_ZHAOXIN) {
++		/*
++		 * All newer Zhaoxin CPUs support MCE broadcasting. Enable
++		 * synchronization with a one second timeout.
++		 */
++		if ((c->x86 == 6 && c->x86_model == 0x19 &&
++			(c->x86_stepping > 3 && c->x86_stepping < 8)) ||
++		    (c->x86 == 6 && c->x86_model == 0x1f) ||
++		     c->x86 > 6) {
++			if (cfg->monarch_timeout < 0)
++				cfg->monarch_timeout = USEC_PER_SEC;
++		}
++	}
++
+ 	if (cfg->monarch_timeout < 0)
+ 		cfg->monarch_timeout = 0;
+ 	if (cfg->bootlog != 0)
+@@ -2014,15 +2031,16 @@ static void mce_disable_error_reporting(void)
+ static void vendor_disable_error_reporting(void)
+ {
+ 	/*
+-	 * Don't clear on Intel or AMD or Hygon CPUs. Some of these MSRs
+-	 * are socket-wide.
++	 * Don't clear on Intel or AMD or Hygon or Zhaoxin CPUs. Some of these
++	 * MSRs are socket-wide.
+ 	 * Disabling them for just a single offlined CPU is bad, since it will
+ 	 * inhibit reporting for all shared resources on the socket like the
+ 	 * last level cache (LLC), the integrated memory controller (iMC), etc.
+ 	 */
+ 	if (boot_cpu_data.x86_vendor == X86_VENDOR_INTEL ||
+ 	    boot_cpu_data.x86_vendor == X86_VENDOR_HYGON ||
+-	    boot_cpu_data.x86_vendor == X86_VENDOR_AMD)
++	    boot_cpu_data.x86_vendor == X86_VENDOR_AMD ||
++	    boot_cpu_data.x86_vendor == X86_VENDOR_ZHAOXIN)
+ 		return;
+ 
+ 	mce_disable_error_reporting();
+-- 
+2.7.4
