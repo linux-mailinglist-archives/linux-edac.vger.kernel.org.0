@@ -2,30 +2,30 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 030CCAEAB0
+	by mail.lfdr.de (Postfix) with ESMTP id DE1BBAEAB2
 	for <lists+linux-edac@lfdr.de>; Tue, 10 Sep 2019 14:39:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2391051AbfIJMhY (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Tue, 10 Sep 2019 08:37:24 -0400
-Received: from mail.skyhub.de ([5.9.137.197]:39428 "EHLO mail.skyhub.de"
+        id S2390519AbfIJMhp (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Tue, 10 Sep 2019 08:37:45 -0400
+Received: from mail.skyhub.de ([5.9.137.197]:39492 "EHLO mail.skyhub.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2390519AbfIJMhX (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Tue, 10 Sep 2019 08:37:23 -0400
+        id S2390009AbfIJMhp (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Tue, 10 Sep 2019 08:37:45 -0400
 Received: from zn.tnic (p200300EC2F0ABE00B4DC6059A6D53D5D.dip0.t-ipconnect.de [IPv6:2003:ec:2f0a:be00:b4dc:6059:a6d5:3d5d])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 9B5301EC0688;
-        Tue, 10 Sep 2019 14:37:22 +0200 (CEST)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id A39811EC0688;
+        Tue, 10 Sep 2019 14:37:43 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1568119042;
+        t=1568119063;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=UB+ywCBDZzQcqqbwU/lk/AhTB7NUtu73VfJbnaCyE3E=;
-        b=e7Mg6iEFBimm+vdm/7V/P049hL6H3/rSiLKoPq9saJGcTww9SvQ8ZhRu6wKuC2YBxi8fDK
-        H9d6iF3/qFY//Xf4iSWgsSNatIy8J9KUFJBrFFDvFHDq6k0tLiVvedR6F3L/ZfqFMADOUi
-        fZpQBJmXEzJLsYOvTPAiSpLij5ZKeVg=
-Date:   Tue, 10 Sep 2019 14:37:20 +0200
+        bh=5FBeehAo9pc5CgZTj0+q999A32D9UmnfBNu8W+HSco4=;
+        b=TpbVM2u4W//8pc1HRoJHGnPgZ0FyfRMYT+4ukSUd143i4tw7P37/VSaZlSpuaMsPT0GIFc
+        t24qlw22B1TvyYHvxphd7y/ZXPFmianN2IKfDrYpLyQ279mwLwz2F6CfwBb0NJu9L3LYCO
+        dCWA2hVXsMcieoyma/Qg6lwdBT2TGt8=
+Date:   Tue, 10 Sep 2019 14:37:42 +0200
 From:   Borislav Petkov <bp@alien8.de>
 To:     Tony W Wang-oc <TonyWWang-oc@zhaoxin.com>
 Cc:     "tony.luck@intel.com" <tony.luck@intel.com>,
@@ -41,95 +41,73 @@ Cc:     "tony.luck@intel.com" <tony.luck@intel.com>,
         "Cooper Yan(BJ-RD)" <CooperYan@zhaoxin.com>,
         "Qiyuan Wang(BJ-RD)" <QiyuanWang@zhaoxin.com>,
         "Herry Yang(BJ-RD)" <HerryYang@zhaoxin.com>
-Subject: Re: [PATCH v2 3/4] x86/mce: Add Zhaoxin CMCI support
-Message-ID: <20190910123720.GF23931@zn.tnic>
-References: <e8d11f3ce0f64a9f9a4cefcc8059747b@zhaoxin.com>
+Subject: Re: [PATCH v2 2/4] x86/mce: Make 4 functions non-static
+Message-ID: <20190910123741.GG23931@zn.tnic>
+References: <5b5bf41a26674a1c9d67cd7b3822a304@zhaoxin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <e8d11f3ce0f64a9f9a4cefcc8059747b@zhaoxin.com>
+In-Reply-To: <5b5bf41a26674a1c9d67cd7b3822a304@zhaoxin.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Tue, Sep 10, 2019 at 08:19:44AM +0000, Tony W Wang-oc wrote:
-> @@ -1777,6 +1777,29 @@ static void mce_centaur_feature_init(struct cpuinfo_x86 *c)
->  	}
->  }
->
-> +#ifdef CONFIG_CPU_SUP_ZHAOXIN
-
-What's that ifdeffery for since you have it in the header already?
-
-> +void mce_zhaoxin_feature_init(struct cpuinfo_x86 *c)
-> +{
-> +	struct mce_bank *mce_banks = this_cpu_ptr(mce_banks_array);
-> +
-> +	/*
-> +	 * These CPUs bank8 SVAD error may be triggered unexpected when
-
-"These CPUs bank8 SVAD"??
-
-> +	 * bringup virtual machine. it is not hardware bug. Always disable
-> +	 * bank8 SVAD error by default.
-> +	 */
-
-That comment is incomprehensible. Please rewrite.
-
-> +	if ((c->x86 == 6 && c->x86_model == 0x19 &&
-> +		(c->x86_stepping > 3 && c->x86_stepping < 8)) ||
-> +	    (c->x86 == 6 && c->x86_model == 0x1f) ||
-> +	    (c->x86 == 7 && c->x86_model == 0x1b)) {
-
-As before: potential to simplify the test here?
-
-> +		if (this_cpu_read(mce_num_banks) > 8)
-> +			mce_banks[8].ctl = 0;
-> +	}
-> +
-> +	intel_init_cmci();
-> +	mce_adjust_timer = cmci_intel_adjust_timer;
-> +}
-> +#endif
-> +
->  static void __mcheck_cpu_init_vendor(struct cpuinfo_x86 *c)
->  {
->  	switch (c->x86_vendor) {
-> @@ -1798,6 +1821,10 @@ static void __mcheck_cpu_init_vendor(struct cpuinfo_x86 *c)
->  		mce_centaur_feature_init(c);
->  		break;
->  
-> +	case X86_VENDOR_ZHAOXIN:
-> +		mce_zhaoxin_feature_init(c);
-> +		break;
-> +
->  	default:
->  		break;
->  	}
+On Tue, Sep 10, 2019 at 08:19:20AM +0000, Tony W Wang-oc wrote:
+> These functions are declared static and cannot be used in others
+> .c source file. this commit removes the static attribute and adds
+> the declaration to the header for these functions.
+> 
+> Signed-off-by: Tony W Wang-oc <TonyWWang-oc@zhaoxin.com>
+> ---
+>  arch/x86/kernel/cpu/mce/intel.c    | 8 ++++----
+>  arch/x86/kernel/cpu/mce/internal.h | 8 ++++++++
+>  2 files changed, 12 insertions(+), 4 deletions(-)
+> 
 > diff --git a/arch/x86/kernel/cpu/mce/intel.c b/arch/x86/kernel/cpu/mce/intel.c
-> index eee4b12..b49cba7 100644
+> index 88cd959..eee4b12 100644
 > --- a/arch/x86/kernel/cpu/mce/intel.c
 > +++ b/arch/x86/kernel/cpu/mce/intel.c
-> @@ -85,7 +85,8 @@ static int cmci_supported(int *banks)
->  	 * initialization is vendor keyed and this
->  	 * makes sure none of the backdoors are entered otherwise.
->  	 */
+> @@ -423,7 +423,7 @@ void cmci_disable_bank(int bank)
+>  	raw_spin_unlock_irqrestore(&cmci_discover_lock, flags);
+>  }
+>  
+> -static void intel_init_cmci(void)
+> +void intel_init_cmci(void)
+>  {
+>  	int banks;
+>  
+> @@ -442,7 +442,7 @@ static void intel_init_cmci(void)
+>  	cmci_recheck();
+>  }
+>  
+> -static void intel_init_lmce(void)
+> +void intel_init_lmce(void)
+>  {
+>  	u64 val;
+>  
+> @@ -455,7 +455,7 @@ static void intel_init_lmce(void)
+>  		wrmsrl(MSR_IA32_MCG_EXT_CTL, val | MCG_EXT_CTL_LMCE_EN);
+>  }
+>  
+> -static void intel_clear_lmce(void)
+> +void intel_clear_lmce(void)
+>  {
+>  	u64 val;
+>  
+> @@ -467,7 +467,7 @@ static void intel_clear_lmce(void)
+>  	wrmsrl(MSR_IA32_MCG_EXT_CTL, val);
+>  }
+>  
+> -static void intel_ppin_init(struct cpuinfo_x86 *c)
+> +void intel_ppin_init(struct cpuinfo_x86 *c)
 
-That comment above needs fixing too.
+That one doesn't need to get exported.
 
-> -	if (boot_cpu_data.x86_vendor != X86_VENDOR_INTEL)
-> +	if (boot_cpu_data.x86_vendor != X86_VENDOR_INTEL &&
-> +	    boot_cpu_data.x86_vendor != X86_VENDOR_ZHAOXIN)
->  		return 0;
-
-<---- newline here.
-
->  	if (!boot_cpu_has(X86_FEATURE_APIC) || lapic_get_maxlvt() < 6)
->  		return 0;
-> -- 
-> 2.7.4
+This can easily be missed because you're exporting them in one patch and
+using them in another. Do the exports in the same patch where you use
+them for the first time.
 
 -- 
 Regards/Gruss,
