@@ -2,103 +2,122 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DA9A2AE8E2
-	for <lists+linux-edac@lfdr.de>; Tue, 10 Sep 2019 13:10:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 302B4AE986
+	for <lists+linux-edac@lfdr.de>; Tue, 10 Sep 2019 13:53:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731204AbfIJLKY (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Tue, 10 Sep 2019 07:10:24 -0400
-Received: from smtp-fw-4101.amazon.com ([72.21.198.25]:35286 "EHLO
-        smtp-fw-4101.amazon.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727816AbfIJLKY (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Tue, 10 Sep 2019 07:10:24 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1568113823; x=1599649823;
-  h=from:subject:to:cc:references:message-id:date:
-   mime-version:in-reply-to:content-transfer-encoding;
-  bh=fgDPTEsn7ZWHjFND/LI/Wp/mhnZ31/D6nGDRthZQawY=;
-  b=YCiqv1qGPMOtqnBojWNk9JFLwymPYXGNXvIS4PEOHbUyeceA33oYpyU+
-   s0dXRe3EDCvga4KIJtqxPHwJyvzhUm//l49b/yyqqXpUv6Gh1G0xsJ0Ub
-   AcWt4iNO2KEjT4m+kK4TZ9UIjczM6SGPWhqN3G7KIheLEyGMu4j45wTKZ
-   c=;
-X-IronPort-AV: E=Sophos;i="5.64,489,1559520000"; 
-   d="scan'208";a="784192521"
-Received: from iad6-co-svc-p1-lb1-vlan3.amazon.com (HELO email-inbound-relay-2b-55156cd4.us-west-2.amazon.com) ([10.124.125.6])
-  by smtp-border-fw-out-4101.iad4.amazon.com with ESMTP; 10 Sep 2019 11:10:20 +0000
-Received: from EX13MTAUWA001.ant.amazon.com (pdx4-ws-svc-p6-lb7-vlan2.pdx.amazon.com [10.170.41.162])
-        by email-inbound-relay-2b-55156cd4.us-west-2.amazon.com (Postfix) with ESMTPS id CEDFAA1D54;
-        Tue, 10 Sep 2019 11:10:19 +0000 (UTC)
-Received: from EX13D21UWA003.ant.amazon.com (10.43.160.184) by
- EX13MTAUWA001.ant.amazon.com (10.43.160.58) with Microsoft SMTP Server (TLS)
- id 15.0.1367.3; Tue, 10 Sep 2019 11:10:19 +0000
-Received: from EX13MTAUWA001.ant.amazon.com (10.43.160.58) by
- EX13D21UWA003.ant.amazon.com (10.43.160.184) with Microsoft SMTP Server (TLS)
- id 15.0.1367.3; Tue, 10 Sep 2019 11:10:19 +0000
-Received: from [10.125.238.37] (10.125.238.37) by mail-relay.amazon.com
- (10.43.160.118) with Microsoft SMTP Server (TLS) id 15.0.1367.3 via Frontend
- Transport; Tue, 10 Sep 2019 11:10:16 +0000
-From:   "Hawa, Hanna" <hhhawa@amazon.com>
-Subject: Re: [PATCH 1/1] edac: Add an API for edac device to report for
- multiple errors
-To:     Borislav Petkov <bp@alien8.de>
-CC:     Robert Richter <rrichter@marvell.com>,
-        "mchehab@kernel.org" <mchehab@kernel.org>,
-        "james.morse@arm.com" <james.morse@arm.com>,
+        id S1726188AbfIJLvX (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Tue, 10 Sep 2019 07:51:23 -0400
+Received: from mail.skyhub.de ([5.9.137.197]:60502 "EHLO mail.skyhub.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725981AbfIJLvX (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Tue, 10 Sep 2019 07:51:23 -0400
+Received: from zn.tnic (p200300EC2F0ABE00B4DC6059A6D53D5D.dip0.t-ipconnect.de [IPv6:2003:ec:2f0a:be00:b4dc:6059:a6d5:3d5d])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id DEB3D1EC09F7;
+        Tue, 10 Sep 2019 13:51:21 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1568116282;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=OF2GNeo9EcoV7r2cxiD5XuZ5iJsWKvLEg2fxOrk40c8=;
+        b=fLz3HvLx3ynrT+1I5v54lpWSEP0T5DZtDyTIyhmmXWLKHuL1r6rIfCW/9jCtoY3MzqyKYy
+        hSkVCejAFaityap4Vi2JjYj5R4mVLRnlmF+WdQ7c7ec0iayRvWnFggfJDZoijnK/8mVzOM
+        pIDycg6TvNudv251RJWFzwSVD21fWhw=
+Date:   Tue, 10 Sep 2019 13:51:16 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Tony W Wang-oc <TonyWWang-oc@zhaoxin.com>
+Cc:     "tony.luck@intel.com" <tony.luck@intel.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "hpa@zytor.com" <hpa@zytor.com>, "x86@kernel.org" <x86@kernel.org>,
         "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "dwmw@amazon.co.uk" <dwmw@amazon.co.uk>,
-        "benh@amazon.com" <benh@amazon.com>,
-        "ronenk@amazon.com" <ronenk@amazon.com>,
-        "talel@amazon.com" <talel@amazon.com>,
-        "jonnyc@amazon.com" <jonnyc@amazon.com>,
-        "hanochu@amazon.com" <hanochu@amazon.com>
-References: <20190905083745.6899-1-hhhawa@amazon.com>
- <20190905095642.ohqkcllm7wufx6sc@rric.localdomain>
- <50f5bc27-98da-ee3e-59dd-7252c3ed7a0a@amazon.com>
- <20190908081602.GC16220@zn.tnic> <20190908083535.GD16220@zn.tnic>
-Message-ID: <488b07a8-ce39-d3fe-4e73-5e6f19176f1b@amazon.com>
-Date:   Tue, 10 Sep 2019 14:10:13 +0300
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        "yazen.ghannam@amd.com" <yazen.ghannam@amd.com>,
+        "vishal.l.verma@intel.com" <vishal.l.verma@intel.com>,
+        "qiuxu.zhuo@intel.com" <qiuxu.zhuo@intel.com>,
+        David Wang <DavidWang@zhaoxin.com>,
+        "Cooper Yan(BJ-RD)" <CooperYan@zhaoxin.com>,
+        "Qiyuan Wang(BJ-RD)" <QiyuanWang@zhaoxin.com>,
+        "Herry Yang(BJ-RD)" <HerryYang@zhaoxin.com>
+Subject: Re: [PATCH v2 1/4] x86/mce: Add Zhaoxin MCE support
+Message-ID: <20190910115116.GD23931@zn.tnic>
+References: <d2660f92baf04d1f9aef5fedc39d7360@zhaoxin.com>
 MIME-Version: 1.0
-In-Reply-To: <20190908083535.GD16220@zn.tnic>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <d2660f92baf04d1f9aef5fedc39d7360@zhaoxin.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-Hi
+On Tue, Sep 10, 2019 at 08:19:08AM +0000, Tony W Wang-oc wrote:
+> All Zhaoxin newer CPUs support MCE that compatible with Intel's
+> "Machine-Check Architecture", so add support for Zhaoxin MCE in
+> mce/core.c.
+> 
+> Signed-off-by: Tony W Wang-oc <TonyWWang-oc@zhaoxin.com>
+> ---
+>  arch/x86/kernel/cpu/mce/core.c | 30 ++++++++++++++++++++++++------
+>  1 file changed, 24 insertions(+), 6 deletions(-)
+> 
+> diff --git a/arch/x86/kernel/cpu/mce/core.c b/arch/x86/kernel/cpu/mce/core.c
+> index 743370e..3f878f6 100644
+> --- a/arch/x86/kernel/cpu/mce/core.c
+> +++ b/arch/x86/kernel/cpu/mce/core.c
+> @@ -488,8 +488,9 @@ int mce_usable_address(struct mce *m)
+>  	if (!(m->status & MCI_STATUS_ADDRV))
+>  		return 0;
+>  
+> -	/* Checks after this one are Intel-specific: */
+> -	if (boot_cpu_data.x86_vendor != X86_VENDOR_INTEL)
+> +	/* Checks after this one are Intel/Zhaoxin-specific: */
+> +	if (boot_cpu_data.x86_vendor != X86_VENDOR_INTEL &&
+> +	    boot_cpu_data.x86_vendor != X86_VENDOR_ZHAOXIN)
+>  		return 1;
+>  
+>  	if (!(m->status & MCI_STATUS_MISCV))
+> @@ -510,7 +511,8 @@ bool mce_is_memory_error(struct mce *m)
+>  	if (m->cpuvendor == X86_VENDOR_AMD ||
+>  	    m->cpuvendor == X86_VENDOR_HYGON) {
+>  		return amd_mce_is_memory_error(m);
+> -	} else if (m->cpuvendor == X86_VENDOR_INTEL) {
+> +	} else if (m->cpuvendor == X86_VENDOR_INTEL ||
+> +		   m->cpuvendor == X86_VENDOR_ZHAOXIN) {
+>  		/*
+>  		 * Intel SDM Volume 3B - 15.9.2 Compound Error Codes
+>  		 *
 
-On 9/8/2019 11:35 AM, Borislav Petkov wrote:
-> On Sun, Sep 08, 2019 at 10:16:02AM +0200, Borislav Petkov wrote:
->> On Sun, Sep 08, 2019 at 10:58:31AM +0300, Hawa, Hanna wrote:
->>>> Better use WARN_ON_ONCE() to avoid flooding.
->>>
->>> In case of two drivers using this function with wrong error count, only the
->>> first WARN_ON_ONCE will catch in this case, and other will miss other wrong
->>> usage of other edac device drivers.
->>
->> The idea is to catch any driver using a 0 error count and fix it, not to
->> flood dmesg. You want _ONCE.
-> 
-> ... and you want to return early too, i.e.,
-> 
-> 	if (WARN_ON_ONCE(!error_count))
-> 		return;
-> 
-> Frankly, I'd even remove all the warning functionality and simply do
-> 
-> 	if (!error_count)
-> 		return;
+Make that a switch-case for better readability pls.
 
-I'll keep it simple as you suggest and remove the warning functionality.
+> @@ -1697,6 +1699,21 @@ static int __mcheck_cpu_apply_quirks(struct cpuinfo_x86 *c)
+>  		if (c->x86 == 6 && c->x86_model == 45)
+>  			quirk_no_way_out = quirk_sandybridge_ifu;
+>  	}
+> +
+> +	if (c->x86_vendor == X86_VENDOR_ZHAOXIN) {
+> +		/*
+> +		 * All newer Zhaoxin CPUs support MCE broadcasting. Enable
+> +		 * synchronization with a one second timeout.
+> +		 */
+> +		if ((c->x86 == 6 && c->x86_model == 0x19 &&
+> +			(c->x86_stepping > 3 && c->x86_stepping < 8)) ||
+> +		    (c->x86 == 6 && c->x86_model == 0x1f) ||
+> +		     c->x86 > 6) {
 
-> 
-> but let's see how much it screams first.
-> 
+Can this be simplified into maybe something like this:
 
-Thanks,
-Hanna
+	if (c->x86 > 6 || (c->x86_model == 0x19 || c->x86_model == 0x1f))
+
+this is, of course, assuming that Zhaoxin doesn't do family < 6 and that
+the other steppings for model 0x19 don't matter because they don't exist
+or so...
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
