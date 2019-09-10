@@ -2,26 +2,26 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 09887AE546
-	for <lists+linux-edac@lfdr.de>; Tue, 10 Sep 2019 10:19:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 54412AE549
+	for <lists+linux-edac@lfdr.de>; Tue, 10 Sep 2019 10:19:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731845AbfIJITY convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-edac@lfdr.de>); Tue, 10 Sep 2019 04:19:24 -0400
-Received: from ZXSHCAS1.zhaoxin.com ([203.148.12.81]:17698 "EHLO
-        ZXSHCAS1.zhaoxin.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1731155AbfIJITY (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Tue, 10 Sep 2019 04:19:24 -0400
-Received: from zxbjmbx3.zhaoxin.com (10.29.252.165) by ZXSHCAS1.zhaoxin.com
- (10.28.252.161) with Microsoft SMTP Server (version=TLS1_2,
+        id S1729304AbfIJITr convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-edac@lfdr.de>); Tue, 10 Sep 2019 04:19:47 -0400
+Received: from ZXSHCAS2.zhaoxin.com ([203.148.12.82]:15685 "EHLO
+        ZXSHCAS2.zhaoxin.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1731155AbfIJITr (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Tue, 10 Sep 2019 04:19:47 -0400
+Received: from zxbjmbx3.zhaoxin.com (10.29.252.165) by ZXSHCAS2.zhaoxin.com
+ (10.28.252.162) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1261.35; Tue, 10 Sep
- 2019 16:19:21 +0800
+ 2019 16:19:45 +0800
 Received: from zxbjmbx1.zhaoxin.com (10.29.252.163) by zxbjmbx3.zhaoxin.com
  (10.29.252.165) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1261.35; Tue, 10 Sep
- 2019 16:19:21 +0800
+ 2019 16:19:44 +0800
 Received: from zxbjmbx1.zhaoxin.com ([fe80::b41a:737:a784:b70d]) by
  zxbjmbx1.zhaoxin.com ([fe80::b41a:737:a784:b70d%16]) with mapi id
- 15.01.1261.035; Tue, 10 Sep 2019 16:19:21 +0800
+ 15.01.1261.035; Tue, 10 Sep 2019 16:19:44 +0800
 From:   Tony W Wang-oc <TonyWWang-oc@zhaoxin.com>
 To:     "tony.luck@intel.com" <tony.luck@intel.com>,
         "Borislav Petkov (bp@alien8.de)" <bp@alien8.de>,
@@ -37,11 +37,11 @@ CC:     David Wang <DavidWang@zhaoxin.com>,
         "Cooper Yan(BJ-RD)" <CooperYan@zhaoxin.com>,
         "Qiyuan Wang(BJ-RD)" <QiyuanWang@zhaoxin.com>,
         "Herry Yang(BJ-RD)" <HerryYang@zhaoxin.com>
-Subject: [PATCH v2 2/4] x86/mce: Make 4 functions non-static
-Thread-Topic: [PATCH v2 2/4] x86/mce: Make 4 functions non-static
-Thread-Index: AdVnqQDOV1imTHrsT2SgiPNqZp0lIw==
-Date:   Tue, 10 Sep 2019 08:19:20 +0000
-Message-ID: <5b5bf41a26674a1c9d67cd7b3822a304@zhaoxin.com>
+Subject: [PATCH v2 3/4] x86/mce: Add Zhaoxin CMCI support
+Thread-Topic: [PATCH v2 3/4] x86/mce: Add Zhaoxin CMCI support
+Thread-Index: AdVnqRp9Tf3+t+7iRiGrtZWDTW0/HQ==
+Date:   Tue, 10 Sep 2019 08:19:44 +0000
+Message-ID: <e8d11f3ce0f64a9f9a4cefcc8059747b@zhaoxin.com>
 Accept-Language: en-US, zh-CN
 Content-Language: zh-CN
 X-MS-Has-Attach: 
@@ -55,79 +55,93 @@ Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-These functions are declared static and cannot be used in others
-.c source file. this commit removes the static attribute and adds
-the declaration to the header for these functions.
+All Zhaoxin newer CPUs support CMCI that compatible with Intel's
+"Machine-Check Architecture", so add support for Zhaoxin CMCI in
+mce/core.c and mce/intel.c.
 
 Signed-off-by: Tony W Wang-oc <TonyWWang-oc@zhaoxin.com>
 ---
- arch/x86/kernel/cpu/mce/intel.c    | 8 ++++----
- arch/x86/kernel/cpu/mce/internal.h | 8 ++++++++
- 2 files changed, 12 insertions(+), 4 deletions(-)
+v1->v2:
+ - Fix redefinition of "mce_zhaoxin_feature_init"
 
+ arch/x86/include/asm/mce.h      |  6 ++++++
+ arch/x86/kernel/cpu/mce/core.c  | 27 +++++++++++++++++++++++++++
+ arch/x86/kernel/cpu/mce/intel.c |  3 ++-
+ 3 files changed, 35 insertions(+), 1 deletion(-)
+
+diff --git a/arch/x86/include/asm/mce.h b/arch/x86/include/asm/mce.h
+index dc2d4b2..0986a11 100644
+--- a/arch/x86/include/asm/mce.h
++++ b/arch/x86/include/asm/mce.h
+@@ -350,4 +350,10 @@ umc_normaddr_to_sysaddr(u64 norm_addr, u16 nid, u8 umc, u64 *sys_addr)	{ return
+ 
+ static inline void mce_hygon_feature_init(struct cpuinfo_x86 *c)	{ return mce_amd_feature_init(c); }
+ 
++#ifdef CONFIG_CPU_SUP_ZHAOXIN
++void mce_zhaoxin_feature_init(struct cpuinfo_x86 *c);
++#else
++static inline void mce_zhaoxin_feature_init(struct cpuinfo_x86 *c) { }
++#endif
++
+ #endif /* _ASM_X86_MCE_H */
+diff --git a/arch/x86/kernel/cpu/mce/core.c b/arch/x86/kernel/cpu/mce/core.c
+index 3f878f6..8a36833 100644
+--- a/arch/x86/kernel/cpu/mce/core.c
++++ b/arch/x86/kernel/cpu/mce/core.c
+@@ -1777,6 +1777,29 @@ static void mce_centaur_feature_init(struct cpuinfo_x86 *c)
+ 	}
+ }
+ 
++#ifdef CONFIG_CPU_SUP_ZHAOXIN
++void mce_zhaoxin_feature_init(struct cpuinfo_x86 *c)
++{
++	struct mce_bank *mce_banks = this_cpu_ptr(mce_banks_array);
++
++	/*
++	 * These CPUs bank8 SVAD error may be triggered unexpected when
++	 * bringup virtual machine. it is not hardware bug. Always disable
++	 * bank8 SVAD error by default.
++	 */
++	if ((c->x86 == 6 && c->x86_model == 0x19 &&
++		(c->x86_stepping > 3 && c->x86_stepping < 8)) ||
++	    (c->x86 == 6 && c->x86_model == 0x1f) ||
++	    (c->x86 == 7 && c->x86_model == 0x1b)) {
++		if (this_cpu_read(mce_num_banks) > 8)
++			mce_banks[8].ctl = 0;
++	}
++
++	intel_init_cmci();
++	mce_adjust_timer = cmci_intel_adjust_timer;
++}
++#endif
++
+ static void __mcheck_cpu_init_vendor(struct cpuinfo_x86 *c)
+ {
+ 	switch (c->x86_vendor) {
+@@ -1798,6 +1821,10 @@ static void __mcheck_cpu_init_vendor(struct cpuinfo_x86 *c)
+ 		mce_centaur_feature_init(c);
+ 		break;
+ 
++	case X86_VENDOR_ZHAOXIN:
++		mce_zhaoxin_feature_init(c);
++		break;
++
+ 	default:
+ 		break;
+ 	}
 diff --git a/arch/x86/kernel/cpu/mce/intel.c b/arch/x86/kernel/cpu/mce/intel.c
-index 88cd959..eee4b12 100644
+index eee4b12..b49cba7 100644
 --- a/arch/x86/kernel/cpu/mce/intel.c
 +++ b/arch/x86/kernel/cpu/mce/intel.c
-@@ -423,7 +423,7 @@ void cmci_disable_bank(int bank)
- 	raw_spin_unlock_irqrestore(&cmci_discover_lock, flags);
- }
- 
--static void intel_init_cmci(void)
-+void intel_init_cmci(void)
- {
- 	int banks;
- 
-@@ -442,7 +442,7 @@ static void intel_init_cmci(void)
- 	cmci_recheck();
- }
- 
--static void intel_init_lmce(void)
-+void intel_init_lmce(void)
- {
- 	u64 val;
- 
-@@ -455,7 +455,7 @@ static void intel_init_lmce(void)
- 		wrmsrl(MSR_IA32_MCG_EXT_CTL, val | MCG_EXT_CTL_LMCE_EN);
- }
- 
--static void intel_clear_lmce(void)
-+void intel_clear_lmce(void)
- {
- 	u64 val;
- 
-@@ -467,7 +467,7 @@ static void intel_clear_lmce(void)
- 	wrmsrl(MSR_IA32_MCG_EXT_CTL, val);
- }
- 
--static void intel_ppin_init(struct cpuinfo_x86 *c)
-+void intel_ppin_init(struct cpuinfo_x86 *c)
- {
- 	unsigned long long val;
- 
-diff --git a/arch/x86/kernel/cpu/mce/internal.h b/arch/x86/kernel/cpu/mce/internal.h
-index 43031db..55d1f0a 100644
---- a/arch/x86/kernel/cpu/mce/internal.h
-+++ b/arch/x86/kernel/cpu/mce/internal.h
-@@ -45,11 +45,19 @@ unsigned long cmci_intel_adjust_timer(unsigned long interval);
- bool mce_intel_cmci_poll(void);
- void mce_intel_hcpu_update(unsigned long cpu);
- void cmci_disable_bank(int bank);
-+void intel_init_cmci(void);
-+void intel_init_lmce(void);
-+void intel_clear_lmce(void);
-+void intel_ppin_init(struct cpuinfo_x86 *c);
- #else
- # define cmci_intel_adjust_timer mce_adjust_timer_default
- static inline bool mce_intel_cmci_poll(void) { return false; }
- static inline void mce_intel_hcpu_update(unsigned long cpu) { }
- static inline void cmci_disable_bank(int bank) { }
-+static inline void intel_init_cmci(void) { }
-+static inline void intel_init_lmce(void) { }
-+static inline void intel_clear_lmce(void) { }
-+static inline void intel_ppin_init(struct cpuinfo_x86 *c) { }
- #endif
- 
- void mce_timer_kick(unsigned long interval);
+@@ -85,7 +85,8 @@ static int cmci_supported(int *banks)
+ 	 * initialization is vendor keyed and this
+ 	 * makes sure none of the backdoors are entered otherwise.
+ 	 */
+-	if (boot_cpu_data.x86_vendor != X86_VENDOR_INTEL)
++	if (boot_cpu_data.x86_vendor != X86_VENDOR_INTEL &&
++	    boot_cpu_data.x86_vendor != X86_VENDOR_ZHAOXIN)
+ 		return 0;
+ 	if (!boot_cpu_has(X86_FEATURE_APIC) || lapic_get_maxlvt() < 6)
+ 		return 0;
 -- 
 2.7.4
