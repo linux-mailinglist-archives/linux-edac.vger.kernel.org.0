@@ -2,72 +2,76 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E8DF8B0060
-	for <lists+linux-edac@lfdr.de>; Wed, 11 Sep 2019 17:40:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 74DDFB1188
+	for <lists+linux-edac@lfdr.de>; Thu, 12 Sep 2019 16:54:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728658AbfIKPko (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Wed, 11 Sep 2019 11:40:44 -0400
-Received: from mail.skyhub.de ([5.9.137.197]:47444 "EHLO mail.skyhub.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727581AbfIKPko (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Wed, 11 Sep 2019 11:40:44 -0400
-Received: from zn.tnic (p200300EC2F0BA90014C938BBBD6B6EBD.dip0.t-ipconnect.de [IPv6:2003:ec:2f0b:a900:14c9:38bb:bd6b:6ebd])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id B24551EC0260;
-        Wed, 11 Sep 2019 17:40:42 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1568216442;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=0XkV/Gz/13IJqBOxxhh8TZyo4mSOacc++RqAW+iwqYU=;
-        b=Rm+awrlFXc/u5Sl6OTsLWmDmUyXs+19HWvYRVtZl6m3kvelXHxxph/I0vUx0Z1fYSe0Ka4
-        uvfPk+iWYyRXW277fmgy4zT7wKAcRMzoo5FDxNamwczHPsw9Fl9/mcQGRNB3c9o8vPaasQ
-        KHvihBjW5AJSvyMHIf5rygWvJKM7T0Y=
-Date:   Wed, 11 Sep 2019 17:40:37 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Xiaochun Lee <lixiaochun.2888@163.com>
-Cc:     tony.luck@intel.com, tglx@linutronix.de, mingo@redhat.com,
-        hpa@zytor.com, x86@kernel.org, linux-edac@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Xiaochun Lee <lixc17@lenovo.com>
-Subject: Re: [PATCH] x86/mce: add a switch of CONFIG_X86_MCELOG_LEGACY
-Message-ID: <20190911154037.GB27910@zn.tnic>
-References: <1568215730-11471-1-git-send-email-lixiaochun.2888@163.com>
+        id S1732820AbfILOyO (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Thu, 12 Sep 2019 10:54:14 -0400
+Received: from smtp-fw-6001.amazon.com ([52.95.48.154]:41147 "EHLO
+        smtp-fw-6001.amazon.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732592AbfILOyO (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Thu, 12 Sep 2019 10:54:14 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1568300053; x=1599836053;
+  h=from:to:cc:subject:date:message-id:mime-version;
+  bh=iXXC6QHvhsukvUq7xWp72n4eTBHxcxsmsJia2V5Zs38=;
+  b=mpoob6V7HZEEMVbTD7DnToIwYyKpJ4vremUz6R2+JQ8+9nH75sv4u5XA
+   2vDPIhA8zeRel7jcXlCE7Bhpc9yqXNMaCIT1POfx8gQlzMA/dx1VO83NS
+   vnLTq8sSW5b+XjHoq4XSAabBR5OhLuZFpRl1xlv9FGhk6HHiUqX7ZoeXo
+   k=;
+X-IronPort-AV: E=Sophos;i="5.64,497,1559520000"; 
+   d="scan'208";a="414933565"
+Received: from iad6-co-svc-p1-lb1-vlan3.amazon.com (HELO email-inbound-relay-1e-62350142.us-east-1.amazon.com) ([10.124.125.6])
+  by smtp-border-fw-out-6001.iad6.amazon.com with ESMTP; 12 Sep 2019 14:54:11 +0000
+Received: from EX13MTAUEA001.ant.amazon.com (iad55-ws-svc-p15-lb9-vlan3.iad.amazon.com [10.40.159.166])
+        by email-inbound-relay-1e-62350142.us-east-1.amazon.com (Postfix) with ESMTPS id 93FFBA2AE4;
+        Thu, 12 Sep 2019 14:54:09 +0000 (UTC)
+Received: from EX13D19EUB003.ant.amazon.com (10.43.166.69) by
+ EX13MTAUEA001.ant.amazon.com (10.43.61.243) with Microsoft SMTP Server (TLS)
+ id 15.0.1367.3; Thu, 12 Sep 2019 14:54:08 +0000
+Received: from ua9e4f3715fbc5f.ant.amazon.com (10.43.161.99) by
+ EX13D19EUB003.ant.amazon.com (10.43.166.69) with Microsoft SMTP Server (TLS)
+ id 15.0.1367.3; Thu, 12 Sep 2019 14:54:02 +0000
+From:   Hanna Hawa <hhhawa@amazon.com>
+To:     <bp@alien8.de>, <mchehab@kernel.org>, <james.morse@arm.com>,
+        <rrichter@marvell.com>
+CC:     <linux-edac@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <dwmw@amazon.co.uk>, <benh@amazon.com>, <ronenk@amazon.com>,
+        <talel@amazon.com>, <jonnyc@amazon.com>, <hanochu@amazon.com>,
+        <hhhawa@amazon.com>
+Subject: [PATCH v2 0/2] Add an API for edac device, for mulriple errors
+Date:   Thu, 12 Sep 2019 15:53:03 +0100
+Message-ID: <20190912145305.21008-1-hhhawa@amazon.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <1568215730-11471-1-git-send-email-lixiaochun.2888@163.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain
+X-Originating-IP: [10.43.161.99]
+X-ClientProxiedBy: EX13D15UWA002.ant.amazon.com (10.43.160.218) To
+ EX13D19EUB003.ant.amazon.com (10.43.166.69)
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Wed, Sep 11, 2019 at 11:28:50PM +0800, Xiaochun Lee wrote:
-> From: Xiaochun Lee <lixc17@lenovo.com>
-> 
-> Add CONFIG_X86_MCELOG_LEGACY to control the
-> behavior of several functions be compiled.
+Add an API for EDAC device to report for multiple errors, and move the
+old report function to use the new API.
 
-... because?
+Changes from v1:
+----------------
+- use 'unsigned int' instead of u16
+- update variable name to be count
+- remove WARN_ON and simply exit if count is zero
+- add inline functions in header file
 
-Your commit messages structure should look something like this:
+Hanna Hawa (2):
+  edac: Add an API for edac device to report for multiple errors
+  edac: move edac_device_handle_*() API functions to header
 
-Problem is A.
-
-It happens because of B.
-
-Fix it by doing C.
-
-(Potentially do D).
-
-For more detailed info, see
-Documentation/process/submitting-patches.rst, Section "2) Describe your
-changes".
+ drivers/edac/edac_device.c | 72 ++++++++++++++++++++------------------
+ drivers/edac/edac_device.h | 63 ++++++++++++++++++++++++---------
+ 2 files changed, 84 insertions(+), 51 deletions(-)
 
 -- 
-Regards/Gruss,
-    Boris.
+2.17.1
 
-https://people.kernel.org/tglx/notes-about-netiquette
