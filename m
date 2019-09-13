@@ -2,82 +2,110 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 50B3DB195A
-	for <lists+linux-edac@lfdr.de>; Fri, 13 Sep 2019 10:10:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 60A59B221D
+	for <lists+linux-edac@lfdr.de>; Fri, 13 Sep 2019 16:39:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729027AbfIMIKr (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Fri, 13 Sep 2019 04:10:47 -0400
-Received: from mx2.suse.de ([195.135.220.15]:58902 "EHLO mx1.suse.de"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1727834AbfIMIKr (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Fri, 13 Sep 2019 04:10:47 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id BAC18AFBC;
-        Fri, 13 Sep 2019 08:10:45 +0000 (UTC)
-Date:   Fri, 13 Sep 2019 10:10:39 +0200
-From:   Borislav Petkov <bp@suse.de>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Tony Luck <tony.luck@intel.com>, x86-ml <x86@kernel.org>,
-        linux-edac <linux-edac@vger.kernel.org>,
-        lkml <linux-kernel@vger.kernel.org>
-Subject: [GIT PULL] RAS updates for 5.4
-Message-ID: <20190913080937.GB20745@zn.tnic>
+        id S1726558AbfIMOgK (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Fri, 13 Sep 2019 10:36:10 -0400
+Received: from mail-oi1-f194.google.com ([209.85.167.194]:37031 "EHLO
+        mail-oi1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730579AbfIMOgJ (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Fri, 13 Sep 2019 10:36:09 -0400
+Received: by mail-oi1-f194.google.com with SMTP id 11so2824823oix.4;
+        Fri, 13 Sep 2019 07:36:09 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:date:from:to:cc:subject:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=x59L5apnJL40NtS0tdeDtuo7G6k5ZSeB+XKw0XxxnFI=;
+        b=FD1ecM1H32wUPzCvVXdAafndTauPHO9rXjMXrf9FVpgf29n51sK9NLfwSdMNXMkMxB
+         G9L7M5tvo9U1EKe7r2+CfrGhr76jiCs/RddmQmSk8Mh4SOHxkfrHHU511KUFfXYq1jLj
+         iziMgSn2kNt/d50zvtRbLDivRio7YB9U7TvlkYQxmSZvcDQD+ODVuU6DuCu2JNtLaBKL
+         lWPvI8ssMJRfbcmQJeRGyjxBQXCvr53y/tPnytFUCgrwQSfn9pRGSFc9jcgD2+zxaUW4
+         f4jI//Of1jLe0MmCZVyJtCIrFyXAAzXtZrvIg/0ZViFJBfKLCl/p5kY+RvogQUR66w3F
+         7r8A==
+X-Gm-Message-State: APjAAAU6NbNT+1uE4HpLQn7AguPVnwwQEZr/br+lvTqnX6HyTNPlGrnr
+        c+JZcJfg+aOpruvQ1heStw==
+X-Google-Smtp-Source: APXvYqwcZJeRHC1PVNC2DKjUVCVr9+SFzeO0M0kOrsz2lu3agim9M0Aj63nSjTgT/vcdVxuD4z+A6g==
+X-Received: by 2002:a05:6808:7c1:: with SMTP id f1mr2510604oij.123.1568385369033;
+        Fri, 13 Sep 2019 07:36:09 -0700 (PDT)
+Received: from localhost (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id s194sm921883oie.19.2019.09.13.07.36.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 13 Sep 2019 07:36:08 -0700 (PDT)
+Message-ID: <5d7ba958.1c69fb81.d998a.6602@mx.google.com>
+Date:   Fri, 13 Sep 2019 15:36:07 +0100
+From:   Rob Herring <robh@kernel.org>
+To:     Talel Shenhar <talel@amazon.com>
+Cc:     bp@alien8.de, mchehab@kernel.org, james.morse@arm.com,
+        davem@davemloft.net, gregkh@linuxfoundation.org,
+        nicolas.ferre@microchip.com, mark.rutland@arm.com,
+        catalin.marinas@arm.com, will@kernel.org,
+        linux-edac@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        hhhawa@amazon.com, ronenk@amazon.com, jonnyc@amazon.com,
+        hanochu@amazon.com, barakw@amazon.com
+Subject: Re: [PATCH 1/3] dt-bindings: edac: al-mc-edac: Amazon's Annapurna
+ Labs Memory Controller EDAC
+References: <1567603943-25316-1-git-send-email-talel@amazon.com>
+ <1567603943-25316-2-git-send-email-talel@amazon.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <1567603943-25316-2-git-send-email-talel@amazon.com>
+X-Mutt-References: <1567603943-25316-2-git-send-email-talel@amazon.com>
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-Hi Linus,
+On Wed, Sep 04, 2019 at 04:32:21PM +0300, Talel Shenhar wrote:
+> Document Amazon's Annapurna Labs Memory Controller EDAC SoC binding.
+> 
+> Signed-off-by: Talel Shenhar <talel@amazon.com>
+> ---
+>  .../devicetree/bindings/edac/amazon,al-mc-edac.txt | 24 ++++++++++++++++++++++
+>  1 file changed, 24 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/edac/amazon,al-mc-edac.txt
+> 
+> diff --git a/Documentation/devicetree/bindings/edac/amazon,al-mc-edac.txt b/Documentation/devicetree/bindings/edac/amazon,al-mc-edac.txt
+> new file mode 100644
+> index 0000000..9a3803f
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/edac/amazon,al-mc-edac.txt
+> @@ -0,0 +1,24 @@
+> +Amazon's Annapurna Labs Memory Controller EDAC
+> +
+> +EDAC node is defined to describe on-chip error detection and correction for
+> +Amazon's Annapurna Labs Memory Controller.
+> +
+> +Required properties:
+> +- compatible:	Shall be "amazon,al-mc-edac".
+> +- reg:		DDR controller resource.
+> +
+> +Optional:
+> +- interrupt-names:	may include "ue", for uncorrectable errors,
+> +			and/or "ce", for correctable errors.
+> +- interrupts:		should contain the interrupts associated with the
+> +			interrupts names.
+> +
+> +Example:
+> +
+> +al_mc_edac {
 
-please pull this branch
+edac@f0080000
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git ras-core-for-linus
+With that,
 
-to receive the latest meager RAS updates for 5.4:
+Reviewed-by: Rob Herring <robh@kernel.org>
 
-- Enable processing of action-optional MCEs which have the Overflow bit set
-  (Tony	Luck)
+> +	compatible = "amazon,al-mc-edac";
+> +	reg = <0x0 0xf0080000 0x0 0x00010000>;
+> +	interrupt-parent = <&amazon_al_system_fabric>;
+> +	interrupt-names = "ue";
+> +	interrupts = <20 IRQ_TYPE_LEVEL_HIGH>;
+> +};
+> -- 
+> 2.7.4
+> 
 
-- -Wmissing-prototypes warning fix and a build fix (Valdis Klētnieks)
-
-Thx.
-
----
-The following changes since commit e21a712a9685488f5ce80495b37b9fdbe96c230d:
-
-  Linux 5.3-rc3 (2019-08-04 18:40:12 -0700)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git ras-core-for-linus
-
-for you to fetch changes up to b6ff24f7b5101101ff897dfdde3f37924e676bc2:
-
-  RAS: Build debugfs.o only when enabled in Kconfig (2019-08-08 17:44:02 +0200)
-
-----------------------------------------------------------------
-Tony Luck (1):
-      x86/mce: Don't check for the overflow bit on action optional machine checks
-
-Valdis Kletnieks (2):
-      RAS: Fix prototype warnings
-      RAS: Build debugfs.o only when enabled in Kconfig
-
- arch/x86/kernel/cpu/mce/severity.c | 4 ++--
- drivers/ras/Makefile               | 3 ++-
- drivers/ras/cec.c                  | 1 +
- drivers/ras/debugfs.c              | 2 ++
- 4 files changed, 7 insertions(+), 3 deletions(-)
-
-
--- 
-Regards/Gruss,
-    Boris.
-
-SUSE Software Solutions Germany GmbH, GF: Felix Imendörffer, HRB 247165, AG München
