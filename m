@@ -2,29 +2,33 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B378B24DC
-	for <lists+linux-edac@lfdr.de>; Fri, 13 Sep 2019 20:10:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B8B4DB271E
+	for <lists+linux-edac@lfdr.de>; Fri, 13 Sep 2019 23:16:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388358AbfIMSKe (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Fri, 13 Sep 2019 14:10:34 -0400
-Received: from mga18.intel.com ([134.134.136.126]:40824 "EHLO mga18.intel.com"
+        id S2388202AbfIMVQa (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Fri, 13 Sep 2019 17:16:30 -0400
+Received: from mail.skyhub.de ([5.9.137.197]:44520 "EHLO mail.skyhub.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2387802AbfIMSKe (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Fri, 13 Sep 2019 14:10:34 -0400
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-X-Amp-File-Uploaded: False
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga106.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 13 Sep 2019 11:10:32 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.64,492,1559545200"; 
-   d="scan'208";a="197638414"
-Received: from agluck-desk2.sc.intel.com (HELO agluck-desk2.amr.corp.intel.com) ([10.3.52.68])
-  by orsmga002.jf.intel.com with ESMTP; 13 Sep 2019 11:10:32 -0700
-Date:   Fri, 13 Sep 2019 11:10:31 -0700
-From:   "Luck, Tony" <tony.luck@intel.com>
-To:     Tony W Wang-oc <TonyWWang-oc@zhaoxin.com>
-Cc:     "Borislav Petkov (bp@alien8.de)" <bp@alien8.de>,
+        id S1725747AbfIMVQ3 (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Fri, 13 Sep 2019 17:16:29 -0400
+Received: from zn.tnic (p200300EC2F0DC5000404141DC4C18A6D.dip0.t-ipconnect.de [IPv6:2003:ec:2f0d:c500:404:141d:c4c1:8a6d])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 8B6A71EC085F;
+        Fri, 13 Sep 2019 23:16:28 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1568409388;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=D0Rj9fr4WuHRasK1bMNdML9YiLsUrLgI9Q4vQ2c910M=;
+        b=Yq3seii6H+FqPB86PKKgrugKeezhOkH/bPl6Ud/NHRdd8WHNrqA/icXUH5fE5cSg7XQbBI
+        GeAl1NG54LDvDQEWZ/v//+LeHAyzbjVAhTcuA4MDbKG2jVMb5iqd4UISovvip3sk+gRYIU
+        4rKwQH0+8YZrocQCS4cbnhxlp9vDRQw=
+Date:   Fri, 13 Sep 2019 23:16:20 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     "Luck, Tony" <tony.luck@intel.com>
+Cc:     Tony W Wang-oc <TonyWWang-oc@zhaoxin.com>,
         "tglx@linutronix.de" <tglx@linutronix.de>,
         "mingo@redhat.com" <mingo@redhat.com>,
         "hpa@zytor.com" <hpa@zytor.com>, "x86@kernel.org" <x86@kernel.org>,
@@ -38,75 +42,62 @@ Cc:     "Borislav Petkov (bp@alien8.de)" <bp@alien8.de>,
         "Qiyuan Wang(BJ-RD)" <QiyuanWang@zhaoxin.com>,
         "Herry Yang(BJ-RD)" <HerryYang@zhaoxin.com>
 Subject: Re: [PATCH v3 1/4] x86/mce: Add Zhaoxin MCE support
-Message-ID: <20190913181031.GA9940@agluck-desk2.amr.corp.intel.com>
+Message-ID: <20190913211620.GE4190@zn.tnic>
 References: <9d6769dca6394638a013ccad2c8f964c@zhaoxin.com>
+ <20190913181031.GA9940@agluck-desk2.amr.corp.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <9d6769dca6394638a013ccad2c8f964c@zhaoxin.com>
-User-Agent: Mutt/1.11.3 (2019-02-01)
+In-Reply-To: <20190913181031.GA9940@agluck-desk2.amr.corp.intel.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Wed, Sep 11, 2019 at 12:01:42PM +0000, Tony W Wang-oc wrote:
-> +	/* Checks after this one are Intel/Zhaoxin-specific: */
-> +	if (boot_cpu_data.x86_vendor != X86_VENDOR_INTEL &&
-> +	    boot_cpu_data.x86_vendor != X86_VENDOR_ZHAOXIN)
+On Fri, Sep 13, 2019 at 11:10:31AM -0700, Luck, Tony wrote:
+> Is it time to have a big cleanup on how we handle similarities
+> and oddities in the MCE subsystem?  We've been adding ad-hoc
+> tests like this in random places ... and it all looks very
+> messy.
 
+Hohum, it has been bothering me for a while now too. ;-\
 
-Is it time to have a big cleanup on how we handle similarities
-and oddities in the MCE subsystem?  We've been adding ad-hoc
-tests like this in random places ... and it all looks very
-messy.  Lines that mention x86_vendor|x86|x86_model below
-arch/x86/kernel/cpu/mce/ currently look like this:
+> Or should we make a big table of CPU vendors/families/models and use
+> x86_match_cpu() to pick out what are running on and set some bits/flags
+> (like X86_FEATURE/X86_BUG) which we can use in the code to do the
+> right thing in each place?
 
-arch/x86/kernel/cpu/mce/amd.c:		   (c->x86_model >= 0x10 && c->x86_model <= 0x2F)) {
-arch/x86/kernel/cpu/mce/amd.c:	    c->x86_model >= 0x10 && c->x86_model <= 0x2F &&
-arch/x86/kernel/cpu/mce/amd.c:	} else if (c->x86 == 0x17 &&
-arch/x86/kernel/cpu/mce/amd.c:	if (c->x86 == 0x15 && bank == 4) {
-arch/x86/kernel/cpu/mce/amd.c:	if (c->x86 == 0x17 &&
-arch/x86/kernel/cpu/mce/core.c:	    boot_cpu_data.x86_vendor == X86_VENDOR_AMD)
-arch/x86/kernel/cpu/mce/core.c:	    boot_cpu_data.x86_vendor == X86_VENDOR_HYGON ||
-arch/x86/kernel/cpu/mce/core.c:	     c->x86 > 6) {
-arch/x86/kernel/cpu/mce/core.c:	if (boot_cpu_data.x86_vendor == X86_VENDOR_AMD)
-arch/x86/kernel/cpu/mce/core.c:	if (boot_cpu_data.x86_vendor != X86_VENDOR_INTEL)
-arch/x86/kernel/cpu/mce/core.c:	if (boot_cpu_data.x86_vendor == X86_VENDOR_INTEL ||
-arch/x86/kernel/cpu/mce/core.c:		if (c->x86 < 0x11 && cfg->bootlog < 0) {
-arch/x86/kernel/cpu/mce/core.c:		if (c->x86 == 0x15 && c->x86_model <= 0xf)
-arch/x86/kernel/cpu/mce/core.c:		if (c->x86 == 15 && this_cpu_read(mce_num_banks) > 4) {
-arch/x86/kernel/cpu/mce/core.c:	if (c->x86 != 5)
-arch/x86/kernel/cpu/mce/core.c:		if ((c->x86 > 6 || (c->x86 == 6 && c->x86_model >= 0xe)) &&
-arch/x86/kernel/cpu/mce/core.c:		if (c->x86 == 6 && c->x86_model < 0x1A && this_cpu_read(mce_num_banks) > 0)
-arch/x86/kernel/cpu/mce/core.c:	if ((c->x86 == 6 && c->x86_model == 0xf && c->x86_stepping >= 0xe) ||
-arch/x86/kernel/cpu/mce/core.c:		if (c->x86 == 6 && c->x86_model <= 13 && cfg->bootlog < 0)
-arch/x86/kernel/cpu/mce/core.c:		if (c->x86 == 6 && c->x86_model == 45)
-arch/x86/kernel/cpu/mce/core.c:		if (c->x86 == 6 && this_cpu_read(mce_num_banks) > 0)
-arch/x86/kernel/cpu/mce/core.c:	if (c->x86_vendor == X86_VENDOR_AMD) {
-arch/x86/kernel/cpu/mce/core.c:	if (c->x86_vendor == X86_VENDOR_AMD || c->x86_vendor == X86_VENDOR_HYGON) {
-arch/x86/kernel/cpu/mce/core.c:	if (c->x86_vendor == X86_VENDOR_INTEL) {
-arch/x86/kernel/cpu/mce/core.c:	if (c->x86_vendor == X86_VENDOR_UNKNOWN) {
-arch/x86/kernel/cpu/mce/core.c:	m->cpuvendor = boot_cpu_data.x86_vendor;
-arch/x86/kernel/cpu/mce/core.c:	switch (c->x86_vendor) {
-arch/x86/kernel/cpu/mce/inject.c:	    boot_cpu_data.x86 < 0x17) {
-arch/x86/kernel/cpu/mce/inject.c:	m->cpuvendor = boot_cpu_data.x86_vendor;
-arch/x86/kernel/cpu/mce/intel.c:	if (boot_cpu_data.x86_vendor != X86_VENDOR_INTEL)
-arch/x86/kernel/cpu/mce/intel.c:	switch (c->x86_model) {
-arch/x86/kernel/cpu/mce/severity.c:	    boot_cpu_data.x86_vendor == X86_VENDOR_HYGON)
-arch/x86/kernel/cpu/mce/severity.c:	if (boot_cpu_data.x86_vendor == X86_VENDOR_AMD ||
-arch/x86/kernel/cpu/mce/therm_throt.c:		if (c->x86 == 6 && (c->x86_model == 9 || c->x86_model == 13)) {
+Yes, that. And I have started doing something along those lines, see
+struct mce_vendor_flags.
 
-Maybe we can X86_VENDOR_ZHAOXIN to this jumble with the excuse that
-it is already so ugly that this patch series only makes things 5% worse?
+If we did the X86_FEATURE/BUG things, we would still end up using those
+new definitions in the MCA code only so I think having our own bits in a
+bitfield would be cleaner/nicer.
 
-Or should we make a big table of CPU vendors/families/models and use
-x86_match_cpu() to pick out what are running on and set some bits/flags
-(like X86_FEATURE/X86_BUG) which we can use in the code to do the
-right thing in each place?
+Anyway, detection can be all done in __mcheck_cpu_init_early() or
+somewhere similar, all matching flags/bits set and then the rest of the
+code would query only them.
 
-E.g. default for Intel and Zhaoxin vendors would be to set MCE_INTEL_LIKE.
+We can also merge mce_vendor_flags into mca_cfg as that thing is used
+everywhere.
 
-Thoughts?
+Another advantage of having our own flags is that we can define them as
+we like and stick them all in internal.h so no exposure to the outside.
 
--Tony
+And so on.
+
+> E.g. default for Intel and Zhaoxin vendors would be to set MCE_INTEL_LIKE.
+> 
+> Thoughts?
+
+Yah, I think that's a good idea and I think we should do it. Not
+immediately but work towards it.
+
+Thx.
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
