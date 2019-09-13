@@ -2,130 +2,111 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 555D3B24D7
-	for <lists+linux-edac@lfdr.de>; Fri, 13 Sep 2019 20:05:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B378B24DC
+	for <lists+linux-edac@lfdr.de>; Fri, 13 Sep 2019 20:10:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387935AbfIMSFS (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Fri, 13 Sep 2019 14:05:18 -0400
-Received: from bombadil.infradead.org ([198.137.202.133]:38806 "EHLO
-        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387471AbfIMSFS (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Fri, 13 Sep 2019 14:05:18 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
-        Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Subject:Cc:To:
-        From:Date:Sender:Reply-To:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=6FeydvuMSyFH5WFdFmV29KNR4XubywUJhosL4frnFWg=; b=ORJ/R7wjjla/6INq3ICv5Ux+n
-        LOzC4bRtAQsQAf0M+n+kS+iOctQArTc9sBuiB3spkNC4fTnGg8TpGFeoDRRiW9IPEDHpfGbtrNXHf
-        kjmgQqe9ujn85tmVTkl0CNkpCGmKBVvInLpnUVlsiaaTQhqYcBx3W2KWPAE6lfEfZpthVUKheBQ9H
-        O+bsrbGrASxDCmo5LkuNyUiERPLnDrxs0i/fEXA6piLbbLrd4bf4RGGgz1Fh7/zcjBX2WQuQAmCTz
-        4HQRG34Pjg8doJ/Itbuh9Yys93zYHlaa+fc4UDwZAZtbg9bO1F9TFpLCcX6Z6ZI6gaUaHEpn6wesw
-        o1umAXYvA==;
-Received: from 177.96.232.144.dynamic.adsl.gvt.net.br ([177.96.232.144] helo=coco.lan)
-        by bombadil.infradead.org with esmtpsa (Exim 4.92.2 #3 (Red Hat Linux))
-        id 1i8pwa-0000Qa-P3; Fri, 13 Sep 2019 18:05:17 +0000
-Date:   Fri, 13 Sep 2019 15:05:12 -0300
-From:   Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     Linux Edac Mailing List <linux-edac@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Tony Luck <tony.luck@intel.com>,
-        Qiuxu Zhuo <qiuxu.zhuo@intel.com>,
-        Robert Richter <rrichter@marvell.com>,
-        James Morse <james.morse@arm.com>,
-        Khuong Dinh <khuong@os.amperecomputing.com>
-Subject: Re: [PATCH 0/7] Address most issues when building with W=1
-Message-ID: <20190913150512.6c4e4d87@coco.lan>
-In-Reply-To: <20190913175320.GD4190@zn.tnic>
-References: <cover.1568385816.git.mchehab+samsung@kernel.org>
-        <20190913175320.GD4190@zn.tnic>
-X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-redhat-linux-gnu)
+        id S2388358AbfIMSKe (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Fri, 13 Sep 2019 14:10:34 -0400
+Received: from mga18.intel.com ([134.134.136.126]:40824 "EHLO mga18.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2387802AbfIMSKe (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Fri, 13 Sep 2019 14:10:34 -0400
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+X-Amp-File-Uploaded: False
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga106.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 13 Sep 2019 11:10:32 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.64,492,1559545200"; 
+   d="scan'208";a="197638414"
+Received: from agluck-desk2.sc.intel.com (HELO agluck-desk2.amr.corp.intel.com) ([10.3.52.68])
+  by orsmga002.jf.intel.com with ESMTP; 13 Sep 2019 11:10:32 -0700
+Date:   Fri, 13 Sep 2019 11:10:31 -0700
+From:   "Luck, Tony" <tony.luck@intel.com>
+To:     Tony W Wang-oc <TonyWWang-oc@zhaoxin.com>
+Cc:     "Borislav Petkov (bp@alien8.de)" <bp@alien8.de>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "hpa@zytor.com" <hpa@zytor.com>, "x86@kernel.org" <x86@kernel.org>,
+        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "yazen.ghannam@amd.com" <yazen.ghannam@amd.com>,
+        "vishal.l.verma@intel.com" <vishal.l.verma@intel.com>,
+        "qiuxu.zhuo@intel.com" <qiuxu.zhuo@intel.com>,
+        David Wang <DavidWang@zhaoxin.com>,
+        "Cooper Yan(BJ-RD)" <CooperYan@zhaoxin.com>,
+        "Qiyuan Wang(BJ-RD)" <QiyuanWang@zhaoxin.com>,
+        "Herry Yang(BJ-RD)" <HerryYang@zhaoxin.com>
+Subject: Re: [PATCH v3 1/4] x86/mce: Add Zhaoxin MCE support
+Message-ID: <20190913181031.GA9940@agluck-desk2.amr.corp.intel.com>
+References: <9d6769dca6394638a013ccad2c8f964c@zhaoxin.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <9d6769dca6394638a013ccad2c8f964c@zhaoxin.com>
+User-Agent: Mutt/1.11.3 (2019-02-01)
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-Em Fri, 13 Sep 2019 19:53:20 +0200
-Borislav Petkov <bp@alien8.de> escreveu:
+On Wed, Sep 11, 2019 at 12:01:42PM +0000, Tony W Wang-oc wrote:
+> +	/* Checks after this one are Intel/Zhaoxin-specific: */
+> +	if (boot_cpu_data.x86_vendor != X86_VENDOR_INTEL &&
+> +	    boot_cpu_data.x86_vendor != X86_VENDOR_ZHAOXIN)
 
-> On Fri, Sep 13, 2019 at 11:50:25AM -0300, Mauro Carvalho Chehab wrote:
-> > There is a recent discussion at KS ML with regards to use W=3D1 as defa=
-ult.
-> >=20
-> > No idea if this will happen or not, but it doesn't hurt cleaning up W=
-=3D1
-> > warnings from the EDAC subsystem, specially since it helps to cleanup
-> > a few things.
-> >=20
-> > This patch series addresses most of such warnings.  After this series,
-> > there will be just two W=3D1 warnings:
-> >=20
-> > 1) i5100 EDAC driver:
-> >=20
-> > 	drivers/edac/i5100_edac.c: In function =E2=80=98i5100_read_log=E2=80=
-=99:
-> > 	drivers/edac/i5100_edac.c:487:11: warning: variable =E2=80=98ecc_loc=
-=E2=80=99 set but not used [-Wunused-but-set-variable]
-> > 	  487 |  unsigned ecc_loc =3D 0;
-> > 	      |           ^~~~~~~
-> >=20
-> >=20
-> >    The ecc_loc contents is filled from MC data, but it is not used anyw=
-ere.
-> >    The i5100 MC is very old: the affected code was added in 2008. It sh=
-ould
-> >    probably be safe to just drop the corresponding data, but, as it may
-> >    contain some relevant info, I was a little reticent of doing that.
-> >=20
-> > 2) Xgene EDAC driver:
-> >=20
-> > 	drivers/edac/xgene_edac.c: In function =E2=80=98xgene_edac_rb_report=
-=E2=80=99:
-> > 	drivers/edac/xgene_edac.c:1486:7: warning: variable =E2=80=98address=
-=E2=80=99 set but not used [-Wunused-but-set-variable]
-> > 	 1486 |   u32 address;
-> > 	      |       ^~~~~~~
-> >=20
-> >    I suspect that the content of the address field should actually be u=
-sed on
-> >    at least some of the logs. =20
->=20
-> + Khuong Dinh <khuong@os.amperecomputing.com> for that.
 
-Thanks!
+Is it time to have a big cleanup on how we handle similarities
+and oddities in the MCE subsystem?  We've been adding ad-hoc
+tests like this in random places ... and it all looks very
+messy.  Lines that mention x86_vendor|x86|x86_model below
+arch/x86/kernel/cpu/mce/ currently look like this:
 
->=20
-> > I may eventually submit patches later to address the above cases, but l=
-et's
-> > solve first the other cases, as they all sound trivial enough.
-> >=20
-> > Mauro Carvalho Chehab (7):
-> >   EDAC: i5100_edac: get rid of an unused var
-> >   EDAC: i7300_edac: rename a kernel-doc var description
-> >   EDAC: i7300_edac: fix a kernel-doc syntax
-> >   EDAC: i5400_edac: print type at debug message
-> >   EDAC: i5400_edac: get rid of some unused vars
-> >   EDAC: sb_edac: get rid of unused vars
-> >   EDAC: skx_common: get rid of unused type var
-> >=20
-> >  drivers/edac/i5100_edac.c |  2 --
-> >  drivers/edac/i5400_edac.c | 15 +++------------
-> >  drivers/edac/i7300_edac.c |  4 ++--
-> >  drivers/edac/sb_edac.c    | 21 ++++++++-------------
-> >  drivers/edac/skx_common.c |  5 +----
-> >  5 files changed, 14 insertions(+), 33 deletions(-) =20
->=20
-> Looks ok to me at a quick glance, ACK.
->=20
-> I've already sent the 5.4 pull request to Linus so you could queue those
-> after -rc1. It's not like they're urgent or so.
+arch/x86/kernel/cpu/mce/amd.c:		   (c->x86_model >= 0x10 && c->x86_model <= 0x2F)) {
+arch/x86/kernel/cpu/mce/amd.c:	    c->x86_model >= 0x10 && c->x86_model <= 0x2F &&
+arch/x86/kernel/cpu/mce/amd.c:	} else if (c->x86 == 0x17 &&
+arch/x86/kernel/cpu/mce/amd.c:	if (c->x86 == 0x15 && bank == 4) {
+arch/x86/kernel/cpu/mce/amd.c:	if (c->x86 == 0x17 &&
+arch/x86/kernel/cpu/mce/core.c:	    boot_cpu_data.x86_vendor == X86_VENDOR_AMD)
+arch/x86/kernel/cpu/mce/core.c:	    boot_cpu_data.x86_vendor == X86_VENDOR_HYGON ||
+arch/x86/kernel/cpu/mce/core.c:	     c->x86 > 6) {
+arch/x86/kernel/cpu/mce/core.c:	if (boot_cpu_data.x86_vendor == X86_VENDOR_AMD)
+arch/x86/kernel/cpu/mce/core.c:	if (boot_cpu_data.x86_vendor != X86_VENDOR_INTEL)
+arch/x86/kernel/cpu/mce/core.c:	if (boot_cpu_data.x86_vendor == X86_VENDOR_INTEL ||
+arch/x86/kernel/cpu/mce/core.c:		if (c->x86 < 0x11 && cfg->bootlog < 0) {
+arch/x86/kernel/cpu/mce/core.c:		if (c->x86 == 0x15 && c->x86_model <= 0xf)
+arch/x86/kernel/cpu/mce/core.c:		if (c->x86 == 15 && this_cpu_read(mce_num_banks) > 4) {
+arch/x86/kernel/cpu/mce/core.c:	if (c->x86 != 5)
+arch/x86/kernel/cpu/mce/core.c:		if ((c->x86 > 6 || (c->x86 == 6 && c->x86_model >= 0xe)) &&
+arch/x86/kernel/cpu/mce/core.c:		if (c->x86 == 6 && c->x86_model < 0x1A && this_cpu_read(mce_num_banks) > 0)
+arch/x86/kernel/cpu/mce/core.c:	if ((c->x86 == 6 && c->x86_model == 0xf && c->x86_stepping >= 0xe) ||
+arch/x86/kernel/cpu/mce/core.c:		if (c->x86 == 6 && c->x86_model <= 13 && cfg->bootlog < 0)
+arch/x86/kernel/cpu/mce/core.c:		if (c->x86 == 6 && c->x86_model == 45)
+arch/x86/kernel/cpu/mce/core.c:		if (c->x86 == 6 && this_cpu_read(mce_num_banks) > 0)
+arch/x86/kernel/cpu/mce/core.c:	if (c->x86_vendor == X86_VENDOR_AMD) {
+arch/x86/kernel/cpu/mce/core.c:	if (c->x86_vendor == X86_VENDOR_AMD || c->x86_vendor == X86_VENDOR_HYGON) {
+arch/x86/kernel/cpu/mce/core.c:	if (c->x86_vendor == X86_VENDOR_INTEL) {
+arch/x86/kernel/cpu/mce/core.c:	if (c->x86_vendor == X86_VENDOR_UNKNOWN) {
+arch/x86/kernel/cpu/mce/core.c:	m->cpuvendor = boot_cpu_data.x86_vendor;
+arch/x86/kernel/cpu/mce/core.c:	switch (c->x86_vendor) {
+arch/x86/kernel/cpu/mce/inject.c:	    boot_cpu_data.x86 < 0x17) {
+arch/x86/kernel/cpu/mce/inject.c:	m->cpuvendor = boot_cpu_data.x86_vendor;
+arch/x86/kernel/cpu/mce/intel.c:	if (boot_cpu_data.x86_vendor != X86_VENDOR_INTEL)
+arch/x86/kernel/cpu/mce/intel.c:	switch (c->x86_model) {
+arch/x86/kernel/cpu/mce/severity.c:	    boot_cpu_data.x86_vendor == X86_VENDOR_HYGON)
+arch/x86/kernel/cpu/mce/severity.c:	if (boot_cpu_data.x86_vendor == X86_VENDOR_AMD ||
+arch/x86/kernel/cpu/mce/therm_throt.c:		if (c->x86 == 6 && (c->x86_model == 9 || c->x86_model == 13)) {
 
-Yeah, that's my plan.
+Maybe we can X86_VENDOR_ZHAOXIN to this jumble with the excuse that
+it is already so ugly that this patch series only makes things 5% worse?
 
-Thanks,
-Mauro
+Or should we make a big table of CPU vendors/families/models and use
+x86_match_cpu() to pick out what are running on and set some bits/flags
+(like X86_FEATURE/X86_BUG) which we can use in the code to do the
+right thing in each place?
+
+E.g. default for Intel and Zhaoxin vendors would be to set MCE_INTEL_LIKE.
+
+Thoughts?
+
+-Tony
