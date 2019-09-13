@@ -2,110 +2,106 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 60A59B221D
-	for <lists+linux-edac@lfdr.de>; Fri, 13 Sep 2019 16:39:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C10C6B2298
+	for <lists+linux-edac@lfdr.de>; Fri, 13 Sep 2019 16:52:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726558AbfIMOgK (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Fri, 13 Sep 2019 10:36:10 -0400
-Received: from mail-oi1-f194.google.com ([209.85.167.194]:37031 "EHLO
-        mail-oi1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730579AbfIMOgJ (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Fri, 13 Sep 2019 10:36:09 -0400
-Received: by mail-oi1-f194.google.com with SMTP id 11so2824823oix.4;
-        Fri, 13 Sep 2019 07:36:09 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:from:to:cc:subject:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=x59L5apnJL40NtS0tdeDtuo7G6k5ZSeB+XKw0XxxnFI=;
-        b=FD1ecM1H32wUPzCvVXdAafndTauPHO9rXjMXrf9FVpgf29n51sK9NLfwSdMNXMkMxB
-         G9L7M5tvo9U1EKe7r2+CfrGhr76jiCs/RddmQmSk8Mh4SOHxkfrHHU511KUFfXYq1jLj
-         iziMgSn2kNt/d50zvtRbLDivRio7YB9U7TvlkYQxmSZvcDQD+ODVuU6DuCu2JNtLaBKL
-         lWPvI8ssMJRfbcmQJeRGyjxBQXCvr53y/tPnytFUCgrwQSfn9pRGSFc9jcgD2+zxaUW4
-         f4jI//Of1jLe0MmCZVyJtCIrFyXAAzXtZrvIg/0ZViFJBfKLCl/p5kY+RvogQUR66w3F
-         7r8A==
-X-Gm-Message-State: APjAAAU6NbNT+1uE4HpLQn7AguPVnwwQEZr/br+lvTqnX6HyTNPlGrnr
-        c+JZcJfg+aOpruvQ1heStw==
-X-Google-Smtp-Source: APXvYqwcZJeRHC1PVNC2DKjUVCVr9+SFzeO0M0kOrsz2lu3agim9M0Aj63nSjTgT/vcdVxuD4z+A6g==
-X-Received: by 2002:a05:6808:7c1:: with SMTP id f1mr2510604oij.123.1568385369033;
-        Fri, 13 Sep 2019 07:36:09 -0700 (PDT)
-Received: from localhost (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id s194sm921883oie.19.2019.09.13.07.36.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 Sep 2019 07:36:08 -0700 (PDT)
-Message-ID: <5d7ba958.1c69fb81.d998a.6602@mx.google.com>
-Date:   Fri, 13 Sep 2019 15:36:07 +0100
-From:   Rob Herring <robh@kernel.org>
-To:     Talel Shenhar <talel@amazon.com>
-Cc:     bp@alien8.de, mchehab@kernel.org, james.morse@arm.com,
-        davem@davemloft.net, gregkh@linuxfoundation.org,
-        nicolas.ferre@microchip.com, mark.rutland@arm.com,
-        catalin.marinas@arm.com, will@kernel.org,
-        linux-edac@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        hhhawa@amazon.com, ronenk@amazon.com, jonnyc@amazon.com,
-        hanochu@amazon.com, barakw@amazon.com
-Subject: Re: [PATCH 1/3] dt-bindings: edac: al-mc-edac: Amazon's Annapurna
- Labs Memory Controller EDAC
-References: <1567603943-25316-1-git-send-email-talel@amazon.com>
- <1567603943-25316-2-git-send-email-talel@amazon.com>
+        id S2389153AbfIMOui (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Fri, 13 Sep 2019 10:50:38 -0400
+Received: from bombadil.infradead.org ([198.137.202.133]:40784 "EHLO
+        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2388953AbfIMOuh (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Fri, 13 Sep 2019 10:50:37 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=Sender:Content-Transfer-Encoding:
+        Content-Type:MIME-Version:Message-Id:Date:Subject:Cc:To:From:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=q3Ga10yfzeYwpxzznlPXk6UJIJ2TiV9coxLDW5IjRtQ=; b=C6+DA8OLlRAbM+V6wKgn6PB17
+        KQ72yJDKteynS6SYGdsx4L+4q0GSUma2xxWwnd2xkMmUs6eyGO8MxP5ynQowZRnVfHbKbQhvzowe5
+        +uHl3oFrIa/d3SJ+DBeJn7ZMEHiv8uSNem5hqiYAOYuBKn9Y11oF0cXStGRcWPNMQvMmJl05A5Yn5
+        QJVhzqoKz/PMQrziYhddGHQHIaE+6P/fAPbqhoF9M1dAS/AcgIPpnH26rDJJdjNU/xVHUI1NQ2QT/
+        ElMQUfEXk/pZOjaRK1f1YU2xNJLxNlBceej6u+MsdWy0WjnnLNJdCtIePIXQ4PQ3p2MxPQSfq01CR
+        yTwS2WLjA==;
+Received: from 177.96.232.144.dynamic.adsl.gvt.net.br ([177.96.232.144] helo=bombadil.infradead.org)
+        by bombadil.infradead.org with esmtpsa (Exim 4.92.2 #3 (Red Hat Linux))
+        id 1i8muC-0002Mq-2T; Fri, 13 Sep 2019 14:50:36 +0000
+Received: from mchehab by bombadil.infradead.org with local (Exim 4.92.2)
+        (envelope-from <mchehab@bombadil.infradead.org>)
+        id 1i8mu9-00042n-Db; Fri, 13 Sep 2019 11:50:33 -0300
+From:   Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
+Cc:     Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
+        Linux Edac Mailing List <linux-edac@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Borislav Petkov <bp@alien8.de>,
+        Tony Luck <tony.luck@intel.com>,
+        Qiuxu Zhuo <qiuxu.zhuo@intel.com>,
+        Robert Richter <rrichter@marvell.com>,
+        James Morse <james.morse@arm.com>
+Subject: [PATCH 0/7] Address most issues when building with W=1
+Date:   Fri, 13 Sep 2019 11:50:25 -0300
+Message-Id: <cover.1568385816.git.mchehab+samsung@kernel.org>
+X-Mailer: git-send-email 2.21.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1567603943-25316-2-git-send-email-talel@amazon.com>
-X-Mutt-References: <1567603943-25316-2-git-send-email-talel@amazon.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+To:     unlisted-recipients:; (no To-header on input)
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Wed, Sep 04, 2019 at 04:32:21PM +0300, Talel Shenhar wrote:
-> Document Amazon's Annapurna Labs Memory Controller EDAC SoC binding.
-> 
-> Signed-off-by: Talel Shenhar <talel@amazon.com>
-> ---
->  .../devicetree/bindings/edac/amazon,al-mc-edac.txt | 24 ++++++++++++++++++++++
->  1 file changed, 24 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/edac/amazon,al-mc-edac.txt
-> 
-> diff --git a/Documentation/devicetree/bindings/edac/amazon,al-mc-edac.txt b/Documentation/devicetree/bindings/edac/amazon,al-mc-edac.txt
-> new file mode 100644
-> index 0000000..9a3803f
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/edac/amazon,al-mc-edac.txt
-> @@ -0,0 +1,24 @@
-> +Amazon's Annapurna Labs Memory Controller EDAC
-> +
-> +EDAC node is defined to describe on-chip error detection and correction for
-> +Amazon's Annapurna Labs Memory Controller.
-> +
-> +Required properties:
-> +- compatible:	Shall be "amazon,al-mc-edac".
-> +- reg:		DDR controller resource.
-> +
-> +Optional:
-> +- interrupt-names:	may include "ue", for uncorrectable errors,
-> +			and/or "ce", for correctable errors.
-> +- interrupts:		should contain the interrupts associated with the
-> +			interrupts names.
-> +
-> +Example:
-> +
-> +al_mc_edac {
+There is a recent discussion at KS ML with regards to use W=1 as default.
 
-edac@f0080000
+No idea if this will happen or not, but it doesn't hurt cleaning up W=1
+warnings from the EDAC subsystem, specially since it helps to cleanup
+a few things.
 
-With that,
+This patch series addresses most of such warnings.  After this series,
+there will be just two W=1 warnings:
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+1) i5100 EDAC driver:
 
-> +	compatible = "amazon,al-mc-edac";
-> +	reg = <0x0 0xf0080000 0x0 0x00010000>;
-> +	interrupt-parent = <&amazon_al_system_fabric>;
-> +	interrupt-names = "ue";
-> +	interrupts = <20 IRQ_TYPE_LEVEL_HIGH>;
-> +};
-> -- 
-> 2.7.4
-> 
+	drivers/edac/i5100_edac.c: In function ‘i5100_read_log’:
+	drivers/edac/i5100_edac.c:487:11: warning: variable ‘ecc_loc’ set but not used [-Wunused-but-set-variable]
+	  487 |  unsigned ecc_loc = 0;
+	      |           ^~~~~~~
+
+
+   The ecc_loc contents is filled from MC data, but it is not used anywere.
+   The i5100 MC is very old: the affected code was added in 2008. It should
+   probably be safe to just drop the corresponding data, but, as it may
+   contain some relevant info, I was a little reticent of doing that.
+
+2) Xgene EDAC driver:
+
+	drivers/edac/xgene_edac.c: In function ‘xgene_edac_rb_report’:
+	drivers/edac/xgene_edac.c:1486:7: warning: variable ‘address’ set but not used [-Wunused-but-set-variable]
+	 1486 |   u32 address;
+	      |       ^~~~~~~
+
+   I suspect that the content of the address field should actually be used on
+   at least some of the logs.
+
+I may eventually submit patches later to address the above cases, but let's
+solve first the other cases, as they all sound trivial enough.
+
+Mauro Carvalho Chehab (7):
+  EDAC: i5100_edac: get rid of an unused var
+  EDAC: i7300_edac: rename a kernel-doc var description
+  EDAC: i7300_edac: fix a kernel-doc syntax
+  EDAC: i5400_edac: print type at debug message
+  EDAC: i5400_edac: get rid of some unused vars
+  EDAC: sb_edac: get rid of unused vars
+  EDAC: skx_common: get rid of unused type var
+
+ drivers/edac/i5100_edac.c |  2 --
+ drivers/edac/i5400_edac.c | 15 +++------------
+ drivers/edac/i7300_edac.c |  4 ++--
+ drivers/edac/sb_edac.c    | 21 ++++++++-------------
+ drivers/edac/skx_common.c |  5 +----
+ 5 files changed, 14 insertions(+), 33 deletions(-)
+
+-- 
+2.21.0
 
