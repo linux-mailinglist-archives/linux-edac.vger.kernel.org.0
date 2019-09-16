@@ -2,26 +2,26 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CEBB7B3980
-	for <lists+linux-edac@lfdr.de>; Mon, 16 Sep 2019 13:36:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 224BFB3982
+	for <lists+linux-edac@lfdr.de>; Mon, 16 Sep 2019 13:36:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731365AbfIPLg0 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-edac@lfdr.de>); Mon, 16 Sep 2019 07:36:26 -0400
-Received: from ZXSHCAS2.zhaoxin.com ([203.148.12.82]:23478 "EHLO
+        id S1731258AbfIPLgw convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-edac@lfdr.de>); Mon, 16 Sep 2019 07:36:52 -0400
+Received: from ZXSHCAS2.zhaoxin.com ([203.148.12.82]:23515 "EHLO
         ZXSHCAS2.zhaoxin.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1731258AbfIPLgZ (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Mon, 16 Sep 2019 07:36:25 -0400
-Received: from zxbjmbx3.zhaoxin.com (10.29.252.165) by ZXSHCAS2.zhaoxin.com
+        with ESMTP id S1729535AbfIPLgw (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Mon, 16 Sep 2019 07:36:52 -0400
+Received: from zxbjmbx2.zhaoxin.com (10.29.252.164) by ZXSHCAS2.zhaoxin.com
  (10.28.252.162) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1261.35; Mon, 16 Sep
- 2019 19:36:23 +0800
-Received: from zxbjmbx1.zhaoxin.com (10.29.252.163) by zxbjmbx3.zhaoxin.com
- (10.29.252.165) with Microsoft SMTP Server (version=TLS1_2,
+ 2019 19:36:50 +0800
+Received: from zxbjmbx1.zhaoxin.com (10.29.252.163) by zxbjmbx2.zhaoxin.com
+ (10.29.252.164) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1261.35; Mon, 16 Sep
- 2019 19:36:23 +0800
+ 2019 19:36:49 +0800
 Received: from zxbjmbx1.zhaoxin.com ([fe80::b41a:737:a784:b70d]) by
  zxbjmbx1.zhaoxin.com ([fe80::b41a:737:a784:b70d%16]) with mapi id
- 15.01.1261.035; Mon, 16 Sep 2019 19:36:22 +0800
+ 15.01.1261.035; Mon, 16 Sep 2019 19:36:49 +0800
 From:   Tony W Wang-oc <TonyWWang-oc@zhaoxin.com>
 To:     "tony.luck@intel.com" <tony.luck@intel.com>,
         "Borislav Petkov (bp@alien8.de)" <bp@alien8.de>,
@@ -37,11 +37,11 @@ CC:     David Wang <DavidWang@zhaoxin.com>,
         "Cooper Yan(BJ-RD)" <CooperYan@zhaoxin.com>,
         "Qiyuan Wang(BJ-RD)" <QiyuanWang@zhaoxin.com>,
         "Herry Yang(BJ-RD)" <HerryYang@zhaoxin.com>
-Subject: [PATCH v3 2/4] x86/mce: Make 3 functions non-static
-Thread-Topic: [PATCH v3 2/4] x86/mce: Make 3 functions non-static
-Thread-Index: AdVsgbm/J0SRAQfhQ4yz5eYD1YjXCg==
-Date:   Mon, 16 Sep 2019 11:36:22 +0000
-Message-ID: <00872f2e8ec945b8b8f4df3bef7993e2@zhaoxin.com>
+Subject: [PATCH v3 3/4]  x86/mce: Add Zhaoxin CMCI support
+Thread-Topic: [PATCH v3 3/4]  x86/mce: Add Zhaoxin CMCI support
+Thread-Index: AdVsgcsB5k4nXJqUR7WnEmO+O6tKsw==
+Date:   Mon, 16 Sep 2019 11:36:49 +0000
+Message-ID: <d7e189b63c354a26b895bbd27bc856b3@zhaoxin.com>
 Accept-Language: en-US, zh-CN
 Content-Language: zh-CN
 X-MS-Has-Attach: 
@@ -55,68 +55,76 @@ Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-These functions are declared static and cannot be used in others
-.c source file. this commit removes the static attribute and adds
-the declaration to the header for these functions.
+All Zhaoxin newer CPUs support CMCI that compatible with Intel's
+"Machine-Check Architecture", so add support for Zhaoxin CMCI in
+mce/core.c and mce/intel.c.
 
 Signed-off-by: Tony W Wang-oc <TonyWWang-oc@zhaoxin.com>
 ---
- arch/x86/kernel/cpu/mce/intel.c    | 6 +++---
- arch/x86/kernel/cpu/mce/internal.h | 6 ++++++
- 2 files changed, 9 insertions(+), 3 deletions(-)
+ arch/x86/kernel/cpu/mce/core.c  | 25 +++++++++++++++++++++++++
+ arch/x86/kernel/cpu/mce/intel.c |  5 ++++-
+ 2 files changed, 29 insertions(+), 1 deletion(-)
 
+diff --git a/arch/x86/kernel/cpu/mce/core.c b/arch/x86/kernel/cpu/mce/core.c
+index 7bcd8c1..65c5a1f 100644
+--- a/arch/x86/kernel/cpu/mce/core.c
++++ b/arch/x86/kernel/cpu/mce/core.c
+@@ -1777,6 +1777,27 @@ static void mce_centaur_feature_init(struct cpuinfo_x86 *c)
+ 	}
+ }
+ 
++static void mce_zhaoxin_feature_init(struct cpuinfo_x86 *c)
++{
++	struct mce_bank *mce_banks = this_cpu_ptr(mce_banks_array);
++
++	/*
++	 * These CPUs have MCA bank 8, that only has one error called SVAD
++	 * (System View Address Decoder) which be controlled by IA32_MC8.CTL.0
++	 * If enabled, the prefetch on these CPUs will cause SVAD machine
++	 * check exception when virtual machine startup and cause system
++	 * panic. Always disable bank 8 SVAD error by default.
++	 */
++	if ((c->x86 == 7 && c->x86_model == 0x1b) ||
++	    (c->x86_model == 0x19 || c->x86_model == 0x1f)) {
++		if (this_cpu_read(mce_num_banks) > 8)
++			mce_banks[8].ctl = 0;
++	}
++
++	intel_init_cmci();
++	mce_adjust_timer = cmci_intel_adjust_timer;
++}
++
+ static void __mcheck_cpu_init_vendor(struct cpuinfo_x86 *c)
+ {
+ 	switch (c->x86_vendor) {
+@@ -1798,6 +1819,10 @@ static void __mcheck_cpu_init_vendor(struct cpuinfo_x86 *c)
+ 		mce_centaur_feature_init(c);
+ 		break;
+ 
++	case X86_VENDOR_ZHAOXIN:
++		mce_zhaoxin_feature_init(c);
++		break;
++
+ 	default:
+ 		break;
+ 	}
 diff --git a/arch/x86/kernel/cpu/mce/intel.c b/arch/x86/kernel/cpu/mce/intel.c
-index 88cd959..70799a5 100644
+index 70799a5..87c473f 100644
 --- a/arch/x86/kernel/cpu/mce/intel.c
 +++ b/arch/x86/kernel/cpu/mce/intel.c
-@@ -423,7 +423,7 @@ void cmci_disable_bank(int bank)
- 	raw_spin_unlock_irqrestore(&cmci_discover_lock, flags);
- }
- 
--static void intel_init_cmci(void)
-+void intel_init_cmci(void)
- {
- 	int banks;
- 
-@@ -442,7 +442,7 @@ static void intel_init_cmci(void)
- 	cmci_recheck();
- }
- 
--static void intel_init_lmce(void)
-+void intel_init_lmce(void)
- {
- 	u64 val;
- 
-@@ -455,7 +455,7 @@ static void intel_init_lmce(void)
- 		wrmsrl(MSR_IA32_MCG_EXT_CTL, val | MCG_EXT_CTL_LMCE_EN);
- }
- 
--static void intel_clear_lmce(void)
-+void intel_clear_lmce(void)
- {
- 	u64 val;
- 
-diff --git a/arch/x86/kernel/cpu/mce/internal.h b/arch/x86/kernel/cpu/mce/internal.h
-index 43031db..842b273 100644
---- a/arch/x86/kernel/cpu/mce/internal.h
-+++ b/arch/x86/kernel/cpu/mce/internal.h
-@@ -45,11 +45,17 @@ unsigned long cmci_intel_adjust_timer(unsigned long interval);
- bool mce_intel_cmci_poll(void);
- void mce_intel_hcpu_update(unsigned long cpu);
- void cmci_disable_bank(int bank);
-+void intel_init_cmci(void);
-+void intel_init_lmce(void);
-+void intel_clear_lmce(void);
- #else
- # define cmci_intel_adjust_timer mce_adjust_timer_default
- static inline bool mce_intel_cmci_poll(void) { return false; }
- static inline void mce_intel_hcpu_update(unsigned long cpu) { }
- static inline void cmci_disable_bank(int bank) { }
-+static inline void intel_init_cmci(void) { }
-+static inline void intel_init_lmce(void) { }
-+static inline void intel_clear_lmce(void) { }
- #endif
- 
- void mce_timer_kick(unsigned long interval);
+@@ -84,9 +84,12 @@ static int cmci_supported(int *banks)
+ 	 * Vendor check is not strictly needed, but the initial
+ 	 * initialization is vendor keyed and this
+ 	 * makes sure none of the backdoors are entered otherwise.
++	 * Checks the vendor are Intel/Zhaoxin-specific:
+ 	 */
+-	if (boot_cpu_data.x86_vendor != X86_VENDOR_INTEL)
++	if (boot_cpu_data.x86_vendor != X86_VENDOR_INTEL &&
++	    boot_cpu_data.x86_vendor != X86_VENDOR_ZHAOXIN)
+ 		return 0;
++
+ 	if (!boot_cpu_has(X86_FEATURE_APIC) || lapic_get_maxlvt() < 6)
+ 		return 0;
+ 	rdmsrl(MSR_IA32_MCG_CAP, cap);
 -- 
 2.7.4
