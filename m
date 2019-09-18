@@ -2,228 +2,383 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E0D2B61DA
-	for <lists+linux-edac@lfdr.de>; Wed, 18 Sep 2019 12:52:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB3B0B69D3
+	for <lists+linux-edac@lfdr.de>; Wed, 18 Sep 2019 19:47:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727252AbfIRKwx (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Wed, 18 Sep 2019 06:52:53 -0400
-Received: from bombadil.infradead.org ([198.137.202.133]:33664 "EHLO
-        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727030AbfIRKwx (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Wed, 18 Sep 2019 06:52:53 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
-        Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Subject:Cc:To:
-        From:Date:Sender:Reply-To:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=uH9aUXv7Qc4H5UGTh+3QPPPZAkd2Pay5B/W3Md+6t/M=; b=GZV/h3RAqbphh7DK9AxFoek0f
-        6EBzEMbLFUGllwPN4t2bRlP1rnbcxpm0ccFyhzBU9LyYyaD3i4L94CO7w2Tfh7+S/v6VefGi0ZVSG
-        Mo2LDhOuiFgZZDfhs7UEGm4VmksyBArIQu9clw4JSbvnJ1FpMNAd+xGnatyVJpdoRA2x8wW0qFsyJ
-        TKBjvBtGrmfwtOC1jHsBOYkCVosE0lLWVJSrUOQrLy8W0E1HTsr/ycSHW3yhM4jao0VDXPTuqllcF
-        DWdT1hpkI+vatjqpUN6JMW0oMU4fZ+v4z/qZsHQ6OtKvdv2lZw4l6OZJ5WHwrO4ewBA4m0fDvQlPV
-        k89FNthSQ==;
-Received: from 177.96.192.152.dynamic.adsl.gvt.net.br ([177.96.192.152] helo=coco.lan)
-        by bombadil.infradead.org with esmtpsa (Exim 4.92.2 #3 (Red Hat Linux))
-        id 1iAXZq-0004mT-KR; Wed, 18 Sep 2019 10:52:51 +0000
-Date:   Wed, 18 Sep 2019 07:52:46 -0300
-From:   Mauro Carvalho Chehab <mchehab@kernel.org>
-To:     Tony Luck <tony.luck@intel.com>
-Cc:     Borislav Petkov <bp@alien8.de>, Qiuxu Zhuo <qiuxu.zhuo@intel.com>,
-        Aristeu Rozanski <aris@redhat.com>, linux-edac@vger.kernel.org
-Subject: Re: [RFC PATCH 2/2] EDAC, skx: Retrieve and print retry_rd_err_log
- registers
-Message-ID: <20190918075246.534d9d6c@coco.lan>
-In-Reply-To: <20190913221344.13055-3-tony.luck@intel.com>
-References: <20190913221344.13055-1-tony.luck@intel.com>
-        <20190913221344.13055-3-tony.luck@intel.com>
-X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-redhat-linux-gnu)
+        id S1728770AbfIRRrj (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Wed, 18 Sep 2019 13:47:39 -0400
+Received: from foss.arm.com ([217.140.110.172]:45954 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727000AbfIRRrj (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Wed, 18 Sep 2019 13:47:39 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0E9921000;
+        Wed, 18 Sep 2019 10:47:38 -0700 (PDT)
+Received: from [10.1.196.105] (eglon.cambridge.arm.com [10.1.196.105])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 22B8A3F59C;
+        Wed, 18 Sep 2019 10:47:32 -0700 (PDT)
+Subject: Re: [PATCH v2 2/2] EDAC: al-mc-edac: Introduce Amazon's Annapurna
+ Labs Memory Controller EDAC
+To:     Talel Shenhar <talel@amazon.com>
+Cc:     robh+dt@kernel.org, mark.rutland@arm.com, bp@alien8.de,
+        mchehab@kernel.org, davem@davemloft.net,
+        gregkh@linuxfoundation.org, nicolas.ferre@microchip.com,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-edac@vger.kernel.org, dwmw@amazon.co.uk,
+        benh@kernel.crashing.org, hhhawa@amazon.com, ronenk@amazon.com,
+        jonnyc@amazon.com, hanochu@amazon.com, amirkl@amazon.com,
+        barakw@amazon.com
+References: <1568529835-15319-1-git-send-email-talel@amazon.com>
+ <1568529835-15319-3-git-send-email-talel@amazon.com>
+From:   James Morse <james.morse@arm.com>
+Message-ID: <4f6cd17c-c56f-b9d2-d6e0-1711de415f47@arm.com>
+Date:   Wed, 18 Sep 2019 18:47:28 +0100
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+In-Reply-To: <1568529835-15319-3-git-send-email-talel@amazon.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-GB
 Content-Transfer-Encoding: 7bit
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-Em Fri, 13 Sep 2019 15:13:44 -0700
-Tony Luck <tony.luck@intel.com> escreveu:
+Hi Talel,
 
-> Skylake logs some additional useful information in per-channel
-> registers in addition the the architectural status/addr/misc
-> logged in the machine check bank.
-> 
-> Pick up this information and print it.
-> 	retry_rd_err_[five 32-bit register values]
-> 	correrrcnt[four hex values]
-> 
-> Note that if additional errors are logged while these registers
-> are being read, you may see a jumble of values some from earlier
-> errors, others from later errors (since the registers report the
-> most recent logged error). The correrrcnt registers provide error
-> counts per possible rank (two 16-bit values in each register). If
-> these counts only change by one since the previous error logged
-> for this channel, then it is safe to assume that the registers
-> logged provide a coherent view of one error.
-> 
-> Signed-off-by: Tony Luck <tony.luck@intel.com>
-> ---
->  drivers/edac/skx_base.c   | 38 ++++++++++++++++++++++++++++++++++++--
->  drivers/edac/skx_common.c |  7 ++++++-
->  drivers/edac/skx_common.h |  4 +++-
->  3 files changed, 45 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/edac/skx_base.c b/drivers/edac/skx_base.c
-> index 0fcf3785e8f3..e0c0366fdc84 100644
-> --- a/drivers/edac/skx_base.c
-> +++ b/drivers/edac/skx_base.c
-> @@ -46,7 +46,8 @@ static struct skx_dev *get_skx_dev(struct pci_bus *bus, u8 idx)
->  }
->  
->  enum munittype {
-> -	CHAN0, CHAN1, CHAN2, SAD_ALL, UTIL_ALL, SAD
-> +	CHAN0, CHAN1, CHAN2, SAD_ALL, UTIL_ALL, SAD,
-> +	ERRCHAN0, ERRCHAN1, ERRCHAN2,
->  };
->  
->  struct munit {
-> @@ -68,6 +69,9 @@ static const struct munit skx_all_munits[] = {
->  	{ 0x2040, { PCI_DEVFN(10, 0), PCI_DEVFN(12, 0) }, 2, 2, CHAN0 },
->  	{ 0x2044, { PCI_DEVFN(10, 4), PCI_DEVFN(12, 4) }, 2, 2, CHAN1 },
->  	{ 0x2048, { PCI_DEVFN(11, 0), PCI_DEVFN(13, 0) }, 2, 2, CHAN2 },
-> +	{ 0x2043, { PCI_DEVFN(10, 3), PCI_DEVFN(12, 3) }, 2, 2, ERRCHAN0 },
-> +	{ 0x2047, { PCI_DEVFN(10, 7), PCI_DEVFN(12, 7) }, 2, 2, ERRCHAN1 },
-> +	{ 0x204b, { PCI_DEVFN(11, 3), PCI_DEVFN(13, 3) }, 2, 2, ERRCHAN2 },
->  	{ 0x208e, { }, 1, 0, SAD },
->  	{ }
->  };
-> @@ -108,6 +112,10 @@ static int get_all_munits(const struct munit *m)
->  			pci_dev_get(pdev);
->  			d->imc[i].chan[m->mtype].cdev = pdev;
->  			break;
-> +		case ERRCHAN0: case ERRCHAN1: case ERRCHAN2:
+On 15/09/2019 07:43, Talel Shenhar wrote:
+> The Amazon's Annapurna Labs Memory Controller EDAC supports ECC capability
+> for error detection and correction (Single bit error correction, Double
+> detection). This driver introduces EDAC driver for that capability.
 
-I would place each case on a separate line, in order to make easier
-to read it, and to follow the Kernel coding style.
+Is there any documentation for this memory controller?
 
-> +			pci_dev_get(pdev);
-> +			d->imc[i].chan[m->mtype - ERRCHAN0].edev = pdev;
-> +			break;
->  		case SAD_ALL:
->  			pci_dev_get(pdev);
->  			d->sad_all = pdev;
-> @@ -216,6 +224,32 @@ static int skx_get_dimm_config(struct mem_ctl_info *mci)
->  #define SKX_ILV_REMOTE(tgt)	(((tgt) & 8) == 0)
->  #define SKX_ILV_TARGET(tgt)	((tgt) & 7)
->  
-> +static void skx_show_retry_rd_err_log(struct decoded_addr *res)
+
+> diff --git a/drivers/edac/al_mc_edac.c b/drivers/edac/al_mc_edac.c
+> new file mode 100644
+> index 0000000..f9763d4
+> --- /dev/null
+> +++ b/drivers/edac/al_mc_edac.c
+> @@ -0,0 +1,382 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Copyright 2019 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+> + */
+> +#include <linux/bitfield.h>
+
+#include <linux/bitops.h> for hweight_long()
+
+> +#include <linux/edac.h>
+> +#include <linux/of_irq.h>
+
+#include <linux/platform_device.h> for platform_get_resource()
+
+> +#include "edac_module.h"
+
+> +/* Registers Values */
+> +#define AL_MC_MSTR_DEV_CFG_X4	0
+> +#define AL_MC_MSTR_DEV_CFG_X8	1
+> +#define AL_MC_MSTR_DEV_CFG_X16	2
+> +#define AL_MC_MSTR_DEV_CFG_X32	3
+
+> +#define AL_MC_MSTR_RANKS_MAX 4
+
+Is this a fixed property of the memory controller, or is it a limit imposed from somewhere
+else. (Does it need to come from the DT?)
+
+
+> +#define AL_MC_MSTR_DATA_BUS_WIDTH_X64	0
+> +
+> +#define DRV_NAME "al_mc_edac"
+> +#define AL_MC_EDAC_MSG_MAX 256
+> +#define AL_MC_EDAC_MSG(message, buffer_size, type,			\
+> +		       rank, row, bg, bank, column, syn0, syn1, syn2)	\
+> +	snprintf(message, buffer_size,					\
+> +		 "%s rank=0x%x row=0x%x bg=0x%x bank=0x%x col=0x%x "	\
+> +		 "syn0: 0x%x syn1: 0x%x syn2: 0x%x",			\
+> +		 type == HW_EVENT_ERR_UNCORRECTED ? "UE" : "CE",	\
+> +		 rank, row, bg, bank, column, syn0, syn1, syn2)
+> +
+> +struct al_mc_edac {
+> +	void __iomem *mmio_base;
+> +	int irq_ce;
+> +	int irq_ue;
+> +};
+> +
+> +static int al_mc_edac_handle_ce(struct mem_ctl_info *mci)
 > +{
-> +	u32 log0, log1, log2, log3, log4;
-> +	u32 corr0, corr1, corr2, corr3;
-> +	struct pci_dev *edev;
-> +
-> +	edev = res->dev->imc[res->imc].chan[res->channel].edev;
-> +
-> +	pci_read_config_dword(edev, 0x154, &log0);
-> +	pci_read_config_dword(edev, 0x148, &log1);
-> +	pci_read_config_dword(edev, 0x150, &log2);
-> +	pci_read_config_dword(edev, 0x15c, &log3);
-> +	pci_read_config_dword(edev, 0x114, &log4);
-> +
-> +	dev_err(&edev->dev, "retry_rd_err_log[%.8x %.8x %.8x %.8x %.8x]\n",
-> +		log0, log1, log2, log3, log4);
-> +
-> +	pci_read_config_dword(edev, 0x104, &corr0);
-> +	pci_read_config_dword(edev, 0x108, &corr1);
-> +	pci_read_config_dword(edev, 0x10c, &corr2);
-> +	pci_read_config_dword(edev, 0x110, &corr3);
-> +
-> +	dev_err(&edev->dev, "correrrcnt[%.8x %.8x %.8x %.8x]\n",
-> +		corr0, corr1, corr2, corr3);
+> +	struct al_mc_edac *al_mc = mci->pvt_info;
+> +	u32 eccerrcnt;
+> +	u16 ce_count;
+> +	u32 ecccaddr0;
+> +	u32 ecccaddr1;
+> +	u32 ecccsyn0;
+> +	u32 ecccsyn1;
+> +	u32 ecccsyn2;
+> +	u8 rank;
+> +	u32 row;
+> +	u8 bg;
+> +	u8 bank;
+> +	u16 column;
+> +	char msg[AL_MC_EDAC_MSG_MAX];
 
-I would report both dev_err above via EDAC.
+(Some of these could go on the same line, same with UE below)
 
-Btw, can't those be output on a way that wouldn't require someone
-to look at the datasheet for the meaning of those registers? 
-"retry_rd_err_log" and "correrrcnt" sounds too obscure for me to
-understand what they mean without reading the entire driver's code and
-read the datasheets.
+
+> +	eccerrcnt = readl_relaxed(al_mc->mmio_base + AL_MC_ECC_ERR_COUNT);
+> +	ce_count = FIELD_GET(AL_MC_ECC_ERR_COUNT_CE, eccerrcnt);
+> +	if (!ce_count)
+> +		return 0;
+> +
+> +	ecccaddr0 = readl_relaxed(al_mc->mmio_base + AL_MC_ECC_CE_ADDR0);
+> +	ecccaddr1 = readl_relaxed(al_mc->mmio_base + AL_MC_ECC_CE_ADDR1);
+> +	ecccsyn0 = readl_relaxed(al_mc->mmio_base + AL_MC_ECC_UE_SYND0);
+> +	ecccsyn1 = readl_relaxed(al_mc->mmio_base + AL_MC_ECC_UE_SYND1);
+> +	ecccsyn2 = readl_relaxed(al_mc->mmio_base + AL_MC_ECC_UE_SYND2);
+> +
+> +	writel(AL_MC_ECC_CLEAR_CE_COUNT | AL_MC_ECC_CLEAR_CE_ERR,
+> +	       al_mc->mmio_base + AL_MC_ECC_CLEAR);
+> +
+> +	dev_dbg(mci->pdev, "eccuaddr0=0x%08x eccuaddr1=0x%08x\n",
+> +		ecccaddr0, ecccaddr1);
+> +
+> +	rank = FIELD_GET(AL_MC_ECC_CE_ADDR0_RANK, ecccaddr0);
+> +	row = FIELD_GET(AL_MC_ECC_CE_ADDR0_ROW, ecccaddr0);
+> +
+> +	bg = FIELD_GET(AL_MC_ECC_CE_ADDR1_BG, ecccaddr1);
+> +	bank = FIELD_GET(AL_MC_ECC_CE_ADDR1_BANK, ecccaddr1);
+> +	column = FIELD_GET(AL_MC_ECC_CE_ADDR1_COLUMN, ecccaddr1);
+> +
+> +	AL_MC_EDAC_MSG(msg, sizeof(msg), HW_EVENT_ERR_CORRECTED,
+> +		       rank, row, bg, bank, column,
+> +		       ecccsyn0, ecccsyn1, ecccsyn2);
+> +
+> +	edac_mc_handle_error(HW_EVENT_ERR_CORRECTED, mci,
+> +			     ce_count, 0, 0, 0, 0, 0, -1, mci->ctl_name, msg);
+
+You used active_ranks as the layer size in al_mc_edac_probe(). Can't you supply the rank here?
+
+(If its not useful, why is it setup like this in al_mc_edac_probe()?)
+
+(applies to UE below too)
+
+
+> +
+> +	return ce_count;
+> +}
+> +
+> +static int al_mc_edac_handle_ue(struct mem_ctl_info *mci)
+> +{
+> +	struct al_mc_edac *al_mc = mci->pvt_info;
+> +	u32 eccerrcnt;
+> +	u16 ue_count;
+> +	u32 eccuaddr0;
+> +	u32 eccuaddr1;
+> +	u32 eccusyn0;
+> +	u32 eccusyn1;
+> +	u32 eccusyn2;
+> +	u8 rank;
+> +	u32 row;
+> +	u8 bg;
+> +	u8 bank;
+> +	u16 column;
+> +	char msg[AL_MC_EDAC_MSG_MAX];
+> +
+> +	eccerrcnt = readl_relaxed(al_mc->mmio_base + AL_MC_ECC_ERR_COUNT);
+> +	ue_count = FIELD_GET(AL_MC_ECC_ERR_COUNT_UE, eccerrcnt);
+> +	if (!ue_count)
+> +		return 0;
+> +
+> +	eccuaddr0 = readl_relaxed(al_mc->mmio_base + AL_MC_ECC_UE_ADDR0);
+> +	eccuaddr1 = readl_relaxed(al_mc->mmio_base + AL_MC_ECC_UE_ADDR1);
+> +	eccusyn0 = readl_relaxed(al_mc->mmio_base + AL_MC_ECC_UE_SYND0);
+> +	eccusyn1 = readl_relaxed(al_mc->mmio_base + AL_MC_ECC_UE_SYND1);
+> +	eccusyn2 = readl_relaxed(al_mc->mmio_base + AL_MC_ECC_UE_SYND2);
+> +
+> +	writel(AL_MC_ECC_CLEAR_UE_COUNT | AL_MC_ECC_CLEAR_UE_ERR,
+> +	       al_mc->mmio_base + AL_MC_ECC_CLEAR);
+> +
+> +	dev_dbg(mci->pdev, "eccuaddr0=0x%08x eccuaddr1=0x%08x\n",
+> +		eccuaddr0, eccuaddr1);
+> +
+> +	rank = FIELD_GET(AL_MC_ECC_UE_ADDR0_RANK, eccuaddr0);
+> +	row = FIELD_GET(AL_MC_ECC_UE_ADDR0_ROW, eccuaddr0);
+> +
+> +	bg = FIELD_GET(AL_MC_ECC_UE_ADDR1_BG, eccuaddr1);
+> +	bank = FIELD_GET(AL_MC_ECC_UE_ADDR1_BANK, eccuaddr1);
+> +	column = FIELD_GET(AL_MC_ECC_UE_ADDR1_COLUMN, eccuaddr1);
+> +
+> +	AL_MC_EDAC_MSG(msg, sizeof(msg), HW_EVENT_ERR_UNCORRECTED,
+> +		       rank, row, bg, bank, column,
+> +		       eccusyn0, eccusyn1, eccusyn2);
+> +
+> +	edac_mc_handle_error(HW_EVENT_ERR_UNCORRECTED, mci,
+> +			     ue_count, 0, 0, 0, 0, 0, -1, mci->ctl_name, msg);
+
+
+What happens when this code runs at the same time as the corrected error handler calling
+edac_mc_handler_error() with this same mci?
+
+This could happen on a second CPU, or on one cpu if the corrected handler is polled.
+
+edac_mc_handle_error() memset's the edac_raw_error_desc in mci, so it can't be called in
+parallel, or twice on the same cpu.
+
+I think you need an irqsave spinlock around the calls to edac_mc_handle_error().
+
+
+> +	return ue_count;
+> +}
+> +
+> +static void al_mc_edac_check(struct mem_ctl_info *mci)
+> +{
+> +	struct al_mc_edac *al_mc = mci->pvt_info;
+> +
+> +	if (al_mc->irq_ue <= 0)
+> +		al_mc_edac_handle_ue(mci);
+> +
+> +	if (al_mc->irq_ce <= 0)
+> +		al_mc_edac_handle_ce(mci);
+> +}
+> +
+> +static irqreturn_t al_mc_edac_irq_handler_ue(int irq, void *info)
+> +{
+> +	struct platform_device *pdev = info;
+> +	struct mem_ctl_info *mci = platform_get_drvdata(pdev);
+> +	int ue_count;
+> +
+> +	ue_count = al_mc_edac_handle_ue(mci);
+> +	if (ue_count)
+> +		return IRQ_HANDLED;
+> +	else
+> +		return IRQ_NONE;
+> +}
+
+As you don't use ue_count, wouldn't this be clearer:
+
+| if (al_mc_edac_handle_ue(mci))
+| 	return IRQ_HANDLED;
+| return IRQ_NONE;
+
+?
+
+
+> +static int al_mc_edac_probe(struct platform_device *pdev)
+> +{
+> +	struct resource *resource;
+> +	void __iomem *mmio_base;
+> +	unsigned int active_ranks;
+> +	struct edac_mc_layer layers[1];
+> +	struct mem_ctl_info *mci;
+> +	struct al_mc_edac *al_mc;
+> +	int ret;
+> +
+> +	resource = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+
+platform_get_resource() can fail, returning NULL.
+
+
+> +	mmio_base = devm_ioremap_resource(&pdev->dev, resource);
+> +	if (IS_ERR(mmio_base)) {
+> +		dev_err(&pdev->dev, "failed to ioremap memory (%ld)\n",
+> +			PTR_ERR(mmio_base));
+> +		return PTR_ERR(mmio_base);
+> +	}
+> +
+> +	active_ranks = al_mc_edac_get_active_ranks(mmio_base);
+> +	if (!active_ranks || active_ranks > AL_MC_MSTR_RANKS_MAX) {
+> +		dev_err(&pdev->dev,
+> +			"unsupported number of active ranks (%d)\n",
+> +			active_ranks);
+> +		return -ENODEV;
+> +	}
+> +
+> +	layers[0].type = EDAC_MC_LAYER_CHIP_SELECT;
+> +	layers[0].size = active_ranks;
+> +	layers[0].is_virt_csrow = false;
+> +	mci = edac_mc_alloc(0, ARRAY_SIZE(layers), layers,
+> +			    sizeof(struct al_mc_edac));
+> +	if (!mci)
+> +		return -ENOMEM;
+> +
+> +	platform_set_drvdata(pdev, mci);
+> +	al_mc = mci->pvt_info;
+> +
+> +	al_mc->mmio_base = mmio_base;
+> +
+> +	al_mc->irq_ue = of_irq_get_byname(pdev->dev.of_node, "ue");
+> +	if (al_mc->irq_ue <= 0)
+> +		dev_dbg(&pdev->dev,
+> +			"no irq defined for ue - falling back to polling\n");
+> +
+> +	al_mc->irq_ce = of_irq_get_byname(pdev->dev.of_node, "ce");
+> +	if (al_mc->irq_ce <= 0)
+> +		dev_dbg(&pdev->dev,
+> +			"no irq defined for ce - falling back to polling\n");
+> +
+> +	if (al_mc->irq_ue <= 0 || al_mc->irq_ce <= 0)
+> +		edac_op_state = EDAC_OPSTATE_POLL;
+> +	else
+> +		edac_op_state = EDAC_OPSTATE_INT;
+> +
+> +	mci->edac_check = al_mc_edac_check;
+> +	mci->mtype_cap = MEM_FLAG_DDR3 | MEM_FLAG_DDR4;
+> +	mci->edac_ctl_cap = EDAC_FLAG_NONE | EDAC_FLAG_SECDED;
+> +	mci->edac_cap = EDAC_FLAG_SECDED;
+> +	mci->mod_name = DRV_NAME;
+> +	mci->ctl_name = "al_mc";
+> +	mci->pdev = &pdev->dev;
+> +	mci->scrub_mode = al_mc_edac_get_scrub_mode(mmio_base);
+> +
+> +	ret = edac_mc_add_mc(mci);
+> +	if (ret < 0) {
+> +		dev_err(&pdev->dev,
+> +			"fail to add memory controller device (%d)\n",
+> +			ret);
+> +		goto err_add_mc;
+> +	}
+> +
+> +	if (al_mc->irq_ue > 0) {
+> +		ret = devm_request_irq(&pdev->dev,
+> +				       al_mc->irq_ue,
+> +				       al_mc_edac_irq_handler_ue,
+
+> +				       0,
+
+As you know when your device has triggered the interrupt from the error counter, could
+these be IRQF_SHARED?
+
+
+> +				       pdev->name,
+> +				       pdev);
 
 > +}
 > +
->  static bool skx_sad_decode(struct decoded_addr *res)
->  {
->  	struct skx_dev *d = list_first_entry(skx_edac_list, typeof(*d), list);
-> @@ -659,7 +693,7 @@ static int __init skx_init(void)
->  		}
->  	}
->  
-> -	skx_set_decode(skx_decode);
-> +	skx_set_decode(skx_decode, skx_show_retry_rd_err_log);
->  
->  	if (nvdimm_count && skx_adxl_get() == -ENODEV)
->  		skx_printk(KERN_NOTICE, "Only decoding DDR4 address!\n");
-> diff --git a/drivers/edac/skx_common.c b/drivers/edac/skx_common.c
-> index 58b8348d0f71..982154a899ce 100644
-> --- a/drivers/edac/skx_common.c
-> +++ b/drivers/edac/skx_common.c
-> @@ -37,6 +37,7 @@ static char *adxl_msg;
->  
->  static char skx_msg[MSG_SIZE];
->  static skx_decode_f skx_decode;
-> +static skx_show_retry_log_f skx_show_retry_rd_err_log;
->  static u64 skx_tolm, skx_tohm;
->  static LIST_HEAD(dev_edac_list);
->  
-> @@ -150,9 +151,10 @@ static bool skx_adxl_decode(struct decoded_addr *res)
->  	return true;
->  }
->  
-> -void skx_set_decode(skx_decode_f decode)
-> +void skx_set_decode(skx_decode_f decode, skx_show_retry_log_f show_retry_log)
->  {
->  	skx_decode = decode;
-> +	skx_show_retry_rd_err_log = show_retry_log;
->  }
->  
->  int skx_get_src_id(struct skx_dev *d, int off, u8 *id)
-> @@ -611,6 +613,9 @@ int skx_mce_check_error(struct notifier_block *nb, unsigned long val,
->  			   "%u APIC 0x%x\n", mce->cpuvendor, mce->cpuid,
->  			   mce->time, mce->socketid, mce->apicid);
->  
-> +	if (skx_show_retry_rd_err_log)
-> +		skx_show_retry_rd_err_log(&res);
+> +static int al_mc_edac_remove(struct platform_device *pdev)
+> +{
+> +	struct mem_ctl_info *mci = platform_get_drvdata(pdev);
 > +
->  	skx_mce_output_error(mci, mce, &res);
->  
->  	return NOTIFY_DONE;
-> diff --git a/drivers/edac/skx_common.h b/drivers/edac/skx_common.h
-> index 08cc971a50ea..25209321ea0d 100644
-> --- a/drivers/edac/skx_common.h
-> +++ b/drivers/edac/skx_common.h
-> @@ -64,6 +64,7 @@ struct skx_dev {
->  		u8 src_id, node_id;
->  		struct skx_channel {
->  			struct pci_dev	*cdev;
-> +			struct pci_dev	*edev;
->  			struct skx_dimm {
->  				u8 close_pg;
->  				u8 bank_xor_enable;
-> @@ -113,10 +114,11 @@ struct decoded_addr {
->  
->  typedef int (*get_dimm_config_f)(struct mem_ctl_info *mci);
->  typedef bool (*skx_decode_f)(struct decoded_addr *res);
-> +typedef void (*skx_show_retry_log_f)(struct decoded_addr *res);
->  
->  int __init skx_adxl_get(void);
->  void __exit skx_adxl_put(void);
-> -void skx_set_decode(skx_decode_f decode);
-> +void skx_set_decode(skx_decode_f decode, skx_show_retry_log_f show_retry_log);
->  
->  int skx_get_src_id(struct skx_dev *d, int off, u8 *id);
->  int skx_get_node_id(struct skx_dev *d, u8 *id);
+> +	edac_mc_del_mc(&pdev->dev);
+> +	edac_mc_free(mci);
+
+What stops your interrupt firing here? You've free'd the memory it uses.
+
+I think you need to devm_free_irq() the interrupts before you free the memory.
+
+
+> +	return 0;
+> +}
+
+
+> +MODULE_LICENSE("GPL v2");
+> +MODULE_AUTHOR("Talel Shenhar");
+> +MODULE_DESCRIPTION("Amazon's Annapurna Lab's Memory Controller EDAC Driver");
+
+(Kconfig says this is 'bool', so it can't be built as a module, having these is a bit odd)
 
 
 
 Thanks,
-Mauro
+
+James
