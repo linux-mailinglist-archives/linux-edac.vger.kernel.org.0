@@ -2,64 +2,86 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B0FDBB56A2
-	for <lists+linux-edac@lfdr.de>; Tue, 17 Sep 2019 22:05:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B0B87B5BC4
+	for <lists+linux-edac@lfdr.de>; Wed, 18 Sep 2019 08:19:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726201AbfIQUFF (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Tue, 17 Sep 2019 16:05:05 -0400
-Received: from mx1.redhat.com ([209.132.183.28]:56564 "EHLO mx1.redhat.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725991AbfIQUFE (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Tue, 17 Sep 2019 16:05:04 -0400
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mx1.redhat.com (Postfix) with ESMTPS id BB3A586663;
-        Tue, 17 Sep 2019 20:05:04 +0000 (UTC)
-Received: from napanee.usersys.redhat.com (dhcp-17-88.bos.redhat.com [10.18.17.88])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 9C1E45D6B2;
-        Tue, 17 Sep 2019 20:05:04 +0000 (UTC)
-Received: by napanee.usersys.redhat.com (Postfix, from userid 1000)
-        id 30F8DC0475; Tue, 17 Sep 2019 16:05:04 -0400 (EDT)
-Date:   Tue, 17 Sep 2019 16:05:04 -0400
-From:   Aristeu Rozanski <aris@redhat.com>
-To:     Tony Luck <tony.luck@intel.com>
-Cc:     Borislav Petkov <bp@alien8.de>, Qiuxu Zhuo <qiuxu.zhuo@intel.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-edac@vger.kernel.org
-Subject: Re: [PATCH 0/2] EDAC, skx: Provide more machine specific location
- detail
-Message-ID: <20190917200503.hwizqhlukpbsipom@redhat.com>
-References: <20190913221344.13055-1-tony.luck@intel.com>
+        id S1727000AbfIRGTn (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Wed, 18 Sep 2019 02:19:43 -0400
+Received: from ZXSHCAS2.zhaoxin.com ([203.148.12.82]:39983 "EHLO
+        ZXSHCAS2.zhaoxin.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1725842AbfIRGTm (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Wed, 18 Sep 2019 02:19:42 -0400
+Received: from zxbjmbx2.zhaoxin.com (10.29.252.164) by ZXSHCAS2.zhaoxin.com
+ (10.28.252.162) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1261.35; Wed, 18 Sep
+ 2019 14:19:38 +0800
+Received: from tony-HX002EA.zhaoxin.com (10.32.64.46) by zxbjmbx2.zhaoxin.com
+ (10.29.252.164) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1261.35; Wed, 18 Sep
+ 2019 14:19:36 +0800
+From:   Tony W Wang-oc <TonyWWang-oc@zhaoxin.com>
+To:     <tony.luck@intel.com>, <bp@alien8.de>, <tglx@linutronix.de>,
+        <mingo@redhat.com>, <hpa@zytor.com>, <x86@kernel.org>,
+        <linux-edac@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <yazen.ghannam@amd.com>, <vishal.l.verma@intel.com>,
+        <qiuxu.zhuo@intel.com>
+CC:     <DavidWang@zhaoxin.com>, <CooperYan@zhaoxin.com>,
+        <QiyuanWang@zhaoxin.com>, <HerryYang@zhaoxin.com>
+Subject: [PATCH v4 0/4] x86/mce: Add supports for Zhaoxin MCA
+Date:   Wed, 18 Sep 2019 14:19:29 +0800
+Message-ID: <1568787573-1297-1-git-send-email-TonyWWang-oc@zhaoxin.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190913221344.13055-1-tony.luck@intel.com>
-User-Agent: NeoMutt/20180716
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
-X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.26]); Tue, 17 Sep 2019 20:05:04 +0000 (UTC)
+Content-Type: text/plain
+X-Originating-IP: [10.32.64.46]
+X-ClientProxiedBy: zxbjmbx1.zhaoxin.com (10.29.252.163) To
+ zxbjmbx2.zhaoxin.com (10.29.252.164)
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-Hi Tony,
+Zhaoxin newer CPUs support MCE, CMCI and LMCE that compatible with
+Intel's "Machine-Check Architecture".
 
-On Fri, Sep 13, 2019 at 03:13:42PM -0700, Tony Luck wrote:
-> First patch refactors code so that second can work on systems
-> with and without the ACPI ADXL address translation code. Perhaps
-> has some value on its own as the code is, IMHO, a little cleaner.
-> 
-> Second is in RFC state. Im looking for input on whether to just print
-> the extra information to the console log (as the patch does now) or
-> whether to tag it onto the long string that we push though the EDAC
-> reporting path.
+To enable the supports of Linux kernel to Zhaoxin's MCA, add
+specific patches for Zhaoxin's MCE, CMCI and LMCE. patches about
+Zhaoxin's CMCI, LMCE use 3 functions in mce/intel.c, so make these
+functions non-static.
 
-I believe it'll be more interesting for users that only care about error
-counts to keep this out of the console. For those who care about the extra
-information, having it available with rasdaemon or equivalent will be
-easier than have to look at both stored errors and kernel logs.
+Some Zhaoxin's CPUs have MCA bank 8, that only has one error called SVAD
+(System View Address Decoder) which be controlled by IA32_MC8.CTL.0.
+If enabled, the prefetch on these CPUs will cause SVAD machine check
+exception when virtual machine startup and cause system panic. Add a
+quirk for these Zhaoxin CPUs MCA bank 8.
+
+v3->v4:
+ - remove redundant if-case test (patch 4/4)
+
+v2->v3:
+ - Make ifelse-case to switch-case (patch 1/4)
+ - Simplify Zhaoxin CPU FMS checking (patch 1/4, 3/4)
+ - Revert 1 unused function intel_ppin_init() (patch 2/4)
+ - Rework mce_zhaoxin_feature_init() as static (patch 3/4)
+ - Rework comment about Zhaoxin MCA SVAD and CMCI (patch 3/4)
+ - Rework mce_zhaoxin_feature_clear() as static (patch 4/4)
+ - Add comment and change coding style (patch 4/4)
+
+v1->v2:
+ - Fix redefinition of "mce_zhaoxin_feature_init" (patch 3/4)
+ - Fix redefinition of "mce_zhaoxin_feature_clear" (patch 4/4)
+
+Tony W Wang-oc (4):
+  x86/mce: Add Zhaoxin MCE support
+  x86/mce: Make 3 functions non-static
+  x86/mce: Add Zhaoxin CMCI support
+  x86/mce: Add Zhaoxin LMCE support
+
+ arch/x86/kernel/cpu/mce/core.c     | 83 ++++++++++++++++++++++++++++++++------
+ arch/x86/kernel/cpu/mce/intel.c    | 11 +++--
+ arch/x86/kernel/cpu/mce/internal.h |  6 +++
+ 3 files changed, 84 insertions(+), 16 deletions(-)
 
 -- 
-Aristeu
+2.7.4
 
