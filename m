@@ -2,383 +2,153 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CB3B0B69D3
-	for <lists+linux-edac@lfdr.de>; Wed, 18 Sep 2019 19:47:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D3819B7330
+	for <lists+linux-edac@lfdr.de>; Thu, 19 Sep 2019 08:34:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728770AbfIRRrj (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Wed, 18 Sep 2019 13:47:39 -0400
-Received: from foss.arm.com ([217.140.110.172]:45954 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727000AbfIRRrj (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Wed, 18 Sep 2019 13:47:39 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0E9921000;
-        Wed, 18 Sep 2019 10:47:38 -0700 (PDT)
-Received: from [10.1.196.105] (eglon.cambridge.arm.com [10.1.196.105])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 22B8A3F59C;
-        Wed, 18 Sep 2019 10:47:32 -0700 (PDT)
-Subject: Re: [PATCH v2 2/2] EDAC: al-mc-edac: Introduce Amazon's Annapurna
- Labs Memory Controller EDAC
-To:     Talel Shenhar <talel@amazon.com>
-Cc:     robh+dt@kernel.org, mark.rutland@arm.com, bp@alien8.de,
-        mchehab@kernel.org, davem@davemloft.net,
-        gregkh@linuxfoundation.org, nicolas.ferre@microchip.com,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-edac@vger.kernel.org, dwmw@amazon.co.uk,
-        benh@kernel.crashing.org, hhhawa@amazon.com, ronenk@amazon.com,
-        jonnyc@amazon.com, hanochu@amazon.com, amirkl@amazon.com,
-        barakw@amazon.com
-References: <1568529835-15319-1-git-send-email-talel@amazon.com>
- <1568529835-15319-3-git-send-email-talel@amazon.com>
-From:   James Morse <james.morse@arm.com>
-Message-ID: <4f6cd17c-c56f-b9d2-d6e0-1711de415f47@arm.com>
-Date:   Wed, 18 Sep 2019 18:47:28 +0100
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+        id S2388162AbfISGd7 (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Thu, 19 Sep 2019 02:33:59 -0400
+Received: from mx0b-0016f401.pphosted.com ([67.231.156.173]:55672 "EHLO
+        mx0b-0016f401.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S2387712AbfISGd7 (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>);
+        Thu, 19 Sep 2019 02:33:59 -0400
+Received: from pps.filterd (m0045851.ppops.net [127.0.0.1])
+        by mx0b-0016f401.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id x8J6UCLK028225;
+        Wed, 18 Sep 2019 23:33:46 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
+ subject : date : message-id : references : in-reply-to : content-type :
+ content-id : content-transfer-encoding : mime-version; s=pfpt0818;
+ bh=4mqZp6U+gujPwvNE+V7xqd820tX8bgcDltznrvgn9Xk=;
+ b=VXzNLqdFPD6FDI74lt0LNnURm3rCsoyGch3V2By9He2O09MyRkDCpe/egeoMKpBVJaYY
+ rTHdLSADVlIJhFyXc7/GLIphFEq2ZbKEgTeJAnsNNiHH8ChkWs+iu1YhX+34gSeJQnvz
+ 6+cE1wu8YA+2uh8StYKNExzlQQSA066chLv0O9iNGJ24wgY6cSkqiptT2nMIgdBFKVKm
+ dvmG4kMiWTBu5VHP/IFrQCMlFBYYkPDqu+7zTL0zGHBnAytXnDXC7z56w9t+XcO3KJ1y
+ wcHAQ/tq8uu1HfKoen1O7X+rCMf2DEQRDsxNFD/abRc6tFtx5NHUFX0NvX9Z0W7kEMDI qA== 
+Received: from sc-exch04.marvell.com ([199.233.58.184])
+        by mx0b-0016f401.pphosted.com with ESMTP id 2v3vcfhkm4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
+        Wed, 18 Sep 2019 23:33:45 -0700
+Received: from SC-EXCH01.marvell.com (10.93.176.81) by SC-EXCH04.marvell.com
+ (10.93.176.84) with Microsoft SMTP Server (TLS) id 15.0.1367.3; Wed, 18 Sep
+ 2019 23:33:44 -0700
+Received: from NAM05-BY2-obe.outbound.protection.outlook.com (104.47.50.55) by
+ SC-EXCH01.marvell.com (10.93.176.81) with Microsoft SMTP Server (TLS) id
+ 15.0.1367.3 via Frontend Transport; Wed, 18 Sep 2019 23:33:43 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=O4TFW00iXXjnAU5uCJYbHYT4dllHgsd/C5HTzFrO44g9D5SzaB6udfM1yZ6qqrkR548Zokn+0wr5/OUH8tx86svYHKivBtuup6KOlIXO/C65Oj3wD7aWnELCPBN85dokxjfLT237gjYN8CmtOXNUy+FlZ0BVgXMfj3jdqOMNbd6YXvRiWv3ePux5DvjTIT4mvI7GSMRXA68PupyxbQVuqe3bE3TGpPsnUaR4tSDFoYB/Ay5wYaZHz2YxYe8gT9kJb1yJY5+IEHiIFlFdDkvGHMnc86Ai8VRccYKhfP29cj5PLONnevDWHMBbHkqnIxT0S0ZMr19Cs3Kv9UX96DH6Jg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=4mqZp6U+gujPwvNE+V7xqd820tX8bgcDltznrvgn9Xk=;
+ b=T+8DGSXBmJdd2LncWlWwiZ8/CVali6ltO2zNVchgCUE1xk3ModD2ceRsFulECtBTw7v2ZYLfp/C197oq+/opF2USoG/2K2WPw5/cQf4Jyqlbb0JKipuGx04n/cl7vjGWCo+zdwNrjlc0mL7Ol3WPpJWrIgActLIiiyJ0N9gNyOxLQHTOhI+xRK3uFadcGClWGp8qmXcMa8yK5l+z+69SilSliaPV1lJzwlKhqNN9t+nBeCBegifEHlHr9saupxPBd4cvLzEQ9UXxoOQUvI7UOjH23MhNxeJ9YsFopQWTJeHodCOzx/qCjai6FBVn/jlUE++hiQ5A4Ub8/fcBecvpMA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=marvell.com; dmarc=pass action=none header.from=marvell.com;
+ dkim=pass header.d=marvell.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=marvell.onmicrosoft.com; s=selector2-marvell-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=4mqZp6U+gujPwvNE+V7xqd820tX8bgcDltznrvgn9Xk=;
+ b=K8k+CKuyPezVc/oiNDiUaDeXhDBR6yuldiayfqfLKBsAHpY7dTuYtZ4ERr3fHEgP9X/v5qaAgEG+tLBxzkXKn4RL+MRUA2AByANSk9NMMxN3z+xKCNyxDJPbUzeXrKmVrEkwcDLKSzznnFF/43iuJQc6M4GP2AzV3hAyF1rS0Uw=
+Received: from MN2PR18MB3408.namprd18.prod.outlook.com (10.255.238.217) by
+ MN2PR18MB3328.namprd18.prod.outlook.com (10.255.238.17) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2284.20; Thu, 19 Sep 2019 06:33:42 +0000
+Received: from MN2PR18MB3408.namprd18.prod.outlook.com
+ ([fe80::8162:62e8:aeeb:ec7b]) by MN2PR18MB3408.namprd18.prod.outlook.com
+ ([fe80::8162:62e8:aeeb:ec7b%3]) with mapi id 15.20.2263.023; Thu, 19 Sep 2019
+ 06:33:42 +0000
+From:   Robert Richter <rrichter@marvell.com>
+To:     Hanna Hawa <hhhawa@amazon.com>
+CC:     "bp@alien8.de" <bp@alien8.de>,
+        "mchehab@kernel.org" <mchehab@kernel.org>,
+        "james.morse@arm.com" <james.morse@arm.com>,
+        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "dwmw@amazon.co.uk" <dwmw@amazon.co.uk>,
+        "benh@amazon.com" <benh@amazon.com>,
+        "ronenk@amazon.com" <ronenk@amazon.com>,
+        "talel@amazon.com" <talel@amazon.com>,
+        "jonnyc@amazon.com" <jonnyc@amazon.com>,
+        "hanochu@amazon.com" <hanochu@amazon.com>
+Subject: Re: [PATCH v2 1/2] edac: Add an API for edac device to report for
+ multiple errors
+Thread-Topic: [PATCH v2 1/2] edac: Add an API for edac device to report for
+ multiple errors
+Thread-Index: AQHVbrQuVYp3+gdDsUucx/uYgcDYxA==
+Date:   Thu, 19 Sep 2019 06:33:42 +0000
+Message-ID: <20190919063334.x2rfk33swyjqur3q@rric.localdomain>
+References: <20190912145305.21008-1-hhhawa@amazon.com>
+ <20190912145305.21008-2-hhhawa@amazon.com>
+In-Reply-To: <20190912145305.21008-2-hhhawa@amazon.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-clientproxiedby: HE1PR05CA0220.eurprd05.prod.outlook.com
+ (2603:10a6:3:fa::20) To MN2PR18MB3408.namprd18.prod.outlook.com
+ (2603:10b6:208:16c::25)
+x-ms-exchange-messagesentrepresentingtype: 1
+x-originating-ip: [31.208.96.227]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 9d2a81a4-15fe-4833-d7be-08d73ccb509b
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600167)(711020)(4605104)(1401327)(2017052603328)(7193020);SRVR:MN2PR18MB3328;
+x-ms-traffictypediagnostic: MN2PR18MB3328:
+x-microsoft-antispam-prvs: <MN2PR18MB3328E7B8FA7AA40D4E9D2408D9890@MN2PR18MB3328.namprd18.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:7219;
+x-forefront-prvs: 016572D96D
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(346002)(136003)(39860400002)(366004)(396003)(376002)(189003)(199004)(86362001)(6436002)(7416002)(9686003)(66476007)(14454004)(486006)(6512007)(66556008)(6486002)(52116002)(256004)(76176011)(66446008)(81166006)(81156014)(66946007)(2906002)(64756008)(229853002)(478600001)(4744005)(53546011)(99286004)(386003)(6246003)(1076003)(6506007)(8936002)(4326008)(26005)(7736002)(305945005)(66066001)(11346002)(476003)(25786009)(102836004)(5660300002)(3846002)(6116002)(186003)(316002)(446003)(6916009)(71200400001)(71190400001)(54906003)(8676002);DIR:OUT;SFP:1101;SCL:1;SRVR:MN2PR18MB3328;H:MN2PR18MB3408.namprd18.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
+received-spf: None (protection.outlook.com: marvell.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam-message-info: TdscTdLt6jhcQAVrBJ8O9K/x340FNpdFm+0+yiImJCEoxfAUuiCeKhc/eKjdeLiG93NQZrS5fDzMeUbq5+6j7R/lH82PgLGUw+0rQuR5HwG0jWDQeMv9Uvhx9cQY/4O1PpKJmMYX8BNdb7VzzfaK3elJ+Tm72epBqkdSs05oPqFmdpqtQXminuoQnDD+L/r67TwzqidFrBSsoli6Pmhdw45w39Vc3aZDmg92gT5C5FE/HoAH40Zo3peWBL+2FQ0Jfkt1+uF0MPrRY2u/L4KSCQ/1fAPuWefVQ1Pxtz57zBFJ0CaN7FvuLhr7cOUXWo2ekcOeKWlemLmX/UmpkVUz6gqkjw3xgj0KPFIqsTuo9XRLnRjq+lWbd5pTIcR/B+9K7Ktoh0nRNwK5tMvhn4+2iErXeSrrTR+iQwNMp06ZVbo=
+x-ms-exchange-transport-forked: True
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <149A30E28A77A04BB6CEC51434FF7CB6@namprd18.prod.outlook.com>
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-In-Reply-To: <1568529835-15319-3-git-send-email-talel@amazon.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-GB
-Content-Transfer-Encoding: 7bit
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9d2a81a4-15fe-4833-d7be-08d73ccb509b
+X-MS-Exchange-CrossTenant-originalarrivaltime: 19 Sep 2019 06:33:42.6181
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 70e1fb47-1155-421d-87fc-2e58f638b6e0
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 7YR87Oy8nqytHLLqRH1m2Clm7wbSrYijEUpCqO+Y+h1HzkeIuTsyi/4h2QQyKEYyDHnnWTqQTBrWiEZc3b5hiQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR18MB3328
+X-OriginatorOrg: marvell.com
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.70,1.0.8
+ definitions=2019-09-19_02:2019-09-18,2019-09-19 signatures=0
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-Hi Talel,
-
-On 15/09/2019 07:43, Talel Shenhar wrote:
-> The Amazon's Annapurna Labs Memory Controller EDAC supports ECC capability
-> for error detection and correction (Single bit error correction, Double
-> detection). This driver introduces EDAC driver for that capability.
-
-Is there any documentation for this memory controller?
-
-
-> diff --git a/drivers/edac/al_mc_edac.c b/drivers/edac/al_mc_edac.c
-> new file mode 100644
-> index 0000000..f9763d4
-> --- /dev/null
-> +++ b/drivers/edac/al_mc_edac.c
-> @@ -0,0 +1,382 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Copyright 2019 Amazon.com, Inc. or its affiliates. All Rights Reserved.
-> + */
-> +#include <linux/bitfield.h>
-
-#include <linux/bitops.h> for hweight_long()
-
-> +#include <linux/edac.h>
-> +#include <linux/of_irq.h>
-
-#include <linux/platform_device.h> for platform_get_resource()
-
-> +#include "edac_module.h"
-
-> +/* Registers Values */
-> +#define AL_MC_MSTR_DEV_CFG_X4	0
-> +#define AL_MC_MSTR_DEV_CFG_X8	1
-> +#define AL_MC_MSTR_DEV_CFG_X16	2
-> +#define AL_MC_MSTR_DEV_CFG_X32	3
-
-> +#define AL_MC_MSTR_RANKS_MAX 4
-
-Is this a fixed property of the memory controller, or is it a limit imposed from somewhere
-else. (Does it need to come from the DT?)
-
-
-> +#define AL_MC_MSTR_DATA_BUS_WIDTH_X64	0
+On 12.09.19 15:53:04, Hanna Hawa wrote:
+> Add an API for EDAC device to report multiple errors with same type.
+>=20
+> Signed-off-by: Hanna Hawa <hhhawa@amazon.com>
+> ---
+>  drivers/edac/edac_device.c | 91 ++++++++++++++++++++++++++++++++++++++
+>  drivers/edac/edac_device.h | 40 +++++++++++++++++
+>  2 files changed, 131 insertions(+)
+>=20
+> diff --git a/drivers/edac/edac_device.c b/drivers/edac/edac_device.c
+> index 65cf2b9355c4..78ac44103acc 100644
+> --- a/drivers/edac/edac_device.c
+> +++ b/drivers/edac/edac_device.c
+> @@ -643,3 +643,94 @@ void edac_device_handle_ue(struct edac_device_ctl_in=
+fo *edac_dev,
+>  			block ? block->name : "N/A", msg);
+>  }
+>  EXPORT_SYMBOL_GPL(edac_device_handle_ue);
 > +
-> +#define DRV_NAME "al_mc_edac"
-> +#define AL_MC_EDAC_MSG_MAX 256
-> +#define AL_MC_EDAC_MSG(message, buffer_size, type,			\
-> +		       rank, row, bg, bank, column, syn0, syn1, syn2)	\
-> +	snprintf(message, buffer_size,					\
-> +		 "%s rank=0x%x row=0x%x bg=0x%x bank=0x%x col=0x%x "	\
-> +		 "syn0: 0x%x syn1: 0x%x syn2: 0x%x",			\
-> +		 type == HW_EVENT_ERR_UNCORRECTED ? "UE" : "CE",	\
-> +		 rank, row, bg, bank, column, syn0, syn1, syn2)
-> +
-> +struct al_mc_edac {
-> +	void __iomem *mmio_base;
-> +	int irq_ce;
-> +	int irq_ue;
-> +};
-> +
-> +static int al_mc_edac_handle_ce(struct mem_ctl_info *mci)
+> +void __edac_device_handle_ce(struct edac_device_ctl_info *edac_dev,
+> +			     unsigned int count, int inst_nr, int block_nr,
+> +			     const char *msg)
 > +{
-> +	struct al_mc_edac *al_mc = mci->pvt_info;
-> +	u32 eccerrcnt;
-> +	u16 ce_count;
-> +	u32 ecccaddr0;
-> +	u32 ecccaddr1;
-> +	u32 ecccsyn0;
-> +	u32 ecccsyn1;
-> +	u32 ecccsyn2;
-> +	u8 rank;
-> +	u32 row;
-> +	u8 bg;
-> +	u8 bank;
-> +	u16 column;
-> +	char msg[AL_MC_EDAC_MSG_MAX];
 
-(Some of these could go on the same line, same with UE below)
-
-
-> +	eccerrcnt = readl_relaxed(al_mc->mmio_base + AL_MC_ECC_ERR_COUNT);
-> +	ce_count = FIELD_GET(AL_MC_ECC_ERR_COUNT_CE, eccerrcnt);
-> +	if (!ce_count)
-> +		return 0;
-> +
-> +	ecccaddr0 = readl_relaxed(al_mc->mmio_base + AL_MC_ECC_CE_ADDR0);
-> +	ecccaddr1 = readl_relaxed(al_mc->mmio_base + AL_MC_ECC_CE_ADDR1);
-> +	ecccsyn0 = readl_relaxed(al_mc->mmio_base + AL_MC_ECC_UE_SYND0);
-> +	ecccsyn1 = readl_relaxed(al_mc->mmio_base + AL_MC_ECC_UE_SYND1);
-> +	ecccsyn2 = readl_relaxed(al_mc->mmio_base + AL_MC_ECC_UE_SYND2);
-> +
-> +	writel(AL_MC_ECC_CLEAR_CE_COUNT | AL_MC_ECC_CLEAR_CE_ERR,
-> +	       al_mc->mmio_base + AL_MC_ECC_CLEAR);
-> +
-> +	dev_dbg(mci->pdev, "eccuaddr0=0x%08x eccuaddr1=0x%08x\n",
-> +		ecccaddr0, ecccaddr1);
-> +
-> +	rank = FIELD_GET(AL_MC_ECC_CE_ADDR0_RANK, ecccaddr0);
-> +	row = FIELD_GET(AL_MC_ECC_CE_ADDR0_ROW, ecccaddr0);
-> +
-> +	bg = FIELD_GET(AL_MC_ECC_CE_ADDR1_BG, ecccaddr1);
-> +	bank = FIELD_GET(AL_MC_ECC_CE_ADDR1_BANK, ecccaddr1);
-> +	column = FIELD_GET(AL_MC_ECC_CE_ADDR1_COLUMN, ecccaddr1);
-> +
-> +	AL_MC_EDAC_MSG(msg, sizeof(msg), HW_EVENT_ERR_CORRECTED,
-> +		       rank, row, bg, bank, column,
-> +		       ecccsyn0, ecccsyn1, ecccsyn2);
-> +
-> +	edac_mc_handle_error(HW_EVENT_ERR_CORRECTED, mci,
-> +			     ce_count, 0, 0, 0, 0, 0, -1, mci->ctl_name, msg);
-
-You used active_ranks as the layer size in al_mc_edac_probe(). Can't you supply the rank here?
-
-(If its not useful, why is it setup like this in al_mc_edac_probe()?)
-
-(applies to UE below too)
-
-
-> +
-> +	return ce_count;
-> +}
-> +
-> +static int al_mc_edac_handle_ue(struct mem_ctl_info *mci)
-> +{
-> +	struct al_mc_edac *al_mc = mci->pvt_info;
-> +	u32 eccerrcnt;
-> +	u16 ue_count;
-> +	u32 eccuaddr0;
-> +	u32 eccuaddr1;
-> +	u32 eccusyn0;
-> +	u32 eccusyn1;
-> +	u32 eccusyn2;
-> +	u8 rank;
-> +	u32 row;
-> +	u8 bg;
-> +	u8 bank;
-> +	u16 column;
-> +	char msg[AL_MC_EDAC_MSG_MAX];
-> +
-> +	eccerrcnt = readl_relaxed(al_mc->mmio_base + AL_MC_ECC_ERR_COUNT);
-> +	ue_count = FIELD_GET(AL_MC_ECC_ERR_COUNT_UE, eccerrcnt);
-> +	if (!ue_count)
-> +		return 0;
-> +
-> +	eccuaddr0 = readl_relaxed(al_mc->mmio_base + AL_MC_ECC_UE_ADDR0);
-> +	eccuaddr1 = readl_relaxed(al_mc->mmio_base + AL_MC_ECC_UE_ADDR1);
-> +	eccusyn0 = readl_relaxed(al_mc->mmio_base + AL_MC_ECC_UE_SYND0);
-> +	eccusyn1 = readl_relaxed(al_mc->mmio_base + AL_MC_ECC_UE_SYND1);
-> +	eccusyn2 = readl_relaxed(al_mc->mmio_base + AL_MC_ECC_UE_SYND2);
-> +
-> +	writel(AL_MC_ECC_CLEAR_UE_COUNT | AL_MC_ECC_CLEAR_UE_ERR,
-> +	       al_mc->mmio_base + AL_MC_ECC_CLEAR);
-> +
-> +	dev_dbg(mci->pdev, "eccuaddr0=0x%08x eccuaddr1=0x%08x\n",
-> +		eccuaddr0, eccuaddr1);
-> +
-> +	rank = FIELD_GET(AL_MC_ECC_UE_ADDR0_RANK, eccuaddr0);
-> +	row = FIELD_GET(AL_MC_ECC_UE_ADDR0_ROW, eccuaddr0);
-> +
-> +	bg = FIELD_GET(AL_MC_ECC_UE_ADDR1_BG, eccuaddr1);
-> +	bank = FIELD_GET(AL_MC_ECC_UE_ADDR1_BANK, eccuaddr1);
-> +	column = FIELD_GET(AL_MC_ECC_UE_ADDR1_COLUMN, eccuaddr1);
-> +
-> +	AL_MC_EDAC_MSG(msg, sizeof(msg), HW_EVENT_ERR_UNCORRECTED,
-> +		       rank, row, bg, bank, column,
-> +		       eccusyn0, eccusyn1, eccusyn2);
-> +
-> +	edac_mc_handle_error(HW_EVENT_ERR_UNCORRECTED, mci,
-> +			     ue_count, 0, 0, 0, 0, 0, -1, mci->ctl_name, msg);
-
-
-What happens when this code runs at the same time as the corrected error handler calling
-edac_mc_handler_error() with this same mci?
-
-This could happen on a second CPU, or on one cpu if the corrected handler is polled.
-
-edac_mc_handle_error() memset's the edac_raw_error_desc in mci, so it can't be called in
-parallel, or twice on the same cpu.
-
-I think you need an irqsave spinlock around the calls to edac_mc_handle_error().
-
-
-> +	return ue_count;
-> +}
-> +
-> +static void al_mc_edac_check(struct mem_ctl_info *mci)
-> +{
-> +	struct al_mc_edac *al_mc = mci->pvt_info;
-> +
-> +	if (al_mc->irq_ue <= 0)
-> +		al_mc_edac_handle_ue(mci);
-> +
-> +	if (al_mc->irq_ce <= 0)
-> +		al_mc_edac_handle_ce(mci);
-> +}
-> +
-> +static irqreturn_t al_mc_edac_irq_handler_ue(int irq, void *info)
-> +{
-> +	struct platform_device *pdev = info;
-> +	struct mem_ctl_info *mci = platform_get_drvdata(pdev);
-> +	int ue_count;
-> +
-> +	ue_count = al_mc_edac_handle_ue(mci);
-> +	if (ue_count)
-> +		return IRQ_HANDLED;
-> +	else
-> +		return IRQ_NONE;
-> +}
-
-As you don't use ue_count, wouldn't this be clearer:
-
-| if (al_mc_edac_handle_ue(mci))
-| 	return IRQ_HANDLED;
-| return IRQ_NONE;
-
-?
-
-
-> +static int al_mc_edac_probe(struct platform_device *pdev)
-> +{
-> +	struct resource *resource;
-> +	void __iomem *mmio_base;
-> +	unsigned int active_ranks;
-> +	struct edac_mc_layer layers[1];
-> +	struct mem_ctl_info *mci;
-> +	struct al_mc_edac *al_mc;
-> +	int ret;
-> +
-> +	resource = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-
-platform_get_resource() can fail, returning NULL.
-
-
-> +	mmio_base = devm_ioremap_resource(&pdev->dev, resource);
-> +	if (IS_ERR(mmio_base)) {
-> +		dev_err(&pdev->dev, "failed to ioremap memory (%ld)\n",
-> +			PTR_ERR(mmio_base));
-> +		return PTR_ERR(mmio_base);
-> +	}
-> +
-> +	active_ranks = al_mc_edac_get_active_ranks(mmio_base);
-> +	if (!active_ranks || active_ranks > AL_MC_MSTR_RANKS_MAX) {
-> +		dev_err(&pdev->dev,
-> +			"unsupported number of active ranks (%d)\n",
-> +			active_ranks);
-> +		return -ENODEV;
-> +	}
-> +
-> +	layers[0].type = EDAC_MC_LAYER_CHIP_SELECT;
-> +	layers[0].size = active_ranks;
-> +	layers[0].is_virt_csrow = false;
-> +	mci = edac_mc_alloc(0, ARRAY_SIZE(layers), layers,
-> +			    sizeof(struct al_mc_edac));
-> +	if (!mci)
-> +		return -ENOMEM;
-> +
-> +	platform_set_drvdata(pdev, mci);
-> +	al_mc = mci->pvt_info;
-> +
-> +	al_mc->mmio_base = mmio_base;
-> +
-> +	al_mc->irq_ue = of_irq_get_byname(pdev->dev.of_node, "ue");
-> +	if (al_mc->irq_ue <= 0)
-> +		dev_dbg(&pdev->dev,
-> +			"no irq defined for ue - falling back to polling\n");
-> +
-> +	al_mc->irq_ce = of_irq_get_byname(pdev->dev.of_node, "ce");
-> +	if (al_mc->irq_ce <= 0)
-> +		dev_dbg(&pdev->dev,
-> +			"no irq defined for ce - falling back to polling\n");
-> +
-> +	if (al_mc->irq_ue <= 0 || al_mc->irq_ce <= 0)
-> +		edac_op_state = EDAC_OPSTATE_POLL;
-> +	else
-> +		edac_op_state = EDAC_OPSTATE_INT;
-> +
-> +	mci->edac_check = al_mc_edac_check;
-> +	mci->mtype_cap = MEM_FLAG_DDR3 | MEM_FLAG_DDR4;
-> +	mci->edac_ctl_cap = EDAC_FLAG_NONE | EDAC_FLAG_SECDED;
-> +	mci->edac_cap = EDAC_FLAG_SECDED;
-> +	mci->mod_name = DRV_NAME;
-> +	mci->ctl_name = "al_mc";
-> +	mci->pdev = &pdev->dev;
-> +	mci->scrub_mode = al_mc_edac_get_scrub_mode(mmio_base);
-> +
-> +	ret = edac_mc_add_mc(mci);
-> +	if (ret < 0) {
-> +		dev_err(&pdev->dev,
-> +			"fail to add memory controller device (%d)\n",
-> +			ret);
-> +		goto err_add_mc;
-> +	}
-> +
-> +	if (al_mc->irq_ue > 0) {
-> +		ret = devm_request_irq(&pdev->dev,
-> +				       al_mc->irq_ue,
-> +				       al_mc_edac_irq_handler_ue,
-
-> +				       0,
-
-As you know when your device has triggered the interrupt from the error counter, could
-these be IRQF_SHARED?
-
-
-> +				       pdev->name,
-> +				       pdev);
-
-> +}
-> +
-> +static int al_mc_edac_remove(struct platform_device *pdev)
-> +{
-> +	struct mem_ctl_info *mci = platform_get_drvdata(pdev);
-> +
-> +	edac_mc_del_mc(&pdev->dev);
-> +	edac_mc_free(mci);
-
-What stops your interrupt firing here? You've free'd the memory it uses.
-
-I think you need to devm_free_irq() the interrupts before you free the memory.
-
-
-> +	return 0;
-> +}
-
-
-> +MODULE_LICENSE("GPL v2");
-> +MODULE_AUTHOR("Talel Shenhar");
-> +MODULE_DESCRIPTION("Amazon's Annapurna Lab's Memory Controller EDAC Driver");
-
-(Kconfig says this is 'bool', so it can't be built as a module, having these is a bit odd)
-
-
+Please do not add a copy here, instead modify the existing function
+and share the code with both, old and new functions.
 
 Thanks,
 
-James
+-Robert
