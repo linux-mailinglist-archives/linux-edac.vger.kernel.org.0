@@ -2,38 +2,37 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 50294B9EE3
-	for <lists+linux-edac@lfdr.de>; Sat, 21 Sep 2019 18:47:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CD1CB9F0A
+	for <lists+linux-edac@lfdr.de>; Sat, 21 Sep 2019 19:03:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2407784AbfIUQrY (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Sat, 21 Sep 2019 12:47:24 -0400
-Received: from mout.web.de ([212.227.17.11]:40061 "EHLO mout.web.de"
+        id S2406216AbfIURDQ (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Sat, 21 Sep 2019 13:03:16 -0400
+Received: from mout.web.de ([212.227.17.12]:59193 "EHLO mout.web.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2407736AbfIUQrY (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Sat, 21 Sep 2019 12:47:24 -0400
+        id S2406192AbfIURDP (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Sat, 21 Sep 2019 13:03:15 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=web.de;
-        s=dbaedf251592; t=1569084401;
-        bh=VUVk13mdIUuMlRF55b+yf9VzEN/rt7FIag9gQ7yHvvQ=;
-        h=X-UI-Sender-Class:To:From:Subject:Cc:Date;
-        b=a7a+cked8wXeIf3EPnXl7PvX4eEeRHzUb6L1srpbb7MlvpLINB02aK4DwQHarnvuB
-         UyNVj/05felNEjC9/2z23aOMVoVRi1QR5SZAA+uplssDaHeU4xP4jLTu3aStBt/09p
-         EzBk1uxjkjzrvxjmeT03Do7QXarQwrZPdncGHfac=
+        s=dbaedf251592; t=1569085374;
+        bh=zQJSoK5O046vNw0Xn8o1QL7Tl7TkCkMseqOpAr0NV20=;
+        h=X-UI-Sender-Class:To:Cc:From:Subject:Date;
+        b=YgeiR8JMJ3VwxfXHlp33Ssyn/IWwy1MEQEWzNvJDbO6BqFxFNvz++EQ1XMTh6T4IN
+         q6SrmI6fHIm1e57LS2gUEgEgw61iPtErKnGDpwIMZ8OO4mj5HdcP0jK8gMHEIhpLMH
+         o5XYS51BeZEG+smcxXXc8lL/7QVtIA7qRM2EHRDE=
 X-UI-Sender-Class: c548c8c5-30a9-4db5-a2e7-cb6cb037b8f9
-Received: from [192.168.1.2] ([2.244.64.44]) by smtp.web.de (mrweb101
- [213.165.67.124]) with ESMTPSA (Nemesis) id 0MHowb-1iD6Vg1oQ1-003hfK; Sat, 21
- Sep 2019 18:46:41 +0200
-To:     linux-edac@vger.kernel.org, linux-aspeed@lists.ozlabs.org,
-        linux-arm-kernel@lists.infradead.org,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Borislav Petkov <bp@alien8.de>,
+Received: from [192.168.1.2] ([2.244.64.44]) by smtp.web.de (mrweb103
+ [213.165.67.124]) with ESMTPSA (Nemesis) id 0LmuAa-1hi9Ba0s7I-00h3e0; Sat, 21
+ Sep 2019 19:02:54 +0200
+To:     linux-edac@vger.kernel.org, Borislav Petkov <bp@alien8.de>,
         James Morse <james.morse@arm.com>,
-        Joel Stanley <joel@jms.id.au>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
         Robert Richter <rrichter@marvell.com>,
-        Stefan Schaeckeler <sschaeck@cisco.com>,
+        Shravan Kumar Ramani <sramani@mellanox.com>,
         Tony Luck <tony.luck@intel.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        kernel-janitors@vger.kernel.org
 From:   Markus Elfring <Markus.Elfring@web.de>
-Subject: [PATCH] EDAC: Aspeed: Use devm_platform_ioremap_resource() in
- aspeed_probe()
+Subject: [PATCH] EDAC: BlueField: Use devm_platform_ioremap_resource() in
+ bluefield_edac_mc_probe()
 Autocrypt: addr=Markus.Elfring@web.de; prefer-encrypt=mutual; keydata=
  mQINBFg2+xABEADBJW2hoUoFXVFWTeKbqqif8VjszdMkriilx90WB5c0ddWQX14h6w5bT/A8
  +v43YoGpDNyhgA0w9CEhuwfZrE91GocMtjLO67TAc2i2nxMc/FJRDI0OemO4VJ9RwID6ltwt
@@ -77,47 +76,45 @@ Autocrypt: addr=Markus.Elfring@web.de; prefer-encrypt=mutual; keydata=
  Z/wsLiWTgKlih2QYULvW61XU+mWsK8+ZlYUrRMpkauN4CJ5yTpvp+Orcz5KixHQmc5tbkLWf
  x0n1QFc1xxJhbzN+r9djSGGN/5IBDfUqSANC8cWzHpWaHmSuU3JSAMB/N+yQjIad2ztTckZY
  pwT6oxng29LzZspTYUEzMz3wK2jQHw+U66qBFk8whA7B2uAU1QdGyPgahLYSOa4XAEGb6wbI FEE=
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        kernel-janitors@vger.kernel.org
-Message-ID: <baabb9e9-a1b2-3a04-9fb6-aa632de5f722@web.de>
-Date:   Sat, 21 Sep 2019 18:46:31 +0200
+Message-ID: <cda92ed6-feb8-87a0-1477-1f784e3dc576@web.de>
+Date:   Sat, 21 Sep 2019 19:02:52 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.1.0
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:gq8XlCdUOHM8oIbnPHW7UAQIq6Z5GsKadnkCt5VEwli0lbxdNOF
- LIEuJRSDw9nn014aM1FIr+hnU/EJ1QAKjxQpIjtmKrvezGfZiXoDqhy8MsYX4y8gMXPbpr7
- 2iseSo6skajlINOGRWd9slaRrg5HfQBKDa5IJB+MoWn/YKa9V8/3ERs8WoDFMQIPx4aYGFY
- jt/c+YYhfT34FpG8ceg0g==
+X-Provags-ID: V03:K1:k4e1oxOdJsiHEJTtoEf3M5AoZG8D3xOl99OQZI086pgCSny64Jn
+ wXHlVyg+G+8GMrGlgeXRQMZNF8rL2sistSOPtIuKQb4MEUCq7aFzs7FJYe8HAaJygZvNQAC
+ Jq8d6YuKe8UcQl+VYiEFz7fhUJfwdZt4qmyHvNLsuxOSlBE1pifGFHOrVdxO760g4g7HjJi
+ 01REofvxOGfS2A7KS4wpg==
 X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:QD/ph56ifWQ=:/g/6NYAoFeNETfJu6fX7VS
- yn7MsENZLO5jL/NPUXnYL49deoepaWh1gAnlH7bfAfWhjdXhTzlxlT6LeHZN4Gvcv+FGJNqIh
- cBbErHIvZRio1nj661HYY8qumbm6DxIk/D78rAPQVwqG7AnXQTS+n/2G17Wwbrt/FzBJFCGMe
- rmWNGon4D6St8JoTWKZN1gVhOjXhhf1RvtGJy3+g/LkF0k0f80+Earfc+zUAe271eqlbx81+/
- xO0XTHBVJvP0akZ5bpvhUCmLfg758MKNzybwWoq6BelHJqM5Kk7FL5t1QYbsnC+5GGvW/obt0
- 0/axzCrdf8h1uJyvS4LA5743Nmr6CG4YhJLU2pTjyPthFIEBmRhyUvl83WNqDpXt9y45XTDxq
- REbrOo2xUHgEt0tJLnNTraDVth7we3apsvVWXpLHRKJ4Dl3y8UsY0eRbC6Ymz50hMpUywS0Cu
- 0flG2jjub/fgacbn/bSDTEH/Xmq70wSYwGsnMkpFeSc14/J0WUxCJDIDbSb483Lio8mI6Nwny
- M8E8Y+aEmByNN0XGvSl6XLN/2FnvVZdxbJj0pgymi60TpQ53NAYw64PDCOmCT4bqiNjvUrale
- 2mdF6Wr2viDdQdjWVhyCribam/x8aVF7f6UKg9zHACE3gyAY4IVBu/gnWfUpG5wG26JqHGmJz
- MW6bwlKZ79A6Uh39J+qPIleohoIPUjVhaUgWvyyGVCODtBpDnKF3to5Rrix5crd0A6EgfNu4U
- UzqeM8Gu8xc0nF0/YX5+lhiGVSVAXmwePtNW0o/Lpkul93GvSSS8FbzhayMr4I3oszHLqex/b
- LeRd9FXoqGXP10AcJsRgAC9hjZa994yo5+rqlPdQvopZtbC/9xwV9gyoS1oTNQA2YmKzKy4uN
- o6kAoL0VM6jxCSzi+hk6s9StbOyvATxvHuqbYIc/N6tRvXClElZ0km/KbCj1BC4uRwXg5Cs9b
- RCMCVnRWullrMulBboLB0dnQ6VvRWQXZrH3AtW79MJE4reyYfypt02h0UWGoKv7gLORQos1K8
- 626gvwTYRI2D9A/TIp6OYznRexUDCgcCCKMOz8sWjU/MJpu9gA9FUH8dcgQRYq6DNl9G8MloK
- NOD2Wjlsz9cZ8+l7KPSvaK/B+s/ra1EFDQKHZ47k65r1pnGRK+qPjyVtTzDmLPfhQltcQCYbA
- Jh8Cr9S0FACTfdZ9Ivhna1bXV4GpLjogzQX0BtgztHAUvTDS3L4ivVFdLGFarWEDmsd0bEUHz
- IJOAKR8uvOIMe1DC5xISRdkJVnX9ZMuxkqRy826yvPuO5mMl5NGEdk6SdQRM=
+X-UI-Out-Filterresults: notjunk:1;V03:K0:p9gDb9qbVZg=:xAQJAVdzhWWbIul1i+Tujk
+ b703L7FI0XyiKDLfAlvztTmsokZXFFXq3AGg+VGROfXMMPaoJjtT8moXx31wjigahZevuv6TC
+ HsrkvuXss9qGQq2tc8CoVXW5lk9dPgfLSRXe6lrFjxqHLTyfmjD+i4nsvrtlZ9bJ+3KcUAXcM
+ TX50IGBK7QOApVnfJ/StBl63f9Zz0W661zWzeo84uF65dvYeOLamMxn/+EAkfC9GQ+Es8d78w
+ 6WxjwBFFZmIQ58vpgk4EzwvQ6Hgs15YyNSGgXHeIkqkSI4vR0+NnofeOm+yoruc/O6hqIdFub
+ EWmrKK3Hn4r0GWpKXtIyw+cK0R/RiygaiITR9fuhOpxhjpnmHkZPLXjDhsMG0EKXRbOe5gxeo
+ 7B/MMeKUO8CTjsEJSpzjKW1sIwmAurXn003LrojMPU9pyEVF5bKjQK4BR2RqNI5nhZg07OuZE
+ pHjq9j2A/C8BVKskg0W9AfD78WK3xG3sP3p0pDyXPues3ydmvsfEAxZxbNqCM87Dl+pT6nf7Z
+ 5mmRCi0Eb/6VvoGLFGQDdsJd1VOVFp5DBT6CbUhMGuWqaeVi1QzBQKzPffASPms1A7q/vANKy
+ Ncg0dwUWs+WtIKsNVlumgqbTFdzDcM6xchugfGOZXRvFK4KR/f8fgCkyET6duQ7/xGJy8ag1D
+ jZe71pO1oaXcaCRpoKGH0jTtbCpyKfKa/d5ARMxGlpbDFYSDf5SIv+rl7S0IS++sMPcS6e3pm
+ qcwL1445N0pgooLEyToaOz1AbLoIWaUCwQsDP6YRwONxk1IAgpKPc24X9Wxr68qfZzlwa+AKp
+ EaKOMOcUVknqRdm0crwNyn1cWHObhv389O2XxkPPsGXbKNAeMAOvOG2IwcYySzIiAvyHaO1wL
+ icxAbz2hkebFrUwswJ1RLDYjmqYT97FpBVaGuDrAyG6pNxheHOS6PxqLyyZ0k/NN2s+CGBxk4
+ nwwUi8DYApA5Lluqe0v61XMeRVG0BEYZsgvC5g7LNvMh5IyHd/oRqQzVkq9aph+MKdeZ0FXMK
+ lDY+3F3mWKHYgBhAuv5CyAyZTiF3e/l5JDTpmanvaKYo+mS5+G2sU/TNUoqxeylC2EUgaczyY
+ h31tKv5f4m+BMZvOQzeK3g/IaBTE0sA9GT7eb/F3dHw9gQGKJRxUkWZfqFqYlFK9VkUW4cyP6
+ PIaTXN1uGMkczlqG93hM/x0etM4ghVKNwiHaEd8wz/uyPiV7NGZKs3Vaw7OHEESfPO5JvHzaC
+ dPFe8KB6CgUQKswcv7ut9fYhOYtFboRb2GzpjqPMP+CcPjE6qVdn8vd0/px4=
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
 From: Markus Elfring <elfring@users.sourceforge.net>
-Date: Sat, 21 Sep 2019 18:32:46 +0200
+Date: Sat, 21 Sep 2019 18:56:54 +0200
 
 Simplify this function implementation by using a known wrapper function.
 
@@ -125,32 +122,44 @@ This issue was detected by using the Coccinelle software.
 
 Signed-off-by: Markus Elfring <elfring@users.sourceforge.net>
 =2D--
- drivers/edac/aspeed_edac.c | 7 +------
+ drivers/edac/bluefield_edac.c | 7 +------
  1 file changed, 1 insertion(+), 6 deletions(-)
 
-diff --git a/drivers/edac/aspeed_edac.c b/drivers/edac/aspeed_edac.c
-index 5634437bb39d..09a9e3de9595 100644
-=2D-- a/drivers/edac/aspeed_edac.c
-+++ b/drivers/edac/aspeed_edac.c
-@@ -281,16 +281,11 @@ static int aspeed_probe(struct platform_device *pdev=
-)
+diff --git a/drivers/edac/bluefield_edac.c b/drivers/edac/bluefield_edac.c
+index e4736eb37bfb..0d09add30460 100644
+=2D-- a/drivers/edac/bluefield_edac.c
++++ b/drivers/edac/bluefield_edac.c
+@@ -245,7 +245,6 @@ static int bluefield_edac_mc_probe(struct platform_dev=
+ice *pdev)
  	struct device *dev =3D &pdev->dev;
- 	struct edac_mc_layer layers[2];
+ 	struct edac_mc_layer layers[1];
  	struct mem_ctl_info *mci;
--	struct resource *res;
- 	void __iomem *regs;
- 	u32 reg04;
- 	int rc;
+-	struct resource *emi_res;
+ 	unsigned int mc_idx, dimm_count;
+ 	int rc, ret;
 
--	res =3D platform_get_resource(pdev, IORESOURCE_MEM, 0);
--	if (!res)
--		return -ENOENT;
+@@ -266,10 +265,6 @@ static int bluefield_edac_mc_probe(struct platform_de=
+vice *pdev)
+ 		return -EINVAL;
+ 	}
+
+-	emi_res =3D platform_get_resource(pdev, IORESOURCE_MEM, 0);
+-	if (!emi_res)
+-		return -EINVAL;
 -
--	regs =3D devm_ioremap_resource(dev, res);
-+	regs =3D devm_platform_ioremap_resource(pdev, 0);
- 	if (IS_ERR(regs))
- 		return PTR_ERR(regs);
+ 	layers[0].type =3D EDAC_MC_LAYER_SLOT;
+ 	layers[0].size =3D dimm_count;
+ 	layers[0].is_virt_csrow =3D true;
+@@ -281,7 +276,7 @@ static int bluefield_edac_mc_probe(struct platform_dev=
+ice *pdev)
+ 	priv =3D mci->pvt_info;
 
+ 	priv->dimm_per_mc =3D dimm_count;
+-	priv->emi_base =3D devm_ioremap_resource(dev, emi_res);
++	priv->emi_base =3D devm_platform_ioremap_resource(pdev, 0);
+ 	if (IS_ERR(priv->emi_base)) {
+ 		dev_err(dev, "failed to map EMI IO resource\n");
+ 		ret =3D PTR_ERR(priv->emi_base);
 =2D-
 2.23.0
 
