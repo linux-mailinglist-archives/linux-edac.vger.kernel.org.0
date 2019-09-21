@@ -2,37 +2,38 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CF408B9EC7
-	for <lists+linux-edac@lfdr.de>; Sat, 21 Sep 2019 17:58:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 50294B9EE3
+	for <lists+linux-edac@lfdr.de>; Sat, 21 Sep 2019 18:47:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2407696AbfIUP6H (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Sat, 21 Sep 2019 11:58:07 -0400
-Received: from mout.web.de ([212.227.17.12]:41219 "EHLO mout.web.de"
+        id S2407784AbfIUQrY (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Sat, 21 Sep 2019 12:47:24 -0400
+Received: from mout.web.de ([212.227.17.11]:40061 "EHLO mout.web.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2407694AbfIUP6H (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Sat, 21 Sep 2019 11:58:07 -0400
+        id S2407736AbfIUQrY (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Sat, 21 Sep 2019 12:47:24 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=web.de;
-        s=dbaedf251592; t=1569081453;
-        bh=NZyRZj6JCdK9cYIuWW8SPhSraVsjvvD3EVx+CjQ5DxY=;
-        h=X-UI-Sender-Class:To:Cc:From:Subject:Date;
-        b=N5WXFSjqurDZFcTP0VCqYQh0xa8RrAiG9OXhEvJBLmbEIB+cKBu5DsGRDZnyo0sIB
-         5Iemqc4BwxFcjgAFTUSA+KzbRH7JtNifVdVuKHVxwNz7vKIhpJygIcsNSy5jEdyem0
-         IiJccWlkh0fBX5HP8YHYTVNtNff2q48J+9q8AF/I=
+        s=dbaedf251592; t=1569084401;
+        bh=VUVk13mdIUuMlRF55b+yf9VzEN/rt7FIag9gQ7yHvvQ=;
+        h=X-UI-Sender-Class:To:From:Subject:Cc:Date;
+        b=a7a+cked8wXeIf3EPnXl7PvX4eEeRHzUb6L1srpbb7MlvpLINB02aK4DwQHarnvuB
+         UyNVj/05felNEjC9/2z23aOMVoVRi1QR5SZAA+uplssDaHeU4xP4jLTu3aStBt/09p
+         EzBk1uxjkjzrvxjmeT03Do7QXarQwrZPdncGHfac=
 X-UI-Sender-Class: c548c8c5-30a9-4db5-a2e7-cb6cb037b8f9
-Received: from [192.168.1.2] ([2.244.64.44]) by smtp.web.de (mrweb102
- [213.165.67.124]) with ESMTPSA (Nemesis) id 0MhDkj-1iXva82BPd-00MO8t; Sat, 21
- Sep 2019 17:57:33 +0200
-To:     linux-edac@vger.kernel.org, Borislav Petkov <bp@alien8.de>,
+Received: from [192.168.1.2] ([2.244.64.44]) by smtp.web.de (mrweb101
+ [213.165.67.124]) with ESMTPSA (Nemesis) id 0MHowb-1iD6Vg1oQ1-003hfK; Sat, 21
+ Sep 2019 18:46:41 +0200
+To:     linux-edac@vger.kernel.org, linux-aspeed@lists.ozlabs.org,
+        linux-arm-kernel@lists.infradead.org,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Borislav Petkov <bp@alien8.de>,
         James Morse <james.morse@arm.com>,
-        =?UTF-8?Q?Jan_L=c3=bcbbe?= <jlu@pengutronix.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Joel Stanley <joel@jms.id.au>,
         Robert Richter <rrichter@marvell.com>,
+        Stefan Schaeckeler <sschaeck@cisco.com>,
         Tony Luck <tony.luck@intel.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        kernel-janitors@vger.kernel.org
 From:   Markus Elfring <Markus.Elfring@web.de>
-Subject: [PATCH] EDAC: Armada XP: Use devm_platform_ioremap_resource() in two
- functions
+Subject: [PATCH] EDAC: Aspeed: Use devm_platform_ioremap_resource() in
+ aspeed_probe()
 Autocrypt: addr=Markus.Elfring@web.de; prefer-encrypt=mutual; keydata=
  mQINBFg2+xABEADBJW2hoUoFXVFWTeKbqqif8VjszdMkriilx90WB5c0ddWQX14h6w5bT/A8
  +v43YoGpDNyhgA0w9CEhuwfZrE91GocMtjLO67TAc2i2nxMc/FJRDI0OemO4VJ9RwID6ltwt
@@ -76,97 +77,80 @@ Autocrypt: addr=Markus.Elfring@web.de; prefer-encrypt=mutual; keydata=
  Z/wsLiWTgKlih2QYULvW61XU+mWsK8+ZlYUrRMpkauN4CJ5yTpvp+Orcz5KixHQmc5tbkLWf
  x0n1QFc1xxJhbzN+r9djSGGN/5IBDfUqSANC8cWzHpWaHmSuU3JSAMB/N+yQjIad2ztTckZY
  pwT6oxng29LzZspTYUEzMz3wK2jQHw+U66qBFk8whA7B2uAU1QdGyPgahLYSOa4XAEGb6wbI FEE=
-Message-ID: <3cf2076e-6394-4997-613d-cbf5b6dbee1e@web.de>
-Date:   Sat, 21 Sep 2019 17:57:24 +0200
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        kernel-janitors@vger.kernel.org
+Message-ID: <baabb9e9-a1b2-3a04-9fb6-aa632de5f722@web.de>
+Date:   Sat, 21 Sep 2019 18:46:31 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.1.0
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:V4KDaKpDGJk2tbrl0dbKCmeVsyRvg/r19joKrX82qZyw87ThdXd
- 9leklZJLv0qVvuYtC+oN6rJ1F2lJSDWfMhVOdyeJf0+43zTyG3/zOkR6HuZZ5mJ3q0aFI1s
- LKYGhXuTWdWo+dKPmNIZAfqfWex+M795dmrsLi9bp1mt/uljwuCttDJJzDmUAV+I6jYv9cE
- BeYT122F6JW0O186lGjAQ==
+X-Provags-ID: V03:K1:gq8XlCdUOHM8oIbnPHW7UAQIq6Z5GsKadnkCt5VEwli0lbxdNOF
+ LIEuJRSDw9nn014aM1FIr+hnU/EJ1QAKjxQpIjtmKrvezGfZiXoDqhy8MsYX4y8gMXPbpr7
+ 2iseSo6skajlINOGRWd9slaRrg5HfQBKDa5IJB+MoWn/YKa9V8/3ERs8WoDFMQIPx4aYGFY
+ jt/c+YYhfT34FpG8ceg0g==
 X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:fbTWqCFNNP8=:RBI9qB/tKa80ZHVGvCt8Se
- 9C6FUbfqovalnxKNASSBYDty9GGlGQbVv7f2E31GgvyhLXkse8Zg/aSjBEO0hyGssNQXLQTi0
- fUIJiruyGcYYeYJD/yq5HjCwjkUd9J/AhIK84QruK93YKOEqUYc1AULDxgEgcy7rUCyxnWnWJ
- 82stuqQhVWsXTWKHBIyizOfGp2A3tm+/UH0A5mc/lhfd/cmDNhrK7HFDgeasAVUjwwZr+Xweb
- /p+mVhDswsFGH4+jSrHtVu3Mrx9SGQlGvLEGnLL5U/wpfEP04tiWVF5Pewucw3fi4ChBTVar5
- bYLi1zImlI/7ZmevIR8zrHPdgcvR/KCHukJ0YLmV1DEcT/st29xcXDXs10EPnz9r6m92jzo36
- 7H8lProU5Xl/sc281vYniINMS+PjFSFVJ8Z4HOBGZZjxH96v1EixD0ZBI+LG3PAeVe35Q2zDt
- /An56NGlTIOFeYvqQ+5Q/0foxTIzXaY877P6Yi9PrFKVmu/DEAj8AZj4kPKe7B94uvIvcsn+j
- 7oVbFpsAowXxBMsF64MaIis7XnzlUvvyW4AO3EyDQ43IuBNQEvg8Fx6VPmRduQQjXgAIbWB8Q
- UiIGTp2EJtwojnO1yS1cKIc0W+7GhqY6tcp0rb99yMwJnFeauFVh0kf1czx9OTmPK38qTsHjB
- iQDt3ydEtCp4sFcJGl48Y2wXlvf5qSWjfQq4t/X7PtFUHBHHGp4aSUUX91BCzmUsH5LubMJYj
- r4WbEdl1eCrJ0aadzn+beQPkwhKUdY8twWGhXU3mmIp3x/s/h/9c5B8UT5ibIV8ln+S5PVEFC
- ZqNeI1pEgo+TEJge5PkoAwGuFTE3BHo55BdBckt16CgEWP0Jn1Mh9fLlkvd8IYqQ3ZQ0ubK3C
- 8x0d+ExfmzGTZyWHmzic63GBuucsCqY+j+h9HbgpFABT+3w/j40oONmXPPB0GS9TtGuel/P71
- G29S2ksMUPhoYWyYfqEQ+sUEJRRlRGy/7SdEbtsJW3/WlkjT5rRqtOqmJp0uTv4YKQ6FASWWl
- eSBHMOhIHLj4yz3d0MQ9rawabHSHApLmFsrzoBqRapYU0VD+6yDtPMuexAWLJIiOB48Mcz34o
- wf5xCRL/KQEugE1uXPz7oFiPegsT7j8Qs8WWuA8k61BwYe1UHlaD21W9WND8n+z2JXfWk1oc1
- Y4V55QOC8L95jWue1QeKqwD09eNAqEF+xirG+YuSvyCOJsLKnm3q1tfRHzpvc/anbVFOv93p6
- W/j7FPAY5YzeAv71PEfZM7Qd3EIVxlpI4ljRP7EXntRtbKu5ptK5FlyEfc7U=
+X-UI-Out-Filterresults: notjunk:1;V03:K0:QD/ph56ifWQ=:/g/6NYAoFeNETfJu6fX7VS
+ yn7MsENZLO5jL/NPUXnYL49deoepaWh1gAnlH7bfAfWhjdXhTzlxlT6LeHZN4Gvcv+FGJNqIh
+ cBbErHIvZRio1nj661HYY8qumbm6DxIk/D78rAPQVwqG7AnXQTS+n/2G17Wwbrt/FzBJFCGMe
+ rmWNGon4D6St8JoTWKZN1gVhOjXhhf1RvtGJy3+g/LkF0k0f80+Earfc+zUAe271eqlbx81+/
+ xO0XTHBVJvP0akZ5bpvhUCmLfg758MKNzybwWoq6BelHJqM5Kk7FL5t1QYbsnC+5GGvW/obt0
+ 0/axzCrdf8h1uJyvS4LA5743Nmr6CG4YhJLU2pTjyPthFIEBmRhyUvl83WNqDpXt9y45XTDxq
+ REbrOo2xUHgEt0tJLnNTraDVth7we3apsvVWXpLHRKJ4Dl3y8UsY0eRbC6Ymz50hMpUywS0Cu
+ 0flG2jjub/fgacbn/bSDTEH/Xmq70wSYwGsnMkpFeSc14/J0WUxCJDIDbSb483Lio8mI6Nwny
+ M8E8Y+aEmByNN0XGvSl6XLN/2FnvVZdxbJj0pgymi60TpQ53NAYw64PDCOmCT4bqiNjvUrale
+ 2mdF6Wr2viDdQdjWVhyCribam/x8aVF7f6UKg9zHACE3gyAY4IVBu/gnWfUpG5wG26JqHGmJz
+ MW6bwlKZ79A6Uh39J+qPIleohoIPUjVhaUgWvyyGVCODtBpDnKF3to5Rrix5crd0A6EgfNu4U
+ UzqeM8Gu8xc0nF0/YX5+lhiGVSVAXmwePtNW0o/Lpkul93GvSSS8FbzhayMr4I3oszHLqex/b
+ LeRd9FXoqGXP10AcJsRgAC9hjZa994yo5+rqlPdQvopZtbC/9xwV9gyoS1oTNQA2YmKzKy4uN
+ o6kAoL0VM6jxCSzi+hk6s9StbOyvATxvHuqbYIc/N6tRvXClElZ0km/KbCj1BC4uRwXg5Cs9b
+ RCMCVnRWullrMulBboLB0dnQ6VvRWQXZrH3AtW79MJE4reyYfypt02h0UWGoKv7gLORQos1K8
+ 626gvwTYRI2D9A/TIp6OYznRexUDCgcCCKMOz8sWjU/MJpu9gA9FUH8dcgQRYq6DNl9G8MloK
+ NOD2Wjlsz9cZ8+l7KPSvaK/B+s/ra1EFDQKHZ47k65r1pnGRK+qPjyVtTzDmLPfhQltcQCYbA
+ Jh8Cr9S0FACTfdZ9Ivhna1bXV4GpLjogzQX0BtgztHAUvTDS3L4ivVFdLGFarWEDmsd0bEUHz
+ IJOAKR8uvOIMe1DC5xISRdkJVnX9ZMuxkqRy826yvPuO5mMl5NGEdk6SdQRM=
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
 From: Markus Elfring <elfring@users.sourceforge.net>
-Date: Sat, 21 Sep 2019 17:50:17 +0200
+Date: Sat, 21 Sep 2019 18:32:46 +0200
 
-Simplify these function implementations by using a known function.
+Simplify this function implementation by using a known wrapper function.
 
 This issue was detected by using the Coccinelle software.
 
 Signed-off-by: Markus Elfring <elfring@users.sourceforge.net>
 =2D--
- drivers/edac/armada_xp_edac.c | 18 ++----------------
- 1 file changed, 2 insertions(+), 16 deletions(-)
+ drivers/edac/aspeed_edac.c | 7 +------
+ 1 file changed, 1 insertion(+), 6 deletions(-)
 
-diff --git a/drivers/edac/armada_xp_edac.c b/drivers/edac/armada_xp_edac.c
-index 7f227bdcbc84..096d8de3893e 100644
-=2D-- a/drivers/edac/armada_xp_edac.c
-+++ b/drivers/edac/armada_xp_edac.c
-@@ -286,17 +286,10 @@ static int axp_mc_probe(struct platform_device *pdev=
+diff --git a/drivers/edac/aspeed_edac.c b/drivers/edac/aspeed_edac.c
+index 5634437bb39d..09a9e3de9595 100644
+=2D-- a/drivers/edac/aspeed_edac.c
++++ b/drivers/edac/aspeed_edac.c
+@@ -281,16 +281,11 @@ static int aspeed_probe(struct platform_device *pdev=
 )
- 	struct edac_mc_layer layers[1];
- 	const struct of_device_id *id;
+ 	struct device *dev =3D &pdev->dev;
+ 	struct edac_mc_layer layers[2];
  	struct mem_ctl_info *mci;
--	struct resource *r;
- 	void __iomem *base;
- 	uint32_t config;
+-	struct resource *res;
+ 	void __iomem *regs;
+ 	u32 reg04;
+ 	int rc;
 
--	r =3D platform_get_resource(pdev, IORESOURCE_MEM, 0);
--	if (!r) {
--		dev_err(&pdev->dev, "Unable to get mem resource\n");
--		return -ENODEV;
--	}
+-	res =3D platform_get_resource(pdev, IORESOURCE_MEM, 0);
+-	if (!res)
+-		return -ENOENT;
 -
--	base =3D devm_ioremap_resource(&pdev->dev, r);
-+	base =3D devm_platform_ioremap_resource(pdev, 0);
- 	if (IS_ERR(base)) {
- 		dev_err(&pdev->dev, "Unable to map regs\n");
- 		return PTR_ERR(base);
-@@ -516,15 +509,8 @@ static int aurora_l2_probe(struct platform_device *pd=
-ev)
- 	const struct of_device_id *id;
- 	uint32_t l2x0_aux_ctrl;
- 	void __iomem *base;
--	struct resource *r;
--
--	r =3D platform_get_resource(pdev, IORESOURCE_MEM, 0);
--	if (!r) {
--		dev_err(&pdev->dev, "Unable to get mem resource\n");
--		return -ENODEV;
--	}
+-	regs =3D devm_ioremap_resource(dev, res);
++	regs =3D devm_platform_ioremap_resource(pdev, 0);
+ 	if (IS_ERR(regs))
+ 		return PTR_ERR(regs);
 
--	base =3D devm_ioremap_resource(&pdev->dev, r);
-+	base =3D devm_platform_ioremap_resource(pdev, 0);
- 	if (IS_ERR(base)) {
- 		dev_err(&pdev->dev, "Unable to map regs\n");
- 		return PTR_ERR(base);
 =2D-
 2.23.0
 
