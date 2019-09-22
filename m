@@ -2,39 +2,35 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 338B8BA4A1
-	for <lists+linux-edac@lfdr.de>; Sun, 22 Sep 2019 20:57:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8489DBA4AF
+	for <lists+linux-edac@lfdr.de>; Sun, 22 Sep 2019 20:57:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2403965AbfIVSuf (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Sun, 22 Sep 2019 14:50:35 -0400
-Received: from mail.kernel.org ([198.145.29.99]:47780 "EHLO mail.kernel.org"
+        id S1729175AbfIVSvG (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Sun, 22 Sep 2019 14:51:06 -0400
+Received: from mail.kernel.org ([198.145.29.99]:48644 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2403906AbfIVSuf (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Sun, 22 Sep 2019 14:50:35 -0400
+        id S1729170AbfIVSvF (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Sun, 22 Sep 2019 14:51:05 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 5D60821D6C;
-        Sun, 22 Sep 2019 18:50:33 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 1C87D208C2;
+        Sun, 22 Sep 2019 18:51:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1569178234;
-        bh=5+4+EyeHu/Ui4dWZQbgh+L+4DfByRKwtCBXnWaSYN9Y=;
+        s=default; t=1569178264;
+        bh=TCzrj21DePjZetssjICk3LSvp+6XekcD+3nP3eSbAjo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=IaCt5icOhXAMtQv10BKDl2E8fe+MMNSL9fis6NesxhGilVDhmD38U1cyozR6yk4OY
-         HlT/KjtcYFSJXxW3kJGG/Z4g2QnaJnDIexRZJheWOVbO2P11Fvap83nruBjnoFOW2x
-         GwQRTqM+Nsd/iRcSJKmyUo6G0//3PrLyH+PyzFYs=
+        b=sDYWQYMO5brs7uGt7Av5naZMW1atDW0dhE/4xUw/pF3SJ7FHsmYb1OTPUGL2fXcMN
+         izFHDqYdG5smOcN8bB4nTJj+D0pPegvL3qhUApPoqxLyMqEel5abMO1esyuY1RmjtP
+         tEEMkHVmYPMXsK4U40eb9Y3aMI4P82+iLfXAeK0Q=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Robert Richter <rrichter@marvell.com>,
-        Borislav Petkov <bp@suse.de>,
-        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
+Cc:     Stephen Douthit <stephend@silicom-usa.com>,
         Tony Luck <tony.luck@intel.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH AUTOSEL 5.2 031/185] EDAC/mc: Fix grain_bits calculation
-Date:   Sun, 22 Sep 2019 14:46:49 -0400
-Message-Id: <20190922184924.32534-31-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, linux-edac@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.2 052/185] EDAC, pnd2: Fix ioremap() size in dnv_rd_reg()
+Date:   Sun, 22 Sep 2019 14:47:10 -0400
+Message-Id: <20190922184924.32534-52-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20190922184924.32534-1-sashal@kernel.org>
 References: <20190922184924.32534-1-sashal@kernel.org>
@@ -47,78 +43,65 @@ Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-From: Robert Richter <rrichter@marvell.com>
+From: Stephen Douthit <stephend@silicom-usa.com>
 
-[ Upstream commit 3724ace582d9f675134985727fd5e9811f23c059 ]
+[ Upstream commit 29a3388bfcce7a6d087051376ea02bf8326a957b ]
 
-The grain in EDAC is defined as "minimum granularity for an error
-report, in bytes". The following calculation of the grain_bits in
-edac_mc is wrong:
+Depending on how BIOS has marked the reserved region containing the 32KB
+MCHBAR you can get warnings like:
 
-	grain_bits = fls_long(e->grain) + 1;
+resource sanity check: requesting [mem 0xfed10000-0xfed1ffff], which spans more than reserved [mem 0xfed10000-0xfed17fff]
+caller dnv_rd_reg+0xc8/0x240 [pnd2_edac] mapping multiple BARs
 
-Where grain_bits is defined as:
+Not all of the mmio regions used in dnv_rd_reg() are the same size.  The
+MCHBAR window is 32KB and the sideband ports are 64KB.  Pass the correct
+size to ioremap() depending on which resource we're reading from.
 
-	grain = 1 << grain_bits
-
-Example:
-
-	grain = 8	# 64 bit (8 bytes)
-	grain_bits = fls_long(8) + 1
-	grain_bits = 4 + 1 = 5
-
-	grain = 1 << grain_bits
-	grain = 1 << 5 = 32
-
-Replace it with the correct calculation:
-
-	grain_bits = fls_long(e->grain - 1);
-
-The example gives now:
-
-	grain_bits = fls_long(8 - 1)
-	grain_bits = fls_long(7)
-	grain_bits = 3
-
-	grain = 1 << 3 = 8
-
-Also, check if the hardware reports a reasonable grain != 0 and fallback
-with a warning to 1 byte granularity otherwise.
-
- [ bp: massage a bit. ]
-
-Signed-off-by: Robert Richter <rrichter@marvell.com>
-Signed-off-by: Borislav Petkov <bp@suse.de>
-Cc: "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>
-Cc: James Morse <james.morse@arm.com>
-Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc: Tony Luck <tony.luck@intel.com>
-Link: https://lkml.kernel.org/r/20190624150758.6695-2-rrichter@marvell.com
+Signed-off-by: Stephen Douthit <stephend@silicom-usa.com>
+Signed-off-by: Tony Luck <tony.luck@intel.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/edac/edac_mc.c | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+ drivers/edac/pnd2_edac.c | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/edac/edac_mc.c b/drivers/edac/edac_mc.c
-index 64922c8fa7e3b..d899d86897d06 100644
---- a/drivers/edac/edac_mc.c
-+++ b/drivers/edac/edac_mc.c
-@@ -1235,9 +1235,13 @@ void edac_mc_handle_error(const enum hw_event_mc_err_type type,
- 	if (p > e->location)
- 		*(p - 1) = '\0';
+diff --git a/drivers/edac/pnd2_edac.c b/drivers/edac/pnd2_edac.c
+index ca25f8fe57ef3..1ad538baaa4a9 100644
+--- a/drivers/edac/pnd2_edac.c
++++ b/drivers/edac/pnd2_edac.c
+@@ -260,11 +260,14 @@ static u64 get_sideband_reg_base_addr(void)
+ 	}
+ }
  
--	/* Report the error via the trace interface */
--	grain_bits = fls_long(e->grain) + 1;
-+	/* Sanity-check driver-supplied grain value. */
-+	if (WARN_ON_ONCE(!e->grain))
-+		e->grain = 1;
-+
-+	grain_bits = fls_long(e->grain - 1);
++#define DNV_MCHBAR_SIZE  0x8000
++#define DNV_SB_PORT_SIZE 0x10000
+ static int dnv_rd_reg(int port, int off, int op, void *data, size_t sz, char *name)
+ {
+ 	struct pci_dev *pdev;
+ 	char *base;
+ 	u64 addr;
++	unsigned long size;
  
-+	/* Report the error via the trace interface */
- 	if (IS_ENABLED(CONFIG_RAS))
- 		trace_mc_event(type, e->msg, e->label, e->error_count,
- 			       mci->mc_idx, e->top_layer, e->mid_layer,
+ 	if (op == 4) {
+ 		pdev = pci_get_device(PCI_VENDOR_ID_INTEL, 0x1980, NULL);
+@@ -279,15 +282,17 @@ static int dnv_rd_reg(int port, int off, int op, void *data, size_t sz, char *na
+ 			addr = get_mem_ctrl_hub_base_addr();
+ 			if (!addr)
+ 				return -ENODEV;
++			size = DNV_MCHBAR_SIZE;
+ 		} else {
+ 			/* MMIO via sideband register base address */
+ 			addr = get_sideband_reg_base_addr();
+ 			if (!addr)
+ 				return -ENODEV;
+ 			addr += (port << 16);
++			size = DNV_SB_PORT_SIZE;
+ 		}
+ 
+-		base = ioremap((resource_size_t)addr, 0x10000);
++		base = ioremap((resource_size_t)addr, size);
+ 		if (!base)
+ 			return -ENODEV;
+ 
 -- 
 2.20.1
 
