@@ -2,38 +2,38 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8489DBA4AF
-	for <lists+linux-edac@lfdr.de>; Sun, 22 Sep 2019 20:57:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 94297BA52A
+	for <lists+linux-edac@lfdr.de>; Sun, 22 Sep 2019 20:58:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729175AbfIVSvG (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Sun, 22 Sep 2019 14:51:06 -0400
-Received: from mail.kernel.org ([198.145.29.99]:48644 "EHLO mail.kernel.org"
+        id S2408061AbfIVSzH (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Sun, 22 Sep 2019 14:55:07 -0400
+Received: from mail.kernel.org ([198.145.29.99]:56040 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729170AbfIVSvF (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Sun, 22 Sep 2019 14:51:05 -0400
+        id S2437417AbfIVSzH (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Sun, 22 Sep 2019 14:55:07 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 1C87D208C2;
-        Sun, 22 Sep 2019 18:51:04 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id E928E208C2;
+        Sun, 22 Sep 2019 18:55:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1569178264;
-        bh=TCzrj21DePjZetssjICk3LSvp+6XekcD+3nP3eSbAjo=;
+        s=default; t=1569178506;
+        bh=pqNJ8pNu97tfTX6kEisVmJXTZF0n5AhEugcUW9k3lp0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=sDYWQYMO5brs7uGt7Av5naZMW1atDW0dhE/4xUw/pF3SJ7FHsmYb1OTPUGL2fXcMN
-         izFHDqYdG5smOcN8bB4nTJj+D0pPegvL3qhUApPoqxLyMqEel5abMO1esyuY1RmjtP
-         tEEMkHVmYPMXsK4U40eb9Y3aMI4P82+iLfXAeK0Q=
+        b=Y6waaDr81pgDPlc2s1Je2fOD7IM3nGP7uEz2NaryisZCQxdmfzSl9gmVI6cWmI2gs
+         99UanaZeo3258oR+0JURFueVekSGrsVJH9aym4R3p6t/7jlFrQAZr+EGMrdpyjqYm2
+         Jkj9GUnNS4s69JvnOu3T6T4WUsRrNCUxVUuNsUOU=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Stephen Douthit <stephend@silicom-usa.com>,
         Tony Luck <tony.luck@intel.com>,
         Sasha Levin <sashal@kernel.org>, linux-edac@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.2 052/185] EDAC, pnd2: Fix ioremap() size in dnv_rd_reg()
-Date:   Sun, 22 Sep 2019 14:47:10 -0400
-Message-Id: <20190922184924.32534-52-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.19 038/128] EDAC, pnd2: Fix ioremap() size in dnv_rd_reg()
+Date:   Sun, 22 Sep 2019 14:52:48 -0400
+Message-Id: <20190922185418.2158-38-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190922184924.32534-1-sashal@kernel.org>
-References: <20190922184924.32534-1-sashal@kernel.org>
+In-Reply-To: <20190922185418.2158-1-sashal@kernel.org>
+References: <20190922185418.2158-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -65,10 +65,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 6 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/edac/pnd2_edac.c b/drivers/edac/pnd2_edac.c
-index ca25f8fe57ef3..1ad538baaa4a9 100644
+index 903a4f1fadcc3..0153c730750e5 100644
 --- a/drivers/edac/pnd2_edac.c
 +++ b/drivers/edac/pnd2_edac.c
-@@ -260,11 +260,14 @@ static u64 get_sideband_reg_base_addr(void)
+@@ -268,11 +268,14 @@ static u64 get_sideband_reg_base_addr(void)
  	}
  }
  
@@ -83,7 +83,7 @@ index ca25f8fe57ef3..1ad538baaa4a9 100644
  
  	if (op == 4) {
  		pdev = pci_get_device(PCI_VENDOR_ID_INTEL, 0x1980, NULL);
-@@ -279,15 +282,17 @@ static int dnv_rd_reg(int port, int off, int op, void *data, size_t sz, char *na
+@@ -287,15 +290,17 @@ static int dnv_rd_reg(int port, int off, int op, void *data, size_t sz, char *na
  			addr = get_mem_ctrl_hub_base_addr();
  			if (!addr)
  				return -ENODEV;
