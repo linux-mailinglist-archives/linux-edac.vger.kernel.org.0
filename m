@@ -2,41 +2,39 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B7F3BA3E5
-	for <lists+linux-edac@lfdr.de>; Sun, 22 Sep 2019 20:45:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FD13BA43C
+	for <lists+linux-edac@lfdr.de>; Sun, 22 Sep 2019 20:56:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389303AbfIVSpk (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Sun, 22 Sep 2019 14:45:40 -0400
-Received: from mail.kernel.org ([198.145.29.99]:41314 "EHLO mail.kernel.org"
+        id S2390577AbfIVSrK (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Sun, 22 Sep 2019 14:47:10 -0400
+Received: from mail.kernel.org ([198.145.29.99]:43466 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2389398AbfIVSpi (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Sun, 22 Sep 2019 14:45:38 -0400
+        id S2388748AbfIVSrJ (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Sun, 22 Sep 2019 14:47:09 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id E12BC20869;
-        Sun, 22 Sep 2019 18:45:36 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id CC422206C2;
+        Sun, 22 Sep 2019 18:47:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1569177938;
-        bh=P73YqyByfJFfD7IeMva3s/Jr+ys9xdTCvSZ1/zaZIYE=;
+        s=default; t=1569178027;
+        bh=aF29muMYd0aFbQLCZ8bnN7wOIqz7jZ7RkN0z5SAUhJI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=2m7hvbTG1LY6d32SGcq273ssg08Ox+cYO4l4f0aPueC0XAPDDFpkn7YhwlNm3aEVi
-         UZJ7Mkzy3/Vl4MK7t/3KX9Y/dkG669k8ZtgwgME6EwG9GHr1jxrKTlvnGkgTpBtAgP
-         5dNm2aiFYJ7X4ntRoOxXmm8D/a6AMwAcjvehSeC8=
+        b=o4qefqI9GSdLzRITIXLS+/kRhDKpsTQp0mQO+XTAnjzRmrGdsl3Y5Fr8uPjyLuFsz
+         vfCaJd6tgORRibXJpvVLFDwdrGVQev7rW1lknoIgPlgH+p16N22U7IGoWl1oF+Zpdi
+         +gqaUNOVv1IszzeCIEr5JnoG15hlLk+y2SwzJAP0=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Dan Carpenter <dan.carpenter@oracle.com>,
+Cc:     Yazen Ghannam <yazen.ghannam@amd.com>,
         Borislav Petkov <bp@suse.de>,
-        Thor Thayer <thor.thayer@linux.intel.com>,
+        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
         James Morse <james.morse@arm.com>,
-        kernel-janitors@vger.kernel.org,
-        linux-edac <linux-edac@vger.kernel.org>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         Tony Luck <tony.luck@intel.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH AUTOSEL 5.3 047/203] EDAC/altera: Use the proper type for the IRQ status bits
-Date:   Sun, 22 Sep 2019 14:41:13 -0400
-Message-Id: <20190922184350.30563-47-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.3 111/203] EDAC/amd64: Support more than two controllers for chip selects handling
+Date:   Sun, 22 Sep 2019 14:42:17 -0400
+Message-Id: <20190922184350.30563-111-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20190922184350.30563-1-sashal@kernel.org>
 References: <20190922184350.30563-1-sashal@kernel.org>
@@ -49,57 +47,233 @@ Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-From: Dan Carpenter <dan.carpenter@oracle.com>
+From: Yazen Ghannam <yazen.ghannam@amd.com>
 
-[ Upstream commit 8faa1cf6ed82f33009f63986c3776cc48af1b7b2 ]
+[ Upstream commit d971e28e2ce4696fcc32998c8aced5e47701fffe ]
 
-Smatch complains about the cast of a u32 pointer to unsigned long:
+The struct chip_select array that's used for saving chip select bases
+and masks is fixed at length of two. There should be one struct
+chip_select for each controller, so this array should be increased to
+support systems that may have more than two controllers.
 
-  drivers/edac/altera_edac.c:1878 altr_edac_a10_irq_handler()
-  warn: passing casted pointer '&irq_status' to 'find_first_bit()'
+Increase the size of the struct chip_select array to eight, which is the
+largest number of controllers per die currently supported on AMD
+systems.
 
-This code wouldn't work on a 64 bit big endian system because it would
-read past the end of &irq_status.
+Fix number of DIMMs and Chip Select bases/masks on Family17h, because
+AMD Family 17h systems support 2 DIMMs, 4 CS bases, and 2 CS masks per
+channel.
 
- [ bp: massage. ]
+Also, carve out the Family 17h+ reading of the bases/masks into a
+separate function. This effectively reverts the original bases/masks
+reading code to before Family 17h support was added.
 
-Fixes: 13ab8448d2c9 ("EDAC, altera: Add ECC Manager IRQ controller support")
-Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+Signed-off-by: Yazen Ghannam <yazen.ghannam@amd.com>
 Signed-off-by: Borislav Petkov <bp@suse.de>
-Reviewed-by: Thor Thayer <thor.thayer@linux.intel.com>
+Cc: "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>
 Cc: James Morse <james.morse@arm.com>
-Cc: kernel-janitors@vger.kernel.org
-Cc: linux-edac <linux-edac@vger.kernel.org>
 Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
 Cc: Tony Luck <tony.luck@intel.com>
-Link: https://lkml.kernel.org/r/20190624134717.GA1754@mwanda
+Link: https://lkml.kernel.org/r/20190821235938.118710-2-Yazen.Ghannam@amd.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/edac/altera_edac.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ drivers/edac/amd64_edac.c | 123 +++++++++++++++++++++-----------------
+ drivers/edac/amd64_edac.h |   5 +-
+ 2 files changed, 71 insertions(+), 57 deletions(-)
 
-diff --git a/drivers/edac/altera_edac.c b/drivers/edac/altera_edac.c
-index c2e693e34d434..bf024ec0116c7 100644
---- a/drivers/edac/altera_edac.c
-+++ b/drivers/edac/altera_edac.c
-@@ -1866,6 +1866,7 @@ static void altr_edac_a10_irq_handler(struct irq_desc *desc)
- 	struct altr_arria10_edac *edac = irq_desc_get_handler_data(desc);
- 	struct irq_chip *chip = irq_desc_get_chip(desc);
- 	int irq = irq_desc_get_irq(desc);
-+	unsigned long bits;
+diff --git a/drivers/edac/amd64_edac.c b/drivers/edac/amd64_edac.c
+index 873437be86d9c..dd60cf5a3d969 100644
+--- a/drivers/edac/amd64_edac.c
++++ b/drivers/edac/amd64_edac.c
+@@ -810,7 +810,7 @@ static void debug_display_dimm_sizes_df(struct amd64_pvt *pvt, u8 ctrl)
  
- 	dberr = (irq == edac->db_irq) ? 1 : 0;
- 	sm_offset = dberr ? A10_SYSMGR_ECC_INTSTAT_DERR_OFST :
-@@ -1875,7 +1876,8 @@ static void altr_edac_a10_irq_handler(struct irq_desc *desc)
+ 	edac_printk(KERN_DEBUG, EDAC_MC, "UMC%d chip selects:\n", ctrl);
  
- 	regmap_read(edac->ecc_mgr_map, sm_offset, &irq_status);
+-	for (dimm = 0; dimm < 4; dimm++) {
++	for (dimm = 0; dimm < 2; dimm++) {
+ 		size0 = 0;
+ 		cs0 = dimm * 2;
  
--	for_each_set_bit(bit, (unsigned long *)&irq_status, 32) {
-+	bits = irq_status;
-+	for_each_set_bit(bit, &bits, 32) {
- 		irq = irq_linear_revmap(edac->domain, dberr * 32 + bit);
- 		if (irq)
- 			generic_handle_irq(irq);
+@@ -942,89 +942,102 @@ static void prep_chip_selects(struct amd64_pvt *pvt)
+ 	} else if (pvt->fam == 0x15 && pvt->model == 0x30) {
+ 		pvt->csels[0].b_cnt = pvt->csels[1].b_cnt = 4;
+ 		pvt->csels[0].m_cnt = pvt->csels[1].m_cnt = 2;
++	} else if (pvt->fam >= 0x17) {
++		int umc;
++
++		for_each_umc(umc) {
++			pvt->csels[umc].b_cnt = 4;
++			pvt->csels[umc].m_cnt = 2;
++		}
++
+ 	} else {
+ 		pvt->csels[0].b_cnt = pvt->csels[1].b_cnt = 8;
+ 		pvt->csels[0].m_cnt = pvt->csels[1].m_cnt = 4;
+ 	}
+ }
+ 
++static void read_umc_base_mask(struct amd64_pvt *pvt)
++{
++	u32 umc_base_reg, umc_mask_reg;
++	u32 base_reg, mask_reg;
++	u32 *base, *mask;
++	int cs, umc;
++
++	for_each_umc(umc) {
++		umc_base_reg = get_umc_base(umc) + UMCCH_BASE_ADDR;
++
++		for_each_chip_select(cs, umc, pvt) {
++			base = &pvt->csels[umc].csbases[cs];
++
++			base_reg = umc_base_reg + (cs * 4);
++
++			if (!amd_smn_read(pvt->mc_node_id, base_reg, base))
++				edac_dbg(0, "  DCSB%d[%d]=0x%08x reg: 0x%x\n",
++					 umc, cs, *base, base_reg);
++		}
++
++		umc_mask_reg = get_umc_base(umc) + UMCCH_ADDR_MASK;
++
++		for_each_chip_select_mask(cs, umc, pvt) {
++			mask = &pvt->csels[umc].csmasks[cs];
++
++			mask_reg = umc_mask_reg + (cs * 4);
++
++			if (!amd_smn_read(pvt->mc_node_id, mask_reg, mask))
++				edac_dbg(0, "  DCSM%d[%d]=0x%08x reg: 0x%x\n",
++					 umc, cs, *mask, mask_reg);
++		}
++	}
++}
++
+ /*
+  * Function 2 Offset F10_DCSB0; read in the DCS Base and DCS Mask registers
+  */
+ static void read_dct_base_mask(struct amd64_pvt *pvt)
+ {
+-	int base_reg0, base_reg1, mask_reg0, mask_reg1, cs;
++	int cs;
+ 
+ 	prep_chip_selects(pvt);
+ 
+-	if (pvt->umc) {
+-		base_reg0 = get_umc_base(0) + UMCCH_BASE_ADDR;
+-		base_reg1 = get_umc_base(1) + UMCCH_BASE_ADDR;
+-		mask_reg0 = get_umc_base(0) + UMCCH_ADDR_MASK;
+-		mask_reg1 = get_umc_base(1) + UMCCH_ADDR_MASK;
+-	} else {
+-		base_reg0 = DCSB0;
+-		base_reg1 = DCSB1;
+-		mask_reg0 = DCSM0;
+-		mask_reg1 = DCSM1;
+-	}
++	if (pvt->umc)
++		return read_umc_base_mask(pvt);
+ 
+ 	for_each_chip_select(cs, 0, pvt) {
+-		int reg0   = base_reg0 + (cs * 4);
+-		int reg1   = base_reg1 + (cs * 4);
++		int reg0   = DCSB0 + (cs * 4);
++		int reg1   = DCSB1 + (cs * 4);
+ 		u32 *base0 = &pvt->csels[0].csbases[cs];
+ 		u32 *base1 = &pvt->csels[1].csbases[cs];
+ 
+-		if (pvt->umc) {
+-			if (!amd_smn_read(pvt->mc_node_id, reg0, base0))
+-				edac_dbg(0, "  DCSB0[%d]=0x%08x reg: 0x%x\n",
+-					 cs, *base0, reg0);
+-
+-			if (!amd_smn_read(pvt->mc_node_id, reg1, base1))
+-				edac_dbg(0, "  DCSB1[%d]=0x%08x reg: 0x%x\n",
+-					 cs, *base1, reg1);
+-		} else {
+-			if (!amd64_read_dct_pci_cfg(pvt, 0, reg0, base0))
+-				edac_dbg(0, "  DCSB0[%d]=0x%08x reg: F2x%x\n",
+-					 cs, *base0, reg0);
++		if (!amd64_read_dct_pci_cfg(pvt, 0, reg0, base0))
++			edac_dbg(0, "  DCSB0[%d]=0x%08x reg: F2x%x\n",
++				 cs, *base0, reg0);
+ 
+-			if (pvt->fam == 0xf)
+-				continue;
++		if (pvt->fam == 0xf)
++			continue;
+ 
+-			if (!amd64_read_dct_pci_cfg(pvt, 1, reg0, base1))
+-				edac_dbg(0, "  DCSB1[%d]=0x%08x reg: F2x%x\n",
+-					 cs, *base1, (pvt->fam == 0x10) ? reg1
+-								: reg0);
+-		}
++		if (!amd64_read_dct_pci_cfg(pvt, 1, reg0, base1))
++			edac_dbg(0, "  DCSB1[%d]=0x%08x reg: F2x%x\n",
++				 cs, *base1, (pvt->fam == 0x10) ? reg1
++							: reg0);
+ 	}
+ 
+ 	for_each_chip_select_mask(cs, 0, pvt) {
+-		int reg0   = mask_reg0 + (cs * 4);
+-		int reg1   = mask_reg1 + (cs * 4);
++		int reg0   = DCSM0 + (cs * 4);
++		int reg1   = DCSM1 + (cs * 4);
+ 		u32 *mask0 = &pvt->csels[0].csmasks[cs];
+ 		u32 *mask1 = &pvt->csels[1].csmasks[cs];
+ 
+-		if (pvt->umc) {
+-			if (!amd_smn_read(pvt->mc_node_id, reg0, mask0))
+-				edac_dbg(0, "    DCSM0[%d]=0x%08x reg: 0x%x\n",
+-					 cs, *mask0, reg0);
+-
+-			if (!amd_smn_read(pvt->mc_node_id, reg1, mask1))
+-				edac_dbg(0, "    DCSM1[%d]=0x%08x reg: 0x%x\n",
+-					 cs, *mask1, reg1);
+-		} else {
+-			if (!amd64_read_dct_pci_cfg(pvt, 0, reg0, mask0))
+-				edac_dbg(0, "    DCSM0[%d]=0x%08x reg: F2x%x\n",
+-					 cs, *mask0, reg0);
++		if (!amd64_read_dct_pci_cfg(pvt, 0, reg0, mask0))
++			edac_dbg(0, "    DCSM0[%d]=0x%08x reg: F2x%x\n",
++				 cs, *mask0, reg0);
+ 
+-			if (pvt->fam == 0xf)
+-				continue;
++		if (pvt->fam == 0xf)
++			continue;
+ 
+-			if (!amd64_read_dct_pci_cfg(pvt, 1, reg0, mask1))
+-				edac_dbg(0, "    DCSM1[%d]=0x%08x reg: F2x%x\n",
+-					 cs, *mask1, (pvt->fam == 0x10) ? reg1
+-								: reg0);
+-		}
++		if (!amd64_read_dct_pci_cfg(pvt, 1, reg0, mask1))
++			edac_dbg(0, "    DCSM1[%d]=0x%08x reg: F2x%x\n",
++				 cs, *mask1, (pvt->fam == 0x10) ? reg1
++							: reg0);
+ 	}
+ }
+ 
+diff --git a/drivers/edac/amd64_edac.h b/drivers/edac/amd64_edac.h
+index 8f66472f7adc2..4dce6a2ac75f9 100644
+--- a/drivers/edac/amd64_edac.h
++++ b/drivers/edac/amd64_edac.h
+@@ -96,6 +96,7 @@
+ /* Hardware limit on ChipSelect rows per MC and processors per system */
+ #define NUM_CHIPSELECTS			8
+ #define DRAM_RANGES			8
++#define NUM_CONTROLLERS			8
+ 
+ #define ON true
+ #define OFF false
+@@ -351,8 +352,8 @@ struct amd64_pvt {
+ 	u32 dbam0;		/* DRAM Base Address Mapping reg for DCT0 */
+ 	u32 dbam1;		/* DRAM Base Address Mapping reg for DCT1 */
+ 
+-	/* one for each DCT */
+-	struct chip_select csels[2];
++	/* one for each DCT/UMC */
++	struct chip_select csels[NUM_CONTROLLERS];
+ 
+ 	/* DRAM base and limit pairs F1x[78,70,68,60,58,50,48,40] */
+ 	struct dram_range ranges[DRAM_RANGES];
 -- 
 2.20.1
 
