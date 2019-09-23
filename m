@@ -2,68 +2,80 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 66867BBC3A
-	for <lists+linux-edac@lfdr.de>; Mon, 23 Sep 2019 21:25:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF10DBBF04
+	for <lists+linux-edac@lfdr.de>; Tue, 24 Sep 2019 01:36:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2440493AbfIWTZ2 (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Mon, 23 Sep 2019 15:25:28 -0400
-Received: from mail.skyhub.de ([5.9.137.197]:54462 "EHLO mail.skyhub.de"
+        id S2388908AbfIWXg7 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-edac@lfdr.de>); Mon, 23 Sep 2019 19:36:59 -0400
+Received: from mga14.intel.com ([192.55.52.115]:61738 "EHLO mga14.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2440469AbfIWTZ1 (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Mon, 23 Sep 2019 15:25:27 -0400
-Received: from zn.tnic (p200300EC2F060400F036B51F4D309BFC.dip0.t-ipconnect.de [IPv6:2003:ec:2f06:400:f036:b51f:4d30:9bfc])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 457551EC06F3;
-        Mon, 23 Sep 2019 21:25:26 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1569266726;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=pMXwX4ItsmZtNTpj59AdITYDi1NqjioGLxhIyytmhS0=;
-        b=hxdMxTDLpYAZWegqznkELUHinhJU6AH1696H5um0x6wxa7+Q2cxuU6aPnX9fIymE6KprHJ
-        6tShg3HkeQpyZapqiWqrQxOtGk4aAzzhGI5DCFnvQWAq0WXe1paChX1maFOQOhUMPz+v7Z
-        NgpBQOJkmetntqwclwBRFEAyQe12DnU=
-Date:   Mon, 23 Sep 2019 21:25:26 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Lei Wang <leiwang_git@outlook.com>
-Cc:     "james.morse@arm.com" <james.morse@arm.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "mark.rutland@arm.com" <mark.rutland@arm.com>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "mchehab@kernel.org" <mchehab@kernel.org>,
-        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
-        "sashal@kernel.org" <sashal@kernel.org>,
-        "hangl@microsoft.com" <hangl@microsoft.com>,
-        "lewan@microsoft.com" <lewan@microsoft.com>,
-        "ruizhao@microsoft.com" <ruizhao@microsoft.com>,
-        "scott.branden@broadcom.com" <scott.branden@broadcom.com>,
-        "yuqing.shen@broadcom.com" <yuqing.shen@broadcom.com>,
-        "ray.jui@broadcom.com" <ray.jui@broadcom.com>
-Subject: Re: [PATCH v6 2/2] EDAC: add EDAC driver for DMC520
-Message-ID: <20190923192526.GK15355@zn.tnic>
-References: <BY5PR04MB65990410B5B26C11DBE9C9B186890@BY5PR04MB6599.namprd04.prod.outlook.com>
- <20190923165034.GJ15355@zn.tnic>
- <BY5PR04MB6599FD4A19BF295C2AADC59086850@BY5PR04MB6599.namprd04.prod.outlook.com>
+        id S1729316AbfIWXg6 (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Mon, 23 Sep 2019 19:36:58 -0400
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 23 Sep 2019 16:36:58 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.64,542,1559545200"; 
+   d="scan'208";a="272450283"
+Received: from orsmsx101.amr.corp.intel.com ([10.22.225.128])
+  by orsmga001.jf.intel.com with ESMTP; 23 Sep 2019 16:36:58 -0700
+Received: from orsmsx157.amr.corp.intel.com (10.22.240.23) by
+ ORSMSX101.amr.corp.intel.com (10.22.225.128) with Microsoft SMTP Server (TLS)
+ id 14.3.439.0; Mon, 23 Sep 2019 16:36:57 -0700
+Received: from orsmsx115.amr.corp.intel.com ([169.254.4.199]) by
+ ORSMSX157.amr.corp.intel.com ([169.254.9.194]) with mapi id 14.03.0439.000;
+ Mon, 23 Sep 2019 16:36:57 -0700
+From:   "Luck, Tony" <tony.luck@intel.com>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>
+CC:     Borislav Petkov <bp@alien8.de>,
+        "Zhuo, Qiuxu" <qiuxu.zhuo@intel.com>,
+        Aristeu Rozanski <aris@redhat.com>,
+        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>
+Subject: RE: [PATCH 1/2] EDAC, skx_common: Refactor so that we initialize
+ "dev" in result of adxl decode.
+Thread-Topic: [PATCH 1/2] EDAC, skx_common: Refactor so that we initialize
+ "dev" in result of adxl decode.
+Thread-Index: AQHVaoCM0E6JatW30EOzRWBnyLyDk6cxu14AgAg8+JA=
+Date:   Mon, 23 Sep 2019 23:36:57 +0000
+Message-ID: <3908561D78D1C84285E8C5FCA982C28F7F478D2A@ORSMSX115.amr.corp.intel.com>
+References: <20190913221344.13055-1-tony.luck@intel.com>
+        <20190913221344.13055-2-tony.luck@intel.com>
+ <20190918074040.3e76a2ac@coco.lan>
+In-Reply-To: <20190918074040.3e76a2ac@coco.lan>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-titus-metadata-40: eyJDYXRlZ29yeUxhYmVscyI6IiIsIk1ldGFkYXRhIjp7Im5zIjoiaHR0cDpcL1wvd3d3LnRpdHVzLmNvbVwvbnNcL0ludGVsMyIsImlkIjoiNzBlYmRjZDAtYTdhZC00M2Y1LTg3NjgtYTM3NzQzMjYxMGFhIiwicHJvcHMiOlt7Im4iOiJDVFBDbGFzc2lmaWNhdGlvbiIsInZhbHMiOlt7InZhbHVlIjoiQ1RQX05UIn1dfV19LCJTdWJqZWN0TGFiZWxzIjpbXSwiVE1DVmVyc2lvbiI6IjE3LjEwLjE4MDQuNDkiLCJUcnVzdGVkTGFiZWxIYXNoIjoia0RQSWZLRFBRdDJYSUtyUUpVb0srZmN2KytpblhNZEtNWENnbXlReVh3Um43RUtyd3dCU0dcLzJlUWpGc2F0WWsifQ==
+x-ctpclassification: CTP_NT
+dlp-product: dlpe-windows
+dlp-version: 11.2.0.6
+dlp-reaction: no-action
+x-originating-ip: [10.22.254.139]
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 8BIT
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <BY5PR04MB6599FD4A19BF295C2AADC59086850@BY5PR04MB6599.namprd04.prod.outlook.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Mon, Sep 23, 2019 at 06:07:27PM +0000, Lei Wang wrote:
-> After merge is over, it would be something like Linux v5.4-rc1?
+>> +	if (res->imc > NUM_IMC - 1) {
+>> +		skx_printk(KERN_ERR, "Bad imc %d\n", res->imc);
+>
+> I would report this via EDAC as well.
 
-Yes, I'll update it once v5.4-rc1 is released.
+It would be nice, but I don't see how.  This function is trying to figure
+out which memory controller (and thus which EDAC struct mem_ctl_info)
+is connected to this error.  If it fails, then we don't know where to report it.
 
--- 
-Regards/Gruss,
-    Boris.
+On the plus side this error (and the other one you flagged) "can't happen"(TM)
+so we shouldn't expend too much effort to solve this.  Code must give up here
+rather than trigger out of bounds array accesses later.
 
-https://people.kernel.org/tglx/notes-about-netiquette
+If we did want to solve this, we could invent a mechanism for EDAC
+drivers to log errors not related to a particular memory controller
+(by passing NULL to edac_mc_handle_error()???).
+
+-Tony
