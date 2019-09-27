@@ -2,66 +2,62 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 46187BDF6D
-	for <lists+linux-edac@lfdr.de>; Wed, 25 Sep 2019 15:51:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE49BC0E26
+	for <lists+linux-edac@lfdr.de>; Sat, 28 Sep 2019 00:53:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2406057AbfIYNvU (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Wed, 25 Sep 2019 09:51:20 -0400
-Received: from mx1.redhat.com ([209.132.183.28]:38664 "EHLO mx1.redhat.com"
+        id S1725990AbfI0WxI (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Fri, 27 Sep 2019 18:53:08 -0400
+Received: from verein.lst.de ([213.95.11.211]:48244 "EHLO verein.lst.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2406005AbfIYNvT (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Wed, 25 Sep 2019 09:51:19 -0400
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mx1.redhat.com (Postfix) with ESMTPS id B67EF308402D;
-        Wed, 25 Sep 2019 13:51:19 +0000 (UTC)
-Received: from napanee.usersys.redhat.com (dhcp-17-195.bos.redhat.com [10.18.17.195])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 963FF19C7F;
-        Wed, 25 Sep 2019 13:51:19 +0000 (UTC)
-Received: by napanee.usersys.redhat.com (Postfix, from userid 1000)
-        id 20B3BC18A1; Wed, 25 Sep 2019 09:51:19 -0400 (EDT)
-Date:   Wed, 25 Sep 2019 09:51:19 -0400
-From:   Aristeu Rozanski <aris@redhat.com>
-To:     Tony Luck <tony.luck@intel.com>
-Cc:     Borislav Petkov <bp@alien8.de>, Qiuxu Zhuo <qiuxu.zhuo@intel.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-edac@vger.kernel.org
-Subject: Re: [PATCH 0/2] EDAC, skx: Provide more machine specific location
- detail
-Message-ID: <20190925135118.c5eihll4m55hbsqc@redhat.com>
-References: <20190913221344.13055-1-tony.luck@intel.com>
+        id S1725815AbfI0WxI (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Fri, 27 Sep 2019 18:53:08 -0400
+Received: by verein.lst.de (Postfix, from userid 2407)
+        id 0CB9E68B05; Sat, 28 Sep 2019 00:53:05 +0200 (CEST)
+Date:   Sat, 28 Sep 2019 00:53:04 +0200
+From:   Christoph Hellwig <hch@lst.de>
+To:     Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
+Cc:     Christoph Hellwig <hch@lst.de>, Borislav Petkov <bp@alien8.de>,
+        paul.walmsley@sifive.com, palmer@sifive.com,
+        linux-riscv@lists.infradead.org, linux-edac@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Yash Shah <yash.shah@sifive.com>
+Subject: Re: [PATCH] riscv: move sifive_l2_cache.c to drivers/soc
+Message-ID: <20190927225304.GA18456@lst.de>
+References: <20190818082935.14869-1-hch@lst.de> <20190819060904.GA4841@zn.tnic> <20190819062619.GA20211@lst.de> <20190822062635.00f6e507@coco.lan>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20190913221344.13055-1-tony.luck@intel.com>
-User-Agent: NeoMutt/20180716
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
-X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.40]); Wed, 25 Sep 2019 13:51:19 +0000 (UTC)
+In-Reply-To: <20190822062635.00f6e507@coco.lan>
+User-Agent: Mutt/1.5.17 (2007-11-01)
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Fri, Sep 13, 2019 at 03:13:42PM -0700, Tony Luck wrote:
-> First patch refactors code so that second can work on systems
-> with and without the ACPI ADXL address translation code. Perhaps
-> has some value on its own as the code is, IMHO, a little cleaner.
+On Thu, Aug 22, 2019 at 06:26:35AM -0300, Mauro Carvalho Chehab wrote:
+> Em Mon, 19 Aug 2019 08:26:19 +0200
+> Christoph Hellwig <hch@lst.de> escreveu:
 > 
-> Second is in RFC state. Im looking for input on whether to just print
-> the extra information to the console log (as the patch does now) or
-> whether to tag it onto the long string that we push though the EDAC
-> reporting path.
+> > On Mon, Aug 19, 2019 at 08:09:04AM +0200, Borislav Petkov wrote:
+> > > On Sun, Aug 18, 2019 at 10:29:35AM +0200, Christoph Hellwig wrote:  
+> > > > The sifive_l2_cache.c is in no way related to RISC-V architecture
+> > > > memory management.  It is a little stub driver working around the fact
+> > > > that the EDAC maintainers prefer their drivers to be structured in a
+> > > > certain way  
+> > > 
+> > > That changed recently so I guess we can do the per-IP block driver after
+> > > all, if people would still prefer it.  
+> > 
+> > That would seem like the best idea.  But I don't really know this code
+> > well enough myself, and I really need to get this code out of the
+> > forced on RISC-V codebase as some SOCs I'm working with simply don't
+> > have the memory for it..
+> > 
+> > So unless someone signs up to do a per-IP block edac drivers instead
+> > very quickly I'd still like to see something like this go into 5.4
+> > for now.
 > 
-> Tony Luck (2):
->   EDAC, skx_common: Refactor so that we initialize "dev" in result of
->     adxl decode.
->   EDAC, skx: Retrieve and print retry_rd_err_log registers
+> I'm wandering if we should at least add an entry for this one at
+> MAINTAINERS, pointing it to the EDAC mailing list. Something like:
 
-with v2:
-
-Acked-by: Aristeu Rozanski <aris@redhat.com>
-
--- 
-Aristeu
-
+Sounds fine.  Can you also ACK the patch with that, as Paul mention
+in another thread he wants an EDAC ACK for it.
