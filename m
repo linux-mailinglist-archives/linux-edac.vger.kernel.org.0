@@ -2,123 +2,126 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 852BECA9A1
-	for <lists+linux-edac@lfdr.de>; Thu,  3 Oct 2019 19:21:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E0AC9CAC5E
+	for <lists+linux-edac@lfdr.de>; Thu,  3 Oct 2019 19:46:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390453AbfJCQpo (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Thu, 3 Oct 2019 12:45:44 -0400
-Received: from mail.skyhub.de ([5.9.137.197]:55350 "EHLO mail.skyhub.de"
+        id S1732172AbfJCQJM (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Thu, 3 Oct 2019 12:09:12 -0400
+Received: from mail.kernel.org ([198.145.29.99]:57844 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2390402AbfJCQpm (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Thu, 3 Oct 2019 12:45:42 -0400
-Received: from zn.tnic (p200300EC2F0F5D00F0B6154A9AF851AA.dip0.t-ipconnect.de [IPv6:2003:ec:2f0f:5d00:f0b6:154a:9af8:51aa])
+        id S1733078AbfJCQJM (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Thu, 3 Oct 2019 12:09:12 -0400
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 0EBC61EC0503;
-        Thu,  3 Oct 2019 18:45:36 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1570121136;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=eIkPCeTvcN78j8vweFeN2Nr3nk3iKgIhVmOywuUW9/M=;
-        b=XWyVnN3Hnw3ZyTL4XgOzMreKMhkPulfwnXD1mttsER3/l8E7tfOwYc+ObMHMUdYfH1glId
-        O7tKS29RD2qU8cboLOfagoGjGU1QORTSGArxvzRZhOQPs9Dyrh65tnk+E5cokgz+Aymvus
-        hvfoU6NbYJIvWKB5LRGu7anv5uYgt9c=
-Date:   Thu, 3 Oct 2019 18:45:27 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Valdis Kletnieks <valdis.kletnieks@vt.edu>,
-        Borislav Petkov <bp@suse.de>, Tony Luck <tony.luck@intel.com>,
-        linux-edac@vger.kernel.org, x86@kernel.org,
+        by mail.kernel.org (Postfix) with ESMTPSA id BA052207FF;
+        Thu,  3 Oct 2019 16:09:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1570118951;
+        bh=q7MH5xjL57lYshgLlsRFQ3lgZeENdcd5LR0JjZVkFok=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=eogvt0xLu2N0RzVWDBH3iISmxmo1Oy3cYBIRHQqYRJPBTOgzXZ4ZmEaPI3k/g2dTv
+         RfX4ofd9OODlKbr3Y4X/RVMgvDAgXPhJUSkwsVS87M9z7PL/YE3yVhxM6Voyqon9U/
+         2fSpgoqyis0AF+syOScmyHntv34OjvgzxB2pbig0=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org, Robert Richter <rrichter@marvell.com>,
+        Borislav Petkov <bp@suse.de>,
+        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Tony Luck <tony.luck@intel.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: Re: [PATCH 5.2 078/313] RAS: Fix prototype warnings
-Message-ID: <20191003164527.GB11675@zn.tnic>
-References: <20191003154533.590915454@linuxfoundation.org>
- <20191003154540.526612763@linuxfoundation.org>
+Subject: [PATCH 4.14 069/185] EDAC/mc: Fix grain_bits calculation
+Date:   Thu,  3 Oct 2019 17:52:27 +0200
+Message-Id: <20191003154453.150860539@linuxfoundation.org>
+X-Mailer: git-send-email 2.23.0
+In-Reply-To: <20191003154437.541662648@linuxfoundation.org>
+References: <20191003154437.541662648@linuxfoundation.org>
+User-Agent: quilt/0.66
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20191003154540.526612763@linuxfoundation.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Thu, Oct 03, 2019 at 05:50:56PM +0200, Greg Kroah-Hartman wrote:
-> From: Valdis Klētnieks <valdis.kletnieks@vt.edu>
-> 
-> [ Upstream commit 0a54b809a3a2c31e1055b45b03708eb730222be1 ]
-> 
-> When building with C=2 and/or W=1, legitimate warnings are issued about
-> missing prototypes:
-> 
->     CHECK   drivers/ras/debugfs.c
->   drivers/ras/debugfs.c:4:15: warning: symbol 'ras_debugfs_dir' was not declared. Should it be static?
->   drivers/ras/debugfs.c:8:5: warning: symbol 'ras_userspace_consumers' was not declared. Should it be static?
->   drivers/ras/debugfs.c:38:12: warning: symbol 'ras_add_daemon_trace' was not declared. Should it be static?
->   drivers/ras/debugfs.c:54:13: warning: symbol 'ras_debugfs_init' was not declared. Should it be static?
->     CC      drivers/ras/debugfs.o
->   drivers/ras/debugfs.c:8:5: warning: no previous prototype for 'ras_userspace_consumers' [-Wmissing-prototypes]
->       8 | int ras_userspace_consumers(void)
->         |     ^~~~~~~~~~~~~~~~~~~~~~~
->   drivers/ras/debugfs.c:38:12: warning: no previous prototype for 'ras_add_daemon_trace' [-Wmissing-prototypes]
->      38 | int __init ras_add_daemon_trace(void)
->         |            ^~~~~~~~~~~~~~~~~~~~
->   drivers/ras/debugfs.c:54:13: warning: no previous prototype for 'ras_debugfs_init' [-Wmissing-prototypes]
->      54 | void __init ras_debugfs_init(void)
->         |             ^~~~~~~~~~~~~~~~
-> 
-> Provide the proper includes.
-> 
->  [ bp: Take care of the same warnings for cec.c too. ]
-> 
-> Signed-off-by: Valdis Kletnieks <valdis.kletnieks@vt.edu>
-> Signed-off-by: Borislav Petkov <bp@suse.de>
-> Cc: Tony Luck <tony.luck@intel.com>
-> Cc: linux-edac@vger.kernel.org
-> Cc: x86@kernel.org
-> Link: http://lkml.kernel.org/r/7168.1565218769@turing-police
-> Signed-off-by: Sasha Levin <sashal@kernel.org>
-> ---
->  drivers/ras/cec.c     | 1 +
->  drivers/ras/debugfs.c | 2 ++
->  2 files changed, 3 insertions(+)
-> 
-> diff --git a/drivers/ras/cec.c b/drivers/ras/cec.c
-> index f5795adc5a6e1..8037c490f3ba7 100644
-> --- a/drivers/ras/cec.c
-> +++ b/drivers/ras/cec.c
-> @@ -1,6 +1,7 @@
->  // SPDX-License-Identifier: GPL-2.0
->  #include <linux/mm.h>
->  #include <linux/gfp.h>
-> +#include <linux/ras.h>
->  #include <linux/kernel.h>
->  #include <linux/workqueue.h>
->  
-> diff --git a/drivers/ras/debugfs.c b/drivers/ras/debugfs.c
-> index 9c1b717efad86..0d4f985afbf37 100644
-> --- a/drivers/ras/debugfs.c
-> +++ b/drivers/ras/debugfs.c
-> @@ -1,5 +1,7 @@
->  // SPDX-License-Identifier: GPL-2.0-only
->  #include <linux/debugfs.h>
-> +#include <linux/ras.h>
-> +#include "debugfs.h"
->  
->  struct dentry *ras_debugfs_dir;
->  
-> -- 
+From: Robert Richter <rrichter@marvell.com>
 
-Definitely not stable material.
+[ Upstream commit 3724ace582d9f675134985727fd5e9811f23c059 ]
 
+The grain in EDAC is defined as "minimum granularity for an error
+report, in bytes". The following calculation of the grain_bits in
+edac_mc is wrong:
+
+	grain_bits = fls_long(e->grain) + 1;
+
+Where grain_bits is defined as:
+
+	grain = 1 << grain_bits
+
+Example:
+
+	grain = 8	# 64 bit (8 bytes)
+	grain_bits = fls_long(8) + 1
+	grain_bits = 4 + 1 = 5
+
+	grain = 1 << grain_bits
+	grain = 1 << 5 = 32
+
+Replace it with the correct calculation:
+
+	grain_bits = fls_long(e->grain - 1);
+
+The example gives now:
+
+	grain_bits = fls_long(8 - 1)
+	grain_bits = fls_long(7)
+	grain_bits = 3
+
+	grain = 1 << 3 = 8
+
+Also, check if the hardware reports a reasonable grain != 0 and fallback
+with a warning to 1 byte granularity otherwise.
+
+ [ bp: massage a bit. ]
+
+Signed-off-by: Robert Richter <rrichter@marvell.com>
+Signed-off-by: Borislav Petkov <bp@suse.de>
+Cc: "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>
+Cc: James Morse <james.morse@arm.com>
+Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc: Tony Luck <tony.luck@intel.com>
+Link: https://lkml.kernel.org/r/20190624150758.6695-2-rrichter@marvell.com
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/edac/edac_mc.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/edac/edac_mc.c b/drivers/edac/edac_mc.c
+index 80801c616395e..f7fa05fee45a1 100644
+--- a/drivers/edac/edac_mc.c
++++ b/drivers/edac/edac_mc.c
+@@ -1240,9 +1240,13 @@ void edac_mc_handle_error(const enum hw_event_mc_err_type type,
+ 	if (p > e->location)
+ 		*(p - 1) = '\0';
+ 
+-	/* Report the error via the trace interface */
+-	grain_bits = fls_long(e->grain) + 1;
++	/* Sanity-check driver-supplied grain value. */
++	if (WARN_ON_ONCE(!e->grain))
++		e->grain = 1;
++
++	grain_bits = fls_long(e->grain - 1);
+ 
++	/* Report the error via the trace interface */
+ 	if (IS_ENABLED(CONFIG_RAS))
+ 		trace_mc_event(type, e->msg, e->label, e->error_count,
+ 			       mci->mc_idx, e->top_layer, e->mid_layer,
 -- 
-Regards/Gruss,
-    Boris.
+2.20.1
 
-https://people.kernel.org/tglx/notes-about-netiquette
+
+
