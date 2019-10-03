@@ -2,43 +2,43 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E2A6DCA9D2
-	for <lists+linux-edac@lfdr.de>; Thu,  3 Oct 2019 19:21:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B8B5CAB0E
+	for <lists+linux-edac@lfdr.de>; Thu,  3 Oct 2019 19:27:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390523AbfJCRAA (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Thu, 3 Oct 2019 13:00:00 -0400
-Received: from mail.kernel.org ([198.145.29.99]:59560 "EHLO mail.kernel.org"
+        id S1727793AbfJCR0K (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Thu, 3 Oct 2019 13:26:10 -0400
+Received: from mail.kernel.org ([198.145.29.99]:41352 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2404017AbfJCQqV (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Thu, 3 Oct 2019 12:46:21 -0400
+        id S2388969AbfJCQQZ (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Thu, 3 Oct 2019 12:16:25 -0400
 Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id BD92B20830;
-        Thu,  3 Oct 2019 16:46:20 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id E423D20700;
+        Thu,  3 Oct 2019 16:16:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1570121181;
-        bh=17ENxLHu3L2mMH6u0ZNP5nKyjgrAqv2BiX847xF1hn4=;
+        s=default; t=1570119384;
+        bh=REPlmJ3AG9u8ggMbAE/uWkhiDbswCFmGAr0G8TJ0BKE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=JFpCphNjWTFKQTiSffKoQxutyi1NLnDHCRMXKgKJnl70BoHAiEP/HUjv8N652Q5/k
-         iT4ifH4UGy6AjmGD87oUcdmo/+cetaWJP6ifkDr+oPk5KsmJ6bEu5cFFa6g94fGQxx
-         Jez18fEJWgS6l/CQV8AEeVe9yWwEOGInFL+6ky+c=
+        b=Tgkw+Mjl2Z/PxXOCD1b2BUHiP//FQf+0EaS1C0SUQPXg+GvOtP4c2CwVMv5T4iusU
+         DkRi00GC/P8gMNSX+sQsQe+S4R83YuG6SiIiS9Ormkq2FMhf7M0n+dpLi1ksG6IC1j
+         S0hWnZKHZ00+i5AKbqG5PsPzpkwJWUO5ceKxzgMM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Yazen Ghannam <yazen.ghannam@amd.com>,
+        stable@vger.kernel.org, Robert Richter <rrichter@marvell.com>,
         Borislav Petkov <bp@suse.de>,
         "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
         James Morse <james.morse@arm.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         Tony Luck <tony.luck@intel.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.3 147/344] EDAC/amd64: Recognize DRAM device type ECC capability
+Subject: [PATCH 4.19 046/211] EDAC/mc: Fix grain_bits calculation
 Date:   Thu,  3 Oct 2019 17:51:52 +0200
-Message-Id: <20191003154554.766258232@linuxfoundation.org>
+Message-Id: <20191003154458.628881944@linuxfoundation.org>
 X-Mailer: git-send-email 2.23.0
-In-Reply-To: <20191003154540.062170222@linuxfoundation.org>
-References: <20191003154540.062170222@linuxfoundation.org>
+In-Reply-To: <20191003154447.010950442@linuxfoundation.org>
+References: <20191003154447.010950442@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -48,70 +48,78 @@ Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-From: Yazen Ghannam <yazen.ghannam@amd.com>
+From: Robert Richter <rrichter@marvell.com>
 
-[ Upstream commit f8be8e5680225ac9caf07d4545f8529b7395327f ]
+[ Upstream commit 3724ace582d9f675134985727fd5e9811f23c059 ]
 
-AMD Family 17h systems support x4 and x16 DRAM devices. However, the
-device type is not checked when setting mci.edac_ctl_cap.
+The grain in EDAC is defined as "minimum granularity for an error
+report, in bytes". The following calculation of the grain_bits in
+edac_mc is wrong:
 
-Set the appropriate capability flag based on the device type.
+	grain_bits = fls_long(e->grain) + 1;
 
-Default to x8 DRAM device when neither the x4 or x16 bits are set.
+Where grain_bits is defined as:
 
- [ bp: reverse cpk_en check to save an indentation level. ]
+	grain = 1 << grain_bits
 
-Fixes: 2d09d8f301f5 ("EDAC, amd64: Determine EDAC MC capabilities on Fam17h")
-Signed-off-by: Yazen Ghannam <yazen.ghannam@amd.com>
+Example:
+
+	grain = 8	# 64 bit (8 bytes)
+	grain_bits = fls_long(8) + 1
+	grain_bits = 4 + 1 = 5
+
+	grain = 1 << grain_bits
+	grain = 1 << 5 = 32
+
+Replace it with the correct calculation:
+
+	grain_bits = fls_long(e->grain - 1);
+
+The example gives now:
+
+	grain_bits = fls_long(8 - 1)
+	grain_bits = fls_long(7)
+	grain_bits = 3
+
+	grain = 1 << 3 = 8
+
+Also, check if the hardware reports a reasonable grain != 0 and fallback
+with a warning to 1 byte granularity otherwise.
+
+ [ bp: massage a bit. ]
+
+Signed-off-by: Robert Richter <rrichter@marvell.com>
 Signed-off-by: Borislav Petkov <bp@suse.de>
 Cc: "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>
 Cc: James Morse <james.morse@arm.com>
 Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
 Cc: Tony Luck <tony.luck@intel.com>
-Link: https://lkml.kernel.org/r/20190821235938.118710-3-Yazen.Ghannam@amd.com
+Link: https://lkml.kernel.org/r/20190624150758.6695-2-rrichter@marvell.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/edac/amd64_edac.c | 14 ++++++++++++--
- 1 file changed, 12 insertions(+), 2 deletions(-)
+ drivers/edac/edac_mc.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/edac/amd64_edac.c b/drivers/edac/amd64_edac.c
-index dd60cf5a3d969..ffe56a8fe39da 100644
---- a/drivers/edac/amd64_edac.c
-+++ b/drivers/edac/amd64_edac.c
-@@ -3150,12 +3150,15 @@ static bool ecc_enabled(struct pci_dev *F3, u16 nid)
- static inline void
- f17h_determine_edac_ctl_cap(struct mem_ctl_info *mci, struct amd64_pvt *pvt)
- {
--	u8 i, ecc_en = 1, cpk_en = 1;
-+	u8 i, ecc_en = 1, cpk_en = 1, dev_x4 = 1, dev_x16 = 1;
+diff --git a/drivers/edac/edac_mc.c b/drivers/edac/edac_mc.c
+index 7d3edd7139328..f59511bd99261 100644
+--- a/drivers/edac/edac_mc.c
++++ b/drivers/edac/edac_mc.c
+@@ -1246,9 +1246,13 @@ void edac_mc_handle_error(const enum hw_event_mc_err_type type,
+ 	if (p > e->location)
+ 		*(p - 1) = '\0';
  
- 	for_each_umc(i) {
- 		if (pvt->umc[i].sdp_ctrl & UMC_SDP_INIT) {
- 			ecc_en &= !!(pvt->umc[i].umc_cap_hi & UMC_ECC_ENABLED);
- 			cpk_en &= !!(pvt->umc[i].umc_cap_hi & UMC_ECC_CHIPKILL_CAP);
+-	/* Report the error via the trace interface */
+-	grain_bits = fls_long(e->grain) + 1;
++	/* Sanity-check driver-supplied grain value. */
++	if (WARN_ON_ONCE(!e->grain))
++		e->grain = 1;
 +
-+			dev_x4  &= !!(pvt->umc[i].dimm_cfg & BIT(6));
-+			dev_x16 &= !!(pvt->umc[i].dimm_cfg & BIT(7));
- 		}
- 	}
++	grain_bits = fls_long(e->grain - 1);
  
-@@ -3163,8 +3166,15 @@ f17h_determine_edac_ctl_cap(struct mem_ctl_info *mci, struct amd64_pvt *pvt)
- 	if (ecc_en) {
- 		mci->edac_ctl_cap |= EDAC_FLAG_SECDED;
- 
--		if (cpk_en)
-+		if (!cpk_en)
-+			return;
-+
-+		if (dev_x4)
- 			mci->edac_ctl_cap |= EDAC_FLAG_S4ECD4ED;
-+		else if (dev_x16)
-+			mci->edac_ctl_cap |= EDAC_FLAG_S16ECD16ED;
-+		else
-+			mci->edac_ctl_cap |= EDAC_FLAG_S8ECD8ED;
- 	}
- }
- 
++	/* Report the error via the trace interface */
+ 	if (IS_ENABLED(CONFIG_RAS))
+ 		trace_mc_event(type, e->msg, e->label, e->error_count,
+ 			       mci->mc_idx, e->top_layer, e->mid_layer,
 -- 
 2.20.1
 
