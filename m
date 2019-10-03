@@ -2,282 +2,101 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D9C3BC4AA2
-	for <lists+linux-edac@lfdr.de>; Wed,  2 Oct 2019 11:28:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 09A1AC9D61
+	for <lists+linux-edac@lfdr.de>; Thu,  3 Oct 2019 13:33:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726038AbfJBJ2H (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Wed, 2 Oct 2019 05:28:07 -0400
-Received: from smtp-fw-33001.amazon.com ([207.171.190.10]:29812 "EHLO
-        smtp-fw-33001.amazon.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725852AbfJBJ2H (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Wed, 2 Oct 2019 05:28:07 -0400
+        id S1730164AbfJCLdX (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Thu, 3 Oct 2019 07:33:23 -0400
+Received: from smtp-fw-6001.amazon.com ([52.95.48.154]:43767 "EHLO
+        smtp-fw-6001.amazon.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729989AbfJCLdW (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Thu, 3 Oct 2019 07:33:22 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1570008484; x=1601544484;
-  h=subject:to:cc:references:from:message-id:date:
-   mime-version:in-reply-to:content-transfer-encoding;
-  bh=pakAPBrVlVMGqVOKoh2qW8SL/VWSbaRCbk8sgD+X+W8=;
-  b=izX4SKGDZeJ1oVK0aupvfwt+09CiUwu95BHy7WxFv5JVi1mBU8BVq5XB
-   DdHVZq8qM5Qond9n7Oid8BrZZkxx65EgoKj5nDZWp7rQ+2/dZTvR+o1Ga
-   vf3Q5OyKt9E5+ae2XaGTkI6YcQKdBc/Gu7pOokjvLFgyEco8JsnVsWhz6
-   g=;
-X-IronPort-AV: E=Sophos;i="5.64,573,1559520000"; 
-   d="scan'208";a="838652386"
-Received: from sea3-co-svc-lb6-vlan2.sea.amazon.com (HELO email-inbound-relay-1d-74cf8b49.us-east-1.amazon.com) ([10.47.22.34])
-  by smtp-border-fw-out-33001.sea14.amazon.com with ESMTP; 02 Oct 2019 09:26:18 +0000
-Received: from EX13MTAUEB001.ant.amazon.com (iad55-ws-svc-p15-lb9-vlan2.iad.amazon.com [10.40.159.162])
-        by email-inbound-relay-1d-74cf8b49.us-east-1.amazon.com (Postfix) with ESMTPS id 68A25C05B3;
-        Wed,  2 Oct 2019 09:26:00 +0000 (UTC)
-Received: from EX13D08UEB004.ant.amazon.com (10.43.60.142) by
- EX13MTAUEB001.ant.amazon.com (10.43.60.129) with Microsoft SMTP Server (TLS)
- id 15.0.1367.3; Wed, 2 Oct 2019 09:25:59 +0000
-Received: from EX13MTAUEB001.ant.amazon.com (10.43.60.96) by
- EX13D08UEB004.ant.amazon.com (10.43.60.142) with Microsoft SMTP Server (TLS)
- id 15.0.1367.3; Wed, 2 Oct 2019 09:25:59 +0000
-Received: from [10.95.86.195] (10.95.86.195) by mail-relay.amazon.com
- (10.43.60.129) with Microsoft SMTP Server (TLS) id 15.0.1367.3 via Frontend
- Transport; Wed, 2 Oct 2019 09:25:56 +0000
-Subject: Re: [PATCH v4 1/2] edac: Add an API for edac device to report for
- multiple errors
-To:     Borislav Petkov <bp@alien8.de>
-CC:     <mchehab@kernel.org>, <james.morse@arm.com>,
-        <rrichter@marvell.com>, <linux-edac@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <dwmw@amazon.co.uk>,
-        <benh@amazon.com>, <ronenk@amazon.com>, <talel@amazon.com>,
-        <jonnyc@amazon.com>, <hanochu@amazon.com>
-References: <20190923191741.29322-1-hhhawa@amazon.com>
- <20190923191741.29322-2-hhhawa@amazon.com> <20190930145046.GH29694@zn.tnic>
-From:   "Hawa, Hanna" <hhhawa@amazon.com>
-Message-ID: <5263edad-e0c9-a05a-72d7-e69c59d78d8f@amazon.com>
-Date:   Wed, 2 Oct 2019 12:25:55 +0300
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+  t=1570102401; x=1601638401;
+  h=from:to:cc:subject:date:message-id:mime-version;
+  bh=4i6VHJPb8Q8LVbG7y75cI3zauRIqKGmEQC2l3cOofEA=;
+  b=Y76U1LgWiWtEE/fbmj2ouyaXv3oEFBn5AYvSa+bc3hhFdgRqsoviKhOP
+   X44UjuBKuFm0YFQ78DgHixxboITg+MLdobmEUIYDQqwClX86POiXA1oL1
+   GuDzicKcd0cJMvkbJkmZPEGBEsomxBl+Qz01pcMrNjdN1w3sNFbIdFkB9
+   I=;
+X-IronPort-AV: E=Sophos;i="5.67,251,1566864000"; 
+   d="scan'208";a="419556202"
+Received: from iad6-co-svc-p1-lb1-vlan3.amazon.com (HELO email-inbound-relay-2c-2225282c.us-west-2.amazon.com) ([10.124.125.6])
+  by smtp-border-fw-out-6001.iad6.amazon.com with ESMTP; 03 Oct 2019 11:33:19 +0000
+Received: from EX13MTAUEA001.ant.amazon.com (pdx4-ws-svc-p6-lb7-vlan3.pdx.amazon.com [10.170.41.166])
+        by email-inbound-relay-2c-2225282c.us-west-2.amazon.com (Postfix) with ESMTPS id 6573AA06D2;
+        Thu,  3 Oct 2019 11:33:18 +0000 (UTC)
+Received: from EX13D01EUB001.ant.amazon.com (10.43.166.194) by
+ EX13MTAUEA001.ant.amazon.com (10.43.61.82) with Microsoft SMTP Server (TLS)
+ id 15.0.1367.3; Thu, 3 Oct 2019 11:33:17 +0000
+Received: from udc4a3e82dbc15a031435.hfa15.amazon.com (10.43.161.7) by
+ EX13D01EUB001.ant.amazon.com (10.43.166.194) with Microsoft SMTP Server (TLS)
+ id 15.0.1367.3; Thu, 3 Oct 2019 11:33:08 +0000
+From:   Talel Shenhar <talel@amazon.com>
+To:     <robh+dt@kernel.org>, <maz@kernel.org>, <mark.rutland@arm.com>,
+        <arnd@arndb.de>, <bp@alien8.de>, <mchehab@kernel.org>,
+        <james.morse@arm.com>, <davem@davemloft.net>,
+        <gregkh@linuxfoundation.org>, <paulmck@linux.ibm.com>,
+        <talel@amazon.com>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-edac@vger.kernel.org>
+CC:     <dwmw@amazon.co.uk>, <benh@kernel.crashing.org>,
+        <hhhawa@amazon.com>, <ronenk@amazon.com>, <jonnyc@amazon.com>,
+        <hanochu@amazon.com>, <amirkl@amazon.com>, <barakw@amazon.com>
+Subject: [PATCH v4 0/2] Amazon's Annapurna Labs POS Driver
+Date:   Thu, 3 Oct 2019 14:32:39 +0300
+Message-ID: <1570102361-11696-1-git-send-email-talel@amazon.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-In-Reply-To: <20190930145046.GH29694@zn.tnic>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
+X-Originating-IP: [10.43.161.7]
+X-ClientProxiedBy: EX13D06UWA004.ant.amazon.com (10.43.160.164) To
+ EX13D01EUB001.ant.amazon.com (10.43.166.194)
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
+The Amazon's Annapurna Labs SoCs includes Point Of Serialization error
+logging unit that reports an error in case of write error (e.g. attempt to
+write to a read only register).
+
+This patch series introduces the support for this unit.
+
+Changes since v3:
+=================
+- ported to be edac device
+- converted dt-bindings to new scheme
+- added unit address to dt example
+
+Changes since v2:
+=================
+- squashed left shifting fix to the driver
+
+Changes since v1:
+=================
+- move MODULE_ to the end of the file
+- simplified resource remapping devm_platform_ioremap_resource()
+- use platform_get_irq() instead of irq_of_parse_and_map()
+- removed the use of _relaxed accessor in favor to the regular ones
+- removed driver selected based on arch
+- added casting to u64 before left shifting (reported by kbuild test robot)
 
 
-On 9/30/2019 5:50 PM, Borislav Petkov wrote:
-> On Mon, Sep 23, 2019 at 08:17:40PM +0100, Hanna Hawa wrote:
->> +void edac_device_handle_ce(struct edac_device_ctl_info *edac_dev,
->> +			int inst_nr, int block_nr, const char *msg)
->> +{
->> +	__edac_device_handle_ce(edac_dev, 1, inst_nr, block_nr, msg);
->> +}
->> +EXPORT_SYMBOL_GPL(edac_device_handle_ce);
-> 
-> Eww, I don't like that: exporting the function *and* the __ counterpart.
-> The user will get confused and that is unnecessary.
-> 
-> See below for a better version. This way you solve the whole deal with a
-> single patch.
-I'm okay with this version, minor comment below.
+Talel Shenhar (2):
+  dt-bindings: soc: al-pos: Amazon's Annapurna Labs POS
+  soc: amazon: al-pos-edac: Introduce Amazon's Annapurna Labs POS EDAC
+    driver
 
-> 
-> ---
-> From: Hanna Hawa <hhhawa@amazon.com>
-> Date: Mon, 23 Sep 2019 20:17:40 +0100
-> Subject: [PATCH] EDAC/device: Rework error logging API
-> 
-> Make the main workhorse the "count" functions which can log a @count
-> of errors. Have the current APIs edac_device_handle_{ce,ue}() call
-> the _count() variants and this way keep the exported symbols number
-> unchanged.
-> 
->   [ bp: Rewrite. ]
-> 
-> Signed-off-by: Hanna Hawa <hhhawa@amazon.com>
-> Signed-off-by: Borislav Petkov <bp@suse.de>
-> Cc: benh@amazon.com
-> Cc: dwmw@amazon.co.uk
-> Cc: hanochu@amazon.com
-> Cc: James Morse <james.morse@arm.com>
-> Cc: jonnyc@amazon.com
-> Cc: linux-edac <linux-edac@vger.kernel.org>
-> Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
-> Cc: ronenk@amazon.com
-> Cc: talel@amazon.com
-> Cc: Tony Luck <tony.luck@intel.com>
-> Link: https://lkml.kernel.org/r/20190923191741.29322-2-hhhawa@amazon.com
-> ---
->   drivers/edac/edac_device.c | 44 ++++++++++++++++---------------
->   drivers/edac/edac_device.h | 54 ++++++++++++++++++++++++++++++--------
->   2 files changed, 66 insertions(+), 32 deletions(-)
-> 
-> diff --git a/drivers/edac/edac_device.c b/drivers/edac/edac_device.c
-> index 65cf2b9355c4..d4d8bed5b55d 100644
-> --- a/drivers/edac/edac_device.c
-> +++ b/drivers/edac/edac_device.c
-> @@ -555,8 +555,9 @@ static inline int edac_device_get_panic_on_ue(struct edac_device_ctl_info
->   	return edac_dev->panic_on_ue;
->   }
->   
-> -void edac_device_handle_ce(struct edac_device_ctl_info *edac_dev,
-> -			int inst_nr, int block_nr, const char *msg)
-> +void edac_device_handle_ce_count(struct edac_device_ctl_info *edac_dev,
-> +				 unsigned int count, int inst_nr, int block_nr,
-> +				 const char *msg)
->   {
->   	struct edac_device_instance *instance;
->   	struct edac_device_block *block = NULL;
+ .../bindings/edac/amazon,al-pos-edac.yaml          |  39 +++++
+ MAINTAINERS                                        |   7 +
+ drivers/edac/Kconfig                               |   6 +
+ drivers/edac/Makefile                              |   1 +
+ drivers/edac/al_pos_edac.c                         | 173 +++++++++++++++++++++
+ 5 files changed, 226 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/edac/amazon,al-pos-edac.yaml
+ create mode 100644 drivers/edac/al_pos_edac.c
 
-Missing count check, same in *_ue_count():
-if (count)
-	return;
+-- 
+2.7.4
 
-> @@ -582,23 +583,24 @@ void edac_device_handle_ce(struct edac_device_ctl_info *edac_dev,
->   
->   	if (instance->nr_blocks > 0) {
->   		block = instance->blocks + block_nr;
-> -		block->counters.ce_count++;
-> +		block->counters.ce_count += count;
->   	}
->   
->   	/* Propagate the count up the 'totals' tree */
-> -	instance->counters.ce_count++;
-> -	edac_dev->counters.ce_count++;
-> +	instance->counters.ce_count += count;
-> +	edac_dev->counters.ce_count += count;
->   
->   	if (edac_device_get_log_ce(edac_dev))
->   		edac_device_printk(edac_dev, KERN_WARNING,
-> -				"CE: %s instance: %s block: %s '%s'\n",
-> -				edac_dev->ctl_name, instance->name,
-> -				block ? block->name : "N/A", msg);
-> +				   "CE: %s instance: %s block: %s count: %d '%s'\n",
-> +				   edac_dev->ctl_name, instance->name,
-> +				   block ? block->name : "N/A", count, msg);
->   }
-> -EXPORT_SYMBOL_GPL(edac_device_handle_ce);
-> +EXPORT_SYMBOL_GPL(edac_device_handle_ce_count);
->   
-> -void edac_device_handle_ue(struct edac_device_ctl_info *edac_dev,
-> -			int inst_nr, int block_nr, const char *msg)
-> +void edac_device_handle_ue_count(struct edac_device_ctl_info *edac_dev,
-> +				 unsigned int count, int inst_nr, int block_nr,
-> +				 const char *msg)
->   {
->   	struct edac_device_instance *instance;
->   	struct edac_device_block *block = NULL;
-> @@ -624,22 +626,22 @@ void edac_device_handle_ue(struct edac_device_ctl_info *edac_dev,
->   
->   	if (instance->nr_blocks > 0) {
->   		block = instance->blocks + block_nr;
-> -		block->counters.ue_count++;
-> +		block->counters.ue_count += count;
->   	}
->   
->   	/* Propagate the count up the 'totals' tree */
-> -	instance->counters.ue_count++;
-> -	edac_dev->counters.ue_count++;
-> +	instance->counters.ue_count += count;
-> +	edac_dev->counters.ue_count += count;
->   
->   	if (edac_device_get_log_ue(edac_dev))
->   		edac_device_printk(edac_dev, KERN_EMERG,
-> -				"UE: %s instance: %s block: %s '%s'\n",
-> -				edac_dev->ctl_name, instance->name,
-> -				block ? block->name : "N/A", msg);
-> +				   "UE: %s instance: %s block: %s count: %d '%s'\n",
-> +				   edac_dev->ctl_name, instance->name,
-> +				   block ? block->name : "N/A", count, msg);
->   
->   	if (edac_device_get_panic_on_ue(edac_dev))
-> -		panic("EDAC %s: UE instance: %s block %s '%s'\n",
-> -			edac_dev->ctl_name, instance->name,
-> -			block ? block->name : "N/A", msg);
-> +		panic("EDAC %s: UE instance: %s block %s count: %d '%s'\n",
-> +		      edac_dev->ctl_name, instance->name,
-> +		      block ? block->name : "N/A", count, msg);
->   }
-> -EXPORT_SYMBOL_GPL(edac_device_handle_ue);
-> +EXPORT_SYMBOL_GPL(edac_device_handle_ue_count);
-> diff --git a/drivers/edac/edac_device.h b/drivers/edac/edac_device.h
-> index 1aaba74ae411..c4c0e0bdce14 100644
-> --- a/drivers/edac/edac_device.h
-> +++ b/drivers/edac/edac_device.h
-> @@ -286,27 +286,60 @@ extern int edac_device_add_device(struct edac_device_ctl_info *edac_dev);
->   extern struct edac_device_ctl_info *edac_device_del_device(struct device *dev);
->   
->   /**
-> - * edac_device_handle_ue():
-> - *	perform a common output and handling of an 'edac_dev' UE event
-> + * Log correctable errors.
->    *
->    * @edac_dev: pointer to struct &edac_device_ctl_info
-> - * @inst_nr: number of the instance where the UE error happened
-> - * @block_nr: number of the block where the UE error happened
-> + * @inst_nr: number of the instance where the CE error happened
-> + * @count: Number of errors to log.
-> + * @block_nr: number of the block where the CE error happened
-> + * @msg: message to be printed
-> + */
-> +void edac_device_handle_ce_count(struct edac_device_ctl_info *edac_dev,
-> +				 unsigned int count, int inst_nr, int block_nr,
-> +				 const char *msg);
-> +
-> +/**
-> + * Log uncorrectable errors.
-> + *
-> + * @edac_dev: pointer to struct &edac_device_ctl_info
-> + * @inst_nr: number of the instance where the CE error happened
-> + * @count: Number of errors to log.
-> + * @block_nr: number of the block where the CE error happened
->    * @msg: message to be printed
->    */
-> -extern void edac_device_handle_ue(struct edac_device_ctl_info *edac_dev,
-> -				int inst_nr, int block_nr, const char *msg);
-> +void edac_device_handle_ue_count(struct edac_device_ctl_info *edac_dev,
-> +				 unsigned int count, int inst_nr, int block_nr,
-> +				 const char *msg);
-> +
->   /**
-> - * edac_device_handle_ce():
-> - *	perform a common output and handling of an 'edac_dev' CE event
-> + * edac_device_handle_ce(): Log a single correctable error
->    *
->    * @edac_dev: pointer to struct &edac_device_ctl_info
->    * @inst_nr: number of the instance where the CE error happened
->    * @block_nr: number of the block where the CE error happened
->    * @msg: message to be printed
->    */
-> -extern void edac_device_handle_ce(struct edac_device_ctl_info *edac_dev,
-> -				int inst_nr, int block_nr, const char *msg);
-> +static inline void
-> +edac_device_handle_ce(struct edac_device_ctl_info *edac_dev, int inst_nr,
-> +		      int block_nr, const char *msg)
-> +{
-> +	edac_device_handle_ce_count(edac_dev, 1, inst_nr, block_nr, msg);
-> +}
-> +
-> +/**
-> + * edac_device_handle_ue(): Log a single uncorrectable error
-> + *
-> + * @edac_dev: pointer to struct &edac_device_ctl_info
-> + * @inst_nr: number of the instance where the UE error happened
-> + * @block_nr: number of the block where the UE error happened
-> + * @msg: message to be printed
-> + */
-> +static inline void
-> +edac_device_handle_ue(struct edac_device_ctl_info *edac_dev, int inst_nr,
-> +		      int block_nr, const char *msg)
-> +{
-> +	edac_device_handle_ue_count(edac_dev, 1, inst_nr, block_nr, msg);
-> +}
->   
->   /**
->    * edac_device_alloc_index: Allocate a unique device index number
-> @@ -316,5 +349,4 @@ extern void edac_device_handle_ce(struct edac_device_ctl_info *edac_dev,
->    */
->   extern int edac_device_alloc_index(void);
->   extern const char *edac_layer_name[];
-> -
->   #endif
-> 
