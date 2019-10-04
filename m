@@ -2,277 +2,71 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 123F4CC120
-	for <lists+linux-edac@lfdr.de>; Fri,  4 Oct 2019 18:57:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5408BCC369
+	for <lists+linux-edac@lfdr.de>; Fri,  4 Oct 2019 21:11:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727647AbfJDQ5H (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Fri, 4 Oct 2019 12:57:07 -0400
-Received: from mail.skyhub.de ([5.9.137.197]:40114 "EHLO mail.skyhub.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726119AbfJDQ5H (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Fri, 4 Oct 2019 12:57:07 -0400
-Received: from zn.tnic (p200300EC2F0C7700D5F6910340328F8F.dip0.t-ipconnect.de [IPv6:2003:ec:2f0c:7700:d5f6:9103:4032:8f8f])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 92EC71EC0626;
-        Fri,  4 Oct 2019 18:57:05 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1570208225;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=h+0mivdjgezbd+ZZJIetcbwxDfHWLnjVmNKjpWtjkgY=;
-        b=AuUusN/7O6GlZJUNpEXx61THkrq/YEpn0/jbbGjeJTC411HQYMp6mDxR/QV9wXMt9LGHbi
-        E1rRd09BijI+dl/wrpmakX/7mcwtRjfvAHp2y6krXK27F6nRCU9s1ZpQXBjK58qHtbY4A8
-        SOYODxCpTLY2vTJJpwzuFHf+DPiPjNA=
-Date:   Fri, 4 Oct 2019 18:57:00 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     "Hawa, Hanna" <hhhawa@amazon.com>
-Cc:     mchehab@kernel.org, james.morse@arm.com, rrichter@marvell.com,
-        linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
-        dwmw@amazon.co.uk, benh@amazon.com, ronenk@amazon.com,
-        talel@amazon.com, jonnyc@amazon.com, hanochu@amazon.com
-Subject: [PATCH -v2] EDAC/device: Rework error logging API
-Message-ID: <20191004165700.GB3362@zn.tnic>
-References: <20190923191741.29322-1-hhhawa@amazon.com>
- <20190923191741.29322-2-hhhawa@amazon.com>
- <20190930145046.GH29694@zn.tnic>
- <5263edad-e0c9-a05a-72d7-e69c59d78d8f@amazon.com>
+        id S1730561AbfJDTLj (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Fri, 4 Oct 2019 15:11:39 -0400
+Received: from mail-lj1-f193.google.com ([209.85.208.193]:42139 "EHLO
+        mail-lj1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730396AbfJDTLi (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Fri, 4 Oct 2019 15:11:38 -0400
+Received: by mail-lj1-f193.google.com with SMTP id y23so7559615lje.9
+        for <linux-edac@vger.kernel.org>; Fri, 04 Oct 2019 12:11:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=usuFISMqci9f735wNqIFTbIm+6Oe9vY9sfRcppqbt5s=;
+        b=HvnR1KR73qda6vY/C+pVxksN+VkAF79ybdTbYLgp2BPfIBTG3X5fPcL8CE/yRW+uYB
+         JcVyzvlgJ6a7Zo3IibEn8NznBc491IMUS7uRPQ2Xi9AskMnPYjzHlY0I24qeDxgvE2FD
+         a7sfDNkFfsbRQKT7Hkd/KJRDBgEOAcZaJc/qhjwn9HaGcxj1w9Cn4mZuNq3oSqE/XsII
+         YTdyE6x1+6JuJjv1gs9xZgr0HuM6VueBCMuQ71OTx2p9m5jrN/ipjmDSP9DBbbMOMvSB
+         2NYml5bEyyVkbiMwCNW4mMYiZ5Bz0QF6bjm/SnC1T8JED+3Ikj77qK6j4BTtzgYdniIo
+         h81g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=usuFISMqci9f735wNqIFTbIm+6Oe9vY9sfRcppqbt5s=;
+        b=DW+dTf+qC5EwA2Bw3lho/EeYMdb9enCu5AKYIgDdP3y+PCpn/gqRXfoLkFWiTdzZFW
+         UccOcU8UG0K1+eEWJe1ekl0vvMQNPeRBZkxIEwUa3NTKGo/gFi0Ibwt+m0Wfkt32sH97
+         9AF9dA3Yd0Rwe2xXjp5dcTG9nYtqncld8pGZN6Y/ErD7FeqxRLLrCewGpDsXTAZ7uABP
+         Gz/QcM1DdqaSiWskY9TSUCCw09j0uswOtAKeA0mdzNKm+MpeifLNoV0DjFkcrEMkk9a9
+         8y/mS0CSePVRdP/vFxaOnrGsJRQXOtcXlxuk1TrLALHMJWXGS+/YCEZSzPX8oeSh8gCY
+         vDtg==
+X-Gm-Message-State: APjAAAUBuQcMoLAhOv225TeMDwWUV8mp41kU/9vA8fTMkIma8T15PM17
+        KRIUIjMoCacNblGpFWNnli6IiDsgLsEjfkAc4t8=
+X-Google-Smtp-Source: APXvYqxneftEXtgdp62+HuPpOF3H0Ge3/BzgCLs+OMAlvJEqXQGw4KdTusSyG/LNSfeR/H5ALp5GlFHQBbsKFNhd5wY=
+X-Received: by 2002:a2e:2953:: with SMTP id u80mr10372271lje.233.1570216296619;
+ Fri, 04 Oct 2019 12:11:36 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <5263edad-e0c9-a05a-72d7-e69c59d78d8f@amazon.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Received: by 2002:a05:6504:1175:0:0:0:0 with HTTP; Fri, 4 Oct 2019 12:11:35
+ -0700 (PDT)
+Reply-To: helenpatrrick@gmail.com
+From:   Angel Helen <isslamicbank@gmail.com>
+Date:   Fri, 4 Oct 2019 19:11:35 +0000
+Message-ID: <CABU49e=m5HNGJpwvNO_mW5jcwDtgW+5F4a+BVr03n1jFqfBEXA@mail.gmail.com>
+Subject: HELLO PLEASE CAN I SPEAK WITH YOU?
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Wed, Oct 02, 2019 at 12:25:55PM +0300, Hawa, Hanna wrote:
-> Missing count check, same in *_ue_count():
-> if (count)
+Hello dear,
+My name is Miss Helen i am a humble sincere single girl looking for
+true love, and a partner to assist me transfer my late father money,
+an amount of, (Four Million Two Hundred Thousand US Dollars) to your
+country for investment. I will give you 40% after the transfer, while
+the remaining amount will be invest in your country in your names,
+with 50% equal profits sharing.
 
-I think you meant:
+Send me your pictures with brief introductions about your self's, so
+that i will give you further details and procedure.
 
-	if (!count)
+Message me to my email: helenpatrrick@gmail.com
 
-Anyway, fixed:
-
----
-From 0e49a27859b947d2abded91ee3558639bf8ec0bd Mon Sep 17 00:00:00 2001
-From: Hanna Hawa <hhhawa@amazon.com>
-Date: Mon, 23 Sep 2019 20:17:40 +0100
-Subject: [PATCH] EDAC/device: Rework error logging API
-
-Make the main workhorse the "count" functions which can log a @count
-of errors. Have the current APIs edac_device_handle_{ce,ue}() call
-the _count() variants and this way keep the exported symbols number
-unchanged.
-
- [ bp: Rewrite. ]
-
-Signed-off-by: Hanna Hawa <hhhawa@amazon.com>
-Signed-off-by: Borislav Petkov <bp@suse.de>
-Cc: benh@amazon.com
-Cc: dwmw@amazon.co.uk
-Cc: hanochu@amazon.com
-Cc: James Morse <james.morse@arm.com>
-Cc: jonnyc@amazon.com
-Cc: linux-edac <linux-edac@vger.kernel.org>
-Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc: ronenk@amazon.com
-Cc: talel@amazon.com
-Cc: Tony Luck <tony.luck@intel.com>
-Link: https://lkml.kernel.org/r/20190923191741.29322-2-hhhawa@amazon.com
----
- drivers/edac/edac_device.c | 50 ++++++++++++++++++++---------------
- drivers/edac/edac_device.h | 54 ++++++++++++++++++++++++++++++--------
- 2 files changed, 72 insertions(+), 32 deletions(-)
-
-diff --git a/drivers/edac/edac_device.c b/drivers/edac/edac_device.c
-index 65cf2b9355c4..8c4d947fb848 100644
---- a/drivers/edac/edac_device.c
-+++ b/drivers/edac/edac_device.c
-@@ -555,12 +555,16 @@ static inline int edac_device_get_panic_on_ue(struct edac_device_ctl_info
- 	return edac_dev->panic_on_ue;
- }
- 
--void edac_device_handle_ce(struct edac_device_ctl_info *edac_dev,
--			int inst_nr, int block_nr, const char *msg)
-+void edac_device_handle_ce_count(struct edac_device_ctl_info *edac_dev,
-+				 unsigned int count, int inst_nr, int block_nr,
-+				 const char *msg)
- {
- 	struct edac_device_instance *instance;
- 	struct edac_device_block *block = NULL;
- 
-+	if (!count)
-+		return;
-+
- 	if ((inst_nr >= edac_dev->nr_instances) || (inst_nr < 0)) {
- 		edac_device_printk(edac_dev, KERN_ERR,
- 				"INTERNAL ERROR: 'instance' out of range "
-@@ -582,27 +586,31 @@ void edac_device_handle_ce(struct edac_device_ctl_info *edac_dev,
- 
- 	if (instance->nr_blocks > 0) {
- 		block = instance->blocks + block_nr;
--		block->counters.ce_count++;
-+		block->counters.ce_count += count;
- 	}
- 
- 	/* Propagate the count up the 'totals' tree */
--	instance->counters.ce_count++;
--	edac_dev->counters.ce_count++;
-+	instance->counters.ce_count += count;
-+	edac_dev->counters.ce_count += count;
- 
- 	if (edac_device_get_log_ce(edac_dev))
- 		edac_device_printk(edac_dev, KERN_WARNING,
--				"CE: %s instance: %s block: %s '%s'\n",
--				edac_dev->ctl_name, instance->name,
--				block ? block->name : "N/A", msg);
-+				   "CE: %s instance: %s block: %s count: %d '%s'\n",
-+				   edac_dev->ctl_name, instance->name,
-+				   block ? block->name : "N/A", count, msg);
- }
--EXPORT_SYMBOL_GPL(edac_device_handle_ce);
-+EXPORT_SYMBOL_GPL(edac_device_handle_ce_count);
- 
--void edac_device_handle_ue(struct edac_device_ctl_info *edac_dev,
--			int inst_nr, int block_nr, const char *msg)
-+void edac_device_handle_ue_count(struct edac_device_ctl_info *edac_dev,
-+				 unsigned int count, int inst_nr, int block_nr,
-+				 const char *msg)
- {
- 	struct edac_device_instance *instance;
- 	struct edac_device_block *block = NULL;
- 
-+	if (!count)
-+		return;
-+
- 	if ((inst_nr >= edac_dev->nr_instances) || (inst_nr < 0)) {
- 		edac_device_printk(edac_dev, KERN_ERR,
- 				"INTERNAL ERROR: 'instance' out of range "
-@@ -624,22 +632,22 @@ void edac_device_handle_ue(struct edac_device_ctl_info *edac_dev,
- 
- 	if (instance->nr_blocks > 0) {
- 		block = instance->blocks + block_nr;
--		block->counters.ue_count++;
-+		block->counters.ue_count += count;
- 	}
- 
- 	/* Propagate the count up the 'totals' tree */
--	instance->counters.ue_count++;
--	edac_dev->counters.ue_count++;
-+	instance->counters.ue_count += count;
-+	edac_dev->counters.ue_count += count;
- 
- 	if (edac_device_get_log_ue(edac_dev))
- 		edac_device_printk(edac_dev, KERN_EMERG,
--				"UE: %s instance: %s block: %s '%s'\n",
--				edac_dev->ctl_name, instance->name,
--				block ? block->name : "N/A", msg);
-+				   "UE: %s instance: %s block: %s count: %d '%s'\n",
-+				   edac_dev->ctl_name, instance->name,
-+				   block ? block->name : "N/A", count, msg);
- 
- 	if (edac_device_get_panic_on_ue(edac_dev))
--		panic("EDAC %s: UE instance: %s block %s '%s'\n",
--			edac_dev->ctl_name, instance->name,
--			block ? block->name : "N/A", msg);
-+		panic("EDAC %s: UE instance: %s block %s count: %d '%s'\n",
-+		      edac_dev->ctl_name, instance->name,
-+		      block ? block->name : "N/A", count, msg);
- }
--EXPORT_SYMBOL_GPL(edac_device_handle_ue);
-+EXPORT_SYMBOL_GPL(edac_device_handle_ue_count);
-diff --git a/drivers/edac/edac_device.h b/drivers/edac/edac_device.h
-index 1aaba74ae411..c4c0e0bdce14 100644
---- a/drivers/edac/edac_device.h
-+++ b/drivers/edac/edac_device.h
-@@ -286,27 +286,60 @@ extern int edac_device_add_device(struct edac_device_ctl_info *edac_dev);
- extern struct edac_device_ctl_info *edac_device_del_device(struct device *dev);
- 
- /**
-- * edac_device_handle_ue():
-- *	perform a common output and handling of an 'edac_dev' UE event
-+ * Log correctable errors.
-  *
-  * @edac_dev: pointer to struct &edac_device_ctl_info
-- * @inst_nr: number of the instance where the UE error happened
-- * @block_nr: number of the block where the UE error happened
-+ * @inst_nr: number of the instance where the CE error happened
-+ * @count: Number of errors to log.
-+ * @block_nr: number of the block where the CE error happened
-+ * @msg: message to be printed
-+ */
-+void edac_device_handle_ce_count(struct edac_device_ctl_info *edac_dev,
-+				 unsigned int count, int inst_nr, int block_nr,
-+				 const char *msg);
-+
-+/**
-+ * Log uncorrectable errors.
-+ *
-+ * @edac_dev: pointer to struct &edac_device_ctl_info
-+ * @inst_nr: number of the instance where the CE error happened
-+ * @count: Number of errors to log.
-+ * @block_nr: number of the block where the CE error happened
-  * @msg: message to be printed
-  */
--extern void edac_device_handle_ue(struct edac_device_ctl_info *edac_dev,
--				int inst_nr, int block_nr, const char *msg);
-+void edac_device_handle_ue_count(struct edac_device_ctl_info *edac_dev,
-+				 unsigned int count, int inst_nr, int block_nr,
-+				 const char *msg);
-+
- /**
-- * edac_device_handle_ce():
-- *	perform a common output and handling of an 'edac_dev' CE event
-+ * edac_device_handle_ce(): Log a single correctable error
-  *
-  * @edac_dev: pointer to struct &edac_device_ctl_info
-  * @inst_nr: number of the instance where the CE error happened
-  * @block_nr: number of the block where the CE error happened
-  * @msg: message to be printed
-  */
--extern void edac_device_handle_ce(struct edac_device_ctl_info *edac_dev,
--				int inst_nr, int block_nr, const char *msg);
-+static inline void
-+edac_device_handle_ce(struct edac_device_ctl_info *edac_dev, int inst_nr,
-+		      int block_nr, const char *msg)
-+{
-+	edac_device_handle_ce_count(edac_dev, 1, inst_nr, block_nr, msg);
-+}
-+
-+/**
-+ * edac_device_handle_ue(): Log a single uncorrectable error
-+ *
-+ * @edac_dev: pointer to struct &edac_device_ctl_info
-+ * @inst_nr: number of the instance where the UE error happened
-+ * @block_nr: number of the block where the UE error happened
-+ * @msg: message to be printed
-+ */
-+static inline void
-+edac_device_handle_ue(struct edac_device_ctl_info *edac_dev, int inst_nr,
-+		      int block_nr, const char *msg)
-+{
-+	edac_device_handle_ue_count(edac_dev, 1, inst_nr, block_nr, msg);
-+}
- 
- /**
-  * edac_device_alloc_index: Allocate a unique device index number
-@@ -316,5 +349,4 @@ extern void edac_device_handle_ce(struct edac_device_ctl_info *edac_dev,
-  */
- extern int edac_device_alloc_index(void);
- extern const char *edac_layer_name[];
--
- #endif
--- 
-2.21.0
-
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+I awaits your answer today.
+God bless you.
+Miss Helen.
