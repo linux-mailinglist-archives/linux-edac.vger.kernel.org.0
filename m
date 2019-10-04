@@ -2,51 +2,52 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CB1AACC680
-	for <lists+linux-edac@lfdr.de>; Sat,  5 Oct 2019 01:27:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 34CD1CC698
+	for <lists+linux-edac@lfdr.de>; Sat,  5 Oct 2019 01:36:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731610AbfJDX1K (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Fri, 4 Oct 2019 19:27:10 -0400
-Received: from mail-io1-f68.google.com ([209.85.166.68]:33609 "EHLO
+        id S1729976AbfJDXf7 (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Fri, 4 Oct 2019 19:35:59 -0400
+Received: from mail-io1-f68.google.com ([209.85.166.68]:33033 "EHLO
         mail-io1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728913AbfJDX1J (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Fri, 4 Oct 2019 19:27:09 -0400
-Received: by mail-io1-f68.google.com with SMTP id z19so17177277ior.0
-        for <linux-edac@vger.kernel.org>; Fri, 04 Oct 2019 16:27:07 -0700 (PDT)
+        with ESMTP id S1728913AbfJDXfy (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Fri, 4 Oct 2019 19:35:54 -0400
+Received: by mail-io1-f68.google.com with SMTP id z19so17205369ior.0
+        for <linux-edac@vger.kernel.org>; Fri, 04 Oct 2019 16:35:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=MgBtF74uU/h5axnlk7JkCOLmu+x1dOiph+vzsmYmvXk=;
-        b=uVq6fcbrUf2k6Z02rKXUYQfm+NxJ2X43dktUoENxNfmYB2XHRk95SxYzgRSsUxbcrB
-         VMY+k9uQhD+yw7Z86iccSLyRvIZnFRWINVLQMCAnizvTboxDa8tSgunhpBqy399TufJo
-         pTQgwsr0b4UWFteBOPGCKp4iaOAJbfAmgi0akHoXxFyE+3Odreox81GbAtjlHVpI3px2
-         Vbo5DzvIn0o5B/YPL/oms2GZI0hF4ZHLN5W6SagkqSMqr/NrriKUAizDRFMfuWBMfg3o
-         h5rMM9AS6TZh1Fjlyk+8lgmSMuV6Io0A48BTiKiatBflNxygHw3HopbT40WTIM5nuhhh
-         6BsQ==
+        bh=+T7DRRD+UBJWxQqae2a5KokUy893Q+Fh/NFyFQWVL5c=;
+        b=aR+KCZ9iMZp71ShYHM33WPPJZLgnz4zsUdnjqJr8GHFuHLR7FyxN/fle/WUHQd2S1g
+         OfLnAhfjfVGHzOaJK0w0TC11rXg1X4dvELPEblK609VJWdmUv3sZEwya23vmrWxc9DIG
+         vIwRS1tb3jC35O1UM0jW9C+Ii5AJiQBiaQ1Ur7s/C07BnQkMOVZ4W9F3sPzf++A2KGb7
+         xR6BJ5NeINKOa0O4NpITK3QSA5A4hBhi6JPVSDWobx9wowRsCSuZB6NQRnkdoOs+Z2W2
+         osQu5NuuvxVuUBBBHYMDims/a/amUqM21/mCbGDA6dx/4nzkkCX+H13qHMc6NbHauO0N
+         1cfg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=MgBtF74uU/h5axnlk7JkCOLmu+x1dOiph+vzsmYmvXk=;
-        b=OTiAUxnX6yIA/Kf/+xOGjnbhGcdu4FiFoj5yetw8op6RINHAwf4tVuOQK19GV1Cojd
-         AKtOpCkQnLdMIC+r8E97S6/SJSMweZdmw+I6LH6TAlYS7jsnI85VIbFn14FHGbAE2ONw
-         qKc/YOTPKBUwoqonBTAyUfp305CmtiRt6GlCguABQFHDTV/Dsqd9QuEh6nqTuuDbcioZ
-         Qle/Gs7P4YEyseNM/wy3Wg89FDJKwoX+kvF2WpP5v+KtjfLFsuABdNZraOMxQTUrHQx6
-         MCfmnqCgBaKSCDFLmaNVSBrK9AA0qBNf6YOCy8GssYgMx+vKFZwDRBgrpXDNY6Mn5tcl
-         FX6w==
-X-Gm-Message-State: APjAAAWXJaCD8yhiJjYyqTxxKLjHmTKt9KCg2P6VWqePk4IUhA8D0oaD
-        1eYpDbj5N1gMT4LvgGDFty6IUfJxUS+rMzKEnSYyFg==
-X-Google-Smtp-Source: APXvYqzJcQzvaX5CC41I1TRQRNaPDPcG28y+blJrc8QdeTRZXOhchbrBqUvMeJR9kiv9S7ucRVxFUERN4ZPen7d4jzw=
-X-Received: by 2002:a05:6638:3:: with SMTP id z3mr17415762jao.54.1570231626712;
- Fri, 04 Oct 2019 16:27:06 -0700 (PDT)
+        bh=+T7DRRD+UBJWxQqae2a5KokUy893Q+Fh/NFyFQWVL5c=;
+        b=pBXI3JxkjHHsxs1bFYP+EiV5M/gGj9cuV7nLG4PQKP4tDof1d7nB3W3Rbx1lR4Bj4m
+         0bl+tudSDA8Aw/AFfuU+VQlsOXhRvU34VbjnbcUoSf3zKNq5MXigl30h6s8x1xM7CWXh
+         jnQYAItd9cy+gD0E51wUIqu43pTJcJLiSljmsM4J4JUHvmxS5djq6o5CpUv7JidexOs0
+         TR7KuLy7cSnvKeGoBX5j79mDSbNgwak3728AqrmikJXxTJiDzRPATzPd0NG8sWzp4QaU
+         Clgvt6hjhm75PMGl3LxUw1aaEXvpIFdIjal8EtZBsJLPJlbH68dOy2KfW+18ilTg5NzP
+         1WsQ==
+X-Gm-Message-State: APjAAAWrPnnCLbmE6vpUNB4snU3rIPJwMIH4lqgzxgBQFq9YiMvXxUK0
+        RCDkhR8wpzRvsyUIE1mTsk+jKoCARdkbGDmUXYQNzA==
+X-Google-Smtp-Source: APXvYqx43jSstCJvk+2c6AUFzK14t9HPWx/edmJdJr8SoFrOND4p+DMir84DYAG2WVlbh9N6FdgDkbxAOENqDWPCqg4=
+X-Received: by 2002:a92:5a10:: with SMTP id o16mr19118181ilb.296.1570232153408;
+ Fri, 04 Oct 2019 16:35:53 -0700 (PDT)
 MIME-Version: 1.0
-References: <20191004215615.5479-1-sean.j.christopherson@intel.com> <20191004215615.5479-8-sean.j.christopherson@intel.com>
-In-Reply-To: <20191004215615.5479-8-sean.j.christopherson@intel.com>
+References: <20191004215615.5479-1-sean.j.christopherson@intel.com> <20191004215615.5479-9-sean.j.christopherson@intel.com>
+In-Reply-To: <20191004215615.5479-9-sean.j.christopherson@intel.com>
 From:   Jim Mattson <jmattson@google.com>
-Date:   Fri, 4 Oct 2019 16:26:55 -0700
-Message-ID: <CALMp9eRDxHAAbtvdUZyM2VyKiKhRxftW+zbmGANF6Y6qADK9_g@mail.gmail.com>
-Subject: Re: [PATCH 07/16] KVM: VMX: Use VMX feature flag to query BIOS enabling
+Date:   Fri, 4 Oct 2019 16:35:42 -0700
+Message-ID: <CALMp9eSEF-MKxF1+ApTe9-2fJbRBt2svHiCdX=4jP25Ed2LqBg@mail.gmail.com>
+Subject: Re: [PATCH 08/16] KVM: VMX: Check for full VMX support when verifying
+ CPU compatibility
 To:     Sean Christopherson <sean.j.christopherson@intel.com>
 Cc:     Thomas Gleixner <tglx@linutronix.de>,
         Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
@@ -78,10 +79,9 @@ X-Mailing-List: linux-edac@vger.kernel.org
 On Fri, Oct 4, 2019 at 2:56 PM Sean Christopherson
 <sean.j.christopherson@intel.com> wrote:
 >
-> Replace KVM's manual checks on IA32_FEATURE_CONTROL with a query on the
-> boot CPU's VMX feature flag.  The VMX flag is now cleared during boot if
-> VMX isn't fully enabled via IA32_FEATURE_CONTROL, including the case
-> where IA32_FEATURE_CONTROL isn't supported.
+> Explicitly check the current CPU's VMX feature flag when verifying
+> compatibility across physical CPUs.  This effectively adds a check on
+> IA32_FEATURE_CONTROL to ensure that VMX is fully enabled on all CPUs.
 >
 > Signed-off-by: Sean Christopherson <sean.j.christopherson@intel.com>
 Reviewed-by: Jim Mattson <jmattson@google.com>
