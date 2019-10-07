@@ -2,105 +2,83 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 526A4CCFDD
-	for <lists+linux-edac@lfdr.de>; Sun,  6 Oct 2019 11:18:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A5F13CDC4D
+	for <lists+linux-edac@lfdr.de>; Mon,  7 Oct 2019 09:17:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726261AbfJFJSz (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Sun, 6 Oct 2019 05:18:55 -0400
-Received: from smtp-fw-9102.amazon.com ([207.171.184.29]:26538 "EHLO
-        smtp-fw-9102.amazon.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726224AbfJFJSy (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Sun, 6 Oct 2019 05:18:54 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1570353534; x=1601889534;
-  h=subject:to:cc:references:from:message-id:date:
-   mime-version:in-reply-to:content-transfer-encoding;
-  bh=DvFDDRFwzFZpm+9W9t8azYWL1u/Z9uXnIXeKEaiewcg=;
-  b=BIF5Ii9LHene3X6hc/jjfpm9SSQCSojXINxUEWgFs70e4y5S8hnTbZL6
-   Bc203boKAlxDlFAKf29fBOoocU5G3JQDdH1w7LcogOL87cP8Zmy63tgjX
-   zOjRtP4Z5FyShdyyvhAT7cBltdIE4b6P8s/abyeXdaoJgx/vlvoix2lfW
-   M=;
-X-IronPort-AV: E=Sophos;i="5.67,263,1566864000"; 
-   d="scan'208";a="707021097"
-Received: from sea3-co-svc-lb6-vlan3.sea.amazon.com (HELO email-inbound-relay-2a-f14f4a47.us-west-2.amazon.com) ([10.47.22.38])
-  by smtp-border-fw-out-9102.sea19.amazon.com with ESMTP; 06 Oct 2019 09:11:37 +0000
-Received: from EX13MTAUEA001.ant.amazon.com (pdx4-ws-svc-p6-lb7-vlan2.pdx.amazon.com [10.170.41.162])
-        by email-inbound-relay-2a-f14f4a47.us-west-2.amazon.com (Postfix) with ESMTPS id C8E90A22EE;
-        Sun,  6 Oct 2019 09:11:05 +0000 (UTC)
-Received: from EX13D01EUB001.ant.amazon.com (10.43.166.194) by
- EX13MTAUEA001.ant.amazon.com (10.43.61.82) with Microsoft SMTP Server (TLS)
- id 15.0.1367.3; Sun, 6 Oct 2019 09:11:05 +0000
-Received: from [10.125.238.52] (10.43.161.192) by EX13D01EUB001.ant.amazon.com
- (10.43.166.194) with Microsoft SMTP Server (TLS) id 15.0.1367.3; Sun, 6 Oct
- 2019 09:10:56 +0000
-Subject: Re: [PATCH v4 1/2] dt-bindings: soc: al-pos: Amazon's Annapurna Labs
- POS
-To:     Rob Herring <robh+dt@kernel.org>
-CC:     Marc Zyngier <maz@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
-        "Arnd Bergmann" <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
-        "Mauro Carvalho Chehab" <mchehab@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        David Miller <davem@davemloft.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Paul E. McKenney" <paulmck@linux.ibm.com>,
-        <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        linux-edac <linux-edac@vger.kernel.org>,
-        "Woodhouse, David" <dwmw@amazon.co.uk>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        "Hawa, Hanna" <hhhawa@amazon.com>,
-        "Krupnik, Ronen" <ronenk@amazon.com>,
-        Jonathan Chocron <jonnyc@amazon.com>,
-        "Hanoch, Uri" <hanochu@amazon.com>, <amirkl@amazon.com>,
-        "Wasserstrom, Barak" <barakw@amazon.com>
-References: <1570102361-11696-1-git-send-email-talel@amazon.com>
- <1570102361-11696-2-git-send-email-talel@amazon.com>
- <CAL_JsqJDJF7h=nSw3dkNF=H3ghJeLR=MUgrEh+qxw0jhDnfxFw@mail.gmail.com>
-From:   "Shenhar, Talel" <talel@amazon.com>
-Message-ID: <ee5a0727-6cc0-062b-0797-20fecdf1a450@amazon.com>
-Date:   Sun, 6 Oct 2019 12:10:50 +0300
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:68.0) Gecko/20100101
- Thunderbird/68.1.1
+        id S1727175AbfJGHRA (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Mon, 7 Oct 2019 03:17:00 -0400
+Received: from mail.skyhub.de ([5.9.137.197]:55138 "EHLO mail.skyhub.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726202AbfJGHRA (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Mon, 7 Oct 2019 03:17:00 -0400
+Received: from zn.tnic (p200300EC2F064200604F0F8C9F77D256.dip0.t-ipconnect.de [IPv6:2003:ec:2f06:4200:604f:f8c:9f77:d256])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 24EA51EC027B;
+        Mon,  7 Oct 2019 09:16:54 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1570432614;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=EnZMwcUNiZNAU7Y16tJi3Av/6Z+UIYJ+V0m0/RhgJFM=;
+        b=r80m7p8hbn7FDRd9VPQKbxtGmp09uUXXuXqgq+jrqKh1KL4rzEBGDJMFxfck9O3HGk4Cg3
+        F8+/MyNeJfkZV56sTcmWE8lRtZyWgN/5P0E6ZzSlPYmkWC4g64Yyxadn/1RcEtk0ezRB+S
+        MmPpks4dkkIe/AMHZUhzjOWGLHH8TKA=
+Date:   Mon, 7 Oct 2019 09:16:45 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Jeff God <jfgaudreault@gmail.com>
+Cc:     linux-edac@vger.kernel.org
+Subject: Re: [GIT PULL] EDAC pile for 5.4 -> AMD family 17h, model 70h support
+Message-ID: <20191007071502.GA24289@zn.tnic>
+References: <CAEVokG7TeAbmkhaxiTpsxhv1pQzqRpU=mR8gVjixb5kXo3s2Eg@mail.gmail.com>
+ <20190924092644.GC19317@zn.tnic>
+ <CAEVokG7UmudOALmeTBq2NgFSiZyGq_6b58nHt2UUHAM2Mzbw+Q@mail.gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <CAL_JsqJDJF7h=nSw3dkNF=H3ghJeLR=MUgrEh+qxw0jhDnfxFw@mail.gmail.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
-X-Originating-IP: [10.43.161.192]
-X-ClientProxiedBy: EX13D04UWB001.ant.amazon.com (10.43.161.46) To
- EX13D01EUB001.ant.amazon.com (10.43.166.194)
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <CAEVokG7UmudOALmeTBq2NgFSiZyGq_6b58nHt2UUHAM2Mzbw+Q@mail.gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-thanks for the review.
+On Sat, Oct 05, 2019 at 12:52:15PM -0400, Jeff God wrote:
+> * I tried different addr values that I believe are in valid range, all
+> other values (cpu,...) were left to their default (0), I used bank 0
+> to trigger the tests and tried different values briefly but always
+> with the same results
 
-On 10/4/2019 6:05 PM, Rob Herring wrote:
-> On Thu, Oct 3, 2019 at 6:33 AM Talel Shenhar <talel@amazon.com> wrote:
->
-> Fails 'make dt_binding_check' (drop the '-'):
-ack, shall be part of v5
->
->> +
->> +examples:
->> +  - |
->> +    al_pos_edac@f0070084 {
-> edac@...
-ack, shall be part of v5
->
->> +      compatible = "amazon,al-pos-edac";
->> +      reg = <0x0 0xf0070084 0x0 0x00000008>;
->> +      interrupt-parent = <&amazon_system_fabric>;
->> +      interrupts = <24 IRQ_TYPE_LEVEL_HIGH>;
-> Not documented.
+Try this as root (the first command is cd-ing into the default debugfs
+mountpoint - check whether that is the case on your system first).
 
-looks good?
+# cd /sys/kernel/debug/mce-inject/
+# echo 10 > /sys/devices/system/machinecheck/machinecheck0/check_interval
+# echo 0x9c7d410092080813 > status; echo 0x000000006d3d483b > addr; echo 2 > cpu; echo hw > flags; echo 4 > bank
 
-    interrupts:
+If you have this in your dmesg:
 
-     description: Interrupt for the error event.
-     maxItems: 1
+[    1.420991] RAS: Correctable Errors collector initialized.
 
+then you need to boot with "ras=cec_disable" first.
 
+> but it does not seem EDAC ever report any ce (or ue) ecc error even
+> when they may be happening and corrected in background.
+
+What does that mean?
+
+You are getting ECCs or you simply want to test whether the ECC
+reporting works on your machine?
+
+P.S., Please do not top-post and see if you get another mail client -
+gmail is linewrapping dmesg and is generally bad for pasting logs and
+code in.
+
+Thx.
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
