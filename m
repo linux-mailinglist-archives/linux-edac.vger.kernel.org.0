@@ -2,117 +2,140 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E18BDCFF4D
-	for <lists+linux-edac@lfdr.de>; Tue,  8 Oct 2019 18:53:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C2C4CD0151
+	for <lists+linux-edac@lfdr.de>; Tue,  8 Oct 2019 21:42:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729464AbfJHQx5 (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Tue, 8 Oct 2019 12:53:57 -0400
-Received: from mail-io1-f66.google.com ([209.85.166.66]:44348 "EHLO
-        mail-io1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725966AbfJHQx5 (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Tue, 8 Oct 2019 12:53:57 -0400
-Received: by mail-io1-f66.google.com with SMTP id w12so37928440iol.11
-        for <linux-edac@vger.kernel.org>; Tue, 08 Oct 2019 09:53:56 -0700 (PDT)
+        id S1727220AbfJHTmw (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Tue, 8 Oct 2019 15:42:52 -0400
+Received: from mail-eopbgr800081.outbound.protection.outlook.com ([40.107.80.81]:51025
+        "EHLO NAM03-DM3-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1728465AbfJHTmv (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Tue, 8 Oct 2019 15:42:51 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ZKCqfwRAoTSaBuQYUM3eT/KAiTB03kar7kvlFIkn7azStTmE0qbawAnXUaam9QlgsiOu3RPMu98CuJpjbqppPiYO9xLe4vfN+hogTBgOa4JA+Z4fScu0rCgA0KRpsKprfgjp3bK4c0AziX9GfGxz5LXLllKHrBfhF8TKqr1A/vrSOFv8jgifgW9oUAzXFtTitZw6ExlGMIToRRymUaZQYMw9atCBSvbwpzRmpbzCqtf1rOmPpcfkX/Wnon4Cqtz0F3ZqkCKw971c2kERyk4vboCnVyeJ7npnpqV2p5PF/YSlKot3shVXgMTT2a0qrsI9mjSKsz6To6iixE3QdUuc2Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=/IXb6kAy+R6xx7cA4tzw1pArQoUo2ubn4VDUf2b4Zlw=;
+ b=dx5xm6ErkNTHpG/1nmO7cBwHbfMzoGdVfcZ4MvPzB7yS2qPFjy6VjSk0hXC4dxbEMXGaggGg3JbvQB8YOrVTejXV44uh9syv06erQJ7yj1ddiOfM7H7FFwYjliWOZV5EKs8RQbrCDVB+vlbB4D5J0EeHIfSG0pWpY5W4odSEuCWDSvpzUpP/lcPoZNuKvHokXDaJC0WUVGiUz3iOe8YNVY7ZMsz1l6LcEvVFJS6itpO7jpMcoPklcc2G20fUpkRQP0FAQOoUDYIS2iuw3PVEMzzw9v9FtL7lYYBGYdPYgO4ykZJwGeEsBHtp/LL9XNWIpvk1BMKxg5+55uKMyqrX+A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=fme5fFYUj0wdKTaXtPchzRO/hZyN3IQGJxfMnt1qVJI=;
-        b=nF6ztrceJdjl9xNuXNv5mwqCWU5zJiJnq0FWCZzdURWJFCyF8lq29UW/vjWY6vTYma
-         A2vyFCS8QnTpZRdKfqpcLtymIzPuly4yfU+HNeOcaOe8C0t7yiMkXCpg2oYL6hJvEsee
-         Up6y0FoUSqnDLGgBNM9DYqZNWygDKvbsDednwj+Rj3AVL0cd8Y1O1AwblvHbnErAyM1s
-         Oq0JalZDIlpzXA79i8F9OCTZDMF/7uK8H/ZB1T0tKbINfE1H1l9gPgxcdjjjRcVQZPUw
-         RGUnyj/xgKxNMmLsrq5wWKfa0asvyNQqKOi+g7hq2lwcgkhXkMCPWXJ4T/K8unUXl+j+
-         FosQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=fme5fFYUj0wdKTaXtPchzRO/hZyN3IQGJxfMnt1qVJI=;
-        b=PfmrtbySdtI2CdPV/P/FeK1DNDtMxiFqQKVwBHuXUB3XVSc0ITQsSH7Dqh/VgokvtO
-         i39kI6W+jthHVek2b93NDiI/KC1xGoFza1CX7NOe+C1H9wi1AXdl+u+8g62vLZr7lCTD
-         63Ylk1L4Hpd7gKo2f7ZOnRck3hUDSlikN2ltaSLQXUPQDFVf7I9qb4ZMd7hDbQDtglWw
-         sE7wueAR9isqi3IDwD6UONLwi/x6IA+FFY0G7t6x33NTYKrcL0j38gfESPNkDgAZDbwz
-         Mau0ycB0KsH73YIgQNBn5vHVB2jiOK/bgaLGCcRo0j0+PYB5pEZ1bmAQskBonHeaBlbj
-         72BA==
-X-Gm-Message-State: APjAAAVb7nS4bG6LfSTNb/4KewW7qQkgSCJMewq++RvO5EkkeKTckWLw
-        TqjW9G97ePZruJbkWj8EWaa0qx0ZphzvEaMzIe7abA==
-X-Google-Smtp-Source: APXvYqwDWGOf+yElISRWjmDcwEri92PuzaR9Mbp5SH1x+dezCLs5TRcNt3I5EnwbB6Klb9T5kpEFj0FvbeItRICFmbk=
-X-Received: by 2002:a6b:1606:: with SMTP id 6mr32477437iow.108.1570553635857;
- Tue, 08 Oct 2019 09:53:55 -0700 (PDT)
+ d=amdcloud.onmicrosoft.com; s=selector2-amdcloud-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=/IXb6kAy+R6xx7cA4tzw1pArQoUo2ubn4VDUf2b4Zlw=;
+ b=r26vHVPCeWyh86wR+5ikIkpVLc+bvLPqomPTn2FICCIXHSUKgeqfpaES6VnSNjvCEzJH0WbzUwgA8FPbUKZYriudpFBotovSCRJcJOTLT3qTkogmwJ2phna8viPK117m/k0wKnPI3KG6QuItzkTLYxamAFgE8zmWNLvo8UW3VGw=
+Received: from SN6PR12MB2639.namprd12.prod.outlook.com (52.135.103.16) by
+ SN6PR12MB2720.namprd12.prod.outlook.com (52.135.103.141) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2327.24; Tue, 8 Oct 2019 19:42:09 +0000
+Received: from SN6PR12MB2639.namprd12.prod.outlook.com
+ ([fe80::ac86:15de:e8d6:61c8]) by SN6PR12MB2639.namprd12.prod.outlook.com
+ ([fe80::ac86:15de:e8d6:61c8%7]) with mapi id 15.20.2327.026; Tue, 8 Oct 2019
+ 19:42:09 +0000
+From:   "Ghannam, Yazen" <Yazen.Ghannam@amd.com>
+To:     Borislav Petkov <bp@alien8.de>, Jeff God <jfgaudreault@gmail.com>
+CC:     "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>
+Subject: Re: [GIT PULL] EDAC pile for 5.4 -> AMD family 17h, model 70h support
+Thread-Topic: [GIT PULL] EDAC pile for 5.4 -> AMD family 17h, model 70h
+ support
+Thread-Index: AQHVe51JKTDxmyKbykahkp73y8AC1qdOxx+AgABffACAAX9igIAAg6EA
+Date:   Tue, 8 Oct 2019 19:42:09 +0000
+Message-ID: <678ba7d1-cf3d-4101-1819-29b291cf236d@amd.com>
+References: <CAEVokG7TeAbmkhaxiTpsxhv1pQzqRpU=mR8gVjixb5kXo3s2Eg@mail.gmail.com>
+ <20190924092644.GC19317@zn.tnic>
+ <CAEVokG7UmudOALmeTBq2NgFSiZyGq_6b58nHt2UUHAM2Mzbw+Q@mail.gmail.com>
+ <20191007071502.GA24289@zn.tnic>
+ <CAEVokG51DtL1g+9YFK6RE=3m-wtjV1VN=vV56b5-3=K21=Jmrw@mail.gmail.com>
+ <20191008115041.GD14765@zn.tnic>
+In-Reply-To: <20191008115041.GD14765@zn.tnic>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-clientproxiedby: BN6PR06CA0042.namprd06.prod.outlook.com
+ (2603:10b6:405:3a::31) To SN6PR12MB2639.namprd12.prod.outlook.com
+ (2603:10b6:805:6f::16)
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=Yazen.Ghannam@amd.com; 
+x-ms-exchange-messagesentrepresentingtype: 1
+x-originating-ip: [165.204.25.250]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 90efc417-ffe4-4f28-feea-08d74c279b63
+x-ms-office365-filtering-ht: Tenant
+x-ms-traffictypediagnostic: SN6PR12MB2720:
+x-microsoft-antispam-prvs: <SN6PR12MB2720391CF9A75162B88FECE9F89A0@SN6PR12MB2720.namprd12.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:8882;
+x-forefront-prvs: 01842C458A
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(39860400002)(396003)(136003)(376002)(366004)(346002)(189003)(199004)(6246003)(110136005)(229853002)(476003)(11346002)(2616005)(256004)(478600001)(66946007)(71190400001)(66446008)(6436002)(71200400001)(64756008)(66476007)(66556008)(6486002)(316002)(25786009)(14454004)(6512007)(4326008)(76176011)(305945005)(6116002)(52116002)(26005)(86362001)(446003)(8936002)(7736002)(486006)(53546011)(6506007)(5660300002)(2906002)(386003)(36756003)(66066001)(31696002)(99286004)(186003)(8676002)(81166006)(102836004)(81156014)(31686004)(3846002);DIR:OUT;SFP:1101;SCL:1;SRVR:SN6PR12MB2720;H:SN6PR12MB2639.namprd12.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
+received-spf: None (protection.outlook.com: amd.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 8HgCVA1JJ/Ws3DVAz7dOXkA4KyBVwFtJ+Qy/TJea7XuN2VK3piwp69Q29DXGLkiBkJC89R9ZmVaeXmCWoRITxbXLup0e4+WUZRLG5G5ccTWbEH02MjteqrRzB41prMoWpvH+9yRl0ISy0vGI0iaIkfF4OjPVJHSTD4qLImTxpOtZMfLRVE8AFHhzePLzJinjsC1o8rXxS6uEirosTHt5culX8mL0aWO28O9pjhB0vSO0PC3953lJlrDI2rpKbyYlmDs1bCC4JAnv0KpptEIld2gXsBw4R7sQVAWHPhhqpY/SS6kKy5RCR0JhhB/GSMtG/rezzei+/PGXE2ujI4csMJuXpA3goTOUQPMPFSU2mZnOPhSajFKEAzic7Yq8RvaKIVT2Jh+TpJ0EsSw0Hb0mpy48z8iXX4ebIyPkZxtWHEY=
+x-ms-exchange-transport-forked: True
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <2A030390F3A143408106AB82AC2F4E50@namprd12.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-References: <20191004215615.5479-1-sean.j.christopherson@intel.com>
- <20191004215615.5479-12-sean.j.christopherson@intel.com> <55f45459-47bf-df37-a12b-17c4c5c6c19a@redhat.com>
- <20191007195638.GG18016@linux.intel.com> <bd2cffea-6427-b3cc-7098-a881e3d4522d@redhat.com>
-In-Reply-To: <bd2cffea-6427-b3cc-7098-a881e3d4522d@redhat.com>
-From:   Jim Mattson <jmattson@google.com>
-Date:   Tue, 8 Oct 2019 09:53:44 -0700
-Message-ID: <CALMp9eSM=rq+jEEzPwWNHNxv03F1s2Dysa7euWJ==PaE=b1sMw@mail.gmail.com>
-Subject: Re: [PATCH 11/16] x86/cpu: Print VMX features as separate line item
- in /proc/cpuinfo
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Sean Christopherson <sean.j.christopherson@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        =?UTF-8?B?UmFkaW0gS3LEjW3DocWZ?= <rkrcmar@redhat.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Tony W Wang-oc <TonyWWang-oc@zhaoxin.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        kvm list <kvm@vger.kernel.org>, linux-edac@vger.kernel.org,
-        Borislav Petkov <bp@suse.de>,
-        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 90efc417-ffe4-4f28-feea-08d74c279b63
+X-MS-Exchange-CrossTenant-originalarrivaltime: 08 Oct 2019 19:42:09.2880
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 9o5riXEiza6dhZRe9/SSVFgFe8gei4YH8Ox5mdS9uoJcfKe0bJROmm4NjWqxvLweS6NIUHozJlG5+qGRWKtiBA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN6PR12MB2720
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Mon, Oct 7, 2019 at 11:57 PM Paolo Bonzini <pbonzini@redhat.com> wrote:
->
-> On 07/10/19 21:56, Sean Christopherson wrote:
-> > On Mon, Oct 07, 2019 at 07:12:37PM +0200, Paolo Bonzini wrote:
-> >> On 04/10/19 23:56, Sean Christopherson wrote:
-> >>> diff --git a/arch/x86/kernel/cpu/proc.c b/arch/x86/kernel/cpu/proc.c
-> >>> index cb2e49810d68..4eec8889b0ff 100644
-> >>> --- a/arch/x86/kernel/cpu/proc.c
-> >>> +++ b/arch/x86/kernel/cpu/proc.c
-> >>> @@ -7,6 +7,10 @@
-> >>>
-> >>>  #include "cpu.h"
-> >>>
-> >>> +#ifdef CONFIG_X86_VMX_FEATURE_NAMES
-> >>> +extern const char * const x86_vmx_flags[NVMXINTS*32];
-> >>> +#endif
-> >>> +
-> >>>  /*
-> >>>   * Get CPU information for use by the procfs.
-> >>>   */
-> >>> @@ -102,6 +106,17 @@ static int show_cpuinfo(struct seq_file *m, void *v)
-> >>>             if (cpu_has(c, i) && x86_cap_flags[i] != NULL)
-> >>>                     seq_printf(m, " %s", x86_cap_flags[i]);
-> >>
-> >> I'm afraid this is going to break some scripts in the wild.  I would
-> >> simply remove the seq_puts below.
-> >
-> > Can you elaborate?  I'm having trouble connecting the dots...
->
-> Somebody is bound to have scripts doing "grep ^flags.*ept /proc/cpuinfo"
-> or checking for VMX flags under some kind of "if (/^flags/)", so it's
-> safer not to separate VMX and non-VMX flags.
-
-Yep. Not quite that exact syntax, but we do have, e.g.:
-
-./x86/feature_check.sh ept
-
-...and you can imagine what feature_check.sh does.
+T24gMTAvOC8yMDE5IDc6NTAgQU0sIEJvcmlzbGF2IFBldGtvdiB3cm90ZToNCj4gT24gTW9uLCBP
+Y3QgMDcsIDIwMTkgYXQgMDg6NTg6MzBBTSAtMDQwMCwgSmVmZiBHb2Qgd3JvdGU6DQo+PiBJIHdh
+bnQgdG8gdGVzdCB0aGF0IHRoZSBFQ0MgcmVwb3J0aW5nIGlzIHdvcmtpbmcgb24gbXkgbWFjaGlu
+ZSAoc28NCj4+IHRoYXQgd2hlbiByZWFsIGVycm9ycyB3aWxsIGhhcHBlbiBvbmUgZGF5IEkgd2ls
+bCBnZXQgbm90aWZpZWQpDQo+Pg0KPj4gVGhlIG1ldGhvZCBJIGRlc2NyaWJlZCBwcmV2aW91c2x5
+IHRvIGdlbmVyYXRlIGVycm9ycyBieSBvdmVyY2xvY2tpbmcNCj4+IG1lbW9yeSB3YXMgbXkgaW5p
+dGlhbCBtZXRob2QgdG8gZ2VuZXJhdGUgcmVhbCBlcnJvcnMsIHdoaWNoIHByb3ZlZCB0bw0KPj4g
+d29yayB3ZWxsIG9uIGFub3RoZXIgc3lzdGVtIHdpdGggYSBwcmV2aW91cyBnZW5lcmF0aW9uIEFN
+RCBSeXplbiAyNzAweA0KPj4gYW5kIHNpbWlsYXIgbW90aGVyYm9hcmQgYW5kIHNhbWUgbWVtb3J5
+LCBidXQgb24gdGhpcyBzeXN0ZW0gaXQgZG9lcw0KPj4gbm90IHJlcG9ydCBhbnkgZXJyb3IsIGFs
+dGhvdWdoIHR1cm5pbmcgb2ZmIEVDQyBpbiB0aGUgYmlvcyBzaG93ZWQgdGhhdA0KPj4gbWVtb3J5
+IGNvcnJ1cHRpb24gaXMgaGFwcGVuaW5nIGZhaXJseSBxdWlja2x5IGluIHRoaXMgY2FzZSwgaGVu
+Y2UgdGhlDQo+PiBjb25jbHVzaW9uIHRoYXQgZXJyb3IgcmVwb3J0aW5nIHdhcyBwcm9iYWJseSBu
+b3Qgd29ya2luZyBidXQgdGhlDQo+PiB1bmRlcmx5aW5nIG1lbW9yeSBlcnJvciBjb3JyZWN0aW9u
+IHN5c3RlbSBtYXkgYmUgd29ya2luZy4NCj4gDQo+IFllYWgsIGlmIEkgaW5qZWN0IGFuICJzdyIg
+dHlwZSBoZXJlLCBJIGdldCBpbW1lZGlhdGVseToNCj4gDQo+IFsgIDI2NC43NDA4NDBdIFtIYXJk
+d2FyZSBFcnJvcl06IENvcnJlY3RlZCBlcnJvciwgbm8gYWN0aW9uIHJlcXVpcmVkLg0KPiBbICAy
+NjQuNzQwOTQyXSBbSGFyZHdhcmUgRXJyb3JdOiBDUFU6MiAoMTc6MToyKSBNQzRfU1RBVFVTWy18
+Q0V8TWlzY1Z8QWRkclZ8LXxTeW5kVnxDRUNDfC18LXxTY3J1Yl06IDB4OWM3ZDQxMDA5MjA4MDgx
+Mw0KPiBbICAyNjQuNzQxMDc0XSBbSGFyZHdhcmUgRXJyb3JdOiBFcnJvciBBZGRyOiAweDAwMDAw
+MDAwNmQzZDQ4M2INCj4gWyAgMjY0Ljc0MTE2OV0gW0hhcmR3YXJlIEVycm9yXTogSVBJRDogMHgw
+MDAwMDAwMDAwMDAwMDAwLCBTeW5kcm9tZTogMHgwMDAwMDAwMDAwMDAwMDAwDQo+IFsgIDI2NC43
+NDEyNzldIFtIYXJkd2FyZSBFcnJvcl06IEJhbmsgNCBpcyByZXNlcnZlZC4NCj4gWyAgMjY0Ljc0
+MTM2OF0gW0hhcmR3YXJlIEVycm9yXTogY2FjaGUgbGV2ZWw6IEwzL0dFTiwgbWVtL2lvOiBNRU0s
+IG1lbS10eDogUkQsIHBhcnQtcHJvYzogU1JDIChubyB0aW1lb3V0KQ0KPiANCj4gYnV0IGRvaW5n
+IGEgaHcgaW5qZWN0aW9uIHNlZW1zIHRvIGRvIGFsbCB0aGF0IGl0IHNob3VsZCBkbzoNCj4gDQo+
+IFsgIDI0NS42NTgxNzVdIG1jZTogZG9faW5qZWN0OiBDUElVMiwgdG9nZ2xpbmcuLi4NCj4gWyAg
+MjQ1LjY1ODM3NV0gbWNlOiBwcmVwYXJlX21zcnMNCj4gWyAgMjQ1LjY1ODUwN10gbWNlOiB0cmln
+Z2VyX21jZTogQ1BVMg0KPiANCj4gYnV0IG5vdGhpbmcgaGFwcGVucy4NCj4gDQo+IFlhemVuLCBh
+cmUgd2UgbWlzc2luZyBzb21ldGhpbmcgaGVyZT8NCj4gDQo+IFNlZSB1cHRocmVhZCBmb3IgZGV0
+YWlscyAtIHRocmVhZCBpcyBvbiBsaW51eC1lZGFjQC4NCj4gDQoNCkhpIGd1eXMsDQpUaGUgImh3
+IiBvcHRpb24gcmVxdWlyZXMgYSBub24temVybywgdmFsaWQgTUNBX1NUQVRVUyB0byBiZSB1c2Vk
+IHNvIHRoYXQgdGhlDQpNQ0EgaGFuZGxlcnMgd2lsbCBmaW5kIHRoZSBlcnJvciBpbiB0aGUgaGFy
+ZHdhcmUgYW5kIHJlcG9ydCBpdC4NCg0KSmVhbi1GcmVkZXJpYywNCllvdSBvcmlnaW5hbGx5IGhh
+ZCBzdGF0dXM9MCB3aGljaCBleHBsYWlucyB3aHkgbm90aGluZyB3YXMgcmVwb3J0ZWQuDQoNCkJv
+cmlzLA0KWW91IHVzZWQgbm9uLXplcm8gdmFsdWVzLCBidXQgeW91IHRhcmdldHRlZCBiYW5rIDQu
+IFRoaXMgYmFuayBpcw0KUmVhZC1hcy1aZXJvL1dyaXRlcy1JZ25vcmVkIG9uIEZhbWlseSAxN2gg
+YW5kIGxhdGVyLiBTbyBldmVuIHRob3VnaCB5b3UgdXNlZA0KZ29vZCB2YWx1ZXMsIHRoZSBNQ0Eg
+aGFuZGxlcnMgd29uJ3QgZmluZCBhbnl0aGluZyBiZWNhdXNlIGJhbmsgNCBpcyBSQVouDQoNCg0K
+SGVyZSBhcmUgc29tZSB2YWx1ZXMgSSB0b29rIGZyb20gYSByZWFsIGNvcnJlY3RlZCBEUkFNIEVD
+QyBlcnJvci4NCg0Kc3RhdHVzPTB4OWMyMDQxMDAwMDAwMDExYg0Kc3luZD0weDdjNzYwMDAxMGE4
+MDAxMDANCg0KVGhlIG1lbW9yeSBjb250cm9sbGVyIGJhbmtzIGFyZSAxNyAoY2hhbm5lbCAwKSBh
+bmQgMTggKGNoYW5uZWwgMSkgb24gRmFtaWx5DQoxN2ggTW9kZWwgN1hoLCBhbmQgdGhlc2UgYXJl
+IG1hbmFnZWQgYnkgQ1BVIDAuDQoNClBsZWFzZSBnaXZlIHRoZXNlIHZhbHVlcyBhIHRyeSBhbmQg
+bGV0IG1lIGtub3cgaG93IGl0IGdvZXMuDQoNClRoYW5rcywNCllhemVuDQoNCg==
