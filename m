@@ -2,127 +2,96 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E741FD189B
-	for <lists+linux-edac@lfdr.de>; Wed,  9 Oct 2019 21:16:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2750ED189C
+	for <lists+linux-edac@lfdr.de>; Wed,  9 Oct 2019 21:17:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731612AbfJITQ2 (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Wed, 9 Oct 2019 15:16:28 -0400
-Received: from mail-ot1-f67.google.com ([209.85.210.67]:33198 "EHLO
-        mail-ot1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731144AbfJITQ1 (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Wed, 9 Oct 2019 15:16:27 -0400
-Received: by mail-ot1-f67.google.com with SMTP id 60so2724147otu.0;
-        Wed, 09 Oct 2019 12:16:27 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=NsEhGh1kFaBNKGsSiEy6NKNPiYELx9hdX+GfRAKSPVg=;
-        b=YjVfrtKrMEzOZ+WLkmgXY7tbQUdOTvzkr6Wg1olFXtPslH3gjHM9zaCvp6R6zCu1lR
-         YnoftlxFNuiGADq+KxcUEgb5KV6JCmUHI8rEK2TzoQUXuxQXHtCcCTqvs9tEkQjNLy9J
-         eZxox+A8adI6PrpDOqnxOHcDaT3QucAcb8ScSMLgkRQrbAv7wt23NlvPMC36pgUo1A5u
-         /nb42/E2Iy5RBhcitd7iTPV6/X5CV5hKJz0qgOwOKNUNLkJ6iYW+mTp4k5KLaSNWy7SF
-         UUagTwm63asMsysFN24/2Y0Zb0Wk+Zmuj9mUO0MKc9K6MdLElKOLcl68HqRkwgt/k56C
-         CtoQ==
-X-Gm-Message-State: APjAAAXXja3OtUZugE+1G7iNBxkdKyCyQed33wlEBaD5gL/uKdZv6eFb
-        JzsOuPvbY6z3kk1ULdUwFw==
-X-Google-Smtp-Source: APXvYqxM9n9jUehaPoDUkjLcg71MT46PUEqivMh5AfPwwaW1yPIijflLW5J8dPQdilMcg/UbuPNGhg==
-X-Received: by 2002:a9d:4501:: with SMTP id w1mr4457932ote.239.1570648586846;
-        Wed, 09 Oct 2019 12:16:26 -0700 (PDT)
-Received: from localhost (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id y6sm959195oiy.45.2019.10.09.12.16.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Oct 2019 12:16:26 -0700 (PDT)
-Date:   Wed, 9 Oct 2019 14:16:25 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Talel Shenhar <talel@amazon.com>
-Cc:     mark.rutland@arm.com, bp@alien8.de, mchehab@kernel.org,
-        james.morse@arm.com, davem@davemloft.net,
-        gregkh@linuxfoundation.org, paulmck@linux.ibm.com,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-edac@vger.kernel.org, dwmw@amazon.co.uk,
-        benh@kernel.crashing.org, hhhawa@amazon.com, ronenk@amazon.com,
-        jonnyc@amazon.com, hanochu@amazon.com, amirkl@amazon.com,
-        barakw@amazon.com
-Subject: Re: [PATCH v3 1/2] dt-bindings: edac: al-mc-edac: Amazon's Annapurna
- Labs Memory Controller EDAC
-Message-ID: <20191009191625.GA8179@bogus>
-References: <1570103363-21486-1-git-send-email-talel@amazon.com>
- <1570103363-21486-2-git-send-email-talel@amazon.com>
+        id S1731581AbfJITRA (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Wed, 9 Oct 2019 15:17:00 -0400
+Received: from mga06.intel.com ([134.134.136.31]:23362 "EHLO mga06.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729535AbfJITRA (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Wed, 9 Oct 2019 15:17:00 -0400
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+X-Amp-File-Uploaded: False
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga104.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 09 Oct 2019 12:16:59 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.67,277,1566889200"; 
+   d="scan'208";a="198105041"
+Received: from sjchrist-coffee.jf.intel.com (HELO linux.intel.com) ([10.54.74.41])
+  by orsmga006.jf.intel.com with ESMTP; 09 Oct 2019 12:16:59 -0700
+Date:   Wed, 9 Oct 2019 12:16:59 -0700
+From:   Sean Christopherson <sean.j.christopherson@intel.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, Peter Zijlstra <peterz@infradead.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Radim =?utf-8?B?S3LEjW3DocWZ?= <rkrcmar@redhat.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Tony W Wang-oc <TonyWWang-oc@zhaoxin.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, linux-edac@vger.kernel.org,
+        Borislav Petkov <bp@suse.de>,
+        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+Subject: Re: [PATCH 11/16] x86/cpu: Print VMX features as separate line item
+ in /proc/cpuinfo
+Message-ID: <20191009191659.GE19952@linux.intel.com>
+References: <20191004215615.5479-1-sean.j.christopherson@intel.com>
+ <20191004215615.5479-12-sean.j.christopherson@intel.com>
+ <55f45459-47bf-df37-a12b-17c4c5c6c19a@redhat.com>
+ <20191007195638.GG18016@linux.intel.com>
+ <bd2cffea-6427-b3cc-7098-a881e3d4522d@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1570103363-21486-2-git-send-email-talel@amazon.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <bd2cffea-6427-b3cc-7098-a881e3d4522d@redhat.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Thu, Oct 03, 2019 at 02:49:22PM +0300, Talel Shenhar wrote:
-> Document Amazon's Annapurna Labs Memory Controller EDAC SoC binding.
+On Tue, Oct 08, 2019 at 08:57:30AM +0200, Paolo Bonzini wrote:
+> On 07/10/19 21:56, Sean Christopherson wrote:
+> > On Mon, Oct 07, 2019 at 07:12:37PM +0200, Paolo Bonzini wrote:
+> >> On 04/10/19 23:56, Sean Christopherson wrote:
+> >>> diff --git a/arch/x86/kernel/cpu/proc.c b/arch/x86/kernel/cpu/proc.c
+> >>> index cb2e49810d68..4eec8889b0ff 100644
+> >>> --- a/arch/x86/kernel/cpu/proc.c
+> >>> +++ b/arch/x86/kernel/cpu/proc.c
+> >>> @@ -7,6 +7,10 @@
+> >>>  
+> >>>  #include "cpu.h"
+> >>>  
+> >>> +#ifdef CONFIG_X86_VMX_FEATURE_NAMES
+> >>> +extern const char * const x86_vmx_flags[NVMXINTS*32];
+> >>> +#endif
+> >>> +
+> >>>  /*
+> >>>   *	Get CPU information for use by the procfs.
+> >>>   */
+> >>> @@ -102,6 +106,17 @@ static int show_cpuinfo(struct seq_file *m, void *v)
+> >>>  		if (cpu_has(c, i) && x86_cap_flags[i] != NULL)
+> >>>  			seq_printf(m, " %s", x86_cap_flags[i]);
+> >>
+> >> I'm afraid this is going to break some scripts in the wild.  I would
+> >> simply remove the seq_puts below.
+> > 
+> > Can you elaborate?  I'm having trouble connecting the dots...
 > 
-> Signed-off-by: Talel Shenhar <talel@amazon.com>
-> ---
->  .../bindings/edac/amazon,al-mc-edac.yaml           | 40 ++++++++++++++++++++++
->  1 file changed, 40 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/edac/amazon,al-mc-edac.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/edac/amazon,al-mc-edac.yaml b/Documentation/devicetree/bindings/edac/amazon,al-mc-edac.yaml
-> new file mode 100644
-> index 0000000..33da051
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/edac/amazon,al-mc-edac.yaml
-> @@ -0,0 +1,40 @@
-> +# SPDX-License-Identifier: GPL-2.0
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/edac/amazon,al-mc-edac.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Amazon's Annapurna Labs Memory Controller EDAC
-> +
-> +maintainers:
-> +  - Talel Shenhar <talel@amazon.com>
-> +  - Talel Shenhar <talelshenhar@gmail.com>
-> +
-> +description: |
-> +  EDAC node is defined to describe on-chip error detection and correction for
-> +  Amazon's Annapurna Labs Memory Controller.
-> +
-> +properties:
-> +
-> +  compatible:
-> +    - const: "amazon,al-mc-edac"
+> Somebody is bound to have scripts doing "grep ^flags.*ept /proc/cpuinfo"
+> or checking for VMX flags under some kind of "if (/^flags/)", so it's
+> safer not to separate VMX and non-VMX flags.
 
-Fails 'make dt_binding_check'. Drop the '-' as a property is not a list.
-
-The "" are also unnecessary.
-
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +
-> +examples:
-> +  - |
-> +    edac@f0080000 {
-> +      compatible = "amazon,al-mc-edac";
-> +      reg = <0x0 0xf0080000 0x0 0x00010000>;
-> +      interrupt-parent = <&amazon_al_system_fabric>;
-> +      interrupt-names = "ue";
-
-Need to document the name or drop as -names on a single entry is 
-pointless.
-
-> +      interrupts = <20 IRQ_TYPE_LEVEL_HIGH>;
-> +    };
-> -- 
-> 2.7.4
-> 
+Are the names of the flags considered ABI?  If so, then the rename of
+"vnmi" to "virtual_nmis" also needs to be dropped.  :-(
