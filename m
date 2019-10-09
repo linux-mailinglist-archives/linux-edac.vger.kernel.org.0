@@ -2,75 +2,54 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B8AE4D1356
-	for <lists+linux-edac@lfdr.de>; Wed,  9 Oct 2019 17:57:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 262CDD172F
+	for <lists+linux-edac@lfdr.de>; Wed,  9 Oct 2019 19:56:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730708AbfJIP5k (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Wed, 9 Oct 2019 11:57:40 -0400
-Received: from mx1.redhat.com ([209.132.183.28]:36528 "EHLO mx1.redhat.com"
+        id S1729535AbfJIR4U (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Wed, 9 Oct 2019 13:56:20 -0400
+Received: from mail.skyhub.de ([5.9.137.197]:44004 "EHLO mail.skyhub.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731559AbfJIP5k (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Wed, 9 Oct 2019 11:57:40 -0400
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com [209.85.128.69])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        id S1730546AbfJIR4U (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Wed, 9 Oct 2019 13:56:20 -0400
+Received: from zn.tnic (p200300EC2F0C2000CC8F9AE7D5DA1569.dip0.t-ipconnect.de [IPv6:2003:ec:2f0c:2000:cc8f:9ae7:d5da:1569])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mx1.redhat.com (Postfix) with ESMTPS id 3D63758
-        for <linux-edac@vger.kernel.org>; Wed,  9 Oct 2019 15:57:40 +0000 (UTC)
-Received: by mail-wm1-f69.google.com with SMTP id k184so1273521wmk.1
-        for <linux-edac@vger.kernel.org>; Wed, 09 Oct 2019 08:57:40 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=y3ptxyyHx0/qzXbUl9U/H+quIFMeBGhW5hUUCE/0MjM=;
-        b=bbAOUHUGx0uInej6tq1xQDBl1ctMS2M+1PkxlIffAl2DJJ28PS5fTdS3KzWNiQufm/
-         62DkRukK4Rp7gmjELvubixzJ+UJd5ir4hcgi9R6fnaOKVDdFhOtA9iMyiq/AhDixrXi3
-         H+FkHvYtfQSD9aUaCN1ENe6TtjUBLnOzyTzOJmGmZAEjm6unmOOpEmFKyNiGLVFSVI68
-         ekuHvAYuJGA1Bcwg+v0mKggds3NumYtOsx3YBmShsq/QDK4Dw+qUpjA3FG69kmr+71dA
-         FxQXvGXn8gVpWbKNjaFGYe/VpTLzboK7AQvRAgsmWOa3pOj+VGwk1WJtrfpWUiuQsq5Q
-         Da7A==
-X-Gm-Message-State: APjAAAUQCrw1XTg98XTxtDmUW2QRNqoPrkoO7jyig8jh5p4lS/CcIn+P
-        GRGVtSPxAK1gCJJt0ZFGV3E5E+4kmJl2eJeuR48VZREiIEHpUtSgB5Zlz8BFxN6dfeK0FndAwsV
-        RbrWFtM64CpUgKaxdnaiUJQ==
-X-Received: by 2002:adf:dc8c:: with SMTP id r12mr3468319wrj.107.1570636658572;
-        Wed, 09 Oct 2019 08:57:38 -0700 (PDT)
-X-Google-Smtp-Source: APXvYqw+wX+0Fvu5SZNmKleHQuTrQYzbUMiEsd1/1OUnhTlZ4mxXcbH5/HWJm+m8uqOx261atg4O6A==
-X-Received: by 2002:adf:dc8c:: with SMTP id r12mr3468273wrj.107.1570636658129;
-        Wed, 09 Oct 2019 08:57:38 -0700 (PDT)
-Received: from shalem.localdomain (2001-1c00-0c14-2800-ec23-a060-24d5-2453.cable.dynamic.v6.ziggo.nl. [2001:1c00:c14:2800:ec23:a060:24d5:2453])
-        by smtp.gmail.com with ESMTPSA id a10sm3027406wrm.52.2019.10.09.08.57.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 09 Oct 2019 08:57:37 -0700 (PDT)
-Subject: Re: [PATCH] x86/mce: Lower throttling MCE messages to warnings
-To:     Benjamin Berg <bberg@redhat.com>, linux-kernel@vger.kernel.org
-Cc:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 3A6FE1EC0B4D;
+        Wed,  9 Oct 2019 19:56:15 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1570643775;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=PMw+kSYqYUuu078V5yDARfkO7aBA1Un8BKx0eEVNnLk=;
+        b=kIFj4m7bp3BoISRedv96BVS6x7yG0joePdwsTT368QgfcY9VHQF68tBlidp3zmQFRH4o5N
+        zejXObN1Zx4VvsXxUJlNNPDE1o0w+q9x3k8CshF/MgfJoT46LuTtf1fWZMgo6ExA656xS6
+        ux2Clqs5YoSIAgZzQsMfu7hXZCTdD8A=
+Date:   Wed, 9 Oct 2019 19:56:08 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Benjamin Berg <bberg@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, Hans de Goede <hdegoede@redhat.com>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
         Christian Kellner <ckellner@redhat.com>,
         Tony Luck <tony.luck@intel.com>,
-        Borislav Petkov <bp@alien8.de>,
         Thomas Gleixner <tglx@linutronix.de>,
         Ingo Molnar <mingo@redhat.com>,
         "H. Peter Anvin" <hpa@zytor.com>, x86@kernel.org,
         linux-edac@vger.kernel.org
+Subject: Re: [PATCH] x86/mce: Lower throttling MCE messages to warnings
+Message-ID: <20191009175608.GK10395@zn.tnic>
 References: <20191009155424.249277-1-bberg@redhat.com>
-From:   Hans de Goede <hdegoede@redhat.com>
-Message-ID: <dafb0aa8-b1e1-14ac-7345-1a504ac2c441@redhat.com>
-Date:   Wed, 9 Oct 2019 17:57:36 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.1.1
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 In-Reply-To: <20191009155424.249277-1-bberg@redhat.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-Hi,
-
-On 09-10-2019 17:54, Benjamin Berg wrote:
+On Wed, Oct 09, 2019 at 05:54:24PM +0200, Benjamin Berg wrote:
 > On modern CPUs it is quite normal that the temperature limits are
 > reached and the CPU is throttled. In fact, often the thermal design is
 > not sufficient to cool the CPU at full load and limits can quickly be
@@ -84,32 +63,48 @@ On 09-10-2019 17:54, Benjamin Berg wrote:
 > 
 > Signed-off-by: Benjamin Berg <bberg@redhat.com>
 > Tested-by: Christian Kellner <ckellner@redhat.com>
-
-Ah, yes lets please lower the log-prio of these messages:
-
-Reviewed-by: Hans de Goede <hdegoede@redhat.com>
-
-Regards,
-
-Hans
-
-
-
 > ---
->   arch/x86/kernel/cpu/mce/therm_throt.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
+>  arch/x86/kernel/cpu/mce/therm_throt.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
 > diff --git a/arch/x86/kernel/cpu/mce/therm_throt.c b/arch/x86/kernel/cpu/mce/therm_throt.c
 > index 6e2becf547c5..bc441d68d060 100644
 > --- a/arch/x86/kernel/cpu/mce/therm_throt.c
 > +++ b/arch/x86/kernel/cpu/mce/therm_throt.c
 > @@ -188,7 +188,7 @@ static void therm_throt_process(bool new_event, int event, int level)
->   	/* if we just entered the thermal event */
->   	if (new_event) {
->   		if (event == THERMAL_THROTTLING_EVENT)
+>  	/* if we just entered the thermal event */
+>  	if (new_event) {
+>  		if (event == THERMAL_THROTTLING_EVENT)
 > -			pr_crit("CPU%d: %s temperature above threshold, cpu clock throttled (total events = %lu)\n",
 > +			pr_warn("CPU%d: %s temperature above threshold, cpu clock throttled (total events = %lu)\n",
->   				this_cpu,
->   				level == CORE_LEVEL ? "Core" : "Package",
->   				state->count);
-> 
+>  				this_cpu,
+>  				level == CORE_LEVEL ? "Core" : "Package",
+>  				state->count);
+> -- 
+
+This has carried over since its very first addition in
+
+commit 3867eb75b9279c7b0f6840d2ad9f27694ba6c4e4
+Author: Dave Jones <davej@suse.de>
+Date:   Tue Apr 2 20:02:27 2002 -0800
+
+    [PATCH] x86 bluesmoke update.
+    
+    o  Make MCE compile time optional       (Paul Gortmaker)
+    o  P4 thermal trip monitoring.          (Zwane Mwaikambo)
+    o  Non-fatal MCE logging.               (Me)
+
+
+It used to be KERN_EMERG back then, though.
+
+And yes, this issue has come up in the past already so I think I'll take
+it. I'll just give Intel folks a couple of days to object should there
+be anything to object to.
+
+Thx.
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
