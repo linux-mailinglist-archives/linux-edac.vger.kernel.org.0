@@ -2,38 +2,38 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 03D93D2876
-	for <lists+linux-edac@lfdr.de>; Thu, 10 Oct 2019 13:55:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 50966D289F
+	for <lists+linux-edac@lfdr.de>; Thu, 10 Oct 2019 14:03:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728030AbfJJLzU (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Thu, 10 Oct 2019 07:55:20 -0400
-Received: from smtp-fw-6001.amazon.com ([52.95.48.154]:23321 "EHLO
-        smtp-fw-6001.amazon.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727653AbfJJLzU (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Thu, 10 Oct 2019 07:55:20 -0400
+        id S1727320AbfJJMDW (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Thu, 10 Oct 2019 08:03:22 -0400
+Received: from smtp-fw-9102.amazon.com ([207.171.184.29]:18699 "EHLO
+        smtp-fw-9102.amazon.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731230AbfJJMDW (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Thu, 10 Oct 2019 08:03:22 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1570708519; x=1602244519;
+  t=1570708999; x=1602244999;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version;
-  bh=UBJNFDgDuOOL+5c0qHN2UePja07eocDiGd4+mUH0X38=;
-  b=ObpJ9LZOipNjO1gUtWBzqlgxC0anHKOxYB0OwEd8YwiztEeyG+3kLjGB
-   ezNBxrvIU9PUqgSJYnKG5thgGPWyGkbVHN51l/uTCytOPjJiMzhySPn7E
-   9GBFBlt2EhmaBViOipio6hr8Sqb0mhVDriMVUUTT4N3VExEGL5fHvN9NS
-   s=;
+  bh=W7AGgV3Fm4KqL7KMaa3squNVWtHqa7T4z1qHwx/vUDU=;
+  b=KeXV3CE0WfIY85SMFLQxyig0XkAXWAIVQVZYGtOolItVjFFxGBHLG9Ta
+   WWBivU75VJjpyynDxi5UKozwJeVqkG+DKnae2INB1Co40fRricUc03Yul
+   BzUsHvC4anPWBWfHjUqctTeGeITGn5CR4EiVMsWphzqUQPG9d7VdhFLb/
+   A=;
 X-IronPort-AV: E=Sophos;i="5.67,280,1566864000"; 
-   d="scan'208";a="421483200"
-Received: from iad6-co-svc-p1-lb1-vlan3.amazon.com (HELO email-inbound-relay-1d-5dd976cd.us-east-1.amazon.com) ([10.124.125.6])
-  by smtp-border-fw-out-6001.iad6.amazon.com with ESMTP; 10 Oct 2019 11:55:18 +0000
+   d="scan'208";a="707877688"
+Received: from sea3-co-svc-lb6-vlan3.sea.amazon.com (HELO email-inbound-relay-1d-2c665b5d.us-east-1.amazon.com) ([10.47.22.38])
+  by smtp-border-fw-out-9102.sea19.amazon.com with ESMTP; 10 Oct 2019 11:56:03 +0000
 Received: from EX13MTAUEA001.ant.amazon.com (iad55-ws-svc-p15-lb9-vlan3.iad.amazon.com [10.40.159.166])
-        by email-inbound-relay-1d-5dd976cd.us-east-1.amazon.com (Postfix) with ESMTPS id 037B2A311F;
-        Thu, 10 Oct 2019 11:55:14 +0000 (UTC)
+        by email-inbound-relay-1d-2c665b5d.us-east-1.amazon.com (Postfix) with ESMTPS id 8392BA21A3;
+        Thu, 10 Oct 2019 11:55:24 +0000 (UTC)
 Received: from EX13D01EUB001.ant.amazon.com (10.43.166.194) by
  EX13MTAUEA001.ant.amazon.com (10.43.61.82) with Microsoft SMTP Server (TLS)
- id 15.0.1367.3; Thu, 10 Oct 2019 11:55:14 +0000
+ id 15.0.1367.3; Thu, 10 Oct 2019 11:55:23 +0000
 Received: from udc4a3e82dbc15a031435.hfa15.amazon.com (10.43.160.48) by
  EX13D01EUB001.ant.amazon.com (10.43.166.194) with Microsoft SMTP Server (TLS)
- id 15.0.1367.3; Thu, 10 Oct 2019 11:55:04 +0000
+ id 15.0.1367.3; Thu, 10 Oct 2019 11:55:14 +0000
 From:   Talel Shenhar <talel@amazon.com>
 To:     <robh+dt@kernel.org>, <maz@kernel.org>, <mark.rutland@arm.com>,
         <arnd@arndb.de>, <bp@alien8.de>, <mchehab@kernel.org>,
@@ -44,9 +44,9 @@ To:     <robh+dt@kernel.org>, <maz@kernel.org>, <mark.rutland@arm.com>,
 CC:     <dwmw@amazon.co.uk>, <benh@kernel.crashing.org>,
         <hhhawa@amazon.com>, <ronenk@amazon.com>, <jonnyc@amazon.com>,
         <hanochu@amazon.com>, <amirkl@amazon.com>, <barakw@amazon.com>
-Subject: [PATCH v4 1/2] dt-bindings: edac: al-mc-edac: Amazon's Annapurna Labs Memory Controller EDAC
-Date:   Thu, 10 Oct 2019 14:54:13 +0300
-Message-ID: <1570708454-10784-2-git-send-email-talel@amazon.com>
+Subject: [PATCH v4 2/2] EDAC: al-mc-edac: Introduce Amazon's Annapurna Labs Memory Controller EDAC
+Date:   Thu, 10 Oct 2019 14:54:14 +0300
+Message-ID: <1570708454-10784-3-git-send-email-talel@amazon.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1570708454-10784-1-git-send-email-talel@amazon.com>
 References: <1570708454-10784-1-git-send-email-talel@amazon.com>
@@ -60,70 +60,431 @@ Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-Document Amazon's Annapurna Labs Memory Controller EDAC SoC binding.
+The Amazon's Annapurna Labs Memory Controller EDAC supports ECC capability
+for error detection and correction (Single bit error correction, Double
+detection). This driver introduces EDAC driver for that capability.
 
 Signed-off-by: Talel Shenhar <talel@amazon.com>
 ---
- .../bindings/edac/amazon,al-mc-edac.yaml           | 50 ++++++++++++++++++++++
- 1 file changed, 50 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/edac/amazon,al-mc-edac.yaml
+ MAINTAINERS               |   7 +
+ drivers/edac/Kconfig      |   7 +
+ drivers/edac/Makefile     |   1 +
+ drivers/edac/al_mc_edac.c | 358 ++++++++++++++++++++++++++++++++++++++++++++++
+ 4 files changed, 373 insertions(+)
+ create mode 100644 drivers/edac/al_mc_edac.c
 
-diff --git a/Documentation/devicetree/bindings/edac/amazon,al-mc-edac.yaml b/Documentation/devicetree/bindings/edac/amazon,al-mc-edac.yaml
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 55199ef..d431e8f 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -757,6 +757,13 @@ F:	drivers/tty/serial/altera_jtaguart.c
+ F:	include/linux/altera_uart.h
+ F:	include/linux/altera_jtaguart.h
+ 
++AMAZON ANNAPURNA LABS MEMORY CONTROLLER EDAC
++M:	Talel Shenhar <talel@amazon.com>
++M:	Talel Shenhar <talelshenhar@gmail.com>
++S:	Maintained
++F:	Documentation/devicetree/bindings/edac/amazon,al-mc-edac.yaml
++F:	drivers/edac/al_mc_edac.c
++
+ AMAZON ANNAPURNA LABS THERMAL MMIO DRIVER
+ M:	Talel Shenhar <talel@amazon.com>
+ S:	Maintained
+diff --git a/drivers/edac/Kconfig b/drivers/edac/Kconfig
+index 417dad6..8c7fb73 100644
+--- a/drivers/edac/Kconfig
++++ b/drivers/edac/Kconfig
+@@ -100,6 +100,13 @@ config EDAC_AMD64_ERROR_INJECTION
+ 	  In addition, there are two control files, inject_read and inject_write,
+ 	  which trigger the DRAM ECC Read and Write respectively.
+ 
++config EDAC_AL_MC
++	tristate "Amazon's Annapurna Lab EDAC Memory Controller"
++	depends on (ARCH_ALPINE || COMPILE_TEST)
++	help
++	  Support for error detection and correction for Amazon's Annapurna
++	  Labs Alpine chips which allows 1 bit correction and 2 bits detection.
++
+ config EDAC_AMD76X
+ 	tristate "AMD 76x (760, 762, 768)"
+ 	depends on PCI && X86_32
+diff --git a/drivers/edac/Makefile b/drivers/edac/Makefile
+index d77200c..5288329 100644
+--- a/drivers/edac/Makefile
++++ b/drivers/edac/Makefile
+@@ -22,6 +22,7 @@ obj-$(CONFIG_EDAC_GHES)			+= ghes_edac.o
+ edac_mce_amd-y				:= mce_amd.o
+ obj-$(CONFIG_EDAC_DECODE_MCE)		+= edac_mce_amd.o
+ 
++obj-$(CONFIG_EDAC_AL_MC)		+= al_mc_edac.o
+ obj-$(CONFIG_EDAC_AMD76X)		+= amd76x_edac.o
+ obj-$(CONFIG_EDAC_CPC925)		+= cpc925_edac.o
+ obj-$(CONFIG_EDAC_I5000)		+= i5000_edac.o
+diff --git a/drivers/edac/al_mc_edac.c b/drivers/edac/al_mc_edac.c
 new file mode 100644
-index 00000000..f66b094
+index 00000000..f1288c4
 --- /dev/null
-+++ b/Documentation/devicetree/bindings/edac/amazon,al-mc-edac.yaml
-@@ -0,0 +1,50 @@
-+# SPDX-License-Identifier: GPL-2.0
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/edac/amazon,al-mc-edac.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
++++ b/drivers/edac/al_mc_edac.c
+@@ -0,0 +1,358 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Copyright 2019 Amazon.com, Inc. or its affiliates. All Rights Reserved.
++ */
++#include <linux/bitfield.h>
++#include <linux/bitops.h>
++#include <linux/edac.h>
++#include <linux/of_irq.h>
++#include <linux/platform_device.h>
++#include <linux/spinlock.h>
++#include "edac_module.h"
 +
-+title: Amazon's Annapurna Labs Memory Controller EDAC
++/* Registers Offset */
++#define AL_MC_MSTR		0x00
++#define AL_MC_ECC_CFG		0x70
++#define AL_MC_ECC_CLEAR		0x7c
++#define AL_MC_ECC_ERR_COUNT	0x80
++#define AL_MC_ECC_CE_ADDR0	0x84
++#define AL_MC_ECC_CE_ADDR1	0x88
++#define AL_MC_ECC_UE_ADDR0	0xa4
++#define AL_MC_ECC_UE_ADDR1	0xa8
++#define AL_MC_ECC_CE_SYND0	0x8c
++#define AL_MC_ECC_CE_SYND1	0x90
++#define AL_MC_ECC_CE_SYND2	0x94
++#define AL_MC_ECC_UE_SYND0	0xac
++#define AL_MC_ECC_UE_SYND1	0xb0
++#define AL_MC_ECC_UE_SYND2	0xb4
 +
-+maintainers:
-+  - Talel Shenhar <talel@amazon.com>
-+  - Talel Shenhar <talelshenhar@gmail.com>
++/* Registers Fields */
++#define AL_MC_MSTR_DEV_CFG		GENMASK(31, 30)
++#define AL_MC_MSTR_RANKS		GENMASK(27, 24)
++#define AL_MC_MSTR_DATA_BUS_WIDTH	GENMASK(13, 12)
++#define AL_MC_MSTR_DDR4			BIT(4)
++#define AL_MC_MSTR_DDR3			BIT(0)
 +
-+description: |
-+  EDAC node is defined to describe on-chip error detection and correction for
-+  Amazon's Annapurna Labs Memory Controller.
++#define AL_MC_ECC_CFG_SCRUB_DISABLED	BIT(4)
++#define AL_MC_ECC_CFG_ECC_MODE		GENMASK(2, 0)
 +
-+properties:
++#define AL_MC_ECC_CLEAR_UE_COUNT	BIT(3)
++#define AL_MC_ECC_CLEAR_CE_COUNT	BIT(2)
++#define AL_MC_ECC_CLEAR_UE_ERR		BIT(1)
++#define AL_MC_ECC_CLEAR_CE_ERR		BIT(0)
 +
-+  compatible:
-+    const: amazon,al-mc-edac
++#define AL_MC_ECC_ERR_COUNT_UE		GENMASK(31, 16)
++#define AL_MC_ECC_ERR_COUNT_CE		GENMASK(15, 0)
 +
-+  reg:
-+    maxItems: 1
++#define AL_MC_ECC_CE_ADDR0_RANK		GENMASK(25, 24)
++#define AL_MC_ECC_CE_ADDR0_ROW		GENMASK(17, 0)
 +
-+  interrupts:
-+    maxItems: 2
-+    items:
-+      - description: uncorrectable error interrupt
-+      - description: correctable error interrupt
++#define AL_MC_ECC_CE_ADDR1_BG		GENMASK(25, 24)
++#define AL_MC_ECC_CE_ADDR1_BANK		GENMASK(18, 16)
++#define AL_MC_ECC_CE_ADDR1_COLUMN	GENMASK(11, 0)
 +
-+  interrupt-names:
-+    maxItems: 2
-+    items:
-+      - const: ue
-+      - const: ce
++#define AL_MC_ECC_UE_ADDR0_RANK		GENMASK(25, 24)
++#define AL_MC_ECC_UE_ADDR0_ROW		GENMASK(17, 0)
 +
-+required:
-+  - compatible
-+  - reg
++#define AL_MC_ECC_UE_ADDR1_BG		GENMASK(25, 24)
++#define AL_MC_ECC_UE_ADDR1_BANK		GENMASK(18, 16)
++#define AL_MC_ECC_UE_ADDR1_COLUMN	GENMASK(11, 0)
 +
-+examples:
-+  - |
-+    #include <dt-bindings/interrupt-controller/irq.h>
-+    edac@f0080000 {
-+      compatible = "amazon,al-mc-edac";
-+      reg = <0x0 0xf0080000 0x0 0x00010000>;
-+      interrupt-parent = <&amazon_al_system_fabric>;
-+      interrupt-names = "ue";
-+      interrupts = <20 IRQ_TYPE_LEVEL_HIGH>;
-+    };
++/* Registers Values */
++#define AL_MC_MSTR_DEV_CFG_X4	0
++#define AL_MC_MSTR_DEV_CFG_X8	1
++#define AL_MC_MSTR_DEV_CFG_X16	2
++#define AL_MC_MSTR_DEV_CFG_X32	3
++#define AL_MC_MSTR_RANKS_MAX 4
++#define AL_MC_MSTR_DATA_BUS_WIDTH_X64	0
++
++#define DRV_NAME "al_mc_edac"
++#define AL_MC_EDAC_MSG_MAX 256
++#define AL_MC_EDAC_MSG(message, buffer_size, type,			\
++		       rank, row, bg, bank, column, syn0, syn1, syn2)	\
++	snprintf(message, buffer_size,					\
++		 "%s rank=0x%x row=0x%x bg=0x%x bank=0x%x col=0x%x "	\
++		 "syn0: 0x%x syn1: 0x%x syn2: 0x%x",			\
++		 type == HW_EVENT_ERR_UNCORRECTED ? "UE" : "CE",	\
++		 rank, row, bg, bank, column, syn0, syn1, syn2)
++
++struct al_mc_edac {
++	void __iomem *mmio_base;
++	spinlock_t lock;
++	int irq_ce;
++	int irq_ue;
++};
++
++static int al_mc_edac_handle_ce(struct mem_ctl_info *mci)
++{
++	struct al_mc_edac *al_mc = mci->pvt_info;
++	u32 eccerrcnt, ecccaddr0, ecccaddr1, ecccsyn0, ecccsyn1, ecccsyn2, row;
++	u16 ce_count, column;
++	u8 rank, bg, bank;
++	char msg[AL_MC_EDAC_MSG_MAX];
++	unsigned long flags;
++
++	eccerrcnt = readl_relaxed(al_mc->mmio_base + AL_MC_ECC_ERR_COUNT);
++	ce_count = FIELD_GET(AL_MC_ECC_ERR_COUNT_CE, eccerrcnt);
++	if (!ce_count)
++		return 0;
++
++	ecccaddr0 = readl_relaxed(al_mc->mmio_base + AL_MC_ECC_CE_ADDR0);
++	ecccaddr1 = readl_relaxed(al_mc->mmio_base + AL_MC_ECC_CE_ADDR1);
++	ecccsyn0 = readl_relaxed(al_mc->mmio_base + AL_MC_ECC_UE_SYND0);
++	ecccsyn1 = readl_relaxed(al_mc->mmio_base + AL_MC_ECC_UE_SYND1);
++	ecccsyn2 = readl_relaxed(al_mc->mmio_base + AL_MC_ECC_UE_SYND2);
++
++	writel(AL_MC_ECC_CLEAR_CE_COUNT | AL_MC_ECC_CLEAR_CE_ERR,
++	       al_mc->mmio_base + AL_MC_ECC_CLEAR);
++
++	dev_dbg(mci->pdev, "eccuaddr0=0x%08x eccuaddr1=0x%08x\n",
++		ecccaddr0, ecccaddr1);
++
++	rank = FIELD_GET(AL_MC_ECC_CE_ADDR0_RANK, ecccaddr0);
++	row = FIELD_GET(AL_MC_ECC_CE_ADDR0_ROW, ecccaddr0);
++
++	bg = FIELD_GET(AL_MC_ECC_CE_ADDR1_BG, ecccaddr1);
++	bank = FIELD_GET(AL_MC_ECC_CE_ADDR1_BANK, ecccaddr1);
++	column = FIELD_GET(AL_MC_ECC_CE_ADDR1_COLUMN, ecccaddr1);
++
++	AL_MC_EDAC_MSG(msg, sizeof(msg), HW_EVENT_ERR_CORRECTED,
++		       rank, row, bg, bank, column,
++		       ecccsyn0, ecccsyn1, ecccsyn2);
++
++	spin_lock_irqsave(&al_mc->lock, flags);
++	edac_mc_handle_error(HW_EVENT_ERR_CORRECTED, mci,
++			     ce_count, 0, 0, 0, 0, 0, -1, mci->ctl_name, msg);
++	spin_unlock_irqrestore(&al_mc->lock, flags);
++
++	return ce_count;
++}
++
++static int al_mc_edac_handle_ue(struct mem_ctl_info *mci)
++{
++	struct al_mc_edac *al_mc = mci->pvt_info;
++	u32 eccerrcnt, eccuaddr0, eccuaddr1, eccusyn0, eccusyn1, eccusyn2, row;
++	u16 ue_count, column;
++	u8 rank, bg, bank;
++	char msg[AL_MC_EDAC_MSG_MAX];
++	unsigned long flags;
++
++	eccerrcnt = readl_relaxed(al_mc->mmio_base + AL_MC_ECC_ERR_COUNT);
++	ue_count = FIELD_GET(AL_MC_ECC_ERR_COUNT_UE, eccerrcnt);
++	if (!ue_count)
++		return 0;
++
++	eccuaddr0 = readl_relaxed(al_mc->mmio_base + AL_MC_ECC_UE_ADDR0);
++	eccuaddr1 = readl_relaxed(al_mc->mmio_base + AL_MC_ECC_UE_ADDR1);
++	eccusyn0 = readl_relaxed(al_mc->mmio_base + AL_MC_ECC_UE_SYND0);
++	eccusyn1 = readl_relaxed(al_mc->mmio_base + AL_MC_ECC_UE_SYND1);
++	eccusyn2 = readl_relaxed(al_mc->mmio_base + AL_MC_ECC_UE_SYND2);
++
++	writel(AL_MC_ECC_CLEAR_UE_COUNT | AL_MC_ECC_CLEAR_UE_ERR,
++	       al_mc->mmio_base + AL_MC_ECC_CLEAR);
++
++	dev_dbg(mci->pdev, "eccuaddr0=0x%08x eccuaddr1=0x%08x\n",
++		eccuaddr0, eccuaddr1);
++
++	rank = FIELD_GET(AL_MC_ECC_UE_ADDR0_RANK, eccuaddr0);
++	row = FIELD_GET(AL_MC_ECC_UE_ADDR0_ROW, eccuaddr0);
++
++	bg = FIELD_GET(AL_MC_ECC_UE_ADDR1_BG, eccuaddr1);
++	bank = FIELD_GET(AL_MC_ECC_UE_ADDR1_BANK, eccuaddr1);
++	column = FIELD_GET(AL_MC_ECC_UE_ADDR1_COLUMN, eccuaddr1);
++
++	AL_MC_EDAC_MSG(msg, sizeof(msg), HW_EVENT_ERR_UNCORRECTED,
++		       rank, row, bg, bank, column,
++		       eccusyn0, eccusyn1, eccusyn2);
++
++	spin_lock_irqsave(&al_mc->lock, flags);
++	edac_mc_handle_error(HW_EVENT_ERR_UNCORRECTED, mci,
++			     ue_count, 0, 0, 0, 0, 0, -1, mci->ctl_name, msg);
++	spin_unlock_irqrestore(&al_mc->lock, flags);
++
++	return ue_count;
++}
++
++static void al_mc_edac_check(struct mem_ctl_info *mci)
++{
++	struct al_mc_edac *al_mc = mci->pvt_info;
++
++	if (al_mc->irq_ue <= 0)
++		al_mc_edac_handle_ue(mci);
++
++	if (al_mc->irq_ce <= 0)
++		al_mc_edac_handle_ce(mci);
++}
++
++static irqreturn_t al_mc_edac_irq_handler_ue(int irq, void *info)
++{
++	struct platform_device *pdev = info;
++	struct mem_ctl_info *mci = platform_get_drvdata(pdev);
++
++	if (al_mc_edac_handle_ue(mci))
++		return IRQ_HANDLED;
++	return IRQ_NONE;
++}
++
++static irqreturn_t al_mc_edac_irq_handler_ce(int irq, void *info)
++{
++	struct platform_device *pdev = info;
++	struct mem_ctl_info *mci = platform_get_drvdata(pdev);
++
++	if (al_mc_edac_handle_ce(mci))
++		return IRQ_HANDLED;
++	return IRQ_NONE;
++}
++
++static enum scrub_type al_mc_edac_get_scrub_mode(void __iomem *mmio_base)
++{
++	u32 ecccfg0;
++
++	ecccfg0 = readl(mmio_base + AL_MC_ECC_CFG);
++
++	if (FIELD_GET(AL_MC_ECC_CFG_SCRUB_DISABLED, ecccfg0))
++		return SCRUB_NONE;
++	else
++		return SCRUB_HW_SRC;
++}
++
++static int al_mc_edac_probe(struct platform_device *pdev)
++{
++	void __iomem *mmio_base;
++	struct edac_mc_layer layers[1];
++	struct mem_ctl_info *mci;
++	struct al_mc_edac *al_mc;
++	int ret;
++
++	mmio_base = devm_platform_ioremap_resource(pdev, 0);
++	if (IS_ERR(mmio_base)) {
++		dev_err(&pdev->dev, "failed to ioremap memory (%ld)\n",
++			PTR_ERR(mmio_base));
++		return PTR_ERR(mmio_base);
++	}
++
++	layers[0].type = EDAC_MC_LAYER_CHIP_SELECT;
++	layers[0].size = 1;
++	layers[0].is_virt_csrow = false;
++	mci = edac_mc_alloc(0, ARRAY_SIZE(layers), layers,
++			    sizeof(struct al_mc_edac));
++	if (!mci)
++		return -ENOMEM;
++
++	platform_set_drvdata(pdev, mci);
++	al_mc = mci->pvt_info;
++
++	al_mc->mmio_base = mmio_base;
++
++	al_mc->irq_ue = of_irq_get_byname(pdev->dev.of_node, "ue");
++	if (al_mc->irq_ue <= 0)
++		dev_dbg(&pdev->dev,
++			"no irq defined for ue - falling back to polling\n");
++
++	al_mc->irq_ce = of_irq_get_byname(pdev->dev.of_node, "ce");
++	if (al_mc->irq_ce <= 0)
++		dev_dbg(&pdev->dev,
++			"no irq defined for ce - falling back to polling\n");
++
++	if (al_mc->irq_ue <= 0 || al_mc->irq_ce <= 0)
++		edac_op_state = EDAC_OPSTATE_POLL;
++	else
++		edac_op_state = EDAC_OPSTATE_INT;
++
++	spin_lock_init(&al_mc->lock);
++
++	mci->edac_check = al_mc_edac_check;
++	mci->mtype_cap = MEM_FLAG_DDR3 | MEM_FLAG_DDR4;
++	mci->edac_ctl_cap = EDAC_FLAG_NONE | EDAC_FLAG_SECDED;
++	mci->edac_cap = EDAC_FLAG_SECDED;
++	mci->mod_name = DRV_NAME;
++	mci->ctl_name = "al_mc";
++	mci->pdev = &pdev->dev;
++	mci->scrub_mode = al_mc_edac_get_scrub_mode(mmio_base);
++
++	ret = edac_mc_add_mc(mci);
++	if (ret < 0) {
++		dev_err(&pdev->dev,
++			"fail to add memory controller device (%d)\n",
++			ret);
++		goto err_add_mc;
++	}
++
++	if (al_mc->irq_ue > 0) {
++		ret = devm_request_irq(&pdev->dev,
++				       al_mc->irq_ue,
++				       al_mc_edac_irq_handler_ue,
++				       IRQF_SHARED,
++				       pdev->name,
++				       pdev);
++		if (ret != 0) {
++			dev_err(&pdev->dev,
++				"failed to request ue irq %d (%d)\n",
++				al_mc->irq_ue, ret);
++			goto err_request_irq;
++		}
++	}
++
++	if (al_mc->irq_ce > 0) {
++		ret = devm_request_irq(&pdev->dev,
++				       al_mc->irq_ce,
++				       al_mc_edac_irq_handler_ce,
++				       IRQF_SHARED,
++				       pdev->name,
++				       pdev);
++		if (ret != 0) {
++			dev_err(&pdev->dev,
++				"failed to request ce irq %d (%d)\n",
++				al_mc->irq_ce, ret);
++			goto err_request_irq;
++		}
++	}
++
++	return 0;
++
++err_request_irq:
++	edac_mc_del_mc(&pdev->dev);
++err_add_mc:
++	edac_mc_free(mci);
++
++	return ret;
++}
++
++static int al_mc_edac_remove(struct platform_device *pdev)
++{
++	struct mem_ctl_info *mci = platform_get_drvdata(pdev);
++	struct al_mc_edac *al_mc = mci->pvt_info;
++
++	if (al_mc->irq_ue > 0)
++		devm_free_irq(&pdev->dev, al_mc->irq_ue, pdev);
++
++	if (al_mc->irq_ce > 0)
++		devm_free_irq(&pdev->dev, al_mc->irq_ce, pdev);
++
++	edac_mc_del_mc(&pdev->dev);
++	edac_mc_free(mci);
++
++	return 0;
++}
++
++static const struct of_device_id al_mc_edac_of_match[] = {
++	{ .compatible = "amazon,al-mc-edac", },
++	{},
++};
++
++MODULE_DEVICE_TABLE(of, al_mc_edac_of_match);
++
++static struct platform_driver al_mc_edac_driver = {
++	.probe = al_mc_edac_probe,
++	.remove = al_mc_edac_remove,
++	.driver = {
++		.name = DRV_NAME,
++		.of_match_table = al_mc_edac_of_match,
++	},
++};
++
++module_platform_driver(al_mc_edac_driver);
++
++MODULE_LICENSE("GPL v2");
++MODULE_AUTHOR("Talel Shenhar");
++MODULE_DESCRIPTION("Amazon's Annapurna Lab's Memory Controller EDAC Driver");
 -- 
 2.7.4
 
