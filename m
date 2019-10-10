@@ -2,41 +2,41 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 09399D2C09
-	for <lists+linux-edac@lfdr.de>; Thu, 10 Oct 2019 16:04:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 66AC9D2C86
+	for <lists+linux-edac@lfdr.de>; Thu, 10 Oct 2019 16:30:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726017AbfJJOEM (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Thu, 10 Oct 2019 10:04:12 -0400
-Received: from smtp-fw-2101.amazon.com ([72.21.196.25]:26652 "EHLO
-        smtp-fw-2101.amazon.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725923AbfJJOEM (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Thu, 10 Oct 2019 10:04:12 -0400
+        id S1726381AbfJJO2g (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Thu, 10 Oct 2019 10:28:36 -0400
+Received: from smtp-fw-4101.amazon.com ([72.21.198.25]:57655 "EHLO
+        smtp-fw-4101.amazon.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726007AbfJJO2g (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Thu, 10 Oct 2019 10:28:36 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1570716251; x=1602252251;
+  t=1570717714; x=1602253714;
   h=subject:to:cc:references:from:message-id:date:
    mime-version:in-reply-to:content-transfer-encoding;
-  bh=XwGL70t454LegYE7GCchMbvmQ2PqMa2pltoRa32OItM=;
-  b=jQwIJqA8CLbo8oDTraE9puZssgxYdMofluM3CwwH6KH+kGm2PVUXQxje
-   zsDijHcXwGxnSDNguaGrvkTgLJxczywUThrnxWBjsTQknkK41yFoJUYeK
-   fg+/kaUoWj7SPD+pgV193zETmTHneCNQ2bVECBWHOj9YAP1gCJ+Lbpqkw
-   0=;
+  bh=MbNhUYiQT/iwMjwdlqMi5LP2NhQ+5+8OhcRLlxcsKBY=;
+  b=SmGbXwl4vtV5RCIgRvc9Z3NPriaB4WIPaH43pM0Ddhw9TkX7JWQ+Eb5R
+   vUU2lJuozjMW+JD7F/Huq0PWJqE0LoqF7qapu9N4BWZRN3vhxso+C8Fet
+   bCg5pBpDPiVGcWLS540UVacrCoLiVkBWcgbqmRCnton3BDKb7GSCWPFsQ
+   Q=;
 X-IronPort-AV: E=Sophos;i="5.67,280,1566864000"; 
-   d="scan'208";a="757243402"
-Received: from iad6-co-svc-p1-lb1-vlan2.amazon.com (HELO email-inbound-relay-1a-7d76a15f.us-east-1.amazon.com) ([10.124.125.2])
-  by smtp-border-fw-out-2101.iad2.amazon.com with ESMTP; 10 Oct 2019 14:04:08 +0000
-Received: from EX13MTAUEB001.ant.amazon.com (iad55-ws-svc-p15-lb9-vlan2.iad.amazon.com [10.40.159.162])
-        by email-inbound-relay-1a-7d76a15f.us-east-1.amazon.com (Postfix) with ESMTPS id B86BAA213E;
-        Thu, 10 Oct 2019 14:04:03 +0000 (UTC)
+   d="scan'208";a="791395129"
+Received: from iad6-co-svc-p1-lb1-vlan3.amazon.com (HELO email-inbound-relay-2a-d0be17ee.us-west-2.amazon.com) ([10.124.125.6])
+  by smtp-border-fw-out-4101.iad4.amazon.com with ESMTP; 10 Oct 2019 14:28:31 +0000
+Received: from EX13MTAUEB001.ant.amazon.com (pdx4-ws-svc-p6-lb7-vlan3.pdx.amazon.com [10.170.41.166])
+        by email-inbound-relay-2a-d0be17ee.us-west-2.amazon.com (Postfix) with ESMTPS id 62D8DA29A8;
+        Thu, 10 Oct 2019 14:28:30 +0000 (UTC)
 Received: from EX13D08UEB003.ant.amazon.com (10.43.60.11) by
- EX13MTAUEB001.ant.amazon.com (10.43.60.96) with Microsoft SMTP Server (TLS)
- id 15.0.1367.3; Thu, 10 Oct 2019 14:04:03 +0000
+ EX13MTAUEB001.ant.amazon.com (10.43.60.129) with Microsoft SMTP Server (TLS)
+ id 15.0.1367.3; Thu, 10 Oct 2019 14:28:30 +0000
 Received: from EX13MTAUEB001.ant.amazon.com (10.43.60.96) by
  EX13D08UEB003.ant.amazon.com (10.43.60.11) with Microsoft SMTP Server (TLS)
- id 15.0.1367.3; Thu, 10 Oct 2019 14:04:02 +0000
+ id 15.0.1367.3; Thu, 10 Oct 2019 14:28:29 +0000
 Received: from [10.107.3.25] (10.107.3.25) by mail-relay.amazon.com
  (10.43.60.129) with Microsoft SMTP Server (TLS) id 15.0.1367.3 via Frontend
- Transport; Thu, 10 Oct 2019 14:03:59 +0000
+ Transport; Thu, 10 Oct 2019 14:28:25 +0000
 Subject: Re: [PATCH v6 3/3] edac: Add support for Amazon's Annapurna Labs L2
  EDAC
 To:     Rob Herring <robh+dt@kernel.org>
@@ -56,17 +56,18 @@ CC:     Borislav Petkov <bp@alien8.de>,
         "Krupnik, Ronen" <ronenk@amazon.com>,
         Talel Shenhar <talel@amazon.com>,
         Jonathan Chocron <jonnyc@amazon.com>,
-        "Hanoch, Uri" <hanochu@amazon.com>
+        "Hanoch, Uri" <hanochu@amazon.com>,
+        Sudeep Holla <Sudeep.Holla@arm.com>
 References: <20191007151730.7705-1-hhhawa@amazon.com>
  <20191007151730.7705-4-hhhawa@amazon.com>
- <CAL_JsqLZOHx=3d9jPy+7y0a92wA-VKEDQ4PVNvo6L8fRe7xJCQ@mail.gmail.com>
+ <CAL_JsqKk1SeUTPdVOC_5ewC+xqdPMZbBxiqZHYO3Zdme06P57w@mail.gmail.com>
 From:   "Hawa, Hanna" <hhhawa@amazon.com>
-Message-ID: <872efced-ec4d-5f24-fca5-c501ed96e570@amazon.com>
-Date:   Thu, 10 Oct 2019 17:03:57 +0300
+Message-ID: <9b62e2aa-4503-02d7-2448-cc0697464046@amazon.com>
+Date:   Thu, 10 Oct 2019 17:28:24 +0300
 User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
  Thunderbird/60.9.0
 MIME-Version: 1.0
-In-Reply-To: <CAL_JsqLZOHx=3d9jPy+7y0a92wA-VKEDQ4PVNvo6L8fRe7xJCQ@mail.gmail.com>
+In-Reply-To: <CAL_JsqKk1SeUTPdVOC_5ewC+xqdPMZbBxiqZHYO3Zdme06P57w@mail.gmail.com>
 Content-Type: text/plain; charset="utf-8"; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -75,104 +76,91 @@ Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-Hi,
 
 
-On 10/10/2019 2:19 AM, Rob Herring wrote:
+On 10/10/2019 2:09 AM, Rob Herring wrote:
+> +Sudeep
+> 
 > On Mon, Oct 7, 2019 at 10:18 AM Hanna Hawa <hhhawa@amazon.com> wrote:
 >>
 >> Adds support for Amazon's Annapurna Labs L2 EDAC driver to detect and
 >> report L2 errors.
->>
->> Signed-off-by: Hanna Hawa <hhhawa@amazon.com>
->> ---
->>   MAINTAINERS               |   5 +
->>   drivers/edac/Kconfig      |   8 ++
->>   drivers/edac/Makefile     |   1 +
->>   drivers/edac/al_l2_edac.c | 251 ++++++++++++++++++++++++++++++++++++++
->>   4 files changed, 265 insertions(+)
->>   create mode 100644 drivers/edac/al_l2_edac.c
->>
->> diff --git a/MAINTAINERS b/MAINTAINERS
->> index 7887a62dc843..0eabcfcf91a9 100644
->> --- a/MAINTAINERS
->> +++ b/MAINTAINERS
->> @@ -748,6 +748,11 @@ M: Hanna Hawa <hhhawa@amazon.com>
->>   S:     Maintained
->>   F:     drivers/edac/al_l1_edac.c
->>
->> +AMAZON ANNAPURNA LABS L2 EDAC
->> +M:     Hanna Hawa <hhhawa@amazon.com>
->> +S:     Maintained
->> +F:     drivers/edac/al_l2_edac.c
->> +
->>   AMAZON ANNAPURNA LABS THERMAL MMIO DRIVER
->>   M:     Talel Shenhar <talel@amazon.com>
->>   S:     Maintained
->> diff --git a/drivers/edac/Kconfig b/drivers/edac/Kconfig
->> index e8161d7c7469..cb394aff1cab 100644
->> --- a/drivers/edac/Kconfig
->> +++ b/drivers/edac/Kconfig
->> @@ -82,6 +82,14 @@ config EDAC_AL_L1
->>            for Amazon's Annapurna Labs SoCs.
->>            This driver detects errors of L1 caches.
->>
->> +config EDAC_AL_L2
->> +       tristate "Amazon's Annapurna Labs L2 EDAC"
 > 
-> I still think this should be an "A57 L2 ECC" driver, but if no one
-> cares I'll shut up and the 2nd person can rename everything.
-
+> I was curious why you needed a DT cache parsing function...
 > 
->> +       depends on ARCH_ALPINE
+> [...]
 > 
-> || COMPILE_TEST
-
-Will be add in next patchset.
-
-> 
-> Maybe it needs an ARM64 dependency too in this case?
-
-Yes, it need ARM64 dependency, I'll add.
-
-Thanks,
-Hanna
-
-> 
->> +       help
->> +         Support for L2 error detection and correction
->> +         for Amazon's Annapurna Labs SoCs.
->> +         This driver detects errors of L2 caches.
->> +
-> 
->> +
->> +       ret = platform_driver_register(&al_l2_edac_driver);
->> +       if (ret) {
->> +               pr_err("Failed to register %s (%d)\n", DRV_NAME, ret);
->> +               return ret;
->> +       }
->> +
->> +       edac_l2_device = platform_device_register_simple(DRV_NAME, -1, NULL, 0);
->> +       if (IS_ERR(edac_l2_device)) {
->> +               pr_err("Failed to register EDAC AL L2 platform device\n");
->> +               return PTR_ERR(edac_l2_device);
->> +       }
->> +
->> +       return 0;
->> +}
->> +
->> +static void __exit al_l2_exit(void)
+>> +static int al_l2_edac_probe(struct platform_device *pdev)
 >> +{
->> +       platform_device_unregister(edac_l2_device);
->> +       platform_driver_unregister(&al_l2_edac_driver);
->> +}
+>> +       struct edac_device_ctl_info *edac_dev;
+>> +       struct al_l2_edac *al_l2;
+>> +       struct device *dev = &pdev->dev;
+>> +       int ret, i;
 >> +
->> +late_initcall(al_l2_init);
->> +module_exit(al_l2_exit);
+>> +       edac_dev = edac_device_alloc_ctl_info(sizeof(*al_l2), DRV_NAME, 1, "L",
+>> +                                             1, 2, NULL, 0,
+>> +                                             edac_device_alloc_index());
+>> +       if (!edac_dev)
+>> +               return -ENOMEM;
 >> +
->> +MODULE_LICENSE("GPL v2");
->> +MODULE_AUTHOR("Hanna Hawa <hhhawa@amazon.com>");
->> +MODULE_DESCRIPTION("Amazon's Annapurna Lab's L2 EDAC Driver");
->> --
->> 2.17.1
->>
+>> +       al_l2 = edac_dev->pvt_info;
+>> +       edac_dev->edac_check = al_l2_edac_check;
+>> +       edac_dev->dev = dev;
+>> +       edac_dev->mod_name = DRV_NAME;
+>> +       edac_dev->dev_name = dev_name(dev);
+>> +       edac_dev->ctl_name = "L2_cache";
+>> +       platform_set_drvdata(pdev, edac_dev);
+>> +
+>> +       INIT_LIST_HEAD(&al_l2->l2_caches);
+>> +
+>> +       for_each_possible_cpu(i) {
+>> +               struct device_node *cpu;
+>> +               struct device_node *cpu_cache;
+>> +               struct al_l2_cache *l2_cache;
+>> +               bool found = false;
+>> +
+>> +               cpu = of_get_cpu_node(i, NULL);
+>> +               if (!cpu)
+>> +                       continue;
+>> +
+>> +               cpu_cache = of_find_next_cache_node(cpu);
+>> +               list_for_each_entry(l2_cache, &al_l2->l2_caches, list_node) {
+>> +                       if (l2_cache->of_node == cpu_cache) {
+>> +                               found = true;
+>> +                               break;
+>> +                       }
+>> +               }
+>> +
+>> +               if (found) {
+>> +                       cpumask_set_cpu(i, &l2_cache->cluster_cpus);
+>> +               } else {
+>> +                       l2_cache = devm_kzalloc(dev, sizeof(*l2_cache),
+>> +                                               GFP_KERNEL);
+>> +                       l2_cache->of_node = cpu_cache;
+>> +                       list_add(&l2_cache->list_node, &al_l2->l2_caches);
+>> +                       cpumask_set_cpu(i, &l2_cache->cluster_cpus);
+>> +               }
+>> +
+>> +               of_node_put(cpu);
+>> +       }
+> 
+> We already have what's probably similar code to parse DT and populate
+> cacheinfo data. Does that not work for you? If not, why not and can we
+> extend it?
+
+As I saw in cacheinfo it will return the cacheinfo for the online CPUs 
+only, correct me if I'm wrong..
+
+Here I'm parsing all the L2 info for all CPUs depends on DT to get 
+"cluster_cpus", and using smp_call_function_any() will call the online 
+cpu to read the L2MERRSR status register.
+
+> 
+> Then your driver might work if the data comes from ACPI instead (or
+> maybe that's all different, I don't know).
+
+No plan to get it work on ACPI, at least in the near future.
+
+> 
+> Rob
+> 
