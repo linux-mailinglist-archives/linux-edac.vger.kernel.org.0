@@ -2,67 +2,177 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C4B8D2B96
-	for <lists+linux-edac@lfdr.de>; Thu, 10 Oct 2019 15:41:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 09399D2C09
+	for <lists+linux-edac@lfdr.de>; Thu, 10 Oct 2019 16:04:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388165AbfJJNlj (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Thu, 10 Oct 2019 09:41:39 -0400
-Received: from mail.skyhub.de ([5.9.137.197]:46004 "EHLO mail.skyhub.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1733228AbfJJNlj (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Thu, 10 Oct 2019 09:41:39 -0400
-Received: from zn.tnic (p200300EC2F0A630049CEEE8F373FE59E.dip0.t-ipconnect.de [IPv6:2003:ec:2f0a:6300:49ce:ee8f:373f:e59e])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 32D7B1EC0391;
-        Thu, 10 Oct 2019 15:41:38 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1570714898;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=iG8IuNXynO8vItVbElLmRDDO00r9i+9u7IdxbTcOn/Q=;
-        b=c/ckwYqEhTq2pSRZQgDcehyZdFKIJDsMTyOFYzUvJgqxXL3OpROPbaQt+IKU87mSespYpT
-        upVaI34R1qU2Nxj0XlbMxjHPejHdn/pKv2vD7wtHO9IsFwJGjKG3+WKJ5cqTU/pUY/6B1q
-        3bJ+LbIArneVVzCdc/wtfZz1J6zB/j8=
-Date:   Thu, 10 Oct 2019 15:41:28 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Jean-Frederic <jfgaudreault@gmail.com>
-Cc:     "Ghannam, Yazen" <Yazen.Ghannam@amd.com>,
-        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>
-Subject: Re: [GIT PULL] EDAC pile for 5.4 -> AMD family 17h, model 70h support
-Message-ID: <20191010134128.GF7658@zn.tnic>
-References: <20191007071502.GA24289@zn.tnic>
- <CAEVokG51DtL1g+9YFK6RE=3m-wtjV1VN=vV56b5-3=K21=Jmrw@mail.gmail.com>
- <20191008115041.GD14765@zn.tnic>
- <678ba7d1-cf3d-4101-1819-29b291cf236d@amd.com>
- <CAEVokG4SSkgWS2N8eqr+h7AJg9CF26OW7vtXwOurCGU-4dsLbw@mail.gmail.com>
- <20191009103041.GC10395@zn.tnic>
- <724d6f97-61f2-94bd-3f4b-793a55b6ac15@amd.com>
- <CAEVokG4T5q8PBmf4=vLjPWQjzL_Xwu6yF81=mLjkpoJSoCggkw@mail.gmail.com>
- <20191010095650.GC7658@zn.tnic>
- <9f3ce002-7380-0e93-7bd5-20bb944d0b77@gmail.com>
+        id S1726017AbfJJOEM (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Thu, 10 Oct 2019 10:04:12 -0400
+Received: from smtp-fw-2101.amazon.com ([72.21.196.25]:26652 "EHLO
+        smtp-fw-2101.amazon.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725923AbfJJOEM (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Thu, 10 Oct 2019 10:04:12 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1570716251; x=1602252251;
+  h=subject:to:cc:references:from:message-id:date:
+   mime-version:in-reply-to:content-transfer-encoding;
+  bh=XwGL70t454LegYE7GCchMbvmQ2PqMa2pltoRa32OItM=;
+  b=jQwIJqA8CLbo8oDTraE9puZssgxYdMofluM3CwwH6KH+kGm2PVUXQxje
+   zsDijHcXwGxnSDNguaGrvkTgLJxczywUThrnxWBjsTQknkK41yFoJUYeK
+   fg+/kaUoWj7SPD+pgV193zETmTHneCNQ2bVECBWHOj9YAP1gCJ+Lbpqkw
+   0=;
+X-IronPort-AV: E=Sophos;i="5.67,280,1566864000"; 
+   d="scan'208";a="757243402"
+Received: from iad6-co-svc-p1-lb1-vlan2.amazon.com (HELO email-inbound-relay-1a-7d76a15f.us-east-1.amazon.com) ([10.124.125.2])
+  by smtp-border-fw-out-2101.iad2.amazon.com with ESMTP; 10 Oct 2019 14:04:08 +0000
+Received: from EX13MTAUEB001.ant.amazon.com (iad55-ws-svc-p15-lb9-vlan2.iad.amazon.com [10.40.159.162])
+        by email-inbound-relay-1a-7d76a15f.us-east-1.amazon.com (Postfix) with ESMTPS id B86BAA213E;
+        Thu, 10 Oct 2019 14:04:03 +0000 (UTC)
+Received: from EX13D08UEB003.ant.amazon.com (10.43.60.11) by
+ EX13MTAUEB001.ant.amazon.com (10.43.60.96) with Microsoft SMTP Server (TLS)
+ id 15.0.1367.3; Thu, 10 Oct 2019 14:04:03 +0000
+Received: from EX13MTAUEB001.ant.amazon.com (10.43.60.96) by
+ EX13D08UEB003.ant.amazon.com (10.43.60.11) with Microsoft SMTP Server (TLS)
+ id 15.0.1367.3; Thu, 10 Oct 2019 14:04:02 +0000
+Received: from [10.107.3.25] (10.107.3.25) by mail-relay.amazon.com
+ (10.43.60.129) with Microsoft SMTP Server (TLS) id 15.0.1367.3 via Frontend
+ Transport; Thu, 10 Oct 2019 14:03:59 +0000
+Subject: Re: [PATCH v6 3/3] edac: Add support for Amazon's Annapurna Labs L2
+ EDAC
+To:     Rob Herring <robh+dt@kernel.org>
+CC:     Borislav Petkov <bp@alien8.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        James Morse <james.morse@arm.com>,
+        Frank Rowand <frowand.list@gmail.com>,
+        David Miller <davem@davemloft.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Linus Walleij" <linus.walleij@linaro.org>, <daniel@iogearbox.net>,
+        "Paul E. McKenney" <paulmck@linux.ibm.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        linux-edac <linux-edac@vger.kernel.org>,
+        <devicetree@vger.kernel.org>,
+        "Woodhouse, David" <dwmw@amazon.co.uk>, <benh@amazon.com>,
+        "Krupnik, Ronen" <ronenk@amazon.com>,
+        Talel Shenhar <talel@amazon.com>,
+        Jonathan Chocron <jonnyc@amazon.com>,
+        "Hanoch, Uri" <hanochu@amazon.com>
+References: <20191007151730.7705-1-hhhawa@amazon.com>
+ <20191007151730.7705-4-hhhawa@amazon.com>
+ <CAL_JsqLZOHx=3d9jPy+7y0a92wA-VKEDQ4PVNvo6L8fRe7xJCQ@mail.gmail.com>
+From:   "Hawa, Hanna" <hhhawa@amazon.com>
+Message-ID: <872efced-ec4d-5f24-fca5-c501ed96e570@amazon.com>
+Date:   Thu, 10 Oct 2019 17:03:57 +0300
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <9f3ce002-7380-0e93-7bd5-20bb944d0b77@gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <CAL_JsqLZOHx=3d9jPy+7y0a92wA-VKEDQ4PVNvo6L8fRe7xJCQ@mail.gmail.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Thu, Oct 10, 2019 at 08:48:20AM -0400, Jean-Frederic wrote:
-> I did recheck all menus in advanced mode several times. I used my bios
-> fairly often when I got this new system, I would also have seen it
-> before I would think.
+Hi,
 
-I have the faint suspicion that our perfectly capable BIOS writers
-forgot to add a disable functionality. Let's see what Yazen finds out
-first, though.
 
--- 
-Regards/Gruss,
-    Boris.
+On 10/10/2019 2:19 AM, Rob Herring wrote:
+> On Mon, Oct 7, 2019 at 10:18 AM Hanna Hawa <hhhawa@amazon.com> wrote:
+>>
+>> Adds support for Amazon's Annapurna Labs L2 EDAC driver to detect and
+>> report L2 errors.
+>>
+>> Signed-off-by: Hanna Hawa <hhhawa@amazon.com>
+>> ---
+>>   MAINTAINERS               |   5 +
+>>   drivers/edac/Kconfig      |   8 ++
+>>   drivers/edac/Makefile     |   1 +
+>>   drivers/edac/al_l2_edac.c | 251 ++++++++++++++++++++++++++++++++++++++
+>>   4 files changed, 265 insertions(+)
+>>   create mode 100644 drivers/edac/al_l2_edac.c
+>>
+>> diff --git a/MAINTAINERS b/MAINTAINERS
+>> index 7887a62dc843..0eabcfcf91a9 100644
+>> --- a/MAINTAINERS
+>> +++ b/MAINTAINERS
+>> @@ -748,6 +748,11 @@ M: Hanna Hawa <hhhawa@amazon.com>
+>>   S:     Maintained
+>>   F:     drivers/edac/al_l1_edac.c
+>>
+>> +AMAZON ANNAPURNA LABS L2 EDAC
+>> +M:     Hanna Hawa <hhhawa@amazon.com>
+>> +S:     Maintained
+>> +F:     drivers/edac/al_l2_edac.c
+>> +
+>>   AMAZON ANNAPURNA LABS THERMAL MMIO DRIVER
+>>   M:     Talel Shenhar <talel@amazon.com>
+>>   S:     Maintained
+>> diff --git a/drivers/edac/Kconfig b/drivers/edac/Kconfig
+>> index e8161d7c7469..cb394aff1cab 100644
+>> --- a/drivers/edac/Kconfig
+>> +++ b/drivers/edac/Kconfig
+>> @@ -82,6 +82,14 @@ config EDAC_AL_L1
+>>            for Amazon's Annapurna Labs SoCs.
+>>            This driver detects errors of L1 caches.
+>>
+>> +config EDAC_AL_L2
+>> +       tristate "Amazon's Annapurna Labs L2 EDAC"
+> 
+> I still think this should be an "A57 L2 ECC" driver, but if no one
+> cares I'll shut up and the 2nd person can rename everything.
 
-https://people.kernel.org/tglx/notes-about-netiquette
+> 
+>> +       depends on ARCH_ALPINE
+> 
+> || COMPILE_TEST
+
+Will be add in next patchset.
+
+> 
+> Maybe it needs an ARM64 dependency too in this case?
+
+Yes, it need ARM64 dependency, I'll add.
+
+Thanks,
+Hanna
+
+> 
+>> +       help
+>> +         Support for L2 error detection and correction
+>> +         for Amazon's Annapurna Labs SoCs.
+>> +         This driver detects errors of L2 caches.
+>> +
+> 
+>> +
+>> +       ret = platform_driver_register(&al_l2_edac_driver);
+>> +       if (ret) {
+>> +               pr_err("Failed to register %s (%d)\n", DRV_NAME, ret);
+>> +               return ret;
+>> +       }
+>> +
+>> +       edac_l2_device = platform_device_register_simple(DRV_NAME, -1, NULL, 0);
+>> +       if (IS_ERR(edac_l2_device)) {
+>> +               pr_err("Failed to register EDAC AL L2 platform device\n");
+>> +               return PTR_ERR(edac_l2_device);
+>> +       }
+>> +
+>> +       return 0;
+>> +}
+>> +
+>> +static void __exit al_l2_exit(void)
+>> +{
+>> +       platform_device_unregister(edac_l2_device);
+>> +       platform_driver_unregister(&al_l2_edac_driver);
+>> +}
+>> +
+>> +late_initcall(al_l2_init);
+>> +module_exit(al_l2_exit);
+>> +
+>> +MODULE_LICENSE("GPL v2");
+>> +MODULE_AUTHOR("Hanna Hawa <hhhawa@amazon.com>");
+>> +MODULE_DESCRIPTION("Amazon's Annapurna Lab's L2 EDAC Driver");
+>> --
+>> 2.17.1
+>>
