@@ -2,42 +2,43 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 53EA7D3D1A
-	for <lists+linux-edac@lfdr.de>; Fri, 11 Oct 2019 12:15:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D22BD3D25
+	for <lists+linux-edac@lfdr.de>; Fri, 11 Oct 2019 12:17:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727003AbfJKKPb (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Fri, 11 Oct 2019 06:15:31 -0400
-Received: from bombadil.infradead.org ([198.137.202.133]:58290 "EHLO
+        id S1727176AbfJKKRT (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Fri, 11 Oct 2019 06:17:19 -0400
+Received: from bombadil.infradead.org ([198.137.202.133]:58338 "EHLO
         bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726458AbfJKKPb (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Fri, 11 Oct 2019 06:15:31 -0400
+        with ESMTP id S1726290AbfJKKRT (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Fri, 11 Oct 2019 06:17:19 -0400
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
         Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Subject:Cc:To:
         From:Date:Sender:Reply-To:Content-ID:Content-Description:Resent-Date:
         Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
         List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=hwAR1Sr46cSaooqzU/ZAWX1QuPmPGh5n5goPhXbgX84=; b=CqYZPhQ8646YFp3Ha820yNtHl
-        Q/IBaN2sO82C028r3cQGksf7M/GL/Dgt1xQxyZdEhgBkmrHRT/MjH6gMLUoVr4IOoeR53fQxdhRbP
-        jRyQjW2fPKTn9rWWPMh0axSwPq4OSxzvpttwcpZn2tqEC/vw+iTicF1bUaEMsiz/EJNrRu3nXtDVL
-        3i4cDEkQgaIL/F/mOBLgES0IB5JlKw1HwqS3UIq1yGPiaVCeIrjWUIH8067ABH+9s0EtqLgX1cSlz
-        /UZBts90XbVn7MG2KMHCRQH8/TNw4ancp3jPx4HEv7dOQ+B/q9gFUeG5fcf7Rol87pfAihNhrKgcN
-        idJc0GRqw==;
+         bh=Cv/KAWwMfr+7BghJTGUGWukKHt7xg9UrE7eOCgXB8Lc=; b=MnaEbUBjI73soKTwbAzHNRrvZ
+        Uw9waepT+B3yTernjqev5rqW69WB1wwZzLBjbAXRuuErEmUWtUNfg7TyHsHh4LvhZQsZzP5RF3ZEX
+        yQLEib/Fctcw+R3S9toaUMNspcDPerEcxsZxVbozmzD4hlMY91cYc8BNZdogb+WK0I9qPAbm4mtEq
+        LNJESqgixdSX37mnXUDQc2ZSbVoXy07mCWO+HNUv6n+8ORNPV3KXSzQA1e2ZWPcmSs7whjE91PQlc
+        y5C3NRFKvzwSnVGtzowCBxsC/O30KS75kHz6el9ZIvGzrb6MNtrGs9QY224N+lMUecY6+AhuSY8P1
+        NtqCC0hyw==;
 Received: from 177.17.141.107.dynamic.adsl.gvt.net.br ([177.17.141.107] helo=coco.lan)
         by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1iIrxH-00034M-W1; Fri, 11 Oct 2019 10:15:28 +0000
-Date:   Fri, 11 Oct 2019 07:15:23 -0300
+        id 1iIrz1-0003C5-LJ; Fri, 11 Oct 2019 10:17:15 +0000
+Date:   Fri, 11 Oct 2019 07:17:11 -0300
 From:   Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
 To:     Robert Richter <rrichter@marvell.com>
 Cc:     Borislav Petkov <bp@alien8.de>, Tony Luck <tony.luck@intel.com>,
         James Morse <james.morse@arm.com>,
         "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 04/19] EDAC, mc: Do not BUG_ON() in edac_mc_alloc()
-Message-ID: <20191011071523.1f121599@coco.lan>
-In-Reply-To: <20191010202418.25098-5-rrichter@marvell.com>
+Subject: Re: [PATCH 05/19] EDAC, mc: Reduce indentation level in
+ edac_mc_handle_error()
+Message-ID: <20191011071711.7e15a4cb@coco.lan>
+In-Reply-To: <20191010202418.25098-6-rrichter@marvell.com>
 References: <20191010202418.25098-1-rrichter@marvell.com>
-        <20191010202418.25098-5-rrichter@marvell.com>
+        <20191010202418.25098-6-rrichter@marvell.com>
 X-Mailer: Claws Mail 3.17.4 (GTK+ 2.24.32; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
@@ -47,36 +48,92 @@ Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-Em Thu, 10 Oct 2019 20:25:12 +0000
+Em Thu, 10 Oct 2019 20:25:14 +0000
 Robert Richter <rrichter@marvell.com> escreveu:
 
-> No need to crash the system in case edac_mc_alloc() is called with
-> invalid arguments, just warn and return. This would cause a checkpatch
-> warning when touching the code later, so just fix it.
+> Reduce the indentation level in edac_mc_handle_error() a bit by using
+> continue. No functional changes.
 > 
 > Signed-off-by: Robert Richter <rrichter@marvell.com>
 
 Reviewed-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
 
 > ---
->  drivers/edac/edac_mc.c | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
+>  drivers/edac/edac_mc.c | 59 +++++++++++++++++++++---------------------
+>  1 file changed, 30 insertions(+), 29 deletions(-)
 > 
 > diff --git a/drivers/edac/edac_mc.c b/drivers/edac/edac_mc.c
-> index c5240bb4c6c0..f2cbca77bc50 100644
+> index f2cbca77bc50..45b02bb31964 100644
 > --- a/drivers/edac/edac_mc.c
 > +++ b/drivers/edac/edac_mc.c
-> @@ -323,7 +323,9 @@ struct mem_ctl_info *edac_mc_alloc(unsigned int mc_num,
->  	int i, j, row, chn, n, len;
->  	bool per_rank = false;
+> @@ -1171,37 +1171,38 @@ void edac_mc_handle_error(const enum hw_event_mc_err_type type,
+>  		 * channel/memory controller/...  may be affected.
+>  		 * Also, don't show errors for empty DIMM slots.
+>  		 */
+> -		if (e->enable_per_layer_report && dimm->nr_pages) {
+> -			if (n_labels >= EDAC_MAX_LABELS) {
+> -				e->enable_per_layer_report = false;
+> -				break;
+> -			}
+> -			n_labels++;
+> -			if (p != e->label) {
+> -				strcpy(p, OTHER_LABEL);
+> -				p += strlen(OTHER_LABEL);
+> -			}
+> -			strcpy(p, dimm->label);
+> -			p += strlen(p);
+> -			*p = '\0';
+> +		if (!e->enable_per_layer_report || !dimm->nr_pages)
+> +			continue;
 >  
-> -	BUG_ON(n_layers > EDAC_MAX_LAYERS || n_layers == 0);
-> +	if (WARN_ON(n_layers > EDAC_MAX_LAYERS || n_layers == 0))
-> +		return NULL;
+> -			/*
+> -			 * get csrow/channel of the DIMM, in order to allow
+> -			 * incrementing the compat API counters
+> -			 */
+> -			edac_dbg(4, "%s csrows map: (%d,%d)\n",
+> -				 mci->csbased ? "rank" : "dimm",
+> -				 dimm->csrow, dimm->cschannel);
+> -			if (row == -1)
+> -				row = dimm->csrow;
+> -			else if (row >= 0 && row != dimm->csrow)
+> -				row = -2;
+> -
+> -			if (chan == -1)
+> -				chan = dimm->cschannel;
+> -			else if (chan >= 0 && chan != dimm->cschannel)
+> -				chan = -2;
+> +		if (n_labels >= EDAC_MAX_LABELS) {
+> +			e->enable_per_layer_report = false;
+> +			break;
+> +		}
+> +		n_labels++;
+> +		if (p != e->label) {
+> +			strcpy(p, OTHER_LABEL);
+> +			p += strlen(OTHER_LABEL);
+>  		}
+> +		strcpy(p, dimm->label);
+> +		p += strlen(p);
+> +		*p = '\0';
 > +
->  	/*
->  	 * Calculate the total amount of dimms and csrows/cschannels while
->  	 * in the old API emulation mode
+> +		/*
+> +		 * get csrow/channel of the DIMM, in order to allow
+> +		 * incrementing the compat API counters
+> +		 */
+> +		edac_dbg(4, "%s csrows map: (%d,%d)\n",
+> +			mci->csbased ? "rank" : "dimm",
+> +			dimm->csrow, dimm->cschannel);
+> +		if (row == -1)
+> +			row = dimm->csrow;
+> +		else if (row >= 0 && row != dimm->csrow)
+> +			row = -2;
+> +
+> +		if (chan == -1)
+> +			chan = dimm->cschannel;
+> +		else if (chan >= 0 && chan != dimm->cschannel)
+> +			chan = -2;
+>  	}
+>  
+>  	if (!e->enable_per_layer_report) {
 
 
 
