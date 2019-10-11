@@ -2,43 +2,42 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4616FD3E33
-	for <lists+linux-edac@lfdr.de>; Fri, 11 Oct 2019 13:20:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DC4ED3E48
+	for <lists+linux-edac@lfdr.de>; Fri, 11 Oct 2019 13:22:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727581AbfJKLUT (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Fri, 11 Oct 2019 07:20:19 -0400
-Received: from bombadil.infradead.org ([198.137.202.133]:60418 "EHLO
+        id S1727905AbfJKLWI (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Fri, 11 Oct 2019 07:22:08 -0400
+Received: from bombadil.infradead.org ([198.137.202.133]:33844 "EHLO
         bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727541AbfJKLUT (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Fri, 11 Oct 2019 07:20:19 -0400
+        with ESMTP id S1727538AbfJKLWI (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Fri, 11 Oct 2019 07:22:08 -0400
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
         Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Subject:Cc:To:
         From:Date:Sender:Reply-To:Content-ID:Content-Description:Resent-Date:
         Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
         List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=XyJkLzK1tgqObp/ZMiScyNde0WPBzRBi2jcUwb+sE58=; b=D61ONBQoro8pAOe2yUr9ihwlv
-        xdMLOvh0S8seCDUh1REvjyqi7eqxDHtxid2eqWC6bQ2PdGvQjYaPVr6Uf6GYKu3H2OO6PcocKOikq
-        6O5JwobwzI8kHpsqmw/RRpzkNuYPxyYymgcnYqcjnmlkwDJyjk6r3mU8Beb1/WXoSPca05aXyqDgP
-        n/lFoPmjJZYKxvQbF2a8/vbXhF2y72p+tQpFZcwgoiP1jEIV4j+6V7Fx2YhNvfh05xwQlxzfCC6OB
-        NRXj2nlE+Nxo6aeOBg2NWRPQ3Mq/YeEkzgy0Fe0dTBssaB0gNZFR8EIJNuLFoBy7L3htKbvaRUPCp
-        0iT/2ViRQ==;
+         bh=/8Id3ugL0O8RKpYToVrLYrKK03KtyD4dKKaWqFDdBWU=; b=EBvEVfbOOtR5yjCP2cFOZZqem
+        X39yfTuFdhsPxutnGElu7I8hqGw/wLL+UeDTZsCAVi8Yrm4cJ5DcdkuQW+2+oLWsdqNCHB5xlbRtI
+        gr/R54GTAF2nOS5XIDZUQnfGHsNdukDDXbaV/muifi5E92HqXv82VkBdmcYaX3UXWUQi65jsPaWay
+        3M9A8g8/nQo8O+lzf0queAmHBGB0pwN6HAYGZY5r2V9bvGLjLzmn9Ukctt6XXmtEyCJLEfLZap/wl
+        CIpVTRvfgLSWbwewHRj6CNHOkkv0tueagDACg7lgtanPWnZ/QyrHR5z9GdZ8diaz9Kj0bjWYS1eKO
+        CzhnIbN7g==;
 Received: from 177.17.141.107.dynamic.adsl.gvt.net.br ([177.17.141.107] helo=coco.lan)
         by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1iIsxz-0007RH-Lh; Fri, 11 Oct 2019 11:20:15 +0000
-Date:   Fri, 11 Oct 2019 08:20:11 -0300
+        id 1iIszl-0008Sl-Fk; Fri, 11 Oct 2019 11:22:05 +0000
+Date:   Fri, 11 Oct 2019 08:22:01 -0300
 From:   Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
 To:     Robert Richter <rrichter@marvell.com>
 Cc:     Borislav Petkov <bp@alien8.de>, Tony Luck <tony.luck@intel.com>,
         James Morse <james.morse@arm.com>,
         "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 17/19] EDAC, ghes: Remove intermediate buffer
- pvt->detail_location
-Message-ID: <20191011082011.5d95e7f3@coco.lan>
-In-Reply-To: <20191010202418.25098-18-rrichter@marvell.com>
+Subject: Re: [PATCH 16/19] EDAC, ghes: Fix grain calculation
+Message-ID: <20191011082201.1b7c26ce@coco.lan>
+In-Reply-To: <20191010202418.25098-17-rrichter@marvell.com>
 References: <20191010202418.25098-1-rrichter@marvell.com>
-        <20191010202418.25098-18-rrichter@marvell.com>
+        <20191010202418.25098-17-rrichter@marvell.com>
 X-Mailer: Claws Mail 3.17.4 (GTK+ 2.24.32; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
@@ -48,63 +47,89 @@ Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-Em Thu, 10 Oct 2019 20:25:38 +0000
+Em Thu, 10 Oct 2019 20:25:37 +0000
 Robert Richter <rrichter@marvell.com> escreveu:
 
-> detail_location[] is used to collect two location strings so they can
-> be passed as one to trace_mc_event(). Instead of having an extra copy
-> step, assemble the location string in other_detail[] from the
-> beginning.
+> The current code to convert a physical address mask to a grain
+> (defined as granularity in bytes) is:
 > 
-> Using other_detail[] to call trace_mc_event() is now the same as in
-> edac_mc.c and code can be unified.
+> 	e->grain = ~(mem_err->physical_addr_mask & ~PAGE_MASK);
 > 
-> Reviewed-by: James Morse <james.morse@arm.com>
+> This is broken in several ways:
+> 
+> 1) It calculates to wrong grain values. E.g., a physical address mask
+> of ~0xfff should give a grain of 0x1000. Without considering
+> PAGE_MASK, there is an off-by-one. Things are worse when also
+> filtering it with ~PAGE_MASK. This will calculate to a grain with the
+> upper bits set. In the example it even calculates to ~0.
+> 
+> 2) The grain does not depend on and is unrelated to the kernel's
+> page-size. The page-size only matters when unmapping memory in
+> memory_failure(). Smaller grains are wrongly rounded up to the
+> page-size, on architectures with a configurable page-size (e.g. arm64)
+> this could round up to the even bigger page-size of the hypervisor.
+> 
+> Fix this with:
+> 
+> 	e->grain = ~mem_err->physical_addr_mask + 1;
+> 
+> The grain_bits are defined as:
+> 
+> 	grain = 1 << grain_bits;
+> 
+> Change also the grain_bits calculation accordingly, it is the same
+> formula as in edac_mc.c now and the code can be unified.
+> 
+> The value in ->physical_addr_mask coming from firmware is assumed to
+> be contiguous, but this is not sanity-checked. However, in case the
+> mask is non-contiguous, a conversion to grain_bits effectively
+> converts the grain bit mask to a power of 2 by rounding up.
+> 
+> Suggested-by: James Morse <james.morse@arm.com>
 > Signed-off-by: Robert Richter <rrichter@marvell.com>
 
 Reviewed-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
 
 > ---
->  drivers/edac/ghes_edac.c | 9 ++++-----
->  1 file changed, 4 insertions(+), 5 deletions(-)
+>  drivers/edac/ghes_edac.c | 10 ++++++++--
+>  1 file changed, 8 insertions(+), 2 deletions(-)
 > 
 > diff --git a/drivers/edac/ghes_edac.c b/drivers/edac/ghes_edac.c
-> index 97242cf18a88..8d9d3c4dbebb 100644
+> index 851aad92e42d..97242cf18a88 100644
 > --- a/drivers/edac/ghes_edac.c
 > +++ b/drivers/edac/ghes_edac.c
-> @@ -21,8 +21,7 @@ struct ghes_edac_pvt {
->  	struct mem_ctl_info *mci;
+> @@ -220,6 +220,7 @@ void ghes_edac_report_mem_error(int sev, struct cper_sec_mem_err *mem_err)
+>  	/* Cleans the error report buffer */
+>  	memset(e, 0, sizeof (*e));
+>  	e->error_count = 1;
+> +	e->grain = 1;
+>  	strcpy(e->label, "unknown label");
+>  	e->msg = pvt->msg;
+>  	e->other_detail = pvt->other_detail;
+> @@ -315,7 +316,7 @@ void ghes_edac_report_mem_error(int sev, struct cper_sec_mem_err *mem_err)
 >  
->  	/* Buffers for the error handling routine */
-> -	char detail_location[240];
-> -	char other_detail[160];
-> +	char other_detail[400];
->  	char msg[80];
->  };
+>  	/* Error grain */
+>  	if (mem_err->validation_bits & CPER_MEM_VALID_PA_MASK)
+> -		e->grain = ~(mem_err->physical_addr_mask & ~PAGE_MASK);
+> +		e->grain = ~mem_err->physical_addr_mask + 1;
 >  
-> @@ -356,6 +355,8 @@ void ghes_edac_report_mem_error(int sev, struct cper_sec_mem_err *mem_err)
+>  	/* Memory error location, mapped on e->location */
+>  	p = e->location;
+> @@ -428,8 +429,13 @@ void ghes_edac_report_mem_error(int sev, struct cper_sec_mem_err *mem_err)
+>  	if (p > pvt->other_detail)
+>  		*(p - 1) = '\0';
 >  
->  	/* All other fields are mapped on e->other_detail */
->  	p = pvt->other_detail;
-> +	p += snprintf(p, sizeof(pvt->other_detail),
-> +		"APEI location: %s ", e->location);
->  	if (mem_err->validation_bits & CPER_MEM_VALID_ERROR_STATUS) {
->  		u64 status = mem_err->error_status;
->  
-> @@ -436,12 +437,10 @@ void ghes_edac_report_mem_error(int sev, struct cper_sec_mem_err *mem_err)
->  	grain_bits = fls_long(e->grain - 1);
->  
+> +	/* Sanity-check driver-supplied grain value. */
+> +	if (WARN_ON_ONCE(!e->grain))
+> +		e->grain = 1;
+> +
+> +	grain_bits = fls_long(e->grain - 1);
+> +
 >  	/* Generate the trace event */
-> -	snprintf(pvt->detail_location, sizeof(pvt->detail_location),
-> -		 "APEI location: %s %s", e->location, e->other_detail);
+> -	grain_bits = fls_long(e->grain);
+>  	snprintf(pvt->detail_location, sizeof(pvt->detail_location),
+>  		 "APEI location: %s %s", e->location, e->other_detail);
 >  	trace_mc_event(e->type, e->msg, e->label, e->error_count,
->  		       mci->mc_idx, e->top_layer, e->mid_layer, e->low_layer,
->  		       (e->page_frame_number << PAGE_SHIFT) | e->offset_in_page,
-> -		       grain_bits, e->syndrome, pvt->detail_location);
-> +		       grain_bits, e->syndrome, e->other_detail);
->  
->  	dimm = edac_get_dimm_by_index(mci, e->top_layer);
->  
 
 
 
