@@ -2,503 +2,469 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C7E5D3AF0
-	for <lists+linux-edac@lfdr.de>; Fri, 11 Oct 2019 10:23:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 80944D3CE7
+	for <lists+linux-edac@lfdr.de>; Fri, 11 Oct 2019 11:59:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726666AbfJKIXY (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Fri, 11 Oct 2019 04:23:24 -0400
-Received: from inca-roads.misterjones.org ([213.251.177.50]:60389 "EHLO
-        inca-roads.misterjones.org" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726174AbfJKIXY (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>);
-        Fri, 11 Oct 2019 04:23:24 -0400
-Received: from 78.163-31-62.static.virginmediabusiness.co.uk ([62.31.163.78] helo=why)
-        by cheepnis.misterjones.org with esmtpsa (TLSv1.2:AES256-GCM-SHA384:256)
-        (Exim 4.80)
-        (envelope-from <maz@kernel.org>)
-        id 1iIqCa-0002DK-Fh; Fri, 11 Oct 2019 10:23:09 +0200
-Date:   Fri, 11 Oct 2019 09:23:06 +0100
-From:   Marc Zyngier <maz@kernel.org>
-To:     Talel Shenhar <talel@amazon.com>
-Cc:     <robh+dt@kernel.org>, <mark.rutland@arm.com>, <arnd@arndb.de>,
-        <bp@alien8.de>, <mchehab@kernel.org>, <james.morse@arm.com>,
-        <davem@davemloft.net>, <gregkh@linuxfoundation.org>,
-        <paulmck@linux.ibm.com>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-edac@vger.kernel.org>,
-        <dwmw@amazon.co.uk>, <benh@kernel.crashing.org>,
-        <hhhawa@amazon.com>, <ronenk@amazon.com>, <jonnyc@amazon.com>,
-        <hanochu@amazon.com>, <amirkl@amazon.com>, <barakw@amazon.com>
-Subject: Re: [PATCH v4 2/2] EDAC: al-mc-edac: Introduce Amazon's Annapurna
- Labs Memory Controller EDAC
-Message-ID: <20191011092306.41a4c9a9@why>
-In-Reply-To: <1570708454-10784-3-git-send-email-talel@amazon.com>
-References: <1570708454-10784-1-git-send-email-talel@amazon.com>
-        <1570708454-10784-3-git-send-email-talel@amazon.com>
-Organization: Approximate
-X-Mailer: Claws Mail 3.17.4 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+        id S1726371AbfJKJ7I (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Fri, 11 Oct 2019 05:59:08 -0400
+Received: from bombadil.infradead.org ([198.137.202.133]:51568 "EHLO
+        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726317AbfJKJ7I (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Fri, 11 Oct 2019 05:59:08 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
+        Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Subject:Cc:To:
+        From:Date:Sender:Reply-To:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=y0xLUjgqOTgOFI57/Ux26p2SnXTzsPy6CcfyZSO+dlM=; b=VnJAaCLQpaje9XbmzAyoktiXU
+        b1wlUEYdpXlZcbdANekQAxKoTpNNwPE6JAkKTySsm3Lb8OIyGwUMPEuDS7PG1ZVRKUS3ZEzmvRf+i
+        +jb3q6CwzBoAN7I9w1du/Mqmu5D4H5f3V02Cnw1fftMd3bRhjiPKiKACFQX17XwOiCk3Ou2eZ+klT
+        FRWBw0++GX3nYCXU985DfcJrsBpwnLfcV0cM/Q5ir4yKjciTwQLYf1VgYnaCbQ4VUhlPgpagAKkVU
+        kd4mIrBOhgfCuQJmu6NKjHzrMJy7Vg7NwDyWIUdWlQcaYD7PWwwSMplTohXk1k1sBhjvreMt/pRj+
+        xFJA0Uw3A==;
+Received: from 177.17.141.107.dynamic.adsl.gvt.net.br ([177.17.141.107] helo=coco.lan)
+        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1iIrhO-0004Ay-Ui; Fri, 11 Oct 2019 09:59:03 +0000
+Date:   Fri, 11 Oct 2019 06:58:57 -0300
+From:   Mauro Carvalho Chehab <mchehab@kernel.org>
+To:     Robert Richter <rrichter@marvell.com>
+Cc:     Borislav Petkov <bp@alien8.de>, Tony Luck <tony.luck@intel.com>,
+        Jason Baron <jbaron@akamai.com>, Tero Kristo <t-kristo@ti.com>,
+        James Morse <james.morse@arm.com>,
+        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Qiuxu Zhuo <qiuxu.zhuo@intel.com>
+Subject: Re: [PATCH 01/19] EDAC: Replace EDAC_DIMM_PTR() macro with
+ edac_get_dimm() function
+Message-ID: <20191011065857.00f287cf@coco.lan>
+In-Reply-To: <20191010202418.25098-2-rrichter@marvell.com>
+References: <20191010202418.25098-1-rrichter@marvell.com>
+        <20191010202418.25098-2-rrichter@marvell.com>
+X-Mailer: Claws Mail 3.17.4 (GTK+ 2.24.32; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 62.31.163.78
-X-SA-Exim-Rcpt-To: talel@amazon.com, robh+dt@kernel.org, mark.rutland@arm.com, arnd@arndb.de, bp@alien8.de, mchehab@kernel.org, james.morse@arm.com, davem@davemloft.net, gregkh@linuxfoundation.org, paulmck@linux.ibm.com, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, linux-edac@vger.kernel.org, dwmw@amazon.co.uk, benh@kernel.crashing.org, hhhawa@amazon.com, ronenk@amazon.com, jonnyc@amazon.com, hanochu@amazon.com, amirkl@amazon.com, barakw@amazon.com
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on cheepnis.misterjones.org); SAEximRunCond expanded to false
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Thu, 10 Oct 2019 14:54:14 +0300
-Talel Shenhar <talel@amazon.com> wrote:
+Em Thu, 10 Oct 2019 20:25:05 +0000
+Robert Richter <rrichter@marvell.com> escreveu:
 
-Hi Talel,
-
-> The Amazon's Annapurna Labs Memory Controller EDAC supports ECC capability
-> for error detection and correction (Single bit error correction, Double
-> detection). This driver introduces EDAC driver for that capability.
+> The EDAC_DIMM_PTR() macro takes 3 arguments from struct mem_ctl_info.
+> Clean up this interface to only pass the mci struct and replace this
+> macro with the new function edac_get_dimm().
 > 
-> Signed-off-by: Talel Shenhar <talel@amazon.com>
+> Also introduce the edac_get_dimm_by_index() function for later use.
+> This allows it to get a dimm pointer only by a given index. This can
+> be useful if the dimm's position within the layers of the memory
+> controller or the exact size of the layers are unknown.
+> 
+> Small style changes made for some hunks after applying the semantic
+> patch.
+> 
+> Semantic patch used:
+> 
+> @@ expression mci, a, b,c; @@
+> 
+> -EDAC_DIMM_PTR(mci->layers, mci->dimms, mci->n_layers, a, b, c)
+> +edac_get_dimm(mci, a, b, c)
+> 
+> Signed-off-by: Robert Richter <rrichter@marvell.com>
 > ---
->  MAINTAINERS               |   7 +
->  drivers/edac/Kconfig      |   7 +
->  drivers/edac/Makefile     |   1 +
->  drivers/edac/al_mc_edac.c | 358 ++++++++++++++++++++++++++++++++++++++++++++++
->  4 files changed, 373 insertions(+)
->  create mode 100644 drivers/edac/al_mc_edac.c
+>  drivers/edac/edac_mc.c      |  1 +
+>  drivers/edac/ghes_edac.c    |  7 +--
+>  drivers/edac/i10nm_base.c   |  3 +-
+>  drivers/edac/i3200_edac.c   |  3 +-
+>  drivers/edac/i5000_edac.c   |  5 +-
+>  drivers/edac/i5100_edac.c   |  3 +-
+>  drivers/edac/i5400_edac.c   |  3 +-
+>  drivers/edac/i7300_edac.c   |  3 +-
+>  drivers/edac/i7core_edac.c  |  3 +-
+>  drivers/edac/ie31200_edac.c |  7 +--
+>  drivers/edac/pnd2_edac.c    |  4 +-
+>  drivers/edac/sb_edac.c      |  2 +-
+>  drivers/edac/skx_base.c     |  3 +-
+>  drivers/edac/ti_edac.c      |  2 +-
+>  include/linux/edac.h        | 92 ++++++++++++++++++++++++-------------
+>  15 files changed, 79 insertions(+), 62 deletions(-)
 > 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 55199ef..d431e8f 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -757,6 +757,13 @@ F:	drivers/tty/serial/altera_jtaguart.c
->  F:	include/linux/altera_uart.h
->  F:	include/linux/altera_jtaguart.h
+> diff --git a/drivers/edac/edac_mc.c b/drivers/edac/edac_mc.c
+> index e6fd079783bd..3d45adb5957f 100644
+> --- a/drivers/edac/edac_mc.c
+> +++ b/drivers/edac/edac_mc.c
+> @@ -438,6 +438,7 @@ struct mem_ctl_info *edac_mc_alloc(unsigned int mc_num,
+>  			goto error;
+>  		mci->dimms[off] = dimm;
+>  		dimm->mci = mci;
+> +		dimm->idx = off;
+
+See my comments about this below. IMO, such change doesn't belong
+to this patch.
+
 >  
-> +AMAZON ANNAPURNA LABS MEMORY CONTROLLER EDAC
-> +M:	Talel Shenhar <talel@amazon.com>
-> +M:	Talel Shenhar <talelshenhar@gmail.com>
-> +S:	Maintained
-> +F:	Documentation/devicetree/bindings/edac/amazon,al-mc-edac.yaml
-> +F:	drivers/edac/al_mc_edac.c
+>  		/*
+>  		 * Copy DIMM location and initialize it.
+> diff --git a/drivers/edac/ghes_edac.c b/drivers/edac/ghes_edac.c
+> index d413a0bdc9ad..fb31e80dfe94 100644
+> --- a/drivers/edac/ghes_edac.c
+> +++ b/drivers/edac/ghes_edac.c
+> @@ -98,9 +98,7 @@ static void ghes_edac_dmidecode(const struct dmi_header *dh, void *arg)
+>  
+>  	if (dh->type == DMI_ENTRY_MEM_DEVICE) {
+>  		struct memdev_dmi_entry *entry = (struct memdev_dmi_entry *)dh;
+> -		struct dimm_info *dimm = EDAC_DIMM_PTR(mci->layers, mci->dimms,
+> -						       mci->n_layers,
+> -						       dimm_fill->count, 0, 0);
+> +		struct dimm_info *dimm = edac_get_dimm(mci, dimm_fill->count, 0, 0);
+>  		u16 rdr_mask = BIT(7) | BIT(13);
+>  
+>  		if (entry->size == 0xffff) {
+> @@ -527,8 +525,7 @@ int ghes_edac_register(struct ghes *ghes, struct device *dev)
+>  		dimm_fill.mci = mci;
+>  		dmi_walk(ghes_edac_dmidecode, &dimm_fill);
+>  	} else {
+> -		struct dimm_info *dimm = EDAC_DIMM_PTR(mci->layers, mci->dimms,
+> -						       mci->n_layers, 0, 0, 0);
+> +		struct dimm_info *dimm = edac_get_dimm(mci, 0, 0, 0);
+>  
+>  		dimm->nr_pages = 1;
+>  		dimm->grain = 128;
+> diff --git a/drivers/edac/i10nm_base.c b/drivers/edac/i10nm_base.c
+> index c370d5457e6b..059eccf0582b 100644
+> --- a/drivers/edac/i10nm_base.c
+> +++ b/drivers/edac/i10nm_base.c
+> @@ -154,8 +154,7 @@ static int i10nm_get_dimm_config(struct mem_ctl_info *mci)
+>  
+>  		ndimms = 0;
+>  		for (j = 0; j < I10NM_NUM_DIMMS; j++) {
+> -			dimm = EDAC_DIMM_PTR(mci->layers, mci->dimms,
+> -					     mci->n_layers, i, j, 0);
+> +			dimm = edac_get_dimm(mci, i, j, 0);
+>  			mtr = I10NM_GET_DIMMMTR(imc, i, j);
+>  			mcddrtcfg = I10NM_GET_MCDDRTCFG(imc, i, j);
+>  			edac_dbg(1, "dimmmtr 0x%x mcddrtcfg 0x%x (mc%d ch%d dimm%d)\n",
+> diff --git a/drivers/edac/i3200_edac.c b/drivers/edac/i3200_edac.c
+> index 299b441647cd..432b375a4075 100644
+> --- a/drivers/edac/i3200_edac.c
+> +++ b/drivers/edac/i3200_edac.c
+> @@ -392,8 +392,7 @@ static int i3200_probe1(struct pci_dev *pdev, int dev_idx)
+>  		unsigned long nr_pages;
+>  
+>  		for (j = 0; j < nr_channels; j++) {
+> -			struct dimm_info *dimm = EDAC_DIMM_PTR(mci->layers, mci->dimms,
+> -							       mci->n_layers, i, j, 0);
+> +			struct dimm_info *dimm = edac_get_dimm(mci, i, j, 0);
+>  
+>  			nr_pages = drb_to_nr_pages(drbs, stacked, j, i);
+>  			if (nr_pages == 0)
+> diff --git a/drivers/edac/i5000_edac.c b/drivers/edac/i5000_edac.c
+> index 078a7351bf05..1a6f69c859ab 100644
+> --- a/drivers/edac/i5000_edac.c
+> +++ b/drivers/edac/i5000_edac.c
+> @@ -1275,9 +1275,8 @@ static int i5000_init_csrows(struct mem_ctl_info *mci)
+>  			if (!MTR_DIMMS_PRESENT(mtr))
+>  				continue;
+>  
+> -			dimm = EDAC_DIMM_PTR(mci->layers, mci->dimms, mci->n_layers,
+> -				       channel / MAX_BRANCHES,
+> -				       channel % MAX_BRANCHES, slot);
+> +			dimm = edac_get_dimm(mci, channel / MAX_BRANCHES,
+> +					     channel % MAX_BRANCHES, slot);
+>  
+>  			csrow_megs = pvt->dimm_info[slot][channel].megabytes;
+>  			dimm->grain = 8;
+> diff --git a/drivers/edac/i5100_edac.c b/drivers/edac/i5100_edac.c
+> index 12bebecb203b..134586753311 100644
+> --- a/drivers/edac/i5100_edac.c
+> +++ b/drivers/edac/i5100_edac.c
+> @@ -858,8 +858,7 @@ static void i5100_init_csrows(struct mem_ctl_info *mci)
+>  		if (!npages)
+>  			continue;
+>  
+> -		dimm = EDAC_DIMM_PTR(mci->layers, mci->dimms, mci->n_layers,
+> -			       chan, rank, 0);
+> +		dimm = edac_get_dimm(mci, chan, rank, 0);
+>  
+>  		dimm->nr_pages = npages;
+>  		dimm->grain = 32;
+> diff --git a/drivers/edac/i5400_edac.c b/drivers/edac/i5400_edac.c
+> index 8c86c6fd7da7..f131c05ade9f 100644
+> --- a/drivers/edac/i5400_edac.c
+> +++ b/drivers/edac/i5400_edac.c
+> @@ -1187,8 +1187,7 @@ static int i5400_init_dimms(struct mem_ctl_info *mci)
+>  			if (!MTR_DIMMS_PRESENT(mtr))
+>  				continue;
+>  
+> -			dimm = EDAC_DIMM_PTR(mci->layers, mci->dimms, mci->n_layers,
+> -				       channel / 2, channel % 2, slot);
+> +			dimm = edac_get_dimm(mci, channel / 2, channel % 2, slot);
+>  
+>  			size_mb =  pvt->dimm_info[slot][channel].megabytes;
+>  
+> diff --git a/drivers/edac/i7300_edac.c b/drivers/edac/i7300_edac.c
+> index 447d357c7a67..2e9bbe56cde9 100644
+> --- a/drivers/edac/i7300_edac.c
+> +++ b/drivers/edac/i7300_edac.c
+> @@ -794,8 +794,7 @@ static int i7300_init_csrows(struct mem_ctl_info *mci)
+>  			for (ch = 0; ch < max_channel; ch++) {
+>  				int channel = to_channel(ch, branch);
+>  
+> -				dimm = EDAC_DIMM_PTR(mci->layers, mci->dimms,
+> -					       mci->n_layers, branch, ch, slot);
+> +				dimm = edac_get_dimm(mci, branch, ch, slot);
+>  
+>  				dinfo = &pvt->dimm_info[slot][channel];
+>  
+> diff --git a/drivers/edac/i7core_edac.c b/drivers/edac/i7core_edac.c
+> index a71cca6eeb33..b3135b208f9a 100644
+> --- a/drivers/edac/i7core_edac.c
+> +++ b/drivers/edac/i7core_edac.c
+> @@ -585,8 +585,7 @@ static int get_dimm_config(struct mem_ctl_info *mci)
+>  			if (!DIMM_PRESENT(dimm_dod[j]))
+>  				continue;
+>  
+> -			dimm = EDAC_DIMM_PTR(mci->layers, mci->dimms, mci->n_layers,
+> -				       i, j, 0);
+> +			dimm = edac_get_dimm(mci, i, j, 0);
+>  			banks = numbank(MC_DOD_NUMBANK(dimm_dod[j]));
+>  			ranks = numrank(MC_DOD_NUMRANK(dimm_dod[j]));
+>  			rows = numrow(MC_DOD_NUMROW(dimm_dod[j]));
+> diff --git a/drivers/edac/ie31200_edac.c b/drivers/edac/ie31200_edac.c
+> index d26300f9cb07..4f65073f230b 100644
+> --- a/drivers/edac/ie31200_edac.c
+> +++ b/drivers/edac/ie31200_edac.c
+> @@ -490,9 +490,7 @@ static int ie31200_probe1(struct pci_dev *pdev, int dev_idx)
+>  
+>  			if (dimm_info[j][i].dual_rank) {
+>  				nr_pages = nr_pages / 2;
+> -				dimm = EDAC_DIMM_PTR(mci->layers, mci->dimms,
+> -						     mci->n_layers, (i * 2) + 1,
+> -						     j, 0);
+> +				dimm = edac_get_dimm(mci, (i * 2) + 1, j, 0);
+>  				dimm->nr_pages = nr_pages;
+>  				edac_dbg(0, "set nr pages: 0x%lx\n", nr_pages);
+>  				dimm->grain = 8; /* just a guess */
+> @@ -503,8 +501,7 @@ static int ie31200_probe1(struct pci_dev *pdev, int dev_idx)
+>  				dimm->dtype = DEV_UNKNOWN;
+>  				dimm->edac_mode = EDAC_UNKNOWN;
+>  			}
+> -			dimm = EDAC_DIMM_PTR(mci->layers, mci->dimms,
+> -					     mci->n_layers, i * 2, j, 0);
+> +			dimm = edac_get_dimm(mci, i * 2, j, 0);
+>  			dimm->nr_pages = nr_pages;
+>  			edac_dbg(0, "set nr pages: 0x%lx\n", nr_pages);
+>  			dimm->grain = 8; /* same guess */
+> diff --git a/drivers/edac/pnd2_edac.c b/drivers/edac/pnd2_edac.c
+> index b1193be1ef1d..933f7722b893 100644
+> --- a/drivers/edac/pnd2_edac.c
+> +++ b/drivers/edac/pnd2_edac.c
+> @@ -1231,7 +1231,7 @@ static void apl_get_dimm_config(struct mem_ctl_info *mci)
+>  		if (!(chan_mask & BIT(i)))
+>  			continue;
+>  
+> -		dimm = EDAC_DIMM_PTR(mci->layers, mci->dimms, mci->n_layers, i, 0, 0);
+> +		dimm = edac_get_dimm(mci, i, 0, 0);
+>  		if (!dimm) {
+>  			edac_dbg(0, "No allocated DIMM for channel %d\n", i);
+>  			continue;
+> @@ -1311,7 +1311,7 @@ static void dnv_get_dimm_config(struct mem_ctl_info *mci)
+>  			if (!ranks_of_dimm[j])
+>  				continue;
+>  
+> -			dimm = EDAC_DIMM_PTR(mci->layers, mci->dimms, mci->n_layers, i, j, 0);
+> +			dimm = edac_get_dimm(mci, i, j, 0);
+>  			if (!dimm) {
+>  				edac_dbg(0, "No allocated DIMM for channel %d DIMM %d\n", i, j);
+>  				continue;
+> diff --git a/drivers/edac/sb_edac.c b/drivers/edac/sb_edac.c
+> index a2fd39d330d6..4957e8ee1879 100644
+> --- a/drivers/edac/sb_edac.c
+> +++ b/drivers/edac/sb_edac.c
+> @@ -1621,7 +1621,7 @@ static int __populate_dimms(struct mem_ctl_info *mci,
+>  		}
+>  
+>  		for (j = 0; j < max_dimms_per_channel; j++) {
+> -			dimm = EDAC_DIMM_PTR(mci->layers, mci->dimms, mci->n_layers, i, j, 0);
+> +			dimm = edac_get_dimm(mci, i, j, 0);
+>  			if (pvt->info.type == KNIGHTS_LANDING) {
+>  				pci_read_config_dword(pvt->knl.pci_channel[i],
+>  					knl_mtr_reg, &mtr);
+> diff --git a/drivers/edac/skx_base.c b/drivers/edac/skx_base.c
+> index 0fcf3785e8f3..8895eda365ff 100644
+> --- a/drivers/edac/skx_base.c
+> +++ b/drivers/edac/skx_base.c
+> @@ -177,8 +177,7 @@ static int skx_get_dimm_config(struct mem_ctl_info *mci)
+>  		pci_read_config_dword(imc->chan[i].cdev, 0x8C, &amap);
+>  		pci_read_config_dword(imc->chan[i].cdev, 0x400, &mcddrtcfg);
+>  		for (j = 0; j < SKX_NUM_DIMMS; j++) {
+> -			dimm = EDAC_DIMM_PTR(mci->layers, mci->dimms,
+> -					     mci->n_layers, i, j, 0);
+> +			dimm = edac_get_dimm(mci, i, j, 0);
+>  			pci_read_config_dword(imc->chan[i].cdev,
+>  					      0x80 + 4 * j, &mtr);
+>  			if (IS_DIMM_PRESENT(mtr)) {
+> diff --git a/drivers/edac/ti_edac.c b/drivers/edac/ti_edac.c
+> index 6ac26d1b929f..8be3e89a510e 100644
+> --- a/drivers/edac/ti_edac.c
+> +++ b/drivers/edac/ti_edac.c
+> @@ -135,7 +135,7 @@ static void ti_edac_setup_dimm(struct mem_ctl_info *mci, u32 type)
+>  	u32 val;
+>  	u32 memsize;
+>  
+> -	dimm = EDAC_DIMM_PTR(mci->layers, mci->dimms, mci->n_layers, 0, 0, 0);
+> +	dimm = edac_get_dimm(mci, 0, 0, 0);
+>  
+>  	val = ti_edac_readl(edac, EMIF_SDRAM_CONFIG);
+>  
+> diff --git a/include/linux/edac.h b/include/linux/edac.h
+> index c19483b90079..7f9804438589 100644
+> --- a/include/linux/edac.h
+> +++ b/include/linux/edac.h
+> @@ -403,37 +403,6 @@ struct edac_mc_layer {
+>  	__i;								\
+>  })
+>  
+> -/**
+> - * EDAC_DIMM_PTR - Macro responsible to get a pointer inside a pointer array
+> - *		   for the element given by [layer0,layer1,layer2] position
+> - *
+> - * @layers:	a struct edac_mc_layer array, describing how many elements
+> - *		were allocated for each layer
+> - * @var:	name of the var where we want to get the pointer
+> - *		(like mci->dimms)
+> - * @nlayers:	Number of layers at the @layers array
+> - * @layer0:	layer0 position
+> - * @layer1:	layer1 position. Unused if n_layers < 2
+> - * @layer2:	layer2 position. Unused if n_layers < 3
+> - *
+> - * For 1 layer, this macro returns "var[layer0]";
+> - *
+> - * For 2 layers, this macro is similar to allocate a bi-dimensional array
+> - * and to return "var[layer0][layer1]";
+> - *
+> - * For 3 layers, this macro is similar to allocate a tri-dimensional array
+> - * and to return "var[layer0][layer1][layer2]";
+> - */
+> -#define EDAC_DIMM_PTR(layers, var, nlayers, layer0, layer1, layer2) ({	\
+> -	typeof(*var) __p;						\
+> -	int ___i = EDAC_DIMM_OFF(layers, nlayers, layer0, layer1, layer2);	\
+> -	if (___i < 0)							\
+> -		__p = NULL;						\
+> -	else								\
+> -		__p = (var)[___i];					\
+> -	__p;								\
+> -})
+> -
+>  struct dimm_info {
+>  	struct device dev;
+>  
+> @@ -443,6 +412,7 @@ struct dimm_info {
+>  	unsigned int location[EDAC_MAX_LAYERS];
+>  
+>  	struct mem_ctl_info *mci;	/* the parent */
+> +	unsigned int idx;		/* index within the parent dimm array */
+
+Same comment here. This doesn't belong to this patch.
+
+>  
+>  	u32 grain;		/* granularity of reported error in bytes */
+>  	enum dev_type dtype;	/* memory device type */
+> @@ -669,4 +639,64 @@ struct mem_ctl_info {
+>  	bool fake_inject_ue;
+>  	u16 fake_inject_count;
+>  };
 > +
->  AMAZON ANNAPURNA LABS THERMAL MMIO DRIVER
->  M:	Talel Shenhar <talel@amazon.com>
->  S:	Maintained
-> diff --git a/drivers/edac/Kconfig b/drivers/edac/Kconfig
-> index 417dad6..8c7fb73 100644
-> --- a/drivers/edac/Kconfig
-> +++ b/drivers/edac/Kconfig
-> @@ -100,6 +100,13 @@ config EDAC_AMD64_ERROR_INJECTION
->  	  In addition, there are two control files, inject_read and inject_write,
->  	  which trigger the DRAM ECC Read and Write respectively.
->  
-> +config EDAC_AL_MC
-> +	tristate "Amazon's Annapurna Lab EDAC Memory Controller"
-> +	depends on (ARCH_ALPINE || COMPILE_TEST)
-> +	help
-> +	  Support for error detection and correction for Amazon's Annapurna
-> +	  Labs Alpine chips which allows 1 bit correction and 2 bits detection.
-> +
->  config EDAC_AMD76X
->  	tristate "AMD 76x (760, 762, 768)"
->  	depends on PCI && X86_32
-> diff --git a/drivers/edac/Makefile b/drivers/edac/Makefile
-> index d77200c..5288329 100644
-> --- a/drivers/edac/Makefile
-> +++ b/drivers/edac/Makefile
-> @@ -22,6 +22,7 @@ obj-$(CONFIG_EDAC_GHES)			+= ghes_edac.o
->  edac_mce_amd-y				:= mce_amd.o
->  obj-$(CONFIG_EDAC_DECODE_MCE)		+= edac_mce_amd.o
->  
-> +obj-$(CONFIG_EDAC_AL_MC)		+= al_mc_edac.o
->  obj-$(CONFIG_EDAC_AMD76X)		+= amd76x_edac.o
->  obj-$(CONFIG_EDAC_CPC925)		+= cpc925_edac.o
->  obj-$(CONFIG_EDAC_I5000)		+= i5000_edac.o
-> diff --git a/drivers/edac/al_mc_edac.c b/drivers/edac/al_mc_edac.c
-> new file mode 100644
-> index 00000000..f1288c4
-> --- /dev/null
-> +++ b/drivers/edac/al_mc_edac.c
-> @@ -0,0 +1,358 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Copyright 2019 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+> +/**
+> + * edac_get_dimm_by_index - Get DIMM info from a memory controller
+> + *                          given by an index
+> + *
+> + * @mci:	a struct mem_ctl_info
+> + * @index:	index in the memory controller's DIMM array
+> + *
+> + * Returns a struct dimm_info* or NULL on failure.
 > + */
-> +#include <linux/bitfield.h>
-> +#include <linux/bitops.h>
-> +#include <linux/edac.h>
-> +#include <linux/of_irq.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/spinlock.h>
-> +#include "edac_module.h"
-> +
-> +/* Registers Offset */
-> +#define AL_MC_MSTR		0x00
-> +#define AL_MC_ECC_CFG		0x70
-> +#define AL_MC_ECC_CLEAR		0x7c
-> +#define AL_MC_ECC_ERR_COUNT	0x80
-> +#define AL_MC_ECC_CE_ADDR0	0x84
-> +#define AL_MC_ECC_CE_ADDR1	0x88
-> +#define AL_MC_ECC_UE_ADDR0	0xa4
-> +#define AL_MC_ECC_UE_ADDR1	0xa8
-> +#define AL_MC_ECC_CE_SYND0	0x8c
-> +#define AL_MC_ECC_CE_SYND1	0x90
-> +#define AL_MC_ECC_CE_SYND2	0x94
-> +#define AL_MC_ECC_UE_SYND0	0xac
-> +#define AL_MC_ECC_UE_SYND1	0xb0
-> +#define AL_MC_ECC_UE_SYND2	0xb4
-> +
-> +/* Registers Fields */
-> +#define AL_MC_MSTR_DEV_CFG		GENMASK(31, 30)
-> +#define AL_MC_MSTR_RANKS		GENMASK(27, 24)
-> +#define AL_MC_MSTR_DATA_BUS_WIDTH	GENMASK(13, 12)
-> +#define AL_MC_MSTR_DDR4			BIT(4)
-> +#define AL_MC_MSTR_DDR3			BIT(0)
-> +
-> +#define AL_MC_ECC_CFG_SCRUB_DISABLED	BIT(4)
-> +#define AL_MC_ECC_CFG_ECC_MODE		GENMASK(2, 0)
-> +
-> +#define AL_MC_ECC_CLEAR_UE_COUNT	BIT(3)
-> +#define AL_MC_ECC_CLEAR_CE_COUNT	BIT(2)
-> +#define AL_MC_ECC_CLEAR_UE_ERR		BIT(1)
-> +#define AL_MC_ECC_CLEAR_CE_ERR		BIT(0)
-> +
-> +#define AL_MC_ECC_ERR_COUNT_UE		GENMASK(31, 16)
-> +#define AL_MC_ECC_ERR_COUNT_CE		GENMASK(15, 0)
-> +
-> +#define AL_MC_ECC_CE_ADDR0_RANK		GENMASK(25, 24)
-> +#define AL_MC_ECC_CE_ADDR0_ROW		GENMASK(17, 0)
-> +
-> +#define AL_MC_ECC_CE_ADDR1_BG		GENMASK(25, 24)
-> +#define AL_MC_ECC_CE_ADDR1_BANK		GENMASK(18, 16)
-> +#define AL_MC_ECC_CE_ADDR1_COLUMN	GENMASK(11, 0)
-> +
-> +#define AL_MC_ECC_UE_ADDR0_RANK		GENMASK(25, 24)
-> +#define AL_MC_ECC_UE_ADDR0_ROW		GENMASK(17, 0)
-> +
-> +#define AL_MC_ECC_UE_ADDR1_BG		GENMASK(25, 24)
-> +#define AL_MC_ECC_UE_ADDR1_BANK		GENMASK(18, 16)
-> +#define AL_MC_ECC_UE_ADDR1_COLUMN	GENMASK(11, 0)
-> +
-> +/* Registers Values */
-> +#define AL_MC_MSTR_DEV_CFG_X4	0
-> +#define AL_MC_MSTR_DEV_CFG_X8	1
-> +#define AL_MC_MSTR_DEV_CFG_X16	2
-> +#define AL_MC_MSTR_DEV_CFG_X32	3
-> +#define AL_MC_MSTR_RANKS_MAX 4
-> +#define AL_MC_MSTR_DATA_BUS_WIDTH_X64	0
-> +
-> +#define DRV_NAME "al_mc_edac"
-> +#define AL_MC_EDAC_MSG_MAX 256
-> +#define AL_MC_EDAC_MSG(message, buffer_size, type,			\
-> +		       rank, row, bg, bank, column, syn0, syn1, syn2)	\
-> +	snprintf(message, buffer_size,					\
-> +		 "%s rank=0x%x row=0x%x bg=0x%x bank=0x%x col=0x%x "	\
-> +		 "syn0: 0x%x syn1: 0x%x syn2: 0x%x",			\
-> +		 type == HW_EVENT_ERR_UNCORRECTED ? "UE" : "CE",	\
-> +		 rank, row, bg, bank, column, syn0, syn1, syn2)
-> +
-> +struct al_mc_edac {
-> +	void __iomem *mmio_base;
-> +	spinlock_t lock;
-> +	int irq_ce;
-> +	int irq_ue;
-> +};
-> +
-> +static int al_mc_edac_handle_ce(struct mem_ctl_info *mci)
+> +static inline struct dimm_info *
+> +edac_get_dimm_by_index(struct mem_ctl_info *mci, int index)
 > +{
-> +	struct al_mc_edac *al_mc = mci->pvt_info;
-> +	u32 eccerrcnt, ecccaddr0, ecccaddr1, ecccsyn0, ecccsyn1, ecccsyn2, row;
-> +	u16 ce_count, column;
-> +	u8 rank, bg, bank;
-> +	char msg[AL_MC_EDAC_MSG_MAX];
-> +	unsigned long flags;
+> +	if (index < 0 || index >= mci->tot_dimms)
+> +		return NULL;
 > +
-> +	eccerrcnt = readl_relaxed(al_mc->mmio_base + AL_MC_ECC_ERR_COUNT);
-> +	ce_count = FIELD_GET(AL_MC_ECC_ERR_COUNT_CE, eccerrcnt);
-> +	if (!ce_count)
-> +		return 0;
-> +
-> +	ecccaddr0 = readl_relaxed(al_mc->mmio_base + AL_MC_ECC_CE_ADDR0);
-> +	ecccaddr1 = readl_relaxed(al_mc->mmio_base + AL_MC_ECC_CE_ADDR1);
-> +	ecccsyn0 = readl_relaxed(al_mc->mmio_base + AL_MC_ECC_UE_SYND0);
-> +	ecccsyn1 = readl_relaxed(al_mc->mmio_base + AL_MC_ECC_UE_SYND1);
-> +	ecccsyn2 = readl_relaxed(al_mc->mmio_base + AL_MC_ECC_UE_SYND2);
-> +
-> +	writel(AL_MC_ECC_CLEAR_CE_COUNT | AL_MC_ECC_CLEAR_CE_ERR,
-> +	       al_mc->mmio_base + AL_MC_ECC_CLEAR);
+> +	if (WARN_ON_ONCE(mci->dimms[index]->idx != index))
+> +		return NULL;
 
-Why the non-relaxed write? All the accesses are ordered by virtue of
-interacting with the same device, and I can't see anything that
-requires ordering with normal memory accesses prior to this write.
+As far as I noticed, the only place you're using the new
+dimm_info.idx field is here...
 
-This pattern appears throughout the driver, and I think they can all be
-relaxed. If not, please document the reason why they can't.
+It sounds that you want to add some sanity check.
+
+If I get it right, the addition of the index doesn't belong to
+this patch, as it is unrelated to the macro replacement.
+
+Also, it is not clear why you added it. Are there any bug
+with would be caught by this extra check?
+
+Or all you want to do is to add some magic number to double
+check if the struct got corrupted? If so, I would initialize
+it with:
+
+	dimm->idx = off + MAGIC_NUMBER;
+
+and, at the check, do the same math, as it would be a lot less
+likely to have a random magic number on an address than small
+numbers like 0.
+
+Anyway, if you have a good reason to add this idx, please place
+it on a separate patch, with a proper description about why
+it is needed.
 
 > +
-> +	dev_dbg(mci->pdev, "eccuaddr0=0x%08x eccuaddr1=0x%08x\n",
-> +		ecccaddr0, ecccaddr1);
-> +
-> +	rank = FIELD_GET(AL_MC_ECC_CE_ADDR0_RANK, ecccaddr0);
-> +	row = FIELD_GET(AL_MC_ECC_CE_ADDR0_ROW, ecccaddr0);
-> +
-> +	bg = FIELD_GET(AL_MC_ECC_CE_ADDR1_BG, ecccaddr1);
-> +	bank = FIELD_GET(AL_MC_ECC_CE_ADDR1_BANK, ecccaddr1);
-> +	column = FIELD_GET(AL_MC_ECC_CE_ADDR1_COLUMN, ecccaddr1);
-> +
-> +	AL_MC_EDAC_MSG(msg, sizeof(msg), HW_EVENT_ERR_CORRECTED,
-> +		       rank, row, bg, bank, column,
-> +		       ecccsyn0, ecccsyn1, ecccsyn2);
-> +
-> +	spin_lock_irqsave(&al_mc->lock, flags);
-> +	edac_mc_handle_error(HW_EVENT_ERR_CORRECTED, mci,
-> +			     ce_count, 0, 0, 0, 0, 0, -1, mci->ctl_name, msg);
-> +	spin_unlock_irqrestore(&al_mc->lock, flags);
-> +
-> +	return ce_count;
+> +	return mci->dimms[index];
 > +}
 > +
-> +static int al_mc_edac_handle_ue(struct mem_ctl_info *mci)
+> +/**
+> + * edac_get_dimm - Get DIMM info from a memory controller given by
+> + *                 [layer0,layer1,layer2] position
+> + *
+> + * @mci:	a struct mem_ctl_info
+> + * @layer0:	layer0 position
+> + * @layer1:	layer1 position. Unused if n_layers < 2
+> + * @layer2:	layer2 position. Unused if n_layers < 3
+> + *
+> + * For 1 layer, this function returns "dimms[layer0]";
+> + *
+> + * For 2 layers, this function is similar to allocate a bi-dimensional
+> + * array and to return "dimms[layer0][layer1]";
+> + *
+> + * For 3 layers, this function is similar to allocate a tri-dimensional array
+> + * and to return "dimms[layer0][layer1][layer2]";
+> + */
+> +static inline struct dimm_info *edac_get_dimm(struct mem_ctl_info *mci,
+> +	int layer0, int layer1, int layer2)
 > +{
-> +	struct al_mc_edac *al_mc = mci->pvt_info;
-> +	u32 eccerrcnt, eccuaddr0, eccuaddr1, eccusyn0, eccusyn1, eccusyn2, row;
-> +	u16 ue_count, column;
-> +	u8 rank, bg, bank;
-> +	char msg[AL_MC_EDAC_MSG_MAX];
-> +	unsigned long flags;
+> +	int index;
 > +
-> +	eccerrcnt = readl_relaxed(al_mc->mmio_base + AL_MC_ECC_ERR_COUNT);
-> +	ue_count = FIELD_GET(AL_MC_ECC_ERR_COUNT_UE, eccerrcnt);
-> +	if (!ue_count)
-> +		return 0;
+> +	if (layer0 < 0
+> +	    || (mci->n_layers > 1 && layer1 < 0)
+> +	    || (mci->n_layers > 2 && layer2 < 0))
+> +		return NULL;
 > +
-> +	eccuaddr0 = readl_relaxed(al_mc->mmio_base + AL_MC_ECC_UE_ADDR0);
-> +	eccuaddr1 = readl_relaxed(al_mc->mmio_base + AL_MC_ECC_UE_ADDR1);
-> +	eccusyn0 = readl_relaxed(al_mc->mmio_base + AL_MC_ECC_UE_SYND0);
-> +	eccusyn1 = readl_relaxed(al_mc->mmio_base + AL_MC_ECC_UE_SYND1);
-> +	eccusyn2 = readl_relaxed(al_mc->mmio_base + AL_MC_ECC_UE_SYND2);
+> +	index = layer0;
 > +
-> +	writel(AL_MC_ECC_CLEAR_UE_COUNT | AL_MC_ECC_CLEAR_UE_ERR,
-> +	       al_mc->mmio_base + AL_MC_ECC_CLEAR);
+> +	if (mci->n_layers > 1)
+> +		index = index * mci->layers[1].size + layer1;
 > +
-> +	dev_dbg(mci->pdev, "eccuaddr0=0x%08x eccuaddr1=0x%08x\n",
-> +		eccuaddr0, eccuaddr1);
+> +	if (mci->n_layers > 2)
+> +		index = index * mci->layers[2].size + layer2;
 > +
-> +	rank = FIELD_GET(AL_MC_ECC_UE_ADDR0_RANK, eccuaddr0);
-> +	row = FIELD_GET(AL_MC_ECC_UE_ADDR0_ROW, eccuaddr0);
-> +
-> +	bg = FIELD_GET(AL_MC_ECC_UE_ADDR1_BG, eccuaddr1);
-> +	bank = FIELD_GET(AL_MC_ECC_UE_ADDR1_BANK, eccuaddr1);
-> +	column = FIELD_GET(AL_MC_ECC_UE_ADDR1_COLUMN, eccuaddr1);
-> +
-> +	AL_MC_EDAC_MSG(msg, sizeof(msg), HW_EVENT_ERR_UNCORRECTED,
-> +		       rank, row, bg, bank, column,
-> +		       eccusyn0, eccusyn1, eccusyn2);
-> +
-> +	spin_lock_irqsave(&al_mc->lock, flags);
-> +	edac_mc_handle_error(HW_EVENT_ERR_UNCORRECTED, mci,
-> +			     ue_count, 0, 0, 0, 0, 0, -1, mci->ctl_name, msg);
-> +	spin_unlock_irqrestore(&al_mc->lock, flags);
-> +
-> +	return ue_count;
+> +	return edac_get_dimm_by_index(mci, index);
 > +}
 > +
-> +static void al_mc_edac_check(struct mem_ctl_info *mci)
-> +{
-> +	struct al_mc_edac *al_mc = mci->pvt_info;
-> +
-> +	if (al_mc->irq_ue <= 0)
-> +		al_mc_edac_handle_ue(mci);
-> +
-> +	if (al_mc->irq_ce <= 0)
-> +		al_mc_edac_handle_ce(mci);
-> +}
-> +
-> +static irqreturn_t al_mc_edac_irq_handler_ue(int irq, void *info)
-> +{
-> +	struct platform_device *pdev = info;
-> +	struct mem_ctl_info *mci = platform_get_drvdata(pdev);
-> +
-> +	if (al_mc_edac_handle_ue(mci))
-> +		return IRQ_HANDLED;
-> +	return IRQ_NONE;
-> +}
-> +
-> +static irqreturn_t al_mc_edac_irq_handler_ce(int irq, void *info)
-> +{
-> +	struct platform_device *pdev = info;
-> +	struct mem_ctl_info *mci = platform_get_drvdata(pdev);
-> +
-> +	if (al_mc_edac_handle_ce(mci))
-> +		return IRQ_HANDLED;
-> +	return IRQ_NONE;
-> +}
-> +
-> +static enum scrub_type al_mc_edac_get_scrub_mode(void __iomem *mmio_base)
-> +{
-> +	u32 ecccfg0;
-> +
-> +	ecccfg0 = readl(mmio_base + AL_MC_ECC_CFG);
-> +
-> +	if (FIELD_GET(AL_MC_ECC_CFG_SCRUB_DISABLED, ecccfg0))
-> +		return SCRUB_NONE;
-> +	else
-> +		return SCRUB_HW_SRC;
-> +}
-> +
-> +static int al_mc_edac_probe(struct platform_device *pdev)
-> +{
-> +	void __iomem *mmio_base;
-> +	struct edac_mc_layer layers[1];
-> +	struct mem_ctl_info *mci;
-> +	struct al_mc_edac *al_mc;
-> +	int ret;
-> +
-> +	mmio_base = devm_platform_ioremap_resource(pdev, 0);
-> +	if (IS_ERR(mmio_base)) {
-> +		dev_err(&pdev->dev, "failed to ioremap memory (%ld)\n",
-> +			PTR_ERR(mmio_base));
-> +		return PTR_ERR(mmio_base);
-> +	}
-> +
-> +	layers[0].type = EDAC_MC_LAYER_CHIP_SELECT;
-> +	layers[0].size = 1;
-> +	layers[0].is_virt_csrow = false;
-> +	mci = edac_mc_alloc(0, ARRAY_SIZE(layers), layers,
-> +			    sizeof(struct al_mc_edac));
-> +	if (!mci)
-> +		return -ENOMEM;
-> +
-> +	platform_set_drvdata(pdev, mci);
-> +	al_mc = mci->pvt_info;
-> +
-> +	al_mc->mmio_base = mmio_base;
-> +
-> +	al_mc->irq_ue = of_irq_get_byname(pdev->dev.of_node, "ue");
-> +	if (al_mc->irq_ue <= 0)
-> +		dev_dbg(&pdev->dev,
-> +			"no irq defined for ue - falling back to polling\n");
-> +
-> +	al_mc->irq_ce = of_irq_get_byname(pdev->dev.of_node, "ce");
-> +	if (al_mc->irq_ce <= 0)
-> +		dev_dbg(&pdev->dev,
-> +			"no irq defined for ce - falling back to polling\n");
-> +
-> +	if (al_mc->irq_ue <= 0 || al_mc->irq_ce <= 0)
-> +		edac_op_state = EDAC_OPSTATE_POLL;
-> +	else
-> +		edac_op_state = EDAC_OPSTATE_INT;
-> +
-> +	spin_lock_init(&al_mc->lock);
-> +
-> +	mci->edac_check = al_mc_edac_check;
-> +	mci->mtype_cap = MEM_FLAG_DDR3 | MEM_FLAG_DDR4;
-> +	mci->edac_ctl_cap = EDAC_FLAG_NONE | EDAC_FLAG_SECDED;
-> +	mci->edac_cap = EDAC_FLAG_SECDED;
-> +	mci->mod_name = DRV_NAME;
-> +	mci->ctl_name = "al_mc";
-> +	mci->pdev = &pdev->dev;
-> +	mci->scrub_mode = al_mc_edac_get_scrub_mode(mmio_base);
-> +
-> +	ret = edac_mc_add_mc(mci);
-> +	if (ret < 0) {
-> +		dev_err(&pdev->dev,
-> +			"fail to add memory controller device (%d)\n",
-> +			ret);
-> +		goto err_add_mc;
-> +	}
-> +
-> +	if (al_mc->irq_ue > 0) {
-> +		ret = devm_request_irq(&pdev->dev,
-> +				       al_mc->irq_ue,
-> +				       al_mc_edac_irq_handler_ue,
-> +				       IRQF_SHARED,
-> +				       pdev->name,
-> +				       pdev);
-> +		if (ret != 0) {
-> +			dev_err(&pdev->dev,
-> +				"failed to request ue irq %d (%d)\n",
-> +				al_mc->irq_ue, ret);
-> +			goto err_request_irq;
-> +		}
-> +	}
-> +
-> +	if (al_mc->irq_ce > 0) {
-> +		ret = devm_request_irq(&pdev->dev,
-> +				       al_mc->irq_ce,
-> +				       al_mc_edac_irq_handler_ce,
-> +				       IRQF_SHARED,
-> +				       pdev->name,
-> +				       pdev);
-> +		if (ret != 0) {
-> +			dev_err(&pdev->dev,
-> +				"failed to request ce irq %d (%d)\n",
-> +				al_mc->irq_ce, ret);
-> +			goto err_request_irq;
-> +		}
-> +	}
-> +
-> +	return 0;
-> +
-> +err_request_irq:
-> +	edac_mc_del_mc(&pdev->dev);
-> +err_add_mc:
-> +	edac_mc_free(mci);
-> +
-> +	return ret;
-> +}
-> +
-> +static int al_mc_edac_remove(struct platform_device *pdev)
-> +{
-> +	struct mem_ctl_info *mci = platform_get_drvdata(pdev);
-> +	struct al_mc_edac *al_mc = mci->pvt_info;
-> +
-> +	if (al_mc->irq_ue > 0)
-> +		devm_free_irq(&pdev->dev, al_mc->irq_ue, pdev);
-> +
-> +	if (al_mc->irq_ce > 0)
-> +		devm_free_irq(&pdev->dev, al_mc->irq_ce, pdev);
-> +
-> +	edac_mc_del_mc(&pdev->dev);
-> +	edac_mc_free(mci);
+>  #endif
 
-nit: I always find the mix of devm_* stuff with non-devm pretty
-awkward, as you end-up tracking things anyway (here, and in the error
-path of the probe function).
 
-I found the use of devm_add_action() to be pretty good at decluttering
-probe and remove entry points, as you just register destructors each
-time you allocate objects, and can forget any form of subsequent
-tracking.
-
-> +
-> +	return 0;
-> +}
-> +
-> +static const struct of_device_id al_mc_edac_of_match[] = {
-> +	{ .compatible = "amazon,al-mc-edac", },
-> +	{},
-> +};
-> +
-> +MODULE_DEVICE_TABLE(of, al_mc_edac_of_match);
-> +
-> +static struct platform_driver al_mc_edac_driver = {
-> +	.probe = al_mc_edac_probe,
-> +	.remove = al_mc_edac_remove,
-> +	.driver = {
-> +		.name = DRV_NAME,
-> +		.of_match_table = al_mc_edac_of_match,
-> +	},
-> +};
-> +
-> +module_platform_driver(al_mc_edac_driver);
-> +
-> +MODULE_LICENSE("GPL v2");
-> +MODULE_AUTHOR("Talel Shenhar");
-> +MODULE_DESCRIPTION("Amazon's Annapurna Lab's Memory Controller EDAC Driver");
 
 Thanks,
-
-	M.
--- 
-Jazz is not dead. It just smells funny...
+Mauro
