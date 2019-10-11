@@ -2,65 +2,92 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BA60D33C7
-	for <lists+linux-edac@lfdr.de>; Fri, 11 Oct 2019 00:11:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A9273D36AC
+	for <lists+linux-edac@lfdr.de>; Fri, 11 Oct 2019 03:04:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726184AbfJJWK5 (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Thu, 10 Oct 2019 18:10:57 -0400
-Received: from smtprelay0113.hostedemail.com ([216.40.44.113]:56900 "EHLO
-        smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1725978AbfJJWK5 (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>);
-        Thu, 10 Oct 2019 18:10:57 -0400
-Received: from filter.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
-        by smtprelay08.hostedemail.com (Postfix) with ESMTP id 31CB2182CED2A;
-        Thu, 10 Oct 2019 22:10:56 +0000 (UTC)
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Spam-Summary: 2,0,0,,d41d8cd98f00b204,joe@perches.com,:::::::::::::,RULES_HIT:41:355:379:599:988:989:1260:1277:1311:1313:1314:1345:1359:1437:1515:1516:1518:1534:1538:1568:1593:1594:1711:1714:1730:1747:1777:1792:2393:2559:2562:2828:2898:3138:3139:3140:3141:3142:3622:3865:3870:3871:3874:4321:5007:7903:10004:10400:11026:11232:11658:11914:12048:12114:12295:12297:12438:12740:12760:12895:13069:13311:13357:13439:14659:21080:21627:30054:30070:30091,0,RBL:47.151.152.152:@perches.com:.lbl8.mailshell.net-62.8.0.100 64.201.201.201,CacheIP:none,Bayesian:0.5,0.5,0.5,Netcheck:none,DomainCache:0,MSF:not bulk,SPF:fn,MSBL:0,DNSBL:neutral,Custom_rules:0:0:0,LFtime:25,LUA_SUMMARY:none
-X-HE-Tag: news25_4231f6f182805
-X-Filterd-Recvd-Size: 1564
-Received: from XPS-9350.home (unknown [47.151.152.152])
-        (Authenticated sender: joe@perches.com)
-        by omf15.hostedemail.com (Postfix) with ESMTPA;
-        Thu, 10 Oct 2019 22:10:54 +0000 (UTC)
-Message-ID: <19dc4500bbfbb9d09f9730764a2b59353534358d.camel@perches.com>
-Subject: Re: [PATCH 05/19] EDAC, mc: Reduce indentation level in
- edac_mc_handle_error()
-From:   Joe Perches <joe@perches.com>
-To:     Robert Richter <rrichter@marvell.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Tony Luck <tony.luck@intel.com>
-Cc:     James Morse <james.morse@arm.com>,
-        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Date:   Thu, 10 Oct 2019 15:10:53 -0700
-In-Reply-To: <20191010202418.25098-6-rrichter@marvell.com>
-References: <20191010202418.25098-1-rrichter@marvell.com>
-         <20191010202418.25098-6-rrichter@marvell.com>
-Content-Type: text/plain; charset="ISO-8859-1"
-User-Agent: Evolution 3.32.1-2 
+        id S1727588AbfJKBEp (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Thu, 10 Oct 2019 21:04:45 -0400
+Received: from mail-io1-f49.google.com ([209.85.166.49]:39185 "EHLO
+        mail-io1-f49.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727518AbfJKBEo (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Thu, 10 Oct 2019 21:04:44 -0400
+Received: by mail-io1-f49.google.com with SMTP id a1so17973660ioc.6
+        for <linux-edac@vger.kernel.org>; Thu, 10 Oct 2019 18:04:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-transfer-encoding:content-language;
+        bh=QBiiW8Wzt/6oy/sRunGU14hbYMniWxRKb+1fPodITQ4=;
+        b=cpQhwbd8njULq69c5FEYKYXCfdkLodvkXI+sFtKj8Y2ENUriHECG3WgcAsJ0PxOjv7
+         H8m9DwvxVgpDKlN1V6qEau1t5Sdvh1q58T6VNjd/+hR1QokUCTg5HM7Wm7ucOWwkDd7A
+         ArwYnEdYZSCjw1qxSMarZ5kX1gjkS23JdbC/KgfUlrPj5gqfzaMKe5K3OBphJKlo3Ckc
+         oZujZqeA5gpgRpfcC94drhxj03AdYgEtDqpRJFyNVEURS0h26Yc4vfr4ZAY99NTkfQE5
+         LWj4UGPxZQS7oMnlbEcr3vJte69u/ysWeVCPMjUjqnOMHqCGS6CqLlM3/avUWw87QGq4
+         01ZA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=QBiiW8Wzt/6oy/sRunGU14hbYMniWxRKb+1fPodITQ4=;
+        b=HhGGEweh/toin2QmVkFBOrHzNs/C74HhVNgh3CXGwjXGHTP+DAanHGGVZZECTv1PYN
+         +gObfjG6Vig0O1RFFobeBOO0VSeQc68SeCNqizqvbqpXLSAiD5XnlAgsGQf/FLlLgxrZ
+         ZNiA0eWMlYP3gP9bEHVk/hiRY8V/dj6aj/w2LgM5yAahR7UAUP73GTGUqQrHL24NN7CT
+         EhTaQa4DmDxr8CyydhAfdQmntuElwS9z7nu4TzLRZedsidkdYEBq4hdBhZvaniNfSQda
+         /FGs/rknWQXfxREsaErZlaXVG2Lk+So6Xr3lcQic6xOM1DROhkDD1eflL5rjeJgC/dWz
+         QEtQ==
+X-Gm-Message-State: APjAAAXXP3IFWTov9B+K9nW2HPRRRvivLoH07TYn8Ji+Nu/Uc8yAJoRc
+        /i3wBW0ziMSTDRLYxmkO+bVdS7nP
+X-Google-Smtp-Source: APXvYqySA9ikj0pu0Y816vuViZLZz+G4GwrGIbjSz1Bf2XZwbuxkMPY0qo1yLfZyaIe93OoVJ9YIIQ==
+X-Received: by 2002:a02:3081:: with SMTP id q123mr14315177jaq.24.1570755883434;
+        Thu, 10 Oct 2019 18:04:43 -0700 (PDT)
+Received: from ?IPv6:2001:1970:535e:cd00:e378:c9fb:7183:d83d? ([2001:1970:535e:cd00:e378:c9fb:7183:d83d])
+        by smtp.gmail.com with ESMTPSA id k7sm5609537iob.80.2019.10.10.18.04.42
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 10 Oct 2019 18:04:42 -0700 (PDT)
+Subject: Re: [GIT PULL] EDAC pile for 5.4 -> AMD family 17h, model 70h support
+To:     "Ghannam, Yazen" <Yazen.Ghannam@amd.com>,
+        Borislav Petkov <bp@alien8.de>
+Cc:     "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>
+References: <20191007071502.GA24289@zn.tnic>
+ <CAEVokG51DtL1g+9YFK6RE=3m-wtjV1VN=vV56b5-3=K21=Jmrw@mail.gmail.com>
+ <20191008115041.GD14765@zn.tnic>
+ <678ba7d1-cf3d-4101-1819-29b291cf236d@amd.com>
+ <CAEVokG4SSkgWS2N8eqr+h7AJg9CF26OW7vtXwOurCGU-4dsLbw@mail.gmail.com>
+ <20191009103041.GC10395@zn.tnic>
+ <724d6f97-61f2-94bd-3f4b-793a55b6ac15@amd.com>
+ <CAEVokG4T5q8PBmf4=vLjPWQjzL_Xwu6yF81=mLjkpoJSoCggkw@mail.gmail.com>
+ <20191010095650.GC7658@zn.tnic>
+ <9f3ce002-7380-0e93-7bd5-20bb944d0b77@gmail.com>
+ <20191010134128.GF7658@zn.tnic>
+ <60b68d6c-5aff-3e7c-9461-c26a5f28cd87@amd.com>
+From:   Jean-Frederic <jfgaudreault@gmail.com>
+Message-ID: <79bca0d0-42eb-c232-6bbe-a958734e096d@gmail.com>
+Date:   Thu, 10 Oct 2019 21:04:41 -0400
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+In-Reply-To: <60b68d6c-5aff-3e7c-9461-c26a5f28cd87@amd.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Thu, 2019-10-10 at 20:25 +0000, Robert Richter wrote:
-> Reduce the indentation level in edac_mc_handle_error() a bit by using
-> continue. No functional changes.
+On 2019-10-10 3:00 p.m., Ghannam, Yazen wrote:
+> Jean-Frederic,
+> Please do the following if you'd like to try this check:
+> 1) rdmsr 0xC0002003
+This returns 0 for me, so I guess PFEH is enabled.
+As long as this is only for the error injection, and is not preventing
+the actual capability for the OS to report the memory errors.
+I'm still not clear on that part.
+> This command will read the MCA_MISC0 register from MCA bank 0. If it is
+> non-zero, then we'll know that PFEH is not enabled.
+>
 
-Seems fine, but trivially below:
-
-> diff --git a/drivers/edac/edac_mc.c b/drivers/edac/edac_mc.c
-[]
-> @@ -1171,37 +1171,38 @@ void edac_mc_handle_error(const enum hw_event_mc_err_type type,
-[]
-> +		strcpy(p, dimm->label);
-> +		p += strlen(p);
-> +		*p = '\0';
-
-This *p = '\0' is unnecessary as the strcpy already did that.
-
+-- 
+Jean-Frédéric
 
