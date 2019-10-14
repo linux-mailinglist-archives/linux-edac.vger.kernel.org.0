@@ -2,64 +2,72 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 113B7D67CF
-	for <lists+linux-edac@lfdr.de>; Mon, 14 Oct 2019 18:57:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 74FC6D6840
+	for <lists+linux-edac@lfdr.de>; Mon, 14 Oct 2019 19:19:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731347AbfJNQ5j (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Mon, 14 Oct 2019 12:57:39 -0400
-Received: from mail.skyhub.de ([5.9.137.197]:49074 "EHLO mail.skyhub.de"
+        id S2387724AbfJNRT3 (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Mon, 14 Oct 2019 13:19:29 -0400
+Received: from foss.arm.com ([217.140.110.172]:49576 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727083AbfJNQ5j (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Mon, 14 Oct 2019 12:57:39 -0400
-Received: from zn.tnic (p200300EC2F065800329C23FFFEA6A903.dip0.t-ipconnect.de [IPv6:2003:ec:2f06:5800:329c:23ff:fea6:a903])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id D53A71EC06FB;
-        Mon, 14 Oct 2019 18:57:37 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1571072258;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=0YE7H57bfJwdjx4DkWtJCZeY4gQA/uBCTTivUvijTW0=;
-        b=HMg/sOnzha2w7Dwsz9tzp1Cw6eE554QdB3OYsG3P1NDa7/qXmeZuZ4zQiKv1QWj+E8Drlb
-        F1aXW2lV32y84+KkyzjXBhMyB9GPZtYbDt3c4W8I1m7ppzgej4eoEsjKeRfATzVa8yBRE4
-        0y2WbT83RFVHxKbtkVbpu41nntdlZ54=
-Date:   Mon, 14 Oct 2019 18:57:35 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     John Garry <john.garry@huawei.com>
-Cc:     James Morse <james.morse@arm.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        tony.luck@intel.com, Robert Richter <rrichter@marvell.com>,
-        linux-edac@vger.kernel.org,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: edac KASAN warning in experimental arm64 allmodconfig boot
-Message-ID: <20191014165735.GF4715@zn.tnic>
-References: <304df85b-8b56-b77e-1a11-aa23769f2e7c@huawei.com>
- <dc974549-6ea4-899d-7f3a-b2fcfafe1528@arm.com>
- <a5e3c4eb-57ed-d4bc-a771-47472c5fb088@huawei.com>
+        id S1731347AbfJNRT3 (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Mon, 14 Oct 2019 13:19:29 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2261628;
+        Mon, 14 Oct 2019 10:19:29 -0700 (PDT)
+Received: from eglon.cambridge.arm.com (eglon.cambridge.arm.com [10.1.196.105])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 399AA3F6C4;
+        Mon, 14 Oct 2019 10:19:28 -0700 (PDT)
+From:   James Morse <james.morse@arm.com>
+To:     linux-edac@vger.kernel.org
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Borislav Petkov <bp@alien8.de>,
+        Tony Luck <tony.luck@intel.com>,
+        Robert Richter <rrichter@marvell.com>,
+        John Garry <john.garry@huawei.com>
+Subject: [PATCH 0/2] EDAC, ghes: Fix use after free and add reference
+Date:   Mon, 14 Oct 2019 18:19:17 +0100
+Message-Id: <20191014171919.85044-1-james.morse@arm.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <a5e3c4eb-57ed-d4bc-a771-47472c5fb088@huawei.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Mon, Oct 14, 2019 at 05:56:02PM +0100, John Garry wrote:
-> BTW, I am not sure if my response to Boris was rejected due to attachments,
-> as but it is here:
-> 
-> https://lore.kernel.org/linux-edac/dc974549-6ea4-899d-7f3a-b2fcfafe1528@arm.com/T/#ma0e122ca0eda9d80e869af179352f75037146d3c
+Hello,
 
-No, all good. It went through.
+ghes_edac can only be registered once, later attempts will silently
+do nothing as the driver is already setup. The unregister path also
+only expects to be called once, but doesn't check.
 
-Thx.
+This leads to KASAN splats if multiple GHES entries are unregistered,
+as the free()d memory is dereferenced, and if we're lucky, free()d
+a second time.
+
+Link: lore.kernel.org/r/304df85b-8b56-b77e-1a11-aa23769f2e7c@huawei.com
+
+Patch 1 is the minimum needed to prevent the dereference and double
+free, but this does expose the lack of symmetry. If we unregister
+one GHES entry, subsequent notifications will be lost.
+Unregistering is unsafe if another CPU is using the free()d memory in
+ghes_edac_report_mem_error().
+
+To fix this, Patch 2 uses ghes_init as a reference count.
+
+We can now unbind all the GHES entries, causing ghes_edac to be
+unregistered, and start rebinding them again.
+
+
+Thanks,
+
+James Morse (2):
+  EDAC, ghes: Fix Use after free in ghes_edac remove path
+  EDAC, ghes: Reference count GHES users of ghes_edac
+
+ drivers/edac/ghes_edac.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
 -- 
-Regards/Gruss,
-    Boris.
+2.20.1
 
-https://people.kernel.org/tglx/notes-about-netiquette
