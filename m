@@ -2,81 +2,74 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C42FAD715C
-	for <lists+linux-edac@lfdr.de>; Tue, 15 Oct 2019 10:46:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FBCBD7182
+	for <lists+linux-edac@lfdr.de>; Tue, 15 Oct 2019 10:48:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728149AbfJOIqU (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Tue, 15 Oct 2019 04:46:20 -0400
-Received: from mail.skyhub.de ([5.9.137.197]:38098 "EHLO mail.skyhub.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726430AbfJOIqU (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Tue, 15 Oct 2019 04:46:20 -0400
-Received: from zn.tnic (p200300EC2F1578003065FDC9422CE4B3.dip0.t-ipconnect.de [IPv6:2003:ec:2f15:7800:3065:fdc9:422c:e4b3])
+        id S1729413AbfJOIso (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Tue, 15 Oct 2019 04:48:44 -0400
+Received: from bombadil.infradead.org ([198.137.202.133]:55452 "EHLO
+        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727735AbfJOIso (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Tue, 15 Oct 2019 04:48:44 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=PZs2Jew1Apcdf2AL00ZC9tQ/+7iCmPCjp3H58ifi9kY=; b=hdwt12/0qG3iaS8UDIeaV6OeT
+        tFWgC5uur0rZhU5DuiIm1RCpWVqBjORlw4dLTzGtKm3n9dWhM48M9oQtbksvQoPa3gihlBl3dnsG8
+        BR8lVZ3SpR4xBhp/F+x+EAxPEnenm89BkltBeLWzPnbL+FtgOKCj5AOgn5ZEVQYCAWFy9y69O58Vk
+        EMLzBLvIq7hS5X3kLFKcFqJF6u4JJMdj/W/++YE51InAPEdltcgY5S9qYGquoGugiYDNEVk3iVEuE
+        K1GXMLtYoJluJU8UhTQcUwLGQMtOSmfqOTYUAc+7bgm5hM4/6BHQXpQ5la89gYMfjmNCSuRlV6t3/
+        SfMUNJt3w==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1iKIVP-0003za-My; Tue, 15 Oct 2019 08:48:35 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id D5D9A1EC0C7C;
-        Tue, 15 Oct 2019 10:46:18 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1571129179;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=QVfSUDayMGb5LhbHc/yY029RgF5cfEqAjDfth02xUa0=;
-        b=X1/9Zj4pWNznRmubFVnNRma29TFVdYsivaAZuTYwXTEkXJl2EQRQWhw45EMRCMMqhQlG2N
-        c0MkzWcv2v4S7/ayu1q26bcyw1IF6KgrRXiEb5SMXm4BW+I0fS2+tQPh+gUuRvBA1GLWWh
-        5NI3iVK3YXQrg38vdn3AMEFxkLoD9Is=
-Date:   Tue, 15 Oct 2019 10:46:14 +0200
-From:   Borislav Petkov <bp@alien8.de>
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id CE17A304637;
+        Tue, 15 Oct 2019 10:47:38 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 36F94284DE590; Tue, 15 Oct 2019 10:48:33 +0200 (CEST)
+Date:   Tue, 15 Oct 2019 10:48:33 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
 To:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Cc:     tony.luck@intel.com, tglx@linutronix.de, mingo@redhat.com,
-        hpa@zytor.com, bberg@redhat.com, x86@kernel.org,
+Cc:     tony.luck@intel.com, bp@alien8.de, tglx@linutronix.de,
+        mingo@redhat.com, hpa@zytor.com, bberg@redhat.com, x86@kernel.org,
         linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
         hdegoede@redhat.com, ckellner@redhat.com
 Subject: Re: [PATCH 1/2] x86, mce, therm_throt: Optimize logging of thermal
  throttle messages
-Message-ID: <20191015084614.GB596@zn.tnic>
+Message-ID: <20191015084833.GD2311@hirez.programming.kicks-ass.net>
 References: <2c2b65c23be3064504566c5f621c1f37bf7e7326.camel@redhat.com>
  <20191014212101.25719-1-srinivas.pandruvada@linux.intel.com>
- <20191014213618.GK4715@zn.tnic>
- <3055e340ebaba9f8fb587a11ce3f25cf33919ab3.camel@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <3055e340ebaba9f8fb587a11ce3f25cf33919ab3.camel@linux.intel.com>
+In-Reply-To: <20191014212101.25719-1-srinivas.pandruvada@linux.intel.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Mon, Oct 14, 2019 at 03:41:38PM -0700, Srinivas Pandruvada wrote:
-> So some users who had issues in their systems can try with this patch.
-> We can get rid of this, till it becomes real issue.
+On Mon, Oct 14, 2019 at 02:21:00PM -0700, Srinivas Pandruvada wrote:
+> Some modern systems have very tight thermal tolerances. Because of this
+> they may cross thermal thresholds when running normal workloads (even
+> during boot). The CPU hardware will react by limiting power/frequency
+> and using duty cycles to bring the temperature back into normal range.
+> 
+> Thus users may see a "critical" message about the "temperature above
+> threshold" which is soon followed by "temperature/speed normal". These
+> messages are rate limited, but still may repeat every few minutes.
+> 
+> The solution here is to set a timeout when the temperature first exceeds
+> the threshold.
 
-We don't add command line parameters which we maybe can get rid of
-later.
+Why can we even reach critical thresholds when the fans are working? I
+always thought it was BAD to ever reach the critical temps and have the
+hardware throttle.
 
-> The temperature is function of load, time and heat dissipation capacity
-> of the system. I have to think more about this to come up with some
-> heuristics where we still warning users about real thermal issues.
-> Since value is not persistent, then next boot again will start from the
-> default.
 
-Yes, and the fact that each machine's temperature is influenced by the
-specific *individual* environment and load the machine runs, shows that
-you need to adjust this timeout automatically and dynamically.
-
-With the command line parameter you're basically putting the onus on the
-user to do that which is just silly. And then she'd need to do it during
-runtime too, if the ambient temperature or machine load, etc, changes.
-
-The whole thing is crying "dynamic".
-
-For a simple example, see mce_timer_fn() where we switch to polling
-during CMCI storms.
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
