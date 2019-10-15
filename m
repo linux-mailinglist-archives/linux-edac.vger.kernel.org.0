@@ -2,74 +2,104 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FBCBD7182
-	for <lists+linux-edac@lfdr.de>; Tue, 15 Oct 2019 10:48:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE192D7197
+	for <lists+linux-edac@lfdr.de>; Tue, 15 Oct 2019 10:53:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729413AbfJOIso (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Tue, 15 Oct 2019 04:48:44 -0400
-Received: from bombadil.infradead.org ([198.137.202.133]:55452 "EHLO
-        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727735AbfJOIso (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Tue, 15 Oct 2019 04:48:44 -0400
+        id S1725812AbfJOIxL (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Tue, 15 Oct 2019 04:53:11 -0400
+Received: from merlin.infradead.org ([205.233.59.134]:33898 "EHLO
+        merlin.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725804AbfJOIxL (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Tue, 15 Oct 2019 04:53:11 -0400
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        d=infradead.org; s=merlin.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
         Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
         Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
         List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=PZs2Jew1Apcdf2AL00ZC9tQ/+7iCmPCjp3H58ifi9kY=; b=hdwt12/0qG3iaS8UDIeaV6OeT
-        tFWgC5uur0rZhU5DuiIm1RCpWVqBjORlw4dLTzGtKm3n9dWhM48M9oQtbksvQoPa3gihlBl3dnsG8
-        BR8lVZ3SpR4xBhp/F+x+EAxPEnenm89BkltBeLWzPnbL+FtgOKCj5AOgn5ZEVQYCAWFy9y69O58Vk
-        EMLzBLvIq7hS5X3kLFKcFqJF6u4JJMdj/W/++YE51InAPEdltcgY5S9qYGquoGugiYDNEVk3iVEuE
-        K1GXMLtYoJluJU8UhTQcUwLGQMtOSmfqOTYUAc+7bgm5hM4/6BHQXpQ5la89gYMfjmNCSuRlV6t3/
-        SfMUNJt3w==;
+         bh=rjzfeDkzQ8oFBeoh7Q4dFwyvzdrmkuKDk9XLQ2RCZI0=; b=jex/AY+8LPcFbFDopQFRs728j
+        hbf53hXlnzhV5Tg5fBA1nC4sBisXRxJ26gVuLqpYyKHpHBUw4LedocCb8ui6WUgU01mWKnl7ugC8v
+        8mxBJlXHxLFML1/EMzFyyX3aBEpWOCcgyeewa8Xd8R11gXokjH8zd8Wl33oPlhDXGd7hEp8MQJyVp
+        bn/5+vldBedLJKPitHRSqe2GpZENcTZJdH4Q15qnbEUc6en55zoh+7huXS4HEU4jjxEPePxebk3Kd
+        ZGxWxQMdeW2uJZRrxYwR2uG8Cjtr0DO+cGy60qFx6QxSW5dvhqFCJfy54c4iuQD9vmAdgW7fwz/09
+        ZwChxmAMA==;
 Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1iKIVP-0003za-My; Tue, 15 Oct 2019 08:48:35 +0000
+        by merlin.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1iKIZg-0000hy-G3; Tue, 15 Oct 2019 08:53:00 +0000
 Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id CE17A304637;
-        Tue, 15 Oct 2019 10:47:38 +0200 (CEST)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 42F553032F8;
+        Tue, 15 Oct 2019 10:52:03 +0200 (CEST)
 Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 36F94284DE590; Tue, 15 Oct 2019 10:48:33 +0200 (CEST)
-Date:   Tue, 15 Oct 2019 10:48:33 +0200
+        id 9F35C28B550CD; Tue, 15 Oct 2019 10:52:57 +0200 (CEST)
+Date:   Tue, 15 Oct 2019 10:52:57 +0200
 From:   Peter Zijlstra <peterz@infradead.org>
-To:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Cc:     tony.luck@intel.com, bp@alien8.de, tglx@linutronix.de,
-        mingo@redhat.com, hpa@zytor.com, bberg@redhat.com, x86@kernel.org,
-        linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
-        hdegoede@redhat.com, ckellner@redhat.com
+To:     "Luck, Tony" <tony.luck@intel.com>
+Cc:     Borislav Petkov <bp@alien8.de>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        tglx@linutronix.de, mingo@redhat.com, hpa@zytor.com,
+        bberg@redhat.com, x86@kernel.org, linux-edac@vger.kernel.org,
+        linux-kernel@vger.kernel.org, hdegoede@redhat.com,
+        ckellner@redhat.com
 Subject: Re: [PATCH 1/2] x86, mce, therm_throt: Optimize logging of thermal
  throttle messages
-Message-ID: <20191015084833.GD2311@hirez.programming.kicks-ass.net>
+Message-ID: <20191015085257.GE2311@hirez.programming.kicks-ass.net>
 References: <2c2b65c23be3064504566c5f621c1f37bf7e7326.camel@redhat.com>
  <20191014212101.25719-1-srinivas.pandruvada@linux.intel.com>
+ <20191014213618.GK4715@zn.tnic>
+ <20191014222735.GA25203@agluck-desk2.amr.corp.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20191014212101.25719-1-srinivas.pandruvada@linux.intel.com>
+In-Reply-To: <20191014222735.GA25203@agluck-desk2.amr.corp.intel.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Mon, Oct 14, 2019 at 02:21:00PM -0700, Srinivas Pandruvada wrote:
-> Some modern systems have very tight thermal tolerances. Because of this
-> they may cross thermal thresholds when running normal workloads (even
-> during boot). The CPU hardware will react by limiting power/frequency
-> and using duty cycles to bring the temperature back into normal range.
+On Mon, Oct 14, 2019 at 03:27:35PM -0700, Luck, Tony wrote:
+> On Mon, Oct 14, 2019 at 11:36:18PM +0200, Borislav Petkov wrote:
+> > This description is already *begging* for this delay value to be
+> > automatically set by the kernel. Putting yet another knob in front of
+> > the user who doesn't have a clue most of the time shows one more time
+> > that we haven't done our job properly by asking her to know what we
+> > already do.
+> > 
+> > IOW, a simple history feedback mechanism which sets the timeout based on
+> > the last couple of values is much smarter. The thing would have a max
+> > value, of course, which, when exceeded should mean an anomaly, etc, but
+> > almost anything else is better than merely asking the user to make an
+> > educated guess.
 > 
-> Thus users may see a "critical" message about the "temperature above
-> threshold" which is soon followed by "temperature/speed normal". These
-> messages are rate limited, but still may repeat every few minutes.
+> You need a plausible start point for the "when to worry the user"
+> message.  Maybe that is your "max value"?
 > 
-> The solution here is to set a timeout when the temperature first exceeds
-> the threshold.
+> So if the system has a couple of excursions above temperature lasting
+> 1 second and then 2 seconds ... would you like to see those ignored
+> (because they are below the initial max)? But now we have a couple
+> of data points pick some new value to be the threshold for reporting?
+> 
+> What value should we pick (based on 1 sec, then 2 sec)?
+> 
+> I would be worried that it would self tune to the point where it
+> does report something that it really didn't need to (e.g. as a result
+> of a few consecutive very short excursions).
 
-Why can we even reach critical thresholds when the fans are working? I
-always thought it was BAD to ever reach the critical temps and have the
-hardware throttle.
+I'm guessing Boris is thinking of a simple IIR like avg filter.
 
+	avg = avg + (sample-avg) / 4
 
+And then only print when sample > 2*avg. If you initialize that with
+some appropriately large value, it should settle down into what it
+'normal' for that particular piece of hardware.
+
+Still, I'm boggled by the whole idea that hitting critical hard throttle
+is considered 'normal' at all.
+
+> We also need to take into account the "typical sampling interval"
+> for user space thermal control software.
+
+Why is control of critical thermal crud in userspace? That seems like a
+massive design fail.
