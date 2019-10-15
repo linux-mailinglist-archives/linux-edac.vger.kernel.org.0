@@ -2,96 +2,84 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B9280D7764
-	for <lists+linux-edac@lfdr.de>; Tue, 15 Oct 2019 15:25:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F720D777F
+	for <lists+linux-edac@lfdr.de>; Tue, 15 Oct 2019 15:31:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731964AbfJONZz (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Tue, 15 Oct 2019 09:25:55 -0400
-Received: from mail.skyhub.de ([5.9.137.197]:53230 "EHLO mail.skyhub.de"
+        id S1731986AbfJONbt (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Tue, 15 Oct 2019 09:31:49 -0400
+Received: from mga06.intel.com ([134.134.136.31]:18418 "EHLO mga06.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728372AbfJONZy (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Tue, 15 Oct 2019 09:25:54 -0400
-Received: from zn.tnic (p200300EC2F1578001D8C11C1C84560F1.dip0.t-ipconnect.de [IPv6:2003:ec:2f15:7800:1d8c:11c1:c845:60f1])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 9F2211EC0CA1;
-        Tue, 15 Oct 2019 15:25:53 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1571145953;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=qbTOTz8IVBsTPv5SpqRTtz8dxulzzuKW6Y6hsH889rg=;
-        b=lcDbr/U4qAd46WF3DeShxAmNHOR2cBd26XTwZPfRqwk/WIBivM4j5GsKLuUTQWu/rB+r1a
-        IL8iaHvXDcdwwPstnSwWU2Kw/0etmTmUkcrG0le65okd9CK1PVsPoEozRw7/fqdIS3CkF2
-        ckufaFJjEuKpS7xYPuvnKtULzz3XT14=
-Date:   Tue, 15 Oct 2019 15:25:49 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     James Morse <james.morse@arm.com>
-Cc:     linux-edac@vger.kernel.org,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Tony Luck <tony.luck@intel.com>,
-        Robert Richter <rrichter@marvell.com>,
-        John Garry <john.garry@huawei.com>
-Subject: Re: [PATCH 0/2] EDAC, ghes: Fix use after free and add reference
-Message-ID: <20191015132549.GC596@zn.tnic>
-References: <20191014171919.85044-1-james.morse@arm.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20191014171919.85044-1-james.morse@arm.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+        id S1727745AbfJONbt (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Tue, 15 Oct 2019 09:31:49 -0400
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga104.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 15 Oct 2019 06:31:48 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.67,300,1566889200"; 
+   d="scan'208";a="395532726"
+Received: from spandruv-mobl3.jf.intel.com ([10.254.34.58])
+  by fmsmga005.fm.intel.com with ESMTP; 15 Oct 2019 06:31:47 -0700
+Message-ID: <f481b4ab6dfebbc0637c843e5f1cd4ddfd4bd60b.camel@linux.intel.com>
+Subject: Re: [PATCH 1/2] x86, mce, therm_throt: Optimize logging of thermal
+ throttle messages
+From:   Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     tony.luck@intel.com, bp@alien8.de, tglx@linutronix.de,
+        mingo@redhat.com, hpa@zytor.com, bberg@redhat.com, x86@kernel.org,
+        linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
+        hdegoede@redhat.com, ckellner@redhat.com
+Date:   Tue, 15 Oct 2019 06:31:46 -0700
+In-Reply-To: <20191015084833.GD2311@hirez.programming.kicks-ass.net>
+References: <2c2b65c23be3064504566c5f621c1f37bf7e7326.camel@redhat.com>
+         <20191014212101.25719-1-srinivas.pandruvada@linux.intel.com>
+         <20191015084833.GD2311@hirez.programming.kicks-ass.net>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5 (3.28.5-3.fc28) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Mon, Oct 14, 2019 at 06:19:17PM +0100, James Morse wrote:
-> Hello,
+On Tue, 2019-10-15 at 10:48 +0200, Peter Zijlstra wrote:
+> On Mon, Oct 14, 2019 at 02:21:00PM -0700, Srinivas Pandruvada wrote:
+> > Some modern systems have very tight thermal tolerances. Because of
+> > this
+> > they may cross thermal thresholds when running normal workloads
+> > (even
+> > during boot). The CPU hardware will react by limiting
+> > power/frequency
+> > and using duty cycles to bring the temperature back into normal
+> > range.
+> > 
+> > Thus users may see a "critical" message about the "temperature
+> > above
+> > threshold" which is soon followed by "temperature/speed normal".
+> > These
+> > messages are rate limited, but still may repeat every few minutes.
+> > 
+> > The solution here is to set a timeout when the temperature first
+> > exceeds
+> > the threshold.
 > 
-> ghes_edac can only be registered once, later attempts will silently
-> do nothing as the driver is already setup. The unregister path also
-> only expects to be called once, but doesn't check.
-> 
-> This leads to KASAN splats if multiple GHES entries are unregistered,
-> as the free()d memory is dereferenced, and if we're lucky, free()d
-> a second time.
-> 
-> Link: lore.kernel.org/r/304df85b-8b56-b77e-1a11-aa23769f2e7c@huawei.com
-> 
-> Patch 1 is the minimum needed to prevent the dereference and double
-> free, but this does expose the lack of symmetry. If we unregister
-> one GHES entry, subsequent notifications will be lost.
-> Unregistering is unsafe if another CPU is using the free()d memory in
-> ghes_edac_report_mem_error().
-> 
-> To fix this, Patch 2 uses ghes_init as a reference count.
-> 
-> We can now unbind all the GHES entries, causing ghes_edac to be
-> unregistered, and start rebinding them again.
-> 
-> 
-> Thanks,
-> 
-> James Morse (2):
->   EDAC, ghes: Fix Use after free in ghes_edac remove path
->   EDAC, ghes: Reference count GHES users of ghes_edac
-> 
->  drivers/edac/ghes_edac.c | 4 ++++
->  1 file changed, 4 insertions(+)
+> Why can we even reach critical thresholds when the fans are working?
+> I
+> always thought it was BAD to ever reach the critical temps and have
+> the
+> hardware throttle.
+CPU temperature doesn't have to hit max(TjMax) to get these warnings.
+OEMs has an ability to program a threshold where a thermal interrupt
+can be generated. In some systems the offset is 20C+ (Read only value).
 
-Patches squashed and queued here:
+In recent systems, there is another offset on top of it which can be
+programmed by OS, once some agent can adjust power limits dynamically.
+By default this is set to low by the firmware, which I guess the prime
+motivation of Benjamin to submit the patch.
 
-https://git.kernel.org/pub/scm/linux/kernel/git/ras/ras.git/log/?h=edac-urgent
+Thanks,
+Srinivas
 
-Will send it to Linus soonish as it is stable material, I guess.
 
-In the meantime, we can iron the whole deal out and improve it.
 
-Thx.
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
