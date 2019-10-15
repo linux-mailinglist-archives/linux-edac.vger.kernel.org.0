@@ -2,104 +2,144 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EE192D7197
-	for <lists+linux-edac@lfdr.de>; Tue, 15 Oct 2019 10:53:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B4E0FD7623
+	for <lists+linux-edac@lfdr.de>; Tue, 15 Oct 2019 14:13:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725812AbfJOIxL (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Tue, 15 Oct 2019 04:53:11 -0400
-Received: from merlin.infradead.org ([205.233.59.134]:33898 "EHLO
-        merlin.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725804AbfJOIxL (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Tue, 15 Oct 2019 04:53:11 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=merlin.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=rjzfeDkzQ8oFBeoh7Q4dFwyvzdrmkuKDk9XLQ2RCZI0=; b=jex/AY+8LPcFbFDopQFRs728j
-        hbf53hXlnzhV5Tg5fBA1nC4sBisXRxJ26gVuLqpYyKHpHBUw4LedocCb8ui6WUgU01mWKnl7ugC8v
-        8mxBJlXHxLFML1/EMzFyyX3aBEpWOCcgyeewa8Xd8R11gXokjH8zd8Wl33oPlhDXGd7hEp8MQJyVp
-        bn/5+vldBedLJKPitHRSqe2GpZENcTZJdH4Q15qnbEUc6en55zoh+7huXS4HEU4jjxEPePxebk3Kd
-        ZGxWxQMdeW2uJZRrxYwR2uG8Cjtr0DO+cGy60qFx6QxSW5dvhqFCJfy54c4iuQD9vmAdgW7fwz/09
-        ZwChxmAMA==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by merlin.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1iKIZg-0000hy-G3; Tue, 15 Oct 2019 08:53:00 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 42F553032F8;
-        Tue, 15 Oct 2019 10:52:03 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 9F35C28B550CD; Tue, 15 Oct 2019 10:52:57 +0200 (CEST)
-Date:   Tue, 15 Oct 2019 10:52:57 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     "Luck, Tony" <tony.luck@intel.com>
-Cc:     Borislav Petkov <bp@alien8.de>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        tglx@linutronix.de, mingo@redhat.com, hpa@zytor.com,
-        bberg@redhat.com, x86@kernel.org, linux-edac@vger.kernel.org,
-        linux-kernel@vger.kernel.org, hdegoede@redhat.com,
-        ckellner@redhat.com
-Subject: Re: [PATCH 1/2] x86, mce, therm_throt: Optimize logging of thermal
- throttle messages
-Message-ID: <20191015085257.GE2311@hirez.programming.kicks-ass.net>
-References: <2c2b65c23be3064504566c5f621c1f37bf7e7326.camel@redhat.com>
- <20191014212101.25719-1-srinivas.pandruvada@linux.intel.com>
- <20191014213618.GK4715@zn.tnic>
- <20191014222735.GA25203@agluck-desk2.amr.corp.intel.com>
+        id S1731827AbfJOMNC (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Tue, 15 Oct 2019 08:13:02 -0400
+Received: from smtp-fw-6002.amazon.com ([52.95.49.90]:14606 "EHLO
+        smtp-fw-6002.amazon.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726139AbfJOMNC (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Tue, 15 Oct 2019 08:13:02 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1571141581; x=1602677581;
+  h=from:to:cc:subject:date:message-id:mime-version;
+  bh=uj9PyGdLbvAR+uiK3mBCeVmp5BQ2NT6FBK9AsCyNcyk=;
+  b=Ew6L6KvEY7YOuaQR45dMCh3di4FDLGbz/UEFmiem3db0aVEXTqNmePY/
+   MoMOxHdlgOQVnnmLLrpPl2JtN5htxqOllJiz7LXa6FuvsfZ+7uI6u0rR5
+   AYpJ0uPYUHFyVhlqJJ+wcL4SjfinH17vYf/XFsLGusDLcbdaZj3TUGuP3
+   g=;
+X-IronPort-AV: E=Sophos;i="5.67,299,1566864000"; 
+   d="scan'208";a="429217439"
+Received: from iad6-co-svc-p1-lb1-vlan3.amazon.com (HELO email-inbound-relay-1d-2c665b5d.us-east-1.amazon.com) ([10.124.125.6])
+  by smtp-border-fw-out-6002.iad6.amazon.com with ESMTP; 15 Oct 2019 12:09:58 +0000
+Received: from EX13MTAUEA001.ant.amazon.com (iad55-ws-svc-p15-lb9-vlan3.iad.amazon.com [10.40.159.166])
+        by email-inbound-relay-1d-2c665b5d.us-east-1.amazon.com (Postfix) with ESMTPS id 4B676A1D0F;
+        Tue, 15 Oct 2019 12:09:53 +0000 (UTC)
+Received: from EX13D19EUB003.ant.amazon.com (10.43.166.69) by
+ EX13MTAUEA001.ant.amazon.com (10.43.61.82) with Microsoft SMTP Server (TLS)
+ id 15.0.1367.3; Tue, 15 Oct 2019 12:09:53 +0000
+Received: from ua9e4f3715fbc5f.ant.amazon.com (10.43.162.200) by
+ EX13D19EUB003.ant.amazon.com (10.43.166.69) with Microsoft SMTP Server (TLS)
+ id 15.0.1367.3; Tue, 15 Oct 2019 12:09:43 +0000
+From:   Hanna Hawa <hhhawa@amazon.com>
+To:     <bp@alien8.de>, <mchehab@kernel.org>, <mark.rutland@arm.com>,
+        <james.morse@arm.com>, <robh+dt@kernel.org>,
+        <frowand.list@gmail.com>, <davem@davemloft.net>,
+        <gregkh@linuxfoundation.org>, <linus.walleij@linaro.org>,
+        <daniel@iogearbox.net>, <paulmck@linux.ibm.com>,
+        <Sudeep.Holla@arm.com>
+CC:     <linux-kernel@vger.kernel.org>, <linux-edac@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <dwmw@amazon.co.uk>,
+        <benh@amazon.com>, <ronenk@amazon.com>, <talel@amazon.com>,
+        <jonnyc@amazon.com>, <hanochu@amazon.com>, <hhhawa@amazon.com>
+Subject: [PATCH v7 0/3] Add support for Amazon's Annapurna Labs EDAC for L1/L2
+Date:   Tue, 15 Oct 2019 13:09:24 +0100
+Message-ID: <20191015120927.10470-1-hhhawa@amazon.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20191014222735.GA25203@agluck-desk2.amr.corp.intel.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain
+X-Originating-IP: [10.43.162.200]
+X-ClientProxiedBy: EX13D25UWB003.ant.amazon.com (10.43.161.33) To
+ EX13D19EUB003.ant.amazon.com (10.43.166.69)
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Mon, Oct 14, 2019 at 03:27:35PM -0700, Luck, Tony wrote:
-> On Mon, Oct 14, 2019 at 11:36:18PM +0200, Borislav Petkov wrote:
-> > This description is already *begging* for this delay value to be
-> > automatically set by the kernel. Putting yet another knob in front of
-> > the user who doesn't have a clue most of the time shows one more time
-> > that we haven't done our job properly by asking her to know what we
-> > already do.
-> > 
-> > IOW, a simple history feedback mechanism which sets the timeout based on
-> > the last couple of values is much smarter. The thing would have a max
-> > value, of course, which, when exceeded should mean an anomaly, etc, but
-> > almost anything else is better than merely asking the user to make an
-> > educated guess.
-> 
-> You need a plausible start point for the "when to worry the user"
-> message.  Maybe that is your "max value"?
-> 
-> So if the system has a couple of excursions above temperature lasting
-> 1 second and then 2 seconds ... would you like to see those ignored
-> (because they are below the initial max)? But now we have a couple
-> of data points pick some new value to be the threshold for reporting?
-> 
-> What value should we pick (based on 1 sec, then 2 sec)?
-> 
-> I would be worried that it would self tune to the point where it
-> does report something that it really didn't need to (e.g. as a result
-> of a few consecutive very short excursions).
+This series adds L1 cache and L2 cache error detection and correction support
+for Amazon's Annapurna Labs SoCs.
 
-I'm guessing Boris is thinking of a simple IIR like avg filter.
+Alpine SoCs supports L1 and L2 single bit correction and two bits detection
+capability based on ARM implementation.
 
-	avg = avg + (sample-avg) / 4
+The CPU cores in the SoC are the same and all of them support ECC.
 
-And then only print when sample > 2*avg. If you initialize that with
-some appropriately large value, it should settle down into what it
-'normal' for that particular piece of hardware.
+Changes since v6:
+-----------------
+- Add ARM64 dependency
+- Add COMPILE_TEST
 
-Still, I'm boggled by the whole idea that hitting critical hard throttle
-is considered 'normal' at all.
+Changes since v5:
+-----------------
+- Use top-level machine compatible to bind the EDAC device
+- Remove DT bindings
+- Add initcall to create platform device and register the edac driver
+- follow 'next-level-cache' phandle to create CPU topology for L2 driver
+- Change the driver to be tristate
+- Move register read to function flow
+- EXPORT_SYMBOL_GPL of_find_next_cache_node
 
-> We also need to take into account the "typical sampling interval"
-> for user space thermal control software.
+Changes since v4:
+-----------------
+- Added include for cpumask.h in al_l2_edac.c
+- Fix RAMID error print according to ARM TRM
+- Use for_each_possible_cpu() to parse information for DT.
+- Add missing of_node_put() call.
 
-Why is control of critical thermal crud in userspace? That seems like a
-massive design fail.
+Changes since v3:
+-----------------
+- Added include for smp.h sysreg.h
+- Use scnprintf instead of snprintf
+- Move write_sysreg_s after valid check to minimize the window between
+read/write.
+- Use IS_ERR_OR_NULL instead of IS_ERR, because
+edac_device_alloc_ctl_info may return NULL.
+
+Changes since v2:
+-----------------
+- Use BIT for single bit instead of GENMASK
+- Use BIT_ULL and GENMASK_ULL for 64bit vector
+- Fix the mod_name/ctrl_name.
+
+Changes since v1:
+-----------------
+- Split into two drivers
+- Get cpu-mask according to l2-cache handler from devicetree
+- Remove parameter casting
+- Use GENMASK() in bit mask
+- Use FIELD_GET()
+- Update define description PLRU_RAM -> PF_RAM
+- Use sys_reg() and read_sysreg_s()
+- Remove all write/read wrappers
+- Check fatal field to set if the error correctable or not
+- Remove un-relevant information from error prints.
+- Update smp_call_function_single() call function to wait
+- remove usage of get_online_cpus/put_online_cpus
+- Use on_each_cpu() and smp_call_function_any() instead of loop with for_each_cpu.
+- use buffer for error prints and pass to edac API
+- Remove edac_op_state set
+- Add for loop to report on repeated errors of the same type
+- Fix error name of the TLB to be L2_TLB as written in ARM TRM
+- Minor change in Kconfig
+- Minor changes in commit message
+
+Hanna Hawa (3):
+  edac: Add support for Amazon's Annapurna Labs L1 EDAC
+  of: EXPORT_SYMBOL_GPL of_find_next_cache_node
+  edac: Add support for Amazon's Annapurna Labs L2 EDAC
+
+ MAINTAINERS               |  10 ++
+ drivers/edac/Kconfig      |  16 +++
+ drivers/edac/Makefile     |   2 +
+ drivers/edac/al_l1_edac.c | 190 +++++++++++++++++++++++++++++
+ drivers/edac/al_l2_edac.c | 251 ++++++++++++++++++++++++++++++++++++++
+ drivers/of/base.c         |   1 +
+ 6 files changed, 470 insertions(+)
+ create mode 100644 drivers/edac/al_l1_edac.c
+ create mode 100644 drivers/edac/al_l2_edac.c
+
+-- 
+2.17.1
+
