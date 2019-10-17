@@ -2,33 +2,33 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 08826DB93C
-	for <lists+linux-edac@lfdr.de>; Thu, 17 Oct 2019 23:44:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 70DAEDBA53
+	for <lists+linux-edac@lfdr.de>; Fri, 18 Oct 2019 01:53:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2395408AbfJQVoz (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Thu, 17 Oct 2019 17:44:55 -0400
-Received: from mail.skyhub.de ([5.9.137.197]:44820 "EHLO mail.skyhub.de"
+        id S2391061AbfJQXxV (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Thu, 17 Oct 2019 19:53:21 -0400
+Received: from mga17.intel.com ([192.55.52.151]:50947 "EHLO mga17.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2395390AbfJQVoz (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Thu, 17 Oct 2019 17:44:55 -0400
-Received: from zn.tnic (p200300EC2F0EE500329C23FFFEA6A903.dip0.t-ipconnect.de [IPv6:2003:ec:2f0e:e500:329c:23ff:fea6:a903])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 3CF791EC0C1A;
-        Thu, 17 Oct 2019 23:44:54 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1571348694;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=gnGwV92zKukvARTtIcUF/OXiJC7etedGc0TNeSv8oLE=;
-        b=FrXJcpQDQHRo8Ej5Z2vB80z1sqMWrOU9V2d4rV1g895DQZ9b+J9RYN/FZt0tB1lYAb34M2
-        zEVPx0mAppReB1VcbjRnnmpfMrfUuw5tzKGTyARoDmcTn5Hj0tnxPnjY8h463Q7IZrnBJI
-        o6wnIvL+Y1+Xz9G2MRxf7Ni1GTv/wkY=
-Date:   Thu, 17 Oct 2019 23:44:45 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     "Luck, Tony" <tony.luck@intel.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
+        id S1729190AbfJQXxU (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Thu, 17 Oct 2019 19:53:20 -0400
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 17 Oct 2019 16:53:20 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.67,309,1566889200"; 
+   d="scan'208";a="200547487"
+Received: from orsmsx110.amr.corp.intel.com ([10.22.240.8])
+  by orsmga006.jf.intel.com with ESMTP; 17 Oct 2019 16:53:20 -0700
+Received: from orsmsx121.amr.corp.intel.com (10.22.225.226) by
+ ORSMSX110.amr.corp.intel.com (10.22.240.8) with Microsoft SMTP Server (TLS)
+ id 14.3.439.0; Thu, 17 Oct 2019 16:53:19 -0700
+Received: from orsmsx115.amr.corp.intel.com ([169.254.4.146]) by
+ ORSMSX121.amr.corp.intel.com ([169.254.10.88]) with mapi id 14.03.0439.000;
+ Thu, 17 Oct 2019 16:53:19 -0700
+From:   "Luck, Tony" <tony.luck@intel.com>
+To:     Borislav Petkov <bp@alien8.de>
+CC:     Peter Zijlstra <peterz@infradead.org>,
         Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
         "tglx@linutronix.de" <tglx@linutronix.de>,
         "mingo@redhat.com" <mingo@redhat.com>,
@@ -39,9 +39,13 @@ Cc:     Peter Zijlstra <peterz@infradead.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
         "hdegoede@redhat.com" <hdegoede@redhat.com>,
         "ckellner@redhat.com" <ckellner@redhat.com>
-Subject: Re: [PATCH 1/2] x86, mce, therm_throt: Optimize logging of thermal
+Subject: RE: [PATCH 1/2] x86, mce, therm_throt: Optimize logging of thermal
  throttle messages
-Message-ID: <20191017214445.GG14441@zn.tnic>
+Thread-Topic: [PATCH 1/2] x86, mce, therm_throt: Optimize logging of thermal
+ throttle messages
+Thread-Index: AQHVgtVLxuJrYmx6hUyzyzJQOp33Lqdb2lSAgABPIQCAATmTgIAAYKeAgAGZqlCAAHqDgP//rfgg
+Date:   Thu, 17 Oct 2019 23:53:18 +0000
+Message-ID: <3908561D78D1C84285E8C5FCA982C28F7F4A6045@ORSMSX115.amr.corp.intel.com>
 References: <2c2b65c23be3064504566c5f621c1f37bf7e7326.camel@redhat.com>
  <20191014212101.25719-1-srinivas.pandruvada@linux.intel.com>
  <20191015084833.GD2311@hirez.programming.kicks-ass.net>
@@ -49,53 +53,29 @@ References: <2c2b65c23be3064504566c5f621c1f37bf7e7326.camel@redhat.com>
  <20191016081405.GO2328@hirez.programming.kicks-ass.net>
  <20191016140001.GF1138@zn.tnic>
  <3908561D78D1C84285E8C5FCA982C28F7F4A57D0@ORSMSX115.amr.corp.intel.com>
+ <20191017214445.GG14441@zn.tnic>
+In-Reply-To: <20191017214445.GG14441@zn.tnic>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-titus-metadata-40: eyJDYXRlZ29yeUxhYmVscyI6IiIsIk1ldGFkYXRhIjp7Im5zIjoiaHR0cDpcL1wvd3d3LnRpdHVzLmNvbVwvbnNcL0ludGVsMyIsImlkIjoiMGYzOWExNTUtM2Q3Ny00Y2Y4LTkyZjQtMjc1ODlkMDQwNDQzIiwicHJvcHMiOlt7Im4iOiJDVFBDbGFzc2lmaWNhdGlvbiIsInZhbHMiOlt7InZhbHVlIjoiQ1RQX05UIn1dfV19LCJTdWJqZWN0TGFiZWxzIjpbXSwiVE1DVmVyc2lvbiI6IjE3LjEwLjE4MDQuNDkiLCJUcnVzdGVkTGFiZWxIYXNoIjoiczZkajBFc09rN0pkd1dWYWNXYkxYVlpxOWhkWW9qSHRCNTBtYlAyN1B3akpvK1RXYlVrSmVTNHdhY0ttR2w4TCJ9
+x-ctpclassification: CTP_NT
+dlp-product: dlpe-windows
+dlp-version: 11.2.0.6
+dlp-reaction: no-action
+x-originating-ip: [10.22.254.140]
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <3908561D78D1C84285E8C5FCA982C28F7F4A57D0@ORSMSX115.amr.corp.intel.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Thu, Oct 17, 2019 at 09:31:30PM +0000, Luck, Tony wrote:
-> That sounds like the right short term action.
-> 
-> Depending on what we end up with from Srinivas ... we may want
-> to reconsider the severity.  The basic premise of Srinivas' patch
-> is to avoid printing anything for short excursions above temperature
-> threshold. But the effect of that is that when we find the core/package
-> staying above temperature for an extended period of time, we are
-> in a serious situation where some action may be needed. E.g.
-> move the laptop off the soft surface that is blocking the air vents.
-
-I don't think having a critical severity message is nearly enough.
-There are cases where the users simply won't see that message, no shell
-opened, nothing scanning dmesg, nothing pops up on the desktop to show
-KERN_CRIT messages, etc.
-
-If we really wanna handle this case then we must be much more reliable:
-
-* we throttle the machine from within the kernel - whatever that may mean
-* if that doesn't help, we stop scheduling !root tasks
-* if that doesn't help, we halt
-* ...
-
-These are purely hypothetical things to do but I'm pointing them out as
-an example that in a high temperature situation we should be actively
-doing something and not wait for the user to do that.
-
-Come to think of it, one can apply the same type of logic here and split
-the temp severity into action-required events and action-optional events
-and then depending on the type, we do things.
-
-Now what those things are, should be determined by the severity of the
-events. Which would mean, we'd need to know how severe those events are.
-And since this is left in the hands of the OEMs, good luck to us. ;-\
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+PiAqIHdlIHRocm90dGxlIHRoZSBtYWNoaW5lIGZyb20gd2l0aGluIHRoZSBrZXJuZWwgLSB3aGF0
+ZXZlciB0aGF0IG1heSBtZWFuDQo+ICogaWYgdGhhdCBkb2Vzbid0IGhlbHAsIHdlIHN0b3Agc2No
+ZWR1bGluZyAhcm9vdCB0YXNrcw0KPiAqIGlmIHRoYXQgZG9lc24ndCBoZWxwLCB3ZSBoYWx0DQoN
+ClRoZSBzaWxpY29uIHdpbGwgZG8gdGhhdCAiaGFsdCIgc3RlcCBhbGwgYnkgaXRzZWxmIGlmIHRo
+ZSB0ZW1wZXJhdHVyZQ0KY29udGludWVzIHRvIHJpc2UgYW5kIGhpdHMgdGhlIGhpZ2hlc3Qgb2Yg
+dGhlIHRlbXBlcmF0dXJlIHRocmVzaG9sZHMuDQoNCi1Ub255DQo=
