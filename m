@@ -2,74 +2,121 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 60B2BDBED8
-	for <lists+linux-edac@lfdr.de>; Fri, 18 Oct 2019 09:52:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 35058DC4C4
+	for <lists+linux-edac@lfdr.de>; Fri, 18 Oct 2019 14:26:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2504883AbfJRHwU (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Fri, 18 Oct 2019 03:52:20 -0400
-Received: from zaovasilisa.ru ([88.200.194.99]:46823 "EHLO usrv.lan"
-        rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org with ESMTP
-        id S2504820AbfJRHwP (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Fri, 18 Oct 2019 03:52:15 -0400
-X-Greylist: delayed 39671 seconds by postgrey-1.27 at vger.kernel.org; Fri, 18 Oct 2019 03:51:51 EDT
-Received: from 127.0.0.1 (localhost [127.0.0.1])
-        by usrv.lan (Postfix) with SMTP id CC3F818647F;
-        Thu, 17 Oct 2019 17:04:03 +0400 (MSD)
-Received: from [72.215.151.127] by 127.0.0.1 with ESMTP id 72A686FDC7F; Thu, 17 Oct 2019 18:59:02 +0600
-Message-ID: <735ui-$$-55e3--c$i$-l0-18w85$-6@8d6h1006syk>
-From:   "Mr Ekrem Bayraktar" <dave@dbsoundfactory.com>
-Reply-To: "Mr Ekrem Bayraktar" <dave@dbsoundfactory.com>
-To:     links@q.vu
-Subject: MOTHERLESS CHILDREN IN YOUR CITY !!
-Date:   Thu, 17 Oct 19 18:59:02 GMT
-X-Mailer: AOL 7.0 for Windows US sub 118
-MIME-Version: 1.0
-Content-Type: multipart/alternative;
-        boundary="EFA7_FB09FAD2"
-X-Priority: 3
-X-MSMail-Priority: Normal
+        id S2633810AbfJRM0i (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Fri, 18 Oct 2019 08:26:38 -0400
+Received: from mga06.intel.com ([134.134.136.31]:61121 "EHLO mga06.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2633694AbfJRM0h (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Fri, 18 Oct 2019 08:26:37 -0400
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga104.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 18 Oct 2019 05:26:36 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.67,311,1566889200"; 
+   d="scan'208";a="186812318"
+Received: from spandruv-desk.jf.intel.com ([10.54.75.31])
+  by orsmga007.jf.intel.com with ESMTP; 18 Oct 2019 05:26:36 -0700
+Message-ID: <c2ce4ef128aad84616b2dc21f6230ad4db12194b.camel@linux.intel.com>
+Subject: Re: [PATCH 1/2] x86, mce, therm_throt: Optimize logging of thermal
+ throttle messages
+From:   Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+To:     Borislav Petkov <bp@alien8.de>, "Luck, Tony" <tony.luck@intel.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "bberg@redhat.com" <bberg@redhat.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "hdegoede@redhat.com" <hdegoede@redhat.com>,
+        "ckellner@redhat.com" <ckellner@redhat.com>
+Date:   Fri, 18 Oct 2019 05:26:36 -0700
+In-Reply-To: <20191017214445.GG14441@zn.tnic>
+References: <2c2b65c23be3064504566c5f621c1f37bf7e7326.camel@redhat.com>
+         <20191014212101.25719-1-srinivas.pandruvada@linux.intel.com>
+         <20191015084833.GD2311@hirez.programming.kicks-ass.net>
+         <f481b4ab6dfebbc0637c843e5f1cd4ddfd4bd60b.camel@linux.intel.com>
+         <20191016081405.GO2328@hirez.programming.kicks-ass.net>
+         <20191016140001.GF1138@zn.tnic>
+         <3908561D78D1C84285E8C5FCA982C28F7F4A57D0@ORSMSX115.amr.corp.intel.com>
+         <20191017214445.GG14441@zn.tnic>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5 (3.28.5-3.fc28) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
+On Thu, 2019-10-17 at 23:44 +0200, Borislav Petkov wrote:
+> On Thu, Oct 17, 2019 at 09:31:30PM +0000, Luck, Tony wrote:
+> > That sounds like the right short term action.
+> > 
+> > Depending on what we end up with from Srinivas ... we may want
+> > to reconsider the severity.  The basic premise of Srinivas' patch
+> > is to avoid printing anything for short excursions above
+> > temperature
+> > threshold. But the effect of that is that when we find the
+> > core/package
+> > staying above temperature for an extended period of time, we are
+> > in a serious situation where some action may be needed. E.g.
+> > move the laptop off the soft surface that is blocking the air
+> > vents.
+> 
+> I don't think having a critical severity message is nearly enough.
+> There are cases where the users simply won't see that message, no
+> shell
+> opened, nothing scanning dmesg, nothing pops up on the desktop to
+> show
+> KERN_CRIT messages, etc.
+> 
+> If we really wanna handle this case then we must be much more
+> reliable:
+> 
+> * we throttle the machine from within the kernel - whatever that may
+> mean
+There are actions associated with the high temperature using acpi
+thermal subsystems. The problem with associating with this warning
+directly is that,  this threhold temperature is set to too low in some
+recent laptops at power up.
 
---EFA7_FB09FAD2
-Content-Type: text/plain;
-Content-Transfer-Encoding: quoted-printable
+Server/desktops generally rely on the embedded controller for FAN
+control, which  kernel have no control. For them this warning helps to
+either bring in additional cooling or fix existing cooling.
 
-Dear Sir / Madam
+If something needs to force throttle from kernel, then we should use
+some offset from the max temperature (aka TJMax), instead of this
+warning threshold. Then we can use idle injection or change duty cycle
+of CPU clocks.
 
+Thanks,
+Srinivas
 
-
-Since ever we left your country back to Canada , we have gotten Government=
- approval and we have been busying planning for the less privilege Childre=
-n projects.
-
-We are planning to release first batch of the funds $2,990,000.00 within 1=
-4 days for building an estate for motherless children in your city.
-
-I want you to use my mother;s company name to register this charity projec=
-t in your country after receiving the project funds.
-
-It must be registered as { Bayraktar Group Homeless Children Ltd }.
-
-
-Can you handle and supervise this big project ?
-Can you manager all the workers as a senior supervisor ?
-We want to be sure you can handle it before we proceed with this project.
-
-
-Please call me if you want to hear from us + 1-917 580 4919.
-Please can you manage such project please Kindly reply for further details=
-.
-
-Your full names-----------
-
-
-
-Ekrem Bayraktar.
-Bayraktar Shipping Group
-
---EFA7_FB09FAD2--
+> * if that doesn't help, we stop scheduling !root tasks
+> * if that doesn't help, we halt
+> * ...
+> 
+> These are purely hypothetical things to do but I'm pointing them out
+> as
+> an example that in a high temperature situation we should be actively
+> doing something and not wait for the user to do that.
+> 
+> Come to think of it, one can apply the same type of logic here and
+> split
+> the temp severity into action-required events and action-optional
+> events
+> and then depending on the type, we do things.
+> 
+> Now what those things are, should be determined by the severity of
+> the
+> events. Which would mean, we'd need to know how severe those events
+> are.
+> And since this is left in the hands of the OEMs, good luck to us. ;-\
+> 
 
