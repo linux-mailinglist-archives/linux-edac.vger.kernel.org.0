@@ -2,95 +2,109 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E0ACDD07F
-	for <lists+linux-edac@lfdr.de>; Fri, 18 Oct 2019 22:38:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 13611DD1C7
+	for <lists+linux-edac@lfdr.de>; Sat, 19 Oct 2019 00:06:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731326AbfJRUid (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Fri, 18 Oct 2019 16:38:33 -0400
-Received: from mga12.intel.com ([192.55.52.136]:52439 "EHLO mga12.intel.com"
+        id S1730137AbfJRWFr (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Fri, 18 Oct 2019 18:05:47 -0400
+Received: from mail.kernel.org ([198.145.29.99]:37654 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2389932AbfJRUid (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Fri, 18 Oct 2019 16:38:33 -0400
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-X-Amp-File-Uploaded: False
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 18 Oct 2019 13:38:32 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.67,312,1566889200"; 
-   d="scan'208";a="196302348"
-Received: from agluck-desk2.sc.intel.com (HELO agluck-desk2.amr.corp.intel.com) ([10.3.52.68])
-  by fmsmga007.fm.intel.com with ESMTP; 18 Oct 2019 13:38:32 -0700
-Date:   Fri, 18 Oct 2019 13:38:32 -0700
-From:   "Luck, Tony" <tony.luck@intel.com>
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        id S1730077AbfJRWFq (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Fri, 18 Oct 2019 18:05:46 -0400
+Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 7E460222C9;
+        Fri, 18 Oct 2019 22:05:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1571436345;
+        bh=8h+FkDc3xXvETtsrZrbsTH8LmB+VdeBjN9RyUmQkvEs=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=h3M3O6pdru5KAZx8kCZT96SRKlbQJExU9rJUUHbZHItiwrnkj0XLYufEknXVSs7Bw
+         G8Xcz27i/+Rt8P9/OwMba1b8eDe6ClmwIz8ddBoxmZPRotZCQ+1bxM7eSjREptu3sc
+         aKCvSYUQqMYyzXhajuIJQK52eg01vVeqcdJvQvjE=
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Kan Liang <kan.liang@linux.intel.com>,
+        Qiuxu Zhuo <qiuxu.zhuo@intel.com>,
+        Tony Luck <tony.luck@intel.com>, Borislav Petkov <bp@suse.de>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Aristeu Rozanski <aris@redhat.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
+        linux-edac <linux-edac@vger.kernel.org>,
+        Mauro Carvalho Chehab <mchehab@s-opensource.com>,
+        Megha Dey <megha.dey@linux.intel.com>,
         Peter Zijlstra <peterz@infradead.org>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "bberg@redhat.com" <bberg@redhat.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "hdegoede@redhat.com" <hdegoede@redhat.com>,
-        "ckellner@redhat.com" <ckellner@redhat.com>
-Subject: Re: [PATCH 1/2] x86, mce, therm_throt: Optimize logging of thermal
- throttle messages
-Message-ID: <20191018203832.GA25033@agluck-desk2.amr.corp.intel.com>
-References: <20191015084833.GD2311@hirez.programming.kicks-ass.net>
- <f481b4ab6dfebbc0637c843e5f1cd4ddfd4bd60b.camel@linux.intel.com>
- <20191016081405.GO2328@hirez.programming.kicks-ass.net>
- <20191016140001.GF1138@zn.tnic>
- <3908561D78D1C84285E8C5FCA982C28F7F4A57D0@ORSMSX115.amr.corp.intel.com>
- <20191017214445.GG14441@zn.tnic>
- <c2ce4ef128aad84616b2dc21f6230ad4db12194b.camel@linux.intel.com>
- <20191018132309.GD17053@zn.tnic>
- <20191018180257.GA23835@agluck-desk2.amr.corp.intel.com>
- <20191018194503.GF17053@zn.tnic>
+        Rajneesh Bhardwaj <rajneesh.bhardwaj@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>, x86-ml <x86@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.19 011/100] x86/cpu: Add Atom Tremont (Jacobsville)
+Date:   Fri, 18 Oct 2019 18:03:56 -0400
+Message-Id: <20191018220525.9042-11-sashal@kernel.org>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20191018220525.9042-1-sashal@kernel.org>
+References: <20191018220525.9042-1-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20191018194503.GF17053@zn.tnic>
-User-Agent: Mutt/1.12.1 (2019-06-15)
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Fri, Oct 18, 2019 at 09:45:03PM +0200, Borislav Petkov wrote:
-> On Fri, Oct 18, 2019 at 11:02:57AM -0700, Luck, Tony wrote:
-> > So what should we do next?
-> 
-> I was simply keying off this statement of yours:
-> 
-> "Depending on what we end up with from Srinivas ... we may want to
-> reconsider the severity."
-> 
-> and I don't think that having KERN_CRIT severity for those messages
-> makes any sense. That's why I was hinting at us organizing and defining
-> our handling of thermal interrupt events properly so that we handle
-> those things correctly and not have people look at dmesg.
+From: Kan Liang <kan.liang@linux.intel.com>
 
-Sorry to have caused confusion. The thoughts behind that statement
-are that we currently have an issue with too many noisy high severity
-messages.  The interim solution we are going with is to downgrade
-the severity.  But if we apply a time based filter to remove most of
-the noise by not printing at all, maybe what we have left is a very
-small number of high severity messages.
+[ Upstream commit 00ae831dfe4474ef6029558f5eb3ef0332d80043 ]
 
-But that's completely up for debate.
+Add the Atom Tremont model number to the Intel family list.
 
-> I think we agree on doing the dynamic threshold determination, no?
+[ Tony: Also update comment at head of file to say "_X" suffix is
+  also used for microserver parts. ]
 
-I agree it is a good thing to look at. I'm not so sure we will find
-a good enough method that works all the way from tablet to server,
-so we might end up with "#define MAX_THERM_TIME 8000" ... but some
-study of options would either turn up a good heuristic, or provide
-evidence for why that is either hard, or no better than a constant.
+Signed-off-by: Kan Liang <kan.liang@linux.intel.com>
+Signed-off-by: Qiuxu Zhuo <qiuxu.zhuo@intel.com>
+Signed-off-by: Tony Luck <tony.luck@intel.com>
+Signed-off-by: Borislav Petkov <bp@suse.de>
+Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc: Aristeu Rozanski <aris@redhat.com>
+Cc: "H. Peter Anvin" <hpa@zytor.com>
+Cc: Ingo Molnar <mingo@redhat.com>
+Cc: linux-edac <linux-edac@vger.kernel.org>
+Cc: Mauro Carvalho Chehab <mchehab@s-opensource.com>
+Cc: Megha Dey <megha.dey@linux.intel.com>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: Qiuxu Zhuo <qiuxu.zhuo@intel.com>
+Cc: Rajneesh Bhardwaj <rajneesh.bhardwaj@intel.com>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: x86-ml <x86@kernel.org>
+Link: https://lkml.kernel.org/r/20190125195902.17109-4-tony.luck@intel.com
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ arch/x86/include/asm/intel-family.h | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-> Does that make more sense?
+diff --git a/arch/x86/include/asm/intel-family.h b/arch/x86/include/asm/intel-family.h
+index 5d0b72f281402..82a57d344b9bc 100644
+--- a/arch/x86/include/asm/intel-family.h
++++ b/arch/x86/include/asm/intel-family.h
+@@ -6,7 +6,7 @@
+  * "Big Core" Processors (Branded as Core, Xeon, etc...)
+  *
+  * The "_X" parts are generally the EP and EX Xeons, or the
+- * "Extreme" ones, like Broadwell-E.
++ * "Extreme" ones, like Broadwell-E, or Atom microserver.
+  *
+  * While adding a new CPUID for a new microarchitecture, add a new
+  * group to keep logically sorted out in chronological order. Within
+@@ -80,6 +80,7 @@
+ #define INTEL_FAM6_ATOM_GOLDMONT	0x5C /* Apollo Lake */
+ #define INTEL_FAM6_ATOM_GOLDMONT_X	0x5F /* Denverton */
+ #define INTEL_FAM6_ATOM_GOLDMONT_PLUS	0x7A /* Gemini Lake */
++#define INTEL_FAM6_ATOM_TREMONT_X	0x86 /* Jacobsville */
+ 
+ /* Xeon Phi */
+ 
+-- 
+2.20.1
 
-Yes. Thanks for the clarifications.
-
--Tony
