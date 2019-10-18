@@ -2,109 +2,126 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 94E21DD24D
-	for <lists+linux-edac@lfdr.de>; Sat, 19 Oct 2019 00:11:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A7A62DD52F
+	for <lists+linux-edac@lfdr.de>; Sat, 19 Oct 2019 01:08:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389816AbfJRWKM (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Fri, 18 Oct 2019 18:10:12 -0400
-Received: from mail.kernel.org ([198.145.29.99]:43036 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2389795AbfJRWKM (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Fri, 18 Oct 2019 18:10:12 -0400
-Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id D757E2246D;
-        Fri, 18 Oct 2019 22:10:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1571436611;
-        bh=WjvZDnRLShYKiiRSM0euLyfqBON8RcUSVSgPwVQF2xM=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Dlgjn/Ht2hp2B+zJnDCrBxXMtVn6hmankKaGTxUrQtbR0yq0ti3oduuYEGFrneur7
-         h7DNvOtEt9b01rTwsCsdCTEt7Q0+qS2kt6QgJ11r7by4nucHgQRjceHHOCZNcbkxox
-         2vOUNJRSoDJ6Q264XtY8P2I+Evp22sNbcuBB9JZs=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Kan Liang <kan.liang@linux.intel.com>,
-        Qiuxu Zhuo <qiuxu.zhuo@intel.com>,
-        Tony Luck <tony.luck@intel.com>, Borislav Petkov <bp@suse.de>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Aristeu Rozanski <aris@redhat.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
-        linux-edac <linux-edac@vger.kernel.org>,
-        Mauro Carvalho Chehab <mchehab@s-opensource.com>,
-        Megha Dey <megha.dey@linux.intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Rajneesh Bhardwaj <rajneesh.bhardwaj@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>, x86-ml <x86@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH AUTOSEL 4.4 02/21] x86/cpu: Add Atom Tremont (Jacobsville)
-Date:   Fri, 18 Oct 2019 18:09:48 -0400
-Message-Id: <20191018221007.10851-2-sashal@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20191018221007.10851-1-sashal@kernel.org>
-References: <20191018221007.10851-1-sashal@kernel.org>
+        id S1727399AbfJRXIg (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Fri, 18 Oct 2019 19:08:36 -0400
+Received: from mail-qt1-f195.google.com ([209.85.160.195]:45115 "EHLO
+        mail-qt1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727004AbfJRXIg (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Fri, 18 Oct 2019 19:08:36 -0400
+Received: by mail-qt1-f195.google.com with SMTP id c21so11416006qtj.12
+        for <linux-edac@vger.kernel.org>; Fri, 18 Oct 2019 16:08:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:subject:to:cc:references:message-id:date:user-agent
+         :mime-version:in-reply-to:content-transfer-encoding:content-language;
+        bh=pCUmIwaumo4m1qSneO/ayd0Kxkg6qqbU0zqjttUgm9k=;
+        b=KBO2aWx7SjGN3w1Km/rmt3dzKsLkC0RfxEEedhPx8iwWowjlf+pgiCC74KF88XAGAs
+         pAbwOMxvjT9ddRHXv/u2CX6msLsexqXfelu7qkUncMmo+VxOkqzINYXBJm8RaFIF3ouL
+         4EBRRQH3/P9Gufc7gNAbW1WtA/+6tu/fdEIflnTNBZZmRb5UWw0sX1XNeBK/944WGWO3
+         ldBWrYyqvNSQ00WT29CTFBnf34LB4bLpleBYsV2qYdo+h/7AFJUShfObOyTAGFk/E8lY
+         OYl9ZD70BIVBDAHBqrLKFFIF3htNzulzyW3u2XNUutx2+pP2YAx18s2BpIwZ1KubnTYh
+         jG1A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:subject:to:cc:references:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=pCUmIwaumo4m1qSneO/ayd0Kxkg6qqbU0zqjttUgm9k=;
+        b=a/lsbIQFzlU8nzKFyWkf1spz29RdimfCuGuUaTUj7cmhZUyWmKHKpE68xIVDrwR7yE
+         dygU0Z6zIsJYRZxbGyDueQGM+vsSyH9DMuu29M26PGJ5zTOkoYGc8PsKBCreYBCnuMK5
+         kYcqTMxBfOw0wgW5xkgGHAESFuLbivZIAcZash5WlwvFldRwvTiKSK4UMmHItnzOFLWg
+         HihLoxr3QZeIUON5PmWuaW4cwXaqruPyOAAok1jmqLPARBXzA/0OrNsyXfpx9H4gpTcp
+         8qSPoqqvFdSvJzgHnpJ3FUmBCrtTs16giLy5HyMbYCJvrZBAOG6KmCu0d3+Ptqpqpk8G
+         ncpA==
+X-Gm-Message-State: APjAAAVFcWuEvh87e6HqrHEUdhzpcB1yyQftEKqaLBW87sj5EzTJUfRT
+        YutSShnfk/MVTHT8tvP5til8MQgv
+X-Google-Smtp-Source: APXvYqzS5+8rH+qyFDfbPRBQTyWD+DAaDaWJua6BsihmJav8HzBHcE9W/2O9E9SCFMY2ulJE+g61Kg==
+X-Received: by 2002:a0c:ef11:: with SMTP id t17mr4983904qvr.3.1571440114628;
+        Fri, 18 Oct 2019 16:08:34 -0700 (PDT)
+Received: from ?IPv6:2001:1970:535e:cd00:e378:c9fb:7183:d83d? ([2001:1970:535e:cd00:e378:c9fb:7183:d83d])
+        by smtp.gmail.com with ESMTPSA id w131sm3729254qka.85.2019.10.18.16.08.33
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 18 Oct 2019 16:08:34 -0700 (PDT)
+From:   Jean-Frederic <jfgaudreault@gmail.com>
+Subject: Re: [GIT PULL] EDAC pile for 5.4 -> AMD family 17h, model 70h support
+To:     "Ghannam, Yazen" <Yazen.Ghannam@amd.com>,
+        Borislav Petkov <bp@alien8.de>
+Cc:     "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>
+References: <20191007071502.GA24289@zn.tnic>
+ <CAEVokG51DtL1g+9YFK6RE=3m-wtjV1VN=vV56b5-3=K21=Jmrw@mail.gmail.com>
+ <20191008115041.GD14765@zn.tnic>
+ <678ba7d1-cf3d-4101-1819-29b291cf236d@amd.com>
+ <CAEVokG4SSkgWS2N8eqr+h7AJg9CF26OW7vtXwOurCGU-4dsLbw@mail.gmail.com>
+ <20191009103041.GC10395@zn.tnic>
+ <724d6f97-61f2-94bd-3f4b-793a55b6ac15@amd.com>
+ <CAEVokG4T5q8PBmf4=vLjPWQjzL_Xwu6yF81=mLjkpoJSoCggkw@mail.gmail.com>
+ <20191010095650.GC7658@zn.tnic>
+ <9f3ce002-7380-0e93-7bd5-20bb944d0b77@gmail.com>
+ <20191010134128.GF7658@zn.tnic>
+ <60b68d6c-5aff-3e7c-9461-c26a5f28cd87@amd.com>
+ <79bca0d0-42eb-c232-6bbe-a958734e096d@gmail.com>
+Message-ID: <f5820b41-c97a-b6be-df97-bbff85a7e5ee@gmail.com>
+Date:   Fri, 18 Oct 2019 19:08:32 -0400
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
+In-Reply-To: <79bca0d0-42eb-c232-6bbe-a958734e096d@gmail.com>
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: 8bit
+Content-Language: en-US
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-From: Kan Liang <kan.liang@linux.intel.com>
+On 2019-10-10 9:04 p.m., Jean-Frederic wrote:
+> On 2019-10-10 3:00 p.m., Ghannam, Yazen wrote:
+>> 1) rdmsr 0xC0002003
+> This returns 0 for me, so I guess PFEH is enabled.
+> As long as this is only for the error injection, and is not preventing
+> the actual capability for the OS to report the memory errors.
+> I'm still not clear on that part.
 
-[ Upstream commit 00ae831dfe4474ef6029558f5eb3ef0332d80043 ]
+On 2019-10-10 5:56 a.m., Borislav Petkov wrote:
+> On 2019-10-09 7:54 p.m., Jeff God wrote:
+>> Would this setting also prevent error reporting at the OS level or is
+>> it just related to the injection?
+> Platform first error handling meands, the BIOS gets to see the error
+> first. So it depends. Yazen, do you have the whole PFEH functionality
+> documented somewhere?
+>
 
-Add the Atom Tremont model number to the Intel family list.
+I don't know if there has been any new information related to these last
+points, I am really looking to understand if ECC error reporting will be
+working in this new Kernel 5.4 for AMD Ryzen 3900x (or are we saying maybe
+this issue could be related to the motherboard?)
+   
+In any case, I think EDAC needs to be able to tell us (like at boot time)
+if the ECC error reporting is working on the system or not, because right
+now (in 5.4) everything appear to load successfully (according to dmesg)
+with all the memory information identified, and edac-util tool appear
+to be working (and returning zeros).
+I don't mind if the error injection part is not working, I think it is
+more an enterprise or debugging feature.
 
-[ Tony: Also update comment at head of file to say "_X" suffix is
-  also used for microserver parts. ]
 
-Signed-off-by: Kan Liang <kan.liang@linux.intel.com>
-Signed-off-by: Qiuxu Zhuo <qiuxu.zhuo@intel.com>
-Signed-off-by: Tony Luck <tony.luck@intel.com>
-Signed-off-by: Borislav Petkov <bp@suse.de>
-Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc: Aristeu Rozanski <aris@redhat.com>
-Cc: "H. Peter Anvin" <hpa@zytor.com>
-Cc: Ingo Molnar <mingo@redhat.com>
-Cc: linux-edac <linux-edac@vger.kernel.org>
-Cc: Mauro Carvalho Chehab <mchehab@s-opensource.com>
-Cc: Megha Dey <megha.dey@linux.intel.com>
-Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: Qiuxu Zhuo <qiuxu.zhuo@intel.com>
-Cc: Rajneesh Bhardwaj <rajneesh.bhardwaj@intel.com>
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: x86-ml <x86@kernel.org>
-Link: https://lkml.kernel.org/r/20190125195902.17109-4-tony.luck@intel.com
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- arch/x86/include/asm/intel-family.h | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+Also, since this was working on the previous generation as mentioned before
+(i.e. AMD RYZEN 2700X and ASUS PRIME 470 to be more specific), I thought
+it would be natural that it works on the newer gen, given the
+information/hype provided around launch time.Asus also confirmed to me
+through their support that this new motherboard supports ecc. It also has
+an ECC option in the bios, as I've mentioned, to enable or disable ecc.
 
-diff --git a/arch/x86/include/asm/intel-family.h b/arch/x86/include/asm/intel-family.h
-index 6801f958e2542..aaa0bd820cf4d 100644
---- a/arch/x86/include/asm/intel-family.h
-+++ b/arch/x86/include/asm/intel-family.h
-@@ -5,7 +5,7 @@
-  * "Big Core" Processors (Branded as Core, Xeon, etc...)
-  *
-  * The "_X" parts are generally the EP and EX Xeons, or the
-- * "Extreme" ones, like Broadwell-E.
-+ * "Extreme" ones, like Broadwell-E, or Atom microserver.
-  *
-  * Things ending in "2" are usually because we have no better
-  * name for them.  There's no processor called "WESTMERE2".
-@@ -67,6 +67,7 @@
- #define INTEL_FAM6_ATOM_GOLDMONT	0x5C /* Apollo Lake */
- #define INTEL_FAM6_ATOM_GOLDMONT_X	0x5F /* Denverton */
- #define INTEL_FAM6_ATOM_GOLDMONT_PLUS	0x7A /* Gemini Lake */
-+#define INTEL_FAM6_ATOM_TREMONT_X	0x86 /* Jacobsville */
- 
- /* Xeon Phi */
- 
+
+If nobody know the answer to my question, then that is fine, I just
+wasn't sure if it was forgotten.
+
+
+Thanks,
+
 -- 
-2.20.1
+Jean-Frédéric
 
