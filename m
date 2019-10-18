@@ -2,51 +2,49 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 78E7FDC881
-	for <lists+linux-edac@lfdr.de>; Fri, 18 Oct 2019 17:34:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D8608DC880
+	for <lists+linux-edac@lfdr.de>; Fri, 18 Oct 2019 17:34:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2410520AbfJRPb3 (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Fri, 18 Oct 2019 11:31:29 -0400
-Received: from mail-eopbgr720052.outbound.protection.outlook.com ([40.107.72.52]:48496
-        "EHLO NAM05-CO1-obe.outbound.protection.outlook.com"
+        id S2408771AbfJRPb2 (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Fri, 18 Oct 2019 11:31:28 -0400
+Received: from mail-eopbgr810051.outbound.protection.outlook.com ([40.107.81.51]:25120
+        "EHLO NAM01-BY2-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S2408745AbfJRPb3 (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Fri, 18 Oct 2019 11:31:29 -0400
+        id S2408707AbfJRPb2 (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Fri, 18 Oct 2019 11:31:28 -0400
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=fcWebCUi/WXOIN5DeFqpcimtprjFZyxxhZiVcb6A+FgwGx6UCVVQ3FKSXwIdkRG14Cze+nmJZNjaHFCPWoNdpNd1+5NDtWYGPLQ/tKSzic1PK6hYbmtIki+WdhFW4H5QzCQp5QAoiKYfkeg4Tuy4mxEl8210PWB/Wo2yuDmiKKEEEEmm0qHZS6hozwmMgjdnqp6jGocBuxlQn3NLgYvmvSyU1m6c0xVNpGg63arjvahU3xvUWjqb089Ylq1Q1igcpdK6ov4NtYgZ+jjulEPP4FIv+ayboZSdvMAEVpFxTQ+gX25zXazfyYuQPN88e2Ds7TkASZWjK8y8EkIwhPsKcQ==
+ b=KxcFbBOG0I+qxoBrmELebOcuNF0eHsMKqIE3AclSAO+UwyTqVILt1VLWTFlrpa1J983/3jtmNmtBcOXwGGpI+vve83mHChBWkR4VhicaDyE22x9bdq1DPGYMp3LLThvMX/1AMQ1ksSbY9uLrejzA4kk6+xdtFuyyI7QZH9r50XyTsg8RY249PwlcoVgcR3bML2VmLOHotp1ejya+kkecUnaVc7i7z/BSRvmnFz+O+TlXOMWmsub0HEJnbnPsZbyVK619A/xZlQGVzPTr2D85gvB6uCtm2X01nxOotULjoQoy+SoGQyrGWJl4GitrdtBz3vm+2pcFTz5J+gpS2LO+cA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=+lCcAUaPzb54VPC0T5iazEqMwS2rgCfSl8XvicBiD7Y=;
- b=N7DCE/sRAu70GNeB+nJWcPzV1i3iUo3J3sQpF0BUshcmw0mG1euDF15w/5GLz2JKSsf0RcaV9Mq9nV1vtcTjccCOugMJCCIXcn3YM2FL6kRNZukW+yCwvuR5dBZuKmP/HSLyKsH5fRX53M+uUcA35EOsg/3FHeO7Tr9Q51jDkUq6MHDknCevq2j0UUrWT4UtGr6tTstKiWZtvH5tGsh4cj+x1qtKijIYvxIu7w2SDeO79fm99WUg/7DmYUo7k6ixvPAaSn0mFfX3Qalpvw2u9hly1E9DIyCbl7jxVAtZOjir/SlIk5pUv1N54v0SYWrJRRo0PyLfn/vW27QW5ABMFg==
+ bh=iku+TKnvbZmtq9iYbqUwsbJE3nAHw2CQQfrwb9S1V5s=;
+ b=e/QWG+42nnUz/pTg3Lk3ukz+XDcILhAmPAvR2szpEYdUSbdpCALjGfvig0RPcbzatuqmcsDqrnnM5Zc8qjGecvNgfna23sHVdYky7F9KWm1NqRHXFTCswxDW8COOBuSFTcetqSQdePYJesiHjD9Ja1bZx5p2kxS7VTjsbJu/4klE/Q4UlifvPC9795zs1H1F50bd2stYy/sLBc7y2IFtpTNNLr+VR1S01xVoUkkOh8jcQMqszXsXfanVuTH1X+f/wwigfYbs85iZk8KykxWkF+/lzxqPDY4JnhTP1y5askdpnFJV+G0d85PIpWEcFFfUdnibxG+t7BGGyIydz8xaJA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
  header.d=amd.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=amdcloud.onmicrosoft.com; s=selector2-amdcloud-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=+lCcAUaPzb54VPC0T5iazEqMwS2rgCfSl8XvicBiD7Y=;
- b=hQepJu7QynBxiclv4XaNa9qVAgaD1915F+eMvU4ZN8zLyyI40PIecD0z/CmJg35e0L1gdmYthcvem/iiivwX2Iah/5VAXzZuVsWrfyawWVGUbXN0ylIAzFpfSuekPPepglCOPwiffboB6mezfWSv1JWIPI3/TanPRu2Bp1g5jBE=
+ bh=iku+TKnvbZmtq9iYbqUwsbJE3nAHw2CQQfrwb9S1V5s=;
+ b=IzCUbMDj2JsXOQfrrpZgH0Yeu41sRsGuoOb0vwI3J0xafppA9ZotGp2R4qubpjZ3HlJhzxQPOtb5qT3tJSm+gY9Kr0+f3ZkqwL8wj1NIef08cgH7O7rsIPlaOcH+aeLtyzgptKjj+i/fxsgl0wAX5RP9Cs9afI3lUG9sT7wILDE=
 Received: from SN6PR12MB2639.namprd12.prod.outlook.com (52.135.103.16) by
- SN6PR12MB2608.namprd12.prod.outlook.com (52.135.102.161) with Microsoft SMTP
+ SN6PR12MB2670.namprd12.prod.outlook.com (52.135.103.23) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2347.21; Fri, 18 Oct 2019 15:31:26 +0000
+ 15.20.2347.16; Fri, 18 Oct 2019 15:31:25 +0000
 Received: from SN6PR12MB2639.namprd12.prod.outlook.com
  ([fe80::ac86:15de:e8d6:61c8]) by SN6PR12MB2639.namprd12.prod.outlook.com
  ([fe80::ac86:15de:e8d6:61c8%7]) with mapi id 15.20.2367.019; Fri, 18 Oct 2019
- 15:31:26 +0000
+ 15:31:25 +0000
 From:   "Ghannam, Yazen" <Yazen.Ghannam@amd.com>
 To:     "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>
 CC:     "Ghannam, Yazen" <Yazen.Ghannam@amd.com>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
         "bp@alien8.de" <bp@alien8.de>
-Subject: [PATCH 1/6] EDAC/amd64: Make struct amd64_family_type global
-Thread-Topic: [PATCH 1/6] EDAC/amd64: Make struct amd64_family_type global
-Thread-Index: AQHVhckaqc6P0belS027Gy5HBkDl1Q==
+Subject: [PATCH 0/6] AMD64 EDAC: Check for nodes without memory, etc.
+Thread-Topic: [PATCH 0/6] AMD64 EDAC: Check for nodes without memory, etc.
+Thread-Index: AQHVhcka4q8ovNc5PECMwVgUuntBSw==
 Date:   Fri, 18 Oct 2019 15:31:25 +0000
-Message-ID: <20191018153114.39378-2-Yazen.Ghannam@amd.com>
-References: <20191018153114.39378-1-Yazen.Ghannam@amd.com>
-In-Reply-To: <20191018153114.39378-1-Yazen.Ghannam@amd.com>
+Message-ID: <20191018153114.39378-1-Yazen.Ghannam@amd.com>
 Accept-Language: en-US
 Content-Language: en-US
 X-MS-Has-Attach: 
@@ -60,33 +58,33 @@ x-ms-exchange-messagesentrepresentingtype: 1
 x-mailer: git-send-email 2.17.1
 x-originating-ip: [165.204.78.2]
 x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: d1aa95c9-cf74-4fd1-6302-08d753e03ce7
+x-ms-office365-filtering-correlation-id: 910463fe-e19b-4729-4e5d-08d753e03c99
 x-ms-office365-filtering-ht: Tenant
-x-ms-traffictypediagnostic: SN6PR12MB2608:
-x-ms-exchange-purlcount: 1
+x-ms-traffictypediagnostic: SN6PR12MB2670:
+x-ms-exchange-purlcount: 3
 x-ld-processed: 3dd8961f-e488-4e60-8e11-a82d994e183d,ExtAddr
 x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <SN6PR12MB2608A0954265A411C57318F4F86C0@SN6PR12MB2608.namprd12.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:2733;
+x-microsoft-antispam-prvs: <SN6PR12MB2670F38C9B08E94A15B63E43F86C0@SN6PR12MB2670.namprd12.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:8882;
 x-forefront-prvs: 01949FE337
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(39860400002)(366004)(376002)(346002)(396003)(136003)(189003)(199004)(6506007)(386003)(186003)(2906002)(6512007)(6436002)(6486002)(2351001)(6306002)(3846002)(478600001)(6116002)(5640700003)(7736002)(305945005)(26005)(102836004)(966005)(446003)(76176011)(71190400001)(71200400001)(66446008)(64756008)(66556008)(66476007)(66946007)(11346002)(476003)(256004)(2616005)(52116002)(50226002)(86362001)(6916009)(99286004)(8936002)(81156014)(25786009)(81166006)(486006)(8676002)(2501003)(36756003)(1076003)(5660300002)(4326008)(14454004)(316002)(66066001)(54906003);DIR:OUT;SFP:1101;SCL:1;SRVR:SN6PR12MB2608;H:SN6PR12MB2639.namprd12.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(346002)(376002)(396003)(366004)(136003)(39860400002)(199004)(189003)(6512007)(6306002)(1076003)(14444005)(316002)(3846002)(4326008)(6116002)(66946007)(66066001)(25786009)(256004)(66476007)(5660300002)(6916009)(2351001)(66556008)(66446008)(14454004)(26005)(486006)(99286004)(52116002)(305945005)(2616005)(50226002)(7736002)(476003)(2501003)(478600001)(6436002)(2906002)(5640700003)(6506007)(102836004)(71200400001)(36756003)(966005)(8676002)(64756008)(186003)(81166006)(81156014)(8936002)(6486002)(86362001)(386003)(71190400001)(54906003);DIR:OUT;SFP:1101;SCL:1;SRVR:SN6PR12MB2670;H:SN6PR12MB2639.namprd12.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
 received-spf: None (protection.outlook.com: amd.com does not designate
  permitted sender hosts)
 x-ms-exchange-senderadcheck: 1
 x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 2AQa5hCciifKDo7Al/Q3YxBgRKmaFwj5u4rJ0qBs3Fz29KDx1ZUDr1sYeFwoTBAOUtYtR+qKHy5aVLgISOG1tZvniuXU68yYytzzedKf8JViDO4pVSNuD3/8+jenKvs9449Ns1Ttjvrx1LUwQTFpqI7pbLJZXC43o4fBPi0iradyRhaOHyuAQWehAJyge2ATYOX4auP0HyavEM6HxTAMnABIfPf9xyFOi0cLunEdOFBEikzCdmgF5yB2mIRlGYAHI26AMLroE2H4IsjXGAN3biKkc7FWazslHbgCgk8VtgayjY1Jmz4KKzt4o6V9GNk04olRBkka+PwwZNicp6PHhCj92O6uPefbRzRu5Zr0mPbC+DdJO+vMu+uFyBL7viDwEVFCQiBC20c7QBh5gHhfDRmx9+Tv0TNMqGgtMyBJr+6+1NarwoikX9nStZZ5bTiCkEi7m2evwaQ4HWnlbNNPqg==
+x-microsoft-antispam-message-info: mB7rMSiSxlskcrIfue65J/ZednmJSsYtr230Aez+z0FyRLbn4UUXwr+u+/Hctr6T3p1dzzwXd0BFrQXlURMcnwk6wPg4fsin50oQN52F+d+Q31H6lkQgrCMdt1yEUTxQUPRbqFsvIvYAZNtAZaQRhzCYeyd6WA6XB3PcR4F5AFeDdFqTacnFLGpnK+ogoa3PBSam0c4yxtcUdcojAD9/KGAhG9px5S9u2l4r09Nrq2NdZsZgi+UDJW4aOO4EnJWidj1pFOgV+uBqB1pTyPRU1NmaZVggCXF5wSEslTkgQpz3AQiDmSJ2VewPySvqZqa+2vq1cqxmtFVrWo7QRIMe36tYEgflwy1Lm/3CM9+4LNn37+VdE+IVCQNRbhU4/ShTydmuvnnZjhH3sExKZqIs+13PWo2TwglY5jj4BLe3/Bv6Rc/WBYcICdArpBi+/Zqbh3OFUnwO63mo2zDZvact2w==
 Content-Type: text/plain; charset="iso-8859-1"
 Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: d1aa95c9-cf74-4fd1-6302-08d753e03ce7
-X-MS-Exchange-CrossTenant-originalarrivaltime: 18 Oct 2019 15:31:25.7920
+X-MS-Exchange-CrossTenant-Network-Message-Id: 910463fe-e19b-4729-4e5d-08d753e03c99
+X-MS-Exchange-CrossTenant-originalarrivaltime: 18 Oct 2019 15:31:25.2763
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
 X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: Bh1TOAAqKL3zwPR0SuGRhnPRGM+0wNzTec9WSCHp2xhDbDscCN0I2reHJvXeDDmrgcyM0TvQVSBAZ6+1qcAd/g==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN6PR12MB2608
+X-MS-Exchange-CrossTenant-userprincipalname: L6S718wxKGqaHaihR66pl30ww8ITXh2cJDK6hMXmHk4wXcGi0uoMHq7q6QEXZL+smMpIhoIbXNxDm+TqrDUAWQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN6PR12MB2670
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
@@ -94,81 +92,40 @@ X-Mailing-List: linux-edac@vger.kernel.org
 
 From: Yazen Ghannam <yazen.ghannam@amd.com>
 
-The struct amd64_family_type doesn't change between multiple nodes and
-instances of the modules, so make it global.
+Hi Boris,
 
-Signed-off-by: Yazen Ghannam <yazen.ghannam@amd.com>
----
-Link:
+This set contains the next revision of the RFC patches I included with
+the last AMD64 EDAC updates. I dropped the RFC tags, and I added a
+couple of new patches.
+
+Most of these patches address the issue where the module check and
+complains about DRAM ECC on nodes without memory.
+
+Patch 3 is new and came out of looking at the family type structs and
+the boot flow.
+
+Patch 6 fixes the "grain not set" warning that was recently introduced.
+
+Thanks,
+Yazen
+
+Links:
 https://lkml.kernel.org/r/20190821235938.118710-9-Yazen.Ghannam@amd.com
+https://lkml.kernel.org/r/20190821235938.118710-10-Yazen.Ghannam@amd.com
+https://lkml.kernel.org/r/20190821235938.118710-11-Yazen.Ghannam@amd.com
 
-rfc -> v1:
-* New patch based on suggestion from Boris.
+Yazen Ghannam (6):
+  EDAC/amd64: Make struct amd64_family_type global
+  EDAC/amd64: Gather hardware information early
+  EDAC/amd64: Save max number of controllers to family type
+  EDAC/amd64: Use cached data when checking for ECC
+  EDAC/amd64: Check for memory before fully initializing an instance
+  EDAC/amd64: Set grain per DIMM
 
- drivers/edac/amd64_edac.c | 12 +++++-------
- 1 file changed, 5 insertions(+), 7 deletions(-)
+ drivers/edac/amd64_edac.c | 174 ++++++++++++++++++++------------------
+ drivers/edac/amd64_edac.h |   1 +
+ 2 files changed, 94 insertions(+), 81 deletions(-)
 
-diff --git a/drivers/edac/amd64_edac.c b/drivers/edac/amd64_edac.c
-index c1d4536ae466..b9a712819c68 100644
---- a/drivers/edac/amd64_edac.c
-+++ b/drivers/edac/amd64_edac.c
-@@ -16,6 +16,8 @@ module_param(ecc_enable_override, int, 0644);
-=20
- static struct msr __percpu *msrs;
-=20
-+static struct amd64_family_type *fam_type;
-+
- /* Per-node stuff */
- static struct ecc_settings **ecc_stngs;
-=20
-@@ -3278,8 +3280,7 @@ f17h_determine_edac_ctl_cap(struct mem_ctl_info *mci,=
- struct amd64_pvt *pvt)
- 	}
- }
-=20
--static void setup_mci_misc_attrs(struct mem_ctl_info *mci,
--				 struct amd64_family_type *fam)
-+static void setup_mci_misc_attrs(struct mem_ctl_info *mci)
- {
- 	struct amd64_pvt *pvt =3D mci->pvt_info;
-=20
-@@ -3298,7 +3299,7 @@ static void setup_mci_misc_attrs(struct mem_ctl_info =
-*mci,
-=20
- 	mci->edac_cap		=3D determine_edac_cap(pvt);
- 	mci->mod_name		=3D EDAC_MOD_STR;
--	mci->ctl_name		=3D fam->ctl_name;
-+	mci->ctl_name		=3D fam_type->ctl_name;
- 	mci->dev_name		=3D pci_name(pvt->F3);
- 	mci->ctl_page_to_phys	=3D NULL;
-=20
-@@ -3312,8 +3313,6 @@ static void setup_mci_misc_attrs(struct mem_ctl_info =
-*mci,
-  */
- static struct amd64_family_type *per_family_init(struct amd64_pvt *pvt)
- {
--	struct amd64_family_type *fam_type =3D NULL;
--
- 	pvt->ext_model  =3D boot_cpu_data.x86_model >> 4;
- 	pvt->stepping	=3D boot_cpu_data.x86_stepping;
- 	pvt->model	=3D boot_cpu_data.x86_model;
-@@ -3420,7 +3419,6 @@ static void compute_num_umcs(void)
- static int init_one_instance(unsigned int nid)
- {
- 	struct pci_dev *F3 =3D node_to_amd_nb(nid)->misc;
--	struct amd64_family_type *fam_type =3D NULL;
- 	struct mem_ctl_info *mci =3D NULL;
- 	struct edac_mc_layer layers[2];
- 	struct amd64_pvt *pvt =3D NULL;
-@@ -3497,7 +3495,7 @@ static int init_one_instance(unsigned int nid)
- 	mci->pvt_info =3D pvt;
- 	mci->pdev =3D &pvt->F3->dev;
-=20
--	setup_mci_misc_attrs(mci, fam_type);
-+	setup_mci_misc_attrs(mci);
-=20
- 	if (init_csrows(mci))
- 		mci->edac_cap =3D EDAC_FLAG_NONE;
 --=20
 2.17.1
 
