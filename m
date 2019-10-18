@@ -2,27 +2,27 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 13611DD1C7
-	for <lists+linux-edac@lfdr.de>; Sat, 19 Oct 2019 00:06:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7309ADD20E
+	for <lists+linux-edac@lfdr.de>; Sat, 19 Oct 2019 00:08:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730137AbfJRWFr (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Fri, 18 Oct 2019 18:05:47 -0400
-Received: from mail.kernel.org ([198.145.29.99]:37654 "EHLO mail.kernel.org"
+        id S2387552AbfJRWIJ (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Fri, 18 Oct 2019 18:08:09 -0400
+Received: from mail.kernel.org ([198.145.29.99]:40536 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730077AbfJRWFq (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Fri, 18 Oct 2019 18:05:46 -0400
+        id S2387544AbfJRWII (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Fri, 18 Oct 2019 18:08:08 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 7E460222C9;
-        Fri, 18 Oct 2019 22:05:43 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 9FEB52245B;
+        Fri, 18 Oct 2019 22:08:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1571436345;
-        bh=8h+FkDc3xXvETtsrZrbsTH8LmB+VdeBjN9RyUmQkvEs=;
+        s=default; t=1571436488;
+        bh=wahJNPsz0/I3Em7HivCnTzLX3ldOjztOBdKUM99bhUc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=h3M3O6pdru5KAZx8kCZT96SRKlbQJExU9rJUUHbZHItiwrnkj0XLYufEknXVSs7Bw
-         G8Xcz27i/+Rt8P9/OwMba1b8eDe6ClmwIz8ddBoxmZPRotZCQ+1bxM7eSjREptu3sc
-         aKCvSYUQqMYyzXhajuIJQK52eg01vVeqcdJvQvjE=
+        b=E5qkNnImL6YV95oMn4t3Rq3qz/hYQDMYthAeLSrhO4v0jgApKe9THHiFoJuFwi8/l
+         mvgBnLmJieV9OZf/aOWJuhh1Vy6CMt0qIqkir2pN1T+lYCM+d66Zka3FSaUS5YD/sH
+         GohWgvwiWdzD9o8bcvQj2VbINltcYOPUq2TxMqB4=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Kan Liang <kan.liang@linux.intel.com>,
@@ -38,12 +38,12 @@ Cc:     Kan Liang <kan.liang@linux.intel.com>,
         Rajneesh Bhardwaj <rajneesh.bhardwaj@intel.com>,
         Thomas Gleixner <tglx@linutronix.de>, x86-ml <x86@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH AUTOSEL 4.19 011/100] x86/cpu: Add Atom Tremont (Jacobsville)
-Date:   Fri, 18 Oct 2019 18:03:56 -0400
-Message-Id: <20191018220525.9042-11-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.14 06/56] x86/cpu: Add Atom Tremont (Jacobsville)
+Date:   Fri, 18 Oct 2019 18:07:03 -0400
+Message-Id: <20191018220753.10002-6-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20191018220525.9042-1-sashal@kernel.org>
-References: <20191018220525.9042-1-sashal@kernel.org>
+In-Reply-To: <20191018220753.10002-1-sashal@kernel.org>
+References: <20191018220753.10002-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -85,7 +85,7 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 2 insertions(+), 1 deletion(-)
 
 diff --git a/arch/x86/include/asm/intel-family.h b/arch/x86/include/asm/intel-family.h
-index 5d0b72f281402..82a57d344b9bc 100644
+index 038e4b63b56b5..5cd7d4e1579d0 100644
 --- a/arch/x86/include/asm/intel-family.h
 +++ b/arch/x86/include/asm/intel-family.h
 @@ -6,7 +6,7 @@
@@ -95,9 +95,9 @@ index 5d0b72f281402..82a57d344b9bc 100644
 - * "Extreme" ones, like Broadwell-E.
 + * "Extreme" ones, like Broadwell-E, or Atom microserver.
   *
-  * While adding a new CPUID for a new microarchitecture, add a new
-  * group to keep logically sorted out in chronological order. Within
-@@ -80,6 +80,7 @@
+  * Things ending in "2" are usually because we have no better
+  * name for them.  There's no processor called "SILVERMONT2".
+@@ -68,6 +68,7 @@
  #define INTEL_FAM6_ATOM_GOLDMONT	0x5C /* Apollo Lake */
  #define INTEL_FAM6_ATOM_GOLDMONT_X	0x5F /* Denverton */
  #define INTEL_FAM6_ATOM_GOLDMONT_PLUS	0x7A /* Gemini Lake */
