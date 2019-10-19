@@ -2,126 +2,110 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A7A62DD52F
-	for <lists+linux-edac@lfdr.de>; Sat, 19 Oct 2019 01:08:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DBA74DD748
+	for <lists+linux-edac@lfdr.de>; Sat, 19 Oct 2019 10:11:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727399AbfJRXIg (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Fri, 18 Oct 2019 19:08:36 -0400
-Received: from mail-qt1-f195.google.com ([209.85.160.195]:45115 "EHLO
-        mail-qt1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727004AbfJRXIg (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Fri, 18 Oct 2019 19:08:36 -0400
-Received: by mail-qt1-f195.google.com with SMTP id c21so11416006qtj.12
-        for <linux-edac@vger.kernel.org>; Fri, 18 Oct 2019 16:08:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:subject:to:cc:references:message-id:date:user-agent
-         :mime-version:in-reply-to:content-transfer-encoding:content-language;
-        bh=pCUmIwaumo4m1qSneO/ayd0Kxkg6qqbU0zqjttUgm9k=;
-        b=KBO2aWx7SjGN3w1Km/rmt3dzKsLkC0RfxEEedhPx8iwWowjlf+pgiCC74KF88XAGAs
-         pAbwOMxvjT9ddRHXv/u2CX6msLsexqXfelu7qkUncMmo+VxOkqzINYXBJm8RaFIF3ouL
-         4EBRRQH3/P9Gufc7gNAbW1WtA/+6tu/fdEIflnTNBZZmRb5UWw0sX1XNeBK/944WGWO3
-         ldBWrYyqvNSQ00WT29CTFBnf34LB4bLpleBYsV2qYdo+h/7AFJUShfObOyTAGFk/E8lY
-         OYl9ZD70BIVBDAHBqrLKFFIF3htNzulzyW3u2XNUutx2+pP2YAx18s2BpIwZ1KubnTYh
-         jG1A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:subject:to:cc:references:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=pCUmIwaumo4m1qSneO/ayd0Kxkg6qqbU0zqjttUgm9k=;
-        b=a/lsbIQFzlU8nzKFyWkf1spz29RdimfCuGuUaTUj7cmhZUyWmKHKpE68xIVDrwR7yE
-         dygU0Z6zIsJYRZxbGyDueQGM+vsSyH9DMuu29M26PGJ5zTOkoYGc8PsKBCreYBCnuMK5
-         kYcqTMxBfOw0wgW5xkgGHAESFuLbivZIAcZash5WlwvFldRwvTiKSK4UMmHItnzOFLWg
-         HihLoxr3QZeIUON5PmWuaW4cwXaqruPyOAAok1jmqLPARBXzA/0OrNsyXfpx9H4gpTcp
-         8qSPoqqvFdSvJzgHnpJ3FUmBCrtTs16giLy5HyMbYCJvrZBAOG6KmCu0d3+Ptqpqpk8G
-         ncpA==
-X-Gm-Message-State: APjAAAVFcWuEvh87e6HqrHEUdhzpcB1yyQftEKqaLBW87sj5EzTJUfRT
-        YutSShnfk/MVTHT8tvP5til8MQgv
-X-Google-Smtp-Source: APXvYqzS5+8rH+qyFDfbPRBQTyWD+DAaDaWJua6BsihmJav8HzBHcE9W/2O9E9SCFMY2ulJE+g61Kg==
-X-Received: by 2002:a0c:ef11:: with SMTP id t17mr4983904qvr.3.1571440114628;
-        Fri, 18 Oct 2019 16:08:34 -0700 (PDT)
-Received: from ?IPv6:2001:1970:535e:cd00:e378:c9fb:7183:d83d? ([2001:1970:535e:cd00:e378:c9fb:7183:d83d])
-        by smtp.gmail.com with ESMTPSA id w131sm3729254qka.85.2019.10.18.16.08.33
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 18 Oct 2019 16:08:34 -0700 (PDT)
-From:   Jean-Frederic <jfgaudreault@gmail.com>
-Subject: Re: [GIT PULL] EDAC pile for 5.4 -> AMD family 17h, model 70h support
-To:     "Ghannam, Yazen" <Yazen.Ghannam@amd.com>,
-        Borislav Petkov <bp@alien8.de>
-Cc:     "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>
-References: <20191007071502.GA24289@zn.tnic>
- <CAEVokG51DtL1g+9YFK6RE=3m-wtjV1VN=vV56b5-3=K21=Jmrw@mail.gmail.com>
- <20191008115041.GD14765@zn.tnic>
- <678ba7d1-cf3d-4101-1819-29b291cf236d@amd.com>
- <CAEVokG4SSkgWS2N8eqr+h7AJg9CF26OW7vtXwOurCGU-4dsLbw@mail.gmail.com>
- <20191009103041.GC10395@zn.tnic>
- <724d6f97-61f2-94bd-3f4b-793a55b6ac15@amd.com>
- <CAEVokG4T5q8PBmf4=vLjPWQjzL_Xwu6yF81=mLjkpoJSoCggkw@mail.gmail.com>
- <20191010095650.GC7658@zn.tnic>
- <9f3ce002-7380-0e93-7bd5-20bb944d0b77@gmail.com>
- <20191010134128.GF7658@zn.tnic>
- <60b68d6c-5aff-3e7c-9461-c26a5f28cd87@amd.com>
- <79bca0d0-42eb-c232-6bbe-a958734e096d@gmail.com>
-Message-ID: <f5820b41-c97a-b6be-df97-bbff85a7e5ee@gmail.com>
-Date:   Fri, 18 Oct 2019 19:08:32 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        id S1727128AbfJSILB (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Sat, 19 Oct 2019 04:11:01 -0400
+Received: from mail.skyhub.de ([5.9.137.197]:43956 "EHLO mail.skyhub.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725818AbfJSILB (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Sat, 19 Oct 2019 04:11:01 -0400
+Received: from zn.tnic (p200300EC2F1CBC00F4835101EE48AEFC.dip0.t-ipconnect.de [IPv6:2003:ec:2f1c:bc00:f483:5101:ee48:aefc])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 221661EC0691;
+        Sat, 19 Oct 2019 10:11:00 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1571472660;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=K6Jnijv0GF9GtTGOao4625yORkxoPksBDwnhh0jkkzo=;
+        b=MydynZs793094o6Fk3fETBioEXYjO8YHjHFsGrN2f/QnNpGbNvRbVW0rQV+qr5P1s5EC+I
+        m4PujFN3SMXZCO5CkiQVhtLWZD+Gj2ZPiB/Dr3h2FPyM3tdyP0QwRCwcoW1uAbnJicD/lC
+        AuBBvuZygKeHsTsVrfOsIR5glfLe768=
+Date:   Sat, 19 Oct 2019 10:10:53 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     "Luck, Tony" <tony.luck@intel.com>
+Cc:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "bberg@redhat.com" <bberg@redhat.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "hdegoede@redhat.com" <hdegoede@redhat.com>,
+        "ckellner@redhat.com" <ckellner@redhat.com>
+Subject: Re: [PATCH 1/2] x86, mce, therm_throt: Optimize logging of thermal
+ throttle messages
+Message-ID: <20191019081001.GA5571@zn.tnic>
+References: <f481b4ab6dfebbc0637c843e5f1cd4ddfd4bd60b.camel@linux.intel.com>
+ <20191016081405.GO2328@hirez.programming.kicks-ass.net>
+ <20191016140001.GF1138@zn.tnic>
+ <3908561D78D1C84285E8C5FCA982C28F7F4A57D0@ORSMSX115.amr.corp.intel.com>
+ <20191017214445.GG14441@zn.tnic>
+ <c2ce4ef128aad84616b2dc21f6230ad4db12194b.camel@linux.intel.com>
+ <20191018132309.GD17053@zn.tnic>
+ <20191018180257.GA23835@agluck-desk2.amr.corp.intel.com>
+ <20191018194503.GF17053@zn.tnic>
+ <20191018203832.GA25033@agluck-desk2.amr.corp.intel.com>
 MIME-Version: 1.0
-In-Reply-To: <79bca0d0-42eb-c232-6bbe-a958734e096d@gmail.com>
 Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
+Content-Disposition: inline
+In-Reply-To: <20191018203832.GA25033@agluck-desk2.amr.corp.intel.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On 2019-10-10 9:04 p.m., Jean-Frederic wrote:
-> On 2019-10-10 3:00 p.m., Ghannam, Yazen wrote:
->> 1) rdmsr 0xC0002003
-> This returns 0 for me, so I guess PFEH is enabled.
-> As long as this is only for the error injection, and is not preventing
-> the actual capability for the OS to report the memory errors.
-> I'm still not clear on that part.
+On Fri, Oct 18, 2019 at 01:38:32PM -0700, Luck, Tony wrote:
+> Sorry to have caused confusion.
 
-On 2019-10-10 5:56 a.m., Borislav Petkov wrote:
-> On 2019-10-09 7:54 p.m., Jeff God wrote:
->> Would this setting also prevent error reporting at the OS level or is
->> it just related to the injection?
-> Platform first error handling meands, the BIOS gets to see the error
-> first. So it depends. Yazen, do you have the whole PFEH functionality
-> documented somewhere?
+Ditto. But us causing confusion is fine - this way we can talk about
+what we really wanna do!
+
+:-)))
+
+> The thoughts behind that statement are that we currently have an issue
+> with too many noisy high severity messages. The interim solution we
+> are going with is to downgrade the severity. But if we apply a time
+> based filter to remove most of the noise by not printing at all, maybe
+> what we have left is a very small number of high severity messages.
 >
+> But that's completely up for debate.
 
-I don't know if there has been any new information related to these last
-points, I am really looking to understand if ECC error reporting will be
-working in this new Kernel 5.4 for AMD Ryzen 3900x (or are we saying maybe
-this issue could be related to the motherboard?)
-   
-In any case, I think EDAC needs to be able to tell us (like at boot time)
-if the ECC error reporting is working on the system or not, because right
-now (in 5.4) everything appear to load successfully (according to dmesg)
-with all the memory information identified, and edac-util tool appear
-to be working (and returning zeros).
-I don't mind if the error injection part is not working, I think it is
-more an enterprise or debugging feature.
+Well, I think those messages being pr_warn are fine if one wants to
+inspect dmesg for signs of overheating and the platform is hitting some
+thermal limits.
 
+And if the time-based filter is not too accurate, that's fine too, I
+guess, as long as we don't flood dmesg.
 
-Also, since this was working on the previous generation as mentioned before
-(i.e. AMD RYZEN 2700X and ASUS PRIME 470 to be more specific), I thought
-it would be natural that it works on the newer gen, given the
-information/hype provided around launch time.Asus also confirmed to me
-through their support that this new motherboard supports ecc. It also has
-an ECC option in the bios, as I've mentioned, to enable or disable ecc.
+What I don't like is the command line parameter and us putting the onus
+on the user to decide although we have all that info in the kernel
+already and we can do that decision automatically.
 
+> I agree it is a good thing to look at. I'm not so sure we will find
+> a good enough method that works all the way from tablet to server,
+> so we might end up with "#define MAX_THERM_TIME 8000" ... but some
+> study of options would either turn up a good heuristic, or provide
+> evidence for why that is either hard, or no better than a constant.
 
-If nobody know the answer to my question, then that is fine, I just
-wasn't sure if it was forgotten.
+Yeah, I still think a simple avg filter which starts from a sufficiently
+high value and improves it over time, should be good enough.
 
+Hell, even the trivial formula we use in the CMCI interrupt for polling,
+might work, where we either double the interval or halve it, depending
+on recent history.
 
-Thanks,
+Thx.
 
 -- 
-Jean-Frédéric
+Regards/Gruss,
+    Boris.
 
+https://people.kernel.org/tglx/notes-about-netiquette
