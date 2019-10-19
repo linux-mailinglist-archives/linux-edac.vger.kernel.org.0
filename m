@@ -2,107 +2,105 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DBA74DD748
-	for <lists+linux-edac@lfdr.de>; Sat, 19 Oct 2019 10:11:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B014DD75D
+	for <lists+linux-edac@lfdr.de>; Sat, 19 Oct 2019 10:26:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727128AbfJSILB (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Sat, 19 Oct 2019 04:11:01 -0400
-Received: from mail.skyhub.de ([5.9.137.197]:43956 "EHLO mail.skyhub.de"
+        id S1725818AbfJSI0C (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Sat, 19 Oct 2019 04:26:02 -0400
+Received: from mail.skyhub.de ([5.9.137.197]:46322 "EHLO mail.skyhub.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725818AbfJSILB (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Sat, 19 Oct 2019 04:11:01 -0400
-Received: from zn.tnic (p200300EC2F1CBC00F4835101EE48AEFC.dip0.t-ipconnect.de [IPv6:2003:ec:2f1c:bc00:f483:5101:ee48:aefc])
+        id S1725616AbfJSI0B (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Sat, 19 Oct 2019 04:26:01 -0400
+Received: from zn.tnic (p200300EC2F1CBC0070FC0520D48C2E42.dip0.t-ipconnect.de [IPv6:2003:ec:2f1c:bc00:70fc:520:d48c:2e42])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 221661EC0691;
-        Sat, 19 Oct 2019 10:11:00 +0200 (CEST)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 4DB6D1EC06F3;
+        Sat, 19 Oct 2019 10:26:00 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1571472660;
+        t=1571473560;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=K6Jnijv0GF9GtTGOao4625yORkxoPksBDwnhh0jkkzo=;
-        b=MydynZs793094o6Fk3fETBioEXYjO8YHjHFsGrN2f/QnNpGbNvRbVW0rQV+qr5P1s5EC+I
-        m4PujFN3SMXZCO5CkiQVhtLWZD+Gj2ZPiB/Dr3h2FPyM3tdyP0QwRCwcoW1uAbnJicD/lC
-        AuBBvuZygKeHsTsVrfOsIR5glfLe768=
-Date:   Sat, 19 Oct 2019 10:10:53 +0200
+        bh=REP+ybro2mEQzoV+aJ3UJhTZLtqzjflFsIQSHxUaDwI=;
+        b=Y17qfHdYnwZm2OjsDJ5D1aigWGQcp+RXrP2KNJOvI5zWpVkPM5nGOICmIofY/Uxe2VbNaT
+        3vs+LeLTi1CoIybx+/UdJ7Z3bCCO32ON8M5Lm+Vx+u8avp09prscoEBokvz0odkekwYqR/
+        5wwKOAWWeVCtvjJNvz5d7tOWP9OAkcg=
+Date:   Sat, 19 Oct 2019 10:25:54 +0200
 From:   Borislav Petkov <bp@alien8.de>
-To:     "Luck, Tony" <tony.luck@intel.com>
-Cc:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "bberg@redhat.com" <bberg@redhat.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "hdegoede@redhat.com" <hdegoede@redhat.com>,
-        "ckellner@redhat.com" <ckellner@redhat.com>
-Subject: Re: [PATCH 1/2] x86, mce, therm_throt: Optimize logging of thermal
- throttle messages
-Message-ID: <20191019081001.GA5571@zn.tnic>
-References: <f481b4ab6dfebbc0637c843e5f1cd4ddfd4bd60b.camel@linux.intel.com>
- <20191016081405.GO2328@hirez.programming.kicks-ass.net>
- <20191016140001.GF1138@zn.tnic>
- <3908561D78D1C84285E8C5FCA982C28F7F4A57D0@ORSMSX115.amr.corp.intel.com>
- <20191017214445.GG14441@zn.tnic>
- <c2ce4ef128aad84616b2dc21f6230ad4db12194b.camel@linux.intel.com>
- <20191018132309.GD17053@zn.tnic>
- <20191018180257.GA23835@agluck-desk2.amr.corp.intel.com>
- <20191018194503.GF17053@zn.tnic>
- <20191018203832.GA25033@agluck-desk2.amr.corp.intel.com>
+To:     Jean-Frederic <jfgaudreault@gmail.com>
+Cc:     "Ghannam, Yazen" <Yazen.Ghannam@amd.com>,
+        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>
+Subject: Re: [GIT PULL] EDAC pile for 5.4 -> AMD family 17h, model 70h support
+Message-ID: <20191019082554.GB5571@zn.tnic>
+References: <CAEVokG4SSkgWS2N8eqr+h7AJg9CF26OW7vtXwOurCGU-4dsLbw@mail.gmail.com>
+ <20191009103041.GC10395@zn.tnic>
+ <724d6f97-61f2-94bd-3f4b-793a55b6ac15@amd.com>
+ <CAEVokG4T5q8PBmf4=vLjPWQjzL_Xwu6yF81=mLjkpoJSoCggkw@mail.gmail.com>
+ <20191010095650.GC7658@zn.tnic>
+ <9f3ce002-7380-0e93-7bd5-20bb944d0b77@gmail.com>
+ <20191010134128.GF7658@zn.tnic>
+ <60b68d6c-5aff-3e7c-9461-c26a5f28cd87@amd.com>
+ <79bca0d0-42eb-c232-6bbe-a958734e096d@gmail.com>
+ <f5820b41-c97a-b6be-df97-bbff85a7e5ee@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20191018203832.GA25033@agluck-desk2.amr.corp.intel.com>
+In-Reply-To: <f5820b41-c97a-b6be-df97-bbff85a7e5ee@gmail.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Fri, Oct 18, 2019 at 01:38:32PM -0700, Luck, Tony wrote:
-> Sorry to have caused confusion.
+On Fri, Oct 18, 2019 at 07:08:32PM -0400, Jean-Frederic wrote:
+> I don't know if there has been any new information related to these last
+> points, I am really looking to understand if ECC error reporting will be
+> working in this new Kernel 5.4 for AMD Ryzen 3900x (or are we saying maybe
+> this issue could be related to the motherboard?)
 
-Ditto. But us causing confusion is fine - this way we can talk about
-what we really wanna do!
+Look here on page 6:
 
-:-)))
+https://www.amd.com/system/files/2017-06/AMD-EPYC-Brings-New-RAS-Capability.pdf
 
-> The thoughts behind that statement are that we currently have an issue
-> with too many noisy high severity messages. The interim solution we
-> are going with is to downgrade the severity. But if we apply a time
-> based filter to remove most of the noise by not printing at all, maybe
-> what we have left is a very small number of high severity messages.
->
-> But that's completely up for debate.
+It hints at what PFEH does. Roughly speaking, the firmware gets to see
+the errors first and because it knows the platform much better, it
+can take much more adequate recovery for those actions than the OS.
+Sometimes.
 
-Well, I think those messages being pr_warn are fine if one wants to
-inspect dmesg for signs of overheating and the platform is hitting some
-thermal limits.
+ [ I believe if the error cannot be handled by the firmware, it gets
+   reported to the OS but I'll let Yazen comment on that. ]
 
-And if the time-based filter is not too accurate, that's fine too, I
-guess, as long as we don't flood dmesg.
+In any case, you have RAS protection on your platform - it is just done
+by the firmware and not by EDAC. And that is perfectly fine - EDAC is
+used when there's no firmware support.
 
-What I don't like is the command line parameter and us putting the onus
-on the user to decide although we have all that info in the kernel
-already and we can do that decision automatically.
+I know, I know, we don't trust the firmware to do it right and so on,
+but it is what it is. Like other stuff we have to rely on the firmware
+to do right.
 
-> I agree it is a good thing to look at. I'm not so sure we will find
-> a good enough method that works all the way from tablet to server,
-> so we might end up with "#define MAX_THERM_TIME 8000" ... but some
-> study of options would either turn up a good heuristic, or provide
-> evidence for why that is either hard, or no better than a constant.
+> In any case, I think EDAC needs to be able to tell us (like at boot time)
+> if the ECC error reporting is working on the system or not, because right
+> now (in 5.4) everything appear to load successfully (according to dmesg)
+> with all the memory information identified, and edac-util tool appear
+> to be working (and returning zeros).
 
-Yeah, I still think a simple avg filter which starts from a sufficiently
-high value and improves it over time, should be good enough.
+EDAC loads fine but there are simply no errors to report.
 
-Hell, even the trivial formula we use in the CMCI interrupt for polling,
-might work, where we either double the interval or halve it, depending
-on recent history.
+> Also, since this was working on the previous generation as mentioned before
 
-Thx.
+See above.
+
+> (i.e. AMD RYZEN 2700X and ASUS PRIME 470 to be more specific), I thought
+> it would be natural that it works on the newer gen, given the
+> information/hype provided around launch time.Asus also confirmed to me
+> through their support that this new motherboard supports ecc. It also has
+> an ECC option in the bios, as I've mentioned, to enable or disable ecc.
+
+Again, you have RAS protection if your DIMMs are ECC ones. It is just
+not done by the kernel but by the firmware. And that can be a better way
+to do it *if* the firmware is doing its job right.
+
+Makes more sense now?
 
 -- 
 Regards/Gruss,
