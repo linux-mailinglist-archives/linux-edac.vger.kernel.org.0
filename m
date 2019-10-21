@@ -2,127 +2,216 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 651A2DD998
-	for <lists+linux-edac@lfdr.de>; Sat, 19 Oct 2019 18:13:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7692FDE562
+	for <lists+linux-edac@lfdr.de>; Mon, 21 Oct 2019 09:38:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726008AbfJSQNB (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Sat, 19 Oct 2019 12:13:01 -0400
-Received: from mail-qk1-f193.google.com ([209.85.222.193]:39859 "EHLO
-        mail-qk1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725992AbfJSQNB (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Sat, 19 Oct 2019 12:13:01 -0400
-Received: by mail-qk1-f193.google.com with SMTP id 4so8268863qki.6
-        for <linux-edac@vger.kernel.org>; Sat, 19 Oct 2019 09:13:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-transfer-encoding:content-language;
-        bh=pRxfdBaA32DFnJjLWccx6qyWkRx/1fKJh+Uefd5BBAY=;
-        b=MRykaJEbom+xZ64yj38u09WWZFBC7Cv0vkRmGyzvypM+p8iGD2xiJv5Q3+7Assxvvh
-         dSdpxDqm+Nu+cWF5Eb9RqzBqs8fEWvNRs1NqnsF0B+Cf6UpPf9l8I5UfkF/tPRRTOVHC
-         0hMZrHlB1cq3GpCriav61UCDtVLLh42cQRrl6SeQzQWGD8OcGNW6o++1tF77358m9BgG
-         h0tVAmk8q7ZrNfyvhVwMzhtGhMtVhpgmJxb9qeK5/V7oqD1PoLM26h+OrmnMmwFB35Dl
-         keRasdRF8AMNN/Nndhl1J6CUrvFg5531D4YN0YhBA5CmBu17Gmut6cddwIRZQCGtPdtj
-         Qf+g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=pRxfdBaA32DFnJjLWccx6qyWkRx/1fKJh+Uefd5BBAY=;
-        b=aAm4ujyigt8NuKGiu2vP37ao9yiSa6hUltzKQfIQDxwdV8rgM4oSP7AdoiIRwmqkkh
-         w66g05GML0ILrrgDBi9jJrE55dPT6HCoj3XNSxhwm40+aEuPpOvgTJFvDKsmfVsyBt/R
-         3ES38PEoW2Rh92XeKXt0G6aJvznuiT9w7kRDEaDBdL4XJGiH7vu13WPRXfDj73BDC7Iu
-         3To+VkN+CTHrK40XWXhgw1DMXod+tdEvjczdV94d4ZuzxxLzNZUCIEldfxs6UgTUWzFp
-         tx0tLXxVl0lHpm2xNon55ojtLs6k7NQLl5a0xU5pMYAZx3j8BfgCRGx4nXfbcVjYe5Xc
-         ovaA==
-X-Gm-Message-State: APjAAAUvasCHeCfNpxBO9sg3TRYlcwg7Q8bSnJoxFqxCdPNVKzfz3RH0
-        LfcsSXdK8q1hVeygD0cNTauC3RR5
-X-Google-Smtp-Source: APXvYqxXWCMf0qfHtlGiudt1JYa6r7D+N922dA+0+0dKf1jFQZK7jRte9mwpIS0pz5gCnIJ+l4oHAQ==
-X-Received: by 2002:a37:8e81:: with SMTP id q123mr3890465qkd.15.1571501579932;
-        Sat, 19 Oct 2019 09:12:59 -0700 (PDT)
-Received: from ?IPv6:2001:1970:535e:cd00:e378:c9fb:7183:d83d? ([2001:1970:535e:cd00:e378:c9fb:7183:d83d])
-        by smtp.gmail.com with ESMTPSA id 60sm4637878qta.77.2019.10.19.09.12.58
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Sat, 19 Oct 2019 09:12:59 -0700 (PDT)
-Subject: Re: [GIT PULL] EDAC pile for 5.4 -> AMD family 17h, model 70h support
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     "Ghannam, Yazen" <Yazen.Ghannam@amd.com>,
-        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>
-References: <CAEVokG4SSkgWS2N8eqr+h7AJg9CF26OW7vtXwOurCGU-4dsLbw@mail.gmail.com>
- <20191009103041.GC10395@zn.tnic>
- <724d6f97-61f2-94bd-3f4b-793a55b6ac15@amd.com>
- <CAEVokG4T5q8PBmf4=vLjPWQjzL_Xwu6yF81=mLjkpoJSoCggkw@mail.gmail.com>
- <20191010095650.GC7658@zn.tnic>
- <9f3ce002-7380-0e93-7bd5-20bb944d0b77@gmail.com>
- <20191010134128.GF7658@zn.tnic>
- <60b68d6c-5aff-3e7c-9461-c26a5f28cd87@amd.com>
- <79bca0d0-42eb-c232-6bbe-a958734e096d@gmail.com>
- <f5820b41-c97a-b6be-df97-bbff85a7e5ee@gmail.com>
- <20191019082554.GB5571@zn.tnic>
-From:   Jean-Frederic <jfgaudreault@gmail.com>
-Message-ID: <fddfb084-69a0-a913-f750-ef0a7830dd1e@gmail.com>
-Date:   Sat, 19 Oct 2019 12:12:57 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        id S1727047AbfJUHii (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Mon, 21 Oct 2019 03:38:38 -0400
+Received: from mail.skyhub.de ([5.9.137.197]:52182 "EHLO mail.skyhub.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726480AbfJUHii (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Mon, 21 Oct 2019 03:38:38 -0400
+Received: from zn.tnic (p2E584653.dip0.t-ipconnect.de [46.88.70.83])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 92BBB1EC072D;
+        Mon, 21 Oct 2019 09:38:36 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1571643516;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=NB+pW62T+4rVFO5wkCclKyVt1owZZ8MzkoOSSg4xqhU=;
+        b=MCbYZIH0nD8XlOx35CYXCs2a7ThOvd0Px0CuKtV7O3ytjO1N+W2C/an40IicwoQrb8wDJI
+        g7UmjPrjRDlAD+Aay8zR7dt+RCjtdRW5TOjKzqLhDfKOBdUpIzRAiyy1W+DPCmqtukwnVv
+        efl133hpPjFHqOXxNfIVf4rHBCfz5Yg=
+Date:   Mon, 21 Oct 2019 09:37:58 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     James Morse <james.morse@arm.com>
+Cc:     linux-edac@vger.kernel.org,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Tony Luck <tony.luck@intel.com>,
+        Robert Richter <rrichter@marvell.com>,
+        John Garry <john.garry@huawei.com>
+Subject: Re: [PATCH 0/2] EDAC, ghes: Fix use after free and add reference
+Message-ID: <20191021073757.GA7014@zn.tnic>
+References: <20191014171919.85044-1-james.morse@arm.com>
+ <20191014173006.GG4715@zn.tnic>
+ <86ba3fcf-d29c-1d6a-d8c3-2a03cb11263e@arm.com>
+ <20191014175319.GH4715@zn.tnic>
+ <20191016151751.GH1138@zn.tnic>
+ <d8899938-72c2-909d-1528-2e763820bd75@arm.com>
+ <20191016185041.GM1138@zn.tnic>
 MIME-Version: 1.0
-In-Reply-To: <20191019082554.GB5571@zn.tnic>
 Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
+Content-Disposition: inline
+In-Reply-To: <20191016185041.GM1138@zn.tnic>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On 2019-10-19 4:25 a.m., Borislav Petkov wrote:
-> Look here on page 6:
-> https://www.amd.com/system/files/2017-06/AMD-EPYC-Brings-New-RAS-Capability.pdf
->
-> It hints at what PFEH does. 
->  [ I believe if the error cannot be handled by the firmware, it gets
->    reported to the OS but I'll let Yazen comment on that. ]
+On Wed, Oct 16, 2019 at 08:50:41PM +0200, Borislav Petkov wrote:
+> Yeah, before we do this, lemme try to simplify the situation more. And
+> yeah, we don't need the mutex - we can use the spinlock only. But let's
+> get rid of the need to access the pvt in the IRQ handler. Yeah, we need
+> the *mci pointer but one can't have it all :)
+> 
+> Anyway, here's what I have, it is only build-tested. I wanna give it a
+> stern look tomorrow, on a clear head again:
 
-Yes, I found that document too after I sent my email yesterday, and I kind of
-had a similar understanding...
+And now I went and redid your patch ontop and thus completely got rid of
+ghes_pvt in favor of having one global ghes_mci pointer.
 
-> I know, I know, we don't trust the firmware to do it right and so on,
-> but it is what it is. Like other stuff we have to rely on the firmware
-> to do right.
+We access it only under the lock and we publish it in
+ghes_edac_register() only in the success case. Can't get any simpler
+than that.
 
-I think we would all like to trust the firmware if it was clear what it is doing
-to be honest.
-However the way these consumer products are sold and documented (the motherboard I mean),
-especially for AMD RYZEN and ECC support, is just that there is almost no information
-(a vague statement aboutit "supports ecc"...)
+Thoughts?
 
-The concept of the PFEH and RAS I think is good the more I read about it, but mostly for
-enterprise solutions, and it would be good too I guess for a consumer product if we knew
-we could rely on it.
+I think it is a lot cleaner and straight-forward this way. Lemme know if
+you wanna run it on your setup and I'll push the two patches somewhere.
 
-As it stands right now, I don't really know if I can trust it. When I did my own tests
-of generating real errors it was either the system is totally stable, or would not boot,
-or would crash suddenly. I could see that ecc really corrects things, because otherwise
-I would get software self check errors in mprime under those conditions fairly quickly
-(after 1-2 minutes), but with ecc enabled I can run for hours without any sign of issue
-under the same conditions.
+Thx.
 
-So can I rely on this to know one day that I am starting to have hardware issues and I
-should replace my memory (or system)? I don't even know how the firmware will report
-anything to me. There is nothing in the bios that seems to give any report about ecc,
-
-> Makes more sense now?
->
-
-Yes, it does makes more sense now, thanks Borislav for all the information.
-
-On my side maybe I'll start looking at other motherboards that potentially do this
-differently.I'll continue to look in other forums to see what others have found for
-other motherboards.
-
-
-Thanks,
+---
+diff --git a/drivers/edac/ghes_edac.c b/drivers/edac/ghes_edac.c
+index bcb6a9c579c6..e55a9cb8ab73 100644
+--- a/drivers/edac/ghes_edac.c
++++ b/drivers/edac/ghes_edac.c
+@@ -15,14 +15,6 @@
+ #include "edac_module.h"
+ #include <ras/ras_event.h>
+ 
+-struct ghes_edac_pvt {
+-	struct list_head list;
+-	struct ghes *ghes;
+-	struct mem_ctl_info *mci;
+-};
+-
+-static atomic_t ghes_init = ATOMIC_INIT(0);
+-static struct ghes_edac_pvt *ghes_pvt;
+ static struct mem_ctl_info *ghes_mci;
+ 
+ /* Buffers for the error handling routine */
+@@ -80,9 +72,8 @@ static void ghes_edac_count_dimms(const struct dmi_header *dh, void *arg)
+ 		(*num_dimm)++;
+ }
+ 
+-static int get_dimm_smbios_index(u16 handle)
++static int get_dimm_smbios_index(struct mem_ctl_info *mci, u16 handle)
+ {
+-	struct mem_ctl_info *mci = ghes_pvt->mci;
+ 	int i;
+ 
+ 	for (i = 0; i < mci->tot_dimms; i++) {
+@@ -345,7 +336,7 @@ void ghes_edac_report_mem_error(int sev, struct cper_sec_mem_err *mem_err)
+ 			p += sprintf(p, "DIMM DMI handle: 0x%.4x ",
+ 				     mem_err->mem_dev_handle);
+ 
+-		index = get_dimm_smbios_index(mem_err->mem_dev_handle);
++		index = get_dimm_smbios_index(ghes_mci, mem_err->mem_dev_handle);
+ 		if (index >= 0) {
+ 			e.top_layer = index;
+ 			e.enable_per_layer_report = true;
+@@ -456,12 +447,13 @@ static struct acpi_platform_list plat_list[] = {
+ 
+ int ghes_edac_register(struct ghes *ghes, struct device *dev)
+ {
+-	bool fake = false;
+-	int rc, num_dimm = 0;
+-	struct mem_ctl_info *mci;
+-	struct edac_mc_layer layers[1];
+ 	struct ghes_edac_dimm_fill dimm_fill;
+-	int idx = -1;
++	struct edac_mc_layer layers[1];
++	struct mem_ctl_info *mci;
++	int err = 0, idx = -1;
++	int rc, num_dimm = 0;
++	unsigned long flags;
++	bool fake = false;
+ 
+ 	if (IS_ENABLED(CONFIG_X86)) {
+ 		/* Check if safe to enable on this system */
+@@ -475,8 +467,9 @@ int ghes_edac_register(struct ghes *ghes, struct device *dev)
+ 	/*
+ 	 * We have only one logical memory controller to which all DIMMs belong.
+ 	 */
+-	if (atomic_inc_return(&ghes_init) > 1)
+-		return 0;
++	spin_lock_irqsave(&ghes_lock, flags);
++	if (ghes_mci)
++		goto unlock;
+ 
+ 	/* Get the number of DIMMs */
+ 	dmi_walk(ghes_edac_count_dimms, &num_dimm);
+@@ -491,17 +484,13 @@ int ghes_edac_register(struct ghes *ghes, struct device *dev)
+ 	layers[0].size = num_dimm;
+ 	layers[0].is_virt_csrow = true;
+ 
+-	mci = edac_mc_alloc(0, ARRAY_SIZE(layers), layers, sizeof(struct ghes_edac_pvt));
++	mci = edac_mc_alloc(0, ARRAY_SIZE(layers), layers, 0);
+ 	if (!mci) {
+ 		pr_info("Can't allocate memory for EDAC data\n");
+-		return -ENOMEM;
++		err = -ENOMEM;
++		goto unlock;
+ 	}
+ 
+-	ghes_pvt	= mci->pvt_info;
+-	ghes_pvt->ghes	= ghes;
+-	ghes_pvt->mci	= mci;
+-	ghes_mci	= mci;
+-
+ 	mci->pdev = dev;
+ 	mci->mtype_cap = MEM_FLAG_EMPTY;
+ 	mci->edac_ctl_cap = EDAC_FLAG_NONE;
+@@ -542,23 +531,30 @@ int ghes_edac_register(struct ghes *ghes, struct device *dev)
+ 	if (rc < 0) {
+ 		pr_info("Can't register at EDAC core\n");
+ 		edac_mc_free(mci);
+-		return -ENODEV;
++		err = -ENODEV;
+ 	}
+-	return 0;
++
++	ghes_mci = mci;
++
++unlock:
++	spin_unlock_irqrestore(&ghes_lock, flags);
++
++	return err;
+ }
+ 
+ void ghes_edac_unregister(struct ghes *ghes)
+ {
+-	struct mem_ctl_info *mci;
++	unsigned long flags;
+ 
+-	if (!ghes_pvt)
+-		return;
++	spin_lock_irqsave(&ghes_lock, flags);
+ 
+-	if (atomic_dec_return(&ghes_init))
+-		return;
++	if (!ghes_mci)
++		goto unlock;
+ 
+-	mci = ghes_pvt->mci;
+-	ghes_pvt = NULL;
+-	edac_mc_del_mc(mci->pdev);
+-	edac_mc_free(mci);
++	edac_mc_del_mc(ghes_mci->pdev);
++	edac_mc_free(ghes_mci);
++	ghes_mci = NULL;
++
++unlock:
++	spin_unlock_irqrestore(&ghes_lock, flags);
+ }
 
 -- 
-Jean-Frédéric
+Regards/Gruss,
+    Boris.
 
+https://people.kernel.org/tglx/notes-about-netiquette
