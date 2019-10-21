@@ -2,213 +2,144 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7692FDE562
-	for <lists+linux-edac@lfdr.de>; Mon, 21 Oct 2019 09:38:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B51DBDE6D3
+	for <lists+linux-edac@lfdr.de>; Mon, 21 Oct 2019 10:43:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727047AbfJUHii (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Mon, 21 Oct 2019 03:38:38 -0400
-Received: from mail.skyhub.de ([5.9.137.197]:52182 "EHLO mail.skyhub.de"
+        id S1727127AbfJUInQ (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Mon, 21 Oct 2019 04:43:16 -0400
+Received: from mail.skyhub.de ([5.9.137.197]:33536 "EHLO mail.skyhub.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726480AbfJUHii (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Mon, 21 Oct 2019 03:38:38 -0400
+        id S1726480AbfJUInP (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Mon, 21 Oct 2019 04:43:15 -0400
 Received: from zn.tnic (p2E584653.dip0.t-ipconnect.de [46.88.70.83])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 92BBB1EC072D;
-        Mon, 21 Oct 2019 09:38:36 +0200 (CEST)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id EF3441EC06BC;
+        Mon, 21 Oct 2019 10:43:13 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1571643516;
+        t=1571647394;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=NB+pW62T+4rVFO5wkCclKyVt1owZZ8MzkoOSSg4xqhU=;
-        b=MCbYZIH0nD8XlOx35CYXCs2a7ThOvd0Px0CuKtV7O3ytjO1N+W2C/an40IicwoQrb8wDJI
-        g7UmjPrjRDlAD+Aay8zR7dt+RCjtdRW5TOjKzqLhDfKOBdUpIzRAiyy1W+DPCmqtukwnVv
-        efl133hpPjFHqOXxNfIVf4rHBCfz5Yg=
-Date:   Mon, 21 Oct 2019 09:37:58 +0200
+        bh=+kD1jAx8Cm45kEHTqdRITtIEL5bTWSpmcXQjoaK9FS8=;
+        b=GD1wGdfH6JMpwKCUB4WkPwEazofhG+eixVieQYIjcBcyAlyfEppP/Jf43M0OBcBXkQ9dEl
+        GI16y8DEjx2S8Nk2U7d7GJqVM/SMZvSK5+1EcsU11GFjajlUya305pDTrotqyCyGTidFx9
+        Pm1qxhDKOmaLQ2vmCA+lxr0K2mDAO9w=
+Date:   Mon, 21 Oct 2019 10:42:34 +0200
 From:   Borislav Petkov <bp@alien8.de>
-To:     James Morse <james.morse@arm.com>
-Cc:     linux-edac@vger.kernel.org,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Tony Luck <tony.luck@intel.com>,
-        Robert Richter <rrichter@marvell.com>,
-        John Garry <john.garry@huawei.com>
-Subject: Re: [PATCH 0/2] EDAC, ghes: Fix use after free and add reference
-Message-ID: <20191021073757.GA7014@zn.tnic>
-References: <20191014171919.85044-1-james.morse@arm.com>
- <20191014173006.GG4715@zn.tnic>
- <86ba3fcf-d29c-1d6a-d8c3-2a03cb11263e@arm.com>
- <20191014175319.GH4715@zn.tnic>
- <20191016151751.GH1138@zn.tnic>
- <d8899938-72c2-909d-1528-2e763820bd75@arm.com>
- <20191016185041.GM1138@zn.tnic>
+To:     "Ghannam, Yazen" <Yazen.Ghannam@amd.com>
+Cc:     "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 2/6] EDAC/amd64: Gather hardware information early
+Message-ID: <20191021084234.GB7014@zn.tnic>
+References: <20191018153114.39378-1-Yazen.Ghannam@amd.com>
+ <20191018153114.39378-3-Yazen.Ghannam@amd.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20191016185041.GM1138@zn.tnic>
+In-Reply-To: <20191018153114.39378-3-Yazen.Ghannam@amd.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Wed, Oct 16, 2019 at 08:50:41PM +0200, Borislav Petkov wrote:
-> Yeah, before we do this, lemme try to simplify the situation more. And
-> yeah, we don't need the mutex - we can use the spinlock only. But let's
-> get rid of the need to access the pvt in the IRQ handler. Yeah, we need
-> the *mci pointer but one can't have it all :)
+On Fri, Oct 18, 2019 at 03:31:26PM +0000, Ghannam, Yazen wrote:
+> From: Yazen Ghannam <yazen.ghannam@amd.com>
 > 
-> Anyway, here's what I have, it is only build-tested. I wanna give it a
-> stern look tomorrow, on a clear head again:
+> Split out gathering hardware information from init_one_instance() into a
+> separate function get_hardware_info().
+> 
+> This is necessary so that the information can be cached earlier and used
+> to check if memory is populated and if ECC is enabled on a node.
+> 
+> Signed-off-by: Yazen Ghannam <yazen.ghannam@amd.com>
+> ---
+> Link:
+> https://lkml.kernel.org/r/20190821235938.118710-9-Yazen.Ghannam@amd.com
+> 
+> rfc -> v1:
+> * Fixup after making struct amd64_family_type fam_type global.
+> 
+>  drivers/edac/amd64_edac.c | 72 +++++++++++++++++++++++----------------
+>  1 file changed, 42 insertions(+), 30 deletions(-)
+> 
+> diff --git a/drivers/edac/amd64_edac.c b/drivers/edac/amd64_edac.c
+> index b9a712819c68..4410da7c3a25 100644
+> --- a/drivers/edac/amd64_edac.c
+> +++ b/drivers/edac/amd64_edac.c
+> @@ -3416,33 +3416,16 @@ static void compute_num_umcs(void)
+>  	edac_dbg(1, "Number of UMCs: %x", num_umcs);
+>  }
+>  
+> -static int init_one_instance(unsigned int nid)
+> +static int get_hardware_info(struct amd64_pvt *pvt)
+>  {
+> -	struct pci_dev *F3 = node_to_amd_nb(nid)->misc;
+> -	struct mem_ctl_info *mci = NULL;
+> -	struct edac_mc_layer layers[2];
+> -	struct amd64_pvt *pvt = NULL;
+>  	u16 pci_id1, pci_id2;
+> -	int err = 0, ret;
+> -
+> -	ret = -ENOMEM;
+> -	pvt = kzalloc(sizeof(struct amd64_pvt), GFP_KERNEL);
+> -	if (!pvt)
+> -		goto err_ret;
+> -
+> -	pvt->mc_node_id	= nid;
+> -	pvt->F3 = F3;
+> -
+> -	ret = -EINVAL;
+> -	fam_type = per_family_init(pvt);
+> -	if (!fam_type)
+> -		goto err_free;
+> +	int ret = -EINVAL;
+>  
+>  	if (pvt->fam >= 0x17) {
+>  		pvt->umc = kcalloc(num_umcs, sizeof(struct amd64_umc), GFP_KERNEL);
+>  		if (!pvt->umc) {
+>  			ret = -ENOMEM;
+> -			goto err_free;
+> +			goto err_ret;
+>  		}
+>  
+>  		pci_id1 = fam_type->f0_id;
+> @@ -3452,18 +3435,33 @@ static int init_one_instance(unsigned int nid)
+>  		pci_id2 = fam_type->f2_id;
+>  	}
+>  
+> -	err = reserve_mc_sibling_devs(pvt, pci_id1, pci_id2);
+> -	if (err)
+> +	ret = reserve_mc_sibling_devs(pvt, pci_id1, pci_id2);
+> +	if (ret)
+>  		goto err_post_init;
+>  
+>  	read_mc_regs(pvt);
+>  
+> +	return 0;
+> +
+> +err_post_init:
+> +	if (pvt->fam >= 0x17)
+> +		kfree(pvt->umc);
 
-And now I went and redid your patch ontop and thus completely got rid of
-ghes_pvt in favor of having one global ghes_mci pointer.
+So you're freeing pvt->umc here but nothing in that function allocated
+it. get_hardware_info() in probe_one_instance() did but if you do it
+this way, it is kinda hard to follow and the layering is a bit iffy.
 
-We access it only under the lock and we publish it in
-ghes_edac_register() only in the success case. Can't get any simpler
-than that.
+So what I'd suggest is:
 
-Thoughts?
+* Rename get_hardware_info() to something like hw_info_get() so that
+you can have a counterpart hw_info_put() which does any cleanup after
+hw_info_get(), including the freeing of the ->umc.
 
-I think it is a lot cleaner and straight-forward this way. Lemme know if
-you wanna run it on your setup and I'll push the two patches somewhere.
+* In probe_one_instance(), if init_one_instance() fails, call
+hw_info_put() on the error path so that all your flow in the probe/init
+functions is nicely ballanced and easily followed.
+
+Makes sense?
 
 Thx.
-
----
-diff --git a/drivers/edac/ghes_edac.c b/drivers/edac/ghes_edac.c
-index bcb6a9c579c6..e55a9cb8ab73 100644
---- a/drivers/edac/ghes_edac.c
-+++ b/drivers/edac/ghes_edac.c
-@@ -15,14 +15,6 @@
- #include "edac_module.h"
- #include <ras/ras_event.h>
- 
--struct ghes_edac_pvt {
--	struct list_head list;
--	struct ghes *ghes;
--	struct mem_ctl_info *mci;
--};
--
--static atomic_t ghes_init = ATOMIC_INIT(0);
--static struct ghes_edac_pvt *ghes_pvt;
- static struct mem_ctl_info *ghes_mci;
- 
- /* Buffers for the error handling routine */
-@@ -80,9 +72,8 @@ static void ghes_edac_count_dimms(const struct dmi_header *dh, void *arg)
- 		(*num_dimm)++;
- }
- 
--static int get_dimm_smbios_index(u16 handle)
-+static int get_dimm_smbios_index(struct mem_ctl_info *mci, u16 handle)
- {
--	struct mem_ctl_info *mci = ghes_pvt->mci;
- 	int i;
- 
- 	for (i = 0; i < mci->tot_dimms; i++) {
-@@ -345,7 +336,7 @@ void ghes_edac_report_mem_error(int sev, struct cper_sec_mem_err *mem_err)
- 			p += sprintf(p, "DIMM DMI handle: 0x%.4x ",
- 				     mem_err->mem_dev_handle);
- 
--		index = get_dimm_smbios_index(mem_err->mem_dev_handle);
-+		index = get_dimm_smbios_index(ghes_mci, mem_err->mem_dev_handle);
- 		if (index >= 0) {
- 			e.top_layer = index;
- 			e.enable_per_layer_report = true;
-@@ -456,12 +447,13 @@ static struct acpi_platform_list plat_list[] = {
- 
- int ghes_edac_register(struct ghes *ghes, struct device *dev)
- {
--	bool fake = false;
--	int rc, num_dimm = 0;
--	struct mem_ctl_info *mci;
--	struct edac_mc_layer layers[1];
- 	struct ghes_edac_dimm_fill dimm_fill;
--	int idx = -1;
-+	struct edac_mc_layer layers[1];
-+	struct mem_ctl_info *mci;
-+	int err = 0, idx = -1;
-+	int rc, num_dimm = 0;
-+	unsigned long flags;
-+	bool fake = false;
- 
- 	if (IS_ENABLED(CONFIG_X86)) {
- 		/* Check if safe to enable on this system */
-@@ -475,8 +467,9 @@ int ghes_edac_register(struct ghes *ghes, struct device *dev)
- 	/*
- 	 * We have only one logical memory controller to which all DIMMs belong.
- 	 */
--	if (atomic_inc_return(&ghes_init) > 1)
--		return 0;
-+	spin_lock_irqsave(&ghes_lock, flags);
-+	if (ghes_mci)
-+		goto unlock;
- 
- 	/* Get the number of DIMMs */
- 	dmi_walk(ghes_edac_count_dimms, &num_dimm);
-@@ -491,17 +484,13 @@ int ghes_edac_register(struct ghes *ghes, struct device *dev)
- 	layers[0].size = num_dimm;
- 	layers[0].is_virt_csrow = true;
- 
--	mci = edac_mc_alloc(0, ARRAY_SIZE(layers), layers, sizeof(struct ghes_edac_pvt));
-+	mci = edac_mc_alloc(0, ARRAY_SIZE(layers), layers, 0);
- 	if (!mci) {
- 		pr_info("Can't allocate memory for EDAC data\n");
--		return -ENOMEM;
-+		err = -ENOMEM;
-+		goto unlock;
- 	}
- 
--	ghes_pvt	= mci->pvt_info;
--	ghes_pvt->ghes	= ghes;
--	ghes_pvt->mci	= mci;
--	ghes_mci	= mci;
--
- 	mci->pdev = dev;
- 	mci->mtype_cap = MEM_FLAG_EMPTY;
- 	mci->edac_ctl_cap = EDAC_FLAG_NONE;
-@@ -542,23 +531,30 @@ int ghes_edac_register(struct ghes *ghes, struct device *dev)
- 	if (rc < 0) {
- 		pr_info("Can't register at EDAC core\n");
- 		edac_mc_free(mci);
--		return -ENODEV;
-+		err = -ENODEV;
- 	}
--	return 0;
-+
-+	ghes_mci = mci;
-+
-+unlock:
-+	spin_unlock_irqrestore(&ghes_lock, flags);
-+
-+	return err;
- }
- 
- void ghes_edac_unregister(struct ghes *ghes)
- {
--	struct mem_ctl_info *mci;
-+	unsigned long flags;
- 
--	if (!ghes_pvt)
--		return;
-+	spin_lock_irqsave(&ghes_lock, flags);
- 
--	if (atomic_dec_return(&ghes_init))
--		return;
-+	if (!ghes_mci)
-+		goto unlock;
- 
--	mci = ghes_pvt->mci;
--	ghes_pvt = NULL;
--	edac_mc_del_mc(mci->pdev);
--	edac_mc_free(mci);
-+	edac_mc_del_mc(ghes_mci->pdev);
-+	edac_mc_free(ghes_mci);
-+	ghes_mci = NULL;
-+
-+unlock:
-+	spin_unlock_irqrestore(&ghes_lock, flags);
- }
 
 -- 
 Regards/Gruss,
