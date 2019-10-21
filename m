@@ -2,101 +2,194 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3888ADF352
-	for <lists+linux-edac@lfdr.de>; Mon, 21 Oct 2019 18:41:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2873EDF360
+	for <lists+linux-edac@lfdr.de>; Mon, 21 Oct 2019 18:43:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729144AbfJUQkt (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Mon, 21 Oct 2019 12:40:49 -0400
-Received: from mail-eopbgr790073.outbound.protection.outlook.com ([40.107.79.73]:29146
-        "EHLO NAM03-CO1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1729011AbfJUQkt (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Mon, 21 Oct 2019 12:40:49 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=fLJsq2qHaiK+ZgHpVaU1Msmjua9gVUpt9fLb162Qn6sb9UY/QHZkA92ZpwWwxsn67arthhaImMZiSl01CXWp0N3WWVWkQY7wCYLKruXRAQyDHTtJ5zScoP94t92nu1969N00qNhcKMaAWPrP2Oxcc8jUHDDFYnh04mk1ENXNLmx2cJL2q2WbUYGGVKGLle67oS51s0L8y0aq3j86YOvixlAfoPI5XUMY+vm8urLhtSqfaX3GsmB7k485YAX9qnNw7y+Mq9avDjg1MsVLmexlwwNcu3MHdQkvqT7IlVi/ixvkY0ut1sJPri7XneljbZLUmTKCc37/oFxKW1IXHgtyXA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=4jhDCcuz1BOoALwOTAI8b0aT1t+Uu6PkzO5MN1jYjCI=;
- b=eFXTRHuwe3N2fpWakcI36ckbj5PZuTHf+XcCWJvuJ+b5DRSNan1CcjuzZq8fZm8ADWptz8VwFuAXjNfD7fDGxwC9qTDbnV/WA8Ta9lkhOzCWVqJCA7Qf1Bh9AWvBeh36Y3DrJq703YIJLDkImDDtYbO4eyGJK2kyRTX3aGjPzynp4Her29ggvc8L0dJ2XsnhCCYmIjG8RMnh75cmyW5A+nSIqBHsqJdaP46j16k4KZQ6N/L4jLobyiwlrBeXTP+JHIkUIzfR/h3sLcb5wLEOF5yji7h03gEArrZvr3R1QvG0U+ztVPfno4QM3hFOhvqTZmbCrXmCk52KVuViyk5EeA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amdcloud.onmicrosoft.com; s=selector2-amdcloud-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=4jhDCcuz1BOoALwOTAI8b0aT1t+Uu6PkzO5MN1jYjCI=;
- b=XfiwCpJTjy/M+LWxHyX4CNei3ws5hEqJe2TiXSKCbUTrbZIMOIBjVjKqZwH4l+RD2Gcv/FV2o8fhcpDfBwo1iAITO1BDxxYJ3HBmVyf9pOpCOsGBPhe9QZx/n0elbFULpAZgrrFk81zV7CkRK9SvYR7b6t0uG7U1eRliZvZaxVk=
-Received: from SN6PR12MB2639.namprd12.prod.outlook.com (52.135.103.16) by
- SN6PR12MB2751.namprd12.prod.outlook.com (52.135.107.31) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2347.16; Mon, 21 Oct 2019 16:40:46 +0000
-Received: from SN6PR12MB2639.namprd12.prod.outlook.com
- ([fe80::ac86:15de:e8d6:61c8]) by SN6PR12MB2639.namprd12.prod.outlook.com
- ([fe80::ac86:15de:e8d6:61c8%7]) with mapi id 15.20.2367.019; Mon, 21 Oct 2019
- 16:40:46 +0000
-From:   "Ghannam, Yazen" <Yazen.Ghannam@amd.com>
-To:     Borislav Petkov <bp@alien8.de>
-CC:     "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH 0/6] AMD64 EDAC: Check for nodes without memory, etc.
-Thread-Topic: [PATCH 0/6] AMD64 EDAC: Check for nodes without memory, etc.
-Thread-Index: AQHVhcka4q8ovNc5PECMwVgUuntBS6dlMYeAgAAfVHA=
-Date:   Mon, 21 Oct 2019 16:40:46 +0000
-Message-ID: <SN6PR12MB26398930AFF9B992CFC9FF7DF8690@SN6PR12MB2639.namprd12.prod.outlook.com>
-References: <20191018153114.39378-1-Yazen.Ghannam@amd.com>
- <20191021144807.GE7014@zn.tnic>
-In-Reply-To: <20191021144807.GE7014@zn.tnic>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=Yazen.Ghannam@amd.com; 
-x-originating-ip: [165.204.25.250]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: ece807fe-4c4c-4744-8c0e-08d756456c3c
-x-ms-office365-filtering-ht: Tenant
-x-ms-traffictypediagnostic: SN6PR12MB2751:
-x-microsoft-antispam-prvs: <SN6PR12MB27518A1B8E430E135C57A7FBF8690@SN6PR12MB2751.namprd12.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:5236;
-x-forefront-prvs: 0197AFBD92
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(39860400002)(346002)(136003)(376002)(366004)(396003)(199004)(189003)(13464003)(7736002)(11346002)(8936002)(71200400001)(71190400001)(478600001)(5660300002)(316002)(446003)(55016002)(2906002)(476003)(6916009)(305945005)(3846002)(25786009)(6116002)(256004)(74316002)(486006)(7696005)(86362001)(76176011)(6436002)(229853002)(66476007)(66556008)(64756008)(66446008)(76116006)(54906003)(99286004)(66066001)(9686003)(33656002)(52536014)(66946007)(14454004)(26005)(81166006)(81156014)(186003)(6506007)(53546011)(102836004)(4744005)(6246003)(4326008)(8676002);DIR:OUT;SFP:1101;SCL:1;SRVR:SN6PR12MB2751;H:SN6PR12MB2639.namprd12.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
-received-spf: None (protection.outlook.com: amd.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: a906eh3A2tqaso3KrZDhzzZiJT5y8r6VpevMhOYUDKNbRbTNAlG4jPON5+fMd7E/zm0CobDEYguXVqAfXGdjEaW4QZ9xwVFErL7cCj+v3GUsIhT77pHY2NYMk2VCMwthsQ4cbazuZGz44GkCo24XDt1ti3JVQaaHqQOxXC3OTGLI3uOJ0WUcLyujKbt7lPkRA8p8oLZyYz6UqpxDOEQyQP6zp9Gj3Mr94gk2ihx0ZL0sRps+IhLm8B9Xu+DJrjgQsbS9oIY28m+sJsNOE08/8wFhAhxAQJKTOMBtnVKK/vrv7AgSUmrfPV5t30wRm+LQAF27wH2rhsdnPJhlhJFGMAe39MAbmpuSmmuiTQhnqszNwuwCws4nuEy+kceDTUdYDG2DsQRL2vGHMQco0FjwHZ4vzZFn6Fqluwb7ZkZaflSkp3Hvxs5Al9rvKv3A9glJ
-x-ms-exchange-transport-forked: True
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        id S1726289AbfJUQnQ (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Mon, 21 Oct 2019 12:43:16 -0400
+Received: from [217.140.110.172] ([217.140.110.172]:58012 "EHLO foss.arm.com"
+        rhost-flags-FAIL-FAIL-OK-OK) by vger.kernel.org with ESMTP
+        id S1727582AbfJUQnQ (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Mon, 21 Oct 2019 12:43:16 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7C4F916F8;
+        Mon, 21 Oct 2019 09:42:53 -0700 (PDT)
+Received: from [10.1.196.105] (unknown [10.1.196.105])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id CCF4D3F71F;
+        Mon, 21 Oct 2019 09:42:48 -0700 (PDT)
+Subject: Re: [PATCH v6 2/2] soc: amazon: al-pos-edac: Introduce Amazon's
+ Annapurna Labs POS EDAC driver
+To:     Talel Shenhar <talel@amazon.com>
+Cc:     robh+dt@kernel.org, maz@kernel.org, mark.rutland@arm.com,
+        arnd@arndb.de, bp@alien8.de, mchehab@kernel.org,
+        davem@davemloft.net, gregkh@linuxfoundation.org,
+        paulmck@linux.ibm.com, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-edac@vger.kernel.org,
+        dwmw@amazon.co.uk, benh@kernel.crashing.org, hhhawa@amazon.com,
+        ronenk@amazon.com, jonnyc@amazon.com, hanochu@amazon.com,
+        amirkl@amazon.com, barakw@amazon.com
+References: <1570707681-865-1-git-send-email-talel@amazon.com>
+ <1570707681-865-3-git-send-email-talel@amazon.com>
+From:   James Morse <james.morse@arm.com>
+Message-ID: <e66ff9b9-5fcb-e746-a551-2dc76bbeab48@arm.com>
+Date:   Mon, 21 Oct 2019 17:42:45 +0100
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: ece807fe-4c4c-4744-8c0e-08d756456c3c
-X-MS-Exchange-CrossTenant-originalarrivaltime: 21 Oct 2019 16:40:46.3354
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 3FTWdbp/8xcNGniEnrm+wiS+NIzow/++rNcMTzPljlFAoVeBn43OQPEoi5qyXdferoDv2MclEXNkubbc7qJ/uw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN6PR12MB2751
+In-Reply-To: <1570707681-865-3-git-send-email-talel@amazon.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-GB
+Content-Transfer-Encoding: 7bit
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-PiAtLS0tLU9yaWdpbmFsIE1lc3NhZ2UtLS0tLQ0KPiBGcm9tOiBsaW51eC1rZXJuZWwtb3duZXJA
-dmdlci5rZXJuZWwub3JnIDxsaW51eC1rZXJuZWwtb3duZXJAdmdlci5rZXJuZWwub3JnPiBPbiBC
-ZWhhbGYgT2YgQm9yaXNsYXYgUGV0a292DQo+IFNlbnQ6IE1vbmRheSwgT2N0b2JlciAyMSwgMjAx
-OSAxMDo0OCBBTQ0KPiBUbzogR2hhbm5hbSwgWWF6ZW4gPFlhemVuLkdoYW5uYW1AYW1kLmNvbT4N
-Cj4gQ2M6IGxpbnV4LWVkYWNAdmdlci5rZXJuZWwub3JnOyBsaW51eC1rZXJuZWxAdmdlci5rZXJu
-ZWwub3JnDQo+IFN1YmplY3Q6IFJlOiBbUEFUQ0ggMC82XSBBTUQ2NCBFREFDOiBDaGVjayBmb3Ig
-bm9kZXMgd2l0aG91dCBtZW1vcnksIGV0Yy4NCj4gDQo+IE9uIEZyaSwgT2N0IDE4LCAyMDE5IGF0
-IDAzOjMxOjI1UE0gKzAwMDAsIEdoYW5uYW0sIFlhemVuIHdyb3RlOg0KPiA+IEZyb206IFlhemVu
-IEdoYW5uYW0gPHlhemVuLmdoYW5uYW1AYW1kLmNvbT4NCj4gPg0KPiA+IEhpIEJvcmlzLA0KPiA+
-DQo+ID4gVGhpcyBzZXQgY29udGFpbnMgdGhlIG5leHQgcmV2aXNpb24gb2YgdGhlIFJGQyBwYXRj
-aGVzIEkgaW5jbHVkZWQgd2l0aA0KPiA+IHRoZSBsYXN0IEFNRDY0IEVEQUMgdXBkYXRlcy4gSSBk
-cm9wcGVkIHRoZSBSRkMgdGFncywgYW5kIEkgYWRkZWQgYQ0KPiA+IGNvdXBsZSBvZiBuZXcgcGF0
-Y2hlcy4NCj4gDQo+IFlhaCwgbG9va3MgcHJldHR5IG11Y2ggZ29vZCwgbW9kdWxvIHRoZSBtaW5v
-ciB0aGluZ3MgSSBjb21tZW50ZWQgb24NCj4gZWFybGllci4NCj4gDQoNClRoYW5rIHlvdS4gSSds
-bCBzZW5kIGFub3RoZXIgcmV2aXNpb24gc29vbi4NCg0KLVlhemVuDQo=
+Hi Talel,
+
+On 10/10/2019 12:41, Talel Shenhar wrote:
+> The Amazon's Annapurna Labs SoCs includes Point Of Serialization error
+> logging unit that reports an error in case write error (e.g . Attempt to
+
+(This is tricky to parse. "error in case write error" -> "error when a write error occurs"?)
+
+> write to a read only register).
+> This error shall be reported to EDAC subsystem as uncorrectable-error.
+
+
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 55199ef..a77d554 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -757,6 +757,13 @@ F:	drivers/tty/serial/altera_jtaguart.c
+>  F:	include/linux/altera_uart.h
+>  F:	include/linux/altera_jtaguart.h
+>  
+> +AMAZON ANNAPURNA LABS POS EDAC DRIVER
+> +M:	Talel Shenhar <talel@amazon.com>
+> +M:	Talel Shenhar <talelshenhar@gmail.com>
+> +S:	Maintained
+> +F:	Documentation/devicetree/bindings/edac/amazon,al-pos-edac.yaml
+
+> +F:	drivers/edac/al-pos-edac.c
+
+~s/-/_/
+
+
+> diff --git a/drivers/edac/al_pos_edac.c b/drivers/edac/al_pos_edac.c
+> new file mode 100644
+> index 00000000..a85ab67
+> --- /dev/null
+> +++ b/drivers/edac/al_pos_edac.c
+> @@ -0,0 +1,173 @@
+
+> +static int al_pos_handle(struct al_pos_edac *al_pos)
+> +{
+
+> +	log1 = readl_relaxed(al_pos->mmio_base + AL_POS_ERROR_LOG_1);
+> +	if (!FIELD_GET(AL_POS_ERROR_LOG_1_VALID, log1))
+> +		return 0;
+
+[...]
+
+> +	edac_device_handle_ue(al_pos->edac_dev, 0, 0, msg);
+> +
+> +	return 1;
+> +}
+[...]
+
+> +static irqreturn_t al_pos_irq_handler(int irq, void *info)
+> +{
+
+> +	if (al_pos_handle(al_pos))
+> +		return IRQ_HANDLED;
+> +	return IRQ_NONE;
+> +}
+
+
+> +static int al_pos_probe(struct platform_device *pdev)
+> +{
+> +	struct edac_device_ctl_info *edac_dev;
+> +	struct al_pos_edac *al_pos;
+> +	int ret;
+> +
+> +	edac_dev = edac_device_alloc_ctl_info(sizeof(*al_pos), DRV_NAME, 1,
+> +					      DRV_NAME, 1, 0, NULL, 0,
+> +					      edac_device_alloc_index());
+> +	if (!edac_dev)
+> +		return -ENOMEM;
+> +
+> +	al_pos = edac_dev->pvt_info;
+> +	al_pos->edac_dev = edac_dev;
+> +	platform_set_drvdata(pdev, al_pos);
+> +
+> +	al_pos->mmio_base = devm_platform_ioremap_resource(pdev, 0);
+> +	if (IS_ERR(al_pos->mmio_base)) {
+> +		dev_err(&pdev->dev, "failed to ioremap memory (%ld)\n",
+> +			PTR_ERR(al_pos->mmio_base));
+
+edac_device_free_ctl_info(al_pos->edac_dev) or goto err_free_edac ?
+
+> +		return PTR_ERR(al_pos->mmio_base);
+> +	}
+> +
+> +	al_pos->irq = platform_get_irq(pdev, 0);
+> +	if (al_pos->irq <= 0)
+> +		edac_dev->edac_check = al_pos_edac_check;
+> +
+> +	edac_dev->dev = &pdev->dev;
+> +	edac_dev->mod_name = DRV_NAME;
+> +	edac_dev->dev_name = dev_name(&pdev->dev);
+> +	edac_dev->ctl_name = "POS";
+
+Does this show up in sysfs? The 'AL_' prefix may make it easier to find the corresponding
+driver. (The TLA space is a little crowded!)
+
+
+> +	ret = edac_device_add_device(edac_dev);
+> +	if (ret) {
+> +		dev_err(&pdev->dev, "Failed to add edac device\n");
+> +		goto err_free_edac;
+> +	}
+> +
+> +	if (al_pos->irq > 0) {
+> +		ret = devm_request_irq(&pdev->dev,
+> +				       al_pos->irq,
+> +				       al_pos_irq_handler,
+
+> +				       0,
+
+Can this be IRQF_SHARED? This lets other devices register the interrupt too, which is
+easily allowed if you can identify whether your device has triggered the interrupt. (which
+you are already doing with the valid bit in your log1 register).
+
+
+> +				       pdev->name,
+> +				       pdev);
+> +		if (ret != 0) {
+> +			dev_err(&pdev->dev,
+> +				"failed to register to irq %d (%d)\n",
+> +				al_pos->irq, ret);
+> +			goto err_remove_edac;
+> +		}
+> +	}
+> +
+> +	return 0;
+> +
+> +err_remove_edac:
+> +	edac_device_del_device(edac_dev->dev);
+> +err_free_edac:
+> +	edac_device_free_ctl_info(edac_dev);
+> +
+> +	return ret;
+> +}
+
+
+With the edac_dev-leak fixed and the -/_ in MAINTAINERS:
+
+Reviewed-by: James Morse <james.morse@arm.com>
+
+
+Thanks,
+
+James
