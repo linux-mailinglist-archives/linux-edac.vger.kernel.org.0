@@ -2,75 +2,72 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B47B8E120C
-	for <lists+linux-edac@lfdr.de>; Wed, 23 Oct 2019 08:24:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D10FE1323
+	for <lists+linux-edac@lfdr.de>; Wed, 23 Oct 2019 09:30:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727194AbfJWGYG (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Wed, 23 Oct 2019 02:24:06 -0400
-Received: from mail-qk1-f196.google.com ([209.85.222.196]:36345 "EHLO
-        mail-qk1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725796AbfJWGYG (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Wed, 23 Oct 2019 02:24:06 -0400
-Received: by mail-qk1-f196.google.com with SMTP id y189so18789286qkc.3;
-        Tue, 22 Oct 2019 23:24:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=jms.id.au; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Yi1p/5AgQUValFkbegnxonQlGe9ds008uEI8GJ+OXbo=;
-        b=AuCfw9OIu+7nH6ya75fRfE9wSSXOEJme4h+b4Jl8lqE3QhpBP0wyip4SbHdD89k+dU
-         YXkDowI6+oNJdoRgFSF8ON+KH+nGnv9PS7lTmPjLzsl0n3+c81FqncBaSpb91bkTBQeu
-         W7CouiNjm3HxMmcdVYt1E1lY3fcVggMLerrJk=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Yi1p/5AgQUValFkbegnxonQlGe9ds008uEI8GJ+OXbo=;
-        b=jQMCkLOGGe61IK461adncOqwHnapsqH5QxTUenhAZ0csTIpUfM8cCqgVri+K9lpzKY
-         t8X9aQEroYVOuXUNZnAJ7vYUspbAo8XMRnM2ojF9AUadiljHCGb6S/OK5kDTtJNVn30E
-         C5SHhHfO1hJpbfQSn18PbP5qpHkzdOmlfGL0jrvPOYGClT+zs6Qe0KV75yZIJM98C1HK
-         2M0DrlDC6RYyS5P3k0gZbnLOG1THXD7A9lDC0/564Vs49+3nVWKdC62VH6vIkKBsTGsr
-         WTlY1xoQRO8MI3M9pWD+yXDwBKmLlbf+BxawTXJYesuYbJ+4Dvbb4T8rboINMpqF2Ehi
-         hPOw==
-X-Gm-Message-State: APjAAAUBoeCu/ae06lfLcWoDv3/Ee096sc8NM7lEUBKK9mbU6GQYqlbH
-        +iUXQdNXn+yPlFxxcvucxlugCyHk8HQo+OuGP8o=
-X-Google-Smtp-Source: APXvYqzVR5Etz/Es4HiMMf1UU0Ef58kwEksY2/0I7PJeRjGUW1kKtmEKe5E3i1zok0d9FQ5uFZGtdYzcPByiBOb1fvE=
-X-Received: by 2002:a37:aa07:: with SMTP id t7mr7032088qke.414.1571811845300;
- Tue, 22 Oct 2019 23:24:05 -0700 (PDT)
+        id S2389636AbfJWHau (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Wed, 23 Oct 2019 03:30:50 -0400
+Received: from mx2.suse.de ([195.135.220.15]:59128 "EHLO mx1.suse.de"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S2389351AbfJWHau (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Wed, 23 Oct 2019 03:30:50 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx1.suse.de (Postfix) with ESMTP id 9FF37B16C;
+        Wed, 23 Oct 2019 07:30:48 +0000 (UTC)
+Date:   Wed, 23 Oct 2019 09:30:47 +0200
+From:   Borislav Petkov <bp@suse.de>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-edac <linux-edac@vger.kernel.org>,
+        lkml <linux-kernel@vger.kernel.org>
+Subject: [GIT PULL] EDAC fix for 5.4
+Message-ID: <20191023073047.GD12272@zn.tnic>
 MIME-Version: 1.0
-References: <baabb9e9-a1b2-3a04-9fb6-aa632de5f722@web.de>
-In-Reply-To: <baabb9e9-a1b2-3a04-9fb6-aa632de5f722@web.de>
-From:   Joel Stanley <joel@jms.id.au>
-Date:   Wed, 23 Oct 2019 06:23:53 +0000
-Message-ID: <CACPK8XfUJ5VGpTS3gwxSVZbdWZKPH6PwT2JKGGJ2yzoXYKdtZg@mail.gmail.com>
-Subject: Re: [PATCH] EDAC: Aspeed: Use devm_platform_ioremap_resource() in aspeed_probe()
-To:     Markus Elfring <Markus.Elfring@web.de>
-Cc:     linux-edac@vger.kernel.org,
-        linux-aspeed <linux-aspeed@lists.ozlabs.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Borislav Petkov <bp@alien8.de>,
-        James Morse <james.morse@arm.com>,
-        Robert Richter <rrichter@marvell.com>,
-        Stefan Schaeckeler <sschaeck@cisco.com>,
-        Tony Luck <tony.luck@intel.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        kernel-janitors@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Sat, 21 Sep 2019 at 16:47, Markus Elfring <Markus.Elfring@web.de> wrote:
->
-> From: Markus Elfring <elfring@users.sourceforge.net>
-> Date: Sat, 21 Sep 2019 18:32:46 +0200
->
-> Simplify this function implementation by using a known wrapper function.
->
-> This issue was detected by using the Coccinelle software.
->
-> Signed-off-by: Markus Elfring <elfring@users.sourceforge.net>
+Hi Linus,
 
-Acked-by: Joel Stanley <joel@jms.id.au>
+please pull,
+thx.
+
+---
+The following changes since commit 54ecb8f7028c5eb3d740bb82b0f1d90f2df63c5c:
+
+  Linux 5.4-rc1 (2019-09-30 10:35:40 -0700)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/ras/ras.git tags/edac_urgent_for_5.4
+
+for you to fetch changes up to 1e72e673b9d102ff2e8333e74b3308d012ddf75b:
+
+  EDAC/ghes: Fix Use after free in ghes_edac remove path (2019-10-17 11:27:05 +0200)
+
+----------------------------------------------------------------
+Fix ghes_edac UAF case triggered by KASAN and DEBUG_TEST_DRIVER_REMOVE.
+
+Future pending rework of the ghes_edac instances registration will do
+away with the single memory controller per system model and that ugly
+hackery there.
+
+This is a minimal fix for stable@, courtesy of James Morse.
+
+----------------------------------------------------------------
+James Morse (1):
+      EDAC/ghes: Fix Use after free in ghes_edac remove path
+
+ drivers/edac/ghes_edac.c | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+-- 
+Regards/Gruss,
+    Boris.
+
+SUSE Software Solutions Germany GmbH, GF: Felix Imendörffer, HRB 36809, AG Nürnberg
