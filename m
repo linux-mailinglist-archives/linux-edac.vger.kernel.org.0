@@ -2,360 +2,163 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A3B4E4083
-	for <lists+linux-edac@lfdr.de>; Fri, 25 Oct 2019 02:19:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 81199E4C5E
+	for <lists+linux-edac@lfdr.de>; Fri, 25 Oct 2019 15:35:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730251AbfJYATg (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Thu, 24 Oct 2019 20:19:36 -0400
-Received: from mga09.intel.com ([134.134.136.24]:29069 "EHLO mga09.intel.com"
+        id S1726826AbfJYNfD (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Fri, 25 Oct 2019 09:35:03 -0400
+Received: from mail.skyhub.de ([5.9.137.197]:46422 "EHLO mail.skyhub.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730212AbfJYATg (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Thu, 24 Oct 2019 20:19:36 -0400
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga102.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 24 Oct 2019 17:19:35 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.68,226,1569308400"; 
-   d="scan'208";a="202458937"
-Received: from spandruv-desk.jf.intel.com ([10.54.75.31])
-  by orsmga006.jf.intel.com with ESMTP; 24 Oct 2019 17:19:35 -0700
-From:   Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-To:     tony.luck@intel.com, bp@alien8.de, tglx@linutronix.de,
-        mingo@redhat.com, hpa@zytor.com, bberg@redhat.com
-Cc:     x86@kernel.org, linux-edac@vger.kernel.org,
-        linux-kernel@vger.kernel.org, hdegoede@redhat.com,
-        ckellner@redhat.com,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Subject: [RFC][PATCH] x86, mce, therm_throt: Optimize notifications of thermal throttle
-Date:   Thu, 24 Oct 2019 17:19:24 -0700
-Message-Id: <20191025001924.10199-1-srinivas.pandruvada@linux.intel.com>
-X-Mailer: git-send-email 2.17.2
+        id S1726404AbfJYNfD (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Fri, 25 Oct 2019 09:35:03 -0400
+Received: from zn.tnic (p200300EC2F0D3C00E44239D1C9BE3FA7.dip0.t-ipconnect.de [IPv6:2003:ec:2f0d:3c00:e442:39d1:c9be:3fa7])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 6FF6C1EC0CE5;
+        Fri, 25 Oct 2019 15:35:01 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1572010501;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=cie/7pIdBT5SGI8liusfhALfpJe2qIxSGd9dh0LI6q0=;
+        b=JDNgbHuUNPJ2lblaM2IUPPB9PYlwz+hzNggdEN37YQEXp5nFptxmzkjbAg2Q5GHwhQmuri
+        zOdffNVl9+k2vaW1Z1N+ySLWfR5/dlgp4Z8qAR2ByVgqdhnGEmxd7H7exJFY0eAGs02Fxr
+        jpVz9JmFBk+xbsJPkuO/kRbMiwndp2A=
+Date:   Fri, 25 Oct 2019 15:34:56 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     "Ghannam, Yazen" <Yazen.Ghannam@amd.com>
+Cc:     "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 0/6] AMD64 EDAC: Check for nodes without memory, etc.
+Message-ID: <20191025133456.GA6483@zn.tnic>
+References: <20191022203448.13962-1-Yazen.Ghannam@amd.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20191022203448.13962-1-Yazen.Ghannam@amd.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-Some modern systems have very tight thermal tolerances. Because of this
-they may cross thermal thresholds when running normal workloads (even
-during boot). The CPU hardware will react by limiting power/frequency
-and using duty cycles to bring the temperature back into normal range.
+On Tue, Oct 22, 2019 at 08:35:08PM +0000, Ghannam, Yazen wrote:
+> From: Yazen Ghannam <yazen.ghannam@amd.com>
+> 
+> Hi Boris,
+> 
+> Most of these patches address the issue where the module checks and
+> complains about DRAM ECC on nodes without memory.
+> 
+> Thanks,
+> Yazen
+> 
+> Link:
+> https://lkml.kernel.org/r/20191018153114.39378-1-Yazen.Ghannam@amd.com
+> 
+> Yazen Ghannam (6):
+>   EDAC/amd64: Make struct amd64_family_type global
+>   EDAC/amd64: Gather hardware information early
+>   EDAC/amd64: Save max number of controllers to family type
+>   EDAC/amd64: Use cached data when checking for ECC
+>   EDAC/amd64: Check for memory before fully initializing an instance
+>   EDAC/amd64: Set grain per DIMM
+> 
+>  drivers/edac/amd64_edac.c | 196 +++++++++++++++++++-------------------
+>  drivers/edac/amd64_edac.h |   2 +
+>  2 files changed, 100 insertions(+), 98 deletions(-)
 
-Thus users may see a "critical" message about the "temperature above
-threshold" which is soon followed by "temperature/speed normal". These
-messages are rate limited, but still may repeat every few minutes.
+Almost there: now it dumps the whole shebang twice. This is on an old
+F10h box which doesn't have ECC DIMMs:
 
-A test run on a laptop with Intel 8th Gen i5 core for two hours with a
-workload resulted in 20K+ thermal interrupts per CPU for core level and
-another 20K+ interrupts at package level. The kernel logs were full of
-throttling messages.
+[    2.222853] EDAC MC: Ver: 3.0.0
+[    2.226881] EDAC DEBUG: edac_mc_sysfs_init: device mc created
+[    5.726912] EDAC amd64: F10h detected (node 0).
+[    5.732709] EDAC DEBUG: reserve_mc_sibling_devs: F1: 0000:00:18.1
+[    5.750886] EDAC DEBUG: reserve_mc_sibling_devs: F2: 0000:00:18.2
+[    5.758427] EDAC DEBUG: reserve_mc_sibling_devs: F3: 0000:00:18.3
+[    5.765871] EDAC DEBUG: read_mc_regs:   TOP_MEM:  0x00000000d0000000
+[    5.774098] EDAC DEBUG: read_mc_regs:   TOP_MEM2: 0x0000000230000000
+[    5.782339] EDAC DEBUG: read_dram_ctl_register: F2x110 (DCTSelLow): 0xffffffff, High range addrs at: 0xfffff800
+[    5.793976] EDAC DEBUG: read_dram_ctl_register:   DCTs operate in ganged mode
+[    5.802429] EDAC DEBUG: read_dram_ctl_register:   data interleave for ECC: enabled, DRAM cleared since last warm reset: yes
+[    5.814702] EDAC DEBUG: read_dram_ctl_register:   channel interleave: enabled, interleave bits selector: 0x3
+[    5.826142] EDAC DEBUG: read_mc_regs:   DRAM range[0], base: 0x0000ff0000000000; limit: 0x0000ff022fffffff
+[    5.837070] EDAC DEBUG: read_mc_regs:    IntlvEn=Disabled; Range access: RW IntlvSel=0 DstNode=0
+[    5.847061] EDAC DEBUG: read_dct_base_mask:   DCSB0[0]=0x00000001 reg: F2x40
+[    5.854699] EDAC DEBUG: read_dct_base_mask:   DCSB1[0]=0x00000000 reg: F2x140
+[    5.862763] EDAC DEBUG: read_dct_base_mask:   DCSB0[1]=0x00000101 reg: F2x44
+[    5.870614] EDAC DEBUG: read_dct_base_mask:   DCSB1[1]=0x00000000 reg: F2x144
+[    5.878457] EDAC DEBUG: read_dct_base_mask:   DCSB0[2]=0x00000201 reg: F2x48
+[    5.888483] EDAC DEBUG: read_dct_base_mask:   DCSB1[2]=0x00000000 reg: F2x148
+[    5.897359] EDAC DEBUG: read_dct_base_mask:   DCSB0[3]=0x00000301 reg: F2x4c
+[    5.906307] EDAC DEBUG: read_dct_base_mask:   DCSB1[3]=0x00000000 reg: F2x14c
+[    5.913698] EDAC DEBUG: read_dct_base_mask:   DCSB0[4]=0x00000000 reg: F2x50
+[    5.921646] EDAC DEBUG: read_dct_base_mask:   DCSB1[4]=0x00000000 reg: F2x150
+[    5.930415] EDAC DEBUG: read_dct_base_mask:   DCSB0[5]=0x00000000 reg: F2x54
+[    5.937772] EDAC DEBUG: read_dct_base_mask:   DCSB1[5]=0x00000000 reg: F2x154
+[    5.945684] EDAC DEBUG: read_dct_base_mask:   DCSB0[6]=0x00000000 reg: F2x58
+[    5.953523] EDAC DEBUG: read_dct_base_mask:   DCSB1[6]=0x00000000 reg: F2x158
+[    5.961546] EDAC DEBUG: read_dct_base_mask:   DCSB0[7]=0x00000000 reg: F2x5c
+[    5.969385] EDAC DEBUG: read_dct_base_mask:   DCSB1[7]=0x00000000 reg: F2x15c
+[    5.977333] EDAC DEBUG: read_dct_base_mask:     DCSM0[0]=0x00f83ce0 reg: F2x60
+[    5.986777] EDAC DEBUG: read_dct_base_mask:     DCSM1[0]=0x00000000 reg: F2x160
+[    6.000195] EDAC DEBUG: read_dct_base_mask:     DCSM0[1]=0x00f83ce0 reg: F2x64
+[    6.012487] EDAC DEBUG: read_dct_base_mask:     DCSM1[1]=0x00000000 reg: F2x164
+[    6.019946] EDAC DEBUG: read_dct_base_mask:     DCSM0[2]=0x00000000 reg: F2x68
+[    6.027283] EDAC DEBUG: read_dct_base_mask:     DCSM1[2]=0x00000000 reg: F2x168
+[    6.035342] EDAC DEBUG: read_dct_base_mask:     DCSM0[3]=0x00000000 reg: F2x6c
+[    6.042800] EDAC DEBUG: read_dct_base_mask:     DCSM1[3]=0x00000000 reg: F2x16c
+[    6.050913] EDAC DEBUG: read_mc_regs:   DIMM type: Unbuffered-DDR2
+[    6.057183] EDAC DEBUG: nb_mce_bank_enabled_on_node: core: 0, MCG_CTL: 0x3f, NB MSR is enabled
+[    6.065925] EDAC DEBUG: nb_mce_bank_enabled_on_node: core: 1, MCG_CTL: 0x3f, NB MSR is enabled
+[    6.081200] EDAC amd64: Node 0: DRAM ECC disabled.
+[    6.092690] EDAC amd64: ECC disabled in the BIOS or no ECC capability, module will not load.
+[    6.208087] EDAC amd64: F10h detected (node 0).
+[    6.212966] EDAC DEBUG: reserve_mc_sibling_devs: F1: 0000:00:18.1
+[    6.235500] EDAC DEBUG: reserve_mc_sibling_devs: F2: 0000:00:18.2
+[    6.241661] EDAC DEBUG: reserve_mc_sibling_devs: F3: 0000:00:18.3
+[    6.252691] EDAC DEBUG: read_mc_regs:   TOP_MEM:  0x00000000d0000000
+[    6.259134] EDAC DEBUG: read_mc_regs:   TOP_MEM2: 0x0000000230000000
+[    6.265823] EDAC DEBUG: read_dram_ctl_register: F2x110 (DCTSelLow): 0xffffffff, High range addrs at: 0xfffff800
+[    6.275978] EDAC DEBUG: read_dram_ctl_register:   DCTs operate in ganged mode
+[    6.283271] EDAC DEBUG: read_dram_ctl_register:   data interleave for ECC: enabled, DRAM cleared since last warm reset: yes
+[    6.294635] EDAC DEBUG: read_dram_ctl_register:   channel interleave: enabled, interleave bits selector: 0x3
+[    6.304565] EDAC DEBUG: read_mc_regs:   DRAM range[0], base: 0x0000ff0000000000; limit: 0x0000ff022fffffff
+[    6.314367] EDAC DEBUG: read_mc_regs:    IntlvEn=Disabled; Range access: RW IntlvSel=0 DstNode=0
+[    6.323259] EDAC DEBUG: read_dct_base_mask:   DCSB0[0]=0x00000001 reg: F2x40
+[    6.330434] EDAC DEBUG: read_dct_base_mask:   DCSB1[0]=0x00000000 reg: F2x140
+[    6.337648] EDAC DEBUG: read_dct_base_mask:   DCSB0[1]=0x00000101 reg: F2x44
+[    6.351551] EDAC DEBUG: read_dct_base_mask:   DCSB1[1]=0x00000000 reg: F2x144
+[    6.364985] EDAC DEBUG: read_dct_base_mask:   DCSB0[2]=0x00000201 reg: F2x48
+[    6.379708] EDAC DEBUG: read_dct_base_mask:   DCSB1[2]=0x00000000 reg: F2x148
+[    6.386913] EDAC DEBUG: read_dct_base_mask:   DCSB0[3]=0x00000301 reg: F2x4c
+[    6.394037] EDAC DEBUG: read_dct_base_mask:   DCSB1[3]=0x00000000 reg: F2x14c
+[    6.401259] EDAC DEBUG: read_dct_base_mask:   DCSB0[4]=0x00000000 reg: F2x50
+[    6.408377] EDAC DEBUG: read_dct_base_mask:   DCSB1[4]=0x00000000 reg: F2x150
+[    6.415854] EDAC DEBUG: read_dct_base_mask:   DCSB0[5]=0x00000000 reg: F2x54
+[    6.422976] EDAC DEBUG: read_dct_base_mask:   DCSB1[5]=0x00000000 reg: F2x154
+[    6.430178] EDAC DEBUG: read_dct_base_mask:   DCSB0[6]=0x00000000 reg: F2x58
+[    6.437300] EDAC DEBUG: read_dct_base_mask:   DCSB1[6]=0x00000000 reg: F2x158
+[    6.444507] EDAC DEBUG: read_dct_base_mask:   DCSB0[7]=0x00000000 reg: F2x5c
+[    6.451621] EDAC DEBUG: read_dct_base_mask:   DCSB1[7]=0x00000000 reg: F2x15c
+[    6.458833] EDAC DEBUG: read_dct_base_mask:     DCSM0[0]=0x00f83ce0 reg: F2x60
+[    6.466155] EDAC DEBUG: read_dct_base_mask:     DCSM1[0]=0x00000000 reg: F2x160
+[    6.473571] EDAC DEBUG: read_dct_base_mask:     DCSM0[1]=0x00f83ce0 reg: F2x64
+[    6.480901] EDAC DEBUG: read_dct_base_mask:     DCSM1[1]=0x00000000 reg: F2x164
+[    6.488305] EDAC DEBUG: read_dct_base_mask:     DCSM0[2]=0x00000000 reg: F2x68
+[    6.495647] EDAC DEBUG: read_dct_base_mask:     DCSM1[2]=0x00000000 reg: F2x168
+[    6.511447] EDAC DEBUG: read_dct_base_mask:     DCSM0[3]=0x00000000 reg: F2x6c
+[    6.511448] EDAC DEBUG: read_dct_base_mask:     DCSM1[3]=0x00000000 reg: F2x16c
+[    6.511451] EDAC DEBUG: read_mc_regs:   DIMM type: Unbuffered-DDR2
+[    6.511458] EDAC DEBUG: nb_mce_bank_enabled_on_node: core: 0, MCG_CTL: 0x3f, NB MSR is enabled
+[    6.511459] EDAC DEBUG: nb_mce_bank_enabled_on_node: core: 1, MCG_CTL: 0x3f, NB MSR is enabled
+[    6.511460] EDAC amd64: Node 0: DRAM ECC disabled.
+[    6.511461] EDAC amd64: ECC disabled in the BIOS or no ECC capability, module will not load.
 
-Brief background, on why there are so many thermal interrupts in a
-modern system:
-From IvyBridge, there is another offset called TCC offset is introduced.
-This adds an offset to the real PROCHOT temperature target. So effectively
-this interrupt is generated much before the PROCHOT. There will be several
-very short throttling by the processor using adaptive thermal monitoring
-at this threshold, instead of more aggressive action close to PROCHOT.
-This offset is configured by OEMs and some tend to be more conservative
-than others. So logging such events just generates noise in the logs.
-
-The real value of these threshold interrupts, is to debug problems with
-the external cooling solutions and performance issues due to excessive
-throttling.
-
-So the solution here:
-- Show in the current thermal_throttle folder, the maximum time for one
-throttling event and total amount of time, the system was in throttling
-state.
-- Don't log short excursions.
-- Log only when, in spite of thermal throttling the temperature is rising.
-This is done by monitoring temperature trend using three point moving
-average. On the high threshold interrupt trigger a delayed workqueue,
-which monitors the threshold violation log bit, calculates moving moving
-average and logs when temperature trend is raising. When the log bit is
-clear and temperature is below threshold temperature, it will print
-"Normal" message. Once a high threshold event is logged, it rate limits
-number of log messages.
-- Reduce the logging severity to warning.
-
-With this patch, on the same test laptop, no warnings are printed in logs
-as the max time the processor could bring the temperature under control is
-only 280 ms.
-
-This implementation is done with the inputs from Alan Cox and Tony Luck.
-
-Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
----
- arch/x86/kernel/cpu/mce/therm_throt.c | 193 +++++++++++++++++++++++---
- 1 file changed, 172 insertions(+), 21 deletions(-)
-
-diff --git a/arch/x86/kernel/cpu/mce/therm_throt.c b/arch/x86/kernel/cpu/mce/therm_throt.c
-index 6e2becf547c5..e06f8d475207 100644
---- a/arch/x86/kernel/cpu/mce/therm_throt.c
-+++ b/arch/x86/kernel/cpu/mce/therm_throt.c
-@@ -47,8 +47,19 @@ struct _thermal_state {
- 	bool			new_event;
- 	int			event;
- 	u64			next_check;
-+	u64			last_interrupt_time;
-+	struct delayed_work	therm_work;
- 	unsigned long		count;
- 	unsigned long		last_count;
-+	unsigned long		max_time_ms;
-+	unsigned long		total_time_ms;
-+	int			rate_control_active;
-+	int			level;
-+	int			sample_index;
-+	int			sample_count;
-+	int			average;
-+	int			baseline_temp;
-+	u8			temp_samples[3];
- };
- 
- struct thermal_state {
-@@ -121,8 +132,22 @@ define_therm_throt_device_one_ro(package_throttle_count);
- define_therm_throt_device_show_func(package_power_limit, count);
- define_therm_throt_device_one_ro(package_power_limit_count);
- 
-+define_therm_throt_device_show_func(core_throttle, max_time_ms);
-+define_therm_throt_device_one_ro(core_throttle_max_time_ms);
-+
-+define_therm_throt_device_show_func(package_throttle, max_time_ms);
-+define_therm_throt_device_one_ro(package_throttle_max_time_ms);
-+
-+define_therm_throt_device_show_func(core_throttle, total_time_ms);
-+define_therm_throt_device_one_ro(core_throttle_total_time_ms);
-+
-+define_therm_throt_device_show_func(package_throttle, total_time_ms);
-+define_therm_throt_device_one_ro(package_throttle_total_time_ms);
-+
- static struct attribute *thermal_throttle_attrs[] = {
- 	&dev_attr_core_throttle_count.attr,
-+	&dev_attr_core_throttle_max_time_ms.attr,
-+	&dev_attr_core_throttle_total_time_ms.attr,
- 	NULL
- };
- 
-@@ -135,6 +160,95 @@ static const struct attribute_group thermal_attr_group = {
- #define CORE_LEVEL	0
- #define PACKAGE_LEVEL	1
- 
-+#define THERM_THROT_POLL_INTERVAL	HZ
-+#define THERM_STATUS_PROCHOT_LOG	BIT(1)
-+
-+static void therm_throt_clear_therm_status_log(int level)
-+{
-+	u64 msr_val;
-+	int msr;
-+
-+	msr = (level == CORE_LEVEL) ? MSR_IA32_THERM_STATUS :
-+			MSR_IA32_PACKAGE_THERM_STATUS;
-+	rdmsrl(msr, msr_val);
-+	wrmsrl(msr, msr_val & ~THERM_STATUS_PROCHOT_LOG);
-+}
-+
-+static void therm_throt_get_therm_status(int level, int *proc_hot, int *temp)
-+{
-+	u64 msr_val;
-+	int msr;
-+
-+	msr = (level == CORE_LEVEL) ? MSR_IA32_THERM_STATUS :
-+			MSR_IA32_PACKAGE_THERM_STATUS;
-+	rdmsrl(msr, msr_val);
-+	*proc_hot = msr_val & THERM_STATUS_PROCHOT_LOG ? 1 : 0;
-+	*temp = (msr_val >> 16) & 0x7F;
-+}
-+
-+static void therm_throt_active_work(struct work_struct *work)
-+{
-+	struct _thermal_state *state = container_of(to_delayed_work(work),
-+						struct _thermal_state, therm_work);
-+	int i, avg, this_cpu, hot, temp;
-+	u64 now = get_jiffies_64();
-+
-+	this_cpu = smp_processor_id();
-+
-+	therm_throt_get_therm_status(state->level, &hot, &temp);
-+	/* temperature value is offset from the max so lesser means hotter */
-+	if (!hot && temp > state->baseline_temp) {
-+		if (state->rate_control_active)
-+			pr_warn("CPU%d: %s temperature/speed normal (total events = %lu)\n",
-+				this_cpu,
-+				state->level == CORE_LEVEL ? "Core" : "Package",
-+				state->count);
-+
-+		state->rate_control_active = 0;
-+		return;
-+	}
-+
-+	if (time_before64(now, state->next_check) &&
-+			  state->rate_control_active)
-+		goto re_arm;
-+
-+	state->next_check = now + CHECK_INTERVAL;
-+
-+	if (state->count != state->last_count) {
-+		/* There was one new thermal interrupt */
-+		state->last_count = state->count;
-+		state->average = 0;
-+		state->sample_count = 0;
-+		state->sample_index = 0;
-+	}
-+
-+	state->temp_samples[state->sample_index] = temp;
-+	state->sample_count++;
-+	state->sample_index = (state->sample_index + 1) % ARRAY_SIZE(state->temp_samples);
-+	if (state->sample_count < ARRAY_SIZE(state->temp_samples))
-+		goto re_arm;
-+
-+	avg = 0;
-+	for (i = 0; i < ARRAY_SIZE(state->temp_samples); ++i)
-+		avg += state->temp_samples[i];
-+
-+	avg /= ARRAY_SIZE(state->temp_samples);
-+
-+	if (state->average > avg) {
-+		pr_warn("CPU%d: %s temperature is above threshold, cpu clock is throttled (total events = %lu)\n",
-+			this_cpu,
-+			state->level == CORE_LEVEL ? "Core" : "Package",
-+			state->count);
-+		state->rate_control_active = 1;
-+	}
-+
-+	state->average = avg;
-+
-+re_arm:
-+	therm_throt_clear_therm_status_log(state->level);
-+	schedule_delayed_work_on(this_cpu, &state->therm_work, THERM_THROT_POLL_INTERVAL);
-+}
-+
- /***
-  * therm_throt_process - Process thermal throttling event from interrupt
-  * @curr: Whether the condition is current or not (boolean), since the
-@@ -178,27 +292,23 @@ static void therm_throt_process(bool new_event, int event, int level)
- 	if (new_event)
- 		state->count++;
- 
--	if (time_before64(now, state->next_check) &&
--			state->count != state->last_count)
--		return;
-+	if (event == THERMAL_THROTTLING_EVENT) {
-+		if (new_event && !state->last_interrupt_time) {
-+			int hot;
- 
--	state->next_check = now + CHECK_INTERVAL;
--	state->last_count = state->count;
-+			therm_throt_get_therm_status(state->level, &hot, &state->baseline_temp);
- 
--	/* if we just entered the thermal event */
--	if (new_event) {
--		if (event == THERMAL_THROTTLING_EVENT)
--			pr_crit("CPU%d: %s temperature above threshold, cpu clock throttled (total events = %lu)\n",
--				this_cpu,
--				level == CORE_LEVEL ? "Core" : "Package",
--				state->count);
--		return;
--	}
--	if (old_event) {
--		if (event == THERMAL_THROTTLING_EVENT)
--			pr_info("CPU%d: %s temperature/speed normal\n", this_cpu,
--				level == CORE_LEVEL ? "Core" : "Package");
--		return;
-+			state->last_interrupt_time = now;
-+			schedule_delayed_work_on(this_cpu, &state->therm_work, THERM_THROT_POLL_INTERVAL);
-+		} else if (old_event && state->last_interrupt_time) {
-+			unsigned long throttle_time;
-+
-+			throttle_time = jiffies_delta_to_msecs(now - state->last_interrupt_time);
-+			if (throttle_time > state->max_time_ms)
-+				state->max_time_ms = throttle_time;
-+			state->total_time_ms += throttle_time;
-+			state->last_interrupt_time = 0;
-+		}
- 	}
- }
- 
-@@ -244,20 +354,47 @@ static int thermal_throttle_add_dev(struct device *dev, unsigned int cpu)
- 	if (err)
- 		return err;
- 
--	if (cpu_has(c, X86_FEATURE_PLN) && int_pln_enable)
-+	if (cpu_has(c, X86_FEATURE_PLN) && int_pln_enable) {
- 		err = sysfs_add_file_to_group(&dev->kobj,
- 					      &dev_attr_core_power_limit_count.attr,
- 					      thermal_attr_group.name);
-+		if (err)
-+			goto del_group;
-+	}
-+
- 	if (cpu_has(c, X86_FEATURE_PTS)) {
- 		err = sysfs_add_file_to_group(&dev->kobj,
- 					      &dev_attr_package_throttle_count.attr,
- 					      thermal_attr_group.name);
--		if (cpu_has(c, X86_FEATURE_PLN) && int_pln_enable)
-+		if (err)
-+			goto del_group;
-+
-+		err = sysfs_add_file_to_group(&dev->kobj,
-+					      &dev_attr_package_throttle_max_time_ms.attr,
-+					      thermal_attr_group.name);
-+		if (err)
-+			goto del_group;
-+
-+		err = sysfs_add_file_to_group(&dev->kobj,
-+					      &dev_attr_package_throttle_total_time_ms.attr,
-+					      thermal_attr_group.name);
-+		if (err)
-+			goto del_group;
-+
-+		if (cpu_has(c, X86_FEATURE_PLN) && int_pln_enable) {
- 			err = sysfs_add_file_to_group(&dev->kobj,
- 					&dev_attr_package_power_limit_count.attr,
- 					thermal_attr_group.name);
-+			if (err)
-+				goto del_group;
-+		}
- 	}
- 
-+	return 0;
-+
-+del_group:
-+	sysfs_remove_group(&dev->kobj, &thermal_attr_group);
-+
- 	return err;
- }
- 
-@@ -269,15 +406,29 @@ static void thermal_throttle_remove_dev(struct device *dev)
- /* Get notified when a cpu comes on/off. Be hotplug friendly. */
- static int thermal_throttle_online(unsigned int cpu)
- {
-+	struct thermal_state *state = &per_cpu(thermal_state, cpu);
- 	struct device *dev = get_cpu_device(cpu);
- 
-+	state->package_throttle.level = PACKAGE_LEVEL;
-+	state->core_throttle.level = CORE_LEVEL;
-+
-+	INIT_DELAYED_WORK(&state->package_throttle.therm_work, therm_throt_active_work);
-+	INIT_DELAYED_WORK(&state->core_throttle.therm_work, therm_throt_active_work);
-+
- 	return thermal_throttle_add_dev(dev, cpu);
- }
- 
- static int thermal_throttle_offline(unsigned int cpu)
- {
-+	struct thermal_state *state = &per_cpu(thermal_state, cpu);
- 	struct device *dev = get_cpu_device(cpu);
- 
-+	cancel_delayed_work(&state->package_throttle.therm_work);
-+	cancel_delayed_work(&state->core_throttle.therm_work);
-+
-+	state->package_throttle.rate_control_active = 0;
-+	state->core_throttle.rate_control_active = 0;
-+
- 	thermal_throttle_remove_dev(dev);
- 	return 0;
- }
 -- 
-2.17.2
+Regards/Gruss,
+    Boris.
 
+https://people.kernel.org/tglx/notes-about-netiquette
