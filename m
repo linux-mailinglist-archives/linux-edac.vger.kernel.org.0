@@ -2,93 +2,158 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D1A2AE4ED4
-	for <lists+linux-edac@lfdr.de>; Fri, 25 Oct 2019 16:22:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A9F06E525C
+	for <lists+linux-edac@lfdr.de>; Fri, 25 Oct 2019 19:32:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733297AbfJYOWz (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Fri, 25 Oct 2019 10:22:55 -0400
-Received: from mail.skyhub.de ([5.9.137.197]:54056 "EHLO mail.skyhub.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730051AbfJYOWz (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Fri, 25 Oct 2019 10:22:55 -0400
-Received: from zn.tnic (p200300EC2F0D3C00E44239D1C9BE3FA7.dip0.t-ipconnect.de [IPv6:2003:ec:2f0d:3c00:e442:39d1:c9be:3fa7])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id D0D9F1EC0CD7;
-        Fri, 25 Oct 2019 16:22:53 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1572013374;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=iLT7/FA+jxa/DCuxDSyuhoJdyith+QPQWFGJS46avAU=;
-        b=nPhjqJORT9hY9M4rCp5ditj4nlo+4eHRIuR7edUUE44I9CJLWFxn04vyjHR1iD6I14oiAj
-        9bgh4p/sJX89DDRDTTzZZUxS25q3v4uQYIu6K5E6/RMeoFYUQdaNfkGdTtPr67BsIOmoyZ
-        1rqrlq5iZui5ZSENyS/8pxGA1KD4Tcc=
-Date:   Fri, 25 Oct 2019 16:22:48 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Sean Christopherson <sean.j.christopherson@intel.com>
-Cc:     Tony Luck <tony.luck@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>, linux-edac@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>, kvm@vger.kernel.org
-Subject: Re: [PATCH v2 02/16] x86/mce: WARN once if IA32_FEATURE_CONTROL MSR
- is left unlocked
-Message-ID: <20191025142248.GD6483@zn.tnic>
-References: <20191021234632.32363-1-sean.j.christopherson@intel.com>
- <20191021235642.418-1-sean.j.christopherson@intel.com>
+        id S2505888AbfJYRbp (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Fri, 25 Oct 2019 13:31:45 -0400
+Received: from mail-pl1-f195.google.com ([209.85.214.195]:37692 "EHLO
+        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2505882AbfJYRbo (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Fri, 25 Oct 2019 13:31:44 -0400
+Received: by mail-pl1-f195.google.com with SMTP id p13so1596860pll.4;
+        Fri, 25 Oct 2019 10:31:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=GnT6FwiHwead4VOZNmhBSr7ANR+aaNkYQiIOZPp8rq4=;
+        b=Rn8L72ZtqYgKPeYtAFmvVLHs3nC5fJjz+0PUfwpGaSgE1722NOOl7L91urX0fJ6N6i
+         b+FTMITlHxMnKVcC7rswIYvOf6I1xmTE35htnCpHkERWaKjhzCklnPP7W/TEHuQK8Xct
+         QfnvUU3Mu6lOMav3YgKcS4FTmE0s6kaoYjGowYRB86oO4XTb27XLeFS/O+njazHh+3Jb
+         LImib3Qn/Q9vUk2XZejM9l5gXnTPDT/DGXHEyhvua8D98WZ4JfXAdYnjtdTqwEi5x64h
+         sBJkibu5NZKovxdZKnrMLvUcZquGJZJJoOXK71rwjj9s24OHhg1OfZ6pvh0HfCvXQx0r
+         Akdw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=GnT6FwiHwead4VOZNmhBSr7ANR+aaNkYQiIOZPp8rq4=;
+        b=jqDUrN8m2a4nC2kupPEyPiuUvrFXCPzTyZNmlua4o7Ix7hSrUzxWoBhJvvR9eujS79
+         IC/KFzHqE+JT+N/5IKt5t7r1WcuUlq5SJDF6qpQv21+67YqhiB3PWj7rgdkKgOUJakWE
+         VmNLcOgBRv/rGmV/2+gvBDs20JutKvQj83bfK/34LScOM+pzPiLtYmoQGtE5nKDFXhiL
+         +KuWJD6LoXmhJFFKROyJX9gDbRvfQgAWK9/+JjmhY+FonCm9zKHqrDKvpuE0Mp9984yk
+         MYDXp7P8a33szBVV8+foz0b3NzVEkpKEvHqC52/n64Vzz5/5UqfX66qZ0is92dsB1qI3
+         YpJA==
+X-Gm-Message-State: APjAAAVA2J7QruOZC5qVpNm9XWGu5HayshiJH3IONP/BhRj2wRGYZzL/
+        P9Fr34iPqi6ynWT1wjlviUA=
+X-Google-Smtp-Source: APXvYqwydM0+1e5/QHpMzyIncTA89uP4w6jdFp+a8+6qamGM8TW/ebqbIv5KTaTwl0doE7h2/mqbAg==
+X-Received: by 2002:a17:902:b095:: with SMTP id p21mr5031126plr.159.1572024703643;
+        Fri, 25 Oct 2019 10:31:43 -0700 (PDT)
+Received: from [172.16.1.40] ([131.107.147.218])
+        by smtp.gmail.com with ESMTPSA id b14sm2897182pfi.95.2019.10.25.10.31.41
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 25 Oct 2019 10:31:43 -0700 (PDT)
+Subject: Re: [PATCH v6 1/2] dt-bindings: edac: arm-dmc520.txt
+To:     Rob Herring <robh+dt@kernel.org>
+Cc:     "bp@alien8.de" <bp@alien8.de>,
+        "james.morse@arm.com" <james.morse@arm.com>,
+        "mark.rutland@arm.com" <mark.rutland@arm.com>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "mchehab@kernel.org" <mchehab@kernel.org>,
+        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
+        "sashal@kernel.org" <sashal@kernel.org>,
+        "hangl@microsoft.com" <hangl@microsoft.com>,
+        "lewan@microsoft.com" <lewan@microsoft.com>,
+        "ruizhao@microsoft.com" <ruizhao@microsoft.com>,
+        "scott.branden@broadcom.com" <scott.branden@broadcom.com>,
+        "yuqing.shen@broadcom.com" <yuqing.shen@broadcom.com>,
+        "ray.jui@broadcom.com" <ray.jui@broadcom.com>,
+        "wangglei@gmail.com" <wangglei@gmail.com>, leiwang_git@outlook.com
+References: <BY5PR04MB6599EAA659A53B2331CB812586890@BY5PR04MB6599.namprd04.prod.outlook.com>
+ <CAL_JsqJxcUr06+O_Ht5Kw0KXCWfSVC+6WMQqNxt-JehHh874hw@mail.gmail.com>
+From:   Lei Wang <wangglei@gmail.com>
+Message-ID: <f4b2c4b9-4999-6736-31eb-a63781013664@gmail.com>
+Date:   Fri, 25 Oct 2019 10:31:38 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20191021235642.418-1-sean.j.christopherson@intel.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <CAL_JsqJxcUr06+O_Ht5Kw0KXCWfSVC+6WMQqNxt-JehHh874hw@mail.gmail.com>
+Content-Type: text/plain; charset=windows-1252; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Mon, Oct 21, 2019 at 04:56:42PM -0700, Sean Christopherson wrote:
-> WARN if the IA32_FEATURE_CONTROL MSR is somehow left unlocked now that
-> CPU initialization unconditionally locks the MSR.
+Thanks James/Rob/Borislav for pointing out the email list issue. My work 
+email does not work good either for this exercise. Going forward I'll 
+switch to my gmail account.
+
+And Thanks Rob for reviewing! Please see below.
+
+>> +++ b/Documentation/devicetree/bindings/edac/arm-dmc520.txt
+>> @@ -0,0 +1,26 @@
+>> +* ARM DMC-520 EDAC node
+>> +
+>> +Required properties:
+>> +- compatible           : "brcm,dmc-520", "arm,dmc-520".
+>> +- reg                  : Address range of the DMC-520 registers.
+>> +- interrupts           : DMC-520 interrupt numbers. The example below specifies
+>> +                         two interrupt lines for dram_ecc_errc_int and
+>> +                         dram_ecc_errd_int.
+>> +- interrupt-config     : This is an array of interrupt masks. For each of the
 > 
-> Cc: Vitaly Kuznetsov <vkuznets@redhat.com>
-> Cc: Wanpeng Li <wanpengli@tencent.com>
-> Cc: Jim Mattson <jmattson@google.com>
-> Cc: kvm@vger.kernel.org
-> Signed-off-by: Sean Christopherson <sean.j.christopherson@intel.com>
-> ---
->  arch/x86/kernel/cpu/mce/intel.c | 7 +++----
->  1 file changed, 3 insertions(+), 4 deletions(-)
+> Not a standard property, so would need a vendor prefix...
+
+Would dmc-interrupt-config as the property name work? Thanks!
+
 > 
-> diff --git a/arch/x86/kernel/cpu/mce/intel.c b/arch/x86/kernel/cpu/mce/intel.c
-> index 88cd9598fa57..1008f14b803b 100644
-> --- a/arch/x86/kernel/cpu/mce/intel.c
-> +++ b/arch/x86/kernel/cpu/mce/intel.c
-> @@ -117,11 +117,10 @@ static bool lmce_supported(void)
->  	 * generate a #GP fault.
->  	 */
->  	rdmsrl(MSR_IA32_FEATURE_CONTROL, tmp);
-> -	if ((tmp & (FEATURE_CONTROL_LOCKED | FEATURE_CONTROL_LMCE)) ==
-> -		   (FEATURE_CONTROL_LOCKED | FEATURE_CONTROL_LMCE))
-> -		return true;
-> +	if (WARN_ON_ONCE(!(tmp & FEATURE_CONTROL_LOCKED)))
-> +		return false;
->  
-> -	return false;
-> +	return tmp & FEATURE_CONTROL_LMCE;
->  }
->  
->  bool mce_intel_cmci_poll(void)
-> -- 
+>> +                         above interrupt line, add one interrupt mask element to
+>> +                         it. That is, there is a 1:1 mapping from each interrupt
+>> +                         line to an interrupt mask. An interrupt mask can represent
+>> +                         multiple interrupts being enabled. Refer to interrupt_control
+>> +                         register in DMC-520 TRM for interrupt mapping. In the example
+>> +                         below, the interrupt configuration enables dram_ecc_errc_int
+>> +                         and dram_ecc_errd_int. And each interrupt is connected to
+>> +                         a separate interrupt line.
+> 
+> I've gone and read thru the TRM some. This binding doesn't seem to
+> correspond to the TRM at all. There are a bunch of interrupts and a
+> combined interrupt, and then there's the same set for 'overflow'
+> interrupts.
+> 
+> There's only one 'interrupt_control' reg. How do you have more that 1
+> 32-bit value?
 
-Reviewed-by: Borislav Petkov <bp@suse.de>
+There is only one 'interrupt_control' register, for multiple interrupt 
+sources. Then depending on platform hardware design, these interrupt 
+sources can be wired to different physical interrupt lines.
 
--- 
-Regards/Gruss,
-    Boris.
+That is, it is possible to mux interrupt sources into  interrupt lines 
+for dmc520 in different ways. For example, in this particular brcm 
+implementation,
 
-https://people.kernel.org/tglx/notes-about-netiquette
+Line 841: source dram_ecc_errc_int
+Line 843: source dram_ecc_errd_int
+Line 839: source dram_ecc_errc_int and dram_ecc_errd_int
+
+There are two possibilities for implementing ecc counts for ce/ue. And 
+we chose to use the single source line: as below, two interrupt lines 
+0x349 and 0x34B, with interrupt masks 0x4 and 0x8 respectively.
+
+Also, it's possible to implement using the combined-source line too: 
+that would be one interrupt line 0x347, with interrupt mask 0xC.
+
+This dt binding can support both by modifying the properties, without 
+having to modify driver code.
+
+ >> +
+ >> +Example:
+ >> +
+ >> +dmc0: dmc@200000 {
+ >> +       compatible = "brcm,dmc-520", "arm,dmc-520";
+ >> +       reg = <0x200000 0x80000>;
+ >> +       interrupts = <0x0 0x349 0x4>, <0x0 0x34B 0x4>;
+ >> +       interrupt-config = <0x4>, <0x8>;
+ >> +};
+ >> --
+ >> 2.17.1
+
+Thanks!
+
+-Lei
+
