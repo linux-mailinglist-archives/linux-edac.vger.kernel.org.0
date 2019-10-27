@@ -2,69 +2,122 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E5DCE562C
-	for <lists+linux-edac@lfdr.de>; Fri, 25 Oct 2019 23:53:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 07208E67CF
+	for <lists+linux-edac@lfdr.de>; Sun, 27 Oct 2019 22:25:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726300AbfJYVxj (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Fri, 25 Oct 2019 17:53:39 -0400
-Received: from mail.skyhub.de ([5.9.137.197]:37794 "EHLO mail.skyhub.de"
+        id S1732524AbfJ0VYd (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Sun, 27 Oct 2019 17:24:33 -0400
+Received: from mail.kernel.org ([198.145.29.99]:46158 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725801AbfJYVxi (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Fri, 25 Oct 2019 17:53:38 -0400
-Received: from zn.tnic (p200300EC2F0D3C004597AB7732076DF8.dip0.t-ipconnect.de [IPv6:2003:ec:2f0d:3c00:4597:ab77:3207:6df8])
+        id S1732534AbfJ0VYc (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Sun, 27 Oct 2019 17:24:32 -0400
+Received: from localhost (100.50.158.77.rev.sfr.net [77.158.50.100])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 88CEF1EC0CF6;
-        Fri, 25 Oct 2019 23:53:37 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1572040417;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=1XzEIJ2Aij+O1b/FperTnyAwAtRoYUY3zHWpOIg/zwQ=;
-        b=klIBso3/J/ahcYo1mvFm6+oVSDl+1NmdHZlWqCtkLn70/8O3vMkRDRTRRXqHshBb8bJduy
-        cZOt2TqblbloRFXf9/1hVT7m1irHgxykhtyA1V+Sei/sxYkOQQNwr/nMM8Qq4XVPTzJ90d
-        eRB02idCz+E/HzJrA5X/5AGFbp1cx7M=
-Date:   Fri, 25 Oct 2019 23:53:33 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Robert Richter <rrichter@marvell.com>
-Cc:     James Morse <james.morse@arm.com>,
+        by mail.kernel.org (Postfix) with ESMTPSA id B8BCC21783;
+        Sun, 27 Oct 2019 21:24:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1572211471;
+        bh=+9jZZGeI7w6970cSzL2GnY+5H/WDdvxEd0GZbvc3oaQ=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=ChvKMzfBeWdcS63/aRH0G2THLmFDINW5sFUObdsrITpuxpvTpA6GizIBeVnUN3ltU
+         SUf9Y1JNrWKzctjxyVrDC8E5NxVwbd6xmp/tWvcoKZlfyTSXpX3eYws8qko41HiBU7
+         i6h0hQKyPsEy5WLe2H8cKraWAuKIN/1XJClLSS8c=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org, John Garry <john.garry@huawei.com>,
+        James Morse <james.morse@arm.com>,
+        Borislav Petkov <bp@suse.de>,
+        linux-edac <linux-edac@vger.kernel.org>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Tony Luck <tony.luck@intel.com>, Borislav Petkov <bp@suse.de>,
-        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] EDAC, ghes: Fix locking and memory barrier issues
-Message-ID: <20191025215333.GH6483@zn.tnic>
-References: <20191025211226.2444-1-rrichter@marvell.com>
+        Robert Richter <rrichter@marvell.com>,
+        Tony Luck <tony.luck@intel.com>
+Subject: [PATCH 5.3 162/197] EDAC/ghes: Fix Use after free in ghes_edac remove path
+Date:   Sun, 27 Oct 2019 22:01:20 +0100
+Message-Id: <20191027203402.547589321@linuxfoundation.org>
+X-Mailer: git-send-email 2.23.0
+In-Reply-To: <20191027203351.684916567@linuxfoundation.org>
+References: <20191027203351.684916567@linuxfoundation.org>
+User-Agent: quilt/0.66
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20191025211226.2444-1-rrichter@marvell.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Fri, Oct 25, 2019 at 09:13:14PM +0000, Robert Richter wrote:
-> The ghes registration and refcount is broken in several ways:
+From: James Morse <james.morse@arm.com>
 
-...
+commit 1e72e673b9d102ff2e8333e74b3308d012ddf75b upstream.
 
-> Fixes: 0fe5f281f749 ("EDAC, ghes: Model a single, logical memory controller")
-> Fixes: 1e72e673b9d1 ("EDAC/ghes: Fix Use after free in ghes_edac remove path")
-> Signed-off-by: Borislav Petkov <bp@suse.de>
-> Signed-off-by: James Morse <james.morse@arm.com>
-> Signed-off-by: Robert Richter <rrichter@marvell.com>
+ghes_edac models a single logical memory controller, and uses a global
+ghes_init variable to ensure only the first ghes_edac_register() will
+do anything.
 
-More staring at the rest later, just to point out that the SOB chain is
-wrong: my and James' SOB must be Co-developed-by: or Originally-by: or
-so. Or even as freetext in the commit message:
+ghes_edac is registered the first time a GHES entry in the HEST is
+probed. There may be multiple entries, so subsequent attempts to
+register ghes_edac are silently ignored as the work has already been
+done.
 
-"Based on patches by ... "
+When a GHES entry is unregistered, it calls ghes_edac_unregister(),
+which free()s the memory behind the global variables in ghes_edac.
 
--- 
-Regards/Gruss,
-    Boris.
+But there may be multiple GHES entries, the next call to
+ghes_edac_unregister() will dereference the free()d memory, and attempt
+to free it a second time.
 
-https://people.kernel.org/tglx/notes-about-netiquette
+This may also be triggered on a platform with one GHES entry, if the
+driver is unbound/re-bound and unbound. The re-bind step will do
+nothing because of ghes_init, the second unbind will then do the same
+work as the first.
+
+Doing the unregister work on the first call is unsafe, as another
+CPU may be processing a notification in ghes_edac_report_mem_error(),
+using the memory we are about to free.
+
+ghes_init is already half of the reference counting. We only need
+to do the register work for the first call, and the unregister work
+for the last. Add the unregister check.
+
+This means we no longer free ghes_edac's memory while there are
+GHES entries that may receive a notification.
+
+This was detected by KASAN and DEBUG_TEST_DRIVER_REMOVE.
+
+ [ bp: merge into a single patch. ]
+
+Fixes: 0fe5f281f749 ("EDAC, ghes: Model a single, logical memory controller")
+Reported-by: John Garry <john.garry@huawei.com>
+Signed-off-by: James Morse <james.morse@arm.com>
+Signed-off-by: Borislav Petkov <bp@suse.de>
+Cc: linux-edac <linux-edac@vger.kernel.org>
+Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc: Robert Richter <rrichter@marvell.com>
+Cc: Tony Luck <tony.luck@intel.com>
+Cc: <stable@vger.kernel.org>
+Link: https://lkml.kernel.org/r/20191014171919.85044-2-james.morse@arm.com
+Link: https://lkml.kernel.org/r/304df85b-8b56-b77e-1a11-aa23769f2e7c@huawei.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+
+---
+ drivers/edac/ghes_edac.c |    4 ++++
+ 1 file changed, 4 insertions(+)
+
+--- a/drivers/edac/ghes_edac.c
++++ b/drivers/edac/ghes_edac.c
+@@ -553,7 +553,11 @@ void ghes_edac_unregister(struct ghes *g
+ 	if (!ghes_pvt)
+ 		return;
+ 
++	if (atomic_dec_return(&ghes_init))
++		return;
++
+ 	mci = ghes_pvt->mci;
++	ghes_pvt = NULL;
+ 	edac_mc_del_mc(mci->pdev);
+ 	edac_mc_free(mci);
+ }
+
+
