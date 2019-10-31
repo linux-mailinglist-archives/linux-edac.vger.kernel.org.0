@@ -2,102 +2,138 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A5373EB2C0
-	for <lists+linux-edac@lfdr.de>; Thu, 31 Oct 2019 15:31:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 52C56EB349
+	for <lists+linux-edac@lfdr.de>; Thu, 31 Oct 2019 15:58:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728119AbfJaOaM (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Thu, 31 Oct 2019 10:30:12 -0400
-Received: from mail.skyhub.de ([5.9.137.197]:37112 "EHLO mail.skyhub.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728173AbfJaOaL (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Thu, 31 Oct 2019 10:30:11 -0400
-Received: from nazgul.tnic (unknown [91.217.168.176])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 05F6D1EC0CDD;
-        Thu, 31 Oct 2019 15:30:08 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1572532209;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=sqyP3VfoTbEL895VJ1+f3tSVuCaoBE2+04xz1AAnFOg=;
-        b=Xeo3HsCIcfJmvYZOJCPPipEJ1ibs+bfYoPo6eun1uVpM5jPUhxWCHrzLZzQJoh98HR7IQZ
-        smtEPthP2lAwmLWh7hXd7NZ8MrzA7oiSsoa6uMTM5RvwsZj4nf38Y1Unws7lfAXx3EMgUJ
-        IJuwCAFqZ3wG0ountN7Fah5+HiXgZ8w=
-Date:   Thu, 31 Oct 2019 15:29:55 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Konstantin Khlebnikov <khlebnikov@yandex-team.ru>,
-        Yazen Ghannam <Yazen.Ghannam@amd.com>
-Cc:     Tony Luck <tony.luck@intel.com>, linux-kernel@vger.kernel.org,
-        linux-edac@vger.kernel.org, x86@kernel.org
-Subject: Re: [PATCH] x86/MCE/AMD: fix warning about sleep-in-atomic at early
+        id S1728078AbfJaO6s (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Thu, 31 Oct 2019 10:58:48 -0400
+Received: from mail-eopbgr800050.outbound.protection.outlook.com ([40.107.80.50]:46305
+        "EHLO NAM03-DM3-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1728029AbfJaO6s (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Thu, 31 Oct 2019 10:58:48 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=hKsK6QWJS9WmUDXE9g76nQFkjfegVW/vVeEAP71vSfgp3rkCdz5DGgO3Z4vlpcXG/GSG1piwj+L5gEN40jtYBNSB8/EFWCiC8yK/FYu4wa1lRrupEm3nbZ+dQgzj/e+xs+hAUi81/tDNNayRk6KbWyWqxcAjUy72CrKw2FR4RqcgYUQ0VD43PBmY28avJPbYkjOMXk4cdNXWDF8t3NsU8ZRPP+ILZf8aj9msLCNpHTQKRbCrtt9KOgtvICNj68txx8Nn2y3mUTjIUJIx8nPBpBhKDqTW0Q57EibKGZ025ppYQydlG6s48EC6kztJdUNKUCBIjEjYniY45jnW/7htnw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=k8iv69vb6pJiJhjUBu+u5EPTr8o5fyXpKcDTmKasnpk=;
+ b=NpTJclkgFZkwZx1/sRAA3tqC4wSc/3E/dtONLXtrYV9UDEg/K52+w9bPzsCtK5bE/ujmQdrBXcrySMF57bmVfs4F5XW7PQE/Y9AuBVfA0fra0aknLGt6ygX8jpGiCohLmvBFQi72vpORgebhYGtdacSEqo/dgIQe0SCIWfPZ9A3aL7sXbsn3aBnKGqQ0Ecta1XraOBhBhvx+u5ht2qC7BbvQZXnYApyfhlAmG+DFNu/1yf+uc4NvG5EPy06n9eo5d+ol0KmNrEyYApDH29G6vI6LzGwSR6wLBWIFQw8IVhusAubw0z8hQvGy0LsQVJUaRMRh+wARZpE0qyDminkV2Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=amdcloud.onmicrosoft.com; s=selector2-amdcloud-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=k8iv69vb6pJiJhjUBu+u5EPTr8o5fyXpKcDTmKasnpk=;
+ b=3F5spoqkzvYzYiApTOXPFoZ9lvsyy7wgFJ10EJq6VTwaOke8WRcBp3pd9z91y/fJI/vxS45LEYSDzFwD6ALtEAennLIoMHxW6GeokNLo78JuRjwUcXwWQNVPGpJuC4/cI+OtbEYFGeOln4CBzpCKVlbCB3dx0iadt0RdipF5qQA=
+Received: from SN6PR12MB2639.namprd12.prod.outlook.com (52.135.103.16) by
+ SN6PR12MB2766.namprd12.prod.outlook.com (52.135.107.138) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2387.24; Thu, 31 Oct 2019 14:58:45 +0000
+Received: from SN6PR12MB2639.namprd12.prod.outlook.com
+ ([fe80::ac86:15de:e8d6:61c8]) by SN6PR12MB2639.namprd12.prod.outlook.com
+ ([fe80::ac86:15de:e8d6:61c8%7]) with mapi id 15.20.2387.028; Thu, 31 Oct 2019
+ 14:58:45 +0000
+From:   "Ghannam, Yazen" <Yazen.Ghannam@amd.com>
+To:     Borislav Petkov <bp@alien8.de>,
+        Konstantin Khlebnikov <khlebnikov@yandex-team.ru>
+CC:     Tony Luck <tony.luck@intel.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
+        "x86@kernel.org" <x86@kernel.org>
+Subject: RE: [PATCH] x86/MCE/AMD: fix warning about sleep-in-atomic at early
  boot
-Message-ID: <20191031142955.GA23693@nazgul.tnic>
+Thread-Topic: [PATCH] x86/MCE/AMD: fix warning about sleep-in-atomic at early
+ boot
+Thread-Index: AQHVj+vKM1/xat6HGkejerE7UOI1HKd0z3yAgAAFsgA=
+Date:   Thu, 31 Oct 2019 14:58:45 +0000
+Message-ID: <SN6PR12MB2639DBDA3897067733D6C669F8630@SN6PR12MB2639.namprd12.prod.outlook.com>
 References: <157252708836.3876.4604398213417262402.stgit@buzz>
+ <20191031142955.GA23693@nazgul.tnic>
+In-Reply-To: <20191031142955.GA23693@nazgul.tnic>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=Yazen.Ghannam@amd.com; 
+x-originating-ip: [165.204.77.11]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-ht: Tenant
+x-ms-office365-filtering-correlation-id: 8d996fe8-2cf1-4b5a-f63f-08d75e12d434
+x-ms-traffictypediagnostic: SN6PR12MB2766:
+x-microsoft-antispam-prvs: <SN6PR12MB2766171892A0B646E2D2F189F8630@SN6PR12MB2766.namprd12.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:6108;
+x-forefront-prvs: 02070414A1
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(396003)(346002)(376002)(136003)(366004)(39860400002)(13464003)(189003)(199004)(2906002)(11346002)(76176011)(14454004)(486006)(5660300002)(71200400001)(33656002)(305945005)(7696005)(229853002)(316002)(476003)(99286004)(52536014)(6436002)(7736002)(71190400001)(55016002)(54906003)(14444005)(110136005)(446003)(4326008)(6116002)(6246003)(81156014)(76116006)(86362001)(8676002)(66446008)(66946007)(256004)(25786009)(64756008)(186003)(53546011)(81166006)(9686003)(6506007)(66066001)(478600001)(74316002)(3846002)(26005)(8936002)(66476007)(102836004)(66556008);DIR:OUT;SFP:1101;SCL:1;SRVR:SN6PR12MB2766;H:SN6PR12MB2639.namprd12.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
+received-spf: None (protection.outlook.com: amd.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: bI6AKK503RDSeBe8/iA/IFn9AgJ4AIihSnN4DAfZrzqaPYMBodAL9GWcYQ9toS9J04ehOMXeidLOxOhcSh1bHRls4a0CbNt5WYIlMmN852RJxORXcUxK+rTBL+4IrAFU5CV3dX6GaDlrGncArXFrsJIuOo/28JGTFFcMXVefO8/W5Su+XhSjhevD9DPal6awmf0tbhmkedk9syCz3nGugs6F24kMDpLW2W1QJFgX33G1u3PPQRSJn8MjTlvxA3LE8CB6gGMBU/1JHwmdhhuxPOX/T8o+YakhuXrR2hnKUjQiVVUTJj0AbZDEaeCLQyMhp9GTSQopRObS06JrgFcQcu+sYZ3zvuFaXY7YGH+UTdw0acHHz/7DBtMPpaenpT3wSc82UBorkYL5Q+Pj1u2PY8+iR+V+DrJqtbUqg8cZCJhf5V/KDc8c8lma17VYgvm3
+x-ms-exchange-transport-forked: True
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <157252708836.3876.4604398213417262402.stgit@buzz>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8d996fe8-2cf1-4b5a-f63f-08d75e12d434
+X-MS-Exchange-CrossTenant-originalarrivaltime: 31 Oct 2019 14:58:45.7578
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 9qS2F6ryfw9xZITaYB4aiKGU+Y/tu5+HTmZu2bfpjmmj7c9L5Q7jwYFOuisaU6T2SySq0M9oOjmoeb1VuCykpQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN6PR12MB2766
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Thu, Oct 31, 2019 at 04:04:48PM +0300, Konstantin Khlebnikov wrote:
-> Function smca_configure() is called only for current cpu thus
-> rdmsr_safe_on_cpu() could be replaced with atomic rdmsr_safe().
-> 
->  BUG: sleeping function called from invalid context at kernel/sched/completion.c:99
->  in_atomic(): 1, irqs_disabled(): 1, pid: 0, name: swapper/1
->  CPU: 1 PID: 0 Comm: swapper/1 Not tainted 4.19.79-16 #1
-					     ^^^^^^^^^^
-
-I'm assuming you hit this on latest upstream too?
-
->  Hardware name: GIGABYTE R181-Z90-00/MZ91-FS0-00, BIOS R11 10/25/2019
->  Call Trace:
->   dump_stack+0x5c/0x7b
->   ___might_sleep+0xec/0x110
->   wait_for_completion+0x39/0x160
->   ? __rdmsr_safe_on_cpu+0x45/0x60
->   rdmsr_safe_on_cpu+0xae/0xf0
->   ? wrmsr_on_cpus+0x20/0x20
->   ? machine_check_poll+0xfd/0x1f0
->   ? mce_amd_feature_init+0x190/0x2d0
->   mce_amd_feature_init+0x190/0x2d0
->   mcheck_cpu_init+0x11a/0x460
->   identify_cpu+0x3e2/0x560
->   identify_secondary_cpu+0x13/0x80
->   smp_store_cpu_info+0x45/0x50
->   start_secondary+0xaa/0x200
->   secondary_startup_64+0xa4/0xb0
-> 
-> Except warning in kernel log everything works fine.
-> 
-> Fixes: 5896820e0aa3 ("x86/mce/AMD, EDAC/mce_amd: Define and use tables for known SMCA IP types")
-> Signed-off-by: Konstantin Khlebnikov <khlebnikov@yandex-team.ru>
-> ---
->  arch/x86/kernel/cpu/mce/amd.c |    2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/arch/x86/kernel/cpu/mce/amd.c b/arch/x86/kernel/cpu/mce/amd.c
-> index 6ea7fdc82f3c..c7ab0d38af79 100644
-> --- a/arch/x86/kernel/cpu/mce/amd.c
-> +++ b/arch/x86/kernel/cpu/mce/amd.c
-> @@ -269,7 +269,7 @@ static void smca_configure(unsigned int bank, unsigned int cpu)
->  	if (smca_banks[bank].hwid)
->  		return;
->  
-> -	if (rdmsr_safe_on_cpu(cpu, MSR_AMD64_SMCA_MCx_IPID(bank), &low, &high)) {
-> +	if (rdmsr_safe(MSR_AMD64_SMCA_MCx_IPID(bank), &low, &high)) {
-
-Yazen, any objections?
-
--- 
-Regards/Gruss,
-    Boris.
-
-ECO tip #101: Trim your mails when you reply.
---
+PiAtLS0tLU9yaWdpbmFsIE1lc3NhZ2UtLS0tLQ0KPiBGcm9tOiBCb3Jpc2xhdiBQZXRrb3YgPGJw
+QGFsaWVuOC5kZT4NCj4gU2VudDogVGh1cnNkYXksIE9jdG9iZXIgMzEsIDIwMTkgMTA6MzAgQU0N
+Cj4gVG86IEtvbnN0YW50aW4gS2hsZWJuaWtvdiA8a2hsZWJuaWtvdkB5YW5kZXgtdGVhbS5ydT47
+IEdoYW5uYW0sIFlhemVuIDxZYXplbi5HaGFubmFtQGFtZC5jb20+DQo+IENjOiBUb255IEx1Y2sg
+PHRvbnkubHVja0BpbnRlbC5jb20+OyBsaW51eC1rZXJuZWxAdmdlci5rZXJuZWwub3JnOyBsaW51
+eC1lZGFjQHZnZXIua2VybmVsLm9yZzsgeDg2QGtlcm5lbC5vcmcNCj4gU3ViamVjdDogUmU6IFtQ
+QVRDSF0geDg2L01DRS9BTUQ6IGZpeCB3YXJuaW5nIGFib3V0IHNsZWVwLWluLWF0b21pYyBhdCBl
+YXJseSBib290DQo+IA0KPiBPbiBUaHUsIE9jdCAzMSwgMjAxOSBhdCAwNDowNDo0OFBNICswMzAw
+LCBLb25zdGFudGluIEtobGVibmlrb3Ygd3JvdGU6DQo+ID4gRnVuY3Rpb24gc21jYV9jb25maWd1
+cmUoKSBpcyBjYWxsZWQgb25seSBmb3IgY3VycmVudCBjcHUgdGh1cw0KPiA+IHJkbXNyX3NhZmVf
+b25fY3B1KCkgY291bGQgYmUgcmVwbGFjZWQgd2l0aCBhdG9taWMgcmRtc3Jfc2FmZSgpLg0KPiA+
+DQo+ID4gIEJVRzogc2xlZXBpbmcgZnVuY3Rpb24gY2FsbGVkIGZyb20gaW52YWxpZCBjb250ZXh0
+IGF0IGtlcm5lbC9zY2hlZC9jb21wbGV0aW9uLmM6OTkNCj4gPiAgaW5fYXRvbWljKCk6IDEsIGly
+cXNfZGlzYWJsZWQoKTogMSwgcGlkOiAwLCBuYW1lOiBzd2FwcGVyLzENCj4gPiAgQ1BVOiAxIFBJ
+RDogMCBDb21tOiBzd2FwcGVyLzEgTm90IHRhaW50ZWQgNC4xOS43OS0xNiAjMQ0KPiAJCQkJCSAg
+ICAgXl5eXl5eXl5eXg0KPiANCj4gSSdtIGFzc3VtaW5nIHlvdSBoaXQgdGhpcyBvbiBsYXRlc3Qg
+dXBzdHJlYW0gdG9vPw0KPiANCj4gPiAgSGFyZHdhcmUgbmFtZTogR0lHQUJZVEUgUjE4MS1aOTAt
+MDAvTVo5MS1GUzAtMDAsIEJJT1MgUjExIDEwLzI1LzIwMTkNCj4gPiAgQ2FsbCBUcmFjZToNCj4g
+PiAgIGR1bXBfc3RhY2srMHg1Yy8weDdiDQo+ID4gICBfX19taWdodF9zbGVlcCsweGVjLzB4MTEw
+DQo+ID4gICB3YWl0X2Zvcl9jb21wbGV0aW9uKzB4MzkvMHgxNjANCj4gPiAgID8gX19yZG1zcl9z
+YWZlX29uX2NwdSsweDQ1LzB4NjANCj4gPiAgIHJkbXNyX3NhZmVfb25fY3B1KzB4YWUvMHhmMA0K
+PiA+ICAgPyB3cm1zcl9vbl9jcHVzKzB4MjAvMHgyMA0KPiA+ICAgPyBtYWNoaW5lX2NoZWNrX3Bv
+bGwrMHhmZC8weDFmMA0KPiA+ICAgPyBtY2VfYW1kX2ZlYXR1cmVfaW5pdCsweDE5MC8weDJkMA0K
+PiA+ICAgbWNlX2FtZF9mZWF0dXJlX2luaXQrMHgxOTAvMHgyZDANCj4gPiAgIG1jaGVja19jcHVf
+aW5pdCsweDExYS8weDQ2MA0KPiA+ICAgaWRlbnRpZnlfY3B1KzB4M2UyLzB4NTYwDQo+ID4gICBp
+ZGVudGlmeV9zZWNvbmRhcnlfY3B1KzB4MTMvMHg4MA0KPiA+ICAgc21wX3N0b3JlX2NwdV9pbmZv
+KzB4NDUvMHg1MA0KPiA+ICAgc3RhcnRfc2Vjb25kYXJ5KzB4YWEvMHgyMDANCj4gPiAgIHNlY29u
+ZGFyeV9zdGFydHVwXzY0KzB4YTQvMHhiMA0KPiA+DQo+ID4gRXhjZXB0IHdhcm5pbmcgaW4ga2Vy
+bmVsIGxvZyBldmVyeXRoaW5nIHdvcmtzIGZpbmUuDQo+ID4NCj4gPiBGaXhlczogNTg5NjgyMGUw
+YWEzICgieDg2L21jZS9BTUQsIEVEQUMvbWNlX2FtZDogRGVmaW5lIGFuZCB1c2UgdGFibGVzIGZv
+ciBrbm93biBTTUNBIElQIHR5cGVzIikNCj4gPiBTaWduZWQtb2ZmLWJ5OiBLb25zdGFudGluIEto
+bGVibmlrb3YgPGtobGVibmlrb3ZAeWFuZGV4LXRlYW0ucnU+DQo+ID4gLS0tDQo+ID4gIGFyY2gv
+eDg2L2tlcm5lbC9jcHUvbWNlL2FtZC5jIHwgICAgMiArLQ0KPiA+ICAxIGZpbGUgY2hhbmdlZCwg
+MSBpbnNlcnRpb24oKyksIDEgZGVsZXRpb24oLSkNCj4gPg0KPiA+IGRpZmYgLS1naXQgYS9hcmNo
+L3g4Ni9rZXJuZWwvY3B1L21jZS9hbWQuYyBiL2FyY2gveDg2L2tlcm5lbC9jcHUvbWNlL2FtZC5j
+DQo+ID4gaW5kZXggNmVhN2ZkYzgyZjNjLi5jN2FiMGQzOGFmNzkgMTAwNjQ0DQo+ID4gLS0tIGEv
+YXJjaC94ODYva2VybmVsL2NwdS9tY2UvYW1kLmMNCj4gPiArKysgYi9hcmNoL3g4Ni9rZXJuZWwv
+Y3B1L21jZS9hbWQuYw0KPiA+IEBAIC0yNjksNyArMjY5LDcgQEAgc3RhdGljIHZvaWQgc21jYV9j
+b25maWd1cmUodW5zaWduZWQgaW50IGJhbmssIHVuc2lnbmVkIGludCBjcHUpDQo+ID4gIAlpZiAo
+c21jYV9iYW5rc1tiYW5rXS5od2lkKQ0KPiA+ICAJCXJldHVybjsNCj4gPg0KPiA+IC0JaWYgKHJk
+bXNyX3NhZmVfb25fY3B1KGNwdSwgTVNSX0FNRDY0X1NNQ0FfTUN4X0lQSUQoYmFuayksICZsb3cs
+ICZoaWdoKSkgew0KPiA+ICsJaWYgKHJkbXNyX3NhZmUoTVNSX0FNRDY0X1NNQ0FfTUN4X0lQSUQo
+YmFuayksICZsb3csICZoaWdoKSkgew0KPiANCj4gWWF6ZW4sIGFueSBvYmplY3Rpb25zPw0KPiAN
+Cg0KVGhpcyBsb29rcyBnb29kIHRvIG1lLg0KDQpXZSBjYW4gZ28gZnVydGhlciBhbmQgcmVtb3Zl
+IHRoZSAiY3B1IiBwYXJhbWV0ZXIgZnJvbSB0aGlzIGVudGlyZSBmdW5jdGlvbi4NCkJ1dCB0aGF0
+IGNhbiBiZSBhbm90aGVyIHBhdGNoLg0KDQpSZXZpZXdlZC1ieTogWWF6ZW4gR2hhbm5hbSA8eWF6
+ZW4uZ2hhbm5hbUBhbWQuY29tPg0KDQpUaGFua3MsDQpZYXplbg0K
