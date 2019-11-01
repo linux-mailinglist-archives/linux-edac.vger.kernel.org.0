@@ -2,110 +2,114 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 780AFEC3D4
-	for <lists+linux-edac@lfdr.de>; Fri,  1 Nov 2019 14:39:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E0B77EC4F8
+	for <lists+linux-edac@lfdr.de>; Fri,  1 Nov 2019 15:48:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727327AbfKANj0 (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Fri, 1 Nov 2019 09:39:26 -0400
-Received: from forwardcorp1j.mail.yandex.net ([5.45.199.163]:51210 "EHLO
-        forwardcorp1j.mail.yandex.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726792AbfKANj0 (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Fri, 1 Nov 2019 09:39:26 -0400
-Received: from mxbackcorp2j.mail.yandex.net (mxbackcorp2j.mail.yandex.net [IPv6:2a02:6b8:0:1619::119])
-        by forwardcorp1j.mail.yandex.net (Yandex) with ESMTP id 5860A2E155F;
-        Fri,  1 Nov 2019 16:39:22 +0300 (MSK)
-Received: from iva4-c987840161f8.qloud-c.yandex.net (iva4-c987840161f8.qloud-c.yandex.net [2a02:6b8:c0c:3da5:0:640:c987:8401])
-        by mxbackcorp2j.mail.yandex.net (nwsmtp/Yandex) with ESMTP id EhlYfs7DX0-dJ0eLnKR;
-        Fri, 01 Nov 2019 16:39:22 +0300
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yandex-team.ru; s=default;
-        t=1572615562; bh=b+U9G81+nIuUfLnTbf5g4AsIvZj1ryKOtGI4+RzRof4=;
-        h=In-Reply-To:Message-ID:From:Date:References:To:Subject:Cc;
-        b=xRD+5G1OOXaMXP3BhUHEeEC081zYL4UPDBVk/bj3BK2Q20430vaadbFydx3/vyCqt
-         aJcOvOF95ry6L/j+PoVRkNOyMeu3SG2DGz3V711KMI3jg82BvCPN8GpqXYde3zRXQC
-         LiSq5R0i+WY6ftnJhMM1aMqCOyJfFoQC//V1d5po=
-Authentication-Results: mxbackcorp2j.mail.yandex.net; dkim=pass header.i=@yandex-team.ru
-Received: from unknown (unknown [2a02:6b8:b080:9508::1:e])
-        by iva4-c987840161f8.qloud-c.yandex.net (nwsmtp/Yandex) with ESMTPSA id qT5bQKrq9n-dJVCBFfB;
-        Fri, 01 Nov 2019 16:39:19 +0300
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (Client certificate not present)
-Subject: Re: [PATCH] x86/MCE/AMD: fix warning about sleep-in-atomic at early
- boot
-To:     Borislav Petkov <bp@alien8.de>,
-        Yazen Ghannam <Yazen.Ghannam@amd.com>
-Cc:     Tony Luck <tony.luck@intel.com>, linux-kernel@vger.kernel.org,
-        linux-edac@vger.kernel.org, x86@kernel.org
-References: <157252708836.3876.4604398213417262402.stgit@buzz>
- <20191031142955.GA23693@nazgul.tnic>
-From:   Konstantin Khlebnikov <khlebnikov@yandex-team.ru>
-Message-ID: <ad7a25d9-1ca5-0791-ae0a-63c524040bcb@yandex-team.ru>
-Date:   Fri, 1 Nov 2019 16:39:17 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        id S1727334AbfKAOsR (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Fri, 1 Nov 2019 10:48:17 -0400
+Received: from mail-eopbgr790048.outbound.protection.outlook.com ([40.107.79.48]:63947
+        "EHLO NAM03-CO1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1727326AbfKAOsR (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Fri, 1 Nov 2019 10:48:17 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=X8lv8J30kzqim3MKI4GLl9wgP5f7aRyrzRHZ0zu000c1ScljkdA6vhzBaBLLj2KA8dft0zrf5LOr+2hDASCFxA5IJpJrCxUI5ZLKUGH3GbcV6qrLkYtooHiNLDCwF8kax/YsKKbdbvVbJAMUiGYn4m9UQe/Eq135J1fqTL6Ann0KlIWNDmC2E1HkqY5WbrghLMo5hEIHZdgCOp/O5ot6wURHaqNLeZMP/DlRdMDVBotCtfA9Wpxb27XQTdssnmlQYJfwS9QGPMab0PrWynP47RsRwU6YW7/Yy7GsBEE+10XfvF9O9tB3/6aIHW5u4e+yyb3jc+vRUAQ5hrBAjdzosA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=FEVovOM9QwXpAcK9g+5Bn222O6iwSGTSqokHALh1lro=;
+ b=XvymZsKGiN20R3KC4WMEJxYi35fjnGsvCcQ9MdmDbb7A8BiYwrSTUU68NLdkpkJ6aCUEnQzVow/ubexMJmB/ROqVo4RBGCaFCPybm1gdfyQJCrSGaA3xfopGHA4F9US+XXRxPKul/bjdyd9gG3alW1w+PdE2zwaJa7U0gSbF9GJG7ayPnZZRegot8U0Bvv3oHpjmxLfzyLbrutelzZ+yrw1QQUIg7VWJIA2Rc/DWBK6jJxnaIIs4FUHgcrZQ8/JE+2qM+rYo5/lMnWHeXzEO2PDofGsAP2Q7skuzQN9nAwdlFP9eBeml9PXqoC5QkgMJKhX7Lxey6p2a1FrEKH6JVQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=amdcloud.onmicrosoft.com; s=selector2-amdcloud-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=FEVovOM9QwXpAcK9g+5Bn222O6iwSGTSqokHALh1lro=;
+ b=hbQhbcnwetMKj1PmHYWmTI/Qn8fFp7ElY320Xw0BHgt17exkKgoTTX457cOckjX2ZiCiSakdwxuvfdpgrbJ2DKMIT6kPpnN9J3zdZz7mJlSslyB9a5gKCDdFBBVe+YOlS/LfXjyTeB0muCCLqB7Y8nBbmI8qgkJOOtNDXgOvyRs=
+Received: from BYAPR12MB2630.namprd12.prod.outlook.com (20.177.124.91) by
+ BYAPR12MB3525.namprd12.prod.outlook.com (20.179.94.90) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2387.24; Fri, 1 Nov 2019 14:48:13 +0000
+Received: from BYAPR12MB2630.namprd12.prod.outlook.com
+ ([fe80::70f9:320:f40f:9528]) by BYAPR12MB2630.namprd12.prod.outlook.com
+ ([fe80::70f9:320:f40f:9528%6]) with mapi id 15.20.2387.028; Fri, 1 Nov 2019
+ 14:48:13 +0000
+From:   "Ghannam, Yazen" <Yazen.Ghannam@amd.com>
+To:     "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>
+CC:     "mchehab+samsung@kernel.org" <mchehab+samsung@kernel.org>
+Subject: [PATCH 0/2] rasdaemon: Add new AMD SMCA error decoding
+Thread-Topic: [PATCH 0/2] rasdaemon: Add new AMD SMCA error decoding
+Thread-Index: AQHVkMNiNm2YvPLgSkWqoykXY4msig==
+Date:   Fri, 1 Nov 2019 14:48:13 +0000
+Message-ID: <20191101144800.20803-1-Yazen.Ghannam@amd.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-clientproxiedby: SN6PR0102CA0017.prod.exchangelabs.com (2603:10b6:805:1::30)
+ To BYAPR12MB2630.namprd12.prod.outlook.com (2603:10b6:a03:67::27)
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=Yazen.Ghannam@amd.com; 
+x-ms-exchange-messagesentrepresentingtype: 1
+x-mailer: git-send-email 2.17.1
+x-originating-ip: [165.204.78.2]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-ht: Tenant
+x-ms-office365-filtering-correlation-id: 54d627bb-3987-457c-899e-08d75eda8545
+x-ms-traffictypediagnostic: BYAPR12MB3525:
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <BYAPR12MB352557887163BF8A7C70546BF8620@BYAPR12MB3525.namprd12.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:9508;
+x-forefront-prvs: 020877E0CB
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(346002)(376002)(136003)(396003)(39860400002)(366004)(199004)(189003)(14454004)(4326008)(486006)(2906002)(25786009)(26005)(305945005)(66946007)(64756008)(476003)(6512007)(186003)(7736002)(2501003)(66556008)(66446008)(2616005)(66066001)(6116002)(66476007)(8676002)(8936002)(36756003)(1076003)(3846002)(478600001)(71190400001)(316002)(6436002)(5660300002)(81156014)(4744005)(99286004)(6916009)(6486002)(2351001)(256004)(102836004)(50226002)(5640700003)(6506007)(52116002)(86362001)(386003)(71200400001)(81166006);DIR:OUT;SFP:1101;SCL:1;SRVR:BYAPR12MB3525;H:BYAPR12MB2630.namprd12.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
+received-spf: None (protection.outlook.com: amd.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: dWLdh6mTUyjhnoCYJl5PpYe4aD2583iPPQ0TJXq6pwIJsq5Rygli74hOedUNI08hS8LwJlT8T71IIRwVHz/R6nuI+ae0dcH1eMmNOYq3AjybnViV1n4CUuddvlBsAcFgFUYLiz++Nl3jPQ3HvGSfPRYS25trNlQtT2FBdrF8LzIBVz/Qu4fC82xiP7iUe24+4KP9SE7OlA51823FbovP8Jrmk3unUKuulAOR11knbdEUhpLe2rSjkzwTTvygVuvSvUzKCVEeSoqYy6DEfgueOY0yJjx8F+l01tNn7GsRr0jdp8D8eKN9F2pQSutgBoely2j0BpmDr+hApPYMy5JaiBifefjhQWH1GOc3+QPWA3ZCyDnHqNzUdNuMUy7ssLCpaAVWRYx5/eMZj1HrR+fo7M8nlVeMtm9XI6cUwk0stBYAt/QTRcB9m8jpywcQVgC8
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-In-Reply-To: <20191031142955.GA23693@nazgul.tnic>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-CA
-Content-Transfer-Encoding: 7bit
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 54d627bb-3987-457c-899e-08d75eda8545
+X-MS-Exchange-CrossTenant-originalarrivaltime: 01 Nov 2019 14:48:13.1610
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: atvdT8DeNKq8cnN5xl0RmwL9vPqTMufwunuoJFB8sEiieeVogcE3DBExOd7FMmOJAuwzZ8CGEUfxveCivaoHkg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR12MB3525
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On 31/10/2019 17.29, Borislav Petkov wrote:
-> On Thu, Oct 31, 2019 at 04:04:48PM +0300, Konstantin Khlebnikov wrote:
->> Function smca_configure() is called only for current cpu thus
->> rdmsr_safe_on_cpu() could be replaced with atomic rdmsr_safe().
->>
->>   BUG: sleeping function called from invalid context at kernel/sched/completion.c:99
->>   in_atomic(): 1, irqs_disabled(): 1, pid: 0, name: swapper/1
->>   CPU: 1 PID: 0 Comm: swapper/1 Not tainted 4.19.79-16 #1
-> 					     ^^^^^^^^^^
-> 
-> I'm assuming you hit this on latest upstream too?
+From: Yazen Ghannam <yazen.ghannam@amd.com>
 
-I tried 5.4 once but there was no warning.
-Code in 4.19 and in mainline almost the same.
+Hi Mauro,
 
-Probably hardware needs full power cycle to reset state or something else.
+This patchset adds new error decoding for recently released AMD Scalable
+MCA systems. Also, the CPU family check is changed to a feature check.
+This is because the Scalable MCA decoding should function the same on
+any AMD system with this feature.
 
-> 
->>   Hardware name: GIGABYTE R181-Z90-00/MZ91-FS0-00, BIOS R11 10/25/2019
->>   Call Trace:
->>    dump_stack+0x5c/0x7b
->>    ___might_sleep+0xec/0x110
->>    wait_for_completion+0x39/0x160
->>    ? __rdmsr_safe_on_cpu+0x45/0x60
->>    rdmsr_safe_on_cpu+0xae/0xf0
->>    ? wrmsr_on_cpus+0x20/0x20
->>    ? machine_check_poll+0xfd/0x1f0
->>    ? mce_amd_feature_init+0x190/0x2d0
->>    mce_amd_feature_init+0x190/0x2d0
->>    mcheck_cpu_init+0x11a/0x460
->>    identify_cpu+0x3e2/0x560
->>    identify_secondary_cpu+0x13/0x80
->>    smp_store_cpu_info+0x45/0x50
->>    start_secondary+0xaa/0x200
->>    secondary_startup_64+0xa4/0xb0
->>
->> Except warning in kernel log everything works fine.
->>
->> Fixes: 5896820e0aa3 ("x86/mce/AMD, EDAC/mce_amd: Define and use tables for known SMCA IP types")
->> Signed-off-by: Konstantin Khlebnikov <khlebnikov@yandex-team.ru>
->> ---
->>   arch/x86/kernel/cpu/mce/amd.c |    2 +-
->>   1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/arch/x86/kernel/cpu/mce/amd.c b/arch/x86/kernel/cpu/mce/amd.c
->> index 6ea7fdc82f3c..c7ab0d38af79 100644
->> --- a/arch/x86/kernel/cpu/mce/amd.c
->> +++ b/arch/x86/kernel/cpu/mce/amd.c
->> @@ -269,7 +269,7 @@ static void smca_configure(unsigned int bank, unsigned int cpu)
->>   	if (smca_banks[bank].hwid)
->>   		return;
->>   
->> -	if (rdmsr_safe_on_cpu(cpu, MSR_AMD64_SMCA_MCx_IPID(bank), &low, &high)) {
->> +	if (rdmsr_safe(MSR_AMD64_SMCA_MCx_IPID(bank), &low, &high)) {
-> 
-> Yazen, any objections?
-> 
+Also, this set was written by Brian Woods at AMD, but he has since left.
+So I'm submitting on his behalf. Please let me know if I should re-do
+the Signed-off-by's in another way.
+
+Thanks,
+Yazen
+
+Brian Woods (2):
+  rasdaemon: rename CPU_NAPLES cputype
+  rasdaemon: add support for new AMD SMCA bank types
+
+ mce-amd-smca.c    | 112 ++++++++++++++++++++++++++++++++++++++++++++++
+ ras-mce-handler.c |  10 +++--
+ ras-mce-handler.h |   2 +-
+ 3 files changed, 119 insertions(+), 5 deletions(-)
+
+--=20
+2.17.1
+
