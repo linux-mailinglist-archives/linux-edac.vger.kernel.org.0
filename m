@@ -2,27 +2,27 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AF09EEFC8
-	for <lists+linux-edac@lfdr.de>; Mon,  4 Nov 2019 23:23:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F0E30EF05F
+	for <lists+linux-edac@lfdr.de>; Mon,  4 Nov 2019 23:28:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387883AbfKDVyR (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Mon, 4 Nov 2019 16:54:17 -0500
-Received: from mail.kernel.org ([198.145.29.99]:48908 "EHLO mail.kernel.org"
+        id S2387635AbfKDVuN (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Mon, 4 Nov 2019 16:50:13 -0500
+Received: from mail.kernel.org ([198.145.29.99]:42144 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2387904AbfKDVyQ (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Mon, 4 Nov 2019 16:54:16 -0500
+        id S2387629AbfKDVuM (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Mon, 4 Nov 2019 16:50:12 -0500
 Received: from localhost (6.204-14-84.ripe.coltfrance.com [84.14.204.6])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 7680B21850;
-        Mon,  4 Nov 2019 21:54:15 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 3D79720B7C;
+        Mon,  4 Nov 2019 21:50:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1572904456;
-        bh=wahJNPsz0/I3Em7HivCnTzLX3ldOjztOBdKUM99bhUc=;
+        s=default; t=1572904211;
+        bh=y3wtbxY+uvAwQ0KK4Tls1a7pGqoMqit5OFV/k9GBELE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Um58H3NeogABu7n+Mth4uz+jma40NkBbp8BXEvt60UWwtnX6HsGSG82Fy5PV240Dg
-         AxTiZ3n93HJesLu/6DxBnZbnpEqtv+KCZ/eEMRokn4+L6J+H7q94majr/tLc13elmQ
-         2f07LCkXIFJLT3VUtik0VEuyiGaYcwQuEOWCc+f8=
+        b=XTblZ4yIoN9YRFfaeGbF4fJzoqQdNHZld0TLb67vx7f8fvF2O9lVDpJEIriPygjMZ
+         veZ7MrhgZQ/i+AkfVY1J9hwrtPd59uRVlr2a6GWwin4I0tBTuIiIdZvQcywyZlfW0H
+         zQ2F3KzkLks9DpsZGKtP+aPIZ0BSvDzlWNazdPgU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -39,12 +39,12 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Rajneesh Bhardwaj <rajneesh.bhardwaj@intel.com>,
         Thomas Gleixner <tglx@linutronix.de>, x86-ml <x86@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 11/95] x86/cpu: Add Atom Tremont (Jacobsville)
-Date:   Mon,  4 Nov 2019 22:44:09 +0100
-Message-Id: <20191104212043.439601102@linuxfoundation.org>
+Subject: [PATCH 4.9 07/62] x86/cpu: Add Atom Tremont (Jacobsville)
+Date:   Mon,  4 Nov 2019 22:44:29 +0100
+Message-Id: <20191104211908.947180808@linuxfoundation.org>
 X-Mailer: git-send-email 2.23.0
-In-Reply-To: <20191104212038.056365853@linuxfoundation.org>
-References: <20191104212038.056365853@linuxfoundation.org>
+In-Reply-To: <20191104211901.387893698@linuxfoundation.org>
+References: <20191104211901.387893698@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -86,10 +86,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 2 insertions(+), 1 deletion(-)
 
 diff --git a/arch/x86/include/asm/intel-family.h b/arch/x86/include/asm/intel-family.h
-index 038e4b63b56b5..5cd7d4e1579d0 100644
+index ba7b6f7364149..74ee597beb3e4 100644
 --- a/arch/x86/include/asm/intel-family.h
 +++ b/arch/x86/include/asm/intel-family.h
-@@ -6,7 +6,7 @@
+@@ -5,7 +5,7 @@
   * "Big Core" Processors (Branded as Core, Xeon, etc...)
   *
   * The "_X" parts are generally the EP and EX Xeons, or the
@@ -98,7 +98,7 @@ index 038e4b63b56b5..5cd7d4e1579d0 100644
   *
   * Things ending in "2" are usually because we have no better
   * name for them.  There's no processor called "SILVERMONT2".
-@@ -68,6 +68,7 @@
+@@ -67,6 +67,7 @@
  #define INTEL_FAM6_ATOM_GOLDMONT	0x5C /* Apollo Lake */
  #define INTEL_FAM6_ATOM_GOLDMONT_X	0x5F /* Denverton */
  #define INTEL_FAM6_ATOM_GOLDMONT_PLUS	0x7A /* Gemini Lake */
