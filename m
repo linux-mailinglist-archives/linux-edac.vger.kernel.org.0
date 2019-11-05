@@ -2,190 +2,324 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 60F53F06B3
-	for <lists+linux-edac@lfdr.de>; Tue,  5 Nov 2019 21:11:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AF49F0715
+	for <lists+linux-edac@lfdr.de>; Tue,  5 Nov 2019 21:36:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726368AbfKEULr (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Tue, 5 Nov 2019 15:11:47 -0500
-Received: from mx0b-0016f401.pphosted.com ([67.231.156.173]:19646 "EHLO
-        mx0b-0016f401.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726141AbfKEULr (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Tue, 5 Nov 2019 15:11:47 -0500
-Received: from pps.filterd (m0045851.ppops.net [127.0.0.1])
-        by mx0b-0016f401.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id xA5KBBbu031910;
-        Tue, 5 Nov 2019 12:11:26 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
- subject : date : message-id : references : in-reply-to : content-type :
- content-id : content-transfer-encoding : mime-version; s=pfpt0818;
- bh=6fldtIfTwygtwU9YCGXXG6yjhX2kAXXRAwut7/L19I0=;
- b=F3vZr/7tfbWDfGrBvQXVMI5GIw1D+7mAVsM6tkj7Yvg2Ze3pSiFcn8aswZtTMmS8f+AN
- SvmqZKx3AH/8L643xU22Ug/NXgKYYRkw9+lN1jqHEmIKVzMzQHIft0ZP4vWyD7vdRPC4
- kqDYTOoQsHQynXOeNFAHJdDY2CuO5V8p92m4mp/afM8/TBgiehmLsiijq3UFbRhLl7K2
- +bnwf10+MK+TY/mqWNr7a8L1TfE3FeQWpXDIpkuG4po6sTXE+FiRO4EQKbWqMckbSpvV
- qkhGkSvQ7HYyDbYl+05kRY9r7JcKk9uHDCDixi4lWxihToiq3fVHUBosw4Q2LtT8wh3+ xA== 
-Received: from sc-exch01.marvell.com ([199.233.58.181])
-        by mx0b-0016f401.pphosted.com with ESMTP id 2w19amv3xx-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
-        Tue, 05 Nov 2019 12:11:26 -0800
-Received: from SC-EXCH01.marvell.com (10.93.176.81) by SC-EXCH01.marvell.com
- (10.93.176.81) with Microsoft SMTP Server (TLS) id 15.0.1367.3; Tue, 5 Nov
- 2019 12:11:24 -0800
-Received: from NAM04-CO1-obe.outbound.protection.outlook.com (104.47.45.52) by
- SC-EXCH01.marvell.com (10.93.176.81) with Microsoft SMTP Server (TLS) id
- 15.0.1367.3 via Frontend Transport; Tue, 5 Nov 2019 12:11:24 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=obKKyObselS1qfRUG3TT6lGm0S23+I9eKF2mxB99dlLDOjbsFjpQmw2PrHul3Wa+vmXvc5GxF0N2JJE+vdVHsUzUj9m/Hg7UAMu4yjvtJCanaLa/8gH0T9vRXPOs9cOxx19DZ9BaUiuA4hDV9BZejPOoQoQY4oXJqGWXEalFgL0V3pycuAQENrqwb9YjNdcHAQ4IIgVZTlwho8aYE8HZdMmf3lv0sofpebnD/Pci4bV98hKU9sbNwLWKaFH6Yzu074VHvalkHLooFbNXbNJWjJLCHBqDeJipCuPeDudrrImIcCJPRy45o6b3+SWwg1ezFmFnNqMIYjk2Uxq/vPIwoQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=6fldtIfTwygtwU9YCGXXG6yjhX2kAXXRAwut7/L19I0=;
- b=mGjNFOxWGXYWkIB6tsNdSHQLigV8ZPUDpvUTZnR41TwXU5inkY2AZpsW1ox3g4wffttGYuQf3UHH5xShRs6bbMGC9UdwkKozlNihTcOwSo+4wQ30hRvlm5ar/Nqym1dyeZgnH4v1WX8XZ3UlxBOXCJ5vXJdT7fX8nuhkZFt+bXrxLtNkGXjOriIJu13Uizkb9lVRUiNwe/c48jH6Scyo7lJLWbotfTrwdUg4j9jdU90+qPL6vVBkyB1RhhJTpMizbJE+4vIdTTCTfoapwFB7pC2oE/KzO0SJ2YwMQ7VJzKNVNAe4LqS2PSlBA7m/vc3E1YpIHcvXrod935Fx8+1FVw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=marvell.com; dmarc=pass action=none header.from=marvell.com;
- dkim=pass header.d=marvell.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=marvell.onmicrosoft.com; s=selector2-marvell-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=6fldtIfTwygtwU9YCGXXG6yjhX2kAXXRAwut7/L19I0=;
- b=Qvp0/k2h7zK0sVueex+xmR1qACEauh6Z40ra5qKH+SHXQrRYqC0pG0ItUOPk4xgFGMR1ph7304oxbo3/JcZ40WtyrqnxfvowN1gLnN5yZd4P8jd8EfDCTZI2VXnb66KHQ/6XQHFMXWQL8LcUKvOsGp9yinLxxK6FUdzFOEaQ5mQ=
-Received: from MN2PR18MB3408.namprd18.prod.outlook.com (10.255.237.10) by
- MN2PR18MB3358.namprd18.prod.outlook.com (10.255.238.87) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2408.24; Tue, 5 Nov 2019 20:11:22 +0000
-Received: from MN2PR18MB3408.namprd18.prod.outlook.com
- ([fe80::c4a:cf3c:f530:fba6]) by MN2PR18MB3408.namprd18.prod.outlook.com
- ([fe80::c4a:cf3c:f530:fba6%6]) with mapi id 15.20.2408.024; Tue, 5 Nov 2019
- 20:11:22 +0000
-From:   Robert Richter <rrichter@marvell.com>
-To:     James Morse <james.morse@arm.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Borislav Petkov <bp@alien8.de>, Tony Luck <tony.luck@intel.com>
-CC:     Borislav Petkov <bp@suse.de>,
-        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v3] EDAC, ghes: Fix locking and memory barrier issues
-Thread-Topic: [PATCH v3] EDAC, ghes: Fix locking and memory barrier issues
-Thread-Index: AQHVlBSz45Hg5fqU9kW80JLQAsOb96d9AjCA
-Date:   Tue, 5 Nov 2019 20:11:22 +0000
-Message-ID: <20191105201115.v2pe6k6g2brx5itv@rric.localdomain>
-References: <20191105200732.3053-1-rrichter@marvell.com>
-In-Reply-To: <20191105200732.3053-1-rrichter@marvell.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-clientproxiedby: HE1PR0402CA0037.eurprd04.prod.outlook.com
- (2603:10a6:7:7c::26) To MN2PR18MB3408.namprd18.prod.outlook.com
- (2603:10b6:208:165::10)
-x-ms-exchange-messagesentrepresentingtype: 1
-x-originating-ip: [31.208.96.227]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: ccf33f59-de3a-4a6b-f462-08d7622c53e9
-x-ms-traffictypediagnostic: MN2PR18MB3358:
-x-microsoft-antispam-prvs: <MN2PR18MB33589FA02705063D2F0B7D31D97E0@MN2PR18MB3358.namprd18.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:10000;
-x-forefront-prvs: 0212BDE3BE
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(346002)(396003)(136003)(366004)(376002)(39860400002)(199004)(189003)(8676002)(14444005)(81156014)(6512007)(6246003)(14454004)(71200400001)(71190400001)(86362001)(66946007)(81166006)(66476007)(66556008)(11346002)(446003)(64756008)(66446008)(486006)(476003)(305945005)(8936002)(386003)(53546011)(316002)(54906003)(6506007)(110136005)(186003)(76176011)(102836004)(26005)(6436002)(66066001)(229853002)(9686003)(7736002)(6486002)(3846002)(2906002)(99286004)(25786009)(52116002)(4326008)(5660300002)(1076003)(6116002)(478600001)(256004);DIR:OUT;SFP:1101;SCL:1;SRVR:MN2PR18MB3358;H:MN2PR18MB3408.namprd18.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
-received-spf: None (protection.outlook.com: marvell.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: OTNNwQzwMK+kI24jO+paFjxjwagUk8g3ahUrlh0jxjFi6NEU7zRkLG4j45pC6lP8HpGc0NB2DPOz1MjaVcnY+DmDItckceylRaK+nJPFGmHuELY/G0azCacyry4VkuqE8lvN362xpdehuJuuBmLM3WNP41rOuPp4aP1xPJD9P0z/1gDAOIrD8hAC6jBdc8NNt8Cm9JYgh81+yQP0mdJ16sSpSkXRMFHEuh/KazebZtgvaYgjYbRI9ptz8EB66wp3eq+3846ja8TtIzA0Ex0riPWo0GpKLqD73QycVM18V5YRClT+G59E963GrurjSrYHOIu+nlm7qjO5VTbncJ1yOX964YA6oq+A6tk34Fv7TKSs5D+I51994MUA2F3X/QSS9qa+09LhfkNxMsAFF8A4GgYd3sLW6xwpiEKGr5D/W/RIz6RohXgmjeVs+LK0KFR9
-x-ms-exchange-transport-forked: True
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <B59DECEBD314A44AAC656088F54B08EF@namprd18.prod.outlook.com>
-Content-Transfer-Encoding: quoted-printable
-MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-Network-Message-Id: ccf33f59-de3a-4a6b-f462-08d7622c53e9
-X-MS-Exchange-CrossTenant-originalarrivaltime: 05 Nov 2019 20:11:22.3708
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 70e1fb47-1155-421d-87fc-2e58f638b6e0
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 27vWgLXKW/eUSZaIPxpRgsULlDKHCZzfeiYPwoZnOwjZ9adN2FpMcq4TX2WPUtQhSf8aQ5MuRZ7ur/Jhr+YWtg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR18MB3358
-X-OriginatorOrg: marvell.com
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.95,1.0.8
- definitions=2019-11-05_07:2019-11-05,2019-11-05 signatures=0
+        id S1729800AbfKEUgd (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Tue, 5 Nov 2019 15:36:33 -0500
+Received: from mga02.intel.com ([134.134.136.20]:13316 "EHLO mga02.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726608AbfKEUgd (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Tue, 5 Nov 2019 15:36:33 -0500
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga101.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 05 Nov 2019 12:36:32 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.68,271,1569308400"; 
+   d="scan'208";a="214020092"
+Received: from spandruv-desk.jf.intel.com ([10.54.75.31])
+  by orsmga002.jf.intel.com with ESMTP; 05 Nov 2019 12:36:32 -0800
+Message-ID: <810bfb95a42090ff64f86e4154e2bd2cfda29f27.camel@linux.intel.com>
+Subject: Re: [RFC][PATCH] x86, mce, therm_throt: Optimize notifications of
+ thermal throttle
+From:   Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     tony.luck@intel.com, tglx@linutronix.de, mingo@redhat.com,
+        hpa@zytor.com, bberg@redhat.com, x86@kernel.org,
+        linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
+        hdegoede@redhat.com, ckellner@redhat.com
+Date:   Tue, 05 Nov 2019 12:36:32 -0800
+In-Reply-To: <20191105144411.GC28418@zn.tnic>
+References: <20191025001924.10199-1-srinivas.pandruvada@linux.intel.com>
+         <20191105144411.GC28418@zn.tnic>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5 (3.28.5-3.fc28) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On 05.11.19 20:07:51, Robert Richter wrote:
-> The ghes registration and refcount is broken in several ways:
->=20
->  * ghes_edac_register() returns with success for a 2nd instance even
->    if a first instance is still running. This is not correct as the
->    first instance may fail later. A subsequent registration may not
->    finish before the first. Parallel registrations must be avoided.
->=20
->  * The refcount was increased even if a registration failed. This
->    leads to stale counters preventing the device from being released.
->=20
->  * The ghes refcount may not be decremented properly on
->    unregistration. Always decrement the refcount once
->    ghes_edac_unregister() is called to keep the refcount sane.
->=20
->  * The ghes_pvt pointer is handed to the irq handler before
->    registration finished.
->=20
->  * The mci structure could be freed while the irq handler is running.
->=20
-> Fix this by adding a mutex to ghes_edac_register(). This mutex
-> serializes instances to register and unregister. The refcount is only
-> increased if the registration succeeded. This makes sure the refcount
-> is in a consistent state after registering or unregistering a device.
-> Note: A spinlock cannot be used here as the code section may sleep.
->=20
-> The ghes_pvt is protected by ghes_lock now. This ensures the pointer
-> is not updated before registration was finished or while the irq
-> handler is running. It is unset before unregistering the device
-> including necessary (implicit) memory barriers making the changes
-> visible to other cpus. Thus, the device can not be used anymore by an
-> interrupt.
->=20
-> Also, rename ghes_init to ghes_refcount for better readability and
-> switch to refcount API.
->=20
-> A refcount is needed. There can be multiple GHES structures being
-> defined (see ACPI 6.3 specification, 18.3.2.7 Generic Hardware Error
-> Source, "Some platforms may describe multiple Generic Hardware Error
-> Source structures with different notification types, ...").
->=20
-> Another approach to use the mci's device refcount (get_device()) and
-> have a release function does not work here. A release function will be
-> called only for device_release() with the last put_device() call. The
-> device must be deleted *before* that with device_del(). This is only
-> possible by maintaining an own refcount.
->=20
-> Fixes: 0fe5f281f749 ("EDAC, ghes: Model a single, logical memory controll=
-er")
-> Fixes: 1e72e673b9d1 ("EDAC/ghes: Fix Use after free in ghes_edac remove p=
-ath")
-> Co-developed-by: James Morse <james.morse@arm.com>
-> Signed-off-by: James Morse <james.morse@arm.com>
-> Co-developed-by: Borislav Petkov <bp@suse.de>
-> Signed-off-by: Borislav Petkov <bp@suse.de>
-> Signed-off-by: Robert Richter <rrichter@marvell.com>
+On Tue, 2019-11-05 at 15:44 +0100, Borislav Petkov wrote:
+> On Thu, Oct 24, 2019 at 05:19:24PM -0700, Srinivas Pandruvada wrote:
 
-I hope this SOB chain is correct now.
+Thanks for the review.
+
+> > Some modern systems have very tight thermal tolerances. Because of
+> > this
+> > they may cross thermal thresholds when running normal workloads
+> > (even
+> > during boot). The CPU hardware will react by limiting
+> > power/frequency
+> > and using duty cycles to bring the temperature back into normal
+> > range.
+> > 
+> > Thus users may see a "critical" message about the "temperature
+> > above
+> > threshold" which is soon followed by "temperature/speed normal".
+> > These
+> > messages are rate limited, but still may repeat every few minutes.
+> 
+> rate-limited
+OK
+
+> 
+> > A test run on a laptop with Intel 8th Gen i5 core for two hours
+> > with a
+> > workload resulted in 20K+ thermal interrupts per CPU for core level
+> > and
+> > another 20K+ interrupts at package level. The kernel logs were full
+> > of
+> > throttling messages.
+> > 
+> > Brief background, on why there are so many thermal interrupts in a
+> > modern system:
+> > From IvyBridge, there is another offset called TCC offset is
+> > introduced.
+> 
+> That sentence needs fixing.
+Will try.
+
+> 
+> > This adds an offset to the real PROCHOT temperature target. So
+> > effectively
+> > this interrupt is generated much before the PROCHOT. There will be
+> > several
+> > very short throttling by the processor using adaptive thermal
+> > monitoring
+> 
+>   ^^^^^^^^^^^^^^^^^^^^^^
+> 
+> "There will be several very short throttling" reads funny.
+Will try to remove "Fun" out of it.
+
+> 
+> > at this threshold, instead of more aggressive action close to
+> > PROCHOT.
+> > This offset is configured by OEMs and some tend to be more
+> > conservative
+> > than others. So logging such events just generates noise in the
+> > logs.
+> > 
+> > The real value of these threshold interrupts, is to debug problems
+> > with
+> > the external cooling solutions and performance issues due to
+> > excessive
+> > throttling.
+> > 
+> > So the solution here:
+> > - Show in the current thermal_throttle folder, the maximum time for
+> > one
+> > throttling event and total amount of time, the system was in
+> > throttling
+> > state.
+> > - Don't log short excursions.
+> > - Log only when, in spite of thermal throttling the temperature is
+> > rising.
+> > This is done by monitoring temperature trend using three point
+> > moving
+> > average. On the high threshold interrupt trigger a delayed
+> > workqueue,
+> > which monitors the threshold violation log bit, calculates moving
+> > moving
+> 
+> What is the "threshold violation log bit" ? THERM_STATUS_PROCHOT_LOG
+> ?
+Yes, BIT 1 of therm
+MSR_IA32_THERM_STATUS/MSR_IA32_PACKAGE_THERM_STATUS.
+
+> 
+> s/moving moving/moving/
+> 
+> Please read your commit message before sending to check whether it
+> makes
+> any sense. Commit messages are not write-only.
+Noted.
+
+> 
+> > average and logs when temperature trend is raising. When the log
+> > bit is
+> > clear and temperature is below threshold temperature, it will print
+> > "Normal" message. Once a high threshold event is logged, it rate
+> > limits
+> > number of log messages.
+> > - Reduce the logging severity to warning.
+> 
+> I already took the reducing printk severity patch, you'd need to redo
+> yours ontop of tip/master.
+I will rebase and remove this from the description.
+
+> > 
+
+[...]
+
+> 
+> > +	int			rate_control_active;
+> 
+> That wants to be a bool judging by the context it is used in.
+I can change to bool, just didn't use it
+https://yarchive.net/comp/linux/bool.html
+
+> 
+> > +	int			level;
+> > +	int			sample_index;
+> > +	int			sample_count;
+> > +	int			average;
+> > +	int			baseline_temp;
+> > +	u8			temp_samples[3];
+> 
+> All these new members (and old members) should be documented what
+> they
+> are. Like, what is "max_time_ms", for example? I can find out from
+> the
+> sysfs func names below but having comments explaining what those are
+> is
+> much better.
+> 
+> >  };
+I will do that.
+
+> >  
+
+[...]
+
+> > +
+> > +static void therm_throt_clear_therm_status_log(int level)
+> 
+> That's a static function, called only once so prepending its name
+> with
+> the "therm_throt_" prefix is pointless and doesn't help readability.
+> Having simply
+> 
+> 	clear_therm_status_log(state->level);
+> 
+> in the code is clearer and shorter. Ditto for the other helper
+> functions.
+OK.
+
+> 
+> > +{
+> > +	u64 msr_val;
+> > +	int msr;
+> > +
+> > +	msr = (level == CORE_LEVEL) ? MSR_IA32_THERM_STATUS :
+> > +			MSR_IA32_PACKAGE_THERM_STATUS;
+> 
+> Make that a normal if-else statement for better readability:
+> 
+OK
+
+> 	if (level == CORE_LEVEL)
+> 		msr = MSR_IA32_THERM_STATUS;
+> 	else
+> 		msr = MSR_IA32_PACKAGE_THERM_STATUS;
+> 
+> > +	rdmsrl(msr, msr_val);
+> 
+> Is that rdmsrl() always going to succeed here or you need to handle a
+> possible error it returns?
+> 
+It should not.
+They are architectural MSRs and the fact that we are getting called
+means that they are enabled by looking at CPUID bits. Also this MSR was
+read before once in intel_thermal_interrupt(). 
+
+
+> > +	wrmsrl(msr, msr_val & ~THERM_STATUS_PROCHOT_LOG);
+> 
+> Same here.
+
+> 
+It shouldn't fail for local CPU write. But I can add error handling.
+
+
+> > +}
+> > +
+> > +static void therm_throt_get_therm_status(int level, int *proc_hot,
+> > int *temp)
+> > +{
+> > +	u64 msr_val;
+> > +	int msr;
+> > +
+> > +	msr = (level == CORE_LEVEL) ? MSR_IA32_THERM_STATUS :
+> > +			MSR_IA32_PACKAGE_THERM_STATUS;
+> > +	rdmsrl(msr, msr_val);
+> > +	*proc_hot = msr_val & THERM_STATUS_PROCHOT_LOG ? 1 : 0;
+> > +	*temp = (msr_val >> 16) & 0x7F;
+> 
+> Same comments as for the therm_throt_clear_therm_status_log()
+> function above.
+> 
+OK
+
+> ...
+> 
+> > @@ -178,27 +292,23 @@ static void therm_throt_process(bool
+> > new_event, int event, int level)
+> >  	if (new_event)
+> >  		state->count++;
+> >  
+> > -	if (time_before64(now, state->next_check) &&
+> > -			state->count != state->last_count)
+> > -		return;
+> > +	if (event == THERMAL_THROTTLING_EVENT) {
+> 
+> Save an indentation level:
+> 
+OK
 
 Thanks,
+Srinivas
 
--Robert
+> 	if (event != THERMAL_THROTTLING_EVENT)
+> 		return;
+> 
+> 	/* next statement starts here */
+> 
+> > +		if (new_event && !state->last_interrupt_time) {
+> > +			int hot;
+> >  
+> > -	state->next_check = now + CHECK_INTERVAL;
+> > -	state->last_count = state->count;
+> > +			therm_throt_get_therm_status(state->level,
+> > &hot, &state->baseline_temp);
+> >  
+> > -	/* if we just entered the thermal event */
+> > -	if (new_event) {
+> > -		if (event == THERMAL_THROTTLING_EVENT)
+> > -			pr_crit("CPU%d: %s temperature above threshold,
+> > cpu clock throttled (total events = %lu)\n",
+> > -				this_cpu,
+> > -				level == CORE_LEVEL ? "Core" :
+> > "Package",
+> > -				state->count);
+> > -		return;
+> > -	}
+> > -	if (old_event) {
+> > -		if (event == THERMAL_THROTTLING_EVENT)
+> > -			pr_info("CPU%d: %s temperature/speed normal\n",
+> > this_cpu,
+> > -				level == CORE_LEVEL ? "Core" :
+> > "Package");
+> > -		return;
+> > +			state->last_interrupt_time = now;
+> > +			schedule_delayed_work_on(this_cpu, &state-
+> > >therm_work, THERM_THROT_POLL_INTERVAL);
+> > +		} else if (old_event && state->last_interrupt_time) {
+> > +			unsigned long throttle_time;
+> > +
+> > +			throttle_time = jiffies_delta_to_msecs(now -
+> > state->last_interrupt_time);
+> > +			if (throttle_time > state->max_time_ms)
+> > +				state->max_time_ms = throttle_time;
+> > +			state->total_time_ms += throttle_time;
+> > +			state->last_interrupt_time = 0;
+> > +		}
+> >  	}
+> >  }
+> >  
+> 
+> 
 
-> ---
-> V3:
->  * fixed SOB chain again (added SOBs according to
->    submitting-patches.rst)
->=20
-> V2:
->  * fixed missing 'goto unlock' in error path
->  * fixed SOB chain
->  * added comment on how to protect ghes_pvt with ghes_lock
->  * renamed ghes_init to ghes_refcount
->  * switched to refcount API instead of atomic_*
-> ---
->  drivers/edac/ghes_edac.c | 89 +++++++++++++++++++++++++++++-----------
->  1 file changed, 65 insertions(+), 24 deletions(-)
