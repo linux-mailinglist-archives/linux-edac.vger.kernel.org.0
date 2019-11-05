@@ -2,209 +2,109 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C9415EFC00
-	for <lists+linux-edac@lfdr.de>; Tue,  5 Nov 2019 12:05:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A0DC5EFEC7
+	for <lists+linux-edac@lfdr.de>; Tue,  5 Nov 2019 14:38:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730798AbfKELFY (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Tue, 5 Nov 2019 06:05:24 -0500
-Received: from mail.skyhub.de ([5.9.137.197]:48468 "EHLO mail.skyhub.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726867AbfKELFY (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Tue, 5 Nov 2019 06:05:24 -0500
-Received: from zn.tnic (p200300EC2F0EF00040535B901ABC1006.dip0.t-ipconnect.de [IPv6:2003:ec:2f0e:f000:4053:5b90:1abc:1006])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id CDFAD1EC095C;
-        Tue,  5 Nov 2019 12:05:17 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1572951918;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=DzLmbHnGnVNGSpU/+IxMmFssZJiIE/Z5fsxo5hTr6ZE=;
-        b=emA+I4lrVnxwIM15AsbRqLJVAMDtGdYuahaYblX3S2hzSXT0/7RHnQ6qDUn+wKjRdj77of
-        InZ27L4mDj7ZM/GDc66+Zxz1MY+rMzuwSX7IdAMKRpa7rrYzd3bCYmgWreKgNSerZe/ryw
-        sarQ7C44E/9ElgEuHtukqj7D6CAuV6s=
-Date:   Tue, 5 Nov 2019 12:05:11 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Robert Richter <rrichter@marvell.com>
-Cc:     James Morse <james.morse@arm.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Tony Luck <tony.luck@intel.com>, Borislav Petkov <bp@suse.de>,
-        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
+        id S2389227AbfKENiS (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Tue, 5 Nov 2019 08:38:18 -0500
+Received: from mail-eopbgr820078.outbound.protection.outlook.com ([40.107.82.78]:2769
+        "EHLO NAM01-SN1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S2389172AbfKENiS (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Tue, 5 Nov 2019 08:38:18 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=LJmmpaK6B5mwoL5xbqW2hPQX6CvM7iqapK9lEPBOdsISXunl5eoscybSvQQqgy9vhEd93WDiH21ibr9z4cJuvv/sSnCqaiUgFtuGrJezHDXOZ0vLAIqFKFyE6Gwq7YObeM6Rjy9T2krZnoAeO8X7FTyKWyAnu1ryFmsjbT9RGkNJRY+Q7k9UDxnE4Uo7/k2Zy5edoeFWq5og1yhI07pOl26g+Fl+DbjlRk/1K/7meaDGpLieODvHcz8x33l8TiEL3z/rpkbs7nFRDVMj0nBHMTlwCAnQgZKwG0BIXSIU7r+NYDVuY2LPl65/UUfJTSiPNrxuOkpSr01AMF01Fy4DRA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=lOiDCrS83r/KivqRh138gIw7PcNqONNuUMjEL8AZvQI=;
+ b=k9G6AlqOBe9DPkyK5gHczj0I8l70PmuC/XTiKXxqKlog5h+bFSMSsfBYT6e2amo4tZI4q5LCCSxcSQKHBr+L/44AkUHVRqyfBCMMACi71PbFQS4kz0ywwAfyQtizY/vrrP8i6FrdX5hMZCytMmoPvgdIaYmhfEBF64u0cVIhNuFErIDELOJh7lt87B1lJbrHnw6AkZ/+4thA5+yPrFKQnfgY1jWMZ/W5AZBSGGmeFxZMEQ9w0T/wlwyo8T3fxZRhLoZiXz/Y8YfowuozOs8GSJ+/5HbdNmn+wNmVOEVmL+1EhdPQZTDXR7AO3n+fACkCEnCInNLGfioUbTtwFdd1Ug==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=amdcloud.onmicrosoft.com; s=selector2-amdcloud-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=lOiDCrS83r/KivqRh138gIw7PcNqONNuUMjEL8AZvQI=;
+ b=fkbpd3srk+Jm7ANejaUnPh0PetiH7NaZ4Q8sRgbQbyZ8xE6pNW+uc3Nu44CNVCUq3dtn/PztxM2ydJuv5+Xpbi7QG7uCwcQsFA90zUA3oyIB9Cjk+Bq33KqOqbAfhwM0fCTLIP37kHd0V2ufeTOMU6alg0ySHzLqITcIQm1fK3Y=
+Received: from SN6PR12MB2639.namprd12.prod.outlook.com (52.135.103.16) by
+ SN6PR12MB2830.namprd12.prod.outlook.com (20.177.250.143) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2408.24; Tue, 5 Nov 2019 13:38:15 +0000
+Received: from SN6PR12MB2639.namprd12.prod.outlook.com
+ ([fe80::2819:e697:4314:56ba]) by SN6PR12MB2639.namprd12.prod.outlook.com
+ ([fe80::2819:e697:4314:56ba%3]) with mapi id 15.20.2408.024; Tue, 5 Nov 2019
+ 13:38:15 +0000
+From:   "Ghannam, Yazen" <Yazen.Ghannam@amd.com>
+To:     Borislav Petkov <bp@alien8.de>
+CC:     "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] EDAC, ghes: Fix locking and memory barrier issues
-Message-ID: <20191105110511.GA28418@zn.tnic>
-References: <20191025211226.2444-1-rrichter@marvell.com>
+Subject: RE: [PATCH v2 0/6] AMD64 EDAC: Check for nodes without memory, etc.
+Thread-Topic: [PATCH v2 0/6] AMD64 EDAC: Check for nodes without memory, etc.
+Thread-Index: AQHViRgxcQiEBlwrekGL67NfTPIxZqdrX8oAgAsY5vCAAA5UAIAGIw2A
+Date:   Tue, 5 Nov 2019 13:38:15 +0000
+Message-ID: <SN6PR12MB2639B236A40754633C8E67F5F87E0@SN6PR12MB2639.namprd12.prod.outlook.com>
+References: <20191022203448.13962-1-Yazen.Ghannam@amd.com>
+ <20191025133456.GA6483@zn.tnic>
+ <BYAPR12MB2630ED1425A3F01727E1C45BF8620@BYAPR12MB2630.namprd12.prod.outlook.com>
+ <20191101155412.GA2300@nazgul.tnic>
+In-Reply-To: <20191101155412.GA2300@nazgul.tnic>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=Yazen.Ghannam@amd.com; 
+x-originating-ip: [184.90.133.239]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-ht: Tenant
+x-ms-office365-filtering-correlation-id: 00235954-fb1c-4537-061c-08d761f56940
+x-ms-traffictypediagnostic: SN6PR12MB2830:
+x-microsoft-antispam-prvs: <SN6PR12MB28300645C2188DABE5C270C4F87E0@SN6PR12MB2830.namprd12.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:6790;
+x-forefront-prvs: 0212BDE3BE
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(376002)(396003)(366004)(39860400002)(136003)(346002)(189003)(199004)(13464003)(86362001)(4326008)(186003)(6506007)(8676002)(99286004)(55016002)(54906003)(229853002)(9686003)(6116002)(3846002)(66556008)(53546011)(14454004)(25786009)(486006)(11346002)(446003)(76116006)(81156014)(74316002)(6916009)(76176011)(305945005)(102836004)(52536014)(5660300002)(33656002)(7736002)(316002)(66946007)(26005)(64756008)(66066001)(2906002)(6246003)(81166006)(71200400001)(71190400001)(478600001)(6436002)(8936002)(256004)(14444005)(7696005)(66476007)(66446008)(476003);DIR:OUT;SFP:1101;SCL:1;SRVR:SN6PR12MB2830;H:SN6PR12MB2639.namprd12.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
+received-spf: None (protection.outlook.com: amd.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: yTmwuwBk+OZoQN9YioBvebt9uTsLtJ8vj83tgS6w9lmf4dIkznQFlRLhhP5XDbjYZ9ouxsCxOhto6azVjsssh/TlA/uTa/G2n6fvBZDGWA1KVVKCCoCRwuqmmAZkKsPc/j2N75w9WXwLLvqYPjr72XWTQrkinOaHqa43hK+S/PsPSsFZ12kg6Yn0eSR7Q0JbKeMYynbtVlvBDtZoOWP40TOhbvhkSrLswIqDXj/R8NlrMsRoGWJ38NMkpWCt7JtyR7q8P9Q1jEI8MduO/Wp964QXGWbOZnEbNQj1BV7LAIocPBnCNqlp43zG7mJWStmRdqwcwUOTWhjgZPeb8GJF/4EiC4F2wCYNwTtZ54vsf5Wcib0xRP/pTI/yh2hzPt2z2iBp7pFeymSbTmVQb9GIJetZrr5+G79iXv+BLnWz5Wz8bAshRpbwfZeVl1Hn84a4
+x-ms-exchange-transport-forked: True
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20191025211226.2444-1-rrichter@marvell.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 00235954-fb1c-4537-061c-08d761f56940
+X-MS-Exchange-CrossTenant-originalarrivaltime: 05 Nov 2019 13:38:15.5780
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 0a93zh1tgwvy/d6xVdHFvbYNbQNFIV1XqprVqpmYMKxKMrH+cDTFHvLKDqDXIOZBq1yDg/aBlkjTKMlbVCRXZw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN6PR12MB2830
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Fri, Oct 25, 2019 at 09:13:14PM +0000, Robert Richter wrote:
-> The ghes registration and refcount is broken in several ways:
-> 
->  * ghes_edac_register() returns with success for a 2nd instance even
->    if a first instance is still running.
-
-How?
-
-There's
-
-        if (atomic_inc_return(&ghes_init) > 1)
-                return 0;
-
-there. How would a second instance bypass this?
-
->  * The refcount was increased even if a registration failed. This
->    leads to stale counters preventing the device from being released.
-
-That I see - the return path should dec ghes_init.
-
->  * The ghes refcount may not be decremented properly on
->    unregistration. Always decrement the refcount once
->    ghes_edac_unregister() is called to keep the refcount sane.
-
-Right.
-
->  * The ghes_pvt pointer is handed to the irq handler before
->    registration finished.
-> 
->  * The mci structure could be freed while the irq handler is running.
-> 
-> Fix this by adding a mutex to ghes_edac_register(). This mutex
-> serializes instances to register and unregister. The refcount is only
-> increased if the registration succeeded. This makes sure the refcount
-> is in a consistent state after registering or unregistering a device.
-> Note: A spinlock cannot be used here as the code section may sleep.
-> 
-> The ghes_pvt is protected by ghes_lock now.
-
-This better be documented in the driver with a comment above the
-ghes_pvt thing.
-
-I'm assuming the support for multiple instances is going ontop of this?
-If so, ghes_pvt needs to be an array or so. Also, if you do that, I
-think you should use mc_devices - see edac_mc_find() et al - instead of
-growing a special one just for this driver.
-
-> This ensures the pointer
-> is not updated before registration was finished or while the irq
-> handler is running. It is unset before unregistering the device
-> including necessary (implicit) memory barriers making the changes
-> visible to other cpus. Thus, the device can not be used anymore by an
-> interrupt.
-> 
-> A refcount is needed. There can be multiple GHES structures being
-> defined (see ACPI 6.3 specification, 18.3.2.7 Generic Hardware Error
-> Source, "Some platforms may describe multiple Generic Hardware Error
-> Source structures with different notification types, ...").
-> 
-> Another approach to use the mci's device refcount (get_device()) and
-> have a release function does not work here. A release function will be
-> called only for device_release() with the last put_device() call. The
-> device must be deleted *before* that with device_del(). This is only
-> possible by maintaining an own refcount.
-> 
-> Fixes: 0fe5f281f749 ("EDAC, ghes: Model a single, logical memory controller")
-> Fixes: 1e72e673b9d1 ("EDAC/ghes: Fix Use after free in ghes_edac remove path")
-> Signed-off-by: Borislav Petkov <bp@suse.de>
-> Signed-off-by: James Morse <james.morse@arm.com>
-> Signed-off-by: Robert Richter <rrichter@marvell.com>
-> ---
->  drivers/edac/ghes_edac.c | 78 ++++++++++++++++++++++++++++------------
->  1 file changed, 56 insertions(+), 22 deletions(-)
-
-...
-
-> @@ -457,10 +461,12 @@ static struct acpi_platform_list plat_list[] = {
->  int ghes_edac_register(struct ghes *ghes, struct device *dev)
->  {
->  	bool fake = false;
-> -	int rc, num_dimm = 0;
-> +	int rc = 0, num_dimm = 0;
->  	struct mem_ctl_info *mci;
-> +	struct ghes_edac_pvt *pvt;
->  	struct edac_mc_layer layers[1];
->  	struct ghes_edac_dimm_fill dimm_fill;
-> +	unsigned long flags;
->  	int idx = -1;
->  
->  	if (IS_ENABLED(CONFIG_X86)) {
-> @@ -472,11 +478,14 @@ int ghes_edac_register(struct ghes *ghes, struct device *dev)
->  		idx = 0;
->  	}
->  
-> +	/* finish another registration/unregistration instance first */
-> +	mutex_lock(&ghes_reg_mutex);
-> +
->  	/*
->  	 * We have only one logical memory controller to which all DIMMs belong.
->  	 */
-> -	if (atomic_inc_return(&ghes_init) > 1)
-> -		return 0;
-> +	if (atomic_inc_not_zero(&ghes_init))
-
-That should probably be called ghes_instances now to make it obvious
-what it is.
-
-Also, you can make it a normal variable now since it is being modified
-under the mutex only.
-
-> +		goto unlock;
->  
->  	/* Get the number of DIMMs */
->  	dmi_walk(ghes_edac_count_dimms, &num_dimm);
-> @@ -494,12 +503,13 @@ int ghes_edac_register(struct ghes *ghes, struct device *dev)
->  	mci = edac_mc_alloc(0, ARRAY_SIZE(layers), layers, sizeof(struct ghes_edac_pvt));
->  	if (!mci) {
->  		pr_info("Can't allocate memory for EDAC data\n");
-> -		return -ENOMEM;
-> +		rc = -ENOMEM;
-> +		goto unlock;
->  	}
->  
-> -	ghes_pvt	= mci->pvt_info;
-> -	ghes_pvt->ghes	= ghes;
-> -	ghes_pvt->mci	= mci;
-> +	pvt		= mci->pvt_info;
-> +	pvt->ghes	= ghes;
-> +	pvt->mci	= mci;
->  
->  	mci->pdev = dev;
->  	mci->mtype_cap = MEM_FLAG_EMPTY;
-> @@ -541,23 +551,47 @@ int ghes_edac_register(struct ghes *ghes, struct device *dev)
->  	if (rc < 0) {
->  		pr_info("Can't register at EDAC core\n");
->  		edac_mc_free(mci);
-> -		return -ENODEV;
-> +		rc = -ENODEV;
-
-This needs to "goto unlock".
-
->  	}
-> -	return 0;
-> +
-> +	spin_lock_irqsave(&ghes_lock, flags);
-> +	ghes_pvt = pvt;
-> +	spin_unlock_irqrestore(&ghes_lock, flags);
-> +
-> +	/* only increment on success */
-> +	atomic_inc(&ghes_init);
-> +
-> +unlock:
-> +	mutex_unlock(&ghes_reg_mutex);
-> +
-> +	return rc;
->  }
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+PiAtLS0tLU9yaWdpbmFsIE1lc3NhZ2UtLS0tLQ0KPiBGcm9tOiBsaW51eC1lZGFjLW93bmVyQHZn
+ZXIua2VybmVsLm9yZyA8bGludXgtZWRhYy1vd25lckB2Z2VyLmtlcm5lbC5vcmc+IE9uIEJlaGFs
+ZiBPZiBCb3Jpc2xhdiBQZXRrb3YNCj4gU2VudDogRnJpZGF5LCBOb3ZlbWJlciAxLCAyMDE5IDEx
+OjU0IEFNDQo+IFRvOiBHaGFubmFtLCBZYXplbiA8WWF6ZW4uR2hhbm5hbUBhbWQuY29tPg0KPiBD
+YzogbGludXgtZWRhY0B2Z2VyLmtlcm5lbC5vcmc7IGxpbnV4LWtlcm5lbEB2Z2VyLmtlcm5lbC5v
+cmcNCj4gU3ViamVjdDogUmU6IFtQQVRDSCB2MiAwLzZdIEFNRDY0IEVEQUM6IENoZWNrIGZvciBu
+b2RlcyB3aXRob3V0IG1lbW9yeSwgZXRjLg0KPiANCj4gT24gRnJpLCBOb3YgMDEsIDIwMTkgYXQg
+MDM6MTk6MzZQTSArMDAwMCwgR2hhbm5hbSwgWWF6ZW4gd3JvdGU6DQo+ID4gSXMgdGhlIG1vZHVs
+ZSBiZWluZyBwcm9iZWQgdHdpY2U/IFdlIGhhdmUgdGhpcyBwcm9ibGVtIGluIGdlbmVyYWwsIGUu
+Zy4gdGhlDQo+ID4gbW9kdWxlIGdldHMgbG9hZGVkIG11bHRpcGxlIHRpbWVzIG9uIGZhaWx1cmUu
+DQo+IA0KPiBZYXAsIGl0IGxvb2tzIGxpa2UgaXQuDQo+IA0KPiA+IFRoZSBjbHVlIGZvciBtZSBp
+cyB0aGF0IG5vZGUgMCBnZXRzIGRldGVjdGVkIHR3aWNlLiBUaGlzIGlzIGRvbmUgaW4NCj4gPiBw
+ZXJfZmFtaWx5X2luaXQoKSBlYXJseSBpbiBwcm9iZV9vbmVfaW5zdGFuY2UoKS4NCj4gPg0KPiA+
+IEluIGFueSBjYXNlLCBJIHRoaW5rIHdlIGNhbiBtYWtlICFlY2NfZW5hYmxlZChwdnQpIGluIHBy
+b2JlX29uZV9pbnN0YW5jZSgpIGENCj4gPiBmYWlsdXJlIG5vdyB0aGF0IHdlIGhhdmUgYW4gZXhw
+bGljaXQgY2hlY2sgZm9yIG1lbW9yeSBvbiBhIG5vZGUuIEluIG90aGVyDQo+ID4gd29yZHMsIGlm
+IHdlIGhhdmUgbWVtb3J5IGFuZCBFQ0MgaXMgZGlzYWJsZWQgdGhlbiB0aGlzIGlzIGEgZmFpbHVy
+ZSBmb3IgdGhlDQo+ID4gbW9kdWxlLg0KPiANCj4gWWVhaCwgZm9yIHRoYXQgY2FzZSB3ZSBzaG91
+bGQgYmUgcHJpbnRpbmcgZWNjX21zZy4gTWFrZXMgc2Vuc2UuDQo+IA0KDQpEbyB5b3UgaGF2ZSBh
+bnkgb3RoZXIgY29tbWVudHMgb24gdGhpcyBzZXQ/IFNob3VsZCBJIHNlbmQgYW5vdGhlciByZXZp
+c2lvbg0Kd2l0aCB0aGlzIGNoYW5nZT8NCg0KVGhhbmtzLA0KWWF6ZW4NCg==
