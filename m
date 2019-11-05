@@ -2,59 +2,59 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 188DAF053B
-	for <lists+linux-edac@lfdr.de>; Tue,  5 Nov 2019 19:39:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D6D73F06A6
+	for <lists+linux-edac@lfdr.de>; Tue,  5 Nov 2019 21:08:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390485AbfKESjy (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Tue, 5 Nov 2019 13:39:54 -0500
-Received: from mx0a-0016f401.pphosted.com ([67.231.148.174]:21618 "EHLO
+        id S1727132AbfKEUIM (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Tue, 5 Nov 2019 15:08:12 -0500
+Received: from mx0a-0016f401.pphosted.com ([67.231.148.174]:35162 "EHLO
         mx0b-0016f401.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S2390423AbfKESjx (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Tue, 5 Nov 2019 13:39:53 -0500
+        by vger.kernel.org with ESMTP id S1725806AbfKEUIM (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Tue, 5 Nov 2019 15:08:12 -0500
 Received: from pps.filterd (m0045849.ppops.net [127.0.0.1])
-        by mx0a-0016f401.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id xA5IQEjB005050;
-        Tue, 5 Nov 2019 10:39:36 -0800
+        by mx0a-0016f401.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id xA5K6QQA009871;
+        Tue, 5 Nov 2019 12:07:54 -0800
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
  subject : date : message-id : content-type : content-transfer-encoding :
- mime-version; s=pfpt0818; bh=E/MliGxLvUXjJ9u9n28yayaSmMfpC2ZVIAEZM+Dag/o=;
- b=QHJ4oo+pm+z4zQGf4rS2ULRd//2Dfte04pTbKkSgf4JtAxcY/NtVMqtDYwOwoFf35Iqq
- icJnxhrl8dvHkOCHLRebYUaq1ISSjF0Zd5wHoUuVtJwj657Xl2fKl4GViRG6z8F9gRr/
- 2O0GeX3rONHwivMsN49lzUqX7hJt4cmwej2LdwesJHzk4vW2t1HKP2Ros2Y1NRJ27uiX
- 2El1xDy97Qf0qcoGQohVuZ5wR4fvnM2Sp+VAUkb4xMNZM93/tCgY3SYNHArVG3+7epES
- X3w9QUt1+2AxgJTV7KmQcWE4Z1inx7OMrW5pNsERDpNIM6rkxFY8XySQPU+k48id2UhJ eQ== 
+ mime-version; s=pfpt0818; bh=ZHMpbuCZSxHqKhlmBWIMNytQ4fYuc+eIfTKZioaof2c=;
+ b=nTUJxvMJdduV5zzkzY0hvKA9x6VDUrstYEIJ6qQ51lBDHMLv0b0RiH3Km/qXkG8xV4kT
+ Qzplgi4VOEw42f2LqlfS9/uMgeb6Wyu3x1++1Q6OybTbz8OOi5O51b1QC9Rm8IAFgVYf
+ THHR6tiOPXVTR+wIHWDfvrZnZIDM8bAFNoKcRdE2Kv6O5uJbzbqRpas6Vu9Me9B6weEg
+ H3/lGk3xcLHgFei5MKGI6+XyYjFxhLpieBuvS7kOqhFDVJjE0yDdgzDfZhbb9Oarb9c/
+ G9S9Uy70BD1ZI9AaqBst4JhzoezCjIWp4aD/Qnaj73SrQ8vIXuPGpXwZgjrZkQegBNcR wQ== 
 Received: from sc-exch01.marvell.com ([199.233.58.181])
-        by mx0a-0016f401.pphosted.com with ESMTP id 2w17n94de1-1
+        by mx0a-0016f401.pphosted.com with ESMTP id 2w3eud08wb-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
-        Tue, 05 Nov 2019 10:39:36 -0800
-Received: from SC-EXCH02.marvell.com (10.93.176.82) by SC-EXCH01.marvell.com
+        Tue, 05 Nov 2019 12:07:54 -0800
+Received: from SC-EXCH04.marvell.com (10.93.176.84) by SC-EXCH01.marvell.com
  (10.93.176.81) with Microsoft SMTP Server (TLS) id 15.0.1367.3; Tue, 5 Nov
- 2019 10:39:34 -0800
-Received: from NAM04-SN1-obe.outbound.protection.outlook.com (104.47.44.51) by
- SC-EXCH02.marvell.com (10.93.176.82) with Microsoft SMTP Server (TLS) id
- 15.0.1367.3 via Frontend Transport; Tue, 5 Nov 2019 10:39:34 -0800
+ 2019 12:07:53 -0800
+Received: from NAM03-CO1-obe.outbound.protection.outlook.com (104.47.40.58) by
+ SC-EXCH04.marvell.com (10.93.176.84) with Microsoft SMTP Server (TLS) id
+ 15.0.1367.3 via Frontend Transport; Tue, 5 Nov 2019 12:07:53 -0800
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=acNXQCM4/YqO8kRHzPp/0aKreGeiGpeDgoRGEJwRocdkRMKyc/9qDGOO2WvlQ0UZktnAsEcwwhjGS16H0wtIeKajCslItIvKoW4w6xyCqVusTtokkT+wiqjBYnlnMB2eyCBg7vtSot5l4YZo3OHdJnkh4nWrlD3uRUtlwJfbVyiU3khWgRbxlcyJH+KPjr4S3hdeL49mXsqGTjxF1+x9Wo+jkNBKpWiPEyeGWjV07izTw+xB2tW1TVax8wFzc4noohlNo9980Wt0fOhSsDIEFoFHjVtmPsuE6j2RVuC7ykoOAG2kCxlopTtyfcNdn3y8PX5FM04fCPlhbUdwMtSOtQ==
+ b=crGmPKjt8FPln00dfmNNgz5SXK+esMIZ+ErkXYKC974U0UuzYk07GYGyaC8uO2L55SWHM14VPasqLd9WRZY/S3lnPLZ1n0VIsq1QKTlb4klYvs9W+g8vKLbSyma+Q6AWAXUZbMlgIQwkFDWL9u0+3f+i5M/1K5FSaqJygWax57+UNKH5fbcXdbhLQcYVg4p4gDV1lidkTZeTZiBcWfE4UP1mhVFbBjhwhhrEa3qHfLmhbgZ9DKG0kBe0IYtEF1UGi8Igyw152W9/JyhDJRFwuSAa7VUQrXdUe0/ZzwYNgREqeTSA+v39V9weQxOVCmH3NL3I0JohHuDe+xINCMoo9g==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=E/MliGxLvUXjJ9u9n28yayaSmMfpC2ZVIAEZM+Dag/o=;
- b=FXfqIJhRHFGLYMQGBDXVMk+iUATDQEeDGDwpg3QaeUTnIfs+9M0iV4YDdOFdPpaqSY8p3u/qrxo6ezXSNi0p24UCSa5/MHmUHSWr3UXLAvqQrzbLmYwRowmt9wT6qz6nXOk6T2xVyWkoB84hBapaQuQG1dJFEEz755qznjKj0gYyatir5rNuFUYWVu5yNEjh+d2r8DgC4GdPQ6HfaYBwzTZNlF9SlUwXjBCqNvuAV5+yCmzDg2OUTwEIUgDGPSFre3/8oADhBZiaQM//LRC2IAOLW+0Zg8zCOLSJESFSanPrr2f5qRCsZ2w2Ip+pe7uo0YErJ8xCJVwH25HeRsT57w==
+ bh=ZHMpbuCZSxHqKhlmBWIMNytQ4fYuc+eIfTKZioaof2c=;
+ b=a9Z8oiBIo7Cl+gpxH7kXOr99FvKwuIx5TjE2psLYZ2FYgT9qQCgottDfAr36tbLPSUuXYmE5B/dyDguokDLO3VwSRdgRngJbo26p20OOPu3EA/OurbPN48p0a5oWYuwwYekKB1YAy0LHdRTFLI9s/h8RATs1Pjxoa4AbiWgCxhcOScQREpgHVZ2nwaQjjj1mxdSLKlN+F7gOem1tsPAQJeqArBEx3z3nLbnf33ptvvBqWp6x0MpfrGgsnf9hbxtJhM23lUvLu/N0I/+B5R9SWjix+byh8rQioT0eHSnkflud/1cns7T8sVaGFIdejJxRpm0tzT3S51fgeUimT0z4lA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=marvell.com; dmarc=pass action=none header.from=marvell.com;
  dkim=pass header.d=marvell.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=marvell.onmicrosoft.com; s=selector2-marvell-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=E/MliGxLvUXjJ9u9n28yayaSmMfpC2ZVIAEZM+Dag/o=;
- b=oZgpDNoOvqGnWDCiN4NKfS7T1xw1sEWgnyv61c1WVPPfUTYLccv2ZSnbnbuxDYr8AaLdGA2mAQzEZg2wMkZWnKxWzGWz7fB/4jHVQbkzFxVIUGYtF6NYjhN7EuXn8XFikxgM1gI9uH2TvppVoTro3g3OtSEyRbfALFIQPcFkNzE=
+ bh=ZHMpbuCZSxHqKhlmBWIMNytQ4fYuc+eIfTKZioaof2c=;
+ b=PVJ6t4GJOz6v4VcTPr6ea9wygAp6wxkrIoexqE0iL45lgUI/0cQVX+rTRGPNC3mbiaZk566qQtvNLpM5ALtBkyxJx+MCyD/HlM5B32ol3ATr4NFbAOVqpaC9QDIeHbxTjt00nifq1bGkn02rt84/mkLYjefVTfd+bvLH7c8PWaw=
 Received: from MN2PR18MB3408.namprd18.prod.outlook.com (10.255.237.10) by
- MN2PR18MB3389.namprd18.prod.outlook.com (10.255.239.33) with Microsoft SMTP
+ MN2PR18MB3085.namprd18.prod.outlook.com (20.179.21.16) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2408.24; Tue, 5 Nov 2019 18:39:31 +0000
+ 15.20.2408.24; Tue, 5 Nov 2019 20:07:51 +0000
 Received: from MN2PR18MB3408.namprd18.prod.outlook.com
  ([fe80::c4a:cf3c:f530:fba6]) by MN2PR18MB3408.namprd18.prod.outlook.com
  ([fe80::c4a:cf3c:f530:fba6%6]) with mapi id 15.20.2408.024; Tue, 5 Nov 2019
- 18:39:31 +0000
+ 20:07:51 +0000
 From:   Robert Richter <rrichter@marvell.com>
 To:     James Morse <james.morse@arm.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
@@ -63,45 +63,45 @@ CC:     Robert Richter <rrichter@marvell.com>,
         Borislav Petkov <bp@suse.de>,
         "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: [PATCH v2] EDAC, ghes: Fix locking and memory barrier issues
-Thread-Topic: [PATCH v2] EDAC, ghes: Fix locking and memory barrier issues
-Thread-Index: AQHVlAhce/hMrmg3H0iOfbbQAxy3FA==
-Date:   Tue, 5 Nov 2019 18:39:31 +0000
-Message-ID: <20191105183846.30327-1-rrichter@marvell.com>
+Subject: [PATCH v3] EDAC, ghes: Fix locking and memory barrier issues
+Thread-Topic: [PATCH v3] EDAC, ghes: Fix locking and memory barrier issues
+Thread-Index: AQHVlBSz45Hg5fqU9kW80JLQAsOb9w==
+Date:   Tue, 5 Nov 2019 20:07:51 +0000
+Message-ID: <20191105200732.3053-1-rrichter@marvell.com>
 Accept-Language: en-US
 Content-Language: en-US
 X-MS-Has-Attach: 
 X-MS-TNEF-Correlator: 
-x-clientproxiedby: HE1PR05CA0257.eurprd05.prod.outlook.com
- (2603:10a6:3:fb::33) To MN2PR18MB3408.namprd18.prod.outlook.com
+x-clientproxiedby: HE1PR0802CA0004.eurprd08.prod.outlook.com
+ (2603:10a6:3:bd::14) To MN2PR18MB3408.namprd18.prod.outlook.com
  (2603:10b6:208:165::10)
 x-ms-exchange-messagesentrepresentingtype: 1
 x-mailer: git-send-email 2.20.1
 x-originating-ip: [31.208.96.227]
 x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 14733517-23d1-4727-9f23-08d7621f7f0f
-x-ms-traffictypediagnostic: MN2PR18MB3389:
+x-ms-office365-filtering-correlation-id: ffa3488e-7387-48a6-cc11-08d7622bd5e6
+x-ms-traffictypediagnostic: MN2PR18MB3085:
 x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <MN2PR18MB338980174D1D522A45A1A71DD97E0@MN2PR18MB3389.namprd18.prod.outlook.com>
+x-microsoft-antispam-prvs: <MN2PR18MB3085169FB5A413AC84D7AC0CD97E0@MN2PR18MB3085.namprd18.prod.outlook.com>
 x-ms-oob-tlc-oobclassifiers: OLM:1284;
 x-forefront-prvs: 0212BDE3BE
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(979002)(4636009)(376002)(396003)(136003)(346002)(39860400002)(366004)(189003)(199004)(6506007)(186003)(1076003)(86362001)(25786009)(3846002)(7736002)(256004)(6512007)(5660300002)(66946007)(14444005)(305945005)(81156014)(486006)(66446008)(476003)(8936002)(66476007)(50226002)(64756008)(66556008)(4326008)(6116002)(99286004)(2616005)(36756003)(386003)(6436002)(52116002)(81166006)(2906002)(8676002)(26005)(6486002)(110136005)(14454004)(54906003)(71190400001)(71200400001)(102836004)(478600001)(66066001)(316002)(969003)(989001)(999001)(1009001)(1019001);DIR:OUT;SFP:1101;SCL:1;SRVR:MN2PR18MB3389;H:MN2PR18MB3408.namprd18.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(366004)(39860400002)(396003)(376002)(346002)(136003)(199004)(189003)(1076003)(66476007)(14454004)(316002)(8676002)(86362001)(5660300002)(110136005)(50226002)(66556008)(4326008)(25786009)(99286004)(2906002)(478600001)(386003)(64756008)(66446008)(52116002)(36756003)(8936002)(81156014)(6506007)(81166006)(26005)(71200400001)(14444005)(71190400001)(2616005)(3846002)(6116002)(6512007)(66946007)(54906003)(102836004)(6486002)(476003)(486006)(6436002)(7736002)(66066001)(186003)(256004)(305945005);DIR:OUT;SFP:1101;SCL:1;SRVR:MN2PR18MB3085;H:MN2PR18MB3408.namprd18.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
 received-spf: None (protection.outlook.com: marvell.com does not designate
  permitted sender hosts)
 x-ms-exchange-senderadcheck: 1
 x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 9sH11u8rTDOGWBsBhztA/ixMNhA7oQNO2iMnrTNyak//OnlE/SWIt6vXJ9kgvRuYtzxU8Tink2kZ2pwOW7kVxuCMVHwsZY0HfOKJiSC/1oWmdEZEw5lrhPYJDKm5zEz2mY13KnU5NkvwaMvOnhwhxt03wYVShOnN9hKDhhP3WdhXQH0hs33+dVdRQ4Eynwaw8MfrOMLc1rzTv0oWgquT7ZkwX7hVVWzbKNIeAZ0UhSmDqdCRjo3cmg7SYC/UYRizcZzBiI0ye7nQwFearTSWusmlGsTai+IMr5kBEyBO9e1Mu6P2y+X/Dn5Otc3J8f1gjkFzfIm52jdvynBO9LC1QqWBJb12/RDCdug+KQ2tbFIw/CZFb92qbEX5O6i9vlDXR2NHnF9ek3v6ic/fbmOzev9PulgNXfSmmK85sWDdTLBoxbbWaU3XTs6bOIK+KMZ2
+x-microsoft-antispam-message-info: TnHr6GqvnsZtX48vbFeuZ0brFXj7mL/kymucsBGB2sPfRGW8HAhxyLIZk3iTTLYMglVJd1+b/4Lx2H9u/lbCO5DUFXXzOSrrAO8mZqk2cPnDUh8cBjHZm2VdZFOgP6HMt0UtNvYCaqhujkFqkTke7/+iYWmGmjWl8U61pUrDCluQfLX007rrgvxh7JaCWKH9lnHF4qTl8XVIlqUdu0sucT0VCA72aHo5W0DJGLSVZkRtULsNXqeAmkh3kESDHuDSZ8QzRwgeR0smWfMx3iS00wXb/6lsE+h8GQL5wXN4grQnVm/6ZVJe15x7XIotiNYIyRaGNfH4U7yaqJIqsNAyoU0xmvkP1mFibUYIoXNfkJUnblGhBQE2irCGbuyTuorBgTLl4gRvLk9nGPhVDKMrLXnXa9Sb5SuBC8nfE4vEp2mEiJKwv2AjMvt977TKdLsb
 Content-Type: text/plain; charset="iso-8859-1"
 Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-Network-Message-Id: 14733517-23d1-4727-9f23-08d7621f7f0f
-X-MS-Exchange-CrossTenant-originalarrivaltime: 05 Nov 2019 18:39:31.3351
+X-MS-Exchange-CrossTenant-Network-Message-Id: ffa3488e-7387-48a6-cc11-08d7622bd5e6
+X-MS-Exchange-CrossTenant-originalarrivaltime: 05 Nov 2019 20:07:51.1131
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
 X-MS-Exchange-CrossTenant-id: 70e1fb47-1155-421d-87fc-2e58f638b6e0
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: gZDcAzcrdnzcqnxVHq624Qe9cgYSUkajoBmM+9Urt5fI5L5SzHh0wgu1yFo8bVz3j/c8srU4h90YgoIWw8sFbA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR18MB3389
+X-MS-Exchange-CrossTenant-userprincipalname: Uc/qqBgDTIhye5QGRLGw/o0gBwlF8BmfMVNrIefVSbmnPsqt9m3CIKAyXEixIAGmS3mLEUijxd8v0RH0q7EftA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR18MB3085
 X-OriginatorOrg: marvell.com
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.95,1.0.8
  definitions=2019-11-05_07:2019-11-05,2019-11-05 signatures=0
@@ -160,10 +160,16 @@ Fixes: 0fe5f281f749 ("EDAC, ghes: Model a single, logical memory controller=
 ")
 Fixes: 1e72e673b9d1 ("EDAC/ghes: Fix Use after free in ghes_edac remove pat=
 h")
-Co-developed-by: Borislav Petkov <bp@suse.de>
 Co-developed-by: James Morse <james.morse@arm.com>
+Signed-off-by: James Morse <james.morse@arm.com>
+Co-developed-by: Borislav Petkov <bp@suse.de>
+Signed-off-by: Borislav Petkov <bp@suse.de>
 Signed-off-by: Robert Richter <rrichter@marvell.com>
 ---
+V3:
+ * fixed SOB chain again (added SOBs according to
+   submitting-patches.rst)
+
 V2:
  * fixed missing 'goto unlock' in error path
  * fixed SOB chain
