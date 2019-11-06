@@ -2,68 +2,166 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 00073F0822
-	for <lists+linux-edac@lfdr.de>; Tue,  5 Nov 2019 22:21:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 775E3F0B89
+	for <lists+linux-edac@lfdr.de>; Wed,  6 Nov 2019 02:17:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729698AbfKEVVH (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Tue, 5 Nov 2019 16:21:07 -0500
-Received: from mga02.intel.com ([134.134.136.20]:16568 "EHLO mga02.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728515AbfKEVVH (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Tue, 5 Nov 2019 16:21:07 -0500
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga101.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 05 Nov 2019 13:21:06 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.68,271,1569308400"; 
-   d="scan'208";a="403501742"
-Received: from spandruv-desk.jf.intel.com ([10.54.75.31])
-  by fmsmga006.fm.intel.com with ESMTP; 05 Nov 2019 13:21:05 -0800
-Message-ID: <3a56071a7b2c157698ed781d09e47051e3974958.camel@linux.intel.com>
-Subject: Re: [RFC][PATCH] x86, mce, therm_throt: Optimize notifications of
- thermal throttle
-From:   Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     tony.luck@intel.com, tglx@linutronix.de, mingo@redhat.com,
-        hpa@zytor.com, bberg@redhat.com, x86@kernel.org,
-        linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
-        hdegoede@redhat.com, ckellner@redhat.com
-Date:   Tue, 05 Nov 2019 13:21:05 -0800
-In-Reply-To: <20191105205617.GF28418@zn.tnic>
-References: <20191025001924.10199-1-srinivas.pandruvada@linux.intel.com>
-         <20191105144411.GC28418@zn.tnic>
-         <810bfb95a42090ff64f86e4154e2bd2cfda29f27.camel@linux.intel.com>
-         <20191105205617.GF28418@zn.tnic>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5 (3.28.5-3.fc28) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+        id S1730478AbfKFBRb (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Tue, 5 Nov 2019 20:17:31 -0500
+Received: from bombadil.infradead.org ([198.137.202.133]:50050 "EHLO
+        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730250AbfKFBRb (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Tue, 5 Nov 2019 20:17:31 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
+        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=fJzCRjgUbUa5xOBq/+QJh0wrLExcew83UwFTm5Lx8Ic=; b=f80WedLMGsiB/BJTqoblaPG7e
+        aFkrRe8i8FMQHqGdHM6fZd3QOu8IdbgQzDeCisqehveKWXlQVw85+N2lJvyer4hd0IIcMugvKPLH7
+        MX/druwPQbDaavWvULiX4xDKwr0l9HhJCVB+E/aErjdqj55W3LeBfMFSxzJjUL+o/vXDj/BDWFyjp
+        SeyQ4LfMNKoy8yOm+zmZbKUUGM0vq19IRgtjXnApfr4ca++jsd/jGIywKLdB4fT1bYmPCR34cf933
+        cF4TvoWVxjShQUIt8U1312LAJ/wcOTvFJxpDYSTeeomsrvkf7/r8shsbbHkRFLnUs4i/xzAvyQn8g
+        ExBeTKEug==;
+Received: from [76.14.1.154] (helo=localhost)
+        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1iS9wp-00070f-Nu; Wed, 06 Nov 2019 01:17:23 +0000
+From:   Christoph Hellwig <hch@lst.de>
+To:     paul.walmsley@sifive.com, palmer@dabbelt.com, bp@alien8.de,
+        mchehab@kernel.org, tony.luck@intel.com, james.morse@arm.com,
+        rrichter@marvell.com, yash.shah@sifive.com
+Cc:     linux-riscv@lists.infradead.org, linux-edac@vger.kernel.org
+Subject: [PATCH, resend] riscv: move sifive_l2_cache.c to drivers/soc
+Date:   Tue,  5 Nov 2019 17:17:23 -0800
+Message-Id: <20191106011723.2110-1-hch@lst.de>
+X-Mailer: git-send-email 2.20.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Tue, 2019-11-05 at 21:56 +0100, Borislav Petkov wrote:
-> On Tue, Nov 05, 2019 at 12:36:32PM -0800, Srinivas Pandruvada wrote:
-> > > That wants to be a bool judging by the context it is used in.
-> > 
-> > I can change to bool, just didn't use it
-> > https://yarchive.net/comp/linux/bool.html
-> 
-> And are you using it in a union or where the size of bool - which is
-> implementation-specific - plays any role, esp. in your particular use
-> case?
-No.
+The sifive_l2_cache.c is in no way related to RISC-V architecture
+memory management.  It is a little stub driver working around the fact
+that the EDAC maintainers prefer their drivers to be structured in a
+certain way that doesn't fit the SiFive SOCs.
 
-> 
-> > They are architectural MSRs and the fact that we are getting called
-> > means that they are enabled by looking at CPUID bits.
-> 
-> If the CPUID bits guarantees their presence, then the error handling
-> is
-> not absolutely necessary.
-> 
-> Thx.
-> 
+Move the file to drivers/soc and add a Kconfig option for it, as well
+as the whole drivers/soc boilerplate for CONFIG_SOC_SIFIVE.
+
+Fixes: a967a289f169 ("RISC-V: sifive_l2_cache: Add L2 cache controller driver for SiFive SoCs")
+Signed-off-by: Christoph Hellwig <hch@lst.de>
+---
+
+I'll still need ACKs from the edac maintainers for this according to
+Paul..
+
+ MAINTAINERS                                            |  1 +
+ arch/riscv/mm/Makefile                                 |  1 -
+ drivers/edac/Kconfig                                   |  2 +-
+ drivers/soc/Kconfig                                    |  1 +
+ drivers/soc/Makefile                                   |  1 +
+ drivers/soc/sifive/Kconfig                             | 10 ++++++++++
+ drivers/soc/sifive/Makefile                            |  4 ++++
+ .../riscv/mm => drivers/soc/sifive}/sifive_l2_cache.c  |  0
+ 8 files changed, 18 insertions(+), 2 deletions(-)
+ create mode 100644 drivers/soc/sifive/Kconfig
+ create mode 100644 drivers/soc/sifive/Makefile
+ rename {arch/riscv/mm => drivers/soc/sifive}/sifive_l2_cache.c (100%)
+
+diff --git a/MAINTAINERS b/MAINTAINERS
+index cba1095547fd..f5a8accb0df3 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -5972,6 +5972,7 @@ M:	Yash Shah <yash.shah@sifive.com>
+ L:	linux-edac@vger.kernel.org
+ S:	Supported
+ F:	drivers/edac/sifive_edac.c
++F:	drivers/soc/sifive/
+ 
+ EDAC-SKYLAKE
+ M:	Tony Luck <tony.luck@intel.com>
+diff --git a/arch/riscv/mm/Makefile b/arch/riscv/mm/Makefile
+index 9d9a17335686..b225134c29e0 100644
+--- a/arch/riscv/mm/Makefile
++++ b/arch/riscv/mm/Makefile
+@@ -11,7 +11,6 @@ obj-y += extable.o
+ obj-y += ioremap.o
+ obj-y += cacheflush.o
+ obj-y += context.o
+-obj-y += sifive_l2_cache.o
+ 
+ ifeq ($(CONFIG_MMU),y)
+ obj-$(CONFIG_SMP) += tlbflush.o
+diff --git a/drivers/edac/Kconfig b/drivers/edac/Kconfig
+index 417dad635526..5c8272329a65 100644
+--- a/drivers/edac/Kconfig
++++ b/drivers/edac/Kconfig
+@@ -462,7 +462,7 @@ config EDAC_ALTERA_SDMMC
+ 
+ config EDAC_SIFIVE
+ 	bool "Sifive platform EDAC driver"
+-	depends on EDAC=y && RISCV
++	depends on EDAC=y && SIFIVE_L2
+ 	help
+ 	  Support for error detection and correction on the SiFive SoCs.
+ 
+diff --git a/drivers/soc/Kconfig b/drivers/soc/Kconfig
+index 833e04a7835c..1778f8c62861 100644
+--- a/drivers/soc/Kconfig
++++ b/drivers/soc/Kconfig
+@@ -14,6 +14,7 @@ source "drivers/soc/qcom/Kconfig"
+ source "drivers/soc/renesas/Kconfig"
+ source "drivers/soc/rockchip/Kconfig"
+ source "drivers/soc/samsung/Kconfig"
++source "drivers/soc/sifive/Kconfig"
+ source "drivers/soc/sunxi/Kconfig"
+ source "drivers/soc/tegra/Kconfig"
+ source "drivers/soc/ti/Kconfig"
+diff --git a/drivers/soc/Makefile b/drivers/soc/Makefile
+index 2ec355003524..8b49d782a1ab 100644
+--- a/drivers/soc/Makefile
++++ b/drivers/soc/Makefile
+@@ -20,6 +20,7 @@ obj-y				+= qcom/
+ obj-y				+= renesas/
+ obj-$(CONFIG_ARCH_ROCKCHIP)	+= rockchip/
+ obj-$(CONFIG_SOC_SAMSUNG)	+= samsung/
++obj-$(CONFIG_SOC_SIFIVE)	+= sifive/
+ obj-y				+= sunxi/
+ obj-$(CONFIG_ARCH_TEGRA)	+= tegra/
+ obj-y				+= ti/
+diff --git a/drivers/soc/sifive/Kconfig b/drivers/soc/sifive/Kconfig
+new file mode 100644
+index 000000000000..9ffb2e8a48cd
+--- /dev/null
++++ b/drivers/soc/sifive/Kconfig
+@@ -0,0 +1,10 @@
++# SPDX-License-Identifier: GPL-2.0
++
++if SOC_SIFIVE
++
++config SIFIVE_L2
++	tristate "Sifive L2 Cache controller"
++	help
++	  Support for the L2 cache controller on SiFive platforms.
++
++endif
+diff --git a/drivers/soc/sifive/Makefile b/drivers/soc/sifive/Makefile
+new file mode 100644
+index 000000000000..9b4a85558347
+--- /dev/null
++++ b/drivers/soc/sifive/Makefile
+@@ -0,0 +1,4 @@
++# SPDX-License-Identifier: GPL-2.0
++
++obj-$(CONFIG_SIFIVE_L2)	+= sifive_l2_cache.o
++
+diff --git a/arch/riscv/mm/sifive_l2_cache.c b/drivers/soc/sifive/sifive_l2_cache.c
+similarity index 100%
+rename from arch/riscv/mm/sifive_l2_cache.c
+rename to drivers/soc/sifive/sifive_l2_cache.c
+-- 
+2.20.1
 
