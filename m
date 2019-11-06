@@ -2,51 +2,49 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 642F0F0BA6
-	for <lists+linux-edac@lfdr.de>; Wed,  6 Nov 2019 02:25:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 04FF5F0BA1
+	for <lists+linux-edac@lfdr.de>; Wed,  6 Nov 2019 02:25:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730834AbfKFBZQ (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Tue, 5 Nov 2019 20:25:16 -0500
-Received: from mail-eopbgr800054.outbound.protection.outlook.com ([40.107.80.54]:39808
-        "EHLO NAM03-DM3-obe.outbound.protection.outlook.com"
+        id S1730743AbfKFBZG (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Tue, 5 Nov 2019 20:25:06 -0500
+Received: from mail-eopbgr820079.outbound.protection.outlook.com ([40.107.82.79]:36833
+        "EHLO NAM01-SN1-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1730596AbfKFBZF (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        id S1729614AbfKFBZF (ORCPT <rfc822;linux-edac@vger.kernel.org>);
         Tue, 5 Nov 2019 20:25:05 -0500
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=dzgIkQUDFUUgmhlVBoyD/6Ob1v78eu5gcyWaCp98+qBvVIqwbcUzlEwZXJlKzb3up5UYIgjCyAc4rNYVrB+f4h7TJcik8aKgt5wR/b1PFn3sM2WUWH/LpaTFLp6MYRzC8wtq9KyV82GOwY5jpXiY5wpIC3POyC0+Urce/fVV/vL0hRWvQRnKOL3ftHZUGbNXPTOep0anCXjSoIJhUiSbcwgdvTJiuOmTiWvL2Jc1HrOfwzEgefp8YRiAroEWG270jBmjEawzb5RT72hLmywnSE6hshmzgXyMIbez/InNKdZMGIMuaZi++pW9w8R24vJFL8aXM924XN3ddqX/6vb+4g==
+ b=gzzbLaKTh/1tAFCEEXbaKBY1lInBHbpss/8Bvm4PA94m80KHZPerCV4lNQk7WL7wVb+n39rpf7sxv8hWYCjSDer8O/svz3V8O61vQBPjuieHDwT68sjY67H04A37gnpiFYPeCHFpp96vRMyTA6AUt5BDglfwc6+lLPL+niDcNAeW4BHJsjW7bVZymlas/tLNpidUOPTj+R9U/xcFHy01uZh4bQjRdYl0fPbetfOuamHdmzecCAihWrDrGoNC9NC00hS3a3T3+Zb0LSF8J0EnvcNvipaGpSjweiVJpHszCfq3J9bVpfBAeoV4CQIKcmV9V2jrNmxaQ7+FRZ62RjAnUQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=yFnFpeiHLxHuwwAQPvDusAhpZzbpRMDC5IDK4TU+I44=;
- b=B23gOIy4Hoi+/ZfuImj2Tj5KOXKVqcehk6D5AfIl/f5tFqM4NbcZ8bhoszvGMYNk2401mX4aJHaCQWxyMk58Ggk7TakS8GQGipw0+iN01KHry3Yu2guozqHSIL/keDmEJgaUY2gwNuyJ8mNQCQfWKWttK4tqLu41K3K5MS4Ppv82f1Rv0PoNELmrDPYAowjeDAXcUE5LNs7Do/e90nQO0QWWKKDdBOPR2QaIR7m9XXUpEZEq6z012EPcUdHSNjpJh+lnNAgy2APkpZ+uw3aO2i1Yo+0CsleJ/NTGzSmhu6RzAjOittXWyuDUM7NpOjRAKMgk8MWf7GtY2ET7Dek8VA==
+ bh=cTUIlgKvu96fUXRcN9kCejWE/AP4ehwwz3pi+3/k1gY=;
+ b=gTXBBmjdTwzijwhNJk5356CyBkz7ZqW83Q1xL945u/hepaSAdAaqrPoVgbMAGlc/Zx/A+mBqHmzyfE1v0HXJCUqM++9/9wtEiP/ptYtmZWMddWyDXpzI+QYHIPQH50XhsBirM8y6J6fbhzofTQ0/bRQvVzqQn26rWnSBJABO0EDSSSwsBqOUBk+khQ6GRprF/ItzdZxt8FqONh6SpCrMrafCVBczbc4vTYkyxGUqannYlObwdxYMcDsaanLv813z8bN9PYTTONno1f07trN+c4/LOOGKMjg1IS+swzIZ8y78kO+Y4MrxbrQMBIKsjo0nl5sAE0qR6jOR3fvvK9tpSw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
  header.d=amd.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=amdcloud.onmicrosoft.com; s=selector2-amdcloud-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=yFnFpeiHLxHuwwAQPvDusAhpZzbpRMDC5IDK4TU+I44=;
- b=L9gYh4X7BMHjiMZZUgKQFfMs1dImR4ej22nDWT7LqX96zq7IbwaqzWLbHKv/RVvEFepMOt7k8IM4K1kSWR+PcgN2keiNS/CEI2yeos55q38VscRmnZ+8pXuTzKN8SBrpYzlsK9GlAFH4vumStlSzES+cdlpjR55EFc73PFOFg5Q=
+ bh=cTUIlgKvu96fUXRcN9kCejWE/AP4ehwwz3pi+3/k1gY=;
+ b=4RzGRfdmwlZ/bUoNqvjQj3sS02NW6sb6hBU00vqxmBH8m6zbFPZJsF5P2FzkGZjJcD9wmmcJ5HOsarF+ubzI7NuWnp3tok1cklmoAm7tFlx267ldbDlFB7AO8M8ryrfgaUncyQF1NBwFOH73bsi74Yo8EAcjkdbSFh2/DZReqvE=
 Received: from SN6PR12MB2639.namprd12.prod.outlook.com (52.135.103.16) by
- SN6PR12MB2701.namprd12.prod.outlook.com (52.135.103.30) with Microsoft SMTP
+ SN6PR12MB2783.namprd12.prod.outlook.com (52.135.107.146) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2408.24; Wed, 6 Nov 2019 01:25:01 +0000
+ 15.20.2408.24; Wed, 6 Nov 2019 01:25:00 +0000
 Received: from SN6PR12MB2639.namprd12.prod.outlook.com
  ([fe80::2819:e697:4314:56ba]) by SN6PR12MB2639.namprd12.prod.outlook.com
  ([fe80::2819:e697:4314:56ba%3]) with mapi id 15.20.2408.024; Wed, 6 Nov 2019
- 01:25:01 +0000
+ 01:25:00 +0000
 From:   "Ghannam, Yazen" <Yazen.Ghannam@amd.com>
 To:     "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>
 CC:     "Ghannam, Yazen" <Yazen.Ghannam@amd.com>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
         "bp@alien8.de" <bp@alien8.de>
-Subject: [PATCH v3 3/5] EDAC/amd64: Save max number of controllers to family
- type
-Thread-Topic: [PATCH v3 3/5] EDAC/amd64: Save max number of controllers to
- family type
-Thread-Index: AQHVlEEC70osO2cD0kWlJdLy5vMoKg==
+Subject: [PATCH v3 2/5] EDAC/amd64: Gather hardware information early
+Thread-Topic: [PATCH v3 2/5] EDAC/amd64: Gather hardware information early
+Thread-Index: AQHVlEEBohvFV9eryESXXaIu8+8MoQ==
 Date:   Wed, 6 Nov 2019 01:25:00 +0000
-Message-ID: <20191106012448.243970-4-Yazen.Ghannam@amd.com>
+Message-ID: <20191106012448.243970-3-Yazen.Ghannam@amd.com>
 References: <20191106012448.243970-1-Yazen.Ghannam@amd.com>
 In-Reply-To: <20191106012448.243970-1-Yazen.Ghannam@amd.com>
 Accept-Language: en-US
@@ -63,31 +61,31 @@ x-mailer: git-send-email 2.17.1
 x-originating-ip: [165.204.78.2]
 x-ms-publictraffictype: Email
 x-ms-office365-filtering-ht: Tenant
-x-ms-office365-filtering-correlation-id: b7b3fe88-c0e2-46a3-1828-08d762582485
-x-ms-traffictypediagnostic: SN6PR12MB2701:
+x-ms-office365-filtering-correlation-id: 86d8486e-fa01-45c0-a7ee-08d76258243c
+x-ms-traffictypediagnostic: SN6PR12MB2783:
 x-ms-exchange-purlcount: 1
 x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <SN6PR12MB270196987C4F4CEF239657B5F8790@SN6PR12MB2701.namprd12.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:9508;
+x-microsoft-antispam-prvs: <SN6PR12MB278344665D936E16A11876BBF8790@SN6PR12MB2783.namprd12.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:2449;
 x-forefront-prvs: 02135EB356
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(366004)(136003)(39860400002)(396003)(346002)(376002)(199004)(189003)(6116002)(81156014)(36756003)(3846002)(6486002)(6306002)(476003)(81166006)(6512007)(66946007)(1076003)(54906003)(2616005)(6506007)(4326008)(76176011)(71200400001)(71190400001)(2501003)(7736002)(11346002)(305945005)(52116002)(2906002)(256004)(5660300002)(446003)(99286004)(186003)(316002)(102836004)(26005)(6916009)(64756008)(66446008)(2351001)(66556008)(66066001)(8676002)(386003)(25786009)(14454004)(966005)(478600001)(50226002)(6436002)(86362001)(8936002)(5640700003)(486006)(66476007);DIR:OUT;SFP:1101;SCL:1;SRVR:SN6PR12MB2701;H:SN6PR12MB2639.namprd12.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(376002)(366004)(396003)(346002)(39860400002)(136003)(189003)(199004)(186003)(5660300002)(86362001)(386003)(4326008)(102836004)(6506007)(1076003)(52116002)(966005)(6306002)(2906002)(5640700003)(99286004)(6116002)(36756003)(54906003)(14454004)(25786009)(486006)(66556008)(446003)(11346002)(81156014)(6916009)(76176011)(305945005)(7736002)(26005)(6512007)(2616005)(66066001)(2501003)(66946007)(316002)(64756008)(478600001)(50226002)(71190400001)(71200400001)(81166006)(8676002)(256004)(14444005)(2351001)(8936002)(6436002)(476003)(6486002)(66446008)(66476007)(3846002);DIR:OUT;SFP:1101;SCL:1;SRVR:SN6PR12MB2783;H:SN6PR12MB2639.namprd12.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
 received-spf: None (protection.outlook.com: amd.com does not designate
  permitted sender hosts)
 x-ms-exchange-senderadcheck: 1
 x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: aHcyY+4U3xAbTCLc24NS/jT7BvmYnz3V1RnjVr1PQQn/vGkoM2xW/FyR9bXjr+41C3739Im4m3SMK3oJgMvCKIBgbHVCfsCVYh/phOxd7rm/KMlK0FQIjbhdhqqc1JIHv/yFkAfLCujK7bJL5gXW3pqXhPdmM0dZYQ81P7P/Fmw8iYi36mWolRfWkQPsMHXHz/LN2xh5ruL7/EJNQRjhKssvSgcTmOVbGXsu0QUrAQ6EyAaw7WoTAc6/+ZpuqnScPXa7rB4d0LyV6Z89Su2iNbHfQEWLcImXKj039Sgq1WxKnmbknheT/sG7WJDrI/aQfV3RLrJpRYUupfhjMOMD2GHy7A6z7fsvy7hwu2m5JojuU1nLe9FeJRj9f/q+R6kluat5foFbCsFyLFWyhTbaCh2OsNgMwL3Bw88m8+4fqws6zj8ClYdYkkJkjgFqPx5OUFXthNdsHuoFppvE3sCaldKjwXPZtJYJRQtdA/Oc2rM=
+x-microsoft-antispam-message-info: lKHoQOueNrQmntmEvi1UPmp6fjWq1MkSXBD4xmducWHO+J5XuWgQXfC05i61/nQFZ9sgT8zn9s6TaZ4ZRlTDQqsjyVYcyhi+d+V7AW2OW/tt5Np2z7m+rpxHjI3R+8XKBlWb2c3Gnp5P5iYR726+C/fZbXcSSSIexHVSXvX6iBQ+nRcKdUtgVWXtYYYmMH8iZm0aLj3gulWEbpPHO1cGwZanK+SfcQ5+wuiX2IaPDvnQjQgECZZ50BGHeKBCIYe7hEJUGOodDHCoz0XI6XBVx0ZbHTVrfLcQj3iPpF6L3wNXlTGkzAsHqutTvbjUQOdOcDvsEq1wN22TR1PzOPFAu2CttnMOlKB0vudDwKHa0MDLzhWOA5gi/vLMANdAjtH0bxZDdNH9fcv74w5LSJDSqUdkNhhpnh2d2L4PgJDFjjsQtho9JVael+p0P5O9qdqe9kRmTghGdu1WaE52LLziGCR0BUHPUoY7gjMQfPNq6sQ=
 Content-Type: text/plain; charset="iso-8859-1"
 Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b7b3fe88-c0e2-46a3-1828-08d762582485
-X-MS-Exchange-CrossTenant-originalarrivaltime: 06 Nov 2019 01:25:00.7439
+X-MS-Exchange-CrossTenant-Network-Message-Id: 86d8486e-fa01-45c0-a7ee-08d76258243c
+X-MS-Exchange-CrossTenant-originalarrivaltime: 06 Nov 2019 01:25:00.2892
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
 X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: SONIPVr05ZeV3AsR6ZhZu1xv3yvQwCiJ9y8YFDcjuOm7jPP8fxH4qEkN4i60q9kOCcxw32quat5aK/GB43BQAw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN6PR12MB2701
+X-MS-Exchange-CrossTenant-userprincipalname: 6lNL+hzZkLXdixpvmhtdwDxDrBLSgUFofG9uSsQAD51zj+72dTCOgeFA0XfX4qX8w9+W7BillCUcY16AE9Ff9w==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN6PR12MB2783
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
@@ -95,223 +93,233 @@ X-Mailing-List: linux-edac@vger.kernel.org
 
 From: Yazen Ghannam <yazen.ghannam@amd.com>
 
-The maximum number of memory controllers is fixed within a family/model
-group. In most cases, this has been fixed at 2, but some systems may
-have up to 8.
+Split out gathering hardware information from init_one_instance() into a
+separate function hw_info_get().
 
-The struct amd64_family_type already contains family/model-specific
-information, and this can be used rather than adding model checks to
-various functions.
+This is necessary so that the information can be cached earlier and used
+to check if memory is populated and if ECC is enabled on a node.
 
-Create a new field in struct amd64_family_type for max_mcs.
-Set this when setting other family type information, and use this when
-needing the maximum number of memory controllers possible for a system.
+Also, define a function hw_info_put() to back out changes made in
+hw_info_get(). Currently, this includes two actions: freeing reserved
+PCI device siblings and freeing the allocated struct amd64_umc.
+
+Check for an allocated PCI device (Function 0 for Family 17h or Function
+1 for pre-Family 17h) before freeing, since hw_info_put() may be called
+before PCI siblings are reserved.
+
+Drop the family check when freeing pvt->umc. This will be NULL on
+pre-Family 17h systems. However, kfree() is safe and will check for a
+NULL pointer before freeing.
 
 Signed-off-by: Yazen Ghannam <yazen.ghannam@amd.com>
 ---
 Link:
-https://lkml.kernel.org/r/20191022203448.13962-4-Yazen.Ghannam@amd.com
+https://lkml.kernel.org/r/20191022203448.13962-3-Yazen.Ghannam@amd.com
 
 v2 -> v3:
 * No change.
 
 v1 -> v2:
-* Change max_num_controllers to max_mcs.
+* Change get_hardware_info() to hw_info_get().
+* Add hw_info_put() to backout changes from hw_info_get().
 
 rfc -> v1:
-* New patch.
-* Idea came up from Boris' comment about compute_num_umcs().
+* Fixup after making struct amd64_family_type fam_type global.
 
- drivers/edac/amd64_edac.c | 44 +++++++++++++--------------------------
- drivers/edac/amd64_edac.h |  2 ++
- 2 files changed, 16 insertions(+), 30 deletions(-)
+ drivers/edac/amd64_edac.c | 101 +++++++++++++++++++-------------------
+ 1 file changed, 51 insertions(+), 50 deletions(-)
 
 diff --git a/drivers/edac/amd64_edac.c b/drivers/edac/amd64_edac.c
-index 6e1c739b7fad..110ed0d27998 100644
+index 83c659e38084..6e1c739b7fad 100644
 --- a/drivers/edac/amd64_edac.c
 +++ b/drivers/edac/amd64_edac.c
-@@ -21,9 +21,6 @@ static struct amd64_family_type *fam_type;
- /* Per-node stuff */
- static struct ecc_settings **ecc_stngs;
+@@ -3418,34 +3418,15 @@ static void compute_num_umcs(void)
+ 	edac_dbg(1, "Number of UMCs: %x", num_umcs);
+ }
 =20
--/* Number of Unified Memory Controllers */
--static u8 num_umcs;
--
- /*
-  * Valid scrub rates for the K8 hardware memory scrubber. We map the scrub=
-bing
-  * bandwidth to a valid bit pattern. The 'set' operation finds the 'matchi=
-ng-
-@@ -456,7 +453,7 @@ static void get_cs_base_and_mask(struct amd64_pvt *pvt,=
- int csrow, u8 dct,
- 	for (i =3D 0; i < pvt->csels[dct].m_cnt; i++)
-=20
- #define for_each_umc(i) \
--	for (i =3D 0; i < num_umcs; i++)
-+	for (i =3D 0; i < fam_type->max_mcs; i++)
-=20
- /*
-  * @input_addr is an InputAddr associated with the node given by mci. Retu=
-rn the
-@@ -2226,6 +2223,7 @@ static struct amd64_family_type family_types[] =3D {
- 		.ctl_name =3D "K8",
- 		.f1_id =3D PCI_DEVICE_ID_AMD_K8_NB_ADDRMAP,
- 		.f2_id =3D PCI_DEVICE_ID_AMD_K8_NB_MEMCTL,
-+		.max_mcs =3D 2,
- 		.ops =3D {
- 			.early_channel_count	=3D k8_early_channel_count,
- 			.map_sysaddr_to_csrow	=3D k8_map_sysaddr_to_csrow,
-@@ -2236,6 +2234,7 @@ static struct amd64_family_type family_types[] =3D {
- 		.ctl_name =3D "F10h",
- 		.f1_id =3D PCI_DEVICE_ID_AMD_10H_NB_MAP,
- 		.f2_id =3D PCI_DEVICE_ID_AMD_10H_NB_DRAM,
-+		.max_mcs =3D 2,
- 		.ops =3D {
- 			.early_channel_count	=3D f1x_early_channel_count,
- 			.map_sysaddr_to_csrow	=3D f1x_map_sysaddr_to_csrow,
-@@ -2246,6 +2245,7 @@ static struct amd64_family_type family_types[] =3D {
- 		.ctl_name =3D "F15h",
- 		.f1_id =3D PCI_DEVICE_ID_AMD_15H_NB_F1,
- 		.f2_id =3D PCI_DEVICE_ID_AMD_15H_NB_F2,
-+		.max_mcs =3D 2,
- 		.ops =3D {
- 			.early_channel_count	=3D f1x_early_channel_count,
- 			.map_sysaddr_to_csrow	=3D f1x_map_sysaddr_to_csrow,
-@@ -2256,6 +2256,7 @@ static struct amd64_family_type family_types[] =3D {
- 		.ctl_name =3D "F15h_M30h",
- 		.f1_id =3D PCI_DEVICE_ID_AMD_15H_M30H_NB_F1,
- 		.f2_id =3D PCI_DEVICE_ID_AMD_15H_M30H_NB_F2,
-+		.max_mcs =3D 2,
- 		.ops =3D {
- 			.early_channel_count	=3D f1x_early_channel_count,
- 			.map_sysaddr_to_csrow	=3D f1x_map_sysaddr_to_csrow,
-@@ -2266,6 +2267,7 @@ static struct amd64_family_type family_types[] =3D {
- 		.ctl_name =3D "F15h_M60h",
- 		.f1_id =3D PCI_DEVICE_ID_AMD_15H_M60H_NB_F1,
- 		.f2_id =3D PCI_DEVICE_ID_AMD_15H_M60H_NB_F2,
-+		.max_mcs =3D 2,
- 		.ops =3D {
- 			.early_channel_count	=3D f1x_early_channel_count,
- 			.map_sysaddr_to_csrow	=3D f1x_map_sysaddr_to_csrow,
-@@ -2276,6 +2278,7 @@ static struct amd64_family_type family_types[] =3D {
- 		.ctl_name =3D "F16h",
- 		.f1_id =3D PCI_DEVICE_ID_AMD_16H_NB_F1,
- 		.f2_id =3D PCI_DEVICE_ID_AMD_16H_NB_F2,
-+		.max_mcs =3D 2,
- 		.ops =3D {
- 			.early_channel_count	=3D f1x_early_channel_count,
- 			.map_sysaddr_to_csrow	=3D f1x_map_sysaddr_to_csrow,
-@@ -2286,6 +2289,7 @@ static struct amd64_family_type family_types[] =3D {
- 		.ctl_name =3D "F16h_M30h",
- 		.f1_id =3D PCI_DEVICE_ID_AMD_16H_M30H_NB_F1,
- 		.f2_id =3D PCI_DEVICE_ID_AMD_16H_M30H_NB_F2,
-+		.max_mcs =3D 2,
- 		.ops =3D {
- 			.early_channel_count	=3D f1x_early_channel_count,
- 			.map_sysaddr_to_csrow	=3D f1x_map_sysaddr_to_csrow,
-@@ -2296,6 +2300,7 @@ static struct amd64_family_type family_types[] =3D {
- 		.ctl_name =3D "F17h",
- 		.f0_id =3D PCI_DEVICE_ID_AMD_17H_DF_F0,
- 		.f6_id =3D PCI_DEVICE_ID_AMD_17H_DF_F6,
-+		.max_mcs =3D 2,
- 		.ops =3D {
- 			.early_channel_count	=3D f17_early_channel_count,
- 			.dbam_to_cs		=3D f17_addr_mask_to_cs_size,
-@@ -2305,6 +2310,7 @@ static struct amd64_family_type family_types[] =3D {
- 		.ctl_name =3D "F17h_M10h",
- 		.f0_id =3D PCI_DEVICE_ID_AMD_17H_M10H_DF_F0,
- 		.f6_id =3D PCI_DEVICE_ID_AMD_17H_M10H_DF_F6,
-+		.max_mcs =3D 2,
- 		.ops =3D {
- 			.early_channel_count	=3D f17_early_channel_count,
- 			.dbam_to_cs		=3D f17_addr_mask_to_cs_size,
-@@ -2314,6 +2320,7 @@ static struct amd64_family_type family_types[] =3D {
- 		.ctl_name =3D "F17h_M30h",
- 		.f0_id =3D PCI_DEVICE_ID_AMD_17H_M30H_DF_F0,
- 		.f6_id =3D PCI_DEVICE_ID_AMD_17H_M30H_DF_F6,
-+		.max_mcs =3D 8,
- 		.ops =3D {
- 			.early_channel_count	=3D f17_early_channel_count,
- 			.dbam_to_cs		=3D f17_addr_mask_to_cs_size,
-@@ -2323,6 +2330,7 @@ static struct amd64_family_type family_types[] =3D {
- 		.ctl_name =3D "F17h_M70h",
- 		.f0_id =3D PCI_DEVICE_ID_AMD_17H_M70H_DF_F0,
- 		.f6_id =3D PCI_DEVICE_ID_AMD_17H_M70H_DF_F6,
-+		.max_mcs =3D 2,
- 		.ops =3D {
- 			.early_channel_count	=3D f17_early_channel_count,
- 			.dbam_to_cs		=3D f17_addr_mask_to_cs_size,
-@@ -3402,29 +3410,13 @@ static const struct attribute_group *amd64_edac_att=
-r_groups[] =3D {
- 	NULL
- };
-=20
--/* Set the number of Unified Memory Controllers in the system. */
--static void compute_num_umcs(void)
--{
--	u8 model =3D boot_cpu_data.x86_model;
--
--	if (boot_cpu_data.x86 < 0x17)
--		return;
--
--	if (model >=3D 0x30 && model <=3D 0x3f)
--		num_umcs =3D 8;
--	else
--		num_umcs =3D 2;
--
--	edac_dbg(1, "Number of UMCs: %x", num_umcs);
--}
--
- static int hw_info_get(struct amd64_pvt *pvt)
+-static int init_one_instance(unsigned int nid)
++static int hw_info_get(struct amd64_pvt *pvt)
  {
+-	struct pci_dev *F3 =3D node_to_amd_nb(nid)->misc;
+-	struct mem_ctl_info *mci =3D NULL;
+-	struct edac_mc_layer layers[2];
+-	struct amd64_pvt *pvt =3D NULL;
  	u16 pci_id1, pci_id2;
- 	int ret =3D -EINVAL;
+-	int err =3D 0, ret;
+-
+-	ret =3D -ENOMEM;
+-	pvt =3D kzalloc(sizeof(struct amd64_pvt), GFP_KERNEL);
+-	if (!pvt)
+-		goto err_ret;
+-
+-	pvt->mc_node_id	=3D nid;
+-	pvt->F3 =3D F3;
+-
+-	ret =3D -EINVAL;
+-	fam_type =3D per_family_init(pvt);
+-	if (!fam_type)
+-		goto err_free;
++	int ret =3D -EINVAL;
 =20
  	if (pvt->fam >=3D 0x17) {
--		pvt->umc =3D kcalloc(num_umcs, sizeof(struct amd64_umc), GFP_KERNEL);
-+		pvt->umc =3D kcalloc(fam_type->max_mcs, sizeof(struct amd64_umc), GFP_KE=
-RNEL);
- 		if (!pvt->umc)
- 			return -ENOMEM;
+ 		pvt->umc =3D kcalloc(num_umcs, sizeof(struct amd64_umc), GFP_KERNEL);
+-		if (!pvt->umc) {
+-			ret =3D -ENOMEM;
+-			goto err_free;
+-		}
++		if (!pvt->umc)
++			return -ENOMEM;
 =20
-@@ -3477,14 +3469,8 @@ static int init_one_instance(struct amd64_pvt *pvt)
- 	 * Always allocate two channels since we can have setups with DIMMs on
- 	 * only one channel. Also, this simplifies handling later for the price
- 	 * of a couple of KBs tops.
--	 *
--	 * On Fam17h+, the number of controllers may be greater than two. So set
--	 * the size equal to the maximum number of UMCs.
+ 		pci_id1 =3D fam_type->f0_id;
+ 		pci_id2 =3D fam_type->f6_id;
+@@ -3454,21 +3435,37 @@ static int init_one_instance(unsigned int nid)
+ 		pci_id2 =3D fam_type->f2_id;
+ 	}
+=20
+-	err =3D reserve_mc_sibling_devs(pvt, pci_id1, pci_id2);
+-	if (err)
+-		goto err_post_init;
++	ret =3D reserve_mc_sibling_devs(pvt, pci_id1, pci_id2);
++	if (ret)
++		return ret;
+=20
+ 	read_mc_regs(pvt);
+=20
++	return 0;
++}
++
++static void hw_info_put(struct amd64_pvt *pvt)
++{
++	if (pvt->F0 || pvt->F1)
++		free_mc_sibling_devs(pvt);
++
++	kfree(pvt->umc);
++}
++
++static int init_one_instance(struct amd64_pvt *pvt)
++{
++	struct mem_ctl_info *mci =3D NULL;
++	struct edac_mc_layer layers[2];
++	int ret =3D -EINVAL;
++
+ 	/*
+ 	 * We need to determine how many memory channels there are. Then use
+ 	 * that information for calculating the size of the dynamic instance
+ 	 * tables in the 'mci' structure.
  	 */
--	if (pvt->fam >=3D 0x17)
--		layers[1].size =3D num_umcs;
--	else
--		layers[1].size =3D 2;
-+	layers[1].size =3D fam_type->max_mcs;
+-	ret =3D -EINVAL;
+ 	pvt->channel_count =3D pvt->ops->early_channel_count(pvt);
+ 	if (pvt->channel_count < 0)
+-		goto err_siblings;
++		return ret;
+=20
+ 	ret =3D -ENOMEM;
+ 	layers[0].type =3D EDAC_MC_LAYER_CHIP_SELECT;
+@@ -3490,9 +3487,9 @@ static int init_one_instance(unsigned int nid)
+ 		layers[1].size =3D 2;
  	layers[1].is_virt_csrow =3D false;
 =20
- 	mci =3D edac_mc_alloc(pvt->mc_node_id, ARRAY_SIZE(layers), layers, 0);
-@@ -3669,8 +3655,6 @@ static int __init amd64_edac_init(void)
- 	if (!msrs)
- 		goto err_free;
+-	mci =3D edac_mc_alloc(nid, ARRAY_SIZE(layers), layers, 0);
++	mci =3D edac_mc_alloc(pvt->mc_node_id, ARRAY_SIZE(layers), layers, 0);
+ 	if (!mci)
+-		goto err_siblings;
++		return ret;
 =20
--	compute_num_umcs();
+ 	mci->pvt_info =3D pvt;
+ 	mci->pdev =3D &pvt->F3->dev;
+@@ -3505,31 +3502,17 @@ static int init_one_instance(unsigned int nid)
+ 	ret =3D -ENODEV;
+ 	if (edac_mc_add_mc_with_groups(mci, amd64_edac_attr_groups)) {
+ 		edac_dbg(1, "failed edac_mc_add_mc()\n");
+-		goto err_add_mc;
++		edac_mc_free(mci);
++		return ret;
+ 	}
+=20
+ 	return 0;
 -
- 	for (i =3D 0; i < amd_nb_num(); i++) {
- 		err =3D probe_one_instance(i);
- 		if (err) {
-diff --git a/drivers/edac/amd64_edac.h b/drivers/edac/amd64_edac.h
-index 8c3cda81e619..9be31688110b 100644
---- a/drivers/edac/amd64_edac.h
-+++ b/drivers/edac/amd64_edac.h
-@@ -479,6 +479,8 @@ struct low_ops {
- struct amd64_family_type {
- 	const char *ctl_name;
- 	u16 f0_id, f1_id, f2_id, f6_id;
-+	/* Maximum number of memory controllers per die/node. */
-+	u8 max_mcs;
- 	struct low_ops ops;
- };
+-err_add_mc:
+-	edac_mc_free(mci);
+-
+-err_siblings:
+-	free_mc_sibling_devs(pvt);
+-
+-err_post_init:
+-	if (pvt->fam >=3D 0x17)
+-		kfree(pvt->umc);
+-
+-err_free:
+-	kfree(pvt);
+-
+-err_ret:
+-	return ret;
+ }
 =20
+ static int probe_one_instance(unsigned int nid)
+ {
+ 	struct pci_dev *F3 =3D node_to_amd_nb(nid)->misc;
++	struct amd64_pvt *pvt =3D NULL;
+ 	struct ecc_settings *s;
+ 	int ret;
+=20
+@@ -3540,6 +3523,21 @@ static int probe_one_instance(unsigned int nid)
+=20
+ 	ecc_stngs[nid] =3D s;
+=20
++	pvt =3D kzalloc(sizeof(struct amd64_pvt), GFP_KERNEL);
++	if (!pvt)
++		goto err_settings;
++
++	pvt->mc_node_id	=3D nid;
++	pvt->F3 =3D F3;
++
++	fam_type =3D per_family_init(pvt);
++	if (!fam_type)
++		goto err_enable;
++
++	ret =3D hw_info_get(pvt);
++	if (ret < 0)
++		goto err_enable;
++
+ 	if (!ecc_enabled(F3, nid)) {
+ 		ret =3D 0;
+=20
+@@ -3556,7 +3554,7 @@ static int probe_one_instance(unsigned int nid)
+ 			goto err_enable;
+ 	}
+=20
+-	ret =3D init_one_instance(nid);
++	ret =3D init_one_instance(pvt);
+ 	if (ret < 0) {
+ 		amd64_err("Error probing instance: %d\n", nid);
+=20
+@@ -3569,6 +3567,10 @@ static int probe_one_instance(unsigned int nid)
+ 	return ret;
+=20
+ err_enable:
++	hw_info_put(pvt);
++	kfree(pvt);
++
++err_settings:
+ 	kfree(s);
+ 	ecc_stngs[nid] =3D NULL;
+=20
+@@ -3595,14 +3597,13 @@ static void remove_one_instance(unsigned int nid)
+=20
+ 	restore_ecc_error_reporting(s, nid, F3);
+=20
+-	free_mc_sibling_devs(pvt);
+-
+ 	kfree(ecc_stngs[nid]);
+ 	ecc_stngs[nid] =3D NULL;
+=20
+ 	/* Free the EDAC CORE resources */
+ 	mci->pvt_info =3D NULL;
+=20
++	hw_info_put(pvt);
+ 	kfree(pvt);
+ 	edac_mc_free(mci);
+ }
 --=20
 2.17.1
 
