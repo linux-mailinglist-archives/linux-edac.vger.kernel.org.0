@@ -2,235 +2,183 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 58CBEF3913
-	for <lists+linux-edac@lfdr.de>; Thu,  7 Nov 2019 20:59:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B95D1F48B2
+	for <lists+linux-edac@lfdr.de>; Fri,  8 Nov 2019 12:58:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725862AbfKGT7q (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Thu, 7 Nov 2019 14:59:46 -0500
-Received: from mga06.intel.com ([134.134.136.31]:34947 "EHLO mga06.intel.com"
+        id S2390834AbfKHLoi (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Fri, 8 Nov 2019 06:44:38 -0500
+Received: from mail.kernel.org ([198.145.29.99]:59610 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726785AbfKGT7p (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Thu, 7 Nov 2019 14:59:45 -0500
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga104.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 07 Nov 2019 11:59:44 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.68,279,1569308400"; 
-   d="scan'208";a="233379315"
-Received: from tthayer-hp-z620.an.intel.com ([10.122.105.146])
-  by fmsmga002.fm.intel.com with ESMTP; 07 Nov 2019 11:59:44 -0800
-From:   thor.thayer@linux.intel.com
-To:     bp@alien8.de, mchehab@kernel.org, tony.luck@intel.com,
-        james.morse@arm.com, rrichter@marvell.com
-Cc:     linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Thor Thayer <thor.thayer@linux.intel.com>
-Subject: [PATCH 2/2] EDAC/altera: Use Altera System Manager driver
-Date:   Thu,  7 Nov 2019 14:01:30 -0600
-Message-Id: <1573156890-26891-3-git-send-email-thor.thayer@linux.intel.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1573156890-26891-1-git-send-email-thor.thayer@linux.intel.com>
-References: <1573156890-26891-1-git-send-email-thor.thayer@linux.intel.com>
+        id S2390823AbfKHLoh (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Fri, 8 Nov 2019 06:44:37 -0500
+Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 40BFA2245B;
+        Fri,  8 Nov 2019 11:44:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1573213477;
+        bh=UfxJx9uniduwgP9FegUeu7x2UFPsH3p8h2KakbrthM8=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=hzelbH4RqxjjJC3KQQAOwhOANkbf6nDMD3c3L0kqrBzf60XNM/mY0wm7Rnw+GqU6r
+         f4+bY8o+IfKm6FbPKKLXt7It860hSAzkze6Qg+ovbsVo0SM9vr5+iK1NQe0naWqs2A
+         spkn+GKqibHIUKHrapGON+oqEjOI6YMh27UHwTpQ=
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Qiuxu Zhuo <qiuxu.zhuo@intel.com>,
+        Aristeu Rozanski <aris@redhat.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-edac <linux-edac@vger.kernel.org>,
+        Tony Luck <tony.luck@intel.com>, Borislav Petkov <bp@suse.de>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.14 059/103] EDAC, sb_edac: Return early on ADDRV bit and address type test
+Date:   Fri,  8 Nov 2019 06:42:24 -0500
+Message-Id: <20191108114310.14363-59-sashal@kernel.org>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20191108114310.14363-1-sashal@kernel.org>
+References: <20191108114310.14363-1-sashal@kernel.org>
+MIME-Version: 1.0
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-From: Thor Thayer <thor.thayer@linux.intel.com>
+From: Qiuxu Zhuo <qiuxu.zhuo@intel.com>
 
-Simplify the EDAC file by using the Altera System Manager
-driver that abstracts the differences between ARM32 and ARM64.
-Also allows the removal of the Arria10 test function since
-this is handled by the System Manager driver.
+[ Upstream commit dcc960b225ceb2bd66c45e0845d03e577f7010f9 ]
 
-Signed-off-by: Thor Thayer <thor.thayer@linux.intel.com>
+Users of the mce_register_decode_chain() are called for every logged
+error. EDAC drivers should check:
+
+1) Is this a memory error? [bit 7 in status register]
+2) Is there a valid address? [bit 58 in status register]
+3) Is the address a system address? [bitfield 8:6 in misc register]
+
+The sb_edac driver performed test "1" twice. Waited far too long to
+perform check "2". Didn't do check "3" at all.
+
+Fix it by moving the test for valid address from
+sbridge_mce_output_error() into sbridge_mce_check_error() and add a test
+for the type immediately after. Delete the redundant check for the type
+of the error from sbridge_mce_output_error().
+
+Signed-off-by: Qiuxu Zhuo <qiuxu.zhuo@intel.com>
+Cc: Aristeu Rozanski <aris@redhat.com>
+Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc: Qiuxu Zhuo <qiuxu.zhuo@intel.com>
+Cc: linux-edac <linux-edac@vger.kernel.org>
+Link: http://lkml.kernel.org/r/20180907230828.13901-2-tony.luck@intel.com
+[ Re-word commit message. ]
+Signed-off-by: Tony Luck <tony.luck@intel.com>
+Signed-off-by: Borislav Petkov <bp@suse.de>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/edac/altera_edac.c | 129 +++------------------------------------------
- 1 file changed, 8 insertions(+), 121 deletions(-)
+ drivers/edac/sb_edac.c | 68 ++++++++++++++++++++++--------------------
+ 1 file changed, 35 insertions(+), 33 deletions(-)
 
-diff --git a/drivers/edac/altera_edac.c b/drivers/edac/altera_edac.c
-index e893ff8731cb..0b57b8c831c7 100644
---- a/drivers/edac/altera_edac.c
-+++ b/drivers/edac/altera_edac.c
-@@ -14,6 +14,7 @@
- #include <linux/interrupt.h>
- #include <linux/irqchip/chained_irq.h>
- #include <linux/kernel.h>
-+#include <linux/mfd/altera-sysmgr.h>
- #include <linux/mfd/syscon.h>
- #include <linux/notifier.h>
- #include <linux/of_address.h>
-@@ -275,7 +276,6 @@ static int a10_unmask_irq(struct platform_device *pdev, u32 mask)
- 	return ret;
- }
+diff --git a/drivers/edac/sb_edac.c b/drivers/edac/sb_edac.c
+index b0b390a1da154..ddd5990211f8a 100644
+--- a/drivers/edac/sb_edac.c
++++ b/drivers/edac/sb_edac.c
+@@ -2915,35 +2915,27 @@ static void sbridge_mce_output_error(struct mem_ctl_info *mci,
+ 	 *	cccc = channel
+ 	 * If the mask doesn't match, report an error to the parsing logic
+ 	 */
+-	if (! ((errcode & 0xef80) == 0x80)) {
+-		optype = "Can't parse: it is not a mem";
+-	} else {
+-		switch (optypenum) {
+-		case 0:
+-			optype = "generic undef request error";
+-			break;
+-		case 1:
+-			optype = "memory read error";
+-			break;
+-		case 2:
+-			optype = "memory write error";
+-			break;
+-		case 3:
+-			optype = "addr/cmd error";
+-			break;
+-		case 4:
+-			optype = "memory scrubbing error";
+-			break;
+-		default:
+-			optype = "reserved";
+-			break;
+-		}
++	switch (optypenum) {
++	case 0:
++		optype = "generic undef request error";
++		break;
++	case 1:
++		optype = "memory read error";
++		break;
++	case 2:
++		optype = "memory write error";
++		break;
++	case 3:
++		optype = "addr/cmd error";
++		break;
++	case 4:
++		optype = "memory scrubbing error";
++		break;
++	default:
++		optype = "reserved";
++		break;
+ 	}
  
--static int socfpga_is_a10(void);
- static int altr_sdram_probe(struct platform_device *pdev)
+-	/* Only decode errors with an valid address (ADDRV) */
+-	if (!GET_BITFIELD(m->status, 58, 58))
+-		return;
+-
+ 	if (pvt->info.type == KNIGHTS_LANDING) {
+ 		if (channel == 14) {
+ 			edac_dbg(0, "%s%s err_code:%04x:%04x EDRAM bank %d\n",
+@@ -3049,17 +3041,11 @@ static int sbridge_mce_check_error(struct notifier_block *nb, unsigned long val,
  {
- 	const struct of_device_id *id;
-@@ -399,7 +399,7 @@ static int altr_sdram_probe(struct platform_device *pdev)
- 		goto err;
+ 	struct mce *mce = (struct mce *)data;
+ 	struct mem_ctl_info *mci;
+-	struct sbridge_pvt *pvt;
+ 	char *type;
  
- 	/* Only the Arria10 has separate IRQs */
--	if (socfpga_is_a10()) {
-+	if (of_machine_is_compatible("altr,socfpga-arria10")) {
- 		/* Arria10 specific initialization */
- 		res = a10_init(mc_vbase);
- 		if (res < 0)
-@@ -502,66 +502,6 @@ module_platform_driver(altr_sdram_edac_driver);
+ 	if (edac_get_report_status() == EDAC_REPORTING_DISABLED)
+ 		return NOTIFY_DONE;
  
- #endif	/* CONFIG_EDAC_ALTERA_SDRAM */
+-	mci = get_mci_for_node_id(mce->socketid, IMC0);
+-	if (!mci)
+-		return NOTIFY_DONE;
+-	pvt = mci->pvt_info;
+-
+ 	/*
+ 	 * Just let mcelog handle it if the error is
+ 	 * outside the memory controller. A memory error
+@@ -3069,6 +3055,22 @@ static int sbridge_mce_check_error(struct notifier_block *nb, unsigned long val,
+ 	if ((mce->status & 0xefff) >> 7 != 1)
+ 		return NOTIFY_DONE;
  
--/**************** Stratix 10 EDAC Memory Controller Functions ************/
--
--/**
-- * s10_protected_reg_write
-- * Write to a protected SMC register.
-- * @context: Not used.
-- * @reg: Address of register
-- * @value: Value to write
-- * Return: INTEL_SIP_SMC_STATUS_OK (0) on success
-- *	   INTEL_SIP_SMC_REG_ERROR on error
-- *	   INTEL_SIP_SMC_RETURN_UNKNOWN_FUNCTION if not supported
-- */
--static int s10_protected_reg_write(void *context, unsigned int reg,
--				   unsigned int val)
--{
--	struct arm_smccc_res result;
--	unsigned long offset = (unsigned long)context;
--
--	arm_smccc_smc(INTEL_SIP_SMC_REG_WRITE, offset + reg, val, 0, 0,
--		      0, 0, 0, &result);
--
--	return (int)result.a0;
--}
--
--/**
-- * s10_protected_reg_read
-- * Read the status of a protected SMC register
-- * @context: Not used.
-- * @reg: Address of register
-- * @value: Value read.
-- * Return: INTEL_SIP_SMC_STATUS_OK (0) on success
-- *	   INTEL_SIP_SMC_REG_ERROR on error
-- *	   INTEL_SIP_SMC_RETURN_UNKNOWN_FUNCTION if not supported
-- */
--static int s10_protected_reg_read(void *context, unsigned int reg,
--				  unsigned int *val)
--{
--	struct arm_smccc_res result;
--	unsigned long offset = (unsigned long)context;
--
--	arm_smccc_smc(INTEL_SIP_SMC_REG_READ, offset + reg, 0, 0, 0,
--		      0, 0, 0, &result);
--
--	*val = (unsigned int)result.a1;
--
--	return (int)result.a0;
--}
--
--static const struct regmap_config s10_sdram_regmap_cfg = {
--	.name = "s10_ddr",
--	.reg_bits = 32,
--	.reg_stride = 4,
--	.val_bits = 32,
--	.max_register = 0xffd12228,
--	.reg_read = s10_protected_reg_read,
--	.reg_write = s10_protected_reg_write,
--	.use_single_read = true,
--	.use_single_write = true,
--};
--
- /************** </Stratix10 EDAC Memory Controller Functions> ***********/
- 
- /************************* EDAC Parent Probe *************************/
-@@ -1008,11 +948,6 @@ static int __maybe_unused altr_init_memory_port(void __iomem *ioaddr, int port)
- 	return ret;
- }
- 
--static int socfpga_is_a10(void)
--{
--	return of_machine_is_compatible("altr,socfpga-arria10");
--}
--
- static __init int __maybe_unused
- altr_init_a10_ecc_block(struct device_node *np, u32 irq_mask,
- 			u32 ecc_ctrl_en_mask, bool dual_port)
-@@ -1028,34 +963,10 @@ altr_init_a10_ecc_block(struct device_node *np, u32 irq_mask,
- 	/* Get the ECC Manager - parent of the device EDACs */
- 	np_eccmgr = of_get_parent(np);
- 
--	if (socfpga_is_a10()) {
--		ecc_mgr_map = syscon_regmap_lookup_by_phandle(np_eccmgr,
--							      "altr,sysmgr-syscon");
--	} else {
--		struct device_node *sysmgr_np;
--		struct resource res;
--		uintptr_t base;
--
--		sysmgr_np = of_parse_phandle(np_eccmgr,
--					     "altr,sysmgr-syscon", 0);
--		if (!sysmgr_np) {
--			edac_printk(KERN_ERR, EDAC_DEVICE,
--				    "Unable to find altr,sysmgr-syscon\n");
--			return -ENODEV;
--		}
-+	ecc_mgr_map =
-+		altr_sysmgr_regmap_lookup_by_phandle(np_eccmgr,
-+						     "altr,sysmgr-syscon");
- 
--		if (of_address_to_resource(sysmgr_np, 0, &res)) {
--			of_node_put(sysmgr_np);
--			return -ENOMEM;
--		}
--
--		/* Need physical address for SMCC call */
--		base = res.start;
--
--		ecc_mgr_map = regmap_init(NULL, NULL, (void *)base,
--					  &s10_sdram_regmap_cfg);
--		of_node_put(sysmgr_np);
--	}
- 	of_node_put(np_eccmgr);
- 	if (IS_ERR(ecc_mgr_map)) {
- 		edac_printk(KERN_ERR, EDAC_DEVICE,
-@@ -2170,33 +2081,9 @@ static int altr_edac_a10_probe(struct platform_device *pdev)
- 	platform_set_drvdata(pdev, edac);
- 	INIT_LIST_HEAD(&edac->a10_ecc_devices);
- 
--	if (socfpga_is_a10()) {
--		edac->ecc_mgr_map =
--			syscon_regmap_lookup_by_phandle(pdev->dev.of_node,
--							"altr,sysmgr-syscon");
--	} else {
--		struct device_node *sysmgr_np;
--		struct resource res;
--		uintptr_t base;
--
--		sysmgr_np = of_parse_phandle(pdev->dev.of_node,
--					     "altr,sysmgr-syscon", 0);
--		if (!sysmgr_np) {
--			edac_printk(KERN_ERR, EDAC_DEVICE,
--				    "Unable to find altr,sysmgr-syscon\n");
--			return -ENODEV;
--		}
--
--		if (of_address_to_resource(sysmgr_np, 0, &res))
--			return -ENOMEM;
--
--		/* Need physical address for SMCC call */
--		base = res.start;
--
--		edac->ecc_mgr_map = devm_regmap_init(&pdev->dev, NULL,
--						     (void *)base,
--						     &s10_sdram_regmap_cfg);
--	}
-+	edac->ecc_mgr_map =
-+		altr_sysmgr_regmap_lookup_by_phandle(pdev->dev.of_node,
-+						     "altr,sysmgr-syscon");
- 
- 	if (IS_ERR(edac->ecc_mgr_map)) {
- 		edac_printk(KERN_ERR, EDAC_DEVICE,
++	/* Check ADDRV bit in STATUS */
++	if (!GET_BITFIELD(mce->status, 58, 58))
++		return NOTIFY_DONE;
++
++	/* Check MISCV bit in STATUS */
++	if (!GET_BITFIELD(mce->status, 59, 59))
++		return NOTIFY_DONE;
++
++	/* Check address type in MISC (physical address only) */
++	if (GET_BITFIELD(mce->misc, 6, 8) != 2)
++		return NOTIFY_DONE;
++
++	mci = get_mci_for_node_id(mce->socketid, IMC0);
++	if (!mci)
++		return NOTIFY_DONE;
++
+ 	if (mce->mcgstatus & MCG_STATUS_MCIP)
+ 		type = "Exception";
+ 	else
 -- 
-2.7.4
+2.20.1
 
