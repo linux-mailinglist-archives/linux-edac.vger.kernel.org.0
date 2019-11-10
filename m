@@ -2,39 +2,39 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 58ABBF6366
-	for <lists+linux-edac@lfdr.de>; Sun, 10 Nov 2019 03:52:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A171FF65CE
+	for <lists+linux-edac@lfdr.de>; Sun, 10 Nov 2019 04:10:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730041AbfKJCvn (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Sat, 9 Nov 2019 21:51:43 -0500
-Received: from mail.kernel.org ([198.145.29.99]:36614 "EHLO mail.kernel.org"
+        id S1728575AbfKJCoc (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Sat, 9 Nov 2019 21:44:32 -0500
+Received: from mail.kernel.org ([198.145.29.99]:43916 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730030AbfKJCvm (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Sat, 9 Nov 2019 21:51:42 -0500
+        id S1727549AbfKJCob (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Sat, 9 Nov 2019 21:44:31 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 9829C22583;
-        Sun, 10 Nov 2019 02:51:40 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id CE29D21848;
+        Sun, 10 Nov 2019 02:44:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1573354301;
-        bh=youHC11LHjAs4CWKcmpmT/pWr3+p84Nsi0dY0gcXfR8=;
+        s=default; t=1573353870;
+        bh=8YwN1mIPCq0li5Fv10AaqXAk7tANchOV30SvSfyabI8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ltsF3wRNvGeXBriGZr5AY7RnZ1AnsF1UF9kPMJ5RJRBB+jABKRhjNgTHNjZAooRRw
-         tjIWRgS9ikX4Kv6wwpup5UoY3TsAFnRbHRD+JZqu2PtNQ2jsJjHOm1GhjMe3IQ0TNi
-         S0uIjcvvKI2tps3RMQJrvupOGe1ijKcRR+S/bG3o=
+        b=JHG3rCPgP6Pk3voZK1r4IQ8tSdJI3+Cf9Z6EkTuM98PvbZStLr/wGO50T7q4gGJyG
+         3sV86Qlvt+nHgse103iyN7x4TufnqgsNOIircR3W6QVlHeGiwSl9lztgQL9ZbUTVyq
+         /Ow/zeAdxIjHwtocmuG0BkoysJYo7FYHbyWfzXjo=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Justin Ernst <justin.ernst@hpe.com>, Borislav Petkov <bp@suse.de>,
         Russ Anderson <russ.anderson@hpe.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         linux-edac@vger.kernel.org, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH AUTOSEL 4.4 37/40] EDAC: Raise the maximum number of memory controllers
-Date:   Sat,  9 Nov 2019 21:50:29 -0500
-Message-Id: <20191110025032.827-37-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.19 150/191] EDAC: Raise the maximum number of memory controllers
+Date:   Sat,  9 Nov 2019 21:39:32 -0500
+Message-Id: <20191110024013.29782-150-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20191110025032.827-1-sashal@kernel.org>
-References: <20191110025032.827-1-sashal@kernel.org>
+In-Reply-To: <20191110024013.29782-1-sashal@kernel.org>
+References: <20191110024013.29782-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -80,7 +80,7 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 2 insertions(+), 1 deletion(-)
 
 diff --git a/include/linux/edac.h b/include/linux/edac.h
-index 4fe67b853de04..9bb4f3311e137 100644
+index bffb97828ed67..958d69332c1d5 100644
 --- a/include/linux/edac.h
 +++ b/include/linux/edac.h
 @@ -17,6 +17,7 @@
@@ -89,9 +89,9 @@ index 4fe67b853de04..9bb4f3311e137 100644
  #include <linux/debugfs.h>
 +#include <linux/numa.h>
  
- struct device;
+ #define EDAC_DEVICE_NAME_LEN	31
  
-@@ -778,6 +779,6 @@ struct mem_ctl_info {
+@@ -670,6 +671,6 @@ struct mem_ctl_info {
  /*
   * Maximum number of memory controllers in the coherent fabric.
   */
