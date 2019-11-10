@@ -2,40 +2,39 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BFB4DF626B
-	for <lists+linux-edac@lfdr.de>; Sun, 10 Nov 2019 03:43:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A46A4F6455
+	for <lists+linux-edac@lfdr.de>; Sun, 10 Nov 2019 03:59:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728134AbfKJCnI (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Sat, 9 Nov 2019 21:43:08 -0500
-Received: from mail.kernel.org ([198.145.29.99]:40380 "EHLO mail.kernel.org"
+        id S1727900AbfKJC6v (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Sat, 9 Nov 2019 21:58:51 -0500
+Received: from mail.kernel.org ([198.145.29.99]:47258 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728149AbfKJCnG (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Sat, 9 Nov 2019 21:43:06 -0500
+        id S1729294AbfKJC4r (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Sat, 9 Nov 2019 21:56:47 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 7A35121D7F;
-        Sun, 10 Nov 2019 02:43:04 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id B692D2248D;
+        Sun, 10 Nov 2019 02:48:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1573353785;
-        bh=8c60UcOuLaLaEMv9/jm2csBMtwnh7BkgFOxAkkxWLEE=;
+        s=default; t=1573354082;
+        bh=UupwU4breSByp96+YTz2uZ3ED3NUHaAkfOoof3kWAeI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=xba1LZ86fReb2h4TuaSd/TFnH6fNRBfU/7mLpVMtHJLGUR8KbD2W/GCCRJuRDCCw0
-         zlwFkmEMOrtlhTOPuhHkwKLot3qRrCKeU2Yu+dkzgk8MygI4O9zm3khsWjQ/LbA21j
-         4xw5YsdRxD/Ha3GQZNuBFPW1eDANvydCbPtShm5g=
+        b=1fZdsG2214Sgo192WU71izkQ9jWTrlvAFPD/zVuGdb0ADB1lddiwLKrCDwT9qusQT
+         dxv9gGetScYS37Y3zRn6QsYyo0v6x9fVh8llQZUuhIF498xc05VEGXI9/HCjkzCUCk
+         kP0MJomnVR2BY1YzveDQWtogfOCjyjPFAn4y19i0=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Qiuxu Zhuo <qiuxu.zhuo@intel.com>, Tony Luck <tony.luck@intel.com>,
-        Borislav Petkov <bp@suse.de>,
-        Aristeu Rozanski <aris@redhat.com>,
+Cc:     Justin Ernst <justin.ernst@hpe.com>, Borislav Petkov <bp@suse.de>,
+        Russ Anderson <russ.anderson@hpe.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         linux-edac@vger.kernel.org, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH AUTOSEL 4.19 088/191] EDAC: Correct DIMM capacity unit symbol
-Date:   Sat,  9 Nov 2019 21:38:30 -0500
-Message-Id: <20191110024013.29782-88-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.14 080/109] EDAC: Raise the maximum number of memory controllers
+Date:   Sat,  9 Nov 2019 21:45:12 -0500
+Message-Id: <20191110024541.31567-80-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20191110024013.29782-1-sashal@kernel.org>
-References: <20191110024013.29782-1-sashal@kernel.org>
+In-Reply-To: <20191110024541.31567-1-sashal@kernel.org>
+References: <20191110024541.31567-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -45,93 +44,61 @@ Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-From: Qiuxu Zhuo <qiuxu.zhuo@intel.com>
+From: Justin Ernst <justin.ernst@hpe.com>
 
-[ Upstream commit 6f6da136046294a1e8d2944336eb97412751f653 ]
+[ Upstream commit 6b58859419554fb824e09cfdd73151a195473cbc ]
 
-The {i3200|i7core|sb|skx}_edac drivers show DIMM capacity using the
-wrong unit symbol: 'Mb' - megabit. Fix them by replacing 'Mb' with
-'MiB' - mebibyte.
+We observe an oops in the skx_edac module during boot:
 
-[Tony: These are all "edac_dbg()" messages, so this won't break scripts
-       that parse console logs.]
+  EDAC MC0: Giving out device to module skx_edac controller Skylake Socket#0 IMC#0
+  EDAC MC1: Giving out device to module skx_edac controller Skylake Socket#0 IMC#1
+  EDAC MC2: Giving out device to module skx_edac controller Skylake Socket#1 IMC#0
+  ...
+  EDAC MC13: Giving out device to module skx_edac controller Skylake Socket#0 IMC#1
+  EDAC MC14: Giving out device to module skx_edac controller Skylake Socket#1 IMC#0
+  EDAC MC15: Giving out device to module skx_edac controller Skylake Socket#1 IMC#1
+  Too many memory controllers: 16
+  EDAC MC: Removed device 0 for skx_edac Skylake Socket#0 IMC#0
 
-Signed-off-by: Qiuxu Zhuo <qiuxu.zhuo@intel.com>
-Signed-off-by: Tony Luck <tony.luck@intel.com>
+We observe there are two memory controllers per socket, with a limit
+of 16. Raise the maximum number of memory controllers from 16 to 2 *
+MAX_NUMNODES (1024).
+
+[ bp: This is just a band-aid fix until we've sorted out the whole issue
+  with the bus_type association and handling in EDAC and can get rid of
+  this arbitrary limit. ]
+
+Signed-off-by: Justin Ernst <justin.ernst@hpe.com>
 Signed-off-by: Borislav Petkov <bp@suse.de>
-Acked-by: Aristeu Rozanski <aris@redhat.com>
+Acked-by: Russ Anderson <russ.anderson@hpe.com>
 Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
 Cc: linux-edac@vger.kernel.org
-Link: https://lkml.kernel.org/r/20180919003433.16475-1-tony.luck@intel.com
+Link: https://lkml.kernel.org/r/20180925143449.284634-1-justin.ernst@hpe.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/edac/i3200_edac.c  | 2 +-
- drivers/edac/i7core_edac.c | 2 +-
- drivers/edac/sb_edac.c     | 2 +-
- drivers/edac/skx_edac.c    | 4 ++--
- 4 files changed, 5 insertions(+), 5 deletions(-)
+ include/linux/edac.h | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/edac/i3200_edac.c b/drivers/edac/i3200_edac.c
-index d92d56cee1017..299b441647cd5 100644
---- a/drivers/edac/i3200_edac.c
-+++ b/drivers/edac/i3200_edac.c
-@@ -399,7 +399,7 @@ static int i3200_probe1(struct pci_dev *pdev, int dev_idx)
- 			if (nr_pages == 0)
- 				continue;
+diff --git a/include/linux/edac.h b/include/linux/edac.h
+index cd75c173fd00b..90f72336aea66 100644
+--- a/include/linux/edac.h
++++ b/include/linux/edac.h
+@@ -17,6 +17,7 @@
+ #include <linux/completion.h>
+ #include <linux/workqueue.h>
+ #include <linux/debugfs.h>
++#include <linux/numa.h>
  
--			edac_dbg(0, "csrow %d, channel %d%s, size = %ld Mb\n", i, j,
-+			edac_dbg(0, "csrow %d, channel %d%s, size = %ld MiB\n", i, j,
- 				 stacked ? " (stacked)" : "", PAGES_TO_MiB(nr_pages));
+ #define EDAC_DEVICE_NAME_LEN	31
  
- 			dimm->nr_pages = nr_pages;
-diff --git a/drivers/edac/i7core_edac.c b/drivers/edac/i7core_edac.c
-index f1d19504a0281..4a3300c2da333 100644
---- a/drivers/edac/i7core_edac.c
-+++ b/drivers/edac/i7core_edac.c
-@@ -597,7 +597,7 @@ static int get_dimm_config(struct mem_ctl_info *mci)
- 			/* DDR3 has 8 I/O banks */
- 			size = (rows * cols * banks * ranks) >> (20 - 3);
+@@ -667,6 +668,6 @@ struct mem_ctl_info {
+ /*
+  * Maximum number of memory controllers in the coherent fabric.
+  */
+-#define EDAC_MAX_MCS	16
++#define EDAC_MAX_MCS	2 * MAX_NUMNODES
  
--			edac_dbg(0, "\tdimm %d %d Mb offset: %x, bank: %d, rank: %d, row: %#x, col: %#x\n",
-+			edac_dbg(0, "\tdimm %d %d MiB offset: %x, bank: %d, rank: %d, row: %#x, col: %#x\n",
- 				 j, size,
- 				 RANKOFFSET(dimm_dod[j]),
- 				 banks, ranks, rows, cols);
-diff --git a/drivers/edac/sb_edac.c b/drivers/edac/sb_edac.c
-index 72cea3cb86224..acb9db55f5700 100644
---- a/drivers/edac/sb_edac.c
-+++ b/drivers/edac/sb_edac.c
-@@ -1622,7 +1622,7 @@ static int __populate_dimms(struct mem_ctl_info *mci,
- 				size = ((u64)rows * cols * banks * ranks) >> (20 - 3);
- 				npages = MiB_TO_PAGES(size);
- 
--				edac_dbg(0, "mc#%d: ha %d channel %d, dimm %d, %lld Mb (%d pages) bank: %d, rank: %d, row: %#x, col: %#x\n",
-+				edac_dbg(0, "mc#%d: ha %d channel %d, dimm %d, %lld MiB (%d pages) bank: %d, rank: %d, row: %#x, col: %#x\n",
- 					 pvt->sbridge_dev->mc, pvt->sbridge_dev->dom, i, j,
- 					 size, npages,
- 					 banks, ranks, rows, cols);
-diff --git a/drivers/edac/skx_edac.c b/drivers/edac/skx_edac.c
-index 4ba92f1dd0f74..dd209e0dd9abb 100644
---- a/drivers/edac/skx_edac.c
-+++ b/drivers/edac/skx_edac.c
-@@ -364,7 +364,7 @@ static int get_dimm_info(u32 mtr, u32 amap, struct dimm_info *dimm,
- 	size = ((1ull << (rows + cols + ranks)) * banks) >> (20 - 3);
- 	npages = MiB_TO_PAGES(size);
- 
--	edac_dbg(0, "mc#%d: channel %d, dimm %d, %lld Mb (%d pages) bank: %d, rank: %d, row: %#x, col: %#x\n",
-+	edac_dbg(0, "mc#%d: channel %d, dimm %d, %lld MiB (%d pages) bank: %d, rank: %d, row: %#x, col: %#x\n",
- 		 imc->mc, chan, dimmno, size, npages,
- 		 banks, 1 << ranks, rows, cols);
- 
-@@ -424,7 +424,7 @@ static int get_nvdimm_info(struct dimm_info *dimm, struct skx_imc *imc,
- 	dimm->mtype = MEM_NVDIMM;
- 	dimm->edac_mode = EDAC_SECDED; /* likely better than this */
- 
--	edac_dbg(0, "mc#%d: channel %d, dimm %d, %llu Mb (%u pages)\n",
-+	edac_dbg(0, "mc#%d: channel %d, dimm %d, %llu MiB (%u pages)\n",
- 		 imc->mc, chan, dimmno, size >> 20, dimm->nr_pages);
- 
- 	snprintf(dimm->label, sizeof(dimm->label), "CPU_SrcID#%u_MC#%u_Chan#%u_DIMM#%u",
+ #endif
 -- 
 2.20.1
 
