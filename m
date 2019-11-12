@@ -2,485 +2,456 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EC1CAF8FB2
-	for <lists+linux-edac@lfdr.de>; Tue, 12 Nov 2019 13:30:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CA621F9381
+	for <lists+linux-edac@lfdr.de>; Tue, 12 Nov 2019 16:01:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726979AbfKLMal (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Tue, 12 Nov 2019 07:30:41 -0500
-Received: from szxga04-in.huawei.com ([45.249.212.190]:6643 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726965AbfKLMal (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Tue, 12 Nov 2019 07:30:41 -0500
-Received: from DGGEMS405-HUB.china.huawei.com (unknown [172.30.72.58])
-        by Forcepoint Email with ESMTP id D0A22CC713232D6D210A;
-        Tue, 12 Nov 2019 20:30:37 +0800 (CST)
-Received: from localhost.localdomain (10.69.192.58) by
- DGGEMS405-HUB.china.huawei.com (10.3.19.205) with Microsoft SMTP Server id
- 14.3.439.0; Tue, 12 Nov 2019 20:30:29 +0800
-From:   Xiaofei Tan <tanxiaofei@huawei.com>
-To:     <mchehab@kernel.org>, <linux-edac@vger.kernel.org>
-CC:     Xiaofei Tan <tanxiaofei@huawei.com>, <linuxarm@huawei.com>,
-        <shiju.jose@huawei.com>, <jonathan.cameron@huawei.com>
-Subject: [PATCH 9/9] rasdaemon: replace sprintf with snprintf for hip08
-Date:   Tue, 12 Nov 2019 20:27:14 +0800
-Message-ID: <1573561634-225173-10-git-send-email-tanxiaofei@huawei.com>
-X-Mailer: git-send-email 2.8.1
-In-Reply-To: <1573561634-225173-1-git-send-email-tanxiaofei@huawei.com>
-References: <1573561634-225173-1-git-send-email-tanxiaofei@huawei.com>
+        id S1727137AbfKLPBL (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Tue, 12 Nov 2019 10:01:11 -0500
+Received: from Galois.linutronix.de ([193.142.43.55]:34652 "EHLO
+        Galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726957AbfKLPBL (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Tue, 12 Nov 2019 10:01:11 -0500
+Received: from [5.158.153.53] (helo=tip-bot2.lab.linutronix.de)
+        by Galois.linutronix.de with esmtpsa (TLS1.2:DHE_RSA_AES_256_CBC_SHA256:256)
+        (Exim 4.80)
+        (envelope-from <tip-bot2@linutronix.de>)
+        id 1iUXf4-00058v-I3; Tue, 12 Nov 2019 16:00:54 +0100
+Received: from [127.0.1.1] (localhost [IPv6:::1])
+        by tip-bot2.lab.linutronix.de (Postfix) with ESMTP id 2E2341C0084;
+        Tue, 12 Nov 2019 16:00:54 +0100 (CET)
+Date:   Tue, 12 Nov 2019 15:00:53 -0000
+From:   "tip-bot2 for Srinivas Pandruvada" <tip-bot2@linutronix.de>
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: ras/core] x86/mce/therm_throt: Optimize notifications of
+ thermal throttle
+Cc:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Borislav Petkov <bp@suse.de>, "H. Peter Anvin" <hpa@zytor.com>,
+        bberg@redhat.com, ckellner@redhat.com, hdegoede@redhat.com,
+        Ingo Molnar <mingo@redhat.com>,
+        "linux-edac" <linux-edac@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Tony Luck <tony.luck@intel.com>, "x86-ml" <x86@kernel.org>,
+        Ingo Molnar <mingo@kernel.org>, Borislav Petkov <bp@alien8.de>,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <20191111214312.81365-1-srinivas.pandruvada@linux.intel.com>
+References: <20191111214312.81365-1-srinivas.pandruvada@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.69.192.58]
-X-CFilter-Loop: Reflected
+Message-ID: <157357085376.29376.9191302193256787154.tip-bot2@tip-bot2>
+X-Mailer: tip-git-log-daemon
+Robot-ID: <tip-bot2.linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Linutronix-Spam-Score: -1.0
+X-Linutronix-Spam-Level: -
+X-Linutronix-Spam-Status: No , -1.0 points, 5.0 required,  ALL_TRUSTED=-1,SHORTCIRCUIT=-0.0001
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-Replace sprintf with snprintf for hip08 to improve reliability.
-Besides, add border check for buffer pointer.
+The following commit has been merged into the ras/core branch of tip:
 
-Signed-off-by: Xiaofei Tan <tanxiaofei@huawei.com>
+Commit-ID:     f6656208f04e5b3804054008eba4bf7170f4c841
+Gitweb:        https://git.kernel.org/tip/f6656208f04e5b3804054008eba4bf7170f4c841
+Author:        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+AuthorDate:    Mon, 11 Nov 2019 13:43:12 -08:00
+Committer:     Borislav Petkov <bp@suse.de>
+CommitterDate: Tue, 12 Nov 2019 15:56:04 +01:00
+
+x86/mce/therm_throt: Optimize notifications of thermal throttle
+
+Some modern systems have very tight thermal tolerances. Because of this
+they may cross thermal thresholds when running normal workloads (even
+during boot). The CPU hardware will react by limiting power/frequency
+and using duty cycles to bring the temperature back into normal range.
+
+Thus users may see a "critical" message about the "temperature above
+threshold" which is soon followed by "temperature/speed normal". These
+messages are rate-limited, but still may repeat every few minutes.
+
+This issue became worse starting with the Ivy Bridge generation of
+CPUs because they include a TCC activation offset in the MSR
+IA32_TEMPERATURE_TARGET. OEMs use this to provide alerts long before
+critical temperatures are reached.
+
+A test run on a laptop with Intel 8th Gen i5 core for two hours with a
+workload resulted in 20K+ thermal interrupts per CPU for core level and
+another 20K+ interrupts at package level. The kernel logs were full of
+throttling messages.
+
+The real value of these threshold interrupts, is to debug problems with
+the external cooling solutions and performance issues due to excessive
+throttling.
+
+So the solution here is the following:
+
+  - In the current thermal_throttle folder, show:
+    - the maximum time for one throttling event and,
+    - the total amount of time the system was in throttling state.
+
+  - Do not log short excursions.
+
+  - Log only when, in spite of thermal throttling, the temperature is rising.
+  On the high threshold interrupt trigger a delayed workqueue that
+  monitors the threshold violation log bit (THERM_STATUS_PROCHOT_LOG). When
+  the log bit is set, this workqueue callback calculates three point moving
+  average and logs a warning message when the temperature trend is rising.
+
+  When this log bit is clear and temperature is below threshold
+  temperature, then the workqueue callback logs a "Normal" message. Once a
+  high threshold event is logged, the logging is rate-limited.
+
+With this patch on the same test laptop, no warnings are printed in the logs
+as the max time the processor could bring the temperature under control is
+only 280 ms.
+
+This implementation is done with the inputs from Alan Cox and Tony Luck.
+
+ [ bp: Touchups. ]
+
+Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Signed-off-by: Borislav Petkov <bp@suse.de>
+Cc: "H. Peter Anvin" <hpa@zytor.com>
+Cc: bberg@redhat.com
+Cc: ckellner@redhat.com
+Cc: hdegoede@redhat.com
+Cc: Ingo Molnar <mingo@redhat.com>
+Cc: linux-edac <linux-edac@vger.kernel.org>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Tony Luck <tony.luck@intel.com>
+Cc: x86-ml <x86@kernel.org>
+Link: https://lkml.kernel.org/r/20191111214312.81365-1-srinivas.pandruvada@linux.intel.com
 ---
- non-standard-hisi_hip08.c | 196 ++++++++++++++++++++++++++--------------------
- 1 file changed, 110 insertions(+), 86 deletions(-)
+ arch/x86/kernel/cpu/mce/therm_throt.c | 251 ++++++++++++++++++++++---
+ 1 file changed, 227 insertions(+), 24 deletions(-)
 
-diff --git a/non-standard-hisi_hip08.c b/non-standard-hisi_hip08.c
-index 976345d..66fc4c8 100644
---- a/non-standard-hisi_hip08.c
-+++ b/non-standard-hisi_hip08.c
-@@ -569,40 +569,41 @@ static int step_vendor_data_tab(struct ras_ns_dec_tab *dec_tab, char *name)
- }
- #endif
+diff --git a/arch/x86/kernel/cpu/mce/therm_throt.c b/arch/x86/kernel/cpu/mce/therm_throt.c
+index bc441d6..d01e0da 100644
+--- a/arch/x86/kernel/cpu/mce/therm_throt.c
++++ b/arch/x86/kernel/cpu/mce/therm_throt.c
+@@ -40,15 +40,58 @@
+ #define THERMAL_THROTTLING_EVENT	0
+ #define POWER_LIMIT_EVENT		1
  
-+#define NO_OVERFLOW(p) ((p) >= buf && (p) < end)
- static void decode_oem_type1_err_hdr(struct ras_ns_dec_tab *dec_tab,
- 				     struct trace_seq *s,
- 				     const struct hisi_oem_type1_err_sec *err)
- {
- 	char buf[HISI_BUF_LEN];
- 	char *p = buf;
-+	char *end = buf + HISI_BUF_LEN;
+-/*
+- * Current thermal event state:
++/**
++ * struct _thermal_state - Represent the current thermal event state
++ * @next_check:			Stores the next timestamp, when it is allowed
++ *				to log the next warning message.
++ * @last_interrupt_time:	Stores the timestamp for the last threshold
++ *				high event.
++ * @therm_work:			Delayed workqueue structure
++ * @count:			Stores the current running count for thermal
++ *				or power threshold interrupts.
++ * @last_count:			Stores the previous running count for thermal
++ *				or power threshold interrupts.
++ * @max_time_ms:		This shows the maximum amount of time CPU was
++ *				in throttled state for a single thermal
++ *				threshold high to low state.
++ * @total_time_ms:		This is a cumulative time during which CPU was
++ *				in the throttled state.
++ * @rate_control_active:	Set when a throttling message is logged.
++ *				This is used for the purpose of rate-control.
++ * @new_event:			Stores the last high/low status of the
++ *				THERM_STATUS_PROCHOT or
++ *				THERM_STATUS_POWER_LIMIT.
++ * @level:			Stores whether this _thermal_state instance is
++ *				for a CORE level or for PACKAGE level.
++ * @sample_index:		Index for storing the next sample in the buffer
++ *				temp_samples[].
++ * @sample_count:		Total number of samples collected in the buffer
++ *				temp_samples[].
++ * @average:			The last moving average of temperature samples
++ * @baseline_temp:		Temperature at which thermal threshold high
++ *				interrupt was generated.
++ * @temp_samples:		Storage for temperature samples to calculate
++ *				moving average.
++ *
++ * This structure is used to represent data related to thermal state for a CPU.
++ * There is a separate storage for core and package level for each CPU.
+  */
+ struct _thermal_state {
+-	bool			new_event;
+-	int			event;
+ 	u64			next_check;
++	u64			last_interrupt_time;
++	struct delayed_work	therm_work;
+ 	unsigned long		count;
+ 	unsigned long		last_count;
++	unsigned long		max_time_ms;
++	unsigned long		total_time_ms;
++	bool			rate_control_active;
++	bool			new_event;
++	u8			level;
++	u8			sample_index;
++	u8			sample_count;
++	u8			average;
++	u8			baseline_temp;
++	u8			temp_samples[3];
+ };
  
--	p += sprintf(p, "[ ");
--	p += sprintf(p, "table_version=%d ", err->version);
-+	p += snprintf(p, end - p, "[ table_version=%d ", err->version);
- 	record_vendor_data(dec_tab, hisi_oem_data_type_int,
- 			   hip08_oem_type1_field_version, err->version, NULL);
+ struct thermal_state {
+@@ -121,8 +164,22 @@ define_therm_throt_device_one_ro(package_throttle_count);
+ define_therm_throt_device_show_func(package_power_limit, count);
+ define_therm_throt_device_one_ro(package_power_limit_count);
  
--	if (err->val_bits & HISI_OEM_VALID_SOC_ID) {
--		p += sprintf(p, "SOC_ID=%d ", err->soc_id);
-+	if (err->val_bits & HISI_OEM_VALID_SOC_ID && NO_OVERFLOW(p)) {
-+		p += snprintf(p, end - p, "SOC_ID=%d ", err->soc_id);
- 		record_vendor_data(dec_tab, hisi_oem_data_type_int,
- 				   hip08_oem_type1_field_soc_id,
- 				   err->soc_id, NULL);
- 	}
- 
--	if (err->val_bits & HISI_OEM_VALID_SOCKET_ID) {
--		p += sprintf(p, "socket_ID=%d ", err->socket_id);
-+	if (err->val_bits & HISI_OEM_VALID_SOCKET_ID && NO_OVERFLOW(p)) {
-+		p += snprintf(p, end - p, "socket_ID=%d ", err->socket_id);
- 		record_vendor_data(dec_tab, hisi_oem_data_type_int,
- 				   hip08_oem_type1_field_socket_id,
- 				   err->socket_id, NULL);
- 	}
- 
--	if (err->val_bits & HISI_OEM_VALID_NIMBUS_ID) {
--		p += sprintf(p, "nimbus_ID=%d ", err->nimbus_id);
-+	if (err->val_bits & HISI_OEM_VALID_NIMBUS_ID && NO_OVERFLOW(p)) {
-+		p += snprintf(p, end - p, "nimbus_ID=%d ", err->nimbus_id);
- 		record_vendor_data(dec_tab, hisi_oem_data_type_int,
- 				   hip08_oem_type1_field_nimbus_id,
- 				   err->nimbus_id, NULL);
- 	}
- 
--	if (err->val_bits & HISI_OEM_VALID_MODULE_ID) {
-+	if (err->val_bits & HISI_OEM_VALID_MODULE_ID && NO_OVERFLOW(p)) {
- 		const char *str = oem_module_name(hisi_oem_type1_module,
- 						  err->module_id);
- 
-@@ -612,7 +613,7 @@ static void decode_oem_type1_err_hdr(struct ras_ns_dec_tab *dec_tab,
- 				   0, str);
- 	}
- 
--	if (err->val_bits & HISI_OEM_VALID_SUB_MODULE_ID) {
-+	if (err->val_bits & HISI_OEM_VALID_SUB_MODULE_ID && NO_OVERFLOW(p)) {
- 		const char *str = oem_submodule_name(hisi_oem_type1_module,
- 						     err->module_id,
- 						     err->sub_module_id);
-@@ -623,15 +624,17 @@ static void decode_oem_type1_err_hdr(struct ras_ns_dec_tab *dec_tab,
- 				   0, str);
- 	}
- 
--	if (err->val_bits & HISI_OEM_VALID_ERR_SEVERITY) {
--		p += sprintf(p, "error_severity=%s ",
-+	if (err->val_bits & HISI_OEM_VALID_ERR_SEVERITY && NO_OVERFLOW(p)) {
-+		p += snprintf(p, end - p, "error_severity=%s ",
- 			     err_severity(err->err_severity));
- 		record_vendor_data(dec_tab, hisi_oem_data_type_text,
- 				   hip08_oem_type1_field_err_sev,
- 				   0, err_severity(err->err_severity));
- 	}
- 
--	p += sprintf(p, "]");
-+	if (NO_OVERFLOW(p))
-+		p += snprintf(p, end - p, "]");
++define_therm_throt_device_show_func(core_throttle, max_time_ms);
++define_therm_throt_device_one_ro(core_throttle_max_time_ms);
 +
- 	trace_seq_printf(s, "%s\n", buf);
- }
++define_therm_throt_device_show_func(package_throttle, max_time_ms);
++define_therm_throt_device_one_ro(package_throttle_max_time_ms);
++
++define_therm_throt_device_show_func(core_throttle, total_time_ms);
++define_therm_throt_device_one_ro(core_throttle_total_time_ms);
++
++define_therm_throt_device_show_func(package_throttle, total_time_ms);
++define_therm_throt_device_one_ro(package_throttle_total_time_ms);
++
+ static struct attribute *thermal_throttle_attrs[] = {
+ 	&dev_attr_core_throttle_count.attr,
++	&dev_attr_core_throttle_max_time_ms.attr,
++	&dev_attr_core_throttle_total_time_ms.attr,
+ 	NULL
+ };
  
-@@ -641,42 +644,48 @@ static void decode_oem_type1_err_regs(struct ras_ns_dec_tab *dec_tab,
- {
- 	char buf[HISI_BUF_LEN];
- 	char *p = buf;
-+	char *end = buf + HISI_BUF_LEN;
+@@ -135,6 +192,105 @@ static const struct attribute_group thermal_attr_group = {
+ #define CORE_LEVEL	0
+ #define PACKAGE_LEVEL	1
  
- 	trace_seq_printf(s, "Reg Dump:\n");
- 	if (err->val_bits & HISI_OEM_TYPE1_VALID_ERR_MISC_0) {
- 		trace_seq_printf(s, "ERR_MISC0=0x%x\n", err->err_misc_0);
--		p += sprintf(p, "ERR_MISC0=0x%x ", err->err_misc_0);
-+		p += snprintf(p, end - p, "ERR_MISC0=0x%x ", err->err_misc_0);
- 	}
- 
--	if (err->val_bits & HISI_OEM_TYPE1_VALID_ERR_MISC_1) {
-+	if (err->val_bits & HISI_OEM_TYPE1_VALID_ERR_MISC_1 && NO_OVERFLOW(p)) {
- 		trace_seq_printf(s, "ERR_MISC1=0x%x\n", err->err_misc_1);
--		p += sprintf(p, "ERR_MISC1=0x%x ", err->err_misc_1);
-+		p += snprintf(p, end - p, "ERR_MISC1=0x%x ", err->err_misc_1);
- 	}
- 
--	if (err->val_bits & HISI_OEM_TYPE1_VALID_ERR_MISC_2) {
-+	if (err->val_bits & HISI_OEM_TYPE1_VALID_ERR_MISC_2 && NO_OVERFLOW(p)) {
- 		trace_seq_printf(s, "ERR_MISC2=0x%x\n", err->err_misc_2);
--		p += sprintf(p, "ERR_MISC2=0x%x ", err->err_misc_2);
-+		p += snprintf(p, end - p, "ERR_MISC2=0x%x ", err->err_misc_2);
- 	}
- 
--	if (err->val_bits & HISI_OEM_TYPE1_VALID_ERR_MISC_3) {
-+	if (err->val_bits & HISI_OEM_TYPE1_VALID_ERR_MISC_3 && NO_OVERFLOW(p)) {
- 		trace_seq_printf(s, "ERR_MISC3=0x%x\n", err->err_misc_3);
--		p += sprintf(p, "ERR_MISC3=0x%x ", err->err_misc_3);
-+		p += snprintf(p, end - p, "ERR_MISC3=0x%x ", err->err_misc_3);
- 	}
- 
--	if (err->val_bits & HISI_OEM_TYPE1_VALID_ERR_MISC_4) {
-+	if (err->val_bits & HISI_OEM_TYPE1_VALID_ERR_MISC_4 && NO_OVERFLOW(p)) {
- 		trace_seq_printf(s, "ERR_MISC4=0x%x\n", err->err_misc_4);
--		p += sprintf(p, "ERR_MISC4=0x%x ", err->err_misc_4);
-+		p += snprintf(p, end - p, "ERR_MISC4=0x%x ", err->err_misc_4);
++#define THERM_THROT_POLL_INTERVAL	HZ
++#define THERM_STATUS_PROCHOT_LOG	BIT(1)
++
++static void clear_therm_status_log(int level)
++{
++	int msr;
++	u64 msr_val;
++
++	if (level == CORE_LEVEL)
++		msr = MSR_IA32_THERM_STATUS;
++	else
++		msr = MSR_IA32_PACKAGE_THERM_STATUS;
++
++	rdmsrl(msr, msr_val);
++	wrmsrl(msr, msr_val & ~THERM_STATUS_PROCHOT_LOG);
++}
++
++static void get_therm_status(int level, bool *proc_hot, u8 *temp)
++{
++	int msr;
++	u64 msr_val;
++
++	if (level == CORE_LEVEL)
++		msr = MSR_IA32_THERM_STATUS;
++	else
++		msr = MSR_IA32_PACKAGE_THERM_STATUS;
++
++	rdmsrl(msr, msr_val);
++	if (msr_val & THERM_STATUS_PROCHOT_LOG)
++		*proc_hot = true;
++	else
++		*proc_hot = false;
++
++	*temp = (msr_val >> 16) & 0x7F;
++}
++
++static void throttle_active_work(struct work_struct *work)
++{
++	struct _thermal_state *state = container_of(to_delayed_work(work),
++						struct _thermal_state, therm_work);
++	unsigned int i, avg, this_cpu = smp_processor_id();
++	u64 now = get_jiffies_64();
++	bool hot;
++	u8 temp;
++
++	get_therm_status(state->level, &hot, &temp);
++	/* temperature value is offset from the max so lesser means hotter */
++	if (!hot && temp > state->baseline_temp) {
++		if (state->rate_control_active)
++			pr_info("CPU%d: %s temperature/speed normal (total events = %lu)\n",
++				this_cpu,
++				state->level == CORE_LEVEL ? "Core" : "Package",
++				state->count);
++
++		state->rate_control_active = false;
++		return;
 +	}
 +
-+	if (err->val_bits & HISI_OEM_TYPE1_VALID_ERR_ADDR && NO_OVERFLOW(p)) {
-+		trace_seq_printf(s, "ERR_ADDR=0x%llx\n",
-+				 (unsigned long long)err->err_addr);
-+		p += snprintf(p, end - p, "ERR_ADDR=0x%llx ",
-+			     (unsigned long long)err->err_addr);
- 	}
- 
--	if (err->val_bits & HISI_OEM_TYPE1_VALID_ERR_ADDR) {
--		trace_seq_printf(s, "ERR_ADDR=0x%p\n", (void *)err->err_addr);
--		p += sprintf(p, "ERR_ADDR=0x%p ", (void *)err->err_addr);
-+	if (p > buf && p < end) {
-+		p--;
-+		*p = '\0';
- 	}
- 
--	*(--p) = '\0';
- 	record_vendor_data(dec_tab, hisi_oem_data_type_text,
- 			   hip08_oem_type1_field_regs_dump, 0, buf);
--
- 	step_vendor_data_tab(dec_tab, "hip08_oem_type1_event_tab");
- }
- 
-@@ -723,34 +732,34 @@ static void decode_oem_type2_err_hdr(struct ras_ns_dec_tab *dec_tab,
- {
- 	char buf[HISI_BUF_LEN];
- 	char *p = buf;
-+	char *end = buf + HISI_BUF_LEN;
- 
--	p += sprintf(p, "[ ");
--	p += sprintf(p, "table_version=%d ", err->version);
-+	p += snprintf(p, end - p, "[ table_version=%d ", err->version);
- 	record_vendor_data(dec_tab, hisi_oem_data_type_int,
--			   hip08_oem_type2_field_version,
--			   err->version, NULL);
--	if (err->val_bits & HISI_OEM_VALID_SOC_ID) {
--		p += sprintf(p, "SOC_ID=%d ", err->soc_id);
-+			   hip08_oem_type2_field_version, err->version, NULL);
++	if (time_before64(now, state->next_check) &&
++			  state->rate_control_active)
++		goto re_arm;
 +
-+	if (err->val_bits & HISI_OEM_VALID_SOC_ID && NO_OVERFLOW(p)) {
-+		p += snprintf(p, end - p, "SOC_ID=%d ", err->soc_id);
- 		record_vendor_data(dec_tab, hisi_oem_data_type_int,
- 				   hip08_oem_type2_field_soc_id,
- 				   err->soc_id, NULL);
- 	}
- 
--	if (err->val_bits & HISI_OEM_VALID_SOCKET_ID) {
--		p += sprintf(p, "socket_ID=%d ", err->socket_id);
-+	if (err->val_bits & HISI_OEM_VALID_SOCKET_ID && NO_OVERFLOW(p)) {
-+		p += snprintf(p, end - p, "socket_ID=%d ", err->socket_id);
- 		record_vendor_data(dec_tab, hisi_oem_data_type_int,
- 				   hip08_oem_type2_field_socket_id,
- 				   err->socket_id, NULL);
- 	}
- 
--	if (err->val_bits & HISI_OEM_VALID_NIMBUS_ID) {
--		p += sprintf(p, "nimbus_ID=%d ", err->nimbus_id);
-+	if (err->val_bits & HISI_OEM_VALID_NIMBUS_ID && NO_OVERFLOW(p)) {
-+		p += snprintf(p, end - p, "nimbus_ID=%d ", err->nimbus_id);
- 		record_vendor_data(dec_tab, hisi_oem_data_type_int,
- 				   hip08_oem_type2_field_nimbus_id,
- 				   err->nimbus_id, NULL);
- 	}
- 
--	if (err->val_bits & HISI_OEM_VALID_MODULE_ID) {
-+	if (err->val_bits & HISI_OEM_VALID_MODULE_ID && NO_OVERFLOW(p)) {
- 		const char *str = oem_module_name(hisi_oem_type2_module,
- 						  err->module_id);
- 
-@@ -760,7 +769,7 @@ static void decode_oem_type2_err_hdr(struct ras_ns_dec_tab *dec_tab,
- 				   0, str);
- 	}
- 
--	if (err->val_bits & HISI_OEM_VALID_SUB_MODULE_ID) {
-+	if (err->val_bits & HISI_OEM_VALID_SUB_MODULE_ID && NO_OVERFLOW(p)) {
- 		const char *str = oem_submodule_name(hisi_oem_type2_module,
- 						     err->module_id,
- 						     err->sub_module_id);
-@@ -771,15 +780,17 @@ static void decode_oem_type2_err_hdr(struct ras_ns_dec_tab *dec_tab,
- 				   0, str);
- 	}
- 
--	if (err->val_bits & HISI_OEM_VALID_ERR_SEVERITY) {
--		p += sprintf(p, "error_severity=%s ",
-+	if (err->val_bits & HISI_OEM_VALID_ERR_SEVERITY && NO_OVERFLOW(p)) {
-+		p += snprintf(p, end - p, "error_severity=%s ",
- 			     err_severity(err->err_severity));
- 		record_vendor_data(dec_tab, hisi_oem_data_type_text,
- 				   hip08_oem_type2_field_err_sev,
- 				   0, err_severity(err->err_severity));
- 	}
- 
--	p += sprintf(p, "]");
-+	if (NO_OVERFLOW(p))
-+		p += snprintf(p, end - p, "]");
++	state->next_check = now + CHECK_INTERVAL;
 +
- 	trace_seq_printf(s, "%s\n", buf);
- }
- 
-@@ -789,54 +800,58 @@ static void decode_oem_type2_err_regs(struct ras_ns_dec_tab *dec_tab,
- {
- 	char buf[HISI_BUF_LEN];
- 	char *p = buf;
-+	char *end = buf + HISI_BUF_LEN;
- 
- 	trace_seq_printf(s, "Reg Dump:\n");
- 	if (err->val_bits & HISI_OEM_TYPE2_VALID_ERR_FR) {
- 		trace_seq_printf(s, "ERR_FR_0=0x%x\n", err->err_fr_0);
- 		trace_seq_printf(s, "ERR_FR_1=0x%x\n", err->err_fr_1);
--		p += sprintf(p, "ERR_FR_0=0x%x ERR_FR_1=0x%x ",
-+		p += snprintf(p, end - p, "ERR_FR_0=0x%x ERR_FR_1=0x%x ",
- 			     err->err_fr_0, err->err_fr_1);
- 	}
- 
--	if (err->val_bits & HISI_OEM_TYPE2_VALID_ERR_CTRL) {
-+	if (err->val_bits & HISI_OEM_TYPE2_VALID_ERR_CTRL && NO_OVERFLOW(p)) {
- 		trace_seq_printf(s, "ERR_CTRL_0=0x%x\n", err->err_ctrl_0);
- 		trace_seq_printf(s, "ERR_CTRL_1=0x%x\n", err->err_ctrl_1);
--		p += sprintf(p, "ERR_CTRL_0=0x%x ERR_CTRL_1=0x%x ",
--				err->err_ctrl_0, err->err_ctrl_1);
-+		p += snprintf(p, end - p, "ERR_CTRL_0=0x%x ERR_CTRL_1=0x%x ",
-+			      err->err_ctrl_0, err->err_ctrl_1);
- 	}
- 
--	if (err->val_bits & HISI_OEM_TYPE2_VALID_ERR_STATUS) {
-+	if (err->val_bits & HISI_OEM_TYPE2_VALID_ERR_STATUS && NO_OVERFLOW(p)) {
- 		trace_seq_printf(s, "ERR_STATUS_0=0x%x\n", err->err_status_0);
- 		trace_seq_printf(s, "ERR_STATUS_1=0x%x\n", err->err_status_1);
--		p += sprintf(p, "ERR_STATUS_0=0x%x ERR_STATUS_1=0x%x ",
--			     err->err_status_0, err->err_status_1);
-+		p += snprintf(p, end - p, "ERR_STATUS_0=0x%x ERR_STATUS_1=0x%x ",
-+			      err->err_status_0, err->err_status_1);
- 	}
- 
--	if (err->val_bits & HISI_OEM_TYPE2_VALID_ERR_ADDR) {
-+	if (err->val_bits & HISI_OEM_TYPE2_VALID_ERR_ADDR && NO_OVERFLOW(p)) {
- 		trace_seq_printf(s, "ERR_ADDR_0=0x%x\n", err->err_addr_0);
- 		trace_seq_printf(s, "ERR_ADDR_1=0x%x\n", err->err_addr_1);
--		p += sprintf(p, "ERR_ADDR_0=0x%x ERR_ADDR_1=0x%x ",
--			     err->err_addr_0, err->err_addr_1);
-+		p += snprintf(p, end - p, "ERR_ADDR_0=0x%x ERR_ADDR_1=0x%x ",
-+			      err->err_addr_0, err->err_addr_1);
- 	}
- 
--	if (err->val_bits & HISI_OEM_TYPE2_VALID_ERR_MISC_0) {
-+	if (err->val_bits & HISI_OEM_TYPE2_VALID_ERR_MISC_0 && NO_OVERFLOW(p)) {
- 		trace_seq_printf(s, "ERR_MISC0_0=0x%x\n", err->err_misc0_0);
- 		trace_seq_printf(s, "ERR_MISC0_1=0x%x\n", err->err_misc0_1);
--		p += sprintf(p, "ERR_MISC0_0=0x%x ERR_MISC0_1=0x%x ",
--			     err->err_misc0_0, err->err_misc0_1);
-+		p += snprintf(p, end - p, "ERR_MISC0_0=0x%x ERR_MISC0_1=0x%x ",
-+			      err->err_misc0_0, err->err_misc0_1);
- 	}
- 
--	if (err->val_bits & HISI_OEM_TYPE2_VALID_ERR_MISC_1) {
-+	if (err->val_bits & HISI_OEM_TYPE2_VALID_ERR_MISC_1 && NO_OVERFLOW(p)) {
- 		trace_seq_printf(s, "ERR_MISC1_0=0x%x\n", err->err_misc1_0);
- 		trace_seq_printf(s, "ERR_MISC1_1=0x%x\n", err->err_misc1_1);
--		p += sprintf(p, "ERR_MISC1_0=0x%x ERR_MISC1_1=0x%x ",
--			     err->err_misc1_0, err->err_misc1_1);
-+		p += snprintf(p, end - p, "ERR_MISC1_0=0x%x ERR_MISC1_1=0x%x ",
-+			      err->err_misc1_0, err->err_misc1_1);
++	if (state->count != state->last_count) {
++		/* There was one new thermal interrupt */
++		state->last_count = state->count;
++		state->average = 0;
++		state->sample_count = 0;
++		state->sample_index = 0;
 +	}
 +
-+	if (p > buf && p < end) {
-+		p--;
-+		*p = '\0';
- 	}
- 
--	*(--p) = '\0';
- 	record_vendor_data(dec_tab, hisi_oem_data_type_text,
- 			   hip08_oem_type2_field_regs_dump, 0, buf);
--
- 	step_vendor_data_tab(dec_tab, "hip08_oem_type2_event_tab");
- }
- 
-@@ -868,7 +883,6 @@ static int decode_hip08_oem_type2_error(struct ras_events *ras,
- 			   hip08_oem_type2_field_timestamp,
- 			   0, event->timestamp);
- 
--
- 	trace_seq_printf(s, "\nHISI HIP08: OEM Type-2 Error\n");
- 	decode_oem_type2_err_hdr(dec_tab, s, err);
- 	decode_oem_type2_err_regs(dec_tab, s, err);
-@@ -882,70 +896,74 @@ static void decode_pcie_local_err_hdr(struct ras_ns_dec_tab *dec_tab,
- {
- 	char buf[HISI_BUF_LEN];
- 	char *p = buf;
-+	char *end = buf + HISI_BUF_LEN;
- 
--	p += sprintf(p, "[ ");
--	p += sprintf(p, "table_version=%d ", err->version);
-+	p += snprintf(p, end - p, "[ table_version=%d ", err->version);
- 	record_vendor_data(dec_tab, hisi_oem_data_type_int,
- 			   hip08_pcie_local_field_version,
- 			   err->version, NULL);
--	if (err->val_bits & HISI_PCIE_LOCAL_VALID_SOC_ID) {
--		p += sprintf(p, "SOC_ID=%d ", err->soc_id);
++	state->temp_samples[state->sample_index] = temp;
++	state->sample_count++;
++	state->sample_index = (state->sample_index + 1) % ARRAY_SIZE(state->temp_samples);
++	if (state->sample_count < ARRAY_SIZE(state->temp_samples))
++		goto re_arm;
 +
-+	if (err->val_bits & HISI_PCIE_LOCAL_VALID_SOC_ID && NO_OVERFLOW(p)) {
-+		p += snprintf(p, end - p, "SOC_ID=%d ", err->soc_id);
- 		record_vendor_data(dec_tab, hisi_oem_data_type_int,
- 				   hip08_pcie_local_field_soc_id,
- 				   err->soc_id, NULL);
- 	}
- 
--	if (err->val_bits & HISI_PCIE_LOCAL_VALID_SOCKET_ID) {
--		p += sprintf(p, "socket_ID=%d ", err->socket_id);
-+	if (err->val_bits & HISI_PCIE_LOCAL_VALID_SOCKET_ID && NO_OVERFLOW(p)) {
-+		p += snprintf(p, end - p, "socket_ID=%d ", err->socket_id);
- 		record_vendor_data(dec_tab, hisi_oem_data_type_int,
- 				   hip08_pcie_local_field_socket_id,
- 				   err->socket_id, NULL);
- 	}
- 
--	if (err->val_bits & HISI_PCIE_LOCAL_VALID_NIMBUS_ID) {
--		p += sprintf(p, "nimbus_ID=%d ", err->nimbus_id);
-+	if (err->val_bits & HISI_PCIE_LOCAL_VALID_NIMBUS_ID && NO_OVERFLOW(p)) {
-+		p += snprintf(p, end - p, "nimbus_ID=%d ", err->nimbus_id);
- 		record_vendor_data(dec_tab, hisi_oem_data_type_int,
- 				   hip08_pcie_local_field_nimbus_id,
- 				   err->nimbus_id, NULL);
- 	}
- 
--	if (err->val_bits & HISI_PCIE_LOCAL_VALID_SUB_MODULE_ID) {
--		p += sprintf(p, "submodule=%s ",
--			     pcie_local_sub_module_name(err->sub_module_id));
-+	if (err->val_bits & HISI_PCIE_LOCAL_VALID_SUB_MODULE_ID && NO_OVERFLOW(p)) {
-+		p += snprintf(p, end - p, "submodule=%s ",
-+			      pcie_local_sub_module_name(err->sub_module_id));
- 		record_vendor_data(dec_tab, hisi_oem_data_type_text,
- 				   hip08_pcie_local_field_sub_module_id,
- 				   0, pcie_local_sub_module_name(err->sub_module_id));
- 	}
- 
--	if (err->val_bits & HISI_PCIE_LOCAL_VALID_CORE_ID) {
--		p += sprintf(p, "core_ID=core%d ", err->core_id);
-+	if (err->val_bits & HISI_PCIE_LOCAL_VALID_CORE_ID && NO_OVERFLOW(p)) {
-+		p += snprintf(p, end - p, "core_ID=core%d ", err->core_id);
- 		record_vendor_data(dec_tab, hisi_oem_data_type_int,
- 				   hip08_pcie_local_field_core_id,
- 				   err->core_id, NULL);
- 	}
- 
--	if (err->val_bits & HISI_PCIE_LOCAL_VALID_PORT_ID) {
--		p += sprintf(p, "port_ID=port%d ", err->port_id);
-+	if (err->val_bits & HISI_PCIE_LOCAL_VALID_PORT_ID && NO_OVERFLOW(p)) {
-+		p += snprintf(p, end - p, "port_ID=port%d ", err->port_id);
- 		record_vendor_data(dec_tab, hisi_oem_data_type_int,
- 				   hip08_pcie_local_field_port_id,
- 				   err->port_id, NULL);
- 	}
- 
--	if (err->val_bits & HISI_PCIE_LOCAL_VALID_ERR_SEVERITY) {
--		p += sprintf(p, "error_severity=%s ",
--			     err_severity(err->err_severity));
-+	if (err->val_bits & HISI_PCIE_LOCAL_VALID_ERR_SEVERITY && NO_OVERFLOW(p)) {
-+		p += snprintf(p, end - p, "error_severity=%s ",
-+			      err_severity(err->err_severity));
- 		record_vendor_data(dec_tab, hisi_oem_data_type_text,
- 				   hip08_pcie_local_field_err_sev,
- 				   0, err_severity(err->err_severity));
- 	}
- 
--	if (err->val_bits & HISI_PCIE_LOCAL_VALID_ERR_TYPE) {
--		p += sprintf(p, "error_type=0x%x ", err->err_type);
-+	if (err->val_bits & HISI_PCIE_LOCAL_VALID_ERR_TYPE && NO_OVERFLOW(p)) {
-+		p += snprintf(p, end - p, "error_type=0x%x ", err->err_type);
- 		record_vendor_data(dec_tab, hisi_oem_data_type_int,
- 				   hip08_pcie_local_field_err_type,
- 				   err->err_type, NULL);
- 	}
--	p += sprintf(p, "]");
++	avg = 0;
++	for (i = 0; i < ARRAY_SIZE(state->temp_samples); ++i)
++		avg += state->temp_samples[i];
 +
-+	if (NO_OVERFLOW(p))
-+		p += snprintf(p, end - p, "]");
++	avg /= ARRAY_SIZE(state->temp_samples);
 +
- 	trace_seq_printf(s, "%s\n", buf);
- }
- 
-@@ -955,21 +973,27 @@ static void decode_pcie_local_err_regs(struct ras_ns_dec_tab *dec_tab,
- {
- 	char buf[HISI_BUF_LEN];
- 	char *p = buf;
-+	char *end = buf + HISI_BUF_LEN;
- 	uint32_t i;
- 
- 	trace_seq_printf(s, "Reg Dump:\n");
- 	for (i = 0; i < HISI_PCIE_LOCAL_ERR_MISC_MAX; i++) {
--		if (err->val_bits & BIT(HISI_PCIE_LOCAL_VALID_ERR_MISC + i)) {
-+		if (err->val_bits & BIT(HISI_PCIE_LOCAL_VALID_ERR_MISC + i) &&
-+		    NO_OVERFLOW(p)) {
- 			trace_seq_printf(s, "ERR_MISC_%d=0x%x\n", i,
- 					 err->err_misc[i]);
--			p += sprintf(p, "ERR_MISC_%d=0x%x ", i, err->err_misc[i]);
-+			p += snprintf(p, end - p, "ERR_MISC_%d=0x%x ",
-+				      i, err->err_misc[i]);
- 		}
- 	}
- 
--	*(--p) = '\0';
-+	if (p > buf && p < end) {
-+		p--;
-+		*p = '\0';
++	if (state->average > avg) {
++		pr_warn("CPU%d: %s temperature is above threshold, cpu clock is throttled (total events = %lu)\n",
++			this_cpu,
++			state->level == CORE_LEVEL ? "Core" : "Package",
++			state->count);
++		state->rate_control_active = true;
 +	}
 +
- 	record_vendor_data(dec_tab, hisi_oem_data_type_text,
- 			   hip08_pcie_local_field_regs_dump, 0, buf);
--
- 	step_vendor_data_tab(dec_tab, "hip08_pcie_local_event_tab");
++	state->average = avg;
++
++re_arm:
++	clear_therm_status_log(state->level);
++	schedule_delayed_work_on(this_cpu, &state->therm_work, THERM_THROT_POLL_INTERVAL);
++}
++
+ /***
+  * therm_throt_process - Process thermal throttling event from interrupt
+  * @curr: Whether the condition is current or not (boolean), since the
+@@ -178,27 +334,33 @@ static void therm_throt_process(bool new_event, int event, int level)
+ 	if (new_event)
+ 		state->count++;
+ 
+-	if (time_before64(now, state->next_check) &&
+-			state->count != state->last_count)
++	if (event != THERMAL_THROTTLING_EVENT)
+ 		return;
+ 
+-	state->next_check = now + CHECK_INTERVAL;
+-	state->last_count = state->count;
++	if (new_event && !state->last_interrupt_time) {
++		bool hot;
++		u8 temp;
++
++		get_therm_status(state->level, &hot, &temp);
++		/*
++		 * Ignore short temperature spike as the system is not close
++		 * to PROCHOT. 10C offset is large enough to ignore. It is
++		 * already dropped from the high threshold temperature.
++		 */
++		if (temp > 10)
++			return;
+ 
+-	/* if we just entered the thermal event */
+-	if (new_event) {
+-		if (event == THERMAL_THROTTLING_EVENT)
+-			pr_warn("CPU%d: %s temperature above threshold, cpu clock throttled (total events = %lu)\n",
+-				this_cpu,
+-				level == CORE_LEVEL ? "Core" : "Package",
+-				state->count);
+-		return;
+-	}
+-	if (old_event) {
+-		if (event == THERMAL_THROTTLING_EVENT)
+-			pr_info("CPU%d: %s temperature/speed normal\n", this_cpu,
+-				level == CORE_LEVEL ? "Core" : "Package");
+-		return;
++		state->baseline_temp = temp;
++		state->last_interrupt_time = now;
++		schedule_delayed_work_on(this_cpu, &state->therm_work, THERM_THROT_POLL_INTERVAL);
++	} else if (old_event && state->last_interrupt_time) {
++		unsigned long throttle_time;
++
++		throttle_time = jiffies_delta_to_msecs(now - state->last_interrupt_time);
++		if (throttle_time > state->max_time_ms)
++			state->max_time_ms = throttle_time;
++		state->total_time_ms += throttle_time;
++		state->last_interrupt_time = 0;
+ 	}
  }
  
--- 
-2.8.1
-
+@@ -244,20 +406,47 @@ static int thermal_throttle_add_dev(struct device *dev, unsigned int cpu)
+ 	if (err)
+ 		return err;
+ 
+-	if (cpu_has(c, X86_FEATURE_PLN) && int_pln_enable)
++	if (cpu_has(c, X86_FEATURE_PLN) && int_pln_enable) {
+ 		err = sysfs_add_file_to_group(&dev->kobj,
+ 					      &dev_attr_core_power_limit_count.attr,
+ 					      thermal_attr_group.name);
++		if (err)
++			goto del_group;
++	}
++
+ 	if (cpu_has(c, X86_FEATURE_PTS)) {
+ 		err = sysfs_add_file_to_group(&dev->kobj,
+ 					      &dev_attr_package_throttle_count.attr,
+ 					      thermal_attr_group.name);
+-		if (cpu_has(c, X86_FEATURE_PLN) && int_pln_enable)
++		if (err)
++			goto del_group;
++
++		err = sysfs_add_file_to_group(&dev->kobj,
++					      &dev_attr_package_throttle_max_time_ms.attr,
++					      thermal_attr_group.name);
++		if (err)
++			goto del_group;
++
++		err = sysfs_add_file_to_group(&dev->kobj,
++					      &dev_attr_package_throttle_total_time_ms.attr,
++					      thermal_attr_group.name);
++		if (err)
++			goto del_group;
++
++		if (cpu_has(c, X86_FEATURE_PLN) && int_pln_enable) {
+ 			err = sysfs_add_file_to_group(&dev->kobj,
+ 					&dev_attr_package_power_limit_count.attr,
+ 					thermal_attr_group.name);
++			if (err)
++				goto del_group;
++		}
+ 	}
+ 
++	return 0;
++
++del_group:
++	sysfs_remove_group(&dev->kobj, &thermal_attr_group);
++
+ 	return err;
+ }
+ 
+@@ -269,15 +458,29 @@ static void thermal_throttle_remove_dev(struct device *dev)
+ /* Get notified when a cpu comes on/off. Be hotplug friendly. */
+ static int thermal_throttle_online(unsigned int cpu)
+ {
++	struct thermal_state *state = &per_cpu(thermal_state, cpu);
+ 	struct device *dev = get_cpu_device(cpu);
+ 
++	state->package_throttle.level = PACKAGE_LEVEL;
++	state->core_throttle.level = CORE_LEVEL;
++
++	INIT_DELAYED_WORK(&state->package_throttle.therm_work, throttle_active_work);
++	INIT_DELAYED_WORK(&state->core_throttle.therm_work, throttle_active_work);
++
+ 	return thermal_throttle_add_dev(dev, cpu);
+ }
+ 
+ static int thermal_throttle_offline(unsigned int cpu)
+ {
++	struct thermal_state *state = &per_cpu(thermal_state, cpu);
+ 	struct device *dev = get_cpu_device(cpu);
+ 
++	cancel_delayed_work(&state->package_throttle.therm_work);
++	cancel_delayed_work(&state->core_throttle.therm_work);
++
++	state->package_throttle.rate_control_active = false;
++	state->core_throttle.rate_control_active = false;
++
+ 	thermal_throttle_remove_dev(dev);
+ 	return 0;
+ }
