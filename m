@@ -2,97 +2,67 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A0D05FB54C
-	for <lists+linux-edac@lfdr.de>; Wed, 13 Nov 2019 17:38:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D03EFB872
+	for <lists+linux-edac@lfdr.de>; Wed, 13 Nov 2019 20:07:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727882AbfKMQiu convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-edac@lfdr.de>); Wed, 13 Nov 2019 11:38:50 -0500
-Received: from lhrrgout.huawei.com ([185.176.76.210]:2097 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726210AbfKMQit (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Wed, 13 Nov 2019 11:38:49 -0500
-Received: from LHREML712-CAH.china.huawei.com (unknown [172.18.7.107])
-        by Forcepoint Email with ESMTP id 620F7F6A421BDE46866D;
-        Wed, 13 Nov 2019 16:38:46 +0000 (GMT)
-Received: from lhreml712-chm.china.huawei.com (10.201.108.63) by
- LHREML712-CAH.china.huawei.com (10.201.108.35) with Microsoft SMTP Server
- (TLS) id 14.3.408.0; Wed, 13 Nov 2019 16:38:45 +0000
-Received: from lhreml715-chm.china.huawei.com (10.201.108.66) by
- lhreml712-chm.china.huawei.com (10.201.108.63) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1713.5; Wed, 13 Nov 2019 16:38:45 +0000
-Received: from lhreml715-chm.china.huawei.com ([10.201.108.66]) by
- lhreml715-chm.china.huawei.com ([10.201.108.66]) with mapi id 15.01.1713.004;
- Wed, 13 Nov 2019 16:38:45 +0000
-From:   Shiju Jose <shiju.jose@huawei.com>
-To:     "mchehab@kernel.org" <mchehab@kernel.org>,
-        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>
-CC:     Linuxarm <linuxarm@huawei.com>
-Subject: RE: [PATCH 0/7] rasdaemon: add fixes, database closure and signal
- handling
-Thread-Topic: [PATCH 0/7] rasdaemon: add fixes, database closure and signal
- handling
-Thread-Index: AQHVhD+VWTNr2YGQWUSVWVtO2U1NGqeJeMVw
-Date:   Wed, 13 Nov 2019 16:38:45 +0000
-Message-ID: <3214142033cc4a8d8d050721bdaa8340@huawei.com>
-References: <Shiju Jose> <20191016163401.16980-1-shiju.jose@huawei.com>
-In-Reply-To: <20191016163401.16980-1-shiju.jose@huawei.com>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.202.226.55]
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 8BIT
+        id S1727168AbfKMTHY (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Wed, 13 Nov 2019 14:07:24 -0500
+Received: from mail.skyhub.de ([5.9.137.197]:37258 "EHLO mail.skyhub.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726285AbfKMTHY (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Wed, 13 Nov 2019 14:07:24 -0500
+Received: from zn.tnic (p200300EC2F0FA700E9EFB2260700430D.dip0.t-ipconnect.de [IPv6:2003:ec:2f0f:a700:e9ef:b226:700:430d])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id C33E31EC02C1;
+        Wed, 13 Nov 2019 20:07:22 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1573672043;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=yUICw90EwxIhckdlyTk+klEoGtb3cVWCQA5GZK19iWk=;
+        b=JK+mbHNoor1HraKw6wuD2U2c4PUvdqCdlBJ08mPVxTHWcJ8kSjsFj5UI3SbgT76hCmZAX6
+        yt+FJhoVU02BbJ/VDycfUgUX2Lbq3wf7Xb8wgFuZAQqfbeIayh+ohh/1HyYEbmzNln0VTW
+        OBzI5OyWDcL+WLf4PDOG6QMJ3TuH3dA=
+Date:   Wed, 13 Nov 2019 20:07:18 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     thor.thayer@linux.intel.com
+Cc:     mchehab@kernel.org, tony.luck@intel.com, james.morse@arm.com,
+        rrichter@marvell.com, linux-edac@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 0/2] Altera EDAC Cleanup
+Message-ID: <20191113190718.GD1647@zn.tnic>
+References: <1573156890-26891-1-git-send-email-thor.thayer@linux.intel.com>
 MIME-Version: 1.0
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <1573156890-26891-1-git-send-email-thor.thayer@linux.intel.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-Hi Mauro,
+On Thu, Nov 07, 2019 at 02:01:28PM -0600, thor.thayer@linux.intel.com wrote:
+> From: Thor Thayer <thor.thayer@linux.intel.com>
+> 
+> This patchset is a cleanup of the Altera EDAC driver that has
+> accumulated as the driver evolved.
+> 
+> Thor Thayer (2):
+>   EDAC/altera: Cleanup the ECC Manager
+>   EDAC/altera: Use Altera System Manager driver
+> 
+>  drivers/edac/altera_edac.c | 150 +++------------------------------------------
+>  1 file changed, 9 insertions(+), 141 deletions(-)
 
-Can you please review this patch set?
+Can't complain about a diffstat like that! :-)
 
-Thanks,
-Shiju
+Applied, thanks.
 
->-----Original Message-----
->From: Shiju Jose
->Sent: 16 October 2019 17:34
->To: mchehab@kernel.org; linux-edac@vger.kernel.org
->Cc: Linuxarm <linuxarm@huawei.com>; Shiju Jose <shiju.jose@huawei.com>
->Subject: [PATCH 0/7] rasdaemon: add fixes, database closure and signal
->handling
->
->This patch set add
->1. fixes for some memory leaks and file closure.
->2. closure for the sqlite3 database.
->3. signal handling for the cleanup.
->
->Shiju Jose (7):
->  rasdaemon: fix cleanup issues in
->    ras-events.c:read_ras_event_all_cpus()
->  rasdaemon: fix memory leak in ras-events.c:handle_ras_events()
->  rasdaemon: fix missing fclose in
->    ras-events.c:select_tracing_timestamp()
->  rasdaemon: fix memory leak in ras-events.c:add_event_handler()
->  rasdaemon: delete multiple definitions of ARRAY_SIZE
->  rasdaemon: add closure and cleanups for the database
->  rasdaemon: add signal handling for the cleanup
->
-> ras-diskerror-handler.c    |   2 -
-> ras-events.c               |  88 +++++++++++++++++++++++++++-----
-> ras-mce-handler.h          |   3 --
-> ras-non-standard-handler.c |  16 ++++++
-> ras-non-standard-handler.h |   6 ++-
-> ras-record.c               | 123
->+++++++++++++++++++++++++++++++++++++++++++--
-> ras-record.h               |   5 ++
-> 7 files changed, 222 insertions(+), 21 deletions(-)
->
->--
->2.1.4
->
+-- 
+Regards/Gruss,
+    Boris.
 
+https://people.kernel.org/tglx/notes-about-netiquette
