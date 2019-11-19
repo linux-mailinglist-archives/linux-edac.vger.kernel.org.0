@@ -2,102 +2,139 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A81E21012C0
-	for <lists+linux-edac@lfdr.de>; Tue, 19 Nov 2019 06:03:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D2C91014E2
+	for <lists+linux-edac@lfdr.de>; Tue, 19 Nov 2019 06:38:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726230AbfKSFDW (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Tue, 19 Nov 2019 00:03:22 -0500
-Received: from mga14.intel.com ([192.55.52.115]:8390 "EHLO mga14.intel.com"
+        id S1729795AbfKSFi2 (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Tue, 19 Nov 2019 00:38:28 -0500
+Received: from mail.kernel.org ([198.145.29.99]:60458 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726170AbfKSFDW (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Tue, 19 Nov 2019 00:03:22 -0500
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-X-Amp-File-Uploaded: False
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 18 Nov 2019 21:03:18 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.68,322,1569308400"; 
-   d="scan'208";a="407626283"
-Received: from sjchrist-coffee.jf.intel.com (HELO linux.intel.com) ([10.54.74.41])
-  by fmsmga006.fm.intel.com with ESMTP; 18 Nov 2019 21:03:17 -0800
-Date:   Mon, 18 Nov 2019 21:03:17 -0800
-From:   Sean Christopherson <sean.j.christopherson@intel.com>
-To:     Kai Huang <kai.huang@linux.intel.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Radim =?utf-8?B?S3LEjW3DocWZ?= <rkrcmar@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Tony Luck <tony.luck@intel.com>,
-        Tony W Wang-oc <TonyWWang-oc@zhaoxin.com>,
-        Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, linux-edac@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, Borislav Petkov <bp@suse.de>,
-        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-Subject: Re: [PATCH v3 04/19] x86/intel: Initialize IA32_FEATURE_CONTROL MSR
- at boot
-Message-ID: <20191119050317.GF23085@linux.intel.com>
-References: <20191119031240.7779-1-sean.j.christopherson@intel.com>
- <20191119031240.7779-5-sean.j.christopherson@intel.com>
- <17a1831a3a72fb87ce2a35689e07ff517c4bdf99.camel@linux.intel.com>
+        id S1729706AbfKSFi0 (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Tue, 19 Nov 2019 00:38:26 -0500
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id CF79B21783;
+        Tue, 19 Nov 2019 05:38:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1574141906;
+        bh=lEQzvuo/J49Mv9aF5nepvQGDuy/fag8KPX8/WX6w/8Y=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=vDl3LD0dib2NF9X6zgTPcViyEmsxQ1KywVMgdqDutbCK8HgjJYdncgjRHd8qpkLRY
+         MRtWbafYY0IKD5j+mtVQQiEdmhS6/NIUIcEhWuB1ZNW6hOdwB0tljRzqJnN8RdQJNx
+         n78FiBGflNPBOWFDJqrg8oQGPYlXDRpc+bk7U4C8=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org, Qiuxu Zhuo <qiuxu.zhuo@intel.com>,
+        Tony Luck <tony.luck@intel.com>, Borislav Petkov <bp@suse.de>,
+        Aristeu Rozanski <aris@redhat.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-edac@vger.kernel.org, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.19 322/422] EDAC: Correct DIMM capacity unit symbol
+Date:   Tue, 19 Nov 2019 06:18:39 +0100
+Message-Id: <20191119051419.862928802@linuxfoundation.org>
+X-Mailer: git-send-email 2.24.0
+In-Reply-To: <20191119051400.261610025@linuxfoundation.org>
+References: <20191119051400.261610025@linuxfoundation.org>
+User-Agent: quilt/0.66
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <17a1831a3a72fb87ce2a35689e07ff517c4bdf99.camel@linux.intel.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Tue, Nov 19, 2019 at 05:41:49PM +1300, Kai Huang wrote:
-> On Mon, 2019-11-18 at 19:12 -0800, Sean Christopherson wrote:
-> > +	/*
-> > +	 * Enable VMX if and only if the kernel may do VMXON at some point,
-> > +	 * i.e. KVM is enabled, to avoid unnecessarily adding an attack vector
-> > +	 * for the kernel, e.g. using VMX to hide malicious code.
-> > +	 */
-> > +	if (cpu_has(c, X86_FEATURE_VMX) && IS_ENABLED(CONFIG_KVM)) {
+From: Qiuxu Zhuo <qiuxu.zhuo@intel.com>
 
-Hmm, this should more specifically be CONFIG_KVM_INTEL.
+[ Upstream commit 6f6da136046294a1e8d2944336eb97412751f653 ]
 
-> > +		msr |= FEAT_CTL_VMX_ENABLED_OUTSIDE_SMX;
-> > +		if (tboot_enabled())
-> > +			msr |= FEAT_CTL_VMX_ENABLED_INSIDE_SMX;
-> > +	}
-> 
-> Why not also take this chance to enable SGX? Or it will come with SGX patch
-> series?
+The {i3200|i7core|sb|skx}_edac drivers show DIMM capacity using the
+wrong unit symbol: 'Mb' - megabit. Fix them by replacing 'Mb' with
+'MiB' - mebibyte.
 
-The latter.  Similar to the KVM check, this shouldn't opt in to SGX unless
-the kernel is capable of using SGX.
+[Tony: These are all "edac_dbg()" messages, so this won't break scripts
+       that parse console logs.]
 
-> > +	wrmsrl(MSR_IA32_FEATURE_CONTROL, msr);
-> > +}
-> > diff --git a/arch/x86/kernel/cpu/intel.c b/arch/x86/kernel/cpu/intel.c
-> > index 4a900804a023..b7c6ed0b40b6 100644
-> > --- a/arch/x86/kernel/cpu/intel.c
-> > +++ b/arch/x86/kernel/cpu/intel.c
-> > @@ -755,6 +755,8 @@ static void init_intel(struct cpuinfo_x86 *c)
-> >  	/* Work around errata */
-> >  	srat_detect_node(c);
-> >  
-> > +	init_feature_control_msr(c);
-> 
-> Will this compile if you disable CONFIG_X86_FEATURE_CONTROL_MSR?
-> 
-> Provide an empty one in cpu.h if the config is not enabled?
+Signed-off-by: Qiuxu Zhuo <qiuxu.zhuo@intel.com>
+Signed-off-by: Tony Luck <tony.luck@intel.com>
+Signed-off-by: Borislav Petkov <bp@suse.de>
+Acked-by: Aristeu Rozanski <aris@redhat.com>
+Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc: linux-edac@vger.kernel.org
+Link: https://lkml.kernel.org/r/20180919003433.16475-1-tony.luck@intel.com
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/edac/i3200_edac.c  | 2 +-
+ drivers/edac/i7core_edac.c | 2 +-
+ drivers/edac/sb_edac.c     | 2 +-
+ drivers/edac/skx_edac.c    | 4 ++--
+ 4 files changed, 5 insertions(+), 5 deletions(-)
 
-CONFIG_X86_FEATURE_CONTROL_MSR can't be disabled manually, it's selected
-by CPU_SUP_INTEL (and by Zhaoxin/Centaur for their relevant patches).
+diff --git a/drivers/edac/i3200_edac.c b/drivers/edac/i3200_edac.c
+index d92d56cee1017..299b441647cd5 100644
+--- a/drivers/edac/i3200_edac.c
++++ b/drivers/edac/i3200_edac.c
+@@ -399,7 +399,7 @@ static int i3200_probe1(struct pci_dev *pdev, int dev_idx)
+ 			if (nr_pages == 0)
+ 				continue;
+ 
+-			edac_dbg(0, "csrow %d, channel %d%s, size = %ld Mb\n", i, j,
++			edac_dbg(0, "csrow %d, channel %d%s, size = %ld MiB\n", i, j,
+ 				 stacked ? " (stacked)" : "", PAGES_TO_MiB(nr_pages));
+ 
+ 			dimm->nr_pages = nr_pages;
+diff --git a/drivers/edac/i7core_edac.c b/drivers/edac/i7core_edac.c
+index f1d19504a0281..4a3300c2da333 100644
+--- a/drivers/edac/i7core_edac.c
++++ b/drivers/edac/i7core_edac.c
+@@ -597,7 +597,7 @@ static int get_dimm_config(struct mem_ctl_info *mci)
+ 			/* DDR3 has 8 I/O banks */
+ 			size = (rows * cols * banks * ranks) >> (20 - 3);
+ 
+-			edac_dbg(0, "\tdimm %d %d Mb offset: %x, bank: %d, rank: %d, row: %#x, col: %#x\n",
++			edac_dbg(0, "\tdimm %d %d MiB offset: %x, bank: %d, rank: %d, row: %#x, col: %#x\n",
+ 				 j, size,
+ 				 RANKOFFSET(dimm_dod[j]),
+ 				 banks, ranks, rows, cols);
+diff --git a/drivers/edac/sb_edac.c b/drivers/edac/sb_edac.c
+index 7447f1453200d..53074ad361e58 100644
+--- a/drivers/edac/sb_edac.c
++++ b/drivers/edac/sb_edac.c
+@@ -1622,7 +1622,7 @@ static int __populate_dimms(struct mem_ctl_info *mci,
+ 				size = ((u64)rows * cols * banks * ranks) >> (20 - 3);
+ 				npages = MiB_TO_PAGES(size);
+ 
+-				edac_dbg(0, "mc#%d: ha %d channel %d, dimm %d, %lld Mb (%d pages) bank: %d, rank: %d, row: %#x, col: %#x\n",
++				edac_dbg(0, "mc#%d: ha %d channel %d, dimm %d, %lld MiB (%d pages) bank: %d, rank: %d, row: %#x, col: %#x\n",
+ 					 pvt->sbridge_dev->mc, pvt->sbridge_dev->dom, i, j,
+ 					 size, npages,
+ 					 banks, ranks, rows, cols);
+diff --git a/drivers/edac/skx_edac.c b/drivers/edac/skx_edac.c
+index 4ba92f1dd0f74..dd209e0dd9abb 100644
+--- a/drivers/edac/skx_edac.c
++++ b/drivers/edac/skx_edac.c
+@@ -364,7 +364,7 @@ static int get_dimm_info(u32 mtr, u32 amap, struct dimm_info *dimm,
+ 	size = ((1ull << (rows + cols + ranks)) * banks) >> (20 - 3);
+ 	npages = MiB_TO_PAGES(size);
+ 
+-	edac_dbg(0, "mc#%d: channel %d, dimm %d, %lld Mb (%d pages) bank: %d, rank: %d, row: %#x, col: %#x\n",
++	edac_dbg(0, "mc#%d: channel %d, dimm %d, %lld MiB (%d pages) bank: %d, rank: %d, row: %#x, col: %#x\n",
+ 		 imc->mc, chan, dimmno, size, npages,
+ 		 banks, 1 << ranks, rows, cols);
+ 
+@@ -424,7 +424,7 @@ unknown_size:
+ 	dimm->mtype = MEM_NVDIMM;
+ 	dimm->edac_mode = EDAC_SECDED; /* likely better than this */
+ 
+-	edac_dbg(0, "mc#%d: channel %d, dimm %d, %llu Mb (%u pages)\n",
++	edac_dbg(0, "mc#%d: channel %d, dimm %d, %llu MiB (%u pages)\n",
+ 		 imc->mc, chan, dimmno, size >> 20, dimm->nr_pages);
+ 
+ 	snprintf(dimm->label, sizeof(dimm->label), "CPU_SrcID#%u_MC#%u_Chan#%u_DIMM#%u",
+-- 
+2.20.1
+
+
+
