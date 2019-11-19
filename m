@@ -2,237 +2,203 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 10316100D26
-	for <lists+linux-edac@lfdr.de>; Mon, 18 Nov 2019 21:30:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C0FB101201
+	for <lists+linux-edac@lfdr.de>; Tue, 19 Nov 2019 04:14:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726922AbfKRUau (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Mon, 18 Nov 2019 15:30:50 -0500
-Received: from mx0b-0016f401.pphosted.com ([67.231.156.173]:12944 "EHLO
-        mx0b-0016f401.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726647AbfKRUat (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>);
-        Mon, 18 Nov 2019 15:30:49 -0500
-Received: from pps.filterd (m0045851.ppops.net [127.0.0.1])
-        by mx0b-0016f401.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id xAIKUEsE015509;
-        Mon, 18 Nov 2019 12:30:33 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
- subject : date : message-id : references : in-reply-to : content-type :
- content-id : content-transfer-encoding : mime-version; s=pfpt0818;
- bh=pqkl+yoOGgizyCRoltbgtN13NxYk3zG2IWaniOjq7x0=;
- b=pCRBTvT9fX57ZAY4RKjeXnYnmjwfQxpWGfoEqLoA1ilMtLpYDjalBFzIxRC7CdbPP6rv
- qw3pIJUiDw/KeTIFkY/vHl8dXpJswax0tzrbj/IrscNw9/SxvBjfUepOr/aCv4IPQd/y
- fXKxgODUXC7rHP1Lvg6cRF0SuxlikqOWDgrwJXRf0ZH2DyztCz3Qr1nL5irZ8KmQUESk
- +IrJ7uzOfwTzcJ9RydXNvv0mZZMg6wA593Pm3emj6V9a14p/+jyF0jC+gwpZP5ZdmJ5t
- X22vvEF25JODFsjE18ToGeM8HsQQe+Q0U4e8oX+QlmmsusNriXApIiaBJ1ZrKA78BeET rg== 
-Received: from sc-exch04.marvell.com ([199.233.58.184])
-        by mx0b-0016f401.pphosted.com with ESMTP id 2wahgs7tya-2
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
-        Mon, 18 Nov 2019 12:30:33 -0800
-Received: from SC-EXCH04.marvell.com (10.93.176.84) by SC-EXCH04.marvell.com
- (10.93.176.84) with Microsoft SMTP Server (TLS) id 15.0.1367.3; Mon, 18 Nov
- 2019 12:30:31 -0800
-Received: from NAM01-BN3-obe.outbound.protection.outlook.com (104.47.33.54) by
- SC-EXCH04.marvell.com (10.93.176.84) with Microsoft SMTP Server (TLS) id
- 15.0.1367.3 via Frontend Transport; Mon, 18 Nov 2019 12:30:31 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=jx44EXaqnYNeNaDJRmSBvoj5YO6VboaU2owW9fLM09QGSgMHt5ex2uC4auR/ltbWdjft66wZb9sGchgaHFbjE+7UwQNiFkfmaVdDu2E/68B5IEeZ8+UUPN7A1oV/U/yMWbZL0TyFfITrFGGzpxwmfiodKO1Dd5MwXqspcaxKisL7julX+WCXRXWcYOA3wDJtOyJG9wfVl3TyAYCWs9OnBl5osVUHUtJQmd2I2l04aQ5KHdA0lyW2ZUDCtiGRmdaBjvV7EhE2alzsR8T5msPwjLMG37O+X20VFu9Ea+9d0RO40u2QqamV6geKeRuXsJ71jziAkh/KZGLBAzd/7gnazg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=pqkl+yoOGgizyCRoltbgtN13NxYk3zG2IWaniOjq7x0=;
- b=ORcoJa23oaMe+AhyvCvSYOi/EKAKiVTcOy0sw6szdKX5tQGRTAUiEyuwkCHUv/rS/5Lw2UnHykrkrqbG+CoF+6UThTxisgedctmF6wdV0RXW3yUEhVs1h1D9DEmZTo4NKZx421NcsPPbHq6eSz3Hk0XXKGjLBKDythMFw1bEiFaAfjJKGAnWCk0SmjonNEwzzXV2cRi8OEvVxn+hpFVPznHew61gWOMS92CrFhmdpjk+I5k0rG7A0XO4DMOhFY+bd9bxJs1oqKkC1aCwP8fLScNGYjIQrkm/nij1pbzIE2NGIpMhO9AcwUenK1bE+kn+AsqpPs/XAKWho8GmL9RSDg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=marvell.com; dmarc=pass action=none header.from=marvell.com;
- dkim=pass header.d=marvell.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=marvell.onmicrosoft.com; s=selector1-marvell-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=pqkl+yoOGgizyCRoltbgtN13NxYk3zG2IWaniOjq7x0=;
- b=HfwKJ95q8KvL69kfVOIvOK10GcWBao5tXNfwv1K+k3E7lxPGkn2FTbZjxnqYMBfiXvrxIOv5s2/LUQFUC2KBgUmbQbNt4PZHKxTAFZgPOk+QPe6KK/t4/wXzH5pLkufz5pgsw6AEkgu85Vj6MN4JX+Tmw01+0BSe31z/Re2L5+M=
-Received: from MN2PR18MB3408.namprd18.prod.outlook.com (10.255.237.10) by
- MN2PR18MB2927.namprd18.prod.outlook.com (20.179.22.146) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2451.29; Mon, 18 Nov 2019 20:30:30 +0000
-Received: from MN2PR18MB3408.namprd18.prod.outlook.com
- ([fe80::657c:6c81:859d:106]) by MN2PR18MB3408.namprd18.prod.outlook.com
- ([fe80::657c:6c81:859d:106%7]) with mapi id 15.20.2451.029; Mon, 18 Nov 2019
- 20:30:30 +0000
-From:   Robert Richter <rrichter@marvell.com>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>
-CC:     Borislav Petkov <bp@alien8.de>, Tony Luck <tony.luck@intel.com>,
-        "James Morse" <james.morse@arm.com>,
-        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 14/20] EDAC, mc: Remove per layer counters
-Thread-Topic: [PATCH v2 14/20] EDAC, mc: Remove per layer counters
-Thread-Index: AQHVlIVBBrxvjhXd+UiTNn0fviO3o6eCeQAAgA779QA=
-Date:   Mon, 18 Nov 2019 20:30:29 +0000
-Message-ID: <20191118203021.jvlerg4k645g43yn@rric.localdomain>
-References: <20191106093239.25517-1-rrichter@marvell.com>
- <20191106093239.25517-15-rrichter@marvell.com>
- <20191109084056.35b4b8ab@kernel.org>
-In-Reply-To: <20191109084056.35b4b8ab@kernel.org>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-clientproxiedby: HE1P18901CA0012.EURP189.PROD.OUTLOOK.COM
- (2603:10a6:3:8b::22) To MN2PR18MB3408.namprd18.prod.outlook.com
- (2603:10b6:208:165::10)
-x-ms-exchange-messagesentrepresentingtype: 1
-x-originating-ip: [31.208.96.227]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 8744af76-fb9d-4c86-6e28-08d76c662744
-x-ms-traffictypediagnostic: MN2PR18MB2927:
-x-microsoft-antispam-prvs: <MN2PR18MB2927F7BE4AE09A50B7395B59D94D0@MN2PR18MB2927.namprd18.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:10000;
-x-forefront-prvs: 0225B0D5BC
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(376002)(346002)(396003)(366004)(39860400002)(136003)(189003)(199004)(76176011)(1076003)(6506007)(316002)(478600001)(4326008)(6916009)(81166006)(14454004)(81156014)(25786009)(6436002)(186003)(8936002)(476003)(26005)(6512007)(9686003)(486006)(66476007)(64756008)(66446008)(66946007)(66556008)(5660300002)(2906002)(305945005)(386003)(8676002)(446003)(11346002)(256004)(99286004)(52116002)(53546011)(6246003)(7736002)(86362001)(66066001)(3846002)(6116002)(54906003)(6486002)(102836004)(71190400001)(71200400001)(229853002);DIR:OUT;SFP:1101;SCL:1;SRVR:MN2PR18MB2927;H:MN2PR18MB3408.namprd18.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
-received-spf: None (protection.outlook.com: marvell.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: KJAhXF/noQ2ZyMXP0epWHaLBVkWR+Hxifj+g2iqk7htAC84yUH5QZup6Ue2OvsnbIbZ8EV3rp5cYCtTlM/3Od4G11gFaROqqho7e8Da0YhMYF+3ce/a/XUP95ZIgLZawq0sAjNEBNYvRBguzn5zW8XBdVtshY4ct0erLMO2AdEsEcKxU2XFai30dr+/QBs83kEGNTOei/2uLuYVxdepisOnZZchPb33DyWrsFzsIKus5pQ6T67LAtreS64vS566v4i2hmnrNTNAdAJWDUoYYTDEmSsNk2TUo8oUIMXmhgcHG+f2pUoXZ+7kOr8sZvr8aeOfNZbYDgLNA5wXKRdeoG0YodoW/8LQpRHFMo+//Gfb8pQuwhPjY0uGI6udiBkkm87oDSCN/EZKvS0VRtjxIgnT7aPjS2OSxMOoxso7apJYJx8X5+Qm4376gsR1VVlIy
-x-ms-exchange-transport-forked: True
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <DC0219FD6C145C49A2EFC6B866D98E66@namprd18.prod.outlook.com>
-Content-Transfer-Encoding: quoted-printable
+        id S1727191AbfKSDOj (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Mon, 18 Nov 2019 22:14:39 -0500
+Received: from mga02.intel.com ([134.134.136.20]:21257 "EHLO mga02.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727500AbfKSDMz (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Mon, 18 Nov 2019 22:12:55 -0500
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga101.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 18 Nov 2019 19:12:41 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.68,322,1569308400"; 
+   d="scan'208";a="218105699"
+Received: from sjchrist-coffee.jf.intel.com ([10.54.74.41])
+  by orsmga002.jf.intel.com with ESMTP; 18 Nov 2019 19:12:41 -0800
+From:   Sean Christopherson <sean.j.christopherson@intel.com>
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org
+Cc:     "H. Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        =?UTF-8?q?Radim=20Kr=C4=8Dm=C3=A1=C5=99?= <rkrcmar@redhat.com>,
+        Sean Christopherson <sean.j.christopherson@intel.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Tony Luck <tony.luck@intel.com>,
+        Tony W Wang-oc <TonyWWang-oc@zhaoxin.com>,
+        Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, linux-edac@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, Borislav Petkov <bp@suse.de>,
+        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+Subject: [PATCH v3 00/19] x86/cpu: Clean up handling of VMX features
+Date:   Mon, 18 Nov 2019 19:12:21 -0800
+Message-Id: <20191119031240.7779-1-sean.j.christopherson@intel.com>
+X-Mailer: git-send-email 2.24.0
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8744af76-fb9d-4c86-6e28-08d76c662744
-X-MS-Exchange-CrossTenant-originalarrivaltime: 18 Nov 2019 20:30:29.9573
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 70e1fb47-1155-421d-87fc-2e58f638b6e0
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: dz2514VD5y1SSYQrhGbCh+DV0CoXvKPnzu+Q02xyDyT6LsVrGO9tB6EAUHxkyUVCYNBH1Ec9kuOfHZ0x3EhB0g==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR18MB2927
-X-OriginatorOrg: marvell.com
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.95,18.0.572
- definitions=2019-11-18_06:2019-11-15,2019-11-18 signatures=0
+Content-Transfer-Encoding: 8bit
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-Hi Mauro,
+Clean up a handful of interrelated warts in the kernel's handling of VMX:
 
-On 09.11.19 08:40:56, Mauro Carvalho Chehab wrote:
-> Em Wed, 6 Nov 2019 09:33:32 +0000
-> Robert Richter <rrichter@marvell.com> escreveu:
->=20
-> > Looking at how mci->{ue,ce}_per_layer[EDAC_MAX_LAYERS] is used, it
-> > turns out that only the leaves in the memory hierarchy are consumed
-> > (in sysfs), but not the intermediate layers, e.g.:
-> >=20
-> >  count =3D dimm->mci->ce_per_layer[dimm->mci->n_layers-1][dimm->idx];
+  - Enable VMX in IA32_FEATURE_CONTROL during boot instead of on-demand
+    during KVM load to avoid future contention over IA32_FEATURE_CONTROL.
 
-first of all, this is the only user, where ce_per_layer[][] is
-accessed *readable*. Note that n_layers is a constant value per
-mci. Thus we could also convert this without any change of
-functionality to:
+  - Rework VMX feature reporting so that it is accurate and up-to-date,
+    now and in the future.
 
- count =3D dimm->mci->ce_counts[dimm->idx];
+  - Consolidate code across CPUs that support VMX.
 
-We can also remove the code that writes counter values to inner
-layers, those values are never read.
+This series stems from two separate but related issues.  The first issue,
+pointed out by Boris in the SGX enabling series[1], is that the kernel
+currently doesn't ensure the IA32_FEATURE_CONTROL MSR is configured during
+boot.  The second issue is that the kernel's reporting of VMX features is
+stale, potentially inaccurate, and difficult to maintain.
 
-The above is nothing else than storing the count per DIMM, which can
-be converted to the following by just adding the count to struct
-dimm_info:
+Please holler if you don't want to be cc'd on future versions of this
+series, or only want to be cc'd on select patches.
 
- count =3D dimm->ce_count;
+v3:
+  - Rebase to tip/master, ceceaf1f12ba ("Merge branch 'WIP.x86/cleanups'").
+  - Rename the feature control MSR bit defines [Boris].
+  - Rewrite the error message displayed when reading feature control MSR
+    faults on a VMX capable CPU to explicitly state that it's likely a
+    hardware or hypervisor issue [Boris].
+  - Collect a Reviewed-by for the LMCE change [Boris].
+  - Enable VMX in feature control (if it's unlocked) if and only if
+    KVM is enabled [Paolo].
+  - Remove a big pile of redudant MSR defines from the KVM selftests that
+    was discovered when renaming the feature control defines.
+  - Fix a changelog typoe [Boris].
 
-Same applies to ue_count.
+v2:
+  - Rebase to latest tip/x86/cpu (1edae1ae6258, "x86/Kconfig: Enforce...)
+  - Collect Jim's reviews.
+  - Fix a typo in setting of EPT capabilities [TonyWWang-oc].
+  - Remove defines for reserved VMX feature flags [Paolo].
+  - Print the VMX features under "flags" and maintain all existing names
+    to be backward compatible with the ABI [Paolo].
+  - Create aggregate APIC features to report FLEXPRIORITY and APICV, so
+    that the full feature *and* their associated individual features are
+    printed, e.g. to aid in recognizing why an APIC feature isn't being
+    used.
+  - Fix a few copy paste errors in changelogs.
 
-As we have the counts in struct dimm_info now, we no longer need to
-allocate {ue,ce}_counts arrays and can remove its allocation and
-release code including everything around.
 
-> >=20
-> > These unused counters only add complexity, remove them. The error
-> > counter values are directly stored in struct dimm_info now.
->=20
-> I guess this patch will cause troubles with some memory controllers.
->=20
-> The problem is that, depending on the memory type and how many bits
-> are wrong, it may not be technically possible to pinpoint an error
-> to a single DIMM.
+v1 cover letter:
 
-If a DIMM can not be identified, the MC has one or more of the pos
-values (pos[0] to pos[mci->n_layers-1]) unset (negative values). The
-count of the outer layer (mci->ce_per_layer[mci->n_layers][index]) is
-not written then. See below in function edac_inc_ce_error().
+== IA32_FEATURE_CONTROL ==
+Lack of IA32_FEATURE_CONTROL configuration during boot isn't a functional
+issue in the current kernel as the majority of platforms set and lock
+IA32_FEATURE_CONTROL in firmware.  And when the MSR is left unlocked, KVM
+is the only subsystem that writes IA32_FEATURE_CONTROL.  That will change
+if/when SGX support is enabled, as SGX will also want to fully enable
+itself when IA32_FEATURE_CONTROL is unlocked.
 
->=20
-> I mean, the memory controller can be, for instance, grouping
-> DIMM1 and DIMM2. If there's just one bit errored, it is possible to
-> assign it to either DIMM1 or DIMM2, but if there are multiple bits
-> wrong, most ECC codes won't allow to pinpoint if the error ocurred
-> at DIMM1 or at DIMM2.
+== VMX Feature Reporting ==
+VMX features are not enumerated via CPUID, but instead are enumerated
+through VMX MSRs.  As a result, new VMX features are not automatically
+reported via /proc/cpuinfo.
 
-An error would not be counted for any DIMM then.
+An attempt was made long ago to report interesting and/or meaningful VMX
+features by synthesizing select features into a Linux-defined cpufeatures
+word.  Synthetic feature flags worked for the initial purpose, but the
+existence of the synthetic flags was forgotten almost immediately, e.g.
+only one new flag (EPT A/D) has been added in the the decade since the
+synthetic VMX features were introduced, while VMX and KVM have gained
+support for many new features.
 
->=20
-> All we know is that the layer has an error.
+Placing the synthetic flags in x86_capability also allows them to be
+queried via cpu_has() and company, which is misleading as the flags exist
+purely for reporting via /proc/cpuinfo.  KVM, the only in-kernel user of
+VMX, ignores the flags.
 
-Right, but this hasn't any effect on DIMM error counters.
+Last but not least, VMX features are reported in /proc/cpuinfo even
+when VMX is unusable due to lack of enabling in IA32_FEATURE_CONTROL.
 
-This has only effect to csrow/channel counters. The code for this did
-not change, see edac_mc_handle_error().
+== Caveats ==
+All of the testing of non-standard flows was done in a VM, as I don't
+have a system that leaves IA32_FEATURE_CONTROL unlocked, or locks it with
+VMX disabled.
 
->=20
-> So, assigning the error to the dimm struct seems plain wrong to me.
+The Centaur and Zhaoxin changes are somewhat speculative, as I haven't
+confirmed they actually support IA32_FEATURE_CONTROL, or that they want to
+gain "official" KVM support.  I assume they unofficially support KVM given
+that both CPUs went through the effort of enumerating VMX features.  That
+in turn would require them to support IA32_FEATURE_CONTROL since KVM will
+fault and refuse to load if the MSR doesn't exist.
 
-I think this is the code in question for you:
+[1] https://lkml.kernel.org/r/20190925085156.GA3891@zn.tnic
 
-> >  static void edac_inc_ce_error(struct mem_ctl_info *mci,
-> > -			      bool enable_per_layer_report,
-> >  			      const int pos[EDAC_MAX_LAYERS],
-> >  			      const u16 count)
-> >  {
-> > -	int i, index =3D 0;
-> > +	struct dimm_info *dimm =3D edac_get_dimm(mci, pos[0], pos[1], pos[2])=
-;
-> > =20
-> >  	mci->ce_mc +=3D count;
-> > =20
-> > -	if (!enable_per_layer_report) {
-> > +	if (dimm)
-> > +		dimm->ce_count +=3D count;
-> > +	else
-> >  		mci->ce_noinfo_count +=3D count;
-> > -		return;
-> > -	}
-> > -
-> > -	for (i =3D 0; i < mci->n_layers; i++) {
-> > -		if (pos[i] < 0)
-> > -			break;
-> > -		index +=3D pos[i];
-> > -		mci->ce_per_layer[i][index] +=3D count;
+Sean Christopherson (19):
+  x86/msr-index: Clean up bit defines for IA32_FEATURE_CONTROL MSR
+  selftests: kvm: Replace manual MSR defs with common msr-index.h
+  tools arch x86: Sync msr-index.h from kernel sources
+  x86/intel: Initialize IA32_FEATURE_CONTROL MSR at boot
+  x86/mce: WARN once if IA32_FEATURE_CONTROL MSR is left unlocked
+  x86/centaur: Use common IA32_FEATURE_CONTROL MSR initialization
+  x86/zhaoxin: Use common IA32_FEATURE_CONTROL MSR initialization
+  KVM: VMX: Drop initialization of IA32_FEATURE_CONTROL MSR
+  x86/cpu: Clear VMX feature flag if VMX is not fully enabled
+  KVM: VMX: Use VMX feature flag to query BIOS enabling
+  KVM: VMX: Check for full VMX support when verifying CPU compatibility
+  x86/vmx: Introduce VMX_FEATURES_*
+  x86/cpu: Detect VMX features on Intel, Centaur and Zhaoxin CPUs
+  x86/cpu: Print VMX flags in /proc/cpuinfo using VMX_FEATURES_*
+  x86/cpufeatures: Drop synthetic VMX feature flags
+  KVM: VMX: Use VMX_FEATURE_* flags to define VMCS control bits
+  x86/cpufeatures: Clean up synthetic virtualization flags
+  perf/x86: Provide stubs of KVM helpers for non-Intel CPUs
+  KVM: VMX: Allow KVM_INTEL when building for Centaur and/or Zhaoxin
+    CPUs
 
-No value written here if pos[] < 0.
+ MAINTAINERS                                   |   2 +-
+ arch/x86/Kconfig.cpu                          |   8 +
+ arch/x86/boot/mkcpustr.c                      |   1 +
+ arch/x86/include/asm/cpufeatures.h            |  15 +-
+ arch/x86/include/asm/msr-index.h              |  11 +-
+ arch/x86/include/asm/perf_event.h             |  22 +-
+ arch/x86/include/asm/processor.h              |   4 +
+ arch/x86/include/asm/vmx.h                    | 105 +--
+ arch/x86/include/asm/vmxfeatures.h            |  86 +++
+ arch/x86/kernel/cpu/Makefile                  |   6 +-
+ arch/x86/kernel/cpu/centaur.c                 |  35 +-
+ arch/x86/kernel/cpu/common.c                  |   3 +
+ arch/x86/kernel/cpu/cpu.h                     |   4 +
+ arch/x86/kernel/cpu/feature_control.c         | 127 +++
+ arch/x86/kernel/cpu/intel.c                   |  49 +-
+ arch/x86/kernel/cpu/mce/intel.c               |   7 +-
+ arch/x86/kernel/cpu/mkcapflags.sh             |  15 +-
+ arch/x86/kernel/cpu/proc.c                    |  14 +
+ arch/x86/kernel/cpu/zhaoxin.c                 |  35 +-
+ arch/x86/kvm/Kconfig                          |  10 +-
+ arch/x86/kvm/vmx/nested.c                     |   4 +-
+ arch/x86/kvm/vmx/vmx.c                        |  57 +-
+ arch/x86/kvm/vmx/vmx.h                        |   2 +-
+ tools/arch/x86/include/asm/msr-index.h        |  27 +-
+ tools/testing/selftests/kvm/Makefile          |   4 +-
+ .../selftests/kvm/include/x86_64/processor.h  | 726 +-----------------
+ tools/testing/selftests/kvm/lib/x86_64/vmx.c  |   4 +-
+ 27 files changed, 400 insertions(+), 983 deletions(-)
+ create mode 100644 arch/x86/include/asm/vmxfeatures.h
+ create mode 100644 arch/x86/kernel/cpu/feature_control.c
 
-> > -
-> > -		if (i < mci->n_layers - 1)
-> > -			index *=3D mci->layers[i + 1].size;
-> > -	}
+-- 
+2.24.0
 
-So in an intermediate step the for loop could be converted to:
-
-	dimm =3D edac_get_dimm(mci, pos[0], pos[1], pos[2]);
-
-	if (dimm)
-		mci->ce_per_layer[mci->n_layers - 1][dimm->idx] +=3D count;
-
-No change in functionality, right?
-
-> >  }
-
-I hope this explains what this patch does.
-
-It looks sane to me, please review again. If you still think it is
-broken, give me an example.
-
-Thanks,
-
--Robert
