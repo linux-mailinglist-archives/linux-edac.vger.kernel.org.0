@@ -2,96 +2,109 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 04890102FD7
-	for <lists+linux-edac@lfdr.de>; Wed, 20 Nov 2019 00:18:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AC5F103295
+	for <lists+linux-edac@lfdr.de>; Wed, 20 Nov 2019 05:37:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727359AbfKSXSX (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Tue, 19 Nov 2019 18:18:23 -0500
-Received: from mga12.intel.com ([192.55.52.136]:62268 "EHLO mga12.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725978AbfKSXSX (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Tue, 19 Nov 2019 18:18:23 -0500
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-X-Amp-File-Uploaded: False
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 19 Nov 2019 15:18:23 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.69,219,1571727600"; 
-   d="scan'208";a="357256816"
-Received: from sjchrist-coffee.jf.intel.com (HELO linux.intel.com) ([10.54.74.41])
-  by orsmga004.jf.intel.com with ESMTP; 19 Nov 2019 15:18:22 -0800
-Date:   Tue, 19 Nov 2019 15:18:22 -0800
-From:   Sean Christopherson <sean.j.christopherson@intel.com>
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Radim =?utf-8?B?S3LEjW3DocWZ?= <rkrcmar@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Tony Luck <tony.luck@intel.com>,
-        Tony W Wang-oc <TonyWWang-oc@zhaoxin.com>,
-        Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, linux-edac@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-Subject: Re: [PATCH v3 01/19] x86/msr-index: Clean up bit defines for
- IA32_FEATURE_CONTROL MSR
-Message-ID: <20191119231822.GA6855@linux.intel.com>
-References: <20191119031240.7779-1-sean.j.christopherson@intel.com>
- <20191119031240.7779-2-sean.j.christopherson@intel.com>
- <20191119111445.GB27787@zn.tnic>
+        id S1727374AbfKTEht (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Tue, 19 Nov 2019 23:37:49 -0500
+Received: from bombadil.infradead.org ([198.137.202.133]:37540 "EHLO
+        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727363AbfKTEht (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Tue, 19 Nov 2019 23:37:49 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
+        Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Subject:Cc:To:
+        From:Date:Sender:Reply-To:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=lPo4c5dbNwDK853TpeEByVuN+U6mdicfp6vecFPXBWI=; b=Z1GYiMRzUunSIz0pVRypFMCFc
+        KvmXX+J/z74ymro6PXpgGx5VgsvGs7o86ulY0Hbf6WZVMA9Qs7r5FiGW6dsEYb/blGJnecXrB/N6I
+        pugna+cqKQiSMyQFyDr/nVuT2gNxArFlg92DO9HtuJ69FxxiCFmNIWo9o0nkWYs6rFJmmXHMvPSQC
+        Ts0OSvk8QrxNQAQFxypcd7zurOdVlpUstktVm8NVMg+6hvxVfzvF6hijQ+vQrnoGBsnzkID2/jZSb
+        4HH0aOM3NMHdacwP5z0fgD4ra3+NFzR6eO2YRlTgoJHnmEZYPTO6pP5tlCIdafMiDei4UsB6wBcvS
+        +wiX/1aDg==;
+Received: from [80.156.29.194] (helo=localhost)
+        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1iXHkR-0001iP-18; Wed, 20 Nov 2019 04:37:47 +0000
+Date:   Wed, 20 Nov 2019 05:37:38 +0100
+From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+To:     Shiju Jose <shiju.jose@huawei.com>
+Cc:     "mchehab@kernel.org" <mchehab@kernel.org>,
+        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
+        Linuxarm <linuxarm@huawei.com>
+Subject: Re: [PATCH 0/7] rasdaemon: add fixes, database closure and signal
+ handling
+Message-ID: <20191120053725.6c80d631@localhost>
+In-Reply-To: <3214142033cc4a8d8d050721bdaa8340@huawei.com>
+References: <Shiju Jose>
+        <20191016163401.16980-1-shiju.jose@huawei.com>
+        <3214142033cc4a8d8d050721bdaa8340@huawei.com>
+X-Mailer: Claws Mail 3.17.4 (GTK+ 2.24.32; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20191119111445.GB27787@zn.tnic>
-User-Agent: Mutt/1.5.24 (2015-08-30)
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Tue, Nov 19, 2019 at 12:15:08PM +0100, Borislav Petkov wrote:
-> On Mon, Nov 18, 2019 at 07:12:22PM -0800, Sean Christopherson wrote:
-> > As pointed out by Boris, the defines for bits in IA32_FEATURE_CONTROL
-> > are quite a mouthful, especially the VMX bits which must differentiate
-> > between enabling VMX inside and outside SMX (TXT) operation.  Rename the
-> > bit defines to abbreviate FEATURE_CONTROL as FEAT_CTL so that they're a
-> > little friendlier on the eyes.  Keep the full name for the MSR itself to
-> > help even the most obtuse reader decipher the abbreviation, and to match
-> > the name used by the Intel SDM.
-> > 
-> > Opportunistically fix a few other annoyances with the defines:
-> > 
-> >   - Relocate the bit defines so that they immediately follow the MSR
-> >     define, e.g. aren't mistaken as belonging to MISC_FEATURE_CONTROL.
-> >   - Add whitespace around the block of feature control defines to make
-> >     it clear that FEAT_CTL is indeed short for FEATURE_CONTROL.
-> >   - Use BIT() instead of manually encoding the bit shift.
-> >   - Use "VMX" instead of "VMXON" to match the SDM.
-> >   - Append "_ENABLED" to the LMCE bit to be consistent with the verbiage
-> >     used for all other feature control bits.  (LCME is an acronym for
-> >     Local Machine Check Exception, i.e. LMCE_ENABLED is not redundant).
-> 
-> Sure but SDM calls it LMCE_ON. What is our current decision on sticking
-> to SDM bit names? I guess we don't...
-> 
-> But above you say "to match the SDM"...
+Em Wed, 13 Nov 2019 16:38:45 +0000
+Shiju Jose <shiju.jose@huawei.com> escreveu:
 
-Ugh.  Match the SDM unless it's obviously "wrong"?  :-)  It might literally
-be the only instance of the SDM using "on" instead of "enable(d)" for an
-MSR or CR bit.  The SDM even refers to it as an enable bit, e.g. "platform
-software has not enabled LMCE by setting IA32_FEATURE_CONTROL.LMCE_ON (bit 20)".
+> Hi Mauro,
+> 
+> Can you please review this patch set?
 
-Whining aside, I'm ok going with LMCE_ON, I have a feeling "on" was
-deliberately chosen differentiate it from IA32_MCG_EXT_CTL.LMCE_EN.
+Reviewed both rasdaemon patchsets and applied.
+
+Thanks!
+Mauro
+
+> 
+> Thanks,
+> Shiju
+> 
+> >-----Original Message-----
+> >From: Shiju Jose
+> >Sent: 16 October 2019 17:34
+> >To: mchehab@kernel.org; linux-edac@vger.kernel.org
+> >Cc: Linuxarm <linuxarm@huawei.com>; Shiju Jose <shiju.jose@huawei.com>
+> >Subject: [PATCH 0/7] rasdaemon: add fixes, database closure and signal
+> >handling
+> >
+> >This patch set add
+> >1. fixes for some memory leaks and file closure.
+> >2. closure for the sqlite3 database.
+> >3. signal handling for the cleanup.
+> >
+> >Shiju Jose (7):
+> >  rasdaemon: fix cleanup issues in
+> >    ras-events.c:read_ras_event_all_cpus()
+> >  rasdaemon: fix memory leak in ras-events.c:handle_ras_events()
+> >  rasdaemon: fix missing fclose in
+> >    ras-events.c:select_tracing_timestamp()
+> >  rasdaemon: fix memory leak in ras-events.c:add_event_handler()
+> >  rasdaemon: delete multiple definitions of ARRAY_SIZE
+> >  rasdaemon: add closure and cleanups for the database
+> >  rasdaemon: add signal handling for the cleanup
+> >
+> > ras-diskerror-handler.c    |   2 -
+> > ras-events.c               |  88 +++++++++++++++++++++++++++-----
+> > ras-mce-handler.h          |   3 --
+> > ras-non-standard-handler.c |  16 ++++++
+> > ras-non-standard-handler.h |   6 ++-
+> > ras-record.c               | 123
+> >+++++++++++++++++++++++++++++++++++++++++++--
+> > ras-record.h               |   5 ++
+> > 7 files changed, 222 insertions(+), 21 deletions(-)
+> >
+> >--
+> >2.1.4
+> >
+> 
+
+
+
+
+Cheers,
+Mauro
