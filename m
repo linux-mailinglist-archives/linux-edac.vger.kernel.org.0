@@ -2,87 +2,87 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F1E42104238
-	for <lists+linux-edac@lfdr.de>; Wed, 20 Nov 2019 18:36:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 05C9110426A
+	for <lists+linux-edac@lfdr.de>; Wed, 20 Nov 2019 18:48:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727987AbfKTRgp (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Wed, 20 Nov 2019 12:36:45 -0500
-Received: from mga17.intel.com ([192.55.52.151]:7732 "EHLO mga17.intel.com"
+        id S1727728AbfKTRsU (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Wed, 20 Nov 2019 12:48:20 -0500
+Received: from mail.skyhub.de ([5.9.137.197]:35402 "EHLO mail.skyhub.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727925AbfKTRgp (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Wed, 20 Nov 2019 12:36:45 -0500
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 20 Nov 2019 09:36:32 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.69,222,1571727600"; 
-   d="scan'208";a="259103050"
-Received: from tthayer-hp-z620.an.intel.com ([10.122.105.146])
-  by FMSMGA003.fm.intel.com with ESMTP; 20 Nov 2019 09:36:32 -0800
-From:   thor.thayer@linux.intel.com
-To:     stable@vger.kernel.org, bp@alien8.de, mchehab@kernel.org
-Cc:     tony.luck@intel.com, james.morse@arm.com, rrichter@marvell.com,
-        linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Thor Thayer <thor.thayer@linux.intel.com>,
-        Meng Li <Meng.Li@windriver.com>
-Subject: [PATCH] EDAC/altera: Use fast register IO for S10 IRQs
-Date:   Wed, 20 Nov 2019 11:38:01 -0600
-Message-Id: <1574271481-9310-1-git-send-email-thor.thayer@linux.intel.com>
-X-Mailer: git-send-email 2.7.4
+        id S1727671AbfKTRsT (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Wed, 20 Nov 2019 12:48:19 -0500
+Received: from zn.tnic (p200300EC2F0D8C00F553B94F3FB99B80.dip0.t-ipconnect.de [IPv6:2003:ec:2f0d:8c00:f553:b94f:3fb9:9b80])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 4B7D41EC0C0A;
+        Wed, 20 Nov 2019 18:48:17 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1574272097;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=sRGk1TFOicxI4LhR8Ex8diUi+6oCm1GfPkLIX+2fv3k=;
+        b=ddWR/VPtrKLvTOJFzaHVDWgpMgbnK9t9PGNQfhYFWQXJDrF/b/wgn4TGqzrtqDphOUfvY9
+        S9/TKirB/KIQWRegfs5f8xqqEspKeinJ7gj3veo+LbHfNO/22QCW/xAe4av/1pQJKREgFD
+        tSdQHBcSqiKfr3ZQdsucmfmj3+xUGag=
+Date:   Wed, 20 Nov 2019 18:48:10 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Sean Christopherson <sean.j.christopherson@intel.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Radim =?utf-8?B?S3LEjW3DocWZ?= <rkrcmar@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Tony Luck <tony.luck@intel.com>,
+        Tony W Wang-oc <TonyWWang-oc@zhaoxin.com>,
+        Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, linux-edac@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+Subject: Re: [PATCH v3 01/19] x86/msr-index: Clean up bit defines for
+ IA32_FEATURE_CONTROL MSR
+Message-ID: <20191120174810.GI2634@zn.tnic>
+References: <20191119031240.7779-1-sean.j.christopherson@intel.com>
+ <20191119031240.7779-2-sean.j.christopherson@intel.com>
+ <20191119111445.GB27787@zn.tnic>
+ <20191119231822.GA6855@linux.intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20191119231822.GA6855@linux.intel.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-From: Thor Thayer <thor.thayer@linux.intel.com>
+On Tue, Nov 19, 2019 at 03:18:22PM -0800, Sean Christopherson wrote:
+> Ugh.  Match the SDM unless it's obviously "wrong"?  :-)  It might literally
+> be the only instance of the SDM using "on" instead of "enable(d)" for an
+> MSR or CR bit.  The SDM even refers to it as an enable bit, e.g. "platform
+> software has not enabled LMCE by setting IA32_FEATURE_CONTROL.LMCE_ON (bit 20)".
+> 
+> Whining aside, I'm ok going with LMCE_ON, I have a feeling "on" was
+> deliberately chosen differentiate it from IA32_MCG_EXT_CTL.LMCE_EN.
 
-When an irq occurs in altera edac driver, regmap_xxx() is invoked
-in atomic context. Regmap must indicate register IO is fast so
-that a spinlock is used instead of a mutex to avoid sleeping
-in atomic context.
+Nah, ok, let's leave this as a one-off case where the SDM is simply
+wrong but otherwise the bit names are correct and we keep them the same
+as in the SDM to avoid obvious confusion.
 
-Fixes mutex-lock error
-   lock_acquire+0xfc/0x288
-   __mutex_lock+0x8c/0x808
-   mutex_lock_nested+0x3c/0x50
-   regmap_lock_mutex+0x24/0x30
-   regmap_write+0x40/0x78
-   a10_eccmgr_irq_unmask+0x34/0x40
-   unmask_irq.part.0+0x30/0x50
-   irq_enable+0x74/0x80
-   __irq_startup+0x80/0xa8
-   irq_startup+0x70/0x150
-   __setup_irq+0x650/0x6d0
-   request_threaded_irq+0xe4/0x180
-   devm_request_threaded_irq+0x7c/0xf0
-   altr_sdram_probe+0x2c4/0x600
-<snip>
+Thx.
 
-Upstream fix pending [1] (common code uses fast mode)
-[1] https://lkml.org/lkml/2019/11/7/1014
-
-Fixes: 3dab6bd52687 ("EDAC, altera: Add support for Stratix10 SDRAM EDAC")
-Cc: stable@vger.kernel.org
-Reported-by: Meng Li <Meng.Li@windriver.com>
-Signed-off-by: Meng Li <Meng.Li@windriver.com>
-Signed-off-by: Thor Thayer <thor.thayer@linux.intel.com>
----
- drivers/edac/altera_edac.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/drivers/edac/altera_edac.c b/drivers/edac/altera_edac.c
-index 59319f0c873b..647b3a5ef095 100644
---- a/drivers/edac/altera_edac.c
-+++ b/drivers/edac/altera_edac.c
-@@ -561,6 +561,7 @@ static const struct regmap_config s10_sdram_regmap_cfg = {
- 	.reg_write = s10_protected_reg_write,
- 	.use_single_read = true,
- 	.use_single_write = true,
-+	.fast_io = true,
- };
- 
- /************** </Stratix10 EDAC Memory Controller Functions> ***********/
 -- 
-2.7.4
+Regards/Gruss,
+    Boris.
 
+https://people.kernel.org/tglx/notes-about-netiquette
