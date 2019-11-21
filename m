@@ -2,56 +2,76 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 85F79104450
-	for <lists+linux-edac@lfdr.de>; Wed, 20 Nov 2019 20:28:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A6883104F8C
+	for <lists+linux-edac@lfdr.de>; Thu, 21 Nov 2019 10:46:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727107AbfKTT2P (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Wed, 20 Nov 2019 14:28:15 -0500
-Received: from mail.kernel.org ([198.145.29.99]:60274 "EHLO mail.kernel.org"
+        id S1726735AbfKUJqW (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Thu, 21 Nov 2019 04:46:22 -0500
+Received: from mga07.intel.com ([134.134.136.100]:62621 "EHLO mga07.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726440AbfKTT2P (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Wed, 20 Nov 2019 14:28:15 -0500
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id BE41D2071F;
-        Wed, 20 Nov 2019 19:28:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1574278093;
-        bh=ufThiCpz1aGjCoQiqthrOUy4HlnE81B/da3Ij3o+1Oc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=qsfZH9Pur6ZJA+0dtO+ct46Go5M4ymMlDq2bn47BfKA+6IdHUcTnzsv85c5HRJ9kM
-         bknu/wNf5rT87FvVvO92Zwd+dja/O6AHZh9ww24vyqqwDPsq5eLJJUQ7Ao2o+I/2ym
-         bohWIJ9KXtEuz1TujE2c9H9mrJfVhFUfsqEF8J0I=
-Date:   Wed, 20 Nov 2019 20:28:10 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     Thor Thayer <thor.thayer@linux.intel.com>, stable@vger.kernel.org,
-        mchehab@kernel.org, tony.luck@intel.com, james.morse@arm.com,
-        rrichter@marvell.com, linux-edac@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Meng Li <Meng.Li@windriver.com>
-Subject: Re: [PATCH] EDAC/altera: Use fast register IO for S10 IRQs
-Message-ID: <20191120192810.GB3086925@kroah.com>
-References: <1574271481-9310-1-git-send-email-thor.thayer@linux.intel.com>
- <20191120180733.GJ2634@zn.tnic>
- <5bfe9cc4-6cd4-7edb-9ed2-abe5fadff06d@linux.intel.com>
- <20191120191335.GL2634@zn.tnic>
+        id S1726541AbfKUJqV (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Thu, 21 Nov 2019 04:46:21 -0500
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+X-Amp-File-Uploaded: False
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga105.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 21 Nov 2019 01:46:20 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.69,224,1571727600"; 
+   d="scan'208";a="210043677"
+Received: from jsakkine-mobl1.tm.intel.com (HELO localhost) ([10.237.50.162])
+  by orsmga006.jf.intel.com with ESMTP; 21 Nov 2019 01:46:13 -0800
+Date:   Thu, 21 Nov 2019 11:46:14 +0200
+From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+To:     Sean Christopherson <sean.j.christopherson@intel.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Radim =?utf-8?B?S3LEjW3DocWZ?= <rkrcmar@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Tony Luck <tony.luck@intel.com>,
+        Tony W Wang-oc <TonyWWang-oc@zhaoxin.com>,
+        Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, linux-edac@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, Borislav Petkov <bp@suse.de>
+Subject: Re: [PATCH v3 01/19] x86/msr-index: Clean up bit defines for
+ IA32_FEATURE_CONTROL MSR
+Message-ID: <20191121094614.GA20907@linux.intel.com>
+References: <20191119031240.7779-1-sean.j.christopherson@intel.com>
+ <20191119031240.7779-2-sean.j.christopherson@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20191120191335.GL2634@zn.tnic>
-User-Agent: Mutt/1.12.2 (2019-09-21)
+In-Reply-To: <20191119031240.7779-2-sean.j.christopherson@intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Wed, Nov 20, 2019 at 08:13:35PM +0100, Borislav Petkov wrote:
-> On Wed, Nov 20, 2019 at 12:52:18PM -0600, Thor Thayer wrote:
-> > This patch should to be applied to the stable branches to fix the issue in
-> > older branches.
-> 
-> Do stable folks pick up stable fixes which are not upstream?
+On Mon, Nov 18, 2019 at 07:12:22PM -0800, Sean Christopherson wrote:
+> As pointed out by Boris, the defines for bits in IA32_FEATURE_CONTROL
+> are quite a mouthful, especially the VMX bits which must differentiate
+> between enabling VMX inside and outside SMX (TXT) operation.  Rename the
+> bit defines to abbreviate FEATURE_CONTROL as FEAT_CTL so that they're a
+> little friendlier on the eyes.  Keep the full name for the MSR itself to
+> help even the most obtuse reader decipher the abbreviation, and to match
+> the name used by the Intel SDM.
 
-Not at all.
+If you anyway shorten the prefix, why not then go directly to FT_CTL?
+It is as obvious as FEAT_CTL is. Given the exhausting long variable
+names like FEAT_CTL_VMX_ENABLED_OUTSIDE_SMX this would be worth of
+considering.
 
+/Jarkko
