@@ -2,94 +2,94 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A5410106882
-	for <lists+linux-edac@lfdr.de>; Fri, 22 Nov 2019 10:01:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 813A5106890
+	for <lists+linux-edac@lfdr.de>; Fri, 22 Nov 2019 10:03:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726100AbfKVJB1 (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Fri, 22 Nov 2019 04:01:27 -0500
-Received: from mail.skyhub.de ([5.9.137.197]:38106 "EHLO mail.skyhub.de"
+        id S1726248AbfKVJDT (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Fri, 22 Nov 2019 04:03:19 -0500
+Received: from mail.skyhub.de ([5.9.137.197]:38452 "EHLO mail.skyhub.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725999AbfKVJB1 (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Fri, 22 Nov 2019 04:01:27 -0500
+        id S1726100AbfKVJDT (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Fri, 22 Nov 2019 04:03:19 -0500
 Received: from zn.tnic (p200300EC2F0E97008857C615A913C712.dip0.t-ipconnect.de [IPv6:2003:ec:2f0e:9700:8857:c615:a913:c712])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id ABB7A1EC0CFF;
-        Fri, 22 Nov 2019 10:01:25 +0100 (CET)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 8312F1EC0CFE;
+        Fri, 22 Nov 2019 10:03:17 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1574413285;
+        t=1574413397;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=96l2VacW0WA05kfi367N/mmkr0O4il49grJtlPRX3hw=;
-        b=LFrEgimm+MiacKNpdYHuSMJCV8yZBoPY//NVyxSmU6lNaP168DxMEu656txIPPML3RxjH5
-        yB/UZLJwxnOKAMofvPwE6vOCVtVy802VxgFgKb3//hGIoVH5jDQmHiptZn9qsumWkV1dv6
-        bN1QyXmLLtp3ri+HCfn0uCAyrPiiXa0=
-Date:   Fri, 22 Nov 2019 10:01:23 +0100
+        bh=liTKNvrJ2ArY+2xUErntrVevJruJzJ9WZm0VG8dwj9s=;
+        b=YNzWh7XyrQ0NI2DDjQ16dJCETjVNhVBN4jP6V4zW9M4KyBN1UBEDMyFKicvloQHXOirnIO
+        TS2H7wdIDXui61G/ViQ37bFdGQ0NKGR0sxY+MhopQVtNCAkLM8o6nFC7DNVkxN/cjuP6aw
+        W6Ib6BtfBESxvQUgCoY3eeF9pBEvZZ0=
+Date:   Fri, 22 Nov 2019 10:03:15 +0100
 From:   Borislav Petkov <bp@alien8.de>
-To:     Robert Richter <rrichter@marvell.com>
-Cc:     "john.garry@huawei.com" <john.garry@huawei.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Tony Luck <tony.luck@intel.com>,
-        "huangming23@huawei.com" <huangming23@huawei.com>,
-        "james.morse@arm.com" <james.morse@arm.com>,
-        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linuxarm@huawei.com" <linuxarm@huawei.com>,
-        "tanxiaofei@huawei.com" <tanxiaofei@huawei.com>,
-        "wanghuiqiang@huawei.com" <wanghuiqiang@huawei.com>
-Subject: Re: [PATCH] EDAC/ghes: Do not warn when incrementing refcount on 0
-Message-ID: <20191122090123.GB6289@zn.tnic>
-References: <4ff7631f-fbb7-e45f-87dd-9223beca4da7@huawei.com>
- <20191121213628.21244-1-rrichter@marvell.com>
+To:     thor.thayer@linux.intel.com
+Cc:     mchehab@kernel.org, tony.luck@intel.com, james.morse@arm.com,
+        rrichter@marvell.com, Meng.Li@windriver.com,
+        linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org
+Subject: Re: [PATCHv2 1/3] EDAC/altera: Use fast register IO for S10 IRQs
+Message-ID: <20191122090314.GC6289@zn.tnic>
+References: <1574361048-17572-1-git-send-email-thor.thayer@linux.intel.com>
+ <1574361048-17572-2-git-send-email-thor.thayer@linux.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20191121213628.21244-1-rrichter@marvell.com>
+In-Reply-To: <1574361048-17572-2-git-send-email-thor.thayer@linux.intel.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Thu, Nov 21, 2019 at 09:36:57PM +0000, Robert Richter wrote:
-> Following warning from the refcount framework is seen during ghes
-> initialization:
+On Thu, Nov 21, 2019 at 12:30:46PM -0600, thor.thayer@linux.intel.com wrote:
+> From: Meng Li <Meng.Li@windriver.com>
 > 
->  EDAC MC0: Giving out device to module ghes_edac.c controller ghes_edac: DEV ghes (INTERRUPT)
->  ------------[ cut here ]------------
->  refcount_t: increment on 0; use-after-free.
->  WARNING: CPU: 36 PID: 1 at lib/refcount.c:156 refcount_inc_checked+0x44/0x50
-> [...]
->  Call trace:
->   refcount_inc_checked+0x44/0x50
->   ghes_edac_register+0x258/0x388
->   ghes_probe+0x28c/0x5f0
+> When an irq occurs in altera edac driver, regmap_xxx() is invoked
+> in atomic context. Regmap must indicate register IO is fast so
+> that a spinlock is used instead of a mutex to avoid sleeping
+> in atomic context.
 > 
-> It warns if the refcount is incremented from zero. This warning is
-> reasonable as a kernel object is typically created with a refcount of
-> one and freed once the refcount is zero. Afterwards the object would
-> be "used-after-free".
+> Fixes mutex-lock error
+>    lock_acquire+0xfc/0x288
+>    __mutex_lock+0x8c/0x808
+>    mutex_lock_nested+0x3c/0x50
+>    regmap_lock_mutex+0x24/0x30
+>    regmap_write+0x40/0x78
+>    a10_eccmgr_irq_unmask+0x34/0x40
+>    unmask_irq.part.0+0x30/0x50
+>    irq_enable+0x74/0x80
+>    __irq_startup+0x80/0xa8
+>    irq_startup+0x70/0x150
+>    __setup_irq+0x650/0x6d0
+>    request_threaded_irq+0xe4/0x180
+>    devm_request_threaded_irq+0x7c/0xf0
+>    altr_sdram_probe+0x2c4/0x600
+> <snip>
 > 
-> For ghes the refcount is initialized with zero, and that is why this
-> message is seen when initializing the first instance. However,
-> whenever the refcount is zero, the device will be allocated and
-> registered. Since the ghes_reg_mutex protects the refcount and
-> serializes allocation and freeing of ghes devices, a use-after-free
-> cannot happen here.
+> Upstream fix pending [1] (common code uses fast mode)
+> [1] https://lkml.org/lkml/2019/11/7/1014
 > 
-> Instead of using refcount_inc() for the first instance, use
-> refcount_set(). This can be used here because the refcount is zero at
-> this point and can not change due to its protection by the mutex.
-> 
-> Reported-by: John Garry <john.garry@huawei.com>
-> Tested-by: John Garry <john.garry@huawei.com>
-> Signed-off-by: Robert Richter <rrichter@marvell.com>
+> Fixes: 3dab6bd52687 ("EDAC, altera: Add support for Stratix10 SDRAM EDAC")
+> Cc: stable@vger.kernel.org
+> Reported-by: Meng Li <Meng.Li@windriver.com>
+> Signed-off-by: Meng Li <Meng.Li@windriver.com>
+> Reviewed-by: Thor Thayer <thor.thayer@linux.intel.com>
 > ---
->  drivers/edac/ghes_edac.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+> v2 Change Author to Meng Li & Reviewed-by: Thor Thayer
 
-Queued, thanks.
+You don't absolutely need to have Reviewed-by: you, when you send
+someone else's patch. The fact that you send it, kinda implies you've
+reviewed it. I sure hope so, at least :-)
+
+What the patch must have is your SOB unterneath. I'll fix that up when
+applying.
+
+Thx.
 
 -- 
 Regards/Gruss,
