@@ -2,34 +2,33 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FE1610723C
-	for <lists+linux-edac@lfdr.de>; Fri, 22 Nov 2019 13:34:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C4B2710755B
+	for <lists+linux-edac@lfdr.de>; Fri, 22 Nov 2019 17:02:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726676AbfKVMet (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Fri, 22 Nov 2019 07:34:49 -0500
-Received: from mail.skyhub.de ([5.9.137.197]:45752 "EHLO mail.skyhub.de"
+        id S1726760AbfKVQCj (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Fri, 22 Nov 2019 11:02:39 -0500
+Received: from mail.skyhub.de ([5.9.137.197]:48650 "EHLO mail.skyhub.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726985AbfKVMes (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Fri, 22 Nov 2019 07:34:48 -0500
-Received: from zn.tnic (p200300EC2F0E9700A4FB1BDEE3C09F73.dip0.t-ipconnect.de [IPv6:2003:ec:2f0e:9700:a4fb:1bde:e3c0:9f73])
+        id S1726633AbfKVQCi (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Fri, 22 Nov 2019 11:02:38 -0500
+Received: from zn.tnic (p200300EC2F0E9700617A286416B6740E.dip0.t-ipconnect.de [IPv6:2003:ec:2f0e:9700:617a:2864:16b6:740e])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id D2DD01EC0D07;
-        Fri, 22 Nov 2019 13:34:46 +0100 (CET)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 4B35C1EC0D02;
+        Fri, 22 Nov 2019 17:02:37 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1574426087;
+        t=1574438557;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=dij5MNPx/IwHCLqmKnuYF4M7pmGAodazP5F2XXl3Cs8=;
-        b=XGeQmD4UYTJDu20ffLIR31lLxhKYQGLyFnCyFmhO65BmnOS8AQpTG2pF6I6ftZbm5sUj+p
-        L+C+VxtDHyXeUZhM1Hzp2OTMT8xd9gZ1Cd/fihs3BuPUt73v76ydlnIBy1LZ5UZDdBYXw9
-        KmqHHh11jj2sDKm7WTl8uMy/ui/YgGM=
-Date:   Fri, 22 Nov 2019 13:34:40 +0100
+        bh=h4hPZVDGhlJ/nVahWCNAYi0rixY8BxMyl5rH5OiLiT8=;
+        b=klUjxbevxiSgkfiTyTD/bZ/K+Cywo2jaMwkNJWrueBGvXxKeqgxub19AJk5N/Ihhiw0Ooi
+        hqGIquKBvf7lD2VmnVaMjbQ5HZc9itIwfYBeiHxEdNdXIX1sH9CtPA6GfNP0Rt2EF81P7w
+        X6BxRgSCuiHiOIuL63ufRfGaMzgzlxU=
+Date:   Fri, 22 Nov 2019 17:02:30 +0100
 From:   Borislav Petkov <bp@alien8.de>
 To:     Sean Christopherson <sean.j.christopherson@intel.com>
-Cc:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
         Ingo Molnar <mingo@redhat.com>, x86@kernel.org,
         "H. Peter Anvin" <hpa@zytor.com>,
         Peter Zijlstra <peterz@infradead.org>,
@@ -48,54 +47,35 @@ Cc:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
         Tony W Wang-oc <TonyWWang-oc@zhaoxin.com>,
         Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
         kvm@vger.kernel.org, linux-edac@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v3 04/19] x86/intel: Initialize IA32_FEATURE_CONTROL MSR
- at boot
-Message-ID: <20191122123433.GH6289@zn.tnic>
+        "linux-kselftest@vger.kernel.org, Jarkko Sakkinen" 
+        <jarkko.sakkinen@linux.intel.com>
+Subject: Re: [PATCH v3 09/19] x86/cpu: Clear VMX feature flag if VMX is not
+ fully enabled
+Message-ID: <20191122160229.GI6289@zn.tnic>
 References: <20191119031240.7779-1-sean.j.christopherson@intel.com>
- <20191119031240.7779-5-sean.j.christopherson@intel.com>
- <20191121103925.GB20907@linux.intel.com>
- <20191121104145.GC20907@linux.intel.com>
- <20191121110533.GD6540@zn.tnic>
- <20191121221234.GE16617@linux.intel.com>
+ <20191119031240.7779-10-sean.j.christopherson@intel.com>
+ <20191121162452.GJ6540@zn.tnic>
+ <20191121210714.GB16617@linux.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20191121221234.GE16617@linux.intel.com>
+In-Reply-To: <20191121210714.GB16617@linux.intel.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Thu, Nov 21, 2019 at 02:12:34PM -0800, Sean Christopherson wrote:
-> Any objection to keeping the MSR name as MSR_IA32_FEATURE_CONTOL?  I'd like
-> to have some anchor back to the name used in the SDM.
-> 
-> Any opinions/thoughts on the name of the Kconfig?  Currently it's
-> X86_FEATURE_CONTROL_MSR, which gets a bit long with CONFIG_ on the front.
-> I also overlooked that we have MSR_MISC_FEATURE_CONTROL, so having IA32 in
-> the Kconfig would probably be a good idea.  X86_IA32 is rather redundant,
-> so maybe IA32_FEAT_CTL or IA32_FEATURE_CONTROL?
+On Thu, Nov 21, 2019 at 01:07:14PM -0800, Sean Christopherson wrote:
+> I'm also ok dropping it altogether, though from a KVM developer
+> perspective I wouldn't mind the extra sanity check :-)
 
-Well, what I'd do is since we have MSR_MISC_FEATURE_CONTROL too, I'd
-call all code and defines pertaining to the 0x3a MSR
+Right, I think we should keep it in the bag and only take it out when it
+really happens. Because if we really wanna be overly cautious in every
+possible case where stuff may fail, we won't see the actual code from
+all the error handling. :-)
 
-<bla>_IA32_FEAT_CTL
-
-I.e.,
-
-CONFIG_IA32_FEAT_CTL,
-MSR_IA32_FEAT_CTL,
-...
-
-and leave a comment over the MSR definition containing the SDM name.
-
-This way, you have a clear distinction between the IA32 and the MISC
-feature control.
-
-But this is just me and I realize we're pretty much deep inside the bike
-shed. :)
+Thx.
 
 -- 
 Regards/Gruss,
