@@ -2,140 +2,103 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EE641109A2B
-	for <lists+linux-edac@lfdr.de>; Tue, 26 Nov 2019 09:30:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 929C7109B9A
+	for <lists+linux-edac@lfdr.de>; Tue, 26 Nov 2019 10:58:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727358AbfKZIaD (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Tue, 26 Nov 2019 03:30:03 -0500
-Received: from szxga04-in.huawei.com ([45.249.212.190]:7171 "EHLO huawei.com"
+        id S1727482AbfKZJ6G (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Tue, 26 Nov 2019 04:58:06 -0500
+Received: from lhrrgout.huawei.com ([185.176.76.210]:2114 "EHLO huawei.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1727164AbfKZIaD (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Tue, 26 Nov 2019 03:30:03 -0500
-Received: from DGGEMS402-HUB.china.huawei.com (unknown [172.30.72.59])
-        by Forcepoint Email with ESMTP id 40B66333196AB7F24E7C;
-        Tue, 26 Nov 2019 16:30:01 +0800 (CST)
-Received: from [127.0.0.1] (10.74.184.86) by DGGEMS402-HUB.china.huawei.com
- (10.3.19.202) with Microsoft SMTP Server id 14.3.439.0; Tue, 26 Nov 2019
- 16:29:52 +0800
-Subject: Re: [PATCH 3/9] rasdaemon: decode submodule of OEM type1 for hip08
-To:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-References: <1573561634-225173-1-git-send-email-tanxiaofei@huawei.com>
- <1573561634-225173-4-git-send-email-tanxiaofei@huawei.com>
- <20191126070713.5bc61802@kernel.org>
-CC:     <mchehab@kernel.org>, <linux-edac@vger.kernel.org>,
-        <linuxarm@huawei.com>, <shiju.jose@huawei.com>,
-        <jonathan.cameron@huawei.com>
-From:   Xiaofei Tan <tanxiaofei@huawei.com>
-Message-ID: <5DDCE227.9000105@huawei.com>
-Date:   Tue, 26 Nov 2019 16:28:23 +0800
-User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:38.0) Gecko/20100101
- Thunderbird/38.5.1
+        id S1727397AbfKZJ6G (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Tue, 26 Nov 2019 04:58:06 -0500
+Received: from lhreml709-cah.china.huawei.com (unknown [172.18.7.108])
+        by Forcepoint Email with ESMTP id 3CA6618EE8A6A8A0B4E8;
+        Tue, 26 Nov 2019 09:58:03 +0000 (GMT)
+Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
+ lhreml709-cah.china.huawei.com (10.201.108.32) with Microsoft SMTP Server
+ (TLS) id 14.3.408.0; Tue, 26 Nov 2019 09:57:57 +0000
+Received: from [127.0.0.1] (10.202.226.46) by lhreml724-chm.china.huawei.com
+ (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1713.5; Tue, 26 Nov
+ 2019 09:57:57 +0000
+Subject: Re: [PATCH] EDAC/ghes: Do not warn when incrementing refcount on 0
+To:     Borislav Petkov <bp@alien8.de>,
+        Robert Richter <rrichter@marvell.com>
+CC:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Tony Luck <tony.luck@intel.com>,
+        "huangming23@huawei.com" <huangming23@huawei.com>,
+        "james.morse@arm.com" <james.morse@arm.com>,
+        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linuxarm@huawei.com" <linuxarm@huawei.com>,
+        "tanxiaofei@huawei.com" <tanxiaofei@huawei.com>,
+        "wanghuiqiang@huawei.com" <wanghuiqiang@huawei.com>
+References: <4ff7631f-fbb7-e45f-87dd-9223beca4da7@huawei.com>
+ <20191121213628.21244-1-rrichter@marvell.com> <20191122090123.GB6289@zn.tnic>
+From:   John Garry <john.garry@huawei.com>
+Message-ID: <cf60a616-35e4-3938-3cdd-19ea22deb487@huawei.com>
+Date:   Tue, 26 Nov 2019 09:57:56 +0000
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.1.2
 MIME-Version: 1.0
-In-Reply-To: <20191126070713.5bc61802@kernel.org>
-Content-Type: text/plain; charset="windows-1252"
+In-Reply-To: <20191122090123.GB6289@zn.tnic>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.74.184.86]
+X-Originating-IP: [10.202.226.46]
+X-ClientProxiedBy: lhreml720-chm.china.huawei.com (10.201.108.71) To
+ lhreml724-chm.china.huawei.com (10.201.108.75)
 X-CFilter-Loop: Reflected
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-Hi Mauro,
-
-On 2019/11/26 14:07, Mauro Carvalho Chehab wrote:
-> Em Tue, 12 Nov 2019 20:27:08 +0800
-> Xiaofei Tan <tanxiaofei@huawei.com> escreveu:
-> 
->> Decode submodule of OEM type1 for hip08, and reconstruct the functions
->> of geting OEM module name and submodule name.
+On 22/11/2019 09:01, Borislav Petkov wrote:
+> On Thu, Nov 21, 2019 at 09:36:57PM +0000, Robert Richter wrote:
+>> Following warning from the refcount framework is seen during ghes
+>> initialization:
 >>
->> Signed-off-by: Xiaofei Tan <tanxiaofei@huawei.com>
+>>   EDAC MC0: Giving out device to module ghes_edac.c controller ghes_edac: DEV ghes (INTERRUPT)
+>>   ------------[ cut here ]------------
+>>   refcount_t: increment on 0; use-after-free.
+>>   WARNING: CPU: 36 PID: 1 at lib/refcount.c:156 refcount_inc_checked+0x44/0x50
+>> [...]
+>>   Call trace:
+>>    refcount_inc_checked+0x44/0x50
+>>    ghes_edac_register+0x258/0x388
+>>    ghes_probe+0x28c/0x5f0
+>>
+>> It warns if the refcount is incremented from zero. This warning is
+>> reasonable as a kernel object is typically created with a refcount of
+>> one and freed once the refcount is zero. Afterwards the object would
+>> be "used-after-free".
+>>
+>> For ghes the refcount is initialized with zero, and that is why this
+>> message is seen when initializing the first instance. However,
+>> whenever the refcount is zero, the device will be allocated and
+>> registered. Since the ghes_reg_mutex protects the refcount and
+>> serializes allocation and freeing of ghes devices, a use-after-free
+>> cannot happen here.
+>>
+>> Instead of using refcount_inc() for the first instance, use
+>> refcount_set(). This can be used here because the refcount is zero at
+>> this point and can not change due to its protection by the mutex.
+>>
+>> Reported-by: John Garry <john.garry@huawei.com>
+>> Tested-by: John Garry <john.garry@huawei.com>
 
-...
+According to kernel dev process Doc, this should be explicitly granted, so:
+Tested-by: John Garry <john.garry@huawei.com>
 
->> +		const char *str = oem_module_name(hisi_oem_type1_module,
->> +						  err->module_id);
->> +
->> +		p += snprintf(p, end - p, "module=%s ", str);
-> 
-> 
-> 
-> Rasdaemon doesn't build after applying this patch, as "end" doesn't exist
-> yet.
-> 
-> I suspect that a latter patch in this series could be adding it, but
-> the better is to not break rasdaemon build on some random patch, as, if
-> we ever need to do a git bisect, this would make it harder for it to
-> work.
-> 
+Thanks,
+John
 
-Oh, Yes, this is my fault. I will fix this issue and send v2 patch set after removing two applied. thanks.
-
+>> Signed-off-by: Robert Richter <rrichter@marvell.com>
+>> ---
+>>   drivers/edac/ghes_edac.c | 4 ++--
+>>   1 file changed, 2 insertions(+), 2 deletions(-)
 > 
->>  		record_vendor_data(dec_tab, hisi_oem_data_type_text,
->>  				   hip08_oem_type1_field_module_id,
->> -				   0, oem_type1_module_name(err->module_id));
->> +				   0, str);
->>  	}
->>  
->>  	if (err->val_bits & HISI_OEM_VALID_SUB_MODULE_ID) {
->> -		char submodule_name[64];
->> +		const char *str = oem_submodule_name(hisi_oem_type1_module,
->> +						     err->module_id,
->> +						     err->sub_module_id);
->>  
->> -		sprintf(submodule_name, "%s%d",
->> -			oem_type1_module_name(err->module_id),
->> -			err->sub_module_id);
->> -		p += sprintf(p, "submodule=%s ", submodule_name);
->> +		p += snprintf(p, end - p, "submodule=%s ", str);
->>  		record_vendor_data(dec_tab, hisi_oem_data_type_text,
->>  				   hip08_oem_type1_field_sub_module_id,
->> -				   0, submodule_name);
->> +				   0, str);
->>  	}
->>  
->>  	if (err->val_bits & HISI_OEM_VALID_ERR_SEVERITY) {
->> @@ -596,18 +749,21 @@ static int decode_hip08_oem_type2_error(struct ras_events *ras,
->>  	}
->>  
->>  	if (err->val_bits & HISI_OEM_VALID_MODULE_ID) {
->> -		p += sprintf(p, "module=%s ",
->> -			     oem_type2_module_name(err->module_id));
->> +		const char *str = oem_module_name(hisi_oem_type2_module,
->> +						  err->module_id);
->> +
->> +		p += snprintf(p, end - p, "module=%s ", str);
->>  		record_vendor_data(dec_tab, hisi_oem_data_type_text,
->>  				   hip08_oem_type2_field_module_id,
->> -				   0, oem_type2_module_name(err->module_id));
->> +				   0, str);
->>  	}
->>  
->>  	if (err->val_bits & HISI_OEM_VALID_SUB_MODULE_ID) {
->> -		const char *str = oem_type2_sub_module_name(err->module_id,
->> -							    err->sub_module_id);
->> +		const char *str = oem_submodule_name(hisi_oem_type2_module,
->> +						     err->module_id,
->> +						     err->sub_module_id);
->>  
->> -		p += sprintf(p, "submodule=%s ", str);
->> +		p += snprintf(p, end - p, "submodule=%s ", str);
->>  		record_vendor_data(dec_tab, hisi_oem_data_type_text,
->>  				   hip08_oem_type2_field_sub_module_id,
->>  				   0, str);
+> Queued, thanks.
 > 
-> 
-> 
-> 
-> Cheers,
-> Mauro
-> 
-> .
-> 
-
--- 
- thanks
-tanxiaofei
 
