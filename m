@@ -2,46 +2,50 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 929C7109B9A
-	for <lists+linux-edac@lfdr.de>; Tue, 26 Nov 2019 10:58:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DF081109BA3
+	for <lists+linux-edac@lfdr.de>; Tue, 26 Nov 2019 10:59:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727482AbfKZJ6G (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Tue, 26 Nov 2019 04:58:06 -0500
-Received: from lhrrgout.huawei.com ([185.176.76.210]:2114 "EHLO huawei.com"
+        id S1727734AbfKZJ7J (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Tue, 26 Nov 2019 04:59:09 -0500
+Received: from lhrrgout.huawei.com ([185.176.76.210]:2115 "EHLO huawei.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1727397AbfKZJ6G (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Tue, 26 Nov 2019 04:58:06 -0500
-Received: from lhreml709-cah.china.huawei.com (unknown [172.18.7.108])
-        by Forcepoint Email with ESMTP id 3CA6618EE8A6A8A0B4E8;
-        Tue, 26 Nov 2019 09:58:03 +0000 (GMT)
+        id S1727731AbfKZJ7J (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Tue, 26 Nov 2019 04:59:09 -0500
+Received: from lhreml701-cah.china.huawei.com (unknown [172.18.7.108])
+        by Forcepoint Email with ESMTP id BEDD7F409889221F4407;
+        Tue, 26 Nov 2019 09:59:07 +0000 (GMT)
 Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
- lhreml709-cah.china.huawei.com (10.201.108.32) with Microsoft SMTP Server
- (TLS) id 14.3.408.0; Tue, 26 Nov 2019 09:57:57 +0000
+ lhreml701-cah.china.huawei.com (10.201.108.42) with Microsoft SMTP Server
+ (TLS) id 14.3.408.0; Tue, 26 Nov 2019 09:59:07 +0000
 Received: from [127.0.0.1] (10.202.226.46) by lhreml724-chm.china.huawei.com
  (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1713.5; Tue, 26 Nov
- 2019 09:57:57 +0000
-Subject: Re: [PATCH] EDAC/ghes: Do not warn when incrementing refcount on 0
-To:     Borislav Petkov <bp@alien8.de>,
-        Robert Richter <rrichter@marvell.com>
-CC:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Tony Luck <tony.luck@intel.com>,
-        "huangming23@huawei.com" <huangming23@huawei.com>,
-        "james.morse@arm.com" <james.morse@arm.com>,
+ 2019 09:59:06 +0000
+Subject: Re: linuxnext-2019119 edac warns (was Re: edac KASAN warning in
+ experimental arm64 allmodconfig boot)
+To:     Robert Richter <rrichter@marvell.com>
+CC:     Borislav Petkov <bp@alien8.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        "tony.luck@intel.com" <tony.luck@intel.com>,
         "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linuxarm@huawei.com" <linuxarm@huawei.com>,
-        "tanxiaofei@huawei.com" <tanxiaofei@huawei.com>,
-        "wanghuiqiang@huawei.com" <wanghuiqiang@huawei.com>
-References: <4ff7631f-fbb7-e45f-87dd-9223beca4da7@huawei.com>
- <20191121213628.21244-1-rrichter@marvell.com> <20191122090123.GB6289@zn.tnic>
+        wanghuiqiang <wanghuiqiang@huawei.com>,
+        Xiaofei Tan <tanxiaofei@huawei.com>,
+        Linuxarm <linuxarm@huawei.com>,
+        "Huangming (Mark)" <huangming23@huawei.com>
+References: <304df85b-8b56-b77e-1a11-aa23769f2e7c@huawei.com>
+ <93bdc04e-9e8f-b766-6e97-9fd9e1460a8c@huawei.com>
+ <20191121142302.rhvgkgqpiubidhtu@rric.localdomain>
+ <4ff7631f-fbb7-e45f-87dd-9223beca4da7@huawei.com>
+ <20191122112842.tmf4lkj52hpv6tqd@rric.localdomain>
 From:   John Garry <john.garry@huawei.com>
-Message-ID: <cf60a616-35e4-3938-3cdd-19ea22deb487@huawei.com>
-Date:   Tue, 26 Nov 2019 09:57:56 +0000
+Message-ID: <4c1bd075-75ec-8445-9595-467b88a406b3@huawei.com>
+Date:   Tue, 26 Nov 2019 09:59:05 +0000
 User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
  Thunderbird/68.1.2
 MIME-Version: 1.0
-In-Reply-To: <20191122090123.GB6289@zn.tnic>
+In-Reply-To: <20191122112842.tmf4lkj52hpv6tqd@rric.localdomain>
 Content-Type: text/plain; charset="utf-8"; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -54,51 +58,58 @@ Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On 22/11/2019 09:01, Borislav Petkov wrote:
-> On Thu, Nov 21, 2019 at 09:36:57PM +0000, Robert Richter wrote:
->> Following warning from the refcount framework is seen during ghes
->> initialization:
->>
->>   EDAC MC0: Giving out device to module ghes_edac.c controller ghes_edac: DEV ghes (INTERRUPT)
->>   ------------[ cut here ]------------
->>   refcount_t: increment on 0; use-after-free.
->>   WARNING: CPU: 36 PID: 1 at lib/refcount.c:156 refcount_inc_checked+0x44/0x50
->> [...]
->>   Call trace:
->>    refcount_inc_checked+0x44/0x50
->>    ghes_edac_register+0x258/0x388
->>    ghes_probe+0x28c/0x5f0
->>
->> It warns if the refcount is incremented from zero. This warning is
->> reasonable as a kernel object is typically created with a refcount of
->> one and freed once the refcount is zero. Afterwards the object would
->> be "used-after-free".
->>
->> For ghes the refcount is initialized with zero, and that is why this
->> message is seen when initializing the first instance. However,
->> whenever the refcount is zero, the device will be allocated and
->> registered. Since the ghes_reg_mutex protects the refcount and
->> serializes allocation and freeing of ghes devices, a use-after-free
->> cannot happen here.
->>
->> Instead of using refcount_inc() for the first instance, use
->> refcount_set(). This can be used here because the refcount is zero at
->> this point and can not change due to its protection by the mutex.
->>
->> Reported-by: John Garry <john.garry@huawei.com>
->> Tested-by: John Garry <john.garry@huawei.com>
+On 22/11/2019 11:28, Robert Richter wrote:
+> On 21.11.19 15:23:42, John Garry wrote:
+>> On 21/11/2019 14:23, Robert Richter wrote:
+>>> On 21.11.19 12:34:22, John Garry wrote:
+> 
+>>>> [   22.046666] EDAC MC: bug in low-level driver: attempt to assign
+>>>> [   22.046666]     duplicate mc_idx 0 in add_mc_to_global_list()
+>>>> [   22.058311] ghes_edac: Can't register at EDAC core
+>>>> [   22.065402] EDAC MC: bug in low-level driver: attempt to assign
+>>>> [   22.065402]     duplicate mc_idx 0 in add_mc_to_global_list()
+>>>> [   22.077080] ghes_edac: Can't register at EDAC core
+>>>> [   22.084140] EDAC MC: bug in low-level driver: attempt to assign
+>>>> [   22.084140]     duplicate mc_idx 0 in add_mc_to_global_list()
+>>>> [   22.095789] ghes_edac: Can't register at EDAC core
+>>>> [   22.102873] EDAC MC: bug in low-level driver: attempt to assign
+>>>> [   22.102873]     duplicate mc_idx 0 in add_mc_to_global_list()
+>>>> [   22.115442] ghes_edac: Can't register at EDAC core
+>>>> [   22.122536] EDAC MC: bug in low-level driver: attempt to assign
+>>>> [   22.122536]     duplicate mc_idx 0 in add_mc_to_global_list()
+>>>> [   22.134344] ghes_edac: Can't register at EDAC core
+>>>> [   22.141441] EDAC MC: bug in low-level driver: attempt to assign
+>>>> [   22.141441]     duplicate mc_idx 0 in add_mc_to_global_list()
+>>>> [   22.153089] ghes_edac: Can't register at EDAC core
+>>>> [   22.160161] EDAC MC: bug in low-level driver: attempt to assign
+>>>> [   22.160161]     duplicate mc_idx 0 in add_mc_to_global_list()
+>>>> [   22.171810] ghes_edac: Can't register at EDAC core
+>>>
+>>> What I am more concerned is this here. In total this implies 8 ghes
+>>> users that all try to register a (single-instance) ghes mc device. For
+>>> non-x86 only one instance is allowed (see ghes_edac_register(), idx =
+>>> 0).
+> 
+> I also looked into this: With refcount_inc_checked() enabled, the
+> refcount is *not* increased from 0 to 1. 
 
-According to kernel dev process Doc, this should be explicitly granted, so:
-Tested-by: John Garry <john.garry@huawei.com>
+Yeah, I had quickly checked this back then and I think you're right.
 
 Thanks,
 John
 
->> Signed-off-by: Robert Richter <rrichter@marvell.com>
->> ---
->>   drivers/edac/ghes_edac.c | 4 ++--
->>   1 file changed, 2 insertions(+), 2 deletions(-)
+Under the hood only
+> refcount_inc_not_zero() is called instead of refcount_inc(). So the
+> refcount is still zero after an edac mc device was registered. Instead
+> of sharing the edac mc device, the driver tries to allocate another mc
+> device for each GHESv2 entry in the HEST table. This causes the
+> 'duplicate mc_idx' message. Also, it is ok to have multiple GHESv2
+> entries (your system seems to have 8 entries), e.g. to serve different
+> kind of errors in the system.
 > 
-> Queued, thanks.
+> Thanks,
+> 
+> -Robert
+> .
 > 
 
