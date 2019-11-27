@@ -2,27 +2,27 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DC2210BD88
-	for <lists+linux-edac@lfdr.de>; Wed, 27 Nov 2019 22:30:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4AEAB10BE74
+	for <lists+linux-edac@lfdr.de>; Wed, 27 Nov 2019 22:38:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730487AbfK0U41 (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Wed, 27 Nov 2019 15:56:27 -0500
-Received: from mail.kernel.org ([198.145.29.99]:47266 "EHLO mail.kernel.org"
+        id S1729436AbfK0Uqz (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Wed, 27 Nov 2019 15:46:55 -0500
+Received: from mail.kernel.org ([198.145.29.99]:59160 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731049AbfK0U40 (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Wed, 27 Nov 2019 15:56:26 -0500
+        id S1729930AbfK0Uqw (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Wed, 27 Nov 2019 15:46:52 -0500
 Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 149102084D;
-        Wed, 27 Nov 2019 20:56:24 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 25D74217AB;
+        Wed, 27 Nov 2019 20:46:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1574888185;
-        bh=sJJLiwpOvgcSG95me1xpezoQaHq1vBEc0vPQTntpyhA=;
+        s=default; t=1574887611;
+        bh=7Jtc+OPj6lJy4u5O+w2EvlERek4r1QK+X5iuHSA0rN0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=UHTudNyMPGeKm/lvJ6ktBklyc7N7JMBefFta3cBH/AnkBR77ZuYaNqTAw2OnWDZks
-         ZChbePjSbXOwMzvNRqgcPIXN3SrSQSJy5thVDQaTW47diSesfxo6g+GudHqKgWlosY
-         GkoZbuWZpW58BuhigZ4OHYoBHhpS0nD2KZd4cvn4=
+        b=PM3Au1NeANCtx9zJ2vS+vhJOY5/iNlJEzoKjFOQVzh5qpmCNP32vuNAS4KLumvVmE
+         uPnqUzpum8tlHbclTIcAES1Fwv2OyuT1yImKARKZhnzgSuLWlh736M4O9r5WoVdqi7
+         gdS74r0scx71YW9gETuH8RJNj2FVavvr/uX/LSso=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -34,12 +34,12 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Sergey Temerkhanov <s.temerkhanov@gmail.com>,
         linux-edac <linux-edac@vger.kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 036/306] EDAC, thunderx: Fix memory leak in thunderx_l2c_threaded_isr()
-Date:   Wed, 27 Nov 2019 21:28:06 +0100
-Message-Id: <20191127203117.470390146@linuxfoundation.org>
+Subject: [PATCH 4.14 026/211] EDAC, thunderx: Fix memory leak in thunderx_l2c_threaded_isr()
+Date:   Wed, 27 Nov 2019 21:29:19 +0100
+Message-Id: <20191127203053.623177869@linuxfoundation.org>
 X-Mailer: git-send-email 2.24.0
-In-Reply-To: <20191127203114.766709977@linuxfoundation.org>
-References: <20191127203114.766709977@linuxfoundation.org>
+In-Reply-To: <20191127203049.431810767@linuxfoundation.org>
+References: <20191127203049.431810767@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -72,10 +72,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/edac/thunderx_edac.c b/drivers/edac/thunderx_edac.c
-index c009d94f40c52..34be60fe68922 100644
+index f35d87519a3e8..dfefa39e93519 100644
 --- a/drivers/edac/thunderx_edac.c
 +++ b/drivers/edac/thunderx_edac.c
-@@ -1884,7 +1884,7 @@ static irqreturn_t thunderx_l2c_threaded_isr(int irq, void *irq_id)
+@@ -1905,7 +1905,7 @@ static irqreturn_t thunderx_l2c_threaded_isr(int irq, void *irq_id)
  	default:
  		dev_err(&l2c->pdev->dev, "Unsupported device: %04x\n",
  			l2c->pdev->device);
@@ -84,7 +84,7 @@ index c009d94f40c52..34be60fe68922 100644
  	}
  
  	while (CIRC_CNT(l2c->ring_head, l2c->ring_tail,
-@@ -1906,7 +1906,7 @@ static irqreturn_t thunderx_l2c_threaded_isr(int irq, void *irq_id)
+@@ -1927,7 +1927,7 @@ static irqreturn_t thunderx_l2c_threaded_isr(int irq, void *irq_id)
  		l2c->ring_tail++;
  	}
  
