@@ -2,126 +2,89 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BBA210C7A3
-	for <lists+linux-edac@lfdr.de>; Thu, 28 Nov 2019 12:03:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B23D910C90B
+	for <lists+linux-edac@lfdr.de>; Thu, 28 Nov 2019 13:58:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726917AbfK1LCh (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Thu, 28 Nov 2019 06:02:37 -0500
-Received: from lhrrgout.huawei.com ([185.176.76.210]:2134 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726670AbfK1LCh (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Thu, 28 Nov 2019 06:02:37 -0500
-Received: from lhreml707-cah.china.huawei.com (unknown [172.18.7.107])
-        by Forcepoint Email with ESMTP id AEB06E27E06C92C1AF82;
-        Thu, 28 Nov 2019 11:02:35 +0000 (GMT)
-Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
- lhreml707-cah.china.huawei.com (10.201.108.48) with Microsoft SMTP Server
- (TLS) id 14.3.408.0; Thu, 28 Nov 2019 11:02:34 +0000
-Received: from [127.0.0.1] (10.202.226.46) by lhreml724-chm.china.huawei.com
- (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1713.5; Thu, 28 Nov
- 2019 11:02:33 +0000
-Subject: Re: linuxnext-20191127 edac warns (was Re: edac KASAN warning in
- experimental arm64 allmodconfig boot)
-To:     Robert Richter <rrichter@marvell.com>
-CC:     Borislav Petkov <bp@alien8.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        "tony.luck@intel.com" <tony.luck@intel.com>,
-        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        wanghuiqiang <wanghuiqiang@huawei.com>,
-        Xiaofei Tan <tanxiaofei@huawei.com>,
-        Linuxarm <linuxarm@huawei.com>,
-        "Huangming (Mark)" <huangming23@huawei.com>
-References: <304df85b-8b56-b77e-1a11-aa23769f2e7c@huawei.com>
- <93bdc04e-9e8f-b766-6e97-9fd9e1460a8c@huawei.com>
- <20191121142302.rhvgkgqpiubidhtu@rric.localdomain>
- <4ff7631f-fbb7-e45f-87dd-9223beca4da7@huawei.com>
- <20191122112842.tmf4lkj52hpv6tqd@rric.localdomain>
- <4c1bd075-75ec-8445-9595-467b88a406b3@huawei.com>
- <957a809b-9efd-0979-df5d-a4f095da6147@huawei.com>
- <20191127205400.cip7hdbhcdokofel@rric.localdomain>
-From:   John Garry <john.garry@huawei.com>
-Message-ID: <7131f2b9-d4c3-b858-2d17-c56003789df2@huawei.com>
-Date:   Thu, 28 Nov 2019 11:02:32 +0000
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.1.2
-MIME-Version: 1.0
-In-Reply-To: <20191127205400.cip7hdbhcdokofel@rric.localdomain>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.202.226.46]
-X-ClientProxiedBy: lhreml720-chm.china.huawei.com (10.201.108.71) To
- lhreml724-chm.china.huawei.com (10.201.108.75)
-X-CFilter-Loop: Reflected
+        id S1726545AbfK1M64 (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Thu, 28 Nov 2019 07:58:56 -0500
+Received: from mout.kundenserver.de ([212.227.126.134]:54199 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726252AbfK1M64 (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Thu, 28 Nov 2019 07:58:56 -0500
+Received: from orion.localdomain ([95.117.37.214]) by mrelayeu.kundenserver.de
+ (mreue011 [212.227.15.167]) with ESMTPSA (Nemesis) id
+ 1MUY9w-1iRTdx29gW-00QSQQ; Thu, 28 Nov 2019 13:54:33 +0100
+From:   "Enrico Weigelt, metux IT consult" <info@metux.net>
+To:     linux-kernel@vger.kernel.org
+Cc:     tim@buttersideup.com, james.morse@arm.com, rrichter@marvell.com,
+        jdelvare@suse.com, linux@roeck-us.net, miquel.raynal@bootlin.com,
+        richard@nod.at, vigneshr@ti.com, linux-crypto@vger.kernel.org,
+        linux-edac@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        linux-mtd@lists.infradead.org, linux-pci@vger.kernel.org
+Subject: [PATCH 1/6] include: linux: pci.h: introduce pci_get_device_by_id()
+Date:   Thu, 28 Nov 2019 13:54:01 +0100
+Message-Id: <20191128125406.10417-1-info@metux.net>
+X-Mailer: git-send-email 2.11.0
+X-Provags-ID: V03:K1:38OkZkxKYjduW4lFWkkXpmNgmHkotIPpFTk3wHRoh85UV7/YYuo
+ tgz5yik/NedusSxW1EgyG7xsdphhkXUnNg3Kaof7TO/6+C0AXpfwJ2AXjL4JM4uXw2NbyBs
+ fQGSRVXajWCZNgSc2SLQluiWV9mv2n9H8XanaYTkjJ6hXiwKJTrkawaVOivTV782SIyVlhy
+ rooI453gLk05E2firCNUg==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:x/bVI3gOHO0=:b8SRXy3cQTU1GMPXvnNm9h
+ MP77h4dAhjsztPhIZ5ViC2W8wpGlmZKcErot+FwRwM1cKJkIrzyAjz9ErATwDMp3R0jKJgspj
+ ECwTEUh1hPWvQVjuJ0HkB+9BCXhfCKKPhMKFsd/V5poviCOQ6zhhDo6o+bXSqh7NtDTjDATh7
+ dO3vF3FXIUBqM5zqEy6lbbf1AyXHkbHU7ZKB9oRELWaJaaMVyhse4C21PHDsc3ezRoriQsiHI
+ 95QsOlRQ11G1P8gYpSjXUkCon0JqkUSg+9HuZGHQJ8toUaeNTy2wivd4BTDY2aEve9TptIXdW
+ jcA8ESAcSDd0HguDf3SiYItRbTP0gR+qcZ6VemEibxnsaGpkRgIe1wkcIHYJK+RdOitCqZ0vi
+ b1LXDt22+5Khx2qOGVBYiXTdGmh3DPyY7kUe4HlYn5cG+Ashfa8A3wBRpahgUBIKC//Mtl4gq
+ RWqobD9GunYu0SJX0OS7fOFs+Io93Pj5MEdiV1fqIAhVRKY3cW3Z1LsfJdEff02Rhmfn4W3Nb
+ aaQFnDcAhEGAFBOGJuDZoYEtXo1djBT5gZC7ruITqXaAUuAcbxhcG5eOvFEZShpvQNs+DWbqn
+ IhrqRH+g4BDor3NYDXJKsfvOQUsiOgqjv8E/WiWn+505kc/u1FpJKVS/b2TAZeaDMNFgAjLX8
+ LSjgvTh/PHowNpjqchgZ+IFodjQ40iDKOpiVeNv16+Qmve0HQdVzpjww0UH0at+1yzCTaFr/v
+ rd3mTknG3pz3HC9VD7s/p92p15LeTLoovZ6bNnjeICggVpLehNuNalNbEtwpvUlUj9brWG2QT
+ Qdh4SaJsmg11d0aG2VQxZciM2y9hGIaHd2hXzWKKrAYXxWLNoAfpPpxkBab7RONNYNsZ/y1Ty
+ +vl6YAdeoGR8p0KxwDZg==
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
+From: Enrico Weigelt <info@metux.net>
 
-Hi Robert,
+Introduce a little helper for getting pci device via struct pci_device_id,
+helpful for reducing a little bit of boilerplate.
 
-> thank you for testing.
+Signed-off-by: Enrico Weigelt, metux IT consult <info@metux.net>
+---
+ include/linux/pci.h | 15 +++++++++++++++
+ 1 file changed, 15 insertions(+)
 
-I'm just stumbling across these, TBH.
+diff --git a/include/linux/pci.h b/include/linux/pci.h
+index eb9f371aa77c..f6650b13724a 100644
+--- a/include/linux/pci.h
++++ b/include/linux/pci.h
+@@ -1050,6 +1050,21 @@ struct pci_bus *pci_find_next_bus(const struct pci_bus *from);
+ 
+ struct pci_dev *pci_get_device(unsigned int vendor, unsigned int device,
+ 			       struct pci_dev *from);
++
++/**
++ * pci_get_device_by_id() - get pci dev by struct pci_device_id
++ * @id: pci_device_id struct
++ *
++ * Retrieve PCI device by struct pci_device_id struct
++ *
++ * @return: pointer to struct pci_dev if sucessful, NULL otherwise
++ */
++static inline struct pci_dev *pci_get_device_by_id(
++	const struct pci_device_id *id)
++{
++	return pci_get_device(id->vendor, id->device, NULL);
++}
++
+ struct pci_dev *pci_get_subsys(unsigned int vendor, unsigned int device,
+ 			       unsigned int ss_vendor, unsigned int ss_device,
+ 			       struct pci_dev *from);
+-- 
+2.11.0
 
-> 
-> On 27.11.19 17:07:33, John Garry wrote:
-> 
->> [snip]
->>
->> I have test enabled:
->> +CONFIG_DEBUG_TEST_DRIVER_REMOVE=y
->> +CONFIG_KASAN=y
->> +CONFIG_DEBUG_KMEMLEAK=y
-> 
-> Is this a regression (did it work before?), or a new test that you
-> newly run?
-
-linuxnext-20191119 does not look to have the issue - that's when I 
-cherry-pick your refcount fix - but has lots of memory leaks:
-
-root@(none)$
-root@(none)$ echo scan > /sys/kernel/debug/kmemleak
-root@(none)$ [  121.639978] kmemleak: 128 new suspected memory leaks 
-(see /sys/kernel/debug/kmemleak)
-
-root@(none)$ cat /sys/kernel/debug/kmemleak
-unreferenced object 0xffff00236c24ba00 (size 256):
-   comm "swapper/0", pid 1, jiffies 4294897826 (age 107.824s)
-   hex dump (first 32 bytes):
-     00 40 2d 3c 23 00 ff ff 00 48 2d 3c 23 00 ff ff  .@-<#....H-<#...
-     00 50 2d 3c 23 00 ff ff 00 58 2d 3c 23 00 ff ff  .P-<#....X-<#...
-   backtrace:
-     [<0000000009aed8e3>] __kmalloc+0x1e0/0x2c0
-     [<00000000bf599427>] edac_mc_alloc+0x31c/0x888
-     [<00000000c070e314>] ghes_edac_register+0x15c/0x390
-     [<00000000e4aad1c2>] ghes_probe+0x28c/0x5f0
-     [<0000000079c357cb>] platform_drv_probe+0x70/0xd8
-     [<00000000d4ab9188>] really_probe+0x118/0x548
-     [<00000000763d50f1>] driver_probe_device+0x7c/0x148
-     [<0000000058e623c3>] device_driver_attach+0x94/0xa0
-     [<00000000d7cb679d>] __driver_attach+0xa4/0x110
-     [<000000007d0942a0>] bus_for_each_dev+0xe8/0x158
-     [<000000004cf734d1>] driver_attach+0x30/0x40
-     [<000000009aa3536e>] bus_add_driver+0x234/0x2f0
-     [<00000000d163cfe0>] driver_register+0xbc/0x1d0
-     [<000000007e4f0ac1>] __platform_driver_register+0x7c/0x88
-     [<00000000a63c8dd0>] ghes_init+0xbc/0x14c
-     [<00000000356c8a7f>] do_one_initcall+0xb4/0x254
-unreferenced object 0xffff00233c2d4000 (size 1024):
-   comm "swapper/0", pid 1, jiffies 4294897826 (age 107.824s)
-   hex dump (first 32 bytes):
-     00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-     00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-   backtrace:
-     [<000000004945469f>] kmem_cache_alloc+0x188/0x260
-     [<0000000032ea779d>] edac_mc_alloc+0x38c/0x888
-
-Unfortunately v5.4 has similar memory leaks.
-
-Thanks,
-John
