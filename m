@@ -2,67 +2,37 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CD206111B4F
-	for <lists+linux-edac@lfdr.de>; Tue,  3 Dec 2019 23:04:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 08F25111F64
+	for <lists+linux-edac@lfdr.de>; Wed,  4 Dec 2019 00:10:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727502AbfLCWEz (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Tue, 3 Dec 2019 17:04:55 -0500
-Received: from mail-pl1-f193.google.com ([209.85.214.193]:39523 "EHLO
-        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727416AbfLCWEz (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Tue, 3 Dec 2019 17:04:55 -0500
-Received: by mail-pl1-f193.google.com with SMTP id o9so2234623plk.6;
-        Tue, 03 Dec 2019 14:04:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:subject:to:cc:references:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=U0Zdh1W8YT0/olhw1BoU9rQF6IK87SH/WsTNkT7lsS0=;
-        b=g/vCifTPoAWVc8oyZoGmNOfDZRRaIHZEevlL0fkqsv6VtvBAbJGLmdmjrOsB+qDtoP
-         5IIjaNVPnNUavp8IrO5OzPBXz7oD8qkQ3Vz6rhXbVKNT2GHcFziIAAn0Q0ncuHJoV00o
-         4LN4IQgja2CntGjXgvKAr5LwQYiF46cmugwBMqCYg3FsdJOqOxlODuFnDkatgSwuiUbd
-         E1Bv3zHyot6Pwgjo5/4gKhueiVc57ttnXApgQvWo0W7x5EO64ifeBpNwfrp9q/8VR1KF
-         4vEHiC4Ctc5c5v1jdoZWCuCeguU4oJgxBv8OfsYv2LAKiCIjNFNsDwDfjnP7LQF4yISC
-         gcQw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:subject:to:cc:references:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=U0Zdh1W8YT0/olhw1BoU9rQF6IK87SH/WsTNkT7lsS0=;
-        b=PjWn9uyAQkwR/i7Ba4OBDbzdXa74zVAr2L7b/04lP0IKyGmTPrQ+gWfZS+ONfJAk9D
-         9FJKYtO/RavMil26tdXVmy37eJEhHGLZBnvZqj0bBzCFr5Rg1uz1I2DziRaPFb1s3gnK
-         To9UHUOtXQkhzEb4PIMBvRxteC+ybTrZEkDhvWeMe+79NNezlICzYHeAXFHtsimapZGn
-         L+ogi3lZHscFzwUQB0ZIG9QOPsJ3o39n9XWGaWx0oJGz6dS71mUP/Nc82IZWR9uqWHoC
-         +ao5tP2MC0qC8m+4Lypx23hxWOjML0Ogt15+gBS9w/bd1mDBp0Fo0edKQTo/3TvomQnz
-         q0nQ==
-X-Gm-Message-State: APjAAAV9N1UfCg0VWzSciYKqW2kKnbc3zuirKbuFEn6VIOoj4xJ+eLO2
-        Adqx7Avjd5bG2/ScAMxc+Qw=
-X-Google-Smtp-Source: APXvYqwH5p1pdvT3ai1jo+LMmmdPT7SPC5sK4b5ZBOokc1cDiEtQrVREoJtQYrcsD0p0AQ4Rb+uUEg==
-X-Received: by 2002:a17:902:59c9:: with SMTP id d9mr180612plj.184.1575410694389;
-        Tue, 03 Dec 2019 14:04:54 -0800 (PST)
-Received: from ?IPv6:2001:4898:d8:1009:24f7:1d2:3fb0:320e? ([2001:4898:80e8:1:b4ee:1d2:3fb0:320e])
-        by smtp.gmail.com with ESMTPSA id i5sm721512pgj.58.2019.12.03.14.04.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 03 Dec 2019 14:04:53 -0800 (PST)
-From:   Shiping Ji <shiping.linux@gmail.com>
-Subject: Re: [PATCH v7 1/2] dt-bindings: edac: arm-dmc520.txt
-To:     Rob Herring <robh@kernel.org>
-Cc:     bp@alien8.de, james.morse@arm.com, mark.rutland@arm.com,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        mchehab@kernel.org, linux-edac@vger.kernel.org, sashal@kernel.org,
-        hangl@microsoft.com, lewan@microsoft.com, ruizhao@microsoft.com,
-        scott.branden@broadcom.com, yuqing.shen@broadcom.com,
-        ray.jui@broadcom.com, shji@microsoft.com, wangglei@gmail.com
-References: <f947d821-8e67-dcc7-d753-5b04d099792d@gmail.com>
- <20191121204350.GA26174@bogus>
-Message-ID: <87af6922-41d6-c017-b31b-75eaa2c5551b@gmail.com>
-Date:   Tue, 3 Dec 2019 14:04:53 -0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.2.2
+        id S1728445AbfLCXHp (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Tue, 3 Dec 2019 18:07:45 -0500
+Received: from mga02.intel.com ([134.134.136.20]:7337 "EHLO mga02.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727981AbfLCXHo (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Tue, 3 Dec 2019 18:07:44 -0500
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga101.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 03 Dec 2019 15:07:43 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.69,275,1571727600"; 
+   d="scan'208";a="205167708"
+Received: from tthayer-hp-z620.an.intel.com (HELO [10.122.105.146]) ([10.122.105.146])
+  by orsmga008.jf.intel.com with ESMTP; 03 Dec 2019 15:07:43 -0800
+Reply-To: thor.thayer@linux.intel.com
+Subject: Re: [Bisected] altera_edac crash on a system without ECC
+To:     Aaro Koskinen <aaro.koskinen@nokia.com>
+Cc:     linux-kernel@vger.kernel.org, linux-edac@vger.kernel.org
+References: <20191129165739.GA2583@ak-laptop.emea.nsn-net.net>
+From:   Thor Thayer <thor.thayer@linux.intel.com>
+Message-ID: <3bbd2890-ffcc-39df-8ab6-ecf72d92a006@linux.intel.com>
+Date:   Tue, 3 Dec 2019 17:09:48 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-In-Reply-To: <20191121204350.GA26174@bogus>
-Content-Type: text/plain; charset=utf-8
+In-Reply-To: <20191129165739.GA2583@ak-laptop.emea.nsn-net.net>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
 Sender: linux-edac-owner@vger.kernel.org
@@ -70,93 +40,165 @@ Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On 11/21/2019 12:43 PM, Rob Herring wrote:
-> On Sun, Nov 17, 2019 at 06:10:43PM -0800, Shiping Ji wrote:
->> This is the device tree bindings for new EDAC driver dmc520_edac.c.
->>
->> Signed-off-by: Lei Wang <leiwang_git@outlook.com>
->> Reviewed-by: James Morse <james.morse@arm.com>
->>
->> ---
->>      Changes in v7:
->>          - Added arm prefix to the interrupt-config property
->>
->> ---
->>  .../devicetree/bindings/edac/arm-dmc520.txt   | 26 +++++++++++++++++++
->>  1 file changed, 26 insertions(+)
->>  create mode 100644 Documentation/devicetree/bindings/edac/arm-dmc520.txt
->>
->> diff --git a/Documentation/devicetree/bindings/edac/arm-dmc520.txt b/Documentation/devicetree/bindings/edac/arm-dmc520.txt
->> new file mode 100644
->> index 000000000000..476cf8b76f2a
->> --- /dev/null
->> +++ b/Documentation/devicetree/bindings/edac/arm-dmc520.txt
->> @@ -0,0 +1,26 @@
->> +* ARM DMC-520 EDAC node
->> +
->> +Required properties:
->> +- compatible  : "brcm,dmc-520", "arm,dmc-520".
->> +- reg   : Address range of the DMC-520 registers.
->> +- interrupts  : DMC-520 interrupt numbers. The example below specifies
->> +     two interrupt lines for dram_ecc_errc_int and
->> +     dram_ecc_errd_int.
->> +- arm,interrupt-config : This is an array of interrupt masks. For each of the
->> +     above interrupt line, add one interrupt mask element to
->> +     it. That is, there is a 1:1 mapping from each interrupt
->> +     line to an interrupt mask. An interrupt mask can represent
->> +     multiple interrupts being enabled. Refer to interrupt_control
->> +     register in DMC-520 TRM for interrupt mapping. In the example
->> +     below, the interrupt configuration enables dram_ecc_errc_int
->> +     and dram_ecc_errd_int. And each interrupt is connected to
->> +     a separate interrupt line.
+Hi Aaro,
+
+On 11/29/19 10:57 AM, Aaro Koskinen wrote:
+> Hi,
 > 
-> Looking at this again, I think I now understand what you are trying to 
-> do. Your mask is just what interrupt line each one is. We have a 
-> standard way of doing this either by using indices of 'interrupts' or 
-> with interrupt-names. The latter probably works best in this case.
+> I tried booting v5.4 mainline kernel on a stratix10 board with ECC
+> disabled, and the altera-edac driver (with only SDRAM enabled) is
+> now crashing the system instead of failing the probe with "No ECC/ECC
+> disabled".
 > 
-> You need to define *all* the interrupt-names:
-> combined
-> ram_ecc_errc
-> ram_ecc_errd
-> dram_ecc_errc
-> dram_ecc_errd
-> failed_access
-> failed_prog
-> link_err
-> temperature_event
-> arch_fsm
-> phy_request
+I apologize for the late reply. I was on vacation.
 
-Thanks for interrupt-names suggestion!
+ECC disabled means the sof/jic that you're loading has ECC disabled, 
+correct?
 
-We did experiments and it looks cleaner now. In the device tree we define only the interrupts and interrupt-names that are of interest:
+> This seems to have started with commit 08f08bfb7b4c ("EDAC, altera:
+> Merge Stratix10 into the Arria10 SDRAM probe routine"). With the change,
+> looks like sdram probe no longer uses SMC calls and instead accesses
+> the registers directly. The crash looks like this:
 
-dmc0: dmc@200000 {
- compatible = "brcm,dmc-520", "arm,dmc-520";
- reg = <0x200000 0x80000>;
- interrupts = <0x0 0x349 0x4>, <0x0 0x34B 0x4>;
- interrupt-names = "dram_ecc_errc", "dram_ecc_errd";
-};
 
-In the driver code, we maintain an interrupt table with all known interrupts (name, irq, mask, etc.) Upon probing, we go through every known interrupt name and call platform_get_irq_byname(). If any interrupt has been defined then we update the interrupt number in the table.
+I haven't seen this. I'd expect both ECC enabled and disabled to fail 
+with the dumps you have below since they'd both need to use the regmap 
+functions.
 
-In isr function we lookup the mask and perform specific logic.
- 
-> I'm not sure if all the '*_oflow' interrupts should be listed too. It 
-> doesn't seem all that useful to get a 2nd interrupt.
+Yes, this does look like it is using the register accesses instead of 
+the SMC call. Line 2206 sets the SMC call after determining from the 
+if() statement if it is a Stratix10 or Arria10 and from below it seems 
+to take the Arria10 path.
 
-No, we do not list them.
+> 
+> [    4.591371] Internal error: synchronous external abort: 96000010 [#1] PREEMPT SMP
+> [    4.598816] CPU: 0 PID: 1 Comm: swapper/0 Not tainted 5.0.0-aakoskin+ #8
+> [    4.605483] Hardware name: SoCFPGA Stratix 10 test (DT)
+> [    4.610683] pstate: 20000085 (nzCv daIf -PAN -UAO)
+> [    4.615461] pc : regmap_mmio_read32le+0x24/0x48
+> [    4.619969] lr : regmap_mmio_read+0x48/0x70
+> [    4.624130] sp : ffff00001002b570
+> [    4.627428] x29: ffff00001002b570 x28: ffff0000107b558c
+> [    4.632715] x27: 0000000000000000 x26: 0000000000000000
+> [    4.638002] x25: ffff0000107dc000 x24: ffff800014690c00
+> [    4.643288] x23: ffff00001002b6cc x22: ffff800014690c10
+> [    4.648576] x21: ffff00001002b6cc x20: ffff800014672800
+> [    4.653862] x19: 0000000000000000 x18: ffffffffffffffff
+> [    4.659148] x17: 0000000000000007 x16: 0000000000000001
+> [    4.664434] x15: ffff000010716000 x14: ffffffffff000000
+> [    4.669721] x13: 0000000000001000 x12: 0000000000000038
+> [    4.675007] x11: 0000000000000010 x10: 0101010101010101
+> [    4.680293] x9 : 0000000000000008 x8 : 0000000000000008
+> [    4.685579] x7 : 0000000000000000 x6 : ffff0000107dc548
+> [    4.690865] x5 : 0000000000000003 x4 : ffff000010091d98
+> [    4.696151] x3 : ffff000010412948 x2 : ffff000010412790
+> [    4.701437] x1 : 0000000000000000 x0 : ffff000010045100
+> [    4.706725] Process swapper/0 (pid: 1, stack limit = 0x(____ptrval____))
+> [    4.713393] Call trace:
+> [    4.715828]  regmap_mmio_read32le+0x24/0x48
+> [    4.719991]  regmap_mmio_read+0x48/0x70
+> [    4.723811]  _regmap_bus_reg_read+0x38/0x48
+> [    4.727974]  _regmap_read+0x6c/0x1a8
+> [    4.731533]  regmap_read+0x50/0x78
+> [    4.734921]  altr_sdram_probe+0x98/0x5f0
+> [    4.738828]  platform_drv_probe+0x58/0xb8
+> [    4.742819]  really_probe+0x1d4/0x3d8
+> [    4.746463]  driver_probe_device+0x70/0x158
+> [    4.750627]  __device_attach_driver+0xbc/0x140
+> [    4.755049]  bus_for_each_drv+0x80/0xe0
+> [    4.758866]  __device_attach+0xe8/0x170
+> [    4.762684]  device_initial_probe+0x24/0x30
+> [    4.766847]  bus_probe_device+0xa0/0xa8
+> [    4.770666]  device_add+0x3d4/0x5f0
+> [    4.774140]  of_device_add+0x5c/0x70
+> [    4.777698]  of_platform_device_create_pdata+0xc4/0x128
+> [    4.782898]  of_platform_bus_create+0x1d0/0x4e0
+> [    4.787405]  of_platform_populate+0x84/0x150
+> [    4.791655]  altr_edac_a10_probe+0x388/0x428
+> [    4.795904]  platform_drv_probe+0x58/0xb8
+> [    4.799895]  really_probe+0x1d4/0x3d8
+> [    4.803539]  driver_probe_device+0x70/0x158
+> [    4.807702]  __driver_attach+0x12c/0x148
+> [    4.811606]  bus_for_each_dev+0x78/0xe0
+> [    4.815422]  driver_attach+0x30/0x40
+> [    4.818980]  bus_add_driver+0x1c0/0x288
+> [    4.822797]  driver_register+0x68/0x118
+> [    4.826614]  __platform_driver_register+0x54/0x60
+> [    4.831299]  altr_edac_a10_driver_init+0x24/0x2c
+> [    4.835896]  do_one_initcall+0xcc/0x230
+> [    4.839714]  kernel_init_freeable+0x290/0x384
+> [    4.844051]  kernel_init+0x18/0x110
+> [    4.847525]  ret_from_fork+0x10/0x1c
+> [    4.851085] Code: 2a0103f3 d503201f f9400280 8b334000 (b9400000)
+> [    4.857154] ---[ end trace 416494f6b96edb9b ]---
+> 
+> After the commit 3123c5c4ca15 ("edac: altera: Move Stratix10 SDRAM ECC
+> to peripheral") the crash location is now at altr_check_ecc_deps(),
+> but I think the cause is still the same:
+> 
+> [    4.996439] Internal error: synchronous external abort: 96000010 [#1] PREEMPT SMP
+> [    5.003892] CPU: 0 PID: 1 Comm: swapper/0 Not tainted 5.4.0-aakoskin+ #10
+> [    5.010645] Hardware name: SoCFPGA Stratix 10 test (DT)
+> [    5.015846] pstate: 80000005 (Nzcv daif -PAN -UAO)
+> [    5.020623] pc : altr_check_ecc_deps+0x28/0x70
+> [    5.025046] lr : altr_edac_a10_device_add+0x19c/0x388
+> [    5.030071] sp : ffff80001002b9f0
+> [    5.033368] x29: ffff80001002b9f0 x28: ffff80001002ba88
+> [    5.038657] x27: ffff8000104cd000 x26: ffff8000106a82c0
+> [    5.043943] x25: ffff800010848000 x24: ffff00007fc007a0
+> [    5.049230] x23: ffff00007fc00570 x22: ffff0000146e3000
+> [    5.054516] x21: ffff000014728880 x20: 0000000010035100
+> [    5.059803] x19: ffff0000146e32a8 x18: ffff800010035fff
+> [    5.065089] x17: 000000000000000e x16: 0000000000000007
+> [    5.070375] x15: ffff800010035fff x14: 00000000f8012000
+> [    5.075661] x13: 0000000000000000 x12: ffff80001077c000
+> [    5.080947] x11: 0040000000000001 x10: 0040000000000041
+> [    5.086233] x9 : 0400000000000001 x8 : ffff800010036000
+> [    5.091520] x7 : 0000000000000000 x6 : 0000000000000001
+> [    5.096807] x5 : 0000000000000001 x4 : ffff0000146f4000
+> [    5.102094] x3 : ffff0000146f4100 x2 : 0000000000000000
+> [    5.107380] x1 : ffff8000106a82c0 x0 : ffff800010035100
+> [    5.112667] Call trace:
+> [    5.115101]  altr_check_ecc_deps+0x28/0x70
+> [    5.119178]  altr_edac_a10_device_add+0x19c/0x388
+> [    5.123859]  altr_edac_a10_probe+0x1c0/0x3d0
+> [    5.128111]  platform_drv_probe+0x58/0xb8
+> [    5.132102]  really_probe+0x1d4/0x430
+> [    5.135746]  driver_probe_device+0x70/0x158
+> [    5.139908]  device_driver_attach+0x74/0x80
+> [    5.144071]  __driver_attach+0xa0/0x198
+> [    5.147889]  bus_for_each_dev+0x78/0xe0
+> [    5.151706]  driver_attach+0x30/0x40
+> [    5.155263]  bus_add_driver+0x178/0x228
+> [    5.159080]  driver_register+0x68/0x118
+> [    5.162898]  __platform_driver_register+0x54/0x60
+> [    5.167583]  altr_edac_a10_driver_init+0x24/0x2c
+> [    5.172181]  do_one_initcall+0xd4/0x240
+> [    5.175997]  kernel_init_freeable+0x1c0/0x260
+> [    5.180336]  kernel_init+0x18/0x110
+> [    5.183811]  ret_from_fork+0x10/0x18
+> [    5.187373] Code: f9401261 f9400a60 b9802c22 8b020000 (b9400000)
+> [    5.193440] ---[ end trace cdc4aebcaf1288ee ]---
+> 
+> Was this register access change intentional? How the driver probe should
+> work when the ECC is not present?
+> 
+The altr_check_ecc_deps() call is checking whether ECC is enabled so the 
+probe should fail.
 
-> Your node should list all that are hooked up in the h/w, not just the > ones you need for EDAC.
+I suspect the device tree. Can you verify the following node is in your 
+device tree?
 
-Do you suggest to list all of them in the device tree node? Currently we list only the enabled ones and update the mask accordingly.
+	sdramedac {
+		compatible = "altr,sdram-edac-s10";
+		altr,sdr-syscon = <&sdr>;
+		interrupts = <16 4>;
+	};
 
-Please let us know whether our approach makes sense, we will submit new patch after your confirmation.
- 
-> Rob
+I'll keep looking into this as well.
+
+Thor
+
+> A.
 > 
 
--- 
-Best regards,
-Shiping Ji
