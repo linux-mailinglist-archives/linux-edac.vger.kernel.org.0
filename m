@@ -2,35 +2,35 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 35FD0113E8F
-	for <lists+linux-edac@lfdr.de>; Thu,  5 Dec 2019 10:52:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CDCDB113E97
+	for <lists+linux-edac@lfdr.de>; Thu,  5 Dec 2019 10:53:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728991AbfLEJw7 (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Thu, 5 Dec 2019 04:52:59 -0500
-Received: from a27-186.smtp-out.us-west-2.amazonses.com ([54.240.27.186]:60124
-        "EHLO a27-186.smtp-out.us-west-2.amazonses.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726096AbfLEJw6 (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Thu, 5 Dec 2019 04:52:58 -0500
+        id S1729128AbfLEJxH (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Thu, 5 Dec 2019 04:53:07 -0500
+Received: from a27-185.smtp-out.us-west-2.amazonses.com ([54.240.27.185]:33132
+        "EHLO a27-185.smtp-out.us-west-2.amazonses.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726096AbfLEJxG (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Thu, 5 Dec 2019 04:53:06 -0500
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
-        s=zsmsymrwgfyinv5wlfyidntwsjeeldzt; d=codeaurora.org; t=1575539577;
-        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Transfer-Encoding;
-        bh=CO0cVItG7+3d1ni5t/elfx3WOfPpM1c5YYqLbJ16tG0=;
-        b=EYD9xJTC06/x58IwDfcMbilMSII7LE0tGNL4+siE1ZconNxhWPNI3ZePYf/ndDVI
-        bubwCST1hHSv/myYUO1Ys8ZMYDUKKIsKuAvVMrpOJmlTkifaXvrjWZAi9n5wY6j3dH5
-        SDU2m3sEe0eDsRktOJ1e74BtRc/GPuUlreEWKi0s=
+        s=zsmsymrwgfyinv5wlfyidntwsjeeldzt; d=codeaurora.org; t=1575539585;
+        h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:MIME-Version:Content-Transfer-Encoding;
+        bh=Ce3K11ERWLy+EF9gQF7x6AErPgl+OIA/TJqM7S8904Q=;
+        b=GFlGfJI5//kYwgHawj4P6rt7n0Dz6aIiFCznYNyTXCRNF+Squz+mOnrMvG0AyJge
+        tliMd7qeKh6we9Uu63YxnuFJgBjyIQ3ksEGEE6p7+tRmQTQtWArxBwj5osVw6qSeNKo
+        eo6AdEyUpcIFcyO1pwazO+XtEhx6JaXOCAoCi604=
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
-        s=gdwg2y3kokkkj5a55z2ilkup5wp5hhxx; d=amazonses.com; t=1575539577;
-        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Transfer-Encoding:Feedback-ID;
-        bh=CO0cVItG7+3d1ni5t/elfx3WOfPpM1c5YYqLbJ16tG0=;
-        b=WxAIW5/zbEtyE1dUXeTGRFOU/kOkgOWCHu8wTSFCoaSsWVf8Y16mh49Jm9Z7wEuL
-        8rYjq7rlrowxM6PNrltfpYC57TD+a5MU+CBMPJhIUlP/j13sYkaWjH5MIycW2eC4YoR
-        c9T74gTkJGKc7rOkSuU/DSL6Ve7ECBaqurjFG12U=
+        s=gdwg2y3kokkkj5a55z2ilkup5wp5hhxx; d=amazonses.com; t=1575539585;
+        h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:MIME-Version:Content-Transfer-Encoding:Feedback-ID;
+        bh=Ce3K11ERWLy+EF9gQF7x6AErPgl+OIA/TJqM7S8904Q=;
+        b=B9FgIw6n6jdfkwrdR1o/6xJBvwtudhA5eI9PlmwPpIkh09Bsyg0V1JnCHCqHO/c6
+        fSHj3XBbi+x6/hM3ciMQ74doU7Iy7C9DeBKMPAWbmZuMP6fOcqjK+SJekdJTYPbRv9R
+        GS7Kh1EAU6G17n0IX+knDzUTb7bGJCNuomMA8pGo=
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
         aws-us-west-2-caf-mail-1.web.codeaurora.org
 X-Spam-Level: 
 X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,SPF_NONE
         autolearn=unavailable autolearn_force=no version=3.4.0
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 0BA2AC447AE
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org A4863C447B4
 Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
 Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=saiprakash.ranjan@codeaurora.org
 From:   Sai Prakash Ranjan <saiprakash.ranjan@codeaurora.org>
@@ -49,49 +49,104 @@ Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         Evan Green <evgreen@chromium.org>, tsoni@codeaurora.org,
         psodagud@codeaurora.org,
         Sai Prakash Ranjan <saiprakash.ranjan@codeaurora.org>
-Subject: [PATCH 0/2] Add EDAC support for Kryo CPU core caches
-Date:   Thu, 5 Dec 2019 09:52:57 +0000
-Message-ID: <0101016ed57a1246-ffd8974e-2d90-4333-939f-6e0d1aeb158c-000000@us-west-2.amazonses.com>
+Subject: [PATCH 1/2] dt-bindings: edac: Add DT bindings for Kryo EDAC
+Date:   Thu, 5 Dec 2019 09:53:05 +0000
+Message-ID: <0101016ed57a3259-eee09e9e-e99a-40f1-ab1c-63e58a42615c-000000@us-west-2.amazonses.com>
 X-Mailer: git-send-email 2.23.0
+In-Reply-To: <cover.1575529553.git.saiprakash.ranjan@codeaurora.org>
+References: <cover.1575529553.git.saiprakash.ranjan@codeaurora.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-SES-Outgoing: 2019.12.05-54.240.27.186
+X-SES-Outgoing: 2019.12.05-54.240.27.185
 Feedback-ID: 1.us-west-2.CZuq2qbDmUIuT3qdvXlRHZZCpfZqZ4GtG9v3VKgRyF0=:AmazonSES
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-This series implements EDAC support for error reporting on
-Kryo{3,4}XX CPU caches L1,L2, L3-SCU. All the cores(big.LITTLE)
-in Kryo{3,4}XX CPUs implement RAS extensions and use interrupt
-based ECC mechanism to report errors.
+This adds DT bindings for Kryo EDAC implemented with RAS
+extensions on KRYO{3,4}XX CPU cores for reporting of cache
+errors.
 
-This series has been tested on SC7180, SDM845, SM8150 SoCs with
-Kryo{3,4}XX CPU cores based on ARM Cortex-A55, Cortex-A75 and
-Cortex-A76.
-
-This implementation is platform specific in contrast to the
-patch posted last time for generic error reporting on arm cortex
-implementations with RAS extensions by Kyle Yan.
- - https://patchwork.kernel.org/patch/10161955/
-
-Downstream implementation of this can be found at:
- - https://source.codeaurora.org/quic/la/kernel/msm-4.14/tree/drivers/edac/kryo_arm64_edac.c?h=msm-4.14
-
-Sai Prakash Ranjan (2):
-  dt-bindings: edac: Add DT bindings for Kryo EDAC
-  drivers: edac: Add EDAC support for Kryo CPU caches
-
- .../bindings/edac/qcom-kryo-edac.yaml         |  67 ++
- MAINTAINERS                                   |   7 +
- drivers/edac/Kconfig                          |  20 +
- drivers/edac/Makefile                         |   1 +
- drivers/edac/qcom_kryo_edac.c                 | 679 ++++++++++++++++++
- 5 files changed, 774 insertions(+)
+Signed-off-by: Sai Prakash Ranjan <saiprakash.ranjan@codeaurora.org>
+---
+ .../bindings/edac/qcom-kryo-edac.yaml         | 67 +++++++++++++++++++
+ 1 file changed, 67 insertions(+)
  create mode 100644 Documentation/devicetree/bindings/edac/qcom-kryo-edac.yaml
- create mode 100644 drivers/edac/qcom_kryo_edac.c
 
+diff --git a/Documentation/devicetree/bindings/edac/qcom-kryo-edac.yaml b/Documentation/devicetree/bindings/edac/qcom-kryo-edac.yaml
+new file mode 100644
+index 000000000000..1a39429a73b4
+--- /dev/null
++++ b/Documentation/devicetree/bindings/edac/qcom-kryo-edac.yaml
+@@ -0,0 +1,67 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/edac/qcom-kryo-edac.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Kryo Error Detection and Correction(EDAC)
++
++maintainers:
++  - Sai Prakash Ranjan <saiprakash.ranjan@codeaurora.org>
++
++description: |
++  Kryo EDAC is defined to describe on-chip error detection and correction
++  for the Kryo CPU cores which implement RAS extensions. It will report
++  all Single Bit Errors and Double Bit Errors found in L1/L2 caches in
++  in two registers ERXSTATUS_EL1 and ERXMISC0_EL1. L3-SCU cache errors
++  are reported in ERR1STATUS and ERR1MISC0 registers.
++    ERXSTATUS_EL1 - Selected Error Record Primary Status Register, EL1
++    ERXMISC0_EL1 - Selected Error Record Miscellaneous Register 0, EL1
++    ERR1STATUS - Error Record Primary Status Register
++    ERR1MISC0 - Error Record Miscellaneous Register 0
++  Current implementation of Kryo ECC(Error Correcting Code) mechanism is
++  based on interrupts.
++
++properties:
++  compatible:
++    enum:
++      - qcom,kryo-edac
++
++  interrupts:
++    minItems: 1
++    maxItems: 4
++    items:
++      - description: l1-l2 cache faultirq interrupt
++      - description: l1-l2 cache errirq interrupt
++      - description: l3-scu cache errirq interrupt
++      - description: l3-scu cache faultirq interrupt
++
++  interrupt-names:
++    minItems: 1
++    maxItems: 4
++    items:
++      - const: l1-l2-faultirq
++      - const: l1-l2-errirq
++      - const: l3-scu-errirq
++      - const: l3-scu-faultirq
++
++required:
++  - compatible
++  - interrupts
++  - interrupt-names
++
++examples:
++  - |
++    #include <dt-bindings/interrupt-controller/arm-gic.h>
++
++    kryo_edac {
++      compatible = "qcom,kryo-edac";
++      interrupts = <GIC_PPI 6 IRQ_TYPE_LEVEL_HIGH>,
++                   <GIC_PPI 7 IRQ_TYPE_LEVEL_HIGH>,
++                   <GIC_SPI 34 IRQ_TYPE_LEVEL_HIGH>,
++                   <GIC_SPI 35 IRQ_TYPE_LEVEL_HIGH>;
++      interrupt-names = "l1-l2-faultirq",
++                        "l1-l2-errirq",
++                        "l3-scu-errirq",
++                        "l3-scu-faultirq";
++    };
 -- 
 QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member
 of Code Aurora Forum, hosted by The Linux Foundation
