@@ -2,61 +2,80 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BF0FD115A2A
-	for <lists+linux-edac@lfdr.de>; Sat,  7 Dec 2019 01:29:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F3351173D8
+	for <lists+linux-edac@lfdr.de>; Mon,  9 Dec 2019 19:15:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726535AbfLGA3b (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Fri, 6 Dec 2019 19:29:31 -0500
-Received: from mail-wm1-f68.google.com ([209.85.128.68]:33237 "EHLO
-        mail-wm1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726491AbfLGA3b (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Fri, 6 Dec 2019 19:29:31 -0500
-Received: by mail-wm1-f68.google.com with SMTP id y23so10893532wma.0
-        for <linux-edac@vger.kernel.org>; Fri, 06 Dec 2019 16:29:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=S7m9By4/eRnSy0vxdfJ6TocT5eJ8gcKLceyHvlHTn3o=;
-        b=UAczeQ0cY+yX9guoET55ezclAqEIwgyAMzPt2ZKBWIbIEt/pMnh3AM4wfp6V+VJf5N
-         /t6chYtkaELTCMsYIAwEqK7Ua++MAsqMO7EBu71mj4Fnlls+x4upb8tVoG2CKNwhblXl
-         GZWv+vxa+pk1bnKGno8f6HZ0ZmxLsefDKEHUp1ThC1gheUMLLO9GE4KYBuoyxwVDBQHN
-         +TWbv9hzxOJ/nyPcm2o6z2SaO7Kv5KPSrhGMjlDOWxjvXF61G6B8vS09UDIp3Kqr/FVJ
-         bo7yk/PV6MjG5BE7V9e+BVzlMyDYxzemK0FCoiLj7UmqPUvOwHSq+EWh2p0uz94KzjFK
-         8hKg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=S7m9By4/eRnSy0vxdfJ6TocT5eJ8gcKLceyHvlHTn3o=;
-        b=oasHA+UipTEFCxnSMQkZb1vNC0FCVYmV9JRY2N1xM2cxBipAUszxdp/vdvQShMAq2+
-         /oo43JujpZ+STB/+OIXWFzd8PegSXmZEZIPC2iGzOCGWwnYoEVUypzpfs1w6C3welWNE
-         M1lwEmfe6rBPUOEKB+TGzYSdP/0ByeVxJRD9krAzGc9sB1NnQNINRXTuFmS02WedOvL8
-         IP5be5V/kV/ZhUKrgOcxlD9MLRSYnyfrL9w8CrMtomzD7PtLQs0VR4bN5rC3siqFcw38
-         Q6P4ouRQlHGhAvhGdimXT5AJsFX6MfMjN87oh36wC24ElBTAsrcAAAOLnM7PwdgYu69N
-         kusw==
-X-Gm-Message-State: APjAAAVK6b5d0tQMcLCwPUqtNfMraBX9UnGyuWeO31QhsJswcuOU+53t
-        EIC4CAKnPMN91I6NBCVxvx6WSHpAQe4iky8FVLE=
-X-Google-Smtp-Source: APXvYqyph35gV3V54gW4I7K644Z0gktlmZ+TXi6PJ8di3vm3dUTlaeyqr+FE+GZusDLWVMAtrDQhs4P9pROrLOxshFQ=
-X-Received: by 2002:a1c:96c4:: with SMTP id y187mr13234108wmd.112.1575678569910;
- Fri, 06 Dec 2019 16:29:29 -0800 (PST)
+        id S1726668AbfLISPB (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Mon, 9 Dec 2019 13:15:01 -0500
+Received: from mail.skyhub.de ([5.9.137.197]:59892 "EHLO mail.skyhub.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726265AbfLISO7 (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Mon, 9 Dec 2019 13:14:59 -0500
+Received: from zn.tnic (p200300EC2F07FE0004E849530B6CB65A.dip0.t-ipconnect.de [IPv6:2003:ec:2f07:fe00:4e8:4953:b6c:b65a])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id BF58A1EC0C1A;
+        Mon,  9 Dec 2019 19:14:57 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1575915297;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=+9J74HXPXpQjfbF2S3fh6rnuCytPtwdJt13WO1twBN0=;
+        b=NHTs/w8MEJOPRg50hPLzRPJTUTyg8r9wTHsIhelmre51ttoi7UDpI5XVbfKZdfr/zborta
+        6t6DQc6qA5iMtOUm0CcRqMCjPJ6Z2MqtgdmwoPuEijlMSoEnmCr3lmCUvPfMCBbDNECxrJ
+        Myn+YN+7suQjtFv3veVaKSEy9IRTYo8=
+Date:   Mon, 9 Dec 2019 19:14:49 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Krzysztof Kozlowski <krzk@kernel.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Tony Luck <tony.luck@intel.com>,
+        James Morse <james.morse@arm.com>,
+        Robert Richter <rrichter@marvell.com>,
+        linux-edac@vger.kernel.org
+Subject: Re: [PATCH] edac: Fix Kconfig indentation
+Message-ID: <20191209181449.GB32641@zn.tnic>
+References: <20191120134206.15588-1-krzk@kernel.org>
 MIME-Version: 1.0
-Received: by 2002:a5d:678e:0:0:0:0:0 with HTTP; Fri, 6 Dec 2019 16:29:29 -0800 (PST)
-Reply-To: mrs.aalia.ahmed@gmail.com
-From:   "Mrs.Aalia.Ahmed" <adamhana1907@gmail.com>
-Date:   Sat, 7 Dec 2019 00:29:29 +0000
-Message-ID: <CAOGreOkqZQY02Qc7dHVxdRFWYrTLKw3DvePG3mBc3_8d8rdvmw@mail.gmail.com>
-Subject: OK
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20191120134206.15588-1-krzk@kernel.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-Greetings My Dearest One.
+On Wed, Nov 20, 2019 at 09:42:06PM +0800, Krzysztof Kozlowski wrote:
+> Adjust indentation from spaces to tab (+optional two spaces) as in
+> coding style with command like:
+> 	$ sed -e 's/^        /\t/' -i */Kconfig
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
+> ---
+>  drivers/edac/Kconfig | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/edac/Kconfig b/drivers/edac/Kconfig
+> index 417dad635526..c49f6bc39716 100644
+> --- a/drivers/edac/Kconfig
+> +++ b/drivers/edac/Kconfig
+> @@ -492,7 +492,7 @@ config EDAC_TI
+>  	depends on ARCH_KEYSTONE || SOC_DRA7XX
+>  	help
+>  	  Support for error detection and correction on the
+> -          TI SoCs.
+> +	  TI SoCs.
+>  
+>  config EDAC_QCOM
+>  	tristate "QCOM EDAC Controller"
+> -- 
 
-My name is Mrs.Aalia.Ahmed, i saw your profile and became interested
-in you, please contact me through my email address
-(mrs.aalia.ahmed@gmail.com) to know each other and i have something
-very important to tell you, i wait for your response to my email ID.
-(mrs.aalia.ahmed@gmail.com
+Applied, thanks.
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
