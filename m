@@ -2,131 +2,76 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B13D117C2B
-	for <lists+linux-edac@lfdr.de>; Tue, 10 Dec 2019 01:09:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 435301182F4
+	for <lists+linux-edac@lfdr.de>; Tue, 10 Dec 2019 10:00:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727388AbfLJAIw (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Mon, 9 Dec 2019 19:08:52 -0500
-Received: from smtp-fw-9101.amazon.com ([207.171.184.25]:6181 "EHLO
-        smtp-fw-9101.amazon.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726495AbfLJAIv (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Mon, 9 Dec 2019 19:08:51 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.de; i=@amazon.de; q=dns/txt; s=amazon201209;
-  t=1575936531; x=1607472531;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=PwOP4ZyxB9R575wj8vgIp3jwd7oy+8sBiI9LgJOgFtY=;
-  b=v5O2T21XRuABzqnsjof0negCQIiHOoornFMuqTg1oRNw8a4EdALFFS69
-   6wKzU62J74OJe2za0bFKCpzQTsRT1cwD4MjaquJWGOn5pDGPnON3zb0pM
-   +twmROslYT5FYH3DlbdaiPRvljTP+FjvPANnPKLFGZloMz0GmgtdBzJpi
-   E=;
-IronPort-SDR: KWTMxw2eVwcNc0o3ykAP2cyBDQvBHn/I9jlq6UBA5qRN4V4oiSTFEHbZH0TyTs/0XPXzq6e1jG
- rhej8/w3mE0w==
-X-IronPort-AV: E=Sophos;i="5.69,297,1571702400"; 
-   d="scan'208";a="4144126"
-Received: from sea32-co-svc-lb4-vlan3.sea.corp.amazon.com (HELO email-inbound-relay-2b-81e76b79.us-west-2.amazon.com) ([10.47.23.38])
-  by smtp-border-fw-out-9101.sea19.amazon.com with ESMTP; 10 Dec 2019 00:08:50 +0000
-Received: from u7588a65da6b65f.ant.amazon.com (pdx2-ws-svc-lb17-vlan2.amazon.com [10.247.140.66])
-        by email-inbound-relay-2b-81e76b79.us-west-2.amazon.com (Postfix) with ESMTPS id C86A2A0731;
-        Tue, 10 Dec 2019 00:08:49 +0000 (UTC)
-Received: from u7588a65da6b65f.ant.amazon.com (localhost [127.0.0.1])
-        by u7588a65da6b65f.ant.amazon.com (8.15.2/8.15.2/Debian-3) with ESMTPS id xBA08jQ2018322
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 10 Dec 2019 01:08:45 +0100
-Received: (from jschoenh@localhost)
-        by u7588a65da6b65f.ant.amazon.com (8.15.2/8.15.2/Submit) id xBA08hT3018312;
-        Tue, 10 Dec 2019 01:08:43 +0100
-From:   =?UTF-8?q?Jan=20H=2E=20Sch=C3=B6nherr?= <jschoenh@amazon.de>
-To:     Tony Luck <tony.luck@intel.com>, Borislav Petkov <bp@alien8.de>
-Cc:     =?UTF-8?q?Jan=20H=2E=20Sch=C3=B6nherr?= <jschoenh@amazon.de>,
-        linux-edac@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, x86@kernel.org
-Subject: [PATCH 6/6] x86/mce: Remove mce_inject_log() in favor of mce_log()
-Date:   Tue, 10 Dec 2019 01:07:33 +0100
-Message-Id: <20191210000733.17979-7-jschoenh@amazon.de>
-X-Mailer: git-send-email 2.22.0.3.gb49bb57c8208.dirty
-In-Reply-To: <20191210000733.17979-1-jschoenh@amazon.de>
-References: <20191210000733.17979-1-jschoenh@amazon.de>
+        id S1727177AbfLJJAW (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Tue, 10 Dec 2019 04:00:22 -0500
+Received: from mail.skyhub.de ([5.9.137.197]:53914 "EHLO mail.skyhub.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726932AbfLJJAW (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Tue, 10 Dec 2019 04:00:22 -0500
+Received: from zn.tnic (p200300EC2F07FE00E11D102681F6043D.dip0.t-ipconnect.de [IPv6:2003:ec:2f07:fe00:e11d:1026:81f6:43d])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 1BBA81EC0CD6;
+        Tue, 10 Dec 2019 10:00:20 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1575968420;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=Q8W1C4hoH3jVijRxBfnvDQINP6tFJNcnFZZxrT3G3zw=;
+        b=sREOE+3ARq+Py/mtg2KXtEP5iYwTca542BPBj/T8HQ+6YQew2PfZ8X9c8NtjSJYqR/6a9E
+        iUaKsvqgK5FS79BDPQSpgVaW/WKHPCd6bFxA/Epx41q8Ru/0alj9GTrPHaZZELgD8ZxclE
+        PJcMciOn14m63KmPeoKyU/OMPe6pKZ8=
+Date:   Tue, 10 Dec 2019 10:00:13 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     "Luck, Tony" <tony.luck@intel.com>
+Cc:     'Aristeu Rozanski' <aris@redhat.com>,
+        "'linux-edac@vger.kernel.org'" <linux-edac@vger.kernel.org>,
+        'Mauro Carvalho Chehab' <mchehab@kernel.org>
+Subject: Re: [PATCH] EDAC: skx_common: downgrade message importance on
+ missing PCI device
+Message-ID: <20191210090013.GA9395@zn.tnic>
+References: <20191204212325.c4k47p5hrnn3vpb5@redhat.com>
+ <3908561D78D1C84285E8C5FCA982C28F7F4F13AB@ORSMSX115.amr.corp.intel.com>
+ <3908561D78D1C84285E8C5FCA982C28F7F4F19BD@ORSMSX115.amr.corp.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <3908561D78D1C84285E8C5FCA982C28F7F4F19BD@ORSMSX115.amr.corp.intel.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-The mutex in mce_inject_log() became unnecessary with Linux 4.12 commit
-5de97c9f6d85 ("x86/mce: Factor out and deprecate the /dev/mcelog driver"),
-though the original reason for its presence only vanished with Linux 4.14
-commit 7298f08ea887 ("x86/mcelog: Get rid of RCU remnants").
+On Tue, Dec 10, 2019 at 12:02:45AM +0000, Luck, Tony wrote:
+> > This looks like we call skx_init() once per core. Do we keep calling it because
+> > the calls are failing?  Or do we do that even when calls succeed?
+> >
+> > I was only really expecting that skx_init() would be called once.
+> 
+> So (by experimentation) it seems that if the module load fails it
+> will be retried num_online_cpus times (though not bound to each
+> CPU in turn ... it will maybe try the init call on the same CPU multiple
+> times, but miss running on some CPUs).
+> 
+> If the load succeeds, then whoever is repeating the load decides
+> to stop.
 
-Drop the mutex. And as that makes mce_inject_log() identical to mce_log(),
-get rid of the former in favor of the latter.
+That's the result of our conversion to MODULE_DEVICE_TABLE to match CPU
+models. So it tries once on each CPU:
 
-Signed-off-by: Jan H. Schönherr <jschoenh@amazon.de>
----
- arch/x86/kernel/cpu/mce/core.c     | 11 +----------
- arch/x86/kernel/cpu/mce/inject.c   |  2 +-
- arch/x86/kernel/cpu/mce/internal.h |  2 --
- 3 files changed, 2 insertions(+), 13 deletions(-)
+https://lkml.kernel.org/r/20191107103857.GC19501@zn.tnic
 
-diff --git a/arch/x86/kernel/cpu/mce/core.c b/arch/x86/kernel/cpu/mce/core.c
-index 677e9079e5ba..44cccae097cb 100644
---- a/arch/x86/kernel/cpu/mce/core.c
-+++ b/arch/x86/kernel/cpu/mce/core.c
-@@ -53,8 +53,6 @@
- 
- #include "internal.h"
- 
--static DEFINE_MUTEX(mce_log_mutex);
--
- /* sysfs synchronization */
- static DEFINE_MUTEX(mce_sysfs_mutex);
- 
-@@ -156,14 +154,7 @@ void mce_log(struct mce *m)
- 	if (!mce_gen_pool_add(m))
- 		irq_work_queue(&mce_irq_work);
- }
--
--void mce_inject_log(struct mce *m)
--{
--	mutex_lock(&mce_log_mutex);
--	mce_log(m);
--	mutex_unlock(&mce_log_mutex);
--}
--EXPORT_SYMBOL_GPL(mce_inject_log);
-+EXPORT_SYMBOL_GPL(mce_log);
- 
- static struct notifier_block mce_srao_nb;
- 
-diff --git a/arch/x86/kernel/cpu/mce/inject.c b/arch/x86/kernel/cpu/mce/inject.c
-index 1f30117b24ba..3413b41b8d55 100644
---- a/arch/x86/kernel/cpu/mce/inject.c
-+++ b/arch/x86/kernel/cpu/mce/inject.c
-@@ -494,7 +494,7 @@ static void do_inject(void)
- 		i_mce.status |= MCI_STATUS_SYNDV;
- 
- 	if (inj_type == SW_INJ) {
--		mce_inject_log(&i_mce);
-+		mce_log(&i_mce);
- 		return;
- 	}
- 
-diff --git a/arch/x86/kernel/cpu/mce/internal.h b/arch/x86/kernel/cpu/mce/internal.h
-index 43031db429d2..1eb1a9343188 100644
---- a/arch/x86/kernel/cpu/mce/internal.h
-+++ b/arch/x86/kernel/cpu/mce/internal.h
-@@ -78,8 +78,6 @@ static inline int apei_clear_mce(u64 record_id)
- }
- #endif
- 
--void mce_inject_log(struct mce *m);
--
- /*
-  * We consider records to be equivalent if bank+status+addr+misc all match.
-  * This is only used when the system is going down because of a fatal error
+I have no clean solution for this except maybe remembering the return
+value of the first instance probing in the edac core module and then
+asking it... it ain't pretty though.
+
 -- 
-2.22.0.3.gb49bb57c8208.dirty
+Regards/Gruss,
+    Boris.
 
+https://people.kernel.org/tglx/notes-about-netiquette
