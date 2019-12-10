@@ -2,27 +2,27 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 58EB4119DE3
-	for <lists+linux-edac@lfdr.de>; Tue, 10 Dec 2019 23:41:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FE38119D2C
+	for <lists+linux-edac@lfdr.de>; Tue, 10 Dec 2019 23:37:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728783AbfLJWb4 (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Tue, 10 Dec 2019 17:31:56 -0500
-Received: from mail.kernel.org ([198.145.29.99]:52138 "EHLO mail.kernel.org"
+        id S1729791AbfLJWgL (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Tue, 10 Dec 2019 17:36:11 -0500
+Received: from mail.kernel.org ([198.145.29.99]:55726 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729006AbfLJWb4 (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Tue, 10 Dec 2019 17:31:56 -0500
+        id S1729605AbfLJWeV (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Tue, 10 Dec 2019 17:34:21 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 434BE24653;
-        Tue, 10 Dec 2019 22:31:54 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 8E78F214AF;
+        Tue, 10 Dec 2019 22:34:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1576017115;
+        s=default; t=1576017260;
         bh=1GJLTD0YCq/aHKXPaGnQo20jDPP0aimF/HpTBL6vbnY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=z9gORHs/K7SCGmO0H+G8yy/tFRjad/XZY+kdeQD7ok4gh/DBpdBV8Qjbf3XFXuee1
-         mz5OG01NvATsE0uHZvMjPk+kMyK56/D8GTHnnPmQZC+U8DCGaCkXN2z+WD5p7nsqKW
-         DwFz6W03JEQohjELWQ/od56n9+93+5qMSk5WDrfY=
+        b=pukGUYstO7TCQpZXkmg/efe0GzOp0PsS5t++e78qvSeB259w/Qmnq4eFWiHiLDWFq
+         iNl+rkvjcn7owUVFQSHhhdXML3G2UHS8qQIRBYKhOY0yndHPu68rmgDsoMj5pd5tDi
+         TikEpTeiEMIl1uoGU/gOIqAW3FXkxYSKIQhzaxhI=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Robert Richter <rrichter@marvell.com>,
@@ -32,12 +32,12 @@ Cc:     Robert Richter <rrichter@marvell.com>,
         "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
         Tony Luck <tony.luck@intel.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH AUTOSEL 4.9 67/91] EDAC/ghes: Fix grain calculation
-Date:   Tue, 10 Dec 2019 17:30:11 -0500
-Message-Id: <20191210223035.14270-67-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.4 54/71] EDAC/ghes: Fix grain calculation
+Date:   Tue, 10 Dec 2019 17:32:59 -0500
+Message-Id: <20191210223316.14988-54-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20191210223035.14270-1-sashal@kernel.org>
-References: <20191210223035.14270-1-sashal@kernel.org>
+In-Reply-To: <20191210223316.14988-1-sashal@kernel.org>
+References: <20191210223316.14988-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
