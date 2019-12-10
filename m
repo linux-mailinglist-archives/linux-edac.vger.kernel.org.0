@@ -2,82 +2,115 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FD83118AA4
-	for <lists+linux-edac@lfdr.de>; Tue, 10 Dec 2019 15:18:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 213FB118F46
+	for <lists+linux-edac@lfdr.de>; Tue, 10 Dec 2019 18:49:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727272AbfLJOSd (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Tue, 10 Dec 2019 09:18:33 -0500
-Received: from us-smtp-2.mimecast.com ([205.139.110.61]:52844 "EHLO
-        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1727333AbfLJOSc (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>);
-        Tue, 10 Dec 2019 09:18:32 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1575987510;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=1V9JAqgeTVs6AxLBxEGbTRQLdHmJlItdgr4E2/Kbzj4=;
-        b=VsrRdojRuL/fq+EeSCLQhzUlVLBa44IBlxDj+uRhmS/UByZhyYXUP2U0KhMi9pIiy+b+sx
-        D8bMziwJHFmnF1gGBwZ1IvCrR0ka4Pr2PtwnnfQUQxyH9ktc0RhQer29zVZoaifTsAtekk
-        bl0OMTcQI3TGgefytaB8gYtN0tIe5vg=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-204-gLsvZp5IN7-CNwVLF1z3LA-1; Tue, 10 Dec 2019 09:18:27 -0500
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id D353B1005512;
-        Tue, 10 Dec 2019 14:18:25 +0000 (UTC)
-Received: from napanee.usersys.redhat.com (dhcp-17-195.bos.redhat.com [10.18.17.195])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id B403D5DA2C;
-        Tue, 10 Dec 2019 14:18:25 +0000 (UTC)
-Received: by napanee.usersys.redhat.com (Postfix, from userid 1000)
-        id 4B89FC0CE4; Tue, 10 Dec 2019 09:18:25 -0500 (EST)
-Date:   Tue, 10 Dec 2019 09:18:25 -0500
-From:   'Aristeu Rozanski' <aris@redhat.com>
-To:     "Luck, Tony" <tony.luck@intel.com>
-Cc:     "'linux-edac@vger.kernel.org'" <linux-edac@vger.kernel.org>,
-        'Borislav Petkov' <bp@alien8.de>,
-        'Mauro Carvalho Chehab' <mchehab@kernel.org>
-Subject: Re: [PATCH] EDAC: skx_common: downgrade message importance on
- missing PCI device
-Message-ID: <20191210141824.igfhvneacovuairi@redhat.com>
-References: <20191204212325.c4k47p5hrnn3vpb5@redhat.com>
- <3908561D78D1C84285E8C5FCA982C28F7F4F13AB@ORSMSX115.amr.corp.intel.com>
- <3908561D78D1C84285E8C5FCA982C28F7F4F19BD@ORSMSX115.amr.corp.intel.com>
+        id S1727565AbfLJRtZ (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Tue, 10 Dec 2019 12:49:25 -0500
+Received: from mga14.intel.com ([192.55.52.115]:31791 "EHLO mga14.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727520AbfLJRtZ (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Tue, 10 Dec 2019 12:49:25 -0500
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 10 Dec 2019 09:30:43 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.69,300,1571727600"; 
+   d="scan'208";a="215642261"
+Received: from tthayer-hp-z620.an.intel.com (HELO [10.122.105.146]) ([10.122.105.146])
+  by orsmga003.jf.intel.com with ESMTP; 10 Dec 2019 09:30:43 -0800
+Reply-To: thor.thayer@linux.intel.com
+Subject: Re: [Bisected] altera_edac crash on a system without ECC
+To:     Aaro Koskinen <aaro.koskinen@nokia.com>
+Cc:     linux-kernel@vger.kernel.org, linux-edac@vger.kernel.org
+References: <20191129165739.GA2583@ak-laptop.emea.nsn-net.net>
+ <3bbd2890-ffcc-39df-8ab6-ecf72d92a006@linux.intel.com>
+ <20191204132531.GA22600@ak-laptop.emea.nsn-net.net>
+From:   Thor Thayer <thor.thayer@linux.intel.com>
+Message-ID: <f9634662-23b0-7ec7-aed5-754bd5dc81b8@linux.intel.com>
+Date:   Tue, 10 Dec 2019 11:32:34 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-In-Reply-To: <3908561D78D1C84285E8C5FCA982C28F7F4F19BD@ORSMSX115.amr.corp.intel.com>
-User-Agent: NeoMutt/20180716
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
-X-MC-Unique: gLsvZp5IN7-CNwVLF1z3LA-1
-X-Mimecast-Spam-Score: 0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: quoted-printable
-Content-Disposition: inline
+In-Reply-To: <20191204132531.GA22600@ak-laptop.emea.nsn-net.net>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Tue, Dec 10, 2019 at 12:02:45AM +0000, Luck, Tony wrote:
-> > This looks like we call skx_init() once per core. Do we keep calling it=
- because
-> > the calls are failing?  Or do we do that even when calls succeed?
-> >
-> > I was only really expecting that skx_init() would be called once.
->=20
-> So (by experimentation) it seems that if the module load fails it
-> will be retried num_online_cpus times (though not bound to each
-> CPU in turn ... it will maybe try the init call on the same CPU multiple
-> times, but miss running on some CPUs).
->=20
-> If the load succeeds, then whoever is repeating the load decides
-> to stop.
+Hi Aaro,
 
-Or silently fails to load the module again for all online cpus.
+On 12/4/19 7:25 AM, Aaro Koskinen wrote:
+> Hi,
+> 
+> On Tue, Dec 03, 2019 at 05:09:48PM -0600, Thor Thayer wrote:
+>> On 11/29/19 10:57 AM, Aaro Koskinen wrote:
+>>> Hi,
+>>>
+>>> I tried booting v5.4 mainline kernel on a stratix10 board with ECC
+>>> disabled, and the altera-edac driver (with only SDRAM enabled) is
+>>> now crashing the system instead of failing the probe with "No ECC/ECC
+>>> disabled".
+>>>
+>> I apologize for the late reply. I was on vacation.
+>>
+>> ECC disabled means the sof/jic that you're loading has ECC disabled,
+>> correct?
+> 
+> Yes.
+> 
+>>> This seems to have started with commit 08f08bfb7b4c ("EDAC, altera:
+>>> Merge Stratix10 into the Arria10 SDRAM probe routine"). With the change,
+>>> looks like sdram probe no longer uses SMC calls and instead accesses
+>>> the registers directly. The crash looks like this:
+>>
+>> I haven't seen this. I'd expect both ECC enabled and disabled to fail with
+>> the dumps you have below since they'd both need to use the regmap functions.
+> 
+> With ECC enabled it doesn't fail, as the direct register access appears
+> to work then (I also checked by reading 0xf8011101 from userspace -
+> and it works without an abort).
+> 
+>> Yes, this does look like it is using the register accesses instead of the
+>> SMC call. Line 2206 sets the SMC call after determining from the if()
+>> statement if it is a Stratix10 or Arria10 and from below it seems to take
+>> the Arria10 path.
+> 
+> But that's setting the ecc_mgr_map. I think that altr_check_ecc_deps
+> and altr_sdram_probe use a different mapping. Before commit 08f08bfb7b4c
+> there was S10 specific altr_s10_sdram_probe() that took care of the SMC,
+> but I cannot see how the current code doing that unless I'm missing some
+> special magic.
+> 
+>> The altr_check_ecc_deps() call is checking whether ECC is enabled so the
+>> probe should fail.
+>>
+>> I suspect the device tree. Can you verify the following node is in your
+>> device tree?
+>>
+>> 	sdramedac {
+>> 		compatible = "altr,sdram-edac-s10";
+>> 		altr,sdr-syscon = <&sdr>;
+>> 		interrupts = <16 4>;
+>> 	};
+> 
+> Yes, I'm using the in-tree socfpga_stratix10.dtsi.
+> 
+> A.
+> 
+This appears to be a setup problem in U-Boot where U-Boot only allows 
+access to the ECC registers if ECC is enabled. However, the Linux EDAC 
+driver reads the ECC registers to determine if ECC is enabled or not.
 
---=20
-Aristeu
+A patch that always allows access to the ECC registers has been posted 
+to U-Boot.
+https://patchwork.ozlabs.org/patch/1205274/
+
+Thanks,
+
+Thor
 
