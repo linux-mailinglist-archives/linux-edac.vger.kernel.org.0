@@ -2,115 +2,84 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 213FB118F46
-	for <lists+linux-edac@lfdr.de>; Tue, 10 Dec 2019 18:49:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 05224119242
+	for <lists+linux-edac@lfdr.de>; Tue, 10 Dec 2019 21:40:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727565AbfLJRtZ (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Tue, 10 Dec 2019 12:49:25 -0500
-Received: from mga14.intel.com ([192.55.52.115]:31791 "EHLO mga14.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727520AbfLJRtZ (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Tue, 10 Dec 2019 12:49:25 -0500
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 10 Dec 2019 09:30:43 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.69,300,1571727600"; 
-   d="scan'208";a="215642261"
-Received: from tthayer-hp-z620.an.intel.com (HELO [10.122.105.146]) ([10.122.105.146])
-  by orsmga003.jf.intel.com with ESMTP; 10 Dec 2019 09:30:43 -0800
-Reply-To: thor.thayer@linux.intel.com
-Subject: Re: [Bisected] altera_edac crash on a system without ECC
-To:     Aaro Koskinen <aaro.koskinen@nokia.com>
-Cc:     linux-kernel@vger.kernel.org, linux-edac@vger.kernel.org
-References: <20191129165739.GA2583@ak-laptop.emea.nsn-net.net>
- <3bbd2890-ffcc-39df-8ab6-ecf72d92a006@linux.intel.com>
- <20191204132531.GA22600@ak-laptop.emea.nsn-net.net>
-From:   Thor Thayer <thor.thayer@linux.intel.com>
-Message-ID: <f9634662-23b0-7ec7-aed5-754bd5dc81b8@linux.intel.com>
-Date:   Tue, 10 Dec 2019 11:32:34 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        id S1726366AbfLJUkK (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Tue, 10 Dec 2019 15:40:10 -0500
+Received: from mout.kundenserver.de ([217.72.192.73]:50263 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725999AbfLJUkK (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Tue, 10 Dec 2019 15:40:10 -0500
+Received: from threadripper.lan ([149.172.19.189]) by mrelayeu.kundenserver.de
+ (mreue108 [212.227.15.145]) with ESMTPA (Nemesis) id
+ 1M8yoa-1ic30Q0886-0067ql; Tue, 10 Dec 2019 21:39:28 +0100
+From:   Arnd Bergmann <arnd@arndb.de>
+To:     Tony Luck <tony.luck@intel.com>, Borislav Petkov <bp@suse.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, x86@kernel.org,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>, "H. Peter Anvin" <hpa@zytor.com>,
+        bberg@redhat.com, ckellner@redhat.com, hdegoede@redhat.com,
+        linux-edac <linux-edac@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] x86/mce/therm_throt: mark throttle_active_work as __maybe_unused
+Date:   Tue, 10 Dec 2019 21:39:13 +0100
+Message-Id: <20191210203925.3119091-1-arnd@arndb.de>
+X-Mailer: git-send-email 2.20.0
 MIME-Version: 1.0
-In-Reply-To: <20191204132531.GA22600@ak-laptop.emea.nsn-net.net>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-Provags-ID: V03:K1:VvX2CPJbY4hvt8Tzl0Tk/uqCvbS1Yvswk4+Cz85uUFkxV5T1BHM
+ ptYXLp9GzAL5B48jbB/OZQjmM4pF6tydVOA/8xT0ZDukdRzHPPhAhE/8G49HHJwjKRpYKMX
+ tCfYneTIisbuZvIb/yLZTH7K0ULi4y0bmuVdO0aA+lGlzewu9wjKwOAcVZY8KnaDNhYLp/L
+ GybRisYFrTyuTLMvySKug==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:clbJ3G5bkOQ=:Y0JgssQH5r4ZQOMKi778tQ
+ m52mWP0VeKwN9oYY70RFsdcwX31HGcnBhTceSZwb48HFslraXHiGNPyfluReVKgEDM4iyZSTR
+ tUGR3CIL80Ydb/CqDqNQkPq4UuN55oaNDWculfJzM2oOgeCh82xE1VM/9mrfSA0SJDW5rNGM5
+ 0o0ZhTBVkc4Bt+m9EH9e5lhuJFfCpBZhRgwbOJBWbzLSp/+zVyPrD3Bec1tM1cvTIL/UTi5Hk
+ Oe4FuRXtXbZMc3LsqlWIbE6kgx11/ycgJYzeighOGW21mTeBulm/brSqWuOuo/ExVHO/pY9xh
+ GBnxzRk/7kYPlpLrJArHdt1QMqW8DkvgVqNebN7IqfTHJlxC1ij5RoZwF+xAAw0KwErhjT9Px
+ OWsd8t2o+BXRjDmHLxcwqTkhD+RloVnKz4ojnIZpuHHl9h4lGOyuVVcFeDRcV/Q5NwBsQcHT9
+ zPHjk6+hYdS7sezquiAFNVB1hfLX2k2C9vBUJ3m9b02IjTiXlcqeuVukXQElCMJtg6vNxlLlx
+ LZJTKsPeStIwZd8fdhGZxCGxGZaLiRGWVFnhP2s20c97kwQXa8M/rGQ0eB5rjpDhqpUshBdk2
+ CNHOJeu/KstDmVGtHBsCmDI4rVB0R1UXKqzRQT712Qzw/SiKXl0blYDpmHTBE3+oUJ5YMbLEF
+ unSnu2UFkX4AGd8wwyJ3KZK1RvZ7amjf3D6PCi0M7GbdycETTMu4QfsC/gAO97qL5y251h79h
+ B0WXEehB5uU3E5liM48pG83g2ixzPuQ3y7BDnExNJ17dANOC+ZMOLF+G+RDoyoGjK0oSkctcs
+ qo8n3rktf+O7S9fm0wWT5qSJa8ljCZxj/qQoTVYAa8LKH22twZwMwyVS/50EkMJIYsQvAkxVE
+ INDcHpuv/j+xlFhTXH5A==
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-Hi Aaro,
+throttle_active_work() is only called if CONFIG_SYSFS is set,
+otherwise we get a harmless warning:
 
-On 12/4/19 7:25 AM, Aaro Koskinen wrote:
-> Hi,
-> 
-> On Tue, Dec 03, 2019 at 05:09:48PM -0600, Thor Thayer wrote:
->> On 11/29/19 10:57 AM, Aaro Koskinen wrote:
->>> Hi,
->>>
->>> I tried booting v5.4 mainline kernel on a stratix10 board with ECC
->>> disabled, and the altera-edac driver (with only SDRAM enabled) is
->>> now crashing the system instead of failing the probe with "No ECC/ECC
->>> disabled".
->>>
->> I apologize for the late reply. I was on vacation.
->>
->> ECC disabled means the sof/jic that you're loading has ECC disabled,
->> correct?
-> 
-> Yes.
-> 
->>> This seems to have started with commit 08f08bfb7b4c ("EDAC, altera:
->>> Merge Stratix10 into the Arria10 SDRAM probe routine"). With the change,
->>> looks like sdram probe no longer uses SMC calls and instead accesses
->>> the registers directly. The crash looks like this:
->>
->> I haven't seen this. I'd expect both ECC enabled and disabled to fail with
->> the dumps you have below since they'd both need to use the regmap functions.
-> 
-> With ECC enabled it doesn't fail, as the direct register access appears
-> to work then (I also checked by reading 0xf8011101 from userspace -
-> and it works without an abort).
-> 
->> Yes, this does look like it is using the register accesses instead of the
->> SMC call. Line 2206 sets the SMC call after determining from the if()
->> statement if it is a Stratix10 or Arria10 and from below it seems to take
->> the Arria10 path.
-> 
-> But that's setting the ecc_mgr_map. I think that altr_check_ecc_deps
-> and altr_sdram_probe use a different mapping. Before commit 08f08bfb7b4c
-> there was S10 specific altr_s10_sdram_probe() that took care of the SMC,
-> but I cannot see how the current code doing that unless I'm missing some
-> special magic.
-> 
->> The altr_check_ecc_deps() call is checking whether ECC is enabled so the
->> probe should fail.
->>
->> I suspect the device tree. Can you verify the following node is in your
->> device tree?
->>
->> 	sdramedac {
->> 		compatible = "altr,sdram-edac-s10";
->> 		altr,sdr-syscon = <&sdr>;
->> 		interrupts = <16 4>;
->> 	};
-> 
-> Yes, I'm using the in-tree socfpga_stratix10.dtsi.
-> 
-> A.
-> 
-This appears to be a setup problem in U-Boot where U-Boot only allows 
-access to the ECC registers if ECC is enabled. However, the Linux EDAC 
-driver reads the ECC registers to determine if ECC is enabled or not.
+arch/x86/kernel/cpu/mce/therm_throt.c:238:13: error: 'throttle_active_work' defined but not used [-Werror=unused-function]
 
-A patch that always allows access to the ECC registers has been posted 
-to U-Boot.
-https://patchwork.ozlabs.org/patch/1205274/
+Mark the function as __maybe_unused to avoid the warning.
 
-Thanks,
+Fixes: f6656208f04e ("x86/mce/therm_throt: Optimize notifications of thermal throttle")
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+---
+ arch/x86/kernel/cpu/mce/therm_throt.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Thor
+diff --git a/arch/x86/kernel/cpu/mce/therm_throt.c b/arch/x86/kernel/cpu/mce/therm_throt.c
+index b38010b541d6..8963493a1e9e 100644
+--- a/arch/x86/kernel/cpu/mce/therm_throt.c
++++ b/arch/x86/kernel/cpu/mce/therm_throt.c
+@@ -235,7 +235,7 @@ static void get_therm_status(int level, bool *proc_hot, u8 *temp)
+ 	*temp = (msr_val >> 16) & 0x7F;
+ }
+ 
+-static void throttle_active_work(struct work_struct *work)
++static void __maybe_unused throttle_active_work(struct work_struct *work)
+ {
+ 	struct _thermal_state *state = container_of(to_delayed_work(work),
+ 						struct _thermal_state, therm_work);
+-- 
+2.20.0
 
