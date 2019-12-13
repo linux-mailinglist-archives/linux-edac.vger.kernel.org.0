@@ -2,145 +2,72 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0192411E056
-	for <lists+linux-edac@lfdr.de>; Fri, 13 Dec 2019 10:10:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8780A11E35E
+	for <lists+linux-edac@lfdr.de>; Fri, 13 Dec 2019 13:11:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726744AbfLMJKm (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Fri, 13 Dec 2019 04:10:42 -0500
-Received: from m228-5.mailgun.net ([159.135.228.5]:13674 "EHLO
-        m228-5.mailgun.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726029AbfLMJKm (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Fri, 13 Dec 2019 04:10:42 -0500
-X-Greylist: delayed 303 seconds by postgrey-1.27 at vger.kernel.org; Fri, 13 Dec 2019 04:10:41 EST
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1576228242; h=Message-ID: Subject: Cc: To: From: Date:
- Content-Transfer-Encoding: Content-Type: MIME-Version: Sender;
- bh=oiZ6N7do6DpLWyW7ai3fK8w8lB8Z4mhLsKqRpsecyYA=; b=jureJrE3jxfeIFaAsjWSl2poq0Ok6B7SBiOUddgtBRLAxYZT7FU/vdg7jaPGIfkURrZfqycP
- bfBbTjQRl0dk4DNNJiTH6hbc38kAwnwU+LQV6EQUK5cgqFfiSXYN3gDA4m9qR41pqIjiWhip
- Ku0SwKuMG6UjpMg2GFykj8EptfA=
-X-Mailgun-Sending-Ip: 159.135.228.5
-X-Mailgun-Sid: WyJlNGY0ZCIsICJsaW51eC1lZGFjQHZnZXIua2VybmVsLm9yZyIsICJiZTllNGEiXQ==
-Received: from smtp.codeaurora.org (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171])
- by mxa.mailgun.org with ESMTP id 5df35462.7f8b5ffcff48-smtp-out-n01;
- Fri, 13 Dec 2019 09:05:38 -0000 (UTC)
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 34568C447A6; Fri, 13 Dec 2019 09:05:36 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED
-        autolearn=unavailable autolearn_force=no version=3.4.0
-Received: from mail.codeaurora.org (localhost.localdomain [127.0.0.1])
-        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: saiprakash.ranjan)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 7D24FC43383;
-        Fri, 13 Dec 2019 09:05:35 +0000 (UTC)
+        id S1726717AbfLMMLO (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Fri, 13 Dec 2019 07:11:14 -0500
+Received: from szxga06-in.huawei.com ([45.249.212.32]:47600 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726867AbfLMMLO (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Fri, 13 Dec 2019 07:11:14 -0500
+Received: from DGGEMS404-HUB.china.huawei.com (unknown [172.30.72.60])
+        by Forcepoint Email with ESMTP id 95267D7B149C30DAA05A;
+        Fri, 13 Dec 2019 20:11:12 +0800 (CST)
+Received: from huawei.com (10.175.124.28) by DGGEMS404-HUB.china.huawei.com
+ (10.3.19.204) with Microsoft SMTP Server id 14.3.439.0; Fri, 13 Dec 2019
+ 20:11:03 +0800
+From:   yu kuai <yukuai3@huawei.com>
+To:     <bp@alien8.de>, <mchehab@kernel.org>, <tony.luck@intel.com>,
+        <james.morse@arm.com>, <rrichter@marvell.com>
+CC:     <yukuai3@huawei.com>, <zhengbin13@huawei.com>,
+        <yi.zhang@huawei.com>, <linux-edac@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH] EDAC: remove set but not used variable 'ecc_loc'
+Date:   Fri, 13 Dec 2019 20:10:36 +0800
+Message-ID: <20191213121036.8886-1-yukuai3@huawei.com>
+X-Mailer: git-send-email 2.17.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-Date:   Fri, 13 Dec 2019 14:35:35 +0530
-From:   Sai Prakash Ranjan <saiprakash.ranjan@codeaurora.org>
-To:     Evan Green <evgreen@chromium.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, Borislav Petkov <bp@alien8.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Tony Luck <tony.luck@intel.com>,
-        James Morse <james.morse@arm.com>,
-        Robert Richter <rrichter@marvell.com>,
-        linux-edac@vger.kernel.org,
-        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>, tsoni@codeaurora.org,
-        psodagud@codeaurora.org
-Subject: Re: [PATCH 2/2] drivers: edac: Add EDAC support for Kryo CPU caches
-Message-ID: <af73f8f15cfeb40746819e87b5a78b60@codeaurora.org>
-X-Sender: saiprakash.ranjan@codeaurora.org
-User-Agent: Roundcube Webmail/1.3.9
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.175.124.28]
+X-CFilter-Loop: Reflected
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-Hi Evan,
+Fixes gcc '-Wunused-but-set-variable' warning:
 
-Thanks for the review comments.
+drivers/edac/i5100_edac.c: In function ‘i5100_read_log’:
+drivers/edac/i5100_edac.c:489:11: warning: variable ‘ecc_loc’
+set but not used [-Wunused-but-set-variable]
 
-On 2019-12-12 01:02, Evan Green wrote:
-> 
-> No name?
-> 
+Signed-off-by: yu kuai <yukuai3@huawei.com>
+---
+ drivers/edac/i5100_edac.c | 2 --
+ 1 file changed, 2 deletions(-)
 
-Will add them in next spin.
-
-> 
-> A comment is warranted to indicate that err_type is indexed by the
-> enum, as this would be easy to mess up in later changes.
-> 
-
-Will use array index as suggested by Stephen.
-
->> +static const char *get_error_msg(u64 errxstatus)
->> +{
->> +       const struct error_record *rec;
->> +       u32 errxstatus_serr;
->> +
->> +       errxstatus_serr = FIELD_GET(KRYO_ERRXSTATUS_SERR, errxstatus);
->> +
->> +       for (rec = serror_record; rec->error_code; rec++) {
-> 
-> It looks like you expect the table to be zero terminated, but it's
-> not. Add the missing zero entry.
-> 
-
-Will add it.
-
->> +
->> +static inline void kryo_clear_error(u64 errxstatus)
->> +{
->> +       write_sysreg_s(errxstatus, SYS_ERXSTATUS_EL1);
->> +       isb();
-> 
-> Is the isb() necessary? If so, why not a dsb as well?
-> 
-
-We usually use isb() with cache and system control registers.
-I do not see anything about isb or dsb mentioned in the TRM
-for error record registers so it's probably OK to remove this.
-James can help us here.
-
->> +
->> +static void kryo_check_l1_l2_ecc(void *info)
->> +{
->> +       struct edac_device_ctl_info *edev_ctl = info;
->> +       u64 errxstatus;
->> +       u64 errxmisc;
->> +       int cpu;
->> +
->> +       cpu = smp_processor_id();
->> +       /* We know record 0 is L1 and L2 */
->> +       write_sysreg_s(0, SYS_ERRSELR_EL1);
->> +       isb();
-> 
-> Another isb I'm not sure about. Is this meant to provide a barrier
-> between ERRSELR and ERXSTATUS? Wouldn't that be dsb, not isb?
-> 
-
-Same as above.
-
-I will repost with your comments addressed once I get more feedbacks 
-from EDAC maintainers.
-
-Thanks,
-Sai
-
+diff --git a/drivers/edac/i5100_edac.c b/drivers/edac/i5100_edac.c
+index 0ddc41e47a96..a7ccf7b13619 100644
+--- a/drivers/edac/i5100_edac.c
++++ b/drivers/edac/i5100_edac.c
+@@ -486,7 +486,6 @@ static void i5100_read_log(struct mem_ctl_info *mci, int chan,
+ 	u32 dw;
+ 	u32 dw2;
+ 	unsigned syndrome = 0;
+-	unsigned ecc_loc = 0;
+ 	unsigned merr;
+ 	unsigned bank;
+ 	unsigned rank;
+@@ -499,7 +498,6 @@ static void i5100_read_log(struct mem_ctl_info *mci, int chan,
+ 		pci_read_config_dword(pdev, I5100_REDMEMA, &dw2);
+ 		syndrome = dw2;
+ 		pci_read_config_dword(pdev, I5100_REDMEMB, &dw2);
+-		ecc_loc = i5100_redmemb_ecc_locator(dw2);
+ 	}
+ 
+ 	if (i5100_validlog_recmemvalid(dw)) {
 -- 
-QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a 
-member
-of Code Aurora Forum, hosted by The Linux Foundation
+2.17.2
+
