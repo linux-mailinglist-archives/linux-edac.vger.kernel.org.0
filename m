@@ -2,110 +2,80 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AC2BC1204A5
-	for <lists+linux-edac@lfdr.de>; Mon, 16 Dec 2019 13:02:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D0B0121020
+	for <lists+linux-edac@lfdr.de>; Mon, 16 Dec 2019 17:52:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727519AbfLPMBx (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Mon, 16 Dec 2019 07:01:53 -0500
-Received: from bombadil.infradead.org ([198.137.202.133]:57470 "EHLO
-        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727491AbfLPMBx (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Mon, 16 Dec 2019 07:01:53 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
-        Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Subject:Cc:To:
-        From:Date:Sender:Reply-To:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=QCchVxwhDIlyJ8ge76Gr1ecOebbrwILZYooDEBWLIGc=; b=eh1DnYImVtZ9r4XF5/1qMxyHy
-        J7GWZy00VzyNVtffmTNC+Fuo8vAi4Z+maSSwE9pBk5NIDLiqVbt/uL6pxi9VCyoJm4jqX0GtZ99Fy
-        6vDuyXZZpYRd9jcKOHCbNIUl62Rn8eqW194U7q7rFlTZw3I36JUl01YAwlQju3uLWD7CKINlq4Xwt
-        ww9wgbMqzNj0OOSL+Bk1v9xzTu6qo7xcRya3nIqq+elQj/F+jwn3+BxQ8SmChXIxTOvsMG58KjL/K
-        hN7WfBHITznikQJSR0GszRKFQZlIwSepmfrlp/E6ysU5gksy757cI1rlqWVUytUdAgfDVyWtG+4S8
-        PcXisK1pw==;
-Received: from x2f7f823.dyn.telefonica.de ([2.247.248.35] helo=localhost)
-        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1igp4B-0000TG-A4; Mon, 16 Dec 2019 12:01:35 +0000
-Date:   Mon, 16 Dec 2019 13:01:30 +0100
-From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-To:     yu kuai <yukuai3@huawei.com>
-Cc:     <bp@alien8.de>, <tony.luck@intel.com>, <james.morse@arm.com>,
-        <rrichter@marvell.com>, <yi.zhang@huawei.com>,
-        <zhengbin13@huawei.com>, <linux-edac@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH V2] EDAC: remove set but not used variable 'ecc_loc'
-Message-ID: <20191216130130.1d7ff030@kernel.org>
-In-Reply-To: <20191216110121.46698-1-yukuai3@huawei.com>
-References: <20191216110121.46698-1-yukuai3@huawei.com>
-X-Mailer: Claws Mail 3.17.4 (GTK+ 2.24.32; x86_64-redhat-linux-gnu)
+        id S1726263AbfLPQwP (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Mon, 16 Dec 2019 11:52:15 -0500
+Received: from mail.skyhub.de ([5.9.137.197]:49220 "EHLO mail.skyhub.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726133AbfLPQwP (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Mon, 16 Dec 2019 11:52:15 -0500
+Received: from zn.tnic (p200300EC2F07BC00D0F2C92C76B3ABC9.dip0.t-ipconnect.de [IPv6:2003:ec:2f07:bc00:d0f2:c92c:76b3:abc9])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 565DC1EC090E;
+        Mon, 16 Dec 2019 17:52:13 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1576515133;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=wTN5rkr1NDxJwl1jtHOEhLLQszADtXK6VHUxDJWHbik=;
+        b=WoEmvkXLmtDlSQxqinPwGvHMEIW4BoPlxoNcloeK673uGUlZnUVWT/a63YEDjK4htuUf9j
+        9xZZfKwIXx4HXpQEnYPuT2tabFtpt3b0HvfYOHcXFYRSYUW+XnWCnEn8O66N0wpP+KXliY
+        UheBTdTrRe0QDl+nVIP/cHCZODNVq1E=
+Date:   Mon, 16 Dec 2019 17:52:07 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Jan =?utf-8?Q?H=2E_Sch=C3=B6nherr?= <jschoenh@amazon.de>,
+        Yazen Ghannam <yazen.ghannam@amd.com>
+Cc:     "Luck, Tony" <tony.luck@intel.com>, linux-edac@vger.kernel.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, x86@kernel.org
+Subject: Re: [PATCH 0/6] x86/mce: Various fixes and cleanups for MCE handling
+Message-ID: <20191216165207.GC17380@zn.tnic>
+References: <20191210000733.17979-1-jschoenh@amazon.de>
+ <20191211002519.GA30513@agluck-desk2.amr.corp.intel.com>
+ <d8e11387-c84a-f333-7ea5-f9043af6375e@amazon.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <d8e11387-c84a-f333-7ea5-f9043af6375e@amazon.de>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-Em Mon, 16 Dec 2019 19:01:21 +0800
-yu kuai <yukuai3@huawei.com> escreveu:
+On Thu, Dec 12, 2019 at 01:25:31PM +0100, Jan H. Schönherr wrote:
+> This and names like "uncorrected_memory_error_notifier()" seem to imply
+> a wider scope than the function actually has. That brings me to another
+> question: should the scope be wider?
+> 
+> Instead of filtering for usable addresses and specific severities, we
+> could for example filter for (similar to cec_add_mce()):
+> 
+>   mce_is_memory_error(m) &&
+>   !mce_is_correctable(m) &&
+>   mce_usable_address(m)
 
-> Fixes gcc '-Wunused-but-set-variable' warning:
->=20
-> drivers/edac/i5100_edac.c: In function =E2=80=98i5100_read_log=E2=80=99:
-> drivers/edac/i5100_edac.c:489:11: warning: variable =E2=80=98ecc_loc=E2=
-=80=99
-> set but not used [-Wunused-but-set-variable]
->=20
-> It is never used, and so can be removed.
-> Signed-off-by: yu kuai <yukuai3@huawei.com>
-> ---
-> changes in V2
-> -remove the definition of the function i5100_redmemb_ecc_locator()
+There's a comment above that code which says what that function wants:
 
-Sounds ok on my eyes.
+	/* We eat only correctable DRAM errors with usable addresses. */
 
-Reviewed-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+> Would that make sense? Or does that violate anything, that I'm not aware of?
 
->  drivers/edac/i5100_edac.c | 7 -------
->  1 file changed, 7 deletions(-)
->=20
-> diff --git a/drivers/edac/i5100_edac.c b/drivers/edac/i5100_edac.c
-> index 0ddc41e47a96..191aa7c19ded 100644
-> --- a/drivers/edac/i5100_edac.c
-> +++ b/drivers/edac/i5100_edac.c
-> @@ -259,11 +259,6 @@ static inline u32 i5100_nrecmemb_ras(u32 a)
->  	return a & ((1 << 16) - 1);
->  }
-> =20
-> -static inline u32 i5100_redmemb_ecc_locator(u32 a)
-> -{
-> -	return a & ((1 << 18) - 1);
-> -}
-> -
->  static inline u32 i5100_recmema_merr(u32 a)
->  {
->  	return i5100_nrecmema_merr(a);
-> @@ -486,7 +481,6 @@ static void i5100_read_log(struct mem_ctl_info *mci, =
-int chan,
->  	u32 dw;
->  	u32 dw2;
->  	unsigned syndrome =3D 0;
-> -	unsigned ecc_loc =3D 0;
->  	unsigned merr;
->  	unsigned bank;
->  	unsigned rank;
-> @@ -499,7 +493,6 @@ static void i5100_read_log(struct mem_ctl_info *mci, =
-int chan,
->  		pci_read_config_dword(pdev, I5100_REDMEMA, &dw2);
->  		syndrome =3D dw2;
->  		pci_read_config_dword(pdev, I5100_REDMEMB, &dw2);
-> -		ecc_loc =3D i5100_redmemb_ecc_locator(dw2);
->  	}
-> =20
->  	if (i5100_validlog_recmemvalid(dw)) {
+So this should be a decision of the two CPU vendors basically answering
+the question: for which error severities you want the kernel to poison
+pages?
 
+Basically a question for Tony and Yazen. CCed.
 
+-- 
+Regards/Gruss,
+    Boris.
 
-
-Cheers,
-Mauro
+https://people.kernel.org/tglx/notes-about-netiquette
