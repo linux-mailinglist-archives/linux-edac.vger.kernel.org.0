@@ -2,93 +2,83 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CB22124B20
-	for <lists+linux-edac@lfdr.de>; Wed, 18 Dec 2019 16:14:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 68D4F1256BC
+	for <lists+linux-edac@lfdr.de>; Wed, 18 Dec 2019 23:31:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727367AbfLRPOC (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Wed, 18 Dec 2019 10:14:02 -0500
-Received: from mail-il1-f196.google.com ([209.85.166.196]:45756 "EHLO
-        mail-il1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727193AbfLRPNy (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Wed, 18 Dec 2019 10:13:54 -0500
-Received: by mail-il1-f196.google.com with SMTP id p8so1952599iln.12
-        for <linux-edac@vger.kernel.org>; Wed, 18 Dec 2019 07:13:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=R9l9mbjTMtC+3agOxuj88vgGSGUSi1shzIvbtHPQHDA=;
-        b=Q3vp2fJ40VWpq9rX2ikiWTUrhuiQJXzCeUu43e1oIIOk8rzGCPMljco+W3g3Sdt7mK
-         0zMp27lNXT81ott0dYeyE6wCdI4c1wfi5qCqRmoGIMvdtgle/6NMWI0GJrkD30CBojRq
-         hZbdgtbn9F/6uhvfSLkMdN7NhUpQoMVScRn9uDFKZJxofy0MWDF6kZw53YXeVt8sjWjA
-         Dd9TBzj4Ogplv/txGap2r0I252pQP7l7XSY4YOVhZ7qL539zlqhtO9W4mad505PIZ9Xp
-         yYy+XyL34oyC2pvEIWTDP8EMj+Gj6Cu0eHyc7GTPTD7Enq1rjLHU3JyAyX8LQzaLW/WP
-         +a+A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=R9l9mbjTMtC+3agOxuj88vgGSGUSi1shzIvbtHPQHDA=;
-        b=tRopEK5wg+IrAQVDgfWzqiW9uXGGDZtoDmclFDTbYf4fW8n60kSLsWlNVvd71eipE+
-         8hY9GFDgUHZgFkHzvJKa2C19r2Qf20Wetyj6xP4L7aw7c4aL7vE0qH7Le5040OrkncXW
-         vLkD4pLaKhkAge1QTb6MActYehoPQCToAqGFvIxEgV3vi4sqw4qyFDKHcdtUvgqO3lIT
-         8V5+TwU4Xya6vzQhilnEXFBOLdkB8CSrMMEmwc6OzPvTCKoyx/SRQ2Bofekn/BtBifZ9
-         2xQvgzNEozegZCY80QYbx73z88sAabRIgVpTtcxQAUNqiA2UuMymSfqR7b+g5OQvfWuq
-         dJMw==
-X-Gm-Message-State: APjAAAX+BCIepmvExMkr0MNL39vui/B97MrBmmzVkB/lXxkNpAawecRq
-        mxq/CPzsNJKh/08/U3bedoGLSKnzjb5t1wc/8g==
-X-Google-Smtp-Source: APXvYqzpDMY1kfzvQTGFYFDuSf5Wkv4RFsY3uCP+mpqq6wLn7kqjCTzLCYufYBbbmMCBsVo5PHwr9dpQEEDI7K8RY00=
-X-Received: by 2002:a92:cc90:: with SMTP id x16mr2363556ilo.269.1576682033220;
- Wed, 18 Dec 2019 07:13:53 -0800 (PST)
-MIME-Version: 1.0
-Received: by 2002:a02:6603:0:0:0:0:0 with HTTP; Wed, 18 Dec 2019 07:13:52
- -0800 (PST)
-Reply-To: dhl.expresscourier102156@outlook.fr
-From:   "MS. MARYANNA B. THOMASON" <info.zennitbankplcnigerian@gmail.com>
-Date:   Wed, 18 Dec 2019 16:13:52 +0100
-Message-ID: <CABHzvrnY8Lhdw4Y2q97jvAVrRpM9CVLFkw=Ved7y1GhGqHiAdw@mail.gmail.com>
-Subject: I WANT TO YOU TO TREAT THIS EMAIL VERY URGENT
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        id S1726540AbfLRWbR (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Wed, 18 Dec 2019 17:31:17 -0500
+Received: from new4-smtp.messagingengine.com ([66.111.4.230]:53391 "EHLO
+        new4-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726463AbfLRWbR (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>);
+        Wed, 18 Dec 2019 17:31:17 -0500
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailnew.nyi.internal (Postfix) with ESMTP id 239BD1E0B;
+        Wed, 18 Dec 2019 17:31:14 -0500 (EST)
+Received: from imap2 ([10.202.2.52])
+  by compute4.internal (MEProxy); Wed, 18 Dec 2019 17:31:14 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=aj.id.au; h=
+        mime-version:message-id:in-reply-to:references:date:from:to:cc
+        :subject:content-type; s=fm1; bh=Lzyvf/oAweCjZ5qIV56uJI0Ozerep15
+        7X4x8VBFaL2w=; b=fgkh+Wd1faRZ80tV79SqEgiqfO47hlCbRGjvMXW/tF7jki9
+        WynI1IF7nJLBpyfFNBrs5kB/iD9B1kZ4Zct/KVqlmhAjbOmezDRIj68BgFn9cKrO
+        6zVbHOITS5uYfxQbYW64M2VcaKodkAdmf+8kBkA/mm8cEojiNaJ0rBJMWyM5iOrA
+        cQ32L48NZETL5UM0mGXuk5qtld06H6KvTLd/QRZEBWK2uUjG/fMq3afcmeP2Ih1F
+        6wwQweBoXijypJ+cC4RH5UgCYG4mCFKK+XeG8mS/OMQRoqwSejkVoevxOJ5J8BBd
+        yxNpuEGrb4n1BnHbYP8kBZFKKwJAzpuZRUsVhCg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-type:date:from:in-reply-to
+        :message-id:mime-version:references:subject:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=Lzyvf/
+        oAweCjZ5qIV56uJI0Ozerep157X4x8VBFaL2w=; b=Ag20xibjqHXMkA9a8aMYoI
+        ymKmoMLALOwuT3RPU4NmvqWfucAiAItau1LrU6oqlFu5Yx7AnxaOgXYQMK83j5BD
+        Xi1ou27OAwT6EHUZYDWbaBwW7nB4IMXpjyYFK81CtGRS9SggF7BweRFMTXZKLofv
+        kCqCYoxzUG30G17iZ0lyC3lAIjCUrYlFLS1vUlnyAANTVhmi+s5Alwy696plDaFd
+        E0C+9w7DORjvdmRgIErOl5NlfrXWfyzy0F1IucCKgW3Xu4ij9y72lfbNNZK4AuLs
+        upfQ+Wh+GcQNPNLmDWGZvMamMOwyk6GpA6Q+MIAHaYL0ghXKPB5vJHWjuphfW6rQ
+        ==
+X-ME-Sender: <xms:rqj6XfEXRl9AX1MZQR9DICsNKazBcDuTVlw-GrXsNQfmXGJubEBsiA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedufedrvddtledgudehkecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpefofgggkfgjfhffhffvufgtsehttdertderredtnecuhfhrohhmpedftehn
+    ughrvgifucflvghffhgvrhihfdcuoegrnhgurhgvfiesrghjrdhiugdrrghuqeenucfrrg
+    hrrghmpehmrghilhhfrhhomheprghnughrvgifsegrjhdrihgurdgruhenucevlhhushht
+    vghrufhiiigvpedt
+X-ME-Proxy: <xmx:rqj6Xfa4-8pcRXygko6cwYT0kJmFx7aETOpInZFh_-vM2nBcvhtrvA>
+    <xmx:rqj6XbycQMjEhwpDN8jUPmY8f2_5AiuUjH9h8oL23BayYpp2vVsdAA>
+    <xmx:rqj6XZQbpq4QZV3aBoG8HOYeycBGUTb1k2zNIIiwFumDcPWv7qe7GQ>
+    <xmx:sqj6XXWAf5MO83LJorjEsG5NKdLUN_wd55TeemMVrtKwttyCxseetw>
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id CAC89E00A3; Wed, 18 Dec 2019 17:31:10 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.1.7-694-gd5bab98-fmstable-20191218v1
+Mime-Version: 1.0
+Message-Id: <524f6f1c-c32d-498b-b835-ae01c338a7e2@www.fastmail.com>
+In-Reply-To: <1576648806-1114-1-git-send-email-vulab@iscas.ac.cn>
+References: <1576648806-1114-1-git-send-email-vulab@iscas.ac.cn>
+Date:   Thu, 19 Dec 2019 09:02:53 +1030
+From:   "Andrew Jeffery" <andrew@aj.id.au>
+To:     "Xu Wang" <vulab@iscas.ac.cn>,
+        "Stefan M Schaeckeler" <sschaeck@cisco.com>,
+        "Borislav Petkov" <bp@alien8.de>,
+        "Mauro Carvalho Chehab" <mchehab@kernel.org>, tony.luck@intel.com,
+        "James Morse" <james.morse@arm.com>, rrichter@marvell.com,
+        "Joel Stanley" <joel@jms.id.au>
+Cc:     linux-edac@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] EDAC: aspeed: Remove unneeded semicolon
+Content-Type: text/plain
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-Attn Dear.
 
-Urgent delivery Notification of your ATM MASTER CARD, Dhl-Benin is
-ready for delivery of your ATM Master card worth $15.800=E2=80=99000=E2=80=
-=9900, as
-approved this morning, Date, 18/12/2019. Through the Intruction from
-INTERNATIONAL MONETARY FUNDS, I.M.F official Directors.
 
-REGISTRATION NO :EG58945
-PARCEL NUMBER: 140479
-Delivery Schuleded now,
-Finally all we required from you is your ATM Card Proccessing Delivery
-fees $19.00 only which you must send to this DHL service to enable us
-dispatch the parcel to your destination today.
+On Wed, 18 Dec 2019, at 16:30, Xu Wang wrote:
+> Remove unneeded semicolon reported by coccinelle.
+> 
+> Signed-off-by: Xu Wang <vulab@iscas.ac.cn>
 
-Here is our receiving payment details.
-You are advised to send it Via Money Gram Service.
-
-Receiver's Name--------Alan Ude
-Country-------Benin Republic.
-City/ Address--------Cotonou
-Test Question--------In God
-Answer-------We Trust
-Amount------------$US19.00 only
-Mtcn-------------
-Sender's Name-------
-
-Your delivery  ATM card worth $15.800=E2=80=99000=E2=80=9900,
-Is Due for delivery to your address today upon confirmation of
-required fee from you asap.
-
-Call us on this phone number for any inquiry. +229 62819378
-Awaiting your urgent response.
-
-MS. MARYANNA B. THOMASON, Shipment director, DHL Express
-Courier Company-Benin
+Acked-by: Andrew Jeffery <andrew@aj.id.au>
