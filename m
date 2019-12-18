@@ -2,83 +2,171 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 68D4F1256BC
-	for <lists+linux-edac@lfdr.de>; Wed, 18 Dec 2019 23:31:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 071801257D5
+	for <lists+linux-edac@lfdr.de>; Thu, 19 Dec 2019 00:37:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726540AbfLRWbR (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Wed, 18 Dec 2019 17:31:17 -0500
-Received: from new4-smtp.messagingengine.com ([66.111.4.230]:53391 "EHLO
-        new4-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726463AbfLRWbR (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>);
-        Wed, 18 Dec 2019 17:31:17 -0500
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailnew.nyi.internal (Postfix) with ESMTP id 239BD1E0B;
-        Wed, 18 Dec 2019 17:31:14 -0500 (EST)
-Received: from imap2 ([10.202.2.52])
-  by compute4.internal (MEProxy); Wed, 18 Dec 2019 17:31:14 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=aj.id.au; h=
-        mime-version:message-id:in-reply-to:references:date:from:to:cc
-        :subject:content-type; s=fm1; bh=Lzyvf/oAweCjZ5qIV56uJI0Ozerep15
-        7X4x8VBFaL2w=; b=fgkh+Wd1faRZ80tV79SqEgiqfO47hlCbRGjvMXW/tF7jki9
-        WynI1IF7nJLBpyfFNBrs5kB/iD9B1kZ4Zct/KVqlmhAjbOmezDRIj68BgFn9cKrO
-        6zVbHOITS5uYfxQbYW64M2VcaKodkAdmf+8kBkA/mm8cEojiNaJ0rBJMWyM5iOrA
-        cQ32L48NZETL5UM0mGXuk5qtld06H6KvTLd/QRZEBWK2uUjG/fMq3afcmeP2Ih1F
-        6wwQweBoXijypJ+cC4RH5UgCYG4mCFKK+XeG8mS/OMQRoqwSejkVoevxOJ5J8BBd
-        yxNpuEGrb4n1BnHbYP8kBZFKKwJAzpuZRUsVhCg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-type:date:from:in-reply-to
-        :message-id:mime-version:references:subject:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=Lzyvf/
-        oAweCjZ5qIV56uJI0Ozerep157X4x8VBFaL2w=; b=Ag20xibjqHXMkA9a8aMYoI
-        ymKmoMLALOwuT3RPU4NmvqWfucAiAItau1LrU6oqlFu5Yx7AnxaOgXYQMK83j5BD
-        Xi1ou27OAwT6EHUZYDWbaBwW7nB4IMXpjyYFK81CtGRS9SggF7BweRFMTXZKLofv
-        kCqCYoxzUG30G17iZ0lyC3lAIjCUrYlFLS1vUlnyAANTVhmi+s5Alwy696plDaFd
-        E0C+9w7DORjvdmRgIErOl5NlfrXWfyzy0F1IucCKgW3Xu4ij9y72lfbNNZK4AuLs
-        upfQ+Wh+GcQNPNLmDWGZvMamMOwyk6GpA6Q+MIAHaYL0ghXKPB5vJHWjuphfW6rQ
-        ==
-X-ME-Sender: <xms:rqj6XfEXRl9AX1MZQR9DICsNKazBcDuTVlw-GrXsNQfmXGJubEBsiA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedufedrvddtledgudehkecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefofgggkfgjfhffhffvufgtsehttdertderredtnecuhfhrohhmpedftehn
-    ughrvgifucflvghffhgvrhihfdcuoegrnhgurhgvfiesrghjrdhiugdrrghuqeenucfrrg
-    hrrghmpehmrghilhhfrhhomheprghnughrvgifsegrjhdrihgurdgruhenucevlhhushht
-    vghrufhiiigvpedt
-X-ME-Proxy: <xmx:rqj6Xfa4-8pcRXygko6cwYT0kJmFx7aETOpInZFh_-vM2nBcvhtrvA>
-    <xmx:rqj6XbycQMjEhwpDN8jUPmY8f2_5AiuUjH9h8oL23BayYpp2vVsdAA>
-    <xmx:rqj6XZQbpq4QZV3aBoG8HOYeycBGUTb1k2zNIIiwFumDcPWv7qe7GQ>
-    <xmx:sqj6XXWAf5MO83LJorjEsG5NKdLUN_wd55TeemMVrtKwttyCxseetw>
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id CAC89E00A3; Wed, 18 Dec 2019 17:31:10 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.1.7-694-gd5bab98-fmstable-20191218v1
-Mime-Version: 1.0
-Message-Id: <524f6f1c-c32d-498b-b835-ae01c338a7e2@www.fastmail.com>
-In-Reply-To: <1576648806-1114-1-git-send-email-vulab@iscas.ac.cn>
-References: <1576648806-1114-1-git-send-email-vulab@iscas.ac.cn>
-Date:   Thu, 19 Dec 2019 09:02:53 +1030
-From:   "Andrew Jeffery" <andrew@aj.id.au>
-To:     "Xu Wang" <vulab@iscas.ac.cn>,
-        "Stefan M Schaeckeler" <sschaeck@cisco.com>,
-        "Borislav Petkov" <bp@alien8.de>,
-        "Mauro Carvalho Chehab" <mchehab@kernel.org>, tony.luck@intel.com,
-        "James Morse" <james.morse@arm.com>, rrichter@marvell.com,
-        "Joel Stanley" <joel@jms.id.au>
-Cc:     linux-edac@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] EDAC: aspeed: Remove unneeded semicolon
-Content-Type: text/plain
+        id S1726609AbfLRXhR (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Wed, 18 Dec 2019 18:37:17 -0500
+Received: from mail-ot1-f65.google.com ([209.85.210.65]:36505 "EHLO
+        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726463AbfLRXhR (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Wed, 18 Dec 2019 18:37:17 -0500
+Received: by mail-ot1-f65.google.com with SMTP id w1so4607351otg.3;
+        Wed, 18 Dec 2019 15:37:16 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=rVq3FctMUlxxbFCAv4Hq3F1IucA62kHuaSw0yCHlOq8=;
+        b=beH6OFUWr5JKlMtvSveZhc4RtA5nbTOiRLI19KLI8OXc7pE5AdYZK1D+eNZ3/LUV5c
+         nMLWAx+I7VSTSn4ycvSFbqCuTfP95CwiC2FZhd2i8EfYpIHSz+bhzW/tCJaec3qGvvsI
+         ++XTzSgYa5teSPCfd0Snf0wVBw2k2+S3a4VhWJMXgbzhsu1kiLUnxEP6N6EEpA29iess
+         OKPeJVpM2C4p9v0+CQBnY0WaM7ZcSSQcivKQllDFJbkQVbIvWYz6XAsZ2UCglkAGnM/l
+         ggWoikGUEVjfBRjIa+oyokyA+zZcQhKpU9bCxKjqwYDJrKGj5T+BxSm76t0OXeTYFlhG
+         mrzg==
+X-Gm-Message-State: APjAAAUEYegaIh3iDUR6LCxmvTU/isEeOkh2xZAGI3L+FhmfAhtArURa
+        aDWM2Sngm2SOb4Kdpz9GWA==
+X-Google-Smtp-Source: APXvYqyPh+4IInW14BHCfGHQzEnJR270O8hYZIX77r6+KeTYekhQCeI3drPFmDyVwEvselhJDCNYTg==
+X-Received: by 2002:a9d:2482:: with SMTP id z2mr5197001ota.279.1576712236059;
+        Wed, 18 Dec 2019 15:37:16 -0800 (PST)
+Received: from localhost (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id c12sm1358241oic.27.2019.12.18.15.37.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 18 Dec 2019 15:37:15 -0800 (PST)
+Date:   Wed, 18 Dec 2019 17:37:14 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Sai Prakash Ranjan <saiprakash.ranjan@codeaurora.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        devicetree@vger.kernel.org, Borislav Petkov <bp@alien8.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Tony Luck <tony.luck@intel.com>,
+        James Morse <james.morse@arm.com>,
+        Robert Richter <rrichter@marvell.com>,
+        linux-edac@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        Stephen Boyd <swboyd@chromium.org>,
+        Evan Green <evgreen@chromium.org>, tsoni@codeaurora.org,
+        psodagud@codeaurora.org
+Subject: Re: [PATCH 1/2] dt-bindings: edac: Add DT bindings for Kryo EDAC
+Message-ID: <20191218233714.GA30302@bogus>
+References: <cover.1575529553.git.saiprakash.ranjan@codeaurora.org>
+ <0101016ed57a3259-eee09e9e-e99a-40f1-ab1c-63e58a42615c-000000@us-west-2.amazonses.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <0101016ed57a3259-eee09e9e-e99a-40f1-ab1c-63e58a42615c-000000@us-west-2.amazonses.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-
-
-On Wed, 18 Dec 2019, at 16:30, Xu Wang wrote:
-> Remove unneeded semicolon reported by coccinelle.
+On Thu, Dec 05, 2019 at 09:53:05AM +0000, Sai Prakash Ranjan wrote:
+> This adds DT bindings for Kryo EDAC implemented with RAS
+> extensions on KRYO{3,4}XX CPU cores for reporting of cache
+> errors.
 > 
-> Signed-off-by: Xu Wang <vulab@iscas.ac.cn>
+> Signed-off-by: Sai Prakash Ranjan <saiprakash.ranjan@codeaurora.org>
+> ---
+>  .../bindings/edac/qcom-kryo-edac.yaml         | 67 +++++++++++++++++++
+>  1 file changed, 67 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/edac/qcom-kryo-edac.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/edac/qcom-kryo-edac.yaml b/Documentation/devicetree/bindings/edac/qcom-kryo-edac.yaml
+> new file mode 100644
+> index 000000000000..1a39429a73b4
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/edac/qcom-kryo-edac.yaml
+> @@ -0,0 +1,67 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/edac/qcom-kryo-edac.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Kryo Error Detection and Correction(EDAC)
+> +
+> +maintainers:
+> +  - Sai Prakash Ranjan <saiprakash.ranjan@codeaurora.org>
+> +
+> +description: |
+> +  Kryo EDAC is defined to describe on-chip error detection and correction
+> +  for the Kryo CPU cores which implement RAS extensions. It will report
+> +  all Single Bit Errors and Double Bit Errors found in L1/L2 caches in
+> +  in two registers ERXSTATUS_EL1 and ERXMISC0_EL1. L3-SCU cache errors
+> +  are reported in ERR1STATUS and ERR1MISC0 registers.
+> +    ERXSTATUS_EL1 - Selected Error Record Primary Status Register, EL1
+> +    ERXMISC0_EL1 - Selected Error Record Miscellaneous Register 0, EL1
+> +    ERR1STATUS - Error Record Primary Status Register
+> +    ERR1MISC0 - Error Record Miscellaneous Register 0
+> +  Current implementation of Kryo ECC(Error Correcting Code) mechanism is
+> +  based on interrupts.
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - qcom,kryo-edac
+> +
+> +  interrupts:
+> +    minItems: 1
+> +    maxItems: 4
+> +    items:
+> +      - description: l1-l2 cache faultirq interrupt
+> +      - description: l1-l2 cache errirq interrupt
+> +      - description: l3-scu cache errirq interrupt
+> +      - description: l3-scu cache faultirq interrupt
+> +
+> +  interrupt-names:
+> +    minItems: 1
+> +    maxItems: 4
 
-Acked-by: Andrew Jeffery <andrew@aj.id.au>
+You are saying only these combinations are valid:
+
+l1-l2-faultirq
+
+l1-l2-faultirq
+l1-l2-errirq
+
+l1-l2-faultirq
+l1-l2-errirq
+l3-scu-errirq
+
+l1-l2-faultirq
+l1-l2-errirq
+l3-scu-errirq
+l3-scu-faultirq
+
+Is that your intent?
+
+> +    items:
+> +      - const: l1-l2-faultirq
+> +      - const: l1-l2-errirq
+> +      - const: l3-scu-errirq
+> +      - const: l3-scu-faultirq
+> +
+> +required:
+> +  - compatible
+> +  - interrupts
+> +  - interrupt-names
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+> +
+> +    kryo_edac {
+> +      compatible = "qcom,kryo-edac";
+> +      interrupts = <GIC_PPI 6 IRQ_TYPE_LEVEL_HIGH>,
+> +                   <GIC_PPI 7 IRQ_TYPE_LEVEL_HIGH>,
+> +                   <GIC_SPI 34 IRQ_TYPE_LEVEL_HIGH>,
+> +                   <GIC_SPI 35 IRQ_TYPE_LEVEL_HIGH>;
+> +      interrupt-names = "l1-l2-faultirq",
+> +                        "l1-l2-errirq",
+> +                        "l3-scu-errirq",
+> +                        "l3-scu-faultirq";
+> +    };
+> -- 
+> QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member
+> of Code Aurora Forum, hosted by The Linux Foundation
+> 
