@@ -2,95 +2,125 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DA9A124003
-	for <lists+linux-edac@lfdr.de>; Wed, 18 Dec 2019 08:04:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A89351245C0
+	for <lists+linux-edac@lfdr.de>; Wed, 18 Dec 2019 12:28:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726545AbfLRHEP (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Wed, 18 Dec 2019 02:04:15 -0500
-Received: from mx0b-0016f401.pphosted.com ([67.231.156.173]:34230 "EHLO
-        mx0b-0016f401.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725797AbfLRHEP (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>);
-        Wed, 18 Dec 2019 02:04:15 -0500
-Received: from pps.filterd (m0045851.ppops.net [127.0.0.1])
-        by mx0b-0016f401.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id xBI71A3a029583;
-        Tue, 17 Dec 2019 23:04:12 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-type; s=pfpt0818;
- bh=UZcnCwq10j0m/Je2ObzEn/jzRkw3tFD03EzMMVd90kY=;
- b=oNB3FkYU6UFk2BbZIlzIFPRlb7hS0SOAZz3YIeonFMpyMwy+VzoJME8H7yzUtAJIe0p3
- ELYr1mpPucVMM3+4MZNnBZkcqTqlB66XbodqS2Amt/2rhavt1lVa9/HZnK4emnJ2bVWP
- 80KClpDX05wvybw/NkIx6V61kjCuxJsLucbocvZotwTl5MjQPWbfr35dT5Z7ZEP/dGWM
- fFKkNEcsctusOvsMOw2T/FsrvabKEc86ggKyFPVA3pCFnDax4ANcDj0K5EGqz+qjnv2X
- uIAQBAPC3Z/Xq+uvQqZd1TZ5z0jIb3PB+q6qGfV7MK2WPi2hDFaLYNfJqc6mX34duCjk RQ== 
-Received: from sc-exch01.marvell.com ([199.233.58.181])
-        by mx0b-0016f401.pphosted.com with ESMTP id 2wxn0wnjy7-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
-        Tue, 17 Dec 2019 23:04:12 -0800
-Received: from SC-EXCH03.marvell.com (10.93.176.83) by SC-EXCH01.marvell.com
- (10.93.176.81) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Tue, 17 Dec
- 2019 23:04:10 -0800
-Received: from maili.marvell.com (10.93.176.43) by SC-EXCH03.marvell.com
- (10.93.176.83) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Tue, 17 Dec 2019 23:04:10 -0800
-Received: from dc5-eodlnx05.marvell.com (dc5-eodlnx05.marvell.com [10.69.113.147])
-        by maili.marvell.com (Postfix) with ESMTP id 4CDA33F703F;
-        Tue, 17 Dec 2019 23:04:10 -0800 (PST)
-From:   Bhaskar Upadhaya <bupadhaya@marvell.com>
-To:     <linux-kernel@vger.kernel.org>, <linux-acpi@vger.kernel.org>,
-        <linux-edac@vger.kernel.org>, <lenb@kernel.org>,
-        <rafael@kernel.org>
-CC:     <gkulkarni@marvell.com>, <rrichter@marvell.com>,
-        <bhaskar.upadhaya.linux@gmail.com>,
-        Bhaskar Upadhaya <bupadhaya@marvell.com>
-Subject: [RFC PATCH] apei/ghes: fix ghes_poll_func by registering in non-deferrable mode
-Date:   Tue, 17 Dec 2019 23:03:38 -0800
-Message-ID: <1576652618-27017-1-git-send-email-bupadhaya@marvell.com>
-X-Mailer: git-send-email 1.8.3.1
+        id S1725930AbfLRL22 (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Wed, 18 Dec 2019 06:28:28 -0500
+Received: from lhrrgout.huawei.com ([185.176.76.210]:2204 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1725785AbfLRL22 (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Wed, 18 Dec 2019 06:28:28 -0500
+Received: from lhreml707-cah.china.huawei.com (unknown [172.18.7.107])
+        by Forcepoint Email with ESMTP id 7FC96B3626971AAABCE9;
+        Wed, 18 Dec 2019 11:28:26 +0000 (GMT)
+Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
+ lhreml707-cah.china.huawei.com (10.201.108.48) with Microsoft SMTP Server
+ (TLS) id 14.3.408.0; Wed, 18 Dec 2019 11:28:25 +0000
+Received: from [127.0.0.1] (10.202.226.46) by lhreml724-chm.china.huawei.com
+ (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1713.5; Wed, 18 Dec
+ 2019 11:28:25 +0000
+Subject: Re: [PATCH] EDAC/mc: Fix use-after-free and memleaks during device
+ removal
+To:     Robert Richter <rrichter@marvell.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Tony Luck <tony.luck@intel.com>
+CC:     James Morse <james.morse@arm.com>,
+        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20191218062129.7400-1-rrichter@marvell.com>
+From:   John Garry <john.garry@huawei.com>
+Message-ID: <0c7da2d7-1cab-f518-2309-f740d7ef36fa@huawei.com>
+Date:   Wed, 18 Dec 2019 11:28:25 +0000
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.1.2
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.95,18.0.572
- definitions=2019-12-18_01:2019-12-17,2019-12-18 signatures=0
+In-Reply-To: <20191218062129.7400-1-rrichter@marvell.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.202.226.46]
+X-ClientProxiedBy: lhreml712-chm.china.huawei.com (10.201.108.63) To
+ lhreml724-chm.china.huawei.com (10.201.108.75)
+X-CFilter-Loop: Reflected
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-Currently Linux register ghes_poll_func with TIMER_DEFERRABLE flag,
-because of which it is serviced when the CPU eventually wakes up with a
-subsequent non-deferrable timer and not at the configured polling interval.
+On 18/12/2019 06:22, Robert Richter wrote:
+> A test kernel with the options set below revealed several issues when
+> removing a mci device:
+> 
+>   DEBUG_TEST_DRIVER_REMOVE
+>   KASAN
+>   DEBUG_KMEMLEAK
+> 
+> Issues seen:
+> 
+> 1) Use-after-free:
+> 
+> On 27.11.19 17:07:33, John Garry wrote:
+>> [   22.104498] BUG: KASAN: use-after-free in
+>> edac_remove_sysfs_mci_device+0x148/0x180
+> 
+> The use-after-free is triggered in edac_remove_sysfs_mci_device(). It
+> became an issue with commit c498afaf7df8 ("EDAC: Introduce an
+> mci_for_each_dimm() iterator").
+> 
+> The reason for it is that device_unregister(&dimm->dev) not only
+> removes the sysfs entry, it also frees the dimm struct in
+> dimm_attr_release(). When incrementing the loop in
+> mci_for_each_dimm(), the dimm struct is accessed again by the loop
+> iterator which causes the use-after-free.
+> 
+> In function edac_remove_sysfs_mci_device() all the mci device's
+> subsequent dimm and csrow objects are removed. When unregistering from
+> sysfs, instead of removing that data it should be kept until it is
+> removed together with the mci device. This keeps the data structures
+> intact and the mci device can be fully used until it will be removed.
+> 
+> 2) Memory leaks:
+> 
+> Following memory leaks have been detected:
+> 
+>   # grep edac /sys/kernel/debug/kmemleak | sort | uniq -c
+>         1     [<000000003c0f58f9>] edac_mc_alloc+0x3bc/0x9d0      # mci->csrows
+>        16     [<00000000bb932dc0>] edac_mc_alloc+0x49c/0x9d0      # csr->channels
+>        16     [<00000000e2734dba>] edac_mc_alloc+0x518/0x9d0      # csr->channels[chn]
+>         1     [<00000000eb040168>] edac_mc_alloc+0x5c8/0x9d0      # mci->dimms
+>        34     [<00000000ef737c29>] ghes_edac_register+0x1c8/0x3f8 # see edac_mc_alloc()
+> 
+> There are two implementions for device removal in the driver. One is
+> used before edac_mc_add_mc(), the other afterwards after the device
+> had been registered in sysfs. The later lacks the removal of some data
+> allocated in edac_mc_alloc(). All the above issues are fixed as
+> follows:
+> 
+> Unify release code in a single mci_release() function and use this one
+> together with put_device() to release the struct mci once there are no
+> users. Free all subsequent data structures of the children devices in
+> that release function too. An effect of this is that no data is freed
+> in edac_mc_sysfs.c (except the "mc" sysfs root node). All sysfs
+> entries have the mci device as a parent, so its refcount will keep the
+> struct from being removed as long as sysfs entries exist. Before
+> freeing struct mci, all sysfs entries are removed now in edac_remove_
+> sysfs_mci_device(). With the changes made the mci_for_each_dimm() loop
+> is now save to remove dimm devices from sysfs.
+> 
+> The patch has been tested with the above kernel options, no issues
+> seen any longer.
+> 
+> This patch should be marked as stable.
 
-For polling mode, the polling interval configured by firmware should not
-be exceeded as per ACPI_6_3 spec[refer Table 18-394], So Timer need to
-be configured in non-deferrable mode by removing TIMER_DEFERRABLE flag.
-With NO_HZ enabled and timer callback being configured in non-deferrable
-mode, timer callback will get called exactly after polling interval.
+Not sure why you haven't...
 
-Impact of removing TIMER_DEFFERABLE flag
-- With NO_HZ enabled, additional timer ticks and unnecessary wakeups of
- the cpu happens exactly after polling interval.
+> 
+> Reported-by: John Garry <john.garry@huawei.com>
 
-- If polling interval is too small than polling function will be called
- too frequently which may stall the cpu.
+The splats and leaks have disappeared for when booting my arm64 machine:
+Tested-by: John Garry <john.garry@huawei.com>
 
-Signed-off-by: Bhaskar Upadhaya <bupadhaya@marvell.com>
----
- drivers/acpi/apei/ghes.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/acpi/apei/ghes.c b/drivers/acpi/apei/ghes.c
-index 777f6f7122b4..c8f9230f69fb 100644
---- a/drivers/acpi/apei/ghes.c
-+++ b/drivers/acpi/apei/ghes.c
-@@ -1181,7 +1181,7 @@ static int ghes_probe(struct platform_device *ghes_dev)
- 
- 	switch (generic->notify.type) {
- 	case ACPI_HEST_NOTIFY_POLLED:
--		timer_setup(&ghes->timer, ghes_poll_func, TIMER_DEFERRABLE);
-+		timer_setup(&ghes->timer, ghes_poll_func, 0);
- 		ghes_add_timer(ghes);
- 		break;
- 	case ACPI_HEST_NOTIFY_EXTERNAL:
--- 
-2.17.1
-
+thanks
