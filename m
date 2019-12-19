@@ -2,79 +2,70 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BEB90125B3B
-	for <lists+linux-edac@lfdr.de>; Thu, 19 Dec 2019 07:09:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B36C125B5E
+	for <lists+linux-edac@lfdr.de>; Thu, 19 Dec 2019 07:21:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725844AbfLSGJv (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Thu, 19 Dec 2019 01:09:51 -0500
-Received: from szxga06-in.huawei.com ([45.249.212.32]:51940 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725821AbfLSGJv (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Thu, 19 Dec 2019 01:09:51 -0500
-Received: from DGGEMS407-HUB.china.huawei.com (unknown [172.30.72.60])
-        by Forcepoint Email with ESMTP id 6F5BBCEFE6931D3BD258;
-        Thu, 19 Dec 2019 14:09:48 +0800 (CST)
-Received: from linux-lmwb.huawei.com (10.175.103.112) by
- DGGEMS407-HUB.china.huawei.com (10.3.19.207) with Microsoft SMTP Server id
- 14.3.439.0; Thu, 19 Dec 2019 14:09:40 +0800
-From:   Ma Feng <mafeng.ma@huawei.com>
-To:     Stefan Schaeckeler <sschaeck@cisco.com>,
-        Borislav Petkov <bp@alien8.de>,
+        id S1726173AbfLSGVY (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Thu, 19 Dec 2019 01:21:24 -0500
+Received: from mail.skyhub.de ([5.9.137.197]:59074 "EHLO mail.skyhub.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725844AbfLSGVY (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Thu, 19 Dec 2019 01:21:24 -0500
+Received: from zn.tnic (p200300EC2F0B1C00F1A577DA89A48CEF.dip0.t-ipconnect.de [IPv6:2003:ec:2f0b:1c00:f1a5:77da:89a4:8cef])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 12A111EC0591;
+        Thu, 19 Dec 2019 07:21:23 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1576736483;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=steoryErl3lLrePbu9jWvjYCeP3FpAY53rDyYMrb8r8=;
+        b=B1pvdwoLIo/ycXAo+zotyuEdABWv7Cyj8C1eOb62tARv8nZnZrRxzlXv94d3kt5KmRjgn/
+        VfhYxGP4bLYWe0j/uy7+CFTrQ1vdoB8Bbs0eQG3gD6ViLTOamhGs7kJyj5FHPCYBoxMqaa
+        hViiA1kbHG5UOB/hgA9TjOsRXrh1Zs4=
+Date:   Thu, 19 Dec 2019 07:21:22 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Ma Feng <mafeng.ma@huawei.com>
+Cc:     Stefan Schaeckeler <sschaeck@cisco.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         Tony Luck <tony.luck@intel.com>,
         James Morse <james.morse@arm.com>,
         Robert Richter <rrichter@marvell.com>,
-        Joel Stanley <joel@jms.id.au>, Andrew Jeffery <andrew@aj.id.au>
-CC:     <linux-edac@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-aspeed@lists.ozlabs.org>, <linux-kernel@vger.kernel.org>,
-        Ma Feng <mafeng.ma@huawei.com>
-Subject: [PATCH] EDAC/aspeed: Remove unneeded semicolon
-Date:   Thu, 19 Dec 2019 14:10:35 +0800
-Message-ID: <1576735835-114453-1-git-send-email-mafeng.ma@huawei.com>
-X-Mailer: git-send-email 2.6.2
+        Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>, linux-edac@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] EDAC/aspeed: Remove unneeded semicolon
+Message-ID: <20191219062122.GB32039@zn.tnic>
+References: <1576735835-114453-1-git-send-email-mafeng.ma@huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.175.103.112]
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <1576735835-114453-1-git-send-email-mafeng.ma@huawei.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-Fixes coccicheck warning:
+On Thu, Dec 19, 2019 at 02:10:35PM +0800, Ma Feng wrote:
+> Fixes coccicheck warning:
+> 
+> drivers/edac/aspeed_edac.c:246:2-3: Unneeded semicolon
+> drivers/edac/aspeed_edac.c:255:2-3: Unneeded semicolon
+> 
+> Reported-by: Hulk Robot <hulkci@huawei.com>
+> Signed-off-by: Ma Feng <mafeng.ma@huawei.com>
+> ---
+>  drivers/edac/aspeed_edac.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 
-drivers/edac/aspeed_edac.c:246:2-3: Unneeded semicolon
-drivers/edac/aspeed_edac.c:255:2-3: Unneeded semicolon
+https://lkml.kernel.org/r/1576648806-1114-1-git-send-email-vulab@iscas.ac.cn
 
-Reported-by: Hulk Robot <hulkci@huawei.com>
-Signed-off-by: Ma Feng <mafeng.ma@huawei.com>
----
- drivers/edac/aspeed_edac.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+-- 
+Regards/Gruss,
+    Boris.
 
-diff --git a/drivers/edac/aspeed_edac.c b/drivers/edac/aspeed_edac.c
-index 09a9e3d..b194658b 100644
---- a/drivers/edac/aspeed_edac.c
-+++ b/drivers/edac/aspeed_edac.c
-@@ -243,7 +243,7 @@ static int init_csrows(struct mem_ctl_info *mci)
- 	if (!np) {
- 		dev_err(mci->pdev, "dt: missing /memory node\n");
- 		return -ENODEV;
--	};
-+	}
-
- 	rc = of_address_to_resource(np, 0, &r);
-
-@@ -252,7 +252,7 @@ static int init_csrows(struct mem_ctl_info *mci)
- 	if (rc) {
- 		dev_err(mci->pdev, "dt: failed requesting resource for /memory node\n");
- 		return rc;
--	};
-+	}
-
- 	dev_dbg(mci->pdev, "dt: /memory node resources: first page r.start=0x%x, resource_size=0x%x, PAGE_SHIFT macro=0x%x\n",
- 		r.start, resource_size(&r), PAGE_SHIFT);
---
-2.6.2
-
+https://people.kernel.org/tglx/notes-about-netiquette
