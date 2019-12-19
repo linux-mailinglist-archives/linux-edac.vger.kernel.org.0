@@ -2,99 +2,96 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F455126526
-	for <lists+linux-edac@lfdr.de>; Thu, 19 Dec 2019 15:48:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 533FE12686A
+	for <lists+linux-edac@lfdr.de>; Thu, 19 Dec 2019 18:49:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726786AbfLSOsv (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Thu, 19 Dec 2019 09:48:51 -0500
-Received: from mail26.static.mailgun.info ([104.130.122.26]:26530 "EHLO
-        mail26.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726701AbfLSOsv (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>);
-        Thu, 19 Dec 2019 09:48:51 -0500
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1576766930; h=Message-ID: References: In-Reply-To: Subject:
- Cc: To: From: Date: Content-Transfer-Encoding: Content-Type:
- MIME-Version: Sender; bh=3zKPnWBvxLfobydpG1oWipP1FXmPrlABqmI/X79v9lQ=;
- b=kZNokw8TgLRfbcAjcvWNWmMqD6wA6D6OzrmItX0SdHT7m/TgqmwdxrkoDnoWQJ9gcO3o0Ydn
- gEM6IV2wrPZJfzZkRMSAgA2oDXDYzwiKi9xaLs258+MMi5RVX1vqiuEwCK3MiklwcoECC1uX
- 83tDz8FGXC2GAhunBryUwWt3yzQ=
-X-Mailgun-Sending-Ip: 104.130.122.26
-X-Mailgun-Sid: WyJlNGY0ZCIsICJsaW51eC1lZGFjQHZnZXIua2VybmVsLm9yZyIsICJiZTllNGEiXQ==
-Received: from smtp.codeaurora.org (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171])
- by mxa.mailgun.org with ESMTP id 5dfb8dd0.7fb376be70a0-smtp-out-n03;
- Thu, 19 Dec 2019 14:48:48 -0000 (UTC)
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 6DD52C00A44; Thu, 19 Dec 2019 14:48:48 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED
-        autolearn=unavailable autolearn_force=no version=3.4.0
-Received: from mail.codeaurora.org (localhost.localdomain [127.0.0.1])
-        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: saiprakash.ranjan)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id E782CC5383A;
-        Thu, 19 Dec 2019 14:48:47 +0000 (UTC)
+        id S1726818AbfLSRti (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Thu, 19 Dec 2019 12:49:38 -0500
+Received: from smtp-fw-6002.amazon.com ([52.95.49.90]:60247 "EHLO
+        smtp-fw-6002.amazon.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726797AbfLSRti (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Thu, 19 Dec 2019 12:49:38 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.de; i=@amazon.de; q=dns/txt; s=amazon201209;
+  t=1576777778; x=1608313778;
+  h=subject:to:cc:references:from:message-id:date:
+   mime-version:in-reply-to:content-transfer-encoding;
+  bh=6M0fsUmFbn5kSFVnpUdTgIDxYPEOQJ+1csuXw9W2yW0=;
+  b=m5TiJkCuWM45E7vmDwWPuAcaGnalrEnuQO8Cj3FsVjtRWwEqg5Veoj93
+   +LJ/hVOcOw5lT+Wf0VQAoJ8NSDRkTYSEKHHhM6dNlmMEUD3R6W2OYsi64
+   2gi3FN2jt6ZbOZmod6rlUoyrMIxLL5yLmR01BiWubDb9jWDt1fcj3Vk75
+   M=;
+IronPort-SDR: ZLPqT9+dLCF/EgDx53puHn9Ztra/eXcT/eMg4GZlbksZSF+N0YZFehCC6TfmvtRAyfdbHFJpKH
+ pduboTKJ6ASA==
+X-IronPort-AV: E=Sophos;i="5.69,332,1571702400"; 
+   d="scan'208";a="8376434"
+Received: from iad12-co-svc-p1-lb1-vlan3.amazon.com (HELO email-inbound-relay-2c-87a10be6.us-west-2.amazon.com) ([10.43.8.6])
+  by smtp-border-fw-out-6002.iad6.amazon.com with ESMTP; 19 Dec 2019 17:49:36 +0000
+Received: from u7588a65da6b65f.ant.amazon.com (pdx2-ws-svc-lb17-vlan3.amazon.com [10.247.140.70])
+        by email-inbound-relay-2c-87a10be6.us-west-2.amazon.com (Postfix) with ESMTPS id 84F36A216B;
+        Thu, 19 Dec 2019 17:49:34 +0000 (UTC)
+Received: from u7588a65da6b65f.ant.amazon.com (localhost [127.0.0.1])
+        by u7588a65da6b65f.ant.amazon.com (8.15.2/8.15.2/Debian-3) with ESMTP id xBJHnW0d017657;
+        Thu, 19 Dec 2019 18:49:32 +0100
+Subject: Re: [PATCH 4/6] x86/mce: Fix handling of optional message string
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     Tony Luck <tony.luck@intel.com>, linux-edac@vger.kernel.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, x86@kernel.org
+References: <20191210000733.17979-1-jschoenh@amazon.de>
+ <20191210000733.17979-5-jschoenh@amazon.de> <20191216173737.GF17380@zn.tnic>
+From:   =?UTF-8?Q?Jan_H=2e_Sch=c3=b6nherr?= <jschoenh@amazon.de>
+Openpgp: preference=signencrypt
+Message-ID: <47be6ccd-0387-47c0-6f01-1304ce26780f@amazon.de>
+Date:   Thu, 19 Dec 2019 18:49:32 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-Date:   Thu, 19 Dec 2019 20:18:47 +0530
-From:   Sai Prakash Ranjan <saiprakash.ranjan@codeaurora.org>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        devicetree@vger.kernel.org, Borislav Petkov <bp@alien8.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Tony Luck <tony.luck@intel.com>,
-        James Morse <james.morse@arm.com>,
-        Robert Richter <rrichter@marvell.com>,
-        linux-edac <linux-edac@vger.kernel.org>,
-        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>,
-        linux-kernel@vger.kernel.org,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Evan Green <evgreen@chromium.org>,
-        Trilok Soni <tsoni@codeaurora.org>,
-        Prasad Sodagudi <psodagud@codeaurora.org>
-Subject: Re: [PATCH 1/2] dt-bindings: edac: Add DT bindings for Kryo EDAC
-In-Reply-To: <CAL_JsqL-uBGy5ekHUZAJB4L1QYoCpnOw-4QPpZraXnsZ49wZ6w@mail.gmail.com>
-References: <cover.1575529553.git.saiprakash.ranjan@codeaurora.org>
- <0101016ed57a3259-eee09e9e-e99a-40f1-ab1c-63e58a42615c-000000@us-west-2.amazonses.com>
- <20191218233714.GA30302@bogus>
- <7469b239edd4beed3e8fefdf02f10ada@codeaurora.org>
- <CAL_JsqL-uBGy5ekHUZAJB4L1QYoCpnOw-4QPpZraXnsZ49wZ6w@mail.gmail.com>
-Message-ID: <86b3a0735df320bc7808930f2bbd0d97@codeaurora.org>
-X-Sender: saiprakash.ranjan@codeaurora.org
-User-Agent: Roundcube Webmail/1.3.9
+In-Reply-To: <20191216173737.GF17380@zn.tnic>
+Content-Language: en-US
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On 2019-12-19 19:28, Rob Herring wrote:
->> > Is that your intent?
->> >
->> 
->> No, I want any combination of interrupts to be valid with atleast one
->> interrupt as mandatory.
->> I thought specifying minItems as 1 and maxItems as 4 will take care of
->> this,  am I doing something wrong?
-> 
-> Interrupts (really all properties) have a defined order in DT and an
-> 'items' list defines both the order and index. You'll need to use
-> oneOf and list out the possibilities. Stick to ones you actually need.
-> 
+T24gMTYvMTIvMjAxOSAxOC4zNywgQm9yaXNsYXYgUGV0a292IHdyb3RlOgo+IE9uIFR1ZSwgRGVj
+IDEwLCAyMDE5IGF0IDAxOjA3OjMxQU0gKzAxMDAsIEphbiBILiBTY2jDtm5oZXJyIHdyb3RlOgo+
+PiBkaWZmIC0tZ2l0IGEvYXJjaC94ODYva2VybmVsL2NwdS9tY2UvY29yZS5jIGIvYXJjaC94ODYv
+a2VybmVsL2NwdS9tY2UvY29yZS5jCj4+IGluZGV4IDZhZmI5ZGUyNTFmMi4uYjExYTc0ZTNmZWE5
+IDEwMDY0NAo+PiAtLS0gYS9hcmNoL3g4Ni9rZXJuZWwvY3B1L21jZS9jb3JlLmMKPj4gKysrIGIv
+YXJjaC94ODYva2VybmVsL2NwdS9tY2UvY29yZS5jCj4+IEBAIC04MDksMTAgKzgwOSwxMiBAQCBz
+dGF0aWMgaW50IG1jZV9ub193YXlfb3V0KHN0cnVjdCBtY2UgKm0sIGNoYXIgKiptc2csIHVuc2ln
+bmVkIGxvbmcgKnZhbGlkcCwKPj4gIAkJaWYgKHF1aXJrX25vX3dheV9vdXQpCj4+ICAJCQlxdWly
+a19ub193YXlfb3V0KGksIG0sIHJlZ3MpOwo+PiAgCj4+ICsJCXRtcCA9IE5VTEw7Cj4+ICAJCW0t
+PmJhbmsgPSBpOwo+PiAgCQlpZiAobWNlX3NldmVyaXR5KG0sIG1jYV9jZmcudG9sZXJhbnQsICZ0
+bXAsIHRydWUpID49IE1DRV9QQU5JQ19TRVZFUklUWSkgewo+PiAgCQkJbWNlX3JlYWRfYXV4KG0s
+IGkpOwo+PiAtCQkJKm1zZyA9IHRtcDsKPj4gKwkJCWlmICh0bXApCj4+ICsJCQkJKm1zZyA9IHRt
+cDsKPj4gIAkJCXJldHVybiAxOwo+PiAgCQl9Cj4+ICAJfQo+PiBAQCAtMTMxMyw2ICsxMzE1LDcg
+QEAgdm9pZCBkb19tYWNoaW5lX2NoZWNrKHN0cnVjdCBwdF9yZWdzICpyZWdzLCBsb25nIGVycm9y
+X2NvZGUpCj4+ICAJCSAqIG1ha2Ugc3VyZSB3ZSBoYXZlIHRoZSByaWdodCAibXNnIi4KPj4gIAkJ
+ICovCj4+ICAJCWlmICh3b3JzdCA+PSBNQ0VfUEFOSUNfU0VWRVJJVFkgJiYgbWNhX2NmZy50b2xl
+cmFudCA8IDMpIHsKPj4gKwkJCW1zZyA9ICJVbmtub3duIjsKPj4gIAkJCW1jZV9zZXZlcml0eSgm
+bSwgY2ZnLT50b2xlcmFudCwgJm1zZywgdHJ1ZSk7Cj4+ICAJCQltY2VfcGFuaWMoIkxvY2FsIGZh
+dGFsIG1hY2hpbmUgY2hlY2shIiwgJm0sIG1zZyk7Cj4+ICAJCX0KPj4gLS0gCj4gCj4gQ2FuIHdl
+IGdldCByaWQgb2YgYWxsIHRoYXQgc2lsbGluZXNzIG9mIGRlYWxpbmcgd2l0aCBhIHBvc3NpYmx5
+Cj4gdW5pbml0aWFsaXplZCBwb2ludGVyIGluIHRoZSBjYWxsZXJzIGFuZCBzaW1wbHkgZG8gYXQg
+dGhlIGJlZ2lubmluZyBvZgo+IG1jZV9wYW5pYygpOgo+IAo+IAlpZiAoIW1zZykKPiAJCW1zZyA9
+ICJVbmtub3duIjsKPiAKPiA/Cj4gCgpOb3QgcXVpdGUuIG1jZV9wYW5pYygpIGFscmVhZHkgaGFu
+ZGxlcyBOVUxMIGFzIGEgdmFsdWUgZm9yICJleHAiIChub3QgIm1zZyIpLgoKV2Ugc3RpbGwgbmVl
+ZCB0byBwYXNzIE5VTEwgb3IgYSBwcm9wZXIgcG9pbnRlci4gTm90IHNvbWUgdW5pbml0aWFsaXpl
+ZCwgcG90ZW50aWFsbHkKcmFuZG9tIGRhdGEuCgpTbywgYXQgdGhlIHZlcnkgbGVhc3Qgd2UgbmVl
+ZCB0byBpbml0aWFsaXplICJ0bXAiIGluIG1jZV9ub193YXlfb3V0KCksIGlmIHlvdSdyZSBsb29r
+aW5nCmZvciBhIG1pbmltYWwgcGF0Y2guCgpUaGlzIHdvdWxkIHR1cm4gdGhlIChub24tZXhpc3Rp
+bmcpIGRlc2NyaXB0aW9uIG9mIHRoZSAibXNnIiBhcmd1bWVudCBvZiBtY2Vfc2V2ZXJpdHkoKQpm
+cm9tIGFuIGFzc3VtZWQ6CiAgImFuIGltcGxlbWVudGF0aW9uIG1heSBvciBtYXkgbm90IHVwZGF0
+ZSBhIHByb3ZpZGVkICptc2cgYXJndW1lbnQiCnRvOgogICJhbiBpbXBsZW1lbnRhdGlvbiBtdXN0
+IGVpdGhlciBhbHdheXMgdXBkYXRlIGEgcHJvdmlkZWQgKm1zZyBhcmd1bWVudCwgb3IgaXQgbXVz
+dCBuZXZlciBkbyBzbyIKClJlZ2FyZHMKSmFuCgotLQoKCgpBbWF6b24gRGV2ZWxvcG1lbnQgQ2Vu
+dGVyIEdlcm1hbnkgR21iSApLcmF1c2Vuc3RyLiAzOAoxMDExNyBCZXJsaW4KR2VzY2hhZWZ0c2Z1
+ZWhydW5nOiBDaHJpc3RpYW4gU2NobGFlZ2VyLCBKb25hdGhhbiBXZWlzcwpFaW5nZXRyYWdlbiBh
+bSBBbXRzZ2VyaWNodCBDaGFybG90dGVuYnVyZyB1bnRlciBIUkIgMTQ5MTczIEIKU2l0ejogQmVy
+bGluClVzdC1JRDogREUgMjg5IDIzNyA4NzkKCgo=
 
-Thanks, I will make the change in the next spin.
-
--Sai
-
--- 
-QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a 
-member
-of Code Aurora Forum, hosted by The Linux Foundation
