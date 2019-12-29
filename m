@@ -2,44 +2,47 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 00DE312C6D8
-	for <lists+linux-edac@lfdr.de>; Sun, 29 Dec 2019 18:55:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 89C9312CA1E
+	for <lists+linux-edac@lfdr.de>; Sun, 29 Dec 2019 19:19:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731995AbfL2Ru6 (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Sun, 29 Dec 2019 12:50:58 -0500
-Received: from mail.kernel.org ([198.145.29.99]:35786 "EHLO mail.kernel.org"
+        id S1727242AbfL2RXk (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Sun, 29 Dec 2019 12:23:40 -0500
+Received: from mail.kernel.org ([198.145.29.99]:41404 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731972AbfL2Ru6 (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Sun, 29 Dec 2019 12:50:58 -0500
+        id S1727566AbfL2RXh (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Sun, 29 Dec 2019 12:23:37 -0500
 Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id D333C207FD;
-        Sun, 29 Dec 2019 17:50:56 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 43F1220722;
+        Sun, 29 Dec 2019 17:23:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1577641857;
-        bh=pDa/f9AcJMh7khYqN1ssSqjeFxVXOoWorA1MKXmZNW8=;
+        s=default; t=1577640216;
+        bh=ABkLrZKoElGRtWFppwkvdptsazTThG4UmudwIkKFSsc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=LWsomwJ5Ew1zjEatVArLVzPUAKra/XyxPWlocSV1gRTUGOSDdaBAE0dkY2G9aqjtF
-         ZJxXcmob/fpo+jdrRhP3ukpPc3PLC4lIWWZ9tZkJLmZTva6Uj7nhY7LGFVAyGeP4xe
-         uK4366L58/3dOZvjgtt5YR1Ixtrtqc3uQrO3jWRA=
+        b=ZcZj2dwce1c2CdnjHf0pO4UxwdM8CurNiN2EInWS0zDGuGf7m9B7r6iXbkdr1QaH4
+         HBGpyhAPtpfdZQjKWGfx26mxbhSdvvJzcm9G7kDpTwbD63VsDMRvXpDhQGmwcn/2zB
+         hWbZJSwNDr2ym6ywZssvzXhfJn/z2Vs5pSBzyPKs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Yazen Ghannam <yazen.ghannam@amd.com>,
+        stable@vger.kernel.org, Benjamin Berg <bberg@redhat.com>,
         Borislav Petkov <bp@suse.de>,
-        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Robert Richter <rrichter@marvell.com>,
-        Tony Luck <tony.luck@intel.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Christian Kellner <ckellner@redhat.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
+        linux-edac <linux-edac@vger.kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Tony Luck <tony.luck@intel.com>, x86-ml <x86@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 187/434] EDAC/amd64: Set grain per DIMM
-Date:   Sun, 29 Dec 2019 18:24:00 +0100
-Message-Id: <20191229172714.243284613@linuxfoundation.org>
+Subject: [PATCH 4.14 066/161] x86/mce: Lower throttling MCE messages priority to warning
+Date:   Sun, 29 Dec 2019 18:18:34 +0100
+Message-Id: <20191229162419.667121768@linuxfoundation.org>
 X-Mailer: git-send-email 2.24.1
-In-Reply-To: <20191229172702.393141737@linuxfoundation.org>
-References: <20191229172702.393141737@linuxfoundation.org>
+In-Reply-To: <20191229162355.500086350@linuxfoundation.org>
+References: <20191229162355.500086350@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -49,55 +52,65 @@ Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-From: Yazen Ghannam <yazen.ghannam@amd.com>
+From: Benjamin Berg <bberg@redhat.com>
 
-[ Upstream commit 466503d6b1b33be46ab87c6090f0ade6c6011cbc ]
+[ Upstream commit 9c3bafaa1fd88e4dd2dba3735a1f1abb0f2c7bb7 ]
 
-The following commit introduced a warning on error reports without a
-non-zero grain value.
+On modern CPUs it is quite normal that the temperature limits are
+reached and the CPU is throttled. In fact, often the thermal design is
+not sufficient to cool the CPU at full load and limits can quickly be
+reached when a burst in load happens. This will even happen with
+technologies like RAPL limitting the long term power consumption of
+the package.
 
-  3724ace582d9 ("EDAC/mc: Fix grain_bits calculation")
+Also, these limits are "softer", as Srinivas explains:
 
-The amd64_edac_mod module does not provide a value, so the warning will
-be given on the first reported memory error.
+"CPU temperature doesn't have to hit max(TjMax) to get these warnings.
+OEMs ha[ve] an ability to program a threshold where a thermal interrupt
+can be generated. In some systems the offset is 20C+ (Read only value).
 
-Set the grain per DIMM to cacheline size (64 bytes). This is the current
-recommendation.
+In recent systems, there is another offset on top of it which can be
+programmed by OS, once some agent can adjust power limits dynamically.
+By default this is set to low by the firmware, which I guess the
+prime motivation of Benjamin to submit the patch."
 
-Fixes: 3724ace582d9 ("EDAC/mc: Fix grain_bits calculation")
-Signed-off-by: Yazen Ghannam <yazen.ghannam@amd.com>
+So these messages do not usually indicate a hardware issue (e.g.
+insufficient cooling). Log them as warnings to avoid confusion about
+their severity.
+
+ [ bp: Massage commit mesage. ]
+
+Signed-off-by: Benjamin Berg <bberg@redhat.com>
 Signed-off-by: Borislav Petkov <bp@suse.de>
-Cc: "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>
-Cc: James Morse <james.morse@arm.com>
-Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc: Robert Richter <rrichter@marvell.com>
+Reviewed-by: Hans de Goede <hdegoede@redhat.com>
+Tested-by: Christian Kellner <ckellner@redhat.com>
+Cc: "H. Peter Anvin" <hpa@zytor.com>
+Cc: Ingo Molnar <mingo@redhat.com>
+Cc: linux-edac <linux-edac@vger.kernel.org>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Cc: Thomas Gleixner <tglx@linutronix.de>
 Cc: Tony Luck <tony.luck@intel.com>
-Link: https://lkml.kernel.org/r/20191022203448.13962-7-Yazen.Ghannam@amd.com
+Cc: x86-ml <x86@kernel.org>
+Link: https://lkml.kernel.org/r/20191009155424.249277-1-bberg@redhat.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/edac/amd64_edac.c | 2 ++
- 1 file changed, 2 insertions(+)
+ arch/x86/kernel/cpu/mcheck/therm_throt.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/edac/amd64_edac.c b/drivers/edac/amd64_edac.c
-index c1d4536ae466..cc5e56d752c8 100644
---- a/drivers/edac/amd64_edac.c
-+++ b/drivers/edac/amd64_edac.c
-@@ -2936,6 +2936,7 @@ static int init_csrows_df(struct mem_ctl_info *mci)
- 			dimm->mtype = pvt->dram_type;
- 			dimm->edac_mode = edac_mode;
- 			dimm->dtype = dev_type;
-+			dimm->grain = 64;
- 		}
- 	}
- 
-@@ -3012,6 +3013,7 @@ static int init_csrows(struct mem_ctl_info *mci)
- 			dimm = csrow->channels[j]->dimm;
- 			dimm->mtype = pvt->dram_type;
- 			dimm->edac_mode = edac_mode;
-+			dimm->grain = 64;
- 		}
- 	}
- 
+diff --git a/arch/x86/kernel/cpu/mcheck/therm_throt.c b/arch/x86/kernel/cpu/mcheck/therm_throt.c
+index ee229ceee745..ec6a07b04fdb 100644
+--- a/arch/x86/kernel/cpu/mcheck/therm_throt.c
++++ b/arch/x86/kernel/cpu/mcheck/therm_throt.c
+@@ -185,7 +185,7 @@ static void therm_throt_process(bool new_event, int event, int level)
+ 	/* if we just entered the thermal event */
+ 	if (new_event) {
+ 		if (event == THERMAL_THROTTLING_EVENT)
+-			pr_crit("CPU%d: %s temperature above threshold, cpu clock throttled (total events = %lu)\n",
++			pr_warn("CPU%d: %s temperature above threshold, cpu clock throttled (total events = %lu)\n",
+ 				this_cpu,
+ 				level == CORE_LEVEL ? "Core" : "Package",
+ 				state->count);
 -- 
 2.20.1
 
