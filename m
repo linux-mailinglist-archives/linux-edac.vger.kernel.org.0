@@ -2,44 +2,47 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DF3B412C754
-	for <lists+linux-edac@lfdr.de>; Sun, 29 Dec 2019 19:14:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 68AAA12C7DC
+	for <lists+linux-edac@lfdr.de>; Sun, 29 Dec 2019 19:15:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728381AbfL2R1O (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Sun, 29 Dec 2019 12:27:14 -0500
-Received: from mail.kernel.org ([198.145.29.99]:49222 "EHLO mail.kernel.org"
+        id S1731297AbfL2Rrh (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Sun, 29 Dec 2019 12:47:37 -0500
+Received: from mail.kernel.org ([198.145.29.99]:58330 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727692AbfL2R1O (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Sun, 29 Dec 2019 12:27:14 -0500
+        id S1731287AbfL2Rrg (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Sun, 29 Dec 2019 12:47:36 -0500
 Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id A9F8B207FF;
-        Sun, 29 Dec 2019 17:27:12 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 3E111208C4;
+        Sun, 29 Dec 2019 17:47:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1577640433;
-        bh=a5E1LuBaxO6rkL8BYot1Thj811ghBqQuy8yf6944W+k=;
+        s=default; t=1577641655;
+        bh=8Y3bpAeQFk9okhggOyjo4H4BlZ0WWo2yo6wIlH7nPkY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=oqPZXh/khDZb6LyCXnwixQ8rIJtFBYGEJyRQPgo5cxI067IitOVXA95l92ic5xdXQ
-         HjrsTCCA2RolZjl23ENsvwPGVOhElXerquiuAZcCZxzEeo1YlUzGgTGg9TBc9LS/BE
-         HH4t+ZYociCYUh6HlZdcrSkZp0R9n2WTmGcYSD6M=
+        b=YvchG8yZHvX3iRc5YSK7w4EqOfWTbXhsEjwdJiX2ZCYLadJId5vltHj20HjE+RrPG
+         0MWFC6C4V2zFdIueFAHMJ1Ne8TuKrVJjN57r2sSylnlDbPGg8BC4ufnYhQ2syHDVl+
+         L0ZIinRGZanin+N9o5k/cgiJXUFHI3QlUN3CQ9Cc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Konstantin Khlebnikov <khlebnikov@yandex-team.ru>,
+        stable@vger.kernel.org, Benjamin Berg <bberg@redhat.com>,
         Borislav Petkov <bp@suse.de>,
-        Yazen Ghannam <yazen.ghannam@amd.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Christian Kellner <ckellner@redhat.com>,
         "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
         linux-edac <linux-edac@vger.kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
         Thomas Gleixner <tglx@linutronix.de>,
-        Tony Luck <tony.luck@intel.com>, x86-ml <x86@kernel.org>
-Subject: [PATCH 4.14 155/161] x86/MCE/AMD: Do not use rdmsr_safe_on_cpu() in smca_configure()
-Date:   Sun, 29 Dec 2019 18:20:03 +0100
-Message-Id: <20191229162448.980647435@linuxfoundation.org>
+        Tony Luck <tony.luck@intel.com>, x86-ml <x86@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.4 157/434] x86/mce: Lower throttling MCE messages priority to warning
+Date:   Sun, 29 Dec 2019 18:23:30 +0100
+Message-Id: <20191229172712.191934842@linuxfoundation.org>
 X-Mailer: git-send-email 2.24.1
-In-Reply-To: <20191229162355.500086350@linuxfoundation.org>
-References: <20191229162355.500086350@linuxfoundation.org>
+In-Reply-To: <20191229172702.393141737@linuxfoundation.org>
+References: <20191229172702.393141737@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -49,73 +52,67 @@ Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-From: Konstantin Khlebnikov <khlebnikov@yandex-team.ru>
+From: Benjamin Berg <bberg@redhat.com>
 
-commit 246ff09f89e54fdf740a8d496176c86743db3ec7 upstream.
+[ Upstream commit 9c3bafaa1fd88e4dd2dba3735a1f1abb0f2c7bb7 ]
 
-... because interrupts are disabled that early and sending IPIs can
-deadlock:
+On modern CPUs it is quite normal that the temperature limits are
+reached and the CPU is throttled. In fact, often the thermal design is
+not sufficient to cool the CPU at full load and limits can quickly be
+reached when a burst in load happens. This will even happen with
+technologies like RAPL limitting the long term power consumption of
+the package.
 
-  BUG: sleeping function called from invalid context at kernel/sched/completion.c:99
-  in_atomic(): 1, irqs_disabled(): 1, non_block: 0, pid: 0, name: swapper/1
-  no locks held by swapper/1/0.
-  irq event stamp: 0
-  hardirqs last  enabled at (0): [<0000000000000000>] 0x0
-  hardirqs last disabled at (0): [<ffffffff8106dda9>] copy_process+0x8b9/0x1ca0
-  softirqs last  enabled at (0): [<ffffffff8106dda9>] copy_process+0x8b9/0x1ca0
-  softirqs last disabled at (0): [<0000000000000000>] 0x0
-  Preemption disabled at:
-  [<ffffffff8104703b>] start_secondary+0x3b/0x190
-  CPU: 1 PID: 0 Comm: swapper/1 Not tainted 5.5.0-rc2+ #1
-  Hardware name: GIGABYTE MZ01-CE1-00/MZ01-CE1-00, BIOS F02 08/29/2018
-  Call Trace:
-   dump_stack
-   ___might_sleep.cold.92
-   wait_for_completion
-   ? generic_exec_single
-   rdmsr_safe_on_cpu
-   ? wrmsr_on_cpus
-   mce_amd_feature_init
-   mcheck_cpu_init
-   identify_cpu
-   identify_secondary_cpu
-   smp_store_cpu_info
-   start_secondary
-   secondary_startup_64
+Also, these limits are "softer", as Srinivas explains:
 
-The function smca_configure() is called only on the current CPU anyway,
-therefore replace rdmsr_safe_on_cpu() with atomic rdmsr_safe() and avoid
-the IPI.
+"CPU temperature doesn't have to hit max(TjMax) to get these warnings.
+OEMs ha[ve] an ability to program a threshold where a thermal interrupt
+can be generated. In some systems the offset is 20C+ (Read only value).
 
- [ bp: Update commit message. ]
+In recent systems, there is another offset on top of it which can be
+programmed by OS, once some agent can adjust power limits dynamically.
+By default this is set to low by the firmware, which I guess the
+prime motivation of Benjamin to submit the patch."
 
-Signed-off-by: Konstantin Khlebnikov <khlebnikov@yandex-team.ru>
+So these messages do not usually indicate a hardware issue (e.g.
+insufficient cooling). Log them as warnings to avoid confusion about
+their severity.
+
+ [ bp: Massage commit mesage. ]
+
+Signed-off-by: Benjamin Berg <bberg@redhat.com>
 Signed-off-by: Borislav Petkov <bp@suse.de>
-Reviewed-by: Yazen Ghannam <yazen.ghannam@amd.com>
+Reviewed-by: Hans de Goede <hdegoede@redhat.com>
+Tested-by: Christian Kellner <ckellner@redhat.com>
 Cc: "H. Peter Anvin" <hpa@zytor.com>
 Cc: Ingo Molnar <mingo@redhat.com>
 Cc: linux-edac <linux-edac@vger.kernel.org>
-Cc: <stable@vger.kernel.org>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
 Cc: Thomas Gleixner <tglx@linutronix.de>
 Cc: Tony Luck <tony.luck@intel.com>
 Cc: x86-ml <x86@kernel.org>
-Link: https://lkml.kernel.org/r/157252708836.3876.4604398213417262402.stgit@buzz
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-
+Link: https://lkml.kernel.org/r/20191009155424.249277-1-bberg@redhat.com
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/x86/kernel/cpu/mcheck/mce_amd.c |    2 +-
+ arch/x86/kernel/cpu/mce/therm_throt.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/arch/x86/kernel/cpu/mcheck/mce_amd.c
-+++ b/arch/x86/kernel/cpu/mcheck/mce_amd.c
-@@ -231,7 +231,7 @@ static void smca_configure(unsigned int
- 	if (smca_banks[bank].hwid)
- 		return;
- 
--	if (rdmsr_safe_on_cpu(cpu, MSR_AMD64_SMCA_MCx_IPID(bank), &low, &high)) {
-+	if (rdmsr_safe(MSR_AMD64_SMCA_MCx_IPID(bank), &low, &high)) {
- 		pr_warn("Failed to read MCA_IPID for bank %d\n", bank);
- 		return;
- 	}
+diff --git a/arch/x86/kernel/cpu/mce/therm_throt.c b/arch/x86/kernel/cpu/mce/therm_throt.c
+index 6e2becf547c5..bc441d68d060 100644
+--- a/arch/x86/kernel/cpu/mce/therm_throt.c
++++ b/arch/x86/kernel/cpu/mce/therm_throt.c
+@@ -188,7 +188,7 @@ static void therm_throt_process(bool new_event, int event, int level)
+ 	/* if we just entered the thermal event */
+ 	if (new_event) {
+ 		if (event == THERMAL_THROTTLING_EVENT)
+-			pr_crit("CPU%d: %s temperature above threshold, cpu clock throttled (total events = %lu)\n",
++			pr_warn("CPU%d: %s temperature above threshold, cpu clock throttled (total events = %lu)\n",
+ 				this_cpu,
+ 				level == CORE_LEVEL ? "Core" : "Package",
+ 				state->count);
+-- 
+2.20.1
+
 
 
