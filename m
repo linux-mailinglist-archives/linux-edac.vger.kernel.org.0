@@ -2,40 +2,41 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D7FAD12C941
-	for <lists+linux-edac@lfdr.de>; Sun, 29 Dec 2019 19:18:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FD9912C8FC
+	for <lists+linux-edac@lfdr.de>; Sun, 29 Dec 2019 19:17:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387725AbfL2SCz (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Sun, 29 Dec 2019 13:02:55 -0500
-Received: from mail.kernel.org ([198.145.29.99]:42288 "EHLO mail.kernel.org"
+        id S2387616AbfL2R6t (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Sun, 29 Dec 2019 12:58:49 -0500
+Received: from mail.kernel.org ([198.145.29.99]:50078 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1732674AbfL2RyZ (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Sun, 29 Dec 2019 12:54:25 -0500
+        id S2387607AbfL2R6t (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Sun, 29 Dec 2019 12:58:49 -0500
 Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 98E4821744;
-        Sun, 29 Dec 2019 17:54:24 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id B0830206A4;
+        Sun, 29 Dec 2019 17:58:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1577642065;
-        bh=UZCOrNCSYzLLHQQCAcwBP86yz0fqplT9ITOoRdzBppw=;
+        s=default; t=1577642328;
+        bh=jjSDoosDC2f5Hfu0htQLEoNtBfuF1F+entclPo6rXTY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ySzmk82yG41ouG4TD8ri0a+QryqBBZINeo9cWZBuF1zj09jAEFwqFUoKCXMbwElKe
-         A7c5M1EX50Bi+8yM01ho9eeNVYLhj7sTTc/ku/DS/PSb0KsVjhtkLmZ+sR+/pbYTxM
-         Gz95lwDQ+niMT1dTFQ1CQc95U4VYEBxi79MpMg4A=
+        b=nq1e6kNOEd5IQw5yVhIOezwGAFrHWFTR/rKe8DxTFW2iZ/rfmp4mMFj9GFf+RYxGJ
+         6Ag7Or4SbvkzbeDHWpTcftxiCbS6VUfqWO/KtJWV2Lj4zEZVSpJnXiF4tgFrPlt41t
+         wqqhZmdh74F9ZePBOgGevCaxNCGAUyDEJBcEfH7U=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, James Morse <james.morse@arm.com>,
-        Robert Richter <rrichter@marvell.com>,
+        stable@vger.kernel.org,
+        Konstantin Khlebnikov <khlebnikov@yandex-team.ru>,
         Borislav Petkov <bp@suse.de>,
-        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
-        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
-        Tony Luck <tony.luck@intel.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 284/434] EDAC/ghes: Fix grain calculation
-Date:   Sun, 29 Dec 2019 18:25:37 +0100
-Message-Id: <20191229172720.814013410@linuxfoundation.org>
+        Yazen Ghannam <yazen.ghannam@amd.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
+        linux-edac <linux-edac@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Tony Luck <tony.luck@intel.com>, x86-ml <x86@kernel.org>
+Subject: [PATCH 5.4 421/434] x86/MCE/AMD: Do not use rdmsr_safe_on_cpu() in smca_configure()
+Date:   Sun, 29 Dec 2019 18:27:54 +0100
+Message-Id: <20191229172731.058586083@linuxfoundation.org>
 X-Mailer: git-send-email 2.24.1
 In-Reply-To: <20191229172702.393141737@linuxfoundation.org>
 References: <20191229172702.393141737@linuxfoundation.org>
@@ -48,95 +49,73 @@ Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-From: Robert Richter <rrichter@marvell.com>
+From: Konstantin Khlebnikov <khlebnikov@yandex-team.ru>
 
-[ Upstream commit 7088e29e0423d3195e09079b4f849ec4837e5a75 ]
+commit 246ff09f89e54fdf740a8d496176c86743db3ec7 upstream.
 
-The current code to convert a physical address mask to a grain
-(defined as granularity in bytes) is:
+... because interrupts are disabled that early and sending IPIs can
+deadlock:
 
-	e->grain = ~(mem_err->physical_addr_mask & ~PAGE_MASK);
+  BUG: sleeping function called from invalid context at kernel/sched/completion.c:99
+  in_atomic(): 1, irqs_disabled(): 1, non_block: 0, pid: 0, name: swapper/1
+  no locks held by swapper/1/0.
+  irq event stamp: 0
+  hardirqs last  enabled at (0): [<0000000000000000>] 0x0
+  hardirqs last disabled at (0): [<ffffffff8106dda9>] copy_process+0x8b9/0x1ca0
+  softirqs last  enabled at (0): [<ffffffff8106dda9>] copy_process+0x8b9/0x1ca0
+  softirqs last disabled at (0): [<0000000000000000>] 0x0
+  Preemption disabled at:
+  [<ffffffff8104703b>] start_secondary+0x3b/0x190
+  CPU: 1 PID: 0 Comm: swapper/1 Not tainted 5.5.0-rc2+ #1
+  Hardware name: GIGABYTE MZ01-CE1-00/MZ01-CE1-00, BIOS F02 08/29/2018
+  Call Trace:
+   dump_stack
+   ___might_sleep.cold.92
+   wait_for_completion
+   ? generic_exec_single
+   rdmsr_safe_on_cpu
+   ? wrmsr_on_cpus
+   mce_amd_feature_init
+   mcheck_cpu_init
+   identify_cpu
+   identify_secondary_cpu
+   smp_store_cpu_info
+   start_secondary
+   secondary_startup_64
 
-This is broken in several ways:
+The function smca_configure() is called only on the current CPU anyway,
+therefore replace rdmsr_safe_on_cpu() with atomic rdmsr_safe() and avoid
+the IPI.
 
-1) It calculates to wrong grain values. E.g., a physical address mask
-of ~0xfff should give a grain of 0x1000. Without considering
-PAGE_MASK, there is an off-by-one. Things are worse when also
-filtering it with ~PAGE_MASK. This will calculate to a grain with the
-upper bits set. In the example it even calculates to ~0.
+ [ bp: Update commit message. ]
 
-2) The grain does not depend on and is unrelated to the kernel's
-page-size. The page-size only matters when unmapping memory in
-memory_failure(). Smaller grains are wrongly rounded up to the
-page-size, on architectures with a configurable page-size (e.g. arm64)
-this could round up to the even bigger page-size of the hypervisor.
-
-Fix this with:
-
-	e->grain = ~mem_err->physical_addr_mask + 1;
-
-The grain_bits are defined as:
-
-	grain = 1 << grain_bits;
-
-Change also the grain_bits calculation accordingly, it is the same
-formula as in edac_mc.c now and the code can be unified.
-
-The value in ->physical_addr_mask coming from firmware is assumed to
-be contiguous, but this is not sanity-checked. However, in case the
-mask is non-contiguous, a conversion to grain_bits effectively
-converts the grain bit mask to a power of 2 by rounding it up.
-
-Suggested-by: James Morse <james.morse@arm.com>
-Signed-off-by: Robert Richter <rrichter@marvell.com>
+Signed-off-by: Konstantin Khlebnikov <khlebnikov@yandex-team.ru>
 Signed-off-by: Borislav Petkov <bp@suse.de>
-Reviewed-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
-Cc: "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>
+Reviewed-by: Yazen Ghannam <yazen.ghannam@amd.com>
+Cc: "H. Peter Anvin" <hpa@zytor.com>
+Cc: Ingo Molnar <mingo@redhat.com>
+Cc: linux-edac <linux-edac@vger.kernel.org>
+Cc: <stable@vger.kernel.org>
+Cc: Thomas Gleixner <tglx@linutronix.de>
 Cc: Tony Luck <tony.luck@intel.com>
-Link: https://lkml.kernel.org/r/20191106093239.25517-11-rrichter@marvell.com
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Cc: x86-ml <x86@kernel.org>
+Link: https://lkml.kernel.org/r/157252708836.3876.4604398213417262402.stgit@buzz
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+
 ---
- drivers/edac/ghes_edac.c | 10 ++++++++--
- 1 file changed, 8 insertions(+), 2 deletions(-)
+ arch/x86/kernel/cpu/mce/amd.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/edac/ghes_edac.c b/drivers/edac/ghes_edac.c
-index 296e714bf553..523dd56a798c 100644
---- a/drivers/edac/ghes_edac.c
-+++ b/drivers/edac/ghes_edac.c
-@@ -231,6 +231,7 @@ void ghes_edac_report_mem_error(int sev, struct cper_sec_mem_err *mem_err)
- 	/* Cleans the error report buffer */
- 	memset(e, 0, sizeof (*e));
- 	e->error_count = 1;
-+	e->grain = 1;
- 	strcpy(e->label, "unknown label");
- 	e->msg = pvt->msg;
- 	e->other_detail = pvt->other_detail;
-@@ -326,7 +327,7 @@ void ghes_edac_report_mem_error(int sev, struct cper_sec_mem_err *mem_err)
+--- a/arch/x86/kernel/cpu/mce/amd.c
++++ b/arch/x86/kernel/cpu/mce/amd.c
+@@ -269,7 +269,7 @@ static void smca_configure(unsigned int
+ 	if (smca_banks[bank].hwid)
+ 		return;
  
- 	/* Error grain */
- 	if (mem_err->validation_bits & CPER_MEM_VALID_PA_MASK)
--		e->grain = ~(mem_err->physical_addr_mask & ~PAGE_MASK);
-+		e->grain = ~mem_err->physical_addr_mask + 1;
- 
- 	/* Memory error location, mapped on e->location */
- 	p = e->location;
-@@ -442,8 +443,13 @@ void ghes_edac_report_mem_error(int sev, struct cper_sec_mem_err *mem_err)
- 	if (p > pvt->other_detail)
- 		*(p - 1) = '\0';
- 
-+	/* Sanity-check driver-supplied grain value. */
-+	if (WARN_ON_ONCE(!e->grain))
-+		e->grain = 1;
-+
-+	grain_bits = fls_long(e->grain - 1);
-+
- 	/* Generate the trace event */
--	grain_bits = fls_long(e->grain);
- 	snprintf(pvt->detail_location, sizeof(pvt->detail_location),
- 		 "APEI location: %s %s", e->location, e->other_detail);
- 	trace_mc_event(type, e->msg, e->label, e->error_count,
--- 
-2.20.1
-
+-	if (rdmsr_safe_on_cpu(cpu, MSR_AMD64_SMCA_MCx_IPID(bank), &low, &high)) {
++	if (rdmsr_safe(MSR_AMD64_SMCA_MCx_IPID(bank), &low, &high)) {
+ 		pr_warn("Failed to read MCA_IPID for bank %d\n", bank);
+ 		return;
+ 	}
 
 
