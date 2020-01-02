@@ -2,27 +2,27 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CC1712EFA0
-	for <lists+linux-edac@lfdr.de>; Thu,  2 Jan 2020 23:47:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C40FE12EEF0
+	for <lists+linux-edac@lfdr.de>; Thu,  2 Jan 2020 23:42:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729373AbgABW33 (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Thu, 2 Jan 2020 17:29:29 -0500
-Received: from mail.kernel.org ([198.145.29.99]:60504 "EHLO mail.kernel.org"
+        id S1731302AbgABWmV (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Thu, 2 Jan 2020 17:42:21 -0500
+Received: from mail.kernel.org ([198.145.29.99]:46558 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730048AbgABW31 (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Thu, 2 Jan 2020 17:29:27 -0500
+        id S1730472AbgABWgF (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Thu, 2 Jan 2020 17:36:05 -0500
 Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id ADD0F20866;
-        Thu,  2 Jan 2020 22:29:26 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id DA7E121835;
+        Thu,  2 Jan 2020 22:36:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1578004167;
+        s=default; t=1578004564;
         bh=Cx/xZ2CdBultJ1QQYrebdLtgIDl5PklKrm8PpPvqR0s=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=P3H8pw/JyDAJ/SKVbJOCQMj6y74xb8dwAOza2SY/4VbsCZplymYMvFZ1c8kCd0Uhf
-         a5MytjlElslrx6/InlWL7mbIzNxoZJSUczhoWSkeEUiLVDlR+ANofNv0NYlFAkF0IH
-         3gJ9WPkh+P/qn0AVY6YQXMer01ISAPNVPrIVzFFw=
+        b=s+N0ym+xhbEvBu3sz9EYWSDe4RK/CiSSrnVIKWphbjCEfItnglWaGyfO1NoWl1Z/j
+         Yyhhuq79PZDhznsU2gJEiXOh2Axp4wSAygRW2H79OrTZkJDS3Elmxxna69FR4CKmG5
+         EwZyE9b+6QyWnOJe8bSQmYJJmo+dvKBIlE8i5lfI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -33,12 +33,12 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
         Tony Luck <tony.luck@intel.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.9 065/171] EDAC/ghes: Fix grain calculation
-Date:   Thu,  2 Jan 2020 23:06:36 +0100
-Message-Id: <20200102220555.906743841@linuxfoundation.org>
+Subject: [PATCH 4.4 052/137] EDAC/ghes: Fix grain calculation
+Date:   Thu,  2 Jan 2020 23:07:05 +0100
+Message-Id: <20200102220553.544836208@linuxfoundation.org>
 X-Mailer: git-send-email 2.24.1
-In-Reply-To: <20200102220546.960200039@linuxfoundation.org>
-References: <20200102220546.960200039@linuxfoundation.org>
+In-Reply-To: <20200102220546.618583146@linuxfoundation.org>
+References: <20200102220546.618583146@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
