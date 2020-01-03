@@ -2,40 +2,40 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BB1B312F97F
-	for <lists+linux-edac@lfdr.de>; Fri,  3 Jan 2020 16:07:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 399A312F980
+	for <lists+linux-edac@lfdr.de>; Fri,  3 Jan 2020 16:07:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727930AbgACPHo (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Fri, 3 Jan 2020 10:07:44 -0500
-Received: from smtp-fw-4101.amazon.com ([72.21.198.25]:1991 "EHLO
+        id S1727769AbgACPHp (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Fri, 3 Jan 2020 10:07:45 -0500
+Received: from smtp-fw-4101.amazon.com ([72.21.198.25]:2000 "EHLO
         smtp-fw-4101.amazon.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727769AbgACPHo (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Fri, 3 Jan 2020 10:07:44 -0500
+        with ESMTP id S1727701AbgACPHp (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Fri, 3 Jan 2020 10:07:45 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=amazon.de; i=@amazon.de; q=dns/txt; s=amazon201209;
-  t=1578064063; x=1609600063;
+  t=1578064064; x=1609600064;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=tJ+5iDQ/bAjdGRg85z5wISvP/YmqlU1qWWJuDNu53GA=;
-  b=YtyCxLXeOAiEb+hLTmuEwTvpqskGdlWjUoe+ooyHH2vs3w0W9n6tZpfI
-   LBfT0+krAqOBdOi7TM9yeQnquyW6bGxGD+ExR9lvN2cG7RJYie7mLUW9L
-   j4GTi89qJBCIpHQhCYsHp4PXTU4YVPsRVKzlNttDE6LBYi/aEQlWjZPAz
-   4=;
-IronPort-SDR: 6JCejOW49GdUl02089QUnN3QGIvR5rbC69HjFv2Pmg3ANnTfSbTR7m2evmt/aRx0vrcWtiVBBE
- 2eAjLLQPTp6g==
+  bh=iHsaaNSb6QuBd5deQsg49o2tayu5boXDGXFCOP8fQzk=;
+  b=Fk6TLzpdu7D3QWekW6/8JbQ6qiy+I3Y6wm0Z5KU9X3bJN7+e5Bvmpzd4
+   gvv5igoUd90w7nxGRwyacv26BSllz8JX2AjHwqJ0DEc/y9g7tVWmbyD5Z
+   LFpdKN/GMUSxnKnQS/kzBNSEOxovQBzH29rqGT2mqzaVKb6gHcC3hF5qe
+   A=;
+IronPort-SDR: dzSxum0Eg4ym7IdAnqI5ApmAWoDS4hbW1dA4MiC2R/lbhYUFwc/P4ZlINqPgjvjg++vg67PfRM
+ Hl3Us7UKpoPg==
 X-IronPort-AV: E=Sophos;i="5.69,390,1571702400"; 
-   d="scan'208";a="10829612"
-Received: from iad12-co-svc-p1-lb1-vlan3.amazon.com (HELO email-inbound-relay-2b-baacba05.us-west-2.amazon.com) ([10.43.8.6])
-  by smtp-border-fw-out-4101.iad4.amazon.com with ESMTP; 03 Jan 2020 15:07:41 +0000
-Received: from u7588a65da6b65f.ant.amazon.com (pdx2-ws-svc-lb17-vlan3.amazon.com [10.247.140.70])
-        by email-inbound-relay-2b-baacba05.us-west-2.amazon.com (Postfix) with ESMTPS id ABF44A22F7;
-        Fri,  3 Jan 2020 15:07:39 +0000 (UTC)
+   d="scan'208";a="10829622"
+Received: from iad12-co-svc-p1-lb1-vlan3.amazon.com (HELO email-inbound-relay-1e-27fb8269.us-east-1.amazon.com) ([10.43.8.6])
+  by smtp-border-fw-out-4101.iad4.amazon.com with ESMTP; 03 Jan 2020 15:07:44 +0000
+Received: from u7588a65da6b65f.ant.amazon.com (iad7-ws-svc-lb50-vlan3.amazon.com [10.0.93.214])
+        by email-inbound-relay-1e-27fb8269.us-east-1.amazon.com (Postfix) with ESMTPS id A32F0A1C46;
+        Fri,  3 Jan 2020 15:07:40 +0000 (UTC)
 Received: from u7588a65da6b65f.ant.amazon.com (localhost [127.0.0.1])
-        by u7588a65da6b65f.ant.amazon.com (8.15.2/8.15.2/Debian-3) with ESMTPS id 003F7cnN020465
+        by u7588a65da6b65f.ant.amazon.com (8.15.2/8.15.2/Debian-3) with ESMTPS id 003F7coI020473
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
         Fri, 3 Jan 2020 16:07:38 +0100
 Received: (from jschoenh@localhost)
-        by u7588a65da6b65f.ant.amazon.com (8.15.2/8.15.2/Submit) id 003F7cj2020464;
+        by u7588a65da6b65f.ant.amazon.com (8.15.2/8.15.2/Submit) id 003F7cqx020472;
         Fri, 3 Jan 2020 16:07:38 +0100
 From:   =?UTF-8?q?Jan=20H=2E=20Sch=C3=B6nherr?= <jschoenh@amazon.de>
 To:     Borislav Petkov <bp@alien8.de>
@@ -46,9 +46,9 @@ Cc:     =?UTF-8?q?Jan=20H=2E=20Sch=C3=B6nherr?= <jschoenh@amazon.de>,
         Thomas Gleixner <tglx@linutronix.de>,
         Ingo Molnar <mingo@redhat.com>,
         "H. Peter Anvin" <hpa@zytor.com>, x86@kernel.org
-Subject: [PATCH v2 3/6] x86/mce: Fix use of uninitialized MCE message string
-Date:   Fri,  3 Jan 2020 16:07:19 +0100
-Message-Id: <20200103150722.20313-4-jschoenh@amazon.de>
+Subject: [PATCH v2 4/6] x86/mce: Allow a variable number of internal MCE decode notifiers
+Date:   Fri,  3 Jan 2020 16:07:20 +0100
+Message-Id: <20200103150722.20313-5-jschoenh@amazon.de>
 X-Mailer: git-send-email 2.22.0.3.gb49bb57c8208.dirty
 In-Reply-To: <20200103150722.20313-1-jschoenh@amazon.de>
 References: <20200103150722.20313-1-jschoenh@amazon.de>
@@ -60,50 +60,74 @@ Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-The function mce_severity() is not required to update its msg argument.
-In fact, mce_severity_amd() does not, which makes mce_no_way_out()
-return uninitialized data, which may be used later for printing.
-
-Assuming that implementations of mce_severity() either always or never
-update the msg argument (which is currently the case), it is sufficient
-to initialize the temporary variable in mce_no_way_out().
-
-While at it, avoid printing a useless "Unknown".
+Get rid of the compile time constant of internal (or mandatory)
+MCE decode notifiers in preparation for future changes. Instead,
+distinguish explicitly between internal and external MCE decode
+notifiers.
 
 Signed-off-by: Jan H. Schönherr <jschoenh@amazon.de>
 ---
-Changes v1->v2:
-- simplify fix by assuming that mce_severity() either always or never
-  updates the msg argument -- as opposed to mce_severity() having the
-  freedom to decide on a case by case basis (requested by Boris);
-- stop printing "Unknown" (requested by Boris).
+New in v2, preparation for patches 5 and 6.
 ---
- arch/x86/kernel/cpu/mce/core.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ arch/x86/kernel/cpu/mce/core.c | 21 ++++++++++++---------
+ 1 file changed, 12 insertions(+), 9 deletions(-)
 
 diff --git a/arch/x86/kernel/cpu/mce/core.c b/arch/x86/kernel/cpu/mce/core.c
-index 0ccd6cf3402d..1d91ce956772 100644
+index 1d91ce956772..d48deb127071 100644
 --- a/arch/x86/kernel/cpu/mce/core.c
 +++ b/arch/x86/kernel/cpu/mce/core.c
-@@ -790,7 +790,7 @@ EXPORT_SYMBOL_GPL(machine_check_poll);
- static int mce_no_way_out(struct mce *m, char **msg, unsigned long *validp,
- 			  struct pt_regs *regs)
+@@ -157,21 +157,24 @@ void mce_log(struct mce *m)
+ EXPORT_SYMBOL_GPL(mce_log);
+ 
+ /*
+- * We run the default notifier if we have only the UC, the first and the
+- * default notifier registered. I.e., the mandatory NUM_DEFAULT_NOTIFIERS
++ * We run the default notifier as long as we have no external
+  * notifiers registered on the chain.
+  */
+-#define NUM_DEFAULT_NOTIFIERS	3
+ static atomic_t num_notifiers;
+ 
+-void mce_register_decode_chain(struct notifier_block *nb)
++static void mce_register_decode_chain_internal(struct notifier_block *nb)
  {
--	char *tmp;
-+	char *tmp = *msg;
- 	int i;
+ 	if (WARN_ON(nb->priority > MCE_PRIO_MCELOG && nb->priority < MCE_PRIO_EDAC))
+ 		return;
  
- 	for (i = 0; i < this_cpu_read(mce_num_banks); i++) {
-@@ -1209,8 +1209,8 @@ void do_machine_check(struct pt_regs *regs, long error_code)
- 	DECLARE_BITMAP(toclear, MAX_NR_BANKS);
- 	struct mca_config *cfg = &mca_cfg;
- 	int cpu = smp_processor_id();
--	char *msg = "Unknown";
- 	struct mce m, *final;
-+	char *msg = NULL;
- 	int worst = 0;
++	blocking_notifier_chain_register(&x86_mce_decoder_chain, nb);
++}
++
++void mce_register_decode_chain(struct notifier_block *nb)
++{
+ 	atomic_inc(&num_notifiers);
  
- 	/*
+-	blocking_notifier_chain_register(&x86_mce_decoder_chain, nb);
++	mce_register_decode_chain_internal(nb);
+ }
+ EXPORT_SYMBOL_GPL(mce_register_decode_chain);
+ 
+@@ -611,7 +614,7 @@ static int mce_default_notifier(struct notifier_block *nb, unsigned long val,
+ 	if (!m)
+ 		return NOTIFY_DONE;
+ 
+-	if (atomic_read(&num_notifiers) > NUM_DEFAULT_NOTIFIERS)
++	if (atomic_read(&num_notifiers))
+ 		return NOTIFY_DONE;
+ 
+ 	__print_mce(m);
+@@ -1966,9 +1969,9 @@ __setup("mce", mcheck_enable);
+ int __init mcheck_init(void)
+ {
+ 	mcheck_intel_therm_init();
+-	mce_register_decode_chain(&first_nb);
+-	mce_register_decode_chain(&mce_uc_nb);
+-	mce_register_decode_chain(&mce_default_nb);
++	mce_register_decode_chain_internal(&first_nb);
++	mce_register_decode_chain_internal(&mce_uc_nb);
++	mce_register_decode_chain_internal(&mce_default_nb);
+ 	mcheck_vendor_init_severity();
+ 
+ 	INIT_WORK(&mce_work, mce_gen_pool_process);
 -- 
 2.22.0.3.gb49bb57c8208.dirty
 
