@@ -2,96 +2,99 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CD9701304BC
-	for <lists+linux-edac@lfdr.de>; Sat,  4 Jan 2020 22:47:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DA6E13111C
+	for <lists+linux-edac@lfdr.de>; Mon,  6 Jan 2020 12:03:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726252AbgADVrm (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Sat, 4 Jan 2020 16:47:42 -0500
-Received: from mail-qk1-f196.google.com ([209.85.222.196]:34255 "EHLO
-        mail-qk1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726170AbgADVrm (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Sat, 4 Jan 2020 16:47:42 -0500
-Received: by mail-qk1-f196.google.com with SMTP id j9so37038039qkk.1
-        for <linux-edac@vger.kernel.org>; Sat, 04 Jan 2020 13:47:42 -0800 (PST)
+        id S1726275AbgAFLDb (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Mon, 6 Jan 2020 06:03:31 -0500
+Received: from mail-ot1-f68.google.com ([209.85.210.68]:40891 "EHLO
+        mail-ot1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726080AbgAFLDb (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Mon, 6 Jan 2020 06:03:31 -0500
+Received: by mail-ot1-f68.google.com with SMTP id w21so63517382otj.7;
+        Mon, 06 Jan 2020 03:03:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:subject:to:cc:references:message-id:date:user-agent
-         :mime-version:in-reply-to:content-transfer-encoding:content-language;
-        bh=SnFTnKx2lZ4rjjQb3CYdShbRp/3ADmmfD/jJ450P1Q0=;
-        b=oCafgkIsTaVSomynfZi2HuvkMA5hNNSsqtnZCcQcIxEzNImhqo3KJKYJGDhA14SEk4
-         wBJE2B4Axlz1M0DQi7w9nfaqjczDRWbueJB2eTRYf2XIeIkc6v8MeMY1U5tw9nRFtrs6
-         ADyQio1kdKhdDeLtCr1eq11CltpcRiy0nBpysZD1Vx9zX2cx/bpylI4TXK43Ab70E8Qr
-         dM5e+s1A/xhoRFiECaBkTddRkYYoRae52WxPyMpAwNn2qDZuz/8vR14u4AVx3JGpWJ6s
-         pJIDNWpYwTh55/mO9/U0QDJ7GJaQpbcJG7kBgORktKD1tpWfVh8a0Xzy74ZdhpCmODtf
-         91zQ==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=6vdryAwpAtjdLmL+w82hzip04Zqpf7RG2w9DyYsoli4=;
+        b=q4YbPMkfXd/I9FQeGyVxHlqjckdvE1tjIRfqafgAFdOgINud/OV2rTNYKuYY2RIcF5
+         Te998iW27gIX+djVeqLQfZ56J9Lcio6zw0E/D0Sj/UXX3Nm79WZgH2mSXxRdxb8PIx6j
+         MEl2Uct0/LoMaUGe4EqDrfufKVu2zwVScn1iMHz+V8RwFWdMryvKDijyIKjVdmlIYt5K
+         4MhPX0SbSxSAkoauQMOF6D4yxI9OZTV9aXcHQ5ihMcQrW3bU4MqF/s5oqNQuDjI6tVP8
+         cQnS2bzUbUvoxbMjxWQux/ZGFSqOjJgwBzuh5BlOXcVMt7gOUjAMyqsKj9NtDQ24Ypxv
+         vJdw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:subject:to:cc:references:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=SnFTnKx2lZ4rjjQb3CYdShbRp/3ADmmfD/jJ450P1Q0=;
-        b=oJ/oFed9lW2PQ9OPZGOu91N/UWGDvxhOrcsmjCec3VSO53fJ4x1VUKjtD5id6HUKmV
-         k18ifT86TVXnL54qhq9sUMfjmfOePIhPs8MPoAOSMgmcq5DjAE88EAou3dFnFCiAs8wx
-         yD5kUlVhEhEO8vfe24Mb/p2F4ES3M80ouI+JgdHsReyeSyw8TmT3lVm8XOv09Iu6YVHi
-         7zqkdM29o7oS1VIZhQ5XoLRfOmfZcbkdZLoS7poVjVFlWsYPqdqSphhXvi9s4H5Bk2aF
-         jJk4P5flViDTvPuInhhwUHr72am3SlN8PlFRuTGLnC0J8yqBCOq9BfRihe3lhZxrOY8C
-         /Aog==
-X-Gm-Message-State: APjAAAXWeYemTz8BPBqYVjqIXguq2efzAUWQ5U9Q+gzzsLTyR6npTawP
-        yrh1d+0ANtr9SfnoAG6H39skqFsr
-X-Google-Smtp-Source: APXvYqw2XVKQ7a0SoK+NXARqQuvu6oxVmmq6tbwWCw98Kt33Zp/SGj9C1SYqFqzgDm/vhXg4nFA9Nw==
-X-Received: by 2002:ae9:ea08:: with SMTP id f8mr71660846qkg.489.1578174461086;
-        Sat, 04 Jan 2020 13:47:41 -0800 (PST)
-Received: from ?IPv6:2001:1970:535e:cd00:e378:c9fb:7183:d83d? ([2001:1970:535e:cd00:e378:c9fb:7183:d83d])
-        by smtp.gmail.com with ESMTPSA id t73sm18579265qke.71.2020.01.04.13.47.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 04 Jan 2020 13:47:40 -0800 (PST)
-From:   Jean-Frederic <jfgaudreault@gmail.com>
-Subject: Re: [GIT PULL] EDAC pile for 5.4 -> AMD family 17h, model 70h support
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     "Ghannam, Yazen" <Yazen.Ghannam@amd.com>,
-        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>
-References: <CAEVokG4SSkgWS2N8eqr+h7AJg9CF26OW7vtXwOurCGU-4dsLbw@mail.gmail.com>
- <20191009103041.GC10395@zn.tnic>
- <724d6f97-61f2-94bd-3f4b-793a55b6ac15@amd.com>
- <CAEVokG4T5q8PBmf4=vLjPWQjzL_Xwu6yF81=mLjkpoJSoCggkw@mail.gmail.com>
- <20191010095650.GC7658@zn.tnic>
- <9f3ce002-7380-0e93-7bd5-20bb944d0b77@gmail.com>
- <20191010134128.GF7658@zn.tnic>
- <60b68d6c-5aff-3e7c-9461-c26a5f28cd87@amd.com>
- <79bca0d0-42eb-c232-6bbe-a958734e096d@gmail.com>
- <f5820b41-c97a-b6be-df97-bbff85a7e5ee@gmail.com>
- <20191019082554.GB5571@zn.tnic>
- <fddfb084-69a0-a913-f750-ef0a7830dd1e@gmail.com>
- <7acbeaaf-27cf-0c04-5979-b362f770bc00@gmail.com>
-Message-ID: <6d9b37f8-e753-8c9e-55b9-547c19b02df2@gmail.com>
-Date:   Sat, 4 Jan 2020 16:47:39 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.2.2
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=6vdryAwpAtjdLmL+w82hzip04Zqpf7RG2w9DyYsoli4=;
+        b=pm89ymOwJfJvfFxGR8Ml0/k/mOOj2ZplrQdXQM1d8RUjFFwo/w3aW4VkTFX1C7BBFy
+         5iw3j1mxFD+puS1ORqVWR3xtZ+stBa9bZ8cv3GzYN8BA5BRR43Nm0Gv1oYR1gP+tOg40
+         nGUCjJ5LICavSy4/mD9gEDHo9PTmuPGhPeeI+ozyszM/yxLGhV3Wr1P0aRAGC5moozUD
+         oJQPTdCuDVQWAJA7zkb8Jl0+T6s+PL3IwRt7i6ZCzBxv1sTf2Ro20+6k0oqqyoHyOEO3
+         +/zkrTsjrbs26m9rfSkhxlNb5UbWL9QmzMgP+43nyor7DRSztnCVUyqjvihDxGKDZHp/
+         HClg==
+X-Gm-Message-State: APjAAAWWGb7rZQfnkqm0/ORzic8an3poAvEczLhZAo8XvfeQimJVlkOH
+        elYhqUXgqLSBU69JJm+hJW+ayVtW13q7A9J0LcI=
+X-Google-Smtp-Source: APXvYqw9wUMjHkz2hw3pD8PhUwQ5RLqU5K/0A4FMvhStPMw80kAZ3AUyK0h+3wc9r20fi7Q5O0KQdUUAv0+WcRqMao8=
+X-Received: by 2002:a05:6830:1e2d:: with SMTP id t13mr118894094otr.128.1578308610177;
+ Mon, 06 Jan 2020 03:03:30 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <7acbeaaf-27cf-0c04-5979-b362f770bc00@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
+References: <1576652618-27017-1-git-send-email-bupadhaya@marvell.com> <20200102180130.GG8345@zn.tnic>
+In-Reply-To: <20200102180130.GG8345@zn.tnic>
+From:   Bhaskar Upadhaya <bhaskar.upadhaya.linux@gmail.com>
+Date:   Mon, 6 Jan 2020 16:33:19 +0530
+Message-ID: <CAEYJA6oXTxTmJEji5_Hup2oB+GrgGnmSTiS-nNuzbNzGJ9VESA@mail.gmail.com>
+Subject: Re: [RFC PATCH] apei/ghes: fix ghes_poll_func by registering in
+ non-deferrable mode
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     Bhaskar Upadhaya <bupadhaya@marvell.com>,
+        linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
+        linux-edac@vger.kernel.org, lenb@kernel.org, rafael@kernel.org,
+        gkulkarni@marvell.com, rrichter@marvell.com
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On 2020-01-04 15:03, Jean-Frederic wrote:
-> I'm not too sure I understand what was the exact problem but it really seems
-> fine now. I also updated my bios meanwhile but it did not mention there was
-> anything related to memory or ECC fix. It just said Improve system
-> performance.
-> (bios version 1405 for Asus PRIME X570-PRO with Ryzen 3900x)
-It seems after all that the real fix may be in on of the last bios update I've
-applied, because I retested with kernel 5.4.2 and even 5.4.0 and I now
-get also error reporting there, although there is some call stack trace
-logged in dmesg, so the newer kernel > 5.4.2 appear much cleaner in
-logging at least.
+On Thu, Jan 2, 2020 at 11:31 PM Borislav Petkov <bp@alien8.de> wrote:
+>
+> On Tue, Dec 17, 2019 at 11:03:38PM -0800, Bhaskar Upadhaya wrote:
+> > Currently Linux register ghes_poll_func with TIMER_DEFERRABLE flag,
+> > because of which it is serviced when the CPU eventually wakes up with a
+> > subsequent non-deferrable timer and not at the configured polling interval.
+> >
+> > For polling mode, the polling interval configured by firmware should not
+> > be exceeded as per ACPI_6_3 spec[refer Table 18-394],
+>
+> I see
+>
+> "Table 18-394 Hardware Error Notification Structure"
+>
+> where does it say that the interval should not be exceeded and what is
+> going to happen if it gets exceeded?
 
-Also now when I do rdmsr 0xC0002003 it returns non-zero, which
-wasn't the case before.
+Definition of poll interval as per spec (referred ACPI 6.3):
+"Indicates the poll interval in milliseconds OSPM should use to
+periodically check the error source for the presence of an error
+condition."
 
--- 
-Jean-Frédéric
+This indicates OSPM should periodically check error source within poll
+interval, but with timer being configured with TIMER_DEFERRABLE, timer
+is not called within poll interval limit
+>
+> IOW, are you fixing something you're observing on some platform or
+> you're reading the spec only?
 
+We are observing an issue in our ThunderX2 platforms wherein
+ghes_poll_func is not called within poll interval when timer is
+configured with TIMER_DEFERRABLE flag(For NO_HZ kernel) and hence we
+are losing the error records.
+>
+> --
+> Regards/Gruss,
+>     Boris.
+>
+> https://people.kernel.org/tglx/notes-about-netiquette
