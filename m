@@ -2,78 +2,75 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 96D9A133003
-	for <lists+linux-edac@lfdr.de>; Tue,  7 Jan 2020 20:56:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AA245133035
+	for <lists+linux-edac@lfdr.de>; Tue,  7 Jan 2020 21:02:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728703AbgAGT4h (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Tue, 7 Jan 2020 14:56:37 -0500
-Received: from mail-ed1-f66.google.com ([209.85.208.66]:38204 "EHLO
-        mail-ed1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728634AbgAGT4h (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Tue, 7 Jan 2020 14:56:37 -0500
-Received: by mail-ed1-f66.google.com with SMTP id i16so626652edr.5
-        for <linux-edac@vger.kernel.org>; Tue, 07 Jan 2020 11:56:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=lUsTd9lJYwK928kai9reachpHe0HC9Hv8/gDLGwtaBI=;
-        b=m/Udengj3famfT4AeeQ1IRW+yMW7VasUnASahB37i/PoeHrkRBk2CGyFKYNukmjW7S
-         L8SRka5Jakx3oOkJPsG2IofN9vOqI+MJeZI3Q0YE0hhIfxJgla/Mvi4GlBIJ0+PXKJyR
-         fGhtIsUmeS9lphgKJPwASTV0Wis5x+akjvA6FztTMBR/K8fgi7sOjdtLa1OeTeeGw/oC
-         WuhGv+1qsxod0shrSr56iRhzuujf6ypC8mQV8JosjFfNeYtuq3xDGNFupimiXFOQL0SO
-         8SxYRsEAywqZcf7WmcQRmN/Qkf20W+/a6rRSJl252WjsQoa/SZxLvQ4mGRJVkfZ3ex9s
-         ABpA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=lUsTd9lJYwK928kai9reachpHe0HC9Hv8/gDLGwtaBI=;
-        b=ibmgfQTmtzdCMKNctwpcSK3QAjBTfNyH2BS/yvr1wQjCFoJvMH+Z11H1avVSalz6xn
-         47MzKTPlv+a34VYOmILMdfFbYPDIltpEe6vmMnTkZJrGn0zPQth70FeOQcuJCU/9DAx5
-         NQLqCNdD0HGtyJFTMtnNDue5qguOXZqi4zfj5YsVc+NKwVr3hDgU3W5gnCVMJGydWnsY
-         SN0fZE1r1ORuM9xAhDQO/3r0q63IYJgoiG2csDrG2qEyVgVBlfdnNztHiye9bOK7v4Vr
-         5+ZX7yYwfAbDPgukN4qMZ1ps3zwlSqYn0go4L1YXpsAhdIa5i1CyjPQy8CW5Bi1/28HP
-         1zfg==
-X-Gm-Message-State: APjAAAXxfrDnUQS+9xpYKBFuUqCBc+HU8Ju0gFimhp8bsIb5ODXVO4gP
-        qMnVisNM8VwHKUrv5QYokhlgWZY5cb9DILSvax0=
-X-Google-Smtp-Source: APXvYqzNbcT08PcgNHBR6CjdjGMonF1aREtl3FixKkalZzLFfyP3YZsjOtPyVn2SjFoUiZ8TzNVIEuitC7fnDU0d3Kk=
-X-Received: by 2002:a17:907:20ef:: with SMTP id rh15mr1111482ejb.325.1578426995176;
- Tue, 07 Jan 2020 11:56:35 -0800 (PST)
+        id S1728379AbgAGUCN (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Tue, 7 Jan 2020 15:02:13 -0500
+Received: from mail.skyhub.de ([5.9.137.197]:57262 "EHLO mail.skyhub.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728358AbgAGUCN (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Tue, 7 Jan 2020 15:02:13 -0500
+Received: from zn.tnic (p200300EC2F0FB400453AE1B66C2BC925.dip0.t-ipconnect.de [IPv6:2003:ec:2f0f:b400:453a:e1b6:6c2b:c925])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 7B0701EC0CD3;
+        Tue,  7 Jan 2020 21:02:11 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1578427331;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=ysOcvAqAKnTyDEY5Saj0YcqW5rlYPZb9UU4KflK5iSs=;
+        b=LJrGoOQaZjEMccNlBstQ3nCwxvQ+RFSVIczJtEam+HYzGJ++W8NhjF62U9KL5vhcEkS4xI
+        sUhutd8vR2MkV21jR9aMhawxREor8jTEqEo9/gr9gDd3z3ZTW+YMmBEXdhqSjAb7++KNXW
+        qSZ3zJ7GRA5JK7xo4Hf87moF6gemf8E=
+Date:   Tue, 7 Jan 2020 21:02:08 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Robert Richter <rrichter@marvell.com>,
+        Bhaskar Upadhaya <bhaskar.upadhaya.linux@gmail.com>
+Cc:     Bhaskar Upadhaya <bupadhaya@marvell.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
+        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
+        "lenb@kernel.org" <lenb@kernel.org>,
+        "rafael@kernel.org" <rafael@kernel.org>,
+        Ganapatrao Prabhakerrao Kulkarni <gkulkarni@marvell.com>
+Subject: Re: [RFC PATCH] apei/ghes: fix ghes_poll_func by registering in
+ non-deferrable mode
+Message-ID: <20200107200208.GN29542@zn.tnic>
+References: <1576652618-27017-1-git-send-email-bupadhaya@marvell.com>
+ <20200102180130.GG8345@zn.tnic>
+ <CAEYJA6oXTxTmJEji5_Hup2oB+GrgGnmSTiS-nNuzbNzGJ9VESA@mail.gmail.com>
+ <20200106130949.GD12238@zn.tnic>
+ <CAEYJA6rPiBYnM4rT5WJnvTSrk6GBHeLYxK5OF5oxmeVxVepGGQ@mail.gmail.com>
+ <20200107130421.6w67frcsllkblie2@rric.localdomain>
 MIME-Version: 1.0
-Received: by 2002:a17:906:72c6:0:0:0:0 with HTTP; Tue, 7 Jan 2020 11:56:34
- -0800 (PST)
-Reply-To: dhlexpresscouriercompany.nyusa@gmail.com
-From:   "Dr. William Johnson" <currency1000000@gmail.com>
-Date:   Tue, 7 Jan 2020 20:56:34 +0100
-Message-ID: <CAPqfnSEyU1pBR_7HT2g1KK7i8caLMBQ8yPA8KRDVm+MN-K_Z4w@mail.gmail.com>
-Subject: contact Dhl office New York to receive your Prepaid ATM Master Card
- worth $15.8Million US DOLLARS now.
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20200107130421.6w67frcsllkblie2@rric.localdomain>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-ATTN Dear Beneficiary.
-Goodnews
-I have Registered your Prepaid ATM Master Card
-worth $15.800,000.00 US DOLLARS with Courier company
-asigned to deliver it to you today.
-So contact Dhl office New York to receive your Prepaid ATM Master Card
-worth $15.8Million US DOLLARS now.
-Contact Person: Mrs. Mary Michael, Director, DHL Courier Company-NY USA. 10218
-Email. dhlexpresscouriercompany.nyusa@gmail.com
-Call the office +(202) 890-8752
-Rec-Confirmed your mailing address to the office as I listed below.
-Your Full Name--------------
-House Address-----------
-Your working Phone Number----------------
-ID copy-------------------------
-Sex-----------------------------
-Note,delivery fee to your address is only $25.00. send it to this
-company urgent on itunes card today so that DHL will deliver this
-Prepaid ATM Master Card to you today according to our finally
-agreement.
-Thanks for coperations,
-Dr. William Johnson
+On Tue, Jan 07, 2020 at 01:04:29PM +0000, Robert Richter wrote:
+> > Thanks Borislav, I will edit the commit message with you comments in
+> > the next patch.
+> > Can I get your Ack in the next patch ?
+
+Acks are being given when the new version arrives. Look at LKML archives
+for examples.
+
+> I guess Boris will apply the patch to his tree as maintainer, so no
+> need to ack it.
+
+Nah, apei/ghes stuff goes through Rafael. I'm just a reviewer for the
+APEI side.
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
