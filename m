@@ -2,75 +2,65 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AA245133035
-	for <lists+linux-edac@lfdr.de>; Tue,  7 Jan 2020 21:02:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B2D0F13351D
+	for <lists+linux-edac@lfdr.de>; Tue,  7 Jan 2020 22:43:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728379AbgAGUCN (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Tue, 7 Jan 2020 15:02:13 -0500
-Received: from mail.skyhub.de ([5.9.137.197]:57262 "EHLO mail.skyhub.de"
+        id S1727134AbgAGVnN (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Tue, 7 Jan 2020 16:43:13 -0500
+Received: from mga01.intel.com ([192.55.52.88]:11754 "EHLO mga01.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728358AbgAGUCN (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Tue, 7 Jan 2020 15:02:13 -0500
-Received: from zn.tnic (p200300EC2F0FB400453AE1B66C2BC925.dip0.t-ipconnect.de [IPv6:2003:ec:2f0f:b400:453a:e1b6:6c2b:c925])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 7B0701EC0CD3;
-        Tue,  7 Jan 2020 21:02:11 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1578427331;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=ysOcvAqAKnTyDEY5Saj0YcqW5rlYPZb9UU4KflK5iSs=;
-        b=LJrGoOQaZjEMccNlBstQ3nCwxvQ+RFSVIczJtEam+HYzGJ++W8NhjF62U9KL5vhcEkS4xI
-        sUhutd8vR2MkV21jR9aMhawxREor8jTEqEo9/gr9gDd3z3ZTW+YMmBEXdhqSjAb7++KNXW
-        qSZ3zJ7GRA5JK7xo4Hf87moF6gemf8E=
-Date:   Tue, 7 Jan 2020 21:02:08 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Robert Richter <rrichter@marvell.com>,
-        Bhaskar Upadhaya <bhaskar.upadhaya.linux@gmail.com>
-Cc:     Bhaskar Upadhaya <bupadhaya@marvell.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
-        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
-        "lenb@kernel.org" <lenb@kernel.org>,
-        "rafael@kernel.org" <rafael@kernel.org>,
-        Ganapatrao Prabhakerrao Kulkarni <gkulkarni@marvell.com>
-Subject: Re: [RFC PATCH] apei/ghes: fix ghes_poll_func by registering in
- non-deferrable mode
-Message-ID: <20200107200208.GN29542@zn.tnic>
-References: <1576652618-27017-1-git-send-email-bupadhaya@marvell.com>
- <20200102180130.GG8345@zn.tnic>
- <CAEYJA6oXTxTmJEji5_Hup2oB+GrgGnmSTiS-nNuzbNzGJ9VESA@mail.gmail.com>
- <20200106130949.GD12238@zn.tnic>
- <CAEYJA6rPiBYnM4rT5WJnvTSrk6GBHeLYxK5OF5oxmeVxVepGGQ@mail.gmail.com>
- <20200107130421.6w67frcsllkblie2@rric.localdomain>
+        id S1727027AbgAGVnM (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Tue, 7 Jan 2020 16:43:12 -0500
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+X-Amp-File-Uploaded: False
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 07 Jan 2020 13:43:12 -0800
+X-IronPort-AV: E=Sophos;i="5.69,407,1571727600"; 
+   d="scan'208";a="215734490"
+Received: from agluck-desk2.sc.intel.com (HELO agluck-desk2.amr.corp.intel.com) ([10.3.52.68])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 07 Jan 2020 13:43:11 -0800
+Date:   Tue, 7 Jan 2020 13:43:10 -0800
+From:   "Luck, Tony" <tony.luck@intel.com>
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     'Aristeu Rozanski' <aris@redhat.com>,
+        "'linux-edac@vger.kernel.org'" <linux-edac@vger.kernel.org>,
+        'Mauro Carvalho Chehab' <mchehab@kernel.org>
+Subject: Re: [PATCH] EDAC: skx_common: downgrade message importance on
+ missing PCI device
+Message-ID: <20200107214310.GA31851@agluck-desk2.amr.corp.intel.com>
+References: <20191204212325.c4k47p5hrnn3vpb5@redhat.com>
+ <3908561D78D1C84285E8C5FCA982C28F7F4F13AB@ORSMSX115.amr.corp.intel.com>
+ <3908561D78D1C84285E8C5FCA982C28F7F4F19BD@ORSMSX115.amr.corp.intel.com>
+ <20191210090013.GA9395@zn.tnic>
+ <20200106151242.vkdiiwhubmkx5osh@redhat.com>
+ <20200106161732.GF12238@zn.tnic>
+ <20200106162013.cbbeo4ezdp2h7p62@redhat.com>
+ <20200106162306.GG12238@zn.tnic>
+ <20200107155109.6gphrtqb2a7q4unn@redhat.com>
+ <20200107164528.GD29542@zn.tnic>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200107130421.6w67frcsllkblie2@rric.localdomain>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20200107164528.GD29542@zn.tnic>
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Tue, Jan 07, 2020 at 01:04:29PM +0000, Robert Richter wrote:
-> > Thanks Borislav, I will edit the commit message with you comments in
-> > the next patch.
-> > Can I get your Ack in the next patch ?
+On Tue, Jan 07, 2020 at 05:45:28PM +0100, Borislav Petkov wrote:
+> On Tue, Jan 07, 2020 at 10:51:09AM -0500, 'Aristeu Rozanski' wrote:
+> > On Mon, Jan 06, 2020 at 05:23:06PM +0100, Borislav Petkov wrote:
+> > > I'm not saying you should blindly remove them. They might be useful for
+> > > debugging purposes so you should consider that usage angle first. In the
+> > > AMD case, the message was really useless.
+> > 
+> > Ah, I thought you had an objection to this patch :)
+> > Do you mind considering it for inclusion?
+> 
+> That's Tony's call as he's maintaining the Intel side of EDAC.
 
-Acks are being given when the new version arrives. Look at LKML archives
-for examples.
+Already applied to git://git.kernel.org/pub/scm/linux/kernel/git/ras/ras.git
+in edac-for-next branch.  Sorry, should have sent you an "Applied" message.
 
-> I guess Boris will apply the patch to his tree as maintainer, so no
-> need to ack it.
-
-Nah, apei/ghes stuff goes through Rafael. I'm just a reviewer for the
-APEI side.
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+-Tony
