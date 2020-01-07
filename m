@@ -2,64 +2,92 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FC7C1315F7
-	for <lists+linux-edac@lfdr.de>; Mon,  6 Jan 2020 17:23:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C645132468
+	for <lists+linux-edac@lfdr.de>; Tue,  7 Jan 2020 12:03:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726622AbgAFQXL (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Mon, 6 Jan 2020 11:23:11 -0500
-Received: from mail.skyhub.de ([5.9.137.197]:49558 "EHLO mail.skyhub.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726508AbgAFQXL (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Mon, 6 Jan 2020 11:23:11 -0500
-Received: from zn.tnic (p200300EC2F270F00B18FEB7C8E4C4E0C.dip0.t-ipconnect.de [IPv6:2003:ec:2f27:f00:b18f:eb7c:8e4c:4e0c])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 048751EC0C51;
-        Mon,  6 Jan 2020 17:23:09 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1578327790;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=onIFPPp72p79GQGtGWOAdjGSjX1w4haOX51Ul041Juo=;
-        b=Mz7JFffHz6pqDN3QGTzI1Hf4s+YUQUlCGVk4xI/hjJ2LohaWyPpEgXqO2VUQCbKr87TDhZ
-        bAKIt3it+vE4+Mc32U28e4oG0kX0BWUingl4tFrazP1ZEvxKGBwIpGKq2+1+rc9PeNcFWi
-        5HUCnZTJxBcWGFqx3uhfkP0c479NMpo=
-Date:   Mon, 6 Jan 2020 17:23:06 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     'Aristeu Rozanski' <aris@redhat.com>
-Cc:     "Luck, Tony" <tony.luck@intel.com>,
-        "'linux-edac@vger.kernel.org'" <linux-edac@vger.kernel.org>,
-        'Mauro Carvalho Chehab' <mchehab@kernel.org>
-Subject: Re: [PATCH] EDAC: skx_common: downgrade message importance on
- missing PCI device
-Message-ID: <20200106162306.GG12238@zn.tnic>
-References: <20191204212325.c4k47p5hrnn3vpb5@redhat.com>
- <3908561D78D1C84285E8C5FCA982C28F7F4F13AB@ORSMSX115.amr.corp.intel.com>
- <3908561D78D1C84285E8C5FCA982C28F7F4F19BD@ORSMSX115.amr.corp.intel.com>
- <20191210090013.GA9395@zn.tnic>
- <20200106151242.vkdiiwhubmkx5osh@redhat.com>
- <20200106161732.GF12238@zn.tnic>
- <20200106162013.cbbeo4ezdp2h7p62@redhat.com>
+        id S1727878AbgAGLDg (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Tue, 7 Jan 2020 06:03:36 -0500
+Received: from mail-oi1-f195.google.com ([209.85.167.195]:34639 "EHLO
+        mail-oi1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727211AbgAGLDg (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Tue, 7 Jan 2020 06:03:36 -0500
+Received: by mail-oi1-f195.google.com with SMTP id l136so17472016oig.1;
+        Tue, 07 Jan 2020 03:03:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=VIJiwe+IJSM2z0EGLFS2PQGz3M9nkcD68T5NhPhR9H8=;
+        b=CcKZCfwZJPCPqsKfYcPbHeCIgrb5nyuGzG4g8NYws1HU0a9pHjn9XpiO9j2ihiirp/
+         4W0jaMMVy6QhJrLRPaa47jd7wnZ4SXJDD1VPqIW//aernvkAjVWp+BSYpoyq4/pWcE4F
+         IkvPow5je2qqfsq6asNMRIePqXyHVf4xGwQXxIq8lq9KoTh/jHmZ59mvNlVGrnhJT1nL
+         lTA2kMODrx6Qu7UumTDdGbUG87l2yokDUt0qk6nEPHNI3eQMIen617qYU/eHaQELjAFd
+         6UFQ/hiQUToJA8Bj+q6X2cP0qvUoLNM9Pbun1i5ofCAzIkqQ2Cld/ffK7OyiQRhrIbxs
+         l6wQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=VIJiwe+IJSM2z0EGLFS2PQGz3M9nkcD68T5NhPhR9H8=;
+        b=XkG/PTnuCpPF88KA25UBMAFBzMDyXhBmN39ITfFfAdgutgZNvfq2MuD/Fd9rYsV04P
+         PnIoP4WNX5MRwHS9hGuusvekMEkSK6tM7EsIo3Bd1lIrUpEEocA3JAp7FtHOuFGv2r4r
+         9pZ7XyylsnvOip5dKx/tikv/MLaunML/vYBtoY01HQaoTusYkSegKmQ86+xa9D34+yQ2
+         T7ix54Yyt7uQIBfLFifNEt4fDLiS7CFzIwOu8+0QqqhHcUAz9rrjx0uf+xFA59Lzyhjf
+         APuF7TEWT8ZHvAwztWD/KZSpBXjnUng6O43mvqxH5Nc+EJx0/0z2voDyntoLw27Ttgnz
+         h17w==
+X-Gm-Message-State: APjAAAWUaKiHM7fbZ7aLfDMvBt+hwSyI67HI3nIZKveXuWBUJbYyBZ9d
+        w3/yB8Q152WtOeKtgEiXXN9ihPWx5mtQCOiG+lBcEw==
+X-Google-Smtp-Source: APXvYqwJdREpeWna05No2U9cVuqfKfYHIH1LmsXxw61Z6a3kpnZIlq7281h28otaUoQlZsAkbNf9FwtZsnV+bKGyLg8=
+X-Received: by 2002:aca:43c1:: with SMTP id q184mr6326963oia.116.1578395015612;
+ Tue, 07 Jan 2020 03:03:35 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20200106162013.cbbeo4ezdp2h7p62@redhat.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <1576652618-27017-1-git-send-email-bupadhaya@marvell.com>
+ <20200102180130.GG8345@zn.tnic> <CAEYJA6oXTxTmJEji5_Hup2oB+GrgGnmSTiS-nNuzbNzGJ9VESA@mail.gmail.com>
+ <20200106130949.GD12238@zn.tnic>
+In-Reply-To: <20200106130949.GD12238@zn.tnic>
+From:   Bhaskar Upadhaya <bhaskar.upadhaya.linux@gmail.com>
+Date:   Tue, 7 Jan 2020 16:33:24 +0530
+Message-ID: <CAEYJA6rPiBYnM4rT5WJnvTSrk6GBHeLYxK5OF5oxmeVxVepGGQ@mail.gmail.com>
+Subject: Re: [RFC PATCH] apei/ghes: fix ghes_poll_func by registering in
+ non-deferrable mode
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     Bhaskar Upadhaya <bupadhaya@marvell.com>,
+        linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
+        linux-edac@vger.kernel.org, lenb@kernel.org, rafael@kernel.org,
+        gkulkarni@marvell.com, rrichter@marvell.com
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Mon, Jan 06, 2020 at 11:20:14AM -0500, 'Aristeu Rozanski' wrote:
-> OK, will resubmit this patch just removing the messages then.
+On Mon, Jan 6, 2020 at 6:39 PM Borislav Petkov <bp@alien8.de> wrote:
+>
+> On Mon, Jan 06, 2020 at 04:33:19PM +0530, Bhaskar Upadhaya wrote:
+> > Definition of poll interval as per spec (referred ACPI 6.3):
+> > "Indicates the poll interval in milliseconds OSPM should use to
+> > periodically check the error source for the presence of an error
+> > condition."
+>
+> Please add that...
+>
+> > We are observing an issue in our ThunderX2 platforms wherein
+> > ghes_poll_func is not called within poll interval when timer is
+> > configured with TIMER_DEFERRABLE flag(For NO_HZ kernel) and hence we
+> > are losing the error records.
+>
+> ... and that to your commit message then, so that it is crystal clear
+> *why* you're making this change.
 
-I'm not saying you should blindly remove them. They might be useful for
-debugging purposes so you should consider that usage angle first. In the
-AMD case, the message was really useless.
+Thanks Borislav, I will edit the commit message with you comments in
+the next patch.
+Can I get your Ack in the next patch ?
 
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+>
+> Thx.
+>
+> --
+> Regards/Gruss,
+>     Boris.
+>
+> https://people.kernel.org/tglx/notes-about-netiquette
