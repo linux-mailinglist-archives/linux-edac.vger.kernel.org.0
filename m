@@ -2,74 +2,109 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B7C9E134567
-	for <lists+linux-edac@lfdr.de>; Wed,  8 Jan 2020 15:54:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C49413490A
+	for <lists+linux-edac@lfdr.de>; Wed,  8 Jan 2020 18:17:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727793AbgAHOyo (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Wed, 8 Jan 2020 09:54:44 -0500
-Received: from us-smtp-2.mimecast.com ([207.211.31.81]:52859 "EHLO
-        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1727164AbgAHOyn (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Wed, 8 Jan 2020 09:54:43 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1578495282;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=dmJyQ8JJz+t+O7yXBHNdTEa+6XpWF9ogpZhb8x8wLk0=;
-        b=c8Nc/r+tMOPfkzgfh0m0dE3wjBTTPqvuHO6II9PBYJkCJaz5wMq2OM2cwAQs/ir1vwFxsd
-        V7HdMlLChL5GP2Mqs59m6JcJsGpFh3MST5O1hv4his4dcTp4BvdKdTwHSzp0Yc2wULBH4l
-        mrh/uVarZ4GeGZY7jiBeMNbOdRyPd3M=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-43-N2WMkb3ZNluE7y1Am3XhLw-1; Wed, 08 Jan 2020 09:54:39 -0500
-X-MC-Unique: N2WMkb3ZNluE7y1Am3XhLw-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 90E7ADB23;
-        Wed,  8 Jan 2020 14:54:37 +0000 (UTC)
-Received: from napanee.usersys.redhat.com (dhcp-17-195.bos.redhat.com [10.18.17.195])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 68E8060FC6;
-        Wed,  8 Jan 2020 14:54:37 +0000 (UTC)
-Received: by napanee.usersys.redhat.com (Postfix, from userid 1000)
-        id C8EE1C0C0B; Wed,  8 Jan 2020 09:54:36 -0500 (EST)
-Date:   Wed, 8 Jan 2020 09:54:36 -0500
-From:   'Aristeu Rozanski' <aris@redhat.com>
-To:     "Luck, Tony" <tony.luck@intel.com>
-Cc:     Borislav Petkov <bp@alien8.de>,
-        "'linux-edac@vger.kernel.org'" <linux-edac@vger.kernel.org>,
-        'Mauro Carvalho Chehab' <mchehab@kernel.org>
-Subject: Re: [PATCH] EDAC: skx_common: downgrade message importance on
- missing PCI device
-Message-ID: <20200108145436.7b77vuozxz2i5gll@redhat.com>
-References: <3908561D78D1C84285E8C5FCA982C28F7F4F13AB@ORSMSX115.amr.corp.intel.com>
- <3908561D78D1C84285E8C5FCA982C28F7F4F19BD@ORSMSX115.amr.corp.intel.com>
- <20191210090013.GA9395@zn.tnic>
- <20200106151242.vkdiiwhubmkx5osh@redhat.com>
- <20200106161732.GF12238@zn.tnic>
- <20200106162013.cbbeo4ezdp2h7p62@redhat.com>
- <20200106162306.GG12238@zn.tnic>
- <20200107155109.6gphrtqb2a7q4unn@redhat.com>
- <20200107164528.GD29542@zn.tnic>
- <20200107214310.GA31851@agluck-desk2.amr.corp.intel.com>
+        id S1729692AbgAHRRx (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Wed, 8 Jan 2020 12:17:53 -0500
+Received: from mx0a-0016f401.pphosted.com ([67.231.148.174]:17320 "EHLO
+        mx0b-0016f401.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1728234AbgAHRRw (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Wed, 8 Jan 2020 12:17:52 -0500
+Received: from pps.filterd (m0045849.ppops.net [127.0.0.1])
+        by mx0a-0016f401.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 008HGD5U027464;
+        Wed, 8 Jan 2020 09:17:43 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=pfpt0818;
+ bh=I1fG9kv5CLR6h4xRTSk0o0xVZKpFfWgrkVSaHI8Xbd0=;
+ b=Td87zyiJAmGKnqjKE0RGg6me4qZGULScK5mnlSI2HLAD+V5UJpvwalfDc3GdVaAAeUyA
+ OsvdhP+ylfW9oiSqGI5IKsHgPh0iNgMhHj9Hz+i5NwbYlKBjbORwjK0kVoGNQby2tNTw
+ PYM0R/wA182qif3uhUHnJsMDGtrMh1pT4RzapMnFM1cxyEWbn10wqCiyM2bPW5PeaX0X
+ 9JIkwbk64VdXUm2f4I+U9p/1cSpWlyw0MUyNGLvLgjJzpNVabjyrR80FelnapOENFTFw
+ MsDzPZvDrtuc3Rhjc3Wf7SfUi/oqTqEKm7Fw7OpPnPBwbOTVOSav9n511+D5/InDkt+a Pg== 
+Received: from sc-exch04.marvell.com ([199.233.58.184])
+        by mx0a-0016f401.pphosted.com with ESMTP id 2xde1916cx-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
+        Wed, 08 Jan 2020 09:17:43 -0800
+Received: from SC-EXCH03.marvell.com (10.93.176.83) by SC-EXCH04.marvell.com
+ (10.93.176.84) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Wed, 8 Jan
+ 2020 09:17:42 -0800
+Received: from maili.marvell.com (10.93.176.43) by SC-EXCH03.marvell.com
+ (10.93.176.83) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Wed, 8 Jan 2020 09:17:41 -0800
+Received: from dc5-eodlnx05.marvell.com (dc5-eodlnx05.marvell.com [10.69.113.147])
+        by maili.marvell.com (Postfix) with ESMTP id 475053F703F;
+        Wed,  8 Jan 2020 09:17:41 -0800 (PST)
+From:   Bhaskar Upadhaya <bupadhaya@marvell.com>
+To:     <linux-kernel@vger.kernel.org>, <linux-acpi@vger.kernel.org>,
+        <linux-edac@vger.kernel.org>, <lenb@kernel.org>,
+        <rafael@kernel.org>
+CC:     <bp@alien8.de>, <gkulkarni@marvell.com>, <rrichter@marvell.com>,
+        <bhaskar.upadhaya.linux@gmail.com>,
+        Bhaskar Upadhaya <bupadhaya@marvell.com>
+Subject: [PATCH V2] apei/ghes: fix ghes_poll_func by registering in non-deferrable mode
+Date:   Wed, 8 Jan 2020 09:17:38 -0800
+Message-ID: <1578503858-27853-1-git-send-email-bupadhaya@marvell.com>
+X-Mailer: git-send-email 1.8.3.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200107214310.GA31851@agluck-desk2.amr.corp.intel.com>
-User-Agent: NeoMutt/20191207
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
+Content-Type: text/plain
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.572
+ definitions=2020-01-08_04:2020-01-08,2020-01-08 signatures=0
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Tue, Jan 07, 2020 at 01:43:10PM -0800, Luck, Tony wrote:
-> Already applied to git://git.kernel.org/pub/scm/linux/kernel/git/ras/ras.git
-> in edac-for-next branch.  Sorry, should have sent you an "Applied" message.
+Currently Linux register ghes_poll_func with TIMER_DEFERRABLE flag,
+because of which it is serviced when the CPU eventually wakes up with a
+subsequent non-deferrable timer and not at the configured polling interval.
 
-Thanks Tony.
+For polling mode, the polling interval configured by firmware should not
+be exceeded as per ACPI_6_3 spec[refer Table 18-394], So Timer need to
+be configured in non-deferrable mode by removing TIMER_DEFERRABLE flag.
+With NO_HZ enabled and timer callback being configured in non-deferrable
+mode, timer callback will get called exactly after polling interval.
 
+Definition of poll interval as per spec (referred ACPI 6.3):
+"Indicates the poll interval in milliseconds OSPM should use to
+periodically check the error source for the presence of an error
+condition"
+
+We are observing an issue in our ThunderX2 platforms wherein
+ghes_poll_func is not called within poll interval when timer is
+configured with TIMER_DEFERRABLE flag(For NO_HZ kernel) and hence
+we are losing the error records.
+
+Impact of removing TIMER_DEFFERABLE flag
+- With NO_HZ enabled, additional timer ticks and unnecessary wakeups of
+ the cpu happens exactly after polling interval.
+
+- If polling interval is too small than polling function will be called
+ too frequently which may stall the cpu.
+
+Signed-off-by: Bhaskar Upadhaya <bupadhaya@marvell.com>
+---
+Changes for V2
+Incorporated Borislav comments to add below in commit message
+- definition of poll interval as per ACPI 6.3
+- problem which is occuring on ThunderX2 platform with TIMER_DEFERRABLE flag
+   
+ drivers/acpi/apei/ghes.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/acpi/apei/ghes.c b/drivers/acpi/apei/ghes.c
+index 777f6f7122b4..c8f9230f69fb 100644
+--- a/drivers/acpi/apei/ghes.c
++++ b/drivers/acpi/apei/ghes.c
+@@ -1181,7 +1181,7 @@ static int ghes_probe(struct platform_device *ghes_dev)
+ 
+ 	switch (generic->notify.type) {
+ 	case ACPI_HEST_NOTIFY_POLLED:
+-		timer_setup(&ghes->timer, ghes_poll_func, TIMER_DEFERRABLE);
++		timer_setup(&ghes->timer, ghes_poll_func, 0);
+ 		ghes_add_timer(ghes);
+ 		break;
+ 	case ACPI_HEST_NOTIFY_EXTERNAL:
 -- 
-Aristeu
+2.17.1
 
