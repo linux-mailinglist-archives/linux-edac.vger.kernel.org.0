@@ -2,113 +2,107 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D60A7135629
-	for <lists+linux-edac@lfdr.de>; Thu,  9 Jan 2020 10:50:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 28964135856
+	for <lists+linux-edac@lfdr.de>; Thu,  9 Jan 2020 12:46:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729856AbgAIJug (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Thu, 9 Jan 2020 04:50:36 -0500
-Received: from mail.skyhub.de ([5.9.137.197]:57344 "EHLO mail.skyhub.de"
+        id S1728763AbgAILqL (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Thu, 9 Jan 2020 06:46:11 -0500
+Received: from mail.skyhub.de ([5.9.137.197]:51702 "EHLO mail.skyhub.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729170AbgAIJug (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Thu, 9 Jan 2020 04:50:36 -0500
-Received: from zn.tnic (p200300EC2F0C570015F413FA3C3D5197.dip0.t-ipconnect.de [IPv6:2003:ec:2f0c:5700:15f4:13fa:3c3d:5197])
+        id S1728656AbgAILqL (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Thu, 9 Jan 2020 06:46:11 -0500
+Received: from zn.tnic (p200300EC2F0C5700288952748FF21F24.dip0.t-ipconnect.de [IPv6:2003:ec:2f0c:5700:2889:5274:8ff2:1f24])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 66F181EC027B;
-        Thu,  9 Jan 2020 10:50:34 +0100 (CET)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 2E5701EC0AED;
+        Thu,  9 Jan 2020 12:46:10 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1578563434;
+        t=1578570370;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=y7mS9NnPD6OSBPhSJx5wYgWB9ewIEygpgYvrQyTTXpg=;
-        b=aVUfb17dyKJyuFU8Zez9HoBXS6G3MDvdXudnzYReDxY8Bsyq0XWU8zAwWM5Pm/UEAzetZG
-        7gAHaVnyo1MgHOlVUjv9nuYuUO4VfZdu6R6Q7XoRXvs94lJ08hEOo1G2+Q+8kekhLSzlzS
-        +g2enexNNuz+AT1l5Rcxz4VAMTdL6CM=
-Date:   Thu, 9 Jan 2020 10:50:26 +0100
+        bh=TvfFRMR6ycdcrY1OKKxWXR/kNAvBaZFOPHrkYJ3yApE=;
+        b=rnJQRQJLqKbuhnx62nJcYoFHz/TlvwipjK30beLzv5OeZSmT6oSF4/vCSPKoLOMjy+FHUg
+        q/E21eg1FLO81zgK0b7XX+hKb0ZIysUfYx0NYGq1P+vAqAbaHw62DKizMRBC4Nu4K5gwEn
+        KH3IOM9z38XYIuGKX6H2UuvQGprhzHM=
+Date:   Thu, 9 Jan 2020 12:46:03 +0100
 From:   Borislav Petkov <bp@alien8.de>
-To:     Bhaskar Upadhaya <bupadhaya@marvell.com>
-Cc:     linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
-        linux-edac@vger.kernel.org, lenb@kernel.org, rafael@kernel.org,
-        gkulkarni@marvell.com, rrichter@marvell.com,
-        bhaskar.upadhaya.linux@gmail.com
-Subject: Re: [PATCH V2] apei/ghes: fix ghes_poll_func by registering in
- non-deferrable mode
-Message-ID: <20200109095026.GA5603@zn.tnic>
-References: <1578503858-27853-1-git-send-email-bupadhaya@marvell.com>
+To:     Xie XiuQi <xiexiuqi@huawei.com>, James Morse <james.morse@arm.com>
+Cc:     tony.luck@intel.com, linux-edac@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH] trace: ras: print the raw data of arm processor error
+ info
+Message-ID: <20200109114603.GC5603@zn.tnic>
+References: <20191214121109.8349-1-xiexiuqi@huawei.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <1578503858-27853-1-git-send-email-bupadhaya@marvell.com>
+In-Reply-To: <20191214121109.8349-1-xiexiuqi@huawei.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Wed, Jan 08, 2020 at 09:17:38AM -0800, Bhaskar Upadhaya wrote:
-> Currently Linux register ghes_poll_func with TIMER_DEFERRABLE flag,
-> because of which it is serviced when the CPU eventually wakes up with a
-> subsequent non-deferrable timer and not at the configured polling interval.
+On Sat, Dec 14, 2019 at 08:11:09PM +0800, Xie XiuQi wrote:
+> User space tools such as rasdaemon need the complete error
+> information from trace event. So, we print the raw data of
+> error information in arm_event.
 > 
-> For polling mode, the polling interval configured by firmware should not
-> be exceeded as per ACPI_6_3 spec[refer Table 18-394], So Timer need to
-> be configured in non-deferrable mode by removing TIMER_DEFERRABLE flag.
-> With NO_HZ enabled and timer callback being configured in non-deferrable
-> mode, timer callback will get called exactly after polling interval.
+> In the past, I try to parse them in trace event, but it's
+> hard to deal the dynamic error item. And in commit 301f55b1a917
+> ("efi: Parse ARM error information value"), the error information
+> already been parsed to syslog.
 > 
-> Definition of poll interval as per spec (referred ACPI 6.3):
-> "Indicates the poll interval in milliseconds OSPM should use to
-> periodically check the error source for the presence of an error
-> condition"
+> So, just print the raw data in trace event for simpler.
 > 
-> We are observing an issue in our ThunderX2 platforms wherein
-> ghes_poll_func is not called within poll interval when timer is
-> configured with TIMER_DEFERRABLE flag(For NO_HZ kernel) and hence
-> we are losing the error records.
+> Cc: Borislav Petkov <bp@suse.de>
+> Cc: Steven Rostedt <rostedt@goodmis.org>
+> Cc: Tyler Baicar <tbaicar@codeaurora.org>
+> Signed-off-by: Xie XiuQi <xiexiuqi@huawei.com>
+> ---
+>  include/ras/ras_event.h | 13 +++++++++++--
+>  1 file changed, 11 insertions(+), 2 deletions(-)
 > 
-> Impact of removing TIMER_DEFFERABLE flag
-> - With NO_HZ enabled, additional timer ticks and unnecessary wakeups of
->  the cpu happens exactly after polling interval.
-> 
-> - If polling interval is too small than polling function will be called
->  too frequently which may stall the cpu.
+> diff --git a/include/ras/ras_event.h b/include/ras/ras_event.h
+> index 36c5c5e38c1d..2023ba9206b3 100644
+> --- a/include/ras/ras_event.h
+> +++ b/include/ras/ras_event.h
+> @@ -180,6 +180,9 @@ TRACE_EVENT(arm_event,
+>  		__field(u32, running_state)
+>  		__field(u32, psci_state)
+>  		__field(u8, affinity)
+> +		__field(u32, count)
+> +		__field(u32, len)
+> +		__dynamic_array(u8, err_info, proc->err_info_num * sizeof(struct cper_arm_err_info))
+>  	),
+>  
+>  	TP_fast_assign(
+> @@ -199,12 +202,18 @@ TRACE_EVENT(arm_event,
+>  			__entry->running_state = ~0;
+>  			__entry->psci_state = ~0;
+>  		}
+> +
+> +		__entry->count = proc->err_info_num;
+> +		__entry->len = __entry->count * sizeof(struct cper_arm_err_info);
+> +		memcpy(__get_dynamic_array(err_info), proc + 1, __entry->len);
+>  	),
+>  
+>  	TP_printk("affinity level: %d; MPIDR: %016llx; MIDR: %016llx; "
+> -		  "running state: %d; PSCI state: %d",
+> +		  "running state: %d; PSCI state: %d; error count: %d; "
+> +		  "raw data: %s",
+>  		  __entry->affinity, __entry->mpidr, __entry->midr,
+> -		  __entry->running_state, __entry->psci_state)
+> +		  __entry->running_state, __entry->psci_state, __entry->count,
+> +		  __print_hex(__get_dynamic_array(err_info), __entry->len))
+>  );
+>  
+>  /*
+> -- 
 
-If that becomes a problem, the polling interval setting should be fixed
-to filter too small values.
-
-Anyway, I went and streamlined your commit message:
-
-    apei/ghes: Do not delay GHES polling
-
-    Currently, the ghes_poll_func() timer callback is registered with the
-    TIMER_DEFERRABLE flag. Thus, it is run when the CPU eventually wakes
-    up together with a subsequent non-deferrable timer and not at the precisely
-    configured polling interval.
-
-    For polling mode, the polling interval configured by firmware should not
-    be exceeded according to the ACPI spec 6.3, Table 18-394. The definition
-    of the polling interval is:
-
-    "Indicates the poll interval in milliseconds OSPM should use to
-    periodically check the error source for the presence of an error
-    condition."
-
-    If this interval is extended due to the timer callback deferring, error
-    records can get lost. Which we are observing on our ThunderX2 platforms.
-
-    Therefore, remove the TIMER_DEFERRABLE flag so that the timer callback
-    executes at the precise interval.
-
-and made it more readable, hopefully.
-
-Rafael, pls fixup when applying.
-
-With that:
-
-Acked-by: Borislav Petkov <bp@suse.de>
-
-Thx.
+That's for ARM folks to decide whether they wanna shuffle raw error
+records into userspace like that. CCed.
 
 -- 
 Regards/Gruss,
