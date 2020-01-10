@@ -2,80 +2,82 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 053F2136518
-	for <lists+linux-edac@lfdr.de>; Fri, 10 Jan 2020 02:57:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 22CC7136521
+	for <lists+linux-edac@lfdr.de>; Fri, 10 Jan 2020 02:57:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730609AbgAJB5I (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Thu, 9 Jan 2020 20:57:08 -0500
+        id S1730625AbgAJB5K (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Thu, 9 Jan 2020 20:57:10 -0500
 Received: from mail-dm6nam12on2062.outbound.protection.outlook.com ([40.107.243.62]:6198
         "EHLO NAM12-DM6-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1730359AbgAJB5I (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Thu, 9 Jan 2020 20:57:08 -0500
+        id S1730604AbgAJB5J (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Thu, 9 Jan 2020 20:57:09 -0500
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ZB8yS6EHltY5vnBeeNBevupwT7Ua+YbB6Awixd5M0PLp/iQ+ETZIrxr5ODCCyWIJy58sFnAV0ojAnnaRR2JtJ1V6+cwbFB0btpZscJ6c9MwUOL0VPLyi6kbixJrglb4kz2N4WaTFT+lz2MDJwdFzFrXiols1/gcDWkzD6ns5b2Bz4LD17xUeYHGY6tVd/ezJsOtCFP0rZnaxaW0/Sc6DQTxrvNcp6YkpyMfLtr85AJjue1jIHY+KiMFkXJ24TDhPWoqiA+Xi9OUP8m69YYGnPnL7rX4BNeHzaIxOBCEP5Uoj/kV2iRYFYqjjGh9a5yNBO/sFVkrpgR3Nt1nlm2MqbQ==
+ b=b0tMzRho8NBaFKFUGye9IiDtVVWo81djL4hVOAq6NfkeZnvIcsCRM7Z9NQWZdk05iwb++3mC3S/EkVVLex892skSWNERxMpq80VTvj9osT5nR5yeQABQnTqPTrG1BLk/RO13rsPmgrO6ejuhHHYueLWe/QYdnOw22nUMUynFY/53Uzw1fVXYgwheqqrTDvFg7RgBnE3sElaYJC6jXEQ3wE6jiksNlS5NtyXpC22YfLi4YC3DhFH5CvvR2utWbIDpaWOngfZ9ElRgizd/s0CWLXKZCUJlQU6adcL89kKwi0xnAqSOK4aEwLzJIzqpCTBT/Z2J3MFYOxzXhhCwXYslsQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=3JoyyOPOsBt0j/rd5e7H3IOxaxDVqpJTNcCr+QI8M5I=;
- b=G6slXRU/6Rxh7xnzQu4+A2zR4exASJIqdyLf8dQ9iwzwWJGGGwffx8su4SUem3duT793STjwsaCdshrE0Zw6AuGtYY5LwuCXYvKTr5Y/wC8B68pgMLq/UhBDR1LTFHL5dnCx25T6FtAtOyk2sdnINGI/GBd8AVtmwkXESL7rCCQOVng/F9v3o7UrBZC7N0/qC8ApXaKarMBOhPgo3UwtYIPorBBD5D70yiN8DtaXVktCn8U7n8tzr4+ZfP72dwerY12Kq2vMx5V0MuY3ZQFpZf8eGy6T31lno6WLBPhZzYIPWNcme1JtwkhPyKoxbJYT7wu0lb8m0eWytf9l/dptWA==
+ bh=1XWByoc/pPEyZrVa+QtxYjoyY9k4L7bQe6aMJwou4lQ=;
+ b=HmfcfXJ4UrndKYv3xkPhxCJBf780+xYCvzFVA8hq9reLyLDk9ZaysU0Q3OG0vtScR9IuxkYcYfqQ2wNyTl39lghzT3gEz3nuFhuH2+JtyDI4EmJ+5hrbUswmLihw52jtBGBvvZoYKyUW1ONL/cmfe0ttqp4Km775eyFJ8g46PAMZy1uGyGQIBjKhdqoV07FctoUzfuAd8PaGZjLafeX/0q/DjD9fTijOLvSqn5soKPJtRhqUFfebYn8RK4WDM4bB7bEqBChOw3OpqXvZYUKo++k7Nt2kdCKAyYy0jjkCOx/dnZ2ZHd1LtBCrBEurH7Ag6fr52AkGdzHPTyIwYVDFSQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
  header.d=amd.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=amdcloud.onmicrosoft.com; s=selector2-amdcloud-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=3JoyyOPOsBt0j/rd5e7H3IOxaxDVqpJTNcCr+QI8M5I=;
- b=f4oqjhGsHvFGaauLFAkTLmwpSalyEqMH78iQUEqOiU7coUAOvjSkbr6PkGafCqAI71aJjofcOsSRcwUcEshGQdBpt4G1zaZ4BGuTvwDfCqH83HiE5n+rdnSBJP3mp3r/Br8gI+7S0meTpqvcy/GCmNK7XjvS/2YXJNCjQlb3zuc=
+ bh=1XWByoc/pPEyZrVa+QtxYjoyY9k4L7bQe6aMJwou4lQ=;
+ b=ql3Rwssr6pQ1rMVxjbvqo4U4cq0Q1xFBamAV1wB7FwYPTDBub7zq+StZC23N4KC0E03a12/Pybt1vesebn3mvA4IJZjLTCLzuiSfmv58YLOLtZNyLyBAdvpBXWD3lSetztU1JVNDmkoJrL6ShVIzvL1RxLyvOPkMa1p/+3UIlOA=
 Authentication-Results: spf=none (sender IP is )
  smtp.mailfrom=Yazen.Ghannam@amd.com; 
 Received: from BN6PR12MB1667.namprd12.prod.outlook.com (10.172.18.18) by
  BN6PR12MB1378.namprd12.prod.outlook.com (10.168.228.9) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2602.11; Fri, 10 Jan 2020 01:57:04 +0000
+ 15.20.2602.11; Fri, 10 Jan 2020 01:57:05 +0000
 Received: from BN6PR12MB1667.namprd12.prod.outlook.com
  ([fe80::d536:f1cd:c8d1:fe]) by BN6PR12MB1667.namprd12.prod.outlook.com
  ([fe80::d536:f1cd:c8d1:fe%12]) with mapi id 15.20.2602.017; Fri, 10 Jan 2020
- 01:57:04 +0000
+ 01:57:05 +0000
 From:   Yazen Ghannam <Yazen.Ghannam@amd.com>
 To:     linux-edac@vger.kernel.org
 Cc:     Yazen Ghannam <Yazen.Ghannam@amd.com>,
         linux-kernel@vger.kernel.org, bp@suse.de, tony.luck@intel.com,
         x86@kernel.org
-Subject: [PATCH 0/5] MCA and EDAC updates for AMD Family 19h
-Date:   Fri, 10 Jan 2020 01:56:46 +0000
-Message-Id: <20200110015651.14887-1-Yazen.Ghannam@amd.com>
+Subject: [PATCH 1/5] x86/MCE/AMD, EDAC/mce_amd: Add new Load Store unit McaType
+Date:   Fri, 10 Jan 2020 01:56:47 +0000
+Message-Id: <20200110015651.14887-2-Yazen.Ghannam@amd.com>
 X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20200110015651.14887-1-Yazen.Ghannam@amd.com>
+References: <20200110015651.14887-1-Yazen.Ghannam@amd.com>
 Content-Type: text/plain
 X-ClientProxiedBy: SN6PR08CA0036.namprd08.prod.outlook.com
  (2603:10b6:805:66::49) To BN6PR12MB1667.namprd12.prod.outlook.com
  (2603:10b6:405:4::18)
 MIME-Version: 1.0
-Received: from ethanolx80b6host.amd.com (165.204.78.1) by SN6PR08CA0036.namprd08.prod.outlook.com (2603:10b6:805:66::49) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2623.12 via Frontend Transport; Fri, 10 Jan 2020 01:57:03 +0000
+Received: from ethanolx80b6host.amd.com (165.204.78.1) by SN6PR08CA0036.namprd08.prod.outlook.com (2603:10b6:805:66::49) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2623.12 via Frontend Transport; Fri, 10 Jan 2020 01:57:04 +0000
 X-Mailer: git-send-email 2.17.1
 X-Originating-IP: [165.204.78.1]
 X-MS-PublicTrafficType: Email
 X-MS-Office365-Filtering-HT: Tenant
-X-MS-Office365-Filtering-Correlation-Id: 12c55ac2-5578-4aa5-b5bb-08d7957063ce
+X-MS-Office365-Filtering-Correlation-Id: d3c103c5-eb9a-499c-372e-08d795706457
 X-MS-TrafficTypeDiagnostic: BN6PR12MB1378:|BN6PR12MB1378:
 X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <BN6PR12MB1378489021FCE355DC28F070F8380@BN6PR12MB1378.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:5516;
+X-Microsoft-Antispam-PRVS: <BN6PR12MB1378F02A351146589B78E6A4F8380@BN6PR12MB1378.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:8882;
 X-Forefront-PRVS: 02788FF38E
-X-Forefront-Antispam-Report: SFV:NSPM;SFS:(10009020)(4636009)(346002)(376002)(39860400002)(396003)(136003)(366004)(189003)(199004)(66556008)(2616005)(6916009)(5660300002)(8676002)(15650500001)(86362001)(66946007)(956004)(36756003)(4326008)(1076003)(81166006)(478600001)(26005)(316002)(4744005)(186003)(8936002)(66476007)(52116002)(16526019)(2906002)(7696005)(6486002)(81156014)(6666004);DIR:OUT;SFP:1101;SCL:1;SRVR:BN6PR12MB1378;H:BN6PR12MB1667.namprd12.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
+X-Forefront-Antispam-Report: SFV:NSPM;SFS:(10009020)(4636009)(346002)(376002)(39860400002)(396003)(136003)(366004)(189003)(199004)(66556008)(2616005)(6916009)(5660300002)(8676002)(86362001)(66946007)(956004)(36756003)(4326008)(1076003)(81166006)(478600001)(26005)(316002)(186003)(8936002)(66476007)(52116002)(16526019)(2906002)(7696005)(6486002)(81156014)(6666004);DIR:OUT;SFP:1101;SCL:1;SRVR:BN6PR12MB1378;H:BN6PR12MB1667.namprd12.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
 Received-SPF: None (protection.outlook.com: amd.com does not designate
  permitted sender hosts)
 X-MS-Exchange-SenderADCheck: 1
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: NCM6fTT5qm6CFKl1tZuitQYyyIrxlVw8mOD5pS6X4giQjM+OLRfNqQf6KBrkVc1PX6+c5YaHRLBd/YNHYN1wvLk4b3UGAPk6oSYCHiKX0Sd5HEMa6WTgcRMHKLesnquIwLrWSFB+L49F1g0ywrsPZEvF7lz6WwNAUTBfLrVOKpSCDKzGIuYl6TusEFHCide3y/q1S9yWAjzvaINyQ4Br3ZtYxdVi+PqRMsbf+P3rF4mNXY8zjcMlBUbJtU1PW6TQ488xouLz/1goOlyCLuqyUidMNTTJsSpZlcXjg6xpC5OjlrNGiGDqH1g6eBOmwOgpUourR4tIzPtZP3KC3TESfjTicva417hGWNKzB/5Y7GwZYc7GSekWTKq23RgYpP8EaoXAqKg0gQMYoocLgLqaoxNqeoAxtp0ihvNXYDCfGX/g063b0BJbu1ULBlwoOZPQ
+X-Microsoft-Antispam-Message-Info: Qisul9dwzGV+H4S5lG1lG3ciHmnmoVDJZr5hXQHPlYj1TLAxuj8bo3QjqsPucgHUIecFGHfGtt5CEjjEnn6WujAHma8KcgkMXTf2d/Nq82YMhJrG6ICgsCrYhrBOShFj9Ap6gjnq0KQ4Gj0XgfaFnKAFlhqv0c1+2n/eUzG8i1knTAMfuPCAPxwr+3bjTn0W/gnCMTwJysXNn7gu0A20C32OfWm9tKiIqmtMwmKqa2C1B5nmfFpGK1EZL/JtdMTDzpo+hlUEuQCCyIBklw93tgWYKFGMHPWMGaW4KpdGusJmeM2E4puQ/YZS2yZJkFMW2AfPuhNpp8jToPafBevZQNpKpOqRpDSomUxQP6BtYaUu5QrfgYCdoYcTELRi9w/O4YdJod4eRpxd7sN0IkNNI+r1/HZKTAAxqsn6u32t06LbH8P1vsqKUgK/YSGsUcY1
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 12c55ac2-5578-4aa5-b5bb-08d7957063ce
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Jan 2020 01:57:04.2000
+X-MS-Exchange-CrossTenant-Network-Message-Id: d3c103c5-eb9a-499c-372e-08d795706457
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Jan 2020 01:57:05.1026
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: uQ5f4wKzUWgVc+iIiQC7eAMNft7YpFsgLUnU1a6Zo0FxHZQsqx9wCZyePDPHYtZd8sEY7MtXIn5+jf/u9H52Rg==
+X-MS-Exchange-CrossTenant-UserPrincipalName: yAW696sYjSZMOA6NxcSg/uXB2jzEjFb2kvL7ahouSV+ozRpDIkItxjdu8E/binZXqyekK11x/W0zL/ZPxCYw7Q==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN6PR12MB1378
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
@@ -84,33 +86,99 @@ X-Mailing-List: linux-edac@vger.kernel.org
 
 From: Yazen Ghannam <yazen.ghannam@amd.com>
 
-Hi Boris,
+Future SMCA systems may see a new version of the Load Store unit bank
+type as indicated by its McaType value.
 
-This patchset adds MCA and EDAC support for AMD Family 19h.
+Add the new (HWID, MCATYPE) tuple. Reuse the same name, since this is
+logically the same to the user.
 
-There aren't any functional changes. Mostly we just need to add new PCI
-IDs and a new MCA bank type. I've also included a couple of patches that
-do away with family checks where appropriate.
+Also, add the new error descriptions to edac_mce_amd.
 
-Thanks,
-Yazen
-
-Yazen Ghannam (5):
-  x86/MCE/AMD, EDAC/mce_amd: Add new Load Store unit McaType
-  EDAC/mce_amd: Always load on SMCA systems
-  x86/amd_nb: Add Family 19h PCI IDs
-  EDAC/amd64: Add family ops for Family 19h Models 00h-0Fh
-  EDAC/amd64: Drop some family checks for newer systems
-
+Signed-off-by: Yazen Ghannam <yazen.ghannam@amd.com>
+---
  arch/x86/include/asm/mce.h    |  1 +
- arch/x86/kernel/amd_nb.c      |  3 ++
  arch/x86/kernel/cpu/mce/amd.c |  2 ++
- drivers/edac/amd64_edac.c     | 62 ++++++++++++++++++++---------------
- drivers/edac/amd64_edac.h     |  3 ++
- drivers/edac/mce_amd.c        | 41 ++++++++++++++++++++---
- include/linux/pci_ids.h       |  1 +
- 7 files changed, 82 insertions(+), 31 deletions(-)
+ drivers/edac/mce_amd.c        | 28 ++++++++++++++++++++++++++++
+ 3 files changed, 31 insertions(+)
 
+diff --git a/arch/x86/include/asm/mce.h b/arch/x86/include/asm/mce.h
+index dc2d4b206ab7..0f84c20c5429 100644
+--- a/arch/x86/include/asm/mce.h
++++ b/arch/x86/include/asm/mce.h
+@@ -290,6 +290,7 @@ extern void apei_mce_report_mem_error(int corrected,
+ /* These may be used by multiple smca_hwid_mcatypes */
+ enum smca_bank_types {
+ 	SMCA_LS = 0,	/* Load Store */
++	SMCA_LS_V2,	/* Load Store */
+ 	SMCA_IF,	/* Instruction Fetch */
+ 	SMCA_L2_CACHE,	/* L2 Cache */
+ 	SMCA_DE,	/* Decoder Unit */
+diff --git a/arch/x86/kernel/cpu/mce/amd.c b/arch/x86/kernel/cpu/mce/amd.c
+index d6cf5c18a7e0..b3a50d962851 100644
+--- a/arch/x86/kernel/cpu/mce/amd.c
++++ b/arch/x86/kernel/cpu/mce/amd.c
+@@ -78,6 +78,7 @@ struct smca_bank_name {
+ 
+ static struct smca_bank_name smca_names[] = {
+ 	[SMCA_LS]	= { "load_store",	"Load Store Unit" },
++	[SMCA_LS_V2]	= { "load_store",	"Load Store Unit" },
+ 	[SMCA_IF]	= { "insn_fetch",	"Instruction Fetch Unit" },
+ 	[SMCA_L2_CACHE]	= { "l2_cache",		"L2 Cache" },
+ 	[SMCA_DE]	= { "decode_unit",	"Decode Unit" },
+@@ -138,6 +139,7 @@ static struct smca_hwid smca_hwid_mcatypes[] = {
+ 
+ 	/* ZN Core (HWID=0xB0) MCA types */
+ 	{ SMCA_LS,	 HWID_MCATYPE(0xB0, 0x0), 0x1FFFFF },
++	{ SMCA_LS_V2,	 HWID_MCATYPE(0xB0, 0x10), 0xFFFFFF },
+ 	{ SMCA_IF,	 HWID_MCATYPE(0xB0, 0x1), 0x3FFF },
+ 	{ SMCA_L2_CACHE, HWID_MCATYPE(0xB0, 0x2), 0xF },
+ 	{ SMCA_DE,	 HWID_MCATYPE(0xB0, 0x3), 0x1FF },
+diff --git a/drivers/edac/mce_amd.c b/drivers/edac/mce_amd.c
+index ea622c6f3a39..aa6ea53f7d14 100644
+--- a/drivers/edac/mce_amd.c
++++ b/drivers/edac/mce_amd.c
+@@ -175,6 +175,33 @@ static const char * const smca_ls_mce_desc[] = {
+ 	"L2 Fill Data error",
+ };
+ 
++static const char * const smca_ls2_mce_desc[] = {
++	"An ECC error was detected on a data cache read by a probe or victimization",
++	"An ECC error or L2 poison was detected on a data cache read by a load",
++	"An ECC error was detected on a data cache read-modify-write by a store",
++	"An ECC error or poison bit mismatch was detected on a tag read by a probe or victimization",
++	"An ECC error or poison bit mismatch was detected on a tag read by a load",
++	"An ECC error or poison bit mismatch was detected on a tag read by a store",
++	"An ECC error was detected on an EMEM read by a load",
++	"An ECC error was detected on an EMEM read-modify-write by a store",
++	"A parity error was detected in an L1 TLB entry by any access",
++	"A parity error was detected in an L2 TLB entry by any access",
++	"A parity error was detected in a PWC entry by any access",
++	"A parity error was detected in an STQ entry by any access",
++	"A parity error was detected in an LDQ entry by any access",
++	"A parity error was detected in a MAB entry by any access",
++	"A parity error was detected in an SCB entry state field by any access",
++	"A parity error was detected in an SCB entry address field by any access",
++	"A parity error was detected in an SCB entry data field by any access",
++	"A parity error was detected in a WCB entry by any access",
++	"A poisoned line was detected in an SCB entry by any access",
++	"A SystemReadDataError error was reported on read data returned from L2 for a load",
++	"A SystemReadDataError error was reported on read data returned from L2 for an SCB store",
++	"A SystemReadDataError error was reported on read data returned from L2 for a WCB store",
++	"A hardware assertion error was reported",
++	"A parity error was detected in an STLF, SCB EMEM entry or SRB store data by any access",
++};
++
+ static const char * const smca_if_mce_desc[] = {
+ 	"Op Cache Microtag Probe Port Parity Error",
+ 	"IC Microtag or Full Tag Multi-hit Error",
+@@ -378,6 +405,7 @@ struct smca_mce_desc {
+ 
+ static struct smca_mce_desc smca_mce_descs[] = {
+ 	[SMCA_LS]	= { smca_ls_mce_desc,	ARRAY_SIZE(smca_ls_mce_desc)	},
++	[SMCA_LS_V2]	= { smca_ls2_mce_desc,	ARRAY_SIZE(smca_ls2_mce_desc)	},
+ 	[SMCA_IF]	= { smca_if_mce_desc,	ARRAY_SIZE(smca_if_mce_desc)	},
+ 	[SMCA_L2_CACHE]	= { smca_l2_mce_desc,	ARRAY_SIZE(smca_l2_mce_desc)	},
+ 	[SMCA_DE]	= { smca_de_mce_desc,	ARRAY_SIZE(smca_de_mce_desc)	},
 -- 
 2.17.1
 
