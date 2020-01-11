@@ -2,126 +2,78 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EE27137653
-	for <lists+linux-edac@lfdr.de>; Fri, 10 Jan 2020 19:45:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F24F9137AD7
+	for <lists+linux-edac@lfdr.de>; Sat, 11 Jan 2020 02:05:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728428AbgAJSpf (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Fri, 10 Jan 2020 13:45:35 -0500
-Received: from mga17.intel.com ([192.55.52.151]:52956 "EHLO mga17.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728023AbgAJSpf (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Fri, 10 Jan 2020 13:45:35 -0500
-X-Amp-Result: UNSCANNABLE
-X-Amp-File-Uploaded: False
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 10 Jan 2020 10:45:35 -0800
-X-IronPort-AV: E=Sophos;i="5.69,418,1571727600"; 
-   d="scan'208";a="218148092"
-Received: from agluck-desk2.amr.corp.intel.com ([10.3.52.68])
-  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 10 Jan 2020 10:45:34 -0800
-Date:   Fri, 10 Jan 2020 10:45:33 -0800
-From:   "Luck, Tony" <tony.luck@intel.com>
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     Jan =?iso-8859-1?Q?H=2E_Sch=F6nherr?= <jschoenh@amazon.de>,
-        Yazen Ghannam <yazen.ghannam@amd.com>,
-        linux-kernel@vger.kernel.org, linux-edac@vger.kernel.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, x86@kernel.org
-Subject: Re: [PATCH v2 1/6] x86/mce: Take action on UCNA/Deferred errors again
-Message-ID: <20200110184533.GB20511@agluck-desk2.amr.corp.intel.com>
-References: <20200103150722.20313-1-jschoenh@amazon.de>
- <20200103150722.20313-2-jschoenh@amazon.de>
- <20200110095004.GD19453@zn.tnic>
+        id S1727865AbgAKBFA (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Fri, 10 Jan 2020 20:05:00 -0500
+Received: from mail-il1-f195.google.com ([209.85.166.195]:39391 "EHLO
+        mail-il1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727846AbgAKBFA (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Fri, 10 Jan 2020 20:05:00 -0500
+Received: by mail-il1-f195.google.com with SMTP id x5so3253377ila.6
+        for <linux-edac@vger.kernel.org>; Fri, 10 Jan 2020 17:04:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=sifive.com; s=google;
+        h=date:from:to:cc:subject:in-reply-to:message-id:references
+         :user-agent:mime-version;
+        bh=oGchJ2QhW6lEKHr0EcwdcOBniXTxW0gJ/C9Tswq1R5g=;
+        b=jPyxKfrPRhG1+zzESdjIpFwo7eC842EPfR2noA0IPLOvFMzR9A5QTsQO2cTEzmwA1e
+         iSpf0VAE/ZA87u7BlrdSz/n4xual1ShORNusYdswkmXhlnLxFhYtzkyiHH3tcBGfzTru
+         67jC+toBVemvSLle7d9azKvrwpbdnXCejMG8PlDAfQnHiMJulEhmZw7IXXpRDSYOhVC5
+         W74Yi9O++enJJ7nukEqpfna7zY0Q0tlTAoaxjvKkZ3+h8IgZdAeY3V/CJ9s57gEwHCre
+         SNhQOAmt+4X+PZNI/ULOOYlbtAwkHJogQbtNDgPAFAQdOCYJH2Llfs58mnVum5OsJBCk
+         uv4w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:in-reply-to:message-id
+         :references:user-agent:mime-version;
+        bh=oGchJ2QhW6lEKHr0EcwdcOBniXTxW0gJ/C9Tswq1R5g=;
+        b=Lk9Ea4af2CMxqMLOi293EcXfz8rTsCTx6dSsP2U+H4EEfVDeDsrXqzBrqgQVWupVnd
+         EBiLvvWFfLyK/lgj/evGpb8kI9bcQnos8nkRr/4Qh/wEs8oHsBT0KY7PJ2Ijd+rtvFVy
+         311RftrSVh256DSCX6SJXuXNVh8HtBQOTVsoDx/EIaAiCsdJOJGEFYKlvEiLtWvgJRxQ
+         qK/uNk3/2emv48mW1mvYGdOJGhUqWAxJDL6i2rMgNjP0Xq3+iQaYY6Xd48F5LOVJjjm+
+         1pnvuUpOaij0lDprgIo2YKtcpryPeW7r07FCxYDys9LdbBaqev7IR1tDrdKQUmyrT6Hj
+         spIQ==
+X-Gm-Message-State: APjAAAX2joiXD6INpDm4ZsJInKXPkavcoH3OyVVXoVDb0dYahvPWLmhz
+        WXrPFwGxMYeKKbZCvZGfDa9HhA==
+X-Google-Smtp-Source: APXvYqzopQQofRLrTlQmFON2Y7R+LIl8tdlZalcACPY9NCb/x3as6rU2+Xn7Ke3eGOWVov5gfP96dQ==
+X-Received: by 2002:a92:914a:: with SMTP id t71mr5417305ild.293.1578704699180;
+        Fri, 10 Jan 2020 17:04:59 -0800 (PST)
+Received: from localhost ([64.62.168.194])
+        by smtp.gmail.com with ESMTPSA id b1sm1190156ilc.33.2020.01.10.17.04.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 10 Jan 2020 17:04:58 -0800 (PST)
+Date:   Fri, 10 Jan 2020 17:04:56 -0800 (PST)
+From:   Paul Walmsley <paul.walmsley@sifive.com>
+X-X-Sender: paulw@viisi.sifive.com
+To:     Yash Shah <yash.shah@sifive.com>
+cc:     palmer@dabbelt.com, aou@eecs.berkeley.edu, bp@alien8.de,
+        mchehab@kernel.org, tony.luck@intel.com, james.morse@arm.com,
+        rrichter@marvell.com, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-edac@vger.kernel.org
+Subject: Re: [PATCH] riscv: move sifive_l2_cache.h to include/soc
+In-Reply-To: <1578463746-25279-1-git-send-email-yash.shah@sifive.com>
+Message-ID: <alpine.DEB.2.21.9999.2001101704440.32308@viisi.sifive.com>
+References: <1578463746-25279-1-git-send-email-yash.shah@sifive.com>
+User-Agent: Alpine 2.21.9999 (DEB 301 2018-08-15)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20200110095004.GD19453@zn.tnic>
+Content-Type: text/plain; charset=US-ASCII
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Fri, Jan 10, 2020 at 10:50:04AM +0100, Borislav Petkov wrote:
-> On Fri, Jan 03, 2020 at 04:07:17PM +0100, Jan H. Schönherr wrote:
-> > Commit fa92c5869426 ("x86, mce: Support memory error recovery for both
-> > UCNA and Deferred error in machine_check_poll") added handling of UCNA
-> > and Deferred errors by adding them to the ring for SRAO errors.
-> > 
-> > Later, commit fd4cf79fcc4b ("x86/mce: Remove the MCE ring for Action
-> > Optional errors") switched storage from the SRAO ring to the unified
-> > pool that is still in use today. In order to only act on the intended
-> > errors, a filter for MCE_AO_SEVERITY is used -- effectively removing
-> > handling of UCNA/Deferred errors again.
-> > 
-> > Extend the severity filter to include UCNA/Deferred errors again.
-> > Also, generalize the naming of the notifier from SRAO to UC to capture
-> > the extended scope.
-> > 
-> > Note, that this change may cause a message like the following to appear,
-> > as the same address may be reported as SRAO and as UCNA:
-> > 
-> >  Memory failure: 0x5fe3284: already hardware poisoned
-> > 
-> > Technically, this is a return to previous behavior.
-> > 
-> > Fixes: fd4cf79fcc4b ("x86/mce: Remove the MCE ring for Action Optional errors")
-> > Signed-off-by: Jan H. Schönherr <jschoenh@amazon.de>
+On Tue, 7 Jan 2020, Yash Shah wrote:
+
+> The commit 9209fb51896f ("riscv: move sifive_l2_cache.c to drivers/soc")
+> moves the sifive L2 cache driver to driver/soc. It did not move the
+> header file along with the driver. Therefore this patch moves the header
+> file to driver/soc
 > 
-> Tony, ACK?
+> Signed-off-by: Yash Shah <yash.shah@sifive.com>
 
-Acked-by: Tony Luck <tony.luck@intel.com>
+Thanks, queued for v5.5-rc.
 
-> Also, do you want it in stable@ so that it gets backported?
 
-That's a tricky question. We have changing behavior (UCNA pages offlined,
-then a few kernel versions stopped doing this, now we are going to start
-doing it again. But is it really a _BUG_ that needs backporting to stable?
-I'm leaning towards "no it isn't". But could perhaps be convinced to change
-my mind if somebody has a good reason for wanting it there.
-
-Is there something to put in the tags to stop this being autoselected
-for backport because it has a Fixes: tag?
-
-> I'm wondering if in the memory_failure error() case, we should hand it
-> down to the remaining notifiers.
-> 
-> Which also begs the question in light of this clumsy notifier counting:
-> 
-> How about we have the default notifier *unconditionally* print the MCE?
-> I.e., if the error has reached it, it would print it. If not and some
-> other notifier consumed it, it will get handled differently.
-> 
-> This way we won't need any special counting of notifiers and special
-> reg/unreg of notifiers etc.
-> 
-> IOW, the logic would be:
-> 
-> If something consumes the error, then it doesn't get printed. Notifier
-> does NOTIFY_STOP.
-> 
-> If nothing consumes it or something looks at it and decides that it
-> should still get printed, then the last catch-all notifier callback does
-> that.
-
-I totally agree that counting notifiers is clumsy. Also less than
-ideal is the concept that any notifier on the chain can declare:
-  "I fixed it"
-and prevent any other notifiers from even seeing it. Well the concept
-is good, but it is overused.
-
-I think we may do better with a field in the "struct mce" that is being
-passed to each where notifiers can wiggle some bits (semantics to be
-defined later) which can tell subsequent notifiers what sort of actions
-have been taken.
-E.g. the SRAO/UCNA notifier can say "I took this page offline"
-the dev_mcelog one can say "I think I handed to a process that has /dev/mcelog open"
-EDAC drivers can say "I decoded the address and printed something"
-CEC can say: "I silently counted this corrected error", or "error exceeded
-threshold and I took the page offline".
-
-The default notifier can print to console if nobody set a bit to say
-that the error had been somehow logged.
-
--Tony
+- Paul
