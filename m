@@ -2,72 +2,120 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EEEA6138B64
-	for <lists+linux-edac@lfdr.de>; Mon, 13 Jan 2020 06:52:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3ECAA138F9D
+	for <lists+linux-edac@lfdr.de>; Mon, 13 Jan 2020 11:52:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726236AbgAMFw0 (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Mon, 13 Jan 2020 00:52:26 -0500
-Received: from mail-oi1-f196.google.com ([209.85.167.196]:40905 "EHLO
-        mail-oi1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726669AbgAMFwZ (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Mon, 13 Jan 2020 00:52:25 -0500
-Received: by mail-oi1-f196.google.com with SMTP id c77so7195811oib.7
-        for <linux-edac@vger.kernel.org>; Sun, 12 Jan 2020 21:52:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=Rjbe3pVeMfYVPdmVklZ4b2stSqI32LIYp+bn/8NyJvk=;
-        b=El5YZgtDEXJCHEtZrRB1ujEJT5GnrR9nqQvx3oNXkD1KXWKAy5lE4fahagwXmNRBuY
-         Z373bCStdjZZAvrcMmyjZhqXNYKD7qS8gpQ1uKt4Zm/CJYofbOmd6y2KCfdaIf8lu4gx
-         e04Qq2Wd5k0QzXhgODgXLh9+BTAbr7mIJG1kvrHD2cB5892G2QaMtoQjZ8YbwAsn/v/R
-         qN1ulSwy8kLJzDOOwwvDkEa6g0paOaNUUW6lO8NcaOsOsQMTh2eV34LXY/bnRxfyDcL+
-         OFIAYoYpyWTxvo4nB11oXa8J2BNLiFXnr18VfN4DCPOmpXqWPT8f/9GzmZX8VWLxs4VK
-         s+8g==
+        id S1728346AbgAMKwG (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Mon, 13 Jan 2020 05:52:06 -0500
+Received: from mail-oi1-f195.google.com ([209.85.167.195]:33317 "EHLO
+        mail-oi1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726193AbgAMKwG (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Mon, 13 Jan 2020 05:52:06 -0500
+Received: by mail-oi1-f195.google.com with SMTP id v140so7827422oie.0;
+        Mon, 13 Jan 2020 02:52:06 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=Rjbe3pVeMfYVPdmVklZ4b2stSqI32LIYp+bn/8NyJvk=;
-        b=KD09q3Sjm+18L2uix6RlfkFAbyp2rLnR1Zg78EivOVOBS6i4xVo/TORDrSQp+IaVT6
-         9aZ5fc93+3avvOMbTkWxs247KBhPdl3BxgbAHsD5XpHnoOLZ9TF4Ze3QaVTu5/Jqyr8D
-         WonEB89DU3exjpkmer2KQySlbIWr4C3R+4ckHOR3++mS3M7HKeI2Kw5xIWbV+h3Fdoux
-         m51JX8lwJ8c9L/4smkab0Kvipuna8+qM0rlAcUgDKwJm3M8vRo/9eJbhiaseUUe72+w2
-         WMPMlb/+xmDkwt4MavfXBFI+IVM6yWtNFHsTbwtXf8CJisK80QgQIr64LuWqh3UwDAaq
-         A1eg==
-X-Gm-Message-State: APjAAAVTXsgMPiVqZz+ZU2uS8D6e3FsSvEKQ9naRn2WraOddnzfuH4+4
-        hM1/gJ+TrWXruAQ4uKUBwEePYFmKZGG3GHDi7aw=
-X-Google-Smtp-Source: APXvYqy7JhGBt0ZjJ/1t4CT74GIhTuvbOMnCynReBbsGRcTAfZPwoiLBCe9XiPA9xaK1JAPmy14eucUMWI9DLkbKsUo=
-X-Received: by 2002:a54:4713:: with SMTP id k19mr11513430oik.113.1578894745174;
- Sun, 12 Jan 2020 21:52:25 -0800 (PST)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=jtPM0qNpCXM1Rp0ETmaEt0V+zDCKJAyqKnvcFDnN5TI=;
+        b=WA4RR2py+X17VEccHsq0Sdywm2W6ngeIRGqz90eIxFxnLoNNH2GhBqHz0n9S118gJc
+         zskt81YTcUo+d9Fj2CTm1kffpU2UPoJYCXCyE201l58tLyLZDA9t45UdwDazYqbtXJIb
+         sVrU7nBIHEMf7NpTfzR7XympmiEA4cwYdQucqsWCqzv2XVzc22hDeYUx1LlmuMwGVbhn
+         0OBuGyTOFN+Du9SJaKcdfC881dPjwoA7wOpuzgKRwoG+YPKhq4Av0bf/Kezco38fT43W
+         Oh1p34UU5m67PG1MjLvgRpZ4IjJa6U5LsMHtvH5AgNlN3Rcaq6kUzTxxH1M+bQpaM9pH
+         4IwA==
+X-Gm-Message-State: APjAAAX1zJaAvdkl4srzVC7XPnEh1fsq0UoNOxpgGfTGhwg7R+UHv0fN
+        3jaIVuxVpQmh3cLF4ckbwkajK45/rR9usETeSD4=
+X-Google-Smtp-Source: APXvYqwbPBJ7mO31GdY19gP+AB/5p+E2X/W43tAwX6BnwDbHMCtzOVfiGXE9nXaiCBE06uLBIrvcFyfeOTJNQ6C/roU=
+X-Received: by 2002:aca:d6c8:: with SMTP id n191mr12916572oig.103.1578912725769;
+ Mon, 13 Jan 2020 02:52:05 -0800 (PST)
 MIME-Version: 1.0
-Received: by 2002:a4a:41cb:0:0:0:0:0 with HTTP; Sun, 12 Jan 2020 21:52:24
- -0800 (PST)
-Reply-To: rickschaech@gmail.com
-From:   Rick Schaech <cathben72@gmail.com>
-Date:   Mon, 13 Jan 2020 01:52:24 -0400
-Message-ID: <CAEcBxO=TAnFn5LzizHa22hUC0Db5FuiZJF28m=yX3_9m--jRqg@mail.gmail.com>
-Subject: I wait for your swift response,
-To:     undisclosed-recipients:;
+References: <1578503858-27853-1-git-send-email-bupadhaya@marvell.com> <20200109095026.GA5603@zn.tnic>
+In-Reply-To: <20200109095026.GA5603@zn.tnic>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Mon, 13 Jan 2020 11:51:54 +0100
+Message-ID: <CAJZ5v0gohOwnGqMk86Zyqxn11fxukXifSe=T08n7vrvv5Q4QNw@mail.gmail.com>
+Subject: Re: [PATCH V2] apei/ghes: fix ghes_poll_func by registering in
+ non-deferrable mode
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     Bhaskar Upadhaya <bupadhaya@marvell.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        "open list:EDAC-CORE" <linux-edac@vger.kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>, gkulkarni@marvell.com,
+        Robert Richter <rrichter@marvell.com>,
+        bhaskar.upadhaya.linux@gmail.com
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-Dear, I'm Mr Rick Schaech, I am the General Account Auditor, Though i
-know we have not meet each other before but sometimes in life God have
-a reason of bringing two people from two different countries together
-as business partners or life partners.
+On Thu, Jan 9, 2020 at 10:50 AM Borislav Petkov <bp@alien8.de> wrote:
+>
+> On Wed, Jan 08, 2020 at 09:17:38AM -0800, Bhaskar Upadhaya wrote:
+> > Currently Linux register ghes_poll_func with TIMER_DEFERRABLE flag,
+> > because of which it is serviced when the CPU eventually wakes up with a
+> > subsequent non-deferrable timer and not at the configured polling interval.
+> >
+> > For polling mode, the polling interval configured by firmware should not
+> > be exceeded as per ACPI_6_3 spec[refer Table 18-394], So Timer need to
+> > be configured in non-deferrable mode by removing TIMER_DEFERRABLE flag.
+> > With NO_HZ enabled and timer callback being configured in non-deferrable
+> > mode, timer callback will get called exactly after polling interval.
+> >
+> > Definition of poll interval as per spec (referred ACPI 6.3):
+> > "Indicates the poll interval in milliseconds OSPM should use to
+> > periodically check the error source for the presence of an error
+> > condition"
+> >
+> > We are observing an issue in our ThunderX2 platforms wherein
+> > ghes_poll_func is not called within poll interval when timer is
+> > configured with TIMER_DEFERRABLE flag(For NO_HZ kernel) and hence
+> > we are losing the error records.
+> >
+> > Impact of removing TIMER_DEFFERABLE flag
+> > - With NO_HZ enabled, additional timer ticks and unnecessary wakeups of
+> >  the cpu happens exactly after polling interval.
+> >
+> > - If polling interval is too small than polling function will be called
+> >  too frequently which may stall the cpu.
+>
+> If that becomes a problem, the polling interval setting should be fixed
+> to filter too small values.
+>
+> Anyway, I went and streamlined your commit message:
+>
+>     apei/ghes: Do not delay GHES polling
+>
+>     Currently, the ghes_poll_func() timer callback is registered with the
+>     TIMER_DEFERRABLE flag. Thus, it is run when the CPU eventually wakes
+>     up together with a subsequent non-deferrable timer and not at the precisely
+>     configured polling interval.
+>
+>     For polling mode, the polling interval configured by firmware should not
+>     be exceeded according to the ACPI spec 6.3, Table 18-394. The definition
+>     of the polling interval is:
+>
+>     "Indicates the poll interval in milliseconds OSPM should use to
+>     periodically check the error source for the presence of an error
+>     condition."
+>
+>     If this interval is extended due to the timer callback deferring, error
+>     records can get lost. Which we are observing on our ThunderX2 platforms.
+>
+>     Therefore, remove the TIMER_DEFERRABLE flag so that the timer callback
+>     executes at the precise interval.
+>
+> and made it more readable, hopefully.
+>
+> Rafael, pls fixup when applying.
 
-My dear friend, I have the sum of 15.7 Million USD i wish to put in
-your name due to the death of my late client who died several years
-ago as his next of kin column still remain blank. Though the internet
-medium is highly abuse these days but am assuring you that this
-transaction is legitimate and I am contacting you that we may have a
-deal, note for your cooperation and collaboration 40% of the sum will
-be for you while the other 60% will be for me as well. I wait for your
-swift response for more details. please forward your response to my
-personal E-mail: rickschaech@gmail.com
+Done.
 
-Yours sincerely,
-Rick Schaech.
+> With that:
+>
+> Acked-by: Borislav Petkov <bp@suse.de>
+
+Thanks!
