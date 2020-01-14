@@ -2,102 +2,113 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EA56B13B0D6
-	for <lists+linux-edac@lfdr.de>; Tue, 14 Jan 2020 18:27:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0301513B5EB
+	for <lists+linux-edac@lfdr.de>; Wed, 15 Jan 2020 00:34:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726450AbgANR1x (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Tue, 14 Jan 2020 12:27:53 -0500
-Received: from mga17.intel.com ([192.55.52.151]:60281 "EHLO mga17.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726270AbgANR1x (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Tue, 14 Jan 2020 12:27:53 -0500
-X-Amp-Result: UNSCANNABLE
-X-Amp-File-Uploaded: False
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 14 Jan 2020 09:27:52 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.70,433,1574150400"; 
-   d="scan'208";a="256380937"
-Received: from sjchrist-coffee.jf.intel.com (HELO linux.intel.com) ([10.54.74.202])
-  by fmsmga002.fm.intel.com with ESMTP; 14 Jan 2020 09:27:51 -0800
-Date:   Tue, 14 Jan 2020 09:27:51 -0800
-From:   Sean Christopherson <sean.j.christopherson@intel.com>
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Radim =?utf-8?B?S3LEjW3DocWZ?= <rkrcmar@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Tony Luck <tony.luck@intel.com>,
-        Tony W Wang-oc <TonyWWang-oc@zhaoxin.com>,
-        Jacob Pan <jacob.jun.pan@linux.intel.com>,
-        Len Brown <lenb@kernel.org>, Shuah Khan <shuah@kernel.org>,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        linux-edac@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-Subject: Re: [PATCH] KVM: VMX: Rename define to CPU_BASED_USE_TSC_OFFSETTING
-Message-ID: <20200114172751.GD16784@linux.intel.com>
-References: <20191221044513.21680-1-sean.j.christopherson@intel.com>
- <20191221044513.21680-18-sean.j.christopherson@intel.com>
- <20200113183228.GO13310@zn.tnic>
- <20200113183705.GL1175@linux.intel.com>
- <20200113183823.GP13310@zn.tnic>
- <20200113184217.GA2216@linux.intel.com>
- <20200113185216.GQ13310@zn.tnic>
- <20200113201610.GE2322@linux.intel.com>
- <20200114093138.GB31032@zn.tnic>
+        id S1728656AbgANXeC (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Tue, 14 Jan 2020 18:34:02 -0500
+Received: from mail-pf1-f193.google.com ([209.85.210.193]:39491 "EHLO
+        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728650AbgANXeC (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Tue, 14 Jan 2020 18:34:02 -0500
+Received: by mail-pf1-f193.google.com with SMTP id q10so7385106pfs.6;
+        Tue, 14 Jan 2020 15:34:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=to:cc:from:subject:message-id:date:user-agent:mime-version
+         :content-language:content-transfer-encoding;
+        bh=yYq+18HeUcEIJUvMzPqlCK3z7OvqDSWg2p8T6vbs7w0=;
+        b=Z/ATddr3rviycwd3yUVGAxEfsWp9p9d0j4yq2F8R7+HmSNZg/V4ufcZhtmo42Mxycq
+         cyRTXv/rVg7PSpwHq1G52xEDDLzNfvZOhghVR4hGtXlf9eStOd/PhOIWt7rQRFG65YZa
+         zi5HQxX8eqw+DNq9qY4Q6LWpkRjLzs8i/Xe9qlJntc+4JlkLy4jgx2VrdSWWYAfC+bCc
+         Mi1KsOUh951Wsee0nIXBd8DfV6FGB7iWSny+PDHJUrNVH709XEcTPIZXOshoIDnr1x6F
+         1rZtEqpSK6FslwuMeDNkaBK5gbHbIhgxdXUkvheqzWoJvK2l7ds/Yl9O0jJFilwQFmkj
+         ACew==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:to:cc:from:subject:message-id:date:user-agent
+         :mime-version:content-language:content-transfer-encoding;
+        bh=yYq+18HeUcEIJUvMzPqlCK3z7OvqDSWg2p8T6vbs7w0=;
+        b=ZQih5S+ZKbBEk/NEsmt9tBI8vfTCpauTvH5zhDZgOiXWWOXg9u1JkVjFEf57qK2YUq
+         /p8dpRnheAyzY6d7GQjvAnpM1vG2dOY13rhVvN33g6e1gb98ZzKmXDbnOfqeZPQPCpLw
+         ThI3IuJy+VZHasnVXuv1xbop8/sO21QJIDkfwdSzAswUAWRfVDk4xgcjXTTxZyisFWcK
+         lvQIJGJv8P76Dqlo6y0eEgg2UTjLl3KtgXVBN7yxoDEeRyvHBXTufYHDvyZLjWV0ilYi
+         CKZgOkjfz5sKz1qR1kY4LFlND+LSrYr23Hjwm8XqC4llyNqrL0jxuqTWv+RRitGULAJZ
+         aVgA==
+X-Gm-Message-State: APjAAAU+9Vi/80sA/Y4V3IMtEeyuu88AivM7Mj/d3J7ZVniv55wb/ft0
+        yN4IydwWo91ePD0UwiQScZ4=
+X-Google-Smtp-Source: APXvYqyRgyNwX25uWnf/RhrIHpTOwItecu9mtenCGAl4NZ02AP5cSmmjCy7IyMVbtYFj8gUWZK3cJg==
+X-Received: by 2002:a62:ee11:: with SMTP id e17mr28449753pfi.48.1579044841465;
+        Tue, 14 Jan 2020 15:34:01 -0800 (PST)
+Received: from ?IPv6:2001:4898:d8:28:acd4:5c73:b928:d080? ([2001:4898:80e8:1:2ceb:5c73:b928:d080])
+        by smtp.gmail.com with ESMTPSA id t187sm19746078pfd.21.2020.01.14.15.34.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 14 Jan 2020 15:34:01 -0800 (PST)
+To:     Borislav Petkov <bp@alien8.de>, James Morse <james.morse@arm.com>,
+        robh+dt@kernel.org, mark.rutland@arm.com
+Cc:     devicetree@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-edac@vger.kernel.org, sashal@kernel.org, hangl@microsoft.com,
+        Lei Wang <lewan@microsoft.com>, ruizhao@microsoft.com,
+        Scott Branden <scott.branden@broadcom.com>,
+        Yuqing Shen <yuqing.shen@broadcom.com>, ray.jui@broadcom.com,
+        shji@microsoft.com, wangglei@gmail.com
+From:   Shiping Ji <shiping.linux@gmail.com>
+Subject: [PATCH v8 1/2] dt-bindings: edac: arm-dmc520.txt
+Message-ID: <acb3a312-5ccd-362c-02ae-beee461a5f4b@gmail.com>
+Date:   Tue, 14 Jan 2020 15:34:00 -0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.3.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200114093138.GB31032@zn.tnic>
-User-Agent: Mutt/1.5.24 (2015-08-30)
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Tue, Jan 14, 2020 at 10:31:38AM +0100, Borislav Petkov wrote:
-> On Mon, Jan 13, 2020 at 12:16:10PM -0800, Sean Christopherson wrote:
-> > On Mon, Jan 13, 2020 at 07:52:16PM +0100, Borislav Petkov wrote:
-> > > On Mon, Jan 13, 2020 at 10:42:17AM -0800, Sean Christopherson wrote:
-> > > > > Doesn't bother me, I could do it in a patch ontop. But your call.
-> > > > 
-> > > > No objection here.
-> > > 
-> > > Something like this:
-> > > 
-> > > ---
-> > > From: Borislav Petkov <bp@suse.de>
-> > > 
-> > > ... so that "offsetting" is spelled the same as the respective VMX feature
-> > > bit VMX_FEATURE_TSC_OFFSETTING.
-> > > 
-> > > No functional changes.
-> > > 
-> > > Signed-off-by: Borislav Petkov <bp@suse.de>
-> > > ---
-> > 
-> > Reviewed-and-tested-by: Sean Christopherson <sean.j.christopherson@intel.com>
-> 
-> Yah, so I tried to do a test-merge with linux-next to see what surprises should
-> I be prepared for and there's the first one:
-> 
-> 5e3d394fdd9e ("KVM: VMX: Fix the spelling of CPU_BASED_USE_TSC_OFFSETTING")
-> 
-> which is already in Paolo's tree. Dropping it on my side.
+This is the device tree bindings for new EDAC driver dmc520_edac.c.
 
-Doh, now that you point it out, I remember that patch going by.  Sorry I
-didn't recall it earlier.
+Signed-off-by: Shiping Ji <shiping.linux@gmail.com>
+Reviewed-by: James Morse <james.morse@arm.com>
 
-Thanks for your help!
+---
+     Changes in v8:
+         - Replaced the vendor specific interrupt-config property with interrupt-names
+
+---
+ .../devicetree/bindings/edac/arm-dmc520.txt   | 22 +++++++++++++++++++
+ 1 file changed, 22 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/edac/arm-dmc520.txt
+
+diff --git a/Documentation/devicetree/bindings/edac/arm-dmc520.txt b/Documentation/devicetree/bindings/edac/arm-dmc520.txt
+new file mode 100644
+index 000000000000..4a673f091918
+--- /dev/null
++++ b/Documentation/devicetree/bindings/edac/arm-dmc520.txt
+@@ -0,0 +1,22 @@
++* ARM DMC-520 EDAC node
++
++Required properties:
++- compatible  : "brcm,dmc-520", "arm,dmc-520".
++- reg   : Address range of the DMC-520 registers.
++- interrupts  : DMC-520 interrupt numbers. The example below specifies
++     two interrupt lines for dram_ecc_errc_int and
++     dram_ecc_errd_int.
++- interrupt-names : This is an array of names corresponding to the interrupt
++     line numbers. The valid interrupt names are the followings:
++     ram_ecc_errc, ram_ecc_errd, dram_ecc_errc, dram_ecc_errd,
++     failed_access, failed_prog, link_err, temperature_event,
++     arch_fsm, phy_request
++
++Example:
++
++dmc0: dmc@200000 {
++ compatible = "brcm,dmc-520", "arm,dmc-520";
++ reg = <0x200000 0x80000>;
++ interrupts = <0x0 0x349 0x4>, <0x0 0x34B 0x4>;
++ interrupt-names = "dram_ecc_errc", "dram_ecc_errd";
++};
+-- 
+2.17.1
