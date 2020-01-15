@@ -2,71 +2,81 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C533013C6ED
-	for <lists+linux-edac@lfdr.de>; Wed, 15 Jan 2020 16:07:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6255513CC76
+	for <lists+linux-edac@lfdr.de>; Wed, 15 Jan 2020 19:46:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726248AbgAOPHm (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Wed, 15 Jan 2020 10:07:42 -0500
-Received: from szxga05-in.huawei.com ([45.249.212.191]:8729 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726132AbgAOPHl (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Wed, 15 Jan 2020 10:07:41 -0500
-Received: from DGGEMS406-HUB.china.huawei.com (unknown [172.30.72.60])
-        by Forcepoint Email with ESMTP id E3CF758C6746AF420D9C;
-        Wed, 15 Jan 2020 23:07:38 +0800 (CST)
-Received: from localhost.localdomain.localdomain (10.175.113.25) by
- DGGEMS406-HUB.china.huawei.com (10.3.19.206) with Microsoft SMTP Server id
- 14.3.439.0; Wed, 15 Jan 2020 23:07:31 +0800
-From:   Wei Yongjun <weiyongjun1@huawei.com>
-To:     Yash Shah <yash.shah@sifive.com>, Borislav Petkov <bp@alien8.de>,
-        "Mauro Carvalho Chehab" <mchehab@kernel.org>,
+        id S1729221AbgAOSqN (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Wed, 15 Jan 2020 13:46:13 -0500
+Received: from foss.arm.com ([217.140.110.172]:41216 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729019AbgAOSqM (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Wed, 15 Jan 2020 13:46:12 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 04A51328;
+        Wed, 15 Jan 2020 10:46:12 -0800 (PST)
+Received: from [10.1.196.105] (eglon.cambridge.arm.com [10.1.196.105])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id A1AF53F6C4;
+        Wed, 15 Jan 2020 10:46:09 -0800 (PST)
+Subject: Re: [PATCH 0/2] Add EDAC support for Kryo CPU core caches
+To:     Sai Prakash Ranjan <saiprakash.ranjan@codeaurora.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        Borislav Petkov <bp@alien8.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
         Tony Luck <tony.luck@intel.com>,
-        "James Morse" <james.morse@arm.com>,
         Robert Richter <rrichter@marvell.com>,
-        "Palmer Dabbelt" <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>
-CC:     Wei Yongjun <weiyongjun1@huawei.com>, <linux-edac@vger.kernel.org>,
-        <linux-riscv@lists.infradead.org>,
-        <kernel-janitors@vger.kernel.org>
-Subject: [PATCH]  EDAC/sifive: fix return value check in ecc_register()
-Date:   Wed, 15 Jan 2020 15:03:03 +0000
-Message-ID: <20200115150303.112627-1-weiyongjun1@huawei.com>
-X-Mailer: git-send-email 2.20.1
+        linux-edac@vger.kernel.org, tsoni@codeaurora.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Evan Green <evgreen@chromium.org>,
+        Stephen Boyd <swboyd@chromium.org>, psodagud@codeaurora.org,
+        linux-arm-kernel@lists.infradead.org, baicar@os.amperecomputing.com
+References: <0101016ed57a10a8-bd8fbdb9-a5cd-4460-bae6-c5c35f0eed88-000000@us-west-2.amazonses.com>
+From:   James Morse <james.morse@arm.com>
+Message-ID: <0769b7cb-4e01-eb83-8ad4-b29b4fafafd4@arm.com>
+Date:   Wed, 15 Jan 2020 18:46:07 +0000
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-Content-Type:   text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7BIT
-X-Originating-IP: [10.175.113.25]
-X-CFilter-Loop: Reflected
+In-Reply-To: <0101016ed57a10a8-bd8fbdb9-a5cd-4460-bae6-c5c35f0eed88-000000@us-west-2.amazonses.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-GB
+Content-Transfer-Encoding: 7bit
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-In case of error, the function edac_device_alloc_ctl_info() returns NULL
-pointer not ERR_PTR(). The IS_ERR() test in the return value check
-should be replaced with NULL test.
+Hi Sai,
 
-Fixes: 91abaeaaff35 ("EDAC/sifive: Add EDAC platform driver for SiFive SoCs")
-Signed-off-by: Wei Yongjun <weiyongjun1@huawei.com>
----
- drivers/edac/sifive_edac.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+(CC: +Tyler)
 
-diff --git a/drivers/edac/sifive_edac.c b/drivers/edac/sifive_edac.c
-index c0cc72a3b2be..3a3dcb14ed99 100644
---- a/drivers/edac/sifive_edac.c
-+++ b/drivers/edac/sifive_edac.c
-@@ -54,8 +54,8 @@ static int ecc_register(struct platform_device *pdev)
- 	p->dci = edac_device_alloc_ctl_info(0, "sifive_ecc", 1, "sifive_ecc",
- 					    1, 1, NULL, 0,
- 					    edac_device_alloc_index());
--	if (IS_ERR(p->dci))
--		return PTR_ERR(p->dci);
-+	if (!p->dci)
-+		return -ENOMEM;
- 
- 	p->dci->dev = &pdev->dev;
- 	p->dci->mod_name = "Sifive ECC Manager";
+On 05/12/2019 09:52, Sai Prakash Ranjan wrote:
+> This series implements EDAC support for error reporting on
+> Kryo{3,4}XX CPU caches L1,L2, L3-SCU. All the cores(big.LITTLE)
+> in Kryo{3,4}XX CPUs implement RAS extensions and use interrupt
+> based ECC mechanism to report errors.
+> 
+> This series has been tested on SC7180, SDM845, SM8150 SoCs with
+> Kryo{3,4}XX CPU cores based on ARM Cortex-A55, Cortex-A75 and
+> Cortex-A76.
+> 
+> This implementation is platform specific in contrast to the
+> patch posted last time for generic error reporting on arm cortex
+> implementations with RAS extensions by Kyle Yan.
+>  - https://patchwork.kernel.org/patch/10161955/
+
+I think that series was dropped because it was too soc-specific and overlaps with the v8.2
+kernel first support. That series was superseded by:
+lore.kernel.org/r/1562086280-5351-1-git-send-email-baicar@os.amperecomputing.com
+
+Can you work with Tyler on a combined series? The combined support may need to look quite
+different. (DT and big/little being the obvious differences).
+
+I'm afraid this is the tip of the kernel-first-RAS iceberg.
 
 
+Thanks,
 
+James
