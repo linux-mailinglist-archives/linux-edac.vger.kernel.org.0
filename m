@@ -2,86 +2,94 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0652513CDED
-	for <lists+linux-edac@lfdr.de>; Wed, 15 Jan 2020 21:17:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FD6413CF48
+	for <lists+linux-edac@lfdr.de>; Wed, 15 Jan 2020 22:39:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729052AbgAOUQk (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Wed, 15 Jan 2020 15:16:40 -0500
-Received: from mail-oi1-f196.google.com ([209.85.167.196]:36540 "EHLO
-        mail-oi1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729011AbgAOUQk (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Wed, 15 Jan 2020 15:16:40 -0500
-Received: by mail-oi1-f196.google.com with SMTP id c16so16713564oic.3
-        for <linux-edac@vger.kernel.org>; Wed, 15 Jan 2020 12:16:40 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:content-language
-         :user-agent;
-        bh=1BVQS3/CT2AwFowBzdJp24DkQzhe3BERjAeXkX0Uz7k=;
-        b=tKXULh+8jHLq3zLWaR9SgwhxiaVR0XUg4s0I/7jAcU+5QgTjwht43pFly2mCAI3uJL
-         1ZKJCKdDKp9KT95batv+XV27n0cyHCL0dcnDo3Jy7iYq4VyMm0Y18i0W4jz0AmVzvBZS
-         y0MI36rMO38j9mTS+3vV9XxRzeOXFSmibHhyJkgRipzCjdWP1JUmcHwTK0UXI6h8HNaY
-         ONHxYEf3mg201f5acjOvMv+quki0NLcGAVBGtM4iV0Rlo6eCnYCLvHPwC6qLfKUZEkoj
-         QaecGvd5bFwWaDm/FEkSuSawJlwrteWvbJ/r11PWE1UCDtsPQwX2rugD89963snT0c6A
-         lxTw==
-X-Gm-Message-State: APjAAAVE2ArdEdQOSbXEP0Smc5U7iopstVg7rIL/C9INR1zActNpDEwQ
-        T4JAaFyUmJAAT0vTBU+jGXNADhw=
-X-Google-Smtp-Source: APXvYqyVIfiewznMeM86rveHWiNg0uFb1FOriqjQDcy0vAKU4gxVjmG2gZreMKh/gfadxPLueV0sRA==
-X-Received: by 2002:aca:5f87:: with SMTP id t129mr1345223oib.36.1579119399345;
-        Wed, 15 Jan 2020 12:16:39 -0800 (PST)
-Received: from rob-hp-laptop (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id r25sm6906821otk.2.2020.01.15.12.16.37
-        for <linux-edac@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Jan 2020 12:16:38 -0800 (PST)
-Received: from rob (uid 1000)
-        (envelope-from rob@rob-hp-laptop)
-        id 220379
-        by rob-hp-laptop (DragonFly Mail Agent v0.11);
-        Wed, 15 Jan 2020 14:16:37 -0600
-Date:   Wed, 15 Jan 2020 14:16:37 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Shiping Ji <shiping.linux@gmail.com>
-Cc:     Borislav Petkov <bp@alien8.de>, James Morse <james.morse@arm.com>,
-        robh+dt@kernel.org, mark.rutland@arm.com,
-        devicetree@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
-        linux-edac@vger.kernel.org,
+        id S1726187AbgAOVi7 (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Wed, 15 Jan 2020 16:38:59 -0500
+Received: from mail.skyhub.de ([5.9.137.197]:48844 "EHLO mail.skyhub.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726566AbgAOVi6 (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Wed, 15 Jan 2020 16:38:58 -0500
+Received: from zn.tnic (p200300EC2F0C7700F109D32638BACFBD.dip0.t-ipconnect.de [IPv6:2003:ec:2f0c:7700:f109:d326:38ba:cfbd])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 36EDB1EC01AD;
+        Wed, 15 Jan 2020 22:38:57 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1579124337;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=LBMtE/WMICvJacbss6a6c+JL3sMqakCf7ajkvPVSGoo=;
+        b=JSk1F/Vcfrva9TnlLBIVasySWnMIdW/M+wVf3lz4G4ILhs9oEKcj0SIZ+hCC5rKyENug+m
+        ViBqPkNwMGLa10+B0A5/XUJxrMcu/PoyEVuUSbvM284vucuDOru9eBDD7mtgubw5OV09UP
+        qo71qnAvNtpRVfXCaiCXtWV2V7DNV5Y=
+Date:   Wed, 15 Jan 2020 22:38:48 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Shiping Ji <shiping.linux@gmail.com>, sashal@kernel.org
+Cc:     James Morse <james.morse@arm.com>, robh+dt@kernel.org,
+        mark.rutland@arm.com, devicetree@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>, linux-edac@vger.kernel.org,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        sashal@kernel.org, hangl@microsoft.com,
-        Lei Wang <lewan@microsoft.com>, ruizhao@microsoft.com,
-        shji@microsoft.com, Scott Branden <scott.branden@broadcom.com>,
+        hangl@microsoft.com, Lei Wang <lewan@microsoft.com>,
+        shji@microsoft.com, ruizhao@microsoft.com,
+        Scott Branden <scott.branden@broadcom.com>,
         Yuqing Shen <yuqing.shen@broadcom.com>, ray.jui@broadcom.com,
         wangglei@gmail.com
-Subject: Re: [PATCH v9 1/2] dt-bindings: edac: arm-dmc520.txt
-Message-ID: <20200115201637.GA25883@bogus>
-References: <4fbf026a-4878-cd65-55f7-7d992782b331@gmail.com>
+Subject: Re: [PATCH v9 2/2] EDAC: add EDAC driver for DMC520
+Message-ID: <20200115213848.GO20975@zn.tnic>
+References: <6a462190-0af2-094a-daa8-f480d54a1fbf@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <4fbf026a-4878-cd65-55f7-7d992782b331@gmail.com>
-Content-Language: en-US
+In-Reply-To: <6a462190-0af2-094a-daa8-f480d54a1fbf@gmail.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Wed, 15 Jan 2020 06:32:27 -0800, Shiping Ji wrote:
-> This is the device tree bindings for new EDAC driver dmc520_edac.c.
+On Wed, Jan 15, 2020 at 06:32:33AM -0800, Shiping Ji wrote:
+> New driver supports error detection and correction on the devices with ARM
+> DMC-520 memory controller.
 > 
 > Signed-off-by: Shiping Ji <shiping.linux@gmail.com>
 > Signed-off-by: Lei Wang <leiwang_git@outlook.com>
 > Reviewed-by: James Morse <james.morse@arm.com>
-> 
-> ---
->      Changes in v9:
->          - Replaced the vendor specific interrupt-config property with interrupt-names
-> 
-> ---
->  .../devicetree/bindings/edac/arm-dmc520.txt   | 22 +++++++++++++++++++
->  1 file changed, 22 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/edac/arm-dmc520.txt
-> 
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+This mail still has your From: because I guess you pasted the patch in
+the mail.
+
+But, if you look at what I wrote here:
+
+https://lkml.kernel.org/r/20200107195606.GM29542@zn.tnic
+
+you'll see the
+
+From: Lei Wang <leiwang_git@outlook.com>
+
+which is the last From: in the mail and that is taken by git as the
+author of the patch.
+
+However, if I apply this mail of yours, it will make you the
+author. Because in git there can be only one author per patch
+and other authors can be additionally accredited with the
+Co-developed-by: tag from the same doc I was pointing at before:
+Documentation/process/submitting-patches.rst
+
+Looking at this driver, however, you have supplied three authors. And I
+think you guys need to discuss it amongst yourselves who is going to be
+the author of this driver in the git history.
+
+If there are more questions, I'm pretty sure Sasha would be glad to
+explain to you how the whole authorship thing works and what the
+implications are.
+
+Thx.
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
