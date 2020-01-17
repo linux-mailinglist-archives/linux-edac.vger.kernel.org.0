@@ -2,128 +2,85 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FAA61400F7
-	for <lists+linux-edac@lfdr.de>; Fri, 17 Jan 2020 01:31:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7858D140104
+	for <lists+linux-edac@lfdr.de>; Fri, 17 Jan 2020 01:35:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730704AbgAQAbc (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Thu, 16 Jan 2020 19:31:32 -0500
-Received: from mail-pl1-f194.google.com ([209.85.214.194]:43015 "EHLO
-        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729387AbgAQAbc (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Thu, 16 Jan 2020 19:31:32 -0500
-Received: by mail-pl1-f194.google.com with SMTP id p27so9084310pli.10
-        for <linux-edac@vger.kernel.org>; Thu, 16 Jan 2020 16:31:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-transfer-encoding:content-language;
-        bh=M9PfMDqq4mrgdJjoCxlePmryw2dwKhdtVpwo2rQpPHI=;
-        b=PdZtFhwcbZoGTyRB0YT1AXckQK03oRubwCEsjPBt6hG1EbNxYH0Fjv9cfZuk8BKwLr
-         Nfun0qpKSn16G4otglGI+BJlfh1NXbJLnUz19wnEiuyifT2ZaGyJeQdcvzWBZB99x0iT
-         nUmD1tc7SEfkKKIGJXLVJXhYzFHw02R8UDDoM=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=M9PfMDqq4mrgdJjoCxlePmryw2dwKhdtVpwo2rQpPHI=;
-        b=hnyQ1EeBrJXJvOfsAtdGTm6LhYoCPgEY+92+J+UFbkKdOJjVz/G6JqbrZnvo45e8OF
-         gKbesCuSf5p23sN0j0umJfWuqF0JVKdps1E0spPNU07HV6KYQkmIPNsFzS2NTcT3wtFF
-         /O2QAUf8EsGgmn4SfXykaslc9kaP63jFuXwPbS5BBlJm6VqNVG0C3hBg8Nj+dqn/6Bi+
-         LRj4pERxCTvYNE3pqte4hrx7uvssvDdLRJUAYDHlHTciTpSrx7yKEI7jxe6xgDTJO1Pq
-         d9nnXkSLmhkJldVbM7487zlJ+QTVk8zvgif6YZ1ADG86kKUF9g0RwVAjjgnuXkEboGx6
-         Onuw==
-X-Gm-Message-State: APjAAAXCmkCxyKzjqnFJ4HyfLHfN+Ru7+Wd3mDtOi+6BDTTbhVYesJfR
-        570vyB6rL79ykDOseuzy4PFbWd8p+kYLDw==
-X-Google-Smtp-Source: APXvYqykX9ESNeqte195/89wDGbzWuoGsUmrWe5z97ksNmWfJhf/Ojx/maDjljtSLn2zv692HKkdeA==
-X-Received: by 2002:a17:90a:17e3:: with SMTP id q90mr2334122pja.139.1579221092047;
-        Thu, 16 Jan 2020 16:31:32 -0800 (PST)
-Received: from [10.136.13.65] ([192.19.228.250])
-        by smtp.gmail.com with ESMTPSA id r20sm25529366pgu.89.2020.01.16.16.31.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 16 Jan 2020 16:31:31 -0800 (PST)
-Subject: Re: [PATCH v9 2/2] EDAC: add EDAC driver for DMC520
-To:     Shiping Ji <shiping.linux@gmail.com>,
-        Borislav Petkov <bp@alien8.de>,
-        James Morse <james.morse@arm.com>, robh+dt@kernel.org,
-        mark.rutland@arm.com
-Cc:     devicetree@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
-        linux-edac@vger.kernel.org,
+        id S1729273AbgAQAff (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Thu, 16 Jan 2020 19:35:35 -0500
+Received: from mail.skyhub.de ([5.9.137.197]:44602 "EHLO mail.skyhub.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727047AbgAQAfe (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Thu, 16 Jan 2020 19:35:34 -0500
+Received: from zn.tnic (p200300EC2F0B23003D0DC5C907B4D929.dip0.t-ipconnect.de [IPv6:2003:ec:2f0b:2300:3d0d:c5c9:7b4:d929])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 5D0171EC0C8A;
+        Fri, 17 Jan 2020 01:35:33 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1579221333;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=i1i+BUVl6X3dVlLrJ1ezNZBhRrN2tvT8AcA1Jjxsl6o=;
+        b=Zee8qfedPj1RhUqUw0X36j2qSZ1p5ge8Xp/CVKrXnCMY4M2kt1gi34TuURop2u/bHG3iaQ
+        zMY+pc/mtH3ry1EDkTwT8GK8sV6j1mzaCVHRaRqJZHiTKBcV0Doc0hGmZqFzdGk/1cpk05
+        wPcBc3z6midbSR7wjOt2MxiYqfT2wyA=
+Date:   Fri, 17 Jan 2020 01:35:23 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Wei Yongjun <weiyongjun1@huawei.com>
+Cc:     Yash Shah <yash.shah@sifive.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        sashal@kernel.org, hangl@microsoft.com,
-        Lei Wang <lewan@microsoft.com>, shji@microsoft.com,
-        ruizhao@microsoft.com, Yuqing Shen <yuqing.shen@broadcom.com>,
-        ray.jui@broadcom.com, wangglei@gmail.com
-References: <6a462190-0af2-094a-daa8-f480d54a1fbf@gmail.com>
-From:   Scott Branden <scott.branden@broadcom.com>
-Message-ID: <aa80b8a5-5297-91c6-6410-99e43b53bd20@broadcom.com>
-Date:   Thu, 16 Jan 2020 16:31:27 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.2.2
+        Tony Luck <tony.luck@intel.com>,
+        James Morse <james.morse@arm.com>,
+        Robert Richter <rrichter@marvell.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        linux-edac@vger.kernel.org, linux-riscv@lists.infradead.org,
+        kernel-janitors@vger.kernel.org
+Subject: Re: [PATCH]  EDAC/sifive: fix return value check in ecc_register()
+Message-ID: <20200117003523.GK27148@zn.tnic>
+References: <20200115150303.112627-1-weiyongjun1@huawei.com>
 MIME-Version: 1.0
-In-Reply-To: <6a462190-0af2-094a-daa8-f480d54a1fbf@gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20200115150303.112627-1-weiyongjun1@huawei.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-Hi Shiping,
-
-Here is another small change to cleanup.
-
-On 2020-01-15 6:32 a.m., Shiping Ji wrote:
-> New driver supports error detection and correction on the devices with ARM
-> DMC-520 memory controller.
->
-> Signed-off-by: Shiping Ji <shiping.linux@gmail.com>
-> Signed-off-by: Lei Wang <leiwang_git@outlook.com>
-> Reviewed-by: James Morse <james.morse@arm.com>
->
+On Wed, Jan 15, 2020 at 03:03:03PM +0000, Wei Yongjun wrote:
+> In case of error, the function edac_device_alloc_ctl_info() returns NULL
+> pointer not ERR_PTR(). The IS_ERR() test in the return value check
+> should be replaced with NULL test.
+> 
+> Fixes: 91abaeaaff35 ("EDAC/sifive: Add EDAC platform driver for SiFive SoCs")
+> Signed-off-by: Wei Yongjun <weiyongjun1@huawei.com>
 > ---
->       Changes in v9:
->           - Removed interrupt-config and replaced with an interrupt map where names and masks are predefined
->           - Only one ISR function is defined, mask is retrieved from the interrupt map
->           - "dram_ecc_errc" and "dram_ecc_errd" are implemented
->
-> ---
-> +static void dmc520_get_dram_ecc_error_info(struct dmc520_edac *edac,
-> +					   bool is_ce,
-> +					   struct ecc_error_info *info)
-> +{
-> +	u32 reg_offset_low, reg_offset_high;
-> +	u32 reg_val_low, reg_val_high;
-> +	bool valid;
-> +
-> +	reg_offset_low = is_ce ? REG_OFFSET_DRAM_ECC_ERRC_INT_INFO_31_00 :
-> +				 REG_OFFSET_DRAM_ECC_ERRD_INT_INFO_31_00;
-> +	reg_offset_high = is_ce ? REG_OFFSET_DRAM_ECC_ERRC_INT_INFO_63_32 :
-> +				  REG_OFFSET_DRAM_ECC_ERRD_INT_INFO_63_32;
-> +
-> +	reg_val_low = dmc520_read_reg(edac, reg_offset_low);
-> +	reg_val_high = dmc520_read_reg(edac, reg_offset_high);
-> +
-> +	valid = (FIELD_GET(REG_FIELD_ERR_INFO_LOW_VALID, reg_val_low) != 0) &&
-> +		(FIELD_GET(REG_FIELD_ERR_INFO_HIGH_VALID, reg_val_high) != 0);
-> +
-> +	if (valid) {
-> +		info->col =
-> +			FIELD_GET(REG_FIELD_ERR_INFO_LOW_COL, reg_val_low);
-> +		info->row =
-> +			FIELD_GET(REG_FIELD_ERR_INFO_LOW_ROW, reg_val_low);
-> +		info->rank =
-> +			FIELD_GET(REG_FIELD_ERR_INFO_LOW_RANK, reg_val_low);
-> +		info->bank =
-> +			FIELD_GET(REG_FIELD_ERR_INFO_HIGH_BANK, reg_val_high);
-> +	} else {
-> +		memset(info, 0, sizeof(struct ecc_error_info));
-This should be sizeof(*info), not sizeof(struct ecc_error_info)
-for better programming to allow info to change type in the future
-without the code changing.
-> +	}
-> +}
-> +
->
+>  drivers/edac/sifive_edac.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/edac/sifive_edac.c b/drivers/edac/sifive_edac.c
+> index c0cc72a3b2be..3a3dcb14ed99 100644
+> --- a/drivers/edac/sifive_edac.c
+> +++ b/drivers/edac/sifive_edac.c
+> @@ -54,8 +54,8 @@ static int ecc_register(struct platform_device *pdev)
+>  	p->dci = edac_device_alloc_ctl_info(0, "sifive_ecc", 1, "sifive_ecc",
+>  					    1, 1, NULL, 0,
+>  					    edac_device_alloc_index());
+> -	if (IS_ERR(p->dci))
+> -		return PTR_ERR(p->dci);
+> +	if (!p->dci)
+> +		return -ENOMEM;
+>  
+>  	p->dci->dev = &pdev->dev;
+>  	p->dci->mod_name = "Sifive ECC Manager";
 
+Applied, thanks.
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
