@@ -2,45 +2,52 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BEAEE1443A0
-	for <lists+linux-edac@lfdr.de>; Tue, 21 Jan 2020 18:53:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A0B6E1443B9
+	for <lists+linux-edac@lfdr.de>; Tue, 21 Jan 2020 18:56:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728829AbgAURxh (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Tue, 21 Jan 2020 12:53:37 -0500
-Received: from mail.kernel.org ([198.145.29.99]:55612 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728186AbgAURxh (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Tue, 21 Jan 2020 12:53:37 -0500
-Received: from mail-qk1-f182.google.com (mail-qk1-f182.google.com [209.85.222.182])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 66C4720882;
-        Tue, 21 Jan 2020 17:53:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1579629216;
-        bh=jSqnb8251iB+PaUjwL/WFnS37zciALpQsGn4VLiEZOM=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=pssvT+PNFm+V3NvPNyFH+RbfyYZF5MO2gKEGEnsd0K1kGLLSzzSQr2WAaFqWFlWXY
-         aHO7HW+SWWV7htzelymF29D+hVY70A3cWLPyP46zOG8QNDg/OsPxGOZbMo6IQ7yesV
-         2eqyFQXlAJZbovUdFWJ3wU4SGj16jqPUjA0Vi8r4=
-Received: by mail-qk1-f182.google.com with SMTP id 21so3607035qky.4;
-        Tue, 21 Jan 2020 09:53:36 -0800 (PST)
-X-Gm-Message-State: APjAAAW2bHa4BicuauCnSmK36hnbDUumROoDLhpV4XT7JhYV7/y0zK0+
-        jcQVDmiHlSlg+NvLD8RL2oFEZ1DDfgtFZKA/pw==
-X-Google-Smtp-Source: APXvYqzHLixt8IrlgT/au2K+GmxkDhCwSit+HjQFs08D+Z88/At71jstGFhsanilwAJ1+GPhBTdil9wNxv/SeT9soW8=
-X-Received: by 2002:a05:620a:135b:: with SMTP id c27mr5331728qkl.119.1579629215564;
- Tue, 21 Jan 2020 09:53:35 -0800 (PST)
-MIME-Version: 1.0
-References: <4fbf026a-4878-cd65-55f7-7d992782b331@gmail.com> <20200116233939.GI27148@zn.tnic>
-In-Reply-To: <20200116233939.GI27148@zn.tnic>
-From:   Rob Herring <robh+dt@kernel.org>
-Date:   Tue, 21 Jan 2020 11:53:23 -0600
-X-Gmail-Original-Message-ID: <CAL_JsqKqC_xm9rrHYaO87BtEv=-ji080p_G8axFduqu1mcqHCA@mail.gmail.com>
-Message-ID: <CAL_JsqKqC_xm9rrHYaO87BtEv=-ji080p_G8axFduqu1mcqHCA@mail.gmail.com>
+        id S1729096AbgAUR4T (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Tue, 21 Jan 2020 12:56:19 -0500
+Received: from mail-pl1-f194.google.com ([209.85.214.194]:42312 "EHLO
+        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728186AbgAUR4T (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Tue, 21 Jan 2020 12:56:19 -0500
+Received: by mail-pl1-f194.google.com with SMTP id p9so1645179plk.9;
+        Tue, 21 Jan 2020 09:56:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=+7UcIYyupUrT8UqdxAteZ1t6SxPyW7FNiWE6g1e+Uv0=;
+        b=AFneFU8tAym4plBbE3InWVUlktNscK05ah9eYmr0DAdE4uVt0eTf6ci/Lze8YwFscS
+         Yo+xartsefE6e+d2YjyWuvh5AiWVNh+1XiKKLeyIV75G/vYO7grsQ2S7fHMY9VDmrwLq
+         ZbqP+b/hf4LnBvYkHk6Muv1atfQc+csSQ7Z/Jp1xcnbTxSOWGaKkyviEwq7nOnVne+UP
+         IdguyqsifpLz1gkpSE2NyCWWrzRMVqPwE9XT7u0EHUoqd0c5RLt2ZpT7s2nPqfsMxHFJ
+         GTEoc9sNOr+ITUAWqrpAHkRRoA4+g3bPmC2B3VUyzyzVQPyGMDeeQs4lO0OUMpzNCaE4
+         NFww==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=+7UcIYyupUrT8UqdxAteZ1t6SxPyW7FNiWE6g1e+Uv0=;
+        b=Y1BvCaW/sxBRQ0n/IW8faZkBpxASaDD4mOYowH9c/95cfOI8peOSIEW0Z6R/d+/gcz
+         MGvG+PD5ZLl9ymt/gxApN+WCtRyau1auyJyJX9TXYE5eoM1gJXplcZylAAM9bxyA/eei
+         NREzd1zr3vibNB/sHaApSGFqixYFLKO8/L3VASQwZoti6wNTxIua5QIwxj7KCeCMj0wd
+         0GEWqA8Ih//YEDx9c0DICesUyeH03jFVRBUEjnjWoJCEgGaJ/sohwcMEiMts4colOzB7
+         jb+3lMWLSHpBuCIVU2Lgf6YGu/n3vVdwnpgTDqYjuzgTH30ZYq6wXWLNGgmalnBZywO5
+         ehlw==
+X-Gm-Message-State: APjAAAVCr2sWTgfpLygif8CFWHbBgduWNsKcsg4azoKjpmjlntg5Ant/
+        sL+AHl7quBjm+I+JYhUsFDQ=
+X-Google-Smtp-Source: APXvYqzF3Luq7je6jNzK1lpqgZmnNfY1NSaU0MalFpmd0APMREaWtHVxWlb7Ns7PUC8OMAHl2iwR2A==
+X-Received: by 2002:a17:902:ab95:: with SMTP id f21mr6430870plr.336.1579629378476;
+        Tue, 21 Jan 2020 09:56:18 -0800 (PST)
+Received: from ?IPv6:2001:4898:d8:28:140e:bf9b:65a6:dd72? ([2001:4898:80e8:8:941d:bf9b:65a6:dd72])
+        by smtp.gmail.com with ESMTPSA id fa21sm76780pjb.17.2020.01.21.09.56.17
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 21 Jan 2020 09:56:17 -0800 (PST)
 Subject: Re: [PATCH v9 1/2] dt-bindings: edac: arm-dmc520.txt
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     Shiping Ji <shiping.linux@gmail.com>,
-        James Morse <james.morse@arm.com>,
+To:     Rob Herring <robh+dt@kernel.org>, Borislav Petkov <bp@alien8.de>
+Cc:     James Morse <james.morse@arm.com>,
         Mark Rutland <mark.rutland@arm.com>,
         devicetree@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
         linux-edac <linux-edac@vger.kernel.org>,
@@ -50,48 +57,32 @@ Cc:     Shiping Ji <shiping.linux@gmail.com>,
         shji@microsoft.com, Scott Branden <scott.branden@broadcom.com>,
         Yuqing Shen <yuqing.shen@broadcom.com>,
         Ray Jui <ray.jui@broadcom.com>, wangglei@gmail.com
-Content-Type: text/plain; charset="UTF-8"
+References: <4fbf026a-4878-cd65-55f7-7d992782b331@gmail.com>
+ <20200116233939.GI27148@zn.tnic>
+ <CAL_JsqKqC_xm9rrHYaO87BtEv=-ji080p_G8axFduqu1mcqHCA@mail.gmail.com>
+From:   Shiping Ji <shiping.linux@gmail.com>
+Message-ID: <0723718a-f359-77b2-f66c-dd531cb19952@gmail.com>
+Date:   Tue, 21 Jan 2020 09:56:15 -0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.1
+MIME-Version: 1.0
+In-Reply-To: <CAL_JsqKqC_xm9rrHYaO87BtEv=-ji080p_G8axFduqu1mcqHCA@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Thu, Jan 16, 2020 at 5:39 PM Borislav Petkov <bp@alien8.de> wrote:
->
-> On Wed, Jan 15, 2020 at 06:32:27AM -0800, Shiping Ji wrote:
-> > This is the device tree bindings for new EDAC driver dmc520_edac.c.
-> >
-> > Signed-off-by: Shiping Ji <shiping.linux@gmail.com>
-> > Signed-off-by: Lei Wang <leiwang_git@outlook.com>
-> > Reviewed-by: James Morse <james.morse@arm.com>
->
-> So for this patch, v2 had Rui Zhao as an author:
->
-> https://lkml.kernel.org/r/BN7PR08MB5572B3388B2D7DC8F6C7F285AE4C0@BN7PR08MB5572.namprd08.prod.outlook.com
->
-> v3 got Lei as an author:
->
-> https://lkml.kernel.org/r/CY1PR0401MB1244062C1738B09D6100F202860A0@CY1PR0401MB1244.namprd04.prod.outlook.com
->
-> and now it is you.
->
-> So when you send next time, think about who's going to be the author.
->
-> > +     line numbers. The valid interrupt names are the followings:
->
-> WARNING: 'followings' may be misspelled - perhaps 'following'?
-> #51: FILE: Documentation/devicetree/bindings/edac/arm-dmc520.txt:10:
-> +     line numbers. The valid interrupt names are the followings:
->
-> Please integrate scripts/checkpatch.pl into your patch creation
-> workflow. Some of the warnings/errors *actually* make sense.
->
-> Also, this patch throws this other checkpatch warning:
->
-> WARNING: DT bindings should be in DT schema format. See: Documentation/devicetree/writing-schema.rst
->
-> but since Rob reviewed it, I'm going to assume checkpatch is wrong here.
+On 1/21/2020 9:53 AM, Rob Herring wrote:
 
-Would be happy for a schema, but not going to ask for that on a v9.
+> Would be happy for a schema, but not going to ask for that on a v9.
 
-Rob
+I drafted the schema, do you have some tools/instrutions to validate against the DTS? I want to make sure the schema is indeed correct.
+
+Thanks!
+
+-- 
+Best regards,
+Shiping Ji
