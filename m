@@ -2,68 +2,91 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A3E1B146EE2
-	for <lists+linux-edac@lfdr.de>; Thu, 23 Jan 2020 18:00:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E2711147158
+	for <lists+linux-edac@lfdr.de>; Thu, 23 Jan 2020 20:02:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729907AbgAWRAS (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Thu, 23 Jan 2020 12:00:18 -0500
-Received: from mail.skyhub.de ([5.9.137.197]:37460 "EHLO mail.skyhub.de"
+        id S1728655AbgAWTCF (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Thu, 23 Jan 2020 14:02:05 -0500
+Received: from mx2.suse.de ([195.135.220.15]:49418 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729903AbgAWRAR (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Thu, 23 Jan 2020 12:00:17 -0500
-Received: from zn.tnic (p200300EC2F095B000C549FEBFD6AD70E.dip0.t-ipconnect.de [IPv6:2003:ec:2f09:5b00:c54:9feb:fd6a:d70e])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 3EC101EC0591;
-        Thu, 23 Jan 2020 18:00:16 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1579798816;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=2Zi/Vu+B2l9NFcgdnSTKPUukaPhmaLbQ1nWfcYAwaa4=;
-        b=kAooszeV1IOJNNYaiYaFa7CrqxTrhAV64Bm/c8m0EExBkSNPh9YuDLtWDwS3jXtGUYWZYh
-        +jSE5jpUrk7DVGMWExLkb10lYo9nYOLiKvE9iA72iY9wS54Lv1I9Xumyap9BOxK0voKTDv
-        Vn8erO2TERKmT88Dj/mhGcLAijtaAiM=
-Date:   Thu, 23 Jan 2020 18:00:14 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Shiping Ji <shiping.linux@gmail.com>
-Cc:     James Morse <james.morse@arm.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        devicetree@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
-        linux-edac <linux-edac@vger.kernel.org>,
+        id S1727022AbgAWTCF (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Thu, 23 Jan 2020 14:02:05 -0500
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx2.suse.de (Postfix) with ESMTP id 01FE2ABF6;
+        Thu, 23 Jan 2020 19:02:02 +0000 (UTC)
+Subject: Re: [PATCH v3 02/10] EDAC/mc: Reorder functions edac_mc_alloc*()
+To:     Robert Richter <rrichter@marvell.com>,
+        Borislav Petkov <bp@alien8.de>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, hangl@microsoft.com,
-        Lei Wang <lewan@microsoft.com>, ruizhao@microsoft.com,
-        shji@microsoft.com, Scott Branden <scott.branden@broadcom.com>,
-        Yuqing Shen <yuqing.shen@broadcom.com>
-Subject: Re: [PATCH v10 1/2] dt-bindings: edac: dmc-520.yaml
-Message-ID: <20200123170014.GF10328@zn.tnic>
-References: <09a2fe69-842f-01cf-1cfa-d5fc639b158a@gmail.com>
- <20200123082322.GB10328@zn.tnic>
- <4165bb52-6dda-60e9-c248-428822167476@gmail.com>
+        Tony Luck <tony.luck@intel.com>
+Cc:     James Morse <james.morse@arm.com>,
+        Aristeu Rozanski <aris@redhat.com>,
+        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
+References: <20200123090210.26933-1-rrichter@marvell.com>
+ <20200123090210.26933-3-rrichter@marvell.com>
+From:   Matthias Brugger <mbrugger@suse.com>
+Message-ID: <45ce6d35-6e07-8ff4-5f67-84adfcb44f14@suse.com>
+Date:   Thu, 23 Jan 2020 20:02:00 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.1
 MIME-Version: 1.0
+In-Reply-To: <20200123090210.26933-3-rrichter@marvell.com>
 Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <4165bb52-6dda-60e9-c248-428822167476@gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Thu, Jan 23, 2020 at 08:47:31AM -0800, Shiping Ji wrote:
-> Boris, we'd still like to keep her as the author since this patch is
-> just updating to a new documentation format where the content being
-> documented was still designed by Lei. I hope this is OK.
+On 23/01/2020 10:02, Robert Richter wrote:
+> Reorder the new created functions edac_mc_alloc_csrows() and
+> edac_mc_alloc_dimms() and move them before edac_mc_alloc(). No further
+> code changes.
+> 
+> Signed-off-by: Robert Richter <rrichter@marvell.com>
+> Reviewed-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
+> Acked-by: Aristeu Rozanski <aris@redhat.com>
+> ---
+>  drivers/edac/edac_mc.c | 209 ++++++++++++++++++++---------------------
+>  1 file changed, 103 insertions(+), 106 deletions(-)
+> 
+> diff --git a/drivers/edac/edac_mc.c b/drivers/edac/edac_mc.c
+> index d71006a4f07b..1e227e69e216 100644
+> --- a/drivers/edac/edac_mc.c
+> +++ b/drivers/edac/edac_mc.c
+> @@ -311,112 +311,6 @@ static void mci_release(struct device *dev)
+>  	kfree(mci);
+>  }
+>  
+> -static int edac_mc_alloc_csrows(struct mem_ctl_info *mci);
+> -static int edac_mc_alloc_dimms(struct mem_ctl_info *mci);
+> -
+> -struct mem_ctl_info *edac_mc_alloc(unsigned int mc_num,
+> -				   unsigned int n_layers,
+> -				   struct edac_mc_layer *layers,
+> -				   unsigned int sz_pvt)
+> -{
+[...]
+> -	edac_dbg(1, "allocating %u bytes for mci data (%d %s, %d csrows/channels)\n",
+> -		 size,
+> -		 tot_dimms,
+> -		 per_rank ? "ranks" : "dimms",
+> -		 tot_csrows * tot_channels);
+> -
+> -	mci = kzalloc(size, GFP_KERNEL);
+> -	if (mci == NULL)
+> -		return NULL;
+> -
+> -	mci->dev.release = mci_release;
+> -	device_initialize(&mci->dev);
 
-Ok, fair enough.
+Seems like some leftovers in your working tree. Are you sure you created the
+patches against a clean upstream tree?
 
-Thx.
+Regards,
+Matthias
 
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
