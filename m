@@ -2,62 +2,62 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E299D14640B
-	for <lists+linux-edac@lfdr.de>; Thu, 23 Jan 2020 10:03:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CFEE14641F
+	for <lists+linux-edac@lfdr.de>; Thu, 23 Jan 2020 10:03:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727817AbgAWJDG (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Thu, 23 Jan 2020 04:03:06 -0500
-Received: from mx0a-0016f401.pphosted.com ([67.231.148.174]:65526 "EHLO
+        id S1727141AbgAWJDp (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Thu, 23 Jan 2020 04:03:45 -0500
+Received: from mx0a-0016f401.pphosted.com ([67.231.148.174]:48808 "EHLO
         mx0b-0016f401.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726118AbgAWJDF (ORCPT
+        by vger.kernel.org with ESMTP id S1726194AbgAWJDp (ORCPT
         <rfc822;linux-edac@vger.kernel.org>);
-        Thu, 23 Jan 2020 04:03:05 -0500
+        Thu, 23 Jan 2020 04:03:45 -0500
 Received: from pps.filterd (m0045849.ppops.net [127.0.0.1])
-        by mx0a-0016f401.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 00N90NZj023654;
-        Thu, 23 Jan 2020 01:02:54 -0800
+        by mx0a-0016f401.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 00N90d8c023738;
+        Thu, 23 Jan 2020 01:02:57 -0800
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
  subject : date : message-id : references : in-reply-to : content-type :
  content-transfer-encoding : mime-version; s=pfpt0818;
- bh=8n/1g3+9aiQeFRsM5MVfKqoi0hRutk4BizwXavVJwQY=;
- b=H/zH3l3vMW4rM+W/ftlta/wIYSxu8WsvywzKfxfzF+2Rl+qwCJKBVKAhPCLe+kF4poTa
- pzuXIS5PorzPckrf1KvMct/lPj7UJElZXaYXe3vZ2uZqLRNtJz6RbiFWDFZGF0gl9/Hu
- R4X647WpMB+jHWoXEiqkULwu9fUQFdt5nuQV4RE4HnK3yFdRI2IZ9sX3dLsok+qwdFV2
- eodxQl4LiDbAljkK3rN3w/xIP/ppBMd6OiqQjO+q4yF/8iyxmsE4s3kXKX5+ITjws+ge
- 0TKTWeM6jgqsd6fSoYqKbFggtD1GM8aLNiRcQ3E4QpoSO16XBCaUYP66RFfCrOQwlG2b Ig== 
-Received: from sc-exch01.marvell.com ([199.233.58.181])
-        by mx0a-0016f401.pphosted.com with ESMTP id 2xq4x4gqv8-1
+ bh=7L5zpdjJ9AFTNz7nqpQNB+kfqsuvsfqwA4gKEAy8/yg=;
+ b=EmIVpNaK/uhMFnmlrIC3tSw2pmq14kt+Zvl4ZlqQ78z9zO+FnLQSAGPBOQokTeQ8bLjL
+ J978FpFLAA9Ko4rBVtqu5XuipgP9eF/OPpcKI/xL52I2bzGPWuZe906CfjHOsbW1iHLi
+ 8/M5ri3oxkj5XO6SOy6og+Zvg6nuIr/OsYAcPVZzHwnECsGWIhkSldO0rw8XoPCze5hU
+ R+xOU15lJlj2LAxONRl18BV3L4xy9pEVbSBdnUak21VyBs1/ImB/5U9nm/vjdRiRYSgZ
+ +lHeIC8b2sKnZXsWTT2xQF7R0oHIUMNIdf8Dn8zCBBl231od60Xvip/7T70bqewssP+i sQ== 
+Received: from sc-exch02.marvell.com ([199.233.58.182])
+        by mx0a-0016f401.pphosted.com with ESMTP id 2xq4x4gqvj-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
-        Thu, 23 Jan 2020 01:02:54 -0800
-Received: from SC-EXCH04.marvell.com (10.93.176.84) by SC-EXCH01.marvell.com
- (10.93.176.81) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Thu, 23 Jan
- 2020 01:02:53 -0800
-Received: from NAM04-SN1-obe.outbound.protection.outlook.com (104.47.44.50) by
- SC-EXCH04.marvell.com (10.93.176.84) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2 via Frontend Transport; Thu, 23 Jan 2020 01:02:53 -0800
+        Thu, 23 Jan 2020 01:02:57 -0800
+Received: from SC-EXCH01.marvell.com (10.93.176.81) by SC-EXCH02.marvell.com
+ (10.93.176.82) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Thu, 23 Jan
+ 2020 01:02:55 -0800
+Received: from NAM04-SN1-obe.outbound.protection.outlook.com (104.47.44.59) by
+ SC-EXCH01.marvell.com (10.93.176.81) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2 via Frontend Transport; Thu, 23 Jan 2020 01:02:55 -0800
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=hyM5dvfXdk8II+ZG7Vpo9+hfeslqExYTrO78yWNsUD44iVFFJrBtajEbE4l/AWr90UvATbYs/9K0RhY4Mv61PwE0JtV1a6G+jtI7REtn/v4ebZicE7DGTcwWULnASxeYTteFFkehknbv2UNujAO3C7/TmlkQuhLm5M9fb/YbyXsWZ4quxcwWmY3pmlLRKaDQ9DNRbYQzJ9KacSei5Um7rSUrvedMhuxTDTTttLL9yhTTzRNMSZ++OjYAoT/3RVYbnEH6zwIpNGSdW4dztGwK7A3KDwqVjnEAfOHStVsN/iwWenjcIj3ayq5qs4omrUqsJgldxDu3nJskY1k7GDg+jg==
+ b=SP/TZeFW8pbO8VB+s690RFMmFxOt9cXkoFZfsTNMOzDdAVYIXryDyAgovSpllt0Bk8KTxIqz3RqaLn2EDzhB9vnz9yA4P6zXLD5xTq1A5ZIDFAzCmnejS/J1h2Zx8uYSjZHpRvUZmDKRWBD/osZuJwTGmlJuxxk+NpPG2ZomU1hawn3arYIJQSoOUXOoad/rlDnyyhSlbQxzHp6/oQGBbQUcSPtghvWRjHpLJ/I7S7mVGZvMDApiMCKYiKVwimZrBQEtTgw7ux2y59Pg69O/F1Bw5YaO0tuYjqnzeyfXaGEaoKOU8xVXVpSvv4u1udXmJVlrNcNlQKRKHaoG0FHbgQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=8n/1g3+9aiQeFRsM5MVfKqoi0hRutk4BizwXavVJwQY=;
- b=NmmxyBleYoeoxJ2KMmatfV65yo9T6eTkzbUmfUxeV03myC+fMRfPtXdZmvUDEMPqEK+8qhY0FJHKdo2UR3MWpcWjrW74jEldQGBUj0nTe+NYRzCuJ2eR5pIggVwo4gx7UC71Kz38dnGI+r3uToMBiRssO2LwOacYr692XEgFHNQhogfOAztR9LGygfSEcSGqvLuHylNFUWoyCmNVALbCwPeCRBVkE+s5YjOYB/n/AcxFlPDNWtsLcR4QhYkEmH6+zsLTDRIrBe9Yimqk8jOVxKSDocrKpWxPWQg4tYHWEe6R5FA7ivRjZ3tLHaDWoOLoqoaY9+S5txvBapnXv+RzkQ==
+ bh=7L5zpdjJ9AFTNz7nqpQNB+kfqsuvsfqwA4gKEAy8/yg=;
+ b=ks13gIG13sbFpewBoutH/Pv2s/iRp4CBKQQSvBq9w5aMMOOIqopkuG1G73rx/VEqod1tVy0IbXYGaVPxLdezrgyjgs+ZiAZmCQr6UA+QbtfnKNHgytLr4fy1c2rgCSC8EYyg4TMK1wAdmqm78v90wkzmpu62sbTSkVHE5sqNpEU2lZWC4QzRAhe/WojFhGaI0lZoFa0rRhaf4vjiq8ez5vZZ6z8OmEkKuIpr8tansKSTptpt3DQxa2pZZyaYrEKFRUu63z/4eU6fBY27WH6ZMSPNBFGqtq6g+BSD7lm4yxqTOP1iHdUVwV8UAfqWGhOP+8+d8I9tKzxwS/qzSVpokg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=marvell.com; dmarc=pass action=none header.from=marvell.com;
  dkim=pass header.d=marvell.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=marvell.onmicrosoft.com; s=selector1-marvell-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=8n/1g3+9aiQeFRsM5MVfKqoi0hRutk4BizwXavVJwQY=;
- b=TkYCUvnl49Rt9LdKhKOZnvpgZ+stoy3HqI4yKKF0rA/l7KKCpFVWWpvTa4IWAru5YCr5BDtMvNSi3/oQnVgz2078aeCWy8XFRUW0KFOLodwe0sKPhJ55WsYUcS/JTaMm2jFPdR+YAhSjLHdJ7W67RTvaGY/AN5l4QI/gLB9gqrY=
+ bh=7L5zpdjJ9AFTNz7nqpQNB+kfqsuvsfqwA4gKEAy8/yg=;
+ b=SZsDxmLaE6laZkHwG+sumgxqXCzqQIF7HfjbDNGQ4LUran99d9sgGykGsNwQjnTQ2WfDDSqlvdeD1dR9bkDOmOSsO4kexUJA0EX/F/5aaPfFX9eKKiAeFmu3tjRNcFInqryLxp69Wo8vP4+DwlabSYs9kew6CTpX0MMm1DWzYiE=
 Received: from MN2PR18MB3408.namprd18.prod.outlook.com (10.255.237.10) by
  MN2PR18MB3247.namprd18.prod.outlook.com (10.255.237.32) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2644.18; Thu, 23 Jan 2020 09:02:52 +0000
+ 15.20.2644.18; Thu, 23 Jan 2020 09:02:54 +0000
 Received: from MN2PR18MB3408.namprd18.prod.outlook.com
  ([fe80::b96d:5663:6402:82ea]) by MN2PR18MB3408.namprd18.prod.outlook.com
  ([fe80::b96d:5663:6402:82ea%7]) with mapi id 15.20.2644.028; Thu, 23 Jan 2020
- 09:02:52 +0000
-Received: from rric.localdomain (31.208.96.227) by HE1PR0902CA0010.eurprd09.prod.outlook.com (2603:10a6:3:e5::20) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2644.20 via Frontend Transport; Thu, 23 Jan 2020 09:02:50 +0000
+ 09:02:54 +0000
+Received: from rric.localdomain (31.208.96.227) by HE1PR0902CA0010.eurprd09.prod.outlook.com (2603:10a6:3:e5::20) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2644.20 via Frontend Transport; Thu, 23 Jan 2020 09:02:52 +0000
 From:   Robert Richter <rrichter@marvell.com>
 To:     Borislav Petkov <bp@alien8.de>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
@@ -67,12 +67,13 @@ CC:     James Morse <james.morse@arm.com>,
         Robert Richter <rrichter@marvell.com>,
         "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
-Subject: [PATCH v3 02/10] EDAC/mc: Reorder functions edac_mc_alloc*()
-Thread-Topic: [PATCH v3 02/10] EDAC/mc: Reorder functions edac_mc_alloc*()
-Thread-Index: AQHV0cvk9qjXYuG9WEiAcE89VHJTnQ==
-Date:   Thu, 23 Jan 2020 09:02:52 +0000
-Message-ID: <20200123090210.26933-3-rrichter@marvell.com>
+        kbuild test robot <lkp@intel.com>
+Subject: [PATCH v3 03/10] EDAC: Store error type in struct edac_raw_error_desc
+Thread-Topic: [PATCH v3 03/10] EDAC: Store error type in struct
+ edac_raw_error_desc
+Thread-Index: AQHV0cvm/jC4lc5uckebz748+umIeQ==
+Date:   Thu, 23 Jan 2020 09:02:54 +0000
+Message-ID: <20200123090210.26933-4-rrichter@marvell.com>
 References: <20200123090210.26933-1-rrichter@marvell.com>
 In-Reply-To: <20200123090210.26933-1-rrichter@marvell.com>
 Accept-Language: en-US
@@ -86,28 +87,28 @@ x-ms-exchange-messagesentrepresentingtype: 1
 x-mailer: git-send-email 2.20.1
 x-originating-ip: [31.208.96.227]
 x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 6edd91f5-0b80-4c1d-9aa0-08d79fe306ee
+x-ms-office365-filtering-correlation-id: e69621b9-10da-4205-f1b7-08d79fe30866
 x-ms-traffictypediagnostic: MN2PR18MB3247:
 x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <MN2PR18MB324758C9448800370722EFD2D90F0@MN2PR18MB3247.namprd18.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:1303;
+x-microsoft-antispam-prvs: <MN2PR18MB32472B91D3E2C7001E89FE68D90F0@MN2PR18MB3247.namprd18.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:8882;
 x-forefront-prvs: 029174C036
 x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(136003)(346002)(366004)(396003)(39850400004)(376002)(199004)(189003)(110136005)(66946007)(52116002)(6512007)(66476007)(66556008)(64756008)(66446008)(54906003)(478600001)(1076003)(5660300002)(956004)(2616005)(6486002)(6506007)(36756003)(2906002)(81156014)(8676002)(86362001)(26005)(81166006)(8936002)(71200400001)(4326008)(186003)(316002)(16526019);DIR:OUT;SFP:1101;SCL:1;SRVR:MN2PR18MB3247;H:MN2PR18MB3408.namprd18.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
 received-spf: None (protection.outlook.com: marvell.com does not designate
  permitted sender hosts)
 x-ms-exchange-senderadcheck: 1
 x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: hZhaIKaNTmJ03vJDUnMA8HoTXNDB1/QfyZfjMFCWsE4T2qDA4ptlwY7lIcMEF6DpYKegTI665OGaScp8FtAz5AQZ82e3MQnkhzWJtsrKo5CRSiUILgioX52eIVIfkxJxHoc5fHu7yEjkotGyMcsIs5D80dVOqU9ErLz4imPLdw2NhSYCKkOCCy35Za0+izIjQjL7Zd/duS4gOKHeNFZWuVmDp3tBv9/xDXNWYyZRlKPcIRg09/1beC8OxXOi9pOzOD3P3mIMKEcm3ZiyN/G1mfBnzfy4uqHkscodEjTbOgf/br6Aqg+O0A3zyLw4dsfzGbi3Hi5LthceZxqEmPTBfQG76gxMa5o1jNdtkYZvoBsUiI6Gqzb1GmoXvhPn3XbXAmB3Xa+Dqla9cmBaqBvxIoMN21KFsKUmUOZy+tr8NoGIgCkdt//mhfXV9s9sIQKl
+x-microsoft-antispam-message-info: xdFYAMeXGZg+0uJFf1E8Q8CPbfeIxwo32+9jpl2iYUHS85JFh9bwOUjjhVhckkWtsrocWhpyHRYyzqTEBL3E6nJLgfRrF2Bp66M0XIckqiGTYeDhm5wO0QH5epI7QSq6fX/BfqleKlX9nnj0ste8SgiqNkxJaLeuTxPyY+14kCZSpgxAcDMIIi4mbKHNahb83mYiE8mh+/mm3RuVnRph0j6rAxZ+/bl5Q8Ar5IOWFz9ua2VpluiVz7p+2w2zRABEz7lEPhyr8kZ8pSSniBTi8COXKsBu0wKsPCGPD/kpbfMEykjM1O01dDUjMAsyWT+9i23P22QTCOoLDAfyt/Mo2jGYBGYgCDKutaX6rcsdeXuvlVwHuSzhLMSHLrVHZa8pLDmpnVXz4Szd1zxzARm9Cc5Mbc61cYMTILzhwK6drPcPFBWrGRtIGJDgn3DlwWoR
 Content-Type: text/plain; charset="iso-8859-1"
 Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6edd91f5-0b80-4c1d-9aa0-08d79fe306ee
-X-MS-Exchange-CrossTenant-originalarrivaltime: 23 Jan 2020 09:02:52.0796
+X-MS-Exchange-CrossTenant-Network-Message-Id: e69621b9-10da-4205-f1b7-08d79fe30866
+X-MS-Exchange-CrossTenant-originalarrivaltime: 23 Jan 2020 09:02:54.5030
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
 X-MS-Exchange-CrossTenant-id: 70e1fb47-1155-421d-87fc-2e58f638b6e0
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: kTS+zsZsIQ5vKUpr7GUVd5VNX9TpzMZ4HBcIewZb8JDdPfiEzg/wnaM8bTsLFSz2NMH1rkUDjeOc3VNum2rxYg==
+X-MS-Exchange-CrossTenant-userprincipalname: XtFLa77ZttG2cIOJF/XpgzkFPdJv3myJe3OHX30GTN2dg/JZOFOAoFIjAnVUfZlKREKmJa95IjQkE7hOZLZGMA==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR18MB3247
 X-OriginatorOrg: marvell.com
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.572
@@ -117,253 +118,162 @@ Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-Reorder the new created functions edac_mc_alloc_csrows() and
-edac_mc_alloc_dimms() and move them before edac_mc_alloc(). No further
-code changes.
+Store the error type in struct edac_raw_error_desc. This makes the
+type parameter of edac_raw_mc_handle_error() obsolete.
 
+Reported-by: kbuild test robot <lkp@intel.com>
 Signed-off-by: Robert Richter <rrichter@marvell.com>
-Reviewed-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
+Reviewed-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 Acked-by: Aristeu Rozanski <aris@redhat.com>
 ---
- drivers/edac/edac_mc.c | 209 ++++++++++++++++++++---------------------
- 1 file changed, 103 insertions(+), 106 deletions(-)
+ drivers/edac/edac_mc.c   | 10 +++++-----
+ drivers/edac/edac_mc.h   |  4 +---
+ drivers/edac/ghes_edac.c | 11 +++++------
+ include/linux/edac.h     |  2 ++
+ 4 files changed, 13 insertions(+), 14 deletions(-)
 
 diff --git a/drivers/edac/edac_mc.c b/drivers/edac/edac_mc.c
-index d71006a4f07b..1e227e69e216 100644
+index 1e227e69e216..8ef69d24297d 100644
 --- a/drivers/edac/edac_mc.c
 +++ b/drivers/edac/edac_mc.c
-@@ -311,112 +311,6 @@ static void mci_release(struct device *dev)
- 	kfree(mci);
+@@ -1086,8 +1086,7 @@ static void edac_ue_error(struct mem_ctl_info *mci,
+ 	edac_inc_ue_error(mci, enable_per_layer_report, pos, error_count);
  }
 =20
--static int edac_mc_alloc_csrows(struct mem_ctl_info *mci);
--static int edac_mc_alloc_dimms(struct mem_ctl_info *mci);
--
--struct mem_ctl_info *edac_mc_alloc(unsigned int mc_num,
--				   unsigned int n_layers,
--				   struct edac_mc_layer *layers,
--				   unsigned int sz_pvt)
--{
--	struct mem_ctl_info *mci;
--	struct edac_mc_layer *layer;
--	u32 *ce_per_layer[EDAC_MAX_LAYERS], *ue_per_layer[EDAC_MAX_LAYERS];
--	unsigned int idx, size, tot_dimms =3D 1, count =3D 1;
--	unsigned int tot_csrows =3D 1, tot_channels =3D 1, tot_errcount =3D 0;
--	void *pvt, *ptr =3D NULL;
--	int i;
--	bool per_rank =3D false;
--
--	if (WARN_ON(n_layers > EDAC_MAX_LAYERS || n_layers =3D=3D 0))
--		return NULL;
--
--	/*
--	 * Calculate the total amount of dimms and csrows/cschannels while
--	 * in the old API emulation mode
--	 */
--	for (idx =3D 0; idx < n_layers; idx++) {
--		tot_dimms *=3D layers[idx].size;
--
--		if (layers[idx].is_virt_csrow)
--			tot_csrows *=3D layers[idx].size;
--		else
--			tot_channels *=3D layers[idx].size;
--
--		if (layers[idx].type =3D=3D EDAC_MC_LAYER_CHIP_SELECT)
--			per_rank =3D true;
--	}
--
--	/* Figure out the offsets of the various items from the start of an mc
--	 * structure.  We want the alignment of each item to be at least as
--	 * stringent as what the compiler would provide if we could simply
--	 * hardcode everything into a single struct.
--	 */
--	mci =3D edac_align_ptr(&ptr, sizeof(*mci), 1);
--	layer =3D edac_align_ptr(&ptr, sizeof(*layer), n_layers);
--	for (i =3D 0; i < n_layers; i++) {
--		count *=3D layers[i].size;
--		edac_dbg(4, "errcount layer %d size %d\n", i, count);
--		ce_per_layer[i] =3D edac_align_ptr(&ptr, sizeof(u32), count);
--		ue_per_layer[i] =3D edac_align_ptr(&ptr, sizeof(u32), count);
--		tot_errcount +=3D 2 * count;
--	}
--
--	edac_dbg(4, "allocating %d error counters\n", tot_errcount);
--	pvt =3D edac_align_ptr(&ptr, sz_pvt, 1);
--	size =3D ((unsigned long)pvt) + sz_pvt;
--
--	edac_dbg(1, "allocating %u bytes for mci data (%d %s, %d csrows/channels)=
-\n",
--		 size,
--		 tot_dimms,
--		 per_rank ? "ranks" : "dimms",
--		 tot_csrows * tot_channels);
--
--	mci =3D kzalloc(size, GFP_KERNEL);
--	if (mci =3D=3D NULL)
--		return NULL;
--
--	mci->dev.release =3D mci_release;
--	device_initialize(&mci->dev);
--
--	/* Adjust pointers so they point within the memory we just allocated
--	 * rather than an imaginary chunk of memory located at address 0.
--	 */
--	layer =3D (struct edac_mc_layer *)(((char *)mci) + ((unsigned long)layer)=
-);
--	for (i =3D 0; i < n_layers; i++) {
--		mci->ce_per_layer[i] =3D (u32 *)((char *)mci + ((unsigned long)ce_per_la=
-yer[i]));
--		mci->ue_per_layer[i] =3D (u32 *)((char *)mci + ((unsigned long)ue_per_la=
-yer[i]));
--	}
--	pvt =3D sz_pvt ? (((char *)mci) + ((unsigned long)pvt)) : NULL;
--
--	/* setup index and various internal pointers */
--	mci->mc_idx =3D mc_num;
--	mci->tot_dimms =3D tot_dimms;
--	mci->pvt_info =3D pvt;
--	mci->n_layers =3D n_layers;
--	mci->layers =3D layer;
--	memcpy(mci->layers, layers, sizeof(*layer) * n_layers);
--	mci->nr_csrows =3D tot_csrows;
--	mci->num_cschannel =3D tot_channels;
--	mci->csbased =3D per_rank;
--
--	if (edac_mc_alloc_csrows(mci))
--		goto error;
--
--	if (edac_mc_alloc_dimms(mci))
--		goto error;
--
--	mci->op_state =3D OP_ALLOC;
--
--	return mci;
--
--error:
--	_edac_mc_free(mci);
--
--	return NULL;
--}
--EXPORT_SYMBOL_GPL(edac_mc_alloc);
--
- static int edac_mc_alloc_csrows(struct mem_ctl_info *mci)
+-void edac_raw_mc_handle_error(const enum hw_event_mc_err_type type,
+-			      struct mem_ctl_info *mci,
++void edac_raw_mc_handle_error(struct mem_ctl_info *mci,
+ 			      struct edac_raw_error_desc *e)
  {
- 	unsigned int tot_csrows =3D mci->nr_csrows;
-@@ -545,6 +439,109 @@ static int edac_mc_alloc_dimms(struct mem_ctl_info *m=
-ci)
- 	return 0;
- }
+ 	char detail[80];
+@@ -1102,14 +1101,14 @@ void edac_raw_mc_handle_error(const enum hw_event_m=
+c_err_type type,
 =20
-+struct mem_ctl_info *edac_mc_alloc(unsigned int mc_num,
-+				   unsigned int n_layers,
-+				   struct edac_mc_layer *layers,
-+				   unsigned int sz_pvt)
-+{
-+	struct mem_ctl_info *mci;
-+	struct edac_mc_layer *layer;
-+	u32 *ce_per_layer[EDAC_MAX_LAYERS], *ue_per_layer[EDAC_MAX_LAYERS];
-+	unsigned int idx, size, tot_dimms =3D 1, count =3D 1;
-+	unsigned int tot_csrows =3D 1, tot_channels =3D 1, tot_errcount =3D 0;
-+	void *pvt, *ptr =3D NULL;
-+	int i;
-+	bool per_rank =3D false;
-+
-+	if (WARN_ON(n_layers > EDAC_MAX_LAYERS || n_layers =3D=3D 0))
-+		return NULL;
-+
-+	/*
-+	 * Calculate the total amount of dimms and csrows/cschannels while
-+	 * in the old API emulation mode
-+	 */
-+	for (idx =3D 0; idx < n_layers; idx++) {
-+		tot_dimms *=3D layers[idx].size;
-+
-+		if (layers[idx].is_virt_csrow)
-+			tot_csrows *=3D layers[idx].size;
-+		else
-+			tot_channels *=3D layers[idx].size;
-+
-+		if (layers[idx].type =3D=3D EDAC_MC_LAYER_CHIP_SELECT)
-+			per_rank =3D true;
-+	}
-+
-+	/* Figure out the offsets of the various items from the start of an mc
-+	 * structure.  We want the alignment of each item to be at least as
-+	 * stringent as what the compiler would provide if we could simply
-+	 * hardcode everything into a single struct.
-+	 */
-+	mci =3D edac_align_ptr(&ptr, sizeof(*mci), 1);
-+	layer =3D edac_align_ptr(&ptr, sizeof(*layer), n_layers);
-+	for (i =3D 0; i < n_layers; i++) {
-+		count *=3D layers[i].size;
-+		edac_dbg(4, "errcount layer %d size %d\n", i, count);
-+		ce_per_layer[i] =3D edac_align_ptr(&ptr, sizeof(u32), count);
-+		ue_per_layer[i] =3D edac_align_ptr(&ptr, sizeof(u32), count);
-+		tot_errcount +=3D 2 * count;
-+	}
-+
-+	edac_dbg(4, "allocating %d error counters\n", tot_errcount);
-+	pvt =3D edac_align_ptr(&ptr, sz_pvt, 1);
-+	size =3D ((unsigned long)pvt) + sz_pvt;
-+
-+	edac_dbg(1, "allocating %u bytes for mci data (%d %s, %d csrows/channels)=
-\n",
-+		 size,
-+		 tot_dimms,
-+		 per_rank ? "ranks" : "dimms",
-+		 tot_csrows * tot_channels);
-+
-+	mci =3D kzalloc(size, GFP_KERNEL);
-+	if (mci =3D=3D NULL)
-+		return NULL;
-+
-+	mci->dev.release =3D mci_release;
-+	device_initialize(&mci->dev);
-+
-+	/* Adjust pointers so they point within the memory we just allocated
-+	 * rather than an imaginary chunk of memory located at address 0.
-+	 */
-+	layer =3D (struct edac_mc_layer *)(((char *)mci) + ((unsigned long)layer)=
-);
-+	for (i =3D 0; i < n_layers; i++) {
-+		mci->ce_per_layer[i] =3D (u32 *)((char *)mci + ((unsigned long)ce_per_la=
-yer[i]));
-+		mci->ue_per_layer[i] =3D (u32 *)((char *)mci + ((unsigned long)ue_per_la=
-yer[i]));
-+	}
-+	pvt =3D sz_pvt ? (((char *)mci) + ((unsigned long)pvt)) : NULL;
-+
-+	/* setup index and various internal pointers */
-+	mci->mc_idx =3D mc_num;
-+	mci->tot_dimms =3D tot_dimms;
-+	mci->pvt_info =3D pvt;
-+	mci->n_layers =3D n_layers;
-+	mci->layers =3D layer;
-+	memcpy(mci->layers, layers, sizeof(*layer) * n_layers);
-+	mci->nr_csrows =3D tot_csrows;
-+	mci->num_cschannel =3D tot_channels;
-+	mci->csbased =3D per_rank;
-+
-+	if (edac_mc_alloc_csrows(mci))
-+		goto error;
-+
-+	if (edac_mc_alloc_dimms(mci))
-+		goto error;
-+
-+	mci->op_state =3D OP_ALLOC;
-+
-+	return mci;
-+
-+error:
-+	_edac_mc_free(mci);
-+
-+	return NULL;
-+}
-+EXPORT_SYMBOL_GPL(edac_mc_alloc);
-+
- void edac_mc_free(struct mem_ctl_info *mci)
+ 	/* Report the error via the trace interface */
+ 	if (IS_ENABLED(CONFIG_RAS))
+-		trace_mc_event(type, e->msg, e->label, e->error_count,
++		trace_mc_event(e->type, e->msg, e->label, e->error_count,
+ 			       mci->mc_idx, e->top_layer, e->mid_layer,
+ 			       e->low_layer,
+ 			       (e->page_frame_number << PAGE_SHIFT) | e->offset_in_page,
+ 			       grain_bits, e->syndrome, e->other_detail);
+=20
+ 	/* Memory type dependent details about the error */
+-	if (type =3D=3D HW_EVENT_ERR_CORRECTED) {
++	if (e->type =3D=3D HW_EVENT_ERR_CORRECTED) {
+ 		snprintf(detail, sizeof(detail),
+ 			"page:0x%lx offset:0x%lx grain:%ld syndrome:0x%lx",
+ 			e->page_frame_number, e->offset_in_page,
+@@ -1154,6 +1153,7 @@ void edac_mc_handle_error(const enum hw_event_mc_err_=
+type type,
+ 	/* Fills the error report buffer */
+ 	memset(e, 0, sizeof (*e));
+ 	e->error_count =3D error_count;
++	e->type =3D type;
+ 	e->top_layer =3D top_layer;
+ 	e->mid_layer =3D mid_layer;
+ 	e->low_layer =3D low_layer;
+@@ -1284,6 +1284,6 @@ void edac_mc_handle_error(const enum hw_event_mc_err_=
+type type,
+ 	if (p > e->location)
+ 		*(p - 1) =3D '\0';
+=20
+-	edac_raw_mc_handle_error(type, mci, e);
++	edac_raw_mc_handle_error(mci, e);
+ }
+ EXPORT_SYMBOL_GPL(edac_mc_handle_error);
+diff --git a/drivers/edac/edac_mc.h b/drivers/edac/edac_mc.h
+index 02aac5c61d00..5d78be774f9e 100644
+--- a/drivers/edac/edac_mc.h
++++ b/drivers/edac/edac_mc.h
+@@ -212,7 +212,6 @@ extern int edac_mc_find_csrow_by_page(struct mem_ctl_in=
+fo *mci,
+  * edac_raw_mc_handle_error() - Reports a memory event to userspace withou=
+t
+  *	doing anything to discover the error location.
+  *
+- * @type:		severity of the error (CE/UE/Fatal)
+  * @mci:		a struct mem_ctl_info pointer
+  * @e:			error description
+  *
+@@ -220,8 +219,7 @@ extern int edac_mc_find_csrow_by_page(struct mem_ctl_in=
+fo *mci,
+  * only be called directly when the hardware error come directly from BIOS=
+,
+  * like in the case of APEI GHES driver.
+  */
+-void edac_raw_mc_handle_error(const enum hw_event_mc_err_type type,
+-			      struct mem_ctl_info *mci,
++void edac_raw_mc_handle_error(struct mem_ctl_info *mci,
+ 			      struct edac_raw_error_desc *e);
+=20
+ /**
+diff --git a/drivers/edac/ghes_edac.c b/drivers/edac/ghes_edac.c
+index b99080d8a10c..7c3e5264a41e 100644
+--- a/drivers/edac/ghes_edac.c
++++ b/drivers/edac/ghes_edac.c
+@@ -201,7 +201,6 @@ static void ghes_edac_dmidecode(const struct dmi_header=
+ *dh, void *arg)
+=20
+ void ghes_edac_report_mem_error(int sev, struct cper_sec_mem_err *mem_err)
  {
- 	edac_dbg(1, "\n");
+-	enum hw_event_mc_err_type type;
+ 	struct edac_raw_error_desc *e;
+ 	struct mem_ctl_info *mci;
+ 	struct ghes_edac_pvt *pvt;
+@@ -240,17 +239,17 @@ void ghes_edac_report_mem_error(int sev, struct cper_=
+sec_mem_err *mem_err)
+=20
+ 	switch (sev) {
+ 	case GHES_SEV_CORRECTED:
+-		type =3D HW_EVENT_ERR_CORRECTED;
++		e->type =3D HW_EVENT_ERR_CORRECTED;
+ 		break;
+ 	case GHES_SEV_RECOVERABLE:
+-		type =3D HW_EVENT_ERR_UNCORRECTED;
++		e->type =3D HW_EVENT_ERR_UNCORRECTED;
+ 		break;
+ 	case GHES_SEV_PANIC:
+-		type =3D HW_EVENT_ERR_FATAL;
++		e->type =3D HW_EVENT_ERR_FATAL;
+ 		break;
+ 	default:
+ 	case GHES_SEV_NO:
+-		type =3D HW_EVENT_ERR_INFO;
++		e->type =3D HW_EVENT_ERR_INFO;
+ 	}
+=20
+ 	edac_dbg(1, "error validation_bits: 0x%08llx\n",
+@@ -442,7 +441,7 @@ void ghes_edac_report_mem_error(int sev, struct cper_se=
+c_mem_err *mem_err)
+ 	if (p > pvt->other_detail)
+ 		*(p - 1) =3D '\0';
+=20
+-	edac_raw_mc_handle_error(type, mci, e);
++	edac_raw_mc_handle_error(mci, e);
+=20
+ unlock:
+ 	spin_unlock_irqrestore(&ghes_lock, flags);
+diff --git a/include/linux/edac.h b/include/linux/edac.h
+index cc31b9742684..6703eb492cd2 100644
+--- a/include/linux/edac.h
++++ b/include/linux/edac.h
+@@ -442,6 +442,7 @@ struct errcount_attribute_data {
+  * struct edac_raw_error_desc - Raw error report structure
+  * @grain:			minimum granularity for an error report, in bytes
+  * @error_count:		number of errors of the same type
++ * @type:			severity of the error (CE/UE/Fatal)
+  * @top_layer:			top layer of the error (layer[0])
+  * @mid_layer:			middle layer of the error (layer[1])
+  * @low_layer:			low layer of the error (layer[2])
+@@ -462,6 +463,7 @@ struct edac_raw_error_desc {
+ 	long grain;
+=20
+ 	u16 error_count;
++	enum hw_event_mc_err_type type;
+ 	int top_layer;
+ 	int mid_layer;
+ 	int low_layer;
 --=20
 2.20.1
 
