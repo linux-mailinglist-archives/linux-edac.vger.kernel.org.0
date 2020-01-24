@@ -2,30 +2,30 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 46F5D148684
-	for <lists+linux-edac@lfdr.de>; Fri, 24 Jan 2020 15:04:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A1261487DF
+	for <lists+linux-edac@lfdr.de>; Fri, 24 Jan 2020 15:26:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387698AbgAXOE6 (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Fri, 24 Jan 2020 09:04:58 -0500
-Received: from mail25.static.mailgun.info ([104.130.122.25]:13018 "EHLO
-        mail25.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S2387821AbgAXOE6 (ORCPT
+        id S2387866AbgAXOZS (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Fri, 24 Jan 2020 09:25:18 -0500
+Received: from mail26.static.mailgun.info ([104.130.122.26]:58770 "EHLO
+        mail26.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S2392261AbgAXOVz (ORCPT
         <rfc822;linux-edac@vger.kernel.org>);
-        Fri, 24 Jan 2020 09:04:58 -0500
+        Fri, 24 Jan 2020 09:21:55 -0500
 DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1579874697; h=Message-ID: References: In-Reply-To: Subject:
+ s=smtp; t=1579875714; h=Message-ID: References: In-Reply-To: Subject:
  Cc: To: From: Date: Content-Transfer-Encoding: Content-Type:
- MIME-Version: Sender; bh=ajqMb8UmIys1+mfIKmm/Eull7lVgeNOgev7uRgfOCXQ=;
- b=NjWDZDDuiFZ7hJEKfZyIdpdSOdzUcY27pGGjwaQzKnX+TehdHjz6+Kq0+sQAfddXgYaPoGvN
- 6KtEQ8V+STDRwyYvkY02TA8Xl87T9O8J0UPjx7jnlmBCxlstV6aMmGl+wpei53b7G4452+Zz
- JhOa0KSEGOAK3Qz6pGiGHTyJqhc=
-X-Mailgun-Sending-Ip: 104.130.122.25
+ MIME-Version: Sender; bh=jiI1uJZF61zF9q0RLqAiLf10/keLiT+nvZg6ovSERgc=;
+ b=SrFaLZE7b3iUNRUYJ8loveLV5p6UEDUBs2WZt+7J8Ule//1vTlV48bQY4fFle78h3kEbZw6X
+ v4goBq2srBjXCCnXkdzIKmCacY03nvRlegOQqlmmzU8em1oVn/o5C7ssF9mHh2jpl0ibf9Xb
+ 99DjfdRcM4UF1+sypGLuA7VuSu0=
+X-Mailgun-Sending-Ip: 104.130.122.26
 X-Mailgun-Sid: WyJlNGY0ZCIsICJsaW51eC1lZGFjQHZnZXIua2VybmVsLm9yZyIsICJiZTllNGEiXQ==
 Received: from smtp.codeaurora.org (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171])
- by mxa.mailgun.org with ESMTP id 5e2af983.7fb04d188068-smtp-out-n02;
- Fri, 24 Jan 2020 14:04:51 -0000 (UTC)
+ by mxa.mailgun.org with ESMTP id 5e2afd81.7f97f26c5c00-smtp-out-n03;
+ Fri, 24 Jan 2020 14:21:53 -0000 (UTC)
 Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id C96C6C447A3; Fri, 24 Jan 2020 14:04:51 +0000 (UTC)
+        id D6752C447B1; Fri, 24 Jan 2020 14:21:51 +0000 (UTC)
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
         aws-us-west-2-caf-mail-1.web.codeaurora.org
 X-Spam-Level: 
@@ -35,13 +35,13 @@ Received: from mail.codeaurora.org (localhost.localdomain [127.0.0.1])
         (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
         (No client certificate requested)
         (Authenticated sender: saiprakash.ranjan)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 0E961C43383;
-        Fri, 24 Jan 2020 14:04:51 +0000 (UTC)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 5B7F4C433CB;
+        Fri, 24 Jan 2020 14:21:49 +0000 (UTC)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII;
  format=flowed
 Content-Transfer-Encoding: 7bit
-Date:   Fri, 24 Jan 2020 19:34:51 +0530
+Date:   Fri, 24 Jan 2020 19:51:49 +0530
 From:   Sai Prakash Ranjan <saiprakash.ranjan@codeaurora.org>
 To:     James Morse <james.morse@arm.com>
 Cc:     Andy Gross <agross@kernel.org>,
@@ -52,16 +52,17 @@ Cc:     Andy Gross <agross@kernel.org>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         Tony Luck <tony.luck@intel.com>,
         Robert Richter <rrichter@marvell.com>,
-        linux-edac@vger.kernel.org, tsoni@codeaurora.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Evan Green <evgreen@chromium.org>,
-        Stephen Boyd <swboyd@chromium.org>, psodagud@codeaurora.org,
-        linux-arm-kernel@lists.infradead.org, baicar@os.amperecomputing.com
-Subject: Re: [PATCH 0/2] Add EDAC support for Kryo CPU core caches
-In-Reply-To: <0769b7cb-4e01-eb83-8ad4-b29b4fafafd4@arm.com>
-References: <0101016ed57a10a8-bd8fbdb9-a5cd-4460-bae6-c5c35f0eed88-000000@us-west-2.amazonses.com>
- <0769b7cb-4e01-eb83-8ad4-b29b4fafafd4@arm.com>
-Message-ID: <4bd9d0f34ff06aa0185616066158349a@codeaurora.org>
+        linux-edac@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        Stephen Boyd <swboyd@chromium.org>,
+        Evan Green <evgreen@chromium.org>, tsoni@codeaurora.org,
+        psodagud@codeaurora.org, baicar@os.amperecomputing.com
+Subject: Re: [PATCH 1/2] dt-bindings: edac: Add DT bindings for Kryo EDAC
+In-Reply-To: <312fc8b8-7019-0c74-6a92-c6740cab5dad@arm.com>
+References: <cover.1575529553.git.saiprakash.ranjan@codeaurora.org>
+ <0101016ed57a3259-eee09e9e-e99a-40f1-ab1c-63e58a42615c-000000@us-west-2.amazonses.com>
+ <312fc8b8-7019-0c74-6a92-c6740cab5dad@arm.com>
+Message-ID: <3c3b1d8107a26bbbf8daca3a6c43caca@codeaurora.org>
 X-Sender: saiprakash.ranjan@codeaurora.org
 User-Agent: Roundcube Webmail/1.3.9
 Sender: linux-edac-owner@vger.kernel.org
@@ -69,44 +70,127 @@ Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-Hello James,
+Hi James,
 
-On 2020-01-16 00:16, James Morse wrote:
+On 2020-01-16 00:18, James Morse wrote:
 > Hi Sai,
 > 
 > (CC: +Tyler)
 > 
-> On 05/12/2019 09:52, Sai Prakash Ranjan wrote:
->> This series implements EDAC support for error reporting on
->> Kryo{3,4}XX CPU caches L1,L2, L3-SCU. All the cores(big.LITTLE)
->> in Kryo{3,4}XX CPUs implement RAS extensions and use interrupt
->> based ECC mechanism to report errors.
->> 
->> This series has been tested on SC7180, SDM845, SM8150 SoCs with
->> Kryo{3,4}XX CPU cores based on ARM Cortex-A55, Cortex-A75 and
->> Cortex-A76.
->> 
->> This implementation is platform specific in contrast to the
->> patch posted last time for generic error reporting on arm cortex
->> implementations with RAS extensions by Kyle Yan.
->>  - https://patchwork.kernel.org/patch/10161955/
+> On 05/12/2019 09:53, Sai Prakash Ranjan wrote:
+>> This adds DT bindings for Kryo EDAC implemented with RAS
+>> extensions on KRYO{3,4}XX CPU cores for reporting of cache
+>> errors.
 > 
-> I think that series was dropped because it was too soc-specific and
-> overlaps with the v8.2
-> kernel first support. That series was superseded by:
-> lore.kernel.org/r/1562086280-5351-1-git-send-email-baicar@os.amperecomputing.com
-> 
-> Can you work with Tyler on a combined series? The combined support may
-> need to look quite
-> different. (DT and big/little being the obvious differences).
-> 
-> I'm afraid this is the tip of the kernel-first-RAS iceberg.
+> KRYO{3,4}XX isn't the only SoC with the RAS extensions. The DT needs
+> to convey the range
+> of ways this armv8 RAS extensions stuff can be wired up.
 > 
 
-Sorry for the delayed response. Sure, I will take a look at the series 
-posted by Tyler.
-It might take some time to come up with that but should be doable with 
-your review :)
+Right, but I was going for Kryo specific implementation and hence the 
+binding as such.
+
+> The folk who look after the ACPI specs have made a start:
+> https://static.docs.arm.com/den0085/a/DEN0085_RAS_ACPI_1.0_BETA_1.pdf
+> 
+> (I suspect that isn't the latest version, I'll try and find out)
+> 
+
+That would be helpful, thanks.
+
+> I'd like the ACPI table and DT to convey the same information so that
+> we don't need to
+> convert or infer things in the driver. If something is missing, we
+> should get it added!
+> 
+
+Sure, I think it is decided now that kernel first RAS implementation 
+will be generic.
+
+> 
+>> diff --git 
+>> a/Documentation/devicetree/bindings/edac/qcom-kryo-edac.yaml 
+>> b/Documentation/devicetree/bindings/edac/qcom-kryo-edac.yaml
+>> new file mode 100644
+>> index 000000000000..1a39429a73b4
+>> --- /dev/null
+>> +++ b/Documentation/devicetree/bindings/edac/qcom-kryo-edac.yaml
+>> @@ -0,0 +1,67 @@
+>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+>> +%YAML 1.2
+>> +---
+>> +$id: http://devicetree.org/schemas/edac/qcom-kryo-edac.yaml#
+>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>> +
+>> +title: Kryo Error Detection and Correction(EDAC)
+>> +
+>> +maintainers:
+>> +  - Sai Prakash Ranjan <saiprakash.ranjan@codeaurora.org>
+>> +
+>> +description: |
+>> +  Kryo EDAC is defined to describe on-chip error detection and 
+>> correction
+>> +  for the Kryo CPU cores which implement RAS extensions.
+> 
+> Please don't make this Kryo specific, otherwise this binding becomes
+> an extra thing we
+> need to support with a 'v8.2 RAS' driver.
+> 
+> What I'd like is a single 'armv82_ras' edac driver that handles faults
+> and errors reported
+> by interrupts, and interacts with the arch code's handling of
+> 'external aborts'. This
+> should work for all platforms using v8.2 RAS and later.
+> 
+> 
+
+Ok sure.
+
+>> +  It will report
+>> +  all Single Bit Errors and Double Bit Errors found in L1/L2 caches 
+>> in
+>> +  in two registers ERXSTATUS_EL1 and ERXMISC0_EL1. L3-SCU cache 
+>> errors
+>> +  are reported in ERR1STATUS and ERR1MISC0 registers.
+>> +    ERXSTATUS_EL1 - Selected Error Record Primary Status Register, 
+>> EL1
+>> +    ERXMISC0_EL1 - Selected Error Record Miscellaneous Register 0, 
+>> EL1
+>> +    ERR1STATUS - Error Record Primary Status Register
+>> +    ERR1MISC0 - Error Record Miscellaneous Register 0
+>> +  Current implementation of Kryo ECC(Error Correcting Code) mechanism 
+>> is
+>> +  based on interrupts.
+> 
+> Your SoC picked the system registers as the interface to these
+> component's registers.
+> The binding would need to specify which index the 'l1-l2' records
+> start at, and how many
+> there are. The same for the 'l3-scu'. You can't hard code these, they
+> are different on
+> other platforms.
+> 
+
+Ok will keep this in mind for the next version.
+
+> There is also an MMIO interface which needs a base address, along with
+> the index and
+> ranges. (which may be different). The same component may use both the
+> system register and
+> the MMIO interface.
+> 
+
+I have some doubts here, Where do I get this info? Will this be 
+implementation specific?
+
+> This stuff is likely to vary on big/little systems, so you need a way
+> of describing which
+> CPUs the settings refer to. This probably isn't something the ACPI
+> tables capture as ACPI
+> machines are typically homogenous.
+> 
+
+Our SoCs are based on big.LITTLE arch, so this will be needed.
 
 Thanks,
 Sai
