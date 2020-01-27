@@ -2,26 +2,26 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A145714A221
-	for <lists+linux-edac@lfdr.de>; Mon, 27 Jan 2020 11:41:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BB21614A2DE
+	for <lists+linux-edac@lfdr.de>; Mon, 27 Jan 2020 12:18:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729945AbgA0Klr (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Mon, 27 Jan 2020 05:41:47 -0500
-Received: from mx2.suse.de ([195.135.220.15]:48332 "EHLO mx2.suse.de"
+        id S1727321AbgA0LSE (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Mon, 27 Jan 2020 06:18:04 -0500
+Received: from mx2.suse.de ([195.135.220.15]:38440 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726079AbgA0Klr (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Mon, 27 Jan 2020 05:41:47 -0500
+        id S1726079AbgA0LSD (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Mon, 27 Jan 2020 06:18:03 -0500
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx2.suse.de (Postfix) with ESMTP id 6B7CDAFDF;
-        Mon, 27 Jan 2020 10:41:45 +0000 (UTC)
-Date:   Mon, 27 Jan 2020 11:41:39 +0100
+        by mx2.suse.de (Postfix) with ESMTP id E36B6AAB8;
+        Mon, 27 Jan 2020 11:18:01 +0000 (UTC)
+Date:   Mon, 27 Jan 2020 12:17:55 +0100
 From:   Borislav Petkov <bp@suse.de>
 To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-edac <linux-edac@vger.kernel.org>,
+Cc:     x86-ml <x86@kernel.org>, linux-edac <linux-edac@vger.kernel.org>,
         lkml <linux-kernel@vger.kernel.org>
-Subject: [GIT PULL] EDAC pile for 5.6
-Message-ID: <20200127104139.GB24228@zn.tnic>
+Subject: [GIT PULL] RAS pile for 5.6
+Message-ID: <20200127111755.GC24228@zn.tnic>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
@@ -34,53 +34,64 @@ X-Mailing-List: linux-edac@vger.kernel.org
 
 Hi Linus,
 
-please pull our totally boring branch this time around.
+please pull the below branch to receive the following RAS updates:
+
+* Misc fixes to the MCA code all over the place, by Jan H. Schönherr.
+
+* Initial support for AMD F19h and other cleanups to amd64_edac, by Yazen
+Ghannam.
+
+* Other small cleanups.
 
 Thx.
 
 ---
 
-The following changes since commit e42617b825f8073569da76dc4510bfa019b1c35a:
+The following changes since commit 7de7de7ca0ae0fc70515ee3154af33af75edae2c:
 
-  Linux 5.5-rc1 (2019-12-08 14:57:55 -0800)
+  Fix root mounting with no mount options (2019-12-16 08:42:39 -0800)
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/ras/ras.git tags/edac_for_5.6
+  git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git ras-core-for-linus
 
-for you to fetch changes up to 7e5d6cf35329c8b232a1e97114545c1745d79083:
+for you to fetch changes up to 86e9f9d60eb5e0c5d99ddf6b79f4d308d6453bd0:
 
-  EDAC/amd64: Do not warn when removing instances (2020-01-17 13:00:06 +0100)
-
-----------------------------------------------------------------
-A garden variety of small fixes all over the place.
+  EDAC/mce_amd: Make fam_ops static global (2020-01-16 21:52:48 +0100)
 
 ----------------------------------------------------------------
-Aristeu Rozanski (1):
-      EDAC: skx_common: downgrade message importance on missing PCI device
+Arnd Bergmann (1):
+      x86/mce/therm_throt: Mark throttle_active_work() as __maybe_unused
 
 Borislav Petkov (1):
-      EDAC/amd64: Do not warn when removing instances
+      EDAC/mce_amd: Make fam_ops static global
 
-Krzysztof Kozlowski (1):
-      EDAC/Kconfig: Fix Kconfig indentation
+Jan H. Schönherr (5):
+      x86/mce: Pass MCE message to mce_panic() on failed kernel recovery
+      x86/mce: Remove mce_inject_log() in favor of mce_log()
+      x86/mce: Take action on UCNA/Deferred errors again
+      x86/mce: Fix mce=nobootlog
+      x86/mce: Fix use of uninitialized MCE message string
 
-Wei Yongjun (1):
-      EDAC/sifive: Fix return value check in ecc_register()
+Yazen Ghannam (5):
+      x86/MCE/AMD, EDAC/mce_amd: Add new Load Store unit McaType
+      EDAC/mce_amd: Always load on SMCA systems
+      x86/amd_nb: Add Family 19h PCI IDs
+      EDAC/amd64: Add family ops for Family 19h Models 00h-0Fh
+      EDAC/amd64: Drop some family checks for newer systems
 
-Xu Wang (1):
-      EDAC/aspeed: Remove unneeded semicolon
-
-yu kuai (1):
-      EDAC: remove set but not used variable 'ecc_loc'
-
- drivers/edac/Kconfig       | 3 +--
- drivers/edac/amd64_edac.c  | 3 ---
- drivers/edac/aspeed_edac.c | 4 ++--
- drivers/edac/i5100_edac.c  | 7 -------
- drivers/edac/sifive_edac.c | 4 ++--
- drivers/edac/skx_common.c  | 2 +-
- 6 files changed, 6 insertions(+), 17 deletions(-)
+ arch/x86/include/asm/mce.h            |   3 +-
+ arch/x86/kernel/amd_nb.c              |   3 +
+ arch/x86/kernel/cpu/mce/amd.c         |   2 +
+ arch/x86/kernel/cpu/mce/core.c        |  70 ++++++++++-------------
+ arch/x86/kernel/cpu/mce/inject.c      |   2 +-
+ arch/x86/kernel/cpu/mce/internal.h    |   2 -
+ arch/x86/kernel/cpu/mce/therm_throt.c |   2 +-
+ drivers/edac/amd64_edac.c             |  62 +++++++++++---------
+ drivers/edac/amd64_edac.h             |   3 +
+ drivers/edac/mce_amd.c                | 105 ++++++++++++++++++++--------------
+ include/linux/pci_ids.h               |   1 +
+ 11 files changed, 141 insertions(+), 114 deletions(-)
 
 -- 
 Regards/Gruss,
