@@ -2,147 +2,83 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F314153156
-	for <lists+linux-edac@lfdr.de>; Wed,  5 Feb 2020 13:58:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DBB8B1536FF
+	for <lists+linux-edac@lfdr.de>; Wed,  5 Feb 2020 18:48:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726960AbgBEM6n (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Wed, 5 Feb 2020 07:58:43 -0500
-Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:32688 "EHLO
-        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726386AbgBEM6l (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Wed, 5 Feb 2020 07:58:41 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1580907520;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=EsKI13uEInV1+e+5h+hQckTbAfRjcgKQBLxQjiFbWOU=;
-        b=Mfz+4QrWmKR4w7tUiqf6HBe/IdRK3NHnzGxS22huJJ43p4A9hjJLg3a3sfsQBlJIYxjycv
-        Hg0bcjaq3TWUvh7/L+Ci0Sow1iOldFuDaRz9jvFGVH1b932x3Nk9tr9+LHRGIv4oGo9qEi
-        rCJSzPbap9e0hwAqmPipNv4wxGmqL7c=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-231-Jl4Bo-I3NZyj9UCfKmcPvQ-1; Wed, 05 Feb 2020 07:58:36 -0500
-X-MC-Unique: Jl4Bo-I3NZyj9UCfKmcPvQ-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 900698010EF;
-        Wed,  5 Feb 2020 12:58:34 +0000 (UTC)
-Received: from prarit.bos.redhat.com (prarit-guest.7a2m.lab.eng.bos.redhat.com [10.16.222.26])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 02FCB5DA7D;
-        Wed,  5 Feb 2020 12:58:32 +0000 (UTC)
-From:   Prarit Bhargava <prarit@redhat.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Prarit Bhargava <prarit@redhat.com>,
-        Alexander Krupp <centos@akr.yagii.de>,
-        Tony Luck <tony.luck@intel.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, x86@kernel.org,
-        linux-edac@vger.kernel.org
-Subject: [PATCH] x86/mce: Enable HSD131, HSM142, HSW131, BDM48, and HSM142
-Date:   Wed,  5 Feb 2020 07:58:31 -0500
-Message-Id: <20200205125831.20430-1-prarit@redhat.com>
+        id S1727083AbgBERsd (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Wed, 5 Feb 2020 12:48:33 -0500
+Received: from mail-wr1-f66.google.com ([209.85.221.66]:36589 "EHLO
+        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726822AbgBERsc (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Wed, 5 Feb 2020 12:48:32 -0500
+Received: by mail-wr1-f66.google.com with SMTP id z3so3847835wru.3;
+        Wed, 05 Feb 2020 09:48:31 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:content-language
+         :user-agent;
+        bh=Ux3DGzV35dAceVNHrHJKtHoyHks4VBOBKylo/BD3j8A=;
+        b=DkfkhCUQJrmGX5V3JIOOSr6LWxJ1zQ/4xCeP6hEV8W73GivRsJdvgwDmpIhVE2maFl
+         AoKnXz6XQaztWKLcuZ5APUZqmWExmm1CNBAImbAedj97ugtamOnmabzKEV9E9GcjVFTq
+         9LEVItT0WHX/dkaDnGxGYa3zwOod3zbOruhkW3I5auKjOfuHfbS4kKy/4y48OwgStCFN
+         Jwz8QRorMN7f7u6IiRqnHRVHKGqngzy5CAtWnjYWAprb/QIYDYR5fsQ9v+6zqKtvESzV
+         vJwiAeY4HJucafCb3AyRCyD7/oTZZZgg5r9jDyQX7IQJxGeYUxGFevZ+HEH6X4Ewd/99
+         +QyA==
+X-Gm-Message-State: APjAAAWgbNt5A3Z35CoG56eUI/zaHfxnZd7bJzBC39PGWwaPf/k68eq2
+        J1boJG/8eoZsaWZ5ytnpvg==
+X-Google-Smtp-Source: APXvYqyjCgMXX07vCklzfGwfuVFLf+VA2qWHi/2w8y238KZGaDM7SrZW2WawDJsygiDUkK+5I/A/1g==
+X-Received: by 2002:adf:dd51:: with SMTP id u17mr28737729wrm.290.1580924911012;
+        Wed, 05 Feb 2020 09:48:31 -0800 (PST)
+Received: from rob-hp-laptop ([212.187.182.166])
+        by smtp.gmail.com with ESMTPSA id b18sm695624wru.50.2020.02.05.09.48.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 05 Feb 2020 09:48:30 -0800 (PST)
+Received: (nullmailer pid 28035 invoked by uid 1000);
+        Wed, 05 Feb 2020 17:48:29 -0000
+Date:   Wed, 5 Feb 2020 17:48:29 +0000
+From:   Rob Herring <robh@kernel.org>
+To:     Shiping Ji <shiping.linux@gmail.com>
+Cc:     Borislav Petkov <bp@alien8.de>, James Morse <james.morse@arm.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        devicetree@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
+        linux-edac <linux-edac@vger.kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Sasha Levin <sashal@kernel.org>, hangl@microsoft.com,
+        ruizhao@microsoft.com, Lei Wang <lewan@microsoft.com>,
+        Scott Branden <scott.branden@broadcom.com>,
+        Yuqing Shen <yuqing.shen@broadcom.com>
+Subject: Re: [PATCH v11 1/2] dt-bindings: edac: dmc-520.yaml
+Message-ID: <20200205174829.GA27969@bogus>
+References: <5354a9c3-5b5a-486a-9d19-fa9be169faef@gmail.com>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <5354a9c3-5b5a-486a-9d19-fa9be169faef@gmail.com>
+Content-Language: en-US
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-Intel Errata HSD131, HSM142, HSW131, and BDM48 report that
-"spurious corrected errors may be logged in the IA32_MC0_STATUS register
-with the valid field (bit 63) set, the uncorrected error field (bit 61)
-not set, a Model Specific Error Code (bits [31:16]) of 0x000F, and
-an MCA Error Code (bits [15:0]) of 0x0005."
+On Mon, 27 Jan 2020 08:23:08 -0800, Shiping Ji wrote:
+> This is the device tree bindings for new EDAC driver dmc520_edac.c.
+> 
+> From: Lei Wang <leiwang_git@outlook.com>
+> 
+> Signed-off-by: Lei Wang <leiwang_git@outlook.com>
+> Signed-off-by: Shiping Ji <shiping.linux@gmail.com>
+> Reviewed-by: James Morse <james.morse@arm.com>
+> 
+> ---
+>      Changes in v11:
+>          - Fix issues reported by make dt_binding_check
+> 
+> ---
+>  .../devicetree/bindings/edac/dmc-520.yaml     | 59 +++++++++++++++++++
+>  1 file changed, 59 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/edac/dmc-520.yaml
+> 
 
-Block these spurious errors from the console and logs.
-
-Links to Intel Specification updates:
-HSD131: https://www.intel.com/content/www/us/en/products/docs/processors/=
-core/4th-gen-core-family-desktop-specification-update.html
-HSM142: https://www.intel.com/content/www/us/en/products/docs/processors/=
-core/4th-gen-core-family-mobile-specification-update.html
-HSW131: https://www.intel.com/content/www/us/en/processors/xeon/xeon-e3-1=
-200v3-spec-update.html
-BDM48: https://www.intel.com/content/www/us/en/products/docs/processors/c=
-ore/5th-gen-core-family-spec-update.html
-
-Signed-off-by: Alexander Krupp <centos@akr.yagii.de>
-Signed-off-by: Prarit Bhargava <prarit@redhat.com>
-Cc: Tony Luck <tony.luck@intel.com>
-Cc: Borislav Petkov <bp@alien8.de>
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: Ingo Molnar <mingo@redhat.com>
-Cc: "H. Peter Anvin" <hpa@zytor.com>
-Cc: x86@kernel.org
-Cc: linux-edac@vger.kernel.org
----
- arch/x86/kernel/cpu/mce/core.c | 21 +++++++++++++++++++++
- 1 file changed, 21 insertions(+)
-
-diff --git a/arch/x86/kernel/cpu/mce/core.c b/arch/x86/kernel/cpu/mce/cor=
-e.c
-index 2c4f949611e4..d893cc764a06 100644
---- a/arch/x86/kernel/cpu/mce/core.c
-+++ b/arch/x86/kernel/cpu/mce/core.c
-@@ -121,6 +121,8 @@ static struct irq_work mce_irq_work;
-=20
- static void (*quirk_no_way_out)(int bank, struct mce *m, struct pt_regs =
-*regs);
-=20
-+static int (*quirk_noprint)(struct mce *m);
-+
- /*
-  * CPU/chipset specific EDAC code can register a notifier call here to p=
-rint
-  * MCE errors in a human-readable form.
-@@ -232,6 +234,9 @@ struct mca_msr_regs msr_ops =3D {
-=20
- static void __print_mce(struct mce *m)
- {
-+	if (quirk_noprint && quirk_noprint(m))
-+		return;
-+
- 	pr_emerg(HW_ERR "CPU %d: Machine Check%s: %Lx Bank %d: %016Lx\n",
- 		 m->extcpu,
- 		 (m->mcgstatus & MCG_STATUS_MCIP ? " Exception" : ""),
-@@ -1622,6 +1627,15 @@ static void quirk_sandybridge_ifu(int bank, struct=
- mce *m, struct pt_regs *regs)
- 	m->cs =3D regs->cs;
- }
-=20
-+static int quirk_spurious_ce_noprint(struct mce *m)
-+{
-+	if (m->bank =3D=3D 0 &&
-+	    (m->status & 0xa0000000ffffffff) =3D=3D 0x80000000000f0005)
-+		return 1;
-+
-+	return 0;
-+}
-+
- /* Add per CPU specific workarounds here */
- static int __mcheck_cpu_apply_quirks(struct cpuinfo_x86 *c)
- {
-@@ -1696,6 +1710,13 @@ static int __mcheck_cpu_apply_quirks(struct cpuinf=
-o_x86 *c)
-=20
- 		if (c->x86 =3D=3D 6 && c->x86_model =3D=3D 45)
- 			quirk_no_way_out =3D quirk_sandybridge_ifu;
-+
-+		if ((c->x86 =3D=3D 6) &&
-+		    ((c->x86_model =3D=3D 0x3c) || (c->x86_model =3D=3D 0x3d) ||
-+		     (c->x86_model =3D=3D 0x45) || (c->x86_model =3D=3D 46))) {
-+			pr_info("MCE errata HSD131, HSM142, HSW131, BDM48, or HSM142 enabled.=
-\n");
-+			quirk_noprint =3D quirk_spurious_ce_noprint;
-+		}
- 	}
-=20
- 	if (c->x86_vendor =3D=3D X86_VENDOR_ZHAOXIN) {
---=20
-2.21.1
-
+Reviewed-by: Rob Herring <robh@kernel.org>
