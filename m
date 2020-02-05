@@ -2,83 +2,91 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DBB8B1536FF
-	for <lists+linux-edac@lfdr.de>; Wed,  5 Feb 2020 18:48:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BA8515381B
+	for <lists+linux-edac@lfdr.de>; Wed,  5 Feb 2020 19:25:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727083AbgBERsd (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Wed, 5 Feb 2020 12:48:33 -0500
-Received: from mail-wr1-f66.google.com ([209.85.221.66]:36589 "EHLO
-        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726822AbgBERsc (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Wed, 5 Feb 2020 12:48:32 -0500
-Received: by mail-wr1-f66.google.com with SMTP id z3so3847835wru.3;
-        Wed, 05 Feb 2020 09:48:31 -0800 (PST)
+        id S1726822AbgBESZU (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Wed, 5 Feb 2020 13:25:20 -0500
+Received: from mail-qk1-f169.google.com ([209.85.222.169]:40843 "EHLO
+        mail-qk1-f169.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727104AbgBESZU (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Wed, 5 Feb 2020 13:25:20 -0500
+Received: by mail-qk1-f169.google.com with SMTP id b7so2819958qkl.7
+        for <linux-edac@vger.kernel.org>; Wed, 05 Feb 2020 10:25:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=BUi8K68+afFQbHz8BrUBvZ94n/k3mtbVv15EiKvcYsA=;
+        b=aRtY42pYqP7shJ4zusTVGkuPNtNuOfTR1jMym5dFFUczEwrevJ3vSr5BwhvH8PxR79
+         MF4IiAehRFV0h/y/BoDMRjFhnz46p6qCYMlxVWsQTHoEaqtX8RnnoiMGeyVe9IvzE8ej
+         qLq+7QpiWJZhccBfW8OM1g3IpDPRFbE6JFb+OSxghoKSuBGI7qtUSsWHZIxFEc6oEXiv
+         5+pH01wLYpZd7+pBR2tZcmqL2Vcht063sZNOGSHoWEAXRECDcO+x4AoXwqhry4IKjZHY
+         4GGrCuyrLfKQSEH6xo3fBABpWvB8JCxegoVq1oOoYE1G85tfwP49buO/mp3wl0OK5feS
+         aRpQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:content-language
-         :user-agent;
-        bh=Ux3DGzV35dAceVNHrHJKtHoyHks4VBOBKylo/BD3j8A=;
-        b=DkfkhCUQJrmGX5V3JIOOSr6LWxJ1zQ/4xCeP6hEV8W73GivRsJdvgwDmpIhVE2maFl
-         AoKnXz6XQaztWKLcuZ5APUZqmWExmm1CNBAImbAedj97ugtamOnmabzKEV9E9GcjVFTq
-         9LEVItT0WHX/dkaDnGxGYa3zwOod3zbOruhkW3I5auKjOfuHfbS4kKy/4y48OwgStCFN
-         Jwz8QRorMN7f7u6IiRqnHRVHKGqngzy5CAtWnjYWAprb/QIYDYR5fsQ9v+6zqKtvESzV
-         vJwiAeY4HJucafCb3AyRCyD7/oTZZZgg5r9jDyQX7IQJxGeYUxGFevZ+HEH6X4Ewd/99
-         +QyA==
-X-Gm-Message-State: APjAAAWgbNt5A3Z35CoG56eUI/zaHfxnZd7bJzBC39PGWwaPf/k68eq2
-        J1boJG/8eoZsaWZ5ytnpvg==
-X-Google-Smtp-Source: APXvYqyjCgMXX07vCklzfGwfuVFLf+VA2qWHi/2w8y238KZGaDM7SrZW2WawDJsygiDUkK+5I/A/1g==
-X-Received: by 2002:adf:dd51:: with SMTP id u17mr28737729wrm.290.1580924911012;
-        Wed, 05 Feb 2020 09:48:31 -0800 (PST)
-Received: from rob-hp-laptop ([212.187.182.166])
-        by smtp.gmail.com with ESMTPSA id b18sm695624wru.50.2020.02.05.09.48.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Feb 2020 09:48:30 -0800 (PST)
-Received: (nullmailer pid 28035 invoked by uid 1000);
-        Wed, 05 Feb 2020 17:48:29 -0000
-Date:   Wed, 5 Feb 2020 17:48:29 +0000
-From:   Rob Herring <robh@kernel.org>
-To:     Shiping Ji <shiping.linux@gmail.com>
-Cc:     Borislav Petkov <bp@alien8.de>, James Morse <james.morse@arm.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        devicetree@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
-        linux-edac <linux-edac@vger.kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, hangl@microsoft.com,
-        ruizhao@microsoft.com, Lei Wang <lewan@microsoft.com>,
-        Scott Branden <scott.branden@broadcom.com>,
-        Yuqing Shen <yuqing.shen@broadcom.com>
-Subject: Re: [PATCH v11 1/2] dt-bindings: edac: dmc-520.yaml
-Message-ID: <20200205174829.GA27969@bogus>
-References: <5354a9c3-5b5a-486a-9d19-fa9be169faef@gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=BUi8K68+afFQbHz8BrUBvZ94n/k3mtbVv15EiKvcYsA=;
+        b=N3CosVN90N8ZAB+yFp9NsUu53hiCxtIsjqF2bl5jxpyE3WLfkxs6umbEgibsQo8nMS
+         zIFj6aXJTMlJniwSrGpRRnZMtOihrXGfDdE97l1LgiJJd+I/N6/3S/qPAxpRBE8mgnjk
+         In7sHTFAzG1L9RRKja+l9SmAM3RfTVoZeNkM2w0gi1iY1wBzXgDZqdu6J/xGbm42MZyB
+         tDGPbUq1tkNDxqZbu9JpsvhZZqMCOSSeIYnHA4kz2MG0SbGVhOXZqaprNa9jdaSSYbvb
+         Qf5oTDE0nWceAZLYF9XoBhYMHzwBX7dQAFhf3Ilvwdy3S+qb97Sq6qrwVD7h7AhEoKdE
+         t1OQ==
+X-Gm-Message-State: APjAAAUrO4MhUtohDA0bYn6OaZ8gmJCcQYfRS8Wjzqhk/Qsil78DQeCI
+        hoYcZLbbIZWkW1K/go9/DxJJBb29FMnG+hvIbLEm/w==
+X-Google-Smtp-Source: APXvYqyVRtI7Ifw9JtnoO/DXgNcM7jgMETFSmPirVruMJZZIxGJs8ROydZrRloaJ9dP+EsVHo6Lu1ZaUHgau3VMhV9E=
+X-Received: by 2002:ae9:efc5:: with SMTP id d188mr34711939qkg.178.1580927117945;
+ Wed, 05 Feb 2020 10:25:17 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <5354a9c3-5b5a-486a-9d19-fa9be169faef@gmail.com>
-Content-Language: en-US
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <CACNqQuQNsVyqxW2yq_W=EN2f0q7oP-Fkfe9vXWV4wMznZ093jA@mail.gmail.com>
+In-Reply-To: <CACNqQuQNsVyqxW2yq_W=EN2f0q7oP-Fkfe9vXWV4wMznZ093jA@mail.gmail.com>
+From:   Tony Luck <tony.luck@gmail.com>
+Date:   Wed, 5 Feb 2020 10:25:07 -0800
+Message-ID: <CA+8MBb+R4V-uesUbsy=5y2FOxHV11k6e=G2uFQe0yV13wCQ3RQ@mail.gmail.com>
+Subject: Re: Qumulo: a question about UECC detection from the ie31200_edac ko
+To:     Dan Pehush <dpehush@qumulo.com>
+Cc:     Linux Edac Mailing List <linux-edac@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Mon, 27 Jan 2020 08:23:08 -0800, Shiping Ji wrote:
-> This is the device tree bindings for new EDAC driver dmc520_edac.c.
-> 
-> From: Lei Wang <leiwang_git@outlook.com>
-> 
-> Signed-off-by: Lei Wang <leiwang_git@outlook.com>
-> Signed-off-by: Shiping Ji <shiping.linux@gmail.com>
-> Reviewed-by: James Morse <james.morse@arm.com>
-> 
-> ---
->      Changes in v11:
->          - Fix issues reported by make dt_binding_check
-> 
-> ---
->  .../devicetree/bindings/edac/dmc-520.yaml     | 59 +++++++++++++++++++
->  1 file changed, 59 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/edac/dmc-520.yaml
-> 
+On Mon, Feb 3, 2020 at 5:27 PM Dan Pehush <dpehush@qumulo.com> wrote:
+>
+> Hi All,
+>
+>    My name is Daniel Pehush, I work on the hardware team at an
+> enterprise data storage company called Qumulo Inc. We want to be able
+> to have our server systems kernel PANIC on the occurrence of a UECC
+> error. A UECC should be treated as an interrupt. We were working with
+> Intel to get resolution for this desired behavior, and they have
+> directed us ask for guidance from the developers of this kernel
+> module. Our current configuration is the following ...
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+I haven't done much with the E3 systems.  Do you know if you
+get CMCI interrupts for corrected errors?  If you do, then it is
+likely that you'd also get a CMCI for an uncorrected error too.
+[Worst acronym ever ... Corrected Machine Check Interrupt, can
+happen for uncorrected errors. Totally separate from the "Machine
+Check"  INT#18].
+
+Clues to check:
+1) Is MCG_CAP bit 10 (MCG_CMCI) set?
+2) If so, use rdmsr(8) to look at each MCi_CTL2 (0x280, 0x281, ... 0x280+nbanks)
+to see if bit 30 (CMCI_EN) is set.
+
+If that's the case, then you may just need to modify your EDAC driver
+to panic if is sees MCi_STATUS.UC == 1
+
+Note that doesn't give you complete containment of the error. Whatever
+read the uncorrected data is going to use it until the CMCI is delivered
+and your driver calls panic.  If this is an application, or kernel code with
+interrupts enabled, then the window is tiny. If the kernel accessed with
+interrupts off, then a lot may happen to that bad data before the plug is
+pulled.
+
+-Tony
