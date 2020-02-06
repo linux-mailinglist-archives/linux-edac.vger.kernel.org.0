@@ -2,113 +2,142 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 06075154482
-	for <lists+linux-edac@lfdr.de>; Thu,  6 Feb 2020 14:05:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E3C57154505
+	for <lists+linux-edac@lfdr.de>; Thu,  6 Feb 2020 14:35:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727613AbgBFNFd (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Thu, 6 Feb 2020 08:05:33 -0500
-Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:45063 "EHLO
-        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1727111AbgBFNFd (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Thu, 6 Feb 2020 08:05:33 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1580994332;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=VK0cVU+EaUKEqVdhJY86wR9NaSgWi1ZgRcL6h4AgQY4=;
-        b=RJVyhYJyFOjEcAmSku0BmdDwKmhozGSaMPqC7IQyoeNSBkorAqK2n6jb/awmC3vkRA6bL1
-        B0l3+5c3Jb9xb/IrG9izaRJRXoRZ4Omq1AyUtFQ9zSXfdJc+WBj6I6hmxPJttxL/rOCY0u
-        UxbRnogZhGSWrvTbh5AREplNaz7jIYM=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-224-RZYZ0dpDMyOQPkIOfvJQLw-1; Thu, 06 Feb 2020 08:05:27 -0500
-X-MC-Unique: RZYZ0dpDMyOQPkIOfvJQLw-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 2D5E763AD8;
-        Thu,  6 Feb 2020 13:05:26 +0000 (UTC)
-Received: from prarit.bos.redhat.com (prarit-guest.7a2m.lab.eng.bos.redhat.com [10.16.222.26])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 32EEC863A5;
-        Thu,  6 Feb 2020 13:05:25 +0000 (UTC)
-Subject: Re: [PATCH] x86/mce: Enable HSD131, HSM142, HSW131, BDM48, and HSM142
-From:   Prarit Bhargava <prarit@redhat.com>
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     linux-kernel@vger.kernel.org,
-        Alexander Krupp <centos@akr.yagii.de>,
-        Tony Luck <tony.luck@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, x86@kernel.org,
-        linux-edac@vger.kernel.org
-References: <20200205125831.20430-1-prarit@redhat.com>
- <20200206110811.GC9741@zn.tnic>
- <1f3f5f54-eb31-1e2a-27be-7ed4cb3dc2d3@redhat.com>
-Message-ID: <e4088217-78cc-91f5-fcc9-6152aaf12caf@redhat.com>
-Date:   Thu, 6 Feb 2020 08:05:24 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.6.1
+        id S1727549AbgBFNfU (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Thu, 6 Feb 2020 08:35:20 -0500
+Received: from lhrrgout.huawei.com ([185.176.76.210]:2388 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1727415AbgBFNfT (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Thu, 6 Feb 2020 08:35:19 -0500
+Received: from lhreml703-cah.china.huawei.com (unknown [172.18.7.107])
+        by Forcepoint Email with ESMTP id 4AA88E637377685659F8;
+        Thu,  6 Feb 2020 13:35:17 +0000 (GMT)
+Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
+ lhreml703-cah.china.huawei.com (10.201.108.44) with Microsoft SMTP Server
+ (TLS) id 14.3.408.0; Thu, 6 Feb 2020 13:35:16 +0000
+Received: from [127.0.0.1] (10.202.226.45) by lhreml724-chm.china.huawei.com
+ (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1713.5; Thu, 6 Feb 2020
+ 13:35:16 +0000
+Subject: Re: [PATCH v2] EDAC/mc: Fix use-after-free and memleaks during device
+ removal
+To:     Robert Richter <rrichter@marvell.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Tony Luck <tony.luck@intel.com>
+CC:     Aristeu Rozanski <aris@redhat.com>,
+        James Morse <james.morse@arm.com>,
+        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20200205212444.10382-1-rrichter@marvell.com>
+From:   John Garry <john.garry@huawei.com>
+Message-ID: <b5c40201-4521-b9c8-3adb-ee227bf2ffb4@huawei.com>
+Date:   Thu, 6 Feb 2020 13:35:15 +0000
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.1.2
 MIME-Version: 1.0
-In-Reply-To: <1f3f5f54-eb31-1e2a-27be-7ed4cb3dc2d3@redhat.com>
-Content-Type: text/plain; charset=utf-8
+In-Reply-To: <20200205212444.10382-1-rrichter@marvell.com>
+Content-Type: text/plain; charset="gbk"; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
+X-Originating-IP: [10.202.226.45]
+X-ClientProxiedBy: lhreml720-chm.china.huawei.com (10.201.108.71) To
+ lhreml724-chm.china.huawei.com (10.201.108.75)
+X-CFilter-Loop: Reflected
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
+On 05/02/2020 21:24, Robert Richter wrote:
+> A test kernel with the options set below revealed several issues when
+> removing a mci device:
+> 
+>   DEBUG_TEST_DRIVER_REMOVE
+>   KASAN
+>   DEBUG_KMEMLEAK
+> 
+> Issues seen:
+> 
+> 1) Use-after-free:
+> 
+> On 27.11.19 17:07:33, John Garry wrote:
+>> [   22.104498] BUG: KASAN: use-after-free in
+>> edac_remove_sysfs_mci_device+0x148/0x180
+> 
+> The use-after-free is caused by the mci_for_each_dimm() iterator that
+> is called in edac_remove_sysfs_mci_device(). The iterator was
+> introduced with commit c498afaf7df8 ("EDAC: Introduce an
+> mci_for_each_dimm() iterator"). The iterator loop calls function
+> device_unregister(&dimm->dev), which removes the sysfs entry of the
+> device, but also frees the dimm struct in dimm_attr_release(). When
+> incrementing the loop in mci_for_each_dimm(), the dimm struct is
+> accessed again, but it is already freed.
+> 
+> The fix is to free all the mci device's subsequent dimm and csrow
+> objects at a later point when the mci device is freed. This keeps the
+> data structures intact and the mci device can be fully used until its
+> removal.
+> 
+> 2) Memory leaks:
+> 
+> Following memory leaks have been detected:
+> 
+>   # grep edac /sys/kernel/debug/kmemleak | sort | uniq -c
+>         1     [<000000003c0f58f9>] edac_mc_alloc+0x3bc/0x9d0      # mci->csrows
+>        16     [<00000000bb932dc0>] edac_mc_alloc+0x49c/0x9d0      # csr->channels
+>        16     [<00000000e2734dba>] edac_mc_alloc+0x518/0x9d0      # csr->channels[chn]
+>         1     [<00000000eb040168>] edac_mc_alloc+0x5c8/0x9d0      # mci->dimms
+>        34     [<00000000ef737c29>] ghes_edac_register+0x1c8/0x3f8 # see edac_mc_alloc()
+> 
+> All leaks are from memory created by edac_mc_alloc().
+> 
+> Note: The test above shows that edac_mc_alloc() was called here from
+> ghes_edac_register(), thus both functions show up in the stack dump,
+> but the driver causing the leaks is edac_mc. The comments with the
+> data structures involved were made manually by analyzing the objdump.
+> 
+> The data structures listed above and created by edac_mc_alloc() are
+> not properly removed during device removal, which is done in
+> edac_mc_free(). There are two paths implemented to remove the device
+> depending on device registration, _edac_mc_free() is called if the
+> device is not registered and edac_unregister_sysfs() otherwise. The
+> implemenations differ. For the sysfs case the mci device removal lacks
+> the removal of subsequent data structures (csrows, channels, dimms).
+> This causes the memory leaks (see mci_attr_release()).
+> 
+> Fixing this as follows:
+> 
+> Unify code and implement a mci_release() function which is used to
+> remove a struct mci regardless of the device registration status. Use
+> put_device() to release the struct. Free all subsequent data structs
+> of the mci's children in that release function. An effect of this is
+> that no data is freed in edac_mc_sysfs.c (except the "mc" sysfs root
+> node). All sysfs entries have the mci device as a parent, so its
+> refcount will keep the mci parent as long as sysfs entries exist. This
+> prevents struct mci from being freed until all sysfs entries have been
+> removed which is done in edac_remove_sysfs_mci_device(). With the
+> changes made the mci_for_each_dimm() loop is now save to release dimm
+> devices from sysfs.
+> 
+> The patch has been tested with the above kernel options, no issues
+> seen any longer.
+> 
+> Reported-by: John Garry <john.garry@huawei.com>
+> Fixes: c498afaf7df8 ("EDAC: Introduce an mci_for_each_dimm() iterator")
+> Fixes: faa2ad09c01c ("edac_mc: edac_mc_free() cannot assume mem_ctl_info is registered in sysfs.")
+> Fixes: 7a623c039075 ("edac: rewrite the sysfs code to use struct device")
+> Signed-off-by: Robert Richter <rrichter@marvell.com>
+> Acked-by: Aristeu Rozanski <aris@redhat.com>
+> Signed-off-by: Robert Richter <rrichter@marvell.com>
+> ---
+> V2:
 
+Kasan warnings and leak reports are gone:
+Tested-by: John Garry <john.garry@huawei.com>
 
-On 2/6/20 7:53 AM, Prarit Bhargava wrote:
-> 
-> 
-> On 2/6/20 6:10 AM, Borislav Petkov wrote:
->> On Wed, Feb 05, 2020 at 07:58:31AM -0500, Prarit Bhargava wrote:
->>
->>> Subject: Re: [PATCH] x86/mce: Enable HSD131, HSM142, HSW131, BDM48, and HSM142
->>
->> That subject is unreadable for humans.
-> 
-> Yeah :/  I couldn't think of a better one.  Maybe "Block spurious corrected
-> errors on some Intel processors"?  Any other suggestion?
-> 
->>
->>> Intel Errata HSD131, HSM142, HSW131, and BDM48 report that
->>> "spurious corrected errors may be logged in the IA32_MC0_STATUS register
->>> with the valid field (bit 63) set, the uncorrected error field (bit 61)
->>> not set, a Model Specific Error Code (bits [31:16]) of 0x000F, and
->>> an MCA Error Code (bits [15:0]) of 0x0005."
->>>
->>> Block these spurious errors from the console and logs.
->>
->> Are they being hit in the wild or why do we need this?
-> 
-> Alexander, cc'd, is being hit by this in the wild.
-> 
->>
->>> Links to Intel Specification updates:
->>> HSD131: https://www.intel.com/content/www/us/en/products/docs/processors/core/4th-gen-core-family-desktop-specification-update.html
->>> HSM142: https://www.intel.com/content/www/us/en/products/docs/processors/core/4th-gen-core-family-mobile-specification-update.html
->>> HSW131: https://www.intel.com/content/www/us/en/processors/xeon/xeon-e3-1200v3-spec-update.html
->>> BDM48: https://www.intel.com/content/www/us/en/products/docs/processors/core/5th-gen-core-family-spec-update.html
->>
->> Those links tend to get stale with time. If you really want to refer to
->> the PDFs, add a new bugzilla entry on https://bugzilla.kernel.org/, add
->> them there as an attachment and add the link to the entry to the commit
->> message.
->>
->>> Signed-off-by: Alexander Krupp <centos@akr.yagii.de>
->>
->> What's that Signed-off-by: tag supposed to mean?
+Cheers
 
-Sorry.  I missed this question, but I really don't understand the question.
-Alexander posted a patch in a kernel bugzilla @ Red Hat and I modified the patch
-with some additional changes.  I don't want him to lose credit for the work so
-he's got a proper Signed-off-by tag for this patch.
-
-P.
 
