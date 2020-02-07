@@ -2,68 +2,71 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B7A7E1545B0
-	for <lists+linux-edac@lfdr.de>; Thu,  6 Feb 2020 15:04:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 664B7155FDA
+	for <lists+linux-edac@lfdr.de>; Fri,  7 Feb 2020 21:42:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727415AbgBFOEm (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Thu, 6 Feb 2020 09:04:42 -0500
-Received: from mail.skyhub.de ([5.9.137.197]:56260 "EHLO mail.skyhub.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726765AbgBFOEl (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Thu, 6 Feb 2020 09:04:41 -0500
-Received: from zn.tnic (p200300EC2F0B4B0065ED6F8530E953C0.dip0.t-ipconnect.de [IPv6:2003:ec:2f0b:4b00:65ed:6f85:30e9:53c0])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 567551EC0CB7;
-        Thu,  6 Feb 2020 15:04:40 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1580997880;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=nMDT/RnHMsdvnJe7PltUSGUscIEQcDp38vE2QnEZmQ0=;
-        b=KSXzHkCTpHFbW7xVEva2B0jCfn1/C6kyzqjRKm5q47vctKOutaODkZn2LwCHnehMTjkV8R
-        jlACfFmO3Ks9pZr7Zqd+H3jZDZg4GrJKHmuzcsc5ubiBQsCoe3j0FqABNhefTe/4/DfuWn
-        E7CI2vTfG+cRt1QBFL2udRNL4ykTs6o=
-Date:   Thu, 6 Feb 2020 15:04:34 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Prarit Bhargava <prarit@redhat.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Alexander Krupp <centos@akr.yagii.de>,
-        Tony Luck <tony.luck@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, x86@kernel.org,
-        linux-edac@vger.kernel.org
-Subject: Re: [PATCH] x86/mce: Enable HSD131, HSM142, HSW131, BDM48, and HSM142
-Message-ID: <20200206140434.GE9741@zn.tnic>
-References: <20200205125831.20430-1-prarit@redhat.com>
- <20200206110811.GC9741@zn.tnic>
- <1f3f5f54-eb31-1e2a-27be-7ed4cb3dc2d3@redhat.com>
- <e4088217-78cc-91f5-fcc9-6152aaf12caf@redhat.com>
+        id S1727567AbgBGUmN (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Fri, 7 Feb 2020 15:42:13 -0500
+Received: from mail-oi1-f195.google.com ([209.85.167.195]:46459 "EHLO
+        mail-oi1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727551AbgBGUmN (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Fri, 7 Feb 2020 15:42:13 -0500
+Received: by mail-oi1-f195.google.com with SMTP id a22so3254617oid.13
+        for <linux-edac@vger.kernel.org>; Fri, 07 Feb 2020 12:42:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=8cDRXBFOpE9J1p6S5H+HXSQg9q3m7pUJ3iUuQ5MPcDc=;
+        b=YPZJJy834hUJnz7pionGH11ZciL6RrbrPELuvEefyNE4m32c/3BRL7jS6BX3GTRbjW
+         A7PT2XuyoA0DKIOAMXBVLqZDks+EHHVySpQpjboWji0NFQ79t34wrEkdhJ/7mvVnPfcg
+         BPXVuIvRzTGxR9yBINGUBTO7OS1IgYRxQvNJFyy4DMElAWJNigH6Lfy9a++UWnjsZV7K
+         NbU0I3Vhb1neiaj+I96jGm3rPYvdHpbUTw6COrl+fTWEjyjGSvKY6qdov3nXpFudxXNb
+         5mDt4W3AkewRXnJYuxGyMUAK1lkfrMP5hrIUalSBsJd0qxRrK90fgDoK4eboWAVqoACA
+         vQPg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=8cDRXBFOpE9J1p6S5H+HXSQg9q3m7pUJ3iUuQ5MPcDc=;
+        b=VYd3k5OXXGlXAMrfoF+HIUMhdaB42QXq4ZDwOCLKkIu+rWt7pdJcpt6fayHWU9pDBL
+         fyRBcr+sljLjmXk8tT5tDwlicIsqj8NBfYz+kLCQYdxmCsv1m9TU4nSIvcL06ft1W5Ir
+         MzPEtsT6pbsmjq6v0+3FnbHcfCR3PBhPfxCX6E4YpM22VBGoXouBc0qJU5Y6OQ7VUHbA
+         XuVFZDxBcMnYQ9+DqwZHIhYCeH4Mu+qa8J7WAzMMEMwB6wxyp7wsF6tmvMXwsX22c5XI
+         E/GiC5mvUdGjVPS9QTCOQIoSILG/1sb2X6ehR6CFa3UC6pzMlc6ebqvs3T2NN2iUmDbO
+         IwoQ==
+X-Gm-Message-State: APjAAAUInAXHvwXWWMWkqo+PBYzGde4ZfbWRY50pIMeOlDD2hSEdA9dC
+        7ZbPzBd57Oo+bIc1ke42iXWhObMifWYg7YRRuP0nTe21K2jbgQ==
+X-Google-Smtp-Source: APXvYqwSeJkRlkGgNiWsW1NpF1DiAIFzsJveh9+wRvoFwY/EgylY09EfD37WjburJ+wD5ZF6dcgpmVqlX+UTGTmHly0=
+X-Received: by 2002:aca:c7cb:: with SMTP id x194mr3327726oif.157.1581108131844;
+ Fri, 07 Feb 2020 12:42:11 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <e4088217-78cc-91f5-fcc9-6152aaf12caf@redhat.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Received: by 2002:a4a:d508:0:0:0:0:0 with HTTP; Fri, 7 Feb 2020 12:42:11 -0800 (PST)
+Reply-To: auch197722@gmail.com
+From:   "Mr. Theophilus Odadudu" <cristinamedina0010@gmail.com>
+Date:   Fri, 7 Feb 2020 15:42:11 -0500
+Message-ID: <CAPNvSTgeN84MC4a+RJ1wBioXqDfarTE4_m4nbA9Dm=S8bmF0WQ@mail.gmail.com>
+Subject: LETTER OF INQUIRY
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Thu, Feb 06, 2020 at 08:05:24AM -0500, Prarit Bhargava wrote:
-> Sorry.  I missed this question, but I really don't understand the question.
-> Alexander posted a patch in a kernel bugzilla @ Red Hat and I modified the patch
-> with some additional changes.  I don't want him to lose credit for the work so
-> he's got a proper Signed-off-by tag for this patch.
+Good Day,
 
-This is not how this is expressed. Either you write that in free text in
-the commit message or you use Co-developed-by. More details in
+I work as a clerk in a Bank here in Nigeria, I have a very
+confidential Business Proposition for you. There is a said amount of
+money floating in the bank unclaimed, belonging to the bank Foreign
+customer who die with his family in the Ethiopian Airline crash of
+March 11, 2019.
 
-Documentation/process/submitting-patches.rst
+I seek your good collaboration to move the fund for our benefit. we
+have agreed that 40% be yours once you help claim.
 
--- 
-Regards/Gruss,
-    Boris.
+Do get back to with 1) Your Full Name: (2) Residential Address: (3)
+Phone, Mobile  (4) Scan Copy of Your ID. to apply for claims of the
+funds.
 
-https://people.kernel.org/tglx/notes-about-netiquette
+Regards
+Theophilus Odadudu
