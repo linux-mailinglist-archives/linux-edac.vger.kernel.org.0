@@ -2,64 +2,61 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 20C0D15A8B4
-	for <lists+linux-edac@lfdr.de>; Wed, 12 Feb 2020 13:05:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BA3F115A8B9
+	for <lists+linux-edac@lfdr.de>; Wed, 12 Feb 2020 13:05:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727675AbgBLMEf (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Wed, 12 Feb 2020 07:04:35 -0500
-Received: from mx0b-0016f401.pphosted.com ([67.231.156.173]:37472 "EHLO
+        id S1728049AbgBLMEq (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Wed, 12 Feb 2020 07:04:46 -0500
+Received: from mx0b-0016f401.pphosted.com ([67.231.156.173]:37916 "EHLO
         mx0b-0016f401.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727535AbgBLMEf (ORCPT
+        by vger.kernel.org with ESMTP id S1728092AbgBLMEp (ORCPT
         <rfc822;linux-edac@vger.kernel.org>);
-        Wed, 12 Feb 2020 07:04:35 -0500
+        Wed, 12 Feb 2020 07:04:45 -0500
 Received: from pps.filterd (m0045851.ppops.net [127.0.0.1])
-        by mx0b-0016f401.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 01CC0KXV008063;
-        Wed, 12 Feb 2020 04:04:21 -0800
+        by mx0b-0016f401.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 01CC0WuL008149;
+        Wed, 12 Feb 2020 04:04:23 -0800
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references :
  content-transfer-encoding : content-type : mime-version; s=pfpt0818;
- bh=ZmuyD3r3TiH1jVbJvMRegp/SV8TVnvHKsQgDMUG0nuQ=;
- b=sDpM0KUMazBqEtAPkm5rQDqSewU/cfTcvy2qeOykuRvTTadMDbhcKY8wFnOondqLfy+x
- +F38fdBje/bClCD/EMP279wqojXIbxvkTqftqAlIvwIzLqjKmT1VbcBvmRasCTqY+8cG
- 4+NufUqVDd5rQUPaCvgvckzMUhK5dwFCaBfi2xw+ygW0ncM6dqSDsZ8pAipT+SXWFP7l
- QtS0ck2PZUo+B6IT845JQnbWilf/Wlt4XiG6L29A4PiDH2wqhS8+mAwdXEhaAIqqL9xE
- V1+wBrlZ5VMSp4NpXb0l6NZCQbZtfpKeUFFlOPvpB3dDRz1bXHkWDSDkpQCNJQzgq45o Bw== 
-Received: from sc-exch04.marvell.com ([199.233.58.184])
-        by mx0b-0016f401.pphosted.com with ESMTP id 2y1wcsqyw3-1
+ bh=Qq2H3AB4e14/RebfiF7Vy1u8BhrrKY416MyJRIw1wwM=;
+ b=sKaPBMJo6esSwc9JhDWdOYlKLj3dWrwf/3g2J84STrLbIa7udOmVUqhgiyWivGWm1XSG
+ U0+3jEKFKGsUdp7eBMiTBAJZDEhQlulwH+A8FciHRKaBaeOeTSoL08d1vlVyJPJTG/1q
+ YnIo+QRy2Zw2qQoVxGqQ577lSI9e6EU5T/gPlXypIHi+e6pJSM6albjnexQNqkO3aWEj
+ 79CNJE7987V+Vq9QxI86dtJ7oF4etakKWQhVq7CNo2on5Ct5jDOcgXMcCdavn52kg5li
+ q91qEvKPDpUjfQVW4VYRe5oEnr+747M8unkEYVfNsK6FEGIppPowSn2kTGR4273XnXPv 4w== 
+Received: from sc-exch03.marvell.com ([199.233.58.183])
+        by mx0b-0016f401.pphosted.com with ESMTP id 2y1wcsqyw8-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
-        Wed, 12 Feb 2020 04:04:20 -0800
-Received: from DC5-EXCH01.marvell.com (10.69.176.38) by SC-EXCH04.marvell.com
- (10.93.176.84) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Wed, 12 Feb
- 2020 04:04:18 -0800
-Received: from SC-EXCH03.marvell.com (10.93.176.83) by DC5-EXCH01.marvell.com
- (10.69.176.38) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Wed, 12 Feb
- 2020 04:04:18 -0800
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (104.47.58.104)
- by SC-EXCH03.marvell.com (10.93.176.83) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2 via Frontend Transport; Wed, 12 Feb 2020 04:04:17 -0800
+        Wed, 12 Feb 2020 04:04:22 -0800
+Received: from SC-EXCH01.marvell.com (10.93.176.81) by SC-EXCH03.marvell.com
+ (10.93.176.83) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Wed, 12 Feb
+ 2020 04:04:20 -0800
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (104.47.58.102)
+ by SC-EXCH01.marvell.com (10.93.176.81) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2 via Frontend Transport; Wed, 12 Feb 2020 04:04:20 -0800
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=IdmkHTZ6U8YlYYKU+146LhulED1nBIP+YuVGDLn8261VdrWOtS6XVOGPsGG1aPTtMEahKV1Dhm3HYLJ+uFGLiS+iO4ftp5LU6KF0S51WP47UdNsgxkKQjHZQ1ombnyQ73fkp66KK1MKo0Dl8dYCjh8G4JQP5YlZTDI2M1baVSLsBd2uTEsfzJ0twyzjPC3X/R5GTCVIfdUzXANr7UyVZ6MPnoqaMRVOxU+osounIwApqwKPzbBW+FZpD9iB9gLOp+hNT2Qf8mwmGvClwH9XwJ+bnJUhysn/s/79/8iUgW9dYGhsWmZx2yJA+LAUGRycOUwn2sh+DM3e7CqVhWXR+rg==
+ b=f7FJgtzwnGX4yVU4hDFTl9sDUYGKXLHSGLbPQ96O4v00+d6lzQlZR/YgfhZcN61yRZhgKGN6x/0Qfba84ad39CGSZcP/jbr+ykvZrd2/48s9GM1TcetHNLdkvKLeFWzns/100gHTQSiUeB+oWIOwz62WeAQh8qI0dSRYB5Cd+HfE+HGUhta3QCBOOGfaSxw/5xxhUnePTRrqOY7MBSqYJNqPidqt0viWHdXp3pVJ2Di3yRIivez2vviSS9oy/Xc3Z2LOFlFyICf+2p3VusH5eflMYprWiOYSOYLfS1SuYa+1+co6oKGIgerW87gm6ucwFtCNRzX9yxFWDiiaxaZG6A==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ZmuyD3r3TiH1jVbJvMRegp/SV8TVnvHKsQgDMUG0nuQ=;
- b=aHqJHaDk3f90ZKbeSFEjfaAH3f+yUgsb7Q2c3SxBa4mveZ3KZi8hgYI4rXhQOpIRA0TcR+54jO0mzEdQlgHLg31ovt/z8ox3BpHjJIrfNLoPGSeyEXzSUArt5Pqlrmtts67f5M7hEy7Fd6Hl36rLhD0za2p6fASJiPNHj/ILpTxkkrJzMHC0295i23prUixAzxAqKgiCWLW5+rPw0GijPHg/mUKH8b7ARAK+e5feGdRW9poXLc+81E2dUwtj0ys5z16+v8FHdz9zSRvm5VFeKkY6a0a0u0odWdn9y02NTxIUdrx1bjbw4rKtUy52koR9Pit9jd231Z2Y1pcJJ25Bww==
+ bh=Qq2H3AB4e14/RebfiF7Vy1u8BhrrKY416MyJRIw1wwM=;
+ b=aDKNKaZ+kgsbDdUzGrqX1sYa+FFgtyZu5TgCJv2jSipF+8TNsz6lejpAqSIEJBo9+jm0yRoFht2YCX+b7osEJvrmRxE25f7EPLLMRPEO+vQQqjLj4OrR1qI9lMXfAu9Y6rZPQjecpn5xIDyFGPKPsU3xwFEMKlYftWhhXVrFcUZtC00svqhP2pER9CDmGl3YH9WxGW2yvjZrmV2GrmPRXq+hXfscLgwzMDTbDDOsAfJg61HWoC5CUAPJneAiLkCNlueZtsE4ExA5FKDKWgggqNRkotvQCjrl+c0pZBYCfu6lZnOsmDjNf1uvEdbZb+W2X1lFJodVOohQ0noa/t8gZw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=marvell.com; dmarc=pass action=none header.from=marvell.com;
  dkim=pass header.d=marvell.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=marvell.onmicrosoft.com; s=selector1-marvell-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ZmuyD3r3TiH1jVbJvMRegp/SV8TVnvHKsQgDMUG0nuQ=;
- b=SWYMlTvKjaVXzfjtRozQkagP+xncFHdbvdl1iZV46/FadIgT2V2MQeuSlMW/vezIOAZfbnbXjj5DUCLuq/MdJv3lCFKa7w/vLYil5tAJ02DLSRgQUhVCE9jjmH2t2ISA6Mp5t1/U5BlgiYdm7wFmUUQwwWT8wKcouT8WnAHFyMI=
+ bh=Qq2H3AB4e14/RebfiF7Vy1u8BhrrKY416MyJRIw1wwM=;
+ b=LNyzlbAB7D4Y1OO3qkwE2nB6OplILRm87aKGRPS+2PKQZGA6IQAPnIviJ05KycmA7xz0iGJbRaZ5oens8OW+gGv8bVYkRsr+q7w4ucXowzZGR3M1a66Vz69M4x7GX7Gf+GwgYfaydVabRo7Fp8h3k8+C/yUPvzVLU9+AnXomlC0=
 Received: from MN2PR18MB3408.namprd18.prod.outlook.com (10.255.237.10) by
  MN2PR18MB3512.namprd18.prod.outlook.com (20.180.247.214) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2707.27; Wed, 12 Feb 2020 12:04:17 +0000
+ 15.20.2707.27; Wed, 12 Feb 2020 12:04:19 +0000
 Received: from MN2PR18MB3408.namprd18.prod.outlook.com
  ([fe80::b96d:5663:6402:82ea]) by MN2PR18MB3408.namprd18.prod.outlook.com
  ([fe80::b96d:5663:6402:82ea%7]) with mapi id 15.20.2707.030; Wed, 12 Feb 2020
- 12:04:17 +0000
+ 12:04:19 +0000
 From:   Robert Richter <rrichter@marvell.com>
 To:     Borislav Petkov <bp@alien8.de>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
@@ -67,10 +64,11 @@ To:     Borislav Petkov <bp@alien8.de>,
 CC:     James Morse <james.morse@arm.com>,
         Aristeu Rozanski <aris@redhat.com>,
         Robert Richter <rrichter@marvell.com>,
-        <linux-edac@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH v3 1/4] Revert parts of "EDAC/mc_sysfs: Make debug messages consistent"
-Date:   Wed, 12 Feb 2020 13:03:37 +0100
-Message-ID: <20200212120340.4764-2-rrichter@marvell.com>
+        <linux-edac@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        John Garry <john.garry@huawei.com>
+Subject: [PATCH v3 2/4] EDAC/mc: Fix use-after-free and memleaks during device removal
+Date:   Wed, 12 Feb 2020 13:03:38 +0100
+Message-ID: <20200212120340.4764-3-rrichter@marvell.com>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20200212120340.4764-1-rrichter@marvell.com>
 References: <20200212120340.4764-1-rrichter@marvell.com>
@@ -80,30 +78,30 @@ X-ClientProxiedBy: HE1PR05CA0226.eurprd05.prod.outlook.com
  (2603:10a6:3:fa::26) To MN2PR18MB3408.namprd18.prod.outlook.com
  (2603:10b6:208:165::10)
 MIME-Version: 1.0
-Received: from rric.localdomain (31.208.96.227) by HE1PR05CA0226.eurprd05.prod.outlook.com (2603:10a6:3:fa::26) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2729.22 via Frontend Transport; Wed, 12 Feb 2020 12:04:15 +0000
+Received: from rric.localdomain (31.208.96.227) by HE1PR05CA0226.eurprd05.prod.outlook.com (2603:10a6:3:fa::26) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2729.22 via Frontend Transport; Wed, 12 Feb 2020 12:04:17 +0000
 X-Mailer: git-send-email 2.20.1
 X-Originating-IP: [31.208.96.227]
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 2c02f96d-83a0-43dc-884a-08d7afb3af41
+X-MS-Office365-Filtering-Correlation-Id: d331fab5-6ca2-432a-7960-08d7afb3b093
 X-MS-TrafficTypeDiagnostic: MN2PR18MB3512:
 X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <MN2PR18MB3512E4DB40001977806FC477D91B0@MN2PR18MB3512.namprd18.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:62;
+X-Microsoft-Antispam-PRVS: <MN2PR18MB3512F75BD47570C76B5E992ED91B0@MN2PR18MB3512.namprd18.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:632;
 X-Forefront-PRVS: 0311124FA9
-X-Forefront-Antispam-Report: SFV:NSPM;SFS:(10009020)(4636009)(366004)(136003)(376002)(39860400002)(346002)(396003)(189003)(199004)(8676002)(66476007)(66556008)(36756003)(66946007)(1076003)(6506007)(81156014)(81166006)(6666004)(186003)(2906002)(478600001)(52116002)(8936002)(16526019)(5660300002)(26005)(6512007)(4326008)(6486002)(110136005)(54906003)(86362001)(316002)(2616005)(956004);DIR:OUT;SFP:1101;SCL:1;SRVR:MN2PR18MB3512;H:MN2PR18MB3408.namprd18.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
+X-Forefront-Antispam-Report: SFV:NSPM;SFS:(10009020)(4636009)(366004)(136003)(376002)(39860400002)(346002)(396003)(189003)(199004)(8676002)(66476007)(66556008)(36756003)(66946007)(1076003)(6506007)(81156014)(53546011)(81166006)(6666004)(186003)(2906002)(478600001)(52116002)(8936002)(16526019)(5660300002)(26005)(6512007)(4326008)(6486002)(110136005)(54906003)(86362001)(316002)(2616005)(956004);DIR:OUT;SFP:1101;SCL:1;SRVR:MN2PR18MB3512;H:MN2PR18MB3408.namprd18.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
 Received-SPF: None (protection.outlook.com: marvell.com does not designate
  permitted sender hosts)
 X-MS-Exchange-SenderADCheck: 1
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: V4G38hreeuIIOSVtVOdROFpUhqbf9dyIFlUZVxygDCb/fmIZGO7lXxtP3Z/4GF4brkeCxnx+fsg5bVScHdzZ2NT3Q82VUXOmyT75wqZK+qHJjFkEKGxSLP+Pw6R7AGKg/sIEKtcqdS6CSztvnwusGC3ZgpwbOjFA7ZK/O2AAJNnCoxQX8ykCOvvks8fsLnLOD1rruAWzCEHg7ptu/QNpnFce/PWKrNRPY3eE1m/ygfN3vKVwGXk+uIZ2gJ+xaNYQOtVOoK5MkyBeT8rVuiR38kK0wgnc2FgDpsDTVt/GkjbhxZBZtDdqkGwvvUXM2ezHH9o8SML6iKBBw1uc6P9Hqy1epl2I3XgXmq8z6JPhXugb99t92BVXMQwXgHoPlehwzRtheYsbk0ImkMpNGKaHHa9Yrqw86q1IbxvMgG5zMmNqSXq+G4HcxvAukM3fo3JL
-X-MS-Exchange-AntiSpam-MessageData: GxiMat+jR2LSjE2rdQ7nZQI1pv/KajAJecYRSdVIfzH6+ESBuJ6Ah2+THXpXwAzHB+DbW8lCtmBjhQBXF1III6ztpf3xZBzOsxJCStS3dj4ytmF5+C5LBGcsxJqpzGT2xGIsOS+flpUyxrHoK8vgeg==
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2c02f96d-83a0-43dc-884a-08d7afb3af41
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Feb 2020 12:04:17.2227
+X-Microsoft-Antispam-Message-Info: /ZXEmFuhnJ93870+dfYA/IwRv9c6WeC1vESUWErjSteMgnSQVO8mQwC7e0JbkbALeVB3L54raBI2HaVtyUa5uyv0URNESVWNmAFrJ4Jb7HXNDUqFROYc4tBOrQWfVKSmED7r7RkEaZufJGT/qfTD4Vf/9fDVfK6aMWf3+Thbf5ifQ1+xof/VgGwDS0pC4AOa1fTvrNbRMHzCRkZbfT1lORhhu4XhRLfpMTqgc/paqYh1W3o247pm8eQ0l0SYpV30cXu0Zl1exejo/P+HFN4Q/hbd/OnwW94iqsG1K5Doay4A+yxw70bjXKPBR2ReQ5YAtof2wfRqNO1O3Gd9G5Xw0596PYlx1rE6c+DWShVeN59ZAz2Eue7aTZWgo8AKSmsmaVukPEOnu/pCRQ4J2P65ohdzUrnxOK6Z//2/a7n0yfJr7qt81PUeipRCOFv89jkT
+X-MS-Exchange-AntiSpam-MessageData: 7OM1pXJBqEaF8n+fpCe5mNTnlyOT5GCJ2xrj9hjs5DysrPkocVLjZML974ul4T5Ve6igLTWhWZePRYnp6Jaaf8JLOlEskLMzq50SxDtCeqazw5kTTZzrEjWTivRC25ipSnLgJvb3lUz6CitIHppNRw==
+X-MS-Exchange-CrossTenant-Network-Message-Id: d331fab5-6ca2-432a-7960-08d7afb3b093
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Feb 2020 12:04:19.5374
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 70e1fb47-1155-421d-87fc-2e58f638b6e0
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: xFj/Y+giq4PsoH8hMLVghkO+BF3cwa5hXE7SfVEQP96Qad+u03zkBEk7Bf60QcU5GO16GJQUsC3EMvvqllI+0w==
+X-MS-Exchange-CrossTenant-UserPrincipalName: ybKwpSuEwY3faordwgt5Z6CfhBr5d4PMhc62YlJ4hK7Hmn80fHtspL5Suibz/DOC8z/p8pIdTrrpU9ov2rWjHw==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR18MB3512
 X-OriginatorOrg: marvell.com
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.572
@@ -113,50 +111,150 @@ Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-This reverts parts of commit e701f412030ec3783f1c30c7741492693d6213e3.
+A test kernel with the options set below revealed several issues when
+removing a mci device:
 
-Revert a couple of changes to ease stable backports of the next fix on
-top of this commit. Due to this revert the next patch will apply
-without conflicts on 5.3 based or earlier kernels. As the code
-introduced by the revert will be removed, the resulting code of the
-fix will be the same as without the revert.
+ DEBUG_TEST_DRIVER_REMOVE
+ KASAN
+ DEBUG_KMEMLEAK
 
+Issues seen:
+
+1) Use-after-free:
+
+On 27.11.19 17:07:33, John Garry wrote:
+> [   22.104498] BUG: KASAN: use-after-free in
+> edac_remove_sysfs_mci_device+0x148/0x180
+
+The use-after-free is caused by the mci_for_each_dimm() iterator that
+is called in edac_remove_sysfs_mci_device(). The iterator was
+introduced with commit c498afaf7df8 ("EDAC: Introduce an
+mci_for_each_dimm() iterator"). The iterator loop calls function
+device_unregister(&dimm->dev), which removes the sysfs entry of the
+device, but also frees the dimm struct in dimm_attr_release(). When
+incrementing the loop in mci_for_each_dimm(), the dimm struct is
+accessed again, but it is already freed.
+
+The fix is to free all the mci device's subsequent dimm and csrow
+objects at a later point in _edac_mc_free() when the mci device is
+freed. This keeps the data structures intact and the mci device can be
+fully used until its removal. The change allows the save usage of
+mci_for_each_dimm() to release dimm devices from sysfs.
+
+2) Memory leaks:
+
+Following memory leaks have been detected:
+
+ # grep edac /sys/kernel/debug/kmemleak | sort | uniq -c
+       1     [<000000003c0f58f9>] edac_mc_alloc+0x3bc/0x9d0      # mci->csrows
+      16     [<00000000bb932dc0>] edac_mc_alloc+0x49c/0x9d0      # csr->channels
+      16     [<00000000e2734dba>] edac_mc_alloc+0x518/0x9d0      # csr->channels[chn]
+       1     [<00000000eb040168>] edac_mc_alloc+0x5c8/0x9d0      # mci->dimms
+      34     [<00000000ef737c29>] ghes_edac_register+0x1c8/0x3f8 # see edac_mc_alloc()
+
+All leaks are from memory created by edac_mc_alloc().
+
+Note: The test above shows that edac_mc_alloc() was called here from
+ghes_edac_register(), thus both functions show up in the stack dump,
+but the driver causing the leaks is edac_mc. The comments with the
+data structures involved were made manually by analyzing the objdump.
+
+The data structures listed above and created by edac_mc_alloc() are
+not properly removed during device removal, which is done in
+edac_mc_free(). There are two paths implemented to remove the device
+depending on device registration, _edac_mc_free() is called if the
+device is not registered and edac_unregister_sysfs() otherwise. The
+implemenations differ. For the sysfs case the mci device removal lacks
+the removal of subsequent data structures (csrows, channels, dimms).
+This causes the memory leaks (see mci_attr_release()).
+
+Fixing this as follows:
+
+Unify code and use the _edac_mc_free() code path to free the mci
+struct and subsequent memory allocations. An effect of this is that no
+data is freed in edac_mc_sysfs.c (except the "mc" sysfs root node).
+
+The patch has been tested with the above kernel options, no issues
+seen any longer.
+
+To backport this patch to 5.4+ kernels, the previous revert patch
+needs to be applied too or squashed with this patch to avoid
+conflicts.
+
+Reported-by: John Garry <john.garry@huawei.com>
+Fixes: c498afaf7df8 ("EDAC: Introduce an mci_for_each_dimm() iterator")
+Fixes: faa2ad09c01c ("edac_mc: edac_mc_free() cannot assume mem_ctl_info is registered in sysfs.")
+Fixes: 7a623c039075 ("edac: rewrite the sysfs code to use struct device")
 Signed-off-by: Robert Richter <rrichter@marvell.com>
 ---
- drivers/edac/edac_mc_sysfs.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ drivers/edac/edac_mc.c       | 12 +++---------
+ drivers/edac/edac_mc_sysfs.c | 15 +++------------
+ 2 files changed, 6 insertions(+), 21 deletions(-)
 
+diff --git a/drivers/edac/edac_mc.c b/drivers/edac/edac_mc.c
+index 7243b88f81d8..69e0d90460e6 100644
+--- a/drivers/edac/edac_mc.c
++++ b/drivers/edac/edac_mc.c
+@@ -505,16 +505,10 @@ void edac_mc_free(struct mem_ctl_info *mci)
+ {
+ 	edac_dbg(1, "\n");
+ 
+-	/* If we're not yet registered with sysfs free only what was allocated
+-	 * in edac_mc_alloc().
+-	 */
+-	if (!device_is_registered(&mci->dev)) {
+-		_edac_mc_free(mci);
+-		return;
+-	}
++	if (device_is_registered(&mci->dev))
++		edac_unregister_sysfs(mci);
+ 
+-	/* the mci instance is freed here, when the sysfs object is dropped */
+-	edac_unregister_sysfs(mci);
++	_edac_mc_free(mci);
+ }
+ EXPORT_SYMBOL_GPL(edac_mc_free);
+ 
 diff --git a/drivers/edac/edac_mc_sysfs.c b/drivers/edac/edac_mc_sysfs.c
-index 0367554e7437..ba0937140fe4 100644
+index ba0937140fe4..1c9c6a7b9f66 100644
 --- a/drivers/edac/edac_mc_sysfs.c
 +++ b/drivers/edac/edac_mc_sysfs.c
-@@ -278,7 +278,7 @@ static void csrow_attr_release(struct device *dev)
- {
- 	struct csrow_info *csrow = container_of(dev, struct csrow_info, dev);
+@@ -276,10 +276,7 @@ static const struct attribute_group *csrow_attr_groups[] = {
  
--	edac_dbg(1, "device %s released\n", dev_name(dev));
-+	edac_dbg(1, "Releasing csrow device %s\n", dev_name(dev));
- 	kfree(csrow);
+ static void csrow_attr_release(struct device *dev)
+ {
+-	struct csrow_info *csrow = container_of(dev, struct csrow_info, dev);
+-
+-	edac_dbg(1, "Releasing csrow device %s\n", dev_name(dev));
+-	kfree(csrow);
++	/* release device with _edac_mc_free() */
  }
  
-@@ -610,7 +610,7 @@ static void dimm_attr_release(struct device *dev)
- {
- 	struct dimm_info *dimm = container_of(dev, struct dimm_info, dev);
+ static const struct device_type csrow_attr_type = {
+@@ -608,10 +605,7 @@ static const struct attribute_group *dimm_attr_groups[] = {
  
--	edac_dbg(1, "device %s released\n", dev_name(dev));
-+	edac_dbg(1, "Releasing dimm device %s\n", dev_name(dev));
- 	kfree(dimm);
+ static void dimm_attr_release(struct device *dev)
+ {
+-	struct dimm_info *dimm = container_of(dev, struct dimm_info, dev);
+-
+-	edac_dbg(1, "Releasing dimm device %s\n", dev_name(dev));
+-	kfree(dimm);
++	/* release device with _edac_mc_free() */
  }
  
-@@ -895,7 +895,7 @@ static void mci_attr_release(struct device *dev)
- {
- 	struct mem_ctl_info *mci = container_of(dev, struct mem_ctl_info, dev);
+ static const struct device_type dimm_attr_type = {
+@@ -893,10 +887,7 @@ static const struct attribute_group *mci_attr_groups[] = {
  
--	edac_dbg(1, "device %s released\n", dev_name(dev));
-+	edac_dbg(1, "Releasing csrow device %s\n", dev_name(dev));
- 	kfree(mci);
+ static void mci_attr_release(struct device *dev)
+ {
+-	struct mem_ctl_info *mci = container_of(dev, struct mem_ctl_info, dev);
+-
+-	edac_dbg(1, "Releasing csrow device %s\n", dev_name(dev));
+-	kfree(mci);
++	/* release device with _edac_mc_free() */
  }
  
+ static const struct device_type mci_attr_type = {
 -- 
 2.20.1
 
