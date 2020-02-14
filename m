@@ -2,99 +2,82 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 439B815F361
-	for <lists+linux-edac@lfdr.de>; Fri, 14 Feb 2020 19:21:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 76C6515F8B8
+	for <lists+linux-edac@lfdr.de>; Fri, 14 Feb 2020 22:30:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2404055AbgBNSLC (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Fri, 14 Feb 2020 13:11:02 -0500
-Received: from mail.kernel.org ([198.145.29.99]:32876 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731294AbgBNPxg (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Fri, 14 Feb 2020 10:53:36 -0500
-Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        id S2388495AbgBNV37 (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Fri, 14 Feb 2020 16:29:59 -0500
+Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:25314 "EHLO
+        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S2387958AbgBNV36 (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Fri, 14 Feb 2020 16:29:58 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1581715798;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Kzi89iF04QxCLMnFCGjJjn2+0t6DNJ4N+OMGiy9A90U=;
+        b=LsNXEtgpqo7FZH9H4siB/uCmPVhtY/nLNwXvhsaA7GPD6OPd9Q+d2M4jU5nUyRiyYDxGj8
+        qH+/DMAG6AE1JgaPVvbGCt8F9fI/G5hiaXwRSg0sZEe6kVtmaWxYfDnM/3sy6nrwAryonh
+        uDTfOpjIs4m3hKg6ygZEgO1VJ+WSGVQ=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-237-sW6XycnXOlCOwyWhijM0uQ-1; Fri, 14 Feb 2020 16:29:54 -0500
+X-MC-Unique: sW6XycnXOlCOwyWhijM0uQ-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 630E6222C4;
-        Fri, 14 Feb 2020 15:53:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1581695616;
-        bh=udPBDdvdYkxFiN4/6jnqwJPzNWTrlv9XsXtSLkNELoA=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=SE4QyeWRhwPZtTVMsFFDRsLkvxI2sQshbHKXS5D2sQyt1RnG96LmQD7oqR4cgJfhT
-         0i6za+23+uztSKFh5ntAJeG+4PRkgQCg8UluB+GYKK6fZxwBEIotPZ9nRYo/Md2CSf
-         YtWyQCS23wdb6eARpU3NWs7zv2JHQ6nzYOC9MVm8=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@suse.de>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        bberg@redhat.com, ckellner@redhat.com,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        hdegoede@redhat.com, "H. Peter Anvin" <hpa@zytor.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        linux-edac <linux-edac@vger.kernel.org>,
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 4CDE51005510;
+        Fri, 14 Feb 2020 21:29:52 +0000 (UTC)
+Received: from prarit.bos.redhat.com (prarit-guest.7a2m.lab.eng.bos.redhat.com [10.16.222.26])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id BB6B05C1C3;
+        Fri, 14 Feb 2020 21:29:50 +0000 (UTC)
+Subject: Re: [PATCH] x86/mce: Do not log spurious corrected mce errors
+To:     "Luck, Tony" <tony.luck@intel.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Alexander Krupp <centos@akr.yagii.de>,
+        Borislav Petkov <bp@alien8.de>,
         Thomas Gleixner <tglx@linutronix.de>,
-        Tony Luck <tony.luck@intel.com>, x86-ml <x86@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH AUTOSEL 5.5 216/542] x86/mce/therm_throt: Mark throttle_active_work() as __maybe_unused
-Date:   Fri, 14 Feb 2020 10:43:28 -0500
-Message-Id: <20200214154854.6746-216-sashal@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200214154854.6746-1-sashal@kernel.org>
-References: <20200214154854.6746-1-sashal@kernel.org>
+        Ingo Molnar <mingo@redhat.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, x86@kernel.org,
+        linux-edac@vger.kernel.org
+References: <20200214123407.4184-1-prarit@redhat.com>
+ <20200214173644.GA7913@agluck-desk2.amr.corp.intel.com>
+From:   Prarit Bhargava <prarit@redhat.com>
+Message-ID: <0adb58a9-45d4-85c0-f3b3-517a19d2534e@redhat.com>
+Date:   Fri, 14 Feb 2020 16:29:50 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.6.1
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20200214173644.GA7913@agluck-desk2.amr.corp.intel.com>
+Content-Type: text/plain; charset=windows-1252
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-From: Arnd Bergmann <arnd@arndb.de>
 
-[ Upstream commit db1ae0314f47e88ae06679270adf17ffa245afd4 ]
 
-throttle_active_work() is only called if CONFIG_SYSFS is set, otherwise
-we get a harmless warning:
+On 2/14/20 12:36 PM, Luck, Tony wrote:
+> On Fri, Feb 14, 2020 at 07:34:07AM -0500, Prarit Bhargava wrote:
+>>  #ifdef CONFIG_X86_MCE_AMD
+>>  extern bool amd_filter_mce(struct mce *m);
+>> +extern bool intel_filter_mce(struct mce *m);
+>>  #else
+> 
+> Something very weird is going on here. Why does
+> CONFIG_X86_MCE_AMD have to be set to enable some
+> *Intel* filter operation?
 
-  arch/x86/kernel/cpu/mce/therm_throt.c:238:13: error: 'throttle_active_work' \
-	  defined but not used [-Werror=unused-function]
+That's a mistake.  I'll fix that in v2.
 
-Mark the function as __maybe_unused to avoid the warning.
+P.
 
-Fixes: f6656208f04e ("x86/mce/therm_throt: Optimize notifications of thermal throttle")
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-Signed-off-by: Borislav Petkov <bp@suse.de>
-Reviewed-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Cc: bberg@redhat.com
-Cc: ckellner@redhat.com
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: hdegoede@redhat.com
-Cc: "H. Peter Anvin" <hpa@zytor.com>
-Cc: Ingo Molnar <mingo@redhat.com>
-Cc: linux-edac <linux-edac@vger.kernel.org>
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: Tony Luck <tony.luck@intel.com>
-Cc: x86-ml <x86@kernel.org>
-Link: https://lkml.kernel.org/r/20191210203925.3119091-1-arnd@arndb.de
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- arch/x86/kernel/cpu/mce/therm_throt.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/arch/x86/kernel/cpu/mce/therm_throt.c b/arch/x86/kernel/cpu/mce/therm_throt.c
-index 6c3e1c92f1835..58b4ee3cda777 100644
---- a/arch/x86/kernel/cpu/mce/therm_throt.c
-+++ b/arch/x86/kernel/cpu/mce/therm_throt.c
-@@ -235,7 +235,7 @@ static void get_therm_status(int level, bool *proc_hot, u8 *temp)
- 	*temp = (msr_val >> 16) & 0x7F;
- }
- 
--static void throttle_active_work(struct work_struct *work)
-+static void __maybe_unused throttle_active_work(struct work_struct *work)
- {
- 	struct _thermal_state *state = container_of(to_delayed_work(work),
- 						struct _thermal_state, therm_work);
--- 
-2.20.1
+> 
+> -Tony
+> 
 
