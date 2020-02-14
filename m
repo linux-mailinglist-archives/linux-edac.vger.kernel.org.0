@@ -2,54 +2,99 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A41B15EDDE
-	for <lists+linux-edac@lfdr.de>; Fri, 14 Feb 2020 18:37:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 439B815F361
+	for <lists+linux-edac@lfdr.de>; Fri, 14 Feb 2020 19:21:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390397AbgBNRgs (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Fri, 14 Feb 2020 12:36:48 -0500
-Received: from mga12.intel.com ([192.55.52.136]:39280 "EHLO mga12.intel.com"
+        id S2404055AbgBNSLC (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Fri, 14 Feb 2020 13:11:02 -0500
+Received: from mail.kernel.org ([198.145.29.99]:32876 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2390178AbgBNRgs (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Fri, 14 Feb 2020 12:36:48 -0500
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-X-Amp-File-Uploaded: False
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 14 Feb 2020 09:36:46 -0800
-X-IronPort-AV: E=Sophos;i="5.70,441,1574150400"; 
-   d="scan'208";a="238420888"
-Received: from agluck-desk2.sc.intel.com (HELO agluck-desk2.amr.corp.intel.com) ([10.3.52.68])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 14 Feb 2020 09:36:46 -0800
-Date:   Fri, 14 Feb 2020 09:36:44 -0800
-From:   "Luck, Tony" <tony.luck@intel.com>
-To:     Prarit Bhargava <prarit@redhat.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Alexander Krupp <centos@akr.yagii.de>,
-        Borislav Petkov <bp@alien8.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
+        id S1731294AbgBNPxg (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Fri, 14 Feb 2020 10:53:36 -0500
+Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 630E6222C4;
+        Fri, 14 Feb 2020 15:53:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1581695616;
+        bh=udPBDdvdYkxFiN4/6jnqwJPzNWTrlv9XsXtSLkNELoA=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=SE4QyeWRhwPZtTVMsFFDRsLkvxI2sQshbHKXS5D2sQyt1RnG96LmQD7oqR4cgJfhT
+         0i6za+23+uztSKFh5ntAJeG+4PRkgQCg8UluB+GYKK6fZxwBEIotPZ9nRYo/Md2CSf
+         YtWyQCS23wdb6eARpU3NWs7zv2JHQ6nzYOC9MVm8=
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@suse.de>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        bberg@redhat.com, ckellner@redhat.com,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        hdegoede@redhat.com, "H. Peter Anvin" <hpa@zytor.com>,
         Ingo Molnar <mingo@redhat.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, x86@kernel.org,
-        linux-edac@vger.kernel.org
-Subject: Re: [PATCH] x86/mce: Do not log spurious corrected mce errors
-Message-ID: <20200214173644.GA7913@agluck-desk2.amr.corp.intel.com>
-References: <20200214123407.4184-1-prarit@redhat.com>
+        linux-edac <linux-edac@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Tony Luck <tony.luck@intel.com>, x86-ml <x86@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.5 216/542] x86/mce/therm_throt: Mark throttle_active_work() as __maybe_unused
+Date:   Fri, 14 Feb 2020 10:43:28 -0500
+Message-Id: <20200214154854.6746-216-sashal@kernel.org>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20200214154854.6746-1-sashal@kernel.org>
+References: <20200214154854.6746-1-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200214123407.4184-1-prarit@redhat.com>
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Fri, Feb 14, 2020 at 07:34:07AM -0500, Prarit Bhargava wrote:
->  #ifdef CONFIG_X86_MCE_AMD
->  extern bool amd_filter_mce(struct mce *m);
-> +extern bool intel_filter_mce(struct mce *m);
->  #else
+From: Arnd Bergmann <arnd@arndb.de>
 
-Something very weird is going on here. Why does
-CONFIG_X86_MCE_AMD have to be set to enable some
-*Intel* filter operation?
+[ Upstream commit db1ae0314f47e88ae06679270adf17ffa245afd4 ]
 
--Tony
+throttle_active_work() is only called if CONFIG_SYSFS is set, otherwise
+we get a harmless warning:
+
+  arch/x86/kernel/cpu/mce/therm_throt.c:238:13: error: 'throttle_active_work' \
+	  defined but not used [-Werror=unused-function]
+
+Mark the function as __maybe_unused to avoid the warning.
+
+Fixes: f6656208f04e ("x86/mce/therm_throt: Optimize notifications of thermal throttle")
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+Signed-off-by: Borislav Petkov <bp@suse.de>
+Reviewed-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Cc: bberg@redhat.com
+Cc: ckellner@redhat.com
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: hdegoede@redhat.com
+Cc: "H. Peter Anvin" <hpa@zytor.com>
+Cc: Ingo Molnar <mingo@redhat.com>
+Cc: linux-edac <linux-edac@vger.kernel.org>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Tony Luck <tony.luck@intel.com>
+Cc: x86-ml <x86@kernel.org>
+Link: https://lkml.kernel.org/r/20191210203925.3119091-1-arnd@arndb.de
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ arch/x86/kernel/cpu/mce/therm_throt.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/arch/x86/kernel/cpu/mce/therm_throt.c b/arch/x86/kernel/cpu/mce/therm_throt.c
+index 6c3e1c92f1835..58b4ee3cda777 100644
+--- a/arch/x86/kernel/cpu/mce/therm_throt.c
++++ b/arch/x86/kernel/cpu/mce/therm_throt.c
+@@ -235,7 +235,7 @@ static void get_therm_status(int level, bool *proc_hot, u8 *temp)
+ 	*temp = (msr_val >> 16) & 0x7F;
+ }
+ 
+-static void throttle_active_work(struct work_struct *work)
++static void __maybe_unused throttle_active_work(struct work_struct *work)
+ {
+ 	struct _thermal_state *state = container_of(to_delayed_work(work),
+ 						struct _thermal_state, therm_work);
+-- 
+2.20.1
+
