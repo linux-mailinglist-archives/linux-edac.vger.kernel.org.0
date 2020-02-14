@@ -2,137 +2,157 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A0BD15BEA7
-	for <lists+linux-edac@lfdr.de>; Thu, 13 Feb 2020 13:47:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D8EDD15D3EE
+	for <lists+linux-edac@lfdr.de>; Fri, 14 Feb 2020 09:37:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729557AbgBMMrS (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Thu, 13 Feb 2020 07:47:18 -0500
-Received: from mail.skyhub.de ([5.9.137.197]:37530 "EHLO mail.skyhub.de"
+        id S1728829AbgBNIha (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Fri, 14 Feb 2020 03:37:30 -0500
+Received: from mail.skyhub.de ([5.9.137.197]:60082 "EHLO mail.skyhub.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729544AbgBMMrS (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Thu, 13 Feb 2020 07:47:18 -0500
-Received: from zn.tnic (p200300EC2F07F600746843EFEB191E44.dip0.t-ipconnect.de [IPv6:2003:ec:2f07:f600:7468:43ef:eb19:1e44])
+        id S1725938AbgBNIha (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Fri, 14 Feb 2020 03:37:30 -0500
+Received: from zn.tnic (p200300EC2F0D5A00F0C2F03C7F1C4548.dip0.t-ipconnect.de [IPv6:2003:ec:2f0d:5a00:f0c2:f03c:7f1c:4548])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id C980E1EC0CE8;
-        Thu, 13 Feb 2020 13:47:16 +0100 (CET)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 59F261EC0CED;
+        Fri, 14 Feb 2020 09:37:28 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1581598036;
+        t=1581669448;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=StBqtZPvE79wkxXiJ2x4Gd/HEg3noCDpRx9TLJvtPSc=;
-        b=FXIQhekrypKY0KlO1GErh3yyKsdic272qs+rjQDs61gbfIgDJfzAGCFYGClcG4CQlf4zJy
-        2FHZWd2oD7IJrqgv2wZN3k3/43m4/UEYmslZInS0SQaVlCaB5un2KQWbUaCjzmp5xBww3b
-        HLaFNxcYMptxyvLzhebxI4RYpBH54Dw=
-Date:   Thu, 13 Feb 2020 13:47:08 +0100
+        bh=bQ+pNAR45micF63heSSUE4/LAB3cGnDZZ8BPobmbcEI=;
+        b=PPgSmn4xqc5wyRg8pgqbp/N6jlwCU0QE0KRPpGkzPpnJiIV+goQ3a2wR5L9McOP+HCKna5
+        h3f3QPqAY2lZKsBJSuuCRvmld/bbxyZyUhSgY9cQFvoLSjR4ll+l/Ygqogq5iUIL3sOCII
+        GByucSvw3ipsvmT0WDc5I6gxHDAzh50=
+Date:   Fri, 14 Feb 2020 09:37:23 +0100
 From:   Borislav Petkov <bp@alien8.de>
-To:     Robert Richter <rrichter@marvell.com>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Tony Luck <tony.luck@intel.com>,
-        James Morse <james.morse@arm.com>,
-        Aristeu Rozanski <aris@redhat.com>,
-        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v3 05/10] EDAC/mc: Create new function edac_inc_csrow()
-Message-ID: <20200213124708.GJ31799@zn.tnic>
-References: <20200123090210.26933-1-rrichter@marvell.com>
- <20200123090210.26933-6-rrichter@marvell.com>
+To:     Dan Carpenter <dan.carpenter@oracle.com>
+Cc:     Tony Luck <tony.luck@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, x86@kernel.org,
+        linux-edac@vger.kernel.org, Saar Amar <Saar.Amar@microsoft.com>,
+        "security@kernel.org" <security@kernel.org>
+Subject: [PATCH] x86/mce/amd: Publish the bank pointer only after setup has
+ succeeded
+Message-ID: <20200214083723.GB13395@zn.tnic>
+References: <20190813100752.GM1935@kadam>
+ <20200128140846.phctkvx5btiexvbx@kili.mountain>
+ <20200204133638.GA19863@zn.tnic>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20200123090210.26933-6-rrichter@marvell.com>
+In-Reply-To: <20200204133638.GA19863@zn.tnic>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Thu, Jan 23, 2020 at 09:02:58AM +0000, Robert Richter wrote:
-> Have a separate function to count errors in csrow/channel. This better
-> separates code and reduces the indentation level. No functional
-> changes.
-> 
-> Signed-off-by: Robert Richter <rrichter@marvell.com>
-> Reviewed-by: Mauro Carvalho Chehab <mchehab@kernel.org>
-> Acked-by: Aristeu Rozanski <aris@redhat.com>
-> ---
->  drivers/edac/edac_mc.c | 40 +++++++++++++++++++++++++---------------
->  1 file changed, 25 insertions(+), 15 deletions(-)
-> 
-> diff --git a/drivers/edac/edac_mc.c b/drivers/edac/edac_mc.c
-> index 3c00c046acc9..e75cb7a9c454 100644
-> --- a/drivers/edac/edac_mc.c
-> +++ b/drivers/edac/edac_mc.c
-> @@ -1091,6 +1091,26 @@ static void edac_ue_error(struct mem_ctl_info *mci,
->  	edac_inc_ue_error(mci, enable_per_layer_report, pos, error_count);
->  }
->  
-> +static void edac_inc_csrow(struct edac_raw_error_desc *e, int row, int chan)
-> +{
-> +	struct mem_ctl_info *mci = error_desc_to_mci(e);
-> +	u16 count = e->error_count;
-> +	enum hw_event_mc_err_type type = e->type;
+Now as a proper, tested patch:
 
-Please sort function local variables declaration in a reverse christmas
-tree order:
+---
+From: Borislav Petkov <bp@suse.de>
 
-	<type A> longest_variable_name;
-	<type B> shorter_var_name;
-	<type C> even_shorter;
-	<type D> i;
+threshold_create_bank() creates a bank descriptor per MCA error
+thresholding counter which can be controlled over sysfs. It publishes
+the pointer to that bank in a per-CPU variable and then goes on to
+create additional thresholding blocks if the bank has such.
 
-> +
-> +	if (row < 0)
-> +		return;
-> +
-> +	edac_dbg(4, "csrow/channel to increment: (%d,%d)\n", row, chan);
-> +
-> +	if (type == HW_EVENT_ERR_CORRECTED) {
-> +		mci->csrows[row]->ce_count += count;
-> +		if (chan >= 0)
-> +			mci->csrows[row]->channels[chan]->ce_count += count;
-> +	} else {
-> +		mci->csrows[row]->ue_count += count;
-> +	}
-> +}
-> +
->  void edac_raw_mc_handle_error(struct edac_raw_error_desc *e)
->  {
->  	struct mem_ctl_info *mci = error_desc_to_mci(e);
-> @@ -1258,22 +1278,12 @@ void edac_mc_handle_error(const enum hw_event_mc_err_type type,
->  			chan = -2;
->  	}
->  
-> -	if (!e->enable_per_layer_report) {
-> +	if (!e->enable_per_layer_report)
->  		strcpy(e->label, "any memory");
-> -	} else {
-> -		edac_dbg(4, "csrow/channel to increment: (%d,%d)\n", row, chan);
-> -		if (p == e->label)
-> -			strcpy(e->label, "unknown memory");
-> -		if (type == HW_EVENT_ERR_CORRECTED) {
-> -			if (row >= 0) {
-> -				mci->csrows[row]->ce_count += error_count;
-> -				if (chan >= 0)
-> -					mci->csrows[row]->channels[chan]->ce_count += error_count;
-> -			}
-> -		} else
-> -			if (row >= 0)
-> -				mci->csrows[row]->ue_count += error_count;
-> -	}
-> +	else if (!*e->label)
-> +		strcpy(e->label, "unknown memory");
-> +
-> +	edac_inc_csrow(e, row, chan);
+However, that creation of additional blocks in
+allocate_threshold_blocks() can fail, leading to a use-after-free
+through the per-CPU pointer.
 
-Err, but this has functional changes: the !e->enable_per_layer_report
-case sets only the e->label and the else branch only does increment
-->ce_count.
+Therefore, publish that pointer only after all blocks have been setup
+successfully.
 
-Your change gets ->ce_count incremented in both cases.
+Fixes: 019f34fccfd5 ("x86, MCE, AMD: Move shared bank to node descriptor")
+Reported-by: Saar Amar <Saar.Amar@microsoft.com>
+Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
+Signed-off-by: Borislav Petkov <bp@suse.de>
+Cc: <stable@vger.kernel.org>
+Link: http://lkml.kernel.org/r/20200128140846.phctkvx5btiexvbx@kili.mountain
+---
+ arch/x86/kernel/cpu/mce/amd.c | 33 ++++++++++++++++-----------------
+ 1 file changed, 16 insertions(+), 17 deletions(-)
 
-Why?
+diff --git a/arch/x86/kernel/cpu/mce/amd.c b/arch/x86/kernel/cpu/mce/amd.c
+index b3a50d962851..e7313e5c497c 100644
+--- a/arch/x86/kernel/cpu/mce/amd.c
++++ b/arch/x86/kernel/cpu/mce/amd.c
+@@ -1198,8 +1198,9 @@ static const char *get_name(unsigned int bank, struct threshold_block *b)
+ 	return buf_mcatype;
+ }
+ 
+-static int allocate_threshold_blocks(unsigned int cpu, unsigned int bank,
+-				     unsigned int block, u32 address)
++static int allocate_threshold_blocks(unsigned int cpu, struct threshold_bank *tb,
++				     unsigned int bank, unsigned int block,
++				     u32 address)
+ {
+ 	struct threshold_block *b = NULL;
+ 	u32 low, high;
+@@ -1243,16 +1244,12 @@ static int allocate_threshold_blocks(unsigned int cpu, unsigned int bank,
+ 
+ 	INIT_LIST_HEAD(&b->miscj);
+ 
+-	if (per_cpu(threshold_banks, cpu)[bank]->blocks) {
+-		list_add(&b->miscj,
+-			 &per_cpu(threshold_banks, cpu)[bank]->blocks->miscj);
+-	} else {
+-		per_cpu(threshold_banks, cpu)[bank]->blocks = b;
+-	}
++	if (tb->blocks)
++		list_add(&b->miscj, &tb->blocks->miscj);
++	else
++		tb->blocks = b;
+ 
+-	err = kobject_init_and_add(&b->kobj, &threshold_ktype,
+-				   per_cpu(threshold_banks, cpu)[bank]->kobj,
+-				   get_name(bank, b));
++	err = kobject_init_and_add(&b->kobj, &threshold_ktype, tb->kobj, get_name(bank, b));
+ 	if (err)
+ 		goto out_free;
+ recurse:
+@@ -1260,7 +1257,7 @@ static int allocate_threshold_blocks(unsigned int cpu, unsigned int bank,
+ 	if (!address)
+ 		return 0;
+ 
+-	err = allocate_threshold_blocks(cpu, bank, block, address);
++	err = allocate_threshold_blocks(cpu, tb, bank, block, address);
+ 	if (err)
+ 		goto out_free;
+ 
+@@ -1345,8 +1342,6 @@ static int threshold_create_bank(unsigned int cpu, unsigned int bank)
+ 		goto out_free;
+ 	}
+ 
+-	per_cpu(threshold_banks, cpu)[bank] = b;
+-
+ 	if (is_shared_bank(bank)) {
+ 		refcount_set(&b->cpus, 1);
+ 
+@@ -1357,9 +1352,13 @@ static int threshold_create_bank(unsigned int cpu, unsigned int bank)
+ 		}
+ 	}
+ 
+-	err = allocate_threshold_blocks(cpu, bank, 0, msr_ops.misc(bank));
+-	if (!err)
+-		goto out;
++	err = allocate_threshold_blocks(cpu, b, bank, 0, msr_ops.misc(bank));
++	if (err)
++		goto out_free;
++
++	per_cpu(threshold_banks, cpu)[bank] = b;
++
++	return 0;
+ 
+  out_free:
+ 	kfree(b);
+-- 
+2.21.0
+
 
 -- 
 Regards/Gruss,
