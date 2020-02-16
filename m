@@ -2,82 +2,154 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 76C6515F8B8
-	for <lists+linux-edac@lfdr.de>; Fri, 14 Feb 2020 22:30:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 80162160270
+	for <lists+linux-edac@lfdr.de>; Sun, 16 Feb 2020 09:18:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388495AbgBNV37 (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Fri, 14 Feb 2020 16:29:59 -0500
-Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:25314 "EHLO
-        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S2387958AbgBNV36 (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Fri, 14 Feb 2020 16:29:58 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1581715798;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Kzi89iF04QxCLMnFCGjJjn2+0t6DNJ4N+OMGiy9A90U=;
-        b=LsNXEtgpqo7FZH9H4siB/uCmPVhtY/nLNwXvhsaA7GPD6OPd9Q+d2M4jU5nUyRiyYDxGj8
-        qH+/DMAG6AE1JgaPVvbGCt8F9fI/G5hiaXwRSg0sZEe6kVtmaWxYfDnM/3sy6nrwAryonh
-        uDTfOpjIs4m3hKg6ygZEgO1VJ+WSGVQ=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-237-sW6XycnXOlCOwyWhijM0uQ-1; Fri, 14 Feb 2020 16:29:54 -0500
-X-MC-Unique: sW6XycnXOlCOwyWhijM0uQ-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 4CDE51005510;
-        Fri, 14 Feb 2020 21:29:52 +0000 (UTC)
-Received: from prarit.bos.redhat.com (prarit-guest.7a2m.lab.eng.bos.redhat.com [10.16.222.26])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id BB6B05C1C3;
-        Fri, 14 Feb 2020 21:29:50 +0000 (UTC)
-Subject: Re: [PATCH] x86/mce: Do not log spurious corrected mce errors
-To:     "Luck, Tony" <tony.luck@intel.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Alexander Krupp <centos@akr.yagii.de>,
-        Borislav Petkov <bp@alien8.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, x86@kernel.org,
-        linux-edac@vger.kernel.org
-References: <20200214123407.4184-1-prarit@redhat.com>
- <20200214173644.GA7913@agluck-desk2.amr.corp.intel.com>
-From:   Prarit Bhargava <prarit@redhat.com>
-Message-ID: <0adb58a9-45d4-85c0-f3b3-517a19d2534e@redhat.com>
-Date:   Fri, 14 Feb 2020 16:29:50 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.6.1
+        id S1726043AbgBPISB (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Sun, 16 Feb 2020 03:18:01 -0500
+Received: from mx2.suse.de ([195.135.220.15]:49770 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725930AbgBPISB (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Sun, 16 Feb 2020 03:18:01 -0500
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx2.suse.de (Postfix) with ESMTP id 153C3AAF1;
+        Sun, 16 Feb 2020 08:17:59 +0000 (UTC)
+Date:   Sun, 16 Feb 2020 09:17:53 +0100
+From:   Borislav Petkov <bp@suse.de>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-edac <linux-edac@vger.kernel.org>,
+        lkml <linux-kernel@vger.kernel.org>
+Subject: [GIT PULL] EDAC urgent for 5.6
+Message-ID: <20200216081753.GA13765@zn.tnic>
 MIME-Version: 1.0
-In-Reply-To: <20200214173644.GA7913@agluck-desk2.amr.corp.intel.com>
-Content-Type: text/plain; charset=windows-1252
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
+Hi Linus,
 
+please pull two EDAC fixes for 5.6. Doing only signed tags from now on, btw.
 
-On 2/14/20 12:36 PM, Luck, Tony wrote:
-> On Fri, Feb 14, 2020 at 07:34:07AM -0500, Prarit Bhargava wrote:
->>  #ifdef CONFIG_X86_MCE_AMD
->>  extern bool amd_filter_mce(struct mce *m);
->> +extern bool intel_filter_mce(struct mce *m);
->>  #else
-> 
-> Something very weird is going on here. Why does
-> CONFIG_X86_MCE_AMD have to be set to enable some
-> *Intel* filter operation?
+Thx.
 
-That's a mistake.  I'll fix that in v2.
+---
+The following changes since commit bb6d3fb354c5ee8d6bde2d576eb7220ea09862b9:
 
-P.
+  Linux 5.6-rc1 (2020-02-09 16:08:48 -0800)
 
-> 
-> -Tony
-> 
+are available in the Git repository at:
 
+  git://git.kernel.org/pub/scm/linux/kernel/git/ras/ras.git tags/edac_urgent_for_5.6
+
+for you to fetch changes up to 4d59588c09f2a2daedad2a544d4d1b602ab3a8af:
+
+  EDAC/sysfs: Remove csrow objects on errors (2020-02-13 13:29:41 +0100)
+
+----------------------------------------------------------------
+Two fixes for use-after-free and memory leaking in the EDAC core, by
+Robert Richter.
+
+Debug options like DEBUG_TEST_DRIVER_REMOVE, KASAN and DEBUG_KMEMLEAK
+unearthed issues with the lifespan of memory allocated by the EDAC
+memory controller descriptor due to misdesigned memory freeing, done
+partially by the EDAC core *and* the driver core, which is problematic
+to say the least.
+
+These two are minimal fixes to take care of stable - a proper rework is
+following which cleans up that mess properly.
+
+----------------------------------------------------------------
+Robert Richter (2):
+      EDAC/mc: Fix use-after-free and memleaks during device removal
+      EDAC/sysfs: Remove csrow objects on errors
+
+ drivers/edac/edac_mc.c       | 12 +++---------
+ drivers/edac/edac_mc_sysfs.c | 18 ++++--------------
+ 2 files changed, 7 insertions(+), 23 deletions(-)
+
+diff --git a/drivers/edac/edac_mc.c b/drivers/edac/edac_mc.c
+index 7243b88f81d8..69e0d90460e6 100644
+--- a/drivers/edac/edac_mc.c
++++ b/drivers/edac/edac_mc.c
+@@ -505,16 +505,10 @@ void edac_mc_free(struct mem_ctl_info *mci)
+ {
+ 	edac_dbg(1, "\n");
+ 
+-	/* If we're not yet registered with sysfs free only what was allocated
+-	 * in edac_mc_alloc().
+-	 */
+-	if (!device_is_registered(&mci->dev)) {
+-		_edac_mc_free(mci);
+-		return;
+-	}
++	if (device_is_registered(&mci->dev))
++		edac_unregister_sysfs(mci);
+ 
+-	/* the mci instance is freed here, when the sysfs object is dropped */
+-	edac_unregister_sysfs(mci);
++	_edac_mc_free(mci);
+ }
+ EXPORT_SYMBOL_GPL(edac_mc_free);
+ 
+diff --git a/drivers/edac/edac_mc_sysfs.c b/drivers/edac/edac_mc_sysfs.c
+index 0367554e7437..c70ec0a306d8 100644
+--- a/drivers/edac/edac_mc_sysfs.c
++++ b/drivers/edac/edac_mc_sysfs.c
+@@ -276,10 +276,7 @@ static const struct attribute_group *csrow_attr_groups[] = {
+ 
+ static void csrow_attr_release(struct device *dev)
+ {
+-	struct csrow_info *csrow = container_of(dev, struct csrow_info, dev);
+-
+-	edac_dbg(1, "device %s released\n", dev_name(dev));
+-	kfree(csrow);
++	/* release device with _edac_mc_free() */
+ }
+ 
+ static const struct device_type csrow_attr_type = {
+@@ -447,8 +444,7 @@ static int edac_create_csrow_objects(struct mem_ctl_info *mci)
+ 		csrow = mci->csrows[i];
+ 		if (!nr_pages_per_csrow(csrow))
+ 			continue;
+-
+-		device_del(&mci->csrows[i]->dev);
++		device_unregister(&mci->csrows[i]->dev);
+ 	}
+ 
+ 	return err;
+@@ -608,10 +604,7 @@ static const struct attribute_group *dimm_attr_groups[] = {
+ 
+ static void dimm_attr_release(struct device *dev)
+ {
+-	struct dimm_info *dimm = container_of(dev, struct dimm_info, dev);
+-
+-	edac_dbg(1, "device %s released\n", dev_name(dev));
+-	kfree(dimm);
++	/* release device with _edac_mc_free() */
+ }
+ 
+ static const struct device_type dimm_attr_type = {
+@@ -893,10 +886,7 @@ static const struct attribute_group *mci_attr_groups[] = {
+ 
+ static void mci_attr_release(struct device *dev)
+ {
+-	struct mem_ctl_info *mci = container_of(dev, struct mem_ctl_info, dev);
+-
+-	edac_dbg(1, "device %s released\n", dev_name(dev));
+-	kfree(mci);
++	/* release device with _edac_mc_free() */
+ }
+ 
+ static const struct device_type mci_attr_type = {
+
+-- 
+Regards/Gruss,
+    Boris.
+
+SUSE Software Solutions Germany GmbH, GF: Felix Imendörffer, HRB 36809, AG Nürnberg
