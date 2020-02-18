@@ -2,81 +2,154 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F471161977
-	for <lists+linux-edac@lfdr.de>; Mon, 17 Feb 2020 19:11:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DEA2162A25
+	for <lists+linux-edac@lfdr.de>; Tue, 18 Feb 2020 17:13:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729594AbgBQSLC (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Mon, 17 Feb 2020 13:11:02 -0500
-Received: from mail.skyhub.de ([5.9.137.197]:33004 "EHLO mail.skyhub.de"
+        id S1726411AbgBRQN1 (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Tue, 18 Feb 2020 11:13:27 -0500
+Received: from mail.skyhub.de ([5.9.137.197]:49904 "EHLO mail.skyhub.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729423AbgBQSLC (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Mon, 17 Feb 2020 13:11:02 -0500
-Received: from zn.tnic (p200300EC2F060D0050A87813B4B3C5CE.dip0.t-ipconnect.de [IPv6:2003:ec:2f06:d00:50a8:7813:b4b3:c5ce])
+        id S1726360AbgBRQN1 (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Tue, 18 Feb 2020 11:13:27 -0500
+Received: from zn.tnic (p200300EC2F0C1F0014C3F76BBACA8B76.dip0.t-ipconnect.de [IPv6:2003:ec:2f0c:1f00:14c3:f76b:baca:8b76])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 072371EC0BFD;
-        Mon, 17 Feb 2020 19:11:00 +0100 (CET)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 4CA8C1EC0CE8;
+        Tue, 18 Feb 2020 17:13:24 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1581963060;
+        t=1582042404;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=dU65btafhItcIBwMwb2cayGHkW7o7XC9r3TDOdi7fFE=;
-        b=JOissN/+BAEonLoMj8nGdgfIUcTnyIKbYNNVpn9J2odTf2m/7LLBc9UPVTXNjW5angGCdk
-        QxmxZSgIc71+Z1OYxP3WI8Y3DPjJi7o+svAZubQBurP+iFqch6HFdJv+80cBg2NANZ4rkF
-        E4F1tG956r3vRRbEZLgU5djzmNXEMPE=
-Date:   Mon, 17 Feb 2020 19:10:55 +0100
+        bh=gK0g9aNgXw+INNWEyqtkjvbY52B+btC+rjGUIGJd4h0=;
+        b=L0pplXre5y5jDvR+LkAlVpEaxzIYoi/nH9H01hGTTnLEYvaVrc472Bygb+98Ql0XwwPjHD
+        q6uyS8RAzM0S030u/0+q1EWmWD2jpLxHCyy+1DGpwOa8wq/fTcLTvPOS3RKD9ZYgNZnee5
+        56GISZiImCW06j2JRcZOgF6bRU8jXCU=
+Date:   Tue, 18 Feb 2020 17:13:19 +0100
 From:   Borislav Petkov <bp@alien8.de>
-To:     Shiping Ji <shiping.linux@gmail.com>
-Cc:     James Morse <james.morse@arm.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        devicetree@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
-        linux-edac <linux-edac@vger.kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, hangl@microsoft.com,
-        ruizhao@microsoft.com, Lei Wang <lewan@microsoft.com>,
-        Scott Branden <scott.branden@broadcom.com>,
-        Yuqing Shen <yuqing.shen@broadcom.com>
-Subject: Re: [PATCH v11 1/2] dt-bindings: edac: dmc-520.yaml
-Message-ID: <20200217181055.GC14426@zn.tnic>
-References: <5354a9c3-5b5a-486a-9d19-fa9be169faef@gmail.com>
+To:     Prarit Bhargava <prarit@redhat.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Alexander Krupp <centos@akr.yagii.de>,
+        Tony Luck <tony.luck@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, x86@kernel.org,
+        linux-edac@vger.kernel.org
+Subject: Re: [PATCH v2] x86/mce: Do not log spurious corrected mce errors
+Message-ID: <20200218161319.GG14449@zn.tnic>
+References: <20200217130659.15895-1-prarit@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <5354a9c3-5b5a-486a-9d19-fa9be169faef@gmail.com>
+In-Reply-To: <20200217130659.15895-1-prarit@redhat.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Mon, Jan 27, 2020 at 08:23:08AM -0800, Shiping Ji wrote:
-> This is the device tree bindings for new EDAC driver dmc520_edac.c.
+On Mon, Feb 17, 2020 at 08:06:59AM -0500, Prarit Bhargava wrote:
+> A user has reported that they are seeing spurious corrected errors on
+> their hardware.
 > 
-> From: Lei Wang <leiwang_git@outlook.com>
+> Intel Errata HSD131, HSM142, HSW131, and BDM48 report that
+> "spurious corrected errors may be logged in the IA32_MC0_STATUS register
+> with the valid field (bit 63) set, the uncorrected error field (bit 61)
+> not set, a Model Specific Error Code (bits [31:16]) of 0x000F, and
+> an MCA Error Code (bits [15:0]) of 0x0005."
 > 
-> Signed-off-by: Lei Wang <leiwang_git@outlook.com>
-> Signed-off-by: Shiping Ji <shiping.linux@gmail.com>
-> Reviewed-by: James Morse <james.morse@arm.com>
+> Block these spurious errors from the console and logs.
 > 
+> Links to Intel Specification updates:
+> HSD131: https://www.intel.com/content/www/us/en/products/docs/processors/core/4th-gen-core-family-desktop-specification-update.html
+> HSM142: https://www.intel.com/content/www/us/en/products/docs/processors/core/4th-gen-core-family-mobile-specification-update.html
+> HSW131: https://www.intel.com/content/www/us/en/processors/xeon/xeon-e3-1200v3-spec-update.html
+> BDM48: https://www.intel.com/content/www/us/en/products/docs/processors/core/5th-gen-core-family-spec-update.html
+
+My previous review comment still holds:
+
+Those links tend to get stale with time. If you really want to refer to
+the PDFs, add a new bugzilla entry on https://bugzilla.kernel.org/, add
+them there as an attachment and add the link to the entry to the commit
+message.
+
+> Signed-off-by: Prarit Bhargava <prarit@redhat.com>
+> Co-developed-by: Alexander Krupp <centos@akr.yagii.de>
+
+WARNING: Co-developed-by: must be immediately followed by Signed-off-by:
+#36:
+
+See Documentation/process/submitting-patches.rst for more detail.
+
+> Cc: Tony Luck <tony.luck@intel.com>
+> Cc: Borislav Petkov <bp@alien8.de>
+> Cc: Thomas Gleixner <tglx@linutronix.de>
+> Cc: Ingo Molnar <mingo@redhat.com>
+> Cc: "H. Peter Anvin" <hpa@zytor.com>
+> Cc: x86@kernel.org
+> Cc: linux-edac@vger.kernel.org
 > ---
->      Changes in v11:
->          - Fix issues reported by make dt_binding_check
+>  arch/x86/kernel/cpu/mce/core.c     |  2 ++
+>  arch/x86/kernel/cpu/mce/intel.c    | 17 +++++++++++++++++
+>  arch/x86/kernel/cpu/mce/internal.h |  1 +
+>  3 files changed, 20 insertions(+)
 > 
-> ---
->  .../devicetree/bindings/edac/dmc-520.yaml     | 59 +++++++++++++++++++
->  1 file changed, 59 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/edac/dmc-520.yaml
+> diff --git a/arch/x86/kernel/cpu/mce/core.c b/arch/x86/kernel/cpu/mce/core.c
+> index 2c4f949611e4..fe3983d551cc 100644
+> --- a/arch/x86/kernel/cpu/mce/core.c
+> +++ b/arch/x86/kernel/cpu/mce/core.c
+> @@ -1877,6 +1877,8 @@ bool filter_mce(struct mce *m)
+>  {
+>  	if (boot_cpu_data.x86_vendor == X86_VENDOR_AMD)
+>  		return amd_filter_mce(m);
+> +	if (boot_cpu_data.x86_vendor == X86_VENDOR_INTEL)
+> +		return intel_filter_mce(m);
+>  
+>  	return false;
+>  }
+> diff --git a/arch/x86/kernel/cpu/mce/intel.c b/arch/x86/kernel/cpu/mce/intel.c
+> index 5627b1091b85..989148e6746c 100644
+> --- a/arch/x86/kernel/cpu/mce/intel.c
+> +++ b/arch/x86/kernel/cpu/mce/intel.c
+> @@ -520,3 +520,20 @@ void mce_intel_feature_clear(struct cpuinfo_x86 *c)
+>  {
+>  	intel_clear_lmce();
+>  }
+> +
+> +bool intel_filter_mce(struct mce *m)
+> +{
+> +	struct cpuinfo_x86 *c = &boot_cpu_data;
+> +
+> +	/* MCE errata HSD131, HSM142, HSW131, BDM48, and HSM142 */
+> +	if ((c->x86 == 6) &&
+> +	    ((c->x86_model == INTEL_FAM6_HASWELL) ||
+> +	     (c->x86_model == INTEL_FAM6_HASWELL_L) ||
+> +	     (c->x86_model == INTEL_FAM6_BROADWELL) ||
+> +	     (c->x86_model == INTEL_FAM6_HASWELL_G)) &&
+> +	    (m->bank == 0) &&
+> +	    ((m->status & 0xa0000000ffffffff) == 0x80000000000f0005))
+> +		return true;
+> +
+> +	return false;
+> +}
+> diff --git a/arch/x86/kernel/cpu/mce/internal.h b/arch/x86/kernel/cpu/mce/internal.h
+> index b785c0d0b590..821faba5b05d 100644
+> --- a/arch/x86/kernel/cpu/mce/internal.h
+> +++ b/arch/x86/kernel/cpu/mce/internal.h
+> @@ -175,5 +175,6 @@ extern bool amd_filter_mce(struct mce *m);
+>  #else
+>  static inline bool amd_filter_mce(struct mce *m)			{ return false; };
+>  #endif
+> +extern bool intel_filter_mce(struct mce *m);
 
-I have only this v11 patch 1/2 in my inbox and not the actual driver,
-i.e., patch 2/2.
+It doesn't even build:
 
-For the driver, I have v10 here:
+ld: arch/x86/kernel/cpu/mce/core.o: in function `filter_mce':
+/home/boris/kernel/linux/arch/x86/kernel/cpu/mce/core.c:1881: undefined reference to `intel_filter_mce'
+make: *** [Makefile:1077: vmlinux] Error 1
 
-https://lkml.kernel.org/r/83b48c70-dc06-d0d4-cae9-a2187fca628b@gmail.com
-
-Did you send a v11 of the driver itself or should I have a look at v10?
+Hint: do it like it is done for amd_filter_mce() but in the respective
+#ifdef CONFIG_X86_MCE_INTEL place.
 
 -- 
 Regards/Gruss,
