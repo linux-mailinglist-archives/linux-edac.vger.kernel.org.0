@@ -2,104 +2,146 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 53B881644ED
-	for <lists+linux-edac@lfdr.de>; Wed, 19 Feb 2020 14:04:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F346164520
+	for <lists+linux-edac@lfdr.de>; Wed, 19 Feb 2020 14:16:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726551AbgBSNEB (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Wed, 19 Feb 2020 08:04:01 -0500
-Received: from mail.skyhub.de ([5.9.137.197]:49948 "EHLO mail.skyhub.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726530AbgBSNEB (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Wed, 19 Feb 2020 08:04:01 -0500
-Received: from zn.tnic (p200300EC2F095500AC4EBF6CAFE7BFD1.dip0.t-ipconnect.de [IPv6:2003:ec:2f09:5500:ac4e:bf6c:afe7:bfd1])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 4B9201EC0216;
-        Wed, 19 Feb 2020 14:03:59 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1582117439;
+        id S1726671AbgBSNQx (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Wed, 19 Feb 2020 08:16:53 -0500
+Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:54108 "EHLO
+        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726530AbgBSNQx (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Wed, 19 Feb 2020 08:16:53 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1582118212;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=rvGK9TWc5VQzzfElldcN9WbR6raRibrDQlfQVR2ux0U=;
-        b=IAFwokmEabnjoZRjjrIL2p1e19VOt69CshgSD0FL+9iSI4y8Oh0HdeBKIrLAlaXv99hlW9
-        PuCWBdk9EQFG8p5BWhUYnkbvVFNwkFpIwov3UlI9y4l2skXGC180p8FdDWpaghq8FxswUf
-        /aQvWNZr3cHpbXmYwElgfOO8Rc1sezc=
-Date:   Wed, 19 Feb 2020 14:03:53 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Prarit Bhargava <prarit@redhat.com>
-Cc:     linux-kernel@vger.kernel.org,
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=EZeX/sR4EMAk2QlfO8plMdFFOB0OohNSKOrhSwQkcdA=;
+        b=BVakiy4FHJQo2E2CeKswOsQ9QH9zNIy33r3LipCFwt0SwXj2aJbWouaofGveOqOHI7/TqP
+        2Ucy9xEolhB7XPONblok0AUMqFgOQ0PPw3kWhWNRKo0tjK1CuCRFQilZAQKYjzLF/rwgBl
+        afjiyY6a5ikWah58mZxhXpIXe2oASFE=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-80-J9pVqpnQNe-FnyV9qyGlig-1; Wed, 19 Feb 2020 08:16:45 -0500
+X-MC-Unique: J9pVqpnQNe-FnyV9qyGlig-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id A7F52DB60;
+        Wed, 19 Feb 2020 13:16:43 +0000 (UTC)
+Received: from prarit.bos.redhat.com (prarit-guest.7a2m.lab.eng.bos.redhat.com [10.16.222.26])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 5DDB78B56B;
+        Wed, 19 Feb 2020 13:16:42 +0000 (UTC)
+From:   Prarit Bhargava <prarit@redhat.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Prarit Bhargava <prarit@redhat.com>,
         Alexander Krupp <centos@akr.yagii.de>,
         Tony Luck <tony.luck@intel.com>,
+        Borislav Petkov <bp@alien8.de>,
         Thomas Gleixner <tglx@linutronix.de>,
         Ingo Molnar <mingo@redhat.com>,
         "H. Peter Anvin" <hpa@zytor.com>, x86@kernel.org,
         linux-edac@vger.kernel.org
-Subject: Re: [PATCH v2] x86/mce: Do not log spurious corrected mce errors
-Message-ID: <20200219130353.GC30966@zn.tnic>
-References: <20200217130659.15895-1-prarit@redhat.com>
- <20200218161319.GG14449@zn.tnic>
- <894a39cb-21e7-3e43-1907-cae390537ccf@redhat.com>
+Subject: [PATCH v3] x86/mce: Do not log spurious corrected mce errors
+Date:   Wed, 19 Feb 2020 08:16:11 -0500
+Message-Id: <20200219131611.36816-1-prarit@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <894a39cb-21e7-3e43-1907-cae390537ccf@redhat.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Wed, Feb 19, 2020 at 07:25:59AM -0500, Prarit Bhargava wrote:
-> When I submitted this patch I looked at other commits in the kernel near
-> top-of-tree and they have Signed-off-by followed by Co-developed-by, and also
-> took your suggestion of not using a Signed-off-by for Alexander.  That's why I
+A user has reported that they are seeing spurious corrected errors on
+their hardware.
 
-I said:
+Intel Errata HSD131, HSM142, HSW131, and BDM48 report that
+"spurious corrected errors may be logged in the IA32_MC0_STATUS register
+with the valid field (bit 63) set, the uncorrected error field (bit 61)
+not set, a Model Specific Error Code (bits [31:16]) of 0x000F, and
+an MCA Error Code (bits [15:0]) of 0x0005."  The Errata PDFs are linked i=
+n
+the bugzilla below.
 
-"This is not how this is expressed. Either you write that in free text in
-the commit message or you use Co-developed-by. More details in
+Block these spurious errors from the console and logs.
 
-Documentation/process/submitting-patches.rst"
-
-> I'm now thoroughly confused as to what the correct format is.  It seems like
-> checkpatch.py is telling me to include a Signed-off-by in addition to the
-> Co-developed-by for Alexander but you explicitly told me not to.
->
-> > See Documentation/process/submitting-patches.rst for more detail.
-
-You need to start reading my replies in their entirety and finally read that
-document I've pointed to twice:
-
-"Co-developed-by: states that the patch was co-created by multiple developers;
-it is a used to give attribution to co-authors (in addition to the author
-attributed by the From: tag) when several people work on a single patch.  Since
-									  ^^^^^
-Co-developed-by: denotes authorship, every Co-developed-by: must be immediately
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-followed by a Signed-off-by: of the associated co-author."
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-I.e., basically what checkpatch is saying.
-
-So you either
-
-a) write in free text in the commit message something like
-
-"This is based on a patch submitted to RH bugzilla by Alexander Krupp
-<centos@akr.yagii.de>"
-
-OR
-
-b) use
-
+Link: https://bugzilla.kernel.org/show_bug.cgi?id=3D206587
 Co-developed-by: Alexander Krupp <centos@akr.yagii.de>
 Signed-off-by: Alexander Krupp <centos@akr.yagii.de>
+Signed-off-by: Prarit Bhargava <prarit@redhat.com>
+Cc: Tony Luck <tony.luck@intel.com>
+Cc: Borislav Petkov <bp@alien8.de>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Ingo Molnar <mingo@redhat.com>
+Cc: "H. Peter Anvin" <hpa@zytor.com>
+Cc: x86@kernel.org
+Cc: linux-edac@vger.kernel.org
+---
+v2: Fix intel_filter_mce() declaration
+v3: Fix !CONFIG_X86_MCE_INTEL compile
 
-Either a) XOR b).
+ arch/x86/kernel/cpu/mce/core.c     |  2 ++
+ arch/x86/kernel/cpu/mce/intel.c    | 17 +++++++++++++++++
+ arch/x86/kernel/cpu/mce/internal.h |  5 +++++
+ 3 files changed, 24 insertions(+)
 
--- 
-Regards/Gruss,
-    Boris.
+diff --git a/arch/x86/kernel/cpu/mce/core.c b/arch/x86/kernel/cpu/mce/cor=
+e.c
+index 2c4f949611e4..fe3983d551cc 100644
+--- a/arch/x86/kernel/cpu/mce/core.c
++++ b/arch/x86/kernel/cpu/mce/core.c
+@@ -1877,6 +1877,8 @@ bool filter_mce(struct mce *m)
+ {
+ 	if (boot_cpu_data.x86_vendor =3D=3D X86_VENDOR_AMD)
+ 		return amd_filter_mce(m);
++	if (boot_cpu_data.x86_vendor =3D=3D X86_VENDOR_INTEL)
++		return intel_filter_mce(m);
+=20
+ 	return false;
+ }
+diff --git a/arch/x86/kernel/cpu/mce/intel.c b/arch/x86/kernel/cpu/mce/in=
+tel.c
+index 5627b1091b85..989148e6746c 100644
+--- a/arch/x86/kernel/cpu/mce/intel.c
++++ b/arch/x86/kernel/cpu/mce/intel.c
+@@ -520,3 +520,20 @@ void mce_intel_feature_clear(struct cpuinfo_x86 *c)
+ {
+ 	intel_clear_lmce();
+ }
++
++bool intel_filter_mce(struct mce *m)
++{
++	struct cpuinfo_x86 *c =3D &boot_cpu_data;
++
++	/* MCE errata HSD131, HSM142, HSW131, BDM48, and HSM142 */
++	if ((c->x86 =3D=3D 6) &&
++	    ((c->x86_model =3D=3D INTEL_FAM6_HASWELL) ||
++	     (c->x86_model =3D=3D INTEL_FAM6_HASWELL_L) ||
++	     (c->x86_model =3D=3D INTEL_FAM6_BROADWELL) ||
++	     (c->x86_model =3D=3D INTEL_FAM6_HASWELL_G)) &&
++	    (m->bank =3D=3D 0) &&
++	    ((m->status & 0xa0000000ffffffff) =3D=3D 0x80000000000f0005))
++		return true;
++
++	return false;
++}
+diff --git a/arch/x86/kernel/cpu/mce/internal.h b/arch/x86/kernel/cpu/mce=
+/internal.h
+index b785c0d0b590..f6e0419969c5 100644
+--- a/arch/x86/kernel/cpu/mce/internal.h
++++ b/arch/x86/kernel/cpu/mce/internal.h
+@@ -175,5 +175,10 @@ extern bool amd_filter_mce(struct mce *m);
+ #else
+ static inline bool amd_filter_mce(struct mce *m)			{ return false; };
+ #endif
++#ifdef CONFIG_X86_MCE_INTEL
++extern bool intel_filter_mce(struct mce *m);
++#else
++static inline bool intel_filter_mce(struct mce *m) { return false; };
++#endif
+=20
+ #endif /* __X86_MCE_INTERNAL_H__ */
+--=20
+2.21.1
 
-https://people.kernel.org/tglx/notes-about-netiquette
