@@ -2,87 +2,66 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 59C741663FB
-	for <lists+linux-edac@lfdr.de>; Thu, 20 Feb 2020 18:08:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 70A31166FB8
+	for <lists+linux-edac@lfdr.de>; Fri, 21 Feb 2020 07:46:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728090AbgBTRH4 (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Thu, 20 Feb 2020 12:07:56 -0500
-Received: from us-smtp-1.mimecast.com ([207.211.31.81]:24496 "EHLO
-        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1728760AbgBTRHs (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>);
-        Thu, 20 Feb 2020 12:07:48 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1582218467;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=fRyl+HNCJYGuzif7UHbBNmoq+TguvgwSchvSmXTT2m8=;
-        b=giUHMUtfIAB0HemHQWmprLxqBb5rPV6Kp6+MEPN2dWwBtGo+ZL3ggisJjLdiIw6hkntwNn
-        e+FBi/TY/0gbeligtFHiyER+7m3jhFhm7o1HaF+crlbQfXQ+6jbu1y3waJi/baKoCcM8AU
-        BCIczJnJFZMJDaimAuasbIm+PHZ00Uw=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-387-o5UPWaBQMDeQ-SMDPVJK3A-1; Thu, 20 Feb 2020 12:07:44 -0500
-X-MC-Unique: o5UPWaBQMDeQ-SMDPVJK3A-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id E3649800EB4;
-        Thu, 20 Feb 2020 17:07:38 +0000 (UTC)
-Received: from redhatnow.users.ipa.redhat.com (ovpn-117-1.phx2.redhat.com [10.3.117.1])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 1A06D90F65;
-        Thu, 20 Feb 2020 17:07:29 +0000 (UTC)
-Subject: Re: [RFC PATCH 02/11] ata: Remove Calxeda AHCI driver
-To:     Rob Herring <robh@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        soc@kernel.org, Andre Przywara <andre.przywara@arm.com>,
-        Robert Richter <rrichter@marvell.com>,
-        Jon Loeliger <jdl@jdl.com>, Alexander Graf <graf@amazon.com>,
-        Matthias Brugger <mbrugger@suse.com>
-Cc:     Alex Williamson <alex.williamson@redhat.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        devicetree@vger.kernel.org, Eric Auger <eric.auger@redhat.com>,
-        iommu@lists.linux-foundation.org,
-        James Morse <james.morse@arm.com>,
-        Jens Axboe <axboe@kernel.dk>, Joerg Roedel <joro@8bytes.org>,
-        kvm@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-edac@vger.kernel.org, linux-ide@vger.kernel.org,
-        linux-pm@vger.kernel.org,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        netdev@vger.kernel.org, "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Tony Luck <tony.luck@intel.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Will Deacon <will@kernel.org>
-References: <20200218171321.30990-1-robh@kernel.org>
- <20200218171321.30990-3-robh@kernel.org>
-From:   Mark Langsdorf <mlangsdo@redhat.com>
-Message-ID: <bf1291f2-597e-bff9-6780-ec233f5c2a20@redhat.com>
-Date:   Thu, 20 Feb 2020 11:07:29 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.1
-MIME-Version: 1.0
-In-Reply-To: <20200218171321.30990-3-robh@kernel.org>
-Content-Type: text/plain; charset=windows-1252; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
+        id S1726244AbgBUGqy (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Fri, 21 Feb 2020 01:46:54 -0500
+Received: from inva020.nxp.com ([92.121.34.13]:40248 "EHLO inva020.nxp.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726100AbgBUGqy (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Fri, 21 Feb 2020 01:46:54 -0500
+Received: from inva020.nxp.com (localhost [127.0.0.1])
+        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 905121A6D81;
+        Fri, 21 Feb 2020 07:46:52 +0100 (CET)
+Received: from invc005.ap-rdc01.nxp.com (invc005.ap-rdc01.nxp.com [165.114.16.14])
+        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 9A8AA1A6D7F;
+        Fri, 21 Feb 2020 07:46:44 +0100 (CET)
+Received: from localhost.localdomain (shlinux2.ap.freescale.net [10.192.224.44])
+        by invc005.ap-rdc01.nxp.com (Postfix) with ESMTP id 295E1403AE;
+        Fri, 21 Feb 2020 14:45:58 +0800 (SGT)
+From:   sherry sun <sherry.sun@nxp.com>
+To:     bp@alien8.de, mchehab@kernel.org, tony.luck@intel.com,
+        james.morse@arm.com, rrichter@marvell.com, michal.simek@xilinx.com,
+        shawnguo@kernel.org, s.hauer@pengutronix.de, robh+dt@kernel.org,
+        mark.rutland@arm.com
+Cc:     linux-edac@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-imx@nxp.com, frank.li@nxp.com
+Subject: [PATCH 0/3] Add edac driver for i.MX8MP based on synopsys edac driver 
+Date:   Fri, 21 Feb 2020 14:39:13 +0800
+Message-Id: <1582267156-20189-1-git-send-email-sherry.sun@nxp.com>
+X-Mailer: git-send-email 2.7.4
+X-Virus-Scanned: ClamAV using ClamSMTP
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On 2/18/20 11:13 AM, Rob Herring wrote:
-> Cc: Jens Axboe <axboe@kernel.dk>
-> Cc: linux-ide@vger.kernel.org
-> Signed-off-by: Rob Herring <robh@kernel.org>
-> ---
+From: Sherry Sun <sherry.sun@nxp.com>
 
-Acked-by: Mark Langsdorf <mark.langsdorf@gmail.com>
+This patchset add edac driver support for i.MX8MP, since i.MX8MP use the same
+synopsys memory controller with ZynqMP, so the driver is based on synopsys_edac
+driver.
+
+Considering that i.MX8MP dts file is still in kernel/git/shawnguo/linux.git and
+isn't in mainline now, I will add EDAC node in i.MX8MP dts after this file is
+pushed to mainline. 
+
+And the edac driver for i.MX8MP has been tested in kernel/git/shawnguo/linux.git
+where i.MX8MP is supported, it turns out that this driver works well to detect
+corrected and uncorrected errors for LPDDR4 in i.MX8MP.
+
+Sherry Sun (3):
+  dt-bindings: memory-controllers: Add i.MX8MP DDRC binding doc
+  EDAC: Add synopsys edac driver support for i.MX8MP
+  EDAC: synopsys: Add edac driver support for i.MX8MP
+
+ .../bindings/memory-controllers/synopsys.txt  |  8 +-
+ drivers/edac/Kconfig                          |  2 +-
+ drivers/edac/synopsys_edac.c                  | 77 ++++++++++++++++++-
+ 3 files changed, 83 insertions(+), 4 deletions(-)
+
+-- 
+2.17.1
 
