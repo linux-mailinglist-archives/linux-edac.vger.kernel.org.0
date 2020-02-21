@@ -2,202 +2,101 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EE91C166FC4
-	for <lists+linux-edac@lfdr.de>; Fri, 21 Feb 2020 07:47:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EC3D1670F2
+	for <lists+linux-edac@lfdr.de>; Fri, 21 Feb 2020 08:50:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727259AbgBUGrU (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Fri, 21 Feb 2020 01:47:20 -0500
-Received: from inva020.nxp.com ([92.121.34.13]:41458 "EHLO inva020.nxp.com"
+        id S1728779AbgBUHtx (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Fri, 21 Feb 2020 02:49:53 -0500
+Received: from mail.kernel.org ([198.145.29.99]:46528 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727066AbgBUGrT (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Fri, 21 Feb 2020 01:47:19 -0500
-Received: from inva020.nxp.com (localhost [127.0.0.1])
-        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id B69FE1A6D88;
-        Fri, 21 Feb 2020 07:47:16 +0100 (CET)
-Received: from invc005.ap-rdc01.nxp.com (invc005.ap-rdc01.nxp.com [165.114.16.14])
-        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 8931A1A6D82;
-        Fri, 21 Feb 2020 07:47:08 +0100 (CET)
-Received: from localhost.localdomain (shlinux2.ap.freescale.net [10.192.224.44])
-        by invc005.ap-rdc01.nxp.com (Postfix) with ESMTP id C85EB4043C;
-        Fri, 21 Feb 2020 14:46:10 +0800 (SGT)
-From:   sherry sun <sherry.sun@nxp.com>
-To:     bp@alien8.de, mchehab@kernel.org, tony.luck@intel.com,
-        james.morse@arm.com, rrichter@marvell.com, michal.simek@xilinx.com,
-        shawnguo@kernel.org, s.hauer@pengutronix.de, robh+dt@kernel.org,
-        mark.rutland@arm.com
-Cc:     linux-edac@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-imx@nxp.com, frank.li@nxp.com
-Subject: [PATCH 3/3] EDAC: synopsys: Add edac driver support for i.MX8MP
-Date:   Fri, 21 Feb 2020 14:39:16 +0800
-Message-Id: <1582267156-20189-4-git-send-email-sherry.sun@nxp.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1582267156-20189-1-git-send-email-sherry.sun@nxp.com>
-References: <1582267156-20189-1-git-send-email-sherry.sun@nxp.com>
-X-Virus-Scanned: ClamAV using ClamSMTP
+        id S1728425AbgBUHtw (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Fri, 21 Feb 2020 02:49:52 -0500
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 7A16A222C4;
+        Fri, 21 Feb 2020 07:49:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1582271391;
+        bh=udPBDdvdYkxFiN4/6jnqwJPzNWTrlv9XsXtSLkNELoA=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=RRlTphl/ugZbLaYTVMmjCWRBg8+8EL+cemH0kY3O7Uq79HxottvEXVgqOT7Jx3BIA
+         0mn25CtzwTAQiPaF+9PbQM0HOMqsA6rE0UyjJRTx8XiWnqDI3yRRoy3pcIt1F9VDDa
+         KPYWu8oubASY9/8DC9qmfFGbsRqBbEc1WMkbFBxI=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
+        Borislav Petkov <bp@suse.de>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        bberg@redhat.com, ckellner@redhat.com, hdegoede@redhat.com,
+        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
+        linux-edac <linux-edac@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Tony Luck <tony.luck@intel.com>, x86-ml <x86@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.5 147/399] x86/mce/therm_throt: Mark throttle_active_work() as __maybe_unused
+Date:   Fri, 21 Feb 2020 08:37:52 +0100
+Message-Id: <20200221072416.791486452@linuxfoundation.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20200221072402.315346745@linuxfoundation.org>
+References: <20200221072402.315346745@linuxfoundation.org>
+User-Agent: quilt/0.66
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-From: Sherry Sun <sherry.sun@nxp.com>
+From: Arnd Bergmann <arnd@arndb.de>
 
-Since i.MX8MP use synopsys ddr controller IP, so add edac support
-for i.MX8MP based on synopsys edac driver. i.MX8MP use LPDDR4 and
-support interrupts for corrected and uncorrected errors. The main
-difference between ZynqMP and i.MX8MP ddr controller is the interrupt
-registers. So add another interrupt handler function, enable/disable
-interrupt function to distinguish with ZynqMP.
+[ Upstream commit db1ae0314f47e88ae06679270adf17ffa245afd4 ]
 
-Signed-off-by: Sherry Sun <sherry.sun@nxp.com>
+throttle_active_work() is only called if CONFIG_SYSFS is set, otherwise
+we get a harmless warning:
+
+  arch/x86/kernel/cpu/mce/therm_throt.c:238:13: error: 'throttle_active_work' \
+	  defined but not used [-Werror=unused-function]
+
+Mark the function as __maybe_unused to avoid the warning.
+
+Fixes: f6656208f04e ("x86/mce/therm_throt: Optimize notifications of thermal throttle")
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+Signed-off-by: Borislav Petkov <bp@suse.de>
+Reviewed-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Cc: bberg@redhat.com
+Cc: ckellner@redhat.com
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: hdegoede@redhat.com
+Cc: "H. Peter Anvin" <hpa@zytor.com>
+Cc: Ingo Molnar <mingo@redhat.com>
+Cc: linux-edac <linux-edac@vger.kernel.org>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Tony Luck <tony.luck@intel.com>
+Cc: x86-ml <x86@kernel.org>
+Link: https://lkml.kernel.org/r/20191210203925.3119091-1-arnd@arndb.de
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/edac/synopsys_edac.c | 77 +++++++++++++++++++++++++++++++++++-
- 1 file changed, 76 insertions(+), 1 deletion(-)
+ arch/x86/kernel/cpu/mce/therm_throt.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/edac/synopsys_edac.c b/drivers/edac/synopsys_edac.c
-index 2d263382d797..66c801502212 100644
---- a/drivers/edac/synopsys_edac.c
-+++ b/drivers/edac/synopsys_edac.c
-@@ -101,6 +101,7 @@
- /* DDR ECC Quirks */
- #define DDR_ECC_INTR_SUPPORT		BIT(0)
- #define DDR_ECC_DATA_POISON_SUPPORT	BIT(1)
-+#define DDR_ECC_IMX8MP			BIT(2)
- 
- /* ZynqMP Enhanced DDR memory controller registers that are relevant to ECC */
- /* ECC Configuration Registers */
-@@ -266,6 +267,11 @@
- 
- #define RANK_B0_BASE			6
- 
-+/* ECCCTL UE/CE Interrupt enable/disable for IMX8MP*/
-+#define DDR_CE_INTR_EN_MASK			0x100
-+#define DDR_UE_INTR_EN_MASK			0x200
-+#define ECC_INTR_MASK				0x10100
-+
- /**
-  * struct ecc_error_info - ECC error log information.
-  * @row:	Row number.
-@@ -524,6 +530,54 @@ static void handle_error(struct mem_ctl_info *mci, struct synps_ecc_status *p)
- 	memset(p, 0, sizeof(*p));
+diff --git a/arch/x86/kernel/cpu/mce/therm_throt.c b/arch/x86/kernel/cpu/mce/therm_throt.c
+index 6c3e1c92f1835..58b4ee3cda777 100644
+--- a/arch/x86/kernel/cpu/mce/therm_throt.c
++++ b/arch/x86/kernel/cpu/mce/therm_throt.c
+@@ -235,7 +235,7 @@ static void get_therm_status(int level, bool *proc_hot, u8 *temp)
+ 	*temp = (msr_val >> 16) & 0x7F;
  }
  
-+static void enable_intr_imx8mp(struct synps_edac_priv *priv)
-+{
-+	int regval;
-+
-+	regval = readl(priv->baseaddr + ECC_CLR_OFST);
-+	regval |= (DDR_CE_INTR_EN_MASK | DDR_UE_INTR_EN_MASK);
-+	writel(regval, priv->baseaddr + ECC_CLR_OFST);
-+}
-+
-+static void disable_intr_imx8mp(struct synps_edac_priv *priv)
-+{
-+	int regval;
-+
-+	regval = readl(priv->baseaddr + ECC_CLR_OFST);
-+	regval &= ~(DDR_CE_INTR_EN_MASK | DDR_UE_INTR_EN_MASK);
-+	writel(regval, priv->baseaddr + ECC_CLR_OFST);
-+}
-+
-+/* Interrupt Handler for ECC interrupts on imx8mp platform. */
-+static irqreturn_t intr_handler_imx8mp(int irq, void *dev_id)
-+{
-+	const struct synps_platform_data *p_data;
-+	struct mem_ctl_info *mci = dev_id;
-+	struct synps_edac_priv *priv;
-+	int status, regval;
-+
-+	priv = mci->pvt_info;
-+	p_data = priv->p_data;
-+
-+	regval = readl(priv->baseaddr + ECC_STAT_OFST);
-+	if (!(regval & ECC_INTR_MASK))
-+		return IRQ_NONE;
-+
-+	status = p_data->get_error_info(priv);
-+	if (status)
-+		return IRQ_NONE;
-+
-+	priv->ce_cnt += priv->stat.ce_cnt;
-+	priv->ue_cnt += priv->stat.ue_cnt;
-+	handle_error(mci, &priv->stat);
-+
-+	edac_dbg(3, "Total error count CE %d UE %d\n",
-+		 priv->ce_cnt, priv->ue_cnt);
-+	enable_intr_imx8mp(priv);
-+
-+	return IRQ_HANDLED;
-+}
-+
- /**
-  * intr_handler - Interrupt Handler for ECC interrupts.
-  * @irq:        IRQ number.
-@@ -541,6 +595,9 @@ static irqreturn_t intr_handler(int irq, void *dev_id)
- 	priv = mci->pvt_info;
- 	p_data = priv->p_data;
- 
-+	if (p_data->quirks & DDR_ECC_IMX8MP)
-+		return intr_handler_imx8mp(irq, dev_id);
-+
- 	regval = readl(priv->baseaddr + DDR_QOS_IRQ_STAT_OFST);
- 	regval &= (DDR_QOSCE_MASK | DDR_QOSUE_MASK);
- 	if (!(regval & ECC_CE_UE_INTR_MASK))
-@@ -817,7 +874,7 @@ static void mc_init(struct mem_ctl_info *mci, struct platform_device *pdev)
- 	platform_set_drvdata(pdev, mci);
- 
- 	/* Initialize controller capabilities and configuration */
--	mci->mtype_cap = MEM_FLAG_DDR3 | MEM_FLAG_DDR2;
-+	mci->mtype_cap = MEM_FLAG_LRDDR4 | MEM_FLAG_DDR3 | MEM_FLAG_DDR2;
- 	mci->edac_ctl_cap = EDAC_FLAG_NONE | EDAC_FLAG_SECDED;
- 	mci->scrub_cap = SCRUB_HW_SRC;
- 	mci->scrub_mode = SCRUB_NONE;
-@@ -842,6 +899,9 @@ static void mc_init(struct mem_ctl_info *mci, struct platform_device *pdev)
- static void enable_intr(struct synps_edac_priv *priv)
+-static void throttle_active_work(struct work_struct *work)
++static void __maybe_unused throttle_active_work(struct work_struct *work)
  {
- 	/* Enable UE/CE Interrupts */
-+	if (priv->p_data->quirks & DDR_ECC_IMX8MP)
-+		return enable_intr_imx8mp(priv);
-+
- 	writel(DDR_QOSUE_MASK | DDR_QOSCE_MASK,
- 			priv->baseaddr + DDR_QOS_IRQ_EN_OFST);
- }
-@@ -849,6 +909,9 @@ static void enable_intr(struct synps_edac_priv *priv)
- static void disable_intr(struct synps_edac_priv *priv)
- {
- 	/* Disable UE/CE Interrupts */
-+	if (priv->p_data->quirks & DDR_ECC_IMX8MP)
-+		return disable_intr_imx8mp(priv);
-+
- 	writel(DDR_QOSUE_MASK | DDR_QOSCE_MASK,
- 			priv->baseaddr + DDR_QOS_IRQ_DB_OFST);
- }
-@@ -898,6 +961,14 @@ static const struct synps_platform_data zynqmp_edac_def = {
- 			  ),
- };
- 
-+static const struct synps_platform_data imx8mp_edac_def = {
-+	.get_error_info	= zynqmp_get_error_info,
-+	.get_mtype	= zynqmp_get_mtype,
-+	.get_dtype	= zynqmp_get_dtype,
-+	.get_ecc_state	= zynqmp_get_ecc_state,
-+	.quirks         = (DDR_ECC_INTR_SUPPORT | DDR_ECC_IMX8MP),
-+};
-+
- static const struct of_device_id synps_edac_match[] = {
- 	{
- 		.compatible = "xlnx,zynq-ddrc-a05",
-@@ -907,6 +978,10 @@ static const struct of_device_id synps_edac_match[] = {
- 		.compatible = "xlnx,zynqmp-ddrc-2.40a",
- 		.data = (void *)&zynqmp_edac_def
- 	},
-+	{
-+		.compatible = "fsl,imx8mp-ddrc",
-+		.data = (void *)&imx8mp_edac_def
-+	},
- 	{
- 		/* end of table */
- 	}
+ 	struct _thermal_state *state = container_of(to_delayed_work(work),
+ 						struct _thermal_state, therm_work);
 -- 
-2.17.1
+2.20.1
+
+
 
