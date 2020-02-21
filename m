@@ -2,24 +2,24 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 86035166FC1
-	for <lists+linux-edac@lfdr.de>; Fri, 21 Feb 2020 07:47:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EE91C166FC4
+	for <lists+linux-edac@lfdr.de>; Fri, 21 Feb 2020 07:47:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726100AbgBUGrO (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Fri, 21 Feb 2020 01:47:14 -0500
-Received: from inva020.nxp.com ([92.121.34.13]:41260 "EHLO inva020.nxp.com"
+        id S1727259AbgBUGrU (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Fri, 21 Feb 2020 01:47:20 -0500
+Received: from inva020.nxp.com ([92.121.34.13]:41458 "EHLO inva020.nxp.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727066AbgBUGrO (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Fri, 21 Feb 2020 01:47:14 -0500
+        id S1727066AbgBUGrT (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Fri, 21 Feb 2020 01:47:19 -0500
 Received: from inva020.nxp.com (localhost [127.0.0.1])
-        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 1D8891A6D94;
-        Fri, 21 Feb 2020 07:47:12 +0100 (CET)
+        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id B69FE1A6D88;
+        Fri, 21 Feb 2020 07:47:16 +0100 (CET)
 Received: from invc005.ap-rdc01.nxp.com (invc005.ap-rdc01.nxp.com [165.114.16.14])
-        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 27D6D1A6D8D;
-        Fri, 21 Feb 2020 07:47:04 +0100 (CET)
+        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 8931A1A6D82;
+        Fri, 21 Feb 2020 07:47:08 +0100 (CET)
 Received: from localhost.localdomain (shlinux2.ap.freescale.net [10.192.224.44])
-        by invc005.ap-rdc01.nxp.com (Postfix) with ESMTP id 97AF64042D;
-        Fri, 21 Feb 2020 14:46:08 +0800 (SGT)
+        by invc005.ap-rdc01.nxp.com (Postfix) with ESMTP id C85EB4043C;
+        Fri, 21 Feb 2020 14:46:10 +0800 (SGT)
 From:   sherry sun <sherry.sun@nxp.com>
 To:     bp@alien8.de, mchehab@kernel.org, tony.luck@intel.com,
         james.morse@arm.com, rrichter@marvell.com, michal.simek@xilinx.com,
@@ -28,9 +28,9 @@ To:     bp@alien8.de, mchehab@kernel.org, tony.luck@intel.com,
 Cc:     linux-edac@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-imx@nxp.com, frank.li@nxp.com
-Subject: [PATCH 2/3] EDAC: Add synopsys edac driver support for i.MX8MP
-Date:   Fri, 21 Feb 2020 14:39:15 +0800
-Message-Id: <1582267156-20189-3-git-send-email-sherry.sun@nxp.com>
+Subject: [PATCH 3/3] EDAC: synopsys: Add edac driver support for i.MX8MP
+Date:   Fri, 21 Feb 2020 14:39:16 +0800
+Message-Id: <1582267156-20189-4-git-send-email-sherry.sun@nxp.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1582267156-20189-1-git-send-email-sherry.sun@nxp.com>
 References: <1582267156-20189-1-git-send-email-sherry.sun@nxp.com>
@@ -42,27 +42,162 @@ X-Mailing-List: linux-edac@vger.kernel.org
 
 From: Sherry Sun <sherry.sun@nxp.com>
 
-The i.MX8MP has a memory controller supported by this driver. So here
-add edac driver for i.MX8MP based on synopsys edac driver.
+Since i.MX8MP use synopsys ddr controller IP, so add edac support
+for i.MX8MP based on synopsys edac driver. i.MX8MP use LPDDR4 and
+support interrupts for corrected and uncorrected errors. The main
+difference between ZynqMP and i.MX8MP ddr controller is the interrupt
+registers. So add another interrupt handler function, enable/disable
+interrupt function to distinguish with ZynqMP.
 
 Signed-off-by: Sherry Sun <sherry.sun@nxp.com>
 ---
- drivers/edac/Kconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/edac/synopsys_edac.c | 77 +++++++++++++++++++++++++++++++++++-
+ 1 file changed, 76 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/edac/Kconfig b/drivers/edac/Kconfig
-index fe2eb892a1bd..58a2d67d5513 100644
---- a/drivers/edac/Kconfig
-+++ b/drivers/edac/Kconfig
-@@ -475,7 +475,7 @@ config EDAC_ARMADA_XP
+diff --git a/drivers/edac/synopsys_edac.c b/drivers/edac/synopsys_edac.c
+index 2d263382d797..66c801502212 100644
+--- a/drivers/edac/synopsys_edac.c
++++ b/drivers/edac/synopsys_edac.c
+@@ -101,6 +101,7 @@
+ /* DDR ECC Quirks */
+ #define DDR_ECC_INTR_SUPPORT		BIT(0)
+ #define DDR_ECC_DATA_POISON_SUPPORT	BIT(1)
++#define DDR_ECC_IMX8MP			BIT(2)
  
- config EDAC_SYNOPSYS
- 	tristate "Synopsys DDR Memory Controller"
--	depends on ARCH_ZYNQ || ARCH_ZYNQMP
-+	depends on ARCH_ZYNQ || ARCH_ZYNQMP || ARCH_MXC
- 	help
- 	  Support for error detection and correction on the Synopsys DDR
- 	  memory controller.
+ /* ZynqMP Enhanced DDR memory controller registers that are relevant to ECC */
+ /* ECC Configuration Registers */
+@@ -266,6 +267,11 @@
+ 
+ #define RANK_B0_BASE			6
+ 
++/* ECCCTL UE/CE Interrupt enable/disable for IMX8MP*/
++#define DDR_CE_INTR_EN_MASK			0x100
++#define DDR_UE_INTR_EN_MASK			0x200
++#define ECC_INTR_MASK				0x10100
++
+ /**
+  * struct ecc_error_info - ECC error log information.
+  * @row:	Row number.
+@@ -524,6 +530,54 @@ static void handle_error(struct mem_ctl_info *mci, struct synps_ecc_status *p)
+ 	memset(p, 0, sizeof(*p));
+ }
+ 
++static void enable_intr_imx8mp(struct synps_edac_priv *priv)
++{
++	int regval;
++
++	regval = readl(priv->baseaddr + ECC_CLR_OFST);
++	regval |= (DDR_CE_INTR_EN_MASK | DDR_UE_INTR_EN_MASK);
++	writel(regval, priv->baseaddr + ECC_CLR_OFST);
++}
++
++static void disable_intr_imx8mp(struct synps_edac_priv *priv)
++{
++	int regval;
++
++	regval = readl(priv->baseaddr + ECC_CLR_OFST);
++	regval &= ~(DDR_CE_INTR_EN_MASK | DDR_UE_INTR_EN_MASK);
++	writel(regval, priv->baseaddr + ECC_CLR_OFST);
++}
++
++/* Interrupt Handler for ECC interrupts on imx8mp platform. */
++static irqreturn_t intr_handler_imx8mp(int irq, void *dev_id)
++{
++	const struct synps_platform_data *p_data;
++	struct mem_ctl_info *mci = dev_id;
++	struct synps_edac_priv *priv;
++	int status, regval;
++
++	priv = mci->pvt_info;
++	p_data = priv->p_data;
++
++	regval = readl(priv->baseaddr + ECC_STAT_OFST);
++	if (!(regval & ECC_INTR_MASK))
++		return IRQ_NONE;
++
++	status = p_data->get_error_info(priv);
++	if (status)
++		return IRQ_NONE;
++
++	priv->ce_cnt += priv->stat.ce_cnt;
++	priv->ue_cnt += priv->stat.ue_cnt;
++	handle_error(mci, &priv->stat);
++
++	edac_dbg(3, "Total error count CE %d UE %d\n",
++		 priv->ce_cnt, priv->ue_cnt);
++	enable_intr_imx8mp(priv);
++
++	return IRQ_HANDLED;
++}
++
+ /**
+  * intr_handler - Interrupt Handler for ECC interrupts.
+  * @irq:        IRQ number.
+@@ -541,6 +595,9 @@ static irqreturn_t intr_handler(int irq, void *dev_id)
+ 	priv = mci->pvt_info;
+ 	p_data = priv->p_data;
+ 
++	if (p_data->quirks & DDR_ECC_IMX8MP)
++		return intr_handler_imx8mp(irq, dev_id);
++
+ 	regval = readl(priv->baseaddr + DDR_QOS_IRQ_STAT_OFST);
+ 	regval &= (DDR_QOSCE_MASK | DDR_QOSUE_MASK);
+ 	if (!(regval & ECC_CE_UE_INTR_MASK))
+@@ -817,7 +874,7 @@ static void mc_init(struct mem_ctl_info *mci, struct platform_device *pdev)
+ 	platform_set_drvdata(pdev, mci);
+ 
+ 	/* Initialize controller capabilities and configuration */
+-	mci->mtype_cap = MEM_FLAG_DDR3 | MEM_FLAG_DDR2;
++	mci->mtype_cap = MEM_FLAG_LRDDR4 | MEM_FLAG_DDR3 | MEM_FLAG_DDR2;
+ 	mci->edac_ctl_cap = EDAC_FLAG_NONE | EDAC_FLAG_SECDED;
+ 	mci->scrub_cap = SCRUB_HW_SRC;
+ 	mci->scrub_mode = SCRUB_NONE;
+@@ -842,6 +899,9 @@ static void mc_init(struct mem_ctl_info *mci, struct platform_device *pdev)
+ static void enable_intr(struct synps_edac_priv *priv)
+ {
+ 	/* Enable UE/CE Interrupts */
++	if (priv->p_data->quirks & DDR_ECC_IMX8MP)
++		return enable_intr_imx8mp(priv);
++
+ 	writel(DDR_QOSUE_MASK | DDR_QOSCE_MASK,
+ 			priv->baseaddr + DDR_QOS_IRQ_EN_OFST);
+ }
+@@ -849,6 +909,9 @@ static void enable_intr(struct synps_edac_priv *priv)
+ static void disable_intr(struct synps_edac_priv *priv)
+ {
+ 	/* Disable UE/CE Interrupts */
++	if (priv->p_data->quirks & DDR_ECC_IMX8MP)
++		return disable_intr_imx8mp(priv);
++
+ 	writel(DDR_QOSUE_MASK | DDR_QOSCE_MASK,
+ 			priv->baseaddr + DDR_QOS_IRQ_DB_OFST);
+ }
+@@ -898,6 +961,14 @@ static const struct synps_platform_data zynqmp_edac_def = {
+ 			  ),
+ };
+ 
++static const struct synps_platform_data imx8mp_edac_def = {
++	.get_error_info	= zynqmp_get_error_info,
++	.get_mtype	= zynqmp_get_mtype,
++	.get_dtype	= zynqmp_get_dtype,
++	.get_ecc_state	= zynqmp_get_ecc_state,
++	.quirks         = (DDR_ECC_INTR_SUPPORT | DDR_ECC_IMX8MP),
++};
++
+ static const struct of_device_id synps_edac_match[] = {
+ 	{
+ 		.compatible = "xlnx,zynq-ddrc-a05",
+@@ -907,6 +978,10 @@ static const struct of_device_id synps_edac_match[] = {
+ 		.compatible = "xlnx,zynqmp-ddrc-2.40a",
+ 		.data = (void *)&zynqmp_edac_def
+ 	},
++	{
++		.compatible = "fsl,imx8mp-ddrc",
++		.data = (void *)&imx8mp_edac_def
++	},
+ 	{
+ 		/* end of table */
+ 	}
 -- 
 2.17.1
 
