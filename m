@@ -2,99 +2,146 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A134816B16E
-	for <lists+linux-edac@lfdr.de>; Mon, 24 Feb 2020 22:05:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 122D216BD73
+	for <lists+linux-edac@lfdr.de>; Tue, 25 Feb 2020 10:39:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727389AbgBXVFK (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Mon, 24 Feb 2020 16:05:10 -0500
-Received: from mga03.intel.com ([134.134.136.65]:40405 "EHLO mga03.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726996AbgBXVFK (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Mon, 24 Feb 2020 16:05:10 -0500
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga103.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 24 Feb 2020 13:05:09 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.70,481,1574150400"; 
-   d="scan'208";a="226113254"
-Received: from orsmsx107.amr.corp.intel.com ([10.22.240.5])
-  by orsmga007.jf.intel.com with ESMTP; 24 Feb 2020 13:05:09 -0800
-Received: from orsmsx125.amr.corp.intel.com (10.22.240.125) by
- ORSMSX107.amr.corp.intel.com (10.22.240.5) with Microsoft SMTP Server (TLS)
- id 14.3.439.0; Mon, 24 Feb 2020 13:05:09 -0800
-Received: from orsmsx110.amr.corp.intel.com ([169.254.10.107]) by
- ORSMSX125.amr.corp.intel.com ([169.254.3.208]) with mapi id 14.03.0439.000;
- Mon, 24 Feb 2020 13:05:08 -0800
-From:   "Pandruvada, Srinivas" <srinivas.pandruvada@intel.com>
-To:     "tglx@linutronix.de" <tglx@linutronix.de>,
-        "bp@alien8.de" <bp@alien8.de>
-CC:     "hpa@zytor.com" <hpa@zytor.com>,
-        "Luck, Tony" <tony.luck@intel.com>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "chris@chris-wilson.co.uk" <chris@chris-wilson.co.uk>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>
-Subject: Re: [PATCH] x86/mce/therm_throt: Handle case where
- throttle_active_work() is called on behalf of an offline CPU
-Thread-Topic: [PATCH] x86/mce/therm_throt: Handle case where
- throttle_active_work() is called on behalf of an offline CPU
-Thread-Index: AQHV61YYXKHnouzZ302AwVkmqxKOXg==
-Date:   Mon, 24 Feb 2020 21:05:08 +0000
-Message-ID: <093f3f8665f72937548665099b7eb9b805fc5ac7.camel@intel.com>
-References: <20200222162432.497201-1-srinivas.pandruvada@linux.intel.com>
-         <20200222175151.GD11284@zn.tnic>
-         <40989625ca5496a986ca3e595957da83723777f4.camel@linux.intel.com>
-         <20200224125525.GA29318@zn.tnic> <87y2ssm0sz.fsf@nanos.tec.linutronix.de>
-         <87lforn5xr.fsf@nanos.tec.linutronix.de>
-In-Reply-To: <87lforn5xr.fsf@nanos.tec.linutronix.de>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Evolution 3.34.2 (3.34.2-1.fc31) 
-x-originating-ip: [10.54.75.21]
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <55200E206ACD1648AB90B8896125ED20@intel.com>
-Content-Transfer-Encoding: base64
+        id S1729800AbgBYJjZ (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Tue, 25 Feb 2020 04:39:25 -0500
+Received: from mx0b-0014ca01.pphosted.com ([208.86.201.193]:53884 "EHLO
+        mx0a-0014ca01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1729080AbgBYJjY (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>);
+        Tue, 25 Feb 2020 04:39:24 -0500
+Received: from pps.filterd (m0042333.ppops.net [127.0.0.1])
+        by mx0b-0014ca01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 01P9XlkP023687;
+        Tue, 25 Feb 2020 01:39:15 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cadence.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=proofpoint;
+ bh=+fu/PYyltrhjTtl98xceuto/ct1lP3k3zkzgM/xTJFU=;
+ b=UpcW9K21tnUV9FIT7Q4Na95JEqigneRqYXv03WD2I6lGdSlng5nd74MDZHzXRfbxKf3O
+ QKMtaw1ZLuo4r4XotDkzx5o6pzlubtb+cwsimf0xSJV3YCIOmAvp5Z9/nRw/zQOzGQ7a
+ GKdb0B/qUpbNiKxHcaytJoAhbD/+u5MD4eJ0PJwPLSM9PICyJNdg1Z9UzmyFSbL1i8v8
+ UcSR6nNg5bZOLQXSZnUR3woMZEWkWqqfvO+UdRu1zK7vnAF4P9qSvDTfViW42n+7Ecrt
+ YD0/7O/57kbO7koAQdHGKKq+QW4UDALqacT9nBhHY1asPn5IcqOn7LawTr+oNr1Ht38Z ag== 
+Received: from nam04-sn1-obe.outbound.protection.outlook.com (mail-sn1nam04lp2054.outbound.protection.outlook.com [104.47.44.54])
+        by mx0b-0014ca01.pphosted.com with ESMTP id 2yb0s3tx3v-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 25 Feb 2020 01:39:15 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=KmETDWH5E8hAIYatHNvu/CbciBA1jAS7Db/rSU9IoxZuDDn8ID10O6oMR99+bMroAjFftveyb4Nvrbvlfzn5EI7VOvsdkL+ty9J0sV9fFKVonhL4ua3GMaY9GhyLAJBM0wJyTBv2p6MypUJ4JCFhWDiZ5JWHmPb20ydhjE8aSeZJAUEmcyOYn4Hhrms/tBHrIb83m+JGhZf7wBkMkoVYVBtP9iMwre+gGXjvt3U2k+3zFW7En+EC7dsKFCUrAq3pqtRhSHdDub4TBVl+QygpoJ7KHS1/r20mRcL5/6Nvxh6LATnFByz3WfjwafMA1n7E6cfFy11a1Oc9uflT/tapDg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=+fu/PYyltrhjTtl98xceuto/ct1lP3k3zkzgM/xTJFU=;
+ b=bmvJRI13Mmh+8vPq1nHSVH34ZKezQDJlkq9VxMFCbr4i3p9oYn2DapWbSNDxYrgqFhmFboeQQDPgC57eqhIljR7qVHk4vgNMG9WGtad11m+y1niIwpURGVg0YJUGHkTmci0wuSAYFlkoH8C7kcFav3YKTFVE6Yc+rdH8YDV1RcEVgmLun9j/HiJ++37ouh+GgRYIXi2uVKjPpXq2AeVve1hwI3k6R4QYkqThrC87lcAxCC8ZOr6nVCOyb1oo0xbMANlQmelgdAkoB3I7M2NidLHEOhMx2AG1xDKKlXZnn7H6b96s2H7y4y6E3mQV0pHSSvtGSZEs4D9UMnm1Hl/ocQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 64.207.220.243) smtp.rcpttodomain=kernel.org smtp.mailfrom=cadence.com;
+ dmarc=pass (p=none sp=none pct=100) action=none header.from=cadence.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cadence.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=+fu/PYyltrhjTtl98xceuto/ct1lP3k3zkzgM/xTJFU=;
+ b=YF33xohG2YGnY4GHyZrsdHS+ahOZajMImcRZrrLYjWYsHPfoH21AFa6ttEl6vN30HirOhwk04YfRX6FzSAWCu6NRw+H4PyR3LtrKUPxqpXgrpOgrOyPSgKFN0OkjAYHcfzjxIs3arvOsBtOt+50+xyBax0h6E5/MhgBqFwvLb4U=
+Received: from DM6PR02CA0051.namprd02.prod.outlook.com (2603:10b6:5:177::28)
+ by MWHPR0701MB3674.namprd07.prod.outlook.com (2603:10b6:301:7e::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2750.21; Tue, 25 Feb
+ 2020 09:39:06 +0000
+Received: from DM6NAM12FT045.eop-nam12.prod.protection.outlook.com
+ (2603:10b6:5:177:cafe::dc) by DM6PR02CA0051.outlook.office365.com
+ (2603:10b6:5:177::28) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2750.18 via Frontend
+ Transport; Tue, 25 Feb 2020 09:39:06 +0000
+Received-SPF: Pass (protection.outlook.com: domain of cadence.com designates
+ 64.207.220.243 as permitted sender) receiver=protection.outlook.com;
+ client-ip=64.207.220.243; helo=wcmailrelayl01.cadence.com;
+Received: from wcmailrelayl01.cadence.com (64.207.220.243) by
+ DM6NAM12FT045.mail.protection.outlook.com (10.13.178.141) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2772.6 via Frontend Transport; Tue, 25 Feb 2020 09:39:06 +0000
+Received: from maileu3.global.cadence.com (maileu3.cadence.com [10.160.88.99])
+        by wcmailrelayl01.cadence.com (8.14.7/8.14.4) with ESMTP id 01P9d2qS127657
+        (version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=OK);
+        Tue, 25 Feb 2020 01:39:05 -0800
+X-CrossPremisesHeadersFilteredBySendConnector: maileu3.global.cadence.com
+Received: from maileu3.global.cadence.com (10.160.88.99) by
+ maileu3.global.cadence.com (10.160.88.99) with Microsoft SMTP Server (TLS) id
+ 15.0.1367.3; Tue, 25 Feb 2020 10:39:01 +0100
+Received: from vleu-orange.cadence.com (10.160.88.83) by
+ maileu3.global.cadence.com (10.160.88.99) with Microsoft SMTP Server (TLS) id
+ 15.0.1367.3 via Frontend Transport; Tue, 25 Feb 2020 10:39:01 +0100
+Received: from vleu-orange.cadence.com (localhost.localdomain [127.0.0.1])
+        by vleu-orange.cadence.com (8.14.4/8.14.4) with ESMTP id 01P9d1VM007379;
+        Tue, 25 Feb 2020 10:39:01 +0100
+Received: (from dkangude@localhost)
+        by vleu-orange.cadence.com (8.14.4/8.14.4/Submit) id 01P9d1Hp007377;
+        Tue, 25 Feb 2020 10:39:01 +0100
+From:   Dhananjay Kangude <dkangude@cadence.com>
+To:     <linux-edac@vger.kernel.org>
+CC:     <bp@alien8.de>, <mchehab@kernel.org>, <tony.luck@intel.com>,
+        <james.morse@arm.com>, <linux-kernel@vger.kernel.org>,
+        <mparab@cadence.com>, <robh+dt@kernel.org>,
+        <devicetree@vger.kernel.org>,
+        Dhananjay Kangude <dkangude@cadence.com>
+Subject: [PATCH 0/2] Add EDAC support for Cadence ddr controller
+Date:   Tue, 25 Feb 2020 10:38:54 +0100
+Message-ID: <20200225093856.7328-1-dkangude@cadence.com>
+X-Mailer: git-send-email 2.15.0
 MIME-Version: 1.0
+Content-Type: text/plain
+X-OrganizationHeadersPreserved: maileu3.global.cadence.com
+X-EOPAttributedMessage: 0
+X-Forefront-Antispam-Report: CIP:64.207.220.243;IPV:;CTRY:US;EFV:NLI;SFV:NSPM;SFS:(10009020)(4636009)(396003)(376002)(136003)(346002)(39860400002)(189003)(199004)(36092001)(70206006)(4744005)(356004)(70586007)(426003)(4326008)(336012)(186003)(36906005)(2616005)(316002)(1076003)(478600001)(6916009)(54906003)(5660300002)(2906002)(6666004)(86362001)(8936002)(81156014)(81166006)(36756003)(26005)(42186006)(107886003)(8676002);DIR:OUT;SFP:1101;SCL:1;SRVR:MWHPR0701MB3674;H:wcmailrelayl01.cadence.com;FPR:;SPF:Pass;LANG:en;PTR:unused.mynethost.com;MX:1;A:1;
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: c8165b9c-ef8f-4acb-3a16-08d7b9d68e93
+X-MS-TrafficTypeDiagnostic: MWHPR0701MB3674:
+X-Microsoft-Antispam-PRVS: <MWHPR0701MB36743C80151BE6C92C49EC0ECDED0@MWHPR0701MB3674.namprd07.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:6108;
+X-Forefront-PRVS: 0324C2C0E2
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: DQm9GJlTeng/6SdO7MPufD6i2EGx22w1bHVtHrpUSnmAkHgrjjY3iVdr0RpQH55h9wXDr3Mzxr/tPYBVnVfhOwG7HLtPfLYcZ78t2edQjXpqV7cGcDOTKzcm6GLpEkXItdQ1pLei2MPFVB6cYy8bK6kc2ZPiSSXjttszjDZ7o3pu42sbuUnyWBa135kVYOZ5M4jeqCXw2WN4dM3iwvpwCXWWB0/COJsjlIXokbo3KOHSouKXKXAfv88e+XZCn7lN/nFvyG/UToSTnEXwgXOmx1qERtOEvuriAhXeX9EA07PmFP0mIc7pA8mZNess3WoRZTast/EFYnnRj/EOHFv2Y+XPPC1xfintWMTpPwevLK5tlxRGZC+WeZyT59wDe8GyIOaD/TuS8vMKbgvpnFWrH5QtH5Ap+4OG5GEUPcgq2i4bH1Phs9H/Mod+nBZicUzyQ6T1d8bKsdvnRvC4/lsBf0z+imlwUXBvxFxPTEAo2ZmYevWV8Nrq+TVuOHd86Rya
+X-OriginatorOrg: cadence.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Feb 2020 09:39:06.1198
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: c8165b9c-ef8f-4acb-3a16-08d7b9d68e93
+X-MS-Exchange-CrossTenant-Id: d36035c5-6ce6-4662-a3dc-e762e61ae4c9
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=d36035c5-6ce6-4662-a3dc-e762e61ae4c9;Ip=[64.207.220.243];Helo=[wcmailrelayl01.cadence.com]
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR0701MB3674
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.572
+ definitions=2020-02-25_02:2020-02-21,2020-02-25 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_check_notspam policy=outbound_check score=0 spamscore=0
+ suspectscore=1 clxscore=1015 lowpriorityscore=0 mlxlogscore=539
+ adultscore=0 impostorscore=0 priorityscore=1501 bulkscore=0 phishscore=0
+ mlxscore=0 malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2001150001 definitions=main-2002250078
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-T24gTW9uLCAyMDIwLTAyLTI0IGF0IDIwOjI1ICswMTAwLCBUaG9tYXMgR2xlaXhuZXIgd3JvdGU6
-DQo+IFRob21hcyBHbGVpeG5lciA8dGdseEBsaW51dHJvbml4LmRlPiB3cml0ZXM6DQo+ID4gV2hp
-Y2ggaXMgd3JvbmcgYXMgd2VsbC4gVHJ5aW5nIHRvICJmaXgiIGl0IGluIHRoZSB3b3JrIHF1ZXVl
-DQo+ID4gY2FsbGJhY2sgaXMNCj4gPiBwYXBlcmluZyBvdmVyIHRoZSByb290IGNhdXNlLg0KPiA+
-IA0KPiA+IFdoeSBpcyBhbnkgd29yayBzY2hlZHVsZWQgb24gYW4gb3V0Z29pbmcgQ1BVIGFmdGVy
-IHRoaXMgQ1BVDQo+ID4gZXhlY3V0ZWQNCj4gPiB0aGVybWFsX3Rocm90dGxlX29mZmxpbmUoKT8N
-Cj4gPiANCj4gPiBXaGVuIHRoZXJtYWxfdGhyb3R0bGVfb2ZmbGluZSgpIGlzIGludm9rZWQgdGhl
-IGNwdSBib3VuZCB3b3JrDQo+ID4gcXVldWVzIGFyZQ0KPiA+IHN0aWxsIGZ1bmN0aW9uYWwgYW5k
-IHRoZXJtYWxfdGhyb3R0bGVfb2ZmbGluZSgpIGNhbmNlbHMgb3V0c3RhbmRpbmcNCj4gPiB3b3Jr
-Lg0KPiA+IA0KPiA+IFNvIG5vLCBwbGVhc2UgZml4IHRoZSByb290IGNhdXNlIG5vdCB0aGUgc3lt
-cHRvbS4NCj4gDQo+IEFuZCBpZiB5b3UgbG9vayBhdCB0aGVybWFsX3Rocm90dGxlX29ubGluZSgp
-IHRoZW4geW91J2xsIG5vdGljZSB0aGF0DQo+IGl0DQo+IGlzIGFzeW1ldHJpYyB2cy4gdGhlcm1h
-bF90aHJvdHRsZV9vZmZsaW5lKCkuDQo+IA0KPiBBbHNvIHlvdSB3YW50IHRvIGRvIGNhbmNlbF9k
-ZWxheWVkX3dvcmtfc3luYygpIGFuZCBub3QganVzdA0KPiBjYW5jZWxfZGVsYXllZF93b3JrKCkg
-YmVjYXVzZSBvbmx5IHRoZSBsYXR0ZXIgZ3VhcmFudGVlcyB0aGF0IHRoZQ0KPiB3b3JrDQo+IGlz
-IG5vdCBlbnF1ZXVlZCBhbnltb3JlIHdoaWxlIHRoZSBmb3JtZXIgZG9lcyBub3QgdGFrZSBydW5u
-aW5nIG9yDQo+IHNlbGYNCj4gcmVxdWV1ZWluZyB3b3JrIGludG8gYWNjb3VudC4NCj4gDQo+IFNv
-bWV0aGluZyBsaWtlIHRoZSB1bnRlc3RlZCBwYXRjaCBiZWxvdy4NClRoYW5rcyBUaG9tYXMuIEkg
-YW0gdGVzdGluZyB0aGlzIHBhdGNoLg0KDQotU3Jpbml2YXMNCg0KPiANCj4gVGhhbmtzLA0KPiAN
-Cj4gICAgICAgICB0Z2x4DQo+IC0tLQ0KPiAtLS0gYS9hcmNoL3g4Ni9rZXJuZWwvY3B1L21jZS90
-aGVybV90aHJvdC5jDQo+ICsrKyBiL2FyY2gveDg2L2tlcm5lbC9jcHUvbWNlL3RoZXJtX3Rocm90
-LmMNCj4gQEAgLTQ4Nyw4ICs0ODcsMTIgQEAgc3RhdGljIGludCB0aGVybWFsX3Rocm90dGxlX29m
-ZmxpbmUodW5zaQ0KPiAgCXN0cnVjdCB0aGVybWFsX3N0YXRlICpzdGF0ZSA9ICZwZXJfY3B1KHRo
-ZXJtYWxfc3RhdGUsIGNwdSk7DQo+ICAJc3RydWN0IGRldmljZSAqZGV2ID0gZ2V0X2NwdV9kZXZp
-Y2UoY3B1KTsNCj4gIA0KPiAtCWNhbmNlbF9kZWxheWVkX3dvcmsoJnN0YXRlLT5wYWNrYWdlX3Ro
-cm90dGxlLnRoZXJtX3dvcmspOw0KPiAtCWNhbmNlbF9kZWxheWVkX3dvcmsoJnN0YXRlLT5jb3Jl
-X3Rocm90dGxlLnRoZXJtX3dvcmspOw0KPiArCS8qIE1hc2sgdGhlIHRoZXJtYWwgdmVjdG9yIGJl
-Zm9yZSBkcmFpbmluZyBldnRsLiBwZW5kaW5nIHdvcmsNCj4gKi8NCj4gKwlsID0gYXBpY19yZWFk
-KEFQSUNfTFZUVEhNUik7DQo+ICsJYXBpY193cml0ZShBUElDX0xWVFRITVIsIGwgfCBBUElDX0xW
-VF9NQVNLRUQpOw0KPiArDQo+ICsJY2FuY2VsX2RlbGF5ZWRfd29ya19zeW5jKCZzdGF0ZS0+cGFj
-a2FnZV90aHJvdHRsZS50aGVybV93b3JrKTsNCj4gKwljYW5jZWxfZGVsYXllZF93b3JrX3N5bmMo
-JnN0YXRlLT5jb3JlX3Rocm90dGxlLnRoZXJtX3dvcmspOw0KPiAgDQo+ICAJc3RhdGUtPnBhY2th
-Z2VfdGhyb3R0bGUucmF0ZV9jb250cm9sX2FjdGl2ZSA9IGZhbHNlOw0KPiAgCXN0YXRlLT5jb3Jl
-X3Rocm90dGxlLnJhdGVfY29udHJvbF9hY3RpdmUgPSBmYWxzZTsNCg==
+
+These patches add new edac driver for Cadence ddr memory controller.
+Cadence controller detects single(CE) and double(UE) bit errors during
+memory operations(RMW). DDR controller raised the interrupt on detection
+of the ecc error event and fill the data into registers. Driver handle
+the interrupt event and notify edac subsystem about ecc errors.
+
+The patch series has two patches:
+1. Add driver support into edac subsystem
+2. Add devicetree binding in yaml format
+
+Dhananjay Kangude (2):
+  EDAC/Cadence:Add EDAC driver for cadence memory controller
+  dt-bindings: edac: Add cadence ddr mc support
+
+ .../devicetree/bindings/edac/cdns,ddr-edac.yaml    |   56 ++
+ drivers/edac/Kconfig                               |    7 +
+ drivers/edac/Makefile                              |    1 +
+ drivers/edac/cadence_edac.c                        |  615 ++++++++++++++++++++
+ 4 files changed, 679 insertions(+), 0 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/edac/cdns,ddr-edac.yaml
+ create mode 100644 drivers/edac/cadence_edac.c
+
