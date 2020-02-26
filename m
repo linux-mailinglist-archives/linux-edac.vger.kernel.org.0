@@ -2,78 +2,72 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A8CC816F497
-	for <lists+linux-edac@lfdr.de>; Wed, 26 Feb 2020 01:58:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A31C316F57E
+	for <lists+linux-edac@lfdr.de>; Wed, 26 Feb 2020 03:11:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729336AbgBZA6n (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Tue, 25 Feb 2020 19:58:43 -0500
-Received: from mga03.intel.com ([134.134.136.65]:23424 "EHLO mga03.intel.com"
+        id S1727809AbgBZCLb (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Tue, 25 Feb 2020 21:11:31 -0500
+Received: from mga01.intel.com ([192.55.52.88]:30408 "EHLO mga01.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729170AbgBZA6m (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Tue, 25 Feb 2020 19:58:42 -0500
-X-Amp-Result: SKIPPED(no attachment in message)
+        id S1729998AbgBZCLa (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Tue, 25 Feb 2020 21:11:30 -0500
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
 X-Amp-File-Uploaded: False
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga103.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 25 Feb 2020 16:58:42 -0800
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 25 Feb 2020 18:11:30 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.70,486,1574150400"; 
-   d="scan'208";a="230293262"
-Received: from jekeller-mobl1.amr.corp.intel.com (HELO [134.134.177.78]) ([134.134.177.78])
-  by fmsmga007.fm.intel.com with ESMTP; 25 Feb 2020 16:58:40 -0800
-Subject: Re: [PATCH v5 13/19] x86/cpufeatures: Add flag to track whether MSR
- IA32_FEAT_CTL is configured
-To:     Sean Christopherson <sean.j.christopherson@intel.com>
-Cc:     TonyWWang-oc@zhaoxin.com, acme@kernel.org,
-        alexander.shishkin@linux.intel.com, bp@alien8.de, bp@suse.de,
-        hpa@zytor.com, jacob.jun.pan@linux.intel.com,
-        jarkko.sakkinen@linux.intel.com, jmattson@google.com,
-        jolsa@redhat.com, joro@8bytes.org, kvm@vger.kernel.org,
-        lenb@kernel.org, linux-edac@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-pm@vger.kernel.org, mark.rutland@arm.com, mingo@redhat.com,
-        namhyung@kernel.org, pbonzini@redhat.com, peterz@infradead.org,
-        rkrcmar@redhat.com, shuah@kernel.org, tglx@linutronix.de,
-        tony.luck@intel.com, vkuznets@redhat.com, wanpengli@tencent.com,
-        x86@kernel.org
-References: <20191221044513.21680-14-sean.j.christopherson@intel.com>
- <e741196d-52aa-0f5e-8f1e-a37ddf2e5025@intel.com>
- <20200225221234.GL9245@linux.intel.com>
- <1eaf6fbe-0adb-5074-3bc4-1e8327e0cdb3@intel.com>
- <20200225232900.GO9245@linux.intel.com>
- <5434303a-0742-3811-fd14-6445d296c0f0@intel.com>
- <20200226004258.GP9245@linux.intel.com>
-From:   Jacob Keller <jacob.e.keller@intel.com>
-Organization: Intel Corporation
-Message-ID: <a9c4b363-1569-f03e-6155-a869dd186ced@intel.com>
-Date:   Tue, 25 Feb 2020 16:58:40 -0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.5.0
+   d="scan'208";a="436469854"
+Received: from lkp-server01.sh.intel.com (HELO lkp-server01) ([10.239.97.150])
+  by fmsmga005.fm.intel.com with ESMTP; 25 Feb 2020 18:11:29 -0800
+Received: from kbuild by lkp-server01 with local (Exim 4.89)
+        (envelope-from <lkp@intel.com>)
+        id 1j6mAa-000FgU-Jt; Wed, 26 Feb 2020 10:11:28 +0800
+Date:   Wed, 26 Feb 2020 10:11:09 +0800
+From:   kbuild test robot <lkp@intel.com>
+To:     Dhananjay Kangude <dkangude@cadence.com>
+Cc:     kbuild-all@lists.01.org, linux-edac@vger.kernel.org
+Subject: [RFC PATCH] EDAC/Cadence: data_synd[] can be static
+Message-ID: <20200226021101.GA16779@e50d7db646c3>
+References: <20200225093856.7328-2-dkangude@cadence.com>
 MIME-Version: 1.0
-In-Reply-To: <20200226004258.GP9245@linux.intel.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200225093856.7328-2-dkangude@cadence.com>
+X-Patchwork-Hint: ignore
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On 2/25/2020 4:42 PM, Sean Christopherson wrote>> So there's something
-weird going on. Maybe "boot_cpu_has" in the
->> vmx_disabled_by_bios is wrong? Hmm.
-> 
-> Hmm, perhaps a bug somewhere else is overwriting the cpufeatures bit for
-> X86_FEATURE_VMX.  Let me see if I can reproduce from net-next.
-> 
 
-If you have any further suggestions for debugging, I'm happy to help try
-to figure this out. To my eyes, it looks like somehow bits get reset...
-It's definitely not clear to me how this happens.
+Fixes: 201447a5db9b ("EDAC/Cadence:Add EDAC driver for cadence memory controller")
+Signed-off-by: kbuild test robot <lkp@intel.com>
+---
+ cadence_edac.c |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-There is the get_cpu_caps call.. but that seems to correctly call
-apply_forced_caps at the end.
-
-That's all I have time for today.
-
-Thanks,
-Jake
+diff --git a/drivers/edac/cadence_edac.c b/drivers/edac/cadence_edac.c
+index 3887db5665eee..17aa656a740ee 100644
+--- a/drivers/edac/cadence_edac.c
++++ b/drivers/edac/cadence_edac.c
+@@ -121,7 +121,7 @@
+ /* Syndrome values */
+ #define ECC_DOUBLE_MULTI_ERR_SYND	0x03
+ 
+-char data_synd[] = {
++static char data_synd[] = {
+ 			0xf4, 0xf1, 0xec, 0xea, 0xe9, 0xe6, 0xe5, 0xe3,
+ 			0xdc, 0xda, 0xd9, 0xd6, 0xd5, 0xd3, 0xce, 0xcb,
+ 			0xb5, 0xb0, 0xad, 0xab, 0xa8, 0xa7, 0xa4, 0xa2,
+@@ -132,7 +132,7 @@ char data_synd[] = {
+ 			0x1c, 0x1a, 0x19, 0x16, 0x15, 0x13, 0x0e, 0x0b
+ 		  };
+ 
+-char check_synd[] = {0x01, 0x02, 0x04, 0x08, 0x10, 0x20, 0x40, 0x80};
++static char check_synd[] = {0x01, 0x02, 0x04, 0x08, 0x10, 0x20, 0x40, 0x80};
+ 
+ /**
+  * struct cdns_platform_data -  cadence platform data structure.
