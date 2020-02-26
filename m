@@ -2,128 +2,112 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 84C9317068A
-	for <lists+linux-edac@lfdr.de>; Wed, 26 Feb 2020 18:49:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 82A561709EA
+	for <lists+linux-edac@lfdr.de>; Wed, 26 Feb 2020 21:41:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726151AbgBZRtc (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Wed, 26 Feb 2020 12:49:32 -0500
-Received: from foss.arm.com ([217.140.110.172]:39834 "EHLO foss.arm.com"
+        id S1727489AbgBZUlN (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Wed, 26 Feb 2020 15:41:13 -0500
+Received: from mga06.intel.com ([134.134.136.31]:5071 "EHLO mga06.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726787AbgBZRtb (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Wed, 26 Feb 2020 12:49:31 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 475F130E;
-        Wed, 26 Feb 2020 09:49:31 -0800 (PST)
-Received: from [10.1.196.105] (eglon.cambridge.arm.com [10.1.196.105])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id BFC373F881;
-        Wed, 26 Feb 2020 09:49:29 -0800 (PST)
-Subject: Re: [PATCH 2/3] EDAC: synopsys: Reorganizing the output message for
- CE/UE
-To:     Sherry Sun <sherry.sun@nxp.com>
-Cc:     bp@alien8.de, mchehab@kernel.org, tony.luck@intel.com,
-        rrichter@marvell.com, michal.simek@xilinx.com,
-        linux-edac@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-imx@nxp.com, frank.li@nxp.com
-References: <1582537357-10339-1-git-send-email-sherry.sun@nxp.com>
- <1582537357-10339-3-git-send-email-sherry.sun@nxp.com>
-From:   James Morse <james.morse@arm.com>
-Message-ID: <39c63f4c-2e39-4478-1de1-b0b564a7f4e1@arm.com>
-Date:   Wed, 26 Feb 2020 17:49:28 +0000
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        id S1727350AbgBZUlN (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Wed, 26 Feb 2020 15:41:13 -0500
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga104.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 26 Feb 2020 12:41:11 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.70,489,1574150400"; 
+   d="scan'208";a="350475837"
+Received: from jekeller-mobl1.amr.corp.intel.com (HELO [134.134.177.84]) ([134.134.177.84])
+  by fmsmga001.fm.intel.com with ESMTP; 26 Feb 2020 12:41:10 -0800
+Subject: Re: [PATCH v5 13/19] x86/cpufeatures: Add flag to track whether MSR
+ IA32_FEAT_CTL is configured
+From:   Jacob Keller <jacob.e.keller@intel.com>
+To:     Sean Christopherson <sean.j.christopherson@intel.com>
+Cc:     TonyWWang-oc@zhaoxin.com, acme@kernel.org,
+        alexander.shishkin@linux.intel.com, bp@alien8.de, bp@suse.de,
+        hpa@zytor.com, jacob.jun.pan@linux.intel.com,
+        jarkko.sakkinen@linux.intel.com, jmattson@google.com,
+        jolsa@redhat.com, joro@8bytes.org, kvm@vger.kernel.org,
+        lenb@kernel.org, linux-edac@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-pm@vger.kernel.org, mark.rutland@arm.com, mingo@redhat.com,
+        namhyung@kernel.org, pbonzini@redhat.com, peterz@infradead.org,
+        rkrcmar@redhat.com, shuah@kernel.org, tglx@linutronix.de,
+        tony.luck@intel.com, vkuznets@redhat.com, wanpengli@tencent.com,
+        x86@kernel.org
+References: <20191221044513.21680-14-sean.j.christopherson@intel.com>
+ <e741196d-52aa-0f5e-8f1e-a37ddf2e5025@intel.com>
+ <20200225221234.GL9245@linux.intel.com>
+ <1eaf6fbe-0adb-5074-3bc4-1e8327e0cdb3@intel.com>
+ <20200225232900.GO9245@linux.intel.com>
+ <5434303a-0742-3811-fd14-6445d296c0f0@intel.com>
+ <20200226004258.GP9245@linux.intel.com>
+ <a9c4b363-1569-f03e-6155-a869dd186ced@intel.com>
+Organization: Intel Corporation
+Message-ID: <df215c4c-82f0-5b15-57c3-d304fd94ff3b@intel.com>
+Date:   Wed, 26 Feb 2020 12:41:09 -0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.5.0
 MIME-Version: 1.0
-In-Reply-To: <1582537357-10339-3-git-send-email-sherry.sun@nxp.com>
+In-Reply-To: <a9c4b363-1569-f03e-6155-a869dd186ced@intel.com>
 Content-Type: text/plain; charset=utf-8
-Content-Language: en-GB
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-Hi Sherry,
-
-On 24/02/2020 09:42, Sherry Sun wrote:
-> The origin way which call sprintf() function two or three times to
-
-(original? 'The current way' may be better)
-
-
-> output message for CE/UE is incorrect, because it won't output all the
-> message needed, instead it will only output the last message in
-> sprintf().
-
-Nice!
-
-
-> So the simplest and most effective way to fix this problem
-> is reorganizing all the output message needed for CE/UE into one
-> sprintf() function.
-
-This is a bug, but its in the middle of a series doing some cleanup, meaning the
-maintainer can't easily pick it up in isolation. Could you post it separately?
-
-'Reorganize' in the subject makes this sound like cleanup. Would "EDAC: synopsys: Fix back
-to back snprintf() messages for CE/UE" be better?
-
-
-Please add:
-Fixes: b500b4a029d57 ("EDAC, synopsys: Add ECC support for ZynqMP DDR controller")
-
-in the signed-off-by area so that stable trees pick this up.
-
-and for what its worth:
-Reviewed-by: James Morse <james.morse@arm.com>
-
-
-Thanks!
-
-James
-
-
-
-> diff --git a/drivers/edac/synopsys_edac.c b/drivers/edac/synopsys_edac.c
-> index 7046b8929522..ef7e907c7956 100644
-> --- a/drivers/edac/synopsys_edac.c
-> +++ b/drivers/edac/synopsys_edac.c
-> @@ -485,20 +485,14 @@ static void handle_error(struct mem_ctl_info *mci, struct synps_ecc_status *p)
->  		pinf = &p->ceinfo;
->  		if (!priv->p_data->quirks) {
->  			snprintf(priv->message, SYNPS_EDAC_MSG_SIZE,
-> -				 "DDR ECC error type:%s Row %d Bank %d Col %d ",
-> -				  "CE", pinf->row, pinf->bank, pinf->col);
-> -			snprintf(priv->message, SYNPS_EDAC_MSG_SIZE,
-> -				 "Bit Position: %d Data: 0x%08x\n",
-> +				 "DDR ECC error type:%s Row %d Bank %d Col %d Bit Position: %d Data: 0x%08x",
-> +				 "CE", pinf->row, pinf->bank, pinf->col,
->  				 pinf->bitpos, pinf->data);
->  		} else {
->  			snprintf(priv->message, SYNPS_EDAC_MSG_SIZE,
-> -				 "DDR ECC error type:%s Row %d Bank %d ",
-> -				  "CE", pinf->row, pinf->bank);
-> -			snprintf(priv->message, SYNPS_EDAC_MSG_SIZE,
-> -				 "BankGroup Number %d Block Number %d ",
-> -				 pinf->bankgrpnr, pinf->blknr);
-> -			snprintf(priv->message, SYNPS_EDAC_MSG_SIZE,
-> -				 "Bit Position: %d Data: 0x%08x\n",
-> +				 "DDR ECC error type:%s Row %d Bank %d BankGroup Number %d Block Number %d Bit Position: %d Data: 0x%08x",
-> +				 "CE", pinf->row, pinf->bank,
-> +				 pinf->bankgrpnr, pinf->blknr,
->  				 pinf->bitpos, pinf->data);
->  		}
->  
-> @@ -515,10 +509,8 @@ static void handle_error(struct mem_ctl_info *mci, struct synps_ecc_status *p)
->  				"UE", pinf->row, pinf->bank, pinf->col);
->  		} else {
->  			snprintf(priv->message, SYNPS_EDAC_MSG_SIZE,
-> -				 "DDR ECC error type :%s Row %d Bank %d ",
-> -				 "UE", pinf->row, pinf->bank);
-> -			snprintf(priv->message, SYNPS_EDAC_MSG_SIZE,
-> -				 "BankGroup Number %d Block Number %d",
-> +				 "DDR ECC error type :%s Row %d Bank %d BankGroup Number %d Block Number %d",
-> +				 "UE", pinf->row, pinf->bank,
->  				 pinf->bankgrpnr, pinf->blknr);
->  		}
->  
+On 2/25/2020 4:58 PM, Jacob Keller wrote:
+> On 2/25/2020 4:42 PM, Sean Christopherson wrote>> So there's something
+> weird going on. Maybe "boot_cpu_has" in the
+>>> vmx_disabled_by_bios is wrong? Hmm.
+>>
+>> Hmm, perhaps a bug somewhere else is overwriting the cpufeatures bit for
+>> X86_FEATURE_VMX.  Let me see if I can reproduce from net-next.
+>>
+> 
+> If you have any further suggestions for debugging, I'm happy to help try
+> to figure this out. To my eyes, it looks like somehow bits get reset...
+> It's definitely not clear to me how this happens.
+> 
+> There is the get_cpu_caps call.. but that seems to correctly call
+> apply_forced_caps at the end.
+> 
+> That's all I have time for today.
+> 
+> Thanks,
+> Jake
 > 
 
+Hi,
+
+I kept digging into this, and I added a further print to the get_cpu_cap
+function.
+
+It looks like get_cpu_cap is being called again *after*
+init_ia32_feat_ctl...
+
+Digging further, I discovered this appears to be the call in setup_pku,
+which would only be enabled for systems which have X86_FEATURE_PKU
+enabled and supported. It's quite likely that test systems may not have
+had this feature, hence why it went undetected till now.
+
+Because of the extra get_cpu_cap call, the capabilities are reset. Since
+we never use setup_clear_cpu_cap or pass NULL to clear_cpu_cap, the code
+that sets the global cpu_caps_cleared bits is not run.
+
+It's not clear to me what the best fix for this is.
+
+Perhaps init_ia32_feat_ctl should be something run during
+early_identify_cpu, since it's really checking global status (rdmsr),
+and not per-CPU status. And then it could directly operate to call
+setup_clear_cpu_cap, which would properly clear the bit globally,
+ensuring that apply_forced_caps kicks in?
+
+Or this needs to somehow be run *after* setup_pku? But that doesn't feel
+very robust.
+
+Thanks,
+Jake
