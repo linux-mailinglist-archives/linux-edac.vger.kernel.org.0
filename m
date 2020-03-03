@@ -2,140 +2,95 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B097B17398E
-	for <lists+linux-edac@lfdr.de>; Fri, 28 Feb 2020 15:12:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 07CB717794C
+	for <lists+linux-edac@lfdr.de>; Tue,  3 Mar 2020 15:42:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726831AbgB1OLi (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Fri, 28 Feb 2020 09:11:38 -0500
-Received: from foss.arm.com ([217.140.110.172]:39026 "EHLO foss.arm.com"
+        id S1729060AbgCCOkM (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Tue, 3 Mar 2020 09:40:12 -0500
+Received: from mail.kernel.org ([198.145.29.99]:35072 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725796AbgB1OLi (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Fri, 28 Feb 2020 09:11:38 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4A6DC31B;
-        Fri, 28 Feb 2020 06:11:37 -0800 (PST)
-Received: from donnerap.cambridge.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 6B99B3F7B4;
-        Fri, 28 Feb 2020 06:11:33 -0800 (PST)
-Date:   Fri, 28 Feb 2020 14:11:30 +0000
-From:   Andre Przywara <andre.przywara@arm.com>
-To:     Will Deacon <will@kernel.org>
-Cc:     Rob Herring <robh@kernel.org>,
-        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        soc@kernel.org, Robert Richter <rrichter@marvell.com>,
-        Jon Loeliger <jdl@jdl.com>, Alexander Graf <graf@amazon.com>,
-        Matthias Brugger <mbrugger@suse.com>,
-        Mark Langsdorf <mlangsdo@redhat.com>,
-        Alex Williamson <alex.williamson@redhat.com>,
+        id S1729071AbgCCOkM (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Tue, 3 Mar 2020 09:40:12 -0500
+Received: from mail.kernel.org (x2f7fa80.dyn.telefonica.de [2.247.250.128])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id CEEFF20842;
+        Tue,  3 Mar 2020 14:40:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1583246412;
+        bh=OLtvri7lhnPMBPe2kuKdN8A2xr5mHeejJQsjos9PaT4=;
+        h=From:To:Cc:Subject:Date:From;
+        b=soQZS0PFPpb8dUqmzdhsEesrugGrP0eZXheu+g7uoWeoNg2UIVB3dqMjcrplvsndz
+         E3XOO8IujDiOdMXpH1/DDyuNxlHg8FJpfI0tZ4+XdP0gBElXPpcyL1T098hAfIhD2S
+         dK4kqE2pPhdGYZalpbUMK0EaCQSEG/KL3vjRySog=
+Received: from mchehab by mail.kernel.org with local (Exim 4.92.3)
+        (envelope-from <mchehab@kernel.org>)
+        id 1j98iP-001Z0l-Eu; Tue, 03 Mar 2020 15:40:09 +0100
+From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         Borislav Petkov <bp@alien8.de>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        devicetree@vger.kernel.org, Eric Auger <eric.auger@redhat.com>,
-        Linux IOMMU <iommu@lists.linux-foundation.org>,
-        James Morse <james.morse@arm.com>,
-        Jens Axboe <axboe@kernel.dk>, Joerg Roedel <joro@8bytes.org>,
-        kvm@vger.kernel.org, linux-clk <linux-clk@vger.kernel.org>,
-        linux-edac <linux-edac@vger.kernel.org>,
-        "open list:LIBATA SUBSYSTEM (Serial and Parallel ATA drivers)" 
-        <linux-ide@vger.kernel.org>,
-        "open list:THERMAL" <linux-pm@vger.kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        netdev <netdev@vger.kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Stephen Boyd <sboyd@kernel.org>,
         Tony Luck <tony.luck@intel.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>
-Subject: Re: [RFC PATCH 06/11] iommu: arm-smmu: Remove Calxeda secure mode
- quirk
-Message-ID: <20200228141130.18be5bb8@donnerap.cambridge.arm.com>
-In-Reply-To: <20200228135645.GA4745@willie-the-truck>
-References: <20200218171321.30990-1-robh@kernel.org>
-        <20200218171321.30990-7-robh@kernel.org>
-        <20200218172000.GF1133@willie-the-truck>
-        <CAL_JsqJn1kG6gah+4318NQfJ4PaS3x3woWEUh08+OTfOcD+1MQ@mail.gmail.com>
-        <20200228100446.GA2395@willie-the-truck>
-        <20200228102556.1dde016e@donnerap.cambridge.arm.com>
-        <20200228105024.GC2395@willie-the-truck>
-        <20200228134254.03fc5e1b@donnerap.cambridge.arm.com>
-        <20200228135645.GA4745@willie-the-truck>
-Organization: ARM
-X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; aarch64-unknown-linux-gnu)
+        James Morse <james.morse@arm.com>,
+        Robert Richter <rrichter@marvell.com>,
+        Jonathan Corbet <corbet@lwn.net>, linux-edac@vger.kernel.org,
+        linux-doc@vger.kernel.org
+Subject: [PATCH 1/2] docs: ras: get rid of some warnings
+Date:   Tue,  3 Mar 2020 15:40:07 +0100
+Message-Id: <0008bd9f16d5d02148501f5a1ba873245af1cab7.1583246400.git.mchehab+huawei@kernel.org>
+X-Mailer: git-send-email 2.24.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+To:     unlisted-recipients:; (no To-header on input)
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Fri, 28 Feb 2020 13:56:46 +0000
-Will Deacon <will@kernel.org> wrote:
+Sphinx produce some warnings due to a bad table format:
 
-> On Fri, Feb 28, 2020 at 01:42:54PM +0000, Andre Przywara wrote:
-> > On Fri, 28 Feb 2020 10:50:25 +0000
-> > Will Deacon <will@kernel.org> wrote:  
-> > > On Fri, Feb 28, 2020 at 10:25:56AM +0000, Andre Przywara wrote:  
-> > > > > On Tue, Feb 25, 2020 at 04:01:54PM -0600, Rob Herring wrote:    
-> > > > > > Seems we're leaving the platform support for now, but I think we never
-> > > > > > actually enabled SMMU support. It's not in the dts either in mainline
-> > > > > > nor the version I have which should be close to what shipped in
-> > > > > > firmware. So as long as Andre agrees, this one is good to apply.      
-> > > > > 
-> > > > > Andre? Can I queue this one for 5.7, please?    
-> > > > 
-> > > > I was wondering how much of a pain it is to keep it in? AFAICS there are
-> > > > other users of the "impl" indirection. If those goes away, I would be
-> > > > happy to let Calxeda go.    
-> > > 
-> > > The impl stuff is new, so we'll keep it around. The concern is more about
-> > > testing (see below).
-> > >   
-> > > > But Eric had the magic DT nodes to get the SMMU working, and I used that
-> > > > before, with updating the DT either on flash or dynamically via U-Boot.    
-> > > 
-> > > What did you actually use the SMMU for, though? The
-> > > 'arm_iommu_create_mapping()' interface isn't widely used and, given that
-> > > highbank doesn't support KVM, the use-cases for VFIO are pretty limited
-> > > too.  
-> > 
-> > AFAIK Highbank doesn't have the SMMU, probably mostly for that reason.
-> > I have a DT snippet for Midway, and that puts the MMIO base at ~36GB, which is not possible on Highbank.
-> > So I think that the quirk is really meant and needed for Midway.  
-> 
-> Sorry, but I don't follow your reasoning here. The MMIO base has nothing
-> to do with the quirk,
+    Documentation/admin-guide/ras.rst:358: WARNING: Definition list ends without a blank line; unexpected unindent.
+    Documentation/admin-guide/ras.rst:358: WARNING: Definition list ends without a blank line; unexpected unindent.
+    Documentation/admin-guide/ras.rst:363: WARNING: Definition list ends without a blank line; unexpected unindent.
+    Documentation/admin-guide/ras.rst:363: WARNING: Definition list ends without a blank line; unexpected unindent.
 
-It hasn't, but Highbank has no LPAE, so couldn't possible have a device at such an address. And this is the only MMIO address I know of.
+Rearrange the things there in order to supress the warnings
+while being precise at the Sphinx output about how ranks are
+mapped into csrows.
 
-> although doing some digging it looks like your
-> conclusion about this applying to Midway (ecx-2000?) is correct:
-> 
-> http://lists.infradead.org/pipermail/linux-arm-kernel/2014-January/226095.html
+Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+---
+ Documentation/admin-guide/ras.rst | 16 +++++++++-------
+ 1 file changed, 9 insertions(+), 7 deletions(-)
 
-Right, thanks for that find. Yes, Midway is the codename for the ECX-2000 SoC product.
-
-Cheers,
-Andre
+diff --git a/Documentation/admin-guide/ras.rst b/Documentation/admin-guide/ras.rst
+index 0310db624964..22b31bc7e129 100644
+--- a/Documentation/admin-guide/ras.rst
++++ b/Documentation/admin-guide/ras.rst
+@@ -351,15 +351,17 @@ controllers. The following example will assume 2 channels:
+ 	+------------+-----------+-----------+
+ 	|            |  ``ch0``  |  ``ch1``  |
+ 	+============+===========+===========+
+-	| ``csrow0`` |  DIMM_A0  |  DIMM_B0  |
+-	|            |   rank0   |   rank0   |
+-	+------------+     -     |     -     |
++	|            |**DIMM_A0**|**DIMM_B0**|
++	+------------+-----------+-----------+
++	| ``csrow0`` |   rank0   |   rank0   |
++	+------------+-----------+-----------+
+ 	| ``csrow1`` |   rank1   |   rank1   |
+ 	+------------+-----------+-----------+
+-	| ``csrow2`` |  DIMM_A1  | DIMM_B1   |
+-	|            |   rank0   |   rank0   |
+-	+------------+     -     |     -     |
+-	| ``csrow3`` |   rank1   |   rank1   |
++	|            |**DIMM_A1**|**DIMM_B1**|
++	+------------+-----------+-----------+
++	| ``csrow2`` |    rank0  |  rank0    |
++	+------------+-----------+-----------+
++	| ``csrow3`` |    rank1  |  rank1    |
+ 	+------------+-----------+-----------+
  
-> > > > So I don't know exactly *how* desperate you are with removing this, or if
-> > > > there are other reasons than "negative diffstat", but if possible I would
-> > > > like to keep it in.    
-> > > 
-> > > It's more that we *do* make quite a lot of changes to the arm-smmu driver
-> > > and it's never tested with this quirk. If you're stepping up to run smmu
-> > > tests on my queue for each release on highbank, then great, but otherwise
-> > > I'd rather not carry the code for fun. The change in diffstat is minimal
-> > > (we're going to need to hooks for nvidia, who broke things in a different
-> > > way).  
-> > 
-> > I am about to set up some more sophisticated testing, and will include
-> > some SMMU bits in it.  
-> 
-> Yes, please.
-> 
-> Will
+ In the above example, there are 4 physical slots on the motherboard
+-- 
+2.24.1
 
