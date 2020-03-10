@@ -2,148 +2,92 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E5D6180732
-	for <lists+linux-edac@lfdr.de>; Tue, 10 Mar 2020 19:44:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 785B2180901
+	for <lists+linux-edac@lfdr.de>; Tue, 10 Mar 2020 21:19:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726403AbgCJSou (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Tue, 10 Mar 2020 14:44:50 -0400
-Received: from mail-ot1-f68.google.com ([209.85.210.68]:35580 "EHLO
-        mail-ot1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726315AbgCJSou (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Tue, 10 Mar 2020 14:44:50 -0400
-Received: by mail-ot1-f68.google.com with SMTP id k26so6958285otr.2;
-        Tue, 10 Mar 2020 11:44:49 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=PJfOBTObVWYVfiIlBNgR4fIlBc7lQjhtjwMHAHY2r38=;
-        b=jspXlkV46wtCr5ljGYqKvjDyr+EwDuPGKHiLmx/sCjBmb4vqXOh3wTuAGCE3rKOjwL
-         pmg7xhaE9Di16irRmxlDpDWhhJLXUIF6YSFuXsLsmkmYkF74gRGG6H9wOZsyyJz+Gdqx
-         PojiqmB2+ONmhHfoDMy/ZSNV8faJblnJRPWQMmG7wDJpWuwlgO3skHR08DKHlD34RDVE
-         23jrH4/wWnENPnJ6Wrka7oTDxiNDiHZoZqKjoO2bkpOQpFb7sYYzCVIG0qgjkAAZyU4/
-         8hQ2tEfLXmaG4aS11mCxfxddmQdMGvMgD6Z9SnsG004rnv4nvgobEZieHDv7XB2pahXR
-         QZqA==
-X-Gm-Message-State: ANhLgQ13lEhGdSuTQsiEqyOT4HFyZg4/f6ORGHdVuzREuo7IperG2fgH
-        ZcYNZgY6Ad4brI4iaER6Hg==
-X-Google-Smtp-Source: ADFU+vuQs0OnawS9/ynUCTc8EKkO5VNO4tLlfeFjHbA8Jtq0UYFCWakGTmg55xZxtKimji/atijdSQ==
-X-Received: by 2002:a9d:6a91:: with SMTP id l17mr13893256otq.29.1583865889501;
-        Tue, 10 Mar 2020 11:44:49 -0700 (PDT)
-Received: from rob-hp-laptop (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id b11sm2077211otj.64.2020.03.10.11.44.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 Mar 2020 11:44:48 -0700 (PDT)
-Received: (nullmailer pid 8866 invoked by uid 1000);
-        Tue, 10 Mar 2020 18:44:47 -0000
-Date:   Tue, 10 Mar 2020 13:44:47 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Dhananjay Kangude <dkangude@cadence.com>
-Cc:     linux-edac@vger.kernel.org, bp@alien8.de, mchehab@kernel.org,
-        tony.luck@intel.com, james.morse@arm.com,
-        linux-kernel@vger.kernel.org, mparab@cadence.com,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH v1 2/2] dt-bindings: edac: Add cadence ddr mc support
-Message-ID: <20200310184447.GB2508@bogus>
-References: <20200228094322.13617-1-dkangude@cadence.com>
- <20200228094322.13617-3-dkangude@cadence.com>
+        id S1726265AbgCJUTG (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Tue, 10 Mar 2020 16:19:06 -0400
+Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:26469 "EHLO
+        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726325AbgCJUTF (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Tue, 10 Mar 2020 16:19:05 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1583871544;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=pgP1T+wGC2P5ovvcZBFXxUKVKB4+9CKMKrqQw1DXEe0=;
+        b=CIcK+SDf5A2QdO4pmcQ2rQpbWeUbTTWxLAmhAEOdxcBjOkLPw5I3w4xAGSNOMtQmBMWBU6
+        PF9iWwa8NIxzd2O/hC6iuiBQFMsiJCyfrHxn/GMk1AMYOXC29HwyMRmM8iNVBXjwajR6/b
+        sQlG2qjZliun3Z9qY5I83Juxp/EA+J8=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-294-0yXbyAw7NhyCLXKNwJvhag-1; Tue, 10 Mar 2020 16:18:56 -0400
+X-MC-Unique: 0yXbyAw7NhyCLXKNwJvhag-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 28F77107ACC4;
+        Tue, 10 Mar 2020 20:18:55 +0000 (UTC)
+Received: from napanee.usersys.redhat.com (dhcp-17-195.bos.redhat.com [10.18.17.195])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id C86837388F;
+        Tue, 10 Mar 2020 20:18:54 +0000 (UTC)
+Received: by napanee.usersys.redhat.com (Postfix, from userid 1000)
+        id 2EE9DC0E48; Tue, 10 Mar 2020 16:18:54 -0400 (EDT)
+Date:   Tue, 10 Mar 2020 16:18:54 -0400
+From:   Aristeu Rozanski <aris@redhat.com>
+To:     Robert Richter <rrichter@marvell.com>
+Cc:     Borislav Petkov <bp@alien8.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Tony Luck <tony.luck@intel.com>,
+        James Morse <james.morse@arm.com>, linux-edac@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 00/11] EDAC/ghes: Cleanup, rework and improvement of
+ memory reporting
+Message-ID: <20200310201854.etpclthuj577lpds@redhat.com>
+References: <20200306151318.17422-1-rrichter@marvell.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200228094322.13617-3-dkangude@cadence.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20200306151318.17422-1-rrichter@marvell.com>
+User-Agent: NeoMutt/20191207
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Fri, Feb 28, 2020 at 10:43:22AM +0100, Dhananjay Kangude wrote:
-> Add documentation for cadence ddr memory controller EDAC DTS bindings
+On Fri, Mar 06, 2020 at 04:13:07PM +0100, Robert Richter wrote:
+> This series contains a significant cleanup and rework of the ghes
+> driver and improves the memory reporting as follows:
 > 
-> Signed-off-by: Dhananjay Kangude <dkangude@cadence.com>
-> ---
->  .../devicetree/bindings/edac/cdns,ddr-edac.yaml    | 59 ++++++++++++++++++++++
->  1 file changed, 59 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/edac/cdns,ddr-edac.yaml
+>  * fix of DIMM label in error reports (patch #2),
 > 
-> diff --git a/Documentation/devicetree/bindings/edac/cdns,ddr-edac.yaml b/Documentation/devicetree/bindings/edac/cdns,ddr-edac.yaml
-> new file mode 100644
-> index 000000000000..d83d8840d57b
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/edac/cdns,ddr-edac.yaml
-> @@ -0,0 +1,59 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/edac/cdns,ddr-edac.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Cadence DDR IP with ECC support (EDAC)
-> +
-> +description:
-> +  This binding describes the Cadence DDR/LPDDR IP with ECC feature enabled
-> +  to detect and correct CE/UE errors.
-> +
-> +maintainers:
-> +  - Dhananjay Kangdue <dkangude@cadence.com>
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - cdns,cadence-ddr4-mc-edac
-
-You have Cadence twice effectively.
-
-'edac' is a linuxism. The binding should be for the DDR controller 
-unless this block only does ECC. Name it based on what the h/w is 
-called.
-
-> +
-> +  '#address-cells':
-> +    const: 1
-> +
-> +  '#size-cells':
-> +    const: 1
-> +
-> +  ranges: true
-
-You don't have any children defined, so you don't need these 3 
-properties.
-
-> +
-> +  reg:
-> +    minItems: 1
-> +    maxItems: 2
-> +    items:
-> +      - description:
-> +          Register block of DDR/LPDDR apb registers up to mapped area.
-> +          Mapped area contains the register set for memory controller,
-> +          phy and PI module register set doesn't part of this mapping.
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +required:
-> +  - compatible
-> +  - ranges
-> +  - reg
-> +  - interrupts
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    edac: edac@fd100000 {
-> +        compatible = "cdns,cadence-ddr4-mc-edac";
-> +        #address-cells = <1>;
-> +        #size-cells = <1>;
-> +        ranges;
-> +        reg = <0xfd100000 0x4000>;
-> +        interrupts = <0x00 0x01 0x04>;
-> +        };
-
-Wrong indent.
-
-> +...
-> -- 
-> 2.15.0
+>  * creation of multiple memory controllers to group DIMMs depending on
+>    the physical memory array (patches #9-#11). This should reflect the
+>    memory topology of a system in sysfs. Esp. multi-node systems show
+>    up with one memory controller per node now.
 > 
+> The changes base on the remaining patches that are a general cleanup
+> and rework:
+> 
+>  * small change to edac_mc, not really dependent on the rest of the
+>    series (patch #1),
+> 
+>  * general cleanup and rework of the ghes driver (patches #3-#8).
+> 
+> The implementation of multiple memory controllers bases on the
+> suggestion from James (see patch #11), thank you James for your
+> valuable input here. The patches are created newly from scratch and
+> obsolete the GHES part of my previous postings a while ago that have
+> not been accepted upstream:
+> 
+>  https://lore.kernel.org/patchwork/cover/1093488/
+> 
+> Tested on a Marvell/Cavium ThunderX2 Sabre (dual socket) system.
+
+Acked-by: Aristeu Rozanski <aris@redhat.com>
+
+-- 
+Aristeu
+
