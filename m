@@ -2,103 +2,205 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0097B181EDF
-	for <lists+linux-edac@lfdr.de>; Wed, 11 Mar 2020 18:14:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 69506182866
+	for <lists+linux-edac@lfdr.de>; Thu, 12 Mar 2020 06:27:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730068AbgCKROu (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Wed, 11 Mar 2020 13:14:50 -0400
-Received: from mail.skyhub.de ([5.9.137.197]:49428 "EHLO mail.skyhub.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729675AbgCKROu (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Wed, 11 Mar 2020 13:14:50 -0400
-Received: from zn.tnic (p200300EC2F12AA00280D644233BA3664.dip0.t-ipconnect.de [IPv6:2003:ec:2f12:aa00:280d:6442:33ba:3664])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 20F4A1EC0304;
-        Wed, 11 Mar 2020 18:14:48 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1583946888;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=pOIR3Q7MS+lWIofLjdYvowmUr10Fu8TbBWzKCrl1rVA=;
-        b=ezMmFg+NM6ZkBHnYwJtIeF9dDV3RY4eUQh+O44OctmClapZxbkZKHf0OC5ckcMzcFfCUZW
-        pS99lHQnfKNvGaeMIC4isPhORCQUJoVcfKePh24IeuuoAs1Qv68UtDCnfGhT3FMv3cUk+z
-        PvFJbrFKQql3oxi/CxWrApOEB1xP1zs=
-Date:   Wed, 11 Mar 2020 18:14:50 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Joe Perches <joe@perches.com>
-Cc:     Tony Luck <tony.luck@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "H. Peter Anvin" <hpa@zytor.com>, x86@kernel.org,
-        linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH -next 022/491] X86 MCE INFRASTRUCTURE: Use fallthrough;
-Message-ID: <20200311171450.GH3470@zn.tnic>
-References: <cover.1583896344.git.joe@perches.com>
- <1dbc36979b08577a2d589b7fe572f83aadf7b5ef.1583896349.git.joe@perches.com>
+        id S2387767AbgCLF1H (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Thu, 12 Mar 2020 01:27:07 -0400
+Received: from rcdn-iport-6.cisco.com ([173.37.86.77]:47479 "EHLO
+        rcdn-iport-6.cisco.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2387758AbgCLF1H (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Thu, 12 Mar 2020 01:27:07 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=cisco.com; i=@cisco.com; l=4796; q=dns/txt; s=iport;
+  t=1583990826; x=1585200426;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=gWPmi/A6NTE/04xSmZ4GUabsv9Q6xWhRvS9G9c95CO4=;
+  b=eY27Js1AD+DSuxVpvG6XdkqGGhPqdWqtBnG73/qVQ/mIoLetEPG6OHBj
+   LZdET3HSNjEErsoLrSKPI+I9NRBmaraTJCOM+EVCt6twr0YRn0OLMSu2A
+   sT4wd7IhcwXkDyjRfSS0RgJTr+zT4tY9+MuxB8dXQnK+0HRp5GOcJotR2
+   o=;
+X-IronPort-AV: E=Sophos;i="5.70,543,1574121600"; 
+   d="scan'208";a="740563919"
+Received: from rcdn-core-6.cisco.com ([173.37.93.157])
+  by rcdn-iport-6.cisco.com with ESMTP/TLS/DHE-RSA-SEED-SHA; 12 Mar 2020 05:19:59 +0000
+Received: from sjc-ads-7741.cisco.com (sjc-ads-7741.cisco.com [10.30.222.28])
+        by rcdn-core-6.cisco.com (8.15.2/8.15.2) with ESMTP id 02C5JxCm030956;
+        Thu, 12 Mar 2020 05:19:59 GMT
+Received: by sjc-ads-7741.cisco.com (Postfix, from userid 381789)
+        id 6B41B1229; Wed, 11 Mar 2020 22:19:59 -0700 (PDT)
+From:   Manali K Shukla <manashuk@cisco.com>
+To:     bp@alien8.de, linux-edac@vger.kernel.org, mchehab@kernel.org,
+        linux-kernel@vger.kernel.org, gregkh@linuxfoundation.org
+Cc:     xe-linux-external@cisco.com, Borislav Petkov <bp@suse.de>,
+        Aristeu Rozanski Filho <arozansk@redhat.com>,
+        Justin Ernst <justin.ernst@hpe.com>,
+        Russ Anderson <rja@hpe.com>, Tony Luck <tony.luck@intel.com>,
+        Manali K Shukla <manashuk@cisco.com>
+Subject: [ PATCH stable v4.14] EDAC: Drop per-memory controller buses
+Date:   Wed, 11 Mar 2020 22:19:29 -0700
+Message-Id: <20200312051929.49195-1-manashuk@cisco.com>
+X-Mailer: git-send-email 2.19.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <1dbc36979b08577a2d589b7fe572f83aadf7b5ef.1583896349.git.joe@perches.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Auto-Response-Suppress: DR, OOF, AutoReply
+X-Outbound-SMTP-Client: 10.30.222.28, sjc-ads-7741.cisco.com
+X-Outbound-Node: rcdn-core-6.cisco.com
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Tue, Mar 10, 2020 at 09:51:36PM -0700, Joe Perches wrote:
+From: Borislav Petkov <bp@suse.de>
 
-> Subject: Re: [PATCH -next 022/491] X86 MCE INFRASTRUCTURE: Use fallthrough;
+upstream 861e6ed667c83d64a42b0db41a22d6b4de4e913f commit
 
-Make that subject prefix "x86/mce: ..."
+... and use the single edac_subsys object returned from
+subsys_system_register(). The idea is to have a single bus
+and multiple devices on it.
 
-> Convert the various uses of fallthrough comments to fallthrough;
-> 
-> Done via script
-> Link: https://lore.kernel.org/lkml/b56602fcf79f849e733e7b521bb0e17895d390fa.1582230379.git.joe.com/
-> 
-> Signed-off-by: Joe Perches <joe@perches.com>
-> ---
->  arch/x86/kernel/cpu/mce/inject.c | 2 +-
->  arch/x86/kernel/cpu/mce/intel.c  | 4 +---
->  2 files changed, 2 insertions(+), 4 deletions(-)
-> 
-> diff --git a/arch/x86/kernel/cpu/mce/inject.c b/arch/x86/kernel/cpu/mce/inject.c
-> index 3413b41..b5e3bab 100644
-> --- a/arch/x86/kernel/cpu/mce/inject.c
-> +++ b/arch/x86/kernel/cpu/mce/inject.c
-> @@ -199,7 +199,7 @@ static int raise_local(void)
->  			 * calling irq_enter, but the necessary
->  			 * machinery isn't exported currently.
->  			 */
-> -			/*FALL THROUGH*/
-> +			fallthrough;
->  		case MCJ_CTX_PROCESS:
->  			raise_exception(m, NULL);
->  			break;
-> diff --git a/arch/x86/kernel/cpu/mce/intel.c b/arch/x86/kernel/cpu/mce/intel.c
-> index d8f9230..5be647 100644
-> --- a/arch/x86/kernel/cpu/mce/intel.c
-> +++ b/arch/x86/kernel/cpu/mce/intel.c
-> @@ -192,9 +192,7 @@ unsigned long cmci_intel_adjust_timer(unsigned long interval)
->  		__this_cpu_write(cmci_storm_state, CMCI_STORM_SUBSIDED);
->  		if (!atomic_sub_return(1, &cmci_storm_on_cpus))
->  			pr_notice("CMCI storm subsided: switching to interrupt mode\n");
-> -
-> -		/* FALLTHROUGH */
-> -
-> +		fallthrough;
->  	case CMCI_STORM_SUBSIDED:
->  		/*
->  		 * We wait for all CPUs to go back to SUBSIDED state. When that
-> -- 
+Signed-off-by: Borislav Petkov <bp@suse.de>
+Acked-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
+CC: Aristeu Rozanski Filho <arozansk@redhat.com>
+CC: Greg KH <gregkh@linuxfoundation.org>
+CC: Justin Ernst <justin.ernst@hpe.com>
+CC: linux-edac <linux-edac@vger.kernel.org>
+CC: Mauro Carvalho Chehab <mchehab@kernel.org>
+CC: Russ Anderson <rja@hpe.com>
+Cc: Tony Luck <tony.luck@intel.com>
+Link: https://lkml.kernel.org/r/20180926152752.GG5584@zn.tnic
+[Manali: backport to v4.14 -stable :
+- removing per-MC bus, this enables to get rid of memory controllers
+  maximum number notion
+- value of max number of memory controllers is 2 * MAX_NUMNODES. On two nodes system MAX_NUMNODES value is ‘1’ and
+  so value of max number of memory controller becomes ‘2’, this patch fixes this issue when there are only 2 nodes on the system
+  and number of memory controllers are more than ‘2’]
+(cherry picked from commit 861e6ed667c83d64a42b0db41a22d6b4de4e913f)
+Signed-off-by: Manali K Shukla <manashuk@cisco.com>
+---
+ drivers/edac/edac_mc.c       |  9 +--------
+ drivers/edac/edac_mc_sysfs.c | 30 ++----------------------------
+ include/linux/edac.h         |  6 ------
+ 3 files changed, 3 insertions(+), 42 deletions(-)
 
-With that:
-
-Acked-by: Borislav Petkov <bp@suse.de>
-
+diff --git a/drivers/edac/edac_mc.c b/drivers/edac/edac_mc.c
+index 329021189c38..2c740edb440f 100644
+--- a/drivers/edac/edac_mc.c
++++ b/drivers/edac/edac_mc.c
+@@ -55,8 +55,6 @@ static LIST_HEAD(mc_devices);
+  */
+ static void const *edac_mc_owner;
+ 
+-static struct bus_type mc_bus[EDAC_MAX_MCS];
+-
+ int edac_get_report_status(void)
+ {
+ 	return edac_report;
+@@ -706,11 +704,6 @@ int edac_mc_add_mc_with_groups(struct mem_ctl_info *mci,
+ 	int ret = -EINVAL;
+ 	edac_dbg(0, "\n");
+ 
+-	if (mci->mc_idx >= EDAC_MAX_MCS) {
+-		pr_warn_once("Too many memory controllers: %d\n", mci->mc_idx);
+-		return -ENODEV;
+-	}
+-
+ #ifdef CONFIG_EDAC_DEBUG
+ 	if (edac_debug_level >= 3)
+ 		edac_mc_dump_mci(mci);
+@@ -750,7 +743,7 @@ int edac_mc_add_mc_with_groups(struct mem_ctl_info *mci,
+ 	/* set load time so that error rate can be tracked */
+ 	mci->start_time = jiffies;
+ 
+-	mci->bus = &mc_bus[mci->mc_idx];
++	mci->bus = edac_get_sysfs_subsys();
+ 
+ 	if (edac_create_sysfs_mci_device(mci, groups)) {
+ 		edac_mc_printk(mci, KERN_WARNING,
+diff --git a/drivers/edac/edac_mc_sysfs.c b/drivers/edac/edac_mc_sysfs.c
+index a4acfa81dfe0..f519189ab342 100644
+--- a/drivers/edac/edac_mc_sysfs.c
++++ b/drivers/edac/edac_mc_sysfs.c
+@@ -942,27 +942,8 @@ static const struct device_type mci_attr_type = {
+ int edac_create_sysfs_mci_device(struct mem_ctl_info *mci,
+ 				 const struct attribute_group **groups)
+ {
+-	char *name;
+ 	int i, err;
+ 
+-	/*
+-	 * The memory controller needs its own bus, in order to avoid
+-	 * namespace conflicts at /sys/bus/edac.
+-	 */
+-	name = kasprintf(GFP_KERNEL, "mc%d", mci->mc_idx);
+-	if (!name)
+-		return -ENOMEM;
+-
+-	mci->bus->name = name;
+-
+-	edac_dbg(0, "creating bus %s\n", mci->bus->name);
+-
+-	err = bus_register(mci->bus);
+-	if (err < 0) {
+-		kfree(name);
+-		return err;
+-	}
+-
+ 	/* get the /sys/devices/system/edac subsys reference */
+ 	mci->dev.type = &mci_attr_type;
+ 	device_initialize(&mci->dev);
+@@ -978,7 +959,7 @@ int edac_create_sysfs_mci_device(struct mem_ctl_info *mci,
+ 	err = device_add(&mci->dev);
+ 	if (err < 0) {
+ 		edac_dbg(1, "failure: create device %s\n", dev_name(&mci->dev));
+-		goto fail_unregister_bus;
++		goto out;
+ 	}
+ 
+ 	/*
+@@ -1026,10 +1007,8 @@ int edac_create_sysfs_mci_device(struct mem_ctl_info *mci,
+ 		device_unregister(&dimm->dev);
+ 	}
+ 	device_unregister(&mci->dev);
+-fail_unregister_bus:
+-	bus_unregister(mci->bus);
+-	kfree(name);
+ 
++out:
+ 	return err;
+ }
+ 
+@@ -1060,13 +1039,8 @@ void edac_remove_sysfs_mci_device(struct mem_ctl_info *mci)
+ 
+ void edac_unregister_sysfs(struct mem_ctl_info *mci)
+ {
+-	struct bus_type *bus = mci->bus;
+-	const char *name = mci->bus->name;
+-
+ 	edac_dbg(1, "Unregistering device %s\n", dev_name(&mci->dev));
+ 	device_unregister(&mci->dev);
+-	bus_unregister(bus);
+-	kfree(name);
+ }
+ 
+ static void mc_attr_release(struct device *dev)
+diff --git a/include/linux/edac.h b/include/linux/edac.h
+index 90f72336aea6..1f5c3f6fd3e5 100644
+--- a/include/linux/edac.h
++++ b/include/linux/edac.h
+@@ -664,10 +664,4 @@ struct mem_ctl_info {
+ 	bool fake_inject_ue;
+ 	u16 fake_inject_count;
+ };
+-
+-/*
+- * Maximum number of memory controllers in the coherent fabric.
+- */
+-#define EDAC_MAX_MCS	2 * MAX_NUMNODES
+-
+ #endif
 -- 
-Regards/Gruss,
-    Boris.
+2.19.1
 
-https://people.kernel.org/tglx/notes-about-netiquette
