@@ -2,34 +2,35 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 69506182866
-	for <lists+linux-edac@lfdr.de>; Thu, 12 Mar 2020 06:27:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C9C6182861
+	for <lists+linux-edac@lfdr.de>; Thu, 12 Mar 2020 06:25:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387767AbgCLF1H (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Thu, 12 Mar 2020 01:27:07 -0400
-Received: from rcdn-iport-6.cisco.com ([173.37.86.77]:47479 "EHLO
-        rcdn-iport-6.cisco.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387758AbgCLF1H (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Thu, 12 Mar 2020 01:27:07 -0400
+        id S1731534AbgCLFZe (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Thu, 12 Mar 2020 01:25:34 -0400
+Received: from rcdn-iport-7.cisco.com ([173.37.86.78]:56284 "EHLO
+        rcdn-iport-7.cisco.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725268AbgCLFZe (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Thu, 12 Mar 2020 01:25:34 -0400
+X-Greylist: delayed 332 seconds by postgrey-1.27 at vger.kernel.org; Thu, 12 Mar 2020 01:25:32 EDT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=cisco.com; i=@cisco.com; l=4796; q=dns/txt; s=iport;
-  t=1583990826; x=1585200426;
+  d=cisco.com; i=@cisco.com; l=4795; q=dns/txt; s=iport;
+  t=1583990732; x=1585200332;
   h=from:to:cc:subject:date:message-id:mime-version:
    content-transfer-encoding;
-  bh=gWPmi/A6NTE/04xSmZ4GUabsv9Q6xWhRvS9G9c95CO4=;
-  b=eY27Js1AD+DSuxVpvG6XdkqGGhPqdWqtBnG73/qVQ/mIoLetEPG6OHBj
-   LZdET3HSNjEErsoLrSKPI+I9NRBmaraTJCOM+EVCt6twr0YRn0OLMSu2A
-   sT4wd7IhcwXkDyjRfSS0RgJTr+zT4tY9+MuxB8dXQnK+0HRp5GOcJotR2
-   o=;
+  bh=YoDySlt/LTy9TAPdafT2LQxNbqjm2MWaEYRZ+jiodFM=;
+  b=TP/Qdo1WpNCYYHD7MBwlkAKyNgJPIMA+OkD8xs21sanKdFjops54clOK
+   x+NQu9nqvxffdRGWr0yXlmYNQjw5e9nWHm2+lbjnIRlXExLO4GsEbKvKy
+   UCqGG2WHQ2XEBzTXlI9/unC/WVVFkNvWu+SkrafRPpPR7K7b/B3AWrik4
+   Y=;
 X-IronPort-AV: E=Sophos;i="5.70,543,1574121600"; 
-   d="scan'208";a="740563919"
-Received: from rcdn-core-6.cisco.com ([173.37.93.157])
-  by rcdn-iport-6.cisco.com with ESMTP/TLS/DHE-RSA-SEED-SHA; 12 Mar 2020 05:19:59 +0000
+   d="scan'208";a="731667992"
+Received: from rcdn-core-12.cisco.com ([173.37.93.148])
+  by rcdn-iport-7.cisco.com with ESMTP/TLS/DHE-RSA-SEED-SHA; 12 Mar 2020 05:22:28 +0000
 Received: from sjc-ads-7741.cisco.com (sjc-ads-7741.cisco.com [10.30.222.28])
-        by rcdn-core-6.cisco.com (8.15.2/8.15.2) with ESMTP id 02C5JxCm030956;
-        Thu, 12 Mar 2020 05:19:59 GMT
+        by rcdn-core-12.cisco.com (8.15.2/8.15.2) with ESMTP id 02C5MSHc007242;
+        Thu, 12 Mar 2020 05:22:28 GMT
 Received: by sjc-ads-7741.cisco.com (Postfix, from userid 381789)
-        id 6B41B1229; Wed, 11 Mar 2020 22:19:59 -0700 (PDT)
+        id 46D7C122A; Wed, 11 Mar 2020 22:22:28 -0700 (PDT)
 From:   Manali K Shukla <manashuk@cisco.com>
 To:     bp@alien8.de, linux-edac@vger.kernel.org, mchehab@kernel.org,
         linux-kernel@vger.kernel.org, gregkh@linuxfoundation.org
@@ -38,16 +39,16 @@ Cc:     xe-linux-external@cisco.com, Borislav Petkov <bp@suse.de>,
         Justin Ernst <justin.ernst@hpe.com>,
         Russ Anderson <rja@hpe.com>, Tony Luck <tony.luck@intel.com>,
         Manali K Shukla <manashuk@cisco.com>
-Subject: [ PATCH stable v4.14] EDAC: Drop per-memory controller buses
-Date:   Wed, 11 Mar 2020 22:19:29 -0700
-Message-Id: <20200312051929.49195-1-manashuk@cisco.com>
+Subject: [ PATCH stable v4.19] EDAC: Drop per-memory controller buses
+Date:   Wed, 11 Mar 2020 22:22:01 -0700
+Message-Id: <20200312052201.49456-1-manashuk@cisco.com>
 X-Mailer: git-send-email 2.19.1
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Auto-Response-Suppress: DR, OOF, AutoReply
 X-Outbound-SMTP-Client: 10.30.222.28, sjc-ads-7741.cisco.com
-X-Outbound-Node: rcdn-core-6.cisco.com
+X-Outbound-Node: rcdn-core-12.cisco.com
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
@@ -71,7 +72,7 @@ CC: Mauro Carvalho Chehab <mchehab@kernel.org>
 CC: Russ Anderson <rja@hpe.com>
 Cc: Tony Luck <tony.luck@intel.com>
 Link: https://lkml.kernel.org/r/20180926152752.GG5584@zn.tnic
-[Manali: backport to v4.14 -stable :
+[Manali: backport to v4.19 -stable :
 - removing per-MC bus, this enables to get rid of memory controllers
   maximum number notion
 - value of max number of memory controllers is 2 * MAX_NUMNODES. On two nodes system MAX_NUMNODES value is ‘1’ and
@@ -86,19 +87,19 @@ Signed-off-by: Manali K Shukla <manashuk@cisco.com>
  3 files changed, 3 insertions(+), 42 deletions(-)
 
 diff --git a/drivers/edac/edac_mc.c b/drivers/edac/edac_mc.c
-index 329021189c38..2c740edb440f 100644
+index fd440b35d76e..d899d86897d0 100644
 --- a/drivers/edac/edac_mc.c
 +++ b/drivers/edac/edac_mc.c
 @@ -55,8 +55,6 @@ static LIST_HEAD(mc_devices);
   */
- static void const *edac_mc_owner;
+ static const char *edac_mc_owner;
  
 -static struct bus_type mc_bus[EDAC_MAX_MCS];
 -
  int edac_get_report_status(void)
  {
  	return edac_report;
-@@ -706,11 +704,6 @@ int edac_mc_add_mc_with_groups(struct mem_ctl_info *mci,
+@@ -712,11 +710,6 @@ int edac_mc_add_mc_with_groups(struct mem_ctl_info *mci,
  	int ret = -EINVAL;
  	edac_dbg(0, "\n");
  
@@ -110,7 +111,7 @@ index 329021189c38..2c740edb440f 100644
  #ifdef CONFIG_EDAC_DEBUG
  	if (edac_debug_level >= 3)
  		edac_mc_dump_mci(mci);
-@@ -750,7 +743,7 @@ int edac_mc_add_mc_with_groups(struct mem_ctl_info *mci,
+@@ -756,7 +749,7 @@ int edac_mc_add_mc_with_groups(struct mem_ctl_info *mci,
  	/* set load time so that error rate can be tracked */
  	mci->start_time = jiffies;
  
@@ -120,10 +121,10 @@ index 329021189c38..2c740edb440f 100644
  	if (edac_create_sysfs_mci_device(mci, groups)) {
  		edac_mc_printk(mci, KERN_WARNING,
 diff --git a/drivers/edac/edac_mc_sysfs.c b/drivers/edac/edac_mc_sysfs.c
-index a4acfa81dfe0..f519189ab342 100644
+index d4545a9222a0..90ba228af57d 100644
 --- a/drivers/edac/edac_mc_sysfs.c
 +++ b/drivers/edac/edac_mc_sysfs.c
-@@ -942,27 +942,8 @@ static const struct device_type mci_attr_type = {
+@@ -920,27 +920,8 @@ static const struct device_type mci_attr_type = {
  int edac_create_sysfs_mci_device(struct mem_ctl_info *mci,
  				 const struct attribute_group **groups)
  {
@@ -151,7 +152,7 @@ index a4acfa81dfe0..f519189ab342 100644
  	/* get the /sys/devices/system/edac subsys reference */
  	mci->dev.type = &mci_attr_type;
  	device_initialize(&mci->dev);
-@@ -978,7 +959,7 @@ int edac_create_sysfs_mci_device(struct mem_ctl_info *mci,
+@@ -956,7 +937,7 @@ int edac_create_sysfs_mci_device(struct mem_ctl_info *mci,
  	err = device_add(&mci->dev);
  	if (err < 0) {
  		edac_dbg(1, "failure: create device %s\n", dev_name(&mci->dev));
@@ -160,7 +161,7 @@ index a4acfa81dfe0..f519189ab342 100644
  	}
  
  	/*
-@@ -1026,10 +1007,8 @@ int edac_create_sysfs_mci_device(struct mem_ctl_info *mci,
+@@ -1004,10 +985,8 @@ int edac_create_sysfs_mci_device(struct mem_ctl_info *mci,
  		device_unregister(&dimm->dev);
  	}
  	device_unregister(&mci->dev);
@@ -172,7 +173,7 @@ index a4acfa81dfe0..f519189ab342 100644
  	return err;
  }
  
-@@ -1060,13 +1039,8 @@ void edac_remove_sysfs_mci_device(struct mem_ctl_info *mci)
+@@ -1038,13 +1017,8 @@ void edac_remove_sysfs_mci_device(struct mem_ctl_info *mci)
  
  void edac_unregister_sysfs(struct mem_ctl_info *mci)
  {
@@ -187,10 +188,10 @@ index a4acfa81dfe0..f519189ab342 100644
  
  static void mc_attr_release(struct device *dev)
 diff --git a/include/linux/edac.h b/include/linux/edac.h
-index 90f72336aea6..1f5c3f6fd3e5 100644
+index 958d69332c1d..efd5145a4c10 100644
 --- a/include/linux/edac.h
 +++ b/include/linux/edac.h
-@@ -664,10 +664,4 @@ struct mem_ctl_info {
+@@ -667,10 +667,4 @@ struct mem_ctl_info {
  	bool fake_inject_ue;
  	u16 fake_inject_count;
  };
