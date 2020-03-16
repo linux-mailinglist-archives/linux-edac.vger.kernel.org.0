@@ -2,196 +2,127 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 669E1186AA7
-	for <lists+linux-edac@lfdr.de>; Mon, 16 Mar 2020 13:12:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A7DF1186AD9
+	for <lists+linux-edac@lfdr.de>; Mon, 16 Mar 2020 13:29:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730945AbgCPMMl (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Mon, 16 Mar 2020 08:12:41 -0400
-Received: from mx0b-0016f401.pphosted.com ([67.231.156.173]:53870 "EHLO
-        mx0b-0016f401.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1730936AbgCPMMl (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>);
-        Mon, 16 Mar 2020 08:12:41 -0400
-Received: from pps.filterd (m0045851.ppops.net [127.0.0.1])
-        by mx0b-0016f401.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 02GC0Oq8030475;
-        Mon, 16 Mar 2020 05:12:26 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=date : from : to :
- cc : subject : message-id : references : content-type : in-reply-to :
- mime-version; s=pfpt0818; bh=7krHi2HcfoYlWB9AuUg0OJYK/vHk5kshsaaRQYgLQLE=;
- b=fhBh3QxMEpToC8hnaIYU3xioMsWpqGpk43ObfGM1TS/RXADWWPKnuBp42xsvTboqRG8K
- NSWgdcW8Ufyk5OLEmLDUifXtUw9TWyHJQoQ7LD8z1m+A3BmWd3Z1qHBpYnIsPLFR8c/O
- EGy7WxbG3MD+AkfxFZeNxJ7qVGCeIbNtv0vAVW+PXEFO8+FvKywkRbsUzNNMf4vjm34+
- OR/hF+BubXqIC7DC7F4xAp6Jx9OtNUyGhcp9e997Qcx7qmFUvDRsxEw1R+TbThH/oSAq
- d5x3KigBAOrgJmtyTtxAyjCTb9csKUTPnBVwYQsANS8VDvX7PQl2yIQD616La2fDX2Ea RA== 
-Received: from sc-exch03.marvell.com ([199.233.58.183])
-        by mx0b-0016f401.pphosted.com with ESMTP id 2yrxsmek39-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
-        Mon, 16 Mar 2020 05:12:26 -0700
-Received: from SC-EXCH04.marvell.com (10.93.176.84) by SC-EXCH03.marvell.com
- (10.93.176.83) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Mon, 16 Mar
- 2020 05:12:23 -0700
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (104.47.58.108)
- by SC-EXCH04.marvell.com (10.93.176.84) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2 via Frontend Transport; Mon, 16 Mar 2020 05:12:23 -0700
+        id S1730965AbgCPM3E (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Mon, 16 Mar 2020 08:29:04 -0400
+Received: from mail-eopbgr10086.outbound.protection.outlook.com ([40.107.1.86]:19590
+        "EHLO EUR02-HE1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1730896AbgCPM3E (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Mon, 16 Mar 2020 08:29:04 -0400
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=UZmtiLo1VMYc/3/Onm8ZXn6TIGeIo4rUhqEOyPLYCdh4IPQRvEZajzAYiElA95YVo7P3nLNrssD9k9hz1krgA72NnpOQvle5E6N6ccC0GKc/5sNMD0AYW1VpSczf9z/KkFydZm7B12Fumz3zNPS7yC80it55JSl76uSGWjJACuzWP1hzzHgnL5W/AEfJ6jPfpwouzoS1Vvxp30sp8WbPA7wsDYgpBlmIyA2Sq7S4VwLgtocedmb8WxhC33WTGQvRERL6BQR6KUu1TJINdsRA8Q3cqwr13vM0hOZUcAPJlQHjNX0FS22oPwczmegaYdGTc8Cwv9f4lpFW4xm/oi4sPA==
+ b=GpPjr8SXAvGeGEo3/7XUIqncW6t7mof8vj2XUF6cL0TGsrSgISAB0UhnqM9yNkc5qjximIgIk6o/GlIOf8bb4582D/ZixRzop4KqZ4m9BYCcVH9qDXvOCQIXmP3M9HB8s1GwrJ2kxIQr+31EvrUpi54EIARzvqdjfNPK7XUnmn5wI33mQcyiS9R+V+l0YJ9qCjRLeky11wG/BLICnAxYDSKfiyVW4hjNg6zxCT5PuLa0/DaQIhMF/VTTgAATftb2Oigl5uk+8XWKTnoix4joMhO3AYahFHft5c980YXHFzchmz8pDpsa8NwQ4yrTxqfVfRzeODqTN6mZpo1p91yl8Q==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=7krHi2HcfoYlWB9AuUg0OJYK/vHk5kshsaaRQYgLQLE=;
- b=Vu8t++fNViZcPyGthEmmK+QefGmy06g8y643dKGj0tzNHjQ6z6CiGU7q9B4EZbsClNGKpbF9fSohk74IQokv4PjYRk5GZ0PugoKJavEj0dnQjVP71m89nWQ9rr+4gzQCPel80CkzgdVhdImpV0Q+NVWNFr00W0rLoXAsE/FWMckozYmedXhYO1t8r8exeWumcEHihQGt/6L3O3mGw4VfGgjkCXbD05W6mXMMIPHgTG/SY2nh1Jep0Ekm9sS7/uE6zZSkiBfqOJXVoGKkHaKaVI/Brb4AsPqOdBtTumi4ivvm+3nK5mUtF4w1vDsPT8eyhdfpgZWZB9f+MEx9Q7vpsg==
+ bh=Rb7LsBiwaQXtOAaHSy5jQa/Za4XR0ztpv56/1lJbFBQ=;
+ b=E50FvTmibehXDWE5hhombdema55y0Q6TFOi9soWR6q0DGiMh7YyuExhr/SGpo668TBzxCk2c28af7xl+ItanPjsVqERAO+9lUWpL3Lv5tWa2dSi6qqYZi4volmANWB/HuwjqvYpn3NT4iXiAeQ2bf0UgFZDGvjMPjyUWFrlhTlrCAPtOah9BLg59s+bTUxJOeSDD6vMZ1jzeTVHWw+jJSmwvNj8qwrXlHvn1Ecb+5MKweLVo+04e0zscIfPQDRK1rjkRwuhvxTVmDYltOHq+6L/fZJ8CBRXwun5A8aEjd2jdW6QG4D4CgMwHRFGNn2JrfPVuSrNGE57ERvBbbkFgVg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=marvell.com; dmarc=pass action=none header.from=marvell.com;
- dkim=pass header.d=marvell.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=marvell.onmicrosoft.com; s=selector1-marvell-onmicrosoft-com;
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=7krHi2HcfoYlWB9AuUg0OJYK/vHk5kshsaaRQYgLQLE=;
- b=WTOXTgTbHvUrvYu8JCMQS38/u9HIDvLwbv3OMcSPlkNXgym6Zpw8++IcogzevttAw1lEB7+ALG2/Ga5IHaLVHw9R+pVpmtkWa7ZWkAa3wx5uI64nE/1qHNXOKETF8N3AsZVWoFgoT8guBXQZO7r8+YkDYyYp+UPhSac/7jMR9BI=
-Received: from MN2PR18MB3408.namprd18.prod.outlook.com (2603:10b6:208:165::10)
- by MN2PR18MB3054.namprd18.prod.outlook.com (2603:10b6:208:a6::27) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2814.18; Mon, 16 Mar
- 2020 12:12:22 +0000
-Received: from MN2PR18MB3408.namprd18.prod.outlook.com
- ([fe80::30c4:52fe:fdf8:faff]) by MN2PR18MB3408.namprd18.prod.outlook.com
- ([fe80::30c4:52fe:fdf8:faff%7]) with mapi id 15.20.2814.021; Mon, 16 Mar 2020
- 12:12:22 +0000
-Date:   Mon, 16 Mar 2020 13:12:14 +0100
-From:   Robert Richter <rrichter@marvell.com>
+ bh=Rb7LsBiwaQXtOAaHSy5jQa/Za4XR0ztpv56/1lJbFBQ=;
+ b=gnW8GzgChcBlfFIcrCGTyV4dACrgRbaPizRknfoFxr1JHdudRhU0ZPvZATafHzG/kFl7zPO5YZpo2GsCBds+JyzQ5nLlq1crdaS/Dp19iE/adJ7oWxt/Q1CCGVdNl4mt8BLUA/JpmIrqkZSusJ3sOheK4aWKGiWF/mbzaQ/tA94=
+Received: from AM6PR04MB6584.eurprd04.prod.outlook.com (20.179.245.21) by
+ AM6PR04MB5557.eurprd04.prod.outlook.com (20.178.93.88) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2814.18; Mon, 16 Mar 2020 12:28:58 +0000
+Received: from AM6PR04MB6584.eurprd04.prod.outlook.com
+ ([fe80::3c28:9128:54b1:ee7c]) by AM6PR04MB6584.eurprd04.prod.outlook.com
+ ([fe80::3c28:9128:54b1:ee7c%6]) with mapi id 15.20.2814.021; Mon, 16 Mar 2020
+ 12:28:58 +0000
+From:   Sherry Sun <sherry.sun@nxp.com>
 To:     Borislav Petkov <bp@alien8.de>
-CC:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Tony Luck <tony.luck@intel.com>,
-        James Morse <james.morse@arm.com>,
-        Aristeu Rozanski <aris@redhat.com>,
-        <linux-edac@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 06/11] EDAC/ghes: Carve out MC device handling into
- separate functions
-Message-ID: <20200316121214.qb3nq22xsbiqaz3e@rric.localdomain>
-References: <20200306151318.17422-1-rrichter@marvell.com>
- <20200306151318.17422-7-rrichter@marvell.com>
- <20200316093134.GB26126@zn.tnic>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200316093134.GB26126@zn.tnic>
-User-Agent: NeoMutt/20170113 (1.7.2)
-X-ClientProxiedBy: HE1PR06CA0142.eurprd06.prod.outlook.com
- (2603:10a6:7:16::29) To MN2PR18MB3408.namprd18.prod.outlook.com
- (2603:10b6:208:165::10)
-MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from rric.localdomain (31.208.96.227) by HE1PR06CA0142.eurprd06.prod.outlook.com (2603:10a6:7:16::29) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2814.19 via Frontend Transport; Mon, 16 Mar 2020 12:12:20 +0000
-X-Originating-IP: [31.208.96.227]
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: adbd3704-3b8b-4b85-2260-08d7c9a347b7
-X-MS-TrafficTypeDiagnostic: MN2PR18MB3054:
-X-Microsoft-Antispam-PRVS: <MN2PR18MB3054A7F65E40499E2A2CD8C9D9F90@MN2PR18MB3054.namprd18.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:10000;
-X-Forefront-PRVS: 03449D5DD1
-X-Forefront-Antispam-Report: SFV:NSPM;SFS:(10009020)(4636009)(376002)(136003)(396003)(366004)(39860400002)(346002)(199004)(52116002)(7696005)(8936002)(6506007)(8676002)(6916009)(1076003)(16526019)(6666004)(5660300002)(186003)(316002)(26005)(478600001)(66556008)(2906002)(66476007)(53546011)(54906003)(66946007)(9686003)(86362001)(81156014)(81166006)(55016002)(956004)(4326008);DIR:OUT;SFP:1101;SCL:1;SRVR:MN2PR18MB3054;H:MN2PR18MB3408.namprd18.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;
-Received-SPF: None (protection.outlook.com: marvell.com does not designate
+CC:     "mchehab@kernel.org" <mchehab@kernel.org>,
+        "tony.luck@intel.com" <tony.luck@intel.com>,
+        "james.morse@arm.com" <james.morse@arm.com>,
+        "rrichter@marvell.com" <rrichter@marvell.com>,
+        "michal.simek@xilinx.com" <michal.simek@xilinx.com>,
+        "manish.narani@xilinx.com" <manish.narani@xilinx.com>,
+        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        dl-linux-imx <linux-imx@nxp.com>, Frank Li <frank.li@nxp.com>
+Subject: RE: [PATCH v2] EDAC: synopsys: Fix the wrong call of pinf->col
+ parameter
+Thread-Topic: [PATCH v2] EDAC: synopsys: Fix the wrong call of pinf->col
+ parameter
+Thread-Index: AQHV7d33uILy8BVBmkGIj78HSs8mPahKKjMAgABbh2CAAJ4fAIAAHRUA
+Date:   Mon, 16 Mar 2020 12:28:58 +0000
+Message-ID: <AM6PR04MB6584F064D683493842EE5B4A92F90@AM6PR04MB6584.eurprd04.prod.outlook.com>
+References: <1582856183-5007-1-git-send-email-sherry.sun@nxp.com>
+ <20200315195024.GB10926@zn.tnic>
+ <AM6PR04MB658495A13744517A6E263D2292F90@AM6PR04MB6584.eurprd04.prod.outlook.com>
+ <20200316104356.GH26126@zn.tnic>
+In-Reply-To: <20200316104356.GH26126@zn.tnic>
+Accept-Language: zh-CN, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=sherry.sun@nxp.com; 
+x-originating-ip: [92.121.68.129]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-ht: Tenant
+x-ms-office365-filtering-correlation-id: b769c13c-e6a9-4dbd-281d-08d7c9a59a0a
+x-ms-traffictypediagnostic: AM6PR04MB5557:|AM6PR04MB5557:
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <AM6PR04MB5557B90FC630D14EE7246B7792F90@AM6PR04MB5557.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:5797;
+x-forefront-prvs: 03449D5DD1
+x-forefront-antispam-report: SFV:NSPM;SFS:(10001)(10009020)(4636009)(39860400002)(346002)(376002)(396003)(366004)(136003)(199004)(76116006)(66946007)(66476007)(64756008)(66556008)(66446008)(8676002)(6506007)(53546011)(2906002)(52536014)(5660300002)(86362001)(45080400002)(966005)(478600001)(316002)(54906003)(4326008)(7696005)(81156014)(8936002)(81166006)(9686003)(55016002)(6916009)(44832011)(71200400001)(26005)(186003)(33656002);DIR:OUT;SFP:1101;SCL:1;SRVR:AM6PR04MB5557;H:AM6PR04MB6584.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;
+received-spf: None (protection.outlook.com: nxp.com does not designate
  permitted sender hosts)
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: hifFB5vKd3a0izdniwFmtaL+Xr569KufWh832HgK2eup7cKqBPKFm9iB+V84eVPYuFWl4Eryaaf9i7JpAj6cFWP5biDBF40ewRKj8GfM+QI8+V4TvvxzH5ECgRS4wVflVtRRm3LulwfQxouU+HPlkkKCgk8JHpkaElPfQgOpq+ntuVvsat/ZLLxG8/aYonn0uhjzn/LuUcVc9Yav1gbBsbw8jT6K4c9GCAC8szGnFih2gLaLjqNq9AdwchkW9mU5gDBlPQk4ZlACL/2s2VogInl+Rt3GI+hlIwEGIUZ/xSSyD0WWZkNIgOqOkvU3YKgeSWfh9IppXo8n52az5suV33jBkxUM5ke4n6hz3W6rNbcCtx1syfAsnzAcCPjP70CKrpGnP68SWdcsTlS0feqqRGetB+s0ITcU1Wl7/iDbtu1YLsPKc5Qe/YqrPCYbdcRK
-X-MS-Exchange-AntiSpam-MessageData: OlRGKyz/cM/BdKBY3zYbcRNCqISwQ8vILXuek2MAo5A2U80IAyiqfB2cPIzxsKlnzbP44gMBe+nfgXNe3tIRkFRrjpDJtIM0W0kqwEdDRdroSv1OHTEEOCrc3TrbZ1fRsDeK2RW/dFz2+ZQJaaHS1Q==
-X-MS-Exchange-CrossTenant-Network-Message-Id: adbd3704-3b8b-4b85-2260-08d7c9a347b7
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Mar 2020 12:12:22.0648
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: /RKCOcGY9uz6E0okVfusXjPv5YRfrRqTER1XX2NGgYn1OebBi3KMIGOCYIyfzkp3/ceA6Nxunua5fLzLdcUghQL3E7Aw4vMG7pD7Cd3uFw2u3I8aBNjLJjOqMmAdHJfT3TB1bXt3lg6IFPI+nNxTtup3pSMe2aYUlTtmakZ0SD4a58B3clffdgLbtH5hBuVdt3FQO3M7E5n2VLv6WhKORud465WLX2StI60KGTbaMZBYSr8YTlMD9embfAlIkPaPHzDDzsN7oPmQLUR1Qhm2RwoaJCul6+IVetbP2GQs/cu9s47rIQGrKoR/nXDN0N5BLR14o6CJJR5E75+R/73HDlAdjidb+pIz4ZSBh32paByYJCDa1sMpcg4UwrF3CnvWJlhX5lzjMbjr/JFB1xDtwzhIxNWSAXVMwhVe4r2oXnQxWM14UUoXTWD6GJGV5KrynjDfvQJ9PGYn0/9tKFbmPDU3KMVUVtsAksREgBR9Ps89pXC5fUFYHKmc3JUQkTlWP54W4bChZ5O9xET1s4wKjzzYHZEEh2uS8Wu0CXhQ/CZoT/syUC5j0t3htno7GifV4zd+SmrB8Q5jWWAO7v9Fs5j9k6qztgUVgBRmsZ07I1w4qUY8ErVGHAValPgm6Vy9
+x-ms-exchange-antispam-messagedata: liuzu4WmlSYZGGNHsA/7y2DOwGnyNxbo0at0vMCsJZUqlSmID/07yI2RjhPIgEg5Hu1wQDTvatBnBLKHbrp6Dr2Dnf/3kG5ALbc7UzpzjzL5LjMGbJmmVPtJjE0apK8rrch4BTN1hRZw6ahNxBrynA==
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: b769c13c-e6a9-4dbd-281d-08d7c9a59a0a
+X-MS-Exchange-CrossTenant-originalarrivaltime: 16 Mar 2020 12:28:58.6808
  (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 70e1fb47-1155-421d-87fc-2e58f638b6e0
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: kNEfK73CcIcJq1OqkWkCodgyrjyjL9MC74G4pyhl6LPeb6CJfpqUI8dSu29orJRN0PWvVwrlL3WngxKKjexybg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR18MB3054
-X-OriginatorOrg: marvell.com
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.572
- definitions=2020-03-16_03:2020-03-12,2020-03-16 signatures=0
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: +4z1n9G89WW/gFK+zYnZp9q87AFrDTI+taci5jizs9/MquCHjMvO9eLMFGRgSibwoJx0he3r1v1W+TGDDIucnw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM6PR04MB5557
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On 16.03.20 10:31:34, Borislav Petkov wrote:
-> On Fri, Mar 06, 2020 at 04:13:13PM +0100, Robert Richter wrote:
-> > The functions are too long, carve out code that handles MC devices
-> > into the new functions ghes_mc_create(), ghes_mc_add_or_free() and
-> > ghes_mc_free(). Apart from better code readability the functions can
-> > be reused and the implementation of the error paths becomes easier.
-> > 
-> > Signed-off-by: Robert Richter <rrichter@marvell.com>
-> > ---
-> >  drivers/edac/ghes_edac.c | 133 +++++++++++++++++++++++----------------
-> >  1 file changed, 79 insertions(+), 54 deletions(-)
-> > 
-> > diff --git a/drivers/edac/ghes_edac.c b/drivers/edac/ghes_edac.c
-> > index 358519e8c2e9..5a4c9694bbff 100644
-> > --- a/drivers/edac/ghes_edac.c
-> > +++ b/drivers/edac/ghes_edac.c
-> > @@ -462,16 +462,81 @@ static struct acpi_platform_list plat_list[] = {
-> >  	{ } /* End */
-> >  };
-> >  
-> > -int ghes_edac_register(struct ghes *ghes, struct device *dev)
-> > +static struct mem_ctl_info *ghes_mc_create(struct device *dev, int mc_idx,
-> > +					int num_dimm)
-> >  {
-> > -	bool fake = false;
-> > -	int rc = 0, num_dimm = 0;
-> > +	struct edac_mc_layer layers[1];
-> >  	struct mem_ctl_info *mci;
-> >  	struct ghes_mci *pvt;
-> > -	struct edac_mc_layer layers[1];
-> > -	struct ghes_dimm_fill dimm_fill;
-> > +
-> > +	layers[0].type = EDAC_MC_LAYER_ALL_MEM;
-> > +	layers[0].size = num_dimm;
-> > +	layers[0].is_virt_csrow = true;
-> > +
-> > +	mci = edac_mc_alloc(mc_idx, ARRAY_SIZE(layers), layers, sizeof(*pvt));
-> > +	if (!mci)
-> > +		return NULL;
-> > +
-> > +	pvt		= mci->pvt_info;
-> > +	pvt->mci	= mci;
-> > +
-> > +	mci->pdev = dev;
-> > +	mci->mtype_cap = MEM_FLAG_EMPTY;
-> > +	mci->edac_ctl_cap = EDAC_FLAG_NONE;
-> > +	mci->edac_cap = EDAC_FLAG_NONE;
-> > +	mci->mod_name = "ghes_edac.c";
-> > +	mci->ctl_name = "ghes_edac";
-> > +	mci->dev_name = "ghes";
-> > +
-> > +	return mci;
-> > +}
-> > +
-> > +static int ghes_mc_add_or_free(struct mem_ctl_info *mci)
-> 
-> ghes_mc_add() is good enough. The fact that the function has error
-> handling doesn't need to be in the name.
-
-It's not just error handling here. I choose the name as the mci is
-freed if it could not be added, which is different to just return an
-error if it fails. Otherwise the flow would be something like:
-
-	mci = ghes_mc_create(...);
-	rc = ghes_mc_add(mci);
-	if (rc) {
-		ghes_mc_free(mci);
-		/* do something */
-	}
-
-But we do not need mci any longer on error, so we can free it directly
-which makes the code much easier, but in fact it does 2 things at a
-time then:
-
-	mci = ghes_mc_create(...);
-	rc = ghes_mc_add_or_free(mci);
-	if (rc)
-        	/* do something */
-
-I would rather prefer ghes_mc_add_or_free().
-
--Robert
-
-
+SGkgQm9yaXNsYXYsDQoNCj4gLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCj4gRnJvbTogQm9y
+aXNsYXYgUGV0a292IDxicEBhbGllbjguZGU+DQo+IFNlbnQ6IDIwMjDlubQz5pyIMTbml6UgMTg6
+NDQNCj4gVG86IFNoZXJyeSBTdW4gPHNoZXJyeS5zdW5AbnhwLmNvbT4NCj4gQ2M6IG1jaGVoYWJA
+a2VybmVsLm9yZzsgdG9ueS5sdWNrQGludGVsLmNvbTsgamFtZXMubW9yc2VAYXJtLmNvbTsNCj4g
+cnJpY2h0ZXJAbWFydmVsbC5jb207IG1pY2hhbC5zaW1la0B4aWxpbnguY29tOyBtYW5pc2gubmFy
+YW5pQHhpbGlueC5jb207DQo+IGxpbnV4LWVkYWNAdmdlci5rZXJuZWwub3JnOyBsaW51eC1rZXJu
+ZWxAdmdlci5rZXJuZWwub3JnOyBkbC1saW51eC1pbXgNCj4gPGxpbnV4LWlteEBueHAuY29tPjsg
+RnJhbmsgTGkgPGZyYW5rLmxpQG54cC5jb20+DQo+IFN1YmplY3Q6IFJlOiBbUEFUQ0ggdjJdIEVE
+QUM6IHN5bm9wc3lzOiBGaXggdGhlIHdyb25nIGNhbGwgb2YgcGluZi0+Y29sDQo+IHBhcmFtZXRl
+cg0KPiANCj4gT24gTW9uLCBNYXIgMTYsIDIwMjAgYXQgMDE6MzA6MzlBTSArMDAwMCwgU2hlcnJ5
+IFN1biB3cm90ZToNCj4gPiBNYXliZSB5b3UgbWlzdW5kZXJzdG9vZCB0aGUgaGFuZGxlX2Vycm9y
+KCksIHRoaXMgZnVuY3Rpb24gaGFzIGFscmVhZHkNCj4gPiBkaXN0aW5ndWlzaGVkIGJldHdlZW4g
+WnlucSBhbmQgWnlucU1QIHRocm91Z2ggcHJpdi0+cF9kYXRhLT5xdWlya3MuDQo+ID4gQW5kIHdo
+YXQgSSBhbSBkb2luZyBpbiB0aGlzIHBhdGNoIGlzIHRvIHJlbW92ZSB0aGUgdXNlbGVzcyBwaW5m
+LT5jb2wNCj4gPiBpbiBaeW5xTVAgcGFydCwgd2hpY2ggd29uJ3QgYnJlYWsgdGhlIFp5bnEgcGFy
+dC4NCj4gDQo+IE9rLCBJIHNlZSBpdCBub3csIHRoYW5rcyBmb3IgY2xhcmlmeWluZy4NCj4gDQo+
+IE5vdywgaW4geW91ciB2MiBwbHMgZml4IHRoaXMgY2hlY2sgaW4gaGFuZGxlX2Vycm9yKCk6DQo+
+IA0KPiAJaWYgKCFwcml2LT5wX2RhdGEtPnF1aXJrcykgew0KPiANCj4gdG8gKmFjdHVhbGx5KiAq
+ZXhwbGljaXRseSogY2hlY2sgdGhhdCB0aGUgcGxhdGZvcm0gZm9yIHdoaWNoIHRoaXMgZnVuY3Rp
+b24gaXMNCj4gY2FsbGVkLCByZWFsbHkgc3VwcG9ydHMgaW50ZXJydXB0cywgaS5lLiwgRERSX0VD
+Q19JTlRSX1NVUFBPUlQsIGFuZCBub3QgdGhhdA0KPiB0aGUgLT5xdWlya3MgdGhpbmcgaXMgIT0g
+MC4gTGlrZSB0aGUgcmVzdCBvZiB0aGUgY29kZSBkb2VzLg0KPiANCg0KT2ssIEkgd2lsbCBmaXgg
+dGhpcyBjaGVjay4NCg0KQmVzdCByZWdhcmRzDQpTaGVycnkgU3VuDQoNCj4gVGh4Lg0KPiANCj4g
+LS0NCj4gUmVnYXJkcy9HcnVzcywNCj4gICAgIEJvcmlzLg0KPiANCj4gaHR0cHM6Ly9ldXIwMS5z
+YWZlbGlua3MucHJvdGVjdGlvbi5vdXRsb29rLmNvbS8/dXJsPWh0dHBzJTNBJTJGJTJGcGVvcGwN
+Cj4gZS5rZXJuZWwub3JnJTJGdGdseCUyRm5vdGVzLWFib3V0LQ0KPiBuZXRpcXVldHRlJmFtcDtk
+YXRhPTAyJTdDMDElN0NzaGVycnkuc3VuJTQwbnhwLmNvbSU3Q2NkODQzMjM5ZmZkDQo+IGQ0OGEw
+NWNlNDA4ZDdjOTk2ZWJkNSU3QzY4NmVhMWQzYmMyYjRjNmZhOTJjZDk5YzVjMzAxNjM1JTdDMCU3
+Qw0KPiAwJTdDNjM3MTk5NTIyMzU2OTA5ODM4JmFtcDtzZGF0YT01cDZKdVhRUUpneWpsYU1PVUgx
+Y0xMU0RGYlV6TQ0KPiBSJTJGanpzNUhDJTJGZVUxWmMlM0QmYW1wO3Jlc2VydmVkPTANCg==
