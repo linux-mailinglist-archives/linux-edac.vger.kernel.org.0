@@ -2,79 +2,62 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B9ABB187E32
-	for <lists+linux-edac@lfdr.de>; Tue, 17 Mar 2020 11:22:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D2BE188350
+	for <lists+linux-edac@lfdr.de>; Tue, 17 Mar 2020 13:11:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726077AbgCQKWx (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Tue, 17 Mar 2020 06:22:53 -0400
-Received: from mail.kernel.org ([198.145.29.99]:53410 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725730AbgCQKWw (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Tue, 17 Mar 2020 06:22:52 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id B82D3205ED;
-        Tue, 17 Mar 2020 10:22:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1584440572;
-        bh=3JhdNYW35Xr7cHItOJ5k+T6/2/lATLnR5LeNQ/kmzqQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ZEAsPeRiKFScbRUEAjJzdfuOTDSm/yKlJrtz84TKJKzeqEsVKi5cPStIAg4wbA7wk
-         +4QEMjYV9+OpLSVA0brQzzDOLlRCuyAg5KuhBmloFa5fbvPH0mZhkWHF+gqNKMD+Mx
-         Er6BDZZ6SxNhW3g2CcE3EEpXQVBovZm0IzpGFy9E=
-Date:   Tue, 17 Mar 2020 11:22:49 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Manali K Shukla <manashuk@cisco.com>
-Cc:     bp@alien8.de, linux-edac@vger.kernel.org, mchehab@kernel.org,
-        linux-kernel@vger.kernel.org, xe-linux-external@cisco.com,
-        Borislav Petkov <bp@suse.de>,
-        Aristeu Rozanski Filho <arozansk@redhat.com>,
-        Justin Ernst <justin.ernst@hpe.com>,
-        Russ Anderson <rja@hpe.com>, Tony Luck <tony.luck@intel.com>
-Subject: Re: [ PATCH stable v4.19] EDAC: Drop per-memory controller buses
-Message-ID: <20200317102249.GC1130294@kroah.com>
-References: <20200312052201.49456-1-manashuk@cisco.com>
+        id S1726968AbgCQML4 (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Tue, 17 Mar 2020 08:11:56 -0400
+Received: from sonic308-2.consmr.mail.ne1.yahoo.com ([66.163.187.121]:35604
+        "EHLO sonic308-2.consmr.mail.ne1.yahoo.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726982AbgCQML4 (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>);
+        Tue, 17 Mar 2020 08:11:56 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1584447115; bh=kcevCRoll2+Bsa3FDERpIV72LVcB1A4YV1b5N2AWYBk=; h=Date:From:Reply-To:Subject:References:From:Subject; b=iUlGnRLQG6F3FaEVNIp3zcBgcxIJSYrz1n2caipTs0506aGX82j4iJh/jdfSgvf/ydicy2n4aU/zcMuD6FT0MPShSa5Y9D0k1iZPPFL8PIFVehJi7MVWrDXqoMlkPLuvXo9aP+WQB/EErjPvAayMOmUP+gTL/NWxITqPGPZK2XtE9pgcVrWyc3xc/+YTyebWNK+rtmAyWlGP/eliRO3yEsGmz8o9JBSgOoQqhEmw5DHDZJheBrRRyvm+a84qVIzOFpXH9siCaC50IUM0wmFhzZuSMna+3k035X/W95iGIQBCFRdjIOLpT0JSULvvxk0W9DSm14SNXbMEEWQazrStyw==
+X-YMail-OSG: 1HTxhrwVM1kZE2_6l5ymOn55wL.OWIsR9auq.uEqq_ZHTQie.PaPJpxl5rp9igB
+ FCikKZTBgfOj8BtWp.7dvKTeASz9ejKdjMoqxE0hg4RSPq.Xd74XcI5VEnMkqJkyztk67cbM7Or9
+ unzm5W7a3GjGw1sOHs_4l.tEhyFRVj01f6pdEhXinjs1ji5NymU2z43mkQDygHNj16YBZa9wTB07
+ moCD3msk0w8_kdkp22fpPwTX4fLTEmNYBk21vXz6HtPk0.6b3kVjtTGK6_ZZh_OYbaLCc5TFSvT.
+ AENtXRny18CK0gOejXVDH8ptfkWZF5lg6LdBoZiGU43ZYWbhjIXMSDsrYPX.SYJZG3m6aL96RlDc
+ 4vm72HzxkuZRIQhMed8kwuXYxZl_jqoyOlhI.nyfIvgsga1AYHOmHv.U_XZRhERMqBF.P5FA.Wnv
+ 6kMqdwrgGgGIaBeQs75cdTwEmgv5ykzgM2LfpevJOpR_MdTOpjHP08RQMgGirEnMzLLu4uGsG6Jp
+ KxzISBhVgXQ4x9lZvKT1RFpVYF.wX6_RTCbllK1_nHOjYKRfnp8EfjyYm_VsnMOFRAnulZztZzAB
+ juSj9TeppZ71SsI8u6thVsJU0PtFY_.RdSdkfF0PQaXmIwubwv0BR2gR0gt5yXxJV0kAW.bpPwB4
+ 8v7fMU_tvJzbYunZIf9a6A3doFdxSkSIuEfQctkuJZxwf955s2qBys5JamCgpQA5LprKLq3.iR.G
+ BIyc.9HtBGd7_XlYAWyIBlRYB4dhsVF8_yma6nxIJdOXkg7QBy0U0Mba7DucPundHOuIxwEb5Rov
+ KpuYyiiYmAOOobaSJaM8GYdWZLDqdKdCwa.RlA0BHZIK3lDCKK9a76.qpc6gs.WiFFwndlk9SpVe
+ CFz52MUKaSLxUp3Y.jhTJdHuxZgtpswiFP2J_BbRrk3nvH_6qaOcGnaxXjwty5qD_ElDn2rmpKl4
+ a06XHTzdmDucbtqSf1I5rTyiFcVFiIzSREWbA7Kc8Kh_utzmUu7QXM6J87zt9PxzcFHlBHvtZV3d
+ Jt2ydetpORiYIDflivuU8c5bAF93F6tbvCTO1bi7racv42jfg48zkh61iQck2C7pew6.5E.HLDNs
+ CDqJWL0wv05joC45oVjMt6mHEACw8YXaKFnoUMjnlrbHwDktN8ty70H7rYDNrKIM_SRj1rjtWOE2
+ wpRrOZm8gM..Xxb1sh2OeXwtcuiT16WAIZ8HTAtstL3u_TVZOyW_eMVZbtrQE7M7dhwEAxNYa.uz
+ Rdql3UbrnbUdAEu4bpqZDBxt5XwCviqOtp.6WkyD5frAPEgwbHYnAZsPjZPglQsouJX2ttD_S.Kj
+ HBXFqHTAuu1pSYJNaUNcIey6u_eM-
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic308.consmr.mail.ne1.yahoo.com with HTTP; Tue, 17 Mar 2020 12:11:55 +0000
+Date:   Tue, 17 Mar 2020 12:09:54 +0000 (UTC)
+From:   Stephen Li <stenn6@gabg.net>
+Reply-To: stephli947701@gmail.com
+Message-ID: <2059527141.1811494.1584446994240@mail.yahoo.com>
+Subject: REF
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20200312052201.49456-1-manashuk@cisco.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+References: <2059527141.1811494.1584446994240.ref@mail.yahoo.com>
+X-Mailer: WebService/1.1.15342 YMailNodin Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.132 Safari/537.36
+To:     unlisted-recipients:; (no To-header on input)
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Wed, Mar 11, 2020 at 10:22:01PM -0700, Manali K Shukla wrote:
-> From: Borislav Petkov <bp@suse.de>
-> 
-> upstream 861e6ed667c83d64a42b0db41a22d6b4de4e913f commit
-> 
-> ... and use the single edac_subsys object returned from
-> subsys_system_register(). The idea is to have a single bus
-> and multiple devices on it.
-> 
-> Signed-off-by: Borislav Petkov <bp@suse.de>
-> Acked-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
-> CC: Aristeu Rozanski Filho <arozansk@redhat.com>
-> CC: Greg KH <gregkh@linuxfoundation.org>
-> CC: Justin Ernst <justin.ernst@hpe.com>
-> CC: linux-edac <linux-edac@vger.kernel.org>
-> CC: Mauro Carvalho Chehab <mchehab@kernel.org>
-> CC: Russ Anderson <rja@hpe.com>
-> Cc: Tony Luck <tony.luck@intel.com>
-> Link: https://lkml.kernel.org/r/20180926152752.GG5584@zn.tnic
-> [Manali: backport to v4.19 -stable :
-> - removing per-MC bus, this enables to get rid of memory controllers
->   maximum number notion
-> - value of max number of memory controllers is 2 * MAX_NUMNODES. On two nodes system MAX_NUMNODES value is ‘1’ and
->   so value of max number of memory controller becomes ‘2’, this patch fixes this issue when there are only 2 nodes on the system
->   and number of memory controllers are more than ‘2’]
-> (cherry picked from commit 861e6ed667c83d64a42b0db41a22d6b4de4e913f)
-> Signed-off-by: Manali K Shukla <manashuk@cisco.com>
 
-Why is this a patch for the stable trees?  What problem does it solve?
 
-thanks,
-
-greg k-h-
+Greetings,
+I was searching through a local business directory when I found your
+profile. I am Soliciting On-Behalf of my private client who is
+interested in having a serious business investment in your country. If
+you have a valid business, investment or project he can invest
+back to me for more details. Your swift response is highly needed.
+Sincerely
+Stephen Li
+Please response back to me with is my private email below for more details
+stephli947701@gmail.com
