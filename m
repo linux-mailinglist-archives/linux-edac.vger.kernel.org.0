@@ -2,92 +2,69 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B1AF518D962
-	for <lists+linux-edac@lfdr.de>; Fri, 20 Mar 2020 21:33:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A3D5E18DA03
+	for <lists+linux-edac@lfdr.de>; Fri, 20 Mar 2020 22:09:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726925AbgCTUdJ (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Fri, 20 Mar 2020 16:33:09 -0400
-Received: from Galois.linutronix.de ([193.142.43.55]:37119 "EHLO
-        Galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726829AbgCTUdJ (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Fri, 20 Mar 2020 16:33:09 -0400
-Received: from p5de0bf0b.dip0.t-ipconnect.de ([93.224.191.11] helo=nanos.tec.linutronix.de)
-        by Galois.linutronix.de with esmtpsa (TLS1.2:DHE_RSA_AES_256_CBC_SHA256:256)
-        (Exim 4.80)
-        (envelope-from <tglx@linutronix.de>)
-        id 1jFOJf-0003W5-B3; Fri, 20 Mar 2020 21:32:27 +0100
-Received: by nanos.tec.linutronix.de (Postfix, from userid 1000)
-        id A95431039FC; Fri, 20 Mar 2020 21:32:26 +0100 (CET)
-From:   Thomas Gleixner <tglx@linutronix.de>
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        "maintainer\:X86 ARCHITECTURE \(32-BIT AND 64-BIT\)" <x86@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mark Gross <mgross@linux.intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Len Brown <lenb@kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Darren Hart <dvhart@infradead.org>,
-        Andy Shevchenko <andy@infradead.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        linux-edac@vger.kernel.org,
-        Platform Driver <platform-driver-x86@vger.kernel.org>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        linux-hwmon@vger.kernel.org, Zhang Rui <rui.zhang@intel.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amit.kucheria@verdurent.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Jacob Pan <jacob.jun.pan@linux.intel.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        linux-mmc <linux-mmc@vger.kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org,
-        Takashi Iwai <tiwai@suse.com>,
-        ALSA Development Mailing List <alsa-devel@alsa-project.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        linux-crypto <linux-crypto@vger.kernel.org>
-Subject: Re: [patch 08/22] ACPI: Convert to new X86 CPU match macros
-In-Reply-To: <CAHp75VcK3tL0YayjF=CSkSkHiOpg2zOV3rdkXQWJmLZ9fmevpg@mail.gmail.com>
-References: <20200320131345.635023594@linutronix.de> <20200320131509.467730627@linutronix.de> <CAHp75VcK3tL0YayjF=CSkSkHiOpg2zOV3rdkXQWJmLZ9fmevpg@mail.gmail.com>
-Date:   Fri, 20 Mar 2020 21:32:26 +0100
-Message-ID: <87bloqpy1x.fsf@nanos.tec.linutronix.de>
+        id S1726851AbgCTVJd convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-edac@lfdr.de>); Fri, 20 Mar 2020 17:09:33 -0400
+Received: from mga04.intel.com ([192.55.52.120]:57838 "EHLO mga04.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725874AbgCTVJc (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Fri, 20 Mar 2020 17:09:32 -0400
+IronPort-SDR: LxgOgxgznAo4msQlLblk4Wif1FgwUATYG/JulmEwSNjEyjplwoeCCBDBzdyMKfRC9IDbfrEPg9
+ oYJR2DUZ4UcQ==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Mar 2020 14:09:32 -0700
+IronPort-SDR: LUEt3r3KJDk1vUWMuhI4tievXJrHC+iPEvvACtJw1waq1DqF5WxC0DTorkzBmPULg1QDWb5240
+ Mu6+YY8m4/kg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.72,286,1580803200"; 
+   d="scan'208";a="237327604"
+Received: from orsmsx103.amr.corp.intel.com ([10.22.225.130])
+  by fmsmga007.fm.intel.com with ESMTP; 20 Mar 2020 14:09:32 -0700
+Received: from orsmsx115.amr.corp.intel.com ([169.254.4.102]) by
+ ORSMSX103.amr.corp.intel.com ([169.254.5.6]) with mapi id 14.03.0439.000;
+ Fri, 20 Mar 2020 14:09:32 -0700
+From:   "Luck, Tony" <tony.luck@intel.com>
+To:     Wei Huang <wei.huang2@amd.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+CC:     "bp@suse.de" <bp@suse.de>,
+        "yazen.ghannam@amd.com" <yazen.ghannam@amd.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "smita.koralahallichannabasappa@amd.com" 
+        <smita.koralahallichannabasappa@amd.com>
+Subject: RE: [PATCH V2 1/1] x86/mce/amd: Add PPIN support for AMD MCE
+Thread-Topic: [PATCH V2 1/1] x86/mce/amd: Add PPIN support for AMD MCE
+Thread-Index: AQHV/u/OOpAw4hNzbky7vzrJSNSJL6hR+Ysw
+Date:   Fri, 20 Mar 2020 21:09:31 +0000
+Message-ID: <3908561D78D1C84285E8C5FCA982C28F7F5B7CE7@ORSMSX115.amr.corp.intel.com>
+References: <20200320194305.3532606-1-wei.huang2@amd.com>
+In-Reply-To: <20200320194305.3532606-1-wei.huang2@amd.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+dlp-product: dlpe-windows
+dlp-version: 11.2.0.6
+dlp-reaction: no-action
+x-originating-ip: [10.22.254.140]
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 8BIT
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Linutronix-Spam-Score: -1.0
-X-Linutronix-Spam-Level: -
-X-Linutronix-Spam-Status: No , -1.0 points, 5.0 required,  ALL_TRUSTED=-1,SHORTCIRCUIT=-0.0001
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-Andy Shevchenko <andy.shevchenko@gmail.com> writes:
+Acked-by: Tony Luck <tony.luck@intel.com>
 
-> On Fri, Mar 20, 2020 at 3:19 PM Thomas Gleixner <tglx@linutronix.de> wrote:
->>
->> The new macro set has a consistent namespace and uses C99 initializers
->> instead of the grufty C89 ones.
->>
->> Rename the local macro wrapper to X86_MATCH for consistency. It stays for
->> readability sake.
->
->> +       X86_MATCH_INTEL_FAM6_MODEL(ATOM_SILVERMONT,     NULL),
->> +       X86_MATCH_INTEL_FAM6_MODEL(ATOM_AIRMONT,        NULL),
->
->> -#define ICPU(model)    { X86_VENDOR_INTEL, 6, model, X86_FEATURE_ANY, }
->> +#define X86_MATCH(model)       X86_MATCH_INTEL_FAM6_MODEL(model, NULL)
->
-> Maybe we can do a generic macro to avoid all these ', NULL' repetitions?
+Still true for this new version.
 
-I opted for having the data argument everywhere to keep the macro maze
-small. And we have enough places where data is actually used.
+-Tony
 
-Thanks,
-
-        tglx
