@@ -2,97 +2,140 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D5D0B18DAF2
-	for <lists+linux-edac@lfdr.de>; Fri, 20 Mar 2020 23:19:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AE6A18DF33
+	for <lists+linux-edac@lfdr.de>; Sat, 21 Mar 2020 10:39:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726986AbgCTWTP (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Fri, 20 Mar 2020 18:19:15 -0400
-Received: from Galois.linutronix.de ([193.142.43.55]:37559 "EHLO
-        Galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726666AbgCTWTO (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Fri, 20 Mar 2020 18:19:14 -0400
-Received: from p5de0bf0b.dip0.t-ipconnect.de ([93.224.191.11] helo=nanos.tec.linutronix.de)
-        by Galois.linutronix.de with esmtpsa (TLS1.2:DHE_RSA_AES_256_CBC_SHA256:256)
-        (Exim 4.80)
-        (envelope-from <tglx@linutronix.de>)
-        id 1jFPyQ-00050m-N3; Fri, 20 Mar 2020 23:18:38 +0100
-Received: by nanos.tec.linutronix.de (Postfix, from userid 1000)
-        id 3A4771039FC; Fri, 20 Mar 2020 23:18:38 +0100 (CET)
-From:   Thomas Gleixner <tglx@linutronix.de>
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        "maintainer\:X86 ARCHITECTURE \(32-BIT AND 64-BIT\)" <x86@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mark Gross <mgross@linux.intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Len Brown <lenb@kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Darren Hart <dvhart@infradead.org>,
-        Andy Shevchenko <andy@infradead.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        linux-edac@vger.kernel.org,
-        Platform Driver <platform-driver-x86@vger.kernel.org>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        linux-hwmon@vger.kernel.org, Zhang Rui <rui.zhang@intel.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amit.kucheria@verdurent.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Jacob Pan <jacob.jun.pan@linux.intel.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        linux-mmc <linux-mmc@vger.kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org,
-        Takashi Iwai <tiwai@suse.com>,
-        ALSA Development Mailing List <alsa-devel@alsa-project.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        linux-crypto <linux-crypto@vger.kernel.org>
-Subject: Re: [patch 09/22] cpufreq: Convert to new X86 CPU match macros
-In-Reply-To: <CAHp75VfuU98gEriS+GDJqZX4BV-cZT9hPbrDX-roeo63O8UvYQ@mail.gmail.com>
-References: <20200320131345.635023594@linutronix.de> <20200320131509.564059710@linutronix.de> <CAHp75VdkvyqOaAsLmz8K2j4bdd0sboPoUpRr6U-zvtkSaQfPRQ@mail.gmail.com> <87eetmpy56.fsf@nanos.tec.linutronix.de> <CAHp75VfuU98gEriS+GDJqZX4BV-cZT9hPbrDX-roeo63O8UvYQ@mail.gmail.com>
-Date:   Fri, 20 Mar 2020 23:18:38 +0100
-Message-ID: <877dzept4x.fsf@nanos.tec.linutronix.de>
+        id S1728239AbgCUJjI (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Sat, 21 Mar 2020 05:39:08 -0400
+Received: from mail.skyhub.de ([5.9.137.197]:52296 "EHLO mail.skyhub.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726995AbgCUJjI (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Sat, 21 Mar 2020 05:39:08 -0400
+Received: from zn.tnic (p200300EC2F1D5B005CBA888EC129B071.dip0.t-ipconnect.de [IPv6:2003:ec:2f1d:5b00:5cba:888e:c129:b071])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 904281EC027B;
+        Sat, 21 Mar 2020 10:39:06 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1584783546;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=1LXHYcqyyUW7TLupYbhXwRTRYkd7p90VEn7YEGvIx5g=;
+        b=OrXfoR6ByOyIheIBtbxpHAWJCBtmVQhW5YdDzkeavlJYYT6hlzQeLCJ8r5Kv/hufPlHTqv
+        ibKE4eUmcIKGF6P/dDJG0ibqndrGnn1f8P0NowVK3VRmKb5piONSA8G4rY2AJWUxxMghcq
+        93oBjXU6MJScAgteQLEU6tGcgiGOryU=
+Date:   Sat, 21 Mar 2020 10:39:00 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Wei Huang <wei.huang2@amd.com>
+Cc:     linux-kernel@vger.kernel.org, tony.luck@intel.com,
+        yazen.ghannam@amd.com, tglx@linutronix.de, mingo@redhat.com,
+        hpa@zytor.com, linux-edac@vger.kernel.org, x86@kernel.org,
+        smita.koralahallichannabasappa@amd.com
+Subject: Re: [PATCH V2 1/1] x86/mce/amd: Add PPIN support for AMD MCE
+Message-ID: <20200321093850.GA17494@zn.tnic>
+References: <20200320194305.3532606-1-wei.huang2@amd.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Linutronix-Spam-Score: -1.0
-X-Linutronix-Spam-Level: -
-X-Linutronix-Spam-Status: No , -1.0 points, 5.0 required,  ALL_TRUSTED=-1,SHORTCIRCUIT=-0.0001
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20200320194305.3532606-1-wei.huang2@amd.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-Andy Shevchenko <andy.shevchenko@gmail.com> writes:
+On Fri, Mar 20, 2020 at 02:43:05PM -0500, Wei Huang wrote:
+> Newer AMD CPUs support a feature called protected processor identification
+> number (PPIN). This feature can be detected via CPUID_Fn80000008_EBX[23].
+> However CPUID alone is not enough to read the processor serial number.
+> MSR_AMD_PPIN_CTL also needs to be configured properly. If for any reason
+> X86_FEATURE_AMD_PPIN[PPIN_EN] can not be turned on, such as disabled in
+> BIOS, we have to clear the CPU capability bit of X86_FEATURE_AMD_PPIN.
+> 
+> When the X86_FEATURE_AMD_PPIN capability is available, MCE can read the
+> serial number to keep track the source of MCE errors.
+> 
+> Co-developed-by: Smita Koralahalli Channabasappa <smita.koralahallichannabasappa@amd.com>
+> Signed-off-by: Smita Koralahalli Channabasappa <smita.koralahallichannabasappa@amd.com>
+> Signed-off-by: Wei Huang <wei.huang2@amd.com>
+> Acked-by: Tony Luck <tony.luck@intel.com>
+> Cc: Borislav Petkov <bp@suse.de>
+> Cc: Yazen Ghannam <yazen.ghannam@amd.com>
+> Cc: Thomas Gleixner <tglx@linutronix.de>
+> Cc: Ingo Molnar <mingo@redhat.com>
+> Cc: "H. Peter Anvin" <hpa@zytor.com>
+> Cc: linux-edac <linux-edac@vger.kernel.org>
+> Cc: x86-ml <x86@kernel.org>
+> ---
+>  arch/x86/include/asm/cpufeatures.h |  1 +
+>  arch/x86/kernel/cpu/amd.c          | 26 ++++++++++++++++++++++++++
+>  arch/x86/kernel/cpu/mce/core.c     |  2 ++
+>  3 files changed, 29 insertions(+)
+> 
+> diff --git a/arch/x86/include/asm/cpufeatures.h b/arch/x86/include/asm/cpufeatures.h
+> index f3327cb56edf..4b263ffb793b 100644
+> --- a/arch/x86/include/asm/cpufeatures.h
+> +++ b/arch/x86/include/asm/cpufeatures.h
+> @@ -299,6 +299,7 @@
+>  #define X86_FEATURE_AMD_IBRS		(13*32+14) /* "" Indirect Branch Restricted Speculation */
+>  #define X86_FEATURE_AMD_STIBP		(13*32+15) /* "" Single Thread Indirect Branch Predictors */
+>  #define X86_FEATURE_AMD_STIBP_ALWAYS_ON	(13*32+17) /* "" Single Thread Indirect Branch Predictors always-on preferred */
+> +#define X86_FEATURE_AMD_PPIN		(13*32+23) /* Protected Processor Inventory Number */
+>  #define X86_FEATURE_AMD_SSBD		(13*32+24) /* "" Speculative Store Bypass Disable */
+>  #define X86_FEATURE_VIRT_SSBD		(13*32+25) /* Virtualized Speculative Store Bypass Disable */
+>  #define X86_FEATURE_AMD_SSB_NO		(13*32+26) /* "" Speculative Store Bypass is fixed in hardware. */
+> diff --git a/arch/x86/kernel/cpu/amd.c b/arch/x86/kernel/cpu/amd.c
+> index 1f875fbe1384..9176db4be69b 100644
+> --- a/arch/x86/kernel/cpu/amd.c
+> +++ b/arch/x86/kernel/cpu/amd.c
+> @@ -394,6 +394,31 @@ static void amd_detect_cmp(struct cpuinfo_x86 *c)
+>  	per_cpu(cpu_llc_id, cpu) = c->phys_proc_id;
+>  }
+>  
+> +static void amd_detect_ppin(struct cpuinfo_x86 *c)
+> +{
+> +	unsigned long long val;
+> +
+> +	if (cpu_has(c, X86_FEATURE_AMD_PPIN)) {
 
-> On Fri, Mar 20, 2020 at 10:30 PM Thomas Gleixner <tglx@linutronix.de> wrote:
->>
->> Andy Shevchenko <andy.shevchenko@gmail.com> writes:
->> > On Fri, Mar 20, 2020 at 3:18 PM Thomas Gleixner <tglx@linutronix.de> wrote:
->> >
->> >> +       X86_MATCH_VENDOR_FAM_MODEL_FEATURE(INTEL,  6,  9, X86_FEATURE_EST, NULL),
->> >> +       X86_MATCH_VENDOR_FAM_MODEL_FEATURE(INTEL,  6, 13, X86_FEATURE_EST, NULL),
->> >> +       X86_MATCH_VENDOR_FAM_MODEL_FEATURE(INTEL, 15,  3, X86_FEATURE_EST, NULL),
->> >> +       X86_MATCH_VENDOR_FAM_MODEL_FEATURE(INTEL, 15,  4, X86_FEATURE_EST, NULL),
->> >
->> >> +       X86_MATCH_VENDOR_FAM_MODEL(INTEL,  6, 0x8, 0),
->> >> +       X86_MATCH_VENDOR_FAM_MODEL(INTEL,  6, 0xb, 0),
->> >> +       X86_MATCH_VENDOR_FAM_MODEL(INTEL, 15, 0x2, 0),
->> >
->> >> +       X86_MATCH_VENDOR_FAM_MODEL(INTEL,  6, 0x8, 0),
->> >> +       X86_MATCH_VENDOR_FAM_MODEL(INTEL,  6, 0xb, 0),
->> >> +       X86_MATCH_VENDOR_FAM_MODEL(INTEL, 15, 0x2, 0),
->> >
->> > Perhaps use names instead of 6 and 15?
->>
->> Thought about that and did not come up with anyting useful. FAM6 vs. 6
->> is not really any better
->
-> Hmm... Do we have family 15 for Intel? Perhaps I missed something...
-> Or is it for any family?
+Flip check:
 
-Pentium 4
+	if (!cpu_has...
+		return;
+
+> +		/* Turn off now until MSR is properly configured */
+> +		clear_cpu_cap(c, X86_FEATURE_AMD_PPIN);
+
+What for? You can do the final decision in the end, once, instead of
+toggling that bit here.
+
+> +
+> +		if (rdmsrl_safe(MSR_AMD_PPIN_CTL, &val))
+> +			return;
+> +
+> +		if ((val & 3UL) == 1UL)
+> +			return;
+> +
+> +		if (!(val & 2UL)) {
+> +			wrmsrl_safe(MSR_AMD_PPIN_CTL,  val | 2UL);
+> +			rdmsrl_safe(MSR_AMD_PPIN_CTL, &val);
+> +		}
+
+Those need comments what they do, like in the Intel variant.
+
+> +
+> +		/* MSR_AMD_PPIN_CTL[PPIN_EN] bit is 1, turn feature back on */
+> +		if (val & 2UL)
+> +			set_cpu_cap(c, X86_FEATURE_AMD_PPIN);
+
+No, keep the feature bit set and clear it only when you determine so
+instead of clearing and setting again.
+
+Thx.
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
