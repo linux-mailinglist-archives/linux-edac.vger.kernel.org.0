@@ -2,111 +2,201 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 53C6A190ACE
-	for <lists+linux-edac@lfdr.de>; Tue, 24 Mar 2020 11:25:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E557190C87
+	for <lists+linux-edac@lfdr.de>; Tue, 24 Mar 2020 12:32:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726994AbgCXKZE (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Tue, 24 Mar 2020 06:25:04 -0400
-Received: from mail-pg1-f194.google.com ([209.85.215.194]:36962 "EHLO
-        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726524AbgCXKZD (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Tue, 24 Mar 2020 06:25:03 -0400
-Received: by mail-pg1-f194.google.com with SMTP id a32so8810157pga.4;
-        Tue, 24 Mar 2020 03:25:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=niMBZQskqIvvbvSQd3Vs9C4OFVhjiYiDfUEWD3hhgQU=;
-        b=WL57huwoohYOXgJDpFwNTccWhDvbdVj53HP9RTAYqeUArAowfq+8wm7C8xnQS+d7Xg
-         T6ZEXRd83CkutsSV26moPh6SFShAu8y5bgcdaa94+vyt5gv9L7FHOWY/xTwiS3ZXTJoo
-         mYyatVs+4JSkglhV/DZno5DkKWgsDuV6Nq3GIgrszTouv3+HdzH3Ue4zNWg9IJabYRM5
-         Yc/KKpuGqrb71fAUqQdj6kfvkI7Fc5ogXvzI4kRXgF1utZe1N1Trsq00q5ItgQsyJMa1
-         K51p515UguhiI4YjD4zkfxOZoju5Vs4RIc7CzfPQSFesYRhhKwf5f8kTncK3eqxsX1rE
-         yirA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=niMBZQskqIvvbvSQd3Vs9C4OFVhjiYiDfUEWD3hhgQU=;
-        b=MzFd2Jhj6NnyoTXDhkIDFXZaVVEeeRk7Ymt0c9yhAa02N+aUf3a2bgMGpJVsI0eyeb
-         dOiCM7PPIjQ7Vy9vzvWavWC/dB5HRgGAX84io8H7x8yQwYGe45tzV8kg3FmX5+KuoT5t
-         4deALsSaFDZjh44GUqT0q4JNNoF+98YMHrDsQhiKmkzRmTvZDXMjkjFRs22HbctASBKf
-         fsytqVC2ZwiG3APXDtOU2kuJmfobubjcFW+5LF70sJzJrqTcnH9PkrIyHA/F0/SmkjI4
-         u3ABbxCxzs7gfxoQZu9QRHtG5xcWiv9ikSPZ1eKCmWL/z1c0mU8DJnGlrg+/XBlexkNE
-         vtBQ==
-X-Gm-Message-State: ANhLgQ1JOAWWi5gPBJvE5LVcy14E2W0ND1MVLJbZRfqVsZSxIOEgewVQ
-        l7nJZI/CkU4AdsGKMvy4n0CbhmtUPRNG4ZxZcbc=
-X-Google-Smtp-Source: ADFU+vtRP5kcse4VydJXhIWcSQg5qG4qh1fLLlH+sYOY0YXmbvxSTKNtq7OW900chK9pK0hyoRdDWpT1dROadSow+qU=
-X-Received: by 2002:a05:6a00:2b4:: with SMTP id q20mr17417161pfs.36.1585045502171;
- Tue, 24 Mar 2020 03:25:02 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200320131509.564059710@linutronix.de> <20200324060124.GC11705@shao2-debian>
-In-Reply-To: <20200324060124.GC11705@shao2-debian>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Tue, 24 Mar 2020 12:24:54 +0200
-Message-ID: <CAHp75VeeKZLeZ8E3Py7LECN54SPFHaRgkxrMzBYQWXM8x+4JhA@mail.gmail.com>
-Subject: Re: [cpufreq] 06c4d00466: will-it-scale.per_process_ops -53.4% regression
-To:     kernel test robot <rong.a.chen@intel.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mark Gross <mgross@linux.intel.com>,
+        id S1727273AbgCXLcb (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Tue, 24 Mar 2020 07:32:31 -0400
+Received: from szxga05-in.huawei.com ([45.249.212.191]:12186 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1727201AbgCXLcb (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Tue, 24 Mar 2020 07:32:31 -0400
+Received: from DGGEMS402-HUB.china.huawei.com (unknown [172.30.72.59])
+        by Forcepoint Email with ESMTP id D2998ACE1257D981151C;
+        Tue, 24 Mar 2020 19:32:27 +0800 (CST)
+Received: from [127.0.0.1] (10.74.184.86) by DGGEMS402-HUB.china.huawei.com
+ (10.3.19.202) with Microsoft SMTP Server id 14.3.487.0; Tue, 24 Mar 2020
+ 19:32:17 +0800
+Subject: Re: [PATCH 11/11] EDAC/ghes: Create one memory controller per
+ physical memory array
+To:     John Garry <john.garry@huawei.com>, Borislav Petkov <bp@alien8.de>,
+        "Robert Richter" <rrichter@marvell.com>
+References: <20200306151318.17422-1-rrichter@marvell.com>
+ <20200306151318.17422-12-rrichter@marvell.com>
+ <20200316095149.GE26126@zn.tnic>
+ <924f4c0e-1f9d-e7de-17cd-466eb3a74d90@huawei.com>
+CC:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         Tony Luck <tony.luck@intel.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Len Brown <lenb@kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Darren Hart <dvhart@infradead.org>,
-        Andy Shevchenko <andy@infradead.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        linux-edac@vger.kernel.org,
-        Platform Driver <platform-driver-x86@vger.kernel.org>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        linux-hwmon@vger.kernel.org, Zhang Rui <rui.zhang@intel.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amit.kucheria@verdurent.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Jacob Pan <jacob.jun.pan@linux.intel.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        linux-mmc <linux-mmc@vger.kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org,
-        Takashi Iwai <tiwai@suse.com>,
-        ALSA Development Mailing List <alsa-devel@alsa-project.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        linux-crypto <linux-crypto@vger.kernel.org>, lkp@lists.01.org
-Content-Type: text/plain; charset="UTF-8"
+        James Morse <james.morse@arm.com>,
+        Aristeu Rozanski <aris@redhat.com>,
+        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Toshi Kani <toshi.kani@hpe.com>,
+        Shiju Jose <shiju.jose@huawei.com>
+From:   Xiaofei Tan <tanxiaofei@huawei.com>
+Message-ID: <5E79EFC0.3040108@huawei.com>
+Date:   Tue, 24 Mar 2020 19:32:16 +0800
+User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:38.0) Gecko/20100101
+ Thunderbird/38.5.1
+MIME-Version: 1.0
+In-Reply-To: <924f4c0e-1f9d-e7de-17cd-466eb3a74d90@huawei.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.74.184.86]
+X-CFilter-Loop: Reflected
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Tue, Mar 24, 2020 at 8:02 AM kernel test robot <rong.a.chen@intel.com> wrote:
->
-> Greeting,
->
-> FYI, we noticed a -53.4% regression of will-it-scale.per_process_ops due to commit:
 
-> commit: 06c4d00466eb374841bc84c39af19b3161ff6917 ("[patch 09/22] cpufreq: Convert to new X86 CPU match macros")
-> url: https://github.com/0day-ci/linux/commits/Thomas-Gleixner/x86-devicetable-Move-x86-specific-macro-out-of-generic-code/20200321-031729
-> base: https://git.kernel.org/cgit/linux/kernel/git/rafael/linux-pm.git linux-next
->
-> in testcase: will-it-scale
-> on test machine: 4 threads Intel(R) Core(TM) i3-3220 CPU @ 3.30GHz with 8G memory
-> with following parameters:
+On 2020/3/18 0:34, John Garry wrote:
+> On 16/03/2020 09:51, Borislav Petkov wrote:
+>> On Fri, Mar 06, 2020 at 04:13:18PM +0100, Robert Richter wrote:
+>>> The ghes driver only creates one memory controller for the whole
+>>> system. This does not reflect memory topology especially in multi-node
+>>> systems. E.g. a Marvell ThunderX2 system shows:
+>>>
+>>>   /sys/devices/system/edac/mc/mc0/dimm0
+>>>   /sys/devices/system/edac/mc/mc0/dimm1
+>>>   /sys/devices/system/edac/mc/mc0/dimm2
+>>>   /sys/devices/system/edac/mc/mc0/dimm3
+>>>   /sys/devices/system/edac/mc/mc0/dimm4
+>>>   /sys/devices/system/edac/mc/mc0/dimm5
+>>>   /sys/devices/system/edac/mc/mc0/dimm6
+>>>   /sys/devices/system/edac/mc/mc0/dimm7
+>>>   /sys/devices/system/edac/mc/mc0/dimm8
+>>>   /sys/devices/system/edac/mc/mc0/dimm9
+>>>   /sys/devices/system/edac/mc/mc0/dimm10
+>>>   /sys/devices/system/edac/mc/mc0/dimm11
+>>>   /sys/devices/system/edac/mc/mc0/dimm12
+>>>   /sys/devices/system/edac/mc/mc0/dimm13
+>>>   /sys/devices/system/edac/mc/mc0/dimm14
+>>>   /sys/devices/system/edac/mc/mc0/dimm15
+>>>
+>>> The DIMMs 9-15 are located on the 2nd node of the system. On
+>>> comparable x86 systems there is one memory controller per node. The
+>>> ghes driver should also group DIMMs depending on the topology and
+>>> create one MC per node.
+>>>
+>>> There are several options to detect the topology. ARM64 systems
+>>> retrieve the (NUMA) node information from the ACPI SRAT table (see
+>>> acpi_table_parse_srat()). The node id is later stored in the physical
+>>> address page. The pfn_to_nid() macro could be used for a DIMM after
+>>> determining its physical address. The drawback of this approach is
+>>> that there are too many subsystems involved it depends on. It could
+>>> easily break and makes the implementation complex. E.g. pfn_to_nid()
+>>> can only be reliable used on mapped address ranges which is not always
+>>> granted, there are various firmware instances involved which could be
+>>> broken, or results may vary depending on NUMA settings.
+>>>
+>>> Another approach that was suggested by James' is to use the DIMM's
+>>> physical memory array handle to group DIMMs [1]. The advantage is to
+>>> only use the information on memory devices from the SMBIOS table that
+>>> contains a reference to the physical memory array it belongs too. This
+>>> information is mandatory same as the use of DIMM handle references by
+>>> GHES to provide the DIMM location of an error. There is only a single
+>>> table to parse which eases implementation. This patch uses this
+>>> approach for DIMM grouping.
+>>>
+>>> Modify the DMI decoder to also detect the physical memory array a DIMM
+>>> is linked to and create one memory controller per array to group
+>>> DIMMs. With the change DIMMs are grouped, e.g. a ThunderX2 system
+>>> shows one MC per node now:
+>>>
+>>>   # grep . /sys/devices/system/edac/mc/mc*/dimm*/dimm_label
+>>>   /sys/devices/system/edac/mc/mc0/dimm0/dimm_label:N0 DIMM_A0
+>>>   /sys/devices/system/edac/mc/mc0/dimm1/dimm_label:N0 DIMM_B0
+>>>   /sys/devices/system/edac/mc/mc0/dimm2/dimm_label:N0 DIMM_C0
+>>>   /sys/devices/system/edac/mc/mc0/dimm3/dimm_label:N0 DIMM_D0
+>>>   /sys/devices/system/edac/mc/mc0/dimm4/dimm_label:N0 DIMM_E0
+>>>   /sys/devices/system/edac/mc/mc0/dimm5/dimm_label:N0 DIMM_F0
+>>>   /sys/devices/system/edac/mc/mc0/dimm6/dimm_label:N0 DIMM_G0
+>>>   /sys/devices/system/edac/mc/mc0/dimm7/dimm_label:N0 DIMM_H0
+>>>   /sys/devices/system/edac/mc/mc1/dimm0/dimm_label:N1 DIMM_I0
+>>>   /sys/devices/system/edac/mc/mc1/dimm1/dimm_label:N1 DIMM_J0
+>>>   /sys/devices/system/edac/mc/mc1/dimm2/dimm_label:N1 DIMM_K0
+>>>   /sys/devices/system/edac/mc/mc1/dimm3/dimm_label:N1 DIMM_L0
+>>>   /sys/devices/system/edac/mc/mc1/dimm4/dimm_label:N1 DIMM_M0
+>>>   /sys/devices/system/edac/mc/mc1/dimm5/dimm_label:N1 DIMM_N0
+>>>   /sys/devices/system/edac/mc/mc1/dimm6/dimm_label:N1 DIMM_O0
+>>>   /sys/devices/system/edac/mc/mc1/dimm7/dimm_label:N1 DIMM_P0
+>>>
+>>> [1] https://lkml.kernel.org/r/f878201f-f8fd-0f2a-5072-ba60c64eefaf@arm.com
+>>>
+>>> Suggested-by: James Morse <james.morse@arm.com>
+>>> Signed-off-by: Robert Richter <rrichter@marvell.com>
+>>> ---
+>>>   drivers/edac/ghes_edac.c | 137 ++++++++++++++++++++++++++++++---------
+>>>   1 file changed, 107 insertions(+), 30 deletions(-)
+>>
+>> This is all fine and good but that change affects the one x86 platform
+>> we support so the whole patchset should be tested there too. Adding
+>> Toshi.
+>>
+>> As a matter of fact, the final version of this set should be tested on
+>> all platforms which are using this thing. Adding John Garry too who
+>> reported issues with this driver recently on his platform.
+> 
+> Adding other RAS-centric guys for H.
 
+Hi John & Borislav & Robert
+I have tested this patch set on our platform. Only one memory controller found when there is one DIMM on
+each socket or node. Just like this:
+estuary:/$ grep . /sys/devices/system/edac/mc/mc*/dimm*/dimm_label
+/sys/devices/system/edac/mc/mc0/dimm0/dimm_label:SOCKET 0 CHANNEL 0 DIMM 0 DIMM0
+/sys/devices/system/edac/mc/mc0/dimm20/dimm_label:SOCKET 1 CHANNEL 2 DIMM 0 DIMM1
 
-drivers/cpufreq/speedstep-centrino.c change missed the terminator,
-perhaps it's a culprit, because I don't believe removing dups and
-reordering lines may affect this.
-Can you restore terminator there and re-test?
+It is not the problem of the patch set. Because our BIOS only defined one "Physical Memory Array Handle" in DMI table.
+Just like this:
+estuary:/$ dmidecode -t memory | grep "Array Handle"
+        Array Handle: 0x0000
+        Array Handle: 0x0000
+        Array Handle: 0x0000
+        Array Handle: 0x0000
+        Array Handle: 0x0000
+        Array Handle: 0x0000
+        Array Handle: 0x0000
+        Array Handle: 0x0000
+        Array Handle: 0x0000
+        Array Handle: 0x0000
+        Array Handle: 0x0000
+        Array Handle: 0x0000
+        Array Handle: 0x0000
+        Array Handle: 0x0000
+        Array Handle: 0x0000
+        Array Handle: 0x0000
+        Array Handle: 0x0000
+        Array Handle: 0x0000
+        Array Handle: 0x0000
+        Array Handle: 0x0000
+        Array Handle: 0x0000
+        Array Handle: 0x0000
+        Array Handle: 0x0000
+        Array Handle: 0x0000
+        Array Handle: 0x0000
+        Array Handle: 0x0000
+        Array Handle: 0x0000
+        Array Handle: 0x0000
+        Array Handle: 0x0000
+        Array Handle: 0x0000
+        Array Handle: 0x0000
+        Array Handle: 0x0000
+
+BTW, i also test other function of edac driver our platform used. They're all good. :)
+> 
+> Cheers,
+> John
+> 
+>>
+>> Thx.
+>>
+> 
+> 
+> .
+> 
 
 -- 
-With Best Regards,
-Andy Shevchenko
+ thanks
+tanxiaofei
+
