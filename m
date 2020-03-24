@@ -2,47 +2,67 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FC0D18FA08
-	for <lists+linux-edac@lfdr.de>; Mon, 23 Mar 2020 17:38:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 53C6A190ACE
+	for <lists+linux-edac@lfdr.de>; Tue, 24 Mar 2020 11:25:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727452AbgCWQis (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Mon, 23 Mar 2020 12:38:48 -0400
-Received: from mga12.intel.com ([192.55.52.136]:30481 "EHLO mga12.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727234AbgCWQis (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Mon, 23 Mar 2020 12:38:48 -0400
-IronPort-SDR: Rriv0Z8hJsGqsw3IoOkPAtgtiPO6JHB23PHs7p4zPBv+48a/GJlbM73vt8QMk6fMAwnqRW4mjh
- p3JleAiIVMMg==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Mar 2020 09:38:46 -0700
-IronPort-SDR: BNtv86v3w8JwvH4wJojnjAtNBR5zND3RBh/ddNAj1/0KWdAuOS7J1X36McxoHrFDWlrsVZa05+
- xW30ri8rHyMA==
-X-IronPort-AV: E=Sophos;i="5.72,297,1580803200"; 
-   d="scan'208";a="269933222"
-Received: from smtp.ostc.intel.com ([10.54.29.231])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Mar 2020 09:38:45 -0700
-Received: from localhost (mtg-dev.jf.intel.com [10.54.74.10])
-        by smtp.ostc.intel.com (Postfix) with ESMTP id E3150636B;
-        Mon, 23 Mar 2020 16:38:43 +0000 (UTC)
-Date:   Mon, 23 Mar 2020 09:38:44 -0700
-From:   mark gross <mgross@linux.intel.com>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     Andy Shevchenko <andy.shevchenko@gmail.com>,
+        id S1726994AbgCXKZE (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Tue, 24 Mar 2020 06:25:04 -0400
+Received: from mail-pg1-f194.google.com ([209.85.215.194]:36962 "EHLO
+        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726524AbgCXKZD (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Tue, 24 Mar 2020 06:25:03 -0400
+Received: by mail-pg1-f194.google.com with SMTP id a32so8810157pga.4;
+        Tue, 24 Mar 2020 03:25:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=niMBZQskqIvvbvSQd3Vs9C4OFVhjiYiDfUEWD3hhgQU=;
+        b=WL57huwoohYOXgJDpFwNTccWhDvbdVj53HP9RTAYqeUArAowfq+8wm7C8xnQS+d7Xg
+         T6ZEXRd83CkutsSV26moPh6SFShAu8y5bgcdaa94+vyt5gv9L7FHOWY/xTwiS3ZXTJoo
+         mYyatVs+4JSkglhV/DZno5DkKWgsDuV6Nq3GIgrszTouv3+HdzH3Ue4zNWg9IJabYRM5
+         Yc/KKpuGqrb71fAUqQdj6kfvkI7Fc5ogXvzI4kRXgF1utZe1N1Trsq00q5ItgQsyJMa1
+         K51p515UguhiI4YjD4zkfxOZoju5Vs4RIc7CzfPQSFesYRhhKwf5f8kTncK3eqxsX1rE
+         yirA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=niMBZQskqIvvbvSQd3Vs9C4OFVhjiYiDfUEWD3hhgQU=;
+        b=MzFd2Jhj6NnyoTXDhkIDFXZaVVEeeRk7Ymt0c9yhAa02N+aUf3a2bgMGpJVsI0eyeb
+         dOiCM7PPIjQ7Vy9vzvWavWC/dB5HRgGAX84io8H7x8yQwYGe45tzV8kg3FmX5+KuoT5t
+         4deALsSaFDZjh44GUqT0q4JNNoF+98YMHrDsQhiKmkzRmTvZDXMjkjFRs22HbctASBKf
+         fsytqVC2ZwiG3APXDtOU2kuJmfobubjcFW+5LF70sJzJrqTcnH9PkrIyHA/F0/SmkjI4
+         u3ABbxCxzs7gfxoQZu9QRHtG5xcWiv9ikSPZ1eKCmWL/z1c0mU8DJnGlrg+/XBlexkNE
+         vtBQ==
+X-Gm-Message-State: ANhLgQ1JOAWWi5gPBJvE5LVcy14E2W0ND1MVLJbZRfqVsZSxIOEgewVQ
+        l7nJZI/CkU4AdsGKMvy4n0CbhmtUPRNG4ZxZcbc=
+X-Google-Smtp-Source: ADFU+vtRP5kcse4VydJXhIWcSQg5qG4qh1fLLlH+sYOY0YXmbvxSTKNtq7OW900chK9pK0hyoRdDWpT1dROadSow+qU=
+X-Received: by 2002:a05:6a00:2b4:: with SMTP id q20mr17417161pfs.36.1585045502171;
+ Tue, 24 Mar 2020 03:25:02 -0700 (PDT)
+MIME-Version: 1.0
+References: <20200320131509.564059710@linutronix.de> <20200324060124.GC11705@shao2-debian>
+In-Reply-To: <20200324060124.GC11705@shao2-debian>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Tue, 24 Mar 2020 12:24:54 +0200
+Message-ID: <CAHp75VeeKZLeZ8E3Py7LECN54SPFHaRgkxrMzBYQWXM8x+4JhA@mail.gmail.com>
+Subject: Re: [cpufreq] 06c4d00466: will-it-scale.per_process_ops -53.4% regression
+To:     kernel test robot <rong.a.chen@intel.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
         LKML <linux-kernel@vger.kernel.org>,
         "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mark Gross <mgross@linux.intel.com>,
         Tony Luck <tony.luck@intel.com>,
         "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Len Brown <lenb@kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Darren Hart <dvhart@infradead.org>,
-        Andy Shevchenko <andy@infradead.org>,
         Viresh Kumar <viresh.kumar@linaro.org>,
         Linux PM <linux-pm@vger.kernel.org>,
         Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Len Brown <lenb@kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Darren Hart <dvhart@infradead.org>,
+        Andy Shevchenko <andy@infradead.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
         linux-edac@vger.kernel.org,
         Platform Driver <platform-driver-x86@vger.kernel.org>,
         Jean Delvare <jdelvare@suse.com>,
@@ -60,49 +80,33 @@ Cc:     Andy Shevchenko <andy.shevchenko@gmail.com>,
         ALSA Development Mailing List <alsa-devel@alsa-project.org>,
         Herbert Xu <herbert@gondor.apana.org.au>,
         "David S. Miller" <davem@davemloft.net>,
-        linux-crypto <linux-crypto@vger.kernel.org>
-Subject: Re: [patch 08/22] ACPI: Convert to new X86 CPU match macros
-Message-ID: <20200323163844.GB123290@mtg-dev.jf.intel.com>
-Reply-To: mgross@linux.intel.com
-References: <20200320131345.635023594@linutronix.de>
- <20200320131509.467730627@linutronix.de>
- <CAHp75VcK3tL0YayjF=CSkSkHiOpg2zOV3rdkXQWJmLZ9fmevpg@mail.gmail.com>
- <87bloqpy1x.fsf@nanos.tec.linutronix.de>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87bloqpy1x.fsf@nanos.tec.linutronix.de>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+        linux-crypto <linux-crypto@vger.kernel.org>, lkp@lists.01.org
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Fri, Mar 20, 2020 at 09:32:26PM +0100, Thomas Gleixner wrote:
-> Andy Shevchenko <andy.shevchenko@gmail.com> writes:
-> 
-> > On Fri, Mar 20, 2020 at 3:19 PM Thomas Gleixner <tglx@linutronix.de> wrote:
-> >>
-> >> The new macro set has a consistent namespace and uses C99 initializers
-> >> instead of the grufty C89 ones.
-> >>
-> >> Rename the local macro wrapper to X86_MATCH for consistency. It stays for
-> >> readability sake.
-> >
-> >> +       X86_MATCH_INTEL_FAM6_MODEL(ATOM_SILVERMONT,     NULL),
-> >> +       X86_MATCH_INTEL_FAM6_MODEL(ATOM_AIRMONT,        NULL),
-> >
-> >> -#define ICPU(model)    { X86_VENDOR_INTEL, 6, model, X86_FEATURE_ANY, }
-> >> +#define X86_MATCH(model)       X86_MATCH_INTEL_FAM6_MODEL(model, NULL)
-> >
-> > Maybe we can do a generic macro to avoid all these ', NULL' repetitions?
-> 
-> I opted for having the data argument everywhere to keep the macro maze
-> small. And we have enough places where data is actually used.
-+1
+On Tue, Mar 24, 2020 at 8:02 AM kernel test robot <rong.a.chen@intel.com> wrote:
+>
+> Greeting,
+>
+> FYI, we noticed a -53.4% regression of will-it-scale.per_process_ops due to commit:
 
---mark
+> commit: 06c4d00466eb374841bc84c39af19b3161ff6917 ("[patch 09/22] cpufreq: Convert to new X86 CPU match macros")
+> url: https://github.com/0day-ci/linux/commits/Thomas-Gleixner/x86-devicetable-Move-x86-specific-macro-out-of-generic-code/20200321-031729
+> base: https://git.kernel.org/cgit/linux/kernel/git/rafael/linux-pm.git linux-next
+>
+> in testcase: will-it-scale
+> on test machine: 4 threads Intel(R) Core(TM) i3-3220 CPU @ 3.30GHz with 8G memory
+> with following parameters:
 
-> Thanks,
-> 
->         tglx
+
+drivers/cpufreq/speedstep-centrino.c change missed the terminator,
+perhaps it's a culprit, because I don't believe removing dups and
+reordering lines may affect this.
+Can you restore terminator there and re-test?
+
+-- 
+With Best Regards,
+Andy Shevchenko
