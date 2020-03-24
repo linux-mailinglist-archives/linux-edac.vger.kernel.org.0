@@ -2,201 +2,396 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E557190C87
-	for <lists+linux-edac@lfdr.de>; Tue, 24 Mar 2020 12:32:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E99F19120B
+	for <lists+linux-edac@lfdr.de>; Tue, 24 Mar 2020 14:53:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727273AbgCXLcb (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Tue, 24 Mar 2020 07:32:31 -0400
-Received: from szxga05-in.huawei.com ([45.249.212.191]:12186 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1727201AbgCXLcb (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Tue, 24 Mar 2020 07:32:31 -0400
-Received: from DGGEMS402-HUB.china.huawei.com (unknown [172.30.72.59])
-        by Forcepoint Email with ESMTP id D2998ACE1257D981151C;
-        Tue, 24 Mar 2020 19:32:27 +0800 (CST)
-Received: from [127.0.0.1] (10.74.184.86) by DGGEMS402-HUB.china.huawei.com
- (10.3.19.202) with Microsoft SMTP Server id 14.3.487.0; Tue, 24 Mar 2020
- 19:32:17 +0800
-Subject: Re: [PATCH 11/11] EDAC/ghes: Create one memory controller per
- physical memory array
-To:     John Garry <john.garry@huawei.com>, Borislav Petkov <bp@alien8.de>,
-        "Robert Richter" <rrichter@marvell.com>
-References: <20200306151318.17422-1-rrichter@marvell.com>
- <20200306151318.17422-12-rrichter@marvell.com>
- <20200316095149.GE26126@zn.tnic>
- <924f4c0e-1f9d-e7de-17cd-466eb3a74d90@huawei.com>
-CC:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        id S1727612AbgCXNwe (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Tue, 24 Mar 2020 09:52:34 -0400
+Received: from Galois.linutronix.de ([193.142.43.55]:44992 "EHLO
+        Galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727502AbgCXNwe (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Tue, 24 Mar 2020 09:52:34 -0400
+Received: from p5de0bf0b.dip0.t-ipconnect.de ([93.224.191.11] helo=nanos.tec.linutronix.de)
+        by Galois.linutronix.de with esmtpsa (TLS1.2:DHE_RSA_AES_256_CBC_SHA256:256)
+        (Exim 4.80)
+        (envelope-from <tglx@linutronix.de>)
+        id 1jGjyC-0006QD-A9; Tue, 24 Mar 2020 14:51:52 +0100
+Received: by nanos.tec.linutronix.de (Postfix, from userid 1000)
+        id 41C9E100292; Tue, 24 Mar 2020 14:51:51 +0100 (CET)
+From:   Thomas Gleixner <tglx@linutronix.de>
+To:     LKML <linux-kernel@vger.kernel.org>
+Cc:     x86@kernel.org, Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mark Gross <mgross@linux.intel.com>,
         Tony Luck <tony.luck@intel.com>,
-        James Morse <james.morse@arm.com>,
-        Aristeu Rozanski <aris@redhat.com>,
-        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Toshi Kani <toshi.kani@hpe.com>,
-        Shiju Jose <shiju.jose@huawei.com>
-From:   Xiaofei Tan <tanxiaofei@huawei.com>
-Message-ID: <5E79EFC0.3040108@huawei.com>
-Date:   Tue, 24 Mar 2020 19:32:16 +0800
-User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:38.0) Gecko/20100101
- Thunderbird/38.5.1
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        linux-pm@vger.kernel.org,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Len Brown <lenb@kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Darren Hart <dvhart@infradead.org>,
+        Andy Shevchenko <andy@infradead.org>,
+        linux-acpi@vger.kernel.org, linux-edac@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        linux-hwmon@vger.kernel.org, Zhang Rui <rui.zhang@intel.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amit.kucheria@verdurent.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Jacob Pan <jacob.jun.pan@linux.intel.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        linux-mmc@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>,
+        linux-pci@vger.kernel.org, Takashi Iwai <tiwai@suse.com>,
+        alsa-devel@alsa-project.org,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        linux-crypto@vger.kernel.org
+Subject: [patch V2 09/22] cpufreq: Convert to new X86 CPU match macros
+In-Reply-To: <20200320131509.564059710@linutronix.de>
+References: <20200320131345.635023594@linutronix.de> <20200320131509.564059710@linutronix.de>
+Date:   Tue, 24 Mar 2020 14:51:51 +0100
+Message-ID: <87eetheu88.fsf@nanos.tec.linutronix.de>
 MIME-Version: 1.0
-In-Reply-To: <924f4c0e-1f9d-e7de-17cd-466eb3a74d90@huawei.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.74.184.86]
-X-CFilter-Loop: Reflected
+Content-Type: text/plain
+X-Linutronix-Spam-Score: -1.0
+X-Linutronix-Spam-Level: -
+X-Linutronix-Spam-Status: No , -1.0 points, 5.0 required,  ALL_TRUSTED=-1,SHORTCIRCUIT=-0.0001
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
+The new macro set has a consistent namespace and uses C99 initializers
+instead of the grufty C89 ones.
 
-On 2020/3/18 0:34, John Garry wrote:
-> On 16/03/2020 09:51, Borislav Petkov wrote:
->> On Fri, Mar 06, 2020 at 04:13:18PM +0100, Robert Richter wrote:
->>> The ghes driver only creates one memory controller for the whole
->>> system. This does not reflect memory topology especially in multi-node
->>> systems. E.g. a Marvell ThunderX2 system shows:
->>>
->>>   /sys/devices/system/edac/mc/mc0/dimm0
->>>   /sys/devices/system/edac/mc/mc0/dimm1
->>>   /sys/devices/system/edac/mc/mc0/dimm2
->>>   /sys/devices/system/edac/mc/mc0/dimm3
->>>   /sys/devices/system/edac/mc/mc0/dimm4
->>>   /sys/devices/system/edac/mc/mc0/dimm5
->>>   /sys/devices/system/edac/mc/mc0/dimm6
->>>   /sys/devices/system/edac/mc/mc0/dimm7
->>>   /sys/devices/system/edac/mc/mc0/dimm8
->>>   /sys/devices/system/edac/mc/mc0/dimm9
->>>   /sys/devices/system/edac/mc/mc0/dimm10
->>>   /sys/devices/system/edac/mc/mc0/dimm11
->>>   /sys/devices/system/edac/mc/mc0/dimm12
->>>   /sys/devices/system/edac/mc/mc0/dimm13
->>>   /sys/devices/system/edac/mc/mc0/dimm14
->>>   /sys/devices/system/edac/mc/mc0/dimm15
->>>
->>> The DIMMs 9-15 are located on the 2nd node of the system. On
->>> comparable x86 systems there is one memory controller per node. The
->>> ghes driver should also group DIMMs depending on the topology and
->>> create one MC per node.
->>>
->>> There are several options to detect the topology. ARM64 systems
->>> retrieve the (NUMA) node information from the ACPI SRAT table (see
->>> acpi_table_parse_srat()). The node id is later stored in the physical
->>> address page. The pfn_to_nid() macro could be used for a DIMM after
->>> determining its physical address. The drawback of this approach is
->>> that there are too many subsystems involved it depends on. It could
->>> easily break and makes the implementation complex. E.g. pfn_to_nid()
->>> can only be reliable used on mapped address ranges which is not always
->>> granted, there are various firmware instances involved which could be
->>> broken, or results may vary depending on NUMA settings.
->>>
->>> Another approach that was suggested by James' is to use the DIMM's
->>> physical memory array handle to group DIMMs [1]. The advantage is to
->>> only use the information on memory devices from the SMBIOS table that
->>> contains a reference to the physical memory array it belongs too. This
->>> information is mandatory same as the use of DIMM handle references by
->>> GHES to provide the DIMM location of an error. There is only a single
->>> table to parse which eases implementation. This patch uses this
->>> approach for DIMM grouping.
->>>
->>> Modify the DMI decoder to also detect the physical memory array a DIMM
->>> is linked to and create one memory controller per array to group
->>> DIMMs. With the change DIMMs are grouped, e.g. a ThunderX2 system
->>> shows one MC per node now:
->>>
->>>   # grep . /sys/devices/system/edac/mc/mc*/dimm*/dimm_label
->>>   /sys/devices/system/edac/mc/mc0/dimm0/dimm_label:N0 DIMM_A0
->>>   /sys/devices/system/edac/mc/mc0/dimm1/dimm_label:N0 DIMM_B0
->>>   /sys/devices/system/edac/mc/mc0/dimm2/dimm_label:N0 DIMM_C0
->>>   /sys/devices/system/edac/mc/mc0/dimm3/dimm_label:N0 DIMM_D0
->>>   /sys/devices/system/edac/mc/mc0/dimm4/dimm_label:N0 DIMM_E0
->>>   /sys/devices/system/edac/mc/mc0/dimm5/dimm_label:N0 DIMM_F0
->>>   /sys/devices/system/edac/mc/mc0/dimm6/dimm_label:N0 DIMM_G0
->>>   /sys/devices/system/edac/mc/mc0/dimm7/dimm_label:N0 DIMM_H0
->>>   /sys/devices/system/edac/mc/mc1/dimm0/dimm_label:N1 DIMM_I0
->>>   /sys/devices/system/edac/mc/mc1/dimm1/dimm_label:N1 DIMM_J0
->>>   /sys/devices/system/edac/mc/mc1/dimm2/dimm_label:N1 DIMM_K0
->>>   /sys/devices/system/edac/mc/mc1/dimm3/dimm_label:N1 DIMM_L0
->>>   /sys/devices/system/edac/mc/mc1/dimm4/dimm_label:N1 DIMM_M0
->>>   /sys/devices/system/edac/mc/mc1/dimm5/dimm_label:N1 DIMM_N0
->>>   /sys/devices/system/edac/mc/mc1/dimm6/dimm_label:N1 DIMM_O0
->>>   /sys/devices/system/edac/mc/mc1/dimm7/dimm_label:N1 DIMM_P0
->>>
->>> [1] https://lkml.kernel.org/r/f878201f-f8fd-0f2a-5072-ba60c64eefaf@arm.com
->>>
->>> Suggested-by: James Morse <james.morse@arm.com>
->>> Signed-off-by: Robert Richter <rrichter@marvell.com>
->>> ---
->>>   drivers/edac/ghes_edac.c | 137 ++++++++++++++++++++++++++++++---------
->>>   1 file changed, 107 insertions(+), 30 deletions(-)
->>
->> This is all fine and good but that change affects the one x86 platform
->> we support so the whole patchset should be tested there too. Adding
->> Toshi.
->>
->> As a matter of fact, the final version of this set should be tested on
->> all platforms which are using this thing. Adding John Garry too who
->> reported issues with this driver recently on his platform.
-> 
-> Adding other RAS-centric guys for H.
+Get rid the of most local macro wrappers for consistency. The ones which
+make sense for readability are renamed to X86_MATCH*.
 
-Hi John & Borislav & Robert
-I have tested this patch set on our platform. Only one memory controller found when there is one DIMM on
-each socket or node. Just like this:
-estuary:/$ grep . /sys/devices/system/edac/mc/mc*/dimm*/dimm_label
-/sys/devices/system/edac/mc/mc0/dimm0/dimm_label:SOCKET 0 CHANNEL 0 DIMM 0 DIMM0
-/sys/devices/system/edac/mc/mc0/dimm20/dimm_label:SOCKET 1 CHANNEL 2 DIMM 0 DIMM1
+In the centrino driver this also removes the two extra duplicates of family
+6 model 13 which have no value at all.
 
-It is not the problem of the patch set. Because our BIOS only defined one "Physical Memory Array Handle" in DMI table.
-Just like this:
-estuary:/$ dmidecode -t memory | grep "Array Handle"
-        Array Handle: 0x0000
-        Array Handle: 0x0000
-        Array Handle: 0x0000
-        Array Handle: 0x0000
-        Array Handle: 0x0000
-        Array Handle: 0x0000
-        Array Handle: 0x0000
-        Array Handle: 0x0000
-        Array Handle: 0x0000
-        Array Handle: 0x0000
-        Array Handle: 0x0000
-        Array Handle: 0x0000
-        Array Handle: 0x0000
-        Array Handle: 0x0000
-        Array Handle: 0x0000
-        Array Handle: 0x0000
-        Array Handle: 0x0000
-        Array Handle: 0x0000
-        Array Handle: 0x0000
-        Array Handle: 0x0000
-        Array Handle: 0x0000
-        Array Handle: 0x0000
-        Array Handle: 0x0000
-        Array Handle: 0x0000
-        Array Handle: 0x0000
-        Array Handle: 0x0000
-        Array Handle: 0x0000
-        Array Handle: 0x0000
-        Array Handle: 0x0000
-        Array Handle: 0x0000
-        Array Handle: 0x0000
-        Array Handle: 0x0000
+Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc: Viresh Kumar <viresh.kumar@linaro.org>
+Cc: linux-pm@vger.kernel.org
+Cc: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Cc: Len Brown <lenb@kernel.org>
+---
+V2: Add the dropped terminator in the centrino speedstep driver back. (Andy)
+---
+ drivers/cpufreq/acpi-cpufreq.c         |    4 -
+ drivers/cpufreq/amd_freq_sensitivity.c |    2 
+ drivers/cpufreq/e_powersaver.c         |    2 
+ drivers/cpufreq/elanfreq.c             |    2 
+ drivers/cpufreq/intel_pstate.c         |   71 ++++++++++++++++-----------------
+ drivers/cpufreq/longhaul.c             |    2 
+ drivers/cpufreq/longrun.c              |    3 -
+ drivers/cpufreq/p4-clockmod.c          |    2 
+ drivers/cpufreq/powernow-k6.c          |    4 -
+ drivers/cpufreq/powernow-k7.c          |    2 
+ drivers/cpufreq/powernow-k8.c          |    2 
+ drivers/cpufreq/sc520_freq.c           |    2 
+ drivers/cpufreq/speedstep-centrino.c   |   14 +-----
+ drivers/cpufreq/speedstep-ich.c        |   10 +---
+ drivers/cpufreq/speedstep-smi.c        |   10 +---
+ 15 files changed, 59 insertions(+), 73 deletions(-)
 
-BTW, i also test other function of edac driver our platform used. They're all good. :)
-> 
-> Cheers,
-> John
-> 
->>
->> Thx.
->>
-> 
-> 
-> .
-> 
-
--- 
- thanks
-tanxiaofei
-
+--- a/drivers/cpufreq/acpi-cpufreq.c
++++ b/drivers/cpufreq/acpi-cpufreq.c
+@@ -991,8 +991,8 @@ late_initcall(acpi_cpufreq_init);
+ module_exit(acpi_cpufreq_exit);
+ 
+ static const struct x86_cpu_id acpi_cpufreq_ids[] = {
+-	X86_FEATURE_MATCH(X86_FEATURE_ACPI),
+-	X86_FEATURE_MATCH(X86_FEATURE_HW_PSTATE),
++	X86_MATCH_FEATURE(X86_FEATURE_ACPI, NULL),
++	X86_MATCH_FEATURE(X86_FEATURE_HW_PSTATE, NULL),
+ 	{}
+ };
+ MODULE_DEVICE_TABLE(x86cpu, acpi_cpufreq_ids);
+--- a/drivers/cpufreq/amd_freq_sensitivity.c
++++ b/drivers/cpufreq/amd_freq_sensitivity.c
+@@ -144,7 +144,7 @@ static void __exit amd_freq_sensitivity_
+ module_exit(amd_freq_sensitivity_exit);
+ 
+ static const struct x86_cpu_id amd_freq_sensitivity_ids[] = {
+-	X86_FEATURE_MATCH(X86_FEATURE_PROC_FEEDBACK),
++	X86_MATCH_FEATURE(X86_FEATURE_PROC_FEEDBACK, NULL),
+ 	{}
+ };
+ MODULE_DEVICE_TABLE(x86cpu, amd_freq_sensitivity_ids);
+--- a/drivers/cpufreq/e_powersaver.c
++++ b/drivers/cpufreq/e_powersaver.c
+@@ -385,7 +385,7 @@ static struct cpufreq_driver eps_driver
+ /* This driver will work only on Centaur C7 processors with
+  * Enhanced SpeedStep/PowerSaver registers */
+ static const struct x86_cpu_id eps_cpu_id[] = {
+-	{ X86_VENDOR_CENTAUR, 6, X86_MODEL_ANY, X86_FEATURE_EST },
++	X86_MATCH_VENDOR_FAM_FEATURE(CENTAUR, 6, X86_FEATURE_EST, NULL),
+ 	{}
+ };
+ MODULE_DEVICE_TABLE(x86cpu, eps_cpu_id);
+--- a/drivers/cpufreq/elanfreq.c
++++ b/drivers/cpufreq/elanfreq.c
+@@ -198,7 +198,7 @@ static struct cpufreq_driver elanfreq_dr
+ };
+ 
+ static const struct x86_cpu_id elan_id[] = {
+-	{ X86_VENDOR_AMD, 4, 10, },
++	X86_MATCH_VENDOR_FAM_MODEL(AMD, 4, 10, NULL),
+ 	{}
+ };
+ MODULE_DEVICE_TABLE(x86cpu, elan_id);
+--- a/drivers/cpufreq/intel_pstate.c
++++ b/drivers/cpufreq/intel_pstate.c
+@@ -1909,51 +1909,51 @@ static const struct pstate_funcs knl_fun
+ 	.get_val = core_get_val,
+ };
+ 
+-#define ICPU(model, policy) \
+-	{ X86_VENDOR_INTEL, 6, model, X86_FEATURE_APERFMPERF,\
+-			(unsigned long)&policy }
++#define X86_MATCH(model, policy)					 \
++	X86_MATCH_VENDOR_FAM_MODEL_FEATURE(INTEL, 6, INTEL_FAM6_##model, \
++					   X86_FEATURE_APERFMPERF, &policy)
+ 
+ static const struct x86_cpu_id intel_pstate_cpu_ids[] = {
+-	ICPU(INTEL_FAM6_SANDYBRIDGE,		core_funcs),
+-	ICPU(INTEL_FAM6_SANDYBRIDGE_X,		core_funcs),
+-	ICPU(INTEL_FAM6_ATOM_SILVERMONT,	silvermont_funcs),
+-	ICPU(INTEL_FAM6_IVYBRIDGE,		core_funcs),
+-	ICPU(INTEL_FAM6_HASWELL,		core_funcs),
+-	ICPU(INTEL_FAM6_BROADWELL,		core_funcs),
+-	ICPU(INTEL_FAM6_IVYBRIDGE_X,		core_funcs),
+-	ICPU(INTEL_FAM6_HASWELL_X,		core_funcs),
+-	ICPU(INTEL_FAM6_HASWELL_L,		core_funcs),
+-	ICPU(INTEL_FAM6_HASWELL_G,		core_funcs),
+-	ICPU(INTEL_FAM6_BROADWELL_G,		core_funcs),
+-	ICPU(INTEL_FAM6_ATOM_AIRMONT,		airmont_funcs),
+-	ICPU(INTEL_FAM6_SKYLAKE_L,		core_funcs),
+-	ICPU(INTEL_FAM6_BROADWELL_X,		core_funcs),
+-	ICPU(INTEL_FAM6_SKYLAKE,		core_funcs),
+-	ICPU(INTEL_FAM6_BROADWELL_D,		core_funcs),
+-	ICPU(INTEL_FAM6_XEON_PHI_KNL,		knl_funcs),
+-	ICPU(INTEL_FAM6_XEON_PHI_KNM,		knl_funcs),
+-	ICPU(INTEL_FAM6_ATOM_GOLDMONT,		core_funcs),
+-	ICPU(INTEL_FAM6_ATOM_GOLDMONT_PLUS,     core_funcs),
+-	ICPU(INTEL_FAM6_SKYLAKE_X,		core_funcs),
++	X86_MATCH(SANDYBRIDGE,		core_funcs),
++	X86_MATCH(SANDYBRIDGE_X,	core_funcs),
++	X86_MATCH(ATOM_SILVERMONT,	silvermont_funcs),
++	X86_MATCH(IVYBRIDGE,		core_funcs),
++	X86_MATCH(HASWELL,		core_funcs),
++	X86_MATCH(BROADWELL,		core_funcs),
++	X86_MATCH(IVYBRIDGE_X,		core_funcs),
++	X86_MATCH(HASWELL_X,		core_funcs),
++	X86_MATCH(HASWELL_L,		core_funcs),
++	X86_MATCH(HASWELL_G,		core_funcs),
++	X86_MATCH(BROADWELL_G,		core_funcs),
++	X86_MATCH(ATOM_AIRMONT,		airmont_funcs),
++	X86_MATCH(SKYLAKE_L,		core_funcs),
++	X86_MATCH(BROADWELL_X,		core_funcs),
++	X86_MATCH(SKYLAKE,		core_funcs),
++	X86_MATCH(BROADWELL_D,		core_funcs),
++	X86_MATCH(XEON_PHI_KNL,		knl_funcs),
++	X86_MATCH(XEON_PHI_KNM,		knl_funcs),
++	X86_MATCH(ATOM_GOLDMONT,	core_funcs),
++	X86_MATCH(ATOM_GOLDMONT_PLUS,	core_funcs),
++	X86_MATCH(SKYLAKE_X,		core_funcs),
+ 	{}
+ };
+ MODULE_DEVICE_TABLE(x86cpu, intel_pstate_cpu_ids);
+ 
+ static const struct x86_cpu_id intel_pstate_cpu_oob_ids[] __initconst = {
+-	ICPU(INTEL_FAM6_BROADWELL_D, core_funcs),
+-	ICPU(INTEL_FAM6_BROADWELL_X, core_funcs),
+-	ICPU(INTEL_FAM6_SKYLAKE_X, core_funcs),
++	X86_MATCH(BROADWELL_D,		core_funcs),
++	X86_MATCH(BROADWELL_X,		core_funcs),
++	X86_MATCH(SKYLAKE_X,		core_funcs),
+ 	{}
+ };
+ 
+ static const struct x86_cpu_id intel_pstate_cpu_ee_disable_ids[] = {
+-	ICPU(INTEL_FAM6_KABYLAKE, core_funcs),
++	X86_MATCH(KABYLAKE,		core_funcs),
+ 	{}
+ };
+ 
+ static const struct x86_cpu_id intel_pstate_hwp_boost_ids[] = {
+-	ICPU(INTEL_FAM6_SKYLAKE_X, core_funcs),
+-	ICPU(INTEL_FAM6_SKYLAKE, core_funcs),
++	X86_MATCH(SKYLAKE_X,		core_funcs),
++	X86_MATCH(SKYLAKE,		core_funcs),
+ 	{}
+ };
+ 
+@@ -2726,13 +2726,14 @@ static inline void intel_pstate_request_
+ 
+ #define INTEL_PSTATE_HWP_BROADWELL	0x01
+ 
+-#define ICPU_HWP(model, hwp_mode) \
+-	{ X86_VENDOR_INTEL, 6, model, X86_FEATURE_HWP, hwp_mode }
++#define X86_MATCH_HWP(model, hwp_mode)					\
++	X86_MATCH_VENDOR_FAM_MODEL_FEATURE(INTEL, 6, INTEL_FAM6_##model, \
++					   X86_FEATURE_APERFMPERF, hwp_mode)
+ 
+ static const struct x86_cpu_id hwp_support_ids[] __initconst = {
+-	ICPU_HWP(INTEL_FAM6_BROADWELL_X, INTEL_PSTATE_HWP_BROADWELL),
+-	ICPU_HWP(INTEL_FAM6_BROADWELL_D, INTEL_PSTATE_HWP_BROADWELL),
+-	ICPU_HWP(X86_MODEL_ANY, 0),
++	X86_MATCH_HWP(BROADWELL_X,	INTEL_PSTATE_HWP_BROADWELL),
++	X86_MATCH_HWP(BROADWELL_D,	INTEL_PSTATE_HWP_BROADWELL),
++	X86_MATCH_HWP(ANY,		0),
+ 	{}
+ };
+ 
+--- a/drivers/cpufreq/longhaul.c
++++ b/drivers/cpufreq/longhaul.c
+@@ -910,7 +910,7 @@ static struct cpufreq_driver longhaul_dr
+ };
+ 
+ static const struct x86_cpu_id longhaul_id[] = {
+-	{ X86_VENDOR_CENTAUR, 6 },
++	X86_MATCH_VENDOR_FAM(CENTAUR, 6, NULL),
+ 	{}
+ };
+ MODULE_DEVICE_TABLE(x86cpu, longhaul_id);
+--- a/drivers/cpufreq/longrun.c
++++ b/drivers/cpufreq/longrun.c
+@@ -281,8 +281,7 @@ static struct cpufreq_driver longrun_dri
+ };
+ 
+ static const struct x86_cpu_id longrun_ids[] = {
+-	{ X86_VENDOR_TRANSMETA, X86_FAMILY_ANY, X86_MODEL_ANY,
+-	  X86_FEATURE_LONGRUN },
++	X86_MATCH_VENDOR_FEATURE(TRANSMETA, X86_FEATURE_LONGRUN, NULL),
+ 	{}
+ };
+ MODULE_DEVICE_TABLE(x86cpu, longrun_ids);
+--- a/drivers/cpufreq/p4-clockmod.c
++++ b/drivers/cpufreq/p4-clockmod.c
+@@ -231,7 +231,7 @@ static struct cpufreq_driver p4clockmod_
+ };
+ 
+ static const struct x86_cpu_id cpufreq_p4_id[] = {
+-	{ X86_VENDOR_INTEL, X86_FAMILY_ANY, X86_MODEL_ANY, X86_FEATURE_ACC },
++	X86_MATCH_VENDOR_FEATURE(INTEL, X86_FEATURE_ACC, NULL),
+ 	{}
+ };
+ 
+--- a/drivers/cpufreq/powernow-k6.c
++++ b/drivers/cpufreq/powernow-k6.c
+@@ -258,8 +258,8 @@ static struct cpufreq_driver powernow_k6
+ };
+ 
+ static const struct x86_cpu_id powernow_k6_ids[] = {
+-	{ X86_VENDOR_AMD, 5, 12 },
+-	{ X86_VENDOR_AMD, 5, 13 },
++	X86_MATCH_VENDOR_FAM_MODEL(AMD, 5, 12, NULL),
++	X86_MATCH_VENDOR_FAM_MODEL(AMD, 5, 13, NULL),
+ 	{}
+ };
+ MODULE_DEVICE_TABLE(x86cpu, powernow_k6_ids);
+--- a/drivers/cpufreq/powernow-k7.c
++++ b/drivers/cpufreq/powernow-k7.c
+@@ -109,7 +109,7 @@ static int check_fsb(unsigned int fsbspe
+ }
+ 
+ static const struct x86_cpu_id powernow_k7_cpuids[] = {
+-	{ X86_VENDOR_AMD, 6, },
++	X86_MATCH_VENDOR_FAM(AMD, 6, NULL),
+ 	{}
+ };
+ MODULE_DEVICE_TABLE(x86cpu, powernow_k7_cpuids);
+--- a/drivers/cpufreq/powernow-k8.c
++++ b/drivers/cpufreq/powernow-k8.c
+@@ -452,7 +452,7 @@ static int core_voltage_post_transition(
+ 
+ static const struct x86_cpu_id powernow_k8_ids[] = {
+ 	/* IO based frequency switching */
+-	{ X86_VENDOR_AMD, 0xf },
++	X86_MATCH_VENDOR_FAM(AMD, 0xf, NULL),
+ 	{}
+ };
+ MODULE_DEVICE_TABLE(x86cpu, powernow_k8_ids);
+--- a/drivers/cpufreq/sc520_freq.c
++++ b/drivers/cpufreq/sc520_freq.c
+@@ -95,7 +95,7 @@ static struct cpufreq_driver sc520_freq_
+ };
+ 
+ static const struct x86_cpu_id sc520_ids[] = {
+-	{ X86_VENDOR_AMD, 4, 9 },
++	X86_MATCH_VENDOR_FAM_MODEL(AMD, 4, 9, NULL),
+ 	{}
+ };
+ MODULE_DEVICE_TABLE(x86cpu, sc520_ids);
+--- a/drivers/cpufreq/speedstep-centrino.c
++++ b/drivers/cpufreq/speedstep-centrino.c
+@@ -520,18 +520,12 @@ static struct cpufreq_driver centrino_dr
+  * or ASCII model IDs.
+  */
+ static const struct x86_cpu_id centrino_ids[] = {
+-	{ X86_VENDOR_INTEL, 6, 9, X86_FEATURE_EST },
+-	{ X86_VENDOR_INTEL, 6, 13, X86_FEATURE_EST },
+-	{ X86_VENDOR_INTEL, 6, 13, X86_FEATURE_EST },
+-	{ X86_VENDOR_INTEL, 6, 13, X86_FEATURE_EST },
+-	{ X86_VENDOR_INTEL, 15, 3, X86_FEATURE_EST },
+-	{ X86_VENDOR_INTEL, 15, 4, X86_FEATURE_EST },
++	X86_MATCH_VENDOR_FAM_MODEL_FEATURE(INTEL,  6,  9, X86_FEATURE_EST, NULL),
++	X86_MATCH_VENDOR_FAM_MODEL_FEATURE(INTEL,  6, 13, X86_FEATURE_EST, NULL),
++	X86_MATCH_VENDOR_FAM_MODEL_FEATURE(INTEL, 15,  3, X86_FEATURE_EST, NULL),
++	X86_MATCH_VENDOR_FAM_MODEL_FEATURE(INTEL, 15,  4, X86_FEATURE_EST, NULL),
+ 	{}
+ };
+-#if 0
+-/* Autoload or not? Do not for now. */
+-MODULE_DEVICE_TABLE(x86cpu, centrino_ids);
+-#endif
+ 
+ /**
+  * centrino_init - initializes the Enhanced SpeedStep CPUFreq driver
+--- a/drivers/cpufreq/speedstep-ich.c
++++ b/drivers/cpufreq/speedstep-ich.c
+@@ -319,15 +319,11 @@ static struct cpufreq_driver speedstep_d
+ };
+ 
+ static const struct x86_cpu_id ss_smi_ids[] = {
+-	{ X86_VENDOR_INTEL, 6, 0xb, },
+-	{ X86_VENDOR_INTEL, 6, 0x8, },
+-	{ X86_VENDOR_INTEL, 15, 2 },
++	X86_MATCH_VENDOR_FAM_MODEL(INTEL,  6, 0x8, 0),
++	X86_MATCH_VENDOR_FAM_MODEL(INTEL,  6, 0xb, 0),
++	X86_MATCH_VENDOR_FAM_MODEL(INTEL, 15, 0x2, 0),
+ 	{}
+ };
+-#if 0
+-/* Autoload or not? Do not for now. */
+-MODULE_DEVICE_TABLE(x86cpu, ss_smi_ids);
+-#endif
+ 
+ /**
+  * speedstep_init - initializes the SpeedStep CPUFreq driver
+--- a/drivers/cpufreq/speedstep-smi.c
++++ b/drivers/cpufreq/speedstep-smi.c
+@@ -299,15 +299,11 @@ static struct cpufreq_driver speedstep_d
+ };
+ 
+ static const struct x86_cpu_id ss_smi_ids[] = {
+-	{ X86_VENDOR_INTEL, 6, 0xb, },
+-	{ X86_VENDOR_INTEL, 6, 0x8, },
+-	{ X86_VENDOR_INTEL, 15, 2 },
++	X86_MATCH_VENDOR_FAM_MODEL(INTEL,  6, 0x8, 0),
++	X86_MATCH_VENDOR_FAM_MODEL(INTEL,  6, 0xb, 0),
++	X86_MATCH_VENDOR_FAM_MODEL(INTEL, 15, 0x2, 0),
+ 	{}
+ };
+-#if 0
+-/* Not auto loaded currently */
+-MODULE_DEVICE_TABLE(x86cpu, ss_smi_ids);
+-#endif
+ 
+ /**
+  * speedstep_init - initializes the SpeedStep CPUFreq driver
