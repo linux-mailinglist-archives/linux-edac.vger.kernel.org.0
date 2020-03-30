@@ -2,139 +2,115 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A2B37193B01
-	for <lists+linux-edac@lfdr.de>; Thu, 26 Mar 2020 09:34:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E00D1197656
+	for <lists+linux-edac@lfdr.de>; Mon, 30 Mar 2020 10:19:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727875AbgCZIeW (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Thu, 26 Mar 2020 04:34:22 -0400
-Received: from mga04.intel.com ([192.55.52.120]:44735 "EHLO mga04.intel.com"
+        id S1729614AbgC3ITv (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Mon, 30 Mar 2020 04:19:51 -0400
+Received: from mx2.suse.de ([195.135.220.15]:41536 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727866AbgCZIeV (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Thu, 26 Mar 2020 04:34:21 -0400
-IronPort-SDR: RVr/sKGyhxIMdz6HpIaaMhZpfgGs268wiRdrLx+0F/vTNiomitmxvpQm9rcyLdfPmw+VnHiadS
- Pn7Gy77wADBw==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Mar 2020 01:34:21 -0700
-IronPort-SDR: nly9xD30xpsmGWYFWXpCQfSK56dqJFIPOST3nuhEheHKExNfIQ5XgPc3HXfYowGvGJpdixXyaW
- B8k9bFVtCr9w==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.72,307,1580803200"; 
-   d="scan'208";a="446919804"
-Received: from shao2-debian.sh.intel.com (HELO localhost) ([10.239.13.3])
-  by fmsmga005.fm.intel.com with ESMTP; 26 Mar 2020 01:34:13 -0700
-Date:   Thu, 26 Mar 2020 16:33:55 +0800
-From:   kernel test robot <rong.a.chen@intel.com>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     Andy Shevchenko <andy.shevchenko@gmail.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mark Gross <mgross@linux.intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Len Brown <lenb@kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Darren Hart <dvhart@infradead.org>,
-        Andy Shevchenko <andy@infradead.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        linux-edac@vger.kernel.org,
-        Platform Driver <platform-driver-x86@vger.kernel.org>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        linux-hwmon@vger.kernel.org, Zhang Rui <rui.zhang@intel.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amit.kucheria@verdurent.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Jacob Pan <jacob.jun.pan@linux.intel.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        linux-mmc <linux-mmc@vger.kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org,
-        Takashi Iwai <tiwai@suse.com>,
-        ALSA Development Mailing List <alsa-devel@alsa-project.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        linux-crypto <linux-crypto@vger.kernel.org>, lkp@lists.01.org
-Subject: Re: [cpufreq] 06c4d00466: will-it-scale.per_process_ops -53.4%
- regression
-Message-ID: <20200326083355.GO11705@shao2-debian>
-References: <20200320131509.564059710@linutronix.de>
- <20200324060124.GC11705@shao2-debian>
- <CAHp75VeeKZLeZ8E3Py7LECN54SPFHaRgkxrMzBYQWXM8x+4JhA@mail.gmail.com>
- <43a4189a-7153-18e8-4657-4a4400002c05@intel.com>
- <87zhc4ybbt.fsf@nanos.tec.linutronix.de>
+        id S1729576AbgC3ITv (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Mon, 30 Mar 2020 04:19:51 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx2.suse.de (Postfix) with ESMTP id 9703DAAFD;
+        Mon, 30 Mar 2020 08:19:48 +0000 (UTC)
+Date:   Mon, 30 Mar 2020 10:19:48 +0200
+From:   Borislav Petkov <bp@suse.de>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-edac <linux-edac@vger.kernel.org>,
+        lkml <linux-kernel@vger.kernel.org>
+Subject: [GIT PULL] EDAC updates for 5.7
+Message-ID: <20200330081948.GC14624@zn.tnic>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <87zhc4ybbt.fsf@nanos.tec.linutronix.de>
+Content-Transfer-Encoding: 8bit
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Wed, Mar 25, 2020 at 11:32:06AM +0100, Thomas Gleixner wrote:
-> Rong Chen <rong.a.chen@intel.com> writes:
-> > On 3/24/20 6:24 PM, Andy Shevchenko wrote:
-> >> On Tue, Mar 24, 2020 at 8:02 AM kernel test robot <rong.a.chen@intel.com> wrote:
-> >>> Greeting,
-> >>>
-> >>> FYI, we noticed a -53.4% regression of will-it-scale.per_process_ops due to commit:
-> >>> commit: 06c4d00466eb374841bc84c39af19b3161ff6917 ("[patch 09/22] cpufreq: Convert to new X86 CPU match macros")
-> >>> url: https://github.com/0day-ci/linux/commits/Thomas-Gleixner/x86-devicetable-Move-x86-specific-macro-out-of-generic-code/20200321-031729
-> >>> base: https://git.kernel.org/cgit/linux/kernel/git/rafael/linux-pm.git linux-next
-> >>>
-> >>> in testcase: will-it-scale
-> >>> on test machine: 4 threads Intel(R) Core(TM) i3-3220 CPU @ 3.30GHz with 8G memory
-> >>> with following parameters:
-> >>
-> >> drivers/cpufreq/speedstep-centrino.c change missed the terminator,
-> >> perhaps it's a culprit, because I don't believe removing dups and
-> >> reordering lines may affect this.
-> >> Can you restore terminator there and re-test?
-> >>
-> >
-> > I have retested with the change, but it has no effect on the performance.
-> 
-> Bah. The binary equivalence testing detected this, but I obvioulsy
-> missed it. Delta fix below.
-> 
-> Thanks,
-> 
->         tglx
-> 
-> 8<--------------
-> --- a/drivers/cpufreq/intel_pstate.c
-> +++ b/drivers/cpufreq/intel_pstate.c
-> @@ -2727,7 +2727,7 @@ static inline void intel_pstate_request_
->  
->  #define X86_MATCH_HWP(model, hwp_mode)					\
->  	X86_MATCH_VENDOR_FAM_MODEL_FEATURE(INTEL, 6, INTEL_FAM6_##model, \
-> -					   X86_FEATURE_APERFMPERF, hwp_mode)
-> +					   X86_FEATURE_HWP, hwp_mode)
->  
->  static const struct x86_cpu_id hwp_support_ids[] __initconst = {
->  	X86_MATCH_HWP(BROADWELL_X,	INTEL_PSTATE_HWP_BROADWELL),
+Hi Linus,
 
-Hi Thomas,
+please pull the pile we've managed to collect this time around.
 
-The patch can fix the regression:
+Thx.
 
-commit: 
-  06c4d00466 ("cpufreq: Convert to new X86 CPU match macros")
-  d369f9be1a ("the fix patch")
+---
+The following changes since commit 7111951b8d4973bda27ff663f2cf18b663d15b48:
 
-06c4d00466eb3748  d369f9be1ad1e22da4e8f03557  testcase/testparams/testbox
-----------------  --------------------------  ---------------------------
-         %stddev      change         %stddev
-             \          |                \  
-     93200             114%     199599        will-it-scale/performance-process-16-read2-ucode=0x21/lkp-ivb-d02
-     93200             114%     199599        GEO-MEAN will-it-scale.per_process_ops
+  Linux 5.6 (2020-03-29 15:25:41 -0700)
 
-Best Regards,
-Rong Chen
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/ras/ras.git tags/edac_updates_for_5.7
+
+for you to fetch changes up to 41dac9a2ad4a3d5c96394a23dd53b7e6edcb80ba:
+
+  Merge branches 'edac-mc-cleanup', 'edac-misc', 'edac-drivers' and 'edac-urgent' into edac-updates-for-5.7 (2020-03-30 10:07:58 +0200)
+
+----------------------------------------------------------------
+* A substantial edac_mc cleanup, sanitizing object freeing, streamlining
+and simplifying code flow, and getting rid of a lot of needless complexity in
+memory controller representation code, by Robert Richter.
+
+* A new EDAC driver for the ARM DMC-520 memory controller, by Lei Wang, Shiping
+Ji and others.
+
+* The usual sprinkling of misc cleanups and fixes all over the subsystem.
+
+----------------------------------------------------------------
+Borislav Petkov (1):
+      Merge branches 'edac-mc-cleanup', 'edac-misc', 'edac-drivers' and 'edac-urgent' into edac-updates-for-5.7
+
+Lei Wang (2):
+      dt-bindings: edac: Dmc-520.yaml
+      EDAC: Add EDAC driver for DMC520
+
+Prarit Bhargava (1):
+      EDAC/mce_amd: Print !SMCA processor warning only once
+
+Robert Richter (11):
+      EDAC/mc: Change mci device removal to use put_device()
+      EDAC/mc: Split edac_mc_alloc() into smaller functions
+      EDAC/mc: Reorder functions edac_mc_alloc*()
+      EDAC: Store error type in struct edac_raw_error_desc
+      EDAC/mc: Determine mci pointer from the error descriptor
+      EDAC/mc: Carve out error increment into a separate function
+      EDAC/mc: Report "unknown memory" on too many DIMM labels found
+      EDAC/mc: Remove enable_per_layer_report function argument
+      EDAC/mc: Pass the error descriptor to error reporting functions
+      EDAC/mc: Remove detail[] string and cleanup error string generation
+      EDAC/mc: Remove per layer counters
+
+Sherry Sun (1):
+      EDAC/synopsys: Do not dump uninitialized pinf->col
+
+Takashi Iwai (1):
+      EDAC/armada_xp: Use scnprintf() for avoiding potential buffer overflow
+
+ .../devicetree/bindings/edac/dmc-520.yaml          |  59 ++
+ MAINTAINERS                                        |   6 +
+ drivers/edac/Kconfig                               |   7 +
+ drivers/edac/Makefile                              |   1 +
+ drivers/edac/armada_xp_edac.c                      |  26 +-
+ drivers/edac/dmc520_edac.c                         | 656 +++++++++++++++++++++
+ drivers/edac/edac_mc.c                             | 511 ++++++++--------
+ drivers/edac/edac_mc.h                             |   6 +-
+ drivers/edac/edac_mc_sysfs.c                       | 110 ++--
+ drivers/edac/edac_module.h                         |   1 -
+ drivers/edac/ghes_edac.c                           |  16 +-
+ drivers/edac/mce_amd.c                             |   2 +-
+ drivers/edac/synopsys_edac.c                       |  22 +-
+ include/linux/edac.h                               |   9 +-
+ 14 files changed, 1054 insertions(+), 378 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/edac/dmc-520.yaml
+ create mode 100644 drivers/edac/dmc520_edac.c
+
+-- 
+Regards/Gruss,
+    Boris.
+
+SUSE Software Solutions Germany GmbH, GF: Felix Imendörffer, HRB 36809, AG Nürnberg
