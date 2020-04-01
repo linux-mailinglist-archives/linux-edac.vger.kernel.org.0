@@ -2,255 +2,221 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 95E3219A9D1
-	for <lists+linux-edac@lfdr.de>; Wed,  1 Apr 2020 12:57:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B035F19ADDE
+	for <lists+linux-edac@lfdr.de>; Wed,  1 Apr 2020 16:33:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727386AbgDAK5Q (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Wed, 1 Apr 2020 06:57:16 -0400
-Received: from mx0a-0016f401.pphosted.com ([67.231.148.174]:20956 "EHLO
-        mx0b-0016f401.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726445AbgDAK5Q (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Wed, 1 Apr 2020 06:57:16 -0400
-Received: from pps.filterd (m0045849.ppops.net [127.0.0.1])
-        by mx0a-0016f401.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 031Ap8kj001320;
-        Wed, 1 Apr 2020 03:57:03 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=date : from : to :
- cc : subject : message-id : references : content-type : in-reply-to :
- mime-version; s=pfpt0818; bh=GwXIQssCDzjW8cdZ/H1blYoVYQGnk/0Qq7aRuYxm6Og=;
- b=bM4gwuyrO+gkI0VhwZDg+jpUxJt9eCWt9ny6Vc71aSZsS5Gh8rSYZkEGfloJwptI59z5
- xWnEQ2kFO7l9CTHg5cSem2LJ5okiyKR/TGgR5O6YMvjM8S9yZjkl91kBw4woCYtXJFRK
- TPsl3mWIJLrmXMSvZKkutTlOBn6KWyj6rHBfuOD5pD7QQvQqNYFlxzpu6giMcOzxRHHd
- iiVIlYx8DqkWDAFNSKbPhG0YCdBF+nXTxBEYY6XyrodG40FmjUp5zKfX2TvoHXxSUca4
- 2wYierLPUwjwwI+NJhnoUoNTO/XEjXhKZ0ezbcy3eH96BxzmP6UZuerxMRJUXvHhG53W xw== 
-Received: from sc-exch03.marvell.com ([199.233.58.183])
-        by mx0a-0016f401.pphosted.com with ESMTP id 304855mm6a-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
-        Wed, 01 Apr 2020 03:57:02 -0700
-Received: from SC-EXCH04.marvell.com (10.93.176.84) by SC-EXCH03.marvell.com
- (10.93.176.83) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Wed, 1 Apr
- 2020 03:57:01 -0700
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (104.47.70.108)
- by SC-EXCH04.marvell.com (10.93.176.84) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2 via Frontend Transport; Wed, 1 Apr 2020 03:57:01 -0700
+        id S1732856AbgDAOdE (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Wed, 1 Apr 2020 10:33:04 -0400
+Received: from mail-eopbgr50086.outbound.protection.outlook.com ([40.107.5.86]:20231
+        "EHLO EUR03-VE1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1732749AbgDAOdE (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Wed, 1 Apr 2020 10:33:04 -0400
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=N2fvobyVC/0G/g0XZsyuETLuv2yOUei7BP3Qff4sTcrcDjnXPjCPY4gpjH1w3xgfRQ/4L/87gJGyjewvmtWKQUshTMDS7SsKKEOaJZFD6xi9MYf65xFJdkSHJYwlP99ESe6Qw9oihTsV15Yc0DfajLjlHOfIf83dWmfqdUpwMINLyfMPSCRyfuT7NlmymXGEyJ+EZ3H2Ei+xTi3ppZsqyVFaV9b1VEW+RDNF74FuzFKek4Xd9R9pHspD3p/hMJbgoE3MlBJZOcB9bW11tc+xw3XJcZ+eKBVMDQ6Z3gCxwDkWQc4NboyZG38++Nf6QnD+jBzt7PXNxGb34EnxAEjqKw==
+ b=aC07xilJlTnAq1EiPGxYjQIrvQCzUESpKZTgZPISvcLZSagdpMwuBUHz5iveWcAWtlL+P/G03tHHBIssrq0fGRoJKB7pFeBurhc5CUgaI2NdsXgmPHx2ZmyX1W1EdyKlX+81nw4ybNG76CjAA832Dr5JzAjIJvDhXi7ZMGgR6qqCulDpvJI1Q9xTQ2gjsoqlk4msTZwT4rXg9LczOgkNW6U4wRrqgkjaQZV30DHGbxOw+eqM8NWpFVldUklv+h271hncdDKD7b2NC2WJ23a2NuFXoyMooIE6p4L+Dx11bobpXcXaigtSgxPbSFxqv7ViNLGyxkM/SmiHYWKCCmUdHQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=GwXIQssCDzjW8cdZ/H1blYoVYQGnk/0Qq7aRuYxm6Og=;
- b=NwNeYcoOYH/kWbP0Z5HwH6EJ4h9+qw5K16DmTUA2g4OgV8GbiVJojgkUDyzmHF4juwX2SWZEtaiX48FSnT8ppXHSTBH9VUkPqPZ9A7nTWR6kw+1THOaVBMxOBE+to4LhlosNsDaVO8H3O7XhmDf00yOzV5RnBQnVJqp+85qJAeZWnsg7hHGW+jBHtMG6BQ55ph4u89P3ITSgafPzK6iF1oUAkfin2vHIUZQZd3G2PnE4Qz7MoTkrPLzT5D1Si6TAORZRFohrhykEY+zt9n7VszGc23gy8D9pAzF79CwDncwsiiBN7cSMjJatxVHX+l/PubVLDG59t17mxY/97M202g==
+ bh=6ksAsR+/8z7qXZqb3bcEQqgmLCFixSPe1v0Ecs1CDkc=;
+ b=lPvuSKQar9UqaJej7wW6119KA0aPJ6zov1r/Hcg+HNo5ANFErad6/8zMCvBUn5fH7buK0VaWudhNDOLE3ABZHi6qz2plPxUycGWhcDh8/b7WWMPG1iVRHB8wGPSuB5w89j2islJPw/N77d63Bwkd5IPeIBc0FG3CcXvHW2MHraHoUAKurPAHAdlFCvH3HqNR5OzRzpguNDCGRgAcDCf43DqErqjnVnE6U8qfU+U+Kb/KYAGbsJJf81Il0o8cJhyDDtml8F2H1QiBZmSZ9JFHFUUYa4/J/9xX43J3Ag/BATxcaQAClwS5dnvLgyR0UgzwBvImFoPG8jv2hKk/rrPF6A==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=marvell.com; dmarc=pass action=none header.from=marvell.com;
- dkim=pass header.d=marvell.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=marvell.onmicrosoft.com; s=selector1-marvell-onmicrosoft-com;
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=GwXIQssCDzjW8cdZ/H1blYoVYQGnk/0Qq7aRuYxm6Og=;
- b=KyxmGmpIRtIhF4JmibztbuLxpudoqENfGevUIStuKLwBnfkaiASK6CK2BUnajE2qr8otj/y5tMPPYB0x3edM1y2RuiuOEnT12/A25sRortWsF+m7PVwUUZTLfJgzzXe/CExSenCnpo5v8Ia4tFbhcrtSeLjN7WJsvQg6y6LXI4U=
-Received: from BYAPR18MB2661.namprd18.prod.outlook.com (2603:10b6:a03:136::26)
- by BYAPR18MB3045.namprd18.prod.outlook.com (2603:10b6:a03:112::29) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2856.20; Wed, 1 Apr
- 2020 10:56:58 +0000
-Received: from BYAPR18MB2661.namprd18.prod.outlook.com
- ([fe80::78a2:38df:6c52:a953]) by BYAPR18MB2661.namprd18.prod.outlook.com
- ([fe80::78a2:38df:6c52:a953%3]) with mapi id 15.20.2856.019; Wed, 1 Apr 2020
- 10:56:58 +0000
-Date:   Wed, 1 Apr 2020 12:56:47 +0200
-From:   Robert Richter <rrichter@marvell.com>
-To:     Sherry Sun <sherry.sun@nxp.com>
-CC:     <bp@alien8.de>, <mchehab@kernel.org>, <tony.luck@intel.com>,
-        <james.morse@arm.com>, <michal.simek@xilinx.com>,
-        <manish.narani@xilinx.com>, <linux-edac@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <frank.li@nxp.com>
-Subject: Re: [PATCH v2 4/4] EDAC: synopsys: Add useful debug and output
+ bh=6ksAsR+/8z7qXZqb3bcEQqgmLCFixSPe1v0Ecs1CDkc=;
+ b=nsVxmXx2rmQJhaxn11jfsBs0/Vvc/higfes31vJragyCxSYcTidlQ9d06Om4cuWNVUcrca8bwount55M88Q3cWi4hXn1NIOtUQ3pbGP4W0+uQRFALGsvFG20/PScJ1wkdtCNtX+ll7TJ76xQiEnqbtGSq+edUPhTg+gWtQ/m7j4=
+Received: from VI1PR04MB4960.eurprd04.prod.outlook.com (20.177.49.213) by
+ VI1PR04MB5117.eurprd04.prod.outlook.com (20.177.50.154) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2856.20; Wed, 1 Apr 2020 14:32:59 +0000
+Received: from VI1PR04MB4960.eurprd04.prod.outlook.com
+ ([fe80::b105:1422:4bfa:338e]) by VI1PR04MB4960.eurprd04.prod.outlook.com
+ ([fe80::b105:1422:4bfa:338e%7]) with mapi id 15.20.2856.019; Wed, 1 Apr 2020
+ 14:32:59 +0000
+From:   Sherry Sun <sherry.sun@nxp.com>
+To:     Robert Richter <rrichter@marvell.com>
+CC:     "bp@alien8.de" <bp@alien8.de>,
+        "mchehab@kernel.org" <mchehab@kernel.org>,
+        "tony.luck@intel.com" <tony.luck@intel.com>,
+        "james.morse@arm.com" <james.morse@arm.com>,
+        "michal.simek@xilinx.com" <michal.simek@xilinx.com>,
+        "manish.narani@xilinx.com" <manish.narani@xilinx.com>,
+        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Frank Li <frank.li@nxp.com>
+Subject: RE: [PATCH v2 4/4] EDAC: synopsys: Add useful debug and output
  information for 64bit systems
-Message-ID: <20200401105647.hszgxzt2uedqofth@rric.localdomain>
+Thread-Topic: [PATCH v2 4/4] EDAC: synopsys: Add useful debug and output
+ information for 64bit systems
+Thread-Index: AQHWB/nL9ePNYAIn50WVBCwbMM/nTqhkGIaAgAA4qYA=
+Date:   Wed, 1 Apr 2020 14:32:58 +0000
+Message-ID: <VI1PR04MB4960BEC8A60876A543A92ED692C90@VI1PR04MB4960.eurprd04.prod.outlook.com>
 References: <1585726749-13039-1-git-send-email-sherry.sun@nxp.com>
  <1585726749-13039-5-git-send-email-sherry.sun@nxp.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1585726749-13039-5-git-send-email-sherry.sun@nxp.com>
-User-Agent: NeoMutt/20170113 (1.7.2)
-X-ClientProxiedBy: HE1PR07CA0035.eurprd07.prod.outlook.com
- (2603:10a6:7:66::21) To BYAPR18MB2661.namprd18.prod.outlook.com
- (2603:10b6:a03:136::26)
-MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from rric.localdomain (31.208.96.227) by HE1PR07CA0035.eurprd07.prod.outlook.com (2603:10a6:7:66::21) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2878.9 via Frontend Transport; Wed, 1 Apr 2020 10:56:55 +0000
-X-Originating-IP: [31.208.96.227]
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: d3a16273-8ca5-40df-75e2-08d7d62b65f8
-X-MS-TrafficTypeDiagnostic: BYAPR18MB3045:
-X-Microsoft-Antispam-PRVS: <BYAPR18MB3045FACE904791BCA1205C5DD9C90@BYAPR18MB3045.namprd18.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:2958;
-X-Forefront-PRVS: 03607C04F0
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR18MB2661.namprd18.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(10009020)(4636009)(366004)(376002)(346002)(396003)(39860400002)(136003)(9686003)(86362001)(26005)(6666004)(16526019)(956004)(52116002)(2906002)(81156014)(7416002)(186003)(55016002)(1076003)(66476007)(53546011)(81166006)(478600001)(8676002)(4326008)(316002)(5660300002)(6506007)(7696005)(66946007)(66556008)(8936002)(6916009);DIR:OUT;SFP:1101;
-Received-SPF: None (protection.outlook.com: marvell.com does not designate
+ <20200401105647.hszgxzt2uedqofth@rric.localdomain>
+In-Reply-To: <20200401105647.hszgxzt2uedqofth@rric.localdomain>
+Accept-Language: zh-CN, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=sherry.sun@nxp.com; 
+x-originating-ip: [92.121.68.129]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-ht: Tenant
+x-ms-office365-filtering-correlation-id: 53a12ffe-00d5-4cd9-298b-08d7d6499379
+x-ms-traffictypediagnostic: VI1PR04MB5117:|VI1PR04MB5117:
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <VI1PR04MB51178958C51F6FCF9403B0B992C90@VI1PR04MB5117.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:3968;
+x-forefront-prvs: 03607C04F0
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB4960.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(10009020)(4636009)(396003)(346002)(39860400002)(376002)(136003)(366004)(76116006)(5660300002)(9686003)(186003)(7696005)(2906002)(71200400001)(8676002)(81166006)(86362001)(66446008)(26005)(4326008)(52536014)(8936002)(64756008)(66556008)(66946007)(478600001)(54906003)(55016002)(6506007)(316002)(6916009)(66476007)(44832011)(81156014)(53546011)(33656002);DIR:OUT;SFP:1101;
+received-spf: None (protection.outlook.com: nxp.com does not designate
  permitted sender hosts)
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: a7RU8o6lJ0hQ1fnoCa69LBJO7KQ6hSaaxD+ok8Ma8/AOvNHkhEwhNWyq+m6SMTJYBzPbgFaXXbxgiWjmLi9BFV0Mb9CEx6rihrQrERjptGunW+JUaYlM/k7Z4z0RDeyjGww5VNsclkDFweBM2nNkuxlm5abhUerCpCQVTO7dyP8WVu55MGRjEoVQTyeA97Im3L1bFUtGJX1peZJCS3exmOd6WL8RpwHR01EcyEw1tcGS7xKGj3kBsn2w5dSKQWTRq5EG1f48qgnR2oeZZ5mQICUbGpGFwZij93jV3V4VfxpXzAZoPmtk6NhOPDedg5cedskggw5/WLWm4E+zLhVBfxldv8EY1kCK+vS2iIZfygFt5MUQk36l/Rr3HFVo1feIWhJ/YiuzoUw7nts23cuHDCr33hUmpmd6iZEj2zfhvc2SszdUFbkxr/cOHdGYj50U
-X-MS-Exchange-AntiSpam-MessageData: 9k1faLd2SNRl/DvseVZQPBEbboLoVKmYysh6ao17F702LtSLa5Zk1sYLbC6EdIothXSlrt9NFTgDpWDipHfgnK7EkeI9danKBUZ2nq/xyHkcqCS8OreGbkevdkb8Jg2wc9oSOJ7BaaUyErSpXwuWCg==
-X-MS-Exchange-CrossTenant-Network-Message-Id: d3a16273-8ca5-40df-75e2-08d7d62b65f8
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Apr 2020 10:56:58.0213
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 3QzA49+mP8Gi/6ZnKrj9o3DCH1R3HOrF++nXsRji6wacSa9vBfBix/nsgM61nZd9jS7alnqp0zfIDT/QBs951YVfgjS1PaTcmV6OABIzm+1y8Wz8fVkamSqsZcViNrMsW3ZYcM3ZEZjoIm7/M8zO3Z6MpWPNHSSO2HU2bIxmEZSWo6XaPMTkPhQHFPMAWsx8/s4w7YW938yfDhrwEw+68wgU+9Xv6uS/f2J2tr1CVztRgnl8bffPUEhLwF8Mxb+BqJ62ln+fAetLBwwp2bKGIIZK971G1tyLIVvkqJ20JhepmS39wK+R5hQkua5tLYVGozOIGe8A+t0qEo5He75BBc9+y1bbA19L+RWyxK4gyw2cBd5mVI6qZdFcA8lo788DW2jX9schrh95kB7JmCsc/uSezsvpSfy/mHD6ogKcydnEyunkf7caMKpqiOP+zmfU
+x-ms-exchange-antispam-messagedata: nDbPnI2sYYeFcj3OJ27omAdtPbAkp7wBjHGXwSbHmU38AfniZwaoU2wbXUCw4jmuFBEUpUxmGmhMNEpW8htifd51yAfS1Blb3gCm3YX+Mdxl6lZyXs5hQPSJ46U/5tYBtz0yWbAG9TOXU7QE2C1IzQ==
+Content-Type: text/plain; charset="gb2312"
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 53a12ffe-00d5-4cd9-298b-08d7d6499379
+X-MS-Exchange-CrossTenant-originalarrivaltime: 01 Apr 2020 14:32:59.0572
  (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 70e1fb47-1155-421d-87fc-2e58f638b6e0
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: kSwU3umA+cicZtGU7kt08coAKlkLP5TQuK/Sr5f02XMEcsm8MwM8B/aJ0g8a5Z+TUPGpgvbGPDLYVFgYFIXamg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR18MB3045
-X-OriginatorOrg: marvell.com
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.676
- definitions=2020-04-01_01:2020-03-31,2020-03-31 signatures=0
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: g3pAztIVKHzBMwu3Zonjp/60KYWpz0HOONTcgqPBSW5o2k/AHqQ79aJDgPSSdJfUjBvFr1SYAxtmjDG+VYGgMA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB5117
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On 01.04.20 15:39:09, Sherry Sun wrote:
-> Now the synopsys_edac driver only support to output the 32-bit error
-> data, but for 64 bit systems, such as i.MX8MP, 64 bit error data is
-> needed. At the same time, when CE/UE happens, syndrome data is also
-> useful to showed to user. So here add data_high and syndrome data for
-> 64-bit systems.
-> 
-> And in order to distinguish 64-bit systems and other systems, here
-> adjust the position of the zynqmp_get_dtype(), so we can called
-> this function to distinguish it. To ensure that functions of the same
-> function are in the same position, here adjust the position of the
-> zynq_get_dtype() too.
-> 
-> Signed-off-by: Sherry Sun <sherry.sun@nxp.com>
-> ---
->  drivers/edac/synopsys_edac.c | 182 ++++++++++++++++++++---------------
->  1 file changed, 102 insertions(+), 80 deletions(-)
-> 
-> diff --git a/drivers/edac/synopsys_edac.c b/drivers/edac/synopsys_edac.c
-> index bf4202a24683..e8c3631ddff4 100644
-> --- a/drivers/edac/synopsys_edac.c
-> +++ b/drivers/edac/synopsys_edac.c
-> @@ -278,18 +278,22 @@
->   * @col:	Column number.
->   * @bank:	Bank number.
->   * @bitpos:	Bit position.
-> - * @data:	Data causing the error.
-> + * @data_low:	Low bit data causing the error.
-> + * @data_high:	High bit data causing the error(used for 64 bit systems).
->   * @bankgrpnr:	Bank group number.
->   * @blknr:	Block number.
-> + * @syndrome:	Syndrome of the error.
->   */
->  struct ecc_error_info {
->  	u32 row;
->  	u32 col;
->  	u32 bank;
->  	u32 bitpos;
-> -	u32 data;
-> +	u32 data_low;
-> +	u32 data_high;
-
-Where are 16, 32 and 64 bit widths. You could handle them all the same
-in a u64.
-
-If I am not wrong, the width is fix for the whole mci. So you could
-create various .get_error_info() functions depending on the data
-width without run time width checks.
-
->  	u32 bankgrpnr;
->  	u32 blknr;
-> +	u32 syndrome;
->  };
->  
->  /**
-
-> @@ -399,7 +467,7 @@ static int zynq_get_error_info(struct synps_edac_priv *priv)
->  	p->ueinfo.row = (regval & ADDR_ROW_MASK) >> ADDR_ROW_SHIFT;
->  	p->ueinfo.col = regval & ADDR_COL_MASK;
->  	p->ueinfo.bank = (regval & ADDR_BANK_MASK) >> ADDR_BANK_SHIFT;
-> -	p->ueinfo.data = readl(base + UE_DATA_31_0_OFST);
-> +	p->ueinfo.data_low = readl(base + UE_DATA_31_0_OFST);
->  	clearval |= ECC_CTRL_CLR_UE_ERR;
->  
->  out:
-> @@ -443,10 +511,14 @@ static int zynqmp_get_error_info(struct synps_edac_priv *priv)
->  	p->ceinfo.bankgrpnr = (regval &	ECC_CEADDR1_BNKGRP_MASK) >>
->  					ECC_CEADDR1_BNKGRP_SHIFT;
->  	p->ceinfo.blknr = (regval & ECC_CEADDR1_BLKNR_MASK);
-> -	p->ceinfo.data = readl(base + ECC_CSYND0_OFST);
-> -	edac_dbg(2, "ECCCSYN0: 0x%08X ECCCSYN1: 0x%08X ECCCSYN2: 0x%08X\n",
-> -		 readl(base + ECC_CSYND0_OFST), readl(base + ECC_CSYND1_OFST),
-> -		 readl(base + ECC_CSYND2_OFST));
-> +	p->ceinfo.data_low = readl(base + ECC_CSYND0_OFST);
-> +	if (zynqmp_get_dtype(base) == DEV_X8) {
-> +		p->ceinfo.data_high = readl(base + ECC_CSYND1_OFST);
-> +		p->ceinfo.syndrome = readl(base + ECC_CSYND2_OFST);
-> +		edac_dbg(2, "CE data_low: 0x%08X data_high: 0x%08X syndrome: 0x%08X\n",
-> +			 p->ceinfo.data_low, p->ceinfo.data_high,
-> +			 p->ceinfo.syndrome);
-
-You are loosing edac_dbg() here for the != DEV_X8 cases.
-
-> +	}
->  ue_err:
->  	if (!p->ue_cnt)
->  		goto out;
-> @@ -459,7 +531,14 @@ static int zynqmp_get_error_info(struct synps_edac_priv *priv)
->  	p->ueinfo.bank = (regval & ECC_CEADDR1_BNKNR_MASK) >>
->  					ECC_CEADDR1_BNKNR_SHIFT;
->  	p->ueinfo.blknr = (regval & ECC_CEADDR1_BLKNR_MASK);
-> -	p->ueinfo.data = readl(base + ECC_UESYND0_OFST);
-> +	p->ueinfo.data_low = readl(base + ECC_UESYND0_OFST);
-> +	if (zynqmp_get_dtype(base) == DEV_X8) {
-> +		p->ueinfo.data_high = readl(base + ECC_UESYND1_OFST);
-> +		p->ueinfo.syndrome = readl(base + ECC_UESYND2_OFST);
-> +		edac_dbg(2, "UE data_low: 0x%08X data_high: 0x%08X syndrome: 0x%08X\n",
-> +			 p->ueinfo.data_low, p->ueinfo.data_high,
-> +			 p->ueinfo.syndrome);
-
-Similar here, no edac_dbg() for != DEV_X8.
-
-> +	}
->  out:
->  	clearval = ECC_CTRL_CLR_CE_ERR | ECC_CTRL_CLR_CE_ERRCNT;
->  	clearval |= ECC_CTRL_CLR_UE_ERR | ECC_CTRL_CLR_UE_ERRCNT;
-> @@ -480,20 +559,27 @@ static void handle_error(struct mem_ctl_info *mci, struct synps_ecc_status *p)
->  {
->  	struct synps_edac_priv *priv = mci->pvt_info;
->  	struct ecc_error_info *pinf;
-> +	int n;
->  
->  	if (p->ce_cnt) {
->  		pinf = &p->ceinfo;
->  		if (priv->p_data->quirks & DDR_ECC_INTR_SUPPORT) {
-> -			snprintf(priv->message, SYNPS_EDAC_MSG_SIZE,
-> -				 "DDR ECC error type:%s Row %d Bank %d BankGroup Number %d Block Number %d Bit Position: %d Data: 0x%08x",
-> -				 "CE", pinf->row, pinf->bank,
-> -				 pinf->bankgrpnr, pinf->blknr,
-> -				 pinf->bitpos, pinf->data);
-> +			n = snprintf(priv->message, SYNPS_EDAC_MSG_SIZE,
-> +				     "DDR ECC error type:%s Row %d Bank %d BankGroup Number %d Block Number %d Bit Position: %d Data: 0x%08x",
-> +				     "CE", pinf->row, pinf->bank,
-> +				     pinf->bankgrpnr, pinf->blknr,
-> +				     pinf->bitpos, pinf->data_low);
-> +
-> +			if (zynqmp_get_dtype(priv->baseaddr) == DEV_X8)
-
-This is zynqmp specific, right? but you call it in the generic
-function handle_error().
-
--Robert
-
-> +				snprintf(priv->message + n,
-> +					 SYNPS_EDAC_MSG_SIZE - n,
-> +					 " Data_high: 0x%08x Syndrome: 0x%08x",
-> +					 pinf->data_high, pinf->syndrome);
->  		} else {
->  			snprintf(priv->message, SYNPS_EDAC_MSG_SIZE,
->  				 "DDR ECC error type:%s Row %d Bank %d Col %d Bit Position: %d Data: 0x%08x",
->  				 "CE", pinf->row, pinf->bank, pinf->col,
-> -				 pinf->bitpos, pinf->data);
-> +				 pinf->bitpos, pinf->data_low);
->  		}
->  
->  		edac_mc_handle_error(HW_EVENT_ERR_CORRECTED, mci,
+SGkgUm9iZXJ0LA0KDQo+IC0tLS0tT3JpZ2luYWwgTWVzc2FnZS0tLS0tDQo+IEZyb206IFJvYmVy
+dCBSaWNodGVyIDxycmljaHRlckBtYXJ2ZWxsLmNvbT4NCj4gU2VudDogMjAyMMTqNNTCMcjVIDE4
+OjU3DQo+IFRvOiBTaGVycnkgU3VuIDxzaGVycnkuc3VuQG54cC5jb20+DQo+IENjOiBicEBhbGll
+bjguZGU7IG1jaGVoYWJAa2VybmVsLm9yZzsgdG9ueS5sdWNrQGludGVsLmNvbTsNCj4gamFtZXMu
+bW9yc2VAYXJtLmNvbTsgbWljaGFsLnNpbWVrQHhpbGlueC5jb207DQo+IG1hbmlzaC5uYXJhbmlA
+eGlsaW54LmNvbTsgbGludXgtZWRhY0B2Z2VyLmtlcm5lbC5vcmc7IGxpbnV4LQ0KPiBrZXJuZWxA
+dmdlci5rZXJuZWwub3JnOyBGcmFuayBMaSA8ZnJhbmsubGlAbnhwLmNvbT4NCj4gU3ViamVjdDog
+UmU6IFtQQVRDSCB2MiA0LzRdIEVEQUM6IHN5bm9wc3lzOiBBZGQgdXNlZnVsIGRlYnVnIGFuZCBv
+dXRwdXQNCj4gaW5mb3JtYXRpb24gZm9yIDY0Yml0IHN5c3RlbXMNCj4gDQo+IE9uIDAxLjA0LjIw
+IDE1OjM5OjA5LCBTaGVycnkgU3VuIHdyb3RlOg0KPiA+IE5vdyB0aGUgc3lub3BzeXNfZWRhYyBk
+cml2ZXIgb25seSBzdXBwb3J0IHRvIG91dHB1dCB0aGUgMzItYml0IGVycm9yDQo+ID4gZGF0YSwg
+YnV0IGZvciA2NCBiaXQgc3lzdGVtcywgc3VjaCBhcyBpLk1YOE1QLCA2NCBiaXQgZXJyb3IgZGF0
+YSBpcw0KPiA+IG5lZWRlZC4gQXQgdGhlIHNhbWUgdGltZSwgd2hlbiBDRS9VRSBoYXBwZW5zLCBz
+eW5kcm9tZSBkYXRhIGlzIGFsc28NCj4gPiB1c2VmdWwgdG8gc2hvd2VkIHRvIHVzZXIuIFNvIGhl
+cmUgYWRkIGRhdGFfaGlnaCBhbmQgc3luZHJvbWUgZGF0YSBmb3INCj4gPiA2NC1iaXQgc3lzdGVt
+cy4NCj4gPg0KPiA+IEFuZCBpbiBvcmRlciB0byBkaXN0aW5ndWlzaCA2NC1iaXQgc3lzdGVtcyBh
+bmQgb3RoZXIgc3lzdGVtcywgaGVyZQ0KPiA+IGFkanVzdCB0aGUgcG9zaXRpb24gb2YgdGhlIHp5
+bnFtcF9nZXRfZHR5cGUoKSwgc28gd2UgY2FuIGNhbGxlZCB0aGlzDQo+ID4gZnVuY3Rpb24gdG8g
+ZGlzdGluZ3Vpc2ggaXQuIFRvIGVuc3VyZSB0aGF0IGZ1bmN0aW9ucyBvZiB0aGUgc2FtZQ0KPiA+
+IGZ1bmN0aW9uIGFyZSBpbiB0aGUgc2FtZSBwb3NpdGlvbiwgaGVyZSBhZGp1c3QgdGhlIHBvc2l0
+aW9uIG9mIHRoZQ0KPiA+IHp5bnFfZ2V0X2R0eXBlKCkgdG9vLg0KPiA+DQo+ID4gU2lnbmVkLW9m
+Zi1ieTogU2hlcnJ5IFN1biA8c2hlcnJ5LnN1bkBueHAuY29tPg0KPiA+IC0tLQ0KPiA+ICBkcml2
+ZXJzL2VkYWMvc3lub3BzeXNfZWRhYy5jIHwgMTgyDQo+ID4gKysrKysrKysrKysrKysrKysrKyst
+LS0tLS0tLS0tLS0tLS0NCj4gPiAgMSBmaWxlIGNoYW5nZWQsIDEwMiBpbnNlcnRpb25zKCspLCA4
+MCBkZWxldGlvbnMoLSkNCj4gPg0KPiA+IGRpZmYgLS1naXQgYS9kcml2ZXJzL2VkYWMvc3lub3Bz
+eXNfZWRhYy5jDQo+ID4gYi9kcml2ZXJzL2VkYWMvc3lub3BzeXNfZWRhYy5jIGluZGV4IGJmNDIw
+MmEyNDY4My4uZThjMzYzMWRkZmY0DQo+IDEwMDY0NA0KPiA+IC0tLSBhL2RyaXZlcnMvZWRhYy9z
+eW5vcHN5c19lZGFjLmMNCj4gPiArKysgYi9kcml2ZXJzL2VkYWMvc3lub3BzeXNfZWRhYy5jDQo+
+ID4gQEAgLTI3OCwxOCArMjc4LDIyIEBADQo+ID4gICAqIEBjb2w6CUNvbHVtbiBudW1iZXIuDQo+
+ID4gICAqIEBiYW5rOglCYW5rIG51bWJlci4NCj4gPiAgICogQGJpdHBvczoJQml0IHBvc2l0aW9u
+Lg0KPiA+IC0gKiBAZGF0YToJRGF0YSBjYXVzaW5nIHRoZSBlcnJvci4NCj4gPiArICogQGRhdGFf
+bG93OglMb3cgYml0IGRhdGEgY2F1c2luZyB0aGUgZXJyb3IuDQo+ID4gKyAqIEBkYXRhX2hpZ2g6
+CUhpZ2ggYml0IGRhdGEgY2F1c2luZyB0aGUgZXJyb3IodXNlZCBmb3IgNjQgYml0DQo+IHN5c3Rl
+bXMpLg0KPiA+ICAgKiBAYmFua2dycG5yOglCYW5rIGdyb3VwIG51bWJlci4NCj4gPiAgICogQGJs
+a25yOglCbG9jayBudW1iZXIuDQo+ID4gKyAqIEBzeW5kcm9tZToJU3luZHJvbWUgb2YgdGhlIGVy
+cm9yLg0KPiA+ICAgKi8NCj4gPiAgc3RydWN0IGVjY19lcnJvcl9pbmZvIHsNCj4gPiAgCXUzMiBy
+b3c7DQo+ID4gIAl1MzIgY29sOw0KPiA+ICAJdTMyIGJhbms7DQo+ID4gIAl1MzIgYml0cG9zOw0K
+PiA+IC0JdTMyIGRhdGE7DQo+ID4gKwl1MzIgZGF0YV9sb3c7DQo+ID4gKwl1MzIgZGF0YV9oaWdo
+Ow0KPiANCj4gV2hlcmUgYXJlIDE2LCAzMiBhbmQgNjQgYml0IHdpZHRocy4gWW91IGNvdWxkIGhh
+bmRsZSB0aGVtIGFsbCB0aGUgc2FtZSBpbiBhDQo+IHU2NC4NCj4gDQo+IElmIEkgYW0gbm90IHdy
+b25nLCB0aGUgd2lkdGggaXMgZml4IGZvciB0aGUgd2hvbGUgbWNpLiBTbyB5b3UgY291bGQgY3Jl
+YXRlDQo+IHZhcmlvdXMgLmdldF9lcnJvcl9pbmZvKCkgZnVuY3Rpb25zIGRlcGVuZGluZyBvbiB0
+aGUgZGF0YSB3aWR0aCB3aXRob3V0IHJ1bg0KPiB0aW1lIHdpZHRoIGNoZWNrcy4NCj4gDQoNClll
+cywgaGVyZSB3ZSBjYW4gdXNlIHU2NC4gV2lsbCBjb3JyZWN0IGl0IGluIHYzLg0KRm9yIHRoZSB6
+eW5xLCBpdCdzIDE2LWJpdCBidXMgd2lkdGgsIGZvciBpbXg4bXAsIGl0J3MgNjQtYml0IGJ1cyB3
+aWR0aC4NCkJ1dCBmb3IgenlucW1wLCBpdCdzIG9wdGlvbmFsIGJldHdlZW4gMzItYml0IGFuZCA2
+NC1iaXQgYnVzIHdpZHRoLA0KU28gd2UgaGFkIGJldHRlciBydW4gdGltZSBjaGVjayB0aGUgYnVz
+IHdpZHRoLCB3aGF0IGRvIHlvdSB0aGluaz8NCg0KPiA+ICAJdTMyIGJhbmtncnBucjsNCj4gPiAg
+CXUzMiBibGtucjsNCj4gPiArCXUzMiBzeW5kcm9tZTsNCj4gPiAgfTsNCj4gPg0KPiA+ICAvKioN
+Cj4gDQo+ID4gQEAgLTM5OSw3ICs0NjcsNyBAQCBzdGF0aWMgaW50IHp5bnFfZ2V0X2Vycm9yX2lu
+Zm8oc3RydWN0DQo+IHN5bnBzX2VkYWNfcHJpdiAqcHJpdikNCj4gPiAgCXAtPnVlaW5mby5yb3cg
+PSAocmVndmFsICYgQUREUl9ST1dfTUFTSykgPj4gQUREUl9ST1dfU0hJRlQ7DQo+ID4gIAlwLT51
+ZWluZm8uY29sID0gcmVndmFsICYgQUREUl9DT0xfTUFTSzsNCj4gPiAgCXAtPnVlaW5mby5iYW5r
+ID0gKHJlZ3ZhbCAmIEFERFJfQkFOS19NQVNLKSA+Pg0KPiBBRERSX0JBTktfU0hJRlQ7DQo+ID4g
+LQlwLT51ZWluZm8uZGF0YSA9IHJlYWRsKGJhc2UgKyBVRV9EQVRBXzMxXzBfT0ZTVCk7DQo+ID4g
+KwlwLT51ZWluZm8uZGF0YV9sb3cgPSByZWFkbChiYXNlICsgVUVfREFUQV8zMV8wX09GU1QpOw0K
+PiA+ICAJY2xlYXJ2YWwgfD0gRUNDX0NUUkxfQ0xSX1VFX0VSUjsNCj4gPg0KPiA+ICBvdXQ6DQo+
+ID4gQEAgLTQ0MywxMCArNTExLDE0IEBAIHN0YXRpYyBpbnQgenlucW1wX2dldF9lcnJvcl9pbmZv
+KHN0cnVjdA0KPiBzeW5wc19lZGFjX3ByaXYgKnByaXYpDQo+ID4gIAlwLT5jZWluZm8uYmFua2dy
+cG5yID0gKHJlZ3ZhbCAmDQo+IAlFQ0NfQ0VBRERSMV9CTktHUlBfTUFTSykgPj4NCj4gPiAgCQkJ
+CQlFQ0NfQ0VBRERSMV9CTktHUlBfU0hJRlQ7DQo+ID4gIAlwLT5jZWluZm8uYmxrbnIgPSAocmVn
+dmFsICYgRUNDX0NFQUREUjFfQkxLTlJfTUFTSyk7DQo+ID4gLQlwLT5jZWluZm8uZGF0YSA9IHJl
+YWRsKGJhc2UgKyBFQ0NfQ1NZTkQwX09GU1QpOw0KPiA+IC0JZWRhY19kYmcoMiwgIkVDQ0NTWU4w
+OiAweCUwOFggRUNDQ1NZTjE6IDB4JTA4WCBFQ0NDU1lOMjoNCj4gMHglMDhYXG4iLA0KPiA+IC0J
+CSByZWFkbChiYXNlICsgRUNDX0NTWU5EMF9PRlNUKSwgcmVhZGwoYmFzZSArDQo+IEVDQ19DU1lO
+RDFfT0ZTVCksDQo+ID4gLQkJIHJlYWRsKGJhc2UgKyBFQ0NfQ1NZTkQyX09GU1QpKTsNCj4gPiAr
+CXAtPmNlaW5mby5kYXRhX2xvdyA9IHJlYWRsKGJhc2UgKyBFQ0NfQ1NZTkQwX09GU1QpOw0KPiA+
+ICsJaWYgKHp5bnFtcF9nZXRfZHR5cGUoYmFzZSkgPT0gREVWX1g4KSB7DQo+ID4gKwkJcC0+Y2Vp
+bmZvLmRhdGFfaGlnaCA9IHJlYWRsKGJhc2UgKyBFQ0NfQ1NZTkQxX09GU1QpOw0KPiA+ICsJCXAt
+PmNlaW5mby5zeW5kcm9tZSA9IHJlYWRsKGJhc2UgKyBFQ0NfQ1NZTkQyX09GU1QpOw0KPiA+ICsJ
+CWVkYWNfZGJnKDIsICJDRSBkYXRhX2xvdzogMHglMDhYIGRhdGFfaGlnaDogMHglMDhYDQo+IHN5
+bmRyb21lOiAweCUwOFhcbiIsDQo+ID4gKwkJCSBwLT5jZWluZm8uZGF0YV9sb3csIHAtPmNlaW5m
+by5kYXRhX2hpZ2gsDQo+ID4gKwkJCSBwLT5jZWluZm8uc3luZHJvbWUpOw0KPiANCj4gWW91IGFy
+ZSBsb29zaW5nIGVkYWNfZGJnKCkgaGVyZSBmb3IgdGhlICE9IERFVl9YOCBjYXNlcy4NCj4gDQo+
+ID4gKwl9DQo+ID4gIHVlX2VycjoNCj4gPiAgCWlmICghcC0+dWVfY250KQ0KPiA+ICAJCWdvdG8g
+b3V0Ow0KPiA+IEBAIC00NTksNyArNTMxLDE0IEBAIHN0YXRpYyBpbnQgenlucW1wX2dldF9lcnJv
+cl9pbmZvKHN0cnVjdA0KPiBzeW5wc19lZGFjX3ByaXYgKnByaXYpDQo+ID4gIAlwLT51ZWluZm8u
+YmFuayA9IChyZWd2YWwgJiBFQ0NfQ0VBRERSMV9CTktOUl9NQVNLKSA+Pg0KPiA+ICAJCQkJCUVD
+Q19DRUFERFIxX0JOS05SX1NISUZUOw0KPiA+ICAJcC0+dWVpbmZvLmJsa25yID0gKHJlZ3ZhbCAm
+IEVDQ19DRUFERFIxX0JMS05SX01BU0spOw0KPiA+IC0JcC0+dWVpbmZvLmRhdGEgPSByZWFkbChi
+YXNlICsgRUNDX1VFU1lORDBfT0ZTVCk7DQo+ID4gKwlwLT51ZWluZm8uZGF0YV9sb3cgPSByZWFk
+bChiYXNlICsgRUNDX1VFU1lORDBfT0ZTVCk7DQo+ID4gKwlpZiAoenlucW1wX2dldF9kdHlwZShi
+YXNlKSA9PSBERVZfWDgpIHsNCj4gPiArCQlwLT51ZWluZm8uZGF0YV9oaWdoID0gcmVhZGwoYmFz
+ZSArIEVDQ19VRVNZTkQxX09GU1QpOw0KPiA+ICsJCXAtPnVlaW5mby5zeW5kcm9tZSA9IHJlYWRs
+KGJhc2UgKyBFQ0NfVUVTWU5EMl9PRlNUKTsNCj4gPiArCQllZGFjX2RiZygyLCAiVUUgZGF0YV9s
+b3c6IDB4JTA4WCBkYXRhX2hpZ2g6IDB4JTA4WA0KPiBzeW5kcm9tZTogMHglMDhYXG4iLA0KPiA+
+ICsJCQkgcC0+dWVpbmZvLmRhdGFfbG93LCBwLT51ZWluZm8uZGF0YV9oaWdoLA0KPiA+ICsJCQkg
+cC0+dWVpbmZvLnN5bmRyb21lKTsNCj4gDQo+IFNpbWlsYXIgaGVyZSwgbm8gZWRhY19kYmcoKSBm
+b3IgIT0gREVWX1g4Lg0KDQpUaGFua3MsIHdpbGwgY29ycmVjdCBpdCBpbiB2My4NCg0KPiANCj4g
+PiArCX0NCj4gPiAgb3V0Og0KPiA+ICAJY2xlYXJ2YWwgPSBFQ0NfQ1RSTF9DTFJfQ0VfRVJSIHwg
+RUNDX0NUUkxfQ0xSX0NFX0VSUkNOVDsNCj4gPiAgCWNsZWFydmFsIHw9IEVDQ19DVFJMX0NMUl9V
+RV9FUlIgfCBFQ0NfQ1RSTF9DTFJfVUVfRVJSQ05UOw0KPiBAQCAtNDgwLDIwDQo+ID4gKzU1OSwy
+NyBAQCBzdGF0aWMgdm9pZCBoYW5kbGVfZXJyb3Ioc3RydWN0IG1lbV9jdGxfaW5mbyAqbWNpLCBz
+dHJ1Y3QNCj4gPiBzeW5wc19lY2Nfc3RhdHVzICpwKSAgew0KPiA+ICAJc3RydWN0IHN5bnBzX2Vk
+YWNfcHJpdiAqcHJpdiA9IG1jaS0+cHZ0X2luZm87DQo+ID4gIAlzdHJ1Y3QgZWNjX2Vycm9yX2lu
+Zm8gKnBpbmY7DQo+ID4gKwlpbnQgbjsNCj4gPg0KPiA+ICAJaWYgKHAtPmNlX2NudCkgew0KPiA+
+ICAJCXBpbmYgPSAmcC0+Y2VpbmZvOw0KPiA+ICAJCWlmIChwcml2LT5wX2RhdGEtPnF1aXJrcyAm
+IEREUl9FQ0NfSU5UUl9TVVBQT1JUKSB7DQo+ID4gLQkJCXNucHJpbnRmKHByaXYtPm1lc3NhZ2Us
+IFNZTlBTX0VEQUNfTVNHX1NJWkUsDQo+ID4gLQkJCQkgIkREUiBFQ0MgZXJyb3IgdHlwZTolcyBS
+b3cgJWQgQmFuayAlZA0KPiBCYW5rR3JvdXAgTnVtYmVyICVkIEJsb2NrIE51bWJlciAlZCBCaXQg
+UG9zaXRpb246ICVkIERhdGE6IDB4JTA4eCIsDQo+ID4gLQkJCQkgIkNFIiwgcGluZi0+cm93LCBw
+aW5mLT5iYW5rLA0KPiA+IC0JCQkJIHBpbmYtPmJhbmtncnBuciwgcGluZi0+YmxrbnIsDQo+ID4g
+LQkJCQkgcGluZi0+Yml0cG9zLCBwaW5mLT5kYXRhKTsNCj4gPiArCQkJbiA9IHNucHJpbnRmKHBy
+aXYtPm1lc3NhZ2UsIFNZTlBTX0VEQUNfTVNHX1NJWkUsDQo+ID4gKwkJCQkgICAgICJERFIgRUND
+IGVycm9yIHR5cGU6JXMgUm93ICVkIEJhbmsgJWQNCj4gQmFua0dyb3VwIE51bWJlciAlZCBCbG9j
+ayBOdW1iZXIgJWQgQml0IFBvc2l0aW9uOiAlZCBEYXRhOiAweCUwOHgiLA0KPiA+ICsJCQkJICAg
+ICAiQ0UiLCBwaW5mLT5yb3csIHBpbmYtPmJhbmssDQo+ID4gKwkJCQkgICAgIHBpbmYtPmJhbmtn
+cnBuciwgcGluZi0+YmxrbnIsDQo+ID4gKwkJCQkgICAgIHBpbmYtPmJpdHBvcywgcGluZi0+ZGF0
+YV9sb3cpOw0KPiA+ICsNCj4gPiArCQkJaWYgKHp5bnFtcF9nZXRfZHR5cGUocHJpdi0+YmFzZWFk
+ZHIpID09IERFVl9YOCkNCj4gDQo+IFRoaXMgaXMgenlucW1wIHNwZWNpZmljLCByaWdodD8gYnV0
+IHlvdSBjYWxsIGl0IGluIHRoZSBnZW5lcmljIGZ1bmN0aW9uDQo+IGhhbmRsZV9lcnJvcigpLg0K
+DQpZZXMsIGFsdGhvdWdoIGhhbmRsZV9lcnJvcigpIGlzIGEgZ2VuZXJpYyBmdW5jdGlvbiwgDQpi
+dXQgdGhpcyBvcGVyYXRpb24gaXMgY2hlY2tlZCBieSBwcml2LT5wX2RhdGEtPnF1aXJrcywNCnNv
+IGhlcmUgaXMgenlucW1wIGFuZCBpbXg4bXAgc3BlY2lmaWMuDQoNCkJlc3QgcmVnYXJkcw0KU2hl
+cnJ5IFN1bg0KDQo+IA0KPiAtUm9iZXJ0DQo+IA0KPiA+ICsJCQkJc25wcmludGYocHJpdi0+bWVz
+c2FnZSArIG4sDQo+ID4gKwkJCQkJIFNZTlBTX0VEQUNfTVNHX1NJWkUgLSBuLA0KPiA+ICsJCQkJ
+CSAiIERhdGFfaGlnaDogMHglMDh4IFN5bmRyb21lOg0KPiAweCUwOHgiLA0KPiA+ICsJCQkJCSBw
+aW5mLT5kYXRhX2hpZ2gsIHBpbmYtPnN5bmRyb21lKTsNCj4gPiAgCQl9IGVsc2Ugew0KPiA+ICAJ
+CQlzbnByaW50Zihwcml2LT5tZXNzYWdlLCBTWU5QU19FREFDX01TR19TSVpFLA0KPiA+ICAJCQkJ
+ICJERFIgRUNDIGVycm9yIHR5cGU6JXMgUm93ICVkIEJhbmsgJWQNCj4gQ29sICVkIEJpdCBQb3Np
+dGlvbjogJWQgRGF0YTogMHglMDh4IiwNCj4gPiAgCQkJCSAiQ0UiLCBwaW5mLT5yb3csIHBpbmYt
+PmJhbmssIHBpbmYtPmNvbCwNCj4gPiAtCQkJCSBwaW5mLT5iaXRwb3MsIHBpbmYtPmRhdGEpOw0K
+PiA+ICsJCQkJIHBpbmYtPmJpdHBvcywgcGluZi0+ZGF0YV9sb3cpOw0KPiA+ICAJCX0NCj4gPg0K
+PiA+ICAJCWVkYWNfbWNfaGFuZGxlX2Vycm9yKEhXX0VWRU5UX0VSUl9DT1JSRUNURUQsIG1jaSwN
+Cg==
