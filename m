@@ -2,40 +2,63 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 583DD19BE58
-	for <lists+linux-edac@lfdr.de>; Thu,  2 Apr 2020 11:06:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4428C19C005
+	for <lists+linux-edac@lfdr.de>; Thu,  2 Apr 2020 13:17:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729033AbgDBJGg (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Thu, 2 Apr 2020 05:06:36 -0400
-Received: from mail-db8eur05on2075.outbound.protection.outlook.com ([40.107.20.75]:31600
-        "EHLO EUR05-DB8-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1728612AbgDBJGg (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Thu, 2 Apr 2020 05:06:36 -0400
+        id S2387963AbgDBLRs (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Thu, 2 Apr 2020 07:17:48 -0400
+Received: from mx0a-0016f401.pphosted.com ([67.231.148.174]:59732 "EHLO
+        mx0b-0016f401.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1728803AbgDBLRs (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Thu, 2 Apr 2020 07:17:48 -0400
+Received: from pps.filterd (m0045849.ppops.net [127.0.0.1])
+        by mx0a-0016f401.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 032BFmUZ008645;
+        Thu, 2 Apr 2020 04:17:24 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=date : from : to :
+ cc : subject : message-id : references : content-type : in-reply-to :
+ mime-version; s=pfpt0818; bh=krY0Zj196GF0qubofGfASf5et9umz54Lqmk63XfkOt4=;
+ b=sYs6/gFvQwlW05woPoETKwqqH6cNUJu+jDIS4fjQIVjVkeqxQj5DP4Dc1xvYbYybxfm4
+ fLR1QkXVI478cRRFBkxL4dPGwjf3AkTVqpEUy6Xo10XmIaSae4qsqBM4ADY212fBiDWL
+ eICAAnhRtyMHo4409Aqjh+3Ww+MaB9IO0DRPemY7wBLNI0xBK8mgM+THj6MDm2j8IxA4
+ rGexno4ureZUMb03MddY7d1+iKH9IKj8Ot6yQ1Faiob6UkAOPZJMKvtDS7uJ8bcTBL/G
+ S7WqIYe6RSEldnMsgIDFkFz7eber6ZG2k/yumHeAo5OLXSfuUdOPIrGrelkUL+fN5QDQ Wg== 
+Received: from sc-exch01.marvell.com ([199.233.58.181])
+        by mx0a-0016f401.pphosted.com with ESMTP id 304855sh43-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
+        Thu, 02 Apr 2020 04:17:24 -0700
+Received: from SC-EXCH01.marvell.com (10.93.176.81) by SC-EXCH01.marvell.com
+ (10.93.176.81) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Thu, 2 Apr
+ 2020 04:17:22 -0700
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (104.47.55.175)
+ by SC-EXCH01.marvell.com (10.93.176.81) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2 via Frontend Transport; Thu, 2 Apr 2020 04:17:22 -0700
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=EoWCYDyFcz3zrdthPod4qhl61r97maBFtI9Cqn4/sm5qXHcB4oGe34ZvQdUdd24MTZgbq0mrp8G6KDZ00rVBqsdyyViRT+u5hX3pKhTf8tjOIPIn9eQG8kklWRGSspJDvpYd2xCSJyXxS/0Vr4TukZOLC9NuzIV8I+621aJ68Icj4SvwcYSZdxeUw0LJDaRyZDsiweBRWElTQsysUV+RfC3arkliV3nH31z09btO+sMN+h0xpAhACvNzLvyqNcQO4+uuxPISkEjcNTqO9uKMZGVb3AvZnGIQ2sK64ecFm9nbj9JPZ9ZDYqA37gQyB6TLieHgjOvSi584db+4QbQaNQ==
+ b=C2RWzRv8EZrJclwgY/3N4bIkNgKXCl8KB7TLamTfiPWGODffFa9CuGtmorQ7XVWt5zi5NxXFpC2UHqsyEJko1bCp+ICjHSWCl2w9hQOoL6DYeZpMfReIeWfffOLA54nEYFQd3c+987EFpyN5uwIhMBR7G9GTTVvrrOlZinIYdg+mvhVP7q1+AdaDd3Yv12vqR4nFh8LcIRmXeVu/y1IqJyjiyUnUqKrugZYuPCKM7doJG255wvZAMHutmAVszSzQtn2LziyMZbbMXtjtGcaoRi+RyHj12uDoVnSXJbkG3pPWvAmrjgEcyt/jPHVB6ZAWq3hIhsoX6hOo2GMHl+FZyQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=sAJUG10sgIb04nE7PESdy6WhS5mJ6j5Ftt6691s9jIY=;
- b=MGlVrVAtouXEFKMghx62CvOeUejXEv2xRfFqFs6LjvHSRtWr+LhWnhb8Ynt2W/aMazEazyVYKRuL5rfBm7BI614Kg2kryQQ/whDumLdZ+y17WlEDfLMt1vkUUSzKo8R+V6wHHxautbDk2dORWgj/AKSu9BcnrMWELn1ZUwgg63Cgb2I2shm8oTPQzymtnqZW1hhefkyVSfjGWoTFhBkp19J7Cwbl8+Mm2W+rr7YSyU8r3CHKzhzOaXXAnkZ80eP8UXBO0v446yvKtmw3ltLe5rLNKeLsx4EPS7IJ/kXE4n02ipWKX73c2oZRXqCk1/niE7NjyKncH6+Tg06RzvAPNw==
+ bh=krY0Zj196GF0qubofGfASf5et9umz54Lqmk63XfkOt4=;
+ b=Brgqo1sQrSTwKMZmS7Kdz7E4GM8bnU2D9Rl3M83KrOP8eT4ODA7XayFWEMFH1qd0gETWj9vhY8Ep0vEv1AsNn7RQM0Tku0fmGEE86VJBJI/sJFBCtj3lcUXXx7DgChSuxR2ALV1J0TZ/JfWFQBrlC8ag32MkuRSZWDJNsMZnyaWx1zw8/fUuTYSlWRbQ4LfI6zYwA/iRNdMTuafY8lDuA+UXzgYGGqxd1XHRM77DIMs9j57p/tAKty8gNwVhFmx/iP13kKutyat9E4r6YODvZxF0UCZ7NkxXpsPmELs9zu4ooww7emq1cRHwo2TYso6IdfMMavzkHkf9LUUX8t2mVQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ smtp.mailfrom=marvell.com; dmarc=pass action=none header.from=marvell.com;
+ dkim=pass header.d=marvell.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=marvell.onmicrosoft.com; s=selector1-marvell-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=sAJUG10sgIb04nE7PESdy6WhS5mJ6j5Ftt6691s9jIY=;
- b=Q1Q5rFhiCWPPJoBV/7mUuljOy4k0kw/dBuOJlDb8qy2oUoJyx/++9bPhtWkN2YhIr7cbL96J/BynZGxrA6uV7vczTtFV3RQBE8jvYxByMKK4g1ulobR3TwJ1AloDDPiCS62C9uUHZAlWPCVphY7FCedzgeYfixlw9JFaeC8A9z8=
-Received: from VI1PR04MB4960.eurprd04.prod.outlook.com (20.177.49.213) by
- VI1PR04MB4013.eurprd04.prod.outlook.com (52.134.31.15) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2878.16; Thu, 2 Apr 2020 09:06:30 +0000
-Received: from VI1PR04MB4960.eurprd04.prod.outlook.com
- ([fe80::b105:1422:4bfa:338e]) by VI1PR04MB4960.eurprd04.prod.outlook.com
- ([fe80::b105:1422:4bfa:338e%7]) with mapi id 15.20.2856.019; Thu, 2 Apr 2020
- 09:06:27 +0000
-From:   Sherry Sun <sherry.sun@nxp.com>
-To:     Robert Richter <rrichter@marvell.com>
+ bh=krY0Zj196GF0qubofGfASf5et9umz54Lqmk63XfkOt4=;
+ b=oD+0VHnA2y2U3jE9Syw4G4pqd0DsqXqQWuHJXVPNgfTPfZT5gwqsINjijqvR92D5okbNiTW2WjBlHK2GcMDqdvVqmIsrvghXo3izLJBJchVaPNII/OQ/DcVX7HePKVza8RUqgWwq7sne1PelKPuzSRgiqR6YXmsff1KIvAYuZqg=
+Received: from BYAPR18MB2661.namprd18.prod.outlook.com (2603:10b6:a03:136::26)
+ by BYAPR18MB3031.namprd18.prod.outlook.com (2603:10b6:a03:12d::31) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2856.20; Thu, 2 Apr
+ 2020 11:17:20 +0000
+Received: from BYAPR18MB2661.namprd18.prod.outlook.com
+ ([fe80::78a2:38df:6c52:a953]) by BYAPR18MB2661.namprd18.prod.outlook.com
+ ([fe80::78a2:38df:6c52:a953%3]) with mapi id 15.20.2856.019; Thu, 2 Apr 2020
+ 11:17:20 +0000
+Date:   Thu, 2 Apr 2020 13:17:09 +0200
+From:   Robert Richter <rrichter@marvell.com>
+To:     Sherry Sun <sherry.sun@nxp.com>
 CC:     "bp@alien8.de" <bp@alien8.de>,
         "mchehab@kernel.org" <mchehab@kernel.org>,
         "tony.luck@intel.com" <tony.luck@intel.com>,
@@ -45,112 +68,112 @@ CC:     "bp@alien8.de" <bp@alien8.de>,
         "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
         dl-linux-imx <linux-imx@nxp.com>, Frank Li <frank.li@nxp.com>
-Subject: RE: [patch v3 3/4] EDAC: synopsys: Add edac driver support for
+Subject: Re: [patch v3 3/4] EDAC: synopsys: Add edac driver support for
  i.MX8MP
-Thread-Topic: [patch v3 3/4] EDAC: synopsys: Add edac driver support for
- i.MX8MP
-Thread-Index: AQHWCI4FcS/WeLicyEGazLJqeHwA4ahlbbGAgAAX+iA=
-Date:   Thu, 2 Apr 2020 09:06:27 +0000
-Message-ID: <VI1PR04MB4960985DD2A4F0CA68063D9592C60@VI1PR04MB4960.eurprd04.prod.outlook.com>
+Message-ID: <20200402111709.qr7zpo5o5vrwh5kb@rric.localdomain>
 References: <1585790433-31465-1-git-send-email-sherry.sun@nxp.com>
  <1585790433-31465-4-git-send-email-sherry.sun@nxp.com>
  <20200402072200.o6c6u3uim6jwopo6@rric.localdomain>
-In-Reply-To: <20200402072200.o6c6u3uim6jwopo6@rric.localdomain>
-Accept-Language: zh-CN, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=sherry.sun@nxp.com; 
-x-originating-ip: [121.228.205.159]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-ht: Tenant
-x-ms-office365-filtering-correlation-id: 8c3e4db6-7019-4ea0-9bc6-08d7d6e52037
-x-ms-traffictypediagnostic: VI1PR04MB4013:|VI1PR04MB4013:
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <VI1PR04MB4013E337EDC7DF7333979A3692C60@VI1PR04MB4013.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:758;
-x-forefront-prvs: 0361212EA8
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB4960.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(10009020)(4636009)(136003)(376002)(366004)(346002)(396003)(39860400002)(44832011)(7696005)(6506007)(52536014)(71200400001)(2906002)(8676002)(8936002)(81166006)(6916009)(53546011)(5660300002)(33656002)(86362001)(316002)(4326008)(54906003)(76116006)(66946007)(66446008)(64756008)(66476007)(66556008)(9686003)(81156014)(478600001)(55016002)(26005)(186003);DIR:OUT;SFP:1101;
-received-spf: None (protection.outlook.com: nxp.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: qBmMknfkfFTsktVrjN7VMeiV25QD99Metf6zMC4DkytC0BcM4RPhDEnTrfXRm7o50HBNIM+j52cHnk9gVq6OIlxmECpCdAit1cTbmGl8yjN5ioEsvlfTLqstlrMQ2H9G8Sdwi3bLWsEaSE/w8WD9VMWWLRdKm3Jyu3HVXUdWJcVa+xp3fxjT6me6K0BWDEjUiq62BW4jojBDbx3lCC8NPN7z0sws7alksxC8w1bYVw5XROHmXxFst3G15fpOHc5z6IRR9rb4Zt7SKLef/u5izMu3VPdAm0jLZ0XNmQMjs7dAwmvZ5hloWrCfS4kU4X0wxGci+789zczkRNXoDxdALBE6vYTr0waKft8GKhDWKGen0TgH/UmGYi24fcefS4A+EuUxYk3hAaBqtJJGNya9TIj1n5Ls0XDX3CcHtO5XLuxy4tWCwQYW0okQjArD3IuX
-x-ms-exchange-antispam-messagedata: oGNDZn9DKYtTmxnIx3d1LIImyIz4zA2niqR2yacSQ+3RyWnMVoRMCGrb+RuLJh+3Q8Wp2TIdGy+Mv1dTtFpStXrHVPCkmFa+0izamETzxcPZLsJTRQ4pdcOGg0Hw7qs19CtwcbZOGq0BnfmsDA88rw==
-Content-Type: text/plain; charset="gb2312"
-Content-Transfer-Encoding: base64
+ <VI1PR04MB4960985DD2A4F0CA68063D9592C60@VI1PR04MB4960.eurprd04.prod.outlook.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <VI1PR04MB4960985DD2A4F0CA68063D9592C60@VI1PR04MB4960.eurprd04.prod.outlook.com>
+User-Agent: NeoMutt/20170113 (1.7.2)
+X-ClientProxiedBy: HE1PR05CA0249.eurprd05.prod.outlook.com
+ (2603:10a6:3:fb::25) To BYAPR18MB2661.namprd18.prod.outlook.com
+ (2603:10b6:a03:136::26)
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8c3e4db6-7019-4ea0-9bc6-08d7d6e52037
-X-MS-Exchange-CrossTenant-originalarrivaltime: 02 Apr 2020 09:06:27.1825
+X-MS-Exchange-MessageSentRepresentingType: 1
+Received: from rric.localdomain (31.208.96.227) by HE1PR05CA0249.eurprd05.prod.outlook.com (2603:10a6:3:fb::25) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2856.20 via Frontend Transport; Thu, 2 Apr 2020 11:17:17 +0000
+X-Originating-IP: [31.208.96.227]
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 58a0b163-c70c-4822-892b-08d7d6f768c7
+X-MS-TrafficTypeDiagnostic: BYAPR18MB3031:
+X-Microsoft-Antispam-PRVS: <BYAPR18MB303134167548599A772F0B7AD9C60@BYAPR18MB3031.namprd18.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:1388;
+X-Forefront-PRVS: 0361212EA8
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR18MB2661.namprd18.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(10009020)(4636009)(136003)(376002)(396003)(39860400002)(366004)(346002)(6666004)(1076003)(5660300002)(26005)(6506007)(52116002)(956004)(16526019)(7696005)(53546011)(2906002)(66476007)(8676002)(478600001)(55016002)(316002)(186003)(66946007)(4326008)(8936002)(9686003)(81166006)(6916009)(7416002)(81156014)(66556008)(54906003)(86362001);DIR:OUT;SFP:1101;
+Received-SPF: None (protection.outlook.com: marvell.com does not designate
+ permitted sender hosts)
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: baRGp/BXag6W5j02II7j/JlFN8N8R55Jv86CVYmzA3UD8xituu3WBNNm65rQLMMUp07S+k4D39Eou5pAEfLt0iIEG0fHhut5t5YanrYC3Xle7uW8hBQq80Yc175yB7ClHr98ryz4khIABaprEA8k7xCzs/+PRnCL01fN6zFyK/+X9bUyGph4shmnjYcWduFexenlpS0Svph3rV9Dxnr4/j1oYEJToc60k7m7IQmALn8t8YKaR26iRObDbBy9tmVIN/wqONqvoeye6bNRaNXc4VTjm2tx3MLQ0tj/yPKl1LUW2faQxHGrKwzhHEWSy3UxO14rblyb1oHdDty0qAgN752QxfwNRKw98dce2Ql9B9zs0HavhT7Gl6yIYm/8AbsQRkXrtQCKOH2PgGYDMNYtR9rpw/Ri/ZaWPGWiyhfX2mYOvpy4pXVh94nEVVFTbV2o
+X-MS-Exchange-AntiSpam-MessageData: vQnEfx8plaWx9aEd089mhMXpEChGK1qZ/URZ2r8OoUhwWAZ/S0s7r9g+c3HSevHen95JZJX1CSv0T5XPA3PAsYlUsHeT1iRnJA9by34vDvfm/NE8HVLItYswnkJwtVNGTk3TPzftRD9AA+Fnpxogzg==
+X-MS-Exchange-CrossTenant-Network-Message-Id: 58a0b163-c70c-4822-892b-08d7d6f768c7
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Apr 2020 11:17:20.1906
  (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: Ex6rHWirvoT0HbbKoUkB1wiA5Z7pQCFZyxfYlqxu/mWdmH8HLelPPjh1WKU5BZcAN4zUs0ov9GVcgVOZKxGQEg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB4013
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 70e1fb47-1155-421d-87fc-2e58f638b6e0
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: GtEC/bQfE1WdHbZXXqQ9+j1TvFXHv+avQ5T6hYBB1PprY9zv6WFXvjWSEu62u7mxFqNky2fWPRXTrHF7skNlcQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR18MB3031
+X-OriginatorOrg: marvell.com
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.676
+ definitions=2020-04-02_01:2020-03-31,2020-04-02 signatures=0
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-SGkgUm9iZXJ0LA0KDQo+IC0tLS0tT3JpZ2luYWwgTWVzc2FnZS0tLS0tDQo+IEZyb206IFJvYmVy
-dCBSaWNodGVyIDxycmljaHRlckBtYXJ2ZWxsLmNvbT4NCj4gU2VudDogMjAyMMTqNNTCMsjVIDE1
-OjIyDQo+IFRvOiBTaGVycnkgU3VuIDxzaGVycnkuc3VuQG54cC5jb20+DQo+IENjOiBicEBhbGll
-bjguZGU7IG1jaGVoYWJAa2VybmVsLm9yZzsgdG9ueS5sdWNrQGludGVsLmNvbTsNCj4gamFtZXMu
-bW9yc2VAYXJtLmNvbTsgbWljaGFsLnNpbWVrQHhpbGlueC5jb207DQo+IG1hbmlzaC5uYXJhbmlA
-eGlsaW54LmNvbTsgbGludXgtZWRhY0B2Z2VyLmtlcm5lbC5vcmc7IGxpbnV4LQ0KPiBrZXJuZWxA
-dmdlci5rZXJuZWwub3JnOyBkbC1saW51eC1pbXggPGxpbnV4LWlteEBueHAuY29tPjsgRnJhbmsg
-TGkNCj4gPGZyYW5rLmxpQG54cC5jb20+DQo+IFN1YmplY3Q6IFJlOiBbcGF0Y2ggdjMgMy80XSBF
-REFDOiBzeW5vcHN5czogQWRkIGVkYWMgZHJpdmVyIHN1cHBvcnQgZm9yDQo+IGkuTVg4TVANCj4g
-DQo+IE9uIDAyLjA0LjIwIDA5OjIwOjMyLCBTaGVycnkgU3VuIHdyb3RlOg0KPiA+IFNpbmNlIGku
-TVg4TVAgdXNlIHN5bm9wc3lzIGRkciBjb250cm9sbGVyIElQLCBzbyBhZGQgZWRhYyBzdXBwb3J0
-IGZvcg0KPiA+IGkuTVg4TVAgYmFzZWQgb24gc3lub3BzeXMgZWRhYyBkcml2ZXIuIGkuTVg4TVAg
-dXNlIExQRERSNCBhbmQgc3VwcG9ydA0KPiA+IGludGVycnVwdHMgZm9yIGNvcnJlY3RlZCBhbmQg
-dW5jb3JyZWN0ZWQgZXJyb3JzLiBUaGUgbWFpbiBkaWZmZXJlbmNlDQo+ID4gYmV0d2VlbiBaeW5x
-TVAgYW5kIGkuTVg4TVAgZGRyIGNvbnRyb2xsZXIgaXMgdGhlIGludGVycnVwdCByZWdpc3RlcnMu
-DQo+ID4gU28gYWRkIGFub3RoZXIgaW50ZXJydXB0IGhhbmRsZXIgZnVuY3Rpb24sIGVuYWJsZS9k
-aXNhYmxlIGludGVycnVwdA0KPiA+IGZ1bmN0aW9uIHRvIGRpc3Rpbmd1aXNoIHdpdGggWnlucU1Q
-Lg0KPiA+DQo+ID4gU2lnbmVkLW9mZi1ieTogU2hlcnJ5IFN1biA8c2hlcnJ5LnN1bkBueHAuY29t
-Pg0KPiA+IC0tLQ0KPiA+ICBkcml2ZXJzL2VkYWMvc3lub3BzeXNfZWRhYy5jIHwgNzcNCj4gPiAr
-KysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKy0NCj4gPiAgMSBmaWxlIGNoYW5nZWQs
-IDc2IGluc2VydGlvbnMoKyksIDEgZGVsZXRpb24oLSkNCj4gDQo+ID4gK3N0YXRpYyB2b2lkIGVu
-YWJsZV9pbnRyX2lteDhtcChzdHJ1Y3Qgc3lucHNfZWRhY19wcml2ICpwcml2KSB7DQo+ID4gKwlp
-bnQgcmVndmFsOw0KPiA+ICsNCj4gPiArCXJlZ3ZhbCA9IHJlYWRsKHByaXYtPmJhc2VhZGRyICsg
-RUNDX0NMUl9PRlNUKTsNCj4gPiArCXJlZ3ZhbCB8PSAoRERSX0NFX0lOVFJfRU5fTUFTSyB8IERE
-Ul9VRV9JTlRSX0VOX01BU0spOw0KPiA+ICsJd3JpdGVsKHJlZ3ZhbCwgcHJpdi0+YmFzZWFkZHIg
-KyBFQ0NfQ0xSX09GU1QpOyB9DQo+ID4gKw0KPiA+ICtzdGF0aWMgdm9pZCBkaXNhYmxlX2ludHJf
-aW14OG1wKHN0cnVjdCBzeW5wc19lZGFjX3ByaXYgKnByaXYpIHsNCj4gPiArCWludCByZWd2YWw7
-DQo+ID4gKw0KPiA+ICsJcmVndmFsID0gcmVhZGwocHJpdi0+YmFzZWFkZHIgKyBFQ0NfQ0xSX09G
-U1QpOw0KPiA+ICsJcmVndmFsICY9IH4oRERSX0NFX0lOVFJfRU5fTUFTSyB8IEREUl9VRV9JTlRS
-X0VOX01BU0spOw0KPiA+ICsJd3JpdGVsKHJlZ3ZhbCwgcHJpdi0+YmFzZWFkZHIgKyBFQ0NfQ0xS
-X09GU1QpOyB9DQo+ID4gKw0KPiA+ICsvKiBJbnRlcnJ1cHQgSGFuZGxlciBmb3IgRUNDIGludGVy
-cnVwdHMgb24gaW14OG1wIHBsYXRmb3JtLiAqLyBzdGF0aWMNCj4gPiAraXJxcmV0dXJuX3QgaW50
-cl9oYW5kbGVyX2lteDhtcChpbnQgaXJxLCB2b2lkICpkZXZfaWQpIHsNCj4gPiArCWNvbnN0IHN0
-cnVjdCBzeW5wc19wbGF0Zm9ybV9kYXRhICpwX2RhdGE7DQo+ID4gKwlzdHJ1Y3QgbWVtX2N0bF9p
-bmZvICptY2kgPSBkZXZfaWQ7DQo+ID4gKwlzdHJ1Y3Qgc3lucHNfZWRhY19wcml2ICpwcml2Ow0K
-PiA+ICsJaW50IHN0YXR1cywgcmVndmFsOw0KPiA+ICsNCj4gPiArCXByaXYgPSBtY2ktPnB2dF9p
-bmZvOw0KPiA+ICsJcF9kYXRhID0gcHJpdi0+cF9kYXRhOw0KPiA+ICsNCj4gPiArCXJlZ3ZhbCA9
-IHJlYWRsKHByaXYtPmJhc2VhZGRyICsgRUNDX1NUQVRfT0ZTVCk7DQo+ID4gKwlpZiAoIShyZWd2
-YWwgJiBFQ0NfSU5UUl9NQVNLKSkNCj4gPiArCQlyZXR1cm4gSVJRX05PTkU7DQo+ID4gKw0KPiA+
-ICsJc3RhdHVzID0gcF9kYXRhLT5nZXRfZXJyb3JfaW5mbyhwcml2KTsNCj4gPiArCWlmIChzdGF0
-dXMpDQo+ID4gKwkJcmV0dXJuIElSUV9OT05FOw0KPiA+ICsNCj4gPiArCXByaXYtPmNlX2NudCAr
-PSBwcml2LT5zdGF0LmNlX2NudDsNCj4gPiArCXByaXYtPnVlX2NudCArPSBwcml2LT5zdGF0LnVl
-X2NudDsNCj4gPiArCWhhbmRsZV9lcnJvcihtY2ksICZwcml2LT5zdGF0KTsNCj4gPiArDQo+ID4g
-KwllZGFjX2RiZygzLCAiVG90YWwgZXJyb3IgY291bnQgQ0UgJWQgVUUgJWRcbiIsDQo+ID4gKwkJ
-IHByaXYtPmNlX2NudCwgcHJpdi0+dWVfY250KTsNCj4gPiArCWVuYWJsZV9pbnRyX2lteDhtcChw
-cml2KTsNCj4gDQo+IFdoeSBkbyB5b3UgZW5hYmxlIGludGVycnVwdHMgaGVyZT8NCg0KQmVjYXVz
-ZSB6eW5xbXBfZ2V0X2Vycm9yX2luZm8oKSB3cm90ZSAwIHRvIEVDQ19DTFJfT0ZTVCwgc28gaGVy
-ZSBoYXZlIHRvIHJlLWVuYWJsZSB0aGUgaW50ZXJydXB0cy4NCg0KQXMgc2FpZCBpbiB0aGUgY29t
-bWl0LCB0aGUgbWFpbiBkaWZmZXJlbmNlIGJldHdlZW4gWnlucU1QIGFuZCBpLk1YOE1QIGRkciBj
-b250cm9sbGVyIGlzIHRoZSBpbnRlcnJ1cHQgcmVnaXN0ZXJzLg0KWnlucU1QIHVzZSBERFIgUU9T
-IEludGVycnVwdCByZWdpc3RlcnMsICBidXQgaS5NWDhNUCB1c2UgRUNDX0NMUl9PRlNUIFJlZ2lz
-dGVyKGJpdDggYW5kIGJpdDkpIHRvIGVuYWJsZS9kaXNhYmxlIHRoZSBjZS91ZSBpbnRlcnJ1cHRz
-LiANCg0KSW4genlucW1wX2dldF9lcnJvcl9pbmZvKCksIFp5bnFtcCB3cm90ZSAwIHRvIEVDQ19D
-TFJfT0ZTVCByZWdpc3RlciB0byBjbGVhciBDRS9VRSBlcnJvciBmbGFncyBhbmQgY291bnRzLCBp
-dCBoYXMgbm8gZWZmZWN0IG9uIFp5bnFtcCBpbnRlcnJ1cHRzLiANCkJ1dCBmb3IgaS5NWDhNUCwg
-d2lydGUgMCB0byBFQ0NfQ0xSX09GU1Qgd2lsbCBkaXNhYmxlIGkuTVg4TVAgQ0UvVUUgaW50ZXJy
-dXB0LCBzbyBuZWVkIHJlLWVuYWJsZSB0aGUgaW50ZXJydXB0cy4NCg0KQmVzdCByZWdhcmRzDQpT
-aGVycnkgU3VuDQoNCj4gDQo+IC1Sb2JlcnQNCj4gDQo+ID4gKw0KPiA+ICsJcmV0dXJuIElSUV9I
-QU5ETEVEOw0KPiA+ICt9DQo=
+On 02.04.20 09:06:27, Sherry Sun wrote:
+> > From: Robert Richter <rrichter@marvell.com>
+> > On 02.04.20 09:20:32, Sherry Sun wrote:
+
+> > > +static void enable_intr_imx8mp(struct synps_edac_priv *priv) {
+> > > +	int regval;
+> > > +
+> > > +	regval = readl(priv->baseaddr + ECC_CLR_OFST);
+> > > +	regval |= (DDR_CE_INTR_EN_MASK | DDR_UE_INTR_EN_MASK);
+> > > +	writel(regval, priv->baseaddr + ECC_CLR_OFST); }
+> > > +
+> > > +static void disable_intr_imx8mp(struct synps_edac_priv *priv) {
+> > > +	int regval;
+> > > +
+> > > +	regval = readl(priv->baseaddr + ECC_CLR_OFST);
+> > > +	regval &= ~(DDR_CE_INTR_EN_MASK | DDR_UE_INTR_EN_MASK);
+> > > +	writel(regval, priv->baseaddr + ECC_CLR_OFST); }
+> > > +
+> > > +/* Interrupt Handler for ECC interrupts on imx8mp platform. */ static
+> > > +irqreturn_t intr_handler_imx8mp(int irq, void *dev_id) {
+> > > +	const struct synps_platform_data *p_data;
+> > > +	struct mem_ctl_info *mci = dev_id;
+> > > +	struct synps_edac_priv *priv;
+> > > +	int status, regval;
+> > > +
+> > > +	priv = mci->pvt_info;
+> > > +	p_data = priv->p_data;
+> > > +
+> > > +	regval = readl(priv->baseaddr + ECC_STAT_OFST);
+> > > +	if (!(regval & ECC_INTR_MASK))
+> > > +		return IRQ_NONE;
+> > > +
+> > > +	status = p_data->get_error_info(priv);
+> > > +	if (status)
+> > > +		return IRQ_NONE;
+> > > +
+> > > +	priv->ce_cnt += priv->stat.ce_cnt;
+> > > +	priv->ue_cnt += priv->stat.ue_cnt;
+> > > +	handle_error(mci, &priv->stat);
+> > > +
+> > > +	edac_dbg(3, "Total error count CE %d UE %d\n",
+> > > +		 priv->ce_cnt, priv->ue_cnt);
+> > > +	enable_intr_imx8mp(priv);
+> > 
+> > Why do you enable interrupts here?
+> 
+> Because zynqmp_get_error_info() wrote 0 to ECC_CLR_OFST, so here have to re-enable the interrupts.
+
+This does not seem to be the right place for it.
+
+> As said in the commit, the main difference between ZynqMP and i.MX8MP ddr controller is the interrupt registers.
+> ZynqMP use DDR QOS Interrupt registers,  but i.MX8MP use ECC_CLR_OFST Register(bit8 and bit9) to enable/disable the ce/ue interrupts. 
+> 
+> In zynqmp_get_error_info(), Zynqmp wrote 0 to ECC_CLR_OFST register to clear CE/UE error flags and counts, it has no effect on Zynqmp interrupts. 
+> But for i.MX8MP, wirte 0 to ECC_CLR_OFST will disable i.MX8MP CE/UE interrupt, so need re-enable the interrupts.
+
+All this shows one more time there should be separate handlers. You
+should get rid most callbacks in struct synps_platform_data and
+instead have separate probe functions for both flavors that share
+common code.
+
+-Robert
