@@ -2,38 +2,38 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A837319DB5F
-	for <lists+linux-edac@lfdr.de>; Fri,  3 Apr 2020 18:20:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BDE7219DB59
+	for <lists+linux-edac@lfdr.de>; Fri,  3 Apr 2020 18:20:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2404407AbgDCQUI (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Fri, 3 Apr 2020 12:20:08 -0400
-Received: from mail.skyhub.de ([5.9.137.197]:49292 "EHLO mail.skyhub.de"
+        id S2404399AbgDCQUH (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Fri, 3 Apr 2020 12:20:07 -0400
+Received: from mail.skyhub.de ([5.9.137.197]:49310 "EHLO mail.skyhub.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728352AbgDCQTy (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        id S2404365AbgDCQTy (ORCPT <rfc822;linux-edac@vger.kernel.org>);
         Fri, 3 Apr 2020 12:19:54 -0400
 Received: from zn.tnic (p200300EC2F0D8900BDBBB37D18611998.dip0.t-ipconnect.de [IPv6:2003:ec:2f0d:8900:bdbb:b37d:1861:1998])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id ACAD81EC0CED;
-        Fri,  3 Apr 2020 18:19:52 +0200 (CEST)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 80A7A1EC0CEE;
+        Fri,  3 Apr 2020 18:19:53 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1585930792;
+        t=1585930793;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=revb2MgAgV6cUyetX2ivAXtvOCJXDZhZdRdERTfkrvE=;
-        b=nHxjRZfsCAZHy2JghqKilAZnewH7RBOivMc0INXK6pld9rSLClk2K/L0dM5SddDNfrcfAm
-        pByhnh9kvrAdmKdKKKqcoXn/xbaTRpOw/gmzcO0NoEPQKw/RyK8rwRw1B4MpgTn5MEIR+c
-        njbVcAJ3zO+TfUIZXtk8m1RjpjhxyQw=
+        bh=WxfUHWPsjSfvG/d93sW/gdjDn/TEWXVobucmlT3oP+E=;
+        b=sQq/8rDkKktjonzP4XOCDPk0aAqWHZGrz0cIYhe92k8Klp6bryCgwhYv/d3Eb1rrxvW/G7
+        J2ccoc88mGzhB02oPY+RkVog8yzg/dEymx9PNLrSpHIpu3zXmmhfrGrNF6rJ4P+8E/lVu7
+        X7hD+Y+YKmTXQ4RWKviHS4TsS2UjPUk=
 From:   Borislav Petkov <bp@alien8.de>
 To:     X86 ML <x86@kernel.org>
 Cc:     Yazen Ghannam <Yazen.Ghannam@amd.com>,
         linux-edac <linux-edac@vger.kernel.org>,
         LKML <linux-kernel@vger.kernel.org>
-Subject: [PATCH 4/7] x86/mce/amd: Sanitize thresholding device creation hotplug path
-Date:   Fri,  3 Apr 2020 18:19:40 +0200
-Message-Id: <20200403161943.1458-5-bp@alien8.de>
+Subject: [PATCH 5/7] x86/mce/amd: Straighten CPU hotplug path
+Date:   Fri,  3 Apr 2020 18:19:41 +0200
+Message-Id: <20200403161943.1458-6-bp@alien8.de>
 X-Mailer: git-send-email 2.21.0
 In-Reply-To: <20200403161943.1458-1-bp@alien8.de>
 References: <20200403161943.1458-1-bp@alien8.de>
@@ -46,131 +46,115 @@ X-Mailing-List: linux-edac@vger.kernel.org
 
 From: Thomas Gleixner <tglx@linutronix.de>
 
-Drop the stupid threshold_init_device() initcall iterating over all
-online CPUs in favor of properly setting up everything on the CPU
-hotplug path, when each CPU's callback is invoked.
+mce_threshold_create_device() hotplug callback runs on the plugged in
+CPU so:
 
- [ bp: Write commit message. ]
+ - use this_cpu_read() which is faster
+ - pass in struct threshold_bank **bp to threshold_create_bank() and
+   instead of doing per-CPU accesses
+ - Use rdmsr_safe() instead of rdmsr_safe_on_cpu() which avoids an IPI.
+
+No functional changes.
 
 Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
 Signed-off-by: Borislav Petkov <bp@suse.de>
 ---
- arch/x86/kernel/cpu/mce/amd.c  | 57 ++++++++++------------------------
- arch/x86/kernel/cpu/mce/core.c | 11 +++++++
- 2 files changed, 27 insertions(+), 41 deletions(-)
+ arch/x86/kernel/cpu/mce/amd.c | 32 +++++++++++++++-----------------
+ 1 file changed, 15 insertions(+), 17 deletions(-)
 
 diff --git a/arch/x86/kernel/cpu/mce/amd.c b/arch/x86/kernel/cpu/mce/amd.c
-index 563942157758..d3c416b6052a 100644
+index d3c416b6052a..a33d9a1caf36 100644
 --- a/arch/x86/kernel/cpu/mce/amd.c
 +++ b/arch/x86/kernel/cpu/mce/amd.c
-@@ -1474,12 +1474,22 @@ int mce_threshold_remove_device(unsigned int cpu)
- 	return 0;
+@@ -1223,10 +1223,10 @@ static int allocate_threshold_blocks(unsigned int cpu, struct threshold_bank *tb
+ 	u32 low, high;
+ 	int err;
+ 
+-	if ((bank >= per_cpu(mce_num_banks, cpu)) || (block >= NR_BLOCKS))
++	if ((bank >= this_cpu_read(mce_num_banks)) || (block >= NR_BLOCKS))
+ 		return 0;
+ 
+-	if (rdmsr_safe_on_cpu(cpu, address, &low, &high))
++	if (rdmsr_safe(address, &low, &high))
+ 		return 0;
+ 
+ 	if (!(high & MASK_VALID_HI)) {
+@@ -1316,9 +1316,10 @@ static int __threshold_add_blocks(struct threshold_bank *b)
+ 	return err;
  }
  
--/* create dir/files for all valid threshold banks */
-+/**
-+ * mce_threshold_create_device - Create the per-CPU MCE threshold device
-+ * @cpu:	The plugged in CPU
-+ *
-+ * Create directories and files for all valid threshold banks.
-+ *
-+ * This is invoked from the CPU hotplug callback which was installed in
-+ * mcheck_init_device(). The invocation happens in context of the hotplug
-+ * thread running on @cpu.  The callback is invoked on all CPUs which are
-+ * online when the callback is installed or during a real hotplug event.
-+ */
+-static int threshold_create_bank(unsigned int cpu, unsigned int bank)
++static int threshold_create_bank(struct threshold_bank **bp, unsigned int cpu,
++				 unsigned int bank)
+ {
+-	struct device *dev = per_cpu(mce_device, cpu);
++	struct device *dev = this_cpu_read(mce_device);
+ 	struct amd_northbridge *nb = NULL;
+ 	struct threshold_bank *b = NULL;
+ 	const char *name = get_name(bank, NULL);
+@@ -1338,7 +1339,7 @@ static int threshold_create_bank(unsigned int cpu, unsigned int bank)
+ 			if (err)
+ 				goto out;
+ 
+-			per_cpu(threshold_banks, cpu)[bank] = b;
++			bp[bank] = b;
+ 			refcount_inc(&b->cpus);
+ 
+ 			err = __threshold_add_blocks(b);
+@@ -1374,8 +1375,7 @@ static int threshold_create_bank(unsigned int cpu, unsigned int bank)
+ 	if (err)
+ 		goto out_kobj;
+ 
+-	per_cpu(threshold_banks, cpu)[bank] = b;
+-
++	bp[bank] = b;
+ 	return 0;
+ 
+ out_kobj:
+@@ -1487,35 +1487,33 @@ int mce_threshold_remove_device(unsigned int cpu)
+  */
  int mce_threshold_create_device(unsigned int cpu)
  {
- 	unsigned int bank;
+-	unsigned int bank;
++	unsigned int numbanks, bank;
  	struct threshold_bank **bp;
--	int err = 0;
-+	int err;
+ 	int err;
  
  	if (!mce_flags.amd_threshold)
  		return 0;
-@@ -1500,49 +1510,14 @@ int mce_threshold_create_device(unsigned int cpu)
+ 
+-	bp = per_cpu(threshold_banks, cpu);
++	bp = this_cpu_read(threshold_banks);
+ 	if (bp)
+ 		return 0;
+ 
+-	bp = kcalloc(per_cpu(mce_num_banks, cpu), sizeof(struct threshold_bank *),
+-		     GFP_KERNEL);
++	numbanks = this_cpu_read(mce_num_banks);
++	bp = kcalloc(numbanks, sizeof(*bp), GFP_KERNEL);
+ 	if (!bp)
+ 		return -ENOMEM;
+ 
+-	per_cpu(threshold_banks, cpu) = bp;
+-
+-	for (bank = 0; bank < per_cpu(mce_num_banks, cpu); ++bank) {
+-		if (!(per_cpu(bank_map, cpu) & (1 << bank)))
++	for (bank = 0; bank < numbanks; ++bank) {
++		if (!(this_cpu_read(bank_map) & (1 << bank)))
  			continue;
- 		err = threshold_create_bank(cpu, bank);
+-		err = threshold_create_bank(cpu, bank);
++		err = threshold_create_bank(bp, cpu, bank);
  		if (err)
--			goto err;
--	}
--	return err;
--err:
--	mce_threshold_remove_device(cpu);
--	return err;
--}
--
--static __init int threshold_init_device(void)
--{
--	unsigned lcpu = 0;
--
--	/* to hit CPUs online before the notifier is up */
--	for_each_online_cpu(lcpu) {
--		int err = mce_threshold_create_device(lcpu);
--
--		if (err)
--			return err;
-+			goto out_err;
+ 			goto out_err;
  	}
++	this_cpu_write(threshold_banks, bp);
  
  	if (thresholding_irq_en)
  		mce_threshold_vector = amd_threshold_interrupt;
- 
+-
  	return 0;
-+out_err:
-+	mce_threshold_remove_device(cpu);
-+	return err;
- }
--/*
-- * there are 3 funcs which need to be _initcalled in a logic sequence:
-- * 1. xen_late_init_mcelog
-- * 2. mcheck_init_device
-- * 3. threshold_init_device
-- *
-- * xen_late_init_mcelog must register xen_mce_chrdev_device before
-- * native mce_chrdev_device registration if running under xen platform;
-- *
-- * mcheck_init_device should be inited before threshold_init_device to
-- * initialize mce_device, otherwise a NULL ptr dereference will cause panic.
-- *
-- * so we use following _initcalls
-- * 1. device_initcall(xen_late_init_mcelog);
-- * 2. device_initcall_sync(mcheck_init_device);
-- * 3. late_initcall(threshold_init_device);
-- *
-- * when running under xen, the initcall order is 1,2,3;
-- * on baremetal, we skip 1 and we do only 2 and 3.
-- */
--late_initcall(threshold_init_device);
-diff --git a/arch/x86/kernel/cpu/mce/core.c b/arch/x86/kernel/cpu/mce/core.c
-index 43ca91e14a77..a6009efdfe2b 100644
---- a/arch/x86/kernel/cpu/mce/core.c
-+++ b/arch/x86/kernel/cpu/mce/core.c
-@@ -2481,6 +2481,13 @@ static __init void mce_init_banks(void)
- 	}
- }
- 
-+/*
-+ * When running on XEN, this initcall is ordered against the XEN mcelog
-+ * initcall:
-+ *
-+ *   device_initcall(xen_late_init_mcelog);
-+ *   device_initcall_sync(mcheck_init_device);
-+ */
- static __init int mcheck_init_device(void)
- {
- 	int err;
-@@ -2512,6 +2519,10 @@ static __init int mcheck_init_device(void)
- 	if (err)
- 		goto err_out_mem;
- 
-+	/*
-+	 * Invokes mce_cpu_online() on all CPUs which are online when
-+	 * the state is installed.
-+	 */
- 	err = cpuhp_setup_state(CPUHP_AP_ONLINE_DYN, "x86/mce:online",
- 				mce_cpu_online, mce_cpu_pre_down);
- 	if (err < 0)
+ out_err:
+ 	mce_threshold_remove_device(cpu);
 -- 
 2.21.0
 
