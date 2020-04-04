@@ -2,107 +2,94 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5887919DB56
-	for <lists+linux-edac@lfdr.de>; Fri,  3 Apr 2020 18:20:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 75ECD19E591
+	for <lists+linux-edac@lfdr.de>; Sat,  4 Apr 2020 16:32:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2404390AbgDCQUA (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Fri, 3 Apr 2020 12:20:00 -0400
-Received: from mail.skyhub.de ([5.9.137.197]:49292 "EHLO mail.skyhub.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2404381AbgDCQT4 (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Fri, 3 Apr 2020 12:19:56 -0400
-Received: from zn.tnic (p200300EC2F0D8900BDBBB37D18611998.dip0.t-ipconnect.de [IPv6:2003:ec:2f0d:8900:bdbb:b37d:1861:1998])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 3524F1EC036E;
-        Fri,  3 Apr 2020 18:19:55 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1585930795;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=bRm7hk26peOhWOB+SdnZcHkF8PzVWnhOl4oWCAUbcyo=;
-        b=IV6OHVgIRfv5wrDPT9QSAfAIEOZE7WyMN4WFf13EQqiDSrti80XFykRKE0V0dqCEjnZITq
-        48DjU1/N8JoG55vIzXoxD87Pa3ZJoC08nUWuUCPmTlzaHVxM7MhrPHIfbaaa/mRqu9dcEz
-        ayBThW0f/tKIStWYZY+HGhqyDiVQtLE=
-From:   Borislav Petkov <bp@alien8.de>
-To:     X86 ML <x86@kernel.org>
-Cc:     Yazen Ghannam <Yazen.Ghannam@amd.com>,
-        linux-edac <linux-edac@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: [PATCH 7/7] x86/mce/amd: Make threshold bank setting hotplug robust
-Date:   Fri,  3 Apr 2020 18:19:43 +0200
-Message-Id: <20200403161943.1458-8-bp@alien8.de>
-X-Mailer: git-send-email 2.21.0
-In-Reply-To: <20200403161943.1458-1-bp@alien8.de>
-References: <20200403161943.1458-1-bp@alien8.de>
+        id S1726057AbgDDOcG (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Sat, 4 Apr 2020 10:32:06 -0400
+Received: from mail-lf1-f66.google.com ([209.85.167.66]:35080 "EHLO
+        mail-lf1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726189AbgDDOcG (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Sat, 4 Apr 2020 10:32:06 -0400
+Received: by mail-lf1-f66.google.com with SMTP id r17so4612488lff.2
+        for <linux-edac@vger.kernel.org>; Sat, 04 Apr 2020 07:32:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:sender:from:date:message-id:subject:to;
+        bh=TgUM7Ifl30bMzpah8ZtDo9NDrrm08wlkz/uMuoqAUq8=;
+        b=BCKjHuUPF8ZvfpNnVLbEl5glQF08TKbeMI71lJLMGtE7DEqoiWn5t41oNSirle9Shx
+         nEPn4yCw5UpPqxdguuudwEwq0qNJqP7IWJDYldgS8hIEWdAEdiNcjxjTts+mT7ztL2Ec
+         EPLMeSY7rpel63fDnmzqbRd6etSOOpJnj+YBA4w530ZqFdO+4jLS16hXs/6w0Od5SBHT
+         VME8wmS2G1VWEix/mhBEGttyiRlPgI7cqP/qS9Ptj8JUOwbT8QQLGDr0G6uASQm4tE7K
+         XzJFN6z4zlNCnor4Xu9Y/x5EEaKqaPr864uN05NAfPfEhGfl1bcezJWS/T6iHuOymEIW
+         xEbw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:sender:from:date
+         :message-id:subject:to;
+        bh=TgUM7Ifl30bMzpah8ZtDo9NDrrm08wlkz/uMuoqAUq8=;
+        b=JgEXalSMuJ62Z8NbvlIFiMB2Q+6M9fYt4PvOkMOrDEmKqffE1roJuCTwu9+PoIY1y9
+         OKlo9zf6zi6Zhyl43BkDscKsaKsUW5FghFH/zim1UIu6SU0Qkr6Pq7zOVcaC4mdZqOqu
+         /jW20EJrQzDLqwgoZ66c5biSrUK7lfTnuxyPbsSGgSe9fUbF6tGu95tiEjEOO11xxgNr
+         fylbviHTkt+zO5hBrheBMo4gNZBXZnnJ+Xoxx75/32IZNCK4a/4/MUUKFT3OZfw39EvP
+         0RVlAvn8guu3NzLh9iwpkGyYE1NtqeB/xqt+kdEgHsned+lmFbA6sowcDhvgE32Sc15c
+         /bEQ==
+X-Gm-Message-State: AGi0PuZe3jtSyrIG9Wd0CG3hl/Vdt2n4QfwjNiZDH7n0IPTELbSbWIK5
+        KBKuc9YAmKGP4YjsNGuO/pJGtBB4v/53eOU4Rms=
+X-Google-Smtp-Source: APiQypIhPUn5Ul+TvR0QguH5sig1GbOjWr7EKhfKl7LNH/xPZDyI4169ugI7FHdzjPCN2KkP8dASZlI/63uQH3PoA9k=
+X-Received: by 2002:a19:f518:: with SMTP id j24mr8502561lfb.205.1586010724091;
+ Sat, 04 Apr 2020 07:32:04 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Reply-To: mr_mohammadahmed62@yahoo.com
+Received: by 2002:ac2:4c33:0:0:0:0:0 with HTTP; Sat, 4 Apr 2020 07:32:03 -0700 (PDT)
+From:   Mohammad Ahmed <mohamadahmed0055@gmail.com>
+Date:   Sat, 4 Apr 2020 07:32:03 -0700
+X-Google-Sender-Auth: DCciCMAmqg3j_nEkzIiu_GXYGu0
+Message-ID: <CAKtYdpwoHcfh1Yv0iHxZoXTosG3w5BD30jACeMN5iBxuSNRYAw@mail.gmail.com>
+Subject: GOOD DAY FROM MR.MOHAMMAD AHMED
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-From: Thomas Gleixner <tglx@linutronix.de>
+My Dear Friend.
 
-Handle the cases when the CPU goes offline before the bank
-setting/reading happens.
+Greetings.
 
- [ bp: Write commit message. ]
+I know this message will come to you as a surprise, My name is Mr.
+Mohammad Ahmed a banker with Bank of Africa Burkina Faso West Africa,
+Please i want to transfer an abandoned sum of 13.5 Million United
+States Dollars into your account, if you are interested do not
+hesitate to get back to me with your personal information listed
+bellow for trust and confident to enable me feed you with more details
+on how the fund will be transfer into your account.
 
-Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-Signed-off-by: Borislav Petkov <bp@suse.de>
----
- arch/x86/kernel/cpu/mce/amd.c | 14 +++++++++++---
- 1 file changed, 11 insertions(+), 3 deletions(-)
+My dear you will provide account for transfer of the fund in your
+favor by our bank management and once the fund transferred into your
+account 50% is for you and 50% for me.
 
-diff --git a/arch/x86/kernel/cpu/mce/amd.c b/arch/x86/kernel/cpu/mce/amd.c
-index 16e7aea86ab1..15c87b87b901 100644
---- a/arch/x86/kernel/cpu/mce/amd.c
-+++ b/arch/x86/kernel/cpu/mce/amd.c
-@@ -386,6 +386,10 @@ static void threshold_restart_bank(void *_tr)
- 	struct thresh_restart *tr = _tr;
- 	u32 hi, lo;
- 
-+	/* sysfs write might race against an offline operation */
-+	if (this_cpu_read(threshold_banks))
-+		return;
-+
- 	rdmsr(tr->b->address, lo, hi);
- 
- 	if (tr->b->threshold_limit < (hi & THRESHOLD_MAX))
-@@ -1085,7 +1089,8 @@ store_interrupt_enable(struct threshold_block *b, const char *buf, size_t size)
- 	memset(&tr, 0, sizeof(tr));
- 	tr.b		= b;
- 
--	smp_call_function_single(b->cpu, threshold_restart_bank, &tr, 1);
-+	if (smp_call_function_single(b->cpu, threshold_restart_bank, &tr, 1))
-+		return -ENODEV;
- 
- 	return size;
- }
-@@ -1109,7 +1114,8 @@ store_threshold_limit(struct threshold_block *b, const char *buf, size_t size)
- 	b->threshold_limit = new;
- 	tr.b = b;
- 
--	smp_call_function_single(b->cpu, threshold_restart_bank, &tr, 1);
-+	if (smp_call_function_single(b->cpu, threshold_restart_bank, &tr, 1))
-+		return -ENODEV;
- 
- 	return size;
- }
-@@ -1118,7 +1124,9 @@ static ssize_t show_error_count(struct threshold_block *b, char *buf)
- {
- 	u32 lo, hi;
- 
--	rdmsr_on_cpu(b->cpu, b->address, &lo, &hi);
-+	/* CPU might be offline by now */
-+	if (rdmsr_on_cpu(b->cpu, b->address, &lo, &hi))
-+		return -ENODEV;
- 
- 	return sprintf(buf, "%u\n", ((hi & THRESHOLD_MAX) -
- 				     (THRESHOLD_MAX - b->threshold_limit)));
--- 
-2.21.0
+The transaction is risk free and there will be no harm, I will like
+you to respond back to me immediately after reading this message to
+enable us proceed ahead for mutual benefit, I know the source of the
+fund and I assure you of receiving it into your account without any
+problem, Read this message and if  accept to execute the business
+transaction then back to me urgently for more details.
 
+I am looking forward to hear back from you urgently.
+
+1. Full name:.........
+2. Home Address:.........
+3. Phone.............
+4. Occupation:.............
+5. Age:............
+6. Country:........
+7. Sex........
+8. Your Passport or ID card or Driving License
+
+Thanks.
+
+Yours faithfully
+
+Mr. Mohammad Ahmed.
