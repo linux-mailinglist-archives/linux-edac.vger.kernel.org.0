@@ -2,80 +2,118 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CBA11A0628
-	for <lists+linux-edac@lfdr.de>; Tue,  7 Apr 2020 07:12:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D9271A0756
+	for <lists+linux-edac@lfdr.de>; Tue,  7 Apr 2020 08:33:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726921AbgDGFMm (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Tue, 7 Apr 2020 01:12:42 -0400
-Received: from mail-ua1-f68.google.com ([209.85.222.68]:36599 "EHLO
-        mail-ua1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726867AbgDGFMm (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Tue, 7 Apr 2020 01:12:42 -0400
-Received: by mail-ua1-f68.google.com with SMTP id m15so847941uao.3
-        for <linux-edac@vger.kernel.org>; Mon, 06 Apr 2020 22:12:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:from:date:message-id:subject:to;
-        bh=38NlpNEbzNFWb7RFQtfvRASB+B576yw7dNc7pozf3pc=;
-        b=m9m/DCsFRus/zRmIuphflM5sHyenmkMN/TOEnECOGthbLJHVg8u2+iqtFZpNbyb2/k
-         2tLF//qwyXGtNVJKRleGUy+KbEtVjN+06Aw6FbGL98d5M/QEqB9c9SHaIsBPFlQYoUCh
-         Lj+P9EPUGdvyQRip4KeH3oSvDVhqDTV0IJcbcI66BzYP/b9Y/1y4LF++1q0teLhPl3GM
-         v15gBTxOBB8qvH4CNaCnwdm2sugBL+St8qIlm7SqBWweWj6hdsos1F0mjeWO8qJt64R9
-         xl3tya8AfljNAFdSOkZ4tC7INitomO8JQPFHHcp+JAODUsaup01At9KIYDntXEoTQZb0
-         DmdQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
-        bh=38NlpNEbzNFWb7RFQtfvRASB+B576yw7dNc7pozf3pc=;
-        b=EYX8xeh5ixSvh5qEOxLUnBbaDBm1FbbBMm6Tl+32rL+/haD/WVqsvHSpy1AYD5UzyP
-         /CpEDTU4ymB/yPmqB8Pz7BZq5X6fYzwgHc7AlvLf2wTxw5X0EWsRFDcabPhVo0JBu0uo
-         PG2vTOCxYV5gqUzNHcW4EKLZUO/D/Z1yucO3ksnSx1Af9aU7GeYr1fhwP7Y5XjgBLUIs
-         p9c9/IwkRPDieO/yZ38jPmvW4ZW0qhNdYeiHkbiYG3Yiv7P5OIEY/RkAXAykNQs8syVH
-         5i6M9WzCXROfsh12g3qcvVE1ZTeE4EMIxFtwHGcMuoxwxRmGnzXbwoh2gJJMU59WdAXI
-         Gy0g==
-X-Gm-Message-State: AGi0PuYv9BHyzE8w1ce9cPNYH/btbv0jgZn2cWqAp9wHn9L+nbGI4mSi
-        jhGFbrZmFIa1uQT67oVFz/Vf7K2uGONFCfOAxHE=
-X-Google-Smtp-Source: APiQypIYXniGQUHEpASwiGNjKth4Cu9ElCz4yjrJ2uXbYBYunhfz0887D/TRydUbTstl7MwaeVftG8QxF1P80ST3qos=
-X-Received: by 2002:ab0:a9:: with SMTP id 38mr504317uaj.61.1586236361040; Mon,
- 06 Apr 2020 22:12:41 -0700 (PDT)
+        id S1726635AbgDGGdz (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Tue, 7 Apr 2020 02:33:55 -0400
+Received: from frisell.zx2c4.com ([192.95.5.64]:34753 "EHLO frisell.zx2c4.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726448AbgDGGdz (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Tue, 7 Apr 2020 02:33:55 -0400
+Received: by frisell.zx2c4.com (ZX2C4 Mail Server) with ESMTP id fc413e04;
+        Tue, 7 Apr 2020 06:25:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha1; c=relaxed; d=zx2c4.com; h=from:to:cc
+        :subject:date:message-id:mime-version:content-transfer-encoding;
+         s=mail; bh=DM9NrDkjXWpH4zu4SJmHj2Mdn+k=; b=f0awkIQPRVQo9hlCsQF4
+        GvF9MJdapgxLuHNpSOZvBlY0debaS6aHicQQHZIBdH1jBG3bh8dUwkj4rAw/F350
+        C6hOWMHuC0QYhFhd5iI8Oi7QfxSH0QEpUegjdZ3ZpjeUnyrZX4vqG3TCrxkvyrwd
+        hLjBRvr7Gd6ebmXeP1tvuq7RJBJzd2Dsi9GobMc7sEz0ymLAiX0ASCGHlp7dP0AA
+        gm926jwHIdGs0QGf3v8cJwHXhTPrHdrMOtN0QMsHuYDDuhvmq5hFjbI9h+Choj0v
+        KPQCCKC0Nincy4Fn4BO48rxRaRxgGGAOFgIzrCUJI2NM0DuXxULLa3XtnQepTGyx
+        Hw==
+Received: by frisell.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 0bb34400 (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384:256:NO);
+        Tue, 7 Apr 2020 06:25:00 +0000 (UTC)
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     linux-kernel@vger.kernel.org, linux-edac@vger.kernel.org,
+        x86@kernel.org, arnd@arndb.de, srinivas.pandruvada@linux.intel.com,
+        bberg@redhat.com, bp@suse.de
+Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Subject: [PATCH 1/3] x86/mce/therm_throt: remove unused platform_thermal_notify function pointer
+Date:   Tue,  7 Apr 2020 00:33:43 -0600
+Message-Id: <20200407063345.4484-1-Jason@zx2c4.com>
 MIME-Version: 1.0
-Received: by 2002:ab0:4929:0:0:0:0:0 with HTTP; Mon, 6 Apr 2020 22:12:40 -0700 (PDT)
-From:   SANDRA DEWI <dewisandra154@gmail.com>
-Date:   Tue, 7 Apr 2020 05:12:40 +0000
-Message-ID: <CABRVPWys0xe4CWBkaU0ZXQW+4d=tjDOjyo8cKohc5-VFkWPkcA@mail.gmail.com>
-Subject: whether this is your correct email address or not
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-Dear ,Pastor
+A long time ago platform_thermal_notify was added as some generic
+mechanism for platform drivers to hook thermal events. It seems as
+though this has been entirely superseded, and nothing uses it. Remove
+the plumbing for this, since this code runs in an interrupt hot path.
 
+Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+---
+ arch/x86/include/asm/mce.h            |  3 ---
+ arch/x86/kernel/cpu/mce/therm_throt.c | 25 -------------------------
+ 2 files changed, 28 deletions(-)
 
+diff --git a/arch/x86/include/asm/mce.h b/arch/x86/include/asm/mce.h
+index 4359b955e0b7..ee30cb60ad36 100644
+--- a/arch/x86/include/asm/mce.h
++++ b/arch/x86/include/asm/mce.h
+@@ -257,9 +257,6 @@ extern void (*deferred_error_int_vector)(void);
+ 
+ void intel_init_thermal(struct cpuinfo_x86 *c);
+ 
+-/* Interrupt Handler for core thermal thresholds */
+-extern int (*platform_thermal_notify)(__u64 msr_val);
+-
+ /* Interrupt Handler for package thermal thresholds */
+ extern int (*platform_thermal_package_notify)(__u64 msr_val);
+ 
+diff --git a/arch/x86/kernel/cpu/mce/therm_throt.c b/arch/x86/kernel/cpu/mce/therm_throt.c
+index f36dc0742085..f904e85eb68f 100644
+--- a/arch/x86/kernel/cpu/mce/therm_throt.c
++++ b/arch/x86/kernel/cpu/mce/therm_throt.c
+@@ -105,10 +105,6 @@ struct thermal_state {
+ 	struct _thermal_state pkg_thresh1;
+ };
+ 
+-/* Callback to handle core threshold interrupts */
+-int (*platform_thermal_notify)(__u64 msr_val);
+-EXPORT_SYMBOL(platform_thermal_notify);
+-
+ /* Callback to handle core package threshold_interrupts */
+ int (*platform_thermal_package_notify)(__u64 msr_val);
+ EXPORT_SYMBOL_GPL(platform_thermal_package_notify);
+@@ -551,24 +547,6 @@ static void notify_package_thresholds(__u64 msr_val)
+ 		platform_thermal_package_notify(msr_val);
+ }
+ 
+-static void notify_thresholds(__u64 msr_val)
+-{
+-	/* check whether the interrupt handler is defined;
+-	 * otherwise simply return
+-	 */
+-	if (!platform_thermal_notify)
+-		return;
+-
+-	/* lower threshold reached */
+-	if ((msr_val & THERM_LOG_THRESHOLD0) &&
+-			thresh_event_valid(CORE_LEVEL, 0))
+-		platform_thermal_notify(msr_val);
+-	/* higher threshold reached */
+-	if ((msr_val & THERM_LOG_THRESHOLD1) &&
+-			thresh_event_valid(CORE_LEVEL, 1))
+-		platform_thermal_notify(msr_val);
+-}
+-
+ /* Thermal transition interrupt handler */
+ static void intel_thermal_interrupt(void)
+ {
+@@ -579,9 +557,6 @@ static void intel_thermal_interrupt(void)
+ 
+ 	rdmsrl(MSR_IA32_THERM_STATUS, msr_val);
+ 
+-	/* Check for violation of core thermal thresholds*/
+-	notify_thresholds(msr_val);
+-
+ 	therm_throt_process(msr_val & THERM_STATUS_PROCHOT,
+ 			    THERMAL_THROTTLING_EVENT,
+ 			    CORE_LEVEL);
+-- 
+2.26.0
 
-I have a client who is an oil business man and he made a fixed deposit
-of $26 million USD in my bank, where I am the director of the branch,
-My client died with his entire family in Jordanian
-
-50% of the fund will be for the church  for the work of God,the
-balance 50% we share it in the ratio of 50/50. Meaning 50% to you and
-50% for me
-
-intervention in the Syrian Civil War 2014 leaving behind no next of
-kin. I Propose to present you as next of kin to claim the funds, if
-interested reply me for full details and how we are to
-
-
-
-proceed to close this deal.
-
-
-
-
-Mrs. Sandra Dewi
-
-
-
-Email  mrsdewi@gmx.com
