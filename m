@@ -2,30 +2,30 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B9D51A31B6
-	for <lists+linux-edac@lfdr.de>; Thu,  9 Apr 2020 11:21:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A4971A31DB
+	for <lists+linux-edac@lfdr.de>; Thu,  9 Apr 2020 11:34:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726521AbgDIJVR (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Thu, 9 Apr 2020 05:21:17 -0400
-Received: from szxga05-in.huawei.com ([45.249.212.191]:12704 "EHLO huawei.com"
+        id S1726654AbgDIJew (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Thu, 9 Apr 2020 05:34:52 -0400
+Received: from szxga06-in.huawei.com ([45.249.212.32]:52750 "EHLO huawei.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725828AbgDIJVR (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Thu, 9 Apr 2020 05:21:17 -0400
-Received: from DGGEMS409-HUB.china.huawei.com (unknown [172.30.72.59])
-        by Forcepoint Email with ESMTP id 2D00AA03DCD767EA6773;
-        Thu,  9 Apr 2020 17:21:08 +0800 (CST)
-Received: from huawei.com (10.175.124.28) by DGGEMS409-HUB.china.huawei.com
- (10.3.19.209) with Microsoft SMTP Server id 14.3.487.0; Thu, 9 Apr 2020
- 17:20:59 +0800
+        id S1726571AbgDIJew (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Thu, 9 Apr 2020 05:34:52 -0400
+Received: from DGGEMS403-HUB.china.huawei.com (unknown [172.30.72.59])
+        by Forcepoint Email with ESMTP id 3AF08A7135E5C9A07FE2;
+        Thu,  9 Apr 2020 17:34:36 +0800 (CST)
+Received: from huawei.com (10.175.124.28) by DGGEMS403-HUB.china.huawei.com
+ (10.3.19.203) with Microsoft SMTP Server id 14.3.487.0; Thu, 9 Apr 2020
+ 17:34:26 +0800
 From:   Jason Yan <yanaijie@huawei.com>
 To:     <khuong@os.amperecomputing.com>, <bp@alien8.de>,
         <mchehab@kernel.org>, <tony.luck@intel.com>, <james.morse@arm.com>,
         <rrichter@marvell.com>, <linux-edac@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>
 CC:     Jason Yan <yanaijie@huawei.com>
-Subject: [PATCH] EDAC, xgene: remove set but not used 'address'
-Date:   Thu, 9 Apr 2020 17:19:33 +0800
-Message-ID: <20200409091933.16347-1-yanaijie@huawei.com>
+Subject: [PATCH v2] EDAC, xgene: remove set but not used 'address'
+Date:   Thu, 9 Apr 2020 17:32:59 +0800
+Message-ID: <20200409093259.20069-1-yanaijie@huawei.com>
 X-Mailer: git-send-email 2.17.2
 MIME-Version: 1.0
 Content-Type: text/plain; charset="UTF-8"
