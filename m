@@ -2,111 +2,76 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D4C5E1A3F55
-	for <lists+linux-edac@lfdr.de>; Fri, 10 Apr 2020 05:55:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F5F31A4377
+	for <lists+linux-edac@lfdr.de>; Fri, 10 Apr 2020 10:23:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727999AbgDJDsE (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Thu, 9 Apr 2020 23:48:04 -0400
-Received: from mail.kernel.org ([198.145.29.99]:59214 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727993AbgDJDsD (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Thu, 9 Apr 2020 23:48:03 -0400
-Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 8F88320A8B;
-        Fri, 10 Apr 2020 03:48:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1586490483;
-        bh=UrwSOr4h2UrF7KC5Oh4oX+BltuND9X9C5BW/wnK2KGY=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=M69NTzNFZKRz4TuElg2FBrLlxL8ELAeQm9M0V7nFVBSBlN2wK1dvUSgbclhJdJvMQ
-         /+2ay+8+wUkkEay03xWMm9SK+kW4MoX3hze7i7kRaWBPGmhjqnZkWlxspRMYGK4xn3
-         XLAW/TLTZzUiGMxcbDC4qE+jYxlLmWsEX5a2/qkk=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Robert Richter <rrichter@marvell.com>,
-        Borislav Petkov <bp@suse.de>,
-        Aristeu Rozanski <aris@redhat.com>,
-        Sasha Levin <sashal@kernel.org>, linux-edac@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.5 02/56] EDAC/mc: Report "unknown memory" on too many DIMM labels found
-Date:   Thu,  9 Apr 2020 23:47:06 -0400
-Message-Id: <20200410034800.8381-2-sashal@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200410034800.8381-1-sashal@kernel.org>
-References: <20200410034800.8381-1-sashal@kernel.org>
+        id S1725861AbgDJIXv (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Fri, 10 Apr 2020 04:23:51 -0400
+Received: from cmccmta3.chinamobile.com ([221.176.66.81]:52378 "EHLO
+        cmccmta3.chinamobile.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725839AbgDJIXv (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Fri, 10 Apr 2020 04:23:51 -0400
+Received: from spf.mail.chinamobile.com (unknown[172.16.121.3]) by rmmx-syy-dmz-app11-12011 (RichMail) with SMTP id 2eeb5e902d07bec-00d91; Fri, 10 Apr 2020 16:23:36 +0800 (CST)
+X-RM-TRANSID: 2eeb5e902d07bec-00d91
+X-RM-TagInfo: emlType=0                                       
+X-RM-SPAM-FLAG: 00000000
+Received: from [172.20.21.224] (unknown[112.25.154.146])
+        by rmsmtp-syy-appsvr02-12002 (RichMail) with SMTP id 2ee25e902d07967-23973;
+        Fri, 10 Apr 2020 16:23:36 +0800 (CST)
+X-RM-TRANSID: 2ee25e902d07967-23973
+Subject: Re: [PATCH] EDAC/altera:Use platform_get_irq_optional()
+To:     Borislav Petkov <bp@alien8.de>, rrichter <rrichter@marvell.com>
+Cc:     "thor.thayer" <thor.thayer@linux.intel.com>,
+        mchehab <mchehab@kernel.org>, "tony.luck" <tony.luck@intel.com>,
+        "james.morse" <james.morse@arm.com>,
+        linux-edac <linux-edac@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+References: <20200402112740.15580-1-tangbin@cmss.chinamobile.com>
+ <20200402123001.obgzqmlure4cfvh7@rric.localdomain>
+ <202004022106312118022@cmss.chinamobile.com>
+ <20200408071022.ft6aamptrxlaz23f@rric.localdomain>
+ <2020040819334451781313@cmss.chinamobile.com>
+ <20200408113658.GE24663@zn.tnic>
+From:   Tang Bin <tangbin@cmss.chinamobile.com>
+Message-ID: <1b9a872f-f616-8eaf-1cca-d73647f696e3@cmss.chinamobile.com>
+Date:   Fri, 10 Apr 2020 16:25:24 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20200408113658.GE24663@zn.tnic>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-From: Robert Richter <rrichter@marvell.com>
+Hi Borislav & Robert:
 
-[ Upstream commit 65bb4d1af92cf007adc0a0c59dadcc393c5cada6 ]
+On 2020/4/8 19:36, Borislav Petkov wrote:
+> On Wed, Apr 08, 2020 at 07:33:44PM +0800, Tang Bin wrote:
+>>    I know what you mean, Thanks.
+> I don't think you do because you still top-post.
+>
+> A: Because it messes up the order in which people normally read text.
+> Q: Why is top-posting such a bad thing?
+> A: Top-posting.
+> Q: What is the most annoying thing in e-mail?
+>
+> A: No.
+> Q: Should I include quotations after my reply?
+>
+> http://daringfireball.net/2007/07/on_top
 
-There is a limitation to report only EDAC_MAX_LABELS in e->label of
-the error descriptor. This is to prevent a potential string overflow.
+I am sorry for the previous writing mistake(top-post). I have consulted 
+others and hope it's right this time. Sorry again and thanks for 
+teaching. I hope to continuously improve myself and regulate myself 
+under your guidance.
 
-The current implementation falls back to "any memory" in this case and
-also stops all further processing to find a unique row and channel of
-the possible error location.
+Thanks.
 
-Reporting "any memory" is wrong as the memory controller reported an
-error location for one of the layers. Instead, report "unknown memory"
-and also do not break early in the loop to further check row and channel
-for uniqueness.
+Tang Bin
 
- [ bp: Massage commit message. ]
 
-Signed-off-by: Robert Richter <rrichter@marvell.com>
-Signed-off-by: Borislav Petkov <bp@suse.de>
-Acked-by: Aristeu Rozanski <aris@redhat.com>
-Link: https://lkml.kernel.org/r/20200123090210.26933-7-rrichter@marvell.com
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/edac/edac_mc.c | 21 +++++++++++----------
- 1 file changed, 11 insertions(+), 10 deletions(-)
-
-diff --git a/drivers/edac/edac_mc.c b/drivers/edac/edac_mc.c
-index 69e0d90460e6c..2349f2ad946bb 100644
---- a/drivers/edac/edac_mc.c
-+++ b/drivers/edac/edac_mc.c
-@@ -1180,20 +1180,21 @@ void edac_mc_handle_error(const enum hw_event_mc_err_type type,
- 		 * channel/memory controller/...  may be affected.
- 		 * Also, don't show errors for empty DIMM slots.
- 		 */
--		if (!e->enable_per_layer_report || !dimm->nr_pages)
-+		if (!dimm->nr_pages)
- 			continue;
- 
--		if (n_labels >= EDAC_MAX_LABELS) {
--			e->enable_per_layer_report = false;
--			break;
--		}
- 		n_labels++;
--		if (p != e->label) {
--			strcpy(p, OTHER_LABEL);
--			p += strlen(OTHER_LABEL);
-+		if (n_labels > EDAC_MAX_LABELS) {
-+			p = e->label;
-+			*p = '\0';
-+		} else {
-+			if (p != e->label) {
-+				strcpy(p, OTHER_LABEL);
-+				p += strlen(OTHER_LABEL);
-+			}
-+			strcpy(p, dimm->label);
-+			p += strlen(p);
- 		}
--		strcpy(p, dimm->label);
--		p += strlen(p);
- 
- 		/*
- 		 * get csrow/channel of the DIMM, in order to allow
--- 
-2.20.1
 
