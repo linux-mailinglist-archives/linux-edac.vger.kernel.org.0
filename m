@@ -2,97 +2,88 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D34A61A7B22
-	for <lists+linux-edac@lfdr.de>; Tue, 14 Apr 2020 14:47:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 605BA1A8024
+	for <lists+linux-edac@lfdr.de>; Tue, 14 Apr 2020 16:45:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2502182AbgDNMrn (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Tue, 14 Apr 2020 08:47:43 -0400
-Received: from mail.skyhub.de ([5.9.137.197]:34574 "EHLO mail.skyhub.de"
+        id S2404493AbgDNOpV (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Tue, 14 Apr 2020 10:45:21 -0400
+Received: from mga01.intel.com ([192.55.52.88]:13080 "EHLO mga01.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2502181AbgDNMrl (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Tue, 14 Apr 2020 08:47:41 -0400
-Received: from zn.tnic (p200300EC2F0C1D0021F05AC4D60C335F.dip0.t-ipconnect.de [IPv6:2003:ec:2f0c:1d00:21f0:5ac4:d60c:335f])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 8FF3E1EC0CDE;
-        Tue, 14 Apr 2020 14:47:36 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1586868456;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=vP4PbFC2Ql0uKPjbBVGyLCqT4YXRCyjqKtYPNE0k1+U=;
-        b=kbzpx2bD9bU7020BOrk7rhM9RaEK4j4gkgGAAdw+xoI82QHY5EPcneTPrNsr67rtlQ0D8L
-        ilzLeGKq2VM9IrLsqwjzmyqSHkpLC1eCPGhc1rt3fwcYMMrRk9o7TJiuXiuF6dTr57mIEE
-        hSh31XhQW/1XV4liU2uL6zPiJAv9jV8=
-Date:   Tue, 14 Apr 2020 14:47:31 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Jason Yan <yanaijie@huawei.com>
-Cc:     khuong@os.amperecomputing.com, mchehab@kernel.org,
-        tony.luck@intel.com, james.morse@arm.com, rrichter@marvell.com,
-        linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] EDAC, xgene: remove set but not used 'address'
-Message-ID: <20200414124731.GB31737@zn.tnic>
-References: <20200409093259.20069-1-yanaijie@huawei.com>
+        id S2404517AbgDNOpV (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Tue, 14 Apr 2020 10:45:21 -0400
+IronPort-SDR: aYmMNxt+SQouH7In8pYnsmuMCVp/GRiN0NcSbdoz5ETFgXng21i1OXhFOIHJJ13hkkHrolyqkd
+ 7UH1IQ3Mu+JA==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Apr 2020 07:45:16 -0700
+IronPort-SDR: PobXDpZNf0jtNRkWrmz39i7ngBS/sjvnT/2SR1sUU6i3DDm9UZChQ8gK20Ek7t3sMQHiHYzgOD
+ uY8zsXymYUog==
+X-IronPort-AV: E=Sophos;i="5.72,382,1580803200"; 
+   d="scan'208";a="253216826"
+Received: from spandruv-mobl.amr.corp.intel.com ([10.251.11.11])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Apr 2020 07:45:15 -0700
+Message-ID: <4b75ec34ccff5abdc0b1c04a5ac39455ddd4f49b.camel@linux.intel.com>
+Subject: Re: [PATCH 3/3] x86/mce/therm_throt: allow disabling the thermal
+ vector altogether
+From:   Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>, linux-edac@vger.kernel.org,
+        X86 ML <x86@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        bberg@redhat.com, bp@suse.de
+Date:   Tue, 14 Apr 2020 07:45:14 -0700
+In-Reply-To: <CAHmME9pigvAgK3Bje6DkFEcdyWwi7-C7D6QEo4YiH_cbJvxqhQ@mail.gmail.com>
+References: <20200407063345.4484-1-Jason@zx2c4.com>
+         <20200407063345.4484-3-Jason@zx2c4.com>
+         <0e189a4fe1e69b08afc859ce83623a0e5ea0c08b.camel@linux.intel.com>
+         <CAHmME9pigvAgK3Bje6DkFEcdyWwi7-C7D6QEo4YiH_cbJvxqhQ@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.34.2 (3.34.2-1.fc31) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20200409093259.20069-1-yanaijie@huawei.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 7bit
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Thu, Apr 09, 2020 at 05:32:59PM +0800, Jason Yan wrote:
-> Fix the following gcc warning:
+On Mon, 2020-04-13 at 22:21 -0600, Jason A. Donenfeld wrote:
+> On Mon, Apr 13, 2020 at 9:38 PM Srinivas Pandruvada
+> <srinivas.pandruvada@linux.intel.com> wrote:
+> > On Tue, 2020-04-07 at 00:33 -0600, Jason A. Donenfeld wrote:
+> > > The thermal IRQ handler uses 1.21% CPU on my system when it's hot
+> > > from
+> > > compiling things. Indeed looking at /proc/interrupts reveals
+> > > quite a
+> > > lot
+> > I am curious why you are hitting threshold frequently?
+> > What is rdmsr 0x1a2
 > 
-> drivers/edac/xgene_edac.c:1486:7: warning: variable ‘address’ set but
-> not used [-Wunused-but-set-variable]
->    u32 address;
->        ^~~~~~~
-> And remove the unused macro RBERRADDR_RD after that.
+> 5640000
+You are getting too many interrupts at 95C. You should look at your
+cooling system. 
+
 > 
-> Reported-by: Hulk Robot <hulkci@huawei.com>
-> Signed-off-by: Jason Yan <yanaijie@huawei.com>
-> ---
->  drivers/edac/xgene_edac.c | 3 ---
->  1 file changed, 3 deletions(-)
+> > > of events coming in. Beyond logging them, the existing drivers on
+> > > the
+> > > system don't appear to do very much that I'm interested in. So,
+> > > add a
+> > > way to disable this entirely so that I can regain precious CPU
+> > > cycles.
+> > It is showing amount of time system is running in a constrained
+> > environment. Lots of real time and HPC folks really care about
+> > this.
 > 
-> diff --git a/drivers/edac/xgene_edac.c b/drivers/edac/xgene_edac.c
-> index e4a1032ba0b5..1d2c27a00a4a 100644
-> --- a/drivers/edac/xgene_edac.c
-> +++ b/drivers/edac/xgene_edac.c
-> @@ -1349,7 +1349,6 @@ static int xgene_edac_l3_remove(struct xgene_edac_dev_ctx *l3)
->  #define WORD_ALIGNED_ERR_MASK		BIT(28)
->  #define PAGE_ACCESS_ERR_MASK		BIT(27)
->  #define WRITE_ACCESS_MASK		BIT(26)
-> -#define RBERRADDR_RD(src)		((src) & 0x03FFFFFF)
->  
->  static const char * const soc_mem_err_v1[] = {
->  	"10GbE0",
-> @@ -1483,13 +1482,11 @@ static void xgene_edac_rb_report(struct edac_device_ctl_info *edac_dev)
->  		return;
->  	if (reg & STICKYERR_MASK) {
->  		bool write;
-> -		u32 address;
->  
->  		dev_err(edac_dev->dev, "IOB bus access error(s)\n");
->  		if (regmap_read(ctx->edac->rb_map, RBEIR, &reg))
->  			return;
->  		write = reg & WRITE_ACCESS_MASK ? 1 : 0;
-> -		address = RBERRADDR_RD(reg);
->  		if (reg & AGENT_OFFLINE_ERR_MASK)
->  			dev_err(edac_dev->dev,
->  				"IOB bus %s access to offline agent error\n",
-> -- 
+> Which is why this patch adds an option, not a full removal or
+> something. Real time and HPC people can keep their expensive
+> interrupt. Other people with different varieties of system
+> disable
+> it.
+Generally compile time flag is not desirable. If it is what required
+then we should have boot time flag something in lines of existing
+"int_pln_enable" option.
 
-Applied, thanks.
+Thanks,
+Srinivas
 
--- 
-Regards/Gruss,
-    Boris.
 
-https://people.kernel.org/tglx/notes-about-netiquette
+
