@@ -2,130 +2,136 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B70391A8E0C
-	for <lists+linux-edac@lfdr.de>; Tue, 14 Apr 2020 23:51:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B85FA1A8F4B
+	for <lists+linux-edac@lfdr.de>; Wed, 15 Apr 2020 01:53:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2440950AbgDNVv2 (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Tue, 14 Apr 2020 17:51:28 -0400
-Received: from mga06.intel.com ([134.134.136.31]:57796 "EHLO mga06.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2440819AbgDNVv0 (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Tue, 14 Apr 2020 17:51:26 -0400
-IronPort-SDR: vZU0oqJXCsEvUa/EtJCIfj1Vo16Ek2XpihzCVrTLA5s+3D5jzjjEnwZEWC0X1sxp8F9MnKNLzI
- hFXw4GXDwwjQ==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Apr 2020 14:51:24 -0700
-IronPort-SDR: ij8iqHgZZGRON/acdZ34Z8oe1de2h0YuaZUoV5nkBqf5XAAASINM7Rc6Fba1Xl8axQDbfmFBtB
- EdajjSl5EfwQ==
-X-IronPort-AV: E=Sophos;i="5.72,384,1580803200"; 
-   d="scan'208";a="271529999"
-Received: from spandruv-mobl.amr.corp.intel.com ([10.134.69.31])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Apr 2020 14:51:23 -0700
-Message-ID: <b64aa350ba40c53e799690141006e0f1885d28a2.camel@linux.intel.com>
-Subject: Re: [PATCH 3/3] x86/mce/therm_throt: allow disabling the thermal
- vector altogether
-From:   Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     Borislav Petkov <bp@suse.de>, LKML <linux-kernel@vger.kernel.org>,
-        linux-edac@vger.kernel.org, X86 ML <x86@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, bberg@redhat.com,
-        Tony Luck <tony.luck@intel.com>
-Date:   Tue, 14 Apr 2020 14:51:22 -0700
-In-Reply-To: <CAHmME9rx6w=p6+AFP=0Y5tPEq1CxUTGe4h8SXz-qRNuCvU0hyw@mail.gmail.com>
-References: <20200407063345.4484-1-Jason@zx2c4.com>
-         <20200407063345.4484-3-Jason@zx2c4.com>
-         <0e189a4fe1e69b08afc859ce83623a0e5ea0c08b.camel@linux.intel.com>
-         <CAHmME9pigvAgK3Bje6DkFEcdyWwi7-C7D6QEo4YiH_cbJvxqhQ@mail.gmail.com>
-         <4b75ec34ccff5abdc0b1c04a5ac39455ddd4f49b.camel@linux.intel.com>
-         <CAHmME9rfXXPepanaxR6EBimSNkJp6KTuNLkYcSceGwZXp_j-Kw@mail.gmail.com>
-         <20200414202328.GK31763@zn.tnic>
-         <81359df9983fb70bd40ddb3be9090e5521294529.camel@linux.intel.com>
-         <CAHmME9rx6w=p6+AFP=0Y5tPEq1CxUTGe4h8SXz-qRNuCvU0hyw@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.34.2 (3.34.2-1.fc31) 
+        id S2634411AbgDNXty (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Tue, 14 Apr 2020 19:49:54 -0400
+Received: from mail-ot1-f68.google.com ([209.85.210.68]:42099 "EHLO
+        mail-ot1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731575AbgDNXtu (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Tue, 14 Apr 2020 19:49:50 -0400
+Received: by mail-ot1-f68.google.com with SMTP id l21so1594100otd.9;
+        Tue, 14 Apr 2020 16:49:50 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=ErGz/RmN1nNcMdKysMZ4QZyfLOTmTqEmcgzrHidWa00=;
+        b=ZWlJ/WpzzGu9qjM6IHUPGp3r7lcNJkd1Jz/xzLAVSkcFmlle0/tn4byoxvyup8gVxF
+         QVCUtEzU5gBMY/AJ3x1AqFf93UKvnZsglCX7mfvtVQggSDqHVuOWVtVlptvz0JS8rZkN
+         oRWMSGFgaM9mqxz6lxbcxVg/hHv5Kk0HXZtf8WVJe7aq1hGsAJ5elcURsdbVaffCh1NZ
+         0WK7oNIK2GnKEG4ONV/2wAhDcQpndjuiBTi5XzCNPcwCe2zZdHPu6CFruRO3arwzfqX/
+         NOQjg9xyfxz7F16hmNB8NPD9+c1uVFU/T/a/4HrONSxajZZp/CbXqaWVUhmKA0th6yeU
+         dkVg==
+X-Gm-Message-State: AGi0PuY14HRlCkA/ovHyYmvirOqpIjHJ1QUEFYq7k0/lCX8mrzxt7ft2
+        Fq7Ivb/21VIvFSYZPVc2kA==
+X-Google-Smtp-Source: APiQypJZufTrwX1G/fitQmoTtHPOYT+eQR62XJjFIzEKrvQjyVS3XgX0fIR0P3iFCf2lzUhQvtbcGw==
+X-Received: by 2002:a9d:441:: with SMTP id 59mr10612961otc.236.1586908189851;
+        Tue, 14 Apr 2020 16:49:49 -0700 (PDT)
+Received: from rob-hp-laptop (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id l7sm5632301otj.52.2020.04.14.16.49.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Apr 2020 16:49:49 -0700 (PDT)
+Received: (nullmailer pid 28246 invoked by uid 1000);
+        Tue, 14 Apr 2020 23:49:48 -0000
+Date:   Tue, 14 Apr 2020 18:49:47 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Dhananjay Kangude <dkangude@cadence.com>
+Cc:     linux-edac@vger.kernel.org, bp@alien8.de, mchehab@kernel.org,
+        tony.luck@intel.com, james.morse@arm.com,
+        linux-kernel@vger.kernel.org, mparab@cadence.com,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH v3 1/2] dt-bindings: edac: Add cadence ddr mc support
+Message-ID: <20200414234947.GA24554@bogus>
+References: <20200406131341.1253-1-dkangude@cadence.com>
+ <20200406131341.1253-2-dkangude@cadence.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200406131341.1253-2-dkangude@cadence.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Tue, 2020-04-14 at 15:07 -0600, Jason A. Donenfeld wrote:
-> On Tue, Apr 14, 2020 at 2:49 PM Srinivas Pandruvada
-> <srinivas.pandruvada@linux.intel.com> wrote:
-> > On Tue, 2020-04-14 at 22:23 +0200, Borislav Petkov wrote:
-> > > + Tony.
-> > > 
-> > > On Tue, Apr 14, 2020 at 01:41:08PM -0600, Jason A. Donenfeld
-> > > wrote:
-> > > > Generally it is desirable, and extremely common too. This
-> > > > thermal
-> > > > code
-> > > > -- which mostly functions to print some messages into kmsg --
-> > > > is
-> > > > very
-> > > > verbose. This is not something I want to compile into smaller
-> > > > systems.
-> > > > This is the reason why kconfig has options in the first place.
-> > > > I'm
-> > > > not
-> > > > sure yet-another boottime flag makes sense for this.
-> > > 
-> > > I don't mind making the already existing option selectable and
-> > > leaving
-> > > it default y, i.e., keeping the current situation by default. And
-> > > people
-> > > who want to disable it, can then do so.
-> > > 
-> > > I do mind to having yet another config option though. No thanks -
-> > > they're already too many.
-> > > 
-> > > So it should be an all or nothing thing.
-> > > 
-> > > Poking quickly at that and
-> > > drivers/thermal/intel/x86_pkg_temp_thermal.c,
-> > > all those things do is report trip points. therm_throt reports
-> > > how
-> > > long
-> > > the hw throttled due to hitting a trip point, etc.
-> > > 
-> > > IINM, of course so please correct me if I'm missing anything.
-> > > 
-> > > But if not and this all is only for reporting and doesn't have
-> > > any
-> > > detrimental effects on the hardware when missing from the system,
-> > > then I
-> > > guess we could make CONFIG_X86_THERMAL_VECTOR user-selectable.
-> > 
-> > We can make user selectable
-> > 
-> > These drivers are used for reporting only.
-> > User space can select a trip temperature via x86_pkg_temp and get
-> > notification via uevent to start additional cooling system
-> > (additional
+On Mon, Apr 06, 2020 at 03:13:40PM +0200, Dhananjay Kangude wrote:
+> Add documentation for cadence ddr memory controller EDAC DTS bindings
 > 
-> I didn't see any uevent stuff. Is this part of out-of-tree modules or
-> proprietary code that's hooking into those EXPORT_SYMBOL (non-GPL)
-> exports?
-This is not out of tree. This is x86_pkg_temp driver as part of thermal
-subsystem, and thermal_zone_device_update()  user space governor issues uevent. But those are different modifiable thresholds not the high/low temperature thresholds.
-
-
+> Signed-off-by: Dhananjay Kangude <dkangude@cadence.com>
+> ---
+>  .../devicetree/bindings/edac/cdns,ddr-edac.yaml    |   47 ++++++++++++++++++++
+>  1 files changed, 47 insertions(+), 0 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/edac/cdns,ddr-edac.yaml
 > 
-> > fans, liquid coooling etc), so that processor don't have to go self
-> > throttling mode. Self throttling depending on processor series and
-> > firmware can be very aggressive.
-> > In client systems thermald will set a temperature and starts power
-> > control once it reaches passive temperature limit. But it can
-> > function
-> > without x86_pkg_temp also, so even if user disables thermal
-> > reporting
-> > it can still function.
-> 
-> The 2/3 patch may be interesting as well to you. This removes the
-> expensive work queue management stuff if the option is deselected,
-> since all those workqueues do is print messages to kmsg, while
-> retaining the rest of the infra.
+> diff --git a/Documentation/devicetree/bindings/edac/cdns,ddr-edac.yaml b/Documentation/devicetree/bindings/edac/cdns,ddr-edac.yaml
+> new file mode 100644
+> index 0000000..30ea757
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/edac/cdns,ddr-edac.yaml
+> @@ -0,0 +1,47 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/edac/cdns,ddr-edac.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Cadence DDR IP with ECC support (EDAC)
+> +
+> +description:
+> +  This binding describes the Cadence DDR/LPDDR IP with ECC feature enabled
+> +  to detect and correct CE/UE errors.
+> +
+> +maintainers:
+> +  - Dhananjay Kangdue <dkangude@cadence.com>
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - cdns,ddr4-mc
 
+Surely there's more than 1 version?
+
+> +
+> +  reg:
+> +    minItems: 1
+> +    maxItems: 2
+> +    items:
+> +      - description:
+> +          Register block of DDR/LPDDR apb registers up to mapped area.
+> +          Mapped area contains the register set for memory controller,
+> +          phy and PI module register set doesn't part of this mapping.
+
+doesn't part of this mapping?
+
+Need a description for the 2nd region.
+
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - interrupts
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    edac: edac@fd100000 {
+
+memory-controller@
+
+> +        compatible = "cdns,ddr4-mc-edac";
+
+Doesn't match.
+
+> +        reg = <0xfd100000 0x4000>;
+> +        interrupts = <0x00 0x01 0x04>;
+> +    };
+> +...
+> -- 
+> 1.7.1
+> 
