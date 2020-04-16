@@ -2,124 +2,123 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EA8F91AB346
-	for <lists+linux-edac@lfdr.de>; Wed, 15 Apr 2020 23:36:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D75671ABBF1
+	for <lists+linux-edac@lfdr.de>; Thu, 16 Apr 2020 11:00:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2438891AbgDOVUl (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Wed, 15 Apr 2020 17:20:41 -0400
-Received: from mx0a-0016f401.pphosted.com ([67.231.148.174]:32288 "EHLO
-        mx0b-0016f401.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S2438818AbgDOVUj (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>);
-        Wed, 15 Apr 2020 17:20:39 -0400
-Received: from pps.filterd (m0045849.ppops.net [127.0.0.1])
-        by mx0a-0016f401.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 03FLEksq010310;
-        Wed, 15 Apr 2020 14:20:11 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=date : from : to :
- cc : subject : message-id : references : content-type :
- content-transfer-encoding : in-reply-to : mime-version; s=pfpt0818;
- bh=RWAS2f5CbuBYhr7iOYbeETIIz4Gt120dhBXJvlbkzvE=;
- b=dq1hDCWLzNRXO0vwQRco8xfE/2qE2HPvkwzd0t6cx8z0v5+wkNrbzhnmvheqLLcX+tln
- CeFSVQGkIlOr12dSy5QxeobCLfQhRSVSDKBAfwlf4FL2atOBmnxX8JbmWEEEGctpUglj
- glv0WuNQEdsFI66yeME6c9FQHy/eV7KxFyy3u35iPGL/QPufsu2nM/KaVsOSX+MZaRZR
- 4rVwmCTuNn6KWxkDq+VHaQmeDiD083Pm+YnM71xJdeSZVx1zEIJwtH85qk6OHbFXaqQf
- oVHLO75dj+sNsPM/wXOJL95R+3gIp0YJKjfm4NKlqrQZ258Osk4pefy2pFg2TJPQXZyN WA== 
-Received: from sc-exch02.marvell.com ([199.233.58.182])
-        by mx0a-0016f401.pphosted.com with ESMTP id 30dn8gm61f-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
-        Wed, 15 Apr 2020 14:20:11 -0700
-Received: from DC5-EXCH01.marvell.com (10.69.176.38) by SC-EXCH02.marvell.com
- (10.93.176.82) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Wed, 15 Apr
- 2020 14:20:09 -0700
-Received: from SC-EXCH02.marvell.com (10.93.176.82) by DC5-EXCH01.marvell.com
- (10.69.176.38) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Wed, 15 Apr
- 2020 14:20:09 -0700
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (104.47.57.170)
- by SC-EXCH02.marvell.com (10.93.176.82) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2 via Frontend Transport; Wed, 15 Apr 2020 14:20:08 -0700
+        id S2502830AbgDPI7j (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Thu, 16 Apr 2020 04:59:39 -0400
+Received: from mail-eopbgr760077.outbound.protection.outlook.com ([40.107.76.77]:10503
+        "EHLO NAM02-CY1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S2503105AbgDPI6d (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Thu, 16 Apr 2020 04:58:33 -0400
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=DhkJffdJQGCrXryXrstJ43lTnzsn/ikIPAxtMCkpO4AedHKFYHwjBvoHobqbJNCFLWyxFDJS8tfcsZ8JjcPPDv0LymKtwFrawyv4A68xL36Yh2qZiCflf/0GVNMwE5VdrT7GPhD87cW9t0d7VToMSuPDtBCrAgoOTOd5fe+CJPVXD0Z0JlgnoKL1EQqWCjunbyIC8FH9UoWllHSmpbObaL1rfhWrnbG/LebWFElFjJTKCSo/ZtQe5v6HEaMcOMcZVBc1IoHsIyYM/LiXo01dWv+VyLvpvT9lPUP65yrAtKN7Fo+9bU50o9jI1g7l3mx3yKO25z+w1RQgl2kkDvKMkA==
+ b=gHt+EC35ZZDXkiOZizSHp3c4NkCt+XKL3bdAjg7orEqwDj+EzZleLLoRa3vBZ600OhDcL3vVYCriiEeUTGDFEnbHQNOAygkn0nkVaiypcq4NmETKgJ3/aKXgGfUV6pPKx5/5Npgd6v/KD1nVq2QRwZghlUaFLRL4jeLbJH91DGG2wuBAI28fJC64LdqCkzMzMVQiWBqBzA06mecaM4NCkd8jlJ7M/IcrWQwjJAwOnUxNQ+pwyguiMbB7Dtb0rOCIfl/6McKclF000DLjPvElBL7B2EOVqlWlL7CfECtpY1sgldzEtibmwd9g28ldIKEeNNFl6HZNvec0FOaXI/WJ+A==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=RWAS2f5CbuBYhr7iOYbeETIIz4Gt120dhBXJvlbkzvE=;
- b=m6K7Lf4N+5O6kEs2LUe1PvupTYgWruSNQJJBz9calLKSpoHt8bAL6Toy9ccDyUMhDBQje91AIzbtY5Am/j365uX7Mji10yX3Rn+tP1P8TQwyWLfKmhr6/ODzo/StdpTpNKEOrqiv4PeEtM4MucICR45C3QGll7DN2OqI5gK3lnbGSHn7CfxVxViwXuthwFojtoAN9eR5bsLc0iQJpzXe5fDCT71JoxjrGK0KzCx7BZZdUUqXK5gGjS9I6rVcC01GL1W6+GlL9n8F2UbBMdSe40Y/wFg5B+f93FNu6Dgbl29LMSrRvlYtYBi+wsopJR64z0LcMUyjd2jNfy7OF02QWg==
+ bh=fUa6IAxx9gfP3sjKcKWh/Enms00gOXBuG8eD5elwhmY=;
+ b=KbDAaSeev//msgPTG89gWHjK8NRxOvaYjQxcJr5ZNvtfGVun3lkbJNnWWYfaart2UQx3xIYgdElmMK3B816ju6EHTSY70k7Ei/FgDuMYncGs9NlS86cQEeAISOPrj2c1pykVG39gVsKWJcAx2DmIxCuU5wq1bbEfA/vmUfXgNrlVxVc1QySHUGSz0V/o39hHakrfLGd9C5F/InUQmacWhM7rmL+0IXKHLFRCciumcTRCjRx7aVeRCSJ5y1Cx2BL9HBGUE8D3zOY2HGYatMcbNzkFHBrUmjrI8JnmPMYNLGOzpGi0i+yDLcCbjglpV3UxVqyHA9sP5E+5WgfwlrPSQw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=marvell.com; dmarc=pass action=none header.from=marvell.com;
- dkim=pass header.d=marvell.com; arc=none
+ smtp.mailfrom=windriver.com; dmarc=pass action=none
+ header.from=windriver.com; dkim=pass header.d=windriver.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=marvell.onmicrosoft.com; s=selector1-marvell-onmicrosoft-com;
+ d=windriversystems.onmicrosoft.com;
+ s=selector2-windriversystems-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=RWAS2f5CbuBYhr7iOYbeETIIz4Gt120dhBXJvlbkzvE=;
- b=S1mXK+MVQjFbjTwNJEPf+7lxVwny5FsfABy8OKjGL4KYb1oW/zjcISQRLROVA3npre4OOcsfWPhaxGnWIhWjCK+7bTTYDAkKRKNHvYLYLJ17h8j7qvaK1tuzgq5QwzOugn3vBswQYAhbOu0skp/19pA6eHDNuCnVc1MW+Mj81Kk=
-Received: from BYAPR18MB2661.namprd18.prod.outlook.com (2603:10b6:a03:136::26)
- by BYAPR18MB2759.namprd18.prod.outlook.com (2603:10b6:a03:10b::24) with
+ bh=fUa6IAxx9gfP3sjKcKWh/Enms00gOXBuG8eD5elwhmY=;
+ b=GGEYxj99jZZDzvljwc8rCZJEHf288yLT9tcyng8FJKi/T33qJSk3Jp89Ov84Rx6ZFMHR+cJykPWymxm1tErs6TEq65dIa9LY0UDinzGiC0ZaqthxiQ7r/MBMYERcrUWmE+dYerA8RMgI05+794ZKKwaFMOKmSel4lNtfgpNYIzQ=
+Authentication-Results: spf=none (sender IP is )
+ smtp.mailfrom=Zhe.He@windriver.com; 
+Received: from SN6PR11MB3360.namprd11.prod.outlook.com (2603:10b6:805:c8::30)
+ by SN6PR11MB3373.namprd11.prod.outlook.com (2603:10b6:805:c6::20) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2921.25; Wed, 15 Apr
- 2020 21:20:07 +0000
-Received: from BYAPR18MB2661.namprd18.prod.outlook.com
- ([fe80::a165:ffa5:f3eb:d62d]) by BYAPR18MB2661.namprd18.prod.outlook.com
- ([fe80::a165:ffa5:f3eb:d62d%7]) with mapi id 15.20.2900.028; Wed, 15 Apr 2020
- 21:20:07 +0000
-Date:   Wed, 15 Apr 2020 23:19:56 +0200
-From:   Robert Richter <rrichter@marvell.com>
-To:     Jason Yan <yanaijie@huawei.com>
-CC:     <bp@alien8.de>, <mchehab@kernel.org>, <tony.luck@intel.com>,
-        <james.morse@arm.com>, <linux-edac@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, Hulk Robot <hulkci@huawei.com>
-Subject: Re: [PATCH] EDAC: remove defined but not used 'bridge_str'
-Message-ID: <20200415211956.nnvqsjt4ekf2qido@rric.localdomain>
-References: <20200415085006.6732-1-yanaijie@huawei.com>
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2900.26; Thu, 16 Apr
+ 2020 08:40:41 +0000
+Received: from SN6PR11MB3360.namprd11.prod.outlook.com
+ ([fe80::75b1:da01:9747:ae65]) by SN6PR11MB3360.namprd11.prod.outlook.com
+ ([fe80::75b1:da01:9747:ae65%4]) with mapi id 15.20.2900.028; Thu, 16 Apr 2020
+ 08:40:40 +0000
+Subject: Re: [PATCH] x86/mce: Add compat_ioctl assignment to make it
+ compatible with 32-bit system
+To:     tony.luck@intel.com, bp@alien8.de, tglx@linutronix.de,
+        mingo@redhat.com, hpa@zytor.com, x86@kernel.org,
+        linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <1583303947-49858-1-git-send-email-zhe.he@windriver.com>
+From:   He Zhe <zhe.he@windriver.com>
+Message-ID: <1f449e01-3207-b699-b91f-d1c04626a447@windriver.com>
+Date:   Thu, 16 Apr 2020 16:40:31 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
+In-Reply-To: <1583303947-49858-1-git-send-email-zhe.he@windriver.com>
 Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20200415085006.6732-1-yanaijie@huawei.com>
-User-Agent: NeoMutt/20170113 (1.7.2)
-X-ClientProxiedBy: HE1PR05CA0139.eurprd05.prod.outlook.com
- (2603:10a6:7:28::26) To BYAPR18MB2661.namprd18.prod.outlook.com
- (2603:10b6:a03:136::26)
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-ClientProxiedBy: HK0PR03CA0116.apcprd03.prod.outlook.com
+ (2603:1096:203:b0::32) To SN6PR11MB3360.namprd11.prod.outlook.com
+ (2603:10b6:805:c8::30)
 MIME-Version: 1.0
 X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from rric.localdomain (31.208.96.227) by HE1PR05CA0139.eurprd05.prod.outlook.com (2603:10a6:7:28::26) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2900.17 via Frontend Transport; Wed, 15 Apr 2020 21:20:04 +0000
-X-Originating-IP: [31.208.96.227]
+Received: from [128.224.162.175] (60.247.85.82) by HK0PR03CA0116.apcprd03.prod.outlook.com (2603:1096:203:b0::32) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2921.26 via Frontend Transport; Thu, 16 Apr 2020 08:40:36 +0000
+X-Originating-IP: [60.247.85.82]
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 395c7210-0069-4d1a-5204-08d7e182c533
-X-MS-TrafficTypeDiagnostic: BYAPR18MB2759:
-X-Microsoft-Antispam-PRVS: <BYAPR18MB2759EB7AEA2F1BE196B952F2D9DB0@BYAPR18MB2759.namprd18.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:1417;
-X-Forefront-PRVS: 0374433C81
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR18MB2661.namprd18.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(10009020)(4636009)(396003)(39860400002)(366004)(346002)(376002)(136003)(8936002)(2906002)(316002)(4326008)(55016002)(186003)(81156014)(956004)(9686003)(8676002)(5660300002)(4744005)(6916009)(6506007)(16526019)(66946007)(6666004)(86362001)(66556008)(66476007)(478600001)(53546011)(1076003)(52116002)(7696005)(26005);DIR:OUT;SFP:1101;
-Received-SPF: None (protection.outlook.com: marvell.com does not designate
+X-MS-Office365-Filtering-Correlation-Id: bbf12f03-102f-4656-6b6a-08d7e1e1d80c
+X-MS-TrafficTypeDiagnostic: SN6PR11MB3373:
+X-Microsoft-Antispam-PRVS: <SN6PR11MB337346E3AE77A5A0F3124CBB8FD80@SN6PR11MB3373.namprd11.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:6790;
+X-Forefront-PRVS: 0375972289
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR11MB3360.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(10009020)(396003)(136003)(376002)(346002)(39850400004)(366004)(66476007)(66556008)(5660300002)(186003)(66946007)(6706004)(478600001)(2616005)(52116002)(16576012)(86362001)(6486002)(316002)(16526019)(6666004)(26005)(53546011)(956004)(36756003)(8676002)(81156014)(8936002)(31696002)(31686004)(2906002)(78286006);DIR:OUT;SFP:1101;
+Received-SPF: None (protection.outlook.com: windriver.com does not designate
  permitted sender hosts)
 X-MS-Exchange-SenderADCheck: 1
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: iv5YlADogKG+jHyG3A7qREjppuP6mHAjZ8AmKsrUA7gEJiZMMH3svddep9v+XivblFuT53rNeGEKvHe9YO57SzGWO01JOxqfzD9ciomblM+TPDza4uM2k7uBbvV0tR5hQCKq4gYeubl267r0+g1eXEXQvNz5KGPdJKSSoTJntCIzI5f8WY3LU/Y9xWWrzQd24xLf5ez6p9Z6JjILU4qjGD2zlcuVoOpXSHefLdIQiab1g9t2urHpqaH06oEwDhFskG4vB/wP+u/wUxOH1uJgO06tXkJaerRnR7Eay7CS2/kEmRnGMiyfQVJSKLxYXoZK55ePdR91jtwxklAA0bmFpXfWf9MXlvEV4MMNk4N4AGtfKxrn4cgUM/P8zyQFxdtttu9GR6gmPaZ3t33d/80G+1QsG5vkFFUN9y0FLtnQOcsDrb/M2TR2tDvf5lD1NOU6
-X-MS-Exchange-AntiSpam-MessageData: ariM+BmLFusoBIZy40EQH+HsROF0JLgvq6kURWYuPsR9MQ0lNnFFu6oZEhSBM3CzFe2Cf0S8c0Vt3iL5v6z7SBY1xAMWhKmikkNTaASbfNVkkDgFtzkdjuCiYWd0xODMfNFcqvNA00ifFfOwvLQyMA==
-X-MS-Exchange-CrossTenant-Network-Message-Id: 395c7210-0069-4d1a-5204-08d7e182c533
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Apr 2020 21:20:06.8706
+X-Microsoft-Antispam-Message-Info: /NgRsP7Cy6CX4ReN3ixZyEPD1HCEKFwmjGCjADM2N6ILhgZja2xaLjkZBSI7djmvvUj5xTzCx/dSspwLYLatB3Hm64UL/bdTMfDgaZPYXvBP96laOGkTcypuaQd21Ah+OBF0LzdCTiTDCHKDQYvMZTfBDSH5ZeDH8ymcs3rtnU2rwp16PgPjyCr8RdBeOvOWnbQk1Tm5kUDS0VSjeC5uJlhkBPGB2ssGfngKXkfxgzVbw5DZDdxjcZ+DzrU0PTukdsthWb+t1imWSEp9L51fydSbwaZOpOiSJs4nnmfqBMIZcidzKc8WpjoZPKfjISjVAS6LWeopkZy/5/8x7bwycCkGHEXrMDaca7DzGMQ1XtCcTl8VQp25pzYUV6BjwAey//s+SCUKjtTtr5qDdv7pXN+yx++3paa+asp/jO9d68bvDRi7IfhBsgO3p/34pGxwckoBcdXhozbAfvurp9yRSkXhKMbCbXbb909Y5a7aMeiNEx9nQM1Z+38YzHFGwsyyfC8INsXfBO8/3/tUCQ25BAUqQgzCU6m8Tm9DUcJ5Wg8=
+X-MS-Exchange-AntiSpam-MessageData: VV4xpqTXv1e6lFf3rEDRZDoyM90er7QWcu1rQw4aIRDg2ketk/le1iddSS4Ydr7rB523JsOoE3r/h9mpoXwKrn49rd+pkrCtlWfw6bn/qYyBgn82Gc3gGnX2tgTrgDq7nweYSdzooLPTA90auewDFA==
+X-OriginatorOrg: windriver.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: bbf12f03-102f-4656-6b6a-08d7e1e1d80c
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Apr 2020 08:40:40.7087
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 70e1fb47-1155-421d-87fc-2e58f638b6e0
+X-MS-Exchange-CrossTenant-Id: 8ddb2873-a1ad-4a18-ae4e-4644631433be
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: exhEnqwnrHCokmkDiObOS0aQj2FHvEAUBf83ARYYqiR0kENHkO4JqhTjSWvCiEXvDUd8wIR9iDQ7fimIJlEiEQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR18MB2759
-X-OriginatorOrg: marvell.com
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.676
- definitions=2020-04-15_08:2020-04-14,2020-04-15 signatures=0
+X-MS-Exchange-CrossTenant-UserPrincipalName: iTDZFF7+PqR2M7hmBrH9JHCUh/0lHkZfPbLm8deFLL2TJrEIqdC0TL3MhteMlNAChoKv1CCwD5dYp8beFOkshg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN6PR11MB3373
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On 15.04.20 16:50:06, Jason Yan wrote:
-> Fix the following gcc warning:
-> 
-> drivers/edac/amd8131_edac.c:47:21: warning: ‘bridge_str’ defined but not
-> used [-Wunused-const-variable=]
->  static char * const bridge_str[] = {
->                      ^~~~~~~~~~
-> 
-> Reported-by: Hulk Robot <hulkci@huawei.com>
-> Signed-off-by: Jason Yan <yanaijie@huawei.com>
+Can this be considered for the moment?
 
-Reviewed-by: Robert Richter <rrichter@marvell.com>
+Thanks,
+Zhe
+
+On 3/4/20 2:39 PM, zhe.he@windriver.com wrote:
+> From: He Zhe <zhe.he@windriver.com>
+>
+> 32-bit user-space program would get errors like the following from ioctl
+> syscall due to missing compat_ioctl.
+> MCE_GET_RECORD_LEN: Inappropriate ioctl for device
+>
+> compat_ptr_ioctl is provided as a generic implementation of .compat_ioctl
+> file operation to ioctl functions that either ignore the argument or pass
+> a pointer to a compatible data type.
+>
+> Signed-off-by: He Zhe <zhe.he@windriver.com>
+> ---
+>  arch/x86/kernel/cpu/mce/dev-mcelog.c | 1 +
+>  1 file changed, 1 insertion(+)
+>
+> diff --git a/arch/x86/kernel/cpu/mce/dev-mcelog.c b/arch/x86/kernel/cpu/mce/dev-mcelog.c
+> index 7c8958d..6c9b91b7 100644
+> --- a/arch/x86/kernel/cpu/mce/dev-mcelog.c
+> +++ b/arch/x86/kernel/cpu/mce/dev-mcelog.c
+> @@ -328,6 +328,7 @@ static const struct file_operations mce_chrdev_ops = {
+>  	.write			= mce_chrdev_write,
+>  	.poll			= mce_chrdev_poll,
+>  	.unlocked_ioctl		= mce_chrdev_ioctl,
+> +	.compat_ioctl		= compat_ptr_ioctl,
+>  	.llseek			= no_llseek,
+>  };
+>  
+
