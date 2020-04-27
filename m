@@ -2,73 +2,96 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 158451BAB62
-	for <lists+linux-edac@lfdr.de>; Mon, 27 Apr 2020 19:34:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B39671BAC2C
+	for <lists+linux-edac@lfdr.de>; Mon, 27 Apr 2020 20:19:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726252AbgD0ReM (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Mon, 27 Apr 2020 13:34:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34986 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726250AbgD0ReM (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Mon, 27 Apr 2020 13:34:12 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D126C0610D5;
-        Mon, 27 Apr 2020 10:34:12 -0700 (PDT)
-Received: from zn.tnic (p200300EC2F05F00014E720D2A42E8264.dip0.t-ipconnect.de [IPv6:2003:ec:2f05:f000:14e7:20d2:a42e:8264])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 992521EC0D0B;
-        Mon, 27 Apr 2020 19:34:10 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1588008850;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=ziGfCAfomKzl6PbHUax/kOvF/TnduRcl7QwWrxwzfCY=;
-        b=ZsJGbYySCGqBaH2Iq10RNlZKMjcnEVOSyZeQvV1kIv2eqIhM26s8sfUKFUP6etZHj/xt2j
-        qd9TsK37g3hYQiqjl1APvHcn+9dpoHgxkzo5OGcgMcBbUyd3SBES06GN8hez6eqSZsTphZ
-        S3X/3G1965IG4kL2ipTJI53+NHdtOzQ=
-Date:   Mon, 27 Apr 2020 19:34:02 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     "Luck, Tony" <tony.luck@intel.com>
-Cc:     Robert Richter <rrichter@marvell.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Aristeu Rozanski <aris@redhat.com>,
-        Matthias Brugger <mbrugger@suse.com>,
-        linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 06/10] EDAC/ghes: Remove local variable rdr_mask in
- ghes_edac_dmidecode()
-Message-ID: <20200427173402.GH11036@zn.tnic>
-References: <20200422115814.22205-1-rrichter@marvell.com>
- <20200422115814.22205-7-rrichter@marvell.com>
- <20200427070802.GA11036@zn.tnic>
- <20200427172408.GA13177@agluck-desk2.amr.corp.intel.com>
+        id S1726223AbgD0STG (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Mon, 27 Apr 2020 14:19:06 -0400
+Received: from mga07.intel.com ([134.134.136.100]:60964 "EHLO mga07.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725995AbgD0STG (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Mon, 27 Apr 2020 14:19:06 -0400
+IronPort-SDR: r8hrnD4xEQX1NDqO/iu7uKHjsAi08s3lzBcBATeDGb/wY4epqo3xGV85hPrppI5oMiym4415zX
+ vEX6GgPs+BGA==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Apr 2020 11:19:05 -0700
+IronPort-SDR: hSKJ2wdAprtTNItd6V6pDBVhSbvJd5aRenMEOiIvofuY60dco2kW9JvJpMOq/llW/NPn/9bOPv
+ CnlV9y/RuQng==
+X-IronPort-AV: E=Sophos;i="5.73,325,1583222400"; 
+   d="scan'208";a="247480665"
+Received: from agluck-desk2.sc.intel.com (HELO agluck-desk2.amr.corp.intel.com) ([10.3.52.68])
+  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Apr 2020 11:19:04 -0700
+Date:   Mon, 27 Apr 2020 11:19:03 -0700
+From:   "Luck, Tony" <tony.luck@intel.com>
+To:     He Zhe <zhe.he@windriver.com>
+Cc:     bp@alien8.de, tglx@linutronix.de, mingo@redhat.com, hpa@zytor.com,
+        x86@kernel.org, linux-edac@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] x86/mce: Add compat_ioctl assignment to make it
+ compatible with 32-bit system
+Message-ID: <20200427181903.GA14473@agluck-desk2.amr.corp.intel.com>
+References: <1583303947-49858-1-git-send-email-zhe.he@windriver.com>
+ <1f449e01-3207-b699-b91f-d1c04626a447@windriver.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200427172408.GA13177@agluck-desk2.amr.corp.intel.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <1f449e01-3207-b699-b91f-d1c04626a447@windriver.com>
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Mon, Apr 27, 2020 at 10:24:08AM -0700, Luck, Tony wrote:
-> That isn't the same. The previous version checked that BOTH bits
-> 7 and 13 were set. Your version checks for either bit.
+On Thu, Apr 16, 2020 at 04:40:31PM +0800, He Zhe wrote:
+> Can this be considered for the moment?
+> 
+> Thanks,
+> Zhe
+> 
+> On 3/4/20 2:39 PM, zhe.he@windriver.com wrote:
+> > From: He Zhe <zhe.he@windriver.com>
+> >
+> > 32-bit user-space program would get errors like the following from ioctl
+> > syscall due to missing compat_ioctl.
+> > MCE_GET_RECORD_LEN: Inappropriate ioctl for device
+> >
+> > compat_ptr_ioctl is provided as a generic implementation of .compat_ioctl
+> > file operation to ioctl functions that either ignore the argument or pass
+> > a pointer to a compatible data type.
 
-Whoops, I'm confused again. ;-\
+I'm not super-familiar with the compat ioctl bits.  But this looks plausible.
 
-> Looks like the original with the local variable was checking for both
-> bits set.
+All three of the ioctl's for this driver have a "pointer to integer" for the
+"return" value.  And "int" is a compatible type between i386 and x86_64.
 
-Yeah, let's leave it as it is. I prefer the rdr_mask thing.
+I don't have a system setup to build a 32-bit binary to test the theory,
+but I assume that you have built something that tests all three:
 
-Thx.
+	MCE_GET_RECORD_LEN
+	MCE_GET_LOG_LEN
+	MCE_GETCLEAR_FLAGS
 
--- 
-Regards/Gruss,
-    Boris.
+So I guess:
 
-https://people.kernel.org/tglx/notes-about-netiquette
+Acked-by: Tony Luck <tony.luck@intel.com>
+
+> >
+> > Signed-off-by: He Zhe <zhe.he@windriver.com>
+> > ---
+> >  arch/x86/kernel/cpu/mce/dev-mcelog.c | 1 +
+> >  1 file changed, 1 insertion(+)
+> >
+> > diff --git a/arch/x86/kernel/cpu/mce/dev-mcelog.c b/arch/x86/kernel/cpu/mce/dev-mcelog.c
+> > index 7c8958d..6c9b91b7 100644
+> > --- a/arch/x86/kernel/cpu/mce/dev-mcelog.c
+> > +++ b/arch/x86/kernel/cpu/mce/dev-mcelog.c
+> > @@ -328,6 +328,7 @@ static const struct file_operations mce_chrdev_ops = {
+> >  	.write			= mce_chrdev_write,
+> >  	.poll			= mce_chrdev_poll,
+> >  	.unlocked_ioctl		= mce_chrdev_ioctl,
+> > +	.compat_ioctl		= compat_ptr_ioctl,
+> >  	.llseek			= no_llseek,
+> >  };
+> >  
+> 
