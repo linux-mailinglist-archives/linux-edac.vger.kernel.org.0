@@ -2,113 +2,98 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E0EF61B7E70
-	for <lists+linux-edac@lfdr.de>; Fri, 24 Apr 2020 20:57:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD4DA1B9821
+	for <lists+linux-edac@lfdr.de>; Mon, 27 Apr 2020 09:08:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729199AbgDXS5l (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Fri, 24 Apr 2020 14:57:41 -0400
-Received: from mga03.intel.com ([134.134.136.65]:21121 "EHLO mga03.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728953AbgDXS5l (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Fri, 24 Apr 2020 14:57:41 -0400
-IronPort-SDR: PHrvr/XHV6zB7YsUtS861I2d7K/MMY/c6t33wWRemRgJxQJcsgXzMAQ555NH+YyK0fjhGe6TSq
- cy8Cm/h8g6mg==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Apr 2020 11:57:40 -0700
-IronPort-SDR: LnB8aXbPjv5c2Pwyyjv7onfs2A4ml/9YZnFObOEQZk9zTTiQBWUNDHApvnEKTaT2Md8kR1Zdk9
- AEJZ6JBRCsew==
-X-IronPort-AV: E=Sophos;i="5.73,313,1583222400"; 
-   d="scan'208";a="430893784"
-Received: from agluck-desk2.sc.intel.com ([10.3.52.68])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Apr 2020 11:57:39 -0700
-From:   Tony Luck <tony.luck@intel.com>
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     Qiuxu Zhuo <qiuxu.zhuo@intel.com>,
-        Jerry Chen <jerry.t.chen@intel.com>,
-        Jin Wen <wen.jin@intel.com>, Tony Luck <tony.luck@intel.com>,
+        id S1726566AbgD0HIM (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Mon, 27 Apr 2020 03:08:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49894 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726504AbgD0HIM (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Mon, 27 Apr 2020 03:08:12 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 594ABC061A0F;
+        Mon, 27 Apr 2020 00:08:12 -0700 (PDT)
+Received: from zn.tnic (p200300EC2F05F000D9541802070C4AE1.dip0.t-ipconnect.de [IPv6:2003:ec:2f05:f000:d954:1802:70c:4ae1])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id F2D5D1EC0CDA;
+        Mon, 27 Apr 2020 09:08:09 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1587971290;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=3CxZwGBTt+ToXUeMtFGEKT2BZI/KNjbUZlpY/rw/Ztg=;
+        b=W2a981xvH2aNCGTvcwxFjU0F46f/6RRi1rqoV5zYGK9c2LGLloo6nejMad5RsnNg3Yr6+R
+        h3zLgOweECmDHK0Te5ziXOnmPWVOoXM9xyvInwmywrfjvgN7fliS+r2rBH9+Yfj6bqV606
+        repydKjEz666T8RBkLKYkdrNiD0BSHQ=
+Date:   Mon, 27 Apr 2020 09:08:02 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Robert Richter <rrichter@marvell.com>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Tony Luck <tony.luck@intel.com>,
+        James Morse <james.morse@arm.com>,
         Aristeu Rozanski <aris@redhat.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-edac@vger.kernel.org
-Subject: [PATCH 2/2] EDAC, i10nm: Fix i10nm_edac loading failure on some servers
-Date:   Fri, 24 Apr 2020 11:57:38 -0700
-Message-Id: <20200424185738.7985-3-tony.luck@intel.com>
-X-Mailer: git-send-email 2.21.1
-In-Reply-To: <20200424185738.7985-1-tony.luck@intel.com>
-References: <20200424185738.7985-1-tony.luck@intel.com>
+        Matthias Brugger <mbrugger@suse.com>,
+        linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 06/10] EDAC/ghes: Remove local variable rdr_mask in
+ ghes_edac_dmidecode()
+Message-ID: <20200427070802.GA11036@zn.tnic>
+References: <20200422115814.22205-1-rrichter@marvell.com>
+ <20200422115814.22205-7-rrichter@marvell.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20200422115814.22205-7-rrichter@marvell.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-From: Qiuxu Zhuo <qiuxu.zhuo@intel.com>
+On Wed, Apr 22, 2020 at 01:58:10PM +0200, Robert Richter wrote:
+> The local variable rdr_mask serves as a static constant here. It hides
+> what the code is doing. Remove it and replace it with the actual logic
+> that checks some bits.
+> 
+> Signed-off-by: Robert Richter <rrichter@marvell.com>
+> ---
+>  drivers/edac/ghes_edac.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/edac/ghes_edac.c b/drivers/edac/ghes_edac.c
+> index a5890afa9c71..038e560fd332 100644
+> --- a/drivers/edac/ghes_edac.c
+> +++ b/drivers/edac/ghes_edac.c
+> @@ -191,7 +191,6 @@ static void ghes_edac_dmidecode(const struct dmi_header *dh, void *arg)
+>  	if (dh->type == DMI_ENTRY_MEM_DEVICE) {
+>  		struct memdev_dmi_entry *entry = (struct memdev_dmi_entry *)dh;
+>  		struct dimm_info *dimm = edac_get_dimm(mci, dimm_fill->count, 0, 0);
+> -		u16 rdr_mask = BIT(7) | BIT(13);
+>  
+>  		if (entry->size == 0xffff) {
+>  			pr_info("Can't get DIMM%i size\n",
+> @@ -241,7 +240,8 @@ static void ghes_edac_dmidecode(const struct dmi_header *dh, void *arg)
+>  		default:
+>  			if (entry->type_detail & BIT(6))
+>  				dimm->mtype = MEM_RMBS;
+> -			else if ((entry->type_detail & rdr_mask) == rdr_mask)
+> +			else if ((entry->type_detail & BIT(7)) &&
+> +				 (entry->type_detail & BIT(13)))
 
-It failed to load the i10nm_edac driver on Ice Lake and
-Tremont/Jacobsville servers if their CPU stepping >= 4 and failed
-on Ice Lake-D servers from stepping 0. The root cause was that for
-Ice Lake and Tremont/Jacobsville servers with CPU stepping >=4, the
-offset for bus number configuration register was updated from 0xcc
-to 0xd0. For Ice Lake-D servers, all the steppings use the updated
-0xd0 offset.
+Well, "checks some bits" doesn't make it more telling than checking a
+descriptive name like "rdr_mask" but ok, since we're assigning MEM_RDR
+here, it is still clear what the check does.
 
-Fix the issue by using the appropriate offset for bus number
-configuration register according to the CPU model number and stepping.
+Btw, please write it like this:
 
-Reported-by: Jerry Chen <jerry.t.chen@intel.com>
-Reported-and-tested-by: Jin Wen <wen.jin@intel.com>
-Signed-off-by: Qiuxu Zhuo <qiuxu.zhuo@intel.com>
-Signed-off-by: Tony Luck <tony.luck@intel.com>
----
- drivers/edac/i10nm_base.c | 20 ++++++++++++++++----
- 1 file changed, 16 insertions(+), 4 deletions(-)
+			else if (entry->type_detail & (BIT(7) | BIT(13)))
 
-diff --git a/drivers/edac/i10nm_base.c b/drivers/edac/i10nm_base.c
-index ba4578c6ef2b..ebb45738c11b 100644
---- a/drivers/edac/i10nm_base.c
-+++ b/drivers/edac/i10nm_base.c
-@@ -122,16 +122,24 @@ static int i10nm_get_all_munits(void)
- 	return 0;
- }
- 
--static struct res_config i10nm_cfg = {
-+/* ATOM_TREMONT_D, ICELAKE_X */
-+static struct res_config i10nm_cfg0 = {
- 	.type			= I10NM,
- 	.decs_did		= 0x3452,
- 	.busno_cfg_offset	= 0xcc,
- };
- 
-+/* ICELAKE_D */
-+static struct res_config i10nm_cfg1 = {
-+	.type			= I10NM,
-+	.decs_did		= 0x3452,
-+	.busno_cfg_offset	= 0xd0,
-+};
-+
- static const struct x86_cpu_id i10nm_cpuids[] = {
--	X86_MATCH_INTEL_FAM6_MODEL(ATOM_TREMONT_D,	&i10nm_cfg),
--	X86_MATCH_INTEL_FAM6_MODEL(ICELAKE_X,		&i10nm_cfg),
--	X86_MATCH_INTEL_FAM6_MODEL(ICELAKE_D,		&i10nm_cfg),
-+	X86_MATCH_INTEL_FAM6_MODEL(ATOM_TREMONT_D,	&i10nm_cfg0),
-+	X86_MATCH_INTEL_FAM6_MODEL(ICELAKE_X,		&i10nm_cfg0),
-+	X86_MATCH_INTEL_FAM6_MODEL(ICELAKE_D,		&i10nm_cfg1),
- 	{}
- };
- MODULE_DEVICE_TABLE(x86cpu, i10nm_cpuids);
-@@ -257,6 +265,10 @@ static int __init i10nm_init(void)
- 		return -ENODEV;
- 	cfg = (struct res_config *)id->driver_data;
- 
-+	/* Newer steppings have different offset for ATOM_TREMONT_D/ICELAKE_X */
-+	if (boot_cpu_data.x86_stepping >= 4)
-+		cfg->busno_cfg_offset = 0xd0;
-+
- 	rc = skx_get_hi_lo(0x09a2, off, &tolm, &tohm);
- 	if (rc)
- 		return rc;
+Thx.
+
 -- 
-2.21.1
+Regards/Gruss,
+    Boris.
 
+https://people.kernel.org/tglx/notes-about-netiquette
