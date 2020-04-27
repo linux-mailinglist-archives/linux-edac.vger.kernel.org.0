@@ -2,33 +2,30 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 283BF1BA59C
-	for <lists+linux-edac@lfdr.de>; Mon, 27 Apr 2020 16:01:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B5AA1BAA2D
+	for <lists+linux-edac@lfdr.de>; Mon, 27 Apr 2020 18:39:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727966AbgD0OA7 (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Mon, 27 Apr 2020 10:00:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57876 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727933AbgD0OAw (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Mon, 27 Apr 2020 10:00:52 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADB8AC0610D5;
-        Mon, 27 Apr 2020 07:00:51 -0700 (PDT)
-Received: from zn.tnic (p200300EC2F05F000ACB29DFFDE7AC3C9.dip0.t-ipconnect.de [IPv6:2003:ec:2f05:f000:acb2:9dff:de7a:c3c9])
+        id S1726030AbgD0QjF (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Mon, 27 Apr 2020 12:39:05 -0400
+Received: from mail.skyhub.de ([5.9.137.197]:59884 "EHLO mail.skyhub.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725852AbgD0QjF (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Mon, 27 Apr 2020 12:39:05 -0400
+Received: from zn.tnic (p200300EC2F05F000C0A7B2478B940873.dip0.t-ipconnect.de [IPv6:2003:ec:2f05:f000:c0a7:b247:8b94:873])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 051BC1EC0D21;
-        Mon, 27 Apr 2020 16:00:49 +0200 (CEST)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 1D1661EC0D28;
+        Mon, 27 Apr 2020 18:39:03 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1587996050;
+        t=1588005543;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=gQyJ11P5tivvLKUDiEhjBf0KP30jTDiuWezjtD55r5k=;
-        b=o5I+3Fo2V/A1ngZQovDfjFGfYcSHt3DEtamirS28hpdqSZcbVvoee+Wfc78mxWcFySh7p2
-        ckyceC3H4UoG0f1kaKF65y/TnkYlKxIrnv+AV7lXlC6YQDsU8tEBcJq54+EdP7ewHsiFyk
-        QsP0skNBlv4+k5e8A8bD8K3fnhNZQxg=
-Date:   Mon, 27 Apr 2020 16:00:43 +0200
+        bh=zrDEZKXqMddKHBeVW4B30r2AAyajrzYPXMCdoxhRD6s=;
+        b=CfgpuXtdJKkIhXvCsOHwNYSxGvglB//MVGa6IJXxl1O7/aNWh36sMtCYwyflyURzJXfvk6
+        iIDx6ja8ru8a6cvJoQ054606OKeVarUTn01wxXkDyzvDH5wNtNbmLSvlckBvC3AlpZ0XaS
+        7rHTevc4E0IhivmLhWuG8xOQ9oIHNt4=
+Date:   Mon, 27 Apr 2020 18:38:56 +0200
 From:   Borislav Petkov <bp@alien8.de>
 To:     Robert Richter <rrichter@marvell.com>
 Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
@@ -37,38 +34,140 @@ Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         Aristeu Rozanski <aris@redhat.com>,
         Matthias Brugger <mbrugger@suse.com>,
         linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 07/10] EDAC/ghes: Cleanup struct ghes_edac_dimm_fill,
- rename it to ghes_dimm_fill
-Message-ID: <20200427135923.GF11036@zn.tnic>
+Subject: Re: [PATCH v2 08/10] EDAC/ghes: Carve out MC device handling into
+ separate functions
+Message-ID: <20200427163856.GG11036@zn.tnic>
 References: <20200422115814.22205-1-rrichter@marvell.com>
- <20200422115814.22205-8-rrichter@marvell.com>
+ <20200422115814.22205-9-rrichter@marvell.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20200422115814.22205-8-rrichter@marvell.com>
+In-Reply-To: <20200422115814.22205-9-rrichter@marvell.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Wed, Apr 22, 2020 at 01:58:11PM +0200, Robert Richter wrote:
-> The struct is used to store temporary data for the dmidecode callback.
-> Clean this up a bit:
-> 
->  1) Rename member count to index since this is what it is used for.
-> 
->  2) Move code close to ghes_edac_dmidecode() where it is used.
-> 
->  3) While at it, use edac_get_dimm_by_index().
+On Wed, Apr 22, 2020 at 01:58:12PM +0200, Robert Richter wrote:
+> The functions are too long, carve out code that handles MC devices
+> into the new functions ghes_mc_create(), ghes_mc_add_or_free() and
+> ghes_mc_free(). Apart from better code readability the functions can
+> be reused and the implementation of the error paths becomes easier.
 > 
 > Signed-off-by: Robert Richter <rrichter@marvell.com>
 > ---
->  drivers/edac/ghes_edac.c | 24 ++++++++++++------------
->  1 file changed, 12 insertions(+), 12 deletions(-)
+>  drivers/edac/ghes_edac.c | 141 +++++++++++++++++++++++----------------
+>  1 file changed, 83 insertions(+), 58 deletions(-)
+> 
+> diff --git a/drivers/edac/ghes_edac.c b/drivers/edac/ghes_edac.c
+> index 4eadc5b344c8..af0a769071f4 100644
+> --- a/drivers/edac/ghes_edac.c
+> +++ b/drivers/edac/ghes_edac.c
+> @@ -535,16 +535,88 @@ static struct acpi_platform_list plat_list[] = {
+>  	{ } /* End */
+>  };
+>  
+> -int ghes_edac_register(struct ghes *ghes, struct device *dev)
+> +static struct mem_ctl_info *ghes_mc_create(struct device *dev, int mc_idx,
+> +					int num_dimm)
 
-Ok except the commit title is wrong. And yes, pls keep it "dimm_fill" -
-short and sweet and without yet another "ghes" in the name. :)
+Align arguments on the opening brace. The other functions need that too.
+
+>  {
+> -	bool fake = false;
+> -	int rc = 0, num_dimm = 0;
+> +	struct edac_mc_layer layers[1];
+>  	struct mem_ctl_info *mci;
+>  	struct ghes_mci *pvt;
+> -	struct edac_mc_layer layers[1];
+> -	struct dimm_fill dimm_fill;
+> +
+> +	layers[0].type = EDAC_MC_LAYER_ALL_MEM;
+> +	layers[0].size = num_dimm;
+> +	layers[0].is_virt_csrow = true;
+> +
+> +	mci = edac_mc_alloc(mc_idx, ARRAY_SIZE(layers), layers, sizeof(*pvt));
+> +	if (!mci)
+> +		return NULL;
+> +
+> +	pvt		= mci->pvt_info;
+> +	pvt->mci	= mci;
+> +
+> +	mci->pdev = dev;
+> +	mci->mtype_cap = MEM_FLAG_EMPTY;
+> +	mci->edac_ctl_cap = EDAC_FLAG_NONE;
+> +	mci->edac_cap = EDAC_FLAG_NONE;
+> +	mci->mod_name = "ghes_edac.c";
+> +	mci->ctl_name = "ghes_edac";
+> +	mci->dev_name = "ghes";
+> +
+> +	return mci;
+> +}
+> +
+> +static int ghes_mc_add_or_free(struct mem_ctl_info *mci,
+> +			struct list_head *dimm_list)
+
+No, I think we talked about this already. This function should be
+called:
+
+	ghes_mc_add()
+
+and should do one thing and one thing only in good old unix tradition:
+add the MC.
+
+> +{
+>  	unsigned long flags;
+> -	int idx = -1;
+> +	int rc;
+> +
+> +	rc = edac_mc_add_mc(mci);
+> +	if (rc < 0) {
+
+> +		ghes_dimm_release(dimm_list);
+> +		edac_mc_free(mci);
+> +		return rc;
+
+Those last three lines should be called by the *caller* of
+ghes_mc_add(), when latter returns an error value.
+
+> +	}
+> +
+> +	spin_lock_irqsave(&ghes_lock, flags);
+> +	ghes_pvt = mci->pvt_info;
+> +	list_splice_tail(dimm_list, &ghes_dimm_list);
+> +	spin_unlock_irqrestore(&ghes_lock, flags);
+> +
+> +	return 0;
+> +}
+> +
+> +static void ghes_mc_free(void)
+> +{
+> +	struct mem_ctl_info *mci;
+> +	unsigned long flags;
+> +	LIST_HEAD(dimm_list);
+> +
+> +	/*
+> +	 * Wait for the irq handler being finished.
+> +	 */
+> +	spin_lock_irqsave(&ghes_lock, flags);
+> +	mci = ghes_pvt ? ghes_pvt->mci : NULL;
+> +	ghes_pvt = NULL;
+> +	list_splice_init(&ghes_dimm_list, &dimm_list);
+> +	spin_unlock_irqrestore(&ghes_lock, flags);
+> +
+> +	ghes_dimm_release(&dimm_list);
+> +
+> +	if (!mci)
+> +		return;
+> +
+> +	mci = edac_mc_del_mc(mci->pdev);
+> +	if (mci)
+> +		edac_mc_free(mci);
+> +}
+
+This function needs to do only freeing of the mc. The list splicing and
+dimm releasing needs to be done by its caller, before calling it.
 
 Thx.
 
