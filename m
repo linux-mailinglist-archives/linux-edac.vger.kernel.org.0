@@ -2,92 +2,82 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BD7D31BB082
-	for <lists+linux-edac@lfdr.de>; Mon, 27 Apr 2020 23:31:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 15F581BBBE7
+	for <lists+linux-edac@lfdr.de>; Tue, 28 Apr 2020 13:07:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726182AbgD0Vb3 (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Mon, 27 Apr 2020 17:31:29 -0400
-Received: from mail-ot1-f65.google.com ([209.85.210.65]:39105 "EHLO
-        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726030AbgD0Vb3 (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Mon, 27 Apr 2020 17:31:29 -0400
-Received: by mail-ot1-f65.google.com with SMTP id m13so28923006otf.6;
-        Mon, 27 Apr 2020 14:31:28 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=P3/VvZUA9zwno+73vZLI4qG6D4JXKfA1s3Po7FwNPGs=;
-        b=owhqWAXN1Rwn8UT5PiawvSvU2OPzhL87Vis3K3cchKghfPJzUm5yA2f8CJVOwqNH9o
-         J6zkpAwTyTpfMykOYJak8JDrNfonVd/tzCXWrAicY23IfYttzeU0pPu64hvJ3dlgc6OT
-         GSu7E917hR7rA/xvbp1fXyI51oKfzZjUEw0xMUV1oGxI1TxRi3AMe/AeUgKuyCxQX7fP
-         AV5VWpHAtoQQOEyegIzkhjPirnfprJ2FNLOG+rN1Kaug9aT0Hr6gRe+MxaV9rNiWNz9n
-         f0caf8hnuj5rVQjdgOhRT4Dv/g13UB+d0g+Nspl17s1wZKX4Z0wEDXQ0uYKUfAH8706b
-         ZOjA==
-X-Gm-Message-State: AGi0PuY44Y1zIMS2X3LkR8i0zcRVGqhuVqoMbA7GkERPZ1e65YGvqOgq
-        8QyTMXRPo2R5ygstnymbpA==
-X-Google-Smtp-Source: APiQypLNeTWAxwwOfxU2MVkwYzjoiYWvXpMeZLwojCWXww6d2kmG4sLN+TM4J4N77uDJJPoW1+5EMQ==
-X-Received: by 2002:aca:3a83:: with SMTP id h125mr598693oia.64.1588023088290;
-        Mon, 27 Apr 2020 14:31:28 -0700 (PDT)
-Received: from rob-hp-laptop (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id p13sm4374770oom.34.2020.04.27.14.31.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Apr 2020 14:31:27 -0700 (PDT)
-Received: (nullmailer pid 30448 invoked by uid 1000);
-        Mon, 27 Apr 2020 21:31:26 -0000
-Date:   Mon, 27 Apr 2020 16:31:26 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Dhananjay Kangude <dkangude@cadence.com>
-Cc:     linux-edac@vger.kernel.org, bp@alien8.de, mchehab@kernel.org,
-        tony.luck@intel.com, james.morse@arm.com,
-        linux-kernel@vger.kernel.org, mparab@cadence.com,
-        robh+dt@kernel.org, devicetree@vger.kernel.org,
-        Dhananjay Kangude <dkangude@cadence.com>
-Subject: Re: [PATCH v4 1/2] dt-bindings: edac: Add cadence ddr mc support
-Message-ID: <20200427213126.GA26416@bogus>
-References: <20200424083155.30918-1-dkangude@cadence.com>
- <20200424083155.30918-2-dkangude@cadence.com>
+        id S1726416AbgD1LHK (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Tue, 28 Apr 2020 07:07:10 -0400
+Received: from mail.skyhub.de ([5.9.137.197]:47434 "EHLO mail.skyhub.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726345AbgD1LHJ (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Tue, 28 Apr 2020 07:07:09 -0400
+Received: from zn.tnic (p200300EC2F0EA50005F31991FCF74C40.dip0.t-ipconnect.de [IPv6:2003:ec:2f0e:a500:5f3:1991:fcf7:4c40])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 6EB821EC0CE4;
+        Tue, 28 Apr 2020 13:07:08 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1588072028;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=6yM3ywV4SHYRhMID8a0485MgrxeuX8DEuZQLHvXZu6Q=;
+        b=JMxXKhjn18H3V9nLLHLvhBv7M38fREPnFGpmQ/rKPlrxu3FxzTLqpP8b50grNQYfWT85Cw
+        XgwLzTnKZ3tM6dRdrUvBwrJmkxNPMoIiz82Ihj/jG3OWo/eOhQ9B89fILz4RVTFYORo0RB
+        3y/So7HpASg3dOx1fp6J5wslbr2xbgg=
+Date:   Tue, 28 Apr 2020 13:06:59 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     robh+dt@kernel.org
+Cc:     Talel Shenhar <talel@amazon.com>, mchehab@kernel.org,
+        james.morse@arm.com, davem@davemloft.net,
+        gregkh@linuxfoundation.org, nicolas.ferre@microchip.com,
+        mark.rutland@arm.com, catalin.marinas@arm.com, will@kernel.org,
+        linux-edac@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        dwmw@amazon.co.uk, benh@kernel.crashing.org, hhhawa@amazon.com,
+        ronenk@amazon.com, jonnyc@amazon.com, hanochu@amazon.com,
+        eitan@amazon.com
+Subject: Re: [PATCH v6 1/2] dt-bindings: edac: al-mc-edac: Amazon's Annapurna
+ Labs Memory Controller EDAC
+Message-ID: <20200428110659.GA11272@zn.tnic>
+References: <20200224134132.23924-1-talel@amazon.com>
+ <20200224134132.23924-2-talel@amazon.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20200424083155.30918-2-dkangude@cadence.com>
+In-Reply-To: <20200224134132.23924-2-talel@amazon.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Fri, 24 Apr 2020 10:31:54 +0200, Dhananjay Kangude wrote:
-> Add documentation for cadence ddr memory controller EDAC DTS bindings
+On Mon, Feb 24, 2020 at 03:41:31PM +0200, Talel Shenhar wrote:
+> Document Amazon's Annapurna Labs Memory Controller EDAC SoC binding.
 > 
-> Signed-off-by: Dhananjay Kangude <dkangude@cadence.com>
+> Signed-off-by: Talel Shenhar <talel@amazon.com>
+> Reviewed-by: Rob Herring <robh@kernel.org>
 > ---
->  .../devicetree/bindings/edac/cdns,ddr-edac.yaml    |   45 ++++++++++++++++++++
->  1 files changed, 45 insertions(+), 0 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/edac/cdns,ddr-edac.yaml
+>  .../bindings/edac/amazon,al-mc-edac.yaml      | 52 +++++++++++++++++++
+>  1 file changed, 52 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/edac/amazon,al-mc-edac.yaml
 > 
+> diff --git a/Documentation/devicetree/bindings/edac/amazon,al-mc-edac.yaml b/Documentation/devicetree/bindings/edac/amazon,al-mc-edac.yaml
+> new file mode 100644
+> index 000000000000..20505f37c9f8
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/edac/amazon,al-mc-edac.yaml
+> @@ -0,0 +1,52 @@
+> +# SPDX-License-Identifier: GPL-2.0-only
 
-My bot found errors running 'make dt_binding_check' on your patch:
+WARNING: DT binding documents should be licensed (GPL-2.0-only OR BSD-2-Clause)
+#36: FILE: Documentation/devicetree/bindings/edac/amazon,al-mc-edac.yaml:1:
++# SPDX-License-Identifier: GPL-2.0-only
 
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/edac/cdns,ddr-edac.yaml: properties:compatible:items: ['cdns,ddr4-mc-edac'] is not valid under any of the given schemas (Possible causes of the failure):
-	/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/edac/cdns,ddr-edac.yaml: properties:compatible:items: ['cdns,ddr4-mc-edac'] is not of type 'object', 'boolean'
-	/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/edac/cdns,ddr-edac.yaml: properties:compatible:items:0: 'cdns,ddr4-mc-edac' is not of type 'object', 'boolean'
+Hi Rob, should I listen to checkpatch or ignore it?
 
-Documentation/devicetree/bindings/Makefile:11: recipe for target 'Documentation/devicetree/bindings/edac/cdns,ddr-edac.example.dts' failed
-make[1]: *** [Documentation/devicetree/bindings/edac/cdns,ddr-edac.example.dts] Error 1
-make[1]: *** Waiting for unfinished jobs....
-warning: no schema found in file: Documentation/devicetree/bindings/edac/cdns,ddr-edac.yaml
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/edac/cdns,ddr-edac.yaml: ignoring, error in schema: properties: compatible: items
-warning: no schema found in file: Documentation/devicetree/bindings/edac/cdns,ddr-edac.yaml
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/edac/cdns,ddr-edac.yaml: ignoring, error in schema: properties: compatible: items
-Makefile:1300: recipe for target 'dt_binding_check' failed
-make: *** [dt_binding_check] Error 2
+-- 
+Regards/Gruss,
+    Boris.
 
-See https://patchwork.ozlabs.org/patch/1276250
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure dt-schema is up to date:
-
-pip3 install git+https://github.com/devicetree-org/dt-schema.git@master --upgrade
-
-Please check and re-submit.
+https://people.kernel.org/tglx/notes-about-netiquette
