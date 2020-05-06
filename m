@@ -2,98 +2,96 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BAD11C714F
-	for <lists+linux-edac@lfdr.de>; Wed,  6 May 2020 15:04:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 37A0A1C761A
+	for <lists+linux-edac@lfdr.de>; Wed,  6 May 2020 18:19:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728106AbgEFNEP (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Wed, 6 May 2020 09:04:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36794 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1728045AbgEFNEP (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Wed, 6 May 2020 09:04:15 -0400
-Received: from mail-ot1-x341.google.com (mail-ot1-x341.google.com [IPv6:2607:f8b0:4864:20::341])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79B5CC061A0F
-        for <linux-edac@vger.kernel.org>; Wed,  6 May 2020 06:04:15 -0700 (PDT)
-Received: by mail-ot1-x341.google.com with SMTP id g19so1250517otk.5
-        for <linux-edac@vger.kernel.org>; Wed, 06 May 2020 06:04:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=ogodDjzd8PHPpuPSoClvKVCajMEhNTrcVTpVmFQpWzM=;
-        b=Tl3aEsHTeXmVOIOXfFBxu2EHTvP5G7TNzwOhxJDhxf6QAtBD2tg8HGDAs/0bwhSBA8
-         80Gfe8lXDCHtwsV86EHjdJoCeFPFUUg0qIPWxCV1CoCZPv7M8qal84X7Bh2qsGTSQnt3
-         2tSP1UEsVB4FOkkify1/M5F3heIEnaTeof5Fq+14vO2tMehJeNmw22oTf4u3/cJY+i6X
-         yniIr12DN+lw/AdqouGEhyPzD/TYKVMIzJlBM5Q6D28qPzU43mJ+kDgpAxJ/dYnUyfiu
-         hEwrNFUj1xrX4YuOOsfPNIECP/GAhnmcT0SLshniTY55nHBJtdAycXSsBQtlnXGUJKgD
-         0HZA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=ogodDjzd8PHPpuPSoClvKVCajMEhNTrcVTpVmFQpWzM=;
-        b=VVSv2VzGwSlxA+Mi9I1f7MT+jbhgaQ6RfdvucFc1KTbj79lV9JBLgIdewEFKSECxv5
-         PxjCju8N+uARxUTjuK6SdiDebVArZATJtDYX3BG8Q5jVgIBIP1V3vYyg07Z6DkYLeXIX
-         6pBX9oUS46CkzyqkHPNnIEphocgMe2ZtfBPd0oMX1BEW1mypDjAudXBO+ZWXHjsPWGIu
-         xh8UNfNlNn9rMLXij5vmq3NmfjlHbeofK14EtL5BEgyZGkQwgo08bP0yFbioff5kU1w7
-         bdTZSTlHW/FY0IUmQWVBtIVjfl96DO1YasZnGmaRKIF2a41Y6Itj3FmnQaPFze3i0IWb
-         M9PA==
-X-Gm-Message-State: AGi0Puazsc1mALrz9r27gUgqOH+BUk8ZOWs2qCNUEKBqKi00Sunmm7jS
-        oMBAYpEOkCpuy8k0WICmN4EKg5UTnMHmCcQSpH4=
-X-Google-Smtp-Source: APiQypLkOPv9XvJcixw5/HEBAopvEPWoj0V5KlF0LYPlod4X5nZXk3a/Sl+gjBNkBBQdUcJSFy6eET93fHz1kss/xiA=
-X-Received: by 2002:a9d:355:: with SMTP id 79mr5935086otv.275.1588770254594;
- Wed, 06 May 2020 06:04:14 -0700 (PDT)
+        id S1729559AbgEFQTk (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Wed, 6 May 2020 12:19:40 -0400
+Received: from us-smtp-1.mimecast.com ([207.211.31.81]:24872 "EHLO
+        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1729239AbgEFQTk (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Wed, 6 May 2020 12:19:40 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1588781979;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=2GKepkm35dnbxL0GRcTMB1GSJjAjSbjaZHFzrucw9MU=;
+        b=iYwQfvlNrnClmA/7Sq8BuAu6FL/AKIdWNybv6psbg+32n0pNYMAF1p9OO9hgd0BN7RRrTf
+        4JuadVmX9XacLH84Po5E5irf5l1WFgvLsL8Fc+cAV6Ev5dnu8q85vWOaTtn+mUwg9al/a2
+        +ZUxp8AfhHsC4cEhucfoFrAPA5JE0y8=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-449-Bkox4T9tOHuNT_4Svzzcng-1; Wed, 06 May 2020 12:19:37 -0400
+X-MC-Unique: Bkox4T9tOHuNT_4Svzzcng-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 4E171107ACCD;
+        Wed,  6 May 2020 16:19:35 +0000 (UTC)
+Received: from llong.remote.csb (ovpn-116-141.rdu2.redhat.com [10.10.116.141])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id A029299D2;
+        Wed,  6 May 2020 16:19:33 +0000 (UTC)
+Subject: Re: [PATCH] doc: Fix some typo errors in ras.rst
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     Jonathan Corbet <corbet@lwn.net>, Tony Luck <tony.luck@intel.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Robert Richter <rrichter@marvell.com>,
+        linux-edac@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20200505151049.11134-1-longman@redhat.com>
+ <20200505154816.GH16070@bombadil.infradead.org>
+From:   Waiman Long <longman@redhat.com>
+Organization: Red Hat
+Message-ID: <eae29941-683c-4501-d3f0-8c33532e8975@redhat.com>
+Date:   Wed, 6 May 2020 12:19:33 -0400
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.1
 MIME-Version: 1.0
-From:   =?UTF-8?B?5Lq/5LiA?= <teroincn@gmail.com>
-Date:   Wed, 6 May 2020 21:04:02 +0800
-Message-ID: <CANTwqXA8_cdV9TRqRrLjTngoiaABji=XA7AfcdvV_D1GQYRYYA@mail.gmail.com>
-Subject: [BUG] is there a memleak in edac_device_register_sysfs_main_kobj
-To:     bp@alien8.de, mchehab@kernel.org, tony.luck@intel.com
-Cc:     linux-edac@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20200505154816.GH16070@bombadil.infradead.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-Hi all,
-I notice that most of the usage of kobject_init_and_add in drivers are
-wrong, and now some drivers code has maken it right
-please see commit dfb5394f804e (https://lkml.org/lkml/2020/4/11/282)
-function edac_device_register_sysfs_main_kobj() in
-drivers/edac/edac_device_sysfs.c may
-have the similar issue and leak kobject.
-if kobject_init_and_add() failed, the edac_dev->kobj may already
-increased it's refcnt and allocated memory to store it's name,
-so a kobject_put is need before return.
+On 5/5/20 11:48 AM, Matthew Wilcox wrote:
+> On Tue, May 05, 2020 at 11:10:49AM -0400, Waiman Long wrote:
+>> Fix typo errors.
+> By reformatting it, you've successfully obscured what typos you've fixed.
+> As a result I read the whole paragraph, and ...
+>
+>>   ECC memory
+>>   ----------
+>>   
+>> -As mentioned on the previous section, ECC memory has extra bits to be
+>> -used for error correction. So, on 64 bit systems, a memory module
+>> -has 64 bits of *data width*, and 74 bits of *total width*. So, there are
+>> -8 bits extra bits to be used for the error detection and correction
+>> +As mentioned on the previous section, ECC memory has extra bits to
+> s/on/in/
+>
+>> +be used for error correction. So, on 64 bit systems, a memory module
+>> +has 64 bits of *data width*, and 72 bits of *total width*.
+> Usually a 64-bit system refers to the width of a pointer.  Here, it's
+> referring to the width of the memory system, which is rather confusing.
+> How about "In the above example" instead of "So, on 64 bit systems".
+>
+>> So, there
+>> +are 8 extra bits to be used for the error detection and correction
+>>   mechanisms. Those extra bits are called *syndrome*\ [#f1]_\ [#f2]_.
+> This would read better as:
+>
+> The extra 8 bits which are used for error detection and correction
+> are referred to as the *syndrome*\ [#f1]_\ [#f2]_.
+>
+Thanks for the suggestion. Will incorporate that in v2.
 
-int edac_device_register_sysfs_main_kobj(struct edac_device_ctl_info *edac_dev)
-{
-...
+-Longman
 
-/* register */
-err = kobject_init_and_add(&edac_dev->kobj,
-&ktype_device_ctrl,&edac_subsys->dev_root->kobj,  "%s",
-edac_dev->name);
-if (err) {
-    edac_dbg(1, "Failed to register '.../edac/%s'\n",   edac_dev->name);
-    goto err_kobj_reg;
-}
-kobject_uevent(&edac_dev->kobj, KOBJ_ADD);
-
-/* At this point, to 'free' the control struct,
-* edac_device_unregister_sysfs_main_kobj() must be used
-*/
-
-edac_dbg(4, "Registered '.../edac/%s' kobject\n", edac_dev->name);
-
-return 0;
-
-/* Error exit stack */
-err_kobj_reg:
-      module_put(edac_dev->owner);
-
-err_out:
-      return err;
-}
-
-Best regards,
-Lin Yi
