@@ -2,101 +2,94 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 03E011CB84B
-	for <lists+linux-edac@lfdr.de>; Fri,  8 May 2020 21:30:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F10711CBC05
+	for <lists+linux-edac@lfdr.de>; Sat,  9 May 2020 03:08:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726797AbgEHTaU (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Fri, 8 May 2020 15:30:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38594 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726767AbgEHTaU (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Fri, 8 May 2020 15:30:20 -0400
-Received: from mail-pl1-x643.google.com (mail-pl1-x643.google.com [IPv6:2607:f8b0:4864:20::643])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 075BCC061A0C
-        for <linux-edac@vger.kernel.org>; Fri,  8 May 2020 12:30:19 -0700 (PDT)
-Received: by mail-pl1-x643.google.com with SMTP id k19so1158907pll.9
-        for <linux-edac@vger.kernel.org>; Fri, 08 May 2020 12:30:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=G+8zSuS0S+a6U9nv66+C2u77Cjfcmm9tozvBS7DhkCQ=;
-        b=tmr8aqUveTBnlQDblMjKRB0AWuN8KV8tw9FY6Qa2lSGQPF5+I5ns/CzQQ4N7QviSlH
-         iqyyAXTkAPaqxciyCggJ2LCm90xWR042EpHQ72PxAUGXJYOYsv+1eV+fvx0h+WPcdgXG
-         fXN6CpQKRMEIh3Sr0xepm0UgsjE4+2kquAWceg29Jdv+royVE81r0e0J5yQ0uBE6umzY
-         lgRdbmgu9rQLS8aJtL1sTbDe+jix1lLBncKY+BtcYIAm4slw3980OzU+QkF/HoV9K85s
-         ypGBFMpsbvD7KWH4f7efJjRourMwJOLkO9Y5ZbSFooOSaxRBMgxgy0QsKFqyeOAP4hdN
-         YUCg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=G+8zSuS0S+a6U9nv66+C2u77Cjfcmm9tozvBS7DhkCQ=;
-        b=R5AYVuqrouprwP+WRwvQVyWsJqvvy7BeiKSGCpzWMpoH4pkPMuLTtxxGGsdKUSsJCq
-         qObKSsxhMctLJE56H+zB6W1gMdb0ggg5kOxKmvB9gmx8qcGULt535rsU2bx5M9/iEu0w
-         7bT0pLZO8XfCzC1f7oxAG5jddz5l5/Nmj8pUl05JyrL0mVlHXTHALqW1GI3UfQX3aAXJ
-         TGiI60/J7yHzhvGqwvpBofjJA8Mon6zxjtn6pRXza3mTNF1RgHh9FzboueH/k44moZzy
-         Xt/o7fAwhjio4KVBtIofpwAF0RdiGFPpsQVJGgKHYO1GiZVxKdHM0r/IAisILy1TKr1F
-         YKMg==
-X-Gm-Message-State: AGi0PuaTOcOkrYLYt6kqqA97F7CO4eUcD3kwAuEQZpkhwRFApw6lDJ3a
-        QFhPVjgHj1DjCRzeVWLuTvY=
-X-Google-Smtp-Source: APiQypLKtfRy5pAlnSWwbEycl/MfF4kWyY4kJ74UBFU31paR5c3rIO9w+TNnqV66VsPmGn/zJiaTzw==
-X-Received: by 2002:a17:902:bd89:: with SMTP id q9mr3808221pls.161.1588966218861;
-        Fri, 08 May 2020 12:30:18 -0700 (PDT)
-Received: from apollo.hsd1.ca.comcast.net ([2601:646:9200:4e0::2691])
-        by smtp.gmail.com with ESMTPSA id y7sm2560676pfq.21.2020.05.08.12.30.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 08 May 2020 12:30:18 -0700 (PDT)
-From:   Khem Raj <raj.khem@gmail.com>
-To:     mchehab@kernel.org, linux-edac@vger.kernel.org
-Cc:     Khem Raj <raj.khem@gmail.com>
-Subject: [PATCH] Fix system header includes
-Date:   Fri,  8 May 2020 12:30:16 -0700
-Message-Id: <20200508193016.3951932-1-raj.khem@gmail.com>
-X-Mailer: git-send-email 2.26.2
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        id S1727878AbgEIBI4 (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Fri, 8 May 2020 21:08:56 -0400
+Received: from mga11.intel.com ([192.55.52.93]:32798 "EHLO mga11.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727828AbgEIBIz (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Fri, 8 May 2020 21:08:55 -0400
+IronPort-SDR: c/McO39PfwgtVIuMMfPrNEBpkPTS9x19VHmV1RH/OBtVVBZtU/JZ9vvxLWsCX0ye+KT+WXeiJl
+ cWymAy/cA1vg==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 May 2020 18:08:55 -0700
+IronPort-SDR: 5fO0j/coocSAUZR0MhXhNEzz703zECrbnIHL7KW5KWwI+U8a3v7HT3ysVkTde1P0Rmu4Zy6vHd
+ ME/AymPQXHIg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.73,369,1583222400"; 
+   d="scan'208";a="285651365"
+Received: from qiuxu-lab.sh.intel.com ([10.239.53.133])
+  by fmsmga004.fm.intel.com with ESMTP; 08 May 2020 18:08:53 -0700
+From:   Qiuxu Zhuo <qiuxu.zhuo@intel.com>
+To:     bp@alien8.de
+Cc:     tony.luck@intel.com, aris@redhat.com, mchehab@kernel.org,
+        linux-edac@vger.kernel.org, Qiuxu Zhuo <qiuxu.zhuo@intel.com>
+Subject: [PATCH v1 1/1] EDAC, {skx,i10nm}: Use CPU stepping macro to pass configurations
+Date:   Sat,  9 May 2020 09:08:22 +0800
+Message-Id: <20200509010822.76331-1-qiuxu.zhuo@intel.com>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-Use poll.h instead of sys/poll.h
-Fixes
-warning: #warning redirecting incorrect #include <sys/poll.h> to <poll.h> [-Wcpp]
+Use the X86_MATCH_INTEL_FAM6_MODEL_STEPPINGS() macro to pass CPU
+stepping specific configurations to {skx,i10nm}_init(), so can delete
+the CPU stepping check from 10nm_init().
 
-Include limits.h for PATH_MAX
-
-Fixes
-ras-events.c:359:16: error: 'PATH_MAX' undeclared (first use in this function)
-  359 |  char pipe_raw[PATH_MAX];
-      |                ^~~~~~~~
-
-Signed-off-by: Khem Raj <raj.khem@gmail.com>
+Signed-off-by: Qiuxu Zhuo <qiuxu.zhuo@intel.com>
 ---
- ras-events.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/edac/i10nm_base.c | 12 +++++-------
+ drivers/edac/skx_base.c   |  2 +-
+ 2 files changed, 6 insertions(+), 8 deletions(-)
 
-diff --git a/ras-events.c b/ras-events.c
-index 511c93d..400e740 100644
---- a/ras-events.c
-+++ b/ras-events.c
-@@ -18,13 +18,14 @@
- #include <dirent.h>
- #include <errno.h>
- #include <fcntl.h>
-+#include <limits.h>
-+#include <poll.h>
- #include <stdio.h>
- #include <stdlib.h>
- #include <string.h>
- #include <unistd.h>
- #include <sys/stat.h>
- #include <sys/types.h>
--#include <sys/poll.h>
- #include <signal.h>
- #include <sys/signalfd.h>
- #include "libtrace/kbuffer.h"
+diff --git a/drivers/edac/i10nm_base.c b/drivers/edac/i10nm_base.c
+index a6bc54b02de4..ea8f2127e238 100644
+--- a/drivers/edac/i10nm_base.c
++++ b/drivers/edac/i10nm_base.c
+@@ -135,9 +135,11 @@ static struct res_config i10nm_cfg1 = {
+ };
+ 
+ static const struct x86_cpu_id i10nm_cpuids[] = {
+-	X86_MATCH_INTEL_FAM6_MODEL(ATOM_TREMONT_D,	&i10nm_cfg0),
+-	X86_MATCH_INTEL_FAM6_MODEL(ICELAKE_X,		&i10nm_cfg0),
+-	X86_MATCH_INTEL_FAM6_MODEL(ICELAKE_D,		&i10nm_cfg1),
++	X86_MATCH_INTEL_FAM6_MODEL_STEPPINGS(ATOM_TREMONT_D,	X86_STEPPINGS(0x0, 0x3), &i10nm_cfg0),
++	X86_MATCH_INTEL_FAM6_MODEL_STEPPINGS(ATOM_TREMONT_D,	X86_STEPPINGS(0x4, 0xf), &i10nm_cfg1),
++	X86_MATCH_INTEL_FAM6_MODEL_STEPPINGS(ICELAKE_X,		X86_STEPPINGS(0x0, 0x3), &i10nm_cfg0),
++	X86_MATCH_INTEL_FAM6_MODEL_STEPPINGS(ICELAKE_X,		X86_STEPPINGS(0x4, 0xf), &i10nm_cfg1),
++	X86_MATCH_INTEL_FAM6_MODEL_STEPPINGS(ICELAKE_D,		X86_STEPPINGS(0x0, 0xf), &i10nm_cfg1),
+ 	{}
+ };
+ MODULE_DEVICE_TABLE(x86cpu, i10nm_cpuids);
+@@ -264,10 +266,6 @@ static int __init i10nm_init(void)
+ 
+ 	cfg = (struct res_config *)id->driver_data;
+ 
+-	/* Newer steppings have different offset for ATOM_TREMONT_D/ICELAKE_X */
+-	if (boot_cpu_data.x86_stepping >= 4)
+-		cfg->busno_cfg_offset = 0xd0;
+-
+ 	rc = skx_get_hi_lo(0x09a2, off, &tolm, &tohm);
+ 	if (rc)
+ 		return rc;
+diff --git a/drivers/edac/skx_base.c b/drivers/edac/skx_base.c
+index 94c942fd06c1..1ff22136cf72 100644
+--- a/drivers/edac/skx_base.c
++++ b/drivers/edac/skx_base.c
+@@ -164,7 +164,7 @@ static struct res_config skx_cfg = {
+ };
+ 
+ static const struct x86_cpu_id skx_cpuids[] = {
+-	X86_MATCH_INTEL_FAM6_MODEL(SKYLAKE_X,	&skx_cfg),
++	X86_MATCH_INTEL_FAM6_MODEL_STEPPINGS(SKYLAKE_X, X86_STEPPINGS(0x0, 0xf), &skx_cfg),
+ 	{ }
+ };
+ MODULE_DEVICE_TABLE(x86cpu, skx_cpuids);
 -- 
-2.26.2
+2.17.1
 
