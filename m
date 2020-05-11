@@ -2,113 +2,82 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C36631CCE08
-	for <lists+linux-edac@lfdr.de>; Sun, 10 May 2020 22:53:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B7FB1CDA97
+	for <lists+linux-edac@lfdr.de>; Mon, 11 May 2020 14:59:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729492AbgEJUwr (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Sun, 10 May 2020 16:52:47 -0400
-Received: from mail.ispras.ru ([83.149.199.45]:52912 "EHLO mail.ispras.ru"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729389AbgEJUwc (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Sun, 10 May 2020 16:52:32 -0400
-Received: from localhost.localdomain (unknown [46.188.10.168])
-        by mail.ispras.ru (Postfix) with ESMTPSA id E0888CD46B;
-        Sun, 10 May 2020 23:52:29 +0300 (MSK)
-From:   Alexander Monakov <amonakov@ispras.ru>
-To:     linux-kernel@vger.kernel.org
-Cc:     Alexander Monakov <amonakov@ispras.ru>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Borislav Petkov <bp@alien8.de>, x86@kernel.org,
-        Yazen Ghannam <yazen.ghannam@amd.com>,
-        Brian Woods <brian.woods@amd.com>,
-        Clemens Ladisch <clemens@ladisch.de>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        linux-hwmon@vger.kernel.org, linux-edac@vger.kernel.org
-Subject: [PATCH 3/3] EDAC/amd64: Add AMD family 17h model 60h PCI IDs
-Date:   Sun, 10 May 2020 20:48:42 +0000
-Message-Id: <20200510204842.2603-4-amonakov@ispras.ru>
-X-Mailer: git-send-email 2.26.2
-In-Reply-To: <20200510204842.2603-1-amonakov@ispras.ru>
-References: <20200510204842.2603-1-amonakov@ispras.ru>
+        id S1727887AbgEKM74 (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Mon, 11 May 2020 08:59:56 -0400
+Received: from smtp-fw-6002.amazon.com ([52.95.49.90]:34185 "EHLO
+        smtp-fw-6002.amazon.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727827AbgEKM74 (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Mon, 11 May 2020 08:59:56 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1589201996; x=1620737996;
+  h=to:cc:from:subject:message-id:date:mime-version:
+   content-transfer-encoding;
+  bh=rvUMtkAVfrgy8OOsei6dSyYOSNtnu+SYcmU5iH7/gzc=;
+  b=AvjMh9ISb8OkPI/mJQLxCwhqZIutSNvPPi0DjTptTpKmDkqJ9f7QiwTB
+   lg5R2oxKs+TEd71WnuSZKl1nE02GB5Bi0vEkV7E12wIfVVfhakxC9cs4Q
+   XbfiegeVFJT7Agh+KBtnFxNGVY8gyKdBRYAE2W+6ZSba0QUFCKEpE60Jf
+   4=;
+IronPort-SDR: Osge9eBHgJQieXPzcNrCbA6kHGERSAcIQjeKIivB6MaB/YHI+TVR/nDkL7z00EarEI2RrYqHTM
+ GqazAaYZcQ6Q==
+X-IronPort-AV: E=Sophos;i="5.73,380,1583193600"; 
+   d="scan'208";a="29564027"
+Received: from iad12-co-svc-p1-lb1-vlan3.amazon.com (HELO email-inbound-relay-2b-55156cd4.us-west-2.amazon.com) ([10.43.8.6])
+  by smtp-border-fw-out-6002.iad6.amazon.com with ESMTP; 11 May 2020 12:59:43 +0000
+Received: from EX13MTAUEE002.ant.amazon.com (pdx4-ws-svc-p6-lb7-vlan2.pdx.amazon.com [10.170.41.162])
+        by email-inbound-relay-2b-55156cd4.us-west-2.amazon.com (Postfix) with ESMTPS id BE947A1FF4;
+        Mon, 11 May 2020 12:59:41 +0000 (UTC)
+Received: from EX13D08UEE001.ant.amazon.com (10.43.62.126) by
+ EX13MTAUEE002.ant.amazon.com (10.43.62.24) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.2; Mon, 11 May 2020 12:59:41 +0000
+Received: from EX13MTAUEE002.ant.amazon.com (10.43.62.24) by
+ EX13D08UEE001.ant.amazon.com (10.43.62.126) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.2; Mon, 11 May 2020 12:59:41 +0000
+Received: from [192.168.12.223] (10.1.213.8) by mail-relay.amazon.com
+ (10.43.62.224) with Microsoft SMTP Server (TLS) id 15.0.1497.2 via Frontend
+ Transport; Mon, 11 May 2020 12:59:39 +0000
+To:     "bp@alien8.de" <bp@alien8.de>,
+        "james.morse@arm.com" <james.morse@arm.com>,
+        Robert Richter <rrichter@marvell.com>
+CC:     "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
+        "Woodhouse, David" <dwmw@amazon.co.uk>,
+        "Krupnik, Ronen" <ronenk@amazon.com>, <talel@amazon.com>,
+        <jonnyc@amazon.com>, "Hanoch, Uri" <hanochu@amazon.com>,
+        <hhhawa@amazon.com>
+From:   "Hawa, Hanna" <hhhawa@amazon.com>
+Subject: [RFC] Support different block names with same EDAC device
+Message-ID: <0ae313a4-97c3-5681-f22c-23decb261b74@amazon.com>
+Date:   Mon, 11 May 2020 15:59:38 +0300
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.8.0
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-Add support for AMD Renoir (4000-series Ryzen CPUs).
+Hi,
 
-Signed-off-by: Alexander Monakov <amonakov@ispras.ru>
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: Borislav Petkov <bp@alien8.de>
-Cc: x86@kernel.org
-Cc: Yazen Ghannam <yazen.ghannam@amd.com>
-Cc: Brian Woods <brian.woods@amd.com>
-Cc: Clemens Ladisch <clemens@ladisch.de>
-Cc: Jean Delvare <jdelvare@suse.com>
-Cc: Guenter Roeck <linux@roeck-us.net>
-Cc: linux-hwmon@vger.kernel.org
-Cc: linux-edac@vger.kernel.org
----
- drivers/edac/amd64_edac.c | 14 ++++++++++++++
- drivers/edac/amd64_edac.h |  3 +++
- 2 files changed, 17 insertions(+)
+Amazon Alpine SoCs have different HW units that have an ability to 
+report on correctable/uncorrectable errors. We want to add support for 
+this HWs using dedicated EDAC driver based on edac device subsystem.
+In edac_device_ctl_info() function one of the parameters is 
+“edac_block_name”, to create nr_blocks kobjects based on that single 
+block name.
+Our target to create multiple block names with the same edac device, e.g.:
+/sys/devices/system/edac/MY_HW_UNIT/error_name_a/
+/sys/devices/system/edac/MY_HW_UNIT/error_name_b/
+/sys/devices/system/edac/MY_HW_UNIT/error_name_c/
+/sys/devices/system/edac/MY_HW_UNIT/error_name_a/
 
-diff --git a/drivers/edac/amd64_edac.c b/drivers/edac/amd64_edac.c
-index 1136500c5f53..d50365e9217a 100644
---- a/drivers/edac/amd64_edac.c
-+++ b/drivers/edac/amd64_edac.c
-@@ -2319,6 +2319,16 @@ static struct amd64_family_type family_types[] = {
- 			.dbam_to_cs		= f17_addr_mask_to_cs_size,
- 		}
- 	},
-+	[F17_M60H_CPUS] = {
-+		.ctl_name = "F17h_M60h",
-+		.f0_id = PCI_DEVICE_ID_AMD_17H_M60H_DF_F0,
-+		.f6_id = PCI_DEVICE_ID_AMD_17H_M60H_DF_F6,
-+		.max_mcs = 2,
-+		.ops = {
-+			.early_channel_count	= f17_early_channel_count,
-+			.dbam_to_cs		= f17_addr_mask_to_cs_size,
-+		}
-+	},
- 	[F17_M70H_CPUS] = {
- 		.ctl_name = "F17h_M70h",
- 		.f0_id = PCI_DEVICE_ID_AMD_17H_M70H_DF_F0,
-@@ -3357,6 +3367,10 @@ static struct amd64_family_type *per_family_init(struct amd64_pvt *pvt)
- 			fam_type = &family_types[F17_M30H_CPUS];
- 			pvt->ops = &family_types[F17_M30H_CPUS].ops;
- 			break;
-+		} else if (pvt->model >= 0x60 && pvt->model <= 0x6f) {
-+			fam_type = &family_types[F17_M60H_CPUS];
-+			pvt->ops = &family_types[F17_M60H_CPUS].ops;
-+			break;
- 		} else if (pvt->model >= 0x70 && pvt->model <= 0x7f) {
- 			fam_type = &family_types[F17_M70H_CPUS];
- 			pvt->ops = &family_types[F17_M70H_CPUS].ops;
-diff --git a/drivers/edac/amd64_edac.h b/drivers/edac/amd64_edac.h
-index abbf3c274d74..52b5d03eeba0 100644
---- a/drivers/edac/amd64_edac.h
-+++ b/drivers/edac/amd64_edac.h
-@@ -120,6 +120,8 @@
- #define PCI_DEVICE_ID_AMD_17H_M10H_DF_F6 0x15ee
- #define PCI_DEVICE_ID_AMD_17H_M30H_DF_F0 0x1490
- #define PCI_DEVICE_ID_AMD_17H_M30H_DF_F6 0x1496
-+#define PCI_DEVICE_ID_AMD_17H_M60H_DF_F0 0x1448
-+#define PCI_DEVICE_ID_AMD_17H_M60H_DF_F6 0x144e
- #define PCI_DEVICE_ID_AMD_17H_M70H_DF_F0 0x1440
- #define PCI_DEVICE_ID_AMD_17H_M70H_DF_F6 0x1446
- #define PCI_DEVICE_ID_AMD_19H_DF_F0	0x1650
-@@ -293,6 +295,7 @@ enum amd_families {
- 	F17_CPUS,
- 	F17_M10H_CPUS,
- 	F17_M30H_CPUS,
-+	F17_M60H_CPUS,
- 	F17_M70H_CPUS,
- 	F19_CPUS,
- 	NUM_FAMILIES,
--- 
-2.26.2
+Can the edac device infrastructure support different block names? Shall 
+we add support for such feature?
 
+Thanks,
+Hanna
