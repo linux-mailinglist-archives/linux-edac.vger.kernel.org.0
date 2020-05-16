@@ -2,169 +2,73 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F8831D5B1F
-	for <lists+linux-edac@lfdr.de>; Fri, 15 May 2020 23:01:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E2AB1D5D97
+	for <lists+linux-edac@lfdr.de>; Sat, 16 May 2020 03:26:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726183AbgEOVBr (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Fri, 15 May 2020 17:01:47 -0400
-Received: from mga03.intel.com ([134.134.136.65]:29406 "EHLO mga03.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726179AbgEOVBr (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Fri, 15 May 2020 17:01:47 -0400
-IronPort-SDR: Wc1M0Y2fnBXZKQf3AUoB+SrqPQdaIwbjIYnE3Oo1VLLljULRDWRuxCKhLkjfZtvYEGUOd8yymD
- 9uTcvZZt6vJA==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 May 2020 14:01:47 -0700
-IronPort-SDR: TgnBGLuMbj5kA+XyCXjh0BKISuxrZiAVSMLLPw0GxJr+tWEpzyzjylfjT4705qu9mESH3R0I6/
- YPhjQVBJCuiw==
-X-IronPort-AV: E=Sophos;i="5.73,396,1583222400"; 
-   d="scan'208";a="410588355"
-Received: from agluck-desk2.sc.intel.com ([10.3.52.68])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 May 2020 14:01:46 -0700
-From:   Tony Luck <tony.luck@intel.com>
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     Qiuxu Zhuo <qiuxu.zhuo@intel.com>,
-        Matthew Riley <mattdr@google.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Aristeu Rozanski <aris@redhat.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-edac@vger.kernel.org
-Subject: [PATCH v1 1/1] EDAC/skx: Use the mcmtr register to retrieve close_pg/bank_xor_enable
-Date:   Fri, 15 May 2020 14:01:46 -0700
-Message-Id: <20200515210146.1337-1-tony.luck@intel.com>
-X-Mailer: git-send-email 2.21.1
+        id S1726231AbgEPB0C (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Fri, 15 May 2020 21:26:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52772 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726223AbgEPB0C (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Fri, 15 May 2020 21:26:02 -0400
+Received: from mail-wm1-x343.google.com (mail-wm1-x343.google.com [IPv6:2a00:1450:4864:20::343])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7320C061A0C
+        for <linux-edac@vger.kernel.org>; Fri, 15 May 2020 18:26:00 -0700 (PDT)
+Received: by mail-wm1-x343.google.com with SMTP id w64so4414615wmg.4
+        for <linux-edac@vger.kernel.org>; Fri, 15 May 2020 18:26:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=OJwXPQy0+6Rn8/55Zw1duk+uyLC3ZqM7xPNHC03bZfM=;
+        b=IxREpFJ/PEc/k17WSzoutNXxO8uzdkCagpUSC+KFHJPGl2+JAV3AWnNw0MGmnYGZVY
+         kE61ht2Oc3rldDHuNonavMwRsVOBQ0wL9oykSfKjDhdbJ10sD0a1rpXl427r870CV5qI
+         6jwDn8QKsvqSw5/vgOGpAzReqH6Pmo1dd8THjhZs02zG6vC1qjQ7t02C4U/FSNCcVMva
+         +nY3SKhjZ5f4idzXaQJYzEk+ZquSoUwas5oSpDylyp9foZsGnWUgqOJWlyhVhkFwG4Bw
+         FcWnBeCQQ5qiTfv9tHKHbueYV//N6KF12XG9a0fEM/Wt2lCj1cemobRtYmhzf006JPuc
+         8wiw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=OJwXPQy0+6Rn8/55Zw1duk+uyLC3ZqM7xPNHC03bZfM=;
+        b=onZ7OtWgYHslncDYePXIwhmy+jd8AWGiI2jIn4Ue0Fn+YI4Jzjn5g3w7SD1+w6UVIi
+         xXWQwOyVYL9qCDpktWGQxSptRNgz3hFUqKe6xJx32Buo9n+swU31lIWLAUj6q00NoMZN
+         M7gpeSXI3cVZcoyurVe9A1GscTT6QmztPdVyDZ9TgQPluZKLSnpgbaXCQGBp4HCKRLHB
+         Tt9ZkMzW3j9STloLuLE4THqArULR94qdR4147GuUEO1w3nXITLsfsldYY9nBfMpk3mlL
+         GifKlcZkMXjJnDKdVHoYJP4e6Ag6xh0JVGDUxpfEvKCUKaDTls8+G0o5o/36LKNz9ey+
+         ECig==
+X-Gm-Message-State: AOAM530xknJnUMUyAJOJrq6gVEjjvJDMMafxvTpkHaqK35jsmLKF4jAo
+        sc3bKGd7UKUKqAdjBM0468Bip4CvDbSNMHJDCME=
+X-Google-Smtp-Source: ABdhPJzlx1Ok/ogigOJgjs5eKtpsp0uBwFE5sXx2kleFYDK8pbhDc+KZP6nJlz0fOukzI2HzJE/ZxBYDvNhRIrl7Peo=
+X-Received: by 2002:a05:600c:2146:: with SMTP id v6mr7027471wml.142.1589592359489;
+ Fri, 15 May 2020 18:25:59 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Received: by 2002:a1c:7d94:0:0:0:0:0 with HTTP; Fri, 15 May 2020 18:25:58
+ -0700 (PDT)
+Reply-To: drtracywilliam2@yahoo.com
+From:   "Dr. Tracy William" <tracywillliams25@gmail.com>
+Date:   Fri, 15 May 2020 23:25:58 -0200
+Message-ID: <CAM_qd2=hEtf8zyaJhC6UbRcTfgsOvcnaNsYodBC2e=U+79DpXA@mail.gmail.com>
+Subject: Hi Dear
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-From: Qiuxu Zhuo <qiuxu.zhuo@intel.com>
+Hi Dear ,
+how are you today I hope that everything is OK with you as it is my
+great pleasure to contact you in having communication with you
+starting from today, i was just surfing through the Internet search
+when i found your email address, I want to make a very new and special
+friend, so i decided to contact you to see how we can make it work if
+we can.
 
-The skx_edac driver wrongly uses the mtr register to retrieve two fields
-close_pg and bank_xor_enable. Fix it by using the correct mcmtr register
-to get the two fields.
-
-Cc: <stable@vger.kernel.org>
-Reported-by: Matthew Riley <mattdr@google.com>
-Signed-off-by: Qiuxu Zhuo <qiuxu.zhuo@intel.com>
-Signed-off-by: Tony Luck <tony.luck@intel.com>
-
----
- drivers/edac/i10nm_base.c |  2 +-
- drivers/edac/skx_base.c   | 20 ++++++++------------
- drivers/edac/skx_common.c |  6 +++---
- drivers/edac/skx_common.h |  2 +-
- 4 files changed, 13 insertions(+), 17 deletions(-)
-
-diff --git a/drivers/edac/i10nm_base.c b/drivers/edac/i10nm_base.c
-index ea8f2127e238..c8d11da85bec 100644
---- a/drivers/edac/i10nm_base.c
-+++ b/drivers/edac/i10nm_base.c
-@@ -175,7 +175,7 @@ static int i10nm_get_dimm_config(struct mem_ctl_info *mci)
- 				 mtr, mcddrtcfg, imc->mc, i, j);
- 
- 			if (IS_DIMM_PRESENT(mtr))
--				ndimms += skx_get_dimm_info(mtr, 0, dimm,
-+				ndimms += skx_get_dimm_info(mtr, 0, 0, dimm,
- 							    imc, i, j);
- 			else if (IS_NVDIMM_PRESENT(mcddrtcfg, j))
- 				ndimms += skx_get_nvdimm_info(dimm, imc, i, j,
-diff --git a/drivers/edac/skx_base.c b/drivers/edac/skx_base.c
-index 1ff22136cf72..2c7db95df326 100644
---- a/drivers/edac/skx_base.c
-+++ b/drivers/edac/skx_base.c
-@@ -169,27 +169,23 @@ static const struct x86_cpu_id skx_cpuids[] = {
- };
- MODULE_DEVICE_TABLE(x86cpu, skx_cpuids);
- 
--#define SKX_GET_MTMTR(dev, reg) \
--	pci_read_config_dword((dev), 0x87c, &(reg))
--
--static bool skx_check_ecc(struct pci_dev *pdev)
-+static bool skx_check_ecc(u32 mcmtr)
- {
--	u32 mtmtr;
--
--	SKX_GET_MTMTR(pdev, mtmtr);
--
--	return !!GET_BITFIELD(mtmtr, 2, 2);
-+	return !!GET_BITFIELD(mcmtr, 2, 2);
- }
- 
- static int skx_get_dimm_config(struct mem_ctl_info *mci)
- {
- 	struct skx_pvt *pvt = mci->pvt_info;
-+	u32 mtr, mcmtr, amap, mcddrtcfg;
- 	struct skx_imc *imc = pvt->imc;
--	u32 mtr, amap, mcddrtcfg;
- 	struct dimm_info *dimm;
- 	int i, j;
- 	int ndimms;
- 
-+	/* Only the mcmtr on the first channel is effective */
-+	pci_read_config_dword(imc->chan[0].cdev, 0x87c, &mcmtr);
-+
- 	for (i = 0; i < SKX_NUM_CHANNELS; i++) {
- 		ndimms = 0;
- 		pci_read_config_dword(imc->chan[i].cdev, 0x8C, &amap);
-@@ -199,14 +195,14 @@ static int skx_get_dimm_config(struct mem_ctl_info *mci)
- 			pci_read_config_dword(imc->chan[i].cdev,
- 					      0x80 + 4 * j, &mtr);
- 			if (IS_DIMM_PRESENT(mtr)) {
--				ndimms += skx_get_dimm_info(mtr, amap, dimm, imc, i, j);
-+				ndimms += skx_get_dimm_info(mtr, mcmtr, amap, dimm, imc, i, j);
- 			} else if (IS_NVDIMM_PRESENT(mcddrtcfg, j)) {
- 				ndimms += skx_get_nvdimm_info(dimm, imc, i, j,
- 							      EDAC_MOD_STR);
- 				nvdimm_count++;
- 			}
- 		}
--		if (ndimms && !skx_check_ecc(imc->chan[0].cdev)) {
-+		if (ndimms && !skx_check_ecc(mcmtr)) {
- 			skx_printk(KERN_ERR, "ECC is disabled on imc %d\n", imc->mc);
- 			return -ENODEV;
- 		}
-diff --git a/drivers/edac/skx_common.c b/drivers/edac/skx_common.c
-index abc9ddd2b7d1..46be1a77bd1d 100644
---- a/drivers/edac/skx_common.c
-+++ b/drivers/edac/skx_common.c
-@@ -303,7 +303,7 @@ static int skx_get_dimm_attr(u32 reg, int lobit, int hibit, int add,
- #define numrow(reg)	skx_get_dimm_attr(reg, 2, 4, 12, 1, 6, "rows")
- #define numcol(reg)	skx_get_dimm_attr(reg, 0, 1, 10, 0, 2, "cols")
- 
--int skx_get_dimm_info(u32 mtr, u32 amap, struct dimm_info *dimm,
-+int skx_get_dimm_info(u32 mtr, u32 mcmtr, u32 amap, struct dimm_info *dimm,
- 		      struct skx_imc *imc, int chan, int dimmno)
- {
- 	int  banks = 16, ranks, rows, cols, npages;
-@@ -323,8 +323,8 @@ int skx_get_dimm_info(u32 mtr, u32 amap, struct dimm_info *dimm,
- 		 imc->mc, chan, dimmno, size, npages,
- 		 banks, 1 << ranks, rows, cols);
- 
--	imc->chan[chan].dimms[dimmno].close_pg = GET_BITFIELD(mtr, 0, 0);
--	imc->chan[chan].dimms[dimmno].bank_xor_enable = GET_BITFIELD(mtr, 9, 9);
-+	imc->chan[chan].dimms[dimmno].close_pg = GET_BITFIELD(mcmtr, 0, 0);
-+	imc->chan[chan].dimms[dimmno].bank_xor_enable = GET_BITFIELD(mcmtr, 9, 9);
- 	imc->chan[chan].dimms[dimmno].fine_grain_bank = GET_BITFIELD(amap, 0, 0);
- 	imc->chan[chan].dimms[dimmno].rowbits = rows;
- 	imc->chan[chan].dimms[dimmno].colbits = cols;
-diff --git a/drivers/edac/skx_common.h b/drivers/edac/skx_common.h
-index 19dd8c099520..78f8c1de0b71 100644
---- a/drivers/edac/skx_common.h
-+++ b/drivers/edac/skx_common.h
-@@ -135,7 +135,7 @@ int skx_get_all_bus_mappings(struct res_config *cfg, struct list_head **list);
- 
- int skx_get_hi_lo(unsigned int did, int off[], u64 *tolm, u64 *tohm);
- 
--int skx_get_dimm_info(u32 mtr, u32 amap, struct dimm_info *dimm,
-+int skx_get_dimm_info(u32 mtr, u32 mcmtr, u32 amap, struct dimm_info *dimm,
- 		      struct skx_imc *imc, int chan, int dimmno);
- 
- int skx_get_nvdimm_info(struct dimm_info *dimm, struct skx_imc *imc,
--- 
-2.17.1
-
+Please i wish you will have the desire with me so that we can get to
+know each other better and see what happens in future. My name is
+Tracy William, I am from the United States of America but presently I
+live and work in England,  I will give you my pictures and details
+about me as soon as i hear from you
+bye
+Tracy
