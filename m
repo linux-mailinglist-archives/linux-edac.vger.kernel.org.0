@@ -2,73 +2,101 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E2AB1D5D97
-	for <lists+linux-edac@lfdr.de>; Sat, 16 May 2020 03:26:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 61E781D628F
+	for <lists+linux-edac@lfdr.de>; Sat, 16 May 2020 18:21:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726231AbgEPB0C (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Fri, 15 May 2020 21:26:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52772 "EHLO
+        id S1726226AbgEPQVa (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Sat, 16 May 2020 12:21:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726223AbgEPB0C (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Fri, 15 May 2020 21:26:02 -0400
-Received: from mail-wm1-x343.google.com (mail-wm1-x343.google.com [IPv6:2a00:1450:4864:20::343])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7320C061A0C
-        for <linux-edac@vger.kernel.org>; Fri, 15 May 2020 18:26:00 -0700 (PDT)
-Received: by mail-wm1-x343.google.com with SMTP id w64so4414615wmg.4
-        for <linux-edac@vger.kernel.org>; Fri, 15 May 2020 18:26:00 -0700 (PDT)
+        with ESMTP id S1726206AbgEPQVa (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Sat, 16 May 2020 12:21:30 -0400
+Received: from mail-pg1-x541.google.com (mail-pg1-x541.google.com [IPv6:2607:f8b0:4864:20::541])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35F3AC061A0C
+        for <linux-edac@vger.kernel.org>; Sat, 16 May 2020 09:21:30 -0700 (PDT)
+Received: by mail-pg1-x541.google.com with SMTP id r10so2515959pgv.8
+        for <linux-edac@vger.kernel.org>; Sat, 16 May 2020 09:21:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=OJwXPQy0+6Rn8/55Zw1duk+uyLC3ZqM7xPNHC03bZfM=;
-        b=IxREpFJ/PEc/k17WSzoutNXxO8uzdkCagpUSC+KFHJPGl2+JAV3AWnNw0MGmnYGZVY
-         kE61ht2Oc3rldDHuNonavMwRsVOBQ0wL9oykSfKjDhdbJ10sD0a1rpXl427r870CV5qI
-         6jwDn8QKsvqSw5/vgOGpAzReqH6Pmo1dd8THjhZs02zG6vC1qjQ7t02C4U/FSNCcVMva
-         +nY3SKhjZ5f4idzXaQJYzEk+ZquSoUwas5oSpDylyp9foZsGnWUgqOJWlyhVhkFwG4Bw
-         FcWnBeCQQ5qiTfv9tHKHbueYV//N6KF12XG9a0fEM/Wt2lCj1cemobRtYmhzf006JPuc
-         8wiw==
+        h=from:to:cc:subject:date:message-id;
+        bh=Cg0ycuIrMHsEZQFx/mNctoPUaSFNFnjiuqv1mZpAwt8=;
+        b=EZTaR9K0R6l6MbzS2QBzzeWEwpjni9oRinDMbhPpA2dvtD33+EN0YbsEXbOkPyy8dx
+         pEBJmXQWjEYqRFt7aqSPIq0T/7iD4E5SZ57B5WofFlICK4xlfaQAg9ouVY/uqKENZlHo
+         DKKoB+F0m7ab/wQo0OTA23q2d5VYK2r0ikCcTxuahVKusaD4UKBcjFZGFme10mmvLrJ4
+         NhDphXQ7PSLXDluuzaxFNSqyXFvn4A31u+OfmEs3TVB9RUGaPerobwo6FTjoPREbmLKY
+         PJyoRCd/9TFJRyOp7jpgUcRGNHYIzpgMOeOm7kKk2RHMgYWOaIuNt6O1EuJMjTy7qXrU
+         4LuQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=OJwXPQy0+6Rn8/55Zw1duk+uyLC3ZqM7xPNHC03bZfM=;
-        b=onZ7OtWgYHslncDYePXIwhmy+jd8AWGiI2jIn4Ue0Fn+YI4Jzjn5g3w7SD1+w6UVIi
-         xXWQwOyVYL9qCDpktWGQxSptRNgz3hFUqKe6xJx32Buo9n+swU31lIWLAUj6q00NoMZN
-         M7gpeSXI3cVZcoyurVe9A1GscTT6QmztPdVyDZ9TgQPluZKLSnpgbaXCQGBp4HCKRLHB
-         Tt9ZkMzW3j9STloLuLE4THqArULR94qdR4147GuUEO1w3nXITLsfsldYY9nBfMpk3mlL
-         GifKlcZkMXjJnDKdVHoYJP4e6Ag6xh0JVGDUxpfEvKCUKaDTls8+G0o5o/36LKNz9ey+
-         ECig==
-X-Gm-Message-State: AOAM530xknJnUMUyAJOJrq6gVEjjvJDMMafxvTpkHaqK35jsmLKF4jAo
-        sc3bKGd7UKUKqAdjBM0468Bip4CvDbSNMHJDCME=
-X-Google-Smtp-Source: ABdhPJzlx1Ok/ogigOJgjs5eKtpsp0uBwFE5sXx2kleFYDK8pbhDc+KZP6nJlz0fOukzI2HzJE/ZxBYDvNhRIrl7Peo=
-X-Received: by 2002:a05:600c:2146:: with SMTP id v6mr7027471wml.142.1589592359489;
- Fri, 15 May 2020 18:25:59 -0700 (PDT)
-MIME-Version: 1.0
-Received: by 2002:a1c:7d94:0:0:0:0:0 with HTTP; Fri, 15 May 2020 18:25:58
- -0700 (PDT)
-Reply-To: drtracywilliam2@yahoo.com
-From:   "Dr. Tracy William" <tracywillliams25@gmail.com>
-Date:   Fri, 15 May 2020 23:25:58 -0200
-Message-ID: <CAM_qd2=hEtf8zyaJhC6UbRcTfgsOvcnaNsYodBC2e=U+79DpXA@mail.gmail.com>
-Subject: Hi Dear
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=Cg0ycuIrMHsEZQFx/mNctoPUaSFNFnjiuqv1mZpAwt8=;
+        b=VdznOsyhiuSYH5/jDjDs7FGLzabRvqYl9ZYux+uQS52JWGwF0PI/akTOEwlCHtLCMe
+         LNT8+TBbN4z+hehd8Mh3gm6jzYCIaSc/AWC56qQKEdvB7A2+Q6iiTx0tCfcwmeZ5KonJ
+         ZFhullE+esa6JtbC+oGsajT+ByJTUwLVtoUbzsucXvlT1cguTo1S7RekGI36qIC7hVbm
+         rUlRX2F6irNj5IxulOXo2xz6ow5gUZ7zbKGAwqJLPXrqCxH38B407aEK/DFHsQEgki9X
+         ZTN0a0se4+VTlcwxUGAsCf9LkFFLxeKpeBu8ON1TUzz56m8eDoaflz6OBT0KfOXWrOGN
+         KpRQ==
+X-Gm-Message-State: AOAM530K7tswrCbLfyf2UaWhtlRoUIyECI433HiBiOubjM2e0G0a1ATV
+        b/nysvb4SVWsHz5cQHhRImAVxMq//yyrmA==
+X-Google-Smtp-Source: ABdhPJwTuIOVuwoP2uFG8nVX6hovN/KOFAZhdDF3DQzHVW4nsYrQGoIyW5AGZOOAKAHMOzPEiOWnZg==
+X-Received: by 2002:a65:6718:: with SMTP id u24mr7797300pgf.451.1589646089501;
+        Sat, 16 May 2020 09:21:29 -0700 (PDT)
+Received: from localhost.localdomain (p2438235-ipngn200604tokaisakaetozai.aichi.ocn.ne.jp. [221.113.241.235])
+        by smtp.gmail.com with ESMTPSA id t5sm4020364pgp.80.2020.05.16.09.21.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 16 May 2020 09:21:29 -0700 (PDT)
+From:   wata2ki <wata2ki@gmail.com>
+To:     linux-edac@vger.kernel.org
+Cc:     Naoto Yamaguchi <i33399_YAMAGUCHI@aisin-aw.co.jp>
+Subject: [PATCH] EDAC/mc: Fix memory alignment calculation formula
+Date:   Sun, 17 May 2020 01:21:15 +0900
+Message-Id: <20200516162115.16545-1-wata2ki@gmail.com>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-Hi Dear ,
-how are you today I hope that everything is OK with you as it is my
-great pleasure to contact you in having communication with you
-starting from today, i was just surfing through the Internet search
-when i found your email address, I want to make a very new and special
-friend, so i decided to contact you to see how we can make it work if
-we can.
+From: Naoto Yamaguchi <i33399_YAMAGUCHI@aisin-aw.co.jp>
 
-Please i wish you will have the desire with me so that we can get to
-know each other better and see what happens in future. My name is
-Tracy William, I am from the United States of America but presently I
-live and work in England,  I will give you my pictures and details
-about me as soon as i hear from you
-bye
-Tracy
+During the development of the off-tree driver, we found a bug that
+causes alignment fault exception in mutex_lock.
+
+Line of the code:
+ffffffc010536ce4: c85ffe62 ldaxr x2, [x19]
+
+Register value:
+x19: ffffff800e90f6c4
+
+This problem was caused by the alignment error of pvt_info
+in struct mem_ctl_info.  It is caused by a calculation formula
+error in edac_align_ptr.
+
+Existing calculation formula is using variable p, but this
+variable is address of the pointer variable not memory offset.
+In this calculation formula should use *p.
+
+Signed-off-by: Naoto Yamaguchi <i33399_YAMAGUCHI@aisin-aw.co.jp>
+---
+ drivers/edac/edac_mc.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+ mode change 100644 => 100755 drivers/edac/edac_mc.c
+
+diff --git a/drivers/edac/edac_mc.c b/drivers/edac/edac_mc.c
+old mode 100644
+new mode 100755
+index 75ede27bdf6a..70929f136dd7
+--- a/drivers/edac/edac_mc.c
++++ b/drivers/edac/edac_mc.c
+@@ -271,7 +271,7 @@ void *edac_align_ptr(void **p, unsigned int size, int n_elems)
+ 	else
+ 		return (char *)ptr;
+ 
+-	r = (unsigned long)p % align;
++	r = (unsigned long)(*p) % align;
+ 
+ 	if (r == 0)
+ 		return (char *)ptr;
+-- 
+2.17.1
+
