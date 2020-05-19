@@ -2,64 +2,64 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 247971D9491
-	for <lists+linux-edac@lfdr.de>; Tue, 19 May 2020 12:45:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 613111D9497
+	for <lists+linux-edac@lfdr.de>; Tue, 19 May 2020 12:45:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726949AbgESKpf (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Tue, 19 May 2020 06:45:35 -0400
-Received: from mx0a-0016f401.pphosted.com ([67.231.148.174]:58320 "EHLO
-        mx0b-0016f401.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726494AbgESKpf (ORCPT
+        id S1728672AbgESKpn (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Tue, 19 May 2020 06:45:43 -0400
+Received: from mx0b-0016f401.pphosted.com ([67.231.156.173]:50342 "EHLO
+        mx0b-0016f401.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1728675AbgESKpm (ORCPT
         <rfc822;linux-edac@vger.kernel.org>);
-        Tue, 19 May 2020 06:45:35 -0400
-Received: from pps.filterd (m0045849.ppops.net [127.0.0.1])
-        by mx0a-0016f401.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 04JAedaq031351;
-        Tue, 19 May 2020 03:45:22 -0700
+        Tue, 19 May 2020 06:45:42 -0400
+Received: from pps.filterd (m0045851.ppops.net [127.0.0.1])
+        by mx0b-0016f401.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 04JAeUiC030302;
+        Tue, 19 May 2020 03:45:30 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references :
  content-transfer-encoding : content-type : mime-version; s=pfpt0818;
- bh=lLCAHuSobwIEK/Wiic+M3Y+HJjZXSuwrKpFZxVRimaE=;
- b=LDygkSvnzxnbL3fR6KkYsQPEWye/3U8ebeXWRiCcwrMHgkCDyx3UFnrqUOePr91Zgk9l
- z8QytF+XoQmEgEwZTDrl3EM/nWT25RvTWiYGXQYW6zFLq7XtXW3oqwfwOVh1/qQdvxe+
- jdmZ3wkaAuZiGnGWSErNWWUNLsLBvydezBMGCZvjPfzlG7aPhaETPDh24IDw5Lrn1SZq
- 5TUYqsg0sLLlufKXh6I8ysoBf7aKjXF2NaU1nbF9q+rgKH3NsUSxTyanycl58ofycILx
- KvZzumcr3qdNl+Yjqn81Xvc4i2fEM+3lptz/J9a6lu6cSPOrGOHTVwHL6K8BD0XD5ib7 qQ== 
-Received: from sc-exch03.marvell.com ([199.233.58.183])
-        by mx0a-0016f401.pphosted.com with ESMTP id 312dhqkgnb-1
+ bh=3goDE3ssYNCKrYs7A6T5G4XmNzhTU+H7VajfjPnbkWA=;
+ b=A+lW433MACmQ7fwLxK4GaT8cDdXhsH5xTYWG1mH57mKrTrizLatFPFabBhYFsh+uCEGk
+ qdBHJgW2/xFpn0NFJnTdWtyI9dbyQd2rvhgIgTd70ZDdy0knXhc72bVWkfZe8YswVUiD
+ nFZizvgdX2HlafTnolXx+IPLFJdAOuBO+CGzlQd7X8PNKYjuU3q3LH5ZtWmS/mCivPcZ
+ mrMgmm4yabE0nFhKfi82iuH+LTqi4KjYTvp8IrW9DGASbZSCyN0a7JLjubsUARV5kN9I
+ OZuq1nH3/VvKKN7HNozpRJzMmBGHohnnb95N2IKtyttZKs3kGvhY86/qx3uOWEb9POum Ng== 
+Received: from sc-exch01.marvell.com ([199.233.58.181])
+        by mx0b-0016f401.pphosted.com with ESMTP id 312fpp2ybm-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
-        Tue, 19 May 2020 03:45:21 -0700
-Received: from SC-EXCH04.marvell.com (10.93.176.84) by SC-EXCH03.marvell.com
- (10.93.176.83) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Tue, 19 May
- 2020 03:45:20 -0700
+        Tue, 19 May 2020 03:45:25 -0700
+Received: from SC-EXCH03.marvell.com (10.93.176.83) by SC-EXCH01.marvell.com
+ (10.93.176.81) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Tue, 19 May
+ 2020 03:45:23 -0700
 Received: from NAM11-CO1-obe.outbound.protection.outlook.com (104.47.56.177)
- by SC-EXCH04.marvell.com (10.93.176.84) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2 via Frontend Transport; Tue, 19 May 2020 03:45:20 -0700
+ by SC-EXCH03.marvell.com (10.93.176.83) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2 via Frontend Transport; Tue, 19 May 2020 03:45:23 -0700
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=gFryiegkaEq3t2S0bQGheKmwMqFJDnIv1QKbF5/jZcMokt9eHqFYkGOGz3mgNW5jwtXUwmoc7mgMrJyG9Lp0a4k052uXAvlmaRPQd5vI1ECKIabRF9DDBUiAqgQ2Y5grDkNdrROIWhrT+JMt9IlN671a2WMMuRJsi2gUosBrlIR7A0lQR2flD8pVy62Uv5sSeDiuG2d4yVnn02gQe82XrHdpnG4WZn5kTvIle5CGc9bQNRQtnOPqP/RF1meGW5gEjdiCDzHqKY33Hbf8LqltHX1tzgrhnd5IaW4CVIAR1jPTHC4t5oMIjkX3SOULV/OmHdaACjhnUW7qFv4zkC/EvA==
+ b=VYlTXHDEuUscaSEvUjGxtgZZivDvKCfamvR1AUltbXwvcYRroSWyYd5rCOlLjQHdgzVY70JwD6L1TYZJLpW3pm2CF8GJ8MsbNnugJnH8Sl++3+EBwZ6kFLLjUUUZ4TejOIItgoXlKXBORdYOLpUXzGlZ1AnmAWAz1yX1/I1hl7pu0cqWjRENLJoUJdBSeWUZsAfmLxupL1e8fCk7hgi5lCs0RLutbpRiXulZ2SRkbARQRin4zCYm7bwVj1eSEH32LhguCMaEdfocsMNaehXhO3q3G/1GBfHr+lpxOfiNPMr3J+Qoj8QbwftPesYD/biYTR9AprckV/G8BJqrVE7uhg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=lLCAHuSobwIEK/Wiic+M3Y+HJjZXSuwrKpFZxVRimaE=;
- b=hnMP/ErzaXQY6AzqUXooEZShdWA+N92W4hdSsCL0Y5NPzPWlOcl7kmyI+l96qZrfhwbbnyDEzan2V1p7xIbIy4033lNafLDpVubE5/aW/ADW1mo69zGMqNpln1poerNPuCdIO+1USIlAlbDHrs2qA0ELK9ULzCH5J/TUsn16z3hc0hFZF19e2lAw6gJrOkKufbiEo53g5BfmldgwjbxhEJcfmPoU9SHfkocymltZcaDgjn84D8eMmTCq/6SAbAM4ivQA6k1gmbq4Al9uP4NOgOn1T8ek0yDBil5af1d1RjtVrQHHTNgPf6No11CE7adNkmE1uzjTdG4VYVXgKEuUXQ==
+ bh=3goDE3ssYNCKrYs7A6T5G4XmNzhTU+H7VajfjPnbkWA=;
+ b=KZvj5kPkH5vFJ93IiZ1YXzaFTfUxOR9+temou0nWy08pknc9GjyD/6iQUl1UZ5XHK/5teZI8cRcXiazdPWsytt6UiPIOCeJMMFqoBhLm8I04E9ciiPnl6R3MavQ2Kyq85EH5guqOA8BaFOadFsSfoUwaDKmgfTH/HemlOoKdfLy+oJkHmrXjJrGRmIWp6KkqFE5LKtshk7QVz2S3+0S2B0lNsRio6IuUqgE2HNDFzEgZjWXMYLiUOW6fuvwY7x4P6StNxft+TdDJenATO41sDcbJUoldho4T3DLho0HSNbyxxJ1dzTQK1C0wf9EHJHaEYZqwoHXb86qZN1/AgsEIQQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=marvell.com; dmarc=pass action=none header.from=marvell.com;
  dkim=pass header.d=marvell.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=marvell.onmicrosoft.com; s=selector1-marvell-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=lLCAHuSobwIEK/Wiic+M3Y+HJjZXSuwrKpFZxVRimaE=;
- b=uX1uM6goISqhS+B7JzAmXuHVtOXJ0np/jHkb8tyLmJw7GJaJytAyOoD55ix3NphodRBdix/1vA7Fysy8iq1xrWCnAJz4VbgLiiL3OXrbZHE3y9ifSv6wnuF4UFtelgvxWlbZU673lseCvuR4l5kv3FucuzRT0nlg+UK+cqyFYds=
+ bh=3goDE3ssYNCKrYs7A6T5G4XmNzhTU+H7VajfjPnbkWA=;
+ b=GklB5EyK4zILj5jOo8Ozwi/HbdHdczvNdLcO7BpAYnbj97XQS0gk0z6rTKh+uZOf9/l4Vr/kU02/KHf3f/0Mv0ikGMKb4O+lWEqvOyj1pMO4UYs6hwzOAys/TT6XdevApDUQPle41x4GzFHD/gbzuRwEBiaTS01cklIjYbM32Rw=
 Authentication-Results: alien8.de; dkim=none (message not signed)
  header.d=none;alien8.de; dmarc=none action=none header.from=marvell.com;
 Received: from BYAPR18MB2661.namprd18.prod.outlook.com (2603:10b6:a03:136::26)
  by BYAPR18MB2455.namprd18.prod.outlook.com (2603:10b6:a03:132::24) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3000.27; Tue, 19 May
- 2020 10:45:19 +0000
+ 2020 10:45:22 +0000
 Received: from BYAPR18MB2661.namprd18.prod.outlook.com
  ([fe80::a165:ffa5:f3eb:d62d]) by BYAPR18MB2661.namprd18.prod.outlook.com
  ([fe80::a165:ffa5:f3eb:d62d%7]) with mapi id 15.20.3021.020; Tue, 19 May 2020
- 10:45:19 +0000
+ 10:45:22 +0000
 From:   Robert Richter <rrichter@marvell.com>
 To:     Borislav Petkov <bp@alien8.de>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
@@ -69,9 +69,9 @@ CC:     James Morse <james.morse@arm.com>,
         Robert Richter <rrichter@marvell.com>,
         Matthias Brugger <mbrugger@suse.com>,
         <linux-edac@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH v3 1/5] EDAC/ghes: Remove unused members of struct ghes_edac_pvt, rename it to ghes_pvt
-Date:   Tue, 19 May 2020 12:44:39 +0200
-Message-ID: <20200519104443.15673-2-rrichter@marvell.com>
+Subject: [PATCH v3 2/5] EDAC/ghes: Cleanup struct dimm_fill
+Date:   Tue, 19 May 2020 12:44:40 +0200
+Message-ID: <20200519104443.15673-3-rrichter@marvell.com>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20200519104443.15673-1-rrichter@marvell.com>
 References: <20200519104443.15673-1-rrichter@marvell.com>
@@ -81,28 +81,28 @@ X-ClientProxiedBy: HE1P189CA0023.EURP189.PROD.OUTLOOK.COM (2603:10a6:7:53::36)
  To BYAPR18MB2661.namprd18.prod.outlook.com (2603:10b6:a03:136::26)
 MIME-Version: 1.0
 X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from rric.localdomain (31.208.96.227) by HE1P189CA0023.EURP189.PROD.OUTLOOK.COM (2603:10a6:7:53::36) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3000.24 via Frontend Transport; Tue, 19 May 2020 10:45:17 +0000
+Received: from rric.localdomain (31.208.96.227) by HE1P189CA0023.EURP189.PROD.OUTLOOK.COM (2603:10a6:7:53::36) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3000.24 via Frontend Transport; Tue, 19 May 2020 10:45:20 +0000
 X-Mailer: git-send-email 2.20.1
 X-Originating-IP: [31.208.96.227]
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 40020fce-f882-4471-76ad-08d7fbe1b954
+X-MS-Office365-Filtering-Correlation-Id: a82a9aea-c59f-4b9b-b8d6-08d7fbe1bb30
 X-MS-TrafficTypeDiagnostic: BYAPR18MB2455:
 X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <BYAPR18MB2455DBACF90BF7378892036DD9B90@BYAPR18MB2455.namprd18.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:1107;
+X-Microsoft-Antispam-PRVS: <BYAPR18MB2455414DF75EDA49FB0E51B7D9B90@BYAPR18MB2455.namprd18.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:326;
 X-Forefront-PRVS: 040866B734
 X-MS-Exchange-SenderADCheck: 1
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 7FJVj1WTU2JGafnQUuJBgVtcxI7lUsu+rsDt09qH7mvO/1If+nDzhkfJaASlNYNBaOna/owo69z+TF9fYVXEWHmgctAoSTWFurfnVWvwXu5l0K9DsP10ikYRRH35Kbrd7SSrnE9W9DzA3tdhZt0lXXhOr/RwmD9kl7Coa8AMGUr6/JLpqqNlhLeTaNksLMVOEv7CCtx9L+tcd8pe0jimzxTdSBWj02asG/EZGRuLdw0vJpc5vfLf4ECXvnmiPo88c+IWSL1ceSVQMER8rg4+wA+UCgClfEvDwrNHyCfItxMPUFIkaE0mAIFQRyVm2DMRBCSSddv2+z5jpUIu4UQtaYMefWkksv2n4CT9t+tGn55oXj3HUv15AxgQZy3ts56CfNvUId+HjFRjK9SwKt+s+bSddjx7caak+8XCaMe9+uckBQRwxGdEgHPK8bUXJkA3
+X-Microsoft-Antispam-Message-Info: JlER1HU1taNiTJ3Mu2wgOjbGRYFHi0bJG05AgHd3I3jX9+JYK1hr3qLGSUV/RK9E+r5eqnWSpVSkd3Q1NTmYoseFjM2Spthph7uSsw64EtxKAFRTWmihUwb0plD8BSWdiO51LbErua5tBfa0+Z4SGCstRyDq3ZH1TYpCEeXqAAVzUEZBwNYy3fP3M9RDyXdtoeC2flMO5l/o4iOUDFP7SMxMcA7m10eKBMiJSCShOfGp7bhSYE0hPjIGfUbHO/jXHtsgDjOtnXNlD4mGBv7JwylO0NLDvGg7p/4903+tNLLd2YkDjtPt1lW2ggPVfZJS2dnVlBVrPtbBp1T5aHT27n8a+gNVN3M9WKYfwdchzWHCpntlrj6lchJArnqvEPeYyidJf5bjsVWLQpYl+YsP0bmAmfifti5V6BwQH1oW99rjiePte6e2HD2zTtbvRjn9
 X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR18MB2661.namprd18.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(4636009)(396003)(39860400002)(136003)(376002)(346002)(366004)(186003)(316002)(16526019)(6666004)(956004)(2616005)(36756003)(8936002)(110136005)(86362001)(66946007)(6486002)(54906003)(26005)(5660300002)(6506007)(66556008)(6512007)(66476007)(52116002)(478600001)(8676002)(1076003)(4326008)(2906002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData: MfySS82USyBrU5vlpT4c+0jGSVW+1a7PH4JCz9ZOPg5LXDaVM9CI182GVhwPHY+9ymU40ltiFadlcsopb4jANBRneBWTMrG6VF0Iebbb4T465Ln8ZrffO7P883GZxM77mLlFNr3dFI7IvB0P1fB7S1tQQD1xzNDL5UJ/6YNa0/ndpqr/BTlZSlSpNwQBU6TLG0vOBVqUpkjZFa0ac9YRkvcbPYwKoSFz2jlkHkB1SQ3e3llXkURnftGdmz48+M78/Vgzv77S70Hw5ZBuCaGhAlzFLBwuUDsnemz8PWiwS9UCborjmUdgAI9dYo+7BMGO8lcBwzt1c3mJVgsow9Gk61mAKrEGldtN/KKbLzE/YqgRNbh26UUniwOjwX2GK7Ds2cqtHHMWUgCKl9jZzU13PQ02CzlKRnI60V5YFjQzB+X8fPcO0SEsdhGf+mhfvy1CxUCmW5jDojyfJGMb/Fml+n1HJn3ui82FVFaj3luqk30=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 40020fce-f882-4471-76ad-08d7fbe1b954
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 May 2020 10:45:19.5086
+X-MS-Exchange-AntiSpam-MessageData: pW30Cxza0dKqD5JfG6ghXwI33/B+rw9KR9mF1bmIUPi4IzmRmf8qzGfU0CCM8glsiudcj7AN+gf/nSBehuMY2U6Mvdi4bN5URVXsQ0MgZtisLc1oaGsvtdIpdKhqlOu6HdgCRW3AcCd243k0DDlj0lgEdw4ZyDLi5FFaMDw27IgNwt3bZBTxB8Y0geN7ri30pweBRrexVQY2CQrPaQevS1jhvK5zDsyXpqODTpGWGKL9Hb04M6VZ3EWqtQOKEFcwSUQatvLrelj2bQlbmPzGoTyJ0WG3J0xny4Tv0IRGXARq17QM+nnCw2LDSlxNZ1wQkvD5LeB0XoE13OHgML54RZcZoa+fk7KHCHT4Wv8dGvQTLfbTTiT62ZOJX7txdPAxQ2T5EfIjy9TSwFP/0ECoyaK/UMv0HPBPckr1VS6Gx+YMHGSS2Q29fkaRpmTuhUfioCeHePYMZ69t4uGTeRYfPiVCuJ8ArKV+xeq4kGd/5TY=
+X-MS-Exchange-CrossTenant-Network-Message-Id: a82a9aea-c59f-4b9b-b8d6-08d7fbe1bb30
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 May 2020 10:45:22.5239
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 70e1fb47-1155-421d-87fc-2e58f638b6e0
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: uHdkdjq8zFxBGAx0qmT6PXhmpogdx1FcbRucYIkBBTFhkJXBbAuP2QnbOo37DhtUneI1gJdbKVoKzf4fHnCyNQ==
+X-MS-Exchange-CrossTenant-UserPrincipalName: 9ed+GiAVJnBRi9aex8h6zmrKoJsabu4gpVYA3tg1uqUALx6QIY1ugXvPUl9h41cNmIb7RYZOuKGnCe1i3ojIQQ==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR18MB2455
 X-OriginatorOrg: marvell.com
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.216,18.0.676
@@ -112,74 +112,105 @@ Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-The struct members list and ghes of struct ghes_edac_pvt are unused,
-remove them. On that occasion, rename it to the shorter name struct
-ghes_pvt.
+The struct is used to store temporary data for the dmidecode callback.
+Clean this up a bit:
+
+ 1) Rename member count to index since this is what it is used for.
+
+ 2) Move code close to ghes_edac_dmidecode() where it is used.
+
+ 3) While at it, use edac_get_dimm_by_index().
 
 Signed-off-by: Robert Richter <rrichter@marvell.com>
 ---
- drivers/edac/ghes_edac.c | 13 +++++--------
- 1 file changed, 5 insertions(+), 8 deletions(-)
+ drivers/edac/ghes_edac.c | 26 +++++++++++++-------------
+ 1 file changed, 13 insertions(+), 13 deletions(-)
 
 diff --git a/drivers/edac/ghes_edac.c b/drivers/edac/ghes_edac.c
-index c7d404629863..2ed48a5d48d6 100644
+index 2ed48a5d48d6..b72fe10b84d4 100644
 --- a/drivers/edac/ghes_edac.c
 +++ b/drivers/edac/ghes_edac.c
-@@ -15,9 +15,7 @@
- #include "edac_module.h"
- #include <ras/ras_event.h>
+@@ -72,11 +72,6 @@ struct memdev_dmi_entry {
+ 	u16 conf_mem_clk_speed;
+ } __attribute__((__packed__));
  
--struct ghes_edac_pvt {
--	struct list_head list;
--	struct ghes *ghes;
-+struct ghes_pvt {
- 	struct mem_ctl_info *mci;
- 
- 	/* Buffers for the error handling routine */
-@@ -32,7 +30,7 @@ static refcount_t ghes_refcount = REFCOUNT_INIT(0);
-  * also provides the necessary (implicit) memory barrier for the SMP
-  * case to make the pointer visible on another CPU.
-  */
--static struct ghes_edac_pvt *ghes_pvt;
-+static struct ghes_pvt *ghes_pvt;
- 
- /* GHES registration mutex */
- static DEFINE_MUTEX(ghes_reg_mutex);
-@@ -216,7 +214,7 @@ void ghes_edac_report_mem_error(int sev, struct cper_sec_mem_err *mem_err)
+-struct ghes_edac_dimm_fill {
+-	struct mem_ctl_info *mci;
+-	unsigned int count;
+-};
+-
+ static void ghes_edac_count_dimms(const struct dmi_header *dh, void *arg)
  {
- 	struct edac_raw_error_desc *e;
- 	struct mem_ctl_info *mci;
--	struct ghes_edac_pvt *pvt;
-+	struct ghes_pvt *pvt;
- 	unsigned long flags;
- 	char *p;
+ 	int *num_dimm = arg;
+@@ -112,19 +107,24 @@ static void dimm_setup_label(struct dimm_info *dimm, u16 handle)
+ 			"unknown memory (handle: 0x%.4x)", handle);
+ }
  
-@@ -468,7 +466,7 @@ int ghes_edac_register(struct ghes *ghes, struct device *dev)
- 	bool fake = false;
- 	int rc = 0, num_dimm = 0;
++struct dimm_fill {
++	struct mem_ctl_info *mci;
++	int index;
++};
++
+ static void ghes_edac_dmidecode(const struct dmi_header *dh, void *arg)
+ {
+-	struct ghes_edac_dimm_fill *dimm_fill = arg;
++	struct dimm_fill *dimm_fill = arg;
+ 	struct mem_ctl_info *mci = dimm_fill->mci;
+ 
+ 	if (dh->type == DMI_ENTRY_MEM_DEVICE) {
+ 		struct memdev_dmi_entry *entry = (struct memdev_dmi_entry *)dh;
+-		struct dimm_info *dimm = edac_get_dimm(mci, dimm_fill->count, 0, 0);
++		struct dimm_info *dimm = edac_get_dimm_by_index(mci, dimm_fill->index);
+ 		u16 rdr_mask = BIT(7) | BIT(13);
+ 
+ 		if (entry->size == 0xffff) {
+ 			pr_info("Can't get DIMM%i size\n",
+-				dimm_fill->count);
++				dimm_fill->index);
+ 			dimm->nr_pages = MiB_TO_PAGES(32);/* Unknown */
+ 		} else if (entry->size == 0x7fff) {
+ 			dimm->nr_pages = MiB_TO_PAGES(entry->extended_size);
+@@ -196,7 +196,7 @@ static void ghes_edac_dmidecode(const struct dmi_header *dh, void *arg)
+ 
+ 		if (dimm->nr_pages) {
+ 			edac_dbg(1, "DIMM%i: %s size = %d MB%s\n",
+-				dimm_fill->count, edac_mem_types[dimm->mtype],
++				dimm_fill->index, edac_mem_types[dimm->mtype],
+ 				PAGES_TO_MiB(dimm->nr_pages),
+ 				(dimm->edac_mode != EDAC_NONE) ? "(ECC)" : "");
+ 			edac_dbg(2, "\ttype %d, detail 0x%02x, width %d(total %d)\n",
+@@ -206,7 +206,7 @@ static void ghes_edac_dmidecode(const struct dmi_header *dh, void *arg)
+ 
+ 		dimm->smbios_handle = entry->handle;
+ 
+-		dimm_fill->count++;
++		dimm_fill->index++;
+ 	}
+ }
+ 
+@@ -468,7 +468,7 @@ int ghes_edac_register(struct ghes *ghes, struct device *dev)
  	struct mem_ctl_info *mci;
--	struct ghes_edac_pvt *pvt;
-+	struct ghes_pvt *pvt;
+ 	struct ghes_pvt *pvt;
  	struct edac_mc_layer layers[1];
- 	struct ghes_edac_dimm_fill dimm_fill;
+-	struct ghes_edac_dimm_fill dimm_fill;
++	struct dimm_fill dimm_fill;
  	unsigned long flags;
-@@ -505,7 +503,7 @@ int ghes_edac_register(struct ghes *ghes, struct device *dev)
- 	layers[0].size = num_dimm;
- 	layers[0].is_virt_csrow = true;
+ 	int idx = -1;
  
--	mci = edac_mc_alloc(0, ARRAY_SIZE(layers), layers, sizeof(struct ghes_edac_pvt));
-+	mci = edac_mc_alloc(0, ARRAY_SIZE(layers), layers, sizeof(struct ghes_pvt));
- 	if (!mci) {
- 		pr_info("Can't allocate memory for EDAC data\n");
- 		rc = -ENOMEM;
-@@ -513,7 +511,6 @@ int ghes_edac_register(struct ghes *ghes, struct device *dev)
+@@ -535,11 +535,11 @@ int ghes_edac_register(struct ghes *ghes, struct device *dev)
  	}
  
- 	pvt		= mci->pvt_info;
--	pvt->ghes	= ghes;
- 	pvt->mci	= mci;
+ 	if (!fake) {
+-		dimm_fill.count = 0;
++		dimm_fill.index = 0;
+ 		dimm_fill.mci = mci;
+ 		dmi_walk(ghes_edac_dmidecode, &dimm_fill);
+ 	} else {
+-		struct dimm_info *dimm = edac_get_dimm(mci, 0, 0, 0);
++		struct dimm_info *dimm = edac_get_dimm_by_index(mci, 0);
  
- 	mci->pdev = dev;
+ 		dimm->nr_pages = 1;
+ 		dimm->grain = 128;
 -- 
 2.20.1
 
