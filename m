@@ -2,83 +2,155 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D0F51DBA37
-	for <lists+linux-edac@lfdr.de>; Wed, 20 May 2020 18:52:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 313601DE939
+	for <lists+linux-edac@lfdr.de>; Fri, 22 May 2020 16:45:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727776AbgETQvw (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Wed, 20 May 2020 12:51:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50238 "EHLO
+        id S1730189AbgEVOpb (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Fri, 22 May 2020 10:45:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726729AbgETQvw (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Wed, 20 May 2020 12:51:52 -0400
-Received: from mail-ej1-x644.google.com (mail-ej1-x644.google.com [IPv6:2a00:1450:4864:20::644])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4381BC061A0F
-        for <linux-edac@vger.kernel.org>; Wed, 20 May 2020 09:51:51 -0700 (PDT)
-Received: by mail-ej1-x644.google.com with SMTP id yc10so4733585ejb.12
-        for <linux-edac@vger.kernel.org>; Wed, 20 May 2020 09:51:51 -0700 (PDT)
+        with ESMTP id S1730172AbgEVOpa (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Fri, 22 May 2020 10:45:30 -0400
+Received: from mail-pj1-x1041.google.com (mail-pj1-x1041.google.com [IPv6:2607:f8b0:4864:20::1041])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A284C061A0E;
+        Fri, 22 May 2020 07:45:30 -0700 (PDT)
+Received: by mail-pj1-x1041.google.com with SMTP id s69so5019075pjb.4;
+        Fri, 22 May 2020 07:45:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=h5s+JplhtpSvqkcmZcYQ/5/oKWyBMMDumaQXVQ0u3s8=;
-        b=GvaetEyGNqIDgtjP+h/DEnAjEoFHyrpOik179kfLu0zReJl8G42Sdf+2PkiyXNEryC
-         HSOT35vkzk+dWrmViroD68zdGuJWdLKfQa5KsSN2/PYeymP7wFhTXSOgWjywBJhwQ2S1
-         QO10sOplMTaARjVohPSZdKwMJttlecDBCmL0WkgjVC51spi77LYkKOsTTzKPFuwvR1/i
-         STXI5ZwGqSOQtp8mzngXLz9BCS5dmADFtl4ISG6OM/y7QZox6pmzTVj9Z1mD+2NsFMvb
-         3mrmQTgvnv56gu5gR6LStjfIV5kS1BR1rJDz/GPr0OU4oVvsyVNVg1ogZRGyYSQcCWJd
-         lyow==
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=rrXdaPjifMrf4XwvQWVex8RQCvnU9ofzUU0gXliR/5E=;
+        b=swaw1mtpQgECkgw2Iz/+9mmP15JUnszYKlOMmg86XZ8kzTHq9biLA2qHiPCFXd5Qu+
+         DN9s5gOFC5LD5Yo1hdZ2hopDIofoJjcywYu7jnK+jZQKbbkCfsz/fKiaq7QI/pf41Wrb
+         y1whQD0ptcQDFDKyfU2HPo/oUdb2FjFzKftplCVMGNZzp1I/8L49zJfDh+7yHK+avfNe
+         S+BEe+R8s73fCKUFiD7PcVIouy87a/yV5vnjAXiMQ07ZJzOOSdomJw06DBa6cZl5DTDL
+         tdxb+ndlAaOMbCtqje5s6qU/2tO/03L2iXVxFqinSSX5Haz3B7SRxsOFnyKa8aYsDhFD
+         j/1g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=h5s+JplhtpSvqkcmZcYQ/5/oKWyBMMDumaQXVQ0u3s8=;
-        b=BHjQFXHg9qW4dM1KmqyTiqyk18bswDt+R8Q+RuEq2afv8EYdcc0c4d/dbJ6amBOf+x
-         1no9xRLfAkDYwaBfCg18O6A+Zz0duXaANgRXsd9P0tsN9QeENlIF5D7OkE5Mk3oBd8CT
-         HfuBP5a+rr9dd/iMl71Px9cvlZjOReDc5azgoBGQhCqdozFId/AdqxNSQ6YIvEP40eWd
-         lEWtelhxVBJYa6SimCGbN3iCq+W8QD4Lu7yqt8f8byWO0t6rPXHC4MmISe75qx9jIpRQ
-         GkxAb1Hv9XJt3qSwf86wpcFmGzZEjpuqi6ncH0VR1EEOpD6oYA41ZYgphfXk6CuMcdXM
-         OorQ==
-X-Gm-Message-State: AOAM530GPjYTn/qFxH44x6YLxAUn2fqiWqZK9HADdCf5bXXBnf2N0YWo
-        EFpA6TDYAV59C3y2/WBhu4iTxlZpNCEbsgkYVAI=
-X-Google-Smtp-Source: ABdhPJxGNwUlibIE15UFzbbkqLs9WYFRyrS3BMr/Y4nQHzCp6j1aMvl5d2YcxC7+ZB9kiYa7N1w5ye+zCrhOOM29ruc=
-X-Received: by 2002:a17:906:90d4:: with SMTP id v20mr4355280ejw.476.1589993509958;
- Wed, 20 May 2020 09:51:49 -0700 (PDT)
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to:user-agent;
+        bh=rrXdaPjifMrf4XwvQWVex8RQCvnU9ofzUU0gXliR/5E=;
+        b=Kx2aHWErfPHanDMfT3IVgWrIaCd0TqaUvNIM4IstOHB0rJpYQN0/+P6i+oAAMSH8PY
+         T+plxEo9w5DkwTIIVFtECViGZNIE3ZstkCsZWViTq9RhacSfjF/Kfj7P8CwetL5keF21
+         pZ5/RKVJThjkYff0AZISauvVwbmSpo1MLHQWjQhQ0IoYAPM6TAqiRtAouHpe7iPtuzgG
+         GpVC0/KdJtqRz+PSWchhqhXq/b0tPRbhCsvzJRCOcb26kK8EVbpIuuQAlLyeLXhgH0z3
+         Xg2eVw+5QRpzc8mMt3WVYUw4HZwMhjpLBAAungwV8NNrDy+lUWMCCeWFR33buxYJbEw7
+         ciDQ==
+X-Gm-Message-State: AOAM532LbhM9CGLAEw810Y0O1dshmnK2tFyCqxYdGBVysTAy7Lt832Ij
+        ZaQND/45GsEUsFxnoQSuhwY=
+X-Google-Smtp-Source: ABdhPJzdMfDd5MnULGJFuXkjBlAHVDbnewxlMrPCPazeK0Jcg0yY1FZBCYBxdkV3wdi8Y9Y06mcClA==
+X-Received: by 2002:a17:90a:ae0d:: with SMTP id t13mr4684628pjq.1.1590158729390;
+        Fri, 22 May 2020 07:45:29 -0700 (PDT)
+Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id f136sm6852659pfa.59.2020.05.22.07.45.28
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Fri, 22 May 2020 07:45:28 -0700 (PDT)
+Date:   Fri, 22 May 2020 07:45:27 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Alexander Monakov <amonakov@ispras.ru>
+Cc:     linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
+        Borislav Petkov <bp@alien8.de>, x86@kernel.org,
+        Yazen Ghannam <yazen.ghannam@amd.com>,
+        Brian Woods <brian.woods@amd.com>,
+        Clemens Ladisch <clemens@ladisch.de>,
+        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        linux-edac@vger.kernel.org
+Subject: Re: [PATCH 1/3] x86/amd_nb: add AMD family 17h model 60h PCI IDs
+Message-ID: <20200522144527.GA172805@roeck-us.net>
+References: <20200510204842.2603-1-amonakov@ispras.ru>
+ <20200510204842.2603-2-amonakov@ispras.ru>
 MIME-Version: 1.0
-Received: by 2002:a05:6402:392:0:0:0:0 with HTTP; Wed, 20 May 2020 09:51:49
- -0700 (PDT)
-Reply-To: scdn-1@tlen.pl
-From:   "Mr. Scott Donald" <md447755@gmail.com>
-Date:   Wed, 20 May 2020 09:51:49 -0700
-Message-ID: <CABJojffXw1tiPX58kBR6FbvHBqhjJUShE319jpoRM=vtAJ8zHQ@mail.gmail.com>
-Subject: Urgent Reply,
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200510204842.2603-2-amonakov@ispras.ru>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-Dear Friend,
-I'm Mr. Scott Donald a Successful business Man. dealing=C2=A0with
-Exportation, I got your email contact through search=C2=A0to let you know
-my Ugly Situation Am a dying Man here in=C2=A0California Los Angeles
-Hospital Bed in (USA), I Lost my=C2=A0Wife and my only Daughter for Corona
-virus and my Doctor said to me that i don't have enough time to live
-any=C2=A0more, i have a project that am about to handover to you.=C2=A0i ha=
-ve
-already instructed the Barclay Bank of London to=C2=A0transfer my fund sum
-of =C2=A33,7M GBP to you as to enable you=C2=A0give 50% to Charitable Home =
-and
-take 50% and i have=C2=A0already given all i have here in America to
-Charitable=C2=A0home I also ask my Doctor to help me get to you in case=C2=
-=A0you
-did not hear from me again, i want to you see on video very urgent
-here is my Doctor Whatsapp Number for urgent notice +13019692737
+On Sun, May 10, 2020 at 08:48:40PM +0000, Alexander Monakov wrote:
+> Add PCI IDs for AMD Renoir (4000-series Ryzen CPUs). This is necessary
+> to enable support for temperature sensors via the k10temp module.
+> 
+> Signed-off-by: Alexander Monakov <amonakov@ispras.ru>
+> Cc: Thomas Gleixner <tglx@linutronix.de>
+> Cc: Borislav Petkov <bp@alien8.de>
+> Cc: x86@kernel.org
+> Cc: Yazen Ghannam <yazen.ghannam@amd.com>
+> Cc: Brian Woods <brian.woods@amd.com>
+> Cc: Clemens Ladisch <clemens@ladisch.de>
+> Cc: Jean Delvare <jdelvare@suse.com>
+> Cc: Guenter Roeck <linux@roeck-us.net>
+> Cc: linux-hwmon@vger.kernel.org
+> Cc: linux-edac@vger.kernel.org
+> Acked-by: Yazen Ghannam <yazen.ghannam@amd.com>
 
-Hope To Hear From You. i want to see you on Video call very urgent please.
-i'm sending this email to you for the second times yet no response from you
+For my own reference:
 
-Regards
+Acked-by: Guenter Roeck <linux@roeck-us.net>
 
-Mr. Scott Donald
+I didn't see a response from any of the x86 maintainers, so this series may
+not make it into v5.8. No idea what to do about that.
+
+Guenter
+
+> ---
+>  arch/x86/kernel/amd_nb.c | 5 +++++
+>  include/linux/pci_ids.h  | 1 +
+>  2 files changed, 6 insertions(+)
+> 
+> diff --git a/arch/x86/kernel/amd_nb.c b/arch/x86/kernel/amd_nb.c
+> index b6b3297851f3..18f6b7c4bd79 100644
+> --- a/arch/x86/kernel/amd_nb.c
+> +++ b/arch/x86/kernel/amd_nb.c
+> @@ -18,9 +18,11 @@
+>  #define PCI_DEVICE_ID_AMD_17H_ROOT	0x1450
+>  #define PCI_DEVICE_ID_AMD_17H_M10H_ROOT	0x15d0
+>  #define PCI_DEVICE_ID_AMD_17H_M30H_ROOT	0x1480
+> +#define PCI_DEVICE_ID_AMD_17H_M60H_ROOT	0x1630
+>  #define PCI_DEVICE_ID_AMD_17H_DF_F4	0x1464
+>  #define PCI_DEVICE_ID_AMD_17H_M10H_DF_F4 0x15ec
+>  #define PCI_DEVICE_ID_AMD_17H_M30H_DF_F4 0x1494
+> +#define PCI_DEVICE_ID_AMD_17H_M60H_DF_F4 0x144c
+>  #define PCI_DEVICE_ID_AMD_17H_M70H_DF_F4 0x1444
+>  #define PCI_DEVICE_ID_AMD_19H_DF_F4	0x1654
+>  
+> @@ -33,6 +35,7 @@ static const struct pci_device_id amd_root_ids[] = {
+>  	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_17H_ROOT) },
+>  	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_17H_M10H_ROOT) },
+>  	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_17H_M30H_ROOT) },
+> +	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_17H_M60H_ROOT) },
+>  	{}
+>  };
+>  
+> @@ -50,6 +53,7 @@ static const struct pci_device_id amd_nb_misc_ids[] = {
+>  	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_17H_DF_F3) },
+>  	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_17H_M10H_DF_F3) },
+>  	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_17H_M30H_DF_F3) },
+> +	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_17H_M60H_DF_F3) },
+>  	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_CNB17H_F3) },
+>  	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_17H_M70H_DF_F3) },
+>  	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_19H_DF_F3) },
+> @@ -65,6 +69,7 @@ static const struct pci_device_id amd_nb_link_ids[] = {
+>  	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_17H_DF_F4) },
+>  	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_17H_M10H_DF_F4) },
+>  	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_17H_M30H_DF_F4) },
+> +	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_17H_M60H_DF_F4) },
+>  	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_17H_M70H_DF_F4) },
+>  	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_19H_DF_F4) },
+>  	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_CNB17H_F4) },
+> diff --git a/include/linux/pci_ids.h b/include/linux/pci_ids.h
+> index 1dfc4e1dcb94..3155f5ada02e 100644
+> --- a/include/linux/pci_ids.h
+> +++ b/include/linux/pci_ids.h
+> @@ -550,6 +550,7 @@
+>  #define PCI_DEVICE_ID_AMD_17H_DF_F3	0x1463
+>  #define PCI_DEVICE_ID_AMD_17H_M10H_DF_F3 0x15eb
+>  #define PCI_DEVICE_ID_AMD_17H_M30H_DF_F3 0x1493
+> +#define PCI_DEVICE_ID_AMD_17H_M60H_DF_F3 0x144b
+>  #define PCI_DEVICE_ID_AMD_17H_M70H_DF_F3 0x1443
+>  #define PCI_DEVICE_ID_AMD_19H_DF_F3	0x1653
+>  #define PCI_DEVICE_ID_AMD_CNB17H_F3	0x1703
