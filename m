@@ -2,65 +2,91 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B62A1ED510
-	for <lists+linux-edac@lfdr.de>; Wed,  3 Jun 2020 19:36:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D07091F09D5
+	for <lists+linux-edac@lfdr.de>; Sun,  7 Jun 2020 06:37:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726148AbgFCRge (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Wed, 3 Jun 2020 13:36:34 -0400
-Received: from mail.skyhub.de ([5.9.137.197]:43952 "EHLO mail.skyhub.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726191AbgFCRge (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Wed, 3 Jun 2020 13:36:34 -0400
-Received: from zn.tnic (p200300ec2f0b2300329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ec:2f0b:2300:329c:23ff:fea6:a903])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 16E061EC0391;
-        Wed,  3 Jun 2020 19:36:33 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1591205793;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=tKviuceYgB5i7KdqZJKv0H6EA3BOolgwHgL3oaSqHqE=;
-        b=LmOt+qJ3jf5Q7/cHpaP/Hxdf5odpwi/P1Hi185I4SMt/hmnkoiDdrJaV69DLLmcVGCK+uu
-        JlB0f8mOFUFfO3gofmzP9GmCPzVYf8i6He3kl0VscC/7YRAhRr3M7bcH4qk30xetFWWUlZ
-        AFo/jPigG6xkpStmJH+GxuQONuHQXbE=
-Date:   Wed, 3 Jun 2020 19:36:28 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Naoto YAMAGUCHI <wata2ki@gmail.com>
-Cc:     linux-edac@vger.kernel.org,
-        Naoto Yamaguchi <i33399_YAMAGUCHI@aisin-aw.co.jp>
-Subject: Re: [PATCH] EDAC/mc: Fix memory alignment calculation formula
-Message-ID: <20200603173628.GE19711@zn.tnic>
-References: <20200516162115.16545-1-wata2ki@gmail.com>
- <20200603112816.GC19711@zn.tnic>
- <CABBJnRYZTsnOjNdd9x5ZS_Vb56yvEJWsLxEERYPj-m3HfAqx1Q@mail.gmail.com>
+        id S1725998AbgFGEhd (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Sun, 7 Jun 2020 00:37:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37586 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725818AbgFGEhd (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Sun, 7 Jun 2020 00:37:33 -0400
+Received: from mail-pg1-x543.google.com (mail-pg1-x543.google.com [IPv6:2607:f8b0:4864:20::543])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CD67C08C5C2;
+        Sat,  6 Jun 2020 21:37:33 -0700 (PDT)
+Received: by mail-pg1-x543.google.com with SMTP id r18so881982pgk.11;
+        Sat, 06 Jun 2020 21:37:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=UxKITpnOepHX3Q0tLOI7lVQPLbvDReCkw9mp7YHySQI=;
+        b=hRnAJhIMir/67KOO13QQD4330fIka4alRb0XswMT1Y2F8QK+SK7hXaiJdl/nlOraTS
+         D95zsOG/jbi/eAv9qFPZjZn1qylsmfZwtr7NlgxzNz5H9F4Fly48NYl6xAndoif45IJS
+         FtiwjzpvORy15/UuvCY5aR+g9CuIVMZQVCRdkQKLwYEo9wrEHY8g5bBtRNpKBvR2YCEs
+         TJdIOvtJPnAEgqTcpKUI+aQj6YvDWYMVv29UgsOfzq0SK1FBN0PeDEeMGN3LZfJWHIAR
+         eX4kqYMSnEcfdlsIIcNdQF1v+8xuYmU2Q6gAsvpG/4WGvM85Ir+IaZCHYreeWcMDGBkJ
+         r+Xw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=UxKITpnOepHX3Q0tLOI7lVQPLbvDReCkw9mp7YHySQI=;
+        b=WtMX5aFMJv8+EfkekxEdmnxJNECO6i6S2fIcn4oyIoye6agbx075s7Wutb9m8LpgUI
+         AG5lEichNvMIpqAdMpyIqvAKwuff7bE/OF2ZStqUK+t+d+Ovz6JBJiqhAj4CqJoG1USh
+         /ppeucNUDLYeozRGj108tvDk6xq1BYjM6axKkte8O+ygMv1HCskLPgyxoZkv6to556WJ
+         YmX0KzHEWUkHvanqBPvaxPcUzY6hZhI85fm625Emsro9dQaYsveeIlEAj5dtXM9ihWC/
+         M0QAM1TiQirXooqEJwekPhFiqvNA/OdP/vlPTW/tIFeajSKDzil9WYJvdH4lTeOKDpa1
+         DMHQ==
+X-Gm-Message-State: AOAM531ZWNdqEl/YkixCeYn6fYtGdmdSXNlDA6jyDhKLPYqte6E+TOCd
+        uW6mrvO+jx4UoR7DpAQvohkT/JAysA==
+X-Google-Smtp-Source: ABdhPJzPWY2ycjDuQguhPpV2intjHxmMxRVdcVYebbug+6B7tUixno0V/SWYc5TXqpaFTqBY8jeWyQ==
+X-Received: by 2002:a65:51c1:: with SMTP id i1mr15326798pgq.272.1591504652736;
+        Sat, 06 Jun 2020 21:37:32 -0700 (PDT)
+Received: from localhost (98.86.92.34.bc.googleusercontent.com. [34.92.86.98])
+        by smtp.gmail.com with ESMTPSA id 141sm3507203pfz.171.2020.06.06.21.37.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 06 Jun 2020 21:37:32 -0700 (PDT)
+From:   Jacky Hu <hengqing.hu@gmail.com>
+To:     linux-edac@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, bp@alien8.de, tony.luck@intel.com,
+        x86@kernel.org, Jacky Hu <hengqing.hu@gmail.com>
+Subject: [PATCH 0/2] MCA and EDAC updates for AMD Family 17h, Model 60h
+Date:   Sun,  7 Jun 2020 12:37:07 +0800
+Message-Id: <20200607043709.48178-1-hengqing.hu@gmail.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CABBJnRYZTsnOjNdd9x5ZS_Vb56yvEJWsLxEERYPj-m3HfAqx1Q@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Wed, Jun 03, 2020 at 10:00:01PM +0900, Naoto YAMAGUCHI wrote:
-> Out of tree driver (edac_injection) is under developing now by Gabriele
-> Paoloni.  This driver will upstream future.
+This patchset adds MCA and EDAC support for AMD Family 17h, Model 60h.
 
-Ah ok. I thought someone is running an out-of-tree EDAC driver for no
-good reason.
+Also k10temp works with 4800h
 
-> When I was porting this driver to aarch64 environment, I found this bug.
+k10temp-pci-00c3
+Adapter: PCI adapter
+Vcore:         1.55 V
+Vsoc:          1.55 V
+Tctl:         +49.6°C
+Tdie:         +49.6°C
+Icore:         0.00 A
+Isoc:          0.00 A
 
-I'll have a look after the merge window, thanks.
+Jacky Hu (2):
+  x86/amd_nb: Add Family 17h, Model 60h PCI IDs
+  EDAC/amd64: Add family ops for Family 17h Models 60h-6Fh
 
-Btw, please do not top-post.
-
-Thx.
+ arch/x86/kernel/amd_nb.c  |  5 +++++
+ drivers/edac/amd64_edac.c | 14 ++++++++++++++
+ drivers/edac/amd64_edac.h |  3 +++
+ drivers/hwmon/k10temp.c   |  2 ++
+ include/linux/pci_ids.h   |  1 +
+ 5 files changed, 25 insertions(+)
 
 -- 
-Regards/Gruss,
-    Boris.
+2.27.0
 
-https://people.kernel.org/tglx/notes-about-netiquette
