@@ -2,85 +2,82 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DFAA01F4E7B
-	for <lists+linux-edac@lfdr.de>; Wed, 10 Jun 2020 08:58:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC0B81F4E7D
+	for <lists+linux-edac@lfdr.de>; Wed, 10 Jun 2020 08:59:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726281AbgFJG6O (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Wed, 10 Jun 2020 02:58:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50090 "EHLO
+        id S1726265AbgFJG67 (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Wed, 10 Jun 2020 02:58:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726280AbgFJG6O (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Wed, 10 Jun 2020 02:58:14 -0400
-Received: from mail-pf1-x444.google.com (mail-pf1-x444.google.com [IPv6:2607:f8b0:4864:20::444])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBFEEC03E96B;
-        Tue,  9 Jun 2020 23:58:13 -0700 (PDT)
-Received: by mail-pf1-x444.google.com with SMTP id 23so685337pfw.10;
-        Tue, 09 Jun 2020 23:58:13 -0700 (PDT)
+        with ESMTP id S1726109AbgFJG67 (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Wed, 10 Jun 2020 02:58:59 -0400
+Received: from mail-pg1-x541.google.com (mail-pg1-x541.google.com [IPv6:2607:f8b0:4864:20::541])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90C8AC03E96B;
+        Tue,  9 Jun 2020 23:58:58 -0700 (PDT)
+Received: by mail-pg1-x541.google.com with SMTP id e9so557672pgo.9;
+        Tue, 09 Jun 2020 23:58:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id;
-        bh=r3H+L43taGseRC/CurkGgYqQKiqJEfVk1rlaC8npJIE=;
-        b=RX4Ntyl+nZEuVvGjjAr4FIViMs4J9FPW+jdx7fgnPo2qVWsBxBLuqfMeZIdTAvHlBn
-         pi6d7xlIRVXre+iRxUrEkwaWJUYmUvvsScijGMQgnrQPA5vcWpMZpb92h2cJGq96+QaU
-         hWr/he/D4o6n0dUZ2leMlPQZvXdrKDY5MN65RgCWZmsZnzLnLf9rXsSuq62mKCIRDjcf
-         Mo1zElwb6Xp4Wfve+PhS3akCU/YK/WGRKFgBZ0wFnajXaDNn8XyTLhKZ+PKDjgag2bDA
-         kNKflag5LdDTVpzDe869ZzlTRRibOqmTYMQFQ9tE6gbqpbYr61KA4Y3s1ZipXkdTRno1
-         E2JA==
+        bh=P6SRipZ1zBnUnTTKuDyAG9Zsu0cS2pULdCBVZ35wHNo=;
+        b=QTyx7TXyp9+BAlm3j+htxNwSwoU85Euw811v4PPybhg3STNtibDKnOTSs0JnujwcsI
+         XtQ98uUxonoHHp6Zjc3LPG7J90+eT4pFyqGLfmrPJ25cEuCmAz77uYvR9YkO4tEfjXL0
+         OgfFQYVbSBotWFv8x3EfXrx9lv3ZDHJlDWDw45vt9ANXyt4a/dHj8+hIhZiIASm/dauB
+         cE2jnHTdH+IfQKv9meGofHSVFTuV4BjTvDSkGxG/vAGsBIfRn6MqrWwx5AiMindJ17Vq
+         mosv+yJvKb62wL8NTpxgjMKIUaAzVAOodGMP/fbMQVIOED2Bb4h0Ts7q3KuVw11LjCXK
+         6BVA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=r3H+L43taGseRC/CurkGgYqQKiqJEfVk1rlaC8npJIE=;
-        b=MiM5k7dMg4IhELrUrvUkVoRqcd3NF3kYCcyPNj6lY34eW2sjX5Bd8alfvnkTR2D00B
-         UVoQ8lm9Abfst8ktMRa1ne1K8+lX0getjAJLZ4MY6PvV81L94/eiV4ILurXhNORSXcNY
-         bFwiWeAivkQLNhK3vnR4b4DpUeTZfhOBLeX87dEDynGtao41hLOZ50b5pcB4wRhbcaNd
-         a0lwIS1r146zF8HHY6FkUvQ/pfy1oKdh6m3euxRZwPkarTX+siiQKSyKqBbD7xwncx4T
-         Z6gtAAZLseoqd0PgcBk6DzPNI8lIClYnujxUNefpWEXDMIOnWr5hizGQFJG9ekGmE5GL
-         SV+g==
-X-Gm-Message-State: AOAM533rs6VdZfAWSE/FzI4rETV6M2VRMpVEDqXSjQmN/KVu2qtE/sjs
-        4aCIxptmv5dwlkz1agrS6DroILIf
-X-Google-Smtp-Source: ABdhPJxT2FVLyk+BQOCYdJDSGVCvd0yMzwzZ4tM7rdRRGEsWlzFtuY8Wt8VlMA1nw4LWZOB1IdARKw==
-X-Received: by 2002:a63:f00d:: with SMTP id k13mr1529198pgh.263.1591772292847;
-        Tue, 09 Jun 2020 23:58:12 -0700 (PDT)
+        bh=P6SRipZ1zBnUnTTKuDyAG9Zsu0cS2pULdCBVZ35wHNo=;
+        b=kXHKsUBkhoGkpaEZD08iQM6p0Sa/2gjoMiRehlC7GtZGngi+c3BGugcdgQRckx5Zh3
+         r1gwjiboZgy8rlLDqJMRVxM1mOpb/7q5aCzgnhUpjbkL730iU9/3gg4HNyhoMwc5/px6
+         1EisW5dJ1PIWnBeOIaSgSNxi9x8WRI0oyqTn4P1AvJptlaWCWitiTyB+y1vKqLexd6Dy
+         X4fomwzwJomUpLuWk83rxizVZO3eeBWmNIrnJ2EXgyM155HoGB7wQszB2qMvIsWCKqze
+         pZHyAKheXJ+ny5TwIFIvad1dWgCMF/yuk2+Th8kFK4U+5Wfyz0MarxWysC3O5pYws14/
+         0cpQ==
+X-Gm-Message-State: AOAM531nCROuwpGC+Mg4jRFUUtCBqb5Ma5zMmfS+kKNRjYEvr7L0tojQ
+        yNv1dN47wg8Hs6oDDLmURknn6RQC
+X-Google-Smtp-Source: ABdhPJyjHrdr/mLmD2Usix7oiCDcp0FdS/6DKgRzZaoNwB3SChMIddPPKNUXbNBCm0RXdkoFAHT3PQ==
+X-Received: by 2002:a62:e40b:: with SMTP id r11mr1450030pfh.265.1591772337793;
+        Tue, 09 Jun 2020 23:58:57 -0700 (PDT)
 Received: from ZB-PF114XEA.360buyad.local ([103.90.76.242])
-        by smtp.gmail.com with ESMTPSA id z186sm11803481pfb.131.2020.06.09.23.58.09
+        by smtp.gmail.com with ESMTPSA id v9sm11948108pfe.198.2020.06.09.23.58.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 09 Jun 2020 23:58:11 -0700 (PDT)
+        Tue, 09 Jun 2020 23:58:57 -0700 (PDT)
 From:   Zhenzhong Duan <zhenzhong.duan@gmail.com>
 To:     linux-kernel@vger.kernel.org, linux-edac@vger.kernel.org
 Cc:     tony.luck@intel.com, bp@alien8.de, mchehab@kernel.org,
         james.morse@arm.com, rrichter@marvell.com,
         Zhenzhong Duan <zhenzhong.duan@gmail.com>
-Subject: [PATCH] EDAC, {skx,i10nm}: Advice mcelog that the error were handled
-Date:   Wed, 10 Jun 2020 14:58:01 +0800
-Message-Id: <20200610065801.3579-1-zhenzhong.duan@gmail.com>
+Subject: [PATCH] EDAC, pnd2: set MCE_PRIO_EDAC priority for pnd2_mce_dec notifier
+Date:   Wed, 10 Jun 2020 14:58:45 +0800
+Message-Id: <20200610065846.3626-1-zhenzhong.duan@gmail.com>
 X-Mailer: git-send-email 2.17.1
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-If one MCE error has been processed in kernel, it's not necessory
-to pass it to user level mcelog.
+...or else it has MCE_PRIO_LOWEST priority by default.
 
 Signed-off-by: Zhenzhong Duan <zhenzhong.duan@gmail.com>
 ---
- drivers/edac/skx_common.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/edac/pnd2_edac.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/edac/skx_common.c b/drivers/edac/skx_common.c
-index 46be1a7..8c0165b 100644
---- a/drivers/edac/skx_common.c
-+++ b/drivers/edac/skx_common.c
-@@ -615,7 +615,8 @@ int skx_mce_check_error(struct notifier_block *nb, unsigned long val,
+diff --git a/drivers/edac/pnd2_edac.c b/drivers/edac/pnd2_edac.c
+index bc47328..368fae3 100644
+--- a/drivers/edac/pnd2_edac.c
++++ b/drivers/edac/pnd2_edac.c
+@@ -1434,6 +1434,7 @@ static int pnd2_mce_check_error(struct notifier_block *nb, unsigned long val, vo
  
- 	skx_mce_output_error(mci, mce, &res);
+ static struct notifier_block pnd2_mce_dec = {
+ 	.notifier_call	= pnd2_mce_check_error,
++	.priority	= MCE_PRIO_EDAC,
+ };
  
--	return NOTIFY_DONE;
-+	/* Advice mcelog that the error were handled */
-+	return NOTIFY_STOP;
- }
- 
- void skx_remove(void)
+ #ifdef CONFIG_EDAC_DEBUG
 -- 
 1.8.3.1
 
