@@ -2,71 +2,82 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 126041F59D1
-	for <lists+linux-edac@lfdr.de>; Wed, 10 Jun 2020 19:16:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DCDB1F5A23
+	for <lists+linux-edac@lfdr.de>; Wed, 10 Jun 2020 19:20:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728002AbgFJRQX (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Wed, 10 Jun 2020 13:16:23 -0400
-Received: from mga06.intel.com ([134.134.136.31]:47491 "EHLO mga06.intel.com"
+        id S1728291AbgFJRTP (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Wed, 10 Jun 2020 13:19:15 -0400
+Received: from mga06.intel.com ([134.134.136.31]:47811 "EHLO mga06.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726979AbgFJRQW (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Wed, 10 Jun 2020 13:16:22 -0400
-IronPort-SDR: qYIXovBhxdeDvjNJbAFhA8Vu6lyMGRr0bKQnIqlTDH8AOqPb0048wvgUMJr3UjbseupH/q55Rx
- eq/7Yh/3CtWw==
+        id S1728057AbgFJRTO (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Wed, 10 Jun 2020 13:19:14 -0400
+IronPort-SDR: sR9lifVVQCTHBATsQZWehFn7wpOFphzJN8y+abrU6aDd+CHM2lrZdJwIu3IzPg8UlXQlmy4YXn
+ s0P+QMXUcu/Q==
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
 Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jun 2020 10:16:22 -0700
-IronPort-SDR: ZY+dNot4VW1cZFIJXURBgJm7H4h4Bm0CkHkwoSYEn5XHzfmw9u0JAU40BmK7K4pdSQqKyNqtOu
- zfcms9JZCDjg==
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jun 2020 10:19:14 -0700
+IronPort-SDR: kx5x97zDI+jMG/eqid0UpxmxpyBmfYSZ6mzpplV3XC3EcPNgDsT2z0Zg8KYyLp7tK2r1pHyElA
+ jjaDzawW/gvA==
 X-IronPort-AV: E=Sophos;i="5.73,496,1583222400"; 
-   d="scan'208";a="447584797"
+   d="scan'208";a="447585617"
 Received: from agluck-desk2.sc.intel.com (HELO agluck-desk2.amr.corp.intel.com) ([10.3.52.68])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jun 2020 10:16:21 -0700
-Date:   Wed, 10 Jun 2020 10:16:20 -0700
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jun 2020 10:19:13 -0700
+Date:   Wed, 10 Jun 2020 10:19:12 -0700
 From:   "Luck, Tony" <tony.luck@intel.com>
 To:     Zhenzhong Duan <zhenzhong.duan@gmail.com>
 Cc:     linux-kernel@vger.kernel.org, linux-edac@vger.kernel.org,
         bp@alien8.de, mchehab@kernel.org, james.morse@arm.com,
         rrichter@marvell.com
-Subject: Re: [PATCH] EDAC, pnd2: set MCE_PRIO_EDAC priority for pnd2_mce_dec
- notifier
-Message-ID: <20200610171620.GA1474@agluck-desk2.amr.corp.intel.com>
+Subject: Re: [PATCH] EDAC/mc: call edac_inc_ue_error() before panic
+Message-ID: <20200610171912.GB1474@agluck-desk2.amr.corp.intel.com>
 References: <20200610065846.3626-1-zhenzhong.duan@gmail.com>
+ <20200610065846.3626-2-zhenzhong.duan@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200610065846.3626-1-zhenzhong.duan@gmail.com>
+In-Reply-To: <20200610065846.3626-2-zhenzhong.duan@gmail.com>
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Wed, Jun 10, 2020 at 02:58:45PM +0800, Zhenzhong Duan wrote:
-> ...or else it has MCE_PRIO_LOWEST priority by default.
+On Wed, Jun 10, 2020 at 02:58:46PM +0800, Zhenzhong Duan wrote:
+> By calling edac_inc_ue_error() before panic, we get a correct UE error
+> count for core dump analysis.
+
+Looks accurate, and I'll add the patch to be applied. But I wonder
+how big a problem it is. Isn't most of the information deriveable
+from the panic message?
+
 > 
 > Signed-off-by: Zhenzhong Duan <zhenzhong.duan@gmail.com>
 > ---
->  drivers/edac/pnd2_edac.c | 1 +
->  1 file changed, 1 insertion(+)
+>  drivers/edac/edac_mc.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 > 
-> diff --git a/drivers/edac/pnd2_edac.c b/drivers/edac/pnd2_edac.c
-> index bc47328..368fae3 100644
-> --- a/drivers/edac/pnd2_edac.c
-> +++ b/drivers/edac/pnd2_edac.c
-> @@ -1434,6 +1434,7 @@ static int pnd2_mce_check_error(struct notifier_block *nb, unsigned long val, vo
+> diff --git a/drivers/edac/edac_mc.c b/drivers/edac/edac_mc.c
+> index 75ede27..c1f23c2 100644
+> --- a/drivers/edac/edac_mc.c
+> +++ b/drivers/edac/edac_mc.c
+> @@ -1011,6 +1011,8 @@ static void edac_ue_error(struct edac_raw_error_desc *e)
+>  			e->other_detail);
+>  	}
 >  
->  static struct notifier_block pnd2_mce_dec = {
->  	.notifier_call	= pnd2_mce_check_error,
-> +	.priority	= MCE_PRIO_EDAC,
->  };
+> +	edac_inc_ue_error(e);
+> +
+>  	if (edac_mc_get_panic_on_ue()) {
+>  		panic("UE %s%son %s (%s page:0x%lx offset:0x%lx grain:%ld%s%s)\n",
+>  			e->msg,
+> @@ -1020,8 +1022,6 @@ static void edac_ue_error(struct edac_raw_error_desc *e)
+>  			*e->other_detail ? " - " : "",
+>  			e->other_detail);
+>  	}
+> -
+> -	edac_inc_ue_error(e);
+>  }
 >  
->  #ifdef CONFIG_EDAC_DEBUG
+>  static void edac_inc_csrow(struct edac_raw_error_desc *e, int row, int chan)
 > -- 
-
-Looks OK. I'll queue this next week (after Linus releases v5.8-rc1). It should
-be merged into v5.9
-
-Thanks
-
--Tony
+> 1.8.3.1
+> 
