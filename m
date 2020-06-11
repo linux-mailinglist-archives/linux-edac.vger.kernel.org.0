@@ -2,84 +2,76 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 04FAE1F6009
-	for <lists+linux-edac@lfdr.de>; Thu, 11 Jun 2020 04:32:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1305B1F6011
+	for <lists+linux-edac@lfdr.de>; Thu, 11 Jun 2020 04:37:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726336AbgFKCcx (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Wed, 10 Jun 2020 22:32:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34148 "EHLO
+        id S1726312AbgFKChg (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Wed, 10 Jun 2020 22:37:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726290AbgFKCcx (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Wed, 10 Jun 2020 22:32:53 -0400
-Received: from mail-pg1-x542.google.com (mail-pg1-x542.google.com [IPv6:2607:f8b0:4864:20::542])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10219C08C5C1;
-        Wed, 10 Jun 2020 19:32:53 -0700 (PDT)
-Received: by mail-pg1-x542.google.com with SMTP id u5so1875102pgn.5;
-        Wed, 10 Jun 2020 19:32:52 -0700 (PDT)
+        with ESMTP id S1726306AbgFKChf (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Wed, 10 Jun 2020 22:37:35 -0400
+Received: from mail-lf1-x143.google.com (mail-lf1-x143.google.com [IPv6:2a00:1450:4864:20::143])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76162C08C5C1;
+        Wed, 10 Jun 2020 19:37:35 -0700 (PDT)
+Received: by mail-lf1-x143.google.com with SMTP id 202so2642782lfe.5;
+        Wed, 10 Jun 2020 19:37:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id;
-        bh=gtC7gk42q9Gil9motcJotL/bdjuqtagoSxa8dX9Y100=;
-        b=LyqW8zS8nhwfM8aORPjfvi+AWEMrdNS58HxcHf6F4LYpoGHBnbe//AR6fwPML51FWE
-         5O7L2V/1D3I4y5iiAHs9u7HrG03yWS9mgvGh80caSyly4ZILyfQEze/SfCdfCVw954+p
-         Zmmky/UNDGO/LqveYJLFQjBVbfy4F7VSFfvmAe8iD6tdJGImW801wxG1UQcCFDq/EpQZ
-         I0/ULYkYXNZWI+GQYFhsNKidjnVmEWjC6hddwcgxueneX9H/8ruFHBtH4yEiacdThxso
-         lG1Vh5F5VtqBzJa7UsWNZSvCdekc+ZK5KcvJsLvACWUtooXNIgdzlyHln6Sa8k4lEMf4
-         MYuw==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=H+PEFHyUXjNCEtnDDerXaMNGUi3G6eX8i5SlzQw9UMI=;
+        b=bSVfWQejXCjrLOj8aD59mpI6QkWd3hIqBjXK49cAsH8WRyy92kxtm0atwhhm+5W6kr
+         xGTReb9eBIElpXamEsVqLi2KDehDVKX2Rb8nuTm3sEemMn44vBuUbFIemxzorJIqDUOs
+         V2d0FBjlDVnLKMzP89OEqIicF6R7Oh/fZnavHYshnTs/IQWbbpCdwr55byyCb4cBk+o9
+         Vni3sI4Sm3Jbz8w+2rawif+8ZD8bqM5XgCX/d0g8f5hOyuedx5jpSx00zG8VgCRda37j
+         30fIHmcDNBjYxtRITEDLWSbw3/QPHuNlnMJFpkns5dPPQZjH7CA9ysuV7BCRCh78uxXy
+         E+NA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=gtC7gk42q9Gil9motcJotL/bdjuqtagoSxa8dX9Y100=;
-        b=qvwIH5fI/Q3w3bBv4orrP3EipFPMo9QYA3+c/zSEhXiihiD+PZWtvE7AGuJYO/yClN
-         T99NpvfpF2Mkhxx28gVaSjWyOGsTzL/siEYM17EPRJ5ze3h9KAw/fUiLxq+vAhQpMzeL
-         yz0sNf038obF+qPGq1h/yDfTnKhi9uEnsucy0YIae7ldxEbXh02XINjIknFQ+mSEPuNI
-         Q7UJF/TKb1pA034DlenfAD7HaFjUVEunIEwtj79wkisGoHPCPShTv2Nua6TEL4xEYTH/
-         47a5qlfGsB9ZNBgu4FTEjXLp2kVF2JHHlXuEEyVS/DERwhX2ZcAmQZUnlJBv3Rkkvhj4
-         /FpQ==
-X-Gm-Message-State: AOAM532mQGFF5PozCKvrxvGCaMrjOAdOhoGtFZMdZ5GfqmygIJXfJzes
-        Z5jAxLw8nlF4MuZUfZlyS7B8OqS8
-X-Google-Smtp-Source: ABdhPJzzFHv0FdmPEv2nuvMFQEWlARORsmk3q5TjZrqF7Y9dv1HR92EFhCcBtUOmeVGfxr4bUITMzw==
-X-Received: by 2002:a65:5688:: with SMTP id v8mr182533pgs.48.1591842772059;
-        Wed, 10 Jun 2020 19:32:52 -0700 (PDT)
-Received: from ZB-PF114XEA.360buyad.local ([103.90.76.242])
-        by smtp.gmail.com with ESMTPSA id o18sm1301393pfu.138.2020.06.10.19.32.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 10 Jun 2020 19:32:51 -0700 (PDT)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=H+PEFHyUXjNCEtnDDerXaMNGUi3G6eX8i5SlzQw9UMI=;
+        b=W4yFp0+milZF6H4n5Q26GM/6am69SiJGy86/Bt+nMD3iUlxZuycZFXgWDdGIkjSasr
+         YXcI49Fx4gDQVly8sqwD+fPjWURjchSiKbcfAEaqKjsOACHL0prU6yV70bc6VEu+CHfp
+         HycGvxVkmTuxakZeI1QPqZQeHtLgvXT1qmb1tCFy/UPiy3iNzPKegcv1IaOEk36aGiMQ
+         0XvOnR+LGLgKmlymBq9pHtlOUCFFgXN2u9YPGbNrAoYGYQv3uy2r/g+epfJv0c9l5xOM
+         NBD5lxxV/SEBKcYA4SVsGKPYOHdnzH1u0zspzziMU+pArGkUbgrwc5v+wDF2UCwbMj7L
+         H5zQ==
+X-Gm-Message-State: AOAM5306neTsJ2HHFvkfHFgXG9jM14Y54o9Wk/htNdq8bgm7q0WHrn7e
+        fg92MRNHrd2yp2xuHThx6giFE8avGJhRAU9ER00=
+X-Google-Smtp-Source: ABdhPJxWdTRGBWzD5BGjFzlGFy2xizTaM088b6o597jGy9OQ0toSHngXQPy6TPuvxL9N1Bpb6s2zEczlkz+VL65NfU0=
+X-Received: by 2002:a19:8453:: with SMTP id g80mr3137317lfd.167.1591843053787;
+ Wed, 10 Jun 2020 19:37:33 -0700 (PDT)
+MIME-Version: 1.0
+References: <20200610065846.3626-1-zhenzhong.duan@gmail.com>
+ <20200610065846.3626-2-zhenzhong.duan@gmail.com> <20200610171912.GB1474@agluck-desk2.amr.corp.intel.com>
+In-Reply-To: <20200610171912.GB1474@agluck-desk2.amr.corp.intel.com>
 From:   Zhenzhong Duan <zhenzhong.duan@gmail.com>
-To:     linux-kernel@vger.kernel.org, linux-edac@vger.kernel.org
-Cc:     x86@kernel.org, tony.luck@intel.com, bp@alien8.de,
-        tglx@linutronix.de, mingo@redhat.com, hpa@zytor.com,
-        Zhenzhong Duan <zhenzhong.duan@gmail.com>
-Subject: [PATCH] x86/mce: fix a wrong assignment of i_mce.status
-Date:   Thu, 11 Jun 2020 10:32:38 +0800
-Message-Id: <20200611023238.3830-1-zhenzhong.duan@gmail.com>
-X-Mailer: git-send-email 2.17.1
+Date:   Thu, 11 Jun 2020 10:37:22 +0800
+Message-ID: <CAFH1YnP_nreyKmHOa24d1XkrFECQg3yFjAJ04FJqWub__SjVxg@mail.gmail.com>
+Subject: Re: [PATCH] EDAC/mc: call edac_inc_ue_error() before panic
+To:     "Luck, Tony" <tony.luck@intel.com>
+Cc:     linux-kernel <linux-kernel@vger.kernel.org>,
+        linux-edac@vger.kernel.org, Borislav Petkov <bp@alien8.de>,
+        mchehab@kernel.org, james.morse@arm.com, rrichter@marvell.com
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-The original code is a nop as i_mce.status is or'ed with part of itself,
-fix it.
+On Thu, Jun 11, 2020 at 1:19 AM Luck, Tony <tony.luck@intel.com> wrote:
+>
+> On Wed, Jun 10, 2020 at 02:58:46PM +0800, Zhenzhong Duan wrote:
+> > By calling edac_inc_ue_error() before panic, we get a correct UE error
+> > count for core dump analysis.
+>
+> Looks accurate, and I'll add the patch to be applied. But I wonder
+> how big a problem it is. Isn't most of the information deriveable
+> from the panic message?
 
-Signed-off-by: Zhenzhong Duan <zhenzhong.duan@gmail.com>
----
- arch/x86/kernel/cpu/mce/inject.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Thanks for review.
+Yes, it's totally not a problem.  I'm a little too strict here.
 
-diff --git a/arch/x86/kernel/cpu/mce/inject.c b/arch/x86/kernel/cpu/mce/inject.c
-index 3413b41..dc28a61 100644
---- a/arch/x86/kernel/cpu/mce/inject.c
-+++ b/arch/x86/kernel/cpu/mce/inject.c
-@@ -511,7 +511,7 @@ static void do_inject(void)
- 	 */
- 	if (inj_type == DFR_INT_INJ) {
- 		i_mce.status |= MCI_STATUS_DEFERRED;
--		i_mce.status |= (i_mce.status & ~MCI_STATUS_UC);
-+		i_mce.status &= ~MCI_STATUS_UC;
- 	}
- 
- 	/*
--- 
-1.8.3.1
-
+Zhenzhong
