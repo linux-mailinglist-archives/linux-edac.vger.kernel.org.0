@@ -2,108 +2,72 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C75101FD3E2
-	for <lists+linux-edac@lfdr.de>; Wed, 17 Jun 2020 19:58:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C1F71FD6C7
+	for <lists+linux-edac@lfdr.de>; Wed, 17 Jun 2020 23:12:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726861AbgFQR6T (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Wed, 17 Jun 2020 13:58:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35252 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726496AbgFQR6T (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Wed, 17 Jun 2020 13:58:19 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05A50C06174E
-        for <linux-edac@vger.kernel.org>; Wed, 17 Jun 2020 10:58:19 -0700 (PDT)
-Received: from zn.tnic (p200300ec2f0bb000eca79a131b243ace.dip0.t-ipconnect.de [IPv6:2003:ec:2f0b:b000:eca7:9a13:1b24:3ace])
+        id S1726840AbgFQVMQ (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Wed, 17 Jun 2020 17:12:16 -0400
+Received: from mail.kernel.org ([198.145.29.99]:46426 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726815AbgFQVMP (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Wed, 17 Jun 2020 17:12:15 -0400
+Received: from embeddedor (unknown [189.207.59.248])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 33E9A1EC03E3;
-        Wed, 17 Jun 2020 19:58:17 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1592416697;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=H5mvB7EfQquLpJvPqMQh9hhExxbj0cV81WCerLfjy2g=;
-        b=hNZ/6erQQg/KnuGvBYuoSnK58D8sjzQdazm9UVzZDJKRcfA7zn71xYO3X9pXj58d7pGiAp
-        e5Ndl5hMNHe54Nq3hxtFDksGpIBMNN7NNZtbsINfwPnXV2b82ozk5LwYPOE9kTlf0CPwjU
-        wRylNaGKVlVx8LZrtpMEbuyk52nuX+A=
-Date:   Wed, 17 Jun 2020 19:58:09 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     wata2ki <wata2ki@gmail.com>, Chris Metcalf <cmetcalf@tilera.com>,
-        Mauro Carvalho Chehab <mchehab@infradead.org>
-Cc:     linux-edac@vger.kernel.org,
-        Naoto Yamaguchi <i33399_YAMAGUCHI@aisin-aw.co.jp>
-Subject: Re: [PATCH] EDAC/mc: Fix memory alignment calculation formula
-Message-ID: <20200617175809.GH10118@zn.tnic>
-References: <20200516162115.16545-1-wata2ki@gmail.com>
+        by mail.kernel.org (Postfix) with ESMTPSA id 4F3F32168B;
+        Wed, 17 Jun 2020 21:12:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1592428334;
+        bh=ANf1viXNC0XSKoSbuh6tqRPGoE7n8+2mW4foAbx4gFA=;
+        h=Date:From:To:Cc:Subject:From;
+        b=d9CIbwABuXthBo2IWu9UjCBvO9Vr3G7pb/PAJQ04UUt22K+WFzXtiE8ArWK2A8S7C
+         agK8P1Jg2kANEKx3ek+T7JMztHCU/L10yFGt9eQ7vji9wpu68OM5UO7K5fCIOnAxYM
+         qGRehsVrw5g/F3zYwEh4WqcYPfLUrxLCJNh9dGcc=
+Date:   Wed, 17 Jun 2020 16:17:34 -0500
+From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
+To:     Tony Luck <tony.luck@intel.com>, Borislav Petkov <bp@alien8.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        "H. Peter Anvin" <hpa@zytor.com>
+Cc:     x86@kernel.org, linux-edac@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        "Gustavo A. R. Silva" <gustavo@embeddedor.com>
+Subject: [PATCH][next] x86/mce/dev-mcelog: Use struct_size() helper in
+ kzalloc()
+Message-ID: <20200617211734.GA9636@embeddedor>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200516162115.16545-1-wata2ki@gmail.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Sun, May 17, 2020 at 01:21:15AM +0900, wata2ki wrote:
-> From: Naoto Yamaguchi <i33399_YAMAGUCHI@aisin-aw.co.jp>
-> 
-> During the development of the off-tree driver, we found a bug that
-> causes alignment fault exception in mutex_lock.
-> 
-> Line of the code:
-> ffffffc010536ce4: c85ffe62 ldaxr x2, [x19]
-> 
-> Register value:
-> x19: ffffff800e90f6c4
-> 
-> This problem was caused by the alignment error of pvt_info
-> in struct mem_ctl_info.  It is caused by a calculation formula
-> error in edac_align_ptr.
-> 
-> Existing calculation formula is using variable p, but this
-> variable is address of the pointer variable not memory offset.
-> In this calculation formula should use *p.
-> 
-> Signed-off-by: Naoto Yamaguchi <i33399_YAMAGUCHI@aisin-aw.co.jp>
-> ---
->  drivers/edac/edac_mc.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->  mode change 100644 => 100755 drivers/edac/edac_mc.c
-> 
-> diff --git a/drivers/edac/edac_mc.c b/drivers/edac/edac_mc.c
-> old mode 100644
-> new mode 100755
-> index 75ede27bdf6a..70929f136dd7
-> --- a/drivers/edac/edac_mc.c
-> +++ b/drivers/edac/edac_mc.c
-> @@ -271,7 +271,7 @@ void *edac_align_ptr(void **p, unsigned int size, int n_elems)
->  	else
->  		return (char *)ptr;
->  
-> -	r = (unsigned long)p % align;
-> +	r = (unsigned long)(*p) % align;
+Make use of the struct_size() helper instead of an open-coded version
+in order to avoid any potential type mistakes.
 
-Looks about right to me.
+This code was detected with the help of Coccinelle and, audited and
+fixed manually.
 
-Btw, you don't need the () around *p - that's evaluated right-to-left so
-the dereference happens first and *then* the typecast, i.e., what you
-want here.
+Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
+---
+ arch/x86/kernel/cpu/mce/dev-mcelog.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-In any case, this line comes from
-
-  8447c4d15e35 ("edac: Do alignment logic properly in edac_align_ptr()")
-
-and I believe it was wrong to use 'p' as that function works with the
-memory offsets - not with the pointer to the pointer. It's a whole
-different story whether I think this whole thing makes sense and it is
-ugly...
-
-Anyway, adding the gentlemen from that commit to Cc.
-
+diff --git a/arch/x86/kernel/cpu/mce/dev-mcelog.c b/arch/x86/kernel/cpu/mce/dev-mcelog.c
+index 43c466020ed5..03e51053592a 100644
+--- a/arch/x86/kernel/cpu/mce/dev-mcelog.c
++++ b/arch/x86/kernel/cpu/mce/dev-mcelog.c
+@@ -345,7 +345,7 @@ static __init int dev_mcelog_init_device(void)
+ 	int err;
+ 
+ 	mce_log_len = max(MCE_LOG_MIN_LEN, num_online_cpus());
+-	mcelog = kzalloc(sizeof(*mcelog) + mce_log_len * sizeof(struct mce), GFP_KERNEL);
++	mcelog = kzalloc(struct_size(mcelog, entry, mce_log_len), GFP_KERNEL);
+ 	if (!mcelog)
+ 		return -ENOMEM;
+ 
 -- 
-Regards/Gruss,
-    Boris.
+2.27.0
 
-https://people.kernel.org/tglx/notes-about-netiquette
