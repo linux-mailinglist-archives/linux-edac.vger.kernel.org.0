@@ -2,184 +2,82 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2ADCF1FC71D
-	for <lists+linux-edac@lfdr.de>; Wed, 17 Jun 2020 09:19:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE9F91FCDBF
+	for <lists+linux-edac@lfdr.de>; Wed, 17 Jun 2020 14:52:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726025AbgFQHTb (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Wed, 17 Jun 2020 03:19:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48990 "EHLO
+        id S1726280AbgFQMvw (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Wed, 17 Jun 2020 08:51:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725894AbgFQHTb (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Wed, 17 Jun 2020 03:19:31 -0400
-Received: from mail-pj1-x1041.google.com (mail-pj1-x1041.google.com [IPv6:2607:f8b0:4864:20::1041])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56C38C061573;
-        Wed, 17 Jun 2020 00:19:31 -0700 (PDT)
-Received: by mail-pj1-x1041.google.com with SMTP id ga6so565189pjb.1;
-        Wed, 17 Jun 2020 00:19:31 -0700 (PDT)
+        with ESMTP id S1726558AbgFQMvw (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Wed, 17 Jun 2020 08:51:52 -0400
+Received: from mail-vs1-xe43.google.com (mail-vs1-xe43.google.com [IPv6:2607:f8b0:4864:20::e43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFC3EC061755
+        for <linux-edac@vger.kernel.org>; Wed, 17 Jun 2020 05:51:50 -0700 (PDT)
+Received: by mail-vs1-xe43.google.com with SMTP id r11so1295127vsj.5
+        for <linux-edac@vger.kernel.org>; Wed, 17 Jun 2020 05:51:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=ZZQRc8cSih9KfpaA3PdbcUNW5+QnVP16MnOdITJs0uY=;
-        b=VtyYKKn+sOaDU5VHlilWhWIIv2BrJkFOKuEqsvLnfoNTBZ5mHTRltx4dfm1p1stZ7E
-         WoZkW6kUztSKZc8w+bFhkVEHxALpSn7ZNj8wZckvhsBDuZeCD/1ukiFIU/jRIEarAt3G
-         pDuEOdYRA5A6hy49OjN8g7ddOOtE+htt6OhqHSJFtMldh+taw2Bs4JYrD+dxLPUCVu60
-         zyYw1+f6MHtx9KU4OUYr/uJaIeYCpWxd7QSLwTxuMNSbKWkDjTV2YdBpX7oI4/Pz+90T
-         8Wh4IMAzHY690hi6WmzLhbhNlh0wTGmJGJK+vzR9rvbHBpH+TA6hgwCIQpEvebi7U1Bp
-         3yCA==
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=J0VpeRSOJK/TFNJp5yzWMw9fGCcpvggw0aTUG92BVzQ=;
+        b=ZKu+9aqdvUwtLpcD7J4C6lBsgUyWhv6hsdFiirPA8rfuyV8UFVKPYwKVJpqr4UE2pU
+         B4BBgF/5tKeNtxlSugc0jyZ8n0Vx0ufUBYt6dnMT0Drxi3+fSSFxiSJ+IwH7V+9HmHyx
+         Rzunxw0ZWu5KXdV3WniWP9uaKBqvwhm3IwDF2Os1MtKolweQYfHW62nbS/WFDRsTvLko
+         qCJlyeq1K+77p6mYxectZSzbUHPK6ZA/hIvm1lKTRB89RRf5VNMgoLDF0JcvOIKLJNLi
+         6ZVgFiaqXCUReYOAGh6bZ7jZTr1+NZfUwO7BGDkr7SdTCt49iDVzZsvDFBewoWeU8EOa
+         Uetg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=ZZQRc8cSih9KfpaA3PdbcUNW5+QnVP16MnOdITJs0uY=;
-        b=sRFcMBSf81QhmDRANeCUL8euTc8FXhmpzS21fpLfqtuNM+H9xnFiNHwgWqprTF68LD
-         Z4Uc7rTsDqKhAuG55sg58Vcwrkm7KzyWYY0p5CuTGXHPIxRxPEqiw5/uERMKR6jgZp8J
-         VPut8UVS3I7OyvaLNuIHXCePdQ9crH9u3RERJU8i7W2OyOLr9p//Xjkjzod1mxMDnKBr
-         5jhpKEAEJtBqSXaIufQGXhF6xxU9WSOp6FWmt+CG9j8FjtLAr12q+0f0qL0zvStQExTZ
-         2olng5L8AoGNj57MmjBJxPJgB755w9u5q3r1HfC71fZguj+3QB+c6LgypoSi4bx/yOeb
-         OFxg==
-X-Gm-Message-State: AOAM533ploVOZlU2mJd0X8U65vzVDEom7AWH2TMQXhOTgjU4NLWXQmyI
-        8vFerzgAbmMtrS3yLwnM2w==
-X-Google-Smtp-Source: ABdhPJyIeenl7cQD2kDC60mWB6VjXLS+6tkAg3ZmwdCKFO3OWqhGMdrjdWeB9LO/ibHX9g/YYbfEsA==
-X-Received: by 2002:a17:90a:6047:: with SMTP id h7mr6370455pjm.145.1592378370875;
-        Wed, 17 Jun 2020 00:19:30 -0700 (PDT)
-Received: from localhost (98.86.92.34.bc.googleusercontent.com. [34.92.86.98])
-        by smtp.gmail.com with ESMTPSA id c7sm16548917pgh.84.2020.06.17.00.19.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 Jun 2020 00:19:30 -0700 (PDT)
-Date:   Wed, 17 Jun 2020 15:19:27 +0800
-From:   Jacky Hu <hengqing.hu@gmail.com>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-hwmon@vger.kernel.org, linux-edac@vger.kernel.org,
-        linux-kernel@vger.kernel.org, tony.luck@intel.com, x86@kernel.org,
-        yazen.ghannam@amd.com, bp@alien8.de, clemens@ladisch.de
-Subject: Re: [PATCH] hwmon: (k10temp) Add AMD family 17h model 60h probe
-Message-ID: <20200617071927.GA398128@i716>
-References: <20200616180940.GN13515@zn.tnic>
- <20200617013255.391975-1-hengqing.hu@gmail.com>
- <20200617034028.GA1614@roeck-us.net>
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=J0VpeRSOJK/TFNJp5yzWMw9fGCcpvggw0aTUG92BVzQ=;
+        b=IDZk/8M9Ez28+juapqEux/RF1DUxNN2VdkwfSCI0shOiszIeCeql9adurJYMLq3hqn
+         H00IukhH5+czNELz0NmCt+Jb21u2DjK7xNXAsFbht3A4zkthD2WTyQgK+NvFa0+koj9i
+         +R0RtIMf27n8PU6DkyFmQzYOwZ4MBEkOWZX3V/ZFDJ6vczbWaFf4rWD4356RYKsTgIAI
+         F7O6u6MtFaZqWFsFLgxZ/UPeWRRKy3ND0IR+VAeyxY+nobD46RAib9ks9stUjmfXgFaT
+         2OvcuYTYilqa3lYCN6t1soxh7oFdhjvGwHtEnLB5pdK9OMJBYhvbH5uhuCVAMgcQ0jYQ
+         BRtQ==
+X-Gm-Message-State: AOAM533ZsctRyP/0Vs7lRqPgIDAx+A21FvzZCibaKMm24NjcH5odpy5c
+        /UmLW+xIOLdNqqqxba+F/HrQpQ6dmWVhuZaeleE=
+X-Google-Smtp-Source: ABdhPJzrmrd/rglMr9DszowcG6Y0QAXwn/An5GjuB6XamBLTeQ4zmrnw8MDcDhu2dntdER4iErQzEM4lO6pfcS/fcBc=
+X-Received: by 2002:a05:6102:215:: with SMTP id z21mr5411787vsp.172.1592398310094;
+ Wed, 17 Jun 2020 05:51:50 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20200617034028.GA1614@roeck-us.net>
+Received: by 2002:ab0:40a9:0:0:0:0:0 with HTTP; Wed, 17 Jun 2020 05:51:49
+ -0700 (PDT)
+Reply-To: sctnld11170@tlen.pl
+From:   "Mr. Scott Donald" <mes64543@gmail.com>
+Date:   Wed, 17 Jun 2020 05:51:49 -0700
+Message-ID: <CAF4hjb9HbTFrvT60_D2AxdTDO1u7dvGfuv1j=7BUKW97ffC-sw@mail.gmail.com>
+Subject: Hello, Please
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-Hi Guenter,
+Dear Friend,
+I'm Mr. Scott Donald a Successful business Man. dealing with
+Exportation, I got your mail contact through search to let you know my
+Ugly Situation Am a dying Man here in Los Angeles California Hospital
+Bed in (USA), I Lost my Wife and my only Daughter for Covid-19 I'm
+dying with same symptoms. my Doctor open-up to me that I don't have
+enough time to live anymore, I have a project that I am about to hand
+over to you. I have already instructed the Barclays Bank of London to
+transfer my fund sum of =C2=A33,7M GBP to you as to enable you to give 50%
+to Charitable Home and take 50% I have given all I have here in
+America to Charitable home I ask my Doctor to help me keep you notice
+when I'm no more please, allow me to see you on my Doctor whats-app
+video call very urgent please, here is my Doctor Whats-app Number for
+urgent notice +13019692737
 
-By increasing the regs count from 32 to 256 and looking into the output of `cat /sys/kernel/debug/k10temp-0000\:00\:18.3/svi`
-There is some data from 0x05a300 - 0x05a330
-Do you have any idea how we can guess the offset for this model?
+Hope To Hear From You. I'm sending this email to you for the second
+time yet no response from you.
 
-0x05a000: 00000000 00000000 00000000 00000000
-0x05a010: 00000000 00000000 00000000 00000000
-0x05a020: 00000000 00000000 00000000 00000000
-0x05a030: 00000000 00000000 00000000 00000000
-0x05a040: 00000000 00000000 00000000 00000000
-0x05a050: 00000000 00000000 00000000 00000000
-0x05a060: 00000000 00000000 00000000 00000000
-0x05a070: 00000000 00000000 00000000 00000000
-0x05a080: 00000000 00000000 00000000 00000000
-0x05a090: 00000000 00000000 00000000 00000000
-0x05a0a0: 00000000 00000000 00000000 00000000
-0x05a0b0: 00000000 00000000 00000000 00000000
-0x05a0c0: 00000000 00000000 00000000 00000000
-0x05a0d0: 00000000 00000000 00000000 00000000
-0x05a0e0: 00000000 00000000 00000000 00000000
-0x05a0f0: 00000000 00000000 00000000 00000000
-0x05a100: 00000000 00000000 00000000 00000000
-0x05a110: 00000000 00000000 00000000 00000000
-0x05a120: 00000000 00000000 00000000 00000000
-0x05a130: 00000000 00000000 00000000 00000000
-0x05a140: 00000000 00000000 00000000 00000000
-0x05a150: 00000000 00000000 00000000 00000000
-0x05a160: 00000000 00000000 00000000 00000000
-0x05a170: 00000000 00000000 00000000 00000000
-0x05a180: 00000000 00000000 00000000 00000000
-0x05a190: 00000000 00000000 00000000 00000000
-0x05a1a0: 00000000 00000000 00000000 00000000
-0x05a1b0: 00000000 00000000 00000000 00000000
-0x05a1c0: 00000000 00000000 00000000 00000000
-0x05a1d0: 00000000 00000000 00000000 00000000
-0x05a1e0: 00000000 00000000 00000000 00000000
-0x05a1f0: 00000000 00000000 00000000 00000000
-0x05a200: 00000000 00000000 00000000 00000000
-0x05a210: 00000000 00000000 00000000 00000000
-0x05a220: 00000000 00000000 00000000 00000000
-0x05a230: 00000000 00000000 00000000 00000000
-0x05a240: 00000000 00000000 00000000 00000000
-0x05a250: 00000000 00000000 00000000 00000000
-0x05a260: 00000000 00000000 00000000 00000000
-0x05a270: 00000000 00000000 00000000 00000000
-0x05a280: 00000000 00000000 00000000 00000000
-0x05a290: 00000000 00000000 00000000 00000000
-0x05a2a0: 00000000 00000000 00000000 00000000
-0x05a2b0: 00000000 00000000 00000000 00000000
-0x05a2c0: 00000000 00000000 00000000 00000000
-0x05a2d0: 00000000 00000000 00000000 00000000
-0x05a2e0: 00000000 00000000 00000000 00000000
-0x05a2f0: 00000000 00000000 00000000 00000000
-0x05a300: 00000000 00000001 00000000 00002710
-0x05a310: 00000000 00000008 0000000e 00000000
-0x05a320: 00000001 0000c000 00000000 0000000b
-0x05a330: 00000001 00000000 00000000 00000000
-0x05a340: 00000000 00000000 00000000 00000000
-0x05a350: 00000000 00000000 00000000 00000000
-0x05a360: 00000000 00000000 00000000 00000000
-0x05a370: 00000000 00000000 00000000 00000000
-0x05a380: 00000000 00000000 00000000 00000000
-0x05a390: 00000000 00000000 00000000 00000000
-0x05a3a0: 00000000 00000000 00000000 00000000
-0x05a3b0: 00000000 00000000 00000000 00000000
-0x05a3c0: 00000000 00000000 00000000 00000000
-0x05a3d0: 00000000 00000000 00000000 00000000
-0x05a3e0: 00000000 00000000 00000000 00000000
-0x05a3f0: 00000000 00000000 00000000 00000000 
+My Regards.
 
-Thanks.
-Jacky
-On Tue, Jun 16, 2020 at 08:40:28PM -0700, Guenter Roeck wrote:
-> On Wed, Jun 17, 2020 at 09:32:55AM +0800, Jacky Hu wrote:
-> > With this patch applied, output from 4800H (idle) looks as follows:
-> > 
-> > k10temp-pci-00c3
-> > Adapter: PCI adapter
-> > Vcore:         1.55 V
-> > Vsoc:          1.55 V
-> > Tctl:         +49.6°C
-> > Tdie:         +49.6°C
-> > Icore:         0.00 A
-> > Isoc:          0.00 A
-> > 
-> > Signed-off-by: Jacky Hu <hengqing.hu@gmail.com>
-> > ---
-> >  drivers/hwmon/k10temp.c | 1 +
-> >  1 file changed, 1 insertion(+)
-> > 
-> > diff --git a/drivers/hwmon/k10temp.c b/drivers/hwmon/k10temp.c
-> > index 8f12995ec133..287e9cf2aab9 100644
-> > --- a/drivers/hwmon/k10temp.c
-> > +++ b/drivers/hwmon/k10temp.c
-> > @@ -583,6 +583,7 @@ static int k10temp_probe(struct pci_dev *pdev, const struct pci_device_id *id)
-> >  			k10temp_get_ccd_support(pdev, data, 4);
-> >  			break;
-> >  		case 0x31:	/* Zen2 Threadripper */
-> > +		case 0x60:	/* Zen2 APU */
-> 
-> Unfortunately it is not that simple. Output above and the little data I have
-> available suggests that current and voltage measurements are different on the
-> APU. That means that show_current must remain false.
-> This will require a separate case statement which doesn't set any flags.
-> 
-> Guenter
-> 
-> >  		case 0x71:	/* Zen2 */
-> >  			data->show_current = !is_threadripper() && !is_epyc();
-> >  			data->cfactor[0] = CFACTOR_ICORE;
-> > -- 
-> > 2.27.0
-> > 
+Mr. Scott Donald
+CEO
