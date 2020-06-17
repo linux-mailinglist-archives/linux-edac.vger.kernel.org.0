@@ -2,81 +2,105 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B36DD1FD0CD
-	for <lists+linux-edac@lfdr.de>; Wed, 17 Jun 2020 17:22:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C75101FD3E2
+	for <lists+linux-edac@lfdr.de>; Wed, 17 Jun 2020 19:58:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726874AbgFQPW3 (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Wed, 17 Jun 2020 11:22:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39182 "EHLO
+        id S1726861AbgFQR6T (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Wed, 17 Jun 2020 13:58:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726815AbgFQPW2 (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Wed, 17 Jun 2020 11:22:28 -0400
+        with ESMTP id S1726496AbgFQR6T (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Wed, 17 Jun 2020 13:58:19 -0400
 Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7C38C06174E;
-        Wed, 17 Jun 2020 08:22:28 -0700 (PDT)
-Received: from zn.tnic (p200300ec2f0bb000a115b7d9110c62d9.dip0.t-ipconnect.de [IPv6:2003:ec:2f0b:b000:a115:b7d9:110c:62d9])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05A50C06174E
+        for <linux-edac@vger.kernel.org>; Wed, 17 Jun 2020 10:58:19 -0700 (PDT)
+Received: from zn.tnic (p200300ec2f0bb000eca79a131b243ace.dip0.t-ipconnect.de [IPv6:2003:ec:2f0b:b000:eca7:9a13:1b24:3ace])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 0C32B1EC03C5;
-        Wed, 17 Jun 2020 17:22:27 +0200 (CEST)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 33E9A1EC03E3;
+        Wed, 17 Jun 2020 19:58:17 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1592407347;
+        t=1592416697;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=jYDxX+7IAxeetjgcjqHuc8C8ajEs1SremN84jrW7G34=;
-        b=FlJ8BA/rFfbHhRscG8JZf3811K+pYpyfbdCPV0v6xnQK4W6lGL1HZV6CKX8ywK1TcNpTwX
-        FQbG4lKH89OkaajVBInGO2SrOZ4JfhlNjEV1J4gDy9EqrxpN0pO7m3XTFyVH8g6p5m7cJQ
-        1qI06z91kpXtHxoEQ6OfLSKHyeP0YPw=
-Date:   Wed, 17 Jun 2020 17:22:19 +0200
+        bh=H5mvB7EfQquLpJvPqMQh9hhExxbj0cV81WCerLfjy2g=;
+        b=hNZ/6erQQg/KnuGvBYuoSnK58D8sjzQdazm9UVzZDJKRcfA7zn71xYO3X9pXj58d7pGiAp
+        e5Ndl5hMNHe54Nq3hxtFDksGpIBMNN7NNZtbsINfwPnXV2b82ozk5LwYPOE9kTlf0CPwjU
+        wRylNaGKVlVx8LZrtpMEbuyk52nuX+A=
+Date:   Wed, 17 Jun 2020 19:58:09 +0200
 From:   Borislav Petkov <bp@alien8.de>
-To:     Jacky Hu <hengqing.hu@gmail.com>,
-        Alexander Monakov <amonakov@ispras.ru>
-Cc:     Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org,
-        linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
-        tony.luck@intel.com, x86@kernel.org, yazen.ghannam@amd.com,
-        clemens@ladisch.de
-Subject: Re: [PATCH] hwmon: (k10temp) Add AMD family 17h model 60h probe
-Message-ID: <20200617152219.GG10118@zn.tnic>
-References: <20200616180940.GN13515@zn.tnic>
- <20200617013255.391975-1-hengqing.hu@gmail.com>
- <20200617034028.GA1614@roeck-us.net>
- <20200617071927.GA398128@i716>
- <alpine.LNX.2.20.13.2006171739010.31660@monopod.intra.ispras.ru>
- <20200617150735.GA405893@i716>
+To:     wata2ki <wata2ki@gmail.com>, Chris Metcalf <cmetcalf@tilera.com>,
+        Mauro Carvalho Chehab <mchehab@infradead.org>
+Cc:     linux-edac@vger.kernel.org,
+        Naoto Yamaguchi <i33399_YAMAGUCHI@aisin-aw.co.jp>
+Subject: Re: [PATCH] EDAC/mc: Fix memory alignment calculation formula
+Message-ID: <20200617175809.GH10118@zn.tnic>
+References: <20200516162115.16545-1-wata2ki@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20200617150735.GA405893@i716>
+In-Reply-To: <20200516162115.16545-1-wata2ki@gmail.com>
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-Ok, both of you:
-
-On Wed, Jun 17, 2020 at 11:07:35PM +0800, Jacky Hu wrote:
-> Hi,
+On Sun, May 17, 2020 at 01:21:15AM +0900, wata2ki wrote:
+> From: Naoto Yamaguchi <i33399_YAMAGUCHI@aisin-aw.co.jp>
 > 
-> Sorry, I apologize for didn't do much lookup that you already did the patch
-> submission before I submitted the patch.
-> I have to say we are all programmed by the programs.
-> Also I didn't submit to either of the lists.
-> A few places I did looked at are below before I did the submission.
-> https://pci-ids.ucw.cz/v2.2/pci.ids
-> https://lore.kernel.org/patchwork/project/lkml/list/
+> During the development of the off-tree driver, we found a bug that
+> causes alignment fault exception in mutex_lock.
+> 
+> Line of the code:
+> ffffffc010536ce4: c85ffe62 ldaxr x2, [x19]
+> 
+> Register value:
+> x19: ffffff800e90f6c4
+> 
+> This problem was caused by the alignment error of pvt_info
+> in struct mem_ctl_info.  It is caused by a calculation formula
+> error in edac_align_ptr.
+> 
+> Existing calculation formula is using variable p, but this
+> variable is address of the pointer variable not memory offset.
+> In this calculation formula should use *p.
+> 
+> Signed-off-by: Naoto Yamaguchi <i33399_YAMAGUCHI@aisin-aw.co.jp>
+> ---
+>  drivers/edac/edac_mc.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>  mode change 100644 => 100755 drivers/edac/edac_mc.c
+> 
+> diff --git a/drivers/edac/edac_mc.c b/drivers/edac/edac_mc.c
+> old mode 100644
+> new mode 100755
+> index 75ede27bdf6a..70929f136dd7
+> --- a/drivers/edac/edac_mc.c
+> +++ b/drivers/edac/edac_mc.c
+> @@ -271,7 +271,7 @@ void *edac_align_ptr(void **p, unsigned int size, int n_elems)
+>  	else
+>  		return (char *)ptr;
+>  
+> -	r = (unsigned long)p % align;
+> +	r = (unsigned long)(*p) % align;
 
-Jacky, please do not top-post. Please adhere to the etiquette on public
-mailing lists.
+Looks about right to me.
 
-Alexander, things like that can happen and they pretty much do happen
-everytime new hw comes out. Kernel development has exploded so much in
-recent years so that it is absolutely normal to miss stuff. Hell, *we*
-miss stuff too, from time to time.
+Btw, you don't need the () around *p - that's evaluated right-to-left so
+the dereference happens first and *then* the typecast, i.e., what you
+want here.
 
-So let's concentrate on the work pls.
+In any case, this line comes from
 
-Thank you both!
+  8447c4d15e35 ("edac: Do alignment logic properly in edac_align_ptr()")
+
+and I believe it was wrong to use 'p' as that function works with the
+memory offsets - not with the pointer to the pointer. It's a whole
+different story whether I think this whole thing makes sense and it is
+ugly...
+
+Anyway, adding the gentlemen from that commit to Cc.
 
 -- 
 Regards/Gruss,
