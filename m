@@ -2,225 +2,51 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C08F1FD01D
-	for <lists+linux-edac@lfdr.de>; Wed, 17 Jun 2020 16:55:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B44751FD03B
+	for <lists+linux-edac@lfdr.de>; Wed, 17 Jun 2020 17:03:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726511AbgFQOzt (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Wed, 17 Jun 2020 10:55:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35050 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726494AbgFQOzt (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Wed, 17 Jun 2020 10:55:49 -0400
-Received: from mail-pl1-x644.google.com (mail-pl1-x644.google.com [IPv6:2607:f8b0:4864:20::644])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B4FFC06174E;
-        Wed, 17 Jun 2020 07:55:49 -0700 (PDT)
-Received: by mail-pl1-x644.google.com with SMTP id d8so1033432plo.12;
-        Wed, 17 Jun 2020 07:55:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=Lf2uuGCCs7Ea66ZjNOUY0M5i57X1v4PINNs6fwANlUk=;
-        b=EUpQACvGp+IXGJtTDN5gunvZ471jI3/ZlaClx9FOQfHejrOi9GqDWGgeeZ3wPayjvS
-         4Le/i1VCrz97/zq7LJ+BzY1B96KxG2MCaTSg7EoFUjyTuhc7iMXiOTzUjZtQzGMQWrbu
-         /V9eLPbYWg8ky5VNxoMpe8bgHj3+VfJiyoHT7suzaGM/XTz1OTAVZw5njCUDlEEEWaOk
-         59OLPbBbPOW+Q0/Rd3p6YQyd9KVRqUhPRyrFqVoWlmoVGusaOboxanKWJEjisFxsVzZs
-         s08rqGDKAioPGb1KVyUdcpRl1pzr467q10Sk3+67IG8pVTXoXlz6zSjMWmD56lw1XSez
-         g8fw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Lf2uuGCCs7Ea66ZjNOUY0M5i57X1v4PINNs6fwANlUk=;
-        b=myjEr7LBiCmKrBCZU4IsQOcWVhU53kXMbmkjE1dN7Tk+p9cOc9SmZjJr2HSsfcJcbY
-         5vHAIOOWkSj4IYaTRXqKYZWSO5kmUuNYZzGs4fzD70+RANEiFJHaH4RvfiEkDhCBVBgf
-         /Jk/jm/jxFwu7Eqe3uzILvwpPxoieWwoCqV3MQFXUfCnJVmI09pjOrPwqiYXCyXOHpYN
-         gCpTnXvUhFZSlSeMRFqkcPIfgYCVVUm2ftrj8G71PXyarhqe8Lz1+AxrDh8ZQl9dPh3V
-         E7yKKu0JoySdjhD4yRJQeZyu9aYi2lVWa0wqThVgIqppM+WwYM3eNxQhAGgrrQtvn51F
-         VMpg==
-X-Gm-Message-State: AOAM533k0X8tmTjN8eUw9w11PLkAmxA6xHE4tOOaTndAbWqb9HeojrQa
-        Yl18x4HqM8szN1wolNTpwg==
-X-Google-Smtp-Source: ABdhPJy0/3xYE9LTTXDbWq153s+TptXu9KTzRkK0GQGHQ/ZQwN3SuT3Ja0R8G+w0jKjDV8Naynkk9w==
-X-Received: by 2002:a17:902:b682:: with SMTP id c2mr6999926pls.313.1592405748504;
-        Wed, 17 Jun 2020 07:55:48 -0700 (PDT)
-Received: from localhost (98.86.92.34.bc.googleusercontent.com. [34.92.86.98])
-        by smtp.gmail.com with ESMTPSA id f14sm515714pjq.36.2020.06.17.07.55.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 Jun 2020 07:55:48 -0700 (PDT)
-Date:   Wed, 17 Jun 2020 22:55:45 +0800
-From:   Jacky Hu <hengqing.hu@gmail.com>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-hwmon@vger.kernel.org, linux-edac@vger.kernel.org,
-        linux-kernel@vger.kernel.org, tony.luck@intel.com, x86@kernel.org,
-        yazen.ghannam@amd.com, bp@alien8.de, clemens@ladisch.de
+        id S1726341AbgFQPDC (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Wed, 17 Jun 2020 11:03:02 -0400
+Received: from winnie.ispras.ru ([83.149.199.91]:29581 "EHLO smtp.ispras.ru"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726329AbgFQPDC (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Wed, 17 Jun 2020 11:03:02 -0400
+X-Greylist: delayed 503 seconds by postgrey-1.27 at vger.kernel.org; Wed, 17 Jun 2020 11:03:02 EDT
+Received: from monopod.intra.ispras.ru (monopod.intra.ispras.ru [10.10.3.121])
+        by smtp.ispras.ru (Postfix) with ESMTP id 735F8203BF;
+        Wed, 17 Jun 2020 17:54:36 +0300 (MSK)
+Date:   Wed, 17 Jun 2020 17:54:36 +0300 (MSK)
+From:   Alexander Monakov <amonakov@ispras.ru>
+To:     Jacky Hu <hengqing.hu@gmail.com>
+cc:     Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org,
+        linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
+        tony.luck@intel.com, x86@kernel.org, yazen.ghannam@amd.com,
+        bp@alien8.de, clemens@ladisch.de
 Subject: Re: [PATCH] hwmon: (k10temp) Add AMD family 17h model 60h probe
-Message-ID: <20200617145545.GA405542@i716>
-References: <20200616180940.GN13515@zn.tnic>
- <20200617013255.391975-1-hengqing.hu@gmail.com>
- <20200617034028.GA1614@roeck-us.net>
- <20200617071927.GA398128@i716>
- <20200617143342.GD93431@roeck-us.net>
+In-Reply-To: <20200617071927.GA398128@i716>
+Message-ID: <alpine.LNX.2.20.13.2006171739010.31660@monopod.intra.ispras.ru>
+References: <20200616180940.GN13515@zn.tnic> <20200617013255.391975-1-hengqing.hu@gmail.com> <20200617034028.GA1614@roeck-us.net> <20200617071927.GA398128@i716>
+User-Agent: Alpine 2.20.13 (LNX 116 2015-12-14)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20200617143342.GD93431@roeck-us.net>
+Content-Type: text/plain; charset=US-ASCII
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-Yep, here it is
+Hi,
 
-~> cat thm.idle
-0x059800: 29a00fef 017f1201 00012921 000f4240
-0x059810: 800000f9 00000000 00000000 00000000
-0x059820: 00000000 00000000 00000000 0fff0078
-0x059830: 00000000 002cecf9 002cecf9 002d2cfb
-0x059840: 002cccf8 002cacf7 002d2cfb 002cccf8
-0x059850: 002d2cfb 002c8cf6 002cccf8 002cacf7
-0x059860: 002cacf7 002cecf9 002c8cf6 002d0cfa
-0x059870: 002d2cfb 002d0cfa 002d0cfa 002cacf7
-0x059880: 002cecf9 002d0cfa 002cecf9 002cacf7
-0x059890: 002cccf8 002c6cf5 002d2cfb 002c8cf6
-0x0598a0: 002c8cf6 002cccf8 002cacf7 002cccf8
-0x0598b0: 002c8cf6 00000000 00002100 ffffffff
-0x0598c0: 00000000 00000000 00000000 00000000
-0x0598d0: 00000000 00000000 00000000 00000000
-0x0598e0: 00000000 00000000 00000000 00000000
-0x0598f0: 00000000 00000000 00000000 00000000
-0x059900: 00000000 00000000 00000000 00000000
-0x059910: 00000000 00000000 00000000 00000000
-0x059920: 00000000 00000000 00000000 00000000
-0x059930: 00000000 00000000 00000000 00000000
-0x059940: 00000000 00000000 00000000 00000000
-0x059950: 00000000 00000000 00000000 00000000
-0x059960: 00000000 00000000 00000000 00000000
-0x059970: 00000000 00000000 08400001 00005229
-0x059980: 00000053 a7800005 3118680e 00000000
-0x059990: 00000000 00000000 00000000 00000000
-0x0599a0: 00000000 00000000 00000000 00000000
-0x0599b0: 00000000 00000000 00000000 00000000
-0x0599c0: 00000000 00000000 00000000 00000000
-0x0599d0: 00000000 00003060 000002d4 00000019
-0x0599e0: 000002c6 00000008 00000000 00000000
-0x0599f0: 000002d4 00000019 00000000 00000000
-0x059a00: 00000001 0001000d 00000000 00000000
-0x059a10: 00000000 00000000 00000000 00000000
-0x059a20: 00000000 00000000 00000000 00000000
-0x059a30: 00000000 00000000 00000000 00000000
-0x059a40: 00000000 00000000 00000000 00000000
-0x059a50: 00000000 00000000 00000000 00000000
-0x059a60: 00000000 00000000 00000000 00000000
-0x059a70: 00000000 00000000 00000000 00000000
-0x059a80: 00000000 00000000 00000000 00000000
-0x059a90: 00000000 00000000 00000000 00000000
-0x059aa0: 00000000 00000000 00000000 00000000
-0x059ab0: 00000000 00000000 00000000 00000000
-0x059ac0: 00000000 00000000 00000000 00000000
-0x059ad0: 00000000 00000000 00000000 00000000
-0x059ae0: 00000000 00000000 00000000 00000000
-0x059af0: 00000000 00000000 00000000 00000000
-0x059b00: 00000000 00000000 00000000 00000000
-0x059b10: 0000000e 00000000 00000003 00000000
-0x059b20: 901f001a 00050003 00000000 00000000
-0x059b30: 00480001 00000000 00000000 00000000
-0x059b40: 00000000 00000000 00000010 0000ffff
-0x059b50: 00000000 00000000 00000000 00000000
-0x059b60: 00000000 00000000 00000000 00000000
-0x059b70: 00000000 00000000 00000000 00130082
-0x059b80: 0000067f 12110201 0003045a 00001303
-0x059b90: 00000000 028a4f5c 08036927 0021e548
-0x059ba0: 00000000 7fffffff 00000000 00000043
-0x059bb0: c00001c0 000000f9 00000000 00000000
-0x059bc0: 00000000 00000000 00000000 00000000
-0x059bd0: 00000000 00000000 00000000 00000000
-0x059be0: 00000000 00000000 00000000 00000000
-0x059bf0: 00000000 00000000 00000000 00000000
+I've already said in my patch submission (which was Cc'ed to LKML,
+linux-edac and linux-hwmon so you should have been able to find it):
 
-~> cat thm.busy
-0x059800: 57800fef 017f1201 00012921 000f4240
-0x059810: 800000f9 00000000 00000000 00000000
-0x059820: 00000000 00000000 00000000 0fff0078
-0x059830: 00000000 00372d4d 0042edad 003f6d90
-0x059840: 00416da1 003e0d85 00392d5d 003bad72
-0x059850: 00394d5e 003acd6b 00382d55 00348d37
-0x059860: 0033ad30 0033cd31 0033cd31 00336d2e
-0x059870: 00338d2f 0043edb5 00402d97 00440db6
-0x059880: 0040ed9d 0039ed63 003c4d77 0039ed63
-0x059890: 003c2d76 003a0d65 00338d2f 00334d2d
-0x0598a0: 0033ad30 00342d34 00344d35 0037cd52
-0x0598b0: 0035ed43 00000000 00002100 ffffffff
-0x0598c0: 00000000 00000000 00000000 00000000
-0x0598d0: 00000000 00000000 00000000 00000000
-0x0598e0: 00000000 00000000 00000000 00000000
-0x0598f0: 00000000 00000000 00000000 00000000
-0x059900: 00000000 00000000 00000000 00000000
-0x059910: 00000000 00000000 00000000 00000000
-0x059920: 00000000 00000000 00000000 00000000
-0x059930: 00000000 00000000 00000000 00000000
-0x059940: 00000000 00000000 00000000 00000000
-0x059950: 00000000 00000000 00000000 00000000
-0x059960: 00000000 00000000 00000000 00000000
-0x059970: 00000000 00000000 08400001 0000ae57
-0x059980: 0000005b a7800005 3118680e 00000000
-0x059990: 00000000 00000000 00000000 00000000
-0x0599a0: 00000000 00000000 00000000 00000000
-0x0599b0: 00000000 00000000 00000000 00000000
-0x0599c0: 00000000 00000000 00000000 00000000
-0x0599d0: 00000000 00003060 00000440 00000012
-0x0599e0: 00000334 0000001a 00000000 00000000
-0x0599f0: 00000440 00000012 00000000 00000000
-0x059a00: 00000001 0001000d 00000000 00000000
-0x059a10: 00000000 00000000 00000000 00000000
-0x059a20: 00000000 00000000 00000000 00000000
-0x059a30: 00000000 00000000 00000000 00000000
-0x059a40: 00000000 00000000 00000000 00000000
-0x059a50: 00000000 00000000 00000000 00000000
-0x059a60: 00000000 00000000 00000000 00000000
-0x059a70: 00000000 00000000 00000000 00000000
-0x059a80: 00000000 00000000 00000000 00000000
-0x059a90: 00000000 00000000 00000000 00000000
-0x059aa0: 00000000 00000000 00000000 00000000
-0x059ab0: 00000000 00000000 00000000 00000000
-0x059ac0: 00000000 00000000 00000000 00000000
-0x059ad0: 00000000 00000000 00000000 00000000
-0x059ae0: 00000000 00000000 00000000 00000000
-0x059af0: 00000000 00000000 00000000 00000000
-0x059b00: 00000000 00000000 00000000 00000000
-0x059b10: 0000000e 00000000 00000003 00000000
-0x059b20: 901f001a 00050003 00000000 00000000
-0x059b30: 00480001 00000000 00000000 00000000
-0x059b40: 00000000 00000000 00000010 0000ffff
-0x059b50: 00000000 00000000 00000000 00000000
-0x059b60: 00000000 00000000 00000000 00000000
-0x059b70: 00000000 00000000 00000000 00130082
-0x059b80: 0000067f 12110201 0003045a 00001303
-0x059b90: 00000000 028a4f5c 08036927 0021e548
-0x059ba0: 00000000 7fffffff 00000000 00000043
-0x059bb0: c00001c0 000000f9 00000000 00000000
-0x059bc0: 00000000 00000000 00000000 00000000
-0x059bd0: 00000000 00000000 00000000 00000000
-0x059be0: 00000000 00000000 00000000 00000000
-0x059bf0: 00000000 00000000 00000000 00000000
+>> It appears SMU offsets for reading current/voltage and CCD temperature
+>> have changed for this generation (reads from currently used offsets
+>> yield zeros), so those features cannot be enabled so trivially.
 
-Jacky
-On Wed, Jun 17, 2020 at 07:33:42AM -0700, Guenter Roeck wrote:
-> On Wed, Jun 17, 2020 at 03:19:27PM +0800, Jacky Hu wrote:
-> > Hi Guenter,
-> > 
-> > By increasing the regs count from 32 to 256 and looking into the output of `cat /sys/kernel/debug/k10temp-0000\:00\:18.3/svi`
-> > There is some data from 0x05a300 - 0x05a330
-> > Do you have any idea how we can guess the offset for this model?
-> > 
-> 
-> For other chips, the upper 16 bits of the register reported the voltage
-> and the lower 16 bit reported the current. It might possibly be that the
-> data is now split into multiple registers, but that is impossible to
-> determine without datasheet and/or additional information. So, sorry,
-> no, I have no idea. We'll have to wait for someone to reverse engineer
-> it.
-> 
-> Can you send the contents of the "thm" file ? Maybe we can at least
-> find the new location of the ccd temperature registers.
-> 
-> Guenter
+In https://github.com/FlyGoat/ryzen_nb_smu/issues/3 there some
+reverse-engineered info that indicates that for Renoir, SMU region has been
+moved to 0x6F000. Its layout also changed, as far as I can tell.
+
+(also, please ask yourself if you want to offer the maintainers an apology)
+
+Alexander
