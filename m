@@ -2,89 +2,76 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CE22D1FE5E9
-	for <lists+linux-edac@lfdr.de>; Thu, 18 Jun 2020 04:29:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1657E1FF9B3
+	for <lists+linux-edac@lfdr.de>; Thu, 18 Jun 2020 18:50:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729112AbgFRC32 (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Wed, 17 Jun 2020 22:29:28 -0400
-Received: from mail.kernel.org ([198.145.29.99]:46498 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728834AbgFRBQL (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Wed, 17 Jun 2020 21:16:11 -0400
-Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 7B6B221D79;
-        Thu, 18 Jun 2020 01:16:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1592442971;
-        bh=nZJGhbo9IBSAjzvkZkeVSYjGPNmAlmVn/KRbXGPmTRQ=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Bpd7WL6baf3QA5Pbgk40JFRk2iHTqBQwtJa3w/FE+GcJgkNAFSx2d3gxi+AfCdowr
-         txs7of+h0jPupQLVi4LdjIzftTFFLNFrLVKqeHA2C90rtaTIEbxgL64DXSgfEt9Zlv
-         QeXjI4MUdAngeJWb4C27x+ajzzn9Na44ecr2ZL4E=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Tony Luck <tony.luck@intel.com>, kbuild test robot <lkp@intel.com>,
-        Borislav Petkov <bp@suse.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Sasha Levin <sashal@kernel.org>, linux-edac@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.7 375/388] x86/mce/dev-mcelog: Fix -Wstringop-truncation warning about strncpy()
-Date:   Wed, 17 Jun 2020 21:07:52 -0400
-Message-Id: <20200618010805.600873-375-sashal@kernel.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200618010805.600873-1-sashal@kernel.org>
-References: <20200618010805.600873-1-sashal@kernel.org>
+        id S1732004AbgFRQuY (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Thu, 18 Jun 2020 12:50:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48816 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729740AbgFRQuW (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Thu, 18 Jun 2020 12:50:22 -0400
+Received: from mail-il1-x143.google.com (mail-il1-x143.google.com [IPv6:2607:f8b0:4864:20::143])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDE99C06174E
+        for <linux-edac@vger.kernel.org>; Thu, 18 Jun 2020 09:50:22 -0700 (PDT)
+Received: by mail-il1-x143.google.com with SMTP id c75so6424494ila.8
+        for <linux-edac@vger.kernel.org>; Thu, 18 Jun 2020 09:50:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:from:date:message-id:subject:to;
+        bh=eihDiEoZQxPyT7gze3G/OpngwSDSpOI/LqfVWohJ65o=;
+        b=STCn+dK0hqdK3kuGQ+x64hvokU+TlKxKwZJoWvHGhlYjU2rvHUI6y3EMNxLW/bRGnu
+         yLAJR8TKgeGo3oZvUkUtbCb9Tjo1dYMLMCZ8t7ExNfr7GnLLVGoGgeOFXvGNCOnyQ+G0
+         QGNIxbXoDA0C0tOneUtJFAvlnVI+Cc4qjZ5wqt58DA3Wy+an6FmbYluCM7sM3WxgDgdy
+         IiMeFW0zVuBan++HKkWDUMVKA/w/XfkSwUIU0Ovy3APh2ZN1A+jPQwOLuaTWy44QSmXJ
+         kFVtyAZHYCaKCeygWGsWvz3/h1SvVpgaldxKvrWTiwsma4jl4p7phpwdSwxkltrf+tdG
+         thLA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=eihDiEoZQxPyT7gze3G/OpngwSDSpOI/LqfVWohJ65o=;
+        b=dtOPUMRPScpKK5pvpLXVHb6SMqBTQB1LHBqKEE2hZGO6mjSMxkoYR+J4XCm7OWBlm/
+         QRxqAadB2NJgIdNzCLrThJ4oTwcayCrrsaj+aknCyKIcLnTi0Ux8hmOAag25nsneqJyF
+         aZe6ssOvdChHuqBDUlQmhxwP4lQL4MGk3mfZvsUSQiD/mBSpppXm2qFdW3M0CqfyY25S
+         1oltDMPrK11JSPelnFy1T+bcX2Zao814kHc4rS1fgRawfuzgkt07dolV0UisYV/LPD5I
+         YGWR4ClPcMQs+SAZ4EOeS30wK8fRGUf3coLtQowLvjFh5xMsHdTbVII7h0J9NfRDs/W1
+         C2NQ==
+X-Gm-Message-State: AOAM531PjOengyw7TO6bpFf7u9cBu5EKCTI3PpNEjwRXrRxdtcjqawwb
+        ogKsL4dRhZoe2H9ktyGvu8Dp+bQRqoSBRcvxGWMvAf40hSs=
+X-Google-Smtp-Source: ABdhPJxcg0hmNn5Br8lN6m0ehlUaPBWlAoIXjw5bZazX13IrZv1BNWWZs9L6ZMgAT8LLHUI3CVRwEQOeQvSgP45uSIg=
+X-Received: by 2002:a92:de0d:: with SMTP id x13mr5173120ilm.256.1592499021477;
+ Thu, 18 Jun 2020 09:50:21 -0700 (PDT)
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+From:   Anders Andersson <pipatron@gmail.com>
+Date:   Thu, 18 Jun 2020 18:49:45 +0200
+Message-ID: <CAKkunMbNWppx_i6xSdDHLseA2QQmGJqj_crY=NF-GZML5np4Vw@mail.gmail.com>
+Subject: User question about memory scrubbing
+To:     linux-edac@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-From: Tony Luck <tony.luck@intel.com>
+Hi! I realize that this is more of a developer-to-developer list, but
+I'm a hobbyist who recently bought my first system with ECC RAM
+(Opteron 6386 SE) and I can't get memory scrubbing to work. It's hard
+to find people who know anything about it.
 
-[ Upstream commit 7ccddc4613db446dc3cbb69a3763ba60ec651d13 ]
+Preliminary research led me to the EDAC documentation on
+https://www.kernel.org/doc/Documentation/ABI/testing/sysfs-devices-edac
+and in particular the "sdram_scrub_rate" file, but had no luck
+manipulating it.
 
-The kbuild test robot reported this warning:
+Before I'm getting too lost: Is that the right way to configure it?
 
-  arch/x86/kernel/cpu/mce/dev-mcelog.c: In function 'dev_mcelog_init_device':
-  arch/x86/kernel/cpu/mce/dev-mcelog.c:346:2: warning: 'strncpy' output \
-    truncated before terminating nul copying 12 bytes from a string of the \
-    same length [-Wstringop-truncation]
+I have amd64_edac_mod and edac_mce_amd loaded. I briefly looked at
+amd64_edac.c and it appears to have the necessary code and matches the
+documentation from AMD so there's something I'm not doing right. I did
+post a more elaborate question on
+https://unix.stackexchange.com/questions/593060/how-do-i-enable-and-verify-ecc-ram-scrubbing-in-linux
+but I'm afraid it's too technical for most users (too technical for me
+too apparently!)
 
-This is accurate, but I don't care that the trailing NUL character isn't
-copied. The string being copied is just a magic number signature so that
-crash dump tools can be sure they are decoding the right blob of memory.
-
-Use memcpy() instead of strncpy().
-
-Fixes: d8ecca4043f2 ("x86/mce/dev-mcelog: Dynamically allocate space for machine check records")
-Reported-by: kbuild test robot <lkp@intel.com>
-Signed-off-by: Tony Luck <tony.luck@intel.com>
-Signed-off-by: Borislav Petkov <bp@suse.de>
-Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-Link: https://lkml.kernel.org/r/20200527182808.27737-1-tony.luck@intel.com
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- arch/x86/kernel/cpu/mce/dev-mcelog.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/arch/x86/kernel/cpu/mce/dev-mcelog.c b/arch/x86/kernel/cpu/mce/dev-mcelog.c
-index d089567a9ce8..bcb379b2fd42 100644
---- a/arch/x86/kernel/cpu/mce/dev-mcelog.c
-+++ b/arch/x86/kernel/cpu/mce/dev-mcelog.c
-@@ -343,7 +343,7 @@ static __init int dev_mcelog_init_device(void)
- 	if (!mcelog)
- 		return -ENOMEM;
- 
--	strncpy(mcelog->signature, MCE_LOG_SIGNATURE, sizeof(mcelog->signature));
-+	memcpy(mcelog->signature, MCE_LOG_SIGNATURE, sizeof(mcelog->signature));
- 	mcelog->len = mce_log_len;
- 	mcelog->recordlen = sizeof(struct mce);
- 
--- 
-2.25.1
-
+Hints and pointers welcome,
+Anders
