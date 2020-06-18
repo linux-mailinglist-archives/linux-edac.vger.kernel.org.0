@@ -2,76 +2,61 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1657E1FF9B3
-	for <lists+linux-edac@lfdr.de>; Thu, 18 Jun 2020 18:50:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BE2F1FFAA9
+	for <lists+linux-edac@lfdr.de>; Thu, 18 Jun 2020 19:56:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732004AbgFRQuY (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Thu, 18 Jun 2020 12:50:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48816 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729740AbgFRQuW (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Thu, 18 Jun 2020 12:50:22 -0400
-Received: from mail-il1-x143.google.com (mail-il1-x143.google.com [IPv6:2607:f8b0:4864:20::143])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDE99C06174E
-        for <linux-edac@vger.kernel.org>; Thu, 18 Jun 2020 09:50:22 -0700 (PDT)
-Received: by mail-il1-x143.google.com with SMTP id c75so6424494ila.8
-        for <linux-edac@vger.kernel.org>; Thu, 18 Jun 2020 09:50:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:from:date:message-id:subject:to;
-        bh=eihDiEoZQxPyT7gze3G/OpngwSDSpOI/LqfVWohJ65o=;
-        b=STCn+dK0hqdK3kuGQ+x64hvokU+TlKxKwZJoWvHGhlYjU2rvHUI6y3EMNxLW/bRGnu
-         yLAJR8TKgeGo3oZvUkUtbCb9Tjo1dYMLMCZ8t7ExNfr7GnLLVGoGgeOFXvGNCOnyQ+G0
-         QGNIxbXoDA0C0tOneUtJFAvlnVI+Cc4qjZ5wqt58DA3Wy+an6FmbYluCM7sM3WxgDgdy
-         IiMeFW0zVuBan++HKkWDUMVKA/w/XfkSwUIU0Ovy3APh2ZN1A+jPQwOLuaTWy44QSmXJ
-         kFVtyAZHYCaKCeygWGsWvz3/h1SvVpgaldxKvrWTiwsma4jl4p7phpwdSwxkltrf+tdG
-         thLA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
-        bh=eihDiEoZQxPyT7gze3G/OpngwSDSpOI/LqfVWohJ65o=;
-        b=dtOPUMRPScpKK5pvpLXVHb6SMqBTQB1LHBqKEE2hZGO6mjSMxkoYR+J4XCm7OWBlm/
-         QRxqAadB2NJgIdNzCLrThJ4oTwcayCrrsaj+aknCyKIcLnTi0Ux8hmOAag25nsneqJyF
-         aZe6ssOvdChHuqBDUlQmhxwP4lQL4MGk3mfZvsUSQiD/mBSpppXm2qFdW3M0CqfyY25S
-         1oltDMPrK11JSPelnFy1T+bcX2Zao814kHc4rS1fgRawfuzgkt07dolV0UisYV/LPD5I
-         YGWR4ClPcMQs+SAZ4EOeS30wK8fRGUf3coLtQowLvjFh5xMsHdTbVII7h0J9NfRDs/W1
-         C2NQ==
-X-Gm-Message-State: AOAM531PjOengyw7TO6bpFf7u9cBu5EKCTI3PpNEjwRXrRxdtcjqawwb
-        ogKsL4dRhZoe2H9ktyGvu8Dp+bQRqoSBRcvxGWMvAf40hSs=
-X-Google-Smtp-Source: ABdhPJxcg0hmNn5Br8lN6m0ehlUaPBWlAoIXjw5bZazX13IrZv1BNWWZs9L6ZMgAT8LLHUI3CVRwEQOeQvSgP45uSIg=
-X-Received: by 2002:a92:de0d:: with SMTP id x13mr5173120ilm.256.1592499021477;
- Thu, 18 Jun 2020 09:50:21 -0700 (PDT)
+        id S1727928AbgFRR46 (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Thu, 18 Jun 2020 13:56:58 -0400
+Received: from mail.skyhub.de ([5.9.137.197]:57458 "EHLO mail.skyhub.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727799AbgFRR45 (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Thu, 18 Jun 2020 13:56:57 -0400
+Received: from zn.tnic (p200300ec2f0dcf0005555d042158ef9e.dip0.t-ipconnect.de [IPv6:2003:ec:2f0d:cf00:555:5d04:2158:ef9e])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 567271EC0423;
+        Thu, 18 Jun 2020 19:56:55 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1592503015;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=Os6rGJV75bv5vqp4xjrJLJBcqG385J3PUiuwO40x2E4=;
+        b=UHFAU6003Kp0gyj0sDh/DWcB828PeRMKcOHGpec2M8vfjSvDaxcHR/8fHRUOJujFtOcW6n
+        t/Qi69ZxhrABRErUDXFPf690bJwiDAGuYTsIl43Z3szqzeFlzeyyJHOutjbGtZcXBWfej/
+        enGtpEegcZ6mIscTKvW6OdHpOXoVO9s=
+Date:   Thu, 18 Jun 2020 19:56:46 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Anders Andersson <pipatron@gmail.com>
+Cc:     linux-edac@vger.kernel.org
+Subject: Re: User question about memory scrubbing
+Message-ID: <20200618175646.GD27951@zn.tnic>
+References: <CAKkunMbNWppx_i6xSdDHLseA2QQmGJqj_crY=NF-GZML5np4Vw@mail.gmail.com>
 MIME-Version: 1.0
-From:   Anders Andersson <pipatron@gmail.com>
-Date:   Thu, 18 Jun 2020 18:49:45 +0200
-Message-ID: <CAKkunMbNWppx_i6xSdDHLseA2QQmGJqj_crY=NF-GZML5np4Vw@mail.gmail.com>
-Subject: User question about memory scrubbing
-To:     linux-edac@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <CAKkunMbNWppx_i6xSdDHLseA2QQmGJqj_crY=NF-GZML5np4Vw@mail.gmail.com>
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-Hi! I realize that this is more of a developer-to-developer list, but
-I'm a hobbyist who recently bought my first system with ECC RAM
-(Opteron 6386 SE) and I can't get memory scrubbing to work. It's hard
-to find people who know anything about it.
+On Thu, Jun 18, 2020 at 06:49:45PM +0200, Anders Andersson wrote:
+> Hi! I realize that this is more of a developer-to-developer list, but
+> I'm a hobbyist who recently bought my first system with ECC RAM
+> (Opteron 6386 SE) and I can't get memory scrubbing to work. It's hard
+> to find people who know anything about it.
+> 
+> Preliminary research led me to the EDAC documentation on
+> https://www.kernel.org/doc/Documentation/ABI/testing/sysfs-devices-edac
+> and in particular the "sdram_scrub_rate" file, but had no luck
+> manipulating it.
 
-Preliminary research led me to the EDAC documentation on
-https://www.kernel.org/doc/Documentation/ABI/testing/sysfs-devices-edac
-and in particular the "sdram_scrub_rate" file, but had no luck
-manipulating it.
+Oh, you're manipulating it alright but there's a bug in reporting it.
+Wanna test a patch?
 
-Before I'm getting too lost: Is that the right way to configure it?
+-- 
+Regards/Gruss,
+    Boris.
 
-I have amd64_edac_mod and edac_mce_amd loaded. I briefly looked at
-amd64_edac.c and it appears to have the necessary code and matches the
-documentation from AMD so there's something I'm not doing right. I did
-post a more elaborate question on
-https://unix.stackexchange.com/questions/593060/how-do-i-enable-and-verify-ecc-ram-scrubbing-in-linux
-but I'm afraid it's too technical for most users (too technical for me
-too apparently!)
-
-Hints and pointers welcome,
-Anders
+https://people.kernel.org/tglx/notes-about-netiquette
