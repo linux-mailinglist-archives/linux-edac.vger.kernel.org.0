@@ -2,77 +2,89 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 51F311FD73B
-	for <lists+linux-edac@lfdr.de>; Wed, 17 Jun 2020 23:29:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE22D1FE5E9
+	for <lists+linux-edac@lfdr.de>; Thu, 18 Jun 2020 04:29:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727027AbgFQV3R (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Wed, 17 Jun 2020 17:29:17 -0400
-Received: from mga14.intel.com ([192.55.52.115]:28951 "EHLO mga14.intel.com"
+        id S1729112AbgFRC32 (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Wed, 17 Jun 2020 22:29:28 -0400
+Received: from mail.kernel.org ([198.145.29.99]:46498 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726496AbgFQV3R (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Wed, 17 Jun 2020 17:29:17 -0400
-IronPort-SDR: uirFb1FVNIpZG5vOxlGAA5p5N05+WLw6+NwxWZBSKX2Mc3+2B2spUcut9wIlBjqCWa81Ybmmel
- LxjWd7OXkSsQ==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jun 2020 14:29:16 -0700
-IronPort-SDR: Nsquo/N3cnkdJ5ghBjTUKzDKBJJIKa3ETc5TpnnzUqDnGDJ2VzU1r8DM4MqnPEpLHl04z0NHNV
- Ur6Wai7guEBw==
-X-IronPort-AV: E=Sophos;i="5.73,523,1583222400"; 
-   d="scan'208";a="273648327"
-Received: from agluck-desk2.sc.intel.com (HELO agluck-desk2.amr.corp.intel.com) ([10.3.52.68])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jun 2020 14:29:16 -0700
-Date:   Wed, 17 Jun 2020 14:29:15 -0700
-From:   "Luck, Tony" <tony.luck@intel.com>
-To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>
-Cc:     Borislav Petkov <bp@alien8.de>,
+        id S1728834AbgFRBQL (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Wed, 17 Jun 2020 21:16:11 -0400
+Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 7B6B221D79;
+        Thu, 18 Jun 2020 01:16:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1592442971;
+        bh=nZJGhbo9IBSAjzvkZkeVSYjGPNmAlmVn/KRbXGPmTRQ=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=Bpd7WL6baf3QA5Pbgk40JFRk2iHTqBQwtJa3w/FE+GcJgkNAFSx2d3gxi+AfCdowr
+         txs7of+h0jPupQLVi4LdjIzftTFFLNFrLVKqeHA2C90rtaTIEbxgL64DXSgfEt9Zlv
+         QeXjI4MUdAngeJWb4C27x+ajzzn9Na44ecr2ZL4E=
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Tony Luck <tony.luck@intel.com>, kbuild test robot <lkp@intel.com>,
+        Borislav Petkov <bp@suse.de>,
         Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, x86@kernel.org,
-        linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
-        "Gustavo A. R. Silva" <gustavo@embeddedor.com>
-Subject: Re: [PATCH][next] x86/mce/dev-mcelog: Use struct_size() helper in
- kzalloc()
-Message-ID: <20200617212915.GA4803@agluck-desk2.amr.corp.intel.com>
-References: <20200617211734.GA9636@embeddedor>
+        Sasha Levin <sashal@kernel.org>, linux-edac@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.7 375/388] x86/mce/dev-mcelog: Fix -Wstringop-truncation warning about strncpy()
+Date:   Wed, 17 Jun 2020 21:07:52 -0400
+Message-Id: <20200618010805.600873-375-sashal@kernel.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20200618010805.600873-1-sashal@kernel.org>
+References: <20200618010805.600873-1-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200617211734.GA9636@embeddedor>
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Wed, Jun 17, 2020 at 04:17:34PM -0500, Gustavo A. R. Silva wrote:
-> Make use of the struct_size() helper instead of an open-coded version
-> in order to avoid any potential type mistakes.
-> 
-> This code was detected with the help of Coccinelle and, audited and
-> fixed manually.
-> 
-> Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
+From: Tony Luck <tony.luck@intel.com>
 
-Acked-by: Tony Luck <tony.luck@intel.com>
+[ Upstream commit 7ccddc4613db446dc3cbb69a3763ba60ec651d13 ]
 
-> ---
->  arch/x86/kernel/cpu/mce/dev-mcelog.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/arch/x86/kernel/cpu/mce/dev-mcelog.c b/arch/x86/kernel/cpu/mce/dev-mcelog.c
-> index 43c466020ed5..03e51053592a 100644
-> --- a/arch/x86/kernel/cpu/mce/dev-mcelog.c
-> +++ b/arch/x86/kernel/cpu/mce/dev-mcelog.c
-> @@ -345,7 +345,7 @@ static __init int dev_mcelog_init_device(void)
->  	int err;
->  
->  	mce_log_len = max(MCE_LOG_MIN_LEN, num_online_cpus());
-> -	mcelog = kzalloc(sizeof(*mcelog) + mce_log_len * sizeof(struct mce), GFP_KERNEL);
-> +	mcelog = kzalloc(struct_size(mcelog, entry, mce_log_len), GFP_KERNEL);
->  	if (!mcelog)
->  		return -ENOMEM;
->  
-> -- 
-> 2.27.0
-> 
+The kbuild test robot reported this warning:
+
+  arch/x86/kernel/cpu/mce/dev-mcelog.c: In function 'dev_mcelog_init_device':
+  arch/x86/kernel/cpu/mce/dev-mcelog.c:346:2: warning: 'strncpy' output \
+    truncated before terminating nul copying 12 bytes from a string of the \
+    same length [-Wstringop-truncation]
+
+This is accurate, but I don't care that the trailing NUL character isn't
+copied. The string being copied is just a magic number signature so that
+crash dump tools can be sure they are decoding the right blob of memory.
+
+Use memcpy() instead of strncpy().
+
+Fixes: d8ecca4043f2 ("x86/mce/dev-mcelog: Dynamically allocate space for machine check records")
+Reported-by: kbuild test robot <lkp@intel.com>
+Signed-off-by: Tony Luck <tony.luck@intel.com>
+Signed-off-by: Borislav Petkov <bp@suse.de>
+Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+Link: https://lkml.kernel.org/r/20200527182808.27737-1-tony.luck@intel.com
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ arch/x86/kernel/cpu/mce/dev-mcelog.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/arch/x86/kernel/cpu/mce/dev-mcelog.c b/arch/x86/kernel/cpu/mce/dev-mcelog.c
+index d089567a9ce8..bcb379b2fd42 100644
+--- a/arch/x86/kernel/cpu/mce/dev-mcelog.c
++++ b/arch/x86/kernel/cpu/mce/dev-mcelog.c
+@@ -343,7 +343,7 @@ static __init int dev_mcelog_init_device(void)
+ 	if (!mcelog)
+ 		return -ENOMEM;
+ 
+-	strncpy(mcelog->signature, MCE_LOG_SIGNATURE, sizeof(mcelog->signature));
++	memcpy(mcelog->signature, MCE_LOG_SIGNATURE, sizeof(mcelog->signature));
+ 	mcelog->len = mce_log_len;
+ 	mcelog->recordlen = sizeof(struct mce);
+ 
+-- 
+2.25.1
+
