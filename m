@@ -2,94 +2,81 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B35081FFB36
-	for <lists+linux-edac@lfdr.de>; Thu, 18 Jun 2020 20:40:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 119B71FFFF2
+	for <lists+linux-edac@lfdr.de>; Fri, 19 Jun 2020 03:55:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726928AbgFRSkt (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Thu, 18 Jun 2020 14:40:49 -0400
-Received: from mail.skyhub.de ([5.9.137.197]:35622 "EHLO mail.skyhub.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726277AbgFRSkt (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Thu, 18 Jun 2020 14:40:49 -0400
-Received: from zn.tnic (p200300ec2f0dcf0005555d042158ef9e.dip0.t-ipconnect.de [IPv6:2003:ec:2f0d:cf00:555:5d04:2158:ef9e])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 36F6F1EC037C;
-        Thu, 18 Jun 2020 20:40:48 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1592505648;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=CUWy+kjdFnuZqUSMcGwInqt415HoR6IssKs8IKSM2l8=;
-        b=bK3vJCa1x0xcUnR4XQYlYXxjw7+U0OpvUqt+qJg9DmDZh+YSQ9A3Ug4zlcV6qhuj8Vd56A
-        eNVyaJOI+nIFnMFDyuCufC0Z0aeMEObWFgMATWpBqFaXKjpVJWwdNyq9mymJKR6nJRizme
-        ONKsV06J9LTeW/ZP+StiLhmrpQTQXnI=
-Date:   Thu, 18 Jun 2020 20:40:41 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Anders Andersson <pipatron@gmail.com>
-Cc:     linux-edac@vger.kernel.org
-Subject: [PATCH] EDAC/amd64: Read back the scrub rate PCI register on F15h
-Message-ID: <20200618184041.GE27951@zn.tnic>
+        id S1728414AbgFSBzz (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Thu, 18 Jun 2020 21:55:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48006 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728181AbgFSBzz (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Thu, 18 Jun 2020 21:55:55 -0400
+Received: from mail-io1-xd44.google.com (mail-io1-xd44.google.com [IPv6:2607:f8b0:4864:20::d44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF388C06174E
+        for <linux-edac@vger.kernel.org>; Thu, 18 Jun 2020 18:55:53 -0700 (PDT)
+Received: by mail-io1-xd44.google.com with SMTP id x189so9515802iof.9
+        for <linux-edac@vger.kernel.org>; Thu, 18 Jun 2020 18:55:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=6Pl32oxUdBHkTR97CwMc5ZgAxNuKLw7Lk6JpqarL0HI=;
+        b=pf90TgSN03OWLQs9hU7FbFwLLp99+3lo2t/0NkyNkMi/8c2akfiRLE/OgOLfF+tdFA
+         7erFuV6W++m1ff4tBgbSzYIl0vzpaw10GZ97Wpr+5+AvliZJbRWC6M+t5Zu90HG7g2BN
+         ulWN3Cv+ip8ZNnlukOGNbZflCWlDKwJAwqfMPqUk/D1ZrgD/EEfKDs5fw/yy0U/A+mm6
+         PHvj388mbHWcVG6Hl/YMiwNbIYJdF9z9TI5Qi15/2+medU9FS+DOMWbMepc00HuyUM17
+         s2soYv79XRm6w1bGWyUpwwVOYw+ivCOtaiPvleyvOtnt9MOfWwzx9Sxfmtpd2104ucO5
+         HJoQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=6Pl32oxUdBHkTR97CwMc5ZgAxNuKLw7Lk6JpqarL0HI=;
+        b=CWGtajT4ktWdzsQnaAIOBgAy4dodwGkqM+J8UcV8UH9mqGlRo+L1CBF+wTZQQo5llG
+         uwj4S1wRyzVQ2X9oJ2shiMAjejNaonIKDJv1i2BS/7mMr0cPL43j2s1N9fWk8rf1uvyo
+         6sOVT+zPVtCk7XHh0AhP7wZXYIpCtVJ/oTfvCZMlSbC7bhkI91nYQIuBMX5HJjon4Tu2
+         JR5QjVmysGxe+LypzUi5TBCNTL6WH3zhifgJcDUZv5apR+XAFSk6XYWZ2Lwe9zCeZYFB
+         pKrZ0YyS4Mm8Demz/b8TvceAkFOIB1jZgTgBNL8Pue2IBR8RDZOnEsLeucBEfU/8UGRT
+         nwXA==
+X-Gm-Message-State: AOAM531IP7K1RW6udGKx/nKSKB/AAvX775rtN7KblDJUVbk5opo0WrMx
+        boWPHvF28D+dTvcx/eJXzo4cs5TN58M7Dlx7SmjOptCd
+X-Google-Smtp-Source: ABdhPJzUZCKNl8Se5pyRezuR0imMATFR8q5pNPBj0ZkvYWAJMQSurTFFUd7S2vMS5k0VmUJQLeXiyS+BgYBykaZh2eI=
+X-Received: by 2002:a02:c802:: with SMTP id p2mr1595481jao.111.1592531753183;
+ Thu, 18 Jun 2020 18:55:53 -0700 (PDT)
+MIME-Version: 1.0
 References: <CAKkunMbNWppx_i6xSdDHLseA2QQmGJqj_crY=NF-GZML5np4Vw@mail.gmail.com>
  <20200618175646.GD27951@zn.tnic>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 In-Reply-To: <20200618175646.GD27951@zn.tnic>
+From:   Anders Andersson <pipatron@gmail.com>
+Date:   Fri, 19 Jun 2020 03:55:16 +0200
+Message-ID: <CAKkunMaXyw+U-izfgXRuhN1tafjXksw_6rsMB82xv=zseFgkqA@mail.gmail.com>
+Subject: Re: User question about memory scrubbing
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     linux-edac@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Thu, Jun 18, 2020 at 07:56:46PM +0200, Borislav Petkov wrote:
+On Thu, Jun 18, 2020 at 7:56 PM Borislav Petkov <bp@alien8.de> wrote:
+>
+> On Thu, Jun 18, 2020 at 06:49:45PM +0200, Anders Andersson wrote:
+> > Hi! I realize that this is more of a developer-to-developer list, but
+> > I'm a hobbyist who recently bought my first system with ECC RAM
+> > (Opteron 6386 SE) and I can't get memory scrubbing to work. It's hard
+> > to find people who know anything about it.
+> >
+> > Preliminary research led me to the EDAC documentation on
+> > https://www.kernel.org/doc/Documentation/ABI/testing/sysfs-devices-edac
+> > and in particular the "sdram_scrub_rate" file, but had no luck
+> > manipulating it.
+>
 > Oh, you're manipulating it alright but there's a bug in reporting it.
 > Wanna test a patch?
 
-Here it is:
+Wow, nice to see that I'm not crazy, and thanks for the quick fix! I
+saw the patch and I will try it out after I've re-learnt how to build
+a kernel again. It's been well over 10 years since I last had to...
 
----
-From: Borislav Petkov <bp@suse.de>
-
-Commit:
-
-  da92110dfdfa ("EDAC, amd64_edac: Extend scrub rate support to F15hM60h")
-
-added support for F15h, model 0x60 CPUs but in doing so, missed to read
-back SCRCTRL PCI config register on F15h CPUs which are *not* model
-0x60. Add that read so that doing
-
-  $ cat /sys/devices/system/edac/mc/mc0/sdram_scrub_rate
-
-can show the previously set DRAM scrub rate.
-
-Fixes: da92110dfdfa ("EDAC, amd64_edac: Extend scrub rate support to F15hM60h")
-Reported-by: Anders Andersson <pipatron@gmail.com>
-Signed-off-by: Borislav Petkov <bp@suse.de>
-Cc: <stable@vger.kernel.org> #v4.4..
-Link: https://lkml.kernel.org/r/CAKkunMbNWppx_i6xSdDHLseA2QQmGJqj_crY=NF-GZML5np4Vw@mail.gmail.com
----
- drivers/edac/amd64_edac.c | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/drivers/edac/amd64_edac.c b/drivers/edac/amd64_edac.c
-index ef90070a9194..6262f6370c5d 100644
---- a/drivers/edac/amd64_edac.c
-+++ b/drivers/edac/amd64_edac.c
-@@ -269,6 +269,8 @@ static int get_scrub_rate(struct mem_ctl_info *mci)
- 
- 		if (pvt->model == 0x60)
- 			amd64_read_pci_cfg(pvt->F2, F15H_M60H_SCRCTRL, &scrubval);
-+		else
-+			amd64_read_pci_cfg(pvt->F3, SCRCTRL, &scrubval);
- 	} else {
- 		amd64_read_pci_cfg(pvt->F3, SCRCTRL, &scrubval);
- 	}
--- 
-2.21.0
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+// Anders
