@@ -2,59 +2,123 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C53C203BC3
-	for <lists+linux-edac@lfdr.de>; Mon, 22 Jun 2020 18:02:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FD1D2046D2
+	for <lists+linux-edac@lfdr.de>; Tue, 23 Jun 2020 03:42:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729770AbgFVQCZ (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Mon, 22 Jun 2020 12:02:25 -0400
-Received: from sonic302-21.consmr.mail.ne1.yahoo.com ([66.163.186.147]:38287
-        "EHLO sonic302-21.consmr.mail.ne1.yahoo.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1729807AbgFVQCX (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>);
-        Mon, 22 Jun 2020 12:02:23 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1592841741; bh=cK2qy9Lv5SAgMg9nAvfVmkJPj46H3ss3vOVyjpHm6Nk=; h=Date:From:Reply-To:Subject:References:From:Subject; b=imnMzKvnrwdEkzevY9v55JCHWrS7mFcRp2xLflBpdsWBX5v32iTt1Jwj292Sqyxc6zTWfVf6UW3RltjDxv8H8ZAxxFg96tpPBoXA2f/GRkfTuiNcUr3yDzOGiHeT9IqR//B+9C8c9YoGDJPnAeuuKcQvLl1HS8J+STK4/r0WZ3jbtWFF0MKDjydg+AbeXShoRDHqwsqAaAi7D9jDq8wNDWBIR81puaAh7APGDPK32RqjpFS85hxXrbmotW59Gm/gC9SoLB52q4udtwMI++FS4HYmIHt+kUh9tNcMAsNUvFYo0HWMN59EiLf7lYGm/4AR40adfmghUfkmt4dYpTZmZQ==
-X-YMail-OSG: AhKkJLAVM1lDQ3XPPTTJWpEw.A_YPk4v7tBrtMEv9XTYrBN0vKxPyUyPokZyCLH
- 0NPJEnbM.Ixt5u0eXkMwZesEBqS.rCtCLJgnod2Yg.I9TXOm0suNzcmJ92mBaA3mHgRFUusjI.6E
- 3Gu4LEq019.le8uhDgpgUZ.YgtmiKAQJK6Bd4WPLqozbdEc8urSPipLpvwJTvKec65xmptWyRiVv
- 5wejfhjut7ltVV2EWvbGnxpPsKrHXW63gZY0z7W.qC8yTTTM6xXIAPM6OYdYDYNn.6t5yJFWlC1P
- OIdbZEYbWLsjaYGAZ3nhw68imywZs7JgVqTzxfR4ZQQxpuo3K8t9CM9O0hpOCt10FP__XXwyrmrD
- TCoCE7B_Edu3G.zjOUn_rksR4jYB.m1Rp.1vZ_bLxnQwCiAul5Wqfj8PNdUGzT.zvxnBCUVqWq9J
- 8hXM6oMyn8gklCF.R8KCTVo6NRJRq4thjGWIexrpJEGu0QolvkJTIALFEd6_slAReLmAOEup3xKy
- .77XY9y0L2WZlQcf1QY4ryEv90HkLK9R59Zd1MxuC8qefRgY6y6xUFmVBWO8SDJCCjnQpB48PRDP
- pRTSfD8hEjxrcMoyLQRR8ik6SRBEuL1N.zoJ2juJT7TtdJItukcqyaFlw7VOC6cm49vWb13NtnZ0
- gQ2bWEWTG5v0uAlc54_ulltpKs.Fgm6hkagBtyzunEJ52PGAuturV.LPWyLoBYPiB1KC1HlV8gI8
- yJqtTplsyPL2eALndgi_xv5WXRslUdVun50zfx9iDK5v_kT1lyZrnl7BpPa5N7roHYs5FCR3fGlt
- 00HJ7sf.lnan3Im8PEbT96k38NwI6o6wqQk3XTx1x0TOib38VwKLgaWNY916uiRI1upzFCMVqmW6
- hKW.i_z2qDWeeQaZVyBhDmfLTpSCKpEZXqJt.HWEa0uB7F6lyRoT1rQEzhMY_zbISz6YbRmtNDlq
- VLlEzjYA6uILpMVD7EkmwXGP0XOJgDIix93HShigByDXDbmOlbnVPelpKvxPRFg3gnhpf.0Rc47i
- 08Ic.liUMCD9zHGFCga9cXgoGaM8kFbRyDB3CB8uLHuuV8rIwOstkm24RLt0t3H1wtfuP85AC7r8
- v042NbRsPX1Mj80LTxFt.KStV8ND4Dc1.IiPBslhVUpEA9f2YrGnkjCHG4.U4j0M0U489djAouYX
- y9F8lECiGIH30pwUi5p9NUzViYBtaTM7ID67rbGjIKdkEdFs14rCm3KSzct0U2izLUB1NerwsRiF
- IQWasnNhp61WOxqpf4zyo6bEJMCV1B8QkTG.8HvHCcJtAwYQhWHkE5SwAzxSGopkwGBC4.Xf9
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic302.consmr.mail.ne1.yahoo.com with HTTP; Mon, 22 Jun 2020 16:02:21 +0000
-Date:   Mon, 22 Jun 2020 16:02:19 +0000 (UTC)
-From:   Karim Zakari <kariim1960z@gmail.com>
-Reply-To: kzakari04@gmail.com
-Message-ID: <1507214802.1850985.1592841739314@mail.yahoo.com>
-Subject: URGENT REPLY.
+        id S1730322AbgFWBmN (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Mon, 22 Jun 2020 21:42:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48886 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731934AbgFWBmN (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Mon, 22 Jun 2020 21:42:13 -0400
+Received: from mail-io1-xd41.google.com (mail-io1-xd41.google.com [IPv6:2607:f8b0:4864:20::d41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED633C061573
+        for <linux-edac@vger.kernel.org>; Mon, 22 Jun 2020 18:42:12 -0700 (PDT)
+Received: by mail-io1-xd41.google.com with SMTP id i25so21939334iog.0
+        for <linux-edac@vger.kernel.org>; Mon, 22 Jun 2020 18:42:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=SctcyhsRxemfH4y0momDALozOu0UsCbqYPy1zQAY9zg=;
+        b=OTHlSkXrgcUxGw9oKHexpo6edXTDFTpN4Li52ZISWVhDQzHK5padxramubiVmYUciq
+         6vvbavUuC/8A8y8b9QsRxYdTT5qAiJQxREMvcm5k5gcq+OymuW5iI5vxxfOPw2XGwiAJ
+         ylkavrCo1/z4xh+M6L2Zkvdkwaawe8QEbTEtNUri1QUK43Qh7+j1az75KxSOGw1fOulJ
+         KBKC/IOrX4fGfgNruj6uSvM3x+hIEQyFi+nsS4A19lPAr/3gRcELWXB2DHJLA4ykSvHs
+         XveeMNHnro409oVE6di+flPrf0y7SYN8yz4tDV2TA5H2ZEbUNl9pVPq43ZnVOFa06i/H
+         /vZA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=SctcyhsRxemfH4y0momDALozOu0UsCbqYPy1zQAY9zg=;
+        b=VSPLHyriupvHBcslqvPfkVI3M58n6lxnAAASpt5nHxqQKfAzL7OgkF+AqT8XqPTAoN
+         XjX/FfZ1P8qe9VclxcW7hJwDLt3Gk3/lfvRL+17WH9YZ3ZnOAatmTCSxYdfoJ1AiDdn7
+         IYp27rqDxccPzfO6Esuwv0NHpXvkMXs5HbSCkx/gqOkcazNgYj9hgwt8WtE8MOxWezhn
+         lLSh1+lpZCZIUN18tHkS+3ONN8fl5u4X22WxhtPgxGBUpV1NRrYH2g2VsoE3/7hO47FG
+         3pRB3UV3Wc3jDDGz77FVTE/3ZgSGZFrcxPRsYqlxHLuWPFiOaOsRmZwQYyu66QQ7IPPV
+         haRQ==
+X-Gm-Message-State: AOAM531c9pnWyH0TOuzdBwYCXHSYC3e5BLHAIYEOFY10wTeeiap1F7Kf
+        zTl0yOqbvdDGVNe93wzozkQWBpsjjL/Bbe0/0a0D0jU0
+X-Google-Smtp-Source: ABdhPJzhMZmPCEPtTWnUvxbEif72fypmsG8VCN0HVE5chzpmCpp5MKHaXBpCSI7c9Y6lyYGo/zcMaN0vMqnknwZA4l4=
+X-Received: by 2002:a05:6602:15c8:: with SMTP id f8mr22587084iow.183.1592876532104;
+ Mon, 22 Jun 2020 18:42:12 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-References: <1507214802.1850985.1592841739314.ref@mail.yahoo.com>
-X-Mailer: WebService/1.1.16138 YMailNodin Mozilla/5.0 (Windows NT 6.1; ) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.106 Safari/537.36
-To:     unlisted-recipients:; (no To-header on input)
+References: <CAKkunMbNWppx_i6xSdDHLseA2QQmGJqj_crY=NF-GZML5np4Vw@mail.gmail.com>
+ <20200618175646.GD27951@zn.tnic> <20200618184041.GE27951@zn.tnic> <20200622151305.GD32200@zn.tnic>
+In-Reply-To: <20200622151305.GD32200@zn.tnic>
+From:   Anders Andersson <pipatron@gmail.com>
+Date:   Tue, 23 Jun 2020 03:41:35 +0200
+Message-ID: <CAKkunMZLhou+T1xdOBi717Jk3JrREd5AHLKk3vK8rqSrvFuAew@mail.gmail.com>
+Subject: Re: [PATCH] EDAC/amd64: Read back the scrub rate PCI register on F15h
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     linux-edac@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
+On Mon, Jun 22, 2020 at 5:13 PM Borislav Petkov <bp@alien8.de> wrote:
+>
+> On Thu, Jun 18, 2020 at 08:40:41PM +0200, Borislav Petkov wrote:
+> > On Thu, Jun 18, 2020 at 07:56:46PM +0200, Borislav Petkov wrote:
+> > > Oh, you're manipulating it alright but there's a bug in reporting it.
+> > > Wanna test a patch?
+> >
+> > Here it is:
+> >
+> > ---
+> > From: Borislav Petkov <bp@suse.de>
+> >
+> > Commit:
+> >
+> >   da92110dfdfa ("EDAC, amd64_edac: Extend scrub rate support to F15hM60h")
+> >
+> > added support for F15h, model 0x60 CPUs but in doing so, missed to read
+> > back SCRCTRL PCI config register on F15h CPUs which are *not* model
+> > 0x60. Add that read so that doing
+> >
+> >   $ cat /sys/devices/system/edac/mc/mc0/sdram_scrub_rate
+> >
+> > can show the previously set DRAM scrub rate.
+> >
+> > Fixes: da92110dfdfa ("EDAC, amd64_edac: Extend scrub rate support to F15hM60h")
+> > Reported-by: Anders Andersson <pipatron@gmail.com>
+> > Signed-off-by: Borislav Petkov <bp@suse.de>
+> > Cc: <stable@vger.kernel.org> #v4.4..
+> > Link: https://lkml.kernel.org/r/CAKkunMbNWppx_i6xSdDHLseA2QQmGJqj_crY=NF-GZML5np4Vw@mail.gmail.com
+> > ---
+> >  drivers/edac/amd64_edac.c | 2 ++
+> >  1 file changed, 2 insertions(+)
+> >
+> > diff --git a/drivers/edac/amd64_edac.c b/drivers/edac/amd64_edac.c
+> > index ef90070a9194..6262f6370c5d 100644
+> > --- a/drivers/edac/amd64_edac.c
+> > +++ b/drivers/edac/amd64_edac.c
+> > @@ -269,6 +269,8 @@ static int get_scrub_rate(struct mem_ctl_info *mci)
+> >
+> >               if (pvt->model == 0x60)
+> >                       amd64_read_pci_cfg(pvt->F2, F15H_M60H_SCRCTRL, &scrubval);
+> > +             else
+> > +                     amd64_read_pci_cfg(pvt->F3, SCRCTRL, &scrubval);
+> >       } else {
+> >               amd64_read_pci_cfg(pvt->F3, SCRCTRL, &scrubval);
+> >       }
+> > --
+>
+> Queued into edac-urgent.
+>
+> Thx.
+>
+> --
+> Regards/Gruss,
+>     Boris.
+>
+> https://people.kernel.org/tglx/notes-about-netiquette
 
 
-Good-Day Friend,
+Ok, finally tested the patch on my machine, and (no surprise)
+everything now works as expected, thanks!
 
- Hope you are doing great Today. I have a proposed business deal worthy (US$16.5 Million Dollars) that will benefit both parties. This is legitimate' legal and your personality will not be compromised.
-
-Waiting for your response for more details, As you are willing to execute this business opportunity with me.
-
-Sincerely Yours,
-Mr. Karim Zakari.
+// Anders
