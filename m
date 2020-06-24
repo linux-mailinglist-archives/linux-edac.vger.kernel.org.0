@@ -2,144 +2,108 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 96A71206B2E
-	for <lists+linux-edac@lfdr.de>; Wed, 24 Jun 2020 06:32:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 074672072F0
+	for <lists+linux-edac@lfdr.de>; Wed, 24 Jun 2020 14:10:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728858AbgFXEco (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Wed, 24 Jun 2020 00:32:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43400 "EHLO
+        id S2403835AbgFXMKf (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Wed, 24 Jun 2020 08:10:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726131AbgFXEcn (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Wed, 24 Jun 2020 00:32:43 -0400
-Received: from mail-pg1-x541.google.com (mail-pg1-x541.google.com [IPv6:2607:f8b0:4864:20::541])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DDD4C061573
-        for <linux-edac@vger.kernel.org>; Tue, 23 Jun 2020 21:32:43 -0700 (PDT)
-Received: by mail-pg1-x541.google.com with SMTP id t6so778477pgq.1
-        for <linux-edac@vger.kernel.org>; Tue, 23 Jun 2020 21:32:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:from:to:cc:subject:in-reply-to:message-id:references
-         :user-agent:mime-version;
-        bh=e0EpgUPvb3oHQJmMLTQgcHeM9n6YCWTkRNUuoek9hfg=;
-        b=ed4OK0LOIth9jOXTiae1LeoQbTkRLW3h1DOXDFGhdT+RK8JeF46h3VV+io9JyJ/qWn
-         fxlglfyDQjotzQGlmf/inIKOHLFVr70dt/YLCY4wulI/K0qAWpQMi7YwoSm70rRQRwgk
-         VccBTh0C7e07735Tz2QuNlq+FWdoCTo0yK5cXV+LUO0y8+sgmrWZsOnwA8d2y0hqSDH3
-         6aV+qLghe9fiHfD+ZLhm/v7LO8V/ErgejMdULGdU7/H4vQWsUQjXMf4QpPcg5G4MkTfV
-         IDTGnKUwvAMeNveHI16hg8HyQO4HJhnLcc3nZIZsAoMEquhfMRcE7c5gblvXgxiyApZl
-         2aYA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:in-reply-to:message-id
-         :references:user-agent:mime-version;
-        bh=e0EpgUPvb3oHQJmMLTQgcHeM9n6YCWTkRNUuoek9hfg=;
-        b=n09X2kNqhwUaMN+WaBoWMKy5eUvvikQORhvPF3sFpyQm+ZlY2obgF1bOmyej5Do+Pz
-         N18PjQr4EaMkMAk85JDUzGYzo4hIzWiDD3HdBSFT9PQlaGmE1R315ii4yBt0pE9OFTyP
-         AtMx1Et7xEyfOGyEvd32olNGX8AvSNfs4/hrQzin5QobBWNAh+mSyOt/qlkJeu/87aVL
-         eqBP/JRrPjoIKkyhPBbZMGnBx6j6FIsNSal/GL3iyvGNSBlaueihV8N95MArREwH6JgK
-         K7p6xA3xkrzFWNsMhSPOn9wW4TxhLUqosnBBJWzcMnzWiLaKDo8i9MabKAxB4sIVJXqH
-         vJFg==
-X-Gm-Message-State: AOAM5333vlzA6KmO7uCvbQoFDS69+bBeam3vvXxC4gb42LzdbjRIoF9d
-        iXSAQHCk0rPD9SjDyS8fWRqnlw==
-X-Google-Smtp-Source: ABdhPJwlS3fHaPwPLhKXuHqqHNQLJX8fzM5Xx9ZkK7q6D7wHwgwL3bpHPJ7udhXXKTVoOZqNrpiOig==
-X-Received: by 2002:a63:5013:: with SMTP id e19mr19742148pgb.68.1592973162813;
-        Tue, 23 Jun 2020 21:32:42 -0700 (PDT)
-Received: from [2620:15c:17:3:3a5:23a7:5e32:4598] ([2620:15c:17:3:3a5:23a7:5e32:4598])
-        by smtp.gmail.com with ESMTPSA id y187sm18817777pfb.46.2020.06.23.21.32.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 Jun 2020 21:32:42 -0700 (PDT)
-Date:   Tue, 23 Jun 2020 21:32:41 -0700 (PDT)
-From:   David Rientjes <rientjes@google.com>
-X-X-Sender: rientjes@chino.kir.corp.google.com
-To:     "Luck, Tony" <tony.luck@intel.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        "Dr. David Alan Gilbert" <dgilbert@redhat.com>,
-        Peter Xu <peterx@redhat.com>,
-        Andrea Arcangeli <aarcange@redhat.com>
-cc:     Matthew Wilcox <willy@infradead.org>,
-        Borislav Petkov <bp@alien8.de>,
+        with ESMTP id S2403782AbgFXMKe (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Wed, 24 Jun 2020 08:10:34 -0400
+Received: from casper.infradead.org (unknown [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D549EC061573
+        for <linux-edac@vger.kernel.org>; Wed, 24 Jun 2020 05:10:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=BTvxV1cC2GZuxzSIAIRaohPI9eSS76hbv1NBGOdD3Fo=; b=IVTa1jbe6CtoLrHamjBhhfE/Ri
+        YD8EtB+YUyaVbNogLBT+YQjQjqjayuVnKuEZA/4lwm+r4XmGtKGOaK96num3NYMMeZPBLAoL2e/or
+        Xqwiq4MxW0TeUOxUAUOrEsDYwhDat2jdTjaBBSTJf3ZvK6I5LBIJU7F853Biip6ARkZWi7UrmEwAF
+        eQ15GMnf2TbBXk1PRfW149sDFNIveQfQUhUEp7FZXUzUIpisCrx2lctyC4lpctHpdrQd3UFtQlN0w
+        DBr84ubvRhiH3nXPlEtFL2hoVeCkK8+4pWoCvFqtN3PMXDGklf+iLe4OEMgt1epnyYKrAWVNWwk0W
+        H+g/uFDw==;
+Received: from willy by casper.infradead.org with local (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1jo4E4-0002ei-74; Wed, 24 Jun 2020 12:10:00 +0000
+Date:   Wed, 24 Jun 2020 13:10:00 +0100
+From:   Matthew Wilcox <willy@infradead.org>
+To:     "Darrick J. Wong" <darrick.wong@oracle.com>
+Cc:     "Luck, Tony" <tony.luck@intel.com>, Borislav Petkov <bp@alien8.de>,
         Naoya Horiguchi <naoya.horiguchi@nec.com>,
         linux-edac@vger.kernel.org, linux-mm@kvack.org,
-        linux-nvdimm@lists.01.org,
-        "Darrick J. Wong" <darrick.wong@oracle.com>,
-        Jane Chu <jane.chu@oracle.com>
+        linux-nvdimm@lists.01.org, Jane Chu <jane.chu@oracle.com>
 Subject: Re: [RFC] Make the memory failure blast radius more precise
-In-Reply-To: <20200623220412.GA21232@agluck-desk2.amr.corp.intel.com>
-Message-ID: <alpine.DEB.2.22.394.2006232114100.97817@chino.kir.corp.google.com>
-References: <20200623201745.GG21350@casper.infradead.org> <20200623220412.GA21232@agluck-desk2.amr.corp.intel.com>
-User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
+Message-ID: <20200624121000.GM21350@casper.infradead.org>
+References: <20200623201745.GG21350@casper.infradead.org>
+ <20200623220412.GA21232@agluck-desk2.amr.corp.intel.com>
+ <20200623221741.GH21350@casper.infradead.org>
+ <20200623222658.GA21817@agluck-desk2.amr.corp.intel.com>
+ <20200623224027.GI21350@casper.infradead.org>
+ <20200624000124.GH7625@magnolia>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200624000124.GH7625@magnolia>
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Tue, 23 Jun 2020, Luck, Tony wrote:
-
-> > Hardware actually tells us the blast radius of the error, but we ignore
-> > it and take out the entire page.  We've had a customer request to know
-> > exactly how much of the page is damaged so they can avoid reconstructing
-> > an entire 2MB page if only a single cacheline is damaged.
+On Tue, Jun 23, 2020 at 05:01:24PM -0700, Darrick J. Wong wrote:
+> On Tue, Jun 23, 2020 at 11:40:27PM +0100, Matthew Wilcox wrote:
+> > On Tue, Jun 23, 2020 at 03:26:58PM -0700, Luck, Tony wrote:
+> > > On Tue, Jun 23, 2020 at 11:17:41PM +0100, Matthew Wilcox wrote:
+> > > > It might also be nice to have an madvise() MADV_ZERO option so the
+> > > > application doesn't have to look up the fd associated with that memory
+> > > > range, but we haven't floated that idea with the customer yet; I just
+> > > > thought of it now.
+> > > 
+> > > So the conversation between OS and kernel goes like this?
+> > > 
+> > > 1) machine check
+> > > 2) Kernel unmaps the 4K page surroundinng the poison and sends
+> > >    SIGBUS to the application to say that one cache line is gone
+> > > 3) App says madvise(MADV_ZERO, that cache line)
+> > > 4) Kernel says ... "oh, you know how to deal with this" and allocates
+> > >    a new page, copying the 63 good cache lines from the old page and
+> > >    zeroing the missing one. New page is mapped to user.
 > > 
-> > This is only a strawman that I did in an hour or two; I'd appreciate
-> > architectural-level feedback.  Should I just convert memory_failure() to
-> > always take an address & granularity?  Should I create a struct to pass
-> > around (page, phys, granularity) instead of reconstructing the missing
-> > pieces in half a dozen functions?  Is this functionality welcome at all,
-> > or is the risk of upsetting applications which expect at least a page
-> > of granularity too high?
+> > That could be one way of implementing it.  My understanding is that
+> > pmem devices will reallocate bad cachelines on writes, so a better
+> > implementation would be:
+> > 
+> > 1) Kernel receives machine check
+> > 2) Kernel sends SIGBUS to the application
+> > 3) App send madvise(MADV_ZERO, addr, 1 << granularity)
+> > 4) Kernel does special writes to ensure the cacheline is zeroed
+> > 5) App does whatever it needs to recover (reconstructs the data or marks
+> > it as gone)
 > 
-> What is the interface to these applications that want finer granularity?
+> Frankly, I've wondered why the filesystem shouldn't just be in charge of
+> all this--
 > 
-> Current code does very poorly with hugetlbfs pages ... user loses the
-> whole 2 MB or 1GB. That's just silly (though I've been told that it is
-> hard to fix because allowing a hugetlbfs page to be broken up at an arbitrary
-> time as the result of a mahcine check means that the kernel needs locking
-> around a bunch of fas paths that currently assume that a huge page will
-> stay being a huge page).
+> 1. kernel receives machine check
+> 2. kernel tattles to xfs
+> 3. xfs looks up which file(s) own the pmem range
+> 4. xfs zeroes the region, clears the poison, and sets AS_EIO on the
+>    files
+
+... machine reboots, app restarts, gets no notification anything is wrong,
+treats zeroed region as good data, launches nuclear missiles.
+
+> 5. xfs sends SIGBUS to any programs that had those files mapped to tell
+>    them "Your data is gone, we've stabilized the storage you had
+>    mapped."
+> 6. app does whatever it needs to recover
 > 
+> Apps shouldn't have to do this punch-and-reallocate dance, seeing as
+> they don't currently do that for SCSI disks and the like.
 
-Thanks for bringing this up, Tony.  Mike Kravetz pointed me to this thread 
-(thanks Mike!) so let's add him in explicitly as well as Andrea, Peter, 
-and David from Red Hat who we've been discussing an idea with that may 
-introduce exactly this needed support but for different purposes :)  The 
-timing of this thread is _uncanny_.
+The SCSI disk retains the error until the sector is rewritten.
+I'm not entirely sure whether you're trying to draw an analogy with
+error-in-page-cache or error-on-storage-medium.
 
-To improve the performance of userfaultfd for the purposes of post-copy 
-live migration we need to reduce the granularity in which pages are 
-migrated; we're looking at this from a 1GB gigantic page perspective but 
-the same arguments can likely be had for 2MB hugepages as well.  1GB pages 
-are too much of a bottleneck and, as you bring up, 1GB is simply too much 
-memory to poison :)  We don't have 1GB thp support so the big idea was to 
-introduce thp-like DoubleMap support into hugetlbfs for the purposes of 
-post-copy live migration and then I had the idea that this could be 
-extended to memory failure as well.
-
-(We don't see the lack of 1GB thp here as a deficiency for anything other 
-than these two issues, hugetlb provides strong guarantees.)
-
-I don't want to hijack Matthew's thread which is primarily about DAX, but 
-did get intrigued by your concerns about hugetlbfs page poisoning.  We can 
-fork the thread off here to discuss only the hugetlb application of this 
-if it makes sense to you or you'd like to collaborate on it as well.
-
-The DoubleMap support would allow us to map the 1GB gigantic pages with 
-the PUD and the PMDs as well (and, further, the 2MB hugepages with the PMD 
-and PTEs) so that we can copy fragments into PMDs or PTEs and we don't 
-need to migrate the entire gigantic page.  Any access triggers #PF through 
-hugetlb_no_page() -> handle_userfault() which would trigger another 
-UFFDIO_COPY and map another fragment.
-
-Assume a world where this DoubleMap support already exists for hugetlb 
-pages today and all the invariants including page migration are fixed up 
-(since a PTE can now map a hugetlb page and a PMD can now map a gigantic 
-hugetlb page).  It *seems* like we'd be able to reduce the blast radius 
-here too on a hard memory failure: dissolve the gigantic page in place, 
-SIGBUS/SIGKILL on the bad PMD or PTE, and avoid poisoning the head of the 
-hugetlb page.  We agree that poisoning this large amount of memory is not 
-ideal :)
-
-Anyway, this was some brainstorming that I was doing with Mike and the 
-others based on the idea of using DoubleMap support for post-copy live 
-migration.  If you would be interested or would like to collaborate on 
-it, we'd love to talk.
+error-on-medium needs to persist until the app takes an affirmative step
+to clear it.  I presume XFS does not write zeroes to sectors with
+errors on SCSI disks ...
