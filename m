@@ -2,89 +2,132 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B1C3820C496
-	for <lists+linux-edac@lfdr.de>; Sun, 28 Jun 2020 00:05:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E53520DC60
+	for <lists+linux-edac@lfdr.de>; Mon, 29 Jun 2020 22:17:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726712AbgF0WFe (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Sat, 27 Jun 2020 18:05:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51136 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726695AbgF0WFe (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Sat, 27 Jun 2020 18:05:34 -0400
-Received: from mail-wm1-x343.google.com (mail-wm1-x343.google.com [IPv6:2a00:1450:4864:20::343])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0BE8C03E979
-        for <linux-edac@vger.kernel.org>; Sat, 27 Jun 2020 15:05:33 -0700 (PDT)
-Received: by mail-wm1-x343.google.com with SMTP id f139so12505544wmf.5
-        for <linux-edac@vger.kernel.org>; Sat, 27 Jun 2020 15:05:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=hDm0J70xfMLbVvceQHwxPddZCp69UMTk2d0jtKg2a8s=;
-        b=f9F4OeCeRmjyCn/l5zWRCnvqn8abBSCJ0Y8qujQ0kmxWn834D2fXcj9rvsWpCDPIuS
-         J4EoerIfxQNxbL3GXEU7ldfNRYPjw9+UDx+oUErzer3ipQGx1bMVBJ4GKw5qxwtLFKgm
-         GIGKX0Yf3u59BQOeDfpIf5jZ+3vnA0ZzLii/fzh6lT1DnoxV12hExchyOgRH8ZWUzh6h
-         YfJSqrAXwDwYWOkanSpTn/205IELx8NOzYqaPLRhLaj+p8d8Tqco8ZlQgP7W4AOriRZo
-         /C1JWu9y1DjEpYGijceZGziK7m0b44a1VzD/YaM40U0hZVpq1t42ddRbOo9XgyjTsiIU
-         X8hQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=hDm0J70xfMLbVvceQHwxPddZCp69UMTk2d0jtKg2a8s=;
-        b=KMEVu2xMEuc6Qcf7jVHQ/yomu0g13TLdOq6XY6bborvXTPvsbYxDGES9q2YXij6GQR
-         6If/X6vATH2KCioSRRc6XRk5tfF9SCxS4OUP75uV8rUrTK3qJVrwJTssBKbWNhXeIgbs
-         JY0Kx4uHezuN5KYkzxae1E9vO1BeBkGG+bSBv5mMN/+rp+04tzRcZNfeYxtskA3l2HEP
-         Pl5f7xAu1zhGVdt9wPskPtNCNqILYbId+YTJl8yeJH48JXKa8XjCpg1uXU0uGwbOPyez
-         MLzUlUlxrC3DeCLcpKl0Upk5smtDS3QOb5VioFExJAGB6o4jW8mCD/zKNlUMwgyGKm3I
-         9cDQ==
-X-Gm-Message-State: AOAM533R8Ci6VSIhb3C6O0jLgjv+ccV3TKgDMSi3IcQs903o7gOguPCf
-        K5NTWS3EpiWkm9k5624b/++sJYT73/LyZeCIEF8zvMbVQv4=
-X-Google-Smtp-Source: ABdhPJzB2PS1uLzfXnv9RJ9+8ywF0BTYmMReQpmFB2cwHUGJdFU/VqT1TPNRIciUkUVNxK28Z0jWU0doicUzCH8V5Ek=
-X-Received: by 2002:a7b:c043:: with SMTP id u3mr10377547wmc.185.1593295180142;
- Sat, 27 Jun 2020 14:59:40 -0700 (PDT)
+        id S1728001AbgF2UOu (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Mon, 29 Jun 2020 16:14:50 -0400
+Received: from mail.kernel.org ([198.145.29.99]:40594 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1732831AbgF2TaS (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Mon, 29 Jun 2020 15:30:18 -0400
+Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id C662E251EE;
+        Mon, 29 Jun 2020 15:35:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1593444911;
+        bh=N8Kw4vgdWvrmLWML7P5AQDoKHbBDhEK38kF08BLH4Gc=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=jZLd6sgf7bEItZ76KoZsHn3uLTbfg56m9AbeyzhLvVrpdjqRnwoXb5Fcitz5am01Q
+         pMdOKboKboBX5pYFeqYnohbTibUgmRHZWJXCUVxX6RqDmLo+1SRUXrXft11fQSNh00
+         z/2OW0GhEOXZEzRfMcFu7utJjpMKyFJjfGdQdKrw=
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Yazen Ghannam <yazen.ghannam@amd.com>,
+        Borislav Petkov <bp@suse.de>,
+        Kim Phillips <kim.phillips@amd.com>,
+        James Morse <james.morse@arm.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-edac <linux-edac@vger.kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.19 007/131] EDAC/amd64: Add Family 17h Model 30h PCI IDs
+Date:   Mon, 29 Jun 2020 11:32:58 -0400
+Message-Id: <20200629153502.2494656-8-sashal@kernel.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20200629153502.2494656-1-sashal@kernel.org>
+References: <20200629153502.2494656-1-sashal@kernel.org>
 MIME-Version: 1.0
-Received: by 2002:adf:f187:0:0:0:0:0 with HTTP; Sat, 27 Jun 2020 14:59:39
- -0700 (PDT)
-Reply-To: un.org@i.ua
-From:   helen <upspostexpress@gmail.com>
-Date:   Sat, 27 Jun 2020 22:59:39 +0100
-Message-ID: <CA+HWcLeFxWA2HFg2eTDi9xRk8OKWn7oojHXSEX-EzsM7GcSGnA@mail.gmail.com>
-Subject: 
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-KernelTest-Patch: http://kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.19.131-rc1.gz
+X-KernelTest-Tree: git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
+X-KernelTest-Branch: linux-4.19.y
+X-KernelTest-Patches: git://git.kernel.org/pub/scm/linux/kernel/git/stable/stable-queue.git
+X-KernelTest-Version: 4.19.131-rc1
+X-KernelTest-Deadline: 2020-07-01T15:34+00:00
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-MONEY-GRAM TRANSFERRED PAYMENT INFO:
+From: Yazen Ghannam <yazen.ghannam@amd.com>
 
-Below is the sender=E2=80=99s information
+[ Upstream commit 6e846239e5487cbb89ac8192d5f11437d010130e ]
 
+Add the new Family 17h Model 30h PCI IDs to the AMD64 EDAC module.
 
+This also fixes a probe failure that appeared when some other PCI IDs
+for Family 17h Model 30h were added to the AMD NB code.
 
-1. MG. REFERENCE NO#: 36360857
+Fixes: be3518a16ef2 (x86/amd_nb: Add PCI device IDs for family 17h, model 30h)
+Signed-off-by: Yazen Ghannam <yazen.ghannam@amd.com>
+Signed-off-by: Borislav Petkov <bp@suse.de>
+Tested-by: Kim Phillips <kim.phillips@amd.com>
+Cc: James Morse <james.morse@arm.com>
+Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc: linux-edac <linux-edac@vger.kernel.org>
+Link: https://lkml.kernel.org/r/20190228153558.127292-1-Yazen.Ghannam@amd.com
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/edac/amd64_edac.c | 13 +++++++++++++
+ drivers/edac/amd64_edac.h |  3 +++
+ 2 files changed, 16 insertions(+)
 
-2. SENDER'S NAME: Johnson Williams
+diff --git a/drivers/edac/amd64_edac.c b/drivers/edac/amd64_edac.c
+index 05d6f9c86ac38..268ada29cd987 100644
+--- a/drivers/edac/amd64_edac.c
++++ b/drivers/edac/amd64_edac.c
+@@ -2209,6 +2209,15 @@ static struct amd64_family_type family_types[] = {
+ 			.dbam_to_cs		= f17_base_addr_to_cs_size,
+ 		}
+ 	},
++	[F17_M30H_CPUS] = {
++		.ctl_name = "F17h_M30h",
++		.f0_id = PCI_DEVICE_ID_AMD_17H_M30H_DF_F0,
++		.f6_id = PCI_DEVICE_ID_AMD_17H_M30H_DF_F6,
++		.ops = {
++			.early_channel_count	= f17_early_channel_count,
++			.dbam_to_cs		= f17_base_addr_to_cs_size,
++		}
++	},
+ };
+ 
+ /*
+@@ -3212,6 +3221,10 @@ static struct amd64_family_type *per_family_init(struct amd64_pvt *pvt)
+ 			fam_type = &family_types[F17_M10H_CPUS];
+ 			pvt->ops = &family_types[F17_M10H_CPUS].ops;
+ 			break;
++		} else if (pvt->model >= 0x30 && pvt->model <= 0x3f) {
++			fam_type = &family_types[F17_M30H_CPUS];
++			pvt->ops = &family_types[F17_M30H_CPUS].ops;
++			break;
+ 		}
+ 		fam_type	= &family_types[F17_CPUS];
+ 		pvt->ops	= &family_types[F17_CPUS].ops;
+diff --git a/drivers/edac/amd64_edac.h b/drivers/edac/amd64_edac.h
+index 4242f8e39c18f..de8dbb0b42b55 100644
+--- a/drivers/edac/amd64_edac.h
++++ b/drivers/edac/amd64_edac.h
+@@ -117,6 +117,8 @@
+ #define PCI_DEVICE_ID_AMD_17H_DF_F6	0x1466
+ #define PCI_DEVICE_ID_AMD_17H_M10H_DF_F0 0x15e8
+ #define PCI_DEVICE_ID_AMD_17H_M10H_DF_F6 0x15ee
++#define PCI_DEVICE_ID_AMD_17H_M30H_DF_F0 0x1490
++#define PCI_DEVICE_ID_AMD_17H_M30H_DF_F6 0x1496
+ 
+ /*
+  * Function 1 - Address Map
+@@ -284,6 +286,7 @@ enum amd_families {
+ 	F16_M30H_CPUS,
+ 	F17_CPUS,
+ 	F17_M10H_CPUS,
++	F17_M30H_CPUS,
+ 	NUM_FAMILIES,
+ };
+ 
+-- 
+2.25.1
 
-3. AMOUNT TO PICKUP: US$10,000
-
-
-
-Go to any Money Gram office near you and pick up the payment Track the
-
-Reference Number by visiting and click the link below
-
-(https://secure.moneygram.com/embed/track) and enter the Reference
-
-Number: 36360857 and the Last Name: Williams, you will find the payment
-
-available for pickup instantly.
-
-Yours Sincerely,
-
-Mrs. Helen Marvis
-United Nations Liaison Office
-Directorate for International Payments
