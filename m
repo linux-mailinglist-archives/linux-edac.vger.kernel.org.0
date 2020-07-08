@@ -2,130 +2,86 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ADB12217824
-	for <lists+linux-edac@lfdr.de>; Tue,  7 Jul 2020 21:43:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F8F8218640
+	for <lists+linux-edac@lfdr.de>; Wed,  8 Jul 2020 13:36:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728190AbgGGTn0 (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Tue, 7 Jul 2020 15:43:26 -0400
-Received: from mga01.intel.com ([192.55.52.88]:8254 "EHLO mga01.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726763AbgGGTn0 (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Tue, 7 Jul 2020 15:43:26 -0400
-IronPort-SDR: MdIUgG+CuSp2Gjh0mwmQINTTzJBKGfKiOGj7hKyYeR3YmGkre++PaCh3zU9U73ExIta36dS8rU
- YbKuUOtL3d4w==
-X-IronPort-AV: E=McAfee;i="6000,8403,9675"; a="165756287"
-X-IronPort-AV: E=Sophos;i="5.75,324,1589266800"; 
-   d="scan'208";a="165756287"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jul 2020 12:43:25 -0700
-IronPort-SDR: 8UpS+ICVsICC80AB1clmi6e87WeOdKs4B0I79MKHkMwLKF52436Ao452/SXQ5wmQbVEYuk1DQR
- mrxdnzrJDsXA==
-X-IronPort-AV: E=Sophos;i="5.75,324,1589266800"; 
-   d="scan'208";a="427585167"
-Received: from agluck-desk2.sc.intel.com ([10.3.52.68])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jul 2020 12:43:25 -0700
-From:   Tony Luck <tony.luck@intel.com>
-To:     Tony Luck <tony.luck@intel.com>
-Cc:     Gabriele Paoloni <gabriele.paoloni@intel.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Qiuxu Zhuo <qiuxu.zhuo@intel.com>,
-        Aristeu Rozanski <aris@redhat.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-edac@vger.kernel.org
-Subject: [PATCH] EDAC, i7core, sb, pnd2, skx: Fix error event severity
-Date:   Tue,  7 Jul 2020 12:43:24 -0700
-Message-Id: <20200707194324.14884-1-tony.luck@intel.com>
-X-Mailer: git-send-email 2.21.1
+        id S1728841AbgGHLf7 (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Wed, 8 Jul 2020 07:35:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51064 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728598AbgGHLf6 (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Wed, 8 Jul 2020 07:35:58 -0400
+Received: from smtp.al2klimov.de (smtp.al2klimov.de [IPv6:2a01:4f8:c0c:1465::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33617C08C5DC
+        for <linux-edac@vger.kernel.org>; Wed,  8 Jul 2020 04:35:58 -0700 (PDT)
+Received: from authenticated-user (PRIMARY_HOSTNAME [PUBLIC_IP])
+        by smtp.al2klimov.de (Postfix) with ESMTPA id D1879BC0D1;
+        Wed,  8 Jul 2020 11:35:52 +0000 (UTC)
+From:   "Alexander A. Klimov" <grandmaster@al2klimov.de>
+To:     tony.luck@intel.com, qiuxu.zhuo@intel.com, bp@alien8.de,
+        mchehab@kernel.org, james.morse@arm.com, rrichter@marvell.com,
+        linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     "Alexander A. Klimov" <grandmaster@al2klimov.de>
+Subject: [PATCH] Replace HTTP links with HTTPS ones: EDAC-SBRIDGE
+Date:   Wed,  8 Jul 2020 13:35:46 +0200
+Message-Id: <20200708113546.14135-1-grandmaster@al2klimov.de>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-Spamd-Bar: +++++
+X-Spam-Level: *****
+Authentication-Results: smtp.al2klimov.de;
+        auth=pass smtp.auth=aklimov@al2klimov.de smtp.mailfrom=grandmaster@al2klimov.de
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-IA32_MCG_STATUS.RIPV indicates whether the return RIP value pushed onto
-the stack as part of machine check delivery is valid or not.
+Rationale:
+Reduces attack surface on kernel devs opening the links for MITM
+as HTTPS traffic is much harder to manipulate.
 
-Various drivers copied a code fragment that uses the RIPV bit to
-determine the severity of the error as either HW_EVENT_ERR_UNCORRECTED
-or HW_EVENT_ERR_FATAL, but this check is reversed (marking errors where
-RIPV is set as "FATAL").
+Deterministic algorithm:
+For each file:
+  If not .svg:
+    For each line:
+      If doesn't contain `\bxmlns\b`:
+        For each link, `\bhttp://[^# \t\r\n]*(?:\w|/)`:
+	  If neither `\bgnu\.org/license`, nor `\bmozilla\.org/MPL\b`:
+            If both the HTTP and HTTPS versions
+            return 200 OK and serve the same content:
+              Replace HTTP with HTTPS.
 
-Reverse the tests so that the error is marked fatal when RIPV is not set.
-
-Reported-by: Gabriele Paoloni <gabriele.paoloni@intel.com>
-Cc: <stable@vger.kernel.org>
-Signed-off-by: Tony Luck <tony.luck@intel.com>
+Signed-off-by: Alexander A. Klimov <grandmaster@al2klimov.de>
 ---
- drivers/edac/i7core_edac.c | 4 ++--
- drivers/edac/pnd2_edac.c   | 2 +-
- drivers/edac/sb_edac.c     | 4 ++--
- drivers/edac/skx_common.c  | 4 ++--
- 4 files changed, 7 insertions(+), 7 deletions(-)
+ Continuing my work started at 93431e0607e5.
+ See also: git log --oneline '--author=Alexander A. Klimov <grandmaster@al2klimov.de>' v5.7..master
+ (Actually letting a shell for loop submit all this stuff for me.)
 
-diff --git a/drivers/edac/i7core_edac.c b/drivers/edac/i7core_edac.c
-index 5860ca41185c..2acd9f9284a2 100644
---- a/drivers/edac/i7core_edac.c
-+++ b/drivers/edac/i7core_edac.c
-@@ -1710,9 +1710,9 @@ static void i7core_mce_output_error(struct mem_ctl_info *mci,
- 	if (uncorrected_error) {
- 		core_err_cnt = 1;
- 		if (ripv)
--			tp_event = HW_EVENT_ERR_FATAL;
--		else
- 			tp_event = HW_EVENT_ERR_UNCORRECTED;
-+		else
-+			tp_event = HW_EVENT_ERR_FATAL;
- 	} else {
- 		tp_event = HW_EVENT_ERR_CORRECTED;
- 	}
-diff --git a/drivers/edac/pnd2_edac.c b/drivers/edac/pnd2_edac.c
-index fd363746f5b0..b8fc4b84fd86 100644
---- a/drivers/edac/pnd2_edac.c
-+++ b/drivers/edac/pnd2_edac.c
-@@ -1155,7 +1155,7 @@ static void pnd2_mce_output_error(struct mem_ctl_info *mci, const struct mce *m,
- 	u32 optypenum = GET_BITFIELD(m->status, 4, 6);
- 	int rc;
- 
--	tp_event = uc_err ? (ripv ? HW_EVENT_ERR_FATAL : HW_EVENT_ERR_UNCORRECTED) :
-+	tp_event = uc_err ? (ripv ? HW_EVENT_ERR_UNCORRECTED : HW_EVENT_ERR_FATAL) :
- 						 HW_EVENT_ERR_CORRECTED;
- 
- 	/*
+ If there are any URLs to be removed completely or at least not HTTPSified:
+ Just clearly say so and I'll *undo my change*.
+ See also: https://lkml.org/lkml/2020/6/27/64
+
+ If there are any valid, but yet not changed URLs:
+ See: https://lkml.org/lkml/2020/6/26/837
+
+ If you apply the patch, please let me know.
+
+
+ drivers/edac/sb_edac.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
 diff --git a/drivers/edac/sb_edac.c b/drivers/edac/sb_edac.c
-index d414698ca324..c5ab634cb6a4 100644
+index d414698ca324..a6704e73fcce 100644
 --- a/drivers/edac/sb_edac.c
 +++ b/drivers/edac/sb_edac.c
-@@ -2982,9 +2982,9 @@ static void sbridge_mce_output_error(struct mem_ctl_info *mci,
- 	if (uncorrected_error) {
- 		core_err_cnt = 1;
- 		if (ripv) {
--			tp_event = HW_EVENT_ERR_FATAL;
--		} else {
- 			tp_event = HW_EVENT_ERR_UNCORRECTED;
-+		} else {
-+			tp_event = HW_EVENT_ERR_FATAL;
- 		}
- 	} else {
- 		tp_event = HW_EVENT_ERR_CORRECTED;
-diff --git a/drivers/edac/skx_common.c b/drivers/edac/skx_common.c
-index 6d8d6dc626bf..2b4ce8e5ac2f 100644
---- a/drivers/edac/skx_common.c
-+++ b/drivers/edac/skx_common.c
-@@ -493,9 +493,9 @@ static void skx_mce_output_error(struct mem_ctl_info *mci,
- 	if (uncorrected_error) {
- 		core_err_cnt = 1;
- 		if (ripv) {
--			tp_event = HW_EVENT_ERR_FATAL;
--		} else {
- 			tp_event = HW_EVENT_ERR_UNCORRECTED;
-+		} else {
-+			tp_event = HW_EVENT_ERR_FATAL;
- 		}
- 	} else {
- 		tp_event = HW_EVENT_ERR_CORRECTED;
+@@ -3552,6 +3552,6 @@ MODULE_PARM_DESC(edac_op_state, "EDAC Error Reporting state: 0=Poll,1=NMI");
+ 
+ MODULE_LICENSE("GPL");
+ MODULE_AUTHOR("Mauro Carvalho Chehab");
+-MODULE_AUTHOR("Red Hat Inc. (http://www.redhat.com)");
++MODULE_AUTHOR("Red Hat Inc. (https://www.redhat.com)");
+ MODULE_DESCRIPTION("MC Driver for Intel Sandy Bridge and Ivy Bridge memory controllers - "
+ 		   SBRIDGE_REVISION);
 -- 
-2.21.1
+2.27.0
 
