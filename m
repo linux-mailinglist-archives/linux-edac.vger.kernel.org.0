@@ -2,31 +2,29 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BC303219865
-	for <lists+linux-edac@lfdr.de>; Thu,  9 Jul 2020 08:19:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED662219964
+	for <lists+linux-edac@lfdr.de>; Thu,  9 Jul 2020 09:08:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726099AbgGIGTv (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Thu, 9 Jul 2020 02:19:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55712 "EHLO
+        id S1726140AbgGIHIP (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Thu, 9 Jul 2020 03:08:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725787AbgGIGTu (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Thu, 9 Jul 2020 02:19:50 -0400
+        with ESMTP id S1726119AbgGIHIP (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Thu, 9 Jul 2020 03:08:15 -0400
 Received: from smtp.al2klimov.de (smtp.al2klimov.de [IPv6:2a01:4f8:c0c:1465::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52001C061A0B;
-        Wed,  8 Jul 2020 23:19:50 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2678AC061A0B;
+        Thu,  9 Jul 2020 00:08:15 -0700 (PDT)
 Received: from authenticated-user (PRIMARY_HOSTNAME [PUBLIC_IP])
-        by smtp.al2klimov.de (Postfix) with ESMTPA id 02A16BC070;
-        Thu,  9 Jul 2020 06:19:45 +0000 (UTC)
+        by smtp.al2klimov.de (Postfix) with ESMTPA id 66F7ABC06E;
+        Thu,  9 Jul 2020 07:08:10 +0000 (UTC)
 From:   "Alexander A. Klimov" <grandmaster@al2klimov.de>
 To:     mchehab@kernel.org, bp@alien8.de, tony.luck@intel.com,
         james.morse@arm.com, rrichter@marvell.com,
         linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc:     "Alexander A. Klimov" <grandmaster@al2klimov.de>
-Subject: [PATCH v2] EDAC-I7300: Replace HTTP links with HTTPS ones
-Date:   Thu,  9 Jul 2020 08:19:38 +0200
-Message-Id: <20200709061938.23869-1-grandmaster@al2klimov.de>
-In-Reply-To: <3908561D78D1C84285E8C5FCA982C28F7F68E520@ORSMSX115.amr.corp.intel.com>
-References: <3908561D78D1C84285E8C5FCA982C28F7F68E520@ORSMSX115.amr.corp.intel.com>
+Subject: [PATCH] EDAC-GHES: Replace HTTP links with HTTPS ones
+Date:   Thu,  9 Jul 2020 09:08:04 +0200
+Message-Id: <20200709070804.24135-1-grandmaster@al2klimov.de>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spamd-Bar: +++++
@@ -55,31 +53,36 @@ For each file:
 
 Signed-off-by: Alexander A. Klimov <grandmaster@al2klimov.de>
 ---
- drivers/edac/i7300_edac.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ Continuing my work started at 93431e0607e5.
+ See also: git log --oneline '--author=Alexander A. Klimov <grandmaster@al2klimov.de>' v5.7..master
+ (Actually letting a shell for loop submit all this stuff for me.)
 
-diff --git a/drivers/edac/i7300_edac.c b/drivers/edac/i7300_edac.c
-index 2e9bbe56cde9..4f28b8c8d378 100644
---- a/drivers/edac/i7300_edac.c
-+++ b/drivers/edac/i7300_edac.c
-@@ -5,7 +5,7 @@
-  * Copyright (c) 2010 by:
-  *	 Mauro Carvalho Chehab
+ If there are any URLs to be removed completely or at least not HTTPSified:
+ Just clearly say so and I'll *undo my change*.
+ See also: https://lkml.org/lkml/2020/6/27/64
+
+ If there are any valid, but yet not changed URLs:
+ See: https://lkml.org/lkml/2020/6/26/837
+
+ If you apply the patch, please let me know.
+
+
+ drivers/edac/ghes_edac.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/edac/ghes_edac.c b/drivers/edac/ghes_edac.c
+index cb3dab56a875..e019319d7c2d 100644
+--- a/drivers/edac/ghes_edac.c
++++ b/drivers/edac/ghes_edac.c
+@@ -4,7 +4,7 @@
+  *
+  * Copyright (c) 2013 by Mauro Carvalho Chehab
   *
 - * Red Hat Inc. http://www.redhat.com
 + * Red Hat Inc. https://www.redhat.com
-  *
-  * Intel 7300 Chipset Memory Controller Hub (MCH) - Datasheet
-  *	http://www.intel.com/Assets/PDF/datasheet/318082.pdf
-@@ -1206,7 +1206,7 @@ module_exit(i7300_exit);
+  */
  
- MODULE_LICENSE("GPL");
- MODULE_AUTHOR("Mauro Carvalho Chehab");
--MODULE_AUTHOR("Red Hat Inc. (http://www.redhat.com)");
-+MODULE_AUTHOR("Red Hat Inc. (https://www.redhat.com)");
- MODULE_DESCRIPTION("MC Driver for Intel I7300 memory controllers - "
- 		   I7300_REVISION);
- 
+ #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
 -- 
 2.27.0
 
