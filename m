@@ -2,26 +2,29 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 65B8321A646
-	for <lists+linux-edac@lfdr.de>; Thu,  9 Jul 2020 19:47:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C5D421AFD6
+	for <lists+linux-edac@lfdr.de>; Fri, 10 Jul 2020 09:00:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728839AbgGIRrk (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Thu, 9 Jul 2020 13:47:40 -0400
-Received: from smtp.al2klimov.de ([78.46.175.9]:57444 "EHLO smtp.al2klimov.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728449AbgGIRrf (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Thu, 9 Jul 2020 13:47:35 -0400
+        id S1726920AbgGJHAq (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Fri, 10 Jul 2020 03:00:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59178 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725851AbgGJHAq (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Fri, 10 Jul 2020 03:00:46 -0400
+Received: from smtp.al2klimov.de (smtp.al2klimov.de [IPv6:2a01:4f8:c0c:1465::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B341C08C5CE;
+        Fri, 10 Jul 2020 00:00:46 -0700 (PDT)
 Received: from authenticated-user (PRIMARY_HOSTNAME [PUBLIC_IP])
-        by smtp.al2klimov.de (Postfix) with ESMTPA id E42D6BC078;
-        Thu,  9 Jul 2020 17:47:30 +0000 (UTC)
+        by smtp.al2klimov.de (Postfix) with ESMTPA id B726DBC0D1;
+        Fri, 10 Jul 2020 07:00:42 +0000 (UTC)
 From:   "Alexander A. Klimov" <grandmaster@al2klimov.de>
-To:     t-kristo@ti.com, bp@alien8.de, mchehab@kernel.org,
-        tony.luck@intel.com, james.morse@arm.com, rrichter@marvell.com,
+To:     mchehab@kernel.org, bp@alien8.de, tony.luck@intel.com,
+        james.morse@arm.com, rrichter@marvell.com,
         linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc:     "Alexander A. Klimov" <grandmaster@al2klimov.de>
-Subject: [PATCH] EDAC-TI: Replace HTTP links with HTTPS ones
-Date:   Thu,  9 Jul 2020 19:47:24 +0200
-Message-Id: <20200709174724.24570-1-grandmaster@al2klimov.de>
+Subject: [PATCH] EDAC-I7CORE: Replace HTTP links with HTTPS ones
+Date:   Fri, 10 Jul 2020 09:00:36 +0200
+Message-Id: <20200710070036.29054-1-grandmaster@al2klimov.de>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spamd-Bar: +++++
@@ -64,21 +67,31 @@ Signed-off-by: Alexander A. Klimov <grandmaster@al2klimov.de>
  If you apply the patch, please let me know.
 
 
- drivers/edac/ti_edac.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/edac/i7core_edac.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/edac/ti_edac.c b/drivers/edac/ti_edac.c
-index 8be3e89a510e..6e52796a0b41 100644
---- a/drivers/edac/ti_edac.c
-+++ b/drivers/edac/ti_edac.c
-@@ -1,6 +1,6 @@
- // SPDX-License-Identifier: GPL-2.0
- /*
-- * Copyright (C) 2017 Texas Instruments Incorporated - http://www.ti.com/
-+ * Copyright (C) 2017 Texas Instruments Incorporated - https://www.ti.com/
+diff --git a/drivers/edac/i7core_edac.c b/drivers/edac/i7core_edac.c
+index 5860ca41185c..9146d1cde600 100644
+--- a/drivers/edac/i7core_edac.c
++++ b/drivers/edac/i7core_edac.c
+@@ -9,7 +9,7 @@
+  * Copyright (c) 2009-2010 by:
+  *	 Mauro Carvalho Chehab
   *
-  * Texas Instruments DDR3 ECC error correction and detection driver
+- * Red Hat Inc. http://www.redhat.com
++ * Red Hat Inc. https://www.redhat.com
   *
+  * Forked and adapted from the i5400_edac driver
+  *
+@@ -2391,7 +2391,7 @@ module_exit(i7core_exit);
+ 
+ MODULE_LICENSE("GPL");
+ MODULE_AUTHOR("Mauro Carvalho Chehab");
+-MODULE_AUTHOR("Red Hat Inc. (http://www.redhat.com)");
++MODULE_AUTHOR("Red Hat Inc. (https://www.redhat.com)");
+ MODULE_DESCRIPTION("MC Driver for Intel i7 Core memory controllers - "
+ 		   I7CORE_REVISION);
+ 
 -- 
 2.27.0
 
