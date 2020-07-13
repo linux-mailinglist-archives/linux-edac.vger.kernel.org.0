@@ -2,29 +2,29 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AD72821D13B
-	for <lists+linux-edac@lfdr.de>; Mon, 13 Jul 2020 10:02:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EAE7521D16B
+	for <lists+linux-edac@lfdr.de>; Mon, 13 Jul 2020 10:11:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727891AbgGMIBd (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Mon, 13 Jul 2020 04:01:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52744 "EHLO
+        id S1726077AbgGMILg (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Mon, 13 Jul 2020 04:11:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729612AbgGMIB1 (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Mon, 13 Jul 2020 04:01:27 -0400
+        with ESMTP id S1725830AbgGMILg (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Mon, 13 Jul 2020 04:11:36 -0400
 Received: from smtp.al2klimov.de (smtp.al2klimov.de [IPv6:2a01:4f8:c0c:1465::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46562C061755;
-        Mon, 13 Jul 2020 01:01:27 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8522FC061755;
+        Mon, 13 Jul 2020 01:11:36 -0700 (PDT)
 Received: from authenticated-user (PRIMARY_HOSTNAME [PUBLIC_IP])
-        by smtp.al2klimov.de (Postfix) with ESMTPA id F3EC4BC0CB;
-        Mon, 13 Jul 2020 08:01:23 +0000 (UTC)
+        by smtp.al2klimov.de (Postfix) with ESMTPA id 3C9F0BC070;
+        Mon, 13 Jul 2020 08:11:33 +0000 (UTC)
 From:   "Alexander A. Klimov" <grandmaster@al2klimov.de>
-To:     mchehab@kernel.org, bp@alien8.de, tony.luck@intel.com,
-        james.morse@arm.com, rrichter@marvell.com,
+To:     jbaron@akamai.com, bp@alien8.de, mchehab@kernel.org,
+        tony.luck@intel.com, james.morse@arm.com, rrichter@marvell.com,
         linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc:     "Alexander A. Klimov" <grandmaster@al2klimov.de>
-Subject: [PATCH] EDAC: i5400_edac: Replace HTTP links with HTTPS ones
-Date:   Mon, 13 Jul 2020 10:01:17 +0200
-Message-Id: <20200713080117.32216-1-grandmaster@al2klimov.de>
+Subject: [PATCH] EDAC/ie31200: Replace HTTP links with HTTPS ones
+Date:   Mon, 13 Jul 2020 10:11:26 +0200
+Message-Id: <20200713081126.32283-1-grandmaster@al2klimov.de>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spamd-Bar: +++++
@@ -74,31 +74,34 @@ Signed-off-by: Alexander A. Klimov <grandmaster@al2klimov.de>
  Impossible is nothing! :)
 
 
- drivers/edac/i5400_edac.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/edac/ie31200_edac.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/edac/i5400_edac.c b/drivers/edac/i5400_edac.c
-index f131c05ade9f..92d63eb533ae 100644
---- a/drivers/edac/i5400_edac.c
-+++ b/drivers/edac/i5400_edac.c
-@@ -8,7 +8,7 @@
-  *	 Ben Woodard <woodard@redhat.com>
-  *	 Mauro Carvalho Chehab
+diff --git a/drivers/edac/ie31200_edac.c b/drivers/edac/ie31200_edac.c
+index d68346a8e141..b52175e7c6d2 100644
+--- a/drivers/edac/ie31200_edac.c
++++ b/drivers/edac/ie31200_edac.c
+@@ -9,7 +9,7 @@
+  * Since the DRAM controller is on the cpu chip, we can use its PCI device
+  * id to identify these processors.
   *
-- * Red Hat Inc. http://www.redhat.com
-+ * Red Hat Inc. https://www.redhat.com
+- * PCI DRAM controller device ids (Taken from The PCI ID Repository - http://pci-ids.ucw.cz/)
++ * PCI DRAM controller device ids (Taken from The PCI ID Repository - https://pci-ids.ucw.cz/)
   *
-  * Forked and adapted from the i5000_edac driver which was
-  * written by Douglas Thompson Linux Networx <norsk5@xmission.com>
-@@ -1460,7 +1460,7 @@ module_exit(i5400_exit);
- MODULE_LICENSE("GPL");
- MODULE_AUTHOR("Ben Woodard <woodard@redhat.com>");
- MODULE_AUTHOR("Mauro Carvalho Chehab");
--MODULE_AUTHOR("Red Hat Inc. (http://www.redhat.com)");
-+MODULE_AUTHOR("Red Hat Inc. (https://www.redhat.com)");
- MODULE_DESCRIPTION("MC Driver for Intel I5400 memory controllers - "
- 		   I5400_REVISION);
- 
+  * 0108: Xeon E3-1200 Processor Family DRAM Controller
+  * 010c: Xeon E3-1200/2nd Generation Core Processor Family DRAM Controller
+@@ -23,9 +23,9 @@
+  * 3e..: 8th/9th Gen Core Processor Host Bridge/DRAM Registers
+  *
+  * Based on Intel specification:
+- * http://www.intel.com/content/dam/www/public/us/en/documents/datasheets/xeon-e3-1200v3-vol-2-datasheet.pdf
++ * https://www.intel.com/content/dam/www/public/us/en/documents/datasheets/xeon-e3-1200v3-vol-2-datasheet.pdf
+  * http://www.intel.com/content/www/us/en/processors/xeon/xeon-e3-1200-family-vol-2-datasheet.html
+- * http://www.intel.com/content/www/us/en/processors/core/7th-gen-core-family-mobile-h-processor-lines-datasheet-vol-2.html
++ * https://www.intel.com/content/www/us/en/processors/core/7th-gen-core-family-mobile-h-processor-lines-datasheet-vol-2.html
+  * https://www.intel.com/content/www/us/en/products/docs/processors/core/8th-gen-core-family-datasheet-vol-2.html
+  *
+  * According to the above datasheet (p.16):
 -- 
 2.27.0
 
