@@ -2,67 +2,90 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1141D21F39B
-	for <lists+linux-edac@lfdr.de>; Tue, 14 Jul 2020 16:14:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D282B221F0F
+	for <lists+linux-edac@lfdr.de>; Thu, 16 Jul 2020 10:55:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725890AbgGNONT (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Tue, 14 Jul 2020 10:13:19 -0400
-Received: from szxga05-in.huawei.com ([45.249.212.191]:7309 "EHLO huawei.com"
+        id S1726070AbgGPIyo (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Thu, 16 Jul 2020 04:54:44 -0400
+Received: from szxga05-in.huawei.com ([45.249.212.191]:7759 "EHLO huawei.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725821AbgGNONS (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Tue, 14 Jul 2020 10:13:18 -0400
-Received: from DGGEMS413-HUB.china.huawei.com (unknown [172.30.72.59])
-        by Forcepoint Email with ESMTP id CE89CA5F2418CD528226;
-        Tue, 14 Jul 2020 22:13:15 +0800 (CST)
-Received: from kernelci-master.huawei.com (10.175.101.6) by
- DGGEMS413-HUB.china.huawei.com (10.3.19.213) with Microsoft SMTP Server id
- 14.3.487.0; Tue, 14 Jul 2020 22:13:05 +0800
-From:   Wei Yongjun <weiyongjun1@huawei.com>
-To:     Hulk Robot <hulkci@huawei.com>,
-        Robert Richter <rrichter@marvell.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Tony Luck <tony.luck@intel.com>
-CC:     Wei Yongjun <weiyongjun1@huawei.com>, <linux-edac@vger.kernel.org>
-Subject: [PATCH -next] EDAC, thunderx: Make symbol 'lmc_dfs_ents' static
-Date:   Tue, 14 Jul 2020 22:23:08 +0800
-Message-ID: <20200714142308.46612-1-weiyongjun1@huawei.com>
-X-Mailer: git-send-email 2.17.1
+        id S1726013AbgGPIyn (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Thu, 16 Jul 2020 04:54:43 -0400
+Received: from DGGEMS401-HUB.china.huawei.com (unknown [172.30.72.58])
+        by Forcepoint Email with ESMTP id 398F9A10BBD81C6EFCED;
+        Thu, 16 Jul 2020 16:54:42 +0800 (CST)
+Received: from localhost.localdomain.localdomain (10.175.113.25) by
+ DGGEMS401-HUB.china.huawei.com (10.3.19.201) with Microsoft SMTP Server id
+ 14.3.487.0; Thu, 16 Jul 2020 16:54:40 +0800
+From:   Qinglang Miao <miaoqinglang@huawei.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Tony Luck <tony.luck@intel.com>, Borislav Petkov <bp@alien8.de>
+CC:     <linux-edac@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH -next] RAS/CEC: Convert to DEFINE_SHOW_ATTRIBUTE
+Date:   Thu, 16 Jul 2020 16:58:34 +0800
+Message-ID: <20200716085834.11484-1-miaoqinglang@huawei.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="ISO-8859-1"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.175.101.6]
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.113.25]
 X-CFilter-Loop: Reflected
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-The sparse tool complains as follows:
+From: Yongqiang Liu <liuyongqiang13@huawei.com>
 
-drivers/edac/thunderx_edac.c:457:22: warning:
- symbol 'lmc_dfs_ents' was not declared. Should it be static?
+Use DEFINE_SHOW_ATTRIBUTE macro to simplify the code.
 
-Symbol 'lmc_dfs_ents' is not used outside of thunderx_edac.c, so
-marks it static.
-
-Reported-by: Hulk Robot <hulkci@huawei.com>
-Signed-off-by: Wei Yongjun <weiyongjun1@huawei.com>
+Signed-off-by: Yongqiang Liu <liuyongqiang13@huawei.com>
 ---
- drivers/edac/thunderx_edac.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/ras/cec.c | 17 +++--------------
+ 1 file changed, 3 insertions(+), 14 deletions(-)
 
-diff --git a/drivers/edac/thunderx_edac.c b/drivers/edac/thunderx_edac.c
-index 4af9744cc6d0..0eb5eb97fd74 100644
---- a/drivers/edac/thunderx_edac.c
-+++ b/drivers/edac/thunderx_edac.c
-@@ -454,7 +454,7 @@ DEBUGFS_STRUCT(inject_int, 0200, thunderx_lmc_inject_int_write, NULL);
- DEBUGFS_STRUCT(inject_ecc, 0200, thunderx_lmc_inject_ecc_write, NULL);
- DEBUGFS_STRUCT(int_w1c, 0400, NULL, thunderx_lmc_int_read);
+diff --git a/drivers/ras/cec.c b/drivers/ras/cec.c
+index a992bb426..ed47b59e4 100644
+--- a/drivers/ras/cec.c
++++ b/drivers/ras/cec.c
+@@ -435,7 +435,7 @@ DEFINE_DEBUGFS_ATTRIBUTE(action_threshold_ops, u64_get, action_threshold_set, "%
  
--struct debugfs_entry *lmc_dfs_ents[] = {
-+static struct debugfs_entry *lmc_dfs_ents[] = {
- 	&debugfs_mask0,
- 	&debugfs_mask2,
- 	&debugfs_parity_test,
+ static const char * const bins[] = { "00", "01", "10", "11" };
+ 
+-static int array_dump(struct seq_file *m, void *v)
++static int array_show(struct seq_file *m, void *v)
+ {
+ 	struct ce_array *ca = &ce_arr;
+ 	int i;
+@@ -467,18 +467,7 @@ static int array_dump(struct seq_file *m, void *v)
+ 	return 0;
+ }
+ 
+-static int array_open(struct inode *inode, struct file *filp)
+-{
+-	return single_open(filp, array_dump, NULL);
+-}
+-
+-static const struct file_operations array_ops = {
+-	.owner	 = THIS_MODULE,
+-	.open	 = array_open,
+-	.read_iter	 = seq_read_iter,
+-	.llseek	 = seq_lseek,
+-	.release = single_release,
+-};
++DEFINE_SHOW_ATTRIBUTE(array);
+ 
+ static int __init create_debugfs_nodes(void)
+ {
+@@ -513,7 +502,7 @@ static int __init create_debugfs_nodes(void)
+ 		goto err;
+ 	}
+ 
+-	array = debugfs_create_file("array", S_IRUSR, d, NULL, &array_ops);
++	array = debugfs_create_file("array", S_IRUSR, d, NULL, &array_fops);
+ 	if (!array) {
+ 		pr_warn("Error creating array debugfs node!\n");
+ 		goto err;
+-- 
+2.17.1
 
