@@ -2,84 +2,87 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BCA922F518
-	for <lists+linux-edac@lfdr.de>; Mon, 27 Jul 2020 18:27:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F0FE422F782
+	for <lists+linux-edac@lfdr.de>; Mon, 27 Jul 2020 20:14:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728898AbgG0Q1V (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Mon, 27 Jul 2020 12:27:21 -0400
-Received: from mga02.intel.com ([134.134.136.20]:17460 "EHLO mga02.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728398AbgG0Q1V (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Mon, 27 Jul 2020 12:27:21 -0400
-IronPort-SDR: Zyrt3+BfaOtjdtjZZV+UkB/nvfcEMGxND+8xw1RB12XAwqBbyEHd4GkyMOY2II0tb2Ks0WEy89
- jz2w91RLJD6w==
-X-IronPort-AV: E=McAfee;i="6000,8403,9694"; a="139093719"
-X-IronPort-AV: E=Sophos;i="5.75,402,1589266800"; 
-   d="scan'208";a="139093719"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jul 2020 09:27:19 -0700
-IronPort-SDR: nF9r4Ff70lscw3zHgJ4L5MfCizfqd26FMjfRw15FVNDjjE6Yj+Y0Po5vFBUGzSdTCfPYyjAheu
- mhnzQ7O2hliw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.75,402,1589266800"; 
-   d="scan'208";a="312267699"
-Received: from orsmsx104.amr.corp.intel.com ([10.22.225.131])
-  by fmsmga004.fm.intel.com with ESMTP; 27 Jul 2020 09:27:18 -0700
-Received: from orsmsx121.amr.corp.intel.com (10.22.225.226) by
- ORSMSX104.amr.corp.intel.com (10.22.225.131) with Microsoft SMTP Server (TLS)
- id 14.3.439.0; Mon, 27 Jul 2020 09:27:18 -0700
-Received: from orsmsx115.amr.corp.intel.com ([169.254.4.57]) by
- ORSMSX121.amr.corp.intel.com ([169.254.10.221]) with mapi id 14.03.0439.000;
- Mon, 27 Jul 2020 09:27:18 -0700
-From:   "Luck, Tony" <tony.luck@intel.com>
-To:     "hpa@zytor.com" <hpa@zytor.com>,
-        Ricardo Neri <ricardo.neri-calderon@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@kernel.org>, Borislav Petkov <bp@suse.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        "x86@kernel.org" <x86@kernel.org>
-CC:     "Hansen, Dave" <dave.hansen@intel.com>,
-        "Zhang, Cathy" <cathy.zhang@intel.com>,
-        "Yu, Fenghua" <fenghua.yu@intel.com>,
-        "Park, Kyung Min" <kyung.min.park@intel.com>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        "Shankar, Ravi V" <ravi.v.shankar@intel.com>,
-        "Christopherson, Sean J" <sean.j.christopherson@intel.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Neri, Ricardo" <ricardo.neri@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>
-Subject: RE: [PATCH 4/4] x86/cpu: Use SERIALIZE in sync_core() when available
-Thread-Topic: [PATCH 4/4] x86/cpu: Use SERIALIZE in sync_core() when
- available
-Thread-Index: AQHWY87lOQINcdfFdkGk2Wd5AEVUOKkbYrqAgAA6k+A=
-Date:   Mon, 27 Jul 2020 16:27:18 +0000
-Message-ID: <3908561D78D1C84285E8C5FCA982C28F7F6B0D4A@ORSMSX115.amr.corp.intel.com>
-References: <20200727043132.15082-1-ricardo.neri-calderon@linux.intel.com>
- <20200727043132.15082-5-ricardo.neri-calderon@linux.intel.com>
- <D51F2DC3-3C56-44E6-A1F2-434E7D27133C@zytor.com>
-In-Reply-To: <D51F2DC3-3C56-44E6-A1F2-434E7D27133C@zytor.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-dlp-product: dlpe-windows
-dlp-version: 11.2.0.6
-dlp-reaction: no-action
-x-originating-ip: [10.22.254.140]
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        id S1730379AbgG0SO3 (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Mon, 27 Jul 2020 14:14:29 -0400
+Received: from mail-il1-f195.google.com ([209.85.166.195]:38659 "EHLO
+        mail-il1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729356AbgG0SO3 (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Mon, 27 Jul 2020 14:14:29 -0400
+Received: by mail-il1-f195.google.com with SMTP id s21so13903498ilk.5;
+        Mon, 27 Jul 2020 11:14:28 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=rPmxfYQDyT8r9CcnowDVVykigkQ+z869mGL3I9FOWwo=;
+        b=BdhgMsN66sRBooFq8ZkMQzcEIrYFHI4dS9ClZo+YjP37BDflDMJklDk/hbKpN0KUG1
+         j3WT6FAI5vHxe26gzwRxYnnqNFqVfJ8L4ivkBlZJ3tiyxQhCtA9CGPzuUzVE8WQ/QkVe
+         TaSNnVkcrATxn+Bp3P6mi46TADFKzvFlKdxn0IOZ/9Xj1MBMX2DF0DQEAKdyJHtt8wVY
+         gNy/qWr9roVJ3JzWDAQrfAoVqaXlyse88xJFABdTOiwi2qMTPFmIvsQEYAtHtZ33IIj5
+         kkrRHi7tx3uYAK1YQGIyEMgo24k+f1LsLewXKMNvDejRkJUafCQqIFGR6gx5pzW/prRc
+         HOGQ==
+X-Gm-Message-State: AOAM5328fCAoqGwOninl8eb2emrVgV1F/5kVkSgGp55kl8ZFXbUEVUkT
+        OB+IcYIGp+heiAevl5tnOg==
+X-Google-Smtp-Source: ABdhPJwOPsDlRJNd39fzhlpbhYZJWTt8o2fLoFjCpKxHuendknVSAZX52OcisWkASIdYEOtqu66cqA==
+X-Received: by 2002:a05:6e02:545:: with SMTP id i5mr20290346ils.59.1595873668199;
+        Mon, 27 Jul 2020 11:14:28 -0700 (PDT)
+Received: from xps15 ([64.188.179.252])
+        by smtp.gmail.com with ESMTPSA id b11sm1133142ile.32.2020.07.27.11.14.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Jul 2020 11:14:27 -0700 (PDT)
+Received: (nullmailer pid 639381 invoked by uid 1000);
+        Mon, 27 Jul 2020 18:14:24 -0000
+Date:   Mon, 27 Jul 2020 12:14:24 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Talel Shenhar <talel@amazon.com>
+Cc:     robh+dt@kernel.org, linux-arm-kernel@lists.infradead.org,
+        mchehab@kernel.org, davem@davemloft.net, catalin.marinas@arm.com,
+        devicetree@vger.kernel.org, ronenk@amazon.com, james.morse@arm.com,
+        bp@alien8.de, linux-kernel@vger.kernel.org,
+        linux-edac@vger.kernel.org, hhhawa@amazon.com, hanochu@amazon.com,
+        mark.rutland@arm.com, eitan@amazon.com, will@kernel.org,
+        nicolas.ferre@microchip.com, jonnyc@amazon.com,
+        gregkh@linuxfoundation.org
+Subject: Re: [PATCH v8 1/2] dt-bindings: edac: al-mc-edac: Amazon's Annapurna
+ Labs Memory Controller EDAC
+Message-ID: <20200727181424.GA639053@bogus>
+References: <20200726191555.5210-1-talel@amazon.com>
+ <20200726191555.5210-2-talel@amazon.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200726191555.5210-2-talel@amazon.com>
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-PiBGb3IgYSByZWFsbHkgb3ZlcmVuZ2luZXJlZCBzb2x1dGlvbiwgYnV0IHdoaWNoIG1pZ2h0IHBl
-cmZvcm0gdW5uZWNlc3NhcnkgcG9vcmx5IG9uIGV4aXN0aW5nIGhhcmR3YXJlOg0KPg0KPiBhc20g
-dm9sYXRpbGUoIjE6IC5ieXRlIDB4ZiwgMHgxLCAweGU4OyAyOiINCj4gICAgICAgICAgICAgICAg
-ICAgICAgICBfQVNNX0VYVEFCTEUoMWIsMmIpKTsNCg0KWW91IHdpbiB0aGUgcHJpemUgZm9yIHRo
-ZSBzbWFsbGVzdCBjb2RlLiAgTWlnaHQgbmVlZCAodGhlIGFscmVhZHkgbGFyZ2UpIGNvbW1lbnQg
-dG8gZG91YmxlDQppbiBzaXplIHRvIGV4cGxhaW4gdGhlIHN1YnRsZXRpZXMhDQoNCi1Ub255DQo=
+On Sun, 26 Jul 2020 22:15:54 +0300, Talel Shenhar wrote:
+> Document Amazon's Annapurna Labs Memory Controller EDAC SoC binding.
+> 
+> Signed-off-by: Talel Shenhar <talel@amazon.com>
+> Reviewed-by: Rob Herring <robh@kernel.org>
+> ---
+>  .../bindings/edac/amazon,al-mc-edac.yaml      | 52 +++++++++++++++++++
+>  1 file changed, 52 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/edac/amazon,al-mc-edac.yaml
+> 
+
+
+My bot found errors running 'make dt_binding_check' on your patch:
+
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/edac/amazon,al-mc-edac.example.dt.yaml: example-0: edac@f0080000:reg:0: [0, 4027056128, 0, 65536] is too long
+
+
+See https://patchwork.ozlabs.org/patch/1336532
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure dt-schema is up to date:
+
+pip3 install git+https://github.com/devicetree-org/dt-schema.git@master --upgrade
+
+Please check and re-submit.
+
