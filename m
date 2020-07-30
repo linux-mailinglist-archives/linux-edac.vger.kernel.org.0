@@ -2,72 +2,70 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E31BA23270B
-	for <lists+linux-edac@lfdr.de>; Wed, 29 Jul 2020 23:41:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BBFC2333AB
+	for <lists+linux-edac@lfdr.de>; Thu, 30 Jul 2020 15:59:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726496AbgG2Vll (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Wed, 29 Jul 2020 17:41:41 -0400
-Received: from mga05.intel.com ([192.55.52.43]:21440 "EHLO mga05.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726476AbgG2Vlk (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Wed, 29 Jul 2020 17:41:40 -0400
-IronPort-SDR: cOR5lNJQTPJWU8PL9icwfhbXMaAL/c6spL4v+nTJh4BONmMoyEbvZUqenAvRKI9XMo/3dh8pXm
- QtgJowHSwgMw==
-X-IronPort-AV: E=McAfee;i="6000,8403,9697"; a="236368740"
-X-IronPort-AV: E=Sophos;i="5.75,411,1589266800"; 
-   d="scan'208";a="236368740"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jul 2020 14:41:40 -0700
-IronPort-SDR: 9ZNHdzBPqCNFFW1X5KT/A4BaV3wcJGvZFtV/GIb3Hf2amUHOVsSUAvEmGRGOx/rlEyTPhlu+XT
- rjfdK/P6whJg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.75,411,1589266800"; 
-   d="scan'208";a="290672455"
-Received: from tthayer-hp-z620.an.intel.com (HELO [10.122.105.146]) ([10.122.105.146])
-  by orsmga006.jf.intel.com with ESMTP; 29 Jul 2020 14:41:39 -0700
-Reply-To: thor.thayer@linux.intel.com
-Subject: Re: [PATCH] MAINTAINERS: edac: socfpga: transfer SoCFPGA EDAC
- maintainership
-To:     Dinh Nguyen <dinguyen@kernel.org>, linux-edac@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, bp@alien8.de
-References: <20200729174511.4256-1-dinguyen@kernel.org>
-From:   Thor Thayer <thor.thayer@linux.intel.com>
-Message-ID: <cf3a5ec4-2f7f-e559-b863-1cb73877c978@linux.intel.com>
-Date:   Wed, 29 Jul 2020 16:41:34 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S1729091AbgG3N6w (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Thu, 30 Jul 2020 09:58:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50494 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729387AbgG3N6q (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Thu, 30 Jul 2020 09:58:46 -0400
+Received: from mail-qk1-x743.google.com (mail-qk1-x743.google.com [IPv6:2607:f8b0:4864:20::743])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D43BEC061575
+        for <linux-edac@vger.kernel.org>; Thu, 30 Jul 2020 06:58:45 -0700 (PDT)
+Received: by mail-qk1-x743.google.com with SMTP id 11so25663076qkn.2
+        for <linux-edac@vger.kernel.org>; Thu, 30 Jul 2020 06:58:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=QcYaplpioI9MLsAnqd4iIIXoRVUu0Gh7RceGnF833lA=;
+        b=N4Z4RakBM2wV4gC7nQk0xwWWVeN3klc8op0Mk2CW0asWsybhcYjcqG9tXF5CAp34+C
+         /48qr3maDPv/t630d0nk8A9IC9nLLSt3V9v/4EwGV7gmnDsCOjHc4+wE6u+uH7D42skO
+         JViIBTEm+Kn39mD4B4EE60RBY8x1IhEU/ALZ4XHQpuLrT58O4vSu9i000u87K9I7xafn
+         6Nm7wuoCSz7ugstbB8mXdHoesEC21V5gMIJfqBtpjIQfTucJ8Q0mY+wh8227ElItbQ1+
+         UYObLJKFLeQw0iFto8QqK9nwOrdMAPSDoJE7eCmJu0RaBTjqB/0Mvi2KeHL8Cat3pgA/
+         Q1QA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=QcYaplpioI9MLsAnqd4iIIXoRVUu0Gh7RceGnF833lA=;
+        b=aaWvtSWhdRMfpAk1v9noAvXJF6naYMsKMCgs2czqqn7zuvPOEWinmEJQx/rI0XUDT+
+         pHIClNXhJcOAtM6h0Ms4ptrGK/eI+KO2Q2JqnbjAcnBdLi3HE0PGtEj4UFWqv6jSqR+d
+         +it4h4PhROsQGnGHU8V3L1GqNjWDhYD6dvDMb80AB+Uau4VJ922oDeXaAMOX4DSvqqhE
+         Hg9ShMrxLjpSuOVcDKmhOaYAw4hqoVpIOJG/m8zX4dYL/rsKtshPT6NOHLLSdRyOAkTy
+         n5LzIvfSPNBB+v5ZsWcpFLbPoPTatKMr0wFriXl0hCgCbgPr7JoM+5vGE7vyIlitCTF3
+         jFfA==
+X-Gm-Message-State: AOAM532uuhQwdNxt1RGK/QAP7MticQsW13JsaocMbEpMscDHJ+v85+zn
+        Uof/LHtLYfzRfQiqQwu9jLDBMdFg8fo6tSSFQFo=
+X-Google-Smtp-Source: ABdhPJxXRtIkxPR5QyGlU6RL+jTImtmyLwSd5A22K8DCRm4H/4H0zglJszZ1qXhvAGqYCVC8G0WMAskSvM4A8JHJWDw=
+X-Received: by 2002:a37:e315:: with SMTP id y21mr4173746qki.129.1596117525129;
+ Thu, 30 Jul 2020 06:58:45 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20200729174511.4256-1-dinguyen@kernel.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Received: by 2002:aed:24ba:0:0:0:0:0 with HTTP; Thu, 30 Jul 2020 06:58:44
+ -0700 (PDT)
+Reply-To: godardchambers1@yandex.com
+From:   "Luis F. Godard" <veronicadeerow@gmail.com>
+Date:   Thu, 30 Jul 2020 15:58:44 +0200
+Message-ID: <CAOXWAkNbNaLQRf3=+tJ-wVuQxCuLfwS+PkyxihhBK01tbCStbA@mail.gmail.com>
+Subject: =?UTF-8?B?SmUgdG8gbmFsw6loYXbDoSB6cHLDoXZhLA==?=
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: base64
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On 7/29/20 12:45 PM, Dinh Nguyen wrote:
-> Thor Thayer is leaving Intel and will no longer be able to maintain the
-> EDAC for SoCFPGA, thus transfer maintainership to Dinh Nguyen.
-> 
-> Signed-off-by: Dinh Nguyen <dinguyen@kernel.org>
-> ---
->   MAINTAINERS | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index f0569cf304ca..c53fc9febf12 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -2466,7 +2466,7 @@ S:	Maintained
->   F:	drivers/clk/socfpga/
->   
->   ARM/SOCFPGA EDAC SUPPORT
-> -M:	Thor Thayer <thor.thayer@linux.intel.com>
-> +M:	Dinh Nguyen <dinguyen@kernel.org>
->   S:	Maintained
->   F:	drivers/edac/altera_edac.
->   
-Acked-by: Thor Thayer <thor.thayer@linux.intel.com>
+SmUgdG8gbmFsw6loYXbDoSB6cHLDoXZhLA0KDQpKYWsgb2JlY27Emz8gRG91ZsOhbSwgxb5lIHNl
+IHRhdG8genByw6F2YSBzIHbDoW1pIGRvYsWZZSBzZXRrw6F2w6EuDQpOZXphcG9tZcWIdGUgcHJv
+c8OtbSB0dXRvIHpwcsOhdnUgbmEgcm96ZMOtbCBvZCBkxZnDrXbEm2rFocOtY2gsIHByb3Rvxb5l
+IHbDocWhDQpkxJtkaWNrw70gZm9uZCB2ZSB2w73FoWkgOSwyIG1pbGlvbnUgVVNEIG55bsOtIG9k
+aGFsdWplIHZhxaFpIG9rYW3Fvml0b3UNCnBveml0aXZuw60gb2Rwb3bEm8SPLiBWeXrDvXbDoW0g
+dsOhcyB2xaFhaywgYWJ5c3RlIGxhc2thdsSbIHDFmWVkYWxpIHN2w6kgY2Vsw6kNCmptw6lubzog
+WmVtxJs6IEFkcmVzYTogUG92b2zDoW7DrTogUm9kaW5uw70gc3RhdjogUG9obGF2w606IFbEm2s6
+IFNvdWtyb23DqQ0KxI3DrXNsbzoga29uZcSNbsSbLCBQbGF0bsOhIGtvcGllIGlkZW50aXR5Og0K
+DQpTIMO6Y3RvdSBWw6HFoS4NCkJhcnJpc3RlciBMdWlzIEZlcm7DoW5kZXogR29kYXJkIChFc3Ep
+DQo=
