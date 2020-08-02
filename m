@@ -2,91 +2,102 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C10A2235A5E
-	for <lists+linux-edac@lfdr.de>; Sun,  2 Aug 2020 22:18:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A0428239CB6
+	for <lists+linux-edac@lfdr.de>; Mon,  3 Aug 2020 00:03:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727809AbgHBUSo (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Sun, 2 Aug 2020 16:18:44 -0400
-Received: from mail.skyhub.de ([5.9.137.197]:58748 "EHLO mail.skyhub.de"
+        id S1726806AbgHBWDd (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Sun, 2 Aug 2020 18:03:33 -0400
+Received: from mga06.intel.com ([134.134.136.31]:51631 "EHLO mga06.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725910AbgHBUSo (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Sun, 2 Aug 2020 16:18:44 -0400
-Received: from nazgul.tnic (unknown [78.130.214.198])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 4D2291EC02A8;
-        Sun,  2 Aug 2020 22:18:40 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1596399520;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=z0K+vlWV9j7wfXLQcUnvdJhwiVrF38RAZueHzdmaci0=;
-        b=IpVr02DQwE3yYwTGqHzkePquczoIuB3CSh4JRazV28rb0yxVyTjgJHeFSYXLscJQCgocj+
-        YjGRmfK2vuZ4xdnOu8V6Bj4srNoX1QpTQVYAD0HdeQama4rhKTHzaxEhs3BC4FYYx+fxXN
-        dZeZiogCz7IvNzoJKsyyZMEOy76rM2w=
-Date:   Sun, 2 Aug 2020 22:18:06 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     Saheed Bolarinwa <refactormyself@gmail.com>, trix@redhat.com,
-        Kalle Valo <kvalo@codeaurora.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Joerg Roedel <joro@8bytes.org>, bjorn@helgaas.com,
-        skhan@linuxfoundation.org,
-        linux-kernel-mentees@lists.linuxfoundation.org,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        linux-mtd@lists.infradead.org, iommu@lists.linux-foundation.org,
-        linux-rdma@vger.kernel.org, linux-ide@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
-        linux-gpio@vger.kernel.org, linux-fpga@vger.kernel.org,
-        linux-edac@vger.kernel.org, dmaengine@vger.kernel.org,
-        linux-crypto@vger.kernel.org,
-        linux-atm-general@lists.sourceforge.net
-Subject: Re: [RFC PATCH 00/17] Drop uses of pci_read_config_*() return value
-Message-ID: <20200802201806.GA24437@nazgul.tnic>
-References: <20200802184648.GA23190@nazgul.tnic>
- <20200802191406.GA248232@bjorn-Precision-5520>
+        id S1726364AbgHBWDc (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Sun, 2 Aug 2020 18:03:32 -0400
+IronPort-SDR: MMoc+Es0RM/eF/itp/5uKzIILdE//1eUT7vqSoZnX9M+lWXgNfdK+S3/d9Itrkc2gKwrwTr52s
+ /oKFS7b1PPEQ==
+X-IronPort-AV: E=McAfee;i="6000,8403,9701"; a="213556387"
+X-IronPort-AV: E=Sophos;i="5.75,427,1589266800"; 
+   d="scan'208";a="213556387"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Aug 2020 15:03:31 -0700
+IronPort-SDR: zHmF67G0C6t+RqSNbsQR2JuTjknAm0KNygE22EuGYJnm9QRA3M6yzHaPWuPm6v/Nzw1tD4BwHO
+ KyBzMIkPsTGA==
+X-IronPort-AV: E=Sophos;i="5.75,427,1589266800"; 
+   d="scan'208";a="466271087"
+Received: from agluck-desk2.sc.intel.com (HELO agluck-desk2.amr.corp.intel.com) ([10.3.52.68])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Aug 2020 15:03:31 -0700
+Date:   Sun, 2 Aug 2020 15:03:30 -0700
+From:   "Luck, Tony" <tony.luck@intel.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Borislav Petkov <bp@alien8.de>, linux-edac@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [GIT PULL] EDAC for 5.9
+Message-ID: <20200802220330.GA24423@agluck-desk2.amr.corp.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200802191406.GA248232@bjorn-Precision-5520>
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Sun, Aug 02, 2020 at 02:14:06PM -0500, Bjorn Helgaas wrote:
-> Wait, I'm not convinced yet.  I know that if a PCI read fails, you
-> normally get ~0 data because the host bridge fabricates it to complete
-> the CPU load.
-> 
-> But what guarantees that a PCI config register cannot contain ~0?
+Hi Linus,
 
-Well, I don't think you can differentiate that case, right?
+Boris is on vacation and aske me to send you the pull request for EDAC
+changes that are queued for v5.9
 
-I guess this is where the driver knowledge comes into play: if the read
-returns ~0, the pci_read_config* should probably return in that case
-something like:
+-Tony
 
-	PCIBIOS_READ_MAYBE_FAILED
+---
 
-to denote it is all 1s and then the caller should be able to determine,
-based on any of domain:bus:slot.func and whatever else the driver knows
-about its hardware, whether the 1s are a valid value or an error.
-Hopefully.
+The following changes since commit b3a9e3b9622ae10064826dccb4f7a52bd88c7407:
 
-Or something better of which I cannot think of right now...
+  Linux 5.8-rc1 (2020-06-14 12:45:04 -0700)
 
--- 
-Regards/Gruss,
-    Boris.
+are available in the Git repository at:
 
-https://people.kernel.org/tglx/notes-about-netiquette
+  git://git.kernel.org/pub/scm/linux/kernel/git/ras/ras.git tags/edac_updates_for_5.9
+
+for you to fetch changes up to 0f959e19fadf00638b686fdeb70e24dfcc7bbcac:
+
+  Merge branch 'edac-ghes' into edac-for-next (2020-06-22 15:28:01 +0200)
+
+----------------------------------------------------------------
+17ed808ad243 ("EDAC: Fix reference count leaks")
+e370f886fefc ("EDAC: Remove edac_get_dimm_by_index()")
+b9cae27728d1 ("EDAC/ghes: Scan the system once on driver init")
+b001694d60fe ("EDAC/ghes: Remove unused members of struct ghes_edac_pvt, rename it to ghes_pvt")
+cb51a371d08e ("EDAC/ghes: Setup DIMM label from DMI and use it in error reports")
+8807e1559749 ("EDAC, {skx,i10nm}: Use CPU stepping macro to pass configurations")
+e9ff6636d3f9 ("EDAC/mc: Call edac_inc_ue_error() before panic")
+30bf38e4341b ("EDAC, pnd2: Set MCE_PRIO_EDAC priority for pnd2_mce_dec notifier")
+
+----------------------------------------------------------------
+Borislav Petkov (3):
+      EDAC/ghes: Scan the system once on driver init
+      EDAC: Remove edac_get_dimm_by_index()
+      Merge branch 'edac-ghes' into edac-for-next
+
+Qiushi Wu (1):
+      EDAC: Fix reference count leaks
+
+Qiuxu Zhuo (1):
+      EDAC, {skx,i10nm}: Use CPU stepping macro to pass configurations
+
+Robert Richter (2):
+      EDAC/ghes: Setup DIMM label from DMI and use it in error reports
+      EDAC/ghes: Remove unused members of struct ghes_edac_pvt, rename it to ghes_pvt
+
+Zhenzhong Duan (2):
+      EDAC, pnd2: Set MCE_PRIO_EDAC priority for pnd2_mce_dec notifier
+      EDAC/mc: Call edac_inc_ue_error() before panic
+
+ drivers/edac/edac_device_sysfs.c |   1 +
+ drivers/edac/edac_mc.c           |   4 +-
+ drivers/edac/edac_pci_sysfs.c    |   2 +-
+ drivers/edac/ghes_edac.c         | 323 +++++++++++++++++++++++----------------
+ drivers/edac/i10nm_base.c        |  12 +-
+ drivers/edac/pnd2_edac.c         |   1 +
+ drivers/edac/skx_base.c          |   2 +-
+ include/linux/edac.h             |  29 +---
+ 8 files changed, 211 insertions(+), 163 deletions(-)
