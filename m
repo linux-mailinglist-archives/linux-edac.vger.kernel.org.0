@@ -2,102 +2,77 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A0428239CB6
-	for <lists+linux-edac@lfdr.de>; Mon,  3 Aug 2020 00:03:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A760D239FDE
+	for <lists+linux-edac@lfdr.de>; Mon,  3 Aug 2020 08:57:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726806AbgHBWDd (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Sun, 2 Aug 2020 18:03:33 -0400
-Received: from mga06.intel.com ([134.134.136.31]:51631 "EHLO mga06.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726364AbgHBWDc (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Sun, 2 Aug 2020 18:03:32 -0400
-IronPort-SDR: MMoc+Es0RM/eF/itp/5uKzIILdE//1eUT7vqSoZnX9M+lWXgNfdK+S3/d9Itrkc2gKwrwTr52s
- /oKFS7b1PPEQ==
-X-IronPort-AV: E=McAfee;i="6000,8403,9701"; a="213556387"
-X-IronPort-AV: E=Sophos;i="5.75,427,1589266800"; 
-   d="scan'208";a="213556387"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Aug 2020 15:03:31 -0700
-IronPort-SDR: zHmF67G0C6t+RqSNbsQR2JuTjknAm0KNygE22EuGYJnm9QRA3M6yzHaPWuPm6v/Nzw1tD4BwHO
- KyBzMIkPsTGA==
-X-IronPort-AV: E=Sophos;i="5.75,427,1589266800"; 
-   d="scan'208";a="466271087"
-Received: from agluck-desk2.sc.intel.com (HELO agluck-desk2.amr.corp.intel.com) ([10.3.52.68])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Aug 2020 15:03:31 -0700
-Date:   Sun, 2 Aug 2020 15:03:30 -0700
-From:   "Luck, Tony" <tony.luck@intel.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Borislav Petkov <bp@alien8.de>, linux-edac@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [GIT PULL] EDAC for 5.9
-Message-ID: <20200802220330.GA24423@agluck-desk2.amr.corp.intel.com>
+        id S1726927AbgHCG5C (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Mon, 3 Aug 2020 02:57:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47810 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726224AbgHCG5C (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Mon, 3 Aug 2020 02:57:02 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFBB4C06174A;
+        Sun,  2 Aug 2020 23:57:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=S81Y7/E/1KRByHOMFTAO1WQMOll7HWoP+pv/fCo/3sI=; b=Imiqwh2wh6gfO95HVgGWdIpJ7R
+        qFqJDaURIpsOiDpUCq2k3ILdHp9/G64PbhflfbfwXUHR3YCqdMM2JIr5p2HV5QlEFNjYcibq1cAwB
+        k5jcDFqNUiYh1ErghhsIpsN5baKyFw50AsjkOnyh0RkcQvG4I/FuQV4i+K4smxUlt0gQ8ZINX4zk1
+        zqYZrKBpxdTsr3nucjd2JPKqfEkufPqh/aFaSwGu2mFtFylC2a36pyZdPfsQXEbP1+7In5Kkj2kTD
+        iIuAdnnH0jCfMh5vNRvgFzTjztCURqfBsmyFjwViAe1IQB++yIvaVvpqhNNNwV/B+lmZFzbHjUNTv
+        QTu3Qcmg==;
+Received: from hch by casper.infradead.org with local (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1k2UOb-0005Zd-6v; Mon, 03 Aug 2020 06:56:29 +0000
+Date:   Mon, 3 Aug 2020 07:56:29 +0100
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     Borislav Petkov <bp@alien8.de>,
+        Saheed Bolarinwa <refactormyself@gmail.com>, trix@redhat.com,
+        Kalle Valo <kvalo@codeaurora.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Joerg Roedel <joro@8bytes.org>, bjorn@helgaas.com,
+        skhan@linuxfoundation.org,
+        linux-kernel-mentees@lists.linuxfoundation.org,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-mtd@lists.infradead.org, iommu@lists.linux-foundation.org,
+        linux-rdma@vger.kernel.org, linux-ide@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
+        linux-gpio@vger.kernel.org, linux-fpga@vger.kernel.org,
+        linux-edac@vger.kernel.org, dmaengine@vger.kernel.org,
+        linux-crypto@vger.kernel.org,
+        linux-atm-general@lists.sourceforge.net
+Subject: Re: [RFC PATCH 00/17] Drop uses of pci_read_config_*() return value
+Message-ID: <20200803065629.GA19534@infradead.org>
+References: <20200802184648.GA23190@nazgul.tnic>
+ <20200802191406.GA248232@bjorn-Precision-5520>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20200802191406.GA248232@bjorn-Precision-5520>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-Hi Linus,
+On Sun, Aug 02, 2020 at 02:14:06PM -0500, Bjorn Helgaas wrote:
+> But what guarantees that a PCI config register cannot contain ~0?
+> If there's something about that in the spec I'd love to know where it
+> is because it would simplify a lot of things.
 
-Boris is on vacation and aske me to send you the pull request for EDAC
-changes that are queued for v5.9
-
--Tony
-
----
-
-The following changes since commit b3a9e3b9622ae10064826dccb4f7a52bd88c7407:
-
-  Linux 5.8-rc1 (2020-06-14 12:45:04 -0700)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/ras/ras.git tags/edac_updates_for_5.9
-
-for you to fetch changes up to 0f959e19fadf00638b686fdeb70e24dfcc7bbcac:
-
-  Merge branch 'edac-ghes' into edac-for-next (2020-06-22 15:28:01 +0200)
-
-----------------------------------------------------------------
-17ed808ad243 ("EDAC: Fix reference count leaks")
-e370f886fefc ("EDAC: Remove edac_get_dimm_by_index()")
-b9cae27728d1 ("EDAC/ghes: Scan the system once on driver init")
-b001694d60fe ("EDAC/ghes: Remove unused members of struct ghes_edac_pvt, rename it to ghes_pvt")
-cb51a371d08e ("EDAC/ghes: Setup DIMM label from DMI and use it in error reports")
-8807e1559749 ("EDAC, {skx,i10nm}: Use CPU stepping macro to pass configurations")
-e9ff6636d3f9 ("EDAC/mc: Call edac_inc_ue_error() before panic")
-30bf38e4341b ("EDAC, pnd2: Set MCE_PRIO_EDAC priority for pnd2_mce_dec notifier")
-
-----------------------------------------------------------------
-Borislav Petkov (3):
-      EDAC/ghes: Scan the system once on driver init
-      EDAC: Remove edac_get_dimm_by_index()
-      Merge branch 'edac-ghes' into edac-for-next
-
-Qiushi Wu (1):
-      EDAC: Fix reference count leaks
-
-Qiuxu Zhuo (1):
-      EDAC, {skx,i10nm}: Use CPU stepping macro to pass configurations
-
-Robert Richter (2):
-      EDAC/ghes: Setup DIMM label from DMI and use it in error reports
-      EDAC/ghes: Remove unused members of struct ghes_edac_pvt, rename it to ghes_pvt
-
-Zhenzhong Duan (2):
-      EDAC, pnd2: Set MCE_PRIO_EDAC priority for pnd2_mce_dec notifier
-      EDAC/mc: Call edac_inc_ue_error() before panic
-
- drivers/edac/edac_device_sysfs.c |   1 +
- drivers/edac/edac_mc.c           |   4 +-
- drivers/edac/edac_pci_sysfs.c    |   2 +-
- drivers/edac/ghes_edac.c         | 323 +++++++++++++++++++++++----------------
- drivers/edac/i10nm_base.c        |  12 +-
- drivers/edac/pnd2_edac.c         |   1 +
- drivers/edac/skx_base.c          |   2 +-
- include/linux/edac.h             |  29 +---
- 8 files changed, 211 insertions(+), 163 deletions(-)
+There isn't.  An we even have cases like the NVMe controller memory
+buffer and persistent memory region, which are BARs that store
+abritrary values for later retreival, so it can't.  (now those
+features have a major issue with error detection, but that is another
+issue)
