@@ -2,50 +2,38 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 87F7723CEF8
-	for <lists+linux-edac@lfdr.de>; Wed,  5 Aug 2020 21:11:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9AF2F23CF17
+	for <lists+linux-edac@lfdr.de>; Wed,  5 Aug 2020 21:14:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728270AbgHETLI (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Wed, 5 Aug 2020 15:11:08 -0400
-Received: from mail.kernel.org ([198.145.29.99]:35876 "EHLO mail.kernel.org"
+        id S1728064AbgHETNu (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Wed, 5 Aug 2020 15:13:50 -0400
+Received: from mga17.intel.com ([192.55.52.151]:40671 "EHLO mga17.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729239AbgHESaU (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Wed, 5 Aug 2020 14:30:20 -0400
-Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com [209.85.221.47])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 8EACC22D05
-        for <linux-edac@vger.kernel.org>; Wed,  5 Aug 2020 18:28:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1596652125;
-        bh=+orqcmMUx4wxaMB9/tQ3uZegiQO+qPJJ8gk9VLAh5zc=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=ZtbhdZQb8DxFu52vBQlyZFa7mtogYGtT8u6xo/+b98WHp8k4XiUzDMX1klsd7tGrP
-         Bo06uJP01CF1VNyEC5XlX7b1bxLCrDLUIhM4lNG5CFpPeXMQxUCyzJl/6FHWzhYIBs
-         vhzq54eGavaU3btohR0RQ78MwIS8roo/QUETwAtg=
-Received: by mail-wr1-f47.google.com with SMTP id c15so5396486wrs.11
-        for <linux-edac@vger.kernel.org>; Wed, 05 Aug 2020 11:28:45 -0700 (PDT)
-X-Gm-Message-State: AOAM533w/KUb8thb0+A1gPP6kEz+KLa8ACOIlpIn5hoBehdWeLYIeW09
-        INNcqd99VBDy3vePdvYNlNCuBBHY1mjnm6r1Ptuhqg==
-X-Google-Smtp-Source: ABdhPJw0T73JhpPablAM0weF5CdOo7RMDuTXYhROjwPq7A2D3w0EFQfTjsbQ7zXQqefzQ2gXJGI+6d2aG6nYRsojZ3E=
-X-Received: by 2002:a5d:65d2:: with SMTP id e18mr3831077wrw.70.1596652124048;
- Wed, 05 Aug 2020 11:28:44 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200805021059.1331-1-ricardo.neri-calderon@linux.intel.com>
- <20200805044840.GA9127@nazgul.tnic> <47A60E6A-0742-45FB-B707-175E87C58184@zytor.com>
- <20200805050808.GC9127@nazgul.tnic> <20200805170717.GB26661@ranerica-svr.sc.intel.com>
-In-Reply-To: <20200805170717.GB26661@ranerica-svr.sc.intel.com>
-From:   Andy Lutomirski <luto@kernel.org>
-Date:   Wed, 5 Aug 2020 11:28:31 -0700
-X-Gmail-Original-Message-ID: <CALCETrWByBugaunKPz52sdOGJpEdNNMK2kcp-wXgjFpFZuoOmQ@mail.gmail.com>
-Message-ID: <CALCETrWByBugaunKPz52sdOGJpEdNNMK2kcp-wXgjFpFZuoOmQ@mail.gmail.com>
-Subject: Re: [PATCH v2] x86/cpu: Use SERIALIZE in sync_core() when available
-To:     Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+        id S1727915AbgHETLq (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Wed, 5 Aug 2020 15:11:46 -0400
+IronPort-SDR: qKX/ElW97fakr3JPsGtRORLgay4GLsxsHmianTeKpbmcvse2HSjsa2LrUTsaFSiJQq52pY06wl
+ BHzHcCNgLGvA==
+X-IronPort-AV: E=McAfee;i="6000,8403,9704"; a="132713644"
+X-IronPort-AV: E=Sophos;i="5.75,438,1589266800"; 
+   d="scan'208";a="132713644"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Aug 2020 12:11:45 -0700
+IronPort-SDR: gMtDv2wkDCrBFAxkgWEqDl3k5FFjBnx432Tkp7OHaGlY0qBEc7kSWXLpFuba6aQYFJUUSHKTnj
+ sNu4wS1fmExQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.75,438,1589266800"; 
+   d="scan'208";a="289026130"
+Received: from ranerica-svr.sc.intel.com ([172.25.110.23])
+  by orsmga003.jf.intel.com with ESMTP; 05 Aug 2020 12:11:44 -0700
+Date:   Wed, 5 Aug 2020 12:11:26 -0700
+From:   Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+To:     Andy Lutomirski <luto@kernel.org>
 Cc:     Borislav Petkov <bp@alien8.de>, "H. Peter Anvin" <hpa@zytor.com>,
         Borislav Petkov <bp@suse.de>,
         Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@kernel.org>,
-        Andy Lutomirski <luto@kernel.org>, X86 ML <x86@kernel.org>,
+        Ingo Molnar <mingo@kernel.org>, X86 ML <x86@kernel.org>,
         "Peter Zijlstra (Intel)" <peterz@infradead.org>,
         Dave Hansen <dave.hansen@intel.com>,
         Tony Luck <tony.luck@intel.com>,
@@ -58,63 +46,76 @@ Cc:     Borislav Petkov <bp@alien8.de>, "H. Peter Anvin" <hpa@zytor.com>,
         Ricardo Neri <ricardo.neri@intel.com>,
         Dave Hansen <dave.hansen@linux.intel.com>,
         linux-edac <linux-edac@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Subject: Re: [PATCH v2] x86/cpu: Use SERIALIZE in sync_core() when available
+Message-ID: <20200805191126.GA27509@ranerica-svr.sc.intel.com>
+References: <20200805021059.1331-1-ricardo.neri-calderon@linux.intel.com>
+ <20200805044840.GA9127@nazgul.tnic>
+ <47A60E6A-0742-45FB-B707-175E87C58184@zytor.com>
+ <20200805050808.GC9127@nazgul.tnic>
+ <20200805170717.GB26661@ranerica-svr.sc.intel.com>
+ <CALCETrWByBugaunKPz52sdOGJpEdNNMK2kcp-wXgjFpFZuoOmQ@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CALCETrWByBugaunKPz52sdOGJpEdNNMK2kcp-wXgjFpFZuoOmQ@mail.gmail.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Wed, Aug 5, 2020 at 10:07 AM Ricardo Neri
-<ricardo.neri-calderon@linux.intel.com> wrote:
->
-> On Wed, Aug 05, 2020 at 07:08:08AM +0200, Borislav Petkov wrote:
-> > On Tue, Aug 04, 2020 at 09:58:25PM -0700, hpa@zytor.com wrote:
-> > > Because why use an alternative to jump over one instruction?
+On Wed, Aug 05, 2020 at 11:28:31AM -0700, Andy Lutomirski wrote:
+> On Wed, Aug 5, 2020 at 10:07 AM Ricardo Neri
+> <ricardo.neri-calderon@linux.intel.com> wrote:
+> >
+> > On Wed, Aug 05, 2020 at 07:08:08AM +0200, Borislav Petkov wrote:
+> > > On Tue, Aug 04, 2020 at 09:58:25PM -0700, hpa@zytor.com wrote:
+> > > > Because why use an alternative to jump over one instruction?
+> > > >
+> > > > I personally would prefer to have the IRET put out of line
 > > >
-> > > I personally would prefer to have the IRET put out of line
+> > > Can't yet - SERIALIZE CPUs are a minority at the moment.
+> > >
+> > > > and have the call/jmp replaced by SERIALIZE inline.
+> > >
+> > > Well, we could do:
+> > >
+> > >       alternative_io("... IRET bunch", __ASM_SERIALIZE, X86_FEATURE_SERIALIZE, ...);
+> > >
+> > > and avoid all kinds of jumping. Alternatives get padded so there
+> > > would be a couple of NOPs following when SERIALIZE gets patched in
+> > > but it shouldn't be a problem. I guess one needs to look at what gcc
+> > > generates...
 > >
-> > Can't yet - SERIALIZE CPUs are a minority at the moment.
+> > But the IRET-TO-SELF code has instruction which modify the stack. This
+> > would violate stack invariance in alternatives as enforced in commit
+> > 7117f16bf460 ("objtool: Fix ORC vs alternatives"). As a result, objtool
+> > gives warnings as follows:
 > >
-> > > and have the call/jmp replaced by SERIALIZE inline.
+> > arch/x86/kernel/alternative.o: warning: objtool: do_sync_core()+0xe:
+> > alternative modifies stack
 > >
-> > Well, we could do:
+> > Perhaps in this specific case it does not matter as the changes in the
+> > stack will be undone by IRET. However, using alternative_io would require
+> > adding the macro STACK_FRAME_NON_STANDARD to functions using sync_core().
+> > IMHO, it wouldn't look good.
 > >
-> >       alternative_io("... IRET bunch", __ASM_SERIALIZE, X86_FEATURE_SERIALIZE, ...);
-> >
-> > and avoid all kinds of jumping. Alternatives get padded so there
-> > would be a couple of NOPs following when SERIALIZE gets patched in
-> > but it shouldn't be a problem. I guess one needs to look at what gcc
-> > generates...
->
-> But the IRET-TO-SELF code has instruction which modify the stack. This
-> would violate stack invariance in alternatives as enforced in commit
-> 7117f16bf460 ("objtool: Fix ORC vs alternatives"). As a result, objtool
-> gives warnings as follows:
->
-> arch/x86/kernel/alternative.o: warning: objtool: do_sync_core()+0xe:
-> alternative modifies stack
->
-> Perhaps in this specific case it does not matter as the changes in the
-> stack will be undone by IRET. However, using alternative_io would require
-> adding the macro STACK_FRAME_NON_STANDARD to functions using sync_core().
-> IMHO, it wouldn't look good.
->
-> So maybe the best approach is to implement as you suggested using
-> static_cpu_has()?
+> > So maybe the best approach is to implement as you suggested using
+> > static_cpu_has()?
+> 
+> I agree.  Let's keep it simple.
+> 
+> Honestly, I think the right solution is to have iret_to_self() in
+> actual asm and invoke it from C as needed. 
 
-I agree.  Let's keep it simple.
+Do you mean anything different from what we have already [1]? If I
+understand your comment correctly, we have exactly that: an
+iret_to_self() asm implementation invoked from C.
 
-Honestly, I think the right solution is to have iret_to_self() in
-actual asm and invoke it from C as needed.  IRET is *slow* -- trying
-to optimize it at all is silly.  The big optimization was switching
-from CPUID to IRET, since CPUID is slooooooooooooooooooow in virtual
-environments, whereas IRET is merely sloooooooow and SERIALIZE is
-probably just sloooow.
+Thanks and BR,
+Ricardo
 
-(I once benchmarked it.  IIRC the winning version on my laptop is MOV
-to CR2 on bare metal and IRET in a Xen PV guest.  This optimization
-was not obviously worthwhile.)
+[1]. https://lore.kernel.org/lkml/20200727043132.15082-4-ricardo.neri-calderon@linux.intel.com/
 
->
-> Thanks and BR,
-> Ricardo
+Thanks and BR,
+Ricardo
