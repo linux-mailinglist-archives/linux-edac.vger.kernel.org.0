@@ -2,36 +2,35 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5ECFD23D04A
-	for <lists+linux-edac@lfdr.de>; Wed,  5 Aug 2020 21:47:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 667E523D2CB
+	for <lists+linux-edac@lfdr.de>; Wed,  5 Aug 2020 22:16:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728337AbgHETbC (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Wed, 5 Aug 2020 15:31:02 -0400
-Received: from mga04.intel.com ([192.55.52.120]:24715 "EHLO mga04.intel.com"
+        id S1729576AbgHEUQH (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Wed, 5 Aug 2020 16:16:07 -0400
+Received: from mga01.intel.com ([192.55.52.88]:28979 "EHLO mga01.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728411AbgHERHl (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Wed, 5 Aug 2020 13:07:41 -0400
-IronPort-SDR: ftrn1bHXVaUoaYxBD+U0Z9VjorwkCEfZFERK8Cei8Gcv/qjHVs9x7o1YKm5zm27aV20rTtOQY5
- 7/aBjUbmuKvw==
-X-IronPort-AV: E=McAfee;i="6000,8403,9704"; a="150056026"
+        id S1726202AbgHEQUC (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Wed, 5 Aug 2020 12:20:02 -0400
+IronPort-SDR: wVshM2Ol8Vg2U9I+dHLAeFm9G/HFVvD1ZkTsOUbuZLQdrcZPLL+c6jZHni6i4ePsNCz0ph8ArI
+ bE9jUSBeysbQ==
+X-IronPort-AV: E=McAfee;i="6000,8403,9703"; a="170650160"
 X-IronPort-AV: E=Sophos;i="5.75,438,1589266800"; 
-   d="scan'208";a="150056026"
+   d="scan'208";a="170650160"
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Aug 2020 10:07:37 -0700
-IronPort-SDR: Rlyu2e2Xng1qZuyU9jpKnOH/LLO1CZOURgcYLNejTmMyJZ0iDuTI/eK/hiWBRfnKYEFrweY2cZ
- vQvwJeWU15Gw==
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Aug 2020 08:54:19 -0700
+IronPort-SDR: Q7NbfeMyv4NMG/aVS6MzmzUFxfTUeW1A1Ya3OMdA+P+MVudymtl3L8OesjU8hFmvyyKJbVYVYL
+ H3C1asV0McGQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.75,438,1589266800"; 
-   d="scan'208";a="306768478"
+   d="scan'208";a="292981672"
 Received: from ranerica-svr.sc.intel.com ([172.25.110.23])
-  by orsmga002.jf.intel.com with ESMTP; 05 Aug 2020 10:07:35 -0700
-Date:   Wed, 5 Aug 2020 10:07:17 -0700
+  by orsmga006.jf.intel.com with ESMTP; 05 Aug 2020 08:54:19 -0700
+Date:   Wed, 5 Aug 2020 08:54:01 -0700
 From:   Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     hpa@zytor.com, Borislav Petkov <bp@suse.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
+To:     Borislav Petkov <bp@suse.de>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
         Ingo Molnar <mingo@kernel.org>,
         Andy Lutomirski <luto@kernel.org>, x86@kernel.org,
         "Peter Zijlstra (Intel)" <peterz@infradead.org>,
@@ -39,6 +38,7 @@ Cc:     hpa@zytor.com, Borislav Petkov <bp@suse.de>,
         Tony Luck <tony.luck@intel.com>,
         Cathy Zhang <cathy.zhang@intel.com>,
         Fenghua Yu <fenghua.yu@intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
         Kyung Min Park <kyung.min.park@intel.com>,
         "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
         Sean Christopherson <sean.j.christopherson@intel.com>,
@@ -47,55 +47,126 @@ Cc:     hpa@zytor.com, Borislav Petkov <bp@suse.de>,
         Dave Hansen <dave.hansen@linux.intel.com>,
         linux-edac@vger.kernel.org
 Subject: Re: [PATCH v2] x86/cpu: Use SERIALIZE in sync_core() when available
-Message-ID: <20200805170717.GB26661@ranerica-svr.sc.intel.com>
+Message-ID: <20200805155401.GB25981@ranerica-svr.sc.intel.com>
 References: <20200805021059.1331-1-ricardo.neri-calderon@linux.intel.com>
  <20200805044840.GA9127@nazgul.tnic>
- <47A60E6A-0742-45FB-B707-175E87C58184@zytor.com>
- <20200805050808.GC9127@nazgul.tnic>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200805050808.GC9127@nazgul.tnic>
+In-Reply-To: <20200805044840.GA9127@nazgul.tnic>
 User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Wed, Aug 05, 2020 at 07:08:08AM +0200, Borislav Petkov wrote:
-> On Tue, Aug 04, 2020 at 09:58:25PM -0700, hpa@zytor.com wrote:
-> > Because why use an alternative to jump over one instruction?
-> >
-> > I personally would prefer to have the IRET put out of line
+On Wed, Aug 05, 2020 at 06:48:40AM +0200, Borislav Petkov wrote:
+> On Tue, Aug 04, 2020 at 07:10:59PM -0700, Ricardo Neri wrote:
+> > The SERIALIZE instruction gives software a way to force the processor to
+> > complete all modifications to flags, registers and memory from previous
+> > instructions and drain all buffered writes to memory before the next
+> > instruction is fetched and executed. Thus, it serves the purpose of
+> > sync_core(). Use it when available.
+> > 
+> > Commit 7117f16bf460 ("objtool: Fix ORC vs alternatives") enforced stack
+> > invariance in alternatives. The iret-to-self does not comply with such
+> > invariance. Thus, it cannot be used inside alternative code. Instead, use
+> > an alternative that jumps to SERIALIZE when available.
+> > 
+> > Cc: Andy Lutomirski <luto@kernel.org>
+> > Cc: Cathy Zhang <cathy.zhang@intel.com>
+> > Cc: Dave Hansen <dave.hansen@linux.intel.com>
+> > Cc: Fenghua Yu <fenghua.yu@intel.com>
+> > Cc: "H. Peter Anvin" <hpa@zytor.com>
+> > Cc: Kyung Min Park <kyung.min.park@intel.com>
+> > Cc: Peter Zijlstra <peterz@infradead.org>
+> > Cc: "Ravi V. Shankar" <ravi.v.shankar@intel.com>
+> > Cc: Sean Christopherson <sean.j.christopherson@intel.com>
+> > Cc: linux-edac@vger.kernel.org
+> > Cc: linux-kernel@vger.kernel.org
+> > Suggested-by: Andy Lutomirski <luto@kernel.org>
+> > Signed-off-by: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+> > ---
+> > This is a v2 from my initial submission [1]. The first three patches of
+> > the series have been merged in Linus' tree. Hence, I am submitting only
+> > this patch for review.
+> > 
+> > [1]. https://lkml.org/lkml/2020/7/27/8
+> > 
+> > Changes since v1:
+> >  * Support SERIALIZE using alternative runtime patching.
+> >    (Peter Zijlstra, H. Peter Anvin)
+> >  * Added a note to specify which version of binutils supports SERIALIZE.
+> >    (Peter Zijlstra)
+> >  * Verified that (::: "memory") is used. (H. Peter Anvin)
+> > ---
+> >  arch/x86/include/asm/special_insns.h |  2 ++
+> >  arch/x86/include/asm/sync_core.h     | 10 +++++++++-
+> >  2 files changed, 11 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/arch/x86/include/asm/special_insns.h b/arch/x86/include/asm/special_insns.h
+> > index 59a3e13204c3..25cd67801dda 100644
+> > --- a/arch/x86/include/asm/special_insns.h
+> > +++ b/arch/x86/include/asm/special_insns.h
+> > @@ -10,6 +10,8 @@
+> >  #include <linux/irqflags.h>
+> >  #include <linux/jump_label.h>
+> >  
+> > +/* Instruction opcode for SERIALIZE; supported in binutils >= 2.35. */
+> > +#define __ASM_SERIALIZE ".byte 0xf, 0x1, 0xe8"
+> >  /*
+> >   * Volatile isn't enough to prevent the compiler from reordering the
+> >   * read/write functions for the control registers and messing everything up.
+> > diff --git a/arch/x86/include/asm/sync_core.h b/arch/x86/include/asm/sync_core.h
+> > index fdb5b356e59b..201ea3d9a6bd 100644
+> > --- a/arch/x86/include/asm/sync_core.h
+> > +++ b/arch/x86/include/asm/sync_core.h
+> > @@ -5,15 +5,19 @@
+> >  #include <linux/preempt.h>
+> >  #include <asm/processor.h>
+> >  #include <asm/cpufeature.h>
+> > +#include <asm/special_insns.h>
+> >  
+> >  #ifdef CONFIG_X86_32
+> >  static inline void iret_to_self(void)
+> >  {
+> >  	asm volatile (
+> > +		ALTERNATIVE("", "jmp 2f", X86_FEATURE_SERIALIZE)
+> >  		"pushfl\n\t"
+> >  		"pushl %%cs\n\t"
+> >  		"pushl $1f\n\t"
+> >  		"iret\n\t"
+> > +		"2:\n\t"
+> > +		__ASM_SERIALIZE "\n"
+> >  		"1:"
+> >  		: ASM_CALL_CONSTRAINT : : "memory");
+> >  }
+> > @@ -23,6 +27,7 @@ static inline void iret_to_self(void)
+> >  	unsigned int tmp;
+> >  
+> >  	asm volatile (
+> > +		ALTERNATIVE("", "jmp 2f", X86_FEATURE_SERIALIZE)
 > 
-> Can't yet - SERIALIZE CPUs are a minority at the moment.
+> Why is this and above stuck inside the asm statement?
 > 
-> > and have the call/jmp replaced by SERIALIZE inline.
+> Why can't you simply do:
 > 
-> Well, we could do:
+> 	if (static_cpu_has(X86_FEATURE_SERIALIZE)) {
+> 		asm volatile(__ASM_SERIALIZE ::: "memory");
+> 		return;
+> 	}
 > 
-> 	alternative_io("... IRET bunch", __ASM_SERIALIZE, X86_FEATURE_SERIALIZE, ...);
-> 
-> and avoid all kinds of jumping. Alternatives get padded so there
-> would be a couple of NOPs following when SERIALIZE gets patched in
-> but it shouldn't be a problem. I guess one needs to look at what gcc
-> generates...
+> on function entry instead of making it more unreadable for no particular
+> reason?
 
-But the IRET-TO-SELF code has instruction which modify the stack. This
-would violate stack invariance in alternatives as enforced in commit
-7117f16bf460 ("objtool: Fix ORC vs alternatives"). As a result, objtool
-gives warnings as follows:
+My my first submission I had implemented it as you describe. The only
+difference was that I used boot_cpu_has() instead of static_cpu_has()
+as the latter has a comment stating that:
+	"Use static_cpu_has() only in fast paths (...) boot_cpu_has() is
+	 already fast enough for the majority of cases..."
 
-arch/x86/kernel/alternative.o: warning: objtool: do_sync_core()+0xe:
-alternative modifies stack
-
-Perhaps in this specific case it does not matter as the changes in the
-stack will be undone by IRET. However, using alternative_io would require
-adding the macro STACK_FRAME_NON_STANDARD to functions using sync_core().
-IMHO, it wouldn't look good.
-
-So maybe the best approach is to implement as you suggested using
-static_cpu_has()?
+sync_core_before_usermode() already handles what I think are the
+critical paths.
 
 Thanks and BR,
 Ricardo
