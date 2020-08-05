@@ -2,116 +2,119 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AFEAB23C9A7
-	for <lists+linux-edac@lfdr.de>; Wed,  5 Aug 2020 11:57:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 87F7723CEF8
+	for <lists+linux-edac@lfdr.de>; Wed,  5 Aug 2020 21:11:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726175AbgHEJ5Q (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Wed, 5 Aug 2020 05:57:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39314 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725868AbgHEJ5L (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Wed, 5 Aug 2020 05:57:11 -0400
-Received: from mail-wm1-x343.google.com (mail-wm1-x343.google.com [IPv6:2a00:1450:4864:20::343])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35A02C06174A;
-        Wed,  5 Aug 2020 02:57:11 -0700 (PDT)
-Received: by mail-wm1-x343.google.com with SMTP id c80so5253600wme.0;
-        Wed, 05 Aug 2020 02:57:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=1OAmVtSarOHcu5ZEW1PVzjCPTYGRQAmrkDItGjUPpX8=;
-        b=fjUp4EAV1gNYJf5jNJEPHu/eTAq2ehsmSAeDsPHlO4hKzSThUSJ7U4GfIHYwQSX8b/
-         DFajIrYJoNyhO21WVG2iZdLL8rDz4nCsADns0oGiWk8QIUE3SeenexMDCqOs4ANqa9N2
-         72yWk7/SuyiaLZ7gz2A8rkQT3PQ/+40618j7P6tqA6Bast9aIc0e7RBLWurLhvHcVtHc
-         zNRswRMhv5bBTWJZ7ws0oP06BwsbpzfE2qayfUuS8K+Mvdj44ZsywzcGWIBErUu10MHB
-         WWLAPOapnMB1aHh73c/zgx6WvLgJ/hyAEuFP7V/Dod+6kjy4YfWxT5tlZHBPGYvb7CJn
-         Ij5w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=1OAmVtSarOHcu5ZEW1PVzjCPTYGRQAmrkDItGjUPpX8=;
-        b=RwKRHWtXlSE5ote94ipaFqHYoFDJlaKC/S8p1OTyTXyjGTyV1ElVlSps6Z9KTajcoQ
-         I+Ok1VHBW2xTMgGXsHt3jgzTsvo6zKY/DdI1gWZVYKjj2fM6enl3LrRtDbbhRVYX0lgy
-         LqWwNcI1pSPM6tt8bTtElzcgS9jVusrNSWjXL1Ft5KN1F1DbYWupOvqRO2D8oVHpkRJY
-         pNiFtDA1SQB1IPjzkdPoA6XTETWfNtBG4/64TTX5/GB8LXnuT6OGX65H1OjGZoiK/9sJ
-         4bK44bc5u1mTwpbpZ2SX0Ta5ANgeoeDx9xSGPmI3VQ+yca77CMd0D5E+ps2pAxfsvUnD
-         keOA==
-X-Gm-Message-State: AOAM531F/eJ24idcYBR4Nk/1eiOb90L9Eq9jS/BF85/wR40X4Fs/XTgX
-        xkks+O4fcli5O87pL14nbQG7JE2DN/laqg==
-X-Google-Smtp-Source: ABdhPJyr4pSazTF5B0tG/B7oKblc6I0+bG+S/lN546VhaOYAv89cbYuDXxavI76P0qEWi3Iaw5tRUg==
-X-Received: by 2002:a1c:24d5:: with SMTP id k204mr2459529wmk.159.1596621429826;
-        Wed, 05 Aug 2020 02:57:09 -0700 (PDT)
-Received: from luca020400-arch.lan ([2001:b07:5d33:19f:d537:6bdb:9442:dd28])
-        by smtp.googlemail.com with ESMTPSA id n24sm2164021wmi.36.2020.08.05.02.57.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Aug 2020 02:57:09 -0700 (PDT)
-From:   Luca Stefani <luca.stefani.ge1@gmail.com>
-Cc:     Luca Stefani <luca.stefani.ge1@gmail.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Borislav Petkov <bp@alien8.de>, linux-edac@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2] RAS/CEC: Fix cec_init prototype
-Date:   Wed,  5 Aug 2020 11:57:08 +0200
-Message-Id: <20200805095708.83939-1-luca.stefani.ge1@gmail.com>
-X-Mailer: git-send-email 2.28.0
-In-Reply-To: <20200805045955.GB9127@nazgul.tnic>
-References: <20200805045955.GB9127@nazgul.tnic>
+        id S1728270AbgHETLI (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Wed, 5 Aug 2020 15:11:08 -0400
+Received: from mail.kernel.org ([198.145.29.99]:35876 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729239AbgHESaU (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Wed, 5 Aug 2020 14:30:20 -0400
+Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com [209.85.221.47])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 8EACC22D05
+        for <linux-edac@vger.kernel.org>; Wed,  5 Aug 2020 18:28:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1596652125;
+        bh=+orqcmMUx4wxaMB9/tQ3uZegiQO+qPJJ8gk9VLAh5zc=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=ZtbhdZQb8DxFu52vBQlyZFa7mtogYGtT8u6xo/+b98WHp8k4XiUzDMX1klsd7tGrP
+         Bo06uJP01CF1VNyEC5XlX7b1bxLCrDLUIhM4lNG5CFpPeXMQxUCyzJl/6FHWzhYIBs
+         vhzq54eGavaU3btohR0RQ78MwIS8roo/QUETwAtg=
+Received: by mail-wr1-f47.google.com with SMTP id c15so5396486wrs.11
+        for <linux-edac@vger.kernel.org>; Wed, 05 Aug 2020 11:28:45 -0700 (PDT)
+X-Gm-Message-State: AOAM533w/KUb8thb0+A1gPP6kEz+KLa8ACOIlpIn5hoBehdWeLYIeW09
+        INNcqd99VBDy3vePdvYNlNCuBBHY1mjnm6r1Ptuhqg==
+X-Google-Smtp-Source: ABdhPJw0T73JhpPablAM0weF5CdOo7RMDuTXYhROjwPq7A2D3w0EFQfTjsbQ7zXQqefzQ2gXJGI+6d2aG6nYRsojZ3E=
+X-Received: by 2002:a5d:65d2:: with SMTP id e18mr3831077wrw.70.1596652124048;
+ Wed, 05 Aug 2020 11:28:44 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-To:     unlisted-recipients:; (no To-header on input)
+References: <20200805021059.1331-1-ricardo.neri-calderon@linux.intel.com>
+ <20200805044840.GA9127@nazgul.tnic> <47A60E6A-0742-45FB-B707-175E87C58184@zytor.com>
+ <20200805050808.GC9127@nazgul.tnic> <20200805170717.GB26661@ranerica-svr.sc.intel.com>
+In-Reply-To: <20200805170717.GB26661@ranerica-svr.sc.intel.com>
+From:   Andy Lutomirski <luto@kernel.org>
+Date:   Wed, 5 Aug 2020 11:28:31 -0700
+X-Gmail-Original-Message-ID: <CALCETrWByBugaunKPz52sdOGJpEdNNMK2kcp-wXgjFpFZuoOmQ@mail.gmail.com>
+Message-ID: <CALCETrWByBugaunKPz52sdOGJpEdNNMK2kcp-wXgjFpFZuoOmQ@mail.gmail.com>
+Subject: Re: [PATCH v2] x86/cpu: Use SERIALIZE in sync_core() when available
+To:     Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+Cc:     Borislav Petkov <bp@alien8.de>, "H. Peter Anvin" <hpa@zytor.com>,
+        Borislav Petkov <bp@suse.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@kernel.org>,
+        Andy Lutomirski <luto@kernel.org>, X86 ML <x86@kernel.org>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Cathy Zhang <cathy.zhang@intel.com>,
+        Fenghua Yu <fenghua.yu@intel.com>,
+        Kyung Min Park <kyung.min.park@intel.com>,
+        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
+        Sean Christopherson <sean.j.christopherson@intel.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Ricardo Neri <ricardo.neri@intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        linux-edac <linux-edac@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-* late_initcall expects a function that returns an integer
-  -> Update the function signature to match.
+On Wed, Aug 5, 2020 at 10:07 AM Ricardo Neri
+<ricardo.neri-calderon@linux.intel.com> wrote:
+>
+> On Wed, Aug 05, 2020 at 07:08:08AM +0200, Borislav Petkov wrote:
+> > On Tue, Aug 04, 2020 at 09:58:25PM -0700, hpa@zytor.com wrote:
+> > > Because why use an alternative to jump over one instruction?
+> > >
+> > > I personally would prefer to have the IRET put out of line
+> >
+> > Can't yet - SERIALIZE CPUs are a minority at the moment.
+> >
+> > > and have the call/jmp replaced by SERIALIZE inline.
+> >
+> > Well, we could do:
+> >
+> >       alternative_io("... IRET bunch", __ASM_SERIALIZE, X86_FEATURE_SERIALIZE, ...);
+> >
+> > and avoid all kinds of jumping. Alternatives get padded so there
+> > would be a couple of NOPs following when SERIALIZE gets patched in
+> > but it shouldn't be a problem. I guess one needs to look at what gcc
+> > generates...
+>
+> But the IRET-TO-SELF code has instruction which modify the stack. This
+> would violate stack invariance in alternatives as enforced in commit
+> 7117f16bf460 ("objtool: Fix ORC vs alternatives"). As a result, objtool
+> gives warnings as follows:
+>
+> arch/x86/kernel/alternative.o: warning: objtool: do_sync_core()+0xe:
+> alternative modifies stack
+>
+> Perhaps in this specific case it does not matter as the changes in the
+> stack will be undone by IRET. However, using alternative_io would require
+> adding the macro STACK_FRAME_NON_STANDARD to functions using sync_core().
+> IMHO, it wouldn't look good.
+>
+> So maybe the best approach is to implement as you suggested using
+> static_cpu_has()?
 
-Fixes: 9554bfe403nd ("x86/mce: Convert the CEC to use the MCE notifier")
-Signed-off-by: Luca Stefani <luca.stefani.ge1@gmail.com>
----
- drivers/ras/cec.c | 9 +++++----
- 1 file changed, 5 insertions(+), 4 deletions(-)
+I agree.  Let's keep it simple.
 
-diff --git a/drivers/ras/cec.c b/drivers/ras/cec.c
-index 569d9ad2c594..6939aa5b3dc7 100644
---- a/drivers/ras/cec.c
-+++ b/drivers/ras/cec.c
-@@ -553,20 +553,20 @@ static struct notifier_block cec_nb = {
- 	.priority	= MCE_PRIO_CEC,
- };
- 
--static void __init cec_init(void)
-+static int __init cec_init(void)
- {
- 	if (ce_arr.disabled)
--		return;
-+		return -ENODEV;
- 
- 	ce_arr.array = (void *)get_zeroed_page(GFP_KERNEL);
- 	if (!ce_arr.array) {
- 		pr_err("Error allocating CE array page!\n");
--		return;
-+		return -ENOMEM;
- 	}
- 
- 	if (create_debugfs_nodes()) {
- 		free_page((unsigned long)ce_arr.array);
--		return;
-+		return -ENOMEM;
- 	}
- 
- 	INIT_DELAYED_WORK(&cec_work, cec_work_fn);
-@@ -575,6 +575,7 @@ static void __init cec_init(void)
- 	mce_register_decode_chain(&cec_nb);
- 
- 	pr_info("Correctable Errors collector initialized.\n");
-+	return 0;
- }
- late_initcall(cec_init);
- 
--- 
-2.28.0
+Honestly, I think the right solution is to have iret_to_self() in
+actual asm and invoke it from C as needed.  IRET is *slow* -- trying
+to optimize it at all is silly.  The big optimization was switching
+from CPUID to IRET, since CPUID is slooooooooooooooooooow in virtual
+environments, whereas IRET is merely sloooooooow and SERIALIZE is
+probably just sloooow.
 
+(I once benchmarked it.  IIRC the winning version on my laptop is MOV
+to CR2 on bare metal and IRET in a Xen PV guest.  This optimization
+was not obviously worthwhile.)
+
+>
+> Thanks and BR,
+> Ricardo
