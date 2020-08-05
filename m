@@ -2,87 +2,116 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B08C723C4ED
-	for <lists+linux-edac@lfdr.de>; Wed,  5 Aug 2020 07:12:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AFEAB23C9A7
+	for <lists+linux-edac@lfdr.de>; Wed,  5 Aug 2020 11:57:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725868AbgHEFMw (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Wed, 5 Aug 2020 01:12:52 -0400
-Received: from terminus.zytor.com ([198.137.202.136]:53135 "EHLO
-        mail.zytor.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725372AbgHEFMw (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Wed, 5 Aug 2020 01:12:52 -0400
-Received: from [IPv6:2601:646:8600:3281:4d47:1bf:1c0:ca78] ([IPv6:2601:646:8600:3281:4d47:1bf:1c0:ca78])
-        (authenticated bits=0)
-        by mail.zytor.com (8.15.2/8.15.2) with ESMTPSA id 0755AV731344388
-        (version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
-        Tue, 4 Aug 2020 22:10:31 -0700
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 0755AV731344388
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
-        s=2020072401; t=1596604231;
-        bh=9mqOS6RNAraQiHKEtxREY8I8rwz6Kyg/eHWTnjLyUwE=;
-        h=Date:In-Reply-To:References:Subject:To:CC:From:From;
-        b=FG2VCEsKz9kEVGxIgEwB1tK2lmtTvgeODXqDe9q3HM8LRX2bu5TGi6UoMSvXSorTu
-         5ZGXx3usLhVO/VlSx7mAP1wj3ttXL4MO358JAyc7iuyk375HFxqYlOkuF9h6w6LEbb
-         HMzYCsCr+iqVRrtapBxil0xbkK7ItXV/W6krqNheu7zV94fooKhJT63wPuOUipO85C
-         umTQ22XzKp9hyt0hMwJ9RTEJGr61r7hQtw/z1HpmwEt79oqptvUadw9uT4XMXJ0mRJ
-         8HL4DeMFmXf24o4UTjuVYVtcEh8JgocQ2Dx5oAjLDIk3JE0xVScDKO02yOQtSfiHtY
-         q23EWnv9PVziA==
-Date:   Tue, 04 Aug 2020 22:10:22 -0700
-User-Agent: K-9 Mail for Android
-In-Reply-To: <20200805050808.GC9127@nazgul.tnic>
-References: <20200805021059.1331-1-ricardo.neri-calderon@linux.intel.com> <20200805044840.GA9127@nazgul.tnic> <47A60E6A-0742-45FB-B707-175E87C58184@zytor.com> <20200805050808.GC9127@nazgul.tnic>
-MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH v2] x86/cpu: Use SERIALIZE in sync_core() when available
-To:     Borislav Petkov <bp@alien8.de>
-CC:     Borislav Petkov <bp@suse.de>,
-        Ricardo Neri <ricardo.neri-calderon@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@kernel.org>,
-        Andy Lutomirski <luto@kernel.org>, x86@kernel.org,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Dave Hansen <dave.hansen@intel.com>,
+        id S1726175AbgHEJ5Q (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Wed, 5 Aug 2020 05:57:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39314 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725868AbgHEJ5L (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Wed, 5 Aug 2020 05:57:11 -0400
+Received: from mail-wm1-x343.google.com (mail-wm1-x343.google.com [IPv6:2a00:1450:4864:20::343])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35A02C06174A;
+        Wed,  5 Aug 2020 02:57:11 -0700 (PDT)
+Received: by mail-wm1-x343.google.com with SMTP id c80so5253600wme.0;
+        Wed, 05 Aug 2020 02:57:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=1OAmVtSarOHcu5ZEW1PVzjCPTYGRQAmrkDItGjUPpX8=;
+        b=fjUp4EAV1gNYJf5jNJEPHu/eTAq2ehsmSAeDsPHlO4hKzSThUSJ7U4GfIHYwQSX8b/
+         DFajIrYJoNyhO21WVG2iZdLL8rDz4nCsADns0oGiWk8QIUE3SeenexMDCqOs4ANqa9N2
+         72yWk7/SuyiaLZ7gz2A8rkQT3PQ/+40618j7P6tqA6Bast9aIc0e7RBLWurLhvHcVtHc
+         zNRswRMhv5bBTWJZ7ws0oP06BwsbpzfE2qayfUuS8K+Mvdj44ZsywzcGWIBErUu10MHB
+         WWLAPOapnMB1aHh73c/zgx6WvLgJ/hyAEuFP7V/Dod+6kjy4YfWxT5tlZHBPGYvb7CJn
+         Ij5w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=1OAmVtSarOHcu5ZEW1PVzjCPTYGRQAmrkDItGjUPpX8=;
+        b=RwKRHWtXlSE5ote94ipaFqHYoFDJlaKC/S8p1OTyTXyjGTyV1ElVlSps6Z9KTajcoQ
+         I+Ok1VHBW2xTMgGXsHt3jgzTsvo6zKY/DdI1gWZVYKjj2fM6enl3LrRtDbbhRVYX0lgy
+         LqWwNcI1pSPM6tt8bTtElzcgS9jVusrNSWjXL1Ft5KN1F1DbYWupOvqRO2D8oVHpkRJY
+         pNiFtDA1SQB1IPjzkdPoA6XTETWfNtBG4/64TTX5/GB8LXnuT6OGX65H1OjGZoiK/9sJ
+         4bK44bc5u1mTwpbpZ2SX0Ta5ANgeoeDx9xSGPmI3VQ+yca77CMd0D5E+ps2pAxfsvUnD
+         keOA==
+X-Gm-Message-State: AOAM531F/eJ24idcYBR4Nk/1eiOb90L9Eq9jS/BF85/wR40X4Fs/XTgX
+        xkks+O4fcli5O87pL14nbQG7JE2DN/laqg==
+X-Google-Smtp-Source: ABdhPJyr4pSazTF5B0tG/B7oKblc6I0+bG+S/lN546VhaOYAv89cbYuDXxavI76P0qEWi3Iaw5tRUg==
+X-Received: by 2002:a1c:24d5:: with SMTP id k204mr2459529wmk.159.1596621429826;
+        Wed, 05 Aug 2020 02:57:09 -0700 (PDT)
+Received: from luca020400-arch.lan ([2001:b07:5d33:19f:d537:6bdb:9442:dd28])
+        by smtp.googlemail.com with ESMTPSA id n24sm2164021wmi.36.2020.08.05.02.57.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 05 Aug 2020 02:57:09 -0700 (PDT)
+From:   Luca Stefani <luca.stefani.ge1@gmail.com>
+Cc:     Luca Stefani <luca.stefani.ge1@gmail.com>,
         Tony Luck <tony.luck@intel.com>,
-        Cathy Zhang <cathy.zhang@intel.com>,
-        Fenghua Yu <fenghua.yu@intel.com>,
-        Kyung Min Park <kyung.min.park@intel.com>,
-        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
-        Sean Christopherson <sean.j.christopherson@intel.com>,
-        linux-kernel@vger.kernel.org,
-        Ricardo Neri <ricardo.neri@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        linux-edac@vger.kernel.org
-From:   hpa@zytor.com
-Message-ID: <2511352F-5D28-4337-A4A2-1B54073F1F72@zytor.com>
+        Borislav Petkov <bp@alien8.de>, linux-edac@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2] RAS/CEC: Fix cec_init prototype
+Date:   Wed,  5 Aug 2020 11:57:08 +0200
+Message-Id: <20200805095708.83939-1-luca.stefani.ge1@gmail.com>
+X-Mailer: git-send-email 2.28.0
+In-Reply-To: <20200805045955.GB9127@nazgul.tnic>
+References: <20200805045955.GB9127@nazgul.tnic>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+To:     unlisted-recipients:; (no To-header on input)
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On August 4, 2020 10:08:08 PM PDT, Borislav Petkov <bp@alien8=2Ede> wrote:
->On Tue, Aug 04, 2020 at 09:58:25PM -0700, hpa@zytor=2Ecom wrote:
->> Because why use an alternative to jump over one instruction?
->>
->> I personally would prefer to have the IRET put out of line
->
->Can't yet - SERIALIZE CPUs are a minority at the moment=2E
->
->> and have the call/jmp replaced by SERIALIZE inline=2E
->
->Well, we could do:
->
->	alternative_io("=2E=2E=2E IRET bunch", __ASM_SERIALIZE,
->X86_FEATURE_SERIALIZE, =2E=2E=2E);
->
->and avoid all kinds of jumping=2E Alternatives get padded so there
->would be a couple of NOPs following when SERIALIZE gets patched in
->but it shouldn't be a problem=2E I guess one needs to look at what gcc
->generates=2E=2E=2E
+* late_initcall expects a function that returns an integer
+  -> Update the function signature to match.
 
-I didn't say behind a trap=2E IRET is a control transfer instruction, and =
-slow, so putting it out of line really isn't unreasonable=2E Can even do a =
-call to a common handler=2E
---=20
-Sent from my Android device with K-9 Mail=2E Please excuse my brevity=2E
+Fixes: 9554bfe403nd ("x86/mce: Convert the CEC to use the MCE notifier")
+Signed-off-by: Luca Stefani <luca.stefani.ge1@gmail.com>
+---
+ drivers/ras/cec.c | 9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/ras/cec.c b/drivers/ras/cec.c
+index 569d9ad2c594..6939aa5b3dc7 100644
+--- a/drivers/ras/cec.c
++++ b/drivers/ras/cec.c
+@@ -553,20 +553,20 @@ static struct notifier_block cec_nb = {
+ 	.priority	= MCE_PRIO_CEC,
+ };
+ 
+-static void __init cec_init(void)
++static int __init cec_init(void)
+ {
+ 	if (ce_arr.disabled)
+-		return;
++		return -ENODEV;
+ 
+ 	ce_arr.array = (void *)get_zeroed_page(GFP_KERNEL);
+ 	if (!ce_arr.array) {
+ 		pr_err("Error allocating CE array page!\n");
+-		return;
++		return -ENOMEM;
+ 	}
+ 
+ 	if (create_debugfs_nodes()) {
+ 		free_page((unsigned long)ce_arr.array);
+-		return;
++		return -ENOMEM;
+ 	}
+ 
+ 	INIT_DELAYED_WORK(&cec_work, cec_work_fn);
+@@ -575,6 +575,7 @@ static void __init cec_init(void)
+ 	mce_register_decode_chain(&cec_nb);
+ 
+ 	pr_info("Correctable Errors collector initialized.\n");
++	return 0;
+ }
+ late_initcall(cec_init);
+ 
+-- 
+2.28.0
+
