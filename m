@@ -2,127 +2,71 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E12C23E44B
-	for <lists+linux-edac@lfdr.de>; Fri,  7 Aug 2020 01:08:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB4C923E462
+	for <lists+linux-edac@lfdr.de>; Fri,  7 Aug 2020 01:32:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725998AbgHFXIu (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Thu, 6 Aug 2020 19:08:50 -0400
-Received: from mga02.intel.com ([134.134.136.20]:49544 "EHLO mga02.intel.com"
+        id S1725999AbgHFXcc (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Thu, 6 Aug 2020 19:32:32 -0400
+Received: from mga03.intel.com ([134.134.136.65]:22362 "EHLO mga03.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725812AbgHFXIs (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Thu, 6 Aug 2020 19:08:48 -0400
-IronPort-SDR: X0HQWG+X0rw55wE1hUQ0tsIWq+g3YKKVP93lHttM258GtizM4vJYfYVaBAAhFPqPWODWB9BMpp
- FveDE+QsyOTg==
-X-IronPort-AV: E=McAfee;i="6000,8403,9705"; a="140825198"
+        id S1725927AbgHFXcc (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Thu, 6 Aug 2020 19:32:32 -0400
+IronPort-SDR: QRCRg1gFD9h3wWKraZVXOXH2Xmmn6sXZWgaueUfcL2fx4IQikL3JGCttPZYDPBCKemthHY7z7v
+ SSKS4vj+zZQg==
+X-IronPort-AV: E=McAfee;i="6000,8403,9705"; a="152913753"
 X-IronPort-AV: E=Sophos;i="5.75,443,1589266800"; 
-   d="scan'208";a="140825198"
+   d="scan'208";a="152913753"
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Aug 2020 16:08:48 -0700
-IronPort-SDR: InTn3SaS92XA5IfZgT9Ttlk+boF6H7ifkXIB6AFOsHfWq271XXoTdj+h4jSxDcIKl57V9/w+Fc
- 45tncFjbwnXA==
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Aug 2020 16:32:31 -0700
+IronPort-SDR: IiY9y7w9DumXRuJdonrOK9z9cKJOBgMWgPuKwrKLpCSHFUivdY6CwnbJY0nJwJb/eK5nJPOo7+
+ jIQ5cUq7J7PA==
 X-IronPort-AV: E=Sophos;i="5.75,443,1589266800"; 
-   d="scan'208";a="307189468"
-Received: from vharish-mobl.amr.corp.intel.com (HELO [10.251.1.104]) ([10.251.1.104])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Aug 2020 16:08:47 -0700
-Subject: Re: [PATCH v3] x86/cpu: Use SERIALIZE in sync_core() when available
-To:     Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@kernel.org>, Borislav Petkov <bp@suse.de>,
-        Andy Lutomirski <luto@kernel.org>, x86@kernel.org,
-        Tony Luck <tony.luck@intel.com>,
-        Cathy Zhang <cathy.zhang@intel.com>,
-        Fenghua Yu <fenghua.yu@intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Kyung Min Park <kyung.min.park@intel.com>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
-        Sean Christopherson <sean.j.christopherson@intel.com>,
-        linux-kernel@vger.kernel.org,
-        Ricardo Neri <ricardo.neri@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        linux-edac@vger.kernel.org
-References: <20200806192531.25136-1-ricardo.neri-calderon@linux.intel.com>
- <a6ab438e-8ca8-999f-9eb9-c43fe1b9f128@intel.com>
- <20200806230455.GA25599@ranerica-svr.sc.intel.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-Autocrypt: addr=dave.hansen@intel.com; keydata=
- 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
- z5cecg==
-Message-ID: <929b76df-7da8-9147-3939-5e044f9d7728@intel.com>
-Date:   Thu, 6 Aug 2020 16:08:47 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+   d="scan'208";a="468035766"
+Received: from agluck-desk2.sc.intel.com (HELO agluck-desk2.amr.corp.intel.com) ([10.3.52.68])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Aug 2020 16:32:30 -0700
+Date:   Thu, 6 Aug 2020 16:32:29 -0700
+From:   "Luck, Tony" <tony.luck@intel.com>
+To:     Jason Baron <jbaron@akamai.com>
+Cc:     bp@suse.de, linux-kernel@vger.kernel.org,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-edac <linux-edac@vger.kernel.org>
+Subject: Re: [PATCH] EDAC/ie31200: fallback if host bridge device is already
+ initialized
+Message-ID: <20200806233229.GA4585@agluck-desk2.amr.corp.intel.com>
+References: <1594923911-10885-1-git-send-email-jbaron@akamai.com>
+ <20200716185242.GA7045@agluck-desk2.amr.corp.intel.com>
+ <dd7ee3d5-0a4c-adcc-ffc3-8e9b8b335683@akamai.com>
+ <3559de79-da8f-5100-f62d-938cbd68ea82@akamai.com>
 MIME-Version: 1.0
-In-Reply-To: <20200806230455.GA25599@ranerica-svr.sc.intel.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <3559de79-da8f-5100-f62d-938cbd68ea82@akamai.com>
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On 8/6/20 4:04 PM, Ricardo Neri wrote:
-> 	 * CPUID is the conventional way, but it's nasty: it doesn't
-> 	 * exist on some 486-like CPUs, and it usually exits to a
-> 	 * hypervisor.
-> 	 *
->  	 * The SERIALIZE instruction is the most straightforward way to
->  	 * do this as it does not clobber registers or exit to a
-> 	 * hypervisor. However, it is not universally available.
->  	 *
-> 	 * Like all of Linux's memory ordering operations, this is a
-> 	 * compiler barrier as well.
-> 	 */
+On Thu, Aug 06, 2020 at 05:35:49PM -0400, Jason Baron wrote:
 > 
-> What do you think?
+> 
+> On 7/16/20 4:33 PM, Jason Baron wrote:
+> > 
+> > 
+> > On 7/16/20 2:52 PM, Luck, Tony wrote:
+> >> On Thu, Jul 16, 2020 at 02:25:11PM -0400, Jason Baron wrote:
+> >>> The Intel uncore driver may claim some of the pci ids from ie31200 which
+> >>> means that the ie31200 edac driver will not initialize them as part of
+> >>> pci_register_driver().
+> >>>
+> 
+> Hi,
+> 
+> I just wondering if there is any feedback on this issue, without this
+> patch the ie31200 edac driver doesn't load properly on a number of boxes.
 
-I like what I suggested.  :)
+Applied it now.  I'll see if I can get it merged for v5.9 (since
+you posted in plenty of time to make this merge window).
 
-SERIALIZE is best where available.  Do it first, comment it by itself.
-
-Then, go into the long discussion of the other alternatives.  They only
-make sense when SERIALIZE isn't there, and the logic for selection there
-is substantially more complicated.
+-Tony
