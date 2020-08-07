@@ -2,168 +2,96 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9082523E645
-	for <lists+linux-edac@lfdr.de>; Fri,  7 Aug 2020 05:28:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A92D23EF07
+	for <lists+linux-edac@lfdr.de>; Fri,  7 Aug 2020 16:29:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726055AbgHGD2x (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Thu, 6 Aug 2020 23:28:53 -0400
-Received: from mga03.intel.com ([134.134.136.65]:42799 "EHLO mga03.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726038AbgHGD2x (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Thu, 6 Aug 2020 23:28:53 -0400
-IronPort-SDR: 1yj1qdaEnfZxoBT2AGV1VeRA/MfhZxlf7rprVnG+pqUtRFRzrTkA5d6TfhjeKlGhBIM8IJffyr
- eGFXwhC57oXQ==
-X-IronPort-AV: E=McAfee;i="6000,8403,9705"; a="152954956"
-X-IronPort-AV: E=Sophos;i="5.75,444,1589266800"; 
-   d="scan'208";a="152954956"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Aug 2020 20:28:52 -0700
-IronPort-SDR: 0E9cD/H5fx6Fo8etzqI3DOSq93r7jaZixsz19Qs2x+B5XHvjWPDTEOoPHMV5YNll+efx/om4Hx
- lwksviia0Z3Q==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.75,444,1589266800"; 
-   d="scan'208";a="468084410"
-Received: from ranerica-svr.sc.intel.com ([172.25.110.23])
-  by orsmga005.jf.intel.com with ESMTP; 06 Aug 2020 20:28:51 -0700
-From:   Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@kernel.org>, Borislav Petkov <bp@suse.de>,
-        Andy Lutomirski <luto@kernel.org>, x86@kernel.org,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>
-Cc:     Dave Hansen <dave.hansen@intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Cathy Zhang <cathy.zhang@intel.com>,
-        Fenghua Yu <fenghua.yu@intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Kyung Min Park <kyung.min.park@intel.com>,
-        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
-        Sean Christopherson <sean.j.christopherson@intel.com>,
-        linux-kernel@vger.kernel.org,
-        Ricardo Neri <ricardo.neri@intel.com>,
-        Ricardo Neri <ricardo.neri-calderon@linux.intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        linux-edac@vger.kernel.org
-Subject: [PATCH v4] x86/cpu: Use SERIALIZE in sync_core() when available
-Date:   Thu,  6 Aug 2020 20:28:33 -0700
-Message-Id: <20200807032833.17484-1-ricardo.neri-calderon@linux.intel.com>
-X-Mailer: git-send-email 2.17.1
+        id S1726030AbgHGO3F (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Fri, 7 Aug 2020 10:29:05 -0400
+Received: from mx0b-002e3701.pphosted.com ([148.163.143.35]:28088 "EHLO
+        mx0b-002e3701.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725815AbgHGO3E (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Fri, 7 Aug 2020 10:29:04 -0400
+Received: from pps.filterd (m0134425.ppops.net [127.0.0.1])
+        by mx0b-002e3701.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 077ESrl4004514;
+        Fri, 7 Aug 2020 14:28:53 GMT
+Received: from g9t5008.houston.hpe.com (g9t5008.houston.hpe.com [15.241.48.72])
+        by mx0b-002e3701.pphosted.com with ESMTP id 32qtumu0hh-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 07 Aug 2020 14:28:53 +0000
+Received: from stormcage.eag.rdlabs.hpecorp.net (stormcage.eag.rdlabs.hpecorp.net [128.162.236.70])
+        by g9t5008.houston.hpe.com (Postfix) with ESMTP id ADE724F;
+        Fri,  7 Aug 2020 14:28:17 +0000 (UTC)
+Received: by stormcage.eag.rdlabs.hpecorp.net (Postfix, from userid 48777)
+        id 472C0200F784F; Fri,  7 Aug 2020 09:28:17 -0500 (CDT)
+From:   Kyle Meyer <kyle.meyer@hpe.com>
+Cc:     russ.anderson@hpe.com, steve.wahl@hpe.com, kyle.meyer@hpe.com,
+        tony.luck@intel.com, bp@alien8.de, linux-edac@vger.kernel.org
+Subject: [PATCH] x86/MCE: Set the MCE's status and misc members
+Date:   Fri,  7 Aug 2020 09:27:50 -0500
+Message-Id: <20200807142750.270548-1-kyle.meyer@hpe.com>
+X-Mailer: git-send-email 2.12.3
+X-HPE-SCL: -1
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
+ definitions=2020-08-07_09:2020-08-06,2020-08-07 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ spamscore=0 mlxscore=0 bulkscore=0 clxscore=1011 impostorscore=0
+ malwarescore=0 mlxlogscore=999 suspectscore=0 adultscore=0 phishscore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2006250000 definitions=main-2008070105
+To:     unlisted-recipients:; (no To-header on input)
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-The SERIALIZE instruction gives software a way to force the processor to
-complete all modifications to flags, registers and memory from previous
-instructions and drain all buffered writes to memory before the next
-instruction is fetched and executed. Thus, it serves the purpose of
-sync_core(). Use it when available.
+The MCE's status and misc members are initialized to zero
+within mce_setup. Set the MCE's status and misc members to the
+corresponding values passed in by the mem_err argument. This provides
+support for the RAS: Corrected Errors Collector (CEC) which uses the
+MCE.
 
-Cc: Andy Lutomirski <luto@kernel.org>
-Cc: Cathy Zhang <cathy.zhang@intel.com>
-Cc: Dave Hansen <dave.hansen@linux.intel.com>
-Cc: Fenghua Yu <fenghua.yu@intel.com>
-Cc: "H. Peter Anvin" <hpa@zytor.com>
-Cc: Kyung Min Park <kyung.min.park@intel.com>
-Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: "Ravi V. Shankar" <ravi.v.shankar@intel.com>
-Cc: Sean Christopherson <sean.j.christopherson@intel.com>
-Cc: linux-edac@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
-Reviewed-by: Tony Luck <tony.luck@intel.com>
-Suggested-by: Andy Lutomirski <luto@kernel.org>
-Signed-off-by: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+Signed-off-by: Kyle Meyer <kyle.meyer@hpe.com>
 ---
-This is v4 from my three previous submission [1], [2], and [3]. The first
-three patches of the series have been merged in Linus' tree. Hence, I am
-submitting only this patch for review.
+ arch/x86/include/asm/mce.h     | 6 ++++--
+ arch/x86/kernel/cpu/mce/apei.c | 8 ++++++++
+ 2 files changed, 12 insertions(+), 2 deletions(-)
 
-[1]. https://lkml.org/lkml/2020/7/27/8
-[2]. https://lkml.org/lkml/2020/8/4/1090
-[3]. https://lkml.org/lkml/2020/8/6/808
-
-Changes since v3:
- * Reworked comments in sync_core() for better readability. (Dave Hansen)
- * Reworked the implementation to align with the style in special_insns.h.
-   No functional changes were introduced. (Tony Luck)
-
-Changes since v2:
- * Support serialize with static_cpu_has() instead of using alternative
-   runtime patching directly. (Borislav Petkov)
-
-Changes since v1:
- * Support SERIALIZE using alternative runtime patching.
-   (Peter Zijlstra, H. Peter Anvin)
- * Added a note to specify which version of binutils supports SERIALIZE.
-   (Peter Zijlstra)
- * Verified that (::: "memory") is used. (H. Peter Anvin)
----
- arch/x86/include/asm/special_insns.h |  6 ++++++
- arch/x86/include/asm/sync_core.h     | 26 ++++++++++++++++++--------
- 2 files changed, 24 insertions(+), 8 deletions(-)
-
-diff --git a/arch/x86/include/asm/special_insns.h b/arch/x86/include/asm/special_insns.h
-index 59a3e13204c3..5999b0b3dd4a 100644
---- a/arch/x86/include/asm/special_insns.h
-+++ b/arch/x86/include/asm/special_insns.h
-@@ -234,6 +234,12 @@ static inline void clwb(volatile void *__p)
+diff --git a/arch/x86/include/asm/mce.h b/arch/x86/include/asm/mce.h
+index cf503824529c..2346d900a232 100644
+--- a/arch/x86/include/asm/mce.h
++++ b/arch/x86/include/asm/mce.h
+@@ -79,8 +79,10 @@
+ #define MCACOD_INSTR	0x0150	/* Instruction Fetch */
  
- #define nop() asm volatile ("nop")
+ /* MCi_MISC register defines */
+-#define MCI_MISC_ADDR_LSB(m)	((m) & 0x3f)
+-#define MCI_MISC_ADDR_MODE(m)	(((m) >> 6) & 7)
++#define MCI_MISC_ADDR_LSB(m)		((m) & 0x3f)
++#define MCI_MISC_ADDR_LSB_SET(x) 	((x) & 0x3f)
++#define MCI_MISC_ADDR_MODE(m)		(((m) >> 6) & 7)
++#define MCI_MISC_ADDR_MODE_SET(x) 	(((x) & 7) << 6)
+ #define  MCI_MISC_ADDR_SEGOFF	0	/* segment offset */
+ #define  MCI_MISC_ADDR_LINEAR	1	/* linear address */
+ #define  MCI_MISC_ADDR_PHYS	2	/* physical address */
+diff --git a/arch/x86/kernel/cpu/mce/apei.c b/arch/x86/kernel/cpu/mce/apei.c
+index af8d37962586..efdfb55b934a 100644
+--- a/arch/x86/kernel/cpu/mce/apei.c
++++ b/arch/x86/kernel/cpu/mce/apei.c
+@@ -38,6 +38,14 @@ void apei_mce_report_mem_error(int severity, struct cper_sec_mem_err *mem_err)
+ 	/* Fake a memory read error with unknown channel */
+ 	m.status = MCI_STATUS_VAL | MCI_STATUS_EN | MCI_STATUS_ADDRV | 0x9f;
  
-+static inline void serialize(void)
-+{
-+	/* Instruction opcode for SERIALIZE; supported in binutils >= 2.35. */
-+	asm volatile(".byte 0xf, 0x1, 0xe8" ::: "memory");
-+}
-+
- #endif /* __KERNEL__ */
- 
- #endif /* _ASM_X86_SPECIAL_INSNS_H */
-diff --git a/arch/x86/include/asm/sync_core.h b/arch/x86/include/asm/sync_core.h
-index fdb5b356e59b..089712777fd9 100644
---- a/arch/x86/include/asm/sync_core.h
-+++ b/arch/x86/include/asm/sync_core.h
-@@ -5,6 +5,7 @@
- #include <linux/preempt.h>
- #include <asm/processor.h>
- #include <asm/cpufeature.h>
-+#include <asm/special_insns.h>
- 
- #ifdef CONFIG_X86_32
- static inline void iret_to_self(void)
-@@ -54,14 +55,23 @@ static inline void iret_to_self(void)
- static inline void sync_core(void)
- {
- 	/*
--	 * There are quite a few ways to do this.  IRET-to-self is nice
--	 * because it works on every CPU, at any CPL (so it's compatible
--	 * with paravirtualization), and it never exits to a hypervisor.
--	 * The only down sides are that it's a bit slow (it seems to be
--	 * a bit more than 2x slower than the fastest options) and that
--	 * it unmasks NMIs.  The "push %cs" is needed because, in
--	 * paravirtual environments, __KERNEL_CS may not be a valid CS
--	 * value when we do IRET directly.
-+	 * The SERIALIZE instruction is the most straightforward way to
-+	 * do this but it not universally available.
-+	 */
-+	if (static_cpu_has(X86_FEATURE_SERIALIZE)) {
-+		serialize();
-+		return;
++	if (boot_cpu_data.x86_vendor == X86_VENDOR_INTEL ||
++	    boot_cpu_data.x86_vendor == X86_VENDOR_ZHAOXIN) {
++		m.status |= MCI_STATUS_MISCV;
++		m.misc |= MCI_MISC_ADDR_LSB_SET(ffs(
++					mem_err->physical_addr_mask) - 1) |
++			  MCI_MISC_ADDR_MODE_SET(MCI_MISC_ADDR_PHYS);
 +	}
 +
-+	/*
-+	 * For all other processors, there are quite a few ways to do this
-+	 * IRET-to-self is nice because it works on every CPU, at any CPL
-+	 * (so it's compatible with paravirtualization), and it never exits
-+	 * to a hypervisor. The only down sides are that it's a bit slow
-+	 * (it seems to be a bit more than 2x slower than the fastest
-+	 * options) and that it unmasks NMIs.  The "push %cs" is needed
-+	 * because, in paravirtual environments, __KERNEL_CS may not be a
-+	 * valid CS value when we do IRET directly.
- 	 *
- 	 * In case NMI unmasking or performance ever becomes a problem,
- 	 * the next best option appears to be MOV-to-CR2 and an
+ 	if (severity >= GHES_SEV_RECOVERABLE)
+ 		m.status |= MCI_STATUS_UC;
+ 
 -- 
-2.17.1
+2.26.2
 
