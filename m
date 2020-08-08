@@ -2,34 +2,34 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7890E23FA3E
-	for <lists+linux-edac@lfdr.de>; Sun,  9 Aug 2020 01:41:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 46EFA23FA1E
+	for <lists+linux-edac@lfdr.de>; Sun,  9 Aug 2020 01:41:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728038AbgHHXlh (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Sat, 8 Aug 2020 19:41:37 -0400
-Received: from mail.kernel.org ([198.145.29.99]:56272 "EHLO mail.kernel.org"
+        id S1728936AbgHHXk5 (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Sat, 8 Aug 2020 19:40:57 -0400
+Received: from mail.kernel.org ([198.145.29.99]:56648 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727066AbgHHXkj (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Sat, 8 Aug 2020 19:40:39 -0400
+        id S1728145AbgHHXk4 (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Sat, 8 Aug 2020 19:40:56 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 180F92053B;
-        Sat,  8 Aug 2020 23:40:38 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 2C77C221E2;
+        Sat,  8 Aug 2020 23:40:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1596930038;
-        bh=BmFvSYOC5avABBb19lAm61NvJ0ZOipqaWWp6VsdLIJA=;
+        s=default; t=1596930055;
+        bh=HOXa4eD0bvE5fye5g9+SaQbqIgVHHLMvawfQXnpAunQ=;
         h=From:To:Cc:Subject:Date:From;
-        b=OYaztwnEfGFy9pVknc+6SozoJU0EOcBWD3MucdmEwc1BM4yYCXYof/YNLYL3OjQ7o
-         Q4+IFFEjCvNxesocQN6h9sX5W3xHHlqGonqMrlAXQgtbSTXw3t+b8bknVyFk4VoyAi
-         JKN9N5CODvEiuSjl2Zav0tdfSTZ9hpkJmKDTFlAU=
+        b=JZE+oyexIC/7i0mM3Y+SGKJH/oBTQgT4UXeGXajYrm1HK7Dc8V1VinS2cMzEgVBzl
+         XT9mrd3CScOgAeiA7tVOBenhRwVNV7ypOT13+YFIDnUD+K2+D1UwMWymtd6KdoVaJ4
+         JdIg9b1fkBJG4ZtwnHIg/dBMZL1Cd8oKfjaG8ujs=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Qiushi Wu <wu000273@umn.edu>, Borislav Petkov <bp@suse.de>,
         Sasha Levin <sashal@kernel.org>, linux-edac@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.9 1/9] EDAC: Fix reference count leaks
-Date:   Sat,  8 Aug 2020 19:40:28 -0400
-Message-Id: <20200808234037.3619732-1-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.4 1/5] EDAC: Fix reference count leaks
+Date:   Sat,  8 Aug 2020 19:40:49 -0400
+Message-Id: <20200808234054.3619873-1-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 X-stable: review
@@ -67,22 +67,22 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  2 files changed, 2 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/edac/edac_device_sysfs.c b/drivers/edac/edac_device_sysfs.c
-index 93da1a45c7161..470b02fc2de96 100644
+index fb68a06ad6837..18991cfec2af4 100644
 --- a/drivers/edac/edac_device_sysfs.c
 +++ b/drivers/edac/edac_device_sysfs.c
-@@ -275,6 +275,7 @@ int edac_device_register_sysfs_main_kobj(struct edac_device_ctl_info *edac_dev)
+@@ -280,6 +280,7 @@ int edac_device_register_sysfs_main_kobj(struct edac_device_ctl_info *edac_dev)
  
  	/* Error exit stack */
  err_kobj_reg:
 +	kobject_put(&edac_dev->kobj);
  	module_put(edac_dev->owner);
  
- err_out:
+ err_mod_get:
 diff --git a/drivers/edac/edac_pci_sysfs.c b/drivers/edac/edac_pci_sysfs.c
-index 6e3428ba400f3..622d117e25335 100644
+index 24d877f6e5775..c56128402bc67 100644
 --- a/drivers/edac/edac_pci_sysfs.c
 +++ b/drivers/edac/edac_pci_sysfs.c
-@@ -386,7 +386,7 @@ static int edac_pci_main_kobj_setup(void)
+@@ -394,7 +394,7 @@ static int edac_pci_main_kobj_setup(void)
  
  	/* Error unwind statck */
  kobject_init_and_add_fail:
