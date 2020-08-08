@@ -2,37 +2,39 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AABA823FBC5
-	for <lists+linux-edac@lfdr.de>; Sun,  9 Aug 2020 01:51:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 78F4123F9B7
+	for <lists+linux-edac@lfdr.de>; Sun,  9 Aug 2020 01:37:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726536AbgHHXgA (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Sat, 8 Aug 2020 19:36:00 -0400
-Received: from mail.kernel.org ([198.145.29.99]:48290 "EHLO mail.kernel.org"
+        id S1727976AbgHHXh3 (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Sat, 8 Aug 2020 19:37:29 -0400
+Received: from mail.kernel.org ([198.145.29.99]:50480 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726528AbgHHXgA (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Sat, 8 Aug 2020 19:36:00 -0400
+        id S1727968AbgHHXh1 (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Sat, 8 Aug 2020 19:37:27 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id EE243207BB;
-        Sat,  8 Aug 2020 23:35:58 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id B6E372073E;
+        Sat,  8 Aug 2020 23:37:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1596929759;
-        bh=U+gWfkrY3BsVuOe18g1jlpr8DJgrJunvSINNKdy/Hcs=;
+        s=default; t=1596929847;
+        bh=xfYaG1bsvUo5UvyrUtAI4ovzdgEKIRkl9oapADRDFIg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=kXvBKkTXxKnqED25yLxtdhJUjPcIMwMJBTBZyOBXqsh4dnJWKHYNDEmFIQ7RnLNx6
-         3BPN3WRumBXsL+XwG1fG5juFgkedd5JAY3O1UBoE3JXeszA0SunTEaf0aZOZtHtsSb
-         CfYAg8MnnXmcpLuEcFYdNW/gt2WEy9D0iJyXjJXo=
+        b=RTc1w1vs7ynS+jp7sZGYRtf4wBwrok+j8mnBA21n+tbFqAcZbNZPwrKIwdOqhhAn1
+         S9VO/5GlTe/biiSXnF0deyxCxMbaOExrjNKG53Tts6MJX0X69PRMVaogSOcDmKIPdt
+         HKJ+b+uT3ZU3alOhFrRyaBcpnvVTCtFtI/0ajtQQ=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Qiushi Wu <wu000273@umn.edu>, Borislav Petkov <bp@suse.de>,
+Cc:     Zhenzhong Duan <zhenzhong.duan@gmail.com>,
+        Borislav Petkov <bp@suse.de>,
+        Yazen Ghannam <yazen.ghannam@amd.com>,
         Sasha Levin <sashal@kernel.org>, linux-edac@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.8 13/72] EDAC: Fix reference count leaks
-Date:   Sat,  8 Aug 2020 19:34:42 -0400
-Message-Id: <20200808233542.3617339-13-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.7 02/58] x86/mce/inject: Fix a wrong assignment of i_mce.status
+Date:   Sat,  8 Aug 2020 19:36:28 -0400
+Message-Id: <20200808233724.3618168-2-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200808233542.3617339-1-sashal@kernel.org>
-References: <20200808233542.3617339-1-sashal@kernel.org>
+In-Reply-To: <20200808233724.3618168-1-sashal@kernel.org>
+References: <20200808233724.3618168-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -42,57 +44,36 @@ Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-From: Qiushi Wu <wu000273@umn.edu>
+From: Zhenzhong Duan <zhenzhong.duan@gmail.com>
 
-[ Upstream commit 17ed808ad243192fb923e4e653c1338d3ba06207 ]
+[ Upstream commit 5d7f7d1d5e01c22894dee7c9c9266500478dca99 ]
 
-When kobject_init_and_add() returns an error, it should be handled
-because kobject_init_and_add() takes a reference even when it fails. If
-this function returns an error, kobject_put() must be called to properly
-clean up the memory associated with the object.
+The original code is a nop as i_mce.status is or'ed with part of itself,
+fix it.
 
-Therefore, replace calling kfree() and call kobject_put() and add a
-missing kobject_put() in the edac_device_register_sysfs_main_kobj()
-error path.
-
- [ bp: Massage and merge into a single patch. ]
-
-Fixes: b2ed215a3338 ("Kobject: change drivers/edac to use kobject_init_and_add")
-Signed-off-by: Qiushi Wu <wu000273@umn.edu>
+Fixes: a1300e505297 ("x86/ras/mce_amd_inj: Trigger deferred and thresholding errors interrupts")
+Signed-off-by: Zhenzhong Duan <zhenzhong.duan@gmail.com>
 Signed-off-by: Borislav Petkov <bp@suse.de>
-Link: https://lkml.kernel.org/r/20200528202238.18078-1-wu000273@umn.edu
-Link: https://lkml.kernel.org/r/20200528203526.20908-1-wu000273@umn.edu
+Acked-by: Yazen Ghannam <yazen.ghannam@amd.com>
+Link: https://lkml.kernel.org/r/20200611023238.3830-1-zhenzhong.duan@gmail.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/edac/edac_device_sysfs.c | 1 +
- drivers/edac/edac_pci_sysfs.c    | 2 +-
- 2 files changed, 2 insertions(+), 1 deletion(-)
+ arch/x86/kernel/cpu/mce/inject.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/edac/edac_device_sysfs.c b/drivers/edac/edac_device_sysfs.c
-index 0e7ea3591b781..5e75937537997 100644
---- a/drivers/edac/edac_device_sysfs.c
-+++ b/drivers/edac/edac_device_sysfs.c
-@@ -275,6 +275,7 @@ int edac_device_register_sysfs_main_kobj(struct edac_device_ctl_info *edac_dev)
+diff --git a/arch/x86/kernel/cpu/mce/inject.c b/arch/x86/kernel/cpu/mce/inject.c
+index 3413b41b8d55f..dc28a615e340f 100644
+--- a/arch/x86/kernel/cpu/mce/inject.c
++++ b/arch/x86/kernel/cpu/mce/inject.c
+@@ -511,7 +511,7 @@ static void do_inject(void)
+ 	 */
+ 	if (inj_type == DFR_INT_INJ) {
+ 		i_mce.status |= MCI_STATUS_DEFERRED;
+-		i_mce.status |= (i_mce.status & ~MCI_STATUS_UC);
++		i_mce.status &= ~MCI_STATUS_UC;
+ 	}
  
- 	/* Error exit stack */
- err_kobj_reg:
-+	kobject_put(&edac_dev->kobj);
- 	module_put(edac_dev->owner);
- 
- err_out:
-diff --git a/drivers/edac/edac_pci_sysfs.c b/drivers/edac/edac_pci_sysfs.c
-index 72c9eb9fdffbe..53042af7262e2 100644
---- a/drivers/edac/edac_pci_sysfs.c
-+++ b/drivers/edac/edac_pci_sysfs.c
-@@ -386,7 +386,7 @@ static int edac_pci_main_kobj_setup(void)
- 
- 	/* Error unwind statck */
- kobject_init_and_add_fail:
--	kfree(edac_pci_top_main_kobj);
-+	kobject_put(edac_pci_top_main_kobj);
- 
- kzalloc_fail:
- 	module_put(THIS_MODULE);
+ 	/*
 -- 
 2.25.1
 
