@@ -2,95 +2,100 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 46EFA23FA1E
-	for <lists+linux-edac@lfdr.de>; Sun,  9 Aug 2020 01:41:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2755223FC99
+	for <lists+linux-edac@lfdr.de>; Sun,  9 Aug 2020 06:36:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728936AbgHHXk5 (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Sat, 8 Aug 2020 19:40:57 -0400
-Received: from mail.kernel.org ([198.145.29.99]:56648 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728145AbgHHXk4 (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Sat, 8 Aug 2020 19:40:56 -0400
-Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 2C77C221E2;
-        Sat,  8 Aug 2020 23:40:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1596930055;
-        bh=HOXa4eD0bvE5fye5g9+SaQbqIgVHHLMvawfQXnpAunQ=;
-        h=From:To:Cc:Subject:Date:From;
-        b=JZE+oyexIC/7i0mM3Y+SGKJH/oBTQgT4UXeGXajYrm1HK7Dc8V1VinS2cMzEgVBzl
-         XT9mrd3CScOgAeiA7tVOBenhRwVNV7ypOT13+YFIDnUD+K2+D1UwMWymtd6KdoVaJ4
-         JdIg9b1fkBJG4ZtwnHIg/dBMZL1Cd8oKfjaG8ujs=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Qiushi Wu <wu000273@umn.edu>, Borislav Petkov <bp@suse.de>,
-        Sasha Levin <sashal@kernel.org>, linux-edac@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.4 1/5] EDAC: Fix reference count leaks
-Date:   Sat,  8 Aug 2020 19:40:49 -0400
-Message-Id: <20200808234054.3619873-1-sashal@kernel.org>
-X-Mailer: git-send-email 2.25.1
+        id S1726321AbgHIEgO (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Sun, 9 Aug 2020 00:36:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56016 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725710AbgHIEgL (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Sun, 9 Aug 2020 00:36:11 -0400
+Received: from mail-pf1-x441.google.com (mail-pf1-x441.google.com [IPv6:2607:f8b0:4864:20::441])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADF76C061756
+        for <linux-edac@vger.kernel.org>; Sat,  8 Aug 2020 21:36:10 -0700 (PDT)
+Received: by mail-pf1-x441.google.com with SMTP id a79so3371552pfa.8
+        for <linux-edac@vger.kernel.org>; Sat, 08 Aug 2020 21:36:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20150623.gappssmtp.com; s=20150623;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=P21tL7daBF3yjezrA/PL3bwhuuAyesA+HDqEdHI5eFU=;
+        b=kJemo03+X3oJOjE2qhGI/wrF+x2Bq9Nuxd1UkRw82JP/J/1UnCgQPhfTA5DK2ghreM
+         DEOYdYirxqKjEkhZ+1AdiFMgUyktbxHcmE/7fPHbx6eW1pkdy/DqqpRvl0gqVQtG3qfL
+         xem9WVqBLZcVZ8qjGhr0hy7Vut7NmmaurZt1seGoXYLBEuyjx7th9ECe4pUgaE1D4Z5e
+         a/d/rjoeiFdC7v27eGX0CH35ekQ02kYJr5DfVW8y9eusgCUHaUa3ITY3cPRKalhENr3x
+         +NREy22FYA47eKSr4VFOLVzlNoT79jUnjLM6RLRkf8CzKJ3QKHG2a0oFBPOo6JfMQSHC
+         ri5Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=P21tL7daBF3yjezrA/PL3bwhuuAyesA+HDqEdHI5eFU=;
+        b=s4S1i/w77y7c1+fXg0EBjNjwuS84UBntGoWFfEblKzJ002nQUE2iHdwtGM/mw7aMua
+         Oqc+/XYgSkxVr74y7wzs/lX+r+EZX9g3PRO2U2H6NsdXURFUmr4uegeyOqdm+XofmsPf
+         H371Rj8RWW7q4AGLHdPXGaW9efCxbXhkz5fuyI2sCMy+ixxyyqPxcVZXdhfKBoFRzGRG
+         sufaeePgpaZNsPahVo7XSsNEU7UHv5odiYWJqEb8T0cGiBzlqTLagvW3KhNvKGamyYQw
+         s05k8ffV2hRht0ncBH+F5AhjyAiQLrZYOURspve4X8+AFHa+aLppZePEs4ReEzH1u67l
+         e8Dw==
+X-Gm-Message-State: AOAM533L5MAB4E8JqmySO9XLlxQzLaP9LcPZswfS0y7xBZnVwo1O6uuy
+        znXC8qaT12/7g1VRFPYYbG9ijw==
+X-Google-Smtp-Source: ABdhPJyaQAVZfx7NE4LBNsDHpjcC+Y5iS7iQdOvy3wN6qrVmdEYeRBauSp4wkqNvWbki3tozGQn05g==
+X-Received: by 2002:a05:6a00:22c9:: with SMTP id f9mr2728054pfj.212.1596947769639;
+        Sat, 08 Aug 2020 21:36:09 -0700 (PDT)
+Received: from FVFX41FWHV2J.bytedance.net ([103.136.220.69])
+        by smtp.gmail.com with ESMTPSA id s2sm16267741pjb.33.2020.08.08.21.36.05
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Sat, 08 Aug 2020 21:36:08 -0700 (PDT)
+From:   Feng zhou <zhoufeng.zf@bytedance.com>
+To:     bp@alien8.de, mchehab@kernel.org, tony.luck@intel.com,
+        james.morse@arm.com, rrichter@marvell.com
+Cc:     linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
+        liuxian.1@bytedance.com, zhoufeng.zf@bytedance.com
+Subject: [PATCH] x86/MCE/AMD, EDAC/mce_amd
+Date:   Sun,  9 Aug 2020 12:35:59 +0800
+Message-Id: <20200809043559.9740-1-zhoufeng.zf@bytedance.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-From: Qiushi Wu <wu000273@umn.edu>
+From: zhoufeng <zhoufeng.zf@bytedance.com>
 
-[ Upstream commit 17ed808ad243192fb923e4e653c1338d3ba06207 ]
+The edac_mce_amd module calls decode_dram_ecc() on AMD Family17h and
+later systems. This function is used in amd64_edac_mod to do
+system-specific decoding for DRAM ECC errors. The function takes a
+"NodeId" as a parameter.
 
-When kobject_init_and_add() returns an error, it should be handled
-because kobject_init_and_add() takes a reference even when it fails. If
-this function returns an error, kobject_put() must be called to properly
-clean up the memory associated with the object.
+In AMD documentation, NodeId is used to identify a physical die in a
+system. This can be used to identify a node in the AMD_NB code and also
+it is used with umc_normaddr_to_sysaddr().
 
-Therefore, replace calling kfree() and call kobject_put() and add a
-missing kobject_put() in the edac_device_register_sysfs_main_kobj()
-error path.
+However, the input used for decode_dram_ecc() is currently the NUMA node
+of a logical CPU. so this will cause the address translation function to
+fail or report incorrect results.
 
- [ bp: Massage and merge into a single patch. ]
-
-Fixes: b2ed215a3338 ("Kobject: change drivers/edac to use kobject_init_and_add")
-Signed-off-by: Qiushi Wu <wu000273@umn.edu>
-Signed-off-by: Borislav Petkov <bp@suse.de>
-Link: https://lkml.kernel.org/r/20200528202238.18078-1-wu000273@umn.edu
-Link: https://lkml.kernel.org/r/20200528203526.20908-1-wu000273@umn.edu
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Signed-off-by: zhoufeng <zhoufeng.zf@bytedance.com>
 ---
- drivers/edac/edac_device_sysfs.c | 1 +
- drivers/edac/edac_pci_sysfs.c    | 2 +-
- 2 files changed, 2 insertions(+), 1 deletion(-)
+ drivers/edac/mce_amd.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/edac/edac_device_sysfs.c b/drivers/edac/edac_device_sysfs.c
-index fb68a06ad6837..18991cfec2af4 100644
---- a/drivers/edac/edac_device_sysfs.c
-+++ b/drivers/edac/edac_device_sysfs.c
-@@ -280,6 +280,7 @@ int edac_device_register_sysfs_main_kobj(struct edac_device_ctl_info *edac_dev)
+diff --git a/drivers/edac/mce_amd.c b/drivers/edac/mce_amd.c
+index 325aedf46ff2..73c805113322 100644
+--- a/drivers/edac/mce_amd.c
++++ b/drivers/edac/mce_amd.c
+@@ -996,7 +996,7 @@ static void decode_smca_error(struct mce *m)
+ 	}
  
- 	/* Error exit stack */
- err_kobj_reg:
-+	kobject_put(&edac_dev->kobj);
- 	module_put(edac_dev->owner);
+ 	if (bank_type == SMCA_UMC && xec == 0 && decode_dram_ecc)
+-		decode_dram_ecc(cpu_to_node(m->extcpu), m);
++		decode_dram_ecc(topology_physical_package_id(m->extcpu), m);
+ }
  
- err_mod_get:
-diff --git a/drivers/edac/edac_pci_sysfs.c b/drivers/edac/edac_pci_sysfs.c
-index 24d877f6e5775..c56128402bc67 100644
---- a/drivers/edac/edac_pci_sysfs.c
-+++ b/drivers/edac/edac_pci_sysfs.c
-@@ -394,7 +394,7 @@ static int edac_pci_main_kobj_setup(void)
- 
- 	/* Error unwind statck */
- kobject_init_and_add_fail:
--	kfree(edac_pci_top_main_kobj);
-+	kobject_put(edac_pci_top_main_kobj);
- 
- kzalloc_fail:
- 	module_put(THIS_MODULE);
+ static inline void amd_decode_err_code(u16 ec)
 -- 
-2.25.1
+2.20.1
 
