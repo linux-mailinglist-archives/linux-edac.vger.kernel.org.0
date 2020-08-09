@@ -2,100 +2,72 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2755223FC99
-	for <lists+linux-edac@lfdr.de>; Sun,  9 Aug 2020 06:36:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 574B723FCED
+	for <lists+linux-edac@lfdr.de>; Sun,  9 Aug 2020 07:43:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726321AbgHIEgO (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Sun, 9 Aug 2020 00:36:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56016 "EHLO
+        id S1726200AbgHIFn3 (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Sun, 9 Aug 2020 01:43:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725710AbgHIEgL (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Sun, 9 Aug 2020 00:36:11 -0400
-Received: from mail-pf1-x441.google.com (mail-pf1-x441.google.com [IPv6:2607:f8b0:4864:20::441])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADF76C061756
-        for <linux-edac@vger.kernel.org>; Sat,  8 Aug 2020 21:36:10 -0700 (PDT)
-Received: by mail-pf1-x441.google.com with SMTP id a79so3371552pfa.8
-        for <linux-edac@vger.kernel.org>; Sat, 08 Aug 2020 21:36:10 -0700 (PDT)
+        with ESMTP id S1725988AbgHIFn3 (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Sun, 9 Aug 2020 01:43:29 -0400
+Received: from mail-ed1-x544.google.com (mail-ed1-x544.google.com [IPv6:2a00:1450:4864:20::544])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23760C061756
+        for <linux-edac@vger.kernel.org>; Sat,  8 Aug 2020 22:43:28 -0700 (PDT)
+Received: by mail-ed1-x544.google.com with SMTP id df16so4103082edb.9
+        for <linux-edac@vger.kernel.org>; Sat, 08 Aug 2020 22:43:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20150623.gappssmtp.com; s=20150623;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=P21tL7daBF3yjezrA/PL3bwhuuAyesA+HDqEdHI5eFU=;
-        b=kJemo03+X3oJOjE2qhGI/wrF+x2Bq9Nuxd1UkRw82JP/J/1UnCgQPhfTA5DK2ghreM
-         DEOYdYirxqKjEkhZ+1AdiFMgUyktbxHcmE/7fPHbx6eW1pkdy/DqqpRvl0gqVQtG3qfL
-         xem9WVqBLZcVZ8qjGhr0hy7Vut7NmmaurZt1seGoXYLBEuyjx7th9ECe4pUgaE1D4Z5e
-         a/d/rjoeiFdC7v27eGX0CH35ekQ02kYJr5DfVW8y9eusgCUHaUa3ITY3cPRKalhENr3x
-         +NREy22FYA47eKSr4VFOLVzlNoT79jUnjLM6RLRkf8CzKJ3QKHG2a0oFBPOo6JfMQSHC
-         ri5Q==
+        d=gmail.com; s=20161025;
+        h=message-id:mime-version:content-transfer-encoding
+         :content-description:subject:to:from:date:reply-to;
+        bh=snYPqYzMcRAFVusSDm1wEdLO3zZSz5O+T7SH8YmSs98=;
+        b=tEV08YQstTq/V5sZwHDdajgGLRmr2BxxqyoSEyBHpDveKrg40f+GfS4OFeyo+D9laZ
+         1WKb9pggW20oyg6kcYYwDu7F8Snyvd7IlgR0qFQjo/o8eEaa0w3k0JDSY/968Fn6K/dZ
+         9izUuKC3Pm4ntds8dj9EvPHGiGfhBBLc5bSLFNy40lSBI/b8sYhfUtJd/3KV0Er13IB0
+         2LnZpneFwZfhkQtHuK5wMU0fj2Px2Yg53WcVmm0aqeIRMfaM9Rtj3Kuwf7/QYZgFWpxl
+         Ug9jZqb4WxoERdnJzYq/YCaEM4BUs1og1mhIKlVTH+Id6XMHdFdWdNnlThLJHbpHhW9M
+         3R7Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=P21tL7daBF3yjezrA/PL3bwhuuAyesA+HDqEdHI5eFU=;
-        b=s4S1i/w77y7c1+fXg0EBjNjwuS84UBntGoWFfEblKzJ002nQUE2iHdwtGM/mw7aMua
-         Oqc+/XYgSkxVr74y7wzs/lX+r+EZX9g3PRO2U2H6NsdXURFUmr4uegeyOqdm+XofmsPf
-         H371Rj8RWW7q4AGLHdPXGaW9efCxbXhkz5fuyI2sCMy+ixxyyqPxcVZXdhfKBoFRzGRG
-         sufaeePgpaZNsPahVo7XSsNEU7UHv5odiYWJqEb8T0cGiBzlqTLagvW3KhNvKGamyYQw
-         s05k8ffV2hRht0ncBH+F5AhjyAiQLrZYOURspve4X8+AFHa+aLppZePEs4ReEzH1u67l
-         e8Dw==
-X-Gm-Message-State: AOAM533L5MAB4E8JqmySO9XLlxQzLaP9LcPZswfS0y7xBZnVwo1O6uuy
-        znXC8qaT12/7g1VRFPYYbG9ijw==
-X-Google-Smtp-Source: ABdhPJyaQAVZfx7NE4LBNsDHpjcC+Y5iS7iQdOvy3wN6qrVmdEYeRBauSp4wkqNvWbki3tozGQn05g==
-X-Received: by 2002:a05:6a00:22c9:: with SMTP id f9mr2728054pfj.212.1596947769639;
-        Sat, 08 Aug 2020 21:36:09 -0700 (PDT)
-Received: from FVFX41FWHV2J.bytedance.net ([103.136.220.69])
-        by smtp.gmail.com with ESMTPSA id s2sm16267741pjb.33.2020.08.08.21.36.05
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Sat, 08 Aug 2020 21:36:08 -0700 (PDT)
-From:   Feng zhou <zhoufeng.zf@bytedance.com>
-To:     bp@alien8.de, mchehab@kernel.org, tony.luck@intel.com,
-        james.morse@arm.com, rrichter@marvell.com
-Cc:     linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
-        liuxian.1@bytedance.com, zhoufeng.zf@bytedance.com
-Subject: [PATCH] x86/MCE/AMD, EDAC/mce_amd
-Date:   Sun,  9 Aug 2020 12:35:59 +0800
-Message-Id: <20200809043559.9740-1-zhoufeng.zf@bytedance.com>
-X-Mailer: git-send-email 2.27.0
+        h=x-gm-message-state:message-id:mime-version
+         :content-transfer-encoding:content-description:subject:to:from:date
+         :reply-to;
+        bh=snYPqYzMcRAFVusSDm1wEdLO3zZSz5O+T7SH8YmSs98=;
+        b=tLhi0p10TK8aOg2U5s/sqZsSArHNvRvXrYM+BturG0n3IF0l1yyGZ/yIN5VucB6hfZ
+         Gu2cZl0aoZ4/vtV1RHTGuVZ2tNBlxWQ9LKv/N2t8O1+F44t91xSgwEZ37SN5gakCCV77
+         Sse7K9P9j1rmoZJLLur0rdALgyCVle+NdoTE/AkHUMLEtqzUn6OkeKr/vwztAsNx8Up7
+         HfrcLFz1i++4f0LsFFT4UHEqiHr5423ujxmNAejLLEFicTz0KkxMMPv6ULfKvX2/z3D6
+         VQbmz74MSyMn/5Y8twH5KdPZiw0Qw1Kz4j2IQ0wwq5AfHeQLgtxJm0l9lEg8eMSAx3cI
+         v5Kg==
+X-Gm-Message-State: AOAM533/QehahdvnDZ23sZcU//zKnTY+reKJ5laqcykGpZ3dh00mIkQF
+        QcQ9lBxZKa9vDy6UzXg9LA==
+X-Google-Smtp-Source: ABdhPJyyI+/KScQGZ4wqk0KoatFyeQlMPr8lmDL+0vUgDMjk40cUmmtMdytlv0FmPowDAhAX572F4Q==
+X-Received: by 2002:a05:6402:206d:: with SMTP id bd13mr15987704edb.57.1596951806655;
+        Sat, 08 Aug 2020 22:43:26 -0700 (PDT)
+Received: from [192.168.0.108] ([196.171.37.220])
+        by smtp.gmail.com with ESMTPSA id k24sm9534694ejz.102.2020.08.08.22.43.21
+        (version=TLS1 cipher=AES128-SHA bits=128/128);
+        Sat, 08 Aug 2020 22:43:26 -0700 (PDT)
+Message-ID: <5f2f8cfe.1c69fb81.2fc79.81d0@mx.google.com>
+Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: quoted-printable
+Content-Description: Mail message body
+Subject: Hello
+To:     Recipients <irakpamoutawakilou@gmail.com>
+From:   "Sophia" <irakpamoutawakilou@gmail.com>
+Date:   Sun, 09 Aug 2020 05:43:08 +0000
+Reply-To: sophiawillians00@gmail.com
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-From: zhoufeng <zhoufeng.zf@bytedance.com>
+Hello Dear,
 
-The edac_mce_amd module calls decode_dram_ecc() on AMD Family17h and
-later systems. This function is used in amd64_edac_mod to do
-system-specific decoding for DRAM ECC errors. The function takes a
-"NodeId" as a parameter.
+How are you doing,
+My name is Sophia Williams
+Please reply, so that we can know more better =
 
-In AMD documentation, NodeId is used to identify a physical die in a
-system. This can be used to identify a node in the AMD_NB code and also
-it is used with umc_normaddr_to_sysaddr().
-
-However, the input used for decode_dram_ecc() is currently the NUMA node
-of a logical CPU. so this will cause the address translation function to
-fail or report incorrect results.
-
-Signed-off-by: zhoufeng <zhoufeng.zf@bytedance.com>
----
- drivers/edac/mce_amd.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/edac/mce_amd.c b/drivers/edac/mce_amd.c
-index 325aedf46ff2..73c805113322 100644
---- a/drivers/edac/mce_amd.c
-+++ b/drivers/edac/mce_amd.c
-@@ -996,7 +996,7 @@ static void decode_smca_error(struct mce *m)
- 	}
- 
- 	if (bank_type == SMCA_UMC && xec == 0 && decode_dram_ecc)
--		decode_dram_ecc(cpu_to_node(m->extcpu), m);
-+		decode_dram_ecc(topology_physical_package_id(m->extcpu), m);
- }
- 
- static inline void amd_decode_err_code(u16 ec)
--- 
-2.20.1
-
+and share photos,
+Thank you.
