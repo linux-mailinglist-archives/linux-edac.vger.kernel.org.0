@@ -2,818 +2,126 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 441D82407CC
-	for <lists+linux-edac@lfdr.de>; Mon, 10 Aug 2020 16:47:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE2B2241058
+	for <lists+linux-edac@lfdr.de>; Mon, 10 Aug 2020 21:29:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726392AbgHJOrX (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Mon, 10 Aug 2020 10:47:23 -0400
-Received: from lhrrgout.huawei.com ([185.176.76.210]:2587 "EHLO huawei.com"
+        id S1729409AbgHJT30 (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Mon, 10 Aug 2020 15:29:26 -0400
+Received: from mail-bn8nam12on2050.outbound.protection.outlook.com ([40.107.237.50]:50529
+        "EHLO NAM12-BN8-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1727055AbgHJOrW (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Mon, 10 Aug 2020 10:47:22 -0400
-Received: from lhreml715-chm.china.huawei.com (unknown [172.18.7.106])
-        by Forcepoint Email with ESMTP id 95AD5F12F26F281AE184;
-        Mon, 10 Aug 2020 15:47:13 +0100 (IST)
-Received: from DESKTOP-6T4S3DQ.china.huawei.com (10.47.95.125) by
- lhreml715-chm.china.huawei.com (10.201.108.66) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1913.5; Mon, 10 Aug 2020 15:47:12 +0100
-From:   Shiju Jose <shiju.jose@huawei.com>
-To:     <mchehab+huawei@kernel.org>, <linux-edac@vger.kernel.org>
-CC:     <linuxarm@huawei.com>, <tanxiaofei@huawei.com>,
-        <jonathan.cameron@huawei.com>
-Subject: [PATCH 1/1] rasdaemon: Modify non-standard error decoding interface using linked list
-Date:   Mon, 10 Aug 2020 15:42:56 +0100
-Message-ID: <20200810144256.1311-1-shiju.jose@huawei.com>
-X-Mailer: git-send-email 2.26.0.windows.1
+        id S1729032AbgHJTKo (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Mon, 10 Aug 2020 15:10:44 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=NUxMxQNhF2ZgeE6tchQHk89+pZxW0AQi2kUVdXOGNqN3EOc4G/mU6UrvkNB0puPyYPZauol2vhJyhtX9xg7cp/XjIRVHR0PPNFLM+nCAWRWlOM6cXfBZke/k0H/otbTqkQdUjhsOWJWXqsjHhSEg/DX50rbe7ssD+srQ0xuvuPvCphmPVxORvnbohR68VIbM1y/qI4vA39cHGujVU0WIfQouG0ZLYDG/DbGq840mAzdZlzhNrS6atstE38CvCom8IFtsJCibOR9hrzpMf/DWmmaagnxb4JzTa7pZZ5LDQCgn/tVjISaWGD+MozkkiiFbuj6xjWtNI/3fKZ6pX29JPg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=6ntjwhA7BptFtWiLYwUI+RUuxlOOv5ibCRFTF4k0srI=;
+ b=PHDAZSWHzb/Uyz9iMNYG0FZaqig6v30IctLtDpJcTQuZKQmqfJ6cdr49Q7KTFITh8GJPZve23S21OJVLGBMaz6yVP310XxAGSNuNZyN3EihBIGhox8WsRj6+4SMjQ0qOA3B/RDTChjEy35XLDS4DXjoDx34GrC2JS5gYBXVoH68aiMqPmOUmllOtV5/SkiXtFAZTUFOSRsf5pXhahaLlxWGO+VSfNh71jyotKoctWDT4+Z2uUjvA7DJKYW/3AcZCyrqnS8jdpEgokkB235iX3Upiit/RNxJQkBnno1bcWK0y1whNkvnaUxdf4/HO7B9onztHHWp5g/lYLC3DFBewXQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=amdcloud.onmicrosoft.com; s=selector2-amdcloud-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=6ntjwhA7BptFtWiLYwUI+RUuxlOOv5ibCRFTF4k0srI=;
+ b=KciQmHrJaEpT9zFOT1ZY/trJRx43CsJ1TwKiBVzzboSNd6bBh7NL4xh+yOWiQm/zbugeQa3wN/08WsmFe040BPY7UY6dvTNr22MoAP6Y71/uQfbWm2PWLMuuwGJkzpw2tMikRdNbXpRnBzB3RaD4O7uZBmROOBxNslnlMPxH0h4=
+Authentication-Results: bytedance.com; dkim=none (message not signed)
+ header.d=none;bytedance.com; dmarc=none action=none header.from=amd.com;
+Received: from BN8PR12MB3108.namprd12.prod.outlook.com (2603:10b6:408:40::20)
+ by BN8PR12MB2980.namprd12.prod.outlook.com (2603:10b6:408:62::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3261.19; Mon, 10 Aug
+ 2020 19:10:41 +0000
+Received: from BN8PR12MB3108.namprd12.prod.outlook.com
+ ([fe80::1ef:8f33:480b:e2d0]) by BN8PR12MB3108.namprd12.prod.outlook.com
+ ([fe80::1ef:8f33:480b:e2d0%4]) with mapi id 15.20.3261.024; Mon, 10 Aug 2020
+ 19:10:41 +0000
+Date:   Mon, 10 Aug 2020 14:10:31 -0500
+From:   Yazen Ghannam <yazen.ghannam@amd.com>
+To:     Feng zhou <zhoufeng.zf@bytedance.com>
+Cc:     bp@alien8.de, mchehab@kernel.org, tony.luck@intel.com,
+        james.morse@arm.com, rrichter@marvell.com,
+        linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
+        liuxian.1@bytedance.com
+Subject: Re: [PATCH] x86/MCE/AMD, EDAC/mce_amd
+Message-ID: <20200810190958.GA3406209@yaz-nikka.amd.com>
+References: <20200809043559.9740-1-zhoufeng.zf@bytedance.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200809043559.9740-1-zhoufeng.zf@bytedance.com>
+X-ClientProxiedBy: SA0PR11CA0006.namprd11.prod.outlook.com
+ (2603:10b6:806:d3::11) To BN8PR12MB3108.namprd12.prod.outlook.com
+ (2603:10b6:408:40::20)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.47.95.125]
-X-ClientProxiedBy: lhreml743-chm.china.huawei.com (10.201.108.193) To
- lhreml715-chm.china.huawei.com (10.201.108.66)
-X-CFilter-Loop: Reflected
+X-MS-Exchange-MessageSentRepresentingType: 1
+Received: from yaz-nikka.amd.com (165.204.77.1) by SA0PR11CA0006.namprd11.prod.outlook.com (2603:10b6:806:d3::11) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3261.18 via Frontend Transport; Mon, 10 Aug 2020 19:10:39 +0000
+X-Originating-IP: [165.204.77.1]
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-HT: Tenant
+X-MS-Office365-Filtering-Correlation-Id: 1ebb77e6-a9a8-4749-6acd-08d83d611312
+X-MS-TrafficTypeDiagnostic: BN8PR12MB2980:
+X-Microsoft-Antispam-PRVS: <BN8PR12MB29806965A375EF1382616B77F8440@BN8PR12MB2980.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:9508;
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: QpAl2WMjmbep/ePIGreatztN8TDPqe0aoB/np0so4ZTeufAliFNkL2NtVjRHaxnSEgb9/mhI6TaIcB/g89od3t9ZZnRkMG9/A9C3X0tlUnFQKsJIYqZAtXVszC0avbVqn0K432QvgIDs37j41Z8UG5UA997oEb7I3WI/uRLOQmdQORBssgVp6/HKm9qxRXpdhdxVWr+ByuRTx3tDPYmi3tIdY8rhHyqaVRRqiCmpTwAwLBQq1I/hi/+606cL8wShDNwdVh+u8G+xgodCE/vl0R9JaPukv/D89sSoAGKQxh1m5avK56/mxFce0moeZLc2oE2mFSlioxCyMMA6ut6ClQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3108.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(4636009)(39860400002)(376002)(136003)(346002)(366004)(396003)(5660300002)(4326008)(44832011)(55016002)(8676002)(186003)(478600001)(86362001)(16526019)(26005)(2906002)(6916009)(33656002)(7696005)(52116002)(956004)(66556008)(66476007)(83380400001)(66946007)(8936002)(6666004)(316002)(1076003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData: PI5g1Sem8AyPj/NBZqI62ATYSMJEVo/nbPI+McflN+5DEjO30FGW5KeB+kSvNUFlnyIzUhRHK8hzEI2gmxM/W3wyY7ZJzCy6dnweJLnFkWQmbmj9XxDA9+nZOWvUo85GgPWLgNGHRLAKpTbJ4KM4doV3mA/VQbaYYYRsQmY7XhjXtn/ntoO18tZXkq6DpdD2ramedpT8ehP3H2tG6MIvI/5vtyPC8m7laTyZYCT5vJ0K8BT408Gh2PkziGZAhlnLnWCBuiw6e4Kpe7yhKduy6PLR9D1USWJVXRWvzQXG4pJLpfXeVZCHzT7HBRVqawCqtY8cprOBJSEileeoADy9YNuDcH8tbsrGgr50HnjEyAf5J+8heG5s6RaqN/MhNfMBlcdYDA0ATWI381iskKycjQu83gRt58IpHYev6xilJDL50YQdRts/cANBmEvSG09xDVtoF1QxExpYjPjpbUbWb1djeV8En920fGspkFvxMXdiP9J7VqeWqfN1vFvdeKKdhc4XUA7NlypQhA8blOeaJLd15tNliC/nn7aL/Q7ti6VBkJAHu9Q5SenfzAT52jMqlf2cB2Ck0zQAdYDsS/q7fcn+fnHp4KEIC8x8FabJYL+UZ/jjU3sO+3z5YI/fbmG0CkOiRAC3sfn23UI1AE02Jg==
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1ebb77e6-a9a8-4749-6acd-08d83d611312
+X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3108.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Aug 2020 19:10:41.6250
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: CuW7aJdO92v+WArJQ/qCRM32MMdMzJp515MhTiH30xkwjcE6PQ3V2ZZpL5SuRO0EJa3Ad0h/AyE4DhSqVvGCJA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN8PR12MB2980
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-Replace the current non-standard error decoding interface with the
-interface based on the linked list to avoid using realloc and
-to improve the interface.
+On Sun, Aug 09, 2020 at 12:35:59PM +0800, Feng zhou wrote:
+> From: zhoufeng <zhoufeng.zf@bytedance.com>
+> 
+> The edac_mce_amd module calls decode_dram_ecc() on AMD Family17h and
+> later systems. This function is used in amd64_edac_mod to do
+> system-specific decoding for DRAM ECC errors. The function takes a
+> "NodeId" as a parameter.
+> 
+> In AMD documentation, NodeId is used to identify a physical die in a
+> system. This can be used to identify a node in the AMD_NB code and also
+> it is used with umc_normaddr_to_sysaddr().
+> 
+> However, the input used for decode_dram_ecc() is currently the NUMA node
+> of a logical CPU. so this will cause the address translation function to
+> fail or report incorrect results.
+> 
+> Signed-off-by: zhoufeng <zhoufeng.zf@bytedance.com>
+> ---
+>  drivers/edac/mce_amd.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/edac/mce_amd.c b/drivers/edac/mce_amd.c
+> index 325aedf46ff2..73c805113322 100644
+> --- a/drivers/edac/mce_amd.c
+> +++ b/drivers/edac/mce_amd.c
+> @@ -996,7 +996,7 @@ static void decode_smca_error(struct mce *m)
+>  	}
+>  
+>  	if (bank_type == SMCA_UMC && xec == 0 && decode_dram_ecc)
+> -		decode_dram_ecc(cpu_to_node(m->extcpu), m);
+> +		decode_dram_ecc(topology_physical_package_id(m->extcpu), m);
 
-Signed-off-by: Shiju Jose <shiju.jose@huawei.com>
----
- non-standard-hisi_hip08.c  | 114 +++++++++++++++++-----------------
- non-standard-hisilicon.c   |  46 +++++++-------
- non-standard-hisilicon.h   |   4 +-
- ras-non-standard-handler.c | 122 ++++++++++++++++++++-----------------
- ras-non-standard-handler.h |  13 ++--
- 5 files changed, 155 insertions(+), 144 deletions(-)
+This will break on Naples systems, because the NodeId and the physical
+package ID will not match.
 
-diff --git a/non-standard-hisi_hip08.c b/non-standard-hisi_hip08.c
-index 2197f81..ebf03e1 100644
---- a/non-standard-hisi_hip08.c
-+++ b/non-standard-hisi_hip08.c
-@@ -528,7 +528,7 @@ static const struct db_table_descriptor hip08_pcie_local_event_tab = {
- #endif
- 
- #define IN_RANGE(p, start, end) ((p) >= (start) && (p) < (end))
--static void decode_oem_type1_err_hdr(struct ras_ns_dec_tab *dec_tab,
-+static void decode_oem_type1_err_hdr(struct ras_ns_ev_decoder *ev_decoder,
- 				     struct trace_seq *s,
- 				     const struct hisi_oem_type1_err_sec *err)
- {
-@@ -537,26 +537,26 @@ static void decode_oem_type1_err_hdr(struct ras_ns_dec_tab *dec_tab,
- 	char *end = buf + HISI_BUF_LEN;
- 
- 	p += snprintf(p, end - p, "[ table_version=%d ", err->version);
--	record_vendor_data(dec_tab, HISI_OEM_DATA_TYPE_INT,
-+	record_vendor_data(ev_decoder, HISI_OEM_DATA_TYPE_INT,
- 			   HIP08_OEM_TYPE1_FIELD_VERSION, err->version, NULL);
- 
- 	if (err->val_bits & HISI_OEM_VALID_SOC_ID && IN_RANGE(p, buf, end)) {
- 		p += snprintf(p, end - p, "SOC_ID=%d ", err->soc_id);
--		record_vendor_data(dec_tab, HISI_OEM_DATA_TYPE_INT,
-+		record_vendor_data(ev_decoder, HISI_OEM_DATA_TYPE_INT,
- 				   HIP08_OEM_TYPE1_FIELD_SOC_ID,
- 				   err->soc_id, NULL);
- 	}
- 
- 	if (err->val_bits & HISI_OEM_VALID_SOCKET_ID && IN_RANGE(p, buf, end)) {
- 		p += snprintf(p, end - p, "socket_ID=%d ", err->socket_id);
--		record_vendor_data(dec_tab, HISI_OEM_DATA_TYPE_INT,
-+		record_vendor_data(ev_decoder, HISI_OEM_DATA_TYPE_INT,
- 				   HIP08_OEM_TYPE1_FIELD_SOCKET_ID,
- 				   err->socket_id, NULL);
- 	}
- 
- 	if (err->val_bits & HISI_OEM_VALID_NIMBUS_ID && IN_RANGE(p, buf, end)) {
- 		p += snprintf(p, end - p, "nimbus_ID=%d ", err->nimbus_id);
--		record_vendor_data(dec_tab, HISI_OEM_DATA_TYPE_INT,
-+		record_vendor_data(ev_decoder, HISI_OEM_DATA_TYPE_INT,
- 				   HIP08_OEM_TYPE1_FIELD_NIMBUS_ID,
- 				   err->nimbus_id, NULL);
- 	}
-@@ -566,7 +566,7 @@ static void decode_oem_type1_err_hdr(struct ras_ns_dec_tab *dec_tab,
- 						  err->module_id);
- 
- 		p += snprintf(p, end - p, "module=%s ", str);
--		record_vendor_data(dec_tab, HISI_OEM_DATA_TYPE_TEXT,
-+		record_vendor_data(ev_decoder, HISI_OEM_DATA_TYPE_TEXT,
- 				   HIP08_OEM_TYPE1_FIELD_MODULE_ID,
- 				   0, str);
- 	}
-@@ -578,7 +578,7 @@ static void decode_oem_type1_err_hdr(struct ras_ns_dec_tab *dec_tab,
- 						     err->sub_module_id);
- 
- 		p += snprintf(p, end - p, "submodule=%s ", str);
--		record_vendor_data(dec_tab, HISI_OEM_DATA_TYPE_TEXT,
-+		record_vendor_data(ev_decoder, HISI_OEM_DATA_TYPE_TEXT,
- 				   HIP08_OEM_TYPE1_FIELD_SUB_MODULE_ID,
- 				   0, str);
- 	}
-@@ -587,7 +587,7 @@ static void decode_oem_type1_err_hdr(struct ras_ns_dec_tab *dec_tab,
- 	    IN_RANGE(p, buf, end)) {
- 		p += snprintf(p, end - p, "error_severity=%s ",
- 			     err_severity(err->err_severity));
--		record_vendor_data(dec_tab, HISI_OEM_DATA_TYPE_TEXT,
-+		record_vendor_data(ev_decoder, HISI_OEM_DATA_TYPE_TEXT,
- 				   HIP08_OEM_TYPE1_FIELD_ERR_SEV,
- 				   0, err_severity(err->err_severity));
- 	}
-@@ -598,7 +598,7 @@ static void decode_oem_type1_err_hdr(struct ras_ns_dec_tab *dec_tab,
- 	trace_seq_printf(s, "%s\n", buf);
- }
- 
--static void decode_oem_type1_err_regs(struct ras_ns_dec_tab *dec_tab,
-+static void decode_oem_type1_err_regs(struct ras_ns_ev_decoder *ev_decoder,
- 				      struct trace_seq *s,
- 				      const struct hisi_oem_type1_err_sec *err)
- {
-@@ -649,14 +649,14 @@ static void decode_oem_type1_err_regs(struct ras_ns_dec_tab *dec_tab,
- 		*p = '\0';
- 	}
- 
--	record_vendor_data(dec_tab, HISI_OEM_DATA_TYPE_TEXT,
-+	record_vendor_data(ev_decoder, HISI_OEM_DATA_TYPE_TEXT,
- 			   HIP08_OEM_TYPE1_FIELD_REGS_DUMP, 0, buf);
--	step_vendor_data_tab(dec_tab, "hip08_oem_type1_event_tab");
-+	step_vendor_data_tab(ev_decoder, "hip08_oem_type1_event_tab");
- }
- 
- /* error data decoding functions */
- static int decode_hip08_oem_type1_error(struct ras_events *ras,
--					struct ras_ns_dec_tab *dec_tab,
-+					struct ras_ns_ev_decoder *ev_decoder,
- 					struct trace_seq *s,
- 					struct ras_non_standard_event *event)
- {
-@@ -670,8 +670,8 @@ static int decode_hip08_oem_type1_error(struct ras_events *ras,
- 	}
- 
- #ifdef HAVE_SQLITE3
--	if (!dec_tab->stmt_dec_record) {
--		if (ras_mc_add_vendor_table(ras, &dec_tab->stmt_dec_record,
-+	if (!ev_decoder->stmt_dec_record) {
-+		if (ras_mc_add_vendor_table(ras, &ev_decoder->stmt_dec_record,
- 					    &hip08_oem_type1_event_tab)
- 			!= SQLITE_OK) {
- 			trace_seq_printf(s,
-@@ -680,18 +680,18 @@ static int decode_hip08_oem_type1_error(struct ras_events *ras,
- 		}
- 	}
- #endif
--	record_vendor_data(dec_tab, HISI_OEM_DATA_TYPE_TEXT,
-+	record_vendor_data(ev_decoder, HISI_OEM_DATA_TYPE_TEXT,
- 			   HIP08_OEM_TYPE1_FIELD_TIMESTAMP,
- 			   0, event->timestamp);
- 
- 	trace_seq_printf(s, "\nHISI HIP08: OEM Type-1 Error\n");
--	decode_oem_type1_err_hdr(dec_tab, s, err);
--	decode_oem_type1_err_regs(dec_tab, s, err);
-+	decode_oem_type1_err_hdr(ev_decoder, s, err);
-+	decode_oem_type1_err_regs(ev_decoder, s, err);
- 
- 	return 0;
- }
- 
--static void decode_oem_type2_err_hdr(struct ras_ns_dec_tab *dec_tab,
-+static void decode_oem_type2_err_hdr(struct ras_ns_ev_decoder *ev_decoder,
- 				     struct trace_seq *s,
- 				     const struct hisi_oem_type2_err_sec *err)
- {
-@@ -700,26 +700,26 @@ static void decode_oem_type2_err_hdr(struct ras_ns_dec_tab *dec_tab,
- 	char *end = buf + HISI_BUF_LEN;
- 
- 	p += snprintf(p, end - p, "[ table_version=%d ", err->version);
--	record_vendor_data(dec_tab, HISI_OEM_DATA_TYPE_INT,
-+	record_vendor_data(ev_decoder, HISI_OEM_DATA_TYPE_INT,
- 			   HIP08_OEM_TYPE2_FIELD_VERSION, err->version, NULL);
- 
- 	if (err->val_bits & HISI_OEM_VALID_SOC_ID && IN_RANGE(p, buf, end)) {
- 		p += snprintf(p, end - p, "SOC_ID=%d ", err->soc_id);
--		record_vendor_data(dec_tab, HISI_OEM_DATA_TYPE_INT,
-+		record_vendor_data(ev_decoder, HISI_OEM_DATA_TYPE_INT,
- 				   HIP08_OEM_TYPE2_FIELD_SOC_ID,
- 				   err->soc_id, NULL);
- 	}
- 
- 	if (err->val_bits & HISI_OEM_VALID_SOCKET_ID && IN_RANGE(p, buf, end)) {
- 		p += snprintf(p, end - p, "socket_ID=%d ", err->socket_id);
--		record_vendor_data(dec_tab, HISI_OEM_DATA_TYPE_INT,
-+		record_vendor_data(ev_decoder, HISI_OEM_DATA_TYPE_INT,
- 				   HIP08_OEM_TYPE2_FIELD_SOCKET_ID,
- 				   err->socket_id, NULL);
- 	}
- 
- 	if (err->val_bits & HISI_OEM_VALID_NIMBUS_ID && IN_RANGE(p, buf, end)) {
- 		p += snprintf(p, end - p, "nimbus_ID=%d ", err->nimbus_id);
--		record_vendor_data(dec_tab, HISI_OEM_DATA_TYPE_INT,
-+		record_vendor_data(ev_decoder, HISI_OEM_DATA_TYPE_INT,
- 				   HIP08_OEM_TYPE2_FIELD_NIMBUS_ID,
- 				   err->nimbus_id, NULL);
- 	}
-@@ -729,7 +729,7 @@ static void decode_oem_type2_err_hdr(struct ras_ns_dec_tab *dec_tab,
- 						  err->module_id);
- 
- 		p += snprintf(p, end - p, "module=%s ", str);
--		record_vendor_data(dec_tab, HISI_OEM_DATA_TYPE_TEXT,
-+		record_vendor_data(ev_decoder, HISI_OEM_DATA_TYPE_TEXT,
- 				   HIP08_OEM_TYPE2_FIELD_MODULE_ID,
- 				   0, str);
- 	}
-@@ -741,7 +741,7 @@ static void decode_oem_type2_err_hdr(struct ras_ns_dec_tab *dec_tab,
- 						     err->sub_module_id);
- 
- 		p += snprintf(p, end - p, "submodule=%s ", str);
--		record_vendor_data(dec_tab, HISI_OEM_DATA_TYPE_TEXT,
-+		record_vendor_data(ev_decoder, HISI_OEM_DATA_TYPE_TEXT,
- 				   HIP08_OEM_TYPE2_FIELD_SUB_MODULE_ID,
- 				   0, str);
- 	}
-@@ -750,7 +750,7 @@ static void decode_oem_type2_err_hdr(struct ras_ns_dec_tab *dec_tab,
- 	    IN_RANGE(p, buf, end)) {
- 		p += snprintf(p, end - p, "error_severity=%s ",
- 			     err_severity(err->err_severity));
--		record_vendor_data(dec_tab, HISI_OEM_DATA_TYPE_TEXT,
-+		record_vendor_data(ev_decoder, HISI_OEM_DATA_TYPE_TEXT,
- 				   HIP08_OEM_TYPE2_FIELD_ERR_SEV,
- 				   0, err_severity(err->err_severity));
- 	}
-@@ -761,7 +761,7 @@ static void decode_oem_type2_err_hdr(struct ras_ns_dec_tab *dec_tab,
- 	trace_seq_printf(s, "%s\n", buf);
- }
- 
--static void decode_oem_type2_err_regs(struct ras_ns_dec_tab *dec_tab,
-+static void decode_oem_type2_err_regs(struct ras_ns_ev_decoder *ev_decoder,
- 				      struct trace_seq *s,
- 				      const struct hisi_oem_type2_err_sec *err)
- {
-@@ -822,13 +822,13 @@ static void decode_oem_type2_err_regs(struct ras_ns_dec_tab *dec_tab,
- 		*p = '\0';
- 	}
- 
--	record_vendor_data(dec_tab, HISI_OEM_DATA_TYPE_TEXT,
-+	record_vendor_data(ev_decoder, HISI_OEM_DATA_TYPE_TEXT,
- 			   HIP08_OEM_TYPE2_FIELD_REGS_DUMP, 0, buf);
--	step_vendor_data_tab(dec_tab, "hip08_oem_type2_event_tab");
-+	step_vendor_data_tab(ev_decoder, "hip08_oem_type2_event_tab");
- }
- 
- static int decode_hip08_oem_type2_error(struct ras_events *ras,
--					struct ras_ns_dec_tab *dec_tab,
-+					struct ras_ns_ev_decoder *ev_decoder,
- 					struct trace_seq *s,
- 					struct ras_non_standard_event *event)
- {
-@@ -842,8 +842,8 @@ static int decode_hip08_oem_type2_error(struct ras_events *ras,
- 	}
- 
- #ifdef HAVE_SQLITE3
--	if (!dec_tab->stmt_dec_record) {
--		if (ras_mc_add_vendor_table(ras, &dec_tab->stmt_dec_record,
-+	if (!ev_decoder->stmt_dec_record) {
-+		if (ras_mc_add_vendor_table(ras, &ev_decoder->stmt_dec_record,
- 			&hip08_oem_type2_event_tab) != SQLITE_OK) {
- 			trace_seq_printf(s,
- 				"create sql hip08_oem_type2_event_tab fail\n");
-@@ -851,18 +851,18 @@ static int decode_hip08_oem_type2_error(struct ras_events *ras,
- 		}
- 	}
- #endif
--	record_vendor_data(dec_tab, HISI_OEM_DATA_TYPE_TEXT,
-+	record_vendor_data(ev_decoder, HISI_OEM_DATA_TYPE_TEXT,
- 			   HIP08_OEM_TYPE2_FIELD_TIMESTAMP,
- 			   0, event->timestamp);
- 
- 	trace_seq_printf(s, "\nHISI HIP08: OEM Type-2 Error\n");
--	decode_oem_type2_err_hdr(dec_tab, s, err);
--	decode_oem_type2_err_regs(dec_tab, s, err);
-+	decode_oem_type2_err_hdr(ev_decoder, s, err);
-+	decode_oem_type2_err_regs(ev_decoder, s, err);
- 
- 	return 0;
- }
- 
--static void decode_pcie_local_err_hdr(struct ras_ns_dec_tab *dec_tab,
-+static void decode_pcie_local_err_hdr(struct ras_ns_ev_decoder *ev_decoder,
- 				      struct trace_seq *s,
- 				      const struct hisi_pcie_local_err_sec *err)
- {
-@@ -871,14 +871,14 @@ static void decode_pcie_local_err_hdr(struct ras_ns_dec_tab *dec_tab,
- 	char *end = buf + HISI_BUF_LEN;
- 
- 	p += snprintf(p, end - p, "[ table_version=%d ", err->version);
--	record_vendor_data(dec_tab, HISI_OEM_DATA_TYPE_INT,
-+	record_vendor_data(ev_decoder, HISI_OEM_DATA_TYPE_INT,
- 			   HIP08_PCIE_LOCAL_FIELD_VERSION,
- 			   err->version, NULL);
- 
- 	if (err->val_bits & HISI_PCIE_LOCAL_VALID_SOC_ID &&
- 	    IN_RANGE(p, buf, end)) {
- 		p += snprintf(p, end - p, "SOC_ID=%d ", err->soc_id);
--		record_vendor_data(dec_tab, HISI_OEM_DATA_TYPE_INT,
-+		record_vendor_data(ev_decoder, HISI_OEM_DATA_TYPE_INT,
- 				   HIP08_PCIE_LOCAL_FIELD_SOC_ID,
- 				   err->soc_id, NULL);
- 	}
-@@ -886,7 +886,7 @@ static void decode_pcie_local_err_hdr(struct ras_ns_dec_tab *dec_tab,
- 	if (err->val_bits & HISI_PCIE_LOCAL_VALID_SOCKET_ID &&
- 	    IN_RANGE(p, buf, end)) {
- 		p += snprintf(p, end - p, "socket_ID=%d ", err->socket_id);
--		record_vendor_data(dec_tab, HISI_OEM_DATA_TYPE_INT,
-+		record_vendor_data(ev_decoder, HISI_OEM_DATA_TYPE_INT,
- 				   HIP08_PCIE_LOCAL_FIELD_SOCKET_ID,
- 				   err->socket_id, NULL);
- 	}
-@@ -894,7 +894,7 @@ static void decode_pcie_local_err_hdr(struct ras_ns_dec_tab *dec_tab,
- 	if (err->val_bits & HISI_PCIE_LOCAL_VALID_NIMBUS_ID &&
- 	    IN_RANGE(p, buf, end)) {
- 		p += snprintf(p, end - p, "nimbus_ID=%d ", err->nimbus_id);
--		record_vendor_data(dec_tab, HISI_OEM_DATA_TYPE_INT,
-+		record_vendor_data(ev_decoder, HISI_OEM_DATA_TYPE_INT,
- 				   HIP08_PCIE_LOCAL_FIELD_NIMBUS_ID,
- 				   err->nimbus_id, NULL);
- 	}
-@@ -903,7 +903,7 @@ static void decode_pcie_local_err_hdr(struct ras_ns_dec_tab *dec_tab,
- 	    IN_RANGE(p, buf, end)) {
- 		p += snprintf(p, end - p, "submodule=%s ",
- 			      pcie_local_sub_module_name(err->sub_module_id));
--		record_vendor_data(dec_tab, HISI_OEM_DATA_TYPE_TEXT,
-+		record_vendor_data(ev_decoder, HISI_OEM_DATA_TYPE_TEXT,
- 				   HIP08_PCIE_LOCAL_FIELD_SUB_MODULE_ID,
- 				   0, pcie_local_sub_module_name(err->sub_module_id));
- 	}
-@@ -911,7 +911,7 @@ static void decode_pcie_local_err_hdr(struct ras_ns_dec_tab *dec_tab,
- 	if (err->val_bits & HISI_PCIE_LOCAL_VALID_CORE_ID &&
- 	    IN_RANGE(p, buf, end)) {
- 		p += snprintf(p, end - p, "core_ID=core%d ", err->core_id);
--		record_vendor_data(dec_tab, HISI_OEM_DATA_TYPE_INT,
-+		record_vendor_data(ev_decoder, HISI_OEM_DATA_TYPE_INT,
- 				   HIP08_PCIE_LOCAL_FIELD_CORE_ID,
- 				   err->core_id, NULL);
- 	}
-@@ -919,7 +919,7 @@ static void decode_pcie_local_err_hdr(struct ras_ns_dec_tab *dec_tab,
- 	if (err->val_bits & HISI_PCIE_LOCAL_VALID_PORT_ID &&
- 	    IN_RANGE(p, buf, end)) {
- 		p += snprintf(p, end - p, "port_ID=port%d ", err->port_id);
--		record_vendor_data(dec_tab, HISI_OEM_DATA_TYPE_INT,
-+		record_vendor_data(ev_decoder, HISI_OEM_DATA_TYPE_INT,
- 				   HIP08_PCIE_LOCAL_FIELD_PORT_ID,
- 				   err->port_id, NULL);
- 	}
-@@ -928,7 +928,7 @@ static void decode_pcie_local_err_hdr(struct ras_ns_dec_tab *dec_tab,
- 	    IN_RANGE(p, buf, end)) {
- 		p += snprintf(p, end - p, "error_severity=%s ",
- 			      err_severity(err->err_severity));
--		record_vendor_data(dec_tab, HISI_OEM_DATA_TYPE_TEXT,
-+		record_vendor_data(ev_decoder, HISI_OEM_DATA_TYPE_TEXT,
- 				   HIP08_PCIE_LOCAL_FIELD_ERR_SEV,
- 				   0, err_severity(err->err_severity));
- 	}
-@@ -936,7 +936,7 @@ static void decode_pcie_local_err_hdr(struct ras_ns_dec_tab *dec_tab,
- 	if (err->val_bits & HISI_PCIE_LOCAL_VALID_ERR_TYPE &&
- 	    IN_RANGE(p, buf, end)) {
- 		p += snprintf(p, end - p, "error_type=0x%x ", err->err_type);
--		record_vendor_data(dec_tab, HISI_OEM_DATA_TYPE_INT,
-+		record_vendor_data(ev_decoder, HISI_OEM_DATA_TYPE_INT,
- 				   HIP08_PCIE_LOCAL_FIELD_ERR_TYPE,
- 				   err->err_type, NULL);
- 	}
-@@ -947,7 +947,7 @@ static void decode_pcie_local_err_hdr(struct ras_ns_dec_tab *dec_tab,
- 	trace_seq_printf(s, "%s\n", buf);
- }
- 
--static void decode_pcie_local_err_regs(struct ras_ns_dec_tab *dec_tab,
-+static void decode_pcie_local_err_regs(struct ras_ns_ev_decoder *ev_decoder,
- 				       struct trace_seq *s,
- 				       const struct hisi_pcie_local_err_sec *err)
- {
-@@ -972,13 +972,13 @@ static void decode_pcie_local_err_regs(struct ras_ns_dec_tab *dec_tab,
- 		*p = '\0';
- 	}
- 
--	record_vendor_data(dec_tab, HISI_OEM_DATA_TYPE_TEXT,
-+	record_vendor_data(ev_decoder, HISI_OEM_DATA_TYPE_TEXT,
- 			   HIP08_PCIE_LOCAL_FIELD_REGS_DUMP, 0, buf);
--	step_vendor_data_tab(dec_tab, "hip08_pcie_local_event_tab");
-+	step_vendor_data_tab(ev_decoder, "hip08_pcie_local_event_tab");
- }
- 
- static int decode_hip08_pcie_local_error(struct ras_events *ras,
--					 struct ras_ns_dec_tab *dec_tab,
-+					 struct ras_ns_ev_decoder *ev_decoder,
- 					 struct trace_seq *s,
- 					 struct ras_non_standard_event *event)
- {
-@@ -992,8 +992,8 @@ static int decode_hip08_pcie_local_error(struct ras_events *ras,
- 	}
- 
- #ifdef HAVE_SQLITE3
--	if (!dec_tab->stmt_dec_record) {
--		if (ras_mc_add_vendor_table(ras, &dec_tab->stmt_dec_record,
-+	if (!ev_decoder->stmt_dec_record) {
-+		if (ras_mc_add_vendor_table(ras, &ev_decoder->stmt_dec_record,
- 				&hip08_pcie_local_event_tab) != SQLITE_OK) {
- 			trace_seq_printf(s,
- 				"create sql hip08_pcie_local_event_tab fail\n");
-@@ -1001,18 +1001,18 @@ static int decode_hip08_pcie_local_error(struct ras_events *ras,
- 		}
- 	}
- #endif
--	record_vendor_data(dec_tab, HISI_OEM_DATA_TYPE_TEXT,
-+	record_vendor_data(ev_decoder, HISI_OEM_DATA_TYPE_TEXT,
- 			   HIP08_PCIE_LOCAL_FIELD_TIMESTAMP,
- 			   0, event->timestamp);
- 
- 	trace_seq_printf(s, "\nHISI HIP08: PCIe local error\n");
--	decode_pcie_local_err_hdr(dec_tab, s, err);
--	decode_pcie_local_err_regs(dec_tab, s, err);
-+	decode_pcie_local_err_hdr(ev_decoder, s, err);
-+	decode_pcie_local_err_regs(ev_decoder, s, err);
- 
- 	return 0;
- }
- 
--struct ras_ns_dec_tab hip08_ns_oem_tab[] = {
-+static struct ras_ns_ev_decoder hip08_ns_ev_decoder[] = {
- 	{
- 		.sec_type = "1f8161e155d641e6bd107afd1dc5f7c5",
- 		.decode = decode_hip08_oem_type1_error,
-@@ -1025,10 +1025,12 @@ struct ras_ns_dec_tab hip08_ns_oem_tab[] = {
- 		.sec_type = "b2889fc9e7d74f9da867af42e98be772",
- 		.decode = decode_hip08_pcie_local_error,
- 	},
--	{ /* sentinel */ }
- };
- 
- static void __attribute__((constructor)) hip08_init(void)
- {
--	register_ns_dec_tab(hip08_ns_oem_tab);
-+	int i;
-+
-+	for (i = 0; i < ARRAY_SIZE(hip08_ns_ev_decoder); i++)
-+		register_ns_ev_decoder(&hip08_ns_ev_decoder[i]);
- }
-diff --git a/non-standard-hisilicon.c b/non-standard-hisilicon.c
-index c9e1fa9..a6f5e78 100644
---- a/non-standard-hisilicon.c
-+++ b/non-standard-hisilicon.c
-@@ -73,38 +73,38 @@ struct hisi_event {
- };
- 
- #ifdef HAVE_SQLITE3
--void record_vendor_data(struct ras_ns_dec_tab *dec_tab,
-+void record_vendor_data(struct ras_ns_ev_decoder *ev_decoder,
- 			       enum hisi_oem_data_type data_type,
- 			       int id, int64_t data, const char *text)
- {
- 	switch (data_type) {
- 	case HISI_OEM_DATA_TYPE_INT:
--		sqlite3_bind_int(dec_tab->stmt_dec_record, id, data);
-+		sqlite3_bind_int(ev_decoder->stmt_dec_record, id, data);
- 		break;
- 	case HISI_OEM_DATA_TYPE_INT64:
--		sqlite3_bind_int64(dec_tab->stmt_dec_record, id, data);
-+		sqlite3_bind_int64(ev_decoder->stmt_dec_record, id, data);
- 		break;
- 	case HISI_OEM_DATA_TYPE_TEXT:
--		sqlite3_bind_text(dec_tab->stmt_dec_record, id, text, -1, NULL);
-+		sqlite3_bind_text(ev_decoder->stmt_dec_record, id, text, -1, NULL);
- 		break;
- 	}
- }
- 
--int step_vendor_data_tab(struct ras_ns_dec_tab *dec_tab, const char *name)
-+int step_vendor_data_tab(struct ras_ns_ev_decoder *ev_decoder, const char *name)
- {
- 	int rc;
- 
--	rc = sqlite3_step(dec_tab->stmt_dec_record);
-+	rc = sqlite3_step(ev_decoder->stmt_dec_record);
- 	if (rc != SQLITE_OK && rc != SQLITE_DONE)
- 		log(TERM, LOG_ERR,
- 		    "Failed to do %s step on sqlite: error = %d\n", name, rc);
- 
--	rc = sqlite3_reset(dec_tab->stmt_dec_record);
-+	rc = sqlite3_reset(ev_decoder->stmt_dec_record);
- 	if (rc != SQLITE_OK && rc != SQLITE_DONE)
- 		log(TERM, LOG_ERR,
- 		    "Failed to reset %s on sqlite: error = %d\n", name, rc);
- 
--	rc = sqlite3_clear_bindings(dec_tab->stmt_dec_record);
-+	rc = sqlite3_clear_bindings(ev_decoder->stmt_dec_record);
- 	if (rc != SQLITE_OK && rc != SQLITE_DONE)
- 		log(TERM, LOG_ERR,
- 		    "Failed to clear bindings %s on sqlite: error = %d\n",
-@@ -113,12 +113,12 @@ int step_vendor_data_tab(struct ras_ns_dec_tab *dec_tab, const char *name)
- 	return rc;
- }
- #else
--void record_vendor_data(struct ras_ns_dec_tab *dec_tab,
-+void record_vendor_data(struct ras_ns_ev_decoder *ev_decoder,
- 			enum hisi_oem_data_type data_type,
- 			int id, int64_t data, const char *text)
- { }
- 
--int step_vendor_data_tab(struct ras_ns_dec_tab *dec_tab, const char *name)
-+int step_vendor_data_tab(struct ras_ns_ev_decoder *ev_decoder, const char *name)
- {
- 	return 0;
- }
-@@ -197,7 +197,7 @@ static void decode_module(struct hisi_event *event, uint8_t module_id)
- 		HISI_SNPRINTF(event->error_msg, "module=%s ", module_name[module_id]);
- }
- 
--static void decode_hisi_common_section_hdr(struct ras_ns_dec_tab *dec_tab,
-+static void decode_hisi_common_section_hdr(struct ras_ns_ev_decoder *ev_decoder,
- 					  const struct hisi_common_error_section *err,
- 					  struct hisi_event *event)
- {
-@@ -244,7 +244,7 @@ static void decode_hisi_common_section_hdr(struct ras_ns_dec_tab *dec_tab,
- }
- 
- static int decode_hisi_common_section(struct ras_events *ras,
--				      struct ras_ns_dec_tab *dec_tab,
-+				      struct ras_ns_ev_decoder *ev_decoder,
- 				      struct trace_seq *s,
- 				      struct ras_non_standard_event *event)
- {
-@@ -253,8 +253,8 @@ static int decode_hisi_common_section(struct ras_events *ras,
- 	struct hisi_event hevent;
- 
- #ifdef HAVE_SQLITE3
--	if (ras->record_events && !dec_tab->stmt_dec_record) {
--		if (ras_mc_add_vendor_table(ras, &dec_tab->stmt_dec_record,
-+	if (ras->record_events && !ev_decoder->stmt_dec_record) {
-+		if (ras_mc_add_vendor_table(ras, &ev_decoder->stmt_dec_record,
- 				&hisi_common_section_tab) != SQLITE_OK) {
- 			trace_seq_printf(s, "create sql hisi_common_section_tab fail\n");
- 			return -1;
-@@ -264,7 +264,7 @@ static int decode_hisi_common_section(struct ras_events *ras,
- 
- 	memset(&hevent, 0, sizeof(struct hisi_event));
- 	trace_seq_printf(s, "\nHisilicon Common Error Section:\n");
--	decode_hisi_common_section_hdr(dec_tab, err, &hevent);
-+	decode_hisi_common_section_hdr(ev_decoder, err, &hevent);
- 	trace_seq_printf(s, "%s\n", hevent.error_msg);
- 
- 	if (err->val_bits & BIT(HISI_COMMON_VALID_REG_ARRAY_SIZE) && err->reg_array_size > 0) {
-@@ -280,28 +280,30 @@ static int decode_hisi_common_section(struct ras_events *ras,
- 	}
- 
- 	if (ras->record_events) {
--		record_vendor_data(dec_tab, HISI_OEM_DATA_TYPE_TEXT,
-+		record_vendor_data(ev_decoder, HISI_OEM_DATA_TYPE_TEXT,
- 				   HISI_COMMON_FIELD_TIMESTAMP,
- 				   0, event->timestamp);
--		record_vendor_data(dec_tab, HISI_OEM_DATA_TYPE_TEXT,
-+		record_vendor_data(ev_decoder, HISI_OEM_DATA_TYPE_TEXT,
- 				   HISI_COMMON_FIELD_ERR_INFO, 0, hevent.error_msg);
--		record_vendor_data(dec_tab, HISI_OEM_DATA_TYPE_TEXT,
-+		record_vendor_data(ev_decoder, HISI_OEM_DATA_TYPE_TEXT,
- 				   HISI_COMMON_FIELD_REGS_DUMP, 0, hevent.reg_msg);
--		step_vendor_data_tab(dec_tab, "hisi_common_section_tab");
-+		step_vendor_data_tab(ev_decoder, "hisi_common_section_tab");
- 	}
- 
- 	return 0;
- }
- 
--struct ras_ns_dec_tab hisi_section_ns_tab[] = {
-+static struct ras_ns_ev_decoder hisi_section_ns_ev_decoder[]  = {
- 	{
- 		.sec_type = "c8b328a899174af69a132e08ab2e7586",
- 		.decode = decode_hisi_common_section,
- 	},
--	{ /* sentinel */ }
- };
- 
- static void __attribute__((constructor)) hisi_ns_init(void)
- {
--	register_ns_dec_tab(hisi_section_ns_tab);
-+	int i;
-+
-+	for (i = 0; i < ARRAY_SIZE(hisi_section_ns_ev_decoder); i++)
-+		register_ns_ev_decoder(&hisi_section_ns_ev_decoder[i]);
- }
-diff --git a/non-standard-hisilicon.h b/non-standard-hisilicon.h
-index 1ce210a..75b911e 100644
---- a/non-standard-hisilicon.h
-+++ b/non-standard-hisilicon.h
-@@ -41,9 +41,9 @@ static inline char *err_severity(uint8_t err_sev)
- 	return "unknown";
- }
- 
--void record_vendor_data(struct ras_ns_dec_tab *dec_tab,
-+void record_vendor_data(struct ras_ns_ev_decoder *ev_decoder,
- 			enum hisi_oem_data_type data_type,
- 			int id, int64_t data, const char *text);
--int step_vendor_data_tab(struct ras_ns_dec_tab *dec_tab, const char *name);
-+int step_vendor_data_tab(struct ras_ns_ev_decoder *ev_decoder, const char *name);
- 
- #endif
-diff --git a/ras-non-standard-handler.c b/ras-non-standard-handler.c
-index d92fd42..1862335 100644
---- a/ras-non-standard-handler.c
-+++ b/ras-non-standard-handler.c
-@@ -22,46 +22,7 @@
- #include "ras-logger.h"
- #include "ras-report.h"
- 
--static p_ns_dec_tab * ns_dec_tab;
--static size_t dec_tab_count;
--
--int register_ns_dec_tab(const p_ns_dec_tab tab)
--{
--	ns_dec_tab = (p_ns_dec_tab *)realloc(ns_dec_tab,
--					    (dec_tab_count + 1) * sizeof(tab));
--	if (ns_dec_tab == NULL) {
--		printf("%s p_ns_dec_tab malloc failed", __func__);
--		return -1;
--	}
--	ns_dec_tab[dec_tab_count] = tab;
--	dec_tab_count++;
--	return 0;
--}
--
--void unregister_ns_dec_tab(void)
--{
--	if (ns_dec_tab) {
--#ifdef HAVE_SQLITE3
--		p_ns_dec_tab dec_tab;
--		int i, count;
--
--		for (count = 0; count < dec_tab_count; count++) {
--			dec_tab = ns_dec_tab[count];
--			for (i = 0; dec_tab[i].decode; i++) {
--				if (dec_tab[i].stmt_dec_record) {
--					ras_mc_finalize_vendor_table(
--						dec_tab[i].stmt_dec_record);
--					dec_tab[i].stmt_dec_record = NULL;
--				}
--			}
--		}
--#endif
--
--		free(ns_dec_tab);
--		ns_dec_tab = NULL;
--		dec_tab_count = 0;
--	}
--}
-+static struct  ras_ns_ev_decoder *ras_ns_ev_dec_list;
- 
- void print_le_hex(struct trace_seq *s, const uint8_t *buf, int index) {
- 	trace_seq_printf(s, "%02x%02x%02x%02x", buf[index+3], buf[index+2], buf[index+1], buf[index]);
-@@ -105,18 +66,75 @@ static int uuid_le_cmp(const char *sec_type, const char *uuid2)
- 	return strncmp(uuid1, uuid2, 32);
- }
- 
-+int register_ns_ev_decoder(struct ras_ns_ev_decoder *ns_ev_decoder)
-+{
-+	struct ras_ns_ev_decoder *list;
-+
-+	if (!ns_ev_decoder)
-+		return -1;
-+
-+	ns_ev_decoder->next = NULL;
-+	ns_ev_decoder->stmt_dec_record = NULL;
-+	if (!ras_ns_ev_dec_list) {
-+		ras_ns_ev_dec_list = ns_ev_decoder;
-+	} else {
-+		list = ras_ns_ev_dec_list;
-+		while (list->next)
-+			list = list->next;
-+		list->next = ns_ev_decoder;
-+	}
-+
-+	return 0;
-+}
-+
-+static int find_ns_ev_decoder(const char *sec_type, struct ras_ns_ev_decoder **p_ns_ev_dec)
-+{
-+	struct ras_ns_ev_decoder *ns_ev_decoder;
-+	int match = 0;
-+
-+	ns_ev_decoder = ras_ns_ev_dec_list;
-+	while (ns_ev_decoder) {
-+		if (uuid_le_cmp(sec_type, ns_ev_decoder->sec_type) == 0) {
-+			*p_ns_ev_dec = ns_ev_decoder;
-+			match  = 1;
-+			break;
-+		}
-+		ns_ev_decoder = ns_ev_decoder->next;
-+	}
-+
-+	if (!match)
-+		return -1;
-+
-+	return 0;
-+}
-+
-+static void unregister_ns_ev_decoder(void)
-+{
-+#ifdef HAVE_SQLITE3
-+	struct ras_ns_ev_decoder *ns_ev_decoder = ras_ns_ev_dec_list;
-+
-+	while (ns_ev_decoder) {
-+		if (ns_ev_decoder->stmt_dec_record) {
-+			ras_mc_finalize_vendor_table(ns_ev_decoder->stmt_dec_record);
-+			ns_ev_decoder->stmt_dec_record = NULL;
-+		}
-+		ns_ev_decoder = ns_ev_decoder->next;
-+	}
-+#endif
-+	ras_ns_ev_dec_list = NULL;
-+}
-+
- int ras_non_standard_event_handler(struct trace_seq *s,
- 			 struct pevent_record *record,
- 			 struct event_format *event, void *context)
- {
--	int len, i, line_count, count;
-+	int len, i, line_count;
- 	unsigned long long val;
- 	struct ras_events *ras = context;
- 	time_t now;
- 	struct tm *tm;
- 	struct ras_non_standard_event ev;
--	p_ns_dec_tab dec_tab;
--	bool dec_done = false;
-+	struct ras_ns_ev_decoder *ns_ev_decoder;
- 
- 	/*
- 	 * Newer kernels (3.10-rc1 or upper) provide an uptime clock.
-@@ -177,19 +195,9 @@ int ras_non_standard_event_handler(struct trace_seq *s,
- 	if(!ev.error)
- 		return -1;
- 
--	for (count = 0; count < dec_tab_count && !dec_done; count++) {
--		dec_tab = ns_dec_tab[count];
--		for (i = 0; dec_tab[i].decode; i++) {
--			if (uuid_le_cmp(ev.sec_type,
--					dec_tab[i].sec_type) == 0) {
--				dec_tab[i].decode(ras, &dec_tab[i], s, &ev);
--				dec_done = true;
--				break;
--			}
--		}
--	}
--
--	if (!dec_done) {
-+	if (!find_ns_ev_decoder(ev.sec_type, &ns_ev_decoder)) {
-+		ns_ev_decoder->decode(ras, ns_ev_decoder, s, &ev);
-+	} else {
- 		len = ev.length;
- 		i = 0;
- 		line_count = 0;
-@@ -222,5 +230,5 @@ int ras_non_standard_event_handler(struct trace_seq *s,
- __attribute__((destructor))
- static void ns_exit(void)
- {
--	unregister_ns_dec_tab();
-+	unregister_ns_ev_decoder();
- }
-diff --git a/ras-non-standard-handler.h b/ras-non-standard-handler.h
-index 2b9bf40..57d4cb5 100644
---- a/ras-non-standard-handler.h
-+++ b/ras-non-standard-handler.h
-@@ -20,15 +20,16 @@
- #define BIT(nr)                 (1UL << (nr))
- #define BIT_ULL(nr)             (1ULL << (nr))
- 
--typedef struct ras_ns_dec_tab {
-+struct ras_ns_ev_decoder {
-+	struct ras_ns_ev_decoder *next;
- 	const char *sec_type;
--	int (*decode)(struct ras_events *ras, struct ras_ns_dec_tab *dec_tab,
-+	int (*decode)(struct ras_events *ras, struct ras_ns_ev_decoder *ev_decoder,
- 		      struct trace_seq *s, struct ras_non_standard_event *event);
- #ifdef HAVE_SQLITE3
- #include <sqlite3.h>
- 	sqlite3_stmt *stmt_dec_record;
- #endif
--} *p_ns_dec_tab;
-+};
- 
- int ras_non_standard_event_handler(struct trace_seq *s,
- 			 struct pevent_record *record,
-@@ -37,11 +38,9 @@ int ras_non_standard_event_handler(struct trace_seq *s,
- void print_le_hex(struct trace_seq *s, const uint8_t *buf, int index);
- 
- #ifdef HAVE_NON_STANDARD
--int register_ns_dec_tab(const p_ns_dec_tab tab);
--void unregister_ns_dec_tab(void);
-+int register_ns_ev_decoder(struct ras_ns_ev_decoder *ns_ev_decoder);
- #else
--static inline int register_ns_dec_tab(const p_ns_dec_tab tab) { return 0; };
--static inline void unregister_ns_dec_tab(void) { return; };
-+static inline int register_ns_ev_decoder(struct ras_ns_ev_decoder *ns_ev_decoder) { return 0; };
- #endif
- 
- #endif
--- 
-2.17.1
+I can send a patch soon that will work for Naples, Rome, and later
+systems.
 
-
+Thanks,
+Yazen
