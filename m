@@ -2,75 +2,127 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DEA54242862
-	for <lists+linux-edac@lfdr.de>; Wed, 12 Aug 2020 12:55:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD01D243062
+	for <lists+linux-edac@lfdr.de>; Wed, 12 Aug 2020 23:09:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727850AbgHLKyt (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Wed, 12 Aug 2020 06:54:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41610 "EHLO
+        id S1726512AbgHLVJS (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Wed, 12 Aug 2020 17:09:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727814AbgHLKyk (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Wed, 12 Aug 2020 06:54:40 -0400
-Received: from mail-yb1-xb42.google.com (mail-yb1-xb42.google.com [IPv6:2607:f8b0:4864:20::b42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2226EC06178A
-        for <linux-edac@vger.kernel.org>; Wed, 12 Aug 2020 03:54:19 -0700 (PDT)
-Received: by mail-yb1-xb42.google.com with SMTP id s195so1116357ybc.8
-        for <linux-edac@vger.kernel.org>; Wed, 12 Aug 2020 03:54:19 -0700 (PDT)
+        with ESMTP id S1726030AbgHLVJR (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Wed, 12 Aug 2020 17:09:17 -0400
+Received: from mail-pj1-x1044.google.com (mail-pj1-x1044.google.com [IPv6:2607:f8b0:4864:20::1044])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93619C061383
+        for <linux-edac@vger.kernel.org>; Wed, 12 Aug 2020 14:09:17 -0700 (PDT)
+Received: by mail-pj1-x1044.google.com with SMTP id kr4so1738038pjb.2
+        for <linux-edac@vger.kernel.org>; Wed, 12 Aug 2020 14:09:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=h1Wep4bWm4c6UJ7FpYIC1ACXuPoB2ZCMfU6PJTjxU/k=;
-        b=eHtAeuj7bl+NqyA/LfsHaO+6oyAIxBkO+xaPddsTkjseO3G/4FMwJLJZ3d+diuxq/O
-         YffChG6lM/ut84kiK2GdqizvnXUTzqNXiKNeOCFMCHYmku2UrRGBn1y3T1OsOwMYOEKv
-         LBmDv2mjmGXbF3KwlPMtLwFc3xM6G+0bvX65YPeFgFlF5FcqfYFe6/ujnqj6ZwqtqzRx
-         CRsXYh37MAdT1niXt9HvyCtXxvFJMDNle0UTFpVQ2TzE6EUtu97WN+v6jDd+jOD/fhNs
-         NHhfILPNMrGbOKQ0K/3+sSXJpmcDIWxt9q3WVW0iG0t9vhqzhK4edfeGY8dzuTRSQOKD
-         0iWg==
+        d=google.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=bAaQQ7e9aAoGDmzOJ51xKy0+RuDHeXB46TjNq9EcMXw=;
+        b=JJyY3xwd5EgGKBxKKs4dXLXjk5wiLbg072kKzLvv50o9mgzTqqrQJL+xdDaimziA1c
+         8lAJxeWVFouTjEHC3p+FJBHv9MkkQXebphjhv/87vMA03btiQzyISXigPijA5x2KQoW5
+         nUw89h2rmkM9A/ksku0Eaj3hOHIgdGgwzjFhnjtQSgNPwpja4IRE5ffrLMK8bI+rSdPx
+         zrd1zLC5Ud5n5igqgNzbn4hLLF+kvpQzPaA3G36KP5d616DBAw5ejnhDSpbZCyii00Ts
+         0nv+48h+3RkOCkQQ7zTOGGL8XFhl0NtwiI7rHihoXoga1nJQSXnDWdFxDtA0zFVtgo2u
+         58kw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=h1Wep4bWm4c6UJ7FpYIC1ACXuPoB2ZCMfU6PJTjxU/k=;
-        b=XwvDd7VItknxsrr8ygbtNF0EDOzygkkxhm+glNGfa5r9bgrkdrHG8nSWVTPGh1tprD
-         DKXC8TKiLK4S/jddgxAIqZZHm7iwk5ex1y9W4eQ0tXcfXA8xuGI2EAySxLA6cHtnFk5v
-         Jea+Kgj2mIoXtY1PSOAGVEEffIwXJwA5+9tESXoxMcE3hYHQV2J89v4z6kr+G50Et1iA
-         xfpcYnDR2dQ9R9V0XyeMiYiEAyY+pRCX4++o43mi/nP+agi8bdJf8St0a0LNY8WQA19a
-         VjC50Khu0PVB3hJ1c2Fgow5J4w7Wjr2T9iYN+v4axinH8MqacC+1U/N2cl7tBOkK/IH2
-         VsFw==
-X-Gm-Message-State: AOAM5329It58iiZtlKjwpyj0FUUiWWe25Uy7xNsMH9X6Wl4b5+XpCjHN
-        hXt6XFs3hXFeMRlViG9dLMsBUz9Y+aMbl5ktwWg=
-X-Google-Smtp-Source: ABdhPJxlNC8oUTUc5nL8/QI7Vh+VC7WTqcpf0G2Ip8kZv1WBdyY0VUrpvwJDuXU1Jl7EvF/Yh6KiQFr+AHCrWs7YdRU=
-X-Received: by 2002:a25:234a:: with SMTP id j71mr54485670ybj.504.1597229657758;
- Wed, 12 Aug 2020 03:54:17 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=bAaQQ7e9aAoGDmzOJ51xKy0+RuDHeXB46TjNq9EcMXw=;
+        b=uCtKYrv8eqxpZXeFAivfcdrg/0wUe3uLQqvXI+M8jpaAQlAJ0hn9jK/bPnwLJeHC8P
+         ovuODrLIOx0F0X8eDAkgtyiEbRXUX7t7koAqMVl2UhZ6wbEMwKQV0lZf87Pw4fwCQ664
+         fNP17PUFFe8cyEqxthHLT3W4023h/pCiC0SOQOh0ogkVevo1OuDZJG2ny5TI6ypIu/0h
+         SVbvTE3lnoHFp80gMlU7hJ6303hB9vU0jRFH4rEykquuDJ83SA4QFk6Eyi4JNNtIgIR/
+         ZyQ1L1KYixRCF9B5w0XQBgxekukMIlqhQx/2rmyn/zNU9o0PxKdj6Zr+9cdfXY6rGqYi
+         +O9A==
+X-Gm-Message-State: AOAM532UIbXHqtuIsddYrE4ZMe+p+ctlIjN1VuImul0Q/ItfAC1+NGsW
+        PM1s4BhVdqsp32NpoCj5ItPJlMDtwEs=
+X-Google-Smtp-Source: ABdhPJzpIfuVpvNm7+wJPOKe1ryB9LzK23HxdnBP82RAznzjdf1L5AejEUEGRunqac7heeExlbSFHQ==
+X-Received: by 2002:a17:90a:2210:: with SMTP id c16mr1938422pje.65.1597266556824;
+        Wed, 12 Aug 2020 14:09:16 -0700 (PDT)
+Received: from google.com ([2620:15c:201:2:f693:9fff:fef4:1b6d])
+        by smtp.gmail.com with ESMTPSA id n1sm3437625pfu.2.2020.08.12.14.09.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 12 Aug 2020 14:09:16 -0700 (PDT)
+Date:   Wed, 12 Aug 2020 14:09:09 -0700
+From:   Sami Tolvanen <samitolvanen@google.com>
+To:     Luca Stefani <luca.stefani.ge1@gmail.com>
+Cc:     Tony Luck <tony.luck@intel.com>, Borislav Petkov <bp@alien8.de>,
+        linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] RAS/CEC: Fix cec_init prototype
+Message-ID: <20200812210909.GA3283093@google.com>
+References: <20200805045955.GB9127@nazgul.tnic>
+ <20200805095708.83939-1-luca.stefani.ge1@gmail.com>
 MIME-Version: 1.0
-Received: by 2002:a05:7000:229b:0:0:0:0 with HTTP; Wed, 12 Aug 2020 03:54:17
- -0700 (PDT)
-Reply-To: alexanadi0005@gmail.com
-From:   Alex Anadi <diplomatagency2011@gmail.com>
-Date:   Wed, 12 Aug 2020 11:54:17 +0100
-Message-ID: <CAG2PG9VSNH2ukcO6fsJhaDp9DqTRw4ujLo-DJjtej2T=gVdW3A@mail.gmail.com>
-Subject: Re:
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200805095708.83939-1-luca.stefani.ge1@gmail.com>
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-Attention: Sir/Madam,
+Hi Luca,
 
-Compliments of the season.
+On Wed, Aug 05, 2020 at 11:57:08AM +0200, Luca Stefani wrote:
+> * late_initcall expects a function that returns an integer
+>   -> Update the function signature to match.
+> 
+> Fixes: 9554bfe403nd ("x86/mce: Convert the CEC to use the MCE notifier")
+> Signed-off-by: Luca Stefani <luca.stefani.ge1@gmail.com>
 
-I am Mr Alex Anadi a senior staff of Computer Telex Dept of central
-bank of Nigeria.
+Thank you for fixing this!
 
-I decided to contact you because of the prevailing security report
-reaching my office and the intense nature of polity in Nigeria.
+[Note that this v2 email never landed in my inbox, perhaps Gmail filtered
+ it out due to a missing To: line?]
 
-This is to inform you about the recent plan of federal government of
-Nigeria to send your fund to you via diplomatic immunity CASH DELIVERY
-SYSTEM valued at $10.6 Million United states dollars only, contact me
-for further details.
+> ---
+>  drivers/ras/cec.c | 9 +++++----
+>  1 file changed, 5 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/ras/cec.c b/drivers/ras/cec.c
+> index 569d9ad2c594..6939aa5b3dc7 100644
+> --- a/drivers/ras/cec.c
+> +++ b/drivers/ras/cec.c
+> @@ -553,20 +553,20 @@ static struct notifier_block cec_nb = {
+>  	.priority	= MCE_PRIO_CEC,
+>  };
+>  
+> -static void __init cec_init(void)
+> +static int __init cec_init(void)
+>  {
+>  	if (ce_arr.disabled)
+> -		return;
+> +		return -ENODEV;
+>  
+>  	ce_arr.array = (void *)get_zeroed_page(GFP_KERNEL);
+>  	if (!ce_arr.array) {
+>  		pr_err("Error allocating CE array page!\n");
+> -		return;
+> +		return -ENOMEM;
+>  	}
+>  
+>  	if (create_debugfs_nodes()) {
+>  		free_page((unsigned long)ce_arr.array);
+> -		return;
+> +		return -ENOMEM;
+>  	}
+>  
+>  	INIT_DELAYED_WORK(&cec_work, cec_work_fn);
+> @@ -575,6 +575,7 @@ static void __init cec_init(void)
+>  	mce_register_decode_chain(&cec_nb);
+>  
+>  	pr_info("Correctable Errors collector initialized.\n");
+> +	return 0;
+>  }
+>  late_initcall(cec_init);
 
-Regards,
-Mr Alex Anadi.
+The type mismatch broke allyesconfig in my test tree and your patch
+fixes the issue. Please feel free to add:
+
+  Reviewed-and-tested-by: Sami Tolvanen <samitolvanen@google.com>
+
+Sami
