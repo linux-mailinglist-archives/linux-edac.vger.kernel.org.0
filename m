@@ -2,158 +2,101 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 65860245708
-	for <lists+linux-edac@lfdr.de>; Sun, 16 Aug 2020 11:17:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 42039245748
+	for <lists+linux-edac@lfdr.de>; Sun, 16 Aug 2020 13:22:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726320AbgHPJRz (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Sun, 16 Aug 2020 05:17:55 -0400
-Received: from smtp-fw-9101.amazon.com ([207.171.184.25]:13505 "EHLO
-        smtp-fw-9101.amazon.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726022AbgHPJRw (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Sun, 16 Aug 2020 05:17:52 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1597569472; x=1629105472;
-  h=subject:to:cc:references:from:message-id:date:
-   mime-version:in-reply-to:content-transfer-encoding;
-  bh=0KiFD7MKYJeA21r8+YOIjXyPutiEhZpN89Zy2Fhpttg=;
-  b=ZF60OjM5ubDRZZi+iSITPnWcBtWZw/Fv6U8o+YkaS3ujh67GNG+T74M9
-   B20vlMwbfeIlw7+g/vH6efsskSwQYACDw3m66b3jTxKi0niOLyyRpkXF6
-   +yG8ALGXUf6OU7mt285fsZB2DlTkNMWaEoqJ6vGAg6gaeKvm39FUd/FBk
-   c=;
-X-IronPort-AV: E=Sophos;i="5.76,319,1592870400"; 
-   d="scan'208";a="60062486"
-Received: from sea32-co-svc-lb4-vlan3.sea.corp.amazon.com (HELO email-inbound-relay-1e-97fdccfd.us-east-1.amazon.com) ([10.47.23.38])
-  by smtp-border-fw-out-9101.sea19.amazon.com with ESMTP; 16 Aug 2020 09:17:49 +0000
-Received: from EX13MTAUEA001.ant.amazon.com (iad55-ws-svc-p15-lb9-vlan2.iad.amazon.com [10.40.159.162])
-        by email-inbound-relay-1e-97fdccfd.us-east-1.amazon.com (Postfix) with ESMTPS id 68A39A1C5B;
-        Sun, 16 Aug 2020 09:17:45 +0000 (UTC)
-Received: from EX13D01EUB001.ant.amazon.com (10.43.166.194) by
- EX13MTAUEA001.ant.amazon.com (10.43.61.243) with Microsoft SMTP Server (TLS)
- id 15.0.1497.2; Sun, 16 Aug 2020 09:17:44 +0000
-Received: from [192.168.3.188] (10.43.162.140) by EX13D01EUB001.ant.amazon.com
- (10.43.166.194) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Sun, 16 Aug
- 2020 09:17:35 +0000
+        id S1728730AbgHPLWc (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Sun, 16 Aug 2020 07:22:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56828 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728639AbgHPLWL (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Sun, 16 Aug 2020 07:22:11 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72E52C061786;
+        Sun, 16 Aug 2020 04:21:56 -0700 (PDT)
+Received: from zn.tnic (p200300ec2f26be005d37f199a58e243d.dip0.t-ipconnect.de [IPv6:2003:ec:2f26:be00:5d37:f199:a58e:243d])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 3CC941EC027B;
+        Sun, 16 Aug 2020 13:21:50 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1597576910;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=cMXvEXkyTsrY8sFsp1lnP4ixT5jJSQ6YbHxQfH0FNg4=;
+        b=Krl/v7U3lVDL8glqCYGHcilbKhYp7xlwSoeGOYfIWisRhmgp569YSVCqhzsCaIfn8zjoc0
+        mC+uzv36mSVuWb++7yBXMOS+hyDvHpjaWPjVrT4ymB62HU4Xv+pfqAn+Eb9BtkifX2ovaW
+        60JxbV021VbIljRwwcb0rQgiuI1C5Ug=
+Date:   Sun, 16 Aug 2020 13:22:44 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     "Shenhar, Talel" <talel@amazon.com>
+Cc:     mchehab@kernel.org, james.morse@arm.com, davem@davemloft.net,
+        gregkh@linuxfoundation.org, nicolas.ferre@microchip.com,
+        robh+dt@kernel.org, mark.rutland@arm.com, catalin.marinas@arm.com,
+        will@kernel.org, linux-edac@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, hhhawa@amazon.com,
+        ronenk@amazon.com, jonnyc@amazon.com, hanochu@amazon.com,
+        eitan@amazon.com
 Subject: Re: [PATCH v9 2/2] EDAC: al-mc-edac: Introduce Amazon's Annapurna
  Labs Memory Controller EDAC
-To:     Borislav Petkov <bp@alien8.de>
-CC:     <mchehab@kernel.org>, <james.morse@arm.com>, <davem@davemloft.net>,
-        <gregkh@linuxfoundation.org>, <nicolas.ferre@microchip.com>,
-        <robh+dt@kernel.org>, <mark.rutland@arm.com>,
-        <catalin.marinas@arm.com>, <will@kernel.org>,
-        <linux-edac@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>, <hhhawa@amazon.com>,
-        <ronenk@amazon.com>, <jonnyc@amazon.com>, <hanochu@amazon.com>,
-        <eitan@amazon.com>, <talel@amazon.com>
+Message-ID: <20200816112244.GG21914@zn.tnic>
 References: <20200728095155.18506-1-talel@amazon.com>
- <20200728095155.18506-3-talel@amazon.com> <20200815183358.GE25814@zn.tnic>
-From:   "Shenhar, Talel" <talel@amazon.com>
-Message-ID: <5d516c64-ecd8-6f36-5f95-6708fe0f3fd5@amazon.com>
-Date:   Sun, 16 Aug 2020 12:17:31 +0300
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+ <20200728095155.18506-3-talel@amazon.com>
+ <20200815183358.GE25814@zn.tnic>
+ <5d516c64-ecd8-6f36-5f95-6708fe0f3fd5@amazon.com>
 MIME-Version: 1.0
-In-Reply-To: <20200815183358.GE25814@zn.tnic>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-GB
-X-Originating-IP: [10.43.162.140]
-X-ClientProxiedBy: EX13D32UWB004.ant.amazon.com (10.43.161.36) To
- EX13D01EUB001.ant.amazon.com (10.43.166.194)
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <5d516c64-ecd8-6f36-5f95-6708fe0f3fd5@amazon.com>
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
+On Sun, Aug 16, 2020 at 12:17:31PM +0300, Shenhar, Talel wrote:
+> Let me know what you think.
 
-On 8/15/2020 9:33 PM, Borislav Petkov wrote:
-> On Tue, Jul 28, 2020 at 12:51:55PM +0300, Talel Shenhar wrote:
->> +static void al_mc_edac_check(struct mem_ctl_info *mci)
->> +{
->> +     struct al_mc_edac *al_mc = mci->pvt_info;
->> +
->> +     if (al_mc->irq_ue <= 0)
->> +             handle_ue(mci);
->> +
->> +     if (al_mc->irq_ce <= 0)
->> +             handle_ce(mci);
->> +}
->> +
->> +static irqreturn_t al_mc_edac_irq_handler_ue(int irq, void *info)
->> +{
->> +     struct platform_device *pdev = info;
->> +     struct mem_ctl_info *mci = platform_get_drvdata(pdev);
->> +
->> +     if (handle_ue(mci))
->> +             return IRQ_HANDLED;
->> +     return IRQ_NONE;
->> +}
->> +
->> +static irqreturn_t al_mc_edac_irq_handler_ce(int irq, void *info)
->> +{
->> +     struct platform_device *pdev = info;
->> +     struct mem_ctl_info *mci = platform_get_drvdata(pdev);
->> +
->> +     if (handle_ce(mci))
->> +             return IRQ_HANDLED;
->> +     return IRQ_NONE;
->> +}
->> +
->> +static enum scrub_type al_mc_edac_get_scrub_mode(void __iomem *mmio_base)
->> +{
->> +     u32 ecccfg0;
->> +
->> +     ecccfg0 = readl(mmio_base + AL_MC_ECC_CFG);
->> +
->> +     if (FIELD_GET(AL_MC_ECC_CFG_SCRUB_DISABLED, ecccfg0))
->> +             return SCRUB_NONE;
->> +     else
->> +             return SCRUB_HW_SRC;
->> +}
->> +
->> +static void devm_al_mc_edac_free(void *data)
->> +{
->> +     edac_mc_free(data);
->> +}
->> +
->> +static void devm_al_mc_edac_del(void *data)
->> +{
->> +     edac_mc_del_mc(data);
->> +}
->  From a previous review:
->
-> I said:
->
->> Drop the "al_mc_edac_" prefix from most of the static functions. You can
->> leave it in the probe function or the IRQ handler so that it is visible
->> in stack traces but all those small functions don't need that prefix.
-> You replied with:
->
->> Shall be part of v7.
-> and yet it ain't part of any v<num>.
->
-> Why?
+Well, devm_al_mc_edac_free() devm_al_mc_edac_del() look like useless
+wrappers to me and can be removed and you can use edac_mc_del_mc() and
+edac_mc_free() directly. But then you need to cast them in an ugly way
+so that it builds:
 
-Thanks for taking a look.
+        ret = devm_add_action(&pdev->dev, (void (*)(void *data))edac_mc_free, mci);
 
- From cover letter:
+I guess we can leave them as is and then lift them into the EDAC core if
+someone else wants to do the same devm_* thing.
 
-- removed static function names prefix from internal functions (external
-   used function, such as devm/interrupts-handlers/probe, left with the
-   prefix to allow stack trace visibility)
+al_mc_edac_get_scrub_mode() doesn't need a prefix because it is used
+only once and the compiler is simply inlining it so you can forget the
+stack trace visibility:
 
-As you can see, part of the functions got their prefix removed, e.g. 
-prepare_msg, handle_ce, handle_ue.
+$ readelf -s drivers/edac/al_mc_edac.ko | grep scrub
+$
 
-I did take your advise for leaving prefix for having visibility for 
-functions being used outside. hence, some were left with the prefix.
+The others are fine, I guess, since they're function pointers and cannot be
+inlined as such so you want them prefixed:
 
-Let me know what you think.
+$ readelf -s drivers/edac/al_mc_edac.ko | grep al_mc_edac
+    23: 00000000     0 FILE    LOCAL  DEFAULT  ABS al_mc_edac.c
+    25: 00000000     4 FUNC    LOCAL  DEFAULT    1 devm_al_mc_edac_free
+    27: 00000004     4 FUNC    LOCAL  DEFAULT    1 devm_al_mc_edac_del
+    31: 00000124    24 FUNC    LOCAL  DEFAULT    1 al_mc_edac_irq_handler_ce
+    35: 00000260    24 FUNC    LOCAL  DEFAULT    1 al_mc_edac_irq_handler_ue
+    36: 00000278    56 FUNC    LOCAL  DEFAULT    1 al_mc_edac_check
+    37: 000002b0   680 FUNC    LOCAL  DEFAULT    1 al_mc_edac_probe
+    47: 00000000    20 FUNC    LOCAL  DEFAULT    3 al_mc_edac_driver_init
+    51: 00000000    12 FUNC    LOCAL  DEFAULT    5 al_mc_edac_driver_exit
+    53: 00000000   392 OBJECT  LOCAL  DEFAULT   16 al_mc_edac_of_match
+    59: 00000000   104 OBJECT  LOCAL  DEFAULT   20 al_mc_edac_driver
+    61: 00000000     0 FILE    LOCAL  DEFAULT  ABS al_mc_edac.mod.c
+    88: 00000000   392 OBJECT  GLOBAL DEFAULT   16 __mod_of__al_mc_edac_of_m
 
->
-> --
-> Regards/Gruss,
->      Boris.
->
-> https://people.kernel.org/tglx/notes-about-netiquette
+Thx.
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
