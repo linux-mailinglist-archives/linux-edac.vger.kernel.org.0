@@ -2,157 +2,124 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 73BA924A1D9
-	for <lists+linux-edac@lfdr.de>; Wed, 19 Aug 2020 16:37:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C88A24C43B
+	for <lists+linux-edac@lfdr.de>; Thu, 20 Aug 2020 19:10:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728493AbgHSOhF (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Wed, 19 Aug 2020 10:37:05 -0400
-Received: from mx0a-002e3701.pphosted.com ([148.163.147.86]:54302 "EHLO
-        mx0a-002e3701.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727018AbgHSOhD (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>);
-        Wed, 19 Aug 2020 10:37:03 -0400
-Received: from pps.filterd (m0150242.ppops.net [127.0.0.1])
-        by mx0a-002e3701.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 07JESxB6012756;
-        Wed, 19 Aug 2020 14:36:59 GMT
-Received: from g9t5008.houston.hpe.com (g9t5008.houston.hpe.com [15.241.48.72])
-        by mx0a-002e3701.pphosted.com with ESMTP id 330m84fgur-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 19 Aug 2020 14:36:59 +0000
-Received: from stormcage.eag.rdlabs.hpecorp.net (stormcage.eag.rdlabs.hpecorp.net [128.162.236.70])
-        by g9t5008.houston.hpe.com (Postfix) with ESMTP id 5AE934F;
-        Wed, 19 Aug 2020 14:36:58 +0000 (UTC)
-Received: by stormcage.eag.rdlabs.hpecorp.net (Postfix, from userid 201855)
-        id ED1C7200FDA48; Wed, 19 Aug 2020 09:36:57 -0500 (CDT)
-From:   Alex Kluver <alex.kluver@hpe.com>
-To:     linux-edac@vger.kernel.org, linux-efi@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     ardb@kernel.org, mchehab@kernel.org, bp@alien8.de,
-        russ.anderson@hpe.com, dimitri.sivanich@hpe.com,
-        kluveralex@gmail.com, Alex Kluver <alex.kluver@hpe.com>
-Subject: [PATCH v2 2/2] cper,edac,efi: Memory Error Record: bank group/address and chip id
-Date:   Wed, 19 Aug 2020 09:35:44 -0500
-Message-Id: <20200819143544.155096-3-alex.kluver@hpe.com>
-X-Mailer: git-send-email 2.12.3
-In-Reply-To: <20200819143544.155096-1-alex.kluver@hpe.com>
-References: <20200819143544.155096-1-alex.kluver@hpe.com>
-X-HPE-SCL: -1
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
- definitions=2020-08-19_07:2020-08-19,2020-08-19 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 lowpriorityscore=0
- mlxlogscore=999 spamscore=0 clxscore=1015 suspectscore=0 bulkscore=0
- priorityscore=1501 malwarescore=0 adultscore=0 phishscore=0
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2006250000 definitions=main-2008190127
+        id S1726946AbgHTRKy (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Thu, 20 Aug 2020 13:10:54 -0400
+Received: from mail-dm6nam10on2071.outbound.protection.outlook.com ([40.107.93.71]:31070
+        "EHLO NAM10-DM6-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1730285AbgHTRGv (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Thu, 20 Aug 2020 13:06:51 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=h6bwJVg1lFKwKtCoOoRUkiUHT3dJE3DgEXi1ztP0Zxyn0zn97TxjB2kNw1zi1VTLmV+GwVBAJwEJbhQh8m+JEgRZ59rcGuG5+RbGCprCRxzhlhZrWVI1QUSqTEygLlJjFJfvQx3ka8PA2Ps9Y9kO6tQSb1TK3joF8dzb0eQ97HrIJw1xfRZFTY6wExyNsOn2y6iG/47FQp5GQAYxThVBVWi2QbLPXYBpAOKEoRUh+42ytbEUOrwXqoPNNmLPflJmBSuE3yZeDk6cc3QVlTockpXidcuOD629RBco7yxd4FMWbmuw12up3tdBPr+GPQULqoverR+8XU8of6adE14sVA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=6CCmaC8O8Z+Z2nkxbusO1E5t+kGU1TfGDjslFBXhPlE=;
+ b=HtVxWpF6Ap9SSJjpwCfVTTdC/fdyTqOmul2x1QfAqO5D1bPu/ec8FErOFf3YvF2npiWNmatpCbZj+wNLNC2zTO86d7nMt8UqYSFLR9D8uWhniX5kXdhDN5+VNGox2WdC4KL9fZZ5GgeEtqbIYKAY7yBNre/mxTFd+JeYcQkXFlXT6PPkId9LbNInT+iT3sFfyO3rMZEk0wORuOVW75V6TpKytMx3dk5HsPpyTr/enTWHG67jV5E86XSBgJ6ZuTs4C85yt2hV6WxHEmAknrnU3z1KU1NZDGpsP41F2bWQJ8jIDsYas9/1n71iQFIYwBQCznBYCVahy/J1lvx627gEKA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=amdcloud.onmicrosoft.com; s=selector2-amdcloud-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=6CCmaC8O8Z+Z2nkxbusO1E5t+kGU1TfGDjslFBXhPlE=;
+ b=jXgPzXqxQkkpAIng63f+4AaqFAWke/hGlqgGRugCabJihZNrIRJL/JAhtWn4LYUFfOvL2W2R0iFZc12jax4rpXfUa1XOa19eEqYSm7s4Nq1RaRWYsHPWIBBLZ9Hp+D9g2xr2s3nFA5lavi2UuBqLLwJY+JV5rD+Geg9t51Wukgo=
+Authentication-Results: vger.kernel.org; dkim=none (message not signed)
+ header.d=none;vger.kernel.org; dmarc=none action=none header.from=amd.com;
+Received: from BN8PR12MB3108.namprd12.prod.outlook.com (2603:10b6:408:40::20)
+ by BN8PR12MB3602.namprd12.prod.outlook.com (2603:10b6:408:49::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3305.25; Thu, 20 Aug
+ 2020 17:06:48 +0000
+Received: from BN8PR12MB3108.namprd12.prod.outlook.com
+ ([fe80::1ef:8f33:480b:e2d0]) by BN8PR12MB3108.namprd12.prod.outlook.com
+ ([fe80::1ef:8f33:480b:e2d0%4]) with mapi id 15.20.3283.024; Thu, 20 Aug 2020
+ 17:06:48 +0000
+From:   Yazen Ghannam <Yazen.Ghannam@amd.com>
+To:     linux-edac@vger.kernel.org
+Cc:     Yazen Ghannam <Yazen.Ghannam@amd.com>,
+        linux-kernel@vger.kernel.org, bp@suse.de, tony.luck@intel.com,
+        x86@kernel.org, Smita.KoralahalliChannabasappa@amd.com
+Subject: [PATCH] x86/mce: Increase maximum number of banks to 64
+Date:   Thu, 20 Aug 2020 17:06:24 +0000
+Message-Id: <20200820170624.1855825-1-Yazen.Ghannam@amd.com>
+X-Mailer: git-send-email 2.25.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: DM6PR11CA0046.namprd11.prod.outlook.com
+ (2603:10b6:5:14c::23) To BN8PR12MB3108.namprd12.prod.outlook.com
+ (2603:10b6:408:40::20)
+MIME-Version: 1.0
+X-MS-Exchange-MessageSentRepresentingType: 1
+Received: from yaz-ethanolx.amd.com (165.204.78.2) by DM6PR11CA0046.namprd11.prod.outlook.com (2603:10b6:5:14c::23) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3305.24 via Frontend Transport; Thu, 20 Aug 2020 17:06:47 +0000
+X-Mailer: git-send-email 2.25.1
+X-Originating-IP: [165.204.78.2]
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-HT: Tenant
+X-MS-Office365-Filtering-Correlation-Id: a94b16ce-2602-44a0-8b59-08d8452b6c6d
+X-MS-TrafficTypeDiagnostic: BN8PR12MB3602:
+X-MS-Exchange-Transport-Forked: True
+X-Microsoft-Antispam-PRVS: <BN8PR12MB36022F46857F155B9C0DFDF6F85A0@BN8PR12MB3602.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:800;
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 80W2OuujGi44uMTiCz+6Wodb1kY71cqsaPQtLpVyRmF67riUCT6JAPzg5YKP8MTWQwtfPDDUSaCdrKFOoy9n3XxOpKkEj83W5EK3HltL0pY/QI6DsO5SvJhGQnakQVky+OCc6anvojcc5ZGWsco66jhlt7tkO7FfNoP8XBLPypwL6zakZhZ1OFSoPO8nY8zw63QTWdUOaFRZ1qB/vyqLk+toWs+Smm7qGc3iu77FkX5q78XBYycv33JtrwdwhlRmRzM2S6RRwPRu8Nn0AyiK+G/hkd/XN4hVbUsmozhrs3o1QyIv5ueVeOFTJDycC3ZsIAMA35dq/R/ovWUGP8Y4JA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3108.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(346002)(376002)(39860400002)(396003)(366004)(136003)(186003)(8936002)(16526019)(26005)(478600001)(4326008)(6666004)(1076003)(86362001)(5660300002)(6486002)(66946007)(8676002)(66476007)(316002)(956004)(7696005)(15650500001)(36756003)(2906002)(83380400001)(2616005)(52116002)(6916009)(66556008);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData: 7DuMsL6+SY3X/K8Fn90yGKJira8TTCbhpopJZGezjXjDTTb0Dd9SigpJRW2Q+9UIFhmutCap0pmR5XZ/lxVqmFXlQnw3Ivoa7H73AxDk4qcLSpLgHgXV8neXAx0VC8YNtN0JyaRBWKgn64nVp10xMYUaDEav+oh0E1o3AAtz1IjdyqLNmEHbP77VZbBt3wBVrbIdvX0JzPxdHa7fHciT03tIJv7P5h1mjP23SNLA+v/uqLn9P9IPiPuNCcWZN061kJmg6Tb8OICDu4IQqeHiH/lhbVakqBTIoFRWxgXDXxEB2q0yuvl+DLMSMA4Cyc6xv280m9FsJfua1d3rKe1SVq2TGXQZeI1RRaEbEoG7lwPLv/yq3L3Pwh3ra9R/NPCXFMrmvu4+vTvPXSAnKkRweZRzsnbgvLOcqh9E0Irayb5YFd3TMGawWR2nEqehCefMeuZh2zmLcnkRqXbPglq3LW4nZ8YIKzV7VfPxAYzNgxgeO8lYG3nvoyETWDgvOkHS5wtA+ixn3nJCJB+VlcTY8AUWAz38wSz7NqYdDY85IRqeFiHXUL3uTg1Sz7hlaVg0J2C+wpmWtvINXpeKM7eeZ4XpyojJTwzdEeDb55HhPqB1uUauI93SanSZ8xf5+OqTc9uX309h89MmzZzpKxfakQ==
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: a94b16ce-2602-44a0-8b59-08d8452b6c6d
+X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3108.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Aug 2020 17:06:48.0462
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: mX2a6M1hrRSLOt7NGx9Trj0XdfOTysYgC6CgYyCpnf9OujIQJyU4hChB2Gsmzo6oXuidpecHlivQpZXlN6/vnQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN8PR12MB3602
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-Updates to the UEFI 2.8 Memory Error Record allow splitting the bank field
-into bank address and bank group, and using the last 3 bits of the extended
-field as a chip identifier.
+From: Akshay Gupta <Akshay.Gupta@amd.com>
 
-When needed, print correct version of bank field, bank group, and chip
-identification
+...because future AMD systems will support up to 64 MCA banks per CPU.
 
-Based on UEFI 2.8 Table 299. Memory Error Record
+MAX_NR_BANKS is used to allocate a number of data structures, and it is
+used as a ceiling for values read from MCG_CAP[Count]. Therefore, this
+change will have no functional effect on existing systems with 32 or
+fewer MCA banks per CPU.
 
-Reviewed-by: Steve Wahl <steve.wahl@hpe.com>
-Reviewed-by: Kyle Meyer <kyle.meyer@hpe.com>
-Reviewed-by: Russ Anderson <russ.anderson@hpe.com>
-Signed-off-by: Alex Kluver <alex.kluver@hpe.com>
+Signed-off-by: Akshay Gupta <Akshay.Gupta@amd.com>
+[ Adjust commit message and code comment. ]
+Signed-off-by: Yazen Ghannam <yazen.ghannam@amd.com>
 ---
+ arch/x86/include/asm/mce.h | 8 ++------
+ 1 file changed, 2 insertions(+), 6 deletions(-)
 
-v1 -> v2:
-   * Add static inline cper_get_mem_extension() to make it
-    more readable, as suggested by Borislav Petkov.
-
-   * Add second patch for bank field, bank group, and chip id.
-
----
- drivers/edac/ghes_edac.c    | 9 +++++++++
- drivers/firmware/efi/cper.c | 9 +++++++++
- include/linux/cper.h        | 8 ++++++++
- 3 files changed, 26 insertions(+)
-
-diff --git a/drivers/edac/ghes_edac.c b/drivers/edac/ghes_edac.c
-index 98fcdaf72a09..31eb72b67265 100644
---- a/drivers/edac/ghes_edac.c
-+++ b/drivers/edac/ghes_edac.c
-@@ -337,6 +337,12 @@ void ghes_edac_report_mem_error(int sev, struct cper_sec_mem_err *mem_err)
- 		p += sprintf(p, "rank:%d ", mem_err->rank);
- 	if (mem_err->validation_bits & CPER_MEM_VALID_BANK)
- 		p += sprintf(p, "bank:%d ", mem_err->bank);
-+	if (mem_err->validation_bits & CPER_MEM_VALID_BANK_GROUP)
-+		p += sprintf(p, "bank_group:%d ",
-+			     mem_err->bank >> CPER_MEM_BANK_GROUP_SHIFT);
-+	if (mem_err->validation_bits & CPER_MEM_VALID_BANK_ADDRESS)
-+		p += sprintf(p, "bank_address:%d ",
-+			     mem_err->bank & CPER_MEM_BANK_ADDRESS_MASK);
- 	if (mem_err->validation_bits & (CPER_MEM_VALID_ROW | CPER_MEM_VALID_ROW_EXT)) {
- 		u32 row = mem_err->row;
+diff --git a/arch/x86/include/asm/mce.h b/arch/x86/include/asm/mce.h
+index 6adced6e7dd3..109af5c7f515 100644
+--- a/arch/x86/include/asm/mce.h
++++ b/arch/x86/include/asm/mce.h
+@@ -200,12 +200,8 @@ void mce_setup(struct mce *m);
+ void mce_log(struct mce *m);
+ DECLARE_PER_CPU(struct device *, mce_device);
  
-@@ -362,6 +368,9 @@ void ghes_edac_report_mem_error(int sev, struct cper_sec_mem_err *mem_err)
- 		if (index >= 0)
- 			e->top_layer = index;
- 	}
-+	if (mem_err->validation_bits & CPER_MEM_VALID_CHIP_ID)
-+		p += sprintf(p, "chipID: %d ",
-+			     mem_err->extended >> CPER_MEM_CHIP_ID_SHIFT);
- 	if (p > e->location)
- 		*(p - 1) = '\0';
+-/*
+- * Maximum banks number.
+- * This is the limit of the current register layout on
+- * Intel CPUs.
+- */
+-#define MAX_NR_BANKS 32
++/* Maximum number of MCA banks per CPU. */
++#define MAX_NR_BANKS 64
  
-diff --git a/drivers/firmware/efi/cper.c b/drivers/firmware/efi/cper.c
-index a60acd17bcaa..e15d484b6a5a 100644
---- a/drivers/firmware/efi/cper.c
-+++ b/drivers/firmware/efi/cper.c
-@@ -232,6 +232,12 @@ static int cper_mem_err_location(struct cper_mem_err_compact *mem, char *msg)
- 		n += scnprintf(msg + n, len - n, "rank: %d ", mem->rank);
- 	if (mem->validation_bits & CPER_MEM_VALID_BANK)
- 		n += scnprintf(msg + n, len - n, "bank: %d ", mem->bank);
-+	if (mem->validation_bits & CPER_MEM_VALID_BANK_GROUP)
-+		n += scnprintf(msg + n, len - n, "bank_group: %d ",
-+			       mem->bank >> CPER_MEM_BANK_GROUP_SHIFT);
-+	if (mem->validation_bits & CPER_MEM_VALID_BANK_ADDRESS)
-+		n += scnprintf(msg + n, len - n, "bank_address: %d ",
-+			       mem->bank & CPER_MEM_BANK_ADDRESS_MASK);
- 	if (mem->validation_bits & CPER_MEM_VALID_DEVICE)
- 		n += scnprintf(msg + n, len - n, "device: %d ", mem->device);
- 	if (mem->validation_bits & (CPER_MEM_VALID_ROW | CPER_MEM_VALID_ROW_EXT)) {
-@@ -254,6 +260,9 @@ static int cper_mem_err_location(struct cper_mem_err_compact *mem, char *msg)
- 	if (mem->validation_bits & CPER_MEM_VALID_TARGET_ID)
- 		scnprintf(msg + n, len - n, "target_id: 0x%016llx ",
- 			  mem->target_id);
-+	if (mem->validation_bits & CPER_MEM_VALID_CHIP_ID)
-+		scnprintf(msg + n, len - n, "chip_id: %d ",
-+			  mem->extended >> CPER_MEM_CHIP_ID_SHIFT);
- 
- 	msg[n] = '\0';
- 	return n;
-diff --git a/include/linux/cper.h b/include/linux/cper.h
-index bd2d8a77a784..6a511a1078ca 100644
---- a/include/linux/cper.h
-+++ b/include/linux/cper.h
-@@ -231,10 +231,18 @@ enum {
- #define CPER_MEM_VALID_CARD_HANDLE		0x10000
- #define CPER_MEM_VALID_MODULE_HANDLE		0x20000
- #define CPER_MEM_VALID_ROW_EXT			0x40000
-+#define CPER_MEM_VALID_BANK_GROUP		0x80000
-+#define CPER_MEM_VALID_BANK_ADDRESS		0x100000
-+#define CPER_MEM_VALID_CHIP_ID			0x200000
- 
- #define CPER_MEM_EXT_ROW_MASK			0x3
- #define CPER_MEM_EXT_ROW_SHIFT			16
- 
-+#define CPER_MEM_BANK_ADDRESS_MASK		0xff
-+#define CPER_MEM_BANK_GROUP_SHIFT		8
-+
-+#define CPER_MEM_CHIP_ID_SHIFT			5
-+
- #define CPER_PCIE_VALID_PORT_TYPE		0x0001
- #define CPER_PCIE_VALID_VERSION			0x0002
- #define CPER_PCIE_VALID_COMMAND_STATUS		0x0004
+ #ifdef CONFIG_X86_MCE_INTEL
+ void mce_intel_feature_init(struct cpuinfo_x86 *c);
 -- 
-2.26.2
+2.25.1
 
