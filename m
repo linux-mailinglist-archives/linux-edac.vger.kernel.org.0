@@ -2,134 +2,53 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 400D824ECAA
-	for <lists+linux-edac@lfdr.de>; Sun, 23 Aug 2020 12:12:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3009424EF48
+	for <lists+linux-edac@lfdr.de>; Sun, 23 Aug 2020 20:39:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726444AbgHWKMN (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Sun, 23 Aug 2020 06:12:13 -0400
-Received: from mx2.suse.de ([195.135.220.15]:59214 "EHLO mx2.suse.de"
+        id S1726356AbgHWSji (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Sun, 23 Aug 2020 14:39:38 -0400
+Received: from mail.kernel.org ([198.145.29.99]:48200 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725905AbgHWKMM (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Sun, 23 Aug 2020 06:12:12 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id 85514AE92;
-        Sun, 23 Aug 2020 10:12:39 +0000 (UTC)
-Date:   Sun, 23 Aug 2020 12:12:03 +0200
-From:   Borislav Petkov <bp@suse.de>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-edac <linux-edac@vger.kernel.org>,
+        id S1726336AbgHWSjY (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Sun, 23 Aug 2020 14:39:24 -0400
+Subject: Re: [GIT PULL] EDAC urgent for v5.9-rc2
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1598207964;
+        bh=09n9DPXyjeVOuJISvWRvida3UAVTg7gh8CDylNsGf4s=;
+        h=From:In-Reply-To:References:Date:To:Cc:From;
+        b=vNFDdXgN2fF64EuC7S/21i3CfTmwM8xM/5xDJXshWkpboxT23s0/ucjwJAWEmEdZB
+         ZrIt4rxgvPYWXAg4fDwk9JpSHkN/8gjm+aMiWaEnarpZrMF66xIJwpFCrJoPGQuIQI
+         8Tq7VHu1JUnGgw5f2QaJVsDlth02NqcqyhHB6Ils=
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <20200823101203.GA27452@zn.tnic>
+References: <20200823101203.GA27452@zn.tnic>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <20200823101203.GA27452@zn.tnic>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/ras/ras.git tags/edac_urgent_for_v5.9_rc2
+X-PR-Tracked-Commit-Id: 45bc6098a3e279d8e391d22428396687562797e2
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: d9232cb79651c244f8679607b6e30c5230bcc967
+Message-Id: <159820796431.12134.18041504030184472094.pr-tracker-bot@kernel.org>
+Date:   Sun, 23 Aug 2020 18:39:24 +0000
+To:     Borislav Petkov <bp@suse.de>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-edac <linux-edac@vger.kernel.org>,
         lkml <linux-kernel@vger.kernel.org>
-Subject: [GIT PULL] EDAC urgent for v5.9-rc2
-Message-ID: <20200823101203.GA27452@zn.tnic>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-Hi Linus,
+The pull request you sent on Sun, 23 Aug 2020 12:12:03 +0200:
 
-please pull a single fix which corrects a wrong error severity
-determination which got copied to a bunch of drivers too.
+> git://git.kernel.org/pub/scm/linux/kernel/git/ras/ras.git tags/edac_urgent_for_v5.9_rc2
 
-Thx.
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/d9232cb79651c244f8679607b6e30c5230bcc967
 
----
-The following changes since commit 9123e3a74ec7b934a4a099e98af6a61c2f80bbf5:
-
-  Linux 5.9-rc1 (2020-08-16 13:04:57 -0700)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/ras/ras.git tags/edac_urgent_for_v5.9_rc2
-
-for you to fetch changes up to 45bc6098a3e279d8e391d22428396687562797e2:
-
-  EDAC/{i7core,sb,pnd2,skx}: Fix error event severity (2020-08-18 15:40:30 +0200)
-
-----------------------------------------------------------------
-A single fix correcting a reversed error severity determination check
-which lead to a recoverable error getting marked as fatal, by Tony
-Luck.
-
-----------------------------------------------------------------
-Tony Luck (1):
-      EDAC/{i7core,sb,pnd2,skx}: Fix error event severity
-
- drivers/edac/i7core_edac.c | 4 ++--
- drivers/edac/pnd2_edac.c   | 2 +-
- drivers/edac/sb_edac.c     | 4 ++--
- drivers/edac/skx_common.c  | 4 ++--
- 4 files changed, 7 insertions(+), 7 deletions(-)
-
-diff --git a/drivers/edac/i7core_edac.c b/drivers/edac/i7core_edac.c
-index 5860ca41185c..2acd9f9284a2 100644
---- a/drivers/edac/i7core_edac.c
-+++ b/drivers/edac/i7core_edac.c
-@@ -1710,9 +1710,9 @@ static void i7core_mce_output_error(struct mem_ctl_info *mci,
- 	if (uncorrected_error) {
- 		core_err_cnt = 1;
- 		if (ripv)
--			tp_event = HW_EVENT_ERR_FATAL;
--		else
- 			tp_event = HW_EVENT_ERR_UNCORRECTED;
-+		else
-+			tp_event = HW_EVENT_ERR_FATAL;
- 	} else {
- 		tp_event = HW_EVENT_ERR_CORRECTED;
- 	}
-diff --git a/drivers/edac/pnd2_edac.c b/drivers/edac/pnd2_edac.c
-index fd363746f5b0..b8fc4b84fd86 100644
---- a/drivers/edac/pnd2_edac.c
-+++ b/drivers/edac/pnd2_edac.c
-@@ -1155,7 +1155,7 @@ static void pnd2_mce_output_error(struct mem_ctl_info *mci, const struct mce *m,
- 	u32 optypenum = GET_BITFIELD(m->status, 4, 6);
- 	int rc;
- 
--	tp_event = uc_err ? (ripv ? HW_EVENT_ERR_FATAL : HW_EVENT_ERR_UNCORRECTED) :
-+	tp_event = uc_err ? (ripv ? HW_EVENT_ERR_UNCORRECTED : HW_EVENT_ERR_FATAL) :
- 						 HW_EVENT_ERR_CORRECTED;
- 
- 	/*
-diff --git a/drivers/edac/sb_edac.c b/drivers/edac/sb_edac.c
-index d414698ca324..c5ab634cb6a4 100644
---- a/drivers/edac/sb_edac.c
-+++ b/drivers/edac/sb_edac.c
-@@ -2982,9 +2982,9 @@ static void sbridge_mce_output_error(struct mem_ctl_info *mci,
- 	if (uncorrected_error) {
- 		core_err_cnt = 1;
- 		if (ripv) {
--			tp_event = HW_EVENT_ERR_FATAL;
--		} else {
- 			tp_event = HW_EVENT_ERR_UNCORRECTED;
-+		} else {
-+			tp_event = HW_EVENT_ERR_FATAL;
- 		}
- 	} else {
- 		tp_event = HW_EVENT_ERR_CORRECTED;
-diff --git a/drivers/edac/skx_common.c b/drivers/edac/skx_common.c
-index 6d8d6dc626bf..2b4ce8e5ac2f 100644
---- a/drivers/edac/skx_common.c
-+++ b/drivers/edac/skx_common.c
-@@ -493,9 +493,9 @@ static void skx_mce_output_error(struct mem_ctl_info *mci,
- 	if (uncorrected_error) {
- 		core_err_cnt = 1;
- 		if (ripv) {
--			tp_event = HW_EVENT_ERR_FATAL;
--		} else {
- 			tp_event = HW_EVENT_ERR_UNCORRECTED;
-+		} else {
-+			tp_event = HW_EVENT_ERR_FATAL;
- 		}
- 	} else {
- 		tp_event = HW_EVENT_ERR_CORRECTED;
+Thank you!
 
 -- 
-Regards/Gruss,
-    Boris.
-
-SUSE Software Solutions Germany GmbH, GF: Felix Imendörffer, HRB 36809, AG Nürnberg
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
