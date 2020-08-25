@@ -2,106 +2,121 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 43531250F0C
-	for <lists+linux-edac@lfdr.de>; Tue, 25 Aug 2020 04:31:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 138F5251835
+	for <lists+linux-edac@lfdr.de>; Tue, 25 Aug 2020 14:06:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728029AbgHYCbN (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Mon, 24 Aug 2020 22:31:13 -0400
-Received: from mail-eopbgr30058.outbound.protection.outlook.com ([40.107.3.58]:28480
-        "EHLO EUR03-AM5-obe.outbound.protection.outlook.com"
+        id S1730110AbgHYMGn (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Tue, 25 Aug 2020 08:06:43 -0400
+Received: from mail-bn8nam12on2054.outbound.protection.outlook.com ([40.107.237.54]:53856
+        "EHLO NAM12-BN8-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725924AbgHYCbM (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Mon, 24 Aug 2020 22:31:12 -0400
+        id S1728093AbgHYMGm (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Tue, 25 Aug 2020 08:06:42 -0400
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=haZfSI854kXIX/JkyODsMQzRItAZ4DfEvYArxMWS3qgOmVxdCz8UlQyDWE1SJR2HSqcvZNipvIhtfSU3Wwn+TWTwDRYBGn1NBrrtra5ueSA1sTM14qv/nW7Ff0ZS9bvLPVU7h7SDLTIx4gMtyifg4Tqw7BBGw8BrSCjxk80OuV8usjf4WQ+Xia4Di5cMsJa5XSBA+rj/gwIp2QFpB8SrR7IWceW0UK+Z6Rng07XbS3LdqvNq0k4vaJy5jaH2OHBBhtFY2eLoKo3cdAkYsbJt9TOwD9nX5WB/AYJVhXJHQ6vdRYG5209aEwGBREiwkCKgVckPUXa7+Jfz9ZVirRdzzQ==
+ b=kjmz51EcgBVq0/QKnIpo2l3Gk8AnWxZZ96FGxdA5gfk+JhUym9VfblAlXRyXL1p0j/OhpKvznvbQGOvLAtoZfMDpEsqREAt3PSAGbSpelcRzxxNtyjFH8/uVGNYztsSnYMzpCpF8KETEEkiYCkJ3XwSFrO31AXTudT4HWLQYsFxrQP5tWPfZLSV7jPPBXchJfGT5V8qJorXtGICcfRsoFdzoOIH/c+Igg7vQi6BcI/KT+sw1Tt8wbQQXJ8BdCOZHgUaiQGPAPvtUogFoi5xyT/uiRj3x/j5gho/MxTA9xcMs25AxTDsaBqJXrlDjNtI1gYK5mlNqQcm+AQgBFuvkRw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=FeWSDGpW1JyF2hN2+LGZudK2Lb1Sc/HD3+r2uSVgR2I=;
- b=hqTKclo937EHiX0WoUX3NqStxQ1yyfq+ETWXmefNjoahwfc8mrES34QOL2pMWOyTtBT4t0osIR+OxGM1ThHLrf6Bo2pM9FZ0xRzmQ26oPvUM3u7kaRsp8FaPweMkKsWgpz3wC0G0qKXlNcD34egWizVeFDZySQ88hewOsywt+24HqQkQ9VqhyWAR426Czx/XrJLdMItywErrrGjQdxP9F8px4bNBPMfW3Pgl8sELYHg215VWJh2qZCU6sGeuXdfJ//e7HmGWL5HpeUcu2iOH3OO3UZmWrviTTExQ3Ppw9pLCFgCtRka2Vh9B9ImpNAhcLm+LkVQDYzt9UlJIWUGoJw==
+ bh=4Rekb6uX1LL7EeX7g/5W1Ayw40lIC967hBLVFRu8ENc=;
+ b=U2bTWeVeEKMIe6+XAb1vZ56HxnKI9207WzNDaeFCl5Kp8zxym/9VYdYb/PU+wTkc9TxCRL00taTr0fZth9U+gVJe78/h7L0LNb7ewGubd+BrmG5u7xojrR6rNcu3eD9tEph/b0NJZvqULOalumXdxXbDxNOxpQPpX5RXbO9slPVIWEZ9b4Yk1FKp+jtsvtj9xubBLvSi3Oe4I2e98TFzBiry/jVCbpc8O1d07DkuaMw+Eh+0vaHZFvp4dGCBv7MkK+/GTObpUkmyBosDC52acXRMcWvpvPTbJIptAEF4mGCSOdc3SlOBbyl8jMhFCCMKQ7MCZcgvWWZ1JZN+zv0L/w==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ smtp.mailfrom=openfive.com; dmarc=pass action=none header.from=sifive.com;
+ dkim=pass header.d=sifive.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sifive.com;
+ s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=FeWSDGpW1JyF2hN2+LGZudK2Lb1Sc/HD3+r2uSVgR2I=;
- b=S8LCLcYD2PLGxYcIn9gBlWosYOop2PQ2Q8z9eGXnuG0+nBSRtLody+7e4LsqVW/NnrVIkkDbga/VikYgGzd/h/G1DNumcDxYTVXJd9/AW/B79zNBED+4NFnHL2FhEB3lvitJ+x+eg/aVp5rzHSUfk61Se00TFdNClqqgIJTrdL8=
-Received: from VI1PR04MB4062.eurprd04.prod.outlook.com (2603:10a6:803:40::32)
- by VE1PR04MB7407.eurprd04.prod.outlook.com (2603:10a6:800:1ab::5) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3305.26; Tue, 25 Aug
- 2020 02:31:09 +0000
-Received: from VI1PR04MB4062.eurprd04.prod.outlook.com
- ([fe80::c64:3b0c:b102:b2df]) by VI1PR04MB4062.eurprd04.prod.outlook.com
- ([fe80::c64:3b0c:b102:b2df%6]) with mapi id 15.20.3305.026; Tue, 25 Aug 2020
- 02:31:09 +0000
-From:   Alison Wang <alison.wang@nxp.com>
-To:     James Morse <james.morse@arm.com>, "bp@alien8.de" <bp@alien8.de>,
-        "tony.luck@intel.com" <tony.luck@intel.com>
-CC:     "mchehab@kernel.org" <mchehab@kernel.org>,
-        "rrichter@marvell.com" <rrichter@marvell.com>,
-        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [EXT] Re: [PATCH] edac: nxp: Add L1 and L2 error detection for
- A53 and A72 cores
-Thread-Topic: [EXT] Re: [PATCH] edac: nxp: Add L1 and L2 error detection for
- A53 and A72 cores
-Thread-Index: AQHWVcrvq+aORnEdQEueBFx0LvqOUKlCs7KAgASNEGA=
-Date:   Tue, 25 Aug 2020 02:31:09 +0000
-Message-ID: <VI1PR04MB4062A3BF31A7002AD45E5200F4570@VI1PR04MB4062.eurprd04.prod.outlook.com>
-References: <20200709082215.12829-1-alison.wang@nxp.com>
- <92811e33-2f57-244b-4b50-c2831b09b835@arm.com>
-In-Reply-To: <92811e33-2f57-244b-4b50-c2831b09b835@arm.com>
-Accept-Language: zh-CN, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: arm.com; dkim=none (message not signed)
- header.d=none;arm.com; dmarc=none action=none header.from=nxp.com;
-x-originating-ip: [119.31.174.73]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-ht: Tenant
-x-ms-office365-filtering-correlation-id: d3e9cae8-8654-4ab0-83fc-08d8489eed49
-x-ms-traffictypediagnostic: VE1PR04MB7407:
-x-microsoft-antispam-prvs: <VE1PR04MB7407F21927374B64066790E8F4570@VE1PR04MB7407.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:9508;
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 70teVQbIEg3oVADu4iwX1dE8uTTG+VTEx/m3xb4rvLJL9xgxDBLYXXGVGNdzd0DY8QXJeePLjVdbEYpCfu1XK1LSyC38fWJjhsO0SVKwbVLkANYA4EtIzLu35BqVOLU+fuCxZmJYZdYh4Uf7OpaSFQ1jiaNdrJwPJcLM/0agOzCkiglc8k4nUAmE4PynQQD8+zdv5rR0LRB/GHBLO5h1tp0rSw5IMAUW0lRfrYueBXuwzpV10f6b3akCggGG5y7s/KkMvyIgTouRxVEr7R4KcRok5z7H5P5EFJGo38VEU12ILqDASSQ7bfi6MCQ9VK9k9cImleRRjZ0dII6RevrF/A==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB4062.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(39860400002)(396003)(376002)(346002)(366004)(136003)(44832011)(2906002)(9686003)(66556008)(53546011)(6506007)(83380400001)(64756008)(76116006)(316002)(54906003)(110136005)(71200400001)(66946007)(8676002)(8936002)(66476007)(55016002)(66446008)(478600001)(4326008)(4744005)(52536014)(5660300002)(26005)(186003)(33656002)(7696005)(86362001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata: O6W0lCdmJigRtrpNy0nxB9tKx2XTvwmjBqAcDk+HlkUbXRMZGgwzNsnTTC6PdZ7RliBA+KYlQ0bXvHttI2W9fbS4a2CRh1N1o5aLBJhJOoQggyMB3mqzVHTC+vVBH10n+rA3oy2KPgKkcBvFVBGnk4sLkRsGuSv62baJ/Omjp/9qDs60O4QeTak6fxvJrlBF/rKCGNxEmoTeIFZB6Vdul8SN/WJ/kr3jkZhTcWg5K1qSY+Ei+h7yz9N8I+JgNDOjX1+DIP3GC3I7LMu3WT4SBCfIr4kv6hyOQZKBTvrDUSKk8flZMISpEsG+7rnNi4DR1A/Y1NUnV0ygNlLDq5bRjDzPyLebwbFZ4NaxGOR95Jn1bcBAMXilUWH0V+SNZnE3wITj+ibJjsl8Mb1MJqiDAqH8JEDXiF+Y+VrqOTZNKVUfuVDomzKaAt3uouHn127z0Y9BeOydYLbtZbA1le3/drnJmyOtPTxZ71JdnrNFtJkO5H5Pq6fBPr6QS+xjtprsBRfG0lINfBe/G36ftnTfWMgo14+sAyOYqIUNLOFk2CYLLAfyTiDSsrjQlsiK/EBlBTKSk9NuidAiZV4RiWUiVY6Qfhxv1xxoH83YttI3DCXfH80cMd9AbIBBmddeleB7wWTDDuPGJX+Rljmshb4zqg==
-x-ms-exchange-transport-forked: True
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+ bh=4Rekb6uX1LL7EeX7g/5W1Ayw40lIC967hBLVFRu8ENc=;
+ b=rUnxFenL5Nz/e6V/sVfkBwdmGClIW4IHXDp9zLemAHHKy1aK7cGeY15e+914MXDTVf52DTL9agv7vWUk2ebE/y3NG5+ufp/DD6eP/DXYqTPAnUaytR1mw6b81MTwCuG02yed91SYArL/u9BG/5srV1WFzyYr2yc0bQDQOQpUgiA=
+Authentication-Results: kernel.org; dkim=none (message not signed)
+ header.d=none;kernel.org; dmarc=none action=none header.from=sifive.com;
+Received: from BN6PR1301MB2020.namprd13.prod.outlook.com
+ (2603:10b6:405:34::34) by BN6PR1301MB1873.namprd13.prod.outlook.com
+ (2603:10b6:405:34::28) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3326.11; Tue, 25 Aug
+ 2020 12:06:39 +0000
+Received: from BN6PR1301MB2020.namprd13.prod.outlook.com
+ ([fe80::a446:9877:b346:93ad]) by BN6PR1301MB2020.namprd13.prod.outlook.com
+ ([fe80::a446:9877:b346:93ad%5]) with mapi id 15.20.3326.019; Tue, 25 Aug 2020
+ 12:06:39 +0000
+From:   Yash Shah <yash.shah@sifive.com>
+To:     robh+dt@kernel.org, palmer@dabbelt.com, paul.walmsley@sifive.com,
+        bp@alien8.de, mchehab@kernel.org, tony.luck@intel.com
+Cc:     aou@eecs.berkeley.edu, james.morse@arm.com, rrichter@marvell.com,
+        devicetree@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-edac@vger.kernel.org,
+        sachin.ghadi@sifive.com, Yash Shah <yash.shah@sifive.com>
+Subject: [PATCH 0/3] SiFive DDR controller and EDAC support
+Date:   Tue, 25 Aug 2020 17:36:19 +0530
+Message-Id: <1598357182-4226-1-git-send-email-yash.shah@sifive.com>
+X-Mailer: git-send-email 2.7.4
+Content-Type: text/plain
+X-ClientProxiedBy: BMXPR01CA0023.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:b00:d::33) To BN6PR1301MB2020.namprd13.prod.outlook.com
+ (2603:10b6:405:34::34)
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
+X-MS-Exchange-MessageSentRepresentingType: 1
+Received: from 255.255.255.255 (255.255.255.255) by BMXPR01CA0023.INDPRD01.PROD.OUTLOOK.COM (2603:1096:b00:d::33) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.20.3305.24 via Frontend Transport; Tue, 25 Aug 2020 12:06:34 +0000
+X-Mailer: git-send-email 2.7.4
+X-Originating-IP: [159.117.144.156]
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 393b4aa6-0c28-4ee0-5409-08d848ef5252
+X-MS-TrafficTypeDiagnostic: BN6PR1301MB1873:
+X-LD-Processed: 22f88e9d-ae0d-4ed9-b984-cdc9be1529f1,ExtAddr
+X-MS-Exchange-Transport-Forked: True
+X-Microsoft-Antispam-PRVS: <BN6PR1301MB18738F9E0C8911A42143089D82570@BN6PR1301MB1873.namprd13.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:7691;
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: m2Kbwzw+ffYLZsCovJCsOBGebB6c0onZn++f0vAKuEb4SBQmlw7k7MTBgIng52zFuLYqb0xKnyqef5Er3BC3oYiOPqvLD6wwvEFkkvJOtyRC9Iucxlcvp8TNFKXODco1hDMCs0U4IFGWvDcwzYt/g8oWkTTbyUz/gFFJhLPeENieQ/o+NduCXYIVw75sm/6AnGthzZvtgmadOzmqqNK4PAcLYFlxjQzmCEEGjpOTshxAggAy6s/7GKRFfl2WETy0/O73HZ7FyWjqo2y0JN8At9FartHXKOytfCFnM5WJ7EZHMEY5AP6KWxSYoBRou192IXlBH6La8r8G5hjtFh93PA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN6PR1301MB2020.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(6029001)(396003)(366004)(136003)(346002)(39850400004)(376002)(7416002)(4326008)(6486002)(66556008)(52116002)(26005)(66476007)(186003)(107886003)(8936002)(316002)(83170400001)(16576012)(42882007)(5660300002)(66946007)(6666004)(478600001)(36756003)(2616005)(83380400001)(956004)(2906002)(8676002)(44832011);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData: PfZ4cxIv+XUx6jwsJtewtIyynGYJ3HcF4u4RoEOYcj7A/akI1+UOs82OumQ/l3N1JVQa0+ySUyWA1SxVYHFKlazg116AlhPLKK+zglRRMoSZeDAPjEMvKzJIq49roCTizV0TdwoL12BjBP0BuGgIaMvTIbJ+L7UkEIC4kft5lM1fYTU2BVfnd+zRTg2aL63/s1EeLQj1NqNxsRw2yduVeO/9w7xuphaZkuvxnEG9GlZj4V2b/JCbDecma2GtqiZjsleod9LKDOyJy/Fy3j3kyeQKefIWvQ3lWzUQ5xvLwklYu+cVFS5DjpECPk5Pqf4GmC2gS32l358DYQsUxkmHLyc/xnDIFYV4V5CPCWKg43SFKj2nuQxPR1Dx6OCe7cEkKALDvodG3SpQ4yF6DzYlm/g+ovXFHtmG5aMqszOJGTwIr7k5DrFotqTk/dUJTS38J4OjAigGZHOU5KQMlSyvapDY5DlLJMk01HptLSQc/BSQdOxw2eY3vMFEg6FGaWuK/cZekSL8EZL0Qw/u9hkB3a0HIxRENz+RzxrIIYTR7Tr70gureWjjY9bsSh+lnSueiTp+DGdkIkOP6ZmPtRlO4UC6P7xeD8UFQMHIenpad2Iuy2KwMJRk8TigditxaeC8B5DIK+12kfo66XVJoFaNdQ==
+X-OriginatorOrg: sifive.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 393b4aa6-0c28-4ee0-5409-08d848ef5252
+X-MS-Exchange-CrossTenant-AuthSource: BN6PR1301MB2020.namprd13.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB4062.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: d3e9cae8-8654-4ab0-83fc-08d8489eed49
-X-MS-Exchange-CrossTenant-originalarrivaltime: 25 Aug 2020 02:31:09.4216
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Aug 2020 12:06:39.1754
  (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: +QrHV2amE3Dli80EArJPDUkUWCD7cuVdAYx79wljbL3DqnwGDF7gDCFXZ0GfE5TnPI8nf2ElpQ5a9XCiHkgI7g==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VE1PR04MB7407
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 22f88e9d-ae0d-4ed9-b984-cdc9be1529f1
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: +KanYP9o44S5UlbKe5pWlQnJQViKn20gBt9WZstjw0aT+3MWkzCJdkA3fcLBD0U5BYtxbU2dkyMLwkmQ58YwKw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN6PR1301MB1873
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-SGksIEphbWVzLA0KDQo+IE9uIDA5LzA3LzIwMjAgMDk6MjIsIEFsaXNvbiBXYW5nIHdyb3RlOg0K
-PiA+IEFkZCBlcnJvciBkZXRlY3Rpb24gZm9yIEE1MyBhbmQgQTcyIGNvcmVzLiBIYXJkd2FyZSBl
-cnJvciBpbmplY3Rpb24gaXMNCj4gPiBzdXBwb3J0ZWQgb24gQTUzLiBTb2Z0d2FyZSBlcnJvciBp
-bmplY3Rpb24gaXMgc3VwcG9ydGVkIG9uIGJvdGguDQo+IA0KPHNuaXA+DQo+IA0KPiBBcyB3ZSBj
-YW4ndCBzYWZlbHkgd3JpdGUgdG8gdGhlc2UgcmVnaXN0ZXJzIGZyb20gbGludXgsIHNvIEkgdGhp
-bmsgdGhpcyBtZWFucyBhbGwNCj4gdGhlIGVycm9yIGluamVjdGlvbiBhbmQgbWF5YmUgU01DIHN0
-dWZmIGNhbiBkaXNhcHBlYXIuDQo+IA0KPiANCj4gKEkndmUgbm90IHJlYWQgcGFzdCBoZXJlLi4p
-DQo+IA0KW0FsaXNvbl0gVGhhbmsgeW91IHZlcnkgbXVjaCBmb3IgYWxsIHlvdXIgZGV0YWlsZWQg
-Y29tbWVudHMuDQpJIGFncmVlZCB3aXRoIHlvdXIgb3BpbmlvbiB0aGF0IENQVUFDVExSX0VMMSBh
-bmQgTDJBQ1RMUiBjYW4ndCBiZSB3cml0dGVuIGluIExpbnV4LiBTbyB0aGUgZXJyb3IgaW5qZWN0
-aW9uIGNhbid0IGJlIGRvbmUgaW4gTGludXguIERvIHlvdSBtZWFuIHRoZSBlcnJvciBpbmplY3Rp
-b24gY2FuIG9ubHkgYmUgZG9uZSBpbiBmaXJtd2FyZSBiZWZvcmUgTGludXggYm9vdHMgdXA/IElm
-IHNvLCB0aGUgc3lzdGVtIGlzIHJ1bm5pbmcgd2l0aCBlcnJvciBpbmplY3Rpb24gZW5hYmxlZCBh
-bGwgdGhlIHRpbWUsIGl0IG1heSBiZSBub3QgYSBnb29kIGlkZWEgdG9vLiBBbnkgc3VnZ2VzdGlv
-bj8NCg0KDQpCZXN0IFJlZ2FyZHMsDQpBbGlzb24gV2FuZw0KDQoNCg==
+The series add supports for SiFive DDR controller driver. This driver
+is use to manage the Cadence DDR controller present in SiFive SoCs.
+Currently it manages only the EDAC feature of the DDR controller.
+The series also adds Memory controller EDAC support for SiFive platform.
+It register for notifier event from SiFive DDR controller driver.
+
+The series is tested and based on Linux v5.8.
+
+For testing on Hifive Unleashed:
+1. Enable the ECC bit of DDR controller during DDR initialization
+2. Erase the entire DRAM in bootloader stage
+3. Using FWC feature of DDR controller force ecc error to test
+
+Yash Shah (3):
+  dt-bindings: riscv: Add DT documentation for DDR Controller in SiFive
+    SoCs
+  soc: sifive: Add SiFive specific Cadence DDR controller driver
+  edac: sifive: Add EDAC support for Memory Controller in SiFive SoCs
+
+ .../devicetree/bindings/riscv/sifive-ddr.yaml      |  41 ++++
+ drivers/edac/Kconfig                               |   2 +-
+ drivers/edac/sifive_edac.c                         | 117 ++++++++++++
+ drivers/soc/sifive/Kconfig                         |   6 +
+ drivers/soc/sifive/Makefile                        |   3 +-
+ drivers/soc/sifive/sifive_ddr.c                    | 207 +++++++++++++++++++++
+ include/soc/sifive/sifive_ddr.h                    |  73 ++++++++
+ 7 files changed, 447 insertions(+), 2 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/riscv/sifive-ddr.yaml
+ create mode 100644 drivers/soc/sifive/sifive_ddr.c
+ create mode 100644 include/soc/sifive/sifive_ddr.h
+
+-- 
+2.7.4
+
