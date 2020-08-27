@@ -2,115 +2,73 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 92304253FF9
-	for <lists+linux-edac@lfdr.de>; Thu, 27 Aug 2020 09:59:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8245D2543E7
+	for <lists+linux-edac@lfdr.de>; Thu, 27 Aug 2020 12:40:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728472AbgH0H7I (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Thu, 27 Aug 2020 03:59:08 -0400
-Received: from mx1.tq-group.com ([62.157.118.193]:8942 "EHLO mx1.tq-group.com"
+        id S1726093AbgH0KkK (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Thu, 27 Aug 2020 06:40:10 -0400
+Received: from mail.skyhub.de ([5.9.137.197]:47972 "EHLO mail.skyhub.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728587AbgH0H7G (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Thu, 27 Aug 2020 03:59:06 -0400
-IronPort-SDR: pcQTABDNzCOEZzVXUHdHR+VQg279JaBcMZMVpmFp4+RY4P0r8TpEUcqSdNCdiuaTz3lvgfF1i4
- VQGOE+SdLDOXfrYRNsEiW6Tj/20R0aSR5ayzhL411S0jeVhK2GMjl109fPURBGKpp2/iz2hi7F
- MHfRoSRZuQV/DzQs9bdPtrUe2SnnCcCU34ppC76d5FifhrDGvKKWHoNMJSB3QJCb5h8m8o9eLd
- /pO7JzSsESETJweFOwkAxRHlf9/nTc9WURJcGlq55bXQYxP6I/0isYsL+T3qKm6HKBFjMBAfYg
- 1HM=
-X-IronPort-AV: E=Sophos;i="5.76,359,1592863200"; 
-   d="scan'208";a="13619585"
-Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
-  by mx1-pgp.tq-group.com with ESMTP; 27 Aug 2020 09:59:04 +0200
-Received: from mx1.tq-group.com ([192.168.6.7])
-  by tq-pgp-pr1.tq-net.de (PGP Universal service);
-  Thu, 27 Aug 2020 09:59:04 +0200
-X-PGP-Universal: processed;
-        by tq-pgp-pr1.tq-net.de on Thu, 27 Aug 2020 09:59:04 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1598515144; x=1630051144;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references;
-  bh=Oe/LRi3jeDUnyT2lJ6K1yeZAK9stHhVflXPfWhtYVhk=;
-  b=WufcuUywO6Xag/qsdyaGEbHwJ2O1eqkNNC6SmY0gdYk6N//6LTx88QGN
-   SwGDgxRFWn4FsR2mZ1xW2qhXZG4NR0fmEj6lq+kaWt4GkhJVpiS7YvTcf
-   D3O8o9tbyXlx0MFoxRHpkKTE2uZ93GMrCaHn/gE6wd7820MevshqGKz6r
-   IqvLuEg94FwwKaeXqVIIufVVfbP4i6WX6b8/silxEZDCJhWj6qQMYTgMy
-   2D8hCCR3bd71ZxcR1x0CzMzHCnQtx5FPkN/+VuuxMqH2VLAanuVb+OTIn
-   TFDIxc0rR46qBt9wa+p0EcNa4pmEvcRALnobIdPjsf/zrXVMpFf2e9J3G
-   w==;
-IronPort-SDR: 9Fyq4A42C5ZokLxgWBJ4iX6M5+kl8NRn9XLfdUEB/cYGt91pe7DrmnL1p8AsSXFops5VDWXROK
- qsi6nj4l7CNS7dpGwm3jwuBAUBOKPqduAl3H8hsdN4IufG7qqxmQDlSDs2ynggyGaLe9BjboGQ
- 51xVYgttTNCkrqObbU5aLLQU2SGYIkixVp2ynyLzUPEPCwb02pyuSYSq/B9Uj1ETxSRMhxk+lC
- 1tlUQTRfg1kjnhpb4FMM0jCxvKm1JO1ug3ZtGnuSExTdpxsHfYNynBcTQFwxmEWjV7JRPG/+lD
- cSU=
-X-IronPort-AV: E=Sophos;i="5.76,359,1592863200"; 
-   d="scan'208";a="13619584"
-Received: from vtuxmail01.tq-net.de ([10.115.0.20])
-  by mx1.tq-group.com with ESMTP; 27 Aug 2020 09:59:04 +0200
-Received: from herburgerg-w.tq-net.de (herburgerg-w.tq-net.de [10.122.52.145])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        id S1728555AbgH0KkK (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Thu, 27 Aug 2020 06:40:10 -0400
+Received: from zn.tnic (p200300ec2f104500a980b16b3f9103d9.dip0.t-ipconnect.de [IPv6:2003:ec:2f10:4500:a980:b16b:3f91:3d9])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id C7C1C280065;
-        Thu, 27 Aug 2020 09:59:04 +0200 (CEST)
-From:   Gregor Herburger <gregor.herburger@ew.tq-group.com>
-To:     york.sun@nxp.com, bp@alien8.de, mchehab@kernel.org,
-        tony.luck@intel.com, james.morse@arm.com, rrichter@marvell.com
-Cc:     linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Gregor Herburger <gregor.herburger@ew.tq-group.com>
-Subject: [PATCH v2 1/1] edac: fsl_ddr_edac: fix expected data message
-Date:   Thu, 27 Aug 2020 09:56:00 +0200
-Message-Id: <20200827075600.22335-1-gregor.herburger@ew.tq-group.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20200817095302.GD549@zn.tnic>
-References: <20200817095302.GD549@zn.tnic>
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 400221EC037C;
+        Thu, 27 Aug 2020 12:40:04 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1598524804;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=8mEIx/a3yrzoKPFt6Yw2usL4Qm923jMWVkTk06lBsNQ=;
+        b=L//sqCAwjZGwmVXuFDW8sL4eoTT4XyJZgIGi5kN0gd9QXF1ygzZ0qlS5ou+49LLJbAVwD+
+        wSC9yFS7ImOYWMXM7BQ1ljuYJwbN4qBZf6TFkzI5EBeEUo1hLvBRVxldj6poARf1eDIfrI
+        QBEgMqCnez+tMgf4g1JTbGkCx5nVkNw=
+Date:   Thu, 27 Aug 2020 12:40:00 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Alison Wang <alison.wang@nxp.com>
+Cc:     James Morse <james.morse@arm.com>,
+        "tony.luck@intel.com" <tony.luck@intel.com>,
+        "mchehab@kernel.org" <mchehab@kernel.org>,
+        "rrichter@marvell.com" <rrichter@marvell.com>,
+        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [EXT] Re: [PATCH] edac: nxp: Add L1 and L2 error detection for
+ A53 and A72 cores
+Message-ID: <20200827104000.GB30897@zn.tnic>
+References: <20200709082215.12829-1-alison.wang@nxp.com>
+ <92811e33-2f57-244b-4b50-c2831b09b835@arm.com>
+ <VI1PR04MB4062A3BF31A7002AD45E5200F4570@VI1PR04MB4062.eurprd04.prod.outlook.com>
+ <f962eb83-da13-a5de-9f06-b1b987f1e621@arm.com>
+ <VI1PR04MB4062B4701339466752BFDDE9F4540@VI1PR04MB4062.eurprd04.prod.outlook.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <VI1PR04MB4062B4701339466752BFDDE9F4540@VI1PR04MB4062.eurprd04.prod.outlook.com>
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-When a correctable single bit error occurs, the driver calculates the
-bad_data_bit respectively the bad_ecc_bit. If there is no error in the
-corresponding data, the value becomes -1. With this the expected data
-message is calculated.
+On Wed, Aug 26, 2020 at 03:03:15AM +0000, Alison Wang wrote:
+> [Alison] I have a look at this patch. This patch doesn't complete all
+> the functions in my patch.
 
-In the case of an error in the lower 32 bits or no error (-1) the right
-side operand of the bit-shift becomes negative which is undefined
-behavior.
+Yep, but pls work together to see if a single driver can support your hw
+too.
 
-This can result in wrong and misleading messages like this:
-[  311.103794] EDAC FSL_DDR MC0: Faulty Data bit: 36
-[  311.108490] EDAC FSL_DDR MC0: Expected Data / ECC:   0xffffffef_ffffffff / 0x80000059
-[  311.116135] EDAC FSL_DDR MC0: Captured Data / ECC:   0xffffffff_ffffffef / 0x59
+> It is just to report errors, but error injection function is all
+> removed.
 
-Fix this by only calculating the expected data where the error occurred.
+Right, because you can't use that on this hw, apparently.
 
-With the fix the dmesg output looks like this:
-[  311.103794] EDAC FSL_DDR MC0: Faulty Data bit: 36
-[  311.108490] EDAC FSL_DDR MC0: Expected Data / ECC:   0xffffffef_ffffffef / 0x59
-[  311.116135] EDAC FSL_DDR MC0: Captured Data / ECC:   0xffffffff_ffffffef / 0x59
+Also note that you should disable error injection in production for
+obvious reasons. Thus all the error injection stuff in EDAC is behind
+CONFIG_EDAC_DEBUG which should be off in production kernels.
 
-Signed-off-by: Gregor Herburger <gregor.herburger@ew.tq-group.com>
----
- drivers/edac/fsl_ddr_edac.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/edac/fsl_ddr_edac.c b/drivers/edac/fsl_ddr_edac.c
-index 6d8ea226010d..4b6989cf1947 100644
---- a/drivers/edac/fsl_ddr_edac.c
-+++ b/drivers/edac/fsl_ddr_edac.c
-@@ -343,9 +343,9 @@ static void fsl_mc_check(struct mem_ctl_info *mci)
- 
- 		fsl_mc_printk(mci, KERN_ERR,
- 			"Expected Data / ECC:\t%#8.8x_%08x / %#2.2x\n",
--			cap_high ^ (1 << (bad_data_bit - 32)),
--			cap_low ^ (1 << bad_data_bit),
--			syndrome ^ (1 << bad_ecc_bit));
-+			(bad_data_bit > 31) ? cap_high ^ (1 << (bad_data_bit - 32)) : cap_high,
-+			(bad_data_bit <= 31) ? cap_low ^ (1 << (bad_data_bit)) : cap_low,
-+			(bad_ecc_bit != -1) ? syndrome ^ (1 << (bad_ecc_bit)) : syndrome);
- 	}
- 
- 	fsl_mc_printk(mci, KERN_ERR,
 -- 
-2.17.1
+Regards/Gruss,
+    Boris.
 
+https://people.kernel.org/tglx/notes-about-netiquette
