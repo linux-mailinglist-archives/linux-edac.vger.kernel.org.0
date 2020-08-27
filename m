@@ -2,97 +2,115 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 55D1B253EBA
-	for <lists+linux-edac@lfdr.de>; Thu, 27 Aug 2020 09:14:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 92304253FF9
+	for <lists+linux-edac@lfdr.de>; Thu, 27 Aug 2020 09:59:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727827AbgH0HN4 (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Thu, 27 Aug 2020 03:13:56 -0400
-Received: from lelv0142.ext.ti.com ([198.47.23.249]:59078 "EHLO
-        lelv0142.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727115AbgH0HN4 (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Thu, 27 Aug 2020 03:13:56 -0400
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 07R7DL4O119558;
-        Thu, 27 Aug 2020 02:13:21 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1598512401;
-        bh=chnLtvlLfmkpGeV2vsBUHPMDpbA5Sy+7t6PEefYVFVY=;
-        h=Subject:To:References:From:Date:In-Reply-To;
-        b=HE2uD3n8TXdGxw/mEb6K4mrLusTjCtNkoYcikFDgoo8p1WepKo4QRnHnUqwz6ahZi
-         UQZ9eFvxLL3w1/36UTjRGVMMV5gMT7TxtvMGwkTEU5873v+3DvBXK/awU3wdmZ9tUR
-         +Lmwi9u6F5mN/pk0MQvkwF7TVfwdwXVrT+aan+RA=
-Received: from DFLE114.ent.ti.com (dfle114.ent.ti.com [10.64.6.35])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTP id 07R7DLmc017430;
-        Thu, 27 Aug 2020 02:13:21 -0500
-Received: from DFLE108.ent.ti.com (10.64.6.29) by DFLE114.ent.ti.com
- (10.64.6.35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3; Thu, 27
- Aug 2020 02:13:20 -0500
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE108.ent.ti.com
- (10.64.6.29) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3 via
- Frontend Transport; Thu, 27 Aug 2020 02:13:20 -0500
-Received: from [127.0.0.1] (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 07R7DHh8126345;
-        Thu, 27 Aug 2020 02:13:17 -0500
-Subject: Re: [PATCH 2/2] EDAC/ti: Fix handling of platform_get_irq() error
-To:     Krzysztof Kozlowski <krzk@kernel.org>,
-        Stefan Schaeckeler <sschaeck@cisco.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Tony Luck <tony.luck@intel.com>,
-        James Morse <james.morse@arm.com>,
-        Robert Richter <rric@kernel.org>,
-        Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>, <linux-edac@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-aspeed@lists.ozlabs.org>, <linux-kernel@vger.kernel.org>
-References: <20200827070743.26628-1-krzk@kernel.org>
- <20200827070743.26628-2-krzk@kernel.org>
-From:   Tero Kristo <t-kristo@ti.com>
-Message-ID: <1a92f43b-5358-169f-7dd8-1860a26d9861@ti.com>
-Date:   Thu, 27 Aug 2020 10:13:16 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
-MIME-Version: 1.0
-In-Reply-To: <20200827070743.26628-2-krzk@kernel.org>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+        id S1728472AbgH0H7I (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Thu, 27 Aug 2020 03:59:08 -0400
+Received: from mx1.tq-group.com ([62.157.118.193]:8942 "EHLO mx1.tq-group.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728587AbgH0H7G (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Thu, 27 Aug 2020 03:59:06 -0400
+IronPort-SDR: pcQTABDNzCOEZzVXUHdHR+VQg279JaBcMZMVpmFp4+RY4P0r8TpEUcqSdNCdiuaTz3lvgfF1i4
+ VQGOE+SdLDOXfrYRNsEiW6Tj/20R0aSR5ayzhL411S0jeVhK2GMjl109fPURBGKpp2/iz2hi7F
+ MHfRoSRZuQV/DzQs9bdPtrUe2SnnCcCU34ppC76d5FifhrDGvKKWHoNMJSB3QJCb5h8m8o9eLd
+ /pO7JzSsESETJweFOwkAxRHlf9/nTc9WURJcGlq55bXQYxP6I/0isYsL+T3qKm6HKBFjMBAfYg
+ 1HM=
+X-IronPort-AV: E=Sophos;i="5.76,359,1592863200"; 
+   d="scan'208";a="13619585"
+Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
+  by mx1-pgp.tq-group.com with ESMTP; 27 Aug 2020 09:59:04 +0200
+Received: from mx1.tq-group.com ([192.168.6.7])
+  by tq-pgp-pr1.tq-net.de (PGP Universal service);
+  Thu, 27 Aug 2020 09:59:04 +0200
+X-PGP-Universal: processed;
+        by tq-pgp-pr1.tq-net.de on Thu, 27 Aug 2020 09:59:04 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1598515144; x=1630051144;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references;
+  bh=Oe/LRi3jeDUnyT2lJ6K1yeZAK9stHhVflXPfWhtYVhk=;
+  b=WufcuUywO6Xag/qsdyaGEbHwJ2O1eqkNNC6SmY0gdYk6N//6LTx88QGN
+   SwGDgxRFWn4FsR2mZ1xW2qhXZG4NR0fmEj6lq+kaWt4GkhJVpiS7YvTcf
+   D3O8o9tbyXlx0MFoxRHpkKTE2uZ93GMrCaHn/gE6wd7820MevshqGKz6r
+   IqvLuEg94FwwKaeXqVIIufVVfbP4i6WX6b8/silxEZDCJhWj6qQMYTgMy
+   2D8hCCR3bd71ZxcR1x0CzMzHCnQtx5FPkN/+VuuxMqH2VLAanuVb+OTIn
+   TFDIxc0rR46qBt9wa+p0EcNa4pmEvcRALnobIdPjsf/zrXVMpFf2e9J3G
+   w==;
+IronPort-SDR: 9Fyq4A42C5ZokLxgWBJ4iX6M5+kl8NRn9XLfdUEB/cYGt91pe7DrmnL1p8AsSXFops5VDWXROK
+ qsi6nj4l7CNS7dpGwm3jwuBAUBOKPqduAl3H8hsdN4IufG7qqxmQDlSDs2ynggyGaLe9BjboGQ
+ 51xVYgttTNCkrqObbU5aLLQU2SGYIkixVp2ynyLzUPEPCwb02pyuSYSq/B9Uj1ETxSRMhxk+lC
+ 1tlUQTRfg1kjnhpb4FMM0jCxvKm1JO1ug3ZtGnuSExTdpxsHfYNynBcTQFwxmEWjV7JRPG/+lD
+ cSU=
+X-IronPort-AV: E=Sophos;i="5.76,359,1592863200"; 
+   d="scan'208";a="13619584"
+Received: from vtuxmail01.tq-net.de ([10.115.0.20])
+  by mx1.tq-group.com with ESMTP; 27 Aug 2020 09:59:04 +0200
+Received: from herburgerg-w.tq-net.de (herburgerg-w.tq-net.de [10.122.52.145])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (No client certificate requested)
+        by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id C7C1C280065;
+        Thu, 27 Aug 2020 09:59:04 +0200 (CEST)
+From:   Gregor Herburger <gregor.herburger@ew.tq-group.com>
+To:     york.sun@nxp.com, bp@alien8.de, mchehab@kernel.org,
+        tony.luck@intel.com, james.morse@arm.com, rrichter@marvell.com
+Cc:     linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Gregor Herburger <gregor.herburger@ew.tq-group.com>
+Subject: [PATCH v2 1/1] edac: fsl_ddr_edac: fix expected data message
+Date:   Thu, 27 Aug 2020 09:56:00 +0200
+Message-Id: <20200827075600.22335-1-gregor.herburger@ew.tq-group.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20200817095302.GD549@zn.tnic>
+References: <20200817095302.GD549@zn.tnic>
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On 27/08/2020 10:07, Krzysztof Kozlowski wrote:
-> platform_get_irq() returns -ERRNO on error.  In such case comparison
-> to 0 would pass the check.
-> 
-> Fixes: 86a18ee21e5e ("EDAC, ti: Add support for TI keystone and DRA7xx EDAC")
-> Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
+When a correctable single bit error occurs, the driver calculates the
+bad_data_bit respectively the bad_ecc_bit. If there is no error in the
+corresponding data, the value becomes -1. With this the expected data
+message is calculated.
 
-Reviewed-by: Tero Kristo <t-kristo@ti.com>
+In the case of an error in the lower 32 bits or no error (-1) the right
+side operand of the bit-shift becomes negative which is undefined
+behavior.
 
-> ---
->   drivers/edac/ti_edac.c | 3 ++-
->   1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/edac/ti_edac.c b/drivers/edac/ti_edac.c
-> index 6e52796a0b41..e7eae20f83d1 100644
-> --- a/drivers/edac/ti_edac.c
-> +++ b/drivers/edac/ti_edac.c
-> @@ -278,7 +278,8 @@ static int ti_edac_probe(struct platform_device *pdev)
->   
->   	/* add EMIF ECC error handler */
->   	error_irq = platform_get_irq(pdev, 0);
-> -	if (!error_irq) {
-> +	if (error_irq < 0) {
-> +		ret = error_irq;
->   		edac_printk(KERN_ERR, EDAC_MOD_NAME,
->   			    "EMIF irq number not defined.\n");
->   		goto err;
-> 
+This can result in wrong and misleading messages like this:
+[  311.103794] EDAC FSL_DDR MC0: Faulty Data bit: 36
+[  311.108490] EDAC FSL_DDR MC0: Expected Data / ECC:   0xffffffef_ffffffff / 0x80000059
+[  311.116135] EDAC FSL_DDR MC0: Captured Data / ECC:   0xffffffff_ffffffef / 0x59
 
---
-Texas Instruments Finland Oy, Porkkalankatu 22, 00180 Helsinki. Y-tunnus/Business ID: 0615521-4. Kotipaikka/Domicile: Helsinki
+Fix this by only calculating the expected data where the error occurred.
+
+With the fix the dmesg output looks like this:
+[  311.103794] EDAC FSL_DDR MC0: Faulty Data bit: 36
+[  311.108490] EDAC FSL_DDR MC0: Expected Data / ECC:   0xffffffef_ffffffef / 0x59
+[  311.116135] EDAC FSL_DDR MC0: Captured Data / ECC:   0xffffffff_ffffffef / 0x59
+
+Signed-off-by: Gregor Herburger <gregor.herburger@ew.tq-group.com>
+---
+ drivers/edac/fsl_ddr_edac.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/edac/fsl_ddr_edac.c b/drivers/edac/fsl_ddr_edac.c
+index 6d8ea226010d..4b6989cf1947 100644
+--- a/drivers/edac/fsl_ddr_edac.c
++++ b/drivers/edac/fsl_ddr_edac.c
+@@ -343,9 +343,9 @@ static void fsl_mc_check(struct mem_ctl_info *mci)
+ 
+ 		fsl_mc_printk(mci, KERN_ERR,
+ 			"Expected Data / ECC:\t%#8.8x_%08x / %#2.2x\n",
+-			cap_high ^ (1 << (bad_data_bit - 32)),
+-			cap_low ^ (1 << bad_data_bit),
+-			syndrome ^ (1 << bad_ecc_bit));
++			(bad_data_bit > 31) ? cap_high ^ (1 << (bad_data_bit - 32)) : cap_high,
++			(bad_data_bit <= 31) ? cap_low ^ (1 << (bad_data_bit)) : cap_low,
++			(bad_ecc_bit != -1) ? syndrome ^ (1 << (bad_ecc_bit)) : syndrome);
+ 	}
+ 
+ 	fsl_mc_printk(mci, KERN_ERR,
+-- 
+2.17.1
+
