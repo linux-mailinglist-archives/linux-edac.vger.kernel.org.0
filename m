@@ -2,130 +2,183 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DF41256217
-	for <lists+linux-edac@lfdr.de>; Fri, 28 Aug 2020 22:34:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4637D2569BF
+	for <lists+linux-edac@lfdr.de>; Sat, 29 Aug 2020 20:30:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726876AbgH1UeU (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Fri, 28 Aug 2020 16:34:20 -0400
-Received: from mail-dm6nam10on2055.outbound.protection.outlook.com ([40.107.93.55]:27873
-        "EHLO NAM10-DM6-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726797AbgH1UeL (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Fri, 28 Aug 2020 16:34:11 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=SZJQ9iJHZiYuW7m5e8gbhdpTQS2zUZS5P/ZaODH6VuPe8TlbEhURayYSmdx1pY9dHKpHIwHtH/Q/oqANXTX55U+kmFaiJtZo/lGIbXpw3Xfo5gD9AJgmjLzjJfoFNkqMoB6Y6dArrnNGYojP7Hzcd+EYfjK2KaT2fyPXo4qG8Z3mT0Qr3++NQYxMdRec4wAKME2PDDarOP7dqzqFk0KFqyUCnllXKFbP5qf4nmYQoYuCebrBt5iIFxY+gHeMMhPswB5u7vC2bfemcd0nrH15yZif4bZzCHG6KuPdylmrLn4qydUjLgcBsJodi6mlt1BVh1P9vPz2rZ17hsihtQjwtw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=p19DD4AlfjlaKQ/B6lMTKHLNGQAO319keFtPMDiG+SQ=;
- b=iwStTC5Pe++xvWvoU84DsknsH+bac6V/zWKwejMz5RFLLO7o7RJzLm/slhh3Br3CbIUxJgFzbULN/HjnHq1MfadoHSYvvtlIX/pzSH05bCMSmvnE5tViqlp/6aUB9u0mDE8r4rfciK733BODXCx9lispc2sqUoxwCWed7ImAme9dheUJEu4Juuh+JMBoanYqlU+ZGPfVcpRo6ozLQNzq77YpEpuKqt5xrI7FmcN3HyI0vSoiVlkf2HW5xKvSNK+B7I7yCv1TyeapC65lg11totBUrUrNISKc1rGm194r9O9Wgytmw5HVHK5glH+v/b8MlsxzB25pMfYmEI4EB8hGzQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amdcloud.onmicrosoft.com; s=selector2-amdcloud-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=p19DD4AlfjlaKQ/B6lMTKHLNGQAO319keFtPMDiG+SQ=;
- b=CqTeAfA6UDNf9ik3VzkVEjdowTmsfDVZt8VQJC9JGcgKfrDAPWju1aBe0YTyv/iQtT6QrK6vj2vrvKar6Zx4mKD4wHvlBlUlvdy1gtFsOcfR24G1wykYKB9Utnv+VcyFjfNAmZoGei+4ul4xVsFz4xkCfKkobyM4CnwH572E0CI=
-Authentication-Results: kernel.org; dkim=none (message not signed)
- header.d=none;kernel.org; dmarc=none action=none header.from=amd.com;
-Received: from SN6PR12MB2685.namprd12.prod.outlook.com (2603:10b6:805:67::33)
- by SA0PR12MB4511.namprd12.prod.outlook.com (2603:10b6:806:95::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3326.19; Fri, 28 Aug
- 2020 20:33:59 +0000
-Received: from SN6PR12MB2685.namprd12.prod.outlook.com
- ([fe80::48e9:c9c:7cd7:de86]) by SN6PR12MB2685.namprd12.prod.outlook.com
- ([fe80::48e9:c9c:7cd7:de86%5]) with mapi id 15.20.3326.019; Fri, 28 Aug 2020
- 20:33:59 +0000
-From:   Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>
-To:     x86@kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-edac@vger.kernel.org,
-        linux-efi@vger.kernel.org, linux-acpi@vger.kernel.org,
-        devel@acpica.org
-Cc:     Borislav Petkov <bp@alien8.de>, Tony Luck <tony.luck@intel.com>,
-        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Len Brown <len.brown@intel.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Yazen Ghannam <yazen.ghannam@amd.com>,
-        Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>
-Subject: [PATCH v2 2/2] x86/mce/dev-mcelog: Fix updating kflags in AMD systems
-Date:   Fri, 28 Aug 2020 15:33:32 -0500
-Message-Id: <20200828203332.11129-3-Smita.KoralahalliChannabasappa@amd.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20200828203332.11129-1-Smita.KoralahalliChannabasappa@amd.com>
-References: <20200828203332.11129-1-Smita.KoralahalliChannabasappa@amd.com>
-Content-Type: text/plain
-X-ClientProxiedBy: SN4PR0501CA0143.namprd05.prod.outlook.com
- (2603:10b6:803:2c::21) To SN6PR12MB2685.namprd12.prod.outlook.com
- (2603:10b6:805:67::33)
+        id S1728335AbgH2Sas (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Sat, 29 Aug 2020 14:30:48 -0400
+Received: from smtprelay0236.hostedemail.com ([216.40.44.236]:36034 "EHLO
+        smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1728265AbgH2Sas (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>);
+        Sat, 29 Aug 2020 14:30:48 -0400
+X-Greylist: delayed 415 seconds by postgrey-1.27 at vger.kernel.org; Sat, 29 Aug 2020 14:30:47 EDT
+Received: from smtprelay.hostedemail.com (10.5.19.251.rfc1918.com [10.5.19.251])
+        by smtpgrave06.hostedemail.com (Postfix) with ESMTP id D67AA800CDB6;
+        Sat, 29 Aug 2020 18:23:54 +0000 (UTC)
+Received: from filter.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
+        by smtprelay08.hostedemail.com (Postfix) with ESMTP id 1D990182CED5B;
+        Sat, 29 Aug 2020 18:23:51 +0000 (UTC)
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Spam-Summary: 2,0,0,,d41d8cd98f00b204,joe@perches.com,,RULES_HIT:41:355:379:966:973:988:989:1260:1277:1311:1313:1314:1345:1437:1515:1516:1518:1535:1544:1593:1594:1711:1730:1747:1777:1792:2196:2199:2393:2559:2562:2828:3138:3139:3140:3141:3142:3355:3865:3866:3867:3870:3872:4117:4385:5007:6742:6743:9036:10004:10848:11026:11658:11914:12043:12048:12297:12760:13439:14096:14097:14181:14659:14721:21080:21433:21627:21990:30025:30029:30046:30054:30055:30091,0,RBL:none,CacheIP:none,Bayesian:0.5,0.5,0.5,Netcheck:none,DomainCache:0,MSF:not bulk,SPF:,MSBL:0,DNSBL:none,Custom_rules:0:0:0,LFtime:1,LUA_SUMMARY:none
+X-HE-Tag: humor54_0f10f2427080
+X-Filterd-Recvd-Size: 6548
+Received: from XPS-9350.home (unknown [47.151.133.149])
+        (Authenticated sender: joe@perches.com)
+        by omf14.hostedemail.com (Postfix) with ESMTPA;
+        Sat, 29 Aug 2020 18:23:44 +0000 (UTC)
+Message-ID: <0f837bfb394ac632241eaac3e349b2ba806bce09.camel@perches.com>
+Subject: sysfs output without newlines
+From:   Joe Perches <joe@perches.com>
+To:     LKML <linux-kernel@vger.kernel.org>,
+        Denis Efremov <efremov@linux.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
+        Julia Lawall <julia.lawall@inria.fr>,
+        Alex Dewar <alex.dewar90@gmail.com>
+Cc:     York Sun <york.sun@nxp.com>, Borislav Petkov <bp@alien8.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Tony Luck <tony.luck@intel.com>,
+        James Morse <james.morse@arm.com>,
+        Robert Richter <rric@kernel.org>,
+        Michal Simek <michal.simek@xilinx.com>,
+        Boris Brezillon <bbrezillon@kernel.org>,
+        Maxim Levitsky <maximlevitsky@gmail.com>,
+        Alex Dubov <oakad@yahoo.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Tomas Winkler <tomas.winkler@intel.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Madalin Bucur <madalin.bucur@nxp.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Douglas Miller <dougmill@linux.ibm.com>,
+        Stanislav Yakovlev <stas.yakovlev@gmail.com>,
+        Kalle Valo <kvalo@codeaurora.org>,
+        Darren Hart <dvhart@infradead.org>,
+        Andy Shevchenko <andy@infradead.org>,
+        Kai =?ISO-8859-1?Q?M=E4kisara?= <Kai.Makisara@kolumbus.fi>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Mark Brown <broonie@kernel.org>,
+        Oliver Neukum <oneukum@suse.com>,
+        Pete Zaitcev <zaitcev@redhat.com>, linux-edac@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-i3c@lists.infradead.org, linux-mmc@vger.kernel.org,
+        netdev@vger.kernel.org, linux-wireless@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org, linux-scsi@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-usb@vger.kernel.org
+Date:   Sat, 29 Aug 2020 11:23:43 -0700
+Content-Type: text/plain; charset="ISO-8859-1"
+User-Agent: Evolution 3.36.4-0ubuntu1 
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from 255.255.255.255 (255.255.255.255) by SN4PR0501CA0143.namprd05.prod.outlook.com (2603:10b6:803:2c::21) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3348.5 via Frontend Transport; Fri, 28 Aug 2020 20:33:58 +0000
-X-Mailer: git-send-email 2.17.1
-X-Originating-IP: [165.204.78.1]
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-HT: Tenant
-X-MS-Office365-Filtering-Correlation-Id: 287fd341-5c60-46b9-b8b8-08d84b91b185
-X-MS-TrafficTypeDiagnostic: SA0PR12MB4511:
-X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <SA0PR12MB451160E6AF1CED559F70E5F290520@SA0PR12MB4511.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:7691;
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: SxlCE4EY+cGEA9MyDo7mpAv4rV2TIrbHTplPncE3hY3tsaeKc2sVhCG0wec1q2YR78PxtbZmVu55QCcbGAt3M1WRTTclXpjM3aRdLyfEOCzlB0IfBcE+KeoBI53jsaDAu9l3fkdS/RjPTmdYjmVPWT5b3BqVzOe6zaNifmGok6H1v4nRAj5ZxHQAmeHbCiBKVnvLavS+zpHOCCVGuwMeIazmqR2sQRd+ej1IIL5uNvy85V0sA/JjhAtVjPi5DYqnq/1i12opF8YiXFfewFIwlkHdYu9t1ls4kpYUpR/v5yysYfhZ6zApEhMx/MxFBjzIm/k6vEP5RUzuK7gmyF3dVA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR12MB2685.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(39860400002)(376002)(136003)(366004)(346002)(396003)(5660300002)(8936002)(8676002)(6486002)(956004)(6666004)(2616005)(66556008)(1076003)(4326008)(7416002)(66946007)(66476007)(86362001)(83380400001)(26005)(36756003)(2906002)(186003)(52116002)(54906003)(478600001)(316002)(16576012);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData: XTTWkPNXZXfe9bQVlzQU5pj7OEa75q+XQuTI+i6SFrr5+YeEZk06qi8TSIzZVfsU5a2700E2QWKdmWwaYdBE0vK64FuHtZlRJuwbmPFoIDYVIdu4bmT4K/ZARMaCfFZMikAP7vp72+Sg3qfur1V7uTZ4bZuZahBWV3VA8sE1+QBPcb2zroqfbdAgfFWPDo3vm8W1FM/ju87eg6xf0Wgam2yfHHq7ox49cov2DpzawuiOoxLKCigAYwIpMABUKBcZhCk2nMBThgrWjkL8+/BcYf4s9ygLvOUeC62wWN9UmV7oCH6q9jSFAdhHPg3P8Ay9DUm+NlPzO/TTTUu8OjWnNhP8yZuLLt8PBIv5XGFEsepWH8R8FlJMbJzEBEtyMkj/1h6HKOAQvIsoe6wHxJ3urBLbk0S4DkUcjgQIf0zD9LlPEYux4LB+mxUHx+d/0KQZRA3x4C4Qb81BWYdd2DGw0Jfx/5/G4TGPCGWMTUVYU+AsvwvN1M8P+19cYVfC+xGZBP55O+MK3+OxtmhKwlpNqbn7BsHlh2cuFhEKVG/PDdjdpCRbi8hcdeFGxY0YAU2zbwC+OSqxu+zpho0/opAahF61FO5iMpCxYytPdbXQcAlI/Z1ZfAveuLdnHzb3+OdtDDqWbaCMnbRholQ5qhSWAg==
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 287fd341-5c60-46b9-b8b8-08d84b91b185
-X-MS-Exchange-CrossTenant-AuthSource: SN6PR12MB2685.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Aug 2020 20:33:59.6035
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: JM/d5Vwlfes0nSAmeGntqCybX8VWC17agw2O2axsJWE7yWtxQOW0zFn0+PMTLq6ILTVUWmbPduN319Gh8J9BtQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA0PR12MB4511
+Content-Transfer-Encoding: 7bit
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-The mcelog utility is not commonly used on AMD systems. Therefore, errors
-logged only by the dev_mce_log() notifier will be missed. This may occur
-if the EDAC modules are not loaded in which case it's preferable to print
-the error record by the default notifier.
+While doing an investigation for a possible treewide conversion of
+sysfs output using sprintf/snprintf/scnprintf, I discovered
+several instances of sysfs output without terminating newlines.
 
-However, the mce->kflags set by dev_mce_log() notifier makes the default
-notifier to skip over the errors assuming they are processed by
-dev_mce_log().
+It seems likely all of these should have newline terminations
+or have the \n\r termination changed to a single newline.
 
-Do not update kflags in the dev_mce_log() notifier on AMD systems.
+Anyone have any objection to patches adding newlines to these
+in their original forms using sprintf/snprintf/scnprintf?
 
-Signed-off-by: Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>
----
-v2:
-	No change
+A few of these might be false positives as
+	"%s", string
+might already have string with a newline termination.
 
- arch/x86/kernel/cpu/mce/dev-mcelog.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
++++ drivers/edac/fsl_ddr_edac.c
++	return sysfs_emit(data, "0x%08x",
++	return sysfs_emit(data, "0x%08x",
++	return sysfs_emit(data, "0x%08x",
++++ drivers/edac/synopsys_edac.c
++	return sysfs_emit(data, "Data Poisoning: %s\n\r",
++		return sysfs_emit(buf, "1");
++		return sysfs_emit(buf, "0");
++		return sysfs_emit(buf, "1");
++		return sysfs_emit(buf, "0");
++		return sysfs_emit(buf, "0");
++		return sysfs_emit(buf, "1");
++		return sysfs_emit(buf, "0");
++	return sysfs_emit(buf, "%u", !!(data->status & mask));
++	return sysfs_emit(buf, "%u", data->tcrit2[index] * 1000);
++	return sysfs_emit(buf, "%d",
++	return sysfs_emit(buf, "%u", data->tcrit1[index] * 1000);
++	return sysfs_emit(buf, "%d",
++	return sysfs_emit(buf, "%d", data->toffset[index] * 500);
++++ drivers/i3c/master.c
++		return sysfs_emit(buf, "i3c:dcr%02Xmanuf%04X", devinfo.dcr,
++	return sysfs_emit(buf, "i3c:dcr%02Xmanuf%04Xpart%04Xext%04X",
++	return sysfs_emit(buf, "%s", dd->boardversion);
++	return sysfs_emit(buf, "%s", dd->serial);
++	return sysfs_emit(buf, "%s", (char *)ib_qib_version);
++	return sysfs_emit(buf, "%s", dd->boardversion);
++	return sysfs_emit(buf, "%s", dd->lbus_info);
++	return sysfs_emit(buf, "ipac:f%02Xv%08Xd%08X", idev->id_format,
++++ drivers/memstick/core/mspro_block.c
++	return sysfs_emit(buffer, "%s", (char *)s_attr->data);
++	return sysfs_emit(buf, "%s",
++	return sysfs_emit(buf, "%s",
++++ drivers/misc/mei/bus.c
++	return sysfs_emit(buf, "%s", cldev->name);
++	return sysfs_emit(buf, "%pUl", uuid);
++	return sysfs_emit(buf, "%02X", version);
++	return sysfs_emit(buf, "mei:%s:%pUl:%02X:",
++	return sysfs_emit(buf, "%d", maxconn);
++	return sysfs_emit(buf, "%d", fixed);
++	return sysfs_emit(buf, "%d", vt);
++	return sysfs_emit(buf, "%u", maxlen);
++	return sysfs_emit(buf, "%s", mei_dev_state_str(dev_state));
++++ drivers/misc/tifm_core.c
++	return sysfs_emit(buf, "%x", sock->type);
++			return sysfs_emit(buf, "%s",
++	return sysfs_emit(buf, "%d", dev->net_count);
++++ drivers/net/ethernet/freescale/dpaa/dpaa_eth_sysfs.c
++		return sysfs_emit(buf, "%llx",
++		return sysfs_emit(buf, "none");
++++ drivers/net/ethernet/ibm/ehea/ehea_main.c
++	return sysfs_emit(buf, "%d", port->logical_port_id);
++++ drivers/net/wireless/intel/ipw2x00/ipw2200.c
++		return sysfs_emit(buf, "%s", priv->prom_net_dev->name);
++	return sysfs_emit(buf, "0x%04X",
++	return sysfs_emit(buf, "%d", il->retry_rate);
++	return sysfs_emit(buf, "%pOF", np);
++	return sysfs_emit(buf, "pcmcia:m%04Xc%04Xf%02Xfn%02Xpfn%02X"
++++ drivers/platform/x86/dell-smbios-base.c
++		return sysfs_emit(buf, "%08x", da_tokens[i].location);
++		return sysfs_emit(buf, "%08x", da_tokens[i].value);
++	return sysfs_emit(buf, "%08x",
++++ drivers/scsi/st.c
++	return sysfs_emit(buf, "%lld",
++	return sysfs_emit(buf, "%lld",
++	return sysfs_emit(buf, "%lld",
++	return sysfs_emit(buf, "%lld",
++	return sysfs_emit(buf, "%lld",
++	return sysfs_emit(buf, "%lld",
++	return sysfs_emit(buf, "%lld",
++	return sysfs_emit(buf, "%lld",
++	return sysfs_emit(buf, "%lld",
++	return sysfs_emit(buf, "%lld",
++++ drivers/spi/spi-tle62x0.c
++	return sysfs_emit(buf, "%d", value);
++++ drivers/usb/class/cdc-acm.c
++	return sysfs_emit(buf, "%d", acm->ctrl_caps);
++	return sysfs_emit(buf, "%d", acm->country_rel_date);
++++ drivers/usb/class/usblp.c
++	return sysfs_emit(buf, "%s", usblp->device_id_string+2);
++	return sysfs_emit(buf, "usb:v%04Xp%04Xd%04Xdc%02Xdsc%02Xdp%02X"
++++ drivers/usb/misc/cytherm.c
++	return sysfs_emit(buf, "%i", cytherm->brightness);
++	return sysfs_emit(buf, "%c%i.%i", sign ? '-' : '+', temp >> 1,
++		return sysfs_emit(buf, "1");
++		return sysfs_emit(buf, "0");
++	return sysfs_emit(buf, "%d", retval);
++	return sysfs_emit(buf, "%d", retval);
 
-diff --git a/arch/x86/kernel/cpu/mce/dev-mcelog.c b/arch/x86/kernel/cpu/mce/dev-mcelog.c
-index 03e51053592a..100fbeebdc72 100644
---- a/arch/x86/kernel/cpu/mce/dev-mcelog.c
-+++ b/arch/x86/kernel/cpu/mce/dev-mcelog.c
-@@ -67,7 +67,9 @@ static int dev_mce_log(struct notifier_block *nb, unsigned long val,
- unlock:
- 	mutex_unlock(&mce_chrdev_read_mutex);
- 
--	mce->kflags |= MCE_HANDLED_MCELOG;
-+	if (boot_cpu_data.x86_vendor != X86_VENDOR_AMD)
-+		mce->kflags |= MCE_HANDLED_MCELOG;
-+
- 	return NOTIFY_OK;
- }
- 
--- 
-2.17.1
 
