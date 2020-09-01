@@ -2,76 +2,172 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 528E92590A3
-	for <lists+linux-edac@lfdr.de>; Tue,  1 Sep 2020 16:36:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 983EA2592C2
+	for <lists+linux-edac@lfdr.de>; Tue,  1 Sep 2020 17:16:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728396AbgIAOfu (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Tue, 1 Sep 2020 10:35:50 -0400
-Received: from mail.skyhub.de ([5.9.137.197]:48366 "EHLO mail.skyhub.de"
+        id S1729341AbgIAPQl (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Tue, 1 Sep 2020 11:16:41 -0400
+Received: from mail.kernel.org ([198.145.29.99]:33552 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728149AbgIAOfn (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Tue, 1 Sep 2020 10:35:43 -0400
-Received: from zn.tnic (p200300ec2f111c00f0e9a36004a82e59.dip0.t-ipconnect.de [IPv6:2003:ec:2f11:1c00:f0e9:a360:4a8:2e59])
+        id S1729338AbgIAPQk (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Tue, 1 Sep 2020 11:16:40 -0400
+Received: from localhost (83-86-74-64.cable.dynamic.v4.ziggo.nl [83.86.74.64])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 4C2721EC00EC;
-        Tue,  1 Sep 2020 16:35:38 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1598970938;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=W/JjlPkr56envneKc3L1P/Ow3k/grlx00YCQ6+YN6bg=;
-        b=abXJBU2J4S5SacLtZDga/ty8nkt15z0PcR3rPQlsoWywTj6Vdp1ODsbYvriCt5eH7K3rA+
-        /RuhpFcuV4oSFc6Dl0m2urbBNH76GW74iPRzcs00L3lnkoSdR4k4ODPyyuUcQ2/jszk02L
-        WJRxfrOe0y8ZAzSYnE4QKDKCQN7F19M=
-Date:   Tue, 1 Sep 2020 16:35:39 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Shiju Jose <shiju.jose@huawei.com>
-Cc:     linux-edac@vger.kernel.org, linux-acpi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, tony.luck@intel.com,
-        rjw@rjwysocki.net, james.morse@arm.com, lenb@kernel.org,
-        linuxarm@huawei.com
-Subject: Re: [PATCH 1/1] RAS: Add CPU Correctable Error Collector to isolate
- an erroneous CPU core
-Message-ID: <20200901143539.GC8392@zn.tnic>
-References: <20200901140140.1772-1-shiju.jose@huawei.com>
+        by mail.kernel.org (Postfix) with ESMTPSA id 817D8207D3;
+        Tue,  1 Sep 2020 15:16:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1598973400;
+        bh=rcAnEbv7j0JSH/T+QJdGBSad0kuDwnM2WtUjOF/zEb4=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=yvy1L8O/Y0Hn4+LvU+k5ZY+Wqos96uHyZhiSABuckbL88zBuYrfL5EtdcJtOsW+95
+         Yp2T5m0bKyVtlTvJGDyqMUFKpY/YlF++b53rKEn7YYCjQ6s2wRO/v9kNpTb38Sw2Y3
+         ZBBN2afz7wfZGqaE9L9QCU7pFwJZQUTm91pQ7aX8=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org, Jason Baron <jbaron@akamai.com>,
+        Borislav Petkov <bp@suse.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-edac <linux-edac@vger.kernel.org>,
+        Tony Luck <tony.luck@intel.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.9 32/78] EDAC/ie31200: Fallback if host bridge device is already initialized
+Date:   Tue,  1 Sep 2020 17:10:08 +0200
+Message-Id: <20200901150926.352567987@linuxfoundation.org>
+X-Mailer: git-send-email 2.28.0
+In-Reply-To: <20200901150924.680106554@linuxfoundation.org>
+References: <20200901150924.680106554@linuxfoundation.org>
+User-Agent: quilt/0.66
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20200901140140.1772-1-shiju.jose@huawei.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Tue, Sep 01, 2020 at 03:01:40PM +0100, Shiju Jose wrote:
-> When the CPU correctable errors reported on an ARM64 CPU core too often,
-> it should be isolated. Add the CPU correctable error collector to
-> store the CPU correctable error count.
-> 
-> When the correctable error count for a CPU exceed the threshold
-> value in a short time period, it will try to isolate the CPU core.
-> The threshold value, time period etc are configurable.
-> 
-> Implementation details is added in the file.
-> 
-> Signed-off-by: Shiju Jose <shiju.jose@huawei.com>
-> ---
->  Documentation/ABI/testing/debugfs-cpu-cec |  22 ++
->  arch/arm64/ras/Kconfig                    |   8 +
->  drivers/acpi/apei/ghes.c                  |  30 +-
->  drivers/ras/Kconfig                       |   1 +
->  drivers/ras/Makefile                      |   1 +
->  drivers/ras/cpu_cec.c                     | 393 ++++++++++++++++++++++
+From: Jason Baron <jbaron@akamai.com>
 
-So instead of adding the ability to collect other error types to the
-CEC, you're duplicating the CEC itself?!
+[ Upstream commit 709ed1bcef12398ac1a35c149f3e582db04456c2 ]
 
-Why?
+The Intel uncore driver may claim some of the pci ids from ie31200 which
+means that the ie31200 edac driver will not initialize them as part of
+pci_register_driver().
 
+Let's add a fallback for this case to 'pci_get_device()' to get a
+reference on the device such that it can still be configured. This is
+similar in approach to other edac drivers.
+
+Signed-off-by: Jason Baron <jbaron@akamai.com>
+Cc: Borislav Petkov <bp@suse.de>
+Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc: linux-edac <linux-edac@vger.kernel.org>
+Signed-off-by: Tony Luck <tony.luck@intel.com>
+Link: https://lore.kernel.org/r/1594923911-10885-1-git-send-email-jbaron@akamai.com
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/edac/ie31200_edac.c | 50 ++++++++++++++++++++++++++++++++++---
+ 1 file changed, 47 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/edac/ie31200_edac.c b/drivers/edac/ie31200_edac.c
+index 1c88d97074951..3438b98e60948 100644
+--- a/drivers/edac/ie31200_edac.c
++++ b/drivers/edac/ie31200_edac.c
+@@ -145,6 +145,8 @@
+ 	(n << (28 + (2 * skl) - PAGE_SHIFT))
+ 
+ static int nr_channels;
++static struct pci_dev *mci_pdev;
++static int ie31200_registered = 1;
+ 
+ struct ie31200_priv {
+ 	void __iomem *window;
+@@ -512,12 +514,16 @@ fail_free:
+ static int ie31200_init_one(struct pci_dev *pdev,
+ 			    const struct pci_device_id *ent)
+ {
+-	edac_dbg(0, "MC:\n");
++	int rc;
+ 
++	edac_dbg(0, "MC:\n");
+ 	if (pci_enable_device(pdev) < 0)
+ 		return -EIO;
++	rc = ie31200_probe1(pdev, ent->driver_data);
++	if (rc == 0 && !mci_pdev)
++		mci_pdev = pci_dev_get(pdev);
+ 
+-	return ie31200_probe1(pdev, ent->driver_data);
++	return rc;
+ }
+ 
+ static void ie31200_remove_one(struct pci_dev *pdev)
+@@ -526,6 +532,8 @@ static void ie31200_remove_one(struct pci_dev *pdev)
+ 	struct ie31200_priv *priv;
+ 
+ 	edac_dbg(0, "\n");
++	pci_dev_put(mci_pdev);
++	mci_pdev = NULL;
+ 	mci = edac_mc_del_mc(&pdev->dev);
+ 	if (!mci)
+ 		return;
+@@ -574,17 +582,53 @@ static struct pci_driver ie31200_driver = {
+ 
+ static int __init ie31200_init(void)
+ {
++	int pci_rc, i;
++
+ 	edac_dbg(3, "MC:\n");
+ 	/* Ensure that the OPSTATE is set correctly for POLL or NMI */
+ 	opstate_init();
+ 
+-	return pci_register_driver(&ie31200_driver);
++	pci_rc = pci_register_driver(&ie31200_driver);
++	if (pci_rc < 0)
++		goto fail0;
++
++	if (!mci_pdev) {
++		ie31200_registered = 0;
++		for (i = 0; ie31200_pci_tbl[i].vendor != 0; i++) {
++			mci_pdev = pci_get_device(ie31200_pci_tbl[i].vendor,
++						  ie31200_pci_tbl[i].device,
++						  NULL);
++			if (mci_pdev)
++				break;
++		}
++		if (!mci_pdev) {
++			edac_dbg(0, "ie31200 pci_get_device fail\n");
++			pci_rc = -ENODEV;
++			goto fail1;
++		}
++		pci_rc = ie31200_init_one(mci_pdev, &ie31200_pci_tbl[i]);
++		if (pci_rc < 0) {
++			edac_dbg(0, "ie31200 init fail\n");
++			pci_rc = -ENODEV;
++			goto fail1;
++		}
++	}
++	return 0;
++
++fail1:
++	pci_unregister_driver(&ie31200_driver);
++fail0:
++	pci_dev_put(mci_pdev);
++
++	return pci_rc;
+ }
+ 
+ static void __exit ie31200_exit(void)
+ {
+ 	edac_dbg(3, "MC:\n");
+ 	pci_unregister_driver(&ie31200_driver);
++	if (!ie31200_registered)
++		ie31200_remove_one(mci_pdev);
+ }
+ 
+ module_init(ie31200_init);
 -- 
-Regards/Gruss,
-    Boris.
+2.25.1
 
-https://people.kernel.org/tglx/notes-about-netiquette
+
+
