@@ -2,54 +2,127 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E5154258849
-	for <lists+linux-edac@lfdr.de>; Tue,  1 Sep 2020 08:34:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 68EA1258B0C
+	for <lists+linux-edac@lfdr.de>; Tue,  1 Sep 2020 11:09:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726044AbgIAGea (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Tue, 1 Sep 2020 02:34:30 -0400
-Received: from mail.kernel.org ([198.145.29.99]:49674 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726006AbgIAGe3 (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Tue, 1 Sep 2020 02:34:29 -0400
-Received: from coco.lan (ip5f5ad5cf.dynamic.kabel-deutschland.de [95.90.213.207])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 234EF2087D;
-        Tue,  1 Sep 2020 06:34:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1598942069;
-        bh=vDhHFE235Xp1Z9swBzG8CUZ/dlVqdTIOu59ZuhS0ryQ=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=nqpyITnh25+fNs0rXZjgtNCd2pi2GMTKUsoZON1ZB2Zbaf7iJQR+kk+LyQg3Djx0s
-         1sN1D4jkAYR+zZHxYMWr5SyhJh+Lio+7lhMYDh/60euhLT7cYi0b3d9WVahhN7W/3N
-         yslfnnZLuSMyv6Al3C5mTEc5ghV77twEBJ5CCPfQ=
-Date:   Tue, 1 Sep 2020 08:34:25 +0200
-From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-To:     Shiju Jose <shiju.jose@huawei.com>
-Cc:     <linux-edac@vger.kernel.org>, <linuxarm@huawei.com>,
-        <tanxiaofei@huawei.com>, <jonathan.cameron@huawei.com>
-Subject: Re: [PATCH 1/1] rasdaemon: ras-mc-ctl: Add ARM processor error
- information
-Message-ID: <20200901083425.1d8dd88b@coco.lan>
-In-Reply-To: <20200811123146.1409-1-shiju.jose@huawei.com>
-References: <20200811123146.1409-1-shiju.jose@huawei.com>
-X-Mailer: Claws Mail 3.17.6 (GTK+ 2.24.32; x86_64-redhat-linux-gnu)
+        id S1726559AbgIAJJF convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-edac@lfdr.de>); Tue, 1 Sep 2020 05:09:05 -0400
+Received: from eu-smtp-delivery-151.mimecast.com ([185.58.86.151]:32716 "EHLO
+        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726512AbgIAJJD (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Tue, 1 Sep 2020 05:09:03 -0400
+Received: from AcuMS.aculab.com (156.67.243.126 [156.67.243.126]) (Using
+ TLS) by relay.mimecast.com with ESMTP id
+ uk-mta-283-TOoGT-t2Oa-s63UZlOFx8A-1; Tue, 01 Sep 2020 10:07:44 +0100
+X-MC-Unique: TOoGT-t2Oa-s63UZlOFx8A-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) with Microsoft SMTP
+ Server (TLS) id 15.0.1347.2; Tue, 1 Sep 2020 10:07:42 +0100
+Received: from AcuMS.Aculab.com ([fe80::43c:695e:880f:8750]) by
+ AcuMS.aculab.com ([fe80::43c:695e:880f:8750%12]) with mapi id 15.00.1347.000;
+ Tue, 1 Sep 2020 10:07:42 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Joe Perches' <joe@perches.com>, Denis Efremov <efremov@linux.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        "Kees Cook" <keescook@chromium.org>,
+        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
+        Julia Lawall <julia.lawall@inria.fr>,
+        Alex Dewar <alex.dewar90@gmail.com>
+CC:     York Sun <york.sun@nxp.com>, Borislav Petkov <bp@alien8.de>,
+        "Mauro Carvalho Chehab" <mchehab@kernel.org>,
+        Tony Luck <tony.luck@intel.com>,
+        "James Morse" <james.morse@arm.com>,
+        Robert Richter <rric@kernel.org>,
+        Michal Simek <michal.simek@xilinx.com>,
+        Boris Brezillon <bbrezillon@kernel.org>,
+        "Maxim Levitsky" <maximlevitsky@gmail.com>,
+        Alex Dubov <oakad@yahoo.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Tomas Winkler <tomas.winkler@intel.com>,
+        "Arnd Bergmann" <arnd@arndb.de>,
+        Madalin Bucur <madalin.bucur@nxp.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "Douglas Miller" <dougmill@linux.ibm.com>,
+        Stanislav Yakovlev <stas.yakovlev@gmail.com>,
+        Kalle Valo <kvalo@codeaurora.org>,
+        Darren Hart <dvhart@infradead.org>,
+        Andy Shevchenko <andy@infradead.org>,
+        =?iso-8859-1?Q?Kai_M=E4kisara?= <Kai.Makisara@kolumbus.fi>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Mark Brown <broonie@kernel.org>,
+        Oliver Neukum <oneukum@suse.com>,
+        Pete Zaitcev <zaitcev@redhat.com>,
+        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-i3c@lists.infradead.org" <linux-i3c@lists.infradead.org>,
+        "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
+        "platform-driver-x86@vger.kernel.org" 
+        <platform-driver-x86@vger.kernel.org>,
+        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+Subject: RE: sysfs output without newlines
+Thread-Topic: sysfs output without newlines
+Thread-Index: AQHWfkO/+C/EB0p8Hk2MEQnp7JjooqlTgZKw
+Date:   Tue, 1 Sep 2020 09:07:42 +0000
+Message-ID: <5f0b48e0291b4b54bc1caeb8b5715c65@AcuMS.aculab.com>
+References: <0f837bfb394ac632241eaac3e349b2ba806bce09.camel@perches.com>
+         <4cd6275c-6e95-3aeb-9924-141f62e00449@linux.com>
+ <b64a4cb0ee68fee01973616e5ef0f299ac191f6d.camel@perches.com>
+In-Reply-To: <b64a4cb0ee68fee01973616e5ef0f299ac191f6d.camel@perches.com>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0.001
+X-Mimecast-Originator: aculab.com
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
+Content-Language: en-US
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-Em Tue, 11 Aug 2020 13:31:46 +0100
-Shiju Jose <shiju.jose@huawei.com> escreveu:
-
-> Add supporting ARM processor error in the ras-mc-ctl tool.
+From: Joe Perches
+> Sent: 29 August 2020 21:34
+...
+> > On 8/29/20 9:23 PM, Joe Perches wrote:
+> > > While doing an investigation for a possible treewide conversion of
+> > > sysfs output using sprintf/snprintf/scnprintf, I discovered
+> > > several instances of sysfs output without terminating newlines.
+> > >
+> > > It seems likely all of these should have newline terminations
+> > > or have the \n\r termination changed to a single newline.
+> >
+> > I think that it could break badly written scripts in rare cases.
 > 
-> Signed-off-by: Shiju Jose <shiju.jose@huawei.com>
+> Maybe.
+> 
+> Is sysfs output a nominally unchangeable api like seq_?
+> Dunno.  seq_ output is extended all the time.
+> 
+> I think whitespace isn't generally considered part of
+> sscanf type input content awareness.
 
-Patch merged, thanks!
+The shell will remove trailing '\n' (but not '\r') from:
+	foo=$(cat bar)
+So shell scripts are unlikely to be affected.
 
-Thanks,
-Mauro
+	David
+
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
+
