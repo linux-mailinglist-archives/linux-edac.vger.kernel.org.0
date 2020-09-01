@@ -2,127 +2,70 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 68EA1258B0C
-	for <lists+linux-edac@lfdr.de>; Tue,  1 Sep 2020 11:09:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F2B8258C82
+	for <lists+linux-edac@lfdr.de>; Tue,  1 Sep 2020 12:13:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726559AbgIAJJF convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-edac@lfdr.de>); Tue, 1 Sep 2020 05:09:05 -0400
-Received: from eu-smtp-delivery-151.mimecast.com ([185.58.86.151]:32716 "EHLO
-        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726512AbgIAJJD (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Tue, 1 Sep 2020 05:09:03 -0400
-Received: from AcuMS.aculab.com (156.67.243.126 [156.67.243.126]) (Using
- TLS) by relay.mimecast.com with ESMTP id
- uk-mta-283-TOoGT-t2Oa-s63UZlOFx8A-1; Tue, 01 Sep 2020 10:07:44 +0100
-X-MC-Unique: TOoGT-t2Oa-s63UZlOFx8A-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) with Microsoft SMTP
- Server (TLS) id 15.0.1347.2; Tue, 1 Sep 2020 10:07:42 +0100
-Received: from AcuMS.Aculab.com ([fe80::43c:695e:880f:8750]) by
- AcuMS.aculab.com ([fe80::43c:695e:880f:8750%12]) with mapi id 15.00.1347.000;
- Tue, 1 Sep 2020 10:07:42 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Joe Perches' <joe@perches.com>, Denis Efremov <efremov@linux.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        "Kees Cook" <keescook@chromium.org>,
-        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
-        Julia Lawall <julia.lawall@inria.fr>,
-        Alex Dewar <alex.dewar90@gmail.com>
-CC:     York Sun <york.sun@nxp.com>, Borislav Petkov <bp@alien8.de>,
-        "Mauro Carvalho Chehab" <mchehab@kernel.org>,
+        id S1726078AbgIAKNy (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Tue, 1 Sep 2020 06:13:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33534 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725989AbgIAKNx (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Tue, 1 Sep 2020 06:13:53 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4144EC061244;
+        Tue,  1 Sep 2020 03:13:53 -0700 (PDT)
+Received: from zn.tnic (p200300ec2f111c000c6e903c2b8b7428.dip0.t-ipconnect.de [IPv6:2003:ec:2f11:1c00:c6e:903c:2b8b:7428])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id C4D711EC0246;
+        Tue,  1 Sep 2020 12:13:50 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1598955230;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=NY4YDSEDfN5GOV9jqboSUJfKtJ2U0iuZgeu2bas8HPA=;
+        b=WKMbQ7cOUg0o41V7Svb+yFavjB/WLzXiMmdevAkS6ZVd3vPEPCMvMPXTgTn9NlQp4hKqpr
+        n2Yblg31FxkJ4cky3yLidaq1+YZyxoADfCQfoO48tgVBL+TVC2awZALlNBB9TCCudug6vX
+        E6/1AAGrwk3S3TuStT+BxopN57N43gg=
+Date:   Tue, 1 Sep 2020 12:13:45 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Dinghao Liu <dinghao.liu@zju.edu.cn>
+Cc:     kjlu@umn.edu, Mauro Carvalho Chehab <mchehab@kernel.org>,
         Tony Luck <tony.luck@intel.com>,
-        "James Morse" <james.morse@arm.com>,
-        Robert Richter <rric@kernel.org>,
-        Michal Simek <michal.simek@xilinx.com>,
-        Boris Brezillon <bbrezillon@kernel.org>,
-        "Maxim Levitsky" <maximlevitsky@gmail.com>,
-        Alex Dubov <oakad@yahoo.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Tomas Winkler <tomas.winkler@intel.com>,
-        "Arnd Bergmann" <arnd@arndb.de>,
-        Madalin Bucur <madalin.bucur@nxp.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "Douglas Miller" <dougmill@linux.ibm.com>,
-        Stanislav Yakovlev <stas.yakovlev@gmail.com>,
-        Kalle Valo <kvalo@codeaurora.org>,
-        Darren Hart <dvhart@infradead.org>,
-        Andy Shevchenko <andy@infradead.org>,
-        =?iso-8859-1?Q?Kai_M=E4kisara?= <Kai.Makisara@kolumbus.fi>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Mark Brown <broonie@kernel.org>,
-        Oliver Neukum <oneukum@suse.com>,
-        Pete Zaitcev <zaitcev@redhat.com>,
-        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-i3c@lists.infradead.org" <linux-i3c@lists.infradead.org>,
-        "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
-        "platform-driver-x86@vger.kernel.org" 
-        <platform-driver-x86@vger.kernel.org>,
-        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Subject: RE: sysfs output without newlines
-Thread-Topic: sysfs output without newlines
-Thread-Index: AQHWfkO/+C/EB0p8Hk2MEQnp7JjooqlTgZKw
-Date:   Tue, 1 Sep 2020 09:07:42 +0000
-Message-ID: <5f0b48e0291b4b54bc1caeb8b5715c65@AcuMS.aculab.com>
-References: <0f837bfb394ac632241eaac3e349b2ba806bce09.camel@perches.com>
-         <4cd6275c-6e95-3aeb-9924-141f62e00449@linux.com>
- <b64a4cb0ee68fee01973616e5ef0f299ac191f6d.camel@perches.com>
-In-Reply-To: <b64a4cb0ee68fee01973616e5ef0f299ac191f6d.camel@perches.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        James Morse <james.morse@arm.com>,
+        Robert Richter <rrichter@marvell.com>,
+        Niklas =?utf-8?Q?S=C3=B6derlund?= <niklas.soderlund@ericsson.com>,
+        linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] EDAC: i5100_edac: Fix error handling code in
+ i5100_init_one
+Message-ID: <20200901101345.GA8392@zn.tnic>
+References: <20200826121437.31606-1-dinghao.liu@zju.edu.cn>
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0.001
-X-Mimecast-Originator: aculab.com
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-Content-Language: en-US
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20200826121437.31606-1-dinghao.liu@zju.edu.cn>
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-From: Joe Perches
-> Sent: 29 August 2020 21:34
-...
-> > On 8/29/20 9:23 PM, Joe Perches wrote:
-> > > While doing an investigation for a possible treewide conversion of
-> > > sysfs output using sprintf/snprintf/scnprintf, I discovered
-> > > several instances of sysfs output without terminating newlines.
-> > >
-> > > It seems likely all of these should have newline terminations
-> > > or have the \n\r termination changed to a single newline.
-> >
-> > I think that it could break badly written scripts in rare cases.
+On Wed, Aug 26, 2020 at 08:14:37PM +0800, Dinghao Liu wrote:
+> When pci_get_device_func() fails, we don't need to execute
+> pci_dev_put(). But mci should be freed to prevent memleak.
+> When pci_enable_device() fails, we don't need to disable
+> einj either.
 > 
-> Maybe.
-> 
-> Is sysfs output a nominally unchangeable api like seq_?
-> Dunno.  seq_ output is extended all the time.
-> 
-> I think whitespace isn't generally considered part of
-> sscanf type input content awareness.
+> Fixes: 52608ba205461 ("i5100_edac: probe for device 19 function 0")
+> Signed-off-by: Dinghao Liu <dinghao.liu@zju.edu.cn>
+> ---
+>  drivers/edac/i5100_edac.c | 10 +++++-----
+>  1 file changed, 5 insertions(+), 5 deletions(-)
 
-The shell will remove trailing '\n' (but not '\r') from:
-	foo=$(cat bar)
-So shell scripts are unlikely to be affected.
+Applied, thanks.
 
-	David
+-- 
+Regards/Gruss,
+    Boris.
 
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
-
+https://people.kernel.org/tglx/notes-about-netiquette
