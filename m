@@ -2,27 +2,27 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 983EA2592C2
-	for <lists+linux-edac@lfdr.de>; Tue,  1 Sep 2020 17:16:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3794B259304
+	for <lists+linux-edac@lfdr.de>; Tue,  1 Sep 2020 17:20:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729341AbgIAPQl (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Tue, 1 Sep 2020 11:16:41 -0400
-Received: from mail.kernel.org ([198.145.29.99]:33552 "EHLO mail.kernel.org"
+        id S1729589AbgIAPUI (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Tue, 1 Sep 2020 11:20:08 -0400
+Received: from mail.kernel.org ([198.145.29.99]:39722 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729338AbgIAPQk (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Tue, 1 Sep 2020 11:16:40 -0400
+        id S1728893AbgIAPUF (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Tue, 1 Sep 2020 11:20:05 -0400
 Received: from localhost (83-86-74-64.cable.dynamic.v4.ziggo.nl [83.86.74.64])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 817D8207D3;
-        Tue,  1 Sep 2020 15:16:39 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 45B26207D3;
+        Tue,  1 Sep 2020 15:20:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1598973400;
-        bh=rcAnEbv7j0JSH/T+QJdGBSad0kuDwnM2WtUjOF/zEb4=;
+        s=default; t=1598973604;
+        bh=MFA31vlUz/wgJDKoSVzaaPhDNaXOMuJ6Cmer3jlUlVY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=yvy1L8O/Y0Hn4+LvU+k5ZY+Wqos96uHyZhiSABuckbL88zBuYrfL5EtdcJtOsW+95
-         Yp2T5m0bKyVtlTvJGDyqMUFKpY/YlF++b53rKEn7YYCjQ6s2wRO/v9kNpTb38Sw2Y3
-         ZBBN2afz7wfZGqaE9L9QCU7pFwJZQUTm91pQ7aX8=
+        b=aQVuXCNgrpU0KL2Y534rDDVpxraMZJHZEV1oQaYE7MswYZQcUz4Q9x3oURnS7wKke
+         ywHroMwPBwhwDnhCzDw3HjmaCMvDn1NWtNLECde4VjtwljGwTAiHg0Am/5J4rczj2b
+         vYzPT+8Lknk35WCk7v7yaoEuMD+deOGCM6b1AqTg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -32,12 +32,12 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-edac <linux-edac@vger.kernel.org>,
         Tony Luck <tony.luck@intel.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.9 32/78] EDAC/ie31200: Fallback if host bridge device is already initialized
-Date:   Tue,  1 Sep 2020 17:10:08 +0200
-Message-Id: <20200901150926.352567987@linuxfoundation.org>
+Subject: [PATCH 4.14 35/91] EDAC/ie31200: Fallback if host bridge device is already initialized
+Date:   Tue,  1 Sep 2020 17:10:09 +0200
+Message-Id: <20200901150929.887155378@linuxfoundation.org>
 X-Mailer: git-send-email 2.28.0
-In-Reply-To: <20200901150924.680106554@linuxfoundation.org>
-References: <20200901150924.680106554@linuxfoundation.org>
+In-Reply-To: <20200901150928.096174795@linuxfoundation.org>
+References: <20200901150928.096174795@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -71,10 +71,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 47 insertions(+), 3 deletions(-)
 
 diff --git a/drivers/edac/ie31200_edac.c b/drivers/edac/ie31200_edac.c
-index 1c88d97074951..3438b98e60948 100644
+index aac9b9b360b80..9e4781a807cfa 100644
 --- a/drivers/edac/ie31200_edac.c
 +++ b/drivers/edac/ie31200_edac.c
-@@ -145,6 +145,8 @@
+@@ -147,6 +147,8 @@
  	(n << (28 + (2 * skl) - PAGE_SHIFT))
  
  static int nr_channels;
@@ -83,7 +83,7 @@ index 1c88d97074951..3438b98e60948 100644
  
  struct ie31200_priv {
  	void __iomem *window;
-@@ -512,12 +514,16 @@ fail_free:
+@@ -518,12 +520,16 @@ static int ie31200_probe1(struct pci_dev *pdev, int dev_idx)
  static int ie31200_init_one(struct pci_dev *pdev,
  			    const struct pci_device_id *ent)
  {
@@ -102,7 +102,7 @@ index 1c88d97074951..3438b98e60948 100644
  }
  
  static void ie31200_remove_one(struct pci_dev *pdev)
-@@ -526,6 +532,8 @@ static void ie31200_remove_one(struct pci_dev *pdev)
+@@ -532,6 +538,8 @@ static void ie31200_remove_one(struct pci_dev *pdev)
  	struct ie31200_priv *priv;
  
  	edac_dbg(0, "\n");
@@ -111,7 +111,7 @@ index 1c88d97074951..3438b98e60948 100644
  	mci = edac_mc_del_mc(&pdev->dev);
  	if (!mci)
  		return;
-@@ -574,17 +582,53 @@ static struct pci_driver ie31200_driver = {
+@@ -583,17 +591,53 @@ static struct pci_driver ie31200_driver = {
  
  static int __init ie31200_init(void)
  {
