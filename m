@@ -2,144 +2,128 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 089D725BB1A
-	for <lists+linux-edac@lfdr.de>; Thu,  3 Sep 2020 08:35:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF27A25BFDC
+	for <lists+linux-edac@lfdr.de>; Thu,  3 Sep 2020 13:05:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726088AbgICGeW (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Thu, 3 Sep 2020 02:34:22 -0400
-Received: from mo-csw1114.securemx.jp ([210.130.202.156]:52200 "EHLO
-        mo-csw.securemx.jp" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725986AbgICGeW (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Thu, 3 Sep 2020 02:34:22 -0400
-Received: by mo-csw.securemx.jp (mx-mo-csw1114) id 0836XqkV026096; Thu, 3 Sep 2020 15:33:52 +0900
-X-Iguazu-Qid: 2wGqimZzpdodzp3qKb
-X-Iguazu-QSIG: v=2; s=0; t=1599114831; q=2wGqimZzpdodzp3qKb; m=3lD5yTuNA9UipE4IT4HqtHJpMosJZhyi/NRwtDEowSQ=
-Received: from imx12.toshiba.co.jp (imx12.toshiba.co.jp [61.202.160.132])
-        by relay.securemx.jp (mx-mr1111) id 0836Xnhn027327;
-        Thu, 3 Sep 2020 15:33:49 +0900
-Received: from enc02.toshiba.co.jp ([61.202.160.51])
-        by imx12.toshiba.co.jp  with ESMTP id 0836XnKm019408;
-        Thu, 3 Sep 2020 15:33:49 +0900 (JST)
-Received: from hop101.toshiba.co.jp ([133.199.85.107])
-        by enc02.toshiba.co.jp  with ESMTP id 0836XmiJ027896;
-        Thu, 3 Sep 2020 15:33:48 +0900
-From:   Punit Agrawal <punit1.agrawal@toshiba.co.jp>
-To:     Smita Koralahalli Channabasappa <skoralah@amd.com>
-Cc:     <x86@kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-pm@vger.kernel.org>, <linux-edac@vger.kernel.org>,
-        <linux-efi@vger.kernel.org>, <linux-acpi@vger.kernel.org>,
-        <devel@acpica.org>, Borislav Petkov <bp@alien8.de>,
-        Tony Luck <tony.luck@intel.com>,
-        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Len Brown <len.brown@intel.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Yazen Ghannam <yazen.ghannam@amd.com>
-Subject: Re: [PATCH v2 1/2] cper, apei, mce: Pass x86 CPER through the MCA handling chain
-References: <20200828203332.11129-1-Smita.KoralahalliChannabasappa@amd.com>
-        <20200828203332.11129-2-Smita.KoralahalliChannabasappa@amd.com>
-        <878sdvv20h.fsf@kokedama.swc.toshiba.co.jp>
-        <102d0c75-d642-8f8b-68c7-792499c2a62a@amd.com>
-Date:   Thu, 03 Sep 2020 15:33:47 +0900
-In-Reply-To: <102d0c75-d642-8f8b-68c7-792499c2a62a@amd.com> (Smita Koralahalli
-        Channabasappa's message of "Wed, 2 Sep 2020 14:29:28 -0500")
-X-TSB-HOP: ON
-Message-ID: <87a6y7qshg.fsf@kokedama.swc.toshiba.co.jp>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.3 (gnu/linux)
+        id S1727065AbgICLFm (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Thu, 3 Sep 2020 07:05:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59884 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726293AbgICK67 (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Thu, 3 Sep 2020 06:58:59 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F035C061244;
+        Thu,  3 Sep 2020 03:58:56 -0700 (PDT)
+Received: from zn.tnic (p200300ec2f0d7a005419317048ee0789.dip0.t-ipconnect.de [IPv6:2003:ec:2f0d:7a00:5419:3170:48ee:789])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 901D21EC04CB;
+        Thu,  3 Sep 2020 12:58:52 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1599130732;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=jFgR8B43svgkJTAQLtPGLdTbywp8lqxgXaF2hdYHOxI=;
+        b=iQOezLnuceBdy6FP5f1e+/Ky22aTiU2sbh7poxpJvORa7KBnNk66Rcr39qYjUCfFei0Tdo
+        QYChFscC2jEOZemAyZEtVFZhEtxKsPpJ/nx0yFkwjJ+Us6VUXojXdpblNYqjeZOLxzrHRm
+        zZMkFiKoqAPbmPzSCP9I904zpWEkViY=
+Date:   Thu, 3 Sep 2020 12:58:49 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Gregor Herburger <gregor.herburger@ew.tq-group.com>
+Cc:     york.sun@nxp.com, mchehab@kernel.org, tony.luck@intel.com,
+        james.morse@arm.com, rrichter@marvell.com,
+        linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/1] edac: fsl_ddr_edac: fix expected data message
+Message-ID: <20200903105849.GC5462@zn.tnic>
+References: <20200817095302.GD549@zn.tnic>
+ <20200827075600.22335-1-gregor.herburger@ew.tq-group.com>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20200827075600.22335-1-gregor.herburger@ew.tq-group.com>
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-Hi Smita,
+On Thu, Aug 27, 2020 at 09:56:00AM +0200, Gregor Herburger wrote:
+> When a correctable single bit error occurs, the driver calculates the
+> bad_data_bit respectively the bad_ecc_bit. If there is no error in the
+> corresponding data, the value becomes -1. With this the expected data
+> message is calculated.
+> 
+> In the case of an error in the lower 32 bits or no error (-1) the right
+> side operand of the bit-shift becomes negative which is undefined
+> behavior.
+> 
+> This can result in wrong and misleading messages like this:
+> [  311.103794] EDAC FSL_DDR MC0: Faulty Data bit: 36
+> [  311.108490] EDAC FSL_DDR MC0: Expected Data / ECC:   0xffffffef_ffffffff / 0x80000059
+> [  311.116135] EDAC FSL_DDR MC0: Captured Data / ECC:   0xffffffff_ffffffef / 0x59
+> 
+> Fix this by only calculating the expected data where the error occurred.
+> 
+> With the fix the dmesg output looks like this:
+> [  311.103794] EDAC FSL_DDR MC0: Faulty Data bit: 36
+> [  311.108490] EDAC FSL_DDR MC0: Expected Data / ECC:   0xffffffef_ffffffef / 0x59
+> [  311.116135] EDAC FSL_DDR MC0: Captured Data / ECC:   0xffffffff_ffffffef / 0x59
+> 
+> Signed-off-by: Gregor Herburger <gregor.herburger@ew.tq-group.com>
+> ---
+>  drivers/edac/fsl_ddr_edac.c | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/edac/fsl_ddr_edac.c b/drivers/edac/fsl_ddr_edac.c
+> index 6d8ea226010d..4b6989cf1947 100644
+> --- a/drivers/edac/fsl_ddr_edac.c
+> +++ b/drivers/edac/fsl_ddr_edac.c
+> @@ -343,9 +343,9 @@ static void fsl_mc_check(struct mem_ctl_info *mci)
+>  
+>  		fsl_mc_printk(mci, KERN_ERR,
+>  			"Expected Data / ECC:\t%#8.8x_%08x / %#2.2x\n",
+> -			cap_high ^ (1 << (bad_data_bit - 32)),
+> -			cap_low ^ (1 << bad_data_bit),
+> -			syndrome ^ (1 << bad_ecc_bit));
+> +			(bad_data_bit > 31) ? cap_high ^ (1 << (bad_data_bit - 32)) : cap_high,
+> +			(bad_data_bit <= 31) ? cap_low ^ (1 << (bad_data_bit)) : cap_low,
 
-Smita Koralahalli Channabasappa <skoralah@amd.com> writes:
+But if bad_data_bit is -1, this check above will hit and you'd still
+shift by -1, IINM.
 
-> On 8/31/20 12:05 AM, Punit Agrawal wrote:
->
->> Hi Smita,
->>
->> A couple of comments below -
->>
->> Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com> writes:
->>
->> [...]
->>
->>
->>> diff --git a/drivers/firmware/efi/cper-x86.c b/drivers/firmware/efi/cper-x86.c
->>> index 2531de49f56c..374b8e18552a 100644
->>> --- a/drivers/firmware/efi/cper-x86.c
->>> +++ b/drivers/firmware/efi/cper-x86.c
->>> @@ -1,7 +1,7 @@
->>>   // SPDX-License-Identifier: GPL-2.0
->>>   // Copyright (C) 2018, Advanced Micro Devices, Inc.
->>>   -#include <linux/cper.h>
->> Why is the include dropped? AFAICT, the definitions from there are still
->> being used after this patch.
->
-> Dropped because <acpi/apei.h> already includes <linux/cper.h>
+How about you fix it properly, clean it up and make it more readable in
+the process (pasting the code directly instead of a diff because a diff
+is less readable):
 
-Generally, you want to follow the rule that if a declaration from a
-header file is being used, it should show up in the includes. The same
-applies to both source as well as header files.
+        if ((err_detect & DDR_EDE_SBE) && (bus_width == 64)) {
+                sbe_ecc_decode(cap_high, cap_low, syndrome,
+                                &bad_data_bit, &bad_ecc_bit);
 
-It doesn't matter if another include in the source file in turn ends up
-including the same header again; the #ifdef guards are there to prevent
-duplicate declarations.
+                if (bad_data_bit != -1) {
+                        if (bad_data_bit > 31)
+                                cap_high ^= 1 << (bad_data_bit - 32);
+                        else
+                                cap_low  ^= 1 << bad_data_bit;
 
-The rationale is that if future changes remove the usage of
-<acpi/apei.h>, the C file can still be compiled after dropping the
-include; there should be no need to then re-introduce <linux/cper.h> at
-that point.
+                        fsl_mc_printk(mci, KERN_ERR, "Faulty Data bit: %d\n", bad_data_bit);
+                        fsl_mc_printk(mci, KERN_ERR, "Expected Data: %#8.8x_%08x\n",
+                                      cap_high, cap_low);
+                }
 
-Hope that makes sense.
+                if (bad_ecc_bit != -1) {
+                        fsl_mc_printk(mci, KERN_ERR, "Faulty ECC bit: %d\n", bad_ecc_bit);
+                        fsl_mc_printk(mci, KERN_ERR, "Expected ECC: %#2.2x\n",
+                                      syndrome ^ (1 << bad_ecc_bit));
+                }
+        }
 
-Thanks,
-Punit
+This way you print only when the respective faulty bits have been
+properly found and not print anything otherwise.
 
->>> +#include <acpi/apei.h>
->
-> [...]
->
->>> diff --git a/include/acpi/apei.h b/include/acpi/apei.h
->>> index 680f80960c3d..44d4d08acce0 100644
->>> --- a/include/acpi/apei.h
->>> +++ b/include/acpi/apei.h
->>> @@ -33,8 +33,15 @@ extern bool ghes_disable;
->>>     #ifdef CONFIG_ACPI_APEI
->>>   void __init acpi_hest_init(void);
->>> +int arch_apei_report_x86_error(struct cper_ia_proc_ctx *ctx_info,
->>> +			       u64 lapic_id);
->>>   #else
->>>   static inline void acpi_hest_init(void) { return; }
->>> +static inline int arch_apei_report_x86_error(struct cper_ia_proc_ctx *ctx_info,
->>> +					     u64 lapic_id)
->>> +{
->>> +	return -EINVAL;
->>> +}
->>>   #endif
->> Adding the declaration to this include violates the separation of
->> generic and architecture specific code.
->>
->> Can this be moved to the appropriate architecture specific header?
->> Perhaps arch/x86/include/asm/apei.h.
->
-> Yes, I have fixed this and moved into arch/x86/include/asm/acpi.h.
->
->>>   typedef int (*apei_hest_func_t)(struct acpi_hest_header *hest_hdr, void *data);
->>> @@ -51,6 +58,8 @@ int erst_clear(u64 record_id);
->>>     int arch_apei_enable_cmcff(struct acpi_hest_header *hest_hdr,
->>> void *data);
->>>   void arch_apei_report_mem_error(int sev, struct cper_sec_mem_err *mem_err);
->>> +int arch_apei_report_x86_error(struct cper_ia_proc_ctx *ctx_info,
->>> +			       u64 lapic_id);
->>
->> Why is the additional declaration needed?
->
-> Will fix in the next revision.
->
-> Thanks,
-> Smita
->
-> [...]
+Hmm?
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
