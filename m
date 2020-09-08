@@ -2,93 +2,85 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A4387261CA4
-	for <lists+linux-edac@lfdr.de>; Tue,  8 Sep 2020 21:24:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 19229262266
+	for <lists+linux-edac@lfdr.de>; Wed,  9 Sep 2020 00:08:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731575AbgIHTYS (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Tue, 8 Sep 2020 15:24:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58328 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731044AbgIHTYI (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Tue, 8 Sep 2020 15:24:08 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82BD6C061573;
-        Tue,  8 Sep 2020 12:24:08 -0700 (PDT)
-Received: from zn.tnic (p200300ec2f10bf0059bdf9fa8e813382.dip0.t-ipconnect.de [IPv6:2003:ec:2f10:bf00:59bd:f9fa:8e81:3382])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 023761EC02B9;
-        Tue,  8 Sep 2020 21:24:05 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1599593046;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=ro+A4oaZan++1bEEF78omLXWyttKgPI68af9UKTgJos=;
-        b=iYMrYMz9RzyMu+adm6Rv7xJxg/qLEoDX6oFI8DRIhty6zebS5PUUSzW93MiQ+drODzcq4v
-        bWzhGMUw4zUKSLuDxsGDAsgRQM40ganzushZ2UZ4x5NkvR1X94uT7ueS+4np5IcF/XTPtD
-        hctrYRFJhtan1tDX8AzHYFvTM5BCNRI=
-Date:   Tue, 8 Sep 2020 21:24:00 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Gregor Herburger <gregor.herburger@ew.tq-group.com>
-Cc:     "york.sun@nxp.com" <york.sun@nxp.com>,
+        id S1726657AbgIHWIh convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-edac@lfdr.de>); Tue, 8 Sep 2020 18:08:37 -0400
+Received: from mga07.intel.com ([134.134.136.100]:56112 "EHLO mga07.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726369AbgIHWIg (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Tue, 8 Sep 2020 18:08:36 -0400
+IronPort-SDR: 7cn6yonKJx9eGFYWYrpRUlas6gfSx/Kz5qKUC90bncyqxqVvJobyXoc8FeMHT9Q+naZOTcEShp
+ 8aduVjc+sCdA==
+X-IronPort-AV: E=McAfee;i="6000,8403,9738"; a="222438979"
+X-IronPort-AV: E=Sophos;i="5.76,407,1592895600"; 
+   d="scan'208";a="222438979"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Sep 2020 15:08:35 -0700
+IronPort-SDR: iD9INV+cK10hvjNf5wcoCWfECqjkvPJqs+NlqjOxlQIBOkqvk9Fz6c3A70SJlr4O8fPg3Hqkn0
+ ARgq+EuH9Tew==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.76,407,1592895600"; 
+   d="scan'208";a="317340286"
+Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
+  by orsmga002.jf.intel.com with ESMTP; 08 Sep 2020 15:08:34 -0700
+Received: from shsmsx605.ccr.corp.intel.com (10.109.6.215) by
+ fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1713.5; Tue, 8 Sep 2020 15:08:32 -0700
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ SHSMSX605.ccr.corp.intel.com (10.109.6.215) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1713.5; Wed, 9 Sep 2020 06:08:30 +0800
+Received: from fmsmsx610.amr.corp.intel.com ([10.18.126.90]) by
+ fmsmsx610.amr.corp.intel.com ([10.18.126.90]) with mapi id 15.01.1713.004;
+ Tue, 8 Sep 2020 15:08:28 -0700
+From:   "Luck, Tony" <tony.luck@intel.com>
+To:     "trix@redhat.com" <trix@redhat.com>,
+        "Zhuo, Qiuxu" <qiuxu.zhuo@intel.com>,
+        "bp@alien8.de" <bp@alien8.de>,
         "mchehab@kernel.org" <mchehab@kernel.org>,
-        "tony.luck@intel.com" <tony.luck@intel.com>,
         "james.morse@arm.com" <james.morse@arm.com>,
-        "rrichter@marvell.com" <rrichter@marvell.com>,
-        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 1/1] edac: fsl_ddr_edac: fix expected data message
-Message-ID: <20200908192400.GL25236@zn.tnic>
-References: <kcEE.e0qfoTd8SOOr3lTVWaXz/A.AASg8YeC1gE@vtuxmail01.tq-net.de>
- <20200904091718.GC21499@zn.tnic>
- <20200904133258.GA21716@herburgerg-w.tq-net.de>
+        "rric@kernel.org" <rric@kernel.org>,
+        "natechancellor@gmail.com" <natechancellor@gmail.com>,
+        "ndesaulniers@google.com" <ndesaulniers@google.com>
+CC:     "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "clang-built-linux@googlegroups.com" 
+        <clang-built-linux@googlegroups.com>
+Subject: RE: [PATCH] EDAC: sb_edac: simplify switch statement
+Thread-Topic: [PATCH] EDAC: sb_edac: simplify switch statement
+Thread-Index: AQHWhSwd2aPyoNmgw0mlzN1Re9AsfalfTkog
+Date:   Tue, 8 Sep 2020 22:08:28 +0000
+Message-ID: <7525690b6aaa4e539989b9c2e5703a56@intel.com>
+References: <20200907153225.7294-1-trix@redhat.com>
+In-Reply-To: <20200907153225.7294-1-trix@redhat.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+dlp-product: dlpe-windows
+dlp-reaction: no-action
+dlp-version: 11.5.1.3
+x-originating-ip: [10.1.200.100]
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 8BIT
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20200904133258.GA21716@herburgerg-w.tq-net.de>
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Fri, Sep 04, 2020 at 03:32:58PM +0200, Gregor Herburger wrote:
-> That shouldn't happen. The whole if-block is only executed when a single 
-> bit correctable error has occured (DDR_EDE_SBE). So we always should have
-> bad_data_bit or bad_ecc_bit (exclusively).
+> However by initializing the type to DEV_UNKNOWN the 3 case can be
+> removed from the switch, saving a comparison and jump.
+>
+> Signed-off-by: Tom Rix <trix@redhat.com>
 
-Ooh, that sbe_ecc_decode() function would give you either the data bit
-- if that one is in error - and if not the data bit, then the ECC bit.
-Aha.
+Applied. Thanks.
 
-Ok, so what the driver should do, IMO, is this:
+-Tony
 
-	if (bad_data_bit != -1) {
-		...
-
-		fsl_mc_printk("Single-bit data error, ... ", bad_data_bit);
-		fsl_mc_printk("Expected Data/Captured Data, ... ", exp_high, exp_low, cap_high, cap_low);
-	}
-
-	if (bad_ecc_bit != -1) {
-		...
-
-		fsl_mc_printk("Single-bit ECC error, ... ", bad_ecc_bit);
-		fsl_mc_printk("Expected ECC/Captured ECC, ... ", exp_syndrome, syndrome);
-	}
-
-This way you only print either the data or the ECC value which was in
-error but not both.
-
-Makes sense?
-
-> Also i just noticed in the kernel log is no hint that this is an
-> single bit error. Maybe we should add this too?
-
-Yap, see above.
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+[Boris: Pushed to edac-misc and edac-for-next branches in RAS tree]
