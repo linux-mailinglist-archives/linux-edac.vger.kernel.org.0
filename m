@@ -2,82 +2,79 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 64281265B15
-	for <lists+linux-edac@lfdr.de>; Fri, 11 Sep 2020 10:05:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AAFCA265BF5
+	for <lists+linux-edac@lfdr.de>; Fri, 11 Sep 2020 10:50:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725778AbgIKIFv (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Fri, 11 Sep 2020 04:05:51 -0400
-Received: from szxga07-in.huawei.com ([45.249.212.35]:34250 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725875AbgIKIFq (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Fri, 11 Sep 2020 04:05:46 -0400
-Received: from DGGEMS411-HUB.china.huawei.com (unknown [172.30.72.59])
-        by Forcepoint Email with ESMTP id 8762F3D7A56EBE70361F;
-        Fri, 11 Sep 2020 16:05:42 +0800 (CST)
-Received: from [127.0.0.1] (10.174.178.16) by DGGEMS411-HUB.china.huawei.com
- (10.3.19.211) with Microsoft SMTP Server id 14.3.487.0; Fri, 11 Sep 2020
- 16:05:41 +0800
-Subject: Re: [PATCH] EDAC/mc_sysfs: add missing newlines when printing
- 'max(dimm)_location'
-To:     Borislav Petkov <bp@alien8.de>
-CC:     <mchehab@kernel.org>, <tony.luck@intel.com>,
-        <linux-edac@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <1599207563-41819-1-git-send-email-wangxiongfeng2@huawei.com>
- <20200910110012.GD8357@zn.tnic>
-From:   Xiongfeng Wang <wangxiongfeng2@huawei.com>
-Message-ID: <ab222053-d4e5-eb0b-a7a3-e8158cac1b88@huawei.com>
-Date:   Fri, 11 Sep 2020 16:05:40 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.1
+        id S1725766AbgIKIue convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-edac@lfdr.de>); Fri, 11 Sep 2020 04:50:34 -0400
+Received: from mail.flex.co.jp ([211.8.82.123]:40528 "EHLO www.flex.co.jp"
+        rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1725800AbgIKIuU (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Fri, 11 Sep 2020 04:50:20 -0400
+Received: from live.com.mx ([103.89.89.225])
+        (authenticated bits=0)
+        by www.flex.co.jp (MTA) with ESMTP id 0898ndvu009401
+        for <linux-edac@vger.kernel.org>; Wed, 9 Sep 2020 17:49:50 +0900
+Reply-To: powerinthewords@yahoo.co.jp
+From:   piyin.crhe@live.com.mx
+To:     linux-edac@vger.kernel.org
+Subject: =?utf-8?Q?=5BSpam=5D?=
+ We are still waiting for your email...
+Date:   09 Sep 2020 01:49:48 -0700
+Message-ID: <20200909014948.B921E3F43C49C236@live.com.mx>
 MIME-Version: 1.0
-In-Reply-To: <20200910110012.GD8357@zn.tnic>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.178.16]
-X-CFilter-Loop: Reflected
+Content-Type: text/plain;
+        charset="utf-8"
+Content-Transfer-Encoding: 8BIT
+X-SpamInfo: FortiGuard-AntiSpam ip, connection black ip 103.89.89.225
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
+Dear Beneficiary,
 
+We wish to inform you that a power of attorney was forwarded to 
+our office  by two gentlemen regarding your unclaimed fund of $56 
+Million Dollar. One of them is an American citizen named Mr. 
+Robert Porter and the other is Mr. Wilhelm Berg a Swedish 
+citizen.We have be waiting for you to contact us since last year.
 
-On 2020/9/10 19:00, Borislav Petkov wrote:
-> On Fri, Sep 04, 2020 at 04:19:23PM +0800, Xiongfeng Wang wrote:
->> When I cat 'max_location' and 'dimm_location' by sysfs, it displays as
->> follows. It's better to add a newline for easy reading.
->>
->> [root@localhost /]# cat /sys/devices/system/edac/mc/mc0/max_location
->> memory 3 [root@localhost /]# cat /sys/devices/system/edac/mc/mc0/dimm0/dimm_location
->> memory 0 [root@localhost /]#
-> 
-> Please use this commit message for your next version:
-> 
-> EDAC/mc_sysfs: Add missing newlines when printing {max,dimm}_location
-> 
-> Reading those sysfs entries gives:
-> 
->   [root@localhost /]# cat /sys/devices/system/edac/mc/mc0/max_location
->   memory 3 [root@localhost /]# cat /sys/devices/system/edac/mc/mc0/dimm0/dimm_location
->   memory 0 [root@localhost /]#
-> 
-> Add newlines after the value it prints for better readability.
+The document claims these gentlemen to be your authorized 
+representatives, and the power of attorney states that you are 
+already deceased.  It further states that your death was due to 
+lung cancer, with your date of death being January 27th, 2020.
 
-Thanks for your advice. I will add it in the next version.
+They have now submitted a new account to replace the receiving 
+account that was in the original claim of funds. These funds have 
+remained unclaimed for quite some time and the need for 
+resolution is pressing. Below is the new account they have 
+submitted.
 
-> 
->> @@ -821,6 +825,7 @@ static ssize_t mci_max_location_show(struct device *dev,
->>  			     edac_layer_name[mci->layers[i].type],
->>  			     mci->layers[i].size - 1);
->>  	}
->> +	p += sprintf(p, "\n");
-> 
-> No size checking here?
+Account Name's :  Robert Porter /Wilhelm Berg
+Account: 5007-29 438 66
+IBAN-nr: SE4150000000050072943866
+Bic-kod: ESSESESS
+Skandinaviska Enskilda Banken. (SEB :)
+SWEDEN .
 
-I can check if it's larger than PAGE_SIZE.
+In the event that you are in fact still alive, we ask that you 
+confirm your existence by responding to this email. You are to 
+view this as a matter requiring immediate attention and response. 
+We have 48 hr monitoring of all activities within Federal Reserve 
+Bank.On this regard,you will be directed to any of our office 
+center that you will go in person to sign the final papers,
+because we have our payment center in Europe,Asia,America and 
+Canada.You will go to any of the office that you will be directed 
+to with the copy of the documents of your fund.
 
-Thanks,
-Xiongfeng
+We have contacted the bank in the Sweden asking them to wait for 
+further directives from Federal Reserve Bank, prior to 
+authorizing any withdrawals in any form.  Our request is based 
+entirely on our attempt to verify that you are in fact deceased, 
+before money is wrongly disbursed.
 
-> 
+Your in Service,
 
+Robert Steven Kaplan
+2200 N Pearl St, Dallas, TX 75201, United States
