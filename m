@@ -2,104 +2,103 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 18C5E26900B
-	for <lists+linux-edac@lfdr.de>; Mon, 14 Sep 2020 17:34:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C56762691F9
+	for <lists+linux-edac@lfdr.de>; Mon, 14 Sep 2020 18:45:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726438AbgINPe1 (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Mon, 14 Sep 2020 11:34:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48032 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726366AbgINPeW (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Mon, 14 Sep 2020 11:34:22 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D200C06174A;
-        Mon, 14 Sep 2020 08:34:22 -0700 (PDT)
-Received: from zn.tnic (p200300ec2f09260028f4716b73cc78b7.dip0.t-ipconnect.de [IPv6:2003:ec:2f09:2600:28f4:716b:73cc:78b7])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id AEEF71EC058B;
-        Mon, 14 Sep 2020 17:34:20 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1600097660;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=YXmL5o+5O/KOYyqI3oi43ZTS7SkSSlK/ze8t5L5fSfQ=;
-        b=EAmq5DFWpMxdEeL4KVyeHQyYWK+iggDCr5KBYNJ7gZtm4Y3fHirnEJJiGgLt5a7KM46hi+
-        /6h83sABEAfSqwqR/AUM4jVJ/jS8tPPnfT9Vf0GSUMbs3ab1G4E7ka2dJI5fIYqxF+zysL
-        s/ez1NP600mRFcG/8PVpAomZ8oAhXDk=
-Date:   Mon, 14 Sep 2020 17:34:20 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>
-Cc:     x86@kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-edac@vger.kernel.org,
-        linux-efi@vger.kernel.org, linux-acpi@vger.kernel.org,
-        devel@acpica.org, Tony Luck <tony.luck@intel.com>,
-        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Len Brown <len.brown@intel.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Yazen Ghannam <yazen.ghannam@amd.com>
-Subject: Re: [PATCH v3 2/2] x86/mce/dev-mcelog: Fix updating kflags in AMD
- systems
-Message-ID: <20200914153420.GD680@zn.tnic>
-References: <20200903234531.162484-1-Smita.KoralahalliChannabasappa@amd.com>
- <20200903234531.162484-3-Smita.KoralahalliChannabasappa@amd.com>
+        id S1726088AbgINQp0 (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Mon, 14 Sep 2020 12:45:26 -0400
+Received: from mx0b-002e3701.pphosted.com ([148.163.143.35]:44158 "EHLO
+        mx0b-002e3701.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726127AbgINQpF (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>);
+        Mon, 14 Sep 2020 12:45:05 -0400
+Received: from pps.filterd (m0134425.ppops.net [127.0.0.1])
+        by mx0b-002e3701.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 08EGdFGk022142;
+        Mon, 14 Sep 2020 16:44:32 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=date : from : to : cc :
+ subject : message-id : reply-to : references : mime-version : content-type
+ : in-reply-to; s=pps0720; bh=Pm/656QFtJruBAnE4Q3O47Rjukt6SAkxNbJK/aGyHJ4=;
+ b=NycJ0xSZ4BEFFf1I9HnQ8ByWlDMHfTrxTjpC5QKldRH8CQxOZq4OrTapdK16Y3Bmgdm3
+ aFqV/eMsjTkgGQ8k2dUnO6HCL6KfW+rKM8muftCyHPePXWA7dcegGMPUXTBeEQC5ldaH
+ x5GoOqroVacsFU33/0n72iYBSCTLMnB8W9mkKc1WD9aTuZUWuqLUXMQ9/7f6WXhU648Y
+ 7uuxF9I42a0XvoWofF4DwY1F8LxjgdPcK6NRtga9RC5FPm/yhSB1YauB4keopLNvJ2dj
+ KiiysK8qwWbympHr3dC81Z1+AyAR4PvWwoclrminWD752U1Lx0yh7JaM3Afwxren8gJt hw== 
+Received: from g4t3427.houston.hpe.com (g4t3427.houston.hpe.com [15.241.140.73])
+        by mx0b-002e3701.pphosted.com with ESMTP id 33gqmp90bb-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 14 Sep 2020 16:44:32 +0000
+Received: from g4t3433.houston.hpecorp.net (g4t3433.houston.hpecorp.net [16.208.49.245])
+        by g4t3427.houston.hpe.com (Postfix) with ESMTP id 6F0C266;
+        Mon, 14 Sep 2020 16:44:31 +0000 (UTC)
+Received: from hpe.com (ben.americas.hpqcorp.net [10.33.153.7])
+        by g4t3433.houston.hpecorp.net (Postfix) with ESMTP id 9690845;
+        Mon, 14 Sep 2020 16:44:30 +0000 (UTC)
+Date:   Mon, 14 Sep 2020 11:44:30 -0500
+From:   Russ Anderson <rja@hpe.com>
+To:     Alex Kluver <kluveralex@gmail.com>
+Cc:     linux-edac@vger.kernel.org, linux-efi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, ardb@kernel.org, mchehab@kernel.org,
+        bp@alien8.de, russ.anderson@hpe.com, dimitri.sivanich@hpe.com,
+        kluveralex@gmail.com
+Subject: Re: [PATCH v2 0/2] UEFI v2.8 Memory Error Record Updates
+Message-ID: <20200914164348.pfgl3u6l5ijgb2jo@hpe.com>
+Reply-To: Russ Anderson <rja@hpe.com>
+References: <20200819143544.155096-1-alex.kluver@hpe.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200903234531.162484-3-Smita.KoralahalliChannabasappa@amd.com>
+In-Reply-To: <20200819143544.155096-1-alex.kluver@hpe.com>
+User-Agent: NeoMutt/20170421 (1.8.2)
+X-HPE-SCL: -1
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
+ definitions=2020-09-14_06:2020-09-14,2020-09-14 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0 mlxscore=0
+ spamscore=0 suspectscore=2 malwarescore=0 bulkscore=0 mlxlogscore=857
+ clxscore=1011 priorityscore=1501 impostorscore=0 adultscore=0 phishscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
+ definitions=main-2009140134
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Thu, Sep 03, 2020 at 06:45:31PM -0500, Smita Koralahalli wrote:
-> The mcelog utility is not commonly used on AMD systems. Therefore, errors
-> logged only by the dev_mce_log() notifier will be missed. This may occur
-> if the EDAC modules are not loaded in which case it's preferable to print
-> the error record by the default notifier.
+On Wed, Aug 19, 2020 at 09:35:42AM -0500, Alex Kluver wrote:
+> The UEFI Specification v2.8, Table 299, Memory Error Record has
+> several changes from previous versions. Bits 18 through 21 have been
+> added to the memory validation bits to include an extended version
+> of row, an option to print bank address and group separately, and chip id.
+> These patches implement bits 18 through 21 into the Memory Error Record.
 > 
-> However, the mce->kflags set by dev_mce_log() notifier makes the default
-> notifier to skip over the errors assuming they are processed by
-> dev_mce_log().
+> Change reserved field to extended field in cper_sec_mem_err structure
+> and added the extended field to the cper_mem_err_compact structure.
 > 
-> Do not update kflags in the dev_mce_log() notifier on AMD systems.
-> 
-> Signed-off-by: Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>
-> ---
-> Link:
-> https://lkml.kernel.org/r/20200828203332.11129-3-Smita.KoralahalliChannabasappa@amd.com
-> 
-> v3:
-> 	No change
-> v2:
-> 	No change
-> ---
->  arch/x86/kernel/cpu/mce/dev-mcelog.c | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
-> 
-> diff --git a/arch/x86/kernel/cpu/mce/dev-mcelog.c b/arch/x86/kernel/cpu/mce/dev-mcelog.c
-> index 03e51053592a..100fbeebdc72 100644
-> --- a/arch/x86/kernel/cpu/mce/dev-mcelog.c
-> +++ b/arch/x86/kernel/cpu/mce/dev-mcelog.c
-> @@ -67,7 +67,9 @@ static int dev_mce_log(struct notifier_block *nb, unsigned long val,
->  unlock:
->  	mutex_unlock(&mce_chrdev_read_mutex);
->  
-> -	mce->kflags |= MCE_HANDLED_MCELOG;
-> +	if (boot_cpu_data.x86_vendor != X86_VENDOR_AMD)
-> +		mce->kflags |= MCE_HANDLED_MCELOG;
-> +
->  	return NOTIFY_OK;
->  }
->  
-> -- 
+> Print correct versions of row, bank, and chip ID.
 
-This one is not related to your 1/2 so it sounds to me like I should
-take this one now, independently?
+Are there any community comment on this patch set?
+Questions/comments/concerns?
+
+Thanks.
+
+> ---
+> v1 -> v2:
+>    * Add static inline cper_get_mem_extension to make
+>      it more readable, as suggested by Borislav Petkov
+> 
+>    * Add second patch for bank field, bank group, and chip id.
+> ---
+> Alex Kluver (2):
+>   edac,ghes,cper: Add Row Extension to Memory Error Record
+>   cper,edac,efi: Memory Error Record: bank group/address and chip id
+> 
+>  drivers/edac/ghes_edac.c    | 17 +++++++++++++++--
+>  drivers/firmware/efi/cper.c | 18 ++++++++++++++++--
+>  include/linux/cper.h        | 24 ++++++++++++++++++++++--
+>  3 files changed, 53 insertions(+), 6 deletions(-)
+> 
+> -- 
+> 2.26.2
+> 
 
 -- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+Russ Anderson,  SuperDome Flex Linux Kernel Group Manager
+HPE - Hewlett Packard Enterprise (formerly SGI)  rja@hpe.com
