@@ -2,72 +2,69 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AB55526A8B1
-	for <lists+linux-edac@lfdr.de>; Tue, 15 Sep 2020 17:23:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B91626AA68
+	for <lists+linux-edac@lfdr.de>; Tue, 15 Sep 2020 19:21:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727180AbgIOPXH (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Tue, 15 Sep 2020 11:23:07 -0400
-Received: from mail-il1-f195.google.com ([209.85.166.195]:38778 "EHLO
-        mail-il1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727302AbgIOPW1 (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Tue, 15 Sep 2020 11:22:27 -0400
-Received: by mail-il1-f195.google.com with SMTP id t18so3369795ilp.5;
-        Tue, 15 Sep 2020 08:22:05 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=2dmfNBb0or2XBWPH7M/N/gQr8odxPSG4GRXc89xeEQs=;
-        b=kI+tqO4rnfSfUIXlyg7ib6CIseb2RIx2ut26vxkA3hKLpa2S2hypmrDqM6XHFDUMRE
-         O2sDvQ1jDsXRbOrXhk5l0jQpk4m4jFB/6x97e5VafkeHtQ7DY89eM165n3YljzLGLvOa
-         zO5lVLmojGf17VAFi9QAoPX0EmEgrlWZoW5oOqecyZWtKoXR0BBqmiPs5gAFlZVeNDg7
-         kPQMD6T0b3/yvJczBIYz2WGagjRdIqieFzldPVE7sdkKdYETLhavLwOy7NEUy1Gil8YP
-         /kHqofIleSisEZ4OZccuA2jMmV1nJ0kQS0D58QzFkOBjas38ovaNbZfhnh8qpLAWkOS7
-         BCOQ==
-X-Gm-Message-State: AOAM531YScRqoiH/5jwLgssje2SnUvdgtQoVzGZ+fzGFs6NSEUbBrLu+
-        croyctrNGgen3bkFdRZpog==
-X-Google-Smtp-Source: ABdhPJzarGxOa8101phpgLhMEl8zzSnfyDc9QvxX1EgyRjavIVLGiApIp7im8HIM665ERMPXyFrw8A==
-X-Received: by 2002:a92:9f53:: with SMTP id u80mr16938322ili.42.1600183325322;
-        Tue, 15 Sep 2020 08:22:05 -0700 (PDT)
-Received: from xps15 ([64.188.179.253])
-        by smtp.gmail.com with ESMTPSA id b8sm7756889ioa.33.2020.09.15.08.22.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Sep 2020 08:22:04 -0700 (PDT)
-Received: (nullmailer pid 1970179 invoked by uid 1000);
-        Tue, 15 Sep 2020 15:22:01 -0000
-Date:   Tue, 15 Sep 2020 09:22:01 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Yash Shah <yash.shah@sifive.com>
-Cc:     palmer@dabbelt.com, paul.walmsley@sifive.com, bp@alien8.de,
-        mchehab@kernel.org, tony.luck@intel.com, aou@eecs.berkeley.edu,
-        james.morse@arm.com, rrichter@marvell.com,
-        devicetree@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-edac@vger.kernel.org,
-        sachin.ghadi@sifive.com
-Subject: Re: [PATCH v2 0/3] SiFive DDR controller and EDAC support
-Message-ID: <20200915152201.GA1940827@bogus>
-References: <1599457679-8947-1-git-send-email-yash.shah@sifive.com>
+        id S1727817AbgIORVR (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Tue, 15 Sep 2020 13:21:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60872 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727801AbgIORTo (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Tue, 15 Sep 2020 13:19:44 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59D28C061788;
+        Tue, 15 Sep 2020 10:19:18 -0700 (PDT)
+Received: from zn.tnic (p200300ec2f0e42006096e946d741c4e4.dip0.t-ipconnect.de [IPv6:2003:ec:2f0e:4200:6096:e946:d741:c4e4])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 93F7E1EC0268;
+        Tue, 15 Sep 2020 19:19:16 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1600190356;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=ZP2LnXhKjOXrRyQf7jvLKq0NuLElbgCFkZmlLt3hIl8=;
+        b=dkjNDHkvejyobN7hl6Fbb6TNQhow+DwpebQ9stMbawfCCn+vDB65JFPbMvvpz/3xftJDWX
+        SX1as4kLkUCyDsheJgQixzT4v51TIClE1lv9pjVBPU7PIXYtzG58qmOPPM/138bBRp2LOk
+        6LH9up5nWYwNWfTVsbbwKX+ol9mqt4g=
+Date:   Tue, 15 Sep 2020 19:19:10 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Ard Biesheuvel <ardb@kernel.org>
+Cc:     Alex Kluver <alex.kluver@hpe.com>, linux-edac@vger.kernel.org,
+        linux-efi <linux-efi@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        mchehab@kernel.org, russ.anderson@hpe.com,
+        Dimitri Sivanich <dimitri.sivanich@hpe.com>,
+        kluveralex@gmail.com
+Subject: Re: [PATCH v2 1/2] edac,ghes,cper: Add Row Extension to Memory Error
+ Record
+Message-ID: <20200915171910.GQ14436@zn.tnic>
+References: <20200819143544.155096-1-alex.kluver@hpe.com>
+ <20200819143544.155096-2-alex.kluver@hpe.com>
+ <20200915163312.GO14436@zn.tnic>
+ <CAMj1kXHmVhB88qZc-1mHAD1ovNJQnWRBncmQJTR_4+kV0fXG5w@mail.gmail.com>
+ <CAMj1kXGvfiqZz-j5=LU0Z6yYCkr24pCz6aJS62QL8cBYUP_S=w@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <1599457679-8947-1-git-send-email-yash.shah@sifive.com>
+In-Reply-To: <CAMj1kXGvfiqZz-j5=LU0Z6yYCkr24pCz6aJS62QL8cBYUP_S=w@mail.gmail.com>
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Mon, Sep 07, 2020 at 11:17:56AM +0530, Yash Shah wrote:
-> The series add supports for SiFive DDR controller driver. This driver
-> is use to manage the Cadence DDR controller present in SiFive SoCs.
-> Currently it manages only the EDAC feature of the DDR controller.
-> The series also adds Memory controller EDAC support for SiFive platform.
-> It register for notifier event from SiFive DDR controller driver.
+On Tue, Sep 15, 2020 at 08:12:31PM +0300, Ard Biesheuvel wrote:
+> Boris - do you anticipate any conflicts? If so, please take these via
+> the EDAC tree - the CPER code is mostly self contained so I don't
+> expect any conflicts with the EFI tree in that case.
 
-This is an odd split and notifiers aren't a great interface. Why not 
-just combine these? Is there some other DDR controller functionality 
-planned for the driver? 
+None so far, and I applied them for testing ontop of my EDAC queue for
+5.10 so it should be all good. But if you want me, I can test-merge your
+branch once ready, just in case...
 
-FYI, highbank_mc_edac.c is also a Cadence controller. IIRC, the register 
-layout changes for every customer/design.
+-- 
+Regards/Gruss,
+    Boris.
 
-Rob
+https://people.kernel.org/tglx/notes-about-netiquette
