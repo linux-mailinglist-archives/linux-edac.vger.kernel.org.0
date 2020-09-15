@@ -2,83 +2,127 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 04DEF26B308
-	for <lists+linux-edac@lfdr.de>; Wed, 16 Sep 2020 00:59:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FDFC26B2E8
+	for <lists+linux-edac@lfdr.de>; Wed, 16 Sep 2020 00:55:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727387AbgIOW7K (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Tue, 15 Sep 2020 18:59:10 -0400
-Received: from mail.kernel.org ([198.145.29.99]:34454 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727426AbgIOPIQ (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Tue, 15 Sep 2020 11:08:16 -0400
-Received: from mail-oi1-f169.google.com (mail-oi1-f169.google.com [209.85.167.169])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 0974F20735;
-        Tue, 15 Sep 2020 15:08:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1600182485;
-        bh=0xyXwfxoIK/ZtHtyv1UhPApx13+V3AjswVKHmWQ82cw=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=ygYgM9m/bn66TFThps3RBp45NivF6dFd2IrQJ/yJlDwq+o3zu/o2aXDe6+eKuDFFz
-         PLLsQ5OEiyl8vcGmQlSZWp4uw3iOkasAeQDPaNPVyDxLa52lXu5nBpOszYtGNCwRIM
-         hbR9tQ38wmTvZhW+cfAbHF0TeKDmXRRnJU7erbZk=
-Received: by mail-oi1-f169.google.com with SMTP id w16so4261576oia.2;
-        Tue, 15 Sep 2020 08:08:05 -0700 (PDT)
-X-Gm-Message-State: AOAM531F8ap7J0dJU1XWJGrxggT/aZsMubkyEK7G88FkSdI52fQMwtVC
-        IhP+FTEgkEB01Kq2blNlwyg3KC5Nca4ZU26xqdM=
-X-Google-Smtp-Source: ABdhPJzAG3ESL6xwQvsmKw3etkopo2FiMleIRFHatfSzighPVWG+gBwRKvRcbxo96nRRSLkkjrR7A+yRyZJlrGpN1hs=
-X-Received: by 2002:a54:4517:: with SMTP id l23mr3918280oil.174.1600182484304;
- Tue, 15 Sep 2020 08:08:04 -0700 (PDT)
+        id S1727409AbgIOWzh (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Tue, 15 Sep 2020 18:55:37 -0400
+Received: from mail-io1-f66.google.com ([209.85.166.66]:36338 "EHLO
+        mail-io1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727401AbgIOPYm (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Tue, 15 Sep 2020 11:24:42 -0400
+Received: by mail-io1-f66.google.com with SMTP id d190so4523138iof.3;
+        Tue, 15 Sep 2020 08:24:38 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=TQwbsrSpPsblvvewNTAvygU6LX9JkoPG3XT5duFS2B8=;
+        b=pMa5QV6rMAf2UdR/IH7HVyXxjxlV9j/Ul8p4ApSo4Kx8qYkfv1XQ8mo3567ojZEszO
+         5ozjTyPxqBj5MSdOqddKPzohM6EW0AEiPY5yWuUG0K30hx9hGSixEpmZEsqk/Jgjsp11
+         5Amn2G9hyTLVcbf0jCq5nFFEE6eN4PNB+rgD0vfRV+evLEV6OeR+I/ywK8lGeoRsSoD8
+         dM5tAXYfC35vmXY7eXaqSD1qp9ZMe95bsyUNJXa6MHrCoMYuos5R1/BOnsb1rsXl50/1
+         UA7MASY7RDgFcjKXo6BRHTN1OitNgM6/MwbfEJPIe6sltOOYpLmE6jIbTWp/1lhvDJT9
+         jXbA==
+X-Gm-Message-State: AOAM5332WGfC6JA3bWEU4g8v9YIudeuQQxFSYiM0NVDlF0f6bsKsjb+R
+        9eTmsaaKRVDkfdhOIjNnQA==
+X-Google-Smtp-Source: ABdhPJyqKFyTIVHyJqHIrEsdIMGqq15HhgpOa6nWJTDsqIgRo7dmwPY2ATDZsR/bup7/2N61XSAUZw==
+X-Received: by 2002:a05:6602:2c4d:: with SMTP id x13mr10837671iov.94.1600183478508;
+        Tue, 15 Sep 2020 08:24:38 -0700 (PDT)
+Received: from xps15 ([64.188.179.253])
+        by smtp.gmail.com with ESMTPSA id i9sm4609484ils.34.2020.09.15.08.24.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 15 Sep 2020 08:24:37 -0700 (PDT)
+Received: (nullmailer pid 1973925 invoked by uid 1000);
+        Tue, 15 Sep 2020 15:24:35 -0000
+Date:   Tue, 15 Sep 2020 09:24:35 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Yash Shah <yash.shah@sifive.com>
+Cc:     palmer@dabbelt.com, paul.walmsley@sifive.com, bp@alien8.de,
+        mchehab@kernel.org, tony.luck@intel.com, aou@eecs.berkeley.edu,
+        james.morse@arm.com, rrichter@marvell.com,
+        devicetree@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-edac@vger.kernel.org,
+        sachin.ghadi@sifive.com
+Subject: Re: [PATCH v2 1/3] dt-bindings: riscv: Add DT documentation for DDR
+ Controller in SiFive SoCs
+Message-ID: <20200915152435.GB1940827@bogus>
+References: <1599457679-8947-1-git-send-email-yash.shah@sifive.com>
+ <1599457679-8947-2-git-send-email-yash.shah@sifive.com>
 MIME-Version: 1.0
-References: <20200819143544.155096-1-alex.kluver@hpe.com>
-In-Reply-To: <20200819143544.155096-1-alex.kluver@hpe.com>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Tue, 15 Sep 2020 18:07:53 +0300
-X-Gmail-Original-Message-ID: <CAMj1kXHHJD3cAvHiYbyj_BjVeeF6Oq3Fu92rZng_QE0BMsxOJw@mail.gmail.com>
-Message-ID: <CAMj1kXHHJD3cAvHiYbyj_BjVeeF6Oq3Fu92rZng_QE0BMsxOJw@mail.gmail.com>
-Subject: Re: [PATCH v2 0/2] UEFI v2.8 Memory Error Record Updates
-To:     Alex Kluver <alex.kluver@hpe.com>
-Cc:     linux-edac@vger.kernel.org, linux-efi <linux-efi@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        mchehab@kernel.org, Borislav Petkov <bp@alien8.de>,
-        russ.anderson@hpe.com, Dimitri Sivanich <dimitri.sivanich@hpe.com>,
-        kluveralex@gmail.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1599457679-8947-2-git-send-email-yash.shah@sifive.com>
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Wed, 19 Aug 2020 at 17:36, Alex Kluver <alex.kluver@hpe.com> wrote:
->
-> The UEFI Specification v2.8, Table 299, Memory Error Record has
-> several changes from previous versions. Bits 18 through 21 have been
-> added to the memory validation bits to include an extended version
-> of row, an option to print bank address and group separately, and chip id.
-> These patches implement bits 18 through 21 into the Memory Error Record.
->
-> Change reserved field to extended field in cper_sec_mem_err structure
-> and added the extended field to the cper_mem_err_compact structure.
->
-> Print correct versions of row, bank, and chip ID.
+On Mon, Sep 07, 2020 at 11:17:57AM +0530, Yash Shah wrote:
+> Add device tree bindings for SiFive FU540 DDR controller driver
+> 
+> Signed-off-by: Yash Shah <yash.shah@sifive.com>
+> Reviewed-by: Palmer Dabbelt <palmerdabbelt@google.com>
+> Acked-by: Palmer Dabbelt <palmerdabbelt@google.com>
 > ---
-> v1 -> v2:
->    * Add static inline cper_get_mem_extension to make
->      it more readable, as suggested by Borislav Petkov
->
->    * Add second patch for bank field, bank group, and chip id.
-> ---
-> Alex Kluver (2):
->   edac,ghes,cper: Add Row Extension to Memory Error Record
->   cper,edac,efi: Memory Error Record: bank group/address and chip id
->
->  drivers/edac/ghes_edac.c    | 17 +++++++++++++++--
->  drivers/firmware/efi/cper.c | 18 ++++++++++++++++--
->  include/linux/cper.h        | 24 ++++++++++++++++++++++--
->  3 files changed, 53 insertions(+), 6 deletions(-)
->
+>  .../devicetree/bindings/riscv/sifive-ddr.yaml      | 41 ++++++++++++++++++++++
 
-For the series,
+Bindings are organized by function, not vendor/arch generally. This goes 
+in bindings/memory-controllers/.
 
-Acked-by: Ard Biesheuvel <ardb@kernel.org>
+>  1 file changed, 41 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/riscv/sifive-ddr.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/riscv/sifive-ddr.yaml b/Documentation/devicetree/bindings/riscv/sifive-ddr.yaml
+> new file mode 100644
+> index 0000000..0288119
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/riscv/sifive-ddr.yaml
+> @@ -0,0 +1,41 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/riscv/sifive-ddr.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: SiFive DDR memory controller binding
+> +
+> +description: |
+> +  The Sifive DDR controller driver is used to manage the Cadence DDR
+> +  controller present in SiFive FU540-C000 SoC. Currently the driver is
+> +  used to manage EDAC feature of the DDR controller.
+
+Bindings describe h/w not drivers. What a driver supports is irrelevant.
+
+> +
+> +maintainers:
+> +  - Yash Shah <yash.shah@sifive.com>
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - sifive,fu540-c000-ddr
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - interrupts
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    memory-controller@100b0000 {
+> +        compatible = "sifive,fu540-c000-ddr";
+> +        reg = <0x100b0000 0x4000>;
+> +        interrupts = <31>;
+> +    };
+> -- 
+> 2.7.4
+> 
