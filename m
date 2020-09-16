@@ -2,141 +2,145 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0097A26C6F2
-	for <lists+linux-edac@lfdr.de>; Wed, 16 Sep 2020 20:12:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1662B26CA38
+	for <lists+linux-edac@lfdr.de>; Wed, 16 Sep 2020 21:52:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727822AbgIPSMs (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Wed, 16 Sep 2020 14:12:48 -0400
-Received: from mx0b-002e3701.pphosted.com ([148.163.143.35]:45094 "EHLO
-        mx0b-002e3701.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727846AbgIPSMo (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>);
-        Wed, 16 Sep 2020 14:12:44 -0400
-Received: from pps.filterd (m0150245.ppops.net [127.0.0.1])
-        by mx0b-002e3701.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 08GI8fR2002128;
-        Wed, 16 Sep 2020 18:12:28 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=date : from : to : cc :
- subject : message-id : reply-to : references : content-type : in-reply-to
- : mime-version; s=pps0720;
- bh=r7o24jDeCuqZLlq1UTiJUs06yNxpLvj1FGdfzK7+HFE=;
- b=FjgcyWG+s4lUSDtHPxOWGSiYjnnXsNJFJoJVoWytGu+9FNz+vppZLv287DR33oMm9UuO
- bA+Cmxg6n+TZalESF6OYeqpgCBUVSE21Sz1XVsxY51POd+iH0BzER3aISwoW5liK+pej
- IDUIdfTVEZfhtR5hHkZFCnWWL9htv5KSEgxzOcXWMOIBZbrskBYTb6eFzFb/SQEwHodM
- +8Kt8WobYieXc1JeDWfxdLK8mhzjKruYryW8hKgXPmNaAfbSXbf3v6tCj7jKdGsJN1km
- zpDd/dxoj5c0nUfUFZvKBI8CzxR3yvil5TwlXtP14vYHLS3vRe0y95+4EtqN6s7PE5iM 5A== 
-Received: from g4t3427.houston.hpe.com (g4t3427.houston.hpe.com [15.241.140.73])
-        by mx0b-002e3701.pphosted.com with ESMTP id 33k5nqaw37-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 16 Sep 2020 18:12:28 +0000
-Received: from g4t3433.houston.hpecorp.net (g4t3433.houston.hpecorp.net [16.208.49.245])
-        by g4t3427.houston.hpe.com (Postfix) with ESMTP id F153C57;
-        Wed, 16 Sep 2020 18:12:27 +0000 (UTC)
-Received: from hpe.com (ben.americas.hpqcorp.net [10.33.153.7])
-        by g4t3433.houston.hpecorp.net (Postfix) with ESMTP id 5710F45;
-        Wed, 16 Sep 2020 18:12:27 +0000 (UTC)
-Date:   Wed, 16 Sep 2020 13:12:27 -0500
-From:   Russ Anderson <rja@hpe.com>
+        id S1727525AbgIPTwU (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Wed, 16 Sep 2020 15:52:20 -0400
+Received: from mail-bn8nam12on2089.outbound.protection.outlook.com ([40.107.237.89]:27841
+        "EHLO NAM12-BN8-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1727904AbgIPTwR (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Wed, 16 Sep 2020 15:52:17 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=hjgXLLcuNG9tzeDZESfqxzaK2YSSaUS/d5ABCn5pbx2ZfnnzUnYLV5ez/LhmlmvVQ+T55dLe/p61LrayvJWBrL8RvFCvn5Wjje+kW3z6zgYncLTBZCQU52uVjzww1oQMIx6klqcKXJkzXqJtaAqW/x2r0kvM2GFRL1KqsE0jxghXXBYOV+x+zcUiZOPRKYlNXVrX6QPWxiTp0+NSXX7hNmdVPcdvknpAt6JO8aSUnTja7KyMDQrrxMSAh5H5ohANs9BvPzv1at9Lzfbkqap6Pi+gKwkSSOVE/vySuUH/9orAX8z4P0XlXOGEgXM4Hx30pQhnIHyIIyn4C/HUw/VaxA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=SZ5bohymRVyrFC0kixiHJP+pGz+l+XM0BWqSiog4A90=;
+ b=mCthpom6SX7nTBSVbEl0QtFXTbvLGQK9m1uX047GV7I1/7n19v7yQaY+aP1PtEagAJRUhhAju3mUwM7OCV2Q6WhEyyZeB1wCq5G98NHLX1Z1SCK3n8+yOoCYi1RQT65gX0s8zCmT0KX4y9b9e22o8Nk+aMbDxDgbeMIfAiXE334O/JpHzVBc0brlfu+VNpX7Ln8C9Bgy2UGFTwyH2oTpc4jbruxq+TkqrsmZ9RXfHPrAB2JFfT5LxnQDu92r3zGB0x3KQQGOrupLw74rbnGts9qYvsjdfEkqBdlg9GgBAN1eBZTklkjuj5dNdF1HpOEO5/IXvOpD569FyW9nfgSyZA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=amdcloud.onmicrosoft.com; s=selector2-amdcloud-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=SZ5bohymRVyrFC0kixiHJP+pGz+l+XM0BWqSiog4A90=;
+ b=LVYRmGuIfs0Gvuk64vUrsTUOeqNnxIcTMHOxgYPmHThFddwmuFjwsK2zKyWRu6dN8LSWUxhyLOh5YyMookkFrJH/8Rg87hho1P88vN9Gg5nUQxGm3ETxA0xaNBsW9H1D7cG11oszXTy2O0qcVVQTHlZv/oc8bxElRTt+QyLzZAs=
+Authentication-Results: alien8.de; dkim=none (message not signed)
+ header.d=none;alien8.de; dmarc=none action=none header.from=amd.com;
+Received: from BN8PR12MB3108.namprd12.prod.outlook.com (2603:10b6:408:40::20)
+ by BN6PR12MB1571.namprd12.prod.outlook.com (2603:10b6:405:4::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3370.16; Wed, 16 Sep
+ 2020 19:52:03 +0000
+Received: from BN8PR12MB3108.namprd12.prod.outlook.com
+ ([fe80::b038:2a58:64e0:2a3e]) by BN8PR12MB3108.namprd12.prod.outlook.com
+ ([fe80::b038:2a58:64e0:2a3e%4]) with mapi id 15.20.3370.019; Wed, 16 Sep 2020
+ 19:52:03 +0000
+Date:   Wed, 16 Sep 2020 14:51:52 -0500
+From:   Yazen Ghannam <yazen.ghannam@amd.com>
 To:     Borislav Petkov <bp@alien8.de>
-Cc:     Ard Biesheuvel <ardb@kernel.org>, linux-edac@vger.kernel.org,
-        linux-efi <linux-efi@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        mchehab@kernel.org, russ.anderson@hpe.com,
-        Dimitri Sivanich <dimitri.sivanich@hpe.com>,
-        kluveralex@gmail.com
-Subject: Re: [PATCH v2 1/2] edac,ghes,cper: Add Row Extension to Memory Error
- Record
-Message-ID: <20200916181155.kdsapz5rdolrnap4@hpe.com>
-Reply-To: Russ Anderson <rja@hpe.com>
-References: <20200819143544.155096-1-alex.kluver@hpe.com>
- <20200819143544.155096-2-alex.kluver@hpe.com>
- <20200915163312.GO14436@zn.tnic>
- <CAMj1kXHmVhB88qZc-1mHAD1ovNJQnWRBncmQJTR_4+kV0fXG5w@mail.gmail.com>
- <CAMj1kXGvfiqZz-j5=LU0Z6yYCkr24pCz6aJS62QL8cBYUP_S=w@mail.gmail.com>
- <20200915171910.GQ14436@zn.tnic>
- <CAMj1kXE6PKb==h_154hRKwZLr3Ek+4z4A8FdTHx=co18ww5d3Q@mail.gmail.com>
- <20200916181030.GR2643@zn.tnic>
+Cc:     linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
+        tony.luck@intel.com, x86@kernel.org,
+        Smita.KoralahalliChannabasappa@amd.com
+Subject: Re: [PATCH v2 1/8] x86/CPU/AMD: Save NodeId on AMD-based systems
+Message-ID: <20200916195152.GA3042858@yaz-nikka.amd.com>
+References: <20200903200144.310991-1-Yazen.Ghannam@amd.com>
+ <20200903200144.310991-2-Yazen.Ghannam@amd.com>
+ <20200909180647.GF12237@zn.tnic>
+ <20200909201755.GB3014671@yaz-nikka.amd.com>
+ <20200910101443.GC8357@zn.tnic>
+ <20200914192039.GA39519@yaz-nikka.amd.com>
+ <20200915083259.GC14436@zn.tnic>
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200916181030.GR2643@zn.tnic>
-User-Agent: NeoMutt/20170421 (1.8.2)
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+In-Reply-To: <20200915083259.GC14436@zn.tnic>
+X-ClientProxiedBy: DM6PR08CA0041.namprd08.prod.outlook.com
+ (2603:10b6:5:1e0::15) To BN8PR12MB3108.namprd12.prod.outlook.com
+ (2603:10b6:408:40::20)
 MIME-Version: 1.0
-X-HPE-SCL: -1
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
- definitions=2020-09-16_11:2020-09-16,2020-09-16 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 adultscore=0
- malwarescore=0 bulkscore=0 mlxlogscore=999 spamscore=0 impostorscore=0
- lowpriorityscore=0 phishscore=0 suspectscore=0 clxscore=1015
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2006250000 definitions=main-2009160129
+X-MS-Exchange-MessageSentRepresentingType: 1
+Received: from yaz-nikka.amd.com (165.204.78.2) by DM6PR08CA0041.namprd08.prod.outlook.com (2603:10b6:5:1e0::15) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3391.13 via Frontend Transport; Wed, 16 Sep 2020 19:52:02 +0000
+X-Originating-IP: [165.204.78.2]
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-HT: Tenant
+X-MS-Office365-Filtering-Correlation-Id: 8dff4f86-ced7-48b0-f2d3-08d85a79fbab
+X-MS-TrafficTypeDiagnostic: BN6PR12MB1571:
+X-MS-Exchange-Transport-Forked: True
+X-Microsoft-Antispam-PRVS: <BN6PR12MB15711A9914DC7A44F48242C1F8210@BN6PR12MB1571.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:9508;
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: wHM5K2XQVB6pHvz27mbTlDkGXsFL8uAm16/BFkv/6txgSGzLU+3k+hzAJkYNGKAEGbHcmsOcrMYNPXNeMLLN6aqt3gt8uP5VeiRsvipwY9RbaSSksDJMtJO/DQg5N/ng47jj8395EktjSmcfmF9Ff36XscMzw3GtB0agxD8V4cQ5ph1mLvbsXyTcGPOrKvedK9lnDnTw9WAP6vyZTRnmjYTYouIDZXx+PxLnAewlUDQvEeA3OX3yq6VXZJRtcWmOHRwRhx8dsMPL0AL3Z+Y78UFrK8f2Dj+6vU+3rwJ2BXgoQ4sON32vE+H68lmqJda5GFH0TnH9XsemaC71KAsbWvD8zfF1ZEGQ2TgMfmgOBqpfSqVTQ/LjVdpIg2x1islK0YpDtAIMi9nclDYUG5MSYvftGs2IPcsZBt+5XY2Pe+A=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3108.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(39850400004)(396003)(346002)(136003)(376002)(478600001)(66476007)(66946007)(44832011)(55016002)(6666004)(16526019)(26005)(5660300002)(4326008)(186003)(956004)(66556008)(86362001)(1076003)(8936002)(83380400001)(7696005)(33656002)(316002)(8676002)(2906002)(52116002)(6916009)(98474003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData: d/lE7fZWaKWwjaFdhNDDPnqPZX8PH1ra4t11529Cjkv8wfEixDDaqauXvjBcEwDdbFUl784FzQ1Yhz6Cwd97gJXXn+wL2yMlJFxnxHxhHkYV/CkcQuA/uncushkcCy17HWyuLSOIHShFBs13PdfDIv+au9YN4SD/iWhne8We60GTsm1jkL5bbaUibdNEoCr4LEQ+iOJRtlKznaodyBnGThXsmwLDKFUYTyvMF8BHxmGS+oZysjh9QbWnzNYBINcjIS8KYUKLe8eK8gHHHMjJGJ/BrApS9YYyTr/mvMHsxhd0MxFdFkkFvgD2+IfnRd/BkZFRUGQPKv++VzI+/cld0e/Ko9ZmyRfTVkP5BLknYGjyJ6R0LWIbnD/2DohnVMJtEnk3rOKGQ7CaKyBY+SzVIUEmBKrKS4tKEcRFNoeqAzNV1csaz1Kx6QzsDliLyMnUk/WoHj20S/qJRRlwHyWEJS+aV6DhDULbZaZJbZAp1RglIEXtZ4QBwvQv4VMjm7lsoeiwC7yxikbZACrJ3LleTgDEgy3HZ/harMELPyh3HL2Xl8rp4lrKdRxdzARzCdCBduuCENkhyb7KhlEFvuDqhHziBgk7EBhIJk1j/JlCP3lMPQRGrvznGucuiA7MZLzFfnO2PIHxYk6gW2qcTuwj5w==
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8dff4f86-ced7-48b0-f2d3-08d85a79fbab
+X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3108.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Sep 2020 19:52:03.5716
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 5IR2RSjLgWPzd8/7VTcAyXpJB3o7wOS6OpO4YyW28x6E1AYm46PtBxXwOQ85rspSMs6gJC7oNd4PrWNANAV5Vw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN6PR12MB1571
 Sender: linux-edac-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Wed, Sep 16, 2020 at 08:10:30PM +0200, Borislav Petkov wrote:
-> On Wed, Sep 16, 2020 at 04:09:36PM +0300, Ard Biesheuvel wrote:
-> > git://git.kernel.org/pub/scm/linux/kernel/git/efi/efi.git next
+On Tue, Sep 15, 2020 at 10:35:15AM +0200, Borislav Petkov wrote:
+...
+> > Yeah, I think example 4b works here. The mismatch though is with
+> > phys_proc_id and package on AMD systems. You can see above that
+> > phys_proc_id gives a socket number, and the AMD NodeId gives a package
+> > number.
 > 
-> Looks good and no conflicts, builds fine too.
-
-Excellent.
-Thanks!
-
-> [boris@zn: ~/kernel/linux> git fetch efi
-> remote: Enumerating objects: 85, done.
-> remote: Counting objects: 100% (85/85), done.
-> remote: Compressing objects: 100% (14/14), done.
-> remote: Total 131 (delta 71), reused 85 (delta 71), pack-reused 46
-> Receiving objects: 100% (131/131), 113.14 KiB | 1.69 MiB/s, done.
-> Resolving deltas: 100% (89/89), completed with 33 local objects.
-> From git://git.kernel.org/pub/scm/linux/kernel/git/efi/efi
->  + 84780c5438ef...744de4180a43 next                    -> efi/next  (forced update)
->    fb1201aececc..46908326c6b8  urgent                  -> efi/urgent
->  * [new tag]                   efi-next-for-v5.10      -> efi-next-for-v5.10
->  * [new tag]                   efi-urgent-for-v5.9-rc5 -> efi-urgent-for-v5.9-rc5
->  * [new tag]                   efi-riscv-shared-for-v5.10 -> efi-riscv-shared-for-v5.10
-> [boris@zn: ~/kernel/linux> git checkout -b test-merge ras/edac-for-next
-> Branch 'test-merge' set up to track remote branch 'edac-for-next' from 'ras'.
-> Switched to a new branch 'test-merge'
-> [boris@zn: ~/kernel/linux> git merge efi/next
-> Auto-merging drivers/firmware/efi/libstub/efi-stub-helper.c
-> Auto-merging drivers/firmware/efi/efi.c
-> Auto-merging drivers/edac/ghes_edac.c
-> Auto-merging arch/x86/platform/efi/efi.c
-> Merge made by the 'recursive' strategy.
->  arch/arm/include/asm/efi.h                      |  23 +++--
->  arch/arm64/include/asm/efi.h                    |   5 +-
->  arch/x86/kernel/setup.c                         |   1 +
->  arch/x86/platform/efi/efi.c                     |   3 +
->  drivers/edac/ghes_edac.c                        |  17 +++-
->  drivers/firmware/efi/Makefile                   |   3 +-
->  drivers/firmware/efi/cper.c                     |  18 +++-
->  drivers/firmware/efi/{arm-init.c => efi-init.c} |   1 +
->  drivers/firmware/efi/efi.c                      |   6 ++
->  drivers/firmware/efi/libstub/arm32-stub.c       | 178 +++++++---------------------------
->  drivers/firmware/efi/libstub/arm64-stub.c       |   1 -
->  drivers/firmware/efi/libstub/efi-stub-helper.c  | 101 +++++++++++++++++++-
->  drivers/firmware/efi/libstub/efi-stub.c         |  48 +---------
->  drivers/firmware/efi/libstub/efistub.h          |  61 +++++++++++-
->  drivers/firmware/efi/libstub/file.c             |   5 +-
->  drivers/firmware/efi/libstub/relocate.c         |   4 +-
->  drivers/firmware/efi/libstub/vsprintf.c         |   2 +-
->  drivers/firmware/efi/mokvar-table.c             | 360 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
->  include/linux/cper.h                            |  24 ++++-
->  include/linux/efi.h                             |  34 +++++++
->  include/linux/pe.h                              |   3 +
->  security/integrity/platform_certs/load_uefi.c   |  85 +++++++++++++----
->  22 files changed, 746 insertions(+), 237 deletions(-)
->  rename drivers/firmware/efi/{arm-init.c => efi-init.c} (99%)
->  create mode 100644 drivers/firmware/efi/mokvar-table.c
+> Ok, now looka here:
 > 
-> -- 
-> Regards/Gruss,
->     Boris.
+> "  - cpuinfo_x86.logical_proc_id:
 > 
-> https://people.kernel.org/tglx/notes-about-netiquette
+>     The logical ID of the package. As we do not trust BIOSes to enumerate the
+>     packages in a consistent way, we introduced the concept of logical package
+>     ID so we can sanely calculate the number of maximum possible packages in
+>     the system and have the packages enumerated linearly."
+> 
+> Doesn't that sound like exactly what you need?
+> 
+> Because that DF ID *is* practically the package ID as there's 1:1
+> mapping between DF and a package, as you say above.
+> 
+> Right?
+> 
+> Now, it says
+> 
+> [    7.670791] smpboot: Max logical packages: 2
+> 
+> on my Rome box but what you want sounds very much like the logical
+> package ID and if we define that on AMD to be that and document it this
+> way, I guess that should work too, provided there are no caveats like
+> sched is using this info for proper task placement and so on. That would
+> need code audit, of course...
+>
 
--- 
-Russ Anderson,  SuperDome Flex Linux Kernel Group Manager
-HPE - Hewlett Packard Enterprise (formerly SGI)  rja@hpe.com
+The only use of logical_proc_id seems to be in hswep_uncore_cpu_init().
+So I think maybe we can use this.
+
+However, I think there are two issues.
+
+1) The logical_proc_id seems like it should refer to the same type of
+structure as phys_proc_id. In our case, this won't be true as
+phys_proc_id would refer to the "socket" on AMD and logical_proc_id
+would refer to the package/AMD NodeId.
+
+2) The AMD NodeId is read during c_init()/init_amd(), so logical_proc_id
+can be set here. But then logical_proc_id will get overwritten later in 
+topology_update_package_map(). I don't know if it'd be good to modify
+the generic flow to support this vendor-specific behavior.
+
+What do you think?
+
+Thanks,
+Yazen
