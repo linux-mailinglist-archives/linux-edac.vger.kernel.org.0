@@ -2,92 +2,121 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1723E26D939
-	for <lists+linux-edac@lfdr.de>; Thu, 17 Sep 2020 12:39:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2488426DAD0
+	for <lists+linux-edac@lfdr.de>; Thu, 17 Sep 2020 13:54:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726185AbgIQKht (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Thu, 17 Sep 2020 06:37:49 -0400
-Received: from mail.skyhub.de ([5.9.137.197]:35386 "EHLO mail.skyhub.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726410AbgIQKhp (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Thu, 17 Sep 2020 06:37:45 -0400
-X-Greylist: delayed 7002 seconds by postgrey-1.27 at vger.kernel.org; Thu, 17 Sep 2020 06:37:35 EDT
-Received: from zn.tnic (p200300ec2f1053000730ae91ea344e59.dip0.t-ipconnect.de [IPv6:2003:ec:2f10:5300:730:ae91:ea34:4e59])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 5D0651EC027B;
-        Thu, 17 Sep 2020 12:37:27 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1600339047;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=giB45ale7a27o6cvoqhhZzCNQwbxgQJ9++MCfiKpbI0=;
-        b=Rnwi1r+wrSTxVoowS9WlyaAiUz+Zz7Ljp/osqVnyPqZZaSzYclgG+PyJmk7UVKLtWBG18n
-        KuREpCutJG8S1B44iUCQLkxuO88K9/zqqFUBBq8EnyDBV0eC7b04Bf24iwTGxQveejTWjk
-        mn2e6suBhLasfO3QM2w3ZYCv13X38Qc=
-Date:   Thu, 17 Sep 2020 12:37:20 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Yazen Ghannam <yazen.ghannam@amd.com>
-Cc:     linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
-        tony.luck@intel.com, x86@kernel.org,
-        Smita.KoralahalliChannabasappa@amd.com
-Subject: Re: [PATCH v2 1/8] x86/CPU/AMD: Save NodeId on AMD-based systems
-Message-ID: <20200917103720.GG31960@zn.tnic>
-References: <20200903200144.310991-1-Yazen.Ghannam@amd.com>
- <20200903200144.310991-2-Yazen.Ghannam@amd.com>
- <20200909180647.GF12237@zn.tnic>
- <20200909201755.GB3014671@yaz-nikka.amd.com>
- <20200910101443.GC8357@zn.tnic>
- <20200914192039.GA39519@yaz-nikka.amd.com>
- <20200915083259.GC14436@zn.tnic>
- <20200916195152.GA3042858@yaz-nikka.amd.com>
+        id S1726851AbgIQLyk (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Thu, 17 Sep 2020 07:54:40 -0400
+Received: from szxga05-in.huawei.com ([45.249.212.191]:13233 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726695AbgIQLy2 (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Thu, 17 Sep 2020 07:54:28 -0400
+X-Greylist: delayed 923 seconds by postgrey-1.27 at vger.kernel.org; Thu, 17 Sep 2020 07:54:27 EDT
+Received: from DGGEMS408-HUB.china.huawei.com (unknown [172.30.72.58])
+        by Forcepoint Email with ESMTP id D8C347362039763D03B9;
+        Thu, 17 Sep 2020 19:38:59 +0800 (CST)
+Received: from [10.174.178.16] (10.174.178.16) by
+ DGGEMS408-HUB.china.huawei.com (10.3.19.208) with Microsoft SMTP Server id
+ 14.3.487.0; Thu, 17 Sep 2020 19:38:57 +0800
+Subject: Re: [PATCH v2] EDAC/mc_sysfs: Add missing newlines when printing
+ {max,dimm}_location
+To:     Borislav Petkov <bp@alien8.de>
+CC:     <mchehab@kernel.org>, <tony.luck@intel.com>,
+        <linux-edac@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <1600051734-8993-1-git-send-email-wangxiongfeng2@huawei.com>
+ <20200916170052.GO2643@zn.tnic>
+From:   Xiongfeng Wang <wangxiongfeng2@huawei.com>
+Message-ID: <591e613e-0b53-028f-08fd-3d62a35b8c4f@huawei.com>
+Date:   Thu, 17 Sep 2020 19:38:57 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20200916195152.GA3042858@yaz-nikka.amd.com>
+In-Reply-To: <20200916170052.GO2643@zn.tnic>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.178.16]
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Wed, Sep 16, 2020 at 02:51:52PM -0500, Yazen Ghannam wrote:
-> What do you think?
+Hi ,
 
-Yeah, forget logical_proc_id - the galactic senate of x86 maintainers
-said that we're keeping that for when BIOS vendors f*ck up with the
-phys_proc_id enumeration on AMD. Then we'll need that as a workaround.
+On 2020/9/17 1:00, Borislav Petkov wrote:
+> On Mon, Sep 14, 2020 at 10:48:54AM +0800, Xiongfeng Wang wrote:
+>> @@ -813,15 +817,21 @@ static ssize_t mci_max_location_show(struct device *dev,
+>>  				     char *data)
+>>  {
+>>  	struct mem_ctl_info *mci = to_mci(dev);
+>> -	int i;
+>> +	int i, n;
+>>  	char *p = data;
+>> +	unsigned int len = PAGE_SIZE;
+>>  
+>>  	for (i = 0; i < mci->n_layers; i++) {
+>> -		p += sprintf(p, "%s %d ",
+>> +		n = snprintf(p, len, "%s %d ",
+>>  			     edac_layer_name[mci->layers[i].type],
+>>  			     mci->layers[i].size - 1);
+>> +		p += n;
+>> +		len -= n;
+> 
+> What happens if that subtraction causes len to wrap around and become a
+> huge positive unsigned integer?
+> 
+>> +		if (!len)
+> 
+> Would that test still work?
 
-Look instead at:
+I am not sure if snprintf will return a value larger than its second input
+paramter 'size'. But we can also check if 'len' is less than 0. It's better.
 
-struct cpuinfo_x86 {
+> 
+> IOW, I did this to your patch ontop. Note that I've moved the "p"
+> pointer incrementation after the length check so that the pointer
+> doesn't overflow too:
 
-	...
+Thanks. I will add it in the next version.
 
-        u16                     cpu_die_id;
-        u16                     logical_die_id;
+> 
+> ---
+> diff --git a/drivers/edac/edac_mc_sysfs.c b/drivers/edac/edac_mc_sysfs.c
+> index bf0e075fb635..fa0551c81e63 100644
+> --- a/drivers/edac/edac_mc_sysfs.c
+> +++ b/drivers/edac/edac_mc_sysfs.c
+> @@ -817,19 +817,22 @@ static ssize_t mci_max_location_show(struct device *dev,
+>  				     char *data)
+>  {
+>  	struct mem_ctl_info *mci = to_mci(dev);
+> -	int i, n;
+> +	int len = PAGE_SIZE;
+>  	char *p = data;
+> -	unsigned int len = PAGE_SIZE;
+> +	int i, n;
+>  
+>  	for (i = 0; i < mci->n_layers; i++) {
+>  		n = snprintf(p, len, "%s %d ",
+>  			     edac_layer_name[mci->layers[i].type],
+>  			     mci->layers[i].size - 1);
+> -		p += n;
+> +
+>  		len -= n;
+> -		if (!len)
+> +		if (len < 0)
 
-and
+Not sure whether we need to check 'len' equals to 0.
+if (len <= 0) ?
 
-7745f03eb395 ("x86/topology: Add CPUID.1F multi-die/package support")
 
-"Some new systems have multiple software-visible die within each
-package."
+>  			goto out;
+> +
+> +		p += n;
+>  	}
+> +
+>  	p += snprintf(p, len, "\n");
+>  out:
+>  	return p - data;
+> 
 
-and you could map the AMD packages to those dies. And if you guys
-implement CPUID.1F to enumerate those packages the same way, then all
-should just work (famous last words).
-
-Because Intel dies is basically AMD packages consisting of a CCX, caches
-and DF.
-
-We would have to update the documentation in the end to denote that but
-let's see if this should work for you too first. Because the concepts
-sound very similar, if not identical...
-
-Thx.
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+Thanks,
+XIongfeng
