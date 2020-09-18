@@ -2,98 +2,64 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B1D6E26F4BD
-	for <lists+linux-edac@lfdr.de>; Fri, 18 Sep 2020 05:33:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D977726F682
+	for <lists+linux-edac@lfdr.de>; Fri, 18 Sep 2020 09:12:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726199AbgIRDds (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Thu, 17 Sep 2020 23:33:48 -0400
-Received: from szxga04-in.huawei.com ([45.249.212.190]:13287 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726102AbgIRDds (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Thu, 17 Sep 2020 23:33:48 -0400
-Received: from DGGEMS412-HUB.china.huawei.com (unknown [172.30.72.60])
-        by Forcepoint Email with ESMTP id 2DD473B87BF4DD4B65B0;
-        Fri, 18 Sep 2020 11:33:46 +0800 (CST)
-Received: from linux-ibm.site (10.175.102.37) by
- DGGEMS412-HUB.china.huawei.com (10.3.19.212) with Microsoft SMTP Server id
- 14.3.487.0; Fri, 18 Sep 2020 11:33:39 +0800
-From:   Xiongfeng Wang <wangxiongfeng2@huawei.com>
-To:     <bp@alien8.de>, <mchehab@kernel.org>, <tony.luck@intel.com>
-CC:     <joe@perches.com>, <linux-edac@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <wangxiongfeng2@huawei.com>
-Subject: [PATCH v3] EDAC/mc_sysfs: Add missing newlines when printing {max,dimm}_location
-Date:   Fri, 18 Sep 2020 11:26:08 +0800
-Message-ID: <1600399568-21649-1-git-send-email-wangxiongfeng2@huawei.com>
-X-Mailer: git-send-email 1.7.12.4
+        id S1726118AbgIRHMh (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Fri, 18 Sep 2020 03:12:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44576 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726044AbgIRHMg (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Fri, 18 Sep 2020 03:12:36 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 944CBC06174A;
+        Fri, 18 Sep 2020 00:12:36 -0700 (PDT)
+Received: from zn.tnic (p200300ec2f0c2600a65c515d56d1ce56.dip0.t-ipconnect.de [IPv6:2003:ec:2f0c:2600:a65c:515d:56d1:ce56])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 011451EC027A;
+        Fri, 18 Sep 2020 09:12:34 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1600413155;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=iHhrIzMeq+aky6lIVbBEUoaSgS50cLMuKK4BEhmeBR0=;
+        b=Vhyv3nuwlfSPig8HX0b/WRfrutaXNI4//og2ZTkvD6TrOyB3dSdw41SaRfLXyxXMXy+JYH
+        3ujobSFWDCCvbzsYU9alzOwQO+kxYeAH/Egpowk7vjT+ofPLrIdDE/opxws7DG3ooffwu+
+        rUE8d9aKTDDZUdxFjiwEudiBVxLaI5U=
+Date:   Fri, 18 Sep 2020 09:12:27 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Xiongfeng Wang <wangxiongfeng2@huawei.com>
+Cc:     mchehab@kernel.org, tony.luck@intel.com,
+        linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] EDAC/mc_sysfs: Add missing newlines when printing
+ {max,dimm}_location
+Message-ID: <20200918071227.GA6585@zn.tnic>
+References: <1600051734-8993-1-git-send-email-wangxiongfeng2@huawei.com>
+ <20200916170052.GO2643@zn.tnic>
+ <591e613e-0b53-028f-08fd-3d62a35b8c4f@huawei.com>
+ <20200917162537.GL31960@zn.tnic>
+ <8ac6d481-e1c4-108e-dbec-b1e86b2d0e86@huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.175.102.37]
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <8ac6d481-e1c4-108e-dbec-b1e86b2d0e86@huawei.com>
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-Reading those sysfs entries gives:
+On Fri, Sep 18, 2020 at 10:37:28AM +0800, Xiongfeng Wang wrote:
+> Thansk a lot. I will send another version. Also I will change the
+> 'snprintf' in 'dimmdev_location_show()' to 'scnprintf'
 
-  [root@localhost /]# cat /sys/devices/system/edac/mc/mc0/max_location
-  memory 3 [root@localhost /]# cat /sys/devices/system/edac/mc/mc0/dimm0/dimm_location
-  memory 0 [root@localhost /]#
+No need to send another one - I have everything locally and just amended
+it.
 
-Add newlines after the value it prints for better readability.
+Thx.
 
-Signed-off-by: Xiongfeng Wang <wangxiongfeng2@huawei.com>
-Signed-off-by: Borislav Petkov <bp@alien8.de>
-Suggested-by: Joe Perches <joe@perches.com>
----
- drivers/edac/edac_mc_sysfs.c | 22 +++++++++++++++++-----
- 1 file changed, 17 insertions(+), 5 deletions(-)
-
-diff --git a/drivers/edac/edac_mc_sysfs.c b/drivers/edac/edac_mc_sysfs.c
-index 4e6aca5..2f9f1e7 100644
---- a/drivers/edac/edac_mc_sysfs.c
-+++ b/drivers/edac/edac_mc_sysfs.c
-@@ -474,8 +474,12 @@ static ssize_t dimmdev_location_show(struct device *dev,
- 				     struct device_attribute *mattr, char *data)
- {
- 	struct dimm_info *dimm = to_dimm(dev);
-+	ssize_t count;
- 
--	return edac_dimm_info_location(dimm, data, PAGE_SIZE);
-+	count = edac_dimm_info_location(dimm, data, PAGE_SIZE);
-+	count += scnprintf(data + count, PAGE_SIZE - count, "\n");
-+
-+	return count;
- }
- 
- static ssize_t dimmdev_label_show(struct device *dev,
-@@ -813,15 +817,23 @@ static ssize_t mci_max_location_show(struct device *dev,
- 				     char *data)
- {
- 	struct mem_ctl_info *mci = to_mci(dev);
--	int i;
-+	int len = PAGE_SIZE;
- 	char *p = data;
-+	int i, n;
- 
- 	for (i = 0; i < mci->n_layers; i++) {
--		p += sprintf(p, "%s %d ",
--			     edac_layer_name[mci->layers[i].type],
--			     mci->layers[i].size - 1);
-+		n = scnprintf(p, len, "%s %d ",
-+			      edac_layer_name[mci->layers[i].type],
-+			      mci->layers[i].size - 1);
-+		len -= n;
-+		if (len <= 0)
-+			goto out;
-+
-+		p += n;
- 	}
- 
-+	p += scnprintf(p, len, "\n");
-+out:
- 	return p - data;
- }
- 
 -- 
-1.7.12.4
+Regards/Gruss,
+    Boris.
 
+https://people.kernel.org/tglx/notes-about-netiquette
