@@ -2,90 +2,101 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B0A222709A1
-	for <lists+linux-edac@lfdr.de>; Sat, 19 Sep 2020 03:22:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8114B271327
+	for <lists+linux-edac@lfdr.de>; Sun, 20 Sep 2020 11:25:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726247AbgISBWc (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Fri, 18 Sep 2020 21:22:32 -0400
-Received: from szxga06-in.huawei.com ([45.249.212.32]:50744 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726009AbgISBWb (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Fri, 18 Sep 2020 21:22:31 -0400
-Received: from DGGEMS407-HUB.china.huawei.com (unknown [172.30.72.58])
-        by Forcepoint Email with ESMTP id 646C5DEA6396A4285BA7;
-        Sat, 19 Sep 2020 09:22:30 +0800 (CST)
-Received: from localhost.localdomain.localdomain (10.175.113.25) by
- DGGEMS407-HUB.china.huawei.com (10.3.19.207) with Microsoft SMTP Server id
- 14.3.487.0; Sat, 19 Sep 2020 09:22:21 +0800
-From:   Qinglang Miao <miaoqinglang@huawei.com>
-To:     Tony Luck <tony.luck@intel.com>, Borislav Petkov <bp@alien8.de>
-CC:     <linux-edac@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        "Qinglang Miao" <miaoqinglang@huawei.com>
-Subject: [PATCH -next v2] RAS/CEC: Convert to DEFINE_SHOW_ATTRIBUTE
-Date:   Sat, 19 Sep 2020 09:22:52 +0800
-Message-ID: <20200919012252.171437-1-miaoqinglang@huawei.com>
-X-Mailer: git-send-email 2.20.1
+        id S1726262AbgITJZH (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Sun, 20 Sep 2020 05:25:07 -0400
+Received: from mx2.suse.de ([195.135.220.15]:38320 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726247AbgITJZH (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Sun, 20 Sep 2020 05:25:07 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id B6207AC26;
+        Sun, 20 Sep 2020 09:25:40 +0000 (UTC)
+Date:   Sun, 20 Sep 2020 11:24:56 +0200
+From:   Borislav Petkov <bp@suse.de>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-edac <linux-edac@vger.kernel.org>,
+        lkml <linux-kernel@vger.kernel.org>
+Subject: [GIT PULL] EDAC urgent for v5.9-rc6
+Message-ID: <20200920092456.GA13044@zn.tnic>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.113.25]
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-Use DEFINE_SHOW_ATTRIBUTE macro to simplify the code.
+Hi Linus,
 
-Signed-off-by: Qinglang Miao <miaoqinglang@huawei.com>
+please pull two more fixes for ghes_edac resulting from playing with
+CONFIG_DEBUG_TEST_DRIVER_REMOVE=y.
+
+Thx.
+
 ---
-v2: based on linux-next(20200917), and can be applied to
-    mainline cleanly now.
+The following changes since commit 856deb866d16e29bd65952e0289066f6078af773:
 
- drivers/ras/cec.c | 17 +++--------------
- 1 file changed, 3 insertions(+), 14 deletions(-)
+  Linux 5.9-rc5 (2020-09-13 16:06:00 -0700)
 
-diff --git a/drivers/ras/cec.c b/drivers/ras/cec.c
-index 6939aa5b3..ddecf25b5 100644
---- a/drivers/ras/cec.c
-+++ b/drivers/ras/cec.c
-@@ -435,7 +435,7 @@ DEFINE_DEBUGFS_ATTRIBUTE(action_threshold_ops, u64_get, action_threshold_set, "%
- 
- static const char * const bins[] = { "00", "01", "10", "11" };
- 
--static int array_dump(struct seq_file *m, void *v)
-+static int array_show(struct seq_file *m, void *v)
- {
- 	struct ce_array *ca = &ce_arr;
- 	int i;
-@@ -467,18 +467,7 @@ static int array_dump(struct seq_file *m, void *v)
- 	return 0;
- }
- 
--static int array_open(struct inode *inode, struct file *filp)
--{
--	return single_open(filp, array_dump, NULL);
--}
--
--static const struct file_operations array_ops = {
--	.owner	 = THIS_MODULE,
--	.open	 = array_open,
--	.read	 = seq_read,
--	.llseek	 = seq_lseek,
--	.release = single_release,
--};
-+DEFINE_SHOW_ATTRIBUTE(array);
- 
- static int __init create_debugfs_nodes(void)
- {
-@@ -513,7 +502,7 @@ static int __init create_debugfs_nodes(void)
- 		goto err;
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/ras/ras.git tags/edac_urgent_for_v5.9_rc6
+
+for you to fetch changes up to 251c54ea26fa6029b01a76161a37a12fde5124e4:
+
+  EDAC/ghes: Check whether the driver is on the safe list correctly (2020-09-15 09:42:15 +0200)
+
+----------------------------------------------------------------
+Two fixes for resulting from CONFIG_DEBUG_TEST_DRIVER_REMOVE=y experiments:
+
+* The first one completes a previous fix to reset a local structure
+containing scanned system data properly so that the driver rescans, as
+it should, on a second load.
+
+* The second one addresses a refcount underflow due to not paying
+attention to the driver whitelest on unregister.
+
+----------------------------------------------------------------
+Borislav Petkov (2):
+      EDAC/ghes: Clear scanned data on unload
+      EDAC/ghes: Check whether the driver is on the safe list correctly
+
+ drivers/edac/ghes_edac.c | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/drivers/edac/ghes_edac.c b/drivers/edac/ghes_edac.c
+index 54ebc8afc6b1..94d1e3165052 100644
+--- a/drivers/edac/ghes_edac.c
++++ b/drivers/edac/ghes_edac.c
+@@ -508,6 +508,7 @@ int ghes_edac_register(struct ghes *ghes, struct device *dev)
+ 		if (!force_load && idx < 0)
+ 			return -ENODEV;
+ 	} else {
++		force_load = true;
+ 		idx = 0;
  	}
  
--	array = debugfs_create_file("array", S_IRUSR, d, NULL, &array_ops);
-+	array = debugfs_create_file("array", S_IRUSR, d, NULL, &array_fops);
- 	if (!array) {
- 		pr_warn("Error creating array debugfs node!\n");
- 		goto err;
--- 
-2.23.0
+@@ -629,9 +630,13 @@ void ghes_edac_unregister(struct ghes *ghes)
+ 	struct mem_ctl_info *mci;
+ 	unsigned long flags;
+ 
++	if (!force_load)
++		return;
++
+ 	mutex_lock(&ghes_reg_mutex);
+ 
+ 	system_scanned = false;
++	memset(&ghes_hw, 0, sizeof(struct ghes_hw_desc));
+ 
+ 	if (!refcount_dec_and_test(&ghes_refcount))
+ 		goto unlock;
 
+-- 
+Regards/Gruss,
+    Boris.
+
+SUSE Software Solutions Germany GmbH, GF: Felix Imendörffer, HRB 36809, AG Nürnberg
