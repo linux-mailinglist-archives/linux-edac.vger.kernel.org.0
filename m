@@ -2,37 +2,37 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C67E627287F
-	for <lists+linux-edac@lfdr.de>; Mon, 21 Sep 2020 16:44:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9470627285E
+	for <lists+linux-edac@lfdr.de>; Mon, 21 Sep 2020 16:43:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728247AbgIUOnc (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Mon, 21 Sep 2020 10:43:32 -0400
-Received: from mail.kernel.org ([198.145.29.99]:49348 "EHLO mail.kernel.org"
+        id S1727679AbgIUOmr (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Mon, 21 Sep 2020 10:42:47 -0400
+Received: from mail.kernel.org ([198.145.29.99]:49882 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727856AbgIUOkm (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Mon, 21 Sep 2020 10:40:42 -0400
+        id S1727804AbgIUOlL (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Mon, 21 Sep 2020 10:41:11 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 52483221EC;
-        Mon, 21 Sep 2020 14:40:41 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id EF747238A1;
+        Mon, 21 Sep 2020 14:41:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1600699241;
-        bh=lf35bmvkVf58PLzv2uXzL4aMrtSeqejjPYhEr5ev3Wc=;
+        s=default; t=1600699267;
+        bh=c+BtdsoEL/TbNxvyh/KaWEjduuXtxTnCLoMjV2rtJOY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=C65I3KKaWvQ5pT9lmTTkPmpVDhLdqawKwUlXNU8J3F+afFwgYuV5d7+O6Kg3nzKDY
-         K9rMVopF2rXtNzKrVq2JtHlmWMGZQ3+jYQer6bSaYnWik8KV9SiumODHMM+JAosMda
-         CCG4jmpOl29ThNzFkxPhdCSZDEHnt/y4IVqiyxwQ=
+        b=0UpzQymXRpY1wz7LzzCAKQIEZHb/l1n/bsPeLUQ3T2Dt/WMVGgnYlb+I0rxxe6vfl
+         hvlK/d7L07S2hByUryDp204iWKbDhAb3FFA1EHN0LSxXXthtFJYCF0Gg1W7sk5FEEr
+         wUq01e49EywoHJ9nMYrX9SeCBZU97J2wdYwpVjKM=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Borislav Petkov <bp@suse.de>, Sasha Levin <sashal@kernel.org>,
         linux-edac@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.8 11/20] EDAC/ghes: Check whether the driver is on the safe list correctly
-Date:   Mon, 21 Sep 2020 10:40:18 -0400
-Message-Id: <20200921144027.2135390-11-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.4 10/15] EDAC/ghes: Check whether the driver is on the safe list correctly
+Date:   Mon, 21 Sep 2020 10:40:49 -0400
+Message-Id: <20200921144054.2135602-10-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200921144027.2135390-1-sashal@kernel.org>
-References: <20200921144027.2135390-1-sashal@kernel.org>
+In-Reply-To: <20200921144054.2135602-1-sashal@kernel.org>
+References: <20200921144054.2135602-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -109,10 +109,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 4 insertions(+)
 
 diff --git a/drivers/edac/ghes_edac.c b/drivers/edac/ghes_edac.c
-index cb3dab56a875d..efad23575b16b 100644
+index 523dd56a798c9..0031819402d0c 100644
 --- a/drivers/edac/ghes_edac.c
 +++ b/drivers/edac/ghes_edac.c
-@@ -469,6 +469,7 @@ int ghes_edac_register(struct ghes *ghes, struct device *dev)
+@@ -488,6 +488,7 @@ int ghes_edac_register(struct ghes *ghes, struct device *dev)
  		if (!force_load && idx < 0)
  			return -ENODEV;
  	} else {
@@ -120,7 +120,7 @@ index cb3dab56a875d..efad23575b16b 100644
  		idx = 0;
  	}
  
-@@ -566,6 +567,9 @@ void ghes_edac_unregister(struct ghes *ghes)
+@@ -586,6 +587,9 @@ void ghes_edac_unregister(struct ghes *ghes)
  	struct mem_ctl_info *mci;
  	unsigned long flags;
  
