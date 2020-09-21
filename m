@@ -2,110 +2,134 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C8F1272665
-	for <lists+linux-edac@lfdr.de>; Mon, 21 Sep 2020 15:58:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C67E627287F
+	for <lists+linux-edac@lfdr.de>; Mon, 21 Sep 2020 16:44:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726950AbgIUN61 (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Mon, 21 Sep 2020 09:58:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36552 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726643AbgIUN6Y (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Mon, 21 Sep 2020 09:58:24 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE0FAC061755;
-        Mon, 21 Sep 2020 06:58:23 -0700 (PDT)
-Received: from zn.tnic (p200300ec2f07e300be7bcf3e7fc25083.dip0.t-ipconnect.de [IPv6:2003:ec:2f07:e300:be7b:cf3e:7fc2:5083])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        id S1728247AbgIUOnc (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Mon, 21 Sep 2020 10:43:32 -0400
+Received: from mail.kernel.org ([198.145.29.99]:49348 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727856AbgIUOkm (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Mon, 21 Sep 2020 10:40:42 -0400
+Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 784F61EC03CE;
-        Mon, 21 Sep 2020 15:58:22 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1600696702;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=d06x5TqtnNiH9Kt79EMMPddIKI/nF54f7588TlbfKnw=;
-        b=hIk76tPSRPkMfQPYuXeScjMCrAGP0emWurfVxuiodcTgesUBC9YXrJSPFjnVc4i6b31MCU
-        Gqs5kWZkyfi1cfOSd+oKK59LbKMmye0r+vSwkuk6piD4vkh/tGxtJEoewEmbYyYQbBNbym
-        KipGX8XpyodbV6h9MALNzthPKTLzjjA=
-Date:   Mon, 21 Sep 2020 15:58:21 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Yazen Ghannam <Yazen.Ghannam@amd.com>
-Cc:     linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
-        tony.luck@intel.com, x86@kernel.org,
-        Smita.KoralahalliChannabasappa@amd.com
-Subject: Re: [PATCH v2 5/8] x86/MCE/AMD: Use macros to get bitfields in
- translation code
-Message-ID: <20200921135821.GH5901@zn.tnic>
-References: <20200903200144.310991-1-Yazen.Ghannam@amd.com>
- <20200903200144.310991-6-Yazen.Ghannam@amd.com>
+        by mail.kernel.org (Postfix) with ESMTPSA id 52483221EC;
+        Mon, 21 Sep 2020 14:40:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1600699241;
+        bh=lf35bmvkVf58PLzv2uXzL4aMrtSeqejjPYhEr5ev3Wc=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=C65I3KKaWvQ5pT9lmTTkPmpVDhLdqawKwUlXNU8J3F+afFwgYuV5d7+O6Kg3nzKDY
+         K9rMVopF2rXtNzKrVq2JtHlmWMGZQ3+jYQer6bSaYnWik8KV9SiumODHMM+JAosMda
+         CCG4jmpOl29ThNzFkxPhdCSZDEHnt/y4IVqiyxwQ=
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Borislav Petkov <bp@suse.de>, Sasha Levin <sashal@kernel.org>,
+        linux-edac@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.8 11/20] EDAC/ghes: Check whether the driver is on the safe list correctly
+Date:   Mon, 21 Sep 2020 10:40:18 -0400
+Message-Id: <20200921144027.2135390-11-sashal@kernel.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20200921144027.2135390-1-sashal@kernel.org>
+References: <20200921144027.2135390-1-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20200903200144.310991-6-Yazen.Ghannam@amd.com>
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Thu, Sep 03, 2020 at 08:01:41PM +0000, Yazen Ghannam wrote:
-> From: Yazen Ghannam <yazen.ghannam@amd.com>
-> 
-> Define macros to get individual bits and bitfields. Use these to make
-> the code more readable.
-> 
-> Signed-off-by: Yazen Ghannam <yazen.ghannam@amd.com>
-> ---
-> Link:
-> https://lkml.kernel.org/r/20200814191449.183998-3-Yazen.Ghannam@amd.com
-> 
-> v1 -> v2:
-> * New patch based on comments for v1 Patch 2.
-> 
->  arch/x86/kernel/cpu/mce/amd.c | 46 +++++++++++++++++------------------
->  1 file changed, 23 insertions(+), 23 deletions(-)
-> 
-> diff --git a/arch/x86/kernel/cpu/mce/amd.c b/arch/x86/kernel/cpu/mce/amd.c
-> index 1e0510fd5afc..90c3ad61ae19 100644
-> --- a/arch/x86/kernel/cpu/mce/amd.c
-> +++ b/arch/x86/kernel/cpu/mce/amd.c
-> @@ -675,6 +675,9 @@ void mce_amd_feature_init(struct cpuinfo_x86 *c)
->  		deferred_error_interrupt_enable(c);
->  }
->  
-> +#define get_bits(x, msb, lsb)	((x & GENMASK_ULL(msb, lsb)) >> lsb)
-> +#define get_bit(x, bit)		((x >> bit) & BIT(0))
-> +
->  #define DF_F0_FABRICINSTINFO3	0x50
->  #define DF_F0_MMIOHOLE		0x104
->  #define DF_F0_DRAMBASEADDR	0x110
-> @@ -704,7 +707,7 @@ int umc_normaddr_to_sysaddr(u64 norm_addr, u16 nid, u8 umc, u64 *sys_addr)
->  
->  	/* Remove HiAddrOffset from normalized address, if enabled: */
->  	if (tmp & BIT(0)) {
-> -		u64 hi_addr_offset = (tmp & GENMASK_ULL(31, 20)) << 8;
-> +		u64 hi_addr_offset = get_bits(tmp, 31, 20) << 28;
->  
->  		/* Check if base 1 is used. */
->  		if (norm_addr >= hi_addr_offset) {
-> @@ -723,10 +726,10 @@ int umc_normaddr_to_sysaddr(u64 norm_addr, u16 nid, u8 umc, u64 *sys_addr)
->  		goto out_err;
->  	}
->  
-> -	lgcy_mmio_hole_en = tmp & BIT(1);
-> -	intlv_num_chan	  = (tmp >> 4) & 0xF;
-> -	intlv_addr_sel	  = (tmp >> 8) & 0x7;
-> -	dram_base_addr	  = (tmp & GENMASK_ULL(31, 12)) << 16;
-> +	lgcy_mmio_hole_en = get_bit(tmp, 1);
-> +	intlv_num_chan	  = get_bits(tmp, 7, 4);
-> +	intlv_addr_sel	  = get_bits(tmp, 10, 8);
-> +	dram_base_addr	  = get_bits(tmp, 31, 12) << 28;
+From: Borislav Petkov <bp@suse.de>
 
-I can't say that those macros make it more readable. Now I have to go
-lookup what the arguments are. I guess I can imagine what the msb and
-lsb is but meh...
+[ Upstream commit 251c54ea26fa6029b01a76161a37a12fde5124e4 ]
 
+With CONFIG_DEBUG_TEST_DRIVER_REMOVE=y, a system would try to probe,
+unregister and probe again a driver.
+
+When ghes_edac is attempted to be loaded on a system which is not on
+the safe platforms list, ghes_edac_register() would return early. The
+unregister counterpart ghes_edac_unregister() would still attempt to
+unregister and exit early at the refcount test, leading to the refcount
+underflow below.
+
+In order to not do *anything* on the unregister path too, reuse the
+force_load parameter and check it on that path too, before fumbling with
+the refcount.
+
+  ghes_edac: ghes_edac_register: entry
+  ghes_edac: ghes_edac_register: return -ENODEV
+  ------------[ cut here ]------------
+  refcount_t: underflow; use-after-free.
+  WARNING: CPU: 10 PID: 1 at lib/refcount.c:28 refcount_warn_saturate+0xb9/0x100
+  Modules linked in:
+  CPU: 10 PID: 1 Comm: swapper/0 Not tainted 5.9.0-rc4+ #12
+  Hardware name: GIGABYTE MZ01-CE1-00/MZ01-CE1-00, BIOS F02 08/29/2018
+  RIP: 0010:refcount_warn_saturate+0xb9/0x100
+  Code: 82 e8 fb 8f 4d 00 90 0f 0b 90 90 c3 80 3d 55 4c f5 00 00 75 88 c6 05 4c 4c f5 00 01 90 48 c7 c7 d0 8a 10 82 e8 d8 8f 4d 00 90 <0f> 0b 90 90 c3 80 3d 30 4c f5 00 00 0f 85 61 ff ff ff c6 05 23 4c
+  RSP: 0018:ffffc90000037d58 EFLAGS: 00010292
+  RAX: 0000000000000026 RBX: ffff88840b8da000 RCX: 0000000000000000
+  RDX: 0000000000000001 RSI: ffffffff8216b24f RDI: 00000000ffffffff
+  RBP: ffff88840c662e00 R08: 0000000000000001 R09: 0000000000000001
+  R10: 0000000000000001 R11: 0000000000000046 R12: 0000000000000000
+  R13: 0000000000000001 R14: 0000000000000000 R15: 0000000000000000
+  FS:  0000000000000000(0000) GS:ffff88840ee80000(0000) knlGS:0000000000000000
+  CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+  CR2: 0000000000000000 CR3: 0000800002211000 CR4: 00000000003506e0
+  Call Trace:
+   ghes_edac_unregister
+   ghes_remove
+   platform_drv_remove
+   really_probe
+   driver_probe_device
+   device_driver_attach
+   __driver_attach
+   ? device_driver_attach
+   ? device_driver_attach
+   bus_for_each_dev
+   bus_add_driver
+   driver_register
+   ? bert_init
+   ghes_init
+   do_one_initcall
+   ? rcu_read_lock_sched_held
+   kernel_init_freeable
+   ? rest_init
+   kernel_init
+   ret_from_fork
+   ...
+  ghes_edac: ghes_edac_unregister: FALSE, refcount: -1073741824
+
+Signed-off-by: Borislav Petkov <bp@suse.de>
+Link: https://lkml.kernel.org/r/20200911164950.GB19320@zn.tnic
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/edac/ghes_edac.c | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/drivers/edac/ghes_edac.c b/drivers/edac/ghes_edac.c
+index cb3dab56a875d..efad23575b16b 100644
+--- a/drivers/edac/ghes_edac.c
++++ b/drivers/edac/ghes_edac.c
+@@ -469,6 +469,7 @@ int ghes_edac_register(struct ghes *ghes, struct device *dev)
+ 		if (!force_load && idx < 0)
+ 			return -ENODEV;
+ 	} else {
++		force_load = true;
+ 		idx = 0;
+ 	}
+ 
+@@ -566,6 +567,9 @@ void ghes_edac_unregister(struct ghes *ghes)
+ 	struct mem_ctl_info *mci;
+ 	unsigned long flags;
+ 
++	if (!force_load)
++		return;
++
+ 	mutex_lock(&ghes_reg_mutex);
+ 
+ 	if (!refcount_dec_and_test(&ghes_refcount))
 -- 
-Regards/Gruss,
-    Boris.
+2.25.1
 
-https://people.kernel.org/tglx/notes-about-netiquette
