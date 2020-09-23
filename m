@@ -2,106 +2,91 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 48E65275FC2
-	for <lists+linux-edac@lfdr.de>; Wed, 23 Sep 2020 20:25:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 69D86276377
+	for <lists+linux-edac@lfdr.de>; Thu, 24 Sep 2020 00:03:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726693AbgIWSZB (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Wed, 23 Sep 2020 14:25:01 -0400
-Received: from mail.kernel.org ([198.145.29.99]:34278 "EHLO mail.kernel.org"
+        id S1726265AbgIWWC7 (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Wed, 23 Sep 2020 18:02:59 -0400
+Received: from mga14.intel.com ([192.55.52.115]:27537 "EHLO mga14.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726419AbgIWSZB (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Wed, 23 Sep 2020 14:25:01 -0400
-Received: from mail-ot1-f41.google.com (mail-ot1-f41.google.com [209.85.210.41])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 44C0323772;
-        Wed, 23 Sep 2020 18:25:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1600885500;
-        bh=PQ694416mkyRJSudKeRj8BUutkY/M7TaA4klpl4VyS4=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=Sp25cRCfXBwQvz8IEVyYDCihyBlbXyN9B/1NISrGs9y+1srSW97VOmUQ/DE41EM0C
-         KvIwFSmNAZVLn5+WIb1cgtc1+M9/AGEhma8J+L2VwYv8Zhv5JJSifOvibXDbjv7L/B
-         zavBT3QAfrCIoTHAYA6lJ94iYn6voP9ghpnPrRQY=
-Received: by mail-ot1-f41.google.com with SMTP id h17so697446otr.1;
-        Wed, 23 Sep 2020 11:25:00 -0700 (PDT)
-X-Gm-Message-State: AOAM531jwKoa99XqRDfVN3FFGQQQl4Ur4isnYiE3LrvozmVWPq/SRHp/
-        Gd0SGQf+8Hb3TWvj3UakWvrXBYXnuumagxhQLSQ=
-X-Google-Smtp-Source: ABdhPJy9WdySVafg27Wj/nNe1H0VU72po5OOABeeZP3D0Di8Jb0nGEdDJw+uU/MGCnmXwce3EztKeBoH4saGj0jKFD8=
-X-Received: by 2002:a9d:6250:: with SMTP id i16mr677534otk.77.1600885499444;
- Wed, 23 Sep 2020 11:24:59 -0700 (PDT)
+        id S1726199AbgIWWC7 (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Wed, 23 Sep 2020 18:02:59 -0400
+IronPort-SDR: Y7ZgzXRxYLa/xUHPJzg/RtzjlDzjt0KaCN7PAkDS7jPdN0SK/Y9U0lTx/Yj1YE9e8BdgQlBsl9
+ jNxWZou5ZIvg==
+X-IronPort-AV: E=McAfee;i="6000,8403,9753"; a="160318146"
+X-IronPort-AV: E=Sophos;i="5.77,295,1596524400"; 
+   d="scan'208";a="160318146"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Sep 2020 15:02:58 -0700
+IronPort-SDR: qNh7V87aQ7Xy3N/+6fQlspqXIOsKIvIBhJYVmTuAOINcdBbjGqDUyjgCc88ffU+q7W8Aff/OiX
+ W9HV+wVrvF/w==
+X-IronPort-AV: E=Sophos;i="5.77,295,1596524400"; 
+   d="scan'208";a="486618606"
+Received: from agluck-desk2.sc.intel.com (HELO agluck-desk2.amr.corp.intel.com) ([10.3.52.68])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Sep 2020 15:02:58 -0700
+Date:   Wed, 23 Sep 2020 15:02:57 -0700
+From:   "Luck, Tony" <tony.luck@intel.com>
+To:     minyard@acm.org
+Cc:     Borislav Petkov <bp@alien8.de>, linux-edac@vger.kernel.org,
+        Corey Minyard <cminyard@mvista.com>,
+        hidehiro.kawai.ez@hitachi.com, linfeilong@huawei.com,
+        liuzhiqiang26@huawei.com, Andy Lutomirski <luto@kernel.org>
+Subject: Re: [PATCH] x86: Fix MCE error handing when kdump is enabled
+Message-ID: <20200923220257.GA20839@agluck-desk2.amr.corp.intel.com>
+References: <20200923115742.4634-1-minyard@acm.org>
 MIME-Version: 1.0
-References: <20200904140444.161291-1-Smita.KoralahalliChannabasappa@amd.com>
- <87wo0kiz6y.fsf@kokedama.swc.toshiba.co.jp> <20200923140512.GJ28545@zn.tnic>
- <CAMj1kXH2uWEfAxTf_+6YN-Sp2VNKtaGhqAx4jyvhW3xR=0Jaug@mail.gmail.com> <20200923153941.GK28545@zn.tnic>
-In-Reply-To: <20200923153941.GK28545@zn.tnic>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Wed, 23 Sep 2020 20:24:48 +0200
-X-Gmail-Original-Message-ID: <CAMj1kXE2HR1Yd9rfyXp92WaB2k1YQ5wKskN0tZ1HwC5Ti+V3OA@mail.gmail.com>
-Message-ID: <CAMj1kXE2HR1Yd9rfyXp92WaB2k1YQ5wKskN0tZ1HwC5Ti+V3OA@mail.gmail.com>
-Subject: Re: [PATCH v4] cper, apei, mce: Pass x86 CPER through the MCA
- handling chain
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     Punit Agrawal <punit1.agrawal@toshiba.co.jp>,
-        Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>,
-        X86 ML <x86@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-pm@vger.kernel.org, linux-edac@vger.kernel.org,
-        linux-efi <linux-efi@vger.kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        devel@acpica.org, Tony Luck <tony.luck@intel.com>,
-        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Len Brown <len.brown@intel.com>,
-        Yazen Ghannam <yazen.ghannam@amd.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200923115742.4634-1-minyard@acm.org>
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Wed, 23 Sep 2020 at 17:39, Borislav Petkov <bp@alien8.de> wrote:
->
-> On Wed, Sep 23, 2020 at 04:52:18PM +0200, Ard Biesheuvel wrote:
-> > I think the question is why we are retaining this Reported-by header
-> > to begin with. Even though the early feedback is appreciated,
-> > crediting the bot for eternity for a version of the patch that never
-> > got merged seems a bit excessive. Also, it may suggest that the bot
-> > was involved in reporting an issue that the patch aims to fix but that
-> > is not the case.
->
-> That is supposed to be explained in [] properly so that there's no
-> misreading of why that tag's there.
->
-> > The last thing we want is Sasha's bot to jump on patches adding new
-> > functionality just because it has a reported-by line.
->
-> It should jump on patches which have Fixes: tags. But Sasha's bot is
-> nuts regardless. :-)
->
-> > So I suggest dropping the Reported-by credit as well as the [] context
-> > regarding v1
->
-> So I don't mind having a Reported-by: tag with an explanation of what
-> it reported. We slap all kinds of tags so having some attribution for
-> the work the 0day bot does to catch such errors is reasonable. I presume
-> they track this way how "useful" it is, by counting the Reported-by's or
-> so, as they suggest one should add a Reported-by in their reports.
->
-> And without any attribution what the 0day bot reported, it might decide
-> not to report anything next time, I'd venture a guess.
->
-> And the same argument can be had for Suggested-by: tags: one could
-> decide not to add that tag and the person who's doing the suggesting
-> might decide not to suggest anymore.
->
-> So I think something like:
->
->  [ Fix a build breakage in an earlier version. ]
-> Reported-by: 0day bot
->
-> is fine as long as it makes it perfectly clear what Reported-by tag
-> is for and as long as ts purpose for being present there is clear, I
-> don't see an issue...
->
+On Wed, Sep 23, 2020 at 06:57:42AM -0500, minyard@acm.org wrote:
+> From: Corey Minyard <cminyard@mvista.com>
+> 
+> If kdump is enabled, the handling of shooting down CPUs does not use the
+> RESET_VECTOR irq before trying to use NMIs to shoot down the CPUs.
+> 
+> For normal errors that is fine.  MCEs, however, interrupt all CPUs at
+> the same time so they are already running in an NMI, so sending them an
+> NMI won't do anything.  The MCE code in wait_for_panic() is set up to
+> receive the RESET_VECTOR because it enables irqs, but it won't work on
+> the NMI-only case.
 
-I don't think it adds much value tbh, but I am not going to obsess
-about it either.
+MCE and NMI are separate exception types ... so not accurate to say
+"already running in an NMI". Better to say somehting like: MCE has higher
+priority than NMI so the NMI is blocked until the MCE is over.
+
+> There is already code in place to scan for the NMI callback being ready,
+> simply call that from the MCE's wait_for_panic() code so it will pick up
+> and handle it if an NMI shootdown is requested.  This required
+> propagating the registers down to wait_for_panic().
+
+The code might look a little prettier if you put "regs" at the start
+of the argument list instead of at the end. Especially for the functions
+that have string message arguments.
+
+> Reported-by: Wu Bo <wubo40@huawei.com>
+> Cc: hidehiro.kawai.ez@hitachi.com
+> Cc: linfeilong@huawei.com
+> Cc: liuzhiqiang26@huawei.com
+> Signed-off-by: Corey Minyard <cminyard@mvista.com>
+> Tested-by: Wu Bo <wubo40@huawei.com>
+> ---
+> Wu Bo found this doing kdumps because the IPMI driver saves panic
+> information to the IPMI event log during a panic.  But it was getting
+> interrupts at the same time because the other cores had interrupts
+> enabled, causing the process to take a long time.
+> 
+> Having interrupt enabled during a kdump shutdown and while the new kdump
+> kernel is running is obviously a bad thing and can cause other problems,
+> too.  I think this is the right fix, but I'm not an expert in this code.
+
+I'm also uncertain if this is the best/right approach. Interaction between
+NMI, MCE, etc. is something of a rats nest. Perhaps Andy Lutomirksi may
+have ideas.
+
+-Tony
