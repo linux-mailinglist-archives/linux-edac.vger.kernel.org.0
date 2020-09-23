@@ -2,296 +2,322 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C7A892756E6
-	for <lists+linux-edac@lfdr.de>; Wed, 23 Sep 2020 13:12:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A27E1275795
+	for <lists+linux-edac@lfdr.de>; Wed, 23 Sep 2020 13:57:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726498AbgIWLMd (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Wed, 23 Sep 2020 07:12:33 -0400
-Received: from mo-csw-fb1115.securemx.jp ([210.130.202.174]:58902 "EHLO
-        mo-csw-fb.securemx.jp" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726332AbgIWLMc (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Wed, 23 Sep 2020 07:12:32 -0400
-X-Greylist: delayed 3877 seconds by postgrey-1.27 at vger.kernel.org; Wed, 23 Sep 2020 07:12:30 EDT
-Received: by mo-csw-fb.securemx.jp (mx-mo-csw-fb1115) id 08NA7t6X018693; Wed, 23 Sep 2020 19:07:56 +0900
-Received: by mo-csw.securemx.jp (mx-mo-csw1115) id 08NA7M88029552; Wed, 23 Sep 2020 19:07:22 +0900
-X-Iguazu-Qid: 2wHHjJER8cR1uaLOcL
-X-Iguazu-QSIG: v=2; s=0; t=1600855641; q=2wHHjJER8cR1uaLOcL; m=em4N8ro/bqvmQjobQrvNWahNf98bQj6KJr+hhIewB/E=
-Received: from imx12.toshiba.co.jp (imx12.toshiba.co.jp [61.202.160.132])
-        by relay.securemx.jp (mx-mr1112) id 08NA7JYQ026085;
-        Wed, 23 Sep 2020 19:07:19 +0900
-Received: from enc02.toshiba.co.jp ([61.202.160.51])
-        by imx12.toshiba.co.jp  with ESMTP id 08NA7JCE014101;
-        Wed, 23 Sep 2020 19:07:19 +0900 (JST)
-Received: from hop101.toshiba.co.jp ([133.199.85.107])
-        by enc02.toshiba.co.jp  with ESMTP id 08NA7Ik6017583;
-        Wed, 23 Sep 2020 19:07:18 +0900
-From:   Punit Agrawal <punit1.agrawal@toshiba.co.jp>
-To:     Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>
-Cc:     <x86@kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-pm@vger.kernel.org>, <linux-edac@vger.kernel.org>,
-        <linux-efi@vger.kernel.org>, <linux-acpi@vger.kernel.org>,
-        <devel@acpica.org>, Borislav Petkov <bp@alien8.de>,
-        Tony Luck <tony.luck@intel.com>,
-        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Len Brown <len.brown@intel.com>,
-        "Ard Biesheuvel" <ardb@kernel.org>,
-        Yazen Ghannam <yazen.ghannam@amd.com>
-Subject: Re: [PATCH v4] cper, apei, mce: Pass x86 CPER through the MCA handling chain
-References: <20200904140444.161291-1-Smita.KoralahalliChannabasappa@amd.com>
-Date:   Wed, 23 Sep 2020 19:07:17 +0900
-In-Reply-To: <20200904140444.161291-1-Smita.KoralahalliChannabasappa@amd.com>
-        (Smita Koralahalli's message of "Fri, 4 Sep 2020 09:04:44 -0500")
-X-TSB-HOP: ON
-Message-ID: <87wo0kiz6y.fsf@kokedama.swc.toshiba.co.jp>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.3 (gnu/linux)
-MIME-Version: 1.0
-Content-Type: text/plain
+        id S1726514AbgIWL5w (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Wed, 23 Sep 2020 07:57:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38372 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726504AbgIWL5v (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Wed, 23 Sep 2020 07:57:51 -0400
+Received: from mail-ot1-x341.google.com (mail-ot1-x341.google.com [IPv6:2607:f8b0:4864:20::341])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACC90C0613CE
+        for <linux-edac@vger.kernel.org>; Wed, 23 Sep 2020 04:57:51 -0700 (PDT)
+Received: by mail-ot1-x341.google.com with SMTP id a2so18653425otr.11
+        for <linux-edac@vger.kernel.org>; Wed, 23 Sep 2020 04:57:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:from:to:cc:subject:date:message-id;
+        bh=6na7YV2CNqhUw34VnwRnENA5O1rkcu25iJJvgyVQTsE=;
+        b=lo5RWzJkAfeVI5JxNFMz9xRm23PXkbqlPgAVIu3Gk7N+FqahkM45ILgThcUtBmDBkx
+         eU2zzHx4c0a3MInnu5/2Z+SjT0ktMaK5o69ypnbXQpzNw3ltCVvRwHM3dhwUon0wIgVq
+         Zwe0ZLsH6zT84KeAO0gKxXACKn6pSd6fF+l833yts9R0ku5DNkv9oEADYsLWXbQ5G/CR
+         Kjf16dRauBWC3l97Rndf6dTlRBB0QJkdw/xiW+jUF24qtGYcop743hdw4ND5Rc6y3iiU
+         y0/0qF7xVmCNkOELeg+qxP3Oq+T0W06uNXFH023RYTSr8ke0TaDQoMs8Fn3/4ImaHd0w
+         Fs9w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id;
+        bh=6na7YV2CNqhUw34VnwRnENA5O1rkcu25iJJvgyVQTsE=;
+        b=Jav/MVoGDwpweUoeJrL5GmzI5iKjAOK2K49zIqEgkv7KxHHDWV+u0jqw1JZ0rDh2J5
+         j3PdkQIktgNw+wdF5Pxj1KT7J0PkA3tecKUE65mDsPOb/qzwCB/g3x16/0PTXdMnwWq0
+         vJBe99dlD7/+snyNQQ1/q4lgYuPW/jP8JiwCbOmBd/guT/Gd25lrWK0aczQ4TAblYneb
+         lKZoXWx6Y8y7k4CCJP3egPEQ71XqnKXHREiZE9FY++5/BKPUm2JaFBlfa5zAux+pznlH
+         DvlhnGupxYot2gYdyScO255j7TL3Kr/bAnMceAv5QAr+rjecnYWiUkrloSjoyqU8podA
+         g2iA==
+X-Gm-Message-State: AOAM530BOv0CJyohZzTC9mMZErba3/cKw1MjImHEJi+WrsCKwbhQnwG/
+        aMUWOL7AupQ13Y1pTvtj76oxim08qyTG
+X-Google-Smtp-Source: ABdhPJxLYGPsZmeAd3+HOUsTpGRrSMFq5/D5v7TfwHWkkLIsAQxvB2pJoaGJjIxiky3BqufIf8xjow==
+X-Received: by 2002:a9d:3b84:: with SMTP id k4mr6334549otc.4.1600862271008;
+        Wed, 23 Sep 2020 04:57:51 -0700 (PDT)
+Received: from serve.minyard.net ([47.184.170.156])
+        by smtp.gmail.com with ESMTPSA id b17sm9040883oog.25.2020.09.23.04.57.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 23 Sep 2020 04:57:50 -0700 (PDT)
+Sender: Corey Minyard <tcminyard@gmail.com>
+Received: from t560.mvista.com (unknown [IPv6:2001:470:b8f6:1b:bda8:cea9:424f:cdc4])
+        by serve.minyard.net (Postfix) with ESMTPA id D7ABA18003B;
+        Wed, 23 Sep 2020 11:57:48 +0000 (UTC)
+From:   minyard@acm.org
+To:     Tony Luck <tony.luck@intel.com>, Borislav Petkov <bp@alien8.de>
+Cc:     linux-edac@vger.kernel.org, Corey Minyard <cminyard@mvista.com>,
+        hidehiro.kawai.ez@hitachi.com, linfeilong@huawei.com,
+        liuzhiqiang26@huawei.com
+Subject: [PATCH] x86: Fix MCE error handing when kdump is enabled
+Date:   Wed, 23 Sep 2020 06:57:42 -0500
+Message-Id: <20200923115742.4634-1-minyard@acm.org>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-Hi Smita,
+From: Corey Minyard <cminyard@mvista.com>
 
-A few comments below.
+If kdump is enabled, the handling of shooting down CPUs does not use the
+RESET_VECTOR irq before trying to use NMIs to shoot down the CPUs.
 
-Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com> writes:
+For normal errors that is fine.  MCEs, however, interrupt all CPUs at
+the same time so they are already running in an NMI, so sending them an
+NMI won't do anything.  The MCE code in wait_for_panic() is set up to
+receive the RESET_VECTOR because it enables irqs, but it won't work on
+the NMI-only case.
 
-> Linux Kernel uses ACPI Boot Error Record Table (BERT) to report fatal
-> errors that occurred in a previous boot. The MCA errors in the BERT are
-> reported using the x86 Processor Error Common Platform Error Record (CPER)
-> format. Currently, the record prints out the raw MSR values and AMD relies
-> on the raw record to provide MCA information.
->
-> Extract the raw MSR values of MCA registers from the BERT and feed it into
-> the standard mce_log() function through the existing x86/MCA RAS
-> infrastructure. This will result in better decoding from the EDAC MCE
-> decoder or the default notifier.
->
-> The implementation is SMCA specific as the raw MCA register values are
-> given in the register offset order of the MCAX address space.
->
-> [ Build error in patch v1. ]
->
-> Reported-by: kernel test robot <lkp@intel.com>
+There is already code in place to scan for the NMI callback being ready,
+simply call that from the MCE's wait_for_panic() code so it will pick up
+and handle it if an NMI shootdown is requested.  This required
+propagating the registers down to wait_for_panic().
 
-I know Boris asked you to add the reason for the Reported-by, but
-usually we don't track version differences in the committed patch.
+Reported-by: Wu Bo <wubo40@huawei.com>
+Cc: hidehiro.kawai.ez@hitachi.com
+Cc: linfeilong@huawei.com
+Cc: liuzhiqiang26@huawei.com
+Signed-off-by: Corey Minyard <cminyard@mvista.com>
+Tested-by: Wu Bo <wubo40@huawei.com>
+---
+Wu Bo found this doing kdumps because the IPMI driver saves panic
+information to the IPMI event log during a panic.  But it was getting
+interrupts at the same time because the other cores had interrupts
+enabled, causing the process to take a long time.
 
-Boris, can you confirm if you want the Reported-by to be retained?
-
-> Signed-off-by: Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>
-> ---
-> Link:
-> https://lkml.kernel.org/r/20200903234531.162484-2-Smita.KoralahalliChannabasappa@amd.com
->
-> v4:
-> 	Included what kernel test robot reported.
-> 	Changed function name from apei_mce_report_x86_error ->
-> 	apei_smca_report_x86_error.
-> 	Added comment for MASK_MCA_STATUS definition.
-> 	Wrapped apei_smca_report_x86_error() with CONFIG_X86_MCE in
-> 	arch/x86/include/asm/mce.h
-> v3:
-> 	Moved arch specific declarations from generic headers to arch
-> 	specific headers.
-> 	Cleaned additional declarations which are unnecessary.
-> 	Included the check for context type.
-> 	Added additional check to verify for appropriate MSR address in
-> 	the register layout.
-> v2:
-> 	Fixed build error reported by kernel test robot.
-> 	Passed struct variable as function argument instead of entire struct.
-> ---
->  arch/x86/include/asm/acpi.h     | 11 ++++++++
->  arch/x86/include/asm/mce.h      |  5 ++++
->  arch/x86/kernel/acpi/apei.c     |  5 ++++
->  arch/x86/kernel/cpu/mce/apei.c  | 49 +++++++++++++++++++++++++++++++++
->  drivers/firmware/efi/cper-x86.c | 10 +++++--
->  5 files changed, 77 insertions(+), 3 deletions(-)
->
-> diff --git a/arch/x86/include/asm/acpi.h b/arch/x86/include/asm/acpi.h
-> index 6d2df1ee427b..65064d9f7fa6 100644
-> --- a/arch/x86/include/asm/acpi.h
-> +++ b/arch/x86/include/asm/acpi.h
-> @@ -159,6 +159,8 @@ static inline u64 x86_default_get_root_pointer(void)
->  extern int x86_acpi_numa_init(void);
->  #endif /* CONFIG_ACPI_NUMA */
->  
-> +struct cper_ia_proc_ctx;
-> +
->  #ifdef CONFIG_ACPI_APEI
->  static inline pgprot_t arch_apei_get_mem_attribute(phys_addr_t addr)
->  {
-> @@ -177,6 +179,15 @@ static inline pgprot_t arch_apei_get_mem_attribute(phys_addr_t addr)
->  	 */
->  	return PAGE_KERNEL_NOENC;
->  }
-> +
-> +int arch_apei_report_x86_error(struct cper_ia_proc_ctx *ctx_info,
-> +			       u64 lapic_id);
-> +#else
-> +static inline int arch_apei_report_x86_error(struct cper_ia_proc_ctx *ctx_info,
-> +					     u64 lapic_id)
-> +{
-> +	return -EINVAL;
-> +}
->  #endif
->  
->  #define ACPI_TABLE_UPGRADE_MAX_PHYS (max_low_pfn_mapped << PAGE_SHIFT)
-> diff --git a/arch/x86/include/asm/mce.h b/arch/x86/include/asm/mce.h
-> index 109af5c7f515..d07bd635acfd 100644
-> --- a/arch/x86/include/asm/mce.h
-> +++ b/arch/x86/include/asm/mce.h
-> @@ -173,17 +173,22 @@ extern void mce_unregister_decode_chain(struct notifier_block *nb);
->  #include <linux/atomic.h>
->  
->  extern int mce_p5_enabled;
-> +struct cper_ia_proc_ctx;
->  
->  #ifdef CONFIG_X86_MCE
->  int mcheck_init(void);
->  void mcheck_cpu_init(struct cpuinfo_x86 *c);
->  void mcheck_cpu_clear(struct cpuinfo_x86 *c);
->  void mcheck_vendor_init_severity(void);
-> +int apei_smca_report_x86_error(struct cper_ia_proc_ctx *ctx_info,
-> +			       u64 lapic_id);
->  #else
->  static inline int mcheck_init(void) { return 0; }
->  static inline void mcheck_cpu_init(struct cpuinfo_x86 *c) {}
->  static inline void mcheck_cpu_clear(struct cpuinfo_x86 *c) {}
->  static inline void mcheck_vendor_init_severity(void) {}
-> +static inline int apei_smca_report_x86_error(struct cper_ia_proc_ctx *ctx_info,
-> +					     u64 lapic_id) { return -EINVAL; }
->  #endif
->  
->  #ifdef CONFIG_X86_ANCIENT_MCE
-> diff --git a/arch/x86/kernel/acpi/apei.c b/arch/x86/kernel/acpi/apei.c
-> index c22fb55abcfd..0916f00a992e 100644
-> --- a/arch/x86/kernel/acpi/apei.c
-> +++ b/arch/x86/kernel/acpi/apei.c
-> @@ -43,3 +43,8 @@ void arch_apei_report_mem_error(int sev, struct cper_sec_mem_err *mem_err)
->  	apei_mce_report_mem_error(sev, mem_err);
->  #endif
->  }
-> +
-> +int arch_apei_report_x86_error(struct cper_ia_proc_ctx *ctx_info, u64 lapic_id)
-> +{
-> +	return apei_smca_report_x86_error(ctx_info, lapic_id);
-> +}
-> diff --git a/arch/x86/kernel/cpu/mce/apei.c b/arch/x86/kernel/cpu/mce/apei.c
-> index af8d37962586..d4b3a2053eef 100644
-> --- a/arch/x86/kernel/cpu/mce/apei.c
-> +++ b/arch/x86/kernel/cpu/mce/apei.c
-> @@ -51,6 +51,55 @@ void apei_mce_report_mem_error(int severity, struct cper_sec_mem_err *mem_err)
->  }
->  EXPORT_SYMBOL_GPL(apei_mce_report_mem_error);
->  
-> +/*
-> + * The first expected register in the register layout of MCAX address space.
-> + * The address defined must match with the first MSR address extracted from
-> + * BERT which in SMCA systems is the bank's MCA_STATUS register.
-> + *
-> + * Note that the decoding of the raw MSR values in BERT is implementation
-> + * specific and follows register offset order of MCAX address space.
-> + */
-> +#define MASK_MCA_STATUS 0xC0002001
-
-The macro value is already defined in mce.h as
-MSR_AMD64_SMCA_MC0_STATUS.  Is there any reason to not use it?
-
-You can move the comment to where you check the status register.
-
-
-> +
-> +int apei_smca_report_x86_error(struct cper_ia_proc_ctx *ctx_info, u64 lapic_id)
-> +{
-> +	const u64 *i_mce = ((const void *) (ctx_info + 1));
-
-This can directly be cast into (const u64 *).
-
-> +	unsigned int cpu;
-> +	struct mce m;
-> +
-> +	if (!boot_cpu_has(X86_FEATURE_SMCA))
-> +		return -EINVAL;
-> +
-> +	if ((ctx_info->msr_addr & MASK_MCA_STATUS) != MASK_MCA_STATUS)
-> +		return -EINVAL;
-> +
-> +	mce_setup(&m);
-> +
-> +	m.extcpu = -1;
-> +	m.socketid = -1;
-> +
-> +	for_each_possible_cpu(cpu) {
-> +		if (cpu_data(cpu).initial_apicid == lapic_id) {
-> +			m.extcpu = cpu;
-> +			m.socketid = cpu_data(m.extcpu).phys_proc_id;
-> +			break;
-> +		}
-> +	}
-> +
-> +	m.apicid = lapic_id;
-> +	m.bank = (ctx_info->msr_addr >> 4) & 0xFF;
-> +	m.status = *i_mce;
-> +	m.addr = *(i_mce + 1);
-> +	m.misc = *(i_mce + 2);
-> +	/* Skipping MCA_CONFIG */
-> +	m.ipid = *(i_mce + 4);
-> +	m.synd = *(i_mce + 5);
-
-Instead of using the raw pointer arithmetic, it is better to define a
-structure for the MCA registers? Something like -
-
-    struct {
-        u64 addr;
-        u64 misc;
-        u64 config;
-        u64 ipid;
-        ...
-    }
-
-Checking back, this was mentioned in the previous review comments as
-well. Please address all comments before posting a new version - either
-by following the suggestion or explaining why it is not a good idea.
+Having interrupt enabled during a kdump shutdown and while the new kdump
+kernel is running is obviously a bad thing and can cause other problems,
+too.  I think this is the right fix, but I'm not an expert in this code.
 
 Thanks,
-Punit
 
-> +
-> +	mce_log(&m);
-> +
-> +	return 0;
-> +}
-> +
->  #define CPER_CREATOR_MCE						\
->  	GUID_INIT(0x75a574e3, 0x5052, 0x4b29, 0x8a, 0x8e, 0xbe, 0x2c,	\
->  		  0x64, 0x90, 0xb8, 0x9d)
-> diff --git a/drivers/firmware/efi/cper-x86.c b/drivers/firmware/efi/cper-x86.c
-> index 2531de49f56c..2f2b0c431c18 100644
-> --- a/drivers/firmware/efi/cper-x86.c
-> +++ b/drivers/firmware/efi/cper-x86.c
-> @@ -2,6 +2,7 @@
->  // Copyright (C) 2018, Advanced Micro Devices, Inc.
->  
->  #include <linux/cper.h>
-> +#include <linux/acpi.h>
->  
->  /*
->   * We don't need a "CPER_IA" prefix since these are all locally defined.
-> @@ -347,9 +348,12 @@ void cper_print_proc_ia(const char *pfx, const struct cper_sec_proc_ia *proc)
->  			       ctx_info->mm_reg_addr);
->  		}
->  
-> -		printk("%sRegister Array:\n", newpfx);
-> -		print_hex_dump(newpfx, "", DUMP_PREFIX_OFFSET, 16, groupsize,
-> -			       (ctx_info + 1), ctx_info->reg_arr_size, 0);
-> +		if (ctx_info->reg_ctx_type != CTX_TYPE_MSR ||
-> +		    arch_apei_report_x86_error(ctx_info, proc->lapic_id)) {
-> +			printk("%sRegister Array:\n", newpfx);
-> +			print_hex_dump(newpfx, "", DUMP_PREFIX_OFFSET, 16, groupsize,
-> +				       (ctx_info + 1), ctx_info->reg_arr_size, 0);
-> +		}
->  
->  		ctx_info = (struct cper_ia_proc_ctx *)((long)ctx_info + size);
->  	}
+-corey
+
+ arch/x86/kernel/cpu/mce/core.c | 67 ++++++++++++++++++++++------------
+ 1 file changed, 44 insertions(+), 23 deletions(-)
+
+diff --git a/arch/x86/kernel/cpu/mce/core.c b/arch/x86/kernel/cpu/mce/core.c
+index f43a78bde670..3a842b3773b3 100644
+--- a/arch/x86/kernel/cpu/mce/core.c
++++ b/arch/x86/kernel/cpu/mce/core.c
+@@ -282,20 +282,35 @@ static int fake_panic;
+ static atomic_t mce_fake_panicked;
+ 
+ /* Panic in progress. Enable interrupts and wait for final IPI */
+-static void wait_for_panic(void)
++static void wait_for_panic(struct pt_regs *regs)
+ {
+ 	long timeout = PANIC_TIMEOUT*USEC_PER_SEC;
+ 
+ 	preempt_disable();
+ 	local_irq_enable();
+-	while (timeout-- > 0)
++	while (timeout-- > 0) {
++		/*
++		 * We are in an NMI waiting to be stopped by the
++		 * handing processor.  For kdump handling, we need to
++		 * be monitoring crash_ipi_issued since that is what
++		 * is used for an NMI stop used by kdump.  But we also
++		 * need to have interrupts enabled some so that
++		 * RESET_VECTOR will interrupt us on a normal
++		 * shutdown.
++		 */
++		local_irq_disable();
++		run_crash_ipi_callback(regs);
++		local_irq_enable();
++
+ 		udelay(1);
++	}
+ 	if (panic_timeout == 0)
+ 		panic_timeout = mca_cfg.panic_timeout;
+ 	panic("Panicing machine check CPU died");
+ }
+ 
+-static void mce_panic(const char *msg, struct mce *final, char *exp)
++static void mce_panic(const char *msg, struct mce *final, char *exp,
++		      struct pt_regs *regs)
+ {
+ 	int apei_err = 0;
+ 	struct llist_node *pending;
+@@ -306,7 +321,7 @@ static void mce_panic(const char *msg, struct mce *final, char *exp)
+ 		 * Make sure only one CPU runs in machine check panic
+ 		 */
+ 		if (atomic_inc_return(&mce_panicked) > 1)
+-			wait_for_panic();
++			wait_for_panic(regs);
+ 		barrier();
+ 
+ 		bust_spinlocks(1);
+@@ -817,7 +832,7 @@ static atomic_t mce_callin;
+ /*
+  * Check if a timeout waiting for other CPUs happened.
+  */
+-static int mce_timed_out(u64 *t, const char *msg)
++static int mce_timed_out(u64 *t, const char *msg, struct pt_regs *regs)
+ {
+ 	/*
+ 	 * The others already did panic for some reason.
+@@ -827,12 +842,12 @@ static int mce_timed_out(u64 *t, const char *msg)
+ 	 */
+ 	rmb();
+ 	if (atomic_read(&mce_panicked))
+-		wait_for_panic();
++		wait_for_panic(regs);
+ 	if (!mca_cfg.monarch_timeout)
+ 		goto out;
+ 	if ((s64)*t < SPINUNIT) {
+ 		if (mca_cfg.tolerant <= 1)
+-			mce_panic(msg, NULL, NULL);
++			mce_panic(msg, NULL, NULL, regs);
+ 		cpu_missing = 1;
+ 		return 1;
+ 	}
+@@ -866,7 +881,7 @@ static int mce_timed_out(u64 *t, const char *msg)
+  * All the spin loops have timeouts; when a timeout happens a CPU
+  * typically elects itself to be Monarch.
+  */
+-static void mce_reign(void)
++static void mce_reign(struct pt_regs *regs)
+ {
+ 	int cpu;
+ 	struct mce *m = NULL;
+@@ -896,7 +911,7 @@ static void mce_reign(void)
+ 	 * other CPUs.
+ 	 */
+ 	if (m && global_worst >= MCE_PANIC_SEVERITY && mca_cfg.tolerant < 3)
+-		mce_panic("Fatal machine check", m, msg);
++		mce_panic("Fatal machine check", m, msg, regs);
+ 
+ 	/*
+ 	 * For UC somewhere we let the CPU who detects it handle it.
+@@ -909,7 +924,8 @@ static void mce_reign(void)
+ 	 * source or one CPU is hung. Panic.
+ 	 */
+ 	if (global_worst <= MCE_KEEP_SEVERITY && mca_cfg.tolerant < 3)
+-		mce_panic("Fatal machine check from unknown source", NULL, NULL);
++		mce_panic("Fatal machine check from unknown source", NULL, NULL,
++			  regs);
+ 
+ 	/*
+ 	 * Now clear all the mces_seen so that they don't reappear on
+@@ -928,7 +944,7 @@ static atomic_t global_nwo;
+  * in the entry order.
+  * TBD double check parallel CPU hotunplug
+  */
+-static int mce_start(int *no_way_out)
++static int mce_start(int *no_way_out, struct pt_regs *regs)
+ {
+ 	int order;
+ 	int cpus = num_online_cpus();
+@@ -949,7 +965,8 @@ static int mce_start(int *no_way_out)
+ 	 */
+ 	while (atomic_read(&mce_callin) != cpus) {
+ 		if (mce_timed_out(&timeout,
+-				  "Timeout: Not all CPUs entered broadcast exception handler")) {
++				  "Timeout: Not all CPUs entered broadcast exception handler",
++				  regs)) {
+ 			atomic_set(&global_nwo, 0);
+ 			return -1;
+ 		}
+@@ -975,7 +992,8 @@ static int mce_start(int *no_way_out)
+ 		 */
+ 		while (atomic_read(&mce_executing) < order) {
+ 			if (mce_timed_out(&timeout,
+-					  "Timeout: Subject CPUs unable to finish machine check processing")) {
++					  "Timeout: Subject CPUs unable to finish machine check processing",
++					  regs)) {
+ 				atomic_set(&global_nwo, 0);
+ 				return -1;
+ 			}
+@@ -995,7 +1013,7 @@ static int mce_start(int *no_way_out)
+  * Synchronize between CPUs after main scanning loop.
+  * This invokes the bulk of the Monarch processing.
+  */
+-static int mce_end(int order)
++static int mce_end(int order, struct pt_regs *regs)
+ {
+ 	int ret = -1;
+ 	u64 timeout = (u64)mca_cfg.monarch_timeout * NSEC_PER_USEC;
+@@ -1020,12 +1038,13 @@ static int mce_end(int order)
+ 		 */
+ 		while (atomic_read(&mce_executing) <= cpus) {
+ 			if (mce_timed_out(&timeout,
+-					  "Timeout: Monarch CPU unable to finish machine check processing"))
++					  "Timeout: Monarch CPU unable to finish machine check processing",
++					  regs))
+ 				goto reset;
+ 			ndelay(SPINUNIT);
+ 		}
+ 
+-		mce_reign();
++		mce_reign(regs);
+ 		barrier();
+ 		ret = 0;
+ 	} else {
+@@ -1034,7 +1053,8 @@ static int mce_end(int order)
+ 		 */
+ 		while (atomic_read(&mce_executing) != 0) {
+ 			if (mce_timed_out(&timeout,
+-					  "Timeout: Monarch CPU did not finish machine check processing"))
++					  "Timeout: Monarch CPU did not finish machine check processing",
++					  regs))
+ 				goto reset;
+ 			ndelay(SPINUNIT);
+ 		}
+@@ -1286,9 +1306,9 @@ noinstr void do_machine_check(struct pt_regs *regs)
+ 	 */
+ 	if (lmce) {
+ 		if (no_way_out)
+-			mce_panic("Fatal local machine check", &m, msg);
++			mce_panic("Fatal local machine check", &m, msg, regs);
+ 	} else {
+-		order = mce_start(&no_way_out);
++		order = mce_start(&no_way_out, regs);
+ 	}
+ 
+ 	__mc_scan_banks(&m, final, toclear, valid_banks, no_way_out, &worst);
+@@ -1301,7 +1321,7 @@ noinstr void do_machine_check(struct pt_regs *regs)
+ 	 * When there's any problem use only local no_way_out state.
+ 	 */
+ 	if (!lmce) {
+-		if (mce_end(order) < 0)
++		if (mce_end(order, regs) < 0)
+ 			no_way_out = worst >= MCE_PANIC_SEVERITY;
+ 	} else {
+ 		/*
+@@ -1314,7 +1334,7 @@ noinstr void do_machine_check(struct pt_regs *regs)
+ 		 */
+ 		if (worst >= MCE_PANIC_SEVERITY && mca_cfg.tolerant < 3) {
+ 			mce_severity(&m, cfg->tolerant, &msg, true);
+-			mce_panic("Local fatal machine check!", &m, msg);
++			mce_panic("Local fatal machine check!", &m, msg, regs);
+ 		}
+ 	}
+ 
+@@ -1325,7 +1345,7 @@ noinstr void do_machine_check(struct pt_regs *regs)
+ 	if (cfg->tolerant == 3)
+ 		kill_it = 0;
+ 	else if (no_way_out)
+-		mce_panic("Fatal machine check on current CPU", &m, msg);
++		mce_panic("Fatal machine check on current CPU", &m, msg, regs);
+ 
+ 	if (worst > 0)
+ 		irq_work_queue(&mce_irq_work);
+@@ -1361,7 +1381,8 @@ noinstr void do_machine_check(struct pt_regs *regs)
+ 		 */
+ 		if (m.kflags & MCE_IN_KERNEL_RECOV) {
+ 			if (!fixup_exception(regs, X86_TRAP_MC, 0, 0))
+-				mce_panic("Failed kernel mode recovery", &m, msg);
++				mce_panic("Failed kernel mode recovery", &m,
++					  msg, regs);
+ 		}
+ 	}
+ }
+-- 
+2.17.1
+
