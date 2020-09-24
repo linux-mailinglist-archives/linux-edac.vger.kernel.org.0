@@ -2,135 +2,150 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D982276489
-	for <lists+linux-edac@lfdr.de>; Thu, 24 Sep 2020 01:32:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A48E12764D9
+	for <lists+linux-edac@lfdr.de>; Thu, 24 Sep 2020 02:03:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726650AbgIWXcX (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Wed, 23 Sep 2020 19:32:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60762 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726605AbgIWXcQ (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Wed, 23 Sep 2020 19:32:16 -0400
-Received: from mail-ot1-x343.google.com (mail-ot1-x343.google.com [IPv6:2607:f8b0:4864:20::343])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 365DEC0613CE
-        for <linux-edac@vger.kernel.org>; Wed, 23 Sep 2020 16:32:15 -0700 (PDT)
-Received: by mail-ot1-x343.google.com with SMTP id n61so1397260ota.10
-        for <linux-edac@vger.kernel.org>; Wed, 23 Sep 2020 16:32:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:reply-to:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=mtOCOSEGbeQ+MvNORqSMFOyw/dyU6B837tbsWfgmJ+g=;
-        b=p+kOhuIujemYrxr7OJzU4Eh17GtXXNLJHY1E/TvtVK8qFwYaA9n45OouiaMfKBcX+c
-         E09OK1psRSSLB3d++7JSaB8LEnNnNlaqfLx21X/4toCBcdTNJzgI+w9xgKtoloIt6ZXZ
-         V/P/weg9P9Uu6lerCLOFF6FvBCYHzJL15etxGW7X49mHvG7/zuurjxcwJYBCoHCR6oro
-         PE6tmW0xsC6D7psaSHNphE1Ai2taLutCrEsCg7/OvqGpxSdYhWi1Dtl+sXa6wZIP3i0y
-         TShhLSpOXEtmWSSIT8GzaWasS3ST3PvrhBodJpg38eHq4t6rt2w4i/YbE0R7SSqMyr2p
-         nkzA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :reply-to:references:mime-version:content-disposition:in-reply-to
-         :user-agent;
-        bh=mtOCOSEGbeQ+MvNORqSMFOyw/dyU6B837tbsWfgmJ+g=;
-        b=Px2zLUgL2ooliOs3IzIxUkxQkQREy30km2Q04wQZum7NgKgwUdYUvI9YLCt2sUkIWp
-         nIOMIj913mBjll+yJRrVDGxOUUFYo0TPNJoQM8MWzS3wJgLygDz6+NL99EMCwWGzAiv+
-         LivpzlxOAgpUS9/tVxBRmK2gqJD80FklyxWyvtIFd7xHLcNvBZXnLfCRLNclSoOxxG5l
-         WOy9h4wAfcxH8FaIN8LWBJsIY1GIXwk6pxwaFDh+hVbfg3ka1x+8bM6lzZNConA8tY8V
-         7B1KgLzTMPOMOIxDnwSnoz3WlZaqd9hZzT3zOexCCz8qVCoJRLFvjO+YHHC3KnsUkDvN
-         HdhA==
-X-Gm-Message-State: AOAM532XrCiQstfvDjUOt+kdSYjZ8jNl+M/uwT2R6JT6imgzdfIumH2H
-        QQUycMKAfkpoJj3ZY9+2NQnY8dIxVoh4
-X-Google-Smtp-Source: ABdhPJxNhwUcwe0MH7WtnyCAb9tiuNDuQBRqOXKl3P7XSmqMFOYMdBCwgRG92Vam8OpYjibtzkBzOQ==
-X-Received: by 2002:a9d:7854:: with SMTP id c20mr1314338otm.123.1600903935076;
-        Wed, 23 Sep 2020 16:32:15 -0700 (PDT)
-Received: from serve.minyard.net (serve.minyard.net. [2001:470:b8f6:1b::1])
-        by smtp.gmail.com with ESMTPSA id m11sm342506ooe.43.2020.09.23.16.32.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Sep 2020 16:32:14 -0700 (PDT)
-Sender: Corey Minyard <tcminyard@gmail.com>
-Received: from minyard.net (unknown [IPv6:2001:470:b8f6:1b:bda8:cea9:424f:cdc4])
-        by serve.minyard.net (Postfix) with ESMTPSA id D1F7B180056;
-        Wed, 23 Sep 2020 23:32:12 +0000 (UTC)
-Date:   Wed, 23 Sep 2020 18:32:11 -0500
-From:   Corey Minyard <minyard@acm.org>
-To:     "Luck, Tony" <tony.luck@intel.com>
-Cc:     Borislav Petkov <bp@alien8.de>, linux-edac@vger.kernel.org,
-        Corey Minyard <cminyard@mvista.com>,
-        hidehiro.kawai.ez@hitachi.com, linfeilong@huawei.com,
-        liuzhiqiang26@huawei.com, Andy Lutomirski <luto@kernel.org>
-Subject: Re: [PATCH] x86: Fix MCE error handing when kdump is enabled
-Message-ID: <20200923233211.GZ3674@minyard.net>
-Reply-To: minyard@acm.org
-References: <20200923115742.4634-1-minyard@acm.org>
- <20200923220257.GA20839@agluck-desk2.amr.corp.intel.com>
+        id S1726632AbgIXADP (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Wed, 23 Sep 2020 20:03:15 -0400
+Received: from mo-csw1516.securemx.jp ([210.130.202.155]:44786 "EHLO
+        mo-csw.securemx.jp" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726562AbgIXADP (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Wed, 23 Sep 2020 20:03:15 -0400
+Received: by mo-csw.securemx.jp (mx-mo-csw1516) id 08O02lcW002993; Thu, 24 Sep 2020 09:02:47 +0900
+X-Iguazu-Qid: 34trYbPuXK3Y6WokyV
+X-Iguazu-QSIG: v=2; s=0; t=1600905766; q=34trYbPuXK3Y6WokyV; m=0KDuZXTtA84FWvgU79W3hotyFURS5UbU6LM7nkZ0KNg=
+Received: from imx2.toshiba.co.jp (imx2.toshiba.co.jp [106.186.93.51])
+        by relay.securemx.jp (mx-mr1511) id 08O02iHp036909;
+        Thu, 24 Sep 2020 09:02:44 +0900
+Received: from enc01.toshiba.co.jp ([106.186.93.100])
+        by imx2.toshiba.co.jp  with ESMTP id 08O02iOw020352;
+        Thu, 24 Sep 2020 09:02:44 +0900 (JST)
+Received: from hop001.toshiba.co.jp ([133.199.164.63])
+        by enc01.toshiba.co.jp  with ESMTP id 08O02h4O023471;
+        Thu, 24 Sep 2020 09:02:43 +0900
+From:   Punit Agrawal <punit1.agrawal@toshiba.co.jp>
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>,
+        x86@kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-edac@vger.kernel.org,
+        linux-efi@vger.kernel.org, linux-acpi@vger.kernel.org,
+        devel@acpica.org, Tony Luck <tony.luck@intel.com>,
+        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Len Brown <len.brown@intel.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Yazen Ghannam <yazen.ghannam@amd.com>
+Subject: Re: [PATCH v4] cper, apei, mce: Pass x86 CPER through the MCA handling chain
+References: <20200904140444.161291-1-Smita.KoralahalliChannabasappa@amd.com>
+        <87wo0kiz6y.fsf@kokedama.swc.toshiba.co.jp>
+        <20200923140512.GJ28545@zn.tnic>
+Date:   Thu, 24 Sep 2020 09:02:42 +0900
+In-Reply-To: <20200923140512.GJ28545@zn.tnic> (Borislav Petkov's message of
+        "Wed, 23 Sep 2020 16:05:12 +0200")
+X-TSB-HOP: ON
+Message-ID: <87pn6chwil.fsf@kokedama.swc.toshiba.co.jp>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.3 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200923220257.GA20839@agluck-desk2.amr.corp.intel.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Wed, Sep 23, 2020 at 03:02:57PM -0700, Luck, Tony wrote:
-> On Wed, Sep 23, 2020 at 06:57:42AM -0500, minyard@acm.org wrote:
-> > From: Corey Minyard <cminyard@mvista.com>
-> > 
-> > If kdump is enabled, the handling of shooting down CPUs does not use the
-> > RESET_VECTOR irq before trying to use NMIs to shoot down the CPUs.
-> > 
-> > For normal errors that is fine.  MCEs, however, interrupt all CPUs at
-> > the same time so they are already running in an NMI, so sending them an
-> > NMI won't do anything.  The MCE code in wait_for_panic() is set up to
-> > receive the RESET_VECTOR because it enables irqs, but it won't work on
-> > the NMI-only case.
-> 
-> MCE and NMI are separate exception types ... so not accurate to say
-> "already running in an NMI". Better to say somehting like: MCE has higher
-> priority than NMI so the NMI is blocked until the MCE is over.
+Borislav Petkov <bp@alien8.de> writes:
 
-Ok, fixed the comment here.
+> Smita,
+>
+> pls sync the time of the box where you create the patch:
+>
+>  Date: Fri,  4 Sep 2020 09:04:44 -0500
+>
+> but your mail headers have:
+>
+>  Received: from ... with mapi id 15.20.3370.019; Fri, 18 Sep 2020 14:49:12 +0000
+>  						^^^^^^^^^^^^^^^^^^
+>
+> On Wed, Sep 23, 2020 at 07:07:17PM +0900, Punit Agrawal wrote:
+>> I know Boris asked you to add the reason for the Reported-by, but
+>> usually we don't track version differences in the committed patch.
+>> 
+>> Boris, can you confirm if you want the Reported-by to be retained?
+>
+> How else would you explain what the Reported-by: tag is for on a patch
+> which adds a feature?
 
-> 
-> > There is already code in place to scan for the NMI callback being ready,
-> > simply call that from the MCE's wait_for_panic() code so it will pick up
-> > and handle it if an NMI shootdown is requested.  This required
-> > propagating the registers down to wait_for_panic().
-> 
-> The code might look a little prettier if you put "regs" at the start
-> of the argument list instead of at the end. Especially for the functions
-> that have string message arguments.
+As Ard clarified, I was questioning the inclusion of the Reported-by:
+tag in the patch itself. But I also don't have enough of a strong
+opinion to obsess about it.
 
-Yeah, I was being lazy.  Better to be consistent.
+[ Aside: One interesting consequence of this though is that by the same
+argument, changes resulting from comments on earlier versions are also
+legitimate content for the final patch. Not saying I agree. ]
 
-> 
-> > Reported-by: Wu Bo <wubo40@huawei.com>
-> > Cc: hidehiro.kawai.ez@hitachi.com
-> > Cc: linfeilong@huawei.com
-> > Cc: liuzhiqiang26@huawei.com
-> > Signed-off-by: Corey Minyard <cminyard@mvista.com>
-> > Tested-by: Wu Bo <wubo40@huawei.com>
-> > ---
-> > Wu Bo found this doing kdumps because the IPMI driver saves panic
-> > information to the IPMI event log during a panic.  But it was getting
-> > interrupts at the same time because the other cores had interrupts
-> > enabled, causing the process to take a long time.
-> > 
-> > Having interrupt enabled during a kdump shutdown and while the new kdump
-> > kernel is running is obviously a bad thing and can cause other problems,
-> > too.  I think this is the right fix, but I'm not an expert in this code.
-> 
-> I'm also uncertain if this is the best/right approach. Interaction between
-> NMI, MCE, etc. is something of a rats nest. Perhaps Andy Lutomirksi may
-> have ideas.
+>
+>> > + * The first expected register in the register layout of MCAX address space.
+>> > + * The address defined must match with the first MSR address extracted from
+>> > + * BERT which in SMCA systems is the bank's MCA_STATUS register.
+>> > + *
+>> > + * Note that the decoding of the raw MSR values in BERT is implementation
+>> > + * specific and follows register offset order of MCAX address space.
+>> > + */
+>> > +#define MASK_MCA_STATUS 0xC0002001
+>> 
+>> The macro value is already defined in mce.h as
+>> MSR_AMD64_SMCA_MC0_STATUS.  Is there any reason to not use it?
+>
+> Good point.
+>
+>> You can move the comment to where you check the status register.
+>
+> No need if he really wants to use the first MCi_STATUS address.
+>
+>> > +	m.apicid = lapic_id;
+>> > +	m.bank = (ctx_info->msr_addr >> 4) & 0xFF;
+>> > +	m.status = *i_mce;
+>> > +	m.addr = *(i_mce + 1);
+>> > +	m.misc = *(i_mce + 2);
+>> > +	/* Skipping MCA_CONFIG */
+>> > +	m.ipid = *(i_mce + 4);
+>> > +	m.synd = *(i_mce + 5);
+>> 
+>> Instead of using the raw pointer arithmetic, it is better to define a
+>> structure for the MCA registers? Something like -
+>> 
+>>     struct {
+>>         u64 addr;
+>>         u64 misc;
+>>         u64 config;
+>>         u64 ipid;
+>>         ...
+>>     }
+>> 
+>> Checking back, this was mentioned in the previous review comments as
+>> well. Please address all comments before posting a new version - either
+>> by following the suggestion or explaining why it is not a good idea.
+>
+> Well, that was addressed in his reply last time:
+>
+> https://lkml.kernel.org/r/a28aa613-8353-0052-31f6-34bc733abf59@amd.com
 
-I have a patch ready with the above changes, pending Andy (or someone
-else) commenting on this.
+Oops. My bad - sorry I missed the response.
 
-Thanks Tony,
+Copying the relevant comment here for discussion -
 
--corey
+>>> The registers here are implementation specific and applies only for
+>>> SMCA systems. So I have used pointer arithmetic as it is not defined
+>>> in the spec.
 
-> 
-> -Tony
+Even though it's not defined in the UEFI spec, it doesn't mean a
+structure definition cannot be created. After all, the patch is relying
+on some guarantee of the meaning of the values and their ordering.
+
+If the patch is relying on the definitions in the SMCA spec it is a good
+idea to reference it here - both for review and providing relevant
+context for future developers.
+
+> You might've missed it because you weren't CCed directly.
+
+Indeed, I missed it. Thanks for the pointer.
+
+Cheers,
+Punit
