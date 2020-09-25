@@ -2,71 +2,56 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D25E27816C
-	for <lists+linux-edac@lfdr.de>; Fri, 25 Sep 2020 09:23:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C9D65278771
+	for <lists+linux-edac@lfdr.de>; Fri, 25 Sep 2020 14:41:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727210AbgIYHXD (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Fri, 25 Sep 2020 03:23:03 -0400
-Received: from mail.skyhub.de ([5.9.137.197]:54216 "EHLO mail.skyhub.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727068AbgIYHXD (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Fri, 25 Sep 2020 03:23:03 -0400
-Received: from zn.tnic (p200300ec2f0b3a00d3756fc4b2470eaa.dip0.t-ipconnect.de [IPv6:2003:ec:2f0b:3a00:d375:6fc4:b247:eaa])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id A5DB91EC0473;
-        Fri, 25 Sep 2020 09:23:01 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1601018581;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=Wjlu/ndJbxVTFlpp3T1F/epZ459T0Uni2kaVnS/ZU6M=;
-        b=mdRVSHbtVf7FFy4Uxm049cBs2q8MUyePRVieH4Q2zgvP/UJJ2lw3FGflMQhwn7ofkbHP87
-        fI72aMJ4JbJnrCMxtCQWMiPS1XD9Ou/DxYW4AIw0+ilKgEMheHz3cqJg7TvNyGG8QHg+i3
-        gDZBrDnPEGIdqs77M5qk8wFH15Iqjl4=
-Date:   Fri, 25 Sep 2020 09:22:31 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Yazen Ghannam <yazen.ghannam@amd.com>
-Cc:     linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
-        tony.luck@intel.com, x86@kernel.org,
-        Smita.KoralahalliChannabasappa@amd.com
-Subject: Re: [PATCH v2 8/8] x86/MCE/AMD Support new memory interleaving modes
- during address translation
-Message-ID: <20200925072231.GC16872@zn.tnic>
-References: <20200903200144.310991-1-Yazen.Ghannam@amd.com>
- <20200903200144.310991-9-Yazen.Ghannam@amd.com>
- <20200923082039.GB28545@zn.tnic>
- <20200923162510.GB1684790@yaz-nikka.amd.com>
+        id S1727749AbgIYMll convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-edac@lfdr.de>); Fri, 25 Sep 2020 08:41:41 -0400
+Received: from mail.hlgd.gob.ec ([181.112.154.212]:50532 "EHLO
+        mail.hlgd.gob.ec" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727248AbgIYMll (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Fri, 25 Sep 2020 08:41:41 -0400
+Received: from localhost (localhost [127.0.0.1])
+        by mail.hlgd.gob.ec (Postfix) with ESMTP id B031E34E004F;
+        Thu, 24 Sep 2020 22:49:45 -0500 (-05)
+Received: from mail.hlgd.gob.ec ([127.0.0.1])
+        by localhost (mail.hlgd.gob.ec [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id 8IRoDzPZBuTQ; Thu, 24 Sep 2020 22:49:45 -0500 (-05)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.hlgd.gob.ec (Postfix) with ESMTP id 7487134C8567;
+        Thu, 24 Sep 2020 22:45:09 -0500 (-05)
+X-Virus-Scanned: amavisd-new at hlgd.gob.ec
+Received: from mail.hlgd.gob.ec ([127.0.0.1])
+        by localhost (mail.hlgd.gob.ec [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id 1zo8WR6n_OyO; Thu, 24 Sep 2020 22:45:09 -0500 (-05)
+Received: from [10.123.39.92] (unknown [105.12.6.205])
+        by mail.hlgd.gob.ec (Postfix) with ESMTPSA id 6BBC034C8593;
+        Thu, 24 Sep 2020 22:43:10 -0500 (-05)
+Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20200923162510.GB1684790@yaz-nikka.amd.com>
+Content-Transfer-Encoding: 8BIT
+Content-Description: Mail message body
+Subject: spende von 2,000,000 euro
+To:     Recipients <vanessa.ramirez@hlgd.gob.ec>
+From:   ''Tayeb souami'' <vanessa.ramirez@hlgd.gob.ec>
+Date:   Fri, 25 Sep 2020 05:43:01 +0200
+Reply-To: Tayebsouam.spende@gmail.com
+Message-Id: <20200925034311.6BBC034C8593@mail.hlgd.gob.ec>
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Wed, Sep 23, 2020 at 11:25:10AM -0500, Yazen Ghannam wrote:
-> I don't remember the original reason, and I was recently asked about
-> this code living in a module. I did some looking after this ask, and I
-> found that we should be using this translation to get a proper value for
-> the memory error notifiers to use. So I think we still need to use this
-> function some way with the core code even if the EDAC interface isn't
-> used.
 
-You'd need to be more specific here, you want to bypass amd64_edac to
-decode errors? Judging by the current RAS activity coming from you guys,
-I'm thinking firmware. But then wouldn't the firmware do the decoding
-for us and then this function is not even needed?
+Hallo mein lieber Freund
+Mein Name ist Tayeb Souami aus New Jersey in Amerika und ich habe den America Lottery Jackpot von 315 Millionen Euro gewonnen. Ich habe mich entschlossen, die Summe von 2.000.000 Euro an fünf glückliche Personen zu spenden, und Sie wurden als einer der Begünstigten ausgewählt. Bitte klicken Sie auf diesen Link, um mehr über meinen Gewinn zu erfahren.
 
-> What do you think?
 
-I think you should explain what the use case is first. :)
+UHR MICH HIER: https://www.youtube.com/watch?v=Z6ui8ZDQ6Ks
 
-Thx.
+Bitte kontaktieren Sie mich über diese E-Mail: Tayebsouam.spende@gmail.com
 
--- 
-Regards/Gruss,
-    Boris.
 
-https://people.kernel.org/tglx/notes-about-netiquette
+Ich hoffe, Sie und Ihre Familie glücklich zu machen.
+
+Grüße
+Herr Tayeb Souami
