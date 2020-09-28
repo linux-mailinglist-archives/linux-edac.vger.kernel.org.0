@@ -2,209 +2,156 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DBEA27A482
-	for <lists+linux-edac@lfdr.de>; Mon, 28 Sep 2020 01:35:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D9D9B27A94E
+	for <lists+linux-edac@lfdr.de>; Mon, 28 Sep 2020 10:07:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726469AbgI0Xf3 (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Sun, 27 Sep 2020 19:35:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43606 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726414AbgI0Xf3 (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Sun, 27 Sep 2020 19:35:29 -0400
-Received: from mail-qv1-xf41.google.com (mail-qv1-xf41.google.com [IPv6:2607:f8b0:4864:20::f41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6B9DC0613D5
-        for <linux-edac@vger.kernel.org>; Sun, 27 Sep 2020 16:35:28 -0700 (PDT)
-Received: by mail-qv1-xf41.google.com with SMTP id f11so4547886qvw.3
-        for <linux-edac@vger.kernel.org>; Sun, 27 Sep 2020 16:35:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=QZ9ccKxrbw+GLDZtn/A5B8mgsLI26ygsTihNFMKsaJg=;
-        b=F/56Xv83N6WX7oppzzL1NJZmCHsucSUClxFHBoBH3xsnTVfETiPJeuhnRdxGz41V4r
-         wmhjN4hzByPXiI41LvOfaV3oAVNMOhh4n5Bti5j3pJHKbA2Nsm8f9J/+OQapxcZKM/0E
-         Yg72rxpPjAQYXHf+wlNQils/SLD473ptBw7hc=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=QZ9ccKxrbw+GLDZtn/A5B8mgsLI26ygsTihNFMKsaJg=;
-        b=kmGJjsWp/HQCXBZ7If8ZcDk3Lhgull+Hu3LeyWMkZNp+dppBySnXCxDB/w4I+Wtohn
-         fmBMoW35O0uvfRmOb2YSn4egwlRBvByYWxkDPUAl0Y9DW+19vKK1QfLsyiB5WmlIsM8d
-         D5cPdeJOPcnwSIT6TZZ44tXXkWj0qUUydMwvTMSxj/xew3vnP+4JJw4odDqz2BM7CBAL
-         Wcs9bCLapyfiIr9rlQ7+y8eEUz8V/XDvDo0SDUPy+8wJ8tMNYy1BVDF8cNKCkJE7QNGi
-         kS4RrD7RJdcHlZ3uqmMlV6dixnkGDlLW+7MA+e0+1xubEaA+2ShHRZCdV/EKwb8bJ64k
-         9FxQ==
-X-Gm-Message-State: AOAM532XqkhvkYql8OXp4IVl3wyNvmWdesZf/GSLKwXqutmxexVQrgCx
-        QPQCd0Uer/litWE0wJA44fulVQ==
-X-Google-Smtp-Source: ABdhPJxVvYjhgGsi9+tR/TAw2u5qjrv6jp+i1+M0SKg/XJH2jhzXZSe5R7zNVYtzRKNJD4xFiXfYRw==
-X-Received: by 2002:a05:6214:292:: with SMTP id l18mr9219493qvv.3.1601249727784;
-        Sun, 27 Sep 2020 16:35:27 -0700 (PDT)
-Received: from localhost ([2620:15c:6:12:cad3:ffff:feb3:bd59])
-        by smtp.gmail.com with ESMTPSA id j16sm7589014qkg.26.2020.09.27.16.35.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 27 Sep 2020 16:35:27 -0700 (PDT)
-Date:   Sun, 27 Sep 2020 19:35:26 -0400
-From:   Joel Fernandes <joel@joelfernandes.org>
-To:     Shuah Khan <skhan@linuxfoundation.org>
-Cc:     corbet@lwn.net, keescook@chromium.org, gregkh@linuxfoundation.org,
-        shuah@kernel.org, rafael@kernel.org, johannes@sipsolutions.net,
-        lenb@kernel.org, james.morse@arm.com, tony.luck@intel.com,
-        bp@alien8.de, arve@android.com, tkjos@android.com,
-        maco@android.com, christian@brauner.io, hridya@google.com,
-        surenb@google.com, minyard@acm.org, arnd@arndb.de,
-        mchehab@kernel.org, rric@kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-acpi@vger.kernel.org, devel@driverdev.osuosl.org,
-        openipmi-developer@lists.sourceforge.net,
-        linux-edac@vger.kernel.org
-Subject: Re: [PATCH 00/11] Introduce Simple atomic and non-atomic counters
-Message-ID: <20200927233526.GA500818@google.com>
-References: <cover.1601073127.git.skhan@linuxfoundation.org>
+        id S1726634AbgI1IHR (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Mon, 28 Sep 2020 04:07:17 -0400
+Received: from mo-csw1114.securemx.jp ([210.130.202.156]:50596 "EHLO
+        mo-csw.securemx.jp" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726328AbgI1IHR (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Mon, 28 Sep 2020 04:07:17 -0400
+Received: by mo-csw.securemx.jp (mx-mo-csw1114) id 08S86hJQ020143; Mon, 28 Sep 2020 17:06:43 +0900
+X-Iguazu-Qid: 2wHHD8Mc0ow5N7A8gs
+X-Iguazu-QSIG: v=2; s=0; t=1601280402; q=2wHHD8Mc0ow5N7A8gs; m=wyJW3X7i3huENYMQ7/lLyT141B4MpZI3/qHSzRMZx5Y=
+Received: from imx2.toshiba.co.jp (imx2.toshiba.co.jp [106.186.93.51])
+        by relay.securemx.jp (mx-mr1112) id 08S86eGE006235;
+        Mon, 28 Sep 2020 17:06:40 +0900
+Received: from enc01.toshiba.co.jp ([106.186.93.100])
+        by imx2.toshiba.co.jp  with ESMTP id 08S86elB000843;
+        Mon, 28 Sep 2020 17:06:40 +0900 (JST)
+Received: from hop001.toshiba.co.jp ([133.199.164.63])
+        by enc01.toshiba.co.jp  with ESMTP id 08S86c4l003317;
+        Mon, 28 Sep 2020 17:06:39 +0900
+From:   Punit Agrawal <punit1.agrawal@toshiba.co.jp>
+To:     Yazen Ghannam <yazen.ghannam@amd.com>
+Cc:     Borislav Petkov <bp@alien8.de>,
+        Smita Koralahalli Channabasappa <skoralah@amd.com>,
+        Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>,
+        <x86@kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-pm@vger.kernel.org>, <linux-edac@vger.kernel.org>,
+        <linux-efi@vger.kernel.org>, <linux-acpi@vger.kernel.org>,
+        <devel@acpica.org>, Tony Luck <tony.luck@intel.com>,
+        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Len Brown <len.brown@intel.com>,
+        Ard Biesheuvel <ardb@kernel.org>
+Subject: Re: [PATCH v4] cper, apei, mce: Pass x86 CPER through the MCA handling chain
+References: <20200904140444.161291-1-Smita.KoralahalliChannabasappa@amd.com>
+        <87wo0kiz6y.fsf@kokedama.swc.toshiba.co.jp>
+        <20200923140512.GJ28545@zn.tnic>
+        <87pn6chwil.fsf@kokedama.swc.toshiba.co.jp>
+        <52c50f37-a86c-57ad-30e0-dac0857e4ef7@amd.com>
+        <20200924175023.GN5030@zn.tnic>
+        <877dsiislt.fsf@kokedama.swc.toshiba.co.jp>
+        <20200925161940.GA21194@yaz-nikka.amd.com>
+Date:   Mon, 28 Sep 2020 17:06:36 +0900
+X-TSB-HOP: ON
+Message-ID: <87lfgugwab.fsf@kokedama.swc.toshiba.co.jp>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.3 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cover.1601073127.git.skhan@linuxfoundation.org>
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Fri, Sep 25, 2020 at 05:47:14PM -0600, Shuah Khan wrote:
-> This patch series is a result of discussion at the refcount_t BOF
-> the Linux Plumbers Conference. In this discussion, we identified
-> a need for looking closely and investigating atomic_t usages in
-> the kernel when it is used strictly as a counter without it
-> controlling object lifetimes and state changes.
-> 
-> There are a number of atomic_t usages in the kernel where atomic_t api
-> is used strictly for counting and not for managing object lifetime. In
-> some cases, atomic_t might not even be needed.
->     
-> The purpose of these counters is twofold: 1. clearly differentiate
-> atomic_t counters from atomic_t usages that guard object lifetimes,
-> hence prone to overflow and underflow errors. It allows tools that scan
-> for underflow and overflow on atomic_t usages to detect overflow and
-> underflows to scan just the cases that are prone to errors. 2. provides
-> non-atomic counters for cases where atomic isn't necessary.
+Yazen Ghannam <yazen.ghannam@amd.com> writes:
 
-Nice series :)
+> On Fri, Sep 25, 2020 at 09:54:06AM +0900, Punit Agrawal wrote:
+>> Borislav Petkov <bp@alien8.de> writes:
+>> 
+>> > On Thu, Sep 24, 2020 at 12:23:27PM -0500, Smita Koralahalli Channabasappa wrote:
+>> >> > Even though it's not defined in the UEFI spec, it doesn't mean a
+>> >> > structure definition cannot be created.
+>> >
+>> > Created for what? That structure better have a big fat comment above it, what
+>> > firmware generates its layout.
+>> 
+>> Maybe I could've used a better choice of words - I meant to define a
+>> structure with meaningful member names to replace the *(ptr + i)
+>> accesses in the patch.
+>> 
+>> The requirement for documenting the record layout doesn't change -
+>> whether using raw pointer arithmetic vs a structure definition.
+>> 
+>> >> > After all, the patch is relying on some guarantee of the meaning of
+>> >> > the values and their ordering.
+>> >
+>> > AFAICT, this looks like an ad-hoc definition and the moment they change
+>> > it in some future revision, that struct of yours becomes invalid so we'd
+>> > need to add another one.
+>> 
+>> If there's no spec backing the current layout, then it'll indeed be an
+>> ad-hoc definition of a structure in the kernel. But considering that
+>> it's part of firmware / OS interface for an important part of the RAS
+>> story I would hope that the code is based on a spec - having that
+>> reference included would help maintainability.
+>> 
+>> Incompatible changes will indeed break the assumptions in the kernel and
+>> code will need to be updated - regardless of the choice of kernel
+>> implementation; pointer arithmetic, structure definition - ad-hoc or
+>> spec provided.
+>> 
+>> Having versioning will allow running older kernels on newer hardware and
+>> vice versa - but I don't see why that is important only when using a
+>> structure based access.
+>>
+>
+> There is no versioning option for the x86 context info structure in the
+> UEFI spec, so I don't think there'd be a clean way to include version
+> information.
+>
+> The format of the data in the context info is not totally ad-hoc, and it
+> does follow the UEFI spec. The "Register Array" field is raw data. This
+> may follow one of the predefined formats in the UEFI spec like the "X64
+> Register State", etc. Or, in the case of MSR and Memory Mapped
+> Registers, this is a raw dump of the registers starting from the address
+> shown in the structure. The two values that can be changed are the
+> starting address and the array size. These two together provide a window
+> to the registers. The registers are fixed, so a single context info
+> struture should include a single contiguous range of registers. Multiple
+> context info structures can be provided to include registers from
+> different, non-contiguous ranges.
+>
+> This patch is checking if an MSR context info structure lines up with
+> the MCAX register space used on Scalable MCA systems. This register
+> space is defined in the AMD Processor Programming Reference for various
+> products. This is considered a hardware feature extension, so the
+> existing register layout won't change though new registers may be added.
+> A layout change would require moving to another register space which is
+> what happened going from legacy MCA (starting at address 0x400) to MCAX
+> (starting at address 0xC0002000) registers.
 
-It appears there is no user of counter_simple in this series other than the
-selftest. Would you be planning to add any conversions in the series itself,
-for illustration of use? Sorry if I missed a usage.
+Thanks for the SMCA related background.
+>
+> The only two things firmware can change are from what address does the
+> info start and where does the info end. So the implementation-specific
+> details here are that currently the starting address is MCA_STATUS (in
+> MCAX space) for a bank and the remaining info includes the other MCA
+> registers for this bank.
+>
+> So I think the kernel can be strict with this format, i.e. the two
+> variables match what we're looking for. This patch already has a check
+> on the starting address. It should also include a check that "Register
+> Array Size" is large enough to include all the registers we want to
+> extract. If the format doesn't match, then we fall back to a raw dump
+> of the data like we have today.
+>
+> Or the kernel can be more flexible and try to find the window of
+> registers based on the starting address. I think this is really
+> open-ended though.
 
-Also how do we guard against atomicity of counter_simple RMW operations? Is
-the implication that it should be guarded using other synchronization to
-prevent lost-update problem?
+I think I understand the hesitancy here if the firmware can arbitrarily
+move the starting address. Though I hope that doesn't happen as it would
+break the feature introduced in $SUBJECT.
 
-Some more comments:
+The way I read the code / spec led me to believe that the MSR context
+info records in the SMCA space are just encoding the layout of MC Bank
+registers[0] and making it explicit can only help.
 
-1.  atomic RMW operations that have a return value are fully ordered. Would
-    you be adding support to counter_simple for such ordering as well, for
-    consistency?
+But Boris seems to think the current approach is good enough. So no
+objections from me.
 
-2. I felt counter_atomic and counter_atomic64 would be nice equivalents to
-   the atomic and atomic64 naming currently used (i.e. dropping the '32').
-   However that is just my opinion and I am ok with either naming.
+Thanks,
+Punit
 
-thanks!
-
- - Joel
-
->     
-> Simple atomic and non-atomic counters api provides interfaces for simple
-> atomic and non-atomic counters that just count, and don't guard resource
-> lifetimes. Counters will wrap around to 0 when it overflows and should
-> not be used to guard resource lifetimes, device usage and open counts
-> that control state changes, and pm states.
->     
-> Using counter_atomic to guard lifetimes could lead to use-after free
-> when it overflows and undefined behavior when used to manage state
-> changes and device usage/open states.
-> 
-> This patch series introduces Simple atomic and non-atomic counters.
-> Counter atomic ops leverage atomic_t and provide a sub-set of atomic_t
-> ops.
-> 
-> In addition this patch series converts a few drivers to use the new api.
-> The following criteria is used for select variables for conversion:
-> 
-> 1. Variable doesn't guard object lifetimes, manage state changes e.g:
->    device usage counts, device open counts, and pm states.
-> 2. Variable is used for stats and counters.
-> 3. The conversion doesn't change the overflow behavior.
-> 
-> Changes since RFC:
-> -- Thanks for reviews and reviewed-by, and Acked-by tags. Updated
->    the patches with the tags.
-> -- Addressed Kees's comments:
->    1. Non-atomic counters renamed to counter_simple32 and counter_simple64
->       to clearly indicate size.
->    2. Added warning for counter_simple* usage and it should be used only
->       when there is no need for atomicity.
->    3. Renamed counter_atomic to counter_atomic32 to clearly indicate size.
->    4. Renamed counter_atomic_long to counter_atomic64 and it now uses
->       atomic64_t ops and indicates size.
->    5. Test updated for the API renames.
->    6. Added helper functions for test results printing
->    7. Verified that the test module compiles in kunit env. and test
->       module can be loaded to run the test.
->    8. Updated Documentation to reflect the intent to make the API
->       restricted so it can never be used to guard object lifetimes
->       and state management. I left _return ops for now, inc_return
->       is necessary for now as per the discussion we had on this topic. 
-> -- Updated driver patches with API name changes.
-> -- We discussed if binder counters can be non-atomic. For now I left
->    them the same as the RFC patch - using counter_atomic32
-> -- Unrelated to this patch series:
->    The patch series review uncovered improvements could be made to
->    test_async_driver_probe and vmw_vmci/vmci_guest. I will track
->    these for fixing later.
-> 
-> Shuah Khan (11):
->   counters: Introduce counter_simple* and counter_atomic* counters
->   selftests:lib:test_counters: add new test for counters
->   drivers/base: convert deferred_trigger_count and probe_count to
->     counter_atomic32
->   drivers/base/devcoredump: convert devcd_count to counter_atomic32
->   drivers/acpi: convert seqno counter_atomic32
->   drivers/acpi/apei: convert seqno counter_atomic32
->   drivers/android/binder: convert stats, transaction_log to
->     counter_atomic32
->   drivers/base/test/test_async_driver_probe: convert to use
->     counter_atomic32
->   drivers/char/ipmi: convert stats to use counter_atomic32
->   drivers/misc/vmw_vmci: convert num guest devices counter to
->     counter_atomic32
->   drivers/edac: convert pci counters to counter_atomic32
-> 
->  Documentation/core-api/counters.rst          | 174 +++++++++
->  MAINTAINERS                                  |   8 +
->  drivers/acpi/acpi_extlog.c                   |   5 +-
->  drivers/acpi/apei/ghes.c                     |   5 +-
->  drivers/android/binder.c                     |  41 +--
->  drivers/android/binder_internal.h            |   3 +-
->  drivers/base/dd.c                            |  19 +-
->  drivers/base/devcoredump.c                   |   5 +-
->  drivers/base/test/test_async_driver_probe.c  |  23 +-
->  drivers/char/ipmi/ipmi_msghandler.c          |   9 +-
->  drivers/char/ipmi/ipmi_si_intf.c             |   9 +-
->  drivers/edac/edac_pci.h                      |   5 +-
->  drivers/edac/edac_pci_sysfs.c                |  28 +-
->  drivers/misc/vmw_vmci/vmci_guest.c           |   9 +-
->  include/linux/counters.h                     | 350 +++++++++++++++++++
->  lib/Kconfig                                  |  10 +
->  lib/Makefile                                 |   1 +
->  lib/test_counters.c                          | 276 +++++++++++++++
->  tools/testing/selftests/lib/Makefile         |   1 +
->  tools/testing/selftests/lib/config           |   1 +
->  tools/testing/selftests/lib/test_counters.sh |   5 +
->  21 files changed, 913 insertions(+), 74 deletions(-)
->  create mode 100644 Documentation/core-api/counters.rst
->  create mode 100644 include/linux/counters.h
->  create mode 100644 lib/test_counters.c
->  create mode 100755 tools/testing/selftests/lib/test_counters.sh
-> 
-> -- 
-> 2.25.1
-> 
+[0] AMD Processor Programming Reference for Family 17H, Sec 3.1.5
