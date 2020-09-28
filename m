@@ -2,97 +2,76 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F31C27B78A
-	for <lists+linux-edac@lfdr.de>; Tue, 29 Sep 2020 01:13:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D01A27BB3B
+	for <lists+linux-edac@lfdr.de>; Tue, 29 Sep 2020 05:01:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726932AbgI1XNK (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Mon, 28 Sep 2020 19:13:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36398 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726915AbgI1XNJ (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Mon, 28 Sep 2020 19:13:09 -0400
-Received: from mail-pf1-x443.google.com (mail-pf1-x443.google.com [IPv6:2607:f8b0:4864:20::443])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A1D7C05BD23
-        for <linux-edac@vger.kernel.org>; Mon, 28 Sep 2020 16:13:09 -0700 (PDT)
-Received: by mail-pf1-x443.google.com with SMTP id k8so2655947pfk.2
-        for <linux-edac@vger.kernel.org>; Mon, 28 Sep 2020 16:13:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=NftyTi1bwuaE14e4XfgcQF93EOxKUsMOEEQqaDTCXJ4=;
-        b=gb3PRHELtfh8s0n7btbKHS7gdHecLDH27/WSx/dTaEZqzwAyfLHcApZT5c+IqoShdm
-         0LEtidHDj3nYkCuzJeB2PL+jPZX/ntrn70g8bHDhQFR+CUPr0IDYs3hxi4tZpkrlg6d9
-         hrDzPZTP54zHmpmIZZBNppWuJmHgMncA/mXvQ=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=NftyTi1bwuaE14e4XfgcQF93EOxKUsMOEEQqaDTCXJ4=;
-        b=bVYdTGJz+JO1Ml/VAv8Zol5RSJFH7/k/mH9J7ZHF+N7Qp3HdoDh9VvHvL6IyEnTDOZ
-         s2vHJCEuI8420GplArgVrRCHLOsyq7IKHuRWhB7H0OTKekzJPvNZQzvGGLS8Oer5BJlo
-         6WQioBj6ijW5+z5UbqDyk7KcMhfqwQS3JoZuiAtGBmyE29hKGMA/+EbCBQFiNoeml124
-         /vxCojgUFcuND3ON/rvdWnhhVM2Q/29cSfcYjE+dlGDA/vOYaD2ZETcDRAF6Xf9ACDxL
-         y2lbByN4KImiTHUmJoBlkwKtHtcvAmOHIK9jzHYtnbzJwhHa+yd9UzjXb97SZ/VTPy8D
-         rudw==
-X-Gm-Message-State: AOAM533IjOmq2SYwxJ0e7kWtGwVEIMFjEtARZ2C3ggKM6n9KdSfhYbhp
-        KVHQjZujnPITNZJMd0MGK/baTA==
-X-Google-Smtp-Source: ABdhPJwQDKOxa8hqpizwqXPcIZmf1ybA5/FNT7GiN+5miNLUE3lYvrdUP8suk6yqrm6piIZGkrVe3g==
-X-Received: by 2002:a65:494e:: with SMTP id q14mr1006851pgs.281.1601334788954;
-        Mon, 28 Sep 2020 16:13:08 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id z23sm2835217pfj.177.2020.09.28.16.13.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Sep 2020 16:13:08 -0700 (PDT)
-Date:   Mon, 28 Sep 2020 16:13:07 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Shuah Khan <skhan@linuxfoundation.org>
-Cc:     corbet@lwn.net, gregkh@linuxfoundation.org, shuah@kernel.org,
-        rafael@kernel.org, johannes@sipsolutions.net, lenb@kernel.org,
-        james.morse@arm.com, tony.luck@intel.com, bp@alien8.de,
-        arve@android.com, tkjos@android.com, maco@android.com,
-        joel@joelfernandes.org, christian@brauner.io, hridya@google.com,
-        surenb@google.com, minyard@acm.org, arnd@arndb.de,
-        mchehab@kernel.org, rric@kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-acpi@vger.kernel.org, devel@driverdev.osuosl.org,
-        openipmi-developer@lists.sourceforge.net,
-        linux-edac@vger.kernel.org
-Subject: Re: [PATCH 00/11] Introduce Simple atomic and non-atomic counters
-Message-ID: <202009281612.EDC1C0078@keescook>
-References: <cover.1601073127.git.skhan@linuxfoundation.org>
- <202009260923.9A2606CFF6@keescook>
- <3929a023-eb7a-509c-50e1-ee72dca05191@linuxfoundation.org>
+        id S1727384AbgI2DBN (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Mon, 28 Sep 2020 23:01:13 -0400
+Received: from mail.police.gov.ua ([91.227.69.84]:32806 "EHLO
+        mail.police.gov.ua" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727382AbgI2DBN (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Mon, 28 Sep 2020 23:01:13 -0400
+X-Greylist: delayed 9180 seconds by postgrey-1.27 at vger.kernel.org; Mon, 28 Sep 2020 23:01:12 EDT
+Received: from localhost (localhost [127.0.0.1])
+        by mail.police.gov.ua (Postfix) with ESMTP id C6E4F2256B9;
+        Tue, 29 Sep 2020 01:40:21 +0300 (EEST)
+Received: from mail.police.gov.ua ([127.0.0.1])
+        by localhost (mail.police.gov.ua [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id 9BHvw6Jdhf4L; Tue, 29 Sep 2020 01:40:21 +0300 (EEST)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.police.gov.ua (Postfix) with ESMTP id 3194C2234E7;
+        Tue, 29 Sep 2020 01:35:09 +0300 (EEST)
+DKIM-Filter: OpenDKIM Filter v2.10.3 mail.police.gov.ua 3194C2234E7
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=police.gov.ua;
+        s=1E8CAC48-C9E3-11E8-A516-E74BFA64F937; t=1601332509;
+        bh=SxLfIeAXWY+aCk408hS3Pmo0ITXSNnUEXGe2fhx60GM=;
+        h=MIME-Version:To:From:Date:Message-Id;
+        b=eO33cj89Tv3zmlp7z2x/dYT+WDE2R3gZFzSnJeapfxPBnak9EWthZHpylksqmrQqn
+         S/zV9xeJ1ODzkJqpEgUSXsgkqk+O7/5xJE5A4/MsdsOkvKI/1N7eCG7XrAULDfpvlr
+         vc0upLqlEptLq4+K7pZaM+YtiBNaL6uasykJ4jDb4jT+qaJE5/6V/iNKLr/TJw7OWs
+         R141QT0Cr0Cb4w5ht1Z3X/7WwAqybHn4VkNG6THrBBPcBacEbUb9+QSDzLA8bfLSiZ
+         rV1trXP8gAQDghIj/MkyY5zQE6dy65zbwruTHuqMkIZkZRYvC91zCg2zM/A61EP/aw
+         bNKeWEYsGdXRw==
+X-Virus-Scanned: amavisd-new at police.gov.ua
+Received: from mail.police.gov.ua ([127.0.0.1])
+        by localhost (mail.police.gov.ua [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id UU4zZNBRoLo8; Tue, 29 Sep 2020 01:35:09 +0300 (EEST)
+Received: from [192.168.43.16] (unknown [105.112.123.255])
+        by mail.police.gov.ua (Postfix) with ESMTPSA id B4360223EDC;
+        Tue, 29 Sep 2020 01:31:02 +0300 (EEST)
+Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <3929a023-eb7a-509c-50e1-ee72dca05191@linuxfoundation.org>
+Content-Transfer-Encoding: quoted-printable
+Content-Description: Mail message body
+Subject: =?utf-8?q?Seien_Sie_gl=C3=BCcklich_2=2E000=2E000=2C00_Euro?=
+To:     Recipients <dkz_3@police.gov.ua>
+From:   dkz_3@police.gov.ua
+Date:   Mon, 28 Sep 2020 23:30:54 +0100
+Reply-To: cwjacksonjunior@gmail.com
+Message-Id: <20200928223102.B4360223EDC@mail.police.gov.ua>
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Mon, Sep 28, 2020 at 04:41:47PM -0600, Shuah Khan wrote:
-> On 9/26/20 10:29 AM, Kees Cook wrote:
-> > On Fri, Sep 25, 2020 at 05:47:14PM -0600, Shuah Khan wrote:
-> > >     7. Verified that the test module compiles in kunit env. and test
-> > >        module can be loaded to run the test.
-> > 
-> > I meant write it using KUnit interfaces (e.g. KUNIT_EXPECT*(),
-> > kunit_test_suite(), etc):
-> > https://www.kernel.org/doc/html/latest/dev-tools/kunit/
-> > 
-> > Though I see the docs are still not updated[1] to reflect the Kconfig
-> > (CONFIG_foo_KUNIT_TEST) and file naming conventions (foo_kunit.c).
-> > 
-> 
-> I would like to be able to run this test outside Kunit env., hence the
-> choice to go with a module and kselftest script. It makes it easier to
-> test as part of my workflow as opposed to doing a kunit and build and
-> running it that way.
+Herzlichen Gl=FCckwunsch, Sie sind ein gl=FCcklicher Gewinner von 2 Million=
+en Euro, da Ihre E-Mail zuf=E4llig ausgew=E4hlt wurde. Ihre E-Mail hat 2.00=
+0.000,00 gewonnen. Kontaktieren Sie die E-Mail unten f=FCr weitere Informat=
+ionen und Anspr=FCche.
 
-It does -- you just load it normally like before and it prints out
-everything just fine. This is how I use the lib/test_user_copy.c and
-lib/test_overflow.c before/after their conversions.
+cwjacksonjunior@gmail.com
 
--- 
-Kees Cook
+
+
+
+
+___________________________________________________________________
+
+
+
+
+
+Congratulations, you are a lucky winner of 2 million euros as your email wa=
+s randomly selected. Your email won 2,000,000.00. contact the email below f=
+or more information and claim.
+
+cwjacksonjunior@gmail.com
