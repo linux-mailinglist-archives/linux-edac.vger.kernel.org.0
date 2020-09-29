@@ -2,132 +2,329 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AAA1B27CEF7
-	for <lists+linux-edac@lfdr.de>; Tue, 29 Sep 2020 15:21:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 323F127D9CE
+	for <lists+linux-edac@lfdr.de>; Tue, 29 Sep 2020 23:16:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728366AbgI2NVp (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Tue, 29 Sep 2020 09:21:45 -0400
-Received: from mail-eopbgr700050.outbound.protection.outlook.com ([40.107.70.50]:24416
-        "EHLO NAM04-SN1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1728362AbgI2NVp (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Tue, 29 Sep 2020 09:21:45 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=gw7SebbMHfubDpAAmiP0scq/qV3++RZjyQ56sEDEkcV41OEBYzDUE6hgxjz5zlODV/IFA/GIpxxkJPlMbrwtwz/MCZOIf6P8Bqih376HPzjaR50mvgdcGojIgAKctQf+Tbw4/Xyfcm/i4egvP1gTFpkTuOZ42aa4DDu1IsBNgVKMfGTxVG0G3fze+MNeLxqvRGUBZuiLLeghuslaUFAOM6ZrcDEuGBMdB52voSh6Mkgsinfs7nG5RDeJXPNNXL41JB/WlqXf6VthQaUfv7QWcOxAnESrxhlDpnE6DfGjQpQ6S92wfzFVwEe0oCQcAsP1OMM8EANLgMGUUKDtrlrTXw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=tWucHuUMxIik2nQUera2p3jYPamAy3cSiaqNTXKS6g0=;
- b=hKqLTjWtj+Ibe3Tmc7SLMyKijtS2vOx8wo14OLy3aE1I4sNYDTpiNcuQwXRsisz1VjlBSxGuL1DEB0Htacki/vKGYzp+ylsa+3lZFrc22ZVoYhwZ6nVgwZoQyAEMCL6u1FC60FL5JyPGAkqCNeFg4DPQG7Sze1gNRFlAhiKKXtp79unGyUPCdmAj0nXSKYcRu8i4jLtp0KFsxnzpISRchfA5kW8SKXuZuprpEL/5pLHspJOwEv7prKwboAb8ab+sUATNXl8HyCzTtTtpJ6HA9v/YZuD+UA4MUVPlksts0EJz3PnkOYNgSk5dVeM6lOWwFMYJPth93RzXHQj7Gqq3fA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
+        id S1727347AbgI2VQv (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Tue, 29 Sep 2020 17:16:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43604 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726643AbgI2VQv (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Tue, 29 Sep 2020 17:16:51 -0400
+Received: from mail-oi1-x241.google.com (mail-oi1-x241.google.com [IPv6:2607:f8b0:4864:20::241])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C5FBC061755
+        for <linux-edac@vger.kernel.org>; Tue, 29 Sep 2020 14:16:51 -0700 (PDT)
+Received: by mail-oi1-x241.google.com with SMTP id x14so7089445oic.9
+        for <linux-edac@vger.kernel.org>; Tue, 29 Sep 2020 14:16:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amdcloud.onmicrosoft.com; s=selector2-amdcloud-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=tWucHuUMxIik2nQUera2p3jYPamAy3cSiaqNTXKS6g0=;
- b=S//45ty/RKRrz8uaDf4zHGMNlwvWTmtqLzSn3LJ+I77lWP9WKMcPr4kFKCMW6HMEbpR8uEcyETslI0TwAUVi5YbDibtn/4Gaf7o9mkHgWFcyE4FS43Iw2Cj0Vu+fuFBzHVLL2rznoDfxOI08qCruvzLAOQEg6MEkaUJ0YxNOEw0=
-Authentication-Results: alien8.de; dkim=none (message not signed)
- header.d=none;alien8.de; dmarc=none action=none header.from=amd.com;
-Received: from BN8PR12MB3108.namprd12.prod.outlook.com (20.178.210.20) by
- BN6PR12MB1745.namprd12.prod.outlook.com (10.175.101.139) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.3412.20; Tue, 29 Sep 2020 13:21:42 +0000
-Received: from BN8PR12MB3108.namprd12.prod.outlook.com
- ([fe80::15c4:832:a4eb:2f1f]) by BN8PR12MB3108.namprd12.prod.outlook.com
- ([fe80::15c4:832:a4eb:2f1f%6]) with mapi id 15.20.3412.029; Tue, 29 Sep 2020
- 13:21:41 +0000
-Date:   Tue, 29 Sep 2020 08:21:17 -0500
-From:   Yazen Ghannam <yazen.ghannam@amd.com>
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
-        tony.luck@intel.com, x86@kernel.org,
-        Smita.KoralahalliChannabasappa@amd.com
-Subject: Re: [PATCH v2 8/8] x86/MCE/AMD Support new memory interleaving modes
- during address translation
-Message-ID: <20200929132117.GA2219666@yaz-nikka.amd.com>
-References: <20200903200144.310991-1-Yazen.Ghannam@amd.com>
- <20200903200144.310991-9-Yazen.Ghannam@amd.com>
- <20200923082039.GB28545@zn.tnic>
- <20200923162510.GB1684790@yaz-nikka.amd.com>
- <20200925072231.GC16872@zn.tnic>
- <20200925195127.GA323455@yaz-nikka.amd.com>
- <20200928094759.GF1685@zn.tnic>
- <20200928155350.GA926956@yaz-nikka.amd.com>
- <20200928181407.GH1685@zn.tnic>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200928181407.GH1685@zn.tnic>
-X-Originating-IP: [165.204.78.2]
-X-ClientProxiedBy: DM5PR04CA0066.namprd04.prod.outlook.com
- (2603:10b6:3:ef::28) To BN8PR12MB3108.namprd12.prod.outlook.com
- (2603:10b6:408:40::20)
-MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from yaz-nikka.amd.com (165.204.78.2) by DM5PR04CA0066.namprd04.prod.outlook.com (2603:10b6:3:ef::28) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3412.22 via Frontend Transport; Tue, 29 Sep 2020 13:21:40 +0000
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-HT: Tenant
-X-MS-Office365-Filtering-Correlation-Id: bbdb2ffb-0647-4c3a-282e-08d8647a9a6c
-X-MS-TrafficTypeDiagnostic: BN6PR12MB1745:
-X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <BN6PR12MB1745DDADBA5BCA2C663D932FF8320@BN6PR12MB1745.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:5516;
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: iJmkgIfcz0462gYcHNDmisfOb1D/qz6XR8t37PhKZTNkzGjsrjUQ4cTOkg05UpmbtdJn4BWbsKBbmbbrsuKfe+zRhBtrp47hKxrtMvTZUeZNO0yH2GwYvRCBRa0HFWtKvgMKQlu6IboPLyayYL+cSpi64JyH7H1kgFlvfhdwcrB6Enyzl+LzqoMyDYB46PSbif9y4eYUC4RRxV0C5DD0+GBqcfX2FOYdk7P4Uc3J1jhKvRqKv8Q0Kg28PYtMyDVPmMk5RDG1H3wnD7mtFeoZKV2LI9zvFbKJ0qiCmqBbD3aUZb9NOXVWV2yATWTL30CFFDWncnmwDuC9F3ZUEV/cCFUWCtRl9JHSjkE1T2SEOJ3p0f1+hxr+yFeJ5u5PkN3p
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3108.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(376002)(346002)(396003)(39860400002)(136003)(478600001)(8676002)(1076003)(316002)(86362001)(83380400001)(66476007)(66556008)(66946007)(52116002)(6916009)(7696005)(6666004)(4326008)(5660300002)(44832011)(8936002)(2906002)(33656002)(26005)(186003)(55016002)(16526019)(956004);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData: gHPu9Oe2hDEk9/3VJOQj6JBAHSjvElzpzjF2dKNo7Ur9ba24P+808FAJp/TWwTcnUL0rIzI0foLrAgpDIpwupg/BdQsYSPzeV6anIQVkLcwk+yL46ytps59BIGD7A6m1B+gf/PGaa7sMI4oL0TnH8fIvdTHx2L0gyoO/6nRVeYN9mzq1i85Ky9BsuMDZ/QmiqQ5Nsv6mSZP/kCkYEdifeS5I1N7jY0ZYNY/TONTlOs5mGvnypSDc/mrehSaI3U+InKe0TtqaDRXUPL8YDQa3DBGpqUtW7uV3v6F7HI11O/ADbTEKDYaRhHHLvEMWH3xtPkLsi8HwmhP2JG5l+z17pbXjDQqbuVhKJKac1R9iDXS24Id9uxXYRjumET8fwbbWWV2t90/u0swa3MheX0tK5obBK1snTNazExCw52MPus+obwxIi63ZyqntuS2CHyBQS8iivzpqtN1iK1LLY6PELo156LGZgsB0Ji1KrBUJVwTGjZb+IBgIesAwMfQzym06i6YJRWIL6trb+WqBGDQsnPko5T2KQQ8//F5uKXrFIQ0LyqckIzFbCiDli8SYsVC81PkvMq56Iicduo2fz8E5DglAJPHJFhjkt+0qAMqppneFxwQXnJEaiCDmQliR30A8iq7HAKM7zemBXOny+T/0nA==
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: bbdb2ffb-0647-4c3a-282e-08d8647a9a6c
-X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3108.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Sep 2020 13:21:41.7069
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: kCb8CWLKGahIZd7AH1cE3ntrE8/FEvYboA/KB7LYcwxXDglddnfeRspUVRFRzU49sfCm6AwSctXNGYcvnI7i5w==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN6PR12MB1745
+        d=gmail.com; s=20161025;
+        h=sender:from:to:cc:subject:date:message-id;
+        bh=DMcTkNl9pK2JK+4wKA6YYPpUFpron4tRg5J306e3r6I=;
+        b=g3ruM82AgcxaD0NucRV/jZ/VfNNUvEIjecCfOg/qxndoO3mKjAceaNJxD8F289YlMH
+         CJ0+RnmBRTCX21dD1t08GAvB+pI2JSEVgpjk5nL5nRJSbo6AwfzBLTMyDPGdHikBCCme
+         E5VljqOYqgopYsU8VIxCvgyoA1WxPkbu1BfXK6UbfA0O86QZkQrLjNub1GnwoPMKmd1t
+         RuPZ8rIMOIrkcbEsQrUG6roxisdr8kp47/dFNkd4mNK3ussDM5BX2bLdrNG5DZoH/MVv
+         4EiMlqmsA+h/H6hDi977n4m4XVUSZmSDAnZiP/phOMD9gtCIkUmPzK04U4XguQP0L25U
+         J1Rw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id;
+        bh=DMcTkNl9pK2JK+4wKA6YYPpUFpron4tRg5J306e3r6I=;
+        b=HCYJ/OFAtntFs9ha/thSPsuc1QDFa/TTLWCSrmaV8YeHUDi+4jOX0tY5eHNf78l8lA
+         uzphe8I5TbJeThJcARDOGvL+1qbIltfL9mteBoKKNo2OXVva6GcJf1YYGZ0/jBYE3eFB
+         zGEnz+Iq3OYMcYnMhk8IcLrbgn3/C/a6NeHjX/EXD/Fqq8JxUG4eRdzo/u5HrLPn9vna
+         Py8jVvn1Nfa4Yw95ZxwObzh2fwkJQmo996SGTonzBl4sOM942N2l2d7VyQugYUXjtA3V
+         T0kDK6VPXhnhXnECsKdeDdF2q157g9/MD80rDb6PCKDBNdhfDVQIPIHvu0+HvoYlvUzi
+         BWCQ==
+X-Gm-Message-State: AOAM5305e3f30w7BeyBDKYATe+dLZmmVflQv896R5Pzth7g5ZwSbgdW6
+        lnI/UJfodG8stUa2nQgHAQ==
+X-Google-Smtp-Source: ABdhPJzQTTTjoG2Ed37VVbQybQqhb4ge81mJft/98aauaO/jV+I6RyPo6PEwzRlqn9fCau15sIza5Q==
+X-Received: by 2002:a54:488c:: with SMTP id r12mr3907139oic.60.1601414210850;
+        Tue, 29 Sep 2020 14:16:50 -0700 (PDT)
+Received: from serve.minyard.net ([47.184.170.156])
+        by smtp.gmail.com with ESMTPSA id z20sm3227803oor.3.2020.09.29.14.16.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 29 Sep 2020 14:16:49 -0700 (PDT)
+Sender: Corey Minyard <tcminyard@gmail.com>
+Received: from t560.minyard.net (unknown [IPv6:2001:470:b8f6:1b:ad7b:1513:3f4c:af82])
+        by serve.minyard.net (Postfix) with ESMTPA id D229218003E;
+        Tue, 29 Sep 2020 21:16:48 +0000 (UTC)
+From:   minyard@acm.org
+To:     "Luck, Tony" <tony.luck@intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Borislav Petkov <bp@alien8.de>
+Cc:     linux-edac@vger.kernel.org, Corey Minyard <cminyard@mvista.com>,
+        hidehiro.kawai.ez@hitachi.com, linfeilong@huawei.com,
+        liuzhiqiang26@huawei.com
+Subject: [PATCH v2] x86: Fix MCE error handing when kdump is enabled
+Date:   Tue, 29 Sep 2020 16:16:44 -0500
+Message-Id: <20200929211644.31632-1-minyard@acm.org>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Mon, Sep 28, 2020 at 08:14:07PM +0200, Borislav Petkov wrote:
-> On Mon, Sep 28, 2020 at 10:53:50AM -0500, Yazen Ghannam wrote:
-> 
-> > I agree that the translation code is implementation-specific and applies
-> > only to DRAM ECC errors, so it make sense to have it in amd64_edac. The
-> > only issue is getting the address translation to earlier notifiers. I
-> > think we can add a new one in amd64_edac to run before others. Maybe this
-> > can be a new priority class like MCE_PRIO_PREPROCESS, or something like
-> > that for notifiers that fixup the MCE data.
-> 
-> Well, I'm not sure you need notifiers here - you wanna call
-> mce_usable_address() and in it, it should do the address conversion
-> calculation to give you a physical address which you can feed to
-> memory_failure etc.
-> 
-> Now, mce_usable_address() is core code and we can make core code call
-> into a module but that is yucky. So *that* is your reason for keeping it
-> where it is.
->
+From: Corey Minyard <cminyard@mvista.com>
 
-Okay, we'll keep the code where it is. I'll work on another set to call
-the address translation with mce_usable_address().
+If kdump is enabled, the handling of shooting down CPUs does not use the
+RESET_VECTOR irq before trying to use NMIs to shoot down the CPUs.
 
-> Looking at its size:
-> 
-> $ readelf -s vmlinux | grep umc_normaddr_to
->   2864: ffffffff817d8ae5   168 FUNC    LOCAL  DEFAULT    1 umc_normaddr_to_[...]
->  91866: ffffffff81030e00  1127 FUNC    GLOBAL DEFAULT    1 umc_normaddr_to_[...]
-> 
-> that's something like ~1.3K and if you split it and do some
-> experimenting, you might get it even slimmer. Not that ~1.3K is that
-> huge for current standards but we should always aim at not bloating the
-> fat guy our kernel already is.
->
+For normal errors that is fine.  MCEs, however, interrupt all CPUs at
+the same time so they are already running in an exception that is
+higher priority than an NMI, so sending them an NMI won't do anything.
+The MCE code in wait_for_panic() is set up to receive the RESET_VECTOR
+because it enables irqs, but it won't work on the NMI-only case.
 
-Okay, I'll keep an eye on this and try to slim it down.
+There is already code in place to scan for the NMI callback being ready,
+simply call that from the MCE's wait_for_panic() code so it will pick up
+and handle it if an NMI shootdown is requested.  This required
+propagating the registers down to wait_for_panic().
 
-Thanks,
-Yazen
+Reported-by: Wu Bo <wubo40@huawei.com>
+Cc: hidehiro.kawai.ez@hitachi.com
+Cc: linfeilong@huawei.com
+Cc: liuzhiqiang26@huawei.com
+Signed-off-by: Corey Minyard <cminyard@mvista.com>
+Tested-by: Wu Bo <wubo40@huawei.com>
+---
+I hadn't heard anything, so I thought I would re-post with the updated
+version of the patch.
+
+Wu Bo found this doing kdumps because the IPMI driver saves panic
+information to the IPMI event log during a panic.  But it was getting
+interrupts at the same time because the other cores had interrupts
+enabled, causing the process to take a long time.
+
+Having interrupt enabled during a kdump shutdown and while the new kdump
+kernel is running is obviously a bad thing and can cause other problems,
+too.  I think this is the right fix, but I'm not an expert in this code.
+
+The only thing I can think of that might be wrong with this is that if
+you are going to take a kdump, it might be best to never re-enable
+interrupts at all.  But I'm not sure.
+
+Changes since v1:
+  * Moved regs to the beginning of all parameter lists that it was
+    added to.
+  * Fixed the header text about NMIs and MCEs.
+
+ arch/x86/kernel/cpu/mce/core.c | 63 +++++++++++++++++++++-------------
+ 1 file changed, 40 insertions(+), 23 deletions(-)
+
+diff --git a/arch/x86/kernel/cpu/mce/core.c b/arch/x86/kernel/cpu/mce/core.c
+index f43a78bde670..b786608f9a21 100644
+--- a/arch/x86/kernel/cpu/mce/core.c
++++ b/arch/x86/kernel/cpu/mce/core.c
+@@ -282,20 +282,35 @@ static int fake_panic;
+ static atomic_t mce_fake_panicked;
+ 
+ /* Panic in progress. Enable interrupts and wait for final IPI */
+-static void wait_for_panic(void)
++static void wait_for_panic(struct pt_regs *regs)
+ {
+ 	long timeout = PANIC_TIMEOUT*USEC_PER_SEC;
+ 
+ 	preempt_disable();
+ 	local_irq_enable();
+-	while (timeout-- > 0)
++	while (timeout-- > 0) {
++		/*
++		 * We are in an NMI waiting to be stopped by the
++		 * handing processor.  For kdump handling, we need to
++		 * be monitoring crash_ipi_issued since that is what
++		 * is used for an NMI stop used by kdump.  But we also
++		 * need to have interrupts enabled some so that
++		 * RESET_VECTOR will interrupt us on a normal
++		 * shutdown.
++		 */
++		local_irq_disable();
++		run_crash_ipi_callback(regs);
++		local_irq_enable();
++
+ 		udelay(1);
++	}
+ 	if (panic_timeout == 0)
+ 		panic_timeout = mca_cfg.panic_timeout;
+ 	panic("Panicing machine check CPU died");
+ }
+ 
+-static void mce_panic(const char *msg, struct mce *final, char *exp)
++static void mce_panic(struct pt_regs *regs, const char *msg,
++		      struct mce *final, char *exp)
+ {
+ 	int apei_err = 0;
+ 	struct llist_node *pending;
+@@ -306,7 +321,7 @@ static void mce_panic(const char *msg, struct mce *final, char *exp)
+ 		 * Make sure only one CPU runs in machine check panic
+ 		 */
+ 		if (atomic_inc_return(&mce_panicked) > 1)
+-			wait_for_panic();
++			wait_for_panic(regs);
+ 		barrier();
+ 
+ 		bust_spinlocks(1);
+@@ -817,7 +832,7 @@ static atomic_t mce_callin;
+ /*
+  * Check if a timeout waiting for other CPUs happened.
+  */
+-static int mce_timed_out(u64 *t, const char *msg)
++static int mce_timed_out(struct pt_regs *regs, u64 *t, const char *msg)
+ {
+ 	/*
+ 	 * The others already did panic for some reason.
+@@ -827,12 +842,12 @@ static int mce_timed_out(u64 *t, const char *msg)
+ 	 */
+ 	rmb();
+ 	if (atomic_read(&mce_panicked))
+-		wait_for_panic();
++		wait_for_panic(regs);
+ 	if (!mca_cfg.monarch_timeout)
+ 		goto out;
+ 	if ((s64)*t < SPINUNIT) {
+ 		if (mca_cfg.tolerant <= 1)
+-			mce_panic(msg, NULL, NULL);
++			mce_panic(regs, msg, NULL, NULL);
+ 		cpu_missing = 1;
+ 		return 1;
+ 	}
+@@ -866,7 +881,7 @@ static int mce_timed_out(u64 *t, const char *msg)
+  * All the spin loops have timeouts; when a timeout happens a CPU
+  * typically elects itself to be Monarch.
+  */
+-static void mce_reign(void)
++static void mce_reign(struct pt_regs *regs)
+ {
+ 	int cpu;
+ 	struct mce *m = NULL;
+@@ -896,7 +911,7 @@ static void mce_reign(void)
+ 	 * other CPUs.
+ 	 */
+ 	if (m && global_worst >= MCE_PANIC_SEVERITY && mca_cfg.tolerant < 3)
+-		mce_panic("Fatal machine check", m, msg);
++		mce_panic(regs, "Fatal machine check", m, msg);
+ 
+ 	/*
+ 	 * For UC somewhere we let the CPU who detects it handle it.
+@@ -909,7 +924,8 @@ static void mce_reign(void)
+ 	 * source or one CPU is hung. Panic.
+ 	 */
+ 	if (global_worst <= MCE_KEEP_SEVERITY && mca_cfg.tolerant < 3)
+-		mce_panic("Fatal machine check from unknown source", NULL, NULL);
++		mce_panic(regs,
++			  "Fatal machine check from unknown source", NULL, NULL);
+ 
+ 	/*
+ 	 * Now clear all the mces_seen so that they don't reappear on
+@@ -928,7 +944,7 @@ static atomic_t global_nwo;
+  * in the entry order.
+  * TBD double check parallel CPU hotunplug
+  */
+-static int mce_start(int *no_way_out)
++static int mce_start(struct pt_regs *regs, int *no_way_out)
+ {
+ 	int order;
+ 	int cpus = num_online_cpus();
+@@ -948,7 +964,7 @@ static int mce_start(int *no_way_out)
+ 	 * Wait for everyone.
+ 	 */
+ 	while (atomic_read(&mce_callin) != cpus) {
+-		if (mce_timed_out(&timeout,
++		if (mce_timed_out(regs, &timeout,
+ 				  "Timeout: Not all CPUs entered broadcast exception handler")) {
+ 			atomic_set(&global_nwo, 0);
+ 			return -1;
+@@ -974,7 +990,7 @@ static int mce_start(int *no_way_out)
+ 		 * only seen by one CPU before cleared, avoiding duplicates.
+ 		 */
+ 		while (atomic_read(&mce_executing) < order) {
+-			if (mce_timed_out(&timeout,
++			if (mce_timed_out(regs, &timeout,
+ 					  "Timeout: Subject CPUs unable to finish machine check processing")) {
+ 				atomic_set(&global_nwo, 0);
+ 				return -1;
+@@ -995,7 +1011,7 @@ static int mce_start(int *no_way_out)
+  * Synchronize between CPUs after main scanning loop.
+  * This invokes the bulk of the Monarch processing.
+  */
+-static int mce_end(int order)
++static int mce_end(struct pt_regs *regs, int order)
+ {
+ 	int ret = -1;
+ 	u64 timeout = (u64)mca_cfg.monarch_timeout * NSEC_PER_USEC;
+@@ -1019,13 +1035,13 @@ static int mce_end(int order)
+ 		 * loops.
+ 		 */
+ 		while (atomic_read(&mce_executing) <= cpus) {
+-			if (mce_timed_out(&timeout,
++			if (mce_timed_out(regs, &timeout,
+ 					  "Timeout: Monarch CPU unable to finish machine check processing"))
+ 				goto reset;
+ 			ndelay(SPINUNIT);
+ 		}
+ 
+-		mce_reign();
++		mce_reign(regs);
+ 		barrier();
+ 		ret = 0;
+ 	} else {
+@@ -1033,7 +1049,7 @@ static int mce_end(int order)
+ 		 * Subject: Wait for Monarch to finish.
+ 		 */
+ 		while (atomic_read(&mce_executing) != 0) {
+-			if (mce_timed_out(&timeout,
++			if (mce_timed_out(regs, &timeout,
+ 					  "Timeout: Monarch CPU did not finish machine check processing"))
+ 				goto reset;
+ 			ndelay(SPINUNIT);
+@@ -1286,9 +1302,9 @@ noinstr void do_machine_check(struct pt_regs *regs)
+ 	 */
+ 	if (lmce) {
+ 		if (no_way_out)
+-			mce_panic("Fatal local machine check", &m, msg);
++			mce_panic(regs, "Fatal local machine check", &m, msg);
+ 	} else {
+-		order = mce_start(&no_way_out);
++		order = mce_start(regs, &no_way_out);
+ 	}
+ 
+ 	__mc_scan_banks(&m, final, toclear, valid_banks, no_way_out, &worst);
+@@ -1301,7 +1317,7 @@ noinstr void do_machine_check(struct pt_regs *regs)
+ 	 * When there's any problem use only local no_way_out state.
+ 	 */
+ 	if (!lmce) {
+-		if (mce_end(order) < 0)
++		if (mce_end(regs, order) < 0)
+ 			no_way_out = worst >= MCE_PANIC_SEVERITY;
+ 	} else {
+ 		/*
+@@ -1314,7 +1330,7 @@ noinstr void do_machine_check(struct pt_regs *regs)
+ 		 */
+ 		if (worst >= MCE_PANIC_SEVERITY && mca_cfg.tolerant < 3) {
+ 			mce_severity(&m, cfg->tolerant, &msg, true);
+-			mce_panic("Local fatal machine check!", &m, msg);
++			mce_panic(regs, "Local fatal machine check!", &m, msg);
+ 		}
+ 	}
+ 
+@@ -1325,7 +1341,7 @@ noinstr void do_machine_check(struct pt_regs *regs)
+ 	if (cfg->tolerant == 3)
+ 		kill_it = 0;
+ 	else if (no_way_out)
+-		mce_panic("Fatal machine check on current CPU", &m, msg);
++		mce_panic(regs, "Fatal machine check on current CPU", &m, msg);
+ 
+ 	if (worst > 0)
+ 		irq_work_queue(&mce_irq_work);
+@@ -1361,7 +1377,8 @@ noinstr void do_machine_check(struct pt_regs *regs)
+ 		 */
+ 		if (m.kflags & MCE_IN_KERNEL_RECOV) {
+ 			if (!fixup_exception(regs, X86_TRAP_MC, 0, 0))
+-				mce_panic("Failed kernel mode recovery", &m, msg);
++				mce_panic(regs, "Failed kernel mode recovery",
++					  &m, msg);
+ 		}
+ 	}
+ }
+-- 
+2.17.1
+
