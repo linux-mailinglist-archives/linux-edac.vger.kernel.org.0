@@ -2,104 +2,107 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A6282804DB
-	for <lists+linux-edac@lfdr.de>; Thu,  1 Oct 2020 19:13:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A56A22804ED
+	for <lists+linux-edac@lfdr.de>; Thu,  1 Oct 2020 19:16:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732805AbgJARMx (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Thu, 1 Oct 2020 13:12:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54836 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732808AbgJARMU (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Thu, 1 Oct 2020 13:12:20 -0400
-Received: from mail-ot1-x342.google.com (mail-ot1-x342.google.com [IPv6:2607:f8b0:4864:20::342])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFC2FC0613D0
-        for <linux-edac@vger.kernel.org>; Thu,  1 Oct 2020 10:12:19 -0700 (PDT)
-Received: by mail-ot1-x342.google.com with SMTP id s66so6212362otb.2
-        for <linux-edac@vger.kernel.org>; Thu, 01 Oct 2020 10:12:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=mvista-com.20150623.gappssmtp.com; s=20150623;
-        h=date:from:to:cc:subject:message-id:reply-to:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=/7NXXrjXj8dvlBu8u10badCJ3wqHRyH8Ya1Qhmj1R7w=;
-        b=Bi5Rf+IyCzanLkVYVcnuRBQTCJgAyhtqyqmmhN+PwflWucC/fDLF2BBMdJgYdhjFxU
-         NfxshNeJPPU/Rx1rAEEc394ukeofq1lkaVjxNLsSQvVeuSfIKzg4V4ZKmkMrJwqB3DHC
-         mekl9rpOfurpNlML/WeVFDTAVcrJ1+qHrj//+LTRFE/eaYc7PDxE9UDU0d2yXBrrNpbh
-         8NFvNB33XSSajw9EaRwHez/55svl0FY2e+0eaXShX0Hw3h76bnGo9bH1qSj4JrtXdLPj
-         /9P+V/dDakIiiHxXiMtQTuGLbgYSSFam0x0jNRpLyjrUTvcxmY20lCelx63P9fxPmQGe
-         gtlg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:reply-to
-         :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=/7NXXrjXj8dvlBu8u10badCJ3wqHRyH8Ya1Qhmj1R7w=;
-        b=AmKRhLxdpX2td2kVyuLMmBDCtNbwNgUeSG6aZZya29pvddIUQ9ESj7uu6L+UI3qGLJ
-         h22ANt5FDXrccKUBZafXDT8WlpF4/TK2KM/VoEZDqjIJc0L4jxaHteFr7HyeuGBnxwX4
-         st7VsFRnVIaHT5v3BjVACckW0N69OakKAg8h6RGE0C5p2rdFwJN/8OlpJfCc5A3sZWwF
-         jz9mZbZS26xYo8YcIoJnPtxTtLD9trwfW6E7TaaqN4ek49djWjMzHDmyFqoKEfi3sW9E
-         /9HByesO0IeC2SAyiodcAzbjAmYLlEN18SLKX3IA8sEGkIJCl4TLRdCzX1Q1jkJ6OAVj
-         uk/A==
-X-Gm-Message-State: AOAM532d0VJSGHghRCtPsdd8NpbqXNTGDK+UInLJ08ik3pNuKLbdYu3E
-        YY2CmpYYQQslp4Tk8MAJF9ZmVA==
-X-Google-Smtp-Source: ABdhPJwtW9F8cfkV4bYuT1doxPf91zIYNcupz9lpvPbeAFuR507sRWYuX99lNIGCmvSyv6rAwcCXJw==
-X-Received: by 2002:a9d:61d5:: with SMTP id h21mr5820968otk.187.1601572339273;
-        Thu, 01 Oct 2020 10:12:19 -0700 (PDT)
-Received: from minyard.net ([2001:470:b8f6:1b:119c:a18f:647:7f4c])
-        by smtp.gmail.com with ESMTPSA id p8sm1457125oot.29.2020.10.01.10.12.17
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Thu, 01 Oct 2020 10:12:18 -0700 (PDT)
-Date:   Thu, 1 Oct 2020 12:12:16 -0500
-From:   Corey Minyard <cminyard@mvista.com>
-To:     "Luck, Tony" <tony.luck@intel.com>
-Cc:     Borislav Petkov <bp@alien8.de>, Corey Minyard <minyard@acm.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
-        "hidehiro.kawai.ez@hitachi.com" <hidehiro.kawai.ez@hitachi.com>,
-        "linfeilong@huawei.com" <linfeilong@huawei.com>,
-        "liuzhiqiang26@huawei.com" <liuzhiqiang26@huawei.com>
-Subject: Re: [PATCH v2] x86: Fix MCE error handing when kdump is enabled
-Message-ID: <20201001171216.GY3725@minyard.net>
-Reply-To: cminyard@mvista.com
-References: <20200929211644.31632-1-minyard@acm.org>
- <20200930175633.GM6810@zn.tnic>
- <20200930184906.GZ3674@minyard.net>
- <20201001113318.GC17683@zn.tnic>
- <20201001134449.GB3674@minyard.net>
- <20201001161645.GD17683@zn.tnic>
- <6c6238c0088747a994a2bdce38ad0242@intel.com>
+        id S1732274AbgJARQL (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Thu, 1 Oct 2020 13:16:11 -0400
+Received: from foss.arm.com ([217.140.110.172]:40646 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1732213AbgJARQL (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Thu, 1 Oct 2020 13:16:11 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A118B1063;
+        Thu,  1 Oct 2020 10:16:10 -0700 (PDT)
+Received: from [172.16.1.113] (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 4DAA23F6CF;
+        Thu,  1 Oct 2020 10:16:09 -0700 (PDT)
+Subject: Re: [PATCH 1/1] RAS: Add CPU Correctable Error Collector to isolate
+ an erroneous CPU core
+To:     Borislav Petkov <bp@alien8.de>, Shiju Jose <shiju.jose@huawei.com>
+Cc:     "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
+        "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "tony.luck@intel.com" <tony.luck@intel.com>,
+        "rjw@rjwysocki.net" <rjw@rjwysocki.net>,
+        "lenb@kernel.org" <lenb@kernel.org>, Linuxarm <linuxarm@huawei.com>
+References: <20200901140140.1772-1-shiju.jose@huawei.com>
+ <20200901143539.GC8392@zn.tnic> <512b7b8e6cb846aabaf5a2191cd9b5d4@huawei.com>
+ <20200909120203.GB12237@zn.tnic>
+ <50714e083d55491a8ccf5ad847682d1e@huawei.com>
+ <20200917084038.GE31960@zn.tnic>
+From:   James Morse <james.morse@arm.com>
+Message-ID: <91e71fe9-b002-0f1f-3237-62cea49e083a@arm.com>
+Date:   Thu, 1 Oct 2020 18:16:03 +0100
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:68.0) Gecko/20100101
+ Thunderbird/68.12.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <6c6238c0088747a994a2bdce38ad0242@intel.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+In-Reply-To: <20200917084038.GE31960@zn.tnic>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-GB
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Thu, Oct 01, 2020 at 04:29:49PM +0000, Luck, Tony wrote:
-> >> I was thinking about this some yesterday.  It seems to me that enabling
-> >> IRQS in an MCE handler is just a bad idea, but it's really a bad idea
-> >> for kdump.
-> >
-> > I don't think this code ever thought about kdump.
-> 
-> How useful is kdump after a machine check induced crash anyway?
-> 
-> kdump is useful for debugging software problems.  There are very
-> few ways that a software bug can result in a machine check. There
-> are many ways that a hardware problem can trigger a machine check
-> and crash.
-> 
-> So it would seem (statistically) that the analysis of almost every kdump
-> after a machine check just says "h/w issue".
+Hi guys,
 
-I don't really know.  It seems like having an idea of what the software
-was doing when the hardware died might be useful for the hardware
-engineers.  I really don't know much about what triggers MCEs, though,
-besides memory errors the hardware couldn't correct.
+On 17/09/2020 09:40, Borislav Petkov wrote:
+> On Thu, Sep 10, 2020 at 03:29:56PM +0000, Shiju Jose wrote:
 
-You could say that the regs don't matter, I suppose, and that's
-probabaly fine.  But if it's easy enough to do, and the interfaces are
-already there and work, and it speeds up the crash process a bit, why
-not do it?
+> You can't know what exactly you wanna do if you don't have a use case
+> you're trying to address.
+> 
+>> According to the ARM Processor CPER definition the error types
+>> reported are Cache Error, TLB Error, Bus Error and micro-architectural
+>> Error.
+> 
+> Bus error sounds like not even originating in the CPU but the CPU only
+> reporting it. Imagine if that really were the case, and you go disable
+> the CPU but the error source is still there. You've just disabled the
+> reporting of the error only and now you don't even know anymore that
+> you're getting errors.
+> 
+>> Few thoughts on this,
+>> 1. Not sure will a CPU core would work/perform as normal after disabling
+>> a functional unit?
+> 
+> You can disable parts of caches, etc, so that you can have a somewhat
+> functioning CPU until the replacement maintenance can take place.
 
--corey
+This is implementation-specific stuff that only firmware can do...
+
+
+>> 2. Support in the HW to disable a function unit alone may not available.
+> 
+> Yes.
+> 
+>> 3. If it is require to store and retrieve the error count based on
+>> functional unit, then CEC will become more complex?
+> 
+> Depends on how it is designed. That's why we're first talking about what
+> needs to be done exactly before going off and doing something.
+> 
+>> This requirement is the part of the early fault prediction by taking
+>> action when large number of corrected errors reported on a CPU core
+>> before it causing serious faults.
+> 
+> And do you know of actual real-life examples where this is really the
+> case? Do you have any users who report a large error count on ARM CPUs,
+> originating from the caches and that something like that would really
+> help?
+> 
+> Because from my x86 CPUs limited experience, the cache arrays are mostly
+> fine and errors reported there are not something that happens very
+> frequently so we don't even need to collect and count those.
+> 
+> So is this something which you need to have in order to check a box
+> somewhere that there is some functionality or is there an actual
+> real-life use case behind it which a customer has requested?
+
+If the corrected-count is available somewhere, can't this policy be made in user-space?
+
+
+Thanks,
+
+James
