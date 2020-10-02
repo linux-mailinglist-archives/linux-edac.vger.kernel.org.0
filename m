@@ -2,112 +2,90 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D9AB2812BF
-	for <lists+linux-edac@lfdr.de>; Fri,  2 Oct 2020 14:31:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F3799281305
+	for <lists+linux-edac@lfdr.de>; Fri,  2 Oct 2020 14:44:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387531AbgJBMbz (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Fri, 2 Oct 2020 08:31:55 -0400
-Received: from lhrrgout.huawei.com ([185.176.76.210]:2949 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726090AbgJBMbz (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Fri, 2 Oct 2020 08:31:55 -0400
-Received: from lhreml715-chm.china.huawei.com (unknown [172.18.7.106])
-        by Forcepoint Email with ESMTP id 6DD1FBE0408B33BD3372;
-        Fri,  2 Oct 2020 13:31:54 +0100 (IST)
-Received: from DESKTOP-6T4S3DQ.china.huawei.com (10.47.84.119) by
- lhreml715-chm.china.huawei.com (10.201.108.66) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1913.5; Fri, 2 Oct 2020 13:31:53 +0100
-From:   Shiju Jose <shiju.jose@huawei.com>
-To:     <linux-edac@vger.kernel.org>, <linux-acpi@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <bp@alien8.de>,
-        <tony.luck@intel.com>, <rjw@rjwysocki.net>, <james.morse@arm.com>,
-        <lenb@kernel.org>
-CC:     <linuxarm@huawei.com>, <shiju.jose@huawei.com>
-Subject: [RFC PATCH 7/7] ACPI / APEI: Add reporting ARM64 CPU correctable errors to the CEC
-Date:   Fri, 2 Oct 2020 13:22:35 +0100
-Message-ID: <20201002122235.1280-8-shiju.jose@huawei.com>
-X-Mailer: git-send-email 2.26.0.windows.1
-In-Reply-To: <20201002122235.1280-1-shiju.jose@huawei.com>
+        id S1726569AbgJBMoD (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Fri, 2 Oct 2020 08:44:03 -0400
+Received: from mail.skyhub.de ([5.9.137.197]:52508 "EHLO mail.skyhub.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725964AbgJBMoD (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Fri, 2 Oct 2020 08:44:03 -0400
+Received: from zn.tnic (p200300ec2f0d63009d6e503e82117789.dip0.t-ipconnect.de [IPv6:2003:ec:2f0d:6300:9d6e:503e:8211:7789])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 2A9B11EC04F0;
+        Fri,  2 Oct 2020 14:44:02 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1601642642;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=6ePxXu+m7xjdZ0x/dAl/b7hIP0Q5tfRXgfKM5KroND4=;
+        b=ZEH2/+CyIVjBWYEvFyyFb/zSxiibBHpwMAke0JCHzvypMEUV2Km3E0xNBxzQcmMA7OISlW
+        /eI37VnU7XhCXNuxuKEZnRa3WBCtIQKfDQXLUgSdgohAaF00oplMuBaGVQwrq7BJP3ebSr
+        5/1QBMOvQ+I/eOmMLU99QE4JEDsLn7s=
+Date:   Fri, 2 Oct 2020 14:43:52 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Shiju Jose <shiju.jose@huawei.com>
+Cc:     linux-edac@vger.kernel.org, linux-acpi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, tony.luck@intel.com,
+        rjw@rjwysocki.net, james.morse@arm.com, lenb@kernel.org,
+        linuxarm@huawei.com
+Subject: Re: [RFC PATCH 0/7] RAS/CEC: Extend CEC for errors count check on
+ short time period
+Message-ID: <20201002124352.GC17436@zn.tnic>
 References: <20201002122235.1280-1-shiju.jose@huawei.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.47.84.119]
-X-ClientProxiedBy: lhreml720-chm.china.huawei.com (10.201.108.71) To
- lhreml715-chm.china.huawei.com (10.201.108.66)
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20201002122235.1280-1-shiju.jose@huawei.com>
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-Add reporting ARM64 CPU correctable errors to the RAS correctable
-errors collector(CEC).
+On Fri, Oct 02, 2020 at 01:22:28PM +0100, Shiju Jose wrote:
+> Open Questions based on the feedback from Boris,
+> 1. ARM processor error types are cache/TLB/bus errors.
+>    [Reference N2.4.4.1 ARM Processor Error Information UEFI Spec v2.8]
+> Any of the above error types should not be consider for the
+> error collection and CPU core isolation?
+> 
+> 2.If disabling entire CPU core is not acceptable,
+> please suggest method to disable L1 and L2 cache on ARM64 core?
 
-ARM processor error types are cache/TLB/bus errors.
-Any of the above error types should not be consider for the
-error collection and CPU core isolation?
+More open questions:
 
-Signed-off-by: Shiju Jose <shiju.jose@huawei.com>
----
- drivers/acpi/apei/ghes.c | 36 +++++++++++++++++++++++++++++++++---
- 1 file changed, 33 insertions(+), 3 deletions(-)
+> This requirement is the part of the early fault prediction by taking
+> action when large number of corrected errors reported on a CPU core
+> before it causing serious faults.
 
-diff --git a/drivers/acpi/apei/ghes.c b/drivers/acpi/apei/ghes.c
-index 81bf71b10d44..3cecb457d352 100644
---- a/drivers/acpi/apei/ghes.c
-+++ b/drivers/acpi/apei/ghes.c
-@@ -511,6 +511,38 @@ static void ghes_handle_aer(struct acpi_hest_generic_data *gdata)
- #endif
- }
- 
-+static void ghes_handle_arm_hw_error(struct acpi_hest_generic_data *gdata)
-+{
-+	struct cper_sec_proc_arm *err = acpi_hest_get_payload(gdata);
-+	struct cper_arm_err_info *err_info;
-+	int sec_sev;
-+	int cpu, i, ret;
-+
-+	log_arm_hw_error(err);
-+
-+	sec_sev = ghes_severity(gdata->error_severity);
-+	if (sec_sev != GHES_SEV_CORRECTED)
-+		return;
-+
-+#if defined(CONFIG_ARM64)
-+	cpu = get_logical_index(err->mpidr);
-+	if (cpu == -EINVAL)
-+		return;
-+
-+	/* ARM processor error types are cache/tlb/bus errors.
-+	 * Any of the above error types should not be consider for the
-+	 * error collection and CPU core isolation?
-+	 */
-+	err_info = (struct cper_arm_err_info *)(err + 1);
-+	for (i = 0; i < err->err_info_num; i++) {
-+		ret = cec_cpu_add_elem(cpu, err_info->multiple_error + 1);
-+		if (ret)
-+			break;
-+		err_info += 1;
-+	}
-+#endif
-+}
-+
- static bool ghes_do_proc(struct ghes *ghes,
- 			 const struct acpi_hest_generic_status *estatus)
- {
-@@ -543,9 +575,7 @@ static bool ghes_do_proc(struct ghes *ghes,
- 			ghes_handle_aer(gdata);
- 		}
- 		else if (guid_equal(sec_type, &CPER_SEC_PROC_ARM)) {
--			struct cper_sec_proc_arm *err = acpi_hest_get_payload(gdata);
--
--			log_arm_hw_error(err);
-+			ghes_handle_arm_hw_error(gdata);
- 		} else {
- 			void *err = acpi_hest_get_payload(gdata);
- 
+And do you know of actual real-life examples where this is really the
+case? Do you have any users who report a large error count on ARM CPUs,
+originating from the caches and that something like that would really
+help?
+
+Because from my x86 CPUs limited experience, the cache arrays are mostly
+fine and errors reported there are not something that happens very
+frequently so we don't even need to collect and count those.
+
+So is this something which you need to have in order to check a box
+somewhere that there is some functionality or is there an actual
+real-life use case behind it which a customer has requested?
+
+Open question from James with my reply to it:
+
+On Thu, Oct 01, 2020 at 06:16:03PM +0100, James Morse wrote:
+> If the corrected-count is available somewhere, can't this policy be
+> made in user-space?
+
+You mean rasdaemon goes and offlines CPUs when certain thresholds are
+reached? Sure. It would be much more flexible too.
+
+First we answer questions and discuss, then we code.
+
 -- 
-2.17.1
+Regards/Gruss,
+    Boris.
 
-
+https://people.kernel.org/tglx/notes-about-netiquette
