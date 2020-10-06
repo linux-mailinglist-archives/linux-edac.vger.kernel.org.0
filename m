@@ -2,191 +2,228 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 37D3F285354
-	for <lists+linux-edac@lfdr.de>; Tue,  6 Oct 2020 22:44:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ABF29285365
+	for <lists+linux-edac@lfdr.de>; Tue,  6 Oct 2020 22:46:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727280AbgJFUox (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Tue, 6 Oct 2020 16:44:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37102 "EHLO
+        id S1727381AbgJFUqL (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Tue, 6 Oct 2020 16:46:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727263AbgJFUox (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Tue, 6 Oct 2020 16:44:53 -0400
-Received: from mail-il1-x144.google.com (mail-il1-x144.google.com [IPv6:2607:f8b0:4864:20::144])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF7C6C0613D3
-        for <linux-edac@vger.kernel.org>; Tue,  6 Oct 2020 13:44:52 -0700 (PDT)
-Received: by mail-il1-x144.google.com with SMTP id c5so94540ilk.11
-        for <linux-edac@vger.kernel.org>; Tue, 06 Oct 2020 13:44:52 -0700 (PDT)
+        with ESMTP id S1727415AbgJFUqG (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Tue, 6 Oct 2020 16:46:06 -0400
+Received: from mail-il1-x141.google.com (mail-il1-x141.google.com [IPv6:2607:f8b0:4864:20::141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 798D4C0613D2
+        for <linux-edac@vger.kernel.org>; Tue,  6 Oct 2020 13:46:04 -0700 (PDT)
+Received: by mail-il1-x141.google.com with SMTP id t7so103217ilf.10
+        for <linux-edac@vger.kernel.org>; Tue, 06 Oct 2020 13:46:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linuxfoundation.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=FAVTd4/uhiW60aPw+XvSmqORkXupHL87bPyGbV0HsYw=;
-        b=U8RRNn9buGpyfeQW5lvmH3Wmzq2YD8O1mN7x0FY+53p4cXKgvqPJy505TkImeSvG5u
-         vPqk7VPNdpjJ6qSCnY+aBFwsvl58Pzzg7PMB9AE+AL+AfTUxXgRReKKC4MwkcYRN5fQj
-         kFbcmpk7KiSko4YptwdL9RjK32FM9VmUFsc+s=
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=bv+5GiaG/LcuKTT3iu5LLoZTiwRc7KlRllwmZiSrosw=;
+        b=FL8PP2NVW1HIPVO0IhjN7z+q8LP6474DNBoj6mJ2Xe/zmlZ5SBxBZKeP8wTK0EA4m9
+         RVkR5yD5ZzEOrrZRc1AU6QSUAUlgm0zC1pTD9wl/S/brmd6Bxo3qDwTgPVyF9v5A5Kpr
+         Z2fcw3h193wXNzMBc6N8GeXXP+IXPaNOZ3a+Y=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=FAVTd4/uhiW60aPw+XvSmqORkXupHL87bPyGbV0HsYw=;
-        b=qXq4Yrpfb7ZuKu5+GqFsJh95aBkWLxgeZhkfTmF8F7jA834o5uNY1vAM5wAiHN+W3+
-         oZN9bg1HiWN7ZESC8Uoo20POS9p2jnkSH57/DRdunbZFt4t4QdZyfazB9QS0+HhKS56k
-         DaUn19zxAKg15Zhz4neNrbKDQD5p1MBBgpBCytHN1sOmcCfnfp6yVn6e8okLpnnkbU5t
-         5DwAW9yqt6eAvCz5/Wv57N576XLwO++8CdG2BNy711GVZqybqEzpR521t+SUKGhfDIt8
-         UFiGaGgFhCMqnsu0nteG3/LD5CgUtjaXZL4iyY1HCt8h5LKNRcObvyroJpn5oHjhaZHP
-         VAnQ==
-X-Gm-Message-State: AOAM532qMJawyDcPQqsdAQbcIcZdInV+Es2eGxF6k6qK9k9dS5Fjwtjh
-        Rz3UHnQ5lyW1o6sBrOBDOopdIQ==
-X-Google-Smtp-Source: ABdhPJyYiB/m/jo1bQRIrsuVzVlWXVEm/AoM5jDHZ7E+dxaOLQnEmcXEJ+hfYOVO3MBQ5PqFH2fXzQ==
-X-Received: by 2002:a92:b30c:: with SMTP id p12mr9703ilh.35.1602017092051;
-        Tue, 06 Oct 2020 13:44:52 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=bv+5GiaG/LcuKTT3iu5LLoZTiwRc7KlRllwmZiSrosw=;
+        b=JT0s5R73ANxHCKjBIPCviLQ2ZpXs02KhuPhms2G67H432zGUGjNoMhvHfGrTTXNAtU
+         Bi/wIkQIQfJtjyuUE+sj1fF3wHug8BF3ekxaQH3CU7XTCRzwhquc06cOaOsX6jzDdz+v
+         kaVzNOtzJctsM4kiJVvOOtMraWn7Q6eoZ6vnTzyh9a9cmCTFk5U+xCmg/6jbEA4g+U5m
+         ZainZg5SPVyhbZlhP/Cv7/+itzJoOBKsVWLbpsZtRTdbhgk+Bqtu8BEO9ZJA0LJR1vdC
+         v1qownPozsnCZkdXEFnO7bKBrvVDLXO91Gbwa7uugdR/t2nAI8VgBYWMSAmRc9bSabVY
+         jmmQ==
+X-Gm-Message-State: AOAM5316Ub9OBnYlQqbMLlNR0vw0H+uflRSPhJs1X/BVTcgXNas/eRq1
+        BHbWIVA546L7syQHYhXprimktA==
+X-Google-Smtp-Source: ABdhPJy7xF551ziYXOReG4BPUfTRZBAq199bpzKm3MbF/0nJHFcRodAHVwJxtWbsU8uC4/CbzkcL1Q==
+X-Received: by 2002:a05:6e02:54d:: with SMTP id i13mr4975410ils.219.1602017163833;
+        Tue, 06 Oct 2020 13:46:03 -0700 (PDT)
 Received: from shuah-t480s.internal (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
-        by smtp.gmail.com with ESMTPSA id s69sm1665627ili.54.2020.10.06.13.44.50
+        by smtp.gmail.com with ESMTPSA id s69sm1665627ili.54.2020.10.06.13.46.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Oct 2020 13:44:51 -0700 (PDT)
+        Tue, 06 Oct 2020 13:46:03 -0700 (PDT)
 From:   Shuah Khan <skhan@linuxfoundation.org>
-To:     corbet@lwn.net, keescook@chromium.org, gregkh@linuxfoundation.org,
-        shuah@kernel.org, rafael@kernel.org, johannes@sipsolutions.net,
-        lenb@kernel.org, james.morse@arm.com, tony.luck@intel.com,
-        bp@alien8.de, arve@android.com, tkjos@android.com,
-        maco@android.com, joel@joelfernandes.org, christian@brauner.io,
-        hridya@google.com, surenb@google.com, minyard@acm.org,
-        arnd@arndb.de, mchehab@kernel.org, rric@kernel.org
-Cc:     Shuah Khan <skhan@linuxfoundation.org>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-acpi@vger.kernel.org, devel@driverdev.osuosl.org,
-        openipmi-developer@lists.sourceforge.net,
-        linux-edac@vger.kernel.org
-Subject: [PATCH v2 00/11] Introduce Simple atomic counters
-Date:   Tue,  6 Oct 2020 14:44:31 -0600
-Message-Id: <cover.1602011710.git.skhan@linuxfoundation.org>
+To:     bp@alien8.de, mchehab@kernel.org, tony.luck@intel.com,
+        james.morse@arm.com, rric@kernel.org, gregkh@linuxfoundation.org,
+        keescook@chromium.org
+Cc:     Shuah Khan <skhan@linuxfoundation.org>, linux-edac@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Borislav Petkov <bp@suse.de>
+Subject: [PATCH v2 11/11] drivers/edac: convert pci counters to counter_atomic32
+Date:   Tue,  6 Oct 2020 14:44:42 -0600
+Message-Id: <03dc29c130e6522448a4328b1cfa8fbf7c9a8c97.1602011710.git.skhan@linuxfoundation.org>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <cover.1602011710.git.skhan@linuxfoundation.org>
+References: <cover.1602011710.git.skhan@linuxfoundation.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-This patch series is a result of discussion at the refcount_t BOF
-the Linux Plumbers Conference. In this discussion, we identified
-a need for looking closely and investigating atomic_t usages in
-the kernel when it is used strictly as a counter without it
-controlling object lifetimes and state changes.
+counter_atomic* is introduced to be used when a variable is used as
+a simple counter and doesn't guard object lifetimes. This clearly
+differentiates atomic_t usages that guard object lifetimes.
 
-There are a number of atomic_t usages in the kernel where atomic_t api
-is used strictly for counting and not for managing object lifetime. In
-some cases, atomic_t might not even be needed.
+counter_atomic* variables will wrap around to 0 when it overflows and
+should not be used to guard resource lifetimes, device usage and
+open counts that control state changes, and pm states.
 
-The purpose of these counters is to clearly differentiate atomic_t
-counters from atomic_t usages that guard object lifetimes, hence prone
-to overflow and underflow errors. It allows tools that scan for underflow
-and overflow on atomic_t usages to detect overflow and underflows to scan
-just the cases that are prone to errors.
+atomic_t variables used for pci counters keep track of pci parity and
+non-parity errors. Convert them to use counter_atomic32.
 
-Simple atomic counters api provides interfaces for simple atomic counters
-that just count, and don't guard resource lifetimes. Counter will wrap
-around to 0 when it overflows and should not be used to guard resource
-lifetimes, device usage and open counts that control state changes, and
-pm states.
+Overflow will wrap around and reset the counts as was the case prior to
+the conversion.
 
-Using counter_atomic* to guard lifetimes could lead to use-after free
-when it overflows and undefined behavior when used to manage state
-changes and device usage/open states.
+Acked-by: Borislav Petkov <bp@suse.de>
+Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
+---
+ drivers/edac/edac_pci.h       |  5 +++--
+ drivers/edac/edac_pci_sysfs.c | 28 ++++++++++++++--------------
+ 2 files changed, 17 insertions(+), 16 deletions(-)
 
-This patch series introduces Simple atomic counters. Counter atomic ops
-leverage atomic_t and provide a sub-set of atomic_t ops.
-
-In addition this patch series converts a few drivers to use the new api.
-The following criteria is used for select variables for conversion:
-
-1. Variable doesn't guard object lifetimes, manage state changes e.g:
-   device usage counts, device open counts, and pm states.
-2. Variable is used for stats and counters.
-3. The conversion doesn't change the overflow behavior.
-
-Changes since Patch v1
--- Thanks for reviews and reviewed-by, and Acked-by tags. Updated
-   the patches with the tags.
--- Addressed Kees's  and Joel's comments:
-   1. Removed dec_return interfaces (Patch 1/11)
-   2. Removed counter_simple interfaces to be added later with changes
-      to drivers that use them (if any) (Patch 1/11)
-   3. Comment and Changelogs updates to Patch 2/11
-
-Kees, if this series is good, would you like to take this through your
-tree or would you like to take this through mine?
-
-Changes since RFC:
--- Thanks for reviews and reviewed-by, and Acked-by tags. Updated
-   the patches with the tags.
--- Addressed Kees's comments:
-   1. Non-atomic counters renamed to counter_simple32 and counter_simple64
-      to clearly indicate size.
-   2. Added warning for counter_simple* usage and it should be used only
-      when there is no need for atomicity.
-   3. Renamed counter_atomic to counter_atomic32 to clearly indicate size.
-   4. Renamed counter_atomic_long to counter_atomic64 and it now uses
-      atomic64_t ops and indicates size.
-   5. Test updated for the API renames.
-   6. Added helper functions for test results printing
-   7. Verified that the test module compiles in kunit env. and test
-      module can be loaded to run the test.
-   8. Updated Documentation to reflect the intent to make the API
-      restricted so it can never be used to guard object lifetimes
-      and state management. I left _return ops for now, inc_return
-      is necessary for now as per the discussion we had on this topic.
--- Updated driver patches with API name changes.
--- We discussed if binder counters can be non-atomic. For now I left
-   them the same as the RFC patch - using counter_atomic32
--- Unrelated to this patch series:
-   The patch series review uncovered improvements could be made to
-   test_async_driver_probe and vmw_vmci/vmci_guest. I will track
-   these for fixing later.
-
-Shuah Khan (11):
-  counters: Introduce counter_atomic* counters
-  selftests:lib:test_counters: add new test for counters
-  drivers/base: convert deferred_trigger_count and probe_count to
-    counter_atomic32
-  drivers/base/devcoredump: convert devcd_count to counter_atomic32
-  drivers/acpi: convert seqno counter_atomic32
-  drivers/acpi/apei: convert seqno counter_atomic32
-  drivers/android/binder: convert stats, transaction_log to
-    counter_atomic32
-  drivers/base/test/test_async_driver_probe: convert to use
-    counter_atomic32
-  drivers/char/ipmi: convert stats to use counter_atomic32
-  drivers/misc/vmw_vmci: convert num guest devices counter to
-    counter_atomic32
-  drivers/edac: convert pci counters to counter_atomic32
-
- Documentation/core-api/counters.rst          | 103 +++++++++++
- MAINTAINERS                                  |   8 +
- drivers/acpi/acpi_extlog.c                   |   5 +-
- drivers/acpi/apei/ghes.c                     |   5 +-
- drivers/android/binder.c                     |  41 ++---
- drivers/android/binder_internal.h            |   3 +-
- drivers/base/dd.c                            |  19 +-
- drivers/base/devcoredump.c                   |   5 +-
- drivers/base/test/test_async_driver_probe.c  |  23 +--
- drivers/char/ipmi/ipmi_msghandler.c          |   9 +-
- drivers/char/ipmi/ipmi_si_intf.c             |   9 +-
- drivers/edac/edac_pci.h                      |   5 +-
- drivers/edac/edac_pci_sysfs.c                |  28 +--
- drivers/misc/vmw_vmci/vmci_guest.c           |   9 +-
- include/linux/counters.h                     | 173 +++++++++++++++++++
- lib/Kconfig                                  |  10 ++
- lib/Makefile                                 |   1 +
- lib/test_counters.c                          | 157 +++++++++++++++++
- tools/testing/selftests/lib/Makefile         |   1 +
- tools/testing/selftests/lib/config           |   1 +
- tools/testing/selftests/lib/test_counters.sh |   5 +
- 21 files changed, 546 insertions(+), 74 deletions(-)
- create mode 100644 Documentation/core-api/counters.rst
- create mode 100644 include/linux/counters.h
- create mode 100644 lib/test_counters.c
- create mode 100755 tools/testing/selftests/lib/test_counters.sh
-
+diff --git a/drivers/edac/edac_pci.h b/drivers/edac/edac_pci.h
+index 5175f5724cfa..797b25a6afc0 100644
+--- a/drivers/edac/edac_pci.h
++++ b/drivers/edac/edac_pci.h
+@@ -30,12 +30,13 @@
+ #include <linux/pci.h>
+ #include <linux/types.h>
+ #include <linux/workqueue.h>
++#include <linux/counters.h>
+ 
+ #ifdef CONFIG_PCI
+ 
+ struct edac_pci_counter {
+-	atomic_t pe_count;
+-	atomic_t npe_count;
++	struct counter_atomic32 pe_count;
++	struct counter_atomic32 npe_count;
+ };
+ 
+ /*
+diff --git a/drivers/edac/edac_pci_sysfs.c b/drivers/edac/edac_pci_sysfs.c
+index 53042af7262e..d33a726234c0 100644
+--- a/drivers/edac/edac_pci_sysfs.c
++++ b/drivers/edac/edac_pci_sysfs.c
+@@ -23,8 +23,8 @@ static int edac_pci_log_pe = 1;		/* log PCI parity errors */
+ static int edac_pci_log_npe = 1;	/* log PCI non-parity error errors */
+ static int edac_pci_poll_msec = 1000;	/* one second workq period */
+ 
+-static atomic_t pci_parity_count = ATOMIC_INIT(0);
+-static atomic_t pci_nonparity_count = ATOMIC_INIT(0);
++static struct counter_atomic32 pci_parity_count = COUNTER_ATOMIC_INIT(0);
++static struct counter_atomic32 pci_nonparity_count = COUNTER_ATOMIC_INIT(0);
+ 
+ static struct kobject *edac_pci_top_main_kobj;
+ static atomic_t edac_pci_sysfs_refcount = ATOMIC_INIT(0);
+@@ -58,13 +58,13 @@ int edac_pci_get_poll_msec(void)
+ /**************************** EDAC PCI sysfs instance *******************/
+ static ssize_t instance_pe_count_show(struct edac_pci_ctl_info *pci, char *data)
+ {
+-	return sprintf(data, "%u\n", atomic_read(&pci->counters.pe_count));
++	return sprintf(data, "%u\n", counter_atomic32_read(&pci->counters.pe_count));
+ }
+ 
+ static ssize_t instance_npe_count_show(struct edac_pci_ctl_info *pci,
+ 				char *data)
+ {
+-	return sprintf(data, "%u\n", atomic_read(&pci->counters.npe_count));
++	return sprintf(data, "%u\n", counter_atomic32_read(&pci->counters.npe_count));
+ }
+ 
+ #define to_instance(k) container_of(k, struct edac_pci_ctl_info, kobj)
+@@ -553,7 +553,7 @@ static void edac_pci_dev_parity_test(struct pci_dev *dev)
+ 			edac_printk(KERN_CRIT, EDAC_PCI,
+ 				"Signaled System Error on %s\n",
+ 				pci_name(dev));
+-			atomic_inc(&pci_nonparity_count);
++			counter_atomic32_inc(&pci_nonparity_count);
+ 		}
+ 
+ 		if (status & (PCI_STATUS_PARITY)) {
+@@ -561,7 +561,7 @@ static void edac_pci_dev_parity_test(struct pci_dev *dev)
+ 				"Master Data Parity Error on %s\n",
+ 				pci_name(dev));
+ 
+-			atomic_inc(&pci_parity_count);
++			counter_atomic32_inc(&pci_parity_count);
+ 		}
+ 
+ 		if (status & (PCI_STATUS_DETECTED_PARITY)) {
+@@ -569,7 +569,7 @@ static void edac_pci_dev_parity_test(struct pci_dev *dev)
+ 				"Detected Parity Error on %s\n",
+ 				pci_name(dev));
+ 
+-			atomic_inc(&pci_parity_count);
++			counter_atomic32_inc(&pci_parity_count);
+ 		}
+ 	}
+ 
+@@ -592,7 +592,7 @@ static void edac_pci_dev_parity_test(struct pci_dev *dev)
+ 				edac_printk(KERN_CRIT, EDAC_PCI, "Bridge "
+ 					"Signaled System Error on %s\n",
+ 					pci_name(dev));
+-				atomic_inc(&pci_nonparity_count);
++				counter_atomic32_inc(&pci_nonparity_count);
+ 			}
+ 
+ 			if (status & (PCI_STATUS_PARITY)) {
+@@ -600,7 +600,7 @@ static void edac_pci_dev_parity_test(struct pci_dev *dev)
+ 					"Master Data Parity Error on "
+ 					"%s\n", pci_name(dev));
+ 
+-				atomic_inc(&pci_parity_count);
++				counter_atomic32_inc(&pci_parity_count);
+ 			}
+ 
+ 			if (status & (PCI_STATUS_DETECTED_PARITY)) {
+@@ -608,7 +608,7 @@ static void edac_pci_dev_parity_test(struct pci_dev *dev)
+ 					"Detected Parity Error on %s\n",
+ 					pci_name(dev));
+ 
+-				atomic_inc(&pci_parity_count);
++				counter_atomic32_inc(&pci_parity_count);
+ 			}
+ 		}
+ 	}
+@@ -646,7 +646,7 @@ void edac_pci_do_parity_check(void)
+ 	if (!check_pci_errors)
+ 		return;
+ 
+-	before_count = atomic_read(&pci_parity_count);
++	before_count = counter_atomic32_read(&pci_parity_count);
+ 
+ 	/* scan all PCI devices looking for a Parity Error on devices and
+ 	 * bridges.
+@@ -658,7 +658,7 @@ void edac_pci_do_parity_check(void)
+ 	/* Only if operator has selected panic on PCI Error */
+ 	if (edac_pci_get_panic_on_pe()) {
+ 		/* If the count is different 'after' from 'before' */
+-		if (before_count != atomic_read(&pci_parity_count))
++		if (before_count != counter_atomic32_read(&pci_parity_count))
+ 			panic("EDAC: PCI Parity Error");
+ 	}
+ }
+@@ -686,7 +686,7 @@ void edac_pci_handle_pe(struct edac_pci_ctl_info *pci, const char *msg)
+ {
+ 
+ 	/* global PE counter incremented by edac_pci_do_parity_check() */
+-	atomic_inc(&pci->counters.pe_count);
++	counter_atomic32_inc(&pci->counters.pe_count);
+ 
+ 	if (edac_pci_get_log_pe())
+ 		edac_pci_printk(pci, KERN_WARNING,
+@@ -711,7 +711,7 @@ void edac_pci_handle_npe(struct edac_pci_ctl_info *pci, const char *msg)
+ {
+ 
+ 	/* global NPE counter incremented by edac_pci_do_parity_check() */
+-	atomic_inc(&pci->counters.npe_count);
++	counter_atomic32_inc(&pci->counters.npe_count);
+ 
+ 	if (edac_pci_get_log_npe())
+ 		edac_pci_printk(pci, KERN_WARNING,
 -- 
 2.25.1
 
