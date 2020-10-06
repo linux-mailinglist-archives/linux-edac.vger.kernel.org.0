@@ -2,113 +2,182 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 531D2284EC6
-	for <lists+linux-edac@lfdr.de>; Tue,  6 Oct 2020 17:21:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 871A3284F9D
+	for <lists+linux-edac@lfdr.de>; Tue,  6 Oct 2020 18:14:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726068AbgJFPVF (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Tue, 6 Oct 2020 11:21:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43536 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726002AbgJFPVF (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Tue, 6 Oct 2020 11:21:05 -0400
-Received: from mail-il1-x142.google.com (mail-il1-x142.google.com [IPv6:2607:f8b0:4864:20::142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE4F9C061755
-        for <linux-edac@vger.kernel.org>; Tue,  6 Oct 2020 08:21:04 -0700 (PDT)
-Received: by mail-il1-x142.google.com with SMTP id t7so6120406ilf.10
-        for <linux-edac@vger.kernel.org>; Tue, 06 Oct 2020 08:21:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=mmj7x7pJat8UNIIwIa7Sd+SRNOWKvcmn8r90tiL0s1A=;
-        b=IXQwwVAi7F6pRyGOUEQ8zaCzPCqLYGzR6fWH1AMiUEwCFiSYJ471FkLdAmCwbx2c54
-         ItJ9whV/AqUo+mM2d7MbaozYvKfTm/b80nFjzDVrSdzgt+4L5TPDPIQZWJW4+sAYwEpy
-         BbucuKw8YdnI1BxGGqAvEq5di/ZoXDjLG4oTw=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=mmj7x7pJat8UNIIwIa7Sd+SRNOWKvcmn8r90tiL0s1A=;
-        b=pnFWi2/yPpqsbTd7a592qYMQIjNCkPTt1BpUdD5xWWWGVupOiGei0JXaLQ7BqIZTim
-         fvd0mJlWwRkI3uteiU77lvl8s63IhuiOsC/O9jUCdSnFOfau864WW8ipwH5AMG8dcopl
-         mjFBQjmyoD4iUW9uoF4Fx5nTLfeOLiB9fsbp+dNolVYUAt6npBJyQQ1VZghvy5ygO4jU
-         EDDpCSRzgQdAC1W0IBbXCzwJ2dUzKPFlaLjE65mifQ4Y1XMnhXKkjKwQRlIvEUj7B9Yt
-         5XrlrtO/LstqPwyizYVcDhTD6Nis9s2jBHg1qqNbCxfXs+fZcC1MFqYCVJt8EdhHQtFW
-         0Urg==
-X-Gm-Message-State: AOAM530FNMR9cdlzgebj02lb69WBzXG3l3omz4NDKXByLpJrUqw5QXiK
-        jsiJdt97lhzsJHLQaGED88GB1Q==
-X-Google-Smtp-Source: ABdhPJyqEmZz43/2Pp1HykB1ZUp+7my5maxDOMBk3deo+zKUWBRwafPlIzkV/qrgjjh1lVhgQ7y1zw==
-X-Received: by 2002:a92:b50b:: with SMTP id f11mr4049407ile.109.1601997664092;
-        Tue, 06 Oct 2020 08:21:04 -0700 (PDT)
-Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
-        by smtp.gmail.com with ESMTPSA id z76sm349366ilf.76.2020.10.06.08.21.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 06 Oct 2020 08:21:03 -0700 (PDT)
-Subject: Re: [PATCH 00/11] Introduce Simple atomic and non-atomic counters
-To:     Kees Cook <keescook@chromium.org>
-Cc:     corbet@lwn.net, gregkh@linuxfoundation.org, shuah@kernel.org,
-        rafael@kernel.org, johannes@sipsolutions.net, lenb@kernel.org,
-        james.morse@arm.com, tony.luck@intel.com, bp@alien8.de,
-        arve@android.com, tkjos@android.com, maco@android.com,
-        joel@joelfernandes.org, christian@brauner.io, hridya@google.com,
-        surenb@google.com, minyard@acm.org, arnd@arndb.de,
-        mchehab@kernel.org, rric@kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-acpi@vger.kernel.org, devel@driverdev.osuosl.org,
-        openipmi-developer@lists.sourceforge.net,
-        linux-edac@vger.kernel.org, Shuah Khan <skhan@linuxfoundation.org>
-References: <cover.1601073127.git.skhan@linuxfoundation.org>
- <202009260923.9A2606CFF6@keescook>
- <3929a023-eb7a-509c-50e1-ee72dca05191@linuxfoundation.org>
- <202009281612.EDC1C0078@keescook>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <700f0ed4-fe09-7610-b460-89b5ad08452c@linuxfoundation.org>
-Date:   Tue, 6 Oct 2020 09:21:01 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
-MIME-Version: 1.0
-In-Reply-To: <202009281612.EDC1C0078@keescook>
-Content-Type: text/plain; charset=utf-8; format=flowed
+        id S1725995AbgJFQOA (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Tue, 6 Oct 2020 12:14:00 -0400
+Received: from lhrrgout.huawei.com ([185.176.76.210]:2962 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1725902AbgJFQOA (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Tue, 6 Oct 2020 12:14:00 -0400
+Received: from lhreml718-chm.china.huawei.com (unknown [172.18.7.108])
+        by Forcepoint Email with ESMTP id 6BD3B50CDA70EDE141E6;
+        Tue,  6 Oct 2020 17:13:56 +0100 (IST)
+Received: from lhreml715-chm.china.huawei.com (10.201.108.66) by
+ lhreml718-chm.china.huawei.com (10.201.108.69) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1913.5; Tue, 6 Oct 2020 17:13:56 +0100
+Received: from lhreml715-chm.china.huawei.com ([10.201.108.66]) by
+ lhreml715-chm.china.huawei.com ([10.201.108.66]) with mapi id 15.01.1913.007;
+ Tue, 6 Oct 2020 17:13:56 +0100
+From:   Shiju Jose <shiju.jose@huawei.com>
+To:     James Morse <james.morse@arm.com>
+CC:     Borislav Petkov <bp@alien8.de>,
+        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
+        "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "tony.luck@intel.com" <tony.luck@intel.com>,
+        "rjw@rjwysocki.net" <rjw@rjwysocki.net>,
+        "lenb@kernel.org" <lenb@kernel.org>,
+        Linuxarm <linuxarm@huawei.com>,
+        Jonathan Cameron <jonathan.cameron@huawei.com>
+Subject: RE: [RFC PATCH 0/7] RAS/CEC: Extend CEC for errors count check on
+ short time period
+Thread-Topic: [RFC PATCH 0/7] RAS/CEC: Extend CEC for errors count check on
+ short time period
+Thread-Index: AQHWmLdPdbyjNlzT0kmpr3mH9sP7namEMSsAgAASuxCAAD4hgIAGP68A
+Date:   Tue, 6 Oct 2020 16:13:56 +0000
+Message-ID: <8d826b53a3fc453ba1c468aaf8eb2e75@huawei.com>
+References: <20201002122235.1280-1-shiju.jose@huawei.com>
+ <20201002124352.GC17436@zn.tnic>
+ <19a8cc62b11c49e9b584857a6a6664e5@huawei.com>
+ <59950d44-906b-684f-c876-e09c76e5f827@arm.com>
+In-Reply-To: <59950d44-906b-684f-c876-e09c76e5f827@arm.com>
+Accept-Language: en-GB, en-US
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.47.85.122]
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On 9/28/20 5:13 PM, Kees Cook wrote:
-> On Mon, Sep 28, 2020 at 04:41:47PM -0600, Shuah Khan wrote:
->> On 9/26/20 10:29 AM, Kees Cook wrote:
->>> On Fri, Sep 25, 2020 at 05:47:14PM -0600, Shuah Khan wrote:
->>>>      7. Verified that the test module compiles in kunit env. and test
->>>>         module can be loaded to run the test.
->>>
->>> I meant write it using KUnit interfaces (e.g. KUNIT_EXPECT*(),
->>> kunit_test_suite(), etc):
->>> https://www.kernel.org/doc/html/latest/dev-tools/kunit/
->>>
->>> Though I see the docs are still not updated[1] to reflect the Kconfig
->>> (CONFIG_foo_KUNIT_TEST) and file naming conventions (foo_kunit.c).
->>>
->>
->> I would like to be able to run this test outside Kunit env., hence the
->> choice to go with a module and kselftest script. It makes it easier to
->> test as part of my workflow as opposed to doing a kunit and build and
->> running it that way.
-> 
-> It does -- you just load it normally like before and it prints out
-> everything just fine. This is how I use the lib/test_user_copy.c and
-> lib/test_overflow.c before/after their conversions.
-> 
-
-I am not seeing any kunit links to either of these tests. I find the
-lib/test_overflow.c very hard to read.
-
-I am going to stick with what I have for now and handle conversion
-later.
-
-I think it might be a good idea to add tests for atomic_t and refcount_t
-APIS as well at some point.
-
-thanks,
--- Shuah
+SGkgSmFtZXMsDQoNClRoYW5rcyBmb3IgdGhlIHJlcGx5IGFuZCB0aGUgaW5mb3JtYXRpb24gc2hh
+cmVkLg0KDQo+LS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCj5Gcm9tOiBKYW1lcyBNb3JzZSBb
+bWFpbHRvOmphbWVzLm1vcnNlQGFybS5jb21dDQo+U2VudDogMDIgT2N0b2JlciAyMDIwIDE4OjMz
+DQo+VG86IFNoaWp1IEpvc2UgPHNoaWp1Lmpvc2VAaHVhd2VpLmNvbT4NCj5DYzogQm9yaXNsYXYg
+UGV0a292IDxicEBhbGllbjguZGU+OyBsaW51eC1lZGFjQHZnZXIua2VybmVsLm9yZzsgbGludXgt
+DQo+YWNwaUB2Z2VyLmtlcm5lbC5vcmc7IGxpbnV4LWtlcm5lbEB2Z2VyLmtlcm5lbC5vcmc7IHRv
+bnkubHVja0BpbnRlbC5jb207DQo+cmp3QHJqd3lzb2NraS5uZXQ7IGxlbmJAa2VybmVsLm9yZzsg
+TGludXhhcm0gPGxpbnV4YXJtQGh1YXdlaS5jb20+DQo+U3ViamVjdDogUmU6IFtSRkMgUEFUQ0gg
+MC83XSBSQVMvQ0VDOiBFeHRlbmQgQ0VDIGZvciBlcnJvcnMgY291bnQgY2hlY2sgb24NCj5zaG9y
+dCB0aW1lIHBlcmlvZA0KPg0KPkhpIFNoaWp1LA0KPg0KPk9uIDAyLzEwLzIwMjAgMTY6MzgsIFNo
+aWp1IEpvc2Ugd3JvdGU6DQo+Pj4gLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCj4+PiBGcm9t
+OiBCb3Jpc2xhdiBQZXRrb3YgW21haWx0bzpicEBhbGllbjguZGVdDQo+Pj4gU2VudDogMDIgT2N0
+b2JlciAyMDIwIDEzOjQ0DQo+Pj4gVG86IFNoaWp1IEpvc2UgPHNoaWp1Lmpvc2VAaHVhd2VpLmNv
+bT4NCj4+PiBDYzogbGludXgtZWRhY0B2Z2VyLmtlcm5lbC5vcmc7IGxpbnV4LWFjcGlAdmdlci5r
+ZXJuZWwub3JnOyBsaW51eC0NCj4+PiBrZXJuZWxAdmdlci5rZXJuZWwub3JnOyB0b255Lmx1Y2tA
+aW50ZWwuY29tOyByandAcmp3eXNvY2tpLm5ldDsNCj4+PiBqYW1lcy5tb3JzZUBhcm0uY29tOyBs
+ZW5iQGtlcm5lbC5vcmc7IExpbnV4YXJtDQo+PGxpbnV4YXJtQGh1YXdlaS5jb20+DQo+Pj4gU3Vi
+amVjdDogUmU6IFtSRkMgUEFUQ0ggMC83XSBSQVMvQ0VDOiBFeHRlbmQgQ0VDIGZvciBlcnJvcnMg
+Y291bnQNCj4+PiBjaGVjayBvbiBzaG9ydCB0aW1lIHBlcmlvZA0KPj4+DQo+Pj4gT24gRnJpLCBP
+Y3QgMDIsIDIwMjAgYXQgMDE6MjI6MjhQTSArMDEwMCwgU2hpanUgSm9zZSB3cm90ZToNCj4+Pj4g
+T3BlbiBRdWVzdGlvbnMgYmFzZWQgb24gdGhlIGZlZWRiYWNrIGZyb20gQm9yaXMsIDEuIEFSTSBw
+cm9jZXNzb3INCj4+Pj4gZXJyb3IgdHlwZXMgYXJlIGNhY2hlL1RMQi9idXMgZXJyb3JzLg0KPj4+
+PiAgICBbUmVmZXJlbmNlIE4yLjQuNC4xIEFSTSBQcm9jZXNzb3IgRXJyb3IgSW5mb3JtYXRpb24g
+VUVGSSBTcGVjDQo+Pj4+IHYyLjhdIEFueSBvZiB0aGUgYWJvdmUgZXJyb3IgdHlwZXMgc2hvdWxk
+IG5vdCBiZSBjb25zaWRlciBmb3IgdGhlDQo+Pj4+IGVycm9yIGNvbGxlY3Rpb24gYW5kIENQVSBj
+b3JlIGlzb2xhdGlvbj8NCj4NCj5Cb3JpcycgZWFybGllciBleGFtcGxlIHdhcyB0aGF0IEJ1cyBl
+cnJvcnMgaGF2ZSB2ZXJ5IGxpdHRsZSB0byBkbyB3aXRoIHRoZSBDUFUuDQo+SXQgbWF5IGp1c3Qg
+YmUgdGhhdCB0aGlzIENQVSBpcyBoYW5kbGluZyB0aGUgSVJRcyBmb3IgYSBmYXVsdCBkZXZpY2Us
+IGFuZCB0aHVzDQo+cmVjZWl2aW5nIHRoZSBlcnJvcnMuIGlycWJhbGFuY2UgY291bGQgY2hhbmdl
+IHRoYXQgYW55dGltZS4NCj4NCj5JJ2QgcHJlZmVyIHdlIGp1c3Qgc3RpY2sgd2l0aCB0aGUgY2Fj
+aGVzIGZvciBub3cuDQo+DQpbLi4uXQ0KDQo+DQo+Pj4gT3BlbiBxdWVzdGlvbiBmcm9tIEphbWVz
+IHdpdGggbXkgcmVwbHkgdG8gaXQ6DQo+Pj4NCj4+PiBPbiBUaHUsIE9jdCAwMSwgMjAyMCBhdCAw
+NjoxNjowM1BNICswMTAwLCBKYW1lcyBNb3JzZSB3cm90ZToNCj4+Pj4gSWYgdGhlIGNvcnJlY3Rl
+ZC1jb3VudCBpcyBhdmFpbGFibGUgc29tZXdoZXJlLCBjYW4ndCB0aGlzIHBvbGljeSBiZQ0KPj4+
+PiBtYWRlIGluIHVzZXItc3BhY2U/DQo+DQo+PiBUaGUgZXJyb3IgY291bnQgaXMgcHJlc2VudCBp
+biB0aGUgc3RydWN0IGNwZXJfYXJtX2Vycl9pbmZvLCB0aGUgZmllbGRzDQo+PiBvZiB0aGlzIHN0
+cnVjdHVyZSAgYXJlIG5vdCByZXBvcnRlZCB0byB0aGUgdXNlci1zcGFjZSB0aHJvdWdoIHRyYWNl
+IGV2ZW50cz8NCj4NCj4+IFByZXNlbnRseSB0aGUgZmllbGRzIG9mIHRhYmxlIHN0cnVjdCBjcGVy
+X3NlY19wcm9jX2FybSBvbmx5IGFyZQ0KPj4gcmVwb3J0ZWQgdG8gdGhlIHVzZXItc3BhY2UgdGhy
+b3VnaCB0cmFjZS1hcm0tZXZlbnQuDQo+PiBBbHNvIHRoZXJlIGNhbiBiZSBtdWx0aXBsZSBjcGVy
+X2FybV9lcnJfaW5mbyBwZXIgY3Blcl9zZWNfcHJvY19hcm0uDQo+PiBUaHVzIEkgdGhpbmsgdGhp
+cyBuZWVkIHJlcG9ydGluZyB0aHJvdWdoIGEgbmV3IHRyYWNlIGV2ZW50Pw0KPg0KPkkgdGhpbmsg
+aXQgd291bGQgYmUgbW9yZSB1c2VmdWwgdG8gZmVlZCB0aGlzIGludG8gZWRhYyBsaWtlIGdoZXMu
+YyBhbHJlYWR5IGRvZXMNCj5mb3IgbWVtb3J5IGVycm9ycy4gVGhlc2Ugd291bGQgZW5kIHVwIGFz
+IGNvcnJlY3RlZCBlcnJvcnMgY291bnRzIG9uIGRldmljZXMNCj5mb3IgTDMgb3Igd2hhdGV2ZXIu
+DQo+DQo+VGhpcyBzYXZlcyBmaXhpbmcgeW91ciB1c2VyLXNwYWNlIGNvbXBvbmVudCB0byB0aGUg
+YXJtIHNwZWNpZmljIENQRVIgcmVjb3JkDQo+Zm9ybWF0LCBvciBldmVuIGZpcm13YXJlLWZpcnN0
+LCBtZWFuaW5nIGl0cyB1c2VmdWwgdG8gdGhlIHdpZGVzdCBudW1iZXIgb2YNCj5wZW9wbGUuDQo+
+DQo+DQo+PiBBbHNvIHRoZSBsb2dpY2FsIGluZGV4IG9mIGEgQ1BVIHdoaWNoIEkgdGhpbmsgbmVl
+ZCB0byBleHRyYWN0IGZyb20gdGhlDQo+J21waWRyJyBmaWVsZCBvZg0KPj4gc3RydWN0IGNwZXJf
+c2VjX3Byb2NfYXJtIHVzaW5nIHBsYXRmb3JtIGRlcGVuZGVudCBrZXJuZWwgZnVuY3Rpb24NCj5n
+ZXRfbG9naWNhbF9pbmRleCgpLg0KPj4gVGh1cyBjcHUgaW5kZXggYWxzbyBuZWVkIHRvIHJlcG9y
+dCB0byB0aGUgdXNlciBzcGFjZS4NCj4NCj5JIHRob3VnaHQgeW91IHdlcmUgdGFsa2luZyBhYm91
+dCBjYWNoZXMuIFRoZXNlIHN0cnVjdHVyZXMgaGF2ZSBhICdsZXZlbCcgZm9yDQo+Y2FjaGUgZXJy
+b3JzLg0KPg0KPkNlcnRhaW5seSB5b3UgbmVlZCBhIHdheSBvZiBrbm93aW5nIHdoaWNoIGNhY2hl
+IGl0IGlzLCBhbmQgZnJvbSB0aGF0IG51bWJlcg0KPnlvdSBzaG91bGQgYWxzbyBiZSBhYmxlIHRv
+IHdvcmsgb3V0IHdoaWNoIHRoZSBDUFVzIGl0IGlzIGF0dGFjaGVkIHRvLg0KPg0KPng4NiBhbHJl
+YWR5IGhhcyBhIHdheSBvZiBkb2luZyB0aGlzOg0KPmh0dHBzOi8vZ2l0Lmtlcm5lbC5vcmcvcHVi
+L3NjbS9saW51eC9rZXJuZWwvZ2l0L3RvcnZhbGRzL2xpbnV4LmdpdC90cmVlL0RvY3UNCj5tZW50
+YXRpb24veDg2L3Jlc2N0cmxfdWkucnN0I24zMjcNCj4NCj5hcm02NCBkb2Vzbid0IGhhdmUgYW55
+dGhpbmcgZXF1aXZhbGVudCwgYnV0IG15IGN1cnJlbnQgcHJvcG9zYWwgZm9yIE1QQU0NCj5pcyBo
+ZXJlOg0KPmh0dHBzOi8vZ2l0Lmtlcm5lbC5vcmcvcHViL3NjbS9saW51eC9rZXJuZWwvZ2l0L21v
+cnNlL2xpbnV4LmdpdC9jb21taXQvP2g9DQo+bXBhbS9zbmFwc2hvdC9mZWImaWQ9Y2UzMTQ4YmQz
+OTUwOWFjOGIxMmY1OTE3ZjBmOTJjZTAxNGE1YjIyZg0KPg0KPkkgd2FzIGhvcGluZyB0aGUgUFBU
+VCB0YWJsZSB3b3VsZCBncm93IHNvbWV0aGluZyB3ZSBjb3VsZCB1c2UgYXMgYW4gSUQsIGJ1dA0K
+PkkndmUgbm90IHNlZW4gYW55dGhpbmcgeWV0Lg0KDQpQbGVhc2UgZmluZCBmb2xsb3dpbmcgcHNl
+dWRvIGNvZGUgd2UgYWRkZWQgZm9yIHRoZSBrZXJuZWwgc2lkZSB0byBtYWtlIHN1cmUNCndlIGNv
+cnJlY3RseSB1bmRlcnN0YW5kIHlvdXIgc3VnZ2VzdGlvbnMuDQoNCjEuIENyZWF0ZSBlZGFjIGRl
+dmljZSBhbmQgZWRhYyBkZXZpY2Ugc3lzZnMgZW50cmllcyBmb3IgdGhlIG9ubGluZSBDUFUgY2Fj
+aGVzLg0KL2RyaXZlcnMvZWRhYy9lZGFjX2RldmljZS5jDQpzdHJ1Y3QgZWRhY19kZXZpY2VfY3Rs
+X2luZm8gICplZGFjX2RldmljZV9hZGRfY2FjaGUodW5zaWduZWQgaW50IGlkLCB1OCBsZXZlbCwg
+dTggdHlwZSkgew0KCS4uLg0KCS8qIENoZWNrIGVkYWMgZW50cnkgZm9yIGNhY2hlIGFscmVhZHkg
+cHJlc2VudCAqLyAgICAgICANCgllZGV2X2NhY2hlID0gZmluZF9lZGFjX2RldmljZV9jYWNoZShp
+ZCwgbGV2ZWwsIHR5cGUpOw0KCWlmIChlZGV2X2NhY2hlKQ0KCQlyZXR1cm4gZWRldl9jYWNoZTsN
+CiANCgllZGV2X2NhY2hlID0gZWRhY19kZXZpY2VfYWxsb2NfY3RybF9pbmZvKC4uLik7DQogCWlm
+ICghZWRldl9jYWNoZSkNCgkJcmV0dXJuIE5VTEw7DQoNCglyYyA9IGVkYWNfZGV2aWNlX2FkZF9k
+ZXZpY2UoZWRldl9jYWNoZSk7DQogCWlmIChyYykNCgkJZ290byBleGl0Ow0KDQogCS8qIHN0b3Jl
+IGVkZXZfY2FjaGUgZm9yIGZ1dHVyZSB1c2UgKi8NCiAJLi4uDQoJcmV0dXJuIGVkZXZfY2FjaGU7
+DQoNCiBleGl0Og0KCS4uLg0KCXJldHVybiBOVUxMOyANCiB9DQoNCi9kcml2ZXJzL2Jhc2UvY2Fj
+aGVpbmZvLmMNCmludCBjYWNoZV9jcmVhdGVfZWRhY19lbnRyaWVzKHU2NCBtcGlkciwgdTggY2Fj
+aGVfbGV2ZWwsIHU4IGNhY2hlX3R5cGUpDQp7IA0KCS4uLg0KCS8qIEdldCBjYWNoZWluZm8gZm9y
+IGVhY2ggb25saW5lIGNwdXMgKi8NCglmb3JfZWFjaF9vbmxpbmVfY3B1KGkpIHsNCgkJc3RydWN0
+IGNwdV9jYWNoZWluZm8gKmNwdV9jaSA9IGdldF9jcHVfY2FjaGVpbmZvKGkpOw0KCQlpZiAoIWNw
+dV9jaSB8fCAhY3B1X2NpLT5pZCkNCgkJCWNvbnRpbnVlOw0KICAgICAgICAJCS4uLiANCgkJLypB
+ZGQgIHRoZSBlZGFjIGVudHJ5IGZvciB0aGUgQ1BVIGNhY2hlICovDQoJCWVkZXZfY2FjaGUgPSBl
+ZGFjX2RldmljZV9hZGRfY2FjaGUoY3B1X2NpLT5pZCwgY3B1X2NpIC0+bGV2ZWwsIGNwdV9jaSAt
+PnR5cGUpDQoJCWlmICghZWRldl9jYWNoZSkNCgkJCWJyZWFrOw0KCQkuLi4NCgl9DQoJLi4uCQ0K
+fQ0KICAgICANCnVuc2lnbmVkIGludCBjYWNoZV9nZXRfY2FjaGVfaWQodTY0IHByb2NfaWQsIHU4
+IGNhY2hlX2xldmVsLCB1OCBjYWNoZV90eXBlKQ0KeyANCgl1bnNpZ25lZCBpbnQgY2FjaGVfaWQg
+PSAwOw0KCS4uLg0KCS8qIFdhbGsgbG9va2luZyBmb3IgbWF0Y2hpbmcgY2FjaGUgbm9kZSAqLyAg
+IA0KCWZvcl9lYWNoX29ubGluZV9jcHUoaSkgew0KCQlzdHJ1Y3QgY3B1X2NhY2hlaW5mbyAqY3B1
+X2NpID0gZ2V0X2NwdV9jYWNoZWluZm8oaSk7DQoJCWlmICghY3B1X2NpIHx8ICFjcHVfY2ktPmlk
+KQ0KCQkJY29udGludWU7DQoNCgkJaWQgPSBDT05WKHByb2NfaWQpOyAgLyogbmVlZCB0byBjaGVj
+ayAqLw0KCQlpZigoaWQgPT0gY3B1X2NpLT5pZCkgJiYgKGNhY2hlX2xldmVsID09IGNwdV9jaS0+
+bGV2ZWwpICYmIChjYWNoZV90eXBlID09IGNwdV9jaS0+dHlwZSkpICB7DQoJCQljYWNoZV9pZCA9
+IGNwdV9jaS0+aWQ7DQoJCQlicmVhazsNCgkJfQ0KCX0NCglyZXR1cm4gY2FjaGVfaWQ7DQp9DQoN
+CjIuIFN0b3JlIENQVSBDRSBjb3VudCBpbiB0aGUgZWRhYyBzeXNmcyBlbnRyeSBmb3IgdGhlIENQ
+VSBjYWNoZS4NCg0KZHJpdmVycy9lZGFjL2doZXNfZWRhYy5jDQp2b2lkIGdoZXNfZWRhY19yZXBv
+cnRfY3B1X2Vycm9yKGludCBjYWNoZV9pZCwgdTggY2FjaGVfbGV2ZWwsIHU4IGNhY2hlX3R5cGUg
+LCB1aW50MzIgY2VfY291bnQpDQp7DQoJLi4uDQoJLyogQ2hlY2sgZWRhYyBlbnRyeSBmb3IgY2Fj
+aGUgYWxyZWFkeSBwcmVzZW50LCBpZiBub3QgYWRkIG5ldyBlbnRyeSAqLyAgICAgICANCgllZGV2
+X2NhY2hlID0gZmluZF9lZGFjX2RldmljZV9jYWNoZShjYWNoZV9pZCwgY2FjaGVfbGV2ZWwsIGNh
+Y2hlX3R5cGUpOw0KCWlmICghZWRldl9jYWNoZSkgew0KCQkvKkFkZCAgdGhlIGVkYWMgZW50cnkg
+Zm9yIHRoZSBjYWNoZSAqLw0KCQllZGV2X2NhY2hlID0gZWRhY19kZXZpY2VfYWRkX2NhY2hlKGNh
+Y2hlX2lkLCBjYWNoZV9sZXZlbCwgY2FjaGVfdHlwZSk7DQoJCWlmICghZWRldl9jYWNoZSkNCgkJ
+CXJldHVybjsNCgl9DQoNCgkvKiBTdG9yZSB0aGUgY2VfY291bnQgdG8gL3N5cy9kZXZpY2VzL3N5
+c3RlbS9lZGFjLyBjcHUvY3B1PG5vPi9MPE4+Y2FjaGUvY2VfY291bnQgKi8NCgllZGFjX2Rldmlj
+ZV9oYW5kbGVfY2VfY291bnQoZWRldl9jYWNoZSwgY2VfY291bnQsIC4uLikNCn0NCiANCmRyaXZl
+cnMvYWNwaS9hcGVpL2doZXMuYw0Kdm9pZCBnaGVzX2hhbmRsZV9hcm1faHdfZXJyb3Ioc3RydWN0
+IGFjcGlfaGVzdF9nZW5lcmljX2RhdGEgKmdkYXRhKSB7DQogCS4uLg0KIAlpZiAoc2VjX3NldiAh
+PSBHSEVTX1NFVl9DT1JSRUNURUQpDQogCQlyZXR1cm47DQogCW1waWRyID0gY3Blcl9zZWNfcHJv
+Y19hcm0tPm1waWRyOyAgICANCiAJZm9yKGkgPSAwOyBpIDwgY3Blcl9zZWNfcHJvY19hcm0tPmVy
+cl9pbmZvX251bTsgaSsrKSB7DQogCQlpZihjcGVyX3NlY19wcm9jX2luZm8tPnR5cGUgIT0gQ1BF
+Ul9BUk1fQ0FDSEVfRVJST1IpIA0KIAkJCWNvbnRpbnVlOyANCiAJCWNlX2NvdW50ID0gY3Blcl9h
+cm1fZXJyX2luZm8tPm11bHRpcGxlX2Vycm9yICsgMTsNCgkJY2FjaGVfdHlwZSA9IGNwZXJfYXJt
+X2Vycl9pbmZvLT50eXBlOw0KCQljYWNoZV9sZXZlbCA9IGNwZXJfYXJtX2Vycl9pbmZvLT5lcnJv
+cl9pbmZvPDI0OiAyMj47ICANCgkJY2FjaGVfaWQgPSBjYWNoZV9nZXRfY2FjaGVfaWQobXBpZHIs
+IGNhY2hlX2xldmVsLCBjYWNoZV90eXBlKTsNCiAJCWlmICghY2FjaGVfaWQpDQogCQkJcmV0dXJu
+Ow0KCQlnaGVzX2VkYWNfcmVwb3J0X2NwdV9lcnJvcihjYWNoZV9pZCwgY2FjaGVfbGV2ZWwsIGNh
+Y2hlX3R5cGUgLCBjZV9jb3VudCk7DQoJfQ0KICAgICAgICAgICAgICAuLi4NCglyZXR1cm47CQ0K
+fQ0KDQo+DQo+DQo+Pj4gWW91IG1lYW4gcmFzZGFlbW9uIGdvZXMgYW5kIG9mZmxpbmVzIENQVXMg
+d2hlbiBjZXJ0YWluIHRocmVzaG9sZHMgYXJlDQo+Pj4gcmVhY2hlZD8gU3VyZS4gSXQgd291bGQg
+YmUgbXVjaCBtb3JlIGZsZXhpYmxlIHRvby4NCj4NClsuLi5dDQo+DQo+DQo+VGhhbmtzLA0KPg0K
+PkphbWVzDQoNClRoYW5rcywNClNoaWp1DQoNCg==
