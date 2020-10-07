@@ -2,78 +2,242 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E3EA9286421
-	for <lists+linux-edac@lfdr.de>; Wed,  7 Oct 2020 18:30:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DD452864FC
+	for <lists+linux-edac@lfdr.de>; Wed,  7 Oct 2020 18:46:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728000AbgJGQaj (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Wed, 7 Oct 2020 12:30:39 -0400
-Received: from sonic309-14.consmr.mail.bf2.yahoo.com ([74.6.129.124]:34429
-        "EHLO sonic309-14.consmr.mail.bf2.yahoo.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727948AbgJGQai (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Wed, 7 Oct 2020 12:30:38 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1602088237; bh=PxMwWzXvs+dqOoH0/FHvFmQpYH2JguaCUHYAVLLmaiw=; h=Date:From:Reply-To:Subject:References:From:Subject; b=bSXRsQDLv/trIglwvR6ekx+5n0zoRDOnRIXoYId4rspfmVyDQ+HO6eYmXiLiOQIPWR6dJBYdY4M1q979OOQ1TKjDFtnwKquq1Ob3JMOTaIsyTSjilWMzNgLVTY4ji2kQ/JaQ6QKxdqIdzoPFh/74Q1bet+/el2lUyJID3dNnojhKSE1oFBWBY/mTdrUi0P73iHEcbJI+Iq/hvn5QsLxuwV7VGZBIMwvdvP/iGc6pjOdpcpQ1qEtBs932WktMM+3FPKW+TcmFBAduZNiV9+axEah3eYjSRSd2ZoMwal6qX4Ti6Uclw1xfmwyFcHhMWElQyc00lSMLda0YLqtvuqhdcw==
-X-YMail-OSG: dnUtNsIVM1ksuZcOc23XYRVNRi2KvP98NXGHdsAi28G.4.j3LzR3teOzcMgJdV6
- I9RFmM0M3xx0XbrxH8auo_1akYgWVB.dRSVHIzgRK0z5hKx5VFXU4dJtCGAc22MGL5lLZwLuriqx
- spHXYJhLgjdOnN7IWn6k8UVsktxReUTOZSvffpMNjGN6HQM2GZkYT4zJYWbavaVbDj4squR6VDsG
- FUPdmjFf_TeRoNar3kYz09J7F737j0hKxKrB5C1UoqySZ4CrJkeCYcCqo6qjLzguiHgWollDFs9G
- wfUhfC__40GHcoR5U.tnb5qO9NkrcEsDCxVN0Yl3TF9R7SuF9eZUUNRi6p1q1qFpmebYHOu0LYlg
- XDWhmcA8Gwj76jCE8zPtY.ndhdUj32w1_jwb8T.5ImGSXELCGBTytNYFshPcp8Ua2JkFFvF7AEdq
- iHZ5_uGt.SmED8hs8oTSH81SBw.PrKO2a867uLjDMYkzg3YMMlzoagsbI._.zcvxQLQF3Z4wI7go
- HVgXyVOK3cgsxDNN9uLZ0PBzPZupw7knpfbTrMUHtBZ0zq90ClywEq7ct3yk4MBS9Sr1iFfm4ZNu
- oWrDUHzm_I8nKttgpWvu4sc9nJFuwsr9mOBdy8h726BxmI.VKfukWu91TYmzhiuAm6.MkLwTx5s7
- aUsvcBlxc0MxNly27ydL4MsSXXLkzfERFT6x9xuzEIoAD8yMO2jUSh5l6KqoNH9z2EVoW5YZOhrr
- OEsIeDnDNTRHYneliFW4sDaexyko3TwKr2Pp7JlEigfgiCb4iF6gqxgc4mr2thIYq4bkT4Ls_81K
- X4aQbMndFHLEAO_QuNMA54Rb3AqGudPYJJ7V8CoZFGKKmyEOz_ThVLuAueq.wZI53AczG8jVl7se
- pLPk5ZMEidaXsZIHJSu7XTUaZj4YR.y0fxjcsA9LW5OHxpz2ZH6AJq36gQAFb8Sd1DQ9OVPJZ0G1
- LWM3bpXug5ZtmnJBAVWOTCE2scF5vKdFgupYZWPle66bt9DbMw9OQwMUvOZEvxs7moY0PLV5aiA6
- d5ekeyaKjOhGBmVwJg2SYofzVimr63heoPJpFi8u902gixnanCPdsaH7mvQ7PGE3BRBl2yMRiQr7
- EH6veU.EzJ1aDRCvkc7RuOoHy6vFYKXRaJCGllfAgmslsFZCzucfimYVY8Q9sPv_QmZQkiy_r_KR
- IofCL2oGnGutvGQued8CdlpR1KyU2Q22Q.Rmrk9sIRuQg4gq9UwmZgqkKL7l2Ezb8LJzN4CtP4Vy
- 9oiQiOtjhDsbbwwEZqzPwNLMX.k2hDjTEKqth9LNJb3MGugX0Usz4sIS3uH974jxBeXagmm3eoh8
- aHcJXeRD2GmKa6Rws6fMUn_xzhK0JeENSAISfAuT4nF6t03_3FQfzo47ObE0mORHnDgvPwAH9BR8
- B9pNTnrTSHLzrBEGuV7FORtCOmb27cguo1_W8_ZbjsY_Dog--
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic309.consmr.mail.bf2.yahoo.com with HTTP; Wed, 7 Oct 2020 16:30:37 +0000
-Date:   Wed, 7 Oct 2020 16:30:36 +0000 (UTC)
-From:   Marilyn Robert <fredodinga22@gmail.com>
-Reply-To: marilyobert@gmail.com
-Message-ID: <1859654730.147012.1602088236348@mail.yahoo.com>
-Subject: =?UTF-8?B?0J3QsNGY0LzQuNC70LAg0LrQsNGYINCz0L7RgdC/0L7QtNCw0YDQvtGC?=
+        id S1728703AbgJGQp0 (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Wed, 7 Oct 2020 12:45:26 -0400
+Received: from foss.arm.com ([217.140.110.172]:46888 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728779AbgJGQpT (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Wed, 7 Oct 2020 12:45:19 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 83FAB30E;
+        Wed,  7 Oct 2020 09:45:18 -0700 (PDT)
+Received: from [172.16.1.113] (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id F34DD3F66B;
+        Wed,  7 Oct 2020 09:45:16 -0700 (PDT)
+Subject: Re: [RFC PATCH 0/7] RAS/CEC: Extend CEC for errors count check on
+ short time period
+To:     Shiju Jose <shiju.jose@huawei.com>
+Cc:     Borislav Petkov <bp@alien8.de>,
+        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
+        "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "tony.luck@intel.com" <tony.luck@intel.com>,
+        "rjw@rjwysocki.net" <rjw@rjwysocki.net>,
+        "lenb@kernel.org" <lenb@kernel.org>,
+        Linuxarm <linuxarm@huawei.com>,
+        Jonathan Cameron <jonathan.cameron@huawei.com>
+References: <20201002122235.1280-1-shiju.jose@huawei.com>
+ <20201002124352.GC17436@zn.tnic>
+ <19a8cc62b11c49e9b584857a6a6664e5@huawei.com>
+ <59950d44-906b-684f-c876-e09c76e5f827@arm.com>
+ <8d826b53a3fc453ba1c468aaf8eb2e75@huawei.com>
+From:   James Morse <james.morse@arm.com>
+Message-ID: <7d15f48a-3380-6b43-04c7-7f9e67564519@arm.com>
+Date:   Wed, 7 Oct 2020 17:45:15 +0100
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:68.0) Gecko/20100101
+ Thunderbird/68.12.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
-References: <1859654730.147012.1602088236348.ref@mail.yahoo.com>
-X-Mailer: WebService/1.1.16795 YMailNodin Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.125 Safari/537.36
-To:     unlisted-recipients:; (no To-header on input)
+In-Reply-To: <8d826b53a3fc453ba1c468aaf8eb2e75@huawei.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-GB
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-DQoNCtCd0LDRmNC80LjQu9CwINC60LDRmCDQs9C+0YHQv9C+0LTQsNGA0L7Rgg0KDQrQiNCw0YEg
-0YHRg9C8IDY4LdCz0L7QtNC40YjQvdCwINC20LXQvdCwLCDQutC+0ZjQsCDRgdGC0YDQsNC00LAg
-0L7QtCDQv9GA0L7QtNC+0LvQttC10L0g0LrQsNGA0YbQuNC90L7QvCDQvdCwINC00L7RmNC60LAs
-INC+0LQg0YHQuNGC0LUg0LzQtdC00LjRhtC40L3RgdC60Lgg0LjQvdC00LjQutCw0YbQuNC4LCDQ
-vNC+0ZjQsNGC0LAg0YHQvtGB0YLQvtGY0LHQsCDQvdCw0LLQuNGB0YLQuNC90LAg0YHQtSDQstC7
-0L7RiNC4INC4INC+0YfQuNCz0LvQtdC00L3QviDQtSDQtNC10LrQsCDQvNC+0LbQtdCx0Lgg0L3Q
-tdC80LAg0LTQsCDQttC40LLQtdCw0Lwg0L/QvtCy0LXRnNC1INC+0LQg0YjQtdGB0YIg0LzQtdGB
-0LXRhtC4INC60LDQutC+INGA0LXQt9GD0LvRgtCw0YIg0L3QsCDQsdGA0LfQuNC+0YIg0YDQsNGB
-0YIg0Lgg0LHQvtC70LrQsNGC0LAg0YjRgtC+INGB0LUg0ZjQsNCy0YPQstCwINC60LDRmCDQvdC1
-0LAuINCc0L7RmNC+0YIg0YHQvtC/0YDRg9CzINC/0L7Rh9C40L3QsCDQvdC10LrQvtC70LrRgyDQ
-s9C+0LTQuNC90Lgg0L3QsNC90LDQt9Cw0LQg0Lgg0L3QsNGI0LjRgtC1INC00L7Qu9Cz0Lgg0LPQ
-vtC00LjQvdC4INCx0YDQsNC6INC90LUg0LHQtdCwINCx0LvQsNCz0L7RgdC70L7QstC10L3QuCDR
-gdC+INC90LjRgtGDINC10LTQvdC+INC00LXRgtC1LCDQv9C+INC90LXQs9C+0LLQsNGC0LAg0YHQ
-vNGA0YIg0LPQviDQvdCw0YHQu9C10LTQuNCyINGG0LXQu9C+0YLQviDQvdC10LPQvtCy0L4g0LHQ
-vtCz0LDRgtGB0YLQstC+Lg0KDQrQlNC+0LDRk9Cw0Lwg0LrQsNGYINCy0LDRgSDQvtGC0LrQsNC6
-0L4g0YHQtSDQv9C+0LzQvtC70LjQsiDQt9CwINGC0L7QsCwg0L/QvtC00LPQvtGC0LLQtdC9INGB
-0YPQvCDQtNCwINC00L7QvdC40YDQsNC8INGB0YPQvNCwINC+0LQgMiwgMzAwLCAwMDAg0LXQstGA
-0LAg0LfQsCDQv9C+0LzQvtGIINC90LAg0YHQuNGA0L7QvNCw0YjQvdC40YLQtSwg0YHQuNGA0L7Q
-vNCw0YjQvdC40YLQtSDQuCDQv9C+0LzQsNC70LrRgyDQv9GA0LjQstC40LvQtdCz0LjRgNCw0L3Q
-uNGC0LUg0LzQtdGT0YMg0LLQsNGI0LjRgtC1INGB0L7QsdGA0LDQvdC40ZjQsCAvINC+0L/RiNGC
-0LXRgdGC0LLQvi4g0JfQsNCx0LXQu9C10LbQtdGC0LUg0LTQtdC60LAg0L7QstC+0Zgg0YTQvtC9
-0LQg0LUg0LTQtdC/0L7QvdC40YDQsNC9INCy0L4g0LHQsNC90LrQsCDQutCw0LTQtSDRiNGC0L4g
-0YDQsNCx0L7RgtC10YjQtSDQvNC+0ZjQvtGCINGB0L7Qv9GA0YPQsy4gQXBwcmVjaWF0ZdC1INGG
-0LXQvdCw0Lwg0LDQutC+INC+0LHRgNC90LXRgtC1INCy0L3QuNC80LDQvdC40LUg0L3QsCDQvNC+
-0LXRgtC+INCx0LDRgNCw0ZrQtSDQt9CwINC/0YDQvtC/0LDQs9C40YDQsNGa0LUg0L3QsCDQvNCw
-0YHQsNC20LDRgtCwINC90LAg0LrRgNCw0LvRgdGC0LLQvtGC0L4sINGc0LUg0LLQuCDQtNCw0LTQ
-sNC8INC/0L7QstC10ZzQtSDQtNC10YLQsNC70Lgg0LfQsCDRgtC+0LAg0LrQsNC60L4g0LTQsCDQ
-v9C+0YHRgtCw0L/QuNGC0LUuDQoNCtCR0LvQsNCz0L7QtNCw0YDQsNC8DQrQky3Rk9CwINCc0LXR
-gNC40LvQuNC9INCg0L7QsdC10YDRgg==
+Hi Shiju,
+
+On 06/10/2020 17:13, Shiju Jose wrote:
+
+[...]
+
+> Please find following pseudo code we added for the kernel side to make sure
+> we correctly understand your suggestions.
+> 
+> 1. Create edac device and edac device sysfs entries for the online CPU caches.
+> /drivers/edac/edac_device.c
+> struct edac_device_ctl_info  *edac_device_add_cache(unsigned int id, u8 level, u8 type) {
+
+Eh? Ah, you are adding helpers for devices that are a cache. As far as I can see, edac
+only cares about 'devices', I don't think this is needed unless there are multiple users,
+or it makes a visible difference to user-space.
+
+Otherwise this could just go into ghes_edac.c
+
+
+How this looks to user-space probably needs discussing. We should avoid inventing anything
+new. I'd expect user-space to see something like the structure described at the top of
+edac_device.h... but I can't spot a driver using this.
+(its a shame its not the other way up, to avoid duplicating shared caches)
+
+Some archaeology may be needed!
+
+(if there is some existing structure, I agree it should be wrapped up in helpers to ensure
+its easiest to be the same. This may be what a edac_device_block is...)
+
+
+>  }
+
+
+> /drivers/base/cacheinfo.c
+> int cache_create_edac_entries(u64 mpidr, u8 cache_level, u8 cache_type)
+> { 
+> 	...
+> 	/* Get cacheinfo for each online cpus */
+> 	for_each_online_cpu(i) {
+> 		struct cpu_cacheinfo *cpu_ci = get_cpu_cacheinfo(i);
+
+I agree the structure of the caches should come from cacheinfo, and you spotted it only
+works for online CPUs!. This means there is an interaction with cpuhp here)
+
+
+> 		if (!cpu_ci || !cpu_ci->id)
+
+cpu->id?  0 is a valid id, there is an attribute flag to say this is valid.
+This field exists in struct cacheinfo, not struct cpu_cacheinfo.
+
+
+> 			continue;
+>         		... 
+> 		/*Add  the edac entry for the CPU cache */
+> 		edev_cache = edac_device_add_cache(cpu_ci->id, cpu_ci ->level, cpu_ci ->type)
+> 		if (!edev_cache)
+> 			break;
+
+This would break all other edac users.
+The edac driver for the platform should take care of creating this stuff, not the core
+cacheinfo code.
+
+The edac driver for the platform may know that L2 doesn't report RAS errors, so there is
+no point exposing it.
+
+For firmware-first, we can't know this until an error shows up, so have to create
+everything. This stuff should only be created/exported when ghes_edac.c is determined to
+be this platforms edac driver. This code should live in ghes_edac.c.
+
+
+> 		...
+> 	}
+> 	...	
+> }
+
+> unsigned int cache_get_cache_id(u64 proc_id, u8 cache_level, u8 cache_type)
+
+See get_cpu_cacheinfo_id(int cpu, int level) in next. (something very similar to this
+lived in arch/x86, bits of the MPAM tree that moved it got queued for next)
+
+
+> { 
+> 	unsigned int cache_id = 0;
+> 	...
+> 	/* Walk looking for matching cache node */   
+> 	for_each_online_cpu(i) {
+
+(there is an interaction with cpuhp here)
+
+
+> 		struct cpu_cacheinfo *cpu_ci = get_cpu_cacheinfo(i);
+> 		if (!cpu_ci || !cpu_ci->id)
+> 			continue;
+
+
+> 		id = CONV(proc_id);  /* need to check */
+
+No idea what is going on here.
+
+(Deriving an ID from the CPU_s_ that are attached to the cache is arm64 specific. This has
+to work for x86 too.
+The MPAM out-of-tree code does this as we don't have anything else. Feedback when it was
+posted as RFC was that the id values should be compacted, I was hoping we would get
+something like an id from the PPTT before needing this value as resctrl ABI for MPAM)
+
+
+> 		if((id == cpu_ci->id) && (cache_level == cpu_ci->level) && (cache_type == cpu_ci->type))  {
+> 			cache_id = cpu_ci->id;
+> 			break;
+> 		}
+> 	}
+> 	return cache_id;
+> }
+
+
+> 2. Store CPU CE count in the edac sysfs entry for the CPU cache.
+> 
+> drivers/edac/ghes_edac.c
+> void ghes_edac_report_cpu_error(int cache_id, u8 cache_level, u8 cache_type , uint32 ce_count)
+> {
+> 	...
+> 	/* Check edac entry for cache already present, if not add new entry */       
+
+You can't create devices at runtime! The notification comes in irq context, and
+edac_device_add_device() takes a mutex, and you need to allocate memory.
+
+This could be deferred to process context - but I bet its a nuisance for user-space to now
+know what counters are available until errors show up.
+
+
+> 	edev_cache = find_edac_device_cache(cache_id, cache_level, cache_type);
+> 	if (!edev_cache) {
+> 		/*Add  the edac entry for the cache */
+> 		edev_cache = edac_device_add_cache(cache_id, cache_level, cache_type);
+> 		if (!edev_cache)
+> 			return;
+> 	}
+
+Better would be to lookup the device based on the CPER. (It already looks up the DIMM
+based on the CPER)
+
+
+> 	/* Store the ce_count to /sys/devices/system/edac/ cpu/cpu<no>/L<N>cache/ce_count */
+> 	edac_device_handle_ce_count(edev_cache, ce_count, ...)
+> }
+>  
+> drivers/acpi/apei/ghes.c
+> void ghes_handle_arm_hw_error(struct acpi_hest_generic_data *gdata) {
+>  	...
+>  	if (sec_sev != GHES_SEV_CORRECTED)
+>  		return;
+
+(Xiaofei Tan is looking at supporting some other of these, so you need to interact with
+that work too)
+
+
+>  	mpidr = cper_sec_proc_arm->mpidr;    
+
+You want an arch-specific call to convert this to the linux CPU number, and then use that
+everywhere. This makes the code more re-usable, and less surprising to other readers.
+
+arm64's get_logical_index() looks like it does what you want.
+
+
+>  	for(i = 0; i < cper_sec_proc_arm->err_info_num; i++) {
+>  		if(cper_sec_proc_info->type != CPER_ARM_CACHE_ERROR) 
+>  			continue; 
+>  		ce_count = cper_arm_err_info->multiple_error + 1;
+> 		cache_type = cper_arm_err_info->type;
+> 		cache_level = cper_arm_err_info->error_info<24: 22>;  
+
+> 		cache_id = cache_get_cache_id(mpidr, cache_level, cache_type);
+
+This needs to be architecture agnostic, it must take the cpu number.
+
+
+>  		if (!cache_id)
+>  			return;
+
+0 is a valid id.
+
+
+> 		ghes_edac_report_cpu_error(cache_id, cache_level, cache_type , ce_count);
+> 	}
+>               ...
+> 	return;	
+> }
+
+
+Thanks,
+
+James
