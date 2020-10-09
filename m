@@ -2,89 +2,82 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E40C28902F
-	for <lists+linux-edac@lfdr.de>; Fri,  9 Oct 2020 19:43:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 826DD28907C
+	for <lists+linux-edac@lfdr.de>; Fri,  9 Oct 2020 20:03:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387440AbgJIRmM (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Fri, 9 Oct 2020 13:42:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55226 "EHLO
+        id S2388000AbgJISDr (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Fri, 9 Oct 2020 14:03:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387436AbgJIRmM (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Fri, 9 Oct 2020 13:42:12 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC846C0613D2;
-        Fri,  9 Oct 2020 10:42:11 -0700 (PDT)
-Received: from zn.tnic (p200300ec2f0bdf00b94e32e687b21ae5.dip0.t-ipconnect.de [IPv6:2003:ec:2f0b:df00:b94e:32e6:87b2:1ae5])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 3A4491EC0354;
-        Fri,  9 Oct 2020 19:42:09 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1602265329;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=X3gULQutXMeAJMTyhcmVBmL++RNoQlboYa/g1nHoyHg=;
-        b=QwupyX0Gp8hel6ih01isLKNIJvR8mFmUKpGsb6VVznWu1Jq47VmzvXMWdGIH8YzThGcQiN
-        6yRJ6PfLxoF/uv05cB1dMeQmpjFq+ov6tO5l2EvmVQYPuPAcpRTZvbaj3TuPD32rP1Rl0f
-        +x3gW2HDkX2OZiUJ1u1eTW2G2ytbgBQ=
-Date:   Fri, 9 Oct 2020 19:42:00 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Yazen Ghannam <Yazen.Ghannam@amd.com>
-Cc:     linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Smita.KoralahalliChannabasappa@amd.com
-Subject: Re: [PATCH] EDAC/amd64: Set proper family type for Family 19h Models
- 20h-2Fh
-Message-ID: <20201009174200.GA21731@zn.tnic>
-References: <20201009171803.3214354-1-Yazen.Ghannam@amd.com>
+        with ESMTP id S1730449AbgJISDr (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Fri, 9 Oct 2020 14:03:47 -0400
+Received: from mail-pf1-x444.google.com (mail-pf1-x444.google.com [IPv6:2607:f8b0:4864:20::444])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED0F0C0613D2
+        for <linux-edac@vger.kernel.org>; Fri,  9 Oct 2020 11:03:46 -0700 (PDT)
+Received: by mail-pf1-x444.google.com with SMTP id 132so932312pfz.5
+        for <linux-edac@vger.kernel.org>; Fri, 09 Oct 2020 11:03:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=gAAMCepqobw6tAv0NKnu0DRBRmHRA3EpSxx1Y4BJ/ao=;
+        b=iiTNuyzuEmUSEE/Hru+Y3B6KbrrOPsp8fAtOvbJ8mesODX2DzYvlOxWG0bMEGSA3ao
+         YcgG/aEDxmOxo1Agatg0s3CfdWn6fgaz30eymOcckXmvkDOG8T/5pnArNF8z9q7q1ch8
+         T7c+WYhFXX6wq88srZeVbX0XazKryeUuBjlrc=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=gAAMCepqobw6tAv0NKnu0DRBRmHRA3EpSxx1Y4BJ/ao=;
+        b=UrO4xZRi4FIMgIftUuVokKPz6t44LiJSVGKqcWvqOl+Qgzcp5ThuIA8N1TFvDURbgm
+         0BPwYS2GiXsdPauzrVsFORzGBe/L4eXpOsMGe5F63yEyNRfcnn8t5HDhGJsam4cl9yIy
+         hPDwDYeAwsmhSp6RlIceoUNOmrYBgr9nnQk5R8zdk/5jaLQs6pwM+bgNSypwrXxai+bo
+         sDxiT7YaGxvDPm8xmMM1zTrBlmcGd/+v51X+BekAXxc1St635ycvY9tFKZGCVay7v+f1
+         0GWbohM1YsyoTBYRIAtyql8A/5TVD72rL95+1o0ejqWa8GWLq7qUva0oKRjdS9X2yfeA
+         j38Q==
+X-Gm-Message-State: AOAM530Hw4eavnIfkUD/hBIGpBSpmYu7yAyGdLaM7mnvT/cQ/EAOS1Lt
+        2lvE1wnwE0hyIUIERR5H/3mMOg==
+X-Google-Smtp-Source: ABdhPJysT12No1lDoGSMw/H2+Oq/8cLgq6b3+eY2EubBXnsEpPWixk4MotSHSqGPQyU35R7/5GB0Cg==
+X-Received: by 2002:a17:90a:7f8b:: with SMTP id m11mr5894826pjl.121.1602266626529;
+        Fri, 09 Oct 2020 11:03:46 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id d128sm11815809pfd.94.2020.10.09.11.03.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 09 Oct 2020 11:03:45 -0700 (PDT)
+Date:   Fri, 9 Oct 2020 11:03:44 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Shuah Khan <skhan@linuxfoundation.org>
+Cc:     corbet@lwn.net, gregkh@linuxfoundation.org, shuah@kernel.org,
+        rafael@kernel.org, johannes@sipsolutions.net, lenb@kernel.org,
+        james.morse@arm.com, tony.luck@intel.com, bp@alien8.de,
+        arve@android.com, tkjos@android.com, maco@android.com,
+        joel@joelfernandes.org, christian@brauner.io, hridya@google.com,
+        surenb@google.com, minyard@acm.org, arnd@arndb.de,
+        mchehab@kernel.org, rric@kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-acpi@vger.kernel.org, devel@driverdev.osuosl.org,
+        openipmi-developer@lists.sourceforge.net,
+        linux-edac@vger.kernel.org
+Subject: Re: [PATCH v3 00/11] Introduce Simple atomic counters
+Message-ID: <202010091103.5E435B42@keescook>
+References: <cover.1602209970.git.skhan@linuxfoundation.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20201009171803.3214354-1-Yazen.Ghannam@amd.com>
+In-Reply-To: <cover.1602209970.git.skhan@linuxfoundation.org>
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Fri, Oct 09, 2020 at 05:18:03PM +0000, Yazen Ghannam wrote:
-> From: Yazen Ghannam <yazen.ghannam@amd.com>
-> 
-> AMD Family 19h Models 20h-2Fh use the same PCI IDs as Family 17h Models
-> 70h-7Fh. The same family ops and number of channels also apply.
-> 
-> Use the Family17h Model 70h family_type and ops for Family 19h Models
-> 20h-2Fh. Update the controller name to match the system.
-> 
-> Signed-off-by: Yazen Ghannam <yazen.ghannam@amd.com>
-> ---
->  drivers/edac/amd64_edac.c | 6 ++++++
->  1 file changed, 6 insertions(+)
-> 
-> diff --git a/drivers/edac/amd64_edac.c b/drivers/edac/amd64_edac.c
-> index fcc08bbf6945..1362274d840b 100644
-> --- a/drivers/edac/amd64_edac.c
-> +++ b/drivers/edac/amd64_edac.c
-> @@ -3385,6 +3385,12 @@ static struct amd64_family_type *per_family_init(struct amd64_pvt *pvt)
->  		break;
->  
->  	case 0x19:
-> +		if (pvt->model >= 0x20 && pvt->model <= 0x2f) {
-> +			fam_type = &family_types[F17_M70H_CPUS];
-> +			pvt->ops = &family_types[F17_M70H_CPUS].ops;
-> +			fam_type->ctl_name = "F19h_M20h";
-> +			break;
-> +		}
->  		fam_type	= &family_types[F19_CPUS];
->  		pvt->ops	= &family_types[F19_CPUS].ops;
->  		family_types[F19_CPUS].ctl_name = "F19h";
-> -- 
+On Fri, Oct 09, 2020 at 09:55:55AM -0600, Shuah Khan wrote:
+> Note: Would like to get this into Linux 5.10-rc1 so we can continue
+> updating drivers that can be updated to use this API. If this all looks
+> good, Kees, would you like to take this through your tree or would you
+> like to take this through mine.
 
-Applied, thanks.
+I'd mentioned this in the v2, but yes, please take via your trees. :)
 
-It is too close to the merge window but this is enablement for new hw
-which no one has yet so nothing should break.
+I'm glad to see this landing!
 
 -- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+Kees Cook
