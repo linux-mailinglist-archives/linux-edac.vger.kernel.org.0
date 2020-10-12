@@ -2,111 +2,127 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2723E28A326
-	for <lists+linux-edac@lfdr.de>; Sun, 11 Oct 2020 01:07:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4508528B153
+	for <lists+linux-edac@lfdr.de>; Mon, 12 Oct 2020 11:20:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388040AbgJJW51 (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Sat, 10 Oct 2020 18:57:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41592 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731185AbgJJTxO (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Sat, 10 Oct 2020 15:53:14 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 713B0C0613B4;
-        Sat, 10 Oct 2020 04:10:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=6cV+tWxBY2tCvh0w9RakejaDPboIY9tCeHrHg2GCiPA=; b=eBUno4bXjQVLTMDPOm+sW25Lwv
-        cowKD724NzwUh0wGoDX2eG2v9P5KJVKb8dHlTaXOU5VS9yonxo5dacyZ9QBDrEL6/NHu9yrFDVlul
-        uJaKEt4lT+vM8kcKN1F9biakAjn/UcusJA6djK/yyy9on5fKvTsxSO+3sp/2KlZsoUnoiEKzwrMB4
-        7TSBcjnZnVEnKSgMC/MZVlM/dgfJ6XN++gsUwy/SxMYtctBJGqU5CSC+MXoSkcGbzs6L+g82bBhNO
-        Y/Lg46iD7UQGhyO+fwbJTDWyUte30Cln331o8ECV+9e4trlBM1tLfDi1pnpFFiEEQbQZdIxL/9tRX
-        HbGqIARQ==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1kRCkg-00026L-PN; Sat, 10 Oct 2020 11:09:27 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 3BEED3003E5;
-        Sat, 10 Oct 2020 13:09:21 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 017E52010B5FA; Sat, 10 Oct 2020 13:09:20 +0200 (CEST)
-Date:   Sat, 10 Oct 2020 13:09:20 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Shuah Khan <skhan@linuxfoundation.org>, corbet@lwn.net,
-        gregkh@linuxfoundation.org, shuah@kernel.org, rafael@kernel.org,
-        johannes@sipsolutions.net, lenb@kernel.org, james.morse@arm.com,
-        tony.luck@intel.com, bp@alien8.de, arve@android.com,
-        tkjos@android.com, maco@android.com, joel@joelfernandes.org,
-        christian@brauner.io, hridya@google.com, surenb@google.com,
-        minyard@acm.org, arnd@arndb.de, mchehab@kernel.org,
-        rric@kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-acpi@vger.kernel.org, devel@driverdev.osuosl.org,
-        openipmi-developer@lists.sourceforge.net,
-        linux-edac@vger.kernel.org, Will Deacon <will@kernel.org>
-Subject: Re: [PATCH v3 00/11] Introduce Simple atomic counters
-Message-ID: <20201010110920.GQ2628@hirez.programming.kicks-ass.net>
-References: <cover.1602209970.git.skhan@linuxfoundation.org>
- <20201009193746.GA1073957@hirez.programming.kicks-ass.net>
- <202010091255.246395A6@keescook>
+        id S1728945AbgJLJUm (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Mon, 12 Oct 2020 05:20:42 -0400
+Received: from mx2.suse.de ([195.135.220.15]:52582 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727227AbgJLJUm (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Mon, 12 Oct 2020 05:20:42 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id 05CBEAFCA;
+        Mon, 12 Oct 2020 09:20:41 +0000 (UTC)
+Date:   Mon, 12 Oct 2020 11:20:29 +0200
+From:   Borislav Petkov <bp@suse.de>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-edac <linux-edac@vger.kernel.org>,
+        lkml <linux-kernel@vger.kernel.org>
+Subject: [GIT PULL] EDAC queue for v5.10
+Message-ID: <20201012092029.GA25311@zn.tnic>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <202010091255.246395A6@keescook>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Fri, Oct 09, 2020 at 01:45:43PM -0700, Kees Cook wrote:
-> On Fri, Oct 09, 2020 at 09:37:46PM +0200, Peter Zijlstra wrote:
-> > On Fri, Oct 09, 2020 at 09:55:55AM -0600, Shuah Khan wrote:
-> > > Simple atomic counters api provides interfaces for simple atomic counters
-> > > that just count, and don't guard resource lifetimes. The interfaces are
-> > > built on top of atomic_t api, providing a smaller subset of atomic_t
-> > > interfaces necessary to support simple counters.
-> > 
-> > To what actual purpose?!? AFACIT its pointless wrappery, it gets us
-> > nothing.
-> 
-> It's not pointless. There is value is separating types for behavioral
-> constraint to avoid flaws. atomic_t provides a native operation. We gained
-> refcount_t for the "must not wrap" type, and this gets us the other side
-> of that behavioral type, which is "wrapping is expected". Separating the
-> atomic_t uses allows for a clearer path to being able to reason about
-> code flow, whether it be a human or a static analyzer.
+Hi Linus,
 
-refcount_t got us actual rutime exceptions that atomic_t doesn't. This
-propsal gets us nothing.
+please pull the EDAC pile accumulated this time around.
 
-atomic_t is very much expected to wrap.
+Thx.
 
-> The counter wrappers add nothing to the image size, and only serve to
-> confine the API to one that cannot be used for lifetime management.
+---
 
-It doesn't add anything period. It doesn't get us new behaviour, it
-splits a 'can wrap' use-case from a 'can wrap' type. That's sodding
-pointless.
+The following changes since commit 9123e3a74ec7b934a4a099e98af6a61c2f80bbf5:
 
-Worse, it mixes 2 unrelated cases into one type, which just makes a
-mockery of things (all the inc_return users are not statistics, some
-might even mis-behave if they wrap).
+  Linux 5.9-rc1 (2020-08-16 13:04:57 -0700)
 
-> Once conversions are done, we have a clean line between refcounting
-> and statistical atomics, which means we have a much lower chance of
-> introducing new flaws (and maybe we'll fix flaws during the conversion,
-> which we've certainly seen before when doing this stricter type/language
-> changes).
-> 
-> I don't see why this is an objectionable goal.
+are available in the Git repository at:
 
-People can and will always find a way to mess things up.
+  git://git.kernel.org/pub/scm/linux/kernel/git/ras/ras.git tags/edac_updates_for_v5.10
 
-Only add types when you get behavioural changes, otherwise it's
-pointless noise.
+for you to fetch changes up to 1dc32628d65a670625afada00f50c91add1a19a2:
 
-My NAK stands.
+  Merge branch 'edac-drivers' into edac-updates-for-v5.10 (2020-10-12 11:05:42 +0200)
+
+----------------------------------------------------------------
+* Add Amazon's Annapurna Labs memory controller EDAC driver, by Talel
+Shenhar.
+
+* New AMD CPUs support, by Yazen Ghannam.
+
+* The usual misc fixes and cleanups all over the subsystem.
+
+----------------------------------------------------------------
+Alexander A. Klimov (1):
+      EDAC: Replace HTTP links with HTTPS ones
+
+Borislav Petkov (1):
+      Merge branch 'edac-drivers' into edac-updates-for-v5.10
+
+Dinghao Liu (1):
+      EDAC/i5100: Fix error handling order in i5100_init_one()
+
+Dinh Nguyen (1):
+      EDAC/socfpga: Transfer SoCFPGA EDAC maintainership
+
+Krzysztof Kozlowski (2):
+      EDAC/aspeed: Fix handling of platform_get_irq() error
+      EDAC/ti: Fix handling of platform_get_irq() error
+
+Liu Shixin (1):
+      EDAC/aspeed: Use module_platform_driver() to simplify
+
+Robert Richter (1):
+      EDAC/highbank: Handover Calxeda Highbank maintenance to Andre Przywara
+
+Talel Shenhar (2):
+      dt-bindings: EDAC: Add Amazon's Annapurna Labs Memory Controller binding
+      EDAC/al-mc-edac: Add Amazon's Annapurna Labs Memory Controller driver
+
+Tom Rix (1):
+      EDAC, sb_edac: Simplify switch statement
+
+Wei Yongjun (1):
+      EDAC/thunderx: Make symbol lmc_dfs_ents static
+
+Xiongfeng Wang (1):
+      EDAC/mc_sysfs: Add missing newlines when printing {max,dimm}_location
+
+Yazen Ghannam (2):
+      EDAC/mce_amd: Add new error descriptions for existing types
+      EDAC/amd64: Set proper family type for Family 19h Models 20h-2Fh
+
+ .../bindings/edac/amazon,al-mc-edac.yaml           |  67 ++++
+ MAINTAINERS                                        |  11 +-
+ drivers/edac/Kconfig                               |   7 +
+ drivers/edac/Makefile                              |   1 +
+ drivers/edac/al_mc_edac.c                          | 354 +++++++++++++++++++++
+ drivers/edac/amd64_edac.c                          |   6 +
+ drivers/edac/aspeed_edac.c                         |  22 +-
+ drivers/edac/e752x_edac.c                          |   2 +-
+ drivers/edac/edac_mc_sysfs.c                       |  22 +-
+ drivers/edac/ghes_edac.c                           |   2 +-
+ drivers/edac/i5100_edac.c                          |  11 +-
+ drivers/edac/i5400_edac.c                          |   4 +-
+ drivers/edac/i7300_edac.c                          |   4 +-
+ drivers/edac/i7core_edac.c                         |   4 +-
+ drivers/edac/ie31200_edac.c                        |   6 +-
+ drivers/edac/mce_amd.c                             |  11 +-
+ drivers/edac/sb_edac.c                             |   7 +-
+ drivers/edac/thunderx_edac.c                       |   2 +-
+ drivers/edac/ti_edac.c                             |   5 +-
+ 19 files changed, 496 insertions(+), 52 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/edac/amazon,al-mc-edac.yaml
+ create mode 100644 drivers/edac/al_mc_edac.c
+
+-- 
+Regards/Gruss,
+    Boris.
+
+SUSE Software Solutions Germany GmbH, GF: Felix Imendörffer, HRB 36809, AG Nürnberg
