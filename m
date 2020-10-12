@@ -2,63 +2,52 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A755328C51B
-	for <lists+linux-edac@lfdr.de>; Tue, 13 Oct 2020 01:09:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC02128BF91
+	for <lists+linux-edac@lfdr.de>; Mon, 12 Oct 2020 20:21:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389161AbgJLXJZ convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-edac@lfdr.de>); Mon, 12 Oct 2020 19:09:25 -0400
-Received: from mx.metalurgs.lv ([81.198.125.103]:63821 "EHLO mx.metalurgs.lv"
+        id S2390849AbgJLSVC (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Mon, 12 Oct 2020 14:21:02 -0400
+Received: from mail.kernel.org ([198.145.29.99]:39082 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2389126AbgJLXJY (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Mon, 12 Oct 2020 19:09:24 -0400
-Received: from mx.metalurgs.lv (localhost [127.0.0.1])
-        by mx.metalurgs.lv (Postfix) with ESMTP id 861D47AEC5
-        for <linux-edac@vger.kernel.org>; Tue, 13 Oct 2020 02:01:28 +0300 (EEST)
-Received: from kas30pipe.localhost (localhost [127.0.0.1])
-        by mx.metalurgs.lv (Postfix) with ESMTP id A566976F99
-        for <linux-edac@vger.kernel.org>; Tue, 13 Oct 2020 01:09:55 +0300 (EEST)
-Received: by mx.metalurgs.lv (Postfix, from userid 1005)
-        id B49E16C963; Mon, 12 Oct 2020 21:11:02 +0300 (EEST)
-Received: from [100.64.1.74] (unknown [190.15.125.55])
-        (Authenticated sender: admin)
-        by mx.metalurgs.lv (Postfix) with ESMTPA id E7A55713BE;
-        Mon, 12 Oct 2020 17:20:45 +0300 (EEST)
-MIME-Version: 1.0
-Content-Description: Mail message body
-To:     Recipients <financialcapability6@gmail.com>
-From:   "Mr. Hashim Bin" <financialcapability6@gmail.com>
-Date:   Mon, 12 Oct 2020 11:20:38 -0300
-Reply-To: hmurrah39@gmail.com
-X-SpamTest-Envelope-From: financialcapability6@gmail.com
-X-SpamTest-Group-ID: 00000000
-X-SpamTest-Info: Profiles 71303 [Jan 01 2015]
-X-SpamTest-Info: {TO: forged address, i.e. recipient, investors, public, etc.}
-X-SpamTest-Info: {DATE: unreal year}
-X-SpamTest-Method: none
-X-SpamTest-Rate: 55
-X-SpamTest-Status: Not detected
-X-SpamTest-Status-Extended: not_detected
-X-SpamTest-Version: SMTP-Filter Version 3.0.0 [0284], KAS30/Release
-Message-ID: <20201012213222.B49E16C963@mx.metalurgs.lv>
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: 8BIT
-Subject: Low Rate Loan./n.,
-X-Anti-Virus: Kaspersky Anti-Virus for Linux Mail Server 5.6.39/RELEASE,
-         bases: 20140401 #7726142, check: 20201012 notchecked
+        id S2387669AbgJLSVC (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Mon, 12 Oct 2020 14:21:02 -0400
+Subject: Re: [GIT PULL] EDAC queue for v5.10
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1602526862;
+        bh=22XGfSewhYj0UUi/pwq1jJzvdCqo8cXGLo+vm/QUmys=;
+        h=From:In-Reply-To:References:Date:To:Cc:From;
+        b=S6E3dZ5/4oKdAA/quNs6PREt9MQtoqbvvLjzKP7NXeobK67LAcrx9u1fwz9BypUVE
+         uyDIbYQp9/2DnOIlpi78HmUT0qgjsCvEX836iBOrufuUjuGTWO2JJR1H6nhTLPCqZ7
+         tzOmvkcgUYj5NETgoyaOB8KLda4FnJe6tcstEnIM=
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <20201012092029.GA25311@zn.tnic>
+References: <20201012092029.GA25311@zn.tnic>
+X-PR-Tracked-List-Id: <linux-edac.vger.kernel.org>
+X-PR-Tracked-Message-Id: <20201012092029.GA25311@zn.tnic>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/ras/ras.git tags/edac_updates_for_v5.10
+X-PR-Tracked-Commit-Id: 1dc32628d65a670625afada00f50c91add1a19a2
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: a9a4b7d9a6380ae4e1df2c9b90fef6c427229aab
+Message-Id: <160252686240.3643.17498350851659457514.pr-tracker-bot@kernel.org>
+Date:   Mon, 12 Oct 2020 18:21:02 +0000
+To:     Borislav Petkov <bp@suse.de>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-edac <linux-edac@vger.kernel.org>,
+        lkml <linux-kernel@vger.kernel.org>
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-Hello Dear,
+The pull request you sent on Mon, 12 Oct 2020 11:20:29 +0200:
 
-We are Investment Company offering Corporate and Personal
-Loan at 3% Interest Rate for a duration of 10Years.
+> git://git.kernel.org/pub/scm/linux/kernel/git/ras/ras.git tags/edac_updates_for_v5.10
 
-We also pay 1% commission to brokers, who introduce project
-owners for finance or other opportunities.
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/a9a4b7d9a6380ae4e1df2c9b90fef6c427229aab
 
-Please get back to me if you are interested for more
-details.
+Thank you!
 
-Yours faithfully,
-Hashim Bin 
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
