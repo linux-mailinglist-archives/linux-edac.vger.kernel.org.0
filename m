@@ -2,42 +2,52 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BF1F290389
-	for <lists+linux-edac@lfdr.de>; Fri, 16 Oct 2020 12:56:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C3B5290D81
+	for <lists+linux-edac@lfdr.de>; Fri, 16 Oct 2020 23:56:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2395525AbgJPKyG (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Fri, 16 Oct 2020 06:54:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49080 "EHLO
+        id S1731927AbgJPV45 (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Fri, 16 Oct 2020 17:56:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2394459AbgJPKyD (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Fri, 16 Oct 2020 06:54:03 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32676C0613D4;
-        Fri, 16 Oct 2020 03:54:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=+RZTLQaq+qRJR9rQRj8dPc5jefZyAh1kHGftAj9LgAo=; b=FBzTRCct2xrc5zVUeKT7is1xSu
-        MGbl4pv9vThbIjrp7wOg/ARUySZd2N65zj7HJnWgkEwqogKZo3kyRyNZCXlCF00S4NUl1ETHDkdkJ
-        z9KhuQEYiVomLErq7jlIKdrzprV7ezYNIiMNt0LE+xYFR16YOvdR6+Xjk5t4zG2+GOL1gki5IFG3a
-        UOZNELwkfPjO+FEtZmB58smOwGFR4/3dZuQ2ZslNhpTAcKbnwzuXRJlY0IVYwZwRZ3Wf2BFbUdX9R
-        bPzY8lx3e875T1rDs1Y0LwvQCNuqCnuYUzWXxXfoDqY2wBzk+y6lFHQAQRqQJpGaCvGZDqRzfYuKz
-        0HeUGVwA==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1kTNMM-0001mw-Nq; Fri, 16 Oct 2020 10:53:19 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 4B3A63011E6;
-        Fri, 16 Oct 2020 12:53:13 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 2C299203EB17E; Fri, 16 Oct 2020 12:53:13 +0200 (CEST)
-Date:   Fri, 16 Oct 2020 12:53:13 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Shuah Khan <skhan@linuxfoundation.org>, corbet@lwn.net,
+        with ESMTP id S1731367AbgJPV44 (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Fri, 16 Oct 2020 17:56:56 -0400
+Received: from mail-io1-xd41.google.com (mail-io1-xd41.google.com [IPv6:2607:f8b0:4864:20::d41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFA3AC0613D4
+        for <linux-edac@vger.kernel.org>; Fri, 16 Oct 2020 14:56:55 -0700 (PDT)
+Received: by mail-io1-xd41.google.com with SMTP id 67so5730796iob.8
+        for <linux-edac@vger.kernel.org>; Fri, 16 Oct 2020 14:56:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=jzoItDulSDSlUxDGRw3G8TEwpiIBVU/vuUm7RuAsW+4=;
+        b=PYK3qHi0SlM4Ap5vtAD939+wmy/uc4NSYcNP6oAvg48Ng1dESdGw/FCNMGWrYwjM3E
+         mPKznaL5D82PF8qF4kbmvDw+x0h/IdSxdhi1DPBMKFr8nijFAdwJDxTwvzpolrbvgX4k
+         qmyYTqKA/kZk19UQGbDyLnBuVH5VapEnAriXw=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=jzoItDulSDSlUxDGRw3G8TEwpiIBVU/vuUm7RuAsW+4=;
+        b=jCiBFKeEf4qhoq3Ci9XNkhpE32RJUe6S8ypWFUVLWIOg4tajD/v+kZ2Mw5464UUfiS
+         6CWqq1PL7NruhVzeBSoDJEv6t7yakWJ4syF7K7o9hrWDb+Z5bZrBucgPkFurU8Z8iwiz
+         lZEkYJcHu9MsI1BxJjkRK0uzGYur7YlaBkUyLFYwRjsUgFRXrLCL7jVRTj+f3bn+8hqo
+         II3QsXL5j7JuIAoU3GzbAzZJNaxTJkaVZ8o+GzmrvKfdcZprqdZvVk6bztbal6FmP3ka
+         VQwW1lKVPhL3quAydQjhOnxUgEnfxzQnAabKV8NSC4zETLD1GwFHuoxEVt649M4Ut35s
+         ZWlg==
+X-Gm-Message-State: AOAM5319MofVg8P0nMmvPHopBeuaaMTuUQxZ087I3KnhOGyYuxgS1R/3
+        3i2Vay62pIhFrDnK9yE1apGP+g==
+X-Google-Smtp-Source: ABdhPJw+AlOetLRaoHdMMYZCU1cMviaNyYmSoxw13tfB/W1yAkmwJK6fIb63qn4IMWo3+S+lpkcr6w==
+X-Received: by 2002:a6b:4014:: with SMTP id k20mr4002080ioa.177.1602885415021;
+        Fri, 16 Oct 2020 14:56:55 -0700 (PDT)
+Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
+        by smtp.gmail.com with ESMTPSA id d14sm3005594ilo.72.2020.10.16.14.56.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 16 Oct 2020 14:56:54 -0700 (PDT)
+Subject: Re: [PATCH v3 00/11] Introduce Simple atomic counters
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Kees Cook <keescook@chromium.org>, corbet@lwn.net,
         gregkh@linuxfoundation.org, shuah@kernel.org, rafael@kernel.org,
         johannes@sipsolutions.net, lenb@kernel.org, james.morse@arm.com,
         tony.luck@intel.com, bp@alien8.de, arve@android.com,
@@ -48,9 +58,8 @@ Cc:     Shuah Khan <skhan@linuxfoundation.org>, corbet@lwn.net,
         linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
         linux-acpi@vger.kernel.org, devel@driverdev.osuosl.org,
         openipmi-developer@lists.sourceforge.net,
-        linux-edac@vger.kernel.org, Will Deacon <will@kernel.org>
-Subject: Re: [PATCH v3 00/11] Introduce Simple atomic counters
-Message-ID: <20201016105313.GJ2611@hirez.programming.kicks-ass.net>
+        linux-edac@vger.kernel.org, Will Deacon <will@kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>
 References: <cover.1602209970.git.skhan@linuxfoundation.org>
  <20201009193746.GA1073957@hirez.programming.kicks-ass.net>
  <202010091255.246395A6@keescook>
@@ -58,24 +67,30 @@ References: <cover.1602209970.git.skhan@linuxfoundation.org>
  <6e1dd408-653e-817e-b659-23649259a929@linuxfoundation.org>
  <20201014091720.GC2628@hirez.programming.kicks-ass.net>
  <202010141611.70B7A38@keescook>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <d09124e5-6eae-8515-5071-ac4d0dd669fe@linuxfoundation.org>
+Date:   Fri, 16 Oct 2020 15:56:53 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
 In-Reply-To: <202010141611.70B7A38@keescook>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Wed, Oct 14, 2020 at 04:31:42PM -0700, Kees Cook wrote:
+On 10/14/20 5:31 PM, Kees Cook wrote:
 > On Wed, Oct 14, 2020 at 11:17:20AM +0200, Peter Zijlstra wrote:
-> > On Tue, Oct 13, 2020 at 08:12:20PM -0600, Shuah Khan wrote:
-> > 
-> > > They don't add any new behavior, As Kees mentioned they do give us a
-> > > way to clearly differentiate atomic usages that can wrap.
-> > 
-> > No it doesn't! atomic_t can wrap, this thing can wrap, no distinction.
-> > 
-> > All it does is fragment the API and sow confusion. FOR NO BENEFIT.
+>> On Tue, Oct 13, 2020 at 08:12:20PM -0600, Shuah Khan wrote:
+>>
+>>> They don't add any new behavior, As Kees mentioned they do give us a
+>>> way to clearly differentiate atomic usages that can wrap.
+>>
+>> No it doesn't! atomic_t can wrap, this thing can wrap, no distinction.
+>>
+>> All it does is fragment the API and sow confusion. FOR NO BENEFIT.
 > 
 > I really don't see it this way. It's a distinct subset of the atomic_t
 > API. The trouble that has existed here has been with an atomic_t being
@@ -90,33 +105,10 @@ On Wed, Oct 14, 2020 at 04:31:42PM -0700, Kees Cook wrote:
 > see why this is so bad: we end up with safer usage, more easily auditable
 > code behavior ("how was this atomic_t instance _intended_ to be used?"),
 > and no change in binary size.
-
-I simply do not believe in that. Maybe I've seen too much code like:
-
-  atomic_dec_and_test(&counter->cnt);
-
-or god forbid (thanks Will):
-
-  typedef union { refcount_t ref; counter_atomic_t cnt; atomic_t atm; } my_awesome_type_t;
-
-People simply aren't too fussed. They'll do whatever it takes (to get
-the job done with minimal effort).
-
-You think you've cleaned things up, but the moment you turn your back,
-it'll decend into madness at break-neck speed. This is part economics
-and part the fact that C is crap (see the above two examples).
-
-Can't we use static-analysis/robots for this? The constant feedback from
-those is the only thing that helps stem the tide of crap.
-
-Create a variable attribute __wrap, and have the robot complain when
-atomic_*_and_test() are used on a variable declared with __wrap. Or
-better yet, when a __wrap heads a condition that leads to call_rcu() /
-*free*().
-
-> > > There is no need to keep inc_return in this API as such. I included it
-> > > so it can be used for above cases 1 and 2, so the users don't have to
-> > > call inc() followed by read(). It can be left out of the API.
+> 
+>>> There is no need to keep inc_return in this API as such. I included it
+>>> so it can be used for above cases 1 and 2, so the users don't have to
+>>> call inc() followed by read(). It can be left out of the API.
 > 
 > I go back and forth on this, but after looking at these instances,
 > it makes sense to have inc_return(), for where counters are actually
@@ -127,35 +119,19 @@ better yet, when a __wrap heads a condition that leads to call_rcu() /
 > 
 > [1] https://lore.kernel.org/lkml/202010071334.8298F3FA7@keescook/
 > [2] https://git.kernel.org/linus/d1e7fd6462ca9fc76650fbe6ca800e35b24267da
-
-Sure, there's valid cases where wrapping is ok, but it's a distinct
-use-case and really shouldn't be mixed up in the statistics one --
-they're distinct.
-
-The fact that patch #4 appears to get this wrong seems like a fairly big
-clue.
-
-> > Wrong! The atomic usage in mutex doesn't fall in any of those
-> > categories.
+> 
+>> Wrong! The atomic usage in mutex doesn't fall in any of those
+>> categories.
 > 
 > But the atomic usage in mutex is *IN* mutex -- it's a separate data
 > type, etc. We don't build mutexes manually, so why build counters
 > manually?
-
-The claim was: atomic usage in the kernel falls in these 3 categories.
-
- - mutex uses atomic (atomic_long_t);
- - mutex is in the kernel;
- - mutex's use of atomic does not fit the listed categories.
-
-Therefore, the claim is false. In fact most of the locking primitives
-use atomic one way or another. And yes, some people do build their own.
-
-> > The only thing you're all saying that makes sense is that unintentional
-> > wrapping can have bad consequences, the rest is pure confusion.
-> > 
-> > Focus on the non-wrapping cases, _everything_ else is not going
-> > anywhere.
+> 
+>> The only thing you're all saying that makes sense is that unintentional
+>> wrapping can have bad consequences, the rest is pure confusion.
+>>
+>> Focus on the non-wrapping cases, _everything_ else is not going
+>> anywhere.
 > 
 > I view this as a way to do so: this subset of wrapping cases is being
 > identified and removed from the pool of all the atomic_t cases so that
@@ -165,22 +141,67 @@ use atomic one way or another. And yes, some people do build their own.
 > The other option is adding some kind of attribute to the declarations
 > (which gets us the annotation) but doesn't provide a limit to the API.
 > (e.g. no counter should ever call dec_return).
+> 
 
-See above; robots can do exactly that.
+Not sure about that. We have more than dec_return to deal with. More on
+this below.
 
-> > So audit the kernel, find the cases that should not wrap, categorize and
-> > create APIs for them that trap the wrapping. But don't go around
-> > confusing things that don't need confusion.
+>> So audit the kernel, find the cases that should not wrap, categorize and
+>> create APIs for them that trap the wrapping. But don't go around
+>> confusing things that don't need confusion.
 > 
 > That's what's happening here. But as it turns out, it's easier to do
 > this by employing both the process of elimination (mark the counters)
 > and direct identification (mark the refcount_t). Then the pool of
 > "unannotated" atomic_t instances continues to shrink.
+> 
 
-That's like saying: "I'm too lazy to track what I've looked at already".
-You're basically proposing to graffiti "Kees was here -- 16/10/2020" all
-over the kernel. Just so you can see where you still need to go.
+Right auditing is what is happening now.
 
-It says the code was (assuming your audit was correct) good at that
-date, but has no guarantees for any moment after that.
+Let me summarize the discussion:
 
+atomic_t api provides a wide range of atomic operations as a base
+api to implement atomic counters, bitops, spinlock interfaces.
+The usages also evolved into being used for resource lifetimes and
+state management. Then came refcount_t api to address resource lifetime
+problems related to atomic_t wrapping.
+
+There is a large overlap between the atomic_t api used for resource
+lifetimes and just counters. Not all counters used for resource
+lifetimes can be converted to refcount_t.
+
+A few quick "git grep" numbers on atomic_t interfaces usage:
+
+Common for all:
+
+atomic_set() - 3418
+atomic_read() - 5833
+atomic_inc() - 3376
+atomic_dec() - 2498
+atomic_inc_return() - 612
+
+Counters don't need these:
+
+atomic_dec_return() - 295
+atomic_add_return() - 209
+atomic_sub_return() - 144
+atomic_add() - 744
+atomic_sub() - 371
+atomic_dec_and_test() - 552
+
+You can see from these numbers, the volume of common usages that make
+it difficult to separate out counters vs. non-counter usages.
+
+The problem we are now running into is, it is becoming difficult
+weed out candidates for refcount_t conversion in this noise.
+
+Isolating a smaller subset of arithmetic atomic ops to address this
+specific counters use-case will help reduce noise. This way we can
+go through this work once and convert all counters to use this narrow
+scoped api and what is left is non-counter usages.
+
+The current situation is more confusing and adding a narrowly focused
+api for counters reduces it and makes it easier.
+
+thanks,
+-- Shuah
