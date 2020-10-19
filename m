@@ -2,50 +2,119 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E0F0929302F
-	for <lists+linux-edac@lfdr.de>; Mon, 19 Oct 2020 23:07:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CA3D293070
+	for <lists+linux-edac@lfdr.de>; Mon, 19 Oct 2020 23:25:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732484AbgJSVHd (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Mon, 19 Oct 2020 17:07:33 -0400
-Received: from mail.kernel.org ([198.145.29.99]:54698 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1732457AbgJSVHd (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Mon, 19 Oct 2020 17:07:33 -0400
-Received: from rric.localdomain (31-208-27-44.cust.bredband2.com [31.208.27.44])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id CA44B22282;
-        Mon, 19 Oct 2020 21:07:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1603141652;
-        bh=BpXpzdSQ0cflX43+Jt0oiRFEOGNhp55SFpE+MV9AO9s=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=LiCsh4G48PMxR3VlWLHFG+K+KITc7jtR1xpfiWW013KHfrdDRh8ENBiJY2kjtz4S1
-         qPSDoKlnKWhnQQf3sZh60nA2RjaoXBMdM3s6Bzm8593GEQVekOAK6vWGRiVlCQDh7a
-         QRjiebGlj5UuDJ1PazhggsvuGipWPAM88+lu+O94=
-Date:   Mon, 19 Oct 2020 23:07:26 +0200
-From:   Robert Richter <rric@kernel.org>
-To:     trix@redhat.com
-Cc:     bp@alien8.de, mchehab@kernel.org, tony.luck@intel.com,
-        james.morse@arm.com, linux-edac@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] edac: amd64_edac: remove unneeded break
-Message-ID: <20201019210726.lsbpl2rvk62bow7r@rric.localdomain>
-References: <20201019193524.13391-1-trix@redhat.com>
+        id S1732870AbgJSVZw (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Mon, 19 Oct 2020 17:25:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50592 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727409AbgJSVZw (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Mon, 19 Oct 2020 17:25:52 -0400
+Received: from mx0b-00190b01.pphosted.com (mx0b-00190b01.pphosted.com [IPv6:2620:100:9005:57f::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D330C0613CE
+        for <linux-edac@vger.kernel.org>; Mon, 19 Oct 2020 14:25:52 -0700 (PDT)
+Received: from pps.filterd (m0122331.ppops.net [127.0.0.1])
+        by mx0b-00190b01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 09JLJS87019400;
+        Mon, 19 Oct 2020 22:25:44 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=akamai.com; h=subject : to : cc :
+ references : from : message-id : date : mime-version : in-reply-to :
+ content-type : content-transfer-encoding; s=jan2016.eng;
+ bh=/QCuB0pUbisYOAw2xr7nvLUVM/azpTTeLr7nF8uZoSo=;
+ b=P5K/NJrRdh9OZd9FUdVAPeGmwTD20ZtYP+QAX8JZVTkfv8ZN/ldi4D6enAz8L8kIhPt7
+ 8hyq76MtLqlAqfQwWFxfviEorizFCCl40fJ5hijUimz2+hCJwRphxzLQWdxazttX1htv
+ BXigpj9pS7r640hXv/4a0CgJcW4IBL0A5pW7lzqowINdqlXbBHYXDLqPr/wEZsMrc+JO
+ Wt6yvl94n9wSXIn44CWdZJgEQeAQcde83n6CJsJq3H7GiLKX8NYwosG4Lb3n5EhspTrS
+ x/EEnlu5ARcOrWBneY+jDmtUjurQ6QnC26FlHb8Gjvggb28Imffg5wtH+Mm6KZuW+ixZ jg== 
+Received: from prod-mail-ppoint1 (prod-mail-ppoint1.akamai.com [184.51.33.18] (may be forged))
+        by mx0b-00190b01.pphosted.com with ESMTP id 347ng0jafh-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 19 Oct 2020 22:25:44 +0100
+Received: from pps.filterd (prod-mail-ppoint1.akamai.com [127.0.0.1])
+        by prod-mail-ppoint1.akamai.com (8.16.0.42/8.16.0.42) with SMTP id 09JLKYw6016386;
+        Mon, 19 Oct 2020 17:25:43 -0400
+Received: from prod-mail-relay10.akamai.com ([172.27.118.251])
+        by prod-mail-ppoint1.akamai.com with ESMTP id 347uxxnjpa-1;
+        Mon, 19 Oct 2020 17:25:43 -0400
+Received: from [0.0.0.0] (prod-ssh-gw01.bos01.corp.akamai.com [172.27.119.138])
+        by prod-mail-relay10.akamai.com (Postfix) with ESMTP id 3830E3D532;
+        Mon, 19 Oct 2020 21:25:43 +0000 (GMT)
+Subject: Re: Constant output in syslog of EDAC message
+To:     Borislav Petkov <bp@alien8.de>,
+        Raymond Bennett <raymond.bennett@gmail.com>
+Cc:     linux-edac@vger.kernel.org
+References: <CAKpodDyWSY+Wt5Q04o5EyjZZU4PFST8U9UNcjwrJZ6C=Tc744g@mail.gmail.com>
+ <20201019205658.GI24325@zn.tnic>
+From:   Jason Baron <jbaron@akamai.com>
+Message-ID: <e0fda286-d8e3-dabb-6cf5-fcd974e048b5@akamai.com>
+Date:   Mon, 19 Oct 2020 17:25:43 -0400
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201019193524.13391-1-trix@redhat.com>
-User-Agent: NeoMutt/20170113 (1.7.2)
+In-Reply-To: <20201019205658.GI24325@zn.tnic>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
+ definitions=2020-10-19_11:2020-10-16,2020-10-19 signatures=0
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 spamscore=0
+ suspectscore=0 phishscore=0 bulkscore=0 mlxscore=0 mlxlogscore=999
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2009150000 definitions=main-2010190142
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
+ definitions=2020-10-19_11:2020-10-16,2020-10-19 signatures=0
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 adultscore=0
+ impostorscore=0 suspectscore=0 priorityscore=1501 mlxlogscore=999
+ clxscore=1011 mlxscore=0 malwarescore=0 spamscore=0 phishscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2009150000 definitions=main-2010190142
+X-Agari-Authentication-Results: mx.akamai.com; spf=${SPFResult} (sender IP is 184.51.33.18)
+ smtp.mailfrom=jbaron@akamai.com smtp.helo=prod-mail-ppoint1
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On 19.10.20 12:35:24, trix@redhat.com wrote:
-> From: Tom Rix <trix@redhat.com>
-> 
-> A break is not needed if it is preceded by a return
-> 
-> Signed-off-by: Tom Rix <trix@redhat.com>
 
-Reviewed-by: Robert Richter <rric@kernel.org>
+On 10/19/20 4:56 PM, Borislav Petkov wrote:
+> On Mon, Oct 19, 2020 at 01:37:16PM -0700, Raymond Bennett wrote:
+>> Hi,
+>>
+>> I am seeing the constant output of the following messages in syslog,
+>> wondering what I can do to resolve this:
+>>
+>> Oct 19 13:19:30 hostname kernel: EDAC DEBUG: ie31200_check: MC0
+> Looks like a debugging leftover. I'll remove it soon unless Jason (CCed)
+> screams.
+>
+> Leaving in the rest for him.
+
+Hi,
+
+Yes, I likely was just following what was in other edac drivers at
+
+the time - for example, i3200_check() has a similar debug. I guess
+
+it could have a higher level. But if we remove this one, we may
+
+want to audit some of the other edac drivers as well.
+
+Thanks,
+
+-Jason
+
+
+>   
+>> It outputs about once every second.
+>>
+>> uname -a
+>> Linux hostname 5.9.0-991.native #1 SMP Mon Oct 12 08:10:54 PDT 2020
+>> x86_64 GNU/Linux
+>>
+>> /proc/cpuinfo
+>> processor : 7
+>> vendor_id : GenuineIntel
+>> cpu family : 6
+>> model : 158
+>> model name : Intel(R) Xeon(R) CPU E3-1505M v6 @ 3.00GHz
+>> stepping : 9
+>> microcode : 0xd6
