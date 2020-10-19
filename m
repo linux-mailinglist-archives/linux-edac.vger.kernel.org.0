@@ -2,119 +2,136 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CA3D293070
-	for <lists+linux-edac@lfdr.de>; Mon, 19 Oct 2020 23:25:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AD872931B8
+	for <lists+linux-edac@lfdr.de>; Tue, 20 Oct 2020 01:05:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732870AbgJSVZw (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Mon, 19 Oct 2020 17:25:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50592 "EHLO
+        id S1727822AbgJSXFv (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Mon, 19 Oct 2020 19:05:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727409AbgJSVZw (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Mon, 19 Oct 2020 17:25:52 -0400
-Received: from mx0b-00190b01.pphosted.com (mx0b-00190b01.pphosted.com [IPv6:2620:100:9005:57f::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D330C0613CE
-        for <linux-edac@vger.kernel.org>; Mon, 19 Oct 2020 14:25:52 -0700 (PDT)
-Received: from pps.filterd (m0122331.ppops.net [127.0.0.1])
-        by mx0b-00190b01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 09JLJS87019400;
-        Mon, 19 Oct 2020 22:25:44 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=akamai.com; h=subject : to : cc :
- references : from : message-id : date : mime-version : in-reply-to :
- content-type : content-transfer-encoding; s=jan2016.eng;
- bh=/QCuB0pUbisYOAw2xr7nvLUVM/azpTTeLr7nF8uZoSo=;
- b=P5K/NJrRdh9OZd9FUdVAPeGmwTD20ZtYP+QAX8JZVTkfv8ZN/ldi4D6enAz8L8kIhPt7
- 8hyq76MtLqlAqfQwWFxfviEorizFCCl40fJ5hijUimz2+hCJwRphxzLQWdxazttX1htv
- BXigpj9pS7r640hXv/4a0CgJcW4IBL0A5pW7lzqowINdqlXbBHYXDLqPr/wEZsMrc+JO
- Wt6yvl94n9wSXIn44CWdZJgEQeAQcde83n6CJsJq3H7GiLKX8NYwosG4Lb3n5EhspTrS
- x/EEnlu5ARcOrWBneY+jDmtUjurQ6QnC26FlHb8Gjvggb28Imffg5wtH+Mm6KZuW+ixZ jg== 
-Received: from prod-mail-ppoint1 (prod-mail-ppoint1.akamai.com [184.51.33.18] (may be forged))
-        by mx0b-00190b01.pphosted.com with ESMTP id 347ng0jafh-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 19 Oct 2020 22:25:44 +0100
-Received: from pps.filterd (prod-mail-ppoint1.akamai.com [127.0.0.1])
-        by prod-mail-ppoint1.akamai.com (8.16.0.42/8.16.0.42) with SMTP id 09JLKYw6016386;
-        Mon, 19 Oct 2020 17:25:43 -0400
-Received: from prod-mail-relay10.akamai.com ([172.27.118.251])
-        by prod-mail-ppoint1.akamai.com with ESMTP id 347uxxnjpa-1;
-        Mon, 19 Oct 2020 17:25:43 -0400
-Received: from [0.0.0.0] (prod-ssh-gw01.bos01.corp.akamai.com [172.27.119.138])
-        by prod-mail-relay10.akamai.com (Postfix) with ESMTP id 3830E3D532;
-        Mon, 19 Oct 2020 21:25:43 +0000 (GMT)
-Subject: Re: Constant output in syslog of EDAC message
-To:     Borislav Petkov <bp@alien8.de>,
-        Raymond Bennett <raymond.bennett@gmail.com>
-Cc:     linux-edac@vger.kernel.org
-References: <CAKpodDyWSY+Wt5Q04o5EyjZZU4PFST8U9UNcjwrJZ6C=Tc744g@mail.gmail.com>
- <20201019205658.GI24325@zn.tnic>
-From:   Jason Baron <jbaron@akamai.com>
-Message-ID: <e0fda286-d8e3-dabb-6cf5-fcd974e048b5@akamai.com>
-Date:   Mon, 19 Oct 2020 17:25:43 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        with ESMTP id S2388843AbgJSXFv (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Mon, 19 Oct 2020 19:05:51 -0400
+Received: from mail-io1-xd44.google.com (mail-io1-xd44.google.com [IPv6:2607:f8b0:4864:20::d44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65E62C0613D3
+        for <linux-edac@vger.kernel.org>; Mon, 19 Oct 2020 16:05:49 -0700 (PDT)
+Received: by mail-io1-xd44.google.com with SMTP id z5so84266iob.1
+        for <linux-edac@vger.kernel.org>; Mon, 19 Oct 2020 16:05:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ziepe.ca; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=KZcwJitFojA7RhzeD/UU8gbzehCBdvf6g5ia0ZYCrq4=;
+        b=R0THCPfeT+NjRv5n7wRuWr3+iQQVH5mYQugrcFEorv7jMlZOJpq4gWO8x2sltRZ1S3
+         8+uXkfK+0xraFRPc7RLEyC+L1Eqn+lwfgcQ60rCu3Ir6T0iqCUlHxkXPI8IxQxljNihW
+         MxA7dERE+Fo0B6yhfEPLGm6gbjuMrGvt0ee7i4ozPAa6C0OwTV1SJBaz+sj8rzyyiIix
+         DQ1LhxNguLsVQ2r9xWcmCur9QDHoeimXQtC/UVpN+4Yl8O9ZbpYKUwlrKFZtzYHwjpgZ
+         iC+kREvCZvwgmOBCIm7DmgxG6/6ncKrp6QDCnbxkp/qIzrhuMyauJsg53LWTp//HSslk
+         z+3Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=KZcwJitFojA7RhzeD/UU8gbzehCBdvf6g5ia0ZYCrq4=;
+        b=rI7rz75RDMYRaDNj00eoPnf8cRDnOqXN3PJeRnd4OEBJzUY2QP/saZdw8X6Nv+i6g7
+         RbuP1cMiHyGhgQjIrf8d7lf6afurjIHdTc9TR4atL8KtYsSwwTkgUGKVuobDeFxP+QCL
+         XZKV/cEnDWjmq89Dy0bwUgia+F8Hs3V+kWuNVTVuwd6X8+XrM56NSI4c8OkwIfcyJIsX
+         8immilxpfODMRquRNB3NGChtjbhyx3ho/Lgjm6hACAz+jSPXcY4Bk4XOy/2BFd4+yEBY
+         nF/YtKU4vZET40eTcVR3HhBgBqJGtG47FJAckdKonuPu/gOUwOjaio66rk/p5qs3Jcdb
+         4zCg==
+X-Gm-Message-State: AOAM532tokXZRWVuAfbECI4T31e5dvCRH6PKVSlJT28BWHj9jUv/dv+f
+        lIb9A6SXTwrc4xDWkvsySOEIMA==
+X-Google-Smtp-Source: ABdhPJwE/qhLAedndnNRaUrUDMs331Onaq8Iz+VDEVRJN+4h4B5ckC67pNXDnvS9MRF/DxLJjNlnIQ==
+X-Received: by 2002:a6b:5019:: with SMTP id e25mr44377iob.123.1603148748578;
+        Mon, 19 Oct 2020 16:05:48 -0700 (PDT)
+Received: from ziepe.ca (hlfxns017vw-156-34-48-30.dhcp-dynamic.fibreop.ns.bellaliant.net. [156.34.48.30])
+        by smtp.gmail.com with ESMTPSA id u8sm7938ilm.36.2020.10.19.16.05.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 19 Oct 2020 16:05:47 -0700 (PDT)
+Received: from jgg by mlx with local (Exim 4.94)
+        (envelope-from <jgg@ziepe.ca>)
+        id 1kUeDq-002hRf-LL; Mon, 19 Oct 2020 20:05:46 -0300
+Date:   Mon, 19 Oct 2020 20:05:46 -0300
+From:   Jason Gunthorpe <jgg@ziepe.ca>
+To:     Nick Desaulniers <ndesaulniers@google.com>
+Cc:     Tom Rix <trix@redhat.com>, LKML <linux-kernel@vger.kernel.org>,
+        linux-edac@vger.kernel.org, linux-acpi@vger.kernel.org,
+        linux-pm@vger.kernel.org, xen-devel@lists.xenproject.org,
+        linux-block@vger.kernel.org,
+        openipmi-developer@lists.sourceforge.net,
+        "open list:HARDWARE RANDOM NUMBER GENERATOR CORE" 
+        <linux-crypto@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-power@fi.rohmeurope.com, linux-gpio@vger.kernel.org,
+        amd-gfx list <amd-gfx@lists.freedesktop.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        nouveau@lists.freedesktop.org,
+        virtualization@lists.linux-foundation.org,
+        spice-devel@lists.freedesktop.org, linux-iio@vger.kernel.org,
+        linux-amlogic@lists.infradead.org,
+        industrypack-devel@lists.sourceforge.net,
+        linux-media@vger.kernel.org, MPT-FusionLinux.pdl@broadcom.com,
+        linux-scsi@vger.kernel.org, linux-mtd@lists.infradead.org,
+        linux-can@vger.kernel.org,
+        Network Development <netdev@vger.kernel.org>,
+        intel-wired-lan@lists.osuosl.org, ath10k@lists.infradead.org,
+        linux-wireless <linux-wireless@vger.kernel.org>,
+        linux-stm32@st-md-mailman.stormreply.com, linux-nfc@lists.01.org,
+        linux-nvdimm <linux-nvdimm@lists.01.org>,
+        linux-pci@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org, patches@opensource.cirrus.com,
+        storagedev@microchip.com, devel@driverdev.osuosl.org,
+        linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
+        usb-storage@lists.one-eyed-alien.net,
+        linux-watchdog@vger.kernel.org, ocfs2-devel@oss.oracle.com,
+        bpf <bpf@vger.kernel.org>, linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org, keyrings@vger.kernel.org,
+        alsa-devel@alsa-project.org,
+        clang-built-linux <clang-built-linux@googlegroups.com>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        George Burgess <gbiv@google.com>
+Subject: Re: [RFC] treewide: cleanup unreachable breaks
+Message-ID: <20201019230546.GH36674@ziepe.ca>
+References: <20201017160928.12698-1-trix@redhat.com>
+ <20201018054332.GB593954@kroah.com>
+ <CAKwvOdkR_Ttfo7_JKUiZFVqr=Uh=4b05KCPCSuzwk=zaWtA2_Q@mail.gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <20201019205658.GI24325@zn.tnic>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
- definitions=2020-10-19_11:2020-10-16,2020-10-19 signatures=0
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 spamscore=0
- suspectscore=0 phishscore=0 bulkscore=0 mlxscore=0 mlxlogscore=999
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2009150000 definitions=main-2010190142
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
- definitions=2020-10-19_11:2020-10-16,2020-10-19 signatures=0
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 adultscore=0
- impostorscore=0 suspectscore=0 priorityscore=1501 mlxlogscore=999
- clxscore=1011 mlxscore=0 malwarescore=0 spamscore=0 phishscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2009150000 definitions=main-2010190142
-X-Agari-Authentication-Results: mx.akamai.com; spf=${SPFResult} (sender IP is 184.51.33.18)
- smtp.mailfrom=jbaron@akamai.com smtp.helo=prod-mail-ppoint1
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAKwvOdkR_Ttfo7_JKUiZFVqr=Uh=4b05KCPCSuzwk=zaWtA2_Q@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
+On Mon, Oct 19, 2020 at 12:42:15PM -0700, Nick Desaulniers wrote:
+> On Sat, Oct 17, 2020 at 10:43 PM Greg KH <gregkh@linuxfoundation.org> wrote:
+> >
+> > On Sat, Oct 17, 2020 at 09:09:28AM -0700, trix@redhat.com wrote:
+> > > From: Tom Rix <trix@redhat.com>
+> > >
+> > > This is a upcoming change to clean up a new warning treewide.
+> > > I am wondering if the change could be one mega patch (see below) or
+> > > normal patch per file about 100 patches or somewhere half way by collecting
+> > > early acks.
+> >
+> > Please break it up into one-patch-per-subsystem, like normal, and get it
+> > merged that way.
+> >
+> > Sending us a patch, without even a diffstat to review, isn't going to
+> > get you very far...
+> 
+> Tom,
+> If you're able to automate this cleanup, I suggest checking in a
+> script that can be run on a directory.  Then for each subsystem you
+> can say in your commit "I ran scripts/fix_whatever.py on this subdir."
+>  Then others can help you drive the tree wide cleanup.  Then we can
+> enable -Wunreachable-code-break either by default, or W=2 right now
+> might be a good idea.
 
-On 10/19/20 4:56 PM, Borislav Petkov wrote:
-> On Mon, Oct 19, 2020 at 01:37:16PM -0700, Raymond Bennett wrote:
->> Hi,
->>
->> I am seeing the constant output of the following messages in syslog,
->> wondering what I can do to resolve this:
->>
->> Oct 19 13:19:30 hostname kernel: EDAC DEBUG: ie31200_check: MC0
-> Looks like a debugging leftover. I'll remove it soon unless Jason (CCed)
-> screams.
->
-> Leaving in the rest for him.
+I remember using clang-modernize in the past to fix issues very
+similar to this, if clang machinery can generate the warning, can't
+something like clang-tidy directly generate the patch?
 
-Hi,
-
-Yes, I likely was just following what was in other edac drivers at
-
-the time - for example, i3200_check() has a similar debug. I guess
-
-it could have a higher level. But if we remove this one, we may
-
-want to audit some of the other edac drivers as well.
+You can send me a patch for drivers/infiniband/* as well
 
 Thanks,
-
--Jason
-
-
->   
->> It outputs about once every second.
->>
->> uname -a
->> Linux hostname 5.9.0-991.native #1 SMP Mon Oct 12 08:10:54 PDT 2020
->> x86_64 GNU/Linux
->>
->> /proc/cpuinfo
->> processor : 7
->> vendor_id : GenuineIntel
->> cpu family : 6
->> model : 158
->> model name : Intel(R) Xeon(R) CPU E3-1505M v6 @ 3.00GHz
->> stepping : 9
->> microcode : 0xd6
+Jason
