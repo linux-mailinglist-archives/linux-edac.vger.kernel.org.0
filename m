@@ -2,74 +2,50 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A04D29301C
-	for <lists+linux-edac@lfdr.de>; Mon, 19 Oct 2020 22:57:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E0F0929302F
+	for <lists+linux-edac@lfdr.de>; Mon, 19 Oct 2020 23:07:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729243AbgJSU5J (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Mon, 19 Oct 2020 16:57:09 -0400
-Received: from mail.skyhub.de ([5.9.137.197]:45614 "EHLO mail.skyhub.de"
+        id S1732484AbgJSVHd (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Mon, 19 Oct 2020 17:07:33 -0400
+Received: from mail.kernel.org ([198.145.29.99]:54698 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729102AbgJSU5J (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Mon, 19 Oct 2020 16:57:09 -0400
-Received: from zn.tnic (p200300ec2f078400f40f8bdfb3e138f0.dip0.t-ipconnect.de [IPv6:2003:ec:2f07:8400:f40f:8bdf:b3e1:38f0])
+        id S1732457AbgJSVHd (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Mon, 19 Oct 2020 17:07:33 -0400
+Received: from rric.localdomain (31-208-27-44.cust.bredband2.com [31.208.27.44])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 543901EC04A6;
-        Mon, 19 Oct 2020 22:57:08 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1603141028;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=d8bXD+BEfEzDBRxynjIyczseYsQOXlXYbanXlnEkGbA=;
-        b=FO8uYSQ44uV6Qk7qm1U1OTUC+v3Pb1kEMuVfRZ5Uhp8AuS1tRkvfzWJEjnatQEtBjtOOth
-        9NPauF2orFLG79DSu8TcPwIE+Fk37W9oBlC3ZiTcwMel7WvG00WQeqLvAF5t+WRcC24gFI
-        +r451Lgo91nEQLNnzr3wzLVDk+XuBTc=
-Date:   Mon, 19 Oct 2020 22:56:58 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Raymond Bennett <raymond.bennett@gmail.com>
-Cc:     linux-edac@vger.kernel.org, Jason Baron <jbaron@akamai.com>
-Subject: Re: Constant output in syslog of EDAC message
-Message-ID: <20201019205658.GI24325@zn.tnic>
-References: <CAKpodDyWSY+Wt5Q04o5EyjZZU4PFST8U9UNcjwrJZ6C=Tc744g@mail.gmail.com>
+        by mail.kernel.org (Postfix) with ESMTPSA id CA44B22282;
+        Mon, 19 Oct 2020 21:07:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1603141652;
+        bh=BpXpzdSQ0cflX43+Jt0oiRFEOGNhp55SFpE+MV9AO9s=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=LiCsh4G48PMxR3VlWLHFG+K+KITc7jtR1xpfiWW013KHfrdDRh8ENBiJY2kjtz4S1
+         qPSDoKlnKWhnQQf3sZh60nA2RjaoXBMdM3s6Bzm8593GEQVekOAK6vWGRiVlCQDh7a
+         QRjiebGlj5UuDJ1PazhggsvuGipWPAM88+lu+O94=
+Date:   Mon, 19 Oct 2020 23:07:26 +0200
+From:   Robert Richter <rric@kernel.org>
+To:     trix@redhat.com
+Cc:     bp@alien8.de, mchehab@kernel.org, tony.luck@intel.com,
+        james.morse@arm.com, linux-edac@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] edac: amd64_edac: remove unneeded break
+Message-ID: <20201019210726.lsbpl2rvk62bow7r@rric.localdomain>
+References: <20201019193524.13391-1-trix@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAKpodDyWSY+Wt5Q04o5EyjZZU4PFST8U9UNcjwrJZ6C=Tc744g@mail.gmail.com>
+In-Reply-To: <20201019193524.13391-1-trix@redhat.com>
+User-Agent: NeoMutt/20170113 (1.7.2)
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Mon, Oct 19, 2020 at 01:37:16PM -0700, Raymond Bennett wrote:
-> Hi,
+On 19.10.20 12:35:24, trix@redhat.com wrote:
+> From: Tom Rix <trix@redhat.com>
 > 
-> I am seeing the constant output of the following messages in syslog,
-> wondering what I can do to resolve this:
+> A break is not needed if it is preceded by a return
 > 
-> Oct 19 13:19:30 hostname kernel: EDAC DEBUG: ie31200_check: MC0
+> Signed-off-by: Tom Rix <trix@redhat.com>
 
-Looks like a debugging leftover. I'll remove it soon unless Jason (CCed)
-screams. 
-
-Leaving in the rest for him.
- 
-> It outputs about once every second.
-> 
-> uname -a
-> Linux hostname 5.9.0-991.native #1 SMP Mon Oct 12 08:10:54 PDT 2020
-> x86_64 GNU/Linux
-> 
-> /proc/cpuinfo
-> processor : 7
-> vendor_id : GenuineIntel
-> cpu family : 6
-> model : 158
-> model name : Intel(R) Xeon(R) CPU E3-1505M v6 @ 3.00GHz
-> stepping : 9
-> microcode : 0xd6
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+Reviewed-by: Robert Richter <rric@kernel.org>
