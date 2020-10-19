@@ -2,74 +2,110 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CC12E2924BC
-	for <lists+linux-edac@lfdr.de>; Mon, 19 Oct 2020 11:39:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D9BB9292E88
+	for <lists+linux-edac@lfdr.de>; Mon, 19 Oct 2020 21:35:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727736AbgJSJj4 (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Mon, 19 Oct 2020 05:39:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52838 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727286AbgJSJj4 (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Mon, 19 Oct 2020 05:39:56 -0400
-Received: from mail-lf1-x142.google.com (mail-lf1-x142.google.com [IPv6:2a00:1450:4864:20::142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 529D2C0613D0
-        for <linux-edac@vger.kernel.org>; Mon, 19 Oct 2020 02:39:56 -0700 (PDT)
-Received: by mail-lf1-x142.google.com with SMTP id z2so13395508lfr.1
-        for <linux-edac@vger.kernel.org>; Mon, 19 Oct 2020 02:39:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:sender:from:date:message-id:subject:to;
-        bh=Zr6WnALleQdZ1gAu/9D/xHkeePuW/Rb5f5x+BjyZdvg=;
-        b=QIZK1nPiYC8ZcBELzS0IhBjf2JVtl2pfb6qrQ3tvwUDVXBlwVtwylABNDe+B1zla7Y
-         4Vxvnco/Aaz+iSSXy0jvfBZ0MxnRgXNYK4RbjZPlazVd6Nx2hWOz22/L3PbqH+JC9R8d
-         o5aEwj1/9yLPSL5k09s+wGxMoN607qd0Nlk4sQzZxFSQjVvlNZQHfcYY6ekSOlWDvi1p
-         uwRw4dm2E2K6Esaag7J/8HRZ/50pPk6XCfXXHc+w7p0muDgo4S8J1Yos6ZxNvOg3mvBS
-         lQz08nf9yUCvitd+cpH+c3++Kq54QIk1uy3QliAP26mrIuoDP5DADjvT4VNtm2j/o0A4
-         HJDw==
+        id S1727681AbgJSTfd (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Mon, 19 Oct 2020 15:35:33 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:27911 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1730021AbgJSTfd (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>);
+        Mon, 19 Oct 2020 15:35:33 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1603136132;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc; bh=C9AZJInHSA4bqiVYuqisAmQR3f3OqCj1KITHHKH76j8=;
+        b=ZD1+RqJE761W5rFRCs5Z7N4RTjlgCYANi7+q0SGit/DQdh+81fhVm91jEahB1Q1jXrqIvA
+        JEtIQPynQAVxqqSq+B7BAZcrGF7qkx4OSlQhep04oEobID2q8P6+TdKXt3iWZAxhC6aZiz
+        TzrPZLl0s78kbV6+kyFt4/ptuINXyO0=
+Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
+ [209.85.222.200]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-285-sG8UvkRMNWySMD9I5F04lg-1; Mon, 19 Oct 2020 15:35:30 -0400
+X-MC-Unique: sG8UvkRMNWySMD9I5F04lg-1
+Received: by mail-qk1-f200.google.com with SMTP id y8so480158qki.12
+        for <linux-edac@vger.kernel.org>; Mon, 19 Oct 2020 12:35:30 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:sender:from:date
-         :message-id:subject:to;
-        bh=Zr6WnALleQdZ1gAu/9D/xHkeePuW/Rb5f5x+BjyZdvg=;
-        b=rfWBdmOa1CvTb+GbjZlxXf/mkA7ObF2ay13TCMhMZN7L1lCpY4LPzualgLqBp4mtDu
-         TpBsfm9rWjh+fOhFt2iEa8nFY9jS43ZQ/E4xY3NrXXrcYJOtF0494RAGl6+W0JKycqRC
-         h59G2MTwO81tXdf2o7jYWj1X77gbhRSD15HT+kmjf/Y5KXXWW9Pbl5JhKMZN7PRXyIOI
-         41X6drWZxOUqMipNPVQUUXVMyNrqSate8EjO2VyuYgM17RtuUIRvH8QD+4/25DjaDXg/
-         5YnrqI45pgGp+eWPnsEkuey8UQvszdZJs5UEdKIdl69Pndw1Jdo2CoOueMzi5MPUAPnw
-         Lp9w==
-X-Gm-Message-State: AOAM531GtRQWYXFemvxwL4FqFQVnfBmdQ/roXZQjHE6bJyiOWQbBNJtm
-        pgM3xaZMSBpuCKvP0iJj9d2k4v6dRsa87OfZOmE=
-X-Google-Smtp-Source: ABdhPJyf2mEr0WsePg7MajeAkiSaCxxrmRRA/9PRDTw1l4Q9jKVVKmcv5SSF/7RxvEsOtgiY9dKUUvP+ZGwxjgzbWd4=
-X-Received: by 2002:ac2:43af:: with SMTP id t15mr5016382lfl.42.1603100394685;
- Mon, 19 Oct 2020 02:39:54 -0700 (PDT)
-MIME-Version: 1.0
-Reply-To: salif.musa211@gmail.com
-Sender: uslif12@gmail.com
-Received: by 2002:a19:88d6:0:0:0:0:0 with HTTP; Mon, 19 Oct 2020 02:39:54
- -0700 (PDT)
-From:   Salif Musa <salif.musa212@gmail.com>
-Date:   Mon, 19 Oct 2020 10:39:54 +0100
-X-Google-Sender-Auth: 0GcHAIJjIbzrP9Qw6dr59MDPLSA
-Message-ID: <CAKVqExfGjP9SgEWgeKVc1wokh9ymZQ6K0=AXAZq6SzHDxVTMoA@mail.gmail.com>
-Subject: TREAT AS URGENT/ REPLY FOR MORE DETAILS
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=C9AZJInHSA4bqiVYuqisAmQR3f3OqCj1KITHHKH76j8=;
+        b=FaPeOtfheIfHLtor/TWNGccrpWx0bMUcwF5aQWPaCZ5Ae3EF28VhUq8UUHlnfWLl8N
+         t7ljkk0AcRvPO0LqK0OeI0EJGbmrizOJ8iGlDJ/vQlVP9EWlvgF266OC5wLyxWF0eZ4x
+         oY1bvqYuxXNlRC20+LanlaANsfEYT4dgAWEBdzYie7vfgQRbkR2ThEuHDXGtFR8/ud2n
+         UGvdDNrjtdD8pUyS9x1ddswzF7RhMoNupvX9fe7XVxpAx0IrZ17cBLMBJQv2DVQ/gHda
+         1zxjaWaZLuO8tEjGSIQle9k4w30lESti3XJG0uyvF4J7DtzdL+gwm1KIm3EXSqYeb0R5
+         NnGw==
+X-Gm-Message-State: AOAM533LRYz4YzAgQtdXlIM6HROQD63q4T1Z0cYIJr+2KJeT+f8StEg6
+        /MmzOkGq6VOjt9eqrldkSdHSSXI7C2bN0bqO2GAO/22MD88uPEj1XhW+5uAmpaVgdGRDPJY1KLA
+        hhuwiCjtthjzPxzu3eOFVOg==
+X-Received: by 2002:ac8:59d4:: with SMTP id f20mr978042qtf.327.1603136129775;
+        Mon, 19 Oct 2020 12:35:29 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwNn25tOM18TKKphRcF7Bg5son2KFp4L4PtW6Ts6kD/aZlr1L+H762Br156VUgjamQ6Rc0lEA==
+X-Received: by 2002:ac8:59d4:: with SMTP id f20mr978021qtf.327.1603136129574;
+        Mon, 19 Oct 2020 12:35:29 -0700 (PDT)
+Received: from trix.remote.csb (075-142-250-213.res.spectrum.com. [75.142.250.213])
+        by smtp.gmail.com with ESMTPSA id p5sm363005qtu.13.2020.10.19.12.35.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 19 Oct 2020 12:35:29 -0700 (PDT)
+From:   trix@redhat.com
+To:     bp@alien8.de, mchehab@kernel.org, tony.luck@intel.com,
+        james.morse@arm.com, rric@kernel.org
+Cc:     linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Tom Rix <trix@redhat.com>
+Subject: [PATCH] edac: amd64_edac: remove unneeded break
+Date:   Mon, 19 Oct 2020 12:35:24 -0700
+Message-Id: <20201019193524.13391-1-trix@redhat.com>
+X-Mailer: git-send-email 2.18.1
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
+From: Tom Rix <trix@redhat.com>
+
+A break is not needed if it is preceded by a return
+
+Signed-off-by: Tom Rix <trix@redhat.com>
+---
+ drivers/edac/amd64_edac.c | 8 --------
+ 1 file changed, 8 deletions(-)
+
+diff --git a/drivers/edac/amd64_edac.c b/drivers/edac/amd64_edac.c
+index fcc08bbf6945..386a3a4cf279 100644
+--- a/drivers/edac/amd64_edac.c
++++ b/drivers/edac/amd64_edac.c
+@@ -2461,14 +2461,11 @@ static int map_err_sym_to_channel(int err_sym, int sym_size)
+ 		case 0x20:
+ 		case 0x21:
+ 			return 0;
+-			break;
+ 		case 0x22:
+ 		case 0x23:
+ 			return 1;
+-			break;
+ 		default:
+ 			return err_sym >> 4;
+-			break;
+ 		}
+ 	/* x8 symbols */
+ 	else
+@@ -2478,17 +2475,12 @@ static int map_err_sym_to_channel(int err_sym, int sym_size)
+ 			WARN(1, KERN_ERR "Invalid error symbol: 0x%x\n",
+ 					  err_sym);
+ 			return -1;
+-			break;
+-
+ 		case 0x11:
+ 			return 0;
+-			break;
+ 		case 0x12:
+ 			return 1;
+-			break;
+ 		default:
+ 			return err_sym >> 3;
+-			break;
+ 		}
+ 	return -1;
+ }
 -- 
-Hi friend
+2.18.1
 
-
-
-I am a banker in ADB BANK. I want to transfer an abandoned sum of
-USD15.6Million to your Bank account. 40/percent will be your share.
-
-No risk involved but keeps it as secret. Contact me for more details.
-Please reply me through my alternative email id only (salif.musa211@gmail.com)
-for confidential reasons.
-
-
-Yours
-Dr Salif Musa
