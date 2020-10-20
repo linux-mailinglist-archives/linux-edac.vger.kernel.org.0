@@ -2,58 +2,59 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B68E293DED
-	for <lists+linux-edac@lfdr.de>; Tue, 20 Oct 2020 15:56:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FF9C293E3B
+	for <lists+linux-edac@lfdr.de>; Tue, 20 Oct 2020 16:09:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2407724AbgJTN4T (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Tue, 20 Oct 2020 09:56:19 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:47600 "EHLO
+        id S2407880AbgJTOJg (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Tue, 20 Oct 2020 10:09:36 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:26670 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S2407727AbgJTN4F (ORCPT
+        by vger.kernel.org with ESMTP id S2407868AbgJTOJf (ORCPT
         <rfc822;linux-edac@vger.kernel.org>);
-        Tue, 20 Oct 2020 09:56:05 -0400
+        Tue, 20 Oct 2020 10:09:35 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1603202163;
+        s=mimecast20190719; t=1603202973;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=HyQ28xr5/lapv6azTtFCvHFT5XQ1+OzeHk+84iEm66Y=;
-        b=QUp+Tm/49C2D2ArfwdGiXcYEZLmxY3ITF9bXZyS+HEfcJJoqaGxmch+2EHiNHeADDWpHNz
-        Ouzap4oFcZixuWmorb4Ub+lRVmWRZDipZO+0tL8W1vnU06zVM/xfLz81/8VfcBPp80A1RW
-        EdBHqnK2mgm1gY9dzcmZeB2rW1Al8Fc=
-Received: from mail-pl1-f199.google.com (mail-pl1-f199.google.com
- [209.85.214.199]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-198-59s9dDrCMSmPTs3w1R5TEg-1; Tue, 20 Oct 2020 09:56:02 -0400
-X-MC-Unique: 59s9dDrCMSmPTs3w1R5TEg-1
-Received: by mail-pl1-f199.google.com with SMTP id a6so1437285plm.5
-        for <linux-edac@vger.kernel.org>; Tue, 20 Oct 2020 06:56:02 -0700 (PDT)
+        bh=rOdQp2iOSkahNa0CfH1+VDlgH/zqWEjNOjN0qUXEes0=;
+        b=cnqp502M0aLKLyFJgeNckWbwvcgAtDlCF9kPLww4tfDoi0y26rYVIkSGxbBCk6QSUHPdkx
+        s6610AV+QQBkQ6M1vMgFUpK+nDvV+9KS8KBLOrXTch4V/26djRoUPSDgXtJUjuNENTzw5E
+        N418RUBDWQl5gnyt2o7/IYZDSnPiWqE=
+Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com
+ [209.85.219.70]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-254-4X8Cu8MiMWWICvB4T3Oq9g-1; Tue, 20 Oct 2020 10:09:31 -0400
+X-MC-Unique: 4X8Cu8MiMWWICvB4T3Oq9g-1
+Received: by mail-qv1-f70.google.com with SMTP id u4so1463387qvk.3
+        for <linux-edac@vger.kernel.org>; Tue, 20 Oct 2020 07:09:31 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-transfer-encoding
          :content-language;
-        bh=HyQ28xr5/lapv6azTtFCvHFT5XQ1+OzeHk+84iEm66Y=;
-        b=knhR02P09U9X0rkQhk8v7UTb2BJF9G1JBGcMb3WWT4WIfvCVHgwjd0QUv0pUeVGYPA
-         VXfpm9zN3i5iGtnWgHI0NI48y4eSskc0pN6JzmqYQTPi6kDv9KLBCq7zyAp0MxWPjbc6
-         5fgilxW30OWohs7QL6NeUdXdIz9un3Avjqa7ni+ihUGfLvGAYx5U8qFhzwzsF4amhV3n
-         eXjLJ4U2YQgPgwuVrDi51mIEjgxObR7OCWT/+ee5Z61UKkamhsi3Hy8y1eFkHLRgH4Nw
-         bz86BIb9DQXTNuiJq562Qn6feIFV+H5xQAyGUH/sBK/hryMF8ig3mzgFfv9hhK71MBtX
-         Pbfw==
-X-Gm-Message-State: AOAM533SG5HJZIM7z5N9vZnQ1+oAARnmxdcq06/4TEVMVxIXjSNv8kgC
-        G3GOmR+RDShnkmBOGPsykanyTaw8ukEr9c3mJ4BgNtkJHsuaHNmqXLAijNw/TOOHWvRCNpGs3Q5
-        WluPnMh6BEOTHMydGVGOzLQ==
-X-Received: by 2002:a05:6a00:230d:b029:15b:51c6:7401 with SMTP id h13-20020a056a00230db029015b51c67401mr2769796pfh.61.1603202161020;
-        Tue, 20 Oct 2020 06:56:01 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJyLUAfqrAOJzxwKF3+voCBF5yQYNbMOvfOkDZhumkJj3bEnT15V4x8vUJ5iQ5pWt9KusIZtsQ==
-X-Received: by 2002:a05:6214:174f:: with SMTP id dc15mr3370377qvb.25.1603202160139;
-        Tue, 20 Oct 2020 06:56:00 -0700 (PDT)
+        bh=rOdQp2iOSkahNa0CfH1+VDlgH/zqWEjNOjN0qUXEes0=;
+        b=ikYsz6kT4tUCrag4vFPKWHx6BhmMOFjxCmGhnL8C5mkWiDqryq7xGUpoi236KcDDks
+         8nfoX29lJKhIbNIA0LX9/jLoBdDxJztnRAvkduK1OPChwWdqK6/ZTqyJk72iMXOEF2Ut
+         kTlS0dtcZ1KrCp/NuQMQq5IHpaXMC4e9MhCFDLMJ8dwJEvtIUttUWxMmzo9co6hEgArW
+         7/fexx8GhtT23TVpP6KEF2DpHoeQC5kl2CrErdi3mglvnkSUMyaH+rxlYd+QiRG+KFlr
+         1xOVhrYGt5CgCH02DM6MqkM5buUjWH75KtTK7KnGu3TTh9a8jlGpfH70hMBeZMlENSEm
+         8vlw==
+X-Gm-Message-State: AOAM533Y1Azg5qWAbCs+ty/2cUhZWJv5okyetgtrDzwJnW7kADPfT+Dx
+        cElgMY+xVMhETQqA6ZFr6cQleZUKgWEK0dTapwQKIVw7n660uAAB53u6oaqIJogTi5HFrkXG39y
+        01AVr4C1gj3KyBDMM3LZE6Q==
+X-Received: by 2002:ac8:4b51:: with SMTP id e17mr2644753qts.15.1603202970471;
+        Tue, 20 Oct 2020 07:09:30 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwKUy8N8weGLwzCzHDZ8oTBMtQsWbHEBLlPfZD5zpEfJ13ExA6QvxSe7FmqqHnm4D1jNxINeQ==
+X-Received: by 2002:a05:620a:2195:: with SMTP id g21mr2990039qka.358.1603202969497;
+        Tue, 20 Oct 2020 07:09:29 -0700 (PDT)
 Received: from trix.remote.csb (075-142-250-213.res.spectrum.com. [75.142.250.213])
-        by smtp.gmail.com with ESMTPSA id b8sm775938qkn.133.2020.10.20.06.55.53
+        by smtp.gmail.com with ESMTPSA id o14sm785284qto.16.2020.10.20.07.09.23
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 20 Oct 2020 06:55:59 -0700 (PDT)
+        Tue, 20 Oct 2020 07:09:28 -0700 (PDT)
 Subject: Re: [RFC] treewide: cleanup unreachable breaks
-To:     Nick Desaulniers <ndesaulniers@google.com>
+To:     Jason Gunthorpe <jgg@ziepe.ca>,
+        Nick Desaulniers <ndesaulniers@google.com>
 Cc:     LKML <linux-kernel@vger.kernel.org>, linux-edac@vger.kernel.org,
         linux-acpi@vger.kernel.org, linux-pm@vger.kernel.org,
         xen-devel@lists.xenproject.org, linux-block@vger.kernel.org,
@@ -88,17 +89,18 @@ Cc:     LKML <linux-kernel@vger.kernel.org>, linux-edac@vger.kernel.org,
         alsa-devel@alsa-project.org,
         clang-built-linux <clang-built-linux@googlegroups.com>,
         Greg KH <gregkh@linuxfoundation.org>,
-        George Burgess <gbiv@google.com>, Joe Perches <joe@perches.com>
+        George Burgess <gbiv@google.com>
 References: <20201017160928.12698-1-trix@redhat.com>
  <20201018054332.GB593954@kroah.com>
  <CAKwvOdkR_Ttfo7_JKUiZFVqr=Uh=4b05KCPCSuzwk=zaWtA2_Q@mail.gmail.com>
+ <20201019230546.GH36674@ziepe.ca>
 From:   Tom Rix <trix@redhat.com>
-Message-ID: <ca1f50d6-1005-8e3d-8d5c-98c82a704338@redhat.com>
-Date:   Tue, 20 Oct 2020 06:55:52 -0700
+Message-ID: <859ff6ff-3e10-195c-6961-7b2902b151d4@redhat.com>
+Date:   Tue, 20 Oct 2020 07:09:23 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.6.0
 MIME-Version: 1.0
-In-Reply-To: <CAKwvOdkR_Ttfo7_JKUiZFVqr=Uh=4b05KCPCSuzwk=zaWtA2_Q@mail.gmail.com>
+In-Reply-To: <20201019230546.GH36674@ziepe.ca>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: 7bit
 Content-Language: en-US
@@ -107,64 +109,49 @@ List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
 
-On 10/19/20 12:42 PM, Nick Desaulniers wrote:
-> On Sat, Oct 17, 2020 at 10:43 PM Greg KH <gregkh@linuxfoundation.org> wrote:
->> On Sat, Oct 17, 2020 at 09:09:28AM -0700, trix@redhat.com wrote:
->>> From: Tom Rix <trix@redhat.com>
+On 10/19/20 4:05 PM, Jason Gunthorpe wrote:
+> On Mon, Oct 19, 2020 at 12:42:15PM -0700, Nick Desaulniers wrote:
+>> On Sat, Oct 17, 2020 at 10:43 PM Greg KH <gregkh@linuxfoundation.org> wrote:
+>>> On Sat, Oct 17, 2020 at 09:09:28AM -0700, trix@redhat.com wrote:
+>>>> From: Tom Rix <trix@redhat.com>
+>>>>
+>>>> This is a upcoming change to clean up a new warning treewide.
+>>>> I am wondering if the change could be one mega patch (see below) or
+>>>> normal patch per file about 100 patches or somewhere half way by collecting
+>>>> early acks.
+>>> Please break it up into one-patch-per-subsystem, like normal, and get it
+>>> merged that way.
 >>>
->>> This is a upcoming change to clean up a new warning treewide.
->>> I am wondering if the change could be one mega patch (see below) or
->>> normal patch per file about 100 patches or somewhere half way by collecting
->>> early acks.
->> Please break it up into one-patch-per-subsystem, like normal, and get it
->> merged that way.
->>
->> Sending us a patch, without even a diffstat to review, isn't going to
->> get you very far...
-> Tom,
-> If you're able to automate this cleanup, I suggest checking in a
-> script that can be run on a directory.  Then for each subsystem you
-> can say in your commit "I ran scripts/fix_whatever.py on this subdir."
->  Then others can help you drive the tree wide cleanup.  Then we can
-> enable -Wunreachable-code-break either by default, or W=2 right now
-> might be a good idea.
+>>> Sending us a patch, without even a diffstat to review, isn't going to
+>>> get you very far...
+>> Tom,
+>> If you're able to automate this cleanup, I suggest checking in a
+>> script that can be run on a directory.  Then for each subsystem you
+>> can say in your commit "I ran scripts/fix_whatever.py on this subdir."
+>>  Then others can help you drive the tree wide cleanup.  Then we can
+>> enable -Wunreachable-code-break either by default, or W=2 right now
+>> might be a good idea.
+> I remember using clang-modernize in the past to fix issues very
+> similar to this, if clang machinery can generate the warning, can't
+> something like clang-tidy directly generate the patch?
 
-I should have waited for Joe Perches's fixer addition to checkpatch :)
+Yes clang-tidy and similar are good tools.
 
-The easy fixes I did only cover about 1/2 of the problems.
+Sometimes they change too much and your time shifts
 
-Remaining are mostly nested switches, which from a complexity standpoint is bad.
+from editing to analyzing and dropping changes.
 
->
-> Ah, George (gbiv@, cc'ed), did an analysis recently of
-> `-Wunreachable-code-loop-increment`, `-Wunreachable-code-break`, and
-> `-Wunreachable-code-return` for Android userspace.  From the review:
-> ```
-> Spoilers: of these, it seems useful to turn on
-> -Wunreachable-code-loop-increment and -Wunreachable-code-return by
-> default for Android
 
-In my simple add-a-cflag bot, i see there are about 250
+I am looking at them for auto changing api.
 
-issues for -Wunreachable-code-return.
-
-I'll see about doing this one next.
-
-> ...
-> While these conventions about always having break arguably became
-> obsolete when we enabled -Wfallthrough, my sample turned up zero
-> potential bugs caught by this warning, and we'd need to put a lot of
-> effort into getting a clean tree. So this warning doesn't seem to be
-> worth it.
-> ```
-> Looks like there's an order of magnitude of `-Wunreachable-code-break`
-> than the other two.
->
-> We probably should add all 3 to W=2 builds (wrapped in cc-option).
-> I've filed https://github.com/ClangBuiltLinux/linux/issues/1180 to
-> follow up on.
-
-Yes, i think think these should be added.
+When i have something greater than half baked i will post.
 
 Tom
+
+>
+> You can send me a patch for drivers/infiniband/* as well
+>
+> Thanks,
+> Jason
+>
 
