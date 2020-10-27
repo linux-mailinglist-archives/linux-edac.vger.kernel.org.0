@@ -2,115 +2,124 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C441F2998B9
-	for <lists+linux-edac@lfdr.de>; Mon, 26 Oct 2020 22:28:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7982129ABDF
+	for <lists+linux-edac@lfdr.de>; Tue, 27 Oct 2020 13:19:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733009AbgJZV2V (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Mon, 26 Oct 2020 17:28:21 -0400
-Received: from mx0b-00190b01.pphosted.com ([67.231.157.127]:62926 "EHLO
-        mx0b-00190b01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1733001AbgJZV2U (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>);
-        Mon, 26 Oct 2020 17:28:20 -0400
-X-Greylist: delayed 2168 seconds by postgrey-1.27 at vger.kernel.org; Mon, 26 Oct 2020 17:28:19 EDT
-Received: from pps.filterd (m0050102.ppops.net [127.0.0.1])
-        by m0050102.ppops.net-00190b01. (8.16.0.42/8.16.0.42) with SMTP id 09QKjOX7020980;
-        Mon, 26 Oct 2020 20:52:07 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=akamai.com; h=subject : to : cc :
- references : from : message-id : date : mime-version : in-reply-to :
- content-type : content-transfer-encoding; s=jan2016.eng;
- bh=pA/oDG+sdQV0EXxWNNoKpVQkOMlzUTuub2403I4Dcow=;
- b=dtIa0RGeDVyPWHWFUK2eKYyQr61i2AMPLOiamJXMtcMbCKxUUxCo7j1vGHrqwM6yWzad
- 12xjHuXyAOhkIcbO+hKKTzCaGDZvFBFG5GY0h87AZ6xOzAxFD519ZEzpRS+8elKmdjhq
- iYAfBhZQHIKk0QoFLKQgC5EZI+NelvTWknWlr8g2QCVo9s2ud2Dy/wzC4B6838zRz5JR
- Ud7fllRe8ykBCtaPYiIz7nWQd/yYrSVZHBnMKBp2zNFNLI7a5LtH0AzbFQc899TO70eD
- zNfFEyXVBNYZQAojuAmB6s6rw5msc02uYfMcDsFs5QQmHmUlbhu2JUpomeTx7C9ueEsu tg== 
-Received: from prod-mail-ppoint1 (prod-mail-ppoint1.akamai.com [184.51.33.18] (may be forged))
-        by m0050102.ppops.net-00190b01. with ESMTP id 34cceu9cd8-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 26 Oct 2020 20:52:07 +0000
-Received: from pps.filterd (prod-mail-ppoint1.akamai.com [127.0.0.1])
-        by prod-mail-ppoint1.akamai.com (8.16.0.42/8.16.0.42) with SMTP id 09QKow2Y025232;
-        Mon, 26 Oct 2020 16:52:06 -0400
-Received: from prod-mail-relay11.akamai.com ([172.27.118.250])
-        by prod-mail-ppoint1.akamai.com with ESMTP id 34cfkxvyus-1;
-        Mon, 26 Oct 2020 16:52:06 -0400
-Received: from [0.0.0.0] (stag-ssh-gw01.bos01.corp.akamai.com [172.27.113.23])
-        by prod-mail-relay11.akamai.com (Postfix) with ESMTP id 9C714239E9;
-        Mon, 26 Oct 2020 20:52:06 +0000 (GMT)
-Subject: Re: Constant output in syslog of EDAC message
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     Raymond Bennett <raymond.bennett@gmail.com>,
-        linux-edac@vger.kernel.org, Jim Cromie <jim.cromie@gmail.com>
-References: <CAKpodDyWSY+Wt5Q04o5EyjZZU4PFST8U9UNcjwrJZ6C=Tc744g@mail.gmail.com>
- <20201019205658.GI24325@zn.tnic>
- <e0fda286-d8e3-dabb-6cf5-fcd974e048b5@akamai.com>
- <20201020091940.GA11583@zn.tnic>
- <3d0f6dfa-850c-a4e1-c9fa-4b4ca1983650@akamai.com>
- <20201026181043.GF22116@zn.tnic>
-From:   Jason Baron <jbaron@akamai.com>
-Message-ID: <e698aaa3-2a3e-acdd-6ffe-d3275f7e7346@akamai.com>
-Date:   Mon, 26 Oct 2020 16:52:06 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S2439142AbgJ0MRj (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Tue, 27 Oct 2020 08:17:39 -0400
+Received: from mail-wm1-f68.google.com ([209.85.128.68]:40292 "EHLO
+        mail-wm1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2411653AbgJ0MRi (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Tue, 27 Oct 2020 08:17:38 -0400
+Received: by mail-wm1-f68.google.com with SMTP id k18so1201903wmj.5
+        for <linux-edac@vger.kernel.org>; Tue, 27 Oct 2020 05:17:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20150623.gappssmtp.com; s=20150623;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=LJP6zUa9eBmdV8bx1jdaWyKmaK9MsWkK16il5Qo0OrM=;
+        b=P+3tCIHOjCZAx0wmilW2GDFvIGyFUKkJ6kMCnuzTaqTK/WVy0FTiGFvqMSEeEaTSDi
+         lidtNcACGQa4FsZTJSv/WM+PJAWcMBZ84eqrsFS5cBt5SmJFi36Zt8P8jQqLDmjkvqeW
+         khRH3E+peGeaQTCIY3Vt2p8gYCX0QOu5toB/kJmHKtw/28SJ6BKumTSSq2MJytdIAdgp
+         oJxR5uAJUIN5EhwIO49GT3ZmC5B5ob3NU85YWSk0gy8yt2me9ot389ODzNeNzE1g7isf
+         BjKSBXgUK2OMn2MduiDvTrDfwsn8XX/eMtY9lahl6HLlIYN8j7wdAJNYVoPtfuaoSs+h
+         PRUQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=LJP6zUa9eBmdV8bx1jdaWyKmaK9MsWkK16il5Qo0OrM=;
+        b=ZjnvnH+gPh3kmPXWJWizfn1vts07mN3OFMviVtVh/eT5CfK+Ad4lH/1HxVhcZquSce
+         RzfBeZhhKWvDctmEuCgk3PKE1j2F9IvU4+Oh92v5bDgaS6vbOY66ZSBJe5xy1nFz/dek
+         UvLY13AKTUiltFOsRNsk5LKE+XXpM0RQGfJfO+UJWUuj2XHdbA/PiAfRQtWEgRz3EQBs
+         HN12Uu/3ORusNR3Tnw4HS0wxHhwp48FNlGP7cYnMhJ1bCwdVMZ0gfHmMcmGusVnI/yKT
+         4sWwXt6/hk2SGhum5P530/jAZKgH83VlH77EOUQEsvI2jDQyGVRYIgE4eI8BOlydKdFk
+         LK7Q==
+X-Gm-Message-State: AOAM532L/wv5AaIRwxfJ0pYOgFgg7Y1hH+tR8pMgFapYIFdOvNfIqrdk
+        NGcVPJXAqpJvw1sQyulfVoEioQ==
+X-Google-Smtp-Source: ABdhPJxUDPfM7/G4w39/lM3kfVBbiG37Et7vUzW73qIzYGjUaK5vAjNfvCioGZotPrXrgX+P7fvBjA==
+X-Received: by 2002:a1c:8087:: with SMTP id b129mr2477389wmd.10.1603801056147;
+        Tue, 27 Oct 2020 05:17:36 -0700 (PDT)
+Received: from debian-brgl.home (amarseille-656-1-4-167.w90-8.abo.wanadoo.fr. [90.8.158.167])
+        by smtp.gmail.com with ESMTPSA id a2sm1731908wrs.55.2020.10.27.05.17.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 27 Oct 2020 05:17:35 -0700 (PDT)
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Gustavo Padovan <gustavo@padovan.org>,
+        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Borislav Petkov <bp@alien8.de>,
+        Tony Luck <tony.luck@intel.com>,
+        James Morse <james.morse@arm.com>,
+        Robert Richter <rric@kernel.org>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        "Michael S . Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        Christoph Lameter <cl@linux.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
+Cc:     linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linaro-mm-sig@lists.linaro.org, linux-kernel@vger.kernel.org,
+        linux-edac@vger.kernel.org, linux-gpio@vger.kernel.org,
+        kvm@vger.kernel.org, virtualization@lists.linux-foundation.org,
+        netdev@vger.kernel.org, linux-mm@kvack.org,
+        alsa-devel@alsa-project.org,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>
+Subject: [PATCH 0/8] slab: provide and use krealloc_array()
+Date:   Tue, 27 Oct 2020 13:17:17 +0100
+Message-Id: <20201027121725.24660-1-brgl@bgdev.pl>
+X-Mailer: git-send-email 2.29.1
 MIME-Version: 1.0
-In-Reply-To: <20201026181043.GF22116@zn.tnic>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.737
- definitions=2020-10-26_14:2020-10-26,2020-10-26 signatures=0
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 mlxscore=0 suspectscore=0
- adultscore=0 phishscore=0 mlxlogscore=972 spamscore=0 malwarescore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
- definitions=main-2010260135
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.737
- definitions=2020-10-26_14:2020-10-26,2020-10-26 signatures=0
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 lowpriorityscore=0
- bulkscore=0 clxscore=1015 adultscore=0 malwarescore=0 phishscore=0
- mlxlogscore=919 impostorscore=0 suspectscore=0 priorityscore=1501
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2009150000 definitions=main-2010260135
-X-Agari-Authentication-Results: mx.akamai.com; spf=${SPFResult} (sender IP is 184.51.33.18)
- smtp.mailfrom=jbaron@akamai.com smtp.helo=prod-mail-ppoint1
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
+From: Bartosz Golaszewski <bgolaszewski@baylibre.com>
 
+Andy brought to my attention the fact that users allocating an array of
+equally sized elements should check if the size multiplication doesn't
+overflow. This is why we have helpers like kmalloc_array().
 
-On 10/26/20 2:10 PM, Borislav Petkov wrote:
-> Hi,
-> 
-> On Mon, Oct 26, 2020 at 01:47:05PM -0400, Jason Baron wrote:
->> So, we would still continue to support edac_debug_level=N but the
->> user would have additional control.
-> 
-> Do you have any actual users needing this? If yes, what are their use
-> cases?
-> 
-> Because I have this aversion towards adding functionality just because
-> and that it potentially might be useful and "users may want". Either
-> they do and they want to use it for X or we don't do anything... yet.
-> 
-> In this particular example, those debug printks are just useless noise
-> so off they go.
-> 
-> Thx.
-> 
+However we don't have krealloc_array() equivalent and there are many
+users who do their own multiplication when calling krealloc() for arrays.
 
-Hi Boris,
+This series provides krealloc_array() and uses it in a couple places.
 
-So I was motivated by this example, where if we had this facility,
-we could easily say just go turn off that specific print instead of
-wait for a new kernel. More generally, I think as you crank up the
-verbosity there may be more of a need to customize the debug
-information, but I don't have any specific use case in mind beyond
-that.
+A separate series will follow adding devm_krealloc_array() which is
+needed in the xilinx adc driver.
 
-I was also curious if various subsystems would find this facility
-useful.
+Bartosz Golaszewski (8):
+  mm: slab: provide krealloc_array()
+  ALSA: pcm: use krealloc_array()
+  vhost: vringh: use krealloc_array()
+  pinctrl: use krealloc_array()
+  edac: ghes: use krealloc_array()
+  drm: atomic: use krealloc_array()
+  hwtracing: intel: use krealloc_array()
+  dma-buf: use krealloc_array()
 
-Thanks,
+ drivers/dma-buf/sync_file.c      |  4 ++--
+ drivers/edac/ghes_edac.c         |  4 ++--
+ drivers/gpu/drm/drm_atomic.c     |  3 ++-
+ drivers/hwtracing/intel_th/msu.c |  2 +-
+ drivers/pinctrl/pinctrl-utils.c  |  2 +-
+ drivers/vhost/vringh.c           |  3 ++-
+ include/linux/slab.h             | 11 +++++++++++
+ sound/core/pcm_lib.c             |  4 ++--
+ 8 files changed, 23 insertions(+), 10 deletions(-)
 
--Jason
+-- 
+2.29.1
+
