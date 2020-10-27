@@ -2,61 +2,36 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AFBA29B70C
-	for <lists+linux-edac@lfdr.de>; Tue, 27 Oct 2020 16:32:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3830429BE8A
+	for <lists+linux-edac@lfdr.de>; Tue, 27 Oct 2020 17:57:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1798579AbgJ0P24 (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Tue, 27 Oct 2020 11:28:56 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:31570 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1798556AbgJ0P2y (ORCPT
+        id S1813538AbgJ0Quw (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Tue, 27 Oct 2020 12:50:52 -0400
+Received: from smtprelay0035.hostedemail.com ([216.40.44.35]:33548 "EHLO
+        smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1813523AbgJ0Quu (ORCPT
         <rfc822;linux-edac@vger.kernel.org>);
-        Tue, 27 Oct 2020 11:28:54 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1603812531;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=mlWO+8V1OcYguip2KBsMhYWBSFJwL/+zUDmEZaIbfJ4=;
-        b=WKldZ05uRRnd7jfUDf+eXY82dU6qVMRserWCR3AQCKsYULu3T/y8B1yqIJaoitr6iizuYf
-        Hx7lIZ9x8eFNLDGBeLFdrw9z15q1vuarALmscrBIZPINoUz/eJ8klX323OFv0aC1cstaWE
-        Yh5Pr3+u/a7yyxYmFlfv0y6WmGdUXC4=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-440-EtnuQjSUPPiPry1tdV41sQ-1; Tue, 27 Oct 2020 11:28:49 -0400
-X-MC-Unique: EtnuQjSUPPiPry1tdV41sQ-1
-Received: by mail-wm1-f70.google.com with SMTP id c204so716363wmd.5
-        for <linux-edac@vger.kernel.org>; Tue, 27 Oct 2020 08:28:48 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=mlWO+8V1OcYguip2KBsMhYWBSFJwL/+zUDmEZaIbfJ4=;
-        b=FK90tyAP1n1sNK5jybFMhrpKIpooa2j/1I4TmAtCoCtDWRYUrbwcQ9mniikW2XNYR0
-         Cj22m/VLgQ5RGxyfpaVpUVgD3TAuvxe9uBVsEE3dQ0TlU5eWo/voQQGW5C2c7AtQUtOv
-         hcXowtd7uUHSJ5ei9Ze+60R3C9sfxMzkV9yLtIodEBbJ6dTgsDsBInlayQ6iICFmY1ib
-         zyZuL/Qj0ob4v4DWHAv8WuUnjUI5DYxBaS8eAmKTkmsqs63AuQriO3EPhiPxP0246XLj
-         6PTof/NgCOFGxqCWfS//h3POP1OuNb5eh46Hm7eTMq3A9drr9UsH6HY6Muqw4bxN8A8Q
-         OJUA==
-X-Gm-Message-State: AOAM531zAmhU9gM+cQ93+68rJVzGjhWrXWe5LeS49F5t7kUS5ksBzEYd
-        5i0yZGZ+4/DNeNhpuH1VrdnTcwTDYWW9YqFrbCLRWiWbvdEBllHIxRcuFBrHkNC5taO6VP1qot7
-        kBsThwb1BMjKRDMolDLuHQg==
-X-Received: by 2002:a1c:2cd7:: with SMTP id s206mr3177575wms.182.1603812526993;
-        Tue, 27 Oct 2020 08:28:46 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJyuH3n7lQ9eR5dnqf6yc1oFeHmyleXhbTjubsRyj6zs3Jak/y/oaUl12gqM18qHQ8tFGKD6AA==
-X-Received: by 2002:a1c:2cd7:: with SMTP id s206mr3177537wms.182.1603812526789;
-        Tue, 27 Oct 2020 08:28:46 -0700 (PDT)
-Received: from redhat.com (bzq-109-65-21-184.red.bezeqint.net. [109.65.21.184])
-        by smtp.gmail.com with ESMTPSA id 3sm2370433wmd.19.2020.10.27.08.28.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 27 Oct 2020 08:28:45 -0700 (PDT)
-Date:   Tue, 27 Oct 2020 11:28:40 -0400
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Bartosz Golaszewski <brgl@bgdev.pl>
+        Tue, 27 Oct 2020 12:50:50 -0400
+Received: from filter.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
+        by smtprelay04.hostedemail.com (Postfix) with ESMTP id 86139180A7FE0;
+        Tue, 27 Oct 2020 16:50:43 +0000 (UTC)
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Spam-Summary: 2,0,0,,d41d8cd98f00b204,joe@perches.com,,RULES_HIT:41:69:355:379:599:800:960:973:988:989:1260:1277:1311:1313:1314:1345:1359:1437:1515:1516:1518:1534:1541:1593:1594:1711:1730:1747:1777:1792:2393:2553:2559:2562:2828:3138:3139:3140:3141:3142:3353:3622:3865:3866:3870:3872:3874:4321:4605:5007:6742:6743:7576:7903:8603:10004:10400:10848:11026:11232:11473:11658:11914:12043:12296:12297:12438:12555:12740:12760:12895:12986:13069:13311:13357:13439:14096:14097:14181:14659:14721:21080:21451:21627:21990:30012:30054:30090:30091,0,RBL:none,CacheIP:none,Bayesian:0.5,0.5,0.5,Netcheck:none,DomainCache:0,MSF:not bulk,SPF:,MSBL:0,DNSBL:none,Custom_rules:0:0:0,LFtime:30,LUA_SUMMARY:none
+X-HE-Tag: bag02_2a11e012727d
+X-Filterd-Recvd-Size: 4083
+Received: from XPS-9350.home (unknown [47.151.133.149])
+        (Authenticated sender: joe@perches.com)
+        by omf19.hostedemail.com (Postfix) with ESMTPA;
+        Tue, 27 Oct 2020 16:50:38 +0000 (UTC)
+Message-ID: <685d850347a1191bba8ba7766fc409b140d18f03.camel@perches.com>
+Subject: Re: [PATCH 3/8] vhost: vringh: use krealloc_array()
+From:   Joe Perches <joe@perches.com>
+To:     "Michael S. Tsirkin" <mst@redhat.com>,
+        Bartosz Golaszewski <brgl@bgdev.pl>
 Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         Sumit Semwal <sumit.semwal@linaro.org>,
         Gustavo Padovan <gustavo@padovan.org>,
-        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+        Christian =?ISO-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         Borislav Petkov <bp@alien8.de>,
         Tony Luck <tony.luck@intel.com>,
@@ -83,50 +58,75 @@ Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
         linux-mm@kvack.org, alsa-devel@alsa-project.org,
         Bartosz Golaszewski <bgolaszewski@baylibre.com>
-Subject: Re: [PATCH 3/8] vhost: vringh: use krealloc_array()
-Message-ID: <20201027112607-mutt-send-email-mst@kernel.org>
+Date:   Tue, 27 Oct 2020 09:50:36 -0700
+In-Reply-To: <20201027112607-mutt-send-email-mst@kernel.org>
 References: <20201027121725.24660-1-brgl@bgdev.pl>
- <20201027121725.24660-4-brgl@bgdev.pl>
+         <20201027121725.24660-4-brgl@bgdev.pl>
+         <20201027112607-mutt-send-email-mst@kernel.org>
+Content-Type: text/plain; charset="ISO-8859-1"
+User-Agent: Evolution 3.38.1-1 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201027121725.24660-4-brgl@bgdev.pl>
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Tue, Oct 27, 2020 at 01:17:20PM +0100, Bartosz Golaszewski wrote:
-> From: Bartosz Golaszewski <bgolaszewski@baylibre.com>
+On Tue, 2020-10-27 at 11:28 -0400, Michael S. Tsirkin wrote:
+> On Tue, Oct 27, 2020 at 01:17:20PM +0100, Bartosz Golaszewski wrote:
+> > From: Bartosz Golaszewski <bgolaszewski@baylibre.com>
+> > 
+> > Use the helper that checks for overflows internally instead of manually
+> > calculating the size of the new array.
+> > 
+> > Signed-off-by: Bartosz Golaszewski <bgolaszewski@baylibre.com>
 > 
-> Use the helper that checks for overflows internally instead of manually
-> calculating the size of the new array.
-> 
-> Signed-off-by: Bartosz Golaszewski <bgolaszewski@baylibre.com>
+> No problem with the patch, it does introduce some symmetry in the code.
 
-No problem with the patch, it does introduce some symmetry in the code.
+Perhaps more symmetry by using kmemdup
+---
+ drivers/vhost/vringh.c | 23 ++++++++++-------------
+ 1 file changed, 10 insertions(+), 13 deletions(-)
 
-Acked-by: Michael S. Tsirkin <mst@redhat.com>
-
-
-
-> ---
->  drivers/vhost/vringh.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/vhost/vringh.c b/drivers/vhost/vringh.c
-> index 8bd8b403f087..08a0e1c842df 100644
-> --- a/drivers/vhost/vringh.c
-> +++ b/drivers/vhost/vringh.c
-> @@ -198,7 +198,8 @@ static int resize_iovec(struct vringh_kiov *iov, gfp_t gfp)
->  
->  	flag = (iov->max_num & VRINGH_IOV_ALLOCATED);
->  	if (flag)
-> -		new = krealloc(iov->iov, new_num * sizeof(struct iovec), gfp);
-> +		new = krealloc_array(iov->iov, new_num,
-> +				     sizeof(struct iovec), gfp);
->  	else {
->  		new = kmalloc_array(new_num, sizeof(struct iovec), gfp);
->  		if (new) {
-> -- 
-> 2.29.1
+diff --git a/drivers/vhost/vringh.c b/drivers/vhost/vringh.c
+index 8bd8b403f087..99222a3651cd 100644
+--- a/drivers/vhost/vringh.c
++++ b/drivers/vhost/vringh.c
+@@ -191,26 +191,23 @@ static int move_to_indirect(const struct vringh *vrh,
+ static int resize_iovec(struct vringh_kiov *iov, gfp_t gfp)
+ {
+ 	struct kvec *new;
+-	unsigned int flag, new_num = (iov->max_num & ~VRINGH_IOV_ALLOCATED) * 2;
++	size_t new_num = (iov->max_num & ~VRINGH_IOV_ALLOCATED) * 2;
++	size_t size;
+ 
+ 	if (new_num < 8)
+ 		new_num = 8;
+ 
+-	flag = (iov->max_num & VRINGH_IOV_ALLOCATED);
+-	if (flag)
+-		new = krealloc(iov->iov, new_num * sizeof(struct iovec), gfp);
+-	else {
+-		new = kmalloc_array(new_num, sizeof(struct iovec), gfp);
+-		if (new) {
+-			memcpy(new, iov->iov,
+-			       iov->max_num * sizeof(struct iovec));
+-			flag = VRINGH_IOV_ALLOCATED;
+-		}
+-	}
++	if (unlikely(check_mul_overflow(new_num, sizeof(struct iovec), &size)))
++		return -ENOMEM;
++
++	if (iov->max_num & VRINGH_IOV_ALLOCATED)
++		new = krealloc(iov->iov, size, gfp);
++	else
++		new = kmemdup(iov->iov, size, gfp);
+ 	if (!new)
+ 		return -ENOMEM;
+ 	iov->iov = new;
+-	iov->max_num = (new_num | flag);
++	iov->max_num = new_num | VRINGH_IOV_ALLOCATED;
+ 	return 0;
+ }
+ 
+ 
 
