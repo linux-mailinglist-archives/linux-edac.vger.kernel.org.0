@@ -2,68 +2,85 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A850D2A3444
-	for <lists+linux-edac@lfdr.de>; Mon,  2 Nov 2020 20:38:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AC8D2A3B58
+	for <lists+linux-edac@lfdr.de>; Tue,  3 Nov 2020 05:14:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726645AbgKBTiH (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Mon, 2 Nov 2020 14:38:07 -0500
-Received: from mail.skyhub.de ([5.9.137.197]:36448 "EHLO mail.skyhub.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725806AbgKBTiG (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Mon, 2 Nov 2020 14:38:06 -0500
-Received: from zn.tnic (p200300ec2f086a00baffd5cf7a666694.dip0.t-ipconnect.de [IPv6:2003:ec:2f08:6a00:baff:d5cf:7a66:6694])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 44D171EC026D;
-        Mon,  2 Nov 2020 20:38:05 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1604345885;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=V/Ai7BjSsO5yxLEsYXa5ZAcD1maTaWRrHOQLLmxUXNU=;
-        b=kJntBVhjuJ2JVZsvE6L2dUVU9txoznAlgXWy4y1vnXdjusgfW5MIxUWcEPRrizq6DdOvGx
-        toppOXFNnzH7bqvCAfOHq5W3A6eckyabuAKCd4Ba1dEB274PEfJXfqIftRDL0X99khSfpG
-        aYRLBHJ6uEWbQV6wzfV7ke7kfMajHxo=
-Date:   Mon, 2 Nov 2020 20:37:55 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Cc:     Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        James Morse <james.morse@arm.com>,
+        id S1725953AbgKCEOZ (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Mon, 2 Nov 2020 23:14:25 -0500
+Received: from smtprelay0169.hostedemail.com ([216.40.44.169]:42348 "EHLO
+        smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1725940AbgKCEOZ (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Mon, 2 Nov 2020 23:14:25 -0500
+Received: from filter.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
+        by smtprelay06.hostedemail.com (Postfix) with ESMTP id 3C52818223256;
+        Tue,  3 Nov 2020 04:14:23 +0000 (UTC)
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Spam-Summary: 2,0,0,,d41d8cd98f00b204,joe@perches.com,,RULES_HIT:41:355:379:599:800:960:973:988:989:1260:1277:1311:1313:1314:1345:1359:1437:1515:1516:1518:1534:1539:1593:1594:1711:1730:1747:1777:1792:2393:2559:2562:2693:2828:2893:3138:3139:3140:3141:3142:3352:3622:3865:3866:3867:3868:3870:3871:3872:3874:4321:5007:6119:6737:6738:6742:7576:7903:8603:10004:10400:10848:11232:11658:11914:12048:12297:12740:12760:12895:13069:13160:13229:13311:13357:13439:14181:14659:14721:21080:21451:21611:21627:21740:30054:30070:30091,0,RBL:none,CacheIP:none,Bayesian:0.5,0.5,0.5,Netcheck:none,DomainCache:0,MSF:not bulk,SPF:,MSBL:0,DNSBL:none,Custom_rules:0:0:0,LFtime:2,LUA_SUMMARY:none
+X-HE-Tag: low21_3f05160272b5
+X-Filterd-Recvd-Size: 2781
+Received: from XPS-9350.home (unknown [47.151.133.149])
+        (Authenticated sender: joe@perches.com)
+        by omf05.hostedemail.com (Postfix) with ESMTPA;
+        Tue,  3 Nov 2020 04:14:17 +0000 (UTC)
+Message-ID: <21d80265fccfcb5d76851c84d1c2d88e0421ab85.camel@perches.com>
+Subject: Re: [PATCH v2 0/8] slab: provide and use krealloc_array()
+From:   Joe Perches <joe@perches.com>
+To:     Bartosz Golaszewski <brgl@bgdev.pl>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Gustavo Padovan <gustavo@padovan.org>,
+        Christian =?ISO-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Borislav Petkov <bp@alien8.de>,
+        Tony Luck <tony.luck@intel.com>,
+        James Morse <james.morse@arm.com>,
         Robert Richter <rric@kernel.org>,
-        Tony Luck <tony.luck@intel.com>, linux-edac@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 10/56] EDAC: fix some kernel-doc markups
-Message-ID: <20201102193755.GH15392@zn.tnic>
-References: <cover.1603469755.git.mchehab+huawei@kernel.org>
- <1d291393ba58c7b80908a3fedf02d2f53921ffe9.1603469755.git.mchehab+huawei@kernel.org>
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        "Michael S . Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        Christoph Lameter <cl@linux.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
+Cc:     linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linaro-mm-sig@lists.linaro.org, linux-kernel@vger.kernel.org,
+        linux-edac@vger.kernel.org, linux-gpio@vger.kernel.org,
+        kvm@vger.kernel.org, virtualization@lists.linux-foundation.org,
+        netdev@vger.kernel.org, linux-mm@kvack.org,
+        alsa-devel@alsa-project.org,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>
+Date:   Mon, 02 Nov 2020 20:14:16 -0800
+In-Reply-To: <20201102152037.963-1-brgl@bgdev.pl>
+References: <20201102152037.963-1-brgl@bgdev.pl>
+Content-Type: text/plain; charset="ISO-8859-1"
+User-Agent: Evolution 3.38.1-1 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <1d291393ba58c7b80908a3fedf02d2f53921ffe9.1603469755.git.mchehab+huawei@kernel.org>
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Fri, Oct 23, 2020 at 06:32:57PM +0200, Mauro Carvalho Chehab wrote:
-> Kernel-doc markup should use this format:
->         identifier - description
+On Mon, 2020-11-02 at 16:20 +0100, Bartosz Golaszewski wrote:
+> From: Bartosz Golaszewski <bgolaszewski@baylibre.com>
 > 
-> Also, some enums are using wrong names at the kernel-doc
-> markup.
+> Andy brought to my attention the fact that users allocating an array of
+> equally sized elements should check if the size multiplication doesn't
+> overflow. This is why we have helpers like kmalloc_array().
 > 
-> Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-> ---
->  drivers/edac/edac_device.h | 11 +++++------
->  include/linux/edac.h       |  4 ++--
->  2 files changed, 7 insertions(+), 8 deletions(-)
+> However we don't have krealloc_array() equivalent and there are many
+> users who do their own multiplication when calling krealloc() for arrays.
+> 
+> This series provides krealloc_array() and uses it in a couple places.
 
-Applied, thanks.
+My concern about this is a possible assumption that __GFP_ZERO will
+work, and as far as I know, it will not.
 
--- 
-Regards/Gruss,
-    Boris.
 
-https://people.kernel.org/tglx/notes-about-netiquette
