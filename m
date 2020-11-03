@@ -2,752 +2,307 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 600492A480D
-	for <lists+linux-edac@lfdr.de>; Tue,  3 Nov 2020 15:26:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A7E932A4BF5
+	for <lists+linux-edac@lfdr.de>; Tue,  3 Nov 2020 17:50:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729744AbgKCO0t (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Tue, 3 Nov 2020 09:26:49 -0500
-Received: from lhrrgout.huawei.com ([185.176.76.210]:3031 "EHLO huawei.com"
+        id S1727706AbgKCQuV (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Tue, 3 Nov 2020 11:50:21 -0500
+Received: from mail-dm6nam12on2040.outbound.protection.outlook.com ([40.107.243.40]:65409
+        "EHLO NAM12-DM6-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1729762AbgKCO0s (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Tue, 3 Nov 2020 09:26:48 -0500
-Received: from lhreml715-chm.china.huawei.com (unknown [172.18.7.108])
-        by Forcepoint Email with ESMTP id 48203B142090872E4644;
-        Tue,  3 Nov 2020 14:26:47 +0000 (GMT)
-Received: from DESKTOP-6T4S3DQ.china.huawei.com (10.47.85.30) by
- lhreml715-chm.china.huawei.com (10.201.108.66) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id
- 15.1.1913.5; Tue, 3 Nov 2020 14:26:46 +0000
-From:   Shiju Jose <shiju.jose@huawei.com>
-To:     <linux-edac@vger.kernel.org>, <mchehab+huawei@kernel.org>
-CC:     <linuxarm@huawei.com>, <tanxiaofei@huawei.com>,
-        <shiju.jose@huawei.com>
-Subject: [PATCH 3/3] rasdaemon: ras-mc-ctl: Add exception handling
-Date:   Tue, 3 Nov 2020 14:22:58 +0000
-Message-ID: <20201103142258.1253-4-shiju.jose@huawei.com>
-X-Mailer: git-send-email 2.26.0.windows.1
-In-Reply-To: <20201103142258.1253-1-shiju.jose@huawei.com>
-References: <20201103142258.1253-1-shiju.jose@huawei.com>
+        id S1725997AbgKCQuV (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Tue, 3 Nov 2020 11:50:21 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=aOouscY+pjfzw5xEZ0pweaZibXOcJL70Mzvby+hUtWVuwKkX3vUsNgGNUJU8zu5aDRvWq8Q+O3OpJW3iIW/LmBhGs2IP+U8ClPf76Gm9zhXfWlJy8hzxg1yMQv+djYDQMUoKNUMks3AYfP2y/tdo7jGqb4krklb0uAwLAmuFpZ8GAabjwkCGUBAfZmtmWMpCYa/VqcHbz9yaumCgbRWihZHAgEj4bHXjZAZinTvxdwjIIZrKNc+S4Yjy42jhySfCIzgQvFe0moRIlTgtStXzr9DgEKjPcmLhf3tO9lqFQrX68JAnASmsUSloFgBwHgw6WzxSTmLnQpsByUvENzLndw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=2mELxmdT19qZnIlROXuKKaCnwwdwsikED+QyiVqvW18=;
+ b=VmeVfv+GXFB9h3kIQAciLc1SuwFlEA/wDirP+NLrO1Qrp7+7rC+27khxTmN7BzEoDgvBOM/UX69Y6/aumHegUnyrGLxpqjjrpOL/PiNR7d44XwdVjyDNr0sTWjju3Gr1fiUIqU/kC/TooTeAZvzOh9Nn5+zeilUoSwgd/KSytCBffEYgKc7twlQzOU7Iyadg4q4WMRnpvwcChUJb3asfnpiPl1jiiPqdOGEqSEflm80DsurCq+eAd+MPbvDiyrte6e7U2BD/EE9oNIrIHGQAkXnSOWtOTFlIx4IWLw61mBqBHLdAFsTyFQ7bd80+ajjnynwxFuFzVFJibaPIy1tzEg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=amdcloud.onmicrosoft.com; s=selector2-amdcloud-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=2mELxmdT19qZnIlROXuKKaCnwwdwsikED+QyiVqvW18=;
+ b=VAAdQrtx4w8PycthfUdIPFtkOBOx7UMdDRkfSd53p5NHCaO8AiXNSIRJ0VWC+w7ARzJINd/UVl6dgbcGAajsQZeWbtULkMDDymF3zNb4adpePV2aN1jV8456OK5XXwahOWXZdiAeWLOu7kQQwRkEcEFfPsj9068jYGVTlA3Nw/4=
+Authentication-Results: kernel.org; dkim=none (message not signed)
+ header.d=none;kernel.org; dmarc=none action=none header.from=amd.com;
+Received: from SN6PR12MB2685.namprd12.prod.outlook.com (2603:10b6:805:67::33)
+ by SA0PR12MB4413.namprd12.prod.outlook.com (2603:10b6:806:9e::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3499.27; Tue, 3 Nov
+ 2020 16:50:18 +0000
+Received: from SN6PR12MB2685.namprd12.prod.outlook.com
+ ([fe80::a160:c63e:b49a:8f9a]) by SN6PR12MB2685.namprd12.prod.outlook.com
+ ([fe80::a160:c63e:b49a:8f9a%3]) with mapi id 15.20.3499.032; Tue, 3 Nov 2020
+ 16:50:18 +0000
+From:   Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>
+To:     x86@kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-edac@vger.kernel.org,
+        linux-efi@vger.kernel.org, linux-acpi@vger.kernel.org
+Cc:     Borislav Petkov <bp@alien8.de>, Tony Luck <tony.luck@intel.com>,
+        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Len Brown <len.brown@intel.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Punit Agrawal <punit1.agrawal@toshiba.co.jp>,
+        Yazen Ghannam <yazen.ghannam@amd.com>,
+        Smita.KoralahalliChannabasappa@amd.com
+Subject: [PATCH v5] cper, apei, mce: Pass x86 CPER through the MCA handling chain
+Date:   Tue,  3 Nov 2020 10:49:52 -0600
+Message-Id: <20201103164952.5126-1-Smita.KoralahalliChannabasappa@amd.com>
+X-Mailer: git-send-email 2.17.1
+Content-Type: text/plain
+X-Originating-IP: [165.204.78.2]
+X-ClientProxiedBy: SA0PR11CA0028.namprd11.prod.outlook.com
+ (2603:10b6:806:d3::33) To SN6PR12MB2685.namprd12.prod.outlook.com
+ (2603:10b6:805:67::33)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.47.85.30]
-X-ClientProxiedBy: lhreml709-chm.china.huawei.com (10.201.108.58) To
- lhreml715-chm.china.huawei.com (10.201.108.66)
-X-CFilter-Loop: Reflected
+X-MS-Exchange-MessageSentRepresentingType: 1
+Received: from ethanolx50f7host.amd.com (165.204.78.2) by SA0PR11CA0028.namprd11.prod.outlook.com (2603:10b6:806:d3::33) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3499.18 via Frontend Transport; Tue, 3 Nov 2020 16:50:17 +0000
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-HT: Tenant
+X-MS-Office365-Filtering-Correlation-Id: 6f330c0b-e748-4ddb-3976-08d880188bb6
+X-MS-TrafficTypeDiagnostic: SA0PR12MB4413:
+X-MS-Exchange-Transport-Forked: True
+X-Microsoft-Antispam-PRVS: <SA0PR12MB4413B1593B0C4070BF57F8EC90110@SA0PR12MB4413.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:8273;
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: gJtnAho1AXUvboqRziC4lhVhgufmLBzyhz9ZtnDXynelRGnay3Fswcj+ay2wzWRkXLslD66BX3dMg12RzXFCAThVquDA5DfHkz1X85CWRZdRNf+jWaAc10PIXjPjpqSU0hIi6x2o7MjKPH4dLqD1ZYKMefh49xlLeo58VqO70Jy68DwiJLgfoZJA/1r+N+KmTMzUryWutTqJfYtsfw+u1uOTVbhUKlr1Hcv7wi+sY3aq6Ykclu0MDAXtzu0tNyx2rnkEoFck1FHIRTvg7aShNtpA8rVDL85j/dESWILoWXTIfrhr97Adau2CVvO0MsfzrJGPObwT/b1tX9LI8/kznuLuylg93cpAYR3UAE1WJ3sOvnS8v2si0gqIWRL/PQAUgvAdB87KBKrr87lehSx/hA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR12MB2685.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(136003)(346002)(366004)(396003)(376002)(39860400002)(2616005)(54906003)(8676002)(66946007)(956004)(7416002)(4326008)(83380400001)(86362001)(26005)(5660300002)(316002)(52116002)(7696005)(966005)(16526019)(66476007)(36756003)(66556008)(186003)(6486002)(8936002)(1076003)(478600001)(2906002)(6666004);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData: 5JVW8r2pnrNDav4BpLMfrBxnVUctZ0UxyJnZf7zh7hekl0qK721hnXBipBpghMuA9OEtW/e/D3C5Vh1HMCfJgLjLVBdPK5RLPUK9sKqmcWPjBUyGtLYqaZtaf6bcTZuISkU8PdwUgtCx5e6sKLIit2KlWIPVEvb5CM15lnhhVTNkecp4unr/lQAg9xaasO3wDiU8j6HpNQJ34xLBV6tTt0angTwW+I+1J+eOQpg6JFV+BrgilR7wzhN/JmG62s1lExlZf2iKESASYycCwWw7ubmDsOLKZIzFaLbWWaQNGDMCUiP7l2Y9iTZTt75o+cBFX1M1JUomdDTGT3xjPQeL8f9irDcIbVCPedRiElBelNU4Sb2XYZpe9mtV7A+/wM2YaGBy3QX8htqCfJipAF/3cZQEam0+WMquJX37kY64AhliEAOShLEkRfDNi7oCMvY1OmKxLIXfpqzz1em11LKZz+AZHiT7tziZOgqrbTEGH3cF7QjfVyehnxgJf8xNUiCP3zoW54q5NbnCLr///sO0pHQPM7r2lwHe+3mlVrH2nGoESP8zTRymnmQOZyTHYooq8lNjsY+SY913C0hoABc8in9BobSQK7f6O7qG5iNwu/StT69YS/md+b79SRiybY2Bq5TNQ7LV7RGqjQGlHn9VtQ==
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6f330c0b-e748-4ddb-3976-08d880188bb6
+X-MS-Exchange-CrossTenant-AuthSource: SN6PR12MB2685.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Nov 2020 16:50:18.5990
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: hqp/VJn3WwbV1VPkYwakEbN4mvK6s9DOJjA5tUVKS4m7qpxXspbTcFoGbIkvmM1jOqyWaj+y1D/hGUEXRFNngQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA0PR12MB4413
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-Add exception handling in the ras-mc-ctl.
+Linux Kernel uses ACPI Boot Error Record Table (BERT) to report fatal
+errors that occurred in a previous boot. The MCA errors in the BERT are
+reported using the x86 Processor Error Common Platform Error Record (CPER)
+format. Currently, the record prints out the raw MSR values and AMD relies
+on the raw record to provide MCA information.
 
-For example, when an event's table is not present in the SQLite DB,
-then the DBI would detect exception and ras-mc-ctl exit without
-read and log remaining event's information. This would happen
-when an event is not enabled in the rasdaemon. Following is the
-error log when the devlink_event table is not present in the DB,
-"DBD::SQLite::db prepare failed: no such table: devlink_event at ./ras-mc-ctl line 1198.
-Can't call method "execute" on an undefined value at ./ras-mc-ctl line 1199"
+Extract the raw MSR values of MCA registers from the BERT and feed it into
+the standard mce_log() function through the existing x86/MCA RAS
+infrastructure. This will result in better decoding from the EDAC MCE
+decoder or the default notifier.
 
-Also disabled the DBI's automatic error logging by setting
-the $dbh->{PrintError} = 0 to avoid duplicate exception logs.
+The implementation is SMCA specific as the raw MCA register values are
+given in the register offset order of the MCAX address space.
 
-Reported-by: Xiaofei Tan <tanxiaofei@huawei.com>
-Signed-off-by: Shiju Jose <shiju.jose@huawei.com>
+[ Fix a build breakage in patch v1. ]
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>
 ---
- util/ras-mc-ctl.in | 632 +++++++++++++++++++++++++--------------------
- 1 file changed, 352 insertions(+), 280 deletions(-)
+Link:
+https://lkml.kernel.org/r/20200904140444.161291-1-Smita.KoralahalliChannabasappa@amd.com
 
-diff --git a/util/ras-mc-ctl.in b/util/ras-mc-ctl.in
-index eebcc4e..07b52e9 100755
---- a/util/ras-mc-ctl.in
-+++ b/util/ras-mc-ctl.in
-@@ -34,6 +34,7 @@ use File::Basename;
- use File::Find;
- use Getopt::Long;
- use POSIX;
-+use Try::Tiny;
+v5:
+	Included check to determine if register array size is large
+	enough to hold all the registers which we want to extract.
+	Used already defined MSR_AMD64_SMCA_MC0_STATUS.
+v4:
+	Included what kernel test robot reported.
+	Changed function name from apei_mce_report_x86_error ->
+	apei_smca_report_x86_error.
+	Added comment for MASK_MCA_STATUS definition.
+	Wrapped apei_smca_report_x86_error() with CONFIG_X86_MCE in
+	arch/x86/include/asm/mce.h
+v3:
+	Moved arch specific declarations from generic headers to arch
+	specific headers.
+	Cleaned additional declarations which are unnecessary.
+	Included the check for context type.
+	Added additional check to verify for appropriate MSR address in
+	the register layout.
+v2:
+	Fixed build error reported by kernel test robot.
+	Passed struct variable as function argument instead of entire struct.
+---
+ arch/x86/include/asm/acpi.h     | 11 +++++++
+ arch/x86/include/asm/mce.h      |  6 ++++
+ arch/x86/kernel/acpi/apei.c     |  5 +++
+ arch/x86/kernel/cpu/mce/apei.c  | 56 +++++++++++++++++++++++++++++++++
+ drivers/firmware/efi/cper-x86.c | 11 +++++--
+ 5 files changed, 86 insertions(+), 3 deletions(-)
+
+diff --git a/arch/x86/include/asm/acpi.h b/arch/x86/include/asm/acpi.h
+index 6d2df1ee427b..65064d9f7fa6 100644
+--- a/arch/x86/include/asm/acpi.h
++++ b/arch/x86/include/asm/acpi.h
+@@ -159,6 +159,8 @@ static inline u64 x86_default_get_root_pointer(void)
+ extern int x86_acpi_numa_init(void);
+ #endif /* CONFIG_ACPI_NUMA */
  
- my $dbname      = "@RASSTATEDIR@/@RAS_DB_FNAME@";
- my $prefix      = "@prefix@";
-@@ -1126,136 +1127,171 @@ sub summary
-     my ($mpidr);
- 
-     my $dbh = DBI->connect("dbi:SQLite:dbname=$dbname", "", "", {});
-+    # Disable the DBI automatic exception log
-+    $dbh->{PrintError} = 0;
- 
-     # Memory controller mc_event errors
--    $query = "select err_type, label, mc, top_layer,middle_layer,lower_layer, count(*) from mc_event group by err_type, label, mc, top_layer, middle_layer, lower_layer";
--    $query_handle = $dbh->prepare($query);
--    $query_handle->execute();
--    $query_handle->bind_columns(\($err_type, $label, $mc, $top, $mid, $low, $count));
--    $out = "";
--    while($query_handle->fetch()) {
--        $out .= "\t$err_type on DIMM Label(s): '$label' location: $mc:$top:$mid:$low errors: $count\n";
--    }
--    if ($out ne "") {
--        print "Memory controller events summary:\n$out\n";
--    } else {
--        print "No Memory errors.\n\n";
--    }
--    $query_handle->finish;
-+    try {
-+        $query = "select err_type, label, mc, top_layer,middle_layer,lower_layer, count(*) from mc_event group by err_type, label, mc, top_layer, middle_layer, lower_layer";
-+        $query_handle = $dbh->prepare($query);
-+        $query_handle->execute();
-+        $query_handle->bind_columns(\($err_type, $label, $mc, $top, $mid, $low, $count));
-+        $out = "";
-+        while($query_handle->fetch()) {
-+            $out .= "\t$err_type on DIMM Label(s): '$label' location: $mc:$top:$mid:$low errors: $count\n";
-+        }
-+        if ($out ne "") {
-+            print "Memory controller events summary:\n$out\n";
-+        } else {
-+            print "No Memory errors.\n\n";
-+        }
-+        $query_handle->finish;
-+    } catch {
-+        print "Exception: $DBI::errstr\n";
-+        log_error ("mc_event table missing from $dbname. Run 'rasdaemon --record'.\n\n");
-+    };
- 
-     # PCIe AER aer_event errors
--    $query = "select err_type, err_msg, count(*) from aer_event group by err_type, err_msg";
--    $query_handle = $dbh->prepare($query);
--    $query_handle->execute();
--    $query_handle->bind_columns(\($err_type, $msg, $count));
--    $out = "";
--    while($query_handle->fetch()) {
--        $out .= "\t$count $err_type errors: $msg\n";
--    }
--    if ($out ne "") {
--        print "PCIe AER events summary:\n$out\n";
--    } else {
--        print "No PCIe AER errors.\n\n";
--    }
--    $query_handle->finish;
-+    try {
-+        $query = "select err_type, err_msg, count(*) from aer_event group by err_type, err_msg";
-+        $query_handle = $dbh->prepare($query);
-+        $query_handle->execute();
-+        $query_handle->bind_columns(\($err_type, $msg, $count));
-+        $out = "";
-+        while($query_handle->fetch()) {
-+            $out .= "\t$count $err_type errors: $msg\n";
-+        }
-+        if ($out ne "") {
-+            print "PCIe AER events summary:\n$out\n";
-+        } else {
-+            print "No PCIe AER errors.\n\n";
-+        }
-+        $query_handle->finish;
-+    } catch {
-+        print "Exception: $DBI::errstr\n\n";
-+    };
- 
-     # ARM processor arm_event errors
--    $query = "select mpidr, count(*) from arm_event group by mpidr";
--    $query_handle = $dbh->prepare($query);
--    $query_handle->execute();
--    $query_handle->bind_columns(\($mpidr, $count));
--    $out = "";
--    while($query_handle->fetch()) {
--        $out .= sprintf "\tCPU(mpidr=0x%x) has %d errors\n", $mpidr, $count;
--    }
--    if ($out ne "") {
--        print "ARM processor events summary:\n$out\n";
--    } else {
--        print "No ARM processor errors.\n\n";
--    }
--    $query_handle->finish;
-+    try {
-+        $query = "select mpidr, count(*) from arm_event group by mpidr";
-+        $query_handle = $dbh->prepare($query);
-+        $query_handle->execute();
-+        $query_handle->bind_columns(\($mpidr, $count));
-+        $out = "";
-+        while($query_handle->fetch()) {
-+            $out .= sprintf "\tCPU(mpidr=0x%x) has %d errors\n", $mpidr, $count;
-+        }
-+        if ($out ne "") {
-+            print "ARM processor events summary:\n$out\n";
-+        } else {
-+            print "No ARM processor errors.\n\n";
-+        }
-+        $query_handle->finish;
-+    } catch {
-+        print "Exception: $DBI::errstr\n\n";
-+    };
- 
-     # extlog errors
--    $query = "select etype, severity, count(*) from extlog_event group by etype, severity";
--    $query_handle = $dbh->prepare($query);
--    $query_handle->execute();
--    $query_handle->bind_columns(\($etype, $severity, $count));
--    $out = "";
--    while($query_handle->fetch()) {
--        $etype_string = get_extlog_type($etype);
--        $severity_string = get_extlog_severity($severity);
--        $out .= "\t$count $etype_string $severity_string errors\n";
--    }
--    if ($out ne "") {
--        print "Extlog records summary:\n$out";
--    } else {
--        print "No Extlog errors.\n\n";
--    }
--    $query_handle->finish;
-+    try {
-+        $query = "select etype, severity, count(*) from extlog_event group by etype, severity";
-+        $query_handle = $dbh->prepare($query);
-+        $query_handle->execute();
-+        $query_handle->bind_columns(\($etype, $severity, $count));
-+        $out = "";
-+        while($query_handle->fetch()) {
-+            $etype_string = get_extlog_type($etype);
-+            $severity_string = get_extlog_severity($severity);
-+            $out .= "\t$count $etype_string $severity_string errors\n";
-+        }
-+        if ($out ne "") {
-+            print "Extlog records summary:\n$out";
-+        } else {
-+            print "No Extlog errors.\n\n";
-+        }
-+        $query_handle->finish;
-+    } catch {
-+        print "Exception: $DBI::errstr\n\n";
-+    };
- 
-     # devlink errors
--    $query = "select dev_name, count(*) from devlink_event group by dev_name";
--    $query_handle = $dbh->prepare($query);
--    $query_handle->execute();
--    $query_handle->bind_columns(\($dev_name, $count));
--    $out = "";
--    while($query_handle->fetch()) {
--        $out .= "\t$dev_name has $count errors\n";
--    }
--    if ($out ne "") {
--        print "Devlink records summary:\n$out";
--    } else {
--        print "No devlink errors.\n";
--    }
--    $query_handle->finish;
-+    try {
-+        $query = "select dev_name, count(*) from devlink_event group by dev_name";
-+        $query_handle = $dbh->prepare($query);
-+        $query_handle->execute();
-+        $query_handle->bind_columns(\($dev_name, $count));
-+        $out = "";
-+        while($query_handle->fetch()) {
-+            $out .= "\t$dev_name has $count errors\n";
-+        }
-+        if ($out ne "") {
-+            print "Devlink records summary:\n$out";
-+        } else {
-+            print "No devlink errors.\n";
-+        }
-+        $query_handle->finish;
-+    } catch {
-+        print "Exception: $DBI::errstr\n\n";
-+    };
- 
-     # Disk errors
--    $query = "select dev, count(*) from disk_errors group by dev";
--    $query_handle = $dbh->prepare($query);
--    $query_handle->execute();
--    $query_handle->bind_columns(\($dev, $count));
--    $out = "";
--    while($query_handle->fetch()) {
--        $out .= "\t$dev has $count errors\n";
--    }
--    if ($out ne "") {
--        print "Disk errors summary:\n$out";
--    } else {
--        print "No disk errors.\n";
--    }
--    $query_handle->finish;
-+    try {
-+        $query = "select dev, count(*) from disk_errors group by dev";
-+        $query_handle = $dbh->prepare($query);
-+        $query_handle->execute();
-+        $query_handle->bind_columns(\($dev, $count));
-+        $out = "";
-+        while($query_handle->fetch()) {
-+            $out .= "\t$dev has $count errors\n";
-+        }
-+        if ($out ne "") {
-+            print "Disk errors summary:\n$out";
-+        } else {
-+            print "No disk errors.\n";
-+        }
-+        $query_handle->finish;
-+    } catch {
-+        print "Exception: $DBI::errstr\n\n";
-+    };
- 
-     # Memory failure errors
--    $query = "select action_result, count(*) from memory_failure_event group by action_result";
--    $query_handle = $dbh->prepare($query);
--    $query_handle->execute();
--    $query_handle->bind_columns(\($action_result, $count));
--    $out = "";
--    while($query_handle->fetch()) {
--        $out .= "\t$action_result errors: $count\n";
--    }
--    if ($out ne "") {
--        print "Memory failure events summary:\n$out\n";
--    } else {
--        print "No Memory failure errors.\n\n";
--    }
--    $query_handle->finish;
-+    try {
-+        $query = "select action_result, count(*) from memory_failure_event group by action_result";
-+        $query_handle = $dbh->prepare($query);
-+        $query_handle->execute();
-+        $query_handle->bind_columns(\($action_result, $count));
-+        $out = "";
-+        while($query_handle->fetch()) {
-+            $out .= "\t$action_result errors: $count\n";
-+        }
-+        if ($out ne "") {
-+            print "Memory failure events summary:\n$out\n";
-+        } else {
-+            print "No Memory failure errors.\n\n";
-+        }
-+        $query_handle->finish;
-+    } catch {
-+        print "Exception: $DBI::errstr\n\n";
-+    };
- 
-     # MCE mce_record errors
--    $query = "select error_msg, count(*) from mce_record group by error_msg";
--    $query_handle = $dbh->prepare($query);
--    $query_handle->execute();
--    $query_handle->bind_columns(\($msg, $count));
--    $out = "";
--    while($query_handle->fetch()) {
--        $out .= "\t$count $msg errors\n";
--    }
--    if ($out ne "") {
--        print "MCE records summary:\n$out";
--    } else {
--        print "No MCE errors.\n";
--    }
--    $query_handle->finish;
-+    try {
-+        $query = "select error_msg, count(*) from mce_record group by error_msg";
-+        $query_handle = $dbh->prepare($query);
-+        $query_handle->execute();
-+        $query_handle->bind_columns(\($msg, $count));
-+        $out = "";
-+        while($query_handle->fetch()) {
-+            $out .= "\t$count $msg errors\n";
-+        }
-+        if ($out ne "") {
-+            print "MCE records summary:\n$out";
-+        } else {
-+            print "No MCE errors.\n";
-+        }
-+        $query_handle->finish;
-+    } catch {
-+        print "Exception: $DBI::errstr\n\n";
-+    };
- 
-     undef($dbh);
- }
-@@ -1272,189 +1308,225 @@ sub errors
-     my ($pfn, $page_type, $action_result);
- 
-     my $dbh = DBI->connect("dbi:SQLite:dbname=$dbname", "", "", {});
-+    # Disable the DBI automatic exception log
-+    $dbh->{PrintError} = 0;
- 
-     # Memory controller mc_event errors
--    $query = "select id, timestamp, err_count, err_type, err_msg, label, mc, top_layer,middle_layer,lower_layer, address, grain, syndrome, driver_detail from mc_event order by id";
--    $query_handle = $dbh->prepare($query);
--    if (!$query_handle) {
-+    try {
-+        $query = "select id, timestamp, err_count, err_type, err_msg, label, mc, top_layer,middle_layer,lower_layer, address, grain, syndrome, driver_detail from mc_event order by id";
-+        $query_handle = $dbh->prepare($query);
-+        if (!$query_handle) {
-+            log_error ("mc_event table missing from $dbname. Run 'rasdaemon --record'.\n");
-+            exit -1
-+        }
-+        $query_handle->execute();
-+        $query_handle->bind_columns(\($id, $time, $count, $type, $msg, $label, $mc, $top, $mid, $low, $addr, $grain, $syndrome, $detail));
-+        $out = "";
-+        while($query_handle->fetch()) {
-+            $out .= "$id $time $count $type error(s): $msg at $label location: $mc:$top:$mid:$low, addr $addr, grain $grain, syndrome $syndrome $detail\n";
-+        }
-+        if ($out ne "") {
-+            print "Memory controller events:\n$out\n";
-+        } else {
-+            print "No Memory errors.\n\n";
-+        }
-+        $query_handle->finish;
-+    } catch {
-+        print "Exception: $DBI::errstr\n\n";
-         log_error ("mc_event table missing from $dbname. Run 'rasdaemon --record'.\n");
--        exit -1
--    }
--    $query_handle->execute();
--    $query_handle->bind_columns(\($id, $time, $count, $type, $msg, $label, $mc, $top, $mid, $low, $addr, $grain, $syndrome, $detail));
--    $out = "";
--    while($query_handle->fetch()) {
--        $out .= "$id $time $count $type error(s): $msg at $label location: $mc:$top:$mid:$low, addr $addr, grain $grain, syndrome $syndrome $detail\n";
--    }
--    if ($out ne "") {
--        print "Memory controller events:\n$out\n";
--    } else {
--        print "No Memory errors.\n\n";
--    }
--    $query_handle->finish;
-+	exit -1
-+    };
- 
-     # PCIe AER aer_event errors
--    $query = "select id, timestamp, dev_name, err_type, err_msg from aer_event order by id";
--    $query_handle = $dbh->prepare($query);
--    $query_handle->execute();
--    $query_handle->bind_columns(\($id, $time, $devname, $type, $msg));
--    $out = "";
--    while($query_handle->fetch()) {
--        $out .= "$id $time $devname $type error: $msg\n";
--    }
--    if ($out ne "") {
--        print "PCIe AER events:\n$out\n";
--    } else {
--        print "No PCIe AER errors.\n\n";
--    }
--    $query_handle->finish;
-+    try {
-+        $query = "select id, timestamp, dev_name, err_type, err_msg from aer_event order by id";
-+        $query_handle = $dbh->prepare($query);
-+        $query_handle->execute();
-+        $query_handle->bind_columns(\($id, $time, $devname, $type, $msg));
-+        $out = "";
-+        while($query_handle->fetch()) {
-+            $out .= "$id $time $devname $type error: $msg\n";
-+        }
-+        if ($out ne "") {
-+            print "PCIe AER events:\n$out\n";
-+        } else {
-+           print "No PCIe AER errors.\n\n";
-+        }
-+        $query_handle->finish;
-+    } catch {
-+        print "Exception: $DBI::errstr\n\n";
-+    };
- 
-     # ARM processor arm_event errors
--    $query = "select id, timestamp, error_count, affinity, mpidr, running_state, psci_state from arm_event order by id";
--    $query_handle = $dbh->prepare($query);
--    $query_handle->execute();
--    $query_handle->bind_columns(\($id, $timestamp, $error_count, $affinity, $mpidr, $r_state, $psci_state));
--    $out = "";
--    while($query_handle->fetch()) {
--        $out .= "$id $timestamp error: ";
--        $out .= "error_count=$error_count, " if ($error_count);
--        $out .= "affinity_level=$affinity, ";
--        $out .= sprintf "mpidr=0x%x, ", $mpidr;
--        $out .= sprintf "running_state=0x%x, ", $r_state;
--        $out .= sprintf "psci_state=0x%x", $psci_state;
--        $out .= "\n";
--    }
--    if ($out ne "") {
--        print "ARM processor events:\n$out\n";
--    } else {
--        print "No ARM processor errors.\n\n";
--    }
--    $query_handle->finish;
-+    try {
-+        $query = "select id, timestamp, error_count, affinity, mpidr, running_state, psci_state from arm_event order by id";
-+        $query_handle = $dbh->prepare($query);
-+        $query_handle->execute();
-+        $query_handle->bind_columns(\($id, $timestamp, $error_count, $affinity, $mpidr, $r_state, $psci_state));
-+        $out = "";
-+        while($query_handle->fetch()) {
-+            $out .= "$id $timestamp error: ";
-+            $out .= "error_count=$error_count, " if ($error_count);
-+            $out .= "affinity_level=$affinity, ";
-+            $out .= sprintf "mpidr=0x%x, ", $mpidr;
-+            $out .= sprintf "running_state=0x%x, ", $r_state;
-+            $out .= sprintf "psci_state=0x%x", $psci_state;
-+            $out .= "\n";
-+        }
-+        if ($out ne "") {
-+            print "ARM processor events:\n$out\n";
-+        } else {
-+            print "No ARM processor errors.\n\n";
-+        }
-+        $query_handle->finish;
-+    } catch {
-+        print "Exception: $DBI::errstr\n\n";
-+    };
- 
-     # Extlog errors
--    $query = "select id, timestamp, etype, severity, address, fru_id, fru_text, cper_data from extlog_event order by id";
--    $query_handle = $dbh->prepare($query);
--    $query_handle->execute();
--    $query_handle->bind_columns(\($id, $timestamp, $etype, $severity, $addr, $fru_id, $fru_text, $cper_data));
--    $out = "";
--    while($query_handle->fetch()) {
--        $etype_string = get_extlog_type($etype);
--        $severity_string = get_extlog_severity($severity);
--        $out .= "$id $timestamp error: ";
--        $out .= "type=$etype_string, ";
--        $out .= "severity=$severity_string, ";
--        $out .= sprintf "address=0x%08x, ", $addr;
--        $out .= sprintf "fru_id=%s, ", get_uuid_le($fru_id);
--        $out .= "fru_text='$fru_text', ";
--        $out .= get_cper_data_text($cper_data) if ($cper_data);
--        $out .= "\n";
--    }
--    if ($out ne "") {
--        print "Extlog events:\n$out\n";
--    } else {
--        print "No Extlog errors.\n\n";
--    }
--    $query_handle->finish;
-+    try {
-+        $query = "select id, timestamp, etype, severity, address, fru_id, fru_text, cper_data from extlog_event order by id";
-+        $query_handle = $dbh->prepare($query);
-+        $query_handle->execute();
-+        $query_handle->bind_columns(\($id, $timestamp, $etype, $severity, $addr, $fru_id, $fru_text, $cper_data));
-+        $out = "";
-+        while($query_handle->fetch()) {
-+            $etype_string = get_extlog_type($etype);
-+            $severity_string = get_extlog_severity($severity);
-+            $out .= "$id $timestamp error: ";
-+            $out .= "type=$etype_string, ";
-+            $out .= "severity=$severity_string, ";
-+            $out .= sprintf "address=0x%08x, ", $addr;
-+            $out .= sprintf "fru_id=%s, ", get_uuid_le($fru_id);
-+            $out .= "fru_text='$fru_text', ";
-+            $out .= get_cper_data_text($cper_data) if ($cper_data);
-+            $out .= "\n";
-+        }
-+        if ($out ne "") {
-+            print "Extlog events:\n$out\n";
-+        } else {
-+            print "No Extlog errors.\n\n";
-+        }
-+        $query_handle->finish;
-+    } catch {
-+        print "Exception: $DBI::errstr\n\n";
-+    };
- 
-     # devlink errors
--    $query = "select id, timestamp, bus_name, dev_name, driver_name, reporter_name, msg from devlink_event order by id";
--    $query_handle = $dbh->prepare($query);
--    $query_handle->execute();
--    $query_handle->bind_columns(\($id, $timestamp, $bus_name, $dev_name, $driver_name, $reporter_name, $msg));
--    $out = "";
--    while($query_handle->fetch()) {
--        $out .= "$id $timestamp error: ";
--        $out .= "bus_name=$bus_name, ";
--        $out .= "dev_name=$dev_name, ";
--        $out .= "driver_name=$driver_name, ";
--        $out .= "reporter_name=$reporter_name, ";
--        $out .= "message='$msg', ";
--        $out .= "\n";
--    }
--    if ($out ne "") {
--        print "Devlink events:\n$out\n";
--    } else {
--        print "No devlink errors.\n\n";
--    }
--    $query_handle->finish;
-+    try {
-+        $query = "select id, timestamp, bus_name, dev_name, driver_name, reporter_name, msg from devlink_event order by id";
-+        $query_handle = $dbh->prepare($query);
-+        $query_handle->execute();
-+        $query_handle->bind_columns(\($id, $timestamp, $bus_name, $dev_name, $driver_name, $reporter_name, $msg));
-+        $out = "";
-+        while($query_handle->fetch()) {
-+            $out .= "$id $timestamp error: ";
-+            $out .= "bus_name=$bus_name, ";
-+            $out .= "dev_name=$dev_name, ";
-+            $out .= "driver_name=$driver_name, ";
-+            $out .= "reporter_name=$reporter_name, ";
-+            $out .= "message='$msg', ";
-+            $out .= "\n";
-+        }
-+        if ($out ne "") {
-+            print "Devlink events:\n$out\n";
-+        } else {
-+            print "No devlink errors.\n\n";
-+        }
-+        $query_handle->finish;
-+    } catch {
-+        print "Exception: $DBI::errstr\n\n";
-+    };
- 
-     # Disk errors
--    $query = "select id, timestamp, dev, sector, nr_sector, error, rwbs, cmd from disk_errors order by id";
--    $query_handle = $dbh->prepare($query);
--    $query_handle->execute();
--    $query_handle->bind_columns(\($id, $timestamp, $dev, $sector, $nr_sector, $error, $rwbs, $cmd));
--    $out = "";
--    while($query_handle->fetch()) {
--        $out .= "$id $timestamp error: ";
--        $out .= "dev=$dev, ";
--        $out .= "sector=$sector, ";
--        $out .= "nr_sector=$nr_sector, ";
--        $out .= "error='$error', ";
--        $out .= "rwbs='$rwbs', ";
--        $out .= "cmd='$cmd', ";
--        $out .= "\n";
--    }
--    if ($out ne "") {
--        print "Disk errors\n$out\n";
--    } else {
--        print "No disk errors.\n\n";
--    }
--    $query_handle->finish;
-+    try {
-+        $query = "select id, timestamp, dev, sector, nr_sector, error, rwbs, cmd from disk_errors order by id";
-+        $query_handle = $dbh->prepare($query);
-+        $query_handle->execute();
-+        $query_handle->bind_columns(\($id, $timestamp, $dev, $sector, $nr_sector, $error, $rwbs, $cmd));
-+        $out = "";
-+        while($query_handle->fetch()) {
-+            $out .= "$id $timestamp error: ";
-+            $out .= "dev=$dev, ";
-+            $out .= "sector=$sector, ";
-+            $out .= "nr_sector=$nr_sector, ";
-+            $out .= "error='$error', ";
-+            $out .= "rwbs='$rwbs', ";
-+            $out .= "cmd='$cmd', ";
-+           $out .= "\n";
-+        }
-+        if ($out ne "") {
-+            print "Disk errors\n$out\n";
-+        } else {
-+            print "No disk errors.\n\n";
-+        }
-+        $query_handle->finish;
-+    } catch {
-+        print "Exception: $DBI::errstr\n\n";
-+    };
- 
-     # Memory failure errors
--    $query = "select id, timestamp, pfn, page_type, action_result from memory_failure_event order by id";
--    $query_handle = $dbh->prepare($query);
--    $query_handle->execute();
--    $query_handle->bind_columns(\($id, $timestamp, $pfn, $page_type, $action_result));
--    $out = "";
--    while($query_handle->fetch()) {
--        $out .= "$id $timestamp error: ";
--        $out .= "pfn=$pfn, page_type=$page_type, action_result=$action_result\n";
--    }
--    if ($out ne "") {
--        print "Memory failure events:\n$out\n";
--    } else {
--        print "No Memory failure errors.\n\n";
--    }
--    $query_handle->finish;
-+    try {
-+        $query = "select id, timestamp, pfn, page_type, action_result from memory_failure_event order by id";
-+        $query_handle = $dbh->prepare($query);
-+        $query_handle->execute();
-+        $query_handle->bind_columns(\($id, $timestamp, $pfn, $page_type, $action_result));
-+        $out = "";
-+        while($query_handle->fetch()) {
-+            $out .= "$id $timestamp error: ";
-+            $out .= "pfn=$pfn, page_type=$page_type, action_result=$action_result\n";
-+        }
-+        if ($out ne "") {
-+            print "Memory failure events:\n$out\n";
-+        } else {
-+            print "No Memory failure errors.\n\n";
-+        }
-+        $query_handle->finish;
-+    } catch {
-+        print "Exception: $DBI::errstr\n\n";
-+    };
- 
-     # MCE mce_record errors
--    $query = "select id, timestamp, mcgcap, mcgstatus, status, addr, misc, ip, tsc, walltime, cpu, cpuid, apicid, socketid, cs, bank, cpuvendor, bank_name, error_msg, mcgstatus_msg, mcistatus_msg, user_action, mc_location from mce_record order by id";
--    $query_handle = $dbh->prepare($query);
--    $query_handle->execute();
--    $query_handle->bind_columns(\($id, $time, $mcgcap,$mcgstatus, $status, $addr, $misc, $ip, $tsc, $walltime, $cpu, $cpuid, $apicid, $socketid, $cs, $bank, $cpuvendor, $bank_name, $msg, $mcgstatus_msg, $mcistatus_msg, $user_action, $mc_location));
--    $out = "";
--    while($query_handle->fetch()) {
--        $out .= "$id $time error: $msg";
--	$out .= ", CPU $cpuvendor" if ($cpuvendor);
--	$out .= ", bank $bank_name" if ($bank_name);
--	$out .= ", mcg $mcgstatus_msg" if ($mcgstatus_msg);
--	$out .= ", mci $mcistatus_msg" if ($mcistatus_msg);
--	$out .= ", $mc_location" if ($mc_location);
--	$out .= ", $user_action" if ($user_action);
--	$out .= sprintf ", mcgcap=0x%08x", $mcgcap if ($mcgcap);
--	$out .= sprintf ", mcgstatus=0x%08x", $mcgstatus if ($mcgstatus);
--	$out .= sprintf ", status=0x%08x", $status if ($status);
--	$out .= sprintf ", addr=0x%08x", $addr if ($addr);
--	$out .= sprintf ", misc=0x%08x", $misc if ($misc);
--	$out .= sprintf ", ip=0x%08x", $ip if ($ip);
--	$out .= sprintf ", tsc=0x%08x", $tsc if ($tsc);
--	$out .= sprintf ", walltime=0x%08x", $walltime if ($walltime);
--	$out .= sprintf ", cpu=0x%08x", $cpu if ($cpu);
--	$out .= sprintf ", cpuid=0x%08x", $cpuid if ($cpuid);
--	$out .= sprintf ", apicid=0x%08x", $apicid if ($apicid);
--	$out .= sprintf ", socketid=0x%08x", $socketid if ($socketid);
--	$out .= sprintf ", cs=0x%08x", $cs if ($cs);
--	$out .= sprintf ", bank=0x%08x", $bank if ($bank);
--
--	$out .= "\n";
--    }
--    if ($out ne "") {
--        print "MCE events:\n$out\n";
--    } else {
--        print "No MCE errors.\n\n";
--    }
--    $query_handle->finish;
-+    try {
-+        $query = "select id, timestamp, mcgcap, mcgstatus, status, addr, misc, ip, tsc, walltime, cpu, cpuid, apicid, socketid, cs, bank, cpuvendor, bank_name, error_msg, mcgstatus_msg, mcistatus_msg, user_action, mc_location from mce_record order by id";
-+        $query_handle = $dbh->prepare($query);
-+        $query_handle->execute();
-+        $query_handle->bind_columns(\($id, $time, $mcgcap,$mcgstatus, $status, $addr, $misc, $ip, $tsc, $walltime, $cpu, $cpuid, $apicid, $socketid, $cs, $bank, $cpuvendor, $bank_name, $msg, $mcgstatus_msg, $mcistatus_msg, $user_action, $mc_location));
-+        $out = "";
-+        while($query_handle->fetch()) {
-+            $out .= "$id $time error: $msg";
-+	    $out .= ", CPU $cpuvendor" if ($cpuvendor);
-+	    $out .= ", bank $bank_name" if ($bank_name);
-+	    $out .= ", mcg $mcgstatus_msg" if ($mcgstatus_msg);
-+	    $out .= ", mci $mcistatus_msg" if ($mcistatus_msg);
-+	    $out .= ", $mc_location" if ($mc_location);
-+	    $out .= ", $user_action" if ($user_action);
-+	    $out .= sprintf ", mcgcap=0x%08x", $mcgcap if ($mcgcap);
-+	    $out .= sprintf ", mcgstatus=0x%08x", $mcgstatus if ($mcgstatus);
-+	    $out .= sprintf ", status=0x%08x", $status if ($status);
-+	    $out .= sprintf ", addr=0x%08x", $addr if ($addr);
-+	    $out .= sprintf ", misc=0x%08x", $misc if ($misc);
-+	    $out .= sprintf ", ip=0x%08x", $ip if ($ip);
-+	    $out .= sprintf ", tsc=0x%08x", $tsc if ($tsc);
-+	    $out .= sprintf ", walltime=0x%08x", $walltime if ($walltime);
-+	    $out .= sprintf ", cpu=0x%08x", $cpu if ($cpu);
-+	    $out .= sprintf ", cpuid=0x%08x", $cpuid if ($cpuid);
-+	    $out .= sprintf ", apicid=0x%08x", $apicid if ($apicid);
-+	    $out .= sprintf ", socketid=0x%08x", $socketid if ($socketid);
-+	    $out .= sprintf ", cs=0x%08x", $cs if ($cs);
-+	    $out .= sprintf ", bank=0x%08x", $bank if ($bank);
++struct cper_ia_proc_ctx;
 +
-+	    $out .= "\n";
-+        }
-+        if ($out ne "") {
-+            print "MCE events:\n$out\n";
-+        } else {
-+            print "No MCE errors.\n\n";
-+        }
-+        $query_handle->finish;
-+    } catch {
-+        print "Exception: $DBI::errstr\n\n";
-+    };
- 
-     undef($dbh);
+ #ifdef CONFIG_ACPI_APEI
+ static inline pgprot_t arch_apei_get_mem_attribute(phys_addr_t addr)
+ {
+@@ -177,6 +179,15 @@ static inline pgprot_t arch_apei_get_mem_attribute(phys_addr_t addr)
+ 	 */
+ 	return PAGE_KERNEL_NOENC;
  }
++
++int arch_apei_report_x86_error(struct cper_ia_proc_ctx *ctx_info,
++			       u64 lapic_id);
++#else
++static inline int arch_apei_report_x86_error(struct cper_ia_proc_ctx *ctx_info,
++					     u64 lapic_id)
++{
++	return -EINVAL;
++}
+ #endif
+ 
+ #define ACPI_TABLE_UPGRADE_MAX_PHYS (max_low_pfn_mapped << PAGE_SHIFT)
+diff --git a/arch/x86/include/asm/mce.h b/arch/x86/include/asm/mce.h
+index a0f147893a04..07eedfd6ec38 100644
+--- a/arch/x86/include/asm/mce.h
++++ b/arch/x86/include/asm/mce.h
+@@ -198,16 +198,22 @@ static inline void enable_copy_mc_fragile(void)
+ }
+ #endif
+ 
++struct cper_ia_proc_ctx;
++
+ #ifdef CONFIG_X86_MCE
+ int mcheck_init(void);
+ void mcheck_cpu_init(struct cpuinfo_x86 *c);
+ void mcheck_cpu_clear(struct cpuinfo_x86 *c);
+ void mcheck_vendor_init_severity(void);
++int apei_smca_report_x86_error(struct cper_ia_proc_ctx *ctx_info,
++			       u64 lapic_id);
+ #else
+ static inline int mcheck_init(void) { return 0; }
+ static inline void mcheck_cpu_init(struct cpuinfo_x86 *c) {}
+ static inline void mcheck_cpu_clear(struct cpuinfo_x86 *c) {}
+ static inline void mcheck_vendor_init_severity(void) {}
++static inline int apei_smca_report_x86_error(struct cper_ia_proc_ctx *ctx_info,
++					     u64 lapic_id) { return -EINVAL; }
+ #endif
+ 
+ #ifdef CONFIG_X86_ANCIENT_MCE
+diff --git a/arch/x86/kernel/acpi/apei.c b/arch/x86/kernel/acpi/apei.c
+index c22fb55abcfd..0916f00a992e 100644
+--- a/arch/x86/kernel/acpi/apei.c
++++ b/arch/x86/kernel/acpi/apei.c
+@@ -43,3 +43,8 @@ void arch_apei_report_mem_error(int sev, struct cper_sec_mem_err *mem_err)
+ 	apei_mce_report_mem_error(sev, mem_err);
+ #endif
+ }
++
++int arch_apei_report_x86_error(struct cper_ia_proc_ctx *ctx_info, u64 lapic_id)
++{
++	return apei_smca_report_x86_error(ctx_info, lapic_id);
++}
+diff --git a/arch/x86/kernel/cpu/mce/apei.c b/arch/x86/kernel/cpu/mce/apei.c
+index af8d37962586..f56f0bc147e2 100644
+--- a/arch/x86/kernel/cpu/mce/apei.c
++++ b/arch/x86/kernel/cpu/mce/apei.c
+@@ -51,6 +51,62 @@ void apei_mce_report_mem_error(int severity, struct cper_sec_mem_err *mem_err)
+ }
+ EXPORT_SYMBOL_GPL(apei_mce_report_mem_error);
+ 
++int apei_smca_report_x86_error(struct cper_ia_proc_ctx *ctx_info, u64 lapic_id)
++{
++	const u64 *i_mce = ((const u64 *) (ctx_info + 1));
++	unsigned int cpu;
++	struct mce m;
++
++	if (!boot_cpu_has(X86_FEATURE_SMCA))
++		return -EINVAL;
++
++	/*
++	 * The starting address of the Register Array extracted from BERT
++	 * must match with the first expected register in the register
++	 * layout of MCAX address space. In SMCA systems this address
++	 * corresponds to banks's MCA_STATUS register.
++	 *
++	 * The Register array size must be large enough to include all
++	 * the SMCA registers which we want to extract.
++	 *
++	 * The number of registers in the Register Array is determined
++	 * by Register Array Size/8 as defined in UEFI spec v2.8, sec
++	 * N.2.4.2.2. The register layout is fixed and currently the raw
++	 * data in the register array includes 6 SMCA registers which the
++	 * kernel can extract.
++	 */
++
++	if ((ctx_info->msr_addr & MSR_AMD64_SMCA_MC0_STATUS) !=
++	    MSR_AMD64_SMCA_MC0_STATUS || ctx_info->reg_arr_size < 48)
++		return -EINVAL;
++
++	mce_setup(&m);
++
++	m.extcpu = -1;
++	m.socketid = -1;
++
++	for_each_possible_cpu(cpu) {
++		if (cpu_data(cpu).initial_apicid == lapic_id) {
++			m.extcpu = cpu;
++			m.socketid = cpu_data(m.extcpu).phys_proc_id;
++			break;
++		}
++	}
++
++	m.apicid = lapic_id;
++	m.bank = (ctx_info->msr_addr >> 4) & 0xFF;
++	m.status = *i_mce;
++	m.addr = *(i_mce + 1);
++	m.misc = *(i_mce + 2);
++	/* Skipping MCA_CONFIG */
++	m.ipid = *(i_mce + 4);
++	m.synd = *(i_mce + 5);
++
++	mce_log(&m);
++
++	return 0;
++}
++
+ #define CPER_CREATOR_MCE						\
+ 	GUID_INIT(0x75a574e3, 0x5052, 0x4b29, 0x8a, 0x8e, 0xbe, 0x2c,	\
+ 		  0x64, 0x90, 0xb8, 0x9d)
+diff --git a/drivers/firmware/efi/cper-x86.c b/drivers/firmware/efi/cper-x86.c
+index 2531de49f56c..438ed9eff6d0 100644
+--- a/drivers/firmware/efi/cper-x86.c
++++ b/drivers/firmware/efi/cper-x86.c
+@@ -2,6 +2,7 @@
+ // Copyright (C) 2018, Advanced Micro Devices, Inc.
+ 
+ #include <linux/cper.h>
++#include <linux/acpi.h>
+ 
+ /*
+  * We don't need a "CPER_IA" prefix since these are all locally defined.
+@@ -347,9 +348,13 @@ void cper_print_proc_ia(const char *pfx, const struct cper_sec_proc_ia *proc)
+ 			       ctx_info->mm_reg_addr);
+ 		}
+ 
+-		printk("%sRegister Array:\n", newpfx);
+-		print_hex_dump(newpfx, "", DUMP_PREFIX_OFFSET, 16, groupsize,
+-			       (ctx_info + 1), ctx_info->reg_arr_size, 0);
++		if (ctx_info->reg_ctx_type != CTX_TYPE_MSR ||
++		    arch_apei_report_x86_error(ctx_info, proc->lapic_id)) {
++			printk("%sRegister Array:\n", newpfx);
++			print_hex_dump(newpfx, "", DUMP_PREFIX_OFFSET, 16,
++				       groupsize, (ctx_info + 1),
++				       ctx_info->reg_arr_size, 0);
++		}
+ 
+ 		ctx_info = (struct cper_ia_proc_ctx *)((long)ctx_info + size);
+ 	}
 -- 
 2.17.1
 
