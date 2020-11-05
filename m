@@ -2,15 +2,15 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 88E862A80B0
-	for <lists+linux-edac@lfdr.de>; Thu,  5 Nov 2020 15:19:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B16E82A82E8
+	for <lists+linux-edac@lfdr.de>; Thu,  5 Nov 2020 17:01:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729113AbgKEOTN (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Thu, 5 Nov 2020 09:19:13 -0500
-Received: from m12-15.163.com ([220.181.12.15]:34621 "EHLO m12-15.163.com"
+        id S1730447AbgKEQBZ (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Thu, 5 Nov 2020 11:01:25 -0500
+Received: from m12-15.163.com ([220.181.12.15]:47043 "EHLO m12-15.163.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730466AbgKEOTM (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Thu, 5 Nov 2020 09:19:12 -0500
+        id S1725308AbgKEQBZ (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Thu, 5 Nov 2020 11:01:25 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
         s=s110527; h=From:Subject:Date:Message-Id; bh=SRGZE9QaYZjF/f6y12
         I0JDiF5vu4zgMn7WRer/RYTls=; b=SV4QX1dxSKK6lpzEorGVWMvJGe16/oTozC
