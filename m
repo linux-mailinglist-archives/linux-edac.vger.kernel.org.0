@@ -2,26 +2,26 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F9672A858E
-	for <lists+linux-edac@lfdr.de>; Thu,  5 Nov 2020 19:02:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D45172A858B
+	for <lists+linux-edac@lfdr.de>; Thu,  5 Nov 2020 19:01:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731799AbgKESBt (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        id S1731591AbgKESBt (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
         Thu, 5 Nov 2020 13:01:49 -0500
-Received: from frasgout.his.huawei.com ([185.176.79.56]:2061 "EHLO
+Received: from frasgout.his.huawei.com ([185.176.79.56]:2060 "EHLO
         frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727275AbgKESBt (ORCPT
+        with ESMTP id S1725862AbgKESBt (ORCPT
         <rfc822;linux-edac@vger.kernel.org>); Thu, 5 Nov 2020 13:01:49 -0500
-Received: from fraeml742-chm.china.huawei.com (unknown [172.18.147.226])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4CRrS12JZbz67Dkr;
-        Fri,  6 Nov 2020 01:41:53 +0800 (CST)
+Received: from fraeml708-chm.china.huawei.com (unknown [172.18.147.200])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4CRrSg73zhz67HHg;
+        Fri,  6 Nov 2020 01:42:27 +0800 (CST)
 Received: from lhreml715-chm.china.huawei.com (10.201.108.66) by
- fraeml742-chm.china.huawei.com (10.206.15.223) with Microsoft SMTP Server
+ fraeml708-chm.china.huawei.com (10.206.15.36) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1913.5; Thu, 5 Nov 2020 18:43:28 +0100
+ 15.1.1913.5; Thu, 5 Nov 2020 18:44:02 +0100
 Received: from DESKTOP-6T4S3DQ.china.huawei.com (10.47.87.221) by
  lhreml715-chm.china.huawei.com (10.201.108.66) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1913.5; Thu, 5 Nov 2020 17:43:26 +0000
+ 15.1.1913.5; Thu, 5 Nov 2020 17:44:01 +0000
 From:   Shiju Jose <shiju.jose@huawei.com>
 To:     <linux-edac@vger.kernel.org>, <linux-acpi@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>, <james.morse@arm.com>,
@@ -29,15 +29,15 @@ To:     <linux-edac@vger.kernel.org>, <linux-acpi@vger.kernel.org>,
         <lenb@kernel.org>, <rrichter@marvell.com>
 CC:     <linuxarm@huawei.com>, <jonathan.cameron@huawei.com>,
         <shiju.jose@huawei.com>
-Subject: [RFC PATCH 1/4] ACPI: PPTT: Fix for a high level cache node detected in the low level
-Date:   Thu, 5 Nov 2020 17:42:30 +0000
-Message-ID: <20201105174233.1146-2-shiju.jose@huawei.com>
+Subject: [RFC PATCH 2/4] ACPI: PPTT: Add function acpi_find_cache_info
+Date:   Thu, 5 Nov 2020 17:42:31 +0000
+Message-ID: <20201105174233.1146-3-shiju.jose@huawei.com>
 X-Mailer: git-send-email 2.26.0.windows.1
 In-Reply-To: <20201105174233.1146-1-shiju.jose@huawei.com>
 References: <20201105174233.1146-1-shiju.jose@huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
 X-Originating-IP: [10.47.87.221]
 X-ClientProxiedBy: lhreml745-chm.china.huawei.com (10.201.108.195) To
  lhreml715-chm.china.huawei.com (10.201.108.66)
@@ -46,131 +46,123 @@ Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-From: Jonathan Cameron <jonathan.cameron@huawei.com>
+Add function acpi_find_cache_info() to find the
+information of the caches found in a CPU hierarchy
+represented in the PPTT.
 
-According to the following sections of the PPTT definition in the
-ACPI specification(V6.3), a high level cache node( For example L2 cache)
-could be represented simultaneously both in the private resource
-of a CPU node and via the next_level_of_cache pointer of a low level
-cache node.
-1. Section 5.2.29.1 Processor hierarchy node structure (Type 0)
-"Each processor node includes a list of resources that are private
-to that node. Resources are described in other PPTT structures such as
-Type 1 cache structures. The processor node’s private resource list
-includes a reference to each of the structures that represent private
-resources to a given processor node. For example, an SoC level processor
-node might contain two references, one pointing to a Level 3 cache
-resource and another pointing to an ID structure."
-
-2. Section 5.2.29.2 Cache Type Structure - Type 1
-   Figure 5-26 Cache Type Structure - Type 1 Example
-
-For the use case of creating EDAC device blocks for the CPU caches,
-we need to search for cache node types in all levels using
-acpi_find_cache_node(), as a platform independent solution to
-retrieve the cache info from the ACPI PPTT. The reason is that
-cacheinfo in the drivers/base/cacheinfo.c would not be populated
-in this stage. In this case, we found acpi_find_cache_node()
-mistakenly detecting high level cache as low level cache, when
-the cache node is in the processor node’s private resource list.
-
-To fix this issue add duplication check in the acpi_find_cache_level(),
-for a cache node found in the private resource of a CPU node
-with all the next level of caches present in the other cache nodes.
-
+Co-developed-by: Jonathan Cameron <jonathan.cameron@huawei.com>
 Signed-off-by: Jonathan Cameron <jonathan.cameron@huawei.com>
-Co-developed-by: Shiju Jose <shiju.jose@huawei.com>
 Signed-off-by: Shiju Jose <shiju.jose@huawei.com>
 ---
- drivers/acpi/pptt.c | 61 ++++++++++++++++++++++++++++++++++++++++++++-
- 1 file changed, 60 insertions(+), 1 deletion(-)
+ drivers/acpi/pptt.c       | 62 +++++++++++++++++++++++++++++++++++++++
+ include/linux/cacheinfo.h | 12 ++++++++
+ 2 files changed, 74 insertions(+)
 
 diff --git a/drivers/acpi/pptt.c b/drivers/acpi/pptt.c
-index 4ae93350b70d..de1dd605d3ad 100644
+index de1dd605d3ad..5f46e6257e6b 100644
 --- a/drivers/acpi/pptt.c
 +++ b/drivers/acpi/pptt.c
-@@ -132,21 +132,80 @@ static unsigned int acpi_pptt_walk_cache(struct acpi_table_header *table_hdr,
- 	return local_level;
+@@ -670,6 +670,68 @@ int acpi_find_last_cache_level(unsigned int cpu)
+ 	return number_of_levels;
  }
  
 +/**
-+ * acpi_pptt_walk_check_duplicate() - Find the cache resource to check,
-+ * is a duplication in the next_level_of_cache pointer of other cache.
-+ * @table_hdr: Pointer to the head of the PPTT table
-+ * @res: cache resource in the PPTT we want to walk
-+ * @res_check: cache resource in the PPTT we want to check for duplication.
++ * acpi_find_cache_info() - Find the information of CPU caches
++ * represented in the PPTT.
++ * @cpu: Kernel logical CPU number.
++ * @cacheinfo: array of struct acpi_cacheinfo.
++ * @size: dimension of the array.
 + *
-+ * Given both PPTT resource, verify that they are cache nodes, then walk
-+ * down each level of cache @res, and check for the duplication.
++ * Given a logical CPU number, returns the info of caches
++ * represented in the PPTT.
++ * Errors caused by lack of a PPTT table, or otherwise, return 0
++ * indicating we didn't find any cache levels.
 + *
-+ * Return: true if duplication found, false otherwise.
++ * Return: total number of caches found in the CPU hierarchy or error.
 + */
-+static bool acpi_pptt_walk_check_duplicate(struct acpi_table_header *table_hdr,
-+					   struct acpi_subtable_header *res,
-+					   struct acpi_subtable_header *res_check)
++int acpi_find_cache_info(unsigned int cpu, struct acpi_cacheinfo *cacheinfo,
++			 size_t size)
 +{
-+	struct acpi_pptt_cache *cache;
-+	struct acpi_pptt_cache *check;
++	u32 acpi_cpu_id;
++	acpi_status status;
++	struct acpi_table_header *table_hdr;
++	struct acpi_pptt_processor *cpu_node = NULL;
++	struct acpi_pptt_cache *found_cache;
++	int i, number_of_caches = 0;
++	int max_level, level = 1;
++	enum cache_type type[] = {
++		CACHE_TYPE_DATA,
++		CACHE_TYPE_INST,
++		CACHE_TYPE_UNIFIED,
++	};
 +
-+	if (res->type != ACPI_PPTT_TYPE_CACHE ||
-+	    res_check->type != ACPI_PPTT_TYPE_CACHE)
-+		return false;
++	if (!cacheinfo || !size)
++		return -ENOMEM;
 +
-+	cache = (struct acpi_pptt_cache *)res;
-+	check = (struct acpi_pptt_cache *)res_check;
-+	while (cache) {
-+		if (cache == check)
-+			return true;
-+		cache = fetch_pptt_cache(table_hdr, cache->next_level_of_cache);
++	status = acpi_get_table(ACPI_SIG_PPTT, 0, &table_hdr);
++	if (ACPI_FAILURE(status)) {
++		acpi_pptt_warn_missing();
++		return -ENOENT;
 +	}
 +
-+	return false;
-+}
-+
- static struct acpi_pptt_cache *
- acpi_find_cache_level(struct acpi_table_header *table_hdr,
- 		      struct acpi_pptt_processor *cpu_node,
- 		      unsigned int *starting_level, unsigned int level,
- 		      int type)
- {
--	struct acpi_subtable_header *res;
-+	struct acpi_subtable_header *res, *res2;
- 	unsigned int number_of_levels = *starting_level;
- 	int resource = 0;
-+	int resource2 = 0;
-+	bool duplicate = false;
- 	struct acpi_pptt_cache *ret = NULL;
- 	unsigned int local_level;
- 
- 	/* walk down from processor node */
- 	while ((res = acpi_get_pptt_resource(table_hdr, cpu_node, resource))) {
- 		resource++;
-+		/*
-+		 * PPTT definition in the ACPI specification allows a high level cache
-+		 * node would be represented simultaneously both in the private resource
-+		 * of a CPU node and via the next_level_of_cache pointer of another cache node,
-+		 * within the same CPU hierarchy. This resulting acpi_find_cache_level()
-+		 * mistakenly detects a higher level cache node in the low level as well.
-+		 *
-+		 * Check a cache node in the private resource of the CPU node for any
-+		 * duplication.
-+		 */
-+		resource2 = 0;
-+		duplicate = false;
-+		while ((res2 = acpi_get_pptt_resource(table_hdr, cpu_node, resource2))) {
-+			resource2++;
-+			if (res2 == res)
-+				continue;
-+			if (acpi_pptt_walk_check_duplicate(table_hdr, res2, res)) {
-+				duplicate = true;
-+				break;
++	acpi_cpu_id = get_acpi_id_for_cpu(cpu);
++	max_level = acpi_find_cache_levels(table_hdr, acpi_cpu_id);
++	while (level <= max_level) {
++		for (i = 0; i < ARRAY_SIZE(type); i++) {
++			found_cache = acpi_find_cache_node(table_hdr, acpi_cpu_id,
++							   type[i], level, &cpu_node);
++			if (found_cache) {
++				cacheinfo[number_of_caches].level = level;
++				cacheinfo[number_of_caches].type = acpi_cache_type(type[i]);
++				number_of_caches++;
++				if (number_of_caches >= size) {
++					acpi_put_table(table_hdr);
++					return -ENOMEM;
++				}
 +			}
 +		}
-+		if (duplicate)
-+			continue;
++		level++;
++	}
++	acpi_put_table(table_hdr);
++
++	return number_of_caches;
++}
++
+ /**
+  * cache_setup_acpi() - Override CPU cache topology with data from the PPTT
+  * @cpu: Kernel logical CPU number
+diff --git a/include/linux/cacheinfo.h b/include/linux/cacheinfo.h
+index 4f72b47973c3..7d37945d2650 100644
+--- a/include/linux/cacheinfo.h
++++ b/include/linux/cacheinfo.h
+@@ -79,6 +79,11 @@ struct cpu_cacheinfo {
+ 	bool cpu_map_populated;
+ };
  
- 		local_level = acpi_pptt_walk_cache(table_hdr, *starting_level,
- 						   res, &ret, level, type);
++struct acpi_cacheinfo {
++	u8 level;
++	u8 type;
++};
++
+ /*
+  * Helpers to make sure "func" is executed on the cpu whose cache
+  * attributes are being detected
+@@ -114,8 +119,15 @@ static inline int acpi_find_last_cache_level(unsigned int cpu)
+ {
+ 	return 0;
+ }
++static inline int acpi_find_cache_info(unsigned int cpu, struct acpi_cacheinfo *cacheinfo,
++				       size_t size)
++{
++	return 0;
++}
+ #else
+ int acpi_find_last_cache_level(unsigned int cpu);
++int acpi_find_cache_info(unsigned int cpu, struct acpi_cacheinfo *cacheinfo,
++			 size_t size);
+ #endif
+ 
+ const struct attribute_group *cache_get_priv_group(struct cacheinfo *this_leaf);
 -- 
 2.17.1
 
