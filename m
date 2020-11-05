@@ -2,27 +2,26 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4824C2A8582
-	for <lists+linux-edac@lfdr.de>; Thu,  5 Nov 2020 19:01:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 351AD2A8588
+	for <lists+linux-edac@lfdr.de>; Thu,  5 Nov 2020 19:01:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731350AbgKESBZ (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        id S1731558AbgKESBZ (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
         Thu, 5 Nov 2020 13:01:25 -0500
-Received: from frasgout.his.huawei.com ([185.176.79.56]:2059 "EHLO
+Received: from frasgout.his.huawei.com ([185.176.79.56]:2057 "EHLO
         frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725862AbgKESBY (ORCPT
+        with ESMTP id S1727275AbgKESBY (ORCPT
         <rfc822;linux-edac@vger.kernel.org>); Thu, 5 Nov 2020 13:01:24 -0500
-X-Greylist: delayed 1129 seconds by postgrey-1.27 at vger.kernel.org; Thu, 05 Nov 2020 13:01:24 EST
-Received: from fraeml703-chm.china.huawei.com (unknown [172.18.147.206])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4CRrV52Pv0z67J5h;
-        Fri,  6 Nov 2020 01:43:41 +0800 (CST)
+Received: from fraeml701-chm.china.huawei.com (unknown [172.18.147.200])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4CRrVl2nfhz67J3M;
+        Fri,  6 Nov 2020 01:44:15 +0800 (CST)
 Received: from lhreml715-chm.china.huawei.com (10.201.108.66) by
- fraeml703-chm.china.huawei.com (10.206.15.52) with Microsoft SMTP Server
+ fraeml701-chm.china.huawei.com (10.206.15.50) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
- 15.1.1913.5; Thu, 5 Nov 2020 18:44:56 +0100
+ 15.1.1913.5; Thu, 5 Nov 2020 18:45:30 +0100
 Received: from DESKTOP-6T4S3DQ.china.huawei.com (10.47.87.221) by
  lhreml715-chm.china.huawei.com (10.201.108.66) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1913.5; Thu, 5 Nov 2020 17:44:55 +0000
+ 15.1.1913.5; Thu, 5 Nov 2020 17:45:29 +0000
 From:   Shiju Jose <shiju.jose@huawei.com>
 To:     <linux-edac@vger.kernel.org>, <linux-acpi@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>, <james.morse@arm.com>,
@@ -30,9 +29,9 @@ To:     <linux-edac@vger.kernel.org>, <linux-acpi@vger.kernel.org>,
         <lenb@kernel.org>, <rrichter@marvell.com>
 CC:     <linuxarm@huawei.com>, <jonathan.cameron@huawei.com>,
         <shiju.jose@huawei.com>
-Subject: [RFC PATCH 3/4] EDAC/ghes: Add EDAC device for the CPU caches
-Date:   Thu, 5 Nov 2020 17:42:32 +0000
-Message-ID: <20201105174233.1146-4-shiju.jose@huawei.com>
+Subject: [RFC PATCH 4/4] ACPI / APEI: Add reporting ARM64 CPU cache corrected error count
+Date:   Thu, 5 Nov 2020 17:42:33 +0000
+Message-ID: <20201105174233.1146-5-shiju.jose@huawei.com>
 X-Mailer: git-send-email 2.26.0.windows.1
 In-Reply-To: <20201105174233.1146-1-shiju.jose@huawei.com>
 References: <20201105174233.1146-1-shiju.jose@huawei.com>
@@ -47,255 +46,129 @@ Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-Find CPU caches in the ACPI PPTT and add CPU EDAC device
-and EDAC device blocks for the caches found.
+Add reporting ARM64 CPU cache corrected error count to the ghes_edac.
+The error count would be updated in the EDAC CPU cache sysfs
+interface.
 
-For the firmware-first error handling, add an interface in the
-ghes_edac, enable to report the CPU corrected error count for
-a CPU core to the user-space through the CPU EDAC device.
-
-Suggested-by: James Morse <james.morse@arm.com>
 Signed-off-by: Jonathan Cameron <jonathan.cameron@huawei.com>
 Signed-off-by: Shiju Jose <shiju.jose@huawei.com>
 ---
- drivers/edac/Kconfig     |  10 +++
- drivers/edac/ghes_edac.c | 135 +++++++++++++++++++++++++++++++++++++++
- include/acpi/ghes.h      |  27 ++++++++
- 3 files changed, 172 insertions(+)
+ drivers/acpi/apei/ghes.c | 79 ++++++++++++++++++++++++++++++++++++++--
+ include/linux/cper.h     |  4 ++
+ 2 files changed, 80 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/edac/Kconfig b/drivers/edac/Kconfig
-index 7a47680d6f07..3a0d8d134dcc 100644
---- a/drivers/edac/Kconfig
-+++ b/drivers/edac/Kconfig
-@@ -74,6 +74,16 @@ config EDAC_GHES
- 
- 	  In doubt, say 'Y'.
- 
-+config EDAC_GHES_CPU_ERROR
-+	bool "EDAC device for reporting firmware-first BIOS detected CPU error count"
-+	depends on EDAC_GHES && ACPI_PPTT
-+	help
-+	  EDAC device for the firmware-first BIOS detected CPU error count reported
-+	  via ACPI APEI/GHES. By enabling this option, EDAC device for the CPU
-+	  hierarchy and EDAC device blocks for caches hierarchy would be created.
-+	  The cpu error count is shared with the userspace via the CPU EDAC
-+	  device's sysfs interface.
-+
- config EDAC_AMD64
- 	tristate "AMD64 (Opteron, Athlon64)"
- 	depends on AMD_NB && EDAC_DECODE_MCE
-diff --git a/drivers/edac/ghes_edac.c b/drivers/edac/ghes_edac.c
-index a918ca93e4f7..96619483e5f3 100644
---- a/drivers/edac/ghes_edac.c
-+++ b/drivers/edac/ghes_edac.c
-@@ -12,6 +12,9 @@
- #include <acpi/ghes.h>
- #include <linux/edac.h>
- #include <linux/dmi.h>
-+#if defined(CONFIG_EDAC_GHES_CPU_ERROR)
-+#include <linux/cacheinfo.h>
-+#endif
- #include "edac_module.h"
- #include <ras/ras_event.h>
- 
-@@ -497,6 +500,130 @@ void ghes_edac_report_mem_error(int sev, struct cper_sec_mem_err *mem_err)
- 	spin_unlock_irqrestore(&ghes_lock, flags);
+diff --git a/drivers/acpi/apei/ghes.c b/drivers/acpi/apei/ghes.c
+index fce7ade2aba9..b17173312087 100644
+--- a/drivers/acpi/apei/ghes.c
++++ b/drivers/acpi/apei/ghes.c
+@@ -523,6 +523,81 @@ static void ghes_handle_aer(struct acpi_hest_generic_data *gdata)
+ #endif
  }
- 
-+#if defined(CONFIG_EDAC_GHES_CPU_ERROR)
-+#define MAX_NUM_CACHES	20
-+static struct ghes_edac_cpu_block {
-+	int cpu;
-+	u8 level;
-+	u8 type;
-+	int block_nr;
-+} *cpu_edac_block_list;
-+
-+static struct edac_device_ctl_info *cpu_edac_dev;
-+static int max_number_of_caches;
-+
-+void ghes_edac_report_cpu_error(struct ghes_einfo_cpu *einfo)
-+{
-+	struct ghes_edac_cpu_block *block;
-+	int i;
-+
-+	if (!einfo || !(einfo->ce_count) || !max_number_of_caches)
-+		return;
-+
-+	for (i = 0; i < max_number_of_caches; i++) {
-+		block = cpu_edac_block_list + (einfo->cpu * max_number_of_caches) + i;
-+		if ((block->level == einfo->cache_level) && (block->type == einfo->cache_type)) {
-+			edac_device_handle_ce_count(cpu_edac_dev, einfo->ce_count,
-+						    einfo->cpu, block->block_nr, "");
-+			break;
-+		}
-+	}
-+}
-+
-+static  int ghes_edac_add_cpu_device(struct device *dev)
-+{
-+	int rc;
-+
-+	cpu_edac_dev = edac_device_alloc_ctl_info(0, "cpu",  num_possible_cpus(),
-+						  "cache", max_number_of_caches, 0, NULL,
-+						  0, edac_device_alloc_index());
-+	if (!cpu_edac_dev) {
-+		pr_warn("edac_device_alloc_ctl_info for cpu_edac_dev failed\n");
-+		return -ENOMEM;
-+	}
-+
-+	cpu_edac_dev->dev = dev;
-+	cpu_edac_dev->ctl_name = "cpu_edac_dev";
-+	cpu_edac_dev->dev_name = "ghes";
-+	cpu_edac_dev->mod_name = "ghes_edac.c";
-+	rc = edac_device_add_device(cpu_edac_dev);
-+	if (rc) {
-+		pr_warn("edac_device_add_device failed\n");
-+		edac_device_free_ctl_info(cpu_edac_dev);
-+		return rc;
-+	}
-+
-+	return 0;
-+}
-+
-+static  void ghes_edac_delete_cpu_device(void)
-+{
-+	max_number_of_caches = 0;
-+	if (cpu_edac_dev) {
-+		edac_device_del_device(cpu_edac_dev->dev);
-+		edac_device_free_ctl_info(cpu_edac_dev);
-+	}
-+	vfree(cpu_edac_block_list);
-+}
-+
-+static void ghes_edac_create_cpu_device(struct device *dev)
-+{
-+	int cpu, i;
-+	struct ghes_edac_cpu_block *block;
-+	int number_of_caches;
-+	struct acpi_cacheinfo cacheinfo[MAX_NUM_CACHES];
-+
-+	/* Find the maximum number of caches present in the cpu heirarchy among the CPUs */
-+	for_each_possible_cpu(cpu) {
-+		number_of_caches = acpi_find_cache_info(cpu, &cacheinfo[0], MAX_NUM_CACHES);
-+		if (number_of_caches <= 0)
-+			return;
-+
-+		if (max_number_of_caches < number_of_caches)
-+			max_number_of_caches = number_of_caches;
-+	}
-+	if (!max_number_of_caches)
-+		return;
-+
-+	/*
-+	 * EDAC device interface supports creating the CPU hierarchy for all the CPUs
-+	 * together. Thus need to allocate cpu_edac_block_list for the max_number_of_caches
-+	 * among all the CPU hierarchy irrespective of the number of caches per CPU might vary.
-+	 */
-+	cpu_edac_block_list = vzalloc(num_possible_cpus() * max_number_of_caches *
-+				      sizeof(*cpu_edac_block_list));
-+	if (!cpu_edac_block_list)
-+		return;
-+
-+	if (ghes_edac_add_cpu_device(dev))
-+		goto error;
-+
-+	for_each_possible_cpu(cpu) {
-+		memset(cacheinfo, 0, MAX_NUM_CACHES * sizeof(struct acpi_cacheinfo));
-+		number_of_caches = acpi_find_cache_info(cpu, &cacheinfo[0], MAX_NUM_CACHES);
-+		if (number_of_caches <= 0)
-+			goto error;
-+		/*
-+		 * The edac cpu cache device blocks entries in the sysfs should match with the cpu
-+		 * cache structure in the sysfs so that the affected cpus for a shared cache
-+		 * can be easily extracted in the userspace.
-+		 */
-+		for (i = 0; i < number_of_caches; i++) {
-+			block = cpu_edac_block_list + (cpu * max_number_of_caches) + i;
-+			block->cpu = cpu;
-+			block->level = cacheinfo[i].level;
-+			block->type = cacheinfo[i].type;
-+			block->block_nr = i;
-+		}
-+	}
-+
-+	return;
-+
-+error:
-+	ghes_edac_delete_cpu_device();
-+}
-+#endif
-+
- /*
-  * Known systems that are safe to enable this module.
-  */
-@@ -624,6 +751,10 @@ int ghes_edac_register(struct ghes *ghes, struct device *dev)
- 	ghes_pvt = pvt;
- 	spin_unlock_irqrestore(&ghes_lock, flags);
- 
-+#if defined(CONFIG_EDAC_GHES_CPU_ERROR)
-+	ghes_edac_create_cpu_device(dev);
-+#endif
-+
- 	/* only set on success */
- 	refcount_set(&ghes_refcount, 1);
- 
-@@ -654,6 +785,10 @@ void ghes_edac_unregister(struct ghes *ghes)
- 	if (!refcount_dec_and_test(&ghes_refcount))
- 		goto unlock;
- 
-+#if defined(CONFIG_EDAC_GHES_CPU_ERROR)
-+	ghes_edac_delete_cpu_device();
-+#endif
-+
- 	/*
- 	 * Wait for the irq handler being finished.
- 	 */
-diff --git a/include/acpi/ghes.h b/include/acpi/ghes.h
-index 34fb3431a8f3..a9098daf53d4 100644
---- a/include/acpi/ghes.h
-+++ b/include/acpi/ghes.h
-@@ -73,6 +73,24 @@ void ghes_unregister_vendor_record_notifier(struct notifier_block *nb);
- 
- int ghes_estatus_pool_init(int num_ghes);
  
 +/*
-+ * struct ghes_einfo_cpu  - structure to pass cpu error info to the edac
-+ * @cpu: CPU index.
-+ * @error_type: error type, cache/TLB/bus/ etc.
-+ * @cache_level: cache level.
-+ * @cache_type: ACPI cache type.
-+ * @ue_count: CPU uncorrectable error count.
-+ * @ce_count: CPU correctable error count.
++ * arm_err_trans_type_to_acpi_cache_type: Function to convert transaction type
++ * in the CPER's ARM cache error structure to the ACPI PPTT cache type.
++ *
++ * @type - transaction type. Type of cache error instruction/data/generic.
++ *
++ * Return: Success: ACPI PPTT cache type. Failure: Negative value.
 + */
-+struct ghes_einfo_cpu {
-+	int cpu;
-+	u8 error_type;
-+	u8 cache_level;
-+	u8 cache_type;
-+	u16 ue_count;
-+	u16 ce_count;
-+};
-+
- /* From drivers/edac/ghes_edac.c */
- 
- #ifdef CONFIG_EDAC_GHES
-@@ -98,6 +116,15 @@ static inline void ghes_edac_unregister(struct ghes *ghes)
- }
- #endif
- 
-+#ifdef CONFIG_EDAC_GHES_CPU_ERROR
-+void ghes_edac_report_cpu_error(struct ghes_einfo_cpu *einfo_cpu);
-+
-+#else
-+static inline void ghes_edac_report_cpu_error(struct ghes_einfo_cpu *einfo_cpu)
++static u8 arm_err_trans_type_to_acpi_cache_type(u8 type)
 +{
++	switch (type) {
++	case CPER_ARM_CACHE_TRANS_TYPE_INSTRUCTION:
++		return ACPI_PPTT_CACHE_TYPE_INSTR;
++	case CPER_ARM_CACHE_TRANS_TYPE_DATA:
++		return ACPI_PPTT_CACHE_TYPE_DATA;
++	case CPER_ARM_CACHE_TRANS_TYPE_GENERIC:
++		return ACPI_PPTT_CACHE_TYPE_UNIFIED;
++	default:
++		pr_warn_ratelimited("FW_WARN GHES_PFX ARM CPER: Invalid cache transaction type\n");
++		return -EINVAL;
++	}
 +}
-+#endif
 +
- static inline int acpi_hest_get_version(struct acpi_hest_generic_data *gdata)
- {
- 	return gdata->revision >> 8;
++static void ghes_handle_arm_hw_error(struct acpi_hest_generic_data *gdata)
++{
++	struct cper_sec_proc_arm *error = acpi_hest_get_payload(gdata);
++	struct cper_arm_err_info *err_info;
++	struct ghes_einfo_cpu einfo;
++	u8 trans_type;
++	u64 error_info;
++	int sec_sev;
++	int i, cache_type;
++
++	log_arm_hw_error(error);
++
++	sec_sev = ghes_severity(gdata->error_severity);
++
++#if defined(CONFIG_ARM64)
++	if (sec_sev == GHES_SEV_CORRECTED) {
++		memset(&einfo, 0, sizeof(einfo));
++		einfo.cpu = get_logical_index(error->mpidr);
++		if (einfo.cpu == -EINVAL)
++			return;
++
++		/* ARM processor error types are cache/TLB/bus errors.
++		 * Presently corrected error count for caches only
++		 * is reported.
++		 */
++		err_info = (struct cper_arm_err_info *)(error + 1);
++
++		for (i = 0; i < error->err_info_num; i++) {
++			if (err_info->type != CPER_ARM_CACHE_ERROR)
++				continue;
++			einfo.ce_count = err_info->multiple_error + 1;
++
++			error_info = err_info->error_info;
++			if (!(error_info & CPER_ARM_ERR_VALID_TRANSACTION_TYPE) ||
++			    !(error_info & CPER_ARM_ERR_VALID_LEVEL))
++				continue;
++
++			trans_type = ((error_info >> CPER_ARM_ERR_TRANSACTION_SHIFT)
++					& CPER_ARM_ERR_TRANSACTION_MASK);
++			cache_type = arm_err_trans_type_to_acpi_cache_type(trans_type);
++			if (cache_type < 0)
++				continue;
++			einfo.cache_type = cache_type;
++			einfo.cache_level = ((error_info >> CPER_ARM_ERR_LEVEL_SHIFT)
++					& CPER_ARM_ERR_LEVEL_MASK);
++			ghes_edac_report_cpu_error(&einfo);
++			err_info += 1;
++		}
++	}
++#endif
++}
++
+ static BLOCKING_NOTIFIER_HEAD(vendor_record_notify_list);
+ 
+ int ghes_register_vendor_record_notifier(struct notifier_block *nb)
+@@ -605,9 +680,7 @@ static bool ghes_do_proc(struct ghes *ghes,
+ 			ghes_handle_aer(gdata);
+ 		}
+ 		else if (guid_equal(sec_type, &CPER_SEC_PROC_ARM)) {
+-			struct cper_sec_proc_arm *err = acpi_hest_get_payload(gdata);
+-
+-			log_arm_hw_error(err);
++			ghes_handle_arm_hw_error(gdata);
+ 		} else {
+ 			void *err = acpi_hest_get_payload(gdata);
+ 
+diff --git a/include/linux/cper.h b/include/linux/cper.h
+index 6a511a1078ca..0ea966af6ad9 100644
+--- a/include/linux/cper.h
++++ b/include/linux/cper.h
+@@ -314,6 +314,10 @@ enum {
+ #define CPER_ARM_ERR_ACCESS_MODE_SHIFT		43
+ #define CPER_ARM_ERR_ACCESS_MODE_MASK		GENMASK(0,0)
+ 
++#define CPER_ARM_CACHE_TRANS_TYPE_INSTRUCTION	0
++#define CPER_ARM_CACHE_TRANS_TYPE_DATA		1
++#define CPER_ARM_CACHE_TRANS_TYPE_GENERIC	2
++
+ /*
+  * All tables and structs must be byte-packed to match CPER
+  * specification, since the tables are provided by the system BIOS
 -- 
 2.17.1
 
