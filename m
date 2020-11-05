@@ -2,116 +2,112 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CDE4E2A7C49
-	for <lists+linux-edac@lfdr.de>; Thu,  5 Nov 2020 11:52:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 88E862A80B0
+	for <lists+linux-edac@lfdr.de>; Thu,  5 Nov 2020 15:19:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730193AbgKEKwn (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Thu, 5 Nov 2020 05:52:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38856 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730124AbgKEKwn (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Thu, 5 Nov 2020 05:52:43 -0500
-Received: from mail-lj1-x244.google.com (mail-lj1-x244.google.com [IPv6:2a00:1450:4864:20::244])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53614C0613CF
-        for <linux-edac@vger.kernel.org>; Thu,  5 Nov 2020 02:52:42 -0800 (PST)
-Received: by mail-lj1-x244.google.com with SMTP id m8so1105115ljj.0
-        for <linux-edac@vger.kernel.org>; Thu, 05 Nov 2020 02:52:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=IbC7h6sutytvBKVgRkW8YBm4v4oQThhwvuIz3XlFJpw=;
-        b=d/RC4QlHsEU0Pk+87b5hebgQR1nvUbGfz+KWgyYPw8avJty+oHtYWwRBfI9ZwNnjQk
-         6x1f9VNEkjxS+WacQizm9QFnRFRoNTRgXz7J8hUL7gDHTr1r0B4CDTIH++hxOUWPbRHA
-         faB9Z1G3wfURCCb570cPMFzwdpYsz5NNLR9grwb6NletLAXur80zPGuj6TnPTgqIsI6W
-         73tvdQLbSeHs/ZIHScGvMbbglljfvtEcmDpRr1SmCjt0Cs2115AxcxEJIltrAcsJpAIs
-         i7f4CKXDgFTYIlx2Oia+shgKsQ9vbBqcm5RZnKYsE+6tO+5eUkPHBV9yZoGBsu8zWwxP
-         sFlA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=IbC7h6sutytvBKVgRkW8YBm4v4oQThhwvuIz3XlFJpw=;
-        b=Lz8QqUKhg/Jfog03VuzuozSnVOw3+2CpbyKrb+kRBJJlAocUeiRyOFmZeJu+42286m
-         50hHstmTC11aHlj0wG6z3kG4mrM1h33+ppuHy/c6PQNKcPWp38aud8Q4ag0M9krTiAYn
-         9lItXEOQ4SYuMFxwJoODCli4r/HNqn67wOsw7X1wFU16YwJMjDX33NzTBChxpOpRJgfG
-         dO691zaitCQc5iAGKgPgjT6YfaVRm1Q1KHF8jshjTcysw2EEEnAm7e0sp21NmGeJv7p8
-         wdylex08TlAdgRqma2Vc93zbyw0X9BUdIyok/TmaWysF7FNCJneLHO3CFaHqB36ksxEy
-         ppQA==
-X-Gm-Message-State: AOAM532i3KEB488YuN8KhrVz7jCpw/SluwwpNqJUuHN71Dtr0O3bNj0l
-        Tx4Tvb9pvGCqZlqLPYN7I7iXiD33O9HuLq0hwbKOuQ==
-X-Google-Smtp-Source: ABdhPJwMZsQSFYx3yHXvvtRlVkabm7C64j8LuP2+XUU2+XVFwAx/DWoa4YDvNPprZ43yAgspd5XcguY3mqI1O9Ir5Vs=
-X-Received: by 2002:a05:651c:1205:: with SMTP id i5mr726163lja.283.1604573560846;
- Thu, 05 Nov 2020 02:52:40 -0800 (PST)
-MIME-Version: 1.0
-References: <20201027121725.24660-1-brgl@bgdev.pl>
-In-Reply-To: <20201027121725.24660-1-brgl@bgdev.pl>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Thu, 5 Nov 2020 11:52:30 +0100
-Message-ID: <CACRpkdYbpOZGmWONeOQFY7DE+t2ev30DQQ-8cxrJNoK9fVVunA@mail.gmail.com>
-Subject: Re: [PATCH 0/8] slab: provide and use krealloc_array()
-To:     Bartosz Golaszewski <brgl@bgdev.pl>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Gustavo Padovan <gustavo@padovan.org>,
-        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Borislav Petkov <bp@alien8.de>,
-        Tony Luck <tony.luck@intel.com>,
-        James Morse <james.morse@arm.com>,
-        Robert Richter <rric@kernel.org>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        "Michael S . Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        Christoph Lameter <cl@linux.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        "open list:DRM PANEL DRIVERS" <dri-devel@lists.freedesktop.org>,
-        linaro-mm-sig@lists.linaro.org,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        linux-edac@vger.kernel.org,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        kvm@vger.kernel.org, virtualization@lists.linux-foundation.org,
-        netdev <netdev@vger.kernel.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        "moderated list:SOUND - SOC LAYER / DYNAMIC AUDIO POWER MANAGEM..." 
-        <alsa-devel@alsa-project.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>
-Content-Type: text/plain; charset="UTF-8"
+        id S1729113AbgKEOTN (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Thu, 5 Nov 2020 09:19:13 -0500
+Received: from m12-15.163.com ([220.181.12.15]:34621 "EHLO m12-15.163.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1730466AbgKEOTM (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Thu, 5 Nov 2020 09:19:12 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id; bh=SRGZE9QaYZjF/f6y12
+        I0JDiF5vu4zgMn7WRer/RYTls=; b=SV4QX1dxSKK6lpzEorGVWMvJGe16/oTozC
+        qfiMNJe3c/W7tgtDcLwD/7JRuP+u2mWCFshBwby3xG/WGHv46NJD/V5aE+l4jF3/
+        BnF5TcjPdkVedjsdN4Juo2sWVlwFFbLoYmdn25rO2uSME6xrSxC+hhxsAjr8MlUB
+        KfFeyvdQ8=
+Received: from smtp.163.com (unknown [36.112.24.10])
+        by smtp11 (Coremail) with SMTP id D8CowAAX_hJ05aNfFE8BGg--.1121S2;
+        Thu, 05 Nov 2020 19:43:50 +0800 (CST)
+From:   yaoaili126@163.com
+To:     rjw@rjwysocki.net, lenb@kernel.org, tony.luck@intel.com,
+        bp@alien8.de, james.morse@arm.com
+Cc:     linux-acpi@vger.kernel.org, linux-edac@vger.kernel.org,
+        yangfeng1@kingsoft.com, CHENGUOMIN@kingsoft.com,
+        yaoaili@kingsoft.com
+Subject: [PATCH] Fix randconfig build error and code bug
+Date:   Thu,  5 Nov 2020 03:43:26 -0800
+Message-Id: <20201105114326.353021-1-yaoaili126@163.com>
+X-Mailer: git-send-email 2.18.4
+In-Reply-To: <202011041829.KUaqiCq1-lkp () intel ! com>
+References: <202011041829.KUaqiCq1-lkp () intel ! com>
+X-CM-TRANSID: D8CowAAX_hJ05aNfFE8BGg--.1121S2
+X-Coremail-Antispam: 1Uf129KBjvJXoW7uw47uw18XF4rAry7CFyxuFg_yoW8urWxpF
+        WxurWYyw48XrnrK34kArykZ345Z3s5W3y3Kan8Gw15W3WrZrWIqrnYq34UKFyrCry5Gw4f
+        Za90qrn2ya97tFJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07jIPfQUUUUU=
+X-Originating-IP: [36.112.24.10]
+X-CM-SenderInfo: 51drtxdolrjli6rwjhhfrp/1tbiLBbTG1spZVxGmQAAsm
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Tue, Oct 27, 2020 at 1:17 PM Bartosz Golaszewski <brgl@bgdev.pl> wrote:
+From: Aili Yao <yaoaili@kingsoft.com>
 
-> From: Bartosz Golaszewski <bgolaszewski@baylibre.com>
->
-> Andy brought to my attention the fact that users allocating an array of
-> equally sized elements should check if the size multiplication doesn't
-> overflow. This is why we have helpers like kmalloc_array().
->
-> However we don't have krealloc_array() equivalent and there are many
-> users who do their own multiplication when calling krealloc() for arrays.
->
-> This series provides krealloc_array() and uses it in a couple places.
->
-> A separate series will follow adding devm_krealloc_array() which is
-> needed in the xilinx adc driver.
+CONFIG_ACPI_APEI is not sufficient for ghes module global function
+replace it with CONFIG_ACPI_APEI_GHES.
 
-The series:
-Acked-by: Linus Walleij <linus.walleij@linaro.org>
+When gen_pool_alloc fails in ghes_in_mce_cper_entry_check, we still need
+to try other cper table to get it cleaned even we are likely to get another
+allocation fail.
 
-I really like this.
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Aili Yao <yaoaili@kingsoft.com>
+---
+ arch/x86/kernel/cpu/mce/internal.h | 6 +++++-
+ drivers/acpi/apei/ghes.c           | 4 ++--
+ 2 files changed, 7 insertions(+), 3 deletions(-)
 
-Yours,
-Linus Walleij
+diff --git a/arch/x86/kernel/cpu/mce/internal.h b/arch/x86/kernel/cpu/mce/internal.h
+index 1c79b32fcaa9..1fdf8ac45372 100644
+--- a/arch/x86/kernel/cpu/mce/internal.h
++++ b/arch/x86/kernel/cpu/mce/internal.h
+@@ -70,7 +70,6 @@ int apei_write_mce(struct mce *m);
+ ssize_t apei_read_mce(struct mce *m, u64 *record_id);
+ int apei_check_mce(void);
+ int apei_clear_mce(u64 record_id);
+-extern int ghes_in_mce_cper_entry_check(void);
+ #else
+ static inline int apei_write_mce(struct mce *m)
+ {
+@@ -88,6 +87,11 @@ static inline int apei_clear_mce(u64 record_id)
+ {
+ 	return -EINVAL;
+ }
++#endif
++
++#ifdef CONFIG_ACPI_APEI_GHES
++extern int ghes_in_mce_cper_entry_check(void);
++#else
+ static inline int ghes_in_mce_cper_entry_check(void)
+ {
+ 	return 0;
+diff --git a/drivers/acpi/apei/ghes.c b/drivers/acpi/apei/ghes.c
+index ba3140d74f75..8baa19c6b625 100644
+--- a/drivers/acpi/apei/ghes.c
++++ b/drivers/acpi/apei/ghes.c
+@@ -1131,7 +1131,7 @@ int ghes_in_mce_cper_entry_check(void)
+ 			/* Going to panic, No need to keep the error. */
+ 			ghes_clear_estatus(ghes, &tmp_header, buf_paddr, fixmap_idx);
+ 			ret = -ENOMEM;
+-			goto done;
++			continue;
+ 		}
+ 
+ 		estatus_node->ghes = ghes;
+@@ -1157,7 +1157,7 @@ int ghes_in_mce_cper_entry_check(void)
+ 		gen_pool_free(ghes_estatus_pool, (unsigned long)estatus_node,
+ 		      node_len);
+ 	}
+-done:
++
+ 	rcu_read_unlock();
+ 	atomic_dec(&ghes_in_nmi);
+ 	return ret;
+
+base-commit: b11831c841cb8046a9e01300f5d91985c293e045
+-- 
+2.18.4
+
+
