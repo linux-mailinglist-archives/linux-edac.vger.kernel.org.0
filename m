@@ -2,127 +2,106 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E24A2BA761
-	for <lists+linux-edac@lfdr.de>; Fri, 20 Nov 2020 11:27:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CC55D2BB132
+	for <lists+linux-edac@lfdr.de>; Fri, 20 Nov 2020 18:12:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727367AbgKTKYx (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Fri, 20 Nov 2020 05:24:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50512 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727327AbgKTKYv (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Fri, 20 Nov 2020 05:24:51 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 845EEC0613CF;
-        Fri, 20 Nov 2020 02:24:51 -0800 (PST)
-Received: from zn.tnic (p200300ec2f11ba00f868c244b2fbf8c0.dip0.t-ipconnect.de [IPv6:2003:ec:2f11:ba00:f868:c244:b2fb:f8c0])
+        id S1730198AbgKTRHq (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Fri, 20 Nov 2020 12:07:46 -0500
+Received: from mail.skyhub.de ([5.9.137.197]:50186 "EHLO mail.skyhub.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729976AbgKTRHq (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Fri, 20 Nov 2020 12:07:46 -0500
+Received: from zn.tnic (p200300ec2f11ba0074b4ba83d21d5a9c.dip0.t-ipconnect.de [IPv6:2003:ec:2f11:ba00:74b4:ba83:d21d:5a9c])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id F30F61EC04E4;
-        Fri, 20 Nov 2020 11:24:47 +0100 (CET)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 09FA01EC047E;
+        Fri, 20 Nov 2020 18:07:45 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1605867888;
+        t=1605892065;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ns4sFxrUSiLCZMnEiVFD5tWKOkMLV8Js5L0ESPn0UgM=;
-        b=qdd6XizVaJklLEA6MR/6kvLxm5Ai0wVGte6WdS0Bb4V2Z4K+rVhXFaTZtETjFQcmi1n6BZ
-        JC65ZytGfhuIiddgFKevpr1UiPOF5BCXsfSJZ4JGkpHE5tfpcaGy9UC8F/ndxLXWm0FmjO
-        I+WiAAX4jxDKK2oPRyC41XigCPR0eF0=
-Date:   Fri, 20 Nov 2020 11:24:36 +0100
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=3KR92vuxYVBgK06PedGl/KeDJFbNpeGefSx2Yb7CWNQ=;
+        b=geHBLt7iPjdg5zExWPyw89Os6akDxLqEyRiyOhnSw/sKpOqGQJkhhELIvem9t+ok/b8PBI
+        Wtm8pOCwCDISigUS6AuowJxglb5MrIx8eVeifm013fH26lwsRGcOJN0SVs5tsxxcfXLXAr
+        7xruRul0mZV7OBzYhQ60+FZI9M9c75c=
+Date:   Fri, 20 Nov 2020 18:07:37 +0100
 From:   Borislav Petkov <bp@alien8.de>
-To:     Aili Yao <yaoaili@kingsoft.com>, tony.luck@intel.com
-Cc:     rjw@rjwysocki.net, lenb@kernel.org, james.morse@arm.com,
-        linux-acpi@vger.kernel.org, linux-edac@vger.kernel.org,
-        yangfeng1@kingsoft.com, CHENGUOMIN@kingsoft.com
-Subject: Re: [PATCH v2] Dump cper error table in mce_panic
-Message-ID: <20201120102422.GA712@zn.tnic>
-References: <20201104065057.40442-1-yaoaili126@163.com>
- <20201117175804.39bbbdc3.yaoaili@kingsoft.com>
- <20201118124538.GI7472@zn.tnic>
- <20201119134057.37ca2c19.yaoaili@kingsoft.com>
- <20201119174508.GE3769@zn.tnic>
- <20201120172235.620eb826.yaoaili@kingsoft.com>
+To:     Gabriele Paoloni <gabriele.paoloni@intel.com>
+Cc:     tony.luck@intel.com, tglx@linutronix.de, mingo@redhat.com,
+        x86@kernel.org, hpa@zytor.com, linux-edac@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-safety@lists.elisa.tech
+Subject: Re: [PATCH 1/4] x86/mce: do not overwrite no_way_out if mce_end()
+ fails
+Message-ID: <20201120170737.GD712@zn.tnic>
+References: <20201118151552.1412-1-gabriele.paoloni@intel.com>
+ <20201118151552.1412-2-gabriele.paoloni@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20201120172235.620eb826.yaoaili@kingsoft.com>
+In-Reply-To: <20201118151552.1412-2-gabriele.paoloni@intel.com>
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Fri, Nov 20, 2020 at 05:22:35PM +0800, Aili Yao wrote:
-> Hi, This test result if from tip/master, previous is upstream latest.
+On Wed, Nov 18, 2020 at 03:15:49PM +0000, Gabriele Paoloni wrote:
+> Currently if mce_end() fails no_way_out is set equal to worst.
+> worst is the worst severirty that was found in the MCA banks
+		     ^^^^^^^^^
 
-Thanks for doing those, now let's see.
+Please introduce a spellchecker into your patch creation workflow.
 
-With rc4 you have the MCE error in the first kernel:
+> associated to the current CPU; however at this point no_way_out
+	     ^
+	     with
 
-[  106.956286] Disabling lock debugging due to kernel taint
-[  106.962373] mce: [Hardware Error]: CPU 18: Machine Check Exception: 5 Bank 7: be00000001010091
-[  106.962377] mce: [Hardware Error]: RIP !INEXACT! 10:<ffffffffac58472a>
-[  106.996488] {acpi_idle_do_entry+0x4a/0x60}
-[  107.001057] mce: [Hardware Error]: TSC ae4b410af0b8 ADDR 314d193000 MISC 200400c008002086
-[  107.010283] mce: [Hardware Error]: PROCESSOR 0:50657 TIME 1605843017 SOCKET 1 APIC 40 microcode 5000021
-[  107.020767] mce: [Hardware Error]: Run the above through 'mcelog --ascii'
-[  107.031295] mce: [Hardware Error]: Machine check: Processor context corrupt
-[  107.039065] Kernel panic - not syncing: Fatal machine check
 
-Now the kdump kernel fires and there's an error record in the CPER
-thing.
+> could be already set by mca_start() by looking at all severities
 
-> [    6.280390] input: Power Button as /devices/LNXSYSTM:00/LNXPWRBN:00/input/input0
-> [    6.288655] ACPI: Power Button [PWRF]
-> [    6.292961] ERST: Error Record Serialization Table (ERST) support is initialized.
-> [    6.301295] pstore: Registered erst as persistent store backend
-> [    6.307912] {1}[Hardware Error]: Hardware error from APEI Generic Hardware Error Source: 4
-> [    6.308886] {1}[Hardware Error]: event severity: fatal
-> [    6.308886] {1}[Hardware Error]:  Error 0, type: fatal
-> [    6.308886] {1}[Hardware Error]:  fru_text: Card03, ChnB, DIMM0
-> [    6.308886] {1}[Hardware Error]:   section_type: memory error
-> [    6.308886] {1}[Hardware Error]:   error_status: 0x0000000000000000
+I think you mean "could have been already set" here
 
-And this error_status is all clear. I wonder why.
+> of all CPUs that entered the MCE handler.
+> if mce_end() fails we first check if no_way_out is already set and
 
-Looking at the ÜFI spec "Section O: Error Status" it defines a couple
-of bits there: whether it was an address or control bits error, who
-detected the error (responder, requestor), whether it was the first
-error, etc, etc.
+Please use passive voice in your commit message: no "we" or "I", etc.
 
-And none of those bits are set.
+Also, pls start new sentences with a capital letter and end them with a
+fullstop.
 
-Which makes me not trust that error record a whole lot but that's a
-given, since it is firmware and firmware is an unfixable piece of crap
-by definition.
+> if so we stick to it, otherwise we use the local worst value
 
-So then one could probably say that if none of those error status bits
-are set, then the error being reported is not something, let's say
-"fresh". This is doubly the case considering that it gets detected when
-the GHES driver probes:
+So basically you're trying to say here that no_way_out might have been
+already set and other CPUs could overwrite it and that should not
+happen.
 
-        /* Handle any pending errors right away */
-        spin_lock_irqsave(&ghes_notify_lock_irq, flags);
-        ghes_proc(ghes);
-        spin_unlock_irqrestore(&ghes_notify_lock_irq, flags);
+Is that what you mean?
 
-so *maybe*, just *maybe* one could say here:
+> Signed-off-by: Gabriele Paoloni <gabriele.paoloni@intel.com>
+> Reviewed-by: Tony Luck <tony.luck@intel.com>
+> ---
+>  arch/x86/kernel/cpu/mce/core.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/arch/x86/kernel/cpu/mce/core.c b/arch/x86/kernel/cpu/mce/core.c
+> index 4102b866e7c0..b990892c6766 100644
+> --- a/arch/x86/kernel/cpu/mce/core.c
+> +++ b/arch/x86/kernel/cpu/mce/core.c
+> @@ -1385,7 +1385,7 @@ noinstr void do_machine_check(struct pt_regs *regs)
+>  	 */
+>  	if (!lmce) {
+>  		if (mce_end(order) < 0)
+> -			no_way_out = worst >= MCE_PANIC_SEVERITY;
+> +			no_way_out = no_way_out ? no_way_out : worst >= MCE_PANIC_SEVERITY;
 
-If the error_status doesn't have any valid bits *and* it has been
-detected on driver init - i.e., the error has been there before the
-driver probed, then even if the error is fatal, GHES should not call
-__ghes_panic().
+I had to stare at this a bit to figure out what you're doing. So how
+about simplifying this:
 
-The even better way to detect this is to be able to check whether this
-is the kdump kernel and whether it got loaded due to a fatal MCE in the
-first kernel and then match that error address with the error address of
-the error which caused the first panic in the mce code. Then the second
-kernel won't need to panic but simply log.
+			if (!no_way_out)
+				no_way_out = worst >= MCE_PANIC_SEVERITY;
 
-However, I think that second way to check is probably hard and the first
-heuristic is probably good enough...
+?
 
-Tony, thoughts?
+Thx.
 
 -- 
 Regards/Gruss,
