@@ -2,332 +2,175 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CCC82B9CE8
-	for <lists+linux-edac@lfdr.de>; Thu, 19 Nov 2020 22:29:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E4C22BA14C
+	for <lists+linux-edac@lfdr.de>; Fri, 20 Nov 2020 04:42:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726474AbgKSVW3 (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Thu, 19 Nov 2020 16:22:29 -0500
-Received: from mga09.intel.com ([134.134.136.24]:60831 "EHLO mga09.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726533AbgKSVW3 (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Thu, 19 Nov 2020 16:22:29 -0500
-IronPort-SDR: e1smBxLxC/VagWzFpFmVcl1Uey0aGudJn960i9OJJtl9EPh3urgTr05AMLSUfGh/vyuESECL6t
- LTjICo4XJZiw==
-X-IronPort-AV: E=McAfee;i="6000,8403,9810"; a="171535897"
-X-IronPort-AV: E=Sophos;i="5.78,354,1599548400"; 
-   d="scan'208";a="171535897"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Nov 2020 13:22:27 -0800
-IronPort-SDR: VLwvFGW4ER2m5jMFPRSPiBI4OUZnDQcz9WojjJq89qDDfjfqJ2r6uTDqBSe6UzEByZ+odBOSwQ
- MY/00xbqo0jw==
-X-IronPort-AV: E=Sophos;i="5.78,354,1599548400"; 
-   d="scan'208";a="476968896"
-Received: from agluck-desk2.sc.intel.com ([10.3.52.68])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Nov 2020 13:22:27 -0800
-From:   Tony Luck <tony.luck@intel.com>
-To:     linux-edac@vger.kernel.org
-Cc:     Qiuxu Zhuo <qiuxu.zhuo@intel.com>, Tony Luck <tony.luck@intel.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Aristeu Rozanski <aris@redhat.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>
-Subject: [PATCH 3/3] EDAC/i10nm: Add Intel Sapphire Rapids server support
-Date:   Thu, 19 Nov 2020 13:22:19 -0800
-Message-Id: <20201119212219.1335-4-tony.luck@intel.com>
-X-Mailer: git-send-email 2.21.1
-In-Reply-To: <20201119212219.1335-1-tony.luck@intel.com>
-References: <20201119212219.1335-1-tony.luck@intel.com>
+        id S1726172AbgKTDkl (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Thu, 19 Nov 2020 22:40:41 -0500
+Received: from mail.kingsoft.com ([114.255.44.145]:46085 "EHLO
+        mail.kingsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726100AbgKTDkl (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Thu, 19 Nov 2020 22:40:41 -0500
+X-AuditID: 0a580157-b25ff70000003991-65-5fb7371c2264
+Received: from mail.kingsoft.com (localhost [10.88.1.32])
+        (using TLS with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (Client did not present a certificate)
+        by mail.kingsoft.com (SMG-1-NODE-87) with SMTP id 2F.7E.14737.C1737BF5; Fri, 20 Nov 2020 11:25:16 +0800 (HKT)
+Received: from aili-OptiPlex-7020 (172.16.253.254) by KSBJMAIL2.kingsoft.cn
+ (10.88.1.32) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1979.3; Fri, 20 Nov
+ 2020 11:40:33 +0800
+Date:   Fri, 20 Nov 2020 11:40:32 +0800
+From:   Aili Yao <yaoaili@kingsoft.com>
+To:     Borislav Petkov <bp@alien8.de>, <lenb@kernel.org>
+CC:     <rjw@rjwysocki.net>, <tony.luck@intel.com>, <james.morse@arm.com>,
+        <linux-acpi@vger.kernel.org>, <linux-edac@vger.kernel.org>,
+        <yangfeng1@kingsoft.com>, <CHENGUOMIN@kingsoft.com>
+Subject: Re: [PATCH v2] Dump cper error table in mce_panic
+Message-ID: <20201120114032.0978eab8.yaoaili@kingsoft.com>
+In-Reply-To: <20201119174508.GE3769@zn.tnic>
+References: <20201104065057.40442-1-yaoaili126@163.com>
+        <20201117175804.39bbbdc3.yaoaili@kingsoft.com>
+        <20201118124538.GI7472@zn.tnic>
+        <20201119134057.37ca2c19.yaoaili@kingsoft.com>
+        <20201119174508.GE3769@zn.tnic>
+Organization: Kingsoft
+X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [172.16.253.254]
+X-ClientProxiedBy: KSBJMAIL1.kingsoft.cn (10.88.1.31) To KSBJMAIL2.kingsoft.cn
+ (10.88.1.32)
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrOLMWRmVeSWpSXmKPExsXCFcGooCtjvj3eYPtPQ4vPG/6xWdzft5zJ
+        YufDt2wWy/f1M1pcONXAZHHm9CVWizcX7rE4sHt8b+1j8Vgzbw2jx+I9L5k8Nq3qZPPYcrWd
+        xePzJrkAtigum5TUnMyy1CJ9uwSujO1bW9kK7hlXrOxsY2lgbNHqYuTkkBAwkZi8fTFrFyMX
+        h5DAdCaJ+xNWsEE4Lxglju7/zwxSxSKgKrFl9WcmEJsNyN51bxYriC0iYCqxaFETE0gDs8Au
+        RonF/y+AJYQFrCSebnjDAmLzAtlHZkDYnAI6EvvP/2QDsYUE7jJKvG6Q7GLk4OAXEJN41WAM
+        cZG9xPO/Z5khWgUlTs58AtbKDNR6YtUxZghbXmL72znMEGMUJQ4v+cUO0askcaR7BhuEHSux
+        bN4r1gmMwrOQjJqFZNQsJKMWMDKvYmQpzk033MQIiYvwHYzzmj7qHWJk4mA8xCjBwawkwrtW
+        c2u8EG9KYmVValF+fFFpTmrxIUZpDhYlcd70uZvjhQTSE0tSs1NTC1KLYLJMHJxSDUwsrobd
+        2w5NluSN/6rGOP9e9+7opQF6r+2rdsRHSVleT0tlj+x5UpfE6fdw8jUrrqbbWRfkDULD0zRv
+        /9+ivv8289eJ5VfVJsxt/dYfoTm5RkRo0nRxfWMtu18PucyZHxefy/XfXSJqozxX74bGGiOl
+        QB7OF5/elrLkrFnwU6rJSM3JM/Csy7qzv8y37J7wOvlKW/RFZW9Tv8T8XYUfvdQSok79nK7T
+        41z93TNbyMJmZciapd0ixxUWqRxMSb9s73bpS86sFy/WHZC/qmX5Z/bMQw8cbxVOeH1pX7HZ
+        jw3WJ7xUD3+R+NO4MiikznTpsaiMve6xZzNvS7ptWmefptP1/buVhvYSIT09nzPcZ5RYijMS
+        DbWYi4oTAQxPz1b6AgAA
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-From: Qiuxu Zhuo <qiuxu.zhuo@intel.com>
+On Thu, 19 Nov 2020 18:45:08 +0100
+Borislav Petkov <bp@alien8.de> wrote:
 
-The Sapphire Rapids CPU model shares the same memory controller
-architecture with Ice Lake server. There are some configurations
-different from Ice Lake server as below:
-- The device ID for configuration agent.
-- The size for per channel memory-mapped I/O.
-- The DDR5 memory support.
-So add the above configurations and the Sapphire Rapids CPU model
-ID for EDAC support.
+> 
+> Ok, before we look any further into this, please redo the whole exercise
+> with the latest upstream kernel - not some 4.18 old crap. Use the
+> tip/master branch:
+>
+Hi, here it is:
 
-Signed-off-by: Qiuxu Zhuo <qiuxu.zhuo@intel.com>
-Signed-off-by: Tony Luck <tony.luck@intel.com>
----
- drivers/edac/i10nm_base.c | 34 +++++++++++++++++++++++++---------
- drivers/edac/skx_base.c   |  6 +++---
- drivers/edac/skx_common.c | 23 ++++++++++++++++++-----
- drivers/edac/skx_common.h | 16 ++++++++++++----
- 4 files changed, 58 insertions(+), 21 deletions(-)
+Error injected:
 
-diff --git a/drivers/edac/i10nm_base.c b/drivers/edac/i10nm_base.c
-index 7b52691c45d2..238a4ad1e526 100644
---- a/drivers/edac/i10nm_base.c
-+++ b/drivers/edac/i10nm_base.c
-@@ -13,7 +13,7 @@
- #include "edac_module.h"
- #include "skx_common.h"
- 
--#define I10NM_REVISION	"v0.0.3"
-+#define I10NM_REVISION	"v0.0.4"
- #define EDAC_MOD_STR	"i10nm_edac"
- 
- /* Debug macros */
-@@ -25,11 +25,13 @@
- #define I10NM_GET_IMC_BAR(d, i, reg)	\
- 	pci_read_config_dword((d)->uracu, 0xd8 + (i) * 4, &(reg))
- #define I10NM_GET_DIMMMTR(m, i, j)	\
--	readl((m)->mbase + 0x2080c + (i) * 0x4000 + (j) * 4)
-+	readl((m)->mbase + 0x2080c + (i) * (m)->chan_mmio_sz + (j) * 4)
- #define I10NM_GET_MCDDRTCFG(m, i, j)	\
--	readl((m)->mbase + 0x20970 + (i) * 0x4000 + (j) * 4)
-+	readl((m)->mbase + 0x20970 + (i) * (m)->chan_mmio_sz + (j) * 4)
- #define I10NM_GET_MCMTR(m, i)		\
--	readl((m)->mbase + 0x20ef8 + (i) * 0x4000)
-+	readl((m)->mbase + 0x20ef8 + (i) * (m)->chan_mmio_sz)
-+#define I10NM_GET_AMAP(m, i)		\
-+	readl((m)->mbase + 0x20814 + (i) * (m)->chan_mmio_sz)
- 
- #define I10NM_GET_SCK_MMIO_BASE(reg)	(GET_BITFIELD(reg, 0, 28) << 23)
- #define I10NM_GET_IMC_MMIO_OFFSET(reg)	(GET_BITFIELD(reg, 0, 10) << 12)
-@@ -129,12 +131,22 @@ static struct res_config i10nm_cfg0 = {
- 	.type			= I10NM,
- 	.decs_did		= 0x3452,
- 	.busno_cfg_offset	= 0xcc,
-+	.ddr_chan_mmio_sz	= 0x4000,
- };
- 
- static struct res_config i10nm_cfg1 = {
- 	.type			= I10NM,
- 	.decs_did		= 0x3452,
- 	.busno_cfg_offset	= 0xd0,
-+	.ddr_chan_mmio_sz	= 0x4000,
-+};
-+
-+static struct res_config spr_cfg = {
-+	.type			= SPR,
-+	.decs_did		= 0x3252,
-+	.busno_cfg_offset	= 0xd0,
-+	.ddr_chan_mmio_sz	= 0x8000,
-+	.support_ddr5		= true,
- };
- 
- static const struct x86_cpu_id i10nm_cpuids[] = {
-@@ -143,6 +155,7 @@ static const struct x86_cpu_id i10nm_cpuids[] = {
- 	X86_MATCH_INTEL_FAM6_MODEL_STEPPINGS(ICELAKE_X,		X86_STEPPINGS(0x0, 0x3), &i10nm_cfg0),
- 	X86_MATCH_INTEL_FAM6_MODEL_STEPPINGS(ICELAKE_X,		X86_STEPPINGS(0x4, 0xf), &i10nm_cfg1),
- 	X86_MATCH_INTEL_FAM6_MODEL_STEPPINGS(ICELAKE_D,		X86_STEPPINGS(0x0, 0xf), &i10nm_cfg1),
-+	X86_MATCH_INTEL_FAM6_MODEL_STEPPINGS(SAPPHIRERAPIDS_X,	X86_STEPPINGS(0x0, 0xf), &spr_cfg),
- 	{}
- };
- MODULE_DEVICE_TABLE(x86cpu, i10nm_cpuids);
-@@ -157,12 +170,13 @@ static bool i10nm_check_ecc(struct skx_imc *imc, int chan)
- 	return !!GET_BITFIELD(mcmtr, 2, 2);
- }
- 
--static int i10nm_get_dimm_config(struct mem_ctl_info *mci)
-+static int i10nm_get_dimm_config(struct mem_ctl_info *mci,
-+				 struct res_config *cfg)
- {
- 	struct skx_pvt *pvt = mci->pvt_info;
- 	struct skx_imc *imc = pvt->imc;
-+	u32 mtr, amap, mcddrtcfg;
- 	struct dimm_info *dimm;
--	u32 mtr, mcddrtcfg;
- 	int i, j, ndimms;
- 
- 	for (i = 0; i < I10NM_NUM_CHANNELS; i++) {
-@@ -170,6 +184,7 @@ static int i10nm_get_dimm_config(struct mem_ctl_info *mci)
- 			continue;
- 
- 		ndimms = 0;
-+		amap = I10NM_GET_AMAP(imc, i);
- 		for (j = 0; j < I10NM_NUM_DIMMS; j++) {
- 			dimm = edac_get_dimm(mci, i, j, 0);
- 			mtr = I10NM_GET_DIMMMTR(imc, i, j);
-@@ -178,8 +193,8 @@ static int i10nm_get_dimm_config(struct mem_ctl_info *mci)
- 				 mtr, mcddrtcfg, imc->mc, i, j);
- 
- 			if (IS_DIMM_PRESENT(mtr))
--				ndimms += skx_get_dimm_info(mtr, 0, 0, dimm,
--							    imc, i, j);
-+				ndimms += skx_get_dimm_info(mtr, 0, amap, dimm,
-+							    imc, i, j, cfg);
- 			else if (IS_NVDIMM_PRESENT(mcddrtcfg, j))
- 				ndimms += skx_get_nvdimm_info(dimm, imc, i, j,
- 							      EDAC_MOD_STR);
-@@ -303,10 +318,11 @@ static int __init i10nm_init(void)
- 			d->imc[i].lmc = i;
- 			d->imc[i].src_id  = src_id;
- 			d->imc[i].node_id = node_id;
-+			d->imc[i].chan_mmio_sz = cfg->ddr_chan_mmio_sz;
- 
- 			rc = skx_register_mci(&d->imc[i], d->imc[i].mdev,
- 					      "Intel_10nm Socket", EDAC_MOD_STR,
--					      i10nm_get_dimm_config);
-+					      i10nm_get_dimm_config, cfg);
- 			if (rc < 0)
- 				goto fail;
- 		}
-diff --git a/drivers/edac/skx_base.c b/drivers/edac/skx_base.c
-index 2c7db95df326..6a4f0b27c654 100644
---- a/drivers/edac/skx_base.c
-+++ b/drivers/edac/skx_base.c
-@@ -174,7 +174,7 @@ static bool skx_check_ecc(u32 mcmtr)
- 	return !!GET_BITFIELD(mcmtr, 2, 2);
- }
- 
--static int skx_get_dimm_config(struct mem_ctl_info *mci)
-+static int skx_get_dimm_config(struct mem_ctl_info *mci, struct res_config *cfg)
- {
- 	struct skx_pvt *pvt = mci->pvt_info;
- 	u32 mtr, mcmtr, amap, mcddrtcfg;
-@@ -195,7 +195,7 @@ static int skx_get_dimm_config(struct mem_ctl_info *mci)
- 			pci_read_config_dword(imc->chan[i].cdev,
- 					      0x80 + 4 * j, &mtr);
- 			if (IS_DIMM_PRESENT(mtr)) {
--				ndimms += skx_get_dimm_info(mtr, mcmtr, amap, dimm, imc, i, j);
-+				ndimms += skx_get_dimm_info(mtr, mcmtr, amap, dimm, imc, i, j, cfg);
- 			} else if (IS_NVDIMM_PRESENT(mcddrtcfg, j)) {
- 				ndimms += skx_get_nvdimm_info(dimm, imc, i, j,
- 							      EDAC_MOD_STR);
-@@ -702,7 +702,7 @@ static int __init skx_init(void)
- 			d->imc[i].node_id = node_id;
- 			rc = skx_register_mci(&d->imc[i], d->imc[i].chan[0].cdev,
- 					      "Skylake Socket", EDAC_MOD_STR,
--					      skx_get_dimm_config);
-+					      skx_get_dimm_config, cfg);
- 			if (rc < 0)
- 				goto fail;
- 		}
-diff --git a/drivers/edac/skx_common.c b/drivers/edac/skx_common.c
-index 2b4ce8e5ac2f..81c3e2ec6f56 100644
---- a/drivers/edac/skx_common.c
-+++ b/drivers/edac/skx_common.c
-@@ -304,15 +304,25 @@ static int skx_get_dimm_attr(u32 reg, int lobit, int hibit, int add,
- #define numcol(reg)	skx_get_dimm_attr(reg, 0, 1, 10, 0, 2, "cols")
- 
- int skx_get_dimm_info(u32 mtr, u32 mcmtr, u32 amap, struct dimm_info *dimm,
--		      struct skx_imc *imc, int chan, int dimmno)
-+		      struct skx_imc *imc, int chan, int dimmno,
-+		      struct res_config *cfg)
- {
--	int  banks = 16, ranks, rows, cols, npages;
-+	int  banks, ranks, rows, cols, npages;
-+	enum mem_type mtype;
- 	u64 size;
- 
- 	ranks = numrank(mtr);
- 	rows = numrow(mtr);
- 	cols = numcol(mtr);
- 
-+	if (cfg->support_ddr5 && (amap & 0x8)) {
-+		banks = 32;
-+		mtype = MEM_DDR5;
-+	} else {
-+		banks = 16;
-+		mtype = MEM_DDR4;
-+	}
-+
- 	/*
- 	 * Compute size in 8-byte (2^3) words, then shift to MiB (2^20)
- 	 */
-@@ -332,7 +342,7 @@ int skx_get_dimm_info(u32 mtr, u32 mcmtr, u32 amap, struct dimm_info *dimm,
- 	dimm->nr_pages = npages;
- 	dimm->grain = 32;
- 	dimm->dtype = get_width(mtr);
--	dimm->mtype = MEM_DDR4;
-+	dimm->mtype = mtype;
- 	dimm->edac_mode = EDAC_SECDED; /* likely better than this */
- 	snprintf(dimm->label, sizeof(dimm->label), "CPU_SrcID#%u_MC#%u_Chan#%u_DIMM#%u",
- 		 imc->src_id, imc->lmc, chan, dimmno);
-@@ -390,7 +400,8 @@ int skx_get_nvdimm_info(struct dimm_info *dimm, struct skx_imc *imc,
- 
- int skx_register_mci(struct skx_imc *imc, struct pci_dev *pdev,
- 		     const char *ctl_name, const char *mod_str,
--		     get_dimm_config_f get_dimm_config)
-+		     get_dimm_config_f get_dimm_config,
-+		     struct res_config *cfg)
- {
- 	struct mem_ctl_info *mci;
- 	struct edac_mc_layer layers[2];
-@@ -425,13 +436,15 @@ int skx_register_mci(struct skx_imc *imc, struct pci_dev *pdev,
- 	}
- 
- 	mci->mtype_cap = MEM_FLAG_DDR4 | MEM_FLAG_NVDIMM;
-+	if (cfg->support_ddr5)
-+		mci->mtype_cap |= MEM_FLAG_DDR5;
- 	mci->edac_ctl_cap = EDAC_FLAG_NONE;
- 	mci->edac_cap = EDAC_FLAG_NONE;
- 	mci->mod_name = mod_str;
- 	mci->dev_name = pci_name(pdev);
- 	mci->ctl_page_to_phys = NULL;
- 
--	rc = get_dimm_config(mci);
-+	rc = get_dimm_config(mci, cfg);
- 	if (rc < 0)
- 		goto fail;
- 
-diff --git a/drivers/edac/skx_common.h b/drivers/edac/skx_common.h
-index 78f8c1de0b71..bf56bebff138 100644
---- a/drivers/edac/skx_common.h
-+++ b/drivers/edac/skx_common.h
-@@ -59,6 +59,7 @@ struct skx_dev {
- 		struct mem_ctl_info *mci;
- 		struct pci_dev *mdev; /* for i10nm CPU */
- 		void __iomem *mbase;  /* for i10nm CPU */
-+		int chan_mmio_sz;     /* for i10nm CPU */
- 		u8 mc;	/* system wide mc# */
- 		u8 lmc;	/* socket relative mc# */
- 		u8 src_id, node_id;
-@@ -82,7 +83,8 @@ struct skx_pvt {
- 
- enum type {
- 	SKX,
--	I10NM
-+	I10NM,
-+	SPR
- };
- 
- enum {
-@@ -118,9 +120,13 @@ struct res_config {
- 	unsigned int decs_did;
- 	/* Default bus number configuration register offset */
- 	int busno_cfg_offset;
-+	/* Per DDR channel memory-mapped I/O size */
-+	int ddr_chan_mmio_sz;
-+	bool support_ddr5;
- };
- 
--typedef int (*get_dimm_config_f)(struct mem_ctl_info *mci);
-+typedef int (*get_dimm_config_f)(struct mem_ctl_info *mci,
-+				 struct res_config *cfg);
- typedef bool (*skx_decode_f)(struct decoded_addr *res);
- typedef void (*skx_show_retry_log_f)(struct decoded_addr *res, char *msg, int len);
- 
-@@ -136,14 +142,16 @@ int skx_get_all_bus_mappings(struct res_config *cfg, struct list_head **list);
- int skx_get_hi_lo(unsigned int did, int off[], u64 *tolm, u64 *tohm);
- 
- int skx_get_dimm_info(u32 mtr, u32 mcmtr, u32 amap, struct dimm_info *dimm,
--		      struct skx_imc *imc, int chan, int dimmno);
-+		      struct skx_imc *imc, int chan, int dimmno,
-+		      struct res_config *cfg);
- 
- int skx_get_nvdimm_info(struct dimm_info *dimm, struct skx_imc *imc,
- 			int chan, int dimmno, const char *mod_str);
- 
- int skx_register_mci(struct skx_imc *imc, struct pci_dev *pdev,
- 		     const char *ctl_name, const char *mod_str,
--		     get_dimm_config_f get_dimm_config);
-+		     get_dimm_config_f get_dimm_config,
-+		     struct res_config *cfg);
- 
- int skx_mce_check_error(struct notifier_block *nb, unsigned long val,
- 			void *data);
+[    0.000000] Linux version 5.10.0-rc4 (root@qd01-test-ec2177009236.qd01.ksyun.com) (gcc (GCC) 9.3.0, GNU ld version 2.27-43.base.el7_8.1) #3 SMP Fri Nov 20 11:22:24 CST 2020
+[    0.000000] Command line: BOOT_IMAGE=/vmlinuz-5.10.0-rc4 root=UUID=a503562a-dafc-40eb-b4c2-6607a3497b5e ro crashkernel=2G nomodeset net.ifnames=0 biosdevname=0 rdloaddriver=mlx5_core rdloaddriver=i40e rdloaddriver=ixgbe strict-devmem=0 hugepages=8192 console=ttyS0,115200n8
+qd01-test-ec2177009236 login: [  103.725568] EINJ: Error INJection is initialized.
+[  103.746313] EDAC MC: Removed device 0 for skx_edac Skylake Socket#0 IMC#0: DEV 0000:2e:0a.0
+[  103.764305] EDAC MC: Removed device 1 for skx_edac Skylake Socket#0 IMC#1: DEV 0000:2e:0c.0
+[  103.779293] EDAC MC: Removed device 2 for skx_edac Skylake Socket#1 IMC#0: DEV 0000:ae:0a.0
+[  103.794290] EDAC MC: Removed device 3 for skx_edac Skylake Socket#1 IMC#1: DEV 0000:ae:0c.0
+[  106.956286] Disabling lock debugging due to kernel taint
+[  106.962373] mce: [Hardware Error]: CPU 18: Machine Check Exception: 5 Bank 7: be00000001010091
+[  106.962377] mce: [Hardware Error]: RIP !INEXACT! 10:<ffffffffac58472a> 
+[  106.996488] {acpi_idle_do_entry+0x4a/0x60}
+[  107.001057] mce: [Hardware Error]: TSC ae4b410af0b8 ADDR 314d193000 MISC 200400c008002086 
+[  107.010283] mce: [Hardware Error]: PROCESSOR 0:50657 TIME 1605843017 SOCKET 1 APIC 40 microcode 5000021
+[  107.020767] mce: [Hardware Error]: Run the above through 'mcelog --ascii'
+[  107.031295] mce: [Hardware Error]: Machine check: Processor context corrupt
+[  107.039065] Kernel panic - not syncing: Fatal machine check
+
+Kdump triggered:
+
+[    0.000000] Linux version 5.10.0-rc4 (root@qd01-test-ec2177009236.qd01.ksyun.com) (gcc (GCC) 9.3.0, GNU ld version 2.27-43.base.el7_8.1) #3 SMP Fri Nov 20 11:22:24 CST 2020
+[    0.000000] Command line: BOOT_IMAGE=/vmlinuz-5.10.0-rc4 ro nomodeset net.ifnames=0 biosdevname=0 rdloaddriver=mlx5_core rdloaddriver=i40e rdloaddriver=ixgbe strict-devmem=0 console=ttyS0,115200n8 irqpoll nr_cpus=1 reset_devices cgroup_disable=memory mce=off numa=off udev.children-max=2 panic=10 rootflags=nofail acpi_no_memhotplug transparent_hugepage=never nokaslr disable_cpu_apicid=0 elfcorehdr=403684744K
+[    0.000000] x86/fpu: Supporting XSAVE feature 0x001: 'x87 floating point registers'
+[    0.000000] x86/fpu: Supporting XSAVE feature 0x002: 'SSE registers'
+[    0.000000] x86/fpu: Supporting XSAVE feature 0x004: 'AVX registers'
+[    0.000000] x86/fpu: Supporting XSAVE feature 0x008: 'MPX bounds registers'
+[    0.000000] x86/fpu: Supporting XSAVE feature 0x010: 'MPX CSR'
+[    0.000000] x86/fpu: Supporting XSAVE feature 0x020: 'AVX-512 opmask'
+[    0.000000] x86/fpu: Supporting XSAVE feature 0x040: 'AVX-512 Hi256'
+[    0.000000] x86/fpu: Supporting XSAVE feature 0x080: 'AVX-512 ZMM_Hi256'
+[    0.000000] x86/fpu: Supporting XSAVE feature 0x200: 'Protection Keys User registers'
+[    0.000000] x86/fpu: xstate_offset[2]:  576, xstate_sizes[2]:  256
+[    0.000000] x86/fpu: xstate_offset[3]:  832, xstate_sizes[3]:   64
+[    0.000000] x86/fpu: xstate_offset[4]:  896, xstate_sizes[4]:   64
+[    0.000000] x86/fpu: xstate_offset[5]:  960, xstate_sizes[5]:   64
+[    0.000000] x86/fpu: xstate_offset[6]: 1024, xstate_sizes[6]:  512
+[    0.000000] x86/fpu: xstate_offset[7]: 1536, xstate_sizes[7]: 1024
+[    0.000000] x86/fpu: xstate_offset[9]: 2560, xstate_sizes[9]:    8
+[    0.000000] x86/fpu: Enabled xstate features 0x2ff, context size is 2568 bytes, using 'compacted' format.
+
+...
+...
+...
+
+[    5.946962] io scheduler bfq registered
+[    5.951261] atomic64_test: passed for x86-64 platform with CX8 and with SSE
+[    5.960169] shpchp: Standard Hot Plug PCI Controller Driver version: 0.4
+[    5.968096] input: Power Button as /devices/LNXSYSTM:00/LNXPWRBN:00/input/input0
+[    5.976376] ACPI: Power Button [PWRF]
+[    5.980794] APEI: Can not request [mem 0xa7d0e040-0xa7d0e04c] for APEI ERST registers
+[    5.989550] {1}[Hardware Error]: Hardware error from APEI Generic Hardware Error Source: 4
+[    5.990513] {1}[Hardware Error]: event severity: fatal
+[    5.990513] {1}[Hardware Error]:  Error 0, type: fatal
+[    5.990513] {1}[Hardware Error]:  fru_text: Card03, ChnB, DIMM0
+[    5.990513] {1}[Hardware Error]:   section_type: memory error
+[    5.990513] {1}[Hardware Error]:   error_status: 0x0000000000000000
+[    5.990513] {1}[Hardware Error]:   physical_address: 0x000000314d193000
+[    5.990513] {1}[Hardware Error]:   node: 2 card: 1 module: 0 rank: 0 bank: 3 device: 0 row: 1651 column: 128 
+[    5.990513] {1}[Hardware Error]:   DIMM location: CPU 1 DIMM 8 
+[    5.990513] Kernel panic - not syncing: Fatal hardware error!
+[    5.990513] CPU: 0 PID: 1 Comm: swapper/0 Tainted: G          I       5.10.0-rc4 #3
+[    5.990513] Hardware name: Lenovo ThinkSystem SR650 -[7X06CTO1WW]-/-[7X06CTO1WW]-, BIOS -[IVE636Z-2.13]- 07/18/2019
+[    5.990513] Call Trace:
+[    5.990513]  dump_stack+0x57/0x6a
+[    5.990513]  panic+0xfb/0x2d7
+[    5.990513]  __ghes_panic.cold+0x21/0x21
+[    5.990513]  ghes_proc+0xe0/0x140
+[    5.990513]  ghes_probe+0x129/0x380
+[    5.990513]  platform_drv_probe+0x35/0x80
+[    5.990513]  really_probe+0x31b/0x420
+[    5.990513]  driver_probe_device+0xe1/0x150
+[    5.990513]  device_driver_attach+0x53/0x60
+[    5.990513]  __driver_attach+0x8a/0x150
+[    5.990513]  ? device_driver_attach+0x60/0x60
+[    5.990513]  ? device_driver_attach+0x60/0x60
+[    5.990513]  bus_for_each_dev+0x78/0xc0
+[    5.990513]  bus_add_driver+0x14d/0x1f0
+[    5.990513]  driver_register+0x6c/0xc0
+[    5.990513]  ? bert_init+0x22a/0x22a
+[    5.990513]  ghes_init+0x87/0xe5
+[    5.990513]  do_one_initcall+0x44/0x1d0
+[    5.990513]  kernel_init_freeable+0x1d3/0x235
+[    5.990513]  ? rest_init+0xb4/0xb4
+[    5.990513]  kernel_init+0xa/0x10c
+[    5.990513]  ret_from_fork+0x1f/0x30
+[    5.990513] Kernel Offset: disabled
+[    5.990513] Rebooting in 10 seconds..
+[    5.990513] ACPI MEMORY or I/O RESET_REG.
+ UEFI:START PEI          
+ UEFI:START PEI          
+ UEFI:MEM INIT           
+<F1> System Setup     <F10> PXE Boot            
+<F2> Diagnostic       <F12> One Time Boot Device
+ UEFI:DXE INIT           
+ UEFI:DXE INIT           
+                
+
 -- 
-2.21.1
+Thanks
 
+Best Regards!
+
+Aili Yao
