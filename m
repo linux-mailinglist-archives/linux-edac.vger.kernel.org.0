@@ -2,76 +2,117 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DD1772BFEAA
-	for <lists+linux-edac@lfdr.de>; Mon, 23 Nov 2020 04:20:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 67CC92C0DA9
+	for <lists+linux-edac@lfdr.de>; Mon, 23 Nov 2020 15:40:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726964AbgKWDTD (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Sun, 22 Nov 2020 22:19:03 -0500
-Received: from mga02.intel.com ([134.134.136.20]:31117 "EHLO mga02.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727690AbgKWDTD (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Sun, 22 Nov 2020 22:19:03 -0500
-IronPort-SDR: kg7asXXsLhgCG+cuwZrufOP1mdS5AUJM+1VqfPjycRcsHCGY8ZEL/5xgtD1oteRsQPz32q+vwt
- r76xUsM0eiyQ==
-X-IronPort-AV: E=McAfee;i="6000,8403,9813"; a="158737538"
-X-IronPort-AV: E=Sophos;i="5.78,361,1599548400"; 
-   d="scan'208";a="158737538"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Nov 2020 19:19:02 -0800
-IronPort-SDR: H4KwNxHQ4teJDChuX0cG4rz6msgqOpfVG+eiOWMjLidMKEogf5wX0XAAwOoC5PJ+IduJ7bVUML
- 40qOkywKjaUQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.78,361,1599548400"; 
-   d="scan'208";a="342687886"
-Received: from lkp-server01.sh.intel.com (HELO ce8054c7261d) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 22 Nov 2020 19:19:00 -0800
-Received: from kbuild by ce8054c7261d with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1kh2NX-0000PQ-Fh; Mon, 23 Nov 2020 03:18:59 +0000
-Date:   Mon, 23 Nov 2020 11:18:50 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Qiuxu Zhuo <qiuxu.zhuo@intel.com>
-Cc:     kbuild-all@lists.01.org,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        Tony Luck <tony.luck@intel.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org, James Morse <james.morse@arm.com>,
-        Robert Richter <rric@kernel.org>, linux-edac@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [RFC PATCH linux-next] EDAC/igen6: ecclog_llist can be static
-Message-ID: <20201123031850.GA20416@aef56166e5fc>
-References: <202011231120.nLkm6K9s-lkp@intel.com>
+        id S2388916AbgKWO1y (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Mon, 23 Nov 2020 09:27:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45864 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2388915AbgKWO1x (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Mon, 23 Nov 2020 09:27:53 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78CEFC0613CF;
+        Mon, 23 Nov 2020 06:27:53 -0800 (PST)
+Received: from zn.tnic (p200300ec2f0bbc0057986d054fc332b4.dip0.t-ipconnect.de [IPv6:2003:ec:2f0b:bc00:5798:6d05:4fc3:32b4])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id C848F1EC0489;
+        Mon, 23 Nov 2020 15:27:51 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1606141671;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=YVlMkzHFiusX04YsfOyqGo4uwcFrGk13RNaV6hMxiVY=;
+        b=IbGNT6Z75IQwf/JbHcLWZ7w/bK5OJCWv9Ab0+boxbhWEf1Q+Ec/CPC6eWqOr745J7SLTRn
+        7Ac8hG8Ni3z/FmiHrk5+6i01xwnNhHgIooe//M/ixS7An08Vz13gABUMKgv9BCvGoAfWvY
+        P4+8fJtpQgmH+FJFKEDzDsEHHHP02/o=
+Date:   Mon, 23 Nov 2020 15:27:46 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Gabriele Paoloni <gabriele.paoloni@intel.com>
+Cc:     tony.luck@intel.com, tglx@linutronix.de, mingo@redhat.com,
+        x86@kernel.org, hpa@zytor.com, linux-edac@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-safety@lists.elisa.tech
+Subject: Re: [PATCH 2/4] x86/mce: move the mce_panic() call and kill_it
+ assignments at the right places
+Message-ID: <20201123142746.GC15044@zn.tnic>
+References: <20201118151552.1412-1-gabriele.paoloni@intel.com>
+ <20201118151552.1412-3-gabriele.paoloni@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <202011231120.nLkm6K9s-lkp@intel.com>
-X-Patchwork-Hint: ignore
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20201118151552.1412-3-gabriele.paoloni@intel.com>
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
+On Wed, Nov 18, 2020 at 03:15:50PM +0000, Gabriele Paoloni wrote:
+> Right now for local MCEs we panic(),if needed, right after lmce is
+> set. For global MCEs mce_reign() takes care of calling mce_panic().
+> Hence this patch:
+> - improves readibility by moving the conditional evaluation of
+> tolerant up to when kill_it is set first
+> - moves the mce_panic() call up into the statement where mce_end()
+> fails
 
-Fixes: 62a8cb0cbbfe ("EDAC/igen6: Add EDAC driver for Intel client SoCs using IBECC")
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: kernel test robot <lkp@intel.com>
----
- igen6_edac.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Pls avoid using "this patch does this and that" in the commit message
+but say directly what it does:
 
-diff --git a/drivers/edac/igen6_edac.c b/drivers/edac/igen6_edac.c
-index b8a6d692c1e4f9..71d29297221054 100644
---- a/drivers/edac/igen6_edac.c
-+++ b/drivers/edac/igen6_edac.c
-@@ -164,7 +164,7 @@ struct ecclog_node {
-  * to EDAC core in a worker.
-  */
- #define ECCLOG_POOL_SIZE	PAGE_SIZE
--LLIST_HEAD(ecclog_llist);
-+static LLIST_HEAD(ecclog_llist);
- static struct gen_pool *ecclog_pool;
- static char ecclog_buf[ECCLOG_POOL_SIZE];
- static struct irq_work ecclog_irq_work;
+- Improve readability ...
+
+- Move mce_panic()...
+
+and so on.
+
+> Signed-off-by: Gabriele Paoloni <gabriele.paoloni@intel.com>
+> Reviewed-by: Tony Luck <tony.luck@intel.com>
+> ---
+>  arch/x86/kernel/cpu/mce/core.c | 21 +++++++++------------
+>  1 file changed, 9 insertions(+), 12 deletions(-)
+> 
+> diff --git a/arch/x86/kernel/cpu/mce/core.c b/arch/x86/kernel/cpu/mce/core.c
+> index b990892c6766..e025ff04438f 100644
+> --- a/arch/x86/kernel/cpu/mce/core.c
+> +++ b/arch/x86/kernel/cpu/mce/core.c
+> @@ -1350,8 +1350,7 @@ noinstr void do_machine_check(struct pt_regs *regs)
+>  	 * severity is MCE_AR_SEVERITY we have other options.
+>  	 */
+>  	if (!(m.mcgstatus & MCG_STATUS_RIPV))
+> -		kill_it = 1;
+> -
+> +		kill_it = (cfg->tolerant == 3) ? 0 : 1;
+
+So you just set kill_it using cfg->tolerant...
+
+>  	/*
+>  	 * Check if this MCE is signaled to only this logical processor,
+>  	 * on Intel, Zhaoxin only.
+> @@ -1384,8 +1383,15 @@ noinstr void do_machine_check(struct pt_regs *regs)
+>  	 * When there's any problem use only local no_way_out state.
+>  	 */
+>  	if (!lmce) {
+> -		if (mce_end(order) < 0)
+> +		if (mce_end(order) < 0) {
+>  			no_way_out = no_way_out ? no_way_out : worst >= MCE_PANIC_SEVERITY;
+> +			/*
+> +			 * mce_reign() has probably failed hence evaluate if we need
+> +			 * to panic
+> +			 */
+> +			if (no_way_out && mca_cfg.tolerant < 3)
+
+... but here you're testing cfg->tolerant again.
+
+why not
+
+			if (no_way_out && kill_it)
+
+?
+
+Thx.
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
