@@ -2,79 +2,89 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CC4C72C7869
-	for <lists+linux-edac@lfdr.de>; Sun, 29 Nov 2020 08:53:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 28C2D2C800E
+	for <lists+linux-edac@lfdr.de>; Mon, 30 Nov 2020 09:35:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725984AbgK2HxM (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Sun, 29 Nov 2020 02:53:12 -0500
-Received: from smtp07.smtpout.orange.fr ([80.12.242.129]:41800 "EHLO
-        smtp.smtpout.orange.fr" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725828AbgK2HxM (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Sun, 29 Nov 2020 02:53:12 -0500
-Received: from localhost.localdomain ([81.185.163.10])
-        by mwinf5d13 with ME
-        id y7rS2300C0DmPsp037rTkN; Sun, 29 Nov 2020 08:51:28 +0100
-X-ME-Helo: localhost.localdomain
-X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Sun, 29 Nov 2020 08:51:28 +0100
-X-ME-IP: 81.185.163.10
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-To:     talel@amazon.com, bp@alien8.de, mchehab@kernel.org,
-        tony.luck@intel.com, james.morse@arm.com, rric@kernel.org
-Cc:     linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel-janitors@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Subject: [PATCH] EDAC/al-mc-edac: Slighly simplify code
-Date:   Sun, 29 Nov 2020 08:51:26 +0100
-Message-Id: <20201129075126.1450573-1-christophe.jaillet@wanadoo.fr>
-X-Mailer: git-send-email 2.27.0
+        id S1726298AbgK3IfC (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Mon, 30 Nov 2020 03:35:02 -0500
+Received: from twspam01.aspeedtech.com ([211.20.114.71]:63028 "EHLO
+        twspam01.aspeedtech.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727266AbgK3IfC (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Mon, 30 Nov 2020 03:35:02 -0500
+Received: from mail.aspeedtech.com ([192.168.0.24])
+        by twspam01.aspeedtech.com with ESMTP id 0AU8VpY8067866;
+        Mon, 30 Nov 2020 16:31:51 +0800 (GMT-8)
+        (envelope-from troy_lee@aspeedtech.com)
+Received: from TroyLee-PC.localdomain (192.168.100.253) by TWMBX02.aspeed.com
+ (192.168.0.24) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Mon, 30 Nov
+ 2020 16:34:12 +0800
+From:   Troy Lee <troy_lee@aspeedtech.com>
+To:     Stefan Schaeckeler <sschaeck@cisco.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        "Borislav Petkov" <bp@alien8.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Tony Luck <tony.luck@intel.com>,
+        James Morse <james.morse@arm.com>,
+        Robert Richter <rrichter@marvell.com>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        "moderated list:ARM/ASPEED MACHINE SUPPORT" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/ASPEED MACHINE SUPPORT" 
+        <linux-aspeed@lists.ozlabs.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:EDAC-CORE" <linux-edac@vger.kernel.org>
+CC:     <leetroy@gmail.com>, <troy_lee@aspeedtech.com>,
+        <ryan_chen@aspeedtech.com>
+Subject: [PATCH 1/3] dt-bindings: edac: aspeed-sdram-edac: Add ast2400/ast2600 support
+Date:   Mon, 30 Nov 2020 16:33:43 +0800
+Message-ID: <20201130083345.4814-1-troy_lee@aspeedtech.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [192.168.100.253]
+X-ClientProxiedBy: TWMBX02.aspeed.com (192.168.0.24) To TWMBX02.aspeed.com
+ (192.168.0.24)
+X-DNSRBL: 
+X-MAIL: twspam01.aspeedtech.com 0AU8VpY8067866
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-Use 'devm_add_action_or_reset()' instead of open coding it.
-This makes the error handling code look more consistent.
-This also save a few LoC.
+Adding Aspeed AST2400 and AST2600 binding for edac driver.
 
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Signed-off-by: Troy Lee <troy_lee@aspeedtech.com>
 ---
- drivers/edac/al_mc_edac.c | 12 ++++--------
- 1 file changed, 4 insertions(+), 8 deletions(-)
+ .../devicetree/bindings/edac/aspeed-sdram-edac.txt       | 9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/edac/al_mc_edac.c b/drivers/edac/al_mc_edac.c
-index 7d4f396c27b5..178b9e581a72 100644
---- a/drivers/edac/al_mc_edac.c
-+++ b/drivers/edac/al_mc_edac.c
-@@ -238,11 +238,9 @@ static int al_mc_edac_probe(struct platform_device *pdev)
- 	if (!mci)
- 		return -ENOMEM;
+diff --git a/Documentation/devicetree/bindings/edac/aspeed-sdram-edac.txt b/Documentation/devicetree/bindings/edac/aspeed-sdram-edac.txt
+index 6a0f3d90d682..8ca9e0a049d8 100644
+--- a/Documentation/devicetree/bindings/edac/aspeed-sdram-edac.txt
++++ b/Documentation/devicetree/bindings/edac/aspeed-sdram-edac.txt
+@@ -1,6 +1,6 @@
+-Aspeed AST2500 SoC EDAC node
++Aspeed BMC SoC EDAC node
  
--	ret = devm_add_action(&pdev->dev, devm_al_mc_edac_free, mci);
--	if (ret) {
--		edac_mc_free(mci);
-+	ret = devm_add_action_or_reset(&pdev->dev, devm_al_mc_edac_free, mci);
-+	if (ret)
- 		return ret;
--	}
+-The Aspeed AST2500 SoC supports DDR3 and DDR4 memory with and without ECC (error
++The Aspeed BMC SoC supports DDR3 and DDR4 memory with and without ECC (error
+ correction check).
  
- 	platform_set_drvdata(pdev, mci);
- 	al_mc = mci->pvt_info;
-@@ -293,11 +291,9 @@ static int al_mc_edac_probe(struct platform_device *pdev)
- 		return ret;
- 	}
+ The memory controller supports SECDED (single bit error correction, double bit
+@@ -11,7 +11,10 @@ Note, the bootloader must configure ECC mode in the memory controller.
  
--	ret = devm_add_action(&pdev->dev, devm_al_mc_edac_del, &pdev->dev);
--	if (ret) {
--		edac_mc_del_mc(&pdev->dev);
-+	ret = devm_add_action_or_reset(&pdev->dev, devm_al_mc_edac_del, &pdev->dev);
-+	if (ret)
- 		return ret;
--	}
  
- 	if (al_mc->irq_ue > 0) {
- 		ret = devm_request_irq(&pdev->dev,
+ Required properties:
+-- compatible: should be "aspeed,ast2500-sdram-edac"
++- compatible: should be one of
++	- "aspeed,ast2400-sdram-edac"
++	- "aspeed,ast2500-sdram-edac"
++	- "aspeed,ast2600-sdram-edac"
+ - reg:        sdram controller register set should be <0x1e6e0000 0x174>
+ - interrupts: should be AVIC interrupt #0
+ 
 -- 
-2.27.0
+2.17.1
 
