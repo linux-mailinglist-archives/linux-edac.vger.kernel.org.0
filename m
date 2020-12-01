@@ -2,40 +2,41 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E7E62C9E1B
-	for <lists+linux-edac@lfdr.de>; Tue,  1 Dec 2020 10:41:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A6BA22C9EBE
+	for <lists+linux-edac@lfdr.de>; Tue,  1 Dec 2020 11:08:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726685AbgLAJiE convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-edac@lfdr.de>); Tue, 1 Dec 2020 04:38:04 -0500
-Received: from mail-eopbgr1300138.outbound.protection.outlook.com ([40.107.130.138]:34473
+        id S1729665AbgLAKG1 (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Tue, 1 Dec 2020 05:06:27 -0500
+Received: from mail-eopbgr1300109.outbound.protection.outlook.com ([40.107.130.109]:36896
         "EHLO APC01-HK2-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725955AbgLAJiE (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Tue, 1 Dec 2020 04:38:04 -0500
+        id S1726589AbgLAKG1 (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Tue, 1 Dec 2020 05:06:27 -0500
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=nwOisIr557I4urYrvRluOlTlrUOfeewfDwOB1gMwnSqb6MCW6dCM7JxWsIrtrED6HUhDY42CYPJD3xwrTJU9+rqKkW7EygE6bt4xX7QbmK4Wtb5Z9oEbUnk8KL3FTz8RTQQwtCZBSWpiVwnZpV8TY/udCC//fMXlYp04Zu2jN5ZNVNfNC12rVIeBGugJR7Slw3PP407mpA1NtjU1JBh/+Q1pya6ugIqdr4mPIiqzEHIUOhRLshlyqVlHths1cxRoHhp3heiD6vuaodMd1++SrKLCszVul6urFwuMNuywBlnxslRwqwR0OZpEMVfVqBIH9pUBxWEawXrdfuJscVSzNg==
+ b=nFmC1yxidqbDR5gcQoyz9YApa/qH+GVVSks4tqTiybMj1LArOkdhiHPLbkrxQoxWCvRfucvFzbQl/lfbdS6Xz0cAdcY9bqON4H0jcYzZE5MJUVOfSJvjUQNFxNBkQAYo60GL3JHyFQJ4msUrwaswJVpVRxwdxQ0+wtkfx827+Pycn7zGP8gB1wkK4eAdZI1j4AKJBfQ64lDYqolaT3Zhxxq3HAOf6Dd20cE5JDiZlgNE1/UjaiWNyFxi/pnZ0N0qshG4qsfrd34uChpl9DWTVhEYo6Zynu2B5q/k1PnM/vL4ubrHFKByUCi7NjDWm/oyXi20Rl+cnHzVHBtBcITF1g==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=akPEsnARS/1rqXyDYJ+ZBFJqw9b/DzwLclcllG1TZNI=;
- b=jHjIZe6LiDUR78ngTEHfUS0bi5qy/ztV57ne7x0lLq1jBaX2PBeUB9pFYY7Df4fQJ8j/iM1rB0qLu4b1kf1dCFMmwpIFRz1f4OZOUOP7wq5+6EQq0by9XLl2s3e8Dnkv++XhSpFPj6NIzEeFdx6AOi7IWE8SKiuexfz1TZ4GDqRys+IbZRS7LBzJk7cWlan7OyoawbIv0T23YTrvl4a4d0fC1vRrYrMEy38EtTgldtGg+7HAgFdULgBp7pNF+AMFNSi4NiYOVU3yWGUIRo735rxvzhWYzC/Dmt/ilGXiC8VABzfdHZyeBYCySEsC+InSxhlXrvZ3tbgC222ab2BBzA==
+ bh=TUajGHWSqg28Fnlgx7L+wkGredWaO6LdDg0aDG62Ljg=;
+ b=Fee7BgR7e4nV0QYJf7KvCY/XOtZ6k71cLQrZDtFja+U4WRrCNqvn+2dZoBGe2a6RZz3FCWPKaWWGaFxzNBIppMDxH/7cjUsAIAIRGuP9tKBm/x6IVDA8D2rECGB29NQvOyTxDVHWBED4+O8fdZMj3XPkHcoLJlNUvLgrl1zUyJcE5/lbOlttfuCvwMRJWvJTtdeg99h+VsYDZW5zKrm28At1Yl8GSWg3r4iDLL4gnqJCmaoQZkE4hM98cLi8DcrWlOoqAm56cGX91fOdwQqCEr2ztLhOnl9qNeGd7B/IqnCIagHoAjd0or+NfY4Ta5624nrYWYPT+xt7tub4reUanQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=aspeedtech.com; dmarc=pass action=none
  header.from=aspeedtech.com; dkim=pass header.d=aspeedtech.com; arc=none
 Received: from PS1PR06MB2600.apcprd06.prod.outlook.com (2603:1096:803:4d::19)
- by PS1PR06MB2629.apcprd06.prod.outlook.com (2603:1096:803:4a::18) with
+ by PU1PR06MB2374.apcprd06.prod.outlook.com (2603:1096:803:3b::14) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3611.31; Tue, 1 Dec
- 2020 09:36:26 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3611.23; Tue, 1 Dec
+ 2020 10:04:51 +0000
 Received: from PS1PR06MB2600.apcprd06.prod.outlook.com
  ([fe80::7d57:cb3c:146c:36e3]) by PS1PR06MB2600.apcprd06.prod.outlook.com
  ([fe80::7d57:cb3c:146c:36e3%4]) with mapi id 15.20.3611.031; Tue, 1 Dec 2020
- 09:36:26 +0000
+ 10:04:51 +0000
 From:   Troy Lee <troy_lee@aspeedtech.com>
-To:     Andrew Jeffery <andrew@aj.id.au>,
-        Stefan M Schaeckeler <sschaeck@cisco.com>,
+To:     "Stefan Schaeckeler (sschaeck)" <sschaeck@cisco.com>,
         Rob Herring <robh+dt@kernel.org>,
-        Joel Stanley <joel@jms.id.au>, Borislav Petkov <bp@alien8.de>,
+        Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Borislav Petkov <bp@alien8.de>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         Tony Luck <tony.luck@intel.com>,
         James Morse <james.morse@arm.com>,
@@ -49,395 +50,106 @@ To:     Andrew Jeffery <andrew@aj.id.au>,
         open list <linux-kernel@vger.kernel.org>,
         "open list:EDAC-CORE" <linux-edac@vger.kernel.org>
 CC:     "leetroy@gmail.com" <leetroy@gmail.com>,
-        Ryan Chen <ryan_chen@aspeedtech.com>
+        Ryan Chen <ryan_chen@aspeedtech.com>,
+        Stefan Schaeckeler <schaecsn@gmx.net>
 Subject: RE: [PATCH 3/3] edac: Supporting AST2400 and AST2600 edac driver
 Thread-Topic: [PATCH 3/3] edac: Supporting AST2400 and AST2600 edac driver
-Thread-Index: AQHWxvOZHTlrFWqSykaazJ8oPL0cyKnhb/yAgABzVqA=
-Date:   Tue, 1 Dec 2020 09:36:26 +0000
-Message-ID: <PS1PR06MB2600A3B6B961FAA7BB5621878AF40@PS1PR06MB2600.apcprd06.prod.outlook.com>
+Thread-Index: AQHWxvOZHTlrFWqSykaazJ8oPL0cyKngZN4AgAGYsUA=
+Date:   Tue, 1 Dec 2020 10:04:51 +0000
+Message-ID: <PS1PR06MB26008D10C46C5DF0B47F81368AF40@PS1PR06MB2600.apcprd06.prod.outlook.com>
 References: <20201130083345.4814-1-troy_lee@aspeedtech.com>
  <20201130083345.4814-3-troy_lee@aspeedtech.com>
- <d6138f1e-f054-4a1e-8c49-f0c32a9352e8@www.fastmail.com>
-In-Reply-To: <d6138f1e-f054-4a1e-8c49-f0c32a9352e8@www.fastmail.com>
+ <4AD4AB7A-54E7-4922-9547-7E26D61F7C77@cisco.com>
+In-Reply-To: <4AD4AB7A-54E7-4922-9547-7E26D61F7C77@cisco.com>
 Accept-Language: zh-TW, en-US
 Content-Language: zh-TW
 X-MS-Has-Attach: 
 X-MS-TNEF-Correlator: 
-authentication-results: aj.id.au; dkim=none (message not signed)
- header.d=none;aj.id.au; dmarc=none action=none header.from=aspeedtech.com;
+authentication-results: cisco.com; dkim=none (message not signed)
+ header.d=none;cisco.com; dmarc=none action=none header.from=aspeedtech.com;
 x-originating-ip: [118.99.190.129]
 x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 092f84cf-4acc-40fb-fb13-08d895dc931e
-x-ms-traffictypediagnostic: PS1PR06MB2629:
+x-ms-office365-filtering-correlation-id: f003460d-216c-4a56-a5df-08d895e08b17
+x-ms-traffictypediagnostic: PU1PR06MB2374:
 x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <PS1PR06MB262962C9F4C53FB215969DA18AF40@PS1PR06MB2629.apcprd06.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:10000;
+x-microsoft-antispam-prvs: <PU1PR06MB23742213C74F3FBE6912D4D78AF40@PU1PR06MB2374.apcprd06.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:2887;
 x-ms-exchange-senderadcheck: 1
 x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 9sCWX3a2x4+9posQMk1oih38YmGe5eEopi0oErKk41NjJ7Bv9Ujh2PZvcbwWzqyYPtvLqH1ofJAY+goIs0jM23Su5AhJG+SWl6AjyT/fohYxna5WsVEFCn9lRE7qKIPoZ5gTao8vsimzZkxJBZKaX73nJ7/j0KlonvPYBOSLoT9EHkwIz/1CsqREiuZSiGAq8Sj7FRNgQ42uTXKWsF9GuvWiWdNX+Vnn7B26DI4+v9CYJG6TTQVrx3xgAw1cyLffzVkSKWUrv7x5wbo31KJ8zsn4mCT42qhiPdUeo4/3AjSLN2fZCm/wmku88oUOb+VXafYeK/Z+z1jpM7GwleQEuyNGbc5C2ZL2clzvv/CU5PoM+zhq+o74hUAa+MQ+kPdk
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PS1PR06MB2600.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(39840400004)(136003)(346002)(366004)(396003)(376002)(7696005)(8676002)(2906002)(83380400001)(110136005)(33656002)(9686003)(316002)(6506007)(71200400001)(53546011)(54906003)(55016002)(7416002)(107886003)(52536014)(86362001)(8936002)(478600001)(26005)(5660300002)(4326008)(64756008)(66946007)(76116006)(66556008)(66476007)(921005)(66446008)(186003);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata: =?us-ascii?Q?mTAx3n2L8JSOBOlYYWFn4SLQE7CeqvOIoq3uFt6FuarJFph8SqZz+RCp7FC+?=
- =?us-ascii?Q?yvjsOfnRAmXcU/asGhx763MjFmw/dW0WVg/RadtH4CERBWpIKNbZXhJOzGls?=
- =?us-ascii?Q?wynm2jBDEEBnL9TOwDEuMGpaYuekf2X4CvoM3ht3iMXbFwopoIXJ9a82Yc4D?=
- =?us-ascii?Q?ilU7yHDHndyb8oTp4ewpvGyxVOMmQW/DsZVv/BFlDSGG9b/G/QGeaJGjzUWc?=
- =?us-ascii?Q?y5oyjMWxTOUe81GCNEuVJB+HGVmGfjmGJtifruFw8Hd+eVlNid1OGVR0BsUb?=
- =?us-ascii?Q?X/ldbru0fpdXywsomyTDVTvS5yh8hF+K+SU749JXHZCoFnqB17FKi3GMTul0?=
- =?us-ascii?Q?7a+Yq5yxN7xTswREV90qURdZggKVQC66afTDMI6bQISwqLEWKX5O4KmfzWUv?=
- =?us-ascii?Q?C49dLFGITdBO6r3GrFTjylAvPJfpBBNjDY9TJV9uQjlWmYVRjR0jAjLD7YuO?=
- =?us-ascii?Q?zjCimwvgcY1IQGq6geZBTvX/RBQrOQvUH3+Bta/FciRBBIpjT3LzjZc2pgpi?=
- =?us-ascii?Q?Kdx+WGttM0iCg9TSea1RzOuA1YRfmoJQCPLeRb5T8tFFzP/s3myTTyMQCRiK?=
- =?us-ascii?Q?WJGVdl03Km1QFgTbC2ckdXGEn8HgEBc6a09fl5+L4uB7uz0wUVtcXbT0p0ng?=
- =?us-ascii?Q?6VpgoiWRJomlD7VF/CpSxc/ySmYYn02k2/+2RRalzl64uQbdxWoLU6e4jzr3?=
- =?us-ascii?Q?QNU22HYY2arY0WSsMj+aPMIvYpSF+TwxHJlOLXWbak2xNYuI8M/8RUw9t6GO?=
- =?us-ascii?Q?G7y96FpXkNzoRD56WTCPuUy/vIz6JVncJ2V4DmA0nN4XkT3BUCeub7aAkQgp?=
- =?us-ascii?Q?ijmVbaZZef4W7IZP80bxwvtmTUAykgG0naJcsY76xmQxfqyZTbwI4ZasKdcu?=
- =?us-ascii?Q?hv3q/5HdZiloyI/WN1VZta49cZ0/GBlsUDpSy6LjcPGjQ3SaSQqGjdhcItnk?=
- =?us-ascii?Q?nem1lU0Gxjk3VxnuRlNXoeQa0c63/8xf4uKlDZTYyjk=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 8BIT
+x-microsoft-antispam-message-info: tQHYB+CZLQPYKJTnaYn/XKj9sxkjfSinqWK2RsDeDZcjaU1S0K5jpxXerJG7elw/Io1oJwyLI29Gq7V/zVSQdFjtdoTJPPDNhWd3ZAuPmdCa3+QfyQV28MJiBmR2w4F/MvQYo+hcHnwVjY0Tpfhbc1+2+1jis2iltbL/pt2hTGRZBfuWNYPeBLw+y3XwmEi2vJdKSBb3ZOlG8jfJQsahbfz/Ej2VMRnroq3hPYK4G/rgKkSK6ljHNv4MQHzjM7Mnm7HFYTjGloE9d2jZjVIYTi7R4Xg3ENIrjVY6/kEvqqYo9zmp1TuB6686zZjpJ2j9BAwBTppPVSFGxbYbIneDSAyFHvB6n9W56AaeAQj+iHeppVn06BxyRBaxtMPPyDWAOSwex7CC2Qh64o/+IcVUVWk5dtKAMpGP+g2aeaLb6eHdtz2h9HesJPRftg/Dntp2
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PS1PR06MB2600.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(136003)(346002)(396003)(366004)(39840400004)(376002)(53546011)(52536014)(966005)(66476007)(478600001)(8676002)(6506007)(66556008)(66446008)(71200400001)(26005)(66946007)(76116006)(8936002)(86362001)(186003)(921005)(7696005)(5660300002)(2906002)(4326008)(64756008)(316002)(110136005)(9686003)(54906003)(33656002)(7416002)(83380400001)(55016002);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata: =?utf-8?B?aFBtOGRmK1V4WUJlZTlWZ2RCY1ZCRFZjdHZIR2lIT2sxUW5ObWhBSW84ella?=
+ =?utf-8?B?N2tnTW1pcGZFOXpnTE9IUzcxL0RmeVNlU0tGQ2lhdXN0ME5LYUxhS2MyTjdr?=
+ =?utf-8?B?aW5vN3d2TnNWenVNVHE1eExRam9vUVhPMEErcS84MzJPK3hZM2ZITzBpa0V0?=
+ =?utf-8?B?ZkVVZWlLeU1oai9QTk16WGI0SjVmSHVXd0hiZmZDUXpqczcvb295V1J1Tld3?=
+ =?utf-8?B?WGs3NVl1RzBKTG43VThFK1RtR2JZbW9haEw4cXNGS2wvQU5DczNrbG9JVUlN?=
+ =?utf-8?B?YlFhbWZKMTc0YXEyQ2wrVXk0L3VTcjZSZzZkaHhjRmVlWEhqVldMODhSQmtD?=
+ =?utf-8?B?RFZ4QXZuV2lFZjN6M3FhcWhlMHVPcVhpaXBIVWN0TkgrblFQOXF5NE1EM294?=
+ =?utf-8?B?b2xsKzNwaG1pSGVFN1psM3VXR2k5OTR1Y3VLekxUL09JcDZTSUozTm9DQUh3?=
+ =?utf-8?B?emNCMFdmbVN2WnNzQ0dxYVA1bUc5T2RJdlZOQU5SNGJieGc3YW00Y3hVOHoy?=
+ =?utf-8?B?U1N2M29iTlpLbDYwM3hJS1lic0kreEVGZHJLaVV6aFNYcEVyUE1XclZzalI2?=
+ =?utf-8?B?ZDFkcXhGL1BFb2FIelVTSHVUUUdQTVFkWmZ1SFJYRFNNKzNneEs3NGs0b0FQ?=
+ =?utf-8?B?aGJsS1BKc2cwUkpRbmY5MlhkN1o3SFNLMVRRUXNmc1B2WVFWU20ySmZ4MkIw?=
+ =?utf-8?B?UFVYVXAvUytiNjQvMDRNU25oZnNjVFJoNlk1Y1h5dUV3M0RHcExvY2FMU1V5?=
+ =?utf-8?B?cGtHcDFId05NcnZid2ZhcVdKUEVtS1ZEUWdsS1lUK2JVQ0NZanBhdGh1WXFL?=
+ =?utf-8?B?MjZzLy9sT3YxaHQ5S296b2RMUThzbGJXOS8yWnQrM3VXbXNIVHdnUUtQQ3hV?=
+ =?utf-8?B?N1R4Z092Qjg2NmNmK21adGRLeThZYUtQWUtaSjVxeWZSN2JSUU96UTF2elVq?=
+ =?utf-8?B?TnJrclpGbnhtemcrbWlvTzc0b1dzQnVQZ0Fab1ZUNVpIWVZoa0hkdjgxRjEv?=
+ =?utf-8?B?MlJzN2oyV3JGa0E1SGJ1bm5yTnVNVjd2T2xFWUF0VmwzM3BpM0xXZ0JxR3RR?=
+ =?utf-8?B?THA4bkl1aFBvTTV5cldBN014YVJrU1E0aXZ1TUN6OElpMzd2U0xaU2Y5ZFdH?=
+ =?utf-8?B?YnJaVkdPUUFLQnlwWVR5ZjdWeHNDcGFIVXpPN3pkWTNpUlczdHRZR2duMU1t?=
+ =?utf-8?B?N0MzVit5R3VHbU1pRGN5UTNBQ1NvQ0Q1dHVMUnJ2czlDNnorME1aQkg3ZVZt?=
+ =?utf-8?B?UzNOLzZRZVJFMGp3cmRWN1ZIV3VSajVkdGRDT3QrZEo3cWtXd2JMdmNPdHY3?=
+ =?utf-8?Q?JMFs2vDkweE+s=3D?=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
 X-OriginatorOrg: aspeedtech.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
 X-MS-Exchange-CrossTenant-AuthSource: PS1PR06MB2600.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 092f84cf-4acc-40fb-fb13-08d895dc931e
-X-MS-Exchange-CrossTenant-originalarrivaltime: 01 Dec 2020 09:36:26.5470
+X-MS-Exchange-CrossTenant-Network-Message-Id: f003460d-216c-4a56-a5df-08d895e08b17
+X-MS-Exchange-CrossTenant-originalarrivaltime: 01 Dec 2020 10:04:51.0851
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
 X-MS-Exchange-CrossTenant-id: 43d4aa98-e35b-4575-8939-080e90d5a249
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: TBHbKq4fKJeRO+Ck3LBGD13dSn4/kM1L/42Aoj/EDGrl4L3JbDqHAUF6yWdROxgZC2a8vgH/JVdilMxLuZ6Plw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PS1PR06MB2629
+X-MS-Exchange-CrossTenant-userprincipalname: 4T234sx1RjaC6JApDBCYmpKQiTu1fTip4u+hyUTQeXGmHnwT4Cxhqws3ETdx7YkIy8qms+XvL/zwa6HaiNH9jg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PU1PR06MB2374
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-Hi Andrew,
-
-Great suggestion, responses inline below. We'll remove build-time SoC dependency driver code and submit an updated v2 patch.
-
-Thanks,
-Troy Lee
-
-> -----Original Message-----
-> From: Andrew Jeffery <andrew@aj.id.au>
-> Sent: Tuesday, December 1, 2020 9:12 AM
-> To: Troy Lee <troy_lee@aspeedtech.com>; Stefan M Schaeckeler
-> <sschaeck@cisco.com>; Rob Herring <robh+dt@kernel.org>; Joel Stanley
-> <joel@jms.id.au>; Borislav Petkov <bp@alien8.de>; Mauro Carvalho Chehab
-> <mchehab@kernel.org>; Tony Luck <tony.luck@intel.com>; James Morse
-> <james.morse@arm.com>; Robert Richter <rrichter@marvell.com>; open
-> list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS
-> <devicetree@vger.kernel.org>; moderated list:ARM/ASPEED MACHINE
-> SUPPORT <linux-arm-kernel@lists.infradead.org>; moderated
-> list:ARM/ASPEED MACHINE SUPPORT <linux-aspeed@lists.ozlabs.org>; open
-> list <linux-kernel@vger.kernel.org>; open list:EDAC-CORE
-> <linux-edac@vger.kernel.org>
-> Cc: leetroy@gmail.com; Ryan Chen <ryan_chen@aspeedtech.com>
-> Subject: Re: [PATCH 3/3] edac: Supporting AST2400 and AST2600 edac driver
-> 
-> Hi Troy,
-> 
-> I like the idea of expanding the driver's support to cover the other SoC
-> generations, but not at the cost of making the build of the driver SoC-specific.
-> I've made some comments below in this regard.
-> 
-> On Mon, 30 Nov 2020, at 19:03, Troy Lee wrote:
-> > Adding AST2400 and AST2600 edac driver support.
-> >
-> > Signed-off-by: Troy Lee <troy_lee@aspeedtech.com>
-> > ---
-> >  drivers/edac/Kconfig       |   6 +-
-> >  drivers/edac/aspeed_edac.c | 114
-> > +++++++++++++++++++++++++++++--------
-> >  2 files changed, 94 insertions(+), 26 deletions(-)
-> >
-> > diff --git a/drivers/edac/Kconfig b/drivers/edac/Kconfig index
-> > fc30f2ef9782..8ea70746d0bf 100644
-> > --- a/drivers/edac/Kconfig
-> > +++ b/drivers/edac/Kconfig
-> > @@ -508,10 +508,10 @@ config EDAC_QCOM
-> >  	  health, you should probably say 'Y' here.
-> >
-> >  config EDAC_ASPEED
-> > -	tristate "Aspeed AST 2500 SoC"
-> > -	depends on MACH_ASPEED_G5
-> > +	tristate "Aspeed AST BMC SoC"
-> > +	depends on (MACH_ASPEED_G4 || MACH_ASPEED_G5 ||
-> MACH_ASPEED_G6)
-> >  	help
-> > -	  Support for error detection and correction on the Aspeed AST 2500 SoC.
-> > +	  Support for error detection and correction on the Aspeed AST BMC SoC.
-> >
-> >  	  First, ECC must be configured in the bootloader. Then, this driver
-> >  	  will expose error counters via the EDAC kernel framework.
-> > diff --git a/drivers/edac/aspeed_edac.c b/drivers/edac/aspeed_edac.c
-> > index fbec28dc661d..03a3c12f6bf6 100644
-> > --- a/drivers/edac/aspeed_edac.c
-> > +++ b/drivers/edac/aspeed_edac.c
-> > @@ -14,12 +14,11 @@
-> >  #include <linux/regmap.h>
-> >  #include "edac_module.h"
-> >
-> > -
-> >  #define DRV_NAME "aspeed-edac"
-> >
-> > -
-> >  #define ASPEED_MCR_PROT        0x00 /* protection key register */
-> >  #define ASPEED_MCR_CONF        0x04 /* configuration register */
-> > +#define ASPEED_MCR_REQ         0x08 /* Graphics Memory Protection
-> register */
-> >  #define ASPEED_MCR_INTR_CTRL   0x50 /* interrupt control/status
-> register */
-> >  #define ASPEED_MCR_ADDR_UNREC  0x58 /* address of first
-> un-recoverable error */
-> >  #define ASPEED_MCR_ADDR_REC    0x5c /* address of last recoverable
-> error */
-> > @@ -34,10 +33,8 @@
-> >  #define ASPEED_MCR_INTR_CTRL_CNT_UNREC GENMASK(15, 12)
-> #define
-> > ASPEED_MCR_INTR_CTRL_ENABLE  (BIT(0) | BIT(1))
-> >
-> > -
-> >  static struct regmap *aspeed_regmap;
-> >
-> > -
-> >  static int regmap_reg_write(void *context, unsigned int reg, unsigned
-> > int val)  {
-> >  	void __iomem *regs = (void __iomem *)context; @@ -53,7 +50,6 @@
-> > static int regmap_reg_write(void *context, unsigned int reg, unsigned
-> > int val)
-> >  	return 0;
-> >  }
-> >
-> > -
-> >  static int regmap_reg_read(void *context, unsigned int reg, unsigned
-> > int *val)  {
-> >  	void __iomem *regs = (void __iomem *)context; @@ -63,6 +59,76 @@
-> > static int regmap_reg_read(void *context, unsigned int reg, unsigned
-> > int *val)
-> >  	return 0;
-> >  }
-> >
-> > +extern void aspeed_sdmc_disable_mem_protection(u8 req) {
-> > +	u32 req_val = 0;
-> > +
-> > +	regmap_read(aspeed_regmap, ASPEED_MCR_REQ, &req_val);
-> > +
-> > +	req_val &= ~BIT(req);
-> > +
-> > +	regmap_write(aspeed_regmap, ASPEED_MCR_REQ, req_val); }
-> > +EXPORT_SYMBOL(aspeed_sdmc_disable_mem_protection);
-> > +
-> > +static const u32 ast2400_dram_table[] = {
-> > +	0x04000000,	//64MB
-> > +	0x08000000,	//128MB
-> > +	0x10000000,	//256MB
-> > +	0x20000000,	//512MB
-> > +};
-> 
-> You could perhaps save us from the size comments here by using e.g.
-> 
-> static const u32 ast2400_dram_table[] = {
->     64 << 20,
->     128 << 20,
->     256 << 20,
->     512 << 20,
-> };
-> 
-Fixed all in v2.
-
-> > +
-> > +static const u32 ast2500_dram_table[] = {
-> > +	0x08000000,	//128MB
-> > +	0x10000000,	//256MB
-> > +	0x20000000,	//512MB
-> > +	0x40000000,	//1024MB
-> > +};
-> > +
-> > +static const u32 ast2600_dram_table[] = {
-> > +	0x10000000,	//256MB
-> > +	0x20000000,	//512MB
-> > +	0x40000000,	//1024MB
-> > +	0x80000000,	//2048MB
-> > +};
-> > +
-> > +extern u32 aspeed_get_dram_size(void) {
-> > +	u32 reg04;
-> > +	u32 size;
-> > +
-> > +	regmap_read(aspeed_regmap, ASPEED_MCR_CONF, &reg04);
-> > +
-> > +#if defined(CONFIG_MACH_ASPEED_G6)
-> > +	size = ast2600_dram_table[reg04 & 0x3]; #elif
-> > +defined(CONFIG_MACH_ASPEED_G5)
-> > +	size = ast2500_dram_table[reg04 & 0x3]; #else
-> > +	size = ast2400_dram_table[reg04 & 0x3]; #endif
-> > +	return size;
-> > +}
-> > +EXPORT_SYMBOL(aspeed_get_dram_size);
-> 
-> The driver must support running on any of the SoC generations without being
-> recompiled. This requires the driver be compiled for a specific SoC generation.
-> 
-> The right way to do this is to use the OF match table data. Please fix it.
-> 
-Fixed in v2, driver can check the DRAM controller hardware version from MCR_CONF [31:28].
-
-> > +
-> > +static const u32 aspeed_vga_table[] = {
-> > +	0x800000,	//8MB
-> > +	0x1000000,	//16MB
-> > +	0x2000000,	//32MB
-> > +	0x4000000,	//64MB
-> > +};
-> > +
-> > +extern u32 aspeed_get_vga_size(void)
-> > +{
-> > +	u32 reg04;
-> > +	u32 size;
-> > +
-> > +	regmap_read(aspeed_regmap, ASPEED_MCR_CONF, &reg04);
-> > +
-> > +	size = aspeed_vga_table[((reg04 & 0xC) >> 2)];
-> > +	return size;
-> > +}
-> > +EXPORT_SYMBOL(aspeed_get_vga_size);
-> > +
-> >  static bool regmap_is_volatile(struct device *dev, unsigned int reg)
-> > {
-> >  	switch (reg) {
-> > @@ -209,8 +275,8 @@ static int config_irq(void *ctx, struct
-> > platform_device *pdev)
-> >  	/* register interrupt handler */
-> >  	irq = platform_get_irq(pdev, 0);
-> >  	dev_dbg(&pdev->dev, "got irq %d\n", irq);
-> > -	if (irq < 0)
-> > -		return irq;
-> > +	if (!irq)
-> > +		return -ENODEV;
-> 
-> The documentation for platform_get_irq() says "Return: IRQ number on
-> success, negative error number on failure."
-> 
-> So this change doesn't look right.
-> 
-Fixed in v2.
-
-> >
-> >  	rc = devm_request_irq(&pdev->dev, irq, mcr_isr, IRQF_TRIGGER_HIGH,
-> >  			      DRV_NAME, ctx);
-> > @@ -239,7 +305,11 @@ static int init_csrows(struct mem_ctl_info *mci)
-> >  	int rc;
-> >
-> >  	/* retrieve info about physical memory from device tree */
-> > -	np = of_find_node_by_path("/memory");
-> > +#ifdef CONFIG_MACH_ASPEED_G4
-> > +	np = of_find_node_by_path("/memory@40000000");
-> > +#else
-> > +	np = of_find_node_by_path("/memory@80000000");
-> > +#endif
-> 
-> Again, this makes the driver SoC-specific at compile time, and that's not going
-> to fly. If we need it, this should be solved with a phandle to the appropriate
-> memory node.
-> 
-Fixed in v2 by using of_find_node_by_name(NULL, "memory") instead.
-
-> >  	if (!np) {
-> >  		dev_err(mci->pdev, "dt: missing /memory node\n");
-> >  		return -ENODEV;
-> > @@ -281,11 +351,19 @@ static int aspeed_probe(struct platform_device
-> *pdev)
-> >  	struct device *dev = &pdev->dev;
-> >  	struct edac_mc_layer layers[2];
-> >  	struct mem_ctl_info *mci;
-> > +	struct device_node *np;
-> > +	struct resource *res;
-> >  	void __iomem *regs;
-> > -	u32 reg04;
-> >  	int rc;
-> >
-> > -	regs = devm_platform_ioremap_resource(pdev, 0);
-> > +	/* setup regmap */
-> > +	np = dev->of_node;
-> > +
-> > +	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-> > +	if (!res)
-> > +		return -ENOENT;
-> > +
-> > +	regs = devm_ioremap_resource(dev, res);
-> >  	if (IS_ERR(regs))
-> >  		return PTR_ERR(regs);
-> 
-> Why is this change necessary?
-> 
-Not necessary, so I'll reverted this part of change in v2.
-
-> >
-> > @@ -294,13 +372,6 @@ static int aspeed_probe(struct platform_device
-> *pdev)
-> >  	if (IS_ERR(aspeed_regmap))
-> >  		return PTR_ERR(aspeed_regmap);
-> >
-> > -	/* bail out if ECC mode is not configured */
-> > -	regmap_read(aspeed_regmap, ASPEED_MCR_CONF, &reg04);
-> > -	if (!(reg04 & ASPEED_MCR_CONF_ECC)) {
-> > -		dev_err(&pdev->dev, "ECC mode is not configured in u-boot\n");
-> > -		return -EPERM;
-> > -	}
-> > -
-> 
-> Why shouldn't we do this check?
-The driver can handle both ECC on and off, so this check might not be necessary.
-
-> >  	edac_op_state = EDAC_OPSTATE_INT;
-> >
-> >  	/* allocate & init EDAC MC data structure */ @@ -373,13 +444,13 @@
-> > static int aspeed_remove(struct platform_device *pdev)
-> >  	return 0;
-> >  }
-> >
-> > -
-> >  static const struct of_device_id aspeed_of_match[] = {
-> > +	{ .compatible = "aspeed,ast2400-sdram-edac" },
-> >  	{ .compatible = "aspeed,ast2500-sdram-edac" },
-> > +	{ .compatible = "aspeed,ast2600-sdram-edac" },
-> 
-> The .data member of struct of_device_id is where you need to attach your
-> SoC-generation-specific data.
-> 
-> Cheers,
-> 
-> Andrew
-> 
-> >  	{},
-> >  };
-> >
-> > -
-> >  static struct platform_driver aspeed_driver = {
-> >  	.driver		= {
-> >  		.name	= DRV_NAME,
-> > @@ -395,18 +466,15 @@ static int __init aspeed_init(void)
-> >  	return platform_driver_register(&aspeed_driver);
-> >  }
-> >
-> > -
-> >  static void __exit aspeed_exit(void)
-> >  {
-> >  	platform_driver_unregister(&aspeed_driver);
-> >  }
-> >
-> > -
-> >  module_init(aspeed_init);
-> >  module_exit(aspeed_exit);
-> >
-> > -
-> >  MODULE_LICENSE("GPL");
-> >  MODULE_AUTHOR("Stefan Schaeckeler <sschaeck@cisco.com>");
-> > -MODULE_DESCRIPTION("Aspeed AST2500 EDAC driver");
-> > +MODULE_DESCRIPTION("Aspeed EDAC driver");
-> >  MODULE_VERSION("1.0");
-> > --
-> > 2.17.1
-> >
-> >
+SGkgU3RlZmFuLA0KDQpUaGUgZHJpdmVyIHdhcyBwb3J0ZWQgZnJvbSBsYXRlc3QgQVNQRUVEIEJT
+UCwgc28gSSBvbmx5IHRlc3Qgd2l0aCBFQ0Mtb24vb2ZmIA0KZnJvbSB1LWJvb3QgYW5kIGNoZWNr
+IGlmIGRyaXZlciBydW5zIGNvcnJlY3RseS4NCg0KVGhlIHRlc3QgZG9jIHlvdSBwcm92aWRlZCBp
+cyB2ZXJ5IG5pY2UgYW5kIGRldGFpbGVkLCBJJ2xsIHRyeSB0byByZXByb2R1Y2UgdGhlIA0KaW5q
+ZWN0aW9uIHRlc3QgaW4gdjIgcGF0Y2guDQoNClRoYW5rcywNClRyb3kgTGVlDQoNCj4gLS0tLS1P
+cmlnaW5hbCBNZXNzYWdlLS0tLS0NCj4gRnJvbTogU3RlZmFuIFNjaGFlY2tlbGVyIChzc2NoYWVj
+aykgPHNzY2hhZWNrQGNpc2NvLmNvbT4NCj4gU2VudDogTW9uZGF5LCBOb3ZlbWJlciAzMCwgMjAy
+MCA1OjE2IFBNDQo+IFRvOiBUcm95IExlZSA8dHJveV9sZWVAYXNwZWVkdGVjaC5jb20+OyBSb2Ig
+SGVycmluZyA8cm9iaCtkdEBrZXJuZWwub3JnPjsNCj4gSm9lbCBTdGFubGV5IDxqb2VsQGptcy5p
+ZC5hdT47IEFuZHJldyBKZWZmZXJ5IDxhbmRyZXdAYWouaWQuYXU+OyBCb3Jpc2xhdg0KPiBQZXRr
+b3YgPGJwQGFsaWVuOC5kZT47IE1hdXJvIENhcnZhbGhvIENoZWhhYiA8bWNoZWhhYkBrZXJuZWwu
+b3JnPjsNCj4gVG9ueSBMdWNrIDx0b255Lmx1Y2tAaW50ZWwuY29tPjsgSmFtZXMgTW9yc2UgPGph
+bWVzLm1vcnNlQGFybS5jb20+Ow0KPiBSb2JlcnQgUmljaHRlciA8cnJpY2h0ZXJAbWFydmVsbC5j
+b20+OyBvcGVuIGxpc3Q6T1BFTiBGSVJNV0FSRSBBTkQNCj4gRkxBVFRFTkVEIERFVklDRSBUUkVF
+IEJJTkRJTkdTIDxkZXZpY2V0cmVlQHZnZXIua2VybmVsLm9yZz47IG1vZGVyYXRlZA0KPiBsaXN0
+OkFSTS9BU1BFRUQgTUFDSElORSBTVVBQT1JUIDxsaW51eC1hcm0ta2VybmVsQGxpc3RzLmluZnJh
+ZGVhZC5vcmc+Ow0KPiBtb2RlcmF0ZWQgbGlzdDpBUk0vQVNQRUVEIE1BQ0hJTkUgU1VQUE9SVA0K
+PiA8bGludXgtYXNwZWVkQGxpc3RzLm96bGFicy5vcmc+OyBvcGVuIGxpc3QgPGxpbnV4LWtlcm5l
+bEB2Z2VyLmtlcm5lbC5vcmc+Ow0KPiBvcGVuIGxpc3Q6RURBQy1DT1JFIDxsaW51eC1lZGFjQHZn
+ZXIua2VybmVsLm9yZz4NCj4gQ2M6IGxlZXRyb3lAZ21haWwuY29tOyBSeWFuIENoZW4gPHJ5YW5f
+Y2hlbkBhc3BlZWR0ZWNoLmNvbT47IFN0ZWZhbg0KPiBTY2hhZWNrZWxlciA8c2NoYWVjc25AZ214
+Lm5ldD4NCj4gU3ViamVjdDogUmU6IFtQQVRDSCAzLzNdIGVkYWM6IFN1cHBvcnRpbmcgQVNUMjQw
+MCBhbmQgQVNUMjYwMCBlZGFjIGRyaXZlcg0KPiANCj4gSGVsbG8gVHJveSwNCj4gDQo+ID4gQWRk
+aW5nIEFTVDI0MDAgYW5kIEFTVDI2MDAgZWRhYyBkcml2ZXIgc3VwcG9ydC4NCj4gPg0KPiA+IFNp
+Z25lZC1vZmYtYnk6IFRyb3kgTGVlIDx0cm95X2xlZUBhc3BlZWR0ZWNoLmNvbT4NCj4gPiAtLS0N
+Cj4gPiBkcml2ZXJzL2VkYWMvS2NvbmZpZyAgICAgICB8ICAgNiArLQ0KPiA+IGRyaXZlcnMvZWRh
+Yy9hc3BlZWRfZWRhYy5jIHwgMTE0ICsrKysrKysrKysrKysrKysrKysrKysrKysrKysrLS0tLS0t
+LS0NCj4gPiAyIGZpbGVzIGNoYW5nZWQsIDk0IGluc2VydGlvbnMoKyksIDI2IGRlbGV0aW9ucygt
+KQ0KPiANCj4gVWgsIHRoZXJlIGFyZSBxdWl0ZSBzb21lIG5vbi10cml2aWFsIGNoYW5nZXMuIEkn
+bGwgaGF2ZSBhIGxvb2sgb3ZlciB0aGUgY29taW5nDQo+IHdlZWtlbmQuDQo+IA0KPiBUZXN0aW5n
+IGFuIGVkYWMgZHJpdmVyIGNvbWVzIHdpdGggY2hhbGxlbmdlcy4gRGlkIHlvdSB0ZXN0IHlvdXIg
+Y29kZT8gSWYgc28sDQo+IGhvdz8NCj4gDQo+IFRoYXQncyBob3cgSSB3YXMgdGVzdGluZyBteSBv
+cmlnaW5hbCBlZGFjIDI1MDAgZHJpdmVyDQo+IGh0dHA6Ly9zdHVkZW50cy5lbmdyLnNjdS5lZHUv
+fnNzY2hhZWNrL21pc2MvYXNwZWVkLWVkYWMuaHRtbA0KPiANCj4gIFN0ZWZhbg0KDQo=
