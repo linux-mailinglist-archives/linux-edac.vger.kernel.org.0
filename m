@@ -2,17 +2,17 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E3CAB2CBA37
-	for <lists+linux-edac@lfdr.de>; Wed,  2 Dec 2020 11:13:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E40D2CBA38
+	for <lists+linux-edac@lfdr.de>; Wed,  2 Dec 2020 11:13:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726344AbgLBKNK (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Wed, 2 Dec 2020 05:13:10 -0500
-Received: from twspam01.aspeedtech.com ([211.20.114.71]:59034 "EHLO
+        id S1726689AbgLBKNN (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Wed, 2 Dec 2020 05:13:13 -0500
+Received: from twspam01.aspeedtech.com ([211.20.114.71]:59036 "EHLO
         twspam01.aspeedtech.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726202AbgLBKNK (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Wed, 2 Dec 2020 05:13:10 -0500
+        with ESMTP id S1726202AbgLBKNN (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Wed, 2 Dec 2020 05:13:13 -0500
 Received: from mail.aspeedtech.com ([192.168.0.24])
-        by twspam01.aspeedtech.com with ESMTP id 0B2A9qI9086422;
+        by twspam01.aspeedtech.com with ESMTP id 0B2A9qgg086424;
         Wed, 2 Dec 2020 18:09:52 +0800 (GMT-8)
         (envelope-from troy_lee@aspeedtech.com)
 Received: from TroyLee-PC.localdomain (192.168.100.253) by TWMBX02.aspeed.com
@@ -38,53 +38,47 @@ To:     Stefan Schaeckeler <sschaeck@cisco.com>,
         "open list:EDAC-CORE" <linux-edac@vger.kernel.org>
 CC:     <leetroy@gmail.com>, <troy_lee@aspeedtech.com>,
         <ryan_chen@aspeedtech.com>
-Subject: [PATCH v3 1/3] dt-bindings: edac: aspeed-sdram-edac: Add ast2400/ast2600 support
-Date:   Wed, 2 Dec 2020 18:12:16 +0800
-Message-ID: <20201202101218.18393-1-troy_lee@aspeedtech.com>
+Subject: [PATCH v3 2/3] ARM: dts: aspeed: Add AST2600 edac into common devicetree
+Date:   Wed, 2 Dec 2020 18:12:17 +0800
+Message-ID: <20201202101218.18393-2-troy_lee@aspeedtech.com>
 X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20201202101218.18393-1-troy_lee@aspeedtech.com>
+References: <20201202101218.18393-1-troy_lee@aspeedtech.com>
 MIME-Version: 1.0
 Content-Type: text/plain
 X-Originating-IP: [192.168.100.253]
 X-ClientProxiedBy: TWMBX02.aspeed.com (192.168.0.24) To TWMBX02.aspeed.com
  (192.168.0.24)
 X-DNSRBL: 
-X-MAIL: twspam01.aspeedtech.com 0B2A9qI9086422
+X-MAIL: twspam01.aspeedtech.com 0B2A9qgg086424
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-Adding Aspeed AST2400 and AST2600 binding for edac driver.
+Adding Aspeed AST2600 edac node into common devicetree.
 
 Signed-off-by: Troy Lee <troy_lee@aspeedtech.com>
 ---
- .../devicetree/bindings/edac/aspeed-sdram-edac.txt       | 9 ++++++---
- 1 file changed, 6 insertions(+), 3 deletions(-)
+ arch/arm/boot/dts/aspeed-g6.dtsi | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/edac/aspeed-sdram-edac.txt b/Documentation/devicetree/bindings/edac/aspeed-sdram-edac.txt
-index 6a0f3d90d682..8ca9e0a049d8 100644
---- a/Documentation/devicetree/bindings/edac/aspeed-sdram-edac.txt
-+++ b/Documentation/devicetree/bindings/edac/aspeed-sdram-edac.txt
-@@ -1,6 +1,6 @@
--Aspeed AST2500 SoC EDAC node
-+Aspeed BMC SoC EDAC node
+diff --git a/arch/arm/boot/dts/aspeed-g6.dtsi b/arch/arm/boot/dts/aspeed-g6.dtsi
+index b58220a49cbd..74367ee96f20 100644
+--- a/arch/arm/boot/dts/aspeed-g6.dtsi
++++ b/arch/arm/boot/dts/aspeed-g6.dtsi
+@@ -69,6 +69,12 @@
+ 		always-on;
+ 	};
  
--The Aspeed AST2500 SoC supports DDR3 and DDR4 memory with and without ECC (error
-+The Aspeed BMC SoC supports DDR3 and DDR4 memory with and without ECC (error
- correction check).
- 
- The memory controller supports SECDED (single bit error correction, double bit
-@@ -11,7 +11,10 @@ Note, the bootloader must configure ECC mode in the memory controller.
- 
- 
- Required properties:
--- compatible: should be "aspeed,ast2500-sdram-edac"
-+- compatible: should be one of
-+	- "aspeed,ast2400-sdram-edac"
-+	- "aspeed,ast2500-sdram-edac"
-+	- "aspeed,ast2600-sdram-edac"
- - reg:        sdram controller register set should be <0x1e6e0000 0x174>
- - interrupts: should be AVIC interrupt #0
- 
++	edac: sdram@1e6e0000 {
++		compatible = "aspeed,ast2600-sdram-edac", "syscon";
++		reg = <0x1e6e0000 0x174>;
++		interrupts = <GIC_SPI 0 IRQ_TYPE_LEVEL_HIGH>;
++	};
++
+ 	ahb {
+ 		compatible = "simple-bus";
+ 		#address-cells = <1>;
 -- 
 2.17.1
 
