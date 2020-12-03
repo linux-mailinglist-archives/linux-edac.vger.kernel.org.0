@@ -2,90 +2,91 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 052A62CD04D
-	for <lists+linux-edac@lfdr.de>; Thu,  3 Dec 2020 08:21:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B6F22CD48D
+	for <lists+linux-edac@lfdr.de>; Thu,  3 Dec 2020 12:28:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728192AbgLCHVS (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Thu, 3 Dec 2020 02:21:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58198 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728294AbgLCHVS (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Thu, 3 Dec 2020 02:21:18 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF69FC061A4D;
-        Wed,  2 Dec 2020 23:20:37 -0800 (PST)
-Received: from zn.tnic (p200300ec2f0dc500db287c99eb312af4.dip0.t-ipconnect.de [IPv6:2003:ec:2f0d:c500:db28:7c99:eb31:2af4])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        id S1727022AbgLCL2P (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Thu, 3 Dec 2020 06:28:15 -0500
+Received: from ozlabs.org ([203.11.71.1]:48791 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725985AbgLCL2P (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Thu, 3 Dec 2020 06:28:15 -0500
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 8DC211EC04DD;
-        Thu,  3 Dec 2020 08:20:35 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1606980035;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=I5tjK7vXmcH6KWOR2osK2BTeMN2+voSuUMYTgYKLvz0=;
-        b=msXBd46puOaaytgd7Vpo+UMF4g38wyPtzFZ9umpdp8RwrpSg80sdCQz5CAXKGOw1n1kVik
-        LG5rNZzvDonZnXLLw/sjDRO+LseOSwsI/ELsDEjxlPRJsHBVDdwEjSBwD821UhfhV1iHQd
-        EdZI6USOuyOb7ZCuwemKgbVnmGPRTiY=
-Date:   Thu, 3 Dec 2020 08:20:36 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Troy Lee <troy_lee@aspeedtech.com>
-Cc:     Andrew Jeffery <andrew@aj.id.au>, Joel Stanley <joel@jms.id.au>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, Tony Luck <tony.luck@intel.com>,
-        Ryan Chen <ryan_chen@aspeedtech.com>,
-        James Morse <james.morse@arm.com>,
-        "moderated list:ARM/ASPEED MACHINE SUPPORT" 
-        <linux-aspeed@lists.ozlabs.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Robert Richter <rrichter@marvell.com>,
-        "leetroy@gmail.com" <leetroy@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Stefan M Schaeckeler <sschaeck@cisco.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        "moderated list:ARM/ASPEED MACHINE SUPPORT" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "open list:EDAC-CORE" <linux-edac@vger.kernel.org>
-Subject: Re: [PATCH v2 3/3] edac: Supporting AST2400 and AST2600 edac driver
-Message-ID: <20201203072036.GB3059@zn.tnic>
-References: <20201202063612.21241-1-troy_lee@aspeedtech.com>
- <20201202063612.21241-3-troy_lee@aspeedtech.com>
- <CACPK8XcBTm8-cAPmtswHbYAf2B+PdBiZ2s1XK1UqKA_NQX_-mw@mail.gmail.com>
- <PS1PR06MB26008E4BCB805553EDEC45038AF30@PS1PR06MB2600.apcprd06.prod.outlook.com>
- <b6dd3a91-abe7-4e9d-b801-6e54e4c88827@www.fastmail.com>
- <20201202182349.GJ2951@zn.tnic>
- <PS1PR06MB2600D6A1E73D89EA0D0D59DC8AF20@PS1PR06MB2600.apcprd06.prod.outlook.com>
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Cmtq71dWPz9sW0;
+        Thu,  3 Dec 2020 22:27:29 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ellerman.id.au;
+        s=201909; t=1606994852;
+        bh=DhZJx6VS2S3i6rp5eGQb6lMVR2DlQIxOHgVG1xjGFrE=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=fZP6igB0dffXJpVPcdAMjoblQ8MgiPxVagbU9j32aVvdtENZ340u7asmb/zevIMam
+         0Zljjs9YIrqkIlnKZNVdDT3NCKBiIziUjE/G02oMM1J4m1sbKNebe4IpqGKedl8RAl
+         wU3n3OS6J1yqIJPH3Bqdx9iUtYQbs6Os7HVLNgJnO3GdxCQq3KYZC6ZG8wehxxixcr
+         JXHk6z0kY89GyKR60cUw2IYC7ReC5nPHHRs4ESewl/BBx98TlPWJvt21tXRj3BqsPy
+         THBPRrHyz/KN9pSs65pYUw6EGble1woG2YzV7nYVM6C9R1AvLrCykcMzvNV+MlRVnU
+         V7fkwXYOLHmfg==
+From:   Michael Ellerman <mpe@ellerman.id.au>
+To:     Borislav Petkov <bp@alien8.de>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>
+Cc:     Wang ShaoBo <bobo.shaobowang@huawei.com>, mchehab@kernel.org,
+        james.morse@arm.com, linux-edac@vger.kernel.org,
+        linux-kernel@vger.kernel.org, huawei.libin@huawei.com,
+        cj.chengjian@huawei.com, linuxppc-dev@lists.ozlabs.org
+Subject: Re: [PATCH] EDAC, mv64x60: Fix error return code in mv64x60_pci_err_probe()
+In-Reply-To: <20201202112515.GC2951@zn.tnic>
+References: <20201124063009.1529-1-bobo.shaobowang@huawei.com> <20201202112515.GC2951@zn.tnic>
+Date:   Thu, 03 Dec 2020 22:27:25 +1100
+Message-ID: <87pn3ruo2q.fsf@mpe.ellerman.id.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <PS1PR06MB2600D6A1E73D89EA0D0D59DC8AF20@PS1PR06MB2600.apcprd06.prod.outlook.com>
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Thu, Dec 03, 2020 at 01:27:27AM +0000, Troy Lee wrote:
-> Hi Broislav and Andrew,
-> 
-> I removed these exported function and submitted v3 PATCH.
+Borislav Petkov <bp@alien8.de> writes:
+> On Tue, Nov 24, 2020 at 02:30:09PM +0800, Wang ShaoBo wrote:
+>> Fix to return -ENODEV error code when edac_pci_add_device() failed instaed
+>> of 0 in mv64x60_pci_err_probe(), as done elsewhere in this function.
+>> 
+>> Fixes: 4f4aeeabc061 ("drivers-edac: add marvell mv64x60 driver")
+>> Signed-off-by: Wang ShaoBo <bobo.shaobowang@huawei.com>
+>> ---
+>>  drivers/edac/mv64x60_edac.c | 1 +
+>>  1 file changed, 1 insertion(+)
+>> 
+>> diff --git a/drivers/edac/mv64x60_edac.c b/drivers/edac/mv64x60_edac.c
+>> index 3c68bb525d5d..456b9ca1fe8d 100644
+>> --- a/drivers/edac/mv64x60_edac.c
+>> +++ b/drivers/edac/mv64x60_edac.c
+>> @@ -168,6 +168,7 @@ static int mv64x60_pci_err_probe(struct platform_device *pdev)
+>>  
+>>  	if (edac_pci_add_device(pci, pdata->edac_idx) > 0) {
+>>  		edac_dbg(3, "failed edac_pci_add_device()\n");
+>> +		res = -ENODEV;
+>>  		goto err;
+>>  	}
+>
+> That driver depends on MV64X60 and I don't see anything in the tree
+> enabling it and I can't select it AFAICT:
+>
+> config MV64X60
+>         bool
+>         select PPC_INDIRECT_PCI
+>         select CHECK_CACHE_COHERENCY
 
-I saw that. A couple of comments:
+It was selected by PPC_C2K, but that was dropped in:
 
-First of all, please do not top-post on a public mailing list.
+  92c8c16f3457 ("powerpc/embedded6xx: Remove C2K board support")
 
-Secondly, Joel gave you Reviewed-by: and Acked-by: for your patches 1
-and 2 which are not in your new submission. But they should be, please
-have a look at Documentation/process/ while you're waiting for his
-review of your v3.
+> PPC folks, what do we do here?
+>
+> If not used anymore, I'd love to have one less EDAC driver.
 
-You don't have to resend now with those added and I can add them if Joel
-is fine with patch 3 but pls remember to pick up tags reviewers have
-given you, in the future.
+It's dead code, so drop it.
 
-Thx.
+I can send a patch if no one else wants to.
 
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+cheers
