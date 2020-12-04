@@ -2,155 +2,54 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E7D342CEBFC
-	for <lists+linux-edac@lfdr.de>; Fri,  4 Dec 2020 11:17:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B44232CF826
+	for <lists+linux-edac@lfdr.de>; Sat,  5 Dec 2020 01:48:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729700AbgLDKQs (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Fri, 4 Dec 2020 05:16:48 -0500
-Received: from frasgout.his.huawei.com ([185.176.79.56]:2207 "EHLO
-        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729682AbgLDKQr (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Fri, 4 Dec 2020 05:16:47 -0500
-Received: from fraeml703-chm.china.huawei.com (unknown [172.18.147.201])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4CnT7z70K6z67KBJ;
-        Fri,  4 Dec 2020 18:14:07 +0800 (CST)
-Received: from lhreml715-chm.china.huawei.com (10.201.108.66) by
- fraeml703-chm.china.huawei.com (10.206.15.52) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
- 15.1.2106.2; Fri, 4 Dec 2020 11:16:06 +0100
-Received: from DESKTOP-6T4S3DQ.china.huawei.com (10.47.85.97) by
- lhreml715-chm.china.huawei.com (10.201.108.66) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1913.5; Fri, 4 Dec 2020 10:16:05 +0000
-From:   Shiju Jose <shiju.jose@huawei.com>
-To:     <linux-edac@vger.kernel.org>, <mchehab+huawei@kernel.org>
-CC:     <linuxarm@huawei.com>, <xuwei5@huawei.com>,
-        <jonathan.cameron@huawei.com>, <john.garry@huawei.com>,
-        <tanxiaofei@huawei.com>, <shameerali.kolothum.thodi@huawei.com>,
-        <salil.mehta@huawei.com>, <shiju.jose@huawei.com>
-Subject: [PATCH 3/3] rasdaemon: ras-mc-ctl: Add support for HiSilicon KunPeng9xx common errors
-Date:   Fri, 4 Dec 2020 10:13:38 +0000
-Message-ID: <20201204101338.1060-4-shiju.jose@huawei.com>
-X-Mailer: git-send-email 2.26.0.windows.1
-In-Reply-To: <20201204101338.1060-1-shiju.jose@huawei.com>
-References: <20201204101338.1060-1-shiju.jose@huawei.com>
+        id S1730933AbgLEAq7 (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Fri, 4 Dec 2020 19:46:59 -0500
+Received: from vsm-gw.hyogo-dai.ac.jp ([202.244.76.12]:49526 "EHLO
+        vsm-gw.hyogo-dai.ac.jp" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726485AbgLEAq5 (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Fri, 4 Dec 2020 19:46:57 -0500
+X-Greylist: delayed 14573 seconds by postgrey-1.27 at vger.kernel.org; Fri, 04 Dec 2020 19:46:41 EST
+Received: from humans-kc.hyogo-dai.ac.jp (humans-kc.hyogo-dai.ac.jp [202.244.77.11])
+        by vsm-gw.hyogo-dai.ac.jp (Postfix) with ESMTP id 274A31A5589;
+        Sat,  5 Dec 2020 04:44:55 +0900 (JST)
+Received: from humans-kc.hyogo-dai.ac.jp (humans-kc.hyogo-dai.ac.jp [127.0.0.1])
+        by postfix.imss71 (Postfix) with ESMTP id E5C39838858;
+        Sat,  5 Dec 2020 04:44:54 +0900 (JST)
+Received: from hyogo-dai.ac.jp (unknown [202.244.77.11])
+        by humans-kc.hyogo-dai.ac.jp (Postfix) with SMTP id B84F6838260;
+        Sat,  5 Dec 2020 04:44:54 +0900 (JST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.47.85.97]
-X-ClientProxiedBy: lhreml710-chm.china.huawei.com (10.201.108.61) To
- lhreml715-chm.china.huawei.com (10.201.108.66)
-X-CFilter-Loop: Reflected
+Message-ID: <20201204194454.00002B21.0147@hyogo-dai.ac.jp>
+Date:   Sat, 05 Dec 2020 04:44:54 +0900
+From:   "Dr.Raymond" <tabata@hyogo-dai.ac.jp>
+To:     <infocarferr1@aim.com>
+Reply-To: <infocarfer@aim.com>
+Subject: I am Vice Chairman of Hang Seng Bank, Dr. Raymond Chien
+         Kuo Fung I have Important Matter to Discuss with you concerning
+         my late client. Died without a NEXT OF KIN. Send me your private
+         email for full details information. 
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Priority: 3
+X-MAILER: Active! mail
+X-TM-AS-MML: disable
+X-TM-AS-Product-Ver: IMSS-7.1.0.1808-8.2.0.1013-25446.007
+X-TM-AS-Result: No--4.326-5.0-31-10
+X-imss-scan-details: No--4.326-5.0-31-10
+X-TM-AS-User-Approved-Sender: No
+X-TMASE-MatchedRID: +T4Z3mpR0x5ITndh1lLRASsOycAMAhSTkCM77ifYafsBLhz6t76Ce/bj
+        Enpjm61/Gf23dqZJjE4Erxo5p8V1/E1+zyfzlN7y/sToY2qzpx7w5nZ/qYg41XEWw1TkKAjcYff
+        qdBtG2ocgOkCKsW/kbuunGEBqPil++coAzulIP8gMTyJMXCOBhj9BWL7GG0LsKrauXd3MZDUZaR
+        NzIP3XI5u3uLPgwbAMH5RdHnhWfwyq9gpuf+A6coDeeVSgzszVDx5n520Z3eZyT7DDRtYlKaWBy
+        ZE9nSaC/rhfyjvqkZu/pNa4BidtZEMMprcbiest
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-Add support for the HiSilicon KunPeng9xx platforms common errors.
+infocarfer@aim.com
 
-Signed-off-by: Shiju Jose <shiju.jose@huawei.com>
-Reviewed-by: Xiaofei Tan <tanxiaofei@huawei.com>
----
- util/ras-mc-ctl.in | 52 ++++++++++++++++++++++++++++++++++++++++++++--
- 1 file changed, 50 insertions(+), 2 deletions(-)
 
-diff --git a/util/ras-mc-ctl.in b/util/ras-mc-ctl.in
-index 711e4b0..0885de1 100755
---- a/util/ras-mc-ctl.in
-+++ b/util/ras-mc-ctl.in
-@@ -1555,6 +1555,7 @@ sub errors
- # Definitions of the vendor platform IDs.
- use constant {
-     HISILICON_KUNPENG_920 => "KunPeng920",
-+    HISILICON_KUNPENG_9XX => "KunPeng9xx",
- };
- 
- sub vendor_errors_summary
-@@ -1562,7 +1563,7 @@ sub vendor_errors_summary
-     require DBI;
-     my ($num_args, $platform_id);
-     my ($query, $query_handle, $count, $out);
--    my ($module_id, $sub_module_id, $err_severity, $err_sev);
-+    my ($module_id, $sub_module_id, $err_severity, $err_sev, $err_info);
- 
-     $num_args = $#ARGV + 1;
-     $platform_id = 0;
-@@ -1651,6 +1652,28 @@ sub vendor_errors_summary
-         };
-     }
- 
-+    # HiSilicon KunPeng9xx common errors
-+    if ($platform_id eq HISILICON_KUNPENG_9XX) {
-+        try {
-+            $query = "select err_info, count(*) from hisi_common_section";
-+            $query_handle = $dbh->prepare($query);
-+            $query_handle->execute();
-+            $query_handle->bind_columns(\($err_info, $count));
-+            $out = "";
-+            while($query_handle->fetch()) {
-+                $out .= "\terrors: $count\n";
-+            }
-+            if ($out ne "") {
-+                print "HiSilicon KunPeng9xx common error events summary:\n$out\n";
-+            } else {
-+                print "No HiSilicon KunPeng9xx common errors.\n\n";
-+            }
-+            $query_handle->finish;
-+        } catch {
-+            print "Exception: $DBI::errstr\n\n";
-+        };
-+    }
-+
-     undef($dbh);
- }
- 
-@@ -1660,7 +1683,7 @@ sub vendor_errors
-     my ($num_args, $platform_id);
-     my ($query, $query_handle, $id, $timestamp, $out);
-     my ($version, $soc_id, $socket_id, $nimbus_id, $core_id, $port_id);
--    my ($module_id, $sub_module_id, $err_severity, $err_type, $regs);
-+    my ($module_id, $sub_module_id, $err_severity, $err_type, $err_info, $regs);
- 
-     $num_args = $#ARGV + 1;
-     $platform_id = 0;
-@@ -1760,6 +1783,30 @@ sub vendor_errors
-         };
-     }
- 
-+    # HiSilicon KunPeng9xx common errors
-+    if ($platform_id eq HISILICON_KUNPENG_9XX) {
-+        try {
-+            $query = "select id, timestamp, err_info, regs_dump from hisi_common_section order by id";
-+            $query_handle = $dbh->prepare($query);
-+            $query_handle->execute();
-+            $query_handle->bind_columns(\($id, $timestamp, $err_info, $regs));
-+            $out = "";
-+            while($query_handle->fetch()) {
-+                $out .= "$id. $timestamp ";
-+                $out .= "Error Info:$err_info \n" if ($err_info);
-+                $out .= "Error Registers: $regs\n\n" if ($regs);
-+            }
-+            if ($out ne "") {
-+                print "HiSilicon KunPeng9xx common error events:\n$out\n";
-+            } else {
-+                print "No HiSilicon KunPeng9xx common errors.\n";
-+            }
-+            $query_handle->finish;
-+        } catch {
-+            print "Exception: $DBI::errstr\n\n";
-+        };
-+    }
-+
-     undef($dbh);
- }
- 
-@@ -1767,6 +1814,7 @@ sub vendor_platforms
- {
-         print "\nSupported platforms for the vendor-specific errors:\n";
-         print "\tHiSilicon KunPeng920, platform-id=\"", HISILICON_KUNPENG_920, "\"\n";
-+        print "\tHiSilicon KunPeng9xx, platform-id=\"", HISILICON_KUNPENG_9XX, "\"\n";
-         print "\n";
- }
- 
--- 
-2.17.1
 
