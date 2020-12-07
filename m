@@ -2,70 +2,78 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E01A2D0EDC
-	for <lists+linux-edac@lfdr.de>; Mon,  7 Dec 2020 12:20:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BC842D0FC6
+	for <lists+linux-edac@lfdr.de>; Mon,  7 Dec 2020 12:55:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726322AbgLGLUT (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Mon, 7 Dec 2020 06:20:19 -0500
-Received: from mail.skyhub.de ([5.9.137.197]:60950 "EHLO mail.skyhub.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726110AbgLGLUT (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Mon, 7 Dec 2020 06:20:19 -0500
-Received: from zn.tnic (p4fed31e1.dip0.t-ipconnect.de [79.237.49.225])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id B320C1EC0426;
-        Mon,  7 Dec 2020 12:19:37 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1607339977;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=XYWwByMWitnTEsriHnMquiuoxbw9xmBiP+xQcZ42uX4=;
-        b=K6WHIa2SoRS6q4VIUPe4HJd5VmZEJmehKXp5SsjskOBJvvF0eDYdwCSzDL0lo73Ak+6Exc
-        7l0UqIk+eoklpvjoARYuh4z69Gnm0ppa8OvDSixAtY3bSIj8IApn/BvgOs7aOfBvUkZn3p
-        rrAH7XqXww1P6eeoDudEnGhesjgXU1c=
-Date:   Mon, 7 Dec 2020 12:17:27 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Michael Ellerman <mpe@ellerman.id.au>
-Cc:     mchehab@kernel.org, tony.luck@intel.com, james.morse@arm.com,
-        rric@kernel.org, linux-edac@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linuxppc-dev@ozlabs.org
-Subject: Re: [PATCH] EDAC/mv64x60: Remove orphan mv64x60 driver
-Message-ID: <20201207111727.GC20489@zn.tnic>
-References: <20201207040253.628528-1-mpe@ellerman.id.au>
+        id S1726638AbgLGLyu (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Mon, 7 Dec 2020 06:54:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44134 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726188AbgLGLyu (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Mon, 7 Dec 2020 06:54:50 -0500
+Received: from mail-qk1-x744.google.com (mail-qk1-x744.google.com [IPv6:2607:f8b0:4864:20::744])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3913C0613D2;
+        Mon,  7 Dec 2020 03:54:04 -0800 (PST)
+Received: by mail-qk1-x744.google.com with SMTP id z11so2988733qkj.7;
+        Mon, 07 Dec 2020 03:54:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=jms.id.au; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=E49RW3lCYWJrRHYIOf8r6xoeeHtbQpoKE5fOTw71iZo=;
+        b=SC5cS/hNjMqFSJGp92Czw/Dl4zANswBGyHPMn5sBorqcFfd0xp1WUId65rkdpnvgLJ
+         UDGS4ehZm7nOxE18JRAjnm9uEFr6RdW0SDIcLWxdOcXs74MieegRUh14FNN0eumwNwv3
+         hwNslglXh0I/5vN4zRprw8EjNoLnjYVS1/vP0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=E49RW3lCYWJrRHYIOf8r6xoeeHtbQpoKE5fOTw71iZo=;
+        b=th53Yj5MGSWSUwpLBo8/aZLgN2wVRFMqYZXGndFaISNuP7GECtP4//r7EJ/6e0Dbsz
+         n/+NOQga6jxsaqbmRxBhtv3/7phORrvn8dZNKHFTLO40OjnQlT3OQGVY5HM8KfoZLmFl
+         298n81f77hGr0rUKgMQMc+d92K6lSPR+XMTqX6CZx1M+jV5BKTi61o1agGptiSVnL2uA
+         d5kqfWZygD5zbLGXp9UXRq7Ptfz0zMFoNL6A3QZh4qFPWSjBFg2FlYzqVL47DnFBdSq/
+         sQiqfWYFyAG5oxrrqCdTpGiY2y8STN2wg1A8lTKXTBW5tv8VdsjsozT5F8EafRKfkM40
+         7VOQ==
+X-Gm-Message-State: AOAM530LcuUdDkZRgPXDyvbKInU17IdtwBmND6hGrywAnhvii+Rmb8S1
+        DrmUA+t7efNtqEwhHEQwM8R4I3sVaNXvojTfzg4=
+X-Google-Smtp-Source: ABdhPJwMVIarKWFTAT6CPBVIaqd6FKPGstN2lTEsLyCRkC4SMh9VXx5/1AbJYFRigDi1UcqIgH0/ixKSkql6qwp0Tho=
+X-Received: by 2002:a05:620a:2101:: with SMTP id l1mr3530842qkl.55.1607342043919;
+ Mon, 07 Dec 2020 03:54:03 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20201207040253.628528-1-mpe@ellerman.id.au>
+References: <20201207090013.14145-1-troy_lee@aspeedtech.com> <20201207090013.14145-3-troy_lee@aspeedtech.com>
+In-Reply-To: <20201207090013.14145-3-troy_lee@aspeedtech.com>
+From:   Joel Stanley <joel@jms.id.au>
+Date:   Mon, 7 Dec 2020 11:53:51 +0000
+Message-ID: <CACPK8Xdo1Ove0Gysd6g6ke9rk2QED4kCjxKEAdSV9SbbFkViVg@mail.gmail.com>
+Subject: Re: [PATCH v4 3/3] edac: Supporting AST2400 and AST2600 edac driver
+To:     Troy Lee <troy_lee@aspeedtech.com>
+Cc:     Stefan Schaeckeler <sschaeck@cisco.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Borislav Petkov <bp@alien8.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Tony Luck <tony.luck@intel.com>,
+        James Morse <james.morse@arm.com>,
+        Robert Richter <rric@kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        "moderated list:ARM/ASPEED MACHINE SUPPORT" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/ASPEED MACHINE SUPPORT" 
+        <linux-aspeed@lists.ozlabs.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:EDAC-CORE" <linux-edac@vger.kernel.org>,
+        leetroy@gmail.com, Ryan Chen <ryan_chen@aspeedtech.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Mon, Dec 07, 2020 at 03:02:53PM +1100, Michael Ellerman wrote:
-> The mv64x60 EDAC driver depends on CONFIG_MV64X60. But that symbol is
-> not user-selectable, and the last code that selected it was removed
-> with the C2K board support in 2018, see:
-> 
->   92c8c16f3457 ("powerpc/embedded6xx: Remove C2K board support")
-> 
-> That means the driver is now dead code, so remove it.
-> 
-> Suggested-by: Borislav Petkov <bp@alien8.de>
-> Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
-> ---
->  drivers/edac/Kconfig        |   7 -
->  drivers/edac/Makefile       |   1 -
->  drivers/edac/mv64x60_edac.c | 883 ------------------------------------
->  drivers/edac/mv64x60_edac.h | 114 -----
->  4 files changed, 1005 deletions(-)
->  delete mode 100644 drivers/edac/mv64x60_edac.c
->  delete mode 100644 drivers/edac/mv64x60_edac.h
+On Mon, 7 Dec 2020 at 09:01, Troy Lee <troy_lee@aspeedtech.com> wrote:
+>
+> Adding AST2400 and AST2600 edac driver support.
+>
+> Signed-off-by: Troy Lee <troy_lee@aspeedtech.com>
 
-Gladly taken and applied, thanks!
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+Reviewed-by: Joel Stanley <joel@jms.id.au>
