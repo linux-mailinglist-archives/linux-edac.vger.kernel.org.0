@@ -2,403 +2,155 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 061082D5158
-	for <lists+linux-edac@lfdr.de>; Thu, 10 Dec 2020 04:30:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BF962D7DEC
+	for <lists+linux-edac@lfdr.de>; Fri, 11 Dec 2020 19:21:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729543AbgLJD0J (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Wed, 9 Dec 2020 22:26:09 -0500
-Received: from mail-dm6nam12on2049.outbound.protection.outlook.com ([40.107.243.49]:24083
-        "EHLO NAM12-DM6-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1729002AbgLJD0H (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Wed, 9 Dec 2020 22:26:07 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=gPOt7//AvgOq5+Ie0uBOH1O+PVWe9/y6wRkMobgSr8a9w+LRmGXXnEmIKrJmyqZ3SEZvQU1Q03i8JHLBRnFrWdJeauq/yhk4pUf430C6zvk6h0YMjadH2sf5Sh5wypp9O72jRzPhpDm006N4EZAFy66h+hICMyw92CdQyxIMIEI6yyHM5yxtpJRWrf9Ef3zJ5sRWW6aTSm6UpjgaUJtKL4mP4yo5o4gUNc2WqAqoyPdgZSBRwsPpMhYqs2/9veL0xWTxnMLegEnBRTcyf6fjGuj8sfxxdLaN8OPJl+7ET5no1n6sAYCCxXa0K1DZg0nueDGOSLBriDqH1lxT2Xpsfg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=5maE5gAhIJn2hmH2+Kbz5AxXy0HYgj8z6owqULWYMPw=;
- b=ZM1L1uyE1OM5CpQcWZENtIzxdyFwkrppMnSYSqStOpsGqUe34LpJJZLeWe2KhmBXgfEC1jy0id0WNGbFAFhJDhrZ3jflWEpZ/E1FUzoA/eorQWatbzYhUGUVrHS9ngmMbuOqkwEQZGUGog55e0os/MbkV+0XrOpWi2RkbF1tQtxm21TrDtbttCmdGf/S1h7rCCQGFoXwL8ALY1vHYoQwP1EUA1R8HSyZxah0rdyMuiPGXN0N4DMrpjtn3QiyMd9W1cHBA7xH+/jqui5OpMBGhRzvWvqhCaH30yk6Hx/DyzMhXMvt+ft7TQNeG9ll0SqWPXSvyi1SZaOVXuEV3ZYGYw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=openfive.com; dmarc=pass action=none header.from=openfive.com;
- dkim=pass header.d=openfive.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=osportal.onmicrosoft.com; s=selector2-osportal-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=5maE5gAhIJn2hmH2+Kbz5AxXy0HYgj8z6owqULWYMPw=;
- b=kydOlzAJSFdUP1ma0aoXzat3NmNfRpa2B+Uhg6Lu8Qb1RPAKaNwXE4RvrSleWH+cn4IcQaGfTzFU/HCNmV9TnDtGdWIFnyPRWqPWv1XIio4o8PY24EYnfJq9vP0QGd7y5hvtNphwKUqS4d5t9vyaLUQQbSmZP0MpUWnFk7b0p6w=
-Received: from BY5PR13MB4453.namprd13.prod.outlook.com (2603:10b6:a03:1d1::19)
- by BYAPR13MB2440.namprd13.prod.outlook.com (2603:10b6:a02:ce::25) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3654.7; Thu, 10 Dec
- 2020 03:25:12 +0000
-Received: from BY5PR13MB4453.namprd13.prod.outlook.com
- ([fe80::7c13:1ac6:9f2a:5eae]) by BY5PR13MB4453.namprd13.prod.outlook.com
- ([fe80::7c13:1ac6:9f2a:5eae%8]) with mapi id 15.20.3654.014; Thu, 10 Dec 2020
- 03:25:12 +0000
-From:   Yash Shah <yash.shah@openfive.com>
-To:     "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "Paul Walmsley ( Sifive)" <paul.walmsley@sifive.com>,
-        "palmer@dabbelt.com" <palmer@dabbelt.com>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "mchehab@kernel.org" <mchehab@kernel.org>,
-        "tony.luck@intel.com" <tony.luck@intel.com>,
-        "james.morse@arm.com" <james.morse@arm.com>,
-        "rric@kernel.org" <rric@kernel.org>
-CC:     "aou@eecs.berkeley.edu" <aou@eecs.berkeley.edu>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
-        Sachin Ghadi <sachin.ghadi@openfive.com>
-Subject: RE: [PATCH 2/3] soc: sifive: beu: Add support for SiFive Bus Error
- Unit
-Thread-Topic: [PATCH 2/3] soc: sifive: beu: Add support for SiFive Bus Error
- Unit
-Thread-Index: AQHWuOuNd8XmX1lGkUy24amlH//I7Knv1gcA
-Date:   Thu, 10 Dec 2020 03:25:12 +0000
-Message-ID: <BY5PR13MB4453A9D53964A6A03E8080E682CB0@BY5PR13MB4453.namprd13.prod.outlook.com>
-References: <1605182457-86046-1-git-send-email-yash.shah@sifive.com>
- <1605182457-86046-2-git-send-email-yash.shah@sifive.com>
-In-Reply-To: <1605182457-86046-2-git-send-email-yash.shah@sifive.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: kernel.org; dkim=none (message not signed)
- header.d=none;kernel.org; dmarc=none action=none header.from=openfive.com;
-x-originating-ip: [103.109.13.228]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 3cbf53d1-fd7d-462d-2a94-08d89cbb3463
-x-ms-traffictypediagnostic: BYAPR13MB2440:
-x-ld-processed: 22f88e9d-ae0d-4ed9-b984-cdc9be1529f1,ExtAddr
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <BYAPR13MB24409077F81CF6DAD327572882CB0@BYAPR13MB2440.namprd13.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:4502;
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: zY8X75OMiIhUMkdfo8QkKV21XoLDqVrRwyryi5oL/mUiHXBErrFkvLM0ki/3r9gOWhXrjbTBYTSgIG8bEWewQV8MUr0LXvGKETa4a+qPuvh3lFOOTMW/g0U62fJeg91jFzRyno4gWgiIpTnqfzQIe3akBU5eSdT+DnFQhaE3zJcQ1YK6GtJdslEnP7SEam38a8eqMyqxB1jJ/jXmFfCvSOyKvzUpcAoIgFGAwVOoHGiQeDMAVZpCM6zK0upu9VOPBxs73JqkF1ShVBwj2UKaQAzH0jLuxvErq5vByyaZP7lIQKTcdgSEc3If+LmOjriVgopjW/Mx0lo8UD023ot1lw==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR13MB4453.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(6029001)(376002)(346002)(136003)(366004)(508600001)(2906002)(8676002)(44832011)(53546011)(71200400001)(52536014)(6506007)(26005)(5660300002)(7696005)(8936002)(9686003)(110136005)(66476007)(4326008)(107886003)(54906003)(186003)(66446008)(66556008)(64756008)(76116006)(66946007)(86362001)(83380400001)(7416002)(33656002)(55016002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata: =?us-ascii?Q?UsLNTuJf0ClSHQ+LNJ4iC5dyM1SOf8MArt82c6wrc8siOGFyLIJCFhvtYQyk?=
- =?us-ascii?Q?ayMovmzfbzazpz5UOIXnTTRjUdZepBxEKT+WzExwOJd9PaKoh1Sc+RHhI/FI?=
- =?us-ascii?Q?QCitAOsHa5oQXhO3B1+LyfdUV+T3HoWIA09gq265urc59zxyEWmiiFdACOAX?=
- =?us-ascii?Q?w0nLiktZ0ZzTGv0LYZVswQa4ElMwfTyWu5LLLQl3et1+LjWhvkQvaRsckBlB?=
- =?us-ascii?Q?zk8Wql9/x1yyL2N8H4vPOYNS8lxjsAFYhTY4i3FctUkY29CayE+2eKg7ZtSC?=
- =?us-ascii?Q?pM4BqsLLEo12l7H2J+dp7sqoI7opnsTTHhlbLH9RL9G6mh9jsl+iqMXFyXBV?=
- =?us-ascii?Q?03kCyMw9kKAhehch/e3xe9JsdKg/ax2qj5QCAMxX/whorYEkbYu4xW3VLXes?=
- =?us-ascii?Q?FCOiA3c0jdzzkdEWNARh+Wzcqx/g+TDtfccnW2sE6AGg3bMVogrjUTI8VYVj?=
- =?us-ascii?Q?U2wYMVokHiiuelDG7L4M8KZOyfVwFstjgTJ0Bdw7vA4CnXPQSawWu9VOpyGK?=
- =?us-ascii?Q?1ZXd5yuVqG1lwIvjpgevCOYb+wxVCx88bQHaP1dXD/2eWDlDaynauy94fGBf?=
- =?us-ascii?Q?onytQZUKtTOGoslHov79qdaFgCe3EjMGvbFzw2C63TJ8Y65grO1mKHstpJl/?=
- =?us-ascii?Q?7VZ2MqxDXd6li+IppHY5z/koSITAM229GfI2AZFO0wEFgMhk0i4dcjb+Gas/?=
- =?us-ascii?Q?oFcLjIixSvLhGesXTlGS7TBsZ0Zg1YGnPKMURxUnL3d+x19XViPODrhfLsg0?=
- =?us-ascii?Q?vXS+Y0y+bKus8fJmxkuP+EXTE3DYrD/zf9k3GSuiSHco6SCGXxQh4QjNaUqA?=
- =?us-ascii?Q?WVn5KSp6izCd4YBez/FEEef34ryEIQVWAXpodRaYsWKEy5U7Zx78J79NtfJQ?=
- =?us-ascii?Q?tgosY1/yWb9O0LztFt45xuXHVjY0PdM7yMHV3UwY2hH3XAcYDe1q0RHLqB95?=
- =?us-ascii?Q?qhvvGzUkhsrvMiJOsFnKJ6cglOB7gDZf1c+sHp4+Kww=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        id S1728714AbgLKSU0 (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Fri, 11 Dec 2020 13:20:26 -0500
+Received: from mail.skyhub.de ([5.9.137.197]:37032 "EHLO mail.skyhub.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2394028AbgLKSUC (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Fri, 11 Dec 2020 13:20:02 -0500
+Received: from zn.tnic (p200300ec2f124300da799288a8bc7530.dip0.t-ipconnect.de [IPv6:2003:ec:2f12:4300:da79:9288:a8bc:7530])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id B1FF71EC0545;
+        Fri, 11 Dec 2020 19:19:20 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1607710760;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:references;
+        bh=RDVfxd7AKozIgTODuCAkkQUIQHLXJRKfrTeEOVdp+Y0=;
+        b=gsFHf88A5rpeQVsNSNKq0UpI33ieZntIcXVHCF2BL6gufYHYawteRobo9zo6DI8tJV+8CN
+        lsHDy7JblY1OfHLzhTyO91FUXOTaQO/UsfDEX6fJdRKqjb4k4sdIYFY35NGxJKCx71SjFL
+        hQ8jyhvX8QdCVHJKPeJlsQqBGgJ/5DY=
+Date:   Fri, 11 Dec 2020 19:19:15 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Tony Luck <tony.luck@intel.com>,
+        Yazen Ghannam <yazen.ghannam@amd.com>
+Cc:     linux-edac <linux-edac@vger.kernel.org>
+Subject: EDAC instances probing
+Message-ID: <20201211181915.GD25974@zn.tnic>
 MIME-Version: 1.0
-X-OriginatorOrg: openfive.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BY5PR13MB4453.namprd13.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3cbf53d1-fd7d-462d-2a94-08d89cbb3463
-X-MS-Exchange-CrossTenant-originalarrivaltime: 10 Dec 2020 03:25:12.3282
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 22f88e9d-ae0d-4ed9-b984-cdc9be1529f1
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: HnDptXgmoBVIigYhw89TvSx/dzOJnN3/oMT6ZIQVrResoqIn/9NHwVL9HUbqMZwMaRqmYKtKQTZvLwtTrWC4CA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR13MB2440
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-Any updates on this patch?
+Hi guys,
 
-- Yash
+so we converted a couple of EDAC drivers to per-CPU-family autoprobing
+instead of the PCI device IDs one which needed constant adding of new
+device IDs.
 
-> -----Original Message-----
-> From: Yash Shah <yash.shah@openfive.com>
-> Sent: 12 November 2020 17:31
-> To: robh+dt@kernel.org; Paul Walmsley ( Sifive)
-> <paul.walmsley@sifive.com>; palmer@dabbelt.com; bp@alien8.de;
-> mchehab@kernel.org; tony.luck@intel.com; james.morse@arm.com;
-> rric@kernel.org
-> Cc: aou@eecs.berkeley.edu; devicetree@vger.kernel.org; linux-
-> riscv@lists.infradead.org; linux-kernel@vger.kernel.org; linux-
-> edac@vger.kernel.org; Sachin Ghadi <sachin.ghadi@openfive.com>; Yash
-> Shah <yash.shah@openfive.com>
-> Subject: [PATCH 2/3] soc: sifive: beu: Add support for SiFive Bus Error U=
-nit
->=20
-> Add driver support for Bus Error Unit present in SiFive's FU740 chip.
-> Currently the driver reports erroneous events only using Platform-level
-> interrupts. The support for reporting events using hart-local interrupts =
-can
-> be added in future.
->=20
-> Signed-off-by: Yash Shah <yash.shah@sifive.com>
-> ---
->  drivers/soc/sifive/Kconfig      |   5 +
->  drivers/soc/sifive/Makefile     |   1 +
->  drivers/soc/sifive/sifive_beu.c | 197
-> ++++++++++++++++++++++++++++++++++++++++
->  include/soc/sifive/sifive_beu.h |  16 ++++
->  4 files changed, 219 insertions(+)
->  create mode 100644 drivers/soc/sifive/sifive_beu.c  create mode 100644
-> include/soc/sifive/sifive_beu.h
->=20
-> diff --git a/drivers/soc/sifive/Kconfig b/drivers/soc/sifive/Kconfig inde=
-x
-> 58cf8c4..d575fc1 100644
-> --- a/drivers/soc/sifive/Kconfig
-> +++ b/drivers/soc/sifive/Kconfig
-> @@ -7,4 +7,9 @@ config SIFIVE_L2
->  	help
->  	  Support for the L2 cache controller on SiFive platforms.
->=20
-> +config SIFIVE_BEU
-> +	bool "Sifive Bus Error Unit"
-> +	help
-> +	  Support for the Bus Error Unit on SiFive platforms.
-> +
->  endif
-> diff --git a/drivers/soc/sifive/Makefile b/drivers/soc/sifive/Makefile in=
-dex
-> b5caff7..1b43ecd 100644
-> --- a/drivers/soc/sifive/Makefile
-> +++ b/drivers/soc/sifive/Makefile
-> @@ -1,3 +1,4 @@
->  # SPDX-License-Identifier: GPL-2.0
->=20
->  obj-$(CONFIG_SIFIVE_L2)	+=3D sifive_l2_cache.o
-> +obj-$(CONFIG_SIFIVE_BEU)	+=3D sifive_beu.o
-> diff --git a/drivers/soc/sifive/sifive_beu.c b/drivers/soc/sifive/sifive_=
-beu.c
-> new file mode 100644 index 0000000..87b69ba
-> --- /dev/null
-> +++ b/drivers/soc/sifive/sifive_beu.c
-> @@ -0,0 +1,197 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * SiFive Bus Error Unit driver
-> + * Copyright (C) 2020 SiFive
-> + * Author: Yash Shah <yash.shah@sifive.com>
-> + *
-> + */
-> +
-> +#include <linux/module.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/of_platform.h>
-> +#include <linux/interrupt.h>
-> +#include <linux/io.h>
-> +#include <soc/sifive/sifive_beu.h>
-> +
-> +#define SIFIVE_BEU_CAUSE	0x00
-> +#define SIFIVE_BEU_VALUE	0x08
-> +#define SIFIVE_BEU_ENABLE	0x10
-> +#define SIFIVE_BEU_PLIC_INTR	0x18
-> +#define SIFIVE_BEU_ACCRUED	0x20
-> +#define SIFIVE_BEU_LOCAL_INTR	0x28
-> +
-> +#define LOCAL_INTERRUPT	0
-> +#define PLIC_INTERRUPT	1
-> +#define MAX_ERR_EVENTS	5
-> +
-> +enum beu_err_events {
-> +	RESERVED =3D -1,
-> +	NO_ERR,
-> +	ITIM_CORR_ECC =3D 2,
-> +	ITIM_UNCORR_ECC,
-> +	TILINKBUS_ERR =3D 5,
-> +	DCACHE_CORR_ECC,
-> +	DCACHE_UNCORR_ECC
-> +};
-> +
-> +static
-> +int err_events[MAX_ERR_EVENTS] =3D {ITIM_CORR_ECC, ITIM_UNCORR_ECC,
-> TILINKBUS_ERR,
-> +				  DCACHE_CORR_ECC,
-> DCACHE_UNCORR_ECC};
-> +
-> +struct beu_sifive_ddata {
-> +	void __iomem *regs;
-> +	int irq;
-> +};
-> +
-> +static int beu_enable_event(struct beu_sifive_ddata *ddata,
-> +			    int event, int intr_type)
-> +{
-> +	unsigned char event_mask =3D BIT(event), val;
-> +
-> +	val =3D readb(ddata->regs + SIFIVE_BEU_ENABLE);
-> +	val |=3D event_mask;
-> +	writeb(val, ddata->regs + SIFIVE_BEU_ENABLE);
-> +
-> +	if (intr_type =3D=3D PLIC_INTERRUPT) {
-> +		val =3D readb(ddata->regs + SIFIVE_BEU_PLIC_INTR);
-> +		val |=3D event_mask;
-> +		writeb(val, ddata->regs + SIFIVE_BEU_PLIC_INTR);
-> +	} else if (intr_type =3D=3D LOCAL_INTERRUPT) {
-> +		val =3D readb(ddata->regs + SIFIVE_BEU_LOCAL_INTR);
-> +		val |=3D event_mask;
-> +		writeb(event_mask, ddata->regs + SIFIVE_BEU_LOCAL_INTR);
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static ATOMIC_NOTIFIER_HEAD(beu_chain);
-> +
-> +int register_sifive_beu_error_notifier(struct notifier_block *nb) {
-> +	return atomic_notifier_chain_register(&beu_chain, nb); }
-> +
-> +int unregister_sifive_beu_error_notifier(struct notifier_block *nb) {
-> +	return atomic_notifier_chain_unregister(&beu_chain, nb); }
-> +
-> +static irqreturn_t beu_sifive_irq(int irq, void *data) {
-> +	struct beu_sifive_ddata *ddata =3D data;
-> +	unsigned char cause, addr;
-> +
-> +	addr =3D readb(ddata->regs + SIFIVE_BEU_VALUE);
-> +	cause =3D readb(ddata->regs + SIFIVE_BEU_CAUSE);
-> +	switch (cause) {
-> +	case NO_ERR:
-> +		break;
-> +	case ITIM_CORR_ECC:
-> +		pr_err("BEU: ITIM ECCFIX @ %d\n", addr);
-> +		atomic_notifier_call_chain(&beu_chain,
-> SIFIVE_BEU_ERR_TYPE_CE,
-> +					   "ITIM ECCFIX");
-> +		break;
-> +	case ITIM_UNCORR_ECC:
-> +		pr_err("BEU: ITIM ECCFAIL @ %d\n", addr);
-> +		atomic_notifier_call_chain(&beu_chain,
-> SIFIVE_BEU_ERR_TYPE_UE,
-> +					   "ITIM ECCFAIL");
-> +		break;
-> +	case TILINKBUS_ERR:
-> +		pr_err("BEU: Load or Store TILINK BUS ERR occurred\n");
-> +		break;
-> +	case DCACHE_CORR_ECC:
-> +		pr_err("BEU: DATACACHE ECCFIX @ %d\n", addr);
-> +		atomic_notifier_call_chain(&beu_chain,
-> SIFIVE_BEU_ERR_TYPE_CE,
-> +					   "DCACHE ECCFIX");
-> +		break;
-> +	case DCACHE_UNCORR_ECC:
-> +		pr_err("BEU: DATACACHE ECCFAIL @ %d\n", addr);
-> +		atomic_notifier_call_chain(&beu_chain,
-> SIFIVE_BEU_ERR_TYPE_UE,
-> +					   "DCACHE ECCFAIL");
-> +		break;
-> +	default:
-> +		pr_err("BEU: Unidentified cause\n");
-> +		break;
-> +	}
-> +	writeb(0, ddata->regs + SIFIVE_BEU_CAUSE);
-> +	writeb(0, ddata->regs + SIFIVE_BEU_ACCRUED);
-> +
-> +	return IRQ_HANDLED;
-> +}
-> +
-> +static int beu_sifive_probe(struct platform_device *pdev) {
-> +	struct device *dev =3D &pdev->dev;
-> +	struct beu_sifive_ddata *ddata;
-> +	struct resource *res;
-> +	int ret, i;
-> +
-> +	ddata =3D devm_kzalloc(dev, sizeof(*ddata), GFP_KERNEL);
-> +	if (!ddata)
-> +		return -ENOMEM;
-> +
-> +	res =3D platform_get_resource(pdev, IORESOURCE_MEM, 0);
-> +	ddata->regs =3D devm_ioremap_resource(dev, res);
-> +	if (IS_ERR(ddata->regs)) {
-> +		dev_err(dev, "Unable to map IO resources\n");
-> +		return PTR_ERR(ddata->regs);
-> +	}
-> +
-> +	ddata->irq =3D platform_get_irq(pdev, 0);
-> +	if (ddata->irq < 0) {
-> +		dev_err(dev, "Unable to find interrupt\n");
-> +		ret =3D ddata->irq;
-> +		return ret;
-> +	}
-> +
-> +	ret =3D devm_request_irq(dev, ddata->irq, beu_sifive_irq, 0,
-> +			       dev_name(dev), ddata);
-> +	if (ret) {
-> +		dev_err(dev, "Unable to request IRQ\n");
-> +		return ret;
-> +	}
-> +
-> +	for (i =3D 0; i < MAX_ERR_EVENTS; i++) {
-> +		ret =3D beu_enable_event(ddata, err_events[i],
-> PLIC_INTERRUPT);
-> +		if (ret) {
-> +			dev_err(dev, "Unable to register PLIC interrupt\n");
-> +			return ret;
-> +		}
-> +	}
-> +
-> +	platform_set_drvdata(pdev, ddata);
-> +
-> +	return 0;
-> +}
-> +
-> +static int beu_sifive_remove(struct platform_device *pdev) {
-> +	struct beu_sifive_ddata *ddata =3D platform_get_drvdata(pdev);
-> +
-> +	/* Mask all error events */
-> +	writeb(0, ddata->regs + SIFIVE_BEU_ENABLE);
-> +	writeb(0, ddata->regs + SIFIVE_BEU_PLIC_INTR);
-> +	writeb(0, ddata->regs + SIFIVE_BEU_LOCAL_INTR);
-> +
-> +	return 0;
-> +}
-> +
-> +static const struct of_device_id beu_sifive_of_match[] =3D {
-> +	{ .compatible =3D "sifive,beu0" },
-> +	{},
-> +};
-> +MODULE_DEVICE_TABLE(of, beu_sifive_of_match);
-> +
-> +static struct platform_driver beu_sifive_driver =3D {
-> +	.probe =3D beu_sifive_probe,
-> +	.remove =3D beu_sifive_remove,
-> +	.driver =3D {
-> +		.name =3D "beu-sifive",
-> +		.of_match_table =3D beu_sifive_of_match,
-> +	},
-> +};
-> +module_platform_driver(beu_sifive_driver);
-> +
-> +MODULE_DESCRIPTION("SiFive BEU driver"); MODULE_LICENSE("GPL v2");
-> diff --git a/include/soc/sifive/sifive_beu.h b/include/soc/sifive/sifive_=
-beu.h
-> new file mode 100644 index 0000000..c2ab688
-> --- /dev/null
-> +++ b/include/soc/sifive/sifive_beu.h
-> @@ -0,0 +1,16 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +/*
-> + * SiFive Bus Error unit header file
-> + *
-> + */
-> +
-> +#ifndef __SOC_SIFIVE_BEU_H
-> +#define __SOC_SIFIVE_BEU_H
-> +
-> +extern int register_sifive_beu_error_notifier(struct notifier_block
-> +*nb); extern int unregister_sifive_beu_error_notifier(struct
-> +notifier_block *nb);
-> +
-> +#define SIFIVE_BEU_ERR_TYPE_CE 0
-> +#define SIFIVE_BEU_ERR_TYPE_UE 1
-> +
-> +#endif /* __SOC_SIFIVE_BEU_H */
-> --
-> 2.7.4
+However easy the new probing is, it spams dmesg on each CPU as it tries
+loading on each CPU, when there's no ECC DIMMs or ECC is disabled.
+Here's the output from a 128 CPU box:
 
+$ grep EDAC dmesg.log | sed 's/\[.*\] //' | sort | uniq -c
+    128 EDAC amd64: F17h detected (node 0).
+    128 EDAC amd64: Node 0: DRAM ECC disabled.
+      1 EDAC MC: Ver: 3.0.0
+
+that's 2 lines per CPU.
+
+Btw, people have complained about the spamming.
+
+So I tried something clumsy, see below, which fixes this into what it
+should say:
+
+$ dmesg | grep EDAC
+[    2.693470] EDAC MC: Ver: 3.0.0
+[    8.284461] EDAC amd64: F17h detected (node 0).
+[    8.287953] EDAC amd64: Node 0: DRAM ECC disabled.
+[    8.381430] EDAC amd64: F17h detected (node 1).
+[    8.384684] EDAC amd64: Node 1: DRAM ECC disabled.
+[    8.461902] EDAC amd64: F17h detected (node 2).
+[    8.461993] EDAC amd64: Node 2: DRAM ECC disabled.
+[    8.536907] EDAC amd64: F17h detected (node 3).
+[    8.538923] EDAC amd64: Node 3: DRAM ECC disabled.
+[    8.643213] EDAC amd64: F17h detected (node 4).
+[    8.645474] EDAC amd64: Node 4: DRAM ECC disabled.
+[    8.713411] EDAC amd64: F17h detected (node 5).
+[    8.714818] EDAC amd64: Node 5: DRAM ECC disabled.
+[    8.807825] EDAC amd64: F17h detected (node 6).
+[    8.809882] EDAC amd64: Node 6: DRAM ECC disabled.
+[    8.908043] EDAC amd64: F17h detected (node 7).
+[    8.910883] EDAC amd64: Node 7: DRAM ECC disabled.
+
+Once per driver instance, however each driver accounts an instance -
+logical node, physical node, whatever.
+
+So it looks like this, do you guys think this is too ugly to live?
+
+---
+diff --git a/drivers/edac/amd64_edac.c b/drivers/edac/amd64_edac.c
+index f7087ddddb90..de37d0d9a27b 100644
+--- a/drivers/edac/amd64_edac.c
++++ b/drivers/edac/amd64_edac.c
+@@ -3581,6 +3581,7 @@ static int probe_one_instance(unsigned int nid)
+ 
+ 	dump_misc_regs(pvt);
+ 
++	set_bit(nid, edac_get_probed_instances());
+ 	return ret;
+ 
+ err_enable:
+@@ -3591,6 +3592,7 @@ static int probe_one_instance(unsigned int nid)
+ 	kfree(s);
+ 	ecc_stngs[nid] = NULL;
+ 
++	set_bit(nid, edac_get_probed_instances());
+ err_out:
+ 	return ret;
+ }
+@@ -3674,6 +3676,10 @@ static int __init amd64_edac_init(void)
+ 		goto err_free;
+ 
+ 	for (i = 0; i < amd_nb_num(); i++) {
++
++		if (test_bit(i, edac_get_probed_instances()))
++			continue;
++
+ 		err = probe_one_instance(i);
+ 		if (err) {
+ 			/* unwind properly */
+diff --git a/drivers/edac/edac_mc.c b/drivers/edac/edac_mc.c
+index f6d462d0be2d..f97186237ccc 100644
+--- a/drivers/edac/edac_mc.c
++++ b/drivers/edac/edac_mc.c
+@@ -53,6 +53,15 @@ static LIST_HEAD(mc_devices);
+  */
+ static const char *edac_mc_owner;
+ 
++/* bitmap of already probed driver instances, 64 should be big enough. :-P */
++static DECLARE_BITMAP(probed_instances, 64);
++
++unsigned long *edac_get_probed_instances(void)
++{
++	return probed_instances;
++}
++EXPORT_SYMBOL_GPL(edac_get_probed_instances);
++
+ static struct mem_ctl_info *error_desc_to_mci(struct edac_raw_error_desc *e)
+ {
+ 	return container_of(e, struct mem_ctl_info, error_desc);
+diff --git a/drivers/edac/edac_mc.h b/drivers/edac/edac_mc.h
+index 881b00eadf7a..7c0d4ac7c35a 100644
+--- a/drivers/edac/edac_mc.h
++++ b/drivers/edac/edac_mc.h
+@@ -255,4 +255,6 @@ void edac_mc_handle_error(const enum hw_event_mc_err_type type,
+  */
+ extern char *edac_op_state_to_string(int op_state);
+ 
++unsigned long *edac_get_probed_instances(void);
++
+ #endif				/* _EDAC_MC_H_ */
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
