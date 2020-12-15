@@ -2,174 +2,157 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EC492DB105
-	for <lists+linux-edac@lfdr.de>; Tue, 15 Dec 2020 17:13:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D0962DB21D
+	for <lists+linux-edac@lfdr.de>; Tue, 15 Dec 2020 18:03:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730246AbgLOQM3 (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Tue, 15 Dec 2020 11:12:29 -0500
-Received: from mail-bn8nam11on2056.outbound.protection.outlook.com ([40.107.236.56]:55356
-        "EHLO NAM11-BN8-obe.outbound.protection.outlook.com"
+        id S1727074AbgLORCl (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Tue, 15 Dec 2020 12:02:41 -0500
+Received: from mail-dm6nam10on2063.outbound.protection.outlook.com ([40.107.93.63]:49249
+        "EHLO NAM10-DM6-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1730596AbgLOQM0 (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Tue, 15 Dec 2020 11:12:26 -0500
+        id S1728853AbgLORCi (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Tue, 15 Dec 2020 12:02:38 -0500
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=T9NzcuGSxCOqo0O1746JXz62wf+YyeTtoaQx64ODkr68LTtsoV3hex7hw8Y1pnm44vXf4oH4XadJATUrcpcSOkJnGFuSRV82qmLzCUF66cVO+QsBdEi5tO/dgIqjfLW5JRpXRLCwgJcL6hRN5TQoWXkeCiz/2H6UKx8oiEGP0+3eUMcace4ramwnlQSG2noRYk6AbM7CkvJIfZsVVPEi8A3NIGY6EhpIB6g3F0BdnzFbn4f4hnWL++7/brZPVM24oieOILEM2AKMJUPtBPa83WQPEQUqM484RyNyxIe6Qy7fMx//x+H/QO/wu9IuTismyjoL0R/lznFU3l0kEH3EAA==
+ b=cH/a7dtbmIlsBnlOFFqOBv9BVLLCo/0we0PG0Eb9wGlXxSbXyK/ghN4hfDjBQG6Magzn2gPEpe2v4JvTL90OEkbGP8XBP6cuEsB1fAY8pbAbRcXCJieEkzuQbUDFrVtiy/qvLh5dQo3oHV+4O+RbxmJDHID8A0aBmLKk1kbB3GDE6qiu9/JirlbxFtlbLkml4URJOSRcjXSOZN2rB/04PuCH+gUJ5gAf1SBi0kfcyaU4ubdK2Oa/1Bud+65p3SKY/vME/j2Rfw6Xj2L60jeqAceEPh0kh79mjXvTT9mZAWD7J1jxkoQ74FjOxgas69+WJpR3wutqN5Xg3k57FZraww==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=30kS/RNfXTpJcP3lp2YzN9M4t1jcgbpCzbZV46qBVmQ=;
- b=JpSCmuLA/S7M2IprfqXSD5IPONQvXa9AhfFew/1gMhWytG4C6Sf9Yof8oTLde6dTDRpw/bg9C5kSpR+IKSjI3St8R4dEXRoaaggl6vSmtqHCGkGQx/3JbO9U0JCd9qkk9ml2IZc4SXtVB4iojriQSZWpwMsqUrLBCAn6+Sv1tJVHTkDyDmlSn7GHDNsaMIW+ZqgEUFGIYBrma3bUW3axNAnUuvahUiGk2RFTPKIbwxrkst75BiBrQz5xjoe+Ty5OWBvzU138R3jCsZ75/6vds/ESDuMnPApcaF4mGIJDu3U9xskGusDaZOUG8D+USbx8UD9SbvBjltAr6zEUtrMjWg==
+ bh=HGaDJz8H9J5ZU+WbZaA6I+M6ru2VK/fzCWSHXXsC6hs=;
+ b=LpoOQLxlxPZyoHeuUI+8KC4OMD7k+yZjCBiQkJUyoZufYGppRURreIspjx9kI8bS3QfM/jBTtINhOSTyvMkKHU7zBt51eyGVViD1XFifeZSAyM/9PbkHFZ/p5qiyEoeddZKG6Zq9MeZuXFLAOsl1U6kC5EeBugR0QpLL5gt+ptCx/je9reVGlMPjR4RbuLfXXvghXxliyuF999H4o3Pvp5yia/LZU5fSvn9iH3H5tVTHUZelDIkoLg8wKPPABqLvUjWyN1UYH8QvIoCJbOqCq+O1mEwJpSX5+6Nr9/yQybpRKAJQc0uFieVAUH9PM9j6mchmOAurhfucySYmncnJxQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
  header.d=amd.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=amdcloud.onmicrosoft.com; s=selector2-amdcloud-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=30kS/RNfXTpJcP3lp2YzN9M4t1jcgbpCzbZV46qBVmQ=;
- b=xSurqDwOWVrBFmd/S5EStTYgmJiXx4+UDIC2m6T5NrilY1qLZOKrINfFbNP4OoSHyLCtoeeDugDI8TMpzJNxwE1aqav5zqv4W8P+LI0mkS2jNxqoLllrPl9eNPDRpVrgJp49Zh/WgYYunP+8ekjoNkHHWBi4pvFnijdwHYGPP4A=
-Authentication-Results: alien8.de; dkim=none (message not signed)
- header.d=none;alien8.de; dmarc=none action=none header.from=amd.com;
+ bh=HGaDJz8H9J5ZU+WbZaA6I+M6ru2VK/fzCWSHXXsC6hs=;
+ b=xyQTgeZSkFVwiVYiTpH9a+hSa9qhGbQw8LhvBwWeXduKFbHDJOJDr+iqLnCmPPCwZhFPXWXo/cFAsucg7wJ3CTBKrWSahVlC2yPr0QOX/AsmoLqVCBHBdmI4++kpl7Tm01A1EK1aekwlu1ti5cAgvP/rqIdyo/KGs+u7UH+vs50=
+Authentication-Results: vger.kernel.org; dkim=none (message not signed)
+ header.d=none;vger.kernel.org; dmarc=none action=none header.from=amd.com;
 Received: from BN8PR12MB3108.namprd12.prod.outlook.com (2603:10b6:408:40::20)
- by BN6PR12MB1379.namprd12.prod.outlook.com (2603:10b6:404:20::20) with
+ by BN8PR12MB2977.namprd12.prod.outlook.com (2603:10b6:408:4a::25) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3654.14; Tue, 15 Dec
- 2020 16:11:23 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3654.17; Tue, 15 Dec
+ 2020 17:01:44 +0000
 Received: from BN8PR12MB3108.namprd12.prod.outlook.com
  ([fe80::9df4:880c:f3f2:679d]) by BN8PR12MB3108.namprd12.prod.outlook.com
  ([fe80::9df4:880c:f3f2:679d%5]) with mapi id 15.20.3654.025; Tue, 15 Dec 2020
- 16:11:23 +0000
-Date:   Tue, 15 Dec 2020 10:11:20 -0600
-From:   Yazen Ghannam <yazen.ghannam@amd.com>
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     linux-edac <linux-edac@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 2/2] EDAC/amd64: Merge error injection sysfs facilities
-Message-ID: <20201215161120.GB2122783@yaz-nikka.amd.com>
-References: <20201215110517.5215-1-bp@alien8.de>
- <20201215110517.5215-2-bp@alien8.de>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201215110517.5215-2-bp@alien8.de>
+ 17:01:44 +0000
+From:   Yazen Ghannam <Yazen.Ghannam@amd.com>
+To:     linux-edac@vger.kernel.org
+Cc:     Yazen Ghannam <Yazen.Ghannam@amd.com>,
+        linux-kernel@vger.kernel.org, bp@alien8.de,
+        Smita.KoralahalliChannabasappa@amd.com
+Subject: [PATCH] EDAC/amd64: Tone down messages about missing PCI IDs
+Date:   Tue, 15 Dec 2020 17:01:31 +0000
+Message-Id: <20201215170131.8496-1-Yazen.Ghannam@amd.com>
+X-Mailer: git-send-email 2.25.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 X-Originating-IP: [165.204.78.2]
-X-ClientProxiedBy: CH0PR04CA0120.namprd04.prod.outlook.com
- (2603:10b6:610:75::35) To BN8PR12MB3108.namprd12.prod.outlook.com
- (2603:10b6:408:40::20)
+X-ClientProxiedBy: SN6PR01CA0007.prod.exchangelabs.com (2603:10b6:805:b6::20)
+ To BN8PR12MB3108.namprd12.prod.outlook.com (2603:10b6:408:40::20)
 MIME-Version: 1.0
 X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from yaz-nikka.amd.com (165.204.78.2) by CH0PR04CA0120.namprd04.prod.outlook.com (2603:10b6:610:75::35) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3632.21 via Frontend Transport; Tue, 15 Dec 2020 16:11:22 +0000
+Received: from yaz-ethanolx.amd.com (165.204.78.2) by SN6PR01CA0007.prod.exchangelabs.com (2603:10b6:805:b6::20) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3654.12 via Frontend Transport; Tue, 15 Dec 2020 17:01:43 +0000
 X-MS-PublicTrafficType: Email
 X-MS-Office365-Filtering-HT: Tenant
-X-MS-Office365-Filtering-Correlation-Id: 5012c0a9-0bc9-41a1-991c-08d8a1141132
-X-MS-TrafficTypeDiagnostic: BN6PR12MB1379:
-X-Microsoft-Antispam-PRVS: <BN6PR12MB1379543A83AD341EEA1EF99EF8C60@BN6PR12MB1379.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:10000;
+X-MS-Office365-Filtering-Correlation-Id: ceab0811-f87f-4bfa-e758-08d8a11b19ca
+X-MS-TrafficTypeDiagnostic: BN8PR12MB2977:
+X-MS-Exchange-Transport-Forked: True
+X-Microsoft-Antispam-PRVS: <BN8PR12MB2977964CE07CDCAC328A0162F8C60@BN8PR12MB2977.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:8273;
 X-MS-Exchange-SenderADCheck: 1
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: fWcLoHCOJevUR3PaesfTiOcEYF3h5WMm3IqrvoJeQSLBQTgief0uioai7J/jl1ASivSIPxh07CFMfmgupSZDnvd5EV2huhxhaEnrrxnyenw4tx+9V7NUGfhvMSSjVii7rMPYkornfrhiI4uuLTUZQChRzen3KA6jAltPT3NNOWUsutEY9yHUZuG+vRUbqG22EBg5lSo2h7viZ28v/a0wxiR+BNAst0BgkInhi8aJbL5GBR+01pZhhjgWYqAaI3flGMBcX4xMiIggXZF8cLc/H07lPJP+/CZH88MyhefCvVKO0ciuYfc3AkvTLKanKnqA5kwOU+3SufQZOIN+Oj84ma55GkikpW4ZWATE1mBMHrVhAoM09daKvNI6yWRmFS7q
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3108.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(346002)(366004)(376002)(136003)(66556008)(66946007)(16526019)(186003)(6916009)(66476007)(26005)(8936002)(86362001)(54906003)(4326008)(956004)(8676002)(44832011)(5660300002)(508600001)(2906002)(52116002)(33656002)(34490700003)(83380400001)(7696005)(1076003)(55016002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData: =?us-ascii?Q?6aseLHWEoEk6OQUDLxdiedm2t7RB9bh9tbyK47XBur0XOcw62S1pYySyaqGu?=
- =?us-ascii?Q?3jc0neKIGqxIdzuWpxysGHJ3Ir/z3rOg1R7xjZrToXe2bVmhD+qHjnpEWjej?=
- =?us-ascii?Q?gyL6wIcpaOPW+rRd0cemmQpWafe6H4zZ2hkilusQLeRHy82j1odJgea4Z/Zw?=
- =?us-ascii?Q?2U0XVoBoM+BvC6cl2GWIhekpDR6OMm0W0aNBjOTPFj7A2RFrcPNotIVceA7S?=
- =?us-ascii?Q?dxZGpnSU2UVMOL8j4bTcmOV3uoaI+xMhurYrbW4jjp3027+ry6gEMW6KXY9O?=
- =?us-ascii?Q?eyYZda33C4F/jtNyqVWTy7DboEVAodq8cw9MYaxKDlFiOdnXqjsmnJfv1z42?=
- =?us-ascii?Q?pWeKTupOzivy3d8UQ4l5QOPQcOVVX37vO4gyM74JCXXpsJz+YqCOTE6bgyAl?=
- =?us-ascii?Q?irhH8VxBAg0mjJhbK84wh4z8XYd0AjUruyVRrRZsx7AZLoD/he0jkwB8NJZ7?=
- =?us-ascii?Q?rdzKOMTlAsw56AlOBZa52t1FWGGUaRHAKd6HBX2IQNUuY9Wna7a2PGjjXvQJ?=
- =?us-ascii?Q?2+Ebp2YdH87xGCxgqwOcGwAjztOjyNCdh0IlffsOrCYPeq8csXH4UIUZUPHa?=
- =?us-ascii?Q?gZBK+8wyn11UMr/oxwo8xAr/Xa62ljTsnUq51J/sx6mpbvT3NdiXwcL7KyyL?=
- =?us-ascii?Q?VvTs99UZJuAlVzlpLI/Uvo3S9veRoRPrndBuxQHx021SbmYShhoaLnu9y3JW?=
- =?us-ascii?Q?N7LChih/lk44Z2FvPSFIVBt6+yUogNKuWigXfMPOoFSV+ZoaphF2wrvA0s9P?=
- =?us-ascii?Q?kkY2ejU3us67oS/ENSlBNgpw8azJN7SEgJnBTML18iSteE0iqORec0TxU6P7?=
- =?us-ascii?Q?VJoVrf/+JGKeFd29IEGWjXAkiTuR0w8MykqbK4FAqg1TYVv/xOUXgsUT/ERK?=
- =?us-ascii?Q?4lhQwW8o2+SAHMVzso0t6QgNh0S50Ul24tDwTEPotZVWRQz3JuZAeQO7Dm+a?=
- =?us-ascii?Q?Bt44lN45rFhB4dIMlHEUzmGCmS7ZTdXNvDbIG6cBdiMVFSRol/yVlaSUlwvP?=
- =?us-ascii?Q?ycun?=
+X-Microsoft-Antispam-Message-Info: hl6u/ijQzcDyFIleR0JXLKrgHFGhB85oJN9dZ/90EjH9FLBTzxk1jmgaUG3w3GI8WdS6FcejaLasVQ5iskrpYm5gVAUTLcNATPau09L/Dso9G0ZoGYHNQ59/iII85EW37kYp4LyVJJn1BZZ++aVdMGRnqBb8l0e4u8YoRV6tPFcmgqqNKkpL0q8IUn2mX42IA07kpTy6P1e85Ez7En4o8pfBS5KrMQvRdC5fkMUywtZfWpTVjvTouEV7WtdrnHEIvTgxd2Nz/GgjNhJPvZ2EVijqBA/V1O7yX8v9gzsIpggbR93ST0sw+JKV+692TIti1DOoT1jr61wqe0T14H3YrTIyRpQUHdCXFv4i8Q1gohxWeoxGXt5BKu1zz2ABkMpk
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3108.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(376002)(136003)(346002)(366004)(26005)(8676002)(34490700003)(2906002)(52116002)(4326008)(15650500001)(7696005)(36756003)(86362001)(83380400001)(6486002)(6916009)(66946007)(2616005)(1076003)(5660300002)(66556008)(16526019)(6666004)(66476007)(186003)(956004)(508600001)(8936002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData: =?us-ascii?Q?1RlPlX5h3mxaS8UKkTWPmDF8WepoA8kj5zOardu7VySjAdgfw72iHEWQbU1g?=
+ =?us-ascii?Q?H71ZkWkvBrNETmcpLp3DytO7dMwfIFXsyb+CHW18PDn4r9AWSprmyMjLK6Ix?=
+ =?us-ascii?Q?pRyjMnSNs/W0crLdlX5IIuqqT6HH3NJbrnYWzYJkdQmPRm89WLoiqK+ENKLm?=
+ =?us-ascii?Q?eqEIq2tppek5rAaz96IHhaZBj57nEGB0k7ghh9se5EBd0oNf0RZPL3QysCOv?=
+ =?us-ascii?Q?YhJ7iwXNg9Wqx3Dh3UpJRDWf6V4y9v2w3DhaRJbR3iGUZADzNiicDPfqftMc?=
+ =?us-ascii?Q?AZCQXn34y9rhLz6kOmzMzCRYDXdzczu/4pz1r/gTQyxiUlD6di1XOm3FwY4A?=
+ =?us-ascii?Q?AKePAHzWWW4KdhP9GEmhHhJZ+MwfsXtJYNUB7+tgj/UriGxo0DaEk6sHqsrl?=
+ =?us-ascii?Q?oGDcqBO/CvwbTJx+9Hiy8Ol/cHHiypcSIJVQfItRIyHuh1hTnU2qyELTQ6An?=
+ =?us-ascii?Q?KY762yTOa1VQqeEzC4DV6A2ivkzgdVw3j0BCN8Xfowaw8NKebx6ajnmi0Qtn?=
+ =?us-ascii?Q?YpR1Wr27ZWn4lUZlNEcpseX3SFqXlS3R0sUhgv6Tzo+YKpjP0R6zBpleJ0f6?=
+ =?us-ascii?Q?9+0RXTd3XSML1Ren9cdlBOSOIBH7aLs+SfS5kPf+OSoj68J8p3/8S8x7cuyx?=
+ =?us-ascii?Q?5RYAutqC5ayrjjjUTf7mr8dkNnKPt11AjmSnqQcU5Dgjz8CZ2vhMD+3qvgmC?=
+ =?us-ascii?Q?ckcmva2qkedSH54NUkux1i0dJjcLa5FDzW8EactnlpB3a/BnNnkdcvXevu8s?=
+ =?us-ascii?Q?GW9UHNuziIkzzODSwnOQXJL9hq7M6wDuqPTa5wbuMdS4N/gzVjlexu6sgQvu?=
+ =?us-ascii?Q?9c0oonIZknXKVIJxtEP4w2C/+eeQ24n9CFrTt+3mUh7jES0+/ciWsgf1jH+k?=
+ =?us-ascii?Q?3DrogmLF+DrRBEmUrj7QjhnedmE4oKYQxSs36JzDrKB8RLlcB9dGQmGAMAJ3?=
+ =?us-ascii?Q?+a8+8zKW88yTz4PLLVFl1y3WOZ7at3WykI0xBL0O1MlYrvj+1bY2udoPQkFq?=
+ =?us-ascii?Q?2sry?=
 X-OriginatorOrg: amd.com
 X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3108.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Dec 2020 16:11:23.2132
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Dec 2020 17:01:44.0472
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5012c0a9-0bc9-41a1-991c-08d8a1141132
+X-MS-Exchange-CrossTenant-Network-Message-Id: ceab0811-f87f-4bfa-e758-08d8a11b19ca
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 0BvODaHiII+gsh414QnnIsx8WgkTAMx6FJyEW9BMnxHvSFg373k9hRuq58LcM4WhW+twtXDPJrWJYSE03cd/Rg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN6PR12MB1379
+X-MS-Exchange-CrossTenant-UserPrincipalName: xa30XU6BFplP0/VNIcVvUESQoh/ULxyg3Eq2AqmrgbChwQlSOjrR1KP9Plo/BBEPx2s1FdYfumE0S6PsuxWPmg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN8PR12MB2977
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Tue, Dec 15, 2020 at 12:05:17PM +0100, Borislav Petkov wrote:
-> From: Borislav Petkov <bp@suse.de>
-> 
-> Merge them into the main driver and put them inside an EDAC_DEBUG
-> ifdeffery to simplify the driver and have all debugging/injection stuff
-> behind a debug build-time switch.
-> 
-> No functional changes.
-> 
-> Signed-off-by: Borislav Petkov <bp@suse.de>
-> ---
->  drivers/edac/Kconfig          |   7 +-
->  drivers/edac/Makefile         |   6 +-
->  drivers/edac/amd64_edac.c     | 237 +++++++++++++++++++++++++++++++++-
->  drivers/edac/amd64_edac.h     |   8 --
->  drivers/edac/amd64_edac_inj.c | 235 ---------------------------------
->  5 files changed, 236 insertions(+), 257 deletions(-)
->  delete mode 100644 drivers/edac/amd64_edac_inj.c
-> 
-> diff --git a/drivers/edac/Kconfig b/drivers/edac/Kconfig
-> index 7a47680d6f07..9c2e719cb86a 100644
-> --- a/drivers/edac/Kconfig
-> +++ b/drivers/edac/Kconfig
-> @@ -81,10 +81,9 @@ config EDAC_AMD64
->  	  Support for error detection and correction of DRAM ECC errors on
->  	  the AMD64 families (>= K8) of memory controllers.
->  
-> -config EDAC_AMD64_ERROR_INJECTION
-> -	bool "Sysfs HW Error injection facilities"
-> -	depends on EDAC_AMD64
-> -	help
-> +	  When EDAC_DEBUG is enabled, hardware error injection facilities
-> +	  through sysfs are available:
-> +
->  	  Recent Opterons (Family 10h and later) provide for Memory Error
+From: Yazen Ghannam <yazen.ghannam@amd.com>
 
-Can we say "Opterons (Family 10h to Family 15h)"? It may also apply to
-Family 16h, but I don't know if they were branded as Opterons.
+Give these messages a debug severity as they are really only useful to
+the module developers.
 
-The injection code in this module doesn't apply to Family 17h and later.
+Also, drop the "(broken BIOS?)" phrase, since this can cause churn for
+BIOS folks. The PCI IDs needed by the module, at least on modern systems,
+are fixed in hardware.
 
-Also, Family 17h and later doesn't allow the OS direct access to the error
-injection registers. They're locked down by security policy, etc.
+Signed-off-by: Yazen Ghannam <yazen.ghannam@amd.com>
+---
+ drivers/edac/amd64_edac.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
->  	  Injection into the ECC detection circuits. The amd64_edac module
->  	  allows the operator/user to inject Uncorrectable and Correctable
+diff --git a/drivers/edac/amd64_edac.c b/drivers/edac/amd64_edac.c
+index f7087ddddb90..a3770ffee2ea 100644
+--- a/drivers/edac/amd64_edac.c
++++ b/drivers/edac/amd64_edac.c
+@@ -2665,7 +2665,7 @@ reserve_mc_sibling_devs(struct amd64_pvt *pvt, u16 pci_id1, u16 pci_id2)
+ 	if (pvt->umc) {
+ 		pvt->F0 = pci_get_related_function(pvt->F3->vendor, pci_id1, pvt->F3);
+ 		if (!pvt->F0) {
+-			amd64_err("F0 not found, device 0x%x (broken BIOS?)\n", pci_id1);
++			edac_dbg(1, "F0 not found, device 0x%x\n", pci_id1);
+ 			return -ENODEV;
+ 		}
+ 
+@@ -2674,7 +2674,7 @@ reserve_mc_sibling_devs(struct amd64_pvt *pvt, u16 pci_id1, u16 pci_id2)
+ 			pci_dev_put(pvt->F0);
+ 			pvt->F0 = NULL;
+ 
+-			amd64_err("F6 not found: device 0x%x (broken BIOS?)\n", pci_id2);
++			edac_dbg(1, "F6 not found: device 0x%x\n", pci_id2);
+ 			return -ENODEV;
+ 		}
+ 
+@@ -2691,7 +2691,7 @@ reserve_mc_sibling_devs(struct amd64_pvt *pvt, u16 pci_id1, u16 pci_id2)
+ 	/* Reserve the ADDRESS MAP Device */
+ 	pvt->F1 = pci_get_related_function(pvt->F3->vendor, pci_id1, pvt->F3);
+ 	if (!pvt->F1) {
+-		amd64_err("F1 not found: device 0x%x (broken BIOS?)\n", pci_id1);
++		edac_dbg(1, "F1 not found: device 0x%x\n", pci_id1);
+ 		return -ENODEV;
+ 	}
+ 
+@@ -2701,7 +2701,7 @@ reserve_mc_sibling_devs(struct amd64_pvt *pvt, u16 pci_id1, u16 pci_id2)
+ 		pci_dev_put(pvt->F1);
+ 		pvt->F1 = NULL;
+ 
+-		amd64_err("F2 not found: device 0x%x (broken BIOS?)\n", pci_id2);
++		edac_dbg(1, "F2 not found: device 0x%x\n", pci_id2);
+ 		return -ENODEV;
+ 	}
+ 
+-- 
+2.25.1
 
-...
-
-> +
-> +static umode_t inj_is_visible(struct kobject *kobj, struct attribute *attr, int idx)
-> +{
-> +	struct device *dev = kobj_to_dev(kobj);
-> +	struct mem_ctl_info *mci = container_of(dev, struct mem_ctl_info, dev);
-> +	struct amd64_pvt *pvt = mci->pvt_info;
-> +
-> +	if (pvt->fam < 0x10)
-
-Related to the comment above, can this be changed to the following?
-
-	if (pvt->fam < 0x10 || pvt->fam >= 0x17)
-
-> +		return 0;
-> +	return attr->mode;
-> +}
-> +
-
-Everything else looks good to me.
-
-Reviewed-by: Yazen Ghannam <yazen.ghannam@amd.com>
-
-Thanks,
-Yazen
