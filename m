@@ -2,98 +2,93 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CB85B2DC564
-	for <lists+linux-edac@lfdr.de>; Wed, 16 Dec 2020 18:33:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D1A4A2DE733
+	for <lists+linux-edac@lfdr.de>; Fri, 18 Dec 2020 17:07:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726796AbgLPRcy (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Wed, 16 Dec 2020 12:32:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40430 "EHLO
+        id S1727665AbgLRQHN (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Fri, 18 Dec 2020 11:07:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726795AbgLPRcy (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Wed, 16 Dec 2020 12:32:54 -0500
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2589CC061794
-        for <linux-edac@vger.kernel.org>; Wed, 16 Dec 2020 09:32:13 -0800 (PST)
-Received: by mail-lf1-x12c.google.com with SMTP id a9so50372101lfh.2
-        for <linux-edac@vger.kernel.org>; Wed, 16 Dec 2020 09:32:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=qqiXE5V/exnIVNEY8/PmSQ2eyNU63PpCSHkahVEwsdw=;
-        b=lclVcOhv/sFJVkcFeKaRXPlcbp0hJrPzjxzPuPUE64uS6yFtslE/IvugbnUCAVCRlI
-         RQT2edTj2IvlKgHwUpxCX/Y99/9tRLGPgOAO9449WtqFpp5Qos+6aSpbcIBsahadFiSb
-         +s93uWpePv15eIaFt2MFabaY+jksudKkTHHoQrSa0PKJYGRWu17ghFwMxyixxpcztSac
-         ERU5OHnDdWFIBOmljWT5mb2o4i9WdqhA/qqtlSrApSqGGWq0M5FLYssfe94tDhzhXYFA
-         b9ckUGtY77t+z6IrSevXR5/WApuQq1xI2pRScdYxgiADF5NMq8VO1w6yey28a/Q4zEaQ
-         neHA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=qqiXE5V/exnIVNEY8/PmSQ2eyNU63PpCSHkahVEwsdw=;
-        b=tSFr/eJk9mA3JPF3EQB/ClCShaHIpgqBrQQeKTt/gMxwf5TRzqyR2YC1y+UBTD9UIQ
-         RI2TY+nkimAy0xlAR1LiYLjRVjx7tUHArvJZY/jaUJoO7IFl181CAx0Ee8L2KqZCgcmS
-         u7KzqSrjHV2unRzqo5zo/4HShYoIVZAqJFp/RzBAJDz9xbfkbAUB5IHuqBxrGCXaAdU6
-         m2w8bPktdJJ1HMQTsK0LupjmcDhfhKVv44viwPSDgnrdTjaxoEcYWGJstwyiIez7hOIu
-         2tFbwuJJiL9oX5eJFLqXWfzpE4uyE99PM4G6pfInKfy/ywHlprJXDoqNomeT/9nHX6zL
-         Qgbg==
-X-Gm-Message-State: AOAM532V2EQIEMB3YaZTFJ/YnaWvOcPkekD/OEMS6Wg5ROIyEZg5oNUc
-        5x6PskG9YUqR1QFtb64UxK6+2P7iG4St1rnICErfXQb+GiA=
-X-Google-Smtp-Source: ABdhPJyR6uQJ4r3Vwg7bs1B+kGzLiy+RmgVROEMuGab2Pux9wKQi+Ivkg2r+hFhki7DULI7efdUa6JZj8PmuRrREguw=
-X-Received: by 2002:a05:651c:1192:: with SMTP id w18mr14168349ljo.40.1608139930633;
- Wed, 16 Dec 2020 09:32:10 -0800 (PST)
+        with ESMTP id S1726025AbgLRQHN (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Fri, 18 Dec 2020 11:07:13 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE2C9C0617A7
+        for <linux-edac@vger.kernel.org>; Fri, 18 Dec 2020 08:06:32 -0800 (PST)
+Received: from zn.tnic (p200300ec2f121000329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ec:2f12:1000:329c:23ff:fea6:a903])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 1E6F51EC0453;
+        Fri, 18 Dec 2020 17:06:30 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1608307590;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:
+         content-transfer-encoding:content-transfer-encoding:in-reply-to:
+         references; bh=ZOYYMxdbJqIF4GCE/QKh9EvhGUlUqWsvSKOhWkBM/R8=;
+        b=ZOlDsR8BJ6vvrrmUt/C+B3eIAcf4WerhVGNC0exJcCq9ALeu8HUlHBBQy6lkKiAKN41mtp
+        FWBviKCy08g56fXtELYw28wwHbcdHg/vmxACYzTR7kpoaJ21Ksgs7z9x8LJm/mwK+DlAzc
+        sYRX7SG6cdVuGVk9r9w3r4ew4J6IKVI=
+From:   Borislav Petkov <bp@alien8.de>
+To:     linux-edac <linux-edac@vger.kernel.org>
+Cc:     Don Curtis <bugrprt21882@online.de>
+Subject: [PATCH] EDAC/amd64: Do not load on family 0x15, model 0x13
+Date:   Fri, 18 Dec 2020 17:06:22 +0100
+Message-Id: <20201218160622.20146-1-bp@alien8.de>
+X-Mailer: git-send-email 2.29.2
 MIME-Version: 1.0
-References: <CABOsP2O+42Kcf7F5mkzkSizTKGSG48giwkgiv3gN=KZZ+Ad+4g@mail.gmail.com>
- <20201216163427.GA6312@zn.tnic> <CABOsP2POd8UhS5Acfg9Ht8NSpULBFbDX+_iK6BGm3ZNGLdRsaw@mail.gmail.com>
- <20201216171545.GC6312@zn.tnic>
-In-Reply-To: <20201216171545.GC6312@zn.tnic>
-From:   Michael Di Domenico <mdidomenico4@gmail.com>
-Date:   Wed, 16 Dec 2020 12:31:59 -0500
-Message-ID: <CABOsP2Ohs-yka1R=d8KfnLJqcXEE34ALrZgyrPY7USjh_uy4ZA@mail.gmail.com>
-Subject: Re: dimm mapping
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     linux-edac@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-that's a bummer.. :(
+From: Borislav Petkov <bp@suse.de>
 
-i guess the best way to determine which dimm to replace still, is
-based on the ipmi sel logs and whether or not one can actually decode
-the error in the sel log correctly.  intel fortunately puts out a
-decode manual that will tell you, but it's a pain to deal with since
-it's all bit math.  other mb vendors can't be bothered.
+Those were only laptops and are very very unlikely to have ECC memory.
+Currently, when the driver attempts to load, it issues:
 
+  EDAC amd64: Error: F1 not found: device 0x1601 (broken BIOS?)
 
-On Wed, Dec 16, 2020 at 12:15 PM Borislav Petkov <bp@alien8.de> wrote:
->
-> On Wed, Dec 16, 2020 at 12:05:25PM -0500, Michael Di Domenico wrote:
-> > the problem i'm trying to solve is that when i run edac-util -v i
-> > don't get the dimm labels.  so when MCE trips it's chore to figure out
-> > which dimm it actually is when looking at the motherboard.  given that
-> > dmidecode seems to report the dimm labels, it seems odd that edac
-> > doesn't use them.  but then again i understand how all that's tied
-> > together (if at all).
->
-> Yeah, the short version is, there's no properly defined way for software
-> to read out DIMM silkscreen labels on each platform. I highly doubt that
-> is even possible. Perhaps some SMBUS interfaces or whatnot but firmware
-> is notoriosly buggy so there's no reliability there.
->
-> And, as said before, in some cases one cannot map back the physical
-> address reported with a DIMM MCE to the actual DIMM.
->
-> And, in recent times, OEM vendors do more and more RAS in the firmware
-> so the kernel doesn't get to even see some errors.
->
-> I'm always hoping that I'll be corrected some day but until then that's
-> the current situation, roughly.
->
-> --
-> Regards/Gruss,
->     Boris.
->
-> https://people.kernel.org/tglx/notes-about-netiquette
+because the PCI device is the wrong one (it uses the F15h default one).
+
+So do not load the driver on them as that is pointless.
+
+Reported-by: Don Curtis <bugrprt21882@online.de>
+Signed-off-by: Borislav Petkov <bp@suse.de>
+Tested-by: Don Curtis <bugrprt21882@online.de>
+Link: http://bugzilla.opensuse.org/show_bug.cgi?id=1179763
+---
+ drivers/edac/amd64_edac.c | 10 +++++++---
+ 1 file changed, 7 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/edac/amd64_edac.c b/drivers/edac/amd64_edac.c
+index f7087ddddb90..5754f429a8d2 100644
+--- a/drivers/edac/amd64_edac.c
++++ b/drivers/edac/amd64_edac.c
+@@ -3342,10 +3342,13 @@ static struct amd64_family_type *per_family_init(struct amd64_pvt *pvt)
+ 			fam_type = &family_types[F15_M60H_CPUS];
+ 			pvt->ops = &family_types[F15_M60H_CPUS].ops;
+ 			break;
++		/* Richland is only client */
++		} else if (pvt->model == 0x13) {
++			return NULL;
++		} else {
++			fam_type	= &family_types[F15_CPUS];
++			pvt->ops	= &family_types[F15_CPUS].ops;
+ 		}
+-
+-		fam_type	= &family_types[F15_CPUS];
+-		pvt->ops	= &family_types[F15_CPUS].ops;
+ 		break;
+ 
+ 	case 0x16:
+@@ -3539,6 +3542,7 @@ static int probe_one_instance(unsigned int nid)
+ 	pvt->mc_node_id	= nid;
+ 	pvt->F3 = F3;
+ 
++	ret = -ENODEV;
+ 	fam_type = per_family_init(pvt);
+ 	if (!fam_type)
+ 		goto err_enable;
+-- 
+2.29.2
+
