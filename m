@@ -2,80 +2,65 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C5DF22E163C
-	for <lists+linux-edac@lfdr.de>; Wed, 23 Dec 2020 03:59:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D1DE22E1A9D
+	for <lists+linux-edac@lfdr.de>; Wed, 23 Dec 2020 10:48:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728887AbgLWCUM (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Tue, 22 Dec 2020 21:20:12 -0500
-Received: from mail.kernel.org ([198.145.29.99]:46336 "EHLO mail.kernel.org"
+        id S1726638AbgLWJsL (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Wed, 23 Dec 2020 04:48:11 -0500
+Received: from mail.kernel.org ([198.145.29.99]:56678 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726969AbgLWCUK (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Tue, 22 Dec 2020 21:20:10 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id CBC8922A83;
-        Wed, 23 Dec 2020 02:19:54 +0000 (UTC)
+        id S1726142AbgLWJsK (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Wed, 23 Dec 2020 04:48:10 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 3D4D922248;
+        Wed, 23 Dec 2020 09:47:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1608689995;
-        bh=2Z3yb9p6tF4duZkuu2uM73Oj92pH5ojf+kvRAhwP5ZQ=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=X0Ecei9hUPHas4B3v7H99doz9N22KOUjqVAuRyTpLVk/YpwyqIpsLZ2aKzIjkUTRr
-         yhPf0whg/pSvScjnUSPRb8ENFkF4o7KkIzMjBTLCBBxicDKtGCZ4zwgBjVfHuowAfi
-         fe6qVQK3jQ/GUXOY1SP7YpHHRGXGjRxil8lLmFHGhhm9mZQ0DXk9ytbsiu8iDT8mnl
-         GwQnEpZddq1y4265Um7UuJ8PI212wQ6TpaUVKprTfqAhbvdoftkgRRhn0AgdbBCYxW
-         IC3CtoavOxK/oq1DsUu8uyvM56NYMAbG/8PrthBCEPtgpt8BiNLHeIU8+riuYQetpt
-         r5TU9ONsLEs4A==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Gabriele Paoloni <gabriele.paoloni@intel.com>,
-        Borislav Petkov <bp@suse.de>, Tony Luck <tony.luck@intel.com>,
-        Sasha Levin <sashal@kernel.org>, linux-edac@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 079/130] x86/mce: Panic for LMCE only if mca_cfg.tolerant < 3
-Date:   Tue, 22 Dec 2020 21:17:22 -0500
-Message-Id: <20201223021813.2791612-79-sashal@kernel.org>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20201223021813.2791612-1-sashal@kernel.org>
-References: <20201223021813.2791612-1-sashal@kernel.org>
+        s=k20201202; t=1608716850;
+        bh=HVYN5bHv3RMtCYGINblgwF1f73emGygvf+fsuOhpe90=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=b/WXjs63BtiPPqzNtjOj0LGFziEuCY2zUxpdK9vtt9O0c9K/SjWi8Hs9Or9dL8iYW
+         TqXfQYDzzqngLSIcSyzApIjghy1oLTr5rGgcXjkSC64BxVJ45gzdUptXDZKnzQgb+T
+         LjvGqxtLGTIDCcbYitWj07iM+EHeQgtn0Cg+GnhiuMB1pwHP1kzlQDcGMx/Bdf8fL/
+         FltKMuq6Ku5QlUG4FVBPD/UfDmHhN3cN+zrmR9N/oeR0uFWXLbE7UB8i2LZGW/ZVFd
+         KBqZp4Met/0NxMbKr9nXrH1fiteoIxvzYaF3oKvVSRja8NOdoBjnqbkXid/QdpS3rc
+         GL4EGzFH0M5Wg==
+Date:   Wed, 23 Dec 2020 10:47:26 +0100
+From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+To:     lvying6 <lvying6@huawei.com>
+Cc:     <linux-edac@vger.kernel.org>, <fanwentao@huawei.com>
+Subject: Re: [PATCH rasdaemon 0/2] ras-page-isolation bugfix
+Message-ID: <20201223104726.31c2e8c8@coco.lan>
+In-Reply-To: <1604138235-7142-1-git-send-email-lvying6@huawei.com>
+References: <1604138235-7142-1-git-send-email-lvying6@huawei.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.32; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-From: Gabriele Paoloni <gabriele.paoloni@intel.com>
+Em Sat, 31 Oct 2020 17:57:13 +0800
+lvying6 <lvying6@huawei.com> escreveu:
 
-[ Upstream commit 3a866b16fd2360a9c4ebf71cfbf7ebfe968c1409 ]
+> This patchset fix two problems in ras-page-isolation.c:
+> 1. fix do_page_offline always considers kernel page offline is
+> successful
+> 2. fix page which is PAGE_OFFLINE_FAILED can not be offlined again
+> 
+> lvying (1):
+>   ras-page-isolation: fix do_page_offline always considers page offline
+>     is successful
+> 
+> lvying6 (1):
+>   ras-page-isolation: page which is PAGE_OFFLINE_FAILED can be offlined
+>     again
+> 
+>  ras-page-isolation.c | 34 +++++++++++++++++++++++-----------
+>  1 file changed, 23 insertions(+), 11 deletions(-)
+> 
 
-Right now for LMCE, if no_way_out is set, mce_panic() is called
-regardless of mca_cfg.tolerant. This is not correct as, if
-mca_cfg.tolerant = 3, the code should never panic.
+Patches applied, thanks!
 
-Add that check.
 
- [ bp: use local ptr 'cfg'. ]
-
-Signed-off-by: Gabriele Paoloni <gabriele.paoloni@intel.com>
-Signed-off-by: Borislav Petkov <bp@suse.de>
-Reviewed-by: Tony Luck <tony.luck@intel.com>
-Link: https://lkml.kernel.org/r/20201127161819.3106432-4-gabriele.paoloni@intel.com
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- arch/x86/kernel/cpu/mce/core.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/arch/x86/kernel/cpu/mce/core.c b/arch/x86/kernel/cpu/mce/core.c
-index 10f69e045d3ea..344fe08779824 100644
---- a/arch/x86/kernel/cpu/mce/core.c
-+++ b/arch/x86/kernel/cpu/mce/core.c
-@@ -1344,7 +1344,7 @@ void do_machine_check(struct pt_regs *regs, long error_code)
- 	 * to see it will clear it.
- 	 */
- 	if (lmce) {
--		if (no_way_out)
-+		if (no_way_out && cfg->tolerant < 3)
- 			mce_panic("Fatal local machine check", &m, msg);
- 	} else {
- 		order = mce_start(&no_way_out);
--- 
-2.27.0
-
+Thanks,
+Mauro
