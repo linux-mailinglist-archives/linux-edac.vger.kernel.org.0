@@ -2,116 +2,112 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 455B02E0E10
-	for <lists+linux-edac@lfdr.de>; Tue, 22 Dec 2020 19:02:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E07F2E163D
+	for <lists+linux-edac@lfdr.de>; Wed, 23 Dec 2020 03:59:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728140AbgLVSA6 (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Tue, 22 Dec 2020 13:00:58 -0500
-Received: from mail.skyhub.de ([5.9.137.197]:56190 "EHLO mail.skyhub.de"
+        id S1727336AbgLWCUM (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Tue, 22 Dec 2020 21:20:12 -0500
+Received: from mail.kernel.org ([198.145.29.99]:46354 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726889AbgLVSA6 (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Tue, 22 Dec 2020 13:00:58 -0500
-Received: from zn.tnic (p200300ec2f0ef2007354cce2a604b467.dip0.t-ipconnect.de [IPv6:2003:ec:2f0e:f200:7354:cce2:a604:b467])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id E15031EC047C;
-        Tue, 22 Dec 2020 19:00:16 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1608660017;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=yGOkMzQul/w6eCPpWTRobTNIWPZsEOMV9f86X1dGtTU=;
-        b=A2DDqq7S8EaLV7u9R88N4bRkMF04hhF20OTbVG1Xsu//QnSC85o7OZvad+2VTJxE/J1A6V
-        Son+Vp0PcZcOCuDPzDIEfJ+1VcZtt1QZV8ZRInARkbdJIc5E3ZbXgpho5mV0u3QXha6bcN
-        SUm5xYF2qjz8lydO8gWYSMeIWxoRvBc=
-Date:   Tue, 22 Dec 2020 19:00:13 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Yazen Ghannam <yazen.ghannam@amd.com>
-Cc:     linux-edac <linux-edac@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 2/2] EDAC/amd64: Merge error injection sysfs facilities
-Message-ID: <20201222180013.GD13463@zn.tnic>
-References: <20201215110517.5215-1-bp@alien8.de>
- <20201215110517.5215-2-bp@alien8.de>
- <20201215161120.GB2122783@yaz-nikka.amd.com>
+        id S1728722AbgLWCUJ (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Tue, 22 Dec 2020 21:20:09 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 98064229C5;
+        Wed, 23 Dec 2020 02:19:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1608689994;
+        bh=8zxW0Coq79vbFKcoFtkC/3t6V/TI80uwbocuc8zfZKA=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=Z+zSVQVPQw3Bxj6OdH4XybodwVrKyZYOqI59X0rG7ynAl8DH2NEH5KYBSTxXV2NRn
+         r/9qYsllMDKLtXfqWY7ripXDPjNT8MxHwr7OTSRVt37S51zRFJOnnnbt1i2eHw7rxa
+         GsbWfCI9lq99kWGzP9ZxL7eo3ogghCj6/FjZ8JzVvg59Y72iJkUiL58QhA5eSRpfq0
+         l7G0FzrSDZVpTGMEbR5eDHUwy82iZUSqC9aztHLHp5nXkEqgCnOL1v/XHLpm2SOb8X
+         OWhmbi/WMbkhh8aqTjcnWppTYorL0i5slDZdPPnaDI0KYmKyegCjBzHtqkcUOLbz69
+         FsXmjyQQBhnWQ==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Gabriele Paoloni <gabriele.paoloni@intel.com>,
+        Borislav Petkov <bp@suse.de>, Tony Luck <tony.luck@intel.com>,
+        Sasha Levin <sashal@kernel.org>, linux-edac@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.4 078/130] x86/mce: Move the mce_panic() call and 'kill_it' assignments to the right places
+Date:   Tue, 22 Dec 2020 21:17:21 -0500
+Message-Id: <20201223021813.2791612-78-sashal@kernel.org>
+X-Mailer: git-send-email 2.27.0
+In-Reply-To: <20201223021813.2791612-1-sashal@kernel.org>
+References: <20201223021813.2791612-1-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20201215161120.GB2122783@yaz-nikka.amd.com>
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Tue, Dec 15, 2020 at 10:11:20AM -0600, Yazen Ghannam wrote:
-> Related to the comment above, can this be changed to the following?
-> 
-> 	if (pvt->fam < 0x10 || pvt->fam >= 0x17)
+From: Gabriele Paoloni <gabriele.paoloni@intel.com>
 
-I made that a "positive" list so that it is explicit which do support
-it out of the box:
+[ Upstream commit e273e6e12ab1db3eb57712bd60655744d0091fa3 ]
 
----
-From: Borislav Petkov <bp@suse.de>
-Date: Tue, 22 Dec 2020 18:55:06 +0100
-Subject: [PATCH] EDAC/amd64: Limit error injection functionality to supported hw
+Right now, for local MCEs the machine calls panic(), if needed, right
+after lmce is set. For MCE broadcasting, mce_reign() takes care of
+calling mce_panic().
 
-Families up to and including 0x16 allow access to the injection
-hardware. Starting with family 0x17, access to those registers is
-blocked by security policy.
+Hence:
+- improve readability by moving the conditional evaluation of
+tolerant up to when kill_it is set first;
+- move the mce_panic() call up into the statement where mce_end()
+fails.
 
-Limit that only on the families which support it.
+ [ bp: Massage, remove comment in the mce_end() failure case because it
+   is superfluous; use local ptr 'cfg' in both tests. ]
 
-Suggested-by: Yazen Ghannam <yazen.ghannam@amd.com>
+Signed-off-by: Gabriele Paoloni <gabriele.paoloni@intel.com>
 Signed-off-by: Borislav Petkov <bp@suse.de>
+Reviewed-by: Tony Luck <tony.luck@intel.com>
+Link: https://lkml.kernel.org/r/20201127161819.3106432-3-gabriele.paoloni@intel.com
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/edac/Kconfig      | 8 ++++----
- drivers/edac/amd64_edac.c | 8 +++++---
- 2 files changed, 9 insertions(+), 7 deletions(-)
+ arch/x86/kernel/cpu/mce/core.c | 15 ++++-----------
+ 1 file changed, 4 insertions(+), 11 deletions(-)
 
-diff --git a/drivers/edac/Kconfig b/drivers/edac/Kconfig
-index 47953b06d6c8..27d0c4cdc58d 100644
---- a/drivers/edac/Kconfig
-+++ b/drivers/edac/Kconfig
-@@ -84,10 +84,10 @@ config EDAC_AMD64
- 	  When EDAC_DEBUG is enabled, hardware error injection facilities
- 	  through sysfs are available:
- 
--	  Recent Opterons (Family 10h and later) provide for Memory Error
--	  Injection into the ECC detection circuits. The amd64_edac module
--	  allows the operator/user to inject Uncorrectable and Correctable
--	  errors into DRAM.
-+	  AMD CPUs up to and excluding family 0x17 provide for Memory
-+	  Error Injection into the ECC detection circuits. The amd64_edac
-+	  module allows the operator/user to inject Uncorrectable and
-+	  Correctable errors into DRAM.
- 
- 	  When enabled, in each of the respective memory controller directories
- 	  (/sys/devices/system/edac/mc/mcX), there are 3 input files:
-diff --git a/drivers/edac/amd64_edac.c b/drivers/edac/amd64_edac.c
-index d55f8ef2240c..9868f95a5622 100644
---- a/drivers/edac/amd64_edac.c
-+++ b/drivers/edac/amd64_edac.c
-@@ -828,9 +828,11 @@ static umode_t inj_is_visible(struct kobject *kobj, struct attribute *attr, int
- 	struct mem_ctl_info *mci = container_of(dev, struct mem_ctl_info, dev);
- 	struct amd64_pvt *pvt = mci->pvt_info;
- 
--	if (pvt->fam < 0x10)
--		return 0;
--	return attr->mode;
-+	/* Families which have that injection hw */
-+	if (pvt->fam >= 0x10 && pvt->fam <= 0x16)
-+		return attr->mode;
+diff --git a/arch/x86/kernel/cpu/mce/core.c b/arch/x86/kernel/cpu/mce/core.c
+index c2a9762d278dd..10f69e045d3ea 100644
+--- a/arch/x86/kernel/cpu/mce/core.c
++++ b/arch/x86/kernel/cpu/mce/core.c
+@@ -1328,8 +1328,7 @@ void do_machine_check(struct pt_regs *regs, long error_code)
+ 	 * severity is MCE_AR_SEVERITY we have other options.
+ 	 */
+ 	if (!(m.mcgstatus & MCG_STATUS_RIPV))
+-		kill_it = 1;
+-
++		kill_it = (cfg->tolerant == 3) ? 0 : 1;
+ 	/*
+ 	 * Check if this MCE is signaled to only this logical processor,
+ 	 * on Intel only.
+@@ -1364,6 +1363,9 @@ void do_machine_check(struct pt_regs *regs, long error_code)
+ 		if (mce_end(order) < 0) {
+ 			if (!no_way_out)
+ 				no_way_out = worst >= MCE_PANIC_SEVERITY;
 +
-+	return 0;
- }
++			if (no_way_out && cfg->tolerant < 3)
++				mce_panic("Fatal machine check on current CPU", &m, msg);
+ 		}
+ 	} else {
+ 		/*
+@@ -1380,15 +1382,6 @@ void do_machine_check(struct pt_regs *regs, long error_code)
+ 		}
+ 	}
  
- static const struct attribute_group inj_group = {
+-	/*
+-	 * If tolerant is at an insane level we drop requests to kill
+-	 * processes and continue even when there is no way out.
+-	 */
+-	if (cfg->tolerant == 3)
+-		kill_it = 0;
+-	else if (no_way_out)
+-		mce_panic("Fatal machine check on current CPU", &m, msg);
+-
+ 	if (worst > 0)
+ 		irq_work_queue(&mce_irq_work);
+ 
 -- 
-2.29.2
+2.27.0
 
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
