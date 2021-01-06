@@ -2,116 +2,94 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CC62E2EC33F
-	for <lists+linux-edac@lfdr.de>; Wed,  6 Jan 2021 19:34:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 863C02EC347
+	for <lists+linux-edac@lfdr.de>; Wed,  6 Jan 2021 19:40:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726118AbhAFSd2 (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Wed, 6 Jan 2021 13:33:28 -0500
-Received: from mail.skyhub.de ([5.9.137.197]:59494 "EHLO mail.skyhub.de"
+        id S1725803AbhAFSkO convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-edac@lfdr.de>); Wed, 6 Jan 2021 13:40:14 -0500
+Received: from mga14.intel.com ([192.55.52.115]:49511 "EHLO mga14.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725890AbhAFSd2 (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Wed, 6 Jan 2021 13:33:28 -0500
-Received: from zn.tnic (p200300ec2f096900fa39b7692df2441c.dip0.t-ipconnect.de [IPv6:2003:ec:2f09:6900:fa39:b769:2df2:441c])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 5550D1EC04EF;
-        Wed,  6 Jan 2021 19:32:47 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1609957967;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=ivwHOniwz5qGdYhs1Yn9GcbjBz+NdsKmDIMr40UYDcg=;
-        b=CmfSIcfachhNklFKKiI/2js7DmC7mtHOkJmvcz4G2Rh3SDKEP2ATVd1AiipTBgnXc8Lism
-        8kAry/NOoOFwEqrwNnE+YPN6lRqfTl1hxZG6DGP+UfX8HwxvUElb47/B6zzzTbm3bQN9WG
-        rXlutzz821hNpT14cZ1WMHJO1MtIRPw=
-Date:   Wed, 6 Jan 2021 19:32:44 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
-        linux-edac@vger.kernel.org, tony.luck@intel.com,
-        tglx@linutronix.de, mingo@redhat.com, hpa@zytor.com,
-        kernel-team@fb.com
-Subject: Re: [PATCH RFC x86/mce] Make mce_timed_out() identify holdout CPUs
-Message-ID: <20210106183244.GA24607@zn.tnic>
+        id S1725800AbhAFSkN (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Wed, 6 Jan 2021 13:40:13 -0500
+IronPort-SDR: kAh8FNVs7mTxvjzKHRw5zW5hzCRUxrFU4mJ5x49hN9r3ekZm2He6AzI+iFOfCpDLNxUF37VZoR
+ YSMKh4r6FUfQ==
+X-IronPort-AV: E=McAfee;i="6000,8403,9856"; a="176540886"
+X-IronPort-AV: E=Sophos;i="5.79,327,1602572400"; 
+   d="scan'208";a="176540886"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jan 2021 10:39:32 -0800
+IronPort-SDR: tc9npouO/88MZ33Lrtz0TlvT9Z/MC7cNMF++1tOZ+hicHff1sqsywpS3LyG7gAJSNLP5GMYWNo
+ memD1sDdr3WQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.79,327,1602572400"; 
+   d="scan'208";a="350304902"
+Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
+  by orsmga006.jf.intel.com with ESMTP; 06 Jan 2021 10:39:31 -0800
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1713.5; Wed, 6 Jan 2021 10:39:30 -0800
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1713.5; Wed, 6 Jan 2021 10:39:30 -0800
+Received: from fmsmsx610.amr.corp.intel.com ([10.18.126.90]) by
+ fmsmsx610.amr.corp.intel.com ([10.18.126.90]) with mapi id 15.01.1713.004;
+ Wed, 6 Jan 2021 10:39:30 -0800
+From:   "Luck, Tony" <tony.luck@intel.com>
+To:     "paulmck@kernel.org" <paulmck@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>
+CC:     "bp@alien8.de" <bp@alien8.de>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "kernel-team@fb.com" <kernel-team@fb.com>
+Subject: RE: [PATCH RFC x86/mce] Make mce_timed_out() identify holdout CPUs
+Thread-Topic: [PATCH RFC x86/mce] Make mce_timed_out() identify holdout CPUs
+Thread-Index: AQHW5FMjkT1VpnYtUUqf+lhaTJjRmaoa6vEA
+Date:   Wed, 6 Jan 2021 18:39:30 +0000
+Message-ID: <3513b04e2bb543d2871ca8c152dcf5ae@intel.com>
 References: <20210106174102.GA23874@paulmck-ThinkPad-P72>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 In-Reply-To: <20210106174102.GA23874@paulmck-ThinkPad-P72>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+dlp-product: dlpe-windows
+dlp-reaction: no-action
+dlp-version: 11.5.1.3
+x-originating-ip: [10.1.200.100]
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 8BIT
+MIME-Version: 1.0
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Wed, Jan 06, 2021 at 09:41:02AM -0800, Paul E. McKenney wrote:
 > The "Timeout: Not all CPUs entered broadcast exception handler" message
 > will appear from time to time given enough systems, but this message does
 > not identify which CPUs failed to enter the broadcast exception handler.
 > This information would be valuable if available, for example, in order to
-> correlated with other hardware-oriented error messages.
-
-Because you're expecting that the CPUs which have not entered the
-exception handler might have stuck earlier and that's the correlation
-there?
-
-> This commit
-
-That's a tautology. :)
-
+> correlated with other hardware-oriented error messages.  This commit
 > therefore maintains a cpumask_t of CPUs that have entered this handler,
 > and prints out which ones failed to enter in the event of a timeout.
-> Build-tested only.
-> 
-> Cc: Tony Luck <tony.luck@intel.com>
-> Cc: Borislav Petkov <bp@alien8.de>
-> Cc: Thomas Gleixner <tglx@linutronix.de>
-> Cc: Ingo Molnar <mingo@redhat.com>
-> Cc: "H. Peter Anvin" <hpa@zytor.com>
-> Cc: <x86@kernel.org>
-> Cc: <linux-edac@vger.kernel.org>
-> Reported-by: Jonathan Lemon <bsd@fb.com>
-> Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
-> 
-> diff --git a/arch/x86/kernel/cpu/mce/core.c b/arch/x86/kernel/cpu/mce/core.c
-> index 13d3f1c..44d2b99 100644
-> --- a/arch/x86/kernel/cpu/mce/core.c
-> +++ b/arch/x86/kernel/cpu/mce/core.c
-> @@ -878,6 +878,12 @@ static atomic_t mce_executing;
->  static atomic_t mce_callin;
->  
->  /*
-> + * Track which CPUs entered and not in order to print holdouts.
-> + */
-> +static cpumask_t mce_present_cpus;
-> +static cpumask_t mce_missing_cpus;
-> +
-> +/*
->   * Check if a timeout waiting for other CPUs happened.
->   */
->  static int mce_timed_out(u64 *t, const char *msg)
-> @@ -894,8 +900,12 @@ static int mce_timed_out(u64 *t, const char *msg)
->  	if (!mca_cfg.monarch_timeout)
->  		goto out;
->  	if ((s64)*t < SPINUNIT) {
-> -		if (mca_cfg.tolerant <= 1)
-> +		if (mca_cfg.tolerant <= 1) {
-> +			if (!cpumask_andnot(&mce_missing_cpus, cpu_online_mask, &mce_present_cpus))
-> +				pr_info("%s: MCE holdout CPUs: %*pbl\n",
-> +					__func__, cpumask_pr_args(&mce_missing_cpus));
->  			mce_panic(msg, NULL, NULL);
-> +		}
->  		cpu_missing = 1;
->  		return 1;
->  	}
-> @@ -1006,6 +1016,7 @@ static int mce_start(int *no_way_out)
->  	 * is updated before mce_callin.
->  	 */
->  	order = atomic_inc_return(&mce_callin);
 
-Doesn't a single mce_callin_mask suffice?
+I tried doing this a while back, but found that in my test case where I forced
+an error that would cause both threads from one core to be "missing", the
+output was highly unpredictable. Some random number of extra CPUs were
+reported as missing. After I added some extra breadcrumbs it became clear
+that pretty much all the CPUs (except the missing pair) entered do_machine_check(),
+but some got hung up at various points beyond the entry point. My only theory
+was that they were trying to snoop caches from the dead core (or access some
+other resource held by the dead core) and so they hung too.
 
--- 
-Regards/Gruss,
-    Boris.
+Your code is much neater than mine ... and perhaps works in other cases, but
+maybe the message needs to allow for the fact that some of the cores that
+are reported missing may just be collateral damage from the initial problem.
 
-https://people.kernel.org/tglx/notes-about-netiquette
+If I get time in the next day or two, I'll run my old test against your code to
+see what happens.
+
+-Tony
