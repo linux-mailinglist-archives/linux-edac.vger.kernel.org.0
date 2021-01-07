@@ -2,88 +2,94 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 77BD52ECACD
-	for <lists+linux-edac@lfdr.de>; Thu,  7 Jan 2021 08:08:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CA2852ECE06
+	for <lists+linux-edac@lfdr.de>; Thu,  7 Jan 2021 11:39:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726498AbhAGHII (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Thu, 7 Jan 2021 02:08:08 -0500
-Received: from mail.skyhub.de ([5.9.137.197]:59320 "EHLO mail.skyhub.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725862AbhAGHIH (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Thu, 7 Jan 2021 02:08:07 -0500
-Received: from zn.tnic (p200300ec2f0e340040aa7c2c4e2416a1.dip0.t-ipconnect.de [IPv6:2003:ec:2f0e:3400:40aa:7c2c:4e24:16a1])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 4AC701EC0249;
-        Thu,  7 Jan 2021 08:07:26 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1610003246;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=KGFgHoScXK7gB6fZQoDz8zCs6uUeA+Ptsmqs8FOCUSM=;
-        b=XAlB6YxFl3hMIWbrMLDgTPBh+P8vAOdOBCQL6FPsxbviydKlnstDQ5ZuT8GD1/I/QrP5sy
-        E39IkG2lhmx+5hqJV+g6UktV6JJ0RzYwfKHFDX+iEI+NtJtOZK9HIuh0m30bitnm02r8+5
-        d36WzkMrMLJWGohHXGwwSeEs7r1Ve4g=
-Date:   Thu, 7 Jan 2021 08:07:24 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
-        linux-edac@vger.kernel.org, tony.luck@intel.com,
-        tglx@linutronix.de, mingo@redhat.com, hpa@zytor.com,
-        kernel-team@fb.com
-Subject: Re: [PATCH RFC x86/mce] Make mce_timed_out() identify holdout CPUs
-Message-ID: <20210107070724.GC14697@zn.tnic>
-References: <20210106174102.GA23874@paulmck-ThinkPad-P72>
- <20210106183244.GA24607@zn.tnic>
- <20210106191353.GA2743@paulmck-ThinkPad-P72>
+        id S1726526AbhAGKjF (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Thu, 7 Jan 2021 05:39:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48624 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726997AbhAGKjE (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Thu, 7 Jan 2021 05:39:04 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26566C0612F5
+        for <linux-edac@vger.kernel.org>; Thu,  7 Jan 2021 02:38:24 -0800 (PST)
+Received: from dude02.hi.pengutronix.de ([2001:67c:670:100:1d::28])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <sha@pengutronix.de>)
+        id 1kxSgQ-0000bO-Jw; Thu, 07 Jan 2021 11:38:22 +0100
+Received: from sha by dude02.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <sha@pengutronix.de>)
+        id 1kxSgO-000766-Fm; Thu, 07 Jan 2021 11:38:20 +0100
+From:   Sascha Hauer <s.hauer@pengutronix.de>
+To:     linux-edac@vger.kernel.org
+Cc:     Borislav Petkov <bp@alien8.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Tony Luck <tony.luck@intel.com>,
+        James Morse <james.morse@arm.com>,
+        Robert Richter <rrichter@marvell.com>,
+        York Sun <york.sun@nxp.com>, kernel@pengutronix.de,
+        linux-arm-kernel@lists.infradead.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>
+Subject: [PATCH v3 0/1] Add L1 and L2 error detection for A53 and A57
+Date:   Thu,  7 Jan 2021 11:38:18 +0100
+Message-Id: <20210107103819.13552-1-s.hauer@pengutronix.de>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20210106191353.GA2743@paulmck-ThinkPad-P72>
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::28
+X-SA-Exim-Mail-From: sha@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-edac@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Wed, Jan 06, 2021 at 11:13:53AM -0800, Paul E. McKenney wrote:
-> Not yet, it isn't!  Well, except in -rcu.  ;-)
+Hi all,
 
-Of course it is - saying "This commit" in this commit's commit message
-is very much a tautology. :-)
+It's been a while since I last sent this, so here's an update.
 
-> You are suggesting dropping mce_missing_cpus and just doing this?
-> 
-> if (!cpumask_andnot(&mce_present_cpus, cpu_online_mask, &mce_present_cpus))
+Like Rob suggested I dropped using a virtual device tree node
+to attach the driver to, so from the original three patches series
+is only one patch left now. I think I have integrated all review
+feedback I got last time, please have a look.
 
-Yes.
+One thing that I find unfortunate in the driver is that I have to
+register the "cpu" hierarchy under edac for all CPUs. Only the
+CPUs supported by this driver actually count anything. On JUNO for
+example we have four cortex-a53 cores (which are supported by this
+driver) and four cortex-a72 cores (which are not supported).
+Nevertheless we create the directory hierarchy for all eight cores.
+I don't know how I should work around this, but maybe James has an
+idea.
 
-And pls don't call it "holdout CPUs" and change the order so that it is
-more user-friendly (yap, you don't need __func__ either):
+As usual, feedback welcome.
 
-[   78.946153] mce: Not all CPUs (24-47,120-143) entered the broadcast exception handler.
-[   78.946153] Kernel panic - not syncing: Timeout: MCA synchronization.
+Sascha
 
-or so.
+Changes since v2:
+- drop usage of virtual dt node (Robh)
+- use read_sysreg_s instead of open coded variant (James Morse)
+- separate error retrieving from error reporting
+- use smp_call_function_single rather than smp_call_function_single_async
+- make driver single instance and register all 'cpu' hierarchy up front once
 
-And that's fine if it appears twice as long as it is the same info - the
-MCA code is one complex mess so you can probably guess why I'd like to
-have new stuff added to it be as simplistic as possible.
+Changes since v1:
+- Split dt-binding into separate patch
+- Sort local function variables in reverse-xmas tree order
+- drop unnecessary comparison and make variable bool
 
-> I was worried (perhaps unnecessarily) about the possibility of CPUs
-> checking in during the printout operation, which would set rather than
-> clear the bit.  But perhaps the possible false positives that Tony points
-> out make this race not worth worrying about.
-> 
-> Thoughts?
+Sascha Hauer (1):
+  drivers/edac: Add L1 and L2 error detection for A53 and A57
 
-Yah, apparently, it is not going to be a precise report as you wanted it
-to be but at least it'll tell you which *sockets* you can rule out, if
-not cores.
-
-:-)
+ drivers/edac/Kconfig              |   6 +
+ drivers/edac/Makefile             |   1 +
+ drivers/edac/cortex_arm64_l1_l2.c | 218 ++++++++++++++++++++++++++++++
+ 3 files changed, 225 insertions(+)
+ create mode 100644 drivers/edac/cortex_arm64_l1_l2.c
 
 -- 
-Regards/Gruss,
-    Boris.
+2.20.1
 
-https://people.kernel.org/tglx/notes-about-netiquette
