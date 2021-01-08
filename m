@@ -2,78 +2,93 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CF6F2EFB56
-	for <lists+linux-edac@lfdr.de>; Fri,  8 Jan 2021 23:48:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7ED1E2EFB92
+	for <lists+linux-edac@lfdr.de>; Sat,  9 Jan 2021 00:09:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725792AbhAHWsR (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Fri, 8 Jan 2021 17:48:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47872 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725763AbhAHWsR (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Fri, 8 Jan 2021 17:48:17 -0500
-Received: from merlin.infradead.org (merlin.infradead.org [IPv6:2001:8b0:10b:1231::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36A59C061757;
-        Fri,  8 Jan 2021 14:47:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=merlin.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=y6utkV8+rnLd3kCaXRS1gntJ/Qt+RxB06NgyDB05tsQ=; b=cWZ2NApOkgotnnOjxHpSpSy41f
-        QBDtpEdN6cXwaoS+nil5TbeOvdq7tGHv0fAA5n+xeWL4divsAEgYZuT9I3hjz7AsLMYZKv2VuwTdu
-        EdtYBgK0jHYipoTeq3UvKbLlStfuTVu+b4OgnnmDI2ika+Ee7+a2dZg6Gfij4xdofckqeD5EOxjOb
-        93vnwdD/6UnmcHpBPnSKgDcX3f9vpqqtDT4/iE5sBWH+Jkyney2V7HACZeK7VWa4A5BqdoYMnXsGN
-        eWto8aD02c5iegGv1szt7ghMaD7SmGYctTFWTc3u83YnlcU2xu/EoFN1rjM85EUrEVohihkEfjMk0
-        mpzXX7kw==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
-        by merlin.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1ky0XR-0003Uq-KF; Fri, 08 Jan 2021 22:47:21 +0000
-Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 05F819866B1; Fri,  8 Jan 2021 23:47:15 +0100 (CET)
-Date:   Fri, 8 Jan 2021 23:47:15 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Tony Luck <tony.luck@intel.com>
-Cc:     Borislav Petkov <bp@alien8.de>, x86@kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
+        id S1726253AbhAHXJ3 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-edac@lfdr.de>); Fri, 8 Jan 2021 18:09:29 -0500
+Received: from mga06.intel.com ([134.134.136.31]:9024 "EHLO mga06.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725792AbhAHXJ2 (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Fri, 8 Jan 2021 18:09:28 -0500
+IronPort-SDR: 1zAMVA1Q2xSzCU18L2qOrgDzGvN9sh+v7fPIFxiKui49eIG7/ImSecpa3Jd564KK/xfceXCjSt
+ TY1XRZbcuyZw==
+X-IronPort-AV: E=McAfee;i="6000,8403,9858"; a="239215312"
+X-IronPort-AV: E=Sophos;i="5.79,333,1602572400"; 
+   d="scan'208";a="239215312"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jan 2021 15:08:59 -0800
+IronPort-SDR: +ofVZIE9INDn8Rs02famlryxSS4bKsPILtr6un1eWfK1B2Zc3b2OGsDZ7fD8E6NxUSpLZ/XztJ
+ TgONT3kizRvQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.79,333,1602572400"; 
+   d="scan'208";a="568217572"
+Received: from fmsmsx605.amr.corp.intel.com ([10.18.126.85])
+  by fmsmga006.fm.intel.com with ESMTP; 08 Jan 2021 15:08:59 -0800
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx605.amr.corp.intel.com (10.18.126.85) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1713.5; Fri, 8 Jan 2021 15:08:59 -0800
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1713.5; Fri, 8 Jan 2021 15:08:58 -0800
+Received: from fmsmsx610.amr.corp.intel.com ([10.18.126.90]) by
+ fmsmsx610.amr.corp.intel.com ([10.18.126.90]) with mapi id 15.01.1713.004;
+ Fri, 8 Jan 2021 15:08:58 -0800
+From:   "Luck, Tony" <tony.luck@intel.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+CC:     Borislav Petkov <bp@alien8.de>, "x86@kernel.org" <x86@kernel.org>,
+        "Andrew Morton" <akpm@linux-foundation.org>,
         Darren Hart <dvhart@infradead.org>,
         Andy Lutomirski <luto@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-edac@vger.kernel.org,
-        linux-mm@kvack.org
-Subject: Re: [PATCH 2/2] futex, x86/mce: Avoid double machine checks
-Message-ID: <20210108224715.GB2453@worktop.programming.kicks-ass.net>
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>
+Subject: RE: [PATCH 2/2] futex, x86/mce: Avoid double machine checks
+Thread-Topic: [PATCH 2/2] futex, x86/mce: Avoid double machine checks
+Thread-Index: AQHW5gzS994+pBz0+EqmRhsWwoX/Iaoe2m6A//9/AZA=
+Date:   Fri, 8 Jan 2021 23:08:58 +0000
+Message-ID: <4493a015ffcd4d82bbea7d1e5c2e73e4@intel.com>
 References: <20210108222251.14391-1-tony.luck@intel.com>
  <20210108222251.14391-3-tony.luck@intel.com>
+ <20210108224715.GB2453@worktop.programming.kicks-ass.net>
+In-Reply-To: <20210108224715.GB2453@worktop.programming.kicks-ass.net>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+dlp-product: dlpe-windows
+dlp-reaction: no-action
+dlp-version: 11.5.1.3
+x-originating-ip: [10.1.200.100]
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 8BIT
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210108222251.14391-3-tony.luck@intel.com>
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Fri, Jan 08, 2021 at 02:22:51PM -0800, Tony Luck wrote:
-> futex_wait_setup() first tries to read the user value with page faults
-> disabled (because it holds a lock, and so cannot sleep). If that read
-> fails it drops the lock and tries again.
-> 
-> But there are now two reasons why the user space read can fail. Either:
-> 1) legacy case of a page fault, in which case it is reasonable to retry
-> 2) machine check on the user address, bad idea to re-read
-> 
-> Add some infrastructure to differentiate these cases.
+> I think this is horrid; why can't we have it return something different
+> then -EFAULT instead?
 
-> --- a/kernel/futex.c
-> +++ b/kernel/futex.c
-> @@ -2658,6 +2658,9 @@ static int futex_wait_setup(u32 __user *uaddr, u32 val, unsigned int flags,
->  	if (ret) {
->  		queue_unlock(*hb);
->  
-> +		if (arch_memory_failure(uaddr))
-> +			return ret;
-> +
->  		ret = get_user(uval, uaddr);
->  		if (ret)
->  			return ret;
+I did consider this ... but it appears that architectures aren't unified in the
+return value from get_user()
 
+Here's another function involved in the futex call chain leading to this:
 
-I think this is horrid; why can't we have it return something different
-then -EFAULT instead?
+static int get_futex_value_locked(u32 *dest, u32 __user *from)
+{
+        int ret;
+
+        pagefault_disable();
+        ret = __get_user(*dest, from);
+        pagefault_enable();
+
+        return ret ? -EFAULT : 0;
+}
+
+It seems like the expectation here is just "zero or not" and we
+don't care what the "not" value is ... just turn it into -EFAULT.
+
+-Tony
