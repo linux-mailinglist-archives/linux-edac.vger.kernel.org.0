@@ -2,26 +2,26 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B0B7D2F2215
-	for <lists+linux-edac@lfdr.de>; Mon, 11 Jan 2021 22:46:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 982542F221A
+	for <lists+linux-edac@lfdr.de>; Mon, 11 Jan 2021 22:47:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731292AbhAKVqF (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Mon, 11 Jan 2021 16:46:05 -0500
+        id S1731682AbhAKVqU (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Mon, 11 Jan 2021 16:46:20 -0500
 Received: from mga14.intel.com ([192.55.52.115]:20892 "EHLO mga14.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731682AbhAKVqE (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Mon, 11 Jan 2021 16:46:04 -0500
-IronPort-SDR: PIdsy3Zxk0jwQ23aW2KsWnxbcjjzxyJYh1AoDJ1fORsXh+oDsGWa+APuLor2nUytnjlNDzzgvd
- e/AUCF+2cWNw==
-X-IronPort-AV: E=McAfee;i="6000,8403,9861"; a="177166209"
+        id S1731244AbhAKVqU (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Mon, 11 Jan 2021 16:46:20 -0500
+IronPort-SDR: SX9KRNCcOaCwHv2YBWGvMQP2KuzFy6EBTk+2zKJdemiIurw0jmzmRz6dnpZYe3BBTE4beRiTcU
+ W4s9/9iwIm9A==
+X-IronPort-AV: E=McAfee;i="6000,8403,9861"; a="177166210"
 X-IronPort-AV: E=Sophos;i="5.79,339,1602572400"; 
-   d="scan'208";a="177166209"
+   d="scan'208";a="177166210"
 Received: from fmsmga008.fm.intel.com ([10.253.24.58])
   by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jan 2021 13:45:08 -0800
-IronPort-SDR: /EYgtN6RyiajNarZm1QuziXZRJmrrwZcrPFB6ZrKQDG+4v0wQOeZWxJaoRULpM/ZF8lHay2iho
- V+jp2RHT8YtA==
+IronPort-SDR: X4mXz3V4ZwtebLI/yZy2KXfk+qBWTED9qqdPXsjYD5tqRiH2UoJ4SxqZD1LZhzSpKaqg9IWTRL
+ 4b6bbRJwj8pw==
 X-IronPort-AV: E=Sophos;i="5.79,339,1602572400"; 
-   d="scan'208";a="352760865"
+   d="scan'208";a="352760868"
 Received: from agluck-desk2.sc.intel.com ([10.3.52.68])
   by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jan 2021 13:45:08 -0800
 From:   Tony Luck <tony.luck@intel.com>
@@ -33,9 +33,9 @@ Cc:     Tony Luck <tony.luck@intel.com>, x86@kernel.org,
         Andy Lutomirski <luto@kernel.org>,
         linux-kernel@vger.kernel.org, linux-edac@vger.kernel.org,
         linux-mm@kvack.org
-Subject: [PATCH v2 1/3] x86/mce: Avoid infinite loop for copy from user recovery
-Date:   Mon, 11 Jan 2021 13:44:50 -0800
-Message-Id: <20210111214452.1826-2-tony.luck@intel.com>
+Subject: [PATCH v2 2/3] x86/mce: Add new return value to get_user() for machine check
+Date:   Mon, 11 Jan 2021 13:44:51 -0800
+Message-Id: <20210111214452.1826-3-tony.luck@intel.com>
 X-Mailer: git-send-email 2.21.1
 In-Reply-To: <20210111214452.1826-1-tony.luck@intel.com>
 References: <20210108222251.14391-1-tony.luck@intel.com>
@@ -46,85 +46,67 @@ Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-Recovery action when get_user() triggers a machine check uses the fixup
-path to make get_user() return -EFAULT.  Also queue_task_work() sets up
-so that kill_me_maybe() will be called on return to user mode to send a
-SIGBUS to the current process.
+When an exception occurs during any of the get_user() functions
+fixup_exception() passes the trap number of the exception in regs->ax
+to the fixup code.
 
-But there are places in the kernel where the code assumes that this
-EFAULT return was simply because of a page fault. The code takes some
-action to fix that, and then retries the access. This results in a second
-machine check.
-
-While processing this second machine check queue_task_work() is called
-again. But since this uses the same callback_head structure that
-was used in the first call, the net result is an entry on the
-current->task_works list that points to itself. When task_work_run()
-is called it loops forever in this code:
-
-		do {
-			next = work->next;
-			work->func(work);
-			work = next;
-			cond_resched();
-		} while (work);
-
-Add a "mce_busy" flag bit to detect this situation and panic
-when it happens.
+Check for X86_TRAP_MC and return -ENXIO ("No such device or address")
+so that callers can take action to avoid repeating an access to an
+address that has an uncorrectable error.
 
 Signed-off-by: Tony Luck <tony.luck@intel.com>
 ---
- arch/x86/kernel/cpu/mce/core.c | 7 ++++++-
- include/linux/sched.h          | 3 ++-
- 2 files changed, 8 insertions(+), 2 deletions(-)
+ arch/x86/lib/getuser.S | 8 +++++++-
+ arch/x86/mm/extable.c  | 1 +
+ 2 files changed, 8 insertions(+), 1 deletion(-)
 
-diff --git a/arch/x86/kernel/cpu/mce/core.c b/arch/x86/kernel/cpu/mce/core.c
-index 13d3f1cbda17..1bf11213e093 100644
---- a/arch/x86/kernel/cpu/mce/core.c
-+++ b/arch/x86/kernel/cpu/mce/core.c
-@@ -1246,6 +1246,7 @@ static void kill_me_maybe(struct callback_head *cb)
- 	struct task_struct *p = container_of(cb, struct task_struct, mce_kill_me);
- 	int flags = MF_ACTION_REQUIRED;
+diff --git a/arch/x86/lib/getuser.S b/arch/x86/lib/getuser.S
+index fa1bc2104b32..c49a449fced6 100644
+--- a/arch/x86/lib/getuser.S
++++ b/arch/x86/lib/getuser.S
+@@ -17,7 +17,7 @@
+  *
+  * Inputs:	%[r|e]ax contains the address.
+  *
+- * Outputs:	%[r|e]ax is error code (0 or -EFAULT)
++ * Outputs:	%[r|e]ax is error code (0 or -EFAULT or -ENXIO)
+  *		%[r|e]dx contains zero-extended value
+  *		%ecx contains the high half for 32-bit __get_user_8
+  *
+@@ -34,6 +34,7 @@
+ #include <asm/asm.h>
+ #include <asm/smap.h>
+ #include <asm/export.h>
++#include <asm/trapnr.h>
  
-+	p->mce_busy = 0;
- 	pr_err("Uncorrected hardware memory error in user-access at %llx", p->mce_addr);
+ #define ASM_BARRIER_NOSPEC ALTERNATIVE "", "lfence", X86_FEATURE_LFENCE_RDTSC
  
- 	if (!p->mce_ripv)
-@@ -1268,6 +1269,7 @@ static void kill_me_maybe(struct callback_head *cb)
+@@ -168,8 +169,13 @@ SYM_CODE_START_LOCAL(.Lbad_get_user_clac)
+ 	ASM_CLAC
+ bad_get_user:
+ 	xor %edx,%edx
++	cmpl $X86_TRAP_MC,%eax
++	je mce_get_user
+ 	mov $(-EFAULT),%_ASM_AX
+ 	ret
++mce_get_user:
++	mov $(-ENXIO),%_ASM_AX
++	ret
+ SYM_CODE_END(.Lbad_get_user_clac)
  
- static void queue_task_work(struct mce *m, int kill_current_task)
+ #ifdef CONFIG_X86_32
+diff --git a/arch/x86/mm/extable.c b/arch/x86/mm/extable.c
+index b93d6cd08a7f..ac4fcb820c40 100644
+--- a/arch/x86/mm/extable.c
++++ b/arch/x86/mm/extable.c
+@@ -77,6 +77,7 @@ __visible bool ex_handler_uaccess(const struct exception_table_entry *fixup,
  {
-+	current->mce_busy = 1;
- 	current->mce_addr = m->addr;
- 	current->mce_kflags = m->kflags;
- 	current->mce_ripv = !!(m->mcgstatus & MCG_STATUS_RIPV);
-@@ -1431,8 +1433,11 @@ noinstr void do_machine_check(struct pt_regs *regs)
- 				mce_panic("Failed kernel mode recovery", &m, msg);
- 		}
- 
--		if (m.kflags & MCE_IN_KERNEL_COPYIN)
-+		if (m.kflags & MCE_IN_KERNEL_COPYIN) {
-+			if (current->mce_busy)
-+				mce_panic("Multiple copyin", &m, msg);
- 			queue_task_work(&m, kill_current_task);
-+		}
- 	}
- out:
- 	mce_wrmsrl(MSR_IA32_MCG_STATUS, 0);
-diff --git a/include/linux/sched.h b/include/linux/sched.h
-index 6e3a5eeec509..a763a76eac57 100644
---- a/include/linux/sched.h
-+++ b/include/linux/sched.h
-@@ -1360,7 +1360,8 @@ struct task_struct {
- 	u64				mce_addr;
- 	__u64				mce_ripv : 1,
- 					mce_whole_page : 1,
--					__mce_reserved : 62;
-+					mce_busy : 1,
-+					__mce_reserved : 61;
- 	struct callback_head		mce_kill_me;
- #endif
- 
+ 	WARN_ONCE(trapnr == X86_TRAP_GP, "General protection fault in user access. Non-canonical address?");
+ 	regs->ip = ex_fixup_addr(fixup);
++	regs->ax = trapnr;
+ 	return true;
+ }
+ EXPORT_SYMBOL(ex_handler_uaccess);
 -- 
 2.21.1
 
