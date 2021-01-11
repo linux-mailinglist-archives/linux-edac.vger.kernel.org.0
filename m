@@ -2,85 +2,51 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 253D42F0833
-	for <lists+linux-edac@lfdr.de>; Sun, 10 Jan 2021 16:50:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CF66E2F0B32
+	for <lists+linux-edac@lfdr.de>; Mon, 11 Jan 2021 03:55:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726303AbhAJPtm (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Sun, 10 Jan 2021 10:49:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58188 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726265AbhAJPtm (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Sun, 10 Jan 2021 10:49:42 -0500
-Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C17F6C061794
-        for <linux-edac@vger.kernel.org>; Sun, 10 Jan 2021 07:49:01 -0800 (PST)
-Received: by mail-pf1-x434.google.com with SMTP id c13so6773872pfi.12
-        for <linux-edac@vger.kernel.org>; Sun, 10 Jan 2021 07:49:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=+4PfVpWzIwPp8aKWtKGCptiTFkBNjW8LRR/4faGpkhk=;
-        b=uetcUeWGL+KLQeDlN6q0dqdxyDb8W98E1HoxCyviCDAokQX0QprFgLLHwPSaSERuCI
-         b+sW1fiNX1jGsa5AXWGoa9eRiz6MzMe14FJiz/H3my+AJpNhkv7+14v4r7G00he6aY3j
-         KuJlVLxHLdwULhGm6DKMt2h/rtSHhOTcMxYUSLDV3MkLsvTUU5SGYoInjUj+kAx/0fbR
-         u9QyzKaW3OyMQVkdzRlFQTBj93G9p42lFCnOPb85CgYRtOOOw0w/XfsV2yP2SCvwrlfA
-         yMKjHdqu/mTDaOSF8omgy/IjJAGyfGHMWYy0XtR6arlQ55Hotn3zpp0NdiAO4XAXrpwe
-         gEzg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=+4PfVpWzIwPp8aKWtKGCptiTFkBNjW8LRR/4faGpkhk=;
-        b=ngrphSC1St/fyywHr1tu86BePQLwGfMqlqH+ZEUOrv60G5zXfjqJ1PFkk5m3RdXVk8
-         QWpHpsuZU/NlArDUn2IXD6bgPCYXEpzm9tj3VG5D4TMz5A/iOcNn2Wq0baH6b2wWBPZs
-         j7vnElqLOWFYqGMf2AvJEEn3plrPRgO9lGrI/9MjdaLmNDKDk2alfnlZl2rFRsJIoWjq
-         p9dQZU61hWyEkpyaX1UqJ4JdeBGFCcIAR7OWm9BFKx6v5Y/1jGsyDwyIOCkiuUhg37xZ
-         Cicbk/jdr+u2xqzukt7i/fZesNtpuZVe/D1PpP5ezc0cJ/TPxC+e7C7wfwP0uu4mITyC
-         0hMQ==
-X-Gm-Message-State: AOAM533kb8a1Dnt1Oe0/vqZh8rtcXSyZDSCuXODHGa9MtO6kQ5NmZCNO
-        Q5Ze2DMe+FeIj7knRbViWIYp
-X-Google-Smtp-Source: ABdhPJyYfhLMVP2TMnuARZ+px/60XGDJc7t5XLSGFCjLDWxXyCz/sXm3e2Q9C8ix2ohXgPGNtIulsg==
-X-Received: by 2002:a63:1315:: with SMTP id i21mr16045078pgl.370.1610293741244;
-        Sun, 10 Jan 2021 07:49:01 -0800 (PST)
-Received: from thinkpad ([2409:4072:6d1d:b3a0:54f0:7e43:912d:37b2])
-        by smtp.gmail.com with ESMTPSA id 123sm17076145pgf.38.2021.01.10.07.48.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 10 Jan 2021 07:49:00 -0800 (PST)
-Date:   Sun, 10 Jan 2021 21:18:53 +0530
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     mchehab@kernel.org, tony.luck@intel.com, james.morse@arm.com,
-        rric@kernel.org, linux-edac@vger.kernel.org,
-        linux-kernel@vger.kernel.org, baicar@os.amperecomputing.com,
-        saiprakash.ranjan@codeaurora.org, bjorn.andersson@linaro.org
-Subject: Re: EDAC driver for ARMv8 RAS extension is being worked on
-Message-ID: <20210110154853.GB15624@thinkpad>
-References: <20210110151149.GA15624@thinkpad>
- <20210110152943.GD22211@zn.tnic>
+        id S1726049AbhAKCyL (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Sun, 10 Jan 2021 21:54:11 -0500
+Received: from mail2.directv.syn-alias.com ([69.168.106.50]:32059 "EHLO
+        mail.directv.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726029AbhAKCyK (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Sun, 10 Jan 2021 21:54:10 -0500
+DKIM-Signature: v=1; a=rsa-sha1; d=wildblue.net; s=20170921; c=relaxed/simple;
+        q=dns/txt; i=@wildblue.net; t=1610333609;
+        h=From:Subject:Date:To:MIME-Version:Content-Type;
+        bh=Kpggc07njxalOD7xAXB7pYwZ8FQ=;
+        b=hCD5jb/YmtgzU6ICYnK1Qc4tr8YOcy7rLiy4UxviVKt7vOOIXVPus4JVZt1O1ZzX
+        yra5dTqApfwa3LtrRDgeCvE9VIdpoupHitKmQ+jlbwEJgj9mnZQky07LdrslY0tH
+        +utjkx+uEJVKtYlUH644KdSgdz0YurwWAxA6jbB81cUfLmIREYab5UQCKZAGMTl9
+        zywCgh6cqY06lkKaxAJXYXLX4G72kHVBnnOB/R+AwvXDEn95GZH8EIoIO5xyOoHI
+        7tkAn1wK67Zb8QOZWDx8B91pbgzvGGKpFSkcKPESJUEtZQacZrk3p7jpnFb72yI2
+        miPcEZUW6SlL9IiHHbC1Bw==;
+X_CMAE_Category: , ,
+X-CNFS-Analysis: v=2.3 cv=a7tOCnaF c=1 sm=1 tr=0 cx=a_idp_x a=5uyRkI3skegLlrM6tBwdcg==:117 a=9cW_t1CCXrUA:10 a=KGjhK52YXX0A:10 a=FKkrIqjQGGEA:10 a=pTz6eDbWlxwA:10 a=tUj3IukAssAA:10 a=IkcTkHD0fZMA:10 a=EmqxpYm9HcoA:10 a=8dZtI8s76CEA:10 a=cs2_pUKLLHIA:10 a=x7bEGLp0ZPQA:10 a=JWQAtlBwcF0zhxzL0cAA:9 a=QEXdDO2ut3YA:10 a=xo5jKAKm-U-Zyk2_beg_:22 a=9afDMuuuZj7VoIJXVRjH:22 a=pHzHmUro8NiASowvMSCR:22 a=Ew2E2A-JSTLzCXPT_086:22
+X-CM-Score: 0
+X-Scanned-by: Cloudmark Authority Engine
+X-Authed-Username: Y2Fyb2x5bmNvcnNlQHdpbGRibHVlLm5ldA==
+Received: from [10.80.118.9] ([10.80.118.9:53852] helo=md07.jasper.bos.sync.lan)
+        by mail2.directv.syn-alias.com (envelope-from <carolyncorse@wildblue.net>)
+        (ecelerity 3.6.25.56547 r(Core:3.6.25.0)) with ESMTP
+        id 89/5D-05577-8ADBBFF5; Sun, 10 Jan 2021 21:53:28 -0500
+Date:   Sun, 10 Jan 2021 21:53:28 -0500 (EST)
+From:   Rowell Hambrick <carolyncorse@wildblue.net>
+Reply-To: rowellhabrick@gmail.com
+Message-ID: <1963277681.2787121.1610333608019.JavaMail.zimbra@wildblue.net>
+Subject: 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210110152943.GD22211@zn.tnic>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [5.62.18.136]
+X-Mailer: Zimbra 8.7.6_GA_1776 (zclient/8.7.6_GA_1776)
+Thread-Index: AhT6SJK4MIcUti3EuH3cYkzCZq3pMQ==
+Thread-Topic: 
+X-Vade-Verditct: spam:high
+X-Vade-Analysis: gggruggvucftvghtrhhoucdtuddrgedujedrvdehtddggeelucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuufgjpfetvefqtffnvggrrhhnihhnghdpggfktefutefvpdfqfgfvnecuuegrihhlohhuthemuceftddunecuogfhohhrsghiugguvghnjfgurhculdehtddtmdenucfjughrpeffhfhrkffugggtgfhiofhtsehtjegttdertdejnecuhfhrohhmpeftohifvghllhcujfgrmhgsrhhitghkuceotggrrhholhihnhgtohhrshgvseifihhluggslhhuvgdrnhgvtheqnecuggftrfgrthhtvghrnhepheelueelheeihedvjeeiudevtdffhfevkeevveeivdfgueeuledvudetjeefudffnecukfhppedutddrkedtrdduudekrdelpdehrdeivddrudekrddufeeinecuhfhorhgsihguuggvnhfjughrpeffhfhrkffugggtgfhiofhtsehtjegttdertdejnecuvehluhhsthgvrhfuihiivgepieenucfrrghrrghmpehinhgvthepuddtrdektddruddukedrleenpdhmrghilhhfrhhomheptggrrhholhihnhgtohhrshgvseifihhluggslhhuvgdrnhgvthenpdhrtghpthhtoheplhhithgrihhhuhgrshhhihihvgesuddviedrtghomhen
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Sun, Jan 10, 2021 at 04:29:43PM +0100, Borislav Petkov wrote:
-> On Sun, Jan 10, 2021 at 08:41:49PM +0530, Manivannan Sadhasivam wrote:
-> > I've collected the feedback on those submissions and came up with the idea of
-> > a single "armv8_ras_edac" driver which will work for both Devicetree and ACPI
-> 
-> "ras" and "edac" both is too much. Just call it armv8_edac or arm64_edac or so.
-> 
-
-Okay, sure.
-
-Thanks,
-Mani
-
-> -- 
-> Regards/Gruss,
->     Boris.
-> 
-> https://people.kernel.org/tglx/notes-about-netiquette
+Did you get my previous message
