@@ -2,69 +2,85 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0273F2F4829
-	for <lists+linux-edac@lfdr.de>; Wed, 13 Jan 2021 11:03:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CC5602F4F85
+	for <lists+linux-edac@lfdr.de>; Wed, 13 Jan 2021 17:09:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726676AbhAMKA7 (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Wed, 13 Jan 2021 05:00:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35690 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726381AbhAMKA7 (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Wed, 13 Jan 2021 05:00:59 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F00B7C061575;
-        Wed, 13 Jan 2021 02:00:18 -0800 (PST)
-Received: from zn.tnic (p200300ec2f0b5c00b2d62b1c55c494d5.dip0.t-ipconnect.de [IPv6:2003:ec:2f0b:5c00:b2d6:2b1c:55c4:94d5])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 5EB081EC0373;
-        Wed, 13 Jan 2021 11:00:16 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1610532016;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=bwXUgqm+T5Hm2apmjjzcl3Q/EJPSeMebtTylU7D0IPM=;
-        b=S/AxnRkx4uD8Hpul/XNm2pKELEPL/XjKvGveGL9E3vtrrLbdwA5CT039hEQIp3oA1ZRC3k
-        fBvXcAixZ7vIqoYufjd7oTdYPH0ZSiM8fDN4pouBzhxgkXfqR8K/yJ3MtGq1OlyCov7Mjh
-        0aR8aCpYVr9aw9K23eq0XvSkA4Yxgj4=
-Date:   Wed, 13 Jan 2021 11:00:09 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Andy Lutomirski <luto@amacapital.net>
-Cc:     "Luck, Tony" <tony.luck@intel.com>,
-        Andy Lutomirski <luto@kernel.org>, X86 ML <x86@kernel.org>,
+        id S1727019AbhAMQGx (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Wed, 13 Jan 2021 11:06:53 -0500
+Received: from mga05.intel.com ([192.55.52.43]:11046 "EHLO mga05.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725846AbhAMQGx (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Wed, 13 Jan 2021 11:06:53 -0500
+IronPort-SDR: WgjdOOYThxqPdEe4wNNk/4kBqXuR5zAngrehk/yrab1xw98y+sOuEJiMfadkKu48w845HtkqtW
+ U7LrB6YozpAw==
+X-IronPort-AV: E=McAfee;i="6000,8403,9863"; a="263014471"
+X-IronPort-AV: E=Sophos;i="5.79,344,1602572400"; 
+   d="scan'208";a="263014471"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jan 2021 08:06:10 -0800
+IronPort-SDR: bOzlq79cq60wRr/pOdULkolaqESeVE55VU8e0SDI7AWi7An4zqvFB9QvPfy0xB4iIQ26NoFKlC
+ w89OBIzLNwKg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.79,344,1602572400"; 
+   d="scan'208";a="567891965"
+Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
+  by orsmga005.jf.intel.com with ESMTP; 13 Jan 2021 08:06:10 -0800
+Received: from fmsmsx612.amr.corp.intel.com (10.18.126.92) by
+ fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1713.5; Wed, 13 Jan 2021 08:06:09 -0800
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx612.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1713.5; Wed, 13 Jan 2021 08:06:09 -0800
+Received: from fmsmsx610.amr.corp.intel.com ([10.18.126.90]) by
+ fmsmsx610.amr.corp.intel.com ([10.18.126.90]) with mapi id 15.01.1713.004;
+ Wed, 13 Jan 2021 08:06:09 -0800
+From:   "Luck, Tony" <tony.luck@intel.com>
+To:     Borislav Petkov <bp@alien8.de>,
+        Andy Lutomirski <luto@amacapital.net>
+CC:     Andy Lutomirski <luto@kernel.org>, X86 ML <x86@kernel.org>,
         Andrew Morton <akpm@linux-foundation.org>,
         Peter Zijlstra <peterz@infradead.org>,
-        Darren Hart <dvhart@infradead.org>,
+        "Darren Hart" <dvhart@infradead.org>,
         LKML <linux-kernel@vger.kernel.org>,
         linux-edac <linux-edac@vger.kernel.org>,
         Linux-MM <linux-mm@kvack.org>
-Subject: Re: [PATCH v2 1/3] x86/mce: Avoid infinite loop for copy from user
+Subject: RE: [PATCH v2 1/3] x86/mce: Avoid infinite loop for copy from user
  recovery
-Message-ID: <20210113100009.GA16960@zn.tnic>
+Thread-Topic: [PATCH v2 1/3] x86/mce: Avoid infinite loop for copy from user
+ recovery
+Thread-Index: AQHW6GMIjFZnFv+51UOaFGZUXPBBdKojguIA//98a4CAAb7TAP//fnCAgACHdoD//4tlAAAR67SA//+aBgCAAJpygP//uQmAgACulACAAGA4gIAAINgQ
+Date:   Wed, 13 Jan 2021 16:06:09 +0000
+Message-ID: <8c4cd08e82884518b607f392523dd70b@intel.com>
 References: <20210113015053.GA21587@agluck-desk2.amr.corp.intel.com>
  <EAA1BF13-3C3C-443C-8BF2-A52B5FFB68DE@amacapital.net>
+ <20210113100009.GA16960@zn.tnic>
+In-Reply-To: <20210113100009.GA16960@zn.tnic>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+dlp-product: dlpe-windows
+dlp-reaction: no-action
+dlp-version: 11.5.1.3
+x-originating-ip: [10.1.200.100]
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <EAA1BF13-3C3C-443C-8BF2-A52B5FFB68DE@amacapital.net>
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Tue, Jan 12, 2021 at 08:15:46PM -0800, Andy Lutomirski wrote:
-> So I’m sort of at a loss as to what we can do.
-
-I think you guys have veered off into the weeds with this. The current
-solution - modulo error messages not destined for humans :) - is not soo
-bad, considering the whole MCA trainwreck.
-
-Or am I missing something completely unacceptable?
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+PiBJIHRoaW5rIHlvdSBndXlzIGhhdmUgdmVlcmVkIG9mZiBpbnRvIHRoZSB3ZWVkcyB3aXRoIHRo
+aXMuIFRoZSBjdXJyZW50DQo+IHNvbHV0aW9uIC0gbW9kdWxvIGVycm9yIG1lc3NhZ2VzIG5vdCBk
+ZXN0aW5lZCBmb3IgaHVtYW5zIDopIC0gaXMgbm90IHNvbw0KPiBiYWQsIGNvbnNpZGVyaW5nIHRo
+ZSB3aG9sZSBNQ0EgdHJhaW53cmVjay4NCj4NCj4gT3IgYW0gSSBtaXNzaW5nIHNvbWV0aGluZyBj
+b21wbGV0ZWx5IHVuYWNjZXB0YWJsZT8NCg0KTWF5YmUgdGhlIG90aGVyIGRpZmZlcmVuY2UgaW4g
+YXBwcm9hY2ggYmV0d2VlbiBBbmR5IGFuZCBtZSBpcyB3aGV0aGVyIHRvDQpnbyBmb3IgYSBzb2x1
+dGlvbiB0aGF0IGNvdmVycyBhbGwgdGhlIGNvcm5lciBjYXNlcywgb3IganVzdCBtYWtlIGFuIGlu
+Y3JlbWVudGFsDQppbXByb3ZlbWVudCB0aGF0IGFsbG93cyBmb3IgcmVjb3ZlciBpbiBzb21lIHVz
+ZWZ1bCBzdWJzZXQgb2YgcmVtYWluaW5nIGZhdGFsDQpjYXNlcywgYnV0IHN0aWxsIGRpZXMgaW4g
+b3RoZXIgY2FzZXMuDQoNCkknbSBoYXBweSB0byByZXBsYWNlIGVycm9yIG1lc3NhZ2VzIHdpdGgg
+b25lcyB0aGF0IGFyZSBtb3JlIGRlc2NyaXB0aXZlIGFuZA0KaGVscGZ1bCB0byBodW1hbnMuDQoN
+Ci1Ub255DQo=
