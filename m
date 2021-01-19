@@ -2,128 +2,109 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ACDA82FBCC7
-	for <lists+linux-edac@lfdr.de>; Tue, 19 Jan 2021 17:46:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B64A22FC3AF
+	for <lists+linux-edac@lfdr.de>; Tue, 19 Jan 2021 23:40:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727135AbhASQqG (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Tue, 19 Jan 2021 11:46:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53070 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2389476AbhASQmd (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Tue, 19 Jan 2021 11:42:33 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADA92C061574;
-        Tue, 19 Jan 2021 08:41:50 -0800 (PST)
-Received: from zn.tnic (p200300ec2f0bca005ed5ab9a356b3c50.dip0.t-ipconnect.de [IPv6:2003:ec:2f0b:ca00:5ed5:ab9a:356b:3c50])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 3D9BF1EC0622;
-        Tue, 19 Jan 2021 17:41:49 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1611074509;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:
-         content-transfer-encoding:content-transfer-encoding:in-reply-to:
-         references; bh=Nv5jEc80G7wIwGUWg/8u6iDRcfP4GOU2xU+S4vSqdhM=;
-        b=cDZk3NDXmtZkGgYH3An5E3NgTLjk31sxorcy0zuCXX7FUml2fHLNT97eMj0yxlSiSMKj3R
-        NI5K9ONgS+23GMpQeqdDWtdWCoYjMqdhDTfP1kSRBJcWzhOht1uQY36j49IlJc8rlH4/Ol
-        HyugGkJpiTqiL4msbKrfCuRfW4kZjrw=
-From:   Borislav Petkov <bp@alien8.de>
-To:     linux-edac <linux-edac@vger.kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>
-Subject: [PATCH] EDAC/amd64: Issue probing messages only on properly detected hardware
-Date:   Tue, 19 Jan 2021 17:41:41 +0100
-Message-Id: <20210119164141.17417-1-bp@alien8.de>
-X-Mailer: git-send-email 2.29.2
+        id S1732638AbhASOhb (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Tue, 19 Jan 2021 09:37:31 -0500
+Received: from frasgout.his.huawei.com ([185.176.79.56]:2368 "EHLO
+        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2389495AbhASKFY (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Tue, 19 Jan 2021 05:05:24 -0500
+Received: from fraeml705-chm.china.huawei.com (unknown [172.18.147.201])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4DKkgx048mz67bwc;
+        Tue, 19 Jan 2021 18:01:17 +0800 (CST)
+Received: from lhreml717-chm.china.huawei.com (10.201.108.68) by
+ fraeml705-chm.china.huawei.com (10.206.15.54) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
+ 15.1.2106.2; Tue, 19 Jan 2021 11:04:24 +0100
+Received: from lhreml715-chm.china.huawei.com (10.201.108.66) by
+ lhreml717-chm.china.huawei.com (10.201.108.68) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2106.2; Tue, 19 Jan 2021 10:04:24 +0000
+Received: from lhreml715-chm.china.huawei.com ([10.201.108.66]) by
+ lhreml715-chm.china.huawei.com ([10.201.108.66]) with mapi id 15.01.2106.006;
+ Tue, 19 Jan 2021 10:04:23 +0000
+From:   Shiju Jose <shiju.jose@huawei.com>
+To:     Borislav Petkov <bp@alien8.de>
+CC:     "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
+        "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "james.morse@arm.com" <james.morse@arm.com>,
+        "mchehab+huawei@kernel.org" <mchehab+huawei@kernel.org>,
+        "tony.luck@intel.com" <tony.luck@intel.com>,
+        "rjw@rjwysocki.net" <rjw@rjwysocki.net>,
+        "lenb@kernel.org" <lenb@kernel.org>,
+        "rrichter@marvell.com" <rrichter@marvell.com>,
+        Jonathan Cameron <jonathan.cameron@huawei.com>,
+        tanxiaofei <tanxiaofei@huawei.com>,
+        "linuxarm@openeuler.org" <linuxarm@openeuler.org>
+Subject: RE: [RFC PATCH 1/2] EDAC/ghes: Add EDAC device for the CPU caches
+Thread-Topic: [RFC PATCH 1/2] EDAC/ghes: Add EDAC device for the CPU caches
+Thread-Index: AQHWzYfjlbqCwiJRuEue7sP+GeTJvaoRjUKAgBcV6jCABVN5gIAA+W4Q
+Date:   Tue, 19 Jan 2021 10:04:23 +0000
+Message-ID: <51d4ecaf997043718d3066e0a45518d2@huawei.com>
+References: <20201208172959.1249-1-shiju.jose@huawei.com>
+ <20201208172959.1249-2-shiju.jose@huawei.com> <20201231164409.GC4504@zn.tnic>
+ <a5745b56831c461bbb2cde4afc7ee295@huawei.com>
+ <20210118183637.GD30090@zn.tnic>
+In-Reply-To: <20210118183637.GD30090@zn.tnic>
+Accept-Language: en-GB, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.47.92.19]
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-From: Borislav Petkov <bp@suse.de>
-
-amd64_edac was converted to CPU family autoprobing (from PCI device IDs)
-to not have to add a new PCI device ID a new platform is shipped but to
-support the whole family directly.
-
-However, this caused a lot of noise in dmesg even when the machine
-doesn't have ECC DIMMs or ECC has been disabled in the BIOS:
-
-  EDAC MC: Ver: 3.0.0
-  EDAC amd64: F17h detected (node 0).
-  EDAC amd64: Node 0: DRAM ECC disabled.
-  EDAC amd64: F17h detected (node 1).
-  EDAC amd64: Node 1: DRAM ECC disabled.
-  EDAC amd64: F17h detected (node 2).
-  EDAC amd64: Node 2: DRAM ECC disabled.
-  EDAC amd64: F17h detected (node 3).
-  EDAC amd64: Node 3: DRAM ECC disabled.
-  EDAC amd64: F17h detected (node 4).
-  EDAC amd64: Node 4: DRAM ECC disabled.
-  EDAC amd64: F17h detected (node 5).
-  EDAC amd64: Node 5: DRAM ECC disabled.
-  EDAC amd64: F17h detected (node 6).
-  EDAC amd64: Node 6: DRAM ECC disabled.
-  EDAC amd64: F17h detected (node 7).
-  EDAC amd64: Node 7: DRAM ECC disabled.
-
-or even
-
-$ grep EDAC dmesg.log | sed 's/\[.*\] //' | sort | uniq -c
-    128 EDAC amd64: F17h detected (node 0).
-    128 EDAC amd64: Node 0: DRAM ECC disabled.
-      1 EDAC MC: Ver: 3.0.0
-
-on a big machine. Yap, that's once per CPU for 128 of them.
-
-So move the init messages after all probing has succeeded to avoid
-unnecessary spew in dmesg.
-
-Signed-off-by: Borislav Petkov <bp@suse.de>
----
- drivers/edac/amd64_edac.c | 14 +++++++-------
- 1 file changed, 7 insertions(+), 7 deletions(-)
-
-diff --git a/drivers/edac/amd64_edac.c b/drivers/edac/amd64_edac.c
-index 9868f95a5622..9fa4dfc6ebee 100644
---- a/drivers/edac/amd64_edac.c
-+++ b/drivers/edac/amd64_edac.c
-@@ -3528,8 +3528,7 @@ static bool ecc_enabled(struct amd64_pvt *pvt)
- 				     MSR_IA32_MCG_CTL, nid);
- 	}
- 
--	amd64_info("Node %d: DRAM ECC %s.\n",
--		   nid, (ecc_en ? "enabled" : "disabled"));
-+	edac_dbg(3, "Node %d: DRAM ECC %s.\n", nid, (ecc_en ? "enabled" : "disabled"));
- 
- 	if (!ecc_en || !nb_mce_en)
- 		return false;
-@@ -3689,11 +3688,6 @@ static struct amd64_family_type *per_family_init(struct amd64_pvt *pvt)
- 		return NULL;
- 	}
- 
--	amd64_info("%s %sdetected (node %d).\n", fam_type->ctl_name,
--		     (pvt->fam == 0xf ?
--				(pvt->ext_model >= K8_REV_F  ? "revF or later "
--							     : "revE or earlier ")
--				 : ""), pvt->mc_node_id);
- 	return fam_type;
- }
- 
-@@ -3865,6 +3859,12 @@ static int probe_one_instance(unsigned int nid)
- 		goto err_enable;
- 	}
- 
-+	amd64_info("%s %sdetected (node %d).\n", fam_type->ctl_name,
-+		     (pvt->fam == 0xf ?
-+				(pvt->ext_model >= K8_REV_F  ? "revF or later "
-+							     : "revE or earlier ")
-+				 : ""), pvt->mc_node_id);
-+
- 	dump_misc_regs(pvt);
- 
- 	return ret;
--- 
-2.29.2
-
+SGkgQm9yaXMsDQoNCj4tLS0tLU9yaWdpbmFsIE1lc3NhZ2UtLS0tLQ0KPkZyb206IEJvcmlzbGF2
+IFBldGtvdiBbbWFpbHRvOmJwQGFsaWVuOC5kZV0NCj5TZW50OiAxOCBKYW51YXJ5IDIwMjEgMTg6
+MzcNCj5UbzogU2hpanUgSm9zZSA8c2hpanUuam9zZUBodWF3ZWkuY29tPg0KPkNjOiBsaW51eC1l
+ZGFjQHZnZXIua2VybmVsLm9yZzsgbGludXgtYWNwaUB2Z2VyLmtlcm5lbC5vcmc7IGxpbnV4LQ0K
+Pmtlcm5lbEB2Z2VyLmtlcm5lbC5vcmc7IGphbWVzLm1vcnNlQGFybS5jb207DQo+bWNoZWhhYito
+dWF3ZWlAa2VybmVsLm9yZzsgdG9ueS5sdWNrQGludGVsLmNvbTsgcmp3QHJqd3lzb2NraS5uZXQ7
+DQo+bGVuYkBrZXJuZWwub3JnOyBycmljaHRlckBtYXJ2ZWxsLmNvbTsgSm9uYXRoYW4gQ2FtZXJv
+bg0KPjxqb25hdGhhbi5jYW1lcm9uQGh1YXdlaS5jb20+OyB0YW54aWFvZmVpIDx0YW54aWFvZmVp
+QGh1YXdlaS5jb20+Ow0KPmxpbnV4YXJtQG9wZW5ldWxlci5vcmcNCj5TdWJqZWN0OiBSZTogW1JG
+QyBQQVRDSCAxLzJdIEVEQUMvZ2hlczogQWRkIEVEQUMgZGV2aWNlIGZvciB0aGUgQ1BVDQo+Y2Fj
+aGVzDQo+DQo+T24gRnJpLCBKYW4gMTUsIDIwMjEgYXQgMTE6MDY6MzBBTSArMDAwMCwgU2hpanUg
+Sm9zZSB3cm90ZToNCj4+IEwyIGNhY2hlIGNvcnJlY3RlZCBlcnJvcnMgYXJlIGRldGVjdGVkIG9j
+Y2FzaW9uYWxseSBvbiBmZXcgb2Ygb3VyDQo+PiBBUk02NCBoYXJkd2FyZSBib2FyZHMuIFRob3Vn
+aCBpdCBpcyByYXJlLCB0aGUgcHJvYmFiaWxpdHkgb2YgdGhlIENQVQ0KPj4gY2FjaGUgZXJyb3Jz
+IGZyZXF1ZW50bHkgb2NjdXJyaW5nIGNhbid0IGJlIGF2b2lkZWQuDQo+PiBUaGUgZWFybGllciBm
+YWlsdXJlIGRldGVjdGlvbiBieSBtb25pdG9yaW5nIHRoZSBjYWNoZSBjb3JyZWN0ZWQgZXJyb3Jz
+DQo+PiBmb3IgdGhlIGZyZXF1ZW50IG9jY3VycmVuY2VzIGFuZCB0YWtpbmcgcHJldmVudGl2ZSBh
+Y3Rpb24gY291bGQNCj4+IHByZXZlbnQgbW9yZSBzZXJpb3VzIGhhcmR3YXJlIGZhdWx0cy4NCj4+
+DQo+PiBPbiBJbnRlbCBhcmNoaXRlY3R1cmVzLCBjYWNoZSBjb3JyZWN0ZWQgZXJyb3JzIGFyZSBy
+ZXBvcnRlZCBhbmQgdGhlDQo+PiBhZmZlY3RlZCBjb3JlcyBhcmUgb2ZmbGluZSBpbiB0aGUgYXJj
+aGl0ZWN0dXJlIHNwZWNpZmljIG1ldGhvZC4NCj4+IGh0dHA6Ly93d3cubWNlbG9nLm9yZy9jYWNo
+ZS5odG1sDQo+Pg0KPj4gSG93ZXZlciBmb3IgdGhlIGZpcm13YXJlLWZpcnN0IGVycm9yIHJlcG9y
+dGluZywgc3BlY2lmaWNhbGx5IG9uDQo+PiBBUk02NCBhcmNoaXRlY3R1cmVzLCB0aGVyZSBpcyBu
+byBwcm92aXNpb24gcHJlc2VudCBmb3IgcmVwb3J0aW5nIHRoZQ0KPj4gY2FjaGUgY29ycmVjdGVk
+IGVycm9yIGNvdW50IHRvIHRoZSB1c2VyLXNwYWNlIGFuZCB0YWtpbmcgcHJldmVudGl2ZQ0KPj4g
+YWN0aW9uIHN1Y2ggYXMgb2ZmbGluZSB0aGUgYWZmZWN0ZWQgY29yZXMuDQo+DQo+SG93IGhhcmQg
+d2FzIGl0IHRvIHdyaXRlIHRoYXQgaW4geW91ciBmaXJzdCBzdWJtaXNzaW9uPyBXaGF0IGRvIHlv
+dSB0aGluaw0KPndvdWxkIGJlIHRoZSBiZXN0IHdheSB0byBwZXJzdWFkZSBhIHBhdGNoIHJldmll
+d2VyL21haW50YWluZXIgdG8gdGFrZSBhDQo+bG9vayBhdCB5b3VyIHN1Ym1pc3Npb24/DQo+DQo+
+PiA+V2h5IGEgc2VwYXJhdGUgS2NvbmZpZyBpdGVtPw0KPj4gQ09ORklHX0VEQUNfR0hFU19DUFVf
+Q0FDSEVfRVJST1IgaXMgYWRkZWQgdG8gbWFrZSB0aGlzIGZlYXR1cmUNCj4+IG9wdGlvbmFsIG9u
+bHkgZm9yIHRoZSBwbGF0Zm9ybXMgd2hpY2ggbmVlZCB0aGlzIGFuZCBzdXBwb3J0ZWQuDQo+Pg0K
+Pj4gPg0KPj4gPj4gKwlkZXBlbmRzIG9uIEVEQUNfR0hFUw0KPg0KPmRlcGVuZHMgb24gRURBQ19H
+SEVTIGhhcmRseSBleHByZXNzZXMgd2hpY2ggcGxhdGZvcm1zIG5lZWQgaXQvc3VwcG9ydCBpdC4N
+Cj4NCj5JZiBhbnl0aGluZywgZGVwZW5kcyBvbiBBUk02NC4NClN1cmUuIEkgd2lsbCBhZGQgZGVw
+ZW5kZW5jeSBvbiBBUk02NC4NClRoaXMgRURBQyBjb2RlIGZvciB0aGUgY2FjaGUgZXJyb3JzIGlz
+ICBhcmNoaXRlY3R1cmUgaW5kZXBlbmRlbnQgZm9yIHRoZQ0KZmlybXdhcmUtZmlyc3QgZXJyb3Ig
+cmVwb3J0aW5nIGFuZCAgY291bGQgYmUgdXNlZCBmb3Igb3RoZXIgYXJjaGl0ZWN0dXJlcywNCnRo
+b3VnaCBub3cgd2UgbmVlZCBpdCBmb3IgdGhlIEFSTTY0LiANCg0KPg0KPj4gPkluaXQgc3R1ZmYg
+YmVsb25ncyBpbnRvIGdoZXNfc2Nhbl9zeXN0ZW0oKS4NCj4+ID4NCj4+IERpZCB5b3UgbWVhbiBj
+YWxsaW5nICBnaGVzX2VkYWNfY3JlYXRlX2NwdV9kZXZpY2UoKSBpbiB0aGUNCj5naGVzX3NjYW5f
+c3lzdGVtKCk/DQo+DQo+SSBtZWFuLCBhbGwgaGFyZHdhcmUgZGlzY292ZXJ5IG5lZWRzIHRvIGhh
+cHBlbiBpbiBnaGVzX3NjYW5fc3lzdGVtDQo+LSB5b3UgZG9uJ3QgbmVlZCB0byBjYWxsIHRob3Nl
+IGZyb20gb3V0c2lkZSB0aGUgZHJpdmVyLCBpbg0KPmdoZXNfZWRhY19yZWdpc3RlcigpLg0KDQpz
+dXJlLiBXaWxsIG1vZGlmeS4NCj4NCj4tLQ0KPlJlZ2FyZHMvR3J1c3MsDQo+ICAgIEJvcmlzLg0K
+DQpUaGFua3MsDQpTaGlqdQ0K
