@@ -2,147 +2,150 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E8920305D08
-	for <lists+linux-edac@lfdr.de>; Wed, 27 Jan 2021 14:24:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 681313075CE
+	for <lists+linux-edac@lfdr.de>; Thu, 28 Jan 2021 13:18:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231635AbhA0NYk (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Wed, 27 Jan 2021 08:24:40 -0500
-Received: from mga07.intel.com ([134.134.136.100]:6567 "EHLO mga07.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S313572AbhAZWg5 (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Tue, 26 Jan 2021 17:36:57 -0500
-IronPort-SDR: jJY6t0cBRoflIqhDjTtW2TTCEcNgL9tKCLL3pEkbjkuKDiLFULG8Z+OtNeuucxW0B8jPXpKZ6+
- pkb9z1buGk5Q==
-X-IronPort-AV: E=McAfee;i="6000,8403,9876"; a="244061126"
-X-IronPort-AV: E=Sophos;i="5.79,377,1602572400"; 
-   d="scan'208";a="244061126"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2021 14:36:07 -0800
-IronPort-SDR: ntLRWFScXw4JrK88VX4h8u9fF93qP3ZixkZMrT4BFbEk0zfvh5qocUC/rsR5vLT73QIMLY+uIM
- Pbo/qvMjWrUA==
-X-IronPort-AV: E=Sophos;i="5.79,377,1602572400"; 
-   d="scan'208";a="472913413"
-Received: from agluck-desk2.sc.intel.com (HELO agluck-desk2.amr.corp.intel.com) ([10.3.52.146])
-  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2021 14:36:06 -0800
-Date:   Tue, 26 Jan 2021 14:36:05 -0800
-From:   "Luck, Tony" <tony.luck@intel.com>
+        id S231220AbhA1MST convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-edac@lfdr.de>); Thu, 28 Jan 2021 07:18:19 -0500
+Received: from mail.kingsoft.com ([114.255.44.146]:41180 "EHLO
+        mail.kingsoft.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S231555AbhA1MSL (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Thu, 28 Jan 2021 07:18:11 -0500
+X-Greylist: delayed 948 seconds by postgrey-1.27 at vger.kernel.org; Thu, 28 Jan 2021 07:18:02 EST
+X-AuditID: 0a580155-6fbff700000550c6-25-6012a164fcc0
+Received: from mail.kingsoft.com (localhost [10.88.1.32])
+        (using TLS with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (Client did not present a certificate)
+        by mail.kingsoft.com (SMG-2-NODE-85) with SMTP id 13.F6.20678.461A2106; Thu, 28 Jan 2021 19:35:00 +0800 (HKT)
+Received: from aili-OptiPlex-7020 (172.16.253.254) by KSBJMAIL2.kingsoft.cn
+ (10.88.1.32) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1979.3; Thu, 28 Jan
+ 2021 20:01:28 +0800
+Date:   Thu, 28 Jan 2021 20:01:28 +0800
+From:   Aili Yao <yaoaili@kingsoft.com>
 To:     Borislav Petkov <bp@alien8.de>
-Cc:     x86@kernel.org, Andrew Morton <akpm@linux-foundation.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Darren Hart <dvhart@infradead.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-edac@vger.kernel.org,
-        linux-mm@kvack.org
-Subject: Re: [PATCH v5] x86/mce: Avoid infinite loop for copy from user
- recovery
-Message-ID: <20210126223605.GA14355@agluck-desk2.amr.corp.intel.com>
-References: <20210115152754.GC9138@zn.tnic>
- <20210115193435.GA4663@agluck-desk2.amr.corp.intel.com>
- <20210115205103.GA5920@agluck-desk2.amr.corp.intel.com>
- <20210115232346.GA7967@agluck-desk2.amr.corp.intel.com>
- <20210119105632.GF27433@zn.tnic>
- <20210119235759.GA9970@agluck-desk2.amr.corp.intel.com>
- <20210120121812.GF825@zn.tnic>
- <20210121210959.GA10304@agluck-desk2.amr.corp.intel.com>
- <20210125225509.GA7149@agluck-desk2.amr.corp.intel.com>
- <20210126110314.GC6514@zn.tnic>
+CC:     <tony.luck@intel.com>, <rjw@rjwysocki.net>, <lenb@kernel.org>,
+        <james.morse@arm.com>, <linux-acpi@vger.kernel.org>,
+        <linux-edac@vger.kernel.org>, <yangfeng1@kingsoft.com>,
+        <CHENGUOMIN@kingsoft.com>
+Subject: Re: [PATCH v2] Dump cper error table in mce_panic
+Message-ID: <20210128200128.6f022993.yaoaili@kingsoft.com>
+In-Reply-To: <20201120102422.GA712@zn.tnic>
+References: <20201104065057.40442-1-yaoaili126@163.com>
+        <20201117175804.39bbbdc3.yaoaili@kingsoft.com>
+        <20201118124538.GI7472@zn.tnic>
+        <20201119134057.37ca2c19.yaoaili@kingsoft.com>
+        <20201119174508.GE3769@zn.tnic>
+        <20201120172235.620eb826.yaoaili@kingsoft.com>
+        <20201120102422.GA712@zn.tnic>
+Organization: Kingsoft
+X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210126110314.GC6514@zn.tnic>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Originating-IP: [172.16.253.254]
+X-ClientProxiedBy: KSBJMAIL1.kingsoft.cn (10.88.1.31) To KSBJMAIL2.kingsoft.cn
+ (10.88.1.32)
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrOLMWRmVeSWpSXmKPExsXCFcGooJuyUCjBYOdNEYvPG/6xWdzft5zJ
+        YufDt2wWy/f1M1pcONXAZHHm9CVWizcX7rE4sHt8b+1j8Vgzbw2jx+I9L5k8Nq3qZPPYcrWd
+        xePzJrkAtigum5TUnMyy1CJ9uwSujLmnrQquyVWcWNfJ0sA4X6KLkZNDQsBEYtmH/+xdjFwc
+        QgLTmSQu3L/MCOG8YJS49bOTGaSKRUBVYtqJeWA2G5C9694sVhBbREBJ4uuiuUwgDcwC5xkl
+        +hqusoAkhAWsJJ5ueANm8wLZa6ddAWvgFNCW6Jnzkwliw3omifaHu4AcDg5+ATGJVw3GECfZ
+        Szz/e5YZoldQ4uTMJ2BzmAU0JVq3/2aHsLUlli18DVYjJKAocXjJL3aIXiWJI90z2CDsWIll
+        816xTmAUnoVk1Cwko2YhGbWAkXkVI0txbrrRJkZIXITuYJzR9FHvECMTB+MhRgkOZiUR3rdz
+        hBKEeFMSK6tSi/Lji0pzUosPMUpzsCiJ85Y78CUICaQnlqRmp6YWpBbBZJk4OKUamMwLjtQH
+        SU5dYxz9rHVWd1f3q+kOe5mZ8g8b6AufmlxdGSrwsF5sR2Uw6wVt6aLZnJGP7i7vd9199+ui
+        +Rzz7m0Mj6y/fSK4pv9Psr30Dl8TpqKJvFWWDcdEN92c9lkjp/fMvIV9glpn1L4sFVLcseLJ
+        3B3Bt12ufVApO/vZsTbpa6C+Q1bilh/X+20zrEu+vO0TOHa0huFf6pxJZ4ucNTPXadR3S6bG
+        8idIOH7S0rzTqr7s84yCXUqCDlyBea9zvCY5fDr1kf2Eztt9Mekzu0/9qM3b+KTuh/0sednZ
+        c+cdtONeer8/xHRXZPf0eJ/3j02+nvT/ZJvntENNxok/aWvM/m1L7be/6XH2W9C3T4mlOCPR
+        UIu5qDgRAC9wxqP6AgAA
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Tue, Jan 26, 2021 at 12:03:14PM +0100, Borislav Petkov wrote:
-> On Mon, Jan 25, 2021 at 02:55:09PM -0800, Luck, Tony wrote:
-> > And now I've changed it back to non-atomic (but keeping the
-> > slightly cleaner looking code style that I used for the atomic
-> > version).  This one also works for thousands of injections and
-> > recoveries.  Maybe take it now before it stops working again :-)
+
+> On Fri, Nov 20, 2020 at 05:22:35PM +0800, Aili Yao wrote:
+> > Hi, This test result if from tip/master, previous is upstream latest.  
 > 
-> Hmm, so the only differences I see between your v4 and this are:
+> Thanks for doing those, now let's see.
 > 
-> -@@ -1238,6 +1238,7 @@ static void __mc_scan_banks(struct mce *m, struct pt_regs *regs, struct mce *fin
-> +@@ -1238,6 +1238,9 @@ static void __mc_scan_banks(struct mce *m, struct pt_regs *regs, struct mce *fin
->   
->   static void kill_me_now(struct callback_head *ch)
->   {
-> ++	struct task_struct *p = container_of(ch, struct task_struct, mce_kill_me);
-> ++
->  +	p->mce_count = 0;
->   	force_sig(SIGBUS);
->   }
+> With rc4 you have the MCE error in the first kernel:
 > 
-> Could the container_of() macro have changed something?
-
-That change was to fix my brown paper bag moment (does not
-compile without a variable named "p" in scope to be used on
-next line.)
-
-> Because we don't know yet (right?) why would it fail? Would it read
-> stale ->mce_count data? If so, then a barrier is missing somewhere.
-
-I don't see how a barrier would make a differece. In the common case
-all this code is executed on the same logical CPU. Return from the
-do_machine_check() tries to return to user mode and finds that there
-is some "task_work" to execute first.
-
-In some cases Linux might context switch to something else. Perhaps
-this task even gets picked up by another CPU to run the task work
-queued functions.  But I imagine that the context switch should act
-as a barrier ... shouldn't it?
-
-> Or what is the failure exactly?
-
-After a few cycles of the test injection to user mode, I saw an
-overflow in the machine check bank. As if it hadn't been cleared
-from the previous iteration ... but all the banks are cleared as
-soon as we find that the machine check is recoverable. A while before
-getting to the code I changed.
-
-When the tests were failing, code was on top of v5.11-rc3. Latest
-experiments moved to -rc5.  There's just a tracing fix from
-PeterZ between rc3 and rc5 to mce/core.c:
-
-737495361d44 ("x86/mce: Remove explicit/superfluous tracing")
-
-which doesn't appear to be a candidate for the problems I saw.
-
-> Because if I take it now without us knowing what the issue is, it will
-> start failing somewhere - Murphy's our friend - and then we'll have to
-> deal with breaking people's boxes. Not fun.
-
-Fair point.
-
-> The other difference is:
+> [  106.956286] Disabling lock debugging due to kernel taint
+> [  106.962373] mce: [Hardware Error]: CPU 18: Machine Check Exception: 5 Bank 7: be00000001010091
+> [  106.962377] mce: [Hardware Error]: RIP !INEXACT! 10:<ffffffffac58472a>
+> [  106.996488] {acpi_idle_do_entry+0x4a/0x60}
+> [  107.001057] mce: [Hardware Error]: TSC ae4b410af0b8 ADDR 314d193000 MISC 200400c008002086
+> [  107.010283] mce: [Hardware Error]: PROCESSOR 0:50657 TIME 1605843017 SOCKET 1 APIC 40 microcode 5000021
+> [  107.020767] mce: [Hardware Error]: Run the above through 'mcelog --ascii'
+> [  107.031295] mce: [Hardware Error]: Machine check: Processor context corrupt
+> [  107.039065] Kernel panic - not syncing: Fatal machine check
 > 
-> @@ -76,8 +71,10 @@ index 13d3f1cbda17..5460c146edb5 100644
->  -	current->mce_kflags = m->kflags;
->  -	current->mce_ripv = !!(m->mcgstatus & MCG_STATUS_RIPV);
->  -	current->mce_whole_page = whole_page(m);
-> ++	int count = ++current->mce_count;
-> ++
->  +	/* First call, save all the details */
-> -+	if (current->mce_count++ == 0) {
-> ++	if (count == 1) {
->  +		current->mce_addr = m->addr;
->  +		current->mce_kflags = m->kflags;
->  +		current->mce_ripv = !!(m->mcgstatus & MCG_STATUS_RIPV);
+> Now the kdump kernel fires and there's an error record in the CPER
+> thing.
 > 
-> Hmm, a local variable and a pre-increment. Can that have an effect somehow?
-
-This is the bit that changed during my detour using atomic_t mce_count.
-I added the local variable to capture value from atomic_inc_return(), then
-used it later, instead of a bunch of atomic_read() calls.
-
-I kept it this way because "if (count == 1)" is marginally easier to read
-than "if (current->mce_count++ == 0)"
-
-> > +	/* Ten is likley overkill. Don't expect more than two faults before task_work() */
+> > [    6.280390] input: Power Button as /devices/LNXSYSTM:00/LNXPWRBN:00/input/input0
+> > [    6.288655] ACPI: Power Button [PWRF]
+> > [    6.292961] ERST: Error Record Serialization Table (ERST) support is initialized.
+> > [    6.301295] pstore: Registered erst as persistent store backend
+> > [    6.307912] {1}[Hardware Error]: Hardware error from APEI Generic Hardware Error Source: 4
+> > [    6.308886] {1}[Hardware Error]: event severity: fatal
+> > [    6.308886] {1}[Hardware Error]:  Error 0, type: fatal
+> > [    6.308886] {1}[Hardware Error]:  fru_text: Card03, ChnB, DIMM0
+> > [    6.308886] {1}[Hardware Error]:   section_type: memory error
+> > [    6.308886] {1}[Hardware Error]:   error_status: 0x0000000000000000  
 > 
-> Typo: likely.
+> And this error_status is all clear. I wonder why.
+> 
+> Looking at the ÜFI spec "Section O: Error Status" it defines a couple
+> of bits there: whether it was an address or control bits error, who
+> detected the error (responder, requestor), whether it was the first
+> error, etc, etc.
+> 
+> And none of those bits are set.
+> 
+> Which makes me not trust that error record a whole lot but that's a
+> given, since it is firmware and firmware is an unfixable piece of crap
+> by definition.
+> 
+> So then one could probably say that if none of those error status bits
+> are set, then the error being reported is not something, let's say
+> "fresh". This is doubly the case considering that it gets detected when
+> the GHES driver probes:
+> 
+>         /* Handle any pending errors right away */
+>         spin_lock_irqsave(&ghes_notify_lock_irq, flags);
+>         ghes_proc(ghes);
+>         spin_unlock_irqrestore(&ghes_notify_lock_irq, flags);
+> 
+> so *maybe*, just *maybe* one could say here:
+> 
+> If the error_status doesn't have any valid bits *and* it has been
+> detected on driver init - i.e., the error has been there before the
+> driver probed, then even if the error is fatal, GHES should not call
+> __ghes_panic().
+> 
+> The even better way to detect this is to be able to check whether this
+> is the kdump kernel and whether it got loaded due to a fatal MCE in the
+> first kernel and then match that error address with the error address of
+> the error which caused the first panic in the mce code. Then the second
+> kernel won't need to panic but simply log.
+> 
+> However, I think that second way to check is probably hard and the first
+> heuristic is probably good enough...
+> 
+> Tony, thoughts?
+> 
 
-Oops. Fixed.
+Long away from this issue, any feedback?
+From kexec-tool, the hest_disable parameter has been added to 2nd kernel, So
+the kdump will not be affected by ghes errors.
+But we still may lose the ghes error info, so i think this patch is still needed?
 
--Tony
+Thanks
+
+-- 
+Best Regards!
+
+Aili Yao
