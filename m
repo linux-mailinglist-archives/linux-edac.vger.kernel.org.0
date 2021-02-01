@@ -2,109 +2,88 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 14CE6309FA2
-	for <lists+linux-edac@lfdr.de>; Mon,  1 Feb 2021 01:09:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D5F6830A708
+	for <lists+linux-edac@lfdr.de>; Mon,  1 Feb 2021 13:01:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229656AbhBAAIR (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Sun, 31 Jan 2021 19:08:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41620 "EHLO
+        id S229545AbhBAMAP (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Mon, 1 Feb 2021 07:00:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230218AbhBAAIA (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Sun, 31 Jan 2021 19:08:00 -0500
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC812C061573
-        for <linux-edac@vger.kernel.org>; Sun, 31 Jan 2021 16:07:19 -0800 (PST)
-Received: by mail-ej1-x631.google.com with SMTP id kg20so21597807ejc.4
-        for <linux-edac@vger.kernel.org>; Sun, 31 Jan 2021 16:07:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=pmarks-net.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=0eLo56GbbOQEWcRbyLNsYNAG4DPjrW+fOVigYq9vZ5I=;
-        b=BxAAy2286rUkiEpV6htMzexnFgIO37Vxn/yVZPIEAy1N71SJD0JIyTNOz9/YdB0IdW
-         KQqP+yd2Bb0q466XDht8M6Of/ylZGlHBmADW7IMhRjQxPZHBfBQer3KjFJvjXyHA3js8
-         y1HvP2jSsstJv9HJN5StI/+nqI3uk9at7Gd2Yc/IutYweYt/9UNWih5p171aSW8sjNkd
-         iBnSHR6sg/BI7tt+feEDZ8NrLPZ5JzbNV6q3m+cPaekExLVrUrbibjqkQMU60xDX9g5E
-         Xsm4n5sXGlcycvPO9UWu3BYPBdkZdEBcf+O37hV+ycEwXDio3MilY4rmL49h9y5y36GS
-         I9wA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=0eLo56GbbOQEWcRbyLNsYNAG4DPjrW+fOVigYq9vZ5I=;
-        b=hphHv2qsG/f/lWCCVUY4Hjql+SdqCaetX11YQxfGx4y+5udtvdFEPA3GFsWmL2bLEH
-         ERRYo2VOjPXzIGlgD8sigPYxuRKITEkll6kLLurIB/O0aC57OeNS0cXQqSlp6Z3+qlGV
-         bbF2VEBtwUmLxxDrS3vCQUmU0NLpmjiKDYenH0a65eEyZbMk/+mv0x9kKjIBsXFFU9Fe
-         V5nufJadKqob3js1RdUWC2bg7zlwM0Ry9t7vOo3VgUjVuLlkzLICN4sY/UCYHpSoEVBP
-         hs21sXUhujx+jEwNxpvCvLA6u4OlYDF0R5xtGBTOsrP+mNanV0oxiaHcbrqbWxxd4DUO
-         p4iA==
-X-Gm-Message-State: AOAM531pbERYeqYFVLeRz8w0klKJUOIeCg+jOU+3LfU9+mzUB0GIwPXT
-        jWrEFQieJWC3+Qz4rfSxPnBjOhXU/CSV8+ulyLfpzC6rU5Q=
-X-Google-Smtp-Source: ABdhPJzUvEyEmyA3ueeMlqT9W5xRS1TXt8hqz6kQkj3t/r1Pua0yHMmtla/aaqhrSKUQ23pLlw7MgvPktXiMr1Y9nMg=
-X-Received: by 2002:a17:906:c954:: with SMTP id fw20mr14988469ejb.342.1612138038149;
- Sun, 31 Jan 2021 16:07:18 -0800 (PST)
-MIME-Version: 1.0
-From:   Paul Marks <paul@pmarks.net>
-Date:   Sun, 31 Jan 2021 16:07:06 -0800
-Message-ID: <CAHq9+ShGiB_H6-E=L398zYR=ja16r2OuvJZfU4KLof=segyJbw@mail.gmail.com>
-Subject: ie31200_edac missing PCI ID for i3-4370
+        with ESMTP id S231256AbhBAL6o (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Mon, 1 Feb 2021 06:58:44 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4280C06174A
+        for <linux-edac@vger.kernel.org>; Mon,  1 Feb 2021 03:58:03 -0800 (PST)
+Received: from dude02.hi.pengutronix.de ([2001:67c:670:100:1d::28])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <sha@pengutronix.de>)
+        id 1l6XqE-00053w-4X; Mon, 01 Feb 2021 12:58:02 +0100
+Received: from sha by dude02.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <sha@pengutronix.de>)
+        id 1l6Xq9-0000DF-8p; Mon, 01 Feb 2021 12:57:57 +0100
+From:   Sascha Hauer <s.hauer@pengutronix.de>
 To:     linux-edac@vger.kernel.org
-Cc:     jbaron@akamai.com, bp@alien8.de, m.chehab@samsung.com
-Content-Type: text/plain; charset="UTF-8"
+Cc:     Borislav Petkov <bp@alien8.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Tony Luck <tony.luck@intel.com>,
+        James Morse <james.morse@arm.com>,
+        Robert Richter <rrichter@marvell.com>,
+        York Sun <york.sun@nxp.com>, kernel@pengutronix.de,
+        linux-arm-kernel@lists.infradead.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>
+Subject: [PATCH iv4 0/2] Add L1 and L2 error detection for A53 and A57
+Date:   Mon,  1 Feb 2021 12:57:51 +0100
+Message-Id: <20210201115753.18349-1-s.hauer@pengutronix.de>
+X-Mailer: git-send-email 2.20.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::28
+X-SA-Exim-Mail-From: sha@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-edac@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-I have an ASRock C226M WS with an i3-4370 CPU.
+Hi All,
 
-# lspci -vnn
-00:00.0 Host bridge [0600]: Intel Corporation 4th Gen Core Processor
-            DRAM Controller [8086:0c00] (rev 06)
-        Subsystem: ASRock Incorporation 4th Gen Core Processor
-            DRAM Controller [1849:0c00]
-        Flags: bus master, fast devsel, latency 0
-        Capabilities: [e0] Vendor Specific Information: Len=0c <?>
-        Kernel driver in use: hsw_uncore
+As mentioned by Marc and Mark usage of the implementation defined
+registers is not generally safe, they can't be used in virtualized
+environments or when EL3 already uses the same registers. This is
+probably the last attempt to get this upstream, I added an additional
+property to the CPU device nodes to be set explicitly when using these
+registers is safe and desired.
 
-But edac-util doesn't work:
+Sascha
 
-# edac-util -v
-edac-util: Fatal: Unable to get EDAC data: Unable to find EDAC data in sysfs
+Changes since v3:
+- Add edac-enabled property to make EDAC support optional
 
-I tried this ham-fisted patch:
+Changes since v2:
+- drop usage of virtual dt node (Robh)
+- use read_sysreg_s instead of open coded variant (James Morse)
+- separate error retrieving from error reporting
+- use smp_call_function_single rather than smp_call_function_single_async
+- make driver single instance and register all 'cpu' hierarchy up front once
 
-# diff -u ./drivers/edac/ie31200_edac.c{.old,}
---- ./drivers/edac/ie31200_edac.c.old
-+++ ./drivers/edac/ie31200_edac.c
-@@ -58,7 +58,7 @@
- #define PCI_DEVICE_ID_INTEL_IE31200_HB_3 0x0150
- #define PCI_DEVICE_ID_INTEL_IE31200_HB_4 0x0158
- #define PCI_DEVICE_ID_INTEL_IE31200_HB_5 0x015c
--#define PCI_DEVICE_ID_INTEL_IE31200_HB_6 0x0c04
-+#define PCI_DEVICE_ID_INTEL_IE31200_HB_6 0x0c00
- #define PCI_DEVICE_ID_INTEL_IE31200_HB_7 0x0c08
- #define PCI_DEVICE_ID_INTEL_IE31200_HB_8 0x1918
- #define PCI_DEVICE_ID_INTEL_IE31200_HB_9 0x5918
+Changes since v1:
+- Split dt-binding into separate patch
+- Sort local function variables in reverse-xmas tree order
+- drop unnecessary comparison and make variable bool
 
-And it seems happy now:
+Sascha Hauer (2):
+  drivers/edac: Add L1 and L2 error detection for A53 and A57
+  dt-bindings: arm: cpus: Add edac-enabled property
 
-# lspci -vnn
-00:00.0 Host bridge [0600]: Intel Corporation 4th Gen Core Processor
-            DRAM Controller [8086:0c00] (rev 06)
-        Subsystem: ASRock Incorporation 4th Gen Core Processor
-            DRAM Controller [1849:0c00]
-        Flags: bus master, fast devsel, latency 0
-        Capabilities: [e0] Vendor Specific Information: Len=0c <?>
-        Kernel driver in use: hsw_uncore
-        Kernel modules: ie31200_edac
+ .../devicetree/bindings/arm/cpus.yaml         |   6 +
+ drivers/edac/Kconfig                          |   6 +
+ drivers/edac/Makefile                         |   1 +
+ drivers/edac/cortex_arm64_l1_l2.c             | 221 ++++++++++++++++++
+ 4 files changed, 234 insertions(+)
+ create mode 100644 drivers/edac/cortex_arm64_l1_l2.c
 
-# edac-util -v
-mc0: 0 Uncorrected Errors with no DIMM info
-mc0: 0 Corrected Errors with no DIMM info
-mc0: csrow0: 0 Uncorrected Errors
-mc0: csrow0: mc#0csrow#0channel#0: 0 Corrected Errors
-mc0: csrow1: 0 Uncorrected Errors
-mc0: csrow1: mc#0csrow#1channel#0: 0 Corrected Errors
-edac-util: No errors to report.
+-- 
+2.20.1
 
-I don't know if it's truly working because I can't overclock the RAM
-to induce ECC errors, but still I think adding 8086:0c00 to this
-driver could be useful.
