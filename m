@@ -2,70 +2,64 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4274B310BB2
-	for <lists+linux-edac@lfdr.de>; Fri,  5 Feb 2021 14:20:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 55BEF31125C
+	for <lists+linux-edac@lfdr.de>; Fri,  5 Feb 2021 21:26:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229623AbhBENSQ (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Fri, 5 Feb 2021 08:18:16 -0500
-Received: from mail.skyhub.de ([5.9.137.197]:52264 "EHLO mail.skyhub.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231290AbhBENMq (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Fri, 5 Feb 2021 08:12:46 -0500
-Received: from zn.tnic (p200300ec2f0bad00265302c9d3d9d03f.dip0.t-ipconnect.de [IPv6:2003:ec:2f0b:ad00:2653:2c9:d3d9:d03f])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 6CF441EC04F2;
-        Fri,  5 Feb 2021 14:11:53 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1612530713;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=3Yqo4dHazii3hqxZNWE1taz5pi6cq6lEokygV43M3LE=;
-        b=CTuQM+W4uV/FkMoqaSbOdgc9LSIlo4mrsoHrw/Hc335bfBj7NR3zAXWPLTweThcQkMb4/8
-        /RSfdKOEBbO/Fs+kaKSOzocXgBCJDvSzhZiixuTDli18R0FZiYyWdI4yniUroOorAtqvlj
-        4vYjrijyR53bkGyTdU8S1vDrZpBx87g=
-Date:   Fri, 5 Feb 2021 14:11:50 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Shiju Jose <shiju.jose@huawei.com>,
-        James Morse <james.morse@arm.com>,
-        "open list:EDAC-CORE" <linux-edac@vger.kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Tony Luck <tony.luck@intel.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Len Brown <lenb@kernel.org>,
-        Robert Richter <rrichter@marvell.com>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        linuxarm@openeuler.org, xuwei5@huawei.com,
-        Jonathan Cameron <jonathan.cameron@huawei.com>,
-        John Garry <john.garry@huawei.com>,
-        tanxiaofei <tanxiaofei@huawei.com>,
-        shameerali.kolothum.thodi@huawei.com, salil.mehta@huawei.com
-Subject: Re: [PATCH v2 1/2] EDAC/ghes: Add EDAC device for reporting the CPU
- cache errors
-Message-ID: <20210205131150.GF17488@zn.tnic>
-References: <20210129094832.2090-1-shiju.jose@huawei.com>
- <20210129094832.2090-2-shiju.jose@huawei.com>
- <CAJZ5v0gZrV9dV4-4GxnzYAUpiHPadtajd+8uBARzRJwdZ6RBhQ@mail.gmail.com>
+        id S233624AbhBEShf (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Fri, 5 Feb 2021 13:37:35 -0500
+Received: from [20.39.40.203] ([20.39.40.203]:54986 "EHLO optinix.in"
+        rhost-flags-FAIL-FAIL-OK-OK) by vger.kernel.org with ESMTP
+        id S233003AbhBEPJb (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Fri, 5 Feb 2021 10:09:31 -0500
+dkim-signature: v=1; a=rsa-sha256; d=digitalsol.in; s=dkim;
+        c=relaxed/relaxed; q=dns/txt; h=From:Reply-To:Subject:Date:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding;
+        bh=wK2neTcOXNiSQ+RBxrnFed+mRrGUU/ndLGEgvo8IMCc=;
+        b=UQEHlnVg5XQbvsB12U1Ol3bhaQI9w8E6XPoWFxWLZmrTEAjZvoQaEbrphRRSyBGIIWdRriBN1NgjJnIHHuwrDk7Jiepk7hcecgKlubZ8Cbf+eyLm3How+vKdkYfuxbESucRjBUGhM3uNAIEl+djc5YuHgus55Al0uLGG/w84VCgbq4C5haAYakmS1vYlSgFchzN2F++luNM29v8DFhI75uaDxJSrLZjsc+U9sEzNpAaOCR9pw2OgdpmsaX
+        RpEWSooLH5k7s+lJH9RwsRzupCIBYaSMrEgafQL+30fpkHM9MFjkLmthx4Z1XqGeg54bjdS4mLhUgJrpa/zvXopT6v+g==
+Received: from User (Unknown [52.231.31.5])
+        by optinix.in with ESMTP
+        ; Mon, 1 Feb 2021 08:49:51 +0000
+Message-ID: <7494048F-E4B5-4167-8C98-9021CA321467@optinix.in>
+Reply-To: <ms.reem@yandex.com>
+From:   "Ms. Reem" <support@digitalsol.in>
+Subject: Re:read
+Date:   Mon, 1 Feb 2021 08:49:50 -0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CAJZ5v0gZrV9dV4-4GxnzYAUpiHPadtajd+8uBARzRJwdZ6RBhQ@mail.gmail.com>
+Content-Type: text/plain;
+        charset="Windows-1251"
+Content-Transfer-Encoding: 7bit
+X-Priority: 3
+X-MSMail-Priority: Normal
+X-Mailer: Microsoft Outlook Express 6.00.2600.0000
+X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2600.0000
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Fri, Feb 05, 2021 at 01:54:04PM +0100, Rafael J. Wysocki wrote:
-> Boris, James, I need your input here.
+Hello,
 
-Gave mine already:
+My name is Ms. Reem Ebrahim Al-Hashimi, I am the "Minister of state
+and Petroleum" also "Minister of State for International Cooperation"
+in UAE. I write to you on behalf of my other "three (3) colleagues"
+who has approved me to solicit for your "partnership in claiming of
+{us$47=Million}" from a Financial Home in Cambodia on their behalf and
+for our "Mutual Benefits".
 
-https://lkml.kernel.org/r/20210119101655.GD27433@zn.tnic
+The Fund {us$47=Million} is our share from the (over-invoiced) Oil/Gas
+deal with Cambodian/Vietnam Government within 2013/2014, however, we
+don't want our government to know about the fund. If this proposal
+interests you, let me know, by sending me an email and I will send to
+you detailed information on how this business would be successfully
+transacted. Be informed that nobody knows about the secret of this
+fund except us, and we know how to carry out the entire transaction.
+So I am compelled to ask, that you will stand on our behalf and
+receive this fund into any account that is solely controlled by you.
 
--- 
-Regards/Gruss,
-    Boris.
+We will compensate you with 15% of the total amount involved as
+gratification for being our partner in this transaction. Reply to:
+ms.reem@yandex.com
 
-https://people.kernel.org/tglx/notes-about-netiquette
+Regards,
+Ms. Reem.
+
