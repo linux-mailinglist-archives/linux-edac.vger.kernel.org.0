@@ -2,67 +2,70 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A296F31032F
-	for <lists+linux-edac@lfdr.de>; Fri,  5 Feb 2021 04:11:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4274B310BB2
+	for <lists+linux-edac@lfdr.de>; Fri,  5 Feb 2021 14:20:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229996AbhBEDJQ (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Thu, 4 Feb 2021 22:09:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48474 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229692AbhBEDJK (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Thu, 4 Feb 2021 22:09:10 -0500
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12302C06178A;
-        Thu,  4 Feb 2021 19:08:30 -0800 (PST)
-Received: by mail-wm1-x32c.google.com with SMTP id j11so4806535wmi.3;
-        Thu, 04 Feb 2021 19:08:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=message-id:sender:from:mime-version:content-transfer-encoding
-         :content-description:subject:to:date:reply-to;
-        bh=hqf55dXwvcYwwL4sAkoYuOM6RPu6wxeec88n5sMRYiY=;
-        b=qKV6lK/xTrI0xWZI/8Vwj4HWtece1YWaUDe9sPcNOebT0x9iH9t9HcfJIQkpWQqu4j
-         9tLsV973I65GjSCqyS40JivInipCupY+1WZAfBNpdOynDt+97z63FrcpdVze5raYfFI1
-         ELiZ/G9wyN0fnfIjx/4fXB0vrZdvzQZF98iXIaty+2RnmRohcZKyquzcoEI7HJVOKKX+
-         EiIOfD4L+JHLtQCVKSDCCxXZVCK4MxNFtPjEIW4ZVaTqiXLcosgUnVu2mpqrz5slCIU6
-         OojTwfk4ppz8i2nlpZs6lLbHMceui26pWhk6A71VZRttpKbJam5k9i/jzM4/k1VhIFAv
-         //BQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:sender:from:mime-version
-         :content-transfer-encoding:content-description:subject:to:date
-         :reply-to;
-        bh=hqf55dXwvcYwwL4sAkoYuOM6RPu6wxeec88n5sMRYiY=;
-        b=fGZY9xPP13GVBXXMytLVmy4dUT3ZCBl7ro2iO2tzQB9V6NtlHlU1WIffRCKLZpGpFs
-         TunlGsH4Zvq3K0GInppg3DWQ6nFY9zo9OCTlLbfqbcT/PQPkayTxHnhgG2AAoU5/1HfN
-         VVucPa+R3cd9on/7Iwf4zdH1ndpzYsxtKOnL6VSymQawxuZsW8hrz9e2OeLzl/dgaQK9
-         HWox4Vg3ubaB7uc8Cr/eNL0mbPl41XDD6k59/uPPLfyvGi2GihpvQ5611x2QMqQ2sXYc
-         SWixN9YRCcnHIfjyWkM9XdAjD15+wAcu2Pbtukm6aIqL6TRZflV0fIny7xopeB0Td1ei
-         oFpg==
-X-Gm-Message-State: AOAM530acKnINW+aC3ADGhAO15HtsmlJf59mPZLjJWA5yurPXOhlWe0j
-        flfCEAyHDuKpQDhkTU0jfxbUDMcg6nY66w==
-X-Google-Smtp-Source: ABdhPJzMvxq+Dz6Cd25sA4YjrzKq+MpOJZGous+0kvBheLF8WnJDbF6X9Nj/FnREqpI7o/SY4LFdpA==
-X-Received: by 2002:a1c:3185:: with SMTP id x127mr1593295wmx.117.1612494508861;
-        Thu, 04 Feb 2021 19:08:28 -0800 (PST)
-Received: from [192.168.1.6] ([154.124.28.35])
-        by smtp.gmail.com with ESMTPSA id n9sm10836813wrq.41.2021.02.04.19.08.24
-        (version=TLS1 cipher=AES128-SHA bits=128/128);
-        Thu, 04 Feb 2021 19:08:27 -0800 (PST)
-Message-ID: <601cb6ab.1c69fb81.5ea54.2ea9@mx.google.com>
-Sender: Skylar Anderson <barr.markimmbayie@gmail.com>
-From:   calantha camara <sgt.andersonskylar0@gmail.com>
-X-Google-Original-From: calantha camara
-Content-Type: text/plain; charset="iso-8859-1"
+        id S229623AbhBENSQ (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Fri, 5 Feb 2021 08:18:16 -0500
+Received: from mail.skyhub.de ([5.9.137.197]:52264 "EHLO mail.skyhub.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231290AbhBENMq (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Fri, 5 Feb 2021 08:12:46 -0500
+Received: from zn.tnic (p200300ec2f0bad00265302c9d3d9d03f.dip0.t-ipconnect.de [IPv6:2003:ec:2f0b:ad00:2653:2c9:d3d9:d03f])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 6CF441EC04F2;
+        Fri,  5 Feb 2021 14:11:53 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1612530713;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=3Yqo4dHazii3hqxZNWE1taz5pi6cq6lEokygV43M3LE=;
+        b=CTuQM+W4uV/FkMoqaSbOdgc9LSIlo4mrsoHrw/Hc335bfBj7NR3zAXWPLTweThcQkMb4/8
+        /RSfdKOEBbO/Fs+kaKSOzocXgBCJDvSzhZiixuTDli18R0FZiYyWdI4yniUroOorAtqvlj
+        4vYjrijyR53bkGyTdU8S1vDrZpBx87g=
+Date:   Fri, 5 Feb 2021 14:11:50 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Shiju Jose <shiju.jose@huawei.com>,
+        James Morse <james.morse@arm.com>,
+        "open list:EDAC-CORE" <linux-edac@vger.kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Tony Luck <tony.luck@intel.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Len Brown <lenb@kernel.org>,
+        Robert Richter <rrichter@marvell.com>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        linuxarm@openeuler.org, xuwei5@huawei.com,
+        Jonathan Cameron <jonathan.cameron@huawei.com>,
+        John Garry <john.garry@huawei.com>,
+        tanxiaofei <tanxiaofei@huawei.com>,
+        shameerali.kolothum.thodi@huawei.com, salil.mehta@huawei.com
+Subject: Re: [PATCH v2 1/2] EDAC/ghes: Add EDAC device for reporting the CPU
+ cache errors
+Message-ID: <20210205131150.GF17488@zn.tnic>
+References: <20210129094832.2090-1-shiju.jose@huawei.com>
+ <20210129094832.2090-2-shiju.jose@huawei.com>
+ <CAJZ5v0gZrV9dV4-4GxnzYAUpiHPadtajd+8uBARzRJwdZ6RBhQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Description: Mail message body
-Subject: hi dear
-To:     Recipients <calantha@vger.kernel.org>
-Date:   Fri, 05 Feb 2021 03:08:17 +0000
-Reply-To: calanthac20@gmail.com
-X-Mailer: cdcaafe51be8cdb99a1c85906066cad3d0e60e273541515a58395093a7c4e1f0eefb01d7fc4e6278706e9fb8c4dad093c3263345202970888b6b4d817f9e998c032e7d59
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <CAJZ5v0gZrV9dV4-4GxnzYAUpiHPadtajd+8uBARzRJwdZ6RBhQ@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-do you speak Eglish
+On Fri, Feb 05, 2021 at 01:54:04PM +0100, Rafael J. Wysocki wrote:
+> Boris, James, I need your input here.
+
+Gave mine already:
+
+https://lkml.kernel.org/r/20210119101655.GD27433@zn.tnic
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
