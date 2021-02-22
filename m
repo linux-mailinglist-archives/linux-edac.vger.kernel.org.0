@@ -2,50 +2,50 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 823EB321CBA
-	for <lists+linux-edac@lfdr.de>; Mon, 22 Feb 2021 17:23:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 21776321CB7
+	for <lists+linux-edac@lfdr.de>; Mon, 22 Feb 2021 17:23:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230177AbhBVQVQ (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Mon, 22 Feb 2021 11:21:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54526 "EHLO
+        id S231510AbhBVQVL (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Mon, 22 Feb 2021 11:21:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231362AbhBVQUv (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Mon, 22 Feb 2021 11:20:51 -0500
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5170C06178A;
-        Mon, 22 Feb 2021 08:20:08 -0800 (PST)
-Received: by mail-ej1-x62c.google.com with SMTP id t11so30320669ejx.6;
-        Mon, 22 Feb 2021 08:20:08 -0800 (PST)
+        with ESMTP id S231325AbhBVQUx (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Mon, 22 Feb 2021 11:20:53 -0500
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38C46C06178B;
+        Mon, 22 Feb 2021 08:20:11 -0800 (PST)
+Received: by mail-ed1-x52c.google.com with SMTP id l12so22784766edt.3;
+        Mon, 22 Feb 2021 08:20:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=MfK8XHAdcFYl+ELW5xxKLzANic1ppzZqbz8B/li+uL0=;
-        b=JHfGm8yVHwxZPf1iUJfWCfKokEIq00zIu1r3zSKaL8r+o0ieJOHCAX1NqngoexxyPT
-         uilSl8cC3AJ28SpXBDlsveYM46RxtAgtt8Xkv2Cfu4xiMLXGm24Ik5M5ADXLbtGWhC0q
-         snRCaMCtVoVOgtem5i2AgQAkL2nyP5BB5GHBNmVYCNgk3UhtK3uOUqFIvMDhpPfQF/FM
-         IRpPlhAqgPRx6TxwyyhqcS3+OLNwmLbvqhV3EIJ0EJJVJvFz+LEvexK7MZK8GVTFQywL
-         wzTlc5O1JkTOnGCeLXsxiUhz0/XsWz1TE2KeED3QN81NZffESJIUMSzQUdPng+GO93Y0
-         BLhw==
+        bh=DgXlL6x8IfhNkYD6R6bR2QbGGSZXQTy+PSFjbRT7U3M=;
+        b=gDQivG7bID32e/1IJ8bRg+bwJHKpg9clkyKdifX0+5PuZsqxb70qWUuw3jlzyDoC44
+         vIkvdS7ZzTtHQXkWzgoUtEaADChPUTz/gv+dd01M5dCNBsHMCqhg6Av4viSY/dmJa8GH
+         iRjYA/OuNgI4Fc0DNQ8lw4vzYgQEUeMGzJLhrjy6fgI3NdVQqsZbmT2p5TLxUI8yCT2X
+         gwhswFmVZNRk/3ek8xhVKJtXVO/E/hMuMJfM5181Ouhe7fqAG1zYZZhiPoP3mi5GdO4B
+         Hgu4fx66TQpWs6hcELGjYj60uoVJZy65Lb3zpZze03UmpVHW+5ve2olXB4cb3HtjSjEy
+         A3mw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=MfK8XHAdcFYl+ELW5xxKLzANic1ppzZqbz8B/li+uL0=;
-        b=Y1XatKwg+HcjoI6Dyje4sonXm4Hfu7Da09EInuL2xEDn/YhJER5wZNy7T0rUnlj4Ye
-         xCx09h/K4EYfWH5u6Z+1eBIDvfToUM+DCYcYLlVcTg4+bSQFDbNfB5FhDqq7L+j5js5L
-         pv9wKvV2POI26V2NspPdNrUh7j/PY0yLmj6SCuT3DYzGr2FpQHiLvM5uxiDElDT7EroP
-         9m8xJ9+yt41tSk+/yqqg5kOvZY10gJf2jLn362NvNf4Kxvrtcm4aj1E7T3HQIbRgpZTW
-         yEtAY/Hl1/M0yvbWC5WWId+VgIqNAWKSKcEz2ji2OhJJoK7lECMVwHTak/9YGGu2CKjH
-         JJLA==
-X-Gm-Message-State: AOAM533jGG69YW3gssztxTJtFcSTA+MQh3gh6eN5LX7UfCpgcQKz7g6W
-        VNZSXVZSN48515IFRJRfUu4=
-X-Google-Smtp-Source: ABdhPJwCh2CPblEXvQM0Cp38XdCGExRMxECymPWlMvx13Qrcot9dBPJVxJBX+umvjcqn6cx7m3XcQQ==
-X-Received: by 2002:a17:907:728b:: with SMTP id dt11mr21477172ejc.321.1614010807589;
-        Mon, 22 Feb 2021 08:20:07 -0800 (PST)
+        bh=DgXlL6x8IfhNkYD6R6bR2QbGGSZXQTy+PSFjbRT7U3M=;
+        b=cR1myXEnmYqB6HQ2OhXRtZbxHTXnQY3VAFk7R0ppJw4ivwSCDAoU7eYRgzmWEEDjRt
+         +ynvO9t6LC4KeBzaY3AHInMcMa+Nti0BpaNIh+lyA3GnGZTjToMLjyyk5XfchmHYplSN
+         fSorXnaqykOG94Y06MB0aMeahGfbU0zN/3y78DrBypjtxrJTiGkcZP7Kd5dcjpr2Txmv
+         m3hUbAsZVclhmIAK9QK6iNka/cHUMc8ceGWdCuIDfUxA0vhF4qat07BZecmx2q7q8PEc
+         bB7M0qxLVoozQvO9k1oEJMs/57ZppdubW1mytBzjww+cAJ8qcfI0ie98yQazt94EfGzj
+         Mqkw==
+X-Gm-Message-State: AOAM530pXejIDRDKh+nxWmnEnHzwaMLRl7z+mLHUf1I0aFY9YWVCtjw+
+        WEqeo70BQQf+eGBR/8rdFPTE68Vg/JOQ5g==
+X-Google-Smtp-Source: ABdhPJwp1V5UvRma9eJQKFaKCSvKO5Gr4rTBCtSC0Vc0HHzBGLofwgLPa0gZ5gasIv1Q7xjnxT/uDQ==
+X-Received: by 2002:aa7:d9cb:: with SMTP id v11mr23101914eds.153.1614010810008;
+        Mon, 22 Feb 2021 08:20:10 -0800 (PST)
 Received: from felia.fritz.box ([2001:16b8:2d6b:2000:6504:2c93:2a67:f7e2])
-        by smtp.gmail.com with ESMTPSA id i7sm67876ejf.59.2021.02.22.08.20.06
+        by smtp.gmail.com with ESMTPSA id i7sm67876ejf.59.2021.02.22.08.20.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 22 Feb 2021 08:20:07 -0800 (PST)
+        Mon, 22 Feb 2021 08:20:09 -0800 (PST)
 From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
 To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         linux-mips@vger.kernel.org
@@ -54,9 +54,9 @@ Cc:     "Maciej W . Rozycki" <macro@orcam.me.uk>,
         linux-edac@vger.kernel.org, linux-hams@vger.kernel.org,
         kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
         Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Subject: [PATCH 3/5] arch: mips: update references to current linux-mips list
-Date:   Mon, 22 Feb 2021 17:19:03 +0100
-Message-Id: <20210222161905.1153-4-lukas.bulwahn@gmail.com>
+Subject: [PATCH 4/5] arch: mips: remove dead references
+Date:   Mon, 22 Feb 2021 17:19:04 +0100
+Message-Id: <20210222161905.1153-5-lukas.bulwahn@gmail.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20210222161905.1153-1-lukas.bulwahn@gmail.com>
 References: <20210222161905.1153-1-lukas.bulwahn@gmail.com>
@@ -64,55 +64,97 @@ Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-The linux-mips mailing list now lives at kernel.org. Update all references
-in the kernel tree.
+The domain lookup for linux-mips.org fails for quite some time now.
+Further, the two links:
+
+  http://decstation.unix-ag.org/
+  http://www.computer-refuge.org/classiccmp/ftp.digital.com/pub/DEC/TriAdd/
+
+refer to old webpages or contain no further technical information.
+
+Remove all those dead references.
 
 Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
 ---
- arch/mips/kernel/r4k-bugs64.c | 2 +-
- arch/mips/lib/iomap-pci.c     | 2 +-
- arch/mips/sgi-ip32/ip32-irq.c | 2 +-
- 3 files changed, 3 insertions(+), 3 deletions(-)
+ arch/mips/Kconfig             |  8 +-------
+ arch/mips/jazz/Kconfig        | 12 +++---------
+ tools/include/nolibc/nolibc.h |  3 +--
+ 3 files changed, 5 insertions(+), 18 deletions(-)
 
-diff --git a/arch/mips/kernel/r4k-bugs64.c b/arch/mips/kernel/r4k-bugs64.c
-index 1ff19f1ea5ca..35729c9e6cfa 100644
---- a/arch/mips/kernel/r4k-bugs64.c
-+++ b/arch/mips/kernel/r4k-bugs64.c
-@@ -18,7 +18,7 @@
- static char bug64hit[] __initdata =
- 	"reliable operation impossible!\n%s";
- static char nowar[] __initdata =
--	"Please report to <linux-mips@linux-mips.org>.";
-+	"Please report to <linux-mips@vger.kernel.org>.";
- static char r4kwar[] __initdata =
- 	"Enable CPU_R4000_WORKAROUNDS to rectify.";
- static char daddiwar[] __initdata =
-diff --git a/arch/mips/lib/iomap-pci.c b/arch/mips/lib/iomap-pci.c
-index 210f5a95ecb1..a9cb28813f0b 100644
---- a/arch/mips/lib/iomap-pci.c
-+++ b/arch/mips/lib/iomap-pci.c
-@@ -32,7 +32,7 @@ void __iomem *__pci_ioport_map(struct pci_dev *dev,
- 		sprintf(name, "%04x:%02x", pci_domain_nr(bus), bus->number);
- 		printk(KERN_WARNING "io_map_base of root PCI bus %s unset.  "
- 		       "Trying to continue but you better\nfix this issue or "
--		       "report it to linux-mips@linux-mips.org or your "
-+		       "report it to linux-mips@vger.kernel.org or your "
- 		       "vendor.\n", name);
- #ifdef CONFIG_PCI_DOMAINS
- 		panic("To avoid data corruption io_map_base MUST be set with "
-diff --git a/arch/mips/sgi-ip32/ip32-irq.c b/arch/mips/sgi-ip32/ip32-irq.c
-index 1bbd5bfb5458..e21ea1de05e3 100644
---- a/arch/mips/sgi-ip32/ip32-irq.c
-+++ b/arch/mips/sgi-ip32/ip32-irq.c
-@@ -343,7 +343,7 @@ static void ip32_unknown_interrupt(void)
- 	printk("Register dump:\n");
- 	show_regs(get_irq_regs());
+diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
+index d89efba3d8a4..8cb1e2be5999 100644
+--- a/arch/mips/Kconfig
++++ b/arch/mips/Kconfig
+@@ -375,9 +375,7 @@ config MACH_DECSTATION
+ 	select SYS_SUPPORTS_1024HZ
+ 	select MIPS_L1_CACHE_SHIFT_4
+ 	help
+-	  This enables support for DEC's MIPS based workstations.  For details
+-	  see the Linux/MIPS FAQ on <http://www.linux-mips.org/> and the
+-	  DECstation porting pages on <http://decstation.unix-ag.org/>.
++	  This enables support for DEC's MIPS based workstations.
  
--	printk("Please mail this report to linux-mips@linux-mips.org\n");
-+	printk("Please mail this report to linux-mips@vger.kernel.org\n");
- 	printk("Spinning...");
- 	while(1) ;
- }
+ 	  If you have one of the following DECstation Models you definitely
+ 	  want to choose R4xx0 for the CPU Type:
+@@ -3263,10 +3261,6 @@ config TC
+ 	  processors.  TURBOchannel programming specifications are available
+ 	  at:
+ 	  <ftp://ftp.hp.com/pub/alphaserver/archive/triadd/>
+-	  and:
+-	  <http://www.computer-refuge.org/classiccmp/ftp.digital.com/pub/DEC/TriAdd/>
+-	  Linux driver support status is documented at:
+-	  <http://www.linux-mips.org/wiki/DECstation>
+ 
+ config MMU
+ 	bool
+diff --git a/arch/mips/jazz/Kconfig b/arch/mips/jazz/Kconfig
+index 42932ca98db9..162d11670c75 100644
+--- a/arch/mips/jazz/Kconfig
++++ b/arch/mips/jazz/Kconfig
+@@ -5,9 +5,7 @@ config ACER_PICA_61
+ 	select DMA_NONCOHERENT
+ 	help
+ 	  This is a machine with a R4400 133/150 MHz CPU. To compile a Linux
+-	  kernel that runs on these, say Y here. For details about Linux on
+-	  the MIPS architecture, check out the Linux/MIPS FAQ on the WWW at
+-	  <http://www.linux-mips.org/>.
++	  kernel that runs on these, say Y here.
+ 
+ config MIPS_MAGNUM_4000
+ 	bool "Support for MIPS Magnum 4000"
+@@ -16,9 +14,7 @@ config MIPS_MAGNUM_4000
+ 	select SYS_SUPPORTS_BIG_ENDIAN
+ 	help
+ 	  This is a machine with a R4000 100 MHz CPU. To compile a Linux
+-	  kernel that runs on these, say Y here. For details about Linux on
+-	  the MIPS architecture, check out the Linux/MIPS FAQ on the WWW at
+-	  <http://www.linux-mips.org/>.
++	  kernel that runs on these, say Y here.
+ 
+ config OLIVETTI_M700
+ 	bool "Support for Olivetti M700-10"
+@@ -26,6 +22,4 @@ config OLIVETTI_M700
+ 	select DMA_NONCOHERENT
+ 	help
+ 	  This is a machine with a R4000 100 MHz CPU. To compile a Linux
+-	  kernel that runs on these, say Y here. For details about Linux on
+-	  the MIPS architecture, check out the Linux/MIPS FAQ on the WWW at
+-	  <http://www.linux-mips.org/>.
++	  kernel that runs on these, say Y here.
+diff --git a/tools/include/nolibc/nolibc.h b/tools/include/nolibc/nolibc.h
+index 8b7a9830dd22..754e64c4a1d1 100644
+--- a/tools/include/nolibc/nolibc.h
++++ b/tools/include/nolibc/nolibc.h
+@@ -1027,8 +1027,7 @@ struct sys_stat_struct {
+  *   - arguments are in a0, a1, a2, a3, then the stack. The caller needs to
+  *     leave some room in the stack for the callee to save a0..a3 if needed.
+  *   - Many registers are clobbered, in fact only a0..a2 and s0..s8 are
+- *     preserved. See: https://www.linux-mips.org/wiki/Syscall as well as
+- *     scall32-o32.S in the kernel sources.
++ *     preserved. See: scall32-o32.S in the kernel sources.
+  *   - the system call is performed by calling "syscall"
+  *   - syscall return comes in v0, and register a3 needs to be checked to know
+  *     if an error occured, in which case errno is in v0.
 -- 
 2.17.1
 
