@@ -2,46 +2,47 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 31B51322421
-	for <lists+linux-edac@lfdr.de>; Tue, 23 Feb 2021 03:29:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D652E3227AA
+	for <lists+linux-edac@lfdr.de>; Tue, 23 Feb 2021 10:20:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230079AbhBWC2q (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Mon, 22 Feb 2021 21:28:46 -0500
-Received: from mail.kingsoft.com ([114.255.44.145]:12074 "EHLO
+        id S231347AbhBWJTA (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Tue, 23 Feb 2021 04:19:00 -0500
+Received: from mail.kingsoft.com ([114.255.44.145]:12108 "EHLO
         mail.kingsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230166AbhBWC2q (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Mon, 22 Feb 2021 21:28:46 -0500
-X-AuditID: 0a580157-f21ff7000005df43-56-603461f427ae
+        with ESMTP id S231190AbhBWJS5 (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Tue, 23 Feb 2021 04:18:57 -0500
+X-AuditID: 0a580157-f39ff7000005df43-ec-6034c2174ffa
 Received: from mail.kingsoft.com (localhost [10.88.1.32])
         (using TLS with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (Client did not present a certificate)
-        by mail.kingsoft.com (SMG-1-NODE-87) with SMTP id 97.10.57155.4F164306; Tue, 23 Feb 2021 10:01:24 +0800 (HKT)
+        by mail.kingsoft.com (SMG-1-NODE-87) with SMTP id BB.C5.57155.712C4306; Tue, 23 Feb 2021 16:51:35 +0800 (HKT)
 Received: from alex-virtual-machine (172.16.253.254) by KSBJMAIL2.kingsoft.cn
  (10.88.1.32) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1979.3; Tue, 23 Feb
- 2021 10:27:56 +0800
-Date:   Tue, 23 Feb 2021 10:27:55 +0800
+ 2021 17:18:09 +0800
+Date:   Tue, 23 Feb 2021 17:18:09 +0800
 From:   Aili Yao <yaoaili@kingsoft.com>
-To:     Borislav Petkov <bp@alien8.de>
-CC:     <tony.luck@intel.com>, <mingo@redhat.com>, <tglx@linutronix.de>,
-        <hpa@zytor.com>, <x86@kernel.org>, <linux-edac@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <yangfeng1@kingsoft.com>,
+To:     "Luck, Tony" <tony.luck@intel.com>
+CC:     Borislav Petkov <bp@alien8.de>,
+        "rjw@rjwysocki.net" <rjw@rjwysocki.net>,
+        "lenb@kernel.org" <lenb@kernel.org>,
+        "james.morse@arm.com" <james.morse@arm.com>,
+        "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
+        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
+        "yangfeng1@kingsoft.com" <yangfeng1@kingsoft.com>,
         <yaoaili@kingsoft.com>
-Subject: Re: [PATCH v2] x86/mce: fix wrong no-return-ip logic in
- do_machine_check()
-Message-ID: <20210223102755.13cbdffd@alex-virtual-machine>
-In-Reply-To: <20210222124550.GB10880@zn.tnic>
-References: <20210222115007.75b7de9b@alex-virtual-machine>
-        <20210222092403.GA29063@zn.tnic>
-        <20210222173109.7b7ac42a@alex-virtual-machine>
-        <20210222100356.GB29063@zn.tnic>
-        <20210222180819.3998fe33@alex-virtual-machine>
-        <20210222102206.GC29063@zn.tnic>
-        <20210222192146.76ffec84@alex-virtual-machine>
-        <20210222201723.0fcec589@alex-virtual-machine>
-        <20210222122241.GA10880@zn.tnic>
-        <20210222203549.0e54c26f@alex-virtual-machine>
-        <20210222124550.GB10880@zn.tnic>
+Subject: Re: [PATCH v2] Dump cper error table in mce_panic
+Message-ID: <20210223171809.7df62b08@alex-virtual-machine>
+In-Reply-To: <e9645a3ff93e46d4aabdf7dd45bfc4d7@intel.com>
+References: <20201104065057.40442-1-yaoaili126@163.com>
+        <20201117175804.39bbbdc3.yaoaili@kingsoft.com>
+        <20201118124538.GI7472@zn.tnic>
+        <20201119134057.37ca2c19.yaoaili@kingsoft.com>
+        <20201119174508.GE3769@zn.tnic>
+        <20201120172235.620eb826.yaoaili@kingsoft.com>
+        <20201120102422.GA712@zn.tnic>
+        <20210128200128.6f022993.yaoaili@kingsoft.com>
+        <e9645a3ff93e46d4aabdf7dd45bfc4d7@intel.com>
 Organization: kingsoft
 X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.30; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
@@ -50,63 +51,51 @@ Content-Transfer-Encoding: 7bit
 X-Originating-IP: [172.16.253.254]
 X-ClientProxiedBy: KSBJMAIL1.kingsoft.cn (10.88.1.31) To KSBJMAIL2.kingsoft.cn
  (10.88.1.32)
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrALMWRmVeSWpSXmKPExsXCFcGooPsl0STBYMZTFovPG/6xWUzbKG5x
-        4VQDk8XlXXPYLC4dWMBksXnTVGaLNxfusVj82PCY1YHD43trH4vH4j0vmTw2repk83h37hy7
-        x/t9V9k8Pm+S8zjR8oU1gD2KyyYlNSezLLVI3y6BK6Oh/SZzQS9vxezvfg2M87m6GDk5JARM
-        JNpvXmTtYuTiEBKYziTx8fcbdgjnFaPEyjNLmEGqWARUJTbu7GMCsdmA7F33ZrGC2CICShJf
-        F81lAmlgFrjDKPGnZxpQAweHsECoxJJphSA1vAJWEn8aDjOC2JwCuhKNs9cwQyy4xyzx7cYe
-        dpAEv4CYRO+V/0wQJ9lLtG1ZxAjRLChxcuYTFhCbWUBH4sSqY8wQtrzE9rdzwGwhAUWJw0t+
-        sUP0Kkkc6Z7BBmHHSiyb94p1AqPwLCSjZiEZNQvJqAWMzKsYWYpz0w03MUIiJXwH47ymj3qH
-        GJk4GA8xSnAwK4nwst01ShDiTUmsrEotyo8vKs1JLT7EKM3BoiTOK+bIlyAkkJ5YkpqdmlqQ
-        WgSTZeLglGpgYl+0MLf1VurJf22v2786ZE1KyO5kWLTu4Q4R+2VMnXo/7TjkauumeTS2uvXK
-        eD+8aJKRnKDgyysb7TWxt/Xf1WvlKw7OvjBZZs+amIM6kt8ZjnX+2v9nz8pvR17stUzombxB
-        X29KqPu6XqvsRSlnlWRWyWrP3NQeuTez4Yu+zrwLmcpLL3U/evApk/Hbx0dXN13jXPTP10lP
-        +5zDSbG9tt9SNkWeyv0UNUV3qtKNV2en+/GXXri9+fdOPg/nLnHvW5ve9E+OvHBopsCt5Ks7
-        Pe09L53hqa+92C7jUXxx1cJ727j1Cv9cXhlqJPv80I2r1tY8DJrLJvzSFlgkZLRLqlph8fza
-        qXPPPLbpWGo4+40SS3FGoqEWc1FxIgBrJabIAwMAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrGLMWRmVeSWpSXmKPExsXCFcGooCt+yCTB4McPLovPG/6xWdzft5zJ
+        YufDt2wWy/f1M1pcONXAZHHm9CVWizcX7rE4sHt8b+1j8Vgzbw2jx+I9L5k8Nq3qZPPYcrWd
+        xePzJrkAtigum5TUnMyy1CJ9uwSujLUH4woecFbcPLqLrYHxAnsXIyeHhICJxPem80xdjFwc
+        QgLTmSR+rJzIDuG8YpS4NXUeaxcjBweLgKrE5X8JIA1sQOaue7NYQWwRATWJS4sfMIPUMwu8
+        YJLY/qyDCSQhLGAl8XTDGxYQmxfI/nm3D6yBU8BSYu7PS2A1QgL9zBJXfjOD2PwCYhK9V/4z
+        QVxkL9G2ZREjRK+gxMmZT8DmMAvoSJxYdYwZwpaX2P52DjPEHEWJw0t+QX2jJHGkewYbhB0r
+        sWzeK9YJjMKzkIyahWTULCSjFjAyr2JkKc5NN9zECImK8B2M85o+6h1iZOJgPMQowcGsJMLL
+        dtcoQYg3JbGyKrUoP76oNCe1+BCjNAeLkjhv4DaTBCGB9MSS1OzU1ILUIpgsEwenVAPTnKXx
+        /Y84LGrTJSbMevQ4e/GKiOoQ61cO+2OuZqsY2iSa3Dv8Uzh96eMz0+w724/vSv8odMlA5ECK
+        2NlXXnEHpp90Vtda83PPn1NOZcoqrzd21Yvm7G3sMVHZWyH/c6VqYP6a2VXOT2bsfrZ9c4Zd
+        azLj5sMawgeazBOXVjHFNQmyin608p9Rd/z6+33NZXOenYic/NgzbGldy+XbOz46+O01+Ttv
+        8esjH+X+2UixdV8tnfiKLc5eNlSr2fFL4vZi7gf/Hf+nT9RNrUlNv/1MXPaVoOe00ncr72g9
+        WSw9cWJ2dWrRzfzqv25566TFZ3Oqmh+f/0157kwmubLDhxf5vTB6xNLwTs2ptveRCHuCEktx
+        RqKhFnNRcSIAVleiPPkCAAA=
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Mon, 22 Feb 2021 13:45:50 +0100
-Borislav Petkov <bp@alien8.de> wrote:
+On Thu, 28 Jan 2021 17:22:30 +0000
+"Luck, Tony" <tony.luck@intel.com> wrote:
 
-> On Mon, Feb 22, 2021 at 08:35:49PM +0800, Aili Yao wrote:
-> > Guest VM, the qemu has no way to know the RIPV value, so always get it
-> > cleared.  
 > 
-> What does that mean?
-> 
-> The guest VM will get the MCE signature it gets from the host kernel so
-> the host kernel most definitely knows the RIPV value.
+> Getting a full memory dump after a machine check generally isn't
+> all that useful anyway. The problem was (almost certainly) h/w, so
+> not much benefit in decoding the dump to find which code was running
+> when the h/w signalled.
 
-When Guest access one address with UE error, it will exit guest mode, the host
-will do the recovery job, and then one SIGBUS is send to the VCPU and qemu will
-catch the signal, there is only address and error level no RIPV in signal, so qemu will
-assume RIPV is cleared and inject the error into guest OS.
+The purpose I try to collect the coredump log is not to identify what the backtrace
+is, I want to confirm if this panic is really needed, there are too many panics in production
+environment with MCA Recovery Enabled, and no kernel log is collected, in some way we can't find
+the benifits from MCA recovery, And for purley this feature cost too much.
 
-> It looks like you're testing how guests will handle MCEs which the host
-> has caught and wants to inject into the guest for further handling. What
-> is your exact use case? Please explain in detail how I can reproduce it
-> step-by-step locally.
+And the unexpected NMI for fatal memory error is not the right way to get work done.
+This is not right, and shouldn't happen.
 
-Yeah, there are multiple steps i do:
-1. One small test code in guest OS access one address A which will be injected UC error,
-   the address will be logged, and use vtop you can get the guest physical address.
+> A second bite at getting the error logs from the death of the first
+> kernel is worth it though.
 
-2. Using "virsh qemu-monitor-command guest --hmp gpa2hvagpa2hva 0xxxxxx" to get the user
-   virtual address,
+I am not smart enough to get the point. I have paid a lot of time for this patch, 
+I need an result even it doesn't work. so i like the reply like this:
 
-3. Using vtop you can get host physical address from the above user address.
+1. this patch is meaningless, and should be rejected.   
+2. this issue is real, but we need other methond, not this patch.
+3. the patch need to improve.
 
-4. Inject 0x10 level error using einj module.
 
-5. then when guest access the address, you will see what happens.
-
-Please using latest upstream kernel for guest OS, and you may change monarch_timeout to a bigger
-value, or you will see other issues not only talked one.
-
-Tks
-
-Best Regards!
+Thanks
 Aili Yao
