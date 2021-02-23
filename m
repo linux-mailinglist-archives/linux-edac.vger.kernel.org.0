@@ -2,79 +2,96 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DAF1D322B88
-	for <lists+linux-edac@lfdr.de>; Tue, 23 Feb 2021 14:35:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 07FBE322E7C
+	for <lists+linux-edac@lfdr.de>; Tue, 23 Feb 2021 17:14:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232830AbhBWNeh convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-edac@lfdr.de>); Tue, 23 Feb 2021 08:34:37 -0500
-Received: from mail-ot1-f51.google.com ([209.85.210.51]:43757 "EHLO
-        mail-ot1-f51.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232599AbhBWNeg (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Tue, 23 Feb 2021 08:34:36 -0500
-Received: by mail-ot1-f51.google.com with SMTP id l23so15508657otn.10;
-        Tue, 23 Feb 2021 05:34:20 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=W1FTBNiyBbbmPU7r9FwLGrJDR2sXQdMfcOeR069zcPk=;
-        b=TRwmgpdFuphVAuVf8CMl9ZH9MMr1gOHJheBmTtHHAbcUk6jYOIp4TrUhiKKXjTAtmM
-         EIE3SvWgnTNu5cizvinWqpsz5V+Z9Jp5QJVrElp6CNRq6cvAJJoSnq3/pl78FoEKx6Fi
-         vcojHUO62BybC3KZRlDPf9rziLd4W7KlDRU1Z6B3Kb4pZjPjwRddo8NROxR0n7ZhUERY
-         SoWxmCe2UohR3YtVwSi++N3t4eQtJrCsoay51XS/aYNdf345267FDa2dNWHLdc9eheJm
-         pGv9YVW1F22DTiHjDg28nX/6FQkWPUA7V3/KndhvTNKNczdtfcGPtaEDXfS6V4Vp5nzy
-         3qrQ==
-X-Gm-Message-State: AOAM532OSytx5N8Qld6OzZ2DyMUPmIc+sSZlROP3mJzM/+IUjXh0brfO
-        xYyAvNN2NAHiFPdLLsZJl8cG9kjLHK2ySfEYlDg=
-X-Google-Smtp-Source: ABdhPJxjkNrWvxSoaC7JsMeEuhHWcisA7wpJjF/HrLOxSfP7dHYrKwtA5+I3iEpYSkzSOYmRV5MKU5jJZwIg36sU74U=
-X-Received: by 2002:a9d:4a8e:: with SMTP id i14mr20834879otf.37.1614087235498;
- Tue, 23 Feb 2021 05:33:55 -0800 (PST)
-MIME-Version: 1.0
-References: <20210222161905.1153-1-lukas.bulwahn@gmail.com>
- <20210222161905.1153-6-lukas.bulwahn@gmail.com> <CAAdtpL5yU0-0hR76zV5hDHWd7NOxa1E0g5=eteHvman1f7cWhQ@mail.gmail.com>
- <alpine.DEB.2.21.2102231330410.1900@angie.orcam.me.uk>
-In-Reply-To: <alpine.DEB.2.21.2102231330410.1900@angie.orcam.me.uk>
-From:   =?UTF-8?Q?Philippe_Mathieu=2DDaud=C3=A9?= <f4bug@amsat.org>
-Date:   Tue, 23 Feb 2021 14:33:44 +0100
-Message-ID: <CAAdtpL4M68ton_YkEYPZPL-+Onm5+LL35pbtpRA4U6oA2gC-TA@mail.gmail.com>
-Subject: Re: [PATCH 5/5] MIPS: SGI-IP27: fix spelling in Copyright
-To:     "Maciej W. Rozycki" <macro@orcam.me.uk>
-Cc:     Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        Tiezhu Yang <yangtiezhu@loongson.cn>, Willy Tarreau <w@1wt.eu>,
-        linux-edac@vger.kernel.org, linux-hams@vger.kernel.org,
-        kernel-janitors@vger.kernel.org,
-        open list <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        id S233312AbhBWQNc convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-edac@lfdr.de>); Tue, 23 Feb 2021 11:13:32 -0500
+Received: from mga04.intel.com ([192.55.52.120]:41789 "EHLO mga04.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233536AbhBWQN3 (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Tue, 23 Feb 2021 11:13:29 -0500
+IronPort-SDR: u7jWhP7OeCTUQES3+gXGNm+84iVnmmGO61Of/H4UGBQIbdQBF9/Z04Ll2yBNaIHYctmPW83epB
+ 2bo+OJgLR16A==
+X-IronPort-AV: E=McAfee;i="6000,8403,9904"; a="182374287"
+X-IronPort-AV: E=Sophos;i="5.81,200,1610438400"; 
+   d="scan'208";a="182374287"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2021 08:12:44 -0800
+IronPort-SDR: mvHRXc1c3Xj2Zc6CYVHAzBQZFfyPMARad72ImXKUsqxBxDHW2aN71TbrhiIa6H7+fFCHZNp2ln
+ fxxOfM/DET5g==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.81,200,1610438400"; 
+   d="scan'208";a="430825957"
+Received: from fmsmsx605.amr.corp.intel.com ([10.18.126.85])
+  by FMSMGA003.fm.intel.com with ESMTP; 23 Feb 2021 08:12:44 -0800
+Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
+ fmsmsx605.amr.corp.intel.com (10.18.126.85) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2106.2; Tue, 23 Feb 2021 08:12:43 -0800
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2106.2; Tue, 23 Feb 2021 08:12:43 -0800
+Received: from fmsmsx610.amr.corp.intel.com ([10.18.126.90]) by
+ fmsmsx610.amr.corp.intel.com ([10.18.126.90]) with mapi id 15.01.2106.002;
+ Tue, 23 Feb 2021 08:12:43 -0800
+From:   "Luck, Tony" <tony.luck@intel.com>
+To:     Aili Yao <yaoaili@kingsoft.com>, Borislav Petkov <bp@alien8.de>
+CC:     "mingo@redhat.com" <mingo@redhat.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "hpa@zytor.com" <hpa@zytor.com>, "x86@kernel.org" <x86@kernel.org>,
+        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "yangfeng1@kingsoft.com" <yangfeng1@kingsoft.com>
+Subject: RE: [PATCH v2] x86/mce: fix wrong no-return-ip logic in
+ do_machine_check()
+Thread-Topic: [PATCH v2] x86/mce: fix wrong no-return-ip logic in
+ do_machine_check()
+Thread-Index: AQHXCMs4S05nMoSMUUKxBUNxuC0xxKpkECSAgABdTYCAAAH8gIAACSgAgAABOoCAAAPaAIAAEKsAgAAPioCAAAF8gIAAA6uAgAACzACAAOWwgIAAeZAAgAAD0QCAAAKCAIAAFsmA///Hv4A=
+Date:   Tue, 23 Feb 2021 16:12:43 +0000
+Message-ID: <9232988079334ab8801cccec6557f9c3@intel.com>
+References: <20210222180819.3998fe33@alex-virtual-machine>
+        <20210222102206.GC29063@zn.tnic>
+        <20210222192146.76ffec84@alex-virtual-machine>
+        <20210222201723.0fcec589@alex-virtual-machine>
+        <20210222122241.GA10880@zn.tnic>
+        <20210222203549.0e54c26f@alex-virtual-machine>
+        <20210222124550.GB10880@zn.tnic>
+        <20210223102755.13cbdffd@alex-virtual-machine>
+        <20210223094300.GA26060@zn.tnic>
+        <20210223175640.5708c7ed@alex-virtual-machine>
+        <20210223100538.GB26060@zn.tnic>
+ <20210223192711.0b517745@alex-virtual-machine>
+In-Reply-To: <20210223192711.0b517745@alex-virtual-machine>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+dlp-product: dlpe-windows
+dlp-reaction: no-action
+dlp-version: 11.5.1.3
+x-originating-ip: [10.1.200.100]
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 8BIT
+MIME-Version: 1.0
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Tue, Feb 23, 2021 at 1:33 PM Maciej W. Rozycki <macro@orcam.me.uk> wrote:
-> On Tue, 23 Feb 2021, Philippe Mathieu-Daudé wrote:
->
-> > > diff --git a/arch/mips/sgi-ip27/ip27-timer.c b/arch/mips/sgi-ip27/ip27-timer.c
-> > > index 79c434fece52..444b5e0e935f 100644
-> > > --- a/arch/mips/sgi-ip27/ip27-timer.c
-> > > +++ b/arch/mips/sgi-ip27/ip27-timer.c
-> > > @@ -1,7 +1,7 @@
-> > >  // SPDX-License-Identifier: GPL-2.0
-> > >  /*
-> > > - * Copytight (C) 1999, 2000, 05, 06 Ralf Baechle (ralf@linux-mips.org)
-> > > - * Copytight (C) 1999, 2000 Silicon Graphics, Inc.
-> > > + * Copyright (C) 1999, 2000, 05, 06 Ralf Baechle (ralf@linux-mips.org)
-> >
-> > If the email isn't valid anymore, why keep it?
->
->  As I noted in an earlier reply and Kurt further confirmed site recovery
-> is under way.
+> What I think is qemu has not an easy to get the MCE signature from host or currently no methods for this
+> So qemu treat all AR will be No RIPV, Do more is better than do less.
 
-Great. Alternatively the authorship is preserved without the author
-email (but IANAL):
+RIPV would be important in the guest in the case where the guest can fix the problem that caused
+the machine check and return to the failed instruction to continue.
 
-Copyright (C) 1999, 2000, 05, 06 Ralf Baechle
+I think the only case where this happens is a fault in a read-only page mapped from a file (typically
+code page, but could be a data page). In this case memory-failure() unmaps the page with the posion
+but Linux can recover by reading data from the file into a new page.
 
->
->   Maciej
+Other cases we send SIGBUS (so go to the signal handler instead of to the faulting instruction).
+
+So it would be good if the state of RIPV could be added to the signal state sent to qemu. If that
+isn't possible, then this full recovery case turns into another SIGBUS case.
+
+-Tony
