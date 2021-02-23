@@ -2,42 +2,42 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6789332236B
-	for <lists+linux-edac@lfdr.de>; Tue, 23 Feb 2021 02:17:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F92B322372
+	for <lists+linux-edac@lfdr.de>; Tue, 23 Feb 2021 02:19:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230042AbhBWBRc (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Mon, 22 Feb 2021 20:17:32 -0500
-Received: from mail.kernel.org ([198.145.29.99]:36912 "EHLO mail.kernel.org"
+        id S230339AbhBWBSM (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Mon, 22 Feb 2021 20:18:12 -0500
+Received: from mail.kernel.org ([198.145.29.99]:37002 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229863AbhBWBRa (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Mon, 22 Feb 2021 20:17:30 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id A40E960232;
-        Tue, 23 Feb 2021 01:16:49 +0000 (UTC)
+        id S230235AbhBWBSL (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Mon, 22 Feb 2021 20:18:11 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id A8BD964E3F;
+        Tue, 23 Feb 2021 01:17:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1614043009;
-        bh=kDwba0vVgoevzJZ1ejp9aIx55kGXux65+VE5+XPArvQ=;
+        s=k20201202; t=1614043050;
+        bh=DvI7TUFaDLZnB8qd1iG9VUOA9R6SUoQ69R1EwEdcZMM=;
         h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=dA0KMovrh4BCRgSKtyWZoXGvYaCHiHdqidrfcXpCsgCrKKGraOYgOGjlR87xeK9qV
-         w9kDmHR0Wgs1Hclsrb0kvsQTHtLGB/XGkgZF5cKW07ejaibXyE6Kgif5hGJvZrmhht
-         rUpJ8+IJBD8cBEYpwp472yOW71w9lomxM4kSoBttML7MiRDODkvV1/YFVPQSn9I5Pw
-         YHY3tJPjXtMI2DObywS+ZHRVjMQ5NT5CD5eVKOwZA9DaZYcPJD6g+KQ0v87UdsXxBW
-         jBaQIxpw6JKXvG9iEVtPlMxMCW+ljIV3M0v1IgOxIv7hdzYaol45Fy8YhZtyZNooLK
-         pjtKMQW08QPSg==
-Received: by mail-io1-f49.google.com with SMTP id k17so7582216ioc.5;
-        Mon, 22 Feb 2021 17:16:49 -0800 (PST)
-X-Gm-Message-State: AOAM531TNgWIYBpib6uTfp/JobczAEA/lQ3GzFHf3jGURHI5b0g92W49
-        yR9WHGbUqwlxCzNs/Gx6+hUlHYKNm1LtToDLTjM=
-X-Google-Smtp-Source: ABdhPJz7+GwyctOMH/oDlyMU8gM2QH44bFdcRoMYUvEOB/ALHXlwc5LneLHjIs6q9qKW0qDTbUKcXjoS+cBpMdiJhb8=
-X-Received: by 2002:a6b:6603:: with SMTP id a3mr17348843ioc.148.1614043009025;
- Mon, 22 Feb 2021 17:16:49 -0800 (PST)
+        b=iEWnlPr39RLT/glEz55wiDthJseWcOOd7pGxMulUuuw/aVUol7QGBLXJc7ESQhlq5
+         a3J/CQCFp9ArKvXJv3VnKqkxbM9zcG5aezsNFELKmtYzgNTQjjtVW+s1lvM2g14v5R
+         kwN/kacQXzbqfkWu6+ge/NGedvHQ3mm8emopJNbtkmQMZAqM25R/osysxmUz6G2MD4
+         XRL2kVHecT/wJsfizFv5DEyWn5IvuJEWglKjoT78QizCJNNVYAaJROs5VNIjIsHDeo
+         QIY92qYPrbSRmiJJg/b6PUw7+bEtl1JAo0SnUOQt3HfBcrj+y04/afoDpKdD+P9rfY
+         vq6QrdgsZZkLQ==
+Received: by mail-io1-f48.google.com with SMTP id u20so15386211iot.9;
+        Mon, 22 Feb 2021 17:17:30 -0800 (PST)
+X-Gm-Message-State: AOAM532WYuEwi7K/rxMH3Ycy+NSaWfsMYmgiKYCI45QTLZZJnabTyhQD
+        VQBBdw0LGNeLr9s/2914sHt6RbjvdNcIofaUuCQ=
+X-Google-Smtp-Source: ABdhPJxeAJEHzXuZoV9sLeUvmUJ7b64ZWK/ioFw5Bel+3a7zaxSdBMePbVEMSu3FRzydH+NpRl52Jax8st22Ohrw9VY=
+X-Received: by 2002:a05:6638:22e:: with SMTP id f14mr11702213jaq.96.1614043050082;
+ Mon, 22 Feb 2021 17:17:30 -0800 (PST)
 MIME-Version: 1.0
-References: <20210222161905.1153-1-lukas.bulwahn@gmail.com> <20210222161905.1153-3-lukas.bulwahn@gmail.com>
-In-Reply-To: <20210222161905.1153-3-lukas.bulwahn@gmail.com>
+References: <20210222161905.1153-1-lukas.bulwahn@gmail.com> <20210222161905.1153-4-lukas.bulwahn@gmail.com>
+In-Reply-To: <20210222161905.1153-4-lukas.bulwahn@gmail.com>
 From:   Huacai Chen <chenhuacai@kernel.org>
-Date:   Tue, 23 Feb 2021 09:16:37 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H5aKEOFr32G3BZJofUQaRtqM7zsy6fX-gPCwxFhKBqa2w@mail.gmail.com>
-Message-ID: <CAAhV-H5aKEOFr32G3BZJofUQaRtqM7zsy6fX-gPCwxFhKBqa2w@mail.gmail.com>
-Subject: Re: [PATCH 2/5] MAINTAINERS: remove linux-mips.org references
+Date:   Tue, 23 Feb 2021 09:17:18 +0800
+X-Gmail-Original-Message-ID: <CAAhV-H5-a2PCbGiezQ5LNT3THBhWrcZnJys0NUZ8+1N9ivkBAw@mail.gmail.com>
+Message-ID: <CAAhV-H5-a2PCbGiezQ5LNT3THBhWrcZnJys0NUZ8+1N9ivkBAw@mail.gmail.com>
+Subject: Re: [PATCH 3/5] arch: mips: update references to current linux-mips list
 To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>
 Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         "open list:MIPS" <linux-mips@vger.kernel.org>,
@@ -55,50 +55,55 @@ Reviewed-by: Huacai Chen <chenhuacai@kernel.org>
 
 On Tue, Feb 23, 2021 at 12:22 AM Lukas Bulwahn <lukas.bulwahn@gmail.com> wrote:
 >
-> The domain lookup for linux-mips.org fails for quite some time now. Hence,
-> webpages, the patchwork instance and Ralf Baechle's email there is not
-> reachable anymore.
->
-> Remove all references of webpages from linux-mips.org in MAINTAINERS, and
-> refer to the kernel.org's linux-mips patchwork instance instead.
+> The linux-mips mailing list now lives at kernel.org. Update all references
+> in the kernel tree.
 >
 > Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
 > ---
->  MAINTAINERS | 5 +----
->  1 file changed, 1 insertion(+), 4 deletions(-)
+>  arch/mips/kernel/r4k-bugs64.c | 2 +-
+>  arch/mips/lib/iomap-pci.c     | 2 +-
+>  arch/mips/sgi-ip32/ip32-irq.c | 2 +-
+>  3 files changed, 3 insertions(+), 3 deletions(-)
 >
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index e949e561867d..703a50183301 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -4980,7 +4980,6 @@ DECSTATION PLATFORM SUPPORT
->  M:     "Maciej W. Rozycki" <macro@orcam.me.uk>
->  L:     linux-mips@vger.kernel.org
->  S:     Maintained
-> -W:     http://www.linux-mips.org/wiki/DECstation
->  F:     arch/mips/dec/
->  F:     arch/mips/include/asm/dec/
->  F:     arch/mips/include/asm/mach-dec/
-> @@ -11932,7 +11931,6 @@ MIPS
->  M:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
->  L:     linux-mips@vger.kernel.org
->  S:     Maintained
-> -W:     http://www.linux-mips.org/
->  Q:     https://patchwork.kernel.org/project/linux-mips/list/
->  T:     git git://git.kernel.org/pub/scm/linux/kernel/git/mips/linux.git
->  F:     Documentation/devicetree/bindings/mips/
-> @@ -18248,10 +18246,9 @@ F:     arch/um/os-Linux/drivers/
+> diff --git a/arch/mips/kernel/r4k-bugs64.c b/arch/mips/kernel/r4k-bugs64.c
+> index 1ff19f1ea5ca..35729c9e6cfa 100644
+> --- a/arch/mips/kernel/r4k-bugs64.c
+> +++ b/arch/mips/kernel/r4k-bugs64.c
+> @@ -18,7 +18,7 @@
+>  static char bug64hit[] __initdata =
+>         "reliable operation impossible!\n%s";
+>  static char nowar[] __initdata =
+> -       "Please report to <linux-mips@linux-mips.org>.";
+> +       "Please report to <linux-mips@vger.kernel.org>.";
+>  static char r4kwar[] __initdata =
+>         "Enable CPU_R4000_WORKAROUNDS to rectify.";
+>  static char daddiwar[] __initdata =
+> diff --git a/arch/mips/lib/iomap-pci.c b/arch/mips/lib/iomap-pci.c
+> index 210f5a95ecb1..a9cb28813f0b 100644
+> --- a/arch/mips/lib/iomap-pci.c
+> +++ b/arch/mips/lib/iomap-pci.c
+> @@ -32,7 +32,7 @@ void __iomem *__pci_ioport_map(struct pci_dev *dev,
+>                 sprintf(name, "%04x:%02x", pci_domain_nr(bus), bus->number);
+>                 printk(KERN_WARNING "io_map_base of root PCI bus %s unset.  "
+>                        "Trying to continue but you better\nfix this issue or "
+> -                      "report it to linux-mips@linux-mips.org or your "
+> +                      "report it to linux-mips@vger.kernel.org or your "
+>                        "vendor.\n", name);
+>  #ifdef CONFIG_PCI_DOMAINS
+>                 panic("To avoid data corruption io_map_base MUST be set with "
+> diff --git a/arch/mips/sgi-ip32/ip32-irq.c b/arch/mips/sgi-ip32/ip32-irq.c
+> index 1bbd5bfb5458..e21ea1de05e3 100644
+> --- a/arch/mips/sgi-ip32/ip32-irq.c
+> +++ b/arch/mips/sgi-ip32/ip32-irq.c
+> @@ -343,7 +343,7 @@ static void ip32_unknown_interrupt(void)
+>         printk("Register dump:\n");
+>         show_regs(get_irq_regs());
 >
->  TURBOCHANNEL SUBSYSTEM
->  M:     "Maciej W. Rozycki" <macro@orcam.me.uk>
-> -M:     Ralf Baechle <ralf@linux-mips.org>
->  L:     linux-mips@vger.kernel.org
->  S:     Maintained
-> -Q:     http://patchwork.linux-mips.org/project/linux-mips/list/
-> +Q:     https://patchwork.kernel.org/project/linux-mips/list/
->  F:     drivers/tc/
->  F:     include/linux/tc.h
->
+> -       printk("Please mail this report to linux-mips@linux-mips.org\n");
+> +       printk("Please mail this report to linux-mips@vger.kernel.org\n");
+>         printk("Spinning...");
+>         while(1) ;
+>  }
 > --
 > 2.17.1
 >
