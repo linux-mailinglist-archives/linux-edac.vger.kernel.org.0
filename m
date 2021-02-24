@@ -2,94 +2,97 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 53158323A0B
-	for <lists+linux-edac@lfdr.de>; Wed, 24 Feb 2021 10:59:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D3204323C22
+	for <lists+linux-edac@lfdr.de>; Wed, 24 Feb 2021 13:51:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234880AbhBXJ6C (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Wed, 24 Feb 2021 04:58:02 -0500
-Received: from mail.kingsoft.com ([114.255.44.146]:45292 "EHLO
-        mail.kingsoft.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S234829AbhBXJ52 (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Wed, 24 Feb 2021 04:57:28 -0500
-X-AuditID: 0a580157-f39ff7000005df43-0a-60361c8fe966
-Received: from mail.kingsoft.com (localhost [10.88.1.32])
-        (using TLS with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (Client did not present a certificate)
-        by mail.kingsoft.com (SMG-1-NODE-87) with SMTP id 4F.E4.57155.F8C16306; Wed, 24 Feb 2021 17:29:51 +0800 (HKT)
-Received: from alex-virtual-machine (172.16.253.254) by KSBJMAIL2.kingsoft.cn
- (10.88.1.32) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1979.3; Wed, 24 Feb
- 2021 17:56:33 +0800
-Date:   Wed, 24 Feb 2021 17:56:32 +0800
-From:   Aili Yao <yaoaili@kingsoft.com>
-To:     "Luck, Tony" <tony.luck@intel.com>
-CC:     Borislav Petkov <bp@alien8.de>,
-        "rjw@rjwysocki.net" <rjw@rjwysocki.net>,
-        "lenb@kernel.org" <lenb@kernel.org>,
-        "james.morse@arm.com" <james.morse@arm.com>,
-        "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
-        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
-        "yangfeng1@kingsoft.com" <yangfeng1@kingsoft.com>
-Subject: Re: [PATCH v2] Dump cper error table in mce_panic
-Message-ID: <20210224175632.5d99abcc@alex-virtual-machine>
-In-Reply-To: <434eba7a568a4b9f8eb7ee11a5c8b04f@intel.com>
-References: <20201104065057.40442-1-yaoaili126@163.com>
-        <20201117175804.39bbbdc3.yaoaili@kingsoft.com>
-        <20201118124538.GI7472@zn.tnic>
-        <20201119134057.37ca2c19.yaoaili@kingsoft.com>
-        <20201119174508.GE3769@zn.tnic>
-        <20201120172235.620eb826.yaoaili@kingsoft.com>
-        <20201120102422.GA712@zn.tnic>
-        <20210128200128.6f022993.yaoaili@kingsoft.com>
-        <e9645a3ff93e46d4aabdf7dd45bfc4d7@intel.com>
-        <20210223171809.7df62b08@alex-virtual-machine>
-        <434eba7a568a4b9f8eb7ee11a5c8b04f@intel.com>
-Organization: kingsoft
-X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.30; x86_64-pc-linux-gnu)
+        id S233115AbhBXMvS (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Wed, 24 Feb 2021 07:51:18 -0500
+Received: from mail.kernel.org ([198.145.29.99]:49460 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229841AbhBXMvK (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Wed, 24 Feb 2021 07:51:10 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 4D13C64E6F;
+        Wed, 24 Feb 2021 12:50:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1614171030;
+        bh=A2GUGgxB6CPesNTdDb+4GD+I5pFzSBZZmn8cu7Upo0g=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=IQFBDOFh+jJDrGycsck7os3WVx1kAW0JYGiEc3/R6VMFjjGAVnEj7tVXJP56zG4AB
+         ZVNYn2uAEdsdMGu/u8/mFh/USK7txp6P2NBkHTNQUTYmuS2dmpP5RXENUQPX8AzcUV
+         LQlTNtHF9rBewRYrzBsLkh79AzsoqZZwNOrpFYsNvQ7SQsEfH4+/9Yem1VY1ro6VcF
+         MG06CxqOFhk3jKceUfxdC9YoZ1ENnEIaQFvAbqh5nXPN+HuyQwV9/I95FzXUvGoaZK
+         ipNjYH/QtDeQ2JY24KMXCNk6JyU9HVpkRPhzuyYDWZnxcPKEh1Z90T4U3YecDIHR55
+         S+ZbiBaprEF7A==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Borislav Petkov <bp@suse.de>, Don Curtis <bugrprt21882@online.de>,
+        Sasha Levin <sashal@kernel.org>, linux-edac@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.11 02/67] EDAC/amd64: Do not load on family 0x15, model 0x13
+Date:   Wed, 24 Feb 2021 07:49:20 -0500
+Message-Id: <20210224125026.481804-2-sashal@kernel.org>
+X-Mailer: git-send-email 2.27.0
+In-Reply-To: <20210224125026.481804-1-sashal@kernel.org>
+References: <20210224125026.481804-1-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [172.16.253.254]
-X-ClientProxiedBy: KSBJMAIL1.kingsoft.cn (10.88.1.31) To KSBJMAIL2.kingsoft.cn
- (10.88.1.32)
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrBLMWRmVeSWpSXmKPExsXCFcGooNsvY5Zg8GGfssXnDf/YLO7vW85k
-        sfPhWzaL5fv6GS0unGpgsjhz+hKrxZsL91gc2D2+t/axeKyZt4bRY/Gel0wem1Z1snlsudrO
-        4vF5k1wAWxSXTUpqTmZZapG+XQJXRsuLb6wF89grnh2YxNrAeJi1i5GDQ0LARGLNG6EuRi4O
-        IYHpTBITryxjhHBeMUpcm3SLvYuRk4NFQFWi4+U2VhCbDcjedW8WmC0ioCZxafEDZpAGZoEL
-        TBLLZv5lAUkIC1hJPN3wBszmBbIvNu4DG8QpYCnx+Ow3dogN75klFp1YBZbgFxCT6L3ynwnE
-        lhCwl2jbsogRollQ4uTMJ2CDmAV0JE6sOsYMYctLbH87B8wWElCUOLzkFztEr5LEke4ZbBB2
-        rMSyea9YJzAKz0IyahaSUbOQjFrAyLyKkaU4N91wEyMkMsJ3MM5r+qh3iJGJg/EQowQHs5II
-        7+Z/pglCvCmJlVWpRfnxRaU5qcWHGKU5WJTEeQO3mSQICaQnlqRmp6YWpBbBZJk4OKUamBYU
-        Fex9+9nXeqVu8zblyJqXjZN/1h1f4iV8cdrfHVf1tni53mFZdYrTd+6k2DDvNx/DTm3b/9xj
-        6qeFS3mDv1T22k++s+OExZs6F60krQ0iVe8WXG6761VvfJ1L7fbfCaIfxbYWOZ9YZ7xBzPb4
-        3HcrTuYtmx5Uu5s9pWvdL+FUlYhzKze9t4qp3jy3bN1WS5lva7VyLf27uatqyhufnZZTS8hO
-        0PXmmPOm76P2JaUpNdw/Tm162XY3P5br1Ic5E0UWNDM/3RlfYLTH/Bs/+8bTWo3/7bZscFi8
-        xsSoqP7ZxlWuj/+LGixWmXj9wvrkyiopOYemgkmTFr7jXTeLS/Zg2Yown99zdAtPsZqxF6Qq
-        sRRnJBpqMRcVJwIAaRl+D/sCAAA=
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Tue, 23 Feb 2021 19:32:37 +0000
-"Luck, Tony" <tony.luck@intel.com> wrote:
+From: Borislav Petkov <bp@suse.de>
 
-> > I am not smart enough to get the point. I have paid a lot of time for this patch, 
-> > I need an result even it doesn't work. so i like the reply like this:
-> >
-> > 1. this patch is meaningless, and should be rejected.   
-> > 2. this issue is real, but we need other methond, not this patch.
-> > 3. the patch need to improve.  
-> 
-> I don't want to say that the patch is meaningless ... it may be useful to you
-> in your environment to help sort out machine checks due to h/w issues vs.
-> programming errors in the machine check recovery code.
-> 
-> But I don't think it is generally useful in the upstream code.
+[ Upstream commit 6c13d7ff81e6d2f01f62ccbfa49d1b8d87f274d0 ]
 
-Got it.
-Another thing I want to say is that when mca_cfg.tolerant is set to 3, this NMI handling will
-also panic the system in some case, but it seems there is not a big influence though.
+Those were only laptops and are very very unlikely to have ECC memory.
+Currently, when the driver attempts to load, it issues:
 
-Thanks
-Aili Yao  
+  EDAC amd64: Error: F1 not found: device 0x1601 (broken BIOS?)
+
+because the PCI device is the wrong one (it uses the F15h default one).
+
+So do not load the driver on them as that is pointless.
+
+Reported-by: Don Curtis <bugrprt21882@online.de>
+Signed-off-by: Borislav Petkov <bp@suse.de>
+Tested-by: Don Curtis <bugrprt21882@online.de>
+Link: http://bugzilla.opensuse.org/show_bug.cgi?id=1179763
+Link: https://lkml.kernel.org/r/20201218160622.20146-1-bp@alien8.de
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/edac/amd64_edac.c | 10 +++++++---
+ 1 file changed, 7 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/edac/amd64_edac.c b/drivers/edac/amd64_edac.c
+index f7087ddddb902..5754f429a8d2d 100644
+--- a/drivers/edac/amd64_edac.c
++++ b/drivers/edac/amd64_edac.c
+@@ -3342,10 +3342,13 @@ static struct amd64_family_type *per_family_init(struct amd64_pvt *pvt)
+ 			fam_type = &family_types[F15_M60H_CPUS];
+ 			pvt->ops = &family_types[F15_M60H_CPUS].ops;
+ 			break;
++		/* Richland is only client */
++		} else if (pvt->model == 0x13) {
++			return NULL;
++		} else {
++			fam_type	= &family_types[F15_CPUS];
++			pvt->ops	= &family_types[F15_CPUS].ops;
+ 		}
+-
+-		fam_type	= &family_types[F15_CPUS];
+-		pvt->ops	= &family_types[F15_CPUS].ops;
+ 		break;
+ 
+ 	case 0x16:
+@@ -3539,6 +3542,7 @@ static int probe_one_instance(unsigned int nid)
+ 	pvt->mc_node_id	= nid;
+ 	pvt->F3 = F3;
+ 
++	ret = -ENODEV;
+ 	fam_type = per_family_init(pvt);
+ 	if (!fam_type)
+ 		goto err_enable;
+-- 
+2.27.0
 
