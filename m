@@ -2,37 +2,35 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D3204323C22
-	for <lists+linux-edac@lfdr.de>; Wed, 24 Feb 2021 13:51:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DCDBE323EDC
+	for <lists+linux-edac@lfdr.de>; Wed, 24 Feb 2021 14:53:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233115AbhBXMvS (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Wed, 24 Feb 2021 07:51:18 -0500
-Received: from mail.kernel.org ([198.145.29.99]:49460 "EHLO mail.kernel.org"
+        id S232495AbhBXNue (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Wed, 24 Feb 2021 08:50:34 -0500
+Received: from mail.kernel.org ([198.145.29.99]:54608 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229841AbhBXMvK (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Wed, 24 Feb 2021 07:51:10 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 4D13C64E6F;
-        Wed, 24 Feb 2021 12:50:29 +0000 (UTC)
+        id S235325AbhBXM5t (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Wed, 24 Feb 2021 07:57:49 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id D2AB064EF1;
+        Wed, 24 Feb 2021 12:52:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1614171030;
-        bh=A2GUGgxB6CPesNTdDb+4GD+I5pFzSBZZmn8cu7Upo0g=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=IQFBDOFh+jJDrGycsck7os3WVx1kAW0JYGiEc3/R6VMFjjGAVnEj7tVXJP56zG4AB
-         ZVNYn2uAEdsdMGu/u8/mFh/USK7txp6P2NBkHTNQUTYmuS2dmpP5RXENUQPX8AzcUV
-         LQlTNtHF9rBewRYrzBsLkh79AzsoqZZwNOrpFYsNvQ7SQsEfH4+/9Yem1VY1ro6VcF
-         MG06CxqOFhk3jKceUfxdC9YoZ1ENnEIaQFvAbqh5nXPN+HuyQwV9/I95FzXUvGoaZK
-         ipNjYH/QtDeQ2JY24KMXCNk6JyU9HVpkRPhzuyYDWZnxcPKEh1Z90T4U3YecDIHR55
-         S+ZbiBaprEF7A==
+        s=k20201202; t=1614171134;
+        bh=c8X0HV894pJBiANVg6efLkwkO+ReRjB5fQ/es0cqU5k=;
+        h=From:To:Cc:Subject:Date:From;
+        b=gPkxxnI9xQTlTBcT+D7wIG4PBaVkChFsYtLBPwgsUb9Ij/HObjpixYdh78yDbms8K
+         XgKVbET1421clMM7VptIwGBBOzgjyknbh8hE7jYTfJPOp7TWZ6QUIHPQb91VIWj8pi
+         6nBTgUhUWRfXl2QfBUtYmDRHK9ldZEWSxhePqPQePxVGJTth7IODlqBhC6O1NziijQ
+         /6T66wiqbo0/frXyLuXxM53zv0d62Nd0zr5ZcW9gd4tD5ANR1mPLFNFSyc7b10r4r6
+         RUFi+fisB5vt1KwMDS0uWRyTulN2iysZf5MzAHHQRn8yjg4Q60Bkl/t6FJSD7xlT+N
+         DNKE4zcrJf9uA==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Borislav Petkov <bp@suse.de>, Don Curtis <bugrprt21882@online.de>,
         Sasha Levin <sashal@kernel.org>, linux-edac@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.11 02/67] EDAC/amd64: Do not load on family 0x15, model 0x13
-Date:   Wed, 24 Feb 2021 07:49:20 -0500
-Message-Id: <20210224125026.481804-2-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.10 01/56] EDAC/amd64: Do not load on family 0x15, model 0x13
+Date:   Wed, 24 Feb 2021 07:51:17 -0500
+Message-Id: <20210224125212.482485-1-sashal@kernel.org>
 X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20210224125026.481804-1-sashal@kernel.org>
-References: <20210224125026.481804-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -65,10 +63,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 7 insertions(+), 3 deletions(-)
 
 diff --git a/drivers/edac/amd64_edac.c b/drivers/edac/amd64_edac.c
-index f7087ddddb902..5754f429a8d2d 100644
+index 620f7041db6b5..b36d5879b91e0 100644
 --- a/drivers/edac/amd64_edac.c
 +++ b/drivers/edac/amd64_edac.c
-@@ -3342,10 +3342,13 @@ static struct amd64_family_type *per_family_init(struct amd64_pvt *pvt)
+@@ -3350,10 +3350,13 @@ static struct amd64_family_type *per_family_init(struct amd64_pvt *pvt)
  			fam_type = &family_types[F15_M60H_CPUS];
  			pvt->ops = &family_types[F15_M60H_CPUS].ops;
  			break;
@@ -85,7 +83,7 @@ index f7087ddddb902..5754f429a8d2d 100644
  		break;
  
  	case 0x16:
-@@ -3539,6 +3542,7 @@ static int probe_one_instance(unsigned int nid)
+@@ -3547,6 +3550,7 @@ static int probe_one_instance(unsigned int nid)
  	pvt->mc_node_id	= nid;
  	pvt->F3 = F3;
  
