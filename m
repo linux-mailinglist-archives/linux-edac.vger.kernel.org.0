@@ -2,95 +2,112 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 63719325BCD
-	for <lists+linux-edac@lfdr.de>; Fri, 26 Feb 2021 04:00:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FD0B325F06
+	for <lists+linux-edac@lfdr.de>; Fri, 26 Feb 2021 09:30:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229864AbhBZDAD (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Thu, 25 Feb 2021 22:00:03 -0500
-Received: from mail.kingsoft.com ([114.255.44.146]:45527 "EHLO
-        mail.kingsoft.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S229508AbhBZDAA (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Thu, 25 Feb 2021 22:00:00 -0500
-X-AuditID: 0a580157-f39ff7000005df43-98-60385db523a9
-Received: from mail.kingsoft.com (localhost [10.88.1.32])
-        (using TLS with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (Client did not present a certificate)
-        by mail.kingsoft.com (SMG-1-NODE-87) with SMTP id 0D.82.57155.5BD58306; Fri, 26 Feb 2021 10:32:21 +0800 (HKT)
-Received: from alex-virtual-machine (172.16.253.254) by KSBJMAIL2.kingsoft.cn
- (10.88.1.32) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1979.3; Fri, 26 Feb
- 2021 10:59:15 +0800
-Date:   Fri, 26 Feb 2021 10:59:15 +0800
-From:   Aili Yao <yaoaili@kingsoft.com>
-To:     "HORIGUCHI =?UTF-8?B?TkFPWUE=?=(=?UTF-8?B?5aCA5Y+j44CA55u05Lmf?=)" 
-        <naoya.horiguchi@nec.com>, "Luck, Tony" <tony.luck@intel.com>
-CC:     Oscar Salvador <osalvador@suse.de>,
-        "david@redhat.com" <david@redhat.com>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "hpa@zytor.com" <hpa@zytor.com>, "x86@kernel.org" <x86@kernel.org>,
-        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "yangfeng1@kingsoft.com" <yangfeng1@kingsoft.com>
-Subject: Re: [PATCH] mm,hwpoison: return -EBUSY when page already poisoned
-Message-ID: <20210226105915.6cf7d2b8@alex-virtual-machine>
-In-Reply-To: <20210226021907.GA27861@hori.linux.bs1.fc.nec.co.jp>
-References: <20210224151619.67c29731@alex-virtual-machine>
-        <20210224103105.GA16368@linux>
-        <20210225114329.4e1a41c6@alex-virtual-machine>
-        <20210225112818.GA10141@hori.linux.bs1.fc.nec.co.jp>
-        <20210225113930.GA7227@localhost.localdomain>
-        <20210225123806.GA15006@hori.linux.bs1.fc.nec.co.jp>
-        <20210225181542.GA178925@agluck-desk2.amr.corp.intel.com>
-        <20210226021907.GA27861@hori.linux.bs1.fc.nec.co.jp>
-Organization: kingsoft
-X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.30; x86_64-pc-linux-gnu)
+        id S230006AbhBZIab (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Fri, 26 Feb 2021 03:30:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59136 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229449AbhBZIaa (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Fri, 26 Feb 2021 03:30:30 -0500
+Received: from mail-io1-xd29.google.com (mail-io1-xd29.google.com [IPv6:2607:f8b0:4864:20::d29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D255C061574;
+        Fri, 26 Feb 2021 00:29:45 -0800 (PST)
+Received: by mail-io1-xd29.google.com with SMTP id a7so8809010iok.12;
+        Fri, 26 Feb 2021 00:29:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=wv9SyvXPStH1HbSiyrd6dLJkIu8R0cmO6gcv4tLTSvQ=;
+        b=Rhl08QI0pfGUZYq6eTciDwuN89KLIIALSh8uKopiHPcUrfyNcHVdR0Y6PGJQ1Aw1Xp
+         vPXZjJhOIbKvkPRAco2v2VKNnyYBYI7anNnDxXs0xiSFo7fx91n4XiggVGMHNhhKvu4k
+         VOo44XIZnSglXqVUOvLckvmbXB7NqIerp5578rZZ7Kkq5DtCOVgLsBTzfYkva3pS5MmR
+         BAfHatL1uy5ftOMq0kGxA8XxXWQPdMPnpdScblfP9jVupdhUCn3EriJZ5//VUNid5wyo
+         f/ATH0swlnaPmd0JLN4HAMbgaAspgJBsV4EsG8vx1D8YainfyvDQL/PiOgyXGYZppUzS
+         m9qA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=wv9SyvXPStH1HbSiyrd6dLJkIu8R0cmO6gcv4tLTSvQ=;
+        b=eB7w4SrEh/UrtC8zeHrlQCVjDDWFPyXAvn1IO1w4ABpiJk9vUEQXrt5WzCYYQ15iij
+         VPbaWpiB+Fo0eF2cBVXkkpIv756TpG2ufOSV/DZ55llt95nN2sPSOS4Rn4K/yagiPdE/
+         b6+a+sPAuqxtgEZOt5eA+8VncJFssTLrutXC3N9HGzm0yf2uzEan7OLdI2EuMOna8ZFO
+         T+VLBcWiM41u/d2xg+CFwUGTvIN/SVLgEH0i4IfYbDw2rkSRmeWzgCYXrcTKJZxt66Ln
+         p+ZTEuSvHVmzb9ZV3hADIfmAABObMB0G2GslzUYE5LclhZ5l/hr4zVTZfXlZQgpwSKkk
+         zT2A==
+X-Gm-Message-State: AOAM531uSRRNbprZ5yxFh0qKgEsdXrMmXHI8gXuiO2bb+jvwjWLlpr/I
+        7yOWLs36t3mOaoQ9MHHxr6TbpvDXBn6CEzOTuZXLu9BVCxA=
+X-Google-Smtp-Source: ABdhPJzPdTp9oMZ+w5xch1v6D5+MMN1OxBLOqz/HNnorcjnd11QqrnQ4bhDhT4DYAfQxcYgPBGykY+glXt4wVghUZ0A=
+X-Received: by 2002:a05:6602:2bd5:: with SMTP id s21mr1906817iov.189.1614328185042;
+ Fri, 26 Feb 2021 00:29:45 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [172.16.253.254]
-X-ClientProxiedBy: KSBJMAIL1.kingsoft.cn (10.88.1.31) To KSBJMAIL2.kingsoft.cn
- (10.88.1.32)
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprDIsWRmVeSWpSXmKPExsXCFcGooLs11iLBYH+/scWc9WvYLD5v+Mdm
-        8XX9L2aLaRvFLS6camCyuLxrDpvFvTX/WS0uHVjAZHGx8QCjxZlpRRabN01ltnhz4R6LxY8N
-        j1kdeD2+t/axeCze85LJY9OqTjaPTZ8msXu8O3eO3ePEjN8sHi+ubmTxeL/vKpvH5tPVHp83
-        yXmcaPnCGsAdxWWTkpqTWZZapG+XwJUx/8ls5oJP7BVzjv5mbGCcw9bFyMkhIWAi0fK8jbmL
-        kYtDSGA6k8ThN19YIJxXjBLLtp4Dq2IRUJVYseYaO4jNBmTvujeLFaRIRKCNUWL9mvNsIA6z
-        wEIWiU8LdjGBVAkLeEl8ub+WEcTmFbCSuHajGaibg4NTwFHizOVckLCQwFxmiTVLlEFsfgEx
-        id4r/5kgTrKXaNuyCKpVUOLkzCcsIDazgI7EiVXHmCFseYntb+cwQ8xRlDi85Bc7RK+SxJHu
-        GVCvxUosm/eKdQKj8Cwko2YhGTULyagFjMyrGFmKc9MNNzFCIjB8B+O8po96hxiZOBgPMUpw
-        MCuJ8G7+Z5ogxJuSWFmVWpQfX1Sak1p8iFGag0VJnFeKzTxBSCA9sSQ1OzW1ILUIJsvEwSnV
-        wMQVLhhwqkt/TYjYp46XupYaUouKgtpZ7nP0cLfa7pqnrpmT3mIYX/SjjnlyQRrTiupvZ6M5
-        EkR36W3UCltbzNF2aoKD7mKdNAlRE7eSf62+PCFlx+ou3Ti8gHPeR+lzH9yP7r5TlCqknu1x
-        1Wf1xJN9ux491/UWF2fi7pDWllFWj568bqt1aa1W59XUFqUrmdq7F5VZdri4Ht2pk5Ddm77/
-        m2vUpjmllnybpc07bZaWHzf8/XuvreTKEqPNgvUHRGeYys1VuskiHRiwiXFj0g8dtUvftnYL
-        JydrlgndY7fntbrz5PsalnM3zkvLazjnHz27Pru8W/XA5hdTH01VeaLRvF6T8Xxr0pTM3ypK
-        LMUZiYZazEXFiQBuLmVkLwMAAA==
+References: <20210222161905.1153-1-lukas.bulwahn@gmail.com>
+ <20210222161905.1153-3-lukas.bulwahn@gmail.com> <CAAdtpL4egZYCGS+2K5FQSFYcPKomosuvvrunpDskkiif5Ma5Uw@mail.gmail.com>
+In-Reply-To: <CAAdtpL4egZYCGS+2K5FQSFYcPKomosuvvrunpDskkiif5Ma5Uw@mail.gmail.com>
+From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Date:   Fri, 26 Feb 2021 09:29:34 +0100
+Message-ID: <CAKXUXMygO2caTv9D1dMv9dxJSgC8=CpcT3hYsNm_ko4HXdNmeg@mail.gmail.com>
+Subject: Re: [PATCH 2/5] MAINTAINERS: remove linux-mips.org references
+To:     =?UTF-8?Q?Philippe_Mathieu=2DDaud=C3=A9?= <f4bug@amsat.org>
+Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        "Maciej W . Rozycki" <macro@orcam.me.uk>,
+        Tiezhu Yang <yangtiezhu@loongson.cn>, Willy Tarreau <w@1wt.eu>,
+        linux-edac@vger.kernel.org, linux-hams@vger.kernel.org,
+        kernel-janitors@vger.kernel.org,
+        open list <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-Hi naoya, tony:
-> > 
-> > Idea for what we should do next ... Now that x86 is calling memory_failure()
-> > from user context ... maybe parallel calls for the same page should
-> > be blocked until the first caller completes so we can:
-> > a) know that pages are unmapped (if that happens)
-> > b) all get the same success/fail status  
-> 
-> One memory_failure() call changes the target page's status and
-> affects all mappings to all affected processes, so I think that
-> (ideally) we don't have to block other threads (letting them
-> early return seems fine).  Sometimes memory_failure() fails,
-> but even in such case, PG_hwpoison is set on the page and other
-> threads properly get SIGBUSs with this patch, so I think that
-> we can avoid the worst scenario (like system stall by MCE loop).
-> 
-I agree with naoya's point, if we block for this issue, Does this change the result
-that the process should be killed? Or is there something other still need to be considered?
+On Tue, Feb 23, 2021 at 10:48 AM Philippe Mathieu-Daud=C3=A9 <f4bug@amsat.o=
+rg> wrote:
+>
+> On Mon, Feb 22, 2021 at 5:22 PM Lukas Bulwahn <lukas.bulwahn@gmail.com> w=
+rote:
+> >
+> > The domain lookup for linux-mips.org fails for quite some time now. Hen=
+ce,
+> > webpages, the patchwork instance and Ralf Baechle's email there is not
+> > reachable anymore.
+> >
+> > Remove all references of webpages from linux-mips.org in MAINTAINERS, a=
+nd
+> > refer to the kernel.org's linux-mips patchwork instance instead.
+> >
+> > Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+> > ---
+> >  MAINTAINERS | 5 +----
+> >  1 file changed, 1 insertion(+), 4 deletions(-)
+> >
+> > diff --git a/MAINTAINERS b/MAINTAINERS
+> > index e949e561867d..703a50183301 100644
+> > --- a/MAINTAINERS
+> > +++ b/MAINTAINERS
+> > @@ -4980,7 +4980,6 @@ DECSTATION PLATFORM SUPPORT
+> >  M:     "Maciej W. Rozycki" <macro@orcam.me.uk>
+> >  L:     linux-mips@vger.kernel.org
+> >  S:     Maintained
+> > -W:     http://www.linux-mips.org/wiki/DECstation
+>
+> Why not use the web archive? The information is still valuable.
+> https://web.archive.org/web/20190704000315/https://www.linux-mips.org/wik=
+i/DECstation
+>
 
-Thanks!
-Aili Yao  
+If that information is valuable, how about adding that into the kernel
+documentation page?
+
+If linux-mips.org wiki is back, we will keep this link; if not, we
+should get a copy of that information into the documentation (where it
+can survive some time) or we simply drop it.
+
+Putting a web.archive.org link into MAINTAINERS sounds like a really
+bad idea to me.
+
+Lukas
