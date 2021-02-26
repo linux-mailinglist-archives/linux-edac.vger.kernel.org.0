@@ -2,205 +2,95 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 59C0732434A
-	for <lists+linux-edac@lfdr.de>; Wed, 24 Feb 2021 18:46:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 63719325BCD
+	for <lists+linux-edac@lfdr.de>; Fri, 26 Feb 2021 04:00:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235517AbhBXRoe convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-edac@lfdr.de>); Wed, 24 Feb 2021 12:44:34 -0500
-Received: from frasgout.his.huawei.com ([185.176.79.56]:2605 "EHLO
-        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232417AbhBXRod (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Wed, 24 Feb 2021 12:44:33 -0500
-Received: from fraeml742-chm.china.huawei.com (unknown [172.18.147.226])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4Dm36d6Wp3z67rmp;
-        Thu, 25 Feb 2021 01:38:17 +0800 (CST)
-Received: from lhreml713-chm.china.huawei.com (10.201.108.64) by
- fraeml742-chm.china.huawei.com (10.206.15.223) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2106.2; Wed, 24 Feb 2021 18:43:45 +0100
-Received: from lhreml715-chm.china.huawei.com (10.201.108.66) by
- lhreml713-chm.china.huawei.com (10.201.108.64) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2106.2; Wed, 24 Feb 2021 17:43:45 +0000
-Received: from lhreml715-chm.china.huawei.com ([10.201.108.66]) by
- lhreml715-chm.china.huawei.com ([10.201.108.66]) with mapi id 15.01.2106.006;
- Wed, 24 Feb 2021 17:43:45 +0000
-From:   Shiju Jose <shiju.jose@huawei.com>
-To:     Jason Tian <jason@os.amperecomputing.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        id S229864AbhBZDAD (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Thu, 25 Feb 2021 22:00:03 -0500
+Received: from mail.kingsoft.com ([114.255.44.146]:45527 "EHLO
+        mail.kingsoft.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S229508AbhBZDAA (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Thu, 25 Feb 2021 22:00:00 -0500
+X-AuditID: 0a580157-f39ff7000005df43-98-60385db523a9
+Received: from mail.kingsoft.com (localhost [10.88.1.32])
+        (using TLS with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (Client did not present a certificate)
+        by mail.kingsoft.com (SMG-1-NODE-87) with SMTP id 0D.82.57155.5BD58306; Fri, 26 Feb 2021 10:32:21 +0800 (HKT)
+Received: from alex-virtual-machine (172.16.253.254) by KSBJMAIL2.kingsoft.cn
+ (10.88.1.32) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1979.3; Fri, 26 Feb
+ 2021 10:59:15 +0800
+Date:   Fri, 26 Feb 2021 10:59:15 +0800
+From:   Aili Yao <yaoaili@kingsoft.com>
+To:     "HORIGUCHI =?UTF-8?B?TkFPWUE=?=(=?UTF-8?B?5aCA5Y+j44CA55u05Lmf?=)" 
+        <naoya.horiguchi@nec.com>, "Luck, Tony" <tony.luck@intel.com>
+CC:     Oscar Salvador <osalvador@suse.de>,
+        "david@redhat.com" <david@redhat.com>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "hpa@zytor.com" <hpa@zytor.com>, "x86@kernel.org" <x86@kernel.org>,
         "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "james.morse@arm.com" <james.morse@arm.com>,
-        "baicar@os.amperecomputing.com" <baicar@os.amperecomputing.com>
-CC:     "zwang@amperecomputing.com" <zwang@amperecomputing.com>
-Subject: RE: [PATCH v2] arm64/ras: Update code to trace out more data for ARM
- processor
-Thread-Topic: [PATCH v2] arm64/ras: Update code to trace out more data for ARM
- processor
-Thread-Index: AQHW+2YRmWqbc46jJECSbt+Gj84YlapnsViA
-Date:   Wed, 24 Feb 2021 17:43:44 +0000
-Message-ID: <fa62e22307374cc1a269750ffc1862f5@huawei.com>
-References: <20210205022229.313030-1-jason@os.amperecomputing.com>
-In-Reply-To: <20210205022229.313030-1-jason@os.amperecomputing.com>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.47.94.46]
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 8BIT
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "yangfeng1@kingsoft.com" <yangfeng1@kingsoft.com>
+Subject: Re: [PATCH] mm,hwpoison: return -EBUSY when page already poisoned
+Message-ID: <20210226105915.6cf7d2b8@alex-virtual-machine>
+In-Reply-To: <20210226021907.GA27861@hori.linux.bs1.fc.nec.co.jp>
+References: <20210224151619.67c29731@alex-virtual-machine>
+        <20210224103105.GA16368@linux>
+        <20210225114329.4e1a41c6@alex-virtual-machine>
+        <20210225112818.GA10141@hori.linux.bs1.fc.nec.co.jp>
+        <20210225113930.GA7227@localhost.localdomain>
+        <20210225123806.GA15006@hori.linux.bs1.fc.nec.co.jp>
+        <20210225181542.GA178925@agluck-desk2.amr.corp.intel.com>
+        <20210226021907.GA27861@hori.linux.bs1.fc.nec.co.jp>
+Organization: kingsoft
+X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.30; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [172.16.253.254]
+X-ClientProxiedBy: KSBJMAIL1.kingsoft.cn (10.88.1.31) To KSBJMAIL2.kingsoft.cn
+ (10.88.1.32)
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprDIsWRmVeSWpSXmKPExsXCFcGooLs11iLBYH+/scWc9WvYLD5v+Mdm
+        8XX9L2aLaRvFLS6camCyuLxrDpvFvTX/WS0uHVjAZHGx8QCjxZlpRRabN01ltnhz4R6LxY8N
+        j1kdeD2+t/axeCze85LJY9OqTjaPTZ8msXu8O3eO3ePEjN8sHi+ubmTxeL/vKpvH5tPVHp83
+        yXmcaPnCGsAdxWWTkpqTWZZapG+XwJUx/8ls5oJP7BVzjv5mbGCcw9bFyMkhIWAi0fK8jbmL
+        kYtDSGA6k8ThN19YIJxXjBLLtp4Dq2IRUJVYseYaO4jNBmTvujeLFaRIRKCNUWL9mvNsIA6z
+        wEIWiU8LdjGBVAkLeEl8ub+WEcTmFbCSuHajGaibg4NTwFHizOVckLCQwFxmiTVLlEFsfgEx
+        id4r/5kgTrKXaNuyCKpVUOLkzCcsIDazgI7EiVXHmCFseYntb+cwQ8xRlDi85Bc7RK+SxJHu
+        GVCvxUosm/eKdQKj8Cwko2YhGTULyagFjMyrGFmKc9MNNzFCIjB8B+O8po96hxiZOBgPMUpw
+        MCuJ8G7+Z5ogxJuSWFmVWpQfX1Sak1p8iFGag0VJnFeKzTxBSCA9sSQ1OzW1ILUIJsvEwSnV
+        wMQVLhhwqkt/TYjYp46XupYaUouKgtpZ7nP0cLfa7pqnrpmT3mIYX/SjjnlyQRrTiupvZ6M5
+        EkR36W3UCltbzNF2aoKD7mKdNAlRE7eSf62+PCFlx+ou3Ti8gHPeR+lzH9yP7r5TlCqknu1x
+        1Wf1xJN9ux491/UWF2fi7pDWllFWj568bqt1aa1W59XUFqUrmdq7F5VZdri4Ht2pk5Ddm77/
+        m2vUpjmllnybpc07bZaWHzf8/XuvreTKEqPNgvUHRGeYys1VuskiHRiwiXFj0g8dtUvftnYL
+        JydrlgndY7fntbrz5PsalnM3zkvLazjnHz27Pru8W/XA5hdTH01VeaLRvF6T8Xxr0pTM3ypK
+        LMUZiYZazEXFiQBuLmVkLwMAAA==
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
->-----Original Message-----
->From: linux-arm-kernel [mailto:linux-arm-kernel-bounces@lists.infradead.org]
->On Behalf Of Jason Tian
->Sent: 05 February 2021 02:22
->To: linux-kernel@vger.kernel.org; linux-edac@vger.kernel.org; linux-arm-
->kernel@lists.infradead.org; james.morse@arm.com;
->baicar@os.amperecomputing.com
->Cc: zwang@amperecomputing.com; jason@os.amperecomputing.com
->Subject: [PATCH v2] arm64/ras: Update code to trace out more data for ARM
->processor
->
->The original arm_event trace code only traces out ARM processor error
->information data. According to UEFI_2_8_A_Feb14 specification chapter
->N2.4.4, the ARM processor error section includes several ARM processor
->error information, several ARM processor context information and several
->vendor specific error information structures.
->
->Add code to trace out all ARM processor context information and vendor
->specific error information with raw hex format.
->
->Signed-off-by: Jason Tian <jason@os.amperecomputing.com>
->---
-> drivers/ras/ras.c       | 22 +++++++++++++++++++++-
-> include/ras/ras_event.h | 41 +++++++++++++++++++++++++++++++++++---
->---
-> 2 files changed, 56 insertions(+), 7 deletions(-)
->
+Hi naoya, tony:
+> > 
+> > Idea for what we should do next ... Now that x86 is calling memory_failure()
+> > from user context ... maybe parallel calls for the same page should
+> > be blocked until the first caller completes so we can:
+> > a) know that pages are unmapped (if that happens)
+> > b) all get the same success/fail status  
+> 
+> One memory_failure() call changes the target page's status and
+> affects all mappings to all affected processes, so I think that
+> (ideally) we don't have to block other threads (letting them
+> early return seems fine).  Sometimes memory_failure() fails,
+> but even in such case, PG_hwpoison is set on the page and other
+> threads properly get SIGBUSs with this patch, so I think that
+> we can avoid the worst scenario (like system stall by MCE loop).
+> 
+I agree with naoya's point, if we block for this issue, Does this change the result
+that the process should be killed? Or is there something other still need to be considered?
 
-Tested-by: Shiju Jose <shiju.jose@huawei.com>
-
->diff --git a/drivers/ras/ras.c b/drivers/ras/ras.c index
->95540ea8dd9d..6f3269da9476 100644
->--- a/drivers/ras/ras.c
->+++ b/drivers/ras/ras.c
->@@ -23,7 +23,27 @@ void log_non_standard_event(const guid_t
->*sec_type, const guid_t *fru_id,
->
-> void log_arm_hw_error(struct cper_sec_proc_arm *err)  {
->-	trace_arm_event(err);
->+	u32 pei_len;
->+	u32 ctx_len;
->+	u32 vsei_len;
->+	u8 *pei_err;
->+	u8 *ctx_err;
->+	u8 *ven_err_data;
->+
->+	pei_len = sizeof(struct cper_arm_err_info) * err->err_info_num;
->+	pei_err = (u8 *) err + sizeof(struct cper_sec_proc_arm);
->+
->+	ctx_len = sizeof(struct cper_arm_ctx_info) * err->context_info_num;
->+	ctx_err = pei_err + sizeof(struct cper_arm_err_info) *
->+		err->err_info_num;
->+
->+	vsei_len = err->section_length - (sizeof(struct cper_sec_proc_arm) +
->+					  pei_len + ctx_len);
->+	ven_err_data = ctx_err + sizeof(struct cper_arm_ctx_info) *
->+					  err->context_info_num;
->+
->+	trace_arm_event(err, pei_err, pei_len, ctx_err, ctx_len,
->+			ven_err_data, vsei_len);
-> }
->
-> static int __init ras_init(void)
->diff --git a/include/ras/ras_event.h b/include/ras/ras_event.h index
->0bdbc0d17d2f..fd9201214be8 100644
->--- a/include/ras/ras_event.h
->+++ b/include/ras/ras_event.h
->@@ -168,11 +168,22 @@ TRACE_EVENT(mc_event,
->  * This event is generated when hardware detects an ARM processor error
->  * has occurred. UEFI 2.6 spec section N.2.4.4.
->  */
->+ #define APEIL "ARM Processor Err Info data len"
->+ #define APEID "ARM Processor Err Info raw data"
->+ #define APECIL "ARM Processor Err Context Info data len"
->+ #define APECID "ARM Processor Err Context Info raw data"
->+ #define VSEIL "Vendor Specific Err Info data len"
->+ #define VSEID "Vendor Specific Err Info raw data"
-> TRACE_EVENT(arm_event,
->
->-	TP_PROTO(const struct cper_sec_proc_arm *proc),
->+	TP_PROTO(const struct cper_sec_proc_arm *proc, const u8 *pei_err,
->+		const u32 pei_len,
->+		const u8 *ctx_err,
->+		const u32 ctx_len,
->+		const u8 *oem,
->+		const u32 oem_len),
->
->-	TP_ARGS(proc),
->+	TP_ARGS(proc, pei_err, pei_len, ctx_err, ctx_len, oem, oem_len),
->
-> 	TP_STRUCT__entry(
-> 		__field(u64, mpidr)
->@@ -180,6 +191,12 @@ TRACE_EVENT(arm_event,
-> 		__field(u32, running_state)
-> 		__field(u32, psci_state)
-> 		__field(u8, affinity)
->+		__field(u32, pei_len)
->+		__dynamic_array(u8, buf, pei_len)
->+		__field(u32, ctx_len)
->+		__dynamic_array(u8, buf1, ctx_len)
->+		__field(u32, oem_len)
->+		__dynamic_array(u8, buf2, oem_len)
-> 	),
->
-> 	TP_fast_assign(
->@@ -199,12 +216,24 @@ TRACE_EVENT(arm_event,
-> 			__entry->running_state = ~0;
-> 			__entry->psci_state = ~0;
-> 		}
->+		__entry->pei_len = pei_len;
->+		memcpy(__get_dynamic_array(buf), pei_err, pei_len);
->+		__entry->ctx_len = ctx_len;
->+		memcpy(__get_dynamic_array(buf1), ctx_err, ctx_len);
->+		__entry->oem_len = oem_len;
->+		memcpy(__get_dynamic_array(buf2), oem, oem_len);
-> 	),
->
->-	TP_printk("affinity level: %d; MPIDR: %016llx; MIDR: %016llx; "
->-		  "running state: %d; PSCI state: %d",
->-		  __entry->affinity, __entry->mpidr, __entry->midr,
->-		  __entry->running_state, __entry->psci_state)
->+	TP_printk("affinity level: %d; MPIDR: %016llx; MIDR: %016llx;
->running state: %d; "
->+		"PSCI state: %d; %s: %d; %s: %s; %s: %d; %s: %s; %s: %d; %s:
->%s",
->+		__entry->affinity, __entry->mpidr, __entry->midr,
->+		__entry->running_state, __entry->psci_state,
->+		APEIL, __entry->pei_len, APEID,
->+		__print_hex(__get_dynamic_array(buf), __entry->pei_len),
->+		APECIL, __entry->ctx_len, APECID,
->+		__print_hex(__get_dynamic_array(buf1), __entry->ctx_len),
->+		VSEIL, __entry->oem_len, VSEID,
->+		__print_hex(__get_dynamic_array(buf2), __entry-
->>oem_len))
-> );
->
-> /*
->--
->2.25.1
->
->
->_______________________________________________
->linux-arm-kernel mailing list
->linux-arm-kernel@lists.infradead.org
->http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
-
-Thanks,
-Shiju
+Thanks!
+Aili Yao  
