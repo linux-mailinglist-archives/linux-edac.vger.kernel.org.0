@@ -2,33 +2,43 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A67F7331A7A
-	for <lists+linux-edac@lfdr.de>; Mon,  8 Mar 2021 23:56:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 95076331B15
+	for <lists+linux-edac@lfdr.de>; Tue,  9 Mar 2021 00:43:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230122AbhCHWzd (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Mon, 8 Mar 2021 17:55:33 -0500
-Received: from mga06.intel.com ([134.134.136.31]:47552 "EHLO mga06.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230070AbhCHWzG (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Mon, 8 Mar 2021 17:55:06 -0500
-IronPort-SDR: u5FvrUpMBY+glSji7AYiaKv0IuFBy/159IaXnZPBZgFo328mbpgHpRRtkUiuaDPiwGAAqNqb6w
- 8F4502+Lj0EQ==
-X-IronPort-AV: E=McAfee;i="6000,8403,9917"; a="249497618"
-X-IronPort-AV: E=Sophos;i="5.81,233,1610438400"; 
-   d="scan'208";a="249497618"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2021 14:55:06 -0800
-IronPort-SDR: oQApYD2RhFTBNoUxIwaYGlt9r/UtUis8L6rQ9q+cmeRxxjcoj0h5t6gU/8ypfCnWW20R0xZrEP
- zs1ToNjAKFUQ==
-X-IronPort-AV: E=Sophos;i="5.81,233,1610438400"; 
-   d="scan'208";a="409476776"
-Received: from agluck-desk2.sc.intel.com (HELO agluck-desk2.amr.corp.intel.com) ([10.3.52.146])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2021 14:55:05 -0800
-Date:   Mon, 8 Mar 2021 14:55:04 -0800
-From:   "Luck, Tony" <tony.luck@intel.com>
-To:     HORIGUCHI =?utf-8?B?TkFPWUEo5aCA5Y+j44CA55u05LmfKQ==?= 
+        id S231571AbhCHXnK (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Mon, 8 Mar 2021 18:43:10 -0500
+Received: from mail-eopbgr1320043.outbound.protection.outlook.com ([40.107.132.43]:26208
+        "EHLO APC01-PU1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S231307AbhCHXmw (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Mon, 8 Mar 2021 18:42:52 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=RsUM1fNj2MI834AtvzdhRCb+2qL3f9UnWRPzWR29W44BT+YmOOiRwwZjKOYegYgfHU6L37ULrU6NMYRPSauL7HH8WfsemqAxk5A8X8kEcpDZKcP8o557VZyA+fH4ftgwNWgKie9ujnk29MZeI8K2zUm7w7xREyV0Un0L3mOi7JH+PNo8Eu/A3SBySGVY5P2yQWhdDRcnsFEoiC4QQ3nwwawEp9POc7VKzomOaeCBvIabcMwTBeiMUM0Oce1N1BYGOdPPKQgZ2nqx5xj3GijGK5ZWmmAX4W4Vs2CGqzHQrplwDZg1gp2z2JB+MczY9VMB52Ac/pOsmcz1EyTHXdVZ/Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=4sbeVvZPvOxX8VhFrUAp6OySwB9TM4k5Rfud+FFWsK8=;
+ b=G6H7lnKW2rQKKpJrsvzYQulqwU7PDSpC5QB7dOpqguNBfffVIKAQVrVOcTNhILzmEDeLBT0N99ADPUx5P2kjCM/HuIzM3Ap3b/13i5084XVKZzRkFnNrR5r9eU7Ah8V2Y1vtjAvNNraxUOVdZ0fpyAnsi5gXHewhUQZj+36QCCJzBSsJ+GZOU58BhkeVUooLMjqyytbHtCX2gq/hFFbugAEpAnET2XlKNmZdPgo3L3gdMNvH7Xhvze0YAwNdDKMxd8v64lg5EauNW+G1fxg/gymfEFKPf3kUVpQFhN2GvvG0RCTVE0SRFiqbkc1BHC6x7GBHB7HzuPRkgIV85A7Anw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nec.com; dmarc=pass action=none header.from=nec.com; dkim=pass
+ header.d=nec.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nec.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=4sbeVvZPvOxX8VhFrUAp6OySwB9TM4k5Rfud+FFWsK8=;
+ b=ebN8DtBckeJa90H8ADg8NaD3ks65a6V6q+qPzxjO+DEvVvPwE0GaJhQPHCGiPfsmuoLIdcKCQMy4t6QeYuE9CqkKmGMAJgZnYIzLz58cNj7j3l5ZlBEcV8l6UAThzki5rjwIia07w9MUPv7qZZtjUFp+DMrYfRs3spL/N5QjdZg=
+Received: from TY1PR01MB1852.jpnprd01.prod.outlook.com (2603:1096:403:8::12)
+ by TY2PR01MB2091.jpnprd01.prod.outlook.com (2603:1096:404:10::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3912.19; Mon, 8 Mar
+ 2021 23:42:41 +0000
+Received: from TY1PR01MB1852.jpnprd01.prod.outlook.com
+ ([fe80::1552:1791:e07c:1f72]) by TY1PR01MB1852.jpnprd01.prod.outlook.com
+ ([fe80::1552:1791:e07c:1f72%7]) with mapi id 15.20.3912.026; Mon, 8 Mar 2021
+ 23:42:41 +0000
+From:   =?iso-2022-jp?B?SE9SSUdVQ0hJIE5BT1lBKBskQktZOH0hIUQ+TGkbKEIp?= 
         <naoya.horiguchi@nec.com>
-Cc:     Aili Yao <yaoaili@kingsoft.com>,
+To:     "Luck, Tony" <tony.luck@intel.com>
+CC:     Aili Yao <yaoaili@kingsoft.com>,
         Oscar Salvador <osalvador@suse.de>,
         "david@redhat.com" <david@redhat.com>,
         "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
@@ -40,11 +50,14 @@ Cc:     Aili Yao <yaoaili@kingsoft.com>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
         "linux-mm@kvack.org" <linux-mm@kvack.org>,
         "yangfeng1@kingsoft.com" <yangfeng1@kingsoft.com>
-Subject: [PATCH] mm/memory-failure: Use a mutex to avoid memory_failure()
+Subject: Re: [PATCH] mm/memory-failure: Use a mutex to avoid memory_failure()
  races
-Message-ID: <20210308225504.GA233893@agluck-desk2.amr.corp.intel.com>
-References: <20210304101653.546a9da1@alex-virtual-machine>
- <20210304121941.667047c3@alex-virtual-machine>
+Thread-Topic: [PATCH] mm/memory-failure: Use a mutex to avoid memory_failure()
+ races
+Thread-Index: AQHXFG4a6KBUueS0DE2O2dOaNXi1CKp6wJiA
+Date:   Mon, 8 Mar 2021 23:42:41 +0000
+Message-ID: <20210308234240.GA23822@hori.linux.bs1.fc.nec.co.jp>
+References: <20210304121941.667047c3@alex-virtual-machine>
  <20210304144524.795872d7@alex-virtual-machine>
  <20210304235720.GA215567@agluck-desk2.amr.corp.intel.com>
  <20210305093016.40c87375@alex-virtual-machine>
@@ -53,111 +66,93 @@ References: <20210304101653.546a9da1@alex-virtual-machine>
  <20210308064558.GA3617@hori.linux.bs1.fc.nec.co.jp>
  <3690ece2101d428fb9067fcd2a423ff8@intel.com>
  <20210308223839.GA21886@hori.linux.bs1.fc.nec.co.jp>
+ <20210308225504.GA233893@agluck-desk2.amr.corp.intel.com>
+In-Reply-To: <20210308225504.GA233893@agluck-desk2.amr.corp.intel.com>
+Accept-Language: ja-JP, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: intel.com; dkim=none (message not signed)
+ header.d=none;intel.com; dmarc=none action=none header.from=nec.com;
+x-originating-ip: [165.225.110.205]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 91b83d85-00c0-4a4a-622a-08d8e28bdd68
+x-ms-traffictypediagnostic: TY2PR01MB2091:
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <TY2PR01MB209102BDF7321BC655666695E7939@TY2PR01MB2091.jpnprd01.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:8273;
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: qUeepDzDlLdevqLYkFkqya5YOKENVvHK7zZI5TCVCb0KGw8QyPikcBeCBC//2vI0youxKkF3jDMow1IkPER0w15Yit3fkEjs38rtKSn4UP7lTImzJdBJaeadyCsDZuZPO+xd8W/hnpM1HClsGOvhuxz5vyXGkeAwIeF5UiMqwRUBqt4fHggY3UnmyM/SCCLFzxwoQZGlOYMG4mPHX1gQF+qUONI12udjWIgYvkVZR8kkDNvi6oyCWNOHXDqTHDv9CAVf87Ft9XPJGzohm+6UBOXdzgqIn5/jYRaG8K1s9dX+cmFti3uCQgBe+6sVG9zElyFV7uVca67DMo9X6t5FBbU7GpNtDeXFNPM7HZHqYOdm89XpUhPVJasCzo318GgNneTLXkmDehcueo5SDIVUQ/hikc5kDCGqZRw+KhweX3Y2gnrzO8aUq2nVuDi4f9T+cdqhtSjI4iiAQQCKEigfnX5FzI52JYI/kQ8el4tVXsZrtGzcwVKbhvB1PKusPwosO91H3p7PeVOdWT9AXUXkXA==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TY1PR01MB1852.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(346002)(136003)(376002)(366004)(39860400002)(396003)(33656002)(6512007)(54906003)(8676002)(8936002)(83380400001)(86362001)(76116006)(186003)(66476007)(55236004)(6506007)(9686003)(4744005)(316002)(85182001)(71200400001)(6916009)(4326008)(478600001)(66556008)(1076003)(2906002)(6486002)(7416002)(66446008)(26005)(5660300002)(64756008)(66946007);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata: =?iso-2022-jp?B?UjgrTFJaNytLRVlsWTZrV3VPalhtb3JVQWVNYi80eXJUREVDdnZmVzBE?=
+ =?iso-2022-jp?B?OGhMRHZhdUxpMGlJY3M2ZWlqNkNRMk1jaTREdHMzTXJ0UDRRV3NvSExn?=
+ =?iso-2022-jp?B?QXViZlZnaGpTUnBUSjNveEhNMGNaSUpSZ0JMNFFBZnFsbWpLdkFRVDFy?=
+ =?iso-2022-jp?B?cjBxR3BCZld2SU5USGt2TVIvQzVQUWI4STZNeE1tQTllU3lzTnZrOUhp?=
+ =?iso-2022-jp?B?R3lZRUlJSDB4b1dnM2p2cWgwUFlTUSs0dGUzL1IvaHNoWmRvKzgzNi9z?=
+ =?iso-2022-jp?B?Wm9QWGZjTE53NUlmc3pMU0U0NkhPUWZDUmZxRlJhUmRVT2Zib0plWGlh?=
+ =?iso-2022-jp?B?bHVWWDU3T2k1U1l6N1o0OG1YQ3NCd2lZV1dPd1NtdWMxdm1wajRuRGh0?=
+ =?iso-2022-jp?B?UElacjRDNjhmU3IzdVpzYzI1R0FqTVBwRTZRYTFwZUtYUUx4Ry8vK1dP?=
+ =?iso-2022-jp?B?cHRibkNpRkRKdVh4dWMvbFlObUVmR3FEOUdQK0txYU53TGRPWlluY1Q4?=
+ =?iso-2022-jp?B?cTJUejg2S0drcDJsWk5yQXRSYjRkaTJWdkovOWN4Z215ZjNNUHl3ZWxZ?=
+ =?iso-2022-jp?B?WU9sR1lHV1Rtd01FUWFjV1g1L3Y4ZnpKSTQvaFlhT3hINU44eVRmZHgz?=
+ =?iso-2022-jp?B?ZmM0MW1zUk42cWNtOEhzaFhSVVRpMGxIaUFmU0lKM0hCbzBVN0xDNTQ2?=
+ =?iso-2022-jp?B?VTFXbHo4SGJsV21PbzBvdXArSGtYVDBiM0NySExOR0FKcDVmMEYra1A5?=
+ =?iso-2022-jp?B?LzFUNW5YRzlwYjRJQ2NuNVdtaVBUSWp6ekJZM25BZHorSllDVU5GTFQx?=
+ =?iso-2022-jp?B?NUlQSW9EcjNvWUxqWXlDS21aV3YxYTk3eW1TNDh1a0IwQjVDK05CTytE?=
+ =?iso-2022-jp?B?Zm5Dc05GcnVremYwT2Z0L2JkdndUajU2NjdtL25Ha2FPVVlFSnEybTBD?=
+ =?iso-2022-jp?B?cnpoQWNGTUt2cVR1MUlBWkp0YnphWU5qaHZJaG9USStlMXp3bGxlYWxz?=
+ =?iso-2022-jp?B?S1hGdEZVM1BPb0E4Z2hWb2R4dndPdlJwdnl6L3VtNDV2a0tKb0xRQXA1?=
+ =?iso-2022-jp?B?cG9lY3FZQkpDWUJGMUFqK3RaemIxOEhJU0NJY1dQVmZwMW9xR016R0s2?=
+ =?iso-2022-jp?B?aUV6V09qbG1RUFJlR3hLT0E1ZG9teE5WZk9kOGs0V0Y5dFFvSWFsbFNi?=
+ =?iso-2022-jp?B?ZnluWjhYazFVbGwzVXFRcGE2RHdPVnU1RFdFTFFUU2c0cGVHc3ZveU85?=
+ =?iso-2022-jp?B?cS94VytoR3oveFgwMHEwbktZL2RhWm9SOHU3bCtpZ3ZDM3g2TVJpRjNx?=
+ =?iso-2022-jp?B?MlJQUE05R3lXaWhOczc3bXp6d3F3WU02ZWpmQi9oZHI0ajhKRlMvL2xk?=
+ =?iso-2022-jp?B?L1BwMlJXb2ZwM2VyV1NPdDA0UjMwOEVWNUkzK2U2RVplOHpsZ2JjNTVq?=
+ =?iso-2022-jp?B?RVNIdzE5NkM3bkhHdVc0SlV3REZnOTZoNjF4U2NWWGV1Y2NTT3VOQVhy?=
+ =?iso-2022-jp?B?YUdrcW1mcllWNDJIbHU4bUlGQUQ4cnVUZFlRdGNBMGt5SFdrQ25Gc0Ez?=
+ =?iso-2022-jp?B?NGVGeUpza1Jvd2NPSGJlbFMxWm92VnRpUnBKOFZTTk42cjgrWXBLaXJv?=
+ =?iso-2022-jp?B?WmVSMndNMmNOQjNxb1dnY0luRVlkaHJkaEFBZitYZUN3b1ZaeGxVV3lV?=
+ =?iso-2022-jp?B?ZmgxekpWQzRwTUdxdHIrRGNuY0JjTGpHK0VLY0tnb2I0WUVUYWFtNmlZ?=
+ =?iso-2022-jp?B?aUE3YjFaWjVIVWZaRHhDZDNjWHVkMW9reHJuSy9vMDJlMDNWTlVGYWlM?=
+ =?iso-2022-jp?B?L1B0OHVxUStlZVdvRDMxc1k2bzQrRTcrYm5ma2NsZ2VqTEVYUjNtdE5q?=
+ =?iso-2022-jp?B?UUNqeEVPRlNQNlNJRlB3emdVY243VzlKcHVNb2RycUJTN01JbW40YVhZ?=
+ =?iso-2022-jp?B?V0lzdjZBdEUvVVFuTUV3eWM2WlBDZz09?=
+Content-Type: text/plain; charset="iso-2022-jp"
+Content-ID: <9378190265DF474F9AAA164143487F83@jpnprd01.prod.outlook.com>
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210308223839.GA21886@hori.linux.bs1.fc.nec.co.jp>
+X-OriginatorOrg: nec.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: TY1PR01MB1852.jpnprd01.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 91b83d85-00c0-4a4a-622a-08d8e28bdd68
+X-MS-Exchange-CrossTenant-originalarrivaltime: 08 Mar 2021 23:42:41.4613
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: e67df547-9d0d-4f4d-9161-51c6ed1f7d11
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: nQ9XrKS4AyGNfIZIxq/F8IS+Taw5Q1IodK2JQteABoxud/L2EZkN3nJIaw9dEEg/FqJLEEFbshub41B2uNdqdA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TY2PR01MB2091
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-There can be races when multiple CPUs consume poison from the same
-page. The first into memory_failure() atomically sets the HWPoison
-page flag and begins hunting for tasks that map this page. Eventually
-it invalidates those mappings and may send a SIGBUS to the affected
-tasks.
+On Mon, Mar 08, 2021 at 02:55:04PM -0800, Luck, Tony wrote:
+> There can be races when multiple CPUs consume poison from the same
+> page. The first into memory_failure() atomically sets the HWPoison
+> page flag and begins hunting for tasks that map this page. Eventually
+> it invalidates those mappings and may send a SIGBUS to the affected
+> tasks.
+>=20
+> But while all that work is going on, other CPUs see a "success"
+> return code from memory_failure() and so they believe the error
+> has been handled and continue executing.
+>=20
+> Fix by wrapping most of the internal parts of memory_failure() in
+> a mutex.
+>=20
+> Signed-off-by: Tony Luck <tony.luck@intel.com>
 
-But while all that work is going on, other CPUs see a "success"
-return code from memory_failure() and so they believe the error
-has been handled and continue executing.
+Thanks!
 
-Fix by wrapping most of the internal parts of memory_failure() in
-a mutex.
-
-Signed-off-by: Tony Luck <tony.luck@intel.com>
----
- mm/memory-failure.c | 19 +++++++++++++++++--
- 1 file changed, 17 insertions(+), 2 deletions(-)
-
-diff --git a/mm/memory-failure.c b/mm/memory-failure.c
-index 24210c9bd843..c1509f4b565e 100644
---- a/mm/memory-failure.c
-+++ b/mm/memory-failure.c
-@@ -1381,6 +1381,8 @@ static int memory_failure_dev_pagemap(unsigned long pfn, int flags,
- 	return rc;
- }
- 
-+static DEFINE_MUTEX(mf_mutex);
-+
- /**
-  * memory_failure - Handle memory failure of a page.
-  * @pfn: Page Number of the corrupted page
-@@ -1424,12 +1426,18 @@ int memory_failure(unsigned long pfn, int flags)
- 		return -ENXIO;
- 	}
- 
-+	mutex_lock(&mf_mutex);
-+
- try_again:
--	if (PageHuge(p))
--		return memory_failure_hugetlb(pfn, flags);
-+	if (PageHuge(p)) {
-+		res = memory_failure_hugetlb(pfn, flags);
-+		goto out2;
-+	}
-+
- 	if (TestSetPageHWPoison(p)) {
- 		pr_err("Memory failure: %#lx: already hardware poisoned\n",
- 			pfn);
-+		mutex_unlock(&mf_mutex);
- 		return 0;
- 	}
- 
-@@ -1463,9 +1471,11 @@ int memory_failure(unsigned long pfn, int flags)
- 				res = MF_FAILED;
- 			}
- 			action_result(pfn, MF_MSG_BUDDY, res);
-+			mutex_unlock(&mf_mutex);
- 			return res == MF_RECOVERED ? 0 : -EBUSY;
- 		} else {
- 			action_result(pfn, MF_MSG_KERNEL_HIGH_ORDER, MF_IGNORED);
-+			mutex_unlock(&mf_mutex);
- 			return -EBUSY;
- 		}
- 	}
-@@ -1473,6 +1483,7 @@ int memory_failure(unsigned long pfn, int flags)
- 	if (PageTransHuge(hpage)) {
- 		if (try_to_split_thp_page(p, "Memory Failure") < 0) {
- 			action_result(pfn, MF_MSG_UNSPLIT_THP, MF_IGNORED);
-+			mutex_unlock(&mf_mutex);
- 			return -EBUSY;
- 		}
- 		VM_BUG_ON_PAGE(!page_count(p), p);
-@@ -1517,6 +1528,7 @@ int memory_failure(unsigned long pfn, int flags)
- 		num_poisoned_pages_dec();
- 		unlock_page(p);
- 		put_page(p);
-+		mutex_unlock(&mf_mutex);
- 		return 0;
- 	}
- 	if (hwpoison_filter(p)) {
-@@ -1524,6 +1536,7 @@ int memory_failure(unsigned long pfn, int flags)
- 			num_poisoned_pages_dec();
- 		unlock_page(p);
- 		put_page(p);
-+		mutex_unlock(&mf_mutex);
- 		return 0;
- 	}
- 
-@@ -1559,6 +1572,8 @@ int memory_failure(unsigned long pfn, int flags)
- 	res = identify_page_state(pfn, p, page_flags);
- out:
- 	unlock_page(p);
-+out2:
-+	mutex_unlock(&mf_mutex);
- 	return res;
- }
- EXPORT_SYMBOL_GPL(memory_failure);
--- 
-2.29.2
-
+Acked-by: Naoya Horiguchi <naoya.horiguchi@nec.com>=
