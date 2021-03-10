@@ -2,29 +2,30 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 534AA3335B8
-	for <lists+linux-edac@lfdr.de>; Wed, 10 Mar 2021 07:11:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E5D83336DA
+	for <lists+linux-edac@lfdr.de>; Wed, 10 Mar 2021 09:02:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229470AbhCJGLS convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-edac@lfdr.de>); Wed, 10 Mar 2021 01:11:18 -0500
-Received: from mail.kingsoft.com ([114.255.44.145]:14202 "EHLO
-        mail.kingsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229543AbhCJGKr (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Wed, 10 Mar 2021 01:10:47 -0500
-X-AuditID: 0a580155-1f5ff7000005482e-70-60485b66f134
+        id S229584AbhCJIBj convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-edac@lfdr.de>); Wed, 10 Mar 2021 03:01:39 -0500
+Received: from mail.kingsoft.com ([114.255.44.146]:47226 "EHLO
+        mail.kingsoft.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S229828AbhCJIBL (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Wed, 10 Mar 2021 03:01:11 -0500
+X-AuditID: 0a580155-20dff7000005482e-38-604875472f08
 Received: from mail.kingsoft.com (localhost [10.88.1.32])
         (using TLS with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (Client did not present a certificate)
-        by mail.kingsoft.com (SMG-2-NODE-85) with SMTP id 8A.93.18478.66B58406; Wed, 10 Mar 2021 13:38:46 +0800 (HKT)
+        by mail.kingsoft.com (SMG-2-NODE-85) with SMTP id 9E.D3.18478.74578406; Wed, 10 Mar 2021 15:29:11 +0800 (HKT)
 Received: from alex-virtual-machine (172.16.253.254) by KSBJMAIL2.kingsoft.cn
  (10.88.1.32) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2176.2; Wed, 10 Mar
- 2021 14:10:43 +0800
-Date:   Wed, 10 Mar 2021 14:10:42 +0800
+ 2021 16:01:08 +0800
+Date:   Wed, 10 Mar 2021 16:01:07 +0800
 From:   Aili Yao <yaoaili@kingsoft.com>
-To:     "Luck, Tony" <tony.luck@intel.com>
-CC:     "HORIGUCHI =?UTF-8?B?TkFPWUE=?=(=?UTF-8?B?5aCA5Y+j44CA55u05Lmf?=)" 
-        <naoya.horiguchi@nec.com>, Oscar Salvador <osalvador@suse.de>,
+To:     "HORIGUCHI =?UTF-8?B?TkFPWUE=?=(=?UTF-8?B?5aCA5Y+j44CA55u05Lmf?=)" 
+        <naoya.horiguchi@nec.com>
+CC:     "Luck, Tony" <tony.luck@intel.com>,
+        Oscar Salvador <osalvador@suse.de>,
         "david@redhat.com" <david@redhat.com>,
         "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
         "bp@alien8.de" <bp@alien8.de>,
@@ -35,214 +36,112 @@ CC:     "HORIGUCHI =?UTF-8?B?TkFPWUE=?=(=?UTF-8?B?5aCA5Y+j44CA55u05Lmf?=)"
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
         "linux-mm@kvack.org" <linux-mm@kvack.org>,
         "yangfeng1@kingsoft.com" <yangfeng1@kingsoft.com>,
-        <yaoaili@kingsoft.com>
-Subject: Re: [PATCH] mm,hwpoison: return -EBUSY when page already poisoned
-Message-ID: <20210310141042.4db9ea29@alex-virtual-machine>
-In-Reply-To: <aee5176eafb54c88b19a5b2671d0a1fc@intel.com>
-References: <20210225181542.GA178925@agluck-desk2.amr.corp.intel.com>
-        <20210226021907.GA27861@hori.linux.bs1.fc.nec.co.jp>
-        <20210226105915.6cf7d2b8@alex-virtual-machine>
-        <20210303033953.GA205389@agluck-desk2.amr.corp.intel.com>
-        <20210303115710.2e9f8e23@alex-virtual-machine>
-        <20210303163912.3d508e0f@alex-virtual-machine>
-        <1a78e9abdc134e35a5efcbf6b2fd2263@intel.com>
-        <20210304101653.546a9da1@alex-virtual-machine>
-        <20210304121941.667047c3@alex-virtual-machine>
-        <20210304144524.795872d7@alex-virtual-machine>
-        <20210304235720.GA215567@agluck-desk2.amr.corp.intel.com>
-        <20210305093016.40c87375@alex-virtual-machine>
-        <aee5176eafb54c88b19a5b2671d0a1fc@intel.com>
+        <yaoaili@kingsoft.com>, <sunhao2@kingsoft.com>
+Subject: Re: [PATCH v2] mm,hwpoison: return -EBUSY when page already
+ poisoned
+Message-ID: <20210310160107.7383a6f4@alex-virtual-machine>
+In-Reply-To: <20210309082824.GA1793@hori.linux.bs1.fc.nec.co.jp>
+References: <20210305093016.40c87375@alex-virtual-machine>
+        <20210305093656.6c262b19@alex-virtual-machine>
+        <20210305221143.GA220893@agluck-desk2.amr.corp.intel.com>
+        <20210308064558.GA3617@hori.linux.bs1.fc.nec.co.jp>
+        <3690ece2101d428fb9067fcd2a423ff8@intel.com>
+        <20210308223839.GA21886@hori.linux.bs1.fc.nec.co.jp>
+        <20210308225504.GA233893@agluck-desk2.amr.corp.intel.com>
+        <20210309100421.3d09b6b1@alex-virtual-machine>
+        <20210309060440.GA29668@hori.linux.bs1.fc.nec.co.jp>
+        <20210309143534.6c1a8ec5@alex-virtual-machine>
+        <20210309082824.GA1793@hori.linux.bs1.fc.nec.co.jp>
 Organization: kingsoft
 X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.30; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8BIT
 X-Originating-IP: [172.16.253.254]
 X-ClientProxiedBy: KSBJMAIL1.kingsoft.cn (10.88.1.31) To KSBJMAIL2.kingsoft.cn
  (10.88.1.32)
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprNIsWRmVeSWpSXmKPExsXCFcGooJsW7ZFgcOGGpMWc9WvYLD5v+Mdm
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprLIsWRmVeSWpSXmKPExsXCFcGooOte6pFgMP0dm8Wc9WvYLD5v+Mdm
         8XX9L2aLaRvFLS6camCyuLxrDpvFvTX/WS0uHVjAZHGx8QCjxZlpRRabN01ltnhz4R6LxY8N
         j1kdeD2+t/axeCze85LJY9OqTjaPTZ8msXu8O3eO3ePEjN8sHi+ubmTxeL/vKpvH5tPVHp83
-        yXmcaPnCGsAdxWWTkpqTWZZapG+XwJXx7fgK5oIb6hXbT7UwNjB+luti5OSQEDCRmHR3CmsX
-        IxeHkMB0JonFf+8zQjivGCWu7/jJ0sXIwcEioCqx6XMySAMbkLnr3ixWEFtEQE3i0uIHzCD1
-        zAKzWSVOTT7LDJIQFvCS+HJ/LSOIzStgJfHlygSwBk4BS4lPPavA4kICK1klPs/1ArH5BcQk
-        eq/8Z4K4yF6ibcsiqF5BiZMzn7CA2MwCOhInVh1jhrC1JZYtfM0MMUdR4vCSX+wQvUoSR7pn
-        sEHYsRLL5r1incAoPAvJqFlIRs1CMmoBI/MqRpbi3HSjTYyQ+AvdwTij6aPeIUYmDsZDjBIc
-        zEoivH7H3RKEeFMSK6tSi/Lji0pzUosPMUpzsCiJ8+495pogJJCeWJKanZpakFoEk2Xi4JRq
-        YGo4krt5a/A7Rqbm48f4pC6VfHqaL1U7922z1yHtPa2Tdtl0W3a4VxT9MG1euvHkneWqgal9
-        z6UiOq+4/n4+r8Glc1Wt9M2EzIsZE27rVEwW5Qo8oKRmZH/D6MOxdx4i7c7Bm9U/RdTFCDn6
-        iWsv+lnutKL254Oobe1bH39TmF1vOOWuwf91TZtWHIw3bLHeVfEvxUGV4+mLlbc2C7pabdid
-        UnKW+XWd/3Unn8f27TbBt7gu71/a++DQyeBPbfk1l1mf897/ducI63e+H+uyi9e1mV8MeBNT
-        O8XoyrptjQfadCy4BJxaGc/bnPjhrbek1PHRm2K3dcemVQi0CZ5WSdgl4aTYG8Mom/0xZvpF
-        HSWW4oxEQy3mouJEAEtHZ50uAwAA
+        yXmcaPnCGsAdxWWTkpqTWZZapG+XwJWxc887xoLFohVXnx9ga2DcJ9DFyMkhIWAiseDrHaYu
+        Ri4OIYHpTBJr5x9hgXBeMUq0PV3CDlLFIqAq8fbWDzYQmw3I3nVvFiuILSKQJLF49lewbmaB
+        7ywSrcdvgRUJC/hL/HnwF6yIV8BK4vGcSWA2p4CDxI2rjawQG86xSEza0c8CkuAXEJPovfKf
+        CeIme4m2LYsYIZoFJU7OfAJWwyygKdG6/Tc7hK0tsWzha2YQW0hAUeLwkl/sEL1KEke6Z7BB
+        2LESy+a9Yp3AKDwLyahZSEbNQjJqASPzKkaW4tx0o02MkBgM3cE4o+mj3iFGJg7GQ4wSHMxK
+        Irx+x90ShHhTEiurUovy44tKc1KLDzFKc7AoifPuPeaaICSQnliSmp2aWpBaBJNl4uCUamA6
+        V1qseLlQpFaeafafTs5mCcUk9TPB+TLbPlVe8Au9ZvnGasPOu0KrY3kYa/7JqZobzm21VfF4
+        u07g9lR9z2P80ldOJUkarVF8Fv8iVMkqah/fo1b2q7saVnh+EpVpnbDpWUwW/0X/fdK3V3ex
+        vb7TvSlE7FrhFOlD+szVZslFPW2sGw8vLzM7s2NCxKvKSN5mMaOneZrrZDxlvoZd9Io4r2DS
+        rLmEf3n1mv+Klw3FpyT255iX8XVw77JqWfH50Erua+l6ru9nexzVsvus7yEga8t2/kH3T/fH
+        XJtS5Jao9Kr7PJ0euZrfsvvAdUXXw+3/tjCuv2lx6IX0PZWN/JnnXr727Xu77uHFpRYiB5VY
+        ijMSDbWYi4oTAfVKR04wAwAA
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Fri, 5 Mar 2021 15:55:25 +0000
-"Luck, Tony" <tony.luck@intel.com> wrote:
+On Tue, 9 Mar 2021 08:28:24 +0000
+HORIGUCHI NAOYA(堀口　直也) <naoya.horiguchi@nec.com> wrote:
 
-> > From the walk, it seems we have got the virtual address, can we just send a SIGBUS with it?  
+> On Tue, Mar 09, 2021 at 02:35:34PM +0800, Aili Yao wrote:
+> > When the page is already poisoned, another memory_failure() call in the
+> > same page now return 0, meaning OK. For nested memory mce handling, this
+> > behavior may lead to mce looping, Example:
+> > 
+> > 1.When LCME is enabled, and there are two processes A && B running on
+> > different core X && Y separately, which will access one same page, then
+> > the page corrupted when process A access it, a MCE will be rasied to
+> > core X and the error process is just underway.
+> > 
+> > 2.Then B access the page and trigger another MCE to core Y, it will also
+> > do error process, it will see TestSetPageHWPoison be true, and 0 is
+> > returned.
+> > 
+> > 3.The kill_me_maybe will check the return:
+> > 
+> > 1244 static void kill_me_maybe(struct callback_head *cb)
+> > 1245 {
+> > 
+> > 1254         if (!memory_failure(p->mce_addr >> PAGE_SHIFT, flags) &&
+> > 1255             !(p->mce_kflags & MCE_IN_KERNEL_COPYIN)) {
+> > 1256                 set_mce_nospec(p->mce_addr >> PAGE_SHIFT,
+> > p->mce_whole_page);
+> > 1257                 sync_core();
+> > 1258                 return;
+> > 1259         }
+> > 
+> > 1267 }
+> > 
+> > 4. The error process for B will end, and may nothing happened if
+> > kill-early is not set, The process B will re-excute instruction and get
+> > into mce again and then loop happens. And also the set_mce_nospec()
+> > here is not proper, may refer to commit fd0e786d9d09 ("x86/mm,
+> > mm/hwpoison: Don't unconditionally unmap kernel 1:1 pages").
+> > 
+> > For other cases which care the return value of memory_failure() should
+> > check why they want to process a memory error which have already been
+> > processed. This behavior seems reasonable.  
 > 
-> If the walk wins the race and the pte for the poisoned page is still valid, then yes.
+> Other reviewers shared ideas about the returned value, but actually
+> I'm not sure which the best one is (EBUSY is not that bad).
+> What we need to fix the reported issue is to return non-zero value
+> for "already poisoned" case (the value itself is not so important). 
 > 
-> But we could have:
+> Other callers of memory_failure() (mostly test programs) could see
+> the change of return value, but they can already see EBUSY now and
+> anyway they should check dmesg for more detail about why failed,
+> so the impact of the change is not so big.
 > 
-> CPU1                            CPU2
-> memory_failure sets poison
-> bit for struct page
+> > 
+> > Signed-off-by: Aili Yao <yaoaili@kingsoft.com>  
 > 
+> Reviewed-by: Naoya Horiguchi <naoya.horiguchi@nec.com>
 > 
-> rmap finds page in task
-> on CPU2 and sets PTE
-> to not-valid-poison
-> 
->                                 memory_failure returns
->                                 early because struct page
->                                 already marked as poison
-> 
->                                 walk page tables looking
->                                 for mapping - don't find it
-> 
-> -Tony
-
-While I don't think there is a race condition, and if you really think the pfn with SIGBUS is not
-proper, I think following patch maybe one way.
-I copy your abandon code, and make a little modification, and just now it pass
-my simple test.
-
-And also this is a RFC version, only valid if you think the pfn with SIGBUS is not right.
+> Thanks,
+> Naoya Horiguchi
 
 Thanks!
 
-From a522ab8856e3a332a2318d57bb19f3c59594d462 Mon Sep 17 00:00:00 2001
-From: Aili Yao <yaoaili@kingsoft.com>
-Date: Wed, 10 Mar 2021 13:59:18 +0800
-Subject: [PATCH] x86/mce: fix invalid SIGBUS address
-
-walk the current process pte and compare with the pfn;
-1. only test for normal page and 2M hugetlb page;
-2. 1G hugetlb and transparentHuge is not support currently;
-3. May other fails is not recognized, This is a RFC version.
-
----
- arch/x86/kernel/cpu/mce/core.c | 83 ++++++++++++++++++++++++++++++++++++++++--
- 1 file changed, 80 insertions(+), 3 deletions(-)
-
-diff --git a/arch/x86/kernel/cpu/mce/core.c b/arch/x86/kernel/cpu/mce/core.c
-index db4afc5..65d7ef7 100644
---- a/arch/x86/kernel/cpu/mce/core.c
-+++ b/arch/x86/kernel/cpu/mce/core.c
-@@ -28,8 +28,12 @@
- #include <linux/sysfs.h>
- #include <linux/types.h>
- #include <linux/slab.h>
-+#include <linux/hugetlb.h>
-+#include <linux/swap.h>
-+#include <linux/swapops.h>
- #include <linux/init.h>
- #include <linux/kmod.h>
-+#include <linux/pagewalk.h>
- #include <linux/poll.h>
- #include <linux/nmi.h>
- #include <linux/cpu.h>
-@@ -1235,6 +1239,81 @@ static void __mc_scan_banks(struct mce *m, struct pt_regs *regs, struct mce *fin
- 	/* mce_clear_state will clear *final, save locally for use later */
- 	*m = *final;
- }
-+static int mc_pte_entry(pte_t *pte, unsigned long addr, unsigned long next, struct mm_walk *walk)
-+{
-+	u64 *buff = (u64 *)walk->private;
-+	u64 pfn = buff[0];
-+
-+	if (!pte_present(*pte) && is_hwpoison_entry(pte_to_swp_entry(*pte)))
-+		goto find;
-+	else if (pte_pfn(*pte) == pfn)
-+		goto find;
-+
-+	return 0;
-+find:
-+	buff[0] = addr;
-+	buff[1] = PAGE_SHIFT;
-+	return true;
-+}
-+
-+extern bool is_hugetlb_entry_hwpoisoned(pte_t pte);
-+
-+static int mc_hugetlb_range(pte_t *ptep, unsigned long hmask,
-+				 unsigned long addr, unsigned long end,
-+				 struct mm_walk *walk)
-+{
-+	u64 *buff = (u64 *)walk->private;
-+	u64 pfn = buff[0];
-+	int shift = PMD_SHIFT;
-+	pte_t pte =  huge_ptep_get(ptep);
-+
-+	if (unlikely(is_hugetlb_entry_hwpoisoned(pte)))
-+		goto find;
-+
-+	if (pte_pfn(*ptep) == pfn)
-+		goto find;
-+
-+	return 0;
-+find:
-+	buff[0] = addr;
-+	buff[1] = shift;
-+	return true;
-+}
-+
-+static struct mm_walk_ops walk = {
-+	.pte_entry = mc_pte_entry,
-+	.hugetlb_entry	= mc_hugetlb_range
-+};
-+
-+void mc_memory_failure_error(struct task_struct *p, unsigned long pfn)
-+{
-+	u64 buff[2] = {pfn, 0};
-+	struct page *page;
-+	int ret = -1;
-+
-+	page = pfn_to_page(pfn);
-+	if (!page)
-+		goto force_sigbus;
-+
-+	if (is_zone_device_page(page))
-+		goto force_sigbus;
-+
-+	mmap_read_lock(p->mm);
-+	ret = walk_page_range(p->mm, 0, TASK_SIZE_MAX, &walk, (void *)buff);
-+	mmap_read_unlock(p->mm);
-+
-+	if (ret && buff[0]) {
-+		pr_err("Memory error may not recovered: %#llx: Sending SIGBUS to %s:%d due to hardware memory corruption\n",
-+		buff[0], p->comm, p->pid);
-+		force_sig_mceerr(BUS_MCEERR_AR, (void __user *)buff[0], buff[1]);
-+	} else {
-+force_sigbus:
-+		pr_err("Memory error may not recovered, pfn: %#lx: Sending SIGBUS to %s:%d due to hardware memory corruption\n",
-+		pfn, p->comm, p->pid);
-+		force_sig_mceerr(BUS_MCEERR_AR, (void __user *)pfn, PAGE_SHIFT);
-+	}
-+
-+}
- 
- static void kill_me_now(struct callback_head *ch)
- {
-@@ -1259,9 +1338,7 @@ static void kill_me_maybe(struct callback_head *cb)
- 	}
- 
- 	if (p->mce_vaddr != (void __user *)-1l) {
--		pr_err("Memory error may not recovered: %#lx: Sending SIGBUS to %s:%d due to hardware memory corruption\n",
--			p->mce_addr >> PAGE_SHIFT, p->comm, p->pid);
--		force_sig_mceerr(BUS_MCEERR_AR, p->mce_vaddr, PAGE_SHIFT);
-+		mc_memory_failure_error(current, p->mce_addr >> PAGE_SHIFT);
- 	} else {
- 		pr_err("Memory error not recovered");
- 		kill_me_now(cb);
--- 
-1.8.3.1
-
-
+And I found my mail was lost in mailist!
 
 -- 
 Thanks!
