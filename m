@@ -2,60 +2,50 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B694337C9E
-	for <lists+linux-edac@lfdr.de>; Thu, 11 Mar 2021 19:27:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DE903337CE7
+	for <lists+linux-edac@lfdr.de>; Thu, 11 Mar 2021 19:48:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229871AbhCKS0s (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Thu, 11 Mar 2021 13:26:48 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:20081 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230047AbhCKS0k (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>);
-        Thu, 11 Mar 2021 13:26:40 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1615487199;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=7/wSGYLh9BUQ/m4VK2E3Iu8L1K7AWw+HwFDDXH/P7x4=;
-        b=Dt56iO4QJuJA+k3BrHjVi7X4akcMO+fRI3Op/0Vlc4YS1d0fSliXBiTt5M6YPh81npUeAo
-        DONzHVH3vUzM3i7Q/rhj6Wb86BvX9R713O30qm86eYnTVWaw712H2o2v2ckbvL/zzFODWg
-        NXs61CYptcr97lCFNI+HveKAq/RCz64=
-Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
- [209.85.222.199]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-197-9AKzmg9rP4C31Oziawwzfw-1; Thu, 11 Mar 2021 13:26:38 -0500
-X-MC-Unique: 9AKzmg9rP4C31Oziawwzfw-1
-Received: by mail-qk1-f199.google.com with SMTP id h21so16310712qkl.12
-        for <linux-edac@vger.kernel.org>; Thu, 11 Mar 2021 10:26:37 -0800 (PST)
+        id S230047AbhCKSrp (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Thu, 11 Mar 2021 13:47:45 -0500
+Received: from youngberry.canonical.com ([91.189.89.112]:40835 "EHLO
+        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230226AbhCKSre (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Thu, 11 Mar 2021 13:47:34 -0500
+Received: from mail-wr1-f72.google.com ([209.85.221.72])
+        by youngberry.canonical.com with esmtps (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.86_2)
+        (envelope-from <krzysztof.kozlowski@canonical.com>)
+        id 1lKQLM-0003UK-EQ
+        for linux-edac@vger.kernel.org; Thu, 11 Mar 2021 18:47:32 +0000
+Received: by mail-wr1-f72.google.com with SMTP id e13so9924177wrg.4
+        for <linux-edac@vger.kernel.org>; Thu, 11 Mar 2021 10:47:32 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=7/wSGYLh9BUQ/m4VK2E3Iu8L1K7AWw+HwFDDXH/P7x4=;
-        b=eqjsvFTmgw/WyWVTPc4nPjJC2PMoIYzLdlLfPRitKsusqq8l5nNKfn58DuvtGQNWl+
-         C6Zpv2W0sTwiMdQOCz0mvajataw43p6/OHWeNOEhOoMH+iDLTdFoAhuPTeR+cVyqrVno
-         5MpbiyviRr69WBcso7YF7T1lvVkS0BkMADZXZTbPWKAeVvNvjhZ8khG1Aco4zRtD2zD9
-         R+68O5AvssPoB/4pwGzeLhtF19AbFSGggBv4tMZH3LaTcIfQTPtSAtqVywUeoV9TLgFJ
-         L3tbcx5wzx9fklmK3TE538YUIpOsq19ZOjZICuOnlPOVBD/QTMgK1cYRWLRvdVxtcyMe
-         Pvfg==
-X-Gm-Message-State: AOAM533UK765qsn83jOpVY6QsrruTbQkpYqlqFZWs31U9TMhubnqcmLs
-        I7IpW13ld2Llbglxnasd/frJC0au9JVAmjIkuX/zip+d2DsyAsMGtMkZ9b402Qzyxrgk76a0lui
-        7B8rl+ns+sWKUuLdKDpaFlg==
-X-Received: by 2002:ac8:68d:: with SMTP id f13mr8512370qth.300.1615487197331;
-        Thu, 11 Mar 2021 10:26:37 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJykrRpLf1VdnWeXfJOmyNvXTcgKB/EbD8MxyP146EU0lCHJTfc5M6K1GGvBKnS5gI4cz7i4ig==
-X-Received: by 2002:ac8:68d:: with SMTP id f13mr8512326qth.300.1615487197076;
-        Thu, 11 Mar 2021 10:26:37 -0800 (PST)
-Received: from trix.remote.csb (075-142-250-213.res.spectrum.com. [75.142.250.213])
-        by smtp.gmail.com with ESMTPSA id 77sm2571571qko.48.2021.03.11.10.26.33
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=AGhsYhdCQ1elD24yTKdnrXd5i7xOjzN52nW5SEJ7/Fo=;
+        b=eUsoAH+goCwp5e6eTfikvZa+LMr1YpApso/LTw1OkK6z+GUbIOeCv3714Le6RkKwSj
+         YdSxwvdIxswZA1To3nDbHhzUDg8jrgQ0wnQC4dSJ4SyitVdOz/ARgJ9lZlRZfU0X8bD/
+         5aCVUtvaTEskqsetWn0K1UtDnGyMU6ejmjnfSLhWHESLElx5E+LogGh+wmBGfzAIixnr
+         YpCEenY7LJSvNwj2fullDXhBjSOYoteSckBkcMRbsSVcplYuiXcKO7LUxafAp8vTFt+t
+         50bi8btKtiT1i45IgWagdu8nVFtqNLxaXGxV6tu0U98YBDsLBsU9s2bbcmTwtYxPtged
+         LXzg==
+X-Gm-Message-State: AOAM533aSEwpUnVEd/JIe7pUfHhdghnr/5F99CdBSNKJnQqvWhb3mU81
+        RGw7i5MbAoZKoTGB1wTQu3xwTyblAS47XfSqWkn65ONRQRPnPGUBiXrE/B6BjdK379VL/wWcMfS
+        RKQGJQlTCDMyd4h5jXXuYYodINnC2fcVzxmyxiSY=
+X-Received: by 2002:a5d:5141:: with SMTP id u1mr10282907wrt.31.1615488451952;
+        Thu, 11 Mar 2021 10:47:31 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzEiONe/luicUkBQrryf9RIkvIG+x8+UJPcdgITbiuaICznSQKmKVThfd4wAkfQtdO2oa9H6A==
+X-Received: by 2002:a5d:5141:: with SMTP id u1mr10282871wrt.31.1615488451652;
+        Thu, 11 Mar 2021 10:47:31 -0800 (PST)
+Received: from [192.168.1.116] (adsl-84-226-167-205.adslplus.ch. [84.226.167.205])
+        by smtp.gmail.com with ESMTPSA id h6sm4972118wmi.6.2021.03.11.10.47.30
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 11 Mar 2021 10:26:36 -0800 (PST)
+        Thu, 11 Mar 2021 10:47:31 -0800 (PST)
 Subject: Re: [PATCH v3 00/15] arm64 / clk: socfpga: simplifying, cleanups and
  compile testing
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Russell King <linux@armlinux.org.uk>,
+To:     Tom Rix <trix@redhat.com>, Russell King <linux@armlinux.org.uk>,
         Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
         soc@kernel.org, Rob Herring <robh+dt@kernel.org>,
         Dinh Nguyen <dinguyen@kernel.org>,
@@ -81,137 +71,152 @@ To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
         linux-fpga@vger.kernel.org, linux-i2c@vger.kernel.org,
         netdev@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com
 References: <20210311152545.1317581-1-krzysztof.kozlowski@canonical.com>
-From:   Tom Rix <trix@redhat.com>
-Message-ID: <f0b90916-9047-d5da-5cde-75d4330cf041@redhat.com>
-Date:   Thu, 11 Mar 2021 10:26:32 -0800
+ <f0b90916-9047-d5da-5cde-75d4330cf041@redhat.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Message-ID: <f581f103-270f-90ed-6946-de63b6712e82@canonical.com>
+Date:   Thu, 11 Mar 2021 19:47:30 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.0
+ Thunderbird/78.7.1
 MIME-Version: 1.0
-In-Reply-To: <20210311152545.1317581-1-krzysztof.kozlowski@canonical.com>
+In-Reply-To: <f0b90916-9047-d5da-5cde-75d4330cf041@redhat.com>
 Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8bit
 Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
+On 11/03/2021 19:26, Tom Rix wrote:
+> 
+> On 3/11/21 7:25 AM, Krzysztof Kozlowski wrote:
+>> Hi,
+>>
+>> All three Intel arm64 SoCFPGA architectures (Agilex, N5X and Stratix 10)
+>> are basically flavors/platforms of the same architecture.  At least from
+>> the Linux point of view.  Up to a point that N5X and Agilex share DTSI.
+>> Having three top-level architectures for the same one barely makes
+>> sense and complicates driver selection.
+>>
+>> Additionally it was pointed out that ARCH_SOCFPGA name is too generic.
+>> There are other vendors making SoC+FPGA designs, so the name should be
+>> changed to have real vendor (currently: Intel).
+>>
+>>
+>> Dependencies / merging
+>> ======================
+>> 1. Patch 1 is used as base, so other changes depend on its hunks.
+>>    I put it at beginning as it is something close to a fix, so candidate
+>>    for stable (even though I did not mark it like that).
+>> 2. Patch 2: everything depends on it.
+>>
+>> 3. 64-bit path:
+>> 3a. Patches 3-7: depend on patch 2, from 64-bit point of view.
+>> 3b. Patch 8: depends on 2-7 as it finally removes 64-bit ARCH_XXX
+>>     symbols.
+>>
+>> 4. 32-bit path:
+>> 4a. Patches 9-14: depend on 2, from 32-bit point of view.
+>> 4b. Patch 15: depends on 9-14 as it finally removes 32-bit ARCH_SOCFPGA
+>>     symbol.
+>>
+>> If the patches look good, proposed merging is via SoC tree (after
+>> getting acks from everyone). Sharing immutable branches is also a way.
+>>
+>>
+>> Changes since v2
+>> ================
+>> 1. Several new patches and changes.
+>> 2. Rename ARCH_SOCFPGA to ARCH_INTEL_SOCFPGA on 32-bit and 64-bit.
+>> 3. Enable compile testing of 32-bit socfpga clock drivers.
+>> 4. Split changes per subsystems for easier review.
+>> 5. I already received an ack from Lee Jones, but I did not add it as
+>>    there was big refactoring.  Please kindly ack one more time if it
+>>    looks good.
+>>
+>> Changes since v1
+>> ================
+>> 1. New patch 3: arm64: socfpga: rename ARCH_STRATIX10 to ARCH_SOCFPGA64.
+>> 2. New patch 4: arm64: intel: merge Agilex and N5X into ARCH_SOCFPGA64.
+>> 3. Fix build is.sue reported by kernel test robot (with ARCH_STRATIX10
+>>    and COMPILE_TEST but without selecting some of the clocks).
+>>
+>>
+>> RFT
+>> ===
+>> I tested compile builds on few configurations, so I hope kbuild 0-day
+>> will check more options (please give it few days on the lists).
+>> I compare the generated autoconf.h and found no issues.  Testing on real
+>> hardware would be appreciated.
+>>
+>> Best regards,
+>> Krzysztof
+>>
+>> Krzysztof Kozlowski (15):
+>>   clk: socfpga: allow building N5X clocks with ARCH_N5X
+>>   ARM: socfpga: introduce common ARCH_INTEL_SOCFPGA
+>>   mfd: altera: merge ARCH_SOCFPGA and ARCH_STRATIX10
+>>   net: stmmac: merge ARCH_SOCFPGA and ARCH_STRATIX10
+>>   clk: socfpga: build together Stratix 10, Agilex and N5X clock drivers
+>>   clk: socfpga: merge ARCH_SOCFPGA and ARCH_STRATIX10
+>>   EDAC: altera: merge ARCH_SOCFPGA and ARCH_STRATIX10
+>>   arm64: socfpga: merge Agilex and N5X into ARCH_INTEL_SOCFPGA
+>>   clk: socfpga: allow compile testing of Stratix 10 / Agilex clocks
+>>   clk: socfpga: use ARCH_INTEL_SOCFPGA also for 32-bit ARM SoCs (and
+>>     compile test)
+>>   dmaengine: socfpga: use ARCH_INTEL_SOCFPGA also for 32-bit ARM SoCs
+>>   fpga: altera: use ARCH_INTEL_SOCFPGA also for 32-bit ARM SoCs
+>>   i2c: altera: use ARCH_INTEL_SOCFPGA also for 32-bit ARM SoCs
+>>   reset: socfpga: use ARCH_INTEL_SOCFPGA also for 32-bit ARM SoCs
+>>   ARM: socfpga: drop ARCH_SOCFPGA
+>>
+>>  arch/arm/Kconfig                            |  2 +-
+>>  arch/arm/Kconfig.debug                      |  6 +++---
+>>  arch/arm/Makefile                           |  2 +-
+>>  arch/arm/boot/dts/Makefile                  |  2 +-
+>>  arch/arm/configs/multi_v7_defconfig         |  2 +-
+>>  arch/arm/configs/socfpga_defconfig          |  2 +-
+>>  arch/arm/mach-socfpga/Kconfig               |  4 ++--
+>>  arch/arm64/Kconfig.platforms                | 17 ++++-------------
+>>  arch/arm64/boot/dts/altera/Makefile         |  2 +-
+>>  arch/arm64/boot/dts/intel/Makefile          |  6 +++---
+>>  arch/arm64/configs/defconfig                |  3 +--
+>>  drivers/clk/Kconfig                         |  1 +
+>>  drivers/clk/Makefile                        |  4 +---
+>>  drivers/clk/socfpga/Kconfig                 | 19 +++++++++++++++++++
+>>  drivers/clk/socfpga/Makefile                | 11 +++++------
+>>  drivers/dma/Kconfig                         |  2 +-
+>>  drivers/edac/Kconfig                        |  2 +-
+>>  drivers/edac/altera_edac.c                  | 17 +++++++++++------
+>>  drivers/firmware/Kconfig                    |  2 +-
+>>  drivers/fpga/Kconfig                        |  8 ++++----
+>>  drivers/i2c/busses/Kconfig                  |  2 +-
+>>  drivers/mfd/Kconfig                         |  4 ++--
+>>  drivers/net/ethernet/stmicro/stmmac/Kconfig |  4 ++--
+>>  drivers/reset/Kconfig                       |  6 +++---
+>>  24 files changed, 71 insertions(+), 59 deletions(-)
+>>  create mode 100644 drivers/clk/socfpga/Kconfig
+>>
+> Thanks for changing the config name.
+> 
+> Please review checkpatch --strict on this set, the typical complaint is
+> 
+> clk: socfpga: use ARCH_INTEL_SOCFPGA also for 32-bit ARM SoCs (and compile test)    
+> WARNING: please write a paragraph that describes the config symbol fully
+> #35: FILE: drivers/clk/socfpg/Kconfig:11:                       
+> +config CLK_INTEL_SOCFPGA32
 
-On 3/11/21 7:25 AM, Krzysztof Kozlowski wrote:
-> Hi,
->
-> All three Intel arm64 SoCFPGA architectures (Agilex, N5X and Stratix 10)
-> are basically flavors/platforms of the same architecture.  At least from
-> the Linux point of view.  Up to a point that N5X and Agilex share DTSI.
-> Having three top-level architectures for the same one barely makes
-> sense and complicates driver selection.
->
-> Additionally it was pointed out that ARCH_SOCFPGA name is too generic.
-> There are other vendors making SoC+FPGA designs, so the name should be
-> changed to have real vendor (currently: Intel).
->
->
-> Dependencies / merging
-> ======================
-> 1. Patch 1 is used as base, so other changes depend on its hunks.
->    I put it at beginning as it is something close to a fix, so candidate
->    for stable (even though I did not mark it like that).
-> 2. Patch 2: everything depends on it.
->
-> 3. 64-bit path:
-> 3a. Patches 3-7: depend on patch 2, from 64-bit point of view.
-> 3b. Patch 8: depends on 2-7 as it finally removes 64-bit ARCH_XXX
->     symbols.
->
-> 4. 32-bit path:
-> 4a. Patches 9-14: depend on 2, from 32-bit point of view.
-> 4b. Patch 15: depends on 9-14 as it finally removes 32-bit ARCH_SOCFPGA
->     symbol.
->
-> If the patches look good, proposed merging is via SoC tree (after
-> getting acks from everyone). Sharing immutable branches is also a way.
->
->
-> Changes since v2
-> ================
-> 1. Several new patches and changes.
-> 2. Rename ARCH_SOCFPGA to ARCH_INTEL_SOCFPGA on 32-bit and 64-bit.
-> 3. Enable compile testing of 32-bit socfpga clock drivers.
-> 4. Split changes per subsystems for easier review.
-> 5. I already received an ack from Lee Jones, but I did not add it as
->    there was big refactoring.  Please kindly ack one more time if it
->    looks good.
->
-> Changes since v1
-> ================
-> 1. New patch 3: arm64: socfpga: rename ARCH_STRATIX10 to ARCH_SOCFPGA64.
-> 2. New patch 4: arm64: intel: merge Agilex and N5X into ARCH_SOCFPGA64.
-> 3. Fix build is.sue reported by kernel test robot (with ARCH_STRATIX10
->    and COMPILE_TEST but without selecting some of the clocks).
->
->
-> RFT
-> ===
-> I tested compile builds on few configurations, so I hope kbuild 0-day
-> will check more options (please give it few days on the lists).
-> I compare the generated autoconf.h and found no issues.  Testing on real
-> hardware would be appreciated.
->
-> Best regards,
-> Krzysztof
->
-> Krzysztof Kozlowski (15):
->   clk: socfpga: allow building N5X clocks with ARCH_N5X
->   ARM: socfpga: introduce common ARCH_INTEL_SOCFPGA
->   mfd: altera: merge ARCH_SOCFPGA and ARCH_STRATIX10
->   net: stmmac: merge ARCH_SOCFPGA and ARCH_STRATIX10
->   clk: socfpga: build together Stratix 10, Agilex and N5X clock drivers
->   clk: socfpga: merge ARCH_SOCFPGA and ARCH_STRATIX10
->   EDAC: altera: merge ARCH_SOCFPGA and ARCH_STRATIX10
->   arm64: socfpga: merge Agilex and N5X into ARCH_INTEL_SOCFPGA
->   clk: socfpga: allow compile testing of Stratix 10 / Agilex clocks
->   clk: socfpga: use ARCH_INTEL_SOCFPGA also for 32-bit ARM SoCs (and
->     compile test)
->   dmaengine: socfpga: use ARCH_INTEL_SOCFPGA also for 32-bit ARM SoCs
->   fpga: altera: use ARCH_INTEL_SOCFPGA also for 32-bit ARM SoCs
->   i2c: altera: use ARCH_INTEL_SOCFPGA also for 32-bit ARM SoCs
->   reset: socfpga: use ARCH_INTEL_SOCFPGA also for 32-bit ARM SoCs
->   ARM: socfpga: drop ARCH_SOCFPGA
->
->  arch/arm/Kconfig                            |  2 +-
->  arch/arm/Kconfig.debug                      |  6 +++---
->  arch/arm/Makefile                           |  2 +-
->  arch/arm/boot/dts/Makefile                  |  2 +-
->  arch/arm/configs/multi_v7_defconfig         |  2 +-
->  arch/arm/configs/socfpga_defconfig          |  2 +-
->  arch/arm/mach-socfpga/Kconfig               |  4 ++--
->  arch/arm64/Kconfig.platforms                | 17 ++++-------------
->  arch/arm64/boot/dts/altera/Makefile         |  2 +-
->  arch/arm64/boot/dts/intel/Makefile          |  6 +++---
->  arch/arm64/configs/defconfig                |  3 +--
->  drivers/clk/Kconfig                         |  1 +
->  drivers/clk/Makefile                        |  4 +---
->  drivers/clk/socfpga/Kconfig                 | 19 +++++++++++++++++++
->  drivers/clk/socfpga/Makefile                | 11 +++++------
->  drivers/dma/Kconfig                         |  2 +-
->  drivers/edac/Kconfig                        |  2 +-
->  drivers/edac/altera_edac.c                  | 17 +++++++++++------
->  drivers/firmware/Kconfig                    |  2 +-
->  drivers/fpga/Kconfig                        |  8 ++++----
->  drivers/i2c/busses/Kconfig                  |  2 +-
->  drivers/mfd/Kconfig                         |  4 ++--
->  drivers/net/ethernet/stmicro/stmmac/Kconfig |  4 ++--
->  drivers/reset/Kconfig                       |  6 +++---
->  24 files changed, 71 insertions(+), 59 deletions(-)
->  create mode 100644 drivers/clk/socfpga/Kconfig
->
-Thanks for changing the config name.
+This symbol is not visible to the user, not selectable, so documenting
+it more than what is already written in option title (the one going
+after "bool") makes little sense. We don't do it for such drivers.
+Mostly because it would be duplication of the option title or include
+useless information (it's like documenting "int i" with "counter used
+for loop"). The checkpatch complains if this is less than three lines,
+but it is not possible to write here anything meaningful for more than
+one line.
 
-Please review checkpatch --strict on this set, the typical complaint is
+Really, it does not make sense. If you think otherwise, please suggest
+the text which is not duplicating option title and does not include
+common stuff from clocks.
 
-clk: socfpga: use ARCH_INTEL_SOCFPGA also for 32-bit ARM SoCs (and compile test)    
-WARNING: please write a paragraph that describes the config symbol fully
-#35: FILE: drivers/clk/socfpg/Kconfig:11:                       
-+config CLK_INTEL_SOCFPGA32
-
-Tom
-
+Best regards,
+Krzysztof
