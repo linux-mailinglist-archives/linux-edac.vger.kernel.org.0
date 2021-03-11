@@ -2,46 +2,46 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7462E3377A5
-	for <lists+linux-edac@lfdr.de>; Thu, 11 Mar 2021 16:28:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B395337797
+	for <lists+linux-edac@lfdr.de>; Thu, 11 Mar 2021 16:28:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234373AbhCKP2L (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Thu, 11 Mar 2021 10:28:11 -0500
-Received: from youngberry.canonical.com ([91.189.89.112]:34352 "EHLO
+        id S234422AbhCKP2I (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Thu, 11 Mar 2021 10:28:08 -0500
+Received: from youngberry.canonical.com ([91.189.89.112]:34277 "EHLO
         youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234404AbhCKP1w (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Thu, 11 Mar 2021 10:27:52 -0500
-Received: from mail-lj1-f200.google.com ([209.85.208.200])
+        with ESMTP id S234358AbhCKP1o (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Thu, 11 Mar 2021 10:27:44 -0500
+Received: from mail-ed1-f69.google.com ([209.85.208.69])
         by youngberry.canonical.com with esmtps (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
         (Exim 4.86_2)
         (envelope-from <krzysztof.kozlowski@canonical.com>)
-        id 1lKNE7-0005my-JQ
-        for linux-edac@vger.kernel.org; Thu, 11 Mar 2021 15:27:51 +0000
-Received: by mail-lj1-f200.google.com with SMTP id v9so8680324ljc.9
-        for <linux-edac@vger.kernel.org>; Thu, 11 Mar 2021 07:27:51 -0800 (PST)
+        id 1lKNDz-0005gL-HX
+        for linux-edac@vger.kernel.org; Thu, 11 Mar 2021 15:27:43 +0000
+Received: by mail-ed1-f69.google.com with SMTP id v27so10051621edx.1
+        for <linux-edac@vger.kernel.org>; Thu, 11 Mar 2021 07:27:43 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=lXB/iL6vA5+sCIUzf2o2vRh/ni0zGUa9h57FfrwufeA=;
-        b=k3hYKUhOtIron00QUYNDTJ89GroyKRgnxZ0u2TYq5ARZLEyAMSmKFy6FDj95DK0hOJ
-         fZcRTkCyGVj0sgbpNlhzjwjRPlpIjGn8/pXrn8k+FChVDKi0Y/gAQpKk9P9ZoGyna74z
-         hGL89g2ax4aVh8HA5fv4qavS1Se7zc+4bC7o+U8Rfc804gcaRIRrn7Ig9gJB4Kzi++c7
-         YKuOyJt8u+LypsnpOocSPdDsHX90d14yaDi3FpSUpjh7X4Iuz3UJ5QfiuOn0kq3KtC/b
-         L/Vkli7J8Y/7QB/Ja/nE4Jvx7fYtDIA4IJrhaD2NSLOoITxL44eIdMRDPTFe7YAeR+u8
-         3cCQ==
-X-Gm-Message-State: AOAM531jpdQ6fZSR4qA5FgYeLIm4pd8iDRioVl5hZM52S3CKqe2PynRW
-        v2+j3TH+pLB/1ZoL7t4EtG9o+YtBZJQ7kk9JPuE5sL5LAq2LMsQFPlQlP7XTK+DG8t8UM3cBRuh
-        MXSiw0GB8huBfe45CNdb+BDiTuDbxkI87kgh6UX8=
-X-Received: by 2002:a17:906:753:: with SMTP id z19mr3596696ejb.447.1615476460419;
-        Thu, 11 Mar 2021 07:27:40 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwn2V3fXBoj0gUy8DLvmPZgdZVpI4oNbBPuRpgJS86sHTABegOHS6FeUR0VFJ6Dqnh8S7uUpw==
-X-Received: by 2002:a17:906:753:: with SMTP id z19mr3596661ejb.447.1615476460220;
-        Thu, 11 Mar 2021 07:27:40 -0800 (PST)
+        bh=RBN1O3Wcnz1uvA/bXXgFQO/02vpYiyGG/6WCSqIa6KY=;
+        b=XmYUu+Kn8q3pk0p9ZVMg+Jq6MMQ68zH+A/0IDiyyONNSx/SmBR2yjDZj895j7QnoCF
+         c1qv/2ojsDlOlB/aLKl6GX7xPUKqzmMZfLaqCuUBEN1dU2S+TsvARkRHi3ohhHrd4oZj
+         W7OgzlIPKMe353eMHqrUgM2v0GdmL3+qirnI74tdLl6qnX4A0x5zDrTOZo+WTybCmPX2
+         n+zEhs46cukQegWqzJB5h7y+AkzpYrVkjoa40Eh3xkhbFUxiTEaoRgLA8nRiUoNrluAE
+         XqzvoQTzCy3OdPBeR7hn2Ljsnx/jtFFJDbW2t/s0AzPt+FC9N7navoKVEXiFyUGZwWKV
+         YfBg==
+X-Gm-Message-State: AOAM531yKOjMJu9DaFaLICvoUSqyhVwc8JXiHwlTTAWQC67eepngm7cp
+        L8iuW892Z5FipedltBeifJoKPTtrVLBMzSDggocCs4wiziKY9FBOCwbqjC87lOADgZ6LRLMygqG
+        Jwdbb4w+GD/tOtNAJng/MXYqqd7NiXAMVko9OEmg=
+X-Received: by 2002:a05:6402:510b:: with SMTP id m11mr9145604edd.103.1615476463285;
+        Thu, 11 Mar 2021 07:27:43 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzftQgQhm6JCnX7NkcREdfHxQ79cH5j2A8F4fhogge3Hb8YjiFCimex/EvBlWPVnkSsMSMXPQ==
+X-Received: by 2002:a05:6402:510b:: with SMTP id m11mr9145573edd.103.1615476463167;
+        Thu, 11 Mar 2021 07:27:43 -0800 (PST)
 Received: from localhost.localdomain (adsl-84-226-167-205.adslplus.ch. [84.226.167.205])
-        by smtp.gmail.com with ESMTPSA id g1sm1497413edh.31.2021.03.11.07.27.39
+        by smtp.gmail.com with ESMTPSA id k9sm1567062edn.68.2021.03.11.07.27.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 11 Mar 2021 07:27:39 -0800 (PST)
+        Thu, 11 Mar 2021 07:27:42 -0800 (PST)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 To:     Russell King <linux@armlinux.org.uk>,
         Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
@@ -69,9 +69,9 @@ To:     Russell King <linux@armlinux.org.uk>,
         linux-fpga@vger.kernel.org, linux-i2c@vger.kernel.org,
         netdev@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com
 Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Subject: [PATCH v3 13/15] i2c: altera: use ARCH_INTEL_SOCFPGA also for 32-bit ARM SoCs
-Date:   Thu, 11 Mar 2021 16:27:38 +0100
-Message-Id: <20210311152738.1318541-1-krzysztof.kozlowski@canonical.com>
+Subject: [PATCH v3 14/15] reset: socfpga: use ARCH_INTEL_SOCFPGA also for 32-bit ARM SoCs
+Date:   Thu, 11 Mar 2021 16:27:41 +0100
+Message-Id: <20210311152741.1318599-1-krzysztof.kozlowski@canonical.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20210311152545.1317581-1-krzysztof.kozlowski@canonical.com>
 References: <20210311152545.1317581-1-krzysztof.kozlowski@canonical.com>
@@ -84,27 +84,26 @@ X-Mailing-List: linux-edac@vger.kernel.org
 ARCH_SOCFPGA is being renamed to ARCH_INTEL_SOCFPGA so adjust the
 32-bit ARM drivers to rely on new symbol.
 
-The side effect is that the I2C_ALTERA will now be available for both
-32-bit and 64-bit Intel SoCFPGA, even though it is used only for 32-bit.
-
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 ---
- drivers/i2c/busses/Kconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/reset/Kconfig | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/i2c/busses/Kconfig b/drivers/i2c/busses/Kconfig
-index 05ebf7546e3f..3eec59f1fed3 100644
---- a/drivers/i2c/busses/Kconfig
-+++ b/drivers/i2c/busses/Kconfig
-@@ -369,7 +369,7 @@ comment "I2C system bus drivers (mostly embedded / system-on-chip)"
+diff --git a/drivers/reset/Kconfig b/drivers/reset/Kconfig
+index b1e8efa16166..7043c7f6dcf0 100644
+--- a/drivers/reset/Kconfig
++++ b/drivers/reset/Kconfig
+@@ -205,8 +205,8 @@ config RESET_STM32MP157
+ 	  This enables the RCC reset controller driver for STM32 MPUs.
  
- config I2C_ALTERA
- 	tristate "Altera Soft IP I2C"
--	depends on ARCH_SOCFPGA || NIOS2 || COMPILE_TEST
-+	depends on ARCH_INTEL_SOCFPGA || NIOS2 || COMPILE_TEST
- 	depends on OF
+ config RESET_SOCFPGA
+-	bool "SoCFPGA Reset Driver" if COMPILE_TEST && !ARCH_SOCFPGA
+-	default ARCH_SOCFPGA
++	bool "SoCFPGA Reset Driver" if COMPILE_TEST && (!ARM || !ARCH_INTEL_SOCFPGA)
++	default ARM && ARCH_INTEL_SOCFPGA
+ 	select RESET_SIMPLE
  	help
- 	  If you say yes to this option, support will be included for the
+ 	  This enables the reset driver for the SoCFPGA ARMv7 platforms. This
 -- 
 2.25.1
 
