@@ -2,121 +2,111 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B0963380D5
-	for <lists+linux-edac@lfdr.de>; Thu, 11 Mar 2021 23:49:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D0EF338597
+	for <lists+linux-edac@lfdr.de>; Fri, 12 Mar 2021 06:56:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229774AbhCKWso (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Thu, 11 Mar 2021 17:48:44 -0500
-Received: from mail-pg1-f171.google.com ([209.85.215.171]:38704 "EHLO
-        mail-pg1-f171.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229569AbhCKWsI (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Thu, 11 Mar 2021 17:48:08 -0500
-Received: by mail-pg1-f171.google.com with SMTP id q5so1947313pgk.5;
-        Thu, 11 Mar 2021 14:48:07 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Yp/zf/TAjp/DgsBtmkn2h95rlPfAql88KAJ1HBTmgds=;
-        b=N/FxOEVl779PVlBHxLIMSqM/0lYSVxxKhk5nWz7vvVtBEIinSimCAOMd0XDNNhdZc4
-         FjsTkq5t5mC4fNIHQs9lSHt5DXDKAV/nqU7BYWSmRYN6LJQf/gd5B/FVtr4/11ThrpJT
-         fLP83HYaHUCYz+ULRt+ZZ2yPoTmaysNyMk8KbLh1aisCSHlQ4t6/igqqP2v4QhINy2pI
-         LJ0IyDyge3TjkeWHu0tz7Wqln5B+Vg1oZXnTAAbPZl3oTQvTUAlFPUw/ZlEnPp4Azu7Z
-         AHhXGL6aiDIR6wDIJdSe1HhQRcTB4NmL1SlZ90QOtcZvMmA1rB2/CU33L1xsUSFfGoD+
-         x+iw==
-X-Gm-Message-State: AOAM533U+cqap7tLjD9Fad6tnML5dqvl7Ls5JhPC+6sbRVt2bhzJMmPK
-        UboDfrRDzAvtuJ51WXH1CVk=
-X-Google-Smtp-Source: ABdhPJz8cvoO7cjx+Ydi2AzXzvDOKfJqCw7+rk33vFgwXIa9cNT/DNeCu3LAtFW6UsvUmJpd+zx4VQ==
-X-Received: by 2002:a63:5c1e:: with SMTP id q30mr8763269pgb.259.1615502887491;
-        Thu, 11 Mar 2021 14:48:07 -0800 (PST)
-Received: from localhost ([2601:647:5b00:1161:a4cc:eef9:fbc0:2781])
-        by smtp.gmail.com with ESMTPSA id n10sm3227074pgk.91.2021.03.11.14.48.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 11 Mar 2021 14:48:06 -0800 (PST)
-Date:   Thu, 11 Mar 2021 14:48:05 -0800
-From:   Moritz Fischer <mdf@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Cc:     Russell King <linux@armlinux.org.uk>,
-        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
-        soc@kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, Vinod Koul <vkoul@kernel.org>,
-        Borislav Petkov <bp@alien8.de>,
-        Tony Luck <tony.luck@intel.com>,
-        James Morse <james.morse@arm.com>,
-        Robert Richter <rric@kernel.org>,
-        Moritz Fischer <mdf@kernel.org>, Tom Rix <trix@redhat.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Alexandre Torgue <alexandre.torgue@st.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
-        dmaengine@vger.kernel.org, linux-edac@vger.kernel.org,
-        linux-fpga@vger.kernel.org, linux-i2c@vger.kernel.org,
-        netdev@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com
-Subject: Re: [PATCH v3 12/15] fpga: altera: use ARCH_INTEL_SOCFPGA also for
- 32-bit ARM SoCs
-Message-ID: <YEqeJSFnQJVV15P1@epycbox.lan>
-References: <20210311152545.1317581-1-krzysztof.kozlowski@canonical.com>
- <20210311152735.1318487-1-krzysztof.kozlowski@canonical.com>
+        id S231201AbhCLFzs (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Fri, 12 Mar 2021 00:55:48 -0500
+Received: from mail.kingsoft.com ([114.255.44.146]:47713 "EHLO
+        mail.kingsoft.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S231252AbhCLFzf (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Fri, 12 Mar 2021 00:55:35 -0500
+X-AuditID: 0a580157-47bff70000021a79-77-604afba1e5a5
+Received: from mail.kingsoft.com (localhost [10.88.1.32])
+        (using TLS with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (Client did not present a certificate)
+        by mail.kingsoft.com (SMG-1-NODE-87) with SMTP id EF.E9.06777.1ABFA406; Fri, 12 Mar 2021 13:26:57 +0800 (HKT)
+Received: from alex-virtual-machine (172.16.253.254) by KSBJMAIL2.kingsoft.cn
+ (10.88.1.32) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2176.2; Fri, 12 Mar
+ 2021 13:55:31 +0800
+Date:   Fri, 12 Mar 2021 13:55:31 +0800
+From:   Aili Yao <yaoaili@kingsoft.com>
+To:     "Luck, Tony" <tony.luck@intel.com>
+CC:     "HORIGUCHI =?UTF-8?B?TkFPWUE=?=(=?UTF-8?B?5aCA5Y+j44CA55u05Lmf?=)" 
+        <naoya.horiguchi@nec.com>, Oscar Salvador <osalvador@suse.de>,
+        "david@redhat.com" <david@redhat.com>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "hpa@zytor.com" <hpa@zytor.com>, "x86@kernel.org" <x86@kernel.org>,
+        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "yangfeng1@kingsoft.com" <yangfeng1@kingsoft.com>,
+        <yaoaili@kingsoft.com>, <sunhao2@kingsoft.com>
+Subject: Re: [PATCH] mm,hwpoison: return -EBUSY when page already poisoned
+Message-ID: <20210312135531.72e33b35@alex-virtual-machine>
+In-Reply-To: <db80e98d2b264e988596d0d7d7c8a776@intel.com>
+References: <20210303115710.2e9f8e23@alex-virtual-machine>
+        <20210303163912.3d508e0f@alex-virtual-machine>
+        <1a78e9abdc134e35a5efcbf6b2fd2263@intel.com>
+        <20210304101653.546a9da1@alex-virtual-machine>
+        <20210304121941.667047c3@alex-virtual-machine>
+        <20210304144524.795872d7@alex-virtual-machine>
+        <20210304235720.GA215567@agluck-desk2.amr.corp.intel.com>
+        <20210305093016.40c87375@alex-virtual-machine>
+        <aee5176eafb54c88b19a5b2671d0a1fc@intel.com>
+        <20210310141042.4db9ea29@alex-virtual-machine>
+        <20210311085529.GA22268@hori.linux.bs1.fc.nec.co.jp>
+        <db80e98d2b264e988596d0d7d7c8a776@intel.com>
+Organization: kingsoft
+X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.30; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210311152735.1318487-1-krzysztof.kozlowski@canonical.com>
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [172.16.253.254]
+X-ClientProxiedBy: KSBJMAIL1.kingsoft.cn (10.88.1.31) To KSBJMAIL2.kingsoft.cn
+ (10.88.1.32)
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprLIsWRmVeSWpSXmKPExsXCFcGooLvwt1eCwf3DyhZz1q9hs/i84R+b
+        xdf1v5gtpm0Ut7hwqoHJ4vKuOWwW99b8Z7W4dGABk8XFxgOMFmemFVls3jSV2eLNhXssFj82
+        PGZ14PX43trH4rF4z0smj02rOtk8Nn2axO7x7tw5do8TM36zeLy4upHF4/2+q2wem09Xe3ze
+        JOdxouULawB3FJdNSmpOZllqkb5dAlfGimkX2Ap+cFZMu/KFpYHxOXsXIyeHhICJxISja5i7
+        GLk4hASmM0mce/aQEcJ5xSix690DRpAqFgFViX8d05hBbDYge9e9WawgtoiAmsSlxQ/AupkF
+        NrNKXDg3nwkkISzgJfHl/lqwZl4BK4nD63eAxTkFLCUuXFvPDrHhAYvE/sZdYHfwC4hJ9F75
+        zwRxk71E25ZFUM2CEidnPmEBsZkFdCROrDrGDGHLS2x/OwfMFhJQlDi85BfUP0oSR7pnsEHY
+        sRLL5r1incAoPAvJqFlIRs1CMmoBI/MqRpbi3HTDTYyQGAzfwTiv6aPeIUYmDsZDjBIczEoi
+        vBdeeiUI8aYkVlalFuXHF5XmpBYfYpTmYFES571c4ZkgJJCeWJKanZpakFoEk2Xi4JRqYJr5
+        KySsx6PbcbHNzkXPz/9YlP96ye26T+mna/3fJW6Zv+qvtiqHcsFxufmPDra6KgVUWOZfaa5u
+        7FPSPdF0UlZbv7n+upro3hiLksdzA9+suiO0mK10mpRDiOXfxbkaUjM4BT00J2sopf3+dZ7V
+        jMXsrKvmLP3DddsCdCSXyxplrTHtY19z1OYKt+jJDReYth14zP821s9JaaGi+oamhZOuTW2L
+        SzwaXJm47IH3Tp2+JctmuwddPnPi4Q3+F397lu9gut7ytVdvYpzMW9HN99dsmPnr8baFl9i0
+        3p8sNOvQsf2+zur2PYtGNt6OBC1V50brjjPJUS86M8r7PnmUr8k99avadu6KrIkNq9ZYRSux
+        FGckGmoxFxUnAgCzo2enMAMAAA==
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-Hi Krzysztof,
+On Thu, 11 Mar 2021 17:05:53 +0000
+"Luck, Tony" <tony.luck@intel.com> wrote:
 
-On Thu, Mar 11, 2021 at 04:27:35PM +0100, Krzysztof Kozlowski wrote:
-> ARCH_SOCFPGA is being renamed to ARCH_INTEL_SOCFPGA so adjust the
-> 32-bit ARM drivers to rely on new symbol.
+> > I guess that p->mce_vaddr stores the virtual address of the error here.
+> > If so, sending SIGBUS with the address looks enough as we do now, so why
+> > do you walk page table to find the error virtual address?  
 > 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Acked-by: Moritz Fischer <mdf@kernel.org>
-> ---
->  drivers/fpga/Kconfig | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
+> p->mce_vaddr only has the virtual address for the COPYIN case. In that code
+> path we decode the kernel instruction that hit the fault in order to find the virtual
+> address. That's easy because:
 > 
-> diff --git a/drivers/fpga/Kconfig b/drivers/fpga/Kconfig
-> index fd325e9c5ce6..b1026c6fb119 100644
-> --- a/drivers/fpga/Kconfig
-> +++ b/drivers/fpga/Kconfig
-> @@ -14,13 +14,13 @@ if FPGA
->  
->  config FPGA_MGR_SOCFPGA
->  	tristate "Altera SOCFPGA FPGA Manager"
-> -	depends on ARCH_SOCFPGA || COMPILE_TEST
-> +	depends on ARCH_INTEL_SOCFPGA || COMPILE_TEST
->  	help
->  	  FPGA manager driver support for Altera SOCFPGA.
->  
->  config FPGA_MGR_SOCFPGA_A10
->  	tristate "Altera SoCFPGA Arria10"
-> -	depends on ARCH_SOCFPGA || COMPILE_TEST
-> +	depends on ARCH_INTEL_SOCFPGA || COMPILE_TEST
->  	select REGMAP_MMIO
->  	help
->  	  FPGA manager driver support for Altera Arria10 SoCFPGA.
-> @@ -99,7 +99,7 @@ config FPGA_BRIDGE
->  
->  config SOCFPGA_FPGA_BRIDGE
->  	tristate "Altera SoCFPGA FPGA Bridges"
-> -	depends on ARCH_SOCFPGA && FPGA_BRIDGE
-> +	depends on ARCH_INTEL_SOCFPGA && FPGA_BRIDGE
->  	help
->  	  Say Y to enable drivers for FPGA bridges for Altera SOCFPGA
->  	  devices.
-> -- 
-> 2.25.1
+> 1) The kernel RIP is known to be good (can't page fault etc. on kernel address).
+> 2) There are only a half dozen instructions used by the kernel for get_user() or
+>      copy_from_user().
 > 
-Thanks,
-Moritz
+> When the machine check happens during user execution accessing poison data
+> we only have the physical address (from MCi_ADDR).
+> 
+> -Tony
+
+Sorry to interrupt as I am really confused here:
+If it's a copyin case, has the page been mapped for the current process?
+will memory_failure() find it and unmap it? if succeed, then the current will be
+signaled with correct vaddr and shift?
+
+Maybe the mce_vaddr is set correctly, but we may lost the correct page shift?
+
+And for copyin case, we don't need to call set_mce_nospec()?
+
+-- 
+Thanks!
+Aili Yao
