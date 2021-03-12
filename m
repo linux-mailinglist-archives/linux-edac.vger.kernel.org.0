@@ -2,40 +2,40 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D18E4339365
-	for <lists+linux-edac@lfdr.de>; Fri, 12 Mar 2021 17:30:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DBA12339A28
+	for <lists+linux-edac@lfdr.de>; Sat, 13 Mar 2021 00:49:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232190AbhCLQ3s convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-edac@lfdr.de>); Fri, 12 Mar 2021 11:29:48 -0500
-Received: from mga11.intel.com ([192.55.52.93]:59180 "EHLO mga11.intel.com"
+        id S235866AbhCLXsy convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-edac@lfdr.de>); Fri, 12 Mar 2021 18:48:54 -0500
+Received: from mga17.intel.com ([192.55.52.151]:60337 "EHLO mga17.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232005AbhCLQ3r (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Fri, 12 Mar 2021 11:29:47 -0500
-IronPort-SDR: HbCqPIK8EYH03sr8G7Tq7VHevrTUnXZNLYXcmb2GfGwisTAB4fUL2+DZha0hH0yGprrGoHIJEj
- DAjXCdoClRQw==
-X-IronPort-AV: E=McAfee;i="6000,8403,9921"; a="185497514"
+        id S235917AbhCLXsf (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Fri, 12 Mar 2021 18:48:35 -0500
+IronPort-SDR: zvGsp/lYoTNcTDolUZlvQVsfiOCLUMS8A+jXMjg+uvIqQ3BSHnF9M5pBvzn5JTw1M/je1/krZm
+ 18+d1eYA/l/Q==
+X-IronPort-AV: E=McAfee;i="6000,8403,9921"; a="168822009"
 X-IronPort-AV: E=Sophos;i="5.81,244,1610438400"; 
-   d="scan'208";a="185497514"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Mar 2021 08:29:39 -0800
-IronPort-SDR: xfqavqvf/Q0gVTpWY4GxfHOXj9kaFU8+WFvbVgS8pgLZG1ix1w4s9a3BS98RLT7M+ItzKo7tSo
- qEGAsaM36rYA==
+   d="scan'208";a="168822009"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Mar 2021 15:48:32 -0800
+IronPort-SDR: eU82mLSqcCkLWvqZYcSZQVkkNBFocFGN+1m26nc2uVQbSnZahEsgExEJmQGe4pwUfLdTG/q96a
+ RMCoALwfuXig==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.81,244,1610438400"; 
-   d="scan'208";a="387388874"
+   d="scan'208";a="604110535"
 Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
-  by orsmga002.jf.intel.com with ESMTP; 12 Mar 2021 08:29:39 -0800
-Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
+  by fmsmga005.fm.intel.com with ESMTP; 12 Mar 2021 15:48:32 -0800
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
  fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2106.2; Fri, 12 Mar 2021 08:29:38 -0800
+ 15.1.2106.2; Fri, 12 Mar 2021 15:48:32 -0800
 Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
- fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
+ fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2106.2; Fri, 12 Mar 2021 08:29:38 -0800
+ 15.1.2106.2; Fri, 12 Mar 2021 15:48:31 -0800
 Received: from fmsmsx610.amr.corp.intel.com ([10.18.126.90]) by
  fmsmsx610.amr.corp.intel.com ([10.18.126.90]) with mapi id 15.01.2106.013;
- Fri, 12 Mar 2021 08:29:38 -0800
+ Fri, 12 Mar 2021 15:48:31 -0800
 From:   "Luck, Tony" <tony.luck@intel.com>
 To:     Aili Yao <yaoaili@kingsoft.com>
 CC:     =?iso-2022-jp?B?SE9SSUdVQ0hJIE5BT1lBKBskQktZOH0hIUQ+TGkbKEIp?= 
@@ -53,9 +53,9 @@ CC:     =?iso-2022-jp?B?SE9SSUdVQ0hJIE5BT1lBKBskQktZOH0hIUQ+TGkbKEIp?=
         "sunhao2@kingsoft.com" <sunhao2@kingsoft.com>
 Subject: RE: [PATCH] mm,hwpoison: return -EBUSY when page already poisoned
 Thread-Topic: [PATCH] mm,hwpoison: return -EBUSY when page already poisoned
-Thread-Index: AQHXCnz5ja9ELypBUEatGW66U99st6pnoa2AgAEgN4CAAIHfAIAAAyEAgAAQXwD//9g7gIABDSmAgAALNoCAB2DqAIAAiu0AgABOzQD//+3L0IABObiAgAAiT4CAACi3AIAAmjmAgACgEACAAGnOwIAHwDQAgAHAYACAAADA4IABX0yAgAAnh8A=
-Date:   Fri, 12 Mar 2021 16:29:37 +0000
-Message-ID: <3900f518d1324c388be52cf81f5220e4@intel.com>
+Thread-Index: AQHXCnz5ja9ELypBUEatGW66U99st6pnoa2AgAEgN4CAAIHfAIAAAyEAgAAQXwD//9g7gIABDSmAgAALNoCAB2DqAIAAiu0AgABOzQD//+3L0IABObiAgAAiT4CAACi3AIAAmjmAgACgEACAAGnOwIAHwDQAgAHAYACAAADA4IABX0yAgAAnh8CAAHr7MA==
+Date:   Fri, 12 Mar 2021 23:48:31 +0000
+Message-ID: <af80221baed940d8bcc643e3e7d40036@intel.com>
 References: <20210303115710.2e9f8e23@alex-virtual-machine>
         <20210303163912.3d508e0f@alex-virtual-machine>
         <1a78e9abdc134e35a5efcbf6b2fd2263@intel.com>
@@ -69,7 +69,8 @@ References: <20210303115710.2e9f8e23@alex-virtual-machine>
         <20210311085529.GA22268@hori.linux.bs1.fc.nec.co.jp>
         <db80e98d2b264e988596d0d7d7c8a776@intel.com>
  <20210312135531.72e33b35@alex-virtual-machine>
-In-Reply-To: <20210312135531.72e33b35@alex-virtual-machine>
+ <3900f518d1324c388be52cf81f5220e4@intel.com>
+In-Reply-To: <3900f518d1324c388be52cf81f5220e4@intel.com>
 Accept-Language: en-US
 Content-Language: en-US
 X-MS-Has-Attach: 
@@ -85,30 +86,28 @@ Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-> Sorry to interrupt as I am really confused here:
-> If it's a copyin case, has the page been mapped for the current process?
+>> will memory_failure() find it and unmap it? if succeed, then the current will be
+>> signaled with correct vaddr and shift?
+>
+> That's a very good question.  I didn't see a SIGBUS when I first wrote this code,
+> hence all the p->mce_vaddr.  But now I'm
+> a) not sure why there wasn't a signal
+> b) if we are to fix the problems noted by AndyL, need to make sure that there isn't a SIGBUS
 
-Yes. The kernel has the current process mapped to the low address range
-and code like get_user(), put_user() "simply" reaches down to those addresses
-(maybe not so simply, as the access needs to be within a STAC/CLAC section
-of code on modern CPUs, and the access instruction needs an entry in EXTABLE
-so that the page fault handler can fix it if there isn't a page mapped at the user
-address).
+Tests on upstream kernel today show that memory_failure() is both unmapping the page
+and sending a SIGBUS.
 
-> will memory_failure() find it and unmap it? if succeed, then the current will be
-> signaled with correct vaddr and shift?
 
-That's a very good question.  I didn't see a SIGBUS when I first wrote this code,
-hence all the p->mce_vaddr.  But now I'm
-a) not sure why there wasn't a signal
-b) if we are to fix the problems noted by AndyL, need to make sure that there isn't a SIGBUS
+My biggest issue with the KERNEL_COPYIN recovery path is that we don't have code
+to mark the page not present while we are still in do_machine_check().  That's resulted
+in recovery working for simple cases where there is a single get_user() call followed by
+an error return if that failed. But more complex cases require more machine checks and
+a touching faith that the kernel will eventually give up trying (spoiler: it sometimes doesn't).
 
-> Maybe the mce_vaddr is set correctly, but we may lost the correct page shift?
-Yes. There is a hard-coded PAGE_SHIFT for this case - which may not match the actual page size.
-
-> And for copyin case, we don't need to call set_mce_nospec()?
-Yes. We should.
-
-Thanks for your good questions.
+Thanks to the decode of the instruction we do have the virtual address. So we just need
+a safe walk of pgd->p4d->pud->pmd->pte (truncated if we hit a huge page) with a write
+of a "not-present" value. Maybe a different poison type from the one we get from
+memory_failure() so that the #PF code can recognize this as a special case and do any
+other work that we avoided because we were in #MC context.
 
 -Tony
