@@ -2,77 +2,95 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DA87339AF5
-	for <lists+linux-edac@lfdr.de>; Sat, 13 Mar 2021 02:56:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 478D633C36B
+	for <lists+linux-edac@lfdr.de>; Mon, 15 Mar 2021 18:07:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229523AbhCMBz5 (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Fri, 12 Mar 2021 20:55:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37816 "EHLO
+        id S235484AbhCORHR (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Mon, 15 Mar 2021 13:07:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231907AbhCMBze (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Fri, 12 Mar 2021 20:55:34 -0500
-Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E8E0C061761
-        for <linux-edac@vger.kernel.org>; Fri, 12 Mar 2021 17:55:33 -0800 (PST)
-Received: by mail-pj1-x1049.google.com with SMTP id dw22so1197954pjb.6
-        for <linux-edac@vger.kernel.org>; Fri, 12 Mar 2021 17:55:33 -0800 (PST)
+        with ESMTP id S235128AbhCORG7 (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Mon, 15 Mar 2021 13:06:59 -0400
+Received: from mail-ua1-x942.google.com (mail-ua1-x942.google.com [IPv6:2607:f8b0:4864:20::942])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FABBC06174A
+        for <linux-edac@vger.kernel.org>; Mon, 15 Mar 2021 10:06:59 -0700 (PDT)
+Received: by mail-ua1-x942.google.com with SMTP id q18so3976740uas.11
+        for <linux-edac@vger.kernel.org>; Mon, 15 Mar 2021 10:06:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=SmCiaIj4fa/BntGmklruqMNsz/t3oXGt1XKruu0aMRA=;
-        b=B98B11Im5itjp0Kmsnv8x0PVZohh9t3Z+Qe0bEFacNwdVrdELuVlSdcNMc6SnG74QE
-         xw5Jga0rtYomYVcIlMYdvVRpSwMW4LAsrezoJ1iUibR9i0F/tJdXw4F/ehpZZrA62104
-         OSz8CzWA9rF2PkIjws1SrwHDPL6pVixtmKzIdHWuYVODTvLjsHfU9XN/9Zda34G0vab+
-         ktO89BYEoD10KSA3DnUzmNQ/9PgKtcIkWIXR3iAw8iCZDzcOBXUD6opd9rGVkdvFv+wX
-         gB064quQ9EUR0Cx/kZFEeHEQrlwM7MkC8Izc7zr+yoWeb5sZGFAq20WExNoZCm9LvecH
-         kLiQ==
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=7Vrbe4gpVhb7cfcmpNanXi5E+OCzidx3VGMrGNR2bC4=;
+        b=IeztSHzwFXmZolftCfjFRG56pGeDsims74ZNrOy69DoxsYWGoDOf8BTYU1oihzpMjs
+         /UI0k2L0Qw3uMk8fxnCnza7S4kxuw+JHz2cJfu6pTZ0sITqTYvWJGTtVh2KwWkmjRaJy
+         oTsqALi8i98UbsZJ68pP2yxOMTP8DzeoQ8F9tJSRTRKzr7Z/qLAW+V3UqNTj4H1X6nI/
+         PmV4gS2F9+luv8LVHd613zQz/YI0VKn4OQSm+awZ9Ty028cbDK+a/CGJDynN7FOkoDYO
+         LOVsaPRK7onH069em311RQlabQWfJu0IClqpKWhZmgRyNcuRh2wyGe9w6vsdywtZEkI6
+         +lwg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=SmCiaIj4fa/BntGmklruqMNsz/t3oXGt1XKruu0aMRA=;
-        b=fJhU/sNn2NqiEy1Lz0s8gnbyxI/fNx3qVWT0zVFwV14g2Wp38QoTIUHU8psSEHl2Pb
-         e5OIhDuvvrcklvSHENlUa8Zna5mIeaxG8lSmaZwL3q3RiOfTAvtFLfsxGXMctopq14Wj
-         U5pIrcfF514aGOucBZpdsA4I8AwibFPw4H8mrmWn3nrfQyzDEoyF/I4yK5Sg4yvxDrzk
-         IqjDzLAQnijawJdQYc4b76WEgnlNfuI3Wgx+bog5yDbgs1nU1zHQkthTfRiASjGs2Pn+
-         SJVrrc+5digHwkYVJEAmNnlUFKkKr/ytw2Zxgnw5PredZeeFLHYznzzC62iIm380dbFF
-         55rA==
-X-Gm-Message-State: AOAM531nogSC174L2hBM/1SQIGaRR1mC4ixs2a+dxGeslYu04XhEHlbb
-        wVosZiChCJCQOQOoXTpdgzbsw1G0
-X-Google-Smtp-Source: ABdhPJwhh25oOc/8AJVs7FL5eGzsu8RlANUl9BwX2RMIN7WSJXFoNJtiRI++7NwAsSX0QjlN4YWHtAqg
-X-Received: from juew-desktop.sea.corp.google.com ([2620:15c:100:202:91c2:423c:5356:a5c6])
- (user=juew job=sendgmr) by 2002:a05:6a00:15d4:b029:1fb:17bf:abe5 with SMTP id
- o20-20020a056a0015d4b02901fb17bfabe5mr971565pfu.39.1615600533243; Fri, 12 Mar
- 2021 17:55:33 -0800 (PST)
-Date:   Fri, 12 Mar 2021 17:55:31 -0800
-In-Reply-To: <20210309200140.GA237657@agluck-desk2.amr.corp.intel.com>
-Message-Id: <20210313015531.1737679-1-juew@google.com>
-Mime-Version: 1.0
-References: <20210309200140.GA237657@agluck-desk2.amr.corp.intel.com>
-X-Mailer: git-send-email 2.31.0.rc2.261.g7f71774620-goog
-Subject: Re: [PATCH v2] mm,hwpoison: return -EBUSY when page already poisoned
-From:   Jue Wang <juew@google.com>
-To:     tony.luck@intel.com
-Cc:     akpm@linux-foundation.org, bp@alien8.de, david@redhat.com,
-        hpa@zytor.com, linux-edac@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org, mingo@redhat.com,
-        naoya.horiguchi@nec.com, osalvador@suse.de, tglx@linutronix.de,
-        x86@kernel.org, yangfeng1@kingsoft.com, yaoaili@kingsoft.com
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=7Vrbe4gpVhb7cfcmpNanXi5E+OCzidx3VGMrGNR2bC4=;
+        b=uKVR2HhUIUPqRvm8PKmJKmBcq785Hzjvx3NwTmnu24FxHwjwmUYrI1SbxsMTTSCoqX
+         Fz5EL0fJlvvRwaopI5Fx+L+YmYKxCXbKXwtXdTX5kBXJmwv7OX1GAbN4uPBIHGLnBw+v
+         xel1zgnYTqd4acH0dPOu0olsfIlcih6n6KKzNjuqW5AxfpsNUxMwl1AcizEW8Q0NAAKA
+         vcOdSzXJOZmCk87/l+BOA1B00pZy/e2Wf35PhF85m2bnNmza8G3cSkgggdsuQ6pjJVj6
+         NzSMNov+a1Cd4xanYPxc3mAHUpNNLOAaaoi4K8SgZ3kRc0fQCu3hGVJkUMC7R60dFrYs
+         knSg==
+X-Gm-Message-State: AOAM532/tO7ctWJrgmH10zyITJIGJouQ14sPlTsGik5vKviCO0OERDuw
+        46Rasw4PZrNgCeNe0TYP2BH7ce5rhaKqD3THAB0=
+X-Google-Smtp-Source: ABdhPJwEfkQ2Vj8T+Ow2okUm+JjAfQUJvyZL+X+WzN8tH7luDQmnBYiNeC3HSx9EJovMuQf3n7FVpZyzmlmraCcCLv0=
+X-Received: by 2002:ab0:32cf:: with SMTP id f15mr5321130uao.68.1615828018158;
+ Mon, 15 Mar 2021 10:06:58 -0700 (PDT)
+MIME-Version: 1.0
+Received: by 2002:ab0:2e8f:0:0:0:0:0 with HTTP; Mon, 15 Mar 2021 10:06:57
+ -0700 (PDT)
+Reply-To: ezbtg22@gmail.com
+From:   "Mrs.E.Glenn" <mrganuserge654@gmail.com>
+Date:   Mon, 15 Mar 2021 10:06:57 -0700
+Message-ID: <CAH16wSN_QM_RAUGGsZ7LC8VTEKhCu3+VnJoNqqTumu2QA95yEg@mail.gmail.com>
+Subject: From Mrs.Glenn
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-I believe the mutex type patch has its own value in protecting 
-memory_failure from other inherent races, e.g., races around 
-split_huge_page where concurrent MCE happens to different 4k pages 
-under the same THP.[1] This realistically can happen given the physical
-locality clustering effect of memory errors.
+-- 
+Dear Beloved,
 
-Thanks,
--Jue
+I am Mrs Elizabet Glenn from Israel. I am a missionary but right now
+in a hospital bed in Israel. I am 59 years and childless; my husband
+is dead. I was diagnosed with terminal cancer. And my doctor just
+predicted that I have but very limited time to live due to damages in
+my system and as a result of that I decided to dispose my 10.5 million
+US dollars to a God-fearing one for the continuation of charitable
+work. This is why I located you.
 
-[1] The split fails due to a page reference taken by other concurrent 
-calling into memory_failure on the same THP.
+My guess about you may not be accurate because I came across your
+contact at the humanitarian calendar event of the year but I believe
+in God who divinely directed me to you for this solemn proposal of
+charitable work.
 
+Therefore I wholeheartedly wish to bequeath my fortune to you as a
+God-fearing person for the continuation of charitable work anywhere
+around the world.
+
+I shall be going in for a surgery operations soonest and desire this
+money to be transferred to you as I do not wish to leave this money in
+the bank because bankers might misuse it for their own interest after
+my death.
+
+As soon as I receive your quick reply assuring me that you will
+utilize the money as I instructed you for the benefit of the less
+privilege, I shall give you more details and also instruct my bank to
+release the money to you for the charity project. I hope you receive
+this mail in good health.
+
+Please contact me on this E-mail (ezbtg22@gmail.com) because I don t
+know what will be my situation in next minute,
+
+I am waiting for your reply.
+
+Yours sincerely,
+Mrs Elizabet Glenn.
