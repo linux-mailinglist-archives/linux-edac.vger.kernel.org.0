@@ -2,32 +2,32 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AEC0733EB59
-	for <lists+linux-edac@lfdr.de>; Wed, 17 Mar 2021 09:23:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BC0C33EC33
+	for <lists+linux-edac@lfdr.de>; Wed, 17 Mar 2021 10:08:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229634AbhCQIXM convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-edac@lfdr.de>); Wed, 17 Mar 2021 04:23:12 -0400
-Received: from mail.kingsoft.com ([114.255.44.145]:15487 "EHLO
+        id S229535AbhCQJIA (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Wed, 17 Mar 2021 05:08:00 -0400
+Received: from mail.kingsoft.com ([114.255.44.145]:15495 "EHLO
         mail.kingsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229541AbhCQIXI (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Wed, 17 Mar 2021 04:23:08 -0400
-X-AuditID: 0a580155-20dff7000005482e-0d-6051b4b3c64c
+        with ESMTP id S229508AbhCQJHs (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Wed, 17 Mar 2021 05:07:48 -0400
+X-AuditID: 0a580157-463ff70000021a79-40-6051c00aa68a
 Received: from mail.kingsoft.com (localhost [10.88.1.32])
         (using TLS with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (Client did not present a certificate)
-        by mail.kingsoft.com (SMG-2-NODE-85) with SMTP id 57.C4.18478.3B4B1506; Wed, 17 Mar 2021 15:50:11 +0800 (HKT)
+        by mail.kingsoft.com (SMG-1-NODE-87) with SMTP id A3.43.06777.A00C1506; Wed, 17 Mar 2021 16:38:34 +0800 (HKT)
 Received: from alex-virtual-machine (172.16.253.254) by KSBJMAIL2.kingsoft.cn
  (10.88.1.32) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2176.2; Wed, 17 Mar
- 2021 16:23:05 +0800
-Date:   Wed, 17 Mar 2021 16:23:04 +0800
+ 2021 17:07:45 +0800
+Date:   Wed, 17 Mar 2021 17:07:44 +0800
 From:   Aili Yao <yaoaili@kingsoft.com>
-To:     "HORIGUCHI =?UTF-8?B?TkFPWUE=?=(=?UTF-8?B?5aCA5Y+j44CA55u05Lmf?=)" 
-        <naoya.horiguchi@nec.com>
-CC:     "Luck, Tony" <tony.luck@intel.com>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        Oscar Salvador <osalvador@suse.de>,
+To:     "Luck, Tony" <tony.luck@intel.com>
+CC:     Andy Lutomirski <luto@kernel.org>,
+        "HORIGUCHI =?UTF-8?B?TkFPWUE=?=( =?UTF-8?B?5aCA5Y+j44CA55u05Lmf?=)" 
+        <naoya.horiguchi@nec.com>, "Oscar Salvador" <osalvador@suse.de>,
         "david@redhat.com" <david@redhat.com>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
         "bp@alien8.de" <bp@alien8.de>,
         "tglx@linutronix.de" <tglx@linutronix.de>,
         "mingo@redhat.com" <mingo@redhat.com>,
@@ -36,286 +36,313 @@ CC:     "Luck, Tony" <tony.luck@intel.com>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
         "linux-mm@kvack.org" <linux-mm@kvack.org>,
         "yangfeng1@kingsoft.com" <yangfeng1@kingsoft.com>,
-        <sunhao2@kingsoft.com>, <yaoaili@kingsoft.com>
+        "sunhao2@kingsoft.com" <sunhao2@kingsoft.com>,
+        <yaoaili@kingsoft.com>
 Subject: Re: [PATCH] mm,hwpoison: return -EBUSY when page already poisoned
-Message-ID: <20210317162304.58ff188c@alex-virtual-machine>
-In-Reply-To: <20210317154812.4173f423@alex-virtual-machine>
-References: <20210303115710.2e9f8e23@alex-virtual-machine>
-        <20210303163912.3d508e0f@alex-virtual-machine>
-        <1a78e9abdc134e35a5efcbf6b2fd2263@intel.com>
-        <20210304101653.546a9da1@alex-virtual-machine>
-        <20210304121941.667047c3@alex-virtual-machine>
-        <20210304144524.795872d7@alex-virtual-machine>
+Message-ID: <20210317170744.01413dcd@alex-virtual-machine>
+In-Reply-To: <20210317002939.GA276305@agluck-desk2.amr.corp.intel.com>
+References: <20210304144524.795872d7@alex-virtual-machine>
         <20210304235720.GA215567@agluck-desk2.amr.corp.intel.com>
         <20210305093016.40c87375@alex-virtual-machine>
         <aee5176eafb54c88b19a5b2671d0a1fc@intel.com>
         <20210310141042.4db9ea29@alex-virtual-machine>
         <20210311085529.GA22268@hori.linux.bs1.fc.nec.co.jp>
-        <20210317154812.4173f423@alex-virtual-machine>
+        <db80e98d2b264e988596d0d7d7c8a776@intel.com>
+        <20210312135531.72e33b35@alex-virtual-machine>
+        <3900f518d1324c388be52cf81f5220e4@intel.com>
+        <af80221baed940d8bcc643e3e7d40036@intel.com>
+        <20210317002939.GA276305@agluck-desk2.amr.corp.intel.com>
 Organization: kingsoft
 X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.30; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
 Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 8BIT
+Content-Transfer-Encoding: 7bit
 X-Originating-IP: [172.16.253.254]
 X-ClientProxiedBy: KSBJMAIL1.kingsoft.cn (10.88.1.31) To KSBJMAIL2.kingsoft.cn
  (10.88.1.32)
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprNIsWRmVeSWpSXmKPExsXCFcGooLt5S2CCwflHQhZz1q9hs/i84R+b
-        xdf1v5gtpm0Ut7hwqoHJ4vKuOWwW99b8Z7W4dGABk8XFxgOMFmemFVls3jSV2eLNhXssFj82
-        PGZ14PX43trH4rF4z0smj02rOtk8Nn2axO7x7tw5do8TM36zeLy4upHF4/2+q2wem09Xe3ze
-        JOdxouULawB3FJdNSmpOZllqkb5dAlfGx2aZgllWFfcOJDUwtup3MXJySAiYSGz4upSli5GL
-        Q0hgOpPE8pkTGCGcV4wSC7atZQapYhFQlfi1ezcTiM0GZO+6N4sVxBYRSJJYPPsrE0gDs8B3
-        FoknV7eAFQkLeEl8ub+WEcTmFbCSmDG3nR3E5hSwltj87j8rxIZHLBIHZu1lA0nwC4hJ9F75
-        zwRxk71E25ZFUM2CEidnPmEBsZkFdCROrDrGDGFrSyxb+BrMFhJQlDi85Bc7RK+SxJHuGWwQ
-        dqzEsnmvWCcwCs9CMmoWklGzkIxawMi8ipGlODfdaBMjJP5CdzDOaPqod4iRiYPxEKMEB7OS
-        CK9pXkCCEG9KYmVValF+fFFpTmrxIUZpDhYlcV7HSKCUQHpiSWp2ampBahFMlomDU6qB6bbk
-        erbwsktHc/6ET/DufuCcJRb66P7OLVd7mNh7tASOH3E6mnZfjKVz6wXhB1OFHBueP5Xx2GHv
-        Ep779+LKvyFzwxK4i5s2ahWVMNgyCF7Pqw+4Y7+8pdA7UEpU54sd39mN5Z+V0w2sFa3/BXPt
-        FFr3zHCu5NTosmVv+/c83tRSE7Xw3CweXaHTf0wOr9k9S2LtVAGzOW9Vd9zWeLo5I7RW8plB
-        dcdKI6FuqT0yLxS37ExbwcT5l60pZc2Z2y0Lr5jYaWUJXtVz3fBg7sLVCZsNOr1dS8KiHvEK
-        nDU9EanydOm1yTuvqJ59tm83Z7QKQ4btt0mzD6xhev8zIiu6TO/xQus/b8895PYTrvPMUmIp
-        zkg01GIuKk4EAMr+zukuAwAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprPIsWRmVeSWpSXmKPExsXCFcGooMt1IDDBYPtVQYs569ewWXze8I/N
+        4uv6X8wW0zaKW1w41cBkcXnXHDaLe2v+s1qc37WW1eLSgQVMFhcbDzBanJlWZLF501RmizcX
+        7rFY/NjwmNWBz+N7ax+Lx+I9L5k8Nq3qZPPY9GkSu8e7c+fYPU7M+M3i8eLqRhaP9/uusnls
+        Pl3t8XmTnMeJli+sAdxRXDYpqTmZZalF+nYJXBnPrh5kK7gWUvFi9wGWBsYPzl2MnBwSAiYS
+        DdNesnYxcnEICUxnkvj6Zh8LSEJI4BWjxNJeARCbRUBV4tPlFjYQmw3I3nVvFiuILSKgJnFp
+        8QNmEJtZ4BOrxP7X6SC2sICXxJf7axlBbF4BK4m/lzrYuxg5ODgF3CQ+7xGE2LWDReLNvlNg
+        c/gFxCR6r/xngjjIXqJtyyKoXkGJkzOfsEDM15E4seoY1C55ie1v5zBD3KkocXjJL3aIXiWJ
+        I90z2CDsWIll816xTmAUnoVk1Cwko2YhGbWAkXkVI0txbrrhJkZIHIbvYJzX9FHvECMTB+Mh
+        RgkOZiURXtO8gAQh3pTEyqrUovz4otKc1OJDjNIcLErivCJRQCmB9MSS1OzU1ILUIpgsEwen
+        VANTyLn+iG9vmj/YKK1N2dH6P+6K3izj+hXbi946evS88LZoDBMwFRdaWWx4Kq+LqUuSI3TD
+        y9Pqpf4eieKl3G+8OpakRcwzvvrmnjpv3dnFK1mdlXwiQr9pB9r+3rRJtPqVg0Dhn0pWp4s5
+        BYJSq7+Um9YI76kxv3k0ZKVw2tYNog80Tu19V216ylX1+sTtOZMVkp/IfZ7jZb16ZqzpIbeH
+        uqat6bPDMx5FnWqLLe+orA7KqDq9gbckKSu8em2hn/rJXq0pVrzrdq2OSzjN4vNp6uLsveVr
+        8+N84n+/WH/21LYE+apVybZGcQb/7Pe99i35LqN0eWdJ8s9JjMHPnSf5dZ393elZp1/349Hs
+        BCWW4oxEQy3mouJEAKnidwkyAwAA
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
+On Tue, 16 Mar 2021 17:29:39 -0700
+"Luck, Tony" <tony.luck@intel.com> wrote:
 
-> > 
-> > Returning true means you stop walking when you find the first entry pointing
-> > to a given pfn. But there could be multiple such entries, so if MCE SRAR is
-> > triggered by memory access to the larger address in hwpoisoned entries, the
-> > returned virtual address might be wrong.
-> >   
+> On Fri, Mar 12, 2021 at 11:48:31PM +0000, Luck, Tony wrote:
+> > Thanks to the decode of the instruction we do have the virtual address. So we just need
+> > a safe walk of pgd->p4d->pud->pmd->pte (truncated if we hit a huge page) with a write
+> > of a "not-present" value. Maybe a different poison type from the one we get from
+> > memory_failure() so that the #PF code can recognize this as a special case and do any
+> > other work that we avoided because we were in #MC context.  
 > 
-> I can't find the way to fix this, maybe the virtual address is contained in
-> related register, but this is really beyong my knowledge.
+> There is no such thing as the safe walk I describe above. In a multi
+> threaded application other threads might munmap(2) bits of the address
+> space which could free some of the p4d->pud->pmd->pte tables.
 > 
-> This is a v2 RFC patch, add support for thp and 1G huge page errors.
+> But the pgd table is guaranteed to exist as long as any of the threads
+> in the process exist. Which gave rise to a new approach (partial credit
+> to Dave Hansen who helped me understand why a more extreme patch that
+> I wanted to use wasn't working ... and he pointed out the pgd persistence).
+> 
+> N.B. The code below DOES NOT WORK. My test application tried to do a write(2)
+> syscall with some poison in the buffer. Goal is that write should return a
+> short count (with only the bytes from the buffer leading up to the poison
+> written to the file). Currently the process gets a suprise SIGSEGV in
+> some glibc code :-(
+> 
+> The code would also need a bunch more work to handle the fact that
+> in a multi-threaded application multiple threads might consume the
+> poison, and some innocent threads not consuming the poison may also end
+> up drawn into the melee in the page fault handler.
+> 
+> 
+> The big picture.
+> ---------------
+> 
+> This approach passes the buck for the recovery from the #MC handler
+> (which has very limited options to do anything useful) to the #PF
+> handler (which is a much friendlier environment where locks and mutexes
+> can be obtained as needed).
+> 
+> The mechanism for this buck passing is for the #MC handler to set a
+> reserved bit in the PGD entry for the user address where the machine
+> check happened, flush the TLB for that address, and then return from
+> the #MC handler to the kernel get_user()/copy_from_user() code which
+> will re-execute the instruction to access the poison address, but this
+> time take a #PF because of the reserved bit in the PGD.
+> 
+> There's a couple of changes bundled in here to help my debugging:
+> 1) Turn off UCNA calls to memory_failure() ... just avoids races
+>    and make tests more determinstic for now
+> 2) Disable "fast string" support ... avoid "REP MOVS" copy routines
+>    since I'm testing on an old system that treats poison consumed
+>    by REP MOVS as fatal.
+> 
+> Posted here for general comments on the approach.  On the plus
+> side it avoids taking multiple machine checks in the kernel when
+> it is accessing user data. I think it can also meet the goal set
+> by Andy Lutomirski of avoiding SIGBUS from syscalls that happen
+> to touch user poison. They should see either short counts for
+> calls like write(2) that may partially succeed or -EFAULT if
+> the system call totally failed.
 > 
 
-Sorry for the debug info and other unclean modifications.
+I have another view here, but maybe wrong, post here for discussion:
+When the process is signaled SIGBUS with BUS_MCEERR_AR, i think it should be from
+a read, with the data read, the process can proceed, like process the data, or make decision.
+When for poison, the data can't be returned, the process don't know what to do, and kill
+is the first option.
 
-Post a clean one.
+while for a copyin case, the read is excuted by kernel, and for poison kernel will refuse to
+excute current read and further operation. For the process, it seems it have a change to proceed.
+
+if just error code is returned, the process may care or not, it may not correctly process the error.
+It seems the worst case here is the process will touch the poison page again, trigger another MCE and
+accordingly be killed.
+
+It's not that bad?
 
 Thanks
 Aili Yao
 
-From 2289276ba943cdcddbf3b5b2cdbcaff78690e2e8 Mon Sep 17 00:00:00 2001
-From: Aili Yao <yaoaili@kingsoft.com>
-Date: Wed, 17 Mar 2021 16:12:41 +0800
-Subject: [PATCH] fix invalid SIGBUS address for recovery fail
+> 
+> diff --git a/arch/x86/include/asm/pgtable_types.h b/arch/x86/include/asm/pgtable_types.h
+> index f24d7ef8fffa..e533eaf20834 100644
+> --- a/arch/x86/include/asm/pgtable_types.h
+> +++ b/arch/x86/include/asm/pgtable_types.h
+> @@ -23,6 +23,7 @@
+>  #define _PAGE_BIT_SOFTW2	10	/* " */
+>  #define _PAGE_BIT_SOFTW3	11	/* " */
+>  #define _PAGE_BIT_PAT_LARGE	12	/* On 2MB or 1GB pages */
+> +#define _PAGE_BIT_RESERVED1	51	/* Reserved bit */
+>  #define _PAGE_BIT_SOFTW4	58	/* available for programmer */
+>  #define _PAGE_BIT_PKEY_BIT0	59	/* Protection Keys, bit 1/4 */
+>  #define _PAGE_BIT_PKEY_BIT1	60	/* Protection Keys, bit 2/4 */
+> @@ -56,6 +57,7 @@
+>  #define _PAGE_PAT_LARGE (_AT(pteval_t, 1) << _PAGE_BIT_PAT_LARGE)
+>  #define _PAGE_SPECIAL	(_AT(pteval_t, 1) << _PAGE_BIT_SPECIAL)
+>  #define _PAGE_CPA_TEST	(_AT(pteval_t, 1) << _PAGE_BIT_CPA_TEST)
+> +#define _PAGE_RESERVED1	(_AT(pteval_t, 1) << _PAGE_BIT_RESERVED1)
+>  #ifdef CONFIG_X86_INTEL_MEMORY_PROTECTION_KEYS
+>  #define _PAGE_PKEY_BIT0	(_AT(pteval_t, 1) << _PAGE_BIT_PKEY_BIT0)
+>  #define _PAGE_PKEY_BIT1	(_AT(pteval_t, 1) << _PAGE_BIT_PKEY_BIT1)
+> diff --git a/arch/x86/include/asm/traps.h b/arch/x86/include/asm/traps.h
+> index 7f7200021bd1..269e8ee04c11 100644
+> --- a/arch/x86/include/asm/traps.h
+> +++ b/arch/x86/include/asm/traps.h
+> @@ -45,4 +45,24 @@ void __noreturn handle_stack_overflow(const char *message,
+>  				      unsigned long fault_address);
+>  #endif
+>  
+> +static inline void pgd_set_reserved(pgd_t *pgdp, unsigned long addr)
+> +{
+> +	pgd_t	pgd;
+> +
+> +	pgdp += pgd_index(addr);
+> +	pgd = *pgdp;
+> +	pgd.pgd |= _PAGE_RESERVED1;
+> +	WRITE_ONCE(*pgdp, pgd);
+> +}
+> +
+> +static inline void pgd_clr_reserved(pgd_t *pgdp, unsigned long addr)
+> +{
+> +	pgd_t	pgd;
+> +
+> +	pgdp += pgd_index(addr);
+> +	pgd = *pgdp;
+> +	pgd.pgd &= ~_PAGE_RESERVED1;
+> +	WRITE_ONCE(*pgdp, pgd);
+> +}
+> +
+>  #endif /* _ASM_X86_TRAPS_H */
+> diff --git a/arch/x86/kernel/cpu/intel.c b/arch/x86/kernel/cpu/intel.c
+> index 0e422a544835..974e1eb5d1aa 100644
+> --- a/arch/x86/kernel/cpu/intel.c
+> +++ b/arch/x86/kernel/cpu/intel.c
+> @@ -287,6 +287,7 @@ static void early_init_intel(struct cpuinfo_x86 *c)
+>  	 */
+>  	if (c->x86 > 6 || (c->x86 == 6 && c->x86_model >= 0xd)) {
+>  		rdmsrl(MSR_IA32_MISC_ENABLE, misc_enable);
+> +misc_enable = 0;
+>  		if (!(misc_enable & MSR_IA32_MISC_ENABLE_FAST_STRING)) {
+>  			pr_info("Disabled fast string operations\n");
+>  			setup_clear_cpu_cap(X86_FEATURE_REP_GOOD);
+> diff --git a/arch/x86/kernel/cpu/mce/core.c b/arch/x86/kernel/cpu/mce/core.c
+> index 7962355436da..41bedc961928 100644
+> --- a/arch/x86/kernel/cpu/mce/core.c
+> +++ b/arch/x86/kernel/cpu/mce/core.c
+> @@ -635,6 +635,7 @@ static struct notifier_block early_nb = {
+>  static int uc_decode_notifier(struct notifier_block *nb, unsigned long val,
+>  			      void *data)
+>  {
+> +#if 0
+>  	struct mce *mce = (struct mce *)data;
+>  	unsigned long pfn;
+>  
+> @@ -650,7 +651,7 @@ static int uc_decode_notifier(struct notifier_block *nb, unsigned long val,
+>  		set_mce_nospec(pfn, whole_page(mce));
+>  		mce->kflags |= MCE_HANDLED_UC;
+>  	}
+> -
+> +#endif
+>  	return NOTIFY_OK;
+>  }
+>  
+> @@ -1443,8 +1444,18 @@ noinstr void do_machine_check(struct pt_regs *regs)
+>  				mce_panic("Failed kernel mode recovery", &m, msg);
+>  		}
+>  
+> -		if (m.kflags & MCE_IN_KERNEL_COPYIN)
+> -			queue_task_work(&m, kill_current_task);
+> +		/*
+> +		 * Machine check while copying from user space. Note that we
+> +		 * do not call fixup_exception(). Instead we ensure a page fault
+> +		 * when we return to the faulting instruction.
+> +		 * Let the page fault handler do the rest of the
+> +		 * recovery.
+> +		 */
+> +		if (m.kflags & MCE_IN_KERNEL_COPYIN) {
+> +			flush_tlb_one_user((unsigned long)current->mce_vaddr);
+> +			pgd_set_reserved(current->mm->pgd, (unsigned long)current->mce_vaddr);
+> +			current->mce_addr = m.addr;
+> +		}
+>  	}
+>  out:
+>  	mce_wrmsrl(MSR_IA32_MCG_STATUS, 0);
+> diff --git a/arch/x86/kernel/cpu/mce/severity.c b/arch/x86/kernel/cpu/mce/severity.c
+> index 83df991314c5..da917945150d 100644
+> --- a/arch/x86/kernel/cpu/mce/severity.c
+> +++ b/arch/x86/kernel/cpu/mce/severity.c
+> @@ -282,7 +282,6 @@ static int error_context(struct mce *m, struct pt_regs *regs)
+>  		return IN_KERNEL_RECOV;
+>  	}
+>  	if (t == EX_HANDLER_UACCESS && regs && is_copy_from_user(regs)) {
+> -		m->kflags |= MCE_IN_KERNEL_RECOV;
+>  		m->kflags |= MCE_IN_KERNEL_COPYIN;
+>  		return IN_KERNEL_RECOV;
+>  	}
+> diff --git a/arch/x86/lib/copy_user_64.S b/arch/x86/lib/copy_user_64.S
+> index 77b9b2a3b5c8..e0e71ca023ce 100644
+> --- a/arch/x86/lib/copy_user_64.S
+> +++ b/arch/x86/lib/copy_user_64.S
+> @@ -234,24 +234,11 @@ EXPORT_SYMBOL(copy_user_enhanced_fast_string)
+>   */
+>  SYM_CODE_START_LOCAL(.Lcopy_user_handle_tail)
+>  	movl %edx,%ecx
+> -	cmp $X86_TRAP_MC,%eax		/* check if X86_TRAP_MC */
+> -	je 3f
+>  1:	rep movsb
+>  2:	mov %ecx,%eax
+>  	ASM_CLAC
+>  	ret
+>  
+> -	/*
+> -	 * Return zero to pretend that this copy succeeded. This
+> -	 * is counter-intuitive, but needed to prevent the code
+> -	 * in lib/iov_iter.c from retrying and running back into
+> -	 * the poison cache line again. The machine check handler
+> -	 * will ensure that a SIGBUS is sent to the task.
+> -	 */
+> -3:	xorl %eax,%eax
+> -	ASM_CLAC
+> -	ret
+> -
+>  	_ASM_EXTABLE_CPY(1b, 2b)
+>  SYM_CODE_END(.Lcopy_user_handle_tail)
+>  
+> diff --git a/arch/x86/mm/fault.c b/arch/x86/mm/fault.c
+> index a73347e2cdfc..49232264e893 100644
+> --- a/arch/x86/mm/fault.c
+> +++ b/arch/x86/mm/fault.c
+> @@ -1245,9 +1245,13 @@ void do_user_addr_fault(struct pt_regs *regs,
+>  	/*
+>  	 * Reserved bits are never expected to be set on
+>  	 * entries in the user portion of the page tables.
+> +	 * Except when machine check handling of a copy from
+> +	 * user passed the buck to #PF.
+>  	 */
+> -	if (unlikely(error_code & X86_PF_RSVD))
+> -		pgtable_bad(regs, error_code, address);
+> +	if (unlikely(error_code & X86_PF_RSVD)) {
+> +		if (!current->mce_vaddr)
+> +			pgtable_bad(regs, error_code, address);
+> +	}
+>  
+>  	/*
+>  	 * If SMAP is on, check for invalid kernel (supervisor) access to user
+> @@ -1291,6 +1295,15 @@ void do_user_addr_fault(struct pt_regs *regs,
+>  			local_irq_enable();
+>  	}
+>  
+> +	if (current->mce_vaddr) {
+> +		pgd_clr_reserved(current->mm->pgd,
+> +				 (unsigned long)current->mce_vaddr);
+> +		memory_failure(current->mce_addr >> PAGE_SHIFT, 0);
+> +		current->mce_vaddr = 0;
+> +		error_code &= ~X86_PF_RSVD;
+> +		pr_info("#PF: maybe fixed? Try to continue\n");
+> +	}
+> +
+>  	perf_sw_event(PERF_COUNT_SW_PAGE_FAULTS, 1, regs, address);
+>  
+>  	if (error_code & X86_PF_WRITE)
 
-Walk the current process pages and compare with the pfn, then get the
-user address and related page_shift.
 
-For thp pages, we can only split anonoums thp page, so I think there may
-be no race condition for walking and searching the thp error page for such
-case; For non anonymous thp, the page flag and pte will not be change. so
-when code goes into this place, it may be race condition for non-anonoums
-thp page or from a recovery fail for anonoums thp, the page status will
-not change, i am not so sure about this;
 
-For the case we don't find the related virtual address, Maybe sending one
-BUS_MCEERR_AR signal with invalid address NULL is a better option, but i am
-not sure.
-
-And this may get the wrong virtual address if process have multiple entry
-for a same page, I don't find a way to get it correct.
-
-Maybe other issues is not recognized.
----
- arch/x86/kernel/cpu/mce/core.c |  12 +---
- include/linux/mm.h             |   1 +
- mm/memory-failure.c            | 127 +++++++++++++++++++++++++++++++++++++++++
- 3 files changed, 131 insertions(+), 9 deletions(-)
-
-diff --git a/arch/x86/kernel/cpu/mce/core.c b/arch/x86/kernel/cpu/mce/core.c
-index db4afc5..4cb873c 100644
---- a/arch/x86/kernel/cpu/mce/core.c
-+++ b/arch/x86/kernel/cpu/mce/core.c
-@@ -1246,7 +1246,7 @@ static void kill_me_maybe(struct callback_head *cb)
- 	struct task_struct *p = container_of(cb, struct task_struct, mce_kill_me);
- 	int flags = MF_ACTION_REQUIRED;
- 
--	pr_err("Uncorrected hardware memory error in user-access at %llx", p->mce_addr);
-+	pr_err("Uncorrected hardware memory error in user-access at %llx\n", p->mce_addr);
- 
- 	if (!p->mce_ripv)
- 		flags |= MF_MUST_KILL;
-@@ -1258,14 +1258,8 @@ static void kill_me_maybe(struct callback_head *cb)
- 		return;
- 	}
- 
--	if (p->mce_vaddr != (void __user *)-1l) {
--		pr_err("Memory error may not recovered: %#lx: Sending SIGBUS to %s:%d due to hardware memory corruption\n",
--			p->mce_addr >> PAGE_SHIFT, p->comm, p->pid);
--		force_sig_mceerr(BUS_MCEERR_AR, p->mce_vaddr, PAGE_SHIFT);
--	} else {
--		pr_err("Memory error not recovered");
--		kill_me_now(cb);
--	}
-+	memory_failure_error(current, p->mce_addr >> PAGE_SHIFT);
-+
- }
- 
- static void queue_task_work(struct mce *m, int kill_current_task)
-diff --git a/include/linux/mm.h b/include/linux/mm.h
-index ecdf8a8..cff2f02 100644
---- a/include/linux/mm.h
-+++ b/include/linux/mm.h
-@@ -3046,6 +3046,7 @@ enum mf_flags {
- 	MF_SOFT_OFFLINE = 1 << 3,
- };
- extern int memory_failure(unsigned long pfn, int flags);
-+extern void memory_failure_error(struct task_struct *p, unsigned long pfn);
- extern void memory_failure_queue(unsigned long pfn, int flags);
- extern void memory_failure_queue_kick(int cpu);
- extern int unpoison_memory(unsigned long pfn);
-diff --git a/mm/memory-failure.c b/mm/memory-failure.c
-index 06f0061..359b42f 100644
---- a/mm/memory-failure.c
-+++ b/mm/memory-failure.c
-@@ -56,6 +56,7 @@
- #include <linux/kfifo.h>
- #include <linux/ratelimit.h>
- #include <linux/page-isolation.h>
-+#include <linux/pagewalk.h>
- #include "internal.h"
- #include "ras/ras_event.h"
- 
-@@ -1553,6 +1554,132 @@ int memory_failure(unsigned long pfn, int flags)
- }
- EXPORT_SYMBOL_GPL(memory_failure);
- 
-+static int pte_range(pte_t *ptep, unsigned long addr, unsigned long next, struct mm_walk *walk)
-+{
-+	u64 *buff = (u64 *)walk->private;
-+	u64 pfn = buff[0];
-+	pte_t pte = *ptep;
-+
-+	if (!pte_none(pte) && !pte_present(pte)) {
-+		swp_entry_t swp_temp = pte_to_swp_entry(pte);
-+
-+		if (is_hwpoison_entry(swp_temp) && swp_offset(swp_temp) == pfn)
-+			goto find;
-+	} else if (pte_pfn(pte) == pfn) {
-+		goto find;
-+	}
-+
-+	return 0;
-+
-+find:
-+	buff[0] = addr;
-+	buff[1] = PAGE_SHIFT;
-+	return true;
-+}
-+
-+static int pmd_range(pmd_t *pmdp, unsigned long addr, unsigned long end,
-+			     struct mm_walk *walk)
-+{
-+	u64 *buff = (u64 *)walk->private;
-+	struct page *page = (struct page *)buff[0];
-+	u64 pfn = buff[1];
-+	pmd_t pmd = *pmdp;
-+
-+	if (likely(!pmd_trans_huge(pmd)))
-+		return 0;
-+
-+	if (pmd_none(pmd) || !pmd_present(pmd))
-+		return 0;
-+
-+	if (pmd_page(pmd) != page)
-+		return 0;
-+
-+	for (; addr != end; page++, addr += PAGE_SIZE) {
-+		if (page_to_pfn(page) == pfn) {
-+			buff[0] = addr;
-+			buff[1] = PAGE_SHIFT;
-+			return true;
-+		}
-+	}
-+
-+	return 0;
-+}
-+
-+static int hugetlb_range(pte_t *ptep, unsigned long hmask,
-+				 unsigned long addr, unsigned long end,
-+				 struct mm_walk *walk)
-+{
-+	u64 *buff = (u64 *)walk->private;
-+	u64 pfn = buff[0];
-+	pte_t pte =  huge_ptep_get(ptep);
-+	struct page *page = pfn_to_page(pfn);
-+
-+	if (!huge_pte_none(pte) && !pte_present(pte)) {
-+		swp_entry_t swp_temp = pte_to_swp_entry(pte);
-+
-+		if (is_hwpoison_entry(swp_temp) && swp_offset(swp_temp) == pfn)
-+			goto find;
-+	}
-+	if (pte_pfn(pte) == pfn)
-+		goto find;
-+
-+	return 0;
-+
-+find:
-+	buff[0] = addr;
-+	buff[1] = (huge_page_size(page_hstate(page)) > PMD_SIZE) ? PUD_SHIFT : PMD_SHIFT;
-+	return true;
-+}
-+
-+void memory_failure_error(struct task_struct *p, unsigned long pfn)
-+{
-+	u64 buff[2] = {0};
-+	struct page *page;
-+	int ret = -1;
-+	struct mm_walk_ops walk = {0};
-+
-+	if (p->mce_vaddr != (void __user *)-1l && p->mce_vaddr != (void __user *)0) {
-+		force_sig_mceerr(BUS_MCEERR_AR, p->mce_vaddr, PAGE_SHIFT);
-+		return;
-+	}
-+
-+	page = pfn_to_page(pfn);
-+	if (!page)
-+		goto force_sigbus;
-+
-+	if (is_zone_device_page(page))
-+		goto force_sigbus;
-+
-+	page = compound_head(page);
-+
-+	if (PageHuge(page)) {
-+		walk.hugetlb_entry = hugetlb_range;
-+		buff[0] = page_to_pfn(page);
-+	} else if (PageTransHuge(page)) {
-+		walk.pmd_entry = pmd_range;
-+		buff[0] = (u64)page;
-+		buff[1] = pfn;
-+	} else {
-+		walk.pte_entry = pte_range;
-+		buff[0] = pfn;
-+	}
-+
-+	mmap_read_lock(p->mm);
-+	ret = walk_page_range(p->mm, 0, TASK_SIZE_MAX, &walk, (void *)buff);
-+	mmap_read_unlock(p->mm);
-+
-+	pr_err("Memory error may not recovered: %#lx: Sending SIGBUS to %s:%d due to hardware memory corruption\n",
-+	pfn, p->comm, p->pid);
-+
-+	if (ret) {
-+		force_sig_mceerr(BUS_MCEERR_AR, (void __user *)buff[0], buff[1]);
-+	} else {
-+force_sigbus:
-+		force_sig_mceerr(BUS_MCEERR_AR, (void __user *)0, PAGE_SHIFT);
-+	}
-+}
-+EXPORT_SYMBOL_GPL(memory_failure_error);
-+
- #define MEMORY_FAILURE_FIFO_ORDER	4
- #define MEMORY_FAILURE_FIFO_SIZE	(1 << MEMORY_FAILURE_FIFO_ORDER)
- 
 -- 
-1.8.3.1
-
+Thanks!
+Aili Yao
