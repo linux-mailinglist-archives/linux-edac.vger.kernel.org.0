@@ -2,30 +2,31 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 51EDC33EAC5
-	for <lists+linux-edac@lfdr.de>; Wed, 17 Mar 2021 08:49:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AEC0733EB59
+	for <lists+linux-edac@lfdr.de>; Wed, 17 Mar 2021 09:23:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230099AbhCQHs0 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-edac@lfdr.de>); Wed, 17 Mar 2021 03:48:26 -0400
-Received: from mail.kingsoft.com ([114.255.44.145]:15481 "EHLO
+        id S229634AbhCQIXM convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-edac@lfdr.de>); Wed, 17 Mar 2021 04:23:12 -0400
+Received: from mail.kingsoft.com ([114.255.44.145]:15487 "EHLO
         mail.kingsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229944AbhCQHsR (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Wed, 17 Mar 2021 03:48:17 -0400
-X-AuditID: 0a580157-463ff70000021a79-27-6051ad662f1b
+        with ESMTP id S229541AbhCQIXI (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Wed, 17 Mar 2021 04:23:08 -0400
+X-AuditID: 0a580155-20dff7000005482e-0d-6051b4b3c64c
 Received: from mail.kingsoft.com (localhost [10.88.1.32])
         (using TLS with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (Client did not present a certificate)
-        by mail.kingsoft.com (SMG-1-NODE-87) with SMTP id 2C.D1.06777.66DA1506; Wed, 17 Mar 2021 15:19:02 +0800 (HKT)
+        by mail.kingsoft.com (SMG-2-NODE-85) with SMTP id 57.C4.18478.3B4B1506; Wed, 17 Mar 2021 15:50:11 +0800 (HKT)
 Received: from alex-virtual-machine (172.16.253.254) by KSBJMAIL2.kingsoft.cn
  (10.88.1.32) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2176.2; Wed, 17 Mar
- 2021 15:48:13 +0800
-Date:   Wed, 17 Mar 2021 15:48:12 +0800
+ 2021 16:23:05 +0800
+Date:   Wed, 17 Mar 2021 16:23:04 +0800
 From:   Aili Yao <yaoaili@kingsoft.com>
 To:     "HORIGUCHI =?UTF-8?B?TkFPWUE=?=(=?UTF-8?B?5aCA5Y+j44CA55u05Lmf?=)" 
-        <naoya.horiguchi@nec.com>, "Luck, Tony" <tony.luck@intel.com>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>
-CC:     Oscar Salvador <osalvador@suse.de>,
+        <naoya.horiguchi@nec.com>
+CC:     "Luck, Tony" <tony.luck@intel.com>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        Oscar Salvador <osalvador@suse.de>,
         "david@redhat.com" <david@redhat.com>,
         "bp@alien8.de" <bp@alien8.de>,
         "tglx@linutronix.de" <tglx@linutronix.de>,
@@ -35,10 +36,10 @@ CC:     Oscar Salvador <osalvador@suse.de>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
         "linux-mm@kvack.org" <linux-mm@kvack.org>,
         "yangfeng1@kingsoft.com" <yangfeng1@kingsoft.com>,
-        <yaoaili@kingsoft.com>, <sunhao2@kingsoft.com>
+        <sunhao2@kingsoft.com>, <yaoaili@kingsoft.com>
 Subject: Re: [PATCH] mm,hwpoison: return -EBUSY when page already poisoned
-Message-ID: <20210317154812.4173f423@alex-virtual-machine>
-In-Reply-To: <20210311085529.GA22268@hori.linux.bs1.fc.nec.co.jp>
+Message-ID: <20210317162304.58ff188c@alex-virtual-machine>
+In-Reply-To: <20210317154812.4173f423@alex-virtual-machine>
 References: <20210303115710.2e9f8e23@alex-virtual-machine>
         <20210303163912.3d508e0f@alex-virtual-machine>
         <1a78e9abdc134e35a5efcbf6b2fd2263@intel.com>
@@ -50,6 +51,7 @@ References: <20210303115710.2e9f8e23@alex-virtual-machine>
         <aee5176eafb54c88b19a5b2671d0a1fc@intel.com>
         <20210310141042.4db9ea29@alex-virtual-machine>
         <20210311085529.GA22268@hori.linux.bs1.fc.nec.co.jp>
+        <20210317154812.4173f423@alex-virtual-machine>
 Organization: kingsoft
 X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.30; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
@@ -58,44 +60,49 @@ Content-Transfer-Encoding: 8BIT
 X-Originating-IP: [172.16.253.254]
 X-ClientProxiedBy: KSBJMAIL1.kingsoft.cn (10.88.1.31) To KSBJMAIL2.kingsoft.cn
  (10.88.1.32)
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprFIsWRmVeSWpSXmKPExsXCFcGooJu2NjDB4N5yVYs569ewWXze8I/N
-        4uv6X8wW0zaKW1w41cBkcXnXHDaLe2v+s1pcOrCAyeJi4wFGizPTiiw2b5rKbPHmwj0Wix8b
-        HrM68Hp8b+1j8Vi85yWTx6ZVnWwemz5NYvd4d+4cu8eJGb9ZPF5c3cji8X7fVTaPzaerPT5v
-        kvM40fKFNYA7issmJTUnsyy1SN8ugStjztSnTAXf3SqePvrB3sB4wbKLkZNDQsBEYt/16Sxd
-        jFwcQgLTmSRmLJsB5bxilPjy/DdTFyMHB4uAqsSVSX4gDWxA5q57s1hBbBGBg4wSa68ygdQz
-        C8xgkTi57CMjSEJYwEviy/21jCC9vAJWEq/264KYnAKOEnvma0CM38giceLOGbA5/AJiEr1X
-        /jNBHGQv0bZlEdgYXgFBiZMzn7CA2MwCOhInVh1jhrC1JZYtfA1mCwkoShxe8osdoldJ4kj3
-        DDYIO1Zi2bxXrBMYhWchGTULyahZSEYtYGRexchSnJtuuIkREn3hOxjnNX3UO8TIxMF4iFGC
-        g1lJhNc0LyBBiDclsbIqtSg/vqg0J7X4EKM0B4uSOK9IFFBKID2xJDU7NbUgtQgmy8TBKdXA
-        1P/DJ/x0UuzHVFm+2NSyjayrZ0l78H1YFhLzPrlKen19jMSZXxcKfrvGflSb7X3kvez2Cjfv
-        /27XwnYKu5/pmLX2VPxF599fa3b4XfWQPP/0tyXfgiSGSyv6lXI1y+51OL5b2MP8VzlF7G7n
-        twd9D5dEtAsZnX05RXKJ1Wp/4+UqbQf/333wPMY36KedddKaiYIG8VECM/WMDj/IkHvHtHSm
-        24XXM7s18hi/NifJ6/ZkF3Qt858VtumT1CeW+dezPVw3NHwNemcU+9Unzqkhr6+2Ptx7cVeA
-        EVPoDpudXD79n++ZNgfs5v/pvmrRtMTo75775+m/Xqfd9dKu8a1HqPr6PUy7U7QemMr5pOQp
-        sRRnJBpqMRcVJwIA9czwZi0DAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprNIsWRmVeSWpSXmKPExsXCFcGooLt5S2CCwflHQhZz1q9hs/i84R+b
+        xdf1v5gtpm0Ut7hwqoHJ4vKuOWwW99b8Z7W4dGABk8XFxgOMFmemFVls3jSV2eLNhXssFj82
+        PGZ14PX43trH4rF4z0smj02rOtk8Nn2axO7x7tw5do8TM36zeLy4upHF4/2+q2wem09Xe3ze
+        JOdxouULawB3FJdNSmpOZllqkb5dAlfGx2aZgllWFfcOJDUwtup3MXJySAiYSGz4upSli5GL
+        Q0hgOpPE8pkTGCGcV4wSC7atZQapYhFQlfi1ezcTiM0GZO+6N4sVxBYRSJJYPPsrE0gDs8B3
+        FoknV7eAFQkLeEl8ub+WEcTmFbCSmDG3nR3E5hSwltj87j8rxIZHLBIHZu1lA0nwC4hJ9F75
+        zwRxk71E25ZFUM2CEidnPmEBsZkFdCROrDrGDGFrSyxb+BrMFhJQlDi85Bc7RK+SxJHuGWwQ
+        dqzEsnmvWCcwCs9CMmoWklGzkIxawMi8ipGlODfdaBMjJP5CdzDOaPqod4iRiYPxEKMEB7OS
+        CK9pXkCCEG9KYmVValF+fFFpTmrxIUZpDhYlcV7HSKCUQHpiSWp2ampBahFMlomDU6qB6bbk
+        erbwsktHc/6ET/DufuCcJRb66P7OLVd7mNh7tASOH3E6mnZfjKVz6wXhB1OFHBueP5Xx2GHv
+        Ep779+LKvyFzwxK4i5s2ahWVMNgyCF7Pqw+4Y7+8pdA7UEpU54sd39mN5Z+V0w2sFa3/BXPt
+        FFr3zHCu5NTosmVv+/c83tRSE7Xw3CweXaHTf0wOr9k9S2LtVAGzOW9Vd9zWeLo5I7RW8plB
+        dcdKI6FuqT0yLxS37ExbwcT5l60pZc2Z2y0Lr5jYaWUJXtVz3fBg7sLVCZsNOr1dS8KiHvEK
+        nDU9EanydOm1yTuvqJ59tm83Z7QKQ4btt0mzD6xhev8zIiu6TO/xQus/b8895PYTrvPMUmIp
+        zkg01GIuKk4EAMr+zukuAwAA
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
 
+> > 
+> > Returning true means you stop walking when you find the first entry pointing
+> > to a given pfn. But there could be multiple such entries, so if MCE SRAR is
+> > triggered by memory access to the larger address in hwpoisoned entries, the
+> > returned virtual address might be wrong.
+> >   
 > 
-> Returning true means you stop walking when you find the first entry pointing
-> to a given pfn. But there could be multiple such entries, so if MCE SRAR is
-> triggered by memory access to the larger address in hwpoisoned entries, the
-> returned virtual address might be wrong.
+> I can't find the way to fix this, maybe the virtual address is contained in
+> related register, but this is really beyong my knowledge.
+> 
+> This is a v2 RFC patch, add support for thp and 1G huge page errors.
 > 
 
-I can't find the way to fix this, maybe the virtual address is contained in
-related register, but this is really beyong my knowledge.
+Sorry for the debug info and other unclean modifications.
 
-This is a v2 RFC patch, add support for thp and 1G huge page errors.
+Post a clean one.
 
 Thanks
 Aili Yao
 
-From 31b685609610b3b06c8fd98d866913dbfeb7e159 Mon Sep 17 00:00:00 2001
+From 2289276ba943cdcddbf3b5b2cdbcaff78690e2e8 Mon Sep 17 00:00:00 2001
 From: Aili Yao <yaoaili@kingsoft.com>
-Date: Wed, 17 Mar 2021 15:34:15 +0800
+Date: Wed, 17 Mar 2021 16:12:41 +0800
 Subject: [PATCH] fix invalid SIGBUS address for recovery fail
 
 Walk the current process pages and compare with the pfn, then get the
@@ -117,38 +124,25 @@ for a same page, I don't find a way to get it correct.
 
 Maybe other issues is not recognized.
 ---
- arch/x86/kernel/cpu/mce/core.c |  16 ++---
+ arch/x86/kernel/cpu/mce/core.c |  12 +---
  include/linux/mm.h             |   1 +
- mm/memory-failure.c            | 145 ++++++++++++++++++++++++++++++++++++++++-
- 3 files changed, 152 insertions(+), 10 deletions(-)
+ mm/memory-failure.c            | 127 +++++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 131 insertions(+), 9 deletions(-)
 
 diff --git a/arch/x86/kernel/cpu/mce/core.c b/arch/x86/kernel/cpu/mce/core.c
-index db4afc5..1bf21cc 100644
+index db4afc5..4cb873c 100644
 --- a/arch/x86/kernel/cpu/mce/core.c
 +++ b/arch/x86/kernel/cpu/mce/core.c
-@@ -28,8 +28,12 @@
- #include <linux/sysfs.h>
- #include <linux/types.h>
- #include <linux/slab.h>
-+#include <linux/hugetlb.h>
-+#include <linux/swap.h>
-+#include <linux/swapops.h>
- #include <linux/init.h>
- #include <linux/kmod.h>
-+#include <linux/pagewalk.h>
- #include <linux/poll.h>
- #include <linux/nmi.h>
- #include <linux/cpu.h>
-@@ -1246,7 +1250,7 @@ static void kill_me_maybe(struct callback_head *cb)
+@@ -1246,7 +1246,7 @@ static void kill_me_maybe(struct callback_head *cb)
  	struct task_struct *p = container_of(cb, struct task_struct, mce_kill_me);
  	int flags = MF_ACTION_REQUIRED;
  
 -	pr_err("Uncorrected hardware memory error in user-access at %llx", p->mce_addr);
-+	pr_err("Uncorrected hardware memory error in user-access at %llx, %llx", p->mce_addr, p->mce_vaddr);
++	pr_err("Uncorrected hardware memory error in user-access at %llx\n", p->mce_addr);
  
  	if (!p->mce_ripv)
  		flags |= MF_MUST_KILL;
-@@ -1258,14 +1262,8 @@ static void kill_me_maybe(struct callback_head *cb)
+@@ -1258,14 +1258,8 @@ static void kill_me_maybe(struct callback_head *cb)
  		return;
  	}
  
@@ -178,38 +172,18 @@ index ecdf8a8..cff2f02 100644
  extern void memory_failure_queue_kick(int cpu);
  extern int unpoison_memory(unsigned long pfn);
 diff --git a/mm/memory-failure.c b/mm/memory-failure.c
-index 06f0061..aaf99a7 100644
+index 06f0061..359b42f 100644
 --- a/mm/memory-failure.c
 +++ b/mm/memory-failure.c
-@@ -56,8 +56,10 @@
+@@ -56,6 +56,7 @@
  #include <linux/kfifo.h>
  #include <linux/ratelimit.h>
  #include <linux/page-isolation.h>
 +#include <linux/pagewalk.h>
  #include "internal.h"
  #include "ras/ras_event.h"
-+#include <linux/delay.h>
  
- int sysctl_memory_failure_early_kill __read_mostly = 0;
- 
-@@ -240,7 +242,7 @@ static int kill_proc(struct to_kill *tk, unsigned long pfn, int flags)
- 	int ret = 0;
- 
- 	pr_err("Memory failure: %#lx: Sending SIGBUS to %s:%d due to hardware memory corruption\n",
--			pfn, t->comm, t->pid);
-+			tk->addr, t->comm, t->pid);
- 
- 	if (flags & MF_ACTION_REQUIRED) {
- 		WARN_ON_ONCE(t != current);
-@@ -1417,6 +1419,7 @@ int memory_failure(unsigned long pfn, int flags)
- try_again:
- 	if (PageHuge(p))
- 		return memory_failure_hugetlb(pfn, flags);
-+
- 	if (TestSetPageHWPoison(p)) {
- 		pr_err("Memory failure: %#lx: already hardware poisoned\n",
- 			pfn);
-@@ -1553,6 +1556,146 @@ int memory_failure(unsigned long pfn, int flags)
+@@ -1553,6 +1554,132 @@ int memory_failure(unsigned long pfn, int flags)
  }
  EXPORT_SYMBOL_GPL(memory_failure);
  
@@ -221,14 +195,10 @@ index 06f0061..aaf99a7 100644
 +
 +	if (!pte_none(pte) && !pte_present(pte)) {
 +		swp_entry_t swp_temp = pte_to_swp_entry(pte);
-+		
-+		printk("%s, %d \n", __FUNCTION__, __LINE__);
-+		if (is_hwpoison_entry(swp_temp) && swp_offset(swp_temp) == pfn) {
-+			printk("%s, %d \n", __FUNCTION__, __LINE__);
++
++		if (is_hwpoison_entry(swp_temp) && swp_offset(swp_temp) == pfn)
 +			goto find;
-+		}
 +	} else if (pte_pfn(pte) == pfn) {
-+		printk("%s, %d \n", __FUNCTION__, __LINE__);
 +		goto find;
 +	}
 +
@@ -259,7 +229,6 @@ index 06f0061..aaf99a7 100644
 +
 +	for (; addr != end; page++, addr += PAGE_SIZE) {
 +		if (page_to_pfn(page) == pfn) {
-+			printk("%s, %d \n", __FUNCTION__, __LINE__);
 +			buff[0] = addr;
 +			buff[1] = PAGE_SHIFT;
 +			return true;
@@ -280,16 +249,13 @@ index 06f0061..aaf99a7 100644
 +
 +	if (!huge_pte_none(pte) && !pte_present(pte)) {
 +		swp_entry_t swp_temp = pte_to_swp_entry(pte);
-+		printk("%s, %d \n", __FUNCTION__, __LINE__);
-+		if (is_hwpoison_entry(swp_temp) && swp_offset(swp_temp) == pfn) {
-+			printk("%s, %d \n", __FUNCTION__, __LINE__);
++
++		if (is_hwpoison_entry(swp_temp) && swp_offset(swp_temp) == pfn)
 +			goto find;
-+		}
 +	}
-+	if (pte_pfn(pte) == pfn) {
-+		printk("%s, %d \n", __FUNCTION__, __LINE__);
++	if (pte_pfn(pte) == pfn)
 +		goto find;
-+	}
++
 +	return 0;
 +
 +find:
@@ -306,7 +272,6 @@ index 06f0061..aaf99a7 100644
 +	struct mm_walk_ops walk = {0};
 +
 +	if (p->mce_vaddr != (void __user *)-1l && p->mce_vaddr != (void __user *)0) {
-+		printk("%s, %d \n", __FUNCTION__, __LINE__);
 +		force_sig_mceerr(BUS_MCEERR_AR, p->mce_vaddr, PAGE_SHIFT);
 +		return;
 +	}
@@ -321,20 +286,17 @@ index 06f0061..aaf99a7 100644
 +	page = compound_head(page);
 +
 +	if (PageHuge(page)) {
-+		printk("%s, %d \n", __FUNCTION__, __LINE__);
 +		walk.hugetlb_entry = hugetlb_range;
 +		buff[0] = page_to_pfn(page);
 +	} else if (PageTransHuge(page)) {
-+		printk("%s, %d \n", __FUNCTION__, __LINE__);
 +		walk.pmd_entry = pmd_range;
 +		buff[0] = (u64)page;
 +		buff[1] = pfn;
 +	} else {
-+		printk("%s, %d \n", __FUNCTION__, __LINE__);
 +		walk.pte_entry = pte_range;
 +		buff[0] = pfn;
 +	}
-+	msleep(1000);
++
 +	mmap_read_lock(p->mm);
 +	ret = walk_page_range(p->mm, 0, TASK_SIZE_MAX, &walk, (void *)buff);
 +	mmap_read_unlock(p->mm);
@@ -343,11 +305,9 @@ index 06f0061..aaf99a7 100644
 +	pfn, p->comm, p->pid);
 +
 +	if (ret) {
-+		printk("%s, %d \n", __FUNCTION__, __LINE__);
 +		force_sig_mceerr(BUS_MCEERR_AR, (void __user *)buff[0], buff[1]);
 +	} else {
 +force_sigbus:
-+		printk("%s, %d \n", __FUNCTION__, __LINE__);
 +		force_sig_mceerr(BUS_MCEERR_AR, (void __user *)0, PAGE_SHIFT);
 +	}
 +}
@@ -358,5 +318,4 @@ index 06f0061..aaf99a7 100644
  
 -- 
 1.8.3.1
-
 
