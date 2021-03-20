@@ -2,76 +2,80 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 14FF034016A
-	for <lists+linux-edac@lfdr.de>; Thu, 18 Mar 2021 10:00:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E2B3D342F37
+	for <lists+linux-edac@lfdr.de>; Sat, 20 Mar 2021 20:23:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229540AbhCRI7n (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Thu, 18 Mar 2021 04:59:43 -0400
-Received: from mout.kundenserver.de ([212.227.17.13]:35937 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229634AbhCRI7M (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Thu, 18 Mar 2021 04:59:12 -0400
-Received: from [192.168.1.155] ([77.4.36.33]) by mrelayeu.kundenserver.de
- (mreue108 [212.227.15.183]) with ESMTPSA (Nemesis) id
- 1Mzz2e-1lakIV30OU-00x3Dq; Thu, 18 Mar 2021 09:58:29 +0100
-Subject: Re: EDAC list as Trojan Horse distribution ??
-To:     "Luck, Tony" <tony.luck@intel.com>,
-        Hermann Ruckerbauer <Hermann.Ruckerbauer@EyeKnowHow.de>,
-        Borislav Petkov <bp@alien8.de>
-Cc:     He Zhe <zhe.he@windriver.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "hpa@zytor.com" <hpa@zytor.com>, "x86@kernel.org" <x86@kernel.org>,
-        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20210316180357.GG18003@zn.tnic>
- <3a2cbcf1-388c-4524-907d-0592438320fc@email.android.com>
- <4347e4ad4d544e778631ddd15eb88d28@intel.com>
-From:   "Enrico Weigelt, metux IT consult" <lkml@metux.net>
-Message-ID: <7af3eb95-3475-b1ad-f6d4-e20e2b043e5d@metux.net>
-Date:   Thu, 18 Mar 2021 09:58:27 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.0
+        id S229772AbhCTTWs (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Sat, 20 Mar 2021 15:22:48 -0400
+Received: from jabberwock.ucw.cz ([46.255.230.98]:56474 "EHLO
+        jabberwock.ucw.cz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229618AbhCTTWW (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Sat, 20 Mar 2021 15:22:22 -0400
+Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
+        id DB92F1C0B78; Sat, 20 Mar 2021 20:22:18 +0100 (CET)
+Date:   Sat, 20 Mar 2021 20:22:18 +0100
+From:   Pavel Machek <pavel@ucw.cz>
+To:     Hermann Ruckerbauer <Hermann.Ruckerbauer@EyeKnowHow.de>
+Cc:     He Zhe <zhe.he@windriver.com>, tony.luck@intel.com, bp@alien8.de,
+        tglx@linutronix.de, mingo@redhat.com, hpa@zytor.com,
+        x86@kernel.org, linux-edac@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Trojan horses on various lists was Re: EDAC list as Trojan Horse
+ distribution ??
+Message-ID: <20210320192217.GA4077@amd>
+References: <1583303947-49858-1-git-send-email-zhe.he@windriver.com>
+ <1f449e01-3207-b699-b91f-d1c04626a447@windriver.com>
+ <59d52031-f4e8-e754-c8b6-ca1130bf0cf1@EyeKnowHow.de>
+ <c0323578-9db6-74b0-ca6f-1324a2f1e9a1@EyeKnowHow.de>
 MIME-Version: 1.0
-In-Reply-To: <4347e4ad4d544e778631ddd15eb88d28@intel.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: tl
-Content-Transfer-Encoding: 8bit
-X-Provags-ID: V03:K1:FM1rMC9zNoPIBvGoAnleprJeVxdtTMHZiUs047P/PsPhX/8qEIU
- mNt9kL855EwSDDbcgOvet1rFE0LcS76PhG0SIUoVi7CrxhPB6IVqeMt1lwFlxCBsG1oS09o
- vqV+GXQHJepixz6p6EduUc0nkBe/CEnpgN4PFZwUJJ3YT/B76EhvXJjDMj9vjBvMSJ2o5Mz
- gMtdSdJlzZN9niIq6841g==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:FJVG9LqpM+4=:mwXKh25ybFISBLOPAPHkLl
- ojKBU82iuTnz8/2dTh4m7tD8wTJUlaGdProK5AHWIWaXYC9xgzZCYJxHlI+jpCNSIeZaiP++r
- DF93ymVAK1LbvVaAbDAmtrJajc5qK5+LDG27NxefER1bNfNccSIogWjAgt/BXZN7TvfsHV8EE
- iiFELvKp+Iiy74FlZRPyKEOZPkCG1hat9WoI2RG69S28vwN0Rg+wJIY53eqcOEj1myTWKtMVY
- //63DX0FAUZpgRCk8C9LL1nDRHVzW+86v8vAR92N4ZnBV/SCMLyDTkwHnCJa5oDaPqUbFQVnv
- kUClZmq90Us+UqrqqW6W+RfXQh/2wclKsiwbn68WtYgrf7fW5n3Z58n0CdHR5HDyH6wgqb0bT
- RhbTVXp/M7gNcXYhBPufc19EV+QPxwJp27+dAKoDA9AQUzwcHVQV//eJ6SpTU
+Content-Type: multipart/signed; micalg=pgp-sha1;
+        protocol="application/pgp-signature"; boundary="NzB8fVQJ5HfG6fxh"
+Content-Disposition: inline
+In-Reply-To: <c0323578-9db6-74b0-ca6f-1324a2f1e9a1@EyeKnowHow.de>
+User-Agent: Mutt/1.5.23 (2014-03-12)
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On 16.03.21 20:51, Luck, Tony wrote:
->>> Nothing new - just the next spammer attempt.
-> 
->> But this was a new class of Spam. So far i got only mass mailing... This was personalized based on my previous e-Mail (did not include this part in my mail)
-> 
-> Somewhat new - combining trawling of public mailing lists for addresses with
-> a phishing attack trying to get you to open a (presumably) malicious payload.
 
-I'm getting those kind of spam for aeons, just another one today.
+--NzB8fVQJ5HfG6fxh
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
+Hi!
 
---mtx
+> > I assume this is just to install a trojan horse when opening the
+> > attached zip (also I assume most of you will work on linux and it
+> > might not be a Problem for you anyhow=A0=A0 ;-) .
+> >
+> > =A0Virus total reports a Trojan horse, but only for with 2 out of 61
+> > virus scan engines (and I have to admit, I did not knew K7AntiVirus
+> > and Qihoo-360 before, all other engines reported the file as
+> > clean!!!!!!! ).
+> >
+> > So be careful when you get some feedback to old requests from this
+> > list
 
--- 
----
-Hinweis: unverschlüsselte E-Mails können leicht abgehört und manipuliert
-werden ! Für eine vertrauliche Kommunikation senden Sie bitte ihren
-GPG/PGP-Schlüssel zu.
----
-Enrico Weigelt, metux IT consult
-Free software and Linux embedded engineering
-info@metux.net -- +49-151-27565287
+Happened to me, too, on different list on two different email
+addresses. Did not reoccur.
+
+Best regards,
+								Pavel
+
+--=20
+http://www.livejournal.com/~pavelmachek
+
+--NzB8fVQJ5HfG6fxh
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: Digital signature
+
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1
+
+iEYEARECAAYFAmBWS2kACgkQMOfwapXb+vKxJwCgvcuUwxIS6KX8syscr9QxrqcO
+TwgAniZ9rBo5cl9rILhj+BHR4qQFyYxm
+=vIuH
+-----END PGP SIGNATURE-----
+
+--NzB8fVQJ5HfG6fxh--
