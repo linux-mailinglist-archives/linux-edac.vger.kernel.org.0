@@ -2,92 +2,78 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B94A34B243
-	for <lists+linux-edac@lfdr.de>; Fri, 26 Mar 2021 23:43:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BD0E34B64B
+	for <lists+linux-edac@lfdr.de>; Sat, 27 Mar 2021 11:42:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230139AbhCZWnS (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Fri, 26 Mar 2021 18:43:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45254 "EHLO
+        id S231445AbhC0Kme (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Sat, 27 Mar 2021 06:42:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230138AbhCZWnR (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Fri, 26 Mar 2021 18:43:17 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35D92C0613AA;
-        Fri, 26 Mar 2021 15:43:16 -0700 (PDT)
-Received: from zn.tnic (p200300ec2f075f009ccde034de5c142d.dip0.t-ipconnect.de [IPv6:2003:ec:2f07:5f00:9ccd:e034:de5c:142d])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id DE2E01EC0513;
-        Fri, 26 Mar 2021 23:43:13 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1616798594;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=KDXcvgtG0h83c1r3w5F4A7Z5EVH9x/tB4a4LIq1DDBo=;
-        b=fTwGM6kvZtMJ1IbJUYe6rAFQ2lleiR2MHmBQRUY33SUeJVMPUwOCj/vTkO6kgUghH/DRjl
-        w5IBIBotWb5lYjhixoZED/DDoVXPCbkvGnnAXRc2kWcKiGWLrWDvavPhrflA8biCQMEySB
-        9bwybzp7wb4ogFIAWm+1iDwS6iWErxk=
-Date:   Fri, 26 Mar 2021 23:43:10 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     William Roche <william.roche@oracle.com>
-Cc:     linux-kernel@vger.kernel.org, Tony Luck <tony.luck@intel.com>,
-        linux-edac@vger.kernel.org
-Subject: Re: [PATCH v1] RAS/CEC: Memory Corrected Errors consistent event
- filtering
-Message-ID: <20210326224310.GL25229@zn.tnic>
-References: <1616783429-6793-1-git-send-email-william.roche@oracle.com>
- <20210326190242.GI25229@zn.tnic>
- <fac89612-e15c-2940-9d6d-70a812dbe99c@oracle.com>
+        with ESMTP id S229875AbhC0Kmd (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Sat, 27 Mar 2021 06:42:33 -0400
+Received: from mail-ed1-x542.google.com (mail-ed1-x542.google.com [IPv6:2a00:1450:4864:20::542])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E1F3C0613B1
+        for <linux-edac@vger.kernel.org>; Sat, 27 Mar 2021 03:42:32 -0700 (PDT)
+Received: by mail-ed1-x542.google.com with SMTP id bf3so9076538edb.6
+        for <linux-edac@vger.kernel.org>; Sat, 27 Mar 2021 03:42:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=1P1ylb+0K8r+W1E1V6incN0kq8bWpLVNDCMYMUCyg3s=;
+        b=sa72r1m43OIdLJVu4ihbW+INfGzYI3hZYQsrSVYcm+y85wQtQlQQIov7ihuwizVpuN
+         JC3A31zS7HjIHB6lU3L2K5ovffmldt3b5rPP1SygjvEqvXI9yVbvH2OyUZbHrzDY1sWA
+         RlQdmskq98Dfy9dagTOYwq0miZVuazwS9dHnmE/VTPMiDPhKt00H3f7vVcDsxr6DcIux
+         qBFVcFESCT2RxHPBBOY85lMs7T4a15zcOVUabi8ffuOEs4tWIfxyWQxp2bMugE7UpnWw
+         9KN1hlcp9rmLbF4DVwvof516ggNIv/WcsdvdJQ+C0Ow1pVlg+eTjh1yH//P/uQhTKISs
+         POMw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=1P1ylb+0K8r+W1E1V6incN0kq8bWpLVNDCMYMUCyg3s=;
+        b=W0FVD/CDje29Ahn5a3zSe8AdmDGABp90oCXiHpWd3jeWTogkfKvtGdvzB2Gh2X8q/8
+         yeztRL+2g8Rd9g7DDtISHQKug576IXaXS1w3DXJPK9cgfqNkgMLTr2SR+z1OtKrcEIAE
+         MQKIF9LNRH2gmMfoHOlLsrMlvEiNHn5W0DJng6I9SiCF6bpCSoHSbU/tHH4/Z8RTI7wr
+         7gRMDz0EqxyrtBH88GyklKrmlf+3bf59wcc7f78JaFJRQ0tUE08bGBWz9xeshAvgFZFQ
+         geOSljgIstGWd1xUKQKFU86/nos1wQGhSt3o2bBOmP0bPAUhlFV7eymMEUIgQae0m0d1
+         RIdg==
+X-Gm-Message-State: AOAM530R5aIygjigdPu6wHanbKJTzxysinbRA3veIpIlu7U4y5n5+OPw
+        Yvd2GbNDU4C5K8cqYj2HIU+kgivJBoiymvlJew==
+X-Google-Smtp-Source: ABdhPJwpJeQDyHTpzIBpQWSQLqNt4tNQoUZXbftYmOY66yZRrwnOsfH/N6LvGBNlKSXXtB5n5MeK27vPwN2XdlHl6tQ=
+X-Received: by 2002:a50:fa42:: with SMTP id c2mr19903999edq.159.1616841751177;
+ Sat, 27 Mar 2021 03:42:31 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <fac89612-e15c-2940-9d6d-70a812dbe99c@oracle.com>
+Received: by 2002:a05:6402:2747:0:0:0:0 with HTTP; Sat, 27 Mar 2021 03:42:30
+ -0700 (PDT)
+Reply-To: sarandan122@yahoo.com
+From:   Mrs Sarah Daniel <shurgasecurcom@gmail.com>
+Date:   Sat, 27 Mar 2021 11:42:30 +0100
+Message-ID: <CAGCG85Fmu7ibwuwA0R+FMunP4BL-XJmUAyPHwdPh=4yT7NngEA@mail.gmail.com>
+Subject: Donation for charity work of God
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Fri, Mar 26, 2021 at 11:24:43PM +0100, William Roche wrote:
-> What we want is to make cec_add_elem() to return !0 value only
-> when the given pfn triggered an action, so that its callers should
-> log the error.
+Donation for charity work of God
 
-No, this is not what the CEC does - it collects those errors and when it
-reaches the threshold for any pfn, it offlines the corresponding page. I
-know, the comment above talks about:
+Greetings to you and sorry if this message came to you as a
+surprise.My name is Mrs Sarah Daniel a widow, I found your email
+address through my late husbands internet dater late Mr. Daniel
 
-  * That error event entry causes cec_add_elem() to return !0 value and thus
-  * signal to its callers to log the error.
+I am presently admitted at the hospital suffering from a blood cancer
+and Parkinson diseases. I have only about a few months to live and I
+want you to Transfer the sum of ( $6.200,000.00) united states dollars
+to your account so you can assist me Distribute my funds to charity
+homes in your country ,
 
-but it doesn't do that. Frankly, I don't see the point of logging the
-error - it already says
+I have set aside 20% for you and your family keep while you donate 80%
+to the less privilege people,
 
-	pr_err("Soft-offlining pfn: 0x%llx\n", pfn);
+I will give you more details or full story as soon as i receive your
+reply as the fund was deposited with a bank
 
-which pfn it has offlined. And that is probably only mildly interesting
-to people - so what, 4K got offlined, servers have so much memory
-nowadays.
+Remain Blessed
 
-The only moment one should start worrying is if one gets those pretty
-often but then you're probably better off simply scheduling maintenance
-and replacing the faulty DIMM - problem solved.
-
-> What I'm expecting from ras_cec is to "hide" CEs until they reach the
-> action threshold where an action is tried against the impacted PFN,
-
-That it does.
-
-> and it's now the time to log the error with the entire notifiers
-> chain.
-
-And I'm not sure why we'd want to do that. It simply offlines the page.
-
-But maybe you could explain what you're trying to achieve...
-
-Thx.
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+Mrs Sarah Daniel
