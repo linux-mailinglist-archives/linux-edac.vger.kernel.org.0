@@ -2,78 +2,62 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BD0E34B64B
-	for <lists+linux-edac@lfdr.de>; Sat, 27 Mar 2021 11:42:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 375EC34BDE7
+	for <lists+linux-edac@lfdr.de>; Sun, 28 Mar 2021 20:08:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231445AbhC0Kme (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Sat, 27 Mar 2021 06:42:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57280 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229875AbhC0Kmd (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Sat, 27 Mar 2021 06:42:33 -0400
-Received: from mail-ed1-x542.google.com (mail-ed1-x542.google.com [IPv6:2a00:1450:4864:20::542])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E1F3C0613B1
-        for <linux-edac@vger.kernel.org>; Sat, 27 Mar 2021 03:42:32 -0700 (PDT)
-Received: by mail-ed1-x542.google.com with SMTP id bf3so9076538edb.6
-        for <linux-edac@vger.kernel.org>; Sat, 27 Mar 2021 03:42:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=1P1ylb+0K8r+W1E1V6incN0kq8bWpLVNDCMYMUCyg3s=;
-        b=sa72r1m43OIdLJVu4ihbW+INfGzYI3hZYQsrSVYcm+y85wQtQlQQIov7ihuwizVpuN
-         JC3A31zS7HjIHB6lU3L2K5ovffmldt3b5rPP1SygjvEqvXI9yVbvH2OyUZbHrzDY1sWA
-         RlQdmskq98Dfy9dagTOYwq0miZVuazwS9dHnmE/VTPMiDPhKt00H3f7vVcDsxr6DcIux
-         qBFVcFESCT2RxHPBBOY85lMs7T4a15zcOVUabi8ffuOEs4tWIfxyWQxp2bMugE7UpnWw
-         9KN1hlcp9rmLbF4DVwvof516ggNIv/WcsdvdJQ+C0Ow1pVlg+eTjh1yH//P/uQhTKISs
-         POMw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=1P1ylb+0K8r+W1E1V6incN0kq8bWpLVNDCMYMUCyg3s=;
-        b=W0FVD/CDje29Ahn5a3zSe8AdmDGABp90oCXiHpWd3jeWTogkfKvtGdvzB2Gh2X8q/8
-         yeztRL+2g8Rd9g7DDtISHQKug576IXaXS1w3DXJPK9cgfqNkgMLTr2SR+z1OtKrcEIAE
-         MQKIF9LNRH2gmMfoHOlLsrMlvEiNHn5W0DJng6I9SiCF6bpCSoHSbU/tHH4/Z8RTI7wr
-         7gRMDz0EqxyrtBH88GyklKrmlf+3bf59wcc7f78JaFJRQ0tUE08bGBWz9xeshAvgFZFQ
-         geOSljgIstGWd1xUKQKFU86/nos1wQGhSt3o2bBOmP0bPAUhlFV7eymMEUIgQae0m0d1
-         RIdg==
-X-Gm-Message-State: AOAM530R5aIygjigdPu6wHanbKJTzxysinbRA3veIpIlu7U4y5n5+OPw
-        Yvd2GbNDU4C5K8cqYj2HIU+kgivJBoiymvlJew==
-X-Google-Smtp-Source: ABdhPJwpJeQDyHTpzIBpQWSQLqNt4tNQoUZXbftYmOY66yZRrwnOsfH/N6LvGBNlKSXXtB5n5MeK27vPwN2XdlHl6tQ=
-X-Received: by 2002:a50:fa42:: with SMTP id c2mr19903999edq.159.1616841751177;
- Sat, 27 Mar 2021 03:42:31 -0700 (PDT)
+        id S231464AbhC1SHb (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Sun, 28 Mar 2021 14:07:31 -0400
+Received: from mail.hanoi.gov.vn ([113.160.32.33]:31610 "EHLO
+        mx01.hanoi.gov.vn" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229647AbhC1SHR (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Sun, 28 Mar 2021 14:07:17 -0400
+X-Greylist: delayed 474 seconds by postgrey-1.27 at vger.kernel.org; Sun, 28 Mar 2021 14:07:01 EDT
+Received: from mx01.hanoi.gov.vn (localhost [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 30259EC3D8;
+        Mon, 29 Mar 2021 00:57:51 +0700 (+07)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hanoi.gov.vn;
+        s=default; t=1616954272;
+        bh=FuW10Z6fSdeNlf/0u/BQ1jcwkjYBw0uHUPQgn0LGo7I=; h=Date:From:To;
+        b=R9blPfqJCHUsZAyZxsyyryS61fl4krmBjYKWM6eGGwB8ZdbTBVPL1mmKOmZXMqNlA
+         7CEqA0MXgUAy+X4oK/wthh4vC9Xoov1Ce8tjf/qJvnL7KGsGNVg9ic0krGeHrdNzGM
+         5cIEKsz0emmHL/izbEfCtadst3HYllOJWdonlm5o=
+X-IMSS-DKIM-Authentication-Result: mx01.hanoi.gov.vn; sigcount=0
+Received: from mx01.hanoi.gov.vn (localhost [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 50FCBEC3DD;
+        Mon, 29 Mar 2021 00:57:49 +0700 (+07)
+Received: from mail.hanoi.gov.vn (mail.hanoi.gov.vn [10.1.1.25])
+        by mx01.hanoi.gov.vn (Postfix) with ESMTPS;
+        Mon, 29 Mar 2021 00:57:49 +0700 (+07)
+Received: from mail.hanoi.gov.vn (localhost [127.0.0.1])
+        by mail.hanoi.gov.vn (Postfix) with ESMTPS id 02AFC7F41B42;
+        Mon, 29 Mar 2021 00:57:44 +0700 (+07)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.hanoi.gov.vn (Postfix) with ESMTP id 08FE47F41B5D;
+        Mon, 29 Mar 2021 00:57:41 +0700 (+07)
+Received: from mail.hanoi.gov.vn ([127.0.0.1])
+        by localhost (mail.hanoi.gov.vn [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id 1D3oZsOAVsx3; Mon, 29 Mar 2021 00:57:36 +0700 (+07)
+Received: from mail.hanoi.gov.vn (mail.hanoi.gov.vn [10.1.1.25])
+        by mail.hanoi.gov.vn (Postfix) with ESMTP id 478CE7F41B59;
+        Mon, 29 Mar 2021 00:57:33 +0700 (+07)
+Date:   Mon, 29 Mar 2021 00:57:33 +0700 (ICT)
+From:   Mackenzie Scott <ttptqd_thanhoai@hanoi.gov.vn>
+Reply-To: Mackenzie Scott <propack@propck.net>
+Message-ID: <354204758.25920932.1616954253215.JavaMail.zimbra@hanoi.gov.vn>
+Subject: Congratulations ($ 100,800,000.00)
 MIME-Version: 1.0
-Received: by 2002:a05:6402:2747:0:0:0:0 with HTTP; Sat, 27 Mar 2021 03:42:30
- -0700 (PDT)
-Reply-To: sarandan122@yahoo.com
-From:   Mrs Sarah Daniel <shurgasecurcom@gmail.com>
-Date:   Sat, 27 Mar 2021 11:42:30 +0100
-Message-ID: <CAGCG85Fmu7ibwuwA0R+FMunP4BL-XJmUAyPHwdPh=4yT7NngEA@mail.gmail.com>
-Subject: Donation for charity work of God
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [185.107.80.217]
+X-Mailer: Zimbra 8.8.15_GA_3894 (zclient/8.8.15_GA_3894)
+Thread-Index: ao/APhyKX+JH1nE2Rn/kAmnh2LEgkw==
+Thread-Topic: Congratulations ($ 100,800,000.00)
 To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+X-TM-AS-GCONF: 00
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-Donation for charity work of God
 
-Greetings to you and sorry if this message came to you as a
-surprise.My name is Mrs Sarah Daniel a widow, I found your email
-address through my late husbands internet dater late Mr. Daniel
 
-I am presently admitted at the hospital suffering from a blood cancer
-and Parkinson diseases. I have only about a few months to live and I
-want you to Transfer the sum of ( $6.200,000.00) united states dollars
-to your account so you can assist me Distribute my funds to charity
-homes in your country ,
-
-I have set aside 20% for you and your family keep while you donate 80%
-to the less privilege people,
-
-I will give you more details or full story as soon as i receive your
-reply as the fund was deposited with a bank
-
-Remain Blessed
-
-Mrs Sarah Daniel
+Hello,i&#39;m Mackenzie Scott,Ex-wife of Amazon founder i&#39;m donating $4 billion to charities,individuals,universities across the Globe from my divorce funds,i&#39;m donating part of it to provide immediate support to people suffering economically during the COVID-19 pandemic,i have a donation worth $100,800,000.00 Dollars for you,you can contact me for more information if you&#39;re interested.
