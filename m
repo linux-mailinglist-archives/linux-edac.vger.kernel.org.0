@@ -2,69 +2,95 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CD15352DFD
-	for <lists+linux-edac@lfdr.de>; Fri,  2 Apr 2021 19:07:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C93CB3557CB
+	for <lists+linux-edac@lfdr.de>; Tue,  6 Apr 2021 17:29:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234275AbhDBRHi (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Fri, 2 Apr 2021 13:07:38 -0400
-Received: from mail.skyhub.de ([5.9.137.197]:37026 "EHLO mail.skyhub.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229722AbhDBRHh (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Fri, 2 Apr 2021 13:07:37 -0400
-Received: from zn.tnic (p200300ec2f0a2000dbf770433a2c90d5.dip0.t-ipconnect.de [IPv6:2003:ec:2f0a:2000:dbf7:7043:3a2c:90d5])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 4B3F81EC036C;
-        Fri,  2 Apr 2021 19:07:35 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1617383255;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=euJLUWQa2u+XPOsgFmEOgV9vS2H3yqYKVzrt+5aZ+XY=;
-        b=nHErEZvLeOOYYjdad438mYJGLNTDyIedW8FqyIZI4qEthxxAajEdqygb7Jg3KHx7705Zqo
-        4wDrflVqmGkyJ+iuXJEiQf5H9BW2OavzUJ+bADa61DSUSR3zscRdDAVs5pxLfiGqwjnQpR
-        qvn+KoueXIHPnBPnxx/RNP+qeU4tFC8=
-Date:   Fri, 2 Apr 2021 19:07:36 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     William Roche <william.roche@oracle.com>
-Cc:     linux-kernel@vger.kernel.org, Tony Luck <tony.luck@intel.com>,
-        linux-edac@vger.kernel.org
-Subject: Re: [PATCH v1] RAS/CEC: Memory Corrected Errors consistent event
- filtering
-Message-ID: <20210402170736.GJ28499@zn.tnic>
-References: <1616783429-6793-1-git-send-email-william.roche@oracle.com>
- <20210326190242.GI25229@zn.tnic>
- <fac89612-e15c-2940-9d6d-70a812dbe99c@oracle.com>
- <20210326224310.GL25229@zn.tnic>
- <3ee5551c-d311-1939-315f-a4712e3821ff@oracle.com>
- <20210401161237.GC28954@zn.tnic>
- <5ba128f6-62f3-beb2-9f04-fdebaf411414@oracle.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <5ba128f6-62f3-beb2-9f04-fdebaf411414@oracle.com>
+        id S233168AbhDFP3f (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Tue, 6 Apr 2021 11:29:35 -0400
+Received: from userp2130.oracle.com ([156.151.31.86]:50338 "EHLO
+        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229790AbhDFP3e (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Tue, 6 Apr 2021 11:29:34 -0400
+Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
+        by userp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 136FNQiV187503;
+        Tue, 6 Apr 2021 15:29:16 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : in-reply-to : references; s=corp-2020-01-29;
+ bh=KAMM11a306xM2ipfm54BMlxObG8E/8Ijj5e8EsmONzE=;
+ b=MpoIHIooyGRktmg4ksXKOl6T6P94O/Z0gVu3MHdHV7OABYhNYh6w02zPnHCeu7IPeO8q
+ KtWu6gZNp6shcLwF0nNmUs9PpdE/IgnjzskK4BJLZhpUet/n6zd0ywMXud9DE9QhGagw
+ KtaAOqQdgmdKwBBzQga/3HVOkls5QD//4xs/l/hxjL4GR/ZwTLcAuyNQntXJVvir82OQ
+ 5v5gGE2HWKeKvSgWjl5UzKCs3kFVINNL2ZsJbGLV1R0747uFeJlYilL3cxssWF7xnJRn
+ Avlvp4EmNMQVd+GdRz7RQpGsZTaqZ0c1XJqtySwnQdMbm5M4N+g+49bMsfcBxlc/xN0S 4Q== 
+Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
+        by userp2130.oracle.com with ESMTP id 37qfuxd91f-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 06 Apr 2021 15:29:16 +0000
+Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
+        by userp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 136FPtPI067450;
+        Tue, 6 Apr 2021 15:29:15 GMT
+Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
+        by userp3030.oracle.com with ESMTP id 37qa3jkdjr-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 06 Apr 2021 15:29:15 +0000
+Received: from abhmp0012.oracle.com (abhmp0012.oracle.com [141.146.116.18])
+        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 136FTAqb030579;
+        Tue, 6 Apr 2021 15:29:11 GMT
+Received: from ca-virt2-1.us.oracle.com (/10.211.11.111)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Tue, 06 Apr 2021 08:29:10 -0700
+From:   =?UTF-8?q?=E2=80=9CWilliam=20Roche?= <william.roche@oracle.com>
+To:     bp@alien8.de
+Cc:     linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
+        tony.luck@intel.com, william.roche@oracle.com
+Subject: [PATCH v2] RAS/CEC: Memory Corrected Errors consistent event filtering
+Date:   Tue,  6 Apr 2021 11:28:59 -0400
+Message-Id: <1617722939-29670-1-git-send-email-william.roche@oracle.com>
+X-Mailer: git-send-email 1.8.3.1
+In-Reply-To: <20210402170736.GJ28499@zn.tnic>
+References: <20210402170736.GJ28499@zn.tnic>
+X-Proofpoint-IMR: 1
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=9946 signatures=668683
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 suspectscore=0
+ malwarescore=0 mlxscore=0 spamscore=0 phishscore=0 adultscore=0
+ mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2104030000 definitions=main-2104060105
+X-Proofpoint-GUID: HFiLMbGVoIYpXqUlQrF-hDuRuKn4oBnD
+X-Proofpoint-ORIG-GUID: HFiLMbGVoIYpXqUlQrF-hDuRuKn4oBnD
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=9946 signatures=668683
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 clxscore=1015 malwarescore=0
+ suspectscore=0 impostorscore=0 mlxscore=0 priorityscore=1501
+ mlxlogscore=999 bulkscore=0 spamscore=0 adultscore=0 phishscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2104030000 definitions=main-2104060105
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Fri, Apr 02, 2021 at 06:00:42PM +0200, William Roche wrote:
-> Corrected Errors are not the best indicators for a failing DIMM
+From: William Roche <william.roche@oracle.com>
 
-In the OS, errors reported through different mechanisms is all we have.
+The Corrected Error events collected by the cec_add_elem() have to be
+consistently filtered out.
+We fix the case where the value of find_elem() to find the slot of a pfn
+was mistakenly used as the return value of the function.
+Now the MCE notifiers chain relying on MCE_HANDLED_CEC would only report
+filtered corrected errors that reached the action threshold.
 
-> For the moment we will have the CE MCE handled my the MCE_HANDLED_CEC
-> aware notifiers only when a page is off-lined, like it used to be.
-> 
-> Can we start with that small fix ?
-
-Sure but do two variables pls - an "err" one which catches the
-function's retval and a "ret" one which ce_add_elem() itself returns so
-that there's no confusion like it was before:
-
+Signed-off-by: William Roche <william.roche@oracle.com>
 ---
+
+Notes:
+    This is the new patch version using an additional 'err' variable.
+    Unit tested it on a VM instance and a "Bare Metal" machine.
+    
+    No reporting is done by the MCE_HANDLED_CEC aware notifiers until
+    the action threshold is reached.
+
+ drivers/ras/cec.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
 diff --git a/drivers/ras/cec.c b/drivers/ras/cec.c
-index ddecf25b5dd4..b926c679cdaf 100644
+index ddecf25..b926c67 100644
 --- a/drivers/ras/cec.c
 +++ b/drivers/ras/cec.c
 @@ -312,8 +312,8 @@ static bool sanity_check(struct ce_array *ca)
@@ -88,11 +114,6 @@ index ddecf25b5dd4..b926c679cdaf 100644
  		/*
  		 * Shift range [to-end] to make room for one more element.
  		 */
-
-Thx.
-
 -- 
-Regards/Gruss,
-    Boris.
+1.8.3.1
 
-https://people.kernel.org/tglx/notes-about-netiquette
