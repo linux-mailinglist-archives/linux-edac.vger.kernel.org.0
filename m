@@ -2,31 +2,41 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BDD1C359DDA
-	for <lists+linux-edac@lfdr.de>; Fri,  9 Apr 2021 13:49:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A34535A42E
+	for <lists+linux-edac@lfdr.de>; Fri,  9 Apr 2021 18:59:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232837AbhDILtk (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Fri, 9 Apr 2021 07:49:40 -0400
-Received: from mail.kernel.org ([198.145.29.99]:50024 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232295AbhDILtj (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Fri, 9 Apr 2021 07:49:39 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 8D3AB6115B;
-        Fri,  9 Apr 2021 11:49:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1617968966;
-        bh=wSgw8vqxkTcKSyPgvD8ke8joz3MElmiOLTRjt10EyxQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=r257Sg1OggCxGJg5bCTag7NFuCUtM6bBbQPGssOeudpQTueqANF9k8caCST6j+GGs
-         mhq+777ZkQwKVhOaru41hweVqSWj04b/XsU8h7+ydnyEF2kONVWjrmWmJI81FX2inh
-         1I5q5flBzM6rB5dvZupRSAfvTfk2iRV4KJ8C1mZTY2vPCzbW73c/T7i/07hy3SI8DF
-         8mRhhs2yT0V+iCISJxvGjQqPD7ppY2j6k1JTxquPWqltBrBwD9Eqf+usc+F86rClEv
-         1sWx6Xv2N6pfdBPoJd3B8urT8gi+vY7QJWCh4h6thPfMXLecWCPm/VUEaLlVYX5ru+
-         /QWkr+ISokV9Q==
-Received: by earth.universe (Postfix, from userid 1000)
-        id 877D23C0C96; Fri,  9 Apr 2021 13:49:24 +0200 (CEST)
-Date:   Fri, 9 Apr 2021 13:49:24 +0200
-From:   Sebastian Reichel <sre@kernel.org>
+        id S233713AbhDIQ7f (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Fri, 9 Apr 2021 12:59:35 -0400
+Received: from mail-pl1-f172.google.com ([209.85.214.172]:33766 "EHLO
+        mail-pl1-f172.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233038AbhDIQ7e (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Fri, 9 Apr 2021 12:59:34 -0400
+Received: by mail-pl1-f172.google.com with SMTP id p10so3070587pld.0;
+        Fri, 09 Apr 2021 09:59:20 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=+9xha/pXNeFBGiuagKWknyCqPbUKuPA8GXpvrC9Jx0I=;
+        b=BxoSKw8xD3QUltwN7gsMzZ89xAodvTc81Ucn20t1I1o7Y+bOpFUbxjg4eKdu6F+2Nn
+         2fWjNzGRaRW+I+Ptq6VbQMGZBPxK8efxYaqZI5y+5VLBDxM84vy/eKNmYobLUyvgNVxg
+         MCOUPGybbTtvFRWiuo6R670DigT1q6XlgQmiMDXLv+TILPESw2gvcCaRm9KjT1ppqT8a
+         3/MktU3k7KoE+qiNJj6eCwHrwqx7b2shYmdwO/Nk9bGuKnMrmX5MMMYt26SQKc1sSbZ1
+         RKmLamiYfdrJpNh5JD7/g0dsy8gJ3fXYzRCnBM+MZxx6yAv9AWxVJH/scmFmICdf4Stv
+         966w==
+X-Gm-Message-State: AOAM5305g4CkeQT1F9gmV4rNZwwr8Vv4+4S20W54eUB70KSj82WxNzYp
+        iVhFaYawaj9NArMskz9q66EB0t3i3nvsYCbl
+X-Google-Smtp-Source: ABdhPJyt31k6gfvx2YDw8pTeEF+IvcLsHKSfe6iHcUQ8SO6kPgNHHt27ciTzVzsJlbESXuH5ZVRF6Q==
+X-Received: by 2002:a17:90a:6b08:: with SMTP id v8mr14057598pjj.131.1617987559528;
+        Fri, 09 Apr 2021 09:59:19 -0700 (PDT)
+Received: from 42.do-not-panic.com (42.do-not-panic.com. [157.230.128.187])
+        by smtp.gmail.com with ESMTPSA id z23sm2795483pjh.45.2021.04.09.09.59.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 09 Apr 2021 09:59:18 -0700 (PDT)
+Received: by 42.do-not-panic.com (Postfix, from userid 1000)
+        id 6D85340256; Fri,  9 Apr 2021 16:59:17 +0000 (UTC)
+Date:   Fri, 9 Apr 2021 16:59:17 +0000
+From:   Luis Chamberlain <mcgrof@kernel.org>
 To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         Alexander Lobakin <alobakin@pm.me>,
@@ -117,6 +127,7 @@ Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         Alexander Shishkin <alexander.shishkin@linux.intel.com>,
         Pavel Machek <pavel@ucw.cz>, Alex Elder <elder@kernel.org>,
         Jakub Kicinski <kuba@kernel.org>,
+        Sebastian Reichel <sre@kernel.org>,
         Ohad Ben-Cohen <ohad@wizery.com>,
         Jens Frederich <jfrederich@gmail.com>,
         Daniel Drake <dsd@laptop.org>,
@@ -126,43 +137,33 @@ Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
         Lai Jiangshan <jiangshanlai@gmail.com>,
         Joel Fernandes <joel@joelfernandes.org>,
-        Luis Chamberlain <mcgrof@kernel.org>,
         Iurii Zaikin <yzaikin@google.com>,
         Mike Rapoport <rppt@linux.ibm.com>
 Subject: Re: [PATCH v2 1/1] kernel.h: Split out panic and oops helpers
-Message-ID: <20210409114924.6dpefx26px7aeuaj@earth.universe>
+Message-ID: <20210409165917.GH4332@42.do-not-panic.com>
 References: <20210409100250.25922-1-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="c2qg5eip4k7clkwy"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 In-Reply-To: <20210409100250.25922-1-andriy.shevchenko@linux.intel.com>
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-
---c2qg5eip4k7clkwy
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-Hi,
-
 On Fri, Apr 09, 2021 at 01:02:50PM +0300, Andy Shevchenko wrote:
 > kernel.h is being used as a dump for all kinds of stuff for a long time.
 > Here is the attempt to start cleaning it up by splitting out panic and
 > oops helpers.
->=20
+> 
 > There are several purposes of doing this:
 > - dropping dependency in bug.h
 > - dropping a loop by moving out panic_notifier.h
 > - unload kernel.h from something which has its own domain
->=20
+> 
 > At the same time convert users tree-wide to use new headers, although
 > for the time being include new header back to kernel.h to avoid twisted
 > indirected includes for existing users.
->=20
+> 
 > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 > Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
 > Acked-by: Mike Rapoport <rppt@linux.ibm.com>
@@ -173,44 +174,7 @@ On Fri, Apr 09, 2021 at 01:02:50PM +0300, Andy Shevchenko wrote:
 > Acked-by: Wei Liu <wei.liu@kernel.org>
 > Acked-by: Rasmus Villemoes <linux@rasmusvillemoes.dk>
 > Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
-> ---
-> v2:
->  - fixed all errors with allmodconfig on x86_64 (Andrew)
->  - checked with allyesconfig on x86_64
->  - additionally grepped source code for panic notifier list usage
->    and converted all users
->  - elaborated commit message (Luis)
->  - collected given tags (incl. Andrew's SoB, see below)
->=20
-> I added Andrew's SoB since part of the fixes I took from him. Andrew,
-> feel free to amend or tell me how you want me to do.
->=20
-> [...]
->  drivers/power/reset/ltc2952-poweroff.c        |  1 +
-> [...]
 
-Acked-by: Sebastian Reichel <sre@kernel.org>
+Acked-by: Luis Chamberlain <mcgrof@kernel.org>
 
--- Sebastian
-
---c2qg5eip4k7clkwy
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmBwPzkACgkQ2O7X88g7
-+poVqw//cO5+glgFxA2CU4t3EHFTzSR2pExNCOensIzn/2YcvKlq6RBiaVlO87al
-zfq//z42WEWWRFkl4NeyjJx6ueQGo5Hk7qQiPRQhgt55UiQsizdAFXK4u97lVQ68
-7V2xDT3MlQ/vc+LG3vZBcSGMIoupHDqbYU2kF8xlBhdwuF1lr44NDxRTRsVErgor
-hlvEGYmwSTIg8aEkLt6Da/elDscG08MDU+vv6KLaSiruCN+RtgZGin9gv3Xu+KUi
-PhPU9ZOAfi6duIQdKmdXiAZ8Vlp/43yzeo80t/XUyiEy7Yq+qtsP6YXHlSWlPJnV
-Zz3ifkmNn7YFWd+iOeTe3oTfVIAtg4w/uX184urC+t242MBSeqEkHt7/1TJR2UAx
-8s9NtSaCLUPuFLPO9s8t6nP4kQ4HN3BoxMvgessqguLZtSg3n1Z4+ZE8veoYHQD3
-Vwz58nFLYkMxRB/pFq6dkXv6uPXTbreYkWuUFsDIao2+FVDkMp81DqE86K2li2d6
-/B6jSmObDmG/aryJn+hoHhCEJSfLnaszENAc0toFvCGYU9D5Com1A74gdztMgOvf
-CB4G04azFTgeTjX5JB6r7KXrcZ08bzspk/lo5H9fx+SLki6gFb88zNqBOLcnMM0d
-FZFNMmZ543wUtAsJSxqObtKeAcjitPcaURrh6sWiRuJkndGtmNY=
-=QA06
------END PGP SIGNATURE-----
-
---c2qg5eip4k7clkwy--
+  Luis
