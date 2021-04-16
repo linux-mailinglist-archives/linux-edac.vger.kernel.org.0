@@ -2,43 +2,42 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 76C343616D2
-	for <lists+linux-edac@lfdr.de>; Fri, 16 Apr 2021 02:34:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 279E33620CE
+	for <lists+linux-edac@lfdr.de>; Fri, 16 Apr 2021 15:22:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235809AbhDPAed (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Thu, 15 Apr 2021 20:34:33 -0400
-Received: from mbox.abcom.al ([217.73.143.249]:55322 "EHLO mbox.abcom.al"
+        id S243925AbhDPNT4 (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Fri, 16 Apr 2021 09:19:56 -0400
+Received: from mbox.abcom.al ([217.73.143.249]:36234 "EHLO mbox.abcom.al"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234865AbhDPAec (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Thu, 15 Apr 2021 20:34:32 -0400
-X-Greylist: delayed 24754 seconds by postgrey-1.27 at vger.kernel.org; Thu, 15 Apr 2021 20:34:32 EDT
+        id S243934AbhDPNT2 (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Fri, 16 Apr 2021 09:19:28 -0400
 Received: from localhost (localhost [127.0.0.1])
-        by mbox.abcom.al (Postfix) with ESMTP id 90AE53C3AB2;
-        Fri, 16 Apr 2021 02:34:06 +0200 (CEST)
+        by mbox.abcom.al (Postfix) with ESMTP id 2320D59F06A3;
+        Fri, 16 Apr 2021 15:13:45 +0200 (CEST)
 Received: from mbox.abcom.al ([127.0.0.1])
         by localhost (mbox.abcom.al [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id IJv9rJJnYdNv; Fri, 16 Apr 2021 02:34:06 +0200 (CEST)
+        with ESMTP id jGgmZg0eUzpB; Fri, 16 Apr 2021 15:13:45 +0200 (CEST)
 Received: from localhost (localhost [127.0.0.1])
-        by mbox.abcom.al (Postfix) with ESMTP id 8F6091A1E3C;
-        Fri, 16 Apr 2021 02:34:05 +0200 (CEST)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mbox.abcom.al 8F6091A1E3C
+        by mbox.abcom.al (Postfix) with ESMTP id BB846599CB74;
+        Fri, 16 Apr 2021 15:13:44 +0200 (CEST)
+DKIM-Filter: OpenDKIM Filter v2.10.3 mbox.abcom.al BB846599CB74
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=abcom.al;
-        s=0F3BA0EE-D5D4-11E8-9596-F9115129F2F4; t=1618533245;
+        s=0F3BA0EE-D5D4-11E8-9596-F9115129F2F4; t=1618578824;
         bh=VCOKpjxaLoatOvx+LSaT3i7u3saMYZrSANTtqEwi9j4=;
         h=MIME-Version:To:From:Date:Message-Id;
-        b=esjEGo9ojJ+7Se/jdC8doWzHpuiPQQ4NqQkZNVq9o0QAxQ3GNtnsdPcDUDwdz1fGG
-         Uupphpr2c4y4YSDhFpBMHqVz3ecNe+GDYnxrOssKZ9X108QMwdzWBTo4LRyGjLmTgb
-         vfE/s3t2C1VZz9hRjXpvRsH4jBaLBoQ+7H3UthKI+oPRXszYoh6xlST2vl/uXWQWJb
-         Q8VvHykYfCvJfS2QTAIk7epK8w/InVtFOuxI5naeiKZyN+61/nBCtr3EHXO1Ck7MVW
-         3FtO0bwyEzlN9oTWVfnwlOeJaSO7w4fvbUstfZV1vb6uFG5TL0wgr9jtEW723NMPVz
-         IJ3A2Rxtz5YxA==
+        b=jCpkqxGV82Qnjp1q8w/aApjsi2Uu3V8f6N4TQNgt5cN2y1lhf/oc70i0Qh84tsVYJ
+         i1av6FoQuS3Xe7x1c4bTIk6fssJTypa79Jz0LKOiL3639in7eLY51n1hAWQ+MKG13x
+         DDK4ym0J5Faf8bDPlA2D+ZO5BeN5Reb8Rpkk9cIJN8GHk4a8bHE1E4uE+84ajJC33K
+         4lf88P5Y3/EKCSHiNXGxHDIEUyFyP1tT8MMY17BaqRdJ4AbGMCn6+WTZtdM4Ec7poO
+         gZaBbvrp1OzKI4vnIh+XeJ3V1MdtH44E8TivYkYu/U9mEnBWxuXG8URqRdzKj5wCrP
+         FrUaZcxsB8yBQ==
 X-Virus-Scanned: amavisd-new at mbox.abcom.al
 Received: from mbox.abcom.al ([127.0.0.1])
         by localhost (mbox.abcom.al [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id ynLm_sMXLawe; Fri, 16 Apr 2021 02:34:05 +0200 (CEST)
-Received: from [10.41.71.107] (unknown [105.4.2.96])
-        by mbox.abcom.al (Postfix) with ESMTPSA id C4F20539963;
-        Fri, 16 Apr 2021 02:33:58 +0200 (CEST)
+        with ESMTP id cD0j6tYsX1Im; Fri, 16 Apr 2021 15:13:44 +0200 (CEST)
+Received: from [10.41.190.186] (unknown [105.4.1.205])
+        by mbox.abcom.al (Postfix) with ESMTPSA id E5DC059FD1E9;
+        Fri, 16 Apr 2021 15:13:37 +0200 (CEST)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
@@ -46,9 +45,9 @@ Content-Description: Mail message body
 Subject: Spende
 To:     Recipients <mtodo@abcom.al>
 From:   "William Kruger" <mtodo@abcom.al>
-Date:   Thu, 15 Apr 2021 17:33:47 -0700
+Date:   Fri, 16 Apr 2021 06:13:26 -0700
 Reply-To: robadamengineeringltd@gmail.com
-Message-Id: <20210416003358.C4F20539963@mbox.abcom.al>
+Message-Id: <20210416131337.E5DC059FD1E9@mbox.abcom.al>
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
