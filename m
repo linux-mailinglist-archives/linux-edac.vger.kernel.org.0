@@ -2,69 +2,78 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 279E33620CE
-	for <lists+linux-edac@lfdr.de>; Fri, 16 Apr 2021 15:22:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 26E1A3638FD
+	for <lists+linux-edac@lfdr.de>; Mon, 19 Apr 2021 03:09:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243925AbhDPNT4 (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Fri, 16 Apr 2021 09:19:56 -0400
-Received: from mbox.abcom.al ([217.73.143.249]:36234 "EHLO mbox.abcom.al"
+        id S235958AbhDSBJr (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Sun, 18 Apr 2021 21:09:47 -0400
+Received: from mbox.abcom.al ([217.73.143.249]:40718 "EHLO mbox.abcom.al"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S243934AbhDPNT2 (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Fri, 16 Apr 2021 09:19:28 -0400
+        id S233117AbhDSBJq (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Sun, 18 Apr 2021 21:09:46 -0400
 Received: from localhost (localhost [127.0.0.1])
-        by mbox.abcom.al (Postfix) with ESMTP id 2320D59F06A3;
-        Fri, 16 Apr 2021 15:13:45 +0200 (CEST)
+        by mbox.abcom.al (Postfix) with ESMTP id 63774114C8D2A;
+        Mon, 19 Apr 2021 02:54:54 +0200 (CEST)
 Received: from mbox.abcom.al ([127.0.0.1])
         by localhost (mbox.abcom.al [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id jGgmZg0eUzpB; Fri, 16 Apr 2021 15:13:45 +0200 (CEST)
+        with ESMTP id 4UiaIWPj0Vr5; Mon, 19 Apr 2021 02:54:54 +0200 (CEST)
 Received: from localhost (localhost [127.0.0.1])
-        by mbox.abcom.al (Postfix) with ESMTP id BB846599CB74;
-        Fri, 16 Apr 2021 15:13:44 +0200 (CEST)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mbox.abcom.al BB846599CB74
+        by mbox.abcom.al (Postfix) with ESMTP id 1C9E911EB4F67;
+        Mon, 19 Apr 2021 02:54:54 +0200 (CEST)
+DKIM-Filter: OpenDKIM Filter v2.10.3 mbox.abcom.al 1C9E911EB4F67
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=abcom.al;
-        s=0F3BA0EE-D5D4-11E8-9596-F9115129F2F4; t=1618578824;
-        bh=VCOKpjxaLoatOvx+LSaT3i7u3saMYZrSANTtqEwi9j4=;
+        s=0F3BA0EE-D5D4-11E8-9596-F9115129F2F4; t=1618793694;
+        bh=p2Sn/5BeV1TeOpE0g2OnXyVNOPHFXRN2kak+hb1GY3o=;
         h=MIME-Version:To:From:Date:Message-Id;
-        b=jCpkqxGV82Qnjp1q8w/aApjsi2Uu3V8f6N4TQNgt5cN2y1lhf/oc70i0Qh84tsVYJ
-         i1av6FoQuS3Xe7x1c4bTIk6fssJTypa79Jz0LKOiL3639in7eLY51n1hAWQ+MKG13x
-         DDK4ym0J5Faf8bDPlA2D+ZO5BeN5Reb8Rpkk9cIJN8GHk4a8bHE1E4uE+84ajJC33K
-         4lf88P5Y3/EKCSHiNXGxHDIEUyFyP1tT8MMY17BaqRdJ4AbGMCn6+WTZtdM4Ec7poO
-         gZaBbvrp1OzKI4vnIh+XeJ3V1MdtH44E8TivYkYu/U9mEnBWxuXG8URqRdzKj5wCrP
-         FrUaZcxsB8yBQ==
+        b=saUnisGL1xviTx0lhLQDflN6inTCB9Mh6NU0XLqyeCZcXXl/zBTvfyUx1l3tt000f
+         rBdmsnqh1iwrnIelZRGFRbSZBEnwEHkwvD7BtC7fHMFsuULQWLEplQ6CF/F5Tfdv4H
+         bGu9/oj0LaSzF0nOhjn/3O42aRWLPvmL5+u3LEpS+njNiGbvr59QPWkFfiiO1MQF2F
+         0gdJf/ReIlJN8imVB9VudL2pfNwf47GtH1RedgsYgAc21n+UPB5ffdwatQwWjCSLZV
+         G+7dSJ4dxh6sot21NSsugs0BfyfO9vqrCp8qbmYCEZAcbfWTYvT1ubEjpWpGcitvE4
+         G7Q+LpQ8i0bTg==
 X-Virus-Scanned: amavisd-new at mbox.abcom.al
 Received: from mbox.abcom.al ([127.0.0.1])
         by localhost (mbox.abcom.al [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id cD0j6tYsX1Im; Fri, 16 Apr 2021 15:13:44 +0200 (CEST)
-Received: from [10.41.190.186] (unknown [105.4.1.205])
-        by mbox.abcom.al (Postfix) with ESMTPSA id E5DC059FD1E9;
-        Fri, 16 Apr 2021 15:13:37 +0200 (CEST)
+        with ESMTP id zJFU9h6Uzye5; Mon, 19 Apr 2021 02:54:54 +0200 (CEST)
+Received: from [192.168.43.60] (unknown [105.4.4.115])
+        by mbox.abcom.al (Postfix) with ESMTPSA id B3765114C8D2A;
+        Mon, 19 Apr 2021 02:54:46 +0200 (CEST)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Description: Mail message body
-Subject: Spende
-To:     Recipients <mtodo@abcom.al>
-From:   "William Kruger" <mtodo@abcom.al>
-Date:   Fri, 16 Apr 2021 06:13:26 -0700
-Reply-To: robadamengineeringltd@gmail.com
-Message-Id: <20210416131337.E5DC059FD1E9@mbox.abcom.al>
+Subject: =?utf-8?q?Hallo=2C_Sie_haben_eine_Spende_von_=E2=82=AC_2=2E000=2E000=2C00?=
+To:     Recipients <abashi@abcom.al>
+From:   <abashi@abcom.al>
+Date:   Mon, 19 Apr 2021 02:54:10 +0200
+Reply-To: billlawrencedonationorg@yahoo.com
+Message-Id: <20210419005446.B3765114C8D2A@mbox.abcom.al>
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-Hallo Liebes, ich bin William Kruger aus Lantana im Palm Beach County, USA.=
- Ich habe einen $ 168 Millionen Jackpot gewonnen, der einer der gr=C3=B6=C3=
-=9Ften Lotterie-Jackpots ist. Im Namen meiner Familie und aus gutem Willen =
-spenden wir Ihnen und Ihrer Familie einen Betrag von (=E2=82=AC 850,000.00 =
-EUR). Ich versuche, die gemeinn=C3=BCtzigen Waisenh=C3=A4user zu erreichen =
-und zur Armutsbek=C3=A4mpfung beizutragen und eine angemessene Gesundheitsv=
-ersorgung f=C3=BCr Einzelpersonen zu gew=C3=A4hrleisten, insbesondere w=C3=
-=A4hrend dieser Welt Pandemic Covid 19. Ich m=C3=B6chte auch, dass Sie eine=
-n Teil dieser Spende in die =C3=B6ffentliche Infrastruktur investieren, um =
-Arbeitslosen in Ihrem Land Arbeitspl=C3=A4tze zu bieten . Ich habe dich gew=
-=C3=A4hlt, weil ich an dich glaube. Ich brauche Ihre uneingeschr=C3=A4nkte =
-Mitarbeit in Bezug auf diese Spende. Hier ist Ihr ausgew=C3=A4hlter Geheimc=
-ode: [W5900Q2172021] und bitte teilen Sie den Code niemandem mit, wenn Sie =
-interessiert und bereit sind, mit mir zu arbeiten. Bitte kontaktieren Sie m=
-ich mit Ihrem Spenden- / Geheimcode [W5900Q2172021] und Ihren vollst=C3=A4n=
-digen Namen hier bei meiner privaten E-Mail: krugerwilliamhome@gmail.com
+Sehr geehrter Herr / Frau
+Ich gr=C3=BC=C3=9Fe Sie im Namen des Herrn. Diese Nachricht wird Ihnen als =
+Benachrichtigung gesendet, dass Sie ausgew=C3=A4hlt wurden, um von meinem W=
+ohlt=C3=A4tigkeitsprojekt zu profitieren, das darauf abzielt, Leben zu ber=
+=C3=BChren und denen zu helfen, die ich auf der ganzen Welt kann, wie Gott =
+mich gesegnet hat.
+Ich habe die Powerball-Lotterie in H=C3=B6he von 150 Millionen USD am 16. D=
+ezember 2019 gewonnen und ich habe mich freiwillig entschlossen, Ihnen eine=
+n Betrag von (2.000.000,00 =E2=82=AC) als Wohlt=C3=A4tigkeitsorganisation z=
+u spenden. Ich versuche, zuf=C3=A4llige Menschen aus verschiedenen Quellen =
+und Moden zu erreichen, um das Leben aus verschiedenen Quellen zu ber=C3=BC=
+hren Winkel. Deshalb erhalten Sie hier die Nachricht.
+Sie wurden als einer der gl=C3=BCcklichen Empf=C3=A4nger registriert, die 2=
+ Millionen Euro erhalten haben. Diese Spende wird Ihnen gegeben, damit Sie =
+Ihre pers=C3=B6nlichen Probleme versch=C3=A4rfen und uns zum gro=C3=9Fen Te=
+il gro=C3=9Fz=C3=BCgig dabei helfen k=C3=B6nnen, die weniger gl=C3=BCcklich=
+en Waisen und gemeinn=C3=BCtzigen Organisationen in Ihrem Land zu unterst=
+=C3=BCtzen Nachbarschaftslokalit=C3=A4t
+Zur =C3=9Cberpr=C3=BCfung: //www.powerball.com/winner-story/150-million-pow=
+erball-ticket-claimed
+
+Kontaktieren Sie mich erneut, um Spenden zu erhalten. E-Mail: billlawrenced=
+onationorg@yahoo.com
+
+Vielen Dank, Bill Lawrence
