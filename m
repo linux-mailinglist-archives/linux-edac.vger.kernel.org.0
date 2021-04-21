@@ -2,63 +2,83 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B81D2364DC5
-	for <lists+linux-edac@lfdr.de>; Tue, 20 Apr 2021 00:42:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6466E366D47
+	for <lists+linux-edac@lfdr.de>; Wed, 21 Apr 2021 15:55:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229683AbhDSWnM (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Mon, 19 Apr 2021 18:43:12 -0400
-Received: from mbox.abcom.al ([217.73.143.249]:43362 "EHLO mbox.abcom.al"
+        id S240290AbhDUNzl (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Wed, 21 Apr 2021 09:55:41 -0400
+Received: from mail.kernel.org ([198.145.29.99]:60892 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229652AbhDSWnM (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Mon, 19 Apr 2021 18:43:12 -0400
-Received: from localhost (localhost [127.0.0.1])
-        by mbox.abcom.al (Postfix) with ESMTP id 2609B11AD2685;
-        Tue, 20 Apr 2021 00:01:28 +0200 (CEST)
-Received: from mbox.abcom.al ([127.0.0.1])
-        by localhost (mbox.abcom.al [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id 2Mu_cE-vCcea; Tue, 20 Apr 2021 00:01:28 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-        by mbox.abcom.al (Postfix) with ESMTP id 9D59E13148D8F;
-        Tue, 20 Apr 2021 00:01:08 +0200 (CEST)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mbox.abcom.al 9D59E13148D8F
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=abcom.al;
-        s=0F3BA0EE-D5D4-11E8-9596-F9115129F2F4; t=1618869668;
-        bh=BZv72htijiAiJQlxop8ucT2O5E8VQfLYZFZIV1NskB4=;
-        h=MIME-Version:To:From:Date:Message-Id;
-        b=FY6pXggVWUDhpQoOExX2JyWHxMlkzA7JjAbLbVS5k5zHVv/+Rsmwz/b72iERzmEST
-         lRsbtGiNov9sKp90s9cpqmYP9/GhxUhU3v7WTXtGgLBtPOtJ04aDpP0aZSjkSXPuoA
-         AJzPKrA8SAm/vuYAMI13DAdb1M7Tp7YzxG7qRNAJT77ZQg0T25Ii6Eq6sUJ00qY36t
-         YHIxdAK3MHZ/ILF2uvRAPgVAYvoa+Lvy48YJBcb3zRxwDB/uE3hz2ZQCh/wuRFlywM
-         9JRWDo+hzrxAH9frjCuRWRtapq+1oIyG0YhNSfNnwL2PyGrKS8cIQ8rPcIJ5tgIch1
-         8+lJWhP2X+IrQ==
-X-Virus-Scanned: amavisd-new at mbox.abcom.al
-Received: from mbox.abcom.al ([127.0.0.1])
-        by localhost (mbox.abcom.al [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id DbGLCJ_7A_6X; Tue, 20 Apr 2021 00:01:08 +0200 (CEST)
-Received: from [192.168.43.60] (unknown [105.4.5.77])
-        by mbox.abcom.al (Postfix) with ESMTPSA id 1A7A8118E1482;
-        Tue, 20 Apr 2021 00:00:48 +0200 (CEST)
-Content-Type: text/plain; charset="utf-8"
+        id S235434AbhDUNzl (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Wed, 21 Apr 2021 09:55:41 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id CAC6B611F2;
+        Wed, 21 Apr 2021 13:55:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1619013307;
+        bh=JD5ziEk/FB8CNzMad7zbcOvmZivcvUwNl7nwAGloB5w=;
+        h=From:To:Cc:Subject:Date:From;
+        b=i0gTfVfze0/PUJiMP682KpT9c250YJgN8nYi7fAF1ZSJklOTRE7NrVvG0j+02PR45
+         Ls4m1q+1KehLZmP8q3ld7gfP5y5ufPdyN8SFN0xnzE22DmWq4tAfQEbrSKcfQeH4U2
+         zkaX3jmIYXWFa2dQ1RJsAZWtXW1pKR1xeZ/E4tmsKb/AADmC5HcISI008N6qAZb3hp
+         2UrWjqEd0UOtC9nVlQesswvXD9QYKaUYqvPXazujPkCfwoY2LwvAQ+dFR+KNXMakFD
+         MK0Ms+CkWg9nJuuzex4fZo4CxhWInZ1CFfIWxmUYk1GrFNmtLg13+tdKO4MFpJni6A
+         ZJX8EbmUw/AdA==
+From:   Arnd Bergmann <arnd@kernel.org>
+To:     Stefan Schaeckeler <sschaeck@cisco.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Tony Luck <tony.luck@intel.com>, Joel Stanley <joel@jms.id.au>,
+        Troy Lee <troy_lee@aspeedtech.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>, James Morse <james.morse@arm.com>,
+        Robert Richter <rric@kernel.org>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Liu Shixin <liushixin2@huawei.com>, linux-edac@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] EDAC/aspeed: use proper format string for printing resource
+Date:   Wed, 21 Apr 2021 15:54:53 +0200
+Message-Id: <20210421135500.3518661-1-arnd@kernel.org>
+X-Mailer: git-send-email 2.29.2
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Description: Mail message body
-Subject: =?utf-8?q?Hallo=2C_Sie_haben_eine_Spende_von_=E2=82=AC_2=2E000=2E000=2C00?=
-To:     Recipients <abashi@abcom.al>
-From:   <abashi@abcom.al>
-Date:   Tue, 20 Apr 2021 00:00:05 +0200
-Reply-To: tayebsouamidonationorg@gmail.com
-Message-Id: <20210419220049.1A7A8118E1482@mbox.abcom.al>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-I'm Tayeb Souami, 55-year-old an elderly citizen of New Jersey, USA. I won =
-a $315.3 million jackpot, On behalf of my family and act of good will, we a=
-re donating to you and your family the sum of (=E2=82=AC 2,000,000.00 EUR) =
-I try to reach the public charity orphanages. Contribute to poverty reducti=
-on and ensure adequate health care for individuals. I also want you to inve=
-st part of this donation in public infrastructure to provide jobs for unemp=
-loyed citizens in your country.You can Watch me on youtube Claimed  https:/=
-/www.youtube.com/watch?v=3DZ6ui8ZDQ6Ks I choose you because I believe in yo=
-u. I need your full cooperation regarding this donation. Please contact me =
-back here at my private email: tayebsouamidonationorg@gmail.com
+From: Arnd Bergmann <arnd@arndb.de>
+
+On ARMv7, resource_size_t can be 64-bit, which breaks printing
+it as %x:
+
+drivers/edac/aspeed_edac.c: In function 'init_csrows':
+drivers/edac/aspeed_edac.c:257:28: error: format '%x' expects argument of type 'unsigned int', but argument 4 has type 'resource_size_t' {aka 'long long unsigned int'} [-Werror=format=]
+  257 |         dev_dbg(mci->pdev, "dt: /memory node resources: first page r.start=0x%x, resource_size=0x%x, PAGE_SHIFT macro=0x%x\n",
+
+Use the special %pR format string to pretty-print the entire
+resource instead.
+
+Fixes: edfc2d73ca45 ("EDAC/aspeed: Add support for AST2400 and AST2600")
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+---
+ drivers/edac/aspeed_edac.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/edac/aspeed_edac.c b/drivers/edac/aspeed_edac.c
+index a46da56d6d54..6bd5f8815919 100644
+--- a/drivers/edac/aspeed_edac.c
++++ b/drivers/edac/aspeed_edac.c
+@@ -254,8 +254,8 @@ static int init_csrows(struct mem_ctl_info *mci)
+ 		return rc;
+ 	}
+ 
+-	dev_dbg(mci->pdev, "dt: /memory node resources: first page r.start=0x%x, resource_size=0x%x, PAGE_SHIFT macro=0x%x\n",
+-		r.start, resource_size(&r), PAGE_SHIFT);
++	dev_dbg(mci->pdev, "dt: /memory node resources: first page %pR, PAGE_SHIFT macro=0x%x\n",
++		&r, PAGE_SHIFT);
+ 
+ 	csrow->first_page = r.start >> PAGE_SHIFT;
+ 	nr_pages = resource_size(&r) >> PAGE_SHIFT;
+-- 
+2.29.2
+
