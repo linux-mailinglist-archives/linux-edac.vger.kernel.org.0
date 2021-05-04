@@ -2,134 +2,133 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A01937254B
-	for <lists+linux-edac@lfdr.de>; Tue,  4 May 2021 07:08:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A1C2372F2B
+	for <lists+linux-edac@lfdr.de>; Tue,  4 May 2021 19:48:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229726AbhEDFJI (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Tue, 4 May 2021 01:09:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45722 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229724AbhEDFJH (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Tue, 4 May 2021 01:09:07 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04BB1C061574;
-        Mon,  3 May 2021 22:08:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
-        :Reply-To:Content-ID:Content-Description;
-        bh=/l3ME+YyFSdYbM3W3a/AxJLnYEq4c0HL5DB1Few+tsY=; b=fnIuE8Usqiz+a4CZLKnOkXfjVJ
-        L1km8jYZPUtgQgMylkarrD2aaff0nMK2iBLrcye228unywIpAk28B6ZRcp+n/0j5rIgXtKLrXrzhu
-        9zFLC1afNQX2M+mCCRPoqQ/ujWWgiB85ACOVoji/gIzTvvtlQQEX1ashC0STdrMwE1s9OqskC6IBB
-        GzQ97qD1RHNTxqpNq+7Vu38eN5uEP0zL0OLsdTsDZA8Sd3kM8XqO3oFBefCWmI0DYBWxYZnWPbSM5
-        vEWAYh4teTS/J6fCCSuPTx9hCFbYqvOOSj/vAMjckWZvALOOUeEOXu/G+CxR/Bc0+ti3H6bi/Zej6
-        D2EiXx0Q==;
-Received: from [2601:1c0:6280:3f0::df68]
-        by casper.infradead.org with esmtpsa (Exim 4.94 #2 (Red Hat Linux))
-        id 1ldnHp-00G88E-81; Tue, 04 May 2021 05:08:00 +0000
-Subject: Re: [PATCH] EDAC: aspeed: print resource_size_t using %pa
-To:     Andrew Jeffery <andrew@aj.id.au>, linux-kernel@vger.kernel.org
-Cc:     kbuild test robot <lkp@intel.com>, linux-aspeed@lists.ozlabs.org,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Tony Luck <tony.luck@intel.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Stefan M Schaeckeler <sschaeck@cisco.com>,
-        Borislav Petkov <bp@suse.de>, linux-edac@vger.kernel.org,
-        Arnd Bergmann <arnd@kernel.org>
-References: <20210503163409.31944-1-rdunlap@infradead.org>
- <e899781c-304c-4494-a544-e3950e928e55@www.fastmail.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-Message-ID: <892dfd15-a8f7-9db9-86bb-9630e88e0e3c@infradead.org>
-Date:   Mon, 3 May 2021 22:07:53 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.9.1
+        id S232039AbhEDRtS (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Tue, 4 May 2021 13:49:18 -0400
+Received: from mail-dm6nam11on2052.outbound.protection.outlook.com ([40.107.223.52]:41921
+        "EHLO NAM11-DM6-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S232045AbhEDRtS (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Tue, 4 May 2021 13:49:18 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=JhQ+Oj2hqVhYOGAyi3vdYtNOdGgmm8LKqmbTonX651Wfx0/q5oLkUsxlrq9ymbC9398bQJGHtOO0N4XlNGKDHPPBypyJljya9zYol+hSbdiIqWMkGqQkkyU4rH8bTdFF58sdFztsBOHFP7Ex592wpKALbR4NhVjQ3SqSoZZRoOy3L5yxgyateuZZcJxdZTUZ+ITLfCaSQhYYdXEsbA4pdxibigCpPbrq68LQ3cT4yddT4RKeKokbbV8+S/9SNSvw02TcqXKENz01fp/9RHnd/ibej88ReVmsydcP1B2L+NKdG3g5XwPpCsslJfQ0cAbhW5hv7u8tjaoL3VoWq18cGg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=96cCY42XheRRAAcNN0LXKhrDouELERIod52zf1VCv1k=;
+ b=dFMx0BZKDVvF2KLpGkHJOREjzIqxlcb28X8dmoDLydIOB6sDIbd1zx+afxJu2Pq5mjNoQrHkQPNTTSDsn80pvwY52XMj8Rn97mXfRhHcU0ZgRSRxV0sCgS3MZ1M7w4sCfzzH3433C8OojQig2CfGwBDEYutQ9JyKtxHzIrocc2PJys30zMqpOcLp2ovHchc/2HInLmi4wMp5P7v1MFlWPt2rAJ47npXXsA/6s9VCTresh+QyACJPmLCVtj5GW7XPdEX/VZzdTNlAuSjyREZbUZ6zEQ5n5Vr49r/wPXfnYRqJNiI53FldcslBwrRC3+38P6XxAFIRzMUZTNnGAaPgxg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=96cCY42XheRRAAcNN0LXKhrDouELERIod52zf1VCv1k=;
+ b=apGatA08OmUg/80OjJiKuLEN9KSpbmofxw/zwHvUlMLqvq7iDJ+Ss+0ftsNjwyuFahyg2Jt9lCiLcQguEDk/i9vD61IpgmgshgAlPwNiUeCiBUfZcM7+vdz/IBuPyj3NjvHRYK3se4oe6foDMsv+Nmdb4ofSAmoBQwYSNxd6pRA=
+Authentication-Results: vger.kernel.org; dkim=none (message not signed)
+ header.d=none;vger.kernel.org; dmarc=none action=none header.from=amd.com;
+Received: from BN8PR12MB3108.namprd12.prod.outlook.com (2603:10b6:408:40::20)
+ by BN6PR1201MB0212.namprd12.prod.outlook.com (2603:10b6:405:56::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4087.42; Tue, 4 May
+ 2021 17:48:18 +0000
+Received: from BN8PR12MB3108.namprd12.prod.outlook.com
+ ([fe80::418b:8ea0:dc4b:d211]) by BN8PR12MB3108.namprd12.prod.outlook.com
+ ([fe80::418b:8ea0:dc4b:d211%6]) with mapi id 15.20.4065.039; Tue, 4 May 2021
+ 17:48:18 +0000
+From:   Yazen Ghannam <Yazen.Ghannam@amd.com>
+To:     linux-edac@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, tony.luck@intel.com, x86@kernel.org,
+        Smita.KoralahalliChannabasappa@amd.com,
+        Yazen Ghannam <yazen.ghannam@amd.com>
+Subject: [PATCH 0/2] AMD Zen-based IF Unit Poison Quirk
+Date:   Tue,  4 May 2021 17:47:10 +0000
+Message-Id: <20210504174712.27675-1-Yazen.Ghannam@amd.com>
+X-Mailer: git-send-email 2.25.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [165.204.184.1]
+X-ClientProxiedBy: BN6PR18CA0013.namprd18.prod.outlook.com
+ (2603:10b6:404:121::23) To BN8PR12MB3108.namprd12.prod.outlook.com
+ (2603:10b6:408:40::20)
 MIME-Version: 1.0
-In-Reply-To: <e899781c-304c-4494-a544-e3950e928e55@www.fastmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+X-MS-Exchange-MessageSentRepresentingType: 1
+Received: from ethanolx80b6host.amd.com (165.204.184.1) by BN6PR18CA0013.namprd18.prod.outlook.com (2603:10b6:404:121::23) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4108.25 via Frontend Transport; Tue, 4 May 2021 17:48:17 +0000
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 6d7cb7e3-fc74-4fcf-fd49-08d90f24ccd9
+X-MS-TrafficTypeDiagnostic: BN6PR1201MB0212:
+X-MS-Exchange-Transport-Forked: True
+X-Microsoft-Antispam-PRVS: <BN6PR1201MB0212C0CB80D19AFDBB6CE757F85A9@BN6PR1201MB0212.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:7691;
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: TKDfGFax5YZXH37ZAMdRf5Vqg7+/V2S8+MoNmr3lO5lBlwHWFPlv5G3Xmc+GXMbKqLagNtptL4lbn/nIE136MN8L34AgfAXwUTB6xLvV3iak3Y3tKl2/KaegtzIYkvHmZ7LOWzEPrCcItTVooZcHRqZ/6cD0lqAI+gFMO/9gR38ODRmXyc3+YbnFitjYVFGOnqNApechvdN3auQNiTw6kCkMZvUt9FWicDNWkF7yk/F6IlkTCX/6afJd/r5d7/Thra8qJxu0sjUZUnlNnI22El14fO1nt1Q/C72TMiFVFgrqtn5+DqNfGHix+NfjVKp/lDf6tmgc/crRuZkz2F6dmR/UaXlIxNFV81IrY3oo5aKS5QpZ6rJUbo0zVvKKp0xDNClWG+5Ian7X7y5hiH2AhGi4mzKhm+8ruRjd3ypzOlVXBue8OKFPSJE6gRqTIJwnd6FGw+9HMfQDEwpE69cb+X4O+Yi2o6itGWYTozkkMp45mx9ra86jiG22e9ywLvZqqEHfkLh4aAfiODJynHJfbUKw1sPMamDCuf8eukFg6QUjPIQDJKDs37IhSB+MVj/T3s2ruNzQlAfXyo6oAuY4/OAKA+6cinJCgHv8ncYhsIrLMuwnqYqHKLnWxWd8sfp4vzlCMnhAzpCkFRbtv7kToA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3108.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(39860400002)(346002)(396003)(136003)(376002)(366004)(66476007)(66946007)(8676002)(5660300002)(26005)(2906002)(38100700002)(38350700002)(6916009)(6486002)(478600001)(66556008)(86362001)(4744005)(1076003)(4326008)(186003)(36756003)(8936002)(316002)(956004)(6666004)(16526019)(7696005)(83380400001)(52116002)(2616005);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData: =?us-ascii?Q?RhgQPiv+d5uWc7Da/jaTZysnuTpB3ocIhTfJtEfxU10I/NZ02YPpmlva1tp6?=
+ =?us-ascii?Q?CkXGNdyeymhb5/QNZBlKeDkF/T1y3KG0IsEublA3fE+5Y59PUmjnR0bbmytd?=
+ =?us-ascii?Q?nJ4Bsd8fqlnqMcSuP5SpVgmjVGMxrxXL9oCtK8mfLC6ygVMudO3tYiAPsiyu?=
+ =?us-ascii?Q?7R3Qd8LqIBTO5P5fMQs8OWYJz8x5YixjmNXgo5FSB2KAQLC2TZpuYGjpdrIX?=
+ =?us-ascii?Q?knC6M7w4yasLpOozkNw1ya9uABP+cXY0B7MdslaMQlGSc7dvVVfLJSNqVk5o?=
+ =?us-ascii?Q?zuUWmBvhxKtXBVMn04HNcIETMexrUeaJbl4VRKOCdIZa//XkHITKQV4rdtcn?=
+ =?us-ascii?Q?FTELDrYyOxEtAHHG4p3IfvXxppQxE9UZv8ec2AMUdHs/s5zAs65YbF4CnUzW?=
+ =?us-ascii?Q?I0bZhvjaJRtrlVyiDkwGMbVncOYHO++d3u4DKZEi88gKf8wx4eKSC7l5Sw/A?=
+ =?us-ascii?Q?2tJjBneQDqbq0jDobw2/qamprsnSMTuMmvS6JcFleR6iiKosmw0VHiCEkRXO?=
+ =?us-ascii?Q?cORcYoliRBz05v236u7HXWOvTYMUKIMFlleBSHif6xFaH631biRoaDf1RfS9?=
+ =?us-ascii?Q?gjyq8vwmEgDpdvz22llP4FayzbDIfNxZXKglFdecWffufril5Y/HEFbrAVh/?=
+ =?us-ascii?Q?5hlC4Gca3llfzCYWRJv9moEndzdtelDXJO0QJ/VNAFcA0IEOZ+tHnnSmal2J?=
+ =?us-ascii?Q?uosvFVM7jTuAtOO45twKq2lnQb6lN6QUksDN1L9C4+PMIif3c3aR/xsuuIkt?=
+ =?us-ascii?Q?37a0UV90kj6f84L/GuQ7QtGvXZTi0OMzbOpHRwFF6aUwP1tExuB/t7tE4ugl?=
+ =?us-ascii?Q?qVg3M7L1S6YPGK5N0i3/faO9yuyTfGyVI5VW9iyEVMDGR3PYf1FCnIQFlrzP?=
+ =?us-ascii?Q?qEwnEiadKcEpv1OrqukvUvzRoqvmskbIIlHcYjrM4uWqYi2tyFAQHlwUzrcY?=
+ =?us-ascii?Q?wDzI1ybs+3anyF409G/1vaMarDSj/qthAx3mpISLVY0RE2uDmA/uBxBZ1YWY?=
+ =?us-ascii?Q?T00ulKPxNwfkkDxcGZ8PFupTHYoYgb+Pxl6CREuvoy+J+lFild2TjE82buWF?=
+ =?us-ascii?Q?3/9yGHaJS3y42masPxYgh8N+o0PwoMGq4l3n05952L8JktpJhe3IP9WlWpoy?=
+ =?us-ascii?Q?45eH050Qzdm7XJgVfcAAZczoc7QH/W9Ozs80/WVmYyynpizU0MI7h2DHilgp?=
+ =?us-ascii?Q?sBOsHwyz6lFIipOYHxcw+dTh07lVVVJxzu9X9dpHhWyQCl93B3Eb845sPEyL?=
+ =?us-ascii?Q?qe6ImXeBoZtc66TpdsHblWWtAxQgjWnZar6Z023qCq/J3E7lvqBzNr3G4NAF?=
+ =?us-ascii?Q?/WrICC3M3cp1pt+N9waIE3D5?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6d7cb7e3-fc74-4fcf-fd49-08d90f24ccd9
+X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3108.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 May 2021 17:48:18.1702
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: V0hd+HEAGljQMkuYG+5VJgyTTKjeedunb5nB+7PTtdiYVniog9XwGpNViedhcUFhK0BUxXVJg/AuGSmwh5Xvkw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN6PR1201MB0212
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On 5/3/21 9:57 PM, Andrew Jeffery wrote:
-> 
-> 
-> On Tue, 4 May 2021, at 02:04, Randy Dunlap wrote:
->> Fix build warnings for using "%x" to print resource_size_t in 2 places.
->> resource_size_t can be either of u32 or u64. We have a special format
->> "%pa" for printing a resource_size_t, which is the same as a phys_addr_t.
->> See Documentation/core-api/printk-formats.rst.
->>
->>   CC      drivers/edac/aspeed_edac.o
->> ../drivers/edac/aspeed_edac.c: In function 'init_csrows':
->> ../drivers/edac/aspeed_edac.c:257:21: warning: format '%x' expects 
->> argument of type 'unsigned int', but argument 4 has type 
->> 'resource_size_t' {aka 'long long unsigned int'} [-Wformat=]
->>   257 |  dev_dbg(mci->pdev, "dt: /memory node resources: first page 
->> r.start=0x%x, resource_size=0x%x, PAGE_SHIFT macro=0x%x\n",
->>   257 |  dev_dbg(mci->pdev, "dt: /memory node resources: first page 
->> r.start=0x%x, resource_size=0x%x, PAGE_SHIFT macro=0x%x\n",
->>   257 |  dev_dbg(mci->pdev, "dt: /memory node resources: first page 
->> r.start=0x%x, resource_size=0x%x, PAGE_SHIFT macro=0x%x\n",
->> ../drivers/edac/aspeed_edac.c:257:21: warning: format '%x' expects 
->> argument of type 'unsigned int', but argument 5 has type 
->> 'resource_size_t' {aka 'long long unsigned int'} [-Wformat=]
->>   257 |  dev_dbg(mci->pdev, "dt: /memory node resources: first page 
->> r.start=0x%x, resource_size=0x%x, PAGE_SHIFT macro=0x%x\n",
->>   257 |  dev_dbg(mci->pdev, "dt: /memory node resources: first page 
->> r.start=0x%x, resource_size=0x%x, PAGE_SHIFT macro=0x%x\n",
->>   257 |  dev_dbg(mci->pdev, "dt: /memory node resources: first page 
->> r.start=0x%x, resource_size=0x%x, PAGE_SHIFT macro=0x%x\n",
->>
->> Fixes: 9b7e6242ee4e ("EDAC, aspeed: Add an Aspeed AST2500 EDAC driver")
->> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
->> Reported-by: kernel test robot <lkp@intel.com>
->> Cc: Troy Lee <troy_lee@aspeedtech.com>
->> Cc: Stefan Schaeckeler <sschaeck@cisco.com>
->> Cc: linux-edac@vger.kernel.org
->> Cc: Borislav Petkov <bp@alien8.de>
->> Cc: Borislav Petkov <bp@suse.de>
->> Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
->> Cc: Tony Luck <tony.luck@intel.com>
->> Cc: linux-aspeed@lists.ozlabs.org
->> ---
->> Found in linux-next but applies to mainline.
-> 
->>
->>  drivers/edac/aspeed_edac.c |    8 +++++---
->>  1 file changed, 5 insertions(+), 3 deletions(-)
->>
->> --- linux-next-20210503.orig/drivers/edac/aspeed_edac.c
->> +++ linux-next-20210503/drivers/edac/aspeed_edac.c
->> @@ -234,6 +234,7 @@ static int init_csrows(struct mem_ctl_in
->>  	u32 nr_pages, dram_type;
->>  	struct dimm_info *dimm;
->>  	struct device_node *np;
->> +	resource_size_t rsize;
->>  	struct resource r;
->>  	u32 reg04;
->>  	int rc;
->> @@ -254,11 +255,12 @@ static int init_csrows(struct mem_ctl_in
->>  		return rc;
->>  	}
->>  
->> -	dev_dbg(mci->pdev, "dt: /memory node resources: first page 
->> r.start=0x%x, resource_size=0x%x, PAGE_SHIFT macro=0x%x\n",
->> -		r.start, resource_size(&r), PAGE_SHIFT);
->> +	rsize = resource_size(&r);
->> +	dev_dbg(mci->pdev, "dt: /memory node resources: first page 
->> r.start=0x%pa, resource_size=0x%pa, PAGE_SHIFT macro=0x%x\n",
->> +		&r.start, &rsize, PAGE_SHIFT);
-> 
-> Arnd posted a fix a few days back that feels more intuitive, though 
-> probably could have cleaned up the grammar:
-> 
-> https://lore.kernel.org/lkml/20210421135500.3518661-1-arnd@kernel.org/
+From: Yazen Ghannam <yazen.ghannam@amd.com>
 
-Oh, that's fine. I just missed it. :(
+The Instruction Fetch unit on AMD Zen-based systems has a
+microarchitectural quirk in which RIPV is not set on poison consumption
+errors. However, the error is guaranteed to be delivered before a
+context switch. Therefore, the CS register can be considered valid.
 
-thanks.
+Patch 1 handles this behavior. Patch 2 addresses fallout from the change
+in behavior in Patch 1.
+
+Both patches Cc: stable because there have been bug reports that seem to
+exhibit this behavior. There are no Fixes tags, because I don't think we
+can point to specific commits that introduced this issue.
+
+Thanks,
+Yazen
+
+Yazen Ghannam (2):
+  x86/MCE: Always save CS register on AMD Zen IF errors
+  x86/MCE: Don't call kill_me_now() directly
+
+ arch/x86/kernel/cpu/mce/amd.c      | 17 +++++++++++++++++
+ arch/x86/kernel/cpu/mce/core.c     | 12 ++++++++----
+ arch/x86/kernel/cpu/mce/internal.h |  2 ++
+ 3 files changed, 27 insertions(+), 4 deletions(-)
+
 -- 
-~Randy
+2.25.1
 
