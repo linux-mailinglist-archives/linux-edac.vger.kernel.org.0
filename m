@@ -2,132 +2,68 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1903C377211
-	for <lists+linux-edac@lfdr.de>; Sat,  8 May 2021 15:21:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 50D5F37726D
+	for <lists+linux-edac@lfdr.de>; Sat,  8 May 2021 16:33:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230486AbhEHNWK (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Sat, 8 May 2021 09:22:10 -0400
-Received: from szxga04-in.huawei.com ([45.249.212.190]:17162 "EHLO
-        szxga04-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230483AbhEHNWJ (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Sat, 8 May 2021 09:22:09 -0400
-Received: from DGGEMS413-HUB.china.huawei.com (unknown [172.30.72.59])
-        by szxga04-in.huawei.com (SkyGuard) with ESMTP id 4FcntN5GWDzncMw
-        for <linux-edac@vger.kernel.org>; Sat,  8 May 2021 21:17:48 +0800 (CST)
-Received: from localhost.localdomain (10.175.101.6) by
- DGGEMS413-HUB.china.huawei.com (10.3.19.213) with Microsoft SMTP Server (TLS)
- id 14.3.498.0; Sat, 8 May 2021 21:20:56 +0800
-Date:   Sun, 9 May 2021 13:32:29 +0800
-From:   Lv Ying <lvying6@huawei.com>
-To:     <tony.luck@intel.com>, <bp@alien8.de>
-CC:     <linux-edac@vger.kernel.org>, <lvying6@huawei.com>,
-        <fanwentao@huawei.com>
-Subject: [RFC PATCH] x86/mce/inject: Fix printk deadlock causing
+        id S229559AbhEHOea (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Sat, 8 May 2021 10:34:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60432 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229500AbhEHOea (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Sat, 8 May 2021 10:34:30 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6472C061574
+        for <linux-edac@vger.kernel.org>; Sat,  8 May 2021 07:33:28 -0700 (PDT)
+Received: from zn.tnic (p200300ec2f1c5300aeec222591b28502.dip0.t-ipconnect.de [IPv6:2003:ec:2f1c:5300:aeec:2225:91b2:8502])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id CA7011EC047F;
+        Sat,  8 May 2021 16:33:25 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1620484405;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=L7RlPNfIo6n+0Rz/6M2EkUySHWS8IV9BUg50l99rBQg=;
+        b=BNuJgciceD3iEqsE65sn+voaca2IlKBUSCh+1cJ0AmJhEu1WyUGZVsHl869BverZqNbkk/
+        /YHxQMR+AVWT1Zjs4eGKWbutlqWWNianQAGq71J638TcEGccBNGvVJBGLUQlvY8u8LnkOd
+        Nz+pNiABPLup4ukPGxosHunYalkL0/k=
+Date:   Sat, 8 May 2021 16:33:23 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Lv Ying <lvying6@huawei.com>
+Cc:     tony.luck@intel.com, linux-edac@vger.kernel.org,
+        fanwentao@huawei.com
+Subject: Re: [RFC PATCH] x86/mce/inject: Fix printk deadlock causing
  mce_timed_out panic
-Message-ID: <20210509053229.GA2477949@localhost.localdomain>
+Message-ID: <YJahM9PaZ7Jefkbi@zn.tnic>
+References: <20210509053229.GA2477949@localhost.localdomain>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Originating-IP: [10.175.101.6]
-X-CFilter-Loop: Reflected
+In-Reply-To: <20210509053229.GA2477949@localhost.localdomain>
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-The mce-inject SRAO broadcast error injection on 4-core CPU caused mce_timed_out
-panic as following:
-Kernel panic - not syncing: Timeout: Not all CPUs entered broadcast exception handler
+On Sun, May 09, 2021 at 01:32:29PM +0800, Lv Ying wrote:
+> The mce-inject SRAO broadcast error injection on 4-core CPU caused mce_timed_out
+> panic as following:
+> Kernel panic - not syncing: Timeout: Not all CPUs entered broadcast exception handler
 
-There are two CPUs's backtrace are the same:
+A couple of things:
 
-Call Trace:
-panic
-mce_panic
-mce_timed_out
-do_machine_check
-raise_exception
-mce_raise_notify
-nmi_handle
-do_nmi
---- <NMI exception stack> ---
+- how exactly do you do that injection, please give exact steps
 
-Another CPU's backtrace:
+- on which kernel, dmesg, .config etc
 
-Call Trace:
-panic
-mce_panic
-mce_timed_out
-do_machine_check
-raise_exception
-mce_raise_notify
-nmi_handle
-do_nmi
---- <NMI exception stack> ---
-...
-console_unlock
-vprintk_emit
-printk
+- anything specific about the hardware you're using
 
-The last CPU's backtrace:
+- always Cc lkml on patches.
 
-Call Trace:
-crash_nmi_callback
-nmi_handle
-do_nmi
---- <NMI exception stack> ---
-vprintk_emit
-printk
-raise_local
-mce_inject_raise
-notifier_call_chain
-mce_chrdev_write
+Thx.
 
-So, the last CPU does not go to mce_timed_out function causing mce_panic.
-The last CPU stuck's reason is as follows:
-
-	CPU A				CPU B
-	 |				 |
-	printk				 |
-	 |				 |
-	hold console_sem		 |
-	 |				 |
-	broadcast NMI		<-	send NMI IPI
-	 |				 |
-	 |				 |
-	mce_timed_out			printk
-	wait all the CPU		 |
-					can not hold console_sem
-					set console_waiter true
-					 |
-					while (console_waiter)
-					  cpu_releax;
-
-The CPU A will call console_lock_spinning_disable_and_check set console_waiter
-false. However, this function will never be called as NMI handler stuck in mce_timed_out.
-
-So, after CPU B send NMI IPI to all the other CPUs, before CPU B itself call
-raise_exception to go to mce_timed_out. No printk should be called. Just remove
-this pr_info, the pr_info("MCE exception done on CPU %d\n", cpu) after
-raise_exception is enough to show that the CPU has handled the MCE exception.
-
-Signed-off-by: Lv Ying <lvying6@huawei.com>
----
- arch/x86/kernel/cpu/mce/inject.c | 1 -
- 1 file changed, 1 deletion(-)
-
-diff --git a/arch/x86/kernel/cpu/mce/inject.c b/arch/x86/kernel/cpu/mce/inject.c
-index 4e86d97f9653..e84a5ffd08f4 100644
---- a/arch/x86/kernel/cpu/mce/inject.c
-+++ b/arch/x86/kernel/cpu/mce/inject.c
-@@ -194,7 +194,6 @@ static int raise_local(void)
- 	int cpu = m->extcpu;
- 
- 	if (m->inject_flags & MCJ_EXCEPTION) {
--		pr_info("Triggering MCE exception on CPU %d\n", cpu);
- 		switch (context) {
- 		case MCJ_CTX_IRQ:
- 			/*
 -- 
-2.23.0
+Regards/Gruss,
+    Boris.
 
+https://people.kernel.org/tglx/notes-about-netiquette
