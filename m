@@ -2,81 +2,81 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 001A9379720
-	for <lists+linux-edac@lfdr.de>; Mon, 10 May 2021 20:40:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FEB1379796
+	for <lists+linux-edac@lfdr.de>; Mon, 10 May 2021 21:22:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231577AbhEJSlT convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-edac@lfdr.de>); Mon, 10 May 2021 14:41:19 -0400
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:60396 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230186AbhEJSlT (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Mon, 10 May 2021 14:41:19 -0400
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: krisman)
-        with ESMTPSA id DC9DC1F41D73
-From:   Gabriel Krisman Bertazi <krisman@collabora.com>
-To:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Cc:     Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        "Daniel W. S. Almeida" <dwlsalmeida@gmail.com>,
-        "Jonathan Corbet" <corbet@lwn.net>, Arnd Bergmann <arnd@arndb.de>,
-        Borislav Petkov <bp@alien8.de>,
-        David Howells <dhowells@redhat.com>,
-        David Woodhouse <dwmw2@infradead.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        James Morse <james.morse@arm.com>,
-        Kees Cook <keescook@chromium.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Robert Richter <rric@kernel.org>,
-        Thorsten Leemhuis <linux@leemhuis.info>,
-        Tony Luck <tony.luck@intel.com>, keyrings@vger.kernel.org,
-        linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 06/53] docs: admin-guide: avoid using UTF-8 chars
-Organization: Collabora
+        id S233212AbhEJTXw (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Mon, 10 May 2021 15:23:52 -0400
+Received: from outgoing-auth-1.mit.edu ([18.9.28.11]:47815 "EHLO
+        outgoing.mit.edu" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S233208AbhEJTXt (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Mon, 10 May 2021 15:23:49 -0400
+Received: from cwcc.thunk.org (pool-72-74-133-215.bstnma.fios.verizon.net [72.74.133.215])
+        (authenticated bits=0)
+        (User authenticated as tytso@ATHENA.MIT.EDU)
+        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 14AJM3dI013584
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 10 May 2021 15:22:05 -0400
+Received: by cwcc.thunk.org (Postfix, from userid 15806)
+        id F267215C3CD9; Mon, 10 May 2021 15:22:02 -0400 (EDT)
+Date:   Mon, 10 May 2021 15:22:02 -0400
+From:   "Theodore Ts'o" <tytso@mit.edu>
+To:     David Woodhouse <dwmw2@infradead.org>
+Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
+        alsa-devel@alsa-project.org, coresight@lists.linaro.org,
+        dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
+        intel-wired-lan@lists.osuosl.org, keyrings@vger.kernel.org,
+        kvm@vger.kernel.org, linux-acpi@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-edac@vger.kernel.org,
+        linux-ext4@vger.kernel.org, linux-f2fs-devel@lists.sourceforge.net,
+        linux-fpga@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        linux-iio@vger.kernel.org, linux-input@vger.kernel.org,
+        linux-integrity@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-rdma@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-sgx@vger.kernel.org, linux-usb@vger.kernel.org,
+        mjpeg-users@lists.sourceforge.net, netdev@vger.kernel.org,
+        rcu@vger.kernel.org, x86@kernel.org
+Subject: Re: [PATCH 00/53] Get rid of UTF-8 chars that can be mapped as ASCII
+Message-ID: <YJmH2irxoRsyNudb@mit.edu>
 References: <cover.1620641727.git.mchehab+huawei@kernel.org>
-        <4b372b47487992fa0b4036b4bfbb6c879f497786.1620641727.git.mchehab+huawei@kernel.org>
-Date:   Mon, 10 May 2021 14:40:09 -0400
-In-Reply-To: <4b372b47487992fa0b4036b4bfbb6c879f497786.1620641727.git.mchehab+huawei@kernel.org>
-        (Mauro Carvalho Chehab's message of "Mon, 10 May 2021 12:26:18 +0200")
-Message-ID: <878s4m301i.fsf@collabora.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+ <2ae366fdff4bd5910a2270823e8da70521c859af.camel@infradead.org>
+ <20210510135518.305cc03d@coco.lan>
+ <de6d1fa5b7934f4afd61370d9c58502bef588466.camel@infradead.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8BIT
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <de6d1fa5b7934f4afd61370d9c58502bef588466.camel@infradead.org>
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-Mauro Carvalho Chehab <mchehab+huawei@kernel.org> writes:
+On Mon, May 10, 2021 at 02:49:44PM +0100, David Woodhouse wrote:
+> On Mon, 2021-05-10 at 13:55 +0200, Mauro Carvalho Chehab wrote:
+> > This patch series is doing conversion only when using ASCII makes
+> > more sense than using UTF-8. 
+> > 
+> > See, a number of converted documents ended with weird characters
+> > like ZERO WIDTH NO-BREAK SPACE (U+FEFF) character. This specific
+> > character doesn't do any good.
+> > 
+> > Others use NO-BREAK SPACE (U+A0) instead of 0x20. Harmless, until
+> > someone tries to use grep[1].
+> 
+> Replacing those makes sense. But replacing emdashes — which are a
+> distinct character that has no direct replacement in ASCII and which
+> people do *deliberately* use instead of hyphen-minus — does not.
 
-> While UTF-8 characters can be used at the Linux documentation,
-> the best is to use them only when ASCII doesn't offer a good replacement.
-> So, replace the occurences of the following UTF-8 characters:
->
-> 	- U+00a0 (' '): NO-BREAK SPACE
-> 	- U+2013 ('–'): EN DASH
-> 	- U+2014 ('—'): EM DASH
->
-> Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-> ---
->  Documentation/admin-guide/index.rst           |  2 +-
->  Documentation/admin-guide/module-signing.rst  |  4 +-
->  Documentation/admin-guide/ras.rst             | 94 +++++++++----------
->  .../admin-guide/reporting-issues.rst          | 12 +--
->  4 files changed, 56 insertions(+), 56 deletions(-)
+I regularly use --- for em-dashes and -- for en-dashes.  Markdown will
+automatically translate 3 ASCII hypens to em-dashes, and 2 ASCII
+hyphens to en-dashes.  It's much, much easier for me to type 2 or 3
+hypens into my text editor of choice than trying to enter the UTF-8
+characters.  If we can make sphinx do this translation, maybe that's
+the best way of dealing with these two characters?
 
-Hi Mauro,
+Cheers,
 
-This patch misses one occurrence of U+2014 in
-Documentation/admin-guide/sysctl/kernel.rst:1288.
-
-There are also countless occurrences in Documentation/, outside of
-Documentation/admin-guide.  I suppose another patch in the series, which
-I didn't receive, will fix them?
-
-These characters will just reappear elsewhere, eventually. I'm not sure
-what is the gain here, other than minor consistence improvements. But we
-should add a Warning during documentation generation (if there isn't one
-already), to prevent them from spreading again.
-
--- 
-Gabriel Krisman Bertazi
+					- Ted
