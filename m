@@ -2,28 +2,23 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FEB1379796
-	for <lists+linux-edac@lfdr.de>; Mon, 10 May 2021 21:22:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E30DE379A28
+	for <lists+linux-edac@lfdr.de>; Tue, 11 May 2021 00:36:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233212AbhEJTXw (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Mon, 10 May 2021 15:23:52 -0400
-Received: from outgoing-auth-1.mit.edu ([18.9.28.11]:47815 "EHLO
-        outgoing.mit.edu" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S233208AbhEJTXt (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Mon, 10 May 2021 15:23:49 -0400
-Received: from cwcc.thunk.org (pool-72-74-133-215.bstnma.fios.verizon.net [72.74.133.215])
-        (authenticated bits=0)
-        (User authenticated as tytso@ATHENA.MIT.EDU)
-        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 14AJM3dI013584
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 10 May 2021 15:22:05 -0400
-Received: by cwcc.thunk.org (Postfix, from userid 15806)
-        id F267215C3CD9; Mon, 10 May 2021 15:22:02 -0400 (EDT)
-Date:   Mon, 10 May 2021 15:22:02 -0400
-From:   "Theodore Ts'o" <tytso@mit.edu>
-To:     David Woodhouse <dwmw2@infradead.org>
-Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        id S231223AbhEJWh3 (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Mon, 10 May 2021 18:37:29 -0400
+Received: from tartarus.angband.pl ([51.83.246.204]:34704 "EHLO
+        tartarus.angband.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230271AbhEJWh2 (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Mon, 10 May 2021 18:37:28 -0400
+X-Greylist: delayed 1784 seconds by postgrey-1.27 at vger.kernel.org; Mon, 10 May 2021 18:37:20 EDT
+Received: from kilobyte by tartarus.angband.pl with local (Exim 4.94.2)
+        (envelope-from <kilobyte@angband.pl>)
+        id 1lgDtp-00EKjz-Lm; Mon, 10 May 2021 23:57:13 +0200
+Date:   Mon, 10 May 2021 23:57:13 +0200
+From:   Adam Borowski <kilobyte@angband.pl>
+To:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Cc:     Linux Doc Mailing List <linux-doc@vger.kernel.org>,
         linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
         alsa-devel@alsa-project.org, coresight@lists.linaro.org,
         dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
@@ -40,43 +35,68 @@ Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         mjpeg-users@lists.sourceforge.net, netdev@vger.kernel.org,
         rcu@vger.kernel.org, x86@kernel.org
 Subject: Re: [PATCH 00/53] Get rid of UTF-8 chars that can be mapped as ASCII
-Message-ID: <YJmH2irxoRsyNudb@mit.edu>
+Message-ID: <YJmsOYzPIsQ04Zxb@angband.pl>
 References: <cover.1620641727.git.mchehab+huawei@kernel.org>
- <2ae366fdff4bd5910a2270823e8da70521c859af.camel@infradead.org>
- <20210510135518.305cc03d@coco.lan>
- <de6d1fa5b7934f4afd61370d9c58502bef588466.camel@infradead.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <de6d1fa5b7934f4afd61370d9c58502bef588466.camel@infradead.org>
+In-Reply-To: <cover.1620641727.git.mchehab+huawei@kernel.org>
+X-Junkbait: aaron@angband.pl, zzyx@angband.pl
+X-SA-Exim-Connect-IP: <locally generated>
+X-SA-Exim-Mail-From: kilobyte@angband.pl
+X-SA-Exim-Scanned: No (on tartarus.angband.pl); SAEximRunCond expanded to false
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Mon, May 10, 2021 at 02:49:44PM +0100, David Woodhouse wrote:
-> On Mon, 2021-05-10 at 13:55 +0200, Mauro Carvalho Chehab wrote:
-> > This patch series is doing conversion only when using ASCII makes
-> > more sense than using UTF-8. 
-> > 
-> > See, a number of converted documents ended with weird characters
-> > like ZERO WIDTH NO-BREAK SPACE (U+FEFF) character. This specific
-> > character doesn't do any good.
-> > 
-> > Others use NO-BREAK SPACE (U+A0) instead of 0x20. Harmless, until
-> > someone tries to use grep[1].
+On Mon, May 10, 2021 at 12:26:12PM +0200, Mauro Carvalho Chehab wrote:
+> There are several UTF-8 characters at the Kernel's documentation.
+[...]
+> Other UTF-8 characters were added along the time, but they're easily
+> replaceable by ASCII chars.
 > 
-> Replacing those makes sense. But replacing emdashes — which are a
-> distinct character that has no direct replacement in ASCII and which
-> people do *deliberately* use instead of hyphen-minus — does not.
+> As Linux developers are all around the globe, and not everybody has UTF-8
+> as their default charset
 
-I regularly use --- for em-dashes and -- for en-dashes.  Markdown will
-automatically translate 3 ASCII hypens to em-dashes, and 2 ASCII
-hyphens to en-dashes.  It's much, much easier for me to type 2 or 3
-hypens into my text editor of choice than trying to enter the UTF-8
-characters.  If we can make sphinx do this translation, maybe that's
-the best way of dealing with these two characters?
+I'm not aware of a distribution that still allows selecting a non-UTF-8
+charset in a normal flow in their installer.  And if they haven't purged
+support for ancient encodings, that support is thoroughly bitrotten.
+Thus, I disagree that this is a legitimate concern.
 
-Cheers,
+What _could_ be a legitimate reason is that someone is on a _terminal_
+that can't display a wide enough set of glyphs.  Such terminals are:
+ • Linux console (because of vgacon limitations; patchsets to improve
+   other cons haven't been mainlined)
+ • some Windows terminals (putty, old Windows console) that can't borrow
+   glyphs from other fonts like fontconfig can
 
-					- Ted
+For the former, it's whatever your distribution ships in
+/usr/share/consolefonts/ or an equivalent, which is based on historic
+ISO-8859 and VT100 traditions.
+
+For the latter, the near-guaranteed character set is WGL4.
+
+
+Thus, at least two of your choices seem to disagree with the above:
+[dropped]
+> 	0xd7   => 'x',		# MULTIPLICATION SIGN
+[retained]
+> 	- U+2b0d ('⬍'): UP DOWN BLACK ARROW
+
+× is present in ISO-8859, V100, WGL4; I've found no font in
+/usr/share/consolefonts/ on my Debian unstable box that lacks this
+character.
+
+⬍ is not found in any of the above.  You might want to at least
+convert it to ↕ which is at least present in WGL4, and thus likely
+to be supported in fonts heeding Windows/Mac/OpenType recommendations.
+That still won't make it work on VT.
+
+
+Meow!
+-- 
+⢀⣴⠾⠻⢶⣦⠀ .--[ Makefile ]
+⣾⠁⢠⠒⠀⣿⡁ # beware of races
+⢿⡄⠘⠷⠚⠋⠀ all: pillage burn
+⠈⠳⣄⠀⠀⠀⠀ `----
