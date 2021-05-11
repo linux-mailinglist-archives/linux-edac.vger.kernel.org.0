@@ -2,133 +2,86 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D196137AD17
-	for <lists+linux-edac@lfdr.de>; Tue, 11 May 2021 19:27:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F0CB637AD24
+	for <lists+linux-edac@lfdr.de>; Tue, 11 May 2021 19:34:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231437AbhEKR2Z (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Tue, 11 May 2021 13:28:25 -0400
-Received: from mail.skyhub.de ([5.9.137.197]:42602 "EHLO mail.skyhub.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231407AbhEKR2Y (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Tue, 11 May 2021 13:28:24 -0400
-Received: from zn.tnic (p200300ec2f0ec70020ab858661d7f414.dip0.t-ipconnect.de [IPv6:2003:ec:2f0e:c700:20ab:8586:61d7:f414])
+        id S231407AbhEKRf4 (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Tue, 11 May 2021 13:35:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34666 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231329AbhEKRf4 (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Tue, 11 May 2021 13:35:56 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 721D0C061574;
+        Tue, 11 May 2021 10:34:49 -0700 (PDT)
+Received: from zn.tnic (p200300ec2f0ec70091f309bcd5e4258d.dip0.t-ipconnect.de [IPv6:2003:ec:2f0e:c700:91f3:9bc:d5e4:258d])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 45B771EC02E6;
-        Tue, 11 May 2021 19:27:17 +0200 (CEST)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id E18211EC0301;
+        Tue, 11 May 2021 19:34:47 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1620754037;
+        t=1620754488;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=B3r/YO4GVHpZhNHppOEhHaJZiEO73O06Xor7sWfCBJg=;
-        b=HKDtVnk855QV7vLOW2EqBGvdL5dVylFBP/gFe7MQ/dzTxDmYSfXzIJUgwIaTtg3uP4sDEA
-        bb4L3PWBo7/cMO9PJUsEsJL+B1KYVLpRid+IA6r3fXJ/8JNYWOC0NiTgTHaexiAOnvLth0
-        HVYns2auhDoC5XX6KTAeNHrUG+Xtgyo=
-Date:   Tue, 11 May 2021 19:27:13 +0200
+        bh=3/bXis5NaA7RX5+1HMGPhmVKaplL2A5rrRK2DTP1lwk=;
+        b=acI2tZYyZobSwgFD1A6t5aJoJZjOjElQRSIFuMg2eSFVnRHruARSwVF+2BoJG4/vCLPcnb
+        mmCjt8Jf0uouuT0ycqg+uTyb6E4/CGSCh0ofKvGRtZmNi3fagNnbTrTE/VUpDJfEQJWlAh
+        ksJCPJKrHLmuOYoWSNj3NmOC0u9ltHU=
+Date:   Tue, 11 May 2021 19:34:49 +0200
 From:   Borislav Petkov <bp@alien8.de>
 To:     Naveen Krishna Chatradhi <nchatrad@amd.com>
 Cc:     linux-edac@vger.kernel.org, x86@kernel.org,
         linux-kernel@vger.kernel.org, mingo@redhat.com, mchehab@kernel.org,
-        Muralidhara M K <muralimk@amd.com>
-Subject: Re: [PATCH 1/3] x86/MCE/AMD, EDAC/mce_amd: Add new SMCA bank types.
-Message-ID: <YJq+ca+kJ4cRl5B8@zn.tnic>
+        Mukul Joshi <mukul.joshi@amd.com>
+Subject: Re: [PATCH 2/3] x86/MCE/AMD: Helper function to check UMC v2
+Message-ID: <YJrAOXEcyUvs/WvY@zn.tnic>
 References: <20210511152538.148084-1-nchatrad@amd.com>
+ <20210511152538.148084-2-nchatrad@amd.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20210511152538.148084-1-nchatrad@amd.com>
+In-Reply-To: <20210511152538.148084-2-nchatrad@amd.com>
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Tue, May 11, 2021 at 08:55:36PM +0530, Naveen Krishna Chatradhi wrote:
-> diff --git a/arch/x86/kernel/cpu/mce/amd.c b/arch/x86/kernel/cpu/mce/amd.c
-> index e486f96b3cb3..055f3a0acf5e 100644
-> --- a/arch/x86/kernel/cpu/mce/amd.c
-> +++ b/arch/x86/kernel/cpu/mce/amd.c
-> @@ -90,6 +90,7 @@ static struct smca_bank_name smca_names[] = {
->  	[SMCA_CS_V2]	= { "coherent_slave",	"Coherent Slave" },
->  	[SMCA_PIE]	= { "pie",		"Power, Interrupts, etc." },
->  	[SMCA_UMC]	= { "umc",		"Unified Memory Controller" },
-> +	[SMCA_UMC_V2]	= { "umc_v2",		"Unified Memory Controller" },
+On Tue, May 11, 2021 at 08:55:37PM +0530, Naveen Krishna Chatradhi wrote:
 
-So this is called "umc_v2" but the other V2 FUs's strings are the same.
-Why?
+> Subject: Re: [PATCH 2/3] x86/MCE/AMD: Helper function to check UMC v2
 
-Also, if you're going to repeat strings, you can just as well group all
-those which are the same this way:
+The condensed patch description in the subject line should start with a
+uppercase letter and should be written in imperative tone:
 
-	[ SMCA_UMC ... SMCA_UMC_V2 ]    = { "umc",              "Unified Memory Controller" },
+"x86/MCE/AMD: Add a helper function... "
 
-and do that for all which have V1 and V2.
+> Signed-off-by: Mukul Joshi <mukul.joshi@amd.com>
+> Reviewed-by: John Clements <John.Clements@amd.com>
+> Reviewed-by: Yazen Ghannam <yazen.ghannam@amd.com>
 
-I mean, gcc is smart enough to do that behind the scenes for identical
-strings but you should do that in C too.
+This is all fine and dandy but it needs your SOB too when you send the
+patch.
 
-> diff --git a/drivers/edac/mce_amd.c b/drivers/edac/mce_amd.c
-> index 5dd905a3f30c..5515fd9336b1 100644
-> --- a/drivers/edac/mce_amd.c
-> +++ b/drivers/edac/mce_amd.c
-> @@ -323,6 +323,21 @@ static const char * const smca_umc_mce_desc[] = {
->  	"AES SRAM ECC error",
->  };
->  
-> +static const char * const smca_umc2_mce_desc[] = {
+Please read Documentation/process/submitting-patches.rst
 
-Ok, gcc reuses the identical string pointers from smca_umc_mce_desc[] so
-we should be ok wrt duplication.
+sections
 
-> +	"DRAM ECC error",
-> +	"Data poison error",
-> +	"SDP parity error",
-> +	"Reserved",
-> +	"Address/Command parity error",
-> +	"Write data parity error",
-> +	"DCQ SRAM ECC error",
-> +	"Reserved",
-> +	"Read data parity error",
-> +	"Rdb SRAM ECC error",
-> +	"RdRsp SRAM ECC error",
-> +	"LM32 MP errors",
-> +};
+Sign your work - the Developer's Certificate of Origin
+When to use Acked-by:, Cc:, and Co-developed-by:
 
-...
+> +bool is_smca_umc_v2(int bank)
+> +{
+> +	return (smca_get_bank_type(bank) == SMCA_UMC_V2);
+> +}
+> +EXPORT_SYMBOL_GPL(is_smca_umc_v2);
 
+This addition looks useless when it doesn't have any users.
 
-> +static const char * const smca_xgmipcs_mce_desc[] = {
-> +	"DataLossErr",
-> +	"TrainingErr",
-> +	"FlowCtrlAckErr",
-> +	"RxFifoUnderflowErr",
-> +	"RxFifoOverflowErr",
-> +	"CRCErr",
-> +	"BERExceededErr",
-> +	"TxVcidDataErr",
-> +	"ReplayBufParityErr",
-> +	"DataParityErr",
-> +	"ReplayFifoOverflowErr",
-> +	"ReplayFIfoUnderflowErr",
-> +	"ElasticFifoOverflowErr",
-> +	"DeskewErr",
-> +	"FlowCtrlCRCErr",
-> +	"DataStartupLimitErr",
-> +	"FCInitTimeoutErr",
-> +	"RecoveryTimeoutErr",
-> +	"ReadySerialTimeoutErr",
-> +	"ReadySerialAttemptErr",
-> +	"RecoveryAttemptErr",
-> +	"RecoveryRelockAttemptErr",
-> +	"ReplayAttemptErr",
-> +	"SyncHdrErr",
-> +	"TxReplayTimeoutErr",
-> +	"RxReplayTimeoutErr",
-> +	"LinkSubTxTimeoutErr",
-> +	"LinkSubRxTimeoutErr",
-> +	"RxCMDPktErr",
+Also, I'm pretty sceptical this even makes sense to have it exported -
+I'm guessing this is for mce_amd.c but I can't say without seeing it in
+use.
 
-What happened to those and why aren't they proper words like the other
-error descriptions?
+The same remarks hold true for your patch 3.
 
 Thx.
 
