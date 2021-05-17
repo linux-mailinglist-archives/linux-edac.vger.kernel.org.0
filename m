@@ -2,107 +2,83 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 856B038205C
-	for <lists+linux-edac@lfdr.de>; Sun, 16 May 2021 20:30:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB2B1382CA5
+	for <lists+linux-edac@lfdr.de>; Mon, 17 May 2021 14:57:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230075AbhEPSbS (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Sun, 16 May 2021 14:31:18 -0400
-Received: from smtp-out-01.aalto.fi ([130.233.228.120]:63808 "EHLO
-        smtp-out-01.aalto.fi" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229506AbhEPSbR (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Sun, 16 May 2021 14:31:17 -0400
-X-Greylist: delayed 589 seconds by postgrey-1.27 at vger.kernel.org; Sun, 16 May 2021 14:31:17 EDT
-Received: from smtp-out-01.aalto.fi (localhost.localdomain [127.0.0.1])
-        by localhost (Email Security Appliance) with SMTP id A7689115854_A1625BB
-        for <linux-edac@vger.kernel.org>; Sun, 16 May 2021 18:20:11 +0000 (GMT)
-Received: from kosh.localdomain (kosh.org.aalto.fi [130.233.224.196])
-        by smtp-out-01.aalto.fi (Sophos Email Appliance) with ESMTP id 73D2E11584C_A1625BF
-        for <linux-edac@vger.kernel.org>; Sun, 16 May 2021 18:20:11 +0000 (GMT)
-Received: by kosh.localdomain (Postfix, from userid 1751673)
-        id 706F42C03BB; Sun, 16 May 2021 21:20:11 +0300 (EEST)
-Date:   Sun, 16 May 2021 21:20:11 +0300
-From:   Pekka Honkanen <pekka.honkanen@aalto.fi>
-To:     linux-edac@vger.kernel.org
-Subject: Comet Lake EDAC support
-Message-ID: <20210516182011.GA370551@kosh.org.aalto.fi>
+        id S233732AbhEQM62 (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Mon, 17 May 2021 08:58:28 -0400
+Received: from mail.skyhub.de ([5.9.137.197]:42844 "EHLO mail.skyhub.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233441AbhEQM62 (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Mon, 17 May 2021 08:58:28 -0400
+Received: from zn.tnic (p200300ec2f061b004a70cca8b839c355.dip0.t-ipconnect.de [IPv6:2003:ec:2f06:1b00:4a70:cca8:b839:c355])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id CCFDC1EC01B5;
+        Mon, 17 May 2021 14:57:10 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1621256230;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=4ZTxHuIXLkDq2ilVFphM2z7wrM4IP5A2RNR6g3B+MWI=;
+        b=nMS3bRrXZ7K9CZaH3CdMjqOW+HMOYJhrn8/mTQ3xMrRiMvTfrwImGNKZbyiX9h5DDEc2gl
+        i7vjYpp2S+C+sTJykl5wmbM6hRm62wthSHoh4foT5h4lh23fBZDDUzQT6DNqX9DW0fyHwf
+        6eSwHfEDx/xhuLtNvzuX/WXAPv1DLF4=
+Date:   Mon, 17 May 2021 14:57:04 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Yazen Ghannam <Yazen.Ghannam@amd.com>
+Cc:     linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
+        tony.luck@intel.com, x86@kernel.org,
+        Smita.KoralahalliChannabasappa@amd.com
+Subject: Re: [PATCH 00/25] AMD MCA Address Translation Updates
+Message-ID: <YKJoICQzD/o7ZPBp@zn.tnic>
+References: <20210507190140.18854-1-Yazen.Ghannam@amd.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-X-SASI-RCODE: 200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=aalto.fi; h=date:from:to:subject:message-id:mime-version:content-type; s=its18; bh=rn+IVd7ZteBrfBJBZhGYeMMu+IDJ6f+8aeYxE7vdaVw=; b=p9ZDJW3bzCSy8v8owgJUuDH5E0/qOnhDZyNLVtaDhwDyFbN/AwozRTU3YQghojahnPCEHbz40uG43lKWtBsKQs/ZiDf3UlQOJrewttk7N8DQXJWx1+VBD6NoZ+8yf43N4LIj5kbKx7KLsIZjs26Pzn7CI3zE3klaxKuJ2d16mz/5MC0MKYeEAsjRM1QHtpyTzPyM2rW5QZmFToseJv2Ob4JQPP1ZWo+MSZqEjXysZi4t+evRkJZb0EkLPxjdqZuJ4+vvEv2eHBpCbXPM1IGIXXVoOZuqlPNUW5MpDHIPYGotSiLCLHlOO2VIp97+GHKN8QSdLGJc7b2zqhZAc6sePQ==
+In-Reply-To: <20210507190140.18854-1-Yazen.Ghannam@amd.com>
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-It looks like Intel Comet Lake (the Xeon W-1200 family) has no EDAC
-support yet. This was a little surprising - Comet Lake has been around
-for about a year. But maybe everyone went for Ryzen instead and I am
-the only Intel user left ;-).
+On Fri, May 07, 2021 at 03:01:15PM -0400, Yazen Ghannam wrote:
+> Patches 1-24 do the refactor without adding new system support. The goal
+> is to break down the translation algorithm into smaller chunks. There
+> are some simple wrapper functions defined. These will be filled in when
+> supporting newer systems. The intention is that new system support can
+> be added without any major refactor. I tried to make a patch for each
+> logical change. There's a bit of churn so as to not break the build with
+> each change. I think many of these patches can be squashed together, if
+> desired. The top level function was split first, then the next level of
+> functions, etc. in a somewhat breadth-first approach.
 
-According to Intel docs the ECC registers are same as Coffee Lake.
+No, that's great what you did and keeping each logical change in a
+single patch is a lot easier on everybody involved.
 
-Coffee Lake:
-https://www.intel.com/content/www/us/en/products/docs/processors/core/8th-gen-core-family-datasheet-vol-2.html
+Now, looking at this - and I know we've talked about this before - but:
 
-Comet Lake:
-https://cdrdv2.intel.com/v1/dl/getContent/621887
+umc_normaddr_to_sysaddr() is used only in amd64_edac.c.
+amd_df_indirect_read() is used only by this function, so how about
+moving both to amd64_edac, where they're needed and then doing the
+refactoring ontop?
 
-In fact it looks like the Host bridge and MCHBAR sections were just
-copy pasted over, with some information omitted. The host bridge PCI
-Device ID 0x3eXX mentioned in the document is not correct. I have a
-W-1290P, and the Device ID is 0x9b33. I suppose it is possible that the
-document is not accurate for ECC registers either.
+You can simply reuse your current patches - just change the file they
+patch from
 
-The PCI IDs list mentions several other values as Comet Lake-S or 10th
-Gen Core DRAM Controller Device ID, but I don't know if these are Xeon
-or not (i.e. relevant for EDAC).
+arch/x86/kernel/cpu/mce/amd.c
 
-Anyway, I hope support can be added with just the new PCI Device ID(s).
-I tried this and EDAC probes fine, and edac-util also shows expected
-output:
+to
 
-titan% edac-util -v
-mc0: 0 Uncorrected Errors with no DIMM info
-mc0: 0 Corrected Errors with no DIMM info
-edac-util: No errors to report.
+drivers/edac/amd64_edac.c
 
-However I am not sure how to verify this actually works. I have a
-Gigabyte W480M motherboard, and the BIOS does not expose ACPI EINJ
-table. Looking at the Intel docs, the DRAM controller registers mention
-error injection capabilities, but it is not clear how to do this, or if
-it is at all possible as the BIOS might disable the ECC injection.
+I went through te umc_... function and AFAICT, it doesn't need any core
+MCE facilities so it should be just fine in EDAC land.
 
-Is there some other way?
+Or?
 
-The patch:
+-- 
+Regards/Gruss,
+    Boris.
 
-diff --git a/drivers/edac/ie31200_edac.c b/drivers/edac/ie31200_edac.c
-index 9a9ff5ad611a..32512b7328ec 100644
---- a/drivers/edac/ie31200_edac.c
-+++ b/drivers/edac/ie31200_edac.c
-@@ -76,12 +76,16 @@
- #define PCI_DEVICE_ID_INTEL_IE31200_HB_CFL_9    0x3ec6
- #define PCI_DEVICE_ID_INTEL_IE31200_HB_CFL_10   0x3eca
- 
-+/* Comet Lake-S */
-+#define PCI_DEVICE_ID_INTEL_IE31200_HB_CML_1	0x9b33
-+
- /* Test if HB is for Skylake or later. */
- #define DEVICE_ID_SKYLAKE_OR_LATER(did)                                        \
- 	(((did) == PCI_DEVICE_ID_INTEL_IE31200_HB_8) ||                        \
- 	 ((did) == PCI_DEVICE_ID_INTEL_IE31200_HB_9) ||                        \
- 	 (((did) & PCI_DEVICE_ID_INTEL_IE31200_HB_CFL_MASK) ==                 \
--	  PCI_DEVICE_ID_INTEL_IE31200_HB_CFL_MASK))
-+	  PCI_DEVICE_ID_INTEL_IE31200_HB_CFL_MASK) ||                          \
-+	 ((did) == PCI_DEVICE_ID_INTEL_IE31200_HB_CML_1))
- 
- #define IE31200_DIMMS			4
- #define IE31200_RANKS			8
-@@ -587,6 +591,7 @@ static const struct pci_device_id ie31200_pci_tbl[] = {
- 	{ PCI_VEND_DEV(INTEL, IE31200_HB_CFL_8),  PCI_ANY_ID, PCI_ANY_ID, 0, 0, IE31200 },
- 	{ PCI_VEND_DEV(INTEL, IE31200_HB_CFL_9),  PCI_ANY_ID, PCI_ANY_ID, 0, 0, IE31200 },
- 	{ PCI_VEND_DEV(INTEL, IE31200_HB_CFL_10), PCI_ANY_ID, PCI_ANY_ID, 0, 0, IE31200 },
-+	{ PCI_VEND_DEV(INTEL, IE31200_HB_CML_1),  PCI_ANY_ID, PCI_ANY_ID, 0, 0, IE31200 },
- 	{ 0, } /* 0 terminated list. */
- };
- MODULE_DEVICE_TABLE(pci, ie31200_pci_tbl);
+https://people.kernel.org/tglx/notes-about-netiquette
