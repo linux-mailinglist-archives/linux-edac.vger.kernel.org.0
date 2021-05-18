@@ -2,80 +2,93 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DB2B1382CA5
-	for <lists+linux-edac@lfdr.de>; Mon, 17 May 2021 14:57:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0417A387BAF
+	for <lists+linux-edac@lfdr.de>; Tue, 18 May 2021 16:51:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233732AbhEQM62 (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Mon, 17 May 2021 08:58:28 -0400
-Received: from mail.skyhub.de ([5.9.137.197]:42844 "EHLO mail.skyhub.de"
+        id S241919AbhEROw7 (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Tue, 18 May 2021 10:52:59 -0400
+Received: from mail.skyhub.de ([5.9.137.197]:44990 "EHLO mail.skyhub.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233441AbhEQM62 (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Mon, 17 May 2021 08:58:28 -0400
-Received: from zn.tnic (p200300ec2f061b004a70cca8b839c355.dip0.t-ipconnect.de [IPv6:2003:ec:2f06:1b00:4a70:cca8:b839:c355])
+        id S235888AbhEROw7 (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Tue, 18 May 2021 10:52:59 -0400
+Received: from zn.tnic (p200300ec2f0ae2009a42d70f2967689e.dip0.t-ipconnect.de [IPv6:2003:ec:2f0a:e200:9a42:d70f:2967:689e])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id CCFDC1EC01B5;
-        Mon, 17 May 2021 14:57:10 +0200 (CEST)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id E0BAE1EC030E;
+        Tue, 18 May 2021 16:51:39 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1621256230;
+        t=1621349500;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=4ZTxHuIXLkDq2ilVFphM2z7wrM4IP5A2RNR6g3B+MWI=;
-        b=nMS3bRrXZ7K9CZaH3CdMjqOW+HMOYJhrn8/mTQ3xMrRiMvTfrwImGNKZbyiX9h5DDEc2gl
-        i7vjYpp2S+C+sTJykl5wmbM6hRm62wthSHoh4foT5h4lh23fBZDDUzQT6DNqX9DW0fyHwf
-        6eSwHfEDx/xhuLtNvzuX/WXAPv1DLF4=
-Date:   Mon, 17 May 2021 14:57:04 +0200
+        bh=vmuROq0D6YxXIDCZICAwW6w0g0CakT1xbJQQIamFFkM=;
+        b=Vl7feaHxOFuwEGBUqtyn3LL2j859bfwfE7YHSlokhy5IGT6MkaA2BvjZuPXlilS/aR/SHa
+        nZmYFRa841b2vEV3TNGAKEq4oze701YWm7x0mkoncV+eRocfUYWGS2dzBwCdOZZMPJcMSR
+        MOHjp4p/ct0+TtuVpoqaTEVvIcFsbqs=
+Date:   Tue, 18 May 2021 16:51:34 +0200
 From:   Borislav Petkov <bp@alien8.de>
-To:     Yazen Ghannam <Yazen.Ghannam@amd.com>
-Cc:     linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
-        tony.luck@intel.com, x86@kernel.org,
-        Smita.KoralahalliChannabasappa@amd.com
-Subject: Re: [PATCH 00/25] AMD MCA Address Translation Updates
-Message-ID: <YKJoICQzD/o7ZPBp@zn.tnic>
-References: <20210507190140.18854-1-Yazen.Ghannam@amd.com>
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     Stefan Schaeckeler <sschaeck@cisco.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Tony Luck <tony.luck@intel.com>, Joel Stanley <joel@jms.id.au>,
+        Troy Lee <troy_lee@aspeedtech.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        James Morse <james.morse@arm.com>,
+        Robert Richter <rric@kernel.org>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Liu Shixin <liushixin2@huawei.com>, linux-edac@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] EDAC/aspeed: use proper format string for printing
+ resource
+Message-ID: <YKPUdhSE+kepi10j@zn.tnic>
+References: <20210421135500.3518661-1-arnd@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20210507190140.18854-1-Yazen.Ghannam@amd.com>
+In-Reply-To: <20210421135500.3518661-1-arnd@kernel.org>
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Fri, May 07, 2021 at 03:01:15PM -0400, Yazen Ghannam wrote:
-> Patches 1-24 do the refactor without adding new system support. The goal
-> is to break down the translation algorithm into smaller chunks. There
-> are some simple wrapper functions defined. These will be filled in when
-> supporting newer systems. The intention is that new system support can
-> be added without any major refactor. I tried to make a patch for each
-> logical change. There's a bit of churn so as to not break the build with
-> each change. I think many of these patches can be squashed together, if
-> desired. The top level function was split first, then the next level of
-> functions, etc. in a somewhat breadth-first approach.
+On Wed, Apr 21, 2021 at 03:54:53PM +0200, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
+> 
+> On ARMv7, resource_size_t can be 64-bit, which breaks printing
+> it as %x:
+> 
+> drivers/edac/aspeed_edac.c: In function 'init_csrows':
+> drivers/edac/aspeed_edac.c:257:28: error: format '%x' expects argument of type 'unsigned int', but argument 4 has type 'resource_size_t' {aka 'long long unsigned int'} [-Werror=format=]
+>   257 |         dev_dbg(mci->pdev, "dt: /memory node resources: first page r.start=0x%x, resource_size=0x%x, PAGE_SHIFT macro=0x%x\n",
+> 
+> Use the special %pR format string to pretty-print the entire
+> resource instead.
+> 
+> Fixes: edfc2d73ca45 ("EDAC/aspeed: Add support for AST2400 and AST2600")
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> ---
+>  drivers/edac/aspeed_edac.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/edac/aspeed_edac.c b/drivers/edac/aspeed_edac.c
+> index a46da56d6d54..6bd5f8815919 100644
+> --- a/drivers/edac/aspeed_edac.c
+> +++ b/drivers/edac/aspeed_edac.c
+> @@ -254,8 +254,8 @@ static int init_csrows(struct mem_ctl_info *mci)
+>  		return rc;
+>  	}
+>  
+> -	dev_dbg(mci->pdev, "dt: /memory node resources: first page r.start=0x%x, resource_size=0x%x, PAGE_SHIFT macro=0x%x\n",
+> -		r.start, resource_size(&r), PAGE_SHIFT);
+> +	dev_dbg(mci->pdev, "dt: /memory node resources: first page %pR, PAGE_SHIFT macro=0x%x\n",
+> +		&r, PAGE_SHIFT);
+>  
+>  	csrow->first_page = r.start >> PAGE_SHIFT;
+>  	nr_pages = resource_size(&r) >> PAGE_SHIFT;
+> -- 
 
-No, that's great what you did and keeping each logical change in a
-single patch is a lot easier on everybody involved.
-
-Now, looking at this - and I know we've talked about this before - but:
-
-umc_normaddr_to_sysaddr() is used only in amd64_edac.c.
-amd_df_indirect_read() is used only by this function, so how about
-moving both to amd64_edac, where they're needed and then doing the
-refactoring ontop?
-
-You can simply reuse your current patches - just change the file they
-patch from
-
-arch/x86/kernel/cpu/mce/amd.c
-
-to
-
-drivers/edac/amd64_edac.c
-
-I went through te umc_... function and AFAICT, it doesn't need any core
-MCE facilities so it should be just fine in EDAC land.
-
-Or?
+Applied, thanks.
 
 -- 
 Regards/Gruss,
