@@ -2,26 +2,26 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 46C483A4752
+	by mail.lfdr.de (Postfix) with ESMTP id E315B3A4754
 	for <lists+linux-edac@lfdr.de>; Fri, 11 Jun 2021 19:01:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231463AbhFKRDt (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Fri, 11 Jun 2021 13:03:49 -0400
-Received: from mga06.intel.com ([134.134.136.31]:56284 "EHLO mga06.intel.com"
+        id S231558AbhFKRDu (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Fri, 11 Jun 2021 13:03:50 -0400
+Received: from mga06.intel.com ([134.134.136.31]:56300 "EHLO mga06.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231553AbhFKRDs (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        id S231489AbhFKRDs (ORCPT <rfc822;linux-edac@vger.kernel.org>);
         Fri, 11 Jun 2021 13:03:48 -0400
-IronPort-SDR: /W00vI96cSHst7dEHD523X9/hUA7MDx3EOwHYaxZA9oz+Q2JXgZRarn/8bnZufZXWTr/QGMJ9u
- SnEUE61XKh8g==
-X-IronPort-AV: E=McAfee;i="6200,9189,10012"; a="266715349"
+IronPort-SDR: A2vnqnge8X5+Swt8bz/zGm9fgRVIQHOLsH/2qQsRttXmMXRx636z7kcDK55tDiEkY7cKEzmZu0
+ znoY4xjkFSVw==
+X-IronPort-AV: E=McAfee;i="6200,9189,10012"; a="266715350"
 X-IronPort-AV: E=Sophos;i="5.83,265,1616482800"; 
-   d="scan'208";a="266715349"
+   d="scan'208";a="266715350"
 Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jun 2021 10:01:36 -0700
-IronPort-SDR: 4TgZR69ad4IDrXRLwAr2qnCxH0WflIiKDR5COVOZ9LNc9FtDL+7aV1PTcbQO/jM4ywBx9Uo3Fr
- AzjCjVWbYD8A==
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jun 2021 10:01:37 -0700
+IronPort-SDR: EBKoTBwQWQw/+LkVBqj3DJNRPVOWO1o6uPBZaWKh/0iBHji0UlRfIXmzlsya330okKDUiTgOM7
+ mA/Z+lMvCr8w==
 X-IronPort-AV: E=Sophos;i="5.83,265,1616482800"; 
-   d="scan'208";a="483329860"
+   d="scan'208";a="483329865"
 Received: from agluck-desk2.sc.intel.com ([10.3.52.146])
   by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jun 2021 10:01:36 -0700
 From:   Tony Luck <tony.luck@intel.com>
@@ -31,9 +31,9 @@ Cc:     Qiuxu Zhuo <qiuxu.zhuo@intel.com>,
         Borislav Petkov <bp@alien8.de>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 1/6] EDAC/skx_common: Add new ADXL components for 2-level memory
-Date:   Fri, 11 Jun 2021 10:01:18 -0700
-Message-Id: <20210611170123.1057025-2-tony.luck@intel.com>
+Subject: [PATCH 2/6] EDAC/i10nm: Add detection of memory levels for ICX/SPR servers
+Date:   Fri, 11 Jun 2021 10:01:19 -0700
+Message-Id: <20210611170123.1057025-3-tony.luck@intel.com>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20210611170123.1057025-1-tony.luck@intel.com>
 References: <20210611170123.1057025-1-tony.luck@intel.com>
@@ -45,207 +45,129 @@ X-Mailing-List: linux-edac@vger.kernel.org
 
 From: Qiuxu Zhuo <qiuxu.zhuo@intel.com>
 
-Some Intel servers may configure memory in 2 levels, using
-fast "near" memory (e.g. DDR) as a cache for larger, slower,
-"far" memory (e.g. 3D X-point).
+Current i10nm_edac driver is only for system configured in 1-level
+memory. If the system is configured in 2-level memory, the driver
+doesn't report the 1st level memory DIMM for the error address, even
+if the error occurs in the 1st level memory.
 
-In these configurations the BIOS ADXL address translation for
-an address in a 2-level memory range will provide details of
-both the "near" and far components.
-
-Current exported ADXL components are only for 1-level memory
-system or for 2nd level memory of 2-level memory system. So
-add new ADXL components for 1st level memory of 2-level memory
-system to fully support 2-level memory system and the detection
-of memory error source(1st level memory or 2nd level memory).
+Both Ice Lake servers and Sapphire Rapids servers can be configured
+in 2-level memory. Add detection of memory levels to i10nm_edac for
+the two kinds of servers so that the driver can report the 2nd level
+memory DIMM or the 1st level memory DIMM according to error source.
 
 Signed-off-by: Qiuxu Zhuo <qiuxu.zhuo@intel.com>
 Signed-off-by: Tony Luck <tony.luck@intel.com>
 ---
- drivers/edac/skx_common.c | 67 ++++++++++++++++++++++++++++++++-------
- drivers/edac/skx_common.h | 11 +++++++
- 2 files changed, 67 insertions(+), 11 deletions(-)
+ drivers/edac/i10nm_base.c | 39 +++++++++++++++++++++++++++++++++++++++
+ drivers/edac/skx_common.h |  3 +++
+ 2 files changed, 42 insertions(+)
 
-diff --git a/drivers/edac/skx_common.c b/drivers/edac/skx_common.c
-index 81c3e2ec6f56..c8691abb720d 100644
---- a/drivers/edac/skx_common.c
-+++ b/drivers/edac/skx_common.c
-@@ -23,10 +23,13 @@
- #include "skx_common.h"
+diff --git a/drivers/edac/i10nm_base.c b/drivers/edac/i10nm_base.c
+index 238a4ad1e526..91431d8922a0 100644
+--- a/drivers/edac/i10nm_base.c
++++ b/drivers/edac/i10nm_base.c
+@@ -24,6 +24,8 @@
+ 	pci_read_config_dword((d)->uracu, 0xd0, &(reg))
+ #define I10NM_GET_IMC_BAR(d, i, reg)	\
+ 	pci_read_config_dword((d)->uracu, 0xd8 + (i) * 4, &(reg))
++#define I10NM_GET_SAD(d, offset, i, reg)\
++	pci_read_config_dword((d)->sad_all, (offset) + (i) * 8, &(reg))
+ #define I10NM_GET_DIMMMTR(m, i, j)	\
+ 	readl((m)->mbase + 0x2080c + (i) * (m)->chan_mmio_sz + (j) * 4)
+ #define I10NM_GET_MCDDRTCFG(m, i, j)	\
+@@ -38,6 +40,10 @@
+ #define I10NM_GET_IMC_MMIO_SIZE(reg)	((GET_BITFIELD(reg, 13, 23) - \
+ 					 GET_BITFIELD(reg, 0, 10) + 1) << 12)
  
- static const char * const component_names[] = {
--	[INDEX_SOCKET]	= "ProcessorSocketId",
--	[INDEX_MEMCTRL]	= "MemoryControllerId",
--	[INDEX_CHANNEL]	= "ChannelId",
--	[INDEX_DIMM]	= "DimmSlotId",
-+	[INDEX_SOCKET]		= "ProcessorSocketId",
-+	[INDEX_MEMCTRL]		= "MemoryControllerId",
-+	[INDEX_CHANNEL]		= "ChannelId",
-+	[INDEX_DIMM]		= "DimmSlotId",
-+	[INDEX_NM_MEMCTRL]	= "NmMemoryControllerId",
-+	[INDEX_NM_CHANNEL]	= "NmChannelId",
-+	[INDEX_NM_DIMM]		= "NmDimmSlotId",
++#define I10NM_MAX_SAD			16
++#define I10NM_SAD_ENABLE(reg)		GET_BITFIELD(reg, 0, 0)
++#define I10NM_SAD_NM_CACHEABLE(reg)	GET_BITFIELD(reg, 5, 5)
++
+ static struct list_head *i10nm_edac_list;
+ 
+ static struct pci_dev *pci_get_dev_wrapper(int dom, unsigned int bus,
+@@ -63,6 +69,31 @@ static struct pci_dev *pci_get_dev_wrapper(int dom, unsigned int bus,
+ 	return pdev;
+ }
+ 
++static bool i10nm_check_2lm(struct res_config *cfg)
++{
++	struct skx_dev *d;
++	u32 reg;
++	int i;
++
++	list_for_each_entry(d, i10nm_edac_list, list) {
++		d->sad_all = pci_get_dev_wrapper(d->seg, d->bus[1],
++						 PCI_SLOT(cfg->sad_all_devfn),
++						 PCI_FUNC(cfg->sad_all_devfn));
++		if (!d->sad_all)
++			continue;
++
++		for (i = 0; i < I10NM_MAX_SAD; i++) {
++			I10NM_GET_SAD(d, cfg->sad_all_offset, i, reg);
++			if (I10NM_SAD_ENABLE(reg) && I10NM_SAD_NM_CACHEABLE(reg)) {
++				edac_dbg(2, "2-level memory configuration.\n");
++				return true;
++			}
++		}
++	}
++
++	return false;
++}
++
+ static int i10nm_get_all_munits(void)
+ {
+ 	struct pci_dev *mdev;
+@@ -132,6 +163,8 @@ static struct res_config i10nm_cfg0 = {
+ 	.decs_did		= 0x3452,
+ 	.busno_cfg_offset	= 0xcc,
+ 	.ddr_chan_mmio_sz	= 0x4000,
++	.sad_all_devfn		= PCI_DEVFN(29, 0),
++	.sad_all_offset		= 0x108,
  };
  
- static int component_indices[ARRAY_SIZE(component_names)];
-@@ -34,12 +37,14 @@ static int adxl_component_count;
- static const char * const *adxl_component_names;
- static u64 *adxl_values;
- static char *adxl_msg;
-+static unsigned long adxl_nm_bitmap;
+ static struct res_config i10nm_cfg1 = {
+@@ -139,6 +172,8 @@ static struct res_config i10nm_cfg1 = {
+ 	.decs_did		= 0x3452,
+ 	.busno_cfg_offset	= 0xd0,
+ 	.ddr_chan_mmio_sz	= 0x4000,
++	.sad_all_devfn		= PCI_DEVFN(29, 0),
++	.sad_all_offset		= 0x108,
+ };
  
- static char skx_msg[MSG_SIZE];
- static skx_decode_f skx_decode;
- static skx_show_retry_log_f skx_show_retry_rd_err_log;
- static u64 skx_tolm, skx_tohm;
- static LIST_HEAD(dev_edac_list);
-+static bool skx_mem_cfg_2lm;
+ static struct res_config spr_cfg = {
+@@ -147,6 +182,8 @@ static struct res_config spr_cfg = {
+ 	.busno_cfg_offset	= 0xd0,
+ 	.ddr_chan_mmio_sz	= 0x8000,
+ 	.support_ddr5		= true,
++	.sad_all_devfn		= PCI_DEVFN(10, 0),
++	.sad_all_offset		= 0x300,
+ };
  
- int __init skx_adxl_get(void)
- {
-@@ -56,14 +61,25 @@ int __init skx_adxl_get(void)
- 		for (j = 0; names[j]; j++) {
- 			if (!strcmp(component_names[i], names[j])) {
- 				component_indices[i] = j;
-+
-+				if (i >= INDEX_NM_FIRST)
-+					adxl_nm_bitmap |= 1 << i;
-+
- 				break;
- 			}
- 		}
- 
--		if (!names[j])
-+		if (!names[j] && i < INDEX_NM_FIRST)
- 			goto err;
+ static const struct x86_cpu_id i10nm_cpuids[] = {
+@@ -296,6 +333,8 @@ static int __init i10nm_init(void)
+ 		return -ENODEV;
  	}
  
-+	if (skx_mem_cfg_2lm) {
-+		if (!adxl_nm_bitmap)
-+			skx_printk(KERN_NOTICE, "Not enough ADXL components for 2-level memory.\n");
-+		else
-+			edac_dbg(2, "adxl_nm_bitmap: 0x%lx\n", adxl_nm_bitmap);
-+	}
++	skx_set_mem_cfg(i10nm_check_2lm(cfg));
 +
- 	adxl_component_names = names;
- 	while (*names++)
- 		adxl_component_count++;
-@@ -99,7 +115,7 @@ void __exit skx_adxl_put(void)
- 	kfree(adxl_msg);
- }
- 
--static bool skx_adxl_decode(struct decoded_addr *res)
-+static bool skx_adxl_decode(struct decoded_addr *res, bool error_in_1st_level_mem)
- {
- 	struct skx_dev *d;
- 	int i, len = 0;
-@@ -116,11 +132,20 @@ static bool skx_adxl_decode(struct decoded_addr *res)
- 	}
- 
- 	res->socket  = (int)adxl_values[component_indices[INDEX_SOCKET]];
--	res->imc     = (int)adxl_values[component_indices[INDEX_MEMCTRL]];
--	res->channel = (int)adxl_values[component_indices[INDEX_CHANNEL]];
--	res->dimm    = (int)adxl_values[component_indices[INDEX_DIMM]];
-+	if (error_in_1st_level_mem) {
-+		res->imc     = (adxl_nm_bitmap & BIT_NM_MEMCTRL) ?
-+			       (int)adxl_values[component_indices[INDEX_NM_MEMCTRL]] : -1;
-+		res->channel = (adxl_nm_bitmap & BIT_NM_CHANNEL) ?
-+			       (int)adxl_values[component_indices[INDEX_NM_CHANNEL]] : -1;
-+		res->dimm    = (adxl_nm_bitmap & BIT_NM_DIMM) ?
-+			       (int)adxl_values[component_indices[INDEX_NM_DIMM]] : -1;
-+	} else {
-+		res->imc     = (int)adxl_values[component_indices[INDEX_MEMCTRL]];
-+		res->channel = (int)adxl_values[component_indices[INDEX_CHANNEL]];
-+		res->dimm    = (int)adxl_values[component_indices[INDEX_DIMM]];
-+	}
- 
--	if (res->imc > NUM_IMC - 1) {
-+	if (res->imc > NUM_IMC - 1 || res->imc < 0) {
- 		skx_printk(KERN_ERR, "Bad imc %d\n", res->imc);
- 		return false;
- 	}
-@@ -151,6 +176,11 @@ static bool skx_adxl_decode(struct decoded_addr *res)
- 	return true;
- }
- 
-+void skx_set_mem_cfg(bool mem_cfg_2lm)
-+{
-+	skx_mem_cfg_2lm = mem_cfg_2lm;
-+}
-+
- void skx_set_decode(skx_decode_f decode, skx_show_retry_log_f show_retry_log)
- {
- 	skx_decode = decode;
-@@ -578,6 +608,21 @@ static void skx_mce_output_error(struct mem_ctl_info *mci,
- 			     optype, skx_msg);
- }
- 
-+static bool skx_error_in_1st_level_mem(const struct mce *m)
-+{
-+	u32 errcode;
-+
-+	if (!skx_mem_cfg_2lm)
-+		return false;
-+
-+	errcode = GET_BITFIELD(m->status, 0, 15);
-+
-+	if ((errcode & 0xef80) != 0x280)
-+		return false;
-+
-+	return true;
-+}
-+
- int skx_mce_check_error(struct notifier_block *nb, unsigned long val,
- 			void *data)
- {
-@@ -597,7 +642,7 @@ int skx_mce_check_error(struct notifier_block *nb, unsigned long val,
- 	res.addr = mce->addr;
- 
- 	if (adxl_component_count) {
--		if (!skx_adxl_decode(&res))
-+		if (!skx_adxl_decode(&res, skx_error_in_1st_level_mem(mce)))
- 			return NOTIFY_DONE;
- 	} else if (!skx_decode || !skx_decode(&res)) {
- 		return NOTIFY_DONE;
+ 	rc = i10nm_get_all_munits();
+ 	if (rc < 0)
+ 		goto fail;
 diff --git a/drivers/edac/skx_common.h b/drivers/edac/skx_common.h
-index bf56bebff138..8b5a49058ce4 100644
+index 8b5a49058ce4..34e89f7ddf93 100644
 --- a/drivers/edac/skx_common.h
 +++ b/drivers/edac/skx_common.h
-@@ -9,6 +9,8 @@
- #ifndef _SKX_COMM_EDAC_H
- #define _SKX_COMM_EDAC_H
- 
-+#include <linux/bits.h>
-+
- #define MSG_SIZE		1024
- 
- /*
-@@ -92,9 +94,17 @@ enum {
- 	INDEX_MEMCTRL,
- 	INDEX_CHANNEL,
- 	INDEX_DIMM,
-+	INDEX_NM_FIRST,
-+	INDEX_NM_MEMCTRL = INDEX_NM_FIRST,
-+	INDEX_NM_CHANNEL,
-+	INDEX_NM_DIMM,
- 	INDEX_MAX
+@@ -133,6 +133,9 @@ struct res_config {
+ 	/* Per DDR channel memory-mapped I/O size */
+ 	int ddr_chan_mmio_sz;
+ 	bool support_ddr5;
++	/* SAD device number and function number */
++	unsigned int sad_all_devfn;
++	int sad_all_offset;
  };
  
-+#define BIT_NM_MEMCTRL	BIT_ULL(INDEX_NM_MEMCTRL)
-+#define BIT_NM_CHANNEL	BIT_ULL(INDEX_NM_CHANNEL)
-+#define BIT_NM_DIMM	BIT_ULL(INDEX_NM_DIMM)
-+
- struct decoded_addr {
- 	struct skx_dev *dev;
- 	u64	addr;
-@@ -133,6 +143,7 @@ typedef void (*skx_show_retry_log_f)(struct decoded_addr *res, char *msg, int le
- int __init skx_adxl_get(void);
- void __exit skx_adxl_put(void);
- void skx_set_decode(skx_decode_f decode, skx_show_retry_log_f show_retry_log);
-+void skx_set_mem_cfg(bool mem_cfg_2lm);
- 
- int skx_get_src_id(struct skx_dev *d, int off, u8 *id);
- int skx_get_node_id(struct skx_dev *d, u8 *id);
+ typedef int (*get_dimm_config_f)(struct mem_ctl_info *mci,
 -- 
 2.29.2
 
