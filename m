@@ -2,84 +2,72 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 934B43A3D58
-	for <lists+linux-edac@lfdr.de>; Fri, 11 Jun 2021 09:39:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 90E343A4753
+	for <lists+linux-edac@lfdr.de>; Fri, 11 Jun 2021 19:01:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230188AbhFKHlY (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Fri, 11 Jun 2021 03:41:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47474 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230035AbhFKHlY (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Fri, 11 Jun 2021 03:41:24 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FC85C061574;
-        Fri, 11 Jun 2021 00:39:27 -0700 (PDT)
-Received: from zn.tnic (p2e584d18.dip0.t-ipconnect.de [46.88.77.24])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 8B0F81EC0528;
-        Fri, 11 Jun 2021 09:39:25 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1623397165;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=bM7mdRbMEwkDpmgRTLq6Xee0t4hAfl6e7oZsXY8E5uU=;
-        b=BWC0hvouGlPlGW//MlEtUhm5fJCs+K10N34ujCxtDnWkdW/AOZN0rmnvKIeyxQe9CAoM53
-        P9jwl7ne0RMwHae7MjL2kq/0nZkzR/bsXDGSpr/y7ZlT79O6fqYFbtidrdoCTXRxnqbEjm
-        R5yL4Q6d1WAo2uUYBwljoPa6WTP7j8w=
-Date:   Fri, 11 Jun 2021 09:37:13 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Smita Koralahalli Channabasappa <skoralah@amd.com>
-Cc:     Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>,
-        x86@kernel.org, linux-kernel@vger.kernel.org,
-        linux-edac@vger.kernel.org, Tony Luck <tony.luck@intel.com>,
-        Yazen Ghannam <yazen.ghannam@amd.com>,
-        Muralidhara M K <muralimk@amd.com>,
-        Akshay Gupta <Akshay.Gupta@amd.com>,
-        Youquan Song <youquan.song@intel.com>,
-        Zhen Lei <thunder.leizhen@huawei.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        "H . Peter Anvin" <hpa@zytor.com>
-Subject: Re: [PATCH 2/2] x86/mce: Add support for Extended Physical Address
- MCA changes
-Message-ID: <YMMSqS0Knb0Pk8GF@zn.tnic>
-References: <20210608221012.223696-1-Smita.KoralahalliChannabasappa@amd.com>
- <20210608221012.223696-3-Smita.KoralahalliChannabasappa@amd.com>
- <YMH9wqUnjudiAVlr@zn.tnic>
- <1c21d3c5-8a5a-31cf-6d84-0905a0c508da@amd.com>
+        id S231503AbhFKRDt (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Fri, 11 Jun 2021 13:03:49 -0400
+Received: from mga06.intel.com ([134.134.136.31]:56290 "EHLO mga06.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230212AbhFKRDs (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Fri, 11 Jun 2021 13:03:48 -0400
+IronPort-SDR: 0UbfJxnrTTeRiY4SvMIaCPwhLcacG9uksr1MtZdKxk/erIjLQUsKtpMOBbDvvSpLZ4z0oN9Tw6
+ 63j2iLaKPJsg==
+X-IronPort-AV: E=McAfee;i="6200,9189,10012"; a="266715348"
+X-IronPort-AV: E=Sophos;i="5.83,265,1616482800"; 
+   d="scan'208";a="266715348"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jun 2021 10:01:36 -0700
+IronPort-SDR: uV9DVA4WoFFn5XpDU4LgPXD++za1rFPU3Zd9a/2lS5hS2tVu+laNrnSRl9J6VSydl384I56TTt
+ w2Z4aNEV9Hpg==
+X-IronPort-AV: E=Sophos;i="5.83,265,1616482800"; 
+   d="scan'208";a="483329856"
+Received: from agluck-desk2.sc.intel.com ([10.3.52.146])
+  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jun 2021 10:01:36 -0700
+From:   Tony Luck <tony.luck@intel.com>
+To:     tony.luck@intel.com
+Cc:     Aristeu Rozanski <aris@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Qiuxu Zhuo <qiuxu.zhuo@intel.com>, linux-edac@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 0/6] Bundle of Intel EDAC patches
+Date:   Fri, 11 Jun 2021 10:01:17 -0700
+Message-Id: <20210611170123.1057025-1-tony.luck@intel.com>
+X-Mailer: git-send-email 2.29.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <1c21d3c5-8a5a-31cf-6d84-0905a0c508da@amd.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Thu, Jun 10, 2021 at 10:36:44PM -0500, Smita Koralahalli Channabasappa wrote:
-> The idea of defining a new struct was to keep SMCA specific stuff separate.
-> Thought, it would be costly to include in existing struct mce_bank[] as it will be
-> unnecessarily defined for each cpu and each bank across all vendors even if they
-> aren't using it and would be a problem if they are constraint on resource and space.
+Intel EDAC patches are like trains/buses ... nothing for a long time
+and then six arrive together.
 
-That's very considerate of you to think about the other vendors - I wish
-everyone would do that...
+Patch 1 & 2:	Mix logging for 2-level memory configurations (to report
+		the error in either the "near" (cache) or "far" memory
+		as appropriate.
 
-However, our mce_banks_array is defined unconditionally on all vendors
-already. So it is there even now. So I wouldn't lose a single second of
-sleep about adding an u64 bitfield there.
+Patch 3:	On package memory is coming (in the future)
 
-> Also, in the future we can use this newly defined struct smca_config[] to cache
-> other MCA_CONFIG feature bits for different use cases if they are per bank and per
-> cpu.
+Patch 4, 5, 6:	Add support to igen6_edac driver for three extra CPU
+		models.
 
-You can use other bits in that bitfield. I hope 64 are enough. :)
+Qiuxu Zhuo (6):
+  EDAC/skx_common: Add new ADXL components for 2-level memory
+  EDAC/i10nm: Add detection of memory levels for ICX/SPR servers
+  EDAC/i10nm: Add support for high bandwidth memory
+  EDAC/igen6: Add Intel ICL-NNPI SoC support
+  EDAC/igen6: Add Intel Tiger Lake SoC support
+  EDAC/igen6: Add Intel Alder Lake SoC support
 
-HTH.
+ drivers/edac/i10nm_base.c | 171 +++++++++++++++--
+ drivers/edac/igen6_edac.c | 374 +++++++++++++++++++++++++++++++++++---
+ drivers/edac/skx_common.c |  82 +++++++--
+ drivers/edac/skx_common.h |  34 +++-
+ 4 files changed, 606 insertions(+), 55 deletions(-)
 
+
+base-commit: 614124bea77e452aa6df7a8714e8bc820b489922
 -- 
-Regards/Gruss,
-    Boris.
+2.29.2
 
-https://people.kernel.org/tglx/notes-about-netiquette
