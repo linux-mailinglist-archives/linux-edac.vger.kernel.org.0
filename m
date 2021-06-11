@@ -2,26 +2,26 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B56483A4755
-	for <lists+linux-edac@lfdr.de>; Fri, 11 Jun 2021 19:01:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B9313A4756
+	for <lists+linux-edac@lfdr.de>; Fri, 11 Jun 2021 19:01:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231582AbhFKRDu (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        id S231553AbhFKRDu (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
         Fri, 11 Jun 2021 13:03:50 -0400
-Received: from mga06.intel.com ([134.134.136.31]:56284 "EHLO mga06.intel.com"
+Received: from mga06.intel.com ([134.134.136.31]:56290 "EHLO mga06.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231459AbhFKRDt (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        id S231460AbhFKRDt (ORCPT <rfc822;linux-edac@vger.kernel.org>);
         Fri, 11 Jun 2021 13:03:49 -0400
-IronPort-SDR: PRmtbWUGwrEujnn/9perHqeuh1Out4A8aDnV38MEloeM58+p3r8gocGqMNbYDdWN+RDJICN3Z8
- gW6iEcYCF99A==
-X-IronPort-AV: E=McAfee;i="6200,9189,10012"; a="266715353"
+IronPort-SDR: rmEQPPSloxHUDlnp8gFk/BYvBIGah5/RPAS4F3A+5dHc0SW/HTWl9KEFJdo4PRe9nijuV80M36
+ SZptdhXzLk8Q==
+X-IronPort-AV: E=McAfee;i="6200,9189,10012"; a="266715354"
 X-IronPort-AV: E=Sophos;i="5.83,265,1616482800"; 
-   d="scan'208";a="266715353"
+   d="scan'208";a="266715354"
 Received: from orsmga001.jf.intel.com ([10.7.209.18])
   by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jun 2021 10:01:37 -0700
-IronPort-SDR: 2y/3jazTNf9fK36WhAP1wWeLB/lRWw6Dj5mJk4JABy394QA8aYYrP4mKoXnHVpkMWAlavT3hIP
- qbHKrpfoUiZA==
+IronPort-SDR: H7Bx+b/t5uWorVCcz+T1tdNuO02lCQVy+j2VmUVCGvQgys35iZEEFS/J15Q4QrmeYtKRMAvNsH
+ p1XkGEMxjuhg==
 X-IronPort-AV: E=Sophos;i="5.83,265,1616482800"; 
-   d="scan'208";a="483329872"
+   d="scan'208";a="483329874"
 Received: from agluck-desk2.sc.intel.com ([10.3.52.146])
   by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jun 2021 10:01:37 -0700
 From:   Tony Luck <tony.luck@intel.com>
@@ -31,9 +31,9 @@ Cc:     Qiuxu Zhuo <qiuxu.zhuo@intel.com>,
         Borislav Petkov <bp@alien8.de>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 4/6] EDAC/igen6: Add Intel ICL-NNPI SoC support
-Date:   Fri, 11 Jun 2021 10:01:21 -0700
-Message-Id: <20210611170123.1057025-5-tony.luck@intel.com>
+Subject: [PATCH 5/6] EDAC/igen6: Add Intel Tiger Lake SoC support
+Date:   Fri, 11 Jun 2021 10:01:22 -0700
+Message-Id: <20210611170123.1057025-6-tony.luck@intel.com>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20210611170123.1057025-1-tony.luck@intel.com>
 References: <20210611170123.1057025-1-tony.luck@intel.com>
@@ -45,77 +45,433 @@ X-Mailing-List: linux-edac@vger.kernel.org
 
 From: Qiuxu Zhuo <qiuxu.zhuo@intel.com>
 
-The Ice Lake Neural Network Processor for Deep Learning Inference
-(ICL-NNPI) SoC shares the same memory controller and In-Band ECC with
-Elkhart Lake SoC. Add the ICL-NNPI compute die IDs for EDAC support.
+Tiger Lake SoC shares the same memory controller and In-Band ECC
+(IBECC) IP with Elkhart Lake SoC. The main differences are that Tiger
+Lake has two memory controllers each associated with one IBECC and
+uses Machine Check for the memory error notification.
+
+So add Tiger Lake compute die IDs, MCE decoding chain registration,
+and memory slice decoding for Tiger Lake EDAC support.
 
 Signed-off-by: Qiuxu Zhuo <qiuxu.zhuo@intel.com>
 Signed-off-by: Tony Luck <tony.luck@intel.com>
 ---
- drivers/edac/igen6_edac.c | 29 +++++++++++++++++++++++++++++
- 1 file changed, 29 insertions(+)
+ drivers/edac/igen6_edac.c | 273 +++++++++++++++++++++++++++++++++++---
+ 1 file changed, 253 insertions(+), 20 deletions(-)
 
 diff --git a/drivers/edac/igen6_edac.c b/drivers/edac/igen6_edac.c
-index 6be9986fc6bd..0fedf2d206d3 100644
+index 0fedf2d206d3..9f653ace50e7 100644
 --- a/drivers/edac/igen6_edac.c
 +++ b/drivers/edac/igen6_edac.c
-@@ -183,6 +183,12 @@ static struct work_struct ecclog_work;
- #define DID_EHL_SKU14	0x4534
- #define DID_EHL_SKU15	0x4536
+@@ -22,6 +22,7 @@
+ #include <linux/io.h>
+ #include <asm/mach_traps.h>
+ #include <asm/nmi.h>
++#include <asm/mce.h>
  
-+/* Compute die IDs for ICL-NNPI with IBECC */
-+#define DID_ICL_SKU8	0x4581
-+#define DID_ICL_SKU10	0x4585
-+#define DID_ICL_SKU11	0x4589
-+#define DID_ICL_SKU12	0x458d
+ #include "edac_mc.h"
+ #include "edac_module.h"
+@@ -40,7 +41,7 @@
+ 
+ #define GET_BITFIELD(v, lo, hi) (((v) & GENMASK_ULL(hi, lo)) >> (lo))
+ 
+-#define NUM_IMC				1 /* Max memory controllers */
++#define NUM_IMC				2 /* Max memory controllers */
+ #define NUM_CHANNELS			2 /* Max channels */
+ #define NUM_DIMMS			2 /* Max DIMMs per channel */
+ 
+@@ -54,6 +55,10 @@
+ #define CAPID_C_OFFSET			0xec
+ #define CAPID_C_IBECC			BIT(15)
+ 
++/* Capability register E */
++#define CAPID_E_OFFSET			0xf0
++#define CAPID_E_IBECC			BIT(12)
++
+ /* Error Status */
+ #define ERRSTS_OFFSET			0xc8
+ #define ERRSTS_CE			BIT_ULL(6)
+@@ -109,12 +114,20 @@
+ #define CHANNEL_HASH_LSB_MASK_BIT(v)	GET_BITFIELD(v, 24, 26)
+ #define CHANNEL_HASH_MODE(v)		GET_BITFIELD(v, 28, 28)
+ 
++/* Parameters for memory slice decode stage */
++#define MEM_SLICE_HASH_MASK(v)		(GET_BITFIELD(v, 6, 19) << 6)
++#define MEM_SLICE_HASH_LSB_MASK_BIT(v)	GET_BITFIELD(v, 24, 26)
++
+ static struct res_config {
++	bool machine_check;
+ 	int num_imc;
++	u32 cmf_base;
++	u32 cmf_size;
++	u32 ms_hash_offset;
+ 	u32 ibecc_base;
+ 	bool (*ibecc_available)(struct pci_dev *pdev);
+ 	/* Convert error address logged in IBECC to system physical address */
+-	u64 (*err_addr_to_sys_addr)(u64 eaddr);
++	u64 (*err_addr_to_sys_addr)(u64 eaddr, int mc);
+ 	/* Convert error address logged in IBECC to integrated memory controller address */
+ 	u64 (*err_addr_to_imc_addr)(u64 eaddr);
+ } *res_cfg;
+@@ -125,6 +138,7 @@ struct igen6_imc {
+ 	struct pci_dev *pdev;
+ 	struct device dev;
+ 	void __iomem *window;
++	u64 size;
+ 	u64 ch_s_size;
+ 	int ch_l_map;
+ 	u64 dimm_s_size[NUM_CHANNELS];
+@@ -134,6 +148,9 @@ struct igen6_imc {
+ 
+ static struct igen6_pvt {
+ 	struct igen6_imc imc[NUM_IMC];
++	u64 ms_hash;
++	u64 ms_s_size;
++	int ms_l_map;
+ } *igen6_pvt;
+ 
+ /* The top of low usable DRAM */
+@@ -189,6 +206,9 @@ static struct work_struct ecclog_work;
+ #define DID_ICL_SKU11	0x4589
+ #define DID_ICL_SKU12	0x458d
+ 
++/* Compute die IDs for Tiger Lake with IBECC */
++#define DID_TGL_SKU	0x9a14
 +
  static bool ehl_ibecc_available(struct pci_dev *pdev)
  {
  	u32 v;
-@@ -212,6 +218,17 @@ static u64 ehl_err_addr_to_imc_addr(u64 eaddr)
- 	return eaddr;
+@@ -199,7 +219,7 @@ static bool ehl_ibecc_available(struct pci_dev *pdev)
+ 	return !!(CAPID_C_IBECC & v);
  }
  
-+static bool icl_ibecc_available(struct pci_dev *pdev)
+-static u64 ehl_err_addr_to_sys_addr(u64 eaddr)
++static u64 ehl_err_addr_to_sys_addr(u64 eaddr, int mc)
+ {
+ 	return eaddr;
+ }
+@@ -229,20 +249,103 @@ static bool icl_ibecc_available(struct pci_dev *pdev)
+ 		(boot_cpu_data.x86_stepping >= 1);
+ }
+ 
++static bool tgl_ibecc_available(struct pci_dev *pdev)
 +{
 +	u32 v;
 +
-+	if (pci_read_config_dword(pdev, CAPID_C_OFFSET, &v))
++	if (pci_read_config_dword(pdev, CAPID_E_OFFSET, &v))
 +		return false;
 +
-+	return !(CAPID_C_IBECC & v) &&
-+		(boot_cpu_data.x86_stepping >= 1);
++	return !(CAPID_E_IBECC & v);
++}
++
++static u64 mem_addr_to_sys_addr(u64 maddr)
++{
++	if (maddr < igen6_tolud)
++		return maddr;
++
++	if (igen6_tom <= _4GB)
++		return maddr - igen6_tolud + _4GB;
++
++	if (maddr < _4GB)
++		return maddr - igen6_tolud + igen6_tom;
++
++	return maddr;
++}
++
++static u64 mem_slice_hash(u64 addr, u64 mask, u64 hash_init, int intlv_bit)
++{
++	u64 hash_addr = addr & mask, hash = hash_init;
++	u64 intlv = (addr >> intlv_bit) & 1;
++	int i;
++
++	for (i = 6; i < 20; i++)
++		hash ^= (hash_addr >> i) & 1;
++
++	return hash ^ intlv;
++}
++
++static u64 tgl_err_addr_to_mem_addr(u64 eaddr, int mc)
++{
++	u64 maddr, hash, mask, ms_s_size;
++	int intlv_bit;
++	u32 ms_hash;
++
++	ms_s_size = igen6_pvt->ms_s_size;
++	if (eaddr >= ms_s_size)
++		return eaddr + ms_s_size;
++
++	ms_hash = igen6_pvt->ms_hash;
++
++	mask = MEM_SLICE_HASH_MASK(ms_hash);
++	intlv_bit = MEM_SLICE_HASH_LSB_MASK_BIT(ms_hash) + 6;
++
++	maddr = GET_BITFIELD(eaddr, intlv_bit, 63) << (intlv_bit + 1) |
++		GET_BITFIELD(eaddr, 0, intlv_bit - 1);
++
++	hash = mem_slice_hash(maddr, mask, mc, intlv_bit);
++
++	return maddr | (hash << intlv_bit);
++}
++
++static u64 tgl_err_addr_to_sys_addr(u64 eaddr, int mc)
++{
++	u64 maddr = tgl_err_addr_to_mem_addr(eaddr, mc);
++
++	return mem_addr_to_sys_addr(maddr);
++}
++
++static u64 tgl_err_addr_to_imc_addr(u64 eaddr)
++{
++	return eaddr;
 +}
 +
  static struct res_config ehl_cfg = {
- 	.num_imc	 = 1,
- 	.ibecc_base	 = 0xdc00,
-@@ -220,6 +237,14 @@ static struct res_config ehl_cfg = {
- 	.err_addr_to_imc_addr  = ehl_err_addr_to_imc_addr,
+-	.num_imc	 = 1,
+-	.ibecc_base	 = 0xdc00,
+-	.ibecc_available = ehl_ibecc_available,
+-	.err_addr_to_sys_addr  = ehl_err_addr_to_sys_addr,
+-	.err_addr_to_imc_addr  = ehl_err_addr_to_imc_addr,
++	.num_imc		= 1,
++	.ibecc_base		= 0xdc00,
++	.ibecc_available	= ehl_ibecc_available,
++	.err_addr_to_sys_addr	= ehl_err_addr_to_sys_addr,
++	.err_addr_to_imc_addr	= ehl_err_addr_to_imc_addr,
  };
  
-+static struct res_config icl_cfg = {
-+	.num_imc	 = 1,
-+	.ibecc_base	 = 0xd800,
-+	.ibecc_available = icl_ibecc_available,
-+	.err_addr_to_sys_addr  = ehl_err_addr_to_sys_addr,
-+	.err_addr_to_imc_addr  = ehl_err_addr_to_imc_addr,
+ static struct res_config icl_cfg = {
+-	.num_imc	 = 1,
+-	.ibecc_base	 = 0xd800,
+-	.ibecc_available = icl_ibecc_available,
+-	.err_addr_to_sys_addr  = ehl_err_addr_to_sys_addr,
+-	.err_addr_to_imc_addr  = ehl_err_addr_to_imc_addr,
++	.num_imc		= 1,
++	.ibecc_base		= 0xd800,
++	.ibecc_available	= icl_ibecc_available,
++	.err_addr_to_sys_addr	= ehl_err_addr_to_sys_addr,
++	.err_addr_to_imc_addr	= ehl_err_addr_to_imc_addr,
 +};
 +
++static struct res_config tgl_cfg = {
++	.machine_check		= true,
++	.num_imc		= 2,
++	.cmf_base		= 0x11000,
++	.cmf_size		= 0x800,
++	.ms_hash_offset		= 0xac,
++	.ibecc_base		= 0xd400,
++	.ibecc_available	= tgl_ibecc_available,
++	.err_addr_to_sys_addr	= tgl_err_addr_to_sys_addr,
++	.err_addr_to_imc_addr	= tgl_err_addr_to_imc_addr,
+ };
+ 
  static const struct pci_device_id igen6_pci_tbl[] = {
- 	{ PCI_VDEVICE(INTEL, DID_EHL_SKU5), (kernel_ulong_t)&ehl_cfg },
- 	{ PCI_VDEVICE(INTEL, DID_EHL_SKU6), (kernel_ulong_t)&ehl_cfg },
-@@ -232,6 +257,10 @@ static const struct pci_device_id igen6_pci_tbl[] = {
- 	{ PCI_VDEVICE(INTEL, DID_EHL_SKU13), (kernel_ulong_t)&ehl_cfg },
- 	{ PCI_VDEVICE(INTEL, DID_EHL_SKU14), (kernel_ulong_t)&ehl_cfg },
- 	{ PCI_VDEVICE(INTEL, DID_EHL_SKU15), (kernel_ulong_t)&ehl_cfg },
-+	{ PCI_VDEVICE(INTEL, DID_ICL_SKU8), (kernel_ulong_t)&icl_cfg },
-+	{ PCI_VDEVICE(INTEL, DID_ICL_SKU10), (kernel_ulong_t)&icl_cfg },
-+	{ PCI_VDEVICE(INTEL, DID_ICL_SKU11), (kernel_ulong_t)&icl_cfg },
-+	{ PCI_VDEVICE(INTEL, DID_ICL_SKU12), (kernel_ulong_t)&icl_cfg },
+@@ -261,6 +364,7 @@ static const struct pci_device_id igen6_pci_tbl[] = {
+ 	{ PCI_VDEVICE(INTEL, DID_ICL_SKU10), (kernel_ulong_t)&icl_cfg },
+ 	{ PCI_VDEVICE(INTEL, DID_ICL_SKU11), (kernel_ulong_t)&icl_cfg },
+ 	{ PCI_VDEVICE(INTEL, DID_ICL_SKU12), (kernel_ulong_t)&icl_cfg },
++	{ PCI_VDEVICE(INTEL, DID_TGL_SKU), (kernel_ulong_t)&tgl_cfg },
  	{ },
  };
  MODULE_DEVICE_TABLE(pci, igen6_pci_tbl);
+@@ -519,7 +623,7 @@ static void ecclog_work_cb(struct work_struct *work)
+ 		eaddr = ECC_ERROR_LOG_ADDR(node->ecclog) <<
+ 			ECC_ERROR_LOG_ADDR_SHIFT;
+ 		res.mc	     = node->mc;
+-		res.sys_addr = res_cfg->err_addr_to_sys_addr(eaddr);
++		res.sys_addr = res_cfg->err_addr_to_sys_addr(eaddr, res.mc);
+ 		res.imc_addr = res_cfg->err_addr_to_imc_addr(eaddr);
+ 
+ 		mci = igen6_pvt->imc[res.mc].mci;
+@@ -569,6 +673,57 @@ static int ecclog_nmi_handler(unsigned int cmd, struct pt_regs *regs)
+ 	return NMI_HANDLED;
+ }
+ 
++static int ecclog_mce_handler(struct notifier_block *nb, unsigned long val,
++			      void *data)
++{
++	struct mce *mce = (struct mce *)data;
++	char *type;
++
++	if (mce->kflags & MCE_HANDLED_CEC)
++		return NOTIFY_DONE;
++
++	/*
++	 * Ignore unless this is a memory related error.
++	 * We don't check the bit MCI_STATUS_ADDRV of MCi_STATUS here,
++	 * since this bit isn't set on some CPU (e.g., Tiger Lake UP3).
++	 */
++	if ((mce->status & 0xefff) >> 7 != 1)
++		return NOTIFY_DONE;
++
++	if (mce->mcgstatus & MCG_STATUS_MCIP)
++		type = "Exception";
++	else
++		type = "Event";
++
++	edac_dbg(0, "CPU %d: Machine Check %s: 0x%llx Bank %d: 0x%llx\n",
++		 mce->extcpu, type, mce->mcgstatus,
++		 mce->bank, mce->status);
++	edac_dbg(0, "TSC 0x%llx\n", mce->tsc);
++	edac_dbg(0, "ADDR 0x%llx\n", mce->addr);
++	edac_dbg(0, "MISC 0x%llx\n", mce->misc);
++	edac_dbg(0, "PROCESSOR %u:0x%x TIME %llu SOCKET %u APIC 0x%x\n",
++		 mce->cpuvendor, mce->cpuid, mce->time,
++		 mce->socketid, mce->apicid);
++	/*
++	 * We just use the Machine Check for the memory error notification.
++	 * Each memory controller is associated with an IBECC instance.
++	 * Directly read and clear the error information(error address and
++	 * error type) on all the IBECC instances so that we know on which
++	 * memory controller the memory error(s) occurred.
++	 */
++	if (!ecclog_handler())
++		return NOTIFY_DONE;
++
++	mce->kflags |= MCE_HANDLED_EDAC;
++
++	return NOTIFY_DONE;
++}
++
++static struct notifier_block ecclog_mce_dec = {
++	.notifier_call	= ecclog_mce_handler,
++	.priority	= MCE_PRIO_EDAC,
++};
++
+ static bool igen6_check_ecc(struct igen6_imc *imc)
+ {
+ 	u32 activate = readl(imc->window + IBECC_ACTIVATE_OFFSET);
+@@ -602,6 +757,8 @@ static int igen6_get_dimm_config(struct mem_ctl_info *mci)
+ 		imc->dimm_l_size[i] = MAD_DIMM_CH_DIMM_L_SIZE(mad_dimm);
+ 		imc->dimm_s_size[i] = MAD_DIMM_CH_DIMM_S_SIZE(mad_dimm);
+ 		imc->dimm_l_map[i]  = MAD_INTRA_CH_DIMM_L_MAP(mad_intra);
++		imc->size += imc->dimm_s_size[i];
++		imc->size += imc->dimm_l_size[i];
+ 		ndimms = 0;
+ 
+ 		for (j = 0; j < NUM_DIMMS; j++) {
+@@ -637,6 +794,8 @@ static int igen6_get_dimm_config(struct mem_ctl_info *mci)
+ 		}
+ 	}
+ 
++	edac_dbg(0, "MC %d, total size %llu MiB\n", mc, imc->size >> 20);
++
+ 	return 0;
+ }
+ 
+@@ -886,6 +1045,77 @@ static void igen6_unregister_mcis(void)
+ 	}
+ }
+ 
++static int igen6_mem_slice_setup(u64 mchbar)
++{
++	struct igen6_imc *imc = &igen6_pvt->imc[0];
++	u64 base = mchbar + res_cfg->cmf_base;
++	u32 offset = res_cfg->ms_hash_offset;
++	u32 size = res_cfg->cmf_size;
++	u64 ms_s_size, ms_hash;
++	void __iomem *cmf;
++	int ms_l_map;
++
++	edac_dbg(2, "\n");
++
++	if (imc[0].size < imc[1].size) {
++		ms_s_size = imc[0].size;
++		ms_l_map  = 1;
++	} else {
++		ms_s_size = imc[1].size;
++		ms_l_map  = 0;
++	}
++
++	igen6_pvt->ms_s_size = ms_s_size;
++	igen6_pvt->ms_l_map  = ms_l_map;
++
++	edac_dbg(0, "ms_s_size: %llu MiB, ms_l_map %d\n",
++		 ms_s_size >> 20, ms_l_map);
++
++	cmf = ioremap(base, size);
++	if (!cmf) {
++		igen6_printk(KERN_ERR, "Failed to ioremap cmf 0x%llx\n", base);
++		return -ENODEV;
++	}
++
++	ms_hash = readq(cmf + offset);
++	igen6_pvt->ms_hash = ms_hash;
++
++	edac_dbg(0, "MEM_SLICE_HASH: 0x%llx\n", ms_hash);
++
++	iounmap(cmf);
++
++	return 0;
++}
++
++static int register_err_handler(void)
++{
++	int rc;
++
++	if (res_cfg->machine_check) {
++		mce_register_decode_chain(&ecclog_mce_dec);
++		return 0;
++	}
++
++	rc = register_nmi_handler(NMI_SERR, ecclog_nmi_handler,
++				  0, IGEN6_NMI_NAME);
++	if (rc) {
++		igen6_printk(KERN_ERR, "Failed to register NMI handler\n");
++		return rc;
++	}
++
++	return 0;
++}
++
++static void unregister_err_handler(void)
++{
++	if (res_cfg->machine_check) {
++		mce_unregister_decode_chain(&ecclog_mce_dec);
++		return;
++	}
++
++	unregister_nmi_handler(NMI_SERR, IGEN6_NMI_NAME);
++}
++
+ static int igen6_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
+ {
+ 	u64 mchbar;
+@@ -909,6 +1139,12 @@ static int igen6_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
+ 			goto fail2;
+ 	}
+ 
++	if (res_cfg->num_imc > 1) {
++		rc = igen6_mem_slice_setup(mchbar);
++		if (rc)
++			goto fail2;
++	}
++
+ 	ecclog_pool = ecclog_gen_pool_create();
+ 	if (!ecclog_pool) {
+ 		rc = -ENOMEM;
+@@ -921,12 +1157,9 @@ static int igen6_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
+ 	/* Check if any pending errors before registering the NMI handler */
+ 	ecclog_handler();
+ 
+-	rc = register_nmi_handler(NMI_SERR, ecclog_nmi_handler,
+-				  0, IGEN6_NMI_NAME);
+-	if (rc) {
+-		igen6_printk(KERN_ERR, "Failed to register NMI handler\n");
++	rc = register_err_handler();
++	if (rc)
+ 		goto fail3;
+-	}
+ 
+ 	/* Enable error reporting */
+ 	rc = errcmd_enable_error_reporting(true);
+@@ -954,7 +1187,7 @@ static void igen6_remove(struct pci_dev *pdev)
+ 
+ 	igen6_debug_teardown();
+ 	errcmd_enable_error_reporting(false);
+-	unregister_nmi_handler(NMI_SERR, IGEN6_NMI_NAME);
++	unregister_err_handler();
+ 	irq_work_sync(&ecclog_irq_work);
+ 	flush_work(&ecclog_work);
+ 	gen_pool_destroy(ecclog_pool);
 -- 
 2.29.2
 
