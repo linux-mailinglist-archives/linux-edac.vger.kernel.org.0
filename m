@@ -2,57 +2,59 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FC4D3AAEA5
-	for <lists+linux-edac@lfdr.de>; Thu, 17 Jun 2021 10:21:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0ED473AB516
+	for <lists+linux-edac@lfdr.de>; Thu, 17 Jun 2021 15:44:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230422AbhFQIXg (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Thu, 17 Jun 2021 04:23:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37770 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230334AbhFQIXf (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Thu, 17 Jun 2021 04:23:35 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01DEEC061760;
-        Thu, 17 Jun 2021 01:21:27 -0700 (PDT)
-Received: from zn.tnic (p200300ec2f0eb200ab657fc0ea7e4260.dip0.t-ipconnect.de [IPv6:2003:ec:2f0e:b200:ab65:7fc0:ea7e:4260])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 8DBFB1EC0556;
-        Thu, 17 Jun 2021 10:21:26 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1623918086;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=p9KkfoMxQXHVpn5PWqJhxG6N2m4bA23fyu2hCz87bkc=;
-        b=MtphHVOANg6LtS7S0gOt47DNm2PwKzgTbELvCzIF3EBJVD8T++yhUobH30A4tJMq5I+loj
-        oeOmDta0pVA240jqgwjSgbdDOC9Jl2xiGynvIrEkLrCc1zXkdYFQr6ddLn94q7VE+BWbe6
-        ryqLv/2QhuZLQep3VB4mtHc+Y3o8e1o=
-Date:   Thu, 17 Jun 2021 10:21:14 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Zou Wei <zou_wei@huawei.com>
-Cc:     mchehab@kernel.org, tony.luck@intel.com, james.morse@arm.com,
-        rric@kernel.org, linux-edac@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH -next] edac: Convert list_for_each to entry variant
-Message-ID: <YMsF+lGa/kCLvzRA@zn.tnic>
-References: <1623740110-15764-1-git-send-email-zou_wei@huawei.com>
+        id S231526AbhFQNqc convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-edac@lfdr.de>); Thu, 17 Jun 2021 09:46:32 -0400
+Received: from 6-200-5-45.rpnnetprovedor.com.br ([45.5.200.6]:50658 "EHLO
+        srv01.rpnnetprovedor.com.br" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S230162AbhFQNqa (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>);
+        Thu, 17 Jun 2021 09:46:30 -0400
+Received: from [84.38.130.143] (helo=IP-130-143.dataclub.eu)
+        by srv01.rpnnetprovedor.com.br with esmtpa (Exim 4.92.2)
+        (envelope-from <robertnellsona@citromail.hu>)
+        id 1ltkuD-0000uk-SZ
+        for linux-edac@vger.kernel.org; Thu, 17 Jun 2021 02:49:34 -0300
+Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <1623740110-15764-1-git-send-email-zou_wei@huawei.com>
+Content-Transfer-Encoding: 8BIT
+Content-Description: Mail message body
+Subject: CAN YOU INVEST WITH ME?...6
+To:     linux-edac@vger.kernel.org
+From:   "Mr.  Robert" <robertnellsona@citromail.hu>
+Date:   Thu, 17 Jun 2021 08:49:25 +0300
+Reply-To: robertnellsona@citromail.hu
+Message-Id: <E1ltkuD-0000uk-SZ@srv01.rpnnetprovedor.com.br>
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Tue, Jun 15, 2021 at 02:55:10PM +0800, Zou Wei wrote:
-> convert list_for_each() to list_for_each_entry() where
-> applicable.
 
-That conversion is applicable to one more place in that file...
+ATTENTION; linux-edac@vger.kernel.org,
 
--- 
-Regards/Gruss,
-    Boris.
+IMPORTANT INVESTMENT INFORMATION
 
-https://people.kernel.org/tglx/notes-about-netiquette
+We have a good investment program going on now.
+We have $95m USD for Investment in your Country.
+We use this opportunity to invest you to join the investment program and you will never regret it.
+Please kindly invest with us and you will be receiving monthly income/return/profit every month.
+We can also give you Loan, 
+
+We have: 
+
+1. Short Term Loan, 
+
+2. Medium Term Loan 
+
+3. and Long Term Loan, 
+
+There is no need of collateral security. We will use our company to sign agreement and guarantee on your behalf and our Lawyer will sign on your behalf.
+
+Reply for more detail.
+
+Thank you Sir.
+
+Robert Nellson.
+INVESTMENT MANAGER.
