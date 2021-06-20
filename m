@@ -2,103 +2,77 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 69FB33ADECC
-	for <lists+linux-edac@lfdr.de>; Sun, 20 Jun 2021 15:36:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 569BE3AE08D
+	for <lists+linux-edac@lfdr.de>; Sun, 20 Jun 2021 23:08:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229750AbhFTNi6 (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Sun, 20 Jun 2021 09:38:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40564 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229763AbhFTNiu (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Sun, 20 Jun 2021 09:38:50 -0400
-Received: from mail-io1-xd42.google.com (mail-io1-xd42.google.com [IPv6:2607:f8b0:4864:20::d42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 387DDC061787
-        for <linux-edac@vger.kernel.org>; Sun, 20 Jun 2021 06:36:16 -0700 (PDT)
-Received: by mail-io1-xd42.google.com with SMTP id p66so12604770iod.8
-        for <linux-edac@vger.kernel.org>; Sun, 20 Jun 2021 06:36:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=D7l/Y2nU4ivOXB3kYNarWKNDy1SUWuawPt7q4q/Bhv4=;
-        b=uDIEtWfgl91FDet7ZYX1u1ozW0abpKvg4acx3thqXBCDoYcWKg7eyNZSXNk+51VeuJ
-         sYbwx77CCJt/Xl1UBy7P++4/uHOQjQcptGzc4BiJd5A/7x+FLCtsFr6R08yAScCPxE/G
-         ycRitdP5UZQCPHBcljPWiYz9qooX9+o9VlIcE1iBIKjgWFsG58IfpnIZmKh5Mer/et0Q
-         Wvv2McVtUA6rn+iTugaAQulni5t+7gIBWkpgi42U+JEUmcEEUifIxcViVFyKhDEEgfNV
-         A33afccbptAYxVMQ3XRd6cg8QS8Vl2AEYQyihFbFLRpIaiCXlHMQE4BSfPfytvzUMqcd
-         FXMw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=D7l/Y2nU4ivOXB3kYNarWKNDy1SUWuawPt7q4q/Bhv4=;
-        b=NuDy2AbP1AneOwgde8ldPV4REus1LzwvmJYHkQI2P+acWp0Jy1LQeeqg50AJpUSANp
-         tbQW/Tii0yoxC8e+nE9FrhP3Gqt8ZY9/JWXt9wuiJ1tyHtymIpXTlkjIbAYXeOu/PKaH
-         j7eW20ndB4EQaDcqCzOKDp8aY+LQD7tIaeB/FwWPLAyIumgR5Sy1cvCQTRyDq+CAzoX2
-         vRemrJHasyMA/nMsXggMUX9v88p0NIuJx2WHYmLNuohwAqCJUR1Z0mjBYe9159KzRzvf
-         x92YTJ6PufiX9xHA4BnGe3BrBxyIUvcpZS6rYYrz+/MpG78ytXQ6LqzSjyH+p8KQOdCZ
-         eqyg==
-X-Gm-Message-State: AOAM533HSzR/kdEhUS0GMzj9Q5eBGW1+b3IL0mA/uz3drDVUHMgNKu3x
-        kTtE2tJsxVwQ4PPgkh7BzsQrdGBFWSuF9pZoIFE=
-X-Google-Smtp-Source: ABdhPJwOQ5lA8oaPxit1UXNypL8Kah2QWj0jtAWNuj5/Z8/Rl7T8YsfxHtOIriCZuXo1tXOWzxp5d5YlbnVjDFRsY5Q=
-X-Received: by 2002:a02:a810:: with SMTP id f16mr12630337jaj.64.1624196175568;
- Sun, 20 Jun 2021 06:36:15 -0700 (PDT)
+        id S230212AbhFTVKh convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-edac@lfdr.de>); Sun, 20 Jun 2021 17:10:37 -0400
+Received: from mga02.intel.com ([134.134.136.20]:49973 "EHLO mga02.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230211AbhFTVKg (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Sun, 20 Jun 2021 17:10:36 -0400
+IronPort-SDR: cVmc/qwAv0SENsiG5xf84sDK3g3RWIWZLCTgoyF5+S45ukYRXhsYECykNqGtbPuTHLRlnJv0Oy
+ lzaUf2cG1qWw==
+X-IronPort-AV: E=McAfee;i="6200,9189,10021"; a="193881080"
+X-IronPort-AV: E=Sophos;i="5.83,288,1616482800"; 
+   d="scan'208";a="193881080"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jun 2021 14:08:23 -0700
+IronPort-SDR: LoETC79phESlLsHLXENMdPX+o3OVdAnbaw1KZvlfwip+5kqIjQ/NVTOgdEvp/pk8peT8m1dvPT
+ zDSJOj6lHzaw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.83,288,1616482800"; 
+   d="scan'208";a="453686096"
+Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
+  by fmsmga008.fm.intel.com with ESMTP; 20 Jun 2021 14:08:23 -0700
+Received: from shsmsx606.ccr.corp.intel.com (10.109.6.216) by
+ fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2242.4; Sun, 20 Jun 2021 14:08:22 -0700
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ SHSMSX606.ccr.corp.intel.com (10.109.6.216) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2242.4; Mon, 21 Jun 2021 05:08:19 +0800
+Received: from fmsmsx610.amr.corp.intel.com ([10.18.126.90]) by
+ fmsmsx610.amr.corp.intel.com ([10.18.126.90]) with mapi id 15.01.2242.008;
+ Sun, 20 Jun 2021 14:08:17 -0700
+From:   "Luck, Tony" <tony.luck@intel.com>
+To:     Randy Dunlap <rdunlap@infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+CC:     "Zhuo, Qiuxu" <qiuxu.zhuo@intel.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>
+Subject: RE: [PATCH] EDAC/igen6: fix core dependency
+Thread-Topic: [PATCH] EDAC/igen6: fix core dependency
+Thread-Index: AQHXZSR20xaNNpx7sU2QBycvvxKAS6sdZfpA
+Date:   Sun, 20 Jun 2021 21:08:17 +0000
+Message-ID: <7b21e5405e4b4838b2b469fcf67eb40e@intel.com>
+References: <20210619160203.2026-1-rdunlap@infradead.org>
+In-Reply-To: <20210619160203.2026-1-rdunlap@infradead.org>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+dlp-product: dlpe-windows
+dlp-reaction: no-action
+dlp-version: 11.5.1.3
+x-originating-ip: [10.1.200.100]
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 8BIT
 MIME-Version: 1.0
-Received: by 2002:a05:6e02:1baf:0:0:0:0 with HTTP; Sun, 20 Jun 2021 06:36:14
- -0700 (PDT)
-Reply-To: sarahkoffi389@yahoo.co.jp
-From:   Sarah Koffi <sarah.koffi101@gmail.com>
-Date:   Sun, 20 Jun 2021 15:36:14 +0200
-Message-ID: <CA+ifgLE1g7jgi567M2HhZfvRSUF63Hu6stsW+ysX=3U-=qnn6Q@mail.gmail.com>
-Subject: Greetings From Mrs. Sarah Koffi
-To:     sarahkoffi389@yahoo.co.jp
-Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-Greetings From Mrs. Sarah Koffi
+> igen6_edac needs mce_register()/unregister() functions,
+> so it should depend on X86_MCE (or X86_MCE_INTEL).
 
-I'm contacting you based on your good profiles I read and for a good
-reasons, I am in search of a property to buy in your country as I
-intended to come over to your
-country for investment, Though I have not meet with you before but I
-believe that one has to risk confiding in someone to succeed sometimes
-in life.
+Thanks Randy
 
-My name is Mrs. Sarah Koffi. My late husband deals on Crude Oil with
-Federal Government of Sudan and he has a personal Oil firm in Bentiu
-Oil zone town and Upper
-Nile city. What I have experience physically, I don't wish to
-experience it again in my life due to the recent civil Ethnic war
-cause by our President Mr. Salva Kiir
-and the rebel leader Mr Riek Machar, I have been Under United Nation
-refuge camp in chad to save my life and that of my little daughter.
+Also reported by the lkp robot (e-mail from the robot got to
+me about six hours after your fix).
 
-Though, I do not know how you will feel to my proposal, but the truth
-is that I sneaked into Chad our neighboring country where I am living
-now as a refugee.
-I escaped with my little daughter when the rebels bust into our house
-and killed my husband as one of the big oil dealers in the country,
-ever since then, I have being on the run.
+Applied.
 
-I left my country and move to Chad our neighboring country with the
-little ceasefire we had, due to the face to face peace meeting accord
-coordinated by the US Secretary of State, Mr John Kerry and United
-Nations in Ethiopia (Addis Ababa) between our President Mr Salva Kiir
-and the rebel leader Mr Riek Machar to stop this war.
-
-I want to solicit for your partnership with trust to invest the $8
-million dollars deposited by my late husband in Bank because my life
-is no longer safe in our country, since the rebels are looking for the
-families of all the oil business men in the country to kill, saying
-that they are they one that is milking the country dry.
-
-I will offer you 20% of the total fund for your help while I will
-partner with you for the investment in your country.
-If I get your reply.
-
-I will wait to hear from you so as to give you details.With love from
-
- i need you to contact me here sarahkoffi389@yahoo.co.jp
-
-Mrs. Sarah Koffi
+-Tony
