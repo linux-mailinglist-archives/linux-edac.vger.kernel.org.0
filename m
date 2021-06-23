@@ -2,49 +2,49 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AD7AB3B20EC
-	for <lists+linux-edac@lfdr.de>; Wed, 23 Jun 2021 21:20:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 400633B20ED
+	for <lists+linux-edac@lfdr.de>; Wed, 23 Jun 2021 21:20:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230031AbhFWTXA (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        id S230021AbhFWTXA (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
         Wed, 23 Jun 2021 15:23:00 -0400
 Received: from mail-bn8nam12on2069.outbound.protection.outlook.com ([40.107.237.69]:51744
         "EHLO NAM12-BN8-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S230001AbhFWTW4 (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Wed, 23 Jun 2021 15:22:56 -0400
+        id S229523AbhFWTXA (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Wed, 23 Jun 2021 15:23:00 -0400
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=mR2XCJ2AZGK9vH+eY/Z7QbtoWvyyXIn3KuYr12PG/jmiwGPGiyvZypcyZeND4HJ63zqoKuF2fOeLRpqCctXRXvJjYJDV/kOWUHg//e/HFdKxcphanWoL4aaYhwijeGk9Bwb4rG01IzEeGyEYynfAccpeuK4hfoOsMErhCd/8njtQcnwiJJjpZb8F+UyU+h9vbVJu12c79MiUfdsGDhqZZUlxyZP62avjwJ+Qn68/t6vSICH4ulT3zt6BePKjLrKEgmYPxQII+4jQRgLa2HXmwggZN1/sv5WIhv5GIgdKg8VznjnWt37HFiPy0FpfCri+aZQkqkfDxpatYiib7ATa4w==
+ b=SFyXwfypaalLArSSKrvCFURYLZlWJZRNQ/dMes2TjKLp+Fe1YCQKEz6JeRM4ufL8E7Ai+XXcuYd2zWrpPlfv57WyWG/+xs8pB+JqkH2pkdKnyOFqUdvC9tx+DwwT9ZOPLvIyruraQoUOpKxG4aqozF3ei3D9PAmffcStbZSAn1JsuIZoGow3i+GQHh2++PZcYgTDN0wWVgDU7TiiJjJBxMWWEHM2BG1Bw8K7MxbDzmVGa1gyKGdhgZLrr+B9R/+WA5EWilWCafvhpbs4FPJUph746NKlO6I4PfswfJBCkiA6quiTMg2xCRxw5G5uLnLtkXQYGAhroaryOhGy4au90Q==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=tKd4ROc5ZNHr8+Zx3H4YoWrv96nwYur3MeUxTo0dL4o=;
- b=DwY66pi/7fo/h7E8+n/H/jt9DyFZyHbmwJ17wKzIsrptgvfiBbUooibbwxi4K8HKXtkTR3xDFpzxq/BrlU1A6c8O1vm5Db4piEVIrVcNz0oWGzFJ/mThgeiHu9C74O9E3QAGxrVL/ZcWdalPtW3Sh9SrZXE9B3P8Oxgwf9rEvsbvglTFXELkzF2uLvvd/9gEMFRZQxXuY+oH0rEbXw867syqXzSW0PIrJqe7NigvuQZRvIXE56eMQCWJO7p0GKF79DQzRDTzwQbPo0UMaXIw8X2Ad+R3wvlC64WhfbY69yHcEAQd3bqYOc4DVheERq+GIW6MZCD2mC8jYXQYZCkSfA==
+ bh=hviOaPm2UJKJLDJjTvQmRyHMNLGdiLIiDkeM7hNg4EU=;
+ b=EqKm2OAIthY5Pa7/2hK7GBuVAIvWauKmQUefkuSPtGOFlCoqlKvrqqZSa9n/UA9scEqakeo0Z/76RpAUHxXGLm4UkOeHmWoTlk68aKE8Zdad3Ol8ZPe7gcYTzggwtyqHzpHw8u/FlUusMv9bj+wO9SZ7wp8GOzEApBwXzdeFGtpuTYw8TD/LrSS4B51BxRr9Sz+JjXVxZUvymkMZFNYwkL6Yqg7gOFfi+4e8/Cm2LlpZT6b4Cii6K4m16o75fIOQYUBZhuvnivfQ/w09Dj1IC70eEgNLSLuslJ4RkAqyDy7NKRpO2RCkeslDqOcH5OivB2Nc6YXyeJwfFOsTKeINuQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
  header.d=amd.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=tKd4ROc5ZNHr8+Zx3H4YoWrv96nwYur3MeUxTo0dL4o=;
- b=RjjWAsnapSBuZdHEN19/eBd08gEKNWEJBLhV2kfDMYTxm6/VqLkJWPcMDrUAvlMAOtuWfqSbBESKTeEL7UUAhy1eBFNRXSrKd98IDd1P7Q8J2TVyHjVpZRznVuRD08FK26IrOA0nfK6eLdaJrozDpzS4i6w8sZNjm5rQ0ZRLzHs=
+ bh=hviOaPm2UJKJLDJjTvQmRyHMNLGdiLIiDkeM7hNg4EU=;
+ b=X02tvSJ9mKS/CAo9TVBUeB2Be41bD5BQpXzRV8akIJ6eB91slGIo295t0GwICoUQUCWKkvZj1yaaVjPMU3ccYS5WbW4GKUEwZ5n5wK7wPT79be4RkybZWdPMsYvRlahvNS3uk6J98/HjkMr1fpfmfkg8OM37W6bSfWrIE1M0zpM=
 Authentication-Results: vger.kernel.org; dkim=none (message not signed)
  header.d=none;vger.kernel.org; dmarc=none action=none header.from=amd.com;
 Received: from BN8PR12MB3108.namprd12.prod.outlook.com (2603:10b6:408:40::20)
  by BN6PR12MB1187.namprd12.prod.outlook.com (2603:10b6:404:1b::19) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4242.19; Wed, 23 Jun
- 2021 19:20:37 +0000
+ 2021 19:20:40 +0000
 Received: from BN8PR12MB3108.namprd12.prod.outlook.com
  ([fe80::c099:e7a1:249a:a8a2]) by BN8PR12MB3108.namprd12.prod.outlook.com
  ([fe80::c099:e7a1:249a:a8a2%7]) with mapi id 15.20.4242.025; Wed, 23 Jun 2021
- 19:20:36 +0000
+ 19:20:40 +0000
 From:   Yazen Ghannam <yazen.ghannam@amd.com>
 To:     linux-edac@vger.kernel.org
 Cc:     linux-kernel@vger.kernel.org, bp@alien8.de, mchehab@kernel.org,
         tony.luck@intel.com, Smita.KoralahalliChannabasappa@amd.com,
-        Yazen Ghannam <yazen.ghannam@amd.com>, x86@kernel.org
-Subject: [PATCH v2 02/31] x86/amd_nb, EDAC/amd64: Move DF Indirect Read to AMD64 EDAC
-Date:   Wed, 23 Jun 2021 19:19:33 +0000
-Message-Id: <20210623192002.3671647-3-yazen.ghannam@amd.com>
+        Yazen Ghannam <yazen.ghannam@amd.com>
+Subject: [PATCH v2 03/31] EDAC/amd64: Don't use naked values for DF registers
+Date:   Wed, 23 Jun 2021 19:19:34 +0000
+Message-Id: <20210623192002.3671647-4-yazen.ghannam@amd.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20210623192002.3671647-1-yazen.ghannam@amd.com>
 References: <20210623192002.3671647-1-yazen.ghannam@amd.com>
@@ -56,214 +56,210 @@ X-ClientProxiedBy: BLAPR03CA0107.namprd03.prod.outlook.com
  (2603:10b6:408:40::20)
 MIME-Version: 1.0
 X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from yaz-ethanolx.amd.com (165.204.184.1) by BLAPR03CA0107.namprd03.prod.outlook.com (2603:10b6:208:32a::22) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4242.19 via Frontend Transport; Wed, 23 Jun 2021 19:20:36 +0000
+Received: from yaz-ethanolx.amd.com (165.204.184.1) by BLAPR03CA0107.namprd03.prod.outlook.com (2603:10b6:208:32a::22) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4242.19 via Frontend Transport; Wed, 23 Jun 2021 19:20:39 +0000
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: e14d03bf-5fa1-49c7-da3d-08d9367bfad4
+X-MS-Office365-Filtering-Correlation-Id: a0e7ce57-58c4-404e-ff1d-08d9367bfcd7
 X-MS-TrafficTypeDiagnostic: BN6PR12MB1187:
 X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <BN6PR12MB1187D8AB459DE52A5EDD36EFF8089@BN6PR12MB1187.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:8882;
+X-Microsoft-Antispam-PRVS: <BN6PR12MB1187CC63B4A4927938A3D010F8089@BN6PR12MB1187.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:10000;
 X-MS-Exchange-SenderADCheck: 1
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: RKzo+fN8t++iwsUnAZ7i7vhrZc4iW7hrNmhHQtTMIsdCVWxlfkHvBcK+eUpwXt9FWrGXPnyGAtQ39yuXHnv3E5zjIdKJcGN9T92bHaSJfUh4dk4Bwg8Jlipuj8PY6c17ArnYdH+1ua04MRQKEziR3FMX37HaEmD0eqVuYv9FDKM+tSXk6eqYaL8OfnaVW3byv0Ok5IgAYTGeRH0IoLgivvnjdEcyndTQB3S90QCDRGBQgXGXj3aKC6EgSVYDzOHIUMr/Bv91DsrXssHQLAgJELOOfoRC4klCm/esh1pgFMcDKMxn3hC4/MnKOBjPc5OU9ES1yFuqv25AUoey7Utb0vDdD6Nkz3tOK37nzWcnA7Xjw1eNCQdvfQ78ko+bsXZDzMrsAGYDDbc2RP0yqPDaMTwzq7Ho3xzADXcHFdasWARk5q3+b/hoyfv0WfJeZM/WICN5/jtUWvVC/TTjByTRUDqCCXfZsV93kFa8pAoie1rC2u6zAMsbCYg2/tKbWZ+0svFjVuuOBOC1SJaOp3O/rvVP81nc+A1yCD7ZowbKY2jz5/941BT4FnSx2PuDI8TSamvq0l/3a8bH7JwpPZ1taIRAEdulaowPIlNT0WhBdNPb5x4iEhdhJUtkKcg2DN+CuP9uZT+4xEHPKkD/VjTi9ZaORgkSG2ZpVp7OcVYYXLXVAq2tYWR2twZe/56muh67fMTeOVNm+PxWLQC/CmWYaeMoKuD71kX/YKeAnEfZox4P3xjH04/rOar262HE/mWC4tvVAh1GaELbTlYgs5PsbhzHCavOy6jPvtaKCsnpAvh1nz6e+505Ec6rbF8yBJ/6Kio7/ZX4DQJ5COqQAufCUA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3108.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(346002)(136003)(376002)(39860400002)(366004)(396003)(966005)(36756003)(38350700002)(38100700002)(44832011)(83380400001)(6916009)(26005)(7696005)(5660300002)(186003)(16526019)(66946007)(6486002)(4326008)(52116002)(8676002)(478600001)(6666004)(1076003)(2906002)(86362001)(66476007)(2616005)(66556008)(8936002)(316002)(956004);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: +G0rsCESyDkr0zXmmhXtlSJdfFowaUOPCHxQMC6p8tlsIJ8CY/ozvqjhDiHnWLb67Cw8Vpy9aFaBEhOAZTjxL8aUBnauXBkzxheGAnnNHToOgvi9mhinFXMNHSg9cv16QXSBSb4rTNC+f3A9i8HhAIZYFbmKitvoWUwAeubWursOJ0HZJWSHQaqEripZrRCRa6MAMsA0DdSfzoz+D4mtsQvkJuf4/MOs+CO59A9miV5iUAHwcWBiMvGNeLAjcIBFLpTH0Qcmn3qisMalNP7BclYYpdGkeYJcGRJZOer4EVuYdwcyzwF4RHY+I+atfFAQV0tRZWw6SBKAEUGhm7VxNgtrrvisSrYfI/7bWRacWJBt4VlPt7aJUbjzpG7I6zMnJzmn7pc5COmCCBPQ3ep9IQgFDgrememkmgEwmNO6z6U6jSIJWFxaryX0Acg5H/5jU3D/aRymLh79MFPXdbMLDRSBTQx9PYTJz+DzNx/2PvUFKUqkDgmxxgOxIGwt+EN72BEyWUR2p7Q/3he/+MWNvDgIzBCcv7b2syXaeIFsIkR889vYUWsp+sJXZtELGySznIRQkXY51as4f5RgkEkXqKJUc6tzB1EJd7BAoBt/kLX/Nu8UBDB2b/P8xl7GEBdqkUD4vUqmqoZ++LCagsfAGsonRhaktFLuDAeZ1e3RmkRMpslS4LzajX5O8fguyUFZmT7N9TVO7F+hQSHXc+Av1LcJnKoVugfyWkLe+uGb0S7dmGG8mJe84zMx1dxm8nh+TtdFsne+RJ+p78PFt2A31LeBr6nVvAcJKoFEaupEAOSQqQuF9eXYHZqxYQN7OLBW9MIIqaRRfAiu/fcLFSjRuuTeLqvnIo7Pu//fl1xmq20=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3108.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(346002)(136003)(376002)(39860400002)(366004)(396003)(966005)(36756003)(38350700002)(38100700002)(44832011)(83380400001)(6916009)(26005)(7696005)(5660300002)(186003)(16526019)(66946007)(6486002)(4326008)(52116002)(8676002)(478600001)(6666004)(1076003)(2906002)(86362001)(66476007)(2616005)(66556008)(8936002)(316002)(956004)(41403002);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?WQy3b52S+gUaAnNOH/h4F7yWi7D8wNY0ytlzF3W2IdXVRXsryyRlk/dbAL5t?=
- =?us-ascii?Q?ILVAFezeg8bUaem4AXuke7CSQLZ1NbiSfZJ1F9RlP2BNJu4su4C2pyC36uxf?=
- =?us-ascii?Q?HfR63fySLzRRGW7du0kfQg/hIN74Typomn4etrobf7atgRdecKYN/+LXQYoi?=
- =?us-ascii?Q?9vG03wxX/IZJs7+dEIFDlJxmIJFTtZyKqv4CeKqaaaJjDeFROi/LxOBFtTem?=
- =?us-ascii?Q?SseL0TPJtX66Byz3uEo+vupk+zN0ik/jN4MVYEfWoihpeRq2nL1ydr1YkoNX?=
- =?us-ascii?Q?L47NIlGO0VbS0bs+Yytp70cO7hofVxvX6nnG28ynlQlOmaGZxgXEt9y8FRcJ?=
- =?us-ascii?Q?PKXitxI0k8TtZ2CEYF+d0mfoOEN3yuQMu1kToAQQYHy1s2VLuFDEjtwYqZwF?=
- =?us-ascii?Q?ttKaNyJvtt2uuzZyd6Hs/ZnWpVzWO4m9/dsvfXqEE80Q10olUTaaMbkio8g1?=
- =?us-ascii?Q?t6uCQkSNievyk5cVKlNrFE4tFXxUlTyl5mtgTuLE1jo9FEqxtE/dq6EigPzc?=
- =?us-ascii?Q?IKeyGZSHoqBBe9QzGyfcodEsYwP6Up38DtCt9Kxqh4vHRaZAzAcclz7i8hcS?=
- =?us-ascii?Q?VR54AINu+FBWM2h+kO75C+/OeIXF2TyAr+sgzqGaNZHxF5JJAaq82qrs6a8t?=
- =?us-ascii?Q?r/wmudZWsqYgVdJKsCUAnf3Qcf5KW7WNVqa91nKhAzht4jP9aP5LOUYw4unC?=
- =?us-ascii?Q?MfXKI0m8HvwZthe43WrEM5s7wseK+igWORrEr5WmXX5Z4YM8fDQbOzvxZmym?=
- =?us-ascii?Q?uGWdCjR9cWbldOY5I7IGg9p4kdO+vL36jT7nFkhjhony2bBYzOmwbTNSfyTv?=
- =?us-ascii?Q?uOCCuwnATsQ8PXm8dWlkfs8TNihrxj6RxNRDNcvkMaTNYAXP2ZSQ8r3eNaoJ?=
- =?us-ascii?Q?liOGYQrJ9ykOwCjURJgKj3upCYxBW8eyuBdndT8zQ6467F6iXaPaTGjG5aBf?=
- =?us-ascii?Q?WgutcWMAlOkNEV2JpHXh5/zUKmUlSfS8HyQeDKNzPZJKdJCl8+bs8Bdvhtxf?=
- =?us-ascii?Q?7GDPAEjEB/PGNx7RPx4Qc4PQCcPLqgSwtRhoImiTNRtFG5jOpySnaEzeAPpx?=
- =?us-ascii?Q?FOekjB8IZcOl/V49jef0i0zriaTkuZYAGu8NRXtFY6dfiwW6tMwBGLzedea7?=
- =?us-ascii?Q?WJaIgUuo8IDwSXjXT+3Rw4IilR4deg/V2qnopsjXp5G+w387NwOysYBRaVnq?=
- =?us-ascii?Q?CNRxeBKkMUpZO//qi1s4QA+Mpp78D16gH1jI5VGC+ChpTEmjYhFdZjda2vU7?=
- =?us-ascii?Q?mCP2FTn36QGxU5A0jMXNiMxHJc6n7pHYn+1SIkot3qn9RN9dQ5hy7RLtK5jB?=
- =?us-ascii?Q?H29GfIro8qqkSMPAKKHfp2lU?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?K0aiUdBaZgjvE1yxJQxyWpGX50Qs3KIj63NXvmeleIgPdKze6/ZTrEmfFZLs?=
+ =?us-ascii?Q?+RTs2mSeaBtqjgtjMAEWe02FQaqdvXkKPnrKxOSorlqUE+Aaom9fsPkLztVe?=
+ =?us-ascii?Q?aueJracZ4+3an1x9hY1cStfrcHeKjShrrrIFvOnH7hMli8LuhBdKdJjEiBfQ?=
+ =?us-ascii?Q?9Kr4++uwR2dZ9ZiJvKW28oAmk67eXQTiFsW9gMcKTso7+IyHPUIs6Gc4CNd8?=
+ =?us-ascii?Q?cWykU0s4fXF46VV1neXU5Lnpm55i2hO6lM8bki2qOC2K0W1k7HCcJ8YlbXeJ?=
+ =?us-ascii?Q?ofO01cTCm8cAeOEPVo+An/D4lTujzeczkMrug17X6KywfSJAoC7eS56Epe9G?=
+ =?us-ascii?Q?GuUBVDWJMK8fFhZMAoLRf+XqueTmXYPTARIzH5i+Klop4XgXk2bfFXjdY5ZD?=
+ =?us-ascii?Q?wpyVNxDTWgqoNx5IMu/LGUw9PVzD9d84INIgMSnsH/SI9O3jGDZ27NHxQtDk?=
+ =?us-ascii?Q?4GKf2yL4/0of4227a6fVZr1xayFZkWMOT3LyTN9Lib4mSPl6Buvw0Beh/8EU?=
+ =?us-ascii?Q?1oD7/r6dm3J8bYQ0A89QSJwxM1Y6bXjoTXuHHft7xaBzEwIYwz4PUoTeH5Ey?=
+ =?us-ascii?Q?MdyNMj+Ov6WglBd8Ak+Ws6823kC4DE/++mbmByWh8eImb4m38pKZPcDG4LDq?=
+ =?us-ascii?Q?RA2Y5NTUIsXvPfVqMeTTu8BizofYvklh3f9bDSS3Z19ktN3iml7teXrCR48V?=
+ =?us-ascii?Q?/Nwm3L0TQKDSbMdqpSGDPO3h64+pr1pEdRX+l4oUyrFPg6dVzcloappH7QsD?=
+ =?us-ascii?Q?a1iFdg/qFooznqE+/XpW0e67JuChHnc1txeKF9zigNu+pcKsmuO+OyBHo600?=
+ =?us-ascii?Q?j+elZU5vVy/nwvohDXV4NmkDYTaYwTRyP4YVAwxF4kjboOyfEVmHnvR7FDJN?=
+ =?us-ascii?Q?Fu1uv1xaf9+RaWkXyreQpIRV8S9FJgbiBr23Sh2fg/OVUBPRNmWEHufKpuIp?=
+ =?us-ascii?Q?hntlq7JDe6t/xdDybvkiNI30wrefAMkpvbAf2P/a/UPOk5eR1hyA4xmd9Z1n?=
+ =?us-ascii?Q?KABG4AYEDfYx7uTFIdyzWtCjDN2yQ136CGIavj4fkabWBm1FGeDiJeLO4yLL?=
+ =?us-ascii?Q?KgSPuf5VaF7PYiuJxPHOJG66yU1iG+DGDAGHctEbvqLPa3og99jLS06178fo?=
+ =?us-ascii?Q?Tyeeflt35Wlt4pbxb8xfoKXb+0psXq/pb+0R3RGTO5s662gP+jbBpb6SYKl5?=
+ =?us-ascii?Q?6R2MKqHuEUH56tXuEvG3BLFm99C3wuW7nS3+bzrENG6jddFWml5Ry681ub0h?=
+ =?us-ascii?Q?5oUZ9pILEc2L/jZyxIjjcPFtpt6TJrDwdCJ6qJ6wNRjMsVr5at1h5mMoDDRl?=
+ =?us-ascii?Q?UTpDZh82BBowvZHGe7SbcECZ?=
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: e14d03bf-5fa1-49c7-da3d-08d9367bfad4
+X-MS-Exchange-CrossTenant-Network-Message-Id: a0e7ce57-58c4-404e-ff1d-08d9367bfcd7
 X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3108.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Jun 2021 19:20:36.8225
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Jun 2021 19:20:40.1966
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: NTdCxOee/ypNsIRmbwJ0opmcbC7Il57OHTrEAiIaAWiFPTSW1P0Ci/MRzKHtWJISYKExeYao2xm3rnBv5jk8PA==
+X-MS-Exchange-CrossTenant-UserPrincipalName: QvfExIq6L1CvoDDA7ZJAAVCoONXwByLDFTL6e2tmb9tMLpYyqDvcgqJG2/m9p5nsKUMVgQsahitbbEhGu7qI0Q==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN6PR12MB1187
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-The df_indirect_read() function is only used for address translation.
-Move this to EDAC along with the translation code.
+AMD Data Fabric registers are defined using a combination of PCI
+function number and offset. Define a struct to hold these values, and
+update the DF Indirect Access function to accept a struct of this type.
 
-Cc: <x86@kernel.org>
+Update the address translation code to include a list of the needed DF
+registers using this new format. Define an enumeration to give the
+registers more human-readable names.
+
 Signed-off-by: Yazen Ghannam <yazen.ghannam@amd.com>
 ---
 Link:
-https://lkml.kernel.org/r/YKJoICQzD/o7ZPBp@zn.tnic
+https://lkml.kernel.org/r/20210507190140.18854-2-Yazen.Ghannam@amd.com
 
 v1->v2:
-* New in v2.
+* Moved from arch/x86 to EDAC.
 
- arch/x86/include/asm/amd_nb.h |  1 -
- arch/x86/kernel/amd_nb.c      | 50 +----------------------------------
- drivers/edac/amd64_edac.c     | 50 +++++++++++++++++++++++++++++++++++
- 3 files changed, 51 insertions(+), 50 deletions(-)
+ drivers/edac/amd64_edac.c | 60 ++++++++++++++++++++++++++++++---------
+ 1 file changed, 47 insertions(+), 13 deletions(-)
 
-diff --git a/arch/x86/include/asm/amd_nb.h b/arch/x86/include/asm/amd_nb.h
-index 455066a06f60..00d1a400b7a1 100644
---- a/arch/x86/include/asm/amd_nb.h
-+++ b/arch/x86/include/asm/amd_nb.h
-@@ -24,7 +24,6 @@ extern int amd_set_subcaches(int, unsigned long);
- 
- extern int amd_smn_read(u16 node, u32 address, u32 *value);
- extern int amd_smn_write(u16 node, u32 address, u32 value);
--extern int amd_df_indirect_read(u16 node, u8 func, u16 reg, u8 instance_id, u32 *lo);
- 
- struct amd_l3_cache {
- 	unsigned indices;
-diff --git a/arch/x86/kernel/amd_nb.c b/arch/x86/kernel/amd_nb.c
-index 23dda362dc0f..5884dfa619ff 100644
---- a/arch/x86/kernel/amd_nb.c
-+++ b/arch/x86/kernel/amd_nb.c
-@@ -27,7 +27,7 @@
- #define PCI_DEVICE_ID_AMD_19H_DF_F4	0x1654
- #define PCI_DEVICE_ID_AMD_19H_M50H_DF_F4 0x166e
- 
--/* Protect the PCI config register pairs used for SMN and DF indirect access. */
-+/* Protect the PCI config register pairs used for SMN. */
- static DEFINE_MUTEX(smn_mutex);
- 
- static u32 *flush_words;
-@@ -177,54 +177,6 @@ int amd_smn_write(u16 node, u32 address, u32 value)
- }
- EXPORT_SYMBOL_GPL(amd_smn_write);
- 
--/*
-- * Data Fabric Indirect Access uses FICAA/FICAD.
-- *
-- * Fabric Indirect Configuration Access Address (FICAA): Constructed based
-- * on the device's Instance Id and the PCI function and register offset of
-- * the desired register.
-- *
-- * Fabric Indirect Configuration Access Data (FICAD): There are FICAD LO
-- * and FICAD HI registers but so far we only need the LO register.
-- */
--int amd_df_indirect_read(u16 node, u8 func, u16 reg, u8 instance_id, u32 *lo)
--{
--	struct pci_dev *F4;
--	u32 ficaa;
--	int err = -ENODEV;
--
--	if (node >= amd_northbridges.num)
--		goto out;
--
--	F4 = node_to_amd_nb(node)->link;
--	if (!F4)
--		goto out;
--
--	ficaa  = 1;
--	ficaa |= reg & 0x3FC;
--	ficaa |= (func & 0x7) << 11;
--	ficaa |= instance_id << 16;
--
--	mutex_lock(&smn_mutex);
--
--	err = pci_write_config_dword(F4, 0x5C, ficaa);
--	if (err) {
--		pr_warn("Error writing DF Indirect FICAA, FICAA=0x%x\n", ficaa);
--		goto out_unlock;
--	}
--
--	err = pci_read_config_dword(F4, 0x98, lo);
--	if (err)
--		pr_warn("Error reading DF Indirect FICAD LO, FICAA=0x%x.\n", ficaa);
--
--out_unlock:
--	mutex_unlock(&smn_mutex);
--
--out:
--	return err;
--}
--EXPORT_SYMBOL_GPL(amd_df_indirect_read);
--
- int amd_cache_northbridges(void)
- {
- 	const struct pci_device_id *misc_ids = amd_nb_misc_ids;
 diff --git a/drivers/edac/amd64_edac.c b/drivers/edac/amd64_edac.c
-index 046b98fcc4fe..e9342d7d693f 100644
+index e9342d7d693f..b94067e3952b 100644
 --- a/drivers/edac/amd64_edac.c
 +++ b/drivers/edac/amd64_edac.c
-@@ -993,6 +993,56 @@ static int sys_addr_to_csrow(struct mem_ctl_info *mci, u64 sys_addr)
- 	return csrow;
+@@ -996,6 +996,11 @@ static int sys_addr_to_csrow(struct mem_ctl_info *mci, u64 sys_addr)
+ /* Protect the PCI config register pairs used for DF indirect access. */
+ static DEFINE_MUTEX(df_indirect_mutex);
+ 
++struct df_reg {
++	u8 func;
++	u16 offset;
++};
++
+ /*
+  * Data Fabric Indirect Access uses FICAA/FICAD.
+  *
+@@ -1006,7 +1011,7 @@ static DEFINE_MUTEX(df_indirect_mutex);
+  * Fabric Indirect Configuration Access Data (FICAD): There are FICAD LO
+  * and FICAD HI registers but so far we only need the LO register.
+  */
+-static int amd_df_indirect_read(u16 node, u8 func, u16 reg, u8 instance_id, u32 *lo)
++static int amd_df_indirect_read(u16 node, struct df_reg reg, u8 instance_id, u32 *lo)
+ {
+ 	struct pci_dev *F4;
+ 	u32 ficaa;
+@@ -1020,8 +1025,8 @@ static int amd_df_indirect_read(u16 node, u8 func, u16 reg, u8 instance_id, u32
+ 		goto out;
+ 
+ 	ficaa  = 1;
+-	ficaa |= reg & 0x3FC;
+-	ficaa |= (func & 0x7) << 11;
++	ficaa |= reg.offset & 0x3FC;
++	ficaa |= (reg.func & 0x7) << 11;
+ 	ficaa |= instance_id << 16;
+ 
+ 	mutex_lock(&df_indirect_mutex);
+@@ -1043,6 +1048,33 @@ static int amd_df_indirect_read(u16 node, u8 func, u16 reg, u8 instance_id, u32
+ 	return err;
  }
  
-+/* Protect the PCI config register pairs used for DF indirect access. */
-+static DEFINE_MUTEX(df_indirect_mutex);
++enum df_reg_names {
++	/* Function 0 */
++	FAB_BLK_INST_INFO_3,
++	DRAM_HOLE_CTL,
++	DRAM_BASE_ADDR,
++	DRAM_LIMIT_ADDR,
++	DRAM_OFFSET,
 +
-+/*
-+ * Data Fabric Indirect Access uses FICAA/FICAD.
-+ *
-+ * Fabric Indirect Configuration Access Address (FICAA): Constructed based
-+ * on the device's Instance Id and the PCI function and register offset of
-+ * the desired register.
-+ *
-+ * Fabric Indirect Configuration Access Data (FICAD): There are FICAD LO
-+ * and FICAD HI registers but so far we only need the LO register.
-+ */
-+static int amd_df_indirect_read(u16 node, u8 func, u16 reg, u8 instance_id, u32 *lo)
-+{
-+	struct pci_dev *F4;
-+	u32 ficaa;
-+	int err = -ENODEV;
++	/* Function 1 */
++	SYS_FAB_ID_MASK,
++};
 +
-+	if (node >= amd_nb_num())
-+		goto out;
-+
-+	F4 = node_to_amd_nb(node)->link;
-+	if (!F4)
-+		goto out;
-+
-+	ficaa  = 1;
-+	ficaa |= reg & 0x3FC;
-+	ficaa |= (func & 0x7) << 11;
-+	ficaa |= instance_id << 16;
-+
-+	mutex_lock(&df_indirect_mutex);
-+
-+	err = pci_write_config_dword(F4, 0x5C, ficaa);
-+	if (err) {
-+		pr_warn("Error writing DF Indirect FICAA, FICAA=0x%x\n", ficaa);
-+		goto out_unlock;
-+	}
-+
-+	err = pci_read_config_dword(F4, 0x98, lo);
-+	if (err)
-+		pr_warn("Error reading DF Indirect FICAD LO, FICAA=0x%x.\n", ficaa);
-+
-+out_unlock:
-+	mutex_unlock(&df_indirect_mutex);
-+
-+out:
-+	return err;
-+}
++static struct df_reg df_regs[] = {
++	/* D18F0x50 (FabricBlockInstanceInformation3_CS) */
++	[FAB_BLK_INST_INFO_3]	=	{0, 0x50},
++	/* D18F0x104 (DramHoleControl) */
++	[DRAM_HOLE_CTL]		=	{0, 0x104},
++	/* D18F0x110 (DramBaseAddress) */
++	[DRAM_BASE_ADDR]	=	{0, 0x110},
++	/* D18F0x114 (DramLimitAddress) */
++	[DRAM_LIMIT_ADDR]	=	{0, 0x114},
++	/* D18F0x1B4 (DramOffset) */
++	[DRAM_OFFSET]		=	{0, 0x1B4},
++	/* D18F1x208 (SystemFabricIdMask) */
++	[SYS_FAB_ID_MASK]	=	{1, 0x208},
++};
 +
  static int umc_normaddr_to_sysaddr(u64 norm_addr, u16 nid, u8 umc, u64 *sys_addr)
  {
  	u64 dram_base_addr, dram_limit_addr, dram_hole_base;
+@@ -1059,8 +1091,9 @@ static int umc_normaddr_to_sysaddr(u64 norm_addr, u16 nid, u8 umc, u64 *sys_addr
+ 	u8 cs_mask, cs_id = 0;
+ 	bool hash_enabled = false;
+ 
+-	/* Read D18F0x1B4 (DramOffset), check if base 1 is used. */
+-	if (amd_df_indirect_read(nid, 0, 0x1B4, umc, &tmp))
++	struct df_reg reg;
++
++	if (amd_df_indirect_read(nid, df_regs[DRAM_OFFSET], umc, &tmp))
+ 		goto out_err;
+ 
+ 	/* Remove HiAddrOffset from normalized address, if enabled: */
+@@ -1073,8 +1106,9 @@ static int umc_normaddr_to_sysaddr(u64 norm_addr, u16 nid, u8 umc, u64 *sys_addr
+ 		}
+ 	}
+ 
+-	/* Read D18F0x110 (DramBaseAddress). */
+-	if (amd_df_indirect_read(nid, 0, 0x110 + (8 * base), umc, &tmp))
++	reg = df_regs[DRAM_BASE_ADDR];
++	reg.offset += base * 8;
++	if (amd_df_indirect_read(nid, reg, umc, &tmp))
+ 		goto out_err;
+ 
+ 	/* Check if address range is valid. */
+@@ -1096,8 +1130,9 @@ static int umc_normaddr_to_sysaddr(u64 norm_addr, u16 nid, u8 umc, u64 *sys_addr
+ 		goto out_err;
+ 	}
+ 
+-	/* Read D18F0x114 (DramLimitAddress). */
+-	if (amd_df_indirect_read(nid, 0, 0x114 + (8 * base), umc, &tmp))
++	reg = df_regs[DRAM_LIMIT_ADDR];
++	reg.offset += base * 8;
++	if (amd_df_indirect_read(nid, reg, umc, &tmp))
+ 		goto out_err;
+ 
+ 	intlv_num_sockets = (tmp >> 8) & 0x1;
+@@ -1153,7 +1188,7 @@ static int umc_normaddr_to_sysaddr(u64 norm_addr, u16 nid, u8 umc, u64 *sys_addr
+ 		 * umc/channel# as instance id of the coherent slave
+ 		 * for FICAA.
+ 		 */
+-		if (amd_df_indirect_read(nid, 0, 0x50, umc, &tmp))
++		if (amd_df_indirect_read(nid, df_regs[FAB_BLK_INST_INFO_3], umc, &tmp))
+ 			goto out_err;
+ 
+ 		cs_fabric_id = (tmp >> 8) & 0xFF;
+@@ -1168,9 +1203,8 @@ static int umc_normaddr_to_sysaddr(u64 norm_addr, u16 nid, u8 umc, u64 *sys_addr
+ 
+ 		sock_id_bit = die_id_bit;
+ 
+-		/* Read D18F1x208 (SystemFabricIdMask). */
+ 		if (intlv_num_dies || intlv_num_sockets)
+-			if (amd_df_indirect_read(nid, 1, 0x208, umc, &tmp))
++			if (amd_df_indirect_read(nid, df_regs[SYS_FAB_ID_MASK], umc, &tmp))
+ 				goto out_err;
+ 
+ 		/* If interleaved over more than 1 die. */
+@@ -1209,7 +1243,7 @@ static int umc_normaddr_to_sysaddr(u64 norm_addr, u16 nid, u8 umc, u64 *sys_addr
+ 
+ 	/* If legacy MMIO hole enabled */
+ 	if (lgcy_mmio_hole_en) {
+-		if (amd_df_indirect_read(nid, 0, 0x104, umc, &tmp))
++		if (amd_df_indirect_read(nid, df_regs[DRAM_HOLE_CTL], umc, &tmp))
+ 			goto out_err;
+ 
+ 		dram_hole_base = tmp & GENMASK(31, 24);
 -- 
 2.25.1
 
