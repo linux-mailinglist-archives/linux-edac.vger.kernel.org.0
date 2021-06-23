@@ -2,49 +2,49 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CDA6C3B20F5
-	for <lists+linux-edac@lfdr.de>; Wed, 23 Jun 2021 21:20:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 22E713B20F6
+	for <lists+linux-edac@lfdr.de>; Wed, 23 Jun 2021 21:20:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230037AbhFWTXH (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Wed, 23 Jun 2021 15:23:07 -0400
+        id S230124AbhFWTXI (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Wed, 23 Jun 2021 15:23:08 -0400
 Received: from mail-dm6nam12on2041.outbound.protection.outlook.com ([40.107.243.41]:25341
         "EHLO NAM12-DM6-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S230092AbhFWTXF (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Wed, 23 Jun 2021 15:23:05 -0400
+        id S230121AbhFWTXG (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Wed, 23 Jun 2021 15:23:06 -0400
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=kezDkbU6u5PJBgp82l1vf7uzF/CBd31EY7ihiTET3LFRCMe0Pq1hLqeaNZUzhNKIEGFo3ahi/5VYoNCeOryDkhHgmoHDSzBe54KruPoIQGnxdwSoEbHtXy7nzGH5ZslFx4RB72/IVMa6TCYYw0fpu3XIwkd7UhbpOm9xEZ5lAlEEkqyWDEMKEx3vWrN3aSK11/yW22Z13k9yujQX77WZrs3Z7crGyN1MCA6ZLYpEfPyFJKYG4+QbeyOEZf+1y0aojIfH4gwLIzAThuN1y3ZY2gBqMrdg638IVyyOUnpPbdbd2aUrtuT1UQviURM0+LQCf7pN3guKaSaAPWcjyGm+CQ==
+ b=BQIlmQzfd3G2sl6XCuO9665zYwMNpHWdrlgya3W0F/CmkQme8J93pfy9OK3jBMCPXCOtm/YTue5yyy+2GByOQ4aI0cnLR6P5yVsshGMtZ5jeKOVF3/1BICDEx3Dt4T1BWc2TOVhW+CGG/1s7PAdMFhMrA1ouNiPIUAhGmMwK0k2dfs5Oad6PHSdiHSGAICveGBFm332xMCBWRxxSf7LPsh5BtMtuI1WatKO30H9rEiJE84DjTmP9todLWQlzee/xaql0exo2W6ZhXomIfirRWC8OFH5pyda0aKbBGYfK3aZQe6HhU6pzrLBWgJ/atd5+YoIFNJxPZCu5o5MfiI6bbA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Bm6JMBN1zZ2Me7i4RL9T3hauuispVZXY0i4kiWk1vV4=;
- b=k5X0RaPGd9Q1F4uaWHkwQS3FLdblQonMc51M7JAOcCFLVhRXFEDrIk6Auk7g7k6V1PhGjX1MmbS3/Y72L8DmTAwDGJ69seYlCJv7zTfq/sAyZcpK2k2MtEUhd1Fdi+M82YmfNPiycXiy4kdzvhpa2nMx4AcEed5DeRhoPuQ94WKH7Iw88u6XiLIAX2Y8vCiQyO2pshpTCtamB6h8BvRUWB7Db3fueMiJEniP2xY0tDxs6Pt/MHhS6pP+6IvjmKE5yzjhYEOGhAXzxjspcqQze/OL54+dKcusMV2LItdXy6iRetLJwtaNvbVb74e6rmbZYzMTRbzNZZbvZ39mOWOhTA==
+ bh=lyAe7Wdg51pdDCo4Qmslwb22oJN7e+CgjyR382G1zx8=;
+ b=Hxv8QUoJJxE+iJxT8gDg3S88YELkPVpM2uu6+uw5fr895XMiLpTTR5MD0l6LiOXirYiFTG7+JrFdIfL/lwrcbVIV+AGwhN6upK4KahWKNwQvXytNg5UmAigvVopPtwsTTe8rez2S0P2WpnJnmJS1/65Y2/gKu0MOo9uWpj3XOt1T0i8biBpX7ut8mZx5sJY9UV0SaXKCMoE2Dg0PfPfjFXJUOntjzmi9ZFZq/clVUM3G6eE5Zi3mrioQwLtYSvzqLTtKZIIaSm08//qRqZvmepSFtHzBNmrRj6jgvkIAB/VJpaSzRqxPhXHTEzdgfjbwMfOvrcFy47/ynRhBTobrTQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
  header.d=amd.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Bm6JMBN1zZ2Me7i4RL9T3hauuispVZXY0i4kiWk1vV4=;
- b=d+ObPo1QNckS+QA+//wynWjjdrSrv6LCuLkD5cXoL8YtRcbvyR7x5t7j/ITdgiTlabzY5OEypePPeIeiKQrKyL6v3JByl8ikUUEMRjNhY0XK0GIAyVuCcw55YjrNakCIYQe+OgfuUtMzwqK7asGtr6FQjGpaHQO/LYMyP5D712A=
+ bh=lyAe7Wdg51pdDCo4Qmslwb22oJN7e+CgjyR382G1zx8=;
+ b=HtTGnptTvvSVEOhZf7koTQWheFNmsQnrZXYFqdjPjfAAFFyyPouwMkzBNAKscGTZ0kHc/kRiX+XhtV4TEzJdjgPUQUi9wJrIMWnlNccuW4YcFFwefTlawcxc4vweaMBJo4oV3vuSgeSVksY/AGmt2Y4u6HyvgcHfn8cPfivWDdY=
 Authentication-Results: vger.kernel.org; dkim=none (message not signed)
  header.d=none;vger.kernel.org; dmarc=none action=none header.from=amd.com;
 Received: from BN8PR12MB3108.namprd12.prod.outlook.com (2603:10b6:408:40::20)
  by BN6PR12MB1187.namprd12.prod.outlook.com (2603:10b6:404:1b::19) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4242.19; Wed, 23 Jun
- 2021 19:20:45 +0000
+ 2021 19:20:46 +0000
 Received: from BN8PR12MB3108.namprd12.prod.outlook.com
  ([fe80::c099:e7a1:249a:a8a2]) by BN8PR12MB3108.namprd12.prod.outlook.com
  ([fe80::c099:e7a1:249a:a8a2%7]) with mapi id 15.20.4242.025; Wed, 23 Jun 2021
- 19:20:45 +0000
+ 19:20:46 +0000
 From:   Yazen Ghannam <yazen.ghannam@amd.com>
 To:     linux-edac@vger.kernel.org
 Cc:     linux-kernel@vger.kernel.org, bp@alien8.de, mchehab@kernel.org,
         tony.luck@intel.com, Smita.KoralahalliChannabasappa@amd.com,
         Yazen Ghannam <yazen.ghannam@amd.com>
-Subject: [PATCH v2 08/31] EDAC/amd64: Define function to read DRAM address map registers
-Date:   Wed, 23 Jun 2021 19:19:39 +0000
-Message-Id: <20210623192002.3671647-9-yazen.ghannam@amd.com>
+Subject: [PATCH v2 09/31] EDAC/amd64: Define function to find interleaving mode
+Date:   Wed, 23 Jun 2021 19:19:40 +0000
+Message-Id: <20210623192002.3671647-10-yazen.ghannam@amd.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20210623192002.3671647-1-yazen.ghannam@amd.com>
 References: <20210623192002.3671647-1-yazen.ghannam@amd.com>
@@ -56,169 +56,175 @@ X-ClientProxiedBy: BLAPR03CA0107.namprd03.prod.outlook.com
  (2603:10b6:408:40::20)
 MIME-Version: 1.0
 X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from yaz-ethanolx.amd.com (165.204.184.1) by BLAPR03CA0107.namprd03.prod.outlook.com (2603:10b6:208:32a::22) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4242.19 via Frontend Transport; Wed, 23 Jun 2021 19:20:44 +0000
+Received: from yaz-ethanolx.amd.com (165.204.184.1) by BLAPR03CA0107.namprd03.prod.outlook.com (2603:10b6:208:32a::22) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4242.19 via Frontend Transport; Wed, 23 Jun 2021 19:20:45 +0000
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: cfb205e6-371e-4188-b3d2-08d9367c0000
+X-MS-Office365-Filtering-Correlation-Id: 98d3f658-2783-4151-6d57-08d9367c0088
 X-MS-TrafficTypeDiagnostic: BN6PR12MB1187:
 X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <BN6PR12MB11872A5E5E8715A31C5215E0F8089@BN6PR12MB1187.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:6790;
+X-Microsoft-Antispam-PRVS: <BN6PR12MB1187DC1237BADE60B1A26848F8089@BN6PR12MB1187.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:8273;
 X-MS-Exchange-SenderADCheck: 1
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: yQuf472g67q5UIyBfcNUGDsHyLUFw9qCF7qRddAPlNZTw3C2ZX4vlUSyijZ3J1gfxFvcF8K2SaBgC0cxRMUBsWTz6pITECTL+59sDTmkELt/iSrO4J6j9mXgoM/JBRuJf0mbaLavVK9H66PZ33fY7oGHBIaCSfLfFSmdaWUAsk471w7VJG66ElEtxxrKL4GZN+Ax7yRIJOiI4G7taa8FF9aK83rvWfRAguBCQBhWCkuHY7MYNH0NNQrDfD6Z1px8r0I7TAVzhb3gDrFPatvzrajAIhnL9pTV9SXkyX+Vgr3jBqnI14eVS0R1QiJPrA3YJeMVzBh6E44S3dmS0rweDQd5O8z/mx3wPeysAjBujH0yk7haDRV4LQ5/tcwD7eQmYtEjJLQ+Hf83htabyGVDDXmaGcJFADc+o+/wBQ7CbNAlnCVhZ7Mybdadsb1D3XFSDp5lpQIUB7h0oEYrb4O3AQYYS7iIYPbxDHGvzw3m5efPsK+C4ndjeZHUT27ByfhqkjJ8FYlgFA7xOnaOL/Skoq4jpF08K4zQq9xG8/yBmG2cTxRR1Tf1RQNvFYE8xJAj1x+FihxfWlX5/t9WspoXjftwD1Q4bFe+NcbBPKQzGVN3H4nt3PPUtHiOQahX9EHoAAcNIw6lL9MvMm9v0HrXK6b4bhzN/yjIejp48Ik4kN0nCcyd+BY7VCMz+JoNLhLVJUMOnS8SxuN9W2dKWWBxki0zB/pLvvpC3zyN+ENev6ufb/iR98Sbw8PzVKxTetkQ3c0wnd2ZzyMeoHyk2iuaoWM+MVThyk3crhhrTaXTEvll9voyOK8P+nH5j9O2Stmqs2YjoRragaiEcYkYLREP0A==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3108.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(346002)(136003)(376002)(39860400002)(366004)(396003)(966005)(36756003)(38350700002)(38100700002)(44832011)(83380400001)(6916009)(26005)(7696005)(5660300002)(186003)(16526019)(66946007)(6486002)(4326008)(52116002)(8676002)(478600001)(6666004)(1076003)(2906002)(86362001)(66476007)(2616005)(66556008)(8936002)(316002)(956004);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: TVIrasbtS43dmBPxS8ick7fPq9TZHrLrSs9HPNpECBGXVYdlTdPtqex172I5ekKj/ihFWN6NkOfFw2xW4j574YNm5pz6mjmxZosGjAzS7VyAhcPN6Szl8ZJ6eaYqVcMBD4b6RhLQ1MYBBLqp/S3agezO0Ps9yncK3/F4cGkWUscJ+U88e5T+5zXdoxWTtGW6GqDwpbh2i8WlZPF4+2inWK3J5bdrCpsA9vz8GgBF678wFKypTHR8RGdsS9D6EAm4RPljKzTBNZQCIND3OJrcxM/e7Nabus3c4BZq8mUoRkRMEPEvCg15XfXEomR2oQW06TWBDaWS6vuj9TSKguLdvXg5whzR+AwB/BlSeSJh3q6cK6v43FjCnjEVunk89+KSCoTi5OLgxnCHnFfQmcu7TiclOup5jwYDrrydtO+k5/loVrhRka/TzfrLx7qb0V5PVcvDn61aHcZ0D0YL/eQtK5U62ENbcaGDCAnwWWiWOJgdsJSsLX7XMKdRoBvwVPy4QTEEcm4ax0WhoqxlsKO/3t2jbt2qQeqWjjFS+TzmWpB4/RKNG0/OjDwWAf6kcmKrj2PA6yCTo7pjfEIhbatVcnfok3QS/o0YM56Az8gXkUIEC0NDJ7ytyaucdT6tV1oO4rjWvSS9oNSYHgEdUXEzpvXBHcWJDN73ag4SxzSEQ95HbCRDLDpq+H6XEBEjxPjPErJKDs1Rb7u2vyVMHV/SYMkA+4XiJxFFFNl1ol6F/mAvjgmEVDXtCl+SNA19N2hwdw2w0doxSqF8plofB2MXYcGacvld3r/ty1aiaYAHn67n5AcNyHonkYMFSQaEWKKVKxmwldKD/SuYqJsXg8w7XMlf887/Gr5M4yTgW4sG92A=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3108.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(346002)(136003)(376002)(39860400002)(366004)(396003)(966005)(36756003)(38350700002)(38100700002)(44832011)(83380400001)(6916009)(26005)(7696005)(5660300002)(186003)(16526019)(66946007)(6486002)(4326008)(52116002)(8676002)(478600001)(6666004)(1076003)(2906002)(86362001)(66476007)(2616005)(66556008)(8936002)(316002)(956004)(37363001);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?1uuRZtpyoQUJpZGh9w2eDFPirnU6q8AaMQIrwzIJhBGWcXeZMvPP/fy6kwKr?=
- =?us-ascii?Q?4Y5sI+nOzG8pxOppsDr+2RtOqs4qTkSnPcjZ4B6RZwhL4eWE3/CuHST2mW0X?=
- =?us-ascii?Q?j8QONBcB09838r7C4bK7e3FAOu7MoA+qeCZyXpndtrxUS1P+LIB2mm1WcBQ+?=
- =?us-ascii?Q?iHV/ng4tqGmrY2Wgmx7dCAvKsBVnVqFJUXfpJsYQRDxkWW/0NJt1lMRtPLGx?=
- =?us-ascii?Q?x6LdOv1JK9MXHPTYBvkjxVCLGugJuXGFEHDeaQf3f/ixE6sgnUIWye9Sr/3C?=
- =?us-ascii?Q?MOGCs0gMWrM8N/4vTMznqP4JHasAATOhSQFPG9F9LRkfSw6TxrNrLvJRx7g6?=
- =?us-ascii?Q?2/qsY4eMu/5lzSYDjAtaGfJcYyAr/JBnhu7V0EwvBoaB5sAv58M1J2htRmzi?=
- =?us-ascii?Q?Sba3qY7cGkwwytsA1VN52IjEHiXbm95UrHsget6XAdgjMA6ZGHIhIhsNE/WF?=
- =?us-ascii?Q?KRtBEK+hp6g8+ZtZIPloAo6TR+p1tWWCGln1O8aY1qmU0bq9jwTHrw7oYppm?=
- =?us-ascii?Q?/gyYMKDDnCABc/2NJduwnYgEo/p+BpBvcLpPtOMlM+a2fxB6OnTZXufzzvoq?=
- =?us-ascii?Q?8inTMFJWMukmG0YZx9+MnLDipi0N6a9HXMlmtzHeVkrRo6N/i3wAMTP+Krsv?=
- =?us-ascii?Q?BTosb9tuJBkL67MSm9t9c6V0hgpFRuyjeDPbNBIfHD7Gprq2u6Lvz4LYUGBK?=
- =?us-ascii?Q?o/sEQ0Fbxd3kvUexpO/fDRJSbPNq4sOYc0JybT2BubHJSb4TbpkQI3Kp8Zsb?=
- =?us-ascii?Q?FkZNzy83aLimfKN3iOzJUe197kAxnTiP7w3jA77Je/jZbuCWRP3lOkomemEA?=
- =?us-ascii?Q?bNgDVMNU/LGYCiBHnnYlJ4i7RPVfGroX6Jr7yM9PjdsTm4N+3ISVjWBXS1eL?=
- =?us-ascii?Q?6WnkVSjIlyG+b5b3BtRlFZoDD42rX3ZrjY3fNcZnfCo9sdpRzs5fOdktDDRs?=
- =?us-ascii?Q?MMr5cHnXX12LDFUyrhUMKmeUIi0hP+BTUU7jKLfykAzCdLPGz7QxoLJGZi1W?=
- =?us-ascii?Q?Fud/XN44HR5ruj8aCiUF2SyUcYN4fc68tGN8oGauRh3SVMBeejXrJ/OJ0UkR?=
- =?us-ascii?Q?N/D6TXSOyruDsw/LItFVLKGmXl0HLREtAa6Kj6/6J/Mp4o0LVK5FJyXkLCwr?=
- =?us-ascii?Q?U6bzEtg9jFmE4BjtgcYWMj41scnvWnI/2c35VRoreAfogDc1jskCTL8IbEDK?=
- =?us-ascii?Q?vA1EWsxZ9dg6uZj3eg6WmgIqdQ9YJ5ATrOr9DPEenPeOJ/1djLEEPiHNCPjM?=
- =?us-ascii?Q?/OPGQmMm3R09bdGlqawZLY27GWZyvgxAYz9pgnMEj4pcveluKH2D0CqCmPTh?=
- =?us-ascii?Q?jIQuu6jJjanebgpeUAhpQG71?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?Lr2Uc98ZhxLqPKz2HEfQ895j5jM10ais5w6D7sESFwwADlgwRojUo7S8yh03?=
+ =?us-ascii?Q?3enXITF8776uPivVHZOhd/l07L+CyqFSxplYWYc+Wt3pj/GAwWvpXo8WoV9K?=
+ =?us-ascii?Q?A9530TDOjCGamZhfYvxxVLCq6zxaBvWFTq4WiqJOedGSv3pwEWktYmatG3nf?=
+ =?us-ascii?Q?zN6GyXke2602BXvngFMCwa9glgujJ4nnheXNzFNGCbhStL/I3pR6R8ZgPkcH?=
+ =?us-ascii?Q?s/LyO8uKG3mLtCzv4O0tnaSqkW/JzpMn6UQTnJKsYZvxg897X7190dhZB1Aj?=
+ =?us-ascii?Q?NaVjBTmj+fFL/SAULwqIXPYVeRsIh9PqJjfhIlDJDsiQTwDSpRw1AA4+KfxH?=
+ =?us-ascii?Q?TriJA0f2QArWmsAuyDFIwWibsQJqbUA/o7mBEicomv1xE9MzM3G8hUblr/ih?=
+ =?us-ascii?Q?oZacCtTGRZ/jwCVbX6apbFkIFpyLTRhUK87k+GG2AYgjJxrN8ePkJQuV5hwF?=
+ =?us-ascii?Q?lOGvn8K7iBCN3jex/n4ahmLFXzicZAQXxD4M/Qdl25hELndg9fToMkNGokpU?=
+ =?us-ascii?Q?IfYZl2lsm5B3xFV3k6BOBctt92PDmSJc/KVf2Kj9sGzQGmUyyXSh2VJ9zptx?=
+ =?us-ascii?Q?aNowvXVHhEz4hUG3n+HWkqMOkZY4V72fFM8PKXrY4JJkVi2+SHNppxXv0fcY?=
+ =?us-ascii?Q?5HwC1kmtK3YAWMRdKfk+lVMgYhMYiY8/Fet7TmMY5Gd38f3MAmO0Jtv3A+3E?=
+ =?us-ascii?Q?IugQazibtzCmZJPzcm8HyOO+5CaCmg4nfC4LahKA5mkUcyVSEr0B8iefkKtv?=
+ =?us-ascii?Q?jxGazKvhlP+T2VzhwxaAAUCweJK1vHc/atEE2PPA3NCLAm4AzFsC4bU8SGMi?=
+ =?us-ascii?Q?xZsM9C5LOaD094LYcEn4iOk91jZ9IHkEYuiiQeCAn/4YIbYm+ioMB2HYfc4s?=
+ =?us-ascii?Q?SHn/cpckBAjGskOcayn3FxHdi98ck9vF815U44bl5ScTKlIEJ+yzoB49N5JH?=
+ =?us-ascii?Q?TP0BJ+IPsyZYkQadfFrcJPzK5V+zFsgvyUKfryNViZTqVASgyC2GAF8ZoYSR?=
+ =?us-ascii?Q?GOU51+AHplvaZlFxpjXtTwd98mSLvefGmU5x76SV5sH4JeyJhjupgVpL6lyB?=
+ =?us-ascii?Q?68fujcrTOlO3Fjnc4VeUA+xnVWEBgXItfW8qaq6bo2ECgfT0eDxZg4kBZFTX?=
+ =?us-ascii?Q?iwEPkLNXMljWvzx5CiWJdSbGv4w2bzx0aFL6IKOu5Vwt9jvTJRbZQ5eVj+1N?=
+ =?us-ascii?Q?HZpzrwNJU/pNSiAp0CxLwrvWQaIsBnRwSEWHKSB/qdSiwTm4+48z+GugjHX8?=
+ =?us-ascii?Q?tg1i0u05skmDdef/QDcb1/JtX5hNQYWdCYQsVd736aVL/j2qYKf9u0Payqg9?=
+ =?us-ascii?Q?fbGg3C1lsXeaHJ3/j7O5zJnn?=
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: cfb205e6-371e-4188-b3d2-08d9367c0000
+X-MS-Exchange-CrossTenant-Network-Message-Id: 98d3f658-2783-4151-6d57-08d9367c0088
 X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3108.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Jun 2021 19:20:45.5515
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Jun 2021 19:20:46.3930
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: EGO3lXPLVu9S85q34TLx6LoU41SL1Q5obpkCTILzCNewu6lQAq8Vnt7bZDWrnqLTllnAkisyWKzsHQqoZa2kYQ==
+X-MS-Exchange-CrossTenant-UserPrincipalName: f+SCa/yRfZtSIaUpyubsWED3U9rXOy6/f0aya0d1gBctxos9XaovKtFi4dHuy4EKs0RTHJpFo+AqGMU7wgwOZA==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN6PR12MB1187
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-Move the reading of the base and limit registers into a helper function.
-Save the raw values in the context struct as they will be parsed later.
+Define a helper function to find the interleaving mode. Define a
+DF2-specific function now. Future DF versions will have their own
+functions.
+
+Use an enumeration for the interleaving modes to give a human-readable
+value. Save the interleaving mode in the context struct, since this will
+be used in multiple functions.
+
+Multiple interleaving modes support hashing, so save a boolean in the
+context struct to check if hashing is enabled.
 
 Signed-off-by: Yazen Ghannam <yazen.ghannam@amd.com>
 ---
 Link:
-https://lkml.kernel.org/r/20210507190140.18854-5-Yazen.Ghannam@amd.com
+https://lkml.kernel.org/r/20210507190140.18854-6-Yazen.Ghannam@amd.com
 
 v1->v2:
 * Moved from arch/x86 to EDAC.
+* Add new function to data_fabric_ops.
 
- drivers/edac/amd64_edac.c | 58 +++++++++++++++++++++++----------------
- 1 file changed, 34 insertions(+), 24 deletions(-)
+ drivers/edac/amd64_edac.c | 35 ++++++++++++++++++++++++++++++++---
+ 1 file changed, 32 insertions(+), 3 deletions(-)
 
 diff --git a/drivers/edac/amd64_edac.c b/drivers/edac/amd64_edac.c
-index 389f0621e885..867ab32caab2 100644
+index 867ab32caab2..93a4ce9eb735 100644
 --- a/drivers/edac/amd64_edac.c
 +++ b/drivers/edac/amd64_edac.c
-@@ -1083,6 +1083,8 @@ static struct df_reg df_regs[] = {
+@@ -1079,8 +1079,16 @@ static struct df_reg df_regs[] = {
+ 	[SYS_FAB_ID_MASK]	=	{1, 0x208},
+ };
+ 
++/* These are mapped 1:1 to the hardware values. Special cases are set at > 0x20. */
++enum intlv_modes {
++	NONE		= 0x00,
++	NOHASH_2CH	= 0x01,
++	DF2_HASH_2CH	= 0x21,
++};
++
+ /* Use "reg_" prefix for raw register values. */
  struct addr_ctx {
++	enum intlv_modes intlv_mode;
  	u64 ret_addr;
  	u32 reg_dram_offset;
-+	u32 reg_base_addr;
-+	u32 reg_limit_addr;
+ 	u32 reg_base_addr;
+@@ -1088,10 +1096,12 @@ struct addr_ctx {
  	u16 nid;
  	u8 inst_id;
  	u8 map_num;
-@@ -1139,6 +1141,30 @@ static int remove_dram_offset(struct addr_ctx *ctx)
- 	return 0;
++	bool hash_enabled;
+ };
+ 
+ struct data_fabric_ops {
+ 	u64 (*get_hi_addr_offset)(struct addr_ctx *ctx);
++	int (*get_intlv_mode)(struct addr_ctx *ctx);
+ };
+ 
+ static u64 get_hi_addr_offset_df2(struct addr_ctx *ctx)
+@@ -1099,8 +1109,26 @@ static u64 get_hi_addr_offset_df2(struct addr_ctx *ctx)
+ 	return (ctx->reg_dram_offset & GENMASK_ULL(31, 20)) << 8;
  }
  
-+static int get_dram_addr_map(struct addr_ctx *ctx)
++static int get_intlv_mode_df2(struct addr_ctx *ctx)
 +{
-+	struct df_reg reg = df_regs[DRAM_BASE_ADDR];
++	ctx->intlv_mode = (ctx->reg_base_addr >> 4) & 0xF;
 +
-+	reg.offset += ctx->map_num * 8;
-+
-+	if (amd_df_indirect_read(ctx->nid, reg, ctx->inst_id, &ctx->reg_base_addr))
-+		return -EINVAL;
-+
-+	/* Check if address range is valid. */
-+	if (!(ctx->reg_base_addr & BIT(0))) {
-+		pr_debug("Invalid DramBaseAddress range: 0x%x.\n", ctx->reg_base_addr);
-+		return -EINVAL;
++	if (ctx->intlv_mode == 8) {
++		ctx->intlv_mode = DF2_HASH_2CH;
++		ctx->hash_enabled = true;
 +	}
 +
-+	reg = df_regs[DRAM_LIMIT_ADDR];
-+	reg.offset += ctx->map_num * 8;
-+
-+	if (amd_df_indirect_read(ctx->nid, reg, ctx->inst_id, &ctx->reg_limit_addr))
++	if (ctx->intlv_mode != NONE &&
++	    ctx->intlv_mode != NOHASH_2CH &&
++	    ctx->intlv_mode != DF2_HASH_2CH)
 +		return -EINVAL;
 +
 +	return 0;
 +}
 +
- static int umc_normaddr_to_sysaddr(u64 norm_addr, u16 nid, u8 umc, u64 *sys_addr)
- {
- 	u64 dram_base_addr, dram_limit_addr, dram_hole_base;
-@@ -1152,8 +1178,6 @@ static int umc_normaddr_to_sysaddr(u64 norm_addr, u16 nid, u8 umc, u64 *sys_addr
- 	u8 cs_mask, cs_id = 0;
- 	bool hash_enabled = false;
+ struct data_fabric_ops df2_ops = {
+ 	.get_hi_addr_offset		=	&get_hi_addr_offset_df2,
++	.get_intlv_mode			=	&get_intlv_mode_df2,
+ };
  
--	struct df_reg reg;
--
+ struct data_fabric_ops *df_ops;
+@@ -1176,7 +1204,6 @@ static int umc_normaddr_to_sysaddr(u64 norm_addr, u16 nid, u8 umc, u64 *sys_addr
+ 	u8 num_intlv_bits, hashed_bit;
+ 	u8 lgcy_mmio_hole_en;
+ 	u8 cs_mask, cs_id = 0;
+-	bool hash_enabled = false;
+ 
  	struct addr_ctx ctx;
  
- 	memset(&ctx, 0, sizeof(ctx));
-@@ -1170,22 +1194,13 @@ static int umc_normaddr_to_sysaddr(u64 norm_addr, u16 nid, u8 umc, u64 *sys_addr
- 	if (remove_dram_offset(&ctx))
+@@ -1197,6 +1224,9 @@ static int umc_normaddr_to_sysaddr(u64 norm_addr, u16 nid, u8 umc, u64 *sys_addr
+ 	if (get_dram_addr_map(&ctx))
  		goto out_err;
  
--	reg = df_regs[DRAM_BASE_ADDR];
--	reg.offset += ctx.map_num * 8;
--	if (amd_df_indirect_read(nid, reg, umc, &tmp))
--		goto out_err;
--
--	/* Check if address range is valid. */
--	if (!(tmp & BIT(0))) {
--		pr_err("%s: Invalid DramBaseAddress range: 0x%x.\n",
--			__func__, tmp);
-+	if (get_dram_addr_map(&ctx))
- 		goto out_err;
--	}
++	if (df_ops->get_intlv_mode(&ctx))
++		goto out_err;
++
+ 	lgcy_mmio_hole_en = ctx.reg_base_addr & BIT(1);
+ 	intlv_num_chan	  = (ctx.reg_base_addr >> 4) & 0xF;
+ 	intlv_addr_sel	  = (ctx.reg_base_addr >> 8) & 0x7;
+@@ -1224,7 +1254,6 @@ static int umc_normaddr_to_sysaddr(u64 norm_addr, u16 nid, u8 umc, u64 *sys_addr
+ 	case 7:	intlv_num_chan = 4; break;
  
--	lgcy_mmio_hole_en = tmp & BIT(1);
--	intlv_num_chan	  = (tmp >> 4) & 0xF;
--	intlv_addr_sel	  = (tmp >> 8) & 0x7;
--	dram_base_addr	  = (tmp & GENMASK_ULL(31, 12)) << 16;
-+	lgcy_mmio_hole_en = ctx.reg_base_addr & BIT(1);
-+	intlv_num_chan	  = (ctx.reg_base_addr >> 4) & 0xF;
-+	intlv_addr_sel	  = (ctx.reg_base_addr >> 8) & 0x7;
-+	dram_base_addr	  = (ctx.reg_base_addr & GENMASK_ULL(31, 12)) << 16;
- 
- 	/* {0, 1, 2, 3} map to address bits {8, 9, 10, 11} respectively */
- 	if (intlv_addr_sel > 3) {
-@@ -1194,14 +1209,9 @@ static int umc_normaddr_to_sysaddr(u64 norm_addr, u16 nid, u8 umc, u64 *sys_addr
- 		goto out_err;
+ 	case 8: intlv_num_chan = 1;
+-		hash_enabled = true;
+ 		break;
+ 	default:
+ 		pr_err("%s: Invalid number of interleaved channels %d.\n",
+@@ -1325,7 +1354,7 @@ static int umc_normaddr_to_sysaddr(u64 norm_addr, u16 nid, u8 umc, u64 *sys_addr
+ 			ctx.ret_addr += (BIT_ULL(32) - dram_hole_base);
  	}
  
--	reg = df_regs[DRAM_LIMIT_ADDR];
--	reg.offset += ctx.map_num * 8;
--	if (amd_df_indirect_read(nid, reg, umc, &tmp))
--		goto out_err;
--
--	intlv_num_sockets = (tmp >> 8) & 0x1;
--	intlv_num_dies	  = (tmp >> 10) & 0x3;
--	dram_limit_addr	  = ((tmp & GENMASK_ULL(31, 12)) << 16) | GENMASK_ULL(27, 0);
-+	intlv_num_sockets = (ctx.reg_limit_addr >> 8) & 0x1;
-+	intlv_num_dies	  = (ctx.reg_limit_addr >> 10) & 0x3;
-+	dram_limit_addr	  = ((ctx.reg_limit_addr & GENMASK_ULL(31, 12)) << 16) | GENMASK_ULL(27, 0);
- 
- 	intlv_addr_bit = intlv_addr_sel + 8;
- 
+-	if (hash_enabled) {
++	if (ctx.hash_enabled) {
+ 		/* Save some parentheses and grab ls-bit at the end. */
+ 		hashed_bit =	(ctx.ret_addr >> 12) ^
+ 				(ctx.ret_addr >> 18) ^
 -- 
 2.25.1
 
