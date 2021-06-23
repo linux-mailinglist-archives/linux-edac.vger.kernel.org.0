@@ -2,49 +2,49 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A8B53B210F
-	for <lists+linux-edac@lfdr.de>; Wed, 23 Jun 2021 21:21:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B5A1F3B210E
+	for <lists+linux-edac@lfdr.de>; Wed, 23 Jun 2021 21:21:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230180AbhFWTXr (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Wed, 23 Jun 2021 15:23:47 -0400
-Received: from mail-dm3nam07on2069.outbound.protection.outlook.com ([40.107.95.69]:36384
-        "EHLO NAM02-DM3-obe.outbound.protection.outlook.com"
+        id S230092AbhFWTXp (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Wed, 23 Jun 2021 15:23:45 -0400
+Received: from mail-co1nam11on2042.outbound.protection.outlook.com ([40.107.220.42]:24416
+        "EHLO NAM11-CO1-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S230241AbhFWTX0 (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Wed, 23 Jun 2021 15:23:26 -0400
+        id S230357AbhFWTXY (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Wed, 23 Jun 2021 15:23:24 -0400
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=CJV5TS3NsDxYtDWqCgOZ3HG8zTIK/TI4ECxJPl/Lonuj2LHTjYF/ulutvAYfbFanOXSQI2cTV8XA8HxAI2X1hfS1hW8yaqvBzDl9WORE1OVIbv6uwNNladwNLW8jMCY9OYEjymKD9iBfvt2AqcYXcpNr0hS90kVAGbFsxxRH+M/2dpfpADX3OGXS8vAnuKTs+E0E1+Hzlhsdu6GlD4zIuoMghiUsDr65TbnoamYRh6h5ubbn6SCix1g0uedBuaKSj9tafwqbpZArsU2ye7PAI1JzeY2iicyEazYSoGszvk5XP6ntjKSe8zS80wthXxrXVicg5Gmmg5dmEDbxeRvrOw==
+ b=S8BMx1RQaOUV2IZqcPZM164nowdECEjJ9kNKolkBgLOtvMnPOQir7z2lbPhPZ6hhVbHkOH0YgrtO+FyV812OkHozd+1qJswHBNoi+d92gRZcY579jLs/9avYHS8iTRqTwjAq1m6UJVJULhNo5HEoAMsHeP3A2mN+lG9/9+ht/LSUZgEWw3/tKXfOvYDm05W3RvoIMmQTKN/mZgElojfvAl+TBKZLiJfk2/XCBb+UlMr50darArT5gxlW4+k5B9iGrPy9JX3Z5ZMe757BlvBHrQvmllljG28UANQlJpwshmLONBJ4eZSlAizK3uAz0FKHByM7IPHHo7hVStfC+JP3aQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=vBntQCmbYa6u+pqJZnRO0gzF5Ml0y/epOyzcJfT0RPU=;
- b=ZErcQWBG2vrlQrjPVt5A2vP9pkT07KgG0g+AIlNBRKy3r59nhHNef9Jv9VRofS27KDTlBqXeog1GY8oNHk6wvTcd2tQWOHQxeKoUcAAWHtBljhgXTAnl3MAMUdEZmNX8xfDkaU/1yxJt4Xagl4M979eGtsW3mxPIV4mOgVmxAryoMcLYPR3sta2LIBRCZY2dR3hozjaxN58N1eCIHHVseMhgCkgwVwMbITqw7VHSwDShiq+olQFkBQmGXr2KJf6rV2aZtSVET0vbliDYzUlhiHk5f5JIaFUrDHJHw/kdH1B/XGLWgBmBS4+ajEfWi8HHDQRUfxs2x7ShjGugKOztxA==
+ bh=VKpZ++iLGBTm/PfPe7a3yquXm/W6vyQt/gFHJGFuhL0=;
+ b=JXQDY9llVWCyFnE6wFcbJtOF2NOqKcjtZEC0vo/cx56BRMD6YcTvQ17m0723as9V+AolfY8cQZjZiZ/CztP4HT2uQtqLDsiq6UteODSkAE0gff96qg1lENnTV7/pJYki6GWbhtCRDnTyxMX0JsucTA2G++bz+/2YXarzXi5nEMaNPpKs3/vQTxagBkQodinDPMfctRysfxEPy5blOTByfV4HNatgnS33LkFkCSKNQFCBoDfdGxIVcQdTkxjU3t1x3FNTi2n3vM82+OrM+PkSMCYAVfPdL+BkHGevatA7gP8FgwalmyrpuzQNVYUOfMoUGtze5XNMKPauYY0NIueZmg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
  header.d=amd.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=vBntQCmbYa6u+pqJZnRO0gzF5Ml0y/epOyzcJfT0RPU=;
- b=jyO6vwASFJocTPg6XXS/i8s8JMASBbrbakX38L6LWZ9Nq8OW5lI/zPa9eRKA+DrY7hIazb9MvSeMQA1VVCy+5HunS7/zKY1ItN+gmhdkftFpBSR3YwetP0BFSw2CHbaCoqzd76rHQxbGmZo4j5bF+b5O5XCRiv9nMe59Qbj8aKw=
+ bh=VKpZ++iLGBTm/PfPe7a3yquXm/W6vyQt/gFHJGFuhL0=;
+ b=OsckuvDYDaaNLezMEo4BoJWXga0HLIPTWC6gniBuVeUHj1nkYkFHyp8mItOkUqKGRakFmIjkCzLQIqcjO+DUXCo5k4Bsmx0f+/+hjm05D3YSgVe1seAxPWTn/tz+8C42JWyQDFTrtgLyogalCEOfnZvfnHpmwBPs1oD2vJ4U2zU=
 Authentication-Results: vger.kernel.org; dkim=none (message not signed)
  header.d=none;vger.kernel.org; dmarc=none action=none header.from=amd.com;
 Received: from BN8PR12MB3108.namprd12.prod.outlook.com (2603:10b6:408:40::20)
- by BN6PR1201MB0211.namprd12.prod.outlook.com (2603:10b6:405:55::13) with
+ by BN8PR12MB3218.namprd12.prod.outlook.com (2603:10b6:408:6b::22) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4242.21; Wed, 23 Jun
- 2021 19:21:00 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4264.18; Wed, 23 Jun
+ 2021 19:21:01 +0000
 Received: from BN8PR12MB3108.namprd12.prod.outlook.com
  ([fe80::c099:e7a1:249a:a8a2]) by BN8PR12MB3108.namprd12.prod.outlook.com
  ([fe80::c099:e7a1:249a:a8a2%7]) with mapi id 15.20.4242.025; Wed, 23 Jun 2021
- 19:21:00 +0000
+ 19:21:01 +0000
 From:   Yazen Ghannam <yazen.ghannam@amd.com>
 To:     linux-edac@vger.kernel.org
 Cc:     linux-kernel@vger.kernel.org, bp@alien8.de, mchehab@kernel.org,
         tony.luck@intel.com, Smita.KoralahalliChannabasappa@amd.com,
         Yazen Ghannam <yazen.ghannam@amd.com>
-Subject: [PATCH v2 25/31] EDAC/amd64: Define function to get CS Fabric ID
-Date:   Wed, 23 Jun 2021 19:19:56 +0000
-Message-Id: <20210623192002.3671647-26-yazen.ghannam@amd.com>
+Subject: [PATCH v2 26/31] EDAC/amd64: Define function to find shift and mask values
+Date:   Wed, 23 Jun 2021 19:19:57 +0000
+Message-Id: <20210623192002.3671647-27-yazen.ghannam@amd.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20210623192002.3671647-1-yazen.ghannam@amd.com>
 References: <20210623192002.3671647-1-yazen.ghannam@amd.com>
@@ -56,112 +56,127 @@ X-ClientProxiedBy: BLAPR03CA0107.namprd03.prod.outlook.com
  (2603:10b6:408:40::20)
 MIME-Version: 1.0
 X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from yaz-ethanolx.amd.com (165.204.184.1) by BLAPR03CA0107.namprd03.prod.outlook.com (2603:10b6:208:32a::22) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4242.19 via Frontend Transport; Wed, 23 Jun 2021 19:21:00 +0000
+Received: from yaz-ethanolx.amd.com (165.204.184.1) by BLAPR03CA0107.namprd03.prod.outlook.com (2603:10b6:208:32a::22) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4242.19 via Frontend Transport; Wed, 23 Jun 2021 19:21:01 +0000
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 309f5646-bab4-4334-4150-08d9367c0915
-X-MS-TrafficTypeDiagnostic: BN6PR1201MB0211:
+X-MS-Office365-Filtering-Correlation-Id: 3338df13-5549-4be1-113c-08d9367c0993
+X-MS-TrafficTypeDiagnostic: BN8PR12MB3218:
 X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <BN6PR1201MB021146F7F2E6BAE0170B7F61F8089@BN6PR1201MB0211.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:9508;
+X-Microsoft-Antispam-PRVS: <BN8PR12MB3218A8651785041805EC0A5BF8089@BN8PR12MB3218.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:7219;
 X-MS-Exchange-SenderADCheck: 1
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: ygxuvZR1x+qS3tcjSXw2QT0WvqFlwKJl1yow92EgnPf7HLYg73omFmOt6o51x3e0cE3x3onGuU+MZGD8VIRUkjiOXshGcuXv2ltUlWoJjknIuIMG8QkukusJfbv3Pc6GY2gn7IvqxY1ySK0RzGcHl3nT+2GukImTKAK61IMqPqrI08eqreHuGNRxKrxBYLjGgdLwC7l/0gtSxsFeKcaPeB8M1GQF2uxWJrtvR6dP+nbe4AcPmaJAfEpgj/sdGX/bm0WbejTJqBbW8TXc2mQqT4yd43oJD0uZXHCgqBwi+dn8fG6+m5IVUQPXCcK4tXwYG4LyxL5l/N/2PnpbwsLHMdNKR9PQlsmSKWSq1/6r6mA+3tnBlqAZNtyrz9EcMZVM73xM2LKnXKLFdfyVD8XKR3mxTq/qfvJbgwIp9uAnXjUvhGcKFRJiNyfBavnOSxWBh8N8XAz4ZNuEtBH6ORL4a5ivFspyqd9x8DjCZIr3ecLLkmRxNqeCaGftcYR8cJenwAEeuET6CojUnNO9zyw1ba8IYbYqxYJL41gnCD3iU8T3IbhqUGocII+pfXeFJTsT7iNH3M0IufhMwhnI33J5Tai8sDEegK52U8tFISQ0kDS9YF7KXWjwuVTz89E92QxaOiTJ0l73hLzIkDZgO5VTL/x6B/lmpXIrmGHv3XAVziBuQKrYf9VFZXfurJs5CVj2RR//rWUc13fjA7KQWKlSviGqdNCTvc+o8rvlsk4RDIkDZ8BE3NvjHxxeRMZjgWWbUrtiPJG1EgglLn0sdswlUg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3108.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(376002)(136003)(39860400002)(396003)(346002)(1076003)(6666004)(86362001)(956004)(66946007)(2616005)(36756003)(316002)(5660300002)(83380400001)(6486002)(966005)(38100700002)(478600001)(26005)(16526019)(186003)(7696005)(52116002)(6916009)(8676002)(66556008)(66476007)(4326008)(8936002)(2906002)(38350700002)(44832011);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: aOS8OF8kRgi0mtv/YF6FxhXjNZfkQIukdwTr/OIVCt8ShKhMBWtyyuUqN3oJar8PeBgPogiIaChKXcexO482u/O9pFPpwUGDO/XBQqnwGKllNMCEhnj+eJXGEfrMazOcb0ntthZN4LTmeaCub/EBy81bJcV9gVyL9591daJ8UD8CotLhTXWM6ArU6BV0tkA6bQ/sIHs+aocvsAoE5+fEqizq1slF6gSqTIqlIducJeYI3pp8im+snaMAkW2Me+W0eLHtW3/5LwcM3YYwGFpjDix/poNJ3vMstJsSx3DEEEAVy7uBLaH+oZQgj2r1o166lw19bD1oPa5vd6eXATNq8N2uG5UandtTHf0XqQGn/5odLbdYYKZhdK9XU9ZBVaBD0SKlYw56UXmznSxBRPWg7im+qf0/M91uOsgU7TSufl5m07+YHIg/c321q5Dd/EA2GnS0JJ3qyMgOY30nOZUbgTqRyfTlXTzXCvLn9XwVqoowVtxPZ6w5dUoyzC0Pi0KzIr9Liv2smXliWz+zb0CF1+wQMJRsgakSnGeSDkkOsWThgR3WJNqaVnHPFRCbQrMoinYrBnfSHqe+bGrl4mk5hF13pLVnJ3DsdP/bxBfzPcZwwdxV9gqDh1Svjiog1wS0npMOZUg2lZNRN51TRCYaTgW2Nou3mQz/xVcW9spoTGz3ks5PY459mFSkY/Y+9kTFF+OFg4fVV3WN5C1Hy6YgEaAKZfYSQ7YjHHLR15gHgN24zwnpZcSGBPvfY0PLpubFpwkUuV1Pnuoi/hd8cfFXP1WzRjtv0G+bMbgSk7G6GYjWxw1PHJG0WUJQ2UiBsgFT8g2c06PXvVgYaluvp/QGaRyHcvrHoQ27NdUTCznnWtA=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3108.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(136003)(376002)(39860400002)(396003)(366004)(346002)(316002)(6486002)(6666004)(26005)(16526019)(38100700002)(38350700002)(956004)(44832011)(2616005)(86362001)(2906002)(186003)(1076003)(6916009)(966005)(83380400001)(478600001)(66946007)(5660300002)(7696005)(8676002)(8936002)(36756003)(52116002)(4326008)(66556008)(66476007)(37363001);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?j9E9iNviiGhNUbPqncGeH4PmMa9yfjRR53a1D7NIrqXvaMJNIh8B49fzGEmL?=
- =?us-ascii?Q?wWwLAWS1t0xUtanBL614vPxWxLOohesSb8EE6yRzYrf5bnS/V3CCrFrL6M1H?=
- =?us-ascii?Q?dSAhAsenul3JZgfu2dpFxwypxnGMRDoAsFwKTvESMCF9TxVm2gxn2oeRvvnF?=
- =?us-ascii?Q?3rkTppiPrQnAIKVFXk1VXmCUKSL/4EEGtu6XUM7pUgkG7/vFPWi29wsliEC5?=
- =?us-ascii?Q?3JL1YmG1mqt/a6uaMaphvXVkFzQ/wKilBhoVpoA+syO/qpuZ58Xo7SMcP3H+?=
- =?us-ascii?Q?ZmwhjA4kgdcWBok5vvYIwX1ehU6fMEph+vNCMauisH16DH5bEBdAQ4COtLiK?=
- =?us-ascii?Q?7/dOZFTxoXFv4zxeLnINN0g3kUX6lnmmd+phpy++q+pS1zOcgah3+QMQGcGW?=
- =?us-ascii?Q?9tvbvMyffdJdPi2G8MZ+qAAj4ZEKZMJw2F/DrF8otw/PsBOJrO/KZtzjgAjk?=
- =?us-ascii?Q?+I/I8//Ho4VA1VmpBwaBq2JMBh9wqAz//vX8mAGJNZTj1A4F7lWCqMKyOIsh?=
- =?us-ascii?Q?KebzRbJWN9I+8V7ePkHzwchnYQxGUn2S7T4sAPXvrflAcJRLb9sHZGWmNAV4?=
- =?us-ascii?Q?/aZEZDyb7Wxh+iZhRIs+gV5AaZMfujG6JnbgAgux7aBViCJIJutEzxNwxnmu?=
- =?us-ascii?Q?/JCc6sJ6QSIB3hMdxfSKgbm/Z4ssmQYtEhPc+FAUsqCgLn7ZBmTfm5oQrjsO?=
- =?us-ascii?Q?dAS3Y9kASdmug8aRcorfAf+tqp1Z0tFXQpFCyFt4jQRXARtA5/HAisEDK4bN?=
- =?us-ascii?Q?xm2inOVhb8M3lFVVsc59lvqT2cmpk7kP0pSphRrilLC9+BHMp8yguPhFJ2Nf?=
- =?us-ascii?Q?3m4/+J8WmO/YN5YsnuNLiZwoJr3UgYmN+yj0NwRtH/UT0fJGBhit7F40hpNe?=
- =?us-ascii?Q?z4otSO/0bQFaGjKHsb4G89WJ3CH431sbmQCEGD+0M49tIJj7S7jXkV6rIW3Y?=
- =?us-ascii?Q?lwoNc8M3cv3PLv63zuRq+jna8L8j27Ay3vYsLn7+PPiE47ET2839fX38yRni?=
- =?us-ascii?Q?CCGZzYNRK1EEQtQNtkuEu6OQIeDLZREA+MCkU0ZUlEGaN1Fzcz3AqIsFaqcf?=
- =?us-ascii?Q?n0eI7XHj4aj2q8IafAWgVkxXRX8TjLixS9hGyFmjBPAg4l82Sy8bMLiTi8Iv?=
- =?us-ascii?Q?CkIZwAZustbupM9+9nmi324ySWw7DhY2e7yGzWa1632Skp6mpdPr7o8zmICd?=
- =?us-ascii?Q?j+auOYlnGi/aoNLJeJuWq+ufsyfwpeyw3sKe6ly968//FwZD6BXAb5viaR9i?=
- =?us-ascii?Q?xzn/+yC4rMsK1o88SmBpTD0bHjCEPiHmiTzwYRA1bHyz4B+aWKS0qa/izlEP?=
- =?us-ascii?Q?GPS0MaROvY8qeB8JlLcsUc/V?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?/J/HDx5P+i+HrMOmzH4YhH+/RNVSJ2vmaezv9sFZD/Z8umA93GbjztINRkE2?=
+ =?us-ascii?Q?i7NrmcaqAJ05XYlEWNsKkX4RSgyIjHazW1cZ2Fns4c2msaSpwmpQ6XcKcj+u?=
+ =?us-ascii?Q?GX08Wcpe0n7dd666rgyOgoCpM/PZ+6+jlGcJQf3PZwnlnylxQKQmiPP6dz2w?=
+ =?us-ascii?Q?LovrvJUXHzXB9MN8KB9WHTIri3OuW/8mKDqSxQEGUILFlgxdtmpC8CeYN2QK?=
+ =?us-ascii?Q?Ccar3CT4tuuFqPhcLeJgwCPgfxAmn7uGAnPWCv6Ez8xN/dmwiemSIxOBH1Tl?=
+ =?us-ascii?Q?L3/1hMzpjOWOVjE7n8SDntU++Yw1SLzsVgg5GvpBgb/ddY01pSt5FWUW81AP?=
+ =?us-ascii?Q?YtWOZdidTv2zAsGgtG8mGZc3G1Y2D8cdMPxbGsS7snVQV2xj7B/KBjYgPwGs?=
+ =?us-ascii?Q?fsjokeU4vnupy4SRVEwr2taONQ2ljAC4iflNfO7BLccfwCFy/rn3qaNuTLV5?=
+ =?us-ascii?Q?1tJcSvTJjHWx6iVKWQGFbkWwvRmyv//zMJHa8HMgtn7MQqK6+C5WLcH60TRv?=
+ =?us-ascii?Q?PhlfQLHStLhDf6vzFrGJvtrE5JcnRdmNkZ4hQT8UE9tvVTUXZCXRYZuryu+T?=
+ =?us-ascii?Q?HG2mAjjDo+EUubHf67o0imwT6nhmIbQYUX6TXHIJvH/P0KN6bM7i1WOIKz1E?=
+ =?us-ascii?Q?j+JYStJk/qGPVqGJG/xO4Us4faN7NDP9sfNrjsMogmbGMSGWEF0xE8e7wxex?=
+ =?us-ascii?Q?2Szf2JaSZ1KTKbFVQDM/6q4TE0lhhyCt4Dpl49CW5RZHfhVl30rlQsrGRMP8?=
+ =?us-ascii?Q?ZOHfiR/P2D9PSnanFeQYtOZRufXnQ3eOikUPJe2i6d/Y8CDnXvBd8ZLl8+Yk?=
+ =?us-ascii?Q?rEr9m54PoOvtfNlcKy7pj/nqK5Cx9pgicGr4W7sJVmJX1rx+CzThj6HUbJxj?=
+ =?us-ascii?Q?JZLLYfDi5UYnAV+UXiWa/+l8e9ie7urDWzxMu/g3BzG/ov5Lu7l9s0z/nyVc?=
+ =?us-ascii?Q?CG0BO1nsKrpBmerl+OvmbjlqlrsMMOo7OAX/WAmvOhGQIHyaM6bbARiCGotK?=
+ =?us-ascii?Q?+I2F+4LYyMkpYMFvFjpK2vSHLeBj2QSBV7zcEUiLFT1DlfmTRlu1BjKIxrxm?=
+ =?us-ascii?Q?fGqyl7zr3DEAHDbpHGtmj4+n/dn+ZqvpjLFfGTcHk1J8AxiIXB8xhtnw3hh/?=
+ =?us-ascii?Q?gOkeExPVrlKWQ3pBzWy/huGvbAGdKqY5+S1+0eooC4/3O9mbjKhRWQP746uB?=
+ =?us-ascii?Q?qUQvIO8KiWwhIg9xPktlAoH65ftg3VXfC21frVqAeu91CCMhsVW/GJvQkRLZ?=
+ =?us-ascii?Q?oI4lUB0qwAA03Ey84sf0xrxzt70tWs0AKxkVqNSmUXATDlZ9QPkpnPg95mam?=
+ =?us-ascii?Q?XlgxgTIHGuV2zJcxribFuOTJ?=
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 309f5646-bab4-4334-4150-08d9367c0915
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3338df13-5549-4be1-113c-08d9367c0993
 X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3108.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Jun 2021 19:21:00.7387
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Jun 2021 19:21:01.6282
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: lg5ITha2NCu3wBFkfG1jcShNw2BN5drRy0QckGu/LbS6Rbi74KtTlCjfamwSMinaIS8U0dm7hI9IRGJm00KfVg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN6PR1201MB0211
+X-MS-Exchange-CrossTenant-UserPrincipalName: GLaWjLiSqXbKZrMmZFdTS3Rr6EgwHBOmDs/LPz4ThlqAUGxzDja1qofCeddDqCEa/EYDw4DrXbSd1HIFWwDcGQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN8PR12MB3218
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-Move code that gets the CS Fabric ID into a separate helper function.
-This will be expanded for future DF versions.
+Move code to find the shift and mask values used in die and socket
+interleaving into separate helper functions. These will be expanded for
+future DF versions. Make the die_id_mask and socket_id_mask values u16
+type to accommodate larger bitfields in future DF versions.
 
-The bitfield used for this value may be larger than the 8 bits currently
-used. So make it a u16 type which is large enough to hold all known
-sizes of this bitfield across DF versions.
+Also, move reading of the System Fabric ID Mask register into
+set_df_ops(). This will be expanded for future DF versions and will be
+used to determine DF version levels.
 
-Also, call this function early as future DF versions may need the value
-early.
+And call this function early since future DF versions may need these
+values early.
 
 Signed-off-by: Yazen Ghannam <yazen.ghannam@amd.com>
 ---
 Link:
-https://lkml.kernel.org/r/20210507190140.18854-22-Yazen.Ghannam@amd.com
+https://lkml.kernel.org/r/20210507190140.18854-23-Yazen.Ghannam@amd.com
 
 v1->v2:
 * Moved from arch/x86 to EDAC.
-* Added function to data_fabric_ops.
+* Added functions to data_fabric_ops.
 
- drivers/edac/amd64_edac.c | 31 +++++++++++++++++++++++--------
- 1 file changed, 23 insertions(+), 8 deletions(-)
+ drivers/edac/amd64_edac.c | 61 +++++++++++++++++++++++++++++----------
+ 1 file changed, 45 insertions(+), 16 deletions(-)
 
 diff --git a/drivers/edac/amd64_edac.c b/drivers/edac/amd64_edac.c
-index d09a17747abd..f5ac3b63376d 100644
+index f5ac3b63376d..fa8046e2b055 100644
 --- a/drivers/edac/amd64_edac.c
 +++ b/drivers/edac/amd64_edac.c
-@@ -1093,6 +1093,7 @@ struct addr_ctx {
+@@ -1093,7 +1093,10 @@ struct addr_ctx {
  	u32 reg_dram_offset;
  	u32 reg_base_addr;
  	u32 reg_limit_addr;
-+	u16 cs_fabric_id;
++	u32 reg_fab_id_mask0;
+ 	u16 cs_fabric_id;
++	u16 die_id_mask;
++	u16 socket_id_mask;
  	u16 nid;
  	u8 inst_id;
  	u8 map_num;
-@@ -1109,6 +1110,7 @@ struct addr_ctx {
+@@ -1109,8 +1112,11 @@ struct addr_ctx {
+ 
  struct data_fabric_ops {
  	u64 (*get_hi_addr_offset)(struct addr_ctx *ctx);
++	u8 (*get_die_id_shift)(struct addr_ctx *ctx);
++	u8 (*get_socket_id_shift)(struct addr_ctx *ctx);
  	int (*get_intlv_mode)(struct addr_ctx *ctx);
-+	int (*get_cs_fabric_id)(struct addr_ctx *ctx);
+ 	int (*get_cs_fabric_id)(struct addr_ctx *ctx);
++	int (*get_masks)(struct addr_ctx *ctx);
  	void (*get_intlv_num_dies)(struct addr_ctx *ctx);
  	void (*get_intlv_num_sockets)(struct addr_ctx *ctx);
  };
-@@ -1192,11 +1194,24 @@ static void get_intlv_num_sockets_df2(struct addr_ctx *ctx)
- 	ctx->intlv_num_sockets = (ctx->reg_limit_addr >> 8) & 0x1;
+@@ -1206,18 +1212,43 @@ static int get_cs_fabric_id_df2(struct addr_ctx *ctx)
+ 	return 0;
  }
  
-+static int get_cs_fabric_id_df2(struct addr_ctx *ctx)
++static int get_masks_df2(struct addr_ctx *ctx)
 +{
-+	u32 tmp;
-+
-+	if (amd_df_indirect_read(ctx->nid, df_regs[FAB_BLK_INST_INFO_3], ctx->inst_id, &tmp))
-+		return -EINVAL;
-+
-+	ctx->cs_fabric_id = (tmp >> 8) & 0xFF;
++	ctx->die_id_mask    = (ctx->reg_fab_id_mask0 >> 8) & 0xFF;
++	ctx->socket_id_mask = (ctx->reg_fab_id_mask0 >> 16) & 0xFF;
 +
 +	return 0;
++}
++
++static u8 get_die_id_shift_df2(struct addr_ctx *ctx)
++{
++	return (ctx->reg_fab_id_mask0 >> 24) & 0xF;
++}
++
++static u8 get_socket_id_shift_df2(struct addr_ctx *ctx)
++{
++	return (ctx->reg_fab_id_mask0 >> 28) & 0xF;
 +}
 +
  struct data_fabric_ops df2_ops = {
@@ -169,60 +184,82 @@ index d09a17747abd..f5ac3b63376d 100644
  	.get_intlv_mode			=	&get_intlv_mode_df2,
  	.get_intlv_num_dies		=	&get_intlv_num_dies_df2,
  	.get_intlv_num_sockets		=	&get_intlv_num_sockets_df2,
-+	.get_cs_fabric_id		=	&get_cs_fabric_id_df2,
+ 	.get_cs_fabric_id		=	&get_cs_fabric_id_df2,
++	.get_masks			=	&get_masks_df2,
++	.get_die_id_shift		=	&get_die_id_shift_df2,
++	.get_socket_id_shift		=	&get_socket_id_shift_df2,
  };
  
  struct data_fabric_ops *df_ops;
-@@ -1296,20 +1311,16 @@ static void get_intlv_num_chan(struct addr_ctx *ctx)
+ 
+ static int set_df_ops(struct addr_ctx *ctx)
+ {
++	if (amd_df_indirect_read(0, df_regs[SYS_FAB_ID_MASK],
++				 DF_BROADCAST, &ctx->reg_fab_id_mask0))
++		return -EINVAL;
++
+ 	df_ops = &df2_ops;
+ 
+ 	return 0;
+@@ -1310,11 +1341,7 @@ static void get_intlv_num_chan(struct addr_ctx *ctx)
+ 
  static int calculate_cs_id(struct addr_ctx *ctx)
  {
- 	u8 die_id_shift, die_id_mask, socket_id_shift, socket_id_mask;
--	u8 die_id_bit, sock_id_bit, cs_fabric_id, cs_mask = 0;
-+	u8 die_id_bit, sock_id_bit, cs_mask = 0;
- 	u32 tmp;
- 
--	if (amd_df_indirect_read(ctx->nid, df_regs[FAB_BLK_INST_INFO_3], ctx->inst_id, &tmp))
--		return -EINVAL;
+-	u8 die_id_shift, die_id_mask, socket_id_shift, socket_id_mask;
+-	u8 die_id_bit, sock_id_bit, cs_mask = 0;
+-	u32 tmp;
 -
--	cs_fabric_id = (tmp >> 8) & 0xFF;
- 	die_id_bit   = 0;
+-	die_id_bit   = 0;
++	u8 die_id_bit = 0, sock_id_bit, cs_mask = 0;
  
  	/* If interleaved over more than 1 channel: */
  	if (ctx->intlv_num_chan) {
- 		die_id_bit = ctx->intlv_num_chan;
- 		cs_mask	   = (1 << die_id_bit) - 1;
--		ctx->cs_id = cs_fabric_id & cs_mask;
-+		ctx->cs_id = ctx->cs_fabric_id & cs_mask;
+@@ -1323,27 +1350,26 @@ static int calculate_cs_id(struct addr_ctx *ctx)
+ 		ctx->cs_id = ctx->cs_fabric_id & cs_mask;
  	}
  
- 	sock_id_bit = die_id_bit;
-@@ -1324,7 +1335,7 @@ static int calculate_cs_id(struct addr_ctx *ctx)
- 		die_id_shift = (tmp >> 24) & 0xF;
- 		die_id_mask  = (tmp >> 8) & 0xFF;
+-	sock_id_bit = die_id_bit;
++	/* Return early if no die interleaving and no socket interleaving. */
++	if (!(ctx->intlv_num_dies || ctx->intlv_num_sockets))
++		return 0;
  
--		ctx->cs_id |= ((cs_fabric_id & die_id_mask) >> die_id_shift) << die_id_bit;
-+		ctx->cs_id |= ((ctx->cs_fabric_id & die_id_mask) >> die_id_shift) << die_id_bit;
+-	if (ctx->intlv_num_dies || ctx->intlv_num_sockets)
+-		if (amd_df_indirect_read(ctx->nid, df_regs[SYS_FAB_ID_MASK], ctx->inst_id, &tmp))
+-			return -EINVAL;
++	sock_id_bit = die_id_bit;
+ 
+ 	/* If interleaved over more than 1 die: */
+ 	if (ctx->intlv_num_dies) {
+-		sock_id_bit  = die_id_bit + ctx->intlv_num_dies;
+-		die_id_shift = (tmp >> 24) & 0xF;
+-		die_id_mask  = (tmp >> 8) & 0xFF;
++		u8 die_id_shift = df_ops->get_die_id_shift(ctx);
+ 
+-		ctx->cs_id |= ((ctx->cs_fabric_id & die_id_mask) >> die_id_shift) << die_id_bit;
++		sock_id_bit  = die_id_bit + ctx->intlv_num_dies;
++		ctx->cs_id |= ((ctx->cs_fabric_id & ctx->die_id_mask)
++				>> die_id_shift) << die_id_bit;
  	}
  
  	/* If interleaved over more than 1 socket: */
-@@ -1332,7 +1343,8 @@ static int calculate_cs_id(struct addr_ctx *ctx)
- 		socket_id_shift	= (tmp >> 28) & 0xF;
- 		socket_id_mask	= (tmp >> 16) & 0xFF;
+ 	if (ctx->intlv_num_sockets) {
+-		socket_id_shift	= (tmp >> 28) & 0xF;
+-		socket_id_mask	= (tmp >> 16) & 0xFF;
++		u8 socket_id_shift = df_ops->get_socket_id_shift(ctx);
  
--		ctx->cs_id |= ((cs_fabric_id & socket_id_mask) >> socket_id_shift) << sock_id_bit;
-+		ctx->cs_id |= ((ctx->cs_fabric_id & socket_id_mask)
-+				>> socket_id_shift) << sock_id_bit;
+-		ctx->cs_id |= ((ctx->cs_fabric_id & socket_id_mask)
++		ctx->cs_id |= ((ctx->cs_fabric_id & ctx->socket_id_mask)
+ 				>> socket_id_shift) << sock_id_bit;
  	}
  
- 	return 0;
-@@ -1411,6 +1423,9 @@ static int umc_normaddr_to_sysaddr(u64 *addr, u16 nid, u8 umc)
+@@ -1423,6 +1449,9 @@ static int umc_normaddr_to_sysaddr(u64 *addr, u16 nid, u8 umc)
  	if (set_df_ops(&ctx))
  		return -EINVAL;
  
-+	if (df_ops->get_cs_fabric_id(&ctx))
++	if (df_ops->get_masks(&ctx))
 +		return -EINVAL;
 +
- 	if (remove_dram_offset(&ctx))
+ 	if (df_ops->get_cs_fabric_id(&ctx))
  		return -EINVAL;
  
 -- 
