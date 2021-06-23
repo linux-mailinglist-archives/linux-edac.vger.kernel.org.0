@@ -2,77 +2,66 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 569BE3AE08D
-	for <lists+linux-edac@lfdr.de>; Sun, 20 Jun 2021 23:08:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 85F3C3B1DEE
+	for <lists+linux-edac@lfdr.de>; Wed, 23 Jun 2021 17:54:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230212AbhFTVKh convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-edac@lfdr.de>); Sun, 20 Jun 2021 17:10:37 -0400
-Received: from mga02.intel.com ([134.134.136.20]:49973 "EHLO mga02.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230211AbhFTVKg (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Sun, 20 Jun 2021 17:10:36 -0400
-IronPort-SDR: cVmc/qwAv0SENsiG5xf84sDK3g3RWIWZLCTgoyF5+S45ukYRXhsYECykNqGtbPuTHLRlnJv0Oy
- lzaUf2cG1qWw==
-X-IronPort-AV: E=McAfee;i="6200,9189,10021"; a="193881080"
-X-IronPort-AV: E=Sophos;i="5.83,288,1616482800"; 
-   d="scan'208";a="193881080"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jun 2021 14:08:23 -0700
-IronPort-SDR: LoETC79phESlLsHLXENMdPX+o3OVdAnbaw1KZvlfwip+5kqIjQ/NVTOgdEvp/pk8peT8m1dvPT
- zDSJOj6lHzaw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.83,288,1616482800"; 
-   d="scan'208";a="453686096"
-Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
-  by fmsmga008.fm.intel.com with ESMTP; 20 Jun 2021 14:08:23 -0700
-Received: from shsmsx606.ccr.corp.intel.com (10.109.6.216) by
- fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2242.4; Sun, 20 Jun 2021 14:08:22 -0700
-Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
- SHSMSX606.ccr.corp.intel.com (10.109.6.216) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2242.4; Mon, 21 Jun 2021 05:08:19 +0800
-Received: from fmsmsx610.amr.corp.intel.com ([10.18.126.90]) by
- fmsmsx610.amr.corp.intel.com ([10.18.126.90]) with mapi id 15.01.2242.008;
- Sun, 20 Jun 2021 14:08:17 -0700
-From:   "Luck, Tony" <tony.luck@intel.com>
-To:     Randy Dunlap <rdunlap@infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-CC:     "Zhuo, Qiuxu" <qiuxu.zhuo@intel.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>
-Subject: RE: [PATCH] EDAC/igen6: fix core dependency
-Thread-Topic: [PATCH] EDAC/igen6: fix core dependency
-Thread-Index: AQHXZSR20xaNNpx7sU2QBycvvxKAS6sdZfpA
-Date:   Sun, 20 Jun 2021 21:08:17 +0000
-Message-ID: <7b21e5405e4b4838b2b469fcf67eb40e@intel.com>
-References: <20210619160203.2026-1-rdunlap@infradead.org>
-In-Reply-To: <20210619160203.2026-1-rdunlap@infradead.org>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-dlp-product: dlpe-windows
-dlp-reaction: no-action
-dlp-version: 11.5.1.3
-x-originating-ip: [10.1.200.100]
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 8BIT
+        id S231449AbhFWP4a convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-edac@lfdr.de>); Wed, 23 Jun 2021 11:56:30 -0400
+Received: from [183.90.58.236] ([183.90.58.236]:51598 "EHLO ns1.zackeruz.tk"
+        rhost-flags-FAIL-FAIL-OK-FAIL) by vger.kernel.org with ESMTP
+        id S231434AbhFWP43 (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Wed, 23 Jun 2021 11:56:29 -0400
+Received: from johnlewis.com (unknown [192.168.20.1])
+        by ns1.zackeruz.tk (Postfix) with ESMTPSA id 5BD13846308
+        for <linux-edac@vger.kernel.org>; Wed, 23 Jun 2021 23:54:10 +0800 (+08)
+Reply-To: robert_turner@johnlewis-trading.com,
+          pippawicks.sales@johnlewis-trading.com
+From:   John Lewis & Partnersip <robert.turner107@johnlewis.com>
+To:     linux-edac@vger.kernel.org
+Subject: 6/23/2021 Product Inquiry 
+Date:   23 Jun 2021 15:54:09 +0000
+Message-ID: <20210623094114.3A99455F8DC18B33@johnlewis.com>
 MIME-Version: 1.0
+Content-Type: text/plain;
+        charset="utf-8"
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-> igen6_edac needs mce_register()/unregister() functions,
-> so it should depend on X86_MCE (or X86_MCE_INTEL).
+Dear linux-edac
 
-Thanks Randy
+The famous brand John Lewis Partnership, is UK's largest multi-
+channel retailer with over 126 shops and multiple expansion in 
+Africa furnished by European/Asian/American products. We are 
+sourcing new products to attract new customers and also retain 
+our existing ones, create new partnerships with companies dealing 
+with different kinds of goods globally.
 
-Also reported by the lkp robot (e-mail from the robot got to
-me about six hours after your fix).
+Your company's products are of interest to our market as we have 
+an amazing market for your products.
 
-Applied.
+Provide us your current catalog through email to review more. We 
+hope to be able to order with you and start a long-term friendly,
+respectable and solid business partnership. Please we would 
+appreciate it if you could send us your stock availability via 
+email if any.
 
--Tony
+Our payment terms are 15 days net in Europe, 30 days Net in UK 
+and 30 days net in Asia/USA as we operate with over 5297 
+suppliers around the globe for the past 50 years now. For 
+immediate response Send your reply to robert_turner@johnlewis-
+trading.com for us to be able to 
+treat with care and urgency.
+
+
+Best Regards
+
+Rob Turner
+Head Of Procurement Operations
+John Lewis & Partners.
+robert_turner@johnlewis-trading.com
+Tel: +44-7451-274090
+WhatsApp: +447497483925
+www.johnlewis.com
+REGISTERED OFFICE: 171 VICTORIA STREET, LONDON SW1E 5NN 
