@@ -2,117 +2,124 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1993C3B4682
-	for <lists+linux-edac@lfdr.de>; Fri, 25 Jun 2021 17:21:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB0433B46EC
+	for <lists+linux-edac@lfdr.de>; Fri, 25 Jun 2021 17:49:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229900AbhFYPXf (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Fri, 25 Jun 2021 11:23:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40944 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229881AbhFYPXf (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Fri, 25 Jun 2021 11:23:35 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6B5DC061574;
-        Fri, 25 Jun 2021 08:21:14 -0700 (PDT)
-Received: from zn.tnic (p200300ec2f0dae005eaeb42c95705db7.dip0.t-ipconnect.de [IPv6:2003:ec:2f0d:ae00:5eae:b42c:9570:5db7])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 5DD221EC03F0;
-        Fri, 25 Jun 2021 17:21:13 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1624634473;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=0PTZ7p2IQbsEzDy2yLK9UqDrnt3n2Qm1Q8c2B02Mvy0=;
-        b=XSoxFJvgTaxVEiF2XchzNvwpVOCDNMxyVszXEwiNrQR5EpxoNKSbR4WJVX0rJXubFfbhzK
-        3BRJZLMKgK0RztHACYj65TUCZ147cPDcWcNAqyMCpaGiwvAe+RBcwbh+1abRetmqNshme1
-        QPU7nU2J5Iku3q9c+nKMnd4z/6EvyX4=
-Date:   Fri, 25 Jun 2021 17:21:08 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Yazen Ghannam <yazen.ghannam@amd.com>
-Cc:     linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
-        mchehab@kernel.org, tony.luck@intel.com,
-        Smita.KoralahalliChannabasappa@amd.com
-Subject: Re: [PATCH v2 03/31] EDAC/amd64: Don't use naked values for DF
- registers
-Message-ID: <YNX0ZLRSLgmm2LiA@zn.tnic>
-References: <20210623192002.3671647-1-yazen.ghannam@amd.com>
- <20210623192002.3671647-4-yazen.ghannam@amd.com>
+        id S229759AbhFYPwI (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Fri, 25 Jun 2021 11:52:08 -0400
+Received: from angie.orcam.me.uk ([78.133.224.34]:59976 "EHLO
+        angie.orcam.me.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229630AbhFYPwH (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Fri, 25 Jun 2021 11:52:07 -0400
+Received: by angie.orcam.me.uk (Postfix, from userid 500)
+        id E9E1592009C; Fri, 25 Jun 2021 17:49:44 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+        by angie.orcam.me.uk (Postfix) with ESMTP id E628892009B;
+        Fri, 25 Jun 2021 17:49:44 +0200 (CEST)
+Date:   Fri, 25 Jun 2021 17:49:44 +0200 (CEST)
+From:   "Maciej W. Rozycki" <macro@orcam.me.uk>
+To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        Kurt Martin <kmartin@wavecomp.com>
+cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-mips@vger.kernel.org, Tiezhu Yang <yangtiezhu@loongson.cn>,
+        Willy Tarreau <w@1wt.eu>,
+        "Maciej W. Rozycki" <macro@linux-mips.org>,
+        linux-edac@vger.kernel.org, linux-hams@vger.kernel.org,
+        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 0/3] Remove dead linux-mips.org references
+In-Reply-To: <20210625110419.24503-1-lukas.bulwahn@gmail.com>
+Message-ID: <alpine.DEB.2.21.2106251722470.37803@angie.orcam.me.uk>
+References: <20210625110419.24503-1-lukas.bulwahn@gmail.com>
+User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20210623192002.3671647-4-yazen.ghannam@amd.com>
+Content-Type: text/plain; charset=US-ASCII
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Wed, Jun 23, 2021 at 07:19:34PM +0000, Yazen Ghannam wrote:
-> +static struct df_reg df_regs[] = {
-> +	/* D18F0x50 (FabricBlockInstanceInformation3_CS) */
-> +	[FAB_BLK_INST_INFO_3]	=	{0, 0x50},
-> +	/* D18F0x104 (DramHoleControl) */
-> +	[DRAM_HOLE_CTL]		=	{0, 0x104},
-> +	/* D18F0x110 (DramBaseAddress) */
-> +	[DRAM_BASE_ADDR]	=	{0, 0x110},
-> +	/* D18F0x114 (DramLimitAddress) */
-> +	[DRAM_LIMIT_ADDR]	=	{0, 0x114},
-> +	/* D18F0x1B4 (DramOffset) */
-> +	[DRAM_OFFSET]		=	{0, 0x1B4},
-> +	/* D18F1x208 (SystemFabricIdMask) */
-> +	[SYS_FAB_ID_MASK]	=	{1, 0x208},
-> +};
-> +
->  static int umc_normaddr_to_sysaddr(u64 norm_addr, u16 nid, u8 umc, u64 *sys_addr)
->  {
->  	u64 dram_base_addr, dram_limit_addr, dram_hole_base;
-> @@ -1059,8 +1091,9 @@ static int umc_normaddr_to_sysaddr(u64 norm_addr, u16 nid, u8 umc, u64 *sys_addr
->  	u8 cs_mask, cs_id = 0;
->  	bool hash_enabled = false;
->  
-> -	/* Read D18F0x1B4 (DramOffset), check if base 1 is used. */
-> -	if (amd_df_indirect_read(nid, 0, 0x1B4, umc, &tmp))
-> +	struct df_reg reg;
-> +
-> +	if (amd_df_indirect_read(nid, df_regs[DRAM_OFFSET], umc, &tmp))
->  		goto out_err;
->  
->  	/* Remove HiAddrOffset from normalized address, if enabled: */
-> @@ -1073,8 +1106,9 @@ static int umc_normaddr_to_sysaddr(u64 norm_addr, u16 nid, u8 umc, u64 *sys_addr
->  		}
->  	}
->  
-> -	/* Read D18F0x110 (DramBaseAddress). */
-> -	if (amd_df_indirect_read(nid, 0, 0x110 + (8 * base), umc, &tmp))
-> +	reg = df_regs[DRAM_BASE_ADDR];
-> +	reg.offset += base * 8;
+[Adding Ralf and Kurt to the list of recipients.]
 
-So this looks weird: you have a df_regs[] array of all those different
-DF registers which I'd assume is a read-only thing because, well, those
-func and offset things are immutable, i.e., hw registers offsets etc.
+On Fri, 25 Jun 2021, Lukas Bulwahn wrote:
 
-But then here you go and and modify the offset.
+> The domain lookup for linux-mips.org fails for quite some time now. Hence,
+> webpages, the patchwork instance and Ralf Baechle's email there is not
+> reachable anymore.
 
-And that df_regs array is globally visible in the driver and if some
-later functionality decides to use it, it'll see the modified offset.
+ Well, mail forwarding has now been set up for my old LMO address, and so 
+I believe for Ralf's.  Any other resources remain unavailable.
 
-IOW, I'd make that array read only (const) and use local vars instead to
-pass down to amd_df_indirect_read().
+> In the discussion of that patch series, Kurt Martin promised to get
+> linux-mips.org back online. Four months have now passed and the webpage is
+> still not back online. So, I suggest to remove these dead references.
+> Probably, we do not lose much if the linux-mips.org webpage never comes back.
 
-And I'm also questioning what the point is for that df_reg thing?
+ While most resources have been migrated I think the wiki was unique and 
+valuable.  Perhaps we could preserve read-only references to archive.org 
+dumps?  It's not clear to me what our policy is here though, if any.
 
-You have them defined but then you have to change them.
+> The domain lookup for linux-mips.org fails for quite some time now. Hence,
+> webpages, the patchwork instance and Ralf Baechle's email there is not
+> reachable anymore.
 
-I.e., you can just as well pass in func and offset separately and be
-done with it.
+ Let's see if the copy of this message intended for Ralf bounces.
 
-But maybe there's something else happening in the patches which comes
-later and which will make me go, ahaa.
+> I removed dead references or replaced them with their living counterparts if
+> available. However, these two cases remain and somebody might want to have a look:
+> 
+>   1. case in ./arch/mips/include/asm/page.h:
+> 
+> <snip>
+> /*
+>  * RELOC_HIDE was originally added by 6007b903dfe5f1d13e0c711ac2894bdd4a61b1ad
+>  * (lmo) rsp. 8431fd094d625b94d364fe393076ccef88e6ce18 (kernel.org).  The
+>  * discussion can be found in
+>  * https://lore.kernel.org/lkml/a2ebde260608230500o3407b108hc03debb9da6e62c@mail.gmail.com
+>  *
+>  * It is unclear if the misscompilations mentioned in
+>  * https://lore.kernel.org/lkml/1281303490-390-1-git-send-email-namhyung@gmail.com
+>  * also affect MIPS so we keep this one until GCC 3.x has been retired
+>  * before we can apply https://patchwork.linux-mips.org/patch/1541/
+>  */
+> </snip>
+> 
+>   Decision: Keep as is. Although GCC 3.x is long retired, it is unclear what
+>   https://patchwork.linux-mips.org/patch/1541/ is and if it has been already
+>   applied or not.
+>   Question: does anyone know how to identify this patch?
 
-Thx.
+ It's on archive.org, marked rejected:
 
--- 
-Regards/Gruss,
-    Boris.
+<https://web.archive.org/web/20180829170737/https://patchwork.linux-mips.org/patch/1541/>
 
-https://people.kernel.org/tglx/notes-about-netiquette
+or alternatively: <https://lore.kernel.org/patchwork/patch/210989/> (with 
+no proper status).  Given the note it might make sense to re-evaluate the 
+patch.  Thanks for the heads-up!
+
+>   2. case in ./drivers/parport/parport_ip32.c:
+> 
+>     linux-mips.org tree is referred to in an old To do item:
+> 
+> <snip>
+>  * To do:
+>  *
+>  *      Fully implement ECP mode.
+>  *      EPP and ECP mode need to be tested.  I currently do not own any
+>  *      peripheral supporting these extended mode, and cannot test them.
+>  *      If DMA mode works well, decide if support for PIO FIFO modes should be
+>  *      dropped.
+>  *      Use the io{read,write} family functions when they become available in
+>  *      the linux-mips.org tree.  Note: the MIPS specific functions readsb()
+>  *      and writesb() are to be translated by ioread8_rep() and iowrite8_rep()
+>  *      respectively.
+> </snip>
+> 
+>   Decision: Keep as is; anyone that wants to follow up on this will probably
+>   understand that the reference is outdated anyway.
+
+ Note that a copy of the LMO tree remains available online at: 
+<git://git.kernel.org/pub/scm/linux/kernel/git/ralf/linux.git>, so any 
+references or git commit IDs are reachable.  Perhaps it would be good to 
+add an actual reference somewhere though.
+
+  Maciej
