@@ -2,124 +2,82 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EB0433B46EC
-	for <lists+linux-edac@lfdr.de>; Fri, 25 Jun 2021 17:49:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 534933B4E5D
+	for <lists+linux-edac@lfdr.de>; Sat, 26 Jun 2021 13:13:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229759AbhFYPwI (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Fri, 25 Jun 2021 11:52:08 -0400
-Received: from angie.orcam.me.uk ([78.133.224.34]:59976 "EHLO
-        angie.orcam.me.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229630AbhFYPwH (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Fri, 25 Jun 2021 11:52:07 -0400
-Received: by angie.orcam.me.uk (Postfix, from userid 500)
-        id E9E1592009C; Fri, 25 Jun 2021 17:49:44 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-        by angie.orcam.me.uk (Postfix) with ESMTP id E628892009B;
-        Fri, 25 Jun 2021 17:49:44 +0200 (CEST)
-Date:   Fri, 25 Jun 2021 17:49:44 +0200 (CEST)
-From:   "Maciej W. Rozycki" <macro@orcam.me.uk>
-To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        Kurt Martin <kmartin@wavecomp.com>
-cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org, Tiezhu Yang <yangtiezhu@loongson.cn>,
-        Willy Tarreau <w@1wt.eu>,
-        "Maciej W. Rozycki" <macro@linux-mips.org>,
-        linux-edac@vger.kernel.org, linux-hams@vger.kernel.org,
-        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 0/3] Remove dead linux-mips.org references
-In-Reply-To: <20210625110419.24503-1-lukas.bulwahn@gmail.com>
-Message-ID: <alpine.DEB.2.21.2106251722470.37803@angie.orcam.me.uk>
-References: <20210625110419.24503-1-lukas.bulwahn@gmail.com>
-User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
+        id S229657AbhFZLQA (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Sat, 26 Jun 2021 07:16:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47578 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229518AbhFZLQA (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Sat, 26 Jun 2021 07:16:00 -0400
+Received: from mail-qt1-x842.google.com (mail-qt1-x842.google.com [IPv6:2607:f8b0:4864:20::842])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2FAAC061574
+        for <linux-edac@vger.kernel.org>; Sat, 26 Jun 2021 04:13:37 -0700 (PDT)
+Received: by mail-qt1-x842.google.com with SMTP id r20so9583539qtp.3
+        for <linux-edac@vger.kernel.org>; Sat, 26 Jun 2021 04:13:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:sender:from:date:message-id:subject:to;
+        bh=AdjC2hO+eH5TkyqfQ3BiLYZ6jv/+FhBBu7F+RgSm63o=;
+        b=oI664D/0IRkNfB6QR6Tz2R0OPBkpNF9u9E+qCiJA9TeU7JBZgdGhTdfWHaXVWXzy3W
+         3VuHoynHopm/7yWGMUNmi39k2GXKybEjUY6AM7jSUTFC7y0F0J8N5nuqn7SN/0tg/XHn
+         U37H7u2rIOVNgHqgk5FRXU/bgVlaOSFDvYNkUSUW4bnFK9YjVMASjC/X7RRo/0SIOdO9
+         +YCZXlySmJkTCUPwovqMIWql5DTimLwSoGz70iCsb3C1J/gr8bCR4fK+rDlZIGNsGnSu
+         PbUanWa3ffPZigXqRBXrdL1Zuwi6mjLDD62yaA7gvWKyVerIDCWxwKkNJ0W732qxWfg8
+         YacA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:sender:from:date
+         :message-id:subject:to;
+        bh=AdjC2hO+eH5TkyqfQ3BiLYZ6jv/+FhBBu7F+RgSm63o=;
+        b=BqAG2Jcj6unN82HSv4yzg7hISuwKulLrMwjldoAllQDYo8wIGLOcawAFLYNXjk6Vpz
+         rOh2clY8ivTLdywX7q13PKAMacfvpODebxqU/2CedXgUEGOfffB/t7yet6LPBBsKtcKE
+         fDq9Ui0t4M/6uRPZMrayNRTqpwzgcATK2q72zfajyyAjcTNQUPWz2KiHFxxjACAPmKcc
+         rQLd7oya8lGbh1uj+c9jpdW8glP+pN5wwraDXxKaIyzEE1gtStyv6wdD1UoUXkDjQMEi
+         Khl/gj3u/P0qciQHhlTGQ2X0/hx79zXDEsSMvSE3c/6NtQWCqxKS+p7mSJRRVbinlc0f
+         9ong==
+X-Gm-Message-State: AOAM530GceZBRLk5hPVAl63e2HlSDzfzt9x13qUqyvur25iEVz9857Dz
+        wjXUH04t0gARmctAkTo2zAfzO87cXgXpW1yDWVk=
+X-Google-Smtp-Source: ABdhPJy7+DV0mPnQ74vGtu6SmTiQktqbtYGg4djJHQ0DFJS8PUYzhNIKxTjCUUfFtxf9pPlSI0JwadePH/U01cKbKms=
+X-Received: by 2002:a05:622a:1492:: with SMTP id t18mr13571920qtx.86.1624706015155;
+ Sat, 26 Jun 2021 04:13:35 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Reply-To: muhammadrawani80@gmail.com
+Sender: sergeantemad.alabbasi@gmail.com
+Received: by 2002:a0c:e8c7:0:0:0:0:0 with HTTP; Sat, 26 Jun 2021 04:13:34
+ -0700 (PDT)
+From:   Dr Muhammad Rawani <rawanimuhammad0@gmail.com>
+Date:   Sat, 26 Jun 2021 04:13:34 -0700
+X-Google-Sender-Auth: qxoJ2Ln7EtO-SVomUu1FPgKlx8A
+Message-ID: <CAN645xW1WUQQdQEOTm4534B04xTAeH2KsMUhPVcFoASxCxrSdw@mail.gmail.com>
+Subject: Hello Dearest
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-[Adding Ralf and Kurt to the list of recipients.]
+My dearest,
 
-On Fri, 25 Jun 2021, Lukas Bulwahn wrote:
+Please forgive me for stressing you with this mail, as I know that my
+mail will come to you as a surprise. My Name is Dr.Muhammad Rawani, I
+am from Burkina Faso, a Burkina be by nationality, in West Africa,
+working with Bank of Africa.I Discovered the sum of seven million, two
+hundred thousand dollars (usd7.2) belonging to deceased customer of
+this bank the fund has been lying in a suspense account without
+anybody coming to put claim over the money since the account late
+owner from Lebanese who died in accident with his family.
 
-> The domain lookup for linux-mips.org fails for quite some time now. Hence,
-> webpages, the patchwork instance and Ralf Baechle's email there is not
-> reachable anymore.
+Therefore, I am soliciting for your assistance to come forward as the
+next of kin. I have agreed that 40% of this money will be for you as
+the beneficiary respect of the provision of your account and service
+rendered, 60% will be for me. Then immediately the money transferred
+to your account from this bank, I will proceed to your country for the
+sharing of the fund. If you think you are capable and will be
+committed to making this deal successes send me an email as soon as
+possible to confirm your interest.
 
- Well, mail forwarding has now been set up for my old LMO address, and so 
-I believe for Ralf's.  Any other resources remain unavailable.
-
-> In the discussion of that patch series, Kurt Martin promised to get
-> linux-mips.org back online. Four months have now passed and the webpage is
-> still not back online. So, I suggest to remove these dead references.
-> Probably, we do not lose much if the linux-mips.org webpage never comes back.
-
- While most resources have been migrated I think the wiki was unique and 
-valuable.  Perhaps we could preserve read-only references to archive.org 
-dumps?  It's not clear to me what our policy is here though, if any.
-
-> The domain lookup for linux-mips.org fails for quite some time now. Hence,
-> webpages, the patchwork instance and Ralf Baechle's email there is not
-> reachable anymore.
-
- Let's see if the copy of this message intended for Ralf bounces.
-
-> I removed dead references or replaced them with their living counterparts if
-> available. However, these two cases remain and somebody might want to have a look:
-> 
->   1. case in ./arch/mips/include/asm/page.h:
-> 
-> <snip>
-> /*
->  * RELOC_HIDE was originally added by 6007b903dfe5f1d13e0c711ac2894bdd4a61b1ad
->  * (lmo) rsp. 8431fd094d625b94d364fe393076ccef88e6ce18 (kernel.org).  The
->  * discussion can be found in
->  * https://lore.kernel.org/lkml/a2ebde260608230500o3407b108hc03debb9da6e62c@mail.gmail.com
->  *
->  * It is unclear if the misscompilations mentioned in
->  * https://lore.kernel.org/lkml/1281303490-390-1-git-send-email-namhyung@gmail.com
->  * also affect MIPS so we keep this one until GCC 3.x has been retired
->  * before we can apply https://patchwork.linux-mips.org/patch/1541/
->  */
-> </snip>
-> 
->   Decision: Keep as is. Although GCC 3.x is long retired, it is unclear what
->   https://patchwork.linux-mips.org/patch/1541/ is and if it has been already
->   applied or not.
->   Question: does anyone know how to identify this patch?
-
- It's on archive.org, marked rejected:
-
-<https://web.archive.org/web/20180829170737/https://patchwork.linux-mips.org/patch/1541/>
-
-or alternatively: <https://lore.kernel.org/patchwork/patch/210989/> (with 
-no proper status).  Given the note it might make sense to re-evaluate the 
-patch.  Thanks for the heads-up!
-
->   2. case in ./drivers/parport/parport_ip32.c:
-> 
->     linux-mips.org tree is referred to in an old To do item:
-> 
-> <snip>
->  * To do:
->  *
->  *      Fully implement ECP mode.
->  *      EPP and ECP mode need to be tested.  I currently do not own any
->  *      peripheral supporting these extended mode, and cannot test them.
->  *      If DMA mode works well, decide if support for PIO FIFO modes should be
->  *      dropped.
->  *      Use the io{read,write} family functions when they become available in
->  *      the linux-mips.org tree.  Note: the MIPS specific functions readsb()
->  *      and writesb() are to be translated by ioread8_rep() and iowrite8_rep()
->  *      respectively.
-> </snip>
-> 
->   Decision: Keep as is; anyone that wants to follow up on this will probably
->   understand that the reference is outdated anyway.
-
- Note that a copy of the LMO tree remains available online at: 
-<git://git.kernel.org/pub/scm/linux/kernel/git/ralf/linux.git>, so any 
-references or git commit IDs are reachable.  Perhaps it would be good to 
-add an actual reference somewhere though.
-
-  Maciej
+Thanks.
+Yours faithful,
+Dr.Muhammad Rawani
