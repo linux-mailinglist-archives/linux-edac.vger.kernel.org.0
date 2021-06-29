@@ -2,27 +2,27 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B317E3B7ABF
-	for <lists+linux-edac@lfdr.de>; Wed, 30 Jun 2021 01:42:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EF1A3B7AC3
+	for <lists+linux-edac@lfdr.de>; Wed, 30 Jun 2021 01:44:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235473AbhF2XpZ (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Tue, 29 Jun 2021 19:45:25 -0400
-Received: from mga09.intel.com ([134.134.136.24]:18675 "EHLO mga09.intel.com"
+        id S235226AbhF2XrQ (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Tue, 29 Jun 2021 19:47:16 -0400
+Received: from mga05.intel.com ([192.55.52.43]:14594 "EHLO mga05.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235295AbhF2XpY (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Tue, 29 Jun 2021 19:45:24 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10030"; a="208208662"
+        id S232615AbhF2XrP (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Tue, 29 Jun 2021 19:47:15 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10030"; a="293897879"
 X-IronPort-AV: E=Sophos;i="5.83,310,1616482800"; 
-   d="scan'208";a="208208662"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jun 2021 16:42:56 -0700
+   d="scan'208";a="293897879"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jun 2021 16:44:47 -0700
 X-IronPort-AV: E=Sophos;i="5.83,310,1616482800"; 
-   d="scan'208";a="625815383"
+   d="scan'208";a="641504140"
 Received: from agluck-desk2.sc.intel.com (HELO agluck-desk2.amr.corp.intel.com) ([10.3.52.146])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jun 2021 16:42:56 -0700
-Date:   Tue, 29 Jun 2021 16:42:55 -0700
+  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jun 2021 16:44:47 -0700
+Date:   Tue, 29 Jun 2021 16:44:46 -0700
 From:   "Luck, Tony" <tony.luck@intel.com>
-To:     torvalds@agluck-desk2.amr.corp.intel.com
+To:     Linus Torvalds <torvalds@linux-foundation.org>
 Cc:     Arnd Bergmann <arnd@arndb.de>, Bixuan Cui <cuibixuan@huawei.com>,
         Borislav Petkov <bp@suse.de>,
         Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
@@ -31,7 +31,7 @@ Cc:     Arnd Bergmann <arnd@arndb.de>, Bixuan Cui <cuibixuan@huawei.com>,
         Yazen Ghannam <yazen.ghannam@amd.com>,
         linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org
 Subject: [GIT PULL] ras/edac changes for v5.14
-Message-ID: <20210629234255.GA1239879@agluck-desk2.amr.corp.intel.com>
+Message-ID: <20210629234446.GA1239895@agluck-desk2.amr.corp.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
