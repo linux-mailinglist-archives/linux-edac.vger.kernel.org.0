@@ -2,60 +2,66 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B6BA3B87C5
-	for <lists+linux-edac@lfdr.de>; Wed, 30 Jun 2021 19:33:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E40AD3B887E
+	for <lists+linux-edac@lfdr.de>; Wed, 30 Jun 2021 20:34:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229852AbhF3RgN (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Wed, 30 Jun 2021 13:36:13 -0400
-Received: from mail.skyhub.de ([5.9.137.197]:33442 "EHLO mail.skyhub.de"
+        id S232851AbhF3ShZ (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Wed, 30 Jun 2021 14:37:25 -0400
+Received: from mail.kernel.org ([198.145.29.99]:39164 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229573AbhF3RgN (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Wed, 30 Jun 2021 13:36:13 -0400
-Received: from zn.tnic (p200300ec2f12c300d32a22941298d01c.dip0.t-ipconnect.de [IPv6:2003:ec:2f12:c300:d32a:2294:1298:d01c])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 4A6701EC046E;
-        Wed, 30 Jun 2021 19:33:43 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1625074423;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=w9TPmtT989Bxa/BMOi3EyRqngWlUdV8lm8j+1Polio4=;
-        b=CayhQfR68oLp4Y61HzHpO1OgsicFzsWsE1YRpgwB6mhTxz1ULt47BxMtqyfhcSDcUiGr4s
-        vqwHRaLUr60Ac9qTat7TEuu74EestJJ8W59Adabn0vD5WwjhqSI1GckQmGKfImmvGH0RB1
-        xayVo5KSc16AKKlXf2efHLjNQ17mTU0=
-Date:   Wed, 30 Jun 2021 19:33:43 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Yazen Ghannam <yazen.ghannam@amd.com>
-Cc:     linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
-        mchehab@kernel.org, tony.luck@intel.com,
-        Smita.KoralahalliChannabasappa@amd.com
-Subject: Re: [PATCH v2 09/31] EDAC/amd64: Define function to find
- interleaving mode
-Message-ID: <YNyq95hXKcbM4+Kk@zn.tnic>
-References: <20210623192002.3671647-1-yazen.ghannam@amd.com>
- <20210623192002.3671647-10-yazen.ghannam@amd.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20210623192002.3671647-10-yazen.ghannam@amd.com>
+        id S232745AbhF3ShZ (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Wed, 30 Jun 2021 14:37:25 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPS id DD0F461419;
+        Wed, 30 Jun 2021 18:34:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1625078095;
+        bh=o7HWFBp8JYLf/BFqmOzk6+xx+xon3y637YTwer/C800=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=M8rIc/WiM5Z3dKLaLSRul49OfyxMr9JF0kKsPc8SNWB0rkOy3gOSZm4cZrG3xPwzL
+         482FaStSQLW/QCLBdhcsxNcSdwzO+AyONFu3+JpGC/T3gRv3HBQPc3SI8A2bvh0OZ1
+         6uLscZ3BofyuCZBvCiOrLC0F3gm5ah51EMWEW21d2KxzbAPybBjHUIx3Nn5knUEKBN
+         Fzs7oG/aJaO7SC7ZQSQez22A0VlFnX3FxEkKPdozKjWMH8iL7NJkOFNCsrH5Jz7TgQ
+         BwRis1/TTQTGsd726PdNWRAal1mRrd8dxzpqilvr1zE06y/1Me+ajc0Ju/xHlFeqQe
+         ovPS9VLDZGJOQ==
+Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id CBE7D60A17;
+        Wed, 30 Jun 2021 18:34:55 +0000 (UTC)
+Subject: Re: [GIT PULL] ras/edac changes for v5.14
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <20210629234446.GA1239895@agluck-desk2.amr.corp.intel.com>
+References: <20210629234446.GA1239895@agluck-desk2.amr.corp.intel.com>
+X-PR-Tracked-List-Id: <linux-edac.vger.kernel.org>
+X-PR-Tracked-Message-Id: <20210629234446.GA1239895@agluck-desk2.amr.corp.intel.com>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/ras/ras.git tags/edac_updates_for_v5.14
+X-PR-Tracked-Commit-Id: 0a9ece9ba154dd6205709108180952c55e630833
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 4b5e35ce075817bc36d7c581b22853be984e5b41
+Message-Id: <162507809577.10377.5016426522118551443.pr-tracker-bot@kernel.org>
+Date:   Wed, 30 Jun 2021 18:34:55 +0000
+To:     "Luck, Tony" <tony.luck@intel.com>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Bixuan Cui <cuibixuan@huawei.com>,
+        Borislav Petkov <bp@suse.de>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Qiuxu Zhuo <qiuxu.zhuo@intel.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Yazen Ghannam <yazen.ghannam@amd.com>,
+        linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Wed, Jun 23, 2021 at 07:19:40PM +0000, Yazen Ghannam wrote:
-> @@ -1088,10 +1096,12 @@ struct addr_ctx {
->  	u16 nid;
->  	u8 inst_id;
->  	u8 map_num;
-> +	bool hash_enabled;
+The pull request you sent on Tue, 29 Jun 2021 16:44:46 -0700:
 
-For such single bits info you can use bitfields, like struct mca_config
-does it, for example.
+> git://git.kernel.org/pub/scm/linux/kernel/git/ras/ras.git tags/edac_updates_for_v5.14
+
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/4b5e35ce075817bc36d7c581b22853be984e5b41
+
+Thank you!
 
 -- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
