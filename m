@@ -2,48 +2,48 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CF0013B856F
-	for <lists+linux-edac@lfdr.de>; Wed, 30 Jun 2021 16:51:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BFC913B8571
+	for <lists+linux-edac@lfdr.de>; Wed, 30 Jun 2021 16:51:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235660AbhF3Oxb (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Wed, 30 Jun 2021 10:53:31 -0400
-Received: from mail-bn8nam11on2089.outbound.protection.outlook.com ([40.107.236.89]:40513
+        id S235846AbhF3Oxh (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Wed, 30 Jun 2021 10:53:37 -0400
+Received: from mail-bn8nam11on2075.outbound.protection.outlook.com ([40.107.236.75]:18017
         "EHLO NAM11-BN8-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S235141AbhF3Ox3 (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Wed, 30 Jun 2021 10:53:29 -0400
+        id S235830AbhF3Oxe (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Wed, 30 Jun 2021 10:53:34 -0400
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ZEeAHN0s/sMrpOKUOrKM4OboBe5hAMa+vGrz+JSiVOexPaInlxMkc46X0r94SUOSCDFQg0Tli4sVfgGG4jbiCBGQiHSuRwRbeKc69eb/s7JZXbUiJWNE1b3jXosV5aUyFEta8E5/N5bWPc4n8EB3EKTfsyCKdpih4yLtEo8r9UzHsvFccTqRLZzAmT1GZSnsOLKHmCGWtfcEcGz3Xa5Ay3NZmodRPxTyqzhftgpLGGcVV+5roXv+JBwhn1IizM5UfDhBTSXvDWim2gCUDE9gmkpv4Z8ai8HvrCGXay5Xcp9kK/oIcKgQ1YLhwEoocBDNvUWZKQSOa32YKJhmqX12Mw==
+ b=EATMlcTm8LrFBPSotZzwNl2Zxr4L5RQFPpbZbyQ3JrJPnqfU6Wq8BGwQ6OvZPam9ejJ8cCOOU641sPp/9blqjbXY7azjqhZjafT2w0/1YyVvjI3xYndaAKEHA4loLM4c4vVimZzEetRdAWSN8Kasgj1MHpUGwflJoHbzKBgIISPraTcdTIc3WYz/5ArWqZoN1qpsTS9f7HlZfD1Cka/iP8VikK4F06dnt6hBeED2ZnMZMZXMs1/T/o9bxbj9CifO/1pwp8CtAxfDLZ8A+a0q208+0qu8b0+PUuJN1W5rlmaNfLMb9kAX0fDnIES1ewQWaTTmIyVrjXFwgmA/JNx0dw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=pUt2kdiN34r5XTw8skP8FGdTqvzZxGf6Hq0nTWByXII=;
- b=iS4/3rNjBE6VhUysfNquanT96Ploj/HBVWp3EOVICRgSki6ck4tHCw7evlaN/YpNCNFKRdfkJf8FwCTc1wFPTbWkhZQb5YaWVKMYXUk8j8Ng7UTtAYSp/9SM8Jqv6daTShz+jj6b4xnjWHx9c3F8JK4sThtig65lcZBw7S6fvOxhRMrNHqCuMiEHFTEZCwqtNWl80oxrDnSdD+C/+sfa4R0gCSAbhho6YtPnCcuH6cz89YZL+YEjrs93thZvHK29/gMXI0nKI2sZMHiJAxWJvP2gkQ/w3+PH2J25xLcuObcESOlalFyzB44CDa2c7QZNyfEyODj+A7eHdG3gwdxy6w==
+ bh=xf42YnwFYxwkc8eNZdcmQMoXqc8V0ftaJjUtv9SZwzk=;
+ b=R5HiiKgMTT6QMH6KIKuKJXlJdxNsBzsy22cMR9ezu42sLJ4TeUB+q+UnijOGF9b6arMnXcUWdiPL8nCATQeXIsDmflflpmcj5K0U1gq+wbFjTjHWk7faKfrognl+9qaJvWJH8+cCzas+svpQm7FU0TMCk5ODDRZHS8Lw7ld7WsL3T2Uk7MbinICAiU1ithylfRPv5SZcbDRfhNSXQkO+qXf27ccMccL6VFPiB22lrsT/cO8YbTE0EUOCUcteGWc6W2btTHBi4KqFZgGcVwlO2GmeyL5dDSqMN0OoLfomD1325yRnAw7j9Gt866pyqvjjYRS0qaBCnhcVhlpZ4t2nqQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
  header.d=amd.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=pUt2kdiN34r5XTw8skP8FGdTqvzZxGf6Hq0nTWByXII=;
- b=vkUA7J7H3ghC77cQR58TFhoQ2t4x0K4UOd+9LplfYi4ccJphxwB57Sqf/8IJrW4X23sHLQC1lEjaeS3RCdXHAkbHgNZbsIDklKQCG5xa/BETn4mSE+C6+NpIZCXH8CVlHny1+CflqRoJ+ckuNyGqFBm4+QKbHBuypCPlB0lsa6w=
+ bh=xf42YnwFYxwkc8eNZdcmQMoXqc8V0ftaJjUtv9SZwzk=;
+ b=N4PbXww8a0ivWUG6wav/i9A6KQPy/e9ghpcEFHaRKpkrkAn5HM8ZL2zos4i5ePYZznUjtoTO6Z2zJYr+NPFGJVOGwWKySEZZ8LoE15HY/MQR8Xo9VjxgATRrzPOb/VM4bnFvEx/j8OOJd4aZQRnGCKwO4h51vGxBEG31uOxQDhw=
 Authentication-Results: vger.kernel.org; dkim=none (message not signed)
  header.d=none;vger.kernel.org; dmarc=none action=none header.from=amd.com;
 Received: from BL1PR12MB5286.namprd12.prod.outlook.com (2603:10b6:208:31d::6)
  by BL1PR12MB5045.namprd12.prod.outlook.com (2603:10b6:208:310::15) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4287.22; Wed, 30 Jun
- 2021 14:50:58 +0000
+ 2021 14:51:04 +0000
 Received: from BL1PR12MB5286.namprd12.prod.outlook.com
  ([fe80::8ce:4339:7e20:7022]) by BL1PR12MB5286.namprd12.prod.outlook.com
  ([fe80::8ce:4339:7e20:7022%5]) with mapi id 15.20.4287.023; Wed, 30 Jun 2021
- 14:50:58 +0000
+ 14:51:04 +0000
 From:   Naveen Krishna Chatradhi <nchatrad@amd.com>
 To:     linux-edac@vger.kernel.org, x86@kernel.org
 Cc:     linux-kernel@vger.kernel.org, bp@alien8.de, mingo@redhat.com,
-        mchehab@kernel.org
-Subject: [PATCH 5/7] EDAC/amd64: Enumerate memory on noncpu nodes
-Date:   Wed, 30 Jun 2021 20:58:26 +0530
-Message-Id: <20210630152828.162659-6-nchatrad@amd.com>
+        mchehab@kernel.org, Yazen Ghannam <yazen.ghannam@amd.com>
+Subject: [PATCH 6/7] EDAC/amd64: Add address translation support for DF3.5
+Date:   Wed, 30 Jun 2021 20:58:27 +0530
+Message-Id: <20210630152828.162659-7-nchatrad@amd.com>
 X-Mailer: git-send-email 2.26.2
 In-Reply-To: <20210630152828.162659-1-nchatrad@amd.com>
 References: <20210630152828.162659-1-nchatrad@amd.com>
@@ -55,659 +55,376 @@ X-ClientProxiedBy: MAXPR01CA0082.INDPRD01.PROD.OUTLOOK.COM
  (2603:10b6:208:31d::6)
 MIME-Version: 1.0
 X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from SLES15.amd.com (165.204.156.251) by MAXPR01CA0082.INDPRD01.PROD.OUTLOOK.COM (2603:1096:a00:49::24) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4287.22 via Frontend Transport; Wed, 30 Jun 2021 14:50:55 +0000
+Received: from SLES15.amd.com (165.204.156.251) by MAXPR01CA0082.INDPRD01.PROD.OUTLOOK.COM (2603:1096:a00:49::24) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4287.22 via Frontend Transport; Wed, 30 Jun 2021 14:51:01 +0000
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 5339eceb-daab-40f5-2109-08d93bd678a5
+X-MS-Office365-Filtering-Correlation-Id: 9dc5f702-7a76-4f9c-7e10-08d93bd67bf8
 X-MS-TrafficTypeDiagnostic: BL1PR12MB5045:
 X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <BL1PR12MB504556D2C6AB9E49A37EC5A5E8019@BL1PR12MB5045.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:2733;
+X-Microsoft-Antispam-PRVS: <BL1PR12MB5045C9158B39528F66F5A373E8019@BL1PR12MB5045.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:9508;
 X-MS-Exchange-SenderADCheck: 1
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Oq2JeRt3VMN/YTHe4Vcc5t2uKpv0xns43KQr5yh7+IWl8G7h9S+WvzIKLWjfQ2gPgylvJNIUkAquLo8xGTU0G7cYxDyGIGcC4046YQcX+4sCF+g3SPqxsPJyFMQje0KiE8hjaizocZPnBDdIqypmjREI+1QcK2/JnByfaoPyrwjAeFoOlB3Llvily3Sjh197GzZ63mF0hXdeKx4jCzOK5Tun5yYXoffiwtpNaW5IAaO3ywBBltpSmOYI22Q1nk74cz/SU0Osh79HFxDkcRUmJVxo/ix7bzDMkeYPTo8xhPtonG7h7WemYQnyOMZmD8g0XnQUofclx4BLJQjfa6TfL5CI1PbYBmGbEYXh89jPDP7GbCrduOtWycWJa9JVD6oT3ivt5mltInS2qypHI3nFS6wHVipqZvDbYtz2lZKX1+tR9WBBAq9RtvlKDCeBaGg10dMaRLAsY7SVsLEopxXty/VOW/XDnyDvi9YMIhrppFvaMcS1QAePjCcolw22QOiFts8GT3ad737VAfXSb5iRO71hj/8kYayfkDC5WEQxRCVvrgRAlmnW9zDnsNeeXFlFD2hNC+RyiinBDqNiTHhOHmUF4MOLWegxWNO8n0y8stLnide/SusVHUZOMkrRJKqjHTIXU5aw21ZUQpNj/IQ+lBQGiaet/mpsUmIVX6LXw1UHSuOoZfwyCBEnj56LmiLJA3VP+zfyl2nI7MoJnaTLxw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL1PR12MB5286.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(376002)(136003)(396003)(39860400002)(346002)(366004)(36756003)(478600001)(83380400001)(6666004)(52116002)(26005)(7696005)(2906002)(6486002)(30864003)(4326008)(66476007)(2616005)(956004)(8676002)(16526019)(186003)(5660300002)(66946007)(66556008)(38100700002)(38350700002)(316002)(8936002)(1076003);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: QzXGN2ZL2RsuT/sM4CN/UYHrQBeqXLs4Vma4yFpwdOVrS/pJVakuPi8AW95ksAuz/8xIYziuhpPoqwFmCVHm5nLR3kMNUSqTZwRQoq5WjAxCgbS7LFzBOX8jBNWcFkYwVeemzVh7+eovJFNPlA/YK/jV85TyLmF/th0S5QJ11kMsMcWeIqxf/2/tPs70ZnPjX5cS4N37i/77ywN/4pNspP+ETQKWT5sV6DCbWbNoqVlWMEm5t3y5EKVGKpulB16N1KGoExDhmLoaEwcgUxVxXbDwUMkyz38n/3XJYoABJqw+YVwO2OWwzek/IXevL/elLB1wOoSFEUpG8WN8URNvHUE47MyF1nZ//mE2H5F2KTo5i8rxyKIe9Vc4URDMFlTn5BDb5sDypowqaMIyk0r1o7LhRdObCG5b+Hp+devPYG/zPQoMMJ1zgSKNJW6HGj48Pk9Ezps0GP8T7/biyOsqopf0ro6Ddz5hAcVdwjGzvyByeh/Y13UnECQBM6AqTh4vCWgNJ1LsvmA/J2s88qiHvDLBjK7k/DjTOdGhUVH6rIfJPFLRaRiaR8Qp5gAvfS7hTHJFUEb7yhTwyOtjVfeKED0R3J33GirEL886zQ3bO3I3H9quReOWN16jHjJm6K0mepIdHIouohOFsongYoWYsN2dSgbR8zhn/2vviZ8xkQQ9djYGkpb0sbnNe2Kf2UQxbzWGs6zmOcermxW6bUcvMw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL1PR12MB5286.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(376002)(136003)(396003)(39860400002)(346002)(366004)(36756003)(478600001)(83380400001)(6666004)(52116002)(26005)(7696005)(2906002)(6486002)(4326008)(66476007)(2616005)(956004)(8676002)(16526019)(186003)(5660300002)(66946007)(66556008)(38100700002)(38350700002)(316002)(8936002)(1076003);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?UJy6klG1B0w2v5PBV4Q3yvYyvNGYTWBF2GNvtsO3rvbRJrVDSHmFhGsyLQNH?=
- =?us-ascii?Q?ZF3qmw3N4+mk4r82QyeYvhXJK4ClQBFTP1eeJVab/rusOWfqQcGzQlcKNpBH?=
- =?us-ascii?Q?GJbpPlseYsZ7pYS3xm8pfvpslengNlmz5JCCEyKNfDzvl4Sa9LzjwktGfnXI?=
- =?us-ascii?Q?bbFtTvwdbYlQVLlroMPJ2syPsLNeqx/7unmWcl4jPJySZdn637S7CaKPW8Op?=
- =?us-ascii?Q?1Oyk9Y6CEEdPL0UyTFFqw3jQ9cq4c0DyxSijrgURnsenjHBVUEvByQ/5OiZM?=
- =?us-ascii?Q?viZYxkzrHKeUg6Hr4fjQcIJNSmAdBwoHCfutFBASuAQlSJcryMUahSFm1SgL?=
- =?us-ascii?Q?zVeqRwwtBl/Wfcf3RjtIXnKKuIpqMzKl1oZatD4Xv1OFUNShJBTqZ4dT5DJ8?=
- =?us-ascii?Q?mP9oIHjvZcUq+/fwoTch4D3CSSIMxGRDonAiojkd7+sSdw5RVFSxXOnJExT0?=
- =?us-ascii?Q?pkUXFCkFoLaocsrkeOjoSeneTY97TbvNK7apoMt5Jr82aOmjayhyad9TfKuN?=
- =?us-ascii?Q?7yytVw65LrjkAbASxOVrUmi9iXWztr3yFpjbXtfJrfeA3cLMj6RTtdHZ9EUM?=
- =?us-ascii?Q?Sblsj27l6yHw9Mlvj2JgVJ9/sX6LyKTh6pyig+meNMQWADDAkeEwaOijUVMx?=
- =?us-ascii?Q?C2CK7GF1KKDVh5zcFHCzsZ3qsXt+zXNgAtg1MOu9BlisKZJzuhD3pJoLnVFo?=
- =?us-ascii?Q?HEQTxurfUf9IfpYbk6eAp7lC+BmWNLLATH74OEnuMDNpg/9NrpcU5PSyNMbh?=
- =?us-ascii?Q?+riM7RfFpGw50kgYELItSsDeKVCpPy+FB5LCq7edqjnRgTek5VFM8psDF+Df?=
- =?us-ascii?Q?dyCt2vOirNIjj6hSOldxjOxDbWvUMHmSasos3cSuFol55TWdmno6dlx1XJLw?=
- =?us-ascii?Q?0r9jIBPmVqFmvrZzqnn145y2NS3gTR2tdhOyZAgn3YqiJ/vfNtC6TwvBsj9Z?=
- =?us-ascii?Q?AUwLpASI6nzV+8ozK7HeT2YRM+DW5IVJdoHEd4g7LBcz1j6tczHkZ9iLmfxC?=
- =?us-ascii?Q?ZtmEoeVVDtF1ttIXxWq9iJsTLYuItvvpBPa1e9FrOTQHdMlSpoMpJdEF0Ayr?=
- =?us-ascii?Q?ecwVy2i8uNFyYwTKaJ8VmhBPyQHgZ+SrdPgzEBpPbstfrd3N76Ht0cO4oTDe?=
- =?us-ascii?Q?6vJk3JJOzAT7nhGLBjmsWVc1eCHca5Jev0oSOf2+12yDCB3M34E/caDO8Ci2?=
- =?us-ascii?Q?Dt0WDzxBNAgYr4foHMi9s9Z9LsOP80CJhVHNnKJWdrUm8vX3Xd6DB0Vzm2P0?=
- =?us-ascii?Q?1BqK1RNJwIuePpqzsDQhKZzIqrsTjFtbhzU8AgujkiD+FzztNOXma46hgYlG?=
- =?us-ascii?Q?5hfPZLtjDJLQCnDKhYd90FGS?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?G8LDM2OXK0MvfjDrG5Dq7HW9pYfEnYIJqjct9bhX0fwFLZ6zKtHfR6X93jcd?=
+ =?us-ascii?Q?WZu6RdlkXF7dzhZoeCaF/kReRajBGJCKUzc1vedAy+MEMPmUOSpMmvkJrkj3?=
+ =?us-ascii?Q?W49Asrup3mpiAgwYnjWJSw2uOJMmdYWhGfGephn3Smv/5rIssF16ZnRclFVj?=
+ =?us-ascii?Q?q5H1rlVLayLOcI5FytarCNUpXg5yDtvvtGsfuSH3v6vBYc0kUmcOZ8Ymh0Wc?=
+ =?us-ascii?Q?EN2uZNyGmgoNewnJmiWZHn6W/jzJDWLFCXASLOQNK6ItZS/nSg9Dxlz6j9yF?=
+ =?us-ascii?Q?uT7H1mkDP3e9vP0GpOJAwH9N1J+NswiqZvVK9ZeX9XvDuQA8tDA6r4yW/Uny?=
+ =?us-ascii?Q?HzcWjijXfMADkpI7TNG1UfM8T+lQG+54BGmDGVXkqz4OC7LXBq/CXPWg2Gjz?=
+ =?us-ascii?Q?Pe5NJ4RSQ4C9tBNMR4MpchJDTEMbefcFSgjWmACFSVRX3Gy6yZ+d/4l0nyFv?=
+ =?us-ascii?Q?+cAwnmfVQCa53VH1cHdFuv0gUCBNJS/WCWIuR1gE/lMH6y1w0/MHNUrq5iJo?=
+ =?us-ascii?Q?dk+4pJicAtAiZhEaxX+FvMVAuhoaL04ZGBkCUKp1qwmtZTsjGhgsyjv1lP6m?=
+ =?us-ascii?Q?57WfFRzhtT2tpiYyiYBFCO5D8TNMNwg58gOjM7l6RWn/vM9yYbonnssQ5I7/?=
+ =?us-ascii?Q?FMUylhJPMqm30PEO6KRpESlaklI44nl9ZEMhQq/DdUhNzvl0CMg40XHvFZV3?=
+ =?us-ascii?Q?qhJph1bKLe+5QVihGsuaqdcagzmdQseRhsDKzgD+lJnDz/DZEAHzEmRby+3T?=
+ =?us-ascii?Q?mfW1GhiSSNJIPhWg4I2nnwdz0Ngn1p8Dp6zjxPCRvL9Ql3g59vvKUFeebeXD?=
+ =?us-ascii?Q?LFMRXqe0gZk44NNfnH/BkzhreaIqzkMPaiLcL5JRr9+V8bcIQ9SS4dt89nb9?=
+ =?us-ascii?Q?sruXT3Pwd1wzrrPe0AvSHX9fXM8B7bCcewA21qD5RxDmMdF57E+QryBgCyF0?=
+ =?us-ascii?Q?/GUQMbn3O2vTf8nwP6A+RFO8jZaOeomqx1k11sIw5m13b/FwUU+sLtGUQvup?=
+ =?us-ascii?Q?vp089sNv1UPtW4uJyBi4dMKiiJkJYOFiH9hs48O+zxebrN61eRpJZpTgv3Ov?=
+ =?us-ascii?Q?xKZzavEliWUmejOFY+Jiz4RqDdcNZTdIdkQwORAhGZFDTphE5ecOj3F6U8He?=
+ =?us-ascii?Q?2gVC4Y/sznrZ7G7JSLYxgIPLbhorWqD60EVs1Ior6f/aiLqeSh7Ge7F0GByl?=
+ =?us-ascii?Q?vFQ/Rjcfa8qMKINgVgSjdLHQPUbPyY5NZMevl1z6ijElkDR6qQDwSGpe7Lc1?=
+ =?us-ascii?Q?v+ZcJCPqYJwvp2HTNRONPBuLF2zZ+5wJf580Xi3VgvaAgaIJ5Zb/9wMPbdyB?=
+ =?us-ascii?Q?DiNK833c+i6wAwlWGc49OeAe?=
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5339eceb-daab-40f5-2109-08d93bd678a5
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9dc5f702-7a76-4f9c-7e10-08d93bd67bf8
 X-MS-Exchange-CrossTenant-AuthSource: BL1PR12MB5286.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Jun 2021 14:50:58.5312
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Jun 2021 14:51:04.0032
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Mh68rNrlvlI+IIgPeJ1qBDaowpa1pLvcw8m8fBxJ6TFSL4vuZWcVhwTSB2xA8Ij0Yvv7kG1dN2cyxz+0HJzSjg==
+X-MS-Exchange-CrossTenant-UserPrincipalName: Xn5RK7PGV5CHk+onKIMTlL6uzV8c1YP9xiVmOegLchJwPbD9XcWHz2SDxDAxsInOJp5RAjs8LNjgbFi+EkSWig==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR12MB5045
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On newer heterogeneous systems from AMD with GPU nodes connected via
-xGMI links to the CPUs, the GPU dies are interfaced with HBM2 memory.
+From: Muralidhara M K <muralimk@amd.com>
 
-This patch modifies the amd64_edac module to handle the HBM memory
-enumeration leveraging the existing edac and the amd64 specific data
-structures.
+Add support for address translation on Data Fabric version 3.5.
 
-The UMC Phys on GPU nodes are enumerated as csrows
-The UMC channels connected to HBMs are enumerated as ranks
+Add new data fabric ops and interleaving modes. Also, adjust how the
+DRAM address maps are found early in the translation for certain cases.
 
 Signed-off-by: Muralidhara M K <muralimk@amd.com>
 Signed-off-by: Naveen Krishna Chatradhi <nchatrad@amd.com>
+Co-developed-by: Yazen Ghannam <yazen.ghannam@amd.com>
+Signed-off-by: Yazen Ghannam <yazen.ghannam@amd.com>
 ---
- drivers/edac/amd64_edac.c | 300 +++++++++++++++++++++++++++++---------
- drivers/edac/amd64_edac.h |  27 ++++
- 2 files changed, 259 insertions(+), 68 deletions(-)
+ drivers/edac/amd64_edac.c | 213 +++++++++++++++++++++++++++++++++++++-
+ 1 file changed, 209 insertions(+), 4 deletions(-)
 
 diff --git a/drivers/edac/amd64_edac.c b/drivers/edac/amd64_edac.c
-index 25c6362e414b..8fe0a5e3c8f2 100644
+index 8fe0a5e3c8f2..a4197061ac2a 100644
 --- a/drivers/edac/amd64_edac.c
 +++ b/drivers/edac/amd64_edac.c
-@@ -1741,6 +1741,9 @@ static unsigned long determine_edac_cap(struct amd64_pvt *pvt)
- 
- 		if (umc_en_mask == dimm_ecc_en_mask)
- 			edac_cap = EDAC_FLAG_SECDED;
-+
-+		if (pvt->is_noncpu)
-+			edac_cap	= EDAC_FLAG_EC;
- 	} else {
- 		bit = (pvt->fam > 0xf || pvt->ext_model >= K8_REV_F)
- 			? 19
-@@ -1799,6 +1802,9 @@ static int f17_get_cs_mode(int dimm, u8 ctrl, struct amd64_pvt *pvt)
- {
- 	int cs_mode = 0;
- 
-+	if (pvt->is_noncpu)
-+		return CS_EVEN_PRIMARY | CS_ODD_PRIMARY;
-+
- 	if (csrow_enabled(2 * dimm, ctrl, pvt))
- 		cs_mode |= CS_EVEN_PRIMARY;
- 
-@@ -1818,6 +1824,15 @@ static void debug_display_dimm_sizes_df(struct amd64_pvt *pvt, u8 ctrl)
- 
- 	edac_printk(KERN_DEBUG, EDAC_MC, "UMC%d chip selects:\n", ctrl);
- 
-+	if (pvt->is_noncpu) {
-+		cs_mode = f17_get_cs_mode(cs0, ctrl, pvt);
-+		for_each_chip_select(cs0, ctrl, pvt) {
-+			size0 = pvt->ops->dbam_to_cs(pvt, ctrl, cs_mode, cs0);
-+			amd64_info(EDAC_MC ": %d: %5dMB\n", cs0, size0);
-+		}
-+		return;
-+	}
-+
- 	for (dimm = 0; dimm < 2; dimm++) {
- 		cs0 = dimm * 2;
- 		cs1 = dimm * 2 + 1;
-@@ -1833,43 +1848,53 @@ static void debug_display_dimm_sizes_df(struct amd64_pvt *pvt, u8 ctrl)
- 	}
- }
- 
--static void __dump_misc_regs_df(struct amd64_pvt *pvt)
-+static void dump_umcch_regs(struct amd64_pvt *pvt, int i)
- {
--	struct amd64_umc *umc;
--	u32 i, tmp, umc_base;
--
--	for_each_umc(i) {
--		umc_base = get_umc_base(i);
--		umc = &pvt->umc[i];
-+	struct amd64_umc *umc = &pvt->umc[i];
-+	u32 tmp, umc_base;
- 
--		edac_dbg(1, "UMC%d DIMM cfg: 0x%x\n", i, umc->dimm_cfg);
-+	if (pvt->is_noncpu) {
- 		edac_dbg(1, "UMC%d UMC cfg: 0x%x\n", i, umc->umc_cfg);
- 		edac_dbg(1, "UMC%d SDP ctrl: 0x%x\n", i, umc->sdp_ctrl);
- 		edac_dbg(1, "UMC%d ECC ctrl: 0x%x\n", i, umc->ecc_ctrl);
-+		edac_dbg(1, "UMC%d All HBMs support ECC: yes\n", i);
-+		return;
-+	}
- 
--		amd_smn_read(pvt->mc_node_id, umc_base + UMCCH_ECC_BAD_SYMBOL, &tmp);
--		edac_dbg(1, "UMC%d ECC bad symbol: 0x%x\n", i, tmp);
--
--		amd_smn_read(pvt->mc_node_id, umc_base + UMCCH_UMC_CAP, &tmp);
--		edac_dbg(1, "UMC%d UMC cap: 0x%x\n", i, tmp);
--		edac_dbg(1, "UMC%d UMC cap high: 0x%x\n", i, umc->umc_cap_hi);
--
--		edac_dbg(1, "UMC%d ECC capable: %s, ChipKill ECC capable: %s\n",
--				i, (umc->umc_cap_hi & BIT(30)) ? "yes" : "no",
--				    (umc->umc_cap_hi & BIT(31)) ? "yes" : "no");
--		edac_dbg(1, "UMC%d All DIMMs support ECC: %s\n",
--				i, (umc->umc_cfg & BIT(12)) ? "yes" : "no");
--		edac_dbg(1, "UMC%d x4 DIMMs present: %s\n",
--				i, (umc->dimm_cfg & BIT(6)) ? "yes" : "no");
--		edac_dbg(1, "UMC%d x16 DIMMs present: %s\n",
--				i, (umc->dimm_cfg & BIT(7)) ? "yes" : "no");
--
--		if (pvt->dram_type == MEM_LRDDR4) {
--			amd_smn_read(pvt->mc_node_id, umc_base + UMCCH_ADDR_CFG, &tmp);
--			edac_dbg(1, "UMC%d LRDIMM %dx rank multiply\n",
--					i, 1 << ((tmp >> 4) & 0x3));
--		}
-+	umc_base = get_umc_base(i);
-+
-+	edac_dbg(1, "UMC%d DIMM cfg: 0x%x\n", i, umc->dimm_cfg);
-+
-+	amd_smn_read(pvt->mc_node_id, umc_base + UMCCH_ECC_BAD_SYMBOL, &tmp);
-+	edac_dbg(1, "UMC%d ECC bad symbol: 0x%x\n", i, tmp);
-+
-+	amd_smn_read(pvt->mc_node_id, umc_base + UMCCH_UMC_CAP, &tmp);
-+	edac_dbg(1, "UMC%d UMC cap: 0x%x\n", i, tmp);
-+	edac_dbg(1, "UMC%d UMC cap high: 0x%x\n", i, umc->umc_cap_hi);
- 
-+	edac_dbg(1, "UMC%d ECC capable: %s, ChipKill ECC capable: %s\n",
-+		 i, (umc->umc_cap_hi & BIT(30)) ? "yes" : "no",
-+		    (umc->umc_cap_hi & BIT(31)) ? "yes" : "no");
-+	edac_dbg(1, "UMC%d All DIMMs support ECC: %s\n",
-+		 i, (umc->umc_cfg & BIT(12)) ? "yes" : "no");
-+	edac_dbg(1, "UMC%d x4 DIMMs present: %s\n",
-+		 i, (umc->dimm_cfg & BIT(6)) ? "yes" : "no");
-+	edac_dbg(1, "UMC%d x16 DIMMs present: %s\n",
-+		 i, (umc->dimm_cfg & BIT(7)) ? "yes" : "no");
-+
-+	if (pvt->dram_type == MEM_LRDDR4) {
-+		amd_smn_read(pvt->mc_node_id, umc_base + UMCCH_ADDR_CFG, &tmp);
-+		edac_dbg(1, "UMC%d LRDIMM %dx rank multiply\n",
-+			 i, 1 << ((tmp >> 4) & 0x3));
-+	}
-+}
-+
-+static void __dump_misc_regs_df(struct amd64_pvt *pvt)
-+{
-+	int i;
-+
-+	for_each_umc(i) {
-+		dump_umcch_regs(pvt, i);
- 		debug_display_dimm_sizes_df(pvt, i);
- 	}
- 
-@@ -1937,10 +1962,14 @@ static void prep_chip_selects(struct amd64_pvt *pvt)
- 		pvt->csels[0].m_cnt = pvt->csels[1].m_cnt = 2;
- 	} else if (pvt->fam >= 0x17) {
- 		int umc;
--
- 		for_each_umc(umc) {
--			pvt->csels[umc].b_cnt = 4;
--			pvt->csels[umc].m_cnt = 2;
-+			if (pvt->is_noncpu) {
-+				pvt->csels[umc].b_cnt = 8;
-+				pvt->csels[umc].m_cnt = 8;
-+			} else {
-+				pvt->csels[umc].b_cnt = 4;
-+				pvt->csels[umc].m_cnt = 2;
-+			}
- 		}
- 
- 	} else {
-@@ -1949,6 +1978,31 @@ static void prep_chip_selects(struct amd64_pvt *pvt)
- 	}
- }
- 
-+static void read_noncpu_umc_base_mask(struct amd64_pvt *pvt)
-+{
-+	u32 base_reg, mask_reg;
-+	u32 *base, *mask;
-+	int umc, cs;
-+
-+	for_each_umc(umc) {
-+		for_each_chip_select(cs, umc, pvt) {
-+			base_reg = get_noncpu_umc_base(umc, cs) + UMCCH_BASE_ADDR;
-+			base = &pvt->csels[umc].csbases[cs];
-+
-+			if (!amd_smn_read(pvt->mc_node_id, base_reg, base))
-+				edac_dbg(0, "  DCSB%d[%d]=0x%08x reg: 0x%x\n",
-+					 umc, cs, *base, base_reg);
-+
-+			mask_reg = get_noncpu_umc_base(umc, cs) + UMCCH_ADDR_MASK;
-+			mask = &pvt->csels[umc].csmasks[cs];
-+
-+			if (!amd_smn_read(pvt->mc_node_id, mask_reg, mask))
-+				edac_dbg(0, "  DCSM%d[%d]=0x%08x reg: 0x%x\n",
-+					 umc, cs, *mask, mask_reg);
-+		}
-+	}
-+}
-+
- static void read_umc_base_mask(struct amd64_pvt *pvt)
- {
- 	u32 umc_base_reg, umc_base_reg_sec;
-@@ -2009,8 +2063,12 @@ static void read_dct_base_mask(struct amd64_pvt *pvt)
- 
- 	prep_chip_selects(pvt);
- 
--	if (pvt->umc)
--		return read_umc_base_mask(pvt);
-+	if (pvt->umc) {
-+		if (pvt->is_noncpu)
-+			return read_noncpu_umc_base_mask(pvt);
-+		else
-+			return read_umc_base_mask(pvt);
-+	}
- 
- 	for_each_chip_select(cs, 0, pvt) {
- 		int reg0   = DCSB0 + (cs * 4);
-@@ -2056,6 +2114,10 @@ static void determine_memory_type(struct amd64_pvt *pvt)
- 	u32 dram_ctrl, dcsm;
- 
- 	if (pvt->umc) {
-+		if (pvt->is_noncpu) {
-+			pvt->dram_type = MEM_HBM2;
-+			return;
-+		}
- 		if ((pvt->umc[0].dimm_cfg | pvt->umc[1].dimm_cfg) & BIT(5))
- 			pvt->dram_type = MEM_LRDDR4;
- 		else if ((pvt->umc[0].dimm_cfg | pvt->umc[1].dimm_cfg) & BIT(4))
-@@ -2445,7 +2507,10 @@ static int f17_early_channel_count(struct amd64_pvt *pvt)
- 
- 	/* SDP Control bit 31 (SdpInit) is clear for unused UMC channels */
- 	for_each_umc(i)
--		channels += !!(pvt->umc[i].sdp_ctrl & UMC_SDP_INIT);
-+		if (pvt->is_noncpu)
-+			channels += pvt->csels[i].b_cnt;
-+		else
-+			channels += !!(pvt->umc[i].sdp_ctrl & UMC_SDP_INIT);
- 
- 	amd64_info("MCT channel count: %d\n", channels);
- 
-@@ -2586,6 +2651,12 @@ static int f17_addr_mask_to_cs_size(struct amd64_pvt *pvt, u8 umc,
- 	u32 msb, weight, num_zero_bits;
- 	int dimm, size = 0;
- 
-+	if (pvt->is_noncpu) {
-+		addr_mask_orig = pvt->csels[umc].csmasks[csrow_nr];
-+		/* The memory channels in case of GPUs are fully populated */
-+		goto skip_noncpu;
-+	}
-+
- 	/* No Chip Selects are enabled. */
- 	if (!cs_mode)
- 		return size;
-@@ -2611,6 +2682,7 @@ static int f17_addr_mask_to_cs_size(struct amd64_pvt *pvt, u8 umc,
- 	else
- 		addr_mask_orig = pvt->csels[umc].csmasks[dimm];
- 
-+ skip_noncpu:
- 	/*
- 	 * The number of zero bits in the mask is equal to the number of bits
- 	 * in a full mask minus the number of bits in the current mask.
-@@ -3356,6 +3428,16 @@ static struct amd64_family_type family_types[] = {
- 			.dbam_to_cs		= f17_addr_mask_to_cs_size,
- 		}
- 	},
-+	[ALDEBARAN_GPUS] = {
-+		.ctl_name = "ALDEBARAN",
-+		.f0_id = PCI_DEVICE_ID_AMD_ALDEBARAN_DF_F0,
-+		.f6_id = PCI_DEVICE_ID_AMD_ALDEBARAN_DF_F6,
-+		.max_mcs = 4,
-+		.ops = {
-+			.early_channel_count	= f17_early_channel_count,
-+			.dbam_to_cs		= f17_addr_mask_to_cs_size,
-+		}
-+	},
+@@ -996,6 +996,7 @@ static int sys_addr_to_csrow(struct mem_ctl_info *mci, u64 sys_addr)
+ /*
+  * Glossary of acronyms used in address translation for Zen-based systems
+  *
++ * CCM		=	Cache Coherent Master
+  * COD		=	Cluster-on-Die
+  * CS		=	Coherent Slave
+  * DF		=	Data Fabric
+@@ -1064,6 +1065,7 @@ static int amd_df_indirect_read(u16 node, struct df_reg reg, u8 instance_id, u32
+ enum df_reg_names {
+ 	/* Function 0 */
+ 	FAB_BLK_INST_CNT,
++	FAB_BLK_INST_INFO_0,
+ 	FAB_BLK_INST_INFO_3,
+ 	DRAM_HOLE_CTL,
+ 	DRAM_BASE_ADDR,
+@@ -1074,11 +1076,16 @@ enum df_reg_names {
+ 	/* Function 1 */
+ 	SYS_FAB_ID_MASK,
+ 	SYS_FAB_ID_MASK_1,
++	SYSFABIDMASK0_DF3POINT5,
++	SYSFABIDMASK1_DF3POINT5,
++	SYSFABIDMASK2_DF3POINT5,
  };
  
- /*
-@@ -3611,6 +3693,19 @@ static int find_umc_channel(struct mce *m)
- 	return (m->ipid & GENMASK(31, 0)) >> 20;
- }
+ static struct df_reg df_regs[] = {
+ 	/* D18F0x40 (FabricBlockInstanceCount) */
+ 	[FAB_BLK_INST_CNT]	=	{0, 0x40},
++	/* D18F0x44 (FabricBlockInstanceInformation0) */
++	[FAB_BLK_INST_INFO_0]	=	{0, 0x44},
+ 	/* D18F0x50 (FabricBlockInstanceInformation3_CS) */
+ 	[FAB_BLK_INST_INFO_3]	=	{0, 0x50},
+ 	/* D18F0x104 (DramHoleControl) */
+@@ -1095,6 +1102,12 @@ static struct df_reg df_regs[] = {
+ 	[SYS_FAB_ID_MASK]	=	{1, 0x208},
+ 	/* D18F1x20C (SystemFabricIdMask1) */
+ 	[SYS_FAB_ID_MASK_1]	=	{1, 0x20C},
++	/* D18F1x150 (SystemFabricIdMask0) */
++	[SYSFABIDMASK0_DF3POINT5] =	{1, 0x150},
++	/* D18F1x154 (SystemFabricIdMask1) */
++	[SYSFABIDMASK1_DF3POINT5] =	{1, 0x154},
++	/* D18F1x158 (SystemFabricIdMask2) */
++	[SYSFABIDMASK2_DF3POINT5] =	{1, 0x158},
+ };
  
-+/*
-+ * The HBM memory managed by the UMCCH of the noncpu node
-+ * can be calculated based on the [15:12]bits of IPID as follows
-+ */
-+static int find_umc_channel_noncpu(struct mce *m)
+ /* These are mapped 1:1 to the hardware values. Special cases are set at > 0x20. */
+@@ -1103,9 +1116,14 @@ enum intlv_modes {
+ 	NOHASH_2CH	= 0x01,
+ 	NOHASH_4CH	= 0x03,
+ 	NOHASH_8CH	= 0x05,
++	NOHASH_16CH	= 0x07,
++	NOHASH_32CH	= 0x08,
+ 	HASH_COD4_2CH	= 0x0C,
+ 	HASH_COD2_4CH	= 0x0D,
+ 	HASH_COD1_8CH	= 0x0E,
++	HASH_8CH	= 0x1C,
++	HASH_16CH	= 0x1D,
++	HASH_32CH	= 0x1E,
+ 	DF2_HASH_2CH	= 0x21,
+ };
+ 
+@@ -1118,6 +1136,7 @@ struct addr_ctx {
+ 	u32 reg_limit_addr;
+ 	u32 reg_fab_id_mask0;
+ 	u32 reg_fab_id_mask1;
++	u32 reg_fab_id_mask2;
+ 	u16 cs_fabric_id;
+ 	u16 die_id_mask;
+ 	u16 socket_id_mask;
+@@ -1447,6 +1466,128 @@ struct data_fabric_ops df3_ops = {
+ 	.get_component_id_mask		=	&get_component_id_mask_df3,
+ };
+ 
++static int dehash_addr_df35(struct addr_ctx *ctx)
 +{
-+	u8 umc, ch;
++	u8 hashed_bit, intlv_ctl_64k, intlv_ctl_2M, intlv_ctl_1G;
++	u8 num_intlv_bits = ctx->intlv_num_chan;
++	u32 tmp, i;
 +
-+	umc = find_umc_channel(m);
-+	ch = ((m->ipid >> 12) & 0xf);
-+	return umc % 2 ? (ch + 4) : ch;
-+}
-+
- static void decode_umc_error(int node_id, struct mce *m)
- {
- 	u8 ecc_type = (m->status >> 45) & 0x3;
-@@ -3618,6 +3713,7 @@ static void decode_umc_error(int node_id, struct mce *m)
- 	struct amd64_pvt *pvt;
- 	struct err_info err;
- 	u64 sys_addr = m->addr;
-+	u8 umc_num;
- 
- 	mci = edac_mc_find(node_id);
- 	if (!mci)
-@@ -3630,7 +3726,16 @@ static void decode_umc_error(int node_id, struct mce *m)
- 	if (m->status & MCI_STATUS_DEFERRED)
- 		ecc_type = 3;
- 
--	err.channel = find_umc_channel(m);
-+	if (pvt->is_noncpu) {
-+		err.csrow = find_umc_channel(m) / 2;
-+		/* The UMC channel is reported as the csrow in case of the noncpu nodes */
-+		err.channel = find_umc_channel_noncpu(m);
-+		umc_num = err.csrow * 8 + err.channel;
-+	} else {
-+		err.channel = find_umc_channel(m);
-+		err.csrow = m->synd & 0x7;
-+		umc_num = err.channel;
-+	}
- 
- 	if (!(m->status & MCI_STATUS_SYNDV)) {
- 		err.err_code = ERR_SYND;
-@@ -3646,9 +3751,7 @@ static void decode_umc_error(int node_id, struct mce *m)
- 			err.err_code = ERR_CHANNEL;
- 	}
- 
--	err.csrow = m->synd & 0x7;
--
--	if (umc_normaddr_to_sysaddr(&sys_addr, pvt->mc_node_id, err.channel)) {
-+	if (umc_normaddr_to_sysaddr(&sys_addr, pvt->mc_node_id, umc_num)) {
- 		err.err_code = ERR_NORM_ADDR;
- 		goto log_error;
- 	}
-@@ -3775,15 +3878,20 @@ static void __read_mc_regs_df(struct amd64_pvt *pvt)
- 
- 	/* Read registers from each UMC */
- 	for_each_umc(i) {
-+		if (pvt->is_noncpu)
-+			umc_base = get_noncpu_umc_base(i, 0);
-+		else
-+			umc_base = get_umc_base(i);
- 
--		umc_base = get_umc_base(i);
- 		umc = &pvt->umc[i];
--
--		amd_smn_read(nid, umc_base + UMCCH_DIMM_CFG, &umc->dimm_cfg);
- 		amd_smn_read(nid, umc_base + UMCCH_UMC_CFG, &umc->umc_cfg);
- 		amd_smn_read(nid, umc_base + UMCCH_SDP_CTRL, &umc->sdp_ctrl);
- 		amd_smn_read(nid, umc_base + UMCCH_ECC_CTRL, &umc->ecc_ctrl);
--		amd_smn_read(nid, umc_base + UMCCH_UMC_CAP_HI, &umc->umc_cap_hi);
-+
-+		if (!pvt->is_noncpu) {
-+			amd_smn_read(nid, umc_base + UMCCH_DIMM_CFG, &umc->dimm_cfg);
-+			amd_smn_read(nid, umc_base + UMCCH_UMC_CAP_HI, &umc->umc_cap_hi);
-+		}
- 	}
- }
- 
-@@ -3865,7 +3973,9 @@ static void read_mc_regs(struct amd64_pvt *pvt)
- 	determine_memory_type(pvt);
- 	edac_dbg(1, "  DIMM type: %s\n", edac_mem_types[pvt->dram_type]);
- 
--	determine_ecc_sym_sz(pvt);
-+	/* ECC symbol size is not available on NONCPU nodes */
-+	if (!pvt->is_noncpu)
-+		determine_ecc_sym_sz(pvt);
- }
- 
- /*
-@@ -3953,15 +4063,21 @@ static int init_csrows_df(struct mem_ctl_info *mci)
- 				continue;
- 
- 			empty = 0;
--			dimm = mci->csrows[cs]->channels[umc]->dimm;
-+			if (pvt->is_noncpu) {
-+				dimm = mci->csrows[umc]->channels[cs]->dimm;
-+				dimm->edac_mode = EDAC_SECDED;
-+				dimm->dtype = DEV_X16;
-+			} else {
-+				dimm->edac_mode = edac_mode;
-+				dimm->dtype = dev_type;
-+				dimm = mci->csrows[cs]->channels[umc]->dimm;
-+			}
- 
- 			edac_dbg(1, "MC node: %d, csrow: %d\n",
- 					pvt->mc_node_id, cs);
- 
- 			dimm->nr_pages = get_csrow_nr_pages(pvt, umc, cs);
- 			dimm->mtype = pvt->dram_type;
--			dimm->edac_mode = edac_mode;
--			dimm->dtype = dev_type;
- 			dimm->grain = 64;
- 		}
- 	}
-@@ -4226,7 +4342,9 @@ static bool ecc_enabled(struct amd64_pvt *pvt)
- 
- 			umc_en_mask |= BIT(i);
- 
--			if (umc->umc_cap_hi & UMC_ECC_ENABLED)
-+			/* ECC is enabled by default on NONCPU nodes */
-+			if (pvt->is_noncpu ||
-+			    (umc->umc_cap_hi & UMC_ECC_ENABLED))
- 				ecc_en_mask |= BIT(i);
- 		}
- 
-@@ -4262,6 +4380,11 @@ f17h_determine_edac_ctl_cap(struct mem_ctl_info *mci, struct amd64_pvt *pvt)
- {
- 	u8 i, ecc_en = 1, cpk_en = 1, dev_x4 = 1, dev_x16 = 1;
- 
-+	if (pvt->is_noncpu) {
-+		mci->edac_ctl_cap |= EDAC_SECDED;
-+		return;
-+	}
-+
- 	for_each_umc(i) {
- 		if (pvt->umc[i].sdp_ctrl & UMC_SDP_INIT) {
- 			ecc_en &= !!(pvt->umc[i].umc_cap_hi & UMC_ECC_ENABLED);
-@@ -4292,7 +4415,11 @@ static void setup_mci_misc_attrs(struct mem_ctl_info *mci)
- {
- 	struct amd64_pvt *pvt = mci->pvt_info;
- 
--	mci->mtype_cap		= MEM_FLAG_DDR2 | MEM_FLAG_RDDR2;
-+	if (pvt->is_noncpu)
-+		mci->mtype_cap = MEM_FLAG_HBM2;
-+	else
-+		mci->mtype_cap = MEM_FLAG_DDR2 | MEM_FLAG_RDDR2;
-+
- 	mci->edac_ctl_cap	= EDAC_FLAG_NONE;
- 
- 	if (pvt->umc) {
-@@ -4397,11 +4524,25 @@ static struct amd64_family_type *per_family_init(struct amd64_pvt *pvt)
- 			fam_type = &family_types[F17_M70H_CPUS];
- 			pvt->ops = &family_types[F17_M70H_CPUS].ops;
- 			fam_type->ctl_name = "F19h_M20h";
--			break;
-+		} else if (pvt->model >= 0x30 && pvt->model <= 0x3f) {
-+			if (pvt->is_noncpu) {
-+				int tmp = 0;
-+
-+				fam_type = &family_types[ALDEBARAN_GPUS];
-+				pvt->ops = &family_types[ALDEBARAN_GPUS].ops;
-+				tmp = pvt->mc_node_id - NONCPU_NODE_INDEX;
-+				sprintf(pvt->buf, "Aldebaran#%ddie#%d", tmp / 2, tmp % 2);
-+				fam_type->ctl_name = pvt->buf;
-+			} else {
-+				fam_type = &family_types[F19_CPUS];
-+				pvt->ops = &family_types[F19_CPUS].ops;
-+				fam_type->ctl_name = "F19h_M30h";
-+			}
-+		} else {
-+			fam_type = &family_types[F19_CPUS];
-+			pvt->ops = &family_types[F19_CPUS].ops;
-+			family_types[F19_CPUS].ctl_name = "F19h";
- 		}
--		fam_type	= &family_types[F19_CPUS];
--		pvt->ops	= &family_types[F19_CPUS].ops;
--		family_types[F19_CPUS].ctl_name = "F19h";
- 		break;
- 
- 	default:
-@@ -4454,6 +4595,30 @@ static void hw_info_put(struct amd64_pvt *pvt)
- 	kfree(pvt->umc);
- }
- 
-+static void populate_layers(struct amd64_pvt *pvt, struct edac_mc_layer *layers)
-+{
-+	if (pvt->is_noncpu) {
-+		layers[0].type = EDAC_MC_LAYER_CHIP_SELECT;
-+		layers[0].size = fam_type->max_mcs;
-+		layers[0].is_virt_csrow = true;
-+		layers[1].type = EDAC_MC_LAYER_CHANNEL;
-+		layers[1].size = pvt->csels[0].b_cnt;
-+		layers[1].is_virt_csrow = false;
-+	} else {
-+		layers[0].type = EDAC_MC_LAYER_CHIP_SELECT;
-+		layers[0].size = pvt->csels[0].b_cnt;
-+		layers[0].is_virt_csrow = true;
-+		layers[1].type = EDAC_MC_LAYER_CHANNEL;
-+		/*
-+		 * Always allocate two channels since we can have setups with
-+		 * DIMMs on only one channel. Also, this simplifies handling
-+		 * later for the price of a couple of KBs tops.
-+		 */
-+		layers[1].size = fam_type->max_mcs;
-+		layers[1].is_virt_csrow = false;
-+	}
-+}
-+
- static int init_one_instance(struct amd64_pvt *pvt)
- {
- 	struct mem_ctl_info *mci = NULL;
-@@ -4469,19 +4634,8 @@ static int init_one_instance(struct amd64_pvt *pvt)
- 	if (pvt->channel_count < 0)
- 		return ret;
- 
--	ret = -ENOMEM;
--	layers[0].type = EDAC_MC_LAYER_CHIP_SELECT;
--	layers[0].size = pvt->csels[0].b_cnt;
--	layers[0].is_virt_csrow = true;
--	layers[1].type = EDAC_MC_LAYER_CHANNEL;
--
--	/*
--	 * Always allocate two channels since we can have setups with DIMMs on
--	 * only one channel. Also, this simplifies handling later for the price
--	 * of a couple of KBs tops.
--	 */
--	layers[1].size = fam_type->max_mcs;
--	layers[1].is_virt_csrow = false;
-+	/* Define layers for CPU and NONCPU nodes */
-+	populate_layers(pvt, layers);
- 
- 	mci = edac_mc_alloc(pvt->mc_node_id, ARRAY_SIZE(layers), layers, 0);
- 	if (!mci)
-@@ -4525,6 +4679,9 @@ static int probe_one_instance(unsigned int nid)
- 	struct ecc_settings *s;
- 	int ret;
- 
-+	if (!F3)
++	if (amd_df_indirect_read(0, df_regs[DF_GLOBAL_CTL], DF_BROADCAST, &tmp))
 +		return -EINVAL;
 +
- 	ret = -ENOMEM;
- 	s = kzalloc(sizeof(struct ecc_settings), GFP_KERNEL);
- 	if (!s)
-@@ -4536,6 +4693,9 @@ static int probe_one_instance(unsigned int nid)
- 	if (!pvt)
- 		goto err_settings;
- 
-+	if (nid >= NONCPU_NODE_INDEX)
-+		pvt->is_noncpu = true;
++	intlv_ctl_64k = !!((tmp >> 20) & 0x1);
++	intlv_ctl_2M  = !!((tmp >> 21) & 0x1);
++	intlv_ctl_1G  = !!((tmp >> 22) & 0x1);
 +
- 	pvt->mc_node_id	= nid;
- 	pvt->F3 = F3;
- 
-@@ -4609,6 +4769,10 @@ static void remove_one_instance(unsigned int nid)
- 	struct mem_ctl_info *mci;
- 	struct amd64_pvt *pvt;
- 
-+	/* Nothing to remove for the space holder entries */
-+	if (!F3)
-+		return;
-+
- 	/* Remove from EDAC CORE tracking list */
- 	mci = edac_mc_del_mc(&F3->dev);
- 	if (!mci)
-@@ -4682,7 +4846,7 @@ static int __init amd64_edac_init(void)
- 
- 	for (i = 0; i < amd_nb_num(); i++) {
- 		err = probe_one_instance(i);
--		if (err) {
-+		if (err && (err != -EINVAL)) {
- 			/* unwind properly */
- 			while (--i >= 0)
- 				remove_one_instance(i);
-diff --git a/drivers/edac/amd64_edac.h b/drivers/edac/amd64_edac.h
-index 85aa820bc165..6d5f7b3afc83 100644
---- a/drivers/edac/amd64_edac.h
-+++ b/drivers/edac/amd64_edac.h
-@@ -126,6 +126,8 @@
- #define PCI_DEVICE_ID_AMD_17H_M70H_DF_F6 0x1446
- #define PCI_DEVICE_ID_AMD_19H_DF_F0	0x1650
- #define PCI_DEVICE_ID_AMD_19H_DF_F6	0x1656
-+#define PCI_DEVICE_ID_AMD_ALDEBARAN_DF_F0	0x14D0
-+#define PCI_DEVICE_ID_AMD_ALDEBARAN_DF_F6	0x14D6
- 
- /*
-  * Function 1 - Address Map
-@@ -298,6 +300,7 @@ enum amd_families {
- 	F17_M60H_CPUS,
- 	F17_M70H_CPUS,
- 	F19_CPUS,
-+	ALDEBARAN_GPUS,
- 	NUM_FAMILIES,
- };
- 
-@@ -389,6 +392,9 @@ struct amd64_pvt {
- 	enum mem_type dram_type;
- 
- 	struct amd64_umc *umc;	/* UMC registers */
-+	char buf[20];
-+
-+	u8 is_noncpu;
- };
- 
- enum err_codes {
-@@ -410,6 +416,27 @@ struct err_info {
- 	u32 offset;
- };
- 
-+static inline u32 get_noncpu_umc_base(u8 umc, u8 channel)
-+{
 +	/*
-+	 * On the NONCPU nodes, base address is calculated based on
-+	 * UMC channel and the HBM channel.
-+	 *
-+	 * UMC channels are selected in 6th nibble
-+	 * UMC chY[3:0]= [(chY*2 + 1) : (chY*2)]50000;
-+	 *
-+	 * HBM channels are selected in 3rd nibble
-+	 * HBM chX[3:0]= [Y  ]5X[3:0]000;
-+	 * HBM chX[7:4]= [Y+1]5X[3:0]000
++	 * CSSelect[0] = XOR of addr{8,  16, 21, 30};
++	 * CSSelect[1] = XOR of addr{9,  17, 22, 31};
++	 * CSSelect[2] = XOR of addr{10, 18, 23, 32};
++	 * CSSelect[3] = XOR of addr{11, 19, 24, 33}; - 16 and 32 channel only
++	 * CSSelect[4] = XOR of addr{12, 20, 25, 34}; - 32 channel only
 +	 */
-+	umc *= 2;
++	for (i = 0; i < num_intlv_bits; i++) {
++		hashed_bit =	((ctx->ret_addr >> (8 + i)) ^
++				((ctx->ret_addr >> (16 + i)) & intlv_ctl_64k) ^
++				((ctx->ret_addr >> (21 + i)) & intlv_ctl_2M) ^
++				((ctx->ret_addr >> (30 + i)) & intlv_ctl_1G));
 +
-+	if (channel / 4)
-+		umc++;
++		hashed_bit &= BIT(0);
++		if (hashed_bit != ((ctx->ret_addr >> (8 + i)) & BIT(0)))
++			ctx->ret_addr ^= BIT(8 + i);
++	}
 +
-+	return 0x50000 + (umc << 20) + ((channel % 4) << 12);
++	return 0;
 +}
 +
- static inline u32 get_umc_base(u8 channel)
++static int get_intlv_mode_df35(struct addr_ctx *ctx)
++{
++	ctx->intlv_mode = (ctx->reg_base_addr >> 2) & 0x1F;
++
++	if (ctx->intlv_mode == HASH_COD4_2CH ||
++	    ctx->intlv_mode == HASH_COD2_4CH ||
++	    ctx->intlv_mode == HASH_COD1_8CH) {
++		ctx->make_space_for_cs_id = &make_space_for_cs_id_cod_hash;
++		ctx->insert_cs_id = &insert_cs_id_cod_hash;
++		ctx->dehash_addr = &dehash_addr_df3;
++	} else {
++		ctx->make_space_for_cs_id = &make_space_for_cs_id_simple;
++		ctx->insert_cs_id = &insert_cs_id_simple;
++
++		if (ctx->intlv_mode == HASH_8CH ||
++		    ctx->intlv_mode == HASH_16CH ||
++		    ctx->intlv_mode == HASH_32CH)
++			ctx->dehash_addr = &dehash_addr_df35;
++	}
++
++	return 0;
++}
++
++static void get_intlv_num_dies_df35(struct addr_ctx *ctx)
++{
++	ctx->intlv_num_dies  = (ctx->reg_base_addr >> 7) & 0x1;
++}
++
++static u8 get_die_id_shift_df35(struct addr_ctx *ctx)
++{
++	return ctx->node_id_shift;
++}
++
++static u8 get_socket_id_shift_df35(struct addr_ctx *ctx)
++{
++	return (ctx->reg_fab_id_mask1 >> 8) & 0xF;
++}
++
++static int get_masks_df35(struct addr_ctx *ctx)
++{
++	if (amd_df_indirect_read(0, df_regs[SYSFABIDMASK1_DF3POINT5],
++				 DF_BROADCAST, &ctx->reg_fab_id_mask1))
++		return -EINVAL;
++
++	if (amd_df_indirect_read(0, df_regs[SYSFABIDMASK2_DF3POINT5],
++				 DF_BROADCAST, &ctx->reg_fab_id_mask2))
++		return -EINVAL;
++
++	ctx->node_id_shift = ctx->reg_fab_id_mask1 & 0xF;
++
++	ctx->die_id_mask = ctx->reg_fab_id_mask2 & 0xFFFF;
++
++	ctx->socket_id_mask = (ctx->reg_fab_id_mask2 >> 16) & 0xFFFF;
++
++	return 0;
++}
++
++static u16 get_dst_fabric_id_df35(struct addr_ctx *ctx)
++{
++	return ctx->reg_limit_addr & 0xFFF;
++}
++
++static int get_cs_fabric_id_df35(struct addr_ctx *ctx)
++{
++	ctx->cs_fabric_id = ctx->inst_id | (ctx->nid << ctx->node_id_shift);
++
++	return 0;
++}
++
++static u16 get_component_id_mask_df35(struct addr_ctx *ctx)
++{
++	return ctx->reg_fab_id_mask0 & 0xFFFF;
++}
++
++struct data_fabric_ops df3point5_ops = {
++	.get_hi_addr_offset		=	&get_hi_addr_offset_df3,
++	.get_intlv_mode			=	&get_intlv_mode_df35,
++	.get_intlv_addr_sel		=	&get_intlv_addr_sel_df3,
++	.get_intlv_num_dies		=	&get_intlv_num_dies_df35,
++	.get_intlv_num_sockets		=	&get_intlv_num_sockets_df3,
++	.get_masks			=	&get_masks_df35,
++	.get_die_id_shift		=	&get_die_id_shift_df35,
++	.get_socket_id_shift		=	&get_socket_id_shift_df35,
++	.get_dst_fabric_id		=	&get_dst_fabric_id_df35,
++	.get_cs_fabric_id		=	&get_cs_fabric_id_df35,
++	.get_component_id_mask		=	&get_component_id_mask_df35,
++};
++
+ struct data_fabric_ops *df_ops;
+ 
+ static int set_df_ops(struct addr_ctx *ctx)
+@@ -1458,6 +1599,16 @@ static int set_df_ops(struct addr_ctx *ctx)
+ 
+ 	ctx->num_blk_instances = tmp & 0xFF;
+ 
++	if (amd_df_indirect_read(0, df_regs[SYSFABIDMASK0_DF3POINT5],
++				 DF_BROADCAST, &ctx->reg_fab_id_mask0))
++		return -EINVAL;
++
++	if ((ctx->reg_fab_id_mask0 & 0xFF) != 0) {
++		ctx->late_hole_remove = true;
++		df_ops = &df3point5_ops;
++		return 0;
++	}
++
+ 	if (amd_df_indirect_read(0, df_regs[SYS_FAB_ID_MASK],
+ 				 DF_BROADCAST, &ctx->reg_fab_id_mask0))
+ 		return -EINVAL;
+@@ -1558,8 +1709,17 @@ static void get_intlv_num_chan(struct addr_ctx *ctx)
+ 		break;
+ 	case NOHASH_8CH:
+ 	case HASH_COD1_8CH:
++	case HASH_8CH:
+ 		ctx->intlv_num_chan = 3;
+ 		break;
++	case NOHASH_16CH:
++	case HASH_16CH:
++		ctx->intlv_num_chan = 4;
++		break;
++	case NOHASH_32CH:
++	case HASH_32CH:
++		ctx->intlv_num_chan = 5;
++		break;
+ 	default:
+ 		/* Valid interleaving modes where checked earlier. */
+ 		break;
+@@ -1665,6 +1825,43 @@ static int addr_over_limit(struct addr_ctx *ctx)
+ 	return 0;
+ }
+ 
++static int find_ccm_instance_id(struct addr_ctx *ctx)
++{
++	u32 temp;
++
++	for (ctx->inst_id = 0; ctx->inst_id < ctx->num_blk_instances; ctx->inst_id++) {
++		if (amd_df_indirect_read(0, df_regs[FAB_BLK_INST_INFO_0], ctx->inst_id, &temp))
++			return -EINVAL;
++
++		if (temp == 0)
++			continue;
++
++		if ((temp & 0xF) == 0)
++			return 0;
++	}
++
++	return -EINVAL;
++}
++
++#define DF_NUM_DRAM_MAPS_AVAILABLE  16
++static int find_map_reg_by_dstfabricid(struct addr_ctx *ctx)
++{
++	u16 node_id_mask = (ctx->reg_fab_id_mask0 >> 16) & 0xFFFF;
++	u16 dst_fabric_id;
++
++	for (ctx->map_num = 0; ctx->map_num < DF_NUM_DRAM_MAPS_AVAILABLE ; ctx->map_num++) {
++		if (get_dram_addr_map(ctx))
++			continue;
++
++		dst_fabric_id = df_ops->get_dst_fabric_id(ctx);
++
++		if ((dst_fabric_id & node_id_mask) == (ctx->cs_fabric_id & node_id_mask))
++			return 0;
++	}
++
++	return -EINVAL;
++}
++
+ static int umc_normaddr_to_sysaddr(u64 *addr, u16 nid, u8 umc)
  {
- 	/* chY: 0xY50000 */
+ 	struct addr_ctx ctx;
+@@ -1686,11 +1883,19 @@ static int umc_normaddr_to_sysaddr(u64 *addr, u16 nid, u8 umc)
+ 	if (df_ops->get_cs_fabric_id(&ctx))
+ 		return -EINVAL;
+ 
+-	if (remove_dram_offset(&ctx))
+-		return -EINVAL;
++	if (ctx.nid >= NONCPU_NODE_INDEX) {
++		if (find_ccm_instance_id(&ctx))
++			return -EINVAL;
+ 
+-	if (get_dram_addr_map(&ctx))
+-		return -EINVAL;
++		if (find_map_reg_by_dstfabricid(&ctx))
++			return -EINVAL;
++	} else {
++		if (remove_dram_offset(&ctx))
++			return -EINVAL;
++
++		if (get_dram_addr_map(&ctx))
++			return -EINVAL;
++	}
+ 
+ 	if (df_ops->get_intlv_mode(&ctx))
+ 		return -EINVAL;
 -- 
 2.25.1
 
