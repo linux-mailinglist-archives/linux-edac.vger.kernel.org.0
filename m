@@ -2,106 +2,90 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C7D1A3BBD55
-	for <lists+linux-edac@lfdr.de>; Mon,  5 Jul 2021 15:08:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F2023BBECA
+	for <lists+linux-edac@lfdr.de>; Mon,  5 Jul 2021 17:20:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231183AbhGENLF (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Mon, 5 Jul 2021 09:11:05 -0400
-Received: from mail-m118208.qiye.163.com ([115.236.118.208]:25360 "EHLO
-        mail-m118208.qiye.163.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230188AbhGENLF (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Mon, 5 Jul 2021 09:11:05 -0400
-X-Greylist: delayed 446 seconds by postgrey-1.27 at vger.kernel.org; Mon, 05 Jul 2021 09:11:04 EDT
-Received: from localhost.localdomain (unknown [113.118.122.203])
-        by mail-m118208.qiye.163.com (Hmail) with ESMTPA id C6A8CE03BD;
-        Mon,  5 Jul 2021 21:00:58 +0800 (CST)
-From:   Ding Hui <dinghui@sangfor.com.cn>
-To:     tony.luck@intel.com, bp@alien8.de, bp@suse.de,
-        naoya.horiguchi@nec.com, osalvador@suse.de, peterz@infradead.org
-Cc:     linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
-        tglx@linutronix.de, mingo@redhat.com, x86@kernel.org,
-        hpa@zytor.com, youquan.song@intel.com, huangcun@sangfor.com.cn,
-        stable@vger.kernel.org, Ding Hui <dinghui@sangfor.com.cn>
-Subject: [PATCH v1] x86/mce: Fix endless loop when run task works after #MC
-Date:   Mon,  5 Jul 2021 20:59:21 +0800
-Message-Id: <20210705125921.936-1-dinghui@sangfor.com.cn>
-X-Mailer: git-send-email 2.17.1
-X-HM-Spam-Status: e1kfGhgUHx5ZQUtXWQgYFAkeWUFZS1VLWVdZKFlBSE83V1ktWUFJV1kPCR
-        oVCBIfWUFZQxhDT1ZJHUxOHR0eTkJMSk5VEwETFhoSFyQUDg9ZV1kWGg8SFR0UWUFZT0tIVUpKS0
-        hKQ1VLWQY+
-X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6PVE6Sjo6Tz9WTRkWFEMTGU8T
-        SRIwCzhVSlVKTUlOT0JLS05CTU5KVTMWGhIXVR8SFRwTDhI7CBoVHB0UCVUYFBZVGBVFWVdZEgtZ
-        QVlKSkhVSkpDVUpJSVVJS0hZV1kIAVlBSE9CSTcG
-X-HM-Tid: 0a7a76c1f02a2c17kusnc6a8ce03bd
+        id S230515AbhGEPWs (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Mon, 5 Jul 2021 11:22:48 -0400
+Received: from youngberry.canonical.com ([91.189.89.112]:59537 "EHLO
+        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230364AbhGEPWr (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Mon, 5 Jul 2021 11:22:47 -0400
+Received: from mail-lj1-f197.google.com ([209.85.208.197])
+        by youngberry.canonical.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.93)
+        (envelope-from <krzysztof.kozlowski@canonical.com>)
+        id 1m0QOH-0007rR-WA
+        for linux-edac@vger.kernel.org; Mon, 05 Jul 2021 15:20:10 +0000
+Received: by mail-lj1-f197.google.com with SMTP id 70-20020a2e09490000b02901827163ceefso1875488ljj.18
+        for <linux-edac@vger.kernel.org>; Mon, 05 Jul 2021 08:20:09 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=7HXLCPSoU2ku5Z25x/c/7Afb0RvzkTlC09xs4+z78F4=;
+        b=omFQGPan3QjYFra9Rh7M8MD86CS7eNtR0OpPQwMXO7CK3/eSNCNsInhR7h37ubTpW+
+         GddWkldLVjv3GoXh7+cQtb7pIx6HJ5Ar1iNiUPDE/ECPEjbicePTrQsMYYec49tlZxsF
+         fbDmvJcVBq0mw+rjnU9ZfJCX2ZE9n/pGr+8rJ4qP+GL75yrzo95gdtFyGWe3UzgeuHEC
+         Ylm8mJVqlpilQwZzS5cmWZ/FI9JLQThg2egrS8VmpwRqTcoyL0XMByMUVX+mQo4I3+bm
+         JKSRVvLvKa6C096sqsdyZhHMnH8p6FwUyWUtB3SptOkA4GT6D1acsiaATNCyGzJGuIU8
+         4bCQ==
+X-Gm-Message-State: AOAM533TTGJvxUZ65ht4+x06Z+YgACFkrOwgNHp0B74wNy/Wsx6RJkuB
+        Btm8D9Il7vy4i7Vckvk7mbpg1yPW/SWmEE4fqfNMMA7Gv6yuyv5PuDAnf+8vI4G1gCp1YXPMOtk
+        8r7Q3IGRsSQCLN4OjeKBBDLMZT0kYOVf3JXESiKI=
+X-Received: by 2002:a05:6402:204:: with SMTP id t4mr16842384edv.34.1625498002782;
+        Mon, 05 Jul 2021 08:13:22 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJyEBSAhhUehUatN39q10BAqmQC9QTSYyb9SbUpH2qnPy7k6MqtbBUwfOrKncFM/WsxjkNCpUQ==
+X-Received: by 2002:a05:6402:204:: with SMTP id t4mr16842367edv.34.1625498002669;
+        Mon, 05 Jul 2021 08:13:22 -0700 (PDT)
+Received: from [192.168.3.211] (xdsl-188-155-177-222.adslplus.ch. [188.155.177.222])
+        by smtp.gmail.com with ESMTPSA id br4sm4348512ejb.110.2021.07.05.08.13.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 05 Jul 2021 08:13:22 -0700 (PDT)
+Subject: Re: [PATCH] EDAC, altera: skip defining unused structures for
+ specific configs
+To:     Dinh Nguyen <dinguyen@kernel.org>, Borislav Petkov <bp@alien8.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Tony Luck <tony.luck@intel.com>,
+        James Morse <james.morse@arm.com>,
+        Robert Richter <rric@kernel.org>, linux-edac@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     kernel test robot <lkp@intel.com>
+References: <20210601092704.203555-1-krzysztof.kozlowski@canonical.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Message-ID: <b60d6dc2-abc2-b0fc-a880-1a7fec1dec67@canonical.com>
+Date:   Mon, 5 Jul 2021 17:13:21 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
+MIME-Version: 1.0
+In-Reply-To: <20210601092704.203555-1-krzysztof.kozlowski@canonical.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-Recently we encounter multi #MC on the same task when it's
-task_work_run() has not been called, current->mce_kill_me was
-added to task_works list more than once, that make a circular
-linked task_works, so task_work_run() will do a endless loop.
+On 01/06/2021 11:27, Krzysztof Kozlowski wrote:
+> The Altera EDAC driver has several features conditionally built
+> depending on Kconfig options.  The edac_device_prv_data structures are
+> conditionally used in of_device_id tables.  They reference other
+> functions and structures which can be defined as __maybe_unused.  This
+> silences build warnings like:
+> 
+>     drivers/edac/altera_edac.c:643:37: warning:
+>         ‘altr_edac_device_inject_fops’ defined but not used [-Wunused-const-variable=]
+> 
+> Reported-by: kernel test robot <lkp@intel.com>
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+> ---
+>  drivers/edac/altera_edac.c | 44 ++++++++++++++++++++++----------------
+>  1 file changed, 26 insertions(+), 18 deletions(-)
 
-More seriously, the SIGBUS signal can not be delivered to the
-userspace task which tigger the #MC and I met #MC flood.
+Hi Altera and EDAC maintainers,
 
-I borrowed mce_kill_me.func to check whether current->mce_kill_me
-has been added to task_works, prevent duplicate addition. When
-work function be called, the task_works must has been taken,
-so it is safe to be cleared in callback.
+Any comments on this patch?
 
-Fixed: commit 5567d11c21a1 ("x86/mce: Send #MC singal from task work")
-Cc: <stable@vger.kernel.org> #v5.8+
-Signed-off-by: Ding Hui <dinghui@sangfor.com.cn>
----
- arch/x86/kernel/cpu/mce/core.c | 12 +++++++++---
- 1 file changed, 9 insertions(+), 3 deletions(-)
-
-diff --git a/arch/x86/kernel/cpu/mce/core.c b/arch/x86/kernel/cpu/mce/core.c
-index 22791aadc085..32fb9ded6b85 100644
---- a/arch/x86/kernel/cpu/mce/core.c
-+++ b/arch/x86/kernel/cpu/mce/core.c
-@@ -1250,6 +1250,7 @@ static void __mc_scan_banks(struct mce *m, struct pt_regs *regs, struct mce *fin
- 
- static void kill_me_now(struct callback_head *ch)
- {
-+	WRITE_ONCE(ch->func, NULL);
- 	force_sig(SIGBUS);
- }
- 
-@@ -1259,6 +1260,8 @@ static void kill_me_maybe(struct callback_head *cb)
- 	int flags = MF_ACTION_REQUIRED;
- 	int ret;
- 
-+	WRITE_ONCE(cb->func, NULL);
-+
- 	pr_err("Uncorrected hardware memory error in user-access at %llx", p->mce_addr);
- 
- 	if (!p->mce_ripv)
-@@ -1289,17 +1292,20 @@ static void kill_me_maybe(struct callback_head *cb)
- 
- static void queue_task_work(struct mce *m, int kill_current_task)
- {
-+	struct callback_head ch;
-+
- 	current->mce_addr = m->addr;
- 	current->mce_kflags = m->kflags;
- 	current->mce_ripv = !!(m->mcgstatus & MCG_STATUS_RIPV);
- 	current->mce_whole_page = whole_page(m);
- 
- 	if (kill_current_task)
--		current->mce_kill_me.func = kill_me_now;
-+		ch.func = kill_me_now;
- 	else
--		current->mce_kill_me.func = kill_me_maybe;
-+		ch.func = kill_me_maybe;
- 
--	task_work_add(current, &current->mce_kill_me, TWA_RESUME);
-+	if (!cmpxchg(&current->mce_kill_me.func, NULL, ch.func))
-+		task_work_add(current, &current->mce_kill_me, TWA_RESUME);
- }
- 
- /*
--- 
-2.17.1
-
+Best regards,
+Krzysztof
