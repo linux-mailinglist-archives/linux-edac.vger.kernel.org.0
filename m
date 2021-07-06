@@ -2,87 +2,142 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 33A643BC621
-	for <lists+linux-edac@lfdr.de>; Tue,  6 Jul 2021 07:38:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB5233BD698
+	for <lists+linux-edac@lfdr.de>; Tue,  6 Jul 2021 14:38:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230074AbhGFFlc (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Tue, 6 Jul 2021 01:41:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53148 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230004AbhGFFlc (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Tue, 6 Jul 2021 01:41:32 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB822C061574
-        for <linux-edac@vger.kernel.org>; Mon,  5 Jul 2021 22:38:53 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id b2so32228818ejg.8
-        for <linux-edac@vger.kernel.org>; Mon, 05 Jul 2021 22:38:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ionos.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=hNUQ7wh0N7HeTOa7d8zggaSVvZkN28GVoez9TkP5YDs=;
-        b=euQAW3VhpMnydgkH9ltLRR/hYeN3dJX9pNpQPs4OTO8RqqDBZc4m8Oger6a7pSMlUT
-         jA6a4lOTyf6dWiTNmGvhUsilVJa2hhjLPyGvQZ9lrSVRtM5SqHbVMKlDwEzr6qma3Jnb
-         sBhEUQTOI8mSIPFXDJ/4tTMES2fBgSTX7r5O7zIeESXOmYX5ajYs/MUwvN4iIp/dc23G
-         2B/rUSjjHpV0m5pQ2oMrPd8q9Bs44pVhzzLQfylFMot4Wx0hCUfCMkRWvmorHwNPm9zy
-         fbUv9acVueF1goNKC99gi10jmoUDzobB4c6Kzw2Lv5M9b8QTbU/17ajxkXTvfOa3yxQk
-         Jpyg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=hNUQ7wh0N7HeTOa7d8zggaSVvZkN28GVoez9TkP5YDs=;
-        b=hodT3LkKwb4ntT+LF+kA8D017OTfNno4isXRWL0uLDLj9WSs0TKWKRHWkVh51n1KNC
-         g201awy64qYRvk/sJwS5rF6Cth9+nSOnqO65oABYItNwOQK2HZQ93AlPFqRjMPMTRjk1
-         bfdLXD8PKDidxniEZl80WDrBJQaUMjRo+adioHXwDPUy8fIU4Ny4T7k9KWw6iK3L0zz7
-         PYbygbn6EhveDFin6mrnO3eIEEQcV8uGmblAAEhuuMUogGwsHlkAVkuLkg4DJC347UBN
-         oekJnotzUfxtn9gIBKE4HwpQQKN5NvG2nooH7ddQBiRLmCfzfzeDzBhURqqQYl/ZXj+V
-         V63w==
-X-Gm-Message-State: AOAM533Sj57M1glaOMiwRCtR9pOnp6u06lQWnrtgcad73PqxpN16mZi5
-        rZ4dVsjm09u9usueX7IpCbhfYfOlMiWh4OeHa90mvw==
-X-Google-Smtp-Source: ABdhPJw1WABHs+UskfaqcLXkd8hVVYdfl/uL9BfUmpKjEZRqHHrAYqstNKAyynu2FWqTO98B8QI33CNawGRneVs6cC4=
-X-Received: by 2002:a17:906:3407:: with SMTP id c7mr16619684ejb.212.1625549932521;
- Mon, 05 Jul 2021 22:38:52 -0700 (PDT)
-MIME-Version: 1.0
-References: <20210706050833.9852-1-jinpu.wang@ionos.com> <YOPrRh/3gZ3JETlh@zn.tnic>
-In-Reply-To: <YOPrRh/3gZ3JETlh@zn.tnic>
-From:   Jinpu Wang <jinpu.wang@ionos.com>
-Date:   Tue, 6 Jul 2021 07:38:41 +0200
-Message-ID: <CAMGffEm1ZX1bRJXTbMj=acV+URSMmKXM_Pohq2Cwi4p1osDdgQ@mail.gmail.com>
-Subject: Re: [PATCH] EDAC/amd64: Do not load EDAC driver when running as a guest
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     linux-edac@vger.kernel.org, yazen.ghannam@amd.com,
-        "Luck, Tony" <tony.luck@intel.com>, mchehab@kernel.org,
-        open list <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        id S232202AbhGFMlQ (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Tue, 6 Jul 2021 08:41:16 -0400
+Received: from mail-m118208.qiye.163.com ([115.236.118.208]:26410 "EHLO
+        mail-m118208.qiye.163.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234698AbhGFMTI (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Tue, 6 Jul 2021 08:19:08 -0400
+Received: from localhost.localdomain (unknown [113.118.122.203])
+        by mail-m118208.qiye.163.com (Hmail) with ESMTPA id AE4C5E041C;
+        Tue,  6 Jul 2021 20:16:24 +0800 (CST)
+From:   Ding Hui <dinghui@sangfor.com.cn>
+To:     tony.luck@intel.com, bp@alien8.de, bp@suse.de,
+        naoya.horiguchi@nec.com, osalvador@suse.de, peterz@infradead.org
+Cc:     linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
+        tglx@linutronix.de, mingo@redhat.com, x86@kernel.org,
+        hpa@zytor.com, youquan.song@intel.com, huangcun@sangfor.com.cn,
+        Ding Hui <dinghui@sangfor.com.cn>, stable@vger.kernel.org
+Subject: [PATCH v2] x86/mce: Fix endless loop when run task works after #MC
+Date:   Tue,  6 Jul 2021 20:16:06 +0800
+Message-Id: <20210706121606.15864-1-dinghui@sangfor.com.cn>
+X-Mailer: git-send-email 2.17.1
+X-HM-Spam-Status: e1kfGhgUHx5ZQUtXWQgYFAkeWUFZS1VLWVdZKFlBSE83V1ktWUFJV1kPCR
+        oVCBIfWUFZGU5DT1YeHUpDH09JTR4aH0JVEwETFhoSFyQUDg9ZV1kWGg8SFR0UWUFZT0tIVUpKS0
+        hKQ1VLWQY+
+X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6NBg6MAw5Oj9MOh8NLC8MIjZI
+        AShPFAlVSlVKTUlOTkxITENOTk5OVTMWGhIXVR8SFRwTDhI7CBoVHB0UCVUYFBZVGBVFWVdZEgtZ
+        QVlKSkhVSkpDVUpJSVVJS0hZV1kIAVlBT0NISDcG
+X-HM-Tid: 0a7a7bbf7e6f2c17kusnae4c5e041c
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Tue, Jul 6, 2021 at 7:34 AM Borislav Petkov <bp@alien8.de> wrote:
->
-> On Tue, Jul 06, 2021 at 07:08:33AM +0200, Jack Wang wrote:
-> > Similar to commit f0a029fff4a5 ("EDAC/Intel: Do not load EDAC driver when running as a guest")
-> >
-> > There's little to no point in loading an EDAC driver running in a guest.
-> >
-> > Add a check in each of the Intel EDAC drivers for X86_FEATURE_HYPERVISOR
-> > and simply return -ENODEV in the init routine.
->
-> Did you even read this sentence before leaving it in the commit message
-> or you simply copied the commit message of f0a029fff4a5 blindly?
-sorry, I notice the patch for Intel, and feel we should do the same
-for AMD, hence post the patch.
-I forgot to adapt the content of the commit message. -.-
->
-> Also:
->
-> https://lore.kernel.org/linux-edac/20210628172740.245689-1-Smita.KoralahalliChannabasappa@amd.com/
->
-Great if it's already in the queue.
-> --
-> Regards/Gruss,
->     Boris.
->
-> https://people.kernel.org/tglx/notes-about-netiquette
-Thanks!
+Recently we encounter multi #MC on the same task when it's
+task_work_run() has not been called, current->mce_kill_me was
+added to task_works list more than once, that make a circular
+linked task_works, so task_work_run() will do a endless loop.
+
+More seriously, the SIGBUS signal can not be delivered to the
+userspace task which tigger the #MC and I met #MC flood.
+
+I borrowed mce_kill_me.func to check whether current->mce_kill_me
+has been added to task_works, prevent duplicate addition and override
+current->mce_xxx. When work function be called, the task_works
+must has been taken, so it is safe to be cleared in callback.
+
+Fixes: commit 5567d11c21a1 ("x86/mce: Send #MC singal from task work")
+Cc: <stable@vger.kernel.org> #v5.8+
+Signed-off-by: Ding Hui <dinghui@sangfor.com.cn>
+
+---
+v1->v2:
+do not call kill_me_now in kill_me_maybe, to avoid mce_kill_me.func
+race condition
+do not override current->mce_xxx before callback
+
+ arch/x86/kernel/cpu/mce/core.c | 38 ++++++++++++++++++++++------------
+ 1 file changed, 25 insertions(+), 13 deletions(-)
+
+diff --git a/arch/x86/kernel/cpu/mce/core.c b/arch/x86/kernel/cpu/mce/core.c
+index 22791aadc085..95d244a95486 100644
+--- a/arch/x86/kernel/cpu/mce/core.c
++++ b/arch/x86/kernel/cpu/mce/core.c
+@@ -1250,6 +1250,7 @@ static void __mc_scan_banks(struct mce *m, struct pt_regs *regs, struct mce *fin
+ 
+ static void kill_me_now(struct callback_head *ch)
+ {
++	WRITE_ONCE(ch->func, NULL);
+ 	force_sig(SIGBUS);
+ }
+ 
+@@ -1258,15 +1259,22 @@ static void kill_me_maybe(struct callback_head *cb)
+ 	struct task_struct *p = container_of(cb, struct task_struct, mce_kill_me);
+ 	int flags = MF_ACTION_REQUIRED;
+ 	int ret;
++	u64 mce_addr = p->mce_addr;
++	__u64 mce_kflags = p->mce_kflags;
++	bool mce_ripv = p->mce_ripv;
++	bool mce_whole_page = p->mce_whole_page;
+ 
+-	pr_err("Uncorrected hardware memory error in user-access at %llx", p->mce_addr);
++	/* reset func after save p->mce_xxx */
++	WRITE_ONCE(cb->func, NULL);
+ 
+-	if (!p->mce_ripv)
++	pr_err("Uncorrected hardware memory error in user-access at %llx", mce_addr);
++
++	if (!mce_ripv)
+ 		flags |= MF_MUST_KILL;
+ 
+-	ret = memory_failure(p->mce_addr >> PAGE_SHIFT, flags);
+-	if (!ret && !(p->mce_kflags & MCE_IN_KERNEL_COPYIN)) {
+-		set_mce_nospec(p->mce_addr >> PAGE_SHIFT, p->mce_whole_page);
++	ret = memory_failure(mce_addr >> PAGE_SHIFT, flags);
++	if (!ret && !(mce_kflags & MCE_IN_KERNEL_COPYIN)) {
++		set_mce_nospec(mce_addr >> PAGE_SHIFT, mce_whole_page);
+ 		sync_core();
+ 		return;
+ 	}
+@@ -1283,23 +1291,27 @@ static void kill_me_maybe(struct callback_head *cb)
+ 		force_sig_mceerr(BUS_MCEERR_AR, p->mce_vaddr, PAGE_SHIFT);
+ 	} else {
+ 		pr_err("Memory error not recovered");
+-		kill_me_now(cb);
++		force_sig(SIGBUS);
+ 	}
+ }
+ 
+ static void queue_task_work(struct mce *m, int kill_current_task)
+ {
+-	current->mce_addr = m->addr;
+-	current->mce_kflags = m->kflags;
+-	current->mce_ripv = !!(m->mcgstatus & MCG_STATUS_RIPV);
+-	current->mce_whole_page = whole_page(m);
++	struct callback_head ch;
+ 
+ 	if (kill_current_task)
+-		current->mce_kill_me.func = kill_me_now;
++		ch.func = kill_me_now;
+ 	else
+-		current->mce_kill_me.func = kill_me_maybe;
++		ch.func = kill_me_maybe;
++
++	if (!cmpxchg(&current->mce_kill_me.func, NULL, ch.func)) {
++		current->mce_addr = m->addr;
++		current->mce_kflags = m->kflags;
++		current->mce_ripv = !!(m->mcgstatus & MCG_STATUS_RIPV);
++		current->mce_whole_page = whole_page(m);
+ 
+-	task_work_add(current, &current->mce_kill_me, TWA_RESUME);
++		task_work_add(current, &current->mce_kill_me, TWA_RESUME);
++	}
+ }
+ 
+ /*
+-- 
+2.17.1
+
