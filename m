@@ -2,188 +2,174 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 37E3E3C19E1
-	for <lists+linux-edac@lfdr.de>; Thu,  8 Jul 2021 21:35:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 08A973C1A08
+	for <lists+linux-edac@lfdr.de>; Thu,  8 Jul 2021 21:44:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229631AbhGHTiI (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Thu, 8 Jul 2021 15:38:08 -0400
-Received: from mail-bn8nam11on2065.outbound.protection.outlook.com ([40.107.236.65]:52160
-        "EHLO NAM11-BN8-obe.outbound.protection.outlook.com"
+        id S229631AbhGHTqy (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Thu, 8 Jul 2021 15:46:54 -0400
+Received: from mail-mw2nam12on2086.outbound.protection.outlook.com ([40.107.244.86]:13344
+        "EHLO NAM12-MW2-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S229497AbhGHTiH (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Thu, 8 Jul 2021 15:38:07 -0400
+        id S229497AbhGHTqx (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Thu, 8 Jul 2021 15:46:53 -0400
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=J55HpShWXFQ2EI4qRoqTF51Fn96/UdQJKK1HIWOkdScjDY1tAqsF9ph8Ldc2iq17GE3YVbgHofQnAdCTwXajcwV0Lk/w9ooYtBheWANGsx/OkkB8leyGGu7A6HFplcYFttdVp2g8vzrcasgtIH7yBXGaaUHuPBZc2yga33DjptWsDA8reLyOkkzmqdq3Q5cSodtEaE1Au7UvlSCp1uibrvglYUvhZWiA0Tcx1e1VeGme0JtWeQLJUkzux4Ah/LmSp6D9v3y8nC/HqTQ8g9X0XMGXQG/qOOxXOx2kefEmBOZtX1RW6Cl75hmCh8uhMP4eDwH5SwUjxiiaz0c1GFAJNg==
+ b=d5qi0bAX0IcCoyD7ExO05uzhp4NCzpRKGnYthx8msiP4fHJ/Wuol8KbseghjxyL5BuEhMphFpqWcJzYCkMSp2MLfF3XolIcomRp3jjMUXt6TDlyum1JW0jBcelKnQlkZgMxDnYNXEbHyXlabyNvhJzFmWy9uCcfXkQK1nfZK/xQCTezXZc1fzgdhBx3KTIZYjO12t8M6Zrr7qhsQl3aEuCE64d17V2lEPFyLnnrh1qYpR1Iat6o7sHalwBsoyzWWwOFGtfOVfWrqn6OUnT3saTr93SiVLXyJ4QtVI/ZlgBTZ6smxqlulNJ8ryRjrwPU8dzZvPW+cszX6YL3vzC+BLw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=sak4XYXVtoAtArtxkB42NYx+sKcLwNpELzfbSm9ia+c=;
- b=RL/QaF91DLN6eToBsVQwBi0cZj1jJvAVsbbpwpvo43leQwigMmWRKAr+4MOxz/WPJ7evtMdapZYOBK3FKQL+dxYKL5sy9L2zII9kaSU6BWQjvEV54opBwbc15qGSzOpiySINp3zEzSwUXi0XbXvz/vviY+BFoDXUw8O1IzdC3r1Hz5BWoXEUhzxvcFWADBPf8iy7yd2drlgU/Kz4GmTIZ0xq29Kq83Plfb7IIKuLehKLoGqrbQ4XuUkScOC6kWnXWQ3sbaTmtxhcFFFTRueKxiKsqe8XSwCjXbsLxi0FmCyGCInUW2/vdBD1vCgajTTJC1D1i68hCcwn8KHbjiOwHA==
+ bh=61jR1YgIt3J9TpJklYB1eI/kxsRVUHA4SbNMxT3Tkng=;
+ b=ZBLm7rrDbC86zwUd3zMJcW8I4f7dTZr9mQcPADIi2akehORvDvODDEUrdX/brY7eVWC39ladtIzC98e221w2ZPozBP0RcInEqzpDZpVb2/OwiKb5Fb94IErjsXtogMi46zKCHp7JWnmTrA6JSkW9kiyoJOQSPQq2jL9x2QsvKwyK7bJnKbQhJffSLRrUEXKRyABpCKSH7EWbqA5sc6r8/sLzkwXv6u+vsghX3myfXMWCEURMrXnmatzeTmEmEEOvYKyJgcTg/wwHkOI93w8yIvXr9wXMiE7g1t8/FMrocKlsMr1QgBGE/bxKy1l1R52uzSXmkwUTW6uo5a58o5TPoA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
  header.d=amd.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=sak4XYXVtoAtArtxkB42NYx+sKcLwNpELzfbSm9ia+c=;
- b=XjXK3/83ptDIpzbjppZilAjdpPz1YVmym0gc2IkCi1DnPw5EwQphykAbRr3inGndsLLWv7gob1UUP+FEtShep6w2L87kMgcGFnKQtIZf1GY08sj/5JeeXxAO8Ao1M8nJL8CAmHqnc2A8vl/U9LyfHN68XWL8NZbJgBT5M+o1c18=
+ bh=61jR1YgIt3J9TpJklYB1eI/kxsRVUHA4SbNMxT3Tkng=;
+ b=31XQl5+M03oBI5UuioZ92AuHN9jfI0Q6O3aF5rj4lguKKQdH5+CNYXHAfVVBqF4k5vk8dO03s4KXr8lfMHPgSUiG2LXHUL9YdvL/eIWa24gqWw4ekgTLIlo4PzS+NgHLaydTHO+958hWsoySm//gf43MPPtOS3gZwi5xRXfplIo=
 Authentication-Results: alien8.de; dkim=none (message not signed)
  header.d=none;alien8.de; dmarc=none action=none header.from=amd.com;
 Received: from BN8PR12MB3108.namprd12.prod.outlook.com (2603:10b6:408:40::20)
- by BN8PR12MB3633.namprd12.prod.outlook.com (2603:10b6:408:49::28) with
+ by BN6PR12MB1185.namprd12.prod.outlook.com (2603:10b6:404:1e::10) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4287.32; Thu, 8 Jul
- 2021 19:35:23 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4308.22; Thu, 8 Jul
+ 2021 19:44:10 +0000
 Received: from BN8PR12MB3108.namprd12.prod.outlook.com
  ([fe80::c099:e7a1:249a:a8a2]) by BN8PR12MB3108.namprd12.prod.outlook.com
  ([fe80::c099:e7a1:249a:a8a2%7]) with mapi id 15.20.4287.035; Thu, 8 Jul 2021
- 19:35:23 +0000
-Date:   Thu, 8 Jul 2021 15:35:17 -0400
+ 19:44:10 +0000
+Date:   Thu, 8 Jul 2021 15:44:08 -0400
 From:   Yazen Ghannam <yazen.ghannam@amd.com>
 To:     Borislav Petkov <bp@alien8.de>
 Cc:     linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
         mchehab@kernel.org, tony.luck@intel.com,
         Smita.KoralahalliChannabasappa@amd.com
-Subject: Re: [PATCH v2 03/31] EDAC/amd64: Don't use naked values for DF
- registers
-Message-ID: <20210708193517.GA15605@aus-x-yghannam.amd.com>
+Subject: Re: [PATCH v2 04/31] EDAC/amd64: Allow for DF Indirect Broadcast
+ reads
+Message-ID: <20210708194408.GB15605@aus-x-yghannam.amd.com>
 References: <20210623192002.3671647-1-yazen.ghannam@amd.com>
- <20210623192002.3671647-4-yazen.ghannam@amd.com>
- <YNX0ZLRSLgmm2LiA@zn.tnic>
+ <20210623192002.3671647-5-yazen.ghannam@amd.com>
+ <YNyaXr9yfi/paLt/@zn.tnic>
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YNX0ZLRSLgmm2LiA@zn.tnic>
-X-ClientProxiedBy: BN9PR03CA0491.namprd03.prod.outlook.com
- (2603:10b6:408:130::16) To BN8PR12MB3108.namprd12.prod.outlook.com
+In-Reply-To: <YNyaXr9yfi/paLt/@zn.tnic>
+X-ClientProxiedBy: BN8PR03CA0013.namprd03.prod.outlook.com
+ (2603:10b6:408:94::26) To BN8PR12MB3108.namprd12.prod.outlook.com
  (2603:10b6:408:40::20)
 MIME-Version: 1.0
 X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from aus-x-yghannam.amd.com (165.204.25.250) by BN9PR03CA0491.namprd03.prod.outlook.com (2603:10b6:408:130::16) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4308.20 via Frontend Transport; Thu, 8 Jul 2021 19:35:22 +0000
+Received: from aus-x-yghannam.amd.com (165.204.25.250) by BN8PR03CA0013.namprd03.prod.outlook.com (2603:10b6:408:94::26) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4308.20 via Frontend Transport; Thu, 8 Jul 2021 19:44:09 +0000
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 9e14ee3b-0471-4212-cd7e-08d942478773
-X-MS-TrafficTypeDiagnostic: BN8PR12MB3633:
+X-MS-Office365-Filtering-Correlation-Id: d22f933e-1078-4ddf-1b32-08d94248c14f
+X-MS-TrafficTypeDiagnostic: BN6PR12MB1185:
 X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <BN8PR12MB36335A55DA8B9B551D2A83E7F8199@BN8PR12MB3633.namprd12.prod.outlook.com>
+X-Microsoft-Antispam-PRVS: <BN6PR12MB1185D36A9649907F60D799FBF8199@BN6PR12MB1185.namprd12.prod.outlook.com>
 X-MS-Oob-TLC-OOBClassifiers: OLM:10000;
 X-MS-Exchange-SenderADCheck: 1
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: mNFur5I0tc/Piia03NZqknl3/V261NvxK9C6+cMWMFXkKZhM2nCJCobUxYKLo/OX43VOY+WX/rZYfR6NzXMXxT8rBxu04yRE0hahN6MXKGrXd8f7FGhHnCQcKlsk8301aLgFRn6dHLJ009GvAC3+XelRPRG4KG1i+Fa8ma0VRMs8NchkcGWVt+iBWIKGnW8wnjtEG1jVWx3Hn4YXIYoYYzDEzMkf/y2FQlktXAsPsCG5ppLnE8qNwqaFrvg0eEZTN4f41FRrKzvhZdLUF9qyHXxTCin164QKLZgxKXGu4kasiHj/uJb0e31sJVG0LdPyOURArT+ZpxNTE21W+KrFK5uBzoP4ME+pZpxcj4VgCIEOlQEHSC+Z85jIDmtbdt4mIvf9WSG6skUCboRlDTwPKCbIdnCyvcGPOcHmvCtRsOfCQBefbwMEONG3Pv9empOY90VSF/u7pGvJLuhC/fc/FV4k0NNNAqI4nqHLI8NR01UZVn1EBFY5qtsiAVkruUzuFOtnBuKcwrrKnNsAdL+1lFKD2hLbHJJgAoowTnxXl/ql2PaaMvisJkyGnJCVXOgC0ns0reqFIQCke6fKRtJ5hNZJCTcY17p2CbW56i6kJchsE/WbJbG7tdGkHxF3c/VA+6QNm9mz510h7qF3kqQvQmcggUqwj2WfmooozxU6De2YqI5bTtLZ/MjIRC+j7pBdOrxHEVDQ1vZqP/ioynz/93toBlcFANy4w0rKJjswvos=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3108.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(39860400002)(396003)(346002)(136003)(376002)(38100700002)(38350700002)(8936002)(66946007)(7696005)(52116002)(55016002)(2906002)(8676002)(6666004)(956004)(44832011)(66476007)(1076003)(5660300002)(316002)(186003)(33656002)(6916009)(86362001)(66556008)(26005)(4326008)(478600001)(83380400001)(41403002);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: JsBw1ZFcN3h6B/Uc5SdoDff0pe55Szj4CJZEckrCTxnyht7vnRA8O+c//rOr9VZDJ4hB8OE7S802PE7pjHRApeXQUWThTpmfLIDqfA5S2sy02JD+Lkoh0SHHt7hhOJm2PTSY+TGDqDvJJs4vE6yyFNEbF3vKd22V74LP+ZmTEwBCjv75gtTASizqSp3GyuM5Ne0xqV5eFxEMfYAs+ZdaRgi54HeuplasjUexOIUobKk3wl/g92087137/R5icdlt1m7iObSz3Ro8sxH2eBmPgVtmteHeS4hKfgzoirT9y3YVG6K7UZFDaRiRIjbmE9K9rB1H+EFkbPmuwI4xQKgfsg+iH9vIzbW+NUj6oREBsYnyVHfl18PI8wzOR0WqK95llvhB77/59kptpK3/5VYOBqd/Y1RfRyH8FwHiWJ8cnKCC8L8cAxiBDhyD4GgCR7mfqj82MatcsfH0x3SsbGpmMt2t4/0ROsTT+ZgpjcArqPsOY/C5kct0ARd+avRay3CnqDJR/E2bjfkphQIz8w//w94bTebRkot2xjtrXb0H3JMAMGflG3VkcyDtcBQ4Cx2AJOlBE6f+lhXJoAwdt+cX2ky5aQyxkJQ0UOpJMt3H/CN8losr/lLmnveu/GgtAx+3XOwoDDisawPglJ8VcuV6tLyVLjxGgrzpUPMeVAcI49IKNH9sT5tEyidfbvqyW24AW7+OLXKaiwfq1ZYljL+6JBBH9Eizw5f2tnmIWVJZGEdD7rS/qY45Off2xO/BipZZxwfWD9rqRUPXlAIdfwnzjzgcnSL3yDq8WBmHevXEuvQ=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3108.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(396003)(136003)(39860400002)(346002)(376002)(366004)(1076003)(186003)(6916009)(26005)(66476007)(66556008)(38350700002)(8676002)(478600001)(38100700002)(83380400001)(66946007)(8936002)(966005)(86362001)(316002)(45080400002)(52116002)(7696005)(33656002)(5660300002)(44832011)(2906002)(4326008)(55016002)(956004);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?BF4ikv19m6akFGtEhDWh8zR6y6lUsDYIGFO/UH68vbgMw36bOMTosJHQzx+9?=
- =?us-ascii?Q?vxcHQmpm2dHlCgvzqmKJbgqTHLOfVBXN0K3ZsRi0ye0rR3ZVQBvhWb2VBCLU?=
- =?us-ascii?Q?wFlX4jFmaCfaZw14WYiTr0wZ2CMbTkuYMhbon3AE97zNYaa8KEkIcHU0jPDX?=
- =?us-ascii?Q?/uqIhSsC/HREpbUWVwIHvpAF2LrUJA/JsEMIKFG8ZZNq5GLhUjhW1+oW4mkG?=
- =?us-ascii?Q?AamZGQOCxeTKkzEip6YpPK0as3KKyHswCOYTOZnL8eiGxyaQ0STADxjOTV/5?=
- =?us-ascii?Q?blTOkSUbm1Q0nJWbktXLMT4gzhxWM4InNSO7WIMbBLBTLk1/3ghpyAZmS2v+?=
- =?us-ascii?Q?mQhE6rawWYbu7NMFc7z6NaAbZrZgVFvyNwPjv4J6O+WTmR7BchU692Y7TRkU?=
- =?us-ascii?Q?11gSnzkh00na2HMllQktma3LXnvn5QR1nWQ7YpW6DzMuPH+HRIxAAx7/Fi7w?=
- =?us-ascii?Q?3D8y4h6kPdL/0D0HKoYG3hHQD65hk6LZu9g8pgRrCCqtBBpXxzC6+rELZAof?=
- =?us-ascii?Q?54EEcZXeDcafJ1DLRQ4jqYy7oU6Du85qHUPQjW8CXCVwNoDLQoxvmzF73g09?=
- =?us-ascii?Q?ZeFtA+GeKxjQDDHs1yhyJdmCbRuemfrY8wAx1fsthlPCMi7RvmTT2MzTgwCh?=
- =?us-ascii?Q?c6342vIeQH1xsnfSk/7D3n8BMFvaBTkSU7cpmwFdwANrpcqU9nEKL9daqDp1?=
- =?us-ascii?Q?/2kl4x5gSpgESEdJT2pXNptmGrsadPlXOw1ffGv31of9kjMGAWxzO8VPd/D7?=
- =?us-ascii?Q?4syGcm9uyXJGVrbb5oWKSjm4uIlAjk/2PbLqUgF26bU3q8YJMzSS9ZMM84KU?=
- =?us-ascii?Q?zBktxPpCArnH3f8YtJeNh7Uqkio75hGUy0+gUW7RWM8Tr/lrcqq17PdiVZLv?=
- =?us-ascii?Q?ST3/hb0ARzsrtU6iLazeZVEzs6NZCYw1Y1XESEFDy6DMJ8lEdGQvCG5NtiEZ?=
- =?us-ascii?Q?j2sVf03AdYdu61GIwk07tAtvozo5OmbJdZaY3fJPngTaS6+oKDEXUJMsNcfR?=
- =?us-ascii?Q?nhBQrAukaULH9o3Gq0C7u4VTopkez/aot9xxte4TdKtFwltRvxO+J64NJmHl?=
- =?us-ascii?Q?f2/T2/MDaQtrUYsFZlcZPKcTsr8DihNNb2vGdMtCjKKI7vgiJR3zkrWYWsg0?=
- =?us-ascii?Q?RCKIlUWuPW89YMBjs3HP1pCJIjYm+eOK5+ApTwZvciGgy12c7WHNMVlQEXs3?=
- =?us-ascii?Q?PoNTi1ruD0enUfiW4HTUW44yC2yiZgLLOm0zlyOfbqgKlGiX+EkhChMS9IDY?=
- =?us-ascii?Q?FK4LiSQu2z4yBREp+2VM1zwr7zkDGLkUnGEKlPQE1aVf5WyB9+Dv5R5vWhF0?=
- =?us-ascii?Q?f4yfM7fu8OBqJ5PLCILjfs2z?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?I1sZmUrGuwXSgO/IU9l5IklcA3Q1MgcsRnuQNTBLXsHfxDaH9QVfkNrpxsfc?=
+ =?us-ascii?Q?PVwYaaTUF+8iXaZ6izJIm+5qPfHyCqRcLAbhv2eDq1kkBc/g76N6OOWdysTB?=
+ =?us-ascii?Q?xiFYV6glx6/zwaXfjeeJh6ZLYLF5aV8as1ahGf8+bTwI9SHSMR1d8Nq8iSg8?=
+ =?us-ascii?Q?v999eNmgY8jtFwpHDZoU+I8bg8/O/VfMCjWr1Ge6HAZdb+JiPWdfwhFAZWnp?=
+ =?us-ascii?Q?XNPKMLNzj9Di9WY9QwUQPUFnYeDBYnbvrcrJIGj7tJi9bS8LObzy/D9WGQjG?=
+ =?us-ascii?Q?xuexhbMWw4OY09n3IFTWrekyRJYmD94JFLv/9xiB8R4VTfDVkKjU8lOQ8pYj?=
+ =?us-ascii?Q?ZjLsrHphLQndb+GQynNF0Y4OOAdjptY7dzXQF6ikohTjYkhb58X2mbkI5OOz?=
+ =?us-ascii?Q?BS3ckQA3ttfra+HFo1DBlIzVJybyiKMq27VFfE3zg/LSIcpFqfBz6dSh0xvF?=
+ =?us-ascii?Q?1TgpGGPONe02PxeQ6jt0LdclD+wyvXyOOxsDXSagHMZl3XFGBN/DNR64bkUW?=
+ =?us-ascii?Q?XaavEv0dMHD5gaLLDPk7B5G0XC0F0ZhhaNrQJmoQUdBKzS08V6mK+ZVnarBI?=
+ =?us-ascii?Q?4qzdCMzEMgc2hF2MfQY4lg1pspexe/1QQTsdoTsXpNRyozdXIqgXBEsS38uF?=
+ =?us-ascii?Q?WGUhkGDg4yIBNaWjgPWxW/HAMWKMsQJOS5YZu6FoI0bHelC8qhyEjDJmRioX?=
+ =?us-ascii?Q?UPd8+5RwjH/topl7Ee+H9dPwFeA/Dii6kpL2RfikivlgakWMGnw3loYVPoiq?=
+ =?us-ascii?Q?cHcLuzG5VOJFMJrM4M2SmE9xKsy91g2DNx6j4didyJQtmkgEqnJVRmkb4tql?=
+ =?us-ascii?Q?yl6eYJ3ESMv6lXw/Nr7Ce8kjXmfgqOd4yqSBd41W4ov4jlLl9fuOUpbaLD1X?=
+ =?us-ascii?Q?KMUVI2nQZW1n5Ay3ex/XbyPKAA/7zkEohs/CyAVmUdcxPdq2fvAQkx8EY1lD?=
+ =?us-ascii?Q?9IIUQ7zh3JqAAMXnMsEnDjoJNd7ytcQS0vT0ABGK+E5IZC+QkAekz3ATUdGa?=
+ =?us-ascii?Q?QO/QwR7IsrOneDlUiW0m5pGDtWzY2MBiOJtBzUf9S0l+DZlwZ/WY9oO2tWf9?=
+ =?us-ascii?Q?TpvVpGvq2gsvzALmS02ZO6urdrgPxDDTMNktmxmSNL/xFb2S12QMD4ACh3vY?=
+ =?us-ascii?Q?9qEXAgvNiFG+M89IqPwidB040GMnJ91EA4Jw0JoIrT7s3ATi3fMCg/Qp/+cN?=
+ =?us-ascii?Q?Ewfw0xKCGe/NJCyCgbfhxa3ffBkvYSmpkk2dF2KF7/xumFOeksJF6FlTCwlT?=
+ =?us-ascii?Q?rCaWC3cQpBBev7rG0hQzesH7ZmT3AvExLr9u/NOj5gZyd+W4LFy42TRVuAqB?=
+ =?us-ascii?Q?1Y+BK6gIy+9SmW19sKSMG9Rf?=
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9e14ee3b-0471-4212-cd7e-08d942478773
+X-MS-Exchange-CrossTenant-Network-Message-Id: d22f933e-1078-4ddf-1b32-08d94248c14f
 X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3108.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Jul 2021 19:35:23.4629
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Jul 2021 19:44:10.0170
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: j/aAyoi69GVC9wiEc/62tk0MO/cricaEiaXi/gmjKYrZ86iH3QgQTIYITzDJDZc/gPWe8onHQhWW1ddLNne8Kw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN8PR12MB3633
+X-MS-Exchange-CrossTenant-UserPrincipalName: dNhJ2tQ0k6TNGYwqzC/YOoDjfcl9HqooOILZq8CmouHzhzSLk3Gnk4mK/XStWk5EnCVGFuCYNwUq6ETcP6Yzhg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN6PR12MB1185
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Fri, Jun 25, 2021 at 05:21:08PM +0200, Borislav Petkov wrote:
-> On Wed, Jun 23, 2021 at 07:19:34PM +0000, Yazen Ghannam wrote:
-> > +static struct df_reg df_regs[] = {
-> > +	/* D18F0x50 (FabricBlockInstanceInformation3_CS) */
-> > +	[FAB_BLK_INST_INFO_3]	=	{0, 0x50},
-> > +	/* D18F0x104 (DramHoleControl) */
-> > +	[DRAM_HOLE_CTL]		=	{0, 0x104},
-> > +	/* D18F0x110 (DramBaseAddress) */
-> > +	[DRAM_BASE_ADDR]	=	{0, 0x110},
-> > +	/* D18F0x114 (DramLimitAddress) */
-> > +	[DRAM_LIMIT_ADDR]	=	{0, 0x114},
-> > +	/* D18F0x1B4 (DramOffset) */
-> > +	[DRAM_OFFSET]		=	{0, 0x1B4},
-> > +	/* D18F1x208 (SystemFabricIdMask) */
-> > +	[SYS_FAB_ID_MASK]	=	{1, 0x208},
-> > +};
+On Wed, Jun 30, 2021 at 06:22:54PM +0200, Borislav Petkov wrote:
+> On Wed, Jun 23, 2021 at 07:19:35PM +0000, Yazen Ghannam wrote:
+> > The DF Indirect Access method allows for "Broadcast" accesses in which
+> > case no specific instance is targeted. Add support using a reserved
+> > instance ID of 0xFF to indicate a broadcast access. Set the FICAA
+> > register appropriately.
+> > 
+> > Signed-off-by: Yazen Ghannam <yazen.ghannam@amd.com>
+> > ---
+> > Link:
+> > https://nam11.safelinks.protection.outlook.com/?url=https%3A%2F%2Flkml.kernel.org%2Fr%2F20210507190140.18854-1-Yazen.Ghannam%40amd.com&amp;data=04%7C01%7Cyazen.ghannam%40amd.com%7C83af21ab3dcc4b529ff008d93be354cb%7C3dd8961fe4884e608e11a82d994e183d%7C0%7C0%7C637606669851041887%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C1000&amp;sdata=DVzJaZy8OOETbvcISwzhg7%2FP3iHjOiP%2BOgMFd8rrrQk%3D&amp;reserved=0
+> > 
+> > v1->v2:
+> > * New in v2.
+> > 
+> >  drivers/edac/amd64_edac.c | 6 +++++-
+> >  1 file changed, 5 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/drivers/edac/amd64_edac.c b/drivers/edac/amd64_edac.c
+> > index b94067e3952b..d67cd8f57b94 100644
+> > --- a/drivers/edac/amd64_edac.c
+> > +++ b/drivers/edac/amd64_edac.c
+> > @@ -1010,7 +1010,11 @@ struct df_reg {
+> >   *
+> >   * Fabric Indirect Configuration Access Data (FICAD): There are FICAD LO
+> >   * and FICAD HI registers but so far we only need the LO register.
+> > + *
+> > + * Use Instance Id 0xFF to indicate a broadcast read.
+> >   */
 > > +
-> >  static int umc_normaddr_to_sysaddr(u64 norm_addr, u16 nid, u8 umc, u64 *sys_addr)
+> > +#define DF_BROADCAST	0xFF
+> >  static int amd_df_indirect_read(u16 node, struct df_reg reg, u8 instance_id, u32 *lo)
 > >  {
-> >  	u64 dram_base_addr, dram_limit_addr, dram_hole_base;
-> > @@ -1059,8 +1091,9 @@ static int umc_normaddr_to_sysaddr(u64 norm_addr, u16 nid, u8 umc, u64 *sys_addr
-> >  	u8 cs_mask, cs_id = 0;
-> >  	bool hash_enabled = false;
+> >  	struct pci_dev *F4;
+> > @@ -1024,7 +1028,7 @@ static int amd_df_indirect_read(u16 node, struct df_reg reg, u8 instance_id, u32
+> >  	if (!F4)
+> >  		goto out;
 > >  
-> > -	/* Read D18F0x1B4 (DramOffset), check if base 1 is used. */
-> > -	if (amd_df_indirect_read(nid, 0, 0x1B4, umc, &tmp))
-> > +	struct df_reg reg;
-> > +
-> > +	if (amd_df_indirect_read(nid, df_regs[DRAM_OFFSET], umc, &tmp))
-> >  		goto out_err;
-> >  
-> >  	/* Remove HiAddrOffset from normalized address, if enabled: */
-> > @@ -1073,8 +1106,9 @@ static int umc_normaddr_to_sysaddr(u64 norm_addr, u16 nid, u8 umc, u64 *sys_addr
-> >  		}
-> >  	}
-> >  
-> > -	/* Read D18F0x110 (DramBaseAddress). */
-> > -	if (amd_df_indirect_read(nid, 0, 0x110 + (8 * base), umc, &tmp))
-> > +	reg = df_regs[DRAM_BASE_ADDR];
-> > +	reg.offset += base * 8;
+> > -	ficaa  = 1;
+> > +	ficaa  = (instance_id == DF_BROADCAST) ? 0 : 1;
 > 
-> So this looks weird: you have a df_regs[] array of all those different
-> DF registers which I'd assume is a read-only thing because, well, those
-> func and offset things are immutable, i.e., hw registers offsets etc.
+> Or, you can define two functions:
 > 
-> But then here you go and and modify the offset.
+> df_indirect_read_broadcast()
+> df_indirect_read_umc()
 > 
-> And that df_regs array is globally visible in the driver and if some
-> later functionality decides to use it, it'll see the modified offset.
+> (no need for the "amd_" prefix either - this is a static function now)
 > 
-> IOW, I'd make that array read only (const) and use local vars instead to
-> pass down to amd_df_indirect_read().
+> which both call a low-level helper:
 > 
-> And I'm also questioning what the point is for that df_reg thing?
+> static int __df_indirect_read(u16 node, struct df_reg reg, u8 instance_id, u32 *lo)
 > 
-> You have them defined but then you have to change them.
-> 
-> I.e., you can just as well pass in func and offset separately and be
-> done with it.
-> 
-> But maybe there's something else happening in the patches which comes
-> later and which will make me go, ahaa.
+> and there you either pass the instance_id or 0xff depending on which
+> outer function is calling it...
 >
 
-You're right that the values should be immutable. The changes done here
-are only for this pair of base/limit registers. Most of the time we'll
-only use 2 pairs (4 registers). But some systems will need to look at 16
-pairs, and so this current approach seemed nicer than writing out 32
-registers with mostly redundant information.
+Yeah, I like it. I'll see what I can do.
 
-I was trying to make the code more "self-documenting" and move away from
-magic numbers, etc. But it all looks okay to me, so I'm not sure which
-way to go (magic numbers + code comments, something else, etc.).
-
-So I'm inclined to stick with passing in the func/offset values and
-dropping the df_regs thing.
+BTW, I'm thinking to include a "tmp" or "scratch" u32 value in the
+context used to hold raw register values that don't need to be saved
+long term. There are a few places where a value is read and some fields
+are extracted, so a few functions have a u32 tmp variable declared. What
+do you think?
 
 Thanks,
 Yazen
-
