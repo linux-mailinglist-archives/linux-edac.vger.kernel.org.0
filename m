@@ -2,90 +2,169 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F0D703C2193
-	for <lists+linux-edac@lfdr.de>; Fri,  9 Jul 2021 11:28:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 720AA3C25B6
+	for <lists+linux-edac@lfdr.de>; Fri,  9 Jul 2021 16:16:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231772AbhGIJbl (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Fri, 9 Jul 2021 05:31:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48082 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231519AbhGIJbk (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Fri, 9 Jul 2021 05:31:40 -0400
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A22A0C0613DD;
-        Fri,  9 Jul 2021 02:28:57 -0700 (PDT)
-Received: by mail-pf1-x429.google.com with SMTP id 21so8234592pfp.3;
-        Fri, 09 Jul 2021 02:28:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=UlbdXK6HKZk/09qQVt3Me9VTXCht6e6ZTtTisWVBdt8=;
-        b=oumRki32Vm1coPwEZiIZqEH73Fqx5Co6+XkbmwKBRZ7x8kJjvB5pb18OxCM6L6WCY0
-         xMGf0opMO39m5XQ5ysJ2Pv4p5XY2wgo99Iv6RTieJ7fozeTBYCa2zFFnqOHzWcLagFwP
-         ymBWOCx94OknBMyHtBhconDRHBJyISX7vmeMqv2gcWhTGqLqwZgNDm60S08RMcdYk7cu
-         7336WG/tET/flbAxa2/eHimSOVvor7aeLM+DqLJgFYzQ/QQWUusyyhtFcjGFGFKR4dG6
-         VcEWZ/wOXAR4r+kO0iD6TSkmaFZ3H0W6yS3A7k19w1kOZPwoqf4iUrh5BH9NaAzktwa3
-         hbrQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=UlbdXK6HKZk/09qQVt3Me9VTXCht6e6ZTtTisWVBdt8=;
-        b=tQCT7bbuDDeUlt3yU7oixd7aw4m4DSJvsg5YJwTQ0pL6OLvtGw2LunYcK7Q7cAIF5e
-         3HvJas6PS29bIS+8OcPEa6gWI7npyJDIpUwwfM1xp8PPQfSR/uuCwmvtAukCXlM8dSvZ
-         bs5zayieDVLUz46fZBy8H/9HTkZcX24iTbIDNRn9tP7fXA44Xhalg896OmMDi/+h38Md
-         PTIyuASuyTLejBf7jkY+PauFeZjqTSQbcMsR+AaIH8AMdUi72+a1xTcFx3RXuKH4rY7H
-         +n4D5GnPS9mve5raUTFAyNcviBLK0MnagRQJjDpaYXCgo33/pz7Ho09owc0zouImfJN2
-         RutA==
-X-Gm-Message-State: AOAM532SELOa6F0GZjv3rkJriRLyzN05oCcz3I9APumYhTjof6JHWv1W
-        Hv/XbIp4yCEhnzsjOkvWDOQ=
-X-Google-Smtp-Source: ABdhPJxYBtCrvXlWT9e1VmEhguWvddB53UrxgpnQucxrADcQ3eGLzkJh3Lpa2EQtQtGOK6tII6esbw==
-X-Received: by 2002:a63:1c20:: with SMTP id c32mr36902480pgc.41.1625822931464;
-        Fri, 09 Jul 2021 02:28:51 -0700 (PDT)
-Received: from localhost.localdomain (f.a4.5177.ip4.static.sl-reverse.com. [119.81.164.15])
-        by smtp.gmail.com with ESMTPSA id 92sm12860460pjv.29.2021.07.09.02.28.49
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 09 Jul 2021 02:28:51 -0700 (PDT)
-From:   yaozhenguo <yaozhenguo1@gmail.com>
-To:     tony.luck@intel.com, youquan.song@intel.com
-Cc:     linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
-        yaozhenguo@jd.com, yaozhenguo <yaozhenguo1@gmail.com>
-Subject: [PATCH] mm,hwpoison: Don't call task_work_add when there is same work in the queue
-Date:   Fri,  9 Jul 2021 17:28:18 +0800
-Message-Id: <20210709092818.7795-1-yaozhenguo1@gmail.com>
-X-Mailer: git-send-email 2.32.0
+        id S231908AbhGIOTB (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Fri, 9 Jul 2021 10:19:01 -0400
+Received: from mail.kernel.org ([198.145.29.99]:37998 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231775AbhGIOTA (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Fri, 9 Jul 2021 10:19:00 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 8B0C3613AF;
+        Fri,  9 Jul 2021 14:16:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1625840177;
+        bh=x5CND8RsRdj7nNiTB7w585ma7e3rrEVRZa5p1+EuLHM=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=htOKdpsGWv/mgxAsURjgwkEs9AEvfyh9YqU8viPhedGYX2Bd/4gSAtH9qUfgTjZRn
+         VOW2Ktr9Cki/pxjw8dJglEaKMs4eMmQgAI2BQI0OIt5tWL6y95p0uPi3xLj2dCqPjq
+         jpMd+LiMPkv8AzAi7PLdiWTU8O+PiUKYG8RjPKLTozsHm6J030Vw0lkOFZOEsJtMLn
+         wxP4Z64Q6fWU0lJWoFCwPE2tTdEBlPYs/qGSghEARaVFevBKQ3/W/uWGx1EsnM75r2
+         97t2u/nBNF0CBof4NlLJ68+Z5n+sRnhNHd0xc0Ai7SLFaScIS+i7MVzM3OegKlD8WC
+         tRkwNf/4g8rhw==
+Subject: Re: [PATCH] EDAC, altera: skip defining unused structures for
+ specific configs
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Tony Luck <tony.luck@intel.com>,
+        James Morse <james.morse@arm.com>,
+        Robert Richter <rric@kernel.org>, linux-edac@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     kernel test robot <lkp@intel.com>
+References: <20210601092704.203555-1-krzysztof.kozlowski@canonical.com>
+From:   Dinh Nguyen <dinguyen@kernel.org>
+Message-ID: <d08ede56-5b53-0697-de17-9eee9a8530e8@kernel.org>
+Date:   Fri, 9 Jul 2021 09:16:15 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
 MIME-Version: 1.0
+In-Reply-To: <20210601092704.203555-1-krzysztof.kozlowski@canonical.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-queue_task_work can be called more than once in one task before
-this task work is running. it can lead to task->task_works becomes
-an endless loop list and the task will never return to user mode.
-Don't call task_work_add when there is same work in the queue.
 
-Signed-off-by: yaozhenguo <yaozhenguo1@gmail.com>
----
- arch/x86/kernel/cpu/mce/core.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/arch/x86/kernel/cpu/mce/core.c b/arch/x86/kernel/cpu/mce/core.c
-index 22791aa..62c67ad 100644
---- a/arch/x86/kernel/cpu/mce/core.c
-+++ b/arch/x86/kernel/cpu/mce/core.c
-@@ -1299,7 +1299,9 @@ static void queue_task_work(struct mce *m, int kill_current_task)
- 	else
- 		current->mce_kill_me.func = kill_me_maybe;
- 
--	task_work_add(current, &current->mce_kill_me, TWA_RESUME);
-+	/* Avoid endless loops in task_work_run */
-+	if (READ_ONCE(current->task_works) != &current->mce_kill_me)
-+		task_work_add(current, &current->mce_kill_me, TWA_RESUME);
- }
- 
- /*
--- 
-1.8.3.1
+On 6/1/21 4:27 AM, Krzysztof Kozlowski wrote:
+> The Altera EDAC driver has several features conditionally built
+> depending on Kconfig options.  The edac_device_prv_data structures are
+> conditionally used in of_device_id tables.  They reference other
+> functions and structures which can be defined as __maybe_unused.  This
+> silences build warnings like:
+> 
+>      drivers/edac/altera_edac.c:643:37: warning:
+>          ‘altr_edac_device_inject_fops’ defined but not used [-Wunused-const-variable=]
+> 
+> Reported-by: kernel test robot <lkp@intel.com>
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+> ---
+>   drivers/edac/altera_edac.c | 44 ++++++++++++++++++++++----------------
+>   1 file changed, 26 insertions(+), 18 deletions(-)
+> 
+> diff --git a/drivers/edac/altera_edac.c b/drivers/edac/altera_edac.c
+> index 61c21bd880a4..2949edb93454 100644
+> --- a/drivers/edac/altera_edac.c
+> +++ b/drivers/edac/altera_edac.c
+> @@ -539,10 +539,18 @@ module_platform_driver(altr_edac_driver);
+>    * trigger testing are different for each memory.
+>    */
+>   
+> +#ifdef CONFIG_EDAC_ALTERA_OCRAM
+>   static const struct edac_device_prv_data ocramecc_data;
+> +#endif
+> +#ifdef CONFIG_EDAC_ALTERA_L2C
+>   static const struct edac_device_prv_data l2ecc_data;
+> +#endif
+> +#ifdef CONFIG_EDAC_ALTERA_OCRAM
+>   static const struct edac_device_prv_data a10_ocramecc_data;
+> +#endif
+> +#ifdef CONFIG_EDAC_ALTERA_L2C
+>   static const struct edac_device_prv_data a10_l2ecc_data;
+> +#endif
+>   
+>   static irqreturn_t altr_edac_device_handler(int irq, void *dev_id)
+>   {
+> @@ -569,9 +577,9 @@ static irqreturn_t altr_edac_device_handler(int irq, void *dev_id)
+>   	return ret_value;
+>   }
+>   
+> -static ssize_t altr_edac_device_trig(struct file *file,
+> -				     const char __user *user_buf,
+> -				     size_t count, loff_t *ppos)
+> +static ssize_t __maybe_unused
+> +altr_edac_device_trig(struct file *file, const char __user *user_buf,
+> +		      size_t count, loff_t *ppos)
+>   
+>   {
+>   	u32 *ptemp, i, error_mask;
+> @@ -640,27 +648,27 @@ static ssize_t altr_edac_device_trig(struct file *file,
+>   	return count;
+>   }
+>   
+> -static const struct file_operations altr_edac_device_inject_fops = {
+> +static const struct file_operations altr_edac_device_inject_fops __maybe_unused = {
+>   	.open = simple_open,
+>   	.write = altr_edac_device_trig,
+>   	.llseek = generic_file_llseek,
+>   };
+>   
+> -static ssize_t altr_edac_a10_device_trig(struct file *file,
+> -					 const char __user *user_buf,
+> -					 size_t count, loff_t *ppos);
+> +static ssize_t __maybe_unused
+> +altr_edac_a10_device_trig(struct file *file, const char __user *user_buf,
+> +			  size_t count, loff_t *ppos);
+>   
+> -static const struct file_operations altr_edac_a10_device_inject_fops = {
+> +static const struct file_operations altr_edac_a10_device_inject_fops __maybe_unused = {
+>   	.open = simple_open,
+>   	.write = altr_edac_a10_device_trig,
+>   	.llseek = generic_file_llseek,
+>   };
+>   
+> -static ssize_t altr_edac_a10_device_trig2(struct file *file,
+> -					  const char __user *user_buf,
+> -					  size_t count, loff_t *ppos);
+> +static ssize_t __maybe_unused
+> +altr_edac_a10_device_trig2(struct file *file, const char __user *user_buf,
+> +			   size_t count, loff_t *ppos);
+>   
+> -static const struct file_operations altr_edac_a10_device_inject2_fops = {
+> +static const struct file_operations altr_edac_a10_device_inject2_fops __maybe_unused = {
+>   	.open = simple_open,
+>   	.write = altr_edac_a10_device_trig2,
+>   	.llseek = generic_file_llseek,
+> @@ -1697,9 +1705,9 @@ MODULE_DEVICE_TABLE(of, altr_edac_a10_device_of_match);
+>    * Based on xgene_edac.c peripheral code.
+>    */
+>   
+> -static ssize_t altr_edac_a10_device_trig(struct file *file,
+> -					 const char __user *user_buf,
+> -					 size_t count, loff_t *ppos)
+> +static ssize_t __maybe_unused
+> +altr_edac_a10_device_trig(struct file *file, const char __user *user_buf,
+> +			  size_t count, loff_t *ppos)
+>   {
+>   	struct edac_device_ctl_info *edac_dci = file->private_data;
+>   	struct altr_edac_device_dev *drvdata = edac_dci->pvt_info;
+> @@ -1729,9 +1737,9 @@ static ssize_t altr_edac_a10_device_trig(struct file *file,
+>    * slightly. A few Arria10 peripherals can use this injection function.
+>    * Inject the error into the memory and then readback to trigger the IRQ.
+>    */
+> -static ssize_t altr_edac_a10_device_trig2(struct file *file,
+> -					  const char __user *user_buf,
+> -					  size_t count, loff_t *ppos)
+> +static ssize_t __maybe_unused
+> +altr_edac_a10_device_trig2(struct file *file, const char __user *user_buf,
+> +			   size_t count, loff_t *ppos)
+>   {
+>   	struct edac_device_ctl_info *edac_dci = file->private_data;
+>   	struct altr_edac_device_dev *drvdata = edac_dci->pvt_info;
+> 
 
+Acked-by: Dinh Nguyen <dinguyen@kernel.org>
