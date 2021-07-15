@@ -2,82 +2,76 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2846E3CA02D
-	for <lists+linux-edac@lfdr.de>; Thu, 15 Jul 2021 15:58:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4945B3CA442
+	for <lists+linux-edac@lfdr.de>; Thu, 15 Jul 2021 19:26:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238237AbhGOOBV (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Thu, 15 Jul 2021 10:01:21 -0400
-Received: from smtp-relay-canonical-0.canonical.com ([185.125.188.120]:44394
-        "EHLO smtp-relay-canonical-0.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229637AbhGOOBU (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>);
-        Thu, 15 Jul 2021 10:01:20 -0400
-Received: from localhost (1.general.cking.uk.vpn [10.172.193.212])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-canonical-0.canonical.com (Postfix) with ESMTPSA id 69DFA408AD;
-        Thu, 15 Jul 2021 13:58:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1626357506;
-        bh=Cl2Z4fkPQ4YWZ9DFZjI76elK6rvIDL5Xxs/GYAwsJ5c=;
-        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type;
-        b=c+f5DW3fRovP4PppXJ+3G7D63Ukw1ThI+F0iU3Tf10NiIJsAdYH3khUy3HBmzF+Qh
-         YfTyiwyAqg8CCEd9IL19IrC4QnQ2/ruTR/SvbupN5zCiThC+wBPHbIgXlul6aSjh28
-         1Y8u9chciqu2vZZWEAUdKFaL0qAXqyh0olA/bf2GzFqe5JCP2MJkXivuE6WdAd1+cM
-         KnUnkJGJSRpNgZ06BcDpY3rqVcCn4uGPkThKZwnOZH9c7HTIcJOtawCL/n6u/yQkIc
-         MaTyYGmCmtJ90q8oe2bRGefJRebg6ntmfkTYsGhvWtwxRpAowKNSCAW/vDVTT7IVbA
-         OmsbL2Aahppfg==
-From:   Colin King <colin.king@canonical.com>
-To:     Borislav Petkov <bp@alien8.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Tony Luck <tony.luck@intel.com>,
-        James Morse <james.morse@arm.com>,
-        Robert Richter <rric@kernel.org>,
-        Doug Thompson <dougthompson@xmission.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-edac@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] drivers/edac: add missing macro arguments and missing macro edac_pci_remove_sysfs
-Date:   Thu, 15 Jul 2021 14:58:26 +0100
-Message-Id: <20210715135826.26241-1-colin.king@canonical.com>
-X-Mailer: git-send-email 2.31.1
+        id S235738AbhGOR2r (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Thu, 15 Jul 2021 13:28:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37516 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233643AbhGOR2r (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Thu, 15 Jul 2021 13:28:47 -0400
+Received: from mail-oi1-x22a.google.com (mail-oi1-x22a.google.com [IPv6:2607:f8b0:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45749C0613DF
+        for <linux-edac@vger.kernel.org>; Thu, 15 Jul 2021 10:25:53 -0700 (PDT)
+Received: by mail-oi1-x22a.google.com with SMTP id t143so7508207oie.8
+        for <linux-edac@vger.kernel.org>; Thu, 15 Jul 2021 10:25:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=Ibb5KNEw1DKqJEg9n4gJy5KnzVasBofn6QaWYsu9UCQ=;
+        b=A07qw47jpyx7/pJf1ZS9aQv4pD7PiHBZWlsl9UoiurRqqc+7ZndQI51YdaaD0nkecu
+         Qd4i+G02coH8O2I/r6ZupOF8oYSIAoIwVq4zkuCtuhDJYsbynWGQdegcG7aq+QxGg/bp
+         poyp2DbaibSeABlojQr/pIAqMWExNaHg4RIE+IQzBlXdCiQq16Yp/UqkBXwITYu4DgIP
+         XTs1gXkC7Br62pPmJXs/2nF+jRhXCAs3iAxTxuy51YthTghMWE/kONdSGZKCG8sWM+Ev
+         WU1ATEDaIH5W63c7UQCvZTdM21+mq9I9FOl7BCTb650pCRFEJMZ521zklByg85zlNwmj
+         7b/w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=Ibb5KNEw1DKqJEg9n4gJy5KnzVasBofn6QaWYsu9UCQ=;
+        b=bOtLLae51YdwSOiHGUghNuhMSqBUAkrvLk6JQntU7fM/6k1nVwtXS/w23gg8eNE5Iw
+         6KgHkrVbNeNfviCBPW5t1IK3JKKjOvZ4N5dalcvIuGLkWciw6eZLp/WKuCquWeynqWLO
+         81eQ05l4Dpw3xYr4Np17GbOPHoaZWg/2JVCiAh2I/OXadRjMOCVaE1j6+EQKmaM/AbkP
+         H4aZ2SiHCxaQZdTsU6hI9INtZoOeZ1ARN/VXs0x/eD+M2ooAa/WbbRTWi7ChX5mVt8bl
+         lwdYjjIfnPA7Jtsj8ZjWBLHMVqTWbm/7xkHsrj2S2IYzclJaDrZLPJRQuDSYSkSLE7FZ
+         69yA==
+X-Gm-Message-State: AOAM531bhvrwbEZy1aeaPikGJ/oqKyY1QOLaVBqOOYfFIl5Xx+Mj4bN7
+        wN9wqS09AYn++RmBTn319BCJ6PEiDmsc2t3GR/oerGNypnI=
+X-Google-Smtp-Source: ABdhPJyZMrq1Z7I3pjjmyAtUHW3ABh0oEghTe77F5dAxRk/llsByjQhtZ30eIUOoh7sIooPsLTy5+nPJ1BCNgIavtsM=
+X-Received: by 2002:a17:90b:d8f:: with SMTP id bg15mr10963237pjb.152.1626369941880;
+ Thu, 15 Jul 2021 10:25:41 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Received: by 2002:a05:6a10:fc85:0:0:0:0 with HTTP; Thu, 15 Jul 2021 10:25:41
+ -0700 (PDT)
+Reply-To: faty.muhamad@gmail.com
+From:   Ms Fatima Muhammad <general.infofederalreserve@gmail.com>
+Date:   Thu, 15 Jul 2021 17:25:41 +0000
+Message-ID: <CAJzJz_Dwu6rUxmnqq1QV9qD4hugxutFJZuENGUwx7RamXm5txA@mail.gmail.com>
+Subject: Hello Dear
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-From: Colin Ian King <colin.king@canonical.com>
+Hello Dear,
 
-The macros edac_pci_handle_pe and edac_pci_handle_npe are missing their
-arguments and don't match the function prototypes they replace. Also
-macro edac_pci_remove_sysfs is missing. Fix this by adding in the missing
-arguments and missing macro.
+My name is Ms.Fatima Muhammad., Please forgive me for stressing you
+with my predicaments and I sorry to approach you through this media
+because is serves the fastest means of  my communication right now,
 
-Fixes: d4c1465b7de9 ("drivers/edac: fix edac_pci sysfs")
-Signed-off-by: Colin Ian King <colin.king@canonical.com>
----
- drivers/edac/edac_module.h | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+I came across your Email from my personal search and I decided to
+contact you believing you will be honest to fulfill my business
+proposal which I believe that will be a very good opportunity for both
+of us. Please it is my pleasure to contact you today for a business
+partnership investments projects worth $4.6 million USD which I intend
+to establish in your country..
 
-diff --git a/drivers/edac/edac_module.h b/drivers/edac/edac_module.h
-index aa1f91688eb8..ed194ba2c207 100644
---- a/drivers/edac/edac_module.h
-+++ b/drivers/edac/edac_module.h
-@@ -123,8 +123,9 @@ extern void edac_pci_handle_npe(struct edac_pci_ctl_info *pci,
- #define edac_sysfs_pci_teardown()
- #define edac_pci_get_check_errors()
- #define edac_pci_get_poll_msec()
--#define edac_pci_handle_pe()
--#define edac_pci_handle_npe()
-+#define edac_pci_remove_sysfs(pci)
-+#define edac_pci_handle_pe(pci, msg)
-+#define edac_pci_handle_npe(pci, msg)
- #endif				/* CONFIG_PCI */
- 
- #endif				/* __EDAC_MODULE_H__ */
--- 
-2.31.1
+Pls If this business proposal offends your moral and ethic values do
+accept my apology. therefore kindly contact me immediately if you are
+interested for more details.
 
+Thank you for your wiliness to help me
+Yours Sincerely Fatima Muhammad
