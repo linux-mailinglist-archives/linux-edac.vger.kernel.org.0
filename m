@@ -2,75 +2,82 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DA4D43C98A3
-	for <lists+linux-edac@lfdr.de>; Thu, 15 Jul 2021 08:05:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2846E3CA02D
+	for <lists+linux-edac@lfdr.de>; Thu, 15 Jul 2021 15:58:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231582AbhGOGIh (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Thu, 15 Jul 2021 02:08:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50834 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230495AbhGOGIh (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Thu, 15 Jul 2021 02:08:37 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 183E8C06175F;
-        Wed, 14 Jul 2021 23:05:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
-        Content-ID:Content-Description:In-Reply-To:References;
-        bh=cDlqF8S6ChV6yjNpdP/3Zdy0rMuV9VvhrElTzLJdMA8=; b=BC1fQlfXce00Iy/0IY+O6VVg3C
-        NOZdv0+/segOoof4YTh/Jf/5UCiV2t4GPc1xgr2oZ9D2AFZSVkdGloVgI/HZjQyyh4dN7QTx0DpTE
-        vodclCXFLc5MNal+pNG1bphwT5Bg/A6Dzpzuy9/I9OPnua6gv4/sQ8c0NNW1nZz6crJlSnm584a9l
-        0aDcZRh3E6GnowFZ41G/jMRCCO6rj/X2g8kcjrrd6Oc0JBpFdBqb6ksXc5x0YWNQKve3f0wbOq2eE
-        vsG04rIY47XaFuDdQjGfES5MZ6fIjvasZFkPBMw4BSMGMHz4i1RMTEJPsJI32MI0ZT3oGhBPgJA8X
-        obQOnN8g==;
-Received: from [2601:1c0:6280:3f0::aefb] (helo=bombadil.infradead.org)
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1m3uVB-00HEA7-UF; Thu, 15 Jul 2021 06:05:42 +0000
-From:   Randy Dunlap <rdunlap@infradead.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Randy Dunlap <rdunlap@infradead.org>,
-        Qiuxu Zhuo <qiuxu.zhuo@intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Borislav Petkov <bp@alien8.de>,
+        id S238237AbhGOOBV (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Thu, 15 Jul 2021 10:01:21 -0400
+Received: from smtp-relay-canonical-0.canonical.com ([185.125.188.120]:44394
+        "EHLO smtp-relay-canonical-0.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229637AbhGOOBU (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>);
+        Thu, 15 Jul 2021 10:01:20 -0400
+Received: from localhost (1.general.cking.uk.vpn [10.172.193.212])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-canonical-0.canonical.com (Postfix) with ESMTPSA id 69DFA408AD;
+        Thu, 15 Jul 2021 13:58:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1626357506;
+        bh=Cl2Z4fkPQ4YWZ9DFZjI76elK6rvIDL5Xxs/GYAwsJ5c=;
+        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type;
+        b=c+f5DW3fRovP4PppXJ+3G7D63Ukw1ThI+F0iU3Tf10NiIJsAdYH3khUy3HBmzF+Qh
+         YfTyiwyAqg8CCEd9IL19IrC4QnQ2/ruTR/SvbupN5zCiThC+wBPHbIgXlul6aSjh28
+         1Y8u9chciqu2vZZWEAUdKFaL0qAXqyh0olA/bf2GzFqe5JCP2MJkXivuE6WdAd1+cM
+         KnUnkJGJSRpNgZ06BcDpY3rqVcCn4uGPkThKZwnOZH9c7HTIcJOtawCL/n6u/yQkIc
+         MaTyYGmCmtJ90q8oe2bRGefJRebg6ntmfkTYsGhvWtwxRpAowKNSCAW/vDVTT7IVbA
+         OmsbL2Aahppfg==
+From:   Colin King <colin.king@canonical.com>
+To:     Borislav Petkov <bp@alien8.de>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-edac@vger.kernel.org,
-        bowsingbetee <bowsingbetee@protonmail.com>,
-        stable@vger.kernel.org
-Subject: [PATCH] EDAC/igen6: fix core dependency AGAIN
-Date:   Wed, 14 Jul 2021 23:05:39 -0700
-Message-Id: <20210715060539.28173-1-rdunlap@infradead.org>
-X-Mailer: git-send-email 2.26.2
+        Tony Luck <tony.luck@intel.com>,
+        James Morse <james.morse@arm.com>,
+        Robert Richter <rric@kernel.org>,
+        Doug Thompson <dougthompson@xmission.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-edac@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] drivers/edac: add missing macro arguments and missing macro edac_pci_remove_sysfs
+Date:   Thu, 15 Jul 2021 14:58:26 +0100
+Message-Id: <20210715135826.26241-1-colin.king@canonical.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-My previous patch had a typo/thinko which prevents this driver
-from being enabled: change X64_64 to X86_64.
+From: Colin Ian King <colin.king@canonical.com>
 
-Fixes: 0a9ece9ba154 ("EDAC/igen6: fix core dependency")
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Cc: Qiuxu Zhuo <qiuxu.zhuo@intel.com>
-Cc: Tony Luck <tony.luck@intel.com>
-Cc: Borislav Petkov <bp@alien8.de>
-Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc: linux-edac@vger.kernel.org
-Cc: bowsingbetee <bowsingbetee@protonmail.com>
-Cc: stable@vger.kernel.org
+The macros edac_pci_handle_pe and edac_pci_handle_npe are missing their
+arguments and don't match the function prototypes they replace. Also
+macro edac_pci_remove_sysfs is missing. Fix this by adding in the missing
+arguments and missing macro.
+
+Fixes: d4c1465b7de9 ("drivers/edac: fix edac_pci sysfs")
+Signed-off-by: Colin Ian King <colin.king@canonical.com>
 ---
- drivers/edac/Kconfig |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/edac/edac_module.h | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
---- linux-next-20210714.orig/drivers/edac/Kconfig
-+++ linux-next-20210714/drivers/edac/Kconfig
-@@ -271,7 +271,7 @@ config EDAC_PND2
- config EDAC_IGEN6
- 	tristate "Intel client SoC Integrated MC"
- 	depends on PCI && PCI_MMCONFIG && ARCH_HAVE_NMI_SAFE_CMPXCHG
--	depends on X64_64 && X86_MCE_INTEL
-+	depends on X86_64 && X86_MCE_INTEL
- 	help
- 	  Support for error detection and correction on the Intel
- 	  client SoC Integrated Memory Controller using In-Band ECC IP.
+diff --git a/drivers/edac/edac_module.h b/drivers/edac/edac_module.h
+index aa1f91688eb8..ed194ba2c207 100644
+--- a/drivers/edac/edac_module.h
++++ b/drivers/edac/edac_module.h
+@@ -123,8 +123,9 @@ extern void edac_pci_handle_npe(struct edac_pci_ctl_info *pci,
+ #define edac_sysfs_pci_teardown()
+ #define edac_pci_get_check_errors()
+ #define edac_pci_get_poll_msec()
+-#define edac_pci_handle_pe()
+-#define edac_pci_handle_npe()
++#define edac_pci_remove_sysfs(pci)
++#define edac_pci_handle_pe(pci, msg)
++#define edac_pci_handle_npe(pci, msg)
+ #endif				/* CONFIG_PCI */
+ 
+ #endif				/* __EDAC_MODULE_H__ */
+-- 
+2.31.1
+
