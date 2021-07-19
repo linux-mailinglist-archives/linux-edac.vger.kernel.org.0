@@ -2,24 +2,24 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D3FDD3CE267
-	for <lists+linux-edac@lfdr.de>; Mon, 19 Jul 2021 18:14:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 638233CE3FB
+	for <lists+linux-edac@lfdr.de>; Mon, 19 Jul 2021 18:30:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346843AbhGSPaR (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Mon, 19 Jul 2021 11:30:17 -0400
-Received: from mail.kernel.org ([198.145.29.99]:40238 "EHLO mail.kernel.org"
+        id S1347470AbhGSPla (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Mon, 19 Jul 2021 11:41:30 -0400
+Received: from mail.kernel.org ([198.145.29.99]:34444 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1348311AbhGSPYm (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Mon, 19 Jul 2021 11:24:42 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 830CC61474;
-        Mon, 19 Jul 2021 16:04:09 +0000 (UTC)
+        id S240940AbhGSPhh (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Mon, 19 Jul 2021 11:37:37 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 3CE1761248;
+        Mon, 19 Jul 2021 16:18:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1626710650;
+        s=korg; t=1626711481;
         bh=QD1d3pOJsWBYGMDUpWa4YS0LLXpRn9mRsdxNn5EXTc0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=iXnppbAJPUVPcHXHEPq/ksqf/tV3zS7ikPd9Jg19fz0wTJi6Nk/FaUECMNVUjuT31
-         gKwREWS78IE6VF4g5FzYgVDXlnuVKcAyL5Dv8jB3lZ2qecQjFUpuEgvUhkzujH1o50
-         8yZnve3RoCs2Wuefe7bDEDAa2RkqqI3K+elPBbB0=
+        b=ZkVpjybQ2HlXssNOsJI8RUmiwKboLVMDPwHDV8L+pENpMfK3ho5EYcTUr2dnqusLd
+         esXjuQxg7ihIbsVCdArajDUCFGZRDtKPI6YXQOmFjOH3lIM6brtPC/LubuPt+nY3FF
+         10Vzl26syUwNlYlTiuH4x6KRJpwisdK3vObA9Jh4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -31,12 +31,12 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         bowsingbetee <bowsingbetee@protonmail.com>,
         Tony Luck <tony.luck@intel.com>,
         Linus Torvalds <torvalds@linux-foundation.org>
-Subject: [PATCH 5.13 024/351] EDAC/igen6: fix core dependency AGAIN
-Date:   Mon, 19 Jul 2021 16:49:30 +0200
-Message-Id: <20210719144945.330192667@linuxfoundation.org>
+Subject: [PATCH 5.12 019/292] EDAC/igen6: fix core dependency AGAIN
+Date:   Mon, 19 Jul 2021 16:51:21 +0200
+Message-Id: <20210719144943.166355936@linuxfoundation.org>
 X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20210719144944.537151528@linuxfoundation.org>
-References: <20210719144944.537151528@linuxfoundation.org>
+In-Reply-To: <20210719144942.514164272@linuxfoundation.org>
+References: <20210719144942.514164272@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
