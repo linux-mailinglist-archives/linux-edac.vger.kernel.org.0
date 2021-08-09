@@ -2,65 +2,83 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 980703E4392
-	for <lists+linux-edac@lfdr.de>; Mon,  9 Aug 2021 12:05:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF7623E440C
+	for <lists+linux-edac@lfdr.de>; Mon,  9 Aug 2021 12:43:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234802AbhHIKFc (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Mon, 9 Aug 2021 06:05:32 -0400
-Received: from mail.kernel.org ([198.145.29.99]:53460 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234822AbhHIKF3 (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Mon, 9 Aug 2021 06:05:29 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id CAF4861004;
-        Mon,  9 Aug 2021 10:05:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1628503509;
-        bh=2zKz1qElSq58PZRYESvVVX02YG+iPBjCI2bz6gw0UN8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=tkLPUzp3FVZI0suGivgvscOU4H5YH5WZAOm7D/zYqm8djWcyc4CaPbrBs5EQiHzi6
-         Svp6jbyK7pZaVKk5NSlSX/mgyVfAKzvDN5SnlF6Pza1YVkgGZLpWHPKRcLF00uEuWR
-         FyvkpnJWfTghbe/BfclSMxIcqKantX3oTZakzcsa1ZPxg8/2FPwIoSZVNkKde4CHqR
-         zo4Kd3fIrtdmi6dIkCvh1Zwinfv2H+dOb7rm4w9qHQJvMVVQjgmSwPEpb+G4m1Gd55
-         lS3Gfso+iprAft7mx7Ywk1WJ77XTsMQmV6Jlg1f6yoGULS0odQBO9hDrorA4JHhxrb
-         20UyaqFPA+Kig==
-Date:   Mon, 9 Aug 2021 12:05:04 +0200
-From:   Robert Richter <rric@kernel.org>
-To:     Len Baker <len.baker@gmx.com>
-Cc:     Joe Perches <joe@perches.com>, Borislav Petkov <bp@alien8.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        id S234250AbhHIKnv (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Mon, 9 Aug 2021 06:43:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49866 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234180AbhHIKnt (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Mon, 9 Aug 2021 06:43:49 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CBB7C0613D3;
+        Mon,  9 Aug 2021 03:43:29 -0700 (PDT)
+Received: from zn.tnic (p200300ec2f26f300329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ec:2f26:f300:329c:23ff:fea6:a903])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id D47E21EC03FE;
+        Mon,  9 Aug 2021 12:43:23 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1628505804;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=iRZgmeCr/Savpcr/auC+m2pX5jLL5wpQZZXyOWrBPUc=;
+        b=kEl2pueuhWRmxbCPU2YGFyTIm0CA72sLxsE7iGU8w/YUwUbr80EKuCFiEkxrUlFUwPeKnP
+        nBbFFNJExUwVq9MWMJ2c7d4wpheBOqQgTBaItGCtHfS8zuItHLw4wSbnIyi3zA0RsGkpJN
+        FnoK3e6cneFPXPkEitmc50zUKZLH2zc=
+Date:   Mon, 9 Aug 2021 12:44:00 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>
+Cc:     x86@kernel.org, linux-edac@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Robert Richter <rric@kernel.org>,
         Tony Luck <tony.luck@intel.com>,
-        James Morse <james.morse@arm.com>,
-        Kees Cook <keescook@chromium.org>,
-        linux-hardening@vger.kernel.org, linux-edac@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] drivers/edac/edac_mc: Remove all strcpy() uses
-Message-ID: <YRD90L6PMoVbbv+9@rric.localdomain>
-References: <20210807155957.10069-1-len.baker@gmx.com>
- <ff02ffffdc130a772c01ec0edbf8d1e684b0730a.camel@perches.com>
- <20210808112617.GA1927@titan>
+        James Morse <james.morse@arm.com>, yazen.ghannam@amd.com
+Subject: Re: [PATCH] EDAC/mce_amd: Do not load edac_mce_amd module on guests
+Message-ID: <YREG8Pzj5n5AIEAs@zn.tnic>
+References: <20210628172740.245689-1-Smita.KoralahalliChannabasappa@amd.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20210808112617.GA1927@titan>
+In-Reply-To: <20210628172740.245689-1-Smita.KoralahalliChannabasappa@amd.com>
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On 08.08.21 13:26:17, Len Baker wrote:
-
-> > Perhaps this should use scnprintf rather than strscpy
-> > Something like:
-> > 			n += scnprintf(buf + n, len - n, "%s",
-> > 				       p == e->label ? dim->label : OTHER_LABEL);
-> >
-> In the first version [1] the scnprintf was used but Robert Richter don't
-> see any benefit compared with the current implementation.
+On Mon, Jun 28, 2021 at 12:27:40PM -0500, Smita Koralahalli wrote:
+> Hypervisors may not expose SMCA feature to the guest.
 > 
-> [1] https://lore.kernel.org/linux-hardening/20210725162954.9861-1-len.baker@gmx.com/
+> Check for X86_FEATURE_HYPERVISOR on entry in mce_amd_init() and return
+> -ENODEV if set.
+> 
+> Suggested-by: Borislav Petkov <bp@suse.de>
+> Signed-off-by: Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>
+> ---
+>  drivers/edac/mce_amd.c | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/drivers/edac/mce_amd.c b/drivers/edac/mce_amd.c
+> index 5dd905a3f30c..1a1629166aa3 100644
+> --- a/drivers/edac/mce_amd.c
+> +++ b/drivers/edac/mce_amd.c
+> @@ -1176,6 +1176,9 @@ static int __init mce_amd_init(void)
+>  	    c->x86_vendor != X86_VENDOR_HYGON)
+>  		return -ENODEV;
+>  
+> +	if (cpu_feature_enabled(X86_FEATURE_HYPERVISOR))
+> +		return -ENODEV;
+> +
+>  	if (boot_cpu_has(X86_FEATURE_SMCA)) {
+>  		xec_mask = 0x3f;
+>  		goto out;
+> -- 
+> 2.17.1
 
-Reason is that there is the assumption that p must always point at the
-end of the string and its trailing zero byte. I am not opposed using
-the string function's return code instead of strlen() to get the
-length. But why using formated output if strscpy() can be used?
+Applied, thanks.
 
--Robert
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
