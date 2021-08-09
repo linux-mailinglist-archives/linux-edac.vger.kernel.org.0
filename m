@@ -2,95 +2,101 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D87D13E4953
-	for <lists+linux-edac@lfdr.de>; Mon,  9 Aug 2021 17:56:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0854B3E49C8
+	for <lists+linux-edac@lfdr.de>; Mon,  9 Aug 2021 18:26:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235666AbhHIP5G (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Mon, 9 Aug 2021 11:57:06 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:32375 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S235525AbhHIP5F (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Mon, 9 Aug 2021 11:57:05 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1628524604;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=ksirypdUbDyon7gnRT9jI8jlCatrBjNvokJRvHrhIUA=;
-        b=KwlGZlc7vXPTVgJtqUUgFB1DGjz2EuC5iuDYYiaJLfYUjet4/bcmPqhNj9sT2m664kvBdQ
-        eIS0fLdRXP6ZhDYST25lk7puwkWqrJpfcJqVLgae2L2teghPQpcUys9xaMe/3vzAUCUmwx
-        bgV4sfbkPUDokyvXb0zv/lhoUNyrfSQ=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-387-LyXmDG6AO1aeto5S1r0Jzg-1; Mon, 09 Aug 2021 11:56:43 -0400
-X-MC-Unique: LyXmDG6AO1aeto5S1r0Jzg-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id EE4108799EC;
-        Mon,  9 Aug 2021 15:56:41 +0000 (UTC)
-Received: from segfault.boston.devel.redhat.com (segfault.boston.devel.redhat.com [10.19.60.26])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 2AB5A5DA60;
-        Mon,  9 Aug 2021 15:56:41 +0000 (UTC)
-From:   Jeff Moyer <jmoyer@redhat.com>
-To:     dan.j.williams@intel.com
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Tony Luck <tony.luck@intel.com>,
-        Borislav Petkov <bp@alien8.de>, <linux-edac@vger.kernel.org>,
-        <x86@kernel.org>, linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Subject: Re: [patch] x86/pat: pass correct address to sanitize_phys
-References: <x49tuknmosl.fsf@segfault.boston.devel.redhat.com>
-X-PGP-KeyID: 1F78E1B4
-X-PGP-CertKey: F6FE 280D 8293 F72C 65FD  5A58 1FF8 A7CA 1F78 E1B4
-Date:   Mon, 09 Aug 2021 11:58:05 -0400
-In-Reply-To: <x49tuknmosl.fsf@segfault.boston.devel.redhat.com> (Jeff Moyer's
-        message of "Wed, 21 Jul 2021 15:48:10 -0400")
-Message-ID: <x494kbyehki.fsf@segfault.boston.devel.redhat.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+        id S233045AbhHIQ0m (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Mon, 9 Aug 2021 12:26:42 -0400
+Received: from mout.gmx.net ([212.227.17.22]:43689 "EHLO mout.gmx.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232881AbhHIQ0Z (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Mon, 9 Aug 2021 12:26:25 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1628526343;
+        bh=3nL4/VMzAAvkcx/Y4QlFv5TCFLlPZza+oU/Wlor7F0I=;
+        h=X-UI-Sender-Class:Date:From:To:Cc:Subject:References:In-Reply-To;
+        b=fd6T0XFTVs5g11Oy5tuiZ8D+w2Fqyx0qc0G+KYdp6bZXiKZaynOK2zqewkIjJuZWs
+         RLPoHo1J7kaWF0uztR5NtyYInX9qkr6aidHu8K5mfLeRzF5bCvGoIjME8WcTRJ85Qx
+         o5WplG4Qwvz1mwNWZ0VATwOtcimF+SrCeD0BTQzQ=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from titan ([79.150.72.99]) by mail.gmx.net (mrgmx105
+ [212.227.17.174]) with ESMTPSA (Nemesis) id 1N9dsb-1n9ETD3FS9-015com; Mon, 09
+ Aug 2021 18:25:42 +0200
+Date:   Mon, 9 Aug 2021 18:25:39 +0200
+From:   Len Baker <len.baker@gmx.com>
+To:     Robert Richter <rric@kernel.org>
+Cc:     Len Baker <len.baker@gmx.com>, Borislav Petkov <bp@alien8.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Tony Luck <tony.luck@intel.com>,
+        James Morse <james.morse@arm.com>,
+        Kees Cook <keescook@chromium.org>,
+        linux-hardening@vger.kernel.org, linux-edac@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3] drivers/edac/edac_mc: Remove all strcpy() uses
+Message-ID: <20210809162539.GB2619@titan>
+References: <20210807155957.10069-1-len.baker@gmx.com>
+ <YRD6uoVYwCSFN0U0@rric.localdomain>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YRD6uoVYwCSFN0U0@rric.localdomain>
+X-Provags-ID: V03:K1:tUFOpibvDcC8BQZoy6rQw+BXUlHzBlNyJwMXnOpXUnskVAlpSTz
+ nh3dHIazEuUS6bNCCMtYrpcmrmeR1lRQ33I61RWuN9v6UOxdRtxX3V7rZUhP8+KUUa4yb7W
+ ZUkIDS/H9oWKgqvjXm2x+y4GYppZ43OX4cqsMl+WZY3/0+zjoRZ5oi3y96W2GZlCvsRiEBw
+ 4ov5U+xfhsnIEjvyxVQtw==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:RvyGGdQcpwE=:nPhhZFPAwQOPWW+hbdauA5
+ dCVp/TofLGNswLYrURJtbshoSRiZZ+VtjaqE+LF4xLWw8f4NfhdVcUsZxezGyXuYaP5OAtFF8
+ cTCPcFHRyj0BzLER8Bsym4jtp67c2k6Sm9kTdmEi6kDLS4qIy5Q5y6equ97W/obfR4XRobFti
+ bqzj4UghltdqSYSQJmvKkm/COTXCnUGgbJLICUokqHF9fVUoUfSZiWwoW10PB+kfxlYNKdAs7
+ va6pwjVardNYasteTOLar7YCf7zi9ahOQgwED3iK3tX/sE56jK/cV7DdTIfogZFkFjVx8BnTI
+ jeG3dNMTDtSmaJ+gjS5Ra74WsvZBFDPuBwhDc+mhxT553Kf+0hLtLYWlUPpex4gu7OQL3BnG6
+ 9tzz9JhkFQOSm2zFHH0PMKzjzMYXYA4NKcMwJvXngXVD42J5erTOzlN8waUnap2KosLPWCx+u
+ yRM4abt42bcTrvMNG0G/k3ukjUm09v52kfsBpY7rZ5lFESSbsUAqRfJ5gv+Tcq2UkFPqSMJxB
+ 98WwUpK6NVMZKDh6jfxEMBT8v2b43N8nyqB3k7njCDZRkjt7787coXTHV1FkDp3CRnREL4yah
+ n6N0QmeYyaye9ANzrMrFmI5LtmqtlMmfsMlkPsl6K0tgR4NhfMnS+dRaWao6fJkcCWnfgqy7i
+ 4QTkkywBlooihzDWeVJJKwWoFd2JBEmvYoLUMP0OYsOLGL4e7gODhamH6kvre52Q7F+0YCMfD
+ KN+plqORD3tp5g8FxvP81VGujdr3C4CJegUrkY5vP3Jrg2zXYq3PIiJOubT/xIlgy0l9eSisM
+ fN/s64KN42v/kttOAtQANB2acAo7xft8NaXEGIkL+fJrwNQ1EFQ2ggWrysnHICWcUkKtsoLrF
+ SdnPOv4iREsHlpDOcfNa4ZxmVwj1EAs8jlCN2cOwJ0SjF+5xHW+Y1KRfyQ85XBK9JAPxT9TTH
+ MGmIo5N8Ar1IVUFb2L/It6qVm+bTjexe57rx7pNjDF1z+ENPfqOYMnehbJ6exExz5NQ6M+ve6
+ jpqJG/xewEx/7F5QcqFvZItfi4du3BRuSeknQ+lwMh6ZQkSp1FgxbdVqqRICBWQnb5cI5O+Gy
+ p1pz6vOal4xeMzXzqSmKQZJ4rW2rZQj6wY4mIVrapaBLPTki6jTPLRoiw==
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-Ping?  This patch fixes a real problem seen in the field.  Can I get
-some review?
+Hi,
 
-Thanks!
-Jeff
+On Mon, Aug 09, 2021 at 11:51:54AM +0200, Robert Richter wrote:
+> On 07.08.21 17:59:57, Len Baker wrote:
+>
+> > @@ -1113,11 +1115,11 @@ void edac_mc_handle_error(const enum hw_event_=
+mc_err_type type,
+> >  			p =3D e->label;
+> >  			*p =3D '\0';
+> >  		} else {
+> > -			if (p !=3D e->label) {
+> > -				strcpy(p, OTHER_LABEL);
+> > -				p +=3D strlen(OTHER_LABEL);
+> > -			}
+> > -			strcpy(p, dimm->label);
+> > +			const char *text =3D (p !=3D e->label) ? OTHER_LABEL :
+> > +				dimm->label;
+> > +
+> > +			strscpy(p, text, len);
+> > +			len -=3D strlen(p);
+>
+> The logic looks broken and dimm labels are not properly copied (the
+> code should add an " or " separator between labels).
 
-Jeff Moyer <jmoyer@redhat.com> writes:
+Apologies. My bad.
 
-> memtype_reserve takes an address range of the form [start, end).  It
-> then passes the start and end addresses to sanitize_phys, which is meant
-> to operate on the inclusive addresses.  If end falls at the end of the
-> physical address space, sanitize_phys will return 0.  This can result in
-> drivers failing to load:
->
-> [   10.000087] mpt3sas_cm0: unable to map adapter memory! or resource not found
-> [   10.000334] mpt3sas_cm0: failure at drivers/scsi/mpt3sas/mpt3sas_scsih.c:10597/_scsih_probe()!
->
-> Fix this by passing the inclusive end address to sanitize_phys.
->
-> Fixes: 510ee090abc3 ("x86/mm/pat: Prepare {reserve, free}_memtype() for "decoy" addresses")
-> Signed-off-by: Jeff Moyer <jmoyer@redhat.com>
-> --
-> It might be worth adding a comment, here.  If there are any suggestions
-> on what a sane wording would be, I'm all ears.
->
-> diff --git a/arch/x86/mm/pat/memtype.c b/arch/x86/mm/pat/memtype.c
-> index 3112ca7786ed..482557905294 100644
-> --- a/arch/x86/mm/pat/memtype.c
-> +++ b/arch/x86/mm/pat/memtype.c
-> @@ -583,7 +583,7 @@ int memtype_reserve(u64 start, u64 end, enum page_cache_mode req_type,
->  	int err = 0;
->  
->  	start = sanitize_phys(start);
-> -	end = sanitize_phys(end);
-> +	end = sanitize_phys(end - 1) + 1;
->  	if (start >= end) {
->  		WARN(1, "%s failed: [mem %#010Lx-%#010Lx], req %s\n", __func__,
->  				start, end - 1, cattr_name(req_type));
+Regards,
+Len
 
+>
+> >  			p +=3D strlen(p);
+> >  		}
+> >
