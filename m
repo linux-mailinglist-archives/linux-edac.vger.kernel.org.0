@@ -2,39 +2,39 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B5DA53E5A44
-	for <lists+linux-edac@lfdr.de>; Tue, 10 Aug 2021 14:45:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3AC113E5A45
+	for <lists+linux-edac@lfdr.de>; Tue, 10 Aug 2021 14:45:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240745AbhHJMpp (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Tue, 10 Aug 2021 08:45:45 -0400
-Received: from mail-bn1nam07on2069.outbound.protection.outlook.com ([40.107.212.69]:36423
-        "EHLO NAM02-BN1-obe.outbound.protection.outlook.com"
+        id S240760AbhHJMpr (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Tue, 10 Aug 2021 08:45:47 -0400
+Received: from mail-dm3nam07on2083.outbound.protection.outlook.com ([40.107.95.83]:55840
+        "EHLO NAM02-DM3-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S240244AbhHJMpo (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Tue, 10 Aug 2021 08:45:44 -0400
+        id S240752AbhHJMpp (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Tue, 10 Aug 2021 08:45:45 -0400
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=jbxayuznaoCCjRofltsB3fF8e1VlyNaHqJYajyIfRQmd6PXjOPtxGj0oy4NUx9EPTdh+kwrzjeOmcoacBT7+Tn+64gMO+5TMjF2dprgqpXMPCHqda2+fgMnj3fysGpshKOAJi2GZcQbbrgzlhwq08mn79vCZQGKGZRT43YMJMY2aWE5dd2WOjQ4JTQifI1SZf7EKb9OUv+Mou1cgy22BSPe2DGTlGihKTZteRL+uCwo5+tfpRkuF1pke3lAqMSnP+iC91GIQOcoOKoSAsRAU//xB1nmd/4hUG2h1BxGVfENU0XDbpkiJ3OGdusJ1n8jKMUIZiiqaLf6GJnrgmF0zAA==
+ b=l6y5vfMbFQLaF2HDxvmSyJp3sc8fs034Gb7EbIcktIqKxujokHTD2Hq7lcLylEgm3PT5KKAgA2lTYQVCyZGj2h/HGNav4uXBaL6Ws2FdvexMpxkVIub979g3HN+IeXOaSB84k5AuEvDJ+iArYMeT0Frh9v1Funz2CKyO9Z0WyHvGMQDdEg/i7L7q/fPjhgphHlZV2S6E3/aMa8HnYQSEUKJMXM9R3VOs4U0G9ZSBV7fGU+1B0SWxIkcbSfJS9ltcUwB3A4ojOwRobHXB1pgrzM7zFl8E9w3xoTyo9LBMcHEhUTMpEJ+L3p8qjRAnv9jWEQGRt+ey/WjsD6rMAvNwig==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=t9c1EdHkcXGIeUodk/cOzWNz1VrdzYs1aI476THuw+U=;
- b=YOfWSiYg9wUdSf6HdBO8GHmelVXrMiCQJcA+DvTY2/podrRTLfIv68SUsxrPK00ABCMRTGc3dmaUAy3jsVhrrgSGmCb0uMs7b944mjTWjGXgz4DOTnilUgFzXY/iJ7VBisHSYp9mDfBmNOK+LkmkcAdNtRjRaYW/zEepeKq4IbSn6xi6OoGmcyOlJWxLXeLnThhFgemSfuXykKIBxEQfu8Oqrhw20zVmWxld4334qsbKD76zRPheep3v+g6meayjfxiyU8VC8A4SpqPJazA/r/g4RXb10DEgvUylzQLw5g5xeD2D14HxnNd74ySgPO8NOXuvpV+RwAnZKMYwMT+XnA==
+ bh=mY4kOpHj79YbgJaDrCBlm6wAWu95U7J8fy5nUSKOlT0=;
+ b=jpywbgqOyJGttc7mPZxG1x4CzJ07yBb3Ngkx3iHa4Fqdkv4LvT8Zfq/h/HP4FGzn4ulU9yw/il9fPQrsj+aFVXxmHX2O000h3GSbSohGIc7CfRSsAsFA0VfILEGn29b0eIslHw0BOmgz0OX1tCAoaVtCERCPZIP5/R1JVelB9Upwn1di8NS15NZ0EwldO6NuE8YRYv/3H0Sk6XGWD0PM+LCOAMZfytkmIVNpy2jYT1VHlUbephp3iFl80eMa9VRaF9JCM8oZU72iODwwb7VJYsPhWhzcREvOk9NWp9bcWFu/aljn9QgQyPd0JFh9LPXEc1whi+B2LOrY1RXs0X6XBg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
  header.d=amd.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=t9c1EdHkcXGIeUodk/cOzWNz1VrdzYs1aI476THuw+U=;
- b=GnP5BIP5wcNKN2q4NCODhqNKOEIVxd86QtIyuHfGgrURSt4Q8/AYjSIR6yEZzXHZcPZaaW2aoD5qA7rFHr8Fmlk+tp1UW6JpcLlin03hFZeDkAY7KvWZf2KPilVPkL6BK3BjthqJNP6L7bLxqq1dFsCQOLNz01L8BvQc+Ym9pAk=
+ bh=mY4kOpHj79YbgJaDrCBlm6wAWu95U7J8fy5nUSKOlT0=;
+ b=YB16PKN4RAMrzgsMsYNsDRgW79RdJuBge4nh0hD3PIeMD7BJRJQym+XhLzG7JDuVoCs1Z8wLuyNNAcGivvQoDRCKJbuH/xHrEdDSmPWf99Rv4eVeF6MVilLp96sCNj2aTRVQdtbcyyaQe/lY7RmXVIE0/HQQ/zmL2IB/e2RdZ44=
 Received: from BL1PR12MB5286.namprd12.prod.outlook.com (2603:10b6:208:31d::6)
- by BL1PR12MB5335.namprd12.prod.outlook.com (2603:10b6:208:317::19) with
+ by BL1PR12MB5061.namprd12.prod.outlook.com (2603:10b6:208:310::13) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4394.22; Tue, 10 Aug
- 2021 12:45:20 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4394.17; Tue, 10 Aug
+ 2021 12:45:22 +0000
 Received: from BL1PR12MB5286.namprd12.prod.outlook.com
  ([fe80::38e0:44fb:fbfb:c8d2]) by BL1PR12MB5286.namprd12.prod.outlook.com
  ([fe80::38e0:44fb:fbfb:c8d2%9]) with mapi id 15.20.4415.014; Tue, 10 Aug 2021
- 12:45:20 +0000
+ 12:45:22 +0000
 From:   "Chatradhi, Naveen Krishna" <NaveenKrishna.Chatradhi@amd.com>
 To:     "Ghannam, Yazen" <Yazen.Ghannam@amd.com>
 CC:     "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
@@ -43,78 +43,78 @@ CC:     "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
         "bp@alien8.de" <bp@alien8.de>,
         "mingo@redhat.com" <mingo@redhat.com>,
         "mchehab@kernel.org" <mchehab@kernel.org>
-Subject: RE: [PATCH 2/7] x86/amd_nb: Add support for northbridges on Aldebaran
-Thread-Topic: [PATCH 2/7] x86/amd_nb: Add support for northbridges on
- Aldebaran
-Thread-Index: AQHXbb9Q3Bvx9g+CvE+KigV7M3taJ6tK3Q0AgCIRJWA=
-Date:   Tue, 10 Aug 2021 12:45:20 +0000
-Message-ID: <BL1PR12MB5286AF6D10A89BBA9DB569EBE8F79@BL1PR12MB5286.namprd12.prod.outlook.com>
+Subject: RE: [PATCH 4/7] EDAC/mce_amd: extract node id from InstanceHi in IPID
+Thread-Topic: [PATCH 4/7] EDAC/mce_amd: extract node id from InstanceHi in
+ IPID
+Thread-Index: AQHXbb9UT9Tpw1TDtUar5E92vFMCPataUzmAgBKbmXA=
+Date:   Tue, 10 Aug 2021 12:45:22 +0000
+Message-ID: <BL1PR12MB52866A0EDF20FC659EA6979CE8F79@BL1PR12MB5286.namprd12.prod.outlook.com>
 References: <20210630152828.162659-1-nchatrad@amd.com>
- <20210630152828.162659-3-nchatrad@amd.com>
- <20210719202554.GB19451@aus-x-yghannam.amd.com>
-In-Reply-To: <20210719202554.GB19451@aus-x-yghannam.amd.com>
+ <20210630152828.162659-5-nchatrad@amd.com>
+ <20210729163245.GA4318@aus-x-yghannam.amd.com>
+In-Reply-To: <20210729163245.GA4318@aus-x-yghannam.amd.com>
 Accept-Language: en-US
 Content-Language: en-US
 X-MS-Has-Attach: 
 X-MS-TNEF-Correlator: 
 msip_labels: MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_Enabled=true;
- MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_SetDate=2021-08-10T12:42:02Z;
+ MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_SetDate=2021-08-10T12:43:29Z;
  MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_Method=Privileged;
  MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_Name=Public-AIP 2.0;
  MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_SiteId=3dd8961f-e488-4e60-8e11-a82d994e183d;
- MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_ActionId=1c691f2d-70f2-44db-a047-ec20d6f21428;
+ MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_ActionId=a8994e13-9daa-407e-a815-520861499c8d;
  MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_ContentBits=1
 authentication-results: amd.com; dkim=none (message not signed)
  header.d=none;amd.com; dmarc=none action=none header.from=amd.com;
 x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 3a068562-919e-42a2-fe21-08d95bfcb6ea
-x-ms-traffictypediagnostic: BL1PR12MB5335:
+x-ms-office365-filtering-correlation-id: 3e0a6b94-a6b0-4edd-7643-08d95bfcb7f5
+x-ms-traffictypediagnostic: BL1PR12MB5061:
 x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <BL1PR12MB533506A26BDC1870BF2A958DE8F79@BL1PR12MB5335.namprd12.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:9508;
+x-microsoft-antispam-prvs: <BL1PR12MB5061F003F60532DCFF58BDDAE8F79@BL1PR12MB5061.namprd12.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:5236;
 x-ms-exchange-senderadcheck: 1
 x-ms-exchange-antispam-relay: 0
 x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: gfZ+EyZ+xQKdhzcJX+NGMcFenIdyRiszh9Cz5M7yUy2+zpTkD6X1PoeiQOewQdvTM1z3JBs68giwBerx22hrUx4PQUgJ6eGwIrHj+M5geY7zTEdI1Z2j86/oi8OqJIsuaFzryazJUvQ5LCx63yebl8iF45slOd+9VIBTDb7V0a+iBP14fLqgImoa2oH0pMx7HERaVkZf2d6algJ90YzSr0UT6ap0hNL5yrZYxoeqwgXXBfaLln0JGG0CzNNAxSyzcnxzMRHKH1Qq+7R85UH0KPa50HjfTiOpVO1yCLC5Lx/7qwRaZlDoyk8UcS181XUyCXtYTDRypJGbpgmNBsQVZuSAv6bMuFdGXm6yxOF3X22kEH8c92xldTyZuuxIhDAgW7UtvA3xlW4/HrqiqTFfMJl70st30M8x3HZtNA9xssfr3/Y4UF2mgTQ61HCca+qUMlX7/HivKmlf1Bv4YJsTZ+sK81Gv4XZk3/IoVD14iwQP/ljr97FXXcR/c2XoiFHciXw+u42OO2oqDqGtPzrGmZ00Q0QX3d3qmA9Q6wZCUohYM2lehH7vkAn89sc26PPQRmDWiUUVb/jLnj87X/XB0pl7NaH7B2BmKSJRFajgxijT1DdhKGLJcEKGKNuhYsMGBH4WQe0mguTGNXkMrZf1Wwexnr7Ak4HKpF5aTPJhBjn3gHL5+z5CyidvJlviKZiB/GRzUv89b10vMa9fONUvmw==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL1PR12MB5286.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(136003)(346002)(39860400002)(396003)(376002)(366004)(6636002)(316002)(7696005)(52536014)(478600001)(9686003)(71200400001)(54906003)(186003)(76116006)(83380400001)(6862004)(86362001)(66946007)(66476007)(66556008)(64756008)(66446008)(53546011)(2906002)(6506007)(55016002)(38100700002)(26005)(4326008)(5660300002)(33656002)(122000001)(8936002)(8676002)(38070700005);DIR:OUT;SFP:1101;
+x-microsoft-antispam-message-info: kmGsC/eVO0wRZa73iokmvuBwUuBz57FFhyYCiR97Z7HTQScWUa1TnpV7gri9XZMC5iRJ67LEodnJZC2jzO8YtClvYXWE2EvLRPD4Cm/1B/yD/4w2msGQpnuBpZetbQ/FllI4gL2hvXr8zqjw16o8SYCrXo9InlKTeLagrDamvIl8W5kPpkgUg8tt7alH2hwhkoqGY6RB8yvtvO+0Wdy5T8/4qw3Bs843Muaal/cKs8Ie1qOPaVGycjmBHD9UMFTIT8Xc4kTd2YGCHh2PB8WmCdYLNy9/sL/hjOr0eoApHwtPLKwwiCtSXcfQ8xqOfFTb8Z+DmhcFB9ds5+OxXIiSMWwJMH7TXdJ+qB0EWVxwgCIV5jCm4lod/FJ7w/IAb4JLxguwxEUJRVNcyfrL8EYJx98pUy/sFs4lSKyGEE1EofkXzcfvcYB0nnxJ9UrUG14UNvj6bNFf9SEQ8N0fUqv7Zeq5HnNayMwJTI40Mw0mv9PpIffDnT5ktzHmRUitA/MPBAkjdKq7gcIm8NHp6uAj3Ov+J9r151m9V3I9EG9hS/XbnVBNrnkYEbVNRc7xPbLMGLfL9sjj9bA99DcWqO6+EJBP9sMGz6Gh9KcloaDeiA825t0sA+AsORMlZ8jQEGlrVvSVPKFJEEOH5vyD1gjTwSiaYgCGU/pJ2DuUWbpTb05aWWjZ1cVb+0UJ/hP2PAw7fb6V8g8/4jf7pQzW7PHaX4hVIBueAkzgj3ye/A7Sr5o=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL1PR12MB5286.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(346002)(376002)(39860400002)(396003)(136003)(366004)(8936002)(76116006)(316002)(478600001)(186003)(8676002)(54906003)(71200400001)(66446008)(9686003)(55016002)(66556008)(66946007)(66476007)(64756008)(5660300002)(7696005)(122000001)(6506007)(38100700002)(86362001)(2906002)(53546011)(6862004)(38070700005)(33656002)(4326008)(6636002)(26005)(52536014)(83380400001)(21314003);DIR:OUT;SFP:1101;
 x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?YNe9RaHoa57tubyeVWZONkQAO1sSpMfnLtXCCcI4znoBZMMw4CE98u+YHVDl?=
- =?us-ascii?Q?NeYLHapKT+bm+J2Q3fe825SBPEJ7R6JJW76X37fCCegVJw8UUqKGWqqKzCjn?=
- =?us-ascii?Q?nTCVE3dQih+BCMNxZE9KcMfDcqMza+wk+zktuu62qbnyea7AJGFzmo/L/l+K?=
- =?us-ascii?Q?0QczVz/5hk0filMI25qc7EGJU5FdGERRZnlRHxhRdE93ywbZ0wLsSBab/wlg?=
- =?us-ascii?Q?cFoKGUvjA3MMTfs4x+ffTyDljW9ppXWe8d09PHk4ROcoEI1t/HN9Oq7W45MQ?=
- =?us-ascii?Q?FaDJL7MNhKIlKi2JjBRev7qZnHLeX64/PibR+JsD+GTxaLNf04Csn4431P7E?=
- =?us-ascii?Q?9ZKIgnj5VyKt8KajtqfrRpBoWCF3ejRugIch+zlbI/wKtLdEBwLafBkCPME5?=
- =?us-ascii?Q?mTcKJopwI3gZUzOqi+CtL0BaXsR1QCrfGKFSHPSR26MAVXcZU8RxRV109Lur?=
- =?us-ascii?Q?Wjx5NOTRhcxX5clJcs3VV+X3ycgbmgUvCabIdFgjQF0y38RUzfMaOUgDimw+?=
- =?us-ascii?Q?SB2PW0KvyjIydzuVaoBaP5Xut55g9nftzw+f72I9b9PzGGv4rdAxnC9MryOt?=
- =?us-ascii?Q?Mnbxf7s/HZZ7/8z29qrNpjPaUgF96UFG2K0k+Rh21e+x7dzLg2Yyqi7Aonj0?=
- =?us-ascii?Q?T9XiLPZwUkdjFiROu7LWz1VUXCsgyxn6DcaKhNaaF8WI7lstRRsfYH2tUEFl?=
- =?us-ascii?Q?zXC1KASevJpSl60cTCih9vmdm4cauM3hoYj2mKpAMb7IpifD7yCXlAASvR3z?=
- =?us-ascii?Q?2iKXB2jDoiMWtarUBAgCIriXNXc9DBTEK6ybN+EYYrx11J0s4Nk1c/WVG3Dd?=
- =?us-ascii?Q?UqRG15EWMBWRri6l3LWI9cP9QBEARlLjSkf6TXWwuz3ywHToB99sixJ7OaMw?=
- =?us-ascii?Q?AS1tipsId7XonRXo72HXAy6Ve115L0Y6GvtNG1kydnAUwjyFX7sBV1x71ynl?=
- =?us-ascii?Q?+jix863WFztQENmhfQuBOgEo+RgDhwAslKwZnv9dsahi6M/xhH9g9l50/N29?=
- =?us-ascii?Q?F6qpt/XmBu7WHEoMfz+CLyggoYh6omFixnc32aLaFf2Jaa+K7W2ezr1O5OH2?=
- =?us-ascii?Q?/4xx16kAtUtpmxVQgoCAsEN4ATMboNwKDvO3t2SRSvhdSJmGCqC4DkcmITjA?=
- =?us-ascii?Q?vvDYrlzMhlkx4APTyYMnVRykICG2YWv3302w2dBEsSpCj+s4Fx4VBS8p8itg?=
- =?us-ascii?Q?kEhdEiioOLhpAVVBr5sb8qF71fa/Se6lCVO7gtluoHkdpD3nv3N1hiBY+JVg?=
- =?us-ascii?Q?rxqnt3FUsgQR+PPJ/MvgR0+UMtF39Tdfx7zkx0kJv9t2/SA5GHoDLtXwZsl9?=
- =?us-ascii?Q?cl+3WWIskQBA+1LtTGWo47zp?=
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?F1kAhO+b3KSkYBrh56rPpd8n5NrU6CezpFDcvKEJAryGo+d/qDlPQLUPHWSn?=
+ =?us-ascii?Q?tfHQX6IA8Hj2u8166tTk65FQyUPcbVyLa1fqY7KNPUDGF3J8vpY2QuJFK1Ko?=
+ =?us-ascii?Q?oVZpzD73Nd56KNjHuwt5QyMhf1+M1MOOF5X5TB05TxMU4t4Pq1VfQXKMtGOW?=
+ =?us-ascii?Q?pqljSa87YeGY82WrNSyTC1eVjU15IZ314RJUkGFfE00a3nRXnLADFuzBBs4l?=
+ =?us-ascii?Q?6C1ns4NwImWgqEHqsqEYknNTrqTTgyijBxloP2Ap9F3b5NBP54vGvtVUwjV2?=
+ =?us-ascii?Q?FDAcqkOZLLy4GbUrUWxP5BmP1ewRgssUQgo3py7i29z2cDerQyGuGug6q0Gm?=
+ =?us-ascii?Q?s5lolXy6PoELEAgfQLS77ZkNmWsazjqSlzMom37KQD1yLlNfLAh41+EyF3B+?=
+ =?us-ascii?Q?MZPFH9QJW/Mt4nWeV9jjXEHghIay+5UMSIhaY+tm2LYvEdBY2VscQGHCt+Wz?=
+ =?us-ascii?Q?/Xx5PBTdOFCLuXg4E8qOXhVs8IyiMzAZzQqBESYVmBG5SQ1JaM2xiWA1sI0T?=
+ =?us-ascii?Q?LnNMvm2XsMbv2czjek0qmG/y8ksTKySrbakWE8U5XgAhLs31bfwg5SFcMC90?=
+ =?us-ascii?Q?JoKQN6YmV1dl4TYGQgkoPPDkfCLX65tDuVnZeQQsakioX3Af5QoaDrj4dSvc?=
+ =?us-ascii?Q?MpPiN4GK960F9qkzp63KeEgFbt/doS0xItISOmHMRzlAENQGa8Cbb10WaSEb?=
+ =?us-ascii?Q?gJoPMlmsi7u98igeXYnGL3SsD19KOf+Q8yqWHxkia6K7nSX/9KQzWzMGFvnU?=
+ =?us-ascii?Q?gWo5TYwcCKiIKe8cdwl6PXEQGaZnPwk+KMKfAvuLQKBUlsM5YPbMDafBBdZq?=
+ =?us-ascii?Q?msFdYa5f8bqqbr6wxLgnp9w1iZ1CltxCYfNC6PKsmVdNX8oFKz0vZzrOGb2k?=
+ =?us-ascii?Q?qCi7/lcnA4IdZdGroiiTQpKy6KtmVVsnk4l04+7GU3H8kMWtbM/jylDhqQtS?=
+ =?us-ascii?Q?y4pcR+VP3gYObC5q7VNOq2Dhxz4gRr+7xC1/Yl2bNfU7f3UNcxn9a9iZ5I/2?=
+ =?us-ascii?Q?VSN0pI6qNuzYY0VONxMBB8jVOamk1r5rqPhWyhcM+hzgBoYrrFahamONlrqj?=
+ =?us-ascii?Q?+B0Vk/tMr7UsoC3HmPfqF/5edlR2P3PuA8tThS0CP2/6sxVHaJV8CT/1dRWN?=
+ =?us-ascii?Q?Nz627oA+5jT6Aly2/ptSrTdzO/214BJzxZyRdhcEuvO9t3UUkO+ubNrCeqf6?=
+ =?us-ascii?Q?2lWyYVtFyx9HmAk2xFlTWx3g19XdlfDdgTmD8X3bc2NyNlUln1vbgVEp7Gv1?=
+ =?us-ascii?Q?lUV33nVinMXTDSfT0fgwc6+W3HJE6tOCG3UvTv4FasTZuyPr61+2MDzNgjE9?=
+ =?us-ascii?Q?Z57pCyyqaEhkeD9yW68mS4rK?=
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
 X-OriginatorOrg: amd.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
 X-MS-Exchange-CrossTenant-AuthSource: BL1PR12MB5286.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3a068562-919e-42a2-fe21-08d95bfcb6ea
-X-MS-Exchange-CrossTenant-originalarrivaltime: 10 Aug 2021 12:45:20.7310
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3e0a6b94-a6b0-4edd-7643-08d95bfcb7f5
+X-MS-Exchange-CrossTenant-originalarrivaltime: 10 Aug 2021 12:45:22.4136
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
 X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: f6gRFSv7U+zhp9hZbE13dW/2hBydxH2jxCpkvz5AoaorSe/vXPlBQ06FPfI932phEh0rTfdx1wdOs6pU9dxmYQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR12MB5335
+X-MS-Exchange-CrossTenant-userprincipalname: aZr8x2bX1/WORyVBxMAjMI5T0HzPwQVMtUWjls/GkAzrGmo0GI1AbDLbJKGKhRKvr2A9AYiN9WahvwCN7b3p/Q==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR12MB5061
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
@@ -123,248 +123,92 @@ X-Mailing-List: linux-edac@vger.kernel.org
 
 Hi Yazen
 
-Regards,
-Naveenk
-
 -----Original Message-----
 From: Ghannam, Yazen <Yazen.Ghannam@amd.com>=20
-Sent: Tuesday, July 20, 2021 1:56 AM
+Sent: Thursday, July 29, 2021 10:03 PM
 To: Chatradhi, Naveen Krishna <NaveenKrishna.Chatradhi@amd.com>
 Cc: linux-edac@vger.kernel.org; x86@kernel.org; linux-kernel@vger.kernel.or=
 g; bp@alien8.de; mingo@redhat.com; mchehab@kernel.org
-Subject: Re: [PATCH 2/7] x86/amd_nb: Add support for northbridges on Aldeba=
-ran
+Subject: Re: [PATCH 4/7] EDAC/mce_amd: extract node id from InstanceHi in I=
+PID
 
-On Wed, Jun 30, 2021 at 08:58:23PM +0530, Naveen Krishna Chatradhi wrote:
-> From: Muralidhara M K <muralimk@amd.com>
->=20
-> On newer heterogeneous systems from AMD, there is a possibility of=20
-> having GPU nodes along with CPU nodes with the MCA banks. The GPU=20
-> nodes (noncpu nodes) starts enumerating from northbridge index 8.
->
+On Wed, Jun 30, 2021 at 08:58:25PM +0530, Naveen Krishna Chatradhi wrote:
+> On AMD systems with SMCA banks on NONCPU nodes, the node id=20
+> information is available in the InstanceHI[47:44] of the IPID register.
 
-"there is a possibility of having GPU nodes along with CPU nodes with the M=
-CA banks" doesn't read clearly to me. It could be more explicit.
-For example, "On newer systems...the CPUs manages MCA errors reported from =
-the GPUs. Enumerate the GPU nodes with the AMD NB framework to support EDAC=
-, etc." or something like this.
+The doesn't read well to me. I saw this as saying "bits 47:44 of the Instan=
+ceHi register". Also, the name of the field is "InstanceIdHi" in the docume=
+ntation.
 
-Also, "northbridge index" isn't a hardware thing rather it's an internal Li=
-nux value. I think you are referring to the "AMD Node ID" value from CPUID.=
- The GPUs don't have CPUID, so the "AMD Node ID" value can't be directly re=
-ad like for CPUs. But the current hardware implementation is such that the =
-GPU nodes are enumerated in sequential order based on the PCI hierarchy, an=
-d the first GPU node is assumed to have an "AMD Node ID" value of 8 (the se=
-cond GPU node has 9, etc.). With this implemenation detail, the Data Fabric=
- on the GPU nodes can be accessed the same way as the Data Fabric on CPU no=
-des.
-
-> Aldebaran GPUs have 2 root ports, with 4 misc port for each root.
->=20
-
-I don't fully understand this sentence. There are 2 "Nodes"/Data Fabrics pe=
-r GPU package, but what do "4 misc port for each root" mean? In any case, i=
-s this relevant to this patch?
-
-Also, there should be an imperitive in the commit message, i.e. "Add ...".
+I think it'd be more clear to say "available in MCA_IPID[47:44] (InstanceId=
+Hi)" or something similar.=20
 [naveenk:] Modified the commit message
 
+>=20
 > Signed-off-by: Muralidhara M K <muralimk@amd.com>
 > Signed-off-by: Naveen Krishna Chatradhi <nchatrad@amd.com>
 > ---
->  arch/x86/include/asm/amd_nb.h |  6 ++++
->  arch/x86/kernel/amd_nb.c      | 62 ++++++++++++++++++++++++++++++++---
->  2 files changed, 63 insertions(+), 5 deletions(-)
+>  drivers/edac/mce_amd.c | 15 +++++++++++++--
+>  1 file changed, 13 insertions(+), 2 deletions(-)
 >=20
-> diff --git a/arch/x86/include/asm/amd_nb.h=20
-> b/arch/x86/include/asm/amd_nb.h index 00d1a400b7a1..e71581cf00e3=20
-> 100644
-> --- a/arch/x86/include/asm/amd_nb.h
-> +++ b/arch/x86/include/asm/amd_nb.h
-> @@ -79,6 +79,12 @@ struct amd_northbridge_info {
-> =20
->  #ifdef CONFIG_AMD_NB
-> =20
-> +/*
-> + * On Newer heterogeneous systems from AMD with CPU and GPU nodes=20
-> +connected
-> + * via xGMI links, the NON CPU Nodes are enumerated from index 8  */
-> +#define NONCPU_NODE_INDEX	8
+> diff --git a/drivers/edac/mce_amd.c b/drivers/edac/mce_amd.c index=20
+> 27d56920b469..364dfb6e359d 100644
+> --- a/drivers/edac/mce_amd.c
+> +++ b/drivers/edac/mce_amd.c
+> @@ -1049,6 +1049,7 @@ static void decode_smca_error(struct mce *m)
+>  	enum smca_bank_types bank_type;
+>  	const char *ip_name;
+>  	u8 xec =3D XEC(m->status, xec_mask);
+> +	u32 node_id =3D 0;
 
-"Newer" doesn't need to be capatilized. And there should be a period at the=
- end of the sentence.
+Why u32? Why not u16 to match topology_die_id() or int to match decode_dram=
+_ecc()?
+[naveenk:] Done, used int.
 
-I don't think "xGMI links" would mean much to most folks. I think the impli=
-cation here is that the CPUs and GPUs are connected directly together (or r=
-ather their Data Fabrics are connected) like is done with
-2 socket CPU systems and also within a socket for Multi-chip Module
-(MCM) CPUs like Naples.
-[naveenk:] Modified the message
-
-> +
->  u16 amd_nb_num(void);
->  bool amd_nb_has_feature(unsigned int feature);  struct=20
-> amd_northbridge *node_to_amd_nb(int node); diff --git=20
-> a/arch/x86/kernel/amd_nb.c b/arch/x86/kernel/amd_nb.c index=20
-> 5884dfa619ff..489003e850dd 100644
-> --- a/arch/x86/kernel/amd_nb.c
-> +++ b/arch/x86/kernel/amd_nb.c
-> @@ -26,6 +26,8 @@
->  #define PCI_DEVICE_ID_AMD_17H_M70H_DF_F4 0x1444
->  #define PCI_DEVICE_ID_AMD_19H_DF_F4	0x1654
->  #define PCI_DEVICE_ID_AMD_19H_M50H_DF_F4 0x166e
-> +#define PCI_DEVICE_ID_AMD_ALDEBARAN_ROOT	0x14bb
-> +#define PCI_DEVICE_ID_AMD_ALDEBARAN_DF_F4	0x14d4
->
-
-These PCI IDs look correct.
-
->  /* Protect the PCI config register pairs used for SMN. */  static=20
-> DEFINE_MUTEX(smn_mutex); @@ -94,6 +96,21 @@ static const struct=20
-> pci_device_id hygon_nb_link_ids[] =3D {
->  	{}
->  };
 > =20
-> +static const struct pci_device_id amd_noncpu_root_ids[] =3D {
-> +	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_ALDEBARAN_ROOT) },
-> +	{}
-> +};
-> +
-> +static const struct pci_device_id amd_noncpu_nb_misc_ids[] =3D {
-> +	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_ALDEBARAN_DF_F3) },
-> +	{}
-> +};
-> +
-> +static const struct pci_device_id amd_noncpu_nb_link_ids[] =3D {
-> +	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_ALDEBARAN_DF_F4) },
-> +	{}
-> +};
-> +
-
-I think separating the CPU and non-CPU IDs is a good idea.
-
->  const struct amd_nb_bus_dev_range amd_nb_bus_dev_ranges[] __initconst =
-=3D {
->  	{ 0x00, 0x18, 0x20 },
->  	{ 0xff, 0x00, 0x20 },
-> @@ -182,11 +199,16 @@ int amd_cache_northbridges(void)
->  	const struct pci_device_id *misc_ids =3D amd_nb_misc_ids;
->  	const struct pci_device_id *link_ids =3D amd_nb_link_ids;
->  	const struct pci_device_id *root_ids =3D amd_root_ids;
-> +
-> +	const struct pci_device_id *noncpu_misc_ids =3D amd_noncpu_nb_misc_ids;
-> +	const struct pci_device_id *noncpu_link_ids =3D amd_noncpu_nb_link_ids;
-> +	const struct pci_device_id *noncpu_root_ids =3D amd_noncpu_root_ids;
-> +
->  	struct pci_dev *root, *misc, *link;
->  	struct amd_northbridge *nb;
->  	u16 roots_per_misc =3D 0;
-> -	u16 misc_count =3D 0;
-> -	u16 root_count =3D 0;
-> +	u16 misc_count =3D 0, misc_count_noncpu =3D 0;
-> +	u16 root_count =3D 0, root_count_noncpu =3D 0;
->  	u16 i, j;
+>  	if (m->bank >=3D ARRAY_SIZE(smca_banks))
+>  		return;
+> @@ -1072,8 +1073,18 @@ static void decode_smca_error(struct mce *m)
+>  	if (xec < smca_mce_descs[bank_type].num_descs)
+>  		pr_cont(", %s.\n", smca_mce_descs[bank_type].descs[xec]);
 > =20
->  	if (amd_northbridges.num)
-> @@ -205,10 +227,16 @@ int amd_cache_northbridges(void)
->  	if (!misc_count)
->  		return -ENODEV;
-> =20
-> +	while ((misc =3D next_northbridge(misc, noncpu_misc_ids)) !=3D NULL)
-> +		misc_count_noncpu++;
-> +
->  	root =3D NULL;
->  	while ((root =3D next_northbridge(root, root_ids)) !=3D NULL)
->  		root_count++;
-> =20
-> +	while ((root =3D next_northbridge(root, noncpu_root_ids)) !=3D NULL)
-> +		root_count_noncpu++;
-> +
->  	if (root_count) {
->  		roots_per_misc =3D root_count / misc_count;
-> =20
-> @@ -222,15 +250,27 @@ int amd_cache_northbridges(void)
->  		}
->  	}
-> =20
-> -	nb =3D kcalloc(misc_count, sizeof(struct amd_northbridge), GFP_KERNEL);
+> -	if (bank_type =3D=3D SMCA_UMC && xec =3D=3D 0 && decode_dram_ecc)
+> -		decode_dram_ecc(topology_die_id(m->extcpu), m);
 > +	/*
-> +	 * The valid amd_northbridges are in between (0 ~ misc_count) and
-> +	 * (NONCPU_NODE_INDEX ~ NONCPU_NODE_INDEX + misc_count_noncpu)
+> +	 * SMCA_UMC_V2 is used on the noncpu nodes, extract the node id
+> +	 * from the InstanceHI[47:44] of the IPID register.
 > +	 */
-
-This comment isn't clear to me. Is it even necessary?
-[naveenk:] moved the message
-
-> +	if (misc_count_noncpu)
-> +		/*
-> +		 * There are NONCPU Nodes with pci root ports starting at index 8
-> +		 * allocate few extra cells for simplicity in handling the indexes
-> +		 */
-
-I think this comment can be more explicit. The first non-CPU Node ID starts=
- at 8 even if there are fewer than 8 CPU nodes. To maintain the AMD Node ID=
- to Linux amd_nb indexing scheme, allocate the number of GPU nodes plus 8. =
-Some allocated amd_northbridge structures will go unused when the number of=
- CPU nodes is less than 8, but this tradeoff is to keep things relatively s=
-imple.
-
-> +		amd_northbridges.num =3D NONCPU_NODE_INDEX + misc_count_noncpu;
-> +	else
-> +		amd_northbridges.num =3D misc_count;
-
-The if-else statements should have {}s even though there's only a single li=
-ne of code in each. This is just to make it easier to read multiple lines. =
-Or the second code comment can be merged with the first outside the if-else=
-.
-[naveenk:] Done
-
+> +	if (bank_type =3D=3D SMCA_UMC_V2 && xec =3D=3D 0)
+> +		node_id =3D ((m->ipid >> 44) & 0xF);
 > +
-> +	nb =3D kcalloc(amd_northbridges.num, sizeof(struct amd_northbridge),=20
-> +GFP_KERNEL);
->  	if (!nb)
->  		return -ENOMEM;
-> =20
->  	amd_northbridges.nb =3D nb;
-> -	amd_northbridges.num =3D misc_count;
-> =20
->  	link =3D misc =3D root =3D NULL;
-> -	for (i =3D 0; i < amd_northbridges.num; i++) {
-> +	for (i =3D 0; i < misc_count; i++) {
->  		node_to_amd_nb(i)->root =3D root =3D
->  			next_northbridge(root, root_ids);
->  		node_to_amd_nb(i)->misc =3D misc =3D
-> @@ -251,6 +291,18 @@ int amd_cache_northbridges(void)
->  			root =3D next_northbridge(root, root_ids);
->  	}
-> =20
-> +	link =3D misc =3D root =3D NULL;
-
-This line can go inside the if statement below.
-[naveenk:] Done
-
-I'm not sure it's totally necessary since the GPU devices should be listed =
-after the CPU devices. But I guess better safe than sorry in case that impl=
-ementation detail doesn't hold in the future. If you keep it, then I think =
-you should do the same above when finding the counts.
-
-> +	if (misc_count_noncpu) {
-> +		for (i =3D NONCPU_NODE_INDEX; i < NONCPU_NODE_INDEX + misc_count_noncp=
-u; i++) {
-> +			node_to_amd_nb(i)->root =3D root =3D
-> +				next_northbridge(root, noncpu_root_ids);
-> +			node_to_amd_nb(i)->misc =3D misc =3D
-> +				next_northbridge(misc, noncpu_misc_ids);
-> +			node_to_amd_nb(i)->link =3D link =3D
-> +				next_northbridge(link, noncpu_link_ids);
-> +		}
-> +	}
+> +	if (bank_type =3D=3D SMCA_UMC && xec =3D=3D 0)
+> +		node_id =3D topology_die_id(m->extcpu);
 > +
->  	if (amd_gart_present())
->  		amd_northbridges.flags |=3D AMD_NB_GART;
-> =20
-> --
+> +	if (decode_dram_ecc)
+> +		decode_dram_ecc(node_id, m);
+
+If decode_dram_ecc() is set, then this will call it on every MCA error that=
+ comes in. Rather we only want to call it on DRAM ECC errors.
+
+You could do something like this:
+
+	if (decode_dram_ecc && xec =3D=3D 0) {
+		u32 node_id =3D 0;
+
+		if (bank_type =3D=3D SMCA_UMC)
+			node_id =3D XXX;
+		else if (bank_type =3D=3D SMCA_UMC_V2)
+			node_id =3D YYY;
+		else
+			return;
+
+		decode_dram_ecc(node_id, m);
+	}
+
+This is just an example. Maybe you can save an indentation level by negatin=
+g those conditions and returning early, etc.
+[naveenk:] modified the ladder.
 
 Thanks,
 Yazen
-[naveenk:] Than you
+[naveenk:] Thank you.
