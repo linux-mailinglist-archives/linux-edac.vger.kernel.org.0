@@ -2,105 +2,104 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ADC573E53A3
-	for <lists+linux-edac@lfdr.de>; Tue, 10 Aug 2021 08:38:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 029973E5610
+	for <lists+linux-edac@lfdr.de>; Tue, 10 Aug 2021 10:57:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234293AbhHJGjO (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Tue, 10 Aug 2021 02:39:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38164 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231229AbhHJGjN (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Tue, 10 Aug 2021 02:39:13 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18792C0613D3;
-        Mon,  9 Aug 2021 23:38:52 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1628577527;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=bSnzBs68VhjDQ3u78tqjUyQJhwzdf88dCvELM4pNA2Q=;
-        b=uqmqUId9lCIImeFKZg4WDPF8nF0evgk1x6FInFYKkm18Zycnzmpj5pEr4DhNNz2INmH7KW
-        GbX/7uWwYT5PGkW8CsjGn5Cuc1NvrxDQxCv4jwErQGUUnPp2xKyTqXvTSb/C10JT3vsQap
-        l3UV4GxFOEZS0VL3kUFb1KQa3+LCN2xzSNuqQx9ucjv2Rd4SrLG81EXowR9KNFzW33G6a3
-        83Bt27m1TMuQnumpcsn6rQYMj7SMV01ksbKSmhTXq0AM5JgiJIsN6MvNGVCsicP9WjhYld
-        W0pFNBzpYWRxugJF/xM6qGlgANJ172GVu3mKtMgk1XunpvCibOix8o0HhCN+8Q==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1628577527;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=bSnzBs68VhjDQ3u78tqjUyQJhwzdf88dCvELM4pNA2Q=;
-        b=b9av0Nd34hog4yyxX9E+8vqOvNpEjZl3IiKG8E4g+Bm+ck63sLPzGl/uuA7Qf7eH5j3U5l
-        /t9DfkNG9il8IfDA==
-To:     Jeff Moyer <jmoyer@redhat.com>, dan.j.williams@intel.com
-Cc:     Ingo Molnar <mingo@redhat.com>, "H. Peter Anvin" <hpa@zytor.com>,
+        id S238425AbhHJI5R convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-edac@lfdr.de>); Tue, 10 Aug 2021 04:57:17 -0400
+Received: from eu-smtp-delivery-151.mimecast.com ([185.58.85.151]:49719 "EHLO
+        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S238379AbhHJI5Q (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>);
+        Tue, 10 Aug 2021 04:57:16 -0400
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) (Using
+ TLS) by relay.mimecast.com with ESMTP id
+ uk-mta-234-w1_GZZkGMW-hVo-Y0c_N0g-1; Tue, 10 Aug 2021 09:56:52 +0100
+X-MC-Unique: w1_GZZkGMW-hVo-Y0c_N0g-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
+ Server (TLS) id 15.0.1497.23; Tue, 10 Aug 2021 09:56:52 +0100
+Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
+ AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
+ 15.00.1497.023; Tue, 10 Aug 2021 09:56:52 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Joe Perches' <joe@perches.com>, Robert Richter <rric@kernel.org>,
+        "Len Baker" <len.baker@gmx.com>
+CC:     Borislav Petkov <bp@alien8.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
         Tony Luck <tony.luck@intel.com>,
-        Borislav Petkov <bp@alien8.de>, linux-edac@vger.kernel.org,
-        x86@kernel.org, linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Subject: Re: [patch] x86/pat: pass correct address to sanitize_phys
-In-Reply-To: <x49tuknmosl.fsf@segfault.boston.devel.redhat.com>
-References: <x49tuknmosl.fsf@segfault.boston.devel.redhat.com>
-Date:   Tue, 10 Aug 2021 08:38:46 +0200
-Message-ID: <87wnotst1l.ffs@tglx>
+        James Morse <james.morse@arm.com>,
+        Kees Cook <keescook@chromium.org>,
+        "linux-hardening@vger.kernel.org" <linux-hardening@vger.kernel.org>,
+        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH v3] drivers/edac/edac_mc: Remove all strcpy() uses
+Thread-Topic: [PATCH v3] drivers/edac/edac_mc: Remove all strcpy() uses
+Thread-Index: AQHXjUKovGKiu304s0CSrAMXVBAc3KtsbpXQ
+Date:   Tue, 10 Aug 2021 08:56:51 +0000
+Message-ID: <c24330a3d7464ed3951d513bb1559258@AcuMS.aculab.com>
+References: <20210807155957.10069-1-len.baker@gmx.com>
+         <ff02ffffdc130a772c01ec0edbf8d1e684b0730a.camel@perches.com>
+         <20210808112617.GA1927@titan> <YRD90L6PMoVbbv+9@rric.localdomain>
+ <99448ef29830fda9b19409bc23b0e7513b22f7b7.camel@perches.com>
+In-Reply-To: <99448ef29830fda9b19409bc23b0e7513b22f7b7.camel@perches.com>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Type: text/plain
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-Jeff,
+From: Joe Perches
+> Sent: 09 August 2021 18:19
+> 
+> On Mon, 2021-08-09 at 12:05 +0200, Robert Richter wrote:
+> > On 08.08.21 13:26:17, Len Baker wrote:
+> >
+> > > > Perhaps this should use scnprintf rather than strscpy
+> > > > Something like:
+> > > > 			n += scnprintf(buf + n, len - n, "%s",
+> > > > 				       p == e->label ? dim->label : OTHER_LABEL);
+> > > >
+> > > In the first version [1] the scnprintf was used but Robert Richter don't
+> > > see any benefit compared with the current implementation.
+> > >
+> > > [1] https://lore.kernel.org/linux-hardening/20210725162954.9861-1-len.baker@gmx.com/
+> >
+> > Reason is that there is the assumption that p must always point at the
+> > end of the string and its trailing zero byte. I am not opposed using
+> > the string function's return code instead of strlen() to get the
+> > length. But why using formated output if strscpy() can be used?
+> 
+> strscpy and scnprintf have different return values and it's simpler
+> and much more common to use scnprintf for appended strings that are
+> limited to a specific buffer length.
 
-On Wed, Jul 21 2021 at 15:48, Jeff Moyer wrote:
+scnprintf() will be a lot slower, but has a much better return value
+than most of the strxxxcpy() functions.
 
-Please write function names with brackets, i.e. sanitize_phys().
+The only slight problem is that you can't differentiate overflow
+from a max-length output.
 
-> memtype_reserve takes an address range of the form [start, end).  It
+Trouble is fixing that adds 'yet another set of functions'.
+Clearly we need the yellow with purple stripe ones :-)
+Probably:
+	offset = xxx(buf, len, offset, ......)
+where offset == len on truncation.
 
-[start, end]
+	David
 
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
 
-> then passes the start and end addresses to sanitize_phys, which is meant
-> to operate on the inclusive addresses.  If end falls at the end of the
-> physical address space, sanitize_phys will return 0.  This can result in
-> drivers failing to load:
->
-> [   10.000087] mpt3sas_cm0: unable to map adapter memory! or resource not found
-> [   10.000334] mpt3sas_cm0: failure at drivers/scsi/mpt3sas/mpt3sas_scsih.c:10597/_scsih_probe()!
-
-Doesn't this trigger the WARN() right below that offending line?
-
-> Fix this by passing the inclusive end address to sanitize_phys.
->
-> Fixes: 510ee090abc3 ("x86/mm/pat: Prepare {reserve, free}_memtype() for "decoy" addresses")
-> Signed-off-by: Jeff Moyer <jmoyer@redhat.com>
-> --
-> It might be worth adding a comment, here.  If there are any suggestions
-> on what a sane wording would be, I'm all ears.
-
-See below.
-
-> diff --git a/arch/x86/mm/pat/memtype.c b/arch/x86/mm/pat/memtype.c
-> index 3112ca7786ed..482557905294 100644
-> --- a/arch/x86/mm/pat/memtype.c
-> +++ b/arch/x86/mm/pat/memtype.c
-> @@ -583,7 +583,7 @@ int memtype_reserve(u64 start, u64 end, enum page_cache_mode req_type,
->  	int err = 0;
->  
->  	start = sanitize_phys(start);
-> -	end = sanitize_phys(end);
-
-        /*
-         * [start, end] is an exclusive address range, but
-         * sanitize_phys() expects an inclusive end address
-         */
-
-> +	end = sanitize_phys(end - 1) + 1;
->  	if (start >= end) {
->  		WARN(1, "%s failed: [mem %#010Lx-%#010Lx], req %s\n", __func__,
->  				start, end - 1, cattr_name(req_type));
-
-Thanks,
-
-        tglx
