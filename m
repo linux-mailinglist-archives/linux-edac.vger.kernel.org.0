@@ -2,77 +2,58 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C4CA3E5C49
-	for <lists+linux-edac@lfdr.de>; Tue, 10 Aug 2021 15:54:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF25E3E5E17
+	for <lists+linux-edac@lfdr.de>; Tue, 10 Aug 2021 16:36:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241215AbhHJNy2 (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Tue, 10 Aug 2021 09:54:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56026 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236814AbhHJNy1 (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Tue, 10 Aug 2021 09:54:27 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87357C0613D3;
-        Tue, 10 Aug 2021 06:54:05 -0700 (PDT)
-Received: from zn.tnic (p200300ec2f0d650032a7c3e3b83a4c54.dip0.t-ipconnect.de [IPv6:2003:ec:2f0d:6500:32a7:c3e3:b83a:4c54])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 804C71EC0345;
-        Tue, 10 Aug 2021 15:53:58 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1628603638;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=wy0O3e24ZiuBDTN+sdm5ZVuQfM7Q7G9zPYzrOaizwCs=;
-        b=ZMNituR4rApaF2UHuKbkO1Smmnc5TClj8CptOX/+I8T1/BBlFukUMJP8LRKLOYiEhlrNYW
-        4JMYEaqREmSHsXVv51V2+fUyrAiXiFhb9RdXnKVdfusNRU2RVug5CSRqkBgmFL8PjJBihd
-        UWY7tav0rZ3dboeVncrZyRgTr4zl1Z4=
-Date:   Tue, 10 Aug 2021 15:54:38 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     "Chatradhi, Naveen Krishna" <NaveenKrishna.Chatradhi@amd.com>
-Cc:     "Ghannam, Yazen" <Yazen.Ghannam@amd.com>,
-        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "mchehab@kernel.org" <mchehab@kernel.org>
-Subject: Re: [PATCH 1/7] x86/amd_nb: Add Aldebaran device to PCI IDs
-Message-ID: <YRKFHuj/2K4FHZS+@zn.tnic>
-References: <20210630152828.162659-1-nchatrad@amd.com>
- <20210630152828.162659-2-nchatrad@amd.com>
- <20210719192830.GA19451@aus-x-yghannam.amd.com>
- <BL1PR12MB5286FFF1B2B421A2E37DDF44E8F79@BL1PR12MB5286.namprd12.prod.outlook.com>
+        id S239443AbhHJOgp (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Tue, 10 Aug 2021 10:36:45 -0400
+Received: from mail.kernel.org ([198.145.29.99]:58786 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S237490AbhHJOgo (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Tue, 10 Aug 2021 10:36:44 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 410BB60EB5;
+        Tue, 10 Aug 2021 14:36:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1628606182;
+        bh=ABqs84wKaUA3FByRyPz8v+wtP3BKrfJzJu/RCm8D2Ns=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=tnMmTlYPtbMjowAzEOmV/NIhYmZfApYgdV5s/JLl5d4j6aQDcoY/FVPk4kTDWjvhe
+         lLFSd1kaqo0joYIwZj/S1k7o/0ihHd8At7bwyS55M/ksf8xofcKco0LSMUSSPOzLyy
+         zP43WWqXDJ2U/y1uRSZnmT84RigA4ULEdOJJxqst//wjsOiDio2IcU/EI1RAsmMZJw
+         QkA4bYBsIIbJIIKcg4CVxaMqOigT904GRlqSe90RwsijWz+X/DWyeCTZdWzYqFYVsu
+         tRncrUBw/vqgZyhaCG5RKslAwIN2dxhMFjaz8D0rLgWZGGGG36GJPGf5zL1waM/sxl
+         BuNFWfiQxBCQA==
+Date:   Tue, 10 Aug 2021 16:36:16 +0200
+From:   Robert Richter <rric@kernel.org>
+To:     Joe Perches <joe@perches.com>
+Cc:     Len Baker <len.baker@gmx.com>, Borislav Petkov <bp@alien8.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Tony Luck <tony.luck@intel.com>,
+        James Morse <james.morse@arm.com>,
+        Kees Cook <keescook@chromium.org>,
+        linux-hardening@vger.kernel.org, linux-edac@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3] drivers/edac/edac_mc: Remove all strcpy() uses
+Message-ID: <YRKO4An9UkObVGmB@rric.localdomain>
+References: <20210807155957.10069-1-len.baker@gmx.com>
+ <ff02ffffdc130a772c01ec0edbf8d1e684b0730a.camel@perches.com>
+ <20210808112617.GA1927@titan>
+ <YRD90L6PMoVbbv+9@rric.localdomain>
+ <99448ef29830fda9b19409bc23b0e7513b22f7b7.camel@perches.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <BL1PR12MB5286FFF1B2B421A2E37DDF44E8F79@BL1PR12MB5286.namprd12.prod.outlook.com>
+In-Reply-To: <99448ef29830fda9b19409bc23b0e7513b22f7b7.camel@perches.com>
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Tue, Aug 10, 2021 at 12:45:17PM +0000, Chatradhi, Naveen Krishna wrote:
-> But I think this patch can be part of the next patch
-> where this value is first used. [naveenk:] Squashed
-> this change into the 2nd patch and submitted v2
-> https://patchwork.kernel.org/project/linux-edac/patch/20210806074350.1
-> 14614-2-nchatrad@amd.com/
+On 09.08.21 10:18:58, Joe Perches wrote:
 
-Btw, I'd suggest you find someone at AMD to teach you to use a proper
-mail client for replying to lkml messages which does proper quoting,
-etc. Outlook and windoze simply isn't cut out for this type of
-communication but rather for managerial blabla.
+> strscpy and scnprintf have different return values and it's simpler
+> and much more common to use scnprintf for appended strings that are
+> limited to a specific buffer length.
 
-Alternatively, you can read this here:
+Calculating the bytes written from the return value is a oneliner.
 
-https://www.kernel.org/doc/html/latest/process/email-clients.html
-
-and try to set up something yourself.
-
-Thx.
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+-Robert
