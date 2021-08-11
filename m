@@ -2,121 +2,79 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BC043E838A
-	for <lists+linux-edac@lfdr.de>; Tue, 10 Aug 2021 21:21:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 80BA83E8B2C
+	for <lists+linux-edac@lfdr.de>; Wed, 11 Aug 2021 09:40:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231425AbhHJTVW (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Tue, 10 Aug 2021 15:21:22 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:33415 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230056AbhHJTVW (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>);
-        Tue, 10 Aug 2021 15:21:22 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1628623259;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=UKz5RODz5prskKuvBZqrHvPYmgz3FaALdg2u0GEXeAk=;
-        b=JCicweRCzxha6Q7q8a7rp0c29YjhSFVTzc7ezJ4NP5QRKRnOwavf9hQm3t7mPWp252LTur
-        ymdIIwtp9mVsbzTqrfjoPfcnQR5k1mYq/lFZ7K0248ky4RiUuyDWam0f7vIJVHQpPNcSHl
-        ntCQUsPMTDtVztqBiRo4PJvOIPuPa0o=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-604-zMfGCzHEMwWOtYJbUDazOA-1; Tue, 10 Aug 2021 15:20:58 -0400
-X-MC-Unique: zMfGCzHEMwWOtYJbUDazOA-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 34E05190B2A0;
-        Tue, 10 Aug 2021 19:20:56 +0000 (UTC)
-Received: from segfault.boston.devel.redhat.com (segfault.boston.devel.redhat.com [10.19.60.26])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 0B4905C1A1;
-        Tue, 10 Aug 2021 19:20:54 +0000 (UTC)
-From:   Jeff Moyer <jmoyer@redhat.com>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     dan.j.williams@intel.com, Ingo Molnar <mingo@redhat.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Tony Luck <tony.luck@intel.com>,
-        Borislav Petkov <bp@alien8.de>, linux-edac@vger.kernel.org,
-        x86@kernel.org, linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Subject: Re: [patch] x86/pat: pass correct address to sanitize_phys
-References: <x49tuknmosl.fsf@segfault.boston.devel.redhat.com>
-        <87wnotst1l.ffs@tglx>
-X-PGP-KeyID: 1F78E1B4
-X-PGP-CertKey: F6FE 280D 8293 F72C 65FD  5A58 1FF8 A7CA 1F78 E1B4
-Date:   Tue, 10 Aug 2021 15:22:19 -0400
-In-Reply-To: <87wnotst1l.ffs@tglx> (Thomas Gleixner's message of "Tue, 10 Aug
-        2021 08:38:46 +0200")
-Message-ID: <x49k0ktm7f8.fsf@segfault.boston.devel.redhat.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+        id S235239AbhHKHlD (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Wed, 11 Aug 2021 03:41:03 -0400
+Received: from mail.kernel.org ([198.145.29.99]:54276 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S234043AbhHKHlC (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Wed, 11 Aug 2021 03:41:02 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 4BEBC6056B;
+        Wed, 11 Aug 2021 07:40:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1628667639;
+        bh=rdqhOz0L1PAh4KXTeSKY4XD8/H+gEn5LQTTMro2BQ9M=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=uQVzxGtxi3P/hMjDt7J/0kB2xhblAqToa9zpLvlF8G+Vf83bZyGVBqazQX+UNuqL7
+         0Nr4/5GeWK2BB6TfyNUG48RN6NEs/twP/NVKGi+wdis36tHP64IE6qNW4WZJxdhRF7
+         QX+oYwtXG362ZK/Rh5crKTcuFKcObaKlFP3l5lwE+f49eN7wJsLEFzl1ZzoBrQAb9Y
+         CjoyTSylavwgQXDExA4IJY79Lr3nElg5YusevfuvinucbLmlLyiiD2VmzaeCtt+uDi
+         OEQjQ+66vfF0aFHvX8fEAYLiFEdbavEvLltA6xGTpiwuZ2Yfmxti884966gk3bANhO
+         1evdzfauj/Xjw==
+Date:   Wed, 11 Aug 2021 09:40:34 +0200
+From:   Robert Richter <rric@kernel.org>
+To:     Joe Perches <joe@perches.com>
+Cc:     Len Baker <len.baker@gmx.com>, Borislav Petkov <bp@alien8.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Tony Luck <tony.luck@intel.com>,
+        James Morse <james.morse@arm.com>,
+        Kees Cook <keescook@chromium.org>,
+        linux-hardening@vger.kernel.org, linux-edac@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3] drivers/edac/edac_mc: Remove all strcpy() uses
+Message-ID: <YRN+8u59lJ6MWsOL@rric.localdomain>
+References: <20210807155957.10069-1-len.baker@gmx.com>
+ <ff02ffffdc130a772c01ec0edbf8d1e684b0730a.camel@perches.com>
+ <20210808112617.GA1927@titan>
+ <YRD90L6PMoVbbv+9@rric.localdomain>
+ <99448ef29830fda9b19409bc23b0e7513b22f7b7.camel@perches.com>
+ <YRKO4An9UkObVGmB@rric.localdomain>
+ <b3070c0352e2a5661a1a59d5c5354cc82a1cce1e.camel@perches.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <b3070c0352e2a5661a1a59d5c5354cc82a1cce1e.camel@perches.com>
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-Thomas Gleixner <tglx@linutronix.de> writes:
+On 10.08.21 08:02:17, Joe Perches wrote:
+> On Tue, 2021-08-10 at 16:36 +0200, Robert Richter wrote:
+> > On 09.08.21 10:18:58, Joe Perches wrote:
+> > 
+> > > strscpy and scnprintf have different return values and it's simpler
+> > > and much more common to use scnprintf for appended strings that are
+> > > limited to a specific buffer length.
+> > 
+> > Calculating the bytes written from the return value is a oneliner.
+> 
+> Not really.
+> You still have to test for strscpy's possible return of -E2BIG.
 
-> Jeff,
->
-> On Wed, Jul 21 2021 at 15:48, Jeff Moyer wrote:
->
-> Please write function names with brackets, i.e. sanitize_phys().
+I thought of:
 
-OK, will do.
+	num = strscpy(p, OTHER_LABEL, len);
+	num = num < 0 ? len : num;
+	len -= num;
+	p += num;
 
->> memtype_reserve takes an address range of the form [start, end).  It
->
-> [start, end]
+Clearly, this does not look nice, esp. if this is repeated in the
+code. That's why I prefer the strlen(p) implementation:
 
-Start is inclusive, end is exclusive, so start <= x < end.  I used the
-notation found here:
+	strscpy(p, OTHER_LABEL, len);
+	len -= strlen(p);
+	p += strlen(p);
 
-  https://en.wikipedia.org/wiki/Interval_(mathematics)
-
-If that's too confusing, I can stick to inclusive vs exclusive verbiage.
-
->> then passes the start and end addresses to sanitize_phys, which is meant
->> to operate on the inclusive addresses.  If end falls at the end of the
->> physical address space, sanitize_phys will return 0.  This can result in
->> drivers failing to load:
->>
->> [   10.000087] mpt3sas_cm0: unable to map adapter memory! or resource not found
->> [   10.000334] mpt3sas_cm0: failure at drivers/scsi/mpt3sas/mpt3sas_scsih.c:10597/_scsih_probe()!
->
-> Doesn't this trigger the WARN() right below that offending line?
-
-It does.  I'll include the warning message in the v2 posting.
-
->> Fix this by passing the inclusive end address to sanitize_phys.
->>
->> Fixes: 510ee090abc3 ("x86/mm/pat: Prepare {reserve, free}_memtype() for "decoy" addresses")
->> Signed-off-by: Jeff Moyer <jmoyer@redhat.com>
->> --
->> It might be worth adding a comment, here.  If there are any suggestions
->> on what a sane wording would be, I'm all ears.
->
-> See below.
->
->> diff --git a/arch/x86/mm/pat/memtype.c b/arch/x86/mm/pat/memtype.c
->> index 3112ca7786ed..482557905294 100644
->> --- a/arch/x86/mm/pat/memtype.c
->> +++ b/arch/x86/mm/pat/memtype.c
->> @@ -583,7 +583,7 @@ int memtype_reserve(u64 start, u64 end, enum page_cache_mode req_type,
->>  	int err = 0;
->>  
->>  	start = sanitize_phys(start);
->> -	end = sanitize_phys(end);
->
->         /*
->          * [start, end] is an exclusive address range, but
->          * sanitize_phys() expects an inclusive end address
->          */
-
-That works for me (modulo the interval notation), thanks for the
-suggestion.
-
-Thanks!
-Jeff
-
+-Robert
