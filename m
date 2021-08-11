@@ -2,60 +2,136 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 69E063E9130
-	for <lists+linux-edac@lfdr.de>; Wed, 11 Aug 2021 14:32:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A06213E9A35
+	for <lists+linux-edac@lfdr.de>; Wed, 11 Aug 2021 23:06:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229710AbhHKMcN (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Wed, 11 Aug 2021 08:32:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56148 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229833AbhHKMcJ (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Wed, 11 Aug 2021 08:32:09 -0400
-Received: from mail-oi1-x22f.google.com (mail-oi1-x22f.google.com [IPv6:2607:f8b0:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A6BAC0619ED
-        for <linux-edac@vger.kernel.org>; Wed, 11 Aug 2021 05:30:02 -0700 (PDT)
-Received: by mail-oi1-x22f.google.com with SMTP id bj40so4278876oib.6
-        for <linux-edac@vger.kernel.org>; Wed, 11 Aug 2021 05:30:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=77BwqRII9XCweQU8IJul6unijI/BEL+vUJmVmCRLxH4=;
-        b=l4gMJVQR0kiw5jB7QjBwuNpfM6KgRmAnZ+U3/uWnaDOrOmeNXH1cBsuQp1/yvU/vbe
-         h7truI0tSaL01ahWzSqREXmT86UPLmMGQ2+FLEgN9spMzc4cuAIBO//Q+H5br/KBc0TV
-         kFrfyS3HAXSTLm9xum/FyUF/jALDjxDHHjAbGHdZk+wTj7O/Gvjxi495MUWK0LMLb61t
-         xWjyjzLQh6acP97vVSQvECAoNev4PY9q3zMqG/1nqsutkiyZpW2+ssMsVdYVIVzVs9ax
-         stDtdqMeOw7/9vXNfePZRksemawFwQjcQ1gGbjzrFwOEwtevs3PZsUTk25T8b2r2n2+I
-         0gBA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=77BwqRII9XCweQU8IJul6unijI/BEL+vUJmVmCRLxH4=;
-        b=dXBlbltvuN4E+aW4CwQ0cCXt3itCCx7a2urRKbfxM553qByIgMrxATEsDhbtJDAoC7
-         hiJ5X0dutp24ShMO9ZKiW+wCBc33jmxZ9q6tubsFwp8BS0hCvvr9OqalF+yEVdMIYUqp
-         G4s2PqE3zTZcF6TpBexDFtth2chKKoEn6pCO6UGF1EGsbyfs8jdrsvKil3KNIJuvxYf/
-         h2cPbqljMg66mT3ROdSPXhBMH40E9cDidn+UMBaAI+Wv+oQsmajSOA3hDZN1v0/XTOcl
-         BJPHBzYyQSVut0mVGZDSv+NXb9ohvFDNN9Y/tcj/fjfj68N3m9Z3MtETijmR7Y5XpF2P
-         mZNg==
-X-Gm-Message-State: AOAM531Bypdr5ybCZaCl0Io6rdvMsjPmfup8ZQl3UEvxFSGIh7Zq2dV8
-        CDzGLiYpMN3YmDmZww83WF4slDrrIhwnxi/HAD8=
-X-Google-Smtp-Source: ABdhPJwW80yC3Jv4N7Ygd/oz/W2w0OMWMVUNvF3laMRZsfuxi/a2uJ5LPRrNJQDqCRwhEl9YwYATyhizs0DKY0HnRMk=
-X-Received: by 2002:a05:6808:1924:: with SMTP id bf36mr24189327oib.106.1628685002002;
- Wed, 11 Aug 2021 05:30:02 -0700 (PDT)
+        id S232058AbhHKVGp (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Wed, 11 Aug 2021 17:06:45 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:36305 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231740AbhHKVGp (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>);
+        Wed, 11 Aug 2021 17:06:45 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1628715980;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type;
+        bh=Ge0GTZUIjxikgSWkPB8zfOtpvL+2/SFPvGVsbcuYMDw=;
+        b=TioJd4tKo2tAa6ykiIeMHFWWandOn3T9Vs60ZZajmm6kjt9u2F1DXIlhuwrB3Hf7zt8lfN
+        WfN5nDKulk0bSstFXafaWkJbaJ942im/OXbM/c8X21nEcolo/NePGVj+0j40NDuOKmdTt3
+        Z6wARcvK1Vu4UNCdDB8L5K1LQWpQ0G4=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-489-06BHg_uoN0OVyFP1lRgvtA-1; Wed, 11 Aug 2021 17:06:19 -0400
+X-MC-Unique: 06BHg_uoN0OVyFP1lRgvtA-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id F3531344B1;
+        Wed, 11 Aug 2021 21:06:17 +0000 (UTC)
+Received: from segfault.boston.devel.redhat.com (segfault.boston.devel.redhat.com [10.19.60.26])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 2AFE11ABD8;
+        Wed, 11 Aug 2021 21:06:13 +0000 (UTC)
+From:   Jeff Moyer <jmoyer@redhat.com>
+To:     dan.j.williams@intel.com, David Hildenbrand <david@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>
+Cc:     Ingo Molnar <mingo@redhat.com>, "H. Peter Anvin" <hpa@zytor.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Borislav Petkov <bp@alien8.de>, linux-edac@vger.kernel.org,
+        x86@kernel.org, linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Subject: [patch, v2] x86/pat: pass valid address to sanitize_phys()
+X-PGP-KeyID: 1F78E1B4
+X-PGP-CertKey: F6FE 280D 8293 F72C 65FD  5A58 1FF8 A7CA 1F78 E1B4
+Date:   Wed, 11 Aug 2021 17:07:37 -0400
+Message-ID: <x49o8a3pu5i.fsf@segfault.boston.devel.redhat.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
-Received: by 2002:a05:6830:23a5:0:0:0:0 with HTTP; Wed, 11 Aug 2021 05:30:01
- -0700 (PDT)
-Reply-To: rihabmanyang07@yahoo.com
-From:   Rihab Manyang <ndourandiogou1@gmail.com>
-Date:   Wed, 11 Aug 2021 13:30:01 +0100
-Message-ID: <CAP5_mB76a-FSZzks8OG9YWvLEFv62qfHQ6sTAFQrmH0xjgR9bw@mail.gmail.com>
-Subject: hi
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
--- 
-How are you?I am miss.Rihab Manyang i will like to be your friend
-please write me back on my email for more details, Thanks.
+The end address passed to memtype_reserve() is handed directly to
+sanitize_phys().  However, end is exclusive and sanitize_phys() expects
+an inclusive address.  If end falls at the end of the physical address
+space, sanitize_phys() will return 0.  This can result in drivers
+failing to load, and the following warning:
+
+[    9.999440] mpt3sas version 29.100.01.00 loaded
+[    9.999817] mpt3sas_cm0: 64 BIT PCI BUS DMA ADDRESSING SUPPORTED, total mem (65413664 kB)
+[    9.999819] ------------[ cut here ]------------
+[    9.999826] WARNING: CPU: 26 PID: 749 at arch/x86/mm/pat.c:354 reserve_memtype+0x262/0x450
+[    9.999828] reserve_memtype failed: [mem 0x3ffffff00000-0xffffffffffffffff], req uncached-minus
+[    9.999828] Modules linked in: mpt3sas(+) bnxt_en(+) ahci(+) crct10dif_pclmul crct10dif_common nvme crc32c_intel libahci nvme_core libata raid_class scsi_transport_sas devlink drm_panel_orientation_quirks nfit libnvdimm dm_mirror dm_region_hash dm_log dm_mod
+[    9.999840] CPU: 26 PID: 749 Comm: systemd-udevd Not tainted 3.10.0-1077.el7_7.mpt3sas_test008.x86_64 #1
+[    9.999842] Hardware name: Inspur SA5112M5/SA5112M5, BIOS 4.1.12 02/24/2021
+[    9.999843] Call Trace:
+[    9.999851]  [<ffffffffa497c4e4>] dump_stack+0x19/0x1b
+[    9.999857]  [<ffffffffa429bc08>] __warn+0xd8/0x100
+[    9.999859]  [<ffffffffa429bc8f>] warn_slowpath_fmt+0x5f/0x80
+[    9.999861]  [<ffffffffa427b1f2>] reserve_memtype+0x262/0x450
+[    9.999867]  [<ffffffffa4276254>] __ioremap_caller+0xf4/0x330
+[    9.999872]  [<ffffffffc04620a1>] ? mpt3sas_base_map_resources+0x151/0xa60 [mpt3sas]
+[    9.999875]  [<ffffffffa42764aa>] ioremap_nocache+0x1a/0x20
+[    9.999879]  [<ffffffffc04620a1>] mpt3sas_base_map_resources+0x151/0xa60 [mpt3sas]
+[    9.999884]  [<ffffffffa442656b>] ? __kmalloc+0x1eb/0x230
+[    9.999889]  [<ffffffffc0465555>] mpt3sas_base_attach+0xf5/0xa50 [mpt3sas]
+[    9.999894]  [<ffffffffc046af3c>] _scsih_probe+0x4ec/0xb00 [mpt3sas]
+[    9.999901]  [<ffffffffa45d297a>] local_pci_probe+0x4a/0xb0
+[    9.999903]  [<ffffffffa45d40c9>] pci_device_probe+0x109/0x160
+[    9.999909]  [<ffffffffa46b7225>] driver_probe_device+0xc5/0x3e0
+[    9.999910]  [<ffffffffa46b7623>] __driver_attach+0x93/0xa0
+[    9.999912]  [<ffffffffa46b7590>] ? __device_attach+0x50/0x50
+[    9.999914]  [<ffffffffa46b4dc5>] bus_for_each_dev+0x75/0xc0
+[    9.999916]  [<ffffffffa46b6b9e>] driver_attach+0x1e/0x20
+[    9.999918]  [<ffffffffa46b6640>] bus_add_driver+0x200/0x2d0
+[    9.999920]  [<ffffffffa46b7cb4>] driver_register+0x64/0xf0
+[    9.999922]  [<ffffffffa45d3905>] __pci_register_driver+0xa5/0xc0
+[    9.999924]  [<ffffffffc049b000>] ? 0xffffffffc049afff
+[    9.999928]  [<ffffffffc049b16e>] _mpt3sas_init+0x16e/0x1000 [mpt3sas]
+[    9.999933]  [<ffffffffa420210a>] do_one_initcall+0xba/0x240
+[    9.999940]  [<ffffffffa431e95a>] load_module+0x271a/0x2bb0
+[    9.999946]  [<ffffffffa45b0600>] ? ddebug_proc_write+0x100/0x100
+[    9.999948]  [<ffffffffa431eedf>] SyS_init_module+0xef/0x140
+[    9.999954]  [<ffffffffa498fed2>] system_call_fastpath+0x25/0x2a
+[    9.999955] ---[ end trace 6d6eea4438db89ef ]---
+[    9.999957] ioremap reserve_memtype failed -22
+[   10.000087] mpt3sas_cm0: unable to map adapter memory! or resource not found
+[   10.000334] mpt3sas_cm0: failure at drivers/scsi/mpt3sas/mpt3sas_scsih.c:10597/_scsih_probe()!
+
+(Note that this warning was from an older distribution kernel, so line
+numbers and file names may not line up with the current tree.)
+
+Fix this by passing the inclusive end address to sanitize_phys().
+
+Fixes: 510ee090abc3 ("x86/mm/pat: Prepare {reserve, free}_memtype() for "decoy" addresses")
+Signed-off-by: Jeff Moyer <jmoyer@redhat.com>
+Reviewed-by: David Hildenbrand <david@redhat.com>
+
+---
+v2:
+- Add the warning splat to the commit log. (tglx)
+- Use parenthesis when referring to function names. (tglx)
+- Add a comment to the code. (tglx)
+- Use inclusive/exclusive instead of interval notation.
+
+diff --git a/arch/x86/mm/pat/memtype.c b/arch/x86/mm/pat/memtype.c
+index 3112ca7786ed..4ba2a3ee4bce 100644
+--- a/arch/x86/mm/pat/memtype.c
++++ b/arch/x86/mm/pat/memtype.c
+@@ -583,7 +583,12 @@ int memtype_reserve(u64 start, u64 end, enum page_cache_mode req_type,
+ 	int err = 0;
+ 
+ 	start = sanitize_phys(start);
+-	end = sanitize_phys(end);
++
++	/*
++	 * The end address passed into this function is exclusive, but
++	 * sanitize_phys() expects an inclusive address.
++	 */
++	end = sanitize_phys(end - 1) + 1;
+ 	if (start >= end) {
+ 		WARN(1, "%s failed: [mem %#010Lx-%#010Lx], req %s\n", __func__,
+ 				start, end - 1, cattr_name(req_type));
+
