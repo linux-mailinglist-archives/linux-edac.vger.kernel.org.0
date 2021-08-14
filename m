@@ -2,136 +2,175 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A06213E9A35
-	for <lists+linux-edac@lfdr.de>; Wed, 11 Aug 2021 23:06:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C48EB3EC143
+	for <lists+linux-edac@lfdr.de>; Sat, 14 Aug 2021 09:56:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232058AbhHKVGp (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Wed, 11 Aug 2021 17:06:45 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:36305 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231740AbhHKVGp (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>);
-        Wed, 11 Aug 2021 17:06:45 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1628715980;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type;
-        bh=Ge0GTZUIjxikgSWkPB8zfOtpvL+2/SFPvGVsbcuYMDw=;
-        b=TioJd4tKo2tAa6ykiIeMHFWWandOn3T9Vs60ZZajmm6kjt9u2F1DXIlhuwrB3Hf7zt8lfN
-        WfN5nDKulk0bSstFXafaWkJbaJ942im/OXbM/c8X21nEcolo/NePGVj+0j40NDuOKmdTt3
-        Z6wARcvK1Vu4UNCdDB8L5K1LQWpQ0G4=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-489-06BHg_uoN0OVyFP1lRgvtA-1; Wed, 11 Aug 2021 17:06:19 -0400
-X-MC-Unique: 06BHg_uoN0OVyFP1lRgvtA-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id F3531344B1;
-        Wed, 11 Aug 2021 21:06:17 +0000 (UTC)
-Received: from segfault.boston.devel.redhat.com (segfault.boston.devel.redhat.com [10.19.60.26])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 2AFE11ABD8;
-        Wed, 11 Aug 2021 21:06:13 +0000 (UTC)
-From:   Jeff Moyer <jmoyer@redhat.com>
-To:     dan.j.williams@intel.com, David Hildenbrand <david@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>
-Cc:     Ingo Molnar <mingo@redhat.com>, "H. Peter Anvin" <hpa@zytor.com>,
+        id S237144AbhHNH4m (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Sat, 14 Aug 2021 03:56:42 -0400
+Received: from mout.gmx.net ([212.227.15.15]:60763 "EHLO mout.gmx.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S236519AbhHNH4l (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Sat, 14 Aug 2021 03:56:41 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1628927745;
+        bh=ZZfa3D/xlj1AhWpX8cfXOHAVJvxO9sqXF8P5vPPNy68=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
+        b=LUpBBn4pE7R3svYl5tl/e8uMT5w73lp5XJqygBtQPA05Su0kJvxRcYcqYqOZqqaUF
+         XZAjHrKOl+coh26CPl4qXoo92fDwbV6AmWlmWsD8kZaJ5idhx5IhyX0PdIPKSwisLY
+         oFajPtA9BgwlMa1BfpjronVsKNOqcIWDIz0Jt1nc=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from localhost.localdomain ([79.150.72.99]) by mail.gmx.net
+ (mrgmx004 [212.227.17.184]) with ESMTPSA (Nemesis) id
+ 1M1HZo-1mGTDH2G7e-002n4J; Sat, 14 Aug 2021 09:55:45 +0200
+From:   Len Baker <len.baker@gmx.com>
+To:     Borislav Petkov <bp@alien8.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
         Tony Luck <tony.luck@intel.com>,
-        Borislav Petkov <bp@alien8.de>, linux-edac@vger.kernel.org,
-        x86@kernel.org, linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Subject: [patch, v2] x86/pat: pass valid address to sanitize_phys()
-X-PGP-KeyID: 1F78E1B4
-X-PGP-CertKey: F6FE 280D 8293 F72C 65FD  5A58 1FF8 A7CA 1F78 E1B4
-Date:   Wed, 11 Aug 2021 17:07:37 -0400
-Message-ID: <x49o8a3pu5i.fsf@segfault.boston.devel.redhat.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+        James Morse <james.morse@arm.com>,
+        Robert Richter <rric@kernel.org>
+Cc:     Len Baker <len.baker@gmx.com>, Joe Perches <joe@perches.com>,
+        David Laight <David.Laight@ACULAB.COM>,
+        Kees Cook <keescook@chromium.org>,
+        linux-hardening@vger.kernel.org, linux-edac@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v4] EDAC/mc: Prefer strscpy over strcpy
+Date:   Sat, 14 Aug 2021 09:55:27 +0200
+Message-Id: <20210814075527.5999-1-len.baker@gmx.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:javi5gFL5vgU8bODNsXF3HGI+TugHhiTkzGQTTjX81sD3qjiqeF
+ 8N1cA2oYzzMXpiaj91SAM7RoivrD/xR2Ym3yTeajR5xn3cLdKGt9aMy89VEE2Kldm6xOcqU
+ jkh3gT5bzUii5ik/f9+rE9sNAgB/o9e6LRKYh3/LJvAd7xmm2lojbRlsjzWqyk+ZAQF1fCr
+ j8ZHinAr0RW0jKqDddTDA==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:Wwa9qhrL6+M=:h0Ty1K8JmOj3iwQHBA6TxX
+ F1mebYma032LVwQb9rtP4Ax43FXttpyTYbQfi/LyyYqCYStIYa09fLQ+6NMWIZerAoiS9wiUI
+ ZsNfrW35NVRIb/2mMj7b0DWxWB/n6HKWF9rM+eCc/gCKZqOZMG2ZvRZ6a/4dXh2q9yjum4JYZ
+ ZhtA1SZgrbxgOP7p4lEL/72FhKNfzEFejBcuHbJch1+tThcc1gWRH/xn40y6cWT6TcHjL9Ux/
+ 3sRy6aMpmD0GhrfENR3cXk9s3SuEe3WqNaa9vXkVt0IH0Cs/oQodx9AWfuPo9FrTk0CviXje8
+ YvVdZhaxPsgIGz+ByTw55NvPyUY6osHTS/n5zmKmNLCSsFc0vWX8BY7lLqOn5J48V98yef11t
+ 2E2M+gbuDFoG2fckN260LvJtKA49dum52FOaYM2RglMwqkJp7k/XGEtWTokN27E6aUhhlUwgy
+ Z+YOZTOYVqgYqTbvqpqK7i9rFU7vj0YE+9RoqALw9d6BJ5Hsi6j10I5j3D+AOm0ezUBWodkG5
+ k+46er9ZNc5Nz7/iMCCCKDX8IwcmX6C4qOCzCJOSbtFNsQ3bKrPyGJ8p8nQeYjRZy2NHHVR6/
+ MusqNmPsn1NnkxGob6JpxGlfrdJN2xJH4ZChW9cLaDCSu+93gi2xv9/M/0unQu/U1mDv5GWVD
+ dNd1SBo23GLaF/NtxlBhTSpG55+Y9+wPSkSS9M6wAdD0WXc4E8bVcZdKiPPmG0wRhq0zfTRtK
+ zKk4tQnTny2lQJOVSHhqXedcg+e/RBMt7ild6m/WjaY7bYDLI7EyP/nUS0619NlgrbvKqjBwi
+ ghZ/a1teSk++5Cut1eIyMakQaCNG1KhUy74XTYUleEL4jNXIE7QH4ySIv2GW3iyzZ1HwtHoch
+ n0+nmUFD4JQN4SSd4PRrNUnmHVPkgyEV6ZGEMwTlvNNGop+BraDe0NuVF4Ftxftbradxsrbl4
+ BsR3uMfI7cULvQnUUIqn1InmRKGOEsbCV+AdLo68fKtwI/gInu/ecLmOaaPuvTi+oKsLcYbXI
+ Vq8fZkrrh6Soqr+XCvXfR6K9n5iJQ0vWMfmKhLQxp+4SnijMX5XKUmf6EV/edXgXzJ3T9HWTH
+ YzWyUNR7qAgXSIlrclD5DU+7IMmi9J241Q0L5pvFwlG4ntBO6zk/1f0Og==
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-The end address passed to memtype_reserve() is handed directly to
-sanitize_phys().  However, end is exclusive and sanitize_phys() expects
-an inclusive address.  If end falls at the end of the physical address
-space, sanitize_phys() will return 0.  This can result in drivers
-failing to load, and the following warning:
+strcpy() performs no bounds checking on the destination buffer. This
+could result in linear overflows beyond the end of the buffer, leading
+to all kinds of misbehaviors. The safe replacement is strscpy().
 
-[    9.999440] mpt3sas version 29.100.01.00 loaded
-[    9.999817] mpt3sas_cm0: 64 BIT PCI BUS DMA ADDRESSING SUPPORTED, total mem (65413664 kB)
-[    9.999819] ------------[ cut here ]------------
-[    9.999826] WARNING: CPU: 26 PID: 749 at arch/x86/mm/pat.c:354 reserve_memtype+0x262/0x450
-[    9.999828] reserve_memtype failed: [mem 0x3ffffff00000-0xffffffffffffffff], req uncached-minus
-[    9.999828] Modules linked in: mpt3sas(+) bnxt_en(+) ahci(+) crct10dif_pclmul crct10dif_common nvme crc32c_intel libahci nvme_core libata raid_class scsi_transport_sas devlink drm_panel_orientation_quirks nfit libnvdimm dm_mirror dm_region_hash dm_log dm_mod
-[    9.999840] CPU: 26 PID: 749 Comm: systemd-udevd Not tainted 3.10.0-1077.el7_7.mpt3sas_test008.x86_64 #1
-[    9.999842] Hardware name: Inspur SA5112M5/SA5112M5, BIOS 4.1.12 02/24/2021
-[    9.999843] Call Trace:
-[    9.999851]  [<ffffffffa497c4e4>] dump_stack+0x19/0x1b
-[    9.999857]  [<ffffffffa429bc08>] __warn+0xd8/0x100
-[    9.999859]  [<ffffffffa429bc8f>] warn_slowpath_fmt+0x5f/0x80
-[    9.999861]  [<ffffffffa427b1f2>] reserve_memtype+0x262/0x450
-[    9.999867]  [<ffffffffa4276254>] __ioremap_caller+0xf4/0x330
-[    9.999872]  [<ffffffffc04620a1>] ? mpt3sas_base_map_resources+0x151/0xa60 [mpt3sas]
-[    9.999875]  [<ffffffffa42764aa>] ioremap_nocache+0x1a/0x20
-[    9.999879]  [<ffffffffc04620a1>] mpt3sas_base_map_resources+0x151/0xa60 [mpt3sas]
-[    9.999884]  [<ffffffffa442656b>] ? __kmalloc+0x1eb/0x230
-[    9.999889]  [<ffffffffc0465555>] mpt3sas_base_attach+0xf5/0xa50 [mpt3sas]
-[    9.999894]  [<ffffffffc046af3c>] _scsih_probe+0x4ec/0xb00 [mpt3sas]
-[    9.999901]  [<ffffffffa45d297a>] local_pci_probe+0x4a/0xb0
-[    9.999903]  [<ffffffffa45d40c9>] pci_device_probe+0x109/0x160
-[    9.999909]  [<ffffffffa46b7225>] driver_probe_device+0xc5/0x3e0
-[    9.999910]  [<ffffffffa46b7623>] __driver_attach+0x93/0xa0
-[    9.999912]  [<ffffffffa46b7590>] ? __device_attach+0x50/0x50
-[    9.999914]  [<ffffffffa46b4dc5>] bus_for_each_dev+0x75/0xc0
-[    9.999916]  [<ffffffffa46b6b9e>] driver_attach+0x1e/0x20
-[    9.999918]  [<ffffffffa46b6640>] bus_add_driver+0x200/0x2d0
-[    9.999920]  [<ffffffffa46b7cb4>] driver_register+0x64/0xf0
-[    9.999922]  [<ffffffffa45d3905>] __pci_register_driver+0xa5/0xc0
-[    9.999924]  [<ffffffffc049b000>] ? 0xffffffffc049afff
-[    9.999928]  [<ffffffffc049b16e>] _mpt3sas_init+0x16e/0x1000 [mpt3sas]
-[    9.999933]  [<ffffffffa420210a>] do_one_initcall+0xba/0x240
-[    9.999940]  [<ffffffffa431e95a>] load_module+0x271a/0x2bb0
-[    9.999946]  [<ffffffffa45b0600>] ? ddebug_proc_write+0x100/0x100
-[    9.999948]  [<ffffffffa431eedf>] SyS_init_module+0xef/0x140
-[    9.999954]  [<ffffffffa498fed2>] system_call_fastpath+0x25/0x2a
-[    9.999955] ---[ end trace 6d6eea4438db89ef ]---
-[    9.999957] ioremap reserve_memtype failed -22
-[   10.000087] mpt3sas_cm0: unable to map adapter memory! or resource not found
-[   10.000334] mpt3sas_cm0: failure at drivers/scsi/mpt3sas/mpt3sas_scsih.c:10597/_scsih_probe()!
+This is a previous step in the path to remove the strcpy() function
+entirely from the kernel.
 
-(Note that this warning was from an older distribution kernel, so line
-numbers and file names may not line up with the current tree.)
+Signed-off-by: Len Baker <len.baker@gmx.com>
+=2D--
+Hi,
 
-Fix this by passing the inclusive end address to sanitize_phys().
+Following the comments in the previous version I don't use the scnprintf
+function avoiding speed penalties. Instead I use the strscpy.
 
-Fixes: 510ee090abc3 ("x86/mm/pat: Prepare {reserve, free}_memtype() for "decoy" addresses")
-Signed-off-by: Jeff Moyer <jmoyer@redhat.com>
-Reviewed-by: David Hildenbrand <david@redhat.com>
+Thanks,
+Len
 
----
-v2:
-- Add the warning splat to the commit log. (tglx)
-- Use parenthesis when referring to function names. (tglx)
-- Add a comment to the code. (tglx)
-- Use inclusive/exclusive instead of interval notation.
+This is a task of the KSPP [1]
 
-diff --git a/arch/x86/mm/pat/memtype.c b/arch/x86/mm/pat/memtype.c
-index 3112ca7786ed..4ba2a3ee4bce 100644
---- a/arch/x86/mm/pat/memtype.c
-+++ b/arch/x86/mm/pat/memtype.c
-@@ -583,7 +583,12 @@ int memtype_reserve(u64 start, u64 end, enum page_cache_mode req_type,
- 	int err = 0;
- 
- 	start = sanitize_phys(start);
--	end = sanitize_phys(end);
-+
-+	/*
-+	 * The end address passed into this function is exclusive, but
-+	 * sanitize_phys() expects an inclusive address.
-+	 */
-+	end = sanitize_phys(end - 1) + 1;
- 	if (start >= end) {
- 		WARN(1, "%s failed: [mem %#010Lx-%#010Lx], req %s\n", __func__,
- 				start, end - 1, cattr_name(req_type));
+[1] https://github.com/KSPP/linux/issues/88
+
+Changelog v1 -> v2
+- Use the strscpy() instead of scnprintf() to add labels and follow a
+  code pattern more similar to the current one (advance "p" and
+  decrement "left") (Robert Richter).
+
+Changelog v2 -> v3
+- Rename the "left" variable to "len" (Robert Richter).
+- Use strlen(p) instead of strlen(OTHER_LABEL) to decrement "len" and
+  increment "p" as otherwise "left" could underflow and p overflow
+  (Robert Richter).
+
+Changelog v3 -> v4
+- Change the commit subject (Joe Perches).
+- Fix broken logic (Robert Richter).
+- Rebase against v5.14-rc5.
+
+Previous versions:
+
+v1
+https://lore.kernel.org/linux-hardening/20210725162954.9861-1-len.baker@gm=
+x.com/
+
+v2
+https://lore.kernel.org/linux-hardening/20210801143558.12674-1-len.baker@g=
+mx.com/
+
+v3
+https://lore.kernel.org/linux-hardening/20210807155957.10069-1-len.baker@g=
+mx.com/
+
+ drivers/edac/edac_mc.c | 14 +++++++++-----
+ 1 file changed, 9 insertions(+), 5 deletions(-)
+
+diff --git a/drivers/edac/edac_mc.c b/drivers/edac/edac_mc.c
+index f6d462d0be2d..7aea6c502316 100644
+=2D-- a/drivers/edac/edac_mc.c
++++ b/drivers/edac/edac_mc.c
+@@ -1032,6 +1032,7 @@ void edac_mc_handle_error(const enum hw_event_mc_err=
+_type type,
+ 	int i, n_labels =3D 0;
+ 	struct edac_raw_error_desc *e =3D &mci->error_desc;
+ 	bool any_memory =3D true;
++	size_t len;
+
+ 	edac_dbg(3, "MC%d\n", mci->mc_idx);
+
+@@ -1086,6 +1087,7 @@ void edac_mc_handle_error(const enum hw_event_mc_err=
+_type type,
+ 	 */
+ 	p =3D e->label;
+ 	*p =3D '\0';
++	len =3D sizeof(e->label);
+
+ 	mci_for_each_dimm(mci, dimm) {
+ 		if (top_layer >=3D 0 && top_layer !=3D dimm->location[0])
+@@ -1114,10 +1116,12 @@ void edac_mc_handle_error(const enum hw_event_mc_e=
+rr_type type,
+ 			*p =3D '\0';
+ 		} else {
+ 			if (p !=3D e->label) {
+-				strcpy(p, OTHER_LABEL);
+-				p +=3D strlen(OTHER_LABEL);
++				strscpy(p, OTHER_LABEL, len);
++				len -=3D strlen(p);
++				p +=3D strlen(p);
+ 			}
+-			strcpy(p, dimm->label);
++			strscpy(p, dimm->label, len);
++			len -=3D strlen(p);
+ 			p +=3D strlen(p);
+ 		}
+
+@@ -1140,9 +1144,9 @@ void edac_mc_handle_error(const enum hw_event_mc_err=
+_type type,
+ 	}
+
+ 	if (any_memory)
+-		strcpy(e->label, "any memory");
++		strscpy(e->label, "any memory", sizeof(e->label));
+ 	else if (!*e->label)
+-		strcpy(e->label, "unknown memory");
++		strscpy(e->label, "unknown memory", sizeof(e->label));
+
+ 	edac_inc_csrow(e, row, chan);
+
+=2D-
+2.25.1
 
