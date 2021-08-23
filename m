@@ -2,32 +2,27 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8166B3F4020
-	for <lists+linux-edac@lfdr.de>; Sun, 22 Aug 2021 16:45:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B0FC3F4D6C
+	for <lists+linux-edac@lfdr.de>; Mon, 23 Aug 2021 17:25:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233648AbhHVOqS (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Sun, 22 Aug 2021 10:46:18 -0400
-Received: from mail.skyhub.de ([5.9.137.197]:40766 "EHLO mail.skyhub.de"
+        id S231295AbhHWPZW (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Mon, 23 Aug 2021 11:25:22 -0400
+Received: from mga06.intel.com ([134.134.136.31]:31009 "EHLO mga06.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233009AbhHVOqS (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Sun, 22 Aug 2021 10:46:18 -0400
-Received: from zn.tnic (p200300ec2f2da100ab464a00f653617a.dip0.t-ipconnect.de [IPv6:2003:ec:2f2d:a100:ab46:4a00:f653:617a])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id D7CB61EC04F0;
-        Sun, 22 Aug 2021 16:45:31 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1629643532;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=+ko0iIV7PBJ60c1KDZgQc1ufJ27j1ul9I7AoqKxARiY=;
-        b=NlPon99KIYT7hKfsgPyRomyJ5Jo8Eibb/z9KFjEyvd88ofgMAPic9jcT48uoK+KXnxUXdW
-        zw5+kpv/epGmlnmJQjtsCnh8zcuG3uHoac2gzdRN+t3Ews4sCCwu6BxWHPtIQ1t5qTBRBf
-        FD+PMv6vk5Mu2tbZWh5K4p0kl+kAlp0=
-Date:   Sun, 22 Aug 2021 16:46:14 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     "Luck, Tony" <tony.luck@intel.com>
+        id S229518AbhHWPZW (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Mon, 23 Aug 2021 11:25:22 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10085"; a="278136554"
+X-IronPort-AV: E=Sophos;i="5.84,344,1620716400"; 
+   d="scan'208";a="278136554"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Aug 2021 08:24:39 -0700
+X-IronPort-AV: E=Sophos;i="5.84,344,1620716400"; 
+   d="scan'208";a="526100722"
+Received: from agluck-desk2.sc.intel.com (HELO agluck-desk2.amr.corp.intel.com) ([10.3.52.146])
+  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Aug 2021 08:24:38 -0700
+Date:   Mon, 23 Aug 2021 08:24:37 -0700
+From:   "Luck, Tony" <tony.luck@intel.com>
+To:     Borislav Petkov <bp@alien8.de>
 Cc:     Jue Wang <juew@google.com>, Ding Hui <dinghui@sangfor.com.cn>,
         naoya.horiguchi@nec.com, osalvador@suse.de,
         Youquan Song <youquan.song@intel.com>, huangcun@sangfor.com.cn,
@@ -35,7 +30,7 @@ Cc:     Jue Wang <juew@google.com>, Ding Hui <dinghui@sangfor.com.cn>,
         linux-kernel@vger.kernel.org
 Subject: Re: [PATCH v2 1/3] x86/mce: Avoid infinite loop for copy from user
  recovery
-Message-ID: <YSJjNlTJiBx1v1SS@zn.tnic>
+Message-ID: <20210823152437.GA1637466@agluck-desk2.amr.corp.intel.com>
 References: <20210706190620.1290391-1-tony.luck@intel.com>
  <20210818002942.1607544-1-tony.luck@intel.com>
  <20210818002942.1607544-2-tony.luck@intel.com>
@@ -43,35 +38,58 @@ References: <20210706190620.1290391-1-tony.luck@intel.com>
  <20210820185945.GA1623421@agluck-desk2.amr.corp.intel.com>
  <YSACMCEoU6FxjDNh@zn.tnic>
  <20210820203356.GA1623896@agluck-desk2.amr.corp.intel.com>
+ <YSJjNlTJiBx1v1SS@zn.tnic>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210820203356.GA1623896@agluck-desk2.amr.corp.intel.com>
+In-Reply-To: <YSJjNlTJiBx1v1SS@zn.tnic>
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Fri, Aug 20, 2021 at 01:33:56PM -0700, Luck, Tony wrote:
-> The new version (thanks to All fixing iov_iter.c) now does
-> exactly what POSIX says should happen.  If I have a buffer
-> with poison at offset 213, and I do this:
+On Sun, Aug 22, 2021 at 04:46:14PM +0200, Borislav Petkov wrote:
+> On Fri, Aug 20, 2021 at 01:33:56PM -0700, Luck, Tony wrote:
+> > The new version (thanks to All fixing iov_iter.c) now does
+> > exactly what POSIX says should happen.  If I have a buffer
+> > with poison at offset 213, and I do this:
+> > 
+> > 	ret = write(fd, buf, 512);
+> > 
+> > Then the return from write is 213, and the first 213 bytes
+> > from the buffer appear in the file, and the file size is
+> > incremented by 213 (assuming the write started with the lseek
+> > offset at the original size of the file).
 > 
-> 	ret = write(fd, buf, 512);
-> 
-> Then the return from write is 213, and the first 213 bytes
-> from the buffer appear in the file, and the file size is
-> incremented by 213 (assuming the write started with the lseek
-> offset at the original size of the file).
+> ... and the user still gets a SIGBUS so that it gets a chance to handle
+> the encountered poison? I.e., not retry the write for the remaining 512
+> - 213 bytes?
 
-... and the user still gets a SIGBUS so that it gets a chance to handle
-the encountered poison? I.e., not retry the write for the remaining 512
-- 213 bytes?
+Whether the user gets a SIGBUS depends on what they do next.  In a typical
+user loop trying to do a write:
 
-If so, do we document that somewhere so that application writers can
-know what they should do in such cases?
+	while (nbytes) {
+		ret = write(fd, buf, nbytes);
+		if (ret == -1)
+			return ret;
+		buf += ret;
+		nbytes -= ret;
+	}
 
--- 
-Regards/Gruss,
-    Boris.
+The next iteration after the short write caused by the machine check
+will return ret == -1, errno = EFAULT.
 
-https://people.kernel.org/tglx/notes-about-netiquette
+Andy Lutomirski convinced me that the kernel should not send a SIGBUS
+to an application when the kernel accesses the poison in user memory.
+
+If the user tries to access the page with the poison directly they'll
+get a SIGBUS (page was unmapped so user gets a #PF, but the x86 fault
+handler sees that the page was unmapped because of poison, so sends a
+SIGBUS).
+
+> If so, do we document that somewhere so that application writers can
+> know what they should do in such cases?
+
+Applications see a failed write ... they should do whatever they would
+normally do for a failed write.
+
+-Tony
