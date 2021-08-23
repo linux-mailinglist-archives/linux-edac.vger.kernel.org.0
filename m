@@ -2,122 +2,104 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BFE3D3F4F7D
-	for <lists+linux-edac@lfdr.de>; Mon, 23 Aug 2021 19:30:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE4FF3F50A1
+	for <lists+linux-edac@lfdr.de>; Mon, 23 Aug 2021 20:45:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229479AbhHWRaq (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Mon, 23 Aug 2021 13:30:46 -0400
-Received: from mail.skyhub.de ([5.9.137.197]:42596 "EHLO mail.skyhub.de"
+        id S231716AbhHWSqc (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Mon, 23 Aug 2021 14:46:32 -0400
+Received: from mga02.intel.com ([134.134.136.20]:7614 "EHLO mga02.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229471AbhHWRap (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Mon, 23 Aug 2021 13:30:45 -0400
-Received: from zn.tnic (p200300ec2f07d9009c2198849783fa17.dip0.t-ipconnect.de [IPv6:2003:ec:2f07:d900:9c21:9884:9783:fa17])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 63E151EC0354;
-        Mon, 23 Aug 2021 19:29:57 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1629739797;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=k7kW0H/f78ipggRR3pMr7cXUnVjI28dbJ/hrQ806WjA=;
-        b=hDhXULFWcHFsoJBIsrfHxmwpgT3Wnl9sEleCLnWDCuz5POadrad9gy5ajW3R69VqkH+gH5
-        9K0Vr0mUo/r33+mjTLFeLTpCv/rZPsIGkCo79PEIkh4IMsknG5IJuzQARW/Ns9Myjbjs+G
-        dE1D547ttNlcLZzDNJGnSf6K/ahRXc0=
-Date:   Mon, 23 Aug 2021 19:30:34 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Len Baker <len.baker@gmx.com>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Tony Luck <tony.luck@intel.com>,
-        James Morse <james.morse@arm.com>,
-        Robert Richter <rric@kernel.org>,
-        Joe Perches <joe@perches.com>,
-        David Laight <David.Laight@aculab.com>,
-        Kees Cook <keescook@chromium.org>,
-        linux-hardening@vger.kernel.org, linux-edac@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4] EDAC/mc: Prefer strscpy over strcpy
-Message-ID: <YSPbOo90alPsv4vL@zn.tnic>
-References: <20210814075527.5999-1-len.baker@gmx.com>
+        id S231695AbhHWSqb (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Mon, 23 Aug 2021 14:46:31 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10085"; a="204360206"
+X-IronPort-AV: E=Sophos;i="5.84,344,1620716400"; 
+   d="scan'208";a="204360206"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Aug 2021 11:45:48 -0700
+X-IronPort-AV: E=Sophos;i="5.84,344,1620716400"; 
+   d="scan'208";a="535472897"
+Received: from agluck-desk2.sc.intel.com (HELO agluck-desk2.amr.corp.intel.com) ([10.3.52.146])
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Aug 2021 11:45:48 -0700
+Date:   Mon, 23 Aug 2021 11:45:47 -0700
+From:   "Luck, Tony" <tony.luck@intel.com>
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     x86@kernel.org, linux-edac@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Sumanth Kamatala <skamatala@juniper.net>
+Subject: Re: [PATCH] x86/mce/dev-mcelog: Call mce_register_decode_chain()
+ much earlier
+Message-ID: <20210823184547.GA1638691@agluck-desk2.amr.corp.intel.com>
+References: <20210819224452.1619400-1-tony.luck@intel.com>
+ <YR+f/fdGIxWcLTP2@zn.tnic>
+ <20210820144314.GA1622759@agluck-desk2.amr.corp.intel.com>
+ <YR/Oxark0bhLlona@zn.tnic>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210814075527.5999-1-len.baker@gmx.com>
+In-Reply-To: <YR/Oxark0bhLlona@zn.tnic>
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Sat, Aug 14, 2021 at 09:55:27AM +0200, Len Baker wrote:
-> strcpy() performs no bounds checking on the destination buffer. This
-> could result in linear overflows beyond the end of the buffer, leading
-> to all kinds of misbehaviors. The safe replacement is strscpy().
+On Fri, Aug 20, 2021 at 05:48:21PM +0200, Borislav Petkov wrote:
+> On Fri, Aug 20, 2021 at 07:43:14AM -0700, Luck, Tony wrote:
+> > How can the kernel tell that all consumers have registered? Is there
+> > some new kernel crystal ball functionality that can predict that an
+> > EDAC driver module is going to be loaded at some point in the future
+> > when user space is up and running :-)
 > 
-> This is a previous step in the path to remove the strcpy() function
-
-"previous step"?
-
-> entirely from the kernel.
+> The crystal ball is called mcheck_late_init(). There's even:
 > 
-> Signed-off-by: Len Baker <len.baker@gmx.com>
-
-...
-
-> diff --git a/drivers/edac/edac_mc.c b/drivers/edac/edac_mc.c
-> index f6d462d0be2d..7aea6c502316 100644
-> --- a/drivers/edac/edac_mc.c
-> +++ b/drivers/edac/edac_mc.c
-> @@ -1032,6 +1032,7 @@ void edac_mc_handle_error(const enum hw_event_mc_err_type type,
->  	int i, n_labels = 0;
->  	struct edac_raw_error_desc *e = &mci->error_desc;
->  	bool any_memory = true;
-> +	size_t len;
+>         /*
+>          * Flush out everything that has been logged during early boot, now that
+>          * everything has been initialized (workqueues, decoders, ...).
+>          */
+>         mce_schedule_work();
 > 
->  	edac_dbg(3, "MC%d\n", mci->mc_idx);
+> in there. That thing is late_initcall() and by that time mcelog should
+> have been registered. And I wonder why isn't that working as expected...
 > 
-> @@ -1086,6 +1087,7 @@ void edac_mc_handle_error(const enum hw_event_mc_err_type type,
->  	 */
->  	p = e->label;
->  	*p = '\0';
-> +	len = sizeof(e->label);
+> > I think the best we could do would be to set a timer for some point
+> > far enough out (one minute?, two minutes?) to give a chance for
+> > modules to load.
 > 
->  	mci_for_each_dimm(mci, dimm) {
->  		if (top_layer >= 0 && top_layer != dimm->location[0])
-> @@ -1114,10 +1116,12 @@ void edac_mc_handle_error(const enum hw_event_mc_err_type type,
->  			*p = '\0';
->  		} else {
->  			if (p != e->label) {
-> -				strcpy(p, OTHER_LABEL);
-> -				p += strlen(OTHER_LABEL);
-> +				strscpy(p, OTHER_LABEL, len);
+> Forget modules - only the built-in stuff. We cannot be waiting
+> indefinitely until someone loads mcelog for decoding.
 
-Hm, maybe I'm missing something but looking at that strscpy()
-definition, why aren't you doing:
+I added some traces:
 
-				num = strscpy(p, OTHER_LABEL, len);
-				if (num < 0)
-					/* just in case */
-					break;
+$ dmesg | grep mce:
+[    0.033648] mce: mce_register_decode_chain fn=mce_early_notifier+0x0/0x50 pri=6
+[    0.033655] mce: mce_register_decode_chain fn=uc_decode_notifier+0x0/0xd0 pri=5
+[    0.033659] mce: mce_register_decode_chain fn=mce_default_notifier+0x0/0x30 pri=0
+[    4.392631] mce: [Hardware Error]: Machine check events logged
+[    4.393356] mce: [Hardware Error]: CPU 0: Machine Check: 0 Bank 0: a000000000004321
+[    4.395352] mce: [Hardware Error]: TSC 0
+[    4.396352] mce: [Hardware Error]: PROCESSOR 0:406f1 TIME 1629743651 SOCKET 0 APIC 0 microcode b000019
+[   15.172861] mce: mce_register_decode_chain fn=dev_mce_log+0x0/0x110 pri=1
+[   15.192101] mce: mcheck_late_init: calling mce_schedule_work()
+[   31.618245] mce: mce_register_decode_chain fn=sbridge_mce_check_error+0x0/0x92 [sb_edac] pri=2
 
-				len -= num;
-				p   += num;
+So you are right that mcheck_late_init() is called after dev_mce_log()
+is registered.  But it seems someone kicks the queue long before that
+happens.  Probably this:
 
-since that function supposedly returns the number of chars copied.
+void mce_log(struct mce *m)
+{
+        if (!mce_gen_pool_add(m))
+                irq_work_queue(&mce_irq_work);
+}
 
-> +				len -= strlen(p);
-> +				p += strlen(p);
->  			}
-> -			strcpy(p, dimm->label);
-> +			strscpy(p, dimm->label, len);
-> +			len -= strlen(p);
->  			p += strlen(p);
+Could we add a flag:
 
-Ditto.
+static bool mce_ready_to_rock; // better name needed :-)
 
-Thx.
+Which gets set in mcheck_late_init(). Then mce_log() becomes:
 
--- 
-Regards/Gruss,
-    Boris.
+void mce_log(struct mce *m)
+{
+        if (!mce_gen_pool_add(m) && mce_ready_to_rock)
+                irq_work_queue(&mce_irq_work);
+}
 
-https://people.kernel.org/tglx/notes-about-netiquette
+-Tony
