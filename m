@@ -2,88 +2,127 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 448403FAD29
-	for <lists+linux-edac@lfdr.de>; Sun, 29 Aug 2021 18:59:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 816453FB323
+	for <lists+linux-edac@lfdr.de>; Mon, 30 Aug 2021 11:31:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235623AbhH2Qje (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Sun, 29 Aug 2021 12:39:34 -0400
-Received: from smtprelay0107.hostedemail.com ([216.40.44.107]:58348 "EHLO
-        smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S235595AbhH2Qjd (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>);
-        Sun, 29 Aug 2021 12:39:33 -0400
-Received: from omf19.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
-        by smtprelay05.hostedemail.com (Postfix) with ESMTP id 2902D180286D2;
-        Sun, 29 Aug 2021 16:38:40 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf19.hostedemail.com (Postfix) with ESMTPA id 8230820D751;
-        Sun, 29 Aug 2021 16:38:38 +0000 (UTC)
-Message-ID: <7b6dc45194f28db52740c2a604550f6879dafe36.camel@perches.com>
-Subject: Re: [PATCH v5] EDAC/mc: Prefer strscpy or scnprintf over strcpy
-From:   Joe Perches <joe@perches.com>
-To:     Len Baker <len.baker@gmx.com>, Borislav Petkov <bp@alien8.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Tony Luck <tony.luck@intel.com>,
-        James Morse <james.morse@arm.com>,
-        Robert Richter <rric@kernel.org>
-Cc:     David Laight <David.Laight@ACULAB.COM>,
-        Kees Cook <keescook@chromium.org>,
-        linux-hardening@vger.kernel.org, linux-edac@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Date:   Sun, 29 Aug 2021 09:38:37 -0700
-In-Reply-To: <20210829161547.6069-1-len.baker@gmx.com>
-References: <20210829161547.6069-1-len.baker@gmx.com>
-Content-Type: text/plain; charset="ISO-8859-1"
-User-Agent: Evolution 3.40.0-1 
+        id S235281AbhH3Jb6 (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Mon, 30 Aug 2021 05:31:58 -0400
+Received: from smtp-out2.suse.de ([195.135.220.29]:33944 "EHLO
+        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235652AbhH3Jb5 (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Mon, 30 Aug 2021 05:31:57 -0400
+Received: from imap1.suse-dmz.suse.de (imap1.suse-dmz.suse.de [192.168.254.73])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 8A18C20081;
+        Mon, 30 Aug 2021 09:31:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1630315863; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=fGw7X/4tGPPL8uwTZJfyYTN9c8KyFzMUk6wIEVD46Nw=;
+        b=lQZrv6O6EGP93LA2Du9cv9NXkWbMP2hKQPyCACGBqnScQw/EOgl0oWZphak0yxuA/90uxA
+        9OUtkpUURMHDr2tISrW7O+nI69ppWdlnEvoCASqXLR6ZbPbsqA7Ovy6LAePBu7+3+lxH0S
+        FKZlYl0ZcU2obwHdWdxG4qPi00DoGFo=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1630315863;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=fGw7X/4tGPPL8uwTZJfyYTN9c8KyFzMUk6wIEVD46Nw=;
+        b=wk74GIDS/gN4iIYtq1CZkgWAhHRTQa9kUsUMNXoYHl0tvP48rY3VDMpYK3Y54OpLpDYAsh
+        LjlKqeCbWaGU1mCA==
+Received: from imap1.suse-dmz.suse.de (imap1.suse-dmz.suse.de [192.168.254.73])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap1.suse-dmz.suse.de (Postfix) with ESMTPS id 794691365C;
+        Mon, 30 Aug 2021 09:31:03 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap1.suse-dmz.suse.de with ESMTPSA
+        id p/8hHVelLGHYNgAAGKfGzw
+        (envelope-from <bp@suse.de>); Mon, 30 Aug 2021 09:31:03 +0000
+Date:   Mon, 30 Aug 2021 11:31:32 +0200
+From:   Borislav Petkov <bp@suse.de>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-edac <linux-edac@vger.kernel.org>,
+        lkml <linux-kernel@vger.kernel.org>
+Subject: [GIT PULL] EDAC updates for v5.15
+Message-ID: <YSyldBbc4ngIMUhS@zn.tnic>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.10
-X-Stat-Signature: kjeub665hd3eemhd18azphncp68gyjyo
-X-Rspamd-Server: rspamout02
-X-Rspamd-Queue-Id: 8230820D751
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Session-ID: U2FsdGVkX1+6+/+VJDwyfpXsLyBJWe/JoPn23k2/juA=
-X-HE-Tag: 1630255118-696944
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Sun, 2021-08-29 at 18:15 +0200, Len Baker wrote:
-> strcpy() performs no bounds checking on the destination buffer. This
-> could result in linear overflows beyond the end of the buffer, leading
-> to all kinds of misbehaviors. The safe replacement is strscpy() [1].
-> 
-> However, to simplify and clarify the code, to concatenate labels use
-> the scnprintf() function. This way it is not necessary to check the
-> return value of strscpy (-E2BIG if the parameter count is 0 or the src
-> was truncated) since the scnprintf returns always the number of chars
-> written into the buffer. This function returns always a nul-terminated
-> string even if it needs to be truncated.
-[]
-> diff --git a/drivers/edac/edac_mc.c b/drivers/edac/edac_mc.c
-[]
-> @@ -1113,12 +1116,11 @@ void edac_mc_handle_error(const enum hw_event_mc_err_type type,
-> †			p = e->label;
-> †			*p = '\0';
-> †		} else {
-> -			if (p != e->label) {
-> -				strcpy(p, OTHER_LABEL);
-> -				p += strlen(OTHER_LABEL);
-> -			}
-> -			strcpy(p, dimm->label);
-> -			p += strlen(p);
-> +			const char *or = (p != e->label) ? OTHER_LABEL : "";
-> +
-> +			n = scnprintf(p, len, "%s%s", or, dimm->label);
-> +			len -= n;
-> +			p += n;
+Hi Linus,
 
-A very common and intelligible mechanism for this is:
+here's the usual boring EDAC pull request of stuff which managed to
+trickle in for 5.15.
 
-	const char *prefix = "";
-	int n = 0;
-	...
-			n += scnprintf(e->label + n, sizeof(e->label) - n,
-				       "%s%s", prefix, dimm->label);
-			prefix = " or ";
+Please pull,
+thx.
 
+---
 
+The following changes since commit e73f0f0ee7541171d89f2e2491130c7771ba58d3:
+
+  Linux 5.14-rc1 (2021-07-11 15:07:40 -0700)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/ras/ras.git tags/edac_updates_for_v5.15
+
+for you to fetch changes up to cf4e6d52f58399c777276172ec250502e19d5e63:
+
+  EDAC/i10nm: Retrieve and print retry_rd_err_log registers (2021-08-23 10:35:36 -0700)
+
+----------------------------------------------------------------
+- Add new HBM2 (High Bandwidth Memory Gen 2) type and add support for it
+to the Intel SKx drivers
+
+- Print additional useful per-channel error information on i10nm, like on SKL
+
+- Check whether the AMD decoder is loaded on a guest and if so, don't
+
+- The usual round of fixes and cleanups
+
+----------------------------------------------------------------
+Dwaipayan Ray (1):
+      EDAC/amd64: Use DEVICE_ATTR helper macros
+
+Krzysztof Kozlowski (1):
+      EDAC/altera: Skip defining unused structures for specific configs
+
+Naveen Krishna Chatradhi (1):
+      EDAC/mc: Add new HBM2 memory type
+
+Qiuxu Zhuo (2):
+      EDAC/skx_common: Set the memory type correctly for HBM memory
+      EDAC/i10nm: Fix NVDIMM detection
+
+Smita Koralahalli (1):
+      EDAC/mce_amd: Do not load edac_mce_amd module on guests
+
+Youquan Song (1):
+      EDAC/i10nm: Retrieve and print retry_rd_err_log registers
+
+ drivers/edac/altera_edac.c |  44 +++++++------
+ drivers/edac/amd64_edac.c  |  21 +++----
+ drivers/edac/edac_mc.c     |   1 +
+ drivers/edac/i10nm_base.c  | 152 ++++++++++++++++++++++++++++++++++++++++++++-
+ drivers/edac/mce_amd.c     |   3 +
+ drivers/edac/skx_base.c    |   3 +-
+ drivers/edac/skx_common.c  |   9 ++-
+ drivers/edac/skx_common.h  |   7 ++-
+ include/linux/edac.h       |   3 +
+ 9 files changed, 205 insertions(+), 38 deletions(-)
+
+-- 
+Regards/Gruss,
+    Boris.
+
+SUSE Software Solutions Germany GmbH, GF: Felix Imend√∂rffer, HRB 36809, AG N√ºrnberg
