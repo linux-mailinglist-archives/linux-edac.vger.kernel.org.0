@@ -2,152 +2,269 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AABF3FE24C
-	for <lists+linux-edac@lfdr.de>; Wed,  1 Sep 2021 20:18:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF8BC3FE279
+	for <lists+linux-edac@lfdr.de>; Wed,  1 Sep 2021 20:42:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344384AbhIASTa (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Wed, 1 Sep 2021 14:19:30 -0400
-Received: from mail-dm6nam10on2063.outbound.protection.outlook.com ([40.107.93.63]:27889
-        "EHLO NAM10-DM6-obe.outbound.protection.outlook.com"
+        id S236651AbhIASne (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Wed, 1 Sep 2021 14:43:34 -0400
+Received: from mail-dm3nam07on2043.outbound.protection.outlook.com ([40.107.95.43]:45408
+        "EHLO NAM02-DM3-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S230063AbhIAST3 (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Wed, 1 Sep 2021 14:19:29 -0400
+        id S232127AbhIASne (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Wed, 1 Sep 2021 14:43:34 -0400
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Z/PpR0pPESDXHqMdeGoDqAPt40iPm6ilj4HKL7CTsWSVhFu3VtfMWW6QLPDFUp0yRCHR6knb8WB6PYULddhhxvdtoczEJeodb+Py9YPx1+QY+v3hFPCy+KmOSrCKKfxIGMz+8WfXn0oeVcWe3x7OaJvcM2jBxU4QNDm90K3tRsab5RjG0Twbw+0q1513OoUp7kIZmxAch8CsRPgQOKWLd8Oxfo35gPJ9tGAgzK4IVzZuSylRY3/PhrOzAnSiijOgZ+7ZUSnKdk+bz94cJ8WxJVVuEWDShNoyzEYKq0CnnGpQMIqQE7CPvKb9YJKtCo5iJTGqI1O//7AYygW7caoWEA==
+ b=lEdKguLI9HRR1XBxBDj5FTxJcQk3V/QgPwZErQyNcoy8RYD6ibQInIqBB0mcaajhozyJ41obcoLr8CbhEHRD/AEEk4bAyFDG6akvd9qsuQ/hdKojOMH3wy8Q3kkss0lKiH6/PKgP7wD5lUs+YtdVbTl9aISIXfel8thPmJFI75YGVggV5iGU5DvcyuhwOEmj7b1Z31zeF3V47QHTOHbFO/0QGsn+pgE1z+iw/XhF8qtJhDUU1aOY3ELJTxe1p5Gd19y1C6OW33AC246N/AKehsRhOmHLTmlIb43JtEy4KHh6yCibdWVAzQo/xb4QNtkCjSx9FiJLN2SDZ5sSWi5ahQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901; h=From:Date:Subject:Message-ID:Content-Type:MIME-Version;
- bh=9n5l/tS/u7ZOPk6oHWpGFCayY1q4ZPWK0vA08De+hg8=;
- b=GmAufKG8U36pUrNUhcHiXnBu6j4iGNOlcy/TbYbzg6LU6ipyF2rIo1n9ROLD9W82i8Ru4wpYgYH25UNIpuNgNNO386wiBH/Wu8E4LGEFlh0gpcKV2cjBMGWLIF6HzzjjDdmLsmDQneHoSY4L5TavtSxViITRtFoxfufOThsnNYlTDrqmcn9MOQfQghossrc5dBAtbEE2R/eNN9sD6l3OtNXF0Hi/rpJkeyGaXdEYfJ50U4NyIikm3ezz7oiVCBRYB0qXCvo6bjg4DFHPMqJfrkmnGRJDaGm1jxLFGwIfHyq93DY6XXneW+Ui94IesgUfDLQMxCVFwMhbI+pxn0JYJQ==
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=QFfYc2fbnST4CV4Hykh76Ugrnbn8wPdYxuVOU8n/oIQ=;
+ b=XHHDx6nq9mdtk21BQPpi444W9ToW0eMZEi7FJfFoZ06+UW/Mgw2Uh17VATnm8dIhc5GqTcDIJ1MRUCAfAWwkbhRGZoFOflInfWS8K6vOk18+ESznendRLdMsSrpzI5sIZg6YIBVp6gZqjpw9bar6g0CeNhLacjs091ZlfUx58D4SwgPnh2rYlBCZovxwJh1LGGkx4qZtztnRGoVVp27t/0GdQpyD1A/3aU+yjDOugzwr0xHN/boKPp5i11n1HlTRhOqdEm+b4vxf5cKnuVdQjOgRrYTULUAowKLXrN4JvvOC28zFB+mspEYyHHEPpDswZTGYOmL16jGCD+xj3Tc/Uw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
  header.d=amd.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=9n5l/tS/u7ZOPk6oHWpGFCayY1q4ZPWK0vA08De+hg8=;
- b=nczQwGqS2fRDCgJrUSs6x1hxJxu+1wHMxfUPgapl+B/scHQAeKAE5cHoZwZOTJA24/MqFW81Bl3HHJt/4YHV+Sr/V5Katvh9KHVGmqAMmVAq6Mybw1aFbUfLvwToja8SHh4H8+6vthZKvsg7iVdAqU/bbJ2SIUFYB0cvGuPJf/o=
+ bh=QFfYc2fbnST4CV4Hykh76Ugrnbn8wPdYxuVOU8n/oIQ=;
+ b=KRtvTMotZwoJH2KNut6q1rNfDeNQmH2PE9+C9HMXTXo1vUN2UdeqP0kuSx/PEsw8J6rbYU1Lf97ne2VO37FhNO56BbQFRc9nwdaaToTvXX4LuWMzXCyv4BGAJYONJ2h65UXxl2H41RSBfEUVtunt0noWaL++YfumR3Pq2WeyBZQ=
 Authentication-Results: alien8.de; dkim=none (message not signed)
  header.d=none;alien8.de; dmarc=none action=none header.from=amd.com;
 Received: from BN8PR12MB3108.namprd12.prod.outlook.com (2603:10b6:408:40::20)
- by BN6PR12MB1121.namprd12.prod.outlook.com (2603:10b6:404:1c::16) with
+ by BN6PR1201MB2481.namprd12.prod.outlook.com (2603:10b6:404:a7::10) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4478.17; Wed, 1 Sep
- 2021 18:18:30 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4457.23; Wed, 1 Sep
+ 2021 18:42:35 +0000
 Received: from BN8PR12MB3108.namprd12.prod.outlook.com
  ([fe80::dd2d:805d:50ad:33c5]) by BN8PR12MB3108.namprd12.prod.outlook.com
  ([fe80::dd2d:805d:50ad:33c5%7]) with mapi id 15.20.4457.025; Wed, 1 Sep 2021
- 18:18:29 +0000
-Date:   Wed, 1 Sep 2021 18:18:26 +0000
+ 18:42:35 +0000
+Date:   Wed, 1 Sep 2021 18:42:26 +0000
 From:   Yazen Ghannam <yazen.ghannam@amd.com>
 To:     Borislav Petkov <bp@alien8.de>
 Cc:     Naveen Krishna Chatradhi <nchatrad@amd.com>,
         linux-edac@vger.kernel.org, x86@kernel.org,
         linux-kernel@vger.kernel.org, mchehab@kernel.org,
         Muralidhara M K <muralimk@amd.com>
-Subject: Re: [PATCH v3 2/3] EDAC/mce_amd: Extract node id from MCA_IPID
-Message-ID: <YS/D8poNYktPKUke@yaz-ubuntu>
+Subject: Re: [PATCH v3 3/3] EDAC/amd64: Enumerate memory on noncpu nodes
+Message-ID: <YS/JkgWA8VreIx1R@yaz-ubuntu>
 References: <20210806074350.114614-4-nchatrad@amd.com>
  <20210823185437.94417-1-nchatrad@amd.com>
- <20210823185437.94417-3-nchatrad@amd.com>
- <YSi9Xbm6K/VuMv/Z@zn.tnic>
+ <20210823185437.94417-4-nchatrad@amd.com>
+ <YSjM8b9vvkmRew94@zn.tnic>
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YSi9Xbm6K/VuMv/Z@zn.tnic>
-X-ClientProxiedBy: BN6PR20CA0056.namprd20.prod.outlook.com
- (2603:10b6:404:151::18) To BN8PR12MB3108.namprd12.prod.outlook.com
+In-Reply-To: <YSjM8b9vvkmRew94@zn.tnic>
+X-ClientProxiedBy: BN8PR12CA0029.namprd12.prod.outlook.com
+ (2603:10b6:408:60::42) To BN8PR12MB3108.namprd12.prod.outlook.com
  (2603:10b6:408:40::20)
 MIME-Version: 1.0
 X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from yaz-ubuntu (165.204.25.250) by BN6PR20CA0056.namprd20.prod.outlook.com (2603:10b6:404:151::18) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4478.19 via Frontend Transport; Wed, 1 Sep 2021 18:18:29 +0000
+Received: from yaz-ubuntu (165.204.25.250) by BN8PR12CA0029.namprd12.prod.outlook.com (2603:10b6:408:60::42) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4478.19 via Frontend Transport; Wed, 1 Sep 2021 18:42:34 +0000
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 2309d4d0-964d-4f1f-5034-08d96d74e64c
-X-MS-TrafficTypeDiagnostic: BN6PR12MB1121:
+X-MS-Office365-Filtering-Correlation-Id: 20f08b25-018e-4b2c-09a0-08d96d78438f
+X-MS-TrafficTypeDiagnostic: BN6PR1201MB2481:
 X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <BN6PR12MB112156974CE00C928EF0E88FF8CD9@BN6PR12MB1121.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:411;
+X-Microsoft-Antispam-PRVS: <BN6PR1201MB2481B4F537D92C625268B6A3F8CD9@BN6PR1201MB2481.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:2449;
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: luLwX+/Ym0Vx3i+N5IsLxCV6Pj7it3zZ9R8WJg1VPZ5dDH3HRL5Y7iioBDVMhZyZHfviJz1Ryhz3WdOCl2juKZgTQ8QbvmxJKP258ZlUZ0J4UNcEOff5vNMS9NeZC5fNSZId4KvHnk54QeVqPaNUGY1SLgHuV//YwrmsELDxKsdEGiQAHC/VyXv/Fh3PXNgqMKJrvqqjuPdXw7hJlZAmSOpR14gSkQM8NZKydi6kp0HdeyiVj829y68FyGv+ihWxAzYRTONz3NB+wDe1FOKNKko5fVlR4k1pvECb1NxiJTfXuAKixjrh6WPHInkZs+tgKf4SdLquTEovzsoSF+QbLxTw0IrFedZTrTOn9dSqX/Jdw/fDi+vSnbamwOUxDj2UIpxu4dSOTQDDdQjWO05Ahng5jl8vIU5zqdqmW+VYYBMvT9bnI17+86sDu0piMzTsSb/1z8Ln3yuMu8/hOs5s7zrlxnu0LTaoVqmz1WPwNRzY0r7CdQfhwzd0ld4WpjO1UpdTnZguElB6aeQYzgMNiCPMkUvdRPswRZB6lc/gmVL9jGmgTBkXJB6QTa3QyAuo9imf6bWJBIY8F6d2F3DRI9tNhrdOKAv2MWkGFIG5xXQEBFBtCqipbqSpu+SKBC1HnCgInmpwa2yNhlkK60Fupg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3108.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(136003)(39860400002)(376002)(396003)(346002)(9686003)(186003)(2906002)(55016002)(26005)(316002)(66476007)(4326008)(44832011)(54906003)(66556008)(66946007)(5660300002)(33716001)(6496006)(83380400001)(8936002)(38100700002)(6916009)(956004)(478600001)(8676002)(86362001)(6666004);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: NJAoEWfAn915lkYuN8/+Jmn8fnQIWbNuf9CH4WBhlLPUAjMWdJZES6Ze2kSJ1uJWp45V9SHqqCmmFLDfezWg/xBXhA0862zf+M9Di/TgixAouzLLrILG3OznzG5a1IER5uonkk+YoafopuZ8Al6CXfj+0VyncmORzRKOYptzwX0UrJjF1nagu6B+F6Pa2tJsM/qi1He9Yp/EkUBvycRRQsz7qqBSrtpIGbzM2uYf4QuaiS+XxZ0AKMXalYAkabP3mqaHTvRDMiD3XTsZnocy97UM30jPXBumQRV5KunJl6RgdDUWkfoSByKPMmYYQV/jMgQ+M+LKcXofXzb8HWbEyx7hB0DYQjjsnfBXFd4j299xDBzQu/6qqKTqFQusmJHgJOvipUcbiugbocERkClJmbvsx8sN+s1UxRLhd97cVuRnLhMAtm26Ue7FXZW4A87u6LAcEPKCC9tmxwaWZYl8iRivUHQPrsG4ZvvxeLkzBub6eWXJRggYB+WH3QC+DNOtATwRryaof6t3/ok3ChtxWtiAZ0VKUBjxg4fH41CYIP+EED3RDMHQpzn1KvQMkbKeRdnf6hQyGHjD2eEvyWgsXoIcic0AsOa1OAz/oj+UtXTjCXQeRCx/wzW3V9zTlnv3+mJ2FpNyuxAHebS4FMvaTQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3108.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(396003)(136003)(376002)(366004)(346002)(39860400002)(66476007)(38100700002)(66946007)(478600001)(66556008)(186003)(33716001)(26005)(8676002)(44832011)(5660300002)(6916009)(55016002)(4326008)(9686003)(86362001)(2906002)(316002)(956004)(54906003)(83380400001)(8936002)(6666004)(6496006);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?ME7U56O9BxrFFxFnWPLXFRIb2iYPiEIbY25Mo5xN1FligzULwT3STLbw9BQw?=
- =?us-ascii?Q?/y+8IoXgODxSEFVXFelTEVQThMI0CPXpJuoQ4tmiGoj1HVzyRqlwkGN0tIjm?=
- =?us-ascii?Q?7IB/qLu8XZTjlt8qy/bEOdV3Da81fMMRXEXFhY75Sb4JC0cXbkU087zE5fDo?=
- =?us-ascii?Q?SStMAVuqeoEqjOh3MR+Ve9FZMBsQAPQYC+rz3dkzxcWTk2Hj0P1qj7YZ3I9x?=
- =?us-ascii?Q?XKJX3MSO2TxOJgh+2xdlyXCBp+5a8SsvIK7eb9dFs2qOa/p+wB0gKaInDCUM?=
- =?us-ascii?Q?DvkMgribO20oeaUNYfo9QFEkQKaDslUUYOi9bRw76nUT/vtwdB6fyqwYvjkw?=
- =?us-ascii?Q?4STkzjUWrJwp8MnyPe8Kk7VeEOXQ2tSUujaD7g7U7otcJDt5MzZD7FickgpK?=
- =?us-ascii?Q?V7fLjGX0/nMtmUsWiuyX6EE/z2rSWd+SYhwze+xLEq2l/VWulzF05jMECUoF?=
- =?us-ascii?Q?9djr/U7nW/1mLkQByNw/4WtgzWL5pCe2JxmVBEAIN1pUJ+4wV7xRD+Yjz8Fs?=
- =?us-ascii?Q?QEJvg1iThvKsI310q0w8nL5C+h5oOTEA/TsLEvnUb2tUKo0yJZFXagidi9wp?=
- =?us-ascii?Q?jG1PcVImI8RCHF/gYrgeUaKVaQKnk/qRqOoSyTUv4IWMMBKXW2iH2YuFSPaz?=
- =?us-ascii?Q?39rAI7MsZQW3HmjgXebbcd2EYas9Mg4uNFZluOOQKz+JXlTtycWkScRSTkmC?=
- =?us-ascii?Q?W8wnmX4OdAUTzuhEBBNTv5srRPWRIsAM4X1tsxjnZGwR5MW2gl4PZz9kpfaH?=
- =?us-ascii?Q?WJnCEbpxwi5Y2R91IBBegsamdOMgmDNgOSM4ZKVkjwzMnqUOR8nQUs01OxY3?=
- =?us-ascii?Q?JInLC42hHvR6y0KjUrb7XaXSvkxpfObXUeaJcMOja/V/wQEkbE9cXepMr6G9?=
- =?us-ascii?Q?+rch7Cp2UGtnbXT59n+L2pC47pvXin/PaOB1z9mb/kC/2gt3MVRGPDvWXFaP?=
- =?us-ascii?Q?haBBR+7GbTYrSmXOfm9pLTCsledoV4SitHCpRxlDiC3inr0Cwi8Ag/BkrRex?=
- =?us-ascii?Q?+ie2oIA21Eg5/bWb4iyCW29UauzwoqfIXSJ5V/wJduyuYcIybU7CrdMuXpzI?=
- =?us-ascii?Q?PKcAjxo/UX+S8nImwX4/t1ULOrIwd3+UcCGui0wfaSXxGwlU2qB5MUQ3th+f?=
- =?us-ascii?Q?2OkgFoME1i1FNRaYS62gxhHqF86HxTukKZAvXvVKYCJVnrNfzY5KgN7B9kpi?=
- =?us-ascii?Q?fAWGs98VDDNLbU8f8in6CIF4RHur+TxCUtB8hMAzDVBpdnoQxCPUk+vCWalj?=
- =?us-ascii?Q?fnPTKdIHDXSqCChQSEhmOGsFvEAEcAoZI9R36ejDm0ofSsffD8aXb0Arz+HM?=
- =?us-ascii?Q?AQ/YcGjZlsUff/VRhPMxNp6B?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?ySwHD83kiwwYdZlUJHd8V5UcZgQattHCtakDAuaKexV1YnBpY4b4EzkTJrIn?=
+ =?us-ascii?Q?P5Xf7MSMXLeg5YcJrARFRLGn2kn9d7pgmReiY0iFyvR8nAYR+YGqlMJbNJcY?=
+ =?us-ascii?Q?qRCA50dbpEdysTT/k5nfFU7pyCJjbWWu4b/fIzM3U+mrxTiZ0EAbAbyMcZGW?=
+ =?us-ascii?Q?6okJA+wUCWssBItFPsP9XKTW7kKPVH93Lx3ufjzaVY6mPAssvziXIUec8G+w?=
+ =?us-ascii?Q?GC4zBN9rpLcJItKkilpe4nz8r/KwI7bQ6Tyqdb6HI3/mHAJ4kGxQanRcpNDA?=
+ =?us-ascii?Q?3HRuRAIVzK84fU4buXeHQsMolp78KvrtV2VpyslEAcR87Y4HfQDVe2KrW4Eq?=
+ =?us-ascii?Q?1ib0WXN04f6OAEVEZCSZlRRygfs/makYcqPw+YQaYQ8NUxoDfGDgUnLie8Ih?=
+ =?us-ascii?Q?EkLEfSxqyLixdJFvwbYszxXXGMvF5olAv3TUxturcP8OAfCbfQmcgHpRaR5l?=
+ =?us-ascii?Q?l9jr+02sDI4tKra1/fm7115d6EqKTQGIRcxtgBeO8SyMg4XaIBj6g1KUMUoh?=
+ =?us-ascii?Q?vm14FH/Wg65D8JBXJx3GA19sszu1q+xSnB84OK+DMeNYsG1E54RtFdsTyFDV?=
+ =?us-ascii?Q?eC/L5E/WpDwCyO1Uh2Y1Q20xY4OjJLkzzo56+K6GULJOo8BkPONb/zbEZoyq?=
+ =?us-ascii?Q?m7lYRrG/wSAKLwOkbIdQOBszqvCwv9LlmOqx643Twa7OLAVz3M21cjnYSz3G?=
+ =?us-ascii?Q?3Q/X5wjGKKz6tMBcOGeUKuGneqmRP16Ug9W7b0+R8IbgXIIOH+GMiUGoBFo9?=
+ =?us-ascii?Q?Hq/+r39PflKT7nVx55v3drOSGTzPDQbAiTOfZYeUz/6ZW3+6qCUEk4Rc7n08?=
+ =?us-ascii?Q?aECS3kpAYQ8THVhvpmR5YfO2ekiPUSnpG+oEdQ3pPyndUIhwfr3dNIs1gKuX?=
+ =?us-ascii?Q?cwUtRLo2Tj1enE4vT4IKEekIYcB0+WytriobWzKer0Ix/kmyWje5z7sYU+4v?=
+ =?us-ascii?Q?6cXHMJzXnkTgn2ryEy71pa5rykzuwfHoezQ0zjCYQ8z+F0FodRW032RSX7rE?=
+ =?us-ascii?Q?wRcGZWp/wyiFBVcjWAuEnRzaHA2o6/nVmL+sC1qCCSq9pQcQGOl8mfAX6OPW?=
+ =?us-ascii?Q?dxUQZ4qE1trbcxSfyDKan/nt3RcQI1Chu3k1t2i9XEJlSJdrXhM/tuPd/XQf?=
+ =?us-ascii?Q?wDCnngvir+uroJV3FD2snrA/AtTYE+KSiCs+uTqdHfxahhUsqAhFbaLqwzBx?=
+ =?us-ascii?Q?anm+2J/g7uO5WcasYouVwyVZimhpbasR0tshlRImvHeOPbQGr0rhHDir6All?=
+ =?us-ascii?Q?/XfAgqzWTRa+/ANcLWZoFkl4ckG3TrM4ym/GjfYQLtmaAGSMagd9goI8h1Ip?=
+ =?us-ascii?Q?x/DkA7NCKn4nW+dfmW+CCZDv?=
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2309d4d0-964d-4f1f-5034-08d96d74e64c
+X-MS-Exchange-CrossTenant-Network-Message-Id: 20f08b25-018e-4b2c-09a0-08d96d78438f
 X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3108.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Sep 2021 18:18:29.8160
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Sep 2021 18:42:34.9075
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: SImk0aE8z5SLSCiBbBl2L7MoAxPI7CXCXCm5aGP8YV1qii8HVQz6O6VClqp/b9rQDVJn342dLSGmgilRJnwf7Q==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN6PR12MB1121
+X-MS-Exchange-CrossTenant-UserPrincipalName: mbxSqSxghhlMXmOCp3DcNAvTysDdpGuoKJlO374KHH9xPxUdXXyO6v6GczL/aClOBU7T2hr67Vmrc3zN+tJ3uA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN6PR1201MB2481
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Fri, Aug 27, 2021 at 12:24:29PM +0200, Borislav Petkov wrote:
-> On Tue, Aug 24, 2021 at 12:24:36AM +0530, Naveen Krishna Chatradhi wrote:
-> > On SMCA banks of the NONCPU nodes, the node id information is
-> > available in MCA_IPID[47:44](InstanceIdHi).
-> > 
-> > Signed-off-by: Muralidhara M K <muralimk@amd.com>
-> > Signed-off-by: Naveen Krishna Chatradhi <nchatrad@amd.com>
-> > Reviewed-by: Yazen Ghannam <yazen.ghannam@amd.com>
-> > ---
-> > Changes since v2:
-> > 1. Modified subject and commit message
-> > 2. Added Reviewed by Yazen Ghannam
-> > 
-> >  drivers/edac/mce_amd.c | 19 +++++++++++++++++--
-> >  1 file changed, 17 insertions(+), 2 deletions(-)
-> > 
-> > diff --git a/drivers/edac/mce_amd.c b/drivers/edac/mce_amd.c
-> > index 27d56920b469..1398032ba25a 100644
-> > --- a/drivers/edac/mce_amd.c
-> > +++ b/drivers/edac/mce_amd.c
-> > @@ -1072,8 +1072,23 @@ static void decode_smca_error(struct mce *m)
-> >  	if (xec < smca_mce_descs[bank_type].num_descs)
-> >  		pr_cont(", %s.\n", smca_mce_descs[bank_type].descs[xec]);
+On Fri, Aug 27, 2021 at 01:30:57PM +0200, Borislav Petkov wrote:
+> On Tue, Aug 24, 2021 at 12:24:37AM +0530, Naveen Krishna Chatradhi wrote:
+
+...
+
+> > @@ -1335,6 +1392,11 @@ static void determine_memory_type(struct amd64_pvt *pvt)
+> >  	u32 dram_ctrl, dcsm;
 > >  
-> > -	if (bank_type == SMCA_UMC && xec == 0 && decode_dram_ecc)
-> > -		decode_dram_ecc(topology_die_id(m->extcpu), m);
-> > +	if (xec == 0 && decode_dram_ecc) {
-> > +		int node_id = 0;
-> > +
-> > +		if (bank_type == SMCA_UMC) {
-> > +			node_id = topology_die_id(m->extcpu);
-> > +		} else if (bank_type == SMCA_UMC_V2) {
-> > +			/*
-> > +			 * SMCA_UMC_V2 is used on the noncpu nodes, extract
+> >  	if (pvt->umc) {
+> > +		if (pvt->is_noncpu) {
+> > +			pvt->dram_type = MEM_HBM2;
+> > +			return;
+> > +		}
 > 
-> Above "NONCPU", here "noncpu", I don't like that "noncpu" nomenclature.
-> I wonder if we can do without it...
+> I don't like this sprinkling of "if (pvt->is_noncpu)" everywhere,
+> at all. Please define a separate read_mc_regs_df() or so which
+> contains only the needed functionalty which you can carve out from
+> read_mc_regs().
 >
 
-Yeah, I think that's fair.
+I like this idea.
+ 
+> > +
+> >  		if ((pvt->umc[0].dimm_cfg | pvt->umc[1].dimm_cfg) & BIT(5))
+> >  			pvt->dram_type = MEM_LRDDR4;
+> >  		else if ((pvt->umc[0].dimm_cfg | pvt->umc[1].dimm_cfg) & BIT(4))
+> > @@ -1724,7 +1786,10 @@ static int f17_early_channel_count(struct amd64_pvt *pvt)
+> >  
+> >  	/* SDP Control bit 31 (SdpInit) is clear for unused UMC channels */
+> >  	for_each_umc(i)
+> > -		channels += !!(pvt->umc[i].sdp_ctrl & UMC_SDP_INIT);
+> > +		if (pvt->is_noncpu)
+> > +			channels += pvt->csels[i].b_cnt;
+> > +		else
+> > +			channels += !!(pvt->umc[i].sdp_ctrl & UMC_SDP_INIT);
+> >  
+> >  	amd64_info("MCT channel count: %d\n", channels);
+> >  
+> 
+> No, a separate gpu_early_channel_count() is needed here. There's a
+> reason for those function pointers getting assigned depending on family.
+>
+
+Good point.
+ 
+...
+> > +/*
+> > + * The CPUs have one channel per UMC, So a UMC number is equivalent to a
+> > + * channel number. The NONCPUs have 8 channels per UMC, so the UMC number no
+> > + * longer works as a channel number.
+> > + * The channel number within a NONCPU UMC is given in MCA_IPID[15:12].
+> > + * However, the IDs are split such that two UMC values go to one UMC, and
+> > + * the channel numbers are split in two groups of four.
+> > + *
+> > + * Refer comment on get_noncpu_umc_base() from amd64_edac.h
+> > + *
+> > + * For example,
+> > + * UMC0 CH[3:0] = 0x0005[3:0]000
+> > + * UMC0 CH[7:4] = 0x0015[3:0]000
+> > + * UMC1 CH[3:0] = 0x0025[3:0]000
+> > + * UMC1 CH[7:4] = 0x0035[3:0]000
+> > + */
+> > +static int find_umc_channel_noncpu(struct mce *m)
+> > +{
+> > +	u8 umc = find_umc_channel(m);
+> > +	u8 ch = ((m->ipid >> 12) & 0xf);
+> > +
+> > +	return umc % 2 ? (ch + 4) : ch;
+> > +}
+> > +
+> >  static void decode_umc_error(int node_id, struct mce *m)
+> >  {
+> >  	u8 ecc_type = (m->status >> 45) & 0x3;
+> > @@ -2897,6 +3003,7 @@ static void decode_umc_error(int node_id, struct mce *m)
+> >  	struct amd64_pvt *pvt;
+> >  	struct err_info err;
+> >  	u64 sys_addr;
+> > +	u8 df_inst_id;
+> 
+> You don't need that variable and can work with err.channel just fine.
+> 
+> >  	mci = edac_mc_find(node_id);
+> >  	if (!mci)
+> > @@ -2909,7 +3016,22 @@ static void decode_umc_error(int node_id, struct mce *m)
+> >  	if (m->status & MCI_STATUS_DEFERRED)
+> >  		ecc_type = 3;
+> >  
+> > -	err.channel = find_umc_channel(m);
+> > +	if (pvt->is_noncpu) {
+> > +		/*
+> > +		 * The NONCPUs have one Chip Select per UMC, so the UMC number
+> > +		 * can used as the Chip Select number. However, the UMC number
+> > +		 * is split in the ID value so it's necessary to divide by 2.
+> > +		 */
+> > +		err.csrow = find_umc_channel(m) / 2;
+> > +		err.channel = find_umc_channel_noncpu(m);
+> > +		/* On NONCPUs, instance id is calculated as below. */
+> > +		df_inst_id = err.csrow * 8 + err.channel;
+> 
+> 		err.channel += err.csrow * 8;
+> 
+> tadaaa!
+>
+
+err.channel still needs to be used in error_address_to_page_and_offset()
+below. So changing it here messes up what's reported to EDAC.
+ 
+...
+> > @@ -3804,6 +3963,9 @@ static int probe_one_instance(unsigned int nid)
+> >  	struct ecc_settings *s;
+> >  	int ret;
+> >  
+> > +	if (!F3)
+> > +		return 0;
+> > +
+> >  	ret = -ENOMEM;
+> >  	s = kzalloc(sizeof(struct ecc_settings), GFP_KERNEL);
+> >  	if (!s)
+> > @@ -3815,6 +3977,9 @@ static int probe_one_instance(unsigned int nid)
+> >  	if (!pvt)
+> >  		goto err_settings;
+> >  
+> > +	if (nid >= NONCPU_NODE_INDEX)
+> > +		pvt->is_noncpu = true;
+> 
+> This is silly and error-prone. Proper detection should happen in
+> per_family_init() and there you should read out from the hardware
+> whether this is a GPU or a CPU node.
+> 
+> Then, you should put an enum type in amd64_family_type which has
+> 
+>  { FAM_TYPE_CPU, FAM_TYPE_GPU, ... }
+> 
+> etc and the places where you need to check whether it is CPU or a GPU,
+> test those types.
+>
+
+This is a good idea. But we have a global *fam_type, so this should be moved
+into struct amd64_pvt, if possible. Then each node can have its own fam_type.
+
+..
+> > @@ -389,6 +392,9 @@ struct amd64_pvt {
+> >  	enum mem_type dram_type;
+> >  
+> >  	struct amd64_umc *umc;	/* UMC registers */
+> > +	char buf[20];
+> 
+> A 20 char buffer in every pvt structure just so that you can sprintf
+> into it when it is a GPU? Err, I don't think so.
+> 
+> You can do the same thing as with the CPUs - the same string for every
+> pvt instance.
+>
+
+Fair point. I like the idea of having unique names though. Is this possible
+with the current EDAC framework? Or is it not worth it?
 
 Thanks,
-Yazen 
+Yazen
