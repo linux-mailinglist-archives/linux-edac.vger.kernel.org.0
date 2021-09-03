@@ -2,123 +2,118 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 117C23FF24E
-	for <lists+linux-edac@lfdr.de>; Thu,  2 Sep 2021 19:29:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BA2C400127
+	for <lists+linux-edac@lfdr.de>; Fri,  3 Sep 2021 16:22:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346570AbhIBRax (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Thu, 2 Sep 2021 13:30:53 -0400
-Received: from mail.skyhub.de ([5.9.137.197]:36968 "EHLO mail.skyhub.de"
+        id S233092AbhICOXN (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Fri, 3 Sep 2021 10:23:13 -0400
+Received: from mout.gmx.net ([212.227.17.21]:32797 "EHLO mout.gmx.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1346499AbhIBRaw (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Thu, 2 Sep 2021 13:30:52 -0400
-Received: from zn.tnic (p200300ec2f0ed100e05ac297e005b15d.dip0.t-ipconnect.de [IPv6:2003:ec:2f0e:d100:e05a:c297:e005:b15d])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 3E6801EC04D6;
-        Thu,  2 Sep 2021 19:29:49 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1630603789;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=8jz11g2rh2be97czWSqZKBVYE/Qs9622Pmm5Hucy2gg=;
-        b=dU9E2KhX1Bg4xhlBf/FH7bPpVKj7xCeUmLVmCkmkWWhd4drcEDNZcASDwVPElCvGy38J7f
-        A7Ca1SnGMR6KyjXKcuNlWBBNZA662l+n0eCwzgP3ni8sRxy1K9bwxaWXeXETtRwbEy9rbC
-        nDdM2SX8Frvf5f41MAEpo6ISd98OvdY=
-Date:   Thu, 2 Sep 2021 19:30:24 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Yazen Ghannam <yazen.ghannam@amd.com>
-Cc:     Naveen Krishna Chatradhi <nchatrad@amd.com>,
-        linux-edac@vger.kernel.org, x86@kernel.org,
-        linux-kernel@vger.kernel.org, mchehab@kernel.org,
-        Muralidhara M K <muralimk@amd.com>
-Subject: Re: [PATCH v3 1/3] x86/amd_nb: Add support for northbridges on
- Aldebaran
-Message-ID: <YTEKMHqjY/IUBfgl@zn.tnic>
-References: <20210806074350.114614-4-nchatrad@amd.com>
- <20210823185437.94417-1-nchatrad@amd.com>
- <20210823185437.94417-2-nchatrad@amd.com>
- <YSYeo6S2OSZbBpb4@zn.tnic>
- <YS/Dsc2gWGGCWnbs@yaz-ubuntu>
+        id S232812AbhICOXM (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Fri, 3 Sep 2021 10:23:12 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1630678918;
+        bh=xTkzBR/NM1ERixuFBW/fGGwiCbZBIA3xA3CMLB2QmJw=;
+        h=X-UI-Sender-Class:Date:From:To:Cc:Subject:References:In-Reply-To;
+        b=RupMdxxCbwjHI9MZb0vuvl7bMomnYh0hykDd24i8jnSyAY2qSSeifZ1vuNDEHI/CE
+         bOT/+9khCIRwqRw9sECBv3ugrn/JZfcFwhAyQaaKMbU0Ve9FMzvRfX/wXOKqGA/JJU
+         9Nr1b1Ev/GP0Sv8HtI2UbTPM6cAdtoPBMnKjitb0=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from titan ([79.150.72.99]) by mail.gmx.net (mrgmx105
+ [212.227.17.174]) with ESMTPSA (Nemesis) id 1N7QxB-1n3Vbn1l1B-017iRL; Fri, 03
+ Sep 2021 16:21:58 +0200
+Date:   Fri, 3 Sep 2021 16:21:46 +0200
+From:   Len Baker <len.baker@gmx.com>
+To:     Joe Perches <joe@perches.com>
+Cc:     Len Baker <len.baker@gmx.com>, Borislav Petkov <bp@alien8.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Tony Luck <tony.luck@intel.com>,
+        James Morse <james.morse@arm.com>,
+        Robert Richter <rric@kernel.org>,
+        David Laight <David.Laight@ACULAB.COM>,
+        Kees Cook <keescook@chromium.org>,
+        linux-hardening@vger.kernel.org, linux-edac@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v5] EDAC/mc: Prefer strscpy or scnprintf over strcpy
+Message-ID: <20210903142146.GA1998@titan>
+References: <20210829161547.6069-1-len.baker@gmx.com>
+ <7b6dc45194f28db52740c2a604550f6879dafe36.camel@perches.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <YS/Dsc2gWGGCWnbs@yaz-ubuntu>
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <7b6dc45194f28db52740c2a604550f6879dafe36.camel@perches.com>
+X-Provags-ID: V03:K1:Z6nRG9qR9L/iEr0xkfe+W1s3Dcdd6mqSG6HqjwqH6IbacZI+saw
+ yrf4hgBnonxvHtfN7G1AIPyKBUaJ4/j9D9SZd7ubn+BFJ792en5vJ8cAzdinriVdLM7UCmS
+ Jw3jlNMeBxGlMnbhjJlcj3vkjZUsy/Ad6Jro5x+j4/KA36h0CYYvPhp1WIUmbf4Dp8ibJAX
+ ZTqZCCho1jpPgiB8L4xCg==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:iYYl9QrDFaI=:vEdMFGqCEoibtpcI+ysMzt
+ 7y6beWEh5NBzNMNttWkX4VLFbPQsvdxNAiBPFUtFpA2mkeRiBqVYI/4ec4g2KRmuS425sMlii
+ RUwcp9mLb1l3D7rBhaZv8w+rhqZ05urvQK9mPRbF9HYJS52Cdk3a8rrWMZrMqqLQLsi4uaaST
+ H0Md7Y8dr0Hc5HuqRS0iUvnD1O/mr8l3URyRFif6Wmy7JrjOVlJI4Ev3rcyJlRk198N6cCcZh
+ Uk15BQR83gFjNRfrNGuXwxWZJXphRXrJVHlPqBItJMZvJUgRP1//L3VUYpMkTeKC0Huw/7/9+
+ OE/HIotSpCFxlpbQ7UZfq8twSa5HdAnLIOba5peiUnziAtPwhJ9yah/xzjjolR2CUC3rV2Khw
+ tgg3p14h3KgjuRZWBOWksJrT7W0KfZwwhw90iuwxocDDtyWw8qNkNSeAETEldwqQyPTcn2a4E
+ 9m9MWb097a487PdYU06XxMJ0yAS0ARJRZ9SdLdVFq87uVbN6rw46ndQ5msoQeOEvK/c6wJ0+q
+ orXseIoSfBIkdzP7J8cGpJ1DsdCiA2Ps51qydrXeY4H6pSj2alnXse9yv1BoN316miAQ3ytGc
+ 3MJcpi4J6wYW4JfaC+DrBssZbIzhcJoupWIPrNSxB4eMmGBtW8HMlztTO/QnxqGXURaPkNDU+
+ y+F4T9BP9OyDTz1hfBZJr58tYdz+Qa3UWkhBp8RnYShkHbLKaj0DnGxBR3voJ/MUdgBAi6dFM
+ c/JT6O/f/4Vv6eRsVQ6GVv4CLyS5StbTSA9U+GIyDGuTqG+jfpOrPuomXNldglSWRJn3+2noE
+ G9D2UpnGOWu8DL/P/sj04MK0NwKcfGMPsGbXVOXUnN8dgUkNKYDL4ZVz8Q8hHxKpycM4Rq8uX
+ uiEz/ZEUBX+yKWpSCYmtS0fH97zMJug+opgxZVvfWy6ED0HnBguSSqm5nLZUvbIgv7oV6YyZ6
+ 8T22jjA1NqjwgV85J/Au6ODjQdsFmUVD18q6XOolOINujwwuZ9mIgNDcOn/U3stzX33bdvGj9
+ UVd2lenXWovNpHiqdRXd9m/zDqCK7qx4Evvlyr7evh8tQgq83F1KzCzWXkKWgaR5CghZc8/y2
+ mKy9fIhtVNo95ko1IKjLtLw+K/5gneSDLl5sES653RssKgfc6gctXoVIQ==
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Wed, Sep 01, 2021 at 06:17:21PM +0000, Yazen Ghannam wrote:
-> These devices aren't officially GPUs, since they don't have graphics/video
-> capabilities. Can we come up with a new term for this class of devices? Maybe
-> accelerators or something?
-> 
-> In any case, GPU is still used throughout documentation and code, so it's fair
-> to just stick with "gpu".
+Hi,
 
-Hmm, yeah, everybody is talking about special-purpose processing units
-now, i.e., accelerators or whatever they call them. I guess this is the
-new fancy thing since sliced bread.
+On Sun, Aug 29, 2021 at 09:38:37AM -0700, Joe Perches wrote:
+> On Sun, 2021-08-29 at 18:15 +0200, Len Baker wrote:
+> > strcpy() performs no bounds checking on the destination buffer. This
+> > could result in linear overflows beyond the end of the buffer, leading
+> > to all kinds of misbehaviors. The safe replacement is strscpy() [1].
+> >
+> > However, to simplify and clarify the code, to concatenate labels use
+> > the scnprintf() function. This way it is not necessary to check the
+> > return value of strscpy (-E2BIG if the parameter count is 0 or the src
+> > was truncated) since the scnprintf returns always the number of chars
+> > written into the buffer. This function returns always a nul-terminated
+> > string even if it needs to be truncated.
+> []
+> > diff --git a/drivers/edac/edac_mc.c b/drivers/edac/edac_mc.c
+> []
+> > @@ -1113,12 +1116,11 @@ void edac_mc_handle_error(const enum hw_event_=
+mc_err_type type,
+> > =A0			p =3D e->label;
+> > =A0			*p =3D '\0';
+> > =A0		} else {
+> > -			if (p !=3D e->label) {
+> > -				strcpy(p, OTHER_LABEL);
+> > -				p +=3D strlen(OTHER_LABEL);
+> > -			}
+> > -			strcpy(p, dimm->label);
+> > -			p +=3D strlen(p);
+> > +			const char *or =3D (p !=3D e->label) ? OTHER_LABEL : "";
+> > +
+> > +			n =3D scnprintf(p, len, "%s%s", or, dimm->label);
+> > +			len -=3D n;
+> > +			p +=3D n;
+>
+> A very common and intelligible mechanism for this is:
+>
+> 	const char *prefix =3D "";
+> 	int n =3D 0;
+> 	...
+> 			n +=3D scnprintf(e->label + n, sizeof(e->label) - n,
+> 				       "%s%s", prefix, dimm->label);
+> 			prefix =3D " or ";
+>
+Ok, I will send a new version using this common mechanism. Thanks for the
+advise.
 
-Well, what are those PCI IDs going to represent? Devices which have RAS
-capabilities on them?
-
-We have this nomenclature called "uncore" in the perf subsystem for
-counters which are not part of the CPU core or whatever. But there we
-use that term on AMD already so that might cause confusion.
-
-But I guess the type of those devices doesn't matter for amd_nb.c,
-right?
-
-All that thing cares for is having an array of northbridges, each with
-the respective PCI devices and that's it. So for amd_nb.c I think that
-differentiation doesn't matter... but keep reading...
-
-> We use the Node ID to index into the amd_northbridge.nb array, e.g. in
-> node_to_amd_nb().
-> 
-> We can get the Node ID of a GPU node when processing an MCA error as in Patch
-> 2 of this set. The hardware is going to give us a value of 8 or more.
-> 
-> So, for example, if we set up the "nb" array like this for 1 CPU and 2 GPUs:
-> [ID:Type] : [0: CPU], [8: GPU], [9: GPU]
->  
-> Then I think we'll need some more processing at runtime to map, for example,
-> an error from GPU Node 9 to NB array Index 2, etc.
-> 
-> Or we can manage this at init time like this:
-> [0: CPU], [1: NULL], [2: NULL], [3: NULL], [4: NULL], [5: NULL], [6: NULL],
-> [7, NULL], [8: GPU], [9: GPU]
-> 
-> And at runtime, the code which does Node ID to NB entry just works. This
-> applies to node_to_amd_nb(), places where we loop over amd_nb_num(), etc.
-> 
-> What do you think?
-
-Ok, looking at patch 2, it does:
-
-	node_id = ((m->ipid >> 44) & 0xF);
-
-So how ugly would it become if you do here:
-
-	node_id = ((m->ipid >> 44) & 0xF);
-	node_id -= accel_id_offset;
-
-where that accel_id_offset is the thing you've read out from one of the
-Data Fabric registers before?
-
-This way, the gap between CPU IDs and accel IDs is gone and in the
-software view, there is none.
-
-Or are we reading other hardware registers which are aware of that gap
-and we would have to remove it again to get the proper index? And if so,
-and if it becomes real ugly, maybe we will have to bite the bullet and
-do the gap in the array but that would be yucky...
-
-Hmmm.
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+Regards,
+Len
