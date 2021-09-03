@@ -2,120 +2,200 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DEAB400130
-	for <lists+linux-edac@lfdr.de>; Fri,  3 Sep 2021 16:25:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 57B5B4001AE
+	for <lists+linux-edac@lfdr.de>; Fri,  3 Sep 2021 17:06:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349335AbhICO0m (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Fri, 3 Sep 2021 10:26:42 -0400
-Received: from mail-dm6nam12on2123.outbound.protection.outlook.com ([40.107.243.123]:41824
-        "EHLO NAM12-DM6-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S233092AbhICO0m (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Fri, 3 Sep 2021 10:26:42 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=S9Wy2KADJa7EvNI+/pF912GTTSgDjLrBoV14jhiz4GkCmSW+7WenJXPzJWZIzr+PPLam1I7pIg6gEf6vlFsHLfK5yvydFwqVLVD/xcJvru8YVR1tVvi9PqxG7gvDBd/pJUw9l68WKuDCIXKGMiYbd8eT+FhOD3aZ6wf1FQhVwQobyMIGmlm9PzOz6w5aMlrxepQN4mZEkY96nnE1z8nnFU7pjcIvnuWXSGhavnpSr3YpCEOOz1Vd4EvuD80z1okZBP4Z/Y8z1Us184MAA4G4QtO/n5IzHhN1xg/U4s6Wnr2yJQgv0nhizLu7Rev9B5o/lufXfypvSthlLBhQXGX92g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901; h=From:Date:Subject:Message-ID:Content-Type:MIME-Version;
- bh=eFspCowtcGuo+fBPrFa9AnY9nU/EQUyAKb0yCsZH2rc=;
- b=Rk9+9atRBwLSAIsixbsrm2S+jTUGw6hdbAtinxUZaiy0ObzsO3RXJVCAbxW5MrtZMeAkHwkNTTlr6q7nDV854OqUG+5b+Jm2muJC7Khl4aOgZU38jjYJ1gUsoZ7k+kwX+hX+mZeC1eBUIhO5/xvhlS4/ZkhkVPGNWxlM3004LeVoNJUwwnUZx7maga8nozBLz3Z/HqsS4xT5ILJlCZc3RSguIR8f7uy/b7rySjnF2naz6BOgvael2P5P9dz3wMJJTfWMm+dR+6xwg1nguoAghma70XI+OkmjbEKDfmYIV2i8rn2Uo5HDOoYhVmUe7nuYHLt5LhtsHLLc2C/DdjltkA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=coreavi.com; dmarc=pass action=none header.from=coreavi.com;
- dkim=pass header.d=coreavi.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=ch1group.onmicrosoft.com; s=selector2-ch1group-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=eFspCowtcGuo+fBPrFa9AnY9nU/EQUyAKb0yCsZH2rc=;
- b=nScml0bL01WTZfE4f8moR2GimGe+X0a4j7EsNQ/qqqm/Dp3cP605wIEWojq2miboEEwBDaF1w6AkVDUi8OmhB3Oez79XBAwb89Jnu7BeIvr8OxQDAzdDcwHwqwCXx+LdsWvna/Yf0rMlUqKFTua3MxDwxsl8IU0dhSyoP7AAIL8=
-Received: from DM8PR22MB2760.namprd22.prod.outlook.com (2603:10b6:8:23::17) by
- DM8PR22MB2758.namprd22.prod.outlook.com (2603:10b6:8:21::15) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.4478.17; Fri, 3 Sep 2021 14:25:41 +0000
-Received: from DM8PR22MB2760.namprd22.prod.outlook.com
- ([fe80::54ca:45a4:4847:33a1]) by DM8PR22MB2760.namprd22.prod.outlook.com
- ([fe80::54ca:45a4:4847:33a1%3]) with mapi id 15.20.4478.022; Fri, 3 Sep 2021
- 14:25:41 +0000
-From:   Lucas Fryzek <lucas.fryzek@coreavi.com>
-To:     "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>
-CC:     Tasos Sachanidis <Tasos.Sachanidis@coreavi.com>
-Subject: Error injection interface for igen6 driver with Intel TGL UP3
- hardware
-Thread-Topic: Error injection interface for igen6 driver with Intel TGL UP3
- hardware
-Thread-Index: AdegIY55w7FLAYKlRm+7S8+0PntwRA==
-Date:   Fri, 3 Sep 2021 14:25:41 +0000
-Message-ID: <DM8PR22MB2760C71E24679B1BF6732F4A8FCF9@DM8PR22MB2760.namprd22.prod.outlook.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: vger.kernel.org; dkim=none (message not signed)
- header.d=none;vger.kernel.org; dmarc=none action=none
- header.from=coreavi.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 4e544673-0830-42ea-7b6d-08d96ee6b55e
-x-ms-traffictypediagnostic: DM8PR22MB2758:
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <DM8PR22MB2758F583D3041D0C0BCC75B98FCF9@DM8PR22MB2758.namprd22.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:9508;
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: QuE5MWkxnvNTuJBvgLvD4E2RPeyrX79Yl5oHJ0O8iT/nQ3Now30hD2Mc11uuw/ufRMlfyzttvdnAhXwvso+8076y1UmivCQw+8n2KFvNRbofC+lJ0Uhhj/rE8p7ixzoqSFbvRqOOb6Mt/I56gsbaKdP/FA+TCf21bz2UEfnBbw3DW4Yh/yv3LP9MrHd9fLo7uPpzD9VTt5VNaxQQVyI3KBveIP3jE1icMmIt6G6MPm14rIaCLY8BEweJOIwCdpatuFw++FwwpE1Kh4nIs17JzMzhvH6urPAETOTwX5CeQqUlVqj8DmveAE+MHW3XtuVs3BvvC0GqNvcQ1w9YVA01nzV8/3AgiCcah8AwsqAE6bW9KqfRQnZXhxZnnyUg1h841xU7QnTdBXARoXysGMr8EIAyFXkqI4ksW2OL1qeW1c6Y/d0HMxG7l9WGdDiKJ7dmfnLpzcD5ZRVAsiXM5YOmlnynqojotvUL8+Ffc+GcazJ6GTpnMQXoHwSB/Ax2ob0JKSmPAw8LIyQZnjUKwgysKFl8Wf8SAET4QpVMNlfkzF5H/TigFHi4z616AIbC2lN/y5aNH7/RlGb89OI0ld5/stOCIpzZjQ5yEPd9u9DTlRLQDcNjQNbTFeIuc+aCdbdpyY7XeOIqo0T9V4fMpv9LpcJslJTNV5+s6qWJFGmffxV+SZb4OZgwCtZOA8dmYJ1uAASoSn4Q4V58726g8V6viQ==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM8PR22MB2760.namprd22.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(39830400003)(366004)(396003)(346002)(376002)(136003)(7696005)(44832011)(8676002)(33656002)(6506007)(52536014)(86362001)(38100700002)(2906002)(38070700005)(4326008)(508600001)(122000001)(4744005)(6916009)(66946007)(66476007)(66446008)(107886003)(64756008)(186003)(76116006)(8936002)(55016002)(316002)(66556008)(9686003)(5660300002)(71200400001);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?sXWmWD7I7AWBsjRqFQEeoNoUSXnDz1uxz9SugCFL2HOEZYhShkVI52NqAe3/?=
- =?us-ascii?Q?ehNWx6m0CLYBdW7SN1VwTlZSe/h4hncv6uddmevGlVr7Dc1GAn7S701XzUzk?=
- =?us-ascii?Q?4IilFEtOCxAuIwaW287cPRAyPKzLwvKcbWHhtNA2wq5imYjR6zcV4Rq0WuMH?=
- =?us-ascii?Q?FKKbAqlCUAXd0qsrJPA5MrzRQ+KO8fKgxDEulLnEWySWbsT1ZfHQe7lZRxMK?=
- =?us-ascii?Q?TsiKRGhu2ZFOYLMYK9Q//cWoAuFmcblolpZVBxs1OOmmVRBWWNt9SnhMs9Sy?=
- =?us-ascii?Q?UgaPk1anDZI5YM3Y7Oi7FYUHZTdczf7vYct6cjf7/GFRO07I8Ey24ZPQvpyR?=
- =?us-ascii?Q?V2FKuhO3UfhIssoCGrd3OHPtTkw/GU9xEXYhGkrols9ICrdtSf0ULSakKgte?=
- =?us-ascii?Q?6qzvvbBMuHb8jcsSTjJBTLyRPppvxPxqAGQwheyHsC0pKZBK8A5paWlPN8QX?=
- =?us-ascii?Q?bewoNl49DoYGuwnlX9HgSS8UgT6KIc5gYg7pKeZdeiqqIZH7Doe0Hn6ks0QG?=
- =?us-ascii?Q?YcJ38a/IBOblcJBW0A852SzWX6ofqErTuIc0KpB4+6HE8a2i8DUmHnCe5aVc?=
- =?us-ascii?Q?fMlKohACKSCtLxyzWMKn9L3zxNY6frG2rU7BottRtCXfwSkhyRsm17ET2Sdp?=
- =?us-ascii?Q?fZcXNtRBOh2S96JTdmbiuvcQ+T4xcXWdWJ2rAelEmxSgEnfO1Q4D1rLwWSoA?=
- =?us-ascii?Q?6mQl1DWqtqdaBbiiP/BByj4LDx1kXZ9ovUfCCOfHdZFuV7cBoppirAJc72+c?=
- =?us-ascii?Q?zlc57g7OUBr4BrGiUOFpGLK254Uk29t9GMraK7JSR76O/eobvOaPhCXaFHHt?=
- =?us-ascii?Q?m9RQIYB8ApKT/g8yjzZU5pmkyrZr9fHUEfxCeSuhKpf5bmZ/zvep5rrG/n1B?=
- =?us-ascii?Q?zLiJx1T9m4NJXcj1rsUo7jpitf1Wl0cBnwYcSfbzra3CiMCfTgmqiVqZVDHV?=
- =?us-ascii?Q?81o4mscDIex2r8rShkSnFmzs+aqyboVQs0bNlih7Amrzva66Lg0bySV749hd?=
- =?us-ascii?Q?WKNBSu4nwx8QMAW816wGvXhKn0dNc7ZohjCKGqybpCZo9tmKzfpSkvDZQ6so?=
- =?us-ascii?Q?G8sqcxLmlxOXo9JgScVy0CrdHRLr061ZE7iZhfu43anFRrR1hDdXKJJXs5Ns?=
- =?us-ascii?Q?m8fXEapSsYPF4p1vHPh0wrehR3vi8GXCnjkaXXQy0SO8X1wRENj9qL//PIyc?=
- =?us-ascii?Q?AD8MEUY5OFFuVOdOJzAe91Czr4ryBb8tB5+gI5JJw5b53eIRkmmcidb8rNtk?=
- =?us-ascii?Q?lSucQrZN/piRezn6hNMZs1HiKedDJJCMk527HgrVcwXDvmkeJaKw1UIu6hpO?=
- =?us-ascii?Q?VsFlYEUdD2ZqBYEn4+d5vHnSTnATejdnGyjpkaK3kLae57hZydaui/AEX0rK?=
- =?us-ascii?Q?qLP5JSLIDmuwqMDS95+PV3t2dmUr?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        id S234472AbhICPHN (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Fri, 3 Sep 2021 11:07:13 -0400
+Received: from mout.gmx.net ([212.227.17.21]:43751 "EHLO mout.gmx.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229997AbhICPHM (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Fri, 3 Sep 2021 11:07:12 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1630681561;
+        bh=2NsobSJ0oyoOkDCO4kNPox42OsO4Nli7GYVADpwZFfk=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
+        b=KgB1oGa26/ftR5JtjgnCkm+LjSNjE91aGRPWcIb6t1XB5VbxTe/0HHCk1dylY+IhD
+         8DHPkRcgqvDIVMlzTPzOliBWGvdT5qyWcy6PpE8paNeNscd2vLNj9LcWiYGNVdiEcb
+         ypTdR3d8h/HQ+TSjwVDIsvtLo0TcbPChzCm4JtPA=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from localhost.localdomain ([79.150.72.99]) by mail.gmx.net
+ (mrgmx105 [212.227.17.174]) with ESMTPSA (Nemesis) id
+ 1M1Ycl-1mO5di2BWl-0038Dr; Fri, 03 Sep 2021 17:06:01 +0200
+From:   Len Baker <len.baker@gmx.com>
+To:     Borislav Petkov <bp@alien8.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Tony Luck <tony.luck@intel.com>,
+        James Morse <james.morse@arm.com>,
+        Robert Richter <rric@kernel.org>, Joe Perches <joe@perches.com>
+Cc:     Len Baker <len.baker@gmx.com>,
+        David Laight <David.Laight@ACULAB.COM>,
+        Kees Cook <keescook@chromium.org>,
+        linux-hardening@vger.kernel.org, linux-edac@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v6] EDAC/mc: Prefer strscpy or scnprintf over strcpy
+Date:   Fri,  3 Sep 2021 17:05:39 +0200
+Message-Id: <20210903150539.7282-1-len.baker@gmx.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-OriginatorOrg: coreavi.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DM8PR22MB2760.namprd22.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4e544673-0830-42ea-7b6d-08d96ee6b55e
-X-MS-Exchange-CrossTenant-originalarrivaltime: 03 Sep 2021 14:25:41.1428
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 76f7f3b2-94a1-4806-8168-1230a353cde3
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: kTNQ5faqUdo03s5+n8TO17nZo5Kdni31EXr7E2rI2k6tx/2q/n+HBz0AuIWe7PsI2lFZmUZRsgDIfZp6aBn5S3kQKp8Y2mSio8ncO3wje9I=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM8PR22MB2758
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:1WWrz35yiVKX3AEpwLelo43wNkwyWS28+jV7tcAjnkGOVJRGex4
+ 62kMobnU+zTr4NUJU2ElQKZSbknVD9xi/fiZzgHOPEn0yel6FeiNrZ0/rYf7Tqr15wECqqe
+ saJNo9jDiqMX7ZTjwu2Gk76XKK9yCFifqrNUd7hHgSBKW/shQPYUUZhnwVeDiho6+DlLcTJ
+ 4lx+zPpb5BPdw91l7pDug==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:IZ8oGDh5x9g=:U+bLOJMA3OId4qv5emQuZJ
+ U3SDolIicL6kmud82MC2AcCCKEKfgtK6iwlCcbXPpLe8oRZG32aFPhUPF4i6+81O3fuWjqaYv
+ AfCueHqlctbkBfoxJvZl4GFMHIczszAa6hzwS03rHmJzbOY7FU2CozUGVofdPegbWbPeZkrKl
+ W2ZNOhpTEvj6nerJFSl7FkalWzKab6bgvItqGNZesS55bBax9SWf3yZiHGh++skpxzY9Yv71g
+ 87OtKy3xdcTECktspsLeGVBeompS816qCi6TOeTYrLyeVsDdt4KEqkfFNrdVx7IXdwg16TGsa
+ yGZCDzHtCaWTendBhow9Un3qUENtZboG9rQLXPnboFGBMoaFsnkgRM6i6vi8lgPlxQEpmsuyR
+ nqo1h5k+lraAbmF1UuPV4I15e4yr61npqDc29+Fy4LMNt5cV1FHhWigLSc4vurAFcMTfNVcWc
+ jA1uH9avsfU9hGU78MPK0vGSawZEkPxtBzUqzSCeFUCTjq5njHGT0xqrSWJ2hKtyiT4tObcEn
+ 4NkuPxFPaiyYOgYah0WCYUCY0SM4MhK1u3SYRCincR313ICEX50GUyesA0Fdy+i+7audYHyXr
+ geDDSsqHNNanXAB/0Tjz754Gm7qIXKhBigPCBY2rrLBPpXH8LGgfeQt2znXbXNB19K4oqaovA
+ Y4rL0WGc5W/8HxFYDm7Cvz/T0RfOuZgPxp6UN+RTWfm/i3KBqwt9E5KVm52HQ1zLB/toHSyU6
+ k0CXQUZ9KFErAqhPKiMrn9kqYoqIcYuVB+UsqC2M2IN7nCeP1bDfBHZDo99wjo7qUTbWvAiBZ
+ laiYC8qNqPl1fkYY2f7pPqBFdOs0ZrKVd39FpSM7bUcY6n/fcyUsuRlyOc7sJP8IgsVEkMhEz
+ N3JVMbvs2yqCERYMC+4dtbeg8ztQg82ZJlSS1N0N+04CKpEk+9xbkzbVc3+yKfSryQ8xqpUnR
+ MHN+Pt0D49C2I7WOfw6uwy5Ng9X54JNOiIHRRrnPz/JmamP3qNM5QPlnVo8k++RpJKDa9AWhh
+ lknR4drQhVLIDWSrBrm8/BrVqNXYGVmiKRDc4XRF99CR5e1690bgDRRXPBXf1FQLifyVLnKks
+ 1tQk0TXeq5h+GgbwVgGaWqvDkw+RL38ckS2FBm/N4KrP+bKapASiM1YiQ==
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-Hello,
+strcpy() performs no bounds checking on the destination buffer. This
+could result in linear overflows beyond the end of the buffer, leading
+to all kinds of misbehaviors. The safe replacement is strscpy() [1].
 
-We are working with some new Intel Tiger Lake hardware (specifically a boar=
-d with the 1185-GRE SKU) and are running kernel version 5.14.0 rc3, compile=
-d with debug support for EDAC. The igen6 driver appears to be loaded and ru=
-nning, but it does appear to export any interfaces to test error injection =
-on the hardware. We have made sure that IBECC is enabled in the bios and th=
-e they IBECC error injection feature is also enabled in the bios.
+However, to simplify and clarify the code, to concatenate labels use
+the scnprintf() function. This way it is not necessary to check the
+return value of strscpy (-E2BIG if the parameter count is 0 or the src
+was truncated) since the scnprintf returns always the number of chars
+written into the buffer. This function returns always a nul-terminated
+string even if it needs to be truncated.
 
-Does the current igen6 driver support error injection on Tiger Lake? How ca=
-n we test IBECC support on Tiger Lake?
+The main reason behind this patch is to remove all the strcpy() uses
+from the kernel with the purpose to clean up the proliferation of
+str*cpy() functions. Later on, the next step will be remove all the
+strcpy implementations [2].
+
+[1] https://www.kernel.org/doc/html/latest/process/deprecated.html#strcpy
+[2] https://github.com/KSPP/linux/issues/88
+
+Co-developed-by: Joe Perches <joe@perches.com>
+Signed-off-by: Joe Perches <joe@perches.com>
+Signed-off-by: Len Baker <len.baker@gmx.com>
+=2D--
+Hi Joe,
+
+I have added the "Co-developed-by: Joe Perches" tag to give you credit,
+since all the code used in this patch relies heavily on your review
+code snippets.
+
+I hope there are no objections.
 
 Thanks,
-Lucas=20
+Len
+
+Changelog v1 -> v2
+- Use the strscpy() instead of scnprintf() to add labels and follow a
+  code pattern more similar to the current one (advance "p" and
+  decrement "left") (Robert Richter).
+
+Changelog v2 -> v3
+- Rename the "left" variable to "len" (Robert Richter).
+- Use strlen(p) instead of strlen(OTHER_LABEL) to decrement "len" and
+  increment "p" as otherwise "left" could underflow and p overflow
+  (Robert Richter).
+
+Changelog v3 -> v4
+- Change the commit subject (Joe Perches).
+- Fix broken logic (Robert Richter).
+- Rebase against v5.14-rc5.
+
+Changelog v4 -> v5
+- Change the commit subject.
+- Clarify why the change is being made by adding more info to the
+  commit message (Borislav Petkov).
+- Use scnprintf instead of strscpy (Joe Perches).
+- Rebase against v5.14-rc7.
+
+Changelog v5 -> v6
+- Rebase against v5.14.
+- Refactor the code to use a more common scnprintf mechanism (Joe
+  Perches).
+
+Previous versions:
+
+v1
+https://lore.kernel.org/linux-hardening/20210725162954.9861-1-len.baker@gm=
+x.com/
+
+v2
+https://lore.kernel.org/linux-hardening/20210801143558.12674-1-len.baker@g=
+mx.com/
+
+v3
+https://lore.kernel.org/linux-hardening/20210807155957.10069-1-len.baker@g=
+mx.com/
+
+v4
+https://lore.kernel.org/linux-hardening/20210814075527.5999-1-len.baker@gm=
+x.com/
+
+v5
+https://lore.kernel.org/linux-hardening/20210829161547.6069-1-len.baker@gm=
+x.com/
+
+ drivers/edac/edac_mc.c | 15 +++++++--------
+ 1 file changed, 7 insertions(+), 8 deletions(-)
+
+diff --git a/drivers/edac/edac_mc.c b/drivers/edac/edac_mc.c
+index f6d462d0be2d..97dff62970a5 100644
+=2D-- a/drivers/edac/edac_mc.c
++++ b/drivers/edac/edac_mc.c
+@@ -1032,6 +1032,8 @@ void edac_mc_handle_error(const enum hw_event_mc_err=
+_type type,
+ 	int i, n_labels =3D 0;
+ 	struct edac_raw_error_desc *e =3D &mci->error_desc;
+ 	bool any_memory =3D true;
++	const char *prefix =3D "";
++	int n =3D 0;
+
+ 	edac_dbg(3, "MC%d\n", mci->mc_idx);
+
+@@ -1113,12 +1115,9 @@ void edac_mc_handle_error(const enum hw_event_mc_er=
+r_type type,
+ 			p =3D e->label;
+ 			*p =3D '\0';
+ 		} else {
+-			if (p !=3D e->label) {
+-				strcpy(p, OTHER_LABEL);
+-				p +=3D strlen(OTHER_LABEL);
+-			}
+-			strcpy(p, dimm->label);
+-			p +=3D strlen(p);
++			n +=3D scnprintf(e->label + n, sizeof(e->label) - n,
++				       "%s%s", prefix, dimm->label);
++			prefix =3D OTHER_LABEL;
+ 		}
+
+ 		/*
+@@ -1140,9 +1139,9 @@ void edac_mc_handle_error(const enum hw_event_mc_err=
+_type type,
+ 	}
+
+ 	if (any_memory)
+-		strcpy(e->label, "any memory");
++		strscpy(e->label, "any memory", sizeof(e->label));
+ 	else if (!*e->label)
+-		strcpy(e->label, "unknown memory");
++		strscpy(e->label, "unknown memory", sizeof(e->label));
+
+ 	edac_inc_csrow(e, row, chan);
+
+=2D-
+2.25.1
+
