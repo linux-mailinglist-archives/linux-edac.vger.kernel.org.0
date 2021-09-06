@@ -2,84 +2,88 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 89831400B7B
-	for <lists+linux-edac@lfdr.de>; Sat,  4 Sep 2021 15:33:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D0AF640127D
+	for <lists+linux-edac@lfdr.de>; Mon,  6 Sep 2021 03:20:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229765AbhIDNYQ (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Sat, 4 Sep 2021 09:24:16 -0400
-Received: from mout.gmx.net ([212.227.17.22]:41841 "EHLO mout.gmx.net"
+        id S238676AbhIFBVQ (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Sun, 5 Sep 2021 21:21:16 -0400
+Received: from mail.kernel.org ([198.145.29.99]:37604 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230297AbhIDNYQ (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Sat, 4 Sep 2021 09:24:16 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1630761779;
-        bh=VedANFIqdoIjEowtEWOZv/ASCI66wxx8Mg47+8sNjBE=;
-        h=X-UI-Sender-Class:Date:From:To:Cc:Subject:References:In-Reply-To;
-        b=KGRV4H0rUFaNpYk30tnCxpFQBIMZsXQRwqWykxbSnBD1qN2GhR5Ta99iwq/NZyBiQ
-         QSiuR+R1jpvHgoUX6mv22UAiIuQNKio8kIdZ5t0jWWShfmwu3W4dIpLPYGqyBXgXqU
-         zb4skP+/Csih/O2Nlz10uU0XlGNbr3lFJNzS3qUo=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from titan ([79.150.72.99]) by mail.gmx.net (mrgmx105
- [212.227.17.174]) with ESMTPSA (Nemesis) id 1MTiPl-1mYF5T3bzh-00U0Aj; Sat, 04
- Sep 2021 15:22:59 +0200
-Date:   Sat, 4 Sep 2021 15:22:44 +0200
-From:   Len Baker <len.baker@gmx.com>
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     Len Baker <len.baker@gmx.com>, Joe Perches <joe@perches.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Tony Luck <tony.luck@intel.com>,
-        James Morse <james.morse@arm.com>,
-        Robert Richter <rric@kernel.org>,
-        David Laight <David.Laight@aculab.com>,
-        Kees Cook <keescook@chromium.org>,
-        linux-hardening@vger.kernel.org, linux-edac@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v6] EDAC/mc: Prefer strscpy or scnprintf over strcpy
-Message-ID: <20210904132244.GA2384@titan>
-References: <20210903150539.7282-1-len.baker@gmx.com>
- <3a035a3ec4571a622ce640e042f9a119@perches.com>
- <20210904094451.GA2998@titan>
- <YTNaOsF3cRpL7065@zn.tnic>
+        id S238678AbhIFBVI (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Sun, 5 Sep 2021 21:21:08 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id A3FAE61054;
+        Mon,  6 Sep 2021 01:20:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1630891204;
+        bh=veOS5DcXdyQJknDpPh/8VSiDRyNRrBRvHEsD4+NfVFc=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=SQeOYbnRsgn4OQcIxnGuZ0XsuKhK+SFRlWodGe/rLFFP501DH0vkIa26geOpzkZ52
+         JhQrCQhvpNVnLDbUAEnPo1JCvofTf/7llAKDtpCjabDZ6b7yV0nCgqD6aomLiAkifA
+         YBniHSWols8CqhU4Duup+z//EVJik9bbyeG1IM4FbIduHCmBe+i5aC4Wp3HOIkX5TU
+         2FABGu7IVoP9IWamago0h4T/AGKDhA0gWDWjXVym+lhJYszhPCOZjdYgMs+MtWNqJd
+         KU1Sm1ztvQBKnVve7SkFKQ+coclmDdlmenSSwfFcwITgy14GHCcF2BMdxcm5KuoJvX
+         grNnYYWAdojXw==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>,
+        Borislav Petkov <bp@suse.de>,
+        Yazen Ghannam <yazen.ghannam@amd.com>,
+        Kim Phillips <kim.phillips@amd.com>,
+        Sasha Levin <sashal@kernel.org>, linux-edac@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.14 10/47] EDAC/mce_amd: Do not load edac_mce_amd module on guests
+Date:   Sun,  5 Sep 2021 21:19:14 -0400
+Message-Id: <20210906011951.928679-10-sashal@kernel.org>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20210906011951.928679-1-sashal@kernel.org>
+References: <20210906011951.928679-1-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YTNaOsF3cRpL7065@zn.tnic>
-X-Provags-ID: V03:K1:01/cutQ6WDHs06bO6yQe43QhF9ZJYQd4XTLYWuJ5jvZM09VoDut
- y9NBU3I1Cv8oxk8tZITw/Rb2wptgQQ6Y57HhPuhEJ5syUOmI63Djkf4kf+ErgacjINoSvz8
- 9HtHWTqeeUa61gOek37pjXBJOAPgJnKFEGcRz1R88SCQ2379R0oAYGLBy9EF5Pk2Icarcg6
- ETvXR66cQz3CInpw4yF7Q==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:MDv4+8Eu+1c=:3eglAEAFlOmd9f4/pip2Pg
- Nbll9pQ6VVQBu/4pdJ6kdsLTUecOq2sn+f3V44l37diWcR9UR0KV6zSnORM599u3GozJx0teD
- qQ9b4zZxD/qHLDlk1hZguRKSN9/UrjFGtxva6qmYLN9VCTIhILmXVPEvYRjMx4oZqwSdAoYkM
- zOtl6hB2gXtLGP2NsyQ5Qxcgz4B17sUKKdJunrnDO5bKEI2cvAgCKIeQPtT7fPGKA5ZeCSDdj
- lt/A/ugYsE/cAnXNK+3ikKXXCZliqDoRXaNmsih3S/6N+CWnSwhZ/IW2fxPn6lnKmLQhLT2cf
- s2o/V5DQhgZpkLwDH1khQ2+QSgjYSV2o32R5OU8CmnslpYNJOfPUQd2ZiFib9AGpyxOgYhCOp
- krqcaNGA54hkXSWJxKYSfCzMiEEBw1a3tyfuWwj2vr5ukCjobBM6XTyeWZ3sWlP9aEs7+3Klv
- gOI2vCdL/wlsSTrcpRjdDoaOEh2R4cRqDRcn1sbMj5CweLb2WzqkTEfQ7WibtY2MFL7nOvh4g
- HYRH6aiadekvQ3BeWs1OsuEjilPCM8LCbt+vZLpPOxPrdjRStBdU6NqglEMYxplSRFGE35Xge
- mLqJT1xcatTZS42KZFuWyq5Rf9hAnvbGvm2MIuYKhff+coZBh/RaK00ta9OTEp365dpbvQe4m
- n7qXwWvXxI8J/9Pfw/PCQjnU4dsCtdkeL0RwH9P85QUpTYT4HKGyELXr1efARjIWpHkAjzBA/
- q/BW2mNW5PYzwB2DlRprj3G3FiULEDdLaPz0ZdW5lhAqnEPB89MATRd/qSoUP8SZ59kPnm5Pp
- ISjgYZcvnMglhLMhcf5m+nNG1gftWU1bID1E5GCbPe+dsh9XkozS9WJCqSoM32ZDMmBVXLuVs
- JqkTbOoYXYdDZT1utwRk+nwnYWxea3qtqm5t5fu1JhY6mXZw6XLxd3mrt2PDitQpqeW5o0GKd
- W3nnwYpIr+G5K9EBm911GPjNyIKg60CFp1xRdgde8QcZDT1k7syUYwOLSuQeose23ycfqHw9f
- loHcfpopwdbd+nwlY/9rhC+du8qxfBy+ooToaO1s132rfsdfOtk/wbvFKnBLUe9kSaAxHV7H+
- Fk4DYAjDMgH4eeXCP8UE0XcZma84sbO1K2oJghXmG37jHfmj8TGXt3uLA==
-Content-Transfer-Encoding: quoted-printable
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-Hi,
+From: Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>
 
-On Sat, Sep 04, 2021 at 01:36:26PM +0200, Borislav Petkov wrote:
-> On Sat, Sep 04, 2021 at 01:23:03PM +0200, Len Baker wrote:
-> > I can remove the macro and add a comment with some explanation.
->
-> No, please leave the macro.
+[ Upstream commit 767f4b620edadac579c9b8b6660761d4285fa6f9 ]
 
-Ok, so I leave the patch as is.
+Hypervisors likely do not expose the SMCA feature to the guest and
+loading this module leads to false warnings. This module should not be
+loaded in guests to begin with, but people tend to do so, especially
+when testing kernels in VMs. And then they complain about those false
+warnings.
 
-Thanks,
-Len
+Do the practical thing and do not load this module when running as a
+guest to avoid all that complaining.
+
+ [ bp: Rewrite commit message. ]
+
+Suggested-by: Borislav Petkov <bp@suse.de>
+Signed-off-by: Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>
+Signed-off-by: Borislav Petkov <bp@suse.de>
+Reviewed-by: Yazen Ghannam <yazen.ghannam@amd.com>
+Tested-by: Kim Phillips <kim.phillips@amd.com>
+Link: https://lkml.kernel.org/r/20210628172740.245689-1-Smita.KoralahalliChannabasappa@amd.com
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/edac/mce_amd.c | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/drivers/edac/mce_amd.c b/drivers/edac/mce_amd.c
+index 27d56920b469..67dbf4c31271 100644
+--- a/drivers/edac/mce_amd.c
++++ b/drivers/edac/mce_amd.c
+@@ -1246,6 +1246,9 @@ static int __init mce_amd_init(void)
+ 	    c->x86_vendor != X86_VENDOR_HYGON)
+ 		return -ENODEV;
+ 
++	if (cpu_feature_enabled(X86_FEATURE_HYPERVISOR))
++		return -ENODEV;
++
+ 	if (boot_cpu_has(X86_FEATURE_SMCA)) {
+ 		xec_mask = 0x3f;
+ 		goto out;
+-- 
+2.30.2
+
