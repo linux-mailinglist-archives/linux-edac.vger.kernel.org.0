@@ -2,88 +2,73 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C18A340136E
-	for <lists+linux-edac@lfdr.de>; Mon,  6 Sep 2021 03:25:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 713CB40277A
+	for <lists+linux-edac@lfdr.de>; Tue,  7 Sep 2021 12:59:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239565AbhIFB0C (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Sun, 5 Sep 2021 21:26:02 -0400
-Received: from mail.kernel.org ([198.145.29.99]:37826 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S239573AbhIFBYX (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Sun, 5 Sep 2021 21:24:23 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 52E2061076;
-        Mon,  6 Sep 2021 01:22:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1630891326;
-        bh=ohGDI1JxsPbCYZG/zalE3wIOE61oV2iX/8ohfb05En4=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=YoSeSw49SlSVci9AlBFuJgkWxUs3uRmsjMk3jGKhW5jXPjG4BwY9Xvq6slUXj7MZA
-         OGqO20HaZAVBONtT8c/JMfQbSLIjDtcUR1SnFBpiLAIUvaEuClRS7m2X1LHpnURmgy
-         rrUtDJvM1R5raksnAdnpw5/d8YCvZZy1vPy6ceqIkEE0C24pZN8GVEmW3xor8fMk1k
-         iKkmwFLKKhZmpL72s4lz1vSmkSRXZPhgN1/XuDrz/LrwWKkj7om2WzBgk0DfU8RbJo
-         m8O+0iyFmggV8apzU81b9X+JFxek6Rw4Bezd8w6/MmJgts9eAA1jShWgNmpuewfkkT
-         fbdBMgbaALniw==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>,
-        Borislav Petkov <bp@suse.de>,
-        Yazen Ghannam <yazen.ghannam@amd.com>,
-        Kim Phillips <kim.phillips@amd.com>,
-        Sasha Levin <sashal@kernel.org>, linux-edac@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.10 10/39] EDAC/mce_amd: Do not load edac_mce_amd module on guests
-Date:   Sun,  5 Sep 2021 21:21:24 -0400
-Message-Id: <20210906012153.929962-10-sashal@kernel.org>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210906012153.929962-1-sashal@kernel.org>
-References: <20210906012153.929962-1-sashal@kernel.org>
+        id S1343718AbhIGLAf (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Tue, 7 Sep 2021 07:00:35 -0400
+Received: from smtp-relay-canonical-0.canonical.com ([185.125.188.120]:56410
+        "EHLO smtp-relay-canonical-0.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1343706AbhIGLAV (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Tue, 7 Sep 2021 07:00:21 -0400
+Received: from localhost (1.general.cking.uk.vpn [10.172.193.212])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-canonical-0.canonical.com (Postfix) with ESMTPSA id 8867841A67;
+        Tue,  7 Sep 2021 10:59:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1631012353;
+        bh=Nbbb7rLVgfd4DDptZCzReFRmpedOnCrgnNcVj4VWs3M=;
+        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type;
+        b=TR+TFdvPZ4rVGF1NV9aD6EJssenTUuVJYmAjN+S+HYRHgEYgqiffLDyqOd4pQISnv
+         6R0UdwG4JcdLDF+Dh0loz2Y07tP2ulWSapTj4EOqbGCkrQr0jHzZvbFVUIi5uGgd2u
+         uzc0R3tvZfCRfFO38Hi5KDjHPVK23ncXjwISeI7HaMTG5XeRSB3nmCrz/emy0rqeaa
+         0LRMYrWXgJHBS9IRpWDZT56HmlteMNU0lg+w6a5Zuyoq3QBeuBE3tO7TFWE8Z1W2OV
+         +9jwydBF5v+2vTku/wmSr27NpwihMQSESNc1buQz3YFpcPvdZTSWNDj8KTebZXNKGZ
+         x0N7eljChCiRg==
+From:   Colin King <colin.king@canonical.com>
+To:     Borislav Petkov <bp@alien8.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Tony Luck <tony.luck@intel.com>,
+        James Morse <james.morse@arm.com>,
+        Robert Richter <rric@kernel.org>, linux-edac@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] EDAC/device: Remove redundant initialization of pointer dev_ctl
+Date:   Tue,  7 Sep 2021 11:59:13 +0100
+Message-Id: <20210907105913.15077-1-colin.king@canonical.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-From: Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>
+From: Colin Ian King <colin.king@canonical.com>
 
-[ Upstream commit 767f4b620edadac579c9b8b6660761d4285fa6f9 ]
+The variable dev_ctl is being initialized with a value that is never
+read, it is being updated later on. The assignment is redundant and
+can be removed.
 
-Hypervisors likely do not expose the SMCA feature to the guest and
-loading this module leads to false warnings. This module should not be
-loaded in guests to begin with, but people tend to do so, especially
-when testing kernels in VMs. And then they complain about those false
-warnings.
-
-Do the practical thing and do not load this module when running as a
-guest to avoid all that complaining.
-
- [ bp: Rewrite commit message. ]
-
-Suggested-by: Borislav Petkov <bp@suse.de>
-Signed-off-by: Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>
-Signed-off-by: Borislav Petkov <bp@suse.de>
-Reviewed-by: Yazen Ghannam <yazen.ghannam@amd.com>
-Tested-by: Kim Phillips <kim.phillips@amd.com>
-Link: https://lkml.kernel.org/r/20210628172740.245689-1-Smita.KoralahalliChannabasappa@amd.com
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Addresses-Coverity: ("Unused value")
+Signed-off-by: Colin Ian King <colin.king@canonical.com>
 ---
- drivers/edac/mce_amd.c | 3 +++
- 1 file changed, 3 insertions(+)
+ drivers/edac/edac_device.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/drivers/edac/mce_amd.c b/drivers/edac/mce_amd.c
-index 6c474fbef32a..b6d4ae84a9a5 100644
---- a/drivers/edac/mce_amd.c
-+++ b/drivers/edac/mce_amd.c
-@@ -1176,6 +1176,9 @@ static int __init mce_amd_init(void)
- 	    c->x86_vendor != X86_VENDOR_HYGON)
- 		return -ENODEV;
+diff --git a/drivers/edac/edac_device.c b/drivers/edac/edac_device.c
+index 8c4d947fb848..a337f7afc3b9 100644
+--- a/drivers/edac/edac_device.c
++++ b/drivers/edac/edac_device.c
+@@ -75,7 +75,6 @@ struct edac_device_ctl_info *edac_device_alloc_ctl_info(
+ 	 * provide if we could simply hardcode everything into a single struct.
+ 	 */
+ 	p = NULL;
+-	dev_ctl = edac_align_ptr(&p, sizeof(*dev_ctl), 1);
  
-+	if (cpu_feature_enabled(X86_FEATURE_HYPERVISOR))
-+		return -ENODEV;
-+
- 	if (boot_cpu_has(X86_FEATURE_SMCA)) {
- 		xec_mask = 0x3f;
- 		goto out;
+ 	/* Calc the 'end' offset past end of ONE ctl_info structure
+ 	 * which will become the start of the 'instance' array
 -- 
-2.30.2
+2.32.0
 
