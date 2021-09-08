@@ -2,82 +2,83 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CED98403CB7
-	for <lists+linux-edac@lfdr.de>; Wed,  8 Sep 2021 17:44:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D5B53403F2B
+	for <lists+linux-edac@lfdr.de>; Wed,  8 Sep 2021 20:42:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348440AbhIHPpP (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Wed, 8 Sep 2021 11:45:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48912 "EHLO
+        id S1346546AbhIHSnI (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Wed, 8 Sep 2021 14:43:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240197AbhIHPpP (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Wed, 8 Sep 2021 11:45:15 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F4E3C061757
-        for <linux-edac@vger.kernel.org>; Wed,  8 Sep 2021 08:44:07 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id a25so5092898ejv.6
-        for <linux-edac@vger.kernel.org>; Wed, 08 Sep 2021 08:44:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=dfWXvWVLK8PdqGgfjMJG/VOHk/WvJvkwHokilz/Z9eU=;
-        b=jO73f3thXMB7AZin2T5yH9rpAhsyE29kDnwH4pVjD7xZreIbZ2oa2UCbfcohBNzPA9
-         GeT9bHHYS/oq++md1OSactXXPvJfF3071PwlKPanhooOtizBBhjd2TZE8m/T3ImbdYk5
-         P9F9Ky1394KQ4+rnV9G6OkW8gOMJKoFqwnF7I7476cvnvELWevR4h25bXkQEGTfm+42j
-         nQ7sr9IVCVmrq0+o6216tb0/3HMZPmgcxGPPi14h3n9y6qvXXsTAgcfFoFx2t3SYXqzA
-         LLsyX6dE6hpbtxXm7DD5lkrFvNdTDpadkNlAOgKVhK9mLH7AYOYdarNzLAngPJF0nUBV
-         EXrg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=dfWXvWVLK8PdqGgfjMJG/VOHk/WvJvkwHokilz/Z9eU=;
-        b=0ehuLa/X0apPGiw8y1qiZROJNBSIkms2LzhBFwwsvch+E0T2b75HNApHETj3a22DjJ
-         o77g49gv0jrVlDFvLxtllp97eA5fih9ldPFhMx4OIG9WuXBTccjQC7WFcEwcr5FKDTBt
-         8HcjLvRY3ZVV/P2xs1FhIKSOCnJMXj7yGR/P9P4AnhzPqgw27RgYfODz205qAe4u7T36
-         C4iBxpV1wOzXJ0f+it3/unYIbgFL4CISJmDLhqeHBzCkp4iPVg2k41FctgEnRTcj19FX
-         GsSG9WrCB+CzsPMDikIAhOuanlHLEp+nm7dqCNxp6p2eLcTB78b6BxOJnLUYhowAeKME
-         I36Q==
-X-Gm-Message-State: AOAM531Xxd/t6l75FlLLVve7wauyTjr7YrBCVHeIzcY4445ExozfDCm0
-        0NU3PrzMCbEGVNm5x8y1ZtSPcL3DF7UKhCyOrFI=
-X-Google-Smtp-Source: ABdhPJxXJk7kZ6CdBoMwGfxvVWpS2LblgIXVYZ93aRDM+MUEt2okEyOq62OkpMibzdW6tBRMSlFeAl5gDnJABT87FxQ=
-X-Received: by 2002:a17:906:3fd7:: with SMTP id k23mr518093ejj.176.1631115845345;
- Wed, 08 Sep 2021 08:44:05 -0700 (PDT)
+        with ESMTP id S235775AbhIHSnI (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Wed, 8 Sep 2021 14:43:08 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4825C061575;
+        Wed,  8 Sep 2021 11:41:59 -0700 (PDT)
+Received: from zn.tnic (p200300ec2f0efc00b7f29acf52797616.dip0.t-ipconnect.de [IPv6:2003:ec:2f0e:fc00:b7f2:9acf:5279:7616])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 2CA691EC04E0;
+        Wed,  8 Sep 2021 20:41:54 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1631126514;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=64mwiSa3Im6pBZVjlFClUkt/HUK4jUzSI5qR9jC8njI=;
+        b=Zw/Gh9j4SodIEppnc9OJzKReT966ru5la4OsRZAvOgWj2XhJ0I7tE+FTPHPSoYFwgkpjqG
+        09WCQ7joRx3Cfbg/G6lSMmEHHCTBssLTPPNEUs+iGffumQhkM9/45hDv1AzV58lQ1snchS
+        RitveNpqOwlNPyhMFdkFXhWQvO9Tw30=
+Date:   Wed, 8 Sep 2021 20:41:46 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Yazen Ghannam <yazen.ghannam@amd.com>
+Cc:     Naveen Krishna Chatradhi <nchatrad@amd.com>,
+        linux-edac@vger.kernel.org, x86@kernel.org,
+        linux-kernel@vger.kernel.org, mchehab@kernel.org,
+        Muralidhara M K <muralimk@amd.com>
+Subject: Re: [PATCH v3 3/3] EDAC/amd64: Enumerate memory on noncpu nodes
+Message-ID: <YTkD6iy9JhwetSYU@zn.tnic>
+References: <20210806074350.114614-4-nchatrad@amd.com>
+ <20210823185437.94417-1-nchatrad@amd.com>
+ <20210823185437.94417-4-nchatrad@amd.com>
+ <YSjM8b9vvkmRew94@zn.tnic>
+ <YS/JkgWA8VreIx1R@yaz-ubuntu>
 MIME-Version: 1.0
-Received: by 2002:a54:2643:0:0:0:0:0 with HTTP; Wed, 8 Sep 2021 08:44:04 -0700 (PDT)
-Reply-To: michaelrachid7@gmail.com
-From:   Michael Rachid <lopdylan1818@gmail.com>
-Date:   Wed, 8 Sep 2021 16:44:04 +0100
-Message-ID: <CABU9XdCpc4FD_t_S65HOmxkp02+23mD8buBJo5qGNpXhLKYD=A@mail.gmail.com>
-Subject: =?UTF-8?B?UFJPUE9TQUwv4LiC4LmJ4Lit4LmA4Liq4LiZ4LitIEvMhMSleCBzzIRlbng=?=
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <YS/JkgWA8VreIx1R@yaz-ubuntu>
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-4LmA4Lie4Li34LmI4Lit4LiZ4Lij4Lix4LiBLA0KDQrguInguLHguJnguYDguILguLXguKLguJng
-uYDguJ7guLfguYjguK3guYHguIjguYnguIfguYPguKvguYnguITguLjguJPguJfguKPguLLguJrg
-uYDguIHguLXguYjguKLguKfguIHguLHguJrguILguYnguK3guYDguKrguJnguK3guJfguLLguIfg
-uJjguLjguKPguIHguLTguIjguJfguLXguYjguInguLHguJnguKHguLXguIvguLbguYjguIfguIng
-uLHguJnguJXguYnguK3guIfguIHguLLguKPguIjguLHguJTguIHguLLguKPguIHguLHguJrguITg
-uLjguJMNCuC4q+C5ieC4suC4quC4tOC4muC4peC5ieC4suC4meC4lOC4reC4peC4peC4suC4o+C5
-jOC4oeC4teC4quC5iOC4p+C4meC4o+C5iOC4p+C4oSDguKHguLHguYjguJnguYPguIjguYTguJTg
-uYnguKfguYjguLLguJfguLjguIHguK3guKLguYjguLLguIfguJbguLnguIHguIHguI7guKvguKHg
-uLLguKLguYHguKXguLDguJvguKPguLLguKjguIjguLLguIHguITguKfguLLguKHguYDguKrguLXg
-uYjguKLguIcNCuC4geC4o+C4uOC4k+C4suC4o+C4sOC4muC4uOC4hOC4p+C4suC4oeC4quC4meC5
-g+C4iOC4guC4reC4h+C4hOC4uOC4kw0KDQrguYTguKHguYDguITguLTguKUg4Lij4Liy4LiK4Li0
-4LiULg0KDQpQaGXhu6XMhMyAeG4gcuG6oWssDQoNCmPMhGjhuqFuIGvMhGhlxKt5biBwaGXhu6XM
-hMyAeCBjw6bMgm5nIGjMhMSxzIIga2h14bmHIHRocsSBYiBrZcSrzIB5dyBr4bqhYiBrzITEpXgg
-c8yEZW54DQp0aMSBbmcg4bmtaHVya2ljIHRoxKvMgCBjzIRo4bqhbiBtxKsgc+G7pcyAbmcgY8yE
-aOG6oW4gdMyCeG5na8SBciBj4bqhZGvEgXIga+G6oWIga2h14bmHDQpozITMgsSBIHPMhGliIGzM
-gsSBbiBkeGxsxIFyzJIgbcSrIHPMhMyAd24gcsyAd20gbeG6ocyAbmPEsSBk4buLzIIg4bqBxIEg
-dGh1ayB44buzxIFuZyB0zIRoxatrDQpr4biNaMyEbcSBeSBsw6ZhIHByxIHhuaPMhGPEgWsga2h3
-xIFtIHPMhGXEq8yAeW5nDQprcnXhuYfEgSByYWJ1IGtod8SBbSBzzIRuY8SxIGvMhGh4bmcga2h1
-4bmHDQoNCm3hu4traGVpbCByxIEgY2hpZC4NCg0KDQoNCg0KRGVhciBmcmllbmQsDQoNCkkgd3Jp
-dGUgdG8gaW5mb3JtIHlvdSBhYm91dCBhIGJ1c2luZXNzIHByb3Bvc2FsIEkgaGF2ZSB3aGljaCBJ
-IHdvdWxkDQpsaWtlIHRvIGhhbmRsZSB3aXRoIHlvdS4NCkZpZnR5IG1pbGxpb24gZG9sbGFycyBp
-cyBpbnZvbHZlZC4gQmUgcmVzdCBhc3N1cmVkIHRoYXQgZXZlcnl0aGluZyBpcw0KbGVnYWwgYW5k
-IHJpc2sgZnJlZS4NCktpbmRseSBpbmRpY2F0ZSB5b3VyIGludGVyZXN0Lg0KDQpNaWNoYWVsIFJh
-Y2hpZA0K
+On Wed, Sep 01, 2021 at 06:42:26PM +0000, Yazen Ghannam wrote:
+> err.channel still needs to be used in error_address_to_page_and_offset()
+> below.
+
+I think you mean __log_ecc_error().
+
+> This is a good idea. But we have a global *fam_type, so this should be moved
+> into struct amd64_pvt, if possible. Then each node can have its own fam_type.
+
+per_family_init() does assign stuff to pvt members so yes, we're saying
+the same thing, practically.
+
+> Fair point. I like the idea of having unique names though. Is this possible
+> with the current EDAC framework? Or is it not worth it?
+
+We don't have unique names for the CPU nodes:
+
+[   25.637486] EDAC MC0: Giving out device to module amd64_edac controller F17h_M30h: DEV 0000:00:18.3 (INTERRUPT)
+[   25.799554] EDAC MC1: Giving out device to module amd64_edac controller F17h_M30h: DEV 0000:00:19.3 (INTERRUPT)
+
+why does it matter to have unique names for the accelerators?
+
+If you wanna differentiate them, you can dump the PCI devs like above.
+
+Just to make it clear - I'm not against it per-se - I'd just need a
+stronger justification for doing this than just "I like the idea".
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
