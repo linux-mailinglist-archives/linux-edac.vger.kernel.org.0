@@ -2,66 +2,82 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 27B87402AA2
-	for <lists+linux-edac@lfdr.de>; Tue,  7 Sep 2021 16:21:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CED98403CB7
+	for <lists+linux-edac@lfdr.de>; Wed,  8 Sep 2021 17:44:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229650AbhIGOWa (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Tue, 7 Sep 2021 10:22:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41154 "EHLO
+        id S1348440AbhIHPpP (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Wed, 8 Sep 2021 11:45:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235808AbhIGOWa (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Tue, 7 Sep 2021 10:22:30 -0400
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9E11C061757
-        for <linux-edac@vger.kernel.org>; Tue,  7 Sep 2021 07:21:21 -0700 (PDT)
-Received: by mail-wm1-x333.google.com with SMTP id n7-20020a05600c3b8700b002f8ca941d89so1795822wms.2
-        for <linux-edac@vger.kernel.org>; Tue, 07 Sep 2021 07:21:21 -0700 (PDT)
+        with ESMTP id S240197AbhIHPpP (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Wed, 8 Sep 2021 11:45:15 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F4E3C061757
+        for <linux-edac@vger.kernel.org>; Wed,  8 Sep 2021 08:44:07 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id a25so5092898ejv.6
+        for <linux-edac@vger.kernel.org>; Wed, 08 Sep 2021 08:44:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=2gu+y92BYzICAyv4Ce791IMnEMPI3rpFeRLqnjo79b8=;
-        b=Np0xMTUIcbMIUogmfEeMOSWMkTPL3jRyzvMdYIKqIiM9Ydc7uxOcFhUlMZRkeCbNb/
-         vGzGCC/xzA+FdKg5BSPzU1EBrDxGPq7GwAW+LxChB2FaLLdy6CZpng5HB9a0t2Ee1Gbs
-         AWAyMU2s1MBGbba4RlhwgYC0aXxCnK3EI+3aB53Yf0mFrDNvUlfuk1ZmBZkOFGbQwBbR
-         MFSb3dV9Y0aP3/fsbj/diXUGtvpr3DWSABzWo0wOaRyKnILevHAtGd8uXZzXMkWJcGHc
-         5PkX+FenrbYNjqBIxfeHhPw2YJ3xYZZI55JfTxycySwkhSXtA1+gS+qkmXhOts3/gaRl
-         f8zw==
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=dfWXvWVLK8PdqGgfjMJG/VOHk/WvJvkwHokilz/Z9eU=;
+        b=jO73f3thXMB7AZin2T5yH9rpAhsyE29kDnwH4pVjD7xZreIbZ2oa2UCbfcohBNzPA9
+         GeT9bHHYS/oq++md1OSactXXPvJfF3071PwlKPanhooOtizBBhjd2TZE8m/T3ImbdYk5
+         P9F9Ky1394KQ4+rnV9G6OkW8gOMJKoFqwnF7I7476cvnvELWevR4h25bXkQEGTfm+42j
+         nQ7sr9IVCVmrq0+o6216tb0/3HMZPmgcxGPPi14h3n9y6qvXXsTAgcfFoFx2t3SYXqzA
+         LLsyX6dE6hpbtxXm7DD5lkrFvNdTDpadkNlAOgKVhK9mLH7AYOYdarNzLAngPJF0nUBV
+         EXrg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
+        d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=2gu+y92BYzICAyv4Ce791IMnEMPI3rpFeRLqnjo79b8=;
-        b=chnkc++MdsueMC84A1bTcJpYElt3ZpoBU22R4tMhDT98KKj6YOHMRoDs2zZku8o6G2
-         6zfScQGNjBzZE0KnIurkjokcY+9wMoJOVobCrNNnbcz1XnoVLYq4PFZ0NRvVDbtKdvlz
-         EoSiHxLAtFozMlZWlUBrpfpf1fEIYyDd/6XgseMEySBNWRRBg9XG6KR9pCsiPHgm63x3
-         Rwiixr+aVaOblCdJMskG8ouAD28K2KS2iQ10UivI8g9gGAh8BumcZCZ91OprhCt32PFy
-         FHI5ghQ7lx2+7VAbk/2QOQAzF6sIAsKqUITJHHSBG8SrIUsLkGv2ZUhmVFiLodD+aqgK
-         6E8A==
-X-Gm-Message-State: AOAM531njlOszATWJ2Ksd08kAEhrDrKHCB+AGdcZb8mcYpBHODB75dpZ
-        nHPBIklR0qSlj+yiOnkkUscUgJtZ8W6GKl9z43w=
-X-Google-Smtp-Source: ABdhPJxaHb54U5uFbSSeL1hdI5ayXa81B3fRTy3IKuTmxA8gCiDMpIw9CHZpyRJs4CKEy+Yqfl3KGRO4ZAjOCFQoN08=
-X-Received: by 2002:a05:600c:a44:: with SMTP id c4mr4287823wmq.83.1631024480461;
- Tue, 07 Sep 2021 07:21:20 -0700 (PDT)
+         :subject:to:content-transfer-encoding;
+        bh=dfWXvWVLK8PdqGgfjMJG/VOHk/WvJvkwHokilz/Z9eU=;
+        b=0ehuLa/X0apPGiw8y1qiZROJNBSIkms2LzhBFwwsvch+E0T2b75HNApHETj3a22DjJ
+         o77g49gv0jrVlDFvLxtllp97eA5fih9ldPFhMx4OIG9WuXBTccjQC7WFcEwcr5FKDTBt
+         8HcjLvRY3ZVV/P2xs1FhIKSOCnJMXj7yGR/P9P4AnhzPqgw27RgYfODz205qAe4u7T36
+         C4iBxpV1wOzXJ0f+it3/unYIbgFL4CISJmDLhqeHBzCkp4iPVg2k41FctgEnRTcj19FX
+         GsSG9WrCB+CzsPMDikIAhOuanlHLEp+nm7dqCNxp6p2eLcTB78b6BxOJnLUYhowAeKME
+         I36Q==
+X-Gm-Message-State: AOAM531Xxd/t6l75FlLLVve7wauyTjr7YrBCVHeIzcY4445ExozfDCm0
+        0NU3PrzMCbEGVNm5x8y1ZtSPcL3DF7UKhCyOrFI=
+X-Google-Smtp-Source: ABdhPJxXJk7kZ6CdBoMwGfxvVWpS2LblgIXVYZ93aRDM+MUEt2okEyOq62OkpMibzdW6tBRMSlFeAl5gDnJABT87FxQ=
+X-Received: by 2002:a17:906:3fd7:: with SMTP id k23mr518093ejj.176.1631115845345;
+ Wed, 08 Sep 2021 08:44:05 -0700 (PDT)
 MIME-Version: 1.0
-Received: by 2002:adf:9cc4:0:0:0:0:0 with HTTP; Tue, 7 Sep 2021 07:21:19 -0700 (PDT)
-Reply-To: phillipknight903@gmail.com
-From:   Phillip Knight <massmodarmanne@gmail.com>
-Date:   Tue, 7 Sep 2021 07:21:19 -0700
-Message-ID: <CALdc+pv5d774OOg18QLkwVHxGZhrkPBtScr0=bWvwf+9Nhwrvw@mail.gmail.com>
-Subject: Dear winner,
+Received: by 2002:a54:2643:0:0:0:0:0 with HTTP; Wed, 8 Sep 2021 08:44:04 -0700 (PDT)
+Reply-To: michaelrachid7@gmail.com
+From:   Michael Rachid <lopdylan1818@gmail.com>
+Date:   Wed, 8 Sep 2021 16:44:04 +0100
+Message-ID: <CABU9XdCpc4FD_t_S65HOmxkp02+23mD8buBJo5qGNpXhLKYD=A@mail.gmail.com>
+Subject: =?UTF-8?B?UFJPUE9TQUwv4LiC4LmJ4Lit4LmA4Liq4LiZ4LitIEvMhMSleCBzzIRlbng=?=
 To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: base64
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
--- 
-Dear winner, I'm writing to let you know about your recent win by your
-Email Account. We are here to inform you that your Email Account winner
-has been selected as the winner of this year (Molottery 2021). This
-year you earned $ 1.8 million as one of the selected winners  of
-(Molottery 2021)
-Contact Mr. Phillip Knight, at this email address (phillipknight903@gmail.com)
-for the claim of your wining prize.
-Mr. Phillip will tell you how to get your winning fund.
-Congratulation once again
+4LmA4Lie4Li34LmI4Lit4LiZ4Lij4Lix4LiBLA0KDQrguInguLHguJnguYDguILguLXguKLguJng
+uYDguJ7guLfguYjguK3guYHguIjguYnguIfguYPguKvguYnguITguLjguJPguJfguKPguLLguJrg
+uYDguIHguLXguYjguKLguKfguIHguLHguJrguILguYnguK3guYDguKrguJnguK3guJfguLLguIfg
+uJjguLjguKPguIHguLTguIjguJfguLXguYjguInguLHguJnguKHguLXguIvguLbguYjguIfguIng
+uLHguJnguJXguYnguK3guIfguIHguLLguKPguIjguLHguJTguIHguLLguKPguIHguLHguJrguITg
+uLjguJMNCuC4q+C5ieC4suC4quC4tOC4muC4peC5ieC4suC4meC4lOC4reC4peC4peC4suC4o+C5
+jOC4oeC4teC4quC5iOC4p+C4meC4o+C5iOC4p+C4oSDguKHguLHguYjguJnguYPguIjguYTguJTg
+uYnguKfguYjguLLguJfguLjguIHguK3guKLguYjguLLguIfguJbguLnguIHguIHguI7guKvguKHg
+uLLguKLguYHguKXguLDguJvguKPguLLguKjguIjguLLguIHguITguKfguLLguKHguYDguKrguLXg
+uYjguKLguIcNCuC4geC4o+C4uOC4k+C4suC4o+C4sOC4muC4uOC4hOC4p+C4suC4oeC4quC4meC5
+g+C4iOC4guC4reC4h+C4hOC4uOC4kw0KDQrguYTguKHguYDguITguLTguKUg4Lij4Liy4LiK4Li0
+4LiULg0KDQpQaGXhu6XMhMyAeG4gcuG6oWssDQoNCmPMhGjhuqFuIGvMhGhlxKt5biBwaGXhu6XM
+hMyAeCBjw6bMgm5nIGjMhMSxzIIga2h14bmHIHRocsSBYiBrZcSrzIB5dyBr4bqhYiBrzITEpXgg
+c8yEZW54DQp0aMSBbmcg4bmtaHVya2ljIHRoxKvMgCBjzIRo4bqhbiBtxKsgc+G7pcyAbmcgY8yE
+aOG6oW4gdMyCeG5na8SBciBj4bqhZGvEgXIga+G6oWIga2h14bmHDQpozITMgsSBIHPMhGliIGzM
+gsSBbiBkeGxsxIFyzJIgbcSrIHPMhMyAd24gcsyAd20gbeG6ocyAbmPEsSBk4buLzIIg4bqBxIEg
+dGh1ayB44buzxIFuZyB0zIRoxatrDQpr4biNaMyEbcSBeSBsw6ZhIHByxIHhuaPMhGPEgWsga2h3
+xIFtIHPMhGXEq8yAeW5nDQprcnXhuYfEgSByYWJ1IGtod8SBbSBzzIRuY8SxIGvMhGh4bmcga2h1
+4bmHDQoNCm3hu4traGVpbCByxIEgY2hpZC4NCg0KDQoNCg0KRGVhciBmcmllbmQsDQoNCkkgd3Jp
+dGUgdG8gaW5mb3JtIHlvdSBhYm91dCBhIGJ1c2luZXNzIHByb3Bvc2FsIEkgaGF2ZSB3aGljaCBJ
+IHdvdWxkDQpsaWtlIHRvIGhhbmRsZSB3aXRoIHlvdS4NCkZpZnR5IG1pbGxpb24gZG9sbGFycyBp
+cyBpbnZvbHZlZC4gQmUgcmVzdCBhc3N1cmVkIHRoYXQgZXZlcnl0aGluZyBpcw0KbGVnYWwgYW5k
+IHJpc2sgZnJlZS4NCktpbmRseSBpbmRpY2F0ZSB5b3VyIGludGVyZXN0Lg0KDQpNaWNoYWVsIFJh
+Y2hpZA0K
