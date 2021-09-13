@@ -2,245 +2,102 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AF54D4087AF
-	for <lists+linux-edac@lfdr.de>; Mon, 13 Sep 2021 10:59:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C654408824
+	for <lists+linux-edac@lfdr.de>; Mon, 13 Sep 2021 11:25:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238362AbhIMJAb (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Mon, 13 Sep 2021 05:00:31 -0400
-Received: from mail.kernel.org ([198.145.29.99]:41182 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236022AbhIMJAb (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Mon, 13 Sep 2021 05:00:31 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id F414461029;
-        Mon, 13 Sep 2021 08:59:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1631523556;
-        bh=CwfHxitG9wk52V601afoOOoBW02DjRN5SudCah4N5Uc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=t+GO5J1bNRJgY7k+CL+jaxFuXEHPHGwmbTU/cTgaE7Ik0XfWZUgKXtPEuyfNRogcH
-         YUMVsz7iHJV0hHFNXCgeaWJbt8o65LNt2RLEVbEDhjLC3vWjF8R0laBnmFS/UCMBJM
-         nGx2YL5udEKiH7eNa2J4FgP29EeoWWUT5PAxR+vWW8lcOog/HB4Y38Po6rWZDttq+2
-         YXqN0WHt749l0I8/JAIXxJmOOTMXP8qv8ICVemxpTS/Y52J822nTh8A5MiwgyXn2QA
-         4jY+8C2tdqi7ZxQtHtgUcX3QnBVofTDrzAUBhEI1FutV6L5nYq3LFn2BsoHCsNFcSL
-         RX/RpR3JRMDxQ==
-Date:   Mon, 13 Sep 2021 10:59:10 +0200
-From:   Robert Richter <rric@kernel.org>
-To:     Len Baker <len.baker@gmx.com>
-Cc:     Borislav Petkov <bp@alien8.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Tony Luck <tony.luck@intel.com>,
-        James Morse <james.morse@arm.com>,
-        Joe Perches <joe@perches.com>,
-        David Laight <David.Laight@aculab.com>,
-        Kees Cook <keescook@chromium.org>,
-        linux-hardening@vger.kernel.org, linux-edac@vger.kernel.org,
+        id S238367AbhIMJ0X (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Mon, 13 Sep 2021 05:26:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60674 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238002AbhIMJ0X (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Mon, 13 Sep 2021 05:26:23 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D45B0C061574;
+        Mon, 13 Sep 2021 02:25:07 -0700 (PDT)
+Received: from zn.tnic (p200300ec2f0973004765224e3bd861c8.dip0.t-ipconnect.de [IPv6:2003:ec:2f09:7300:4765:224e:3bd8:61c8])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id C98591EC0521;
+        Mon, 13 Sep 2021 11:25:00 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1631525100;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=dPlZ7SwE2Bck0JaPAUxS3dOshX7CdpAXQTGsFhy+ZN8=;
+        b=CrcQIu9kedVB9sb4JyFABo6gii9pMiXOCa5WgEHeSa+HfSIVmKmOhr1PrBthWgOJsMQi8Q
+        WIfU7PTfFMNNHJKhI41PPESZULMA5qNgKzTRcqziplz5wmINqGqGPsxffVUrRiqFrO4uKu
+        PcAP0kyAu+n2zR9bOZWqoebweEDwTPE=
+Date:   Mon, 13 Sep 2021 11:24:53 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Tony Luck <tony.luck@intel.com>
+Cc:     Jue Wang <juew@google.com>, Ding Hui <dinghui@sangfor.com.cn>,
+        naoya.horiguchi@nec.com, osalvador@suse.de,
+        Youquan Song <youquan.song@intel.com>, huangcun@sangfor.com.cn,
+        x86@kernel.org, linux-edac@vger.kernel.org, linux-mm@kvack.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH] EDAC/mc: Prefer strscpy or scnprintf over strcpy, sprintf
- and snprintf
-Message-ID: <YT8S3poKyd5Nr5cK@rric.localdomain>
-References: <20210903150539.7282-1-len.baker@gmx.com>
+Subject: Re: [PATCH v2 1/3] x86/mce: Avoid infinite loop for copy from user
+ recovery
+Message-ID: <YT8Y5cBiaD3NpAIi@zn.tnic>
+References: <20210706190620.1290391-1-tony.luck@intel.com>
+ <20210818002942.1607544-1-tony.luck@intel.com>
+ <20210818002942.1607544-2-tony.luck@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20210903150539.7282-1-len.baker@gmx.com>
+In-Reply-To: <20210818002942.1607544-2-tony.luck@intel.com>
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-Len,
-
-On 03.09.21 17:05:39, Len Baker wrote:
-> strcpy() performs no bounds checking on the destination buffer. This
-> could result in linear overflows beyond the end of the buffer, leading
-> to all kinds of misbehaviors. The safe replacement is strscpy() [1].
+On Tue, Aug 17, 2021 at 05:29:40PM -0700, Tony Luck wrote:
+> Recovery action when get_user() triggers a machine check uses the fixup
+> path to make get_user() return -EFAULT.  Also queue_task_work() sets up
+> so that kill_me_maybe() will be called on return to user mode to send
+> a SIGBUS to the current process.
 > 
-> However, to simplify and clarify the code, to concatenate labels use
-> the scnprintf() function. This way it is not necessary to check the
-> return value of strscpy (-E2BIG if the parameter count is 0 or the src
-> was truncated) since the scnprintf returns always the number of chars
-> written into the buffer. This function returns always a nul-terminated
-> string even if it needs to be truncated.
+> But there are places in the kernel where the code assumes that this
+> EFAULT return was simply because of a page fault. The code takes some
+> action to fix that, and then retries the access. This results in a second
+> machine check.
 > 
-> The main reason behind this patch is to remove all the strcpy() uses
-> from the kernel with the purpose to clean up the proliferation of
-> str*cpy() functions. Later on, the next step will be remove all the
-> strcpy implementations [2].
+> While processing this second machine check queue_task_work() is called
+> again. But since this uses the same callback_head structure that was used
+> in the first call, the net result is an entry on the current->task_works
+> list that points to itself. When task_work_run() is called it loops
+> forever in this code:
 > 
-> [1] https://www.kernel.org/doc/html/latest/process/deprecated.html#strcpy
-> [2] https://github.com/KSPP/linux/issues/88
+>         do {
+>                 next = work->next;
+>                 work->func(work);
+>                 work = next;
+>                 cond_resched();
+>         } while (work);
 > 
-> Co-developed-by: Joe Perches <joe@perches.com>
-> Signed-off-by: Joe Perches <joe@perches.com>
-> Signed-off-by: Len Baker <len.baker@gmx.com>
+> Add a counter (current->mce_count) to keep track of repeated machine
+> checks before task_work() is called. First machine check saves the address
+> information and calls task_work_add(). Subsequent machine checks before
+> that task_work call back is executed check that the address is in the
+> same page as the first machine check (since the callback will offline
+> exactly one page).
+> 
+> Expected worst case is two machine checks before moving on (e.g. one user
+> access with page faults disabled, then a repeat to the same addrsss with
+> page faults enabled). Just in case there is some code that loops forever
+> enforce a limit of 10.
+> 
+> Cc: <stable@vger.kernel.org>
 
-this patch looks good to me. I made some changes on top of it to
-further ease pointer arithmetic and also fix remaining
-sprintf/snprintf() users as it makes sense to have them all in a
-single change. See below. Boris, please apply.
+What about a Fixes: tag?
 
-Thanks,
+I guess backporting this to the respective kernels is predicated upon
+the existence of those other "places" in the kernel where code assumes
+the EFAULT was because of a #PF.
 
--Robert
+Hmmm?
 
-From 01a3c62a533e71984dfff7189e247b3e848f1449 Mon Sep 17 00:00:00 2001
-From: Len Baker <len.baker@gmx.com>
-Date: Fri, 3 Sep 2021 17:05:39 +0200
-Subject: [PATCH] EDAC/mc: Prefer strscpy or scnprintf over strcpy, sprintf
- and snprintf
-
-strcpy() performs no bounds checking on the destination buffer. This
-could result in linear overflows beyond the end of the buffer, leading
-to all kinds of misbehaviors. The safe replacement is strscpy().
-[1][2]
-
-However, to simplify and clarify the code, to concatenate labels use
-the scnprintf() function. This way it is not necessary to check the
-return value of strscpy (-E2BIG if the parameter count is 0 or the src
-was truncated) since the scnprintf returns always the number of chars
-written into the buffer. This function returns always a nul-terminated
-string even if it needs to be truncated.
-
-While at it, fix all other broken string generation code that wrongly
-interprets snprintf()'s return code or just uses sprintf(), implement
-that using scnprintf() here too. Drop breaks in loops around
-scnprintf() as it is safe now to loop. Moreover, the check is
-needless: For the case when the buffer is exhausted, len never gets
-zero because scnprintf() takes the full buffer length as input
-parameter, but excludes the trailing '\0' in its return code and thus,
-1 is the minimum len.
-
-[1] https://www.kernel.org/doc/html/latest/process/deprecated.html#strcpy
-[2] https://github.com/KSPP/linux/issues/88
-
- [ rric: Replace snprintf() with scnprintf(), rework sprintf() user,
-   drop breaks in loops around scnprintf(), introduce 'end' pointer to
-   reduce pointer arithmetic, use prefix pattern for e->location,
-   adjust subject and description ]
-
-Co-developed-by: Joe Perches <joe@perches.com>
-Signed-off-by: Joe Perches <joe@perches.com>
-Signed-off-by: Len Baker <len.baker@gmx.com>
-Signed-off-by: Robert Richter <rrichter@amd.com>
----
- drivers/edac/edac_mc.c | 42 ++++++++++++++++++------------------------
- 1 file changed, 18 insertions(+), 24 deletions(-)
-
-diff --git a/drivers/edac/edac_mc.c b/drivers/edac/edac_mc.c
-index 2c5975674723..9f82ca295353 100644
---- a/drivers/edac/edac_mc.c
-+++ b/drivers/edac/edac_mc.c
-@@ -66,14 +66,12 @@ unsigned int edac_dimm_info_location(struct dimm_info *dimm, char *buf,
- 	char *p = buf;
- 
- 	for (i = 0; i < mci->n_layers; i++) {
--		n = snprintf(p, len, "%s %d ",
-+		n = scnprintf(p, len, "%s %d ",
- 			      edac_layer_name[mci->layers[i].type],
- 			      dimm->location[i]);
- 		p += n;
- 		len -= n;
- 		count += n;
--		if (!len)
--			break;
- 	}
- 
- 	return count;
-@@ -341,19 +339,16 @@ static int edac_mc_alloc_dimms(struct mem_ctl_info *mci)
- 		 */
- 		len = sizeof(dimm->label);
- 		p = dimm->label;
--		n = snprintf(p, len, "mc#%u", mci->mc_idx);
-+		n = scnprintf(p, len, "mc#%u", mci->mc_idx);
- 		p += n;
- 		len -= n;
- 		for (layer = 0; layer < mci->n_layers; layer++) {
--			n = snprintf(p, len, "%s#%u",
--				     edac_layer_name[mci->layers[layer].type],
--				     pos[layer]);
-+			n = scnprintf(p, len, "%s#%u",
-+				      edac_layer_name[mci->layers[layer].type],
-+				      pos[layer]);
- 			p += n;
- 			len -= n;
- 			dimm->location[layer] = pos[layer];
--
--			if (len <= 0)
--				break;
- 		}
- 
- 		/* Link it to the csrows old API data */
-@@ -1027,12 +1022,13 @@ void edac_mc_handle_error(const enum hw_event_mc_err_type type,
- 			  const char *other_detail)
- {
- 	struct dimm_info *dimm;
--	char *p;
-+	char *p, *end;
- 	int row = -1, chan = -1;
- 	int pos[EDAC_MAX_LAYERS] = { top_layer, mid_layer, low_layer };
- 	int i, n_labels = 0;
- 	struct edac_raw_error_desc *e = &mci->error_desc;
- 	bool any_memory = true;
-+	const char *prefix;
- 
- 	edac_dbg(3, "MC%d\n", mci->mc_idx);
- 
-@@ -1087,6 +1083,8 @@ void edac_mc_handle_error(const enum hw_event_mc_err_type type,
- 	 */
- 	p = e->label;
- 	*p = '\0';
-+	end = p + sizeof(e->label);
-+	prefix = "";
- 
- 	mci_for_each_dimm(mci, dimm) {
- 		if (top_layer >= 0 && top_layer != dimm->location[0])
-@@ -1114,12 +1112,8 @@ void edac_mc_handle_error(const enum hw_event_mc_err_type type,
- 			p = e->label;
- 			*p = '\0';
- 		} else {
--			if (p != e->label) {
--				strcpy(p, OTHER_LABEL);
--				p += strlen(OTHER_LABEL);
--			}
--			strcpy(p, dimm->label);
--			p += strlen(p);
-+			p += scnprintf(p, end - p, "%s%s", prefix, dimm->label);
-+			prefix = OTHER_LABEL;
- 		}
- 
- 		/*
-@@ -1141,25 +1135,25 @@ void edac_mc_handle_error(const enum hw_event_mc_err_type type,
- 	}
- 
- 	if (any_memory)
--		strcpy(e->label, "any memory");
-+		strscpy(e->label, "any memory", sizeof(e->label));
- 	else if (!*e->label)
--		strcpy(e->label, "unknown memory");
-+		strscpy(e->label, "unknown memory", sizeof(e->label));
- 
- 	edac_inc_csrow(e, row, chan);
- 
- 	/* Fill the RAM location data */
- 	p = e->location;
-+	end = p + sizeof(e->location);
-+	prefix = "";
- 
- 	for (i = 0; i < mci->n_layers; i++) {
- 		if (pos[i] < 0)
- 			continue;
- 
--		p += sprintf(p, "%s:%d ",
--			     edac_layer_name[mci->layers[i].type],
--			     pos[i]);
-+		p += scnprintf(p, end - p, "%s%s:%d", prefix,
-+			       edac_layer_name[mci->layers[i].type], pos[i]);
-+		prefix = " ";
- 	}
--	if (p > e->location)
--		*(p - 1) = '\0';
- 
- 	edac_raw_mc_handle_error(e);
- }
 -- 
-2.30.2
+Regards/Gruss,
+    Boris.
 
+https://people.kernel.org/tglx/notes-about-netiquette
