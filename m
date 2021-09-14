@@ -2,219 +2,140 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D7448409F60
-	for <lists+linux-edac@lfdr.de>; Mon, 13 Sep 2021 23:52:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E039F40A891
+	for <lists+linux-edac@lfdr.de>; Tue, 14 Sep 2021 09:49:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235200AbhIMVx7 (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Mon, 13 Sep 2021 17:53:59 -0400
-Received: from mga03.intel.com ([134.134.136.65]:27374 "EHLO mga03.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234843AbhIMVx7 (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Mon, 13 Sep 2021 17:53:59 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10106"; a="221853521"
-X-IronPort-AV: E=Sophos;i="5.85,290,1624345200"; 
-   d="scan'208";a="221853521"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Sep 2021 14:52:42 -0700
-X-IronPort-AV: E=Sophos;i="5.85,290,1624345200"; 
-   d="scan'208";a="543499530"
-Received: from agluck-desk2.sc.intel.com (HELO agluck-desk2.amr.corp.intel.com) ([10.3.52.146])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Sep 2021 14:52:41 -0700
-Date:   Mon, 13 Sep 2021 14:52:39 -0700
-From:   "Luck, Tony" <tony.luck@intel.com>
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     Jue Wang <juew@google.com>, Ding Hui <dinghui@sangfor.com.cn>,
-        naoya.horiguchi@nec.com, osalvador@suse.de,
-        Youquan Song <youquan.song@intel.com>, huangcun@sangfor.com.cn,
-        x86@kernel.org, linux-edac@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v3] x86/mce: Avoid infinite loop for copy from user recovery
-Message-ID: <YT/IJ9ziLqmtqEPu@agluck-desk2.amr.corp.intel.com>
-References: <20210706190620.1290391-1-tony.luck@intel.com>
- <20210818002942.1607544-1-tony.luck@intel.com>
- <20210818002942.1607544-2-tony.luck@intel.com>
- <YT8Y5cBiaD3NpAIi@zn.tnic>
+        id S231407AbhINHvK (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Tue, 14 Sep 2021 03:51:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57422 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233909AbhINHuy (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Tue, 14 Sep 2021 03:50:54 -0400
+Received: from mail-il1-x12e.google.com (mail-il1-x12e.google.com [IPv6:2607:f8b0:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9912AC061365
+        for <linux-edac@vger.kernel.org>; Tue, 14 Sep 2021 00:45:48 -0700 (PDT)
+Received: by mail-il1-x12e.google.com with SMTP id b8so11284077ilh.12
+        for <linux-edac@vger.kernel.org>; Tue, 14 Sep 2021 00:45:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=HDchPRn5PQyF3h/2rdF9lm/oZ1G+RfxC7VmNacrADaE=;
+        b=lzGNzodm3u+XkjSRzWCgbSt0F/DrRoRH+4GteTYxHNyrOM3JeIK2sS5b4nJ+J1f19p
+         e1dZTTW8GKE71CvR8b4WojoyG3j4biqYyTXtptzb//fxefJvEv2wwAJfwCWeXLZCDLvM
+         9kgvd2A861cp9kWZ+OvmP5cOXAeCiucCua7QE96Guzxi1pVJvyzQcAoEcCaA4GnhbqIB
+         RwYzKsTHXgY/p7hOsuoe0TJ5wszJT3o1VlxFjVfV4ZjdN3y59MJhIcMAyCmo0t5pfrgp
+         FiFz7KTcXx8tdLxvjkPbNrxdGJosua351JGKdNoo8XR8YRQdkHCioMbAeWdHezVbYXF8
+         SC/A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=HDchPRn5PQyF3h/2rdF9lm/oZ1G+RfxC7VmNacrADaE=;
+        b=hsYQkr3m79AqCKrDyKbRdIf/vvebAu8fl0A2d6UKeKA8UVcOezS9WBT20tR3zKGPtG
+         wLbr1QtgstqvY2fREcgKGFRdfR0zpntf4WiMojV0GBs0FgaBz1aCXBDQ/uW79DCkZKpq
+         J7I0yFJSQRkQCYJXDnAaOTikzUxZgvq33sKgdy7qlgYOoGkZ8mwwjc89dtourtsXI7DC
+         C9EjcWx5i0ApIulTAhBIMylAdORL4sL2rkBdNbrsspM5c2D7q4WNrHO0ouEyY6EU/vQR
+         8s/J+pu6yigkEOFesqTC6MuDE2pSACXLX066pW1K4I53Fa2C6EseE4ZPGF2onIShmwgd
+         oFvw==
+X-Gm-Message-State: AOAM530J7m5rmOGE5jyjjQokkzbVb9SbqzM/w1DUe1RbeDdtxOk9GrS1
+        w/JmgBxp6SxalGUL/cze2M/4WGgQUJ8klEN9NFQ=
+X-Google-Smtp-Source: ABdhPJzWbdF0lzVPV/8gR+vvEcDtr3h4CROAqTwI4Ge6vmEDdUEaRZMhvUUesLYFl9YDGgGjue0cJN3e5dLUloUc214=
+X-Received: by 2002:a05:6e02:1d8b:: with SMTP id h11mr5948992ila.94.1631605547780;
+ Tue, 14 Sep 2021 00:45:47 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YT8Y5cBiaD3NpAIi@zn.tnic>
+Received: by 2002:a02:c76e:0:0:0:0:0 with HTTP; Tue, 14 Sep 2021 00:45:47
+ -0700 (PDT)
+Reply-To: shawnhayden424@gmail.com
+From:   Shawn Hayden <adamarichard600@gmail.com>
+Date:   Tue, 14 Sep 2021 08:45:47 +0100
+Message-ID: <CAK+eSe-1qFT_2e=cc+RjVqrSr6-4gnncHv-ZCSunvm-5Ns3w7w@mail.gmail.com>
+Subject: =?UTF-8?B?Q0hBUklUWS/guIHguLLguKPguIHguLjguKjguKUgS8SBciBrdeG5o8yEbA==?=
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: base64
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-There are two cases for machine check recovery:
-1) The machine check was triggered by ring3 (application) code.
-   This is the simpler case. The machine check handler simply queues
-   work to be executed on return to user. That code unmaps the page
-   from all users and arranges to send a SIGBUS to the task that
-   triggered the poison.
-2) The machine check was triggered in kernel code that is covered by
-   an extable entry.
-   In this case the machine check handler still queues a work entry to
-   unmap the page, etc. but this will not be called right away because
-   the #MC handler returns to the fix up code address in the extable
-   entry.
-
-Problems occur if the kernel triggers another machine check before the
-return to user processes the first queued work item.
-
-Specifically the work is queued using the "mce_kill_me" callback
-structure in the task struct for the current thread. Attempting to queue
-a second work item using this same callback results in a loop in the
-linked list of work functions to call. So when the kernel does return to
-user it enters an infinite loop processing the same entry for ever.
-
-There are some legitimate scenarios where the kernel may take a second
-machine check before returning to the user.
-
-1) Some code (e.g. futex) first tries a get_user() with page faults
-   disabled. If this fails, the code retries with page faults enabled
-   expecting that this will resolve the page fault.
-2) Copy from user code retries a copy in byte-at-time mode to check
-   whether any additional bytes can be copied.
-
-On the other side of the fence are some bad drivers that do not check
-the return value from individual get_user() calls and may access
-multiple user addresses without noticing that some/all calls have
-failed.
-
-Fix by adding a counter (current->mce_count) to keep track of repeated
-machine checks before task_work() is called. First machine check saves
-the address information and calls task_work_add(). Subsequent machine
-checks before that task_work call back is executed check that the address
-is in the same page as the first machine check (since the callback will
-offline exactly one page).
-
-Expected worst case is four machine checks before moving on (e.g. one
-user access with page faults disabled, then a repeat to the same address
-with page faults enabled ... repeat in copy tail bytes). Just in case
-there is some code that loops forever enforce a limit of 10.
-
-Also mark queue_task_work() as "noinstr" (as reported kernel test robot
-<lkp@intel.com>)
-
-Cc: <stable@vger.kernel.org>
-Fixes: 5567d11c21a1 ("x86/mce: Send #MC singal from task work")
-Signed-off-by: Tony Luck <tony.luck@intel.com>
----
-
-> What about a Fixes: tag?
-
-Added a Fixes tag.
-
-Also added "noinstr" to queue_task_work() per a kernel robot report.
-
-Also re-wrote the commit comment (based on questions raised against v2)
-
-> I guess backporting this to the respective kernels is predicated upon
-> the existence of those other "places" in the kernel where code assumes
-> the EFAULT was because of a #PF.
-
-Not really. I don't expect to change any kernel code that just bounces
-off the same machine check a few times. This patch does work best in
-conjunction with patches 2 & 3 (unchanged, not reposted here). But it
-will fix some old issues even without those two.
-
- arch/x86/kernel/cpu/mce/core.c | 43 +++++++++++++++++++++++++---------
- include/linux/sched.h          |  1 +
- 2 files changed, 33 insertions(+), 11 deletions(-)
-
-diff --git a/arch/x86/kernel/cpu/mce/core.c b/arch/x86/kernel/cpu/mce/core.c
-index 8cb7816d03b4..9891b4070a61 100644
---- a/arch/x86/kernel/cpu/mce/core.c
-+++ b/arch/x86/kernel/cpu/mce/core.c
-@@ -1253,6 +1253,9 @@ static void __mc_scan_banks(struct mce *m, struct pt_regs *regs, struct mce *fin
- 
- static void kill_me_now(struct callback_head *ch)
- {
-+	struct task_struct *p = container_of(ch, struct task_struct, mce_kill_me);
-+
-+	p->mce_count = 0;
- 	force_sig(SIGBUS);
- }
- 
-@@ -1262,6 +1265,7 @@ static void kill_me_maybe(struct callback_head *cb)
- 	int flags = MF_ACTION_REQUIRED;
- 	int ret;
- 
-+	p->mce_count = 0;
- 	pr_err("Uncorrected hardware memory error in user-access at %llx", p->mce_addr);
- 
- 	if (!p->mce_ripv)
-@@ -1290,17 +1294,34 @@ static void kill_me_maybe(struct callback_head *cb)
- 	}
- }
- 
--static void queue_task_work(struct mce *m, int kill_current_task)
-+static noinstr void queue_task_work(struct mce *m, char *msg, int kill_current_task)
- {
--	current->mce_addr = m->addr;
--	current->mce_kflags = m->kflags;
--	current->mce_ripv = !!(m->mcgstatus & MCG_STATUS_RIPV);
--	current->mce_whole_page = whole_page(m);
-+	int count = ++current->mce_count;
- 
--	if (kill_current_task)
--		current->mce_kill_me.func = kill_me_now;
--	else
--		current->mce_kill_me.func = kill_me_maybe;
-+	/* First call, save all the details */
-+	if (count == 1) {
-+		current->mce_addr = m->addr;
-+		current->mce_kflags = m->kflags;
-+		current->mce_ripv = !!(m->mcgstatus & MCG_STATUS_RIPV);
-+		current->mce_whole_page = whole_page(m);
-+
-+		if (kill_current_task)
-+			current->mce_kill_me.func = kill_me_now;
-+		else
-+			current->mce_kill_me.func = kill_me_maybe;
-+	}
-+
-+	/* Ten is likley overkill. Don't expect more than two faults before task_work() */
-+	if (count > 10)
-+		mce_panic("Too many machine checks while accessing user data", m, msg);
-+
-+	/* Second or later call, make sure page address matches the one from first call */
-+	if (count > 1 && (current->mce_addr >> PAGE_SHIFT) != (m->addr >> PAGE_SHIFT))
-+		mce_panic("Machine checks to different user pages", m, msg);
-+
-+	/* Do not call task_work_add() more than once */
-+	if (count > 1)
-+		return;
- 
- 	task_work_add(current, &current->mce_kill_me, TWA_RESUME);
- }
-@@ -1438,7 +1459,7 @@ noinstr void do_machine_check(struct pt_regs *regs)
- 		/* If this triggers there is no way to recover. Die hard. */
- 		BUG_ON(!on_thread_stack() || !user_mode(regs));
- 
--		queue_task_work(&m, kill_current_task);
-+		queue_task_work(&m, msg, kill_current_task);
- 
- 	} else {
- 		/*
-@@ -1456,7 +1477,7 @@ noinstr void do_machine_check(struct pt_regs *regs)
- 		}
- 
- 		if (m.kflags & MCE_IN_KERNEL_COPYIN)
--			queue_task_work(&m, kill_current_task);
-+			queue_task_work(&m, msg, kill_current_task);
- 	}
- out:
- 	mce_wrmsrl(MSR_IA32_MCG_STATUS, 0);
-diff --git a/include/linux/sched.h b/include/linux/sched.h
-index e12b524426b0..39039ce8ac4c 100644
---- a/include/linux/sched.h
-+++ b/include/linux/sched.h
-@@ -1471,6 +1471,7 @@ struct task_struct {
- 					mce_whole_page : 1,
- 					__mce_reserved : 62;
- 	struct callback_head		mce_kill_me;
-+	int				mce_count;
- #endif
- 
- #ifdef CONFIG_KRETPROBES
--- 
-2.31.1
-
+4LmA4Lie4Li34LmI4Lit4LiZ4Lij4Lix4LiBLA0KDQrguInguLHguJnguYDguJvguYfguJnguJ7g
+uKXguYDguKHguLfguK3guIfguK3guK3guKrguYDguJXguKPguYDguKXguLXguKLguJfguLXguYjg
+uK3guLLguKjguLHguKLguK3guKLguLnguYjguYPguJnguKrguKvguKPguLHguJDguK3guYDguKHg
+uKPguLTguIHguLLguYHguKXguLDguYDguJvguYfguJnguJnguLLguKLguKvguJnguYnguLLguJTg
+uYnguKfguKLguK3guLLguKLguLggMzUg4Lib4Li1DQrguJvguKPguLDguKrguJrguIHguLLguKPg
+uJPguYwuIOC4ieC4seC4meC5gOC4nuC4tOC5iOC4h+C4leC4tOC4lOC5gOC4iuC4t+C5ieC4reC5
+hOC4p+C4o+C4seC4quC5guC4hOC4p+C4tOC4lC0xOSDguYHguKXguLDguYDguJnguLfguYjguK3g
+uIfguIjguLLguIENCuC4reC4suC4ouC4uOC5gOC4l+C5iOC4suC4ieC4seC4mSDguInguLHguJng
+uYTguKHguYjguITguLTguJTguKfguYjguLLguInguLHguJnguIjguLDguKPguK3guJTguIjguLLg
+uIHguKrguLTguYjguIfguJnguLXguYnguYTguJTguYkg4LiJ4Lix4LiZ4Lit4Lii4Li54LmI4Lig
+4Liy4Lii4LmD4LiV4LmJ4Lit4Lit4LiB4LiL4Li04LmA4LiI4LiZ4Liq4Liz4Lir4Lij4Lix4Lia
+IGENCuC4quC4reC4h+C4quC4suC4oeC4p+C4seC4meC4ieC4seC4meC5hOC4oeC5iOC4quC4suC4
+oeC4suC4o+C4luC4i+C4t+C5ieC4reC4iuC4teC4p+C4tOC4leC4lOC5ieC4p+C4ouC5gOC4h+C4
+tOC4meC5hOC4lOC5iSDguInguLHguJnguKrguLLguKHguLLguKPguJbguJrguKPguLTguIjguLLg
+uITguYDguIfguLTguJkgNTUNCuC4peC5ieC4suC4meC5gOC4q+C4o+C4teC4ouC4jeC4quC4q+C4
+o+C4seC4kOC5gOC4nuC4t+C5iOC4reC4geC4suC4o+C4geC4uOC4qOC4pQ0K4LmC4LiU4Lii4LmA
+4LiJ4Lie4Liy4Liw4LiB4Liy4Lij4LiK4LmI4Lin4Lii4LmA4Lir4Lil4Li34Lit4Lic4Li54LmJ
+4Lii4Liy4LiB4LmE4Lij4LmJIOC4m+C4teC4l+C4teC5iOC5geC4peC5ieC4p+C4ieC4seC4meC5
+gOC4quC4teC4ouC4oOC4o+C4o+C4ouC4suC4lOC5ieC4p+C4ouC5guC4o+C4hOC4oeC4sOC5gOC4
+o+C5h+C4hw0K4LmB4Lil4Liw4Lil4Li54LiB4LiK4Liy4Lii4LiE4LiZ4LmA4LiU4Li14Lii4Lin
+4LiC4Lit4LiH4LiJ4Lix4LiZ4Lib4LmI4Lin4Lii4LmA4Lib4LmH4LiZ4LmC4Lij4LiE4LmA4Lij
+4Li34LmJ4Lit4Lij4Lix4LiHDQrguJnguLHguIHguJ7guJnguLHguJnguJfguLXguYjguYDguKrg
+uLXguKLguYDguIfguLTguJnguJfguLHguYnguIfguKvguKHguJTguJfguLXguYjguInguLHguJng
+uKHguK3guJrguYPguKvguYnguYDguILguLLguYTguJsNCuC4meC4reC4meC4m+C5iOC4p+C4ouC4
+reC4ouC4ueC5iOC5hOC4oeC5iOC4o+C4reC4lOC4geC5h+C4guC4reC4nuC4ow0K4LiE4Li44LiT
+4LiK4LmI4Lin4Lii4LiJ4Lix4LiZ4LmA4LiV4Li04Lih4LmA4LiV4LmH4Lih4LiE4Lin4Liy4Lih
+4Lib4Lij4Liy4Lij4LiW4LiZ4Liy4Liq4Li44LiU4LiX4LmJ4Liy4Lii4LiC4Lit4LiH4LiJ4Lix
+4LiZIOC4meC4teC5iOC4hOC4t+C4reC4hOC4p+C4suC4oeC4m+C4o+C4suC4o+C4luC4meC4suC4
+l+C4teC5iOC4iOC4sOC4o+C4seC4muC5g+C4iuC5ieC4ieC4seC4mQ0K4LmA4Lie4Li34LmI4Lit
+4Lin4Li04LiH4Lin4Lit4LiZ4LiV4LmI4Lit4Lie4Lij4Liw4LmA4LiI4LmJ4Liy4LmA4Lie4Li3
+4LmI4Lit4LiI4Li04LiV4Lin4Li04LiN4LiN4Liy4LiT4LiC4Lit4LiH4LiJ4Lix4LiZ4LmB4Lil
+4Liw4LiB4Liy4Lij4Lit4Lig4Lix4Lii4Lia4Liy4Lib4LiC4Lit4LiH4LiJ4Lix4LiZIOC4luC5
+ieC4suC4hOC4uOC4k+C5gOC4leC5h+C4oeC5g+C4iA0K4LmB4Lil4Liw4Lie4Lij4LmJ4Lit4Lih
+4LiX4Li14LmI4LiI4Liw4LiK4LmI4Lin4Lii4LmA4Lir4Lil4Li34LitIOC5guC4m+C4o+C4lOC4
+leC4reC4muC4ieC4seC4meC5geC4peC4sOC4ieC4seC4meC4iOC4sOC5g+C4q+C5ieC4o+C4suC4
+ouC4peC4sOC5gOC4reC4teC4ouC4lOC5geC4geC5iOC4hOC4uOC4kyDguInguLHguJnguKPguLng
+uYnguKfguYjguLLguInguLHguJkNCuC4quC4suC4oeC4suC4o+C4luC5hOC4p+C5ieC4p+C4suC4
+h+C5g+C4iOC4hOC4uOC4k+C5hOC4lOC5iSDguIrguYjguKfguKLguInguLHguJnguJTguYnguKfg
+uKIuDQoNCuC4guC4reC5geC4quC4lOC4h+C4hOC4p+C4suC4oeC4meC4seC4muC4luC4t+C4rS4N
+Cg0K4LiK4Lit4Lin4LmM4LiZIOC5gOC4ruC4ouC5jOC5gOC4lOC4mS4NCg0KUGhl4bulzITMgHhu
+IHLhuqFrLA0KDQpjzIRo4bqhbiBwxJVuIHBobG1l4bulzIR4bmcgeHhzzIR0ZXJsZcSreSB0aMSr
+zIAgeMSB4bmjzIThuqF5IHh5xavMgCBuxLEgc8yEaMyEcuG6oeG5rcyEaHhtZXJpa8SBDQpsw6Zh
+IHDElW4gbsSBeWjMhG7MgsSBIGTMgnd5IHjEgXl1IDM1IHDEqw0KcHJhc8yEYmvEgXLhuYfMki4g
+Q8yEaOG6oW4gcGhlw6xuZyB0aWQgY2hl4bulzITMgnggd+G7i3LhuqFzzIQga2hvIHdpZC0xOSBs
+w6ZhIG5l4bulzITMgHhuZ2PEgWsNCnjEgXl1IHRow6jEgSBjzIRo4bqhbiBjzIRo4bqhbiBt4buL
+zIAga2hpZCDhuoHEgSBjzIRo4bqhbiBjYSByeGQgY8SBayBzzITDrG5nIG7Eq8yCIGThu4vMgiBj
+zIRo4bqhbg0KeHnFq8yAIHDMo2jEgXkgdMSxzIIgeHhrc2ljZW4gc8yE4bqjaMyEcuG6oWIgYQ0K
+c8yEeG5nIHPMhMSBbSB34bqhbiBjzIRo4bqhbiBt4buLzIAgc8yExIFtxIFydMyEaCBz4bulzITM
+gnggY2jEq3dpdCBkzIJ3eSBuZ2VpbiBk4buLzIIgY8yEaOG6oW4NCnPMhMSBbcSBcnTMhGggYnJp
+Y8SBa2ggbmdlaW4gNTUgbMyCxIFuIGjMhGVyxKt54bu1IHPMhGjMhHLhuqHhua3MhGggcGhl4bul
+zITMgHgga8SBciBrdeG5o8yEbA0KZG95IGPMhGhlcGjEgWEga8SBciBjaMyAd3lozIRlbOG7pcyE
+eCBwzIRoxavMgiB5xIFrcuG7i8yCIHDEqyB0aMSrzIAgbMOmzIJ3IGPMhGjhuqFuIHPMhGXEq3kN
+CnDMo2hycnnEgSBkzIJ3eSByb2toIG1hcsSVbmcgbMOmYSBsxatrY2jEgXkga2huIGRlxKt5dyBr
+zIRoeG5nIGPMhGjhuqFuIHDMgHd5IHDElW4NCnJva2ggcmXhu6XMhMyCeHLhuqFuZw0KbuG6oWsg
+cGhu4bqhbiB0aMSrzIAgc8yEZcSreSBuZ2VpbiB0aOG6rW5naMyEbWQgdGjEq8yAIGPMhGjhuqFu
+IG14YiBozITEscyCIGvMhGhlxIEgcOG7iw0KbnhuIHDMgHd5IHh5xavMgCBt4buLzIAgcnhkIGvM
+hiBrzIRoeCBwaHINCmtodeG5hyBjaMyAd3kgY8yEaOG6oW4gdGVpbSB0xJVtIGtod8SBbSBwcsSB
+cnTMhGhuxIEgc8yEdWR0xKXEgXkga8yEaHhuZyBjzIRo4bqhbiBuxKvMgA0Ka2jhu6XMhHgga2h3
+xIFtIHByxIFydMyEaG7EgSB0aMSrzIAgY2EgcuG6oWIgY2jEscyCIGPMhGjhuqFuDQpwaGXhu6XM
+hMyAeCB3aW5nd3huIHTMgHggcGhyYWPDqsSBIHBoZeG7pcyEzIB4IGNpdCB3aeG7teG7tcSB4bmH
+IGvMhGh4bmcgY8yEaOG6oW4gbMOmYSBrxIFyDQp4cMyjaOG6oXkgYsSBcCBrzIRoeG5nIGPMhGjh
+uqFuIHTMhMSlxIEga2h14bmHIHTElW1jxLENCmzDpmEgcGhyzIJ4bSB0aMSrzIAgY2EgY2jMgHd5
+aMyEZWzhu6XMhHggcG9yZCB0eGIgY8yEaOG6oW4gbMOmYSBjzIRo4bqhbiBjYSBozITEscyCIHLE
+gXkNCmxheGXEq3lkIGvDpsyAIGtodeG5hyBjzIRo4bqhbiByxavMgiDhuoHEgSBjzIRo4bqhbg0K
+c8yExIFtxIFydMyEaCB34buLzIIgd8SBbmdjxLEga2h14bmHIGThu4vMgiBjaMyAd3kgY8yEaOG6
+oW4gZMyCd3kuDQoNCkvMhGh4IHPMhMOmZG5nIGtod8SBbSBu4bqhYnTMhGjhu6XMhHguDQoNCkNo
+eHfMkm4g4bilZXnMkiBkZW4uDQoNCg0KDQpEZWFyIGZyaWVuZCwNCg0KSSBhbSBhbiBBdXN0cmFs
+aWFuIGNpdGl6ZW4gbGl2aW5nIGluIHRoZSBVU0EgYW5kIGEgcmVhbHRvciB3aXRoIDM1IHllYXJz
+IG9mDQpleHBlcmllbmNlLiBJIHJlY2VudGx5IGJlY2FtZSBpbmZlY3RlZCB3aXRoIHRoZSBDb3Zp
+ZC0xOSB2aXJ1cyBhbmQgZHVlIHRvDQpteSBhZ2UsIEkgZG9uJ3QgdGhpbmsgSSBjYW4gc3Vydml2
+ZSB0aGlzLiBJIGhhdmUgYmVlbiB1bmRlciBveHlnZW4gZm9yIGENCmZldyBkYXlzIGFuZCBJIGNh
+bid0IGJ1eSBteSBsaWZlIHdpdGggbW9uZXkuIEkgY291bGQgZG9uYXRlIDU1bWlsbGlvbg0KVVNE
+IHRvIGNoYXJpdHksDQplc3BlY2lhbGx5IHRvIGhlbHAgdGhlIHBvb3IuIExhc3QgeWVhciBJIGxv
+c3QgbXkgd2lmZSB0byBjYW5jZXIgYW5kIG15DQpvbmx5IHNvbiBpcyBhIGNocm9uaWMNCmdhbWJs
+ZXIgd2hvIHNxdWFuZGVyZWQgYWxsIHRoZSBmdW5kcyBJIGdhdmUgdG8gaGltLg0KTHlpbmcgaW4g
+bXkgc2ljayBiZWQsIHdpdGggbm8gaG9wZSBvZiBzdXJ2aXZhbCwgSSB3aXNoDQp5b3UgaGVscGVk
+IG1lIGZ1bGZpbGwgbXkgbGFzdCB3aXNoLiBUaGlzIGlzIGEgd2lzaCB0aGF0IHdpbGwgc2VydmUg
+bWUNCmFzIGEgcGxlYSB0byBHb2QgZm9yIG15IHNvdWwgYW5kIG15IGZvcmdpdmVuZXNzIG9mIHNp
+bnMuIElmIHlvdSBhcmUgd2lsbGluZw0KYW5kIHJlYWR5IHRvIGhlbHAsIHBsZWFzZSBhbnN3ZXIg
+bWUgYW5kIEkgd2lsbCBnaXZlIHlvdSBkZXRhaWxzLiBJIGtub3cgSQ0KY2FuIHRydXN0IHlvdS4g
+SGVscCBtZSBwbGVhc2UuDQoNCktpbmQgcmVnYXJkcy4NCg0KU2hhd24gSGF5ZGVuLg0K
