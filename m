@@ -2,153 +2,93 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 995DD40D693
-	for <lists+linux-edac@lfdr.de>; Thu, 16 Sep 2021 11:48:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA80B40E988
+	for <lists+linux-edac@lfdr.de>; Thu, 16 Sep 2021 20:06:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235563AbhIPJtV (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Thu, 16 Sep 2021 05:49:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38974 "EHLO
+        id S237091AbhIPSH7 (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Thu, 16 Sep 2021 14:07:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235533AbhIPJtU (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Thu, 16 Sep 2021 05:49:20 -0400
+        with ESMTP id S1344443AbhIPSEw (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Thu, 16 Sep 2021 14:04:52 -0400
 Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0019CC061574
-        for <linux-edac@vger.kernel.org>; Thu, 16 Sep 2021 02:47:59 -0700 (PDT)
-Received: from zn.tnic (p200300ec2f11c600b77f9e345fbfb487.dip0.t-ipconnect.de [IPv6:2003:ec:2f11:c600:b77f:9e34:5fbf:b487])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4288C04309C;
+        Thu, 16 Sep 2021 09:36:40 -0700 (PDT)
+Received: from zn.tnic (p200300ec2f11c600e73b4cdd38695acb.dip0.t-ipconnect.de [IPv6:2003:ec:2f11:c600:e73b:4cdd:3869:5acb])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 44A9C1EC02DD;
-        Thu, 16 Sep 2021 11:47:54 +0200 (CEST)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 2800B1EC01B5;
+        Thu, 16 Sep 2021 18:36:35 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1631785674;
+        t=1631810195;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=hOOP7cyJJdufYBs6Ml4jmD1a5MjrNNfFRNS7LbCvVYU=;
-        b=AHRRrI4zjeUGikwxq728PwH9tbpdKZc8j5F+hDI5jOI+dV77TzOtAzlaVaRKo3+pnFvaYF
-        cT4XMQaXvfCQ6WcnfGQD9c7jHAKxDMgQB5yrlWsXmWNmJLAn7ufzSA7pGhEI8hH7KHCaiY
-        jEk2mS3rMHl/z5SlXJdyTqtzhrnqyUg=
-Date:   Thu, 16 Sep 2021 11:47:48 +0200
+        bh=+7ddXl1VhC5cKCH603B8euBD2SfYgtpwndMg074Sibw=;
+        b=A8T2xHSbKQoVIReSXSD2AQRbj+IwXmxL6RwUpxF/GO3Kw/6acgURWgfdUXxp9ZWW7KYto+
+        j0n5MsMz//QraO5gj2tAhx3S6VFqjPKVWFj+yQ1YD+3zf/4gkMDsQkjU0UMbwaV2kPQFcV
+        WgW35aZw7a2IKslqMQJWoKRLnNMKqek=
+Date:   Thu, 16 Sep 2021 18:36:29 +0200
 From:   Borislav Petkov <bp@alien8.de>
-To:     Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
-Cc:     linux-edac@vger.kernel.org, mchehab@kernel.org,
-        michal.simek@xilinx.com, git@xilinx.com
-Subject: Re: [PATCH 2/2] edac: synopsys: Fix the issue in reporting of the
- error count
-Message-ID: <YUMSxK0rWEGRxR/4@zn.tnic>
-References: <20210818072315.15149-1-shubhrajyoti.datta@xilinx.com>
- <20210818072315.15149-2-shubhrajyoti.datta@xilinx.com>
+To:     Yazen Ghannam <yazen.ghannam@amd.com>
+Cc:     Naveen Krishna Chatradhi <nchatrad@amd.com>,
+        linux-edac@vger.kernel.org, x86@kernel.org,
+        linux-kernel@vger.kernel.org, mchehab@kernel.org,
+        Muralidhara M K <muralimk@amd.com>
+Subject: Re: [PATCH v3 1/3] x86/amd_nb: Add support for northbridges on
+ Aldebaran
+Message-ID: <YUNyjSfTxIT7VY2H@zn.tnic>
+References: <20210806074350.114614-4-nchatrad@amd.com>
+ <20210823185437.94417-1-nchatrad@amd.com>
+ <20210823185437.94417-2-nchatrad@amd.com>
+ <YSYeo6S2OSZbBpb4@zn.tnic>
+ <YS/Dsc2gWGGCWnbs@yaz-ubuntu>
+ <YTEKMHqjY/IUBfgl@zn.tnic>
+ <YT+TYrOZpe1IEv28@yaz-ubuntu>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20210818072315.15149-2-shubhrajyoti.datta@xilinx.com>
+In-Reply-To: <YT+TYrOZpe1IEv28@yaz-ubuntu>
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Wed, Aug 18, 2021 at 12:53:15PM +0530, Shubhrajyoti Datta wrote:
-> Currently we are reading the error count from status register which
+On Mon, Sep 13, 2021 at 06:07:30PM +0000, Yazen Ghannam wrote:
+> I really like this idea. I've gone over the current and future code a few
+> times to make sure things are okay. As far as I can tell, this idea should
+> work most of the time, since the "node_id" value is mostly used to look up the
+> right devices in the nb array. But there is one case so far where the "real"
+> hardware node_id is needed during address translation.
 
-Please use passive voice in your commit message: no "we" or "I", etc,
-and describe your changes in imperative mood.
+Yap, I figured as much as this is kinda like the only place where you'd
+care about the actual node id.
 
-Also, pls read section "2) Describe your changes" in
-Documentation/process/submitting-patches.rst for more details.
+> This case is in the new code in review for Data Fabric v3.5, and it
+> only applies to the GPU devices.
+>
+> What do you think about having a couple of helper functions to go between the
+> hardware and Linux index IDs? Most cases will use "hardware -> Linux index",
+> and when needed there can be a "Linux index -> hardware".
 
-Bottom line is: personal pronouns are ambiguous in text, especially with
-so many parties/companies/etc developing the kernel so let's avoid them
-please.
+That's fine as long as it is properly documented what it does.
 
-> is not correct, this patch fixes the issue by reading the count from
+> I think we still need some piece of info to indicate a device is a GPU based
+> on its node_id. The AMD NB code doesn't need to know, but the address
+> translation code does. The AMD NB enumeration can be mostly generic. I think
+> it may be enough to save an "id offset" value and also a "first special index"
+> value. Then we can go back and forth between the appropriate values without
+> having to allocate a bunch of unused memory or hardcoding certain values.
 
-Avoid having "This patch" or "This commit" in the commit message. It is
-tautologically useless.
+Well, since we're going to need this in the translation logic and that
+is part of amd64_edac and there we said we'll move the family type up
+into amd64_pvt so that you can have a family descriptor per node, then I
+guess you're all set. :-)
 
-Also, do
+> Thanks for the idea!
 
-$ git grep 'This patch' Documentation/process
+Sure, np.
 
-for more details.
-
-> error count register(ERRCNT). Currently we are not reporting the
-> errors cumulatively.
-> Also send the cumulative errors to the edac_mc_handle_error.
-> 
-> Signed-off-by: Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
-> ---
->  drivers/edac/synopsys_edac.c | 19 +++++++++++++------
->  1 file changed, 13 insertions(+), 6 deletions(-)
-> 
-> diff --git a/drivers/edac/synopsys_edac.c b/drivers/edac/synopsys_edac.c
-> index 7d08627e738b..38c03bdc2393 100644
-> --- a/drivers/edac/synopsys_edac.c
-> +++ b/drivers/edac/synopsys_edac.c
-> @@ -163,6 +163,11 @@
->  #define ECC_STAT_CECNT_SHIFT		8
->  #define ECC_STAT_BITNUM_MASK		0x7F
->  
-> +/* ECC error count register definitions */
-> +#define ECC_ERRCNT_UECNT_MASK		0xFFFF0000
-> +#define ECC_ERRCNT_UECNT_SHIFT		16
-> +#define ECC_ERRCNT_CECNT_MASK		0xFFFF
-> +
->  /* DDR QOS Interrupt register definitions */
->  #define DDR_QOS_IRQ_STAT_OFST		0x20200
->  #define DDR_QOSUE_MASK			0x4
-> @@ -418,14 +423,16 @@ static int zynqmp_get_error_info(struct synps_edac_priv *priv)
->  	base = priv->baseaddr;
->  	p = &priv->stat;
->  
-> +	regval = readl(base + ECC_ERRCNT_OFST);
-> +	p->ce_cnt = regval & ECC_ERRCNT_CECNT_MASK;
-> +	p->ue_cnt = (regval & ECC_ERRCNT_UECNT_MASK) >> ECC_ERRCNT_UECNT_SHIFT;
-> +	if (!p->ce_cnt)
-> +		goto ue_err;
-> +
->  	regval = readl(base + ECC_STAT_OFST);
->  	if (!regval)
->  		return 1;
->  
-> -	p->ce_cnt = (regval & ECC_STAT_CECNT_MASK) >> ECC_STAT_CECNT_SHIFT;
-> -	p->ue_cnt = (regval & ECC_STAT_UECNT_MASK) >> ECC_STAT_UECNT_SHIFT;
-> -	if (!p->ce_cnt)
-> -		goto ue_err;
->  
->  	p->ceinfo.bitpos = (regval & ECC_STAT_BITNUM_MASK);
->  
-
-That change looks correct.
-
-> @@ -491,7 +498,7 @@ static void handle_error(struct mem_ctl_info *mci, struct synps_ecc_status *p)
->  		}
->  
->  		edac_mc_handle_error(HW_EVENT_ERR_CORRECTED, mci,
-> -				     p->ce_cnt, 0, 0, 0, 0, 0, -1,
-> +				     priv->ce_cnt, 0, 0, 0, 0, 0, -1,
->  				     priv->message, "");
->  	}
->  
-> @@ -509,7 +516,7 @@ static void handle_error(struct mem_ctl_info *mci, struct synps_ecc_status *p)
->  		}
->  
->  		edac_mc_handle_error(HW_EVENT_ERR_UNCORRECTED, mci,
-> -				     p->ue_cnt, 0, 0, 0, 0, 0, -1,
-> +				     priv->ue_cnt, 0, 0, 0, 0, 0, -1,
->  				     priv->message, "");
->  	}
->  
-
-That one doesn't. AFIACT, handle_error() is supposed to deal with the
-current errors logged which ->get_error_info() has done by putting the
-counts into priv->stat which gets passed in.
-
-The cumilative errors are dumped a little bit further down - grep for
-"Total error count". Those are debug statements, though.
-
-Also, edac_mc_handle_error() gets the *current* error counts which got
-logged by the current ECC interrupt - not the cumulative!
-
-HTH.
+Thx.
 
 -- 
 Regards/Gruss,
