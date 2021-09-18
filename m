@@ -2,84 +2,76 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C749E41055B
-	for <lists+linux-edac@lfdr.de>; Sat, 18 Sep 2021 11:17:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF58B4106BE
+	for <lists+linux-edac@lfdr.de>; Sat, 18 Sep 2021 15:22:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232720AbhIRJS4 (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Sat, 18 Sep 2021 05:18:56 -0400
-Received: from mout.gmx.net ([212.227.15.18]:37867 "EHLO mout.gmx.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231497AbhIRJSz (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Sat, 18 Sep 2021 05:18:55 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1631956630;
-        bh=iry8CxJ90YvNjBabfl8pNpq16ZRgsLo1wiD4DopXVmU=;
-        h=X-UI-Sender-Class:Date:From:To:Cc:Subject:References:In-Reply-To;
-        b=N5oBX9fJAM5iyWuylOVnewRLM5T8PbFyPWX5WoDIVrxxzEaifUei5SK4HbJaLcyhB
-         mJR+WMiSp3QyFWhfZKVQGTm/aD5WeY/i+OsZ1fIV3JUkQX3pFihlSiCWZqp4qiMocw
-         0M8GLO9j+6c609FcTk5bxH+vIQdau5X9WPcSltcI=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from titan ([79.150.72.99]) by mail.gmx.net (mrgmx005
- [212.227.17.184]) with ESMTPSA (Nemesis) id 1M72oH-1mXIh03s1X-008aqz; Sat, 18
- Sep 2021 11:17:10 +0200
-Date:   Sat, 18 Sep 2021 11:17:06 +0200
-From:   Len Baker <len.baker@gmx.com>
-To:     Robert Richter <rric@kernel.org>
-Cc:     Len Baker <len.baker@gmx.com>, Borislav Petkov <bp@alien8.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Tony Luck <tony.luck@intel.com>,
-        James Morse <james.morse@arm.com>,
-        Joe Perches <joe@perches.com>,
-        David Laight <David.Laight@aculab.com>,
-        Kees Cook <keescook@chromium.org>,
-        linux-hardening@vger.kernel.org, linux-edac@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] EDAC/mc: Prefer strscpy or scnprintf over strcpy,
- sprintf and snprintf
-Message-ID: <20210918091706.GB2941@titan>
-References: <20210903150539.7282-1-len.baker@gmx.com>
- <YT8S3poKyd5Nr5cK@rric.localdomain>
+        id S234275AbhIRNXr (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Sat, 18 Sep 2021 09:23:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58250 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237013AbhIRNXq (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Sat, 18 Sep 2021 09:23:46 -0400
+Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80A31C061757
+        for <linux-edac@vger.kernel.org>; Sat, 18 Sep 2021 06:22:21 -0700 (PDT)
+Received: by mail-pg1-x536.google.com with SMTP id n18so12494604pgm.12
+        for <linux-edac@vger.kernel.org>; Sat, 18 Sep 2021 06:22:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:sender:from:date:message-id:subject:to;
+        bh=Ji+q4N9noIdzAlk7ReOzxs3EvL6pDsGbQL9mPgu1HFQ=;
+        b=nJP692c/kXdokQBhEkea/wkrhJmKJzFnoQzhXenLvNeWPzbzuFn3HZ1EyjE0Txz+Ou
+         E4TdZ8P0z1nnxbj2uYPjv/KS1jgYJwW5+E6Oko3PRDP4wRX8Dvidn17+LZ5H5i8RXkpI
+         bg/bAQnVjcaml6NYDutxlP1nz+Qu/ckK/KX/5sdMvfREFVZmb83YLk+q8FcvShhyW/QO
+         IKFVbMLCXFZfJErI2cDOIvq9E1jzi7m8xO2+ryk/UbYFU8gLtqRxdwWODbua/d6W5v8E
+         KxUNa1r+Dw9jTIN5eze++KrWWQPZYZbOJpzRWsxpxaI4lfc39Eq6KcVTbDn1QbSuP6eP
+         D1Mg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
+         :to;
+        bh=Ji+q4N9noIdzAlk7ReOzxs3EvL6pDsGbQL9mPgu1HFQ=;
+        b=h2hCjU7GQ3U9N9ZqvWdFEUkYGsYgSlEfHe41/fmSbQXPrSLE4BTmW29Z6BhOWNasgE
+         rTlWKqAJjRAayi6RC1zCyzcD3hStxfoBnVEuc7mrJyD8q+5cqPyUQTLSRpgwQNdlJYZY
+         0UEmzifQigtMcOX4eNPTeXushDD3aPi8PRYg/+fwewiZ0cTDQ+ZST1Y+Gmq7wbad48IA
+         tNveK1u942fSGrgy+LbstezXtGpgja4yAhj0Pwn8qpcMkiLvzWY7V7vZPA/HHVLFAYv/
+         WE5aeITaSef2Ka+pfKjgvc4+2EZfl1llqTExQ4UpjXx/5mw9FKldlDh+z0urpcBUydV5
+         esaQ==
+X-Gm-Message-State: AOAM5320V1f1/bl4z5ItyiQnz1IA+JUWS4uKsqQhNIsqzgGaH4PLD10D
+        YuDcqRcgFyoaPJnYJuhk5riQxniMe9ttkfpfkC8=
+X-Google-Smtp-Source: ABdhPJzcz2EySxVUhAfNCKElvWRdubZ35VPyRyFXU6raRwlF+k/fHC6885SVu0ttDCt4N2Cm2SraHAJUjlIXTaojzZQ=
+X-Received: by 2002:a05:6a00:130c:b0:444:f9d4:d800 with SMTP id
+ j12-20020a056a00130c00b00444f9d4d800mr7784447pfu.38.1631971341078; Sat, 18
+ Sep 2021 06:22:21 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YT8S3poKyd5Nr5cK@rric.localdomain>
-X-Provags-ID: V03:K1:x0hRNgzN/YTNYOtTnqiD/7Y0qsVVqL9WVhMPAY6LnNnNY4O2mkH
- oG+BnOd9niqyJRuLPBiDldfFUoeD85ilPs9KPbod2z+yNhyqhYRs+M5zTqhzOnA6fCLJiif
- UCclBZVfVw9wuZYAwoq/wlzZZGw4UVhTZvrZVP/eNvxEFn+R/AnhhLEkHLeUa1e8hu+4UqW
- UeC20cI2ifUtL4sp8gqFg==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:tWU3fgmMYgo=:XFGFwtM/KjC8HsB9wUwC8D
- tqSyMMJa3StwqxNbr3Il5Y4S+yMMFvhnERirF78hD5ipB0sbfKgAWoXXCSzlbfnt8xyH8Ktec
- K7xDCgNTalQX/8bT1Ttl8PFwcNK8gq/SdGkjXSs8sYIU53dQOMapjmx8uijekomsaCbvSG4Fp
- ZZP787y/zmDYfv0BBoZV2QJ9tjZYeT0GKzXmghPBg5Yorgqiw0fjiF8yP/WO7MQlIW9R7GxnK
- 3k/2/98ZmIEn54yJgAP0FlAdTYOioYim398Oq+sEE7fSSZdTXrY3DdXXuYZlpcWMzH7yCV9P1
- 8tALytVCBRcAlzpmMG0uTSD/TP0SLX/AtF3BQZySasu0Ye/Ygfa3oANc20bPurr+dnLh/txlG
- n/GMFybb1qHtzEv+5O3R8EuXTH0UF8DVyeYwbIbQctURkYqWWhXxpustPBDqLC6oogPf4B1bQ
- t6fDtjgFl4qTFbuPEgUFcaloo5SGhjk2wURzM6vwJngpY0RXpr7eLoduP8TEjePClWaoyw/q9
- VjtymHc2ol3lV3GWFa0DG8voi0TWWjeeP8jjw2QhbD+kGK58GNPgI//Y2iV+HX9diVAsBdVBV
- PaeZXJaH9BcKwHAL2PO5RmF37Rgf8mHojGkMR2dmaql4XXHHk8VTrFCKiFVd8I4M1lHSGSzt+
- 5txKU0e5NFJHzGuHJoL4gkYag86GXN86kK8I2v/F9nysMmLbtbBkq+IxRRUi88AlXYRS12325
- /i1WBKYJpS6N5ryUSNJ1ZErEWTqPmXyRRKdLeM93VyQgvoHAnFTzBhj2TX3FCd0RZ6TP30rSb
- j0YHzMG9NFJbQ0XxQJdY6vJrBm32HXCGHqxmSeK/j3VCZgbLQUs0T5rOM9zki5XejwTUz5r0E
- 9lHWxm/TRq2+p0c48SnwrJYwv3zP7WYx9kOz8nMnoIusJq6utBXz1I5SudTMYuhT1Gq3Ios+O
- kZUJXvi3x7QuG/Je08IdAGBAFX2ozgJXTlqR0POlqEuozSaI933Kjkg8KUBmfyDwOF2xohusa
- ylkCVcDLDHG2FKV//K+JsxKrfnwF5UGPAbCEK02fY3zAI1iPVVsmE+g86fmt4zq57xeKS5ca/
- VsAO2yMY+aKH2g=
-Content-Transfer-Encoding: quoted-printable
+Sender: mrsaishiag6@gmail.com
+Received: by 2002:a05:6a10:2810:0:0:0:0 with HTTP; Sat, 18 Sep 2021 06:22:20
+ -0700 (PDT)
+From:   Mrs Aisha Al-Qaddafi <mrsaishag6555@gmail.com>
+Date:   Sat, 18 Sep 2021 06:22:20 -0700
+X-Google-Sender-Auth: 9oj76FXut03NbDecWG-lifrc9Tw
+Message-ID: <CAMhFShK+kVN6uHpMjgcVqvS-Wxnh=EhPShhowxGwcxVdiqNLLg@mail.gmail.com>
+Subject: hello dear friend please can i trust you
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-Hi,
-
-On Mon, Sep 13, 2021 at 10:59:10AM +0200, Robert Richter wrote:
-
-> this patch looks good to me. I made some changes on top of it to
-> further ease pointer arithmetic and also fix remaining
-> sprintf/snprintf() users as it makes sense to have them all in a
-> single change. See below. Boris, please apply.
-
-Thanks Robert for doing this.
-
-Regards,
-Len
+Dear Friend,
+I came across your e-mail contact prior a private search while in need
+of your assistance. I am Aisha Al-Qaddafi, the only biological
+Daughter of Former President of Libya Col. Muammar Al-Qaddafi. Am a
+single Mother and a Widow with three Children.
+I have investment funds worth Twenty Seven Million Five Hundred
+Thousand United State Dollar ($27.500.000.00 ) and i need a trusted
+investment Manager/Partner because of my current refugee status,
+however, I am interested in you for investment project assistance in
+your country, may be from there, we can build business relationship in
+the nearest future.
+If you are willing to handle this project on my behalf kindly reply
+urgent to enable me provide you more information about the investment
+funds.
+Your Urgent Reply Will Be Appreciated
+Best Regards
+Mrs Aisha Al-Qaddafi
