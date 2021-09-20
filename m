@@ -2,33 +2,39 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C4CDC4119E9
-	for <lists+linux-edac@lfdr.de>; Mon, 20 Sep 2021 18:37:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7450B411A07
+	for <lists+linux-edac@lfdr.de>; Mon, 20 Sep 2021 18:43:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236138AbhITQiw (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Mon, 20 Sep 2021 12:38:52 -0400
-Received: from mail.skyhub.de ([5.9.137.197]:38880 "EHLO mail.skyhub.de"
+        id S239113AbhITQpF (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Mon, 20 Sep 2021 12:45:05 -0400
+Received: from mga14.intel.com ([192.55.52.115]:58896 "EHLO mga14.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229561AbhITQiv (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Mon, 20 Sep 2021 12:38:51 -0400
-Received: from zn.tnic (p200300ec2f0a2a00274102d8249bfe43.dip0.t-ipconnect.de [IPv6:2003:ec:2f0a:2a00:2741:2d8:249b:fe43])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 844FB1EC0354;
-        Mon, 20 Sep 2021 18:37:19 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1632155839;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=OZLOStkn+5FkSTPMmV67a0eHWTpfl/RGMxI9yKzZj+E=;
-        b=LnpcfM8yS9mNHTXgEX7weD8k5b5jYRigsOoGxUu4iH2XfhXnjzDMY/hSqLxjZhnZZH8+mQ
-        KNkKn7vvbCjnUNjbQoFWRnIDXIq+hHFuaHADtPbAPnRg7j6V1SmsXgzNL+ODy+rflfgBsc
-        3x5NDm+v/56Fk909N6DaYI0TmtBiSsI=
-Date:   Mon, 20 Sep 2021 18:37:19 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     "Luck, Tony" <tony.luck@intel.com>
-Cc:     Jue Wang <juew@google.com>, Ding Hui <dinghui@sangfor.com.cn>,
+        id S237709AbhITQpF (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Mon, 20 Sep 2021 12:45:05 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10113"; a="222821628"
+X-IronPort-AV: E=Sophos;i="5.85,308,1624345200"; 
+   d="scan'208";a="222821628"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Sep 2021 09:43:17 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.85,308,1624345200"; 
+   d="scan'208";a="434822284"
+Received: from fmsmsx603.amr.corp.intel.com ([10.18.126.83])
+  by orsmga006.jf.intel.com with ESMTP; 20 Sep 2021 09:43:15 -0700
+Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
+ fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2242.12; Mon, 20 Sep 2021 09:43:14 -0700
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2242.12; Mon, 20 Sep 2021 09:43:14 -0700
+Received: from fmsmsx610.amr.corp.intel.com ([10.18.126.90]) by
+ fmsmsx610.amr.corp.intel.com ([10.18.126.90]) with mapi id 15.01.2242.012;
+ Mon, 20 Sep 2021 09:43:14 -0700
+From:   "Luck, Tony" <tony.luck@intel.com>
+To:     Borislav Petkov <bp@alien8.de>
+CC:     Jue Wang <juew@google.com>, Ding Hui <dinghui@sangfor.com.cn>,
         "naoya.horiguchi@nec.com" <naoya.horiguchi@nec.com>,
         "osalvador@suse.de" <osalvador@suse.de>,
         "Song, Youquan" <youquan.song@intel.com>,
@@ -37,36 +43,33 @@ Cc:     Jue Wang <juew@google.com>, Ding Hui <dinghui@sangfor.com.cn>,
         "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
         "linux-mm@kvack.org" <linux-mm@kvack.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 3/3] x86/mce: Drop copyin special case for #MC
-Message-ID: <YUi4v6BHqN5WqJUd@zn.tnic>
+Subject: RE: [PATCH v2 3/3] x86/mce: Drop copyin special case for #MC
+Thread-Topic: [PATCH v2 3/3] x86/mce: Drop copyin special case for #MC
+Thread-Index: AQHXk8gq8Qe1g5tesEOw6jGkHsNov6utTUoAgAAAgWCAAHuLgP//i9Tw
+Date:   Mon, 20 Sep 2021 16:43:14 +0000
+Message-ID: <b65f57dd40e54572b3e00c571bafe1e3@intel.com>
 References: <20210706190620.1290391-1-tony.luck@intel.com>
  <20210818002942.1607544-1-tony.luck@intel.com>
- <20210818002942.1607544-4-tony.luck@intel.com>
- <YUhQsOKLeY/QV6ag@zn.tnic>
- <9d4690a2f3f143f882f63bd88c355004@intel.com>
+ <20210818002942.1607544-4-tony.luck@intel.com> <YUhQsOKLeY/QV6ag@zn.tnic>
+ <9d4690a2f3f143f882f63bd88c355004@intel.com> <YUi4v6BHqN5WqJUd@zn.tnic>
+In-Reply-To: <YUi4v6BHqN5WqJUd@zn.tnic>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+dlp-product: dlpe-windows
+dlp-reaction: no-action
+dlp-version: 11.6.200.16
+x-originating-ip: [10.1.200.100]
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <9d4690a2f3f143f882f63bd88c355004@intel.com>
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Mon, Sep 20, 2021 at 04:18:58PM +0000, Luck, Tony wrote:
-> > Can we name some of those fixes here pls?
-> 
-> Some/all of this bunch from Al Viro:
-
-Is this how you generated that list, per chance?
-
-$ git log --oneline v5.14 -- lib/iov_iter.c
-
-?
-
-Output looks at least similar to what you've pasted...
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+PiBJcyB0aGlzIGhvdyB5b3UgZ2VuZXJhdGVkIHRoYXQgbGlzdCwgcGVyIGNoYW5jZT8NCj4NCj4g
+JCBnaXQgbG9nIC0tb25lbGluZSB2NS4xNCAtLSBsaWIvaW92X2l0ZXIuYw0KDQpBbG1vc3QuIEkg
+aGFkICJ2NS4xNCBedjUuMTMiIHRvIHN0b3AgZ2l0IGZyb20gZ29pbmcgYmFjaw0KZnVydGhlciB0
+aGFuIHdoZW4gSSB0aGluayBBbCBzdGFydGVkIGFwcGx5aW5nIHRob3NlIGZpeGVzLg0KDQotVG9u
+eQ0K
