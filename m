@@ -2,90 +2,65 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C5E324149F0
-	for <lists+linux-edac@lfdr.de>; Wed, 22 Sep 2021 14:59:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C999F414BCB
+	for <lists+linux-edac@lfdr.de>; Wed, 22 Sep 2021 16:24:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230218AbhIVNBD (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Wed, 22 Sep 2021 09:01:03 -0400
-Received: from mx24.baidu.com ([111.206.215.185]:54210 "EHLO baidu.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S230350AbhIVNBD (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Wed, 22 Sep 2021 09:01:03 -0400
-Received: from BC-Mail-Ex27.internal.baidu.com (unknown [172.31.51.21])
-        by Forcepoint Email with ESMTPS id A9B8549C90D736DA522A;
-        Wed, 22 Sep 2021 20:59:31 +0800 (CST)
-Received: from BJHW-MAIL-EX27.internal.baidu.com (10.127.64.42) by
- BC-Mail-Ex27.internal.baidu.com (172.31.51.21) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
- 15.1.2176.2; Wed, 22 Sep 2021 20:59:31 +0800
-Received: from LAPTOP-UKSR4ENP.internal.baidu.com (172.31.63.8) by
- BJHW-MAIL-EX27.internal.baidu.com (10.127.64.42) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
- 15.1.2308.14; Wed, 22 Sep 2021 20:59:30 +0800
-From:   Cai Huoqing <caihuoqing@baidu.com>
-To:     <caihuoqing@baidu.com>
-CC:     Talel Shenhar <talel@amazon.com>, Borislav Petkov <bp@alien8.de>,
-        "Mauro Carvalho Chehab" <mchehab@kernel.org>,
-        Tony Luck <tony.luck@intel.com>,
-        "James Morse" <james.morse@arm.com>,
-        Robert Richter <rric@kernel.org>, <linux-edac@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH] EDAC/al-mc-edac: Make use of the helper function devm_add_action_or_reset()
-Date:   Wed, 22 Sep 2021 20:59:23 +0800
-Message-ID: <20210922125924.321-1-caihuoqing@baidu.com>
-X-Mailer: git-send-email 2.17.1
+        id S233176AbhIVOZ7 (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Wed, 22 Sep 2021 10:25:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56640 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233513AbhIVOZ6 (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Wed, 22 Sep 2021 10:25:58 -0400
+Received: from mail-vs1-xe34.google.com (mail-vs1-xe34.google.com [IPv6:2607:f8b0:4864:20::e34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6CBCC061756
+        for <linux-edac@vger.kernel.org>; Wed, 22 Sep 2021 07:24:28 -0700 (PDT)
+Received: by mail-vs1-xe34.google.com with SMTP id az15so3126489vsb.8
+        for <linux-edac@vger.kernel.org>; Wed, 22 Sep 2021 07:24:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=n9CHWZyWDp9kvdnuR+4lcf8cF9DH3RRu6znx/rfpPqs=;
+        b=odL3wjNPb7I/0EoO8dr+zljh4jE2fNC4oA2cjJ+HsQuUByWbcm8xybAfPB5XBu93PO
+         Yz9D2apLt8mEiEfIMQlmSLNthA+3pPQCOCJthLiRwhhFKnqHSdO2kNvGSwDmIYDq5V6g
+         NGpko1fxp9twGzQ2emsGAkJStrw6Ukxg53KGJqyFXKspthWU0kr5o/0PmnyrODt2ZEGg
+         zvZG2ou3UTwZN/ouBhmkRec6cKvs57XzSRKLnxQJTlZH8X5MjgPBf26l556eAwj+7Aii
+         5j5Ucqbm76Yk/kkwlaCbCacNNdZlWSCm1pIfWO+xOyrrlb6VYCcf2x8W7L2YoXiwJxRm
+         bMHw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=n9CHWZyWDp9kvdnuR+4lcf8cF9DH3RRu6znx/rfpPqs=;
+        b=NJ1wWEZXA4Qxa7wngN1YoLF9hB/eAwq8Z/fL36+Zbf0f4xKLtnv8Z2vWgMe6lR+0xa
+         nGvaOv72GEDELj3b+uVeAvkEh62keFI9y25cgapBUM5YCuyMcFt2e/1cBsKlPINwMtW+
+         BGaD2N8ZIRgoz2dzW6ImtlCOvkihFXEhTuSubU4YNh6K8Jr/+PvYVU33PvOQqFBPFGCu
+         rhzYoW5rUSVCOc5lKmmnIjRcZz//hv5PxA7mpAl8f6FMzKTI0Au9SvKQTzSylhjcW7s6
+         0i/I7SGWkZmzVLRlgUXAtiHELKVYihBLXVnljqdBM0ymYIpxik80GvBkhcYgaw3vIhWK
+         aHlQ==
+X-Gm-Message-State: AOAM530AO++OZv2qtpJzCVUC7Loi1wKOp3Skp4K5uJiDgq4cSr2OmlSX
+        AgeTwTOiQ5yXHDw1BifGXrw30qusransVO46dkU=
+X-Google-Smtp-Source: ABdhPJzPzLSijOszPBevexjHldaaqEMTc6CkBViPa5wbzxTT9B0EL9xFruWgnqGtnhyFtWUQjGOQtLk2EJijGK0P4jM=
+X-Received: by 2002:a05:6102:20c1:: with SMTP id i1mr14438141vsr.60.1632320666521;
+ Wed, 22 Sep 2021 07:24:26 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [172.31.63.8]
-X-ClientProxiedBy: BC-Mail-Ex31.internal.baidu.com (172.31.51.25) To
- BJHW-MAIL-EX27.internal.baidu.com (10.127.64.42)
+Received: by 2002:a67:ca19:0:0:0:0:0 with HTTP; Wed, 22 Sep 2021 07:24:25
+ -0700 (PDT)
+Reply-To: mrs.fedora@yahoo.com
+From:   "Mrs. Fedora Borislav" <nnakhodorkovsky2@gmail.com>
+Date:   Wed, 22 Sep 2021 15:24:25 +0100
+Message-ID: <CANBA4+ePa0L40OzN2iWGkHui=rteMSRX9cHVLt33GdtgOGzSzA@mail.gmail.com>
+Subject: HELLO
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-The helper function devm_add_action_or_reset() will internally
-call devm_add_action(), and if devm_add_action() fails then it will
-execute the action mentioned and return the error code. So
-use devm_add_action_or_reset() instead of devm_add_action()
-to simplify the error handling, reduce the code.
-
-Signed-off-by: Cai Huoqing <caihuoqing@baidu.com>
----
- drivers/edac/al_mc_edac.c | 12 ++++--------
- 1 file changed, 4 insertions(+), 8 deletions(-)
-
-diff --git a/drivers/edac/al_mc_edac.c b/drivers/edac/al_mc_edac.c
-index 7d4f396c27b5..178b9e581a72 100644
---- a/drivers/edac/al_mc_edac.c
-+++ b/drivers/edac/al_mc_edac.c
-@@ -238,11 +238,9 @@ static int al_mc_edac_probe(struct platform_device *pdev)
- 	if (!mci)
- 		return -ENOMEM;
- 
--	ret = devm_add_action(&pdev->dev, devm_al_mc_edac_free, mci);
--	if (ret) {
--		edac_mc_free(mci);
-+	ret = devm_add_action_or_reset(&pdev->dev, devm_al_mc_edac_free, mci);
-+	if (ret)
- 		return ret;
--	}
- 
- 	platform_set_drvdata(pdev, mci);
- 	al_mc = mci->pvt_info;
-@@ -293,11 +291,9 @@ static int al_mc_edac_probe(struct platform_device *pdev)
- 		return ret;
- 	}
- 
--	ret = devm_add_action(&pdev->dev, devm_al_mc_edac_del, &pdev->dev);
--	if (ret) {
--		edac_mc_del_mc(&pdev->dev);
-+	ret = devm_add_action_or_reset(&pdev->dev, devm_al_mc_edac_del, &pdev->dev);
-+	if (ret)
- 		return ret;
--	}
- 
- 	if (al_mc->irq_ue > 0) {
- 		ret = devm_request_irq(&pdev->dev,
 -- 
-2.25.1
+Hello
 
+I am Mrs.Fedora Borislav from Russia, i have a business proposal for
+you. Please reach me on my private email for more information.(
+mrs.fedora1@hotmail.com)
+
+Thank you.
