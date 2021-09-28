@@ -2,88 +2,66 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 47C7541A2AA
-	for <lists+linux-edac@lfdr.de>; Tue, 28 Sep 2021 00:08:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B21C41B382
+	for <lists+linux-edac@lfdr.de>; Tue, 28 Sep 2021 18:04:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237963AbhI0WJ4 (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Mon, 27 Sep 2021 18:09:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52066 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237871AbhI0WJx (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Mon, 27 Sep 2021 18:09:53 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7C66C05174B;
-        Mon, 27 Sep 2021 15:05:37 -0700 (PDT)
-Received: from zn.tnic (p200300ec2f088a00839935e3d35582f9.dip0.t-ipconnect.de [IPv6:2003:ec:2f08:8a00:8399:35e3:d355:82f9])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 34CAA1EC04E4;
-        Tue, 28 Sep 2021 00:05:32 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1632780332;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=AlsOtt1HkU9FHs1jkzkGfXAXEYqguAUFS1q2I7ksodo=;
-        b=Knfz4Ihnj3SPawJGXShW+AkVXIiVjF2HujWe+6V6Or/F6oYI4kxme0OQlShLrctpOKMLAX
-        aVJai24kdEs8+l44exepufmGN8bkgxmmtxJnHieNaoLAXjYZUj+GDOW9Bf0j0PeVwHXBhF
-        UFK1BYvepeFHbN/9S3rjd4VHLYKy9b8=
-Date:   Tue, 28 Sep 2021 00:05:22 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Smita Koralahalli Channabasappa <skoralah@amd.com>
-Cc:     Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>,
-        x86@kernel.org, linux-edac@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Tony Luck <tony.luck@intel.com>,
-        "H . Peter Anvin" <hpa@zytor.com>, yazen.ghannam@amd.com
-Subject: Re: [PATCH 1/5] x86/mce/inject: Check if a bank is unpopulated
- before error simulation
-Message-ID: <YVJAIlGr5EvepsOg@zn.tnic>
-References: <20210915232739.6367-1-Smita.KoralahalliChannabasappa@amd.com>
- <20210915232739.6367-2-Smita.KoralahalliChannabasappa@amd.com>
- <YU2Lm+11Pqg/RBK3@zn.tnic>
- <60d4f6be-76f7-e4b6-6fb5-2af78b01d32d@amd.com>
- <YVImVgsxyfQO7TGI@zn.tnic>
- <7e790ba1-0b31-690c-7bd3-d8361109cef5@amd.com>
+        id S241824AbhI1QGL (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Tue, 28 Sep 2021 12:06:11 -0400
+Received: from mail.kernel.org ([198.145.29.99]:47478 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S241821AbhI1QGJ (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Tue, 28 Sep 2021 12:06:09 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 27AD96128B;
+        Tue, 28 Sep 2021 16:04:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1632845069;
+        bh=P4ZkEtDSPnIoXB1tLW1afhZpMp6qUuz4Ha6J4mMMF+Y=;
+        h=From:To:Cc:Subject:Date:From;
+        b=JEMBpoTvyDv5hbAmUzjdFRvle5ut7iUoFzOHkhk9cLW4vNmZvBUwYQZIhFFFIxPoZ
+         DrcGaz6X8a31DTkv4uSfQYfq2qlgkPXiwAMAQeBPGQVvlhw+6gdLEFI+ktJwRhO77F
+         9j7ghfylIAJlJVcJ3YXNAw+hk4NllNHhAF2ZRR3Mv8VRIUly//K/tofo8tWAgRpnaw
+         /9VTJYVaSKNq2ZzpHuP5qPTjDqTojSTS8hFjFQYCF1Z5POmR0tpQguZxNsrcw17/JS
+         /ikU92qwTfrim3IZa0WGPu4gASsm0xbxf2pgeom6gBJl/b25ADUTHWNC9ZRp8vsn9G
+         n6bXosMPiHzaQ==
+From:   Dinh Nguyen <dinguyen@kernel.org>
+To:     michal.simek@xilinx.com
+Cc:     dinguyen@kernel.org, bp@alien8.de, mchehab@kernel.org,
+        tony.luck@intel.com, james.morse@arm.com, rric@kernel.org,
+        linux-kernel@vger.kernel.org, linux-edac@vger.kernel.org
+Subject: [PATCHv3 1/3] EDAC/synopsys: use the quirk for version instead of ddr version
+Date:   Tue, 28 Sep 2021 11:04:21 -0500
+Message-Id: <20210928160423.271187-1-dinguyen@kernel.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <7e790ba1-0b31-690c-7bd3-d8361109cef5@amd.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Mon, Sep 27, 2021 at 04:56:17PM -0500, Smita Koralahalli Channabasappa wrote:
-> Yes, this makes sense to me now. But you meant to say inj_ipid_set()
-> instead of inj_bank_set()..?
+Version 2.40a supports DDR_ECC_INTR_SUPPORT for a quirk, so use that
+quirk to determine a call to setup_address_map().
 
-Yeah, I had it correct before:
+Signed-off-by: Dinh Nguyen <dinguyen@kernel.org>
+---
+v3: new patch
+---
+ drivers/edac/synopsys_edac.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-"This whole thing belongs into inj_ipid_set() where you should verify... "
-
-> 
-> Something like this:
-> 
-> -MCE_INJECT_SET(ipid)
-> 
-> +static int inj_ipid_set(void *data, u64 val)
-> +{
-> +	struct mce *m = (struct mce*)data;
-> 
-> +	if cpu_feature_enabled(X86_FEATURE_SMCA)) {
-> 
-> +		rdmsrl_on_cpu(..
-> 		..
-> 		..
-> +	m->ipid = val;
-> +	..
-> +}
-
-Yes, and return proper error codes.
-
-Thx.
-
+diff --git a/drivers/edac/synopsys_edac.c b/drivers/edac/synopsys_edac.c
+index 7e7146b22c16..bf237fccb444 100644
+--- a/drivers/edac/synopsys_edac.c
++++ b/drivers/edac/synopsys_edac.c
+@@ -1352,8 +1352,7 @@ static int mc_probe(struct platform_device *pdev)
+ 		}
+ 	}
+ 
+-	if (of_device_is_compatible(pdev->dev.of_node,
+-				    "xlnx,zynqmp-ddrc-2.40a"))
++	if (priv->p_data->quirks & DDR_ECC_INTR_SUPPORT)
+ 		setup_address_map(priv);
+ #endif
+ 
 -- 
-Regards/Gruss,
-    Boris.
+2.25.1
 
-https://people.kernel.org/tglx/notes-about-netiquette
