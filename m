@@ -2,65 +2,65 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AA9241D8FE
-	for <lists+linux-edac@lfdr.de>; Thu, 30 Sep 2021 13:41:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E471F41DBD7
+	for <lists+linux-edac@lfdr.de>; Thu, 30 Sep 2021 16:02:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350522AbhI3LnT (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Thu, 30 Sep 2021 07:43:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52238 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350490AbhI3LnT (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Thu, 30 Sep 2021 07:43:19 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3D70C06176A;
-        Thu, 30 Sep 2021 04:41:36 -0700 (PDT)
-Received: from zn.tnic (p200300ec2f0e1600628f023c6c6559e3.dip0.t-ipconnect.de [IPv6:2003:ec:2f0e:1600:628f:23c:6c65:59e3])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 0E36F1EC0390;
-        Thu, 30 Sep 2021 13:41:35 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1633002095;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=zw4ZBpbNO4udwIPZnGBCbr91htBxnE2GelfY5GA0t18=;
-        b=ghU4aYnGBnaV6bULPJzMBvLCHqvIoDgoheR+CWnXD6r4H3UkuUTJqh3v4QpGWhHTWgVT1q
-        OV2PpZNxNqm6zRHPQqr3P9zaQneQJ0rDWi55y6AQVYyW18XQghXmXOb3iXv1J4r3oM+P0W
-        1EZwr8iqLwyghF7rqpqUQEz/mF1y27Y=
-Date:   Thu, 30 Sep 2021 13:41:30 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Dinh Nguyen <dinguyen@kernel.org>
+        id S1351636AbhI3OEd (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Thu, 30 Sep 2021 10:04:33 -0400
+Received: from mail.kernel.org ([198.145.29.99]:53298 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1351814AbhI3OEF (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Thu, 30 Sep 2021 10:04:05 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 36ADB61440;
+        Thu, 30 Sep 2021 14:02:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1633010540;
+        bh=0LHNHemELtyiGJYnwXmqlHpJyubLyRp92TIqcnNtJSg=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=CV831w0f3j7NNWnLxQEgi9ajfFekM7LDl7Wu2gjMJe6YSOELc5Ts+4lQfPITrK0eu
+         bLB+UqVaN9X52kls0wke9eHpE4RdtipoTB++yVDunhpENU1hPajE0t/ZJ2VMM5Tyho
+         TFwECotNHFsefuvgeaUM8mc0o6jfihHVICvnUHtvSQ36Afr7V2aTGIk/lodhUDoOgV
+         ra55nLsBPpwNBc4VmeByhlB8JkTRhrr6NfWw5/hXYsRLWXjTnVgUYwqZVuIZ8QiHiJ
+         fTv3ri3oN8UmItmyjMUh+ZESIIxIfzZED6EUb8WSO+DVnP7Cq/4KkPoJxoCMMbLQAo
+         6qN7qcQvV6G3Q==
+Subject: Re: [PATCHv3 2/3] EDAC/synopsys: add support for version 3 of the
+ Synopsys EDAC DDR
+To:     Borislav Petkov <bp@alien8.de>
 Cc:     michal.simek@xilinx.com, mchehab@kernel.org, tony.luck@intel.com,
         james.morse@arm.com, rric@kernel.org, linux-kernel@vger.kernel.org,
         linux-edac@vger.kernel.org
-Subject: Re: [PATCHv3 2/3] EDAC/synopsys: add support for version 3 of the
- Synopsys EDAC DDR
-Message-ID: <YVWianHwt7P1LPY9@zn.tnic>
 References: <20210928160423.271187-1-dinguyen@kernel.org>
- <20210928160423.271187-2-dinguyen@kernel.org>
+ <20210928160423.271187-2-dinguyen@kernel.org> <YVWianHwt7P1LPY9@zn.tnic>
+From:   Dinh Nguyen <dinguyen@kernel.org>
+Message-ID: <203f5399-a8e0-70be-8b8b-782e6870143e@kernel.org>
+Date:   Thu, 30 Sep 2021 09:02:19 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20210928160423.271187-2-dinguyen@kernel.org>
+In-Reply-To: <YVWianHwt7P1LPY9@zn.tnic>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Tue, Sep 28, 2021 at 11:04:22AM -0500, Dinh Nguyen wrote:
-> @@ -899,6 +930,10 @@ static const struct of_device_id synps_edac_match[] = {
->  		.compatible = "xlnx,zynqmp-ddrc-2.40a",
->  		.data = (void *)&zynqmp_edac_def
->  	},
-> +	{
-> +		.compatible = "snps,ddrc-3.80a",
 
-WARNING: DT compatible string "snps,ddrc-3.80a" appears un-documented -- check ./Documentation/devicetree/bindings/
-#169: FILE: drivers/edac/synopsys_edac.c:934:
-+               .compatible = "snps,ddrc-3.80a",
 
--- 
-Regards/Gruss,
-    Boris.
+On 9/30/21 6:41 AM, Borislav Petkov wrote:
+> On Tue, Sep 28, 2021 at 11:04:22AM -0500, Dinh Nguyen wrote:
+>> @@ -899,6 +930,10 @@ static const struct of_device_id synps_edac_match[] = {
+>>   		.compatible = "xlnx,zynqmp-ddrc-2.40a",
+>>   		.data = (void *)&zynqmp_edac_def
+>>   	},
+>> +	{
+>> +		.compatible = "snps,ddrc-3.80a",
+> 
+> WARNING: DT compatible string "snps,ddrc-3.80a" appears un-documented -- check ./Documentation/devicetree/bindings/
+> #169: FILE: drivers/edac/synopsys_edac.c:934:
+> +               .compatible = "snps,ddrc-3.80a",
+> 
 
-https://people.kernel.org/tglx/notes-about-netiquette
+I'll send a follow-up patch to document this.
+
+Dinh
