@@ -2,86 +2,60 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A6BEF421471
-	for <lists+linux-edac@lfdr.de>; Mon,  4 Oct 2021 18:53:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 06D6D421A80
+	for <lists+linux-edac@lfdr.de>; Tue,  5 Oct 2021 01:19:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237537AbhJDQzL (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Mon, 4 Oct 2021 12:55:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55718 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237516AbhJDQzL (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Mon, 4 Oct 2021 12:55:11 -0400
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CA02C061745
-        for <linux-edac@vger.kernel.org>; Mon,  4 Oct 2021 09:53:22 -0700 (PDT)
-Received: by mail-pl1-x632.google.com with SMTP id j15so312990plh.7
-        for <linux-edac@vger.kernel.org>; Mon, 04 Oct 2021 09:53:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=purestorage.com; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=ZUf5cLarGbiZnEVQ0Jzbit4iKZIxXZvjgSxdN+0foqc=;
-        b=Vx5dqKS/inyiI6BZVCDIbx4UiQ0h+MwxKSDQSPjEPPX2/1cd8EQ8qr9Bd+t2Iv9Vtn
-         o4D0NdAD3wLu3IcOFiismcNxu+wyOjUhHv2Nq7pEOHKPMny+oFgaMtZ9OIpmcL0Lve85
-         d3dnIiNMkk15Bv/lvsO50uuKyZj1h/4lSm6V4=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=ZUf5cLarGbiZnEVQ0Jzbit4iKZIxXZvjgSxdN+0foqc=;
-        b=OX3Wvr6vJU9+shkVmIZEfrXfJvwho5cLg2/8F2RyUpAs5DC4plrDGWEjB1kqz40Hbm
-         ht/P+CHPUywqsWswTvPcmrrpVvhb4Yp/crTZcwbahuKXB4kngp1dWdMT8NzLzhMnv0+Q
-         fGtdhFtAPO8aun6yJZSt2LOxDmXdFrRjakpVYe9WvadvnUIYFpJLsH2wo734IGVxPmPY
-         LbGhe+ToiX5FVbCduVSSx+x5toEN01f59EtbuIgyrvi3qtdoQYgnxhqp9P4PyX9QGYq6
-         l1T1bBMEC16eukqj9x1Prf6lbFzjBGGIeoMbwr9sfH08qZqDecsUJjxAvJHYmMEBonMM
-         FAUw==
-X-Gm-Message-State: AOAM5300anuDE94zZVYIdNqoypqkZ4PLJVw7dO3zTA35GtvnlCZRxIVt
-        L7bffiR+1U2LymgzXjZFnqaCKg==
-X-Google-Smtp-Source: ABdhPJw6z9JMaEksrrfUCdhF1zMg6OajCMv5wDqRrCT1ktQzZlZPw+WHtJxMGyDW7ekLIIMMypGhFQ==
-X-Received: by 2002:a17:90a:6c97:: with SMTP id y23mr31633347pjj.117.1633366401867;
-        Mon, 04 Oct 2021 09:53:21 -0700 (PDT)
-Received: from ebps (cpe-75-80-179-40.san.res.rr.com. [75.80.179.40])
-        by smtp.gmail.com with ESMTPSA id z2sm3550319pfe.210.2021.10.04.09.53.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 04 Oct 2021 09:53:21 -0700 (PDT)
-Date:   Mon, 4 Oct 2021 09:53:18 -0700
-From:   Eric Badger <ebadger@purestorage.com>
-To:     "Luck, Tony" <tony.luck@intel.com>
-Cc:     Borislav Petkov <bp@alien8.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Robert Richter <rric@kernel.org>,
-        "open list:EDAC-CORE" <linux-edac@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] EDAC/mc_sysfs: Print MC-scope sysfs counters unsigned
-Message-ID: <20211004165318.GA700900@ebps>
-References: <20211003181653.GA685515@ebadger-ThinkPad-T590>
- <045ce9cf33904a52a365a04c055c5cbf@intel.com>
+        id S233597AbhJDXVi (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Mon, 4 Oct 2021 19:21:38 -0400
+Received: from mga06.intel.com ([134.134.136.31]:63190 "EHLO mga06.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233517AbhJDXVh (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Mon, 4 Oct 2021 19:21:37 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10127"; a="286489837"
+X-IronPort-AV: E=Sophos;i="5.85,347,1624345200"; 
+   d="scan'208";a="286489837"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Oct 2021 16:19:47 -0700
+X-IronPort-AV: E=Sophos;i="5.85,347,1624345200"; 
+   d="scan'208";a="521617882"
+Received: from akleen-mobl1.amr.corp.intel.com (HELO [10.209.96.73]) ([10.209.96.73])
+  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Oct 2021 16:19:46 -0700
+Subject: Re: [PATCH v2 4/7] ABI: sysfs-mce: add a new ABI file
+To:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     "H. Peter Anvin" <hpa@zytor.com>, Jonathan Corbet <corbet@lwn.net>,
+        Borislav Petkov <bp@alien8.de>, Ingo Molnar <mingo@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Tony Luck <tony.luck@intel.com>, linux-edac@vger.kernel.org,
+        linux-kernel@vger.kernel.org, x86@kernel.org
+References: <cover.1632994837.git.mchehab+huawei@kernel.org>
+ <801a26985e32589eb78ba4b728d3e19fdea18f04.1632994837.git.mchehab+huawei@kernel.org>
+From:   Andi Kleen <ak@linux.intel.com>
+Message-ID: <eb2f2771-139f-c949-72a2-13e33059af8a@linux.intel.com>
+Date:   Mon, 4 Oct 2021 16:19:46 -0700
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <045ce9cf33904a52a365a04c055c5cbf@intel.com>
+In-Reply-To: <801a26985e32589eb78ba4b728d3e19fdea18f04.1632994837.git.mchehab+huawei@kernel.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Mon, Oct 04, 2021 at 03:21:13PM +0000, Luck, Tony wrote:
-> > This is cosmetically nicer for counts > INT32_MAX, and aligns the
-> > MC-scope format with that of the lower layer sysfs counter files.
-> 
-> While this is technically the right thing to do, I pity the system administrator that
-> is looking at a system with more than 2147483647 corrected or uncorrected errors!
-> 
-> So:
-> 
-> Acked-by: Tony Luck <tony.luck@intel.com>
-> 
-> but maybe this is just churn and not really useful in practice?
 
-Pity accepted :). I only noticed the sign mismatch after seeing a
-negative value on a server in the wild. But it's cosmetic really; if
-you've reached INT32_MAX you'll probably reach UINT32_MAX and can't rely
-on the counter.
+On 9/30/2021 2:44 AM, Mauro Carvalho Chehab wrote:
+> Reduce the gap of missing ABIs for Intel servers with MCE
+> by adding a new ABI file.
+>
+> The contents of this file comes from:
+> 	Documentation/x86/x86_64/machinecheck.rst
+>
+> Cc: Andi Kleen <ak@linux.intel.com>
+> Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 
-Cheers,
-Eric
+Reviewed-by: Andi Kleen <ak@linux.intel.com>
+
+
