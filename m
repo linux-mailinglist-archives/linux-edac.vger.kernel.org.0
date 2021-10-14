@@ -2,72 +2,100 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B86042D690
-	for <lists+linux-edac@lfdr.de>; Thu, 14 Oct 2021 11:56:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C704E42E11F
+	for <lists+linux-edac@lfdr.de>; Thu, 14 Oct 2021 20:22:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230126AbhJNJ6N (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Thu, 14 Oct 2021 05:58:13 -0400
-Received: from mail.skyhub.de ([5.9.137.197]:55592 "EHLO mail.skyhub.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230199AbhJNJ6L (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Thu, 14 Oct 2021 05:58:11 -0400
-Received: from zn.tnic (p200300ec2f0c7200b0e4a365e78c79f0.dip0.t-ipconnect.de [IPv6:2003:ec:2f0c:7200:b0e4:a365:e78c:79f0])
+        id S232608AbhJNSYq (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Thu, 14 Oct 2021 14:24:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37142 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231792AbhJNSYq (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Thu, 14 Oct 2021 14:24:46 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36DBBC061570;
+        Thu, 14 Oct 2021 11:22:41 -0700 (PDT)
+Received: from zn.tnic (p200300ec2f0c720076278dcac58b4415.dip0.t-ipconnect.de [IPv6:2003:ec:2f0c:7200:7627:8dca:c58b:4415])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id AA11E1EC047E;
-        Thu, 14 Oct 2021 11:56:05 +0200 (CEST)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 254D11EC01A8;
+        Thu, 14 Oct 2021 20:22:38 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1634205365;
+        t=1634235758;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=sHLsxf9M5MPo/+/8DZe1zU1q55XpB0h23T1Q3btydec=;
-        b=Fx0q3HQ8RHsk21xu1sFLMb/dxdKu/cl9qYuvjjMBGyFOFgWQLwHMAKjupb4WTNi5ilBvoz
-        Q+kc52DN8lkpsyk2MHu12yhdRkzN5eJA6a9UHANFV66sXkd4DOFAFZ84SL5xKzGUhphAuH
-        bDmC5+xQwaNIXva2X/i+HXtZZovbyAg=
-Date:   Thu, 14 Oct 2021 11:56:04 +0200
+        bh=Hc/czkblm90nyAaSHB84LYcbQ9F8p2MEH3ltwTTSbeM=;
+        b=YmRXcxDB85kE+taKi6h2OcamDiviZwlqU1utqYK61z0vV1wy3Y7FpcFAYCPor887fgf2cN
+        7Gurp7eC0mOajbDGrn99vbhByWOWZUgTV0flObZIHbfcsZeKlYHag4G7e0PaHUoJIBFTr2
+        jUvKzCmAfYYZtPGX3QSrJ6kP7qANvo4=
+Date:   Thu, 14 Oct 2021 20:22:37 +0200
 From:   Borislav Petkov <bp@alien8.de>
-To:     Hans Potsch <hans.potsch@nokia.com>
-Cc:     jlu@pengutronix.de, linux-edac@vger.kernel.org,
-        harald.glock@nokia.com
-Subject: Re: [PATCH] EDAC/armada-xp: Fix output of uncorrectable error counter
-Message-ID: <YWf+tClabicEVQ4d@zn.tnic>
-References: <AM8PR07MB81725DB8E29F93C960A0B1C8FEB09@AM8PR07MB8172.eurprd07.prod.outlook.com>
- <20211006121332.58788-1-hans.potsch@nokia.com>
+To:     "Koralahalli Channabasappa, Smita" <skoralah@amd.com>
+Cc:     Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>,
+        x86@kernel.org, linux-edac@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Tony Luck <tony.luck@intel.com>,
+        "H . Peter Anvin" <hpa@zytor.com>, yazen.ghannam@amd.com
+Subject: Re: [PATCH 1/5] x86/mce/inject: Check if a bank is unpopulated
+ before error simulation
+Message-ID: <YWh1bc6Lol65f0RH@zn.tnic>
+References: <20210915232739.6367-1-Smita.KoralahalliChannabasappa@amd.com>
+ <20210915232739.6367-2-Smita.KoralahalliChannabasappa@amd.com>
+ <YU2Lm+11Pqg/RBK3@zn.tnic>
+ <78bec0e8-a64a-466c-4245-2386de7db5c9@amd.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20211006121332.58788-1-hans.potsch@nokia.com>
+In-Reply-To: <78bec0e8-a64a-466c-4245-2386de7db5c9@amd.com>
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Wed, Oct 06, 2021 at 02:13:32PM +0200, Hans Potsch wrote:
-> Incorrect parameter is passed to the edac_mc_handle_error() function.
-> Therefore number of correctable errors is displayed as uncorrectable
-> errors. Changed to correct parameter.
+On Mon, Oct 11, 2021 at 04:12:14PM -0500, Koralahalli Channabasappa, Smita wrote:
+> I do not have the bank number in order to look up the IPID for that bank.
+> I couldn't know the bank number because mce-inject files are synchronized
+> in a way that once the bank number is written the injection starts.
+> Can you please suggest what needs to be done here?
+>
+> Also, the IPID register is read only from the OS, hence the user provided
+> IPID values could be useful for "sw" error injection types. For "hw" error
+> injection types we need to read from the registers to determine the IPID
+> value.
 > 
-> Signed-off-by: Hans Potsch <hans.potsch@nokia.com>
-> ---
->  drivers/edac/armada_xp_edac.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/edac/armada_xp_edac.c b/drivers/edac/armada_xp_edac.c
-> index e3e757513d1b..b1f46a974b9e 100644
-> --- a/drivers/edac/armada_xp_edac.c
-> +++ b/drivers/edac/armada_xp_edac.c
-> @@ -178,7 +178,7 @@ static void axp_mc_check(struct mem_ctl_info *mci)
->  				     "details unavailable (multiple errors)");
->  	if (cnt_dbe)
->  		edac_mc_handle_error(HW_EVENT_ERR_UNCORRECTED, mci,
-> -				     cnt_sbe, /* error count */
-> +				     cnt_dbe, /* error count */
->  				     0, 0, 0, /* pfn, offset, syndrome */
->  				     -1, -1, -1, /* top, mid, low layer */
->  				     mci->ctl_name,
-> -- 
+> Should there be two cases where on a "sw" injection use the user provided
+> IPID value whereas on "hw" injection read from registers?
 
-Applied, thanks.
+Right, that's a good point. So the way I see it is, we need to decide
+what is allowed for sw injection and what for hw injection, wrt to IPID
+value.
+
+I think for sw injection, we probably should say that since this is
+sw only and its purpose is to test the code only, there should not be
+any limitations imposed by the underlying machine. Like using the bank
+number, for example.
+
+So what you do now for sw injection:
+
+		if (val && inj_type == SW_INJ)
+			m->ipid = val;
+
+should be good enough. User simply sets some IPID value and that value
+will be used for the bank which is written when injecting.
+
+Now, for hw injection, you have two cases:
+
+1. The bank is unpopulated so setting the IPID there doesn't make any sense.
+
+2. The bank *is* populated and the respective IPID MSR has a value
+describing what that bank is.
+
+And in that case, does it even make sense to set the IPID? I don't think
+so because that IP block's type - aka IPID - has been set already by
+hardware/firmware.
+
+So the way I see it, it makes no sense whatsoever to set the IPID of a
+bank during hw injection.
+
+Right?
 
 -- 
 Regards/Gruss,
