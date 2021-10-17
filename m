@@ -2,65 +2,94 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7054742FC0D
-	for <lists+linux-edac@lfdr.de>; Fri, 15 Oct 2021 21:26:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4490B4307FD
+	for <lists+linux-edac@lfdr.de>; Sun, 17 Oct 2021 12:38:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242734AbhJOT2L (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Fri, 15 Oct 2021 15:28:11 -0400
-Received: from mail.skyhub.de ([5.9.137.197]:39968 "EHLO mail.skyhub.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S242721AbhJOT2B (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Fri, 15 Oct 2021 15:28:01 -0400
-Received: from zn.tnic (p200300ec2f0cfb00bb7b1559c428a59f.dip0.t-ipconnect.de [IPv6:2003:ec:2f0c:fb00:bb7b:1559:c428:a59f])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        id S237806AbhJQKkR (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Sun, 17 Oct 2021 06:40:17 -0400
+Received: from smtp-out2.suse.de ([195.135.220.29]:44946 "EHLO
+        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235835AbhJQKkQ (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Sun, 17 Oct 2021 06:40:16 -0400
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id EB41F1EC051F;
-        Fri, 15 Oct 2021 21:25:51 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1634325952;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=diUPBadghGnVRGSh80f0o42e9M3rUKFPPTqan9vhLOA=;
-        b=Aa967DoR7YNNJtpW+XvIMGckgMIqnKf5WypS+n71Jwi1W4jKxEmlyo5W21VMfikUR5xxfp
-        d4PG0ZhQrn9nDqP5swC0wLWgkj8ffB6PJQjCUUDyevOfcDTDo9/z46DsAb1RgF0tN6Vtwu
-        7YvMzKQb0AgVYdBUff+P9WyENt/4qW4=
-Date:   Fri, 15 Oct 2021 21:25:50 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     "Chatradhi, Naveen Krishna" <nchatrad@amd.com>
-Cc:     linux-edac@vger.kernel.org, x86@kernel.org,
-        linux-kernel@vger.kernel.org, mingo@redhat.com, mchehab@kernel.org,
-        yazen.ghannam@amd.com
-Subject: Re: [PATCH v4 0/4] x86/edac/amd64: Add support for noncpu nodes
-Message-ID: <YWnVvgluSC03Z1mg@zn.tnic>
-References: <20210823185437.94417-1-nchatrad@amd.com>
- <20211014185400.10451-1-nchatrad@amd.com>
- <YWiKpw5MwtAiwNyB@zn.tnic>
- <9f78573d-c969-da1d-8a7d-4abd7d8a75f2@amd.com>
+        by smtp-out2.suse.de (Postfix) with ESMTPS id B931B1FD63;
+        Sun, 17 Oct 2021 10:38:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1634467086; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=wL8xtjaYGEluhMiDXGEdJMCUjSyJvHUKLjf2FdHV0xs=;
+        b=lr2L+pIdAWNYNqS/mYBU4U/NP3+j7GmqEn2FrDekd3qxpqK+J+IkcTdmZBW3A2ZhmVh3I9
+        scFXOvwFWojLvYNPWo1eO5IwSNRvPXwMDRM4DdcKtzwoG3rdHIYiVRs1OqwAnQDecjfTGu
+        m8jLBFdnObUahAPiwZP+RYUrT9suPIU=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1634467086;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=wL8xtjaYGEluhMiDXGEdJMCUjSyJvHUKLjf2FdHV0xs=;
+        b=o9ltiLUJK0qq5x/vf9MgW0RX3Phy+hs0tFt3jvjDmXhgsDdHZt794h4GZ9s6RtCNE/TnBd
+        zG92thXCbx+8RuCA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 9D06D1377A;
+        Sun, 17 Oct 2021 10:38:06 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id is3lJQ79a2H9PQAAMHmgww
+        (envelope-from <bp@suse.de>); Sun, 17 Oct 2021 10:38:06 +0000
+Date:   Sun, 17 Oct 2021 12:38:09 +0200
+From:   Borislav Petkov <bp@suse.de>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-edac <linux-edac@vger.kernel.org>,
+        lkml <linux-kernel@vger.kernel.org>
+Subject: [GIT PULL] EDAC fix for v5.15-rc6
+Message-ID: <YWv9Eb+ZYTtWfLSc@zn.tnic>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <9f78573d-c969-da1d-8a7d-4abd7d8a75f2@amd.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Fri, Oct 15, 2021 at 05:48:32PM +0530, Chatradhi, Naveen Krishna wrote:
-> Could you please review the latest one (above link)
+Hi Linus,
 
-Ok.
- 
-> or should i push them as v5, to avoid the confusion.
-
-Nah, not necessary.
-
-The goal is to always avoid spamming maintainers with patchsets if not
-absolutely necessary. :-)
+please pull a single EDAC fix for 5.15.
 
 Thx.
+
+---
+
+The following changes since commit 64570fbc14f8d7cb3fe3995f20e26bc25ce4b2cc:
+
+  Linux 5.15-rc5 (2021-10-10 17:01:59 -0700)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/ras/ras.git tags/edac_urgent_for_v5.15_rc6
+
+for you to fetch changes up to d9b7748ffc45250b4d7bcf22404383229bc495f5:
+
+  EDAC/armada-xp: Fix output of uncorrectable error counter (2021-10-14 11:46:03 +0200)
+
+----------------------------------------------------------------
+- Log the "correct" uncorrectable error count in the armada_xp driver
+
+----------------------------------------------------------------
+Hans Potsch (1):
+      EDAC/armada-xp: Fix output of uncorrectable error counter
+
+ drivers/edac/armada_xp_edac.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 -- 
 Regards/Gruss,
     Boris.
 
-https://people.kernel.org/tglx/notes-about-netiquette
+SUSE Software Solutions Germany GmbH, GF: Felix Imendörffer, HRB 36809, AG Nürnberg
