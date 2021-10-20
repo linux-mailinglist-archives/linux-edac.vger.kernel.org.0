@@ -2,73 +2,74 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 685BD434541
-	for <lists+linux-edac@lfdr.de>; Wed, 20 Oct 2021 08:38:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D933434E9C
+	for <lists+linux-edac@lfdr.de>; Wed, 20 Oct 2021 17:07:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229809AbhJTGlD (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Wed, 20 Oct 2021 02:41:03 -0400
-Received: from szxga02-in.huawei.com ([45.249.212.188]:25302 "EHLO
-        szxga02-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229691AbhJTGk5 (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Wed, 20 Oct 2021 02:40:57 -0400
-Received: from dggemv703-chm.china.huawei.com (unknown [172.30.72.55])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4HZ16S6z9gzbhGc;
-        Wed, 20 Oct 2021 14:34:08 +0800 (CST)
-Received: from dggpemm500001.china.huawei.com (7.185.36.107) by
- dggemv703-chm.china.huawei.com (10.3.19.46) with Microsoft SMTP Server
+        id S230363AbhJTPJO convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-edac@lfdr.de>); Wed, 20 Oct 2021 11:09:14 -0400
+Received: from mga12.intel.com ([192.55.52.136]:51232 "EHLO mga12.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229570AbhJTPJO (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Wed, 20 Oct 2021 11:09:14 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10143"; a="208902821"
+X-IronPort-AV: E=Sophos;i="5.87,167,1631602800"; 
+   d="scan'208";a="208902821"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Oct 2021 08:06:59 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.87,167,1631602800"; 
+   d="scan'208";a="551674637"
+Received: from fmsmsx605.amr.corp.intel.com ([10.18.126.85])
+  by fmsmga004.fm.intel.com with ESMTP; 20 Oct 2021 08:06:59 -0700
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx605.amr.corp.intel.com (10.18.126.85) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.15; Wed, 20 Oct 2021 14:38:30 +0800
-Received: from localhost.localdomain (10.67.165.24) by
- dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
+ 15.1.2242.12; Wed, 20 Oct 2021 08:06:58 -0700
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.15; Wed, 20 Oct 2021 14:38:30 +0800
-From:   Xiaofei Tan <tanxiaofei@huawei.com>
-To:     <mchehab@kernel.org>, <linux-edac@vger.kernel.org>
-CC:     <shiju.jose@huawei.com>, <linuxarm@openeuler.org>,
-        <jonathan.cameron@huawei.com>, Xiaofei Tan <tanxiaofei@huawei.com>
-Subject: [PATCH 4/4] rasdaemon: Add some modules supported by hisi common error section
-Date:   Wed, 20 Oct 2021 14:33:40 +0800
-Message-ID: <20211020063340.26079-5-tanxiaofei@huawei.com>
-X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20211020063340.26079-1-tanxiaofei@huawei.com>
-References: <20211020063340.26079-1-tanxiaofei@huawei.com>
+ 15.1.2242.12; Wed, 20 Oct 2021 08:06:58 -0700
+Received: from fmsmsx610.amr.corp.intel.com ([10.18.126.90]) by
+ fmsmsx610.amr.corp.intel.com ([10.18.126.90]) with mapi id 15.01.2242.012;
+ Wed, 20 Oct 2021 08:06:58 -0700
+From:   "Luck, Tony" <tony.luck@intel.com>
+To:     Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+CC:     "H . Peter Anvin" <hpa@zytor.com>,
+        "yazen.ghannam@amd.com" <yazen.ghannam@amd.com>
+Subject: RE: [PATCH v2 2/5] x86/mce/inject: Warn the user on a not set valid
+ bit in MCA_STATUS
+Thread-Topic: [PATCH v2 2/5] x86/mce/inject: Warn the user on a not set valid
+ bit in MCA_STATUS
+Thread-Index: AQHXxUI8p9AjIXdBe0GwapWxUk7Kj6vb/UKQ
+Date:   Wed, 20 Oct 2021 15:06:58 +0000
+Message-ID: <cd4be28ced3544f5b0eae397ccbe83c0@intel.com>
+References: <20211019233641.140275-1-Smita.KoralahalliChannabasappa@amd.com>
+ <20211019233641.140275-3-Smita.KoralahalliChannabasappa@amd.com>
+In-Reply-To: <20211019233641.140275-3-Smita.KoralahalliChannabasappa@amd.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+dlp-product: dlpe-windows
+dlp-reaction: no-action
+dlp-version: 11.6.200.16
+x-originating-ip: [10.1.200.100]
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 8BIT
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.67.165.24]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- dggpemm500001.china.huawei.com (7.185.36.107)
-X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-Add some modules supported by hisi common error section. Besides,
-HHA is the module for some old platform, and it takes the same place
-of MATA, so remove it.
++	if (!(i_mce.status & MCI_STATUS_VAL))
++		pr_warn("Handlers might ignore signatures with Val=0 in MCA_STATUS\n");
 
-Signed-off-by: Xiaofei Tan <tanxiaofei@huawei.com>
----
- non-standard-hisilicon.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+I don't think there is any "might" about this. All code paths start by checking for MCI_STATUS_VAL
+and skipping if it isn't set.
 
-diff --git a/non-standard-hisilicon.c b/non-standard-hisilicon.c
-index f9c7bd4..1432163 100644
---- a/non-standard-hisilicon.c
-+++ b/non-standard-hisilicon.c
-@@ -184,7 +184,11 @@ static const char* module_name[] = {
- 	"SEC",
- 	"RDE",
- 	"MEE",
--	"HHA",
-+	"L4D",
-+	"Tsensor",
-+	"ROH",
-+	"BTC",
-+	"HILINK"
- };
- 
- static const char* get_soc_desc(uint8_t soc_id)
--- 
-2.33.0
+s/might/will/
 
+-Tony
