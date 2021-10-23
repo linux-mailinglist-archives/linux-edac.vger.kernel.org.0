@@ -2,89 +2,91 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9ED4F4376D6
-	for <lists+linux-edac@lfdr.de>; Fri, 22 Oct 2021 14:21:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 55895438411
+	for <lists+linux-edac@lfdr.de>; Sat, 23 Oct 2021 17:42:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231356AbhJVMYL (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Fri, 22 Oct 2021 08:24:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53606 "EHLO
+        id S231482AbhJWPpN (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Sat, 23 Oct 2021 11:45:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231911AbhJVMYK (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Fri, 22 Oct 2021 08:24:10 -0400
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22063C061227
-        for <linux-edac@vger.kernel.org>; Fri, 22 Oct 2021 05:21:52 -0700 (PDT)
-Received: by mail-ed1-x52e.google.com with SMTP id y12so379970eda.4
-        for <linux-edac@vger.kernel.org>; Fri, 22 Oct 2021 05:21:52 -0700 (PDT)
+        with ESMTP id S230104AbhJWPpM (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Sat, 23 Oct 2021 11:45:12 -0400
+Received: from mail-wr1-x443.google.com (mail-wr1-x443.google.com [IPv6:2a00:1450:4864:20::443])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB8A1C061766
+        for <linux-edac@vger.kernel.org>; Sat, 23 Oct 2021 08:42:52 -0700 (PDT)
+Received: by mail-wr1-x443.google.com with SMTP id e4so3688400wrc.7
+        for <linux-edac@vger.kernel.org>; Sat, 23 Oct 2021 08:42:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=EabbjzyBCsHP1Pqryzjhoy0dM3xlyxLmmpO8ACgMTo8=;
-        b=opUIgqVWyZcHOIldu+LgQVfQLu2JLSm4eq0yRYoR8X3EkJ0jJdtgK1LJrEC4fAYG/u
-         x5QndCavFk6KrgrLKL2M04eWhmo9Ht5gsCUOTzm6BFmYlOhPKCnfQmAWRcGWJ3Kgd+Po
-         dxnzE1GzD0Fe/zdoRYGanqsnNZ7HZwcDd5jvb2P53Z7ySB2eUUW5eKcCwJjvHcLwQW3D
-         hmZMQ0WQ67mADARNZlQPTMDFACAa1pT2f55C5E+z5xU/0SGGI05AA1ys/nk/8Z7QRecx
-         rbFLK51ODld/urTp+hjZ3tCNNEiv03NL8R5n8H4ZVv1sIR3Pcfr4FSd/aUugOrtvCJBK
-         4QUQ==
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=F26I+cBcpyIkdxRfcHLvmvj+TTSmfbBclURHJNpWXCA=;
+        b=AYtLHgTG+6uRU7+ihCnpuOHko6pqohXhhQkkijOFNs1K9R3uZtGzQ5Q1/HW70ikQOH
+         to4qY+MneU8Wp5m/9lAfflx+y719nabfpikWCEUlEWf4TV2mCVtwTqCiU9WBe0/PueVA
+         Ai5uemlRsLruanwKtfzO+GeDcAbGf94MhP9fVYsSthGmJThkp9aXQloZUCc7KpPJDIe5
+         ZDHZUIMzc7AFUI4sZuF8c0yufIwBcSuY8XEdvjlaOTWtthy6nwfYJOAMZizkpVyMjWcI
+         yYcYAJzSYs4KyL2X7l5KUECXBatU7ZxHLxcDM7wHj0/uSurwobyzbl1doBaHD0t2U4Ok
+         8KFA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=EabbjzyBCsHP1Pqryzjhoy0dM3xlyxLmmpO8ACgMTo8=;
-        b=ssG3dsXCyuRByiX5LzLK3Ea7J8MPud3QwJp4jYP8CsLRwLEqJ32q81aRPKHx8zaFa+
-         mmHcfwq8pALjsmnmpeJ2mWGEkdlWiV+8urOE0pdmbCvTNXh6rIlz3OGMN0PtKMyFsnvp
-         jmRfJEhUTB8AXMzZv80wm0B9nYHKZRRSnFcn6iSawV1OytQ6uldn3pnrc9IvY2lXwSbw
-         7Nw9ON9YmStppb1jk8iV7Jn0U83BsEbXlRbpI64TSjaUUdcKfMbR88Yn6Z+mlu2JvE1S
-         7ihbw5t4V/E6UkukhikiUTkpXIw12gDkmNHeoJtALAUr3uzovx0zsOiIQ01SFVS3f11k
-         HiQw==
-X-Gm-Message-State: AOAM532Mtq//jBluzKFnwN0MvCnhc9gHPX+PSL6Dy/DpQ3WlUG0atMQn
-        uTkU4dGOESs8DeluqJUMW9vo1yIwShoK8HvwM8M=
-X-Google-Smtp-Source: ABdhPJy2Z+mCK6UsBedDHfuHLqHjOelryE6bx9xZ/OavTEghlxY+bPID2uQBe/oD5nVNF4jHf9BZTkpf3h9vpVXzB08=
-X-Received: by 2002:a17:907:1b0a:: with SMTP id mp10mr15488909ejc.29.1634905309828;
- Fri, 22 Oct 2021 05:21:49 -0700 (PDT)
+         :subject:to:content-transfer-encoding;
+        bh=F26I+cBcpyIkdxRfcHLvmvj+TTSmfbBclURHJNpWXCA=;
+        b=Q6gHK3WxUlNAJyeUYyrOEGc7yfE7hL9mJ4RibwnmC+qfhclCvMtyNJ/hVOE3WgSXwc
+         0hpjVGDOPsizU3cdXgnAKgV+o/XbWLWmMR8TL3gRSPTJRvWczbGi0NmzYV0QO+DEqECv
+         ASSNrItPVQ5YMVAfsIrgGRjAGCMbGFC4sZIaIwYX0r5HeZ86UJdKYW5zKCw0xFRBH9k3
+         OllrcQnI8/+6jqshKGqG7w+7j62yea0+otL36IreJiwNo5t8PhwBT2gj1TARhDPRa5qB
+         P2R55IHk5ap+GsEWZp7N6M4icBviAuzrwA40naWYH/vTXDe5AFb7a0uMetZPhwJ5fz/4
+         HgCw==
+X-Gm-Message-State: AOAM532Ay+wXJJ9Tpox7I7SiAbE9GwsYdZLZDZxEznuqwuPebq3WgFJX
+        sQ5nD8VpicYgccWW/8JPRtHIjkELrWwzr2zNCeU=
+X-Google-Smtp-Source: ABdhPJxbHWCQaA22XVwQFJLeK97z9oroWNyFUNBz/3teSSfazwM0svrL6URXAe5PADGpGE0jjZn5M2av0IBmVyuOXKg=
+X-Received: by 2002:adf:a411:: with SMTP id d17mr3075552wra.232.1635003770995;
+ Sat, 23 Oct 2021 08:42:50 -0700 (PDT)
 MIME-Version: 1.0
-Received: by 2002:a17:907:7fa7:0:0:0:0 with HTTP; Fri, 22 Oct 2021 05:21:48
+Received: by 2002:a1c:a916:0:0:0:0:0 with HTTP; Sat, 23 Oct 2021 08:42:50
  -0700 (PDT)
-Reply-To: bahadur.rayanby@gmail.com
-From:   Ryan Bahadur <dr.philposman7@gmail.com>
-Date:   Fri, 22 Oct 2021 05:21:48 -0700
-Message-ID: <CAMOT=VQ19xGMh1Soq8rNHNKaBCqZh03d0u+Nrf_Ou9bAtd-seQ@mail.gmail.com>
-Subject: CAN I TRUST YOU
+Reply-To: martinafrancis01@gmail.com
+From:   martinafran42 <martinafran42@gmail.com>
+Date:   Sat, 23 Oct 2021 08:42:50 -0700
+Message-ID: <CAC1Op46rzf-95OpiL4YE=Lzvu2F7NstX11WdGagxm5dfjjFJ3w@mail.gmail.com>
+Subject: =?UTF-8?Q?Dobry_dzie=C5=84_moja_droga?=
 To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
--- 
-Greetings,
+--=20
+Dobry dzie=C5=84 moja droga
+Jak si=C4=99 masz i twoja rodzina.
+Jestem pani Martina Francis, chora wdowa pisz=C4=85ca ze szpitalnego =C5=82=
+=C3=B3=C5=BCka
+bez dziecka. Kontaktuj=C4=99 si=C4=99 z Pa=C5=84stwem, aby=C5=9Bcie dowiedz=
+ieli si=C4=99 o moim
+pragnieniu przekazania sumy (2 700 000,00 USD MILION=C3=93W USD), kt=C3=B3r=
+=C4=85
+odziedziczy=C5=82am po moim zmar=C5=82ym m=C4=99=C5=BCu na cele charytatywn=
+e, obecnie
+fundusz jest nadal w banku. Niedawno m=C3=B3j lekarz powiedzia=C5=82 mi, =
+=C5=BCe mam
+powa=C5=BCn=C4=85 chorob=C4=99 nowotworow=C4=85 i moje =C5=BCycie nie jest =
+ju=C5=BC gwarantowane,
+dlatego podejmuj=C4=99 t=C4=99 decyzj=C4=99..
 
-Firstly, I apologize for encroaching into your privacy in this manner
-as it may seem unethical though it is a matter of great importance.
+Chc=C4=99, aby=C5=9Bcie skorzystali z tego funduszu dla ludzi ubogich,
+maltretowanych dzieci, mniej uprzywilejowanych, ko=C5=9Bcio=C5=82=C3=B3w, s=
+ieroci=C5=84c=C3=B3w
+i cierpi=C4=85cych wd=C3=B3w w spo=C5=82ecze=C5=84stwie.
 
-I am Mr.Ryan Bahadur, I work with Cayman National Bank (Cayman Islands).
+Prosz=C4=99, wr=C3=B3=C4=87 do mnie natychmiast po przeczytaniu tej wiadomo=
+=C5=9Bci, aby
+uzyska=C4=87 wi=C4=99cej szczeg=C3=B3=C5=82=C3=B3w dotycz=C4=85cych tej age=
+ndy humanitarnej.
 
-I am contacting you because my status would not permit me to do this
-alone as it is concerning our customer and an investment placed under
-our bank's management over 5 years ago.
+Niech B=C3=B3g ci=C4=99 b=C5=82ogos=C5=82awi, kiedy czekam na twoj=C4=85 od=
+powied=C5=BA.
 
-I have a proposal I would love to discuss with you which will be very
-beneficial to both of us. It's regarding my late client who has a huge
-deposit with my bank.
-
-He is from your country and shares the same last name with you.
-
-I want to seek your consent to present you as the next of kin to my
-late client who died and left a huge deposit with my bank.
-
-I would respectfully request that you keep the contents of this mail
-confidential and respect the integrity of the information you come by
-as a result of this mail.
-
-Please kindly get back to me for more details if I can TRUST YOU.{
-bahadur.rayanby@gmail.com}
-
-Regards
-Mr.Ryan Bahadur
-Treasury and Deposit Management,
-Cayman National Bank Cayman Islands.
+Twoja siostra.
+Pani Martina Francis.
