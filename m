@@ -2,181 +2,137 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 353D84397EE
-	for <lists+linux-edac@lfdr.de>; Mon, 25 Oct 2021 15:56:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D4FF439944
+	for <lists+linux-edac@lfdr.de>; Mon, 25 Oct 2021 16:51:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232779AbhJYN7I (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Mon, 25 Oct 2021 09:59:08 -0400
-Received: from mail.skyhub.de ([5.9.137.197]:39238 "EHLO mail.skyhub.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230225AbhJYN7I (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Mon, 25 Oct 2021 09:59:08 -0400
-Received: from zn.tnic (p200300ec2f0f4e00a9aecab73d80ddb1.dip0.t-ipconnect.de [IPv6:2003:ec:2f0f:4e00:a9ae:cab7:3d80:ddb1])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id C85941EC04F2;
-        Mon, 25 Oct 2021 15:56:44 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1635170204;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=9vcw/G3G8TQiJIk2OJLutgGZViY71B8IEbfeewsQb/U=;
-        b=rgfokybylLH9QkNR9EtK6heI0+s1mfTbk62b6DqtZyIjWUNyejE/sj31AiYx7rE1t6KP1K
-        e1m5ymVhAe6pF+23oSydWnReCRtIVQXrMGKGa8h53Yf2FtX1Rgfh7g1r5YnVj/xOHOIk6W
-        OIA8uJY3zO4jhBFCZMTrEs11Db5vV5Y=
-Date:   Mon, 25 Oct 2021 15:56:43 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>
-Cc:     x86@kernel.org, linux-edac@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Tony Luck <tony.luck@intel.com>,
-        "H . Peter Anvin" <hpa@zytor.com>, yazen.ghannam@amd.com
-Subject: Re: [PATCH v2 1/5] x86/mce/inject: Check if a bank is unpopulated
- before error injection
-Message-ID: <YXa3m7SWAhRcFi35@zn.tnic>
-References: <20211019233641.140275-1-Smita.KoralahalliChannabasappa@amd.com>
- <20211019233641.140275-2-Smita.KoralahalliChannabasappa@amd.com>
+        id S233582AbhJYOxh (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Mon, 25 Oct 2021 10:53:37 -0400
+Received: from mail-dm3nam07on2069.outbound.protection.outlook.com ([40.107.95.69]:49377
+        "EHLO NAM02-DM3-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S233661AbhJYOxJ (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Mon, 25 Oct 2021 10:53:09 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=MZucI4MqiadID6tBMMvigJ3VoXMuyJTm7VnNV/tAMGleLJP+vhP/S83YTXehUAODAVczW3C9iR5gJKbErmOIDMLYtc+JZ/zgW+XSfJbNcYo54rhZ8lVn0uWvzzdlFgxMWBk/Sej2XGe3cMDmEsVfBMR0AQeDf+ThQ/iYfWiKpoJvlXM8sL3VDtoXpsyrRmXVAz27ELq8Kv+PwZHbaSrGahAmu1d8FRFW2TRf0tiUvfrI+f4RpPyZjsz26NK7zyW29L2h26B78PbEJWkhkr24g9p4WLr2HVZkmHK0WGQFjMKGNfpsXxptevIaN8eV+EtC9APhv1Vc1DRLGbE87jLaiw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=EUJ0a2+DYtAsQJNxVoFvBK7Q/KA2sSe2bk0k7NCdjg0=;
+ b=FHP3Uokj1PlHlui8jdsvHLPYkCZFcnnw+0BWiRPqeO7gm2VWwgpToSV7Zud78RIKENHSDQhUePAR1XZ8sBynRu+I/sEsVLluV74XdczhQcb+j3mmztqgGuueRncbhD6NpRntneCxxFMyDd8y3sHgZW/aA0Lstg0G+4HAUE2l4Hm9SePP/MgHH3al+pR+OinSZx2Kiv4wR1r8tR8Pq2+ajELg5LpQO1Ycw0BAr92jaw33YvqacZtLpIHoTDz2AxuGj9C45L7/ZqqWHALb3qU65wXooM800gcmU96xEIuLoATaG4Zi0A/Oc14ajwhwC+sciUZFu6AeQiBj8bRiFzgUEQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=EUJ0a2+DYtAsQJNxVoFvBK7Q/KA2sSe2bk0k7NCdjg0=;
+ b=oRLAA0WxQHpvLhPeD+LBkAFrcfjRzd+fVXohAyp90UNM1z3yHaafS/yF4390CsXEfS25Uq/8OY7nAxvdFUt/VIPsohZBjxPx2C7Simu2LqjsvTk65TrasxugdJAIg9jtQ+uqaDU6icDMHySAaapbEm2d6CUwLR7k+OBJnzx+wbY=
+Received: from MW4PR04CA0097.namprd04.prod.outlook.com (2603:10b6:303:83::12)
+ by BN8PR12MB3603.namprd12.prod.outlook.com (2603:10b6:408:4a::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4628.15; Mon, 25 Oct
+ 2021 14:50:42 +0000
+Received: from CO1NAM11FT061.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:303:83:cafe::c1) by MW4PR04CA0097.outlook.office365.com
+ (2603:10b6:303:83::12) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4628.18 via Frontend
+ Transport; Mon, 25 Oct 2021 14:50:42 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; vger.kernel.org; dkim=none (message not signed)
+ header.d=none;vger.kernel.org; dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com;
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ CO1NAM11FT061.mail.protection.outlook.com (10.13.175.200) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.4628.16 via Frontend Transport; Mon, 25 Oct 2021 14:50:41 +0000
+Received: from milan-ETHANOL-X.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.15; Mon, 25 Oct
+ 2021 09:50:37 -0500
+From:   Naveen Krishna Chatradhi <nchatrad@amd.com>
+To:     <linux-edac@vger.kernel.org>, <x86@kernel.org>
+CC:     <linux-kernel@vger.kernel.org>, <bp@alien8.de>, <mingo@redhat.com>,
+        <mchehab@kernel.org>, <yazen.ghannam@amd.com>,
+        Naveen Krishna Chatradhi <nchatrad@amd.com>
+Subject: [PATCH v5 0/5] x86/edac/amd64: Add heterogeneous node support
+Date:   Mon, 25 Oct 2021 20:20:13 +0530
+Message-ID: <20211025145018.29985-1-nchatrad@amd.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20211019233641.140275-2-Smita.KoralahalliChannabasappa@amd.com>
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 00f0028d-bfee-4363-f84c-08d997c6d114
+X-MS-TrafficTypeDiagnostic: BN8PR12MB3603:
+X-Microsoft-Antispam-PRVS: <BN8PR12MB360320162AD8BB99FD536E5EE8839@BN8PR12MB3603.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:1122;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 4o2Je5YX0CIk1vBuuv4MvXtcQOukGfOvHSEcaTb/j2ps7NTRDGrgJNkzeYIsI9JjITkET9rr8Mky9lMUtqcL6dvdBvw9XvV3EPRUwnlXrsmhZsf62xhf/vSiDiW8DVUWeG7JnJl6h7YpDuQN/oqXjp1sfVGLarkAz33cfvJFhcyL83XoKvrk4qL6HeqRVEaCVXLw8gS3IMqZf+RtSdFrKGjKaiENjPbNbbQG3ZczAaptgyJx/9hMO9K0SNvUzL2kG8n4oT+iNPileihCwi1foNF4CZglhvr9TXSTZYiYs1oovucgI1kHfIeC5NMTT6D1Qx8c4w/kEUr6TkLzROcbCMjMirA6WO1rjZ9i1IYiQyRtvfa6mhfJalwiQUmU5ItxBEtyqU2k1KtJjCvxioqROnhl7A+K9lyw9PhdQLXbBfo3xoxMPtez/QmAadz9pzNYjjqVb8fSOzqICENJtDY8BaERv/+dT+q1mjpsPgYLHssGqYfEhxcFqWNZ4Lq/EZXRyQ7vsX380sfQkp1rOi353/qNuYtzq7eHOD1tM6ir+4QYDvVf1IH6W3ECTLFYwO+HRCgbV8hajUc65SvpWaCguIfRVmLc/R3Or2i4UG+BsN6fphZNsMceN6FoLGClIc2BKjrISUFtj6Doh/dLd5v9ZSePYga9bo/6mcaocZJdL2BfYwzQKjqD6C+rUNTZy3jKX/MxstBe9MRUJhXdrprqB5JeNakWXWuTjhizUMIiUsw=
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(4636009)(46966006)(36840700001)(316002)(5660300002)(7696005)(36756003)(336012)(16526019)(2616005)(26005)(186003)(426003)(8936002)(110136005)(4326008)(508600001)(83380400001)(36860700001)(2906002)(54906003)(8676002)(47076005)(81166007)(6666004)(70206006)(70586007)(82310400003)(356005)(1076003)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Oct 2021 14:50:41.5317
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 00f0028d-bfee-4363-f84c-08d997c6d114
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT061.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN8PR12MB3603
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Tue, Oct 19, 2021 at 06:36:37PM -0500, Smita Koralahalli wrote:
-> The MCA_IPID register uniquely identifies a bank's type on Scalable MCA
-> (SMCA) systems. When an MCA bank is not populated, the MCA_IPID register
-> will read as zero and writes to it will be ignored.
-> 
-> On a "hw" error injection check the value of this register before trying
-> to inject the error.
-> 
-> Do not impose any limitation on a "sw" injection and allow the user to
-> test out all the decoding paths without relying on the available hardware,
-> as its purpose is to just test the code.
-> 
-> Signed-off-by: Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>
-> ---
-> v2:
-> 	simulate -> inject.
-> 	Corrected according to kernel commenting style.
-> 	boot_cpu_has() -> cpu_feature_enabled().
-> 	Error simulation not possible: Bank %llu unpopulated ->
-> 	Cannot set IPID - bank %llu unpopulated.
-> 	Used user provided IPID value on sw injection without checking
-> 	underlying hardware and defined it under inj_ipid_set().
-> ---
->  arch/x86/kernel/cpu/mce/inject.c | 39 +++++++++++++++++++++++++++++---
->  1 file changed, 36 insertions(+), 3 deletions(-)
+On newer heterogeneous systems with AMD CPUs the data fabrics of GPUs
+can be connected directly via custom links.
 
-So I gave it a critical look and did some modifications, see below.
-Looking at those IPID MSRs - they're all read-only, which means for !sw
-injection, all the module can do is check whether they're 0 - and fail
-injection in that case - and do the injection otherwise.
+This series of patchset does the following
+1. amd_nb.c:
+   a. Add support for northbridges on Aldebaran GPU nodes
+   b. export AMD node map details to be used by edac and mce modules
+	
+2. mce_amd module:
+   a. Identify the node ID where the error occurred and map the node
+      id to linux enumerated node id.
 
-Ok?
+3. amd64_edac module
+   a. Add new family op routines
+   b. Enumerate UMCs and HBMs on the GPU nodes
+   c. Move fam_type structure into amd64_pvt struct
 
----
-From: Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>
-Date: Tue, 19 Oct 2021 18:36:37 -0500
-Subject: [PATCH] x86/mce/inject: Check if a bank is populated before error
- injection
+This patchset is rebased on top of
+"
+commit 07416cadfdfa38283b840e700427ae3782c76f6b
+Author: Yazen Ghannam <yazen.ghannam@amd.com>
+Date:   Tue Oct 5 15:44:19 2021 +0000
 
-The MCA_IPID register uniquely identifies a bank's type on Scalable MCA
-(SMCA) systems. When an MCA bank is not populated, the MCA_IPID register
-will read as zero and writes to it will be ignored.
+    EDAC/amd64: Handle three rank interleaving mode
+"
 
-On a hw-type error injection (injection which writes the actual MCA
-registers in an attempt to cause a real MCE) check the value of this
-register before trying to inject the error.
+Muralidhara M K (3):
+  x86/amd_nb: Add support for northbridges on Aldebaran
+  EDAC/amd64: Extend family ops functions
+  EDAC/amd64: Move struct fam_type into amd64_pvt structure
 
-Do not impose any limitation on a sw-type injection (software-only
-injection) and allow the user to test out all the decoding paths without
-relying on the available hardware, as its purpose is to just test the
-code.
+Naveen Krishna Chatradhi (2):
+  EDAC/mce_amd: Extract node id from MCA_IPID
+  EDAC/amd64: Enumerate memory on Aldebaran GPU nodes
 
- [ bp: Heavily massage. ]
-
-Signed-off-by: Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>
-Signed-off-by: Borislav Petkov <bp@suse.de>
-Link: https://lkml.kernel.org/r/20211019233641.140275-2-Smita.KoralahalliChannabasappa@amd.com
----
- arch/x86/kernel/cpu/mce/inject.c | 42 +++++++++++++++++++++++++++++++-
- 1 file changed, 41 insertions(+), 1 deletion(-)
-
-diff --git a/arch/x86/kernel/cpu/mce/inject.c b/arch/x86/kernel/cpu/mce/inject.c
-index 0bfc14041bbb..3333ae7886bd 100644
---- a/arch/x86/kernel/cpu/mce/inject.c
-+++ b/arch/x86/kernel/cpu/mce/inject.c
-@@ -74,7 +74,6 @@ MCE_INJECT_SET(status);
- MCE_INJECT_SET(misc);
- MCE_INJECT_SET(addr);
- MCE_INJECT_SET(synd);
--MCE_INJECT_SET(ipid);
- 
- #define MCE_INJECT_GET(reg)						\
- static int inj_##reg##_get(void *data, u64 *val)			\
-@@ -95,6 +94,20 @@ DEFINE_SIMPLE_ATTRIBUTE(status_fops, inj_status_get, inj_status_set, "%llx\n");
- DEFINE_SIMPLE_ATTRIBUTE(misc_fops, inj_misc_get, inj_misc_set, "%llx\n");
- DEFINE_SIMPLE_ATTRIBUTE(addr_fops, inj_addr_get, inj_addr_set, "%llx\n");
- DEFINE_SIMPLE_ATTRIBUTE(synd_fops, inj_synd_get, inj_synd_set, "%llx\n");
-+
-+/* Use the user provided IPID value on a sw injection. */
-+static int inj_ipid_set(void *data, u64 val)
-+{
-+	struct mce *m = (struct mce *)data;
-+
-+	if (cpu_feature_enabled(X86_FEATURE_SMCA)) {
-+		if (inj_type == SW_INJ)
-+			m->ipid = val;
-+	}
-+
-+	return 0;
-+}
-+
- DEFINE_SIMPLE_ATTRIBUTE(ipid_fops, inj_ipid_get, inj_ipid_set, "%llx\n");
- 
- static void setup_inj_struct(struct mce *m)
-@@ -577,6 +590,33 @@ static int inj_bank_set(void *data, u64 val)
- 	}
- 
- 	m->bank = val;
-+
-+	/*
-+	 * sw-only injection allows to write arbitrary values into the MCA registers
-+	 * because it tests only the decoding paths.
-+	 */
-+	if (inj_type == SW_INJ)
-+		goto inject;
-+
-+	/*
-+	 * Read IPID value to determine if a bank is populated on the target
-+	 * CPU.
-+	 */
-+	if (cpu_feature_enabled(X86_FEATURE_SMCA)) {
-+		u64 ipid;
-+
-+		if (rdmsrl_on_cpu(m->extcpu, MSR_AMD64_SMCA_MCx_IPID(val), &ipid)) {
-+			pr_err("Error reading IPID on CPU%d\n", m->extcpu);
-+			return -EINVAL;
-+		}
-+
-+		if (!ipid) {
-+			pr_err("Cannot inject into bank %llu - it is unpopulated\n", val);
-+			return -ENODEV;
-+		}
-+	}
-+
-+inject:
- 	do_inject();
- 
- 	/* Reset injection struct */
--- 
-2.29.2
+ arch/x86/include/asm/amd_nb.h |   9 +
+ arch/x86/kernel/amd_nb.c      | 150 +++++++--
+ drivers/edac/amd64_edac.c     | 592 +++++++++++++++++++++++++---------
+ drivers/edac/amd64_edac.h     |  39 ++-
+ drivers/edac/mce_amd.c        |  24 +-
+ include/linux/pci_ids.h       |   1 +
+ 6 files changed, 630 insertions(+), 185 deletions(-)
 
 -- 
-Regards/Gruss,
-    Boris.
+2.25.1
 
-https://people.kernel.org/tglx/notes-about-netiquette
