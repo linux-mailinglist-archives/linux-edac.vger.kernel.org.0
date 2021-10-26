@@ -2,90 +2,132 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4295843AFA9
-	for <lists+linux-edac@lfdr.de>; Tue, 26 Oct 2021 12:02:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3254F43B459
+	for <lists+linux-edac@lfdr.de>; Tue, 26 Oct 2021 16:36:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229786AbhJZKE0 (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Tue, 26 Oct 2021 06:04:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50884 "EHLO
+        id S236719AbhJZOi5 (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Tue, 26 Oct 2021 10:38:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233868AbhJZKEY (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Tue, 26 Oct 2021 06:04:24 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF279C061745;
-        Tue, 26 Oct 2021 03:02:00 -0700 (PDT)
-Received: from zn.tnic (p200300ec2f131c00c83ef6486df21458.dip0.t-ipconnect.de [IPv6:2003:ec:2f13:1c00:c83e:f648:6df2:1458])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 7E3B31EC03AD;
-        Tue, 26 Oct 2021 12:01:59 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1635242519;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=WhjVDXMFSu8Xxoze/JOX25dHFUwk5eljGOQCDrVyJYI=;
-        b=RA7fOra9IGQkqGgYf34IEhAcFA3OAz2hhUHSSaRq72KIpjvXMWQjPk/RpOfXjaY2vwxqMa
-        374hSANxgEmNv7WCmm8e99ocs+xiPEDSuoyroTAKSBNGGmjZH9piqH5oQs9E9hHgs/GRj2
-        ULBYiKhrkVIEg2ewawvGhSy/iEHZekg=
-Date:   Tue, 26 Oct 2021 12:02:01 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>
-Cc:     x86@kernel.org, linux-edac@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Tony Luck <tony.luck@intel.com>,
-        "H . Peter Anvin" <hpa@zytor.com>, yazen.ghannam@amd.com
-Subject: Re: [PATCH v2 2/5] x86/mce/inject: Warn the user on a not set valid
- bit in MCA_STATUS
-Message-ID: <YXfSGW1i5dLsiX84@zn.tnic>
-References: <20211019233641.140275-1-Smita.KoralahalliChannabasappa@amd.com>
- <20211019233641.140275-3-Smita.KoralahalliChannabasappa@amd.com>
+        with ESMTP id S231546AbhJZOip (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Tue, 26 Oct 2021 10:38:45 -0400
+Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 610C5C061243;
+        Tue, 26 Oct 2021 07:36:21 -0700 (PDT)
+Received: by mail-pf1-x42a.google.com with SMTP id 187so14490596pfc.10;
+        Tue, 26 Oct 2021 07:36:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=eOQEzHsfDUG5a6fEo5SBK49peF0X2Nq6aI7qLYd8X1s=;
+        b=hJ5z+zQ5xDBPkJ121XuHys1HR2dUTr0YanjdBm7nC6tc9Qcjtpy6NfqSga8GEAJZpl
+         4tfHBCP/9AJwrNfn43S9kP25bQAF2AHwRFV+83F4sxMBo7/5JiF6mIkd4lEiqaZ3XtU+
+         n8THa0cL+N+0oKhJK+1/WG9RPJy/RvgJ/L4sAR+mTibgxI2faFIS10XP1duQXZO1hdps
+         5K/V8hvoU9uXyuCWHvKoFXq1QASw1A5bwso9MtR90+fusD1rc7UDa0DSAqf3wVzg5j29
+         HqC3kQo/9T/X6W/oyjligaHbIEKHNaXQkp4pxpcHG0DVJ7dONO6g0YwQ676qoYjz55aG
+         78NA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=eOQEzHsfDUG5a6fEo5SBK49peF0X2Nq6aI7qLYd8X1s=;
+        b=y/hb1vorZWUobCeVYsa/9SlswE6ApCYaeCuQr52EmqyAw0muiPETmgsIMJ+6z4kSF1
+         sGDuB+Fy/0SJgUjPvQQJsQA57Q/ou2sE5QFHREZuwowlc3MX9AF6RYdR17MXaKlb7Qtg
+         kxRD/V+6hp3K9vkjm/Dl9Szkhgx4F2f7DimKueb6uclXL1J8iWEqqbavYMGeG1P9aGdT
+         do0cZyOHSBGccvQMcs8D8oWNvKvezJCig2tVXR5IoWHKzzWp3dRa+BAT6QoYQBIi3gCN
+         flKE8LGJ9tDs/3goyfMd9JsT7rg0zHrg4lG5GEnadduGZSgeOlNHpRMr2CijNOJRjuQH
+         hvyg==
+X-Gm-Message-State: AOAM531/gJipQSEfO7ZXPZLHi/Dbht5aFba8DREikpnH9kmGaaCxEyjT
+        Obv6foONmHx0RQ7/t+/j0fWIgG3xePc=
+X-Google-Smtp-Source: ABdhPJwS8rxj3OTHVCQMv/cMzqxnv3L3NeAmXSLSLD6FUzAvJ41FzowRDVMHxQSX3ai2r9XNzaLJqQ==
+X-Received: by 2002:a63:69c4:: with SMTP id e187mr19225335pgc.379.1635258980759;
+        Tue, 26 Oct 2021 07:36:20 -0700 (PDT)
+Received: from localhost ([47.88.5.130])
+        by smtp.gmail.com with ESMTPSA id z2sm20577230pfe.119.2021.10.26.07.36.19
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 26 Oct 2021 07:36:20 -0700 (PDT)
+From:   Lai Jiangshan <jiangshanlai@gmail.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     x86@kernel.org, Lai Jiangshan <laijs@linux.alibaba.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Tony Luck <tony.luck@intel.com>,
+        Juergen Gross <jgross@suse.com>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Joerg Roedel <jroedel@suse.de>, linux-edac@vger.kernel.org
+Subject: [PATCH V4 39/50] x86/debug, mce: Use C entry code
+Date:   Tue, 26 Oct 2021 22:34:25 +0800
+Message-Id: <20211026143436.19071-14-jiangshanlai@gmail.com>
+X-Mailer: git-send-email 2.19.1.6.gb485710b
+In-Reply-To: <20211026141420.17138-1-jiangshanlai@gmail.com>
+References: <20211026141420.17138-1-jiangshanlai@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20211019233641.140275-3-Smita.KoralahalliChannabasappa@amd.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Tue, Oct 19, 2021 at 06:36:38PM -0500, Smita Koralahalli wrote:
-> MCA handlers check the valid bit in each status register (MCA_STATUS[Val])
-> and will likely ignore signatures if the valid bit is not set.
-> 
-> Warn the user if the valid bit is not set before doing error injection.
-> 
-> Signed-off-by: Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>
-> ---
-> v2:
-> 	Added a warning statement instead of setting the valid bit.
-> ---
->  arch/x86/kernel/cpu/mce/inject.c | 3 +++
->  1 file changed, 3 insertions(+)
-> 
-> diff --git a/arch/x86/kernel/cpu/mce/inject.c b/arch/x86/kernel/cpu/mce/inject.c
-> index 601efd104bb4..a993dc3d0333 100644
-> --- a/arch/x86/kernel/cpu/mce/inject.c
-> +++ b/arch/x86/kernel/cpu/mce/inject.c
-> @@ -487,6 +487,9 @@ static void do_inject(void)
->  
->  	i_mce.tsc = rdtsc_ordered();
->  
-> +	if (!(i_mce.status & MCI_STATUS_VAL))
-> +		pr_warn("Handlers might ignore signatures with Val=0 in MCA_STATUS\n");
-> +
->  	if (i_mce.misc)
->  		i_mce.status |= MCI_STATUS_MISCV;
->  
-> -- 
+From: Lai Jiangshan <laijs@linux.alibaba.com>
 
-So what's the real reason for this?
+Use DEFINE_IDTENTRY_IST_ETNRY to emit C entry function and use the function
+directly in entry_64.S.
 
-You've injected and you didn't get any feedback and were wondering why?
+Signed-off-by: Lai Jiangshan <laijs@linux.alibaba.com>
+---
+ arch/x86/entry/entry_64.S        | 10 +---------
+ arch/x86/include/asm/idtentry.h  |  1 +
+ arch/x86/kernel/cpu/mce/Makefile |  3 +++
+ 3 files changed, 5 insertions(+), 9 deletions(-)
 
-If handlers ignore !VAL MCEs, why don't you simply set it
-unconditionally on entry to do_inject()?
-
+diff --git a/arch/x86/entry/entry_64.S b/arch/x86/entry/entry_64.S
+index c9ee58e8e6d1..7c994bcde1b0 100644
+--- a/arch/x86/entry/entry_64.S
++++ b/arch/x86/entry/entry_64.S
+@@ -466,16 +466,8 @@ SYM_CODE_START(\asmsym)
+ 	testb	$3, CS(%rsp)
+ 	jnz	.Lfrom_usermode_switch_stack_\@
+ 
+-	/* paranoid_entry returns GS information for paranoid_exit in EBX. */
+-	call	paranoid_entry
+-
+-	UNWIND_HINT_REGS
+-
+ 	movq	%rsp, %rdi		/* pt_regs pointer */
+-
+-	call	\cfunc
+-
+-	call	paranoid_exit
++	call	ist_\cfunc
+ 	jmp	restore_regs_and_return_to_kernel
+ 
+ 	/* Switch to the regular task stack and use the noist entry point */
+diff --git a/arch/x86/include/asm/idtentry.h b/arch/x86/include/asm/idtentry.h
+index 0f615943a460..d0fd32288442 100644
+--- a/arch/x86/include/asm/idtentry.h
++++ b/arch/x86/include/asm/idtentry.h
+@@ -358,6 +358,7 @@ __visible __entry_text void ist_##func(struct pt_regs *regs)		\
+  * Maps to DEFINE_IDTENTRY_RAW
+  */
+ #define DEFINE_IDTENTRY_IST(func)					\
++	DEFINE_IDTENTRY_IST_ETNRY(func)					\
+ 	DEFINE_IDTENTRY_RAW(func)
+ 
+ /**
+diff --git a/arch/x86/kernel/cpu/mce/Makefile b/arch/x86/kernel/cpu/mce/Makefile
+index 015856abdbb1..555963416ec3 100644
+--- a/arch/x86/kernel/cpu/mce/Makefile
++++ b/arch/x86/kernel/cpu/mce/Makefile
+@@ -1,4 +1,7 @@
+ # SPDX-License-Identifier: GPL-2.0
++
++CFLAGS_core.o			+= -fno-stack-protector
++
+ obj-y				=  core.o severity.o genpool.o
+ 
+ obj-$(CONFIG_X86_ANCIENT_MCE)	+= winchip.o p5.o
 -- 
-Regards/Gruss,
-    Boris.
+2.19.1.6.gb485710b
 
-https://people.kernel.org/tglx/notes-about-netiquette
