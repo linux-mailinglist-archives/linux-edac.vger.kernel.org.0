@@ -2,130 +2,142 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 51BD243D39B
-	for <lists+linux-edac@lfdr.de>; Wed, 27 Oct 2021 23:12:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 50F6D43D6A2
+	for <lists+linux-edac@lfdr.de>; Thu, 28 Oct 2021 00:33:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244219AbhJ0VPW (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Wed, 27 Oct 2021 17:15:22 -0400
-Received: from mail-dm6nam12on2081.outbound.protection.outlook.com ([40.107.243.81]:46252
+        id S229437AbhJ0WgF (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Wed, 27 Oct 2021 18:36:05 -0400
+Received: from mail-dm6nam12on2068.outbound.protection.outlook.com ([40.107.243.68]:62369
         "EHLO NAM12-DM6-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S244218AbhJ0VPV (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Wed, 27 Oct 2021 17:15:21 -0400
+        id S229822AbhJ0WfO (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Wed, 27 Oct 2021 18:35:14 -0400
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=X58soyHUmaYPGb9xDSIIN9H4f7c0DHdavl5bW9rjRDbHcOu4o2fM69OXO9ra0eWAuretIl2pMSiXhOS81pMfRRwqy0UAJXQcaUNxN5REzegOmwAkkSNJC/A1FbcjLAqwxwJETrlwsNQu2LsyxHj/20gzCaj2mQs8fSlE213XTq1telxgkBSRUdOa8DTzkQQi27AdsfYT5B0AFmoz15c0FI6oTzfnojX7jtYYY0WNeO0jL3BM1HNiR6CeWt1ImylJFYrsiwY5j5MqCjMlrkYE5qj93jjeNplOud/8oWKCli2KUenIb4rYkJldyLTJCJ7kmUGkvYCHu6SmhS7yvzzpMw==
+ b=YYKnOmbTsPblfiAi5cha4SPDkqX1JdRsYHUZvGaIciN1ZDyy9bzAO6UyyVpGc2CZ8i6dHuatXF7FQn91QCNf9Cvd0Ado5lZnMO22gWLcx2iM7PdnDYOVONIpL9uw4h3Pd9+Ls5GWkIX0USD8muYjWfWpKLwrPqzUeeaHPpm3zwu8oCt0rgcX6h9PtolNxfivuwxDEA6zI1NGzE74l+Zy2f7zHeIQN8vmtW33Z9zvozhkSbCJoJIU2Vfx+jnQVq6joZx+v7oi42bMz8nteF2CvAtwZb6CGZCfpt2PBUKWH42GYytN8y0sDYwhyc8Z7w3HQ0JL/a6hu0hQLhdafdy1Tg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=sLJqLEFzARWv1xuUK6PW/nFLO3jaINa7mUBKsywbKNo=;
- b=M9bqDlUpXWiyuBaj1eYwJ8NEbd5UtGBzgipaB8XiZYCbT6Y23W22wLaPrznaWezuvF+ZrK4j5wq2BCCYv0QX8u8se7z7970koKw93RmnNiesBhasEZ1m8o3gfG7tbwdvRsOlN7kUy6aXCbthJ+wXl0/NpiBLkW6E/M1VAr6MQtPndeJ+y0xt3ITS0xzT4ZxLJpTyTOXRet6tbKtE8b98A5yHiM9A9K49n3b+xvN69HII0NbZQoD3HNHyyE/zr3ZDf93BWKyjEqQ3Jh2vQR8JbZ9DLX98cA2Y1PCh7ZWwaFwmEGytfXCX71Lo1i3Yy3WqtPkpG2s5paYMSnuyw+x7cg==
+ bh=6Y7pjGPkHiP/H9DPuMFulSPHlr2UfnGU5T6w9crP13o=;
+ b=P9gSyMdf8I5UWivH1HYsrnB+KoJ/FklzzlnVTkFB1wGGifaiU36d7tKX6vcFkS+7IKedhnOfUXVF1xKQG6dS5hAAQI4OPmKYuzlTG1tvzHDtxQpDgjksng8rjmE+y+w8AWEjJIpllHIZmnRztQKF9EDXnECPMFMxEja3pISsE4LHo6drHax8znreTtVayuoB/XytwVc3Oya8Xn3nDuz2bTtkP9QVQXGGw7ShyyCoQtXyCFBrl0C4xNo6ugcwi4a3QLFzs2kgYkvZTT6OGGIzVjcrYQYWCuaXEKe2Haf/MzH/jJJm+rfL4OT8rxNiaq1UUrMqVvtUzxGFfTIO3qYBsw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
  header.d=amd.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=sLJqLEFzARWv1xuUK6PW/nFLO3jaINa7mUBKsywbKNo=;
- b=dut59KopeAdRGi605+ANwLWun3s+daFvKC0PwkBUnY9thiVQUaohwR08OKOi+WtYeCP5AtmJ3fvpsPCD5qPiL4DIa/EZB6ez83X5bRNN3b9Pn8a/bA/m+FcSt6ExRopjL1CB1n++UoJTvj2ovKqNPYq27IjDI0ZBU1br/CnCSwo=
+ bh=6Y7pjGPkHiP/H9DPuMFulSPHlr2UfnGU5T6w9crP13o=;
+ b=xC6/jcojPn5zTSkdXhYf0bQNaBUg5NKfmdvIQI5s5ANXQpDdhIWaUeUYepELL5zRBnB7ABcPpjMe5wtc1k6RQfU4j88M022wrBswVIttozzMZTGRbfRDugxoGwa4L/RAiMs7B9EgCNyBBnint0wPQ8AQHUU/yoipuGcLwLkWbYQ=
 Authentication-Results: amd.com; dkim=none (message not signed)
  header.d=none;amd.com; dmarc=none action=none header.from=amd.com;
 Received: from BN8PR12MB3108.namprd12.prod.outlook.com (2603:10b6:408:40::20)
- by BN6PR12MB1700.namprd12.prod.outlook.com (2603:10b6:404:108::7) with
+ by BN6PR12MB1314.namprd12.prod.outlook.com (2603:10b6:404:1e::8) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4649.15; Wed, 27 Oct
- 2021 21:12:53 +0000
+ 2021 22:32:45 +0000
 Received: from BN8PR12MB3108.namprd12.prod.outlook.com
  ([fe80::d075:22bc:12ee:e73e]) by BN8PR12MB3108.namprd12.prod.outlook.com
  ([fe80::d075:22bc:12ee:e73e%7]) with mapi id 15.20.4608.018; Wed, 27 Oct 2021
- 21:12:53 +0000
-Date:   Wed, 27 Oct 2021 21:12:45 +0000
+ 22:32:45 +0000
+Date:   Wed, 27 Oct 2021 22:32:36 +0000
 From:   Yazen Ghannam <yazen.ghannam@amd.com>
 To:     Naveen Krishna Chatradhi <nchatrad@amd.com>
 Cc:     linux-edac@vger.kernel.org, x86@kernel.org,
         linux-kernel@vger.kernel.org, bp@alien8.de, mingo@redhat.com,
         mchehab@kernel.org, Muralidhara M K <muralimk@amd.com>
-Subject: Re: [PATCH v5 4/5] EDAC/amd64: Move struct fam_type into amd64_pvt
- structure
-Message-ID: <YXnAzSrCtH1Jx2Nz@yaz-ubuntu>
+Subject: Re: [PATCH v5 5/5] EDAC/amd64: Enumerate memory on Aldebaran GPU
+ nodes
+Message-ID: <YXnThJnUuWP6Ou/D@yaz-ubuntu>
 References: <20211025145018.29985-1-nchatrad@amd.com>
- <20211025145018.29985-5-nchatrad@amd.com>
+ <20211025145018.29985-6-nchatrad@amd.com>
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211025145018.29985-5-nchatrad@amd.com>
-X-ClientProxiedBy: BL0PR02CA0052.namprd02.prod.outlook.com
- (2603:10b6:207:3d::29) To BN8PR12MB3108.namprd12.prod.outlook.com
+In-Reply-To: <20211025145018.29985-6-nchatrad@amd.com>
+X-ClientProxiedBy: MN2PR03CA0012.namprd03.prod.outlook.com
+ (2603:10b6:208:23a::17) To BN8PR12MB3108.namprd12.prod.outlook.com
  (2603:10b6:408:40::20)
 MIME-Version: 1.0
-Received: from yaz-ubuntu (165.204.25.250) by BL0PR02CA0052.namprd02.prod.outlook.com (2603:10b6:207:3d::29) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4649.15 via Frontend Transport; Wed, 27 Oct 2021 21:12:52 +0000
+Received: from yaz-ubuntu (165.204.25.250) by MN2PR03CA0012.namprd03.prod.outlook.com (2603:10b6:208:23a::17) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4649.14 via Frontend Transport; Wed, 27 Oct 2021 22:32:44 +0000
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 89dcd51b-4747-4727-675f-08d9998e89ea
-X-MS-TrafficTypeDiagnostic: BN6PR12MB1700:
-X-Microsoft-Antispam-PRVS: <BN6PR12MB1700ADB6CDBEE0E3E232E4D6F8859@BN6PR12MB1700.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:3276;
+X-MS-Office365-Filtering-Correlation-Id: 72f68215-4258-444d-da21-08d99999b244
+X-MS-TrafficTypeDiagnostic: BN6PR12MB1314:
+X-Microsoft-Antispam-PRVS: <BN6PR12MB1314C6AAD68FD095E0FE1344F8859@BN6PR12MB1314.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:6108;
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 4dS5EAOflayYo19D/ll2vddFlZAaHAYxpHMKbzhMnN6Y6mGoG3RHRZo7NFGpd+E3O7uay/HY/vZVTnIdzW0v+DAZCc0bo9DAe3YqBbdnc/2MLG6sHcWsm3T/5uRd6hSnwtPouJGCIlmrkXVFcL3NbtLStfKNRbN+c+zgPZq/oixJA0m/JYWqRNlil7q+6Pht+D3T0XoPQ+NEwJBCMP7YjZlZLIOZYPH6xQxJLPAXOgJY/IlM950hMA72SlKhipeaoB5Qh80eTgPi6fz/c9Z/5KvmD2L6x6F4mLPaMTj6epIL88T1BoJaU6GXq90500xmvu6uLJsFRpjurHHBxFp7/9ntQ2rbctfO3Z5ZuAKIeFz0yV9Y1A3RznUOKytmRrJPqgDBMguGuSZISyu8oDzmV/Gtz9TcN3c+dmdCXfgWS0DWKcizJmV5AokLJcCooc7yljImZqD1Bo8p5gV0SyKMt0s2Ygbf1hiobM6NFMilU2u1mz39wRn8+nh2JAjRsfqUFLMf2KLA2Snz0rjnsW+Aswc85bAVqYIzsq9xAawCDpi8Sk5gs4wd+4O7kU6u86rX2KPK+O42NM7gdAfmuYiV2kr1sMA0cfvlpCFWm/P5ehJq//rR+NFeOVsInoPnzOGoJ+OABClu4pUuH5cfdsaEVg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3108.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(66476007)(66556008)(26005)(8676002)(6496006)(66946007)(38100700002)(5660300002)(316002)(4744005)(8936002)(33716001)(6666004)(86362001)(956004)(4326008)(2906002)(508600001)(6636002)(6862004)(55016002)(186003)(44832011)(9686003);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: f0xCgHD2TDOzlwib2rAB6bUivzY7QFrOHP/yZ6gNFVg94qndkNWlDq+qbRVpWnefXn1HwNER6yTEGSYMoJtzIcXwHNpECrlLNMkI90INE9C/VJAm8ziRPWJI2MoAUxZx82VTGd2ZBwz14tRIsW7HjIeU3jO5dynq3PzC6MFcDJVFGhLgT4n1sSW52kWl0ozaTclTSAAVQFzLJAhyknNaBfs6JYkvouaA0zZ3v74AkHkiOnDlbDsk2AkX4PzbSPNl04iD8vccZBrX3Rs6Dz00Abalch1upwhyBJ3kQqy4GleLy8wJKF/w9Y/xg02O6hY6uKbffsjA1+TJu2qZcgqspeGM4gLx+K7h2vY5VzxR/Bokf+slXy+tJAgPVfijk2kSoRJzisZSIjxksiG+FTDQIaWnaLHhJ/Zcb6/JfQmLvh0uVjoctM98/2ci30XKyI0CORXxqK/9fxt8dMHTEEwPwJZFtxkVQX8Nnh/66+cl84Kn73+C7/ttBYEPdSaG/9nHEO7H9nbeHMNy5MfcKRIE+zBkBAPMHdrlYcPmQhd1bFFZ3wWE5eu+NxfFCeiloGLl1f+A0pySR5HFlP38RTjFe2pJ/0PdTAv7Nl8RaO/DtdSspWgHYIG9lHAVjgtaNKhgF6OIgofbmXG4rg6VaINtXQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3108.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(9686003)(55016002)(44832011)(6636002)(316002)(4326008)(956004)(6666004)(2906002)(5660300002)(26005)(186003)(66946007)(508600001)(66476007)(66556008)(6862004)(8676002)(8936002)(6496006)(33716001)(86362001)(38100700002);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?pav/z277yvD9BT64i6Nf4YfHl//LpcrR/Ij6dmobcUQNEi+BjhzIQL15JmOi?=
- =?us-ascii?Q?gym81W//Js4YWfb5SKaxK7gIjI2HP8pjoHyK+oInWF4n5+2J+YU06N3Tx34W?=
- =?us-ascii?Q?AMHJmBvZlzIu2UpcI6wlIUagGfy25p1N3Rz/G6sjcsN4XLe31JOSOtSzPr77?=
- =?us-ascii?Q?AEorszLmR8uWmiL25h8EGqyPQzZHJfM1R6ZP4nFZbx+6oZTnM8b/9cYr8lx0?=
- =?us-ascii?Q?n+iS9dCUXwRr83mjsRUd1AwEHuAdiHIut09nt1seEmNXUqVd0yhleTnk0xHX?=
- =?us-ascii?Q?5/Mnlarb517ujtYFM6bKJ4lc7EM5qmSx3g5pNFgWHzrMZJtiod2Zl4oOEEIf?=
- =?us-ascii?Q?dpcVfkvhVd1nQl0ZoLIGD/ce04pL/exIHIKLUwW+1u8rNNy5kV6QVt2MJMEP?=
- =?us-ascii?Q?nh2JhK2xl1IkGgud0qOz1uAQ/qjvRsRIK81Wy2zacPdb68qSCY4KLkUKyz1c?=
- =?us-ascii?Q?Kfi9ZQ+2MSslEmW9/5WZs6BV8F7JNyhWguJRQyetnhV7e6HvvaJhmmOJ6BOM?=
- =?us-ascii?Q?35p6Xiaj+ORTcIpQ1lc2n7PKddGq91BLPZlE8K/dACow1BzDXIla8NUF36vS?=
- =?us-ascii?Q?LoH3cCJi5yZVD/msc/xP9HewCTeZ+70REGhgqcTr7nqctcp3dkL2mx+RMIA7?=
- =?us-ascii?Q?fK2BracqDkBoUJLbOIwQPrHdhbRtITBllHTgkYzHOYtJFHI5p5KS5mPoJ2xu?=
- =?us-ascii?Q?+FYVezKsofcYMuzsIQ4tqLiYcy/G/sW0H51Fi+40zhjz9z/5Pgjx4GjaRUCz?=
- =?us-ascii?Q?g5+nOePyvQ3xX7GWdiKnbUcKANWPB+OZwVryrKjH/SSpJsM5+kaFV8M3W6jt?=
- =?us-ascii?Q?Jt+j6DL6r5rFVQLB35dXo2MHW5DIWzf0DUf7Snba5kJlR7hVrVJgMxbXjXPb?=
- =?us-ascii?Q?VfVlSE0G8dHt3GfLAaCm0iQR3mFx5dTzkiwioiRREllO4bKRW5kmnprfrJ07?=
- =?us-ascii?Q?SAWiSPAUU9/kWuM7IGNkcZjMK5bYbIF9doyPgX8oJPkK19OeipEsWtBGlVYy?=
- =?us-ascii?Q?qNxAhq2HvIiN7lE+zrBhJrK9seBKdl9BWutba5WFCyTmOq9eY+kjtvl1ZPcW?=
- =?us-ascii?Q?Is+9cCKgu2ccvkP/H3Wu7RJHW2nhzVSr7AMResLJOOAjAdUeWsFa6STyZDVw?=
- =?us-ascii?Q?v4fY0R+4EWjYkCeZE4z7YgE9awor419vqbj6mUPDLSwsDDe8o4ZgITSu45ny?=
- =?us-ascii?Q?oO1bNQweZbOJm8MtCU/F5t59EiFSgaz7SzBURhT6j/u/2chcetjPTgPMJFS7?=
- =?us-ascii?Q?lYAyPKIIjKoXkTJTcKV2EcK+lfIEY5SAj0uWJ93ZF0hP0fKnvAB05r7EBUjV?=
- =?us-ascii?Q?7w2o08PjJF8xZhJctvDMapvPt5GQ3+EAsVOxfQyFJKalvJa1C1v2oUclEPZX?=
- =?us-ascii?Q?B5AHiR0N0+H2d/0VuvNykSlYq3Sm+bLQMRfW5aPnYBZU6gn7vrvHhQhuAm0i?=
- =?us-ascii?Q?v1mnmdD2luDP8nRLeaQ595MvEED9T4WAygUGyPsJjG1iR1jC8Uu99j1ALjyu?=
- =?us-ascii?Q?CyUE4FCBHn7f0zskPzV8Kg6ccgK75WUbIup0+0M6xvdOMCQvEXIRr4koihV/?=
- =?us-ascii?Q?Xt+LSdzLDYhOuHWcqdW0XDVMX3BrHqAJGwVVXpJX+aYonQ3X9fksSwKZeBRS?=
- =?us-ascii?Q?jNLPR3wKLGGNjJCquyMv6SY=3D?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?Wzt4uEcJxZHHp/mnpzSfPqEgTAHRepJIS43xU8CPnJ76TKLsH9acY6PegMGm?=
+ =?us-ascii?Q?p4HFOKF4MBMerdQXgSS9he3HKIOSUyjTDngTq3n/t/4TPNwI+ZJ6x4tK+i5B?=
+ =?us-ascii?Q?P7fYfmK46r1YHKubDLMjxmVICkyWaZZxkSc0ewJTtd4iFf2tMB5+jCG2mYx+?=
+ =?us-ascii?Q?86Dj31FWHE3NV7tJRy8NU/Ftxqo7oy+bdS5xHUFpBHHGZSE1HU1CIvZeU9DQ?=
+ =?us-ascii?Q?msQQern2+66l48hOPnpBcEpesQqqz3OYtkhJkmBx0/5UdYiuCN7OdGln4Egw?=
+ =?us-ascii?Q?Vp6kGXhSDs55va1orBiizyCOKoZr/bdgUnZT3eo3ungePD57r+FcJ2zpbUyg?=
+ =?us-ascii?Q?na2iJSrT9sHnPqldvDzDWuf+XqemuoUWhXMllKJNcm0tzaMPXL07uevMb3gq?=
+ =?us-ascii?Q?4xKq3o998X+6rvIzOtMfLGVj9559g8AADqCaR2rDuOIeUhMkXMBrPFDaQAZc?=
+ =?us-ascii?Q?88OC+XzAHhsmrAT0pJLh0tkdavi05mz3cYoMrDdbIOOc/LFChDKcvNG9GdDP?=
+ =?us-ascii?Q?XekWa4VNDXR1cfRLWn8hSfJdZ9uWk4bK7KvsqNKcO2XXCMBVwM4rxlB5IAtu?=
+ =?us-ascii?Q?IjUijkh1Sxxlo5bFfK+ShICBNfVRr9jEbFWS5J5A+nmA/dXh4OuFqsBUdhcp?=
+ =?us-ascii?Q?w2KlD+VQNqbR8imzXYBXdA5R8pHMYb1KIwFDAXoYKYO70mquGmUiMB/qsfV+?=
+ =?us-ascii?Q?Zo9GiZ7lmmKpXnZK4ptanUOvzvNFL9ND58K2NGC5R0mX+/DlrsZuoPxSq75E?=
+ =?us-ascii?Q?7S2+ixXMRJ5WCseR9DqPw6cCjGNYoeQOOJVvNX/cSDo/BnW0lEfOwiIIu17y?=
+ =?us-ascii?Q?nXx1nWSQLDYCAQN6YFAcQwujNnNS1q0hbyG46auAQ0Njz8RbDTHT4F3RA7Rv?=
+ =?us-ascii?Q?aKkmWOZ3A4S7jP58Jh3+BmnbQp2fEQyaKgyUcJeJmJ4WIw1eaaYx0r++dDny?=
+ =?us-ascii?Q?zA2nc6P3CqZ2n/hcPXa1FLqW4iFmZnFGRkBqH9nuZ9b4pfR74hzM15F1Ol2c?=
+ =?us-ascii?Q?RgijZ9hv+VQ67SQbow37v+eJ9zw1JhFqctbWjTOQxsD4+OWwze5su5brLVoJ?=
+ =?us-ascii?Q?Yqp7OwPxuacwGjAnPf/QO6lRWwim30LtKiZpXRUaNLGIfK15hUOrtDJiyXnW?=
+ =?us-ascii?Q?9v7wCCn4retsCUt3A/3v4ZS16/3TpQgZtaSL6jfoo5hwjilbhmGMtDKS6C29?=
+ =?us-ascii?Q?ztKVOeC+dbcNm5Ku8cnMHOsKFG6QxsiDKLlAKAGq3k5T09j3e1VPnI1vN72M?=
+ =?us-ascii?Q?36/0A0Jar6GRUn+iPl4jAn0aquNoSyhvDe7GUGiuGuX2jpTCssih9ty/GJzJ?=
+ =?us-ascii?Q?tFm11Uy9p0qsifeInUaeBxXvBBG1yxLeFe8BukEFJLiPRujqmF4ddOzZ6YCU?=
+ =?us-ascii?Q?c88L1ixD+TOe2UbuDqI54iKDE0ZkT6PyvQOdG/NKU8ZvhrmOWa8VS6J7jgDV?=
+ =?us-ascii?Q?zzw0E5tiV/fq2U36pNW6LJ9dSt2OaV6pGiJhno8tkhH5XBdK1wCw35g1vZyd?=
+ =?us-ascii?Q?AwjQ6PuHSgW41qcwqYpqlZ+V4MfhyMa1qbgO1rDIueb2XXJLBMnJJo3s0ccB?=
+ =?us-ascii?Q?EtWZ2QnHouKkF5mZdVOFP08/pIRI0fjEfvoTAcQpDYVgenEFGuWYRsmp+LR3?=
+ =?us-ascii?Q?QAkxWp5HLWpDeaBG0/AQosg=3D?=
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 89dcd51b-4747-4727-675f-08d9998e89ea
+X-MS-Exchange-CrossTenant-Network-Message-Id: 72f68215-4258-444d-da21-08d99999b244
 X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3108.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Oct 2021 21:12:52.9251
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Oct 2021 22:32:45.1597
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: fGo5Ck68cm/1jLX2p+zPAfmtxBX1DEVuCSz66D/a3VXFhrjtuN+g4S7NpzHAe8acnkYmsjZVba4HsyUEba6JIA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN6PR12MB1700
+X-MS-Exchange-CrossTenant-UserPrincipalName: MAmYOHuWD9r8gCpkEpNlRii+w4ptVrs4/fhBny/wV1okC1xghD2kdLUdqpHZyGASNtx9qe8HqRoox/mlQ+hZEA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN6PR12MB1314
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Mon, Oct 25, 2021 at 08:20:17PM +0530, Naveen Krishna Chatradhi wrote:
-> From: Muralidhara M K <muralimk@amd.com>
-> 
-> On heterogeneous systems, the GPU nodes are probed after the CPU
-> nodes and will overwrites the family type set by CPU nodes.
-> 
-> Moving struct fam_type to struct amd64_pvt, instead of using fam_type
-> as a global variable.
-> 
-> Signed-off-by: Muralidhara M K <muralimk@amd.com>
-> Signed-off-by: Naveen Krishna Chatradhi <nchatrad@amd.com>
-> ---
+On Mon, Oct 25, 2021 at 08:20:18PM +0530, Naveen Krishna Chatradhi wrote:
+...
+> @@ -3726,10 +3944,21 @@ static struct amd64_family_type *per_family_init(struct amd64_pvt *pvt)
+>  			pvt->ops = &family_types[F17_M70H_CPUS].ops;
+>  			pvt->fam_type->ctl_name = "F19h_M20h";
+>  			break;
+> +		} else if (pvt->model >= 0x30 && pvt->model <= 0x3f) {
+> +			if (pvt->mc_node_id >= amd_cpu_node_count()) {
+> +				pvt->fam_type = &family_types[ALDEBARAN_GPUS];
+> +				pvt->ops = &family_types[ALDEBARAN_GPUS].ops;
+> +				pvt->is_gpu = true;
+> +			} else {
+> +				pvt->fam_type = &family_types[F19_CPUS];
+> +				pvt->ops = &family_types[F19_CPUS].ops;
+> +				family_types[F19_CPUS].ctl_name = "F19h_M30h";
+> +			}
+> +		} else {
+> +			pvt->fam_type	= &family_types[F19_CPUS];
+> +			pvt->ops	= &family_types[F19_CPUS].ops;
+> +			family_types[F19_CPUS].ctl_name = "F19h";
+>  		}
+> -		pvt->fam_type	= &family_types[F19_CPUS];
+> -		pvt->ops	= &family_types[F19_CPUS].ops;
+> -		family_types[F19_CPUS].ctl_name = "F19h";
+>  		break;
+>  
 
-This looks good to me.
-
-Reviewed-by: Yazen Ghannam <yazen.ghannam@amd.com>
+Why move these lines into the else clause above?
 
 Thanks,
 Yazen
