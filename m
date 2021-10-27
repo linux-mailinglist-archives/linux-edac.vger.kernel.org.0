@@ -2,198 +2,165 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D000C43D359
-	for <lists+linux-edac@lfdr.de>; Wed, 27 Oct 2021 22:55:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 82CFC43D38A
+	for <lists+linux-edac@lfdr.de>; Wed, 27 Oct 2021 23:08:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244139AbhJ0U5j (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Wed, 27 Oct 2021 16:57:39 -0400
-Received: from mail-sn1anam02on2049.outbound.protection.outlook.com ([40.107.96.49]:27270
-        "EHLO NAM02-SN1-obe.outbound.protection.outlook.com"
+        id S240694AbhJ0VLP (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Wed, 27 Oct 2021 17:11:15 -0400
+Received: from mail-dm6nam12on2079.outbound.protection.outlook.com ([40.107.243.79]:63176
+        "EHLO NAM12-DM6-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S244127AbhJ0U5j (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Wed, 27 Oct 2021 16:57:39 -0400
+        id S235939AbhJ0VLO (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Wed, 27 Oct 2021 17:11:14 -0400
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ANHDHmrCBHuXwaUXAV0hi3dDytzV+ONsCOx5L+o2sZ3NIo+0Ef9cX3ZJ0og1LcRzIvnjhwqcHVVwRoUkgIG3VwijMuekgUspYvXpRpdui5wfWUmRMJghcq5tYVae5hMEoN5vOiI9pDS1EVDX8Q6Q3dl4vaBm6n5fA1aDaLVomVNr/vKwrhZSNecsp8j/pk9JX4GvfyZWUFcES2mszfFec4DNWdvSMtLgK7AvlJx4aVRltrG/5u+ycLlGSEV3PZ3Lg3gTfmDRezvFY7OqnfFbZPNjxX8IdZclP9ljJcYXlL1cljrstkTo47qb6BtU/uhbCpNjmnIV9JUjVrTVmYzHzQ==
+ b=lKmOImfeV+mRR9iWUj+7twxl/Vey3putNowEH7zwrs6AlOa/57VR21HvF7ZS5SK0R17kOWxyJ6alPah9oSkV3IetQ60TDWunB5CVIwTu/9YVoU0aokq/3Q2XcTH5cSu1QKB+jAILKSIZB3JXeGDAPm5NSyEC/pnnwoY0n9RoaAWg5WNlnZPckZl0e0JPvoTweUBdmMzx5GyvUeVLRFFmzsWEHBU6+CEvLB/oCDle5o9Z3R2mHAplrvay4aEDWnnUi/mk3VwuGy204XiN7bfIZpbMRwCBrRUMO8PRJ1JsvUSJGwHsIzXodal6o346+xtu5OCHkoahxRSVCinRdnkWKQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ctC2svP2PhjUtrkhfkKdwyAzk5K76pPLiewIEc0zUUo=;
- b=Js8BjMqvBbltvGLgxFqiUJI+evbHDYCUfS5EH9uE0BaMvKG72G5QxZ/JkL9RGb9OTGQSMA4twfKC8/y6xf/fIyxgyhqqdOe5bbAtmUezYiLDp23Vdhc4F0JK2yHiOtqIVcM0j/4/gX1RS3UAOJUv4iXwe1WXaevXROn4S7P5TVyXAB1/zzSz2SOh7nqvnuR5Z7wT2s881LDwvg8YLPDsLNcXcUf67ShQ5NslJcUKZY8hlSqPhCiHFCEjCJyizelMf+ddYbS09gdP08KLVGtP4Pn1+ubTbPU6Y2hix6Y7bnv6nE71MNlovhK1vLl+ebLwDfX7D3r5I8ky85GiwH0RHg==
+ bh=mN+o/As8jrv8ry1ylm65zpwdKYoUJEhTimx0FIgUO3Q=;
+ b=cLwvTX4BT3KK7+c79s9P7sJHMAk3mR//Sa/yi4SgKhHVWNTHw3AGGD3ooFuGm953J1bYoN5CsZ7gjE1K1aeFgfCxoUs0Nn8zd0iCx5TtKHB+puUcQBfPSokh2WO5AOwOh2u4+iyE4eNNYJ1Mma+HCvCK0VYY1lB+Hewn0Cifbd0TnKz/DG5aqgC5n0WSWj1ALi7FZtB5Xtuij92yLAU7+IquxHV/TjHz/20Cr7GiktQOOB3lo5lgJ3MCRd5U5+BNEDZE7jk0+4rLLP63jYDpCW52AwyuTzUmsLfdxHL0WpqRVoVMi3GY8Fzu4TyDjmczm0oJOECk2Od+XzVur96S0Q==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
  header.d=amd.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ctC2svP2PhjUtrkhfkKdwyAzk5K76pPLiewIEc0zUUo=;
- b=rjQrHQIIkzLConR+vXJMCYzHFzJmI633TmdHo4IRID0TrbjhCzjD3TbBwhEvT4pJBDKvfnOHs9TdITncL7ven6f9g/OWRM4mCi1IWp7Al63Ehvvw6cWnVCdPiwXh7udBnAuyxQ5iGjcM3aU3d7KFG+Q4xBx9F9D5YnQh4lRKKiE=
+ bh=mN+o/As8jrv8ry1ylm65zpwdKYoUJEhTimx0FIgUO3Q=;
+ b=hn/0bS2XDStHKihmjCIv9EgYBmHjc3YczlGE/DYGt4QENgJgh6CJcjmnOeq0rL2RTwDHRvDfVYUnelAdXIyQGJqo34frk6aMdgXBJuoMnw39Nc0pazvwrK4dFN2j/HWvTuc6aaCfS3cl4ciw3xwCtigbfkBuTVun+B+7XL5zC/w=
 Authentication-Results: amd.com; dkim=none (message not signed)
  header.d=none;amd.com; dmarc=none action=none header.from=amd.com;
 Received: from BN8PR12MB3108.namprd12.prod.outlook.com (2603:10b6:408:40::20)
- by BN8PR12MB3474.namprd12.prod.outlook.com (2603:10b6:408:46::14) with
+ by BN8PR12MB2948.namprd12.prod.outlook.com (2603:10b6:408:6d::14) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4649.15; Wed, 27 Oct
- 2021 20:55:10 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4649.14; Wed, 27 Oct
+ 2021 21:08:46 +0000
 Received: from BN8PR12MB3108.namprd12.prod.outlook.com
  ([fe80::d075:22bc:12ee:e73e]) by BN8PR12MB3108.namprd12.prod.outlook.com
  ([fe80::d075:22bc:12ee:e73e%7]) with mapi id 15.20.4608.018; Wed, 27 Oct 2021
- 20:55:09 +0000
-Date:   Wed, 27 Oct 2021 20:54:58 +0000
+ 21:08:46 +0000
+Date:   Wed, 27 Oct 2021 21:08:35 +0000
 From:   Yazen Ghannam <yazen.ghannam@amd.com>
 To:     Naveen Krishna Chatradhi <nchatrad@amd.com>
 Cc:     linux-edac@vger.kernel.org, x86@kernel.org,
         linux-kernel@vger.kernel.org, bp@alien8.de, mingo@redhat.com,
         mchehab@kernel.org, Muralidhara M K <muralimk@amd.com>
-Subject: Re: [PATCH v5 1/5] x86/amd_nb: Add support for northbridges on
- Aldebaran
-Message-ID: <YXm8or71P9rcukk1@yaz-ubuntu>
+Subject: Re: [PATCH v5 3/5] EDAC/amd64: Extend family ops functions
+Message-ID: <YXm/0wBVvplOzFva@yaz-ubuntu>
 References: <20211025145018.29985-1-nchatrad@amd.com>
- <20211025145018.29985-2-nchatrad@amd.com>
+ <20211025145018.29985-4-nchatrad@amd.com>
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211025145018.29985-2-nchatrad@amd.com>
-X-ClientProxiedBy: MN2PR08CA0013.namprd08.prod.outlook.com
- (2603:10b6:208:239::18) To BN8PR12MB3108.namprd12.prod.outlook.com
+In-Reply-To: <20211025145018.29985-4-nchatrad@amd.com>
+X-ClientProxiedBy: BL0PR02CA0096.namprd02.prod.outlook.com
+ (2603:10b6:208:51::37) To BN8PR12MB3108.namprd12.prod.outlook.com
  (2603:10b6:408:40::20)
 MIME-Version: 1.0
-Received: from yaz-ubuntu (165.204.25.250) by MN2PR08CA0013.namprd08.prod.outlook.com (2603:10b6:208:239::18) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4628.22 via Frontend Transport; Wed, 27 Oct 2021 20:55:07 +0000
+Received: from yaz-ubuntu (165.204.25.250) by BL0PR02CA0096.namprd02.prod.outlook.com (2603:10b6:208:51::37) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4649.14 via Frontend Transport; Wed, 27 Oct 2021 21:08:45 +0000
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: ef865e45-818e-4abf-0a9a-08d9998c0fae
-X-MS-TrafficTypeDiagnostic: BN8PR12MB3474:
-X-Microsoft-Antispam-PRVS: <BN8PR12MB3474D322589C0956788E1337F8859@BN8PR12MB3474.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:10000;
+X-MS-Office365-Filtering-Correlation-Id: eabaf3ac-0f39-4dca-8150-08d9998df715
+X-MS-TrafficTypeDiagnostic: BN8PR12MB2948:
+X-Microsoft-Antispam-PRVS: <BN8PR12MB2948A06E6AAD8926F08A54EFF8859@BN8PR12MB2948.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:8882;
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: cYmt+sexKXWFblkgEw85uHzjyfjPDXOZlBCwUTScDJJBvQ3JmiQ/yQfsPK/7L+gFt3k3YyzfXlVxijh7Vpoahc/xtP0IoFSUD2OkXm3V3dYRW9522sdro3yvWxkmeNfhqx3eqM0SzI3qqBF2R/Ohtl0p5f7Knb7a28SuysWvS1hX8ub1bh1xSadO/ROMmXgx4atq9jNnbwmVfpMQjygSk6x5AtsrmGysGj0ZruqnKPJEaZrLecS13KOCBbfsSPl1DYxAUxHEyF/kIPYgpui1mSg47VTmBPPDigg8S6bO/XnXqbzyL71YbNYJNiVjkjguRLXrrUCUCzcHuvimpegVgDyeks5jryfAgWj3SK4eMilazvDK2PATC/Od1pZTvDKmL8tJHx5j8fNzqWi86IcZFWtK3s04k/bRNTrrbsggpy4QKAgXN8qNnPgH6VFCvj7P5ye5ViW34H48AiB64vuiY9CecVAVrF50Mdr4WB5JgWiDTNxdMtwM5bJJYFppMS++6WeKKtFSBEuv4kZVNFqrTuVRv0npcbZT74RcSbUoaJdGm4K6/huNACOJE9fx55gEY05ua2Pxls2EnDxt3aQINsg9ASRajr58BhPUpqbbw7CCpb5/Pc1w/ArmX1cU0bTmSLdCDBHgASM2Nn7gVbjAVg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3108.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(86362001)(55016002)(956004)(6862004)(508600001)(9686003)(26005)(186003)(6496006)(316002)(8676002)(44832011)(5660300002)(6636002)(8936002)(2906002)(4326008)(66556008)(66476007)(6666004)(66946007)(33716001)(83380400001)(38100700002);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: kaSgkiJL19DBPkIhJlJDPCJirUeUdd7i3GliCQ1yzhjxsCMJVRJIZbGGByEtM0HIlyFJUAF/reYt+ndoFXK0RCqyDZG6ygCx6k1NqbnZiSif5v5eoXadiSqopwQ3wNK/t5LUnTMQR2loY5MIJ+ggSpPmVMBLM0nRZsvg34PCvzah4kKen1EVFNI7TL6FaXWDBFxXMwWU/UFHqxaicHIu+q6UNWYvAmq38hF8kk5RIOCf43bFm1L1lO9rugCK+7ajMGsohB61DVBv01AsmyU4wCWc8IA+pwVm1nKsPqfqtoW3wLeSWKt2fBBt2LDWhMJV/xTBzbGbUCu7+6KQrnmz4WIGGzcyaWpp98T0azpSXxeAMzRg80+kl3F6nlHtM3GWrzjmlOZtlKd8pDpJwDzCka1deZIuF7Ae6XZTvhob22yxAnWtEvHRuHD34O13OOBmQp4PeBx5FHZi9/eVWiIKMaqqlST2H1/dxN6d2chQ/9g2waZan1r8I1XmDW/yhgTtxg457FuhdOLhnFLUcojYGnP6eANS+8VkOYNHm/rIEHP96+sSTC1bVCkxOh56qWI/8PQUKGnFCTQijafgRuD3vFQBSl+wjEVmAnXD7CnsIL40CrjiJMuvxa3ivdFU5Inpw625LZTrx68nbYdnVYGouw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3108.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(38100700002)(66476007)(9686003)(5660300002)(4326008)(2906002)(316002)(55016002)(8936002)(33716001)(66946007)(6862004)(44832011)(6666004)(86362001)(66556008)(83380400001)(956004)(8676002)(6496006)(6636002)(508600001)(26005)(186003);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?wMVZFzB4fXta2oUIm1wpmNYZjkrpFHfVxY4HqRbRvUr/gWa5uVEgFay+UOzD?=
- =?us-ascii?Q?sgOVNkOvhTnC3f/JvI4VuqtL/KZtU80IO0o/jpLKVxI37ef7x0O6epI1j2NF?=
- =?us-ascii?Q?nMur4ifT78Dhgvz/OW2wH7gsUBG4hJiu18KBys1YCpB3apOmpdwtE4/kB4ka?=
- =?us-ascii?Q?MGzkfbEn4Z7b0JD4zaH/7cqZi85IEnA3HTqr1DDI1ZRO/bVBTcMDsq/u9f3y?=
- =?us-ascii?Q?vKHlOkLb4ti7MMm6/0EuK83oJihfH7dwTabqtwk3Bo7VtNrsZQEW457vhz3+?=
- =?us-ascii?Q?D3ZijnsmKbUKSWoIAu75qS8NcesROeg0mYH3DWam7uM9E5lBIIcEBpb/4TCf?=
- =?us-ascii?Q?HIiOLZxY+VdtK5tvbx7PO3DjnSkLnG8LS08g7g2T7mmdJDcpCR/Bdd/LFEjc?=
- =?us-ascii?Q?PWUJn/1riZhvGhy+vVWEw9wLdhmGBY1QyBJZ3FwO8KYb168FNXOYK6l/WFT6?=
- =?us-ascii?Q?0n2PRNUaEx0/CHwuX68PYLB3bJ5Ugh46B8TkK/LaaYgfBX7rlGg9zCAnp+ce?=
- =?us-ascii?Q?WRACj0FbrHYmjNioM5OflxfS8e3Xibn/6n49jCm4JB9iPXWENcUAbuML9qQn?=
- =?us-ascii?Q?DcST2nVPd8jutNF9utDXqAw/LoOaQXhbnhXSBBYHWlWOdWINAZKRX8vIR7w3?=
- =?us-ascii?Q?OwVhUnEUnxzydZfOLdYp37IwNZUbDLkK+3XMGP95ylhQOMRD2uzaUaRR3zZY?=
- =?us-ascii?Q?nP6xKLscK5oLtKZ6STLYH6EgylPymBorJMhqn9/o+OHqHY1rl4LJr9SME1r5?=
- =?us-ascii?Q?Gd6GUkeE7srg+GCNAYga1xHq0V9wz82TbbglGDIYkrXzePIbDw+z8QxJ7UiF?=
- =?us-ascii?Q?Vl2fM+gaxnitVb3uQUmRu38UT1u0oG2jLDyjWFib5MS6y1kWwwcM6NKj9wYI?=
- =?us-ascii?Q?9szFG89CnM28Vw/z170tEGzHpY9bUmXodonFrU3pT4GPBcjf3lE4Pcd9YUII?=
- =?us-ascii?Q?gVniT0lXSfaNiegxujuWYJODeJZU+dfgnMVm+TmLkJbpSAU+OCi8goX/FjsA?=
- =?us-ascii?Q?5i2DIKcsjnp/VC+uLIpILtHeVCqAhxlzoBnDzKPbSSb56WetRlUxu1+0IYfS?=
- =?us-ascii?Q?V2zKWqdA3o6ikrGbedXDtckBn64rdyEuo73U3sbHv8qH1uR7WSKgsBQyueTi?=
- =?us-ascii?Q?ZZX6oChdn2inku1PLtUuqTGtvH37y7NFfxzEQ4p3Zeb0torHrRyOw2qn9BKt?=
- =?us-ascii?Q?pZSlJ7V2sBFurVwJTP86UNqPWmBeSzRjbKoyvNSfEf7X13SfN2/rNZ8kkTlm?=
- =?us-ascii?Q?cvt+9p9yeL5lVJzULc4zLQ8uB4gKLy7iKSBR6q9QqH4W4N/1ArRLwLzr62lX?=
- =?us-ascii?Q?0ia4y3/rkjSyrG+7Zy9ahXVowFPJhE22iMmdWfNcni0R0Go84YYlScZAVNB9?=
- =?us-ascii?Q?in4pOU5lQ2Kle8ZL4UK3f+n0uN+1NubluYdVtBx0XGUWqoKa6U89Hf7wzizz?=
- =?us-ascii?Q?EZqJ86MHOVUeqVDV+G/LApPmNTaiFCFxtxqOXJekzF21KUSX0W5HNPznEQhR?=
- =?us-ascii?Q?HDyEu3tetCU7tgMfl0RjvqCRPIU9gQe0t3B7QpQ3Y6K/29a+lQwWhbJxR8Ri?=
- =?us-ascii?Q?hsnpqyhBa23ZgpTAl25JOt6Py3XZRl+CUg8ilUAb+qU5D8OTPglT2oN0zDRB?=
- =?us-ascii?Q?tlWC126ZcBSb9eT+3C7A7mY=3D?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?rTir4ar9ilakWh7RqxI4GHSkV1LFskCq59SGgE4IqCXxIjM557t8iOcViaJ5?=
+ =?us-ascii?Q?tQLizkqGI++dSeM50k+LxQAKIdRFd72zwqCNY/Dp4/AGSQsYHJXPUrZU3xU0?=
+ =?us-ascii?Q?X95CEV9iYWXJXbgFu3yX40TnZF3wwgDCZrlWA0i6MM+sQq5H5TEZIhaaze0A?=
+ =?us-ascii?Q?yeMohIoT7KupPBnjTgCh+g0dnlAWvHIki+1ezYIaRADkcBxrlTC5moT5i3GR?=
+ =?us-ascii?Q?L1dZvDhqaWnIEjCimFMxXkGZtndxGxaFbvNe0fAvSL9zSYWjPcF0TqN3/gfa?=
+ =?us-ascii?Q?L4Uy6dCZ86Da74mHBzy45qC7dcwcRQ7hkjBohZ1BQOXHSNOk0bt56D6x/l5Z?=
+ =?us-ascii?Q?/pF72WvNExNS17jNF58kTgwqzGLT0bcbVrAdG8t+pU4V7s4jgYVwOV3kyoKw?=
+ =?us-ascii?Q?BwyCqcszeTaELk3WcRvhXZRlqQSxUZMmbgNgAENLf6VsJT5v0YG5Ln/6rtvP?=
+ =?us-ascii?Q?UZfVwmb0NywGdenJhsuOMOE2+2HTdj8/AbfEsfxGdkcAf81ixhrWsYH9QUs2?=
+ =?us-ascii?Q?nP0E63O9dHtHAzev8whXxOyFQDwHVebEWWnDqLzdqO6wBAA+uW3umZ/hIR33?=
+ =?us-ascii?Q?7Pfzt3ZOxK7e1fnqnaFBa8RtEE59Dw0w8+RcrPUWgVeIoDwWFQxQIl0O1jYx?=
+ =?us-ascii?Q?Wgz5SFhyEsxuKF59rail6OI4x4T/Sr34l9OG7NlJT9JAjke+y8vn3HyNTFi2?=
+ =?us-ascii?Q?j7NOFfFwukw2o01FqFhDLRC3bhryXAz4bnhQ7ZoM3df9NUgs32L+uf7xx9hJ?=
+ =?us-ascii?Q?bjcuV2i0LWV2P8JRqfXAV13ZQNu8peQIAZhRXmCRrpyVBU+4xm8FZBF/pfT0?=
+ =?us-ascii?Q?dZe2Yn2XxCvv7ySoAcn+GDxASr+/q3fVrtzFWJg+Yk3CWdPhSWmJg3h9c2Dx?=
+ =?us-ascii?Q?hdTmLRj3T9zXwwidNm3UCUQZEH7QQb5CCRmzzaxuAE77XSr+X6XPZ80OJPGP?=
+ =?us-ascii?Q?L0ZAobWOOhV3F4XwqY4iE5b2rL4Sxi5V1oeiPIWjRgtFB4R8PN68kTrg4elc?=
+ =?us-ascii?Q?IcOzYOyoa5owpvV1ODqYo/MGIJaxhbosV8m6t1BJ4f/48Zw9EU+wp0X8Rdr7?=
+ =?us-ascii?Q?edNEZ5AHVnmTpzjE7m2K0CTyWkWEwF1C+n7P4NLJjFFms8NlsPbE9dvz2OK7?=
+ =?us-ascii?Q?6TmEvIoK0HpeO4l3Sea3e1plu8NEFpGe+xOtdri98e7BzeJlqssywPGe3Wao?=
+ =?us-ascii?Q?ImvkbcNLZSy71/rSTJiPUPoTLSJ5VZtJbw/Jt166Fz+iOkhe7kwrIYD3szoe?=
+ =?us-ascii?Q?RgVDTWI13LVNNHjVwPhNRDfDFRY/m142WhdyiqDkiZrEC6GWjOsHDlg3nM/E?=
+ =?us-ascii?Q?BL1LUKVdUBxY0G0UsI2NVEL0xLfUV4ntNeagsrLD9MhxfWngR2/m22Qe1SH8?=
+ =?us-ascii?Q?F4FIn4yEXx9J2amj2HsZpH+3eAUuFRJ9SPOa/Y2+u8nXPqDMiJTucuiP6gEW?=
+ =?us-ascii?Q?GIdjIqgqb91971hTF07zDkDGJqH5VO11+BYRrTlDViqv5lvAEfp1mzEpjvTq?=
+ =?us-ascii?Q?6y2vr5mciRmyNui1m6GclLr+5ZXcekYx+GPDo6vePa4GtH2egZjEgaGosXay?=
+ =?us-ascii?Q?8fwTrza76Mb0qNq1PhCSHaoneRPHLAMHXC68AajL1XaarS+H6E2uN+lI6eYF?=
+ =?us-ascii?Q?MNEq5h4aLcVj8gA7gh2yDHw=3D?=
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: ef865e45-818e-4abf-0a9a-08d9998c0fae
+X-MS-Exchange-CrossTenant-Network-Message-Id: eabaf3ac-0f39-4dca-8150-08d9998df715
 X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3108.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Oct 2021 20:55:08.8950
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Oct 2021 21:08:46.6324
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: F99drHBw9OYZQeIez0kQdlNMBR08K5zG3eR9dzSnIdPb2dTzT6z0rqMnoBapfehsPVBynRvNR3PZ/ftdng/fmA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN8PR12MB3474
+X-MS-Exchange-CrossTenant-UserPrincipalName: YcjxwwOOKJwWRshoyN+C12CSagX9Neio+F/AzjF2DhFUTRIuYdNg3SkERuXg0348cXJUe9i/cqleeDfCFblYHA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN8PR12MB2948
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Mon, Oct 25, 2021 at 08:20:14PM +0530, Naveen Krishna Chatradhi wrote:
+On Mon, Oct 25, 2021 at 08:20:16PM +0530, Naveen Krishna Chatradhi wrote:
 ...
-> +/* GPU Data Fabric ID Device 24 Function 1 */
-> +#define PCI_DEVICE_ID_AMD_ALDEBARAN_DF_F1 0x14d1
+> @@ -3106,8 +3141,9 @@ static void read_mc_regs(struct amd64_pvt *pvt)
+>  		edac_dbg(0, "  TOP_MEM2 disabled\n");
+>  	}
+>  
+> -	if (pvt->umc) {
+> -		__read_mc_regs_df(pvt);
+> +	if (pvt->ops->get_mc_regs) {
+> +		pvt->ops->get_mc_regs(pvt);
+
+This entire read_mc_regs() function can be split up like how you've done the
+others. So get_mc_regs() is set for all family types. The common code can be
+split out into another function.
+
 > +
-> +static struct pci_dev *get_gpu_df_f1(void)
-> +{
-> +	return pci_get_device(PCI_VENDOR_ID_AMD,
-> +			      PCI_DEVICE_ID_AMD_ALDEBARAN_DF_F1, NULL);
-> +}
+>  		amd64_read_pci_cfg(pvt->F0, DF_DHAR, &pvt->dhar);
+>  
+>  		goto skip;
+> @@ -3154,7 +3190,10 @@ static void read_mc_regs(struct amd64_pvt *pvt)
+>  	}
+>  
+>  skip:
+> -	read_dct_base_mask(pvt);
+> +	pvt->ops->prep_chip_select(pvt);
 > +
-> +/* DF18xF1 registers on Aldebaran GPU */
-> +#define REG_LOCAL_NODE_TYPE_MAP		0x144
-> +#define REG_RMT_NODE_TYPE_MAP		0x148
-> +
-> +/*
-> + * Newer AMD CPUs and GPUs whose data fabrics can be connected via custom xGMI
-> + * links, comes with registers to gather local and remote node type map info.
-> + *
-> + * "Local Node Type" refers to nodes with the same type as that from which the
-> + * register is read, and "Remote Node Type" refers to nodes with a different type.
-> + *
-> + * This function, reads the registers from GPU DF function 1.
-> + * Hence, local nodes are GPU and remote nodes are CPUs.
-> + */
-> +static int amd_get_node_map(struct pci_dev *pdev)
-> +{
-> +	struct amd_node_map *nodemap;
-> +	u32 tmp;
-> +
-> +	nodemap = kmalloc(sizeof(*nodemap), GFP_KERNEL);
-> +	if (!nodemap)
-> +		return -ENOMEM;
-> +
-> +	pci_read_config_dword(pdev, REG_LOCAL_NODE_TYPE_MAP, &tmp);
-> +	nodemap->gpu_node_start_id = tmp & 0xFFF;
-> +
-> +	pci_read_config_dword(pdev, REG_RMT_NODE_TYPE_MAP, &tmp);
-> +	nodemap->cpu_node_count = tmp >> 16 & 0xFFF;
-> +
-> +	amd_northbridges.nodemap = nodemap;
-> +	return 0;
-> +}
-> +
+> +	if (pvt->ops->get_base_mask)
+
+This check is redundant since it's done below in per_family_init().
+
 ...
->  int amd_cache_northbridges(void)
->  {
->  	const struct pci_device_id *misc_ids = amd_nb_misc_ids;
->  	const struct pci_device_id *link_ids = amd_nb_link_ids;
->  	const struct pci_device_id *root_ids = amd_root_ids;
-> -	struct pci_dev *root, *misc, *link;
-> +	struct pci_dev *root, *misc, *link, *dff1;
-...
-> +	/*
-> +	 * The number of miscs, roots and roots_per_misc might vary on different
-> +	 * nodes of a heterogeneous system.
-> +	 * Calculate roots_per_misc accordingly in order to skip the redundant
-> +	 * roots and map the DF/SMN interfaces to correct PCI roots.
-> +	 */
-> +	if (gpu_root_count && gpu_misc_count) {
-> +		dff1 = get_gpu_df_f1();
-
-dff1 is only used in this section, so it can be declared here.
-
-> +		if (!dff1) {
-> +			pr_debug("Failed to gather GPU node info.\n");
-
-This message doesn't make sense to me. The failure is that a particular PCI
-device was not found. Gathering node info hasn't even been attempted yet.
-
-> +			return -ENODEV;
-> +		}
+> @@ -3703,6 +3739,20 @@ static struct amd64_family_type *per_family_init(struct amd64_pvt *pvt)
+>  		return NULL;
+>  	}
+>  
+> +	/* ops required for all the families */
+> +	if (!pvt->ops->early_channel_count || !pvt->ops->dbam_to_cs ||
+> +	    !pvt->ops->prep_chip_select || !pvt->ops->get_base_mask ||
+> +	    !pvt->ops->display_misc_regs || !pvt->ops->populate_csrows) {
+> +		edac_dbg(1, "Common helper routines not defined.\n");
+> +		return NULL;
+> +	}
 > +
-> +		if (amd_get_node_map(dff1))
-> +			return -ENOMEM;
+> +	/* ops required for families 17h and later */
+> +	if (pvt->fam >= 0x17 && (!pvt->ops->get_umc_err_info || !pvt->ops->get_mc_regs)) {
+> +		edac_dbg(1, "Platform specific helper routines not defined.\n");
+> +		return NULL;
+> +	}
 > +
-
-Also, why do these functions need to be split up? If it was because of the
-return values, then you could have done the following.
-
-		int ret = amd_get_node_map();
-
-		if (ret)
-			return ret;
+>  	return fam_type;
+>  }
+>
 
 Thanks,
-Yazen
+Yazen  
