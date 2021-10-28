@@ -2,40 +2,41 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A09F643E7CD
-	for <lists+linux-edac@lfdr.de>; Thu, 28 Oct 2021 19:59:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D6DB43E7D2
+	for <lists+linux-edac@lfdr.de>; Thu, 28 Oct 2021 19:59:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231880AbhJ1SB5 (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Thu, 28 Oct 2021 14:01:57 -0400
-Received: from mail-mw2nam12on2066.outbound.protection.outlook.com ([40.107.244.66]:16033
-        "EHLO NAM12-MW2-obe.outbound.protection.outlook.com"
+        id S231981AbhJ1SCM (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Thu, 28 Oct 2021 14:02:12 -0400
+Received: from mail-dm6nam10on2047.outbound.protection.outlook.com ([40.107.93.47]:62351
+        "EHLO NAM10-DM6-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S231508AbhJ1SBF (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Thu, 28 Oct 2021 14:01:05 -0400
+        id S231530AbhJ1SBI (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Thu, 28 Oct 2021 14:01:08 -0400
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=eIGypAgEuCzTs52k/vBNUySOTuXRE5P1f2Pe4BJbFX3RbIzE+PkyF6cgvs7KpK1UEhVfWGZDMJaubvKfrcPxFA2WF5Z9c6ynNkE42pWVAmzEwnM84BxbpMm/djh05hds4vhjdu0MbpZ2tXyAuoLoxuDY8VGRuNLQgnN7BDoZXYDcv5asSvQGL1+GDab8NpZE1BH7eAT/VKQKK5hqEFc6TDkgpW/ScmaWruRytYImFEW8Ocw7PHjRSznUvO8hA9EQ+7NeXbAeDla0vZ3jlOmoUZ+0zsaMeLDgMy7Dn/r/9fUDspzPRSha8Wv5AacbfnTt/eFfnfm/lChYfVwwOb+XZg==
+ b=gEGbbq3PWso2A/LiWBfrOhjc+DYeYdKxRhvb9PeI7mjlyFHEVGKyfWM0/jL8S0Ei0CX4g+9LuhkNt4SG6B9svkPjXi2xXglKi48r34e7LC2yNahEPLslXnfBQIDKL8a8lj0EyCgnIxziM8eGXKkQcskPcHJRH86CRA7qTw5bQo+EE9/qCb54zCg7o9n0UeT2Z9dpCzE18bjP4kJjL1zzRakeJnbbsHf9qS9O7aHee/aYAlWfZApJn62N9wBoxIsoFnGWC6Pv7oXiEOkNrSQcCX+A2vKi4W98xsi6XgHF8+ggahvkSbCABTCI02Jx1X6gv2wWvgHDVtrvhCZH+osLWw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=qiTflZ3kzPXc4cnJg53mbQUtcCOoT22I3NuEPWG4IMo=;
- b=Z+U/Rlw0a0kL1977Nc/OyWNaMSMJmG9CQvt3bfmqu6tnuVXkmTrJUj5de1ozjjrWdbrz8xLX6slKpthknVJv4zctkQQBYEJ3uaC/8DiBFSGppNVymWcum/e5+UDUseeQMcT3yg50b7tcb3eezt1wWrx3xVbJslZsmynKRQeELn8zS0ad53WUKW775XfxJ1RoILr2sLKNEb6/VW+v0fFRBvqAvKYEGdZtnt/UYiaNhgQSQ2lU4a3bXK7mi4fYxqd/ojaJp8LHi/h+1b9rAgIFTrw4B5NF+iG+iEuE6GA+thgeGojVwctJ8Gz0zJMJzTsyj6s8KS/rfJDfjzppBFdbOg==
+ bh=R4JRRPLRFoFj6dV1+dDLLLgqe8V9aPW2YYNhHMEPwr0=;
+ b=WFHWPN1/6znBx2KL80/rxWoqvietYi4kGOFmKXbHvnViGGV0CGrugMcbAS5M6F1cCYJNGIBXvdSciDGCV/UpOK/Pchl3cSWcd6UpvDvTc5ruBy53GhfrGNeaiSO5kyTFGBAFX06/vmJ/ztf49DV1uAJlQRAZM8DIT2//2jGwifQMxWDLXpfDbmbiMlX08dHChzZtHCRFf46RJ1pgbYD/armj9Kj51yCsujIELL7T6GUeLXCLQq+dNwZwt7zt11U64TyB91ECMNCQKg08BKYm9DqSdIJQgNymZnIiv1ZzCkeNOPCRcknl6F+pJk2ZnFMrwJ9sdLXh5JhuBeYULJQoPA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
  dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
  header.from=amd.com; dkim=none (message not signed); arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=qiTflZ3kzPXc4cnJg53mbQUtcCOoT22I3NuEPWG4IMo=;
- b=LhO+PnvNYHU1uSBO0S322wn7xcSZg+QObypd3vdMTNTrAzHpUuhBGAjJMvKd1nFesRQJifcUnp9FH976vLByFguAizrM4S8r+TTHZpdOn77CWXou8pEEhiPM/unLDKulvfnKrIhPqRV6DBwS8buZBuFKjUFnM/j0/JmX9qE5z3M=
-Received: from CO1PR15CA0099.namprd15.prod.outlook.com (2603:10b6:101:21::19)
- by DM5PR12MB1179.namprd12.prod.outlook.com (2603:10b6:3:6f::9) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.4628.20; Thu, 28 Oct 2021 17:58:36 +0000
-Received: from CO1NAM11FT064.eop-nam11.prod.protection.outlook.com
- (2603:10b6:101:21:cafe::4f) by CO1PR15CA0099.outlook.office365.com
- (2603:10b6:101:21::19) with Microsoft SMTP Server (version=TLS1_2,
+ bh=R4JRRPLRFoFj6dV1+dDLLLgqe8V9aPW2YYNhHMEPwr0=;
+ b=jyIrvjucDWiK05mkXkQFQiDrYhiwoqZnY/+gP7esk51R8Kud2C24TPcJideTH88DEwXydojwoYRZRI4pmzPyhHGN0kevgZC36LYeLeegIAG4Q9ueuqhMjTCiEo9L4uMetuLFoomhyYSnWZ+dBb/mKaPtQSu/HHNEejTX1OEkm9M=
+Received: from MW2PR16CA0046.namprd16.prod.outlook.com (2603:10b6:907:1::23)
+ by SN6PR12MB2735.namprd12.prod.outlook.com (2603:10b6:805:69::26) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4649.15; Thu, 28 Oct
+ 2021 17:58:38 +0000
+Received: from CO1NAM11FT037.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:907:1:cafe::ea) by MW2PR16CA0046.outlook.office365.com
+ (2603:10b6:907:1::23) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4649.14 via Frontend
- Transport; Thu, 28 Oct 2021 17:58:36 +0000
+ Transport; Thu, 28 Oct 2021 17:58:38 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
  smtp.mailfrom=amd.com; vger.kernel.org; dkim=none (message not signed)
  header.d=none;vger.kernel.org; dmarc=pass action=none header.from=amd.com;
@@ -43,13 +44,13 @@ Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
  165.204.84.17 as permitted sender) receiver=protection.outlook.com;
  client-ip=165.204.84.17; helo=SATLEXMB04.amd.com;
 Received: from SATLEXMB04.amd.com (165.204.84.17) by
- CO1NAM11FT064.mail.protection.outlook.com (10.13.175.77) with Microsoft SMTP
+ CO1NAM11FT037.mail.protection.outlook.com (10.13.174.91) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.4649.14 via Frontend Transport; Thu, 28 Oct 2021 17:58:35 +0000
+ 15.20.4649.14 via Frontend Transport; Thu, 28 Oct 2021 17:58:37 +0000
 Received: from yaz-ubuntu.amd.com (10.180.168.240) by SATLEXMB04.amd.com
  (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.15; Thu, 28 Oct
- 2021 12:58:34 -0500
+ 2021 12:58:35 -0500
 From:   Yazen Ghannam <yazen.ghannam@amd.com>
 To:     <linux-edac@vger.kernel.org>
 CC:     <linux-kernel@vger.kernel.org>, <bp@alien8.de>,
@@ -57,9 +58,9 @@ CC:     <linux-kernel@vger.kernel.org>, <bp@alien8.de>,
         <rric@kernel.org>, <Smita.KoralahalliChannabasappa@amd.com>,
         <NaveenKrishna.Chatradhi@amd.com>, <Muralidhara.MK@amd.com>,
         Yazen Ghannam <yazen.ghannam@amd.com>
-Subject: [PATCH v3 23/33] EDAC/amd64: Define function to insert CS ID into address
-Date:   Thu, 28 Oct 2021 17:57:18 +0000
-Message-ID: <20211028175728.121452-24-yazen.ghannam@amd.com>
+Subject: [PATCH v3 24/33] EDAC/amd64: Define function to get CS Fabric ID
+Date:   Thu, 28 Oct 2021 17:57:19 +0000
+Message-ID: <20211028175728.121452-25-yazen.ghannam@amd.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20211028175728.121452-1-yazen.ghannam@amd.com>
 References: <20211028175728.121452-1-yazen.ghannam@amd.com>
@@ -71,114 +72,150 @@ X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
  (10.181.40.145)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 091f0e0a-30b1-46c5-49bf-08d99a3c906d
-X-MS-TrafficTypeDiagnostic: DM5PR12MB1179:
-X-Microsoft-Antispam-PRVS: <DM5PR12MB11795A1183C6236F9C675EC9F8869@DM5PR12MB1179.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:7691;
+X-MS-Office365-Filtering-Correlation-Id: 14c99eff-4329-490c-7772-08d99a3c9180
+X-MS-TrafficTypeDiagnostic: SN6PR12MB2735:
+X-Microsoft-Antispam-PRVS: <SN6PR12MB2735EE1DB06662A3445F615DF8869@SN6PR12MB2735.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:6430;
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: wjpKcTDrL3W1+nW612izdqYLjoifb1M7FRwRTtvwFeG18gJriSBkXWknwloADBg44xQw73hzRFE0Vi12tNtiofQQu/MqkGrzrf9gkvRgYXwMOruKVxLPtR4ZTiM8XiOS7O900tkE1m3zFFl+/JRB5eRI/8raqrgm5I19NjAmXMJLesXUXriMMUNrA3McCKpbqF6vXwGQ7yGgLJ67Gc5EDA4uKiMkJEkrS4GMJ7rx6ZLOlJDTbOK+SxLhy81k3WuFBvs2WXfrVynYoHj91KC559KghhJYAFtKiInmfnYiuHagoT4nLfizZ4zkEf7WtdksvRQ2sHN0YdeJfsJXfgJaPa/6BUnY+koyqcY5icbAX8gj1iVeEMinRivu1ZYtF2c1zdsSyYoCfpyVbGj7tXj7lxBbHt5Q6/zQko59ze9Dr1rZvgMc6nUQsK8E/YIOS13yfeOwAHmDTBzY120VuXZWMqJpAKoZa9onZ12H9GeFE0RG/EQ/Eb8NU0I123HQKjjgILSS8SuZDD9LrOm25rHpN9NsoC6GwfExUJBl5bsUQmJGp7JHkqqAxMyoKcUMXatuQVNruR8pTF0LPnHHGbmRGvveOTE7cgNcOO7HXxBXDt9jaf5/wgbqvDhPNvqXJkfTL9Ix4r01iyShgas3UC3P1AYfM0kbC6nBXDyhT3LjqaVByo4n8hXIIyN+Na6t2FirJeNFnvZHwlQtf+klzGkmpD8HPOOQ1BM2vmAPLAYNUFAr4H3q0DtyCfs+XpabfKYPVdtPpYUTT9dSGBJxuVwyyyvRVeZqsfEdypE/tjm25Z7BkLR7ojnvSudmtUJgSRSO
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(4636009)(36840700001)(46966006)(356005)(16526019)(426003)(70586007)(2906002)(70206006)(54906003)(36756003)(44832011)(7696005)(83380400001)(508600001)(36860700001)(81166007)(1076003)(966005)(186003)(86362001)(47076005)(26005)(8676002)(6916009)(316002)(8936002)(4326008)(82310400003)(336012)(2616005)(5660300002)(6666004)(36900700001);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: DJGuDMFkbNHlUtoJAWpqvqMrKIhxYNz/MgbMmKu+fFu+xO2g9Q/kUKxCz5+xMyrpb9IP3U1aiAnyiOYFGDFIDe5jh7H2lsW+en4P7gUoE5B0wUipJqzP9Yf4qNaLLdptGbfV7jL0tcjwTtCf/MVXaeFy5RfmOj0k2nOB3T8Y9DxbvQoiO+qykmqE3bfYVZlZeaa26RVcIWoQL52nObNc6YGt4PVB0/EcLSz6mKPjpMovY/LS51hQn9Cn9jgM5zDzurMnnu72+xGF8gDNbTi+Naj37qHhusvPM6i24wGIOvkNwYRxf3NXFXhmX8slBDi9pDeWONwn3ZGGO3eUzFkBkKTUp22o4BIhZSailgBvQIp0297Daw5FMrL56ZLJ5486a6/2B7BlNCYWdX0rX6rVD+SRgKr7Tdit5OUT81JYdSEkUyTVU0gK6jmXt43dpjynAuCw8wxGz0RBBjd0UqmRFAMv83eRgBNfxJgmT0+ZNfD9hRzRqerCdp/Rqq+HDP8NgoX7UcMFzx4RvettqW2IExMsSkonePdxzBDEijgH85GKguWDfDUXLfsZsGM8/UkAVqfeG3gEwYjE1ui4MkXLRz0/U/Q5gbJHyqqwDhrVfho42rWzMzdNiXkAIWNtD9kc57lNnlDoEzMP7kgmAJ5VSLMYFZX9E517JkO9xeiC2nDapnUMxtbrEPfUIL87jOGDXhQgKE78FpDoOE2x/1yVkO9ietn/MRzohculDr1Vy9H94+MnovcrB75pqd6lj5eWSHdbdovgVGE8bUGTUOSEgMx3NIA0XzidoaCwJHukG9jfIqVRJhYlf2WMsgNFFMO/
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(4636009)(46966006)(36840700001)(8676002)(8936002)(7696005)(356005)(508600001)(36860700001)(86362001)(70586007)(82310400003)(70206006)(83380400001)(426003)(54906003)(26005)(966005)(44832011)(47076005)(336012)(316002)(36756003)(81166007)(1076003)(6666004)(6916009)(16526019)(2906002)(5660300002)(2616005)(4326008)(186003)(36900700001);DIR:OUT;SFP:1101;
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Oct 2021 17:58:35.9843
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Oct 2021 17:58:37.7867
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 091f0e0a-30b1-46c5-49bf-08d99a3c906d
+X-MS-Exchange-CrossTenant-Network-Message-Id: 14c99eff-4329-490c-7772-08d99a3c9180
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT064.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT037.eop-nam11.prod.protection.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR12MB1179
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN6PR12MB2735
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-Move the code that inserts the CS ID into the address into a separate
-helper function.
+Move code that gets the CS Fabric ID into a separate helper function.
+This will be expanded for future DF versions.
 
-Save the function pointer in the context struct. It will be set based on
-interleaving mode rather than Data Fabric version. This will be expanded
-for new interleaving modes added in future Data Fabric versions.
+The bitfield used for this value may be larger than the 8 bits currently
+used. So make it a u16 type which is large enough to hold all known
+sizes of this bitfield across DF versions.
+
+Also, call this function early as future DF versions may need the value
+early.
 
 Signed-off-by: Yazen Ghannam <yazen.ghannam@amd.com>
 ---
 Link:
-https://lkml.kernel.org/r/20210623192002.3671647-25-yazen.ghannam@amd.com
+https://lkml.kernel.org/r/20210623192002.3671647-26-yazen.ghannam@amd.com
 
 v2->v3:
-* Was patch 24 in v2.
+* Was patch 25 in v2.
 
 v1->v2:
 * Moved from arch/x86 to EDAC.
-* Added function pointer to ctx struct.
+* Added function to data_fabric_ops.
 
- drivers/edac/amd64_edac.c | 24 ++++++++----------------
- 1 file changed, 8 insertions(+), 16 deletions(-)
+ drivers/edac/amd64_edac.c | 33 ++++++++++++++++++++++-----------
+ 1 file changed, 22 insertions(+), 11 deletions(-)
 
 diff --git a/drivers/edac/amd64_edac.c b/drivers/edac/amd64_edac.c
-index 2da0170f6d84..a36df70910aa 100644
+index a36df70910aa..5aae735f1389 100644
 --- a/drivers/edac/amd64_edac.c
 +++ b/drivers/edac/amd64_edac.c
-@@ -1074,6 +1074,7 @@ struct addr_ctx {
- 	u8 cs_id;
- 	int (*dehash_addr)(struct addr_ctx *ctx);
- 	void (*make_space_for_cs_id)(struct addr_ctx *ctx);
-+	void (*insert_cs_id)(struct addr_ctx *ctx);
- };
- 
+@@ -1064,6 +1064,7 @@ struct addr_ctx {
+ 	u32 reg_dram_offset;
+ 	u32 reg_base_addr;
+ 	u32 reg_limit_addr;
++	u16 cs_fabric_id;
+ 	u16 nid;
+ 	u8 inst_id;
+ 	u8 map_num;
+@@ -1080,6 +1081,7 @@ struct addr_ctx {
  struct data_fabric_ops {
-@@ -1106,6 +1107,11 @@ static void make_space_for_cs_id_simple(struct addr_ctx *ctx)
- 	expand_bits(ctx->intlv_addr_bit, num_intlv_bits, &ctx->ret_addr);
+ 	u64	(*get_hi_addr_offset)		(struct addr_ctx *ctx);
+ 	int	(*get_intlv_mode)		(struct addr_ctx *ctx);
++	int	(*get_cs_fabric_id)		(struct addr_ctx *ctx);
+ 	void	(*get_intlv_num_dies)		(struct addr_ctx *ctx);
+ 	void	(*get_intlv_num_sockets)	(struct addr_ctx *ctx);
+ };
+@@ -1163,11 +1165,23 @@ static void get_intlv_num_sockets_df2(struct addr_ctx *ctx)
+ 	ctx->intlv_num_sockets = (ctx->reg_limit_addr >> 8) & 0x1;
  }
  
-+static void insert_cs_id_simple(struct addr_ctx *ctx)
++static int get_cs_fabric_id_df2(struct addr_ctx *ctx)
 +{
-+	ctx->ret_addr |= (ctx->cs_id << ctx->intlv_addr_bit);
++	/* Read D18F0x50 (FabricBlockInstanceInformation3). */
++	if (df_indirect_read_instance(ctx->nid, 0, 0x50, ctx->inst_id, &ctx->tmp))
++		return -EINVAL;
++
++	ctx->cs_fabric_id = (ctx->tmp >> 8) & 0xFF;
++
++	return 0;
 +}
 +
- static u64 get_hi_addr_offset_df2(struct addr_ctx *ctx)
+ struct data_fabric_ops df2_ops = {
+ 	.get_hi_addr_offset		=	get_hi_addr_offset_df2,
+ 	.get_intlv_mode			=	get_intlv_mode_df2,
+ 	.get_intlv_num_dies		=	get_intlv_num_dies_df2,
+ 	.get_intlv_num_sockets		=	get_intlv_num_sockets_df2,
++	.get_cs_fabric_id		=	get_cs_fabric_id_df2,
+ };
+ 
+ struct data_fabric_ops *df_ops;
+@@ -1257,20 +1271,13 @@ static void get_intlv_num_chan(struct addr_ctx *ctx)
+ static int calculate_cs_id(struct addr_ctx *ctx)
  {
- 	return (ctx->reg_dram_offset & GENMASK_ULL(31, 20)) << 8;
-@@ -1137,6 +1143,7 @@ static int get_intlv_mode_df2(struct addr_ctx *ctx)
+ 	u8 die_id_shift, die_id_mask, socket_id_shift, socket_id_mask;
+-	u8 die_id_bit, sock_id_bit, cs_fabric_id, cs_mask = 0;
+-
+-	/* Read D18F0x50 (FabricBlockInstanceInformation3). */
+-	if (df_indirect_read_instance(ctx->nid, 0, 0x50, ctx->inst_id, &ctx->tmp))
+-		return -EINVAL;
+-
+-	cs_fabric_id = (ctx->tmp >> 8) & 0xFF;
+-	die_id_bit   = 0;
++	u8 die_id_bit = 0, sock_id_bit, cs_mask = 0;
+ 
+ 	/* If interleaved over more than 1 channel: */
+ 	if (ctx->intlv_num_chan) {
+ 		die_id_bit = ctx->intlv_num_chan;
+ 		cs_mask	   = (1 << die_id_bit) - 1;
+-		ctx->cs_id = cs_fabric_id & cs_mask;
++		ctx->cs_id = ctx->cs_fabric_id & cs_mask;
  	}
  
- 	ctx->make_space_for_cs_id = make_space_for_cs_id_simple;
-+	ctx->insert_cs_id = insert_cs_id_simple;
+ 	sock_id_bit = die_id_bit;
+@@ -1286,7 +1293,7 @@ static int calculate_cs_id(struct addr_ctx *ctx)
+ 		die_id_shift = (ctx->tmp >> 24) & 0xF;
+ 		die_id_mask  = (ctx->tmp >> 8) & 0xFF;
  
- 	if (ctx->intlv_mode != NONE &&
- 	    ctx->intlv_mode != NOHASH_2CH &&
-@@ -1295,8 +1302,6 @@ static int calculate_cs_id(struct addr_ctx *ctx)
+-		ctx->cs_id |= ((cs_fabric_id & die_id_mask) >> die_id_shift) << die_id_bit;
++		ctx->cs_id |= ((ctx->cs_fabric_id & die_id_mask) >> die_id_shift) << die_id_bit;
+ 	}
  
- static int denormalize_addr(struct addr_ctx *ctx)
- {
--	u8 num_intlv_bits;
--
- 	/* Return early if no interleaving. */
- 	if (ctx->intlv_mode == NONE)
- 		return 0;
-@@ -1313,20 +1318,7 @@ static int denormalize_addr(struct addr_ctx *ctx)
- 	if (calculate_cs_id(ctx))
- 		return -EINVAL;
+ 	/* If interleaved over more than 1 socket: */
+@@ -1294,7 +1301,8 @@ static int calculate_cs_id(struct addr_ctx *ctx)
+ 		socket_id_shift	= (ctx->tmp >> 28) & 0xF;
+ 		socket_id_mask	= (ctx->tmp >> 16) & 0xFF;
  
--	if (num_intlv_bits > 0) {
--		u64 temp_addr_i;
--
--		/*
--		 * The pre-interleaved address consists of XXXXXXIIIYYYYY
--		 * where III is the ID for this CS, and XXXXXXYYYYY are the
--		 * address bits from the post-interleaved address.
--		 * "num_intlv_bits" has been calculated to tell us how many "I"
--		 * bits there are. "intlv_addr_bit" tells us how many "Y" bits
--		 * there are (where "I" starts).
--		 */
--		temp_addr_i = (ctx->cs_id << ctx->intlv_addr_bit);
--		ctx->ret_addr |= temp_addr_i;
--	}
-+	ctx->insert_cs_id(ctx);
+-		ctx->cs_id |= ((cs_fabric_id & socket_id_mask) >> socket_id_shift) << sock_id_bit;
++		ctx->cs_id |= ((ctx->cs_fabric_id & socket_id_mask)
++				>> socket_id_shift) << sock_id_bit;
+ 	}
  
  	return 0;
- }
+@@ -1372,6 +1380,9 @@ static int umc_normaddr_to_sysaddr(u64 *addr, u16 nid, u8 df_inst_id)
+ 	ctx.nid = nid;
+ 	ctx.inst_id = df_inst_id;
+ 
++	if (df_ops->get_cs_fabric_id(&ctx))
++		return -EINVAL;
++
+ 	if (remove_dram_offset(&ctx))
+ 		return -EINVAL;
+ 
 -- 
 2.25.1
 
