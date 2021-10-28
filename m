@@ -2,41 +2,41 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C5B2F43E7BB
-	for <lists+linux-edac@lfdr.de>; Thu, 28 Oct 2021 19:59:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8936E43E7BD
+	for <lists+linux-edac@lfdr.de>; Thu, 28 Oct 2021 19:59:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231669AbhJ1SB0 (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Thu, 28 Oct 2021 14:01:26 -0400
-Received: from mail-mw2nam12on2068.outbound.protection.outlook.com ([40.107.244.68]:9091
-        "EHLO NAM12-MW2-obe.outbound.protection.outlook.com"
+        id S231672AbhJ1SB1 (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Thu, 28 Oct 2021 14:01:27 -0400
+Received: from mail-dm6nam10on2072.outbound.protection.outlook.com ([40.107.93.72]:35809
+        "EHLO NAM10-DM6-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S231384AbhJ1SAz (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        id S231388AbhJ1SAz (ORCPT <rfc822;linux-edac@vger.kernel.org>);
         Thu, 28 Oct 2021 14:00:55 -0400
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=lot8az09WkUN65+BR8GcKTfIUu9OWSFi+E3+sceXfxnyC5E6sioWq4VBFLdbWDuCrck4exRboDy5v8qp0ndvYTz9TXoTbXwNbEauPl4ElDiZ2+Zg1A3nd1wope2M+o0CP5yLjg20Xil0r1dFwRgEAVfFmsPbeJ9Pt+J+C+MkxCEGfFpHU525rCH2fk8DEyV/7S1MJHjeOmyOGawyb4Go/796y3Z1SnBq1q92h6EeICYUVIjP6obwgjan30z2XgkZcKN0Oerxia0P0iaLWMGsxLgcoYR5dYt8Pizfywojn2B7OESfGZ9qKtVPUb6mMfj8mV3lhxiuNNxbVDpN3ZdO2g==
+ b=CXKG9kh4HmbKBR4+1iQg3yPv+52bFyullMIj/1EpLu3ArfmbKSpiov6dporzZOfagn6K37cYNaD1c98xgjSdYAIPgDcln7veuD0lgS4r0AVeHPSx0uokyv+VymbJJW2tat/MK39S9IQd+SMFNq8o9EAk7CN1n08Td2xiLmN6qQMYhCFlfkn0t9KWyvQt5NlcstXc8IQE1bYwciS9mCwSUrsha+QgNySKIOJOO6JEwW/VN2G0VpdawIaUnm2UCu0ATDcjbpZ1sooB3/kiVYopugP7ulGitSq2dt+BdwqPK/QOX47ZSNxlj5rZf6/8RNuv+G5TQDRzfSDrpI3TPc5O8w==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=BpM+izJ1kKRwKaau+Yo/fWAMSBZvB4JB/vQ9CBy7DJc=;
- b=UZTeoeMZ8zMpYKQRkQEaIAvmEV3SHfhmD9ZadyUSKZyHhnflDObpoBR7DJAVGDWhj8DEOj+VBRnuiUbZju/lWAVl4VkJRGKFn3eOmvYo7OzOCJbL9M+urAvT8En8lyL/964ocjfiiyYdBH3CaCk66vLeRauszDHEroGB+ITFUDsFTTBUgpbVzC5FHw5oo3FgzR8g0fZ+3j398TS7Xr51tEeUhQeVjsf0pxCWvYTk+qAT/NZASswXSs3dSnj3A6PNgAS4KlLpxensq/nkesH4NQXUwh8T0ywJeGQLk4hbybzUvnQlq/lxn90AvI7Mv4kMlDXa1gJFu091XjL/jmqI/Q==
+ bh=yxHNCJrdQP6vM2XGuMPU5snYc1VWRjcp6DyFB20MrIw=;
+ b=EcX9FJIjjHR4BDWUbAxCLlUa31UlWShsOR1wZGHYFCMPn0P4IiQ9RdOEIl+gCxp61POrRxQXHmO4L5D5Fa27vrLPMd5rnT9KVtDDyILpzuBhsftobRo/+uLRVTM/1qLVtsUx1+uJmGgHLs8tf2L8PXVzzpRoGSu13aKYS0TDOqWowm9GVGlKDb7Q9KxXUGCJ3Ej8SUeRBMHiVekZldp9D30m+QSigNvCU1v1FE07mVVFPjxfl/jBtWtbpioV436qcVpag9gFHKOKBVfgYVEQEuoADoiEYoFvDjYhTR4D1hHpFoc31kCpZckaHU+e+XRM7w+seZs7towZOTLAvLsBcg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
  dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
  header.from=amd.com; dkim=none (message not signed); arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=BpM+izJ1kKRwKaau+Yo/fWAMSBZvB4JB/vQ9CBy7DJc=;
- b=SKwQ7aghbnK716IDCnT/eU9d+GRZnu5g/l43wj2vkzo6+/Z33SynfBCcVwFJQ/PQBOvNoGR+uf198W2Jiwl15vxeEmpb0FTFE4YbynwW2oT7/dEl5Q+nBqPEIsJkWTLVxbHkLx5TEcnl7EGsoXHi8LUfrA6SvfHULY99+wrugCM=
-Received: from CO1PR15CA0091.namprd15.prod.outlook.com (2603:10b6:101:21::11)
- by DM5PR12MB1419.namprd12.prod.outlook.com (2603:10b6:3:77::18) with
+ bh=yxHNCJrdQP6vM2XGuMPU5snYc1VWRjcp6DyFB20MrIw=;
+ b=0ULYQOu29mb7PrrdvKH4+AJMpdWsECu1Ws8f+2mDbb4XZk9aeMdAJW1NZ8WjM5CUvMZkKGRM2I0+NQEBHmPrKWOg1jvwOGYf5gRpE0LH56BXTDETIynw6saVcIV71Emi7QeAswT13Sg7JK1/Y4e6mCLsmvPASrFMEM3hb9HcvM4=
+Received: from CO1PR15CA0097.namprd15.prod.outlook.com (2603:10b6:101:21::17)
+ by DM6PR12MB4404.namprd12.prod.outlook.com (2603:10b6:5:2a7::13) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4628.20; Thu, 28 Oct
- 2021 17:58:24 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4649.14; Thu, 28 Oct
+ 2021 17:58:25 +0000
 Received: from CO1NAM11FT064.eop-nam11.prod.protection.outlook.com
- (2603:10b6:101:21:cafe::a0) by CO1PR15CA0091.outlook.office365.com
- (2603:10b6:101:21::11) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4649.14 via Frontend
- Transport; Thu, 28 Oct 2021 17:58:24 +0000
+ (2603:10b6:101:21:cafe::21) by CO1PR15CA0097.outlook.office365.com
+ (2603:10b6:101:21::17) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4649.15 via Frontend
+ Transport; Thu, 28 Oct 2021 17:58:25 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
  smtp.mailfrom=amd.com; vger.kernel.org; dkim=none (message not signed)
  header.d=none;vger.kernel.org; dmarc=pass action=none header.from=amd.com;
@@ -46,11 +46,11 @@ Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
 Received: from SATLEXMB04.amd.com (165.204.84.17) by
  CO1NAM11FT064.mail.protection.outlook.com (10.13.175.77) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.4649.14 via Frontend Transport; Thu, 28 Oct 2021 17:58:23 +0000
+ 15.20.4649.14 via Frontend Transport; Thu, 28 Oct 2021 17:58:24 +0000
 Received: from yaz-ubuntu.amd.com (10.180.168.240) by SATLEXMB04.amd.com
  (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.15; Thu, 28 Oct
- 2021 12:58:19 -0500
+ 2021 12:58:21 -0500
 From:   Yazen Ghannam <yazen.ghannam@amd.com>
 To:     <linux-edac@vger.kernel.org>
 CC:     <linux-kernel@vger.kernel.org>, <bp@alien8.de>,
@@ -58,9 +58,9 @@ CC:     <linux-kernel@vger.kernel.org>, <bp@alien8.de>,
         <rric@kernel.org>, <Smita.KoralahalliChannabasappa@amd.com>,
         <NaveenKrishna.Chatradhi@amd.com>, <Muralidhara.MK@amd.com>,
         Yazen Ghannam <yazen.ghannam@amd.com>
-Subject: [PATCH v3 14/33] EDAC/amd64: Simplify function parameters
-Date:   Thu, 28 Oct 2021 17:57:09 +0000
-Message-ID: <20211028175728.121452-15-yazen.ghannam@amd.com>
+Subject: [PATCH v3 15/33] EDAC/amd64: Define function to get Interleave Address Bit
+Date:   Thu, 28 Oct 2021 17:57:10 +0000
+Message-ID: <20211028175728.121452-16-yazen.ghannam@amd.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20211028175728.121452-1-yazen.ghannam@amd.com>
 References: <20211028175728.121452-1-yazen.ghannam@amd.com>
@@ -72,106 +72,92 @@ X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
  (10.181.40.145)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 9d6c6620-1b57-42a0-7692-08d99a3c893a
-X-MS-TrafficTypeDiagnostic: DM5PR12MB1419:
-X-Microsoft-Antispam-PRVS: <DM5PR12MB141906B25D00F615A2DC0A49F8869@DM5PR12MB1419.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:5797;
+X-MS-Office365-Filtering-Correlation-Id: 7e29377e-1a7f-41c1-2a18-08d99a3c89df
+X-MS-TrafficTypeDiagnostic: DM6PR12MB4404:
+X-Microsoft-Antispam-PRVS: <DM6PR12MB440495EA0052B97CEA5765E6F8869@DM6PR12MB4404.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:4714;
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: HjIRrKScdtdvVT1aKxyH6AfdO4X7NMh8vg0aw3JSMvqqFSLKAY1hpovlXLU6cfzb1wXUm0B273LCBfJMyvru5hoGT+nEuKmotnRfW1Tvd9mFePeNg43yrcxlLNNtlcfWm5z856nY3gwJFC8w6l36YOXQptzF5nJ87Jb4bjYI024MsKzU7AruEEFsSRoYpteDDHKMqCBFeDclHEOhCIhEQvAreB+e59AR/j0n2k6sbxQI1BcIa0DdTk2s73zLSo9mqpQNX8aA/6AWMFheck3ZJTwmqydCK/WK/t+ww15GMnGVNfR8OvHpsz+4maqxpTGW6Pg9mZufeMoleldbch7bmsCMerQO/OrYMZ6+x6foUMvFVvAPz6ta7RVNYE4nPFxlu1MQ83M+tMwwPQ5fjLLLPBmAoEpA4UMiq4FNevr5BmojbfLWTDazlRykSvp9wSrsFVl1Dip9mXA5SgguG69u0xmUxWTsO5/oo8nOtR90ooH9ATdSXLo5E9B6TPeNhhZLv4DCysUJvG6yKxPxJYfMPTzvKOEsy23GsoE0jy28Ow65SCeuAxnFP3TUUiXy43gFkbePSozH7gQH6nbTRRwaa18JMw1tLvrv7BNBQKItKC+7zJnZTt4zV2ciKsC8bVeC2r7B7XSneRSIzYJW4MYt+2P8IvU50ypTRIv5LA6n+TIU68zPglK3qN1LRMwMZvnwZvis+BwqRuSJ8HFVzda0o9JezvuyUWy8Xz/Xl8PcQgEHx4iTTjAGh4E7Bb7ci93ZP6quaawlBHY42Jcag1RV6E6tnFZhKUAWKmWPWX/1JMM2gcP6iCW0SEbZ2lcinXo9
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(4636009)(46966006)(36840700001)(336012)(8676002)(316002)(86362001)(81166007)(4326008)(508600001)(6666004)(2906002)(83380400001)(7696005)(54906003)(5660300002)(47076005)(966005)(356005)(426003)(1076003)(82310400003)(2616005)(16526019)(186003)(36756003)(70586007)(8936002)(36860700001)(26005)(6916009)(70206006)(44832011)(36900700001);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: h/9cXhdLL4r8nRLRDRJ2g3peDWsk5aFuTpd0JYyNoCPblvEOJtsrkoWp9n9kqNP5ch8eicFnxbqB5wZeNAbgzIxJzu2wP2kV1VmJfXape+F1F3RxkuV8Qoc2ZoeiRImItT9bB5b8OISqrBfcHqvw/U2V/m3zIbOFnKyDIqxXUb/YoiO3rfRjiV3HtVy9qEbtzeMdJO4N3CkVW5hrXtg6Wk2EmCrvNBkYp97fj8w5KVYawsSqoYopjmRuiII4K8gaqAeyXzWi4/yn2nuQEurBkwDZ1OikpACBPoCaRIuduhtjEjhvIVUeSEUe9vAN60aavm2koUZ+rbA6skM8kEP3WsZG86n/MAioeM5xK5LVrPN5rM+e692Uu4PGZTBiOGI5jjIMKl27ofs6O+n2GE9rpyi3Kd1sIVg28VVzQbMzQVFkeEF18yu4jwAuJ5aLIfpOIiLK3D037sHi6JPlAwBEXJQ9/jaLkgXYJkjdLN6gLYQNWaYZQzbC9oe0fuvzoNh/CAMAcfbMvGoznFuHO0kk6xXfAEhdQSCFRAUrTIkNaZTttABc6Th1e1R05xHdEQopm426Hg5XfhG6YSHiHnEU1mVzIdd98X/rxijDAtUQ+zaCepHP5uL5JcZoY9Ph4jJZDGjZWux4XWgMjj0bR9153P6YPZTBeqSmj4R66QwXFOZtBthn+ISzZHfHsATmv4xFZhHsfaCsZvrgJ5EmMX5wHDmxZJPzFIvO1a8RLHe+1AckR35Yfjg73PZDeLwKM98YW2zS2avtpKMOyr0ViWlc0FeENPlJwNb2inrwnkLu+8cSvzy1QXv5SlJve3oBTMRa
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(4636009)(36840700001)(46966006)(86362001)(2906002)(316002)(70586007)(70206006)(82310400003)(54906003)(44832011)(1076003)(6916009)(186003)(8676002)(16526019)(6666004)(8936002)(26005)(5660300002)(336012)(966005)(508600001)(426003)(2616005)(36860700001)(36756003)(7696005)(4326008)(356005)(81166007)(47076005)(83380400001)(36900700001);DIR:OUT;SFP:1101;
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Oct 2021 17:58:23.9062
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Oct 2021 17:58:24.9865
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9d6c6620-1b57-42a0-7692-08d99a3c893a
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7e29377e-1a7f-41c1-2a18-08d99a3c89df
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
 X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT064.eop-nam11.prod.protection.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR12MB1419
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB4404
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-Use a single address parameter for input and result to reduce the number
-of parameters.
-
-Also, rename the "umc" parameter to "df_inst_id" to reflect what the
-value represents.
+Move code to find the interleave address bit into a separate helper
+function.
 
 Signed-off-by: Yazen Ghannam <yazen.ghannam@amd.com>
 ---
 Link:
-https://lkml.kernel.org/r/20210623192002.3671647-16-yazen.ghannam@amd.com
+https://lkml.kernel.org/r/20210623192002.3671647-17-yazen.ghannam@amd.com
 
 v2->v3:
-* Was patch 15 in v2.
-* Renamed the "umc" parameter.
+* Was patch 16 in v2.
 
 v1->v2:
 * Moved from arch/x86 to EDAC.
 
- drivers/edac/amd64_edac.c | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+ drivers/edac/amd64_edac.c | 24 ++++++++++++++++--------
+ 1 file changed, 16 insertions(+), 8 deletions(-)
 
 diff --git a/drivers/edac/amd64_edac.c b/drivers/edac/amd64_edac.c
-index 2bacc8111f8e..f4074bc270ec 100644
+index f4074bc270ec..6b19fc5cf340 100644
 --- a/drivers/edac/amd64_edac.c
 +++ b/drivers/edac/amd64_edac.c
-@@ -1328,7 +1328,7 @@ static int addr_over_limit(struct addr_ctx *ctx)
+@@ -1172,25 +1172,33 @@ static int get_dram_addr_map(struct addr_ctx *ctx)
  	return 0;
  }
  
--static int umc_normaddr_to_sysaddr(u64 norm_addr, u16 nid, u8 umc, u64 *sys_addr)
-+static int umc_normaddr_to_sysaddr(u64 *addr, u16 nid, u8 df_inst_id)
+-static int denormalize_addr(struct addr_ctx *ctx)
++static int get_intlv_addr_bit(struct addr_ctx *ctx)
  {
- 	struct addr_ctx ctx;
+-	u8 die_id_shift, die_id_mask, socket_id_shift, socket_id_mask;
+-	u8 intlv_num_dies, intlv_num_chan, intlv_num_sockets;
+ 	u8 intlv_addr_sel = (ctx->reg_base_addr >> 8) & 0x7;
+-	u8 num_intlv_bits, cs_mask = 0;
  
-@@ -1338,10 +1338,10 @@ static int umc_normaddr_to_sysaddr(u64 norm_addr, u16 nid, u8 umc, u64 *sys_addr
- 	memset(&ctx, 0, sizeof(ctx));
- 
- 	/* We start from the normalized address */
--	ctx.ret_addr = norm_addr;
-+	ctx.ret_addr = *addr;
- 
- 	ctx.nid = nid;
--	ctx.inst_id = umc;
-+	ctx.inst_id = df_inst_id;
- 
- 	if (remove_dram_offset(&ctx))
+ 	/* {0, 1, 2, 3} map to address bits {8, 9, 10, 11} respectively */
+ 	if (intlv_addr_sel > 3) {
+-		pr_err("%s: Invalid interleave address select %d.\n",
+-			__func__, intlv_addr_sel);
++		pr_debug("Invalid interleave address select %d.\n", intlv_addr_sel);
  		return -EINVAL;
-@@ -1364,7 +1364,7 @@ static int umc_normaddr_to_sysaddr(u64 norm_addr, u16 nid, u8 umc, u64 *sys_addr
- 	if (addr_over_limit(&ctx))
- 		return -EINVAL;
- 
--	*sys_addr = ctx.ret_addr;
-+	*addr = ctx.ret_addr;
- 	return 0;
- }
- 
-@@ -3475,10 +3475,10 @@ static void decode_umc_error(int node_id, struct mce *m)
- {
- 	u8 ecc_type = (m->status >> 45) & 0x3;
- 	struct mem_ctl_info *mci;
-+	u64 sys_addr = m->addr;
- 	struct amd64_pvt *pvt;
- 	struct err_info err;
- 	u8 df_inst_id;
--	u64 sys_addr;
- 
- 	mci = edac_mc_find(node_id);
- 	if (!mci)
-@@ -3517,7 +3517,7 @@ static void decode_umc_error(int node_id, struct mce *m)
- 	else
- 		df_inst_id = err.channel;
- 
--	if (umc_normaddr_to_sysaddr(m->addr, pvt->mc_node_id, df_inst_id, &sys_addr)) {
-+	if (umc_normaddr_to_sysaddr(&sys_addr, pvt->mc_node_id, df_inst_id)) {
- 		err.err_code = ERR_NORM_ADDR;
- 		goto log_error;
  	}
+ 
++	ctx->intlv_addr_bit = intlv_addr_sel + 8;
++
++	return 0;
++}
++
++static int denormalize_addr(struct addr_ctx *ctx)
++{
++	u8 die_id_shift, die_id_mask, socket_id_shift, socket_id_mask;
++	u8 intlv_num_dies, intlv_num_chan, intlv_num_sockets;
++	u8 num_intlv_bits, cs_mask = 0;
++
++	if (get_intlv_addr_bit(ctx))
++		return -EINVAL;
++
+ 	intlv_num_sockets = (ctx->reg_limit_addr >> 8) & 0x1;
+ 	intlv_num_dies	  = (ctx->reg_limit_addr >> 10) & 0x3;
+ 
+-	ctx->intlv_addr_bit = intlv_addr_sel + 8;
+-
+ 	/* Re-use intlv_num_chan by setting it equal to log2(#channels) */
+ 	switch (intlv_num_chan) {
+ 	case 0:	intlv_num_chan = 0; break;
 -- 
 2.25.1
 
