@@ -2,41 +2,41 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 609BA43E7A4
-	for <lists+linux-edac@lfdr.de>; Thu, 28 Oct 2021 19:59:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 93F7B43E7A7
+	for <lists+linux-edac@lfdr.de>; Thu, 28 Oct 2021 19:59:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231217AbhJ1SAo (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Thu, 28 Oct 2021 14:00:44 -0400
-Received: from mail-bn8nam11on2049.outbound.protection.outlook.com ([40.107.236.49]:1315
-        "EHLO NAM11-BN8-obe.outbound.protection.outlook.com"
+        id S231247AbhJ1SAs (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Thu, 28 Oct 2021 14:00:48 -0400
+Received: from mail-bn8nam12on2063.outbound.protection.outlook.com ([40.107.237.63]:46176
+        "EHLO NAM12-BN8-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S231216AbhJ1SAh (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Thu, 28 Oct 2021 14:00:37 -0400
+        id S231244AbhJ1SAk (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Thu, 28 Oct 2021 14:00:40 -0400
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=lsPdhPn8zQnnlFcZGWnK8+I4L5al1r8UDX5VlulpQwQm6Mk9w+vj0d5NQzwnY57l12opt/OG7sW5v8MZWrQXCMu5+YGV+splsbt/WmjNCFPkBQb0nXJSca35vANutSKAxjXF75/acS7VWQICN/xmaw6s2kZXIuYSGaBdCe17Ln2Zu0/I8IKoa39aq1ZEe8R+0QC9+OfKsPAWCCvW1HwCfu85Y8zrqwu5GQcnmpVX4HV7JSf+cDRlNwssgqBkDD4+lqwd51n7N7/Q5L56f6sZG51GbfFJgT9R/aCl8VB+P5jaLWEDR7X/PXm2U5XavHXHikm4J3EaLlj1HtZOh7lOfw==
+ b=J1P+Qg4cBGMP55GyceMMDVTmk0RkAyvXIzsTogbdJlgnIi9W0/f14SrbnSW8spBBRgd1AqHZ9Htn84KwPE+sd4MHPJaqhVc5i4pPhzIXkNe1C5hl4K9g55XFcNFAPmxE9OChwFMGkuG4yw22LNd7oK0PM/E91rI0hi47l6sOemVgs/0r8tFLwqOd2bEZIOu0VaetLDKEa5T1IYq40kA7EXLlesgjICI1BT/XSHUMy5gnTK+l+D+GeCPvO9OEo6XwCWxz8ImA69Mbowlfu4tq4JFty5XieWgIw7QwzxupSt34rsoIyBsLyqqgxQA2q8rBgVdfB4oreyGy/OaQAnPIyw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=UZL6fznkQaBtyOT1nZdyKHEQu3UrQMvRmNHMk6CzGNQ=;
- b=k6F45KyNWOJTjRTlhQfVz3NYbmbf9b7DBTW0JPpAPOQ2m+GzSGq1Szf3x9l5GGPI6giCE+cOkTd8bF7MtfDtgSjdOxBFlasEfGmRXb2xrkD/fs5Vh6lyQLjQn+jgz2BcxDaUgo2nHTn8kPNA8taZFrE0IVP33GF71REjcDfaMR7SmfcZctj6wLuNSijig204t6yA70Mv2l65+DpEBC3KcS+c7uZgH0docLKQ2nfS1QMkUqMxqcnEIDEdOqyw2XsmSjc4puhFBR8HMus0XqNNbPZEb0BXgJx4gxVsiPGS9yYLUo/ukrX/jnchu1VFSKVzaEEHo//c7gC/O+vHrngNwQ==
+ bh=eSPDosYIjuToZ7jK7FPvIcG5SytH3TKeUvi57zIJSMo=;
+ b=fQBtWNQgVeRw8np/lPk2OmDCbseYEKwygPrhtG3bKICX4DEsqaQ+1wGZW5m9rL+n82DfQDNcjamgzze2A7dbU+ykpbOBndkRWX1/EIcLFiAsqsYvCsbi2/7dbqec/qYQKP7YOQw9zbXf9Qarq/rhBJ2HNzFZK4fHaP3dNwxU/OlmHooBQbfFXj5pzeonAYvW/gxPxvlBn0MKhmuw0WIYZX4lNizisxXLF7xLZfTalt8rv2tB+9MbZSw4LWwf2si3VCT8PwJrERTA95Ydn88UfGZhjfAXE3l2tkM0ohzcq7yu3wc390MgJn/elj8IEmzocFraVAmDiXAIAJ824vuT9g==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
  dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
  header.from=amd.com; dkim=none (message not signed); arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=UZL6fznkQaBtyOT1nZdyKHEQu3UrQMvRmNHMk6CzGNQ=;
- b=sttid3tzJItiOZ7jGgbfyPRhvD4qUv/Va/St4n5kTYmTbU+AXibHq5i9U4xSwI56QvnxrNnARsurotXEfMoX7jaib8+G9Nj1wPpjv9Y4kgT7C/3GJqs4+hCdr1OrqfnPlTw2vgx1Oikz8SHydiJn0JhZuk/2oMwnjlKjCdnNtRA=
-Received: from CO2PR05CA0069.namprd05.prod.outlook.com (2603:10b6:102:2::37)
- by MW2PR12MB2444.namprd12.prod.outlook.com (2603:10b6:907:11::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4649.13; Thu, 28 Oct
- 2021 17:58:07 +0000
-Received: from CO1NAM11FT059.eop-nam11.prod.protection.outlook.com
- (2603:10b6:102:2:cafe::73) by CO2PR05CA0069.outlook.office365.com
- (2603:10b6:102:2::37) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4669.5 via Frontend
- Transport; Thu, 28 Oct 2021 17:58:06 +0000
+ bh=eSPDosYIjuToZ7jK7FPvIcG5SytH3TKeUvi57zIJSMo=;
+ b=bZHMsV31x8PaVl65p/w5VQ3evb0lTNyJGI5up/emiHzGpYB4DSCNBunZH9haqoD56UTYVXFdgO3l9cCcF4qgYbLNPr2NVbjswXjP3smR83/cAjJoANZHYdFUckHcC+ENaXYS1hDx2ETilwyCXtyfGKhH3a2xAsecatywcNooHFE=
+Received: from MWHPR2001CA0003.namprd20.prod.outlook.com
+ (2603:10b6:301:15::13) by MWHPR1201MB2478.namprd12.prod.outlook.com
+ (2603:10b6:300:e5::19) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4649.14; Thu, 28 Oct
+ 2021 17:58:10 +0000
+Received: from CO1NAM11FT010.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:301:15:cafe::51) by MWHPR2001CA0003.outlook.office365.com
+ (2603:10b6:301:15::13) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4649.14 via Frontend
+ Transport; Thu, 28 Oct 2021 17:58:09 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
  smtp.mailfrom=amd.com; vger.kernel.org; dkim=none (message not signed)
  header.d=none;vger.kernel.org; dmarc=pass action=none header.from=amd.com;
@@ -44,13 +44,13 @@ Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
  165.204.84.17 as permitted sender) receiver=protection.outlook.com;
  client-ip=165.204.84.17; helo=SATLEXMB04.amd.com;
 Received: from SATLEXMB04.amd.com (165.204.84.17) by
- CO1NAM11FT059.mail.protection.outlook.com (10.13.174.160) with Microsoft SMTP
+ CO1NAM11FT010.mail.protection.outlook.com (10.13.175.88) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.4649.14 via Frontend Transport; Thu, 28 Oct 2021 17:58:06 +0000
+ 15.20.4649.14 via Frontend Transport; Thu, 28 Oct 2021 17:58:09 +0000
 Received: from yaz-ubuntu.amd.com (10.180.168.240) by SATLEXMB04.amd.com
  (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.15; Thu, 28 Oct
- 2021 12:58:05 -0500
+ 2021 12:58:07 -0500
 From:   Yazen Ghannam <yazen.ghannam@amd.com>
 To:     <linux-edac@vger.kernel.org>
 CC:     <linux-kernel@vger.kernel.org>, <bp@alien8.de>,
@@ -58,9 +58,9 @@ CC:     <linux-kernel@vger.kernel.org>, <bp@alien8.de>,
         <rric@kernel.org>, <Smita.KoralahalliChannabasappa@amd.com>,
         <NaveenKrishna.Chatradhi@amd.com>, <Muralidhara.MK@amd.com>,
         Yazen Ghannam <yazen.ghannam@amd.com>
-Subject: [PATCH v3 05/33] EDAC/amd64: Define Data Fabric operations
-Date:   Thu, 28 Oct 2021 17:57:00 +0000
-Message-ID: <20211028175728.121452-6-yazen.ghannam@amd.com>
+Subject: [PATCH v3 06/33] EDAC/amd64: Define functions for DramOffset
+Date:   Thu, 28 Oct 2021 17:57:01 +0000
+Message-ID: <20211028175728.121452-7-yazen.ghannam@amd.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20211028175728.121452-1-yazen.ghannam@amd.com>
 References: <20211028175728.121452-1-yazen.ghannam@amd.com>
@@ -72,95 +72,163 @@ X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
  (10.181.40.145)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: e6cc2e98-c6bb-4447-a408-08d99a3c7ee2
-X-MS-TrafficTypeDiagnostic: MW2PR12MB2444:
-X-Microsoft-Antispam-PRVS: <MW2PR12MB2444ED365C3390DA9BA56076F8869@MW2PR12MB2444.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:8273;
+X-MS-Office365-Filtering-Correlation-Id: 4786ad81-9f34-4e51-3f8a-08d99a3c8098
+X-MS-TrafficTypeDiagnostic: MWHPR1201MB2478:
+X-Microsoft-Antispam-PRVS: <MWHPR1201MB2478C1BB2D0C31230AAB414CF8869@MWHPR1201MB2478.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:7219;
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: VdnbHPMHO9jFBieplFicXrn0kpyezMKPB+3mLUK4NVkH70SFbZAjj683B0a6KAOr2sINp/E/jXAOG10za7i9ZNWXjtMJNYsaG7+g1PrWWK6r4Arc04WSpxWUR2H3lPzW6sJLBGoqr3XHJ6Sh2beTzXflm7YLzEmLyIQuNjXQNrj4V2dKHZ3a9Vy/tXbq4CYG11h5A6GJIZCArzkFb1pko/89I2HupsxM3y586145UZPk8POCt7Ixe7eHFjWqS/xJZBPdSpfaXjsTeFhBlrlESpv8hzEbhBy8T2v+8vZGTMpV92uB8oGhS//he0wLC8cWkFAuo03OgbhRZcUIM5wBo07Dt+YmsVFGZnYVDNYx84tKa1EyZurws+1NGQmag0nu4xKndCeUKnwWuJ9y5mo3/7xt7lTJfka7bY5LlEROT1AqdrPCg2ZuyHx2Zc2MEfT8SdDVD3sZe4p88l0T5VQ4/POLcZK8ttAQGp0Y9kS5ADcuDVMKx/v/kfAWjFlPlOGisKjfM6KpSv20IICHZcRNFRqwXGp9Js+59XijM3Pyq0NbZ5RoHUcbiMV1SUkbEheCiv4bpKuwLc3Amjkkt5WpHdgEmR700Xh5GaoI/g6jOWzTrUQixmpB4XPzpiHwhLYpF1pwMetoJgVvFkLFOULDXjO8friG2SZiAgtTLq5+bW8r0HV1gb6D78BkqLotrFeNvpg7VzBjxgGX8dCq8Yylw2iq2R9wwpJRAR5dukbMvEY5XxVZmD0pQ3vgpd4m8uvZda0TfDj/ZEJdQSeji/nQdqcEiHSaKrz8APxmUEFnFZH3VOLsuhwyx56NITbQpzbx
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(4636009)(36840700001)(46966006)(82310400003)(54906003)(83380400001)(316002)(47076005)(6666004)(44832011)(336012)(70206006)(356005)(70586007)(966005)(81166007)(6916009)(2906002)(7696005)(5660300002)(36756003)(16526019)(2616005)(186003)(426003)(8676002)(86362001)(1076003)(4326008)(36860700001)(8936002)(26005)(508600001)(36900700001);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: Cf8vGmm8dumyxvbCUPQO61mMGhb0UZZdlsfquUrksRS4BQtCCk6c5i2Bc6s67She90xJVF0EwuhlLUHFbG1GAYapb3kzpz2pPmCRhlA5lDt2Vl+iQCHavF4c12UunYem7EX9CvGr3Ic3tmZu5qIGUfp7iWlbE8eS67HLAvNmud92YeZW3r/5NBTqiC9w4VcOGxnQI76ZFI06cCqOnPDOdVDvLM0aBe/FUquLsW5xv7QDAqC2NY67nXVTTWfnqB8mMGoyWd7xJ1y4pcTWWttEP+TLgcyVBLSPgE0eixMx3+SKXkpqTfUOLuk3VWDz+xKXYgJHk/F2zuKCsiXlmu8bd9hVc0ZONXO4zjktuwnDCMxJBrsbAcqv8jR+YwcOstS3OReHtlYdOwKNqiY7q2DJsC86UfitRZ07snbZ0XxWHd1g7zbreYXlg8n0oI5QsdXvZX65iOQS1KcLStn6Zakg44Pf4TQcUDtoLOLAvlNIedEIa+tvzKNERpm7KC3TTer2h+5tJHz7wJB/MjzfbTjw29Khy5gr3mwfiPBGv3uPJG5Q+PaGyektWjsF9voRecpoTbjStNGlAUWIxn6IPhtBI3kK8fObMr6SpaVjGrkZVVgNEufqX5Z5xSrj8J5BQ9A8efRe9HFlhZPs2C4EzCza/Mo+OrToL8XA8jgOosuGH7CpHx+BIMWRLjK2Ys6LiShwG4EvdnXNo86iKDS0LYjmm8ZZGQZWn3jx5fMJjjBt63NsNrMXKtrKwM7qKg2+Cqi6mPhFfngsTKpBXENFvh2pcJjhcCXfuOLF1DKssiftBWxsH8ChWAB72dgC8dq8r8Vg
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(4636009)(46966006)(36840700001)(36756003)(5660300002)(7696005)(4326008)(47076005)(356005)(54906003)(508600001)(44832011)(81166007)(316002)(70206006)(70586007)(1076003)(8936002)(6666004)(336012)(36860700001)(86362001)(2906002)(82310400003)(26005)(8676002)(83380400001)(6916009)(426003)(966005)(186003)(2616005)(16526019)(36900700001);DIR:OUT;SFP:1101;
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Oct 2021 17:58:06.5554
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Oct 2021 17:58:09.3613
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: e6cc2e98-c6bb-4447-a408-08d99a3c7ee2
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4786ad81-9f34-4e51-3f8a-08d99a3c8098
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT059.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT010.eop-nam11.prod.protection.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW2PR12MB2444
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR1201MB2478
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-Define a stub to hold operations for different Data Fabric versions.
-This will be filled in following patches.
+Add helper functions to read the DramOffset register and to remove the
+offset from the calculated address.
 
-Set the operations at init-time as appropriate for each model/family
-group.
+The helper functions will be expanded in future DF versions.
+
+Rename the "base" variable to "map_num" to indicate that this is the
+address map number. An address map is defined with a base and limit
+value. The map_num variable is used to select the proper base and limit
+registers to use for the address translation.
 
 Signed-off-by: Yazen Ghannam <yazen.ghannam@amd.com>
 ---
 Link:
-https://lkml.kernel.org/r/20210623192002.3671647-7-yazen.ghannam@amd.com
+https://lkml.kernel.org/r/20210623192002.3671647-8-yazen.ghannam@amd.com
 
 v2->v3:
-* Was patch 6 in v2.
-* "df_ops" is set at init time.
+* Was patch 7 in v2.
+* Dropped "df_regs" use.
 
 v1->v2:
-* New in v2.
+* Moved from arch/x86 to EDAC.
+* Add function to data_fabric_ops.
 
- drivers/edac/amd64_edac.c | 13 +++++++++++++
- 1 file changed, 13 insertions(+)
+ drivers/edac/amd64_edac.c | 58 +++++++++++++++++++++++++++++----------
+ 1 file changed, 43 insertions(+), 15 deletions(-)
 
 diff --git a/drivers/edac/amd64_edac.c b/drivers/edac/amd64_edac.c
-index 3fb137ea74b3..f83f9813294d 100644
+index f83f9813294d..d7780e570fd0 100644
 --- a/drivers/edac/amd64_edac.c
 +++ b/drivers/edac/amd64_edac.c
-@@ -1056,6 +1056,14 @@ struct addr_ctx {
+@@ -1049,21 +1049,60 @@ static int df_indirect_read_broadcast(u16 node, u8 func, u16 reg, u32 *lo)
+ 	return __df_indirect_read(node, func, reg, DF_BROADCAST, lo);
+ }
+ 
++/* Use "reg_" prefix for raw register values. */
+ struct addr_ctx {
+ 	u64 ret_addr;
+ 	u32 tmp;
++	u32 reg_dram_offset;
+ 	u16 nid;
  	u8 inst_id;
++	u8 map_num;
  };
  
-+struct data_fabric_ops {
-+};
+ struct data_fabric_ops {
++	u64	(*get_hi_addr_offset)		(struct addr_ctx *ctx);
+ };
+ 
++static u64 get_hi_addr_offset_df2(struct addr_ctx *ctx)
++{
++	return (ctx->reg_dram_offset & GENMASK_ULL(31, 20)) << 8;
++}
 +
-+struct data_fabric_ops df2_ops = {
-+};
+ struct data_fabric_ops df2_ops = {
++	.get_hi_addr_offset		=	get_hi_addr_offset_df2,
+ };
+ 
+ struct data_fabric_ops *df_ops;
+ 
++static int get_dram_offset_reg(struct addr_ctx *ctx)
++{
++	/* Read D18F0x1B4 (DramOffset) */
++	if (df_indirect_read_instance(ctx->nid, 0, 0x1B4, ctx->inst_id, &ctx->reg_dram_offset))
++		return -EINVAL;
 +
-+struct data_fabric_ops *df_ops;
++	return 0;
++}
++
++static int remove_dram_offset(struct addr_ctx *ctx)
++{
++	if (get_dram_offset_reg(ctx))
++		return -EINVAL;
++
++	ctx->map_num = 0;
++
++	/* Remove HiAddrOffset from normalized address, if enabled: */
++	if (ctx->reg_dram_offset & BIT(0)) {
++		u64 hi_addr_offset = df_ops->get_hi_addr_offset(ctx);
++
++		if (ctx->ret_addr >= hi_addr_offset) {
++			ctx->ret_addr -= hi_addr_offset;
++			ctx->map_num = 1;
++		}
++	}
++
++	return 0;
++}
 +
  static int umc_normaddr_to_sysaddr(u64 norm_addr, u16 nid, u8 umc, u64 *sys_addr)
  {
  	u64 dram_base_addr, dram_limit_addr, dram_hole_base;
-@@ -1070,6 +1078,9 @@ static int umc_normaddr_to_sysaddr(u64 norm_addr, u16 nid, u8 umc, u64 *sys_addr
+@@ -1072,7 +1111,7 @@ static int umc_normaddr_to_sysaddr(u64 norm_addr, u16 nid, u8 umc, u64 *sys_addr
+ 	u8 intlv_num_dies, intlv_num_chan, intlv_num_sockets;
+ 	u8 intlv_addr_sel, intlv_addr_bit;
+ 	u8 num_intlv_bits, hashed_bit;
+-	u8 lgcy_mmio_hole_en, base = 0;
++	u8 lgcy_mmio_hole_en;
+ 	u8 cs_mask, cs_id = 0;
+ 	bool hash_enabled = false;
  
- 	struct addr_ctx ctx;
+@@ -1089,22 +1128,11 @@ static int umc_normaddr_to_sysaddr(u64 norm_addr, u16 nid, u8 umc, u64 *sys_addr
+ 	ctx.nid = nid;
+ 	ctx.inst_id = umc;
  
-+	if (!df_ops)
-+		return -EINVAL;
-+
- 	memset(&ctx, 0, sizeof(ctx));
+-	/* Read D18F0x1B4 (DramOffset), check if base 1 is used. */
+-	if (df_indirect_read_instance(nid, 0, 0x1B4, umc, &ctx.tmp))
++	if (remove_dram_offset(&ctx))
+ 		goto out_err;
  
- 	/* We start from the normalized address */
-@@ -4190,6 +4201,7 @@ static struct amd64_family_type *per_family_init(struct amd64_pvt *pvt)
- 		if (pvt->model >= 0x10 && pvt->model <= 0x2f) {
- 			pvt->fam_type = &family_types[F17_M10H_CPUS];
- 			pvt->ops = &family_types[F17_M10H_CPUS].ops;
-+			df_ops	 = &df2_ops;
- 			break;
- 		} else if (pvt->model >= 0x30 && pvt->model <= 0x3f) {
- 			pvt->fam_type = &family_types[F17_M30H_CPUS];
-@@ -4208,6 +4220,7 @@ static struct amd64_family_type *per_family_init(struct amd64_pvt *pvt)
- 	case 0x18:
- 		pvt->fam_type	= &family_types[F17_CPUS];
- 		pvt->ops	= &family_types[F17_CPUS].ops;
-+		df_ops		= &df2_ops;
+-	/* Remove HiAddrOffset from normalized address, if enabled: */
+-	if (ctx.tmp & BIT(0)) {
+-		u64 hi_addr_offset = (ctx.tmp & GENMASK_ULL(31, 20)) << 8;
+-
+-		if (norm_addr >= hi_addr_offset) {
+-			ctx.ret_addr -= hi_addr_offset;
+-			base = 1;
+-		}
+-	}
+-
+ 	/* Read D18F0x110 (DramBaseAddress). */
+-	if (df_indirect_read_instance(nid, 0, 0x110 + (8 * base), umc, &ctx.tmp))
++	if (df_indirect_read_instance(nid, 0, 0x110 + (8 * ctx.map_num), umc, &ctx.tmp))
+ 		goto out_err;
  
- 		if (pvt->fam == 0x18)
- 			family_types[F17_CPUS].ctl_name = "F18h";
+ 	/* Check if address range is valid. */
+@@ -1127,7 +1155,7 @@ static int umc_normaddr_to_sysaddr(u64 norm_addr, u16 nid, u8 umc, u64 *sys_addr
+ 	}
+ 
+ 	/* Read D18F0x114 (DramLimitAddress). */
+-	if (df_indirect_read_instance(nid, 0, 0x114 + (8 * base), umc, &ctx.tmp))
++	if (df_indirect_read_instance(nid, 0, 0x114 + (8 * ctx.map_num), umc, &ctx.tmp))
+ 		goto out_err;
+ 
+ 	intlv_num_sockets = (ctx.tmp >> 8) & 0x1;
 -- 
 2.25.1
 
