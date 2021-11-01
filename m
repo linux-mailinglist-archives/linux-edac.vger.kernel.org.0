@@ -2,81 +2,116 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 21B134414DF
-	for <lists+linux-edac@lfdr.de>; Mon,  1 Nov 2021 09:06:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CF3F4415DB
+	for <lists+linux-edac@lfdr.de>; Mon,  1 Nov 2021 10:09:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231501AbhKAIIn (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Mon, 1 Nov 2021 04:08:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54072 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231613AbhKAIIi (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Mon, 1 Nov 2021 04:08:38 -0400
-Received: from mail-lf1-x144.google.com (mail-lf1-x144.google.com [IPv6:2a00:1450:4864:20::144])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0752C061210
-        for <linux-edac@vger.kernel.org>; Mon,  1 Nov 2021 01:06:01 -0700 (PDT)
-Received: by mail-lf1-x144.google.com with SMTP id j9so34779804lfu.7
-        for <linux-edac@vger.kernel.org>; Mon, 01 Nov 2021 01:06:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=J/sLAHxRh6EjJh2rcjPDJLzA40VXjb4DP54UXQAr8IU=;
-        b=jTwGY7UqyQ8YIhJUDjrqZPtk3LzrWCAUOAMDPLz5M7CqLBHqNsFTo9C861qV1B25Xf
-         r5L553Wxmro5Ww3I0Kz3a52AwkmZqFToii6+0ZOhpUkOfcb53PnNGE9m6Sqik3zmhZwo
-         n/R9HTp53zn5NI3DbL08muEwIh9gH7g9lDe2tstM5tUGQD80ibC8oJ7RZsh0jabUj80l
-         TjW7jDszyj0LgBKofuNs3yAxUhi8ze1MSxaF3AEB8qSt1N3bygNegk5wBFiWacOIsTYm
-         giGQNkRW+M+En5ZqEkyuSVwtFALtbKc66CUkcVFPmwMgTZmFkWlfrtrQ91sQ12FB43ir
-         IgcA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=J/sLAHxRh6EjJh2rcjPDJLzA40VXjb4DP54UXQAr8IU=;
-        b=k7JgnZsAF+zMmw0+gcGx1lYSmcVHuInZGHWfq7UJFzAQRCbMJnalTrrJKSC6cjFmSl
-         s2uMvOEPiYyKjFMZFOLs41WHrFOGMlzGnjr/EvKwAD3QTVWeDYuqWaiyEsAeiFlUZDqi
-         UQgLu2dtopIlNH3lnok6LCVW/KlijFWwNqnSHEeZRa+RjGWEmUAKgtuVULGDiUC3RZz6
-         v1BCgUncjmdnfvqOxgYHViXcFGNlYxj7VvaLfhIVOpcXX/BLvXsgV/zr5ZRPzzpibEA+
-         vPHQktbMk1tCkn+UtQvmlLbBkQYPrlwGTBF/ICOatKC5JfM4rO20aHpOl5FR8H3TrPdQ
-         9Omw==
-X-Gm-Message-State: AOAM532lDBY/KfSmbaJTiBrXwZa8fR0gRau/hU1kKPE28PByoVk0hX6G
-        1DltjhzYSX8tXD2elbmnOsUaEeGgzr/JANX48o8=
-X-Google-Smtp-Source: ABdhPJxmqEVdpxtX6Hrcfxe4l+hmj7ibNqiYjCRoHEGQmkHQsxyv4j0y0ocCVsmwYp4ABnpO0ho1EyHAGzTI8DbI2zw=
-X-Received: by 2002:a05:6512:3696:: with SMTP id d22mr7627111lfs.659.1635753959932;
- Mon, 01 Nov 2021 01:05:59 -0700 (PDT)
+        id S231271AbhKAJLg (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Mon, 1 Nov 2021 05:11:36 -0400
+Received: from smtp-out2.suse.de ([195.135.220.29]:37390 "EHLO
+        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231223AbhKAJLf (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Mon, 1 Nov 2021 05:11:35 -0400
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 6F2591FD6C;
+        Mon,  1 Nov 2021 09:09:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1635757741; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=TxXL8ai+LaiG9ItDIIFOlbUzCDkbkCepe+Cl9UPOuk4=;
+        b=nSlSK36iQ8qf9eOlCdco7NP6L9YqcfEOjh6wz11qBkW+KIBgRDxkXXhI2QOPD3yXiy9rkU
+        q7mjjuHPkIlcFYZR/F1Bnrx4mG6FY/KCFcib+XD5SGXpQauLwfyE63czAR/7iBTSQRhVan
+        KOGQAz4H4QeDIrK0FLZcQ1ZlQiYkUVk=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1635757741;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=TxXL8ai+LaiG9ItDIIFOlbUzCDkbkCepe+Cl9UPOuk4=;
+        b=Hrsiuy5jpuZB6wXanF0eZ75nPJjhYXAl3aYrPEeuFyOqZ749GQosTioCNOMVrONALSYjAu
+        mty/YfdRnWMSJMAQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 557CB13A6F;
+        Mon,  1 Nov 2021 09:09:01 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 5XBZFK2uf2E7MQAAMHmgww
+        (envelope-from <bp@suse.de>); Mon, 01 Nov 2021 09:09:01 +0000
+Date:   Mon, 1 Nov 2021 10:08:57 +0100
+From:   Borislav Petkov <bp@suse.de>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-edac <linux-edac@vger.kernel.org>,
+        lkml <linux-kernel@vger.kernel.org>
+Subject: [GIT PULL] EDAC updates for v5.16
+Message-ID: <YX+uqd7WuvpfyfmD@zn.tnic>
 MIME-Version: 1.0
-Received: by 2002:a05:6512:304b:0:0:0:0 with HTTP; Mon, 1 Nov 2021 01:05:59
- -0700 (PDT)
-Reply-To: aisha.7d@yahoo.com
-From:   Aisha AG <rbx17058@gmail.com>
-Date:   Mon, 1 Nov 2021 00:05:59 -0800
-Message-ID: <CA+KbyychNgycp0rGBpdptJEdAFJQQCku4iDOhYe4CxitYXaueA@mail.gmail.com>
-Subject: Hello Dear,
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
+Hi Linus,
+
+please pull a small pile of EDAC updates which the autumn wind blew my
+way. :)
+
+Thx.
+
+---
+
+The following changes since commit 6880fa6c56601bb8ed59df6c30fd390cc5f6dd8f:
+
+  Linux 5.15-rc1 (2021-09-12 16:28:37 -0700)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/ras/ras.git tags/edac_updates_for_v5.16
+
+for you to fetch changes up to 537bddd069c743759addf422d0b8f028ff0f8dbc:
+
+  EDAC/sb_edac: Fix top-of-high-memory value for Broadwell/Haswell (2021-10-11 08:28:46 -0700)
+
+----------------------------------------------------------------
+- amd64_edac: Add support for three-rank interleaving mode which is
+present on AMD zen2 servers
+
+- The usual fixes and cleanups all over EDAC land
+
+----------------------------------------------------------------
+Cai Huoqing (1):
+      EDAC/al_mc: Make use of the helper function devm_add_action_or_reset()
+
+Eric Badger (2):
+      EDAC/mc_sysfs: Print MC-scope sysfs counters unsigned
+      EDAC/sb_edac: Fix top-of-high-memory value for Broadwell/Haswell
+
+Len Baker (1):
+      EDAC/mc: Replace strcpy(), sprintf() and snprintf() with strscpy() or scnprintf()
+
+Tang Bin (1):
+      EDAC/ti: Remove redundant error messages
+
+Yazen Ghannam (1):
+      EDAC/amd64: Handle three rank interleaving mode
+
+ drivers/edac/al_mc_edac.c    | 12 ++++--------
+ drivers/edac/amd64_edac.c    | 22 +++++++++++++++++++++-
+ drivers/edac/edac_mc.c       | 42 ++++++++++++++++++------------------------
+ drivers/edac/edac_mc_sysfs.c |  8 ++++----
+ drivers/edac/sb_edac.c       |  2 +-
+ drivers/edac/ti_edac.c       |  7 +------
+ 6 files changed, 49 insertions(+), 44 deletions(-)
+
 -- 
+Regards/Gruss,
+    Boris.
 
-Hello Dear,
-
-I came across your e-mail contact prior to a private search while in
-need of your assistance. I am Aisha Al-Qaddafi, the only biological
-Daughter of Former President of Libya Col.Muammar Al-Qaddafi.
-Am a Widow and a single Mother with three Children.
-
-I have investment funds worth Twenty Seven Million Five Hundred
-Thousand United State Dollar $27.500.000.00, and i need a trusted
-investment Manager/Partner because of my current refugee status,
-however, I am interested in you for investment project assistance in
-your country,may be from there,we can build business relationship
-in the nearest future.
-
-I am willing to negotiate an investment/business profit sharing ratio
-with you based on the future investment earning profits.
-
-If you are willing to handle this project on my behalf kindly reply
-urgently to enable me to provide you more information about the
-investment funds.
-Best Regards
-Mrs Aisha Al-Qaddafi.
+SUSE Software Solutions Germany GmbH, GF: Ivo Totev, HRB 36809, AG Nürnberg
