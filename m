@@ -2,57 +2,81 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7320644115E
-	for <lists+linux-edac@lfdr.de>; Mon,  1 Nov 2021 00:13:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 21B134414DF
+	for <lists+linux-edac@lfdr.de>; Mon,  1 Nov 2021 09:06:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230169AbhJaXQV (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Sun, 31 Oct 2021 19:16:21 -0400
-Received: from mailgate.kemenperin.go.id ([202.47.80.142]:54908 "EHLO
-        mailgate.kemenperin.go.id" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230098AbhJaXQV (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Sun, 31 Oct 2021 19:16:21 -0400
-X-Greylist: delayed 11016 seconds by postgrey-1.27 at vger.kernel.org; Sun, 31 Oct 2021 19:16:20 EDT
-Received: from localhost (localhost [127.0.0.1])
-        by mailgate.kemenperin.go.id (Postfix) with ESMTP id 004D8828F2B;
-        Mon,  1 Nov 2021 00:59:58 +0700 (WIB)
-Received: from mailgate.kemenperin.go.id ([127.0.0.1])
-        by localhost (mailgate.kemenperin.go.id [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id YpJ1mpCxkP6P; Mon,  1 Nov 2021 00:59:57 +0700 (WIB)
-Received: from localhost (localhost [127.0.0.1])
-        by mailgate.kemenperin.go.id (Postfix) with ESMTP id DF91F828CCA;
-        Mon,  1 Nov 2021 00:56:49 +0700 (WIB)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mailgate.kemenperin.go.id DF91F828CCA
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kemenperin.go.id;
-        s=3298A942-BBC6-11E3-B333-483736368EC2; t=1635703010;
-        bh=+tje3x5yIAM91gcZZJ8xoRjx6IuR+B3ePoXPCKu2mgI=;
-        h=Date:From:Message-ID:MIME-Version;
-        b=Q/4fAUID/C9skKvo3fMpBtVHmKmDe9hOH9QV2awsZn72xynNe259ypRNTbcMXy2sC
-         k/eIUdeBbF9yLUOjKSMHb8lt6yGUOClhs2PzjFAlTf/sFy2GsO/gaJlFbOdKIOjJ6Y
-         V3tjzJJOxjSRfEnY//Ce7xyHXS++D89ETROMy63E=
-X-Virus-Scanned: amavisd-new at kemenperin.go.id
-Received: from mailgate.kemenperin.go.id ([127.0.0.1])
-        by localhost (mailgate.kemenperin.go.id [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id uFF6MG9SC63i; Mon,  1 Nov 2021 00:56:49 +0700 (WIB)
-Received: from mailgate.kemenperin.go.id (mailgate.kemenperin.go.id [10.1.0.89])
-        by mailgate.kemenperin.go.id (Postfix) with ESMTP id 7AFD9828BF2;
-        Mon,  1 Nov 2021 00:54:47 +0700 (WIB)
-Date:   Mon, 1 Nov 2021 00:54:47 +0700 (WIB)
-From:   Manuel Franco <silitonga@kemenperin.go.id>
-Reply-To: Manuel Franco <manuelfrancospende1@gmail.com>
-Message-ID: <1889725019.326989.1635702887450.JavaMail.zimbra@kemenperin.go.id>
-Subject: 2,000,000.00 Euro
+        id S231501AbhKAIIn (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Mon, 1 Nov 2021 04:08:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54072 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231613AbhKAIIi (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Mon, 1 Nov 2021 04:08:38 -0400
+Received: from mail-lf1-x144.google.com (mail-lf1-x144.google.com [IPv6:2a00:1450:4864:20::144])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0752C061210
+        for <linux-edac@vger.kernel.org>; Mon,  1 Nov 2021 01:06:01 -0700 (PDT)
+Received: by mail-lf1-x144.google.com with SMTP id j9so34779804lfu.7
+        for <linux-edac@vger.kernel.org>; Mon, 01 Nov 2021 01:06:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=J/sLAHxRh6EjJh2rcjPDJLzA40VXjb4DP54UXQAr8IU=;
+        b=jTwGY7UqyQ8YIhJUDjrqZPtk3LzrWCAUOAMDPLz5M7CqLBHqNsFTo9C861qV1B25Xf
+         r5L553Wxmro5Ww3I0Kz3a52AwkmZqFToii6+0ZOhpUkOfcb53PnNGE9m6Sqik3zmhZwo
+         n/R9HTp53zn5NI3DbL08muEwIh9gH7g9lDe2tstM5tUGQD80ibC8oJ7RZsh0jabUj80l
+         TjW7jDszyj0LgBKofuNs3yAxUhi8ze1MSxaF3AEB8qSt1N3bygNegk5wBFiWacOIsTYm
+         giGQNkRW+M+En5ZqEkyuSVwtFALtbKc66CUkcVFPmwMgTZmFkWlfrtrQ91sQ12FB43ir
+         IgcA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=J/sLAHxRh6EjJh2rcjPDJLzA40VXjb4DP54UXQAr8IU=;
+        b=k7JgnZsAF+zMmw0+gcGx1lYSmcVHuInZGHWfq7UJFzAQRCbMJnalTrrJKSC6cjFmSl
+         s2uMvOEPiYyKjFMZFOLs41WHrFOGMlzGnjr/EvKwAD3QTVWeDYuqWaiyEsAeiFlUZDqi
+         UQgLu2dtopIlNH3lnok6LCVW/KlijFWwNqnSHEeZRa+RjGWEmUAKgtuVULGDiUC3RZz6
+         v1BCgUncjmdnfvqOxgYHViXcFGNlYxj7VvaLfhIVOpcXX/BLvXsgV/zr5ZRPzzpibEA+
+         vPHQktbMk1tCkn+UtQvmlLbBkQYPrlwGTBF/ICOatKC5JfM4rO20aHpOl5FR8H3TrPdQ
+         9Omw==
+X-Gm-Message-State: AOAM532lDBY/KfSmbaJTiBrXwZa8fR0gRau/hU1kKPE28PByoVk0hX6G
+        1DltjhzYSX8tXD2elbmnOsUaEeGgzr/JANX48o8=
+X-Google-Smtp-Source: ABdhPJxmqEVdpxtX6Hrcfxe4l+hmj7ibNqiYjCRoHEGQmkHQsxyv4j0y0ocCVsmwYp4ABnpO0ho1EyHAGzTI8DbI2zw=
+X-Received: by 2002:a05:6512:3696:: with SMTP id d22mr7627111lfs.659.1635753959932;
+ Mon, 01 Nov 2021 01:05:59 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.1.0.89]
-Thread-Index: nqPdzO4YAY5/A5QVyWr6KZnHK7seVw==
-Thread-Topic: 2,000,000.00 Euro
-To:     unlisted-recipients:; (no To-header on input)
+Received: by 2002:a05:6512:304b:0:0:0:0 with HTTP; Mon, 1 Nov 2021 01:05:59
+ -0700 (PDT)
+Reply-To: aisha.7d@yahoo.com
+From:   Aisha AG <rbx17058@gmail.com>
+Date:   Mon, 1 Nov 2021 00:05:59 -0800
+Message-ID: <CA+KbyychNgycp0rGBpdptJEdAFJQQCku4iDOhYe4CxitYXaueA@mail.gmail.com>
+Subject: Hello Dear,
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-
-
 -- 
-You have a donation of 2,000,000.00 Euro.Get back to me now so we can proceed.
+
+Hello Dear,
+
+I came across your e-mail contact prior to a private search while in
+need of your assistance. I am Aisha Al-Qaddafi, the only biological
+Daughter of Former President of Libya Col.Muammar Al-Qaddafi.
+Am a Widow and a single Mother with three Children.
+
+I have investment funds worth Twenty Seven Million Five Hundred
+Thousand United State Dollar $27.500.000.00, and i need a trusted
+investment Manager/Partner because of my current refugee status,
+however, I am interested in you for investment project assistance in
+your country,may be from there,we can build business relationship
+in the nearest future.
+
+I am willing to negotiate an investment/business profit sharing ratio
+with you based on the future investment earning profits.
+
+If you are willing to handle this project on my behalf kindly reply
+urgently to enable me to provide you more information about the
+investment funds.
+Best Regards
+Mrs Aisha Al-Qaddafi.
