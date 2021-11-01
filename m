@@ -2,106 +2,238 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C089441950
-	for <lists+linux-edac@lfdr.de>; Mon,  1 Nov 2021 11:01:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E48C4441F36
+	for <lists+linux-edac@lfdr.de>; Mon,  1 Nov 2021 18:28:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232288AbhKAKDu (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Mon, 1 Nov 2021 06:03:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51898 "EHLO
+        id S229560AbhKARa7 (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Mon, 1 Nov 2021 13:30:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231775AbhKAKDh (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Mon, 1 Nov 2021 06:03:37 -0400
-Received: from mail-ot1-x332.google.com (mail-ot1-x332.google.com [IPv6:2607:f8b0:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7B0EC0370D4
-        for <linux-edac@vger.kernel.org>; Mon,  1 Nov 2021 02:28:36 -0700 (PDT)
-Received: by mail-ot1-x332.google.com with SMTP id p11-20020a9d4e0b000000b0055a5741bff7so3600241otf.2
-        for <linux-edac@vger.kernel.org>; Mon, 01 Nov 2021 02:28:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=ad1GoWfa8TA9AvVhZ5DiPXIhRf57ja962l5kZMhfDJk=;
-        b=O4p9bLXxNvfMT12zfoafaZOINtqYEv167OdVrS8FrnFtpgH9ECLSGzKG+QmpAeoYLN
-         KZJq0SvVyhy/iNFsVl94U2wklQRBpzr3cHvsv6aN3NHrwMobSDcM+Rf6qYqGSGyHgtac
-         DXAJ3PU3/k3JLK8cq2Ej1h9CVaQS3jCgIkapPCQ1wX+5L5pBVMGhCUBNEie4mnc2B2/h
-         daGulyx8+YofX2Y5+KL3kNxjPROxB3xAr8S+2x77LdmuLyFpO99x7knb3rlsHHo8rzr1
-         NqPIgvrjjy/V0i1PxWGW54DvxERZz/srI+C8O7K1DYKBcnoZQEuJun5hZapNPHb2QOex
-         pMDg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=ad1GoWfa8TA9AvVhZ5DiPXIhRf57ja962l5kZMhfDJk=;
-        b=BKe905oRF0G/reAfbSCr9OAO84IwCpkGnujPlxqB1NScP1US9GWVUt7kkYOYpvfjT0
-         7vkFdb2F6nLxj46l2mEnE15DzA1ZPZW4nOJ0Q0re5LkCCfq2WohMpNL1L/kb8ryaATj2
-         cfcPj9zUHou8YGKkVAOV+1egnJnqhtS4EcdalAAKeX++llqPl84xrPjEZokPBkx6jSYQ
-         gMzrI1+ql4WtKJry2WI+ptxBeskjFGw+I2J1T6OoNMWOcFE1/QgdH99C43QhUqEpq3fh
-         AOqSyZnQm4fix1jcSHpfWufwA86rZ++IaMzesS3HuthUskR6Qu+DsPmCc51c7XfSIVJv
-         8EBw==
-X-Gm-Message-State: AOAM531lJVYqlwHJCQVBQPbeV0arZYJrVYow/OB+Mv9eD1652h7M+bv5
-        2qPDN8x5FYWPYs8cciQfC3EV9K4yLdFANx8Zi0o=
-X-Google-Smtp-Source: ABdhPJxFvAH7iReYsJx73LSs7CNsFl8w4dy6FvmqlIqFmin669dNHDvAzD15Zl2dSJpT1KxH0GY6TjS/4eHuFfJNmKM=
-X-Received: by 2002:a9d:d15:: with SMTP id 21mr14792091oti.34.1635758916113;
- Mon, 01 Nov 2021 02:28:36 -0700 (PDT)
+        with ESMTP id S229541AbhKARa6 (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Mon, 1 Nov 2021 13:30:58 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58DCCC061714;
+        Mon,  1 Nov 2021 10:28:25 -0700 (PDT)
+Received: from zn.tnic (p200300ec2f0cfa004489ab9813dd6ac7.dip0.t-ipconnect.de [IPv6:2003:ec:2f0c:fa00:4489:ab98:13dd:6ac7])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 47B241EC03AD;
+        Mon,  1 Nov 2021 18:28:23 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1635787703;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=eYaoRCUmJyiH2GvVbQB2ZVepH4soF139tueZyPA8kuY=;
+        b=Uzmi9atMX4XAf4R5X939yMYVD5ZZO8B2Gvu82M62QHF8Sg5TyqnySC4UlChuGL/VJZkKI3
+        lX5KR19nifz848L8EGhwZKs3smTEPx+h4J/AhDRVKraLcTTgD4RZiciJlpgIdRVz0Md1n1
+        SZkyIIELqDZLuBxtEpjxFOBPJeH3kpQ=
+Date:   Mon, 1 Nov 2021 18:28:18 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Naveen Krishna Chatradhi <nchatrad@amd.com>
+Cc:     linux-edac@vger.kernel.org, x86@kernel.org,
+        linux-kernel@vger.kernel.org, mingo@redhat.com, mchehab@kernel.org,
+        yazen.ghannam@amd.com, Muralidhara M K <muralimk@amd.com>
+Subject: Re: [PATCH v6 1/5] x86/amd_nb: Add support for northbridges on
+ Aldebaran
+Message-ID: <YYAjssgwjBw/vkf0@zn.tnic>
+References: <20211028130106.15701-1-nchatrad@amd.com>
+ <20211028130106.15701-2-nchatrad@amd.com>
 MIME-Version: 1.0
-Received: by 2002:a4a:9673:0:0:0:0:0 with HTTP; Mon, 1 Nov 2021 02:28:35 -0700 (PDT)
-Reply-To: mohammadahmed7760@gmail.com
-From:   Mohammad Ahmed <miss.marryharry123@gmail.com>
-Date:   Mon, 1 Nov 2021 02:28:35 -0700
-Message-ID: <CAD_eajj-x8L8tPXScJp6BtkbAikeZTQRaLETSL_KtMm62CXfdw@mail.gmail.com>
-Subject: I NEED YOUR URGENT ASSISTANCE FROM MR.MOHAMMAD AHMED / CAN I TRUST YOU
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20211028130106.15701-2-nchatrad@amd.com>
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-My Dear friend.
+On Thu, Oct 28, 2021 at 06:31:02PM +0530, Naveen Krishna Chatradhi wrote:
+> +/* GPU Data Fabric ID Device 24 Function 1 */
+> +#define PCI_DEVICE_ID_AMD_ALDEBARAN_DF_F1 0x14d1
+> +
+> +/* DF18xF1 registers on Aldebaran GPU */
+> +#define REG_LOCAL_NODE_TYPE_MAP		0x144
+> +#define REG_RMT_NODE_TYPE_MAP		0x148
 
-With all due respect, I know this message will come to you as a
-surprise, My name is Mr. Mohammad Ahmed a banker working with Bank of
-Africa Du Burkina Faso West Africa, i need your urgent assistance to
-transfer an abandoned Sum of 13.5 Millions USD into your account.
+Move those defines up, along with the rest of them. While at it, you can
+align them all vertically.
 
-I am contacting you independently of my investigation in my bank and
-no one is informed of this communication. I need your urgent
-assistance to transfer the sum of $13.5Million Dollars to Your private
-account; The Fund in question belongs to one of our late foreign
-customer who died a long time ago with his family together with his
-supposed NEXT OF KIN since the year 2005 in the plane crash.
+> +
+> +/*
+> + * Newer AMD CPUs and GPUs whose data fabrics can be connected via custom xGMI
 
-The Fund has been here in our Bank coffers lying dormant for years now
-without anybody coming to claim the fund as the late deceased family
-relation for none of his family relation is a wear of the fund in our
-bank.
+"Newer" is a commit message type of adjective and doesn't belong in
+permanent comments because when years pass, they won't be "newer"
+anymore. IOW, you can simply drop it here.
 
-I want you to come and stand as the late deceased Next of Kin and
-business partner to claim his balance with our bank no matter the
-country you came from bank will release and transfer the fund into
-your account and be rest assured to have my support during the claim
-for I am the late deceased account manager before he met his sudden
-death in the plane crash with his family on their way traveling for
-Summer Holidays.
+> + * links, comes with registers to gather local and remote node type map info.
 
-I am contacting you to come and claim the fund through my support
-because the bank laws here does not allow any inheritance fund to stay
-more than 16years in the bank coffers without claiming by the
-concerned family for the money will be recalled to the bank Treasury
-account as unclaimed funds.
+"come"
 
-I am ready to share with you 50% for you and 50% for me and by
-indicating your interest and capability to execute the project with me
-after reading message; I will send you more details on how the fund
-will be officially transfer in your account for the transaction will
-be execute in your favor without any problem for the only thing i want
-from you is to be honest with me during the transaction official
-process.
+> + *
+> + * "Local Node Type" refers to nodes with the same type as that from which the
+> + * register is read, and "Remote Node Type" refers to nodes with a different type.
 
-I will be waiting for your urgent response to enable me feed you with
-more details for us to proceed ahead.
+This sure sounds weird.
 
-Thanks.
+With my simplistic thinking I'd assume "local" is the CPU and "remote"
+is the GPU...
 
-Best Regards,
+> + * This function, reads the registers from GPU DF function 1.
+> + * Hence, local nodes are GPU and remote nodes are CPUs.
+> + */
+> +static int amd_get_node_map(void)
+> +{
+> +	struct amd_node_map *nodemap;
+> +	struct pci_dev *pdev;
+> +	u32 tmp;
+> +
+> +	pdev = pci_get_device(PCI_VENDOR_ID_AMD,
+> +			      PCI_DEVICE_ID_AMD_ALDEBARAN_DF_F1, NULL);
+> +	if (!pdev) {
+> +		pr_debug("DF Func1 PCI device not found on this node.\n");
+> +		return -ENODEV;
+> +	}
+> +
+> +	nodemap = kmalloc(sizeof(*nodemap), GFP_KERNEL);
 
+You allocate a whopping 4 bytes? Just do
 
-Mr. Mohammad Ahmed
+	struct amd_node_map nodemap;
+
+in the nb info descriptor.
+
+I still need to see whether those node maps and functions you're adding
+and exporting even make sense but that will happen later.
+
+> +	if (!nodemap)
+> +		return -ENOMEM;
+> +
+> +	pci_read_config_dword(pdev, REG_LOCAL_NODE_TYPE_MAP, &tmp);
+
+Check retval.
+
+> +	nodemap->gpu_node_start_id = tmp & 0xFFF;
+> +
+> +	pci_read_config_dword(pdev, REG_RMT_NODE_TYPE_MAP, &tmp);
+
+Ditto.
+
+> +	nodemap->cpu_node_count = tmp >> 16 & 0xFFF;
+> +
+> +	amd_northbridges.nodemap = nodemap;
+> +	return 0;
+> +}
+> +
+>  static struct pci_dev *next_northbridge(struct pci_dev *dev,
+>  					const struct pci_device_id *ids)
+>  {
+> @@ -230,6 +297,27 @@ int amd_df_indirect_read(u16 node, u8 func, u16 reg, u8 instance_id, u32 *lo)
+>  }
+>  EXPORT_SYMBOL_GPL(amd_df_indirect_read);
+>  
+> +struct pci_dev *get_root_devs(struct pci_dev *root,
+
+static
+
+> +			      const struct pci_device_id *root_ids,
+> +			      u16 roots_per_misc)
+> +{
+> +	u16 j;
+> +
+> +	/*
+> +	 * If there are more PCI root devices than data fabric/
+> +	 * system management network interfaces, then the (N)
+> +	 * PCI roots per DF/SMN interface are functionally the
+> +	 * same (for DF/SMN access) and N-1 are redundant.  N-1
+> +	 * PCI roots should be skipped per DF/SMN interface so
+> +	 * the following DF/SMN interfaces get mapped to
+> +	 * correct PCI roots.
+> +	 */
+> +	for (j = 0; j < roots_per_misc; j++)
+> +		root = next_northbridge(root, root_ids);
+> +
+> +	return root;
+> +}
+> +
+>  int amd_cache_northbridges(void)
+>  {
+>  	const struct pci_device_id *misc_ids = amd_nb_misc_ids;
+> @@ -237,10 +325,10 @@ int amd_cache_northbridges(void)
+>  	const struct pci_device_id *root_ids = amd_root_ids;
+>  	struct pci_dev *root, *misc, *link;
+>  	struct amd_northbridge *nb;
+> -	u16 roots_per_misc = 0;
+> -	u16 misc_count = 0;
+> -	u16 root_count = 0;
+> -	u16 i, j;
+> +	u16 roots_per_misc = 0, gpu_roots_per_misc = 0;
+> +	u16 misc_count = 0, gpu_misc_count = 0;
+> +	u16 root_count = 0, gpu_root_count = 0;
+> +	u16 i;
+>  
+>  	if (amd_northbridges.num)
+>  		return 0;
+> @@ -252,15 +340,23 @@ int amd_cache_northbridges(void)
+>  	}
+>  
+>  	misc = NULL;
+> -	while ((misc = next_northbridge(misc, misc_ids)) != NULL)
+> -		misc_count++;
+> +	while ((misc = next_northbridge(misc, misc_ids)) != NULL) {
+
+Just remove that redundant "!= NULL" at the end, while at it.
+
+> +		if (misc->device == PCI_DEVICE_ID_AMD_ALDEBARAN_DF_F3)
+> +			gpu_misc_count++;
+> +		else
+> +			misc_count++;
+> +	}
+>  
+>  	if (!misc_count)
+>  		return -ENODEV;
+>  
+>  	root = NULL;
+> -	while ((root = next_northbridge(root, root_ids)) != NULL)
+> -		root_count++;
+> +	while ((root = next_northbridge(root, root_ids)) != NULL) {
+> +		if (root->device == PCI_DEVICE_ID_AMD_ALDEBARAN_ROOT)
+> +			gpu_root_count++;
+> +		else
+> +			root_count++;
+> +	}
+>  
+>  	if (root_count) {
+>  		roots_per_misc = root_count / misc_count;
+> @@ -275,33 +371,37 @@ int amd_cache_northbridges(void)
+>  		}
+>  	}
+>  
+> -	nb = kcalloc(misc_count, sizeof(struct amd_northbridge), GFP_KERNEL);
+> +	/*
+> +	 * The number of miscs, roots and roots_per_misc might vary on different
+> +	 * nodes of a heterogeneous system.
+> +	 * Calculate roots_per_misc accordingly in order to skip the redundant
+> +	 * roots and map the DF/SMN interfaces to correct PCI roots.
+> +	 */
+
+Reflow that comment so that it is a block.
+
+> +	if (gpu_root_count && gpu_misc_count) {
+> +		int ret = amd_get_node_map();
+> +
+
+^ Superfluous newline.
+
+> +		if (ret)
+> +			return ret;
+> +
+> +		gpu_roots_per_misc = gpu_root_count / gpu_misc_count;
+> +	}
+> +
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
