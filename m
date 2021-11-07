@@ -2,63 +2,71 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C12E1445E0F
-	for <lists+linux-edac@lfdr.de>; Fri,  5 Nov 2021 03:50:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CC5244741C
+	for <lists+linux-edac@lfdr.de>; Sun,  7 Nov 2021 17:50:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231985AbhKECxD (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Thu, 4 Nov 2021 22:53:03 -0400
-Received: from m1557.mail.126.com ([220.181.15.57]:56317 "EHLO
-        m1557.mail.126.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230287AbhKECxD (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Thu, 4 Nov 2021 22:53:03 -0400
-X-Greylist: delayed 1838 seconds by postgrey-1.27 at vger.kernel.org; Thu, 04 Nov 2021 22:53:02 EDT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=126.com;
-        s=s110527; h=Date:From:Subject:MIME-Version:Message-ID; bh=qpDs8
-        hIs1kRyl/8h2qiuF+WKeIphxLBkUPQUEf69qNE=; b=Pv3nrjEQFOSjSfT6tlR+P
-        keaeLJvucBs/uG6iOU13YYiZmPtRmKfLvb5vv1aO7yKlmubDuP+h+yqIZvsaLHDN
-        +WfSxiX8YB9zKQlDjLoyNZOxhWjcmfK8w1ZQshKy/O6oEzsTqyfCGZoNmP68yGbn
-        ue0chXJ28yyGm5sn2LCauk=
-Received: from zhangzl2013$126.com ( [223.72.68.57] ) by
- ajax-webmail-wmsvr57 (Coremail) ; Fri, 5 Nov 2021 10:19:27 +0800 (CST)
-X-Originating-IP: [223.72.68.57]
-Date:   Fri, 5 Nov 2021 10:19:27 +0800 (CST)
-From:   "Zhaolong Zhang" <zhangzl2013@126.com>
-To:     "Borislav Petkov" <bp@alien8.de>
-Cc:     "Luck, Tony" <tony.luck@intel.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re:Re: [PATCH] x86/mce: correct cpu_missing reporting in
- mce_timed_out
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version XT5.0.13 build 20210622(1d4788a8)
- Copyright (c) 2002-2021 www.mailtech.cn 126com
-In-Reply-To: <YYQgPGVxP0R9hfYx@zn.tnic>
-References: <20211104074431.1091525-1-zhangzl2013@126.com>
- <YYOkKm8UmmIxSdXF@zn.tnic> <442373b1384e4607ba743de4c09df670@intel.com>
- <YYQgPGVxP0R9hfYx@zn.tnic>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset=GBK
+        id S235917AbhKGQxU (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Sun, 7 Nov 2021 11:53:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35666 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235894AbhKGQxS (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Sun, 7 Nov 2021 11:53:18 -0500
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44883C061766
+        for <linux-edac@vger.kernel.org>; Sun,  7 Nov 2021 08:50:35 -0800 (PST)
+Received: by mail-pj1-x1033.google.com with SMTP id o6-20020a17090a0a0600b001a64b9a11aeso6984785pjo.3
+        for <linux-edac@vger.kernel.org>; Sun, 07 Nov 2021 08:50:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=3KhLtwCKP93j3EcWq+BGTsAWsp8Oi4eBuXX0Ov40ah8=;
+        b=EWSeuwGW0MwopZk6+JQj2LPLP+kn6j+n6zcELOfFZ2WWjJX2dgivodx6hXZfQ+vlSS
+         Bgdmc5AMr+L2JY9clB1XVfl5q11/kgOjlAWQeygS8KyifAY0d0yX9y2bbfXfGAn5aE6V
+         ogb9m/nxt7SXZixXZv5lJtlFdPSDBCXanGJMKLvGY8Vh5rPkvEm+wRax8zziNjziN18L
+         V3AjR36b7Kj5f7h9TqbYhJlnXqoYzcFbb2X3eeIx5wRGp/16bCVCyQEqrIz0D5KOpCUC
+         SPYOl4LPtaEyUSntyV/iTLNaUXW2yYflvSVjb3O9TG4Sfks9nED35gmPgI416l3YLwhE
+         CxpA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=3KhLtwCKP93j3EcWq+BGTsAWsp8Oi4eBuXX0Ov40ah8=;
+        b=RyTMcx4qjXJmK6Zp02Ux0Ye5lmwDZI4VtPBq4RygHlclcpxGh3GYVUDZKWYrSFp+Er
+         2tjQcHrZFZjibNOKaWYuhvFrWLoEXOZ7gGUyoD+liDNMSBff/6duZW+xqGoz53sRUymL
+         EBwwQNqRBO7LGTVYbZys9d5I+oJc8dimPNsnY8sOgrMvyrbI/lFTa14nctTGB5csNAV5
+         Z14MSdYqm5qvisBTCO5I6gZhwz9m0jV7KKl2dUwuSlH/VKEfi7iAtcDSxDrNv+roTvtJ
+         PmqTTeWTQUWLCZG7li80qqfuF5CiEbCoOMzdnWvO6/EzRyzvZF1lJdJ/ESv+jkIeK+VH
+         v72A==
+X-Gm-Message-State: AOAM530Z6LHU9bY5peynjGhZ0cG/sTlAAkS1mPaKVXLfy8J2ZNKvH16/
+        /wqbITNsgjQx5KcLjw4aB/wkogULDkh35okAXrw=
+X-Google-Smtp-Source: ABdhPJxkCqReol7UR24Aw9NYMyqT7sVxbhk5EYO1bgdnJ/3iAMRi09QfMfqwLDNM12eoIGQJfPeU/nWQ5FJo/sPkN/o=
+X-Received: by 2002:a17:902:a60b:b0:142:7621:be0b with SMTP id
+ u11-20020a170902a60b00b001427621be0bmr4078099plq.58.1636303834746; Sun, 07
+ Nov 2021 08:50:34 -0800 (PST)
 MIME-Version: 1.0
-Message-ID: <572d793c.f2e.17cede4cbf0.Coremail.zhangzl2013@126.com>
-X-Coremail-Locale: zh_CN
-X-CM-TRANSID: OcqowACXFo6wlIRh3UkZAA--.41596W
-X-CM-SenderInfo: x2kd0wt2osiiat6rjloofrz/1tbiYwlCz1x5eCWxMAABsf
-X-Coremail-Antispam: 1U5529EdanIXcx71UUUUU7vcSsGvfC2KfnxnUU==
+Received: by 2002:a05:6a10:4a14:0:0:0:0 with HTTP; Sun, 7 Nov 2021 08:50:34
+ -0800 (PST)
+Reply-To: amabenchambers00@gmail.com
+From:   Amadou Benjamin <ousmanekarim54@gmail.com>
+Date:   Sun, 7 Nov 2021 08:50:34 -0800
+Message-ID: <CAJFAt4ZBhTYuN-nemNTedKsmLo3Bvi-=Fak557pWmDAv5j9mnw@mail.gmail.com>
+Subject: 
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-CkF0IDIwMjEtMTEtMDUgMDI6MDI6MzYsICJCb3Jpc2xhdiBQZXRrb3YiIDxicEBhbGllbjguZGU+
-IHdyb3RlOgo+T24gVGh1LCBOb3YgMDQsIDIwMjEgYXQgMDM6NDc6MzZQTSArMDAwMCwgTHVjaywg
-VG9ueSB3cm90ZToKPj4gPiBGcmFua2x5LCB3ZSBtaWdodCBqdXN0IGFzIHdlbGwga2lsbCB0aGF0
-IGNwdV9taXNzaW5nIHRoaW5nIGJlY2F1c2Ugd2UKPj4gPiBhbHJlYWR5IHNheSB0aGF0IHNvbWUg
-Q1BVcyBhcmUgbm90IHJlc3BvbmRpbmcuCj4+IAo+PiBZZXMuIFRoZSBtb3JlIHJlY2VudCBjb21t
-aXQ6Cj4+IAo+PiA3YmIzOTMxM2NkNjIgKCJ4ODYvbWNlOiBNYWtlIG1jZV90aW1lZF9vdXQoKSBp
-ZGVudGlmeSBob2xkb3V0IENQVXMiKQo+PiAKPj4gdHJpZXMgdG8gcHJvdmlkZSB0aGUgbW9yZSBk
-ZXRhaWxlZCBtZXNzYWdlIGFib3V0ICp3aGljaCogQ1BVcyBhcmUgbWlzc2luZwo+Cj5FeGFjdGx5
-Lgo+Cj4+IEkgdGhpbmsgY3B1X21pc3NpbmcgY2FuIGJlIGRyb3BwZWQuCj4KPlpoYW9sb25nLCB5
-b3UgY291bGQgc2VuZCBhIHBhdGNoIGRvaW5nIHRoYXQsIGluc3RlYWQuCgpUaGFua3MgZm9yIHRo
-ZSByZXBseS4gTGV0IG1lIHNlZSBob3cgdG8gZG8gaXQgcHJvcGVybHkuCgpSZWdhcmRzLApaaGFv
-bG9uZwoKPgo+VGh4Lgo+Cj4tLSAKPlJlZ2FyZHMvR3J1c3MsCj4gICAgQm9yaXMuCj4KPmh0dHBz
-Oi8vcGVvcGxlLmtlcm5lbC5vcmcvdGdseC9ub3Rlcy1hYm91dC1uZXRpcXVldHRlCg==
+-- 
+Hello good day.
+
+I am Barrister Amadou Benjamin by name, with due respect, I am
+contacting you to help get the deposit 10.5 million Dollars, my late
+client Engineer Vasiliy left in his Bank before his sudden death on
+April 21, 2007, to avoid confiscation by Lloyds bank. Please write me
+back through this email (amabenchambers00@gmail.com)for more
+information about this transaction or send me your private email to
+Contact you myself.
+
+Sincerely,
+Barrister Amadou Benjamin Esq
