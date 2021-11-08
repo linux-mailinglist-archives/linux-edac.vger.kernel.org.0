@@ -2,61 +2,96 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 563C8448025
-	for <lists+linux-edac@lfdr.de>; Mon,  8 Nov 2021 14:19:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 32509448051
+	for <lists+linux-edac@lfdr.de>; Mon,  8 Nov 2021 14:34:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239868AbhKHNWT (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Mon, 8 Nov 2021 08:22:19 -0500
-Received: from m1547.mail.126.com ([220.181.15.47]:14390 "EHLO
-        m1547.mail.126.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235636AbhKHNWS (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Mon, 8 Nov 2021 08:22:18 -0500
-X-Greylist: delayed 1871 seconds by postgrey-1.27 at vger.kernel.org; Mon, 08 Nov 2021 08:22:18 EST
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=126.com;
-        s=s110527; h=Date:From:Subject:MIME-Version:Message-ID; bh=Uc0NQ
-        Af7xp3eaLtJLiT84Hrb+v4NGgZhHRTyK3iTFj4=; b=c9fXxEMukW+IQVPZ24SpU
-        EuFilAgmdelinlahveQoFQgJTTL5DhYUsDttsB3D1iuhTxWhcIuVZ01yUiiRE0Pv
-        jxEQgJN6S9S35/Noo5+DeSkMOT/gbCtkILIa/e330LAM2b0rn8gPPwYlCxcr3pTh
-        XHZ8Uje8oWmlPWCOJOTboE=
-Received: from zhangzl2013$126.com ( [120.244.188.145] ) by
- ajax-webmail-wmsvr47 (Coremail) ; Mon, 8 Nov 2021 20:47:59 +0800 (CST)
-X-Originating-IP: [120.244.188.145]
-Date:   Mon, 8 Nov 2021 20:47:59 +0800 (CST)
-From:   "Zhaolong Zhang" <zhangzl2013@126.com>
-To:     "Borislav Petkov" <bp@alien8.de>
-Cc:     "Tony Luck" <tony.luck@intel.com>, x86@kernel.org,
-        linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
-        "Paul E . McKenney" <paulmck@kernel.org>
-Subject: Re: [PATCH] x86/mce: drop cpu_missing since we have more capable
- mce_missing_cpus
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version XT5.0.13 build 20210622(1d4788a8)
- Copyright (c) 2002-2021 www.mailtech.cn 126com
-In-Reply-To: <YYj8ir/UYnG/zVK4@zn.tnic>
-References: <572d793c.f2e.17cede4cbf0.Coremail.zhangzl2013@126.com>
- <20211108082832.142436-1-zhangzl2013@126.com> <YYjuiHN1wKt82fjs@zn.tnic>
- <4d526023.3cde.17cff097bab.Coremail.zhangzl2013@126.com>
- <YYj8ir/UYnG/zVK4@zn.tnic>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset=GBK
+        id S239964AbhKHNhN (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Mon, 8 Nov 2021 08:37:13 -0500
+Received: from mail.skyhub.de ([5.9.137.197]:42682 "EHLO mail.skyhub.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S235700AbhKHNhM (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Mon, 8 Nov 2021 08:37:12 -0500
+Received: from zn.tnic (p200300ec2f33110093973d8dfcf40fd9.dip0.t-ipconnect.de [IPv6:2003:ec:2f33:1100:9397:3d8d:fcf4:fd9])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 2A5A81EC0295;
+        Mon,  8 Nov 2021 14:34:27 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1636378467;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=+HBnFYHXgIpN0783puQdmV5sl9beAJsY+GC35ZNWPXY=;
+        b=dJL8vhiYLN68ncpoxkrQpS0yxfjmpGIw8qAiZe6JPUg0vz9wAV6Y9iKGjEnJD0/Caf1fJl
+        b49lZM4iOt6Qk47E139tW7sWxEVrKPBTLlis3IM/Sy6N8xQnn2+v2koOFBzvkg7X7MM/wx
+        xzq+8L+o8M8gCDFEUxr4BNH68LTK8Lc=
+Date:   Mon, 8 Nov 2021 14:34:20 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     "Chatradhi, Naveen Krishna" <nchatrad@amd.com>
+Cc:     linux-edac@vger.kernel.org, x86@kernel.org,
+        linux-kernel@vger.kernel.org, mingo@redhat.com, mchehab@kernel.org,
+        yazen.ghannam@amd.com, Muralidhara M K <muralimk@amd.com>
+Subject: Re: [PATCH v6 1/5] x86/amd_nb: Add support for northbridges on
+ Aldebaran
+Message-ID: <YYknXBpOUQtV1aZ8@zn.tnic>
+References: <20211028130106.15701-1-nchatrad@amd.com>
+ <20211028130106.15701-2-nchatrad@amd.com>
+ <YYF9ei59G/OUyZqR@zn.tnic>
+ <b7f3639a-e46c-25e8-270b-04860074fd3c@amd.com>
 MIME-Version: 1.0
-Message-ID: <4a77f582.4434.17cff975224.Coremail.zhangzl2013@126.com>
-X-Coremail-Locale: zh_CN
-X-CM-TRANSID: L8qowAAnaumAHIlhg_5PAQ--.9082W
-X-CM-SenderInfo: x2kd0wt2osiiat6rjloofrz/1tbiCx9Fz1x5fUS6QgACs4
-X-Coremail-Antispam: 1U5529EdanIXcx71UUUUU7vcSsGvfC2KfnxnUU==
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <b7f3639a-e46c-25e8-270b-04860074fd3c@amd.com>
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-QXQgMjAyMS0xMS0wOCAxODozMTozOCwgIkJvcmlzbGF2IFBldGtvdiIgPGJwQGFsaWVuOC5kZT4g
-d3JvdGU6Cj5PbiBNb24sIE5vdiAwOCwgMjAyMSBhdCAwNjoxMzowNFBNICswODAwLCBaaGFvbG9u
-ZyBaaGFuZyB3cm90ZToKPj4gSSB3YXMgY29uY2VybmluZyB0aGF0IGlmIEkgc2ltcGx5IHJlbW92
-ZSB0aGUgY3B1X21pc3NpbmcgY29kZSwgd2Ugd2lsbCBsb3NlIHRoZSBsb2cgaW4gdGhlCj4+IHNp
-dHVhdGlvbiB3aGVyZSBtY2FfY2ZnLnRvbGVyYW50ID4gMSBhbmQgbm9fd2F5X291dCBpcyBzZXQg
-YWZ0ZXJ3YXJkcy4KPj4gCj4+IERvIHlvdSB0aGluayB3ZSBjYW4gc2FmZWx5IGlnbm9yZSB0aGF0
-IHNpdHVhdGlvbj8KPgo+V2VsbCwgaG93IGxpa2VseSBpcyB0byBoYXZlIHN1Y2ggYSBzaXR1YXRp
-b24gaW4gcHJhY3RpY2U/CgpJdCBpcyBkaWZmaWN1bHQgdG8gYW5zd2VyLi4uCkJ1dCBzaW5jZSBj
-dXJyZW50IGNvZGUgaXMgZGVhbGluZyB3aXRoIHRoaXMgc2l0dWF0aW9uLCBJIHRoaW5rIEkgc2hv
-dWxkIGNvdmVyIGl0IHRvbywKYWx0aG91Z2ggaXQgaXMgb25seSBhIHBpZWNlIG9mIGxvZy4KClJl
-Z2FyZHMsClpoYW9sb25n
+On Thu, Nov 04, 2021 at 06:48:29PM +0530, Chatradhi, Naveen Krishna wrote:
+> I know, this is confusion. we will try to give a meaning for definition
+> here.
+
+Well, not that - you will need to keep adding PCI device IDs for the
+future GPUs supporting this stuff.
+
+> How about, defining a new struct
+> 
+> +struct system_topology {
+> +       const struct pci_device_id *misc_ids;
+> +       const struct pci_device_id *link_ids;
+> +       const struct pci_device_id *root_ids;
+> +       u16 roots_per_misc;
+> +       u16 misc_count;
+> +       u16 root_count;
+> +};
+
+Well, how does having a single struct help make things easier?
+
+IOW, if you use accessors to get the information you need, it doesn't
+really matter what the underlying organization of the data is. And if
+it helps to keep 'em separate because stuff is simple altogether, then,
+they should be separate.
+
+So, before you ask "How about", think of answering the question "Why
+should it be done this way? What are the advantages?"
+
+> This way, creating appropriate number MCs under EDAC and existing exported
+> APIs can remain the same.
+
+Why does that matter?
+
+Also, have you verified in what order the init_amd_nbs() fs initcall and
+amd64_edac_init() get executed?
+
+I'm going to venture a pretty sure guess that the initcall runs first
+and that amd_cache_northbridges() call in amd64_edac_init() is probably
+not even needed anymore...
+
+Thx.
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
