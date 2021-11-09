@@ -2,71 +2,94 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E347A44A860
-	for <lists+linux-edac@lfdr.de>; Tue,  9 Nov 2021 09:31:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F2A944A941
+	for <lists+linux-edac@lfdr.de>; Tue,  9 Nov 2021 09:36:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244092AbhKIIeY (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Tue, 9 Nov 2021 03:34:24 -0500
-Received: from m1510.mail.126.com ([220.181.15.10]:17221 "EHLO
-        m1510.mail.126.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244095AbhKIIeX (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Tue, 9 Nov 2021 03:34:23 -0500
+        id S235527AbhKIIjE (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Tue, 9 Nov 2021 03:39:04 -0500
+Received: from m15112.mail.126.com ([220.181.15.112]:54318 "EHLO
+        m15112.mail.126.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235325AbhKIIjB (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Tue, 9 Nov 2021 03:39:01 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=126.com;
-        s=s110527; h=Date:From:Subject:MIME-Version:Message-ID; bh=dLzp2
-        hWh/AXLN2eszbgtSNzCV7q6sPVEhGOup8/b82U=; b=ge2eLYwvmU+LDQ5vYMYQN
-        Pd0kF9qDubWsw+cklAzMAOQFrw9GHqAfZg/Fg2Ynp1RdtJ4Ra+E5WcjMlk92U/TT
-        HnLPdZdYqS6g6qIxauHCXO4pdJPAjKmY/55BmheRF+gRnjeZMTAzsxRUvksXGhBU
-        OeFevefu8w7BIthXKdJBVs=
-Received: from zhangzl2013$126.com ( [60.247.85.82] ) by
- ajax-webmail-wmsvr10 (Coremail) ; Tue, 9 Nov 2021 16:31:23 +0800 (CST)
-X-Originating-IP: [60.247.85.82]
-Date:   Tue, 9 Nov 2021 16:31:23 +0800 (CST)
-From:   "Zhaolong Zhang" <zhangzl2013@126.com>
-To:     "Borislav Petkov" <bp@alien8.de>
-Cc:     "Tony Luck" <tony.luck@intel.com>, x86@kernel.org,
-        linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=kla6R
+        9K9d3FCT77Y5F5AOks9pVDk12Rh6lbb/BxZbAQ=; b=NRg9h3K8gfc5Ktyaz0v1f
+        vYgI8onby/qLJMS86oBHZjZtFOJRqZI+gumdBvvYGYHR1VtyQDrlCUor4wI0b/rK
+        hmgIcal9uokbV4xc1+ludXBcOivuQq36imBiAEN38ugJO8zJXrfPL67WXXDlPy6o
+        WCdO7y4anANmG6wBqZxBEQ=
+Received: from pek-lpd-ccm5.wrs.com (unknown [60.247.85.82])
+        by smtp2 (Coremail) with SMTP id DMmowACnon7oMophVTTeBA--.41486S2;
+        Tue, 09 Nov 2021 16:36:03 +0800 (CST)
+From:   Zhaolong Zhang <zhangzl2013@126.com>
+To:     Tony Luck <tony.luck@intel.com>, Borislav Petkov <bp@alien8.de>,
+        Zhaolong Zhang <zhangzl2013@126.com>
+Cc:     x86@kernel.org, linux-edac@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
         "Paul E . McKenney" <paulmck@kernel.org>
-Subject: Re: [PATCH] x86/mce: drop cpu_missing since we have more capable
- mce_missing_cpus
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version XT5.0.13 build 20210622(1d4788a8)
- Copyright (c) 2002-2021 www.mailtech.cn 126com
-In-Reply-To: <4a77f582.4434.17cff975224.Coremail.zhangzl2013@126.com>
-References: <572d793c.f2e.17cede4cbf0.Coremail.zhangzl2013@126.com>
- <20211108082832.142436-1-zhangzl2013@126.com> <YYjuiHN1wKt82fjs@zn.tnic>
- <4d526023.3cde.17cff097bab.Coremail.zhangzl2013@126.com>
- <YYj8ir/UYnG/zVK4@zn.tnic>
- <4a77f582.4434.17cff975224.Coremail.zhangzl2013@126.com>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset=GBK
+Subject: [PATCH] x86/mce: Get rid of cpu_missing
+Date:   Tue,  9 Nov 2021 16:35:47 +0800
+Message-Id: <20211109083547.3546963-1-zhangzl2013@126.com>
+X-Mailer: git-send-email 2.27.0
+In-Reply-To: <776fad3d.3369.17d03d2c2ba.Coremail.zhangzl2013@126.com>
+References: <776fad3d.3369.17d03d2c2ba.Coremail.zhangzl2013@126.com>
 MIME-Version: 1.0
-Message-ID: <776fad3d.3369.17d03d2c2ba.Coremail.zhangzl2013@126.com>
-X-Coremail-Locale: zh_CN
-X-CM-TRANSID: CsqowABnf1fcMYphXOxQAQ--.40801W
-X-CM-SenderInfo: x2kd0wt2osiiat6rjloofrz/1tbi4wZGz1pD-fwU9QABsU
-X-Coremail-Antispam: 1U5529EdanIXcx71UUUUU7vcSsGvfC2KfnxnUU==
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: DMmowACnon7oMophVTTeBA--.41486S2
+X-Coremail-Antispam: 1Uf129KBjvJXoW7Zr1DAFWkJF1kJF18Gw15urg_yoW8Xr1xpr
+        4qv3WrtF4rZa43Cayqy3Z3Zw18A3s3Ka4xG3y7Cw43Xw13ta43tFZ3Xwn5ZF17u395Gr13
+        XFWFqF15KayxJaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07UZjjkUUUUU=
+X-Originating-IP: [60.247.85.82]
+X-CM-SenderInfo: x2kd0wt2osiiat6rjloofrz/1tbikhNGz1pEEwILtgAAs6
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-QXQgMjAyMS0xMS0wOCAyMDo0Nzo1OSwgIlpoYW9sb25nIFpoYW5nIiA8emhhbmd6bDIwMTNAMTI2
-LmNvbT4gd3JvdGU6Cj5BdCAyMDIxLTExLTA4IDE4OjMxOjM4LCAiQm9yaXNsYXYgUGV0a292IiA8
-YnBAYWxpZW44LmRlPiB3cm90ZToKPj5PbiBNb24sIE5vdiAwOCwgMjAyMSBhdCAwNjoxMzowNFBN
-ICswODAwLCBaaGFvbG9uZyBaaGFuZyB3cm90ZToKPj4+IEkgd2FzIGNvbmNlcm5pbmcgdGhhdCBp
-ZiBJIHNpbXBseSByZW1vdmUgdGhlIGNwdV9taXNzaW5nIGNvZGUsIHdlIHdpbGwgbG9zZSB0aGUg
-bG9nIGluIHRoZQo+Pj4gc2l0dWF0aW9uIHdoZXJlIG1jYV9jZmcudG9sZXJhbnQgPiAxIGFuZCBu
-b193YXlfb3V0IGlzIHNldCBhZnRlcndhcmRzLgo+Pj4gCj4+PiBEbyB5b3UgdGhpbmsgd2UgY2Fu
-IHNhZmVseSBpZ25vcmUgdGhhdCBzaXR1YXRpb24/Cj4+Cj4+V2VsbCwgaG93IGxpa2VseSBpcyB0
-byBoYXZlIHN1Y2ggYSBzaXR1YXRpb24gaW4gcHJhY3RpY2U/Cj4KPkl0IGlzIGRpZmZpY3VsdCB0
-byBhbnN3ZXIuLi4KPkJ1dCBzaW5jZSBjdXJyZW50IGNvZGUgaXMgZGVhbGluZyB3aXRoIHRoaXMg
-c2l0dWF0aW9uLCBJIHRoaW5rIEkgc2hvdWxkIGNvdmVyIGl0IHRvbywKPmFsdGhvdWdoIGl0IGlz
-IG9ubHkgYSBwaWVjZSBvZiBsb2cuCgpIaSBCb3JpcywKCkkgcmVjb25zaWRlcmVkIHRoZSBzaXR1
-YXRpb24uCklmIHRoZXJlIGlzIGEgbm9uLXJlY292ZXJhYmxlIG1jZSBhcyB3ZWxsLCBqdXN0IGxl
-dCBpdCBwcmludCB0aGF0IHJlYXNvbi4gTm8gbmVlZCB0byBicmluZyB0aGUKdGltZW91dCBtZXNz
-YWdlIGluZGVlZC4gQmVjYXVzZSBzaW5jZSB0aGUgdG9sZXJhbnQgd2FzIHNldCB0byBhIGhpZ2gg
-bGV2ZWwgdG8gaWdub3JlIHRoZSB0aW1lb3V0LAp3ZSBjYW4gZXZlbnR1YWxseSBpZ25vcmUgdGhl
-bS4KClNvIHNpbXBseSBkcm9wIGNwdV9taXNzaW5nIHZhcmlhYmxlIGFzIHlvdSBtZW50aW9uZWQg
-c2hvdWxkIHdvcmsuCgpJIGFtIG5vdCBzdXJlIHdoZXRoZXIgaXQgc2hvdWxkIGJlIGF1dGhvcmVk
-IGJ5IHlvdSBvciBzdWdnZXN0ZWQgYnkgeW91LgpBbnl3YXksIEkgd2lsbCBwb3N0IGEgbmV3IHBh
-dGNoIGV4YWN0bHkgYXMgeW91IHN1Z2dlc3RlZC4gUGxlYXNlIHBpY2sgaXQgb3IgaWdub3JlIGl0
-IGFzIGFwcHJvcHJpYXRlIDopCgpUaGFua3MsClpoYW9sb25nCg==
+Drop cpu_missing since we have more capable mce_missing_cpus.
+
+Suggested-by: Borislav Petkov <bp@suse.de>
+Signed-off-by: Zhaolong Zhang <zhangzl2013@126.com>
+---
+ arch/x86/kernel/cpu/mce/core.c | 5 -----
+ 1 file changed, 5 deletions(-)
+
+diff --git a/arch/x86/kernel/cpu/mce/core.c b/arch/x86/kernel/cpu/mce/core.c
+index 50a3e455cded..51aefffe39f1 100644
+--- a/arch/x86/kernel/cpu/mce/core.c
++++ b/arch/x86/kernel/cpu/mce/core.c
+@@ -99,7 +99,6 @@ struct mca_config mca_cfg __read_mostly = {
+ 
+ static DEFINE_PER_CPU(struct mce, mces_seen);
+ static unsigned long mce_need_notify;
+-static int cpu_missing;
+ 
+ /*
+  * MCA banks polled by the period polling timer for corrected events.
+@@ -314,8 +313,6 @@ static void mce_panic(const char *msg, struct mce *final, char *exp)
+ 		if (!apei_err)
+ 			apei_err = apei_write_mce(final);
+ 	}
+-	if (cpu_missing)
+-		pr_emerg(HW_ERR "Some CPUs didn't answer in synchronization\n");
+ 	if (exp)
+ 		pr_emerg(HW_ERR "Machine check: %s\n", exp);
+ 	if (!fake_panic) {
+@@ -909,7 +906,6 @@ static int mce_timed_out(u64 *t, const char *msg)
+ 					 cpumask_pr_args(&mce_missing_cpus));
+ 			mce_panic(msg, NULL, NULL);
+ 		}
+-		cpu_missing = 1;
+ 		return 1;
+ 	}
+ 	*t -= SPINUNIT;
+@@ -2720,7 +2716,6 @@ struct dentry *mce_get_debugfs_dir(void)
+ 
+ static void mce_reset(void)
+ {
+-	cpu_missing = 0;
+ 	atomic_set(&mce_fake_panicked, 0);
+ 	atomic_set(&mce_executing, 0);
+ 	atomic_set(&mce_callin, 0);
+-- 
+2.27.0
+
