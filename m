@@ -2,76 +2,82 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8030744AF57
-	for <lists+linux-edac@lfdr.de>; Tue,  9 Nov 2021 15:20:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 42A1A44B0DA
+	for <lists+linux-edac@lfdr.de>; Tue,  9 Nov 2021 17:06:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235142AbhKIOWu (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Tue, 9 Nov 2021 09:22:50 -0500
-Received: from m1547.mail.126.com ([220.181.15.47]:42541 "EHLO
-        m1547.mail.126.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233356AbhKIOWt (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Tue, 9 Nov 2021 09:22:49 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=126.com;
-        s=s110527; h=Date:From:Subject:MIME-Version:Message-ID; bh=mMFuL
-        ZrvmYEvdeDVWzFznmoNMEL1hSaZQJnGg0467PM=; b=dlbnri1ZNikGe0yBkcg5O
-        uvZx6Hl7yw2WNyWgrolbUdVVdW2GAgQ6pSK+rAQXur+kS++y3/bj2BdsnYIPqWm3
-        RK2wgYIAfe6lfFJnuKgYAQBY7+A08osWJc4aLUKEZNslLWvdJkeI8ge04Qidr/4l
-        CmTMzKFEwks6hN9NoqJGLE=
-Received: from zhangzl2013$126.com ( [120.244.188.145] ) by
- ajax-webmail-wmsvr47 (Coremail) ; Tue, 9 Nov 2021 22:19:10 +0800 (CST)
-X-Originating-IP: [120.244.188.145]
-Date:   Tue, 9 Nov 2021 22:19:10 +0800 (CST)
-From:   "Zhaolong Zhang" <zhangzl2013@126.com>
-To:     "Borislav Petkov" <bp@alien8.de>
-Cc:     "Tony Luck" <tony.luck@intel.com>, x86@kernel.org,
-        linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
+        id S237487AbhKIQJo (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Tue, 9 Nov 2021 11:09:44 -0500
+Received: from mga09.intel.com ([134.134.136.24]:51456 "EHLO mga09.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S235059AbhKIQJn (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Tue, 9 Nov 2021 11:09:43 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10163"; a="232314691"
+X-IronPort-AV: E=Sophos;i="5.87,220,1631602800"; 
+   d="scan'208";a="232314691"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Nov 2021 08:06:57 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.87,220,1631602800"; 
+   d="scan'208";a="491707776"
+Received: from fmsmsx606.amr.corp.intel.com ([10.18.126.86])
+  by orsmga007.jf.intel.com with ESMTP; 09 Nov 2021 08:06:49 -0800
+Received: from fmsmsx612.amr.corp.intel.com (10.18.126.92) by
+ fmsmsx606.amr.corp.intel.com (10.18.126.86) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2242.12; Tue, 9 Nov 2021 08:06:49 -0800
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx612.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2242.12; Tue, 9 Nov 2021 08:06:48 -0800
+Received: from fmsmsx610.amr.corp.intel.com ([10.18.126.90]) by
+ fmsmsx610.amr.corp.intel.com ([10.18.126.90]) with mapi id 15.01.2242.012;
+ Tue, 9 Nov 2021 08:06:48 -0800
+From:   "Luck, Tony" <tony.luck@intel.com>
+To:     Borislav Petkov <bp@alien8.de>,
+        Zhaolong Zhang <zhangzl2013@126.com>
+CC:     "x86@kernel.org" <x86@kernel.org>,
+        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
         "Paul E . McKenney" <paulmck@kernel.org>
-Subject: Re: [PATCH] x86/mce: Get rid of cpu_missing
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version XT5.0.13 build 20210622(1d4788a8)
- Copyright (c) 2002-2021 www.mailtech.cn 126com
-In-Reply-To: <YYo8H34W8xPafdnH@zn.tnic>
-References: <776fad3d.3369.17d03d2c2ba.Coremail.zhangzl2013@126.com>
- <20211109083547.3546963-1-zhangzl2013@126.com> <YYo8H34W8xPafdnH@zn.tnic>
+Subject: RE: [PATCH] x86/mce: drop cpu_missing since we have more capable
+ mce_missing_cpus
+Thread-Topic: [PATCH] x86/mce: drop cpu_missing since we have more capable
+ mce_missing_cpus
+Thread-Index: AQHX1Hq0qXr3DmSE1U2VzqbCjPBltKv55BMAgAALgwCAAAUwAIAAJhiAgAFKpICAAAodgP//7irA
+Date:   Tue, 9 Nov 2021 16:06:48 +0000
+Message-ID: <d66e53d9d8cf4dabb2daade220308d7a@intel.com>
+References: <572d793c.f2e.17cede4cbf0.Coremail.zhangzl2013@126.com>
+ <20211108082832.142436-1-zhangzl2013@126.com> <YYjuiHN1wKt82fjs@zn.tnic>
+ <4d526023.3cde.17cff097bab.Coremail.zhangzl2013@126.com>
+ <YYj8ir/UYnG/zVK4@zn.tnic>
+ <4a77f582.4434.17cff975224.Coremail.zhangzl2013@126.com>
+ <776fad3d.3369.17d03d2c2ba.Coremail.zhangzl2013@126.com>
+ <YYo6VwPZLCWcP3Bl@zn.tnic>
+In-Reply-To: <YYo6VwPZLCWcP3Bl@zn.tnic>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+dlp-product: dlpe-windows
+dlp-reaction: no-action
+dlp-version: 11.6.200.16
+x-originating-ip: [10.1.200.100]
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset=GBK
 MIME-Version: 1.0
-Message-ID: <7fe8edf3.412c.17d051128cd.Coremail.zhangzl2013@126.com>
-X-Coremail-Locale: zh_CN
-X-CM-TRANSID: L8qowABHg+pfg4phsVtQAQ--.33248W
-X-CM-SenderInfo: x2kd0wt2osiiat6rjloofrz/1tbiYwZGz1x5eEukjwABsQ
-X-Coremail-Antispam: 1U5529EdanIXcx71UUUUU7vcSsGvfC2KfnxnUU==
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-QXQgMjAyMS0xMS0wOSAxNzoxNToxMSwgIkJvcmlzbGF2IFBldGtvdiIgPGJwQGFsaWVuOC5kZT4g
-d3JvdGU6Cj5PbiBUdWUsIE5vdiAwOSwgMjAyMSBhdCAwNDozNTo0N1BNICswODAwLCBaaGFvbG9u
-ZyBaaGFuZyB3cm90ZToKPj4gRHJvcCBjcHVfbWlzc2luZyBzaW5jZSB3ZSBoYXZlIG1vcmUgY2Fw
-YWJsZSBtY2VfbWlzc2luZ19jcHVzLgo+Cj5XaG8gaXMgIndlIj8KPgo+QWxzbywgeW91IG5lZWQg
-dG8gdHJ5IGhhcmRlciB3aXRoIHRoYXQgY29tbWl0IG1lc3NhZ2UgLSBtY2VfbWlzc2luZ19jcHVz
-Cj5pcyBhIGNwdW1hc2sgYW5kIEkgZG9uJ3Qgc2VlIGhvdyBhIGNwdW1hc2sgY2FuIGJlICJtb3Jl
-IGNhcGFibGUiLi4uCj4KPlNvbWUgbW9yZSBoaW50cyBvbiBhIHBvc3NpYmxlIHdheSB0byBzdHJ1
-Y3R1cmUgYSBjb21taXQgbWVzc2FnZSAtIHRob3NlCj5hcmUganVzdCBoaW50cyAtIG5vdCBuZWNl
-c3NhcmlseSBydWxlcyAtIGJ1dCBpdCBzaG91bGQgaGVscCB5b3UgZ2V0IGFuCj5pZGVhOgo+Cj5Q
-cm9ibGVtIGlzIEEuCj4KPkl0IGhhcHBlbnMgYmVjYXVzZSBvZiBCLgo+Cj5GaXggaXQgYnkgZG9p
-bmcgQy4KPgo+KFBvdGVudGlhbGx5IGRvIEQpLgo+Cj5Gb3IgbW9yZSBkZXRhaWxlZCBpbmZvLCBz
-ZWUKPkRvY3VtZW50YXRpb24vcHJvY2Vzcy9zdWJtaXR0aW5nLXBhdGNoZXMucnN0LCBTZWN0aW9u
-ICIyKSBEZXNjcmliZSB5b3VyCj5jaGFuZ2VzIi4KPgo+QWxzbywgdG8gdGhlIHRvbmUsIGZyb20g
-RG9jdW1lbnRhdGlvbi9wcm9jZXNzL3N1Ym1pdHRpbmctcGF0Y2hlcy5yc3Q6Cj4KPiAiRGVzY3Jp
-YmUgeW91ciBjaGFuZ2VzIGluIGltcGVyYXRpdmUgbW9vZCwgZS5nLiAibWFrZSB4eXp6eSBkbyBm
-cm90eiIKPiAgaW5zdGVhZCBvZiAiW1RoaXMgcGF0Y2hdIG1ha2VzIHh5enp5IGRvIGZyb3R6IiBv
-ciAiW0ldIGNoYW5nZWQgeHl6enkKPiAgdG8gZG8gZnJvdHoiLCBhcyBpZiB5b3UgYXJlIGdpdmlu
-ZyBvcmRlcnMgdG8gdGhlIGNvZGViYXNlIHRvIGNoYW5nZQo+ICBpdHMgYmVoYXZpb3VyLiIKPgo+
-QWxzbywgZG8gbm90IHRhbGsgYWJvdXQgd2hhdCB5b3VyIHBhdGNoIGRvZXMgLSB0aGF0IHNob3Vs
-ZCBob3BlZnVsbHkgYmUKPnZpc2libGUgaW4gdGhlIGRpZmYgaXRzZWxmLiBSYXRoZXIsIHRhbGsg
-YWJvdXQgKndoeSogeW91J3JlIGRvaW5nIHdoYXQKPnlvdSdyZSBkb2luZy4KPgo+QWxzbywgcGxl
-YXNlIHVzZSBwYXNzaXZlIHZvaWNlIGluIHlvdXIgY29tbWl0IG1lc3NhZ2U6IG5vICJ3ZSIgb3Ig
-IkkiLCBldGMsCj5hbmQgZGVzY3JpYmUgeW91ciBjaGFuZ2VzIGluIGltcGVyYXRpdmUgbW9vZC4K
-Pgo+Qm90dG9tIGxpbmUgaXM6IHBlcnNvbmFsIHByb25vdW5zIGFyZSBhbWJpZ3VvdXMgaW4gdGV4
-dCwgZXNwZWNpYWxseSB3aXRoCj5zbyBtYW55IHBhcnRpZXMvY29tcGFuaWVzL2V0YyBkZXZlbG9w
-aW5nIHRoZSBrZXJuZWwgc28gbGV0J3MgYXZvaWQgdGhlbQo+cGxlYXNlLgoKSGkgQm9yaXMsCgpU
-aGFuayB5b3Ugc28gbXVjaCBmb3IgeW91ciBraW5kIHJlcGx5LiBJIHJlYWxseSBhcHByZWNpYXRl
-IHlvdXIgZGV0YWlsZWQgZ3VpZGFuY2UuCkkndmUgc2VudCBhIHYyIHBhdGNoIHdpdGggbmV3IGRl
-c2NyaXB0aW9ucywgdHJ5aW5nIHRvIGJlIHVzZWZ1bCBhbmQgYnJpZWYuCkhvcGUgaXQgaXMgcXVh
-bGlmaWVkLi4uCgpSZWdhcmRzLApaaGFvbG9uZwo=
+PiAgICAgICAgaWYgKChzNjQpKnQgPCBTUElOVU5JVCkgew0KPiAgICAgICAgICAgICAgICBpZiAo
+Y3B1bWFza19hbmQoJm1jZV9taXNzaW5nX2NwdXMsIGNwdV9vbmxpbmVfbWFzaywgJm1jZV9taXNz
+aW5nX2NwdXMpKQ0KPiAgICAgICAgICAgICAgICAgICAgICAgIHByX2VtZXJnKCJDUFVzIG5vdCBy
+ZXNwb25kaW5nIHRvIE1DRSBicm9hZGNhc3QgKG1heSBpbmNsdWRlIGZhbHNlIHBvc2l0aXZlcyk6
+ICUqcGJsXG4iLA0KPiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIGNwdW1hc2tfcHJf
+YXJncygmbWNlX21pc3NpbmdfY3B1cykpOw0KPiAgICAgICAgICAgICAgICBpZiAobWNhX2NmZy50
+b2xlcmFudCA8PSAxKQ0KPiAgICAgICAgICAgICAgICAgICAgICAgIG1jZV9wYW5pYyhtc2csIE5V
+TEwsIE5VTEwpOw0KPiAgICAgICAgICAgICAgICByZXR1cm4gMTsNCj4gICAgICAgIH0NCg0KSnVz
+dCBhIG5vdGUgdGhhdCBza2lwcGluZyB0aGUgbWNlX3BhbmljKCkgaGVyZSBpc24ndCBnb2luZyB0
+byBoZWxwIG11Y2guIFdpdGggc29tZSBDUFVzDQpzdHVjayBub3QgcmVzcG9uZGluZyB0byAjTUMg
+dGhlIHN5c3RlbSBpcyBnb2luZyB0byBsb2NrIHVwIG9yIGNyYXNoIGZvciBvdGhlciB0aW1lb3V0
+cyBpbg0KdGhlIG5leHQgZmV3IHNlY29uZHMuDQoNCi1Ub255DQoNCg==
