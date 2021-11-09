@@ -2,94 +2,107 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F2A944A941
-	for <lists+linux-edac@lfdr.de>; Tue,  9 Nov 2021 09:36:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EE85144AA2E
+	for <lists+linux-edac@lfdr.de>; Tue,  9 Nov 2021 10:10:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235527AbhKIIjE (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Tue, 9 Nov 2021 03:39:04 -0500
-Received: from m15112.mail.126.com ([220.181.15.112]:54318 "EHLO
-        m15112.mail.126.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235325AbhKIIjB (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Tue, 9 Nov 2021 03:39:01 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=126.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=kla6R
-        9K9d3FCT77Y5F5AOks9pVDk12Rh6lbb/BxZbAQ=; b=NRg9h3K8gfc5Ktyaz0v1f
-        vYgI8onby/qLJMS86oBHZjZtFOJRqZI+gumdBvvYGYHR1VtyQDrlCUor4wI0b/rK
-        hmgIcal9uokbV4xc1+ludXBcOivuQq36imBiAEN38ugJO8zJXrfPL67WXXDlPy6o
-        WCdO7y4anANmG6wBqZxBEQ=
-Received: from pek-lpd-ccm5.wrs.com (unknown [60.247.85.82])
-        by smtp2 (Coremail) with SMTP id DMmowACnon7oMophVTTeBA--.41486S2;
-        Tue, 09 Nov 2021 16:36:03 +0800 (CST)
-From:   Zhaolong Zhang <zhangzl2013@126.com>
-To:     Tony Luck <tony.luck@intel.com>, Borislav Petkov <bp@alien8.de>,
-        Zhaolong Zhang <zhangzl2013@126.com>
-Cc:     x86@kernel.org, linux-edac@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
+        id S244688AbhKIJMj (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Tue, 9 Nov 2021 04:12:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40318 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S244712AbhKIJMi (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Tue, 9 Nov 2021 04:12:38 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78E5AC061767;
+        Tue,  9 Nov 2021 01:09:52 -0800 (PST)
+Received: from zn.tnic (p2e584790.dip0.t-ipconnect.de [46.88.71.144])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id D3E4A1EC04E4;
+        Tue,  9 Nov 2021 10:09:50 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1636448990;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=zfYYtoXdHEdFf5P9uwulPig2zqIQ1+SFMFErzFp806w=;
+        b=ft1SgBWY9GStg3ExlOa+rDEF1dTyrsXU9D6YufTNatnc0R4z9ltlGcsYrdWazptt5oRUti
+        RgcjV1xRzhC7MLXziTjKrdV3cPwrrnyzkyi4PxlVGqtfn+LxyDetsBhIfgHaCsuYh4Pwod
+        MPGuLRrjVvX59aaNrERMMivCxizxg2E=
+Date:   Tue, 9 Nov 2021 10:07:35 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Zhaolong Zhang <zhangzl2013@126.com>
+Cc:     Tony Luck <tony.luck@intel.com>, x86@kernel.org,
+        linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
         "Paul E . McKenney" <paulmck@kernel.org>
-Subject: [PATCH] x86/mce: Get rid of cpu_missing
-Date:   Tue,  9 Nov 2021 16:35:47 +0800
-Message-Id: <20211109083547.3546963-1-zhangzl2013@126.com>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <776fad3d.3369.17d03d2c2ba.Coremail.zhangzl2013@126.com>
-References: <776fad3d.3369.17d03d2c2ba.Coremail.zhangzl2013@126.com>
+Subject: Re: [PATCH] x86/mce: drop cpu_missing since we have more capable
+ mce_missing_cpus
+Message-ID: <YYo6VwPZLCWcP3Bl@zn.tnic>
+References: <572d793c.f2e.17cede4cbf0.Coremail.zhangzl2013@126.com>
+ <20211108082832.142436-1-zhangzl2013@126.com>
+ <YYjuiHN1wKt82fjs@zn.tnic>
+ <4d526023.3cde.17cff097bab.Coremail.zhangzl2013@126.com>
+ <YYj8ir/UYnG/zVK4@zn.tnic>
+ <4a77f582.4434.17cff975224.Coremail.zhangzl2013@126.com>
+ <776fad3d.3369.17d03d2c2ba.Coremail.zhangzl2013@126.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: DMmowACnon7oMophVTTeBA--.41486S2
-X-Coremail-Antispam: 1Uf129KBjvJXoW7Zr1DAFWkJF1kJF18Gw15urg_yoW8Xr1xpr
-        4qv3WrtF4rZa43Cayqy3Z3Zw18A3s3Ka4xG3y7Cw43Xw13ta43tFZ3Xwn5ZF17u395Gr13
-        XFWFqF15KayxJaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07UZjjkUUUUU=
-X-Originating-IP: [60.247.85.82]
-X-CM-SenderInfo: x2kd0wt2osiiat6rjloofrz/1tbikhNGz1pEEwILtgAAs6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <776fad3d.3369.17d03d2c2ba.Coremail.zhangzl2013@126.com>
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-Drop cpu_missing since we have more capable mce_missing_cpus.
+On Tue, Nov 09, 2021 at 04:31:23PM +0800, Zhaolong Zhang wrote:
+> If there is a non-recoverable mce as well, just let it print that
+> reason. No need to bring the timeout message indeed. Because since
+> the tolerant was set to a high level to ignore the timeout, we can
+> eventually ignore them.
 
-Suggested-by: Borislav Petkov <bp@suse.de>
-Signed-off-by: Zhaolong Zhang <zhangzl2013@126.com>
----
- arch/x86/kernel/cpu/mce/core.c | 5 -----
- 1 file changed, 5 deletions(-)
+Here's how I see it:
 
-diff --git a/arch/x86/kernel/cpu/mce/core.c b/arch/x86/kernel/cpu/mce/core.c
-index 50a3e455cded..51aefffe39f1 100644
---- a/arch/x86/kernel/cpu/mce/core.c
-+++ b/arch/x86/kernel/cpu/mce/core.c
-@@ -99,7 +99,6 @@ struct mca_config mca_cfg __read_mostly = {
- 
- static DEFINE_PER_CPU(struct mce, mces_seen);
- static unsigned long mce_need_notify;
--static int cpu_missing;
- 
- /*
-  * MCA banks polled by the period polling timer for corrected events.
-@@ -314,8 +313,6 @@ static void mce_panic(const char *msg, struct mce *final, char *exp)
- 		if (!apei_err)
- 			apei_err = apei_write_mce(final);
- 	}
--	if (cpu_missing)
--		pr_emerg(HW_ERR "Some CPUs didn't answer in synchronization\n");
- 	if (exp)
- 		pr_emerg(HW_ERR "Machine check: %s\n", exp);
- 	if (!fake_panic) {
-@@ -909,7 +906,6 @@ static int mce_timed_out(u64 *t, const char *msg)
- 					 cpumask_pr_args(&mce_missing_cpus));
- 			mce_panic(msg, NULL, NULL);
- 		}
--		cpu_missing = 1;
- 		return 1;
- 	}
- 	*t -= SPINUNIT;
-@@ -2720,7 +2716,6 @@ struct dentry *mce_get_debugfs_dir(void)
- 
- static void mce_reset(void)
- {
--	cpu_missing = 0;
- 	atomic_set(&mce_fake_panicked, 0);
- 	atomic_set(&mce_executing, 0);
- 	atomic_set(&mce_callin, 0);
+	/*
+	 * Tolerant levels:
+	 * 0: always panic on uncorrected errors, log corrected errors
+	 * 1: panic or SIGBUS on uncorrected errors, log corrected errors
+	 * 2: SIGBUS or log uncorrected errors (if possible), log corr. errors
+	 * 3: never panic or SIGBUS, log all errors (for testing only)
+	 */
+
+So on normal deployments, no one should fiddle with tolerant levels - so
+you'll be running at tolerance level 0 by default and all should print
+out. Same for level 1.
+
+Levels 2 and 3 are, to me at least, purely for testing *only*. And,
+actually, that error message should be issued regardless of the
+tolerance level - only the panicking should be controlled by that. IOW,
+that code should do:
+
+        if ((s64)*t < SPINUNIT) {
+                if (cpumask_and(&mce_missing_cpus, cpu_online_mask, &mce_missing_cpus))
+                        pr_emerg("CPUs not responding to MCE broadcast (may include false positives): %*pbl\n",
+                                 cpumask_pr_args(&mce_missing_cpus));
+                if (mca_cfg.tolerant <= 1)
+                        mce_panic(msg, NULL, NULL);
+                return 1;
+        }
+
+because, regardless of tolerance level, saying that some cores didn't
+respond is important info.
+
+You could do that as a separate patch, on top, if you feel like it.
+
+> I am not sure whether it should be authored by you or suggested by
+> you.
+
+Suggested is fine.
+
+> Anyway, I will post a new patch exactly as you suggested. Please pick
+> it or ignore it as appropriate :)
+
+Thx.
+
 -- 
-2.27.0
+Regards/Gruss,
+    Boris.
 
+https://people.kernel.org/tglx/notes-about-netiquette
