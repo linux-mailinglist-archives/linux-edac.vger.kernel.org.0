@@ -2,104 +2,79 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 47C7B4508FA
-	for <lists+linux-edac@lfdr.de>; Mon, 15 Nov 2021 16:54:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 832DC450930
+	for <lists+linux-edac@lfdr.de>; Mon, 15 Nov 2021 17:05:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236608AbhKOP5D (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Mon, 15 Nov 2021 10:57:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47202 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236531AbhKOP5B (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Mon, 15 Nov 2021 10:57:01 -0500
-Received: from mail-ua1-x932.google.com (mail-ua1-x932.google.com [IPv6:2607:f8b0:4864:20::932])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69497C061714
-        for <linux-edac@vger.kernel.org>; Mon, 15 Nov 2021 07:53:55 -0800 (PST)
-Received: by mail-ua1-x932.google.com with SMTP id y5so17921304ual.7
-        for <linux-edac@vger.kernel.org>; Mon, 15 Nov 2021 07:53:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=aEbkD0MZHqHf+9rUBNePxHoQt3EslhmQ3qory9m4aBw=;
-        b=E7rBax8labyklrw9VhcUbmFHxnpO3O8QEFRsWBHgfc57M3AeLCa8782v0bv0Jr4gq9
-         CLvZx25oPmvQN9fuB4sVJxT9vgDlvVr6SyZ/Os4VZRLuhGx/IIXr8O0f67oILXtwd2wq
-         UUTcE+0bpEWwlyQCg+q/3PHPtTctBmAGftknE/lgWm9HjcRWhnOscjdn2FVyr7pHjvPd
-         JBS8eeanIOClck7JT0ZBMvWXMmPbNMjTE5OGUl1aGutxhBJVuGdnHIdi+0FfBkkvqVsX
-         wCFIcopU3a6iZfbLGEMHO75S8YS+t3i+i3YvPea4yXEl1Z1j8vdxxq00h0NLzrcvKkiX
-         hS+A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=aEbkD0MZHqHf+9rUBNePxHoQt3EslhmQ3qory9m4aBw=;
-        b=oc+/uCS+N0x6/mSdDVO5YJSHfDJ3WWDQ1BW60D1ts2tSkSqiW9ktbh2vazkadCbqxf
-         aau0G5E4rU/g+JJpAeevb/bUWibBDky/9ZTVmmFNUsdvlv9qjfyK6hcT8qNnoB7T/CPv
-         DMxDWj+17qyzRslgvDDzg+tmRkVm02Pu2ERgelPLqdqhO2hE2BDg/ZDARjiR4dfwbC5S
-         jLt2qurd6+IbXQwnrMjM0ZcmEXch9iqJLXSVVy0LgT3KFQBYsoekLfMsL2o2dEBDYtPE
-         WQf/iiVTZEPeRiFlF8wVe6sJP5+RvtjChAwEsdY/sx5Q+QAhAAmgwY9pPnGebKIBCCIG
-         tjvg==
-X-Gm-Message-State: AOAM530Z0y6PI8omzLRPOu7Kch9WDO2XyIMFcutmqHotepXpBVcX9oWB
-        ErNpPkNW+BOQX9ETVLBP/F6sW3PKDLW82NCzmSE5uYg9LMw=
-X-Google-Smtp-Source: ABdhPJxURdO8f+60HnJy0kPpGz3jy0J9cc2WRT16RVVAhwaLiCF/+y2eo9Dip3KDc5GDSfsyindK0tF2AX2hN8TtN/0=
-X-Received: by 2002:a05:6102:3708:: with SMTP id s8mr43676318vst.45.1636991634051;
- Mon, 15 Nov 2021 07:53:54 -0800 (PST)
+        id S236709AbhKOQIa (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Mon, 15 Nov 2021 11:08:30 -0500
+Received: from mail.skyhub.de ([5.9.137.197]:48242 "EHLO mail.skyhub.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S236618AbhKOQHu (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Mon, 15 Nov 2021 11:07:50 -0500
+Received: from zn.tnic (p200300ec2f0b5600329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ec:2f0b:5600:329c:23ff:fea6:a903])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 9BDA91EC0283;
+        Mon, 15 Nov 2021 17:04:41 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1636992281;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=A5es2ls9sF041xL932PggqKzePNRYdDu0Notq+AQ++4=;
+        b=bD2S1Tx6UNeSVqnibY0x84EtiVVZga7M4RegujnuD/YDA4uoyV8LlhuCNuTSsFibbb7KYH
+        1MdKWgBjHZTpnL+wbtQ7QXQg3K7sjfiQaO7SUMCWzhOKYVQFI7K8A63rUcf4fwoGyLso9U
+        pURavpZPUKO6hm6a+r/jMCO+11tYVm0=
+Date:   Mon, 15 Nov 2021 17:04:30 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     "Chatradhi, Naveen Krishna" <nchatrad@amd.com>
+Cc:     linux-edac@vger.kernel.org, x86@kernel.org,
+        linux-kernel@vger.kernel.org, mingo@redhat.com, mchehab@kernel.org,
+        yazen.ghannam@amd.com, Muralidhara M K <muralimk@amd.com>
+Subject: Re: [PATCH v6 5/5] EDAC/amd64: Enumerate memory on Aldebaran GPU
+ nodes
+Message-ID: <YZKFDgtaBtvD6NIz@zn.tnic>
+References: <20211028130106.15701-1-nchatrad@amd.com>
+ <20211028130106.15701-6-nchatrad@amd.com>
+ <YY0WrKjnQ20IjrhB@zn.tnic>
+ <90642509-81af-51f2-8942-c90432680fa2@amd.com>
 MIME-Version: 1.0
-Received: by 2002:a05:6130:395:0:0:0:0 with HTTP; Mon, 15 Nov 2021 07:53:53
- -0800 (PST)
-Reply-To: liampayen50@gmail.com
-From:   liam payen <io452404@gmail.com>
-Date:   Mon, 15 Nov 2021 07:53:53 -0800
-Message-ID: <CAA+kqzy1Cusup5u=AF4mHzppxLJ1qoXcipsz75MFOM5CaXX8eQ@mail.gmail.com>
-Subject: =?UTF-8?B?5oiR6ZyA6KaB5L2g55qE5biu5Yqp?=
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <90642509-81af-51f2-8942-c90432680fa2@amd.com>
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-5oiR5piv5Yip5Lqa5aeGwrfkvanmgankuK3lo6vlpKvkurrjgIINCg0K5Zyo576O5Zu96ZmG5Yab
-55qE5Yab5LqL6YOo6Zeo44CC576O5Zu977yM5LiA5ZCN5Lit5aOr77yMMzIg5bKB77yM5oiR5Y2V
-6Lqr77yM5p2l6Ieq576O5Zu955Sw57qz6KW/5bee5YWL5Yip5aSr5YWw77yM55uu5YmN6am75omO
-5Zyo5Y+Z5Yip5Lqa77yM5LiO5oGQ5oCW5Li75LmJ5L2c5oiY44CC5oiR55qE5Y2V5L2N5piv56ys
-NOaKpOeQhumYn+esrDc4MuaXheaUr+aPtOiQpeOAgg0KDQrmiJHmmK/kuIDkuKrlhYXmu6HniLHl
-v4PjgIHor5rlrp7lkozmt7Hmg4XnmoTkurrvvIzlhbfmnInoia/lpb3nmoTlub3pu5jmhJ/vvIzm
-iJHllpzmrKLnu5Por4bmlrDmnIvlj4vlubbkuobop6Pku5bku6znmoTnlJ/mtLvmlrnlvI/vvIzm
-iJHllpzmrKLnnIvliLDlpKfmtbfnmoTms6LmtarlkozlsbHohInnmoTnvo7kuL3ku6Xlj4rlpKfo
-h6rnhLbmiYDmi6XmnInnmoTkuIDliIfmj5DkvpvjgILlvojpq5jlhbTog73mm7TlpJrlnLDkuobo
-p6PmgqjvvIzmiJHorqTkuLrmiJHku6zlj6/ku6Xlu7rnq4voia/lpb3nmoTllYbkuJrlj4vosIrj
-gIINCg0K5oiR5LiA55u05b6I5LiN5byA5b+D77yM5Zug5Li66L+Z5Lqb5bm05p2l55Sf5rS75a+5
-5oiR5LiN5YWs5bmz77yb5oiR5aSx5Y675LqG54i25q+N77yM6YKj5bm05oiRIDIxDQrlsoHjgILm
-iJHniLbkurLlj6vkuZTlsJTCt+S9qeaBqe+8jOavjeS6suWPq+eOm+S4vcK35L2p5oGp44CC5rKh
-5pyJ5Lq65biu5Yqp5oiR77yM5L2G5b6I6auY5YW05oiR57uI5LqO5Zyo576O5Yab5Lit5om+5Yiw
-5LqG6Ieq5bex44CCDQoNCuaIkee7k+WpmueUn+S6huWtqeWtkO+8jOS9huS7luatu+S6hu+8jOS4
-jeS5heaIkeS4iOWkq+W8gOWni+asuumql+aIke+8jOaJgOS7peaIkeS4jeW+l+S4jeaUvuW8g+Wp
-muWnu+OAgg0KDQrlnKjmiJHnmoTlm73lrrbjgIHnvo7lm73lkozlj5nliKnkuprov5nph4zvvIzm
-iJHkuZ/lvojlubjov5DvvIzmi6XmnInmiJHnlJ/mtLvkuK3miYDpnIDnmoTkuIDliIfvvIzkvYbm
-sqHmnInkurrnu5nmiJHlu7rorq7jgILmiJHpnIDopoHkuIDkuKror5rlrp7nmoTkurrmnaXkv6Hk
-u7vvvIzku5bkuZ/kvJrlsLHlpoLkvZXmipXotYTmiJHnmoTpkrHmj5Dkvpvlu7rorq7jgILlm6Dk
-uLrmiJHmmK/miJHniLbmr43lnKjku5bku6zljrvkuJbliY3nlJ/kuIvnmoTllK/kuIDkuIDkuKrl
-pbPlranjgIINCg0K5oiR5LiN6K6k6K+G5L2g5pys5Lq677yM5L2G5oiR6K6k5Li65pyJ5LiA5Liq
-5YC85b6X5L+h6LWW55qE5aW95Lq677yM5LuW5Y+v5Lul5bu656uL55yf5q2j55qE5L+h5Lu75ZKM
-6Imv5aW955qE5ZWG5Lia5Y+L6LCK77yM5aaC5p6c5L2g55yf55qE5pyJ5LiA5Liq6K+a5a6e55qE
-5ZCN5a2X77yM5oiR5Lmf5pyJ5LiA5Lqb5Lic6KW/6KaB5ZKM5L2g5YiG5Lqr55u45L+h44CC5Zyo
-5L2g6Lqr5LiK77yM5Zug5Li65oiR6ZyA6KaB5L2g55qE5biu5Yqp44CC5oiR5oul5pyJ5oiR5Zyo
-5Y+Z5Yip5Lqa6L+Z6YeM6LWa5Yiw55qE5oC76aKd77yIMjUwDQrkuIfnvo7lhYPvvInjgILmiJHk
-vJrlnKjkuIvkuIDlsIHnlLXlrZDpgq7ku7bkuK3lkYror4nkvaDmiJHmmK/lpoLkvZXlgZrliLDn
-moTvvIzkuI3opoHmg4rmhYzvvIzku5bku6zmsqHmnInpo47pmanvvIzogIzkuJTmiJHov5jlnKjk
-uI4gUmVkDQrmnInogZTns7vnmoTkurrpgZPkuLvkuYnljLvnlJ/nmoTluK7liqnkuIvlsIbov5nn
-rJTpkrHlrZjlhaXkuobpk7booYzjgILmiJHluIzmnJvmgqjlsIboh6rlt7HkvZzkuLrmiJHnmoTl
-j5fnm4rkurrmnaXmjqXmlLbln7rph5HlubblnKjmiJHlnKjov5nph4zlrozmiJDlkI7noa7kv53l
-roPnmoTlronlhajlubbojrflvpfmiJHnmoTlhpvkuovpgJrooYzor4Hku6XlnKjmgqjnmoTlm73l
-rrbkuI7mgqjkvJrpnaLvvJvkuI3opoHlrrPmgJXpk7booYzkvJrlsIbotYTph5HlrZjlgqjlnKgN
-CkFUTSBWSVNBIOWNoeS4re+8jOi/meWvueaIkeS7rOadpeivtOaYr+WuieWFqOS4lOW/q+aNt+ea
-hOOAgg0KDQrnrJTorrA75oiR5LiN55+l6YGT5oiR5Lus6KaB5Zyo6L+Z6YeM5ZGG5aSa5LmF77yM
-5oiR55qE5ZG96L+Q77yM5Zug5Li65oiR5Zyo6L+Z6YeM5Lik5qyh54K45by56KKt5Ye75Lit5bm4
-5a2Y5LiL5p2l77yM6L+Z5L+D5L2/5oiR5a+75om+5LiA5Liq5YC85b6X5L+h6LWW55qE5Lq65p2l
-5biu5Yqp5oiR5o6l5pS25ZKM5oqV6LWE5Z+66YeR77yM5Zug5Li65oiR5bCG5p2l5Yiw5L2g5Lus
-55qE5Zu95a625Ye66Lqr5oqV6LWE77yM5byA5aeL5paw55Sf5rS777yM5LiN5YaN5b2T5YW144CC
-DQoNCuWmguaenOaCqOaEv+aEj+iwqOaFjuWkhOeQhu+8jOivt+WbnuWkjeaIkeOAguaIkeS8muWR
-iuivieS9oOS4i+S4gOatpeeahOa1geeoi++8jOW5tuWPkemAgeabtOWkmuWFs+S6juWfuumHkeWt
-mOWFpemTtuihjOeahOS/oeaBr+OAguS7peWPiumTtuihjOWwhuWmguS9leW4ruWKqeaIkeS7rOmA
-mui/hyBBVE0gVklTQQ0KQ0FSRCDlsIbotYTph5Hovaznp7vliLDmgqjnmoTlm73lrrYv5Zyw5Yy6
-44CC5aaC5p6c5L2g5pyJ5YW06Laj77yM6K+35LiO5oiR6IGU57O744CCDQo=
+On Mon, Nov 15, 2021 at 08:54:55PM +0530, Chatradhi, Naveen Krishna wrote:
+> The errors are not specific to GPUs, the errors are originating from HBM2e
+> memory chips on the GPU.
+> 
+> As a first step, I'm trying to leverage the existing EDAC interfaces to
+> report the HBM errors.
+
+Report them how? How do the HBM chips fit in the EDAC sysfs hierarchy?
+Does it even work with the current hierarchy or does EDAC need more
+major restructuring?
+
+You can send me an example from sysfs on such a system, privately is
+fine too.
+
+> Page retirement and storing the bad pages info on a persistent storage can
+> be the next steps.
+
+If you're thinking about plugging this into memory_failure(), then this
+has nothing to do with EDAC.
+
+All EDAC can give you is error count numbers in sysfs.
+
+So I'd like to see where this is going first, and whether it is even
+worth it adding it to EDAC.
+
+Thx.
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
