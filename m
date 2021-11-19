@@ -2,79 +2,79 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 12FDD4565CE
-	for <lists+linux-edac@lfdr.de>; Thu, 18 Nov 2021 23:44:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F107456914
+	for <lists+linux-edac@lfdr.de>; Fri, 19 Nov 2021 05:23:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231895AbhKRWrA (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Thu, 18 Nov 2021 17:47:00 -0500
-Received: from mail.kernel.org ([198.145.29.99]:35066 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232469AbhKRWq6 (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Thu, 18 Nov 2021 17:46:58 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id C9F97600D4;
-        Thu, 18 Nov 2021 22:43:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1637275437;
-        bh=N9jTIFliNnDCqYanHCgoS9+gfA6v3yNGg/McyII/kPs=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=LAWLApl0V0aUK4UdGPZtWzjV87bJ994Bz/Bp+N5n/sxm9Xjzi1pyKn4vQMs70LZWT
-         9QevPtT/DcJiBjeGgvNyLxBYcKJVudgntS3V+qyBtPjcdPc26hqNNPh0KL3bSJ5Cw1
-         tIgQ9fjjFgRlPG5+m7cJK4svRNS+Zu6aji+Wuaxk5/eyDTV6m8p63iDYRlYdjm7eb4
-         8ms4xctUUfe0cZu7cJY1tGKm3RXaH9CVrz8vIp/yTOvswnICaQNU1Vs93AjkqGvXsM
-         R80ZfgJn3Bszg/tHNoF7BkYi6Pt531JMMiGcw43aKVHWREagwhm8Imh4bQAbF13yu+
-         /PGynoCpgMpTQ==
-Subject: Re: [PATCHv4 1/4] EDAC/synopsys: use the quirk for version instead of
- ddr version
-To:     bp@alien8.de
-Cc:     linux-kernel@vger.kernel.org, linux-edac@vger.kernel.org,
-        Michal Simek <michal.simek@xilinx.com>
-References: <20211012190709.1504152-1-dinguyen@kernel.org>
-From:   Dinh Nguyen <dinguyen@kernel.org>
-Message-ID: <778158cf-fbe9-0a65-7982-5372592e5ad2@kernel.org>
-Date:   Thu, 18 Nov 2021 16:43:55 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+        id S232796AbhKSE02 (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Thu, 18 Nov 2021 23:26:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35744 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231314AbhKSE02 (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Thu, 18 Nov 2021 23:26:28 -0500
+Received: from mail-io1-xd43.google.com (mail-io1-xd43.google.com [IPv6:2607:f8b0:4864:20::d43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 479C7C061756
+        for <linux-edac@vger.kernel.org>; Thu, 18 Nov 2021 20:23:27 -0800 (PST)
+Received: by mail-io1-xd43.google.com with SMTP id w22so11224180ioa.1
+        for <linux-edac@vger.kernel.org>; Thu, 18 Nov 2021 20:23:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=eTS1GK69RCI4oJxzikNG+dG1kEXvzkq40C70DiSwh3g=;
+        b=cQL4g+H2gJMJP3xWFQe/KzoyGqIo0AawlIVz6HOmgj7H+oswWn1JndJ03Ybadqh/iG
+         GFezuribER5iOwOrdhcpaLRDpEBug17B9goO8697VSiSH7/hueTiocUUiYuEl0npDX+N
+         7dyH4NYh7rX0U9rKSBeHM3T0tr/VTmzWLqZb6dR+9h3OxCcYEbSP6A9trr03z0AdHvvI
+         ahSumHf41Gk0/WiflEL2tp00pjSmNcuzmCnCLHtvda8y92IYt7+31MLaTkWsbzEryIp/
+         PD6PRbns5nLepTYC8LZKXr6gjYxNXB3IFy8QgwmShmHo9WUyNgKaHeXs5AvuxibzX411
+         sWzA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=eTS1GK69RCI4oJxzikNG+dG1kEXvzkq40C70DiSwh3g=;
+        b=eDTkQb1huYvOHKIywoExHTOhBicjszFc3ZPDRgLssTFZIzloLzkgL//sQcbkBefXEY
+         ahWuCpipc8xLYfy4Jwvva4ayCGuw1YhdWz7nO3W8aKbMsJ+t2eB8QHaX+h9saRyOtumv
+         WXePDAwV1L+m+bb1ipkgZhSA1YL6eGGZg3v3lPxr8AQm+9QDaNgUjU5+m1K5Ns+ILyh+
+         A3wOj+wJDjXoFZG6JqJP94D7rPlkzGV9fFlS5F2GuDbwyh67jYULPyEpHY36exH1CIa3
+         mYb9C5Kf56WAqVr1tZmf6e1StDKMPWjOXx2XWGw5Opc3w2++mxyUTHrr3Np2bV6iEn2b
+         LVyw==
+X-Gm-Message-State: AOAM532Ab2o2GJ9JRFsqtgW2cj3q1UDIP05K+lFzasIA0tMDWue8inSg
+        7N6PBAOvDhA1O/7/IV0kAcmo3Yo92olF4r2tw1o=
+X-Google-Smtp-Source: ABdhPJyoJdpS7Kf9B+KrNKG19mDCqtighLiNuAqL2cgDQj7eZ+/CBh/r4yLZu32slWVXs7TOdIJDzf3XHUtHh6UYg8Y=
+X-Received: by 2002:a05:6602:164a:: with SMTP id y10mr3074210iow.123.1637295806431;
+ Thu, 18 Nov 2021 20:23:26 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <20211012190709.1504152-1-dinguyen@kernel.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Received: by 2002:a05:6602:2f03:0:0:0:0 with HTTP; Thu, 18 Nov 2021 20:23:25
+ -0800 (PST)
+Reply-To: anthonyrrobson@gmail.com
+From:   "Mr. Anthony Robson" <abcudday@gmail.com>
+Date:   Thu, 18 Nov 2021 20:23:25 -0800
+Message-ID: <CADXsGJFbR1Q52ZiBs8f3ijChf5RKGDYxHiXANAhCVcHdcbSS1A@mail.gmail.com>
+Subject: I look forward to hearing from you SOONEST!
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-Hi Boris,
+Hello Friend,
 
-can you please take this series through your tree?
+Below is the email i sent to you.
 
-Thanks,
-Dinh
+I am so sorry for sending you this unsolicited and unexpected email.
 
-On 10/12/21 2:07 PM, Dinh Nguyen wrote:
-> Version 2.40a supports DDR_ECC_INTR_SUPPORT for a quirk, so use that
-> quirk to determine a call to setup_address_map().
-> 
-> Reviewed-by: Michal Simek <michal.simek@xilinx.com>
-> Signed-off-by: Dinh Nguyen <dinguyen@kernel.org>
-> ---
-> v4: add Reviewed-by
-> v3: new patch
-> ---
->   drivers/edac/synopsys_edac.c | 3 +--
->   1 file changed, 1 insertion(+), 2 deletions(-)
-> 
-> diff --git a/drivers/edac/synopsys_edac.c b/drivers/edac/synopsys_edac.c
-> index 7e7146b22c16..bf237fccb444 100644
-> --- a/drivers/edac/synopsys_edac.c
-> +++ b/drivers/edac/synopsys_edac.c
-> @@ -1352,8 +1352,7 @@ static int mc_probe(struct platform_device *pdev)
->   		}
->   	}
->   
-> -	if (of_device_is_compatible(pdev->dev.of_node,
-> -				    "xlnx,zynqmp-ddrc-2.40a"))
-> +	if (priv->p_data->quirks & DDR_ECC_INTR_SUPPORT)
->   		setup_address_map(priv);
->   #endif
->   
-> 
+I actually got your contact from your country website and i decided to
+contact you directly about this business venture.
+
+I am contacting you in good faith and this business investment
+proposal will be of mutual benefit for us. I have a business proposal
+in huge sum amount of US$800,000 000 00 (Eight Hundred  Million United
+state dollars only} to be transferred to any safe account with your
+assistance.
+
+Contact me back via my email if you are interested in this business
+investment proposal and if you can be trusted for further briefing and
+details.
+I look forward to hearing from you SOONEST!
+
+Kind Regards.
+Mr. Anthony Robson.
