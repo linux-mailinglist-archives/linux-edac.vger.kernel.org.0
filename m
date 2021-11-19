@@ -2,58 +2,59 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 25A4E458010
-	for <lists+linux-edac@lfdr.de>; Sat, 20 Nov 2021 19:56:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B6F61459896
+	for <lists+linux-edac@lfdr.de>; Tue, 23 Nov 2021 00:52:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229535AbhKTS7g (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Sat, 20 Nov 2021 13:59:36 -0500
-Received: from mail.skyhub.de ([5.9.137.197]:38602 "EHLO mail.skyhub.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229497AbhKTS7g (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Sat, 20 Nov 2021 13:59:36 -0500
-Received: from zn.tnic (p200300ec2f227e007756bf95113cdd51.dip0.t-ipconnect.de [IPv6:2003:ec:2f22:7e00:7756:bf95:113c:dd51])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id F19BC1EC011B;
-        Sat, 20 Nov 2021 19:56:31 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1637434592;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=YP0WzvRCwJ96px1O4yFE1cWq1zzQA1iUGq1cY3hMda4=;
-        b=kLZrHRK4mHdMHZ6u803TItPgWiJr8SHZMCfMhvacigGm8voPyzbZpGLhuN1UdixHsvaEou
-        UgJisnvJ36NXpjCh5KvqZWjYcnKqJelo5pjq8FSi+fnVE23XmTkrNMyucSwgN0m4WAD3Ve
-        egR+lwj7DKfvFVkeWqv5yHVxql9CCXU=
-Date:   Sat, 20 Nov 2021 19:56:25 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Dinh Nguyen <dinguyen@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-edac@vger.kernel.org,
-        Michal Simek <michal.simek@xilinx.com>
-Subject: Re: [PATCHv4 1/4] EDAC/synopsys: use the quirk for version instead
- of ddr version
-Message-ID: <YZlE2VxkZSUUeFxn@zn.tnic>
-References: <20211012190709.1504152-1-dinguyen@kernel.org>
- <778158cf-fbe9-0a65-7982-5372592e5ad2@kernel.org>
+        id S232184AbhKVXz1 (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Mon, 22 Nov 2021 18:55:27 -0500
+Received: from mx08-00227901.pphosted.com ([91.207.212.184]:59606 "EHLO
+        mx08-00227901.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232101AbhKVXzX (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>);
+        Mon, 22 Nov 2021 18:55:23 -0500
+Received: from pps.filterd (m0097674.ppops.net [127.0.0.1])
+        by mx08-.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 1AJ7wixe018132;
+        Fri, 19 Nov 2021 10:27:12 +0100
+Received: from zbw2k16ex01.bardusch.net ([185.80.186.174])
+        by mx08-.pphosted.com (PPS) with ESMTPS id 3cdmdm1455-5
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA bits=256 verify=NOT);
+        Fri, 19 Nov 2021 10:27:11 +0100
+Received: from ZBW2K16EX01.bardusch.net (172.25.1.1) by
+ ZBW2K16EX01.bardusch.net (172.25.1.1) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA) id 15.1.2308.20;
+ Fri, 19 Nov 2021 10:27:10 +0100
+Received: from User (172.25.1.131) by ZBW2K16EX01.bardusch.net (172.25.1.1)
+ with Microsoft SMTP Server id 15.1.2308.20 via Frontend Transport; Fri, 19
+ Nov 2021 10:26:59 +0100
+Reply-To: <josechoondak@gmail.com>
+From:   Joseph Choondak <info@ndd.co.mz>
+Subject: I hope this email finds you well.
+Date:   Fri, 19 Nov 2021 01:27:13 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <778158cf-fbe9-0a65-7982-5372592e5ad2@kernel.org>
+Content-Type: text/plain; charset="Windows-1251"
+Content-Transfer-Encoding: 7bit
+X-Priority: 3
+X-MSMail-Priority: Normal
+X-Mailer: Microsoft Outlook Express 6.00.2600.0000
+X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2600.0000
+Message-ID: <e7a31752-8681-4042-9ad5-c01248965c5f@ZBW2K16EX01.bardusch.net>
+To:     Undisclosed recipients:;
+X-Proofpoint-GUID: CmkypoSbrhIOZjoh10HOlF5xTX1kBMKq
+X-Proofpoint-ORIG-GUID: CmkypoSbrhIOZjoh10HOlF5xTX1kBMKq
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.0.607.475
+ definitions=2021-11-19_08,2021-11-17_01,2020-04-07_01
+X-Proofpoint-Spam-Reason: orgsafe
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Thu, Nov 18, 2021 at 04:43:55PM -0600, Dinh Nguyen wrote:
-> Hi Boris,
-> 
-> can you please take this series through your tree?
+May I please ask with considerable urgency for your kind assistance with the following matter.
+I'm a financial person, I think  I have something huge you might be interested in.
 
-Sure, applied.
+Looking forward to hearing from you.
 
-Thx.
 
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+Respectfully!!
+Joseph Choondak
+Account Executive.
