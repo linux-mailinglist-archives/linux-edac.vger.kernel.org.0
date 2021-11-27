@@ -2,92 +2,84 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B767845F6CF
-	for <lists+linux-edac@lfdr.de>; Fri, 26 Nov 2021 23:20:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A07D4601C1
+	for <lists+linux-edac@lfdr.de>; Sat, 27 Nov 2021 22:48:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229802AbhKZWYE (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Fri, 26 Nov 2021 17:24:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53634 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233615AbhKZWWE (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Fri, 26 Nov 2021 17:22:04 -0500
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA6B5C061574;
-        Fri, 26 Nov 2021 14:18:50 -0800 (PST)
-Received: by mail-wr1-x435.google.com with SMTP id o13so21384219wrs.12;
-        Fri, 26 Nov 2021 14:18:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=googlemail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=8YPOf/hryHXLNf5LZMrhfLPR/t5FxaDsdYpZZbn9qeA=;
-        b=SAOmx1u+b9+/SH8EqbHf0gb/dxmO2bkyeCAIwQBrMKZ7EvZvpx3ScaGlZxHm8jT95Z
-         swm58WRmEwpOkEjxMVi+lqc5bX0TzP7BaGyGByM7VGLfbEkM7dpkEInJcnCKM/uCUf5L
-         RE+2FkoY0n1sNWSVnlLqXdldFP5/9OxFlijQaXSi6aKzJWard7iMkkBu+IraRbvMqdV8
-         fAHj/Fo4wmoZ2xYx8FPu+KyhgS0WtlpndS4Bp/1y+st3QRx2eNtF/bMlPD+PIHUejNJT
-         fEMuhHvXmfOHQfIB9teoiqOu6l1X3r17Y4aIiIEib6f1CWt1Fl0f8hyKcm74QKYyLfMj
-         tsQg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=8YPOf/hryHXLNf5LZMrhfLPR/t5FxaDsdYpZZbn9qeA=;
-        b=eW0H2SH5MP4jGvhXVza4QwVbw70uq/lSuDMwFDTqa+IILIto4+tYFPHhlNrHzj6en8
-         q9RJVir+zl2hR+igJ9IACSVyRfQlJ89LPY3B6/P5SJL6UneVc7UIs0paVywChSc6hUGm
-         88bXn2d8lRhCNdWni8ZMyEv+BOppMYzUSWMycouA29G5MwxcrFKYz48FOSJ24u/tcX6q
-         kY0vaqpts8hW5/ypNZNH7Jnbi+Tr59KCH8sj712UKV+RvpWMm8SsNTR9AiFVx0IJNCs8
-         F4UimJFOSwvqSoCvRdP+/f+XUyjnnwvtS2dfaFtODhsRgBQNQwm7aUKIEXhjQ5azIIqp
-         L+IA==
-X-Gm-Message-State: AOAM5324upOW+xtueqIqWbDKNOYYQz/FICvzulijoAMYua41NakPIhVy
-        LFrQVmPRrmq4sQ==
-X-Google-Smtp-Source: ABdhPJzpv1hu+dk1JBApzyvzlN/nfu36ibqkZGgaQtsO4EvvZHjLPhpWgb7j1GDiHcPgqf2FxMTJGg==
-X-Received: by 2002:adf:cc91:: with SMTP id p17mr16899891wrj.589.1637965129359;
-        Fri, 26 Nov 2021 14:18:49 -0800 (PST)
-Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.gmail.com with ESMTPSA id j40sm8547915wms.16.2021.11.26.14.18.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 26 Nov 2021 14:18:49 -0800 (PST)
-From:   Colin Ian King <colin.i.king@googlemail.com>
-X-Google-Original-From: Colin Ian King <colin.i.king@gmail.com>
-To:     Tony Luck <tony.luck@intel.com>, Qiuxu Zhuo <qiuxu.zhuo@intel.com>,
+        id S1356330AbhK0VwK (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Sat, 27 Nov 2021 16:52:10 -0500
+Received: from mail.ispras.ru ([83.149.199.84]:33634 "EHLO mail.ispras.ru"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1356437AbhK0VuK (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Sat, 27 Nov 2021 16:50:10 -0500
+X-Greylist: delayed 363 seconds by postgrey-1.27 at vger.kernel.org; Sat, 27 Nov 2021 16:50:09 EST
+Received: from [10.10.3.121] (unknown [10.10.3.121])
+        by mail.ispras.ru (Postfix) with ESMTPS id B5CAE40755CF;
+        Sat, 27 Nov 2021 21:40:48 +0000 (UTC)
+Date:   Sun, 28 Nov 2021 00:40:48 +0300 (MSK)
+From:   Alexander Monakov <amonakov@ispras.ru>
+To:     linux-edac@vger.kernel.org
+cc:     Yazen Ghannam <yazen.ghannam@amd.com>,
         Borislav Petkov <bp@alien8.de>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Robert Richter <rric@kernel.org>, linux-edac@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] EDAC/sb_edac: Remove redundant initialization of variable rc
-Date:   Fri, 26 Nov 2021 22:18:48 +0000
-Message-Id: <20211126221848.1125321-1-colin.i.king@gmail.com>
-X-Mailer: git-send-email 2.33.1
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-kernel@vger.kernel.org
+Subject: Excessive delays from GHES polling on dual-socket AMD EPYC
+Message-ID: <878e4019-3a88-798e-4427-7efb5289a4e1@ispras.ru>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-The variable rc is being initialized with a value that is never
-read, it is being updated later on. The assignment is redundant and
-can be removed.
+Hello world,
 
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
----
- drivers/edac/sb_edac.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+when lightly testing a dual-socket server with 64-core AMD processors I
+noticed that workloads running on cpu #0 can exhibit significantly worse
+latencies compared to cpu #1 ... cpu #255. Checking SSD response time,
+on cpu #0 I got:
 
-diff --git a/drivers/edac/sb_edac.c b/drivers/edac/sb_edac.c
-index 1522d4aa2ca6..9678ab97c7ac 100644
---- a/drivers/edac/sb_edac.c
-+++ b/drivers/edac/sb_edac.c
-@@ -3439,7 +3439,7 @@ MODULE_DEVICE_TABLE(x86cpu, sbridge_cpuids);
- 
- static int sbridge_probe(const struct x86_cpu_id *id)
- {
--	int rc = -ENODEV;
-+	int rc;
- 	u8 mc, num_mc = 0;
- 	struct sbridge_dev *sbridge_dev;
- 	struct pci_id_table *ptable = (struct pci_id_table *)id->driver_data;
--- 
-2.33.1
+taskset -c 0 ioping -R /dev/sdf
 
+--- /dev/sdf (block device 1.75 TiB) ioping statistics ---
+70.7 k requests completed in 2.97 s, 276.3 MiB read, 23.8 k iops, 93.1 MiB/s
+generated 70.7 k requests in 3.00 s, 276.4 MiB, 23.6 k iops, 92.1 MiB/s
+min/avg/max/mdev = 33.1 us / 41.9 us / 87.9 ms / 452.6 us
+
+Notice 87.9 millisecond maximum response time, and compare with its
+hyperthread sibing:
+
+taskset -c 128 ioping -R /dev/sdf
+
+--- /dev/sdf (block device 1.75 TiB) ioping statistics ---
+80.5 k requests completed in 2.96 s, 314.5 MiB read, 27.2 k iops, 106.2 MiB/s
+generated 80.5 k requests in 3.00 s, 314.5 MiB, 26.8 k iops, 104.8 MiB/s
+min/avg/max/mdev = 33.2 us / 36.8 us / 89.2 us / 2.00 us
+
+Of course maximum times themselves vary from run to run, but the general
+picture stays: on cpu #0 I get about three orders of magnitude
+longer latencies. I think this is outside of "latency-sensitive
+workloads might care" territory and closer to "hurts everyone" kind of
+issue, hence I'm reporting it.
+
+
+On this machine there's AMD HEST ACPI table that registers 14342 polled
+"generic hardware error sources" (GHES) with poll interval 5 seconds.
+(this seems misdesigned: it will cause cross-socket polling unless the
+OS takes special care to divine which GHES to poll from where)
+
+Linux setups a timer for each of those individually, so when the machine
+is idle there's approximately 2800 timers per second invoked on cpu #0.
+Plus, there's a secondary issue with timer migration:
+get_nohz_timer_target will attempt to select a non-idle CPU out of 256
+(visiting some CPUs repeatedly if they appear in nested domains), and
+fail. If I help it along by running 'taskset -c 1 yes > /dev/null' or
+disable kernel.timer_migration entirely, it drops maximum latency in the
+above ioping test to 1..10ms range (down to two orders of magnitude from
+three).
+
+I guess the short answer is that if I don't like it I can boot that
+server with 'ghes_disable=1', but is a proper solution possible? Like
+requiring explicit opt-in to honor polled GHES entries?
+
+Thank you.
+Alexander
