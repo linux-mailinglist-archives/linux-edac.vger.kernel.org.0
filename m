@@ -2,137 +2,62 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 068AC46143F
-	for <lists+linux-edac@lfdr.de>; Mon, 29 Nov 2021 12:52:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B404D4620BD
+	for <lists+linux-edac@lfdr.de>; Mon, 29 Nov 2021 20:42:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241633AbhK2L4P (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Mon, 29 Nov 2021 06:56:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60098 "EHLO
+        id S1352732AbhK2Tpp (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Mon, 29 Nov 2021 14:45:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238075AbhK2LyP (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Mon, 29 Nov 2021 06:54:15 -0500
-Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BB9DC08ED87
-        for <linux-edac@vger.kernel.org>; Mon, 29 Nov 2021 02:57:21 -0800 (PST)
-Received: by mail-yb1-xb2b.google.com with SMTP id v64so41033481ybi.5
-        for <linux-edac@vger.kernel.org>; Mon, 29 Nov 2021 02:57:21 -0800 (PST)
+        with ESMTP id S241950AbhK2Tnm (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Mon, 29 Nov 2021 14:43:42 -0500
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11F19C042380
+        for <linux-edac@vger.kernel.org>; Mon, 29 Nov 2021 08:02:50 -0800 (PST)
+Received: by mail-ed1-x52a.google.com with SMTP id g14so74005276edb.8
+        for <linux-edac@vger.kernel.org>; Mon, 29 Nov 2021 08:02:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=/N2AzXdmQhj8cnrxf6yxwa23/wIatZRqd4goM9Q+IO8=;
-        b=ErhOpdgigBGRX0iOA2ci/LrupvuM6+6c+q9rD2B6x1di+sFL9PVYGmzafYCayO999B
-         Ex51N+if313WKcW+gK1lj/OWtPvwfLDnTT20+eAv8YxxrR4g7rLnHIdzsTIvVAz0SrpQ
-         Ch6axdbEwb+a/M3Dt2tKAFVIFy0Y8iZuOwtZqXl1J60xk4GO/CqIzkuCM++XjDrDX06p
-         089vT34nfrhei7WTrhyk/M1T035mB+FNPNQ5Hd3oBtsviAPMtLS5mvE7ZDcnz+92hK94
-         07sMoak/mgTSYg0TcRsMzWsKiITVk9cvja0ME+E02kwQTfYZNPVDhNnY35dNNYcmygLp
-         iGDg==
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=A9mpHfvDXsmkNMhyOGewzekr0FIgj4cYBvcSjhTr+N0=;
+        b=XLZKH/GLIn/u5rB4NKzbl/hJdSIRpUZ2fjPrk0ucAedeyrj1Q5NR7x6EhC9VyjYMj8
+         Bjj4IyaqAMbSYiA6+YPNi4zjr6Yv4dPfNaLrwzxfAq9W5VGj5dD+FnU8bqaa2ImYnrzD
+         ACEz6JxSjDxYXFeSKFYkpcYydEZsUDCSEG1aDNWwcnD8SDYGVCObv8lWgGMI/qw8qa9i
+         aBlFxwRwvgQBJZw72rXHXVTaPMX8JGkXBzup8cU4l/b9ClehsotHb79g5Qwc45TwF0gV
+         6SYkyLeP+r2PdDXgXr4EjmaQh3wz1QMIEyHscCzAKABOqX9VgVnACbXKEZIHp1uM+7qb
+         8bNQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=/N2AzXdmQhj8cnrxf6yxwa23/wIatZRqd4goM9Q+IO8=;
-        b=Krv7idfsI3RaXV48m9eSCr52KsMOqtMCJWSayP54iLClYC2BlJq7CDd5URxvk1vEKZ
-         5fjHEhmIeqwRkjfE45jTKzNSkLSrPAmJDGz6X6jtgW4AMe5WGl1RPnM03lvtpgy1HD+K
-         A8njEvUiyCZTEe76I8YzME6HpOL16BZyudCZKNSrbOhR8WJ2xiz62ww9CyvQZWUEZGDm
-         ggTpvsdvcFEicNoL9uZS8oiUxPyElCI28jdgzyc+XJvChHlIJORWX7OIp1RVsE4rPmhQ
-         gY5/X44Bx/yTgqEBoj8PQrer/gWp9WgKtahCB4QrCFRRXHr6HSKLq57zA323gSBP2kDP
-         xVVg==
-X-Gm-Message-State: AOAM530+26v91bzxy8vmJ27DySZx6qPWuSDLw8aAMUTd1CSGUIIAUAOR
-        at+Cd/VdldDnzwi5iSwvk6o78Vt5p86YgQdPfI0=
-X-Google-Smtp-Source: ABdhPJwDXAO1KxnCKDkkwiudCJqJuhpArYKiJQTg+eIzhjAbEBRvY4HWTqik/oBHDS4epB1bybFjcLt6vUq4kag2XME=
-X-Received: by 2002:a25:8052:: with SMTP id a18mr5454865ybn.634.1638183440729;
- Mon, 29 Nov 2021 02:57:20 -0800 (PST)
+         :subject:to;
+        bh=A9mpHfvDXsmkNMhyOGewzekr0FIgj4cYBvcSjhTr+N0=;
+        b=edjKwJbOKBEvkKOSVjYgUHI7yODkQvRfRSfDOCTE0XKZu+rBMxYM6GIQZj90gqkD9C
+         FhQ6+DoumEmC/i5CX22xj2b9ifAjxO3o6RGDsPG0E4EbsU1D/ii+uMsDawx3KfCoJkMx
+         5HYf8mdjyHhYBmwfbqYkdfgNQSr++N7vMmpAaKHiD9ckxk/D6druPuh8HVbq1r9gs5/R
+         nt5BySidFErmKI/MfXWBMzv7QWGOdt/tNB/rdb+ksWrS7cdw5aImg6kkaP4TqXiUBOg1
+         HNuH1uGDf89SGEjcMlOiQuYvFB9zJWzK7GGS/ba2t7BRj7hV3YM1V0ZRKXSwN0QtqcJS
+         y2ew==
+X-Gm-Message-State: AOAM531K6c1Str8upD9XdSa2xgG2n32gNhnwV6+kTnDTFQ02lXHmiHHc
+        LWAW+/XNABgHOn8LRFNVVt3JLvanGtqhpmRzTwI=
+X-Google-Smtp-Source: ABdhPJyoAPjnWlBX2XZUKHME7zJWE3unyhdoRRJkbdfqrH7Z7xaDrezHqLO4n4ce/wR3ogBX9C4cs665ICbl0/7sUe8=
+X-Received: by 2002:aa7:cf9a:: with SMTP id z26mr75242392edx.136.1638201768946;
+ Mon, 29 Nov 2021 08:02:48 -0800 (PST)
 MIME-Version: 1.0
-Received: by 2002:a05:7010:178c:b0:1df:8029:4655 with HTTP; Mon, 29 Nov 2021
- 02:57:20 -0800 (PST)
-Reply-To: koffiaya202100@gmail.com
-From:   Koffi Aya <jindaratdaosornprasat2014@gmail.com>
-Date:   Mon, 29 Nov 2021 10:57:20 +0000
-Message-ID: <CAEU+xUtwV2_ndBWAkwUyRuwpTUmaYNsko=VW5FhYtsUrob4E3g@mail.gmail.com>
-Subject: Von Koffi
+Received: by 2002:a17:906:d54e:0:0:0:0 with HTTP; Mon, 29 Nov 2021 08:02:47
+ -0800 (PST)
+Reply-To: fredbenson1950@gmail.com
+From:   fred <obicasmir428@gmail.com>
+Date:   Mon, 29 Nov 2021 16:02:47 +0000
+Message-ID: <CABzKOhbS6A92o=YY3oMT+YYrSPe+i5JBbHq3Fugj1LSVph3+XQ@mail.gmail.com>
+Subject: hi
 To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
---=20
-Von: Koffi Aya
-Liebste,
-Guten Tag und vielen Dank f=C3=BCr Ihre Aufmerksamkeit. Bitte, ich m=C3=B6c=
-hte, dass
-Sie meine E-Mail sorgf=C3=A4ltig lesen und mir helfen, dieses Projekt zu
-bearbeiten. Ich bin Miss Koffi Aya und m=C3=B6chte Sie in aller Bescheidenh=
-eit
-um Ihre Partnerschaft und Unterst=C3=BCtzung bei der =C3=9Cbertragung und A=
-nlage
-meiner Erbschaftsgelder in H=C3=B6he von 6.500.000,00 US-Dollar (sechs Mill=
-ionen
-f=C3=BCnfhunderttausend US-Dollar) bitten, die mein verstorbener geliebter =
-Vater
-vor seinem Tod bei einer Bank hinterlegt hat.
-
-Ich m=C3=B6chte Ihnen versichern, dass dieser Fonds legal von meinem
-verstorbenen Vater erworben wurde und keinen kriminellen Hintergrund hat.
-Mein Vater hat diesen Fonds legal durch ein legitimes Gesch=C3=A4ft erworbe=
-n,
-bevor er w=C3=A4hrend seiner Gesch=C3=A4ftsreise zu Tode vergiftet wurde. D=
-er Tod
-meines Vaters wurde von seinen Verwandten, die ihn w=C3=A4hrend seiner
-Dienstreise begleiteten, vermutet. Denn nach 3 Monaten nach dem Tod meines
-Vaters begannen Seine Verwandten, alle Besitzt=C3=BCmer meines verstorbenen
-Vaters zu beanspruchen und zu verkaufen.
-
-Die Verwandten meines verstorbenen Vaters wissen nichts von den
-6.500.000,00 US-Dollar (sechs Millionen f=C3=BCnfhunderttausend US-Dollar),=
- die
-mein verstorbener Vater auf die Bank eingezahlt hat und mein verstorbener
-Vater sagte mir heimlich, bevor er starb, dass ich in jedem Land nach einem
-ausl=C3=A4ndischen Partner suchen sollte meiner Wahl, wohin ich diese Gelde=
-r f=C3=BCr
-meine eigenen Zwecke =C3=BCberweise.
-
-Bitte helfen Sie mir, dieses Geld f=C3=BCr gesch=C3=A4ftliche Zwecke in Ihr=
-em Land
-auf Ihr Konto zu =C3=BCberweisen. Ich habe diese Entscheidung getroffen, we=
-il
-ich viele Dem=C3=BCtigungen von den Verwandten meines verstorbenen Vaters
-erlitten habe. Zur Zeit habe ich Kommunikation mit dem Direktor der Bank,
-bei der mein verstorbener Vater dieses Geld hinterlegt hat. Ich habe dem
-Direktor der Bank die Dringlichkeit erkl=C3=A4rt, sicherzustellen, dass das=
- Geld
-ins Ausland =C3=BCberwiesen wird, damit ich dieses Land zu meiner Sicherhei=
-t
-verlassen kann. Der Direktor der Bank hat mir zugesichert, dass das Geld
-=C3=BCberwiesen wird, sobald ich jemanden vorlege, der den Geldbetrag in me=
-inem
-Namen f=C3=BCr diesen Zweck ehrlich entgegennimmt.
-
-Seien Sie versichert, dass die Bank den Betrag auf Ihr Konto =C3=BCberweist=
- und
-es keine Probleme geben wird. Diese Transaktion ist 100% risikofrei und
-legitim. Ich bin bereit, Ihnen nach erfolgreicher =C3=9Cberweisung dieses G=
-eldes
-auf Ihr Konto 30% der Gesamtsumme als Entsch=C3=A4digung f=C3=BCr Ihren Auf=
-wand
-anzubieten. Sie werden mir auch helfen, 10% an Wohlt=C3=A4tigkeitsorganisat=
-ionen
-und Heime f=C3=BCr mutterlose Babys in Ihrem Land zu spenden.
-
-Bitte alles, was ich m=C3=B6chte, ist, dass Sie f=C3=BCr mich als mein ausl=
-=C3=A4ndischer
-Partner auftreten, damit die Bank dieses Geld auf Ihr Konto =C3=BCberweist,
-damit ich in diesem Land leben kann. Bitte, ich brauche Ihre dringende
-Hilfe wegen meines jetzigen Zustands. Mit Ihrer vollen Zustimmung, mit mir
-zu diesem Zweck zusammenzuarbeiten, bekunden Sie bitte Ihr Interesse durch
-eine R=C3=BCckantwort an mich, damit ich Ihnen die notwendigen Informatione=
-n und
-die Details zum weiteren Vorgehen gebe. Ich werde Ihnen 30% des Geldes f=C3=
-=BCr
-Ihre Hilfe anbieten und Hilfestellung, damit umzugehen.
-
-Ihre dringende Antwort wird gesch=C3=A4tzt.
-Mit freundlichen Gr=C3=BC=C3=9Fen
-Koffi Aya
+Good day dear friend. My name is FRED BENSON; I'm the senior partner
+at FRED BENSON & Associate Law Firm based in Togo republic.
+I want us to claim the sum of (US$ 4.5 MILLION ) from the BTCI bank
+Lome Togo security company. You get 40% from the total amount.
+We work together and there will be success at the end. Reply for more details.
