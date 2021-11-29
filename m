@@ -2,84 +2,63 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A07D4601C1
-	for <lists+linux-edac@lfdr.de>; Sat, 27 Nov 2021 22:48:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 65023461028
+	for <lists+linux-edac@lfdr.de>; Mon, 29 Nov 2021 09:28:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356330AbhK0VwK (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Sat, 27 Nov 2021 16:52:10 -0500
-Received: from mail.ispras.ru ([83.149.199.84]:33634 "EHLO mail.ispras.ru"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1356437AbhK0VuK (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Sat, 27 Nov 2021 16:50:10 -0500
-X-Greylist: delayed 363 seconds by postgrey-1.27 at vger.kernel.org; Sat, 27 Nov 2021 16:50:09 EST
-Received: from [10.10.3.121] (unknown [10.10.3.121])
-        by mail.ispras.ru (Postfix) with ESMTPS id B5CAE40755CF;
-        Sat, 27 Nov 2021 21:40:48 +0000 (UTC)
-Date:   Sun, 28 Nov 2021 00:40:48 +0300 (MSK)
-From:   Alexander Monakov <amonakov@ispras.ru>
-To:     linux-edac@vger.kernel.org
-cc:     Yazen Ghannam <yazen.ghannam@amd.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-kernel@vger.kernel.org
-Subject: Excessive delays from GHES polling on dual-socket AMD EPYC
-Message-ID: <878e4019-3a88-798e-4427-7efb5289a4e1@ispras.ru>
+        id S1348565AbhK2Ibv (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Mon, 29 Nov 2021 03:31:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43664 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239174AbhK2I3v (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Mon, 29 Nov 2021 03:29:51 -0500
+Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA7FEC0613A5
+        for <linux-edac@vger.kernel.org>; Mon, 29 Nov 2021 00:23:05 -0800 (PST)
+Received: by mail-lj1-x22d.google.com with SMTP id u22so32885731lju.7
+        for <linux-edac@vger.kernel.org>; Mon, 29 Nov 2021 00:23:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=h5SGxromuDQtUoJTnxkhza7HXaouvO2qwEGMHxx3weM=;
+        b=TXPNJdC2r1iwoSZ/Y8M1XP+KzZCam0+qziJjQijxTu5aqUDFE6JJ5XRer9/5Z/weKl
+         rORkmJ++sjeg2i1Hs/e4qXTBGXFuyqZx8Eto8SzExPVFZPit/3uugPFSTfC/iRStp2dK
+         zTqkbs3TjOi/Mt/fUFQj0qyYvXesuYhHwPMnKaOCoi1bhK05rgj2Y7cIVdTMJ3lrAuVa
+         b/TnI3IHqUGTLOmN2hylhI2F6JGPG5YiMC6Ha0EJyd7y27iYMJmJAqJE0WPGc5hj05tR
+         7UHjb4JyMX+pzzs4clVFpy9qfb0LhrQnc8xAoy3dGMm+Z4lMEPyRiNH0ltaXklCgXiXR
+         E/qg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=h5SGxromuDQtUoJTnxkhza7HXaouvO2qwEGMHxx3weM=;
+        b=VXahbkYUCjwUnbySuWzYIeKDMSOIs1zm1PWqMuB/2erc2pgbh89wayyt/UA/onDPJX
+         ODkC3mimXexrR7iWUO8NDi0YYgFAcZi9hSUc2RPbtYCU9hae7PH3l7a5nIGEgiqDSsgr
+         +6mQQFJQIHgXvt4Wc/u213DjA1iDMBqM2bhVG+JTFwIYCAcoYM+KEGWUbaUOU5JrY6xA
+         euYybDSbsKQXqVEmt+MXzxZXmo0l8U1hnx0TIXEv1Gpwxj+0vx1+cilbHVKY8KdoxmKI
+         165HMskqhNbKFj4Br/rC54Y62UODz9KI6XFoQ+hmyXkAzr3/m/+wKgHSkcBkuO/bBQnF
+         9dVA==
+X-Gm-Message-State: AOAM532LM1mNQGcVyZPnoEbNOJoO6HfnoS6+fvTJwlWFA7Y+heYUjc1M
+        dy5IszKbYF6INMBXixh/XOc2lIgsz1OkkOL+8Q==
+X-Google-Smtp-Source: ABdhPJz4zItSG/eUm7nkCJe5HruRiFSBp317oc5/jeAcc+fKYmc5q3XsdUdGc1yGDz5u04vm+2YL+vhHeLjaa7ACIcI=
+X-Received: by 2002:a2e:2a43:: with SMTP id q64mr47923476ljq.102.1638174183800;
+ Mon, 29 Nov 2021 00:23:03 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Received: by 2002:ab3:7796:0:0:0:0:0 with HTTP; Mon, 29 Nov 2021 00:23:03
+ -0800 (PST)
+Reply-To: evelyngaby76@gmail.com
+From:   Evelyn Gaby <evelyngaby313@gmail.com>
+Date:   Mon, 29 Nov 2021 08:23:03 +0000
+Message-ID: <CAA63f6y83iyLQjiOT2wVUYfXgSveYedA0FqnM8oZbkQt9TJucw@mail.gmail.com>
+Subject: Hello
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-Hello world,
+.
+Please get back to me for more details,
+I like to disclose something very important to you,
 
-when lightly testing a dual-socket server with 64-core AMD processors I
-noticed that workloads running on cpu #0 can exhibit significantly worse
-latencies compared to cpu #1 ... cpu #255. Checking SSD response time,
-on cpu #0 I got:
-
-taskset -c 0 ioping -R /dev/sdf
-
---- /dev/sdf (block device 1.75 TiB) ioping statistics ---
-70.7 k requests completed in 2.97 s, 276.3 MiB read, 23.8 k iops, 93.1 MiB/s
-generated 70.7 k requests in 3.00 s, 276.4 MiB, 23.6 k iops, 92.1 MiB/s
-min/avg/max/mdev = 33.1 us / 41.9 us / 87.9 ms / 452.6 us
-
-Notice 87.9 millisecond maximum response time, and compare with its
-hyperthread sibing:
-
-taskset -c 128 ioping -R /dev/sdf
-
---- /dev/sdf (block device 1.75 TiB) ioping statistics ---
-80.5 k requests completed in 2.96 s, 314.5 MiB read, 27.2 k iops, 106.2 MiB/s
-generated 80.5 k requests in 3.00 s, 314.5 MiB, 26.8 k iops, 104.8 MiB/s
-min/avg/max/mdev = 33.2 us / 36.8 us / 89.2 us / 2.00 us
-
-Of course maximum times themselves vary from run to run, but the general
-picture stays: on cpu #0 I get about three orders of magnitude
-longer latencies. I think this is outside of "latency-sensitive
-workloads might care" territory and closer to "hurts everyone" kind of
-issue, hence I'm reporting it.
-
-
-On this machine there's AMD HEST ACPI table that registers 14342 polled
-"generic hardware error sources" (GHES) with poll interval 5 seconds.
-(this seems misdesigned: it will cause cross-socket polling unless the
-OS takes special care to divine which GHES to poll from where)
-
-Linux setups a timer for each of those individually, so when the machine
-is idle there's approximately 2800 timers per second invoked on cpu #0.
-Plus, there's a secondary issue with timer migration:
-get_nohz_timer_target will attempt to select a non-idle CPU out of 256
-(visiting some CPUs repeatedly if they appear in nested domains), and
-fail. If I help it along by running 'taskset -c 1 yes > /dev/null' or
-disable kernel.timer_migration entirely, it drops maximum latency in the
-above ioping test to 1..10ms range (down to two orders of magnitude from
-three).
-
-I guess the short answer is that if I don't like it I can boot that
-server with 'ghes_disable=1', but is a proper solution possible? Like
-requiring explicit opt-in to honor polled GHES entries?
-
-Thank you.
-Alexander
+Regards.
+Mrs Evelyn Gaby.
