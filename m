@@ -2,59 +2,137 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DB93B46127B
-	for <lists+linux-edac@lfdr.de>; Mon, 29 Nov 2021 11:34:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 068AC46143F
+	for <lists+linux-edac@lfdr.de>; Mon, 29 Nov 2021 12:52:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232580AbhK2KiD (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Mon, 29 Nov 2021 05:38:03 -0500
-Received: from mail.vallenar.cl ([200.54.241.89]:35548 "EHLO mail.vallenar.cl"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235743AbhK2KgC (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Mon, 29 Nov 2021 05:36:02 -0500
-Received: from localhost (localhost [127.0.0.1])
-        by mail.vallenar.cl (Postfix) with ESMTP id 70A371CEF776;
-        Sun, 28 Nov 2021 14:07:12 -0300 (-03)
-Received: from mail.vallenar.cl ([127.0.0.1])
-        by localhost (mail.vallenar.cl [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id BaEeZa31vyGI; Sun, 28 Nov 2021 14:07:12 -0300 (-03)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.vallenar.cl (Postfix) with ESMTP id 4F34E1D0777A;
-        Sun, 28 Nov 2021 12:25:19 -0300 (-03)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.vallenar.cl 4F34E1D0777A
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vallenar.cl;
-        s=EC098874-C7DE-11E7-B3B1-1A9A6030413E; t=1638113119;
-        bh=IQxUcKgLaEia+DMrVj9OEHbWOH8TffrzQMeZgAxYubI=;
-        h=MIME-Version:To:From:Date:Message-Id;
-        b=jf1I9xxTxaZ6C1OPQA/zc1UFnqDmEwitooMxMRjabthONAuC6U3R0IP//IvSQA3V3
-         sfxJI4SikGFyh3v7uBTruIne42iLkWnWkZNU3zB0BjyXTvsF0LPExIxWa4y6YNo/bh
-         DtNsSa0kkZwc/WRDUBSg0kVbHW06Kzf4dZkjqoDKZ0pgz2jgI6qw6K207FW1a19leR
-         l4FjJvip+pfZsC3/06O14Txg0Kl/Y6GLesCDFtUzF9XRRP0Ncs/mJThhrkAY9YE6W4
-         XrL3QMNmR8R/nhSHbokwg8YetJ7RMD8qoG/i//791FMtFN6LcYW6TYf2PmEOL3H3NU
-         ubd9HD/OXMlGw==
-X-Virus-Scanned: amavisd-new at vallenar.cl
-Received: from mail.vallenar.cl ([127.0.0.1])
-        by localhost (mail.vallenar.cl [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id pryR-6tLuzzF; Sun, 28 Nov 2021 12:25:19 -0300 (-03)
-Received: from [192.168.8.101] (unknown [105.0.3.102])
-        by mail.vallenar.cl (Postfix) with ESMTPSA id 183F31D08C99;
-        Sun, 28 Nov 2021 11:21:38 -0300 (-03)
-Content-Type: text/plain; charset="iso-8859-1"
+        id S241633AbhK2L4P (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Mon, 29 Nov 2021 06:56:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60098 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238075AbhK2LyP (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Mon, 29 Nov 2021 06:54:15 -0500
+Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BB9DC08ED87
+        for <linux-edac@vger.kernel.org>; Mon, 29 Nov 2021 02:57:21 -0800 (PST)
+Received: by mail-yb1-xb2b.google.com with SMTP id v64so41033481ybi.5
+        for <linux-edac@vger.kernel.org>; Mon, 29 Nov 2021 02:57:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=/N2AzXdmQhj8cnrxf6yxwa23/wIatZRqd4goM9Q+IO8=;
+        b=ErhOpdgigBGRX0iOA2ci/LrupvuM6+6c+q9rD2B6x1di+sFL9PVYGmzafYCayO999B
+         Ex51N+if313WKcW+gK1lj/OWtPvwfLDnTT20+eAv8YxxrR4g7rLnHIdzsTIvVAz0SrpQ
+         Ch6axdbEwb+a/M3Dt2tKAFVIFy0Y8iZuOwtZqXl1J60xk4GO/CqIzkuCM++XjDrDX06p
+         089vT34nfrhei7WTrhyk/M1T035mB+FNPNQ5Hd3oBtsviAPMtLS5mvE7ZDcnz+92hK94
+         07sMoak/mgTSYg0TcRsMzWsKiITVk9cvja0ME+E02kwQTfYZNPVDhNnY35dNNYcmygLp
+         iGDg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=/N2AzXdmQhj8cnrxf6yxwa23/wIatZRqd4goM9Q+IO8=;
+        b=Krv7idfsI3RaXV48m9eSCr52KsMOqtMCJWSayP54iLClYC2BlJq7CDd5URxvk1vEKZ
+         5fjHEhmIeqwRkjfE45jTKzNSkLSrPAmJDGz6X6jtgW4AMe5WGl1RPnM03lvtpgy1HD+K
+         A8njEvUiyCZTEe76I8YzME6HpOL16BZyudCZKNSrbOhR8WJ2xiz62ww9CyvQZWUEZGDm
+         ggTpvsdvcFEicNoL9uZS8oiUxPyElCI28jdgzyc+XJvChHlIJORWX7OIp1RVsE4rPmhQ
+         gY5/X44Bx/yTgqEBoj8PQrer/gWp9WgKtahCB4QrCFRRXHr6HSKLq57zA323gSBP2kDP
+         xVVg==
+X-Gm-Message-State: AOAM530+26v91bzxy8vmJ27DySZx6qPWuSDLw8aAMUTd1CSGUIIAUAOR
+        at+Cd/VdldDnzwi5iSwvk6o78Vt5p86YgQdPfI0=
+X-Google-Smtp-Source: ABdhPJwDXAO1KxnCKDkkwiudCJqJuhpArYKiJQTg+eIzhjAbEBRvY4HWTqik/oBHDS4epB1bybFjcLt6vUq4kag2XME=
+X-Received: by 2002:a25:8052:: with SMTP id a18mr5454865ybn.634.1638183440729;
+ Mon, 29 Nov 2021 02:57:20 -0800 (PST)
 MIME-Version: 1.0
+Received: by 2002:a05:7010:178c:b0:1df:8029:4655 with HTTP; Mon, 29 Nov 2021
+ 02:57:20 -0800 (PST)
+Reply-To: koffiaya202100@gmail.com
+From:   Koffi Aya <jindaratdaosornprasat2014@gmail.com>
+Date:   Mon, 29 Nov 2021 10:57:20 +0000
+Message-ID: <CAEU+xUtwV2_ndBWAkwUyRuwpTUmaYNsko=VW5FhYtsUrob4E3g@mail.gmail.com>
+Subject: Von Koffi
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-Content-Description: Mail message body
-Subject: 2.000.000,00. Euro
-To:     Recipients <yperez@vallenar.cl>
-From:   "manuel franco" <yperez@vallenar.cl>
-Date:   Sun, 28 Nov 2021 16:29:08 +0200
-Reply-To: manuelfrancospende00@gmail.com
-Message-Id: <20211128142139.183F31D08C99@mail.vallenar.cl>
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-Sie haben eine Spende von 2.000.000,00. Euro
+--=20
+Von: Koffi Aya
+Liebste,
+Guten Tag und vielen Dank f=C3=BCr Ihre Aufmerksamkeit. Bitte, ich m=C3=B6c=
+hte, dass
+Sie meine E-Mail sorgf=C3=A4ltig lesen und mir helfen, dieses Projekt zu
+bearbeiten. Ich bin Miss Koffi Aya und m=C3=B6chte Sie in aller Bescheidenh=
+eit
+um Ihre Partnerschaft und Unterst=C3=BCtzung bei der =C3=9Cbertragung und A=
+nlage
+meiner Erbschaftsgelder in H=C3=B6he von 6.500.000,00 US-Dollar (sechs Mill=
+ionen
+f=C3=BCnfhunderttausend US-Dollar) bitten, die mein verstorbener geliebter =
+Vater
+vor seinem Tod bei einer Bank hinterlegt hat.
 
-Mein Name ist Manuel Franco aus den Vereinigten Staaten.
-Ich habe die Amerika-Lotterie im Wert von 768 Millionen US-Dollar gewonnen =
-und spende einen Teil davon an nur 5 gl=FCckliche Menschen und ein paar Wai=
-senh=E4user als Wohlwollen f=FCr die Menschheit.
+Ich m=C3=B6chte Ihnen versichern, dass dieser Fonds legal von meinem
+verstorbenen Vater erworben wurde und keinen kriminellen Hintergrund hat.
+Mein Vater hat diesen Fonds legal durch ein legitimes Gesch=C3=A4ft erworbe=
+n,
+bevor er w=C3=A4hrend seiner Gesch=C3=A4ftsreise zu Tode vergiftet wurde. D=
+er Tod
+meines Vaters wurde von seinen Verwandten, die ihn w=C3=A4hrend seiner
+Dienstreise begleiteten, vermutet. Denn nach 3 Monaten nach dem Tod meines
+Vaters begannen Seine Verwandten, alle Besitzt=C3=BCmer meines verstorbenen
+Vaters zu beanspruchen und zu verkaufen.
+
+Die Verwandten meines verstorbenen Vaters wissen nichts von den
+6.500.000,00 US-Dollar (sechs Millionen f=C3=BCnfhunderttausend US-Dollar),=
+ die
+mein verstorbener Vater auf die Bank eingezahlt hat und mein verstorbener
+Vater sagte mir heimlich, bevor er starb, dass ich in jedem Land nach einem
+ausl=C3=A4ndischen Partner suchen sollte meiner Wahl, wohin ich diese Gelde=
+r f=C3=BCr
+meine eigenen Zwecke =C3=BCberweise.
+
+Bitte helfen Sie mir, dieses Geld f=C3=BCr gesch=C3=A4ftliche Zwecke in Ihr=
+em Land
+auf Ihr Konto zu =C3=BCberweisen. Ich habe diese Entscheidung getroffen, we=
+il
+ich viele Dem=C3=BCtigungen von den Verwandten meines verstorbenen Vaters
+erlitten habe. Zur Zeit habe ich Kommunikation mit dem Direktor der Bank,
+bei der mein verstorbener Vater dieses Geld hinterlegt hat. Ich habe dem
+Direktor der Bank die Dringlichkeit erkl=C3=A4rt, sicherzustellen, dass das=
+ Geld
+ins Ausland =C3=BCberwiesen wird, damit ich dieses Land zu meiner Sicherhei=
+t
+verlassen kann. Der Direktor der Bank hat mir zugesichert, dass das Geld
+=C3=BCberwiesen wird, sobald ich jemanden vorlege, der den Geldbetrag in me=
+inem
+Namen f=C3=BCr diesen Zweck ehrlich entgegennimmt.
+
+Seien Sie versichert, dass die Bank den Betrag auf Ihr Konto =C3=BCberweist=
+ und
+es keine Probleme geben wird. Diese Transaktion ist 100% risikofrei und
+legitim. Ich bin bereit, Ihnen nach erfolgreicher =C3=9Cberweisung dieses G=
+eldes
+auf Ihr Konto 30% der Gesamtsumme als Entsch=C3=A4digung f=C3=BCr Ihren Auf=
+wand
+anzubieten. Sie werden mir auch helfen, 10% an Wohlt=C3=A4tigkeitsorganisat=
+ionen
+und Heime f=C3=BCr mutterlose Babys in Ihrem Land zu spenden.
+
+Bitte alles, was ich m=C3=B6chte, ist, dass Sie f=C3=BCr mich als mein ausl=
+=C3=A4ndischer
+Partner auftreten, damit die Bank dieses Geld auf Ihr Konto =C3=BCberweist,
+damit ich in diesem Land leben kann. Bitte, ich brauche Ihre dringende
+Hilfe wegen meines jetzigen Zustands. Mit Ihrer vollen Zustimmung, mit mir
+zu diesem Zweck zusammenzuarbeiten, bekunden Sie bitte Ihr Interesse durch
+eine R=C3=BCckantwort an mich, damit ich Ihnen die notwendigen Informatione=
+n und
+die Details zum weiteren Vorgehen gebe. Ich werde Ihnen 30% des Geldes f=C3=
+=BCr
+Ihre Hilfe anbieten und Hilfestellung, damit umzugehen.
+
+Ihre dringende Antwort wird gesch=C3=A4tzt.
+Mit freundlichen Gr=C3=BC=C3=9Fen
+Koffi Aya
