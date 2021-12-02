@@ -2,91 +2,75 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C8A5466488
-	for <lists+linux-edac@lfdr.de>; Thu,  2 Dec 2021 14:32:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C214466544
+	for <lists+linux-edac@lfdr.de>; Thu,  2 Dec 2021 15:30:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231253AbhLBNfz (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Thu, 2 Dec 2021 08:35:55 -0500
-Received: from out30-42.freemail.mail.aliyun.com ([115.124.30.42]:52426 "EHLO
-        out30-42.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230492AbhLBNfy (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Thu, 2 Dec 2021 08:35:54 -0500
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R191e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04394;MF=xueshuai@linux.alibaba.com;NM=1;PH=DS;RN=9;SR=0;TI=SMTPD_---0UzAdFCh_1638451948;
-Received: from 30.240.117.107(mailfrom:xueshuai@linux.alibaba.com fp:SMTPD_---0UzAdFCh_1638451948)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Thu, 02 Dec 2021 21:32:29 +0800
-Message-ID: <1c4594ad-7477-9597-a627-21217f66a4f9@linux.alibaba.com>
-Date:   Thu, 2 Dec 2021 21:32:27 +0800
+        id S1358531AbhLBOeI (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Thu, 2 Dec 2021 09:34:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36836 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1347408AbhLBOeH (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Thu, 2 Dec 2021 09:34:07 -0500
+Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com [IPv6:2607:f8b0:4864:20::d36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41B88C061757
+        for <linux-edac@vger.kernel.org>; Thu,  2 Dec 2021 06:30:45 -0800 (PST)
+Received: by mail-io1-xd36.google.com with SMTP id x6so35201543iol.13
+        for <linux-edac@vger.kernel.org>; Thu, 02 Dec 2021 06:30:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=GHNkghZ/SHmwrMzY7g0MQJmTTVnThVnJgPEL1u34LOU=;
+        b=PljSp/DihrYuRHyKxSbw9+oBDMH3h0RmA+1G+EN2K0BguB2OBCBWpt6sT+fjJNrqzd
+         0HRnL7VWnPr1KyrqDFjks4+H5heiHNVwc/lgoRW1dBp5UZF2g2BtwkbxLP6CZIXVtwVg
+         w6bgfUV8JnBqiP9L2mZJNu7BcUeV3FV9mnQwNeEYZCeaeG7Ujetcvj2leZOpMCAdgeG/
+         +OlHkKkwd3/VWcvO+tUztePMhYNE7vh6qg13ArfDv3xtEOzPLSL/3koNSkAR3UELxpj/
+         WY3upLN8vHx/UvjCPjpbSgdNtQUGZ4lUo4FaiCKxvS/VJl7/Jz7BRVUOdE+fF3QCFAxW
+         0sGQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=GHNkghZ/SHmwrMzY7g0MQJmTTVnThVnJgPEL1u34LOU=;
+        b=b2Q8L9fCTpKpm8HCxwdtV6sn8zqCaGjLT5xP7H/5xTQA/bJQS1jhPLRfI9VWL2MU0c
+         K48ftABznW96RYiropB6pRg8XKezTMyv5APif1UHjXarz9RpunQAU7BHsXRGNhHjRxl2
+         wmNeR0gAJqNLecqgw73R6lkGzqrjp6KSDIQ6GcDhOL7w1/Q7PjlFxLXyDrs1gbTH/qhn
+         ON1f4xvotFGaUKR8R/22Vrz7Skb366dwC3p/qx1pOeGUzo7O+V7xkXh80fnkzpmTZ3Gx
+         FpKD1q3TBEy9pFhbTKZxdcEgptOH7RW6R7wmgVzmbUDm+cdg+sLHbY/LKZM/aFfJk7Br
+         tBbA==
+X-Gm-Message-State: AOAM532XL2g4E+vmV/1RpC8NCBc3eoL8gSAfcTH+T/wgPCRG0TsVy6uF
+        fTj34yizJaWhD64k3pIQ5++uRXJwUTIc59krdqY=
+X-Google-Smtp-Source: ABdhPJyrW3eQ5pwAhb10Rt+e0IuqCkU6Ve+sMc4DY1UAEOZhwYn5fkC87hEMl8OfLLGySo8y2x3btJMdyye6QjsOm5g=
+X-Received: by 2002:a6b:2cc1:: with SMTP id s184mr15372616ios.63.1638455444318;
+ Thu, 02 Dec 2021 06:30:44 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.3.2
-Subject: Re: [PATCH] edac,ghes,cper: Add device to Memory Error Record
-Content-Language: en-US
-To:     "Luck, Tony" <tony.luck@intel.com>
-Cc:     mchehab@kernel.org, bp@alien8.de, james.morse@arm.com,
-        rric@kernel.org, linux-edac@vger.kernel.org,
-        linux-kernel@vger.kernel.org, zhangliguang@linux.alibaba.com,
-        zhuo.song@linux.alibaba.com
-References: <20211130131648.85860-1-xueshuai@linux.alibaba.com>
- <YaZ3yiIBRj6qIg2h@agluck-desk2.amr.corp.intel.com>
-From:   Shuai Xue <xueshuai@linux.alibaba.com>
-In-Reply-To: <YaZ3yiIBRj6qIg2h@agluck-desk2.amr.corp.intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Received: by 2002:a05:6602:1550:0:0:0:0 with HTTP; Thu, 2 Dec 2021 06:30:43
+ -0800 (PST)
+Reply-To: nistelvaraj@gmail.com
+From:   Anitha Selvaraj <joakum11@gmail.com>
+Date:   Thu, 2 Dec 2021 15:30:43 +0100
+Message-ID: <CAOvonVtK2ef3+cHOqf8kMjN-mQFUpu+jHWVs9ayVTAZ6D5jcbQ@mail.gmail.com>
+Subject: Beloved one in Christ
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-Hi, Tony,
+-- 
+Dearest one in Christ,
 
-> This looks OK (same as code in drivers/firmware/efi/cper.c in the
-> cper_mem_err_location() function. But that makes me wonder why there
-> is near duplication of code in ghes_edac.c?
-May it is a legacy issue.
+I am Mrs Anitha Selvaraj, I married Mr.Francis Selvaraj, for 19 years
+without a child  and my husband died in 2007. I'm contacting you so
+that you will know my desire to donate the sum of ( 6,500,000 Dollars
+) that I inherited from my late husband to charity, currently the fund
+is still in the bank. Recently, my doctor told me that I have serious
+sickness which is cancer problem and I will not last for the next 2
+months.
 
+I want a person  that will use this fund for orphanages, schools,
+churches, widows, propagating the word of God in his country.
+Reply me for more information's,
 
-> The cper.c code seems to be written defensively using scnprintf()
-> instead of sprintf().  Could ghes_edac share the same code?
-I think so, ghes_edac_report_mem_error in ghes_edac.c is Long Method
-and have Duplicated Code with cper_mem_err_location,
-cper_dimm_err_location, and cper_mem_err_type_str in
-drivers/firmware/efi/cper.c.
-
-I will send a new patch to rework ghes_edac_report_mem_error.
-
-Cheers
-Shuai
-
-On 2021/12/1 AM3:13, Luck, Tony wrote:
-> On Tue, Nov 30, 2021 at 09:16:48PM +0800, Shuai Xue wrote:
->> If Bit 7 of Validation Bits is valid, the device number of the memory
->> associated with errors should be reported to Memory Error Record.
->>
->> Signed-off-by: Shuai Xue <xueshuai@linux.alibaba.com>
->> ---
->>  drivers/edac/ghes_edac.c | 2 ++
->>  1 file changed, 2 insertions(+)
->>
->> diff --git a/drivers/edac/ghes_edac.c b/drivers/edac/ghes_edac.c
->> index a918ca93e4f7..cf98b270d6f7 100644
->> --- a/drivers/edac/ghes_edac.c
->> +++ b/drivers/edac/ghes_edac.c
->> @@ -378,6 +378,8 @@ void ghes_edac_report_mem_error(int sev, struct cper_sec_mem_err *mem_err)
->>  	if (mem_err->validation_bits & CPER_MEM_VALID_BANK_ADDRESS)
->>  		p += sprintf(p, "bank_address:%d ",
->>  			     mem_err->bank & CPER_MEM_BANK_ADDRESS_MASK);
->> +	if (mem_err->validation_bits & CPER_MEM_VALID_DEVICE)
->> +		p += sprintf(p, "device:%d ", mem_err->device);
->>  	if (mem_err->validation_bits & (CPER_MEM_VALID_ROW | CPER_MEM_VALID_ROW_EXT)) {
->>  		u32 row = mem_err->row;
->>  
-> 
-> This looks OK (same as code in drivers/firmware/efi/cper.c in the
-> cper_mem_err_location() function. But that makes me wonder why there
-> is near duplication of code in ghes_edac.c?
-> 
-> The cper.c code seems to be written defensively using scnprintf()
-> instead of sprintf().  Could ghes_edac share the same code?
-> 
-> -Tony
-> 
+Remain blessed
+Your sister in christ
+Mrs. Anitha Selvaraj
