@@ -2,65 +2,114 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A5104676A4
-	for <lists+linux-edac@lfdr.de>; Fri,  3 Dec 2021 12:38:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EAC80467FC3
+	for <lists+linux-edac@lfdr.de>; Fri,  3 Dec 2021 23:17:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351862AbhLCLla (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Fri, 3 Dec 2021 06:41:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42130 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380475AbhLCLla (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Fri, 3 Dec 2021 06:41:30 -0500
-Received: from mail-ed1-x544.google.com (mail-ed1-x544.google.com [IPv6:2a00:1450:4864:20::544])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6362AC061757
-        for <linux-edac@vger.kernel.org>; Fri,  3 Dec 2021 03:38:06 -0800 (PST)
-Received: by mail-ed1-x544.google.com with SMTP id y13so10112399edd.13
-        for <linux-edac@vger.kernel.org>; Fri, 03 Dec 2021 03:38:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=MJP7wImtBDw8H4PK2aZ3ZntvFPd8o+wyHEJQi9qm7e4=;
-        b=kha0mM4r3P4R0kh5vXWC5WoLLX1NdIUbdgJLVAXp/K9lihdOVGFCCxPArfQ5UwI64X
-         S9OH82MgFN9sd0LBUzR1wYzw1IY/drmTUyGz2Tvfuw1ycaWHc0kYajIMMft4rAY17zXp
-         f+tu/CpajChSJ/cmgiu6LrFHDLWzUwD/TBDDDQ+yU+xJN3jE8sBWrMO3TX9/etlFz0gQ
-         ap6wI3QiePOlPFhCYTuvB3f5AZ1PWcr+q2dtGNhc3SWmcNNq5wCwtmA/lW9FLvI0q9Fx
-         T9fBtbzpcBMM3nMIJPSuCklVZo8kVzrN0BldUDKNp0Lo8kz9r978VpIDyrsIyz+9IcwT
-         wm1Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=MJP7wImtBDw8H4PK2aZ3ZntvFPd8o+wyHEJQi9qm7e4=;
-        b=TREl49Mt0T2b8Hw33vPTuP1gk/7MeHhpYWElzaG3omeUZlOvIQj2JUJ5fDFzOxpMcZ
-         cXFkx4B4ib87VP0HOEWgqcUW4Cl1VmLNLbmo3ZSslRjyYRVdjK6rtTV2RGv5env9ou9/
-         dmSyRV+hSn1zqETTvZtNi6aHrQr/Anm2tpXYErPltEjAri+xJhXQsyvRYDsVAK20htiT
-         BimWY2oAPPpiGKtX9IduwHrG+XVvaYPZGSz/95yi1zhXRPr91F3fgv8id1e7pnJwuC2m
-         frp72XCCQ6GV0gT1956Qykttg+vbgtSavN/GjrtStX0K4hOsWFdHEo2d1EiKGuc8+ME8
-         7F2w==
-X-Gm-Message-State: AOAM531nN8aJbWg15l8tfEUwXr++k16JLFUU1cMfIvyFOQx65ZKcpc5m
-        zLKVGV8/fvWsi5wxLh9m+dQJgpPXP5OPwQkgBJw=
-X-Google-Smtp-Source: ABdhPJzQLZfG/o0EGekhT9sDC5Jb9I1xypSYv8vwUBwkjpILusH9WLyArGQw0fDpo9990dRC/wsyqBE4sT3kydH1x4w=
-X-Received: by 2002:a50:ea84:: with SMTP id d4mr26328097edo.379.1638531484831;
- Fri, 03 Dec 2021 03:38:04 -0800 (PST)
+        id S1383353AbhLCWVM (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Fri, 3 Dec 2021 17:21:12 -0500
+Received: from mail.skyhub.de ([5.9.137.197]:53186 "EHLO mail.skyhub.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S240628AbhLCWVL (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Fri, 3 Dec 2021 17:21:11 -0500
+Received: from zn.tnic (dslb-088-067-202-008.088.067.pools.vodafone-ip.de [88.67.202.8])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 042311EC0423;
+        Fri,  3 Dec 2021 23:17:41 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1638569862;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=kL9eqgUNrzI/sJU1B6x23WPjaQ2GSbsiis3eiY9isNs=;
+        b=cqgkIxnweoXx+8bEKER/LyPENhJkKR4PFOgzHezUMhg+N3NsDRCHyPRw8p3Nq+COOt0XHF
+        DucbO/MV4Lnhn9V8ssaJ9HmDFxfSu9YtJ7dj2Jkh/w1xNz4zyJVCjfMTo9Cdr2xj7g6oRx
+        Lo8Yk4U74ALEujjnDH/cb5b98y07y6Y=
+Date:   Fri, 3 Dec 2021 23:17:45 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Yazen Ghannam <yazen.ghannam@amd.com>
+Cc:     linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
+        tony.luck@intel.com, x86@kernel.org,
+        Smita.KoralahalliChannabasappa@amd.com, mukul.joshi@amd.com,
+        alexander.deucher@amd.com, william.roche@oracle.com
+Subject: Re: [PATCH 1/3] x86/MCE/AMD: Provide an "Unknown" MCA bank type
+Message-ID: <YaqXiVjNLINxwz8G@zn.tnic>
+References: <20211203020017.728440-1-yazen.ghannam@amd.com>
+ <20211203020017.728440-2-yazen.ghannam@amd.com>
 MIME-Version: 1.0
-Received: by 2002:a50:cfcc:0:0:0:0:0 with HTTP; Fri, 3 Dec 2021 03:38:04 -0800 (PST)
-Reply-To: jp2888322@gmail.com
-From:   Maria-Elisabeth_Schaeffler <kamauesther2023@gmail.com>
-Date:   Fri, 3 Dec 2021 14:38:04 +0300
-Message-ID: <CAA37wo7G51iDo=9wgPO_PWqH7AjuUTWBvB1xquDgTr-2BojZ8Q@mail.gmail.com>
-Subject: Re
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20211203020017.728440-2-yazen.ghannam@amd.com>
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
---=20
-Ich bin Maria-Elisabeth Schaeffler, Ihre Spende von 1.500.000,00 Euro ist
-noch verf=C3=BCgbar.E-Mail f=C3=BCr weitere Informationen
+On Fri, Dec 03, 2021 at 02:00:15AM +0000, Yazen Ghannam wrote:
+> The AMD MCA Thresholding sysfs interface populates directories for each
+> bank and thresholding block. The name used for each directory is looked
+> up in a table of known bank types. However, new bank types won't match
+> in this list and will return NULL for the name. This will cause the
+> machinecheck sysfs interface to fail to be populated.
+> 
+> Set new and unknown MCA bank types to the "unknown" type. Also,
+> ensure that the bank's thresholding block directories have unique names.
+> This will ensure that the machinecheck sysfs interface can be
+> initialized.
 
+What is the advantage of having a sysfs directory structure headed with
+an "unknown" entry vs not having that structure at all when the kernel
+runs on a machine for which it has not been enabled yet?
 
-Gr=C3=BC=C3=9Fe
-Maria-Elisabeth_Schaeffler
+IOW, if those new banks would need additional enablement, what's the
+point of having "unknown" on older kernels which do not have any
+functionality?
+
+IOW, how does this:
+
+/sys/devices/system/machinecheck/machinecheck0/unknown/unknown/
+├── error_count
+├── interrupt_enable
+└── threshold_limit
+
+help a user?
+
+Btw, looking at the current layout:
+
+...
+├── insn_fetch
+│   └── insn_fetch
+│       ├── error_count
+│       ├── interrupt_enable
+│       └── threshold_limit
+├── l2_cache
+│   └── l2_cache
+│       ├── error_count
+│       ├── interrupt_enable
+│       └── threshold_limit
+...
+
+we have those names repeated which looks wonky and useless too. I'd
+expect them to be:
+
+...
+├── insn_fetch
+│   ├── error_count
+│   ├── interrupt_enable
+│   └── threshold_limit
+├── l2_cache
+│   ├── error_count
+│   ├── interrupt_enable
+│   └── threshold_limit
+...
+
+Can we fix that too pls?
+
+Thx.
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
