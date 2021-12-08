@@ -2,92 +2,89 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3210D46CC32
-	for <lists+linux-edac@lfdr.de>; Wed,  8 Dec 2021 05:13:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 13FA446D15C
+	for <lists+linux-edac@lfdr.de>; Wed,  8 Dec 2021 11:50:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244207AbhLHERT (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Tue, 7 Dec 2021 23:17:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41598 "EHLO
+        id S230194AbhLHKxt (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Wed, 8 Dec 2021 05:53:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232630AbhLHERS (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Tue, 7 Dec 2021 23:17:18 -0500
-Received: from mail-pg1-x542.google.com (mail-pg1-x542.google.com [IPv6:2607:f8b0:4864:20::542])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DCB0C061574
-        for <linux-edac@vger.kernel.org>; Tue,  7 Dec 2021 20:13:47 -0800 (PST)
-Received: by mail-pg1-x542.google.com with SMTP id r138so936160pgr.13
-        for <linux-edac@vger.kernel.org>; Tue, 07 Dec 2021 20:13:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=w0n14T57zPuvlg1YaFYy3gRfrUPFN1bDHGIrct+fXgc=;
-        b=cGWxDwe8B66FlIrZtrergIqE5+JvdqJ48sEvPTrvhBJ9xEqZLGyWZmuSPdCEFce/7D
-         /sVR44uqtlb2dmBH+iwgt0kboAu4/HTy3OZt9J6nwOu1H5twbKwVBnMykOKrBLHcBBEb
-         cgMJ7/59oMUtMggaQ9x/N1xe+U0YzN1k+xfCXkO5L7YIW30RFDnvCB0PrD7sMExliX7S
-         joeNtgfdJmxv3l42BA4cQp1HveXj/LpauGoYMsZKrrlYurvW6FC9Nrn9v/z7yklCLUv+
-         2uZJGSHlx+O0Rg+LxyFVcXJ8erZC2O96QnEFLkA1QmSl94RBUxOevwSkF8rG8CDqN06m
-         KdcQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=w0n14T57zPuvlg1YaFYy3gRfrUPFN1bDHGIrct+fXgc=;
-        b=yyzul80aMfbpxESBBh4E7/S4s+ZZ9GE7uqcnUoypLcTMqF8l5jEs8jktkWOgLJpP3y
-         hBOMMi/TuMaUhdhJZkuwWyMzwTN/yzLGBDZnFHo7ecNbjAIej45/95UecWtVFvb3Si9D
-         wX2WoL3vxJ8yiJZ+KWQVeQZs1tJohqO/8djNQ0120a/a1fbcdbLViAc030v1LoYAsIDI
-         LgMiEpyW0uNwv6WsdjAP3cKcTwPv49k7fLo+lB2B1+PTlABJ8kRXerGkTK4pWyXR7EwO
-         OQMUbrqVx5O4IwYi7aTcZF7vehEFwOAHt47FOGKqK4zUgXf/vyy3xZPCwnh2qI9frJQJ
-         cXtA==
-X-Gm-Message-State: AOAM533lk3lIZb2+XrCT/r2XkLdvSey+byqRKDUuSvu4gFapkNJRVE7N
-        YJP/eq78ybBE+iQPa6GBDwvRDfwP7CdIOhKwCScHEySXN+E8bg==
-X-Google-Smtp-Source: ABdhPJx498jQ3rDCAEAukf875uPMCUUvAAHHJyp/169nhahBv8dg1ZTt80/LmlBc7j967yPpWx87fZn4PQyrL4JX27A=
-X-Received: by 2002:a92:600f:: with SMTP id u15mr3954317ilb.292.1638936815828;
- Tue, 07 Dec 2021 20:13:35 -0800 (PST)
+        with ESMTP id S229475AbhLHKxs (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Wed, 8 Dec 2021 05:53:48 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD9EEC061746;
+        Wed,  8 Dec 2021 02:50:16 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 77A1EB82089;
+        Wed,  8 Dec 2021 10:50:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5880EC00446;
+        Wed,  8 Dec 2021 10:50:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638960614;
+        bh=+nI62eh7Zk9rq1LC16W1ZYAytYZC0sTX786aEudokNY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=IlY3afEKTOja6hjuwYrUDZEWksuICk31i3To7Kc6iGw1Wcl67/LXD4qZJKGTroUwx
+         SfQRi33BBe1dX2FXI1p52/hZCYs0mQYiODJdmUqkgF+KXgFTDlTKsSr3wBuEczmhlb
+         qT0MVngN7jdWAFk3JPDzQe8UE0C5jZ4mjeGXC4jWnQvhdwdSoBcIQLXemukdhNlAtB
+         WQUED+wvSC/9Pp8VtgPkGbQGJXvlDLADyc35l92qEI3LCEuky0Z7B/VTs15GkaiAg9
+         kuzxRoQDO57m2cfV2PqRljXcb0so38CSNc4XaboEb3TkREMa7S8TgUllmv/HSUH9Mm
+         OaJTyUWYuWW9Q==
+Date:   Wed, 8 Dec 2021 11:50:07 +0100
+From:   Robert Richter <rric@kernel.org>
+To:     Shuai Xue <xueshuai@linux.alibaba.com>
+Cc:     mchehab@kernel.org, bp@alien8.de, tony.luck@intel.com,
+        james.morse@arm.com, ardb@kernel.org, linux-edac@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-efi@vger.kernel.org,
+        zhangliguang@linux.alibaba.com, zhuo.song@linux.alibaba.com
+Subject: Re: [PATCH 2/2] ghes_edac: refactor error status fields decoding
+Message-ID: <YbCN3yXUVsCgP+x7@rric.localdomain>
+References: <20211207031905.61906-2-xueshuai@linux.alibaba.com>
+ <20211207031905.61906-3-xueshuai@linux.alibaba.com>
+ <Ya9JxfyXYYNtLoSf@rric.localdomain>
+ <662eff5c-8c53-8035-cae0-99448734406c@linux.alibaba.com>
 MIME-Version: 1.0
-Received: by 2002:a05:6e02:1a07:0:0:0:0 with HTTP; Tue, 7 Dec 2021 20:13:35
- -0800 (PST)
-Reply-To: dj0015639@gmail.com
-From:   David Jackson <enkenpaul@gmail.com>
-Date:   Wed, 8 Dec 2021 05:13:35 +0100
-Message-ID: <CAG7-cQ_JEx-8fDdxn0Ex314ViSE32kaUjoR=sUvV7wmCUiKRGw@mail.gmail.com>
-Subject: FEDERAL BUREAU OF INVESTIGATION
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <662eff5c-8c53-8035-cae0-99448734406c@linux.alibaba.com>
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-Our Ref: RTB /SNT/STB
-To: Beneficiary
+On 07.12.21 21:20:25, Shuai Xue wrote:
 
-This is FBI special agents, David Jackson. I was delegated along side
-others by the United Nations to investigate scammers who has been in
-the business of swindling foreigners especially those that has one
-form of transaction/contracts and another. Please be informed that in
-the course of our investigation, we detected that your name and
-details in our Scammed Monitoring Network. We also found out that you
-were scammed of a huge sum of money by scammers via Western union and
-MoneyGram. Be informed here that in a bid to alleviate the suffering
-of scammed victims, the United Nations initiated this compensation
-program and therefore, you are entitled to the sum of Five Million Two
-Hundred Thousand United States Dollars ($5,200,000.00 USD) for being a
-victim.
+> >> --- a/include/linux/cper.h
+> >> +++ b/include/linux/cper.h
+> >> @@ -568,7 +568,8 @@ void cper_print_proc_arm(const char *pfx,
+> >>  			 const struct cper_sec_proc_arm *proc);
+> >>  void cper_print_proc_ia(const char *pfx,
+> >>  			const struct cper_sec_proc_ia *proc);
+> >> -int cper_mem_err_location(struct cper_mem_err_compact *mem, char *msg);
+> >> -int cper_dimm_err_location(struct cper_mem_err_compact *mem, char *msg);
+> >> +int cper_mem_err_location(const struct cper_mem_err_compact *mem, char *msg);
+> >> +int cper_dimm_err_location(const struct cper_mem_err_compact *mem, char *msg);
+> > 
+> > Do we really need that 'const' here?
+> I think we do. It is read only and should not be modified in these functions,
+> just as cper_print_proc_arm' style.
 
-Note that the said fund will be transfer to you via the Citibank being
-the paying bank mandated by the United Nations officials.
+Even if it is used read-only I don't see a real need for const here.
+So let's change this only if there is a reason such as avoiding
+unnecessary casts.
 
-However, we have to inform you that we have been able to arrest some
-of the swindlers who has been in this illicit business and will all be
-prosecuted accordingly. Be informed as well that we have limited time
-to stay back here, so we will advice that you urgently respond to this
-message ASAP. And do not inform any of the people that collected money
-from you before now about this new development to avoid jeopardizing
-our investigation. All you need to do is to follow our instruction and
-receive your compensation accordingly as directed by the United
-Nations.
+> >> +const char *cper_mem_err_status_str(u64 status);
+> > 
+> > The function i/f is different compared to the others, though the
+> > purpose is the same. Let's use same style:
+> > 
+> >  int cper_mem_err_status(const struct cper_mem_err_compact *mem, char *msg);
+> Sorry, I don't catch it. cper_mem_err_status_str() decodes the error status and return
+> a string, the same style as cper_severity_str and cper_mem_err_type_str do. May
+> we need to move the declaration ahead with cper_severity_str?
 
-We urgently wait to receive your response.
+Right, move it after cper_mem_err_type_str(). Looks good then.
 
-Regards,
-DAVID JACKSON
-FEDERAL BUREAU OF INVESTIGATION
-INVESTIGATION ON ALL ONLINE WIRE TRANSFER
+Thanks,
+
+-Robert
