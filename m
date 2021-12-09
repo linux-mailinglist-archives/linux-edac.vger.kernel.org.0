@@ -2,269 +2,355 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A20E246DA48
-	for <lists+linux-edac@lfdr.de>; Wed,  8 Dec 2021 18:44:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8479E46E3FE
+	for <lists+linux-edac@lfdr.de>; Thu,  9 Dec 2021 09:18:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235519AbhLHRsB (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Wed, 8 Dec 2021 12:48:01 -0500
-Received: from mail-bn8nam11on2053.outbound.protection.outlook.com ([40.107.236.53]:44576
-        "EHLO NAM11-BN8-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S235573AbhLHRry (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Wed, 8 Dec 2021 12:47:54 -0500
+        id S234550AbhLIIVq (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Thu, 9 Dec 2021 03:21:46 -0500
+Received: from esa11.fujitsucc.c3s2.iphmx.com ([216.71.156.121]:1570 "EHLO
+        esa11.fujitsucc.c3s2.iphmx.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S234509AbhLIIVp (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Thu, 9 Dec 2021 03:21:45 -0500
+X-Greylist: delayed 429 seconds by postgrey-1.27 at vger.kernel.org; Thu, 09 Dec 2021 03:21:44 EST
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=fujitsu.com; i=@fujitsu.com; q=dns/txt; s=fj1;
+  t=1639037892; x=1670573892;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=eP08FY+fklh0dLBQzTIyRccRYO1AlxSM8QQyuCtOLWQ=;
+  b=f9DVcEHvdfPxonDubU3FOeH4C+H1scPF5+0I96Rn1fjuiXjEK5AskO7Y
+   dhvmKQlW1RtKl7dlIHtBKQjYTdow/Dav1/UciY1lD1d4k5yRctGKTbXQ2
+   a6h2HNRyU1CcGCWgTLIJpWdJqNSpQGKM/QXfg67GgG2KxGLWAZlREVDi3
+   TUUflBqIke2LMHgiEhY8y4z6wy3hFpcmDU+Y9UE2ZrFxqYRonysdGgMMy
+   pgB6hlQKpYqNrs5vJHeJDSmUUyjBEYHM3RkKvylNmCV1Aa+ZHD0L/KVz6
+   An66JF/HVHse7+uNlWCF4c3Q/nz8mRYpO25dG8Ns8gO5FCWiVcIRxWfp6
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10192"; a="45807628"
+X-IronPort-AV: E=Sophos;i="5.88,191,1635174000"; 
+   d="scan'208";a="45807628"
+Received: from mail-tycjpn01lp2168.outbound.protection.outlook.com (HELO JPN01-TYC-obe.outbound.protection.outlook.com) ([104.47.23.168])
+  by ob1.fujitsucc.c3s2.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2021 17:10:52 +0900
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=lS8vy+F/ND503jEwzieshiiNlAn4G15+0d1LFfZNsEgHDammBm2ekI4A5hxePS8G1blPoVQhOKgRIsPWfBdWt+E3rgPjdLv7odX3dPWyf1QLaPe6NK/9uQkYvP1lhACykRLedWNOZkKkfaOnMMYLH9/ouQ08GrQKdlch6/bWBAwKyJaMFFHslEV4eXUIClzPJkfcMVKD02U3UwEzxVdrNKbhAYzAa5w9gCjxYAxwHXa2lh7hOBC4mA0/QqLfQJv8oEgF161uFL5slJym4XZJe+L2z01YuG3KiKLrAA0JqLjlwbpvyEciTS7e7obnw5UvKnjaZiM56eN8WdOYa0qgXQ==
+ b=R52UFcUcioiOmDX7H2FLFQ3QSBLH6nSm5ptS4YFe1Vs6WXhe6//PfEOd7aH8tmkhXH6NYBMVNBFE4j5eAtH0tIQiDBxpV9dtFNEYyPNPL8xCEbcrUJ2HL6v2Tp5gix0GxBp10/BwxczZ28Hcd4me85AjcduEQHFJU2xp/d0Ci21IHfWFGGTpVrDDpkxs6zxsQoAP1R2KqlYkSUoVF9g5vULMLMEB8sGt0UJ7O5829kqYmppIyjuGg9QDwagVs2MDIuti+tT7QRKKJnLb1CysN7nC9wz6Ihdbn2rE99muMfWbv16ghuw2u0gWshJC1RzIIe6rUcSQUTr3zOfJJdqYRw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=VQezkGWWPyx8t+dGm5LeaT4BDtaYa3RIROt8uf4iw9Q=;
- b=SyerqJK8jJtKEbWVYdtzx1Y2/F5zNL6ne2xBRgvoJpSRnoZAFSOMQ06Uy2lVU5Vb1PpowgrQrnUWFUK6aQPkzHWETQStt2eyU7281xMd+x52uIocmeyO1XelTUqU9yrZvfuIvjskAZhmenpvt9PeKW/yq/Vf5E1rY/DKkE3fIWqd4sm4Zmr87RPnENX9adZPJsyPwxgjlPV+W9pt9MGxW3lPkB4RD+/7oydS8gHHnIj13Wgm0r5b57EBUAjSqVCojoPgv6LDIC13ZrWt7NB8uuwWqT6iLZxNIDvMtttSrykegsEel+bvllqMX6Aode+81/tUztBMDB9ugZtT4w927Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ bh=NBaPa2W90d96hpQeL5RJuW4MwxfhdVlf2oxz93BCIiA=;
+ b=lvF7uY/uifRcgf8eFvITvnOamin11faf6rKEJOnv941VfDwQLlWWQAd8/kxdz8Njv+TgDCmVFVuOsHhjCIgyEAuiTaCkZQDOfMAuFpfNMETOjAdYF5kC9/M+Et+qAgkwa5Q9disjslzgJEHr8UXwJVGPzWeqsrWHAtlwQLMHbQT8qDzM7WX9r13k2xm+A5ZdMMfTJgMgymmQeTHERxJ1obVD2aXbJV1/Ltk+EfLaqwJLSCJvvSLdo/3koIQtdad2CMo0JoF9h9yCPh1tFhIb+FQ0U6jA++OWrnnoJzfLcqU/zgpKv4iJxG0TR3Sy/hHBlK3SKvndwxh/xHeWh1JP0w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=fujitsu.com; dmarc=pass action=none header.from=fujitsu.com;
+ dkim=pass header.d=fujitsu.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=fujitsu.onmicrosoft.com; s=selector2-fujitsu-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=VQezkGWWPyx8t+dGm5LeaT4BDtaYa3RIROt8uf4iw9Q=;
- b=mYODthAKEFELkILcTW98SNgKaJxejXo1ntap2Kyujvrpbg9jnwpEKnhjTIRKreXN3hYddEgZwrdNLXtmL81FipUR14Ncvr9WCCa1MWVFDFGazOUzIvVM9Co/Ptug8Ta9YxKj6Q6a13cNfzUIp4lhwtH8ZIkEDrATV6VUwgBzZrw=
-Received: from MW4PR03CA0210.namprd03.prod.outlook.com (2603:10b6:303:b8::35)
- by MWHPR12MB1311.namprd12.prod.outlook.com (2603:10b6:300:13::20) with
+ bh=NBaPa2W90d96hpQeL5RJuW4MwxfhdVlf2oxz93BCIiA=;
+ b=EWfrUP6mM0Lxa1ndr5RUjcKSD6ZrumIaFdOCD2dApcdeEOjUrSLKjKDQqYKQNDDbOHK8pDQzJonMiTU4U1fxfiPbiZYnMNfSSOBOAM09ly6IN0066jneGQ/rFL5xFRv+dNvRrYyuDCurq8KoU/Sg4vGOz9BxZ29zV+l0w64q3pk=
+Received: from TYCPR01MB6160.jpnprd01.prod.outlook.com (2603:1096:400:4f::8)
+ by TYAPR01MB6540.jpnprd01.prod.outlook.com (2603:1096:400:a0::11) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4755.16; Wed, 8 Dec
- 2021 17:44:19 +0000
-Received: from CO1NAM11FT065.eop-nam11.prod.protection.outlook.com
- (2603:10b6:303:b8:cafe::d4) by MW4PR03CA0210.outlook.office365.com
- (2603:10b6:303:b8::35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4755.21 via Frontend
- Transport; Wed, 8 Dec 2021 17:44:19 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB03.amd.com;
-Received: from SATLEXMB03.amd.com (165.204.84.17) by
- CO1NAM11FT065.mail.protection.outlook.com (10.13.174.62) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.4755.13 via Frontend Transport; Wed, 8 Dec 2021 17:44:19 +0000
-Received: from yaz-ethanolx.amd.com (10.180.168.240) by SATLEXMB03.amd.com
- (10.181.40.144) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.17; Wed, 8 Dec
- 2021 11:44:18 -0600
-From:   Yazen Ghannam <yazen.ghannam@amd.com>
-To:     <linux-edac@vger.kernel.org>
-CC:     <linux-kernel@vger.kernel.org>, <bp@alien8.de>,
-        <mchehab@kernel.org>, <tony.luck@intel.com>, <james.morse@arm.com>,
-        <rric@kernel.org>, <Smita.KoralahalliChannabasappa@amd.com>,
-        <william.roche@oracle.com>, "Yazen Ghannam" <yazen.ghannam@amd.com>
-Subject: [PATCH 4/4] EDAC/amd64: Add DDR5 support and related register changes
-Date:   Wed, 8 Dec 2021 17:43:56 +0000
-Message-ID: <20211208174356.1997855-5-yazen.ghannam@amd.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20211208174356.1997855-1-yazen.ghannam@amd.com>
-References: <20211208174356.1997855-1-yazen.ghannam@amd.com>
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4755.20; Thu, 9 Dec
+ 2021 08:10:50 +0000
+Received: from TYCPR01MB6160.jpnprd01.prod.outlook.com
+ ([fe80::9097:d9f3:3ce8:c65f]) by TYCPR01MB6160.jpnprd01.prod.outlook.com
+ ([fe80::9097:d9f3:3ce8:c65f%2]) with mapi id 15.20.4755.024; Thu, 9 Dec 2021
+ 08:10:50 +0000
+From:   "ishii.shuuichir@fujitsu.com" <ishii.shuuichir@fujitsu.com>
+To:     'Tyler Baicar' <baicar@os.amperecomputing.com>,
+        "patches@amperecomputing.com" <patches@amperecomputing.com>,
+        "abdulhamid@os.amperecomputing.com" 
+        <abdulhamid@os.amperecomputing.com>,
+        "darren@os.amperecomputing.com" <darren@os.amperecomputing.com>,
+        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
+        "will@kernel.org" <will@kernel.org>,
+        "maz@kernel.org" <maz@kernel.org>,
+        "james.morse@arm.com" <james.morse@arm.com>,
+        "alexandru.elisei@arm.com" <alexandru.elisei@arm.com>,
+        "suzuki.poulose@arm.com" <suzuki.poulose@arm.com>,
+        "lorenzo.pieralisi@arm.com" <lorenzo.pieralisi@arm.com>,
+        "guohanjun@huawei.com" <guohanjun@huawei.com>,
+        "sudeep.holla@arm.com" <sudeep.holla@arm.com>,
+        "rafael@kernel.org" <rafael@kernel.org>,
+        "lenb@kernel.org" <lenb@kernel.org>,
+        "tony.luck@intel.com" <tony.luck@intel.com>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "mark.rutland@arm.com" <mark.rutland@arm.com>,
+        "anshuman.khandual@arm.com" <anshuman.khandual@arm.com>,
+        "vincenzo.frascino@arm.com" <vincenzo.frascino@arm.com>,
+        "tabba@google.com" <tabba@google.com>,
+        "marcan@marcan.st" <marcan@marcan.st>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        "jthierry@redhat.com" <jthierry@redhat.com>,
+        "masahiroy@kernel.org" <masahiroy@kernel.org>,
+        "samitolvanen@google.com" <samitolvanen@google.com>,
+        "john.garry@huawei.com" <john.garry@huawei.com>,
+        "daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>,
+        "gor@linux.ibm.com" <gor@linux.ibm.com>,
+        "zhangshaokun@hisilicon.com" <zhangshaokun@hisilicon.com>,
+        "tmricht@linux.ibm.com" <tmricht@linux.ibm.com>,
+        "dchinner@redhat.com" <dchinner@redhat.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "kvmarm@lists.cs.columbia.edu" <kvmarm@lists.cs.columbia.edu>,
+        "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
+        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
+        "Vineeth.Pillai@microsoft.com" <Vineeth.Pillai@microsoft.com>
+CC:     "ishii.shuuichir@fujitsu.com" <ishii.shuuichir@fujitsu.com>
+Subject: RE: [PATCH 1/2] ACPI/AEST: Initial AEST driver
+Thread-Topic: [PATCH 1/2] ACPI/AEST: Initial AEST driver
+Thread-Index: AQHX4VXODm0DCpHkAEmPB3bdoJBMaKwpypXw
+Date:   Thu, 9 Dec 2021 08:10:50 +0000
+Message-ID: <TYCPR01MB6160D05580A6E8C9510D25A5E9709@TYCPR01MB6160.jpnprd01.prod.outlook.com>
+References: <20211124170708.3874-1-baicar@os.amperecomputing.com>
+ <20211124170708.3874-2-baicar@os.amperecomputing.com>
+In-Reply-To: <20211124170708.3874-2-baicar@os.amperecomputing.com>
+Accept-Language: ja-JP, en-US
+Content-Language: ja-JP
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+msip_labels: =?iso-2022-jp?B?TVNJUF9MYWJlbF9hNzI5NWNjMS1kMjc5LTQyYWMtYWI0ZC0zYjBmNGZl?=
+ =?iso-2022-jp?B?Y2UwNTBfQWN0aW9uSWQ9NWFjZWMyMmUtZmZkNy00NjNhLWI0YjQtYzY4?=
+ =?iso-2022-jp?B?ODBmMmUyZjIxO01TSVBfTGFiZWxfYTcyOTVjYzEtZDI3OS00MmFjLWFi?=
+ =?iso-2022-jp?B?NGQtM2IwZjRmZWNlMDUwX0NvbnRlbnRCaXRzPTA7TVNJUF9MYWJlbF9h?=
+ =?iso-2022-jp?B?NzI5NWNjMS1kMjc5LTQyYWMtYWI0ZC0zYjBmNGZlY2UwNTBfRW5hYmxl?=
+ =?iso-2022-jp?B?ZD10cnVlO01TSVBfTGFiZWxfYTcyOTVjYzEtZDI3OS00MmFjLWFiNGQt?=
+ =?iso-2022-jp?B?M2IwZjRmZWNlMDUwX01ldGhvZD1TdGFuZGFyZDtNU0lQX0xhYmVsX2E3?=
+ =?iso-2022-jp?B?Mjk1Y2MxLWQyNzktNDJhYy1hYjRkLTNiMGY0ZmVjZTA1MF9OYW1lPUZV?=
+ =?iso-2022-jp?B?SklUU1UtUkVTVFJJQ1RFRBskQiJMJT8lUhsoQjtNU0lQX0xhYmVsX2E3?=
+ =?iso-2022-jp?B?Mjk1Y2MxLWQyNzktNDJhYy1hYjRkLTNiMGY0ZmVjZTA1MF9TZXREYXRl?=
+ =?iso-2022-jp?B?PTIwMjEtMTItMDlUMDY6MzM6MDZaO01TSVBfTGFiZWxfYTcyOTVjYzEt?=
+ =?iso-2022-jp?B?ZDI3OS00MmFjLWFiNGQtM2IwZjRmZWNlMDUwX1NpdGVJZD1hMTlmMTIx?=
+ =?iso-2022-jp?B?ZC04MWUxLTQ4NTgtYTlkOC03MzZlMjY3ZmQ0Yzc7?=
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=fujitsu.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 24abd93b-994f-492a-0a49-08d9baeb69a7
+x-ms-traffictypediagnostic: TYAPR01MB6540:EE_
+x-microsoft-antispam-prvs: <TYAPR01MB654037E60DE5418830F059D1E9709@TYAPR01MB6540.jpnprd01.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:3631;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: Q0fzzVISeAZoFr+OVz5pSQ+zlT/Fpwttz4mJs8V9KCZAYZS258fbc9D/miOnkUPok7Hf3pkTPnHrg7A1az3+yryTYrRIsk70RNAjycLk+vjbvJQ+qnGH6W/IMwHp4aPn1/H8oKFr3UyQhduxhvTXqi5yz5K00zDGepqy5ksXySG9l6TVWjhwDW0Zib567DTzEKn6y2U0Ds8LnPDGlga8T4Tgy2h4Na41S1baaeiKlx1Zx4pz6eusctAZCx1MxMeEMnCwFwBhP16259gGWlQcPUsPfuA3FObAOktkpRhisFs4m8dn7LAwSnyJyC1GQsijInGDkenumN/rQnBAXIH3wijupvmu8tMFNHfzBl1FLPnJ6J2/sSBJjDBFCvv8zlsHqclLaG2Db3uZz3TE+vBAdFp9CGwupvSX5wIJTME2BTkLRsr0U+d7cf7csit937MMBNGWXvUFLV/0E/jOgoW1bRpg3u4q2KmKpf9rI0uGZSy4kbycmhNwHVlGEauNpXP++0zSbOsrP99LIv7/10XGmhL/QtxZ47e2dyKyZD1HDE/wdtsR11srpntUjtIVQXfutP6skjvz1ngNqgQFLDPzFCyk1fcTBPycfc/EwydCQtbHEC6FBdGop1SGeBqdI+qRpgKQ8Fx9dhQCbqUm2EBPb0XU/aqT4crJT05TXfOk4hIdBys5UvR1M0Mbyf0oeAM4h3GzPSpZusWwSnYkmDXntFX679MMx0oeXBhc7RtvPTw=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYCPR01MB6160.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(66946007)(55016003)(53546011)(64756008)(76116006)(5660300002)(66556008)(107886003)(7416002)(66476007)(6506007)(52536014)(8676002)(186003)(9686003)(7406005)(66446008)(45080400002)(110136005)(122000001)(33656002)(86362001)(4326008)(82960400001)(508600001)(85182001)(83380400001)(2906002)(26005)(316002)(38070700005)(38100700002)(921005)(71200400001)(8936002)(7696005);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?iso-2022-jp?B?S3daV1lJTDZXcTRNZVowNERXZ2owdDFhTmJIbjMwaXI5NVFQK29KSzIr?=
+ =?iso-2022-jp?B?b2s1Y0k0azhuU3l2YWh5K1R1RHJJWFd5eC9iZHJBOEpGNnFXbXBrREM3?=
+ =?iso-2022-jp?B?ZzY4ZUFYK1VRVG9JanFHS3dLYWwvSStGdkxZVkpZZ3lDY292czBib0Fx?=
+ =?iso-2022-jp?B?cGo2UkluWnJxa1djY2t4NHR5bHBza3JTMUNJdEMzY3MwWE9selZBVWxF?=
+ =?iso-2022-jp?B?RFRQVUVhRFFBY1F6dk9yTEEyU0xmb0ZYcWpCdGJVOU9wZm9NZEthMHYx?=
+ =?iso-2022-jp?B?S1d5ZlRnTkN1L3ptSkVJMmg1TVNJSkpZQzlDTTdpOWtDVVR1OGE5aW5M?=
+ =?iso-2022-jp?B?UzRwQi9xcnB1cVhXUXVtWWZISzROM0N2aEN4dTFNOE5tb2l3aFhOaEh4?=
+ =?iso-2022-jp?B?bGRTVHRpd20rR3YrNU8zOEtRZ3kzbHhsWVFaOUVqcUt4RWZGUkN2MWJs?=
+ =?iso-2022-jp?B?SzQxU0RHeHZwMjRoSWZHbkl4MjlyMlR0KzZJUERkV1lXVXlLK3N5VzdV?=
+ =?iso-2022-jp?B?Zy9HMHdzZlRSemdTSTU0ZFVTajh3N0ZvSFRBM0xYbnhjSjZjVG4xeFQ2?=
+ =?iso-2022-jp?B?c1MzY3pqeWxSZTUweFI1d3VMbjJtRmxhTStlYXJSVlYxR2xLcmRtOGJK?=
+ =?iso-2022-jp?B?SDVZcHRaSzBKSmY0S3F6WE44R3YrVFU2WVdCUVp2WnZTS3duR1hVZVRO?=
+ =?iso-2022-jp?B?M2hqOU45SjJ0V0JpM0J2MVcvS2xwdTQ2eUUvM1NjR1FZYkZvRE9RbDZ6?=
+ =?iso-2022-jp?B?dFlXQjFJaEpqSFlrdTJpdHJjcENwelg4UGowa0xvdlcvelJwNEIrQ0lv?=
+ =?iso-2022-jp?B?MHlZdDNsdFBSWktpQzZjcnhmTHVDdWVUMi90M05TczlWaVVGaU1ybVpn?=
+ =?iso-2022-jp?B?bVVpMEhWRWJ4ckVGcFRIQzRUaEVlWGJHVVJFQlJ2MWxndnMrY2tLWm5l?=
+ =?iso-2022-jp?B?M2lEdUVvUEN0Vko0SnBPVTNJYzZXNzhkR0VXaitNVWZIVFZoY3lsa0JM?=
+ =?iso-2022-jp?B?K3kyenFwK09tWTI1U0pEaXZ1RDE4a3U2bHBLS0VoU2lFb1prL2haaUds?=
+ =?iso-2022-jp?B?SmRYZHhxeUViZ1JYYnJWdE9lcUVRV1dScDU4QitFMnlXSUlQRjdPMThL?=
+ =?iso-2022-jp?B?M2xXaUZQT0lmWlQ4Y1BSUUljbHNnRGtmaW1PbnVxL2dGK1BHRDY0c0RW?=
+ =?iso-2022-jp?B?eTl2MzVJMUZGMGV2dFhYaWFtdHN4OHJRTmt1SjZOOUhNS3FhTjV6ZTBF?=
+ =?iso-2022-jp?B?OXA4bG9MeVI1eHBqRVdBKzRaUFJvSUg3cjdna2U1RGhNbGF5MUY0UG1U?=
+ =?iso-2022-jp?B?ODBuN3lxNndOQStBRXFuaDJaN3RtaXVLTGJLUngrT0xGbWV0N0V0TU1m?=
+ =?iso-2022-jp?B?SWxOWEFNNzVXQkNXeTQ3K1pZUTMxY0lvdVV1bjh3QnhvSDMvVElDbnh0?=
+ =?iso-2022-jp?B?YWNJcXNuWnpCL1lXbjNQU1Z2ZDU3TmNnbG9Yblljbm0rNTJSTXpKRmZ0?=
+ =?iso-2022-jp?B?Zks1NnJvWmxRSWVZRitCa0ZVWW5LQ2dSY0dLUVhUTEdTSzAwWDZmUjBq?=
+ =?iso-2022-jp?B?dGFVa2VsellVbTY2eTJBNHM3YlR6dndrQmRlZUdhTXFTTFFPMm1kWmht?=
+ =?iso-2022-jp?B?VHQzd1dVRWdzTExhSC9sSVZpVWs1dzZkYTdnbmg0NWtTUCtyWDRvRHhD?=
+ =?iso-2022-jp?B?eUNXWXA5VnpMa3daMk5lSEc4TDhnTnVoWDJvZkppKzNSWDRGOEgrL0c0?=
+ =?iso-2022-jp?B?aGp3aDNFNnV5cWN0U0d6OC9tQVJWK3pHaHdsQUJvTHhKZlJmWFgwSVRM?=
+ =?iso-2022-jp?B?ZU1USjZEblNQZnZaazQ2djBybnZQd1lFTjVML3BZaTFsNWRmMDl0MHMv?=
+ =?iso-2022-jp?B?d2txM2QvaVhNNWtyWGhGamJIMTNiZUpLcEtQOW96R2syaHV5b2ZsSmNL?=
+ =?iso-2022-jp?B?N09Pb1ZSNWUyYWNEODVMNnpDTUdVNUozclB0dlpsUGJ2elQrWHZFZ0hw?=
+ =?iso-2022-jp?B?ZWt5bVB0MC82ZW9sNXZCVGtLNmZKVWtyZ01uNG9LRld0MzFFM3l3dkJ0?=
+ =?iso-2022-jp?B?SmRBTDhGMVdpVUZlZy9HNERRNHhvSGJBU0dkVWEzUk9ibHY2MFNpck0y?=
+ =?iso-2022-jp?B?anZFa0ltdXZ3RUVSS3poemdveno0OTVvQm9oL0V6NWlJUVk5MmV2UEdS?=
+ =?iso-2022-jp?B?bk04WXBQTkZxL3ZNd0hlU0F2eHJIaEg0R0FGeGVUOGV5amlSdDZhQTRy?=
+ =?iso-2022-jp?B?eTVrVWVpczVlb0VXazR3a2JrY3dtTmI0dnFnekNnSUxiRFJKUWJtRnFT?=
+ =?iso-2022-jp?B?TExzWXIyMnFLZytqMXpsUSt5RUoxL3Jnb1dySW45dkcxOTNEQlhwOFlm?=
+ =?iso-2022-jp?B?elE2TjJuQ01LQ2JENTBKRDRzRGJrV3NRWmJLSlpwSlFRM0hWVjNwRm41?=
+ =?iso-2022-jp?B?UGRBWmVRPT0=?=
+Content-Type: text/plain; charset="iso-2022-jp"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB03.amd.com
- (10.181.40.144)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 84e825d9-9b06-4add-0c82-08d9ba725cd6
-X-MS-TrafficTypeDiagnostic: MWHPR12MB1311:EE_
-X-Microsoft-Antispam-PRVS: <MWHPR12MB131185767CD02FD992D44D62F86F9@MWHPR12MB1311.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:6108;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: CHyF1d2sfXtmEqUlP869L3eAfzLF3P+hJ8zrTivmehf+rzpjdPnszHiARBpGExVZlfcG1VxSmpnLn9g/fQqwy+35WuLzLMDzlA3nPrFiD4NaVWxwtCgM7AtxHZi4XzFWqql4QPSLFayIAjiYOS8EzjnhLBlmwZfgy2DeE65ho8SZkJVl1cobgHDVlvvjqWod1664PjfRQo5mf48YCSeThRMgdArnr6mOl0idfpRWAxT5w1B4xV5yxSrxF7iUd9vfPHIchxaq4IA+ZNUUtySMNyS11JI5vECMziVatEF1qoygZtTXBpWM1Vv9dz5Dczh73rKxN9uPA1JZlRUPVeVBK1q1K0MXYxigd/MPHnjZy/9PmVJRyS0pBT4GDuiVA6Q6Pf+CyWt1I09/pS88q+T2wy+yVsjLFxb0293N/On2RTTK9z0CcqCc2TTMrpFj+AF7Yiw0ZvzUVCJDw17tPa0BiDV0AjauOHRoCfqxUDEUccVrVUp7TrW9EgOTMLMLQvRHRYYqfz3l9FLD1vt+U7Rb9aNL9ctv7uzrGh7BgecSwK0s+gQzNWb9OPNjImAkSp3Pcc9vwCl6UtlJbczCNJWuUV+gkdLXADO1zlhfDG2y2gcGu67goiWu6fOirCswNrpkjLRFkKrbDPmjYHK/8Z9a0q+9pYP6q+ksVmQ12qHIa9HOuneePKJeDa7c2PbUQRt9vHI3M1iFZ+lwAaZji3Kr+79034Ra7b5jgBR2fRNBpsCNbGfrs7zfEA5EeTZTjiPTowUoTc8rPithgjp9pYKLYAuc6QEqQMo7fnrV0kUxAsQ=
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB03.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(4636009)(36840700001)(46966006)(40470700001)(7696005)(8936002)(2616005)(44832011)(36860700001)(82310400004)(70206006)(356005)(70586007)(81166007)(316002)(26005)(54906003)(5660300002)(508600001)(2906002)(6666004)(1076003)(40460700001)(8676002)(426003)(186003)(4326008)(86362001)(83380400001)(336012)(47076005)(16526019)(36756003)(6916009)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Dec 2021 17:44:19.4643
+X-OriginatorOrg: fujitsu.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: TYCPR01MB6160.jpnprd01.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 24abd93b-994f-492a-0a49-08d9baeb69a7
+X-MS-Exchange-CrossTenant-originalarrivaltime: 09 Dec 2021 08:10:50.1485
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 84e825d9-9b06-4add-0c82-08d9ba725cd6
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB03.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT065.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR12MB1311
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: a19f121d-81e1-4858-a9d8-736e267fd4c7
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: DukkIrS79o9fjCUik2NdmpgBb9cr/o+fanLcBqooP4Du2D06b0LQtirqx7VSUP6lvPHfgceYa7eLp3NSHXouP340Z8d7PLlCqzwdsmnOfTs=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYAPR01MB6540
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-Future AMD systems will support DDR5.
+Hi, Tyler.
 
-Add support for changes in register addresses for these systems.
+We would like to make a few comments.
 
-Introduce a "family flags" bitmask that can be used to indicate any
-special behavior needed on a per-family basis.
+> -----Original Message-----
+> From: Tyler Baicar <baicar@os.amperecomputing.com>
+> Sent: Thursday, November 25, 2021 2:07 AM
+> To: patches@amperecomputing.com; abdulhamid@os.amperecomputing.com;
+> darren@os.amperecomputing.com; catalin.marinas@arm.com; will@kernel.org;
+> maz@kernel.org; james.morse@arm.com; alexandru.elisei@arm.com;
+> suzuki.poulose@arm.com; lorenzo.pieralisi@arm.com; guohanjun@huawei.com;
+> sudeep.holla@arm.com; rafael@kernel.org; lenb@kernel.org;
+> tony.luck@intel.com; bp@alien8.de; mark.rutland@arm.com;
+> anshuman.khandual@arm.com; vincenzo.frascino@arm.com;
+> tabba@google.com; marcan@marcan.st; keescook@chromium.org;
+> jthierry@redhat.com; masahiroy@kernel.org; samitolvanen@google.com;
+> john.garry@huawei.com; daniel.lezcano@linaro.org; gor@linux.ibm.com;
+> zhangshaokun@hisilicon.com; tmricht@linux.ibm.com; dchinner@redhat.com;
+> tglx@linutronix.de; linux-kernel@vger.kernel.org;
+> linux-arm-kernel@lists.infradead.org; kvmarm@lists.cs.columbia.edu;
+> linux-acpi@vger.kernel.org; linux-edac@vger.kernel.org; Ishii, Shuuichiro=
+u/=1B$B@P0f=1B(B
+> =1B$B<~0lO:=1B(B <ishii.shuuichir@fujitsu.com>; Vineeth.Pillai@microsoft.=
+com
+> Cc: Tyler Baicar <baicar@os.amperecomputing.com>
+> Subject: [PATCH 1/2] ACPI/AEST: Initial AEST driver
+>=20
+> Add support for parsing the ARM Error Source Table and basic handling of
+> errors reported through both memory mapped and system register interfaces=
+.
+>=20
+> Assume system register interfaces are only registered with private
+> peripheral interrupts (PPIs); otherwise there is no guarantee the
+> core handling the error is the core which took the error and has the
+> syndrome info in its system registers.
+>=20
+> Add logging for all detected errors and trigger a kernel panic if there i=
+s
+> any uncorrected error present.
+>=20
+> Signed-off-by: Tyler Baicar <baicar@os.amperecomputing.com>
+> ---
 
-Signed-off-by: Yazen Ghannam <yazen.ghannam@amd.com>
----
- drivers/edac/amd64_edac.c | 61 +++++++++++++++++++++++++++++++++++----
- drivers/edac/amd64_edac.h | 11 +++++++
- 2 files changed, 66 insertions(+), 6 deletions(-)
+[...]
 
-diff --git a/drivers/edac/amd64_edac.c b/drivers/edac/amd64_edac.c
-index 1df763128483..e37a8e0cef7e 100644
---- a/drivers/edac/amd64_edac.c
-+++ b/drivers/edac/amd64_edac.c
-@@ -15,6 +15,36 @@ static struct msr __percpu *msrs;
- 
- static struct amd64_family_type *fam_type;
- 
-+/* Family flag helpers */
-+static inline bool has_ddr5(void)
-+{
-+	return fam_type->flags.has_ddr5;
-+}
-+
-+static inline u64 get_addr_cfg(void)
-+{
-+	if (has_ddr5())
-+		return UMCCH_ADDR_CFG_DDR5;
-+
-+	return UMCCH_ADDR_CFG;
-+}
-+
-+static inline u64 get_addr_mask_sec(void)
-+{
-+	if (has_ddr5())
-+		return UMCCH_ADDR_MASK_SEC_DDR5;
-+
-+	return UMCCH_ADDR_MASK_SEC;
-+}
-+
-+static inline u64 get_dimm_cfg(void)
-+{
-+	if (has_ddr5())
-+		return UMCCH_DIMM_CFG_DDR5;
-+
-+	return UMCCH_DIMM_CFG;
-+}
-+
- /* Per-node stuff */
- static struct ecc_settings **ecc_stngs;
- 
-@@ -1429,8 +1459,10 @@ static void __dump_misc_regs_df(struct amd64_pvt *pvt)
- 		edac_dbg(1, "UMC%d x16 DIMMs present: %s\n",
- 				i, (umc->dimm_cfg & BIT(7)) ? "yes" : "no");
- 
--		if (pvt->dram_type == MEM_LRDDR4) {
--			amd_smn_read(pvt->mc_node_id, umc_base + UMCCH_ADDR_CFG, &tmp);
-+		if (pvt->dram_type == MEM_LRDDR4 || pvt->dram_type == MEM_LRDDR5) {
-+			amd_smn_read(pvt->mc_node_id,
-+				     umc_base + get_addr_cfg(),
-+				     &tmp);
- 			edac_dbg(1, "UMC%d LRDIMM %dx rank multiply\n",
- 					i, 1 << ((tmp >> 4) & 0x3));
- 		}
-@@ -1505,7 +1537,7 @@ static void prep_chip_selects(struct amd64_pvt *pvt)
- 
- 		for_each_umc(umc) {
- 			pvt->csels[umc].b_cnt = 4;
--			pvt->csels[umc].m_cnt = 2;
-+			pvt->csels[umc].m_cnt = has_ddr5() ? 4 : 2;
- 		}
- 
- 	} else {
-@@ -1545,7 +1577,7 @@ static void read_umc_base_mask(struct amd64_pvt *pvt)
- 		}
- 
- 		umc_mask_reg = get_umc_base(umc) + UMCCH_ADDR_MASK;
--		umc_mask_reg_sec = get_umc_base(umc) + UMCCH_ADDR_MASK_SEC;
-+		umc_mask_reg_sec = get_umc_base(umc) + get_addr_mask_sec();
- 
- 		for_each_chip_select_mask(cs, umc, pvt) {
- 			mask = &pvt->csels[umc].csmasks[cs];
-@@ -1628,6 +1660,17 @@ static void determine_memory_type(struct amd64_pvt *pvt)
- 			dimm_cfg |= pvt->umc[i].dimm_cfg;
- 		}
- 
-+		/* Check if system supports DDR5 and has DDR5 DIMMs in use. */
-+		if (has_ddr5() && (umc_cfg & BIT(0))) {
-+			if (dimm_cfg & BIT(5))
-+				pvt->dram_type = MEM_LRDDR5;
-+			else if (dimm_cfg & BIT(4))
-+				pvt->dram_type = MEM_RDDR5;
-+			else
-+				pvt->dram_type = MEM_DDR5;
-+			return;
-+		}
-+
- 		if (dimm_cfg & BIT(5))
- 			pvt->dram_type = MEM_LRDDR4;
- 		else if (dimm_cfg & BIT(4))
-@@ -2174,8 +2217,13 @@ static int f17_addr_mask_to_cs_size(struct amd64_pvt *pvt, u8 umc,
- 	 * There is one mask per DIMM, and two Chip Selects per DIMM.
- 	 *	CS0 and CS1 -> DIMM0
- 	 *	CS2 and CS3 -> DIMM1
-+	 *
-+	 *	Systems with DDR5 support have one mask per Chip Select.
- 	 */
--	dimm = csrow_nr >> 1;
-+	if (has_ddr5())
-+		dimm = csrow_nr;
-+	else
-+		dimm = csrow_nr >> 1;
- 
- 	/* Asymmetric dual-rank DIMM support. */
- 	if ((csrow_nr & 1) && (cs_mode & CS_ODD_SECONDARY))
-@@ -2937,6 +2985,7 @@ static struct amd64_family_type family_types[] = {
- 		.f0_id = PCI_DEVICE_ID_AMD_19H_M10H_DF_F0,
- 		.f6_id = PCI_DEVICE_ID_AMD_19H_M10H_DF_F6,
- 		.max_mcs = 12,
-+		.flags.has_ddr5 = 1,
- 		.ops = {
- 			.early_channel_count	= f17_early_channel_count,
- 			.dbam_to_cs		= f17_addr_mask_to_cs_size,
-@@ -3365,7 +3414,7 @@ static void __read_mc_regs_df(struct amd64_pvt *pvt)
- 		umc_base = get_umc_base(i);
- 		umc = &pvt->umc[i];
- 
--		amd_smn_read(nid, umc_base + UMCCH_DIMM_CFG, &umc->dimm_cfg);
-+		amd_smn_read(nid, umc_base + get_dimm_cfg(), &umc->dimm_cfg);
- 		amd_smn_read(nid, umc_base + UMCCH_UMC_CFG, &umc->umc_cfg);
- 		amd_smn_read(nid, umc_base + UMCCH_SDP_CTRL, &umc->sdp_ctrl);
- 		amd_smn_read(nid, umc_base + UMCCH_ECC_CTRL, &umc->ecc_ctrl);
-diff --git a/drivers/edac/amd64_edac.h b/drivers/edac/amd64_edac.h
-index 650cab401e21..48cba95451cb 100644
---- a/drivers/edac/amd64_edac.h
-+++ b/drivers/edac/amd64_edac.h
-@@ -271,8 +271,11 @@
- #define UMCCH_BASE_ADDR_SEC		0x10
- #define UMCCH_ADDR_MASK			0x20
- #define UMCCH_ADDR_MASK_SEC		0x28
-+#define UMCCH_ADDR_MASK_SEC_DDR5	0x30
- #define UMCCH_ADDR_CFG			0x30
-+#define UMCCH_ADDR_CFG_DDR5		0x40
- #define UMCCH_DIMM_CFG			0x80
-+#define UMCCH_DIMM_CFG_DDR5		0x90
- #define UMCCH_UMC_CFG			0x100
- #define UMCCH_SDP_CTRL			0x104
- #define UMCCH_ECC_CTRL			0x14C
-@@ -477,11 +480,19 @@ struct low_ops {
- 					 unsigned cs_mode, int cs_mask_nr);
- };
- 
-+struct amd64_family_flags {
-+	/* Indicates that the family supports DDR5 and associated register changes. */
-+	__u64 has_ddr5		: 1,
-+
-+	      __reserved	: 63;
-+};
-+
- struct amd64_family_type {
- 	const char *ctl_name;
- 	u16 f0_id, f1_id, f2_id, f6_id;
- 	/* Maximum number of memory controllers per die/node. */
- 	u8 max_mcs;
-+	struct amd64_family_flags flags;
- 	struct low_ops ops;
- };
- 
--- 
-2.25.1
+> +static int __init aest_init_node(struct acpi_aest_hdr *node)
+> +{
+> +	union acpi_aest_processor_data *proc_data;
+> +	union aest_node_spec *node_spec;
+> +	struct aest_node_data *data;
+> +	int ret;
+> +
+> +	data =3D kzalloc(sizeof(struct aest_node_data), GFP_KERNEL);
+> +	if (!data)
+> +		return -ENOMEM;
+> +
+> +	data->node_type =3D node->type;
+> +
+> +	node_spec =3D ACPI_ADD_PTR(union aest_node_spec, node,
+> node->node_specific_offset);
+> +
+> +	switch (node->type) {
+> +	case ACPI_AEST_PROCESSOR_ERROR_NODE:
+> +		memcpy(&data->data, node_spec, sizeof(struct
+> acpi_aest_processor));
+> +		break;
+> +	case ACPI_AEST_MEMORY_ERROR_NODE:
+> +		memcpy(&data->data, node_spec, sizeof(struct
+> acpi_aest_memory));
+> +		break;
+> +	case ACPI_AEST_SMMU_ERROR_NODE:
+> +		memcpy(&data->data, node_spec, sizeof(struct
+> acpi_aest_smmu));
+> +		break;
+> +	case ACPI_AEST_VENDOR_ERROR_NODE:
+> +		memcpy(&data->data, node_spec, sizeof(struct
+> acpi_aest_vendor));
+> +		break;
+> +	case ACPI_AEST_GIC_ERROR_NODE:
+> +		memcpy(&data->data, node_spec, sizeof(struct
+> acpi_aest_gic));
+> +		break;
+> +	default:
+> +		kfree(data);
+> +		return -EINVAL;
+> +	}
+> +
+> +	if (node->type =3D=3D ACPI_AEST_PROCESSOR_ERROR_NODE) {
+> +		proc_data =3D ACPI_ADD_PTR(union acpi_aest_processor_data,
+> node_spec,
+> +					 sizeof(acpi_aest_processor));
+> +
+> +		switch (data->data.processor.resource_type) {
+> +		case ACPI_AEST_CACHE_RESOURCE:
+> +			memcpy(&data->proc_data, proc_data,
+> +			       sizeof(struct acpi_aest_processor_cache));
+> +			break;
+> +		case ACPI_AEST_TLB_RESOURCE:
+> +			memcpy(&data->proc_data, proc_data,
+> +			       sizeof(struct acpi_aest_processor_tlb));
+> +			break;
+> +		case ACPI_AEST_GENERIC_RESOURCE:
+> +			memcpy(&data->proc_data, proc_data,
+> +			       sizeof(struct acpi_aest_processor_generic));
+> +			break;
+> +		}
+> +	}
+> +
+> +	ret =3D aest_init_interface(node, data);
+> +	if (ret) {
+> +		kfree(data);
+> +		return ret;
+> +	}
+> +
+> +	return aest_init_interrupts(node, data);
+
+If aest_init_interrupts() failed, is it necessary to release
+the data pointer acquired by kzalloc?
+
+> +}
+> +
+> +static void aest_count_ppi(struct acpi_aest_hdr *node)
+> +{
+> +	struct acpi_aest_node_interrupt *interrupt;
+> +	int i;
+> +
+> +	interrupt =3D ACPI_ADD_PTR(struct acpi_aest_node_interrupt, node,
+> +				 node->node_interrupt_offset);
+> +
+> +	for (i =3D 0; i < node->node_interrupt_count; i++, interrupt++) {
+> +		if (interrupt->gsiv >=3D 16 && interrupt->gsiv < 32)
+> +			num_ppi++;
+> +	}
+> +}
+> +
+> +static int aest_starting_cpu(unsigned int cpu)
+> +{
+> +	int i;
+> +
+> +	for (i =3D 0; i < num_ppi; i++)
+> +		enable_percpu_irq(ppi_irqs[i], IRQ_TYPE_NONE);
+> +
+> +	return 0;
+> +}
+> +
+> +static int aest_dying_cpu(unsigned int cpu)
+> +{
+
+Wouldn't it be better to execute disable_percpu_irq(), which is paired
+with enable_percpu_irq(), in aest_dying_cpu()?
+
+> +	return 0;
+> +}
+> +
+
+[...]
+
+Best regards,=20
+Shuuichirou.
 
