@@ -2,69 +2,62 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 93A7346F570
-	for <lists+linux-edac@lfdr.de>; Thu,  9 Dec 2021 22:00:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EB5FD4700BE
+	for <lists+linux-edac@lfdr.de>; Fri, 10 Dec 2021 13:34:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232479AbhLIVDp (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Thu, 9 Dec 2021 16:03:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43538 "EHLO
+        id S231747AbhLJMh7 (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Fri, 10 Dec 2021 07:37:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231519AbhLIVDo (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Thu, 9 Dec 2021 16:03:44 -0500
-Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A95F5C061746
-        for <linux-edac@vger.kernel.org>; Thu,  9 Dec 2021 13:00:10 -0800 (PST)
-Received: by mail-pg1-x535.google.com with SMTP id 137so6200551pgg.3
-        for <linux-edac@vger.kernel.org>; Thu, 09 Dec 2021 13:00:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=BJPWo58tKlQXm4vRD5vnXhZrKIbn/SXsA1N14vuJVFE=;
-        b=HDQaSwQak/N2he922zPWW8Kt6V0y0r/r/ddXnOE8ZVwjUOuGXpgvCGPpWbPgasJsad
-         MPdAnPSXNHDpBngIzfZSLvS/pSAWzKXZ7Vjvhw7xbMj4SM5q3CUcIf+mNsBXs5MDyYWA
-         OfjtHHyde7aXAJboFDFcGNbYI/gyyD98vnSZEuLHcvkKqabz+vDAJ5unUzRi7PscRn2O
-         QrelYzgAEtKPRzTB5LruOfzV20SIAmyJaDE+Wq8vfpbT5HZcYTImeebJLSfFYkmHgVbL
-         REUS2fCCmT9JlSATiuR03IW/4wMV6B0XSdU1hpY2/HCM/dEIi2J71CiSST2fOw32hORr
-         UrFw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=BJPWo58tKlQXm4vRD5vnXhZrKIbn/SXsA1N14vuJVFE=;
-        b=HD6DNko7ke3ckl1zEMHNz1dPy/z9ZN6YQ2CZF/WnuExsq8HJms96cotmZ80DShndG8
-         r/7BgocD5CoxE592HqOGOMspn4+Ekp96aKI+S/L51hlIxnNB0AbXom5w9sSbZECiyDpE
-         TiSYg52a7mtc8xO4BtEzbxkpxQx1cmqxNc9jyg2oHlFz7FrjjUdCBCUSWuyHZXaha1+w
-         +qyvD/daU0I3n5rShNS1amzUb8sqU1fn5p1Amll7WH7zOFcfPvwrcrnmOx6s0Ho2fNVT
-         UN30eFN5kuxHeDllafLBnkrZcj+ydUaoD8+rFSA2h9WKUXyd7jq/Xko6SE4CDEGJgbfL
-         XKUA==
-X-Gm-Message-State: AOAM530k0SEYBC4hpljRrejYpM8+aC+5veX1bRSdhvh+dudG2j0U9Knt
-        orATcf+5tTx4EqtJY1qb+w13VLFtoYGWuJHj/j0=
-X-Google-Smtp-Source: ABdhPJx5f68YiYU2AwdcRxyp33aawqMiDcSXXGsErgxO0ZniginZy8l5PTlStnNdcjb+PHnlPE1dewX0IwOAdPab5eg=
-X-Received: by 2002:a63:4a5d:: with SMTP id j29mr34783247pgl.455.1639083610189;
- Thu, 09 Dec 2021 13:00:10 -0800 (PST)
+        with ESMTP id S231149AbhLJMh7 (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Fri, 10 Dec 2021 07:37:59 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18837C061746;
+        Fri, 10 Dec 2021 04:34:24 -0800 (PST)
+Received: from zn.tnic (dslb-088-067-202-008.088.067.pools.vodafone-ip.de [88.67.202.8])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 69A9C1EC0535;
+        Fri, 10 Dec 2021 13:34:17 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1639139657;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=jfyx8yNivL7PHlxA1P8iIYgkuecYK2mnYhE69iT2PYc=;
+        b=MZ4k6ykulwss9wnSYaCKVp3oby/qsQhh9Tyu7yFQfCinjFEetF6GGsF7swX1T7eC1uuLWj
+        AOF1SjTqMtOf+nSFDuT59AqMR0dLv3kRefjXr6Hqg+EeX+UefLPNeRaFP4gC6FN26/+RLa
+        3vkPPrJcQWALW/sjYnWNog0VyIuK+GY=
+Date:   Fri, 10 Dec 2021 13:34:19 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Yazen Ghannam <yazen.ghannam@amd.com>
+Cc:     linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
+        mchehab@kernel.org, tony.luck@intel.com, james.morse@arm.com,
+        rric@kernel.org, Smita.KoralahalliChannabasappa@amd.com,
+        william.roche@oracle.com
+Subject: Re: [PATCH 3/4] EDAC/amd64: Check register values from all UMCs
+Message-ID: <YbNJSyv4GdC+SUSD@zn.tnic>
+References: <20211208174356.1997855-1-yazen.ghannam@amd.com>
+ <20211208174356.1997855-4-yazen.ghannam@amd.com>
 MIME-Version: 1.0
-Received: by 2002:a05:6a20:7d8b:b0:5d:5c22:870b with HTTP; Thu, 9 Dec 2021
- 13:00:09 -0800 (PST)
-Reply-To: clmloans9@gmail.com
-From:   MR ANTHONY EDWARD <debraalessii@gmail.com>
-Date:   Thu, 9 Dec 2021 22:00:09 +0100
-Message-ID: <CAM30Livg1bgTR9ct7i5sZ9vpaSp0Rf1Wd64CyxsccyW8Vf1FvA@mail.gmail.com>
-Subject: DARLEHEN ZU 2% BEANTRAGEN
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20211208174356.1997855-4-yazen.ghannam@amd.com>
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
---=20
-Ben=C3=B6tigen Sie einen Gesch=C3=A4ftskredit oder einen Kredit jeglicher A=
-rt?
-Wenn ja, kontaktieren Sie uns
+On Wed, Dec 08, 2021 at 05:43:55PM +0000, Yazen Ghannam wrote:
+> Loop over all UMCs and create bitmasks to check the values of the
+> DIMM_CFG and UMC_CFG registers rather than just checking the values from
+> the first two UMCs.
 
-*Vollst=C3=A4ndiger Name:
-*Ben=C3=B6tigte Menge:
-*Darlehensdauer:
-*Handy:
-*Land:
+Do not talk about what your patch does in the commit message - that
+should hopefully be visible in the diff itself. Rather, talk about *why*
+you're doing what you're doing.
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
