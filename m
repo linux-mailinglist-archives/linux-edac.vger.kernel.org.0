@@ -2,111 +2,78 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DDBDC471484
-	for <lists+linux-edac@lfdr.de>; Sat, 11 Dec 2021 16:39:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DF914716ED
+	for <lists+linux-edac@lfdr.de>; Sat, 11 Dec 2021 22:58:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230252AbhLKPjI (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Sat, 11 Dec 2021 10:39:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56202 "EHLO
+        id S231628AbhLKV6U (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Sat, 11 Dec 2021 16:58:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229911AbhLKPjG (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Sat, 11 Dec 2021 10:39:06 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57228C061714;
-        Sat, 11 Dec 2021 07:39:06 -0800 (PST)
-Received: from zn.tnic (dslb-088-067-202-008.088.067.pools.vodafone-ip.de [88.67.202.8])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id D2AE21EC0328;
-        Sat, 11 Dec 2021 16:38:59 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1639237140;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=PCo8/3FbDWkNYbh+fjQyqWz6U8P5rVcozIYlwpXUhb8=;
-        b=rxqjsay5HYoXItLMry2wgsjUPTI08cALqTVRO5K8rXIZNM2Bx/qHuFTHdRC4N5GmZXzk4k
-        bixmdpRF77fc7OuAFZzTZjXTyBUGQc2EMRvkmrdsCZxfdyVLfTc45NGH+11z134KO/vgDg
-        AcUVL+V31kd2Gnf7r52Fjdytqvw7AFQ=
-Date:   Sat, 11 Dec 2021 16:39:01 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Yazen Ghannam <yazen.ghannam@amd.com>
-Cc:     linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
-        tony.luck@intel.com, x86@kernel.org,
-        Smita.KoralahalliChannabasappa@amd.com, mukul.joshi@amd.com,
-        alexander.deucher@amd.com, william.roche@oracle.com
-Subject: Re: [PATCH 1/3] x86/MCE/AMD: Provide an "Unknown" MCA bank type
-Message-ID: <YbTGFYl2FlcJJKz2@zn.tnic>
-References: <20211203020017.728440-1-yazen.ghannam@amd.com>
- <20211203020017.728440-2-yazen.ghannam@amd.com>
- <YaqXiVjNLINxwz8G@zn.tnic>
- <Ya+LukojuewlomeF@yaz-ubuntu>
+        with ESMTP id S231594AbhLKV6T (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Sat, 11 Dec 2021 16:58:19 -0500
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73D08C061370
+        for <linux-edac@vger.kernel.org>; Sat, 11 Dec 2021 13:58:19 -0800 (PST)
+Received: by mail-ed1-x52a.google.com with SMTP id l25so40943782eda.11
+        for <linux-edac@vger.kernel.org>; Sat, 11 Dec 2021 13:58:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:sender:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=hD0jfu1MWy/UXBkBYsVvOAZPApZLyir6gKavdc4BceI=;
+        b=SOBkDHN1upt351fJGA10IENq8Lskn6OtfiA/mtFXWwbxNo6rK0VqMIikUbNdR10QL9
+         NEz57nH7+DwD4ui2QjR5G0PDUg/x30DeYlpAViKmfLpj6c8owgTXHIRe2HlXrWJIYspc
+         p1qexb7VgQzyxOs2U317jKWC2PVt5FsJQNP/qzuU8HlodfKZxoIrg2Y5u0+UlgiuF7n+
+         KF6xHlFhNhhV0WZH+n1XpQNFkro1//sIniT/eC7+Qq7omDixZHJ42uWefxucVRQsgqoP
+         MP9jAyQEdDJw2KiXunMshfyB4wcDGfWvxehuLHSr6op0i/Er4qRI4zT2OKxsbV2QjSnP
+         PYpQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:sender:from:date
+         :message-id:subject:to:content-transfer-encoding;
+        bh=hD0jfu1MWy/UXBkBYsVvOAZPApZLyir6gKavdc4BceI=;
+        b=Kwr3Q1CrP00gEFh0yNdyiC9eh2S/hYCrB84CMXnBzpikZTDaTkCpSoTqCWCwOcFH8c
+         Q19GXDpyD1Ip1NJAi4lRKh2KN+FcejBxjoE8YpMpfMR5/C5WbcIcwG3BCNyPX1W+ZoH6
+         K9qa0F4gruXlepN2bJsUVPs41N/JcP8GDOt+KwNmnt8kHrJQSsaAjD0U3bJFFlZ1lZgs
+         tcHetcHLGGym8n+O0FGimQQTpXD8dxa0nRJQQew7h6TyQ140B6NxV47si8FUETHVBESE
+         FGHS1MVMN2TLHwPPxto4cHsPNCoqPup/eVVmgsOob0CnUAx5ZuyQTn1HjMZCGunjnKZ1
+         YXuw==
+X-Gm-Message-State: AOAM531aV5kJMYuiY2LxoUfnKePjUCip4yZ+VX3B1XbQdqwLW73T4ftZ
+        swPCJSv1aW+oNT09oD2YhS4+aKu4yPGdbxxvOkI=
+X-Google-Smtp-Source: ABdhPJxTVLquc00JfCv8xmVg6F+Df36Ax6F8m8eI1vWHtjjPBaUzu2dvtxl/29t2QJINStCFpJhLct20UqzajIEroTA=
+X-Received: by 2002:a17:907:6da2:: with SMTP id sb34mr33325880ejc.509.1639259897490;
+ Sat, 11 Dec 2021 13:58:17 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <Ya+LukojuewlomeF@yaz-ubuntu>
+Reply-To: martinafrancis022@gmail.com
+Sender: rebeccaalhajidangombe@gmail.com
+Received: by 2002:a17:907:94d3:0:0:0:0 with HTTP; Sat, 11 Dec 2021 13:58:16
+ -0800 (PST)
+From:   Martina Francis <martinafrancis61@gmail.com>
+Date:   Sat, 11 Dec 2021 13:58:16 -0800
+X-Google-Sender-Auth: QI6h_ccu4Os7HpLN5lf7FmNkMqQ
+Message-ID: <CANadOMYJBdKak2aObykULF4gdU88=OTR03g+XDqpCofMfFracg@mail.gmail.com>
+Subject: Bom Dia meu querido
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Tue, Dec 07, 2021 at 04:28:42PM +0000, Yazen Ghannam wrote:
-> Sure thing. But I don't think removing the second directory will be okay. The
-> layout is "bank"/"block". If the "block" has special use like DRAM ECC, or L3
-> Cache on older systems, then it'll have a unique name. Otherwise, the block
-> will take the name of the bank.
+--=20
+Bom Dia meu querido,
+Como vai voc=C3=AA hoje, meu nome =C3=A9 Dona Martina Francis, uma vi=C3=BA=
+va doente.
+Eu tenho um fundo de doa=C3=A7=C3=A3o de ($ 2.700.000,00 USD) MILH=C3=95ES =
+que quero
+doar atrav=C3=A9s de voc=C3=AA para ajudar os =C3=B3rf=C3=A3os, vi=C3=BAvas=
+, deficientes
+f=C3=ADsicos e casas de caridade.
 
-Ah, there was something... and I found a good example on my zen1 box:
+Por favor, volte para mim imediatamente ap=C3=B3s ler esta mensagem para
+obter mais detalhes sobre esta agenda humanit=C3=A1ria.
 
-├── umc_0
-│   ├── dram_ecc
-│   │   ├── error_count
-│   │   ├── interrupt_enable
-│   │   └── threshold_limit
-│   └── misc_umc
-│       ├── error_count
-│       ├── interrupt_enable
-│       └── threshold_limit
+Deus te aben=C3=A7oe enquanto espero sua resposta.
+Sua irm=C3=A3.
 
-but yeah, that still doesn't make it clear how the hierarchy is...
-
-> /sys/devices/system/machinecheck/machinecheck0/thresholding
-> ├── bank0
-> │   ├── desc ("Instruction Fetch")
-> │   └── block0
-> │       ├── desc ("All Errors")
-> │       ├── error_count
-> │       ├── interrupt_enable
-> │       └── threshold_limit
-> ├── bank1
-> │   ├── desc ("Northbridge")
-> │   ├── block0
-> │   │   ├── desc ("DRAM Errors")
-> │   │   ├── error_count
-> │   │   ├── interrupt_enable
-> │   │   └── threshold_limit
-> │   └── block1
-> │       ├── desc ("Link Errors")
-> │       ├── error_count
-> │       ├── interrupt_enable
-> │       └── threshold_limit
-> ...
-> 
-> I'm inclined to the second option, since it keeps all the thresholding
-> functionality under a single directory.
-
-Yeah, that makes it explicit and one can see that a bank can have
-multiple blocks.
-
-Renaming will change the ABI but we can always do symlinks later if
-people complain. Which I doubt because I've yet to hear of someone using
-that thresholding thing at all...
-
-Thx.
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+Sra. Martina Francis.
