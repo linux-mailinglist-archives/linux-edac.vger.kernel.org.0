@@ -2,64 +2,58 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ADFA8471321
-	for <lists+linux-edac@lfdr.de>; Sat, 11 Dec 2021 10:19:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5619D47138E
+	for <lists+linux-edac@lfdr.de>; Sat, 11 Dec 2021 12:09:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229455AbhLKJTf (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Sat, 11 Dec 2021 04:19:35 -0500
-Received: from smtpbg127.qq.com ([109.244.180.96]:56046 "EHLO smtpbg.qq.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S230206AbhLKJTe (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Sat, 11 Dec 2021 04:19:34 -0500
-X-QQ-mid: bizesmtp45t1639214357tp0q2cjc
-Received: from localhost.localdomain (unknown [182.132.179.213])
-        by esmtp6.qq.com (ESMTP) with 
-        id ; Sat, 11 Dec 2021 17:19:16 +0800 (CST)
-X-QQ-SSF: 01000000008000D0H000B00A0000000
-X-QQ-FEAT: TzHnbXlu93pRW0fktOVQsSVC/lCRcE3bO8RsrNpzf6GBxnYyfN8VswfWiQ4WM
-        E33MpzFJyarduiiY6hHUHZCs7i7+7H1nr9bC2p54n0fNN9tmLLlNyK241DBxpLj8kjrSo42
-        Ue1ZJaJXDHI9aBkel1y40jE0PnxHXaa+gBMmH1l9Zg89f4vXDVC7e02eLaLAXhnbGdWVOb6
-        PGArPe4AIagjJTemiHvLq4l/3eVjHr11zctq9CkKfyqvTHGXBlAVReGVkIKBQNlHMQPCr48
-        mRVjsx9HAAH6rww92wSHy68M6PSAKpGNilczG2XyJhAF908RrB8O3QckkUYr/ugQzEgOns5
-        rg/xHXh7q+8PWJ5k44xc4uM05WbnEtiiadN6kEO
-X-QQ-GoodBg: 0
-From:   Jason Wang <wangborong@cdjrlc.com>
-To:     bp@alien8.de
+        id S230421AbhLKLJJ (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Sat, 11 Dec 2021 06:09:09 -0500
+Received: from mail.skyhub.de ([5.9.137.197]:36566 "EHLO mail.skyhub.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230413AbhLKLJJ (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Sat, 11 Dec 2021 06:09:09 -0500
+Received: from zn.tnic (dslb-088-067-202-008.088.067.pools.vodafone-ip.de [88.67.202.8])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 2F63B1EC04DE;
+        Sat, 11 Dec 2021 12:09:04 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1639220944;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=L2nTyHnglfV/p1fdhAPCEoans1duqzNgPre3L5/aOXw=;
+        b=lHuiAvT5cppLfCX+hGKadtns5er3eQ/avQGs6hzhnQ8vmJBkXfhQuu4oz17rb3ecf7kdi1
+        nNWs1xxzztsMRROZmijYMFdREpajnLzC4+jyhVlogK0j9aMdnCslJwzrTZVTVk5C4nLMFz
+        /cbi7LTfqVZYOY8ofjc8IInTtYdwxpQ=
+Date:   Sat, 11 Dec 2021 12:09:05 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Jason Wang <wangborong@cdjrlc.com>
 Cc:     tony.luck@intel.com, linux-edac@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Jason Wang <wangborong@cdjrlc.com>
-Subject: [PATCH] RAS/CEC: fix typo in a comment
-Date:   Sat, 11 Dec 2021 17:19:14 +0800
-Message-Id: <20211211091914.268823-1-wangborong@cdjrlc.com>
-X-Mailer: git-send-email 2.34.1
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] RAS/CEC: fix typo in a comment
+Message-ID: <YbSG0ap1a+jhgKe3@zn.tnic>
+References: <20211211091914.268823-1-wangborong@cdjrlc.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:cdjrlc.com:qybgspam:qybgspam1
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20211211091914.268823-1-wangborong@cdjrlc.com>
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-The double `an' in the comment in line 41 is repeated. Remove one
-of them from the comment.
+On Sat, Dec 11, 2021 at 05:19:14PM +0800, Jason Wang wrote:
+> The double `an' in the comment in line 41 is repeated. Remove one
+> of them from the comment.
+> 
+> Signed-off-by: Jason Wang <wangborong@cdjrlc.com>
+> ---
+>  drivers/ras/cec.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-Signed-off-by: Jason Wang <wangborong@cdjrlc.com>
----
- drivers/ras/cec.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Applied, thanks.
 
-diff --git a/drivers/ras/cec.c b/drivers/ras/cec.c
-index d7894f178bd4..42f2fc0bc8a9 100644
---- a/drivers/ras/cec.c
-+++ b/drivers/ras/cec.c
-@@ -38,7 +38,7 @@
-  * elements entered into the array, during which, we're decaying all elements.
-  * If, after decay, an element gets inserted again, its generation is set to 11b
-  * to make sure it has higher numerical count than other, older elements and
-- * thus emulate an an LRU-like behavior when deleting elements to free up space
-+ * thus emulate an LRU-like behavior when deleting elements to free up space
-  * in the page.
-  *
-  * When an element reaches it's max count of action_threshold, we try to poison
 -- 
-2.34.1
+Regards/Gruss,
+    Boris.
 
+https://people.kernel.org/tglx/notes-about-netiquette
