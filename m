@@ -2,65 +2,72 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 25C744717FA
-	for <lists+linux-edac@lfdr.de>; Sun, 12 Dec 2021 04:27:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BB9A64719E1
+	for <lists+linux-edac@lfdr.de>; Sun, 12 Dec 2021 12:48:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231750AbhLLD1H (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Sat, 11 Dec 2021 22:27:07 -0500
-Received: from smtpbg126.qq.com ([106.55.201.22]:50560 "EHLO smtpbg587.qq.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S229635AbhLLD1G (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Sat, 11 Dec 2021 22:27:06 -0500
-X-QQ-mid: bizesmtp38t1639279616tvuhi8oz
-Received: from localhost.localdomain (unknown [182.132.179.213])
-        by esmtp6.qq.com (ESMTP) with 
-        id ; Sun, 12 Dec 2021 11:26:55 +0800 (CST)
-X-QQ-SSF: 01000000002000D0H000B00A0000000
-X-QQ-FEAT: dpyQmELDBxFo0y7giH8K9FeBllKIq5qQDPu1p2HfTShzZnbL2O7nslt9VgfqG
-        IAsXQG4UbhLSHiLwpKqmn0GCxknqpOpPu/bYN/mbziCKnVC4WbtyloZ9TmmT/clfkIEAbWv
-        9GcyTXRu9chT6ETAWAfaEYWnadG8bYOMIpgWScCQR757QRAm9FR70DpLX+lNGrpOpvB1R/H
-        VkLa7iSv5Q+q4IfjK6ohJLAMc0PbKB2u4tZ5i8JS/Pue3d0RhKGtMxZlH744iKt7RKapN6A
-        ujg3yY1OTSpNKHECgYDbnQrTGpgVu7+8t5/v6IUx62GuHo/f8z+yHcD/RM9eq2eEFyVLQsD
-        JjMqkzGLEfg45SkqEZxsDtvcYRJAyY8oLElZV8w+UPnNlZ22SU=
-X-QQ-GoodBg: 0
-From:   Jason Wang <wangborong@cdjrlc.com>
-To:     bp@alien8.de
+        id S230229AbhLLLsZ (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Sun, 12 Dec 2021 06:48:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34858 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229464AbhLLLsY (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Sun, 12 Dec 2021 06:48:24 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89E34C061714;
+        Sun, 12 Dec 2021 03:48:24 -0800 (PST)
+Received: from zn.tnic (dslb-088-067-202-008.088.067.pools.vodafone-ip.de [88.67.202.8])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 931C21EC0298;
+        Sun, 12 Dec 2021 12:48:17 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1639309697;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=+4/Sx6gmNK9SJMBx25ANJ7tuuVUMf5npkh2k4RvknAo=;
+        b=SBeXCB1QhGVQ+r9WlnwS+OuJjaPkIN2TtCWAnds1+a1WBEPqAqkcjqbc+yzn7cAJYqr98E
+        UFyQ3oxraFVEnSgaLd3J/7hadYlFxgDrh0uwkWAA8t9gQA2wJQDQost8Otp7HYvkE25mzr
+        RZwkLhHgTjw6vpNWfpyWc4Ye12IBC8c=
+Date:   Sun, 12 Dec 2021 12:48:19 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Jason Wang <wangborong@cdjrlc.com>
 Cc:     yazen.ghannam@amd.com, mchehab@kernel.org, tony.luck@intel.com,
         james.morse@arm.com, rric@kernel.org, linux-edac@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Jason Wang <wangborong@cdjrlc.com>
-Subject: [PATCH] EDAC/amd64: fix typo in a comment
-Date:   Sun, 12 Dec 2021 11:26:53 +0800
-Message-Id: <20211212032653.56459-1-wangborong@cdjrlc.com>
-X-Mailer: git-send-email 2.34.1
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] EDAC/amd64: fix typo in a comment
+Message-ID: <YbXhg699DSJNm3JK@zn.tnic>
+References: <20211212032653.56459-1-wangborong@cdjrlc.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:cdjrlc.com:qybgspam:qybgspam2
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20211212032653.56459-1-wangborong@cdjrlc.com>
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-The double `reads' in the comment in line 126 is repeated. Remove one
-of them from the comment.
+On Sun, Dec 12, 2021 at 11:26:53AM +0800, Jason Wang wrote:
+> The double `reads' in the comment in line 126 is repeated. Remove one
+> of them from the comment.
+> 
+> Signed-off-by: Jason Wang <wangborong@cdjrlc.com>
+> ---
+>  drivers/edac/amd64_edac.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-Signed-off-by: Jason Wang <wangborong@cdjrlc.com>
----
- drivers/edac/amd64_edac.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+If you're going to waste your time fixing comments, then please fix your
+commit message like I did for your previous patch:
 
-diff --git a/drivers/edac/amd64_edac.c b/drivers/edac/amd64_edac.c
-index ca0c67bc25c6..dff6469e9f67 100644
---- a/drivers/edac/amd64_edac.c
-+++ b/drivers/edac/amd64_edac.c
-@@ -123,7 +123,7 @@ static inline int amd64_read_dct_pci_cfg(struct amd64_pvt *pvt, u8 dct,
- 		if (dct) {
- 			/*
- 			 * Note: If ganging is enabled, barring the regs
--			 * F2x[1,0]98 and F2x[1,0]9C; reads reads to F2x1xx
-+			 * F2x[1,0]98 and F2x[1,0]9C; reads to F2x1xx
- 			 * return 0. (cf. Section 2.8.1 F10h BKDG)
- 			 */
- 			if (dct_ganging_enabled(pvt))
+https://git.kernel.org/pub/scm/linux/kernel/git/ras/ras.git/commit/?h=edac-misc&id=b011a57e41ccbd402ecdcb53514ba76b898ec22e
+
+And then I'd strongly suggest you try fixing real bugs - there's no
+shortage of those - instead of wasting your and others' time with
+comments fixes. Those can be addressed when someone is changing the code
+in that area too.
+
+Thx.
+
 -- 
-2.34.1
+Regards/Gruss,
+    Boris.
 
+https://people.kernel.org/tglx/notes-about-netiquette
