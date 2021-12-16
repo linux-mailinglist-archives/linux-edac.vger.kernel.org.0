@@ -2,401 +2,214 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C444147790F
-	for <lists+linux-edac@lfdr.de>; Thu, 16 Dec 2021 17:29:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F0DC477BB4
+	for <lists+linux-edac@lfdr.de>; Thu, 16 Dec 2021 19:44:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233799AbhLPQ33 (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Thu, 16 Dec 2021 11:29:29 -0500
-Received: from mail-dm6nam11on2050.outbound.protection.outlook.com ([40.107.223.50]:8128
-        "EHLO NAM11-DM6-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S239173AbhLPQ32 (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Thu, 16 Dec 2021 11:29:28 -0500
+        id S233118AbhLPSoW (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Thu, 16 Dec 2021 13:44:22 -0500
+Received: from mx0b-00069f02.pphosted.com ([205.220.177.32]:36200 "EHLO
+        mx0b-00069f02.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232847AbhLPSoW (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>);
+        Thu, 16 Dec 2021 13:44:22 -0500
+Received: from pps.filterd (m0246630.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1BGHV9Ra024466;
+        Thu, 16 Dec 2021 18:44:07 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=message-id : date :
+ subject : to : cc : references : from : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=corp-2021-07-09;
+ bh=9lyofT33PglZ8LmwW+clflKDX4p/g40oJCilPyiyelw=;
+ b=PtEeFfGhezx/f9aCztZ/jglARp5CMY/VBUUiaZjtWCiU9n8yf1M7KzvFe8AmhaA01VXa
+ BLdjV5G8hvcDvl2OQpWknNDZPZqgIaKZ0neQyZZ3vXHd/BFyKJjOxgpng7vA0I9coEN9
+ gj/divEYXoRvEjr7p2ZqyOxpK9628fcYKEznFosgdfShslwfW5/1iEQncUtyZYyJIycA
+ XHpsFM0eomP7zb6LudNYdX2h1cK05C27Ay6FEJowaHClZ68ffvCfpuabBzpFc8XctTZ6
+ fmuXg9fbjJBlnaOZCCcJQrFm6qramXNuAUXX2hwI2aTYyO2GPrAcxVD58kMdRXnCGpZj ow== 
+Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
+        by mx0b-00069f02.pphosted.com with ESMTP id 3cykmckm5w-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 16 Dec 2021 18:44:07 +0000
+Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
+        by userp3020.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 1BGIVpkj004730;
+        Thu, 16 Dec 2021 18:44:06 GMT
+Received: from nam04-mw2-obe.outbound.protection.outlook.com (mail-mw2nam08lp2176.outbound.protection.outlook.com [104.47.73.176])
+        by userp3020.oracle.com with ESMTP id 3cvneu5rnm-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 16 Dec 2021 18:44:05 +0000
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=RkcRVCuw5R9WZCff9WlP/K2QG3JjEJVIcBCzVVQS3OBLJ2h9LcUcoTwTdb/FmTSOmKQN3b1QaYs/0gNNmB56sEARJru5lWaSOR/GLZsWGm0oSI5Ja8+5cuH8gWN8jMVaNp3OtSAYmgFaJu0AfHUClt5rfDSzucVs10Sh21f3/f7eAq+CGHCc+8tcV+6sjdAkJLnlMQpAf2RqmaWtyRhm0IcHJmH1ygXyUTDIG72o+1IcsLRdJsuCPhVJkJjQKtFXmFGeZlq6ZnqT6mhJjVcG+7OOvRHud/pdHRStgy3Mxf4c13wmm40l3YoWoHigP1bNEWFmD1vXXA9t1erahjxhRw==
+ b=XRBeuVI/d/hT3CMnWc6qVWl460IwmkukbJ3EFSDagS4YkWu1eE03tonw2Ia7fddgvoTVlj6nAxffcnb2J841OF3cFnxZX97LDUzUDMMeArn1w1mRpHfwirmjIGm+pscPRoKDGcj44PDHth7bnKZ7+ZGJl4gGNft49gRm5eWgnful2GuPSY4oiiPl16s2Ut8+gyMxD5liuRjdZBEreXuJOOvyccCFuysG1ksAvzqnL1iv+Zm17j3+ptNkWR87CffEe7CSFvb0Ei6HYZ+W/m/VxKcDFUH3LBZDkfPN+B2SndseWC4w4+i4kmghJAvmOp+jd6yD96J1TLHnADG+3yKtGw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=PKNuRbAE4YE4/CpCjApadC2BS8cTjWTk8gEVQiTN4z0=;
- b=W4aq1uSLTcUFb7ulgUeboTzLP3JNPT/x0v6V2nw3B7kjrhA61F0jE8HyoBHmb58Bz2yVaeaXyMGV8kpNQWMgodVCunPWAe1q2ZnPX3tGTaiqq75LCEEh+MUjvFOpyLgYdb84ceZtVwdKmEfEA3xZaVGriy39vdw9bsN8MjB9wZcNixa48YGPuZsSiriNzEJ/3hvBXjEbOrrFdcerTex/bDMo4OZsXdPbc+n98qv5/2ox51XpmekjWcuguR3HrA2u8yLQyKS8GJ6P5ah7XtGepE6byjiGZUP6C6kyr1J5msFgDXh4Z+k7TOQk8i5FIJAAl7uALC5vJ8GAIBULCILF8Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ bh=9lyofT33PglZ8LmwW+clflKDX4p/g40oJCilPyiyelw=;
+ b=oeR59Wa1GnGlNTwNJh3AcbuVLNYw8rwth6wV34+kJfV5TizNSxEKeJ4+QDb2Q7Vlm8R3gWqY270RF6qBs2X6VfjsOQzpCr6udKBxtuyLoOqXYH7HmK7cOL5rbiw/9kJ2bGd4qK0fAmVW2SDu7T8DMXOZmPND3RlqreUOc2pXbZYL65HXQIF91Bi/xMVidIQ5SNwQ+5DfhzkneQbwe9VgQ8RaTMnILiVkfjl9ru2htglXr/ZCroXoBg2O4VB9lsMuBL4699MPrcDa1oFbajUFKFHxeLHXvzcI1RgN94DCh5tocDxSisjI7sGFdQ0LMcSJTF+HrBMNiPNvjjJAaeWqOQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=PKNuRbAE4YE4/CpCjApadC2BS8cTjWTk8gEVQiTN4z0=;
- b=K0ueD9R+98mQC0Gr/0F36PCdlIW7e65Pd1UQzykucCLRS4X1bqQPW5IBoR0H4D3JRryDXrDnWZOfEyY7mUghQsLsEZhDueN0wTLdtolXq6v8IQjstylQ5nwUJ7KkZpgWWoFPJC2Kg3jd+BOMPUZE37CeM8k8YYJ9ApSTUhz1CQI=
-Received: from MW3PR05CA0030.namprd05.prod.outlook.com (2603:10b6:303:2b::35)
- by BN7PR12MB2785.namprd12.prod.outlook.com (2603:10b6:408:2d::23) with
+ bh=9lyofT33PglZ8LmwW+clflKDX4p/g40oJCilPyiyelw=;
+ b=thmfepQKTibNUX9ivatPD6d3vW/TLTQYJzyKi4vnI40ceGCBb+ZPW1GjzQmpoo2pTE0zC3J0fkxVtm00bxFLNlzxjSGN2TeNPT70HqvxLJHKtbc2m/DwtkZ83low3vYq/fbNT3JZMKErAT+7FJPHAOxzq2nLz0F6Rlziq2TvhV8=
+Received: from PH0PR10MB5481.namprd10.prod.outlook.com (2603:10b6:510:ea::5)
+ by PH0PR10MB5467.namprd10.prod.outlook.com (2603:10b6:510:d4::20) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4778.17; Thu, 16 Dec
- 2021 16:29:25 +0000
-Received: from CO1NAM11FT035.eop-nam11.prod.protection.outlook.com
- (2603:10b6:303:2b:cafe::ce) by MW3PR05CA0030.outlook.office365.com
- (2603:10b6:303:2b::35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4801.13 via Frontend
- Transport; Thu, 16 Dec 2021 16:29:25 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB03.amd.com;
-Received: from SATLEXMB03.amd.com (165.204.84.17) by
- CO1NAM11FT035.mail.protection.outlook.com (10.13.175.36) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.4801.14 via Frontend Transport; Thu, 16 Dec 2021 16:29:24 +0000
-Received: from yaz-ethanolx.amd.com (10.180.168.240) by SATLEXMB03.amd.com
- (10.181.40.144) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.17; Thu, 16 Dec
- 2021 10:29:23 -0600
-From:   Yazen Ghannam <yazen.ghannam@amd.com>
-To:     <linux-edac@vger.kernel.org>
-CC:     <linux-kernel@vger.kernel.org>, <tony.luck@intel.com>,
-        <x86@kernel.org>, <Smita.KoralahalliChannabasappa@amd.com>,
-        <william.roche@oracle.com>, <alexander.deucher@amd.com>,
-        <mukul.joshi@amd.com>, Yazen Ghannam <yazen.ghannam@amd.com>
-Subject: [PATCH v2 2/2] x86/MCE/AMD, EDAC/mce_amd: Support non-uniform MCA bank type enumeration
-Date:   Thu, 16 Dec 2021 16:29:05 +0000
-Message-ID: <20211216162905.4132657-3-yazen.ghannam@amd.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20211216162905.4132657-1-yazen.ghannam@amd.com>
-References: <20211216162905.4132657-1-yazen.ghannam@amd.com>
-MIME-Version: 1.0
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4801.14; Thu, 16 Dec
+ 2021 18:44:03 +0000
+Received: from PH0PR10MB5481.namprd10.prod.outlook.com
+ ([fe80::18e7:1b9a:a547:38b3]) by PH0PR10MB5481.namprd10.prod.outlook.com
+ ([fe80::18e7:1b9a:a547:38b3%7]) with mapi id 15.20.4801.014; Thu, 16 Dec 2021
+ 18:44:03 +0000
+Message-ID: <cd5fb58d-1529-6c05-e49d-ec36f0337483@oracle.com>
+Date:   Thu, 16 Dec 2021 19:43:55 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Subject: Re: [PATCH v2 2/2] EDAC/amd64: Add new register offset support and
+ related changes
+Content-Language: en-US
+To:     Yazen Ghannam <yazen.ghannam@amd.com>,
+        Borislav Petkov <bp@alien8.de>
+Cc:     linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
+        mchehab@kernel.org, tony.luck@intel.com, james.morse@arm.com,
+        rric@kernel.org, Smita.KoralahalliChannabasappa@amd.com
+References: <20211215155309.2711917-1-yazen.ghannam@amd.com>
+ <20211215155309.2711917-3-yazen.ghannam@amd.com>
+ <d327bbfe-a3c0-9b26-569d-43e17dba126d@oracle.com> <Ybou1VTJ8oced4Ge@zn.tnic>
+ <YbtfcUmWAFDWMG9w@yaz-ubuntu>
+From:   William Roche <william.roche@oracle.com>
+In-Reply-To: <YbtfcUmWAFDWMG9w@yaz-ubuntu>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB03.amd.com
- (10.181.40.144)
-X-EOPAttributedMessage: 0
+X-ClientProxiedBy: AM4P190CA0021.EURP190.PROD.OUTLOOK.COM
+ (2603:10a6:200:56::31) To PH0PR10MB5481.namprd10.prod.outlook.com
+ (2603:10b6:510:ea::5)
+MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: cdabc78c-98bc-44ee-9385-08d9c0b1392e
-X-MS-TrafficTypeDiagnostic: BN7PR12MB2785:EE_
-X-Microsoft-Antispam-PRVS: <BN7PR12MB2785231D95FCEAA1B6EAC2A1F8779@BN7PR12MB2785.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:1388;
+X-MS-Office365-Filtering-Correlation-Id: 72d141a3-b82e-4233-eeed-08d9c0c407db
+X-MS-TrafficTypeDiagnostic: PH0PR10MB5467:EE_
+X-Microsoft-Antispam-PRVS: <PH0PR10MB5467AD05CE7DB08BD3A4CBD585779@PH0PR10MB5467.namprd10.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:10000;
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 7xkHYW5+R6W2yFoutcjBapsHKJY8EzvFfF7ibIRfMMLF7reHuEd0X5f0UwRGSRVqRZjsgvm0X3ZD1UGM8EwhFljwZVuVILhJov0Faf2waZZ9CbcqDc4lXYF9sqRP5cih5PzNPucI6eNH1i1QZo4ejttSg+c+WdB8MTbWX1+5MSlklbo2TqZJ5emEDfiw2T4JhVM5IgggyXC+3NRBvwmHQfGOKkwsOkp1tivMmlZdFDv7aP6FJ43jrdSzqZqROlm9f4LN3SICbodFXMumdwZ9aICSaohbTK+wx506HNqdu0J7FvrUb2Rs7cagdP6r628IWftHqQG2Ou0gzr2mAp3vUpPqsi0Qhrkmgta2NHWVT/AxP4OHb4MAbWA3i5gAtMUURSisEaVms6KJc54XJ/qzQFUY+iEoS2t5F4JUf25un1l59x2BWmsF+kP0KUER6WyHEBL3veWJP/LkR2oOt8CXH3e3EKj2ZuJW+J6eMVtsddRnbXnnH1ExPq/Yo2QEuQF1yHQt7CcpzY2iE0+VkTXxguisFylP0yf2ZW1zv1/B4pdMLRSqdRw12gJT8TDtIt9qwfuDhbE9uxTfslwVEwPOv1ngwu58acneRL9MfIDQwzkgkKspqfgifB3bX70dTks9J461p0YYLpKoZFohmxTqO3rLdoooyWFiF/Gll5u7wauTkfeVAA2N9lajjD7Q9+4QAgGraneyhvdF6SagGtDKanO9cRvY9B4joxGjdCk0k4jiiNJOcrWXQ37KKbQb5kH4QRRc2Mk+ytEBAR6NnAuqRETmOkkluWxYYh8nBm/HuxAycJjrZubSfaDncMi95Gu9wzM8G6evKgXda2zcB3Xo/hbxLjSmPe6VqLhhHNWeeKlmIZwy1VoOti1TI66hd42W
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB03.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(4636009)(46966006)(36840700001)(40470700001)(36860700001)(2616005)(82310400004)(356005)(316002)(508600001)(15650500001)(4326008)(1076003)(44832011)(36756003)(5660300002)(16526019)(47076005)(86362001)(336012)(70586007)(186003)(6916009)(426003)(26005)(966005)(8936002)(2906002)(83380400001)(70206006)(81166007)(40460700001)(7696005)(8676002)(6666004)(54906003)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Dec 2021 16:29:24.9171
+X-Microsoft-Antispam-Message-Info: /KrzXWqZaJ595KtUuiFBRXQXpI+ROPQAJaH0sS3UqlFCy2/ykzz/tHSiaOv7lMCy3tdwsI9P6Qc7wFmn2YQkBLfLVTBh1IJWnAlhB52cuOQjlIv8JFFfLVWKcWGSUiU5qy791aoL9tDvSZlFpls7mKAD8tQb7+zmQ4CEWYUoLHnQesqkKTqjijsSJmoB7q208LF3BkwXiKvFiLaGDCTYQOtC16X2jnfsMTNwr9ZVjbwx1BLvoWovmZtlXP5xgdN1uW79JcFnQCtd+DiD4yhsjoYr76GDkVh9mTg822lx8Ilm//YWMgF7uBDSzIWEwkyaziiT1acbUzqt37tmIRm6eK62+o1eN3v3Qw5qjHSNVqAqSa3Q3hWIp1c30fndZSG9Ydz4GXSJkNHg+z7T4CpLy+0AVg9bzl7YoKtt9T4xhlOAZcAp2XBCsmlVECt55NGUP9j3k3HsrZOZ98caCUB2oBKdwOtfQN+Bz1wwWvd4cMKXDA/4W5IHsCfPgy9oAGJyxi93xOShdy/98xBB4NsdyFnfVmSeyE1RwNh79JABNXVhTZjVZLgMyj48S2W6/ttP0FQEqAMeai14kQmOmzBMpcWrgd9nxZ+voEgVqlZO40lI6GSdqwap4wzh6PuRG0SZtL4ATTWOK9HE/mXvDrcpqu4MP+J/kz8KhHbggsBLdi0ADAy/dsjstrADoNvNtyUg1fT65LkuvAzilLPkLDxLdc3oc8+WWtnLM9oiaYPtRMk=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR10MB5481.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(508600001)(53546011)(38100700002)(316002)(44832011)(6666004)(6486002)(186003)(8676002)(83380400001)(31686004)(8936002)(2616005)(86362001)(31696002)(5660300002)(6506007)(36756003)(6512007)(4326008)(2906002)(110136005)(66946007)(66476007)(52116002)(66556008)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?aDJtUlJZbExjQ2FYamJiVjRCRHQ1bzVwWTVrS2w5NFJvZHRtRWxGQldLeUtp?=
+ =?utf-8?B?RWROclFVL0RNZzF1RUVDL2xNaFRxSnhYc1RJUk91YUhuWkxLV3ZDbWpBdlZO?=
+ =?utf-8?B?Nk1uam56cGJWZXBtZy9yNTEwRlFxSzJJNXRDd2thTHFNQkdpYk41bG8ySjk4?=
+ =?utf-8?B?WG4ydmVTb3BqdmNWWGhvNncySWlPVTlCRFhST3ZRdXpJUmNiVFhTdUpnVFhJ?=
+ =?utf-8?B?VmZtM04waFJGYlR3Z29tOEVMZUFycXBheHcrWXlqbGFnR1paUUtpeEJSNGUy?=
+ =?utf-8?B?Tms4SkZFaDBBWk5zTUlNSzBjL0pkQkhpRFUzRTk2OWVSVFhGdW02T2tXQUFU?=
+ =?utf-8?B?dTJZQmxPdlVtcmg2ZFlnZUJoSFd4aTR0Y05qbmVlZE4rdDFLT1ZjNWZNNk45?=
+ =?utf-8?B?QXRaOGFHZ1JNUE1YVU9qUU1DTjk0MUliZkFsOVhLMlZTc2RjcS9lT21NT2FW?=
+ =?utf-8?B?eVNpZU9ZOXAyOEpvQXRKYjNSbHFjOTBLcm5scll0dXJsaXhHNElPSkxOMjBB?=
+ =?utf-8?B?bU9LREVPYUx2bUdkUkVsZStrc1NEWFlKbk11UXNsbTloNnBCWnRIRE9ma1lv?=
+ =?utf-8?B?bVIva283RzgxSGI0OG05TXhhcXFqdThHYmY3NXE3emNCYjlabnFnWkc2aC9X?=
+ =?utf-8?B?MXpjU3BWcGx5M3E2UGtjRXVwb2FUdFduWFJZL01PM2Q0Z0FaSnBISnQ0WG90?=
+ =?utf-8?B?SmZ5K1BzT2RobUpmWno3bE9jREQ3RUg0bFVEcTVvNHBNOUtGMmxuTHZLb2li?=
+ =?utf-8?B?NEtQclpPbzc5TGRNTXBoUndIbXM3d2t0WVoxd2VCMVpnL1lTbGFNaHBvTVlL?=
+ =?utf-8?B?RnlIWUlON3VjMkVqOUpHN1k2U0dpSjFDMjNOV2U5UXcvcTI3NVNoUWtzSmRZ?=
+ =?utf-8?B?M2FnRE54OFgxTzdoazAwTFIwY1VOakhZbXhkeFZXYUhac2FSYXpYcU9GRjhj?=
+ =?utf-8?B?VzFNT1VQNmEwMGpJeWdCUUVnZXcwMXNRWWdielJ6ZkJHamRIcEczZlRoMTVD?=
+ =?utf-8?B?VHp2OVlZZWVTQzE3NjR6TDRYTFJHSUdyalI5OVd1WkpLVmJ3TTdQc1N4b0ds?=
+ =?utf-8?B?VlRPN1JVQTFKcC9UeWlNNnJvMTExUVF1ekZxYlY4MmI2dm00ZFlXTXZEcktF?=
+ =?utf-8?B?WGpoTnZScnBLRDZKSHhQbUpBL1drYWxRVk03aXI3NHVjeXEyVXZCaWpyNTRq?=
+ =?utf-8?B?SkdVb0wzZWRRQ1BJVlgzenQxQkgvbzBZUVlqaUlDZzlrQlBra2tiaE9Edk9v?=
+ =?utf-8?B?VWhMeDJJbGFqRzd1cTRjZWZla0htenVrczVKam55UGRjVzFybEg1UHE3cUVi?=
+ =?utf-8?B?QmV5aWJMNWMyeVowc0ZjU3pGZlBqZ1RvKzc3ek9sTzJkc1dsYjJKVDBucU5H?=
+ =?utf-8?B?WWlLQ3lDMHpEY0IvZ0xyUDdPdzVReHQ3T1Y5dkRLKyttRkJvUmdITzl1TmZx?=
+ =?utf-8?B?bDFMRVRwMmg5YmhTa2Nub1hYVjZHQVdQWUpYYjJZMi91ek1heE9aRDBuTncx?=
+ =?utf-8?B?TzNISkJnOEQ2OFlyMDhZYmxsa25XbERnZlNERUxyYkJkK3kzWEo4MjBpUDlw?=
+ =?utf-8?B?ZVo3T3IxUU5KdzFiVnA3cDJHY01GLzlXTEVWOVJIQXpPQnl2Z3lIdWgzYlVU?=
+ =?utf-8?B?RjlBTTlqVXBnSThiQXVtRnZwMms4U1NONnlxc0hqYkpmUDVNdURBc3BRR05T?=
+ =?utf-8?B?VmYyNVRFZmlBM3ZLMys3QUpicDZhSENOLys3TTVsUWpWT3c0c0RUWklZZHZL?=
+ =?utf-8?B?L2k4cnd1elRrdTdHR3IxajFQeUdBNVIra0YrcmxYeGZmak1HWlpyWU5tZXN0?=
+ =?utf-8?B?aVdSSjlvWjJuK0VqckhRVENRMGVyZ0VsRlRkdi9iNENWcWpldHhuVVRoWThE?=
+ =?utf-8?B?aUl5QzFSOUVsdGVtWnhUZVlpNFpYWTArTGJ2ckxkbDhkVThvVmM5SmQzb3VI?=
+ =?utf-8?B?eW9zSXNCQkxVWjJpWjkxZ2hMNnVYYldiRUVueW0yMWozbmFScVU1YnBXL2pK?=
+ =?utf-8?B?UzdiN2tHS3F5aVlkRW14YmxSbzNCOXZhSW9YTDIrOGV2VURVQWlQODRvTy9Q?=
+ =?utf-8?B?T0lESnA1dVpoamVPZFBHQnlXMzBXelczOUF0QjhuaW9hYmI3ZXhBZHc5NGNs?=
+ =?utf-8?B?WVh3YjgwVFRiZ2p3aVl4MTAzeHExRmoyb0xRUmRnYVlBaU1UZVVsMlBtT2xN?=
+ =?utf-8?B?eXNZQytOYW4xazNUaTNjYklYaEkyemxrdEw2Qzl6eURzL0xvTW1EVHExeFdN?=
+ =?utf-8?B?b3ZlRmozQ2RZV2JjUzlxVng0QnBGTXVRM1RLT0Y1VWFQQzlveGYyQytPdHh5?=
+ =?utf-8?Q?Q5+K4hr5lPdL7Gg05p?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 72d141a3-b82e-4233-eeed-08d9c0c407db
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR10MB5481.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Dec 2021 18:44:03.0269
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: cdabc78c-98bc-44ee-9385-08d9c0b1392e
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB03.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT035.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN7PR12MB2785
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: wAm1MuCCwGfe4jNXiP/j4Gjgf9bpuxW7R5miOPPISn/A5H2FrcGSJF1MRZ0Cy9nLyehz7loKVFApegYaq1NgszQPihED67Db2UnZfZCYEW8=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR10MB5467
+X-Proofpoint-Virus-Version: vendor=nai engine=6300 definitions=10200 signatures=668683
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 adultscore=0
+ malwarescore=0 bulkscore=0 spamscore=0 mlxlogscore=999 mlxscore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2110150000 definitions=main-2112160104
+X-Proofpoint-ORIG-GUID: DzuQoxWIQbjYxToGOAxJHvbsmTglgtY8
+X-Proofpoint-GUID: DzuQoxWIQbjYxToGOAxJHvbsmTglgtY8
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-AMD systems currently lay out MCA bank types such that the type of bank
-number "i" is either the same across all CPUs or is Reserved/Read-as-Zero.
+On 16/12/2021 16:46, Yazen Ghannam wrote:
+> On Wed, Dec 15, 2021 at 07:07:17PM +0100, Borislav Petkov wrote:
+>> On Wed, Dec 15, 2021 at 05:32:27PM +0100, William Roche wrote:
+>>>> @@ -2174,8 +2215,13 @@ static int f17_addr_mask_to_cs_size(struct amd64_pvt *pvt, u8 umc,
+>>>>    	 * There is one mask per DIMM, and two Chip Selects per DIMM.
+>>>>    	 *	CS0 and CS1 -> DIMM0
+>>>>    	 *	CS2 and CS3 -> DIMM1
+>>>> +	 *
+>>>> +	 *	Systems with newer register layout have one mask per Chip Select.
+>>> Just a question about this comment: Can it be translated into this ?
+>>>
+>>> +	 * Except on systems with newer register layout where we have one Chip Select per DIMM.
+>> Sure, but without the "we":
+>>
+>> 	...
+>> 	* On systems with the newer register layout there is one Chip Select per DIMM.
+>> 	*/
+>>
+> Hi William,
+> Thanks for the suggestion, but it's not quite correct.
 
-For example:
+That's exactly what I wanted to know. Thanks.
 
-  Bank # | CPUx | CPUy
-    0      LS     LS
-    1      RAZ    UMC
-    2      CS     CS
-    3      SMU    RAZ
+>
+> There are still two Chip Selects per DIMM module, i.e. the system can support
+> dual-rank (2R) DIMMs. Current AMD systems can support upto 2 DIMMs per Unified
+> Memory Controller (UMC). There are two "Address Mask" registers in each UMC,
+> and each register covers an entire DIMM (and by extension the two Chip Selects
+> available for each DIMM).
+>
+> Future systems will still support upto 2 DIMMs per UMC. However, the register
+> space is updated so that there are now four "Address Mask" registers per UMC.
+> And each of these registers is now explicitly related to one of the four Chip
+> Selects available per UMC.
 
-Future AMD systems will lay out MCA bank types such that the type of
-bank number "i" may be different across CPUs.
+ From what I understand, future systems would still support the same 
+number of dimms per UMC (2), the same number of Chip Select (2 per 
+dimm), the only thing that changes is the number of Address Mask 
+registers (going from 2 per UMC  to  4 per UMC).
 
-For example:
+So I'm confused, we deduce 'dimm' from csrow_nr, which would be in fact 
+the Chip Select *masks* number (cs_mask_nr from the dbam_to_cs signature 
+in struct low_ops), so why are we saying and dimm=csrow_nr in the case 
+of the new layout, but dimm = csrow_nr / 2 in the case on the standard 
+layout ?
 
-  Bank # | CPUx | CPUy
-    0      LS     LS
-    1      RAZ    UMC
-    2      CS     NBIO
-    3      SMU    RAZ
+Should we indicate what this 'dimm' value really is ?
 
-Change the structures that cache MCA bank types to be per-CPU and update
-smca_get_bank_type() to handle this change.
+Sorry if I'm missing something very obvious here.
 
-Move some SMCA-specific structures to amd.c from mce.h, since they no
-longer need to be global.
+Thanks,
+William.
 
-Break out the "count" for bank types from struct smca_hwid, since this
-should provide a per-CPU count rather than a system-wide count.
 
-Apply the "const" qualifier to the struct smca_hwid_mcatypes array. The
-values in this array should not change at runtime.
-
-Signed-off-by: Yazen Ghannam <yazen.ghannam@amd.com>
----
-Link:
-https://lkml.kernel.org/r/20211203020017.728440-4-yazen.ghannam@amd.com
-
-v1->v2:
-* Rework due to dropping patch 1 from v1.
-
- arch/x86/include/asm/mce.h              | 18 +-------
- arch/x86/kernel/cpu/mce/amd.c           | 59 +++++++++++++++----------
- drivers/edac/mce_amd.c                  | 11 +----
- drivers/gpu/drm/amd/amdgpu/amdgpu_ras.c |  2 +-
- 4 files changed, 39 insertions(+), 51 deletions(-)
-
-diff --git a/arch/x86/include/asm/mce.h b/arch/x86/include/asm/mce.h
-index 52d2b35cac2d..cc73061e7255 100644
---- a/arch/x86/include/asm/mce.h
-+++ b/arch/x86/include/asm/mce.h
-@@ -329,22 +329,6 @@ enum smca_bank_types {
- 	N_SMCA_BANK_TYPES
- };
- 
--#define HWID_MCATYPE(hwid, mcatype) (((hwid) << 16) | (mcatype))
--
--struct smca_hwid {
--	unsigned int bank_type;	/* Use with smca_bank_types for easy indexing. */
--	u32 hwid_mcatype;	/* (hwid,mcatype) tuple */
--	u8 count;		/* Number of instances. */
--};
--
--struct smca_bank {
--	struct smca_hwid *hwid;
--	u32 id;			/* Value of MCA_IPID[InstanceId]. */
--	u8 sysfs_id;		/* Value used for sysfs name. */
--};
--
--extern struct smca_bank smca_banks[MAX_NR_BANKS];
--
- extern const char *smca_get_long_name(enum smca_bank_types t);
- extern bool amd_mce_is_memory_error(struct mce *m);
- 
-@@ -352,7 +336,7 @@ extern int mce_threshold_create_device(unsigned int cpu);
- extern int mce_threshold_remove_device(unsigned int cpu);
- 
- void mce_amd_feature_init(struct cpuinfo_x86 *c);
--enum smca_bank_types smca_get_bank_type(unsigned int bank);
-+enum smca_bank_types smca_get_bank_type(unsigned int cpu, unsigned int bank);
- #else
- 
- static inline int mce_threshold_create_device(unsigned int cpu)		{ return 0; };
-diff --git a/arch/x86/kernel/cpu/mce/amd.c b/arch/x86/kernel/cpu/mce/amd.c
-index ffe8ea8bc877..345ccdf329bc 100644
---- a/arch/x86/kernel/cpu/mce/amd.c
-+++ b/arch/x86/kernel/cpu/mce/amd.c
-@@ -71,6 +71,22 @@ static const char * const smca_umc_block_names[] = {
- 	"misc_umc"
- };
- 
-+#define HWID_MCATYPE(hwid, mcatype) (((hwid) << 16) | (mcatype))
-+
-+struct smca_hwid {
-+	unsigned int bank_type;	/* Use with smca_bank_types for easy indexing. */
-+	u32 hwid_mcatype;	/* (hwid,mcatype) tuple */
-+};
-+
-+struct smca_bank {
-+	const struct smca_hwid *hwid;
-+	u32 id;			/* Value of MCA_IPID[InstanceId]. */
-+	u8 sysfs_id;		/* Value used for sysfs name. */
-+};
-+
-+static DEFINE_PER_CPU_READ_MOSTLY(struct smca_bank[MAX_NR_BANKS], smca_banks);
-+static DEFINE_PER_CPU_READ_MOSTLY(u8[N_SMCA_BANK_TYPES], smca_bank_counts);
-+
- struct smca_bank_name {
- 	const char *name;	/* Short name for sysfs */
- 	const char *long_name;	/* Long name for pretty-printing */
-@@ -126,14 +142,14 @@ const char *smca_get_long_name(enum smca_bank_types t)
- }
- EXPORT_SYMBOL_GPL(smca_get_long_name);
- 
--enum smca_bank_types smca_get_bank_type(unsigned int bank)
-+enum smca_bank_types smca_get_bank_type(unsigned int cpu, unsigned int bank)
- {
- 	struct smca_bank *b;
- 
- 	if (bank >= MAX_NR_BANKS)
- 		return N_SMCA_BANK_TYPES;
- 
--	b = &smca_banks[bank];
-+	b = &per_cpu(smca_banks, cpu)[bank];
- 	if (!b->hwid)
- 		return N_SMCA_BANK_TYPES;
- 
-@@ -141,7 +157,7 @@ enum smca_bank_types smca_get_bank_type(unsigned int bank)
- }
- EXPORT_SYMBOL_GPL(smca_get_bank_type);
- 
--static struct smca_hwid smca_hwid_mcatypes[] = {
-+static const struct smca_hwid smca_hwid_mcatypes[] = {
- 	/* { bank_type, hwid_mcatype } */
- 
- 	/* Reserved type */
-@@ -219,9 +235,6 @@ static struct smca_hwid smca_hwid_mcatypes[] = {
- 	{ SMCA_GMI_PHY,	 HWID_MCATYPE(0x269, 0x0)	},
- };
- 
--struct smca_bank smca_banks[MAX_NR_BANKS];
--EXPORT_SYMBOL_GPL(smca_banks);
--
- /*
-  * In SMCA enabled processors, we can have multiple banks for a given IP type.
-  * So to define a unique name for each bank, we use a temp c-string to append
-@@ -277,8 +290,9 @@ static void smca_set_misc_banks_map(unsigned int bank, unsigned int cpu)
- 
- static void smca_configure(unsigned int bank, unsigned int cpu)
- {
-+	u8 *bank_counts = this_cpu_ptr(smca_bank_counts);
-+	const struct smca_hwid *s_hwid;
- 	unsigned int i, hwid_mcatype;
--	struct smca_hwid *s_hwid;
- 	u32 high, low;
- 	u32 smca_config = MSR_AMD64_SMCA_MCx_CONFIG(bank);
- 
-@@ -314,10 +328,6 @@ static void smca_configure(unsigned int bank, unsigned int cpu)
- 
- 	smca_set_misc_banks_map(bank, cpu);
- 
--	/* Return early if this bank was already initialized. */
--	if (smca_banks[bank].hwid && smca_banks[bank].hwid->hwid_mcatype != 0)
--		return;
--
- 	if (rdmsr_safe(MSR_AMD64_SMCA_MCx_IPID(bank), &low, &high)) {
- 		pr_warn("Failed to read MCA_IPID for bank %d\n", bank);
- 		return;
-@@ -328,10 +338,11 @@ static void smca_configure(unsigned int bank, unsigned int cpu)
- 
- 	for (i = 0; i < ARRAY_SIZE(smca_hwid_mcatypes); i++) {
- 		s_hwid = &smca_hwid_mcatypes[i];
-+
- 		if (hwid_mcatype == s_hwid->hwid_mcatype) {
--			smca_banks[bank].hwid = s_hwid;
--			smca_banks[bank].id = low;
--			smca_banks[bank].sysfs_id = s_hwid->count++;
-+			this_cpu_ptr(smca_banks)[bank].hwid = s_hwid;
-+			this_cpu_ptr(smca_banks)[bank].id = low;
-+			this_cpu_ptr(smca_banks)[bank].sysfs_id = bank_counts[s_hwid->bank_type]++;
- 			break;
- 		}
- 	}
-@@ -617,7 +628,7 @@ prepare_threshold_block(unsigned int bank, unsigned int block, u32 addr,
- 
- bool amd_filter_mce(struct mce *m)
- {
--	enum smca_bank_types bank_type = smca_get_bank_type(m->bank);
-+	enum smca_bank_types bank_type = smca_get_bank_type(m->extcpu, m->bank);
- 	struct cpuinfo_x86 *c = &boot_cpu_data;
- 
- 	/* See Family 17h Models 10h-2Fh Erratum #1114. */
-@@ -655,7 +666,7 @@ static void disable_err_thresholding(struct cpuinfo_x86 *c, unsigned int bank)
- 	} else if (c->x86 == 0x17 &&
- 		   (c->x86_model >= 0x10 && c->x86_model <= 0x2F)) {
- 
--		if (smca_get_bank_type(bank) != SMCA_IF)
-+		if (smca_get_bank_type(smp_processor_id(), bank) != SMCA_IF)
- 			return;
- 
- 		msrs[0] = MSR_AMD64_SMCA_MCx_MISC(bank);
-@@ -723,7 +734,7 @@ bool amd_mce_is_memory_error(struct mce *m)
- 	u8 xec = (m->status >> 16) & 0x1f;
- 
- 	if (mce_flags.smca)
--		return smca_get_bank_type(m->bank) == SMCA_UMC && xec == 0x0;
-+		return smca_get_bank_type(m->extcpu, m->bank) == SMCA_UMC && xec == 0x0;
- 
- 	return m->bank == 4 && xec == 0x8;
- }
-@@ -1039,7 +1050,7 @@ static struct kobj_type threshold_ktype = {
- 	.release		= threshold_block_release,
- };
- 
--static const char *get_name(unsigned int bank, struct threshold_block *b)
-+static const char *get_name(unsigned int cpu, unsigned int bank, struct threshold_block *b)
- {
- 	enum smca_bank_types bank_type;
- 
-@@ -1050,7 +1061,7 @@ static const char *get_name(unsigned int bank, struct threshold_block *b)
- 		return th_names[bank];
- 	}
- 
--	bank_type = smca_get_bank_type(bank);
-+	bank_type = smca_get_bank_type(cpu, bank);
- 	if (bank_type >= N_SMCA_BANK_TYPES)
- 		return NULL;
- 
-@@ -1060,12 +1071,12 @@ static const char *get_name(unsigned int bank, struct threshold_block *b)
- 		return NULL;
- 	}
- 
--	if (smca_banks[bank].hwid->count == 1)
-+	if (per_cpu(smca_bank_counts, cpu)[bank_type] == 1)
- 		return smca_get_name(bank_type);
- 
- 	snprintf(buf_mcatype, MAX_MCATYPE_NAME_LEN,
--		 "%s_%x", smca_get_name(bank_type),
--			  smca_banks[bank].sysfs_id);
-+		 "%s_%u", smca_get_name(bank_type),
-+			  per_cpu(smca_banks, cpu)[bank].sysfs_id);
- 	return buf_mcatype;
- }
- 
-@@ -1121,7 +1132,7 @@ static int allocate_threshold_blocks(unsigned int cpu, struct threshold_bank *tb
- 	else
- 		tb->blocks = b;
- 
--	err = kobject_init_and_add(&b->kobj, &threshold_ktype, tb->kobj, get_name(bank, b));
-+	err = kobject_init_and_add(&b->kobj, &threshold_ktype, tb->kobj, get_name(cpu, bank, b));
- 	if (err)
- 		goto out_free;
- recurse:
-@@ -1176,7 +1187,7 @@ static int threshold_create_bank(struct threshold_bank **bp, unsigned int cpu,
- 	struct device *dev = this_cpu_read(mce_device);
- 	struct amd_northbridge *nb = NULL;
- 	struct threshold_bank *b = NULL;
--	const char *name = get_name(bank, NULL);
-+	const char *name = get_name(cpu, bank, NULL);
- 	int err = 0;
- 
- 	if (!dev)
-diff --git a/drivers/edac/mce_amd.c b/drivers/edac/mce_amd.c
-index cfd3f7ae9251..cc5c63feb26a 100644
---- a/drivers/edac/mce_amd.c
-+++ b/drivers/edac/mce_amd.c
-@@ -1166,20 +1166,13 @@ static void decode_mc6_mce(struct mce *m)
- /* Decode errors according to Scalable MCA specification */
- static void decode_smca_error(struct mce *m)
- {
--	struct smca_hwid *hwid;
--	enum smca_bank_types bank_type;
-+	enum smca_bank_types bank_type = smca_get_bank_type(m->extcpu, m->bank);
- 	const char *ip_name;
- 	u8 xec = XEC(m->status, xec_mask);
- 
--	if (m->bank >= ARRAY_SIZE(smca_banks))
-+	if (bank_type >= N_SMCA_BANK_TYPES)
- 		return;
- 
--	hwid = smca_banks[m->bank].hwid;
--	if (!hwid)
--		return;
--
--	bank_type = hwid->bank_type;
--
- 	if (bank_type == SMCA_RESERVED) {
- 		pr_emerg(HW_ERR "Bank %d is reserved.\n", m->bank);
- 		return;
-diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_ras.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_ras.c
-index 08133de21fdd..75dad0214dc7 100644
---- a/drivers/gpu/drm/amd/amdgpu/amdgpu_ras.c
-+++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_ras.c
-@@ -2647,7 +2647,7 @@ static int amdgpu_bad_page_notifier(struct notifier_block *nb,
- 	 * and error occurred in DramECC (Extended error code = 0) then only
- 	 * process the error, else bail out.
- 	 */
--	if (!m || !((smca_get_bank_type(m->bank) == SMCA_UMC_V2) &&
-+	if (!m || !((smca_get_bank_type(m->extcpu, m->bank) == SMCA_UMC_V2) &&
- 		    (XEC(m->status, 0x3f) == 0x0)))
- 		return NOTIFY_DONE;
- 
--- 
-2.25.1
-
+> Does this help? I can update the code comments with these details.
+>
+> Thanks,
+> Yazen
