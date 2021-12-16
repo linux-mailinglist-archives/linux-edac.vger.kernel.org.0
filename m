@@ -2,85 +2,81 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 749F84770A1
-	for <lists+linux-edac@lfdr.de>; Thu, 16 Dec 2021 12:42:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E4DA4477242
+	for <lists+linux-edac@lfdr.de>; Thu, 16 Dec 2021 13:54:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233339AbhLPLmn (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Thu, 16 Dec 2021 06:42:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60200 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233367AbhLPLmc (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Thu, 16 Dec 2021 06:42:32 -0500
-Received: from mail-qt1-x830.google.com (mail-qt1-x830.google.com [IPv6:2607:f8b0:4864:20::830])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76961C061792
-        for <linux-edac@vger.kernel.org>; Thu, 16 Dec 2021 03:42:29 -0800 (PST)
-Received: by mail-qt1-x830.google.com with SMTP id z9so25080973qtj.9
-        for <linux-edac@vger.kernel.org>; Thu, 16 Dec 2021 03:42:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=xre5um49Rnqa1tZMCD58Cd6UlD4MleswKAp3tzt2gjo=;
-        b=XAiY5JQCbKhUV3kfV68NxknTY8076aQ+jZiIG+NNSnrj8SbWsLA5ZyVis9Hv7MDsX5
-         Wp1aJ8rEmDfQ1U3vhA+W5Q6fUW0sQxhqwaHiosPbQFbyYijHt4Icvm/T0vEK5/kKmBc+
-         QqELCOAj0es+5TzRQyWwGBhwQGehjbOewfhMN3/S4hQw7QoR6Y3+tDzh1TbUcqm1TT9t
-         NYT2/qpfB6ahTcpnyVYoBu/0br0EmuZ66fyA68h0ieuZcBkGcxPgfheRqd2GHCJMPyzP
-         6QgpFUXd/uCVTtz1/hZUUGudKd9Q0ZImcSJeB1tjd8lIsCPvJkt1eKVnbTcB60Kk9v0/
-         CoRA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=xre5um49Rnqa1tZMCD58Cd6UlD4MleswKAp3tzt2gjo=;
-        b=ztHIi77RmHez5DfEJsxy9rnf9Ty+KR+brjzRmy1RpLxYiPICucmzTJcOxoT2kFfOQe
-         NmQvFwKIfECbt+At/wk04jSgvekAlALq8J9gyMlFak/4jrwDmv+hTt/Xv9ua2ObETojx
-         H92vjVYd2SNz9vtQnuQknGqi3PQw7N++cDVCHEDulvQzWCOsO/oyRxdfb+t6LeHeTEYr
-         MIgpSOD+CCszeDOsESh69S4IvMugI6f2E8dzIJnM7i+yCXPRKIShM1qWdHi7U5O+y7At
-         x74TwZNM9xvCN+fdgFNQG1fx4rT6ul8QAwiNGZfKNLe5JGyaqoymSVCz9eoAxFQBxH0+
-         bCTA==
-X-Gm-Message-State: AOAM532O2dPuRWe+AKWzas3tAmhJBf4AXx/3ifBJF4MeTQ//jdW9BbOY
-        nxaLZsVqiyZak/Q0e/4g1J8Q80bYeuRVYlMIjQg=
-X-Google-Smtp-Source: ABdhPJxzAaV5DauAecsJzqBWmheSvDxk3ghiLfb6YRovClVg4kL4yUlGwYUFAnV+1q8jYrfo3AT6l8iJutzsg/2jTPA=
-X-Received: by 2002:a05:622a:1d4:: with SMTP id t20mr16497208qtw.84.1639654948506;
- Thu, 16 Dec 2021 03:42:28 -0800 (PST)
+        id S236991AbhLPMyW (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Thu, 16 Dec 2021 07:54:22 -0500
+Received: from out30-42.freemail.mail.aliyun.com ([115.124.30.42]:42992 "EHLO
+        out30-42.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S236990AbhLPMyV (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>);
+        Thu, 16 Dec 2021 07:54:21 -0500
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R141e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04357;MF=xueshuai@linux.alibaba.com;NM=1;PH=DS;RN=11;SR=0;TI=SMTPD_---0V-oyp.9_1639659256;
+Received: from 30.240.114.88(mailfrom:xueshuai@linux.alibaba.com fp:SMTPD_---0V-oyp.9_1639659256)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Thu, 16 Dec 2021 20:54:18 +0800
+Message-ID: <74ea4177-b8b7-d60a-d468-d317b389aedd@linux.alibaba.com>
+Date:   Thu, 16 Dec 2021 20:54:16 +0800
 MIME-Version: 1.0
-Received: by 2002:a05:622a:199c:0:0:0:0 with HTTP; Thu, 16 Dec 2021 03:42:28
- -0800 (PST)
-Reply-To: selviasantiago1@gmail.com
-From:   Selvia Santiago <mariamatinez119@gmail.com>
-Date:   Thu, 16 Dec 2021 11:42:28 +0000
-Message-ID: <CAONDhKOtxcgjB1YEPd0RXNOVbbQ8k-9k32v_cdFxEKFzk62kJg@mail.gmail.com>
-Subject: Urgent
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.3.2
+From:   Shuai Xue <xueshuai@linux.alibaba.com>
+Subject: Re: [PATCH v2 0/3] ghes_edac: refactor memory error reporting to
+ avoid code duplication
+To:     mchehab@kernel.org, bp@alien8.de, tony.luck@intel.com,
+        james.morse@arm.com, rric@kernel.org, ardb@kernel.org,
+        linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-efi@vger.kernel.org
+Cc:     zhangliguang@linux.alibaba.com, zhuo.song@linux.alibaba.com
+References: <20211210134019.28536-1-xueshuai@linux.alibaba.com>
+Content-Language: en-US
+In-Reply-To: <20211210134019.28536-1-xueshuai@linux.alibaba.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
--- 
-Urgent
+Hi folks,
 
-I am Mrs. Selvia Santiago from Abidjan, Cote D'Ivoire, I am a widow
-suffering from long time illness (Cancer), there is funds I inherited
-from my late loving husband Mr. Santiago Carlos, the sum of (US$2.7
-Million Dollars) which he deposited in bank before his death, I need a
-honest and Faithful person that can use these funds for humanity work.
+On 2021/12/10 PM9:40, Shuai Xue wrote:
+> ghes_edac_report_mem_error() in ghes_edac.c is Long Method and have
+> Duplicated Code with cper_mem_err_location(), cper_dimm_err_location(), and
+> cper_mem_err_type_str() in drivers/firmware/efi/cper.c. In addition, the
+> cper_print_mem() in drivers/firmware/efi/cper.c only reports the error
+> status and misses its description.
+> 
+> This patch set is to refactor ghes_edac_report_mem_error with:
+> 
+> - Patch 01 is to unify memory error report format with cper;
+> - Patch 02 is to introduces cper_*(), into ghes_edac_report_mem_error(),
+>   this can avoid bunch of duplicate code lines;
+> - Patch 02 is to wrap up error status decoding logics and reuse it in
+>     cper_print_mem().
+> 
+> Changes since v1:
+> https://lore.kernel.org/all/20211207031905.61906-2-xueshuai@linux.alibaba.com/
+> 
+> - add a new patch to unify ghes and cper before removing duplication.
+> - document the changes in patch description
+> - add EXPORT_SYMBOL_GPL()s for cper_*()
+> - document and the dependency and add UEFI_CPER dependency explicitly
+> Thanks Robert Richter for review comments.
+> 
+> Shuai Xue (3):
+>   ghes_edac: unify memory error report format with cper
+>   ghes_edac: refactor memory error location processing
+>   ghes_edac: refactor error status fields decoding
+> 
+>  drivers/edac/Kconfig        |   1 +
+>  drivers/edac/ghes_edac.c    | 196 +++++++-----------------------------
+>  drivers/firmware/efi/cper.c |  86 ++++++++++++----
+>  include/linux/cper.h        |   3 +
+>  4 files changed, 105 insertions(+), 181 deletions(-)
+> 
 
-I took this decision because I don't have any child that will inherit
-this money and I don't want a situation where this money will be used
-in an ungodly way. That is why I am taking this decision, and my
-doctor has confirmed to me that I have less than two weeks to live,
-having known my condition I decided to donate this fund to a charity
-or individual that will utilize this money to assist the poor and the
-needy in accordance to my instructions.
+I am wondering if you have any comments on this series of patches?
 
-I want you to use 70% of this funds for orphanages, school, church,
-widows, propagating the word and other humanity works,The remaining
-30% should be yours for your efforts as the new beneficiary.
-
-Please if you would be able to use these funds for humanity work
-kindly reply me. As soon as I have received your response, I will give
-you further directives on how you are to go about the claims of the
-said funds.
-
-Remain blessed.
-Mrs Selvia Santiago.
+Best Regards,
+Shuai
