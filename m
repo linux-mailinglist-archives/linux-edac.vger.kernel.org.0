@@ -2,151 +2,166 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 859AC4780C9
-	for <lists+linux-edac@lfdr.de>; Fri, 17 Dec 2021 00:42:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9950E4788A0
+	for <lists+linux-edac@lfdr.de>; Fri, 17 Dec 2021 11:20:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229533AbhLPXmU (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Thu, 16 Dec 2021 18:42:20 -0500
-Received: from foss.arm.com ([217.140.110.172]:49936 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229511AbhLPXmT (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Thu, 16 Dec 2021 18:42:19 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 479E012FC;
-        Thu, 16 Dec 2021 15:42:19 -0800 (PST)
-Received: from bogus (unknown [10.57.33.218])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B62073F73B;
-        Thu, 16 Dec 2021 15:42:11 -0800 (PST)
-Date:   Thu, 16 Dec 2021 23:42:08 +0000
-From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     Tyler Baicar <baicar@amperemail.onmicrosoft.com>,
-        Marc Zyngier <maz@kernel.org>
-Cc:     Darren Hart <darren@os.amperecomputing.com>,
-        lorenzo.pieralisi@arm.com, guohanjun@huawei.com,
-        Tyler Baicar <baicar@os.amperecomputing.com>,
-        patches@amperecomputing.com, abdulhamid@os.amperecomputing.com,
-        catalin.marinas@arm.com, will@kernel.org, james.morse@arm.com,
-        alexandru.elisei@arm.com, suzuki.poulose@arm.com,
-        rafael@kernel.org, lenb@kernel.org, tony.luck@intel.com,
-        bp@alien8.de, mark.rutland@arm.com, anshuman.khandual@arm.com,
-        vincenzo.frascino@arm.com, tabba@google.com, marcan@marcan.st,
-        keescook@chromium.org, masahiroy@kernel.org,
-        samitolvanen@google.com, john.garry@huawei.com,
-        daniel.lezcano@linaro.org, gor@linux.ibm.com,
-        zhangshaokun@hisilicon.com, tmricht@linux.ibm.com,
-        dchinner@redhat.com, tglx@linutronix.de,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        kvmarm@lists.cs.columbia.edu, linux-acpi@vger.kernel.org,
-        linux-edac@vger.kernel.org, ishii.shuuichir@fujitsu.com,
-        Vineeth.Pillai@microsoft.com
-Subject: Re: [PATCH 1/2] ACPI/AEST: Initial AEST driver
-Message-ID: <20211216234208.hszjx5lpurdjmftj@bogus>
-References: <20211124170708.3874-1-baicar@os.amperecomputing.com>
- <20211124170708.3874-2-baicar@os.amperecomputing.com>
- <87czmpcto5.wl-maz@kernel.org>
- <YaU6eyGM+bX/bEhG@fedora>
- <87h7bum0xh.wl-maz@kernel.org>
- <YaZUL+cftvNYgx1j@fedora>
- <addaf134-d5c0-65de-62ca-76950d6460ab@amperemail.onmicrosoft.com>
-MIME-Version: 1.0
+        id S234764AbhLQKUq (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Fri, 17 Dec 2021 05:20:46 -0500
+Received: from mx0b-00069f02.pphosted.com ([205.220.177.32]:53404 "EHLO
+        mx0b-00069f02.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S234763AbhLQKUq (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>);
+        Fri, 17 Dec 2021 05:20:46 -0500
+Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1BH8A0cX031676;
+        Fri, 17 Dec 2021 10:20:43 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : content-type : mime-version; s=corp-2021-07-09;
+ bh=0cKmCuvVtRFVTPaoKNwAjiTbN6a1e5ooUifFuZnbJBE=;
+ b=DQmk9fVs8aG53dE+SepJiNaEiqQJ/i0wKzpZZkeCbkj8kG/tTLN7Lj3Q25PLydcnVSVb
+ FeNBstTC8v2zpmSFb7eoqlYXkSA2ZMVhoD55LIwkBvRz+pELtEw4kRJ0JRarkCqqD72c
+ 2eMCP1X0ZDdPeIIMxr2I1M/D3wg2eIKFm/TVvzDPotw3QRCLVHyvQV0rrRTLf6HqjImP
+ avRnHXXnAJ4HOAvCXCP5TUWK08M44ao3NmY3m98CnuMbpn93gWxw0MkrVts3A/NOrDHw
+ 3TuWKNq96iN27WrQMh8uiIY1Xvn86H7vgZI7RvbiGsDHdOfA8k2Vk5fUFXdM6Vpwqqo/ mg== 
+Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
+        by mx0b-00069f02.pphosted.com with ESMTP id 3cykmbndet-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 17 Dec 2021 10:20:43 +0000
+Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
+        by userp3020.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 1BHAFvZk059515;
+        Fri, 17 Dec 2021 10:20:42 GMT
+Received: from nam11-bn8-obe.outbound.protection.outlook.com (mail-bn8nam11lp2172.outbound.protection.outlook.com [104.47.58.172])
+        by userp3020.oracle.com with ESMTP id 3cvnevcf29-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 17 Dec 2021 10:20:42 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=DXx9YHbWkVIt4heQAwbGevK3jXlodvrVmzqp5KIZElca0So7psES0ffgwp9t1qUxc0pvtuEFVIQ3ZSDo4+YhfZowN0eJ8ui4DHqAG1CLA4pZyxmdOBXz1t9eBkhuFCFIw4dr/6Qv49otJ77MYSbw/fYOcX6BFUV/bTJVH7JlXfLKNAGnCgVzCO+I/vJ+kd4asOLlLQ/SHuUsOOyCGAWFng/u3YTzRbNmWP+H0X+Q4pBfKDPuGYfo+d9GBLmDJVekv5CECxHfvBYLXTzu4VTLxA1jFOq48K37xCmSOj21jB8rdYbO8pazKWPAo6x8zCkWKPQMQZrDPOmFNZpvjISTKA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=0cKmCuvVtRFVTPaoKNwAjiTbN6a1e5ooUifFuZnbJBE=;
+ b=SanAfz7MhrJNFxiLf+sQqblqe+00ZmITafjfuEoLPeus8IIFWgCBeSrlQ3QwEapxDBnvs/Ajt7IqyLGhCW5bqdmMPuBB3U98uuQkyDm51nMBI52hEc0Dr8X6czcD/Ek9PYIjhR2q/plN4i+fG5sUKw3eiMWMnCgJS94qHq6tEUL6h4M4NzuEJhEqQ/hi9lLNr/17bTz0BK3prH+XCu4QLgwwhSZJVhkxUzEgLmEA0AHkR6PrzeNI9zMTyM4OXPpb/uph6sKRPLp5xT1Bl0LTrCDsTZSx/fI5wXVlKeRrNySvTNFErwAsnQD8bmZTctcACEX1kt0Rte3pN7W2gDKOzg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=0cKmCuvVtRFVTPaoKNwAjiTbN6a1e5ooUifFuZnbJBE=;
+ b=eE4s18l4jfgr3q2M2ys5eM4kALesP/HJdGRIq4i+he9u8KVNMTh2iO6iEiYq/QIlVVFHDnzBQzlsm5VY9Y+yEIywAyXEe6k7DRXP+Cbg7L60vXmMmFBC82xACy4ymRPbNhNObY+Zg18DXSjrYc9YZDAg14r5r4z875D36sJs8PY=
+Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
+ (2603:10b6:301:2d::28) by MW5PR10MB5850.namprd10.prod.outlook.com
+ (2603:10b6:303:19c::17) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4690.27; Fri, 17 Dec
+ 2021 10:20:40 +0000
+Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
+ ([fe80::7194:c377:36cc:d9f0]) by MWHPR1001MB2365.namprd10.prod.outlook.com
+ ([fe80::7194:c377:36cc:d9f0%6]) with mapi id 15.20.4801.017; Fri, 17 Dec 2021
+ 10:20:40 +0000
+Date:   Fri, 17 Dec 2021 13:20:29 +0300
+From:   Dan Carpenter <dan.carpenter@oracle.com>
+To:     bp@suse.de
+Cc:     linux-edac@vger.kernel.org
+Subject: [bug report] x86/mce: Prevent severity computation from being
+ instrumented
+Message-ID: <20211217102029.GA29708@kili>
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <addaf134-d5c0-65de-62ca-76950d6460ab@amperemail.onmicrosoft.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-ClientProxiedBy: ZR0P278CA0146.CHEP278.PROD.OUTLOOK.COM
+ (2603:10a6:910:41::7) To MWHPR1001MB2365.namprd10.prod.outlook.com
+ (2603:10b6:301:2d::28)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 4f50104c-182b-44f0-e0b0-08d9c146e013
+X-MS-TrafficTypeDiagnostic: MW5PR10MB5850:
+X-Microsoft-Antispam-PRVS: <MW5PR10MB5850186A7E4BA8A11FFB22AE8E789@MW5PR10MB5850.namprd10.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:6108;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: Nf1d1mAVgNGdqN0y8t5NOUjnnyELrPcUExd31TNkTVb7uE88vkjMA11Fl6MNYK+zBUbEo698NuFJ8z7QM3+LSKBeUfdwvLFZSuv9/sPadT5H6syc+c2dCgM5gZzBLTu8AiEQ6m0vgiwCKYDetBt7Z0cYnizRzdoqulKLqQ4HAFgpDgupYpBE/mekYXaBXSqwj6JcZzsihVHz+7RYTzp8gGF5WSpOIooPp2HMlEc7kFfqEQeNZ8EZOp6DVmp10J4bpw9JoIPdFrlKJNYuLkV1dvT1Ml3xfIFsK3jLlX+6IPd0ivxT8rJ/yY0Xl6C1fBC3vR8ufejgwaCcO9eZl3Q2e0LRA+XjPxTly5BUhWvc2ALBxrOfo1VabcV6x4aKthmw3Blw2MU4WsU5ac0GgGCCMWOwqHwPD0FBVbrzfQ6K6p9B6FT8Eig2Xe+i1Evd9eZZoWcV/BMUgRw1rzC0MyQUnoVTFtE+Z1ekY4G9fRQDRs2z5rCSuJS5x1FtYaEVB547uffcLJlOjmduIddyabfDG0pfFRIklVV+RxR02OBeazFB9VXJJDf14CGptJp1fzCrv+b8ha63Jw53881SJFgJY7LP+HW06o2pYhkH/LhMXir7S9d2bid9FVse05pbBF9MPAVxKs+oWYV45r//VHYUbMlLaQrCAE7GMicjzLPaL3eRFyE5U5+5YOreohUYTeEx4qtsR3eEkMQnbOjp/lNmHA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1001MB2365.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(7916004)(366004)(33716001)(2906002)(38100700002)(186003)(4744005)(33656002)(6506007)(8676002)(66946007)(6916009)(4326008)(6666004)(1076003)(38350700002)(26005)(52116002)(9686003)(8936002)(83380400001)(6512007)(508600001)(66556008)(66476007)(5660300002)(6486002)(44832011)(316002)(86362001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?LB2T75+iJvyvjRNN2BIo72OiZvBJd04adMgdEXtwn9fh8vlHmjYBQ3tIj708?=
+ =?us-ascii?Q?rMUKHz5nt0Q7jcnBauOnjLsMNCefsUj2enyoWUbuO9jsXQ/A2vDXMMWo3aVL?=
+ =?us-ascii?Q?kqf9ou8yR2BPd3pQC4JO3p/c/LiLOUjEEbTzRMoRKK4KO0vyyZU1HWjY8lX7?=
+ =?us-ascii?Q?ixNP3VExYucqrEK1EWR8jgg7/q5MS4w6VLThhnHXJQ2jNfVwhZMp2WvL9Bsw?=
+ =?us-ascii?Q?HuPkfQd7TWPVwX5SZbKKONe8Q9f4Qk6SJpJsxhQHuJr0ZKU4U3iQWZFiWN44?=
+ =?us-ascii?Q?LLqNgbNeavlVDgS0VK9j2VbUZBU8/7OQ2Rp/HqIzIFiqNVQRjLmBHwEAE40u?=
+ =?us-ascii?Q?Esc5NNQRnCfrp14V/pKR/kkAdkz4fukrQSjEDgGH73yvUFzxMFtUAx1sGsTr?=
+ =?us-ascii?Q?qjt7QLwSDqPNO25E6Pd7Froyzxh4qmnyAH7FDYRf0tfgHvP/mIN0NhDPUzys?=
+ =?us-ascii?Q?ONuME+EGa/JrdzU8xp/JD543vdGwNoEDqTwVx9seage3b7ph6xZMJjcQ5WqK?=
+ =?us-ascii?Q?UUcOJGpjVGfjnuMSX7Pc65jeUkjQSJTJYZrt4iLx/KZ7G1XNKY04tfcY9jKL?=
+ =?us-ascii?Q?k+MxWPSEc5qlGEpNvACDCuUxvcBhu0w8RirHKwEfkLgTUeXJIS4bZWpN8gTk?=
+ =?us-ascii?Q?wEb4vx5HG9eKGP7jKQmcCNV4VO+KH7NU9SEISiycUZi4bcLCkrtK1Ij66Jmw?=
+ =?us-ascii?Q?GiWlm7ydUhbBLXtgysAwt4l1nmE0KyyhS5pARZUjdwfFW0mW6fLvxYc5Exd3?=
+ =?us-ascii?Q?WokZdOFAvJxdO2oxAtwWZWEAWeH9qZfKx5oHoPgl4LraH3yVikWyDjYBhG8+?=
+ =?us-ascii?Q?EmWT+dsYMQ/Z5MS/+uWn/qeO3kwV3M7lXordhudLoJW/tuKi1EOB1L76O4AJ?=
+ =?us-ascii?Q?s4ZXTVcvZYFfCjeYsmiDMI+GL0B2tPWb6+tuh/OMT8Dg/yY/KpmJKsl3lnU6?=
+ =?us-ascii?Q?NgWqOU0EpaYyBUmB1zTr0PkkvcyUSxuQXqmfbLwVKFSX0PcirSAfo1Dkufg3?=
+ =?us-ascii?Q?aEIxhL+ySaTHyo6t9jg5oANiOLwNRvU4izr2o9bD+ECg1U7yG2QIAD8q+xVS?=
+ =?us-ascii?Q?C4j2IopsA8sOYeqte2KbV/ZmKCB5+CjTE6ONpwOVVLztw3fN6+7AzOgKJiO7?=
+ =?us-ascii?Q?b6OLZqPZuFJKHA0XDHMvfzTu/fexZKs5T6QytfrUUqKEWkLsFDsFVr7hL942?=
+ =?us-ascii?Q?WxlA3HipDdDaRgfSFUPUle/nfdga6t1nCCKdAq6ckqHwYqDtq6J8X0wKhbn+?=
+ =?us-ascii?Q?+LyPmbKNTUYfIdU01OdBd+QceAV78e5yXE2AkGgbSe2jCzwzncf33OenaEZ3?=
+ =?us-ascii?Q?8wOUPJVzOu0CvBxHKSYDV2IXZff5PJXOps0CNQRss8I4gUZvOVjXQgzr/Fcx?=
+ =?us-ascii?Q?yUDCwIcAKNxs4/WMSUnTpD0H/eU/fOZPfl/oZuiCMNKtSSeqDxY5bL3B/klG?=
+ =?us-ascii?Q?bAHnwyWggTqGLlp6F5bpPdIzdhnJY7nxgOU1/i2QQeZZdDBq66HrIAcgO/9j?=
+ =?us-ascii?Q?v7+F/bJ5lnxtiXajIIrDhjMfzmHoK/p+FKZmySiSbWX3yYc9hgJZUxZrHDST?=
+ =?us-ascii?Q?Otg2CcJ8Lx7+w2f3mN8hjlxNM8WRWMaIEk6lkjGuGUUHtDhTvwVXJpCj+DZN?=
+ =?us-ascii?Q?zxGlW1h4x90LYprRIhCkiR78RpVDxt06hmJfID3HMBo7dbLdF6SX4KNzV8BF?=
+ =?us-ascii?Q?Oalx/sqX9zrjaITV0kOER+E8isk=3D?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4f50104c-182b-44f0-e0b0-08d9c146e013
+X-MS-Exchange-CrossTenant-AuthSource: MWHPR1001MB2365.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Dec 2021 10:20:40.2255
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 7nnkSs/muYRck4QNF5+Uv9jN89RtqIrCSvS6suxQehTMSdTrKv7DgYFLGk1kszf9hDBufFz+zUCVELCimATdsxUlNiE/fD++TP+vFdRJ940=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW5PR10MB5850
+X-Proofpoint-Virus-Version: vendor=nai engine=6300 definitions=10200 signatures=668683
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 adultscore=0
+ malwarescore=0 bulkscore=0 spamscore=0 mlxlogscore=684 mlxscore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2110150000 definitions=main-2112170059
+X-Proofpoint-ORIG-GUID: bC7uQIBbp2QHU5MhlUeXij9qWX50jjTu
+X-Proofpoint-GUID: bC7uQIBbp2QHU5MhlUeXij9qWX50jjTu
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Thu, Dec 16, 2021 at 05:05:15PM -0500, Tyler Baicar wrote:
-> -Moved ACPI for ARM64 maintainers to "to:"
-> 
-> Hi Marc, Darren,
-> 
-> On 11/30/2021 11:41 AM, Darren Hart wrote:
-> > On Tue, Nov 30, 2021 at 09:45:46AM +0000, Marc Zyngier wrote:
-> > > Hi Darren,
-> > > 
-> > > On Mon, 29 Nov 2021 20:39:23 +0000,
-> > > Darren Hart <darren@os.amperecomputing.com> wrote:
-> > > > On Wed, Nov 24, 2021 at 06:09:14PM +0000, Marc Zyngier wrote:
-> > > > > On Wed, 24 Nov 2021 17:07:07 +0000,
-> > > > > > diff --git a/MAINTAINERS b/MAINTAINERS
-> > > > > > index 5250298d2817..aa0483726606 100644
-> > > > > > --- a/MAINTAINERS
-> > > > > > +++ b/MAINTAINERS
-> > > > > > @@ -382,6 +382,7 @@ ACPI FOR ARM64 (ACPI/arm64)
-> > > > > >   M:	Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-> > > > > >   M:	Hanjun Guo <guohanjun@huawei.com>
-> > > > > >   M:	Sudeep Holla <sudeep.holla@arm.com>
-> > > > > > +R:	Tyler Baicar <baicar@os.amperecomputing.com>
-> > > > > >   L:	linux-acpi@vger.kernel.org
-> > > > > >   L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
-> > > > > >   S:	Maintained
-> > > > > Isn't this a bit premature? This isn't even mentioned in the commit
-> > > > > message, only in passing in the cover letter.
-> > > > > 
-> > > > Hi Marc,
-> > > > 
-> > > > This was something I encouraged Tyler to add during internal review,
-> > > > both in response to the checkpatch.pl warning about adding new drivers
-> > > > as well as our interest in reviewing any future changes to the aest
-> > > > driver. Since refactoring is common, this level made sense to me - but
-> > > > would it be preferable to add a new entry for just the new driver Tyler
-> > > > added?
-> > > Adding someone as the co-maintainer/co-reviewer of a whole subsystem
-> > > (ACPI/arm64 in this case) comes, IMO, with a number of pre-requisites:
-> > > has the proposed co-{maintainer,reviewer} contributed and/or reviewed
-> > > a significant number of patches to that subsystem and/or actively
-> > > participated in the public discussions on the design and the
-> > > maintenance of the subsystem, so that their reviewing is authoritative
-> > > enough? I won't be judge of this, but it is definitely something to
-> > > consider.
-> > Hi Marc,
-> > 
-> > Agreed. I applied similar criteria when considering sub maintainers for
-> > the platform/x86 subsystem while I maintained it.
-> > 
-> > > I don't think preemptively adding someone to the MAINTAINERS entry to
-> > > indicate an interest in a whole subsystem is the right way to do it.
-> > > One could argue that this is what a mailing list is for! ;-) On the
-> > > other hand, an active participation to the review process is the
-> > > perfect way to engage with fellow developers and to grow a profile. It
-> > > is at this stage that adding oneself as an upstream reviewer makes a
-> > > lot of sense.
-> > Also generally agree. In this specific case, our interest was in the
-> > driver itself, and we had to decide between the whole subsystem or
-> > adding another F: entry in MAINTAINERS for the specific driver. Since
-> > drivers/acpi/arm64 only has 3 .c files in it, adding another entry
-> > seemed premature and overly granular. Certainly a subjective thing and
-> > we have no objection to adding the extra line if that's preferred. This
-> > should have been noted in the commit message.
-> 
-> Thank you for the feedback here, I will make sure to add this to the commit
-> message and cover letter in the next version.
+Hello Borislav Petkov,
 
-Hi Marc,
+This is a semi-automatic email about new static checker warnings.
 
-Thanks for responding and providing all the necessary details.
+The patch 0a5b288e85bb: "x86/mce: Prevent severity computation from
+being instrumented" from Oct 13, 2021, leads to the following Smatch
+complaint:
 
-> 
-> Hi Lorenzo, Hanjun, Sudeep,
-> 
-> As for adding myself as a reviewer under ACPI for ARM64 or adding another F:
-> entry, do you have a preference or guidance on what I should do here?
->
+    arch/x86/kernel/cpu/mce/severity.c:286 error_context()
+    warn: variable dereferenced before check 'regs' (see line 280)
 
-I prefer to start with an entry specific to the $subject driver for all
-the reasons Marc has already stated. It may also add confusion and provide
-misleading reference to others who want to maintain specific drivers like
-this in the future. Further it will result in this list to grow even though
-not all in that will be interested in reviewing or maintaining ARM64
-ACPI subsystem if we take the approach in this patch and more confusion
-to the developers.
+arch/x86/kernel/cpu/mce/severity.c
+   279		fixup_type = ex_get_fixup_type(m->ip);
+   280		copy_user  = is_copy_from_user(regs);
+                                               ^^^^
+New unchecked dereference
 
-Ofcourse if you are interested and get engaged in the review of ARM64
-ACPI in the future we can always revisit and update accordingly.
+   281		instrumentation_end();
+   282	
+   283		switch (fixup_type) {
+   284		case EX_TYPE_UACCESS:
+   285		case EX_TYPE_COPY:
+   286			if (!regs || !copy_user)
+                             ^^^^
+Old code checked for NULL
 
-Hope this helps and provides clarification you are looking for.
+   287				return IN_KERNEL;
+   288			m->kflags |= MCE_IN_KERNEL_COPYIN;
 
--- 
-Regards,
-Sudeep
+regards,
+dan carpenter
