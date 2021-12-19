@@ -2,93 +2,95 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A98984797A8
-	for <lists+linux-edac@lfdr.de>; Sat, 18 Dec 2021 00:50:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BED3A47A2B1
+	for <lists+linux-edac@lfdr.de>; Sun, 19 Dec 2021 23:31:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230163AbhLQXuz (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Fri, 17 Dec 2021 18:50:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60170 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229665AbhLQXuv (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Fri, 17 Dec 2021 18:50:51 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 426FCC061574;
-        Fri, 17 Dec 2021 15:50:51 -0800 (PST)
-Received: from zn.tnic (dslb-088-067-202-008.088.067.pools.vodafone-ip.de [88.67.202.8])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id C05E11EC0554;
-        Sat, 18 Dec 2021 00:50:45 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1639785045;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=YPKeZYlefOhxteGkcbA54NxsqWdhrSSYYoWIVlRd0ng=;
-        b=VAXNqiqTkK0dF48MdOSar6dv1qPP3flE7IRjIX6689gq9/ICLDI+4LWGxnR5fzBUn/GzbW
-        eGEb2yQe9F06bznfSKF0aTWsr8P+m9ioi3PMSXUfG1V6dKbjMg0rL5Wny5HWHbSLjxmoKn
-        If/zlKLrPDq2BtB8wcowTU3sJhym0jc=
-Date:   Sat, 18 Dec 2021 00:50:48 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     "Luck, Tony" <tony.luck@intel.com>
-Cc:     Dan Carpenter <dan.carpenter@oracle.com>,
-        linux-edac@vger.kernel.org, lkml <linux-kernel@vger.kernel.org>
-Subject: [PATCH] x86/mce: Check regs before accessing it
-Message-ID: <Yb0iWLMtGxRvVuQ2@zn.tnic>
-References: <20211217102029.GA29708@kili>
- <Ybx0qV3S61Hjj+jw@zn.tnic>
- <YbzFQ40JUftkpeKi@agluck-desk2.amr.corp.intel.com>
+        id S233698AbhLSWbm (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Sun, 19 Dec 2021 17:31:42 -0500
+Received: from relay7-d.mail.gandi.net ([217.70.183.200]:59351 "EHLO
+        relay7-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231651AbhLSWbl (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Sun, 19 Dec 2021 17:31:41 -0500
+Received: (Authenticated sender: m@zorinaq.com)
+        by relay7-d.mail.gandi.net (Postfix) with ESMTPSA id B28E720005;
+        Sun, 19 Dec 2021 22:31:38 +0000 (UTC)
+From:   Marc Bevand <m@zorinaq.com>
+To:     linux-edac@vger.kernel.org
+Cc:     Yazen Ghannam <yazen.ghannam@amd.com>, Marc Bevand <m@zorinaq.com>
+Subject: [PATCH] EDAC/amd64: Add PCI device IDs for family 19h model 50h
+Date:   Sun, 19 Dec 2021 14:31:27 -0800
+Message-Id: <20211219223127.71554-1-m@zorinaq.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <YbzFQ40JUftkpeKi@agluck-desk2.amr.corp.intel.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-From: Borislav Petkov <bp@suse.de>
+Add the new family 19h model 50h PCI IDs (device 18h functions 0 and 6)
+to support Ryzen 5000 APUs ("Cezanne").
 
-Commit in Fixes accesses pt_regs before checking whether it is NULL or
-not. Change the flow so that the NULL pointer check happens first.
-
-Fixes: 0a5b288e85bb ("x86/mce: Prevent severity computation from being instrumented")
-Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
-Signed-off-by: Borislav Petkov <bp@suse.de>
-Reviewed-by: Tony Luck <tony.luck@intel.com>
-Link: https://lore.kernel.org/r/20211217102029.GA29708@kili
+Signed-off-by: Marc Bevand <m@zorinaq.com>
 ---
- arch/x86/kernel/cpu/mce/severity.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ drivers/edac/amd64_edac.c | 16 ++++++++++++++++
+ drivers/edac/amd64_edac.h |  3 +++
+ 2 files changed, 19 insertions(+)
 
-diff --git a/arch/x86/kernel/cpu/mce/severity.c b/arch/x86/kernel/cpu/mce/severity.c
-index a32646769705..7aa2bda93cbb 100644
---- a/arch/x86/kernel/cpu/mce/severity.c
-+++ b/arch/x86/kernel/cpu/mce/severity.c
-@@ -222,6 +222,9 @@ static bool is_copy_from_user(struct pt_regs *regs)
- 	struct insn insn;
- 	int ret;
+diff --git a/drivers/edac/amd64_edac.c b/drivers/edac/amd64_edac.c
+index 4fce75013674..45c81c0a232f 100644
+--- a/drivers/edac/amd64_edac.c
++++ b/drivers/edac/amd64_edac.c
+@@ -2650,6 +2650,16 @@ static struct amd64_family_type family_types[] = {
+ 			.dbam_to_cs		= f17_addr_mask_to_cs_size,
+ 		}
+ 	},
++	[F19_M50H_CPUS] = {
++		.ctl_name = "F19h_M50h",
++		.f0_id = PCI_DEVICE_ID_AMD_19H_M50H_DF_F0,
++		.f6_id = PCI_DEVICE_ID_AMD_19H_M50H_DF_F6,
++		.max_mcs = 2,
++		.ops = {
++			.early_channel_count	= f17_early_channel_count,
++			.dbam_to_cs		= f17_addr_mask_to_cs_size,
++		}
++	},
+ };
  
-+	if (!regs)
-+		return false;
-+
- 	if (copy_from_kernel_nofault(insn_buf, (void *)regs->ip, MAX_INSN_SIZE))
- 		return false;
+ /*
+@@ -3693,6 +3703,12 @@ static struct amd64_family_type *per_family_init(struct amd64_pvt *pvt)
+ 			fam_type->ctl_name = "F19h_M20h";
+ 			break;
+ 		}
++		if (pvt->model == 0x50) {
++			fam_type = &family_types[F19_M50H_CPUS];
++			pvt->ops = &family_types[F19_M50H_CPUS].ops;
++			fam_type->ctl_name = "F19h_M50h";
++			break;
++		}
+ 		fam_type	= &family_types[F19_CPUS];
+ 		pvt->ops	= &family_types[F19_CPUS].ops;
+ 		family_types[F19_CPUS].ctl_name = "F19h";
+diff --git a/drivers/edac/amd64_edac.h b/drivers/edac/amd64_edac.h
+index 85aa820bc165..796e39e1890c 100644
+--- a/drivers/edac/amd64_edac.h
++++ b/drivers/edac/amd64_edac.h
+@@ -126,6 +126,8 @@
+ #define PCI_DEVICE_ID_AMD_17H_M70H_DF_F6 0x1446
+ #define PCI_DEVICE_ID_AMD_19H_DF_F0	0x1650
+ #define PCI_DEVICE_ID_AMD_19H_DF_F6	0x1656
++#define PCI_DEVICE_ID_AMD_19H_M50H_DF_F0 0x166a
++#define PCI_DEVICE_ID_AMD_19H_M50H_DF_F6 0x1670
  
-@@ -283,7 +286,7 @@ static noinstr int error_context(struct mce *m, struct pt_regs *regs)
- 	switch (fixup_type) {
- 	case EX_TYPE_UACCESS:
- 	case EX_TYPE_COPY:
--		if (!regs || !copy_user)
-+		if (!copy_user)
- 			return IN_KERNEL;
- 		m->kflags |= MCE_IN_KERNEL_COPYIN;
- 		fallthrough;
+ /*
+  * Function 1 - Address Map
+@@ -298,6 +300,7 @@ enum amd_families {
+ 	F17_M60H_CPUS,
+ 	F17_M70H_CPUS,
+ 	F19_CPUS,
++	F19_M50H_CPUS,
+ 	NUM_FAMILIES,
+ };
+ 
 -- 
-2.29.2
+2.30.2
 
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
