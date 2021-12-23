@@ -2,102 +2,52 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D4CA47C9BC
-	for <lists+linux-edac@lfdr.de>; Wed, 22 Dec 2021 00:31:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FEF247E014
+	for <lists+linux-edac@lfdr.de>; Thu, 23 Dec 2021 08:57:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237387AbhLUXbk (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Tue, 21 Dec 2021 18:31:40 -0500
-Received: from relay5-d.mail.gandi.net ([217.70.183.197]:49005 "EHLO
-        relay5-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235284AbhLUXbk (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Tue, 21 Dec 2021 18:31:40 -0500
-Received: (Authenticated sender: m@zorinaq.com)
-        by relay5-d.mail.gandi.net (Postfix) with ESMTPSA id 651881C0005;
-        Tue, 21 Dec 2021 23:31:36 +0000 (UTC)
-From:   Marc Bevand <m@zorinaq.com>
-To:     linux-edac@vger.kernel.org
-Cc:     Yazen Ghannam <yazen.ghannam@amd.com>, Marc Bevand <m@zorinaq.com>
-Subject: [PATCH v2] EDAC/amd64: Add PCI device IDs for family 19h model 50h
-Date:   Tue, 21 Dec 2021 15:31:12 -0800
-Message-Id: <20211221233112.556927-1-m@zorinaq.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <YcIk4XJaBZs/aihF@yaz-ubuntu>
-References: <YcIk4XJaBZs/aihF@yaz-ubuntu>
+        id S242646AbhLWH5O (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Thu, 23 Dec 2021 02:57:14 -0500
+Received: from mail.BETTERBIZ.PL ([45.86.209.138]:59078 "EHLO
+        mail.betterbiz.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242693AbhLWH5N (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Thu, 23 Dec 2021 02:57:13 -0500
+X-Greylist: delayed 506 seconds by postgrey-1.27 at vger.kernel.org; Thu, 23 Dec 2021 02:57:13 EST
+Received: by mail.betterbiz.pl (Postfix, from userid 1001)
+        id 5708B83054; Thu, 23 Dec 2021 02:45:43 -0500 (EST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=betterbiz.pl; s=mail;
+        t=1640245727; bh=07NAgW1e0WiNB9zqagiM2BnwZfWBCpNa2E4+ccxBPgw=;
+        h=Date:From:To:Subject:From;
+        b=Ro1jELznJBsNfm2Nv9dMEGbRSenWmlAWsTTrntxnAfCFuxjxEd0VgpZggQbXSRwoY
+         iRYu844dW6zswVPbHXbtpaIdsxioZEsS2EPwpYtkVgTRGEodto2YSgIlGnI8mLjizM
+         Iq9GNuMZ9o5HFs5oZSnsyg6EXwznv1cmVAgvKabnoZk6XkmJWCSUxMBYupqaPYJD9J
+         CWYEwwN3ZFGTIcS5gGFufSIRPoDKhI9jY25Yv4e5eIjnztM2cETuIuAsSxXMDIjd/V
+         Yn5pHf2av1gYPqCNXzDR4kk6NUGdubhJl2aBg5B6M4Ag8XT4ewd5GXy6VTOizCRrrq
+         MQomz+a9tjUWg==
+Received: by mail.betterbiz.pl for <linux-edac@vger.kernel.org>; Thu, 23 Dec 2021 07:45:38 GMT
+Message-ID: <20211223024500-0.1.f.zae.0.8a4id5jj6r@betterbiz.pl>
+Date:   Thu, 23 Dec 2021 07:45:38 GMT
+From:   "Jakub Daroch" <jakub.daroch@betterbiz.pl>
+To:     <linux-edac@vger.kernel.org>
+Subject: Wycena paneli fotowoltaicznych
+X-Mailer: mail.betterbiz.pl
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-Add the new family 19h model 50h PCI IDs (device 18h functions 0 and 6)
-to support Ryzen 5000 APUs ("Cezanne").
+Dzie=C5=84 dobry,
 
-Signed-off-by: Marc Bevand <m@zorinaq.com>
----
-V1 -> V2: rebase on latest ras.git, apply to models 0x50-0x5f
+dostrzegam mo=C5=BCliwo=C5=9B=C4=87 wsp=C3=B3=C5=82pracy z Pa=C5=84stwa f=
+irm=C4=85.
 
-Hi Yazen, I addressed your comments in v2 of this patch, included below.
-Cheers, 
-Marc.
+=C5=9Awiadczymy kompleksow=C4=85 obs=C5=82ug=C4=99 inwestycji w fotowolta=
+ik=C4=99, kt=C3=B3ra obni=C5=BCa koszty energii elektrycznej nawet o 90%.
 
- drivers/edac/amd64_edac.c | 15 +++++++++++++++
- drivers/edac/amd64_edac.h |  3 +++
- 2 files changed, 18 insertions(+)
+Czy s=C4=85 Pa=C5=84stwo zainteresowani weryfikacj=C4=85 wst=C4=99pnych p=
+ropozycji?
 
-diff --git a/drivers/edac/amd64_edac.c b/drivers/edac/amd64_edac.c
-index c6c58f01067f..f8ef2edf8abf 100644
---- a/drivers/edac/amd64_edac.c
-+++ b/drivers/edac/amd64_edac.c
-@@ -2660,6 +2660,16 @@ static struct amd64_family_type family_types[] = {
- 			.dbam_to_cs		= f17_addr_mask_to_cs_size,
- 		}
- 	},
-+	[F19_M50H_CPUS] = {
-+		.ctl_name = "F19h_M50h",
-+		.f0_id = PCI_DEVICE_ID_AMD_19H_M50H_DF_F0,
-+		.f6_id = PCI_DEVICE_ID_AMD_19H_M50H_DF_F6,
-+		.max_mcs = 2,
-+		.ops = {
-+			.early_channel_count	= f17_early_channel_count,
-+			.dbam_to_cs		= f17_addr_mask_to_cs_size,
-+		}
-+	},
- };
- 
- /*
-@@ -3706,6 +3716,11 @@ static struct amd64_family_type *per_family_init(struct amd64_pvt *pvt)
- 			pvt->ops = &family_types[F17_M70H_CPUS].ops;
- 			fam_type->ctl_name = "F19h_M20h";
- 			break;
-+		} else if (pvt->model >= 0x50 && pvt->model <= 0x5f) {
-+			fam_type = &family_types[F19_M50H_CPUS];
-+			pvt->ops = &family_types[F19_M50H_CPUS].ops;
-+			fam_type->ctl_name = "F19h_M50h";
-+			break;
- 		} else if (pvt->model >= 0xa0 && pvt->model <= 0xaf) {
- 			fam_type = &family_types[F19_M10H_CPUS];
- 			pvt->ops = &family_types[F19_M10H_CPUS].ops;
-diff --git a/drivers/edac/amd64_edac.h b/drivers/edac/amd64_edac.h
-index 650cab401e21..352bda9803f6 100644
---- a/drivers/edac/amd64_edac.h
-+++ b/drivers/edac/amd64_edac.h
-@@ -128,6 +128,8 @@
- #define PCI_DEVICE_ID_AMD_19H_DF_F6	0x1656
- #define PCI_DEVICE_ID_AMD_19H_M10H_DF_F0 0x14ad
- #define PCI_DEVICE_ID_AMD_19H_M10H_DF_F6 0x14b3
-+#define PCI_DEVICE_ID_AMD_19H_M50H_DF_F0 0x166a
-+#define PCI_DEVICE_ID_AMD_19H_M50H_DF_F6 0x1670
- 
- /*
-  * Function 1 - Address Map
-@@ -301,6 +303,7 @@ enum amd_families {
- 	F17_M70H_CPUS,
- 	F19_CPUS,
- 	F19_M10H_CPUS,
-+	F19_M50H_CPUS,
- 	NUM_FAMILIES,
- };
- 
--- 
-2.30.2
 
+Pozdrawiam,
+Jakub Daroch
