@@ -2,90 +2,114 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C59F47EA55
-	for <lists+linux-edac@lfdr.de>; Fri, 24 Dec 2021 02:32:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E01E47EDE2
+	for <lists+linux-edac@lfdr.de>; Fri, 24 Dec 2021 10:38:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350787AbhLXBcw (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Thu, 23 Dec 2021 20:32:52 -0500
-Received: from mga18.intel.com ([134.134.136.126]:9874 "EHLO mga18.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S245122AbhLXBcv (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Thu, 23 Dec 2021 20:32:51 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640309571; x=1671845571;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references;
-  bh=G+4Blk1PEnOk/BdXn40Lnu8L0XGoZgem6KDA9qaNe2c=;
-  b=RDU9/wYFtQQbwhIMn8sbu7y9ig1FPuGgJ5Gb6flvGMQA9OIk/tFo6gpb
-   6NrzyVhp+IbKHQErF1Al7U7WVukhSTXBcQfw10e8WJr+l/de/ZXsme5C4
-   Wda0Sr3xNxCF9b6pgGyMKT3Kfb/vqJtXhaR7G3O2KQvIwl863qO7GmoSI
-   GIjkPtQ5PR/P3TxlVvhBjFXYmX2j+z8jaS+QgD83egIZ9FiGlqm9aOQl1
-   B8qoQGI1WT5UhOMRHeQsqFfeieQOWl0wOXm8ByXB8oIxU248zD3qcOjLq
-   sNwN/oTDYnNs4Lgwrz/FMnSJEUmJtzu6pV7aR6wG9DzFTmM/+BpP7oQZB
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10207"; a="227753434"
-X-IronPort-AV: E=Sophos;i="5.88,231,1635231600"; 
-   d="scan'208";a="227753434"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Dec 2021 17:32:49 -0800
-X-IronPort-AV: E=Sophos;i="5.88,231,1635231600"; 
-   d="scan'208";a="756991241"
-Received: from qiuxu-clx.sh.intel.com ([10.239.53.115])
-  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Dec 2021 17:32:47 -0800
-From:   Qiuxu Zhuo <qiuxu.zhuo@intel.com>
-To:     "Luck, Tony" <tony.luck@intel.com>
-Cc:     Qiuxu Zhuo <qiuxu.zhuo@intel.com>, Borislav Petkov <bp@alien8.de>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 1/1] EDAC/i10nm: Release mdev/mbase when failing to detect HBM
-Date:   Fri, 24 Dec 2021 04:11:26 -0500
-Message-Id: <20211224091126.1246-1-qiuxu.zhuo@intel.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <202112161000.15tF7PTx-lkp@intel.com>
-References: <202112161000.15tF7PTx-lkp@intel.com>
+        id S1343821AbhLXJif (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Fri, 24 Dec 2021 04:38:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45160 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241582AbhLXJif (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Fri, 24 Dec 2021 04:38:35 -0500
+Received: from mail-qk1-x742.google.com (mail-qk1-x742.google.com [IPv6:2607:f8b0:4864:20::742])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 495E8C061401
+        for <linux-edac@vger.kernel.org>; Fri, 24 Dec 2021 01:38:35 -0800 (PST)
+Received: by mail-qk1-x742.google.com with SMTP id e25so2202647qkl.12
+        for <linux-edac@vger.kernel.org>; Fri, 24 Dec 2021 01:38:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=DA2RfWm5BfTc8dY4tRUxJejPvziWb2AgHmDwtjqgqi8=;
+        b=F6+6pKm4yoIXJYa9fnLiTd8NEUh+N86TvoEOdgBeon8dawwpV2bQWrseUhrVdcftZ+
+         Ix0+/JHtRgXDDsSFsmUFSkL3idX9kj2Um+x+1KdGTM9pnhNHnQ9xpUAGg4Z6Qv5CHhqD
+         NuOl7mke/K046d18wDn6vvaN8knr5AQhPONRV229BfhfUN13AMERRMHpWJfsmylDhrsU
+         EdDLL8wdF8tNyShgnkJvny69ubEE5eBYOOWh7+HDpTsAZHNr0lNJDpbfKb+Ec+1GM5N+
+         0A4/misEuUCMkhfsaMGTCduSbSdUqJQzbdIP3EPP2tdQWEFwu2Ua6ZGEeLCzFOqeazal
+         /LnQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=DA2RfWm5BfTc8dY4tRUxJejPvziWb2AgHmDwtjqgqi8=;
+        b=e9D305dabQGk9OAIFYDinGLBBdnfyoTsdBF1twK3I8F8CCsp1DGXE2YeU0JB5pVGIK
+         RlO39XxKltvF+Sxfc2g7zJcF9MK8wHWWH3zzdYCqdQYvFpt4ZORPy8fzuUeRzzqNXuLT
+         0DsnXOWLnaqZXrDf3+FeajOJkRLn7gGKKcblFNdAfH6s6z6An6Bai251NjOooZJyBAdv
+         zafhXXy5DEJzxbGQ0VvnBWO5SYsxybk52unVcnpNxBqf74v/91v3VuDLjxogKFbCBM6B
+         6H8AO0eM0mcnoSfeZY7Yd/2Wc3U4z2fzCpT4uGVlmfmZR12KuYhggm1NNzqueGIF/0lQ
+         Q+Hg==
+X-Gm-Message-State: AOAM530ZDridbqWUjjyihY45FuSoFlMmU8ieHLRwJ43zB9YEYR3+X6HH
+        c+n6X/GvC7T7Dlav3WfmpObf4SYbrGvLgbcouq8=
+X-Google-Smtp-Source: ABdhPJw+WCdD703KGr4zTlSj9oRbEiBT7EFydvo85iIoTEz8Kpc33aCGN+jdiBYfYom1B94pYTeP1+O/E9zUrWSBAfQ=
+X-Received: by 2002:ae9:e892:: with SMTP id a140mr4089993qkg.399.1640338714503;
+ Fri, 24 Dec 2021 01:38:34 -0800 (PST)
+MIME-Version: 1.0
+Received: by 2002:ad4:5c62:0:0:0:0:0 with HTTP; Fri, 24 Dec 2021 01:38:34
+ -0800 (PST)
+Reply-To: williamsreneta2019@gmail.com
+From:   MISS WILLIAMS <info.turvateealfastar@gmail.com>
+Date:   Fri, 24 Dec 2021 01:38:34 -0800
+Message-ID: <CAM-qQYasm5NAOQHnUKG4arFnKKcRouFSkZWKDCavBBwVZvp==g@mail.gmail.com>
+Subject: Greetings Dearest One,
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-Commit in Fixes doesn't release mdev/mbase when failing to detect
-HBM. Add the code to release mdev/mbase when failing to detect HBM.
+Greetings Dearest One,
 
-Fixes: c945088384d0 ("EDAC/i10nm: Add support for high bandwidth memory")
-Reported-by: kernel test robot <lkp@intel.com>
-Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
-Signed-off-by: Qiuxu Zhuo <qiuxu.zhuo@intel.com>
----
- drivers/edac/i10nm_base.c | 9 +++++++++
- 1 file changed, 9 insertions(+)
+How are you today, together with your family?Hope fine.I would like to
+use this opportunity to introduce myself to you. I am Miss Reneta
+Williams, From Benin Republic, West Africa. And my late parents are
+Mr. and Mrs. Dikko Williams; my father was a highly reputable business
+magnet who operated in Benin Republic during his days.
 
-diff --git a/drivers/edac/i10nm_base.c b/drivers/edac/i10nm_base.c
-index 83345bfac246..6cf50ee0b77c 100644
---- a/drivers/edac/i10nm_base.c
-+++ b/drivers/edac/i10nm_base.c
-@@ -358,6 +358,9 @@ static int i10nm_get_hbm_munits(void)
- 
- 			mbase = ioremap(base + off, I10NM_HBM_IMC_MMIO_SIZE);
- 			if (!mbase) {
-+				pci_dev_put(d->imc[lmc].mdev);
-+				d->imc[lmc].mdev = NULL;
-+
- 				i10nm_printk(KERN_ERR, "Failed to ioremap for hbm mc 0x%llx\n",
- 					     base + off);
- 				return -ENOMEM;
-@@ -368,6 +371,12 @@ static int i10nm_get_hbm_munits(void)
- 
- 			mcmtr = I10NM_GET_MCMTR(&d->imc[lmc], 0);
- 			if (!I10NM_IS_HBM_IMC(mcmtr)) {
-+				iounmap(d->imc[lmc].mbase);
-+				d->imc[lmc].mbase = NULL;
-+				d->imc[lmc].hbm_mc = false;
-+				pci_dev_put(d->imc[lmc].mdev);
-+				d->imc[lmc].mdev = NULL;
-+
- 				i10nm_printk(KERN_ERR, "This isn't an hbm mc!\n");
- 				return -ENODEV;
- 			}
--- 
-2.17.1
+I am writing this mail to you with tears and sorrow from my heart.
+With due respect trust and humanity, I know this mail will come to you
+as a surprise since we haven't known or come across each other before,
+considering the fact that I sourced your email contact through the
+Internet in search of trusted person who can be trusted and will
+assist me.
 
+It is sad to say that he passed away mysteriously in France during one
+of his business trips abroad. Though his sudden death was linked or
+rather suspected to have been masterminded by an uncle of his who
+traveled with him at that time. But God knows the truth! My mother
+died when I was just 6yrs old, and since then my father took me so
+special.
+
+Before his death, he called me and informed me that he has the sum of
+Eighteen Million Five Hundred , United State Dollar
+(USD$18.500,000.00) left in fixed deposit account in one of the
+leading banks in Africa. He further told me that he deposited the
+money in my name, and also gave me all the necessary but legal
+documents to this fund with the bank.
+
+I am 21 years old and a university undergraduate and really don't know
+what to do. Now I want an account overseas where I can transfer this
+funds and after the transaction I will come and reside permanently in
+your country till such a time that it will be convenient for me to
+return back home if I so desire.
+
+The death of my father actually brought sorrow to my life. I also want
+to invest the fund under your care because I am ignorant of business
+world. I am in a sincere desire of your humble assistance in this
+regards. Your suggestions and ideas will be highly regarded.
+
+Now permit me to ask these few questions:
+
+1. Can you honestly help me from your heart?
+
+2. Can I completely trust you?
+
+3. What percentage of the total amount in question will be good for
+you after the money is in your account?
+
+Please, consider this and get back to me as soon as
+possible.Immediately and confirm your willingness on this my
+email(williamsreneta2019@gmail.com), here is one of my Picture and
+also i will inform you more details involved in this matter.
+
+Regards,
+
+Miss Reneta Williams.
