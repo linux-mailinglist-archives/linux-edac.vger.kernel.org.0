@@ -2,66 +2,106 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BB1D480011
-	for <lists+linux-edac@lfdr.de>; Mon, 27 Dec 2021 16:42:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 981BF4804C4
+	for <lists+linux-edac@lfdr.de>; Mon, 27 Dec 2021 22:15:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239625AbhL0Pmx (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Mon, 27 Dec 2021 10:42:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36672 "EHLO
+        id S233327AbhL0VP7 (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Mon, 27 Dec 2021 16:15:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239043AbhL0PlC (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Mon, 27 Dec 2021 10:41:02 -0500
+        with ESMTP id S229811AbhL0VP6 (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Mon, 27 Dec 2021 16:15:58 -0500
 Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2DD6C06175B;
-        Mon, 27 Dec 2021 07:39:43 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 858C6C06173E;
+        Mon, 27 Dec 2021 13:15:58 -0800 (PST)
 Received: from zn.tnic (dslb-088-067-202-008.088.067.pools.vodafone-ip.de [88.67.202.8])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 2B1A61EC04DE;
-        Mon, 27 Dec 2021 16:39:38 +0100 (CET)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 83A6C1EC0136;
+        Mon, 27 Dec 2021 22:15:52 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1640619578;
+        t=1640639752;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=LVeaMo/UI0cU46Vp+S4TD+kWGM95e4/LUlb6vGb15pU=;
-        b=nQcdQaMFVFoGHpa8Lx9yAQV7NwmDTdMIWFcuxBS6WqHQnhCdiazSTDASFL0RK4kNb6cXTQ
-        BylPjUodSzcEuAnX5H5jBKgh8kCb68j/6PHVrhoPGzoo8eoi55QKX44wPg7DlyGEX3TP3o
-        dxn29NAM1QiexmlP2HVOA1iWqviePZM=
-Date:   Mon, 27 Dec 2021 16:39:41 +0100
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=v89L9YrJVb3sx+iZgfHzW+0wtMeZVlTyazLamFsjbXw=;
+        b=dOsOj1SyKWdxG+yORljCuoUxeC7qOlw5X4AVLrYbrN9HSyOnBDgKGse8hz/MmHJ3AVOogI
+        9EFlR+1pm5vXBx16RO/9jH9kOWmpk0/RgpD4LA5H5NebihZex2t/Gc0/Bac5RY0i1N9iCt
+        VkbKmKamSEaC25+CKyzWfCp9IzVc5lE=
+Date:   Mon, 27 Dec 2021 22:15:55 +0100
 From:   Borislav Petkov <bp@alien8.de>
 To:     =?utf-8?B?5byg5a2Q5YuLKFpoYW5nIFppeHVuKQ==?= <zhangzixun1@oppo.com>
 Cc:     "tony.luck@intel.com" <tony.luck@intel.com>,
         "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
 Subject: Re: A stack overflow found in flags_write()
-Message-ID: <YcnePfF1OOqoQwrX@zn.tnic>
+Message-ID: <YcotC4QE29+GGUey@zn.tnic>
 References: <TY2PR02MB2815A59F6B963F9C068CBB8A8E429@TY2PR02MB2815.apcprd02.prod.outlook.com>
+ <YcnePfF1OOqoQwrX@zn.tnic>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <TY2PR02MB2815A59F6B963F9C068CBB8A8E429@TY2PR02MB2815.apcprd02.prod.outlook.com>
+In-Reply-To: <YcnePfF1OOqoQwrX@zn.tnic>
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Mon, Dec 27, 2021 at 11:59:37AM +0000, 张子勋(Zhang Zixun) wrote:
-> Hi,
-> I find a problem in flags_write() in arch/x86/kernel/cpu/mce/inject.c. There is a parameter cnt in this function and it used in compute write size by "buf[cnt - 1] = 0". If cnt == 0, buf[cnt - 1] will change buf[-1] and occur overflow. This problem can be fixed by patch I provided.
-> 
-> Thanks
-> ________________________________
-> OPPO
-> 
-> 本电子邮件及其附件含有OPPO公司的保密信息，仅限于邮件指明的收件人使用（包含个人及群组）。禁止任何人在未经授权的情况下以任何形式使用。如果您错收了本邮件，请立即以电子邮件通知发件人并删除本邮件及其附件。
-> 
-> This e-mail and its attachments contain confidential information from OPPO, which is intended only for the person or entity whose address is listed above. Any use of the information contained herein in any way (including, but not limited to, total or partial disclosure, reproduction, or dissemination) by persons other than the intended recipient(s) is prohibited. If you receive this e-mail in error, please notify the sender by phone or email immediately and delete it!
+As to the issue at hand, that was a good catch - I was just able to
+trigger it so I wrote a proper patch for you.
 
-Deleted.
+Lemme know if you're ok with it - I'll queue it soon.
 
-If you want me to read your mail, you'll have to get rid of that footer.
+Thx.
+
+---
+From: Zhang Zixun <zhang133010@icloud.com>
+Date: Mon, 27 Dec 2021 22:02:49 +0100
+Subject: [PATCH] x86/mce/inject: Avoid out-of-bounds write when setting flags
+
+A contrived zero-length write, for example, by using write(2):
+
+  ...
+  ret = write(fd, str, 0);
+  ...
+
+to the "flags" file causes:
+
+  BUG: KASAN: stack-out-of-bounds in flags_write
+  Write of size 1 at addr ffff888019be7ddf by task writefile/3787
+
+  CPU: 4 PID: 3787 Comm: writefile Not tainted 5.16.0-rc7+ #12
+  Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.14.0-2 04/01/2014
+
+due to accessing buf one char before its start.
+
+Prevent such out-of-bounds access.
+
+  [ bp: Productize into a proper patch. ]
+
+Fixes: 0451d14d0561 ("EDAC, mce_amd_inj: Modify flags attribute to use string arguments")
+Signed-off-by: Zhang Zixun <zhang133010@icloud.com>
+Signed-off-by: Borislav Petkov <bp@suse.de>
+Link: https://lore.kernel.org/r/TY2PR02MB2815A59F6B963F9C068CBB8A8E429@TY2PR02MB2815.apcprd02.prod.outlook.com
+---
+ arch/x86/kernel/cpu/mce/inject.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/arch/x86/kernel/cpu/mce/inject.c b/arch/x86/kernel/cpu/mce/inject.c
+index 6eac840c64bb..5fbd7ffb3233 100644
+--- a/arch/x86/kernel/cpu/mce/inject.c
++++ b/arch/x86/kernel/cpu/mce/inject.c
+@@ -363,7 +363,7 @@ static ssize_t flags_write(struct file *filp, const char __user *ubuf,
+ 	char buf[MAX_FLAG_OPT_SIZE], *__buf;
+ 	int err;
+ 
+-	if (cnt > MAX_FLAG_OPT_SIZE)
++	if (!cnt || cnt > MAX_FLAG_OPT_SIZE)
+ 		return -EINVAL;
+ 
+ 	if (copy_from_user(&buf, ubuf, cnt))
+-- 
+2.29.2
+
 
 -- 
 Regards/Gruss,
