@@ -2,50 +2,69 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 200DA47F633
-	for <lists+linux-edac@lfdr.de>; Sun, 26 Dec 2021 10:42:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BB1D480011
+	for <lists+linux-edac@lfdr.de>; Mon, 27 Dec 2021 16:42:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233190AbhLZJmQ (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Sun, 26 Dec 2021 04:42:16 -0500
-Received: from slot0.jllresort.com ([62.197.136.5]:42481 "EHLO
-        slot0.jllresort.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233181AbhLZJmO (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Sun, 26 Dec 2021 04:42:14 -0500
-X-Greylist: delayed 724 seconds by postgrey-1.27 at vger.kernel.org; Sun, 26 Dec 2021 04:42:14 EST
-DKIM-Signature: v=1; a=rsa-sha1; c=relaxed/relaxed; s=dkim; d=jllresort.com;
- h=Reply-To:From:To:Subject:Date:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding; i=ele.mon@jllresort.com;
- bh=x/BIV+ObFIRVSDvjnWkw+qoXLAw=;
- b=lWu+2alZ0T3dnP4F/1vV4tJnVMvREQPyCZKRJG37fHxZebsl/rJFMgv96DlORvCJeBcm1Y+Zcxx0
-   ebgjNJS9DIevDEWCfOw+weK6nJ7+T4RiHzCF/2nYpPuFB9OgV5nbH1SjHfKD5b9mG/TEXrixtUqE
-   Fg1bn0djBKicqF333OxRvhoHtHky3FBE1+7+ryu5PbHha+JBlMJOBK6eNSlIcBSukyQXcjU6byU0
-   ajUs871hs1eBkB0Lg7Tbz4uL9wa7HjMejglkid4rtrMJ94EgOnIVMNInZySFBS37Folp5xSlT6BC
-   0uAbdPGEvpz2P5ntBnkvcloijiupROJNg74Cpg==
-DomainKey-Signature: a=rsa-sha1; c=nofws; q=dns; s=dkim; d=jllresort.com;
- b=HHgqgvuMLx6YCCMEbhrVd6Tpxz1nTsJwSKb7CEjVJ/RNR2r+B88/FooPdWgJnbcLbBhfXzj1LlVT
-   R86skVz6V6953C7y9A2NWU3u9B7M8RdwL5Hans4nGYiF18kDSQxLzOL1NlQGfE8CX473SPRopYEB
-   iEuH3lnPbuZ2akdvYbfEoMCvUiCYRAtzhLUtwHCRVkIbWVGyeGU2BBTj+zX6hHt1QnAiXTss7pic
-   CXc9ZY9m493x92nwj9Hfy0MqPwudG9eWlepOdkKceXJPAquv+TF4EeLwCQvcLQ1fKVm5laIvV53e
-   sAYffBpJzGcrMW3WEvZPh/tSNETfrJt+V+nkGQ==;
-Reply-To: mustafa.ayvaz@ayvazburosu.com
-From:   ele.mon@jllresort.com
-To:     linux-edac@vger.kernel.org
-Subject: Happy Weekend:
-Date:   26 Dec 2021 10:29:29 +0100
-Message-ID: <20211226102855.1268D06228742E7F@jllresort.com>
+        id S239625AbhL0Pmx (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Mon, 27 Dec 2021 10:42:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36672 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239043AbhL0PlC (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Mon, 27 Dec 2021 10:41:02 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2DD6C06175B;
+        Mon, 27 Dec 2021 07:39:43 -0800 (PST)
+Received: from zn.tnic (dslb-088-067-202-008.088.067.pools.vodafone-ip.de [88.67.202.8])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 2B1A61EC04DE;
+        Mon, 27 Dec 2021 16:39:38 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1640619578;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=LVeaMo/UI0cU46Vp+S4TD+kWGM95e4/LUlb6vGb15pU=;
+        b=nQcdQaMFVFoGHpa8Lx9yAQV7NwmDTdMIWFcuxBS6WqHQnhCdiazSTDASFL0RK4kNb6cXTQ
+        BylPjUodSzcEuAnX5H5jBKgh8kCb68j/6PHVrhoPGzoo8eoi55QKX44wPg7DlyGEX3TP3o
+        dxn29NAM1QiexmlP2HVOA1iWqviePZM=
+Date:   Mon, 27 Dec 2021 16:39:41 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     =?utf-8?B?5byg5a2Q5YuLKFpoYW5nIFppeHVuKQ==?= <zhangzixun1@oppo.com>
+Cc:     "tony.luck@intel.com" <tony.luck@intel.com>,
+        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: A stack overflow found in flags_write()
+Message-ID: <YcnePfF1OOqoQwrX@zn.tnic>
+References: <TY2PR02MB2815A59F6B963F9C068CBB8A8E429@TY2PR02MB2815.apcprd02.prod.outlook.com>
 MIME-Version: 1.0
-Content-Type: text/plain;
-        charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <TY2PR02MB2815A59F6B963F9C068CBB8A8E429@TY2PR02MB2815.apcprd02.prod.outlook.com>
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-Greetings to you linux-edac,
+On Mon, Dec 27, 2021 at 11:59:37AM +0000, 张子勋(Zhang Zixun) wrote:
+> Hi,
+> I find a problem in flags_write() in arch/x86/kernel/cpu/mce/inject.c. There is a parameter cnt in this function and it used in compute write size by "buf[cnt - 1] = 0". If cnt == 0, buf[cnt - 1] will change buf[-1] and occur overflow. This problem can be fixed by patch I provided.
+> 
+> Thanks
+> ________________________________
+> OPPO
+> 
+> 本电子邮件及其附件含有OPPO公司的保密信息，仅限于邮件指明的收件人使用（包含个人及群组）。禁止任何人在未经授权的情况下以任何形式使用。如果您错收了本邮件，请立即以电子邮件通知发件人并删除本邮件及其附件。
+> 
+> This e-mail and its attachments contain confidential information from OPPO, which is intended only for the person or entity whose address is listed above. Any use of the information contained herein in any way (including, but not limited to, total or partial disclosure, reproduction, or dissemination) by persons other than the intended recipient(s) is prohibited. If you receive this e-mail in error, please notify the sender by phone or email immediately and delete it!
 
-I was wondering if you got my previous email? I have been trying=20
-to reach you by email linux-edac@vger.kernel.org, kindly get back=20
-to me swiftly, it is very important and urgent.
+Deleted.
 
-Thanks
-Mustafa Ayvaz
-Email: mustafa.ayvaz@ayvazburosu.com
+If you want me to read your mail, you'll have to get rid of that footer.
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
