@@ -2,106 +2,209 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 981BF4804C4
-	for <lists+linux-edac@lfdr.de>; Mon, 27 Dec 2021 22:15:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 33952480BEB
+	for <lists+linux-edac@lfdr.de>; Tue, 28 Dec 2021 18:13:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233327AbhL0VP7 (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Mon, 27 Dec 2021 16:15:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57238 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229811AbhL0VP6 (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Mon, 27 Dec 2021 16:15:58 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 858C6C06173E;
-        Mon, 27 Dec 2021 13:15:58 -0800 (PST)
+        id S235870AbhL1RM7 (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Tue, 28 Dec 2021 12:12:59 -0500
+Received: from mail.skyhub.de ([5.9.137.197]:56040 "EHLO mail.skyhub.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233056AbhL1RM6 (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Tue, 28 Dec 2021 12:12:58 -0500
 Received: from zn.tnic (dslb-088-067-202-008.088.067.pools.vodafone-ip.de [88.67.202.8])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 83A6C1EC0136;
-        Mon, 27 Dec 2021 22:15:52 +0100 (CET)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 074D61EC036C;
+        Tue, 28 Dec 2021 18:12:52 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1640639752;
+        t=1640711573;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=v89L9YrJVb3sx+iZgfHzW+0wtMeZVlTyazLamFsjbXw=;
-        b=dOsOj1SyKWdxG+yORljCuoUxeC7qOlw5X4AVLrYbrN9HSyOnBDgKGse8hz/MmHJ3AVOogI
-        9EFlR+1pm5vXBx16RO/9jH9kOWmpk0/RgpD4LA5H5NebihZex2t/Gc0/Bac5RY0i1N9iCt
-        VkbKmKamSEaC25+CKyzWfCp9IzVc5lE=
-Date:   Mon, 27 Dec 2021 22:15:55 +0100
+        bh=j59Irj+zUTsu0KOhDxbKX2aummrAw6VOEX6q3YpZiqg=;
+        b=g8+TSrLPCJtjVdfwuFY5E9iiMpD4J0KgXyTNFBUFlHWwU8LN0JdpCj5Z9tcoUpFQ9rtFJO
+        YRzR/7B8kH0OP/Ha6Szkar2EupvbhkfOfcMkotMEwfvozis3CIZbEYeJJMNrd0fgV4p1z5
+        vmy1heYEgzAthQGaM2PL5wa2Ev2OvLo=
+Date:   Tue, 28 Dec 2021 18:12:54 +0100
 From:   Borislav Petkov <bp@alien8.de>
-To:     =?utf-8?B?5byg5a2Q5YuLKFpoYW5nIFppeHVuKQ==?= <zhangzixun1@oppo.com>
-Cc:     "tony.luck@intel.com" <tony.luck@intel.com>,
-        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: A stack overflow found in flags_write()
-Message-ID: <YcotC4QE29+GGUey@zn.tnic>
-References: <TY2PR02MB2815A59F6B963F9C068CBB8A8E429@TY2PR02MB2815.apcprd02.prod.outlook.com>
- <YcnePfF1OOqoQwrX@zn.tnic>
+To:     Shuai Xue <xueshuai@linux.alibaba.com>
+Cc:     mchehab@kernel.org, tony.luck@intel.com, james.morse@arm.com,
+        rric@kernel.org, ardb@kernel.org, linux-edac@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-efi@vger.kernel.org,
+        zhangliguang@linux.alibaba.com, zhuo.song@linux.alibaba.com
+Subject: Re: [PATCH v2 1/3] ghes_edac: unify memory error report format with
+ cper
+Message-ID: <YctFli9oMBYTlf7h@zn.tnic>
+References: <20211210134019.28536-1-xueshuai@linux.alibaba.com>
+ <20211210134019.28536-2-xueshuai@linux.alibaba.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <YcnePfF1OOqoQwrX@zn.tnic>
+In-Reply-To: <20211210134019.28536-2-xueshuai@linux.alibaba.com>
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-As to the issue at hand, that was a good catch - I was just able to
-trigger it so I wrote a proper patch for you.
+On Fri, Dec 10, 2021 at 09:40:17PM +0800, Shuai Xue wrote:
+> Subject: Re: [PATCH v2 1/3] ghes_edac: unify memory error report format with
 
-Lemme know if you're ok with it - I'll queue it soon.
+"EDAC/ghes: Unify..."
 
-Thx.
+is the format we use in the EDAC tree.
 
----
-From: Zhang Zixun <zhang133010@icloud.com>
-Date: Mon, 27 Dec 2021 22:02:49 +0100
-Subject: [PATCH] x86/mce/inject: Avoid out-of-bounds write when setting flags
+> The changes are to:
+> 
+> - add device info into ghes_edac
+> - change bit_pos to bit_position, col to column, requestorID to
+>   requestor_id, etc in ghes_edac
+> - move requestor_id, responder_id, target_id and chip_id into memory error
+>   location in ghes_edac
+> - add "DIMM location: not present." for DIMM location in ghes_edac
+> - remove the 'space' delimiter after the colon in ghes_edac and cper
 
-A contrived zero-length write, for example, by using write(2):
+This commit message is useless: it should not talk about what your patch
+does - that should hopefully be visible in the diff itself. Rather, it
+should talk about *why* you're doing what you're doing.
 
-  ...
-  ret = write(fd, str, 0);
-  ...
+Also, your patch does a bunch of things at once.
 
-to the "flags" file causes:
+From: Documentation/process/submitting-patches.rst
 
-  BUG: KASAN: stack-out-of-bounds in flags_write
-  Write of size 1 at addr ffff888019be7ddf by task writefile/3787
+"Solve only one problem per patch.  If your description starts to get
+long, that's a sign that you probably need to split up your patch.
+See :ref:`split_changes`."
 
-  CPU: 4 PID: 3787 Comm: writefile Not tainted 5.16.0-rc7+ #12
-  Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.14.0-2 04/01/2014
+You should have a look at that file.
 
-due to accessing buf one char before its start.
+Also, avoid having "This patch" or "This commit" in the commit message.
+It is tautologically useless.
 
-Prevent such out-of-bounds access.
+Also, do
 
-  [ bp: Productize into a proper patch. ]
+$ git grep 'This patch' Documentation/process
 
-Fixes: 0451d14d0561 ("EDAC, mce_amd_inj: Modify flags attribute to use string arguments")
-Signed-off-by: Zhang Zixun <zhang133010@icloud.com>
-Signed-off-by: Borislav Petkov <bp@suse.de>
-Link: https://lore.kernel.org/r/TY2PR02MB2815A59F6B963F9C068CBB8A8E429@TY2PR02MB2815.apcprd02.prod.outlook.com
----
- arch/x86/kernel/cpu/mce/inject.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+for more details.
 
-diff --git a/arch/x86/kernel/cpu/mce/inject.c b/arch/x86/kernel/cpu/mce/inject.c
-index 6eac840c64bb..5fbd7ffb3233 100644
---- a/arch/x86/kernel/cpu/mce/inject.c
-+++ b/arch/x86/kernel/cpu/mce/inject.c
-@@ -363,7 +363,7 @@ static ssize_t flags_write(struct file *filp, const char __user *ubuf,
- 	char buf[MAX_FLAG_OPT_SIZE], *__buf;
- 	int err;
- 
--	if (cnt > MAX_FLAG_OPT_SIZE)
-+	if (!cnt || cnt > MAX_FLAG_OPT_SIZE)
- 		return -EINVAL;
- 
- 	if (copy_from_user(&buf, ubuf, cnt))
--- 
-2.29.2
+> The original EDAC and cper error log are as follows (all Validation Bits
+> are enabled):
+> 
+> [31940.060454] EDAC MC0: 1 CE Single-symbol ChipKill ECC on unknown memory (node:0 card:0 module:0 rank:0 bank:257 bank_group:1 bank_address:1 row:75492 col:8 bit_pos:0 DIMM DMI handle: 0x0000 chipID: 0 page:0x93724c offset:0x20 grain:1 syndrome:0x0 - APEI location: node:0 card:0 module:0 rank:0 bank:257 bank_group:1 bank_address:1 row:75492 col:8 bit_pos:0 DIMM DMI handle: 0x0000 chipID: 0 status(0x0000000000000000): reserved requestorID: 0x0000000000000000 responderID: 0x0000000000000000 targetID: 0x0000000000000000)
+> [31940.060459] {3}[Hardware Error]: Hardware error from APEI Generic Hardware Error Source: 2
+> [31940.060460] {3}[Hardware Error]: It has been corrected by h/w and requires no further action
+> [31940.060462] {3}[Hardware Error]: event severity: corrected
+> [31940.060463] {3}[Hardware Error]:  Error 0, type: corrected
+> [31940.060464] {3}[Hardware Error]:   section_type: memory error
+> [31940.060465] {3}[Hardware Error]:   error_status: 0x0000000000000000
+> [31940.060466] {3}[Hardware Error]:   physical_address: 0x000000093724c020
+> [31940.060466] {3}[Hardware Error]:   physical_address_mask: 0x0000000000000000
+> [31940.060469] {3}[Hardware Error]:   node: 0 card: 0 module: 0 rank: 0 bank: 257 bank_group: 1 bank_address: 1 device: 0 row: 75492 column: 8 bit_position: 0 requestor_id: 0x0000000000000000 responder_id: 0x0000000000000000
+> [31940.060470] {3}[Hardware Error]:   error_type: 4, single-symbol chipkill ECC
+> [31940.060471] {3}[Hardware Error]:   DIMM location: not present. DMI handle: 0x0000
+> 
+> Now, the EDAC and cper error log are properly reporting the error as
+> follows (all Validation Bits are enabled):
+> 
+> [ 117.973657] EDAC MC0: 1 CE Single-symbol ChipKill ECC on 0x0000
 
+What does "ECC on 0x0000" mean?
+
+> (node:0 card:0 module:0 rank:0 bank:1026 bank_group:4
+> bank_address:2 device:0 row:6749 column:8 bit_position:0
+
+> requestor_id:0x0000000000000000
+> responder_id:0x0000000000000000
+> target_id:0x0000000000000000
+
+those look useless to me too. Probably invalid/unpopulated by BIOS...
+
+> chip_id:0 DIMM location:not present. DIMM
+> DMI handle:0x0000 page:0x8d2ef4 offset:0x20 grain:1 syndrome:0x0 -
+> APEI location: node:0 card:0 module:0 rank:0 bank:1026 bank_group:4
+> bank_address:2 device:0 row:6749 column:8 bit_position:0
+> requestor_id:0x0000000000000000 responder_id:0x0000000000000000
+> target_id:0x0000000000000000 chip_id:0 DIMM location:not present. DIMM
+> DMI handle:0x0000 status(0x0000000000000000):reserved)
+
+Sorry but I fail to see how this changed error record is an improvement.
+
+> [  117.973663] {2}[Hardware Error]: Hardware error from APEI Generic Hardware Error Source: 2
+> [  117.973664] {2}[Hardware Error]: It has been corrected by h/w and requires no further action
+> [  117.973665] {2}[Hardware Error]: event severity: corrected
+> [  117.973666] {2}[Hardware Error]:  Error 0, type: corrected
+> [  117.973667] {2}[Hardware Error]:   section_type: memory error
+> [  117.973668] {2}[Hardware Error]:   error_status: 0x0000000000000000
+> [  117.973669] {2}[Hardware Error]:   physical_address: 0x00000008d2ef4020
+> [  117.973670] {2}[Hardware Error]:   physical_address_mask: 0x0000000000000000
+> [  117.973672] {2}[Hardware Error]:   node:0 card:0 module:0 rank:0 bank:1026 bank_group:4 bank_address:2 device:0 row:6749 column:8 bit_position:0 requestor_id:0x0000000000000000 responder_id:0x0000000000000000 target_id:0x0000000000000000 chip_id:0
+> [  117.973673] {2}[Hardware Error]:   error_type: 4, single-symbol chipkill ECC
+> [  117.973674] {2}[Hardware Error]:   DIMM location: not present. DMI handle:0x0000
+> 
+> Signed-off-by: Shuai Xue <xueshuai@linux.alibaba.com>
+> ---
+>  drivers/edac/ghes_edac.c    | 35 +++++++++++++++++++----------------
+>  drivers/firmware/efi/cper.c | 34 +++++++++++++++++-----------------
+>  2 files changed, 36 insertions(+), 33 deletions(-)
+> 
+> diff --git a/drivers/edac/ghes_edac.c b/drivers/edac/ghes_edac.c
+> index 6d1ddecbf0da..526a28cbb19b 100644
+> --- a/drivers/edac/ghes_edac.c
+> +++ b/drivers/edac/ghes_edac.c
+> @@ -378,6 +378,8 @@ void ghes_edac_report_mem_error(int sev, struct cper_sec_mem_err *mem_err)
+>  	if (mem_err->validation_bits & CPER_MEM_VALID_BANK_ADDRESS)
+>  		p += sprintf(p, "bank_address:%d ",
+>  			     mem_err->bank & CPER_MEM_BANK_ADDRESS_MASK);
+> +	if (mem_err->validation_bits & CPER_MEM_VALID_DEVICE)
+> +		p += sprintf(p, "device:%d ", mem_err->device);
+>  	if (mem_err->validation_bits & (CPER_MEM_VALID_ROW | CPER_MEM_VALID_ROW_EXT)) {
+>  		u32 row = mem_err->row;
+>  
+> @@ -385,9 +387,21 @@ void ghes_edac_report_mem_error(int sev, struct cper_sec_mem_err *mem_err)
+>  		p += sprintf(p, "row:%d ", row);
+>  	}
+>  	if (mem_err->validation_bits & CPER_MEM_VALID_COLUMN)
+> -		p += sprintf(p, "col:%d ", mem_err->column);
+> +		p += sprintf(p, "column:%d ", mem_err->column);
+>  	if (mem_err->validation_bits & CPER_MEM_VALID_BIT_POSITION)
+> -		p += sprintf(p, "bit_pos:%d ", mem_err->bit_pos);
+> +		p += sprintf(p, "bit_position:%d ", mem_err->bit_pos);
+
+What for?
+
+> +	if (mem_err->validation_bits & CPER_MEM_VALID_REQUESTOR_ID)
+> +		p += sprintf(p, "requestor_id:0x%016llx ",
+> +			     (long long)mem_err->requestor_id);
+> +	if (mem_err->validation_bits & CPER_MEM_VALID_RESPONDER_ID)
+> +		p += sprintf(p, "responder_id:0x%016llx ",
+> +			     (long long)mem_err->responder_id);
+					^^^^^^^^^^^^^^^^^^^^^^
+
+> +	if (mem_err->validation_bits & CPER_MEM_VALID_TARGET_ID)
+> +		p += sprintf(p, "target_id:0x%016llx ",
+> +			     (long long)mem_err->responder_id);
+					^^^^^^^^^^^^^^^^^^^^^^
+
+mem_err->responder_id for both responder and target?!
+
+> +	if (mem_err->validation_bits & CPER_MEM_VALID_CHIP_ID)
+> +		p += sprintf(p, "chip_id:%d ",
+> +			     mem_err->extended >> CPER_MEM_CHIP_ID_SHIFT);
+
+I don't know if some dumb BIOS simply sets those valid bits regardless
+of whether those fields are populated or not... It looks like it...
+
+Right, so first this needs to explain *why* you're doing what you're
+doing. And then with each reason why, you should do a patch, one by one,
+explaining the rationale.
+
+/me goes and looks at the next patches.
+
+Aha, and you add all that crap here just to remove it in patch 2. But
+this is all useless churn.
+
+If you want to use cper_mem_err_location(), why don't you simply use it
+directly?
+
+And so on and so on...
 
 -- 
 Regards/Gruss,
