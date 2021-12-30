@@ -2,87 +2,80 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DE479481BC1
-	for <lists+linux-edac@lfdr.de>; Thu, 30 Dec 2021 12:36:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E7BF481EEA
+	for <lists+linux-edac@lfdr.de>; Thu, 30 Dec 2021 18:57:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238869AbhL3Lgs (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Thu, 30 Dec 2021 06:36:48 -0500
-Received: from mail.skyhub.de ([5.9.137.197]:57882 "EHLO mail.skyhub.de"
+        id S240163AbhL3R5T (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Thu, 30 Dec 2021 12:57:19 -0500
+Received: from mail.skyhub.de ([5.9.137.197]:49126 "EHLO mail.skyhub.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235195AbhL3Lgr (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Thu, 30 Dec 2021 06:36:47 -0500
+        id S237227AbhL3R5S (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Thu, 30 Dec 2021 12:57:18 -0500
 Received: from zn.tnic (dslb-088-067-202-008.088.067.pools.vodafone-ip.de [88.67.202.8])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 436E51EC04FB;
-        Thu, 30 Dec 2021 12:36:42 +0100 (CET)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id C4F041EC0354;
+        Thu, 30 Dec 2021 18:57:12 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1640864202;
+        t=1640887032;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=AVrysX5wSe1p4jfVYyywrt1X33OJViyHDBCWQ71sm6E=;
-        b=sPkBnDbB411OC5zaCV34PbPt58vHOA4yIQ9+JL7+notweJCeXFZ8D+H3zBsYJLswxqN7eY
-        OiFnpupneTNGz7IMQ5xqA0E2m8FndT1gzxeDigbg6cdcXQoF1TKxUdohKhhCYeJVCeFtyD
-        yUkZXexBsvyiywJ3xJ7E1eTJbWmWDd4=
-Date:   Thu, 30 Dec 2021 12:36:44 +0100
+        bh=qUxY9/LwjcFd+zfBmJBks3//3cYkreropnaUn0+Qhnc=;
+        b=KW6+Feri0RKwhcgndr2gEqRAK2u36dnEXJU0NIwg5WUDNtr0R2qeO+dVfVtleSdnstFVPV
+        9G1EtkTXR7MEWjegoaDZp7Auzui+44NZKMJhmL3RkRsMtar87mCK5dGQpBpjKAv0728WVy
+        khoPKeyXnn4jdOS4x7SFwkQ4aOBu7dM=
+Date:   Thu, 30 Dec 2021 18:57:14 +0100
 From:   Borislav Petkov <bp@alien8.de>
-To:     Yazen Ghannam <yazen.ghannam@amd.com>
-Cc:     linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
-        mchehab@kernel.org, tony.luck@intel.com, james.morse@arm.com,
-        rric@kernel.org, Smita.KoralahalliChannabasappa@amd.com,
-        william.roche@oracle.com
-Subject: Re: [PATCH v2 1/2] EDAC/amd64: Check register values from all UMCs
-Message-ID: <Yc2ZzMT+Mg5xCvjI@zn.tnic>
-References: <20211215155309.2711917-1-yazen.ghannam@amd.com>
- <20211215155309.2711917-2-yazen.ghannam@amd.com>
- <YbotciKVDsH1Fl1H@zn.tnic>
- <YbtkcppejpW8gHqY@yaz-ubuntu>
+To:     Shuai Xue <xueshuai@linux.alibaba.com>
+Cc:     mchehab@kernel.org, tony.luck@intel.com, james.morse@arm.com,
+        rric@kernel.org, ardb@kernel.org, linux-edac@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-efi@vger.kernel.org,
+        zhangliguang@linux.alibaba.com, zhuo.song@linux.alibaba.com
+Subject: Re: [PATCH v2 1/3] ghes_edac: unify memory error report format with
+ cper
+Message-ID: <Yc3y+uVEcAFgTE5x@zn.tnic>
+References: <20211210134019.28536-1-xueshuai@linux.alibaba.com>
+ <20211210134019.28536-2-xueshuai@linux.alibaba.com>
+ <YctFli9oMBYTlf7h@zn.tnic>
+ <9e0bf7c0-ed50-5b0b-0576-3651249ba5cd@linux.alibaba.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <YbtkcppejpW8gHqY@yaz-ubuntu>
+In-Reply-To: <9e0bf7c0-ed50-5b0b-0576-3651249ba5cd@linux.alibaba.com>
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Thu, Dec 16, 2021 at 04:08:18PM +0000, Yazen Ghannam wrote:
-> No, that's a good question. And actually the assumption is incorrect. It is
-> allowed to have different DIMM types in a system though all DIMMs on a single
-> UMC must match.
+On Wed, Dec 29, 2021 at 11:22:11AM +0800, Shuai Xue wrote:
+> Yep, these fields are unpopulated by BIOS, I manually enable all Validation
+> Bits for debug so that we see the difference more clearly. I will declare it
+> in next version.
 
-Oh fun, really?!
+Declare what? I can't parse your statement.
 
-So a single system can have DDR4 *and* DDR5 on the same board?!
+> Well, the purpose is not to improve but unify.
 
-So then that
+The most importang goal with kernel code is improvement and less bugs.
+Unification is second. We should not jump through hoops and unify at
+every price just because there's a duplicated function somewhere.
+Remember that when doing your changes.
 
-	pvt->dram_type
+> Well, Robert suggested me add a unification patch[1] so that we could review
+> the changes more clearly. I think it makes sense.
 
-is insufficient to store the DIMM type for a pvt. If you have multiple
-UMCs on a pvt and all have different type DIMMs, then you need the
-relevant DIMM type when you dump it in sysfs...
+Not really. I can imagine why Robert suggested that but this strategy is
+causing unnecessary churn. What one usually does in such cases is:
 
-Which then means, you need ->dram_type to be per UMC...
+1. Add changes to the target functionality - the one in cper.c - by
+explaining *why* those changes are needed.
 
-And also, I'm assuming the hw already enforces that DIMMs on a single
-UMC must match - it simply won't boot if they don't so you don't have to
-enforce that, at least.
+2. Switch ghes_edac.c to that functionality and remove the redundant one
+there.
 
-> Do you recommend a follow up patch or should this one be reworked?
+Simple and clean diffstat and easy review.
 
-This one is insufficient, I'm afraid.
-
-One way to address this is, you could use pvt->umc at the places where
-dram_type is used and assign directly to the dimm->mtype thing. But then
-you'd need a way to map each struct dimm_info *dimm to the UMC so that
-you can determine the correct DIMM type.
-
-Which would make pvt->dram_type redundant and can be removed.
-
-Or you might have a better idea...
-
-HTH.
+Thx.
 
 -- 
 Regards/Gruss,
