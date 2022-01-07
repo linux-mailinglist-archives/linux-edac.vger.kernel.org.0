@@ -2,59 +2,68 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A3A6148716F
-	for <lists+linux-edac@lfdr.de>; Fri,  7 Jan 2022 04:47:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E721487D9D
+	for <lists+linux-edac@lfdr.de>; Fri,  7 Jan 2022 21:22:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229759AbiAGDr1 (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Thu, 6 Jan 2022 22:47:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41716 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229949AbiAGDrW (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Thu, 6 Jan 2022 22:47:22 -0500
-Received: from mail-qv1-xf29.google.com (mail-qv1-xf29.google.com [IPv6:2607:f8b0:4864:20::f29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0265C061245
-        for <linux-edac@vger.kernel.org>; Thu,  6 Jan 2022 19:47:22 -0800 (PST)
-Received: by mail-qv1-xf29.google.com with SMTP id a9so4323741qvd.12
-        for <linux-edac@vger.kernel.org>; Thu, 06 Jan 2022 19:47:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=5F8lMBmC+Nok/5F2Ab8lEIhaSUPAGb450L+uK4sWz2A=;
-        b=p6xt6ZESiP7fhI082FRtQDjG+IYG6QkiqSLE9SaK5lwNb4BsF7xmJGIaK9+ZFKCz/r
-         wXtJ8QpYok6Ju7PDxAwlWMQG+wVmwf4zg3cAQX+DB2IUPv4fValkweq2izjpLHtoqXZF
-         9Dqli3Of9OMUmt0hX1NQv8fwT/G3hzs5m1whnPihc/JrGUVbui1xR561/vbTLXnRNL7q
-         jila7xLOoF596IkrnacZl7/mtLFbsOEcxa6DsYvJ/Y7q3q88kKCOCXk6Sb1++W65pytv
-         8VBVxNq6vYpiauZWkuFeNZgtUI4AU8vnByqqEOaE87R+cutEZsPoKtplq0gdUHA2czBK
-         5kVw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=5F8lMBmC+Nok/5F2Ab8lEIhaSUPAGb450L+uK4sWz2A=;
-        b=wqkeOmA3x3aRwYCNnIrlL/ga1rzCacJO9jdPY98zFTL/S3i6GxgeHSh0LyCAfZAcGG
-         Mvugi+Lr4oobSUvpe/SDiO7U50T6ZW5+S+wzu0k5LXYuVXRL3DFAfv/BBuBr53fJfHKG
-         Jkyxgg+7+cqlcKlaQ7GmjkayJxFsFjjwmiwTSULeWArNk0wTHLwZ+k+im3sdi85C1f3w
-         NBLbMapROaXiP4BxMGgSt7GXz+VI3c8BYGmJWLgW/XD1JrQyuNKds/kohLkWT2DIobbY
-         wL+QMdXGCOBQWN5VmJf/qNJ3xAbaUtS2tpvfMi0Yck9Y/JP+RKdqtoRNK+pybZWY6Svf
-         2zng==
-X-Gm-Message-State: AOAM532AYdNSQaavLy3qTX59GjtEQv5EnNDH2C0pWj8JIyDAVSVBkAvM
-        3+hJVi4ixUMAWYcqZd675efIhmp6LWdDZOAoaBA=
-X-Google-Smtp-Source: ABdhPJxbCKW4fTpVnX2CQvf9RgErNXW1jwP4z7SknLbQ8Cc9Yo+wV5VNXoMrHTDT6nrY6l5JMWZVPP3ed7loEUw8xy4=
-X-Received: by 2002:a05:6214:4118:: with SMTP id kc24mr55862932qvb.118.1641527241158;
- Thu, 06 Jan 2022 19:47:21 -0800 (PST)
+        id S230112AbiAGUWY (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Fri, 7 Jan 2022 15:22:24 -0500
+Received: from mga04.intel.com ([192.55.52.120]:46796 "EHLO mga04.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230012AbiAGUWY (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Fri, 7 Jan 2022 15:22:24 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1641586943; x=1673122943;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=OKZl4ThMotCxOA/nRrfu4xtwbWLIdLeaDwe+BMDXgr0=;
+  b=mvOxQm29sAycisBfx660sbARDKYuYzH0+QUjLCRGGDHkzuEdx+zel+rk
+   ZTHmkoEUzI+VBHUfX793s43JRvpcqpSWfIOuQX+fhJZPWHXKFjwCUKDM3
+   JC68fdNGRRF8ebs4ghyBMvuFmD+ccpN1v43ceu7H8oxql5KVK2Upk2clu
+   aqoCiYivWZ2VzcfgaQD4yrWwUzonEwtkGKNj9z8FKCuboRNWgaK2+7QUO
+   csSf9WCQ6QCBlcUzlQkv87KWZmFi3BpP9jJdwfPunaywKVk8JTa+YXwef
+   cbVHTt+VUCCFTtu0TiQL10ac9agtE/GZWmOG67PowZ/CpLr/g95AfsmEK
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10220"; a="241751510"
+X-IronPort-AV: E=Sophos;i="5.88,270,1635231600"; 
+   d="scan'208";a="241751510"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jan 2022 12:21:22 -0800
+X-IronPort-AV: E=Sophos;i="5.88,270,1635231600"; 
+   d="scan'208";a="513925177"
+Received: from agluck-desk2.sc.intel.com (HELO agluck-desk2.amr.corp.intel.com) ([10.3.52.146])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jan 2022 12:21:21 -0800
+Date:   Fri, 7 Jan 2022 12:21:20 -0800
+From:   "Luck, Tony" <tony.luck@intel.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Borislav Petkov <bp@alien8.de>, Qiuxu Zhuo <qiuxu.zhuo@intel.com>,
+        linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [GIT PULL] One late urgent EDAC driver fix from the RAS tree
+Message-ID: <YdigwC6Od5wQCyFF@agluck-desk2.amr.corp.intel.com>
 MIME-Version: 1.0
-Received: by 2002:a05:622a:1113:0:0:0:0 with HTTP; Thu, 6 Jan 2022 19:47:20
- -0800 (PST)
-Reply-To: ericopokueric3@gmail.com
-From:   Eric Opokue <egojohn32@gmail.com>
-Date:   Fri, 7 Jan 2022 05:47:20 +0200
-Message-ID: <CAGacM92fW7+Mf+VfO=vaZ2ZEKj7Lff8hRDzpxfc_daQqO1wT0w@mail.gmail.com>
-Subject: Happy new mornth
-To:     ericopokueric3@gmail.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-Hello dear, my name is Mr. Eric Opoku, I have a business proposal can
-i trust you?
+The following changes since commit c9e6606c7fe92b50a02ce51dda82586ebdf99b48:
+
+  Linux 5.16-rc8 (2022-01-02 14:23:25 -0800)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/ras/ras.git tags/edac_urgent_for_v5.16
+
+for you to fetch changes up to c370baa328022cbd46c59c821d1b467a97f047be:
+
+  EDAC/i10nm: Release mdev/mbase when failing to detect HBM (2022-01-04 09:08:00 -0800)
+
+----------------------------------------------------------------
+Fix 10nm EDAC driver to release and unmap resources on systems without HBM
+
+----------------------------------------------------------------
+Qiuxu Zhuo (1):
+      EDAC/i10nm: Release mdev/mbase when failing to detect HBM
+
+ drivers/edac/i10nm_base.c | 9 +++++++++
+ 1 file changed, 9 insertions(+)
