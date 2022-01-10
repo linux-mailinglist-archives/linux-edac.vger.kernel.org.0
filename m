@@ -2,69 +2,130 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B177487E4D
-	for <lists+linux-edac@lfdr.de>; Fri,  7 Jan 2022 22:32:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 58B6A489548
+	for <lists+linux-edac@lfdr.de>; Mon, 10 Jan 2022 10:35:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229995AbiAGVcz (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Fri, 7 Jan 2022 16:32:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55688 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229894AbiAGVcz (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Fri, 7 Jan 2022 16:32:55 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E017C061574;
-        Fri,  7 Jan 2022 13:32:55 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        id S242984AbiAJJfm (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Mon, 10 Jan 2022 04:35:42 -0500
+Received: from smtp-out2.suse.de ([195.135.220.29]:57422 "EHLO
+        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242952AbiAJJfk (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Mon, 10 Jan 2022 04:35:40 -0500
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DDCBFB82297;
-        Fri,  7 Jan 2022 21:32:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 9A739C36AE9;
-        Fri,  7 Jan 2022 21:32:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1641591172;
-        bh=JO6uJvDbybmnUUNjbmpcBKsNix7QQYv8ap58zDBS8GI=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=vOYrycYYnNW+QD3F6KEENhMGJmezlpGPV9pgTuAUSgmxzRstyJrz/HoLIvasaImL1
-         bgN6rBU8Z7VQTvlucno+2xywagJSDCu8uIygdWNKjGZP+F3I2N7u1oAI4qqB9bzw8d
-         bTo9l2TtSG+NAQZ2cKE/9ELsaXWScOlH32y8eRvL63WjlrrlNAMnnV/ALTIcV40yrr
-         IVb+un8cDuzTzQ5S6s8p7O7DOdtEZsKnBlI4Zs1LbxVmMIY2zIgnA6nbcwsDfxWCtr
-         t2pyiHPoqQtRxxAbxuSF0zW5MZ5PDhI2Cbt3/Lo7GRnZQB13c5w0T+7IyhtRS4QybN
-         9NOHU0VWE5FLA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 89CDBF79408;
-        Fri,  7 Jan 2022 21:32:52 +0000 (UTC)
-Subject: Re: [GIT PULL] One late urgent EDAC driver fix from the RAS tree
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <YdigwC6Od5wQCyFF@agluck-desk2.amr.corp.intel.com>
-References: <YdigwC6Od5wQCyFF@agluck-desk2.amr.corp.intel.com>
-X-PR-Tracked-List-Id: <linux-edac.vger.kernel.org>
-X-PR-Tracked-Message-Id: <YdigwC6Od5wQCyFF@agluck-desk2.amr.corp.intel.com>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/ras/ras.git tags/edac_urgent_for_v5.16
-X-PR-Tracked-Commit-Id: c370baa328022cbd46c59c821d1b467a97f047be
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 494603e06b3c8c0b29086b72f0bc41abf102fe0d
-Message-Id: <164159117255.9111.17755400595406583152.pr-tracker-bot@kernel.org>
-Date:   Fri, 07 Jan 2022 21:32:52 +0000
-To:     "Luck, Tony" <tony.luck@intel.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Borislav Petkov <bp@alien8.de>,
-        Qiuxu Zhuo <qiuxu.zhuo@intel.com>, linux-edac@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 87CB01F398;
+        Mon, 10 Jan 2022 09:35:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1641807337; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=sizo3rC1sGmkVBeFS1L7qMfzgPXpZrS3YdS+cYJGvCI=;
+        b=WXrQ3prBZpjmS980/GSIwfwUgLCg94tGn2x012O1oLBNKOVTJzEDwUK04LdLmMSt+CAYts
+        mdakGnV5wHBYbz17gBLYfogWdpsECK9TtfV8dWiY++MKnDH4OJFmiHhAhpiI28XXSk3119
+        atzJFFeGhuNnzAIPHHgdFBMSHPtbKeU=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1641807337;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=sizo3rC1sGmkVBeFS1L7qMfzgPXpZrS3YdS+cYJGvCI=;
+        b=lY5iBfNZTuxtNpP08pSM+Pbxf+IFq6nWp7IDTbBDnD3LzR6HXdLKuB3P5l8A9FQNv961Ut
+        vOPoLBfaOfRIIABg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 7131F13CAF;
+        Mon, 10 Jan 2022 09:35:37 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id C4k7Gun922EXMwAAMHmgww
+        (envelope-from <bp@suse.de>); Mon, 10 Jan 2022 09:35:37 +0000
+Date:   Mon, 10 Jan 2022 10:35:40 +0100
+From:   Borislav Petkov <bp@suse.de>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-edac <linux-edac@vger.kernel.org>,
+        lkml <linux-kernel@vger.kernel.org>
+Subject: [GIT PULL] EDAC updates for v5.17
+Message-ID: <Ydv97EG//cs7Xo99@zn.tnic>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-The pull request you sent on Fri, 7 Jan 2022 12:21:20 -0800:
+Hi Linus,
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/ras/ras.git tags/edac_urgent_for_v5.16
+please pull the collected pile of EDAC updates for v5.17.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/494603e06b3c8c0b29086b72f0bc41abf102fe0d
+Thx.
 
-Thank you!
+---
+
+The following changes since commit 0fcfb00b28c0b7884635dacf38e46d60bf3d4eb1:
+
+  Linux 5.16-rc4 (2021-12-05 14:08:22 -0800)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/ras/ras.git tags/edac_updates_for_v5.17_rc1
+
+for you to fetch changes up to da0119a9123c73269657fc61f537223d6affef02:
+
+  Merge branches 'edac-misc' and 'edac-amd64' into edac-updates-for-v5.17 (2022-01-10 10:07:00 +0100)
+
+----------------------------------------------------------------
+- Add support for version 3 of the Synopsys DDR controller to synopsys_edac
+
+- Add support for DRR5 and new models 0x10-0x1f and 0x50-0x5f of AMD
+  family 0x19 CPUs to amd64_edac
+
+- The usual set of fixes and cleanups
+
+----------------------------------------------------------------
+Borislav Petkov (1):
+      Merge branches 'edac-misc' and 'edac-amd64' into edac-updates-for-v5.17
+
+Colin Ian King (1):
+      EDAC/sb_edac: Remove redundant initialization of variable rc
+
+Dinh Nguyen (4):
+      EDAC/synopsys: Use the quirk for version instead of ddr version
+      EDAC/synopsys: Add support for version 3 of the Synopsys EDAC DDR
+      EDAC/synopsys: Enable the driver on Intel's N5X platform
+      dt-bindings: memory: Add entry for version 3.80a
+
+Jason Wang (1):
+      RAS/CEC: Remove a repeated 'an' in a comment
+
+Marc Bevand (1):
+      EDAC/amd64: Add support for family 19h, models 50h-5fh
+
+Randy Dunlap (1):
+      EDAC/sifive: Fix non-kernel-doc comment
+
+Yazen Ghannam (2):
+      EDAC: Add RDDR5 and LRDDR5 memory types
+      EDAC/amd64: Add support for AMD Family 19h Models 10h-1Fh and A0h-AFh
+
+ .../memory-controllers/synopsys,ddrc-ecc.yaml      |  1 +
+ drivers/edac/Kconfig                               |  2 +-
+ drivers/edac/amd64_edac.c                          | 36 ++++++++++++++-
+ drivers/edac/amd64_edac.h                          |  8 +++-
+ drivers/edac/edac_mc.c                             |  2 +
+ drivers/edac/sb_edac.c                             |  2 +-
+ drivers/edac/sifive_edac.c                         |  2 +-
+ drivers/edac/synopsys_edac.c                       | 52 ++++++++++++++++++----
+ drivers/ras/cec.c                                  |  2 +-
+ include/linux/edac.h                               |  6 +++
+ 10 files changed, 98 insertions(+), 15 deletions(-)
 
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+Regards/Gruss,
+    Boris.
+
+SUSE Software Solutions Germany GmbH, GF: Ivo Totev, HRB 36809, AG Nürnberg
