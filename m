@@ -2,183 +2,74 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8045648CDF1
-	for <lists+linux-edac@lfdr.de>; Wed, 12 Jan 2022 22:45:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E0FA548D565
+	for <lists+linux-edac@lfdr.de>; Thu, 13 Jan 2022 11:15:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233174AbiALVpr (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Wed, 12 Jan 2022 16:45:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36070 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230245AbiALVpq (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Wed, 12 Jan 2022 16:45:46 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2A93C06173F;
-        Wed, 12 Jan 2022 13:45:45 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id AA6BCB8211C;
-        Wed, 12 Jan 2022 21:45:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6540C36AE5;
-        Wed, 12 Jan 2022 21:45:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642023943;
-        bh=Rl4cYWMV8h1J8XxpmCmzqZfaoBMwLhpNARBfd20DoT4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Khszb13U1jmu+m7bsIzdnnnT1iCYGXg5GGE42/oJuMQsK9Yn6UuauPQmmihxCed8g
-         I1F6FNxWdahiv8HObXLZ1MgG9aNbNh1vuWd5lPBPEE8jOf+os+a0Eg3ZNc61OeDpAd
-         oG1pZPxuhBAj0VIDmNNIk5GiF3ZYFM98qq+jWT/t93oYg9ih3f230JowrUn42Y60WL
-         bkt6CNPh+5WsNOS7M+9MpTJWTFF/zRWDIyY+MuNMqob1T2eWMhLpwtYRPlw8g7cffu
-         gO+N6rZqa7cTguyMABuPC7x4dDwKst9lAVidnA7ik+1nWq+j4fbnhftwUHOLMDmzq6
-         MQ+g/36gi+i7A==
-Date:   Wed, 12 Jan 2022 21:45:25 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        KVM list <kvm@vger.kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>, linux-iio@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        ALSA Development Mailing List <alsa-devel@alsa-project.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Joakim Zhang <qiangqing.zhang@nxp.com>,
-        Guenter Roeck <groeck@chromium.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        MTD Maling List <linux-mtd@lists.infradead.org>,
-        Linux I2C <linux-i2c@vger.kernel.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        linux-phy@lists.infradead.org, netdev@vger.kernel.org,
-        linux-spi <linux-spi@vger.kernel.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        openipmi-developer@lists.sourceforge.net,
-        Khuong Dinh <khuong@os.amperecomputing.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
-        Kamal Dasu <kdasu.kdev@gmail.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        bcm-kernel-feedback-list <bcm-kernel-feedback-list@broadcom.com>,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Linux PWM List <linux-pwm@vger.kernel.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Robert Richter <rric@kernel.org>,
-        Saravanan Sekar <sravanhome@gmail.com>,
-        Corey Minyard <minyard@acm.org>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        John Garry <john.garry@huawei.com>,
-        Peter Korsgaard <peter@korsgaard.com>,
-        William Breathitt Gray <vilhelm.gray@gmail.com>,
-        Mark Gross <markgross@kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Sebastian Reichel <sre@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Takashi Iwai <tiwai@suse.com>,
-        platform-driver-x86@vger.kernel.org,
-        Benson Leung <bleung@chromium.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-edac@vger.kernel.org, Tony Luck <tony.luck@intel.com>,
-        Mun Yew Tham <mun.yew.tham@intel.com>,
-        Eric Auger <eric.auger@redhat.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Linux MMC List <linux-mmc@vger.kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Sergey Shtylyov <s.shtylyov@omp.ru>,
-        Vinod Koul <vkoul@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Zha Qipeng <qipeng.zha@intel.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Richard Weinberger <richard@nod.at>,
-        Niklas =?iso-8859-1?Q?S=F6derlund?= 
-        <niklas.soderlund@ragnatech.se>,
-        linux-mediatek@lists.infradead.org,
-        Brian Norris <computersforpeace@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: Re: [PATCH 1/2] platform: make platform_get_irq_optional() optional
-Message-ID: <Yd9L9SZ+g13iyKab@sirena.org.uk>
-References: <20220110195449.12448-1-s.shtylyov@omp.ru>
- <20220110195449.12448-2-s.shtylyov@omp.ru>
- <20220110201014.mtajyrfcfznfhyqm@pengutronix.de>
- <YdyilpjC6rtz6toJ@lunn.ch>
- <CAMuHMdWK3RKVXRzMASN4HaYfLckdS7rBvSopafq+iPADtGEUzA@mail.gmail.com>
- <20220112085009.dbasceh3obfok5dc@pengutronix.de>
- <CAMuHMdWsMGPiQaPS0-PJ_+Mc5VQ37YdLfbHr_aS40kB+SfW-aw@mail.gmail.com>
- <20220112213121.5ruae5mxwj6t3qiy@pengutronix.de>
+        id S229808AbiAMKGl (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Thu, 13 Jan 2022 05:06:41 -0500
+Received: from smtp-fw-33001.amazon.com ([207.171.190.10]:55137 "EHLO
+        smtp-fw-33001.amazon.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229681AbiAMKGi (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Thu, 13 Jan 2022 05:06:38 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1642068399; x=1673604399;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=gRObVb2efQEchpFIfpjUYhaUuaApiy9HH1WsKyStpPI=;
+  b=PMak1J/7JaRcjSIaXbxFY2g59KgUGG51F1kmFGuEpUvi7N68eUl4sWrS
+   7sxkEIpPk/HuRGOD99M3bQa7rWQwFJDVTFmLO+kRHlCFCm53El0vpJ+8X
+   2LFrJfJY2ipB4Ilz6VVTSzees1PVlPBjyqdDKdIraYXMI74PmQ6Hcsuam
+   Q=;
+X-IronPort-AV: E=Sophos;i="5.88,284,1635206400"; 
+   d="scan'208";a="169823163"
+Received: from iad12-co-svc-p1-lb1-vlan2.amazon.com (HELO email-inbound-relay-pdx-2b-0085f2c8.us-west-2.amazon.com) ([10.43.8.2])
+  by smtp-border-fw-33001.sea14.amazon.com with ESMTP; 13 Jan 2022 10:06:25 +0000
+Received: from EX13MTAUWB001.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan2.pdx.amazon.com [10.236.137.194])
+        by email-inbound-relay-pdx-2b-0085f2c8.us-west-2.amazon.com (Postfix) with ESMTPS id F072E4129A;
+        Thu, 13 Jan 2022 10:06:23 +0000 (UTC)
+Received: from EX13D13UWB001.ant.amazon.com (10.43.161.156) by
+ EX13MTAUWB001.ant.amazon.com (10.43.161.207) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.28; Thu, 13 Jan 2022 10:06:23 +0000
+Received: from EX13MTAUWC001.ant.amazon.com (10.43.162.135) by
+ EX13D13UWB001.ant.amazon.com (10.43.161.156) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.26; Thu, 13 Jan 2022 10:06:23 +0000
+Received: from dev-dsk-farbere-1a-46ecabed.eu-west-1.amazon.com
+ (172.19.116.181) by mail-relay.amazon.com (10.43.162.232) with Microsoft SMTP
+ Server id 15.0.1497.28 via Frontend Transport; Thu, 13 Jan 2022 10:06:23
+ +0000
+Received: by dev-dsk-farbere-1a-46ecabed.eu-west-1.amazon.com (Postfix, from userid 14301484)
+        id 8E2272D48; Thu, 13 Jan 2022 10:06:22 +0000 (UTC)
+From:   Eliav Farber <farbere@amazon.com>
+To:     <bp@alien8.de>
+CC:     <mchehab@kernel.org>, <linux-edac@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <ronenk@amazon.com>,
+        <talel@amazon.com>, <hhhawa@amazon.com>, <jonnyc@amazon.com>,
+        <hanochu@amazon.com>, <farbere@amazon.com>
+Subject: [PATCH 0/4] edac_align_ptr() bug fix and refactoring
+Date:   Thu, 13 Jan 2022 10:06:18 +0000
+Message-ID: <20220113100622.12783-1-farbere@amazon.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="bKSGz4pQDpFpvPus"
-Content-Disposition: inline
-In-Reply-To: <20220112213121.5ruae5mxwj6t3qiy@pengutronix.de>
-X-Cookie: Bridge ahead.  Pay troll.
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
+Fix address alignment and return value casting, modify data types
+and refactor the flow to be more clear and readable.
 
---bKSGz4pQDpFpvPus
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Eliav Farber (4):
+  EDAC: Fix calculation of returned address and next offset in
+    edac_align_ptr()
+  EDAC: Remove unnecessary cast to char* in edac_align_ptr() function
+  EDAC: Refactor edac_align_ptr() to use u8/u16/u32/u64 data types
+  EDAC: Refactor edac_align_ptr() flow
 
-On Wed, Jan 12, 2022 at 10:31:21PM +0100, Uwe Kleine-K=F6nig wrote:
-> On Wed, Jan 12, 2022 at 11:27:02AM +0100, Geert Uytterhoeven wrote:
+ drivers/edac/edac_mc.c | 41 ++++++++++++++++++++---------------------
+ 1 file changed, 20 insertions(+), 21 deletions(-)
 
-(Do we really need *all* the CCs here?)
+-- 
+2.32.0
 
-> That convinces me, that platform_get_irq_optional() is a bad name. The
-> only difference to platform_get_irq is that it's silent. And returning
-> a dummy irq value (which would make it aligned with the other _optional
-> functions) isn't possible.
-
-There is regulator_get_optional() which is I believe the earliest of
-these APIs, it doesn't return a dummy either (and is silent too) - this
-is because regulator_get() does return a dummy since it's the vastly
-common case that regulators must be physically present and them not
-being found is due to there being an error in the system description.
-It's unfortunate that we've ended up with these two different senses for
-_optional(), people frequently get tripped up by it.
-
-> > To me it sounds much more logical for the driver to check if an
-> > optional irq is non-zero (available) or zero (not available), than to
-> > sprinkle around checks for -ENXIO. In addition, you have to remember
-> > that this one returns -ENXIO, while other APIs use -ENOENT or -ENOSYS
-> > (or some other error code) to indicate absence. I thought not having
-> > to care about the actual error code was the main reason behind the
-> > introduction of the *_optional() APIs.
-
-> No, the main benefit of gpiod_get_optional() (and clk_get_optional()) is
-> that you can handle an absent GPIO (or clk) as if it were available.
-
-Similarly for the regulator API, kind of.
-
---bKSGz4pQDpFpvPus
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmHfS/QACgkQJNaLcl1U
-h9BO/wf/X52fQIYQFCYJDsHS4pHQDXMDv8aCyyoEen4dO7d7t6fuflAYrOGj/MXP
-UkHWhHmjH5EJrD5XQQmsOLQV5qXKD/mmvAuXQzNA/aUITdBah/r9xt3Y2nYb4+zR
-Nm3ZzFmvTZVLATEdRt39LZxBwD/gCkwQpEd1tSBKsiNsq2k9eyGs6zff3Aj5xUzC
-+9zfg/GCQOESdU+jRATqvdl69QGdA5N6dPgzgIQEtecGNmx02jn8bEqmaN0SX1NZ
-zQXn1ChOAI4lWDhW4uAEnD4aF8hUN//xR2DiHIjNuGFgb7vTKdJgbI0iG2iH30Nm
-zgsgo5YMgTHurpX6yL8pMaJC54r/Pg==
-=MHmO
------END PGP SIGNATURE-----
-
---bKSGz4pQDpFpvPus--
