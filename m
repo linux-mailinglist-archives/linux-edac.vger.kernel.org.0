@@ -2,119 +2,203 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A614D48D567
-	for <lists+linux-edac@lfdr.de>; Thu, 13 Jan 2022 11:15:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BA4048D65B
+	for <lists+linux-edac@lfdr.de>; Thu, 13 Jan 2022 12:10:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229947AbiAMKGl (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Thu, 13 Jan 2022 05:06:41 -0500
-Received: from smtp-fw-80007.amazon.com ([99.78.197.218]:42547 "EHLO
-        smtp-fw-80007.amazon.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229762AbiAMKGk (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Thu, 13 Jan 2022 05:06:40 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1642068401; x=1673604401;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=Iz+I4bzIGgmHfCHsYZ6rNTtN23uutTDTQTkg7YnpZtM=;
-  b=ZOckOUPVGTvVgg5b4+U24LL0NctugflI7wY7QwH4ObW0dP0QxKKeaBlB
-   OU+nldW/udtFTcTknq15kezP6FfwoeMGREw49ClJ/UqbR4n9eMq9IJunF
-   rxsGxRxbsOlLWYZwbwuK/uSmmA2apj4nqZ0JnQBqcswP2uf2j9rbPQEgD
-   4=;
-X-IronPort-AV: E=Sophos;i="5.88,284,1635206400"; 
-   d="scan'208";a="55067096"
-Received: from pdx4-co-svc-p1-lb2-vlan2.amazon.com (HELO email-inbound-relay-pdx-2b-0085f2c8.us-west-2.amazon.com) ([10.25.36.210])
-  by smtp-border-fw-80007.pdx80.corp.amazon.com with ESMTP; 13 Jan 2022 10:06:24 +0000
-Received: from EX13MTAUWB001.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan2.pdx.amazon.com [10.236.137.194])
-        by email-inbound-relay-pdx-2b-0085f2c8.us-west-2.amazon.com (Postfix) with ESMTPS id F3F5041557;
-        Thu, 13 Jan 2022 10:06:23 +0000 (UTC)
-Received: from EX13D13UWB004.ant.amazon.com (10.43.161.218) by
- EX13MTAUWB001.ant.amazon.com (10.43.161.249) with Microsoft SMTP Server (TLS)
- id 15.0.1497.28; Thu, 13 Jan 2022 10:06:23 +0000
-Received: from EX13MTAUWA001.ant.amazon.com (10.43.160.58) by
- EX13D13UWB004.ant.amazon.com (10.43.161.218) with Microsoft SMTP Server (TLS)
- id 15.0.1497.26; Thu, 13 Jan 2022 10:06:23 +0000
-Received: from dev-dsk-farbere-1a-46ecabed.eu-west-1.amazon.com
- (172.19.116.181) by mail-relay.amazon.com (10.43.160.118) with Microsoft SMTP
- Server id 15.0.1497.28 via Frontend Transport; Thu, 13 Jan 2022 10:06:23
- +0000
-Received: by dev-dsk-farbere-1a-46ecabed.eu-west-1.amazon.com (Postfix, from userid 14301484)
-        id 9A16C3096; Thu, 13 Jan 2022 10:06:22 +0000 (UTC)
-From:   Eliav Farber <farbere@amazon.com>
-To:     <bp@alien8.de>
-CC:     <mchehab@kernel.org>, <linux-edac@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <ronenk@amazon.com>,
-        <talel@amazon.com>, <hhhawa@amazon.com>, <jonnyc@amazon.com>,
-        <hanochu@amazon.com>, <farbere@amazon.com>
-Subject: [PATCH 4/4] EDAC: Refactor edac_align_ptr() flow
-Date:   Thu, 13 Jan 2022 10:06:22 +0000
-Message-ID: <20220113100622.12783-5-farbere@amazon.com>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220113100622.12783-1-farbere@amazon.com>
-References: <20220113100622.12783-1-farbere@amazon.com>
+        id S233982AbiAMLJ5 (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Thu, 13 Jan 2022 06:09:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46566 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233972AbiAMLJ5 (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Thu, 13 Jan 2022 06:09:57 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF875C06173F
+        for <linux-edac@vger.kernel.org>; Thu, 13 Jan 2022 03:09:56 -0800 (PST)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1n7xyF-0006Q7-HJ; Thu, 13 Jan 2022 12:08:43 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1n7xy5-00A3Hi-BT; Thu, 13 Jan 2022 12:08:32 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1n7xy3-0005lb-Nu; Thu, 13 Jan 2022 12:08:31 +0100
+Date:   Thu, 13 Jan 2022 12:08:31 +0100
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Andrew Lunn <andrew@lunn.ch>, Ulf Hansson <ulf.hansson@linaro.org>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        KVM list <kvm@vger.kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>, linux-iio@vger.kernel.org,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        ALSA Development Mailing List <alsa-devel@alsa-project.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Guenter Roeck <groeck@chromium.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        MTD Maling List <linux-mtd@lists.infradead.org>,
+        Linux I2C <linux-i2c@vger.kernel.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        linux-phy@lists.infradead.org, Jiri Slaby <jirislaby@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Khuong Dinh <khuong@os.amperecomputing.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
+        Kamal Dasu <kdasu.kdev@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        bcm-kernel-feedback-list <bcm-kernel-feedback-list@broadcom.com>,
+        Zhang Rui <rui.zhang@intel.com>,
+        platform-driver-x86@vger.kernel.org,
+        Linux PWM List <linux-pwm@vger.kernel.org>,
+        Robert Richter <rric@kernel.org>,
+        Saravanan Sekar <sravanhome@gmail.com>,
+        Corey Minyard <minyard@acm.org>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        John Garry <john.garry@huawei.com>,
+        Takashi Iwai <tiwai@suse.com>,
+        Peter Korsgaard <peter@korsgaard.com>,
+        William Breathitt Gray <vilhelm.gray@gmail.com>,
+        Mark Gross <markgross@kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Sergey Shtylyov <s.shtylyov@omp.ru>,
+        Borislav Petkov <bp@alien8.de>,
+        Eric Auger <eric.auger@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        openipmi-developer@lists.sourceforge.net,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Benson Leung <bleung@chromium.org>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-edac@vger.kernel.org, Tony Luck <tony.luck@intel.com>,
+        Richard Weinberger <richard@nod.at>,
+        Mun Yew Tham <mun.yew.tham@intel.com>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        netdev@vger.kernel.org,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Linux MMC List <linux-mmc@vger.kernel.org>,
+        Joakim Zhang <qiangqing.zhang@nxp.com>,
+        linux-spi <linux-spi@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Zha Qipeng <qipeng.zha@intel.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Niklas =?utf-8?Q?S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
+        linux-mediatek@lists.infradead.org,
+        Brian Norris <computersforpeace@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: Re: [PATCH 1/2] platform: make platform_get_irq_optional() optional
+Message-ID: <20220113110831.wvwbm75hbfysbn2d@pengutronix.de>
+References: <20220110195449.12448-1-s.shtylyov@omp.ru>
+ <20220110195449.12448-2-s.shtylyov@omp.ru>
+ <20220110201014.mtajyrfcfznfhyqm@pengutronix.de>
+ <YdyilpjC6rtz6toJ@lunn.ch>
+ <CAMuHMdWK3RKVXRzMASN4HaYfLckdS7rBvSopafq+iPADtGEUzA@mail.gmail.com>
+ <20220112085009.dbasceh3obfok5dc@pengutronix.de>
+ <CAMuHMdWsMGPiQaPS0-PJ_+Mc5VQ37YdLfbHr_aS40kB+SfW-aw@mail.gmail.com>
+ <20220112213121.5ruae5mxwj6t3qiy@pengutronix.de>
+ <Yd9L9SZ+g13iyKab@sirena.org.uk>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="zcdy7nemyxfoojub"
+Content-Disposition: inline
+In-Reply-To: <Yd9L9SZ+g13iyKab@sirena.org.uk>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-edac@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-Modify flow to be more clear:
- - Calculate required alignment based on size.
- - Check if *p is aligned and fix if not.
- - Set return ptr to to be *p.
- - Increase *p by new size for the next call.
 
-Signed-off-by: Eliav Farber <farbere@amazon.com>
----
- drivers/edac/edac_mc.c | 24 ++++++++++++++----------
- 1 file changed, 14 insertions(+), 10 deletions(-)
+--zcdy7nemyxfoojub
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/drivers/edac/edac_mc.c b/drivers/edac/edac_mc.c
-index 3367bf997b73..a3ff5a019fc7 100644
---- a/drivers/edac/edac_mc.c
-+++ b/drivers/edac/edac_mc.c
-@@ -241,9 +241,7 @@ EXPORT_SYMBOL_GPL(edac_mem_types);
- void *edac_align_ptr(void **p, unsigned size, int n_elems)
- {
- 	unsigned align, r;
--	void *ptr = *p;
--
--	*p += size * n_elems;
-+	void *ptr;
- 
- 	/*
- 	 * 'p' can possibly be an unaligned item X such that sizeof(X) is
-@@ -258,16 +256,22 @@ void *edac_align_ptr(void **p, unsigned size, int n_elems)
- 	else if (size > sizeof(u8))
- 		align = sizeof(u16);
- 	else
--		return ptr;
--
--	r = (unsigned long)ptr % align;
-+		goto out;
- 
--	if (r == 0)
--		return ptr;
-+	/* Calculate alignment, and fix *p if not aligned. */
-+	r = (unsigned long)*p % align;
-+	if (r)
-+		*p += align - r;
- 
--	*p += align - r;
-+out:
-+	/*
-+	 * Set return ptr to to be *p (after alignment if it was needed),
-+	 * and increase *p by new size for the next call.
-+	 */
-+	ptr = *p;
-+	*p += size * n_elems;
- 
--	return (void *)(((unsigned long)ptr) + align - r);
-+	return ptr;
- }
- 
- static void _edac_mc_free(struct mem_ctl_info *mci)
--- 
-2.32.0
+On Wed, Jan 12, 2022 at 09:45:25PM +0000, Mark Brown wrote:
+> On Wed, Jan 12, 2022 at 10:31:21PM +0100, Uwe Kleine-K=F6nig wrote:
+> > On Wed, Jan 12, 2022 at 11:27:02AM +0100, Geert Uytterhoeven wrote:
+>=20
+> (Do we really need *all* the CCs here?)
 
+It's probably counteractive to finding an agreement because there are
+too many opinions on that matter. But I didn't dare to strip it down,
+too :-)
+
+> > That convinces me, that platform_get_irq_optional() is a bad name. The
+> > only difference to platform_get_irq is that it's silent. And returning
+> > a dummy irq value (which would make it aligned with the other _optional
+> > functions) isn't possible.
+>=20
+> There is regulator_get_optional() which is I believe the earliest of
+> these APIs, it doesn't return a dummy either (and is silent too) - this
+> is because regulator_get() does return a dummy since it's the vastly
+> common case that regulators must be physically present and them not
+> being found is due to there being an error in the system description.
+> It's unfortunate that we've ended up with these two different senses for
+> _optional(), people frequently get tripped up by it.
+
+Yeah, I tripped over that one already, too. And according to my counting
+this results in three different senses now :-\ :
+
+ a) regulator
+    regulator_get returns a dummy, regulator_get_optional returns ERR_PTR(-=
+ENODEV)
+ b) clk + gpiod
+    ..._get returns ERR_PTR(-ENODEV), ..._get_optional returns a dummy
+ c) platform_get_irq()
+    platform_get_irq_optional() is just a silent variant of
+    platform_get_irq(); the return values are identical.
+   =20
+This is all very unfortunate. In my eyes b) is the most sensible
+sense, but the past showed that we don't agree here. (The most annoying
+part of regulator_get is the warning that is emitted that regularily
+makes customers ask what happens here and if this is fixable.)
+
+I think at least c) is easy to resolve because
+platform_get_irq_optional() isn't that old yet and mechanically
+replacing it by platform_get_irq_silent() should be easy and safe.
+And this is orthogonal to the discussion if -ENOXIO is a sensible return
+value and if it's as easy as it could be to work with errors on irq
+lookups.
+
+Best regards
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--zcdy7nemyxfoojub
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmHgCCsACgkQwfwUeK3K
+7AktbAf/UzNin6+fnXTmkdrTvXWaXCV8TB76EIUtIdNWwJEjmXxWes5jyBpp/jXj
+7gSmYT3gi4oK0wjB6dKmqF6jba5/RPL4cdS6/8iQDp32Xey0hzWymBPENLc/Nxt5
+Ge81cdot6EFxqSkuW1Zbe55wzmNUmEsez7+e+8gJAviPB6zQndDE/zAkwxczzb04
+GfD6Uixgm4a29NwXNIignwNm8pACez/px2A8cVhILZ8135X0rdwYM17BiQtfM5Uq
+s2hZsLfxWm9ZvdyxA7gGvsfefPmiPfS3k/HWagHMDB8nQq4vqnMmPTu01YJs34dM
++ycJZkglW3eJnCZ9Fr5sjnuP6uLExw==
+=5Hn7
+-----END PGP SIGNATURE-----
+
+--zcdy7nemyxfoojub--
