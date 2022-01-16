@@ -2,82 +2,43 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F59D48FE71
-	for <lists+linux-edac@lfdr.de>; Sun, 16 Jan 2022 19:29:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2235F48FFF6
+	for <lists+linux-edac@lfdr.de>; Mon, 17 Jan 2022 02:35:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233934AbiAPS3t (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Sun, 16 Jan 2022 13:29:49 -0500
-Received: from mail.skyhub.de ([5.9.137.197]:33694 "EHLO mail.skyhub.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232456AbiAPS3t (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Sun, 16 Jan 2022 13:29:49 -0500
-Received: from zn.tnic (dslb-088-067-202-008.088.067.pools.vodafone-ip.de [88.67.202.8])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 79CA71EC0104;
-        Sun, 16 Jan 2022 19:29:43 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1642357783;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=SM4OKV9Mv+s2Q5kz4yzPv56ShBZelcFLXXBsRc0m6d0=;
-        b=NDIcNZQlCqkxEEr8l8uJ6fsjOfPcy6ZNU8F8+h1+3hoAUXvWwwYa/4ImLpbXYTtQJoA9O2
-        CeEbdcZegdIz+VpjD2A6dDsslpP1hnucCv5prm9Ir5u8CLEGjg60aCryKIA8+M5AcmA5e8
-        Pngtj8n4haYf/NXmTHq/mB6bTv5L6JM=
-Date:   Sun, 16 Jan 2022 19:29:46 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Tyler Hicks <tyhicks@linux.microsoft.com>
-Cc:     Lei Wang <lewan@microsoft.com>, Tony Luck <tony.luck@intel.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sinan Kaya <okaya@kernel.org>,
-        Shiping Ji <shiping.linux@gmail.com>,
-        James Morse <james.morse@arm.com>,
-        Robert Richter <rric@kernel.org>, linux-edac@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] EDAC/dmc520: Don't print an error for each unconfigured
- interrupt line
-Message-ID: <YeRkGvestiloCAUV@zn.tnic>
-References: <20220111163800.22362-1-tyhicks@linux.microsoft.com>
+        id S236727AbiAQBfL convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-edac@lfdr.de>); Sun, 16 Jan 2022 20:35:11 -0500
+Received: from ec2-13-115-114-132.ap-northeast-1.compute.amazonaws.com ([13.115.114.132]:32868
+        "EHLO mail.gunma-suigai-risk.jp" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S233906AbiAQBfL (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>);
+        Sun, 16 Jan 2022 20:35:11 -0500
+Received: from Unknown (unknown [103.107.94.82])
+        by mail.gunma-suigai-risk.jp (Postfix) with ESMTPA id 9DB902BCDB22;
+        Sun, 16 Jan 2022 09:36:01 +0000 (UTC)
+Message-ID: <2E2B9DCEC5113FFC20256CD0D4FBA1BC@ptgu>
+Reply-To: "Fredrik Elvebakk" <fcresswell9@gmail.com>
+From:   "Fredrik Elvebakk" <investment@dnb.no>
+Subject: Re:
+Date:   Sun, 16 Jan 2022 01:35:52 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220111163800.22362-1-tyhicks@linux.microsoft.com>
+Content-Type: text/plain;
+        format=flowed;
+        charset="windows-1251";
+        reply-type=original
+Content-Transfer-Encoding: 8BIT
+X-Priority: 3
+X-MSMail-Priority: Normal
+X-Mailer: Microsoft Windows Live Mail 14.0.8117.416
+X-MimeOLE: Produced By Microsoft MimeOLE V14.0.8117.416
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Tue, Jan 11, 2022 at 10:38:00AM -0600, Tyler Hicks wrote:
-> The dmc520 driver requires that at least one interrupt line, out of the ten
-> possible, is configured. The driver prints an error and returns -EINVAL
-> from its .probe function if there are no interrupt lines configured.
-> 
-> Don't print a KERN_ERR level message for each interrupt line that's
-> unconfigured as that can confuse users into thinking that there is an
-> error condition.
-> 
-> Before this change, the following KERN_ERR level messages would be
-> reported if only dram_ecc_errc and dram_ecc_errd were configured in the
-> device tree:
-> 
->  dmc520 68000000.dmc: IRQ ram_ecc_errc not found
->  dmc520 68000000.dmc: IRQ ram_ecc_errd not found
->  dmc520 68000000.dmc: IRQ failed_access not found
->  dmc520 68000000.dmc: IRQ failed_prog not found
->  dmc520 68000000.dmc: IRQ link_err not
->  dmc520 68000000.dmc: IRQ temperature_event not found
->  dmc520 68000000.dmc: IRQ arch_fsm not found
->  dmc520 68000000.dmc: IRQ phy_request not found
-> 
-> Fixes: 1088750d7839 ("EDAC: Add EDAC driver for DMC520")
-> Signed-off-by: Tyler Hicks <tyhicks@linux.microsoft.com>
-> Cc: <stable@vger.kernel.org>
+Hello
 
-Why stable? AFAICT, this is fixing only the spew of some error messages
-but the driver is still functional.
+Kindly get back to me for an important 
+discussion
 
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+Best regards
+Fredrik Elvebakk
