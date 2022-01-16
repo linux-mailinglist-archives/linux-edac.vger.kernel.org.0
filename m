@@ -2,187 +2,82 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 72F7A48FE5A
-	for <lists+linux-edac@lfdr.de>; Sun, 16 Jan 2022 19:15:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F59D48FE71
+	for <lists+linux-edac@lfdr.de>; Sun, 16 Jan 2022 19:29:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235983AbiAPSPe (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Sun, 16 Jan 2022 13:15:34 -0500
-Received: from mxout03.lancloud.ru ([45.84.86.113]:59572 "EHLO
-        mxout03.lancloud.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235965AbiAPSPd (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Sun, 16 Jan 2022 13:15:33 -0500
-Received: from LanCloud
-DKIM-Filter: OpenDKIM Filter v2.11.0 mxout03.lancloud.ru 2173F206F618
-Received: from LanCloud
-Received: from LanCloud
-Received: from LanCloud
-Subject: Re: [PATCH 1/2] platform: make platform_get_irq_optional() optional
-To:     =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>
-CC:     Andrew Lunn <andrew@lunn.ch>, Ulf Hansson <ulf.hansson@linaro.org>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        KVM list <kvm@vger.kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        <linux-iio@vger.kernel.org>,
-        "Linus Walleij" <linus.walleij@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        "ALSA Development Mailing List" <alsa-devel@alsa-project.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Guenter Roeck <groeck@chromium.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        MTD Maling List <linux-mtd@lists.infradead.org>,
-        Linux I2C <linux-i2c@vger.kernel.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        <linux-phy@lists.infradead.org>, Jiri Slaby <jirislaby@kernel.org>,
-        <openipmi-developer@lists.sourceforge.net>,
-        "David S. Miller" <davem@davemloft.net>,
-        Khuong Dinh <khuong@os.amperecomputing.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
-        Joakim Zhang <qiangqing.zhang@nxp.com>,
-        Kamal Dasu <kdasu.kdev@gmail.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        "Bartosz Golaszewski" <brgl@bgdev.pl>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        bcm-kernel-feedback-list <bcm-kernel-feedback-list@broadcom.com>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Linux PWM List <linux-pwm@vger.kernel.org>,
-        Robert Richter <rric@kernel.org>,
-        Saravanan Sekar <sravanhome@gmail.com>,
-        Corey Minyard <minyard@acm.org>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
+        id S233934AbiAPS3t (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Sun, 16 Jan 2022 13:29:49 -0500
+Received: from mail.skyhub.de ([5.9.137.197]:33694 "EHLO mail.skyhub.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232456AbiAPS3t (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Sun, 16 Jan 2022 13:29:49 -0500
+Received: from zn.tnic (dslb-088-067-202-008.088.067.pools.vodafone-ip.de [88.67.202.8])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 79CA71EC0104;
+        Sun, 16 Jan 2022 19:29:43 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1642357783;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=SM4OKV9Mv+s2Q5kz4yzPv56ShBZelcFLXXBsRc0m6d0=;
+        b=NDIcNZQlCqkxEEr8l8uJ6fsjOfPcy6ZNU8F8+h1+3hoAUXvWwwYa/4ImLpbXYTtQJoA9O2
+        CeEbdcZegdIz+VpjD2A6dDsslpP1hnucCv5prm9Ir5u8CLEGjg60aCryKIA8+M5AcmA5e8
+        Pngtj8n4haYf/NXmTHq/mB6bTv5L6JM=
+Date:   Sun, 16 Jan 2022 19:29:46 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Tyler Hicks <tyhicks@linux.microsoft.com>
+Cc:     Lei Wang <lewan@microsoft.com>, Tony Luck <tony.luck@intel.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        John Garry <john.garry@huawei.com>,
-        Peter Korsgaard <peter@korsgaard.com>,
-        "William Breathitt Gray" <vilhelm.gray@gmail.com>,
-        Mark Gross <markgross@kernel.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Mark Brown <broonie@kernel.org>,
-        "Borislav Petkov" <bp@alien8.de>,
-        Sebastian Reichel <sre@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Takashi Iwai <tiwai@suse.com>,
-        <platform-driver-x86@vger.kernel.org>,
-        Benson Leung <bleung@chromium.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        <linux-edac@vger.kernel.org>, Tony Luck <tony.luck@intel.com>,
-        Mun Yew Tham <mun.yew.tham@intel.com>,
-        Eric Auger <eric.auger@redhat.com>,
-        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Cornelia Huck <cohuck@redhat.com>,
-        "Linux MMC List" <linux-mmc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Vinod Koul <vkoul@kernel.org>,
+        Sinan Kaya <okaya@kernel.org>,
+        Shiping Ji <shiping.linux@gmail.com>,
         James Morse <james.morse@arm.com>,
-        Zha Qipeng <qipeng.zha@intel.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Richard Weinberger <richard@nod.at>,
-        =?UTF-8?Q?Niklas_S=c3=b6derlund?= <niklas.soderlund@ragnatech.se>,
-        <linux-mediatek@lists.infradead.org>,
-        "Brian Norris" <computersforpeace@gmail.com>,
-        <netdev@vger.kernel.org>
-References: <20220110201014.mtajyrfcfznfhyqm@pengutronix.de>
- <YdyilpjC6rtz6toJ@lunn.ch>
- <CAMuHMdWK3RKVXRzMASN4HaYfLckdS7rBvSopafq+iPADtGEUzA@mail.gmail.com>
- <20220112085009.dbasceh3obfok5dc@pengutronix.de>
- <CAMuHMdWsMGPiQaPS0-PJ_+Mc5VQ37YdLfbHr_aS40kB+SfW-aw@mail.gmail.com>
- <20220112213121.5ruae5mxwj6t3qiy@pengutronix.de>
- <Yd9L9SZ+g13iyKab@sirena.org.uk>
- <29f0c65d-77f2-e5b2-f6cc-422add8a707d@omp.ru>
- <20220114092557.jrkfx7ihg26ekzci@pengutronix.de>
- <61b80939-357d-14f5-df99-b8d102a4e1a1@omp.ru>
- <20220114202226.ugzklxv4wzr6egwj@pengutronix.de>
-From:   Sergey Shtylyov <s.shtylyov@omp.ru>
-Organization: Open Mobile Platform
-Message-ID: <57af1851-9341-985e-7b28-d2ba86770ecb@omp.ru>
-Date:   Sun, 16 Jan 2022 21:15:20 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+        Robert Richter <rric@kernel.org>, linux-edac@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] EDAC/dmc520: Don't print an error for each unconfigured
+ interrupt line
+Message-ID: <YeRkGvestiloCAUV@zn.tnic>
+References: <20220111163800.22362-1-tyhicks@linux.microsoft.com>
 MIME-Version: 1.0
-In-Reply-To: <20220114202226.ugzklxv4wzr6egwj@pengutronix.de>
-Content-Type: text/plain; charset="windows-1252"
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [192.168.11.198]
-X-ClientProxiedBy: LFEXT01.lancloud.ru (fd00:f066::141) To
- LFEX1907.lancloud.ru (fd00:f066::207)
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220111163800.22362-1-tyhicks@linux.microsoft.com>
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-Hello!
-
-On 1/14/22 11:22 PM, Uwe Kleine-König wrote:
-
->>>>>>> To me it sounds much more logical for the driver to check if an
->>>>>>> optional irq is non-zero (available) or zero (not available), than to
->>>>>>> sprinkle around checks for -ENXIO. In addition, you have to remember
->>>>>>> that this one returns -ENXIO, while other APIs use -ENOENT or -ENOSYS
->>>>>>> (or some other error code) to indicate absence. I thought not having
->>>>>>> to care about the actual error code was the main reason behind the
->>>>>>> introduction of the *_optional() APIs.
->>>>>
->>>>>> No, the main benefit of gpiod_get_optional() (and clk_get_optional()) is
->>>>>> that you can handle an absent GPIO (or clk) as if it were available.
->>>>
->>>>    Hm, I've just looked at these and must note that they match 1:1 with
->>>> platform_get_irq_optional(). Unfortunately, we can't however behave the
->>>> same way in request_irq() -- because it has to support IRQ0 for the sake
->>>> of i8253 drivers in arch/...
->>>
->>> Let me reformulate your statement to the IMHO equivalent:
->>>
->>> 	If you set aside the differences between
->>> 	platform_get_irq_optional() and gpiod_get_optional(),
->>
->>    Sorry, I should make it clear this is actually the diff between a would-be
->> platform_get_irq_optional() after my patch, not the current code...
+On Tue, Jan 11, 2022 at 10:38:00AM -0600, Tyler Hicks wrote:
+> The dmc520 driver requires that at least one interrupt line, out of the ten
+> possible, is configured. The driver prints an error and returns -EINVAL
+> from its .probe function if there are no interrupt lines configured.
 > 
-> The similarity is that with your patch both gpiod_get_optional() and
-> platform_get_irq_optional() return NULL and 0 on not-found. The relevant
-> difference however is that for a gpiod NULL is a dummy value, while for
-> irqs it's not. So the similarity is only syntactically, but not
-> semantically.
-
-   I have noting to say here, rather than optional IRQ could well have a different
-meaning than for clk/gpio/etc.
-
-[...]
->>> However for an interupt this cannot work. You will always have to check
->>> if the irq is actually there or not because if it's not you cannot just
->>> ignore that. So there is no benefit of an optional irq.
->>>
->>> Leaving error message reporting aside, the introduction of
->>> platform_get_irq_optional() allows to change
->>>
->>> 	irq = platform_get_irq(...);
->>> 	if (irq < 0 && irq != -ENXIO) {
->>> 		return irq;
->>> 	} else if (irq >= 0) {
->>
->>    Rather (irq > 0) actually, IRQ0 is considered invalid (but still returned).
+> Don't print a KERN_ERR level message for each interrupt line that's
+> unconfigured as that can confuse users into thinking that there is an
+> error condition.
 > 
-> This is a topic I don't feel strong for, so I'm sloppy here. If changing
-> this is all that is needed to convince you of my point ...
+> Before this change, the following KERN_ERR level messages would be
+> reported if only dram_ecc_errc and dram_ecc_errd were configured in the
+> device tree:
+> 
+>  dmc520 68000000.dmc: IRQ ram_ecc_errc not found
+>  dmc520 68000000.dmc: IRQ ram_ecc_errd not found
+>  dmc520 68000000.dmc: IRQ failed_access not found
+>  dmc520 68000000.dmc: IRQ failed_prog not found
+>  dmc520 68000000.dmc: IRQ link_err not
+>  dmc520 68000000.dmc: IRQ temperature_event not found
+>  dmc520 68000000.dmc: IRQ arch_fsm not found
+>  dmc520 68000000.dmc: IRQ phy_request not found
+> 
+> Fixes: 1088750d7839 ("EDAC: Add EDAC driver for DMC520")
+> Signed-off-by: Tyler Hicks <tyhicks@linux.microsoft.com>
+> Cc: <stable@vger.kernel.org>
 
-   Note that we should absolutely (and first of all) stop returning 0 from platform_get_irq()
-on a "real" IRQ0. Handling that "still good" zero absolutely doesn't scale e.g. for the subsystems
-(like libata) which take 0 as an indication that the polling mode should be used... We can't afford
-to be sloppy here. ;-)
+Why stable? AFAICT, this is fixing only the spew of some error messages
+but the driver is still functional.
 
-[...]
+-- 
+Regards/Gruss,
+    Boris.
 
-> Best regards
-> Uwe
-
-MBR, Sergey
+https://people.kernel.org/tglx/notes-about-netiquette
