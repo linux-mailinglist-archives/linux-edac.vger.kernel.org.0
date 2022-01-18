@@ -2,47 +2,48 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 913184918B5
-	for <lists+linux-edac@lfdr.de>; Tue, 18 Jan 2022 03:48:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D964F491A4C
+	for <lists+linux-edac@lfdr.de>; Tue, 18 Jan 2022 03:59:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344310AbiARCsB (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Mon, 17 Jan 2022 21:48:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32982 "EHLO
+        id S1348696AbiARC7H (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Mon, 17 Jan 2022 21:59:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347514AbiARClb (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Mon, 17 Jan 2022 21:41:31 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01C6DC035451;
-        Mon, 17 Jan 2022 18:36:49 -0800 (PST)
+        with ESMTP id S1346488AbiARCtG (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Mon, 17 Jan 2022 21:49:06 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10A9DC06175A;
+        Mon, 17 Jan 2022 18:41:12 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B9E1AB81253;
-        Tue, 18 Jan 2022 02:36:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9E0F5C36AF6;
-        Tue, 18 Jan 2022 02:36:45 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DB89E612E2;
+        Tue, 18 Jan 2022 02:41:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5E2B1C36AF5;
+        Tue, 18 Jan 2022 02:41:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642473406;
-        bh=gToy9rgpXmjmXhO5O+rCXe40u5KiGEURIYJCElHCaJg=;
+        s=k20201202; t=1642473671;
+        bh=bjnr579xE3xgyvjFIi7SCyvGueJvDxugpZ7TyGVGiLM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=o/BnznOgBETLN8lAKzZSsNkL/3iB0u5VcX9PZhJBSKCkj7dHwxGAjeGG5KREQQO0h
-         7/WbXCUtUuBksEgOc0OwfE+xesVoQxD0W/sofOhoSAfjq13YIGZOZhSSFy3Ly2+wdX
-         xHQmYNwMfgG2d3uFXcEKKt5Mm1OR4JG1J3Xsr9Yfd4bgNLYZP2SRA+wHNlq3eb5/49
-         dPRN280o4orXFhFx3azvO4ZA0ldecJiasKuZ3DJh833s9lU4LcdJoz37+a2YzgA3mg
-         jiOQihx7QIxtU/Og3xeltpDfPTOcN1vW0I0gOtcJ8OsAJ3JvN9HnEDGQQkRO1YLneN
-         SKYyciGs0JSqw==
+        b=ZKHwtSZcRq+y8f4QN4wv2ca7WzaOZQ2mfS7ASnnsvrZ5YRgRwE+J290vYEZGrocKv
+         LXFQM2xrBDMGas+OGirJzKuW+DUOHLg5FXZzJgrt5V70RQBnEnwovCGGCDQbkf3Nn6
+         J+7t8ASY/4GAN5kkqoBO8qPvIHst/WOKwG7S2XCy7GLnOTlMuIS7cCMa8W4btDfiWs
+         EMqs4hvgRI0INQGsz67kWZdbk5tiF8uOITwvTnLKeQs4uXo8pj96vfI3sGa2FNWyu4
+         gv5W/N2uEZd/nR4bBURJE37HN6LO2cn9wwscNH+pFYq1Zu5PYJFV1mQCr1WJQlhQUX
+         wQCZmVdEW0jIA==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Borislav Petkov <bp@suse.de>, Sasha Levin <sashal@kernel.org>,
-        bp@alien8.de, tglx@linutronix.de, mingo@redhat.com,
-        dave.hansen@linux.intel.com, x86@kernel.org,
+Cc:     Dinh Nguyen <dinguyen@kernel.org>, Borislav Petkov <bp@suse.de>,
+        Michal Simek <michal.simek@xilinx.com>,
+        Sasha Levin <sashal@kernel.org>, bp@alien8.de,
+        mchehab@kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-edac@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.15 107/188] x86/mce: Mark mce_read_aux() noinstr
-Date:   Mon, 17 Jan 2022 21:30:31 -0500
-Message-Id: <20220118023152.1948105-107-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.10 020/116] EDAC/synopsys: Use the quirk for version instead of ddr version
+Date:   Mon, 17 Jan 2022 21:38:31 -0500
+Message-Id: <20220118024007.1950576-20-sashal@kernel.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220118023152.1948105-1-sashal@kernel.org>
-References: <20220118023152.1948105-1-sashal@kernel.org>
+In-Reply-To: <20220118024007.1950576-1-sashal@kernel.org>
+References: <20220118024007.1950576-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -51,34 +52,36 @@ Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-From: Borislav Petkov <bp@suse.de>
+From: Dinh Nguyen <dinguyen@kernel.org>
 
-[ Upstream commit db6c996d6ce45dfb44891f0824a65ecec216f47a ]
+[ Upstream commit bd1d6da17c296bd005bfa656952710d256e77dd3 ]
 
-Fixes
+Version 2.40a supports DDR_ECC_INTR_SUPPORT for a quirk, so use that
+quirk to determine a call to setup_address_map().
 
-  vmlinux.o: warning: objtool: do_machine_check()+0x681: call to mce_read_aux() leaves .noinstr.text section
-
+Signed-off-by: Dinh Nguyen <dinguyen@kernel.org>
 Signed-off-by: Borislav Petkov <bp@suse.de>
-Link: https://lore.kernel.org/r/20211208111343.8130-10-bp@alien8.de
+Reviewed-by: Michal Simek <michal.simek@xilinx.com>
+Link: https://lkml.kernel.org/r/20211012190709.1504152-1-dinguyen@kernel.org
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/x86/kernel/cpu/mce/core.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/edac/synopsys_edac.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/arch/x86/kernel/cpu/mce/core.c b/arch/x86/kernel/cpu/mce/core.c
-index c37a0bcf2744b..e23e74e2f928d 100644
---- a/arch/x86/kernel/cpu/mce/core.c
-+++ b/arch/x86/kernel/cpu/mce/core.c
-@@ -691,7 +691,7 @@ static struct notifier_block mce_default_nb = {
- /*
-  * Read ADDR and MISC registers.
-  */
--static void mce_read_aux(struct mce *m, int i)
-+static noinstr void mce_read_aux(struct mce *m, int i)
- {
- 	if (m->status & MCI_STATUS_MISCV)
- 		m->misc = mce_rdmsrl(msr_ops.misc(i));
+diff --git a/drivers/edac/synopsys_edac.c b/drivers/edac/synopsys_edac.c
+index 1a801a5d3b08b..92906b56b1a2b 100644
+--- a/drivers/edac/synopsys_edac.c
++++ b/drivers/edac/synopsys_edac.c
+@@ -1351,8 +1351,7 @@ static int mc_probe(struct platform_device *pdev)
+ 		}
+ 	}
+ 
+-	if (of_device_is_compatible(pdev->dev.of_node,
+-				    "xlnx,zynqmp-ddrc-2.40a"))
++	if (priv->p_data->quirks & DDR_ECC_INTR_SUPPORT)
+ 		setup_address_map(priv);
+ #endif
+ 
 -- 
 2.34.1
 
