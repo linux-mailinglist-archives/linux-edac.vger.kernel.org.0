@@ -2,47 +2,47 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 14A56491E06
-	for <lists+linux-edac@lfdr.de>; Tue, 18 Jan 2022 04:47:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ED196491DFA
+	for <lists+linux-edac@lfdr.de>; Tue, 18 Jan 2022 04:45:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350842AbiARDqW (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Mon, 17 Jan 2022 22:46:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33480 "EHLO
+        id S1347436AbiARDpr (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Mon, 17 Jan 2022 22:45:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347376AbiARClS (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Mon, 17 Jan 2022 21:41:18 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CDC2C08C5D7;
-        Mon, 17 Jan 2022 18:36:43 -0800 (PST)
+        with ESMTP id S1350710AbiARCwO (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Mon, 17 Jan 2022 21:52:14 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FBBAC07E5FC;
+        Mon, 17 Jan 2022 18:42:53 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BE706612C8;
-        Tue, 18 Jan 2022 02:36:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2D225C36AF4;
-        Tue, 18 Jan 2022 02:36:41 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id ED29CB81229;
+        Tue, 18 Jan 2022 02:42:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A124AC36AEF;
+        Tue, 18 Jan 2022 02:42:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642473402;
-        bh=XzhNkZxyer8awJv+RVsKsH09udznovulrHjfciVCME4=;
+        s=k20201202; t=1642473770;
+        bh=ehT1W02LPHHbQC4CpSx98mgh4CIOnT+AKMKHij0IAzI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=eKID1t2cgl/J6Alu3PFKMKIFSDEZmixC4GSEqEpT9yiCVEueBeRktwl5GNi8eKLhD
-         hNDHcvJCqyqf/cB5wMjfb52PtxouygL/tu4nUPRhNRn4ODK3Y136aHeL3NN17FBVdr
-         axU1/z6ZWtIRd2uEDHcUZTAY+rTRROYdwRobP5f44+KEwydOWzuzn9tz+wVTXnSAkb
-         HsOS+g0Z6qwdAGA1uCUZd16lEXpifkbSQBtWpo53DeZb7uthwT34PgkDR1/mYmy9vP
-         8dxcugT2GLJwvJQL/+Oa9O0fO7kYNwD3TtmKfyYpCLaFgw3VVcA8j19b36KuSx1/OU
-         a6wQHa9VWctHQ==
+        b=TM8mSvH25ygAbWXSJu7522o0H7eWcxclcyB+Ha4SYk533o/JgUwP1fnU1+oO9g13o
+         qdLH38k9WHFa/V0WkyYlp+0viQjkyV9SAPjPyi6qRATuDDAlAlVocuxwCyxskaM2NC
+         42E9R5St1coC3HCrxeEVWfEAoCf4Xg8/vxQ2GYF3utdgnD8qPULjKugXbmDs1SdPx+
+         avn1/2FUHZxw0kjcvcJVLQqfkPr7txElsqtOfPUTUCGbNLfkBfJzVlxidOqnOH0qQs
+         kTEt1dzATV/9v4LcwbYi25NlaUsxbYyjWDJD7BilHSZ+UP48HGGmdpFrk7HOIF9eR5
+         yo+5hldwqM9wA==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Borislav Petkov <bp@suse.de>, Sasha Levin <sashal@kernel.org>,
         bp@alien8.de, tglx@linutronix.de, mingo@redhat.com,
         dave.hansen@linux.intel.com, x86@kernel.org,
         linux-edac@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.15 104/188] x86/mce: Allow instrumentation during task work queueing
-Date:   Mon, 17 Jan 2022 21:30:28 -0500
-Message-Id: <20220118023152.1948105-104-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.10 062/116] x86/mce: Mark mce_panic() noinstr
+Date:   Mon, 17 Jan 2022 21:39:13 -0500
+Message-Id: <20220118024007.1950576-62-sashal@kernel.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220118023152.1948105-1-sashal@kernel.org>
-References: <20220118023152.1948105-1-sashal@kernel.org>
+In-Reply-To: <20220118024007.1950576-1-sashal@kernel.org>
+References: <20220118024007.1950576-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -53,48 +53,65 @@ X-Mailing-List: linux-edac@vger.kernel.org
 
 From: Borislav Petkov <bp@suse.de>
 
-[ Upstream commit 4fbce464db81a42f9a57ee242d6150ec7f996415 ]
+[ Upstream commit 3c7ce80a818fa7950be123cac80cd078e5ac1013 ]
+
+And allow instrumentation inside it because it does calls to other
+facilities which will not be tagged noinstr.
 
 Fixes
 
-  vmlinux.o: warning: objtool: do_machine_check()+0xdb1: call to queue_task_work() leaves .noinstr.text section
+  vmlinux.o: warning: objtool: do_machine_check()+0xc73: call to mce_panic() leaves .noinstr.text section
 
 Signed-off-by: Borislav Petkov <bp@suse.de>
-Link: https://lore.kernel.org/r/20211208111343.8130-6-bp@alien8.de
+Link: https://lore.kernel.org/r/20211208111343.8130-8-bp@alien8.de
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/x86/kernel/cpu/mce/core.c | 11 +++++++++++
- 1 file changed, 11 insertions(+)
+ arch/x86/kernel/cpu/mce/core.c | 15 ++++++++++++---
+ 1 file changed, 12 insertions(+), 3 deletions(-)
 
 diff --git a/arch/x86/kernel/cpu/mce/core.c b/arch/x86/kernel/cpu/mce/core.c
-index 193204aee8801..c8d121085c8f7 100644
+index 34fffffaf8730..64d8a96a2bf1e 100644
 --- a/arch/x86/kernel/cpu/mce/core.c
 +++ b/arch/x86/kernel/cpu/mce/core.c
-@@ -1454,6 +1454,14 @@ noinstr void do_machine_check(struct pt_regs *regs)
- 	if (worst != MCE_AR_SEVERITY && !kill_current_task)
- 		goto out;
+@@ -295,11 +295,17 @@ static void wait_for_panic(void)
+ 	panic("Panicing machine check CPU died");
+ }
  
+-static void mce_panic(const char *msg, struct mce *final, char *exp)
++static noinstr void mce_panic(const char *msg, struct mce *final, char *exp)
+ {
+-	int apei_err = 0;
+ 	struct llist_node *pending;
+ 	struct mce_evt_llist *l;
++	int apei_err = 0;
++
 +	/*
-+	 * Enable instrumentation around the external facilities like
-+	 * task_work_add() (via queue_task_work()), fixup_exception() etc.
-+	 * For now, that is. Fixing this properly would need a lot more involved
-+	 * reorganization.
++	 * Allow instrumentation around external facilities usage. Not that it
++	 * matters a whole lot since the machine is going to panic anyway.
 +	 */
 +	instrumentation_begin();
-+
- 	/* Fault was in user mode and we need to take some action */
- 	if ((m.cs & 3) == 3) {
- 		/* If this triggers there is no way to recover. Die hard. */
-@@ -1479,6 +1487,9 @@ noinstr void do_machine_check(struct pt_regs *regs)
- 		if (m.kflags & MCE_IN_KERNEL_COPYIN)
- 			queue_task_work(&m, msg, kill_current_task);
+ 
+ 	if (!fake_panic) {
+ 		/*
+@@ -314,7 +320,7 @@ static void mce_panic(const char *msg, struct mce *final, char *exp)
+ 	} else {
+ 		/* Don't log too much for fake panic */
+ 		if (atomic_inc_return(&mce_fake_panicked) > 1)
+-			return;
++			goto out;
  	}
+ 	pending = mce_gen_pool_prepare_records();
+ 	/* First print corrected ones that are still unlogged */
+@@ -352,6 +358,9 @@ static void mce_panic(const char *msg, struct mce *final, char *exp)
+ 		panic(msg);
+ 	} else
+ 		pr_emerg(HW_ERR "Fake kernel panic: %s\n", msg);
 +
++out:
 +	instrumentation_end();
-+
- out:
- 	mce_wrmsrl(MSR_IA32_MCG_STATUS, 0);
  }
+ 
+ /* Support code for software error injection */
 -- 
 2.34.1
 
