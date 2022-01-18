@@ -2,45 +2,44 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D964F491A4C
-	for <lists+linux-edac@lfdr.de>; Tue, 18 Jan 2022 03:59:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 67D4A491A4D
+	for <lists+linux-edac@lfdr.de>; Tue, 18 Jan 2022 03:59:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348696AbiARC7H (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Mon, 17 Jan 2022 21:59:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34838 "EHLO
+        id S245625AbiARC7J (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Mon, 17 Jan 2022 21:59:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346488AbiARCtG (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Mon, 17 Jan 2022 21:49:06 -0500
+        with ESMTP id S1350696AbiARCwN (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Mon, 17 Jan 2022 21:52:13 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10A9DC06175A;
-        Mon, 17 Jan 2022 18:41:12 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC756C09427E;
+        Mon, 17 Jan 2022 18:42:49 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DB89E612E2;
-        Tue, 18 Jan 2022 02:41:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5E2B1C36AF5;
-        Tue, 18 Jan 2022 02:41:10 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BC7C161127;
+        Tue, 18 Jan 2022 02:42:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1D53DC36AF4;
+        Tue, 18 Jan 2022 02:42:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642473671;
-        bh=bjnr579xE3xgyvjFIi7SCyvGueJvDxugpZ7TyGVGiLM=;
+        s=k20201202; t=1642473769;
+        bh=7iTssmaqpC1K/Xqd0MdRNMXEmtIL7JRZogdBpi/rGDQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ZKHwtSZcRq+y8f4QN4wv2ca7WzaOZQ2mfS7ASnnsvrZ5YRgRwE+J290vYEZGrocKv
-         LXFQM2xrBDMGas+OGirJzKuW+DUOHLg5FXZzJgrt5V70RQBnEnwovCGGCDQbkf3Nn6
-         J+7t8ASY/4GAN5kkqoBO8qPvIHst/WOKwG7S2XCy7GLnOTlMuIS7cCMa8W4btDfiWs
-         EMqs4hvgRI0INQGsz67kWZdbk5tiF8uOITwvTnLKeQs4uXo8pj96vfI3sGa2FNWyu4
-         gv5W/N2uEZd/nR4bBURJE37HN6LO2cn9wwscNH+pFYq1Zu5PYJFV1mQCr1WJQlhQUX
-         wQCZmVdEW0jIA==
+        b=TVe/Nnx1dX4w0I7xMFeZ2HzuZcGRGRlbFptrVLQ3QU3LbrrsdRFr5ixwllQXq+7zI
+         qjtYLkkW1x4lEp8Il8+P/Ez3+DZ8R7D54oC99FLO/qygAIWe/4Uw7lxG3Yy9SMd+lQ
+         iF+Fj0G86FL5y4jKiVwbDmXpziPoFyTUU0xLJxdO2PWHSaCEFL1ajA5asTNxCyu6st
+         OZYC1xs0T2itgVIkMdkJkadpBeT7KjQfBckQ4KLfrhQNPNemzgP5xmbj2u8v/PI3vC
+         hBrHiOspWI+9giJCIhOtuDOmz8BTAmLmHb4y/LF9/wErKokBdDY4bYMtPhv/623Ylr
+         D1AXWLalmSxBw==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Dinh Nguyen <dinguyen@kernel.org>, Borislav Petkov <bp@suse.de>,
-        Michal Simek <michal.simek@xilinx.com>,
-        Sasha Levin <sashal@kernel.org>, bp@alien8.de,
-        mchehab@kernel.org, linux-arm-kernel@lists.infradead.org,
+Cc:     Borislav Petkov <bp@suse.de>, Sasha Levin <sashal@kernel.org>,
+        bp@alien8.de, tglx@linutronix.de, mingo@redhat.com,
+        dave.hansen@linux.intel.com, x86@kernel.org,
         linux-edac@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.10 020/116] EDAC/synopsys: Use the quirk for version instead of ddr version
-Date:   Mon, 17 Jan 2022 21:38:31 -0500
-Message-Id: <20220118024007.1950576-20-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.10 061/116] x86/mce: Allow instrumentation during task work queueing
+Date:   Mon, 17 Jan 2022 21:39:12 -0500
+Message-Id: <20220118024007.1950576-61-sashal@kernel.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220118024007.1950576-1-sashal@kernel.org>
 References: <20220118024007.1950576-1-sashal@kernel.org>
@@ -52,36 +51,50 @@ Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-From: Dinh Nguyen <dinguyen@kernel.org>
+From: Borislav Petkov <bp@suse.de>
 
-[ Upstream commit bd1d6da17c296bd005bfa656952710d256e77dd3 ]
+[ Upstream commit 4fbce464db81a42f9a57ee242d6150ec7f996415 ]
 
-Version 2.40a supports DDR_ECC_INTR_SUPPORT for a quirk, so use that
-quirk to determine a call to setup_address_map().
+Fixes
 
-Signed-off-by: Dinh Nguyen <dinguyen@kernel.org>
+  vmlinux.o: warning: objtool: do_machine_check()+0xdb1: call to queue_task_work() leaves .noinstr.text section
+
 Signed-off-by: Borislav Petkov <bp@suse.de>
-Reviewed-by: Michal Simek <michal.simek@xilinx.com>
-Link: https://lkml.kernel.org/r/20211012190709.1504152-1-dinguyen@kernel.org
+Link: https://lore.kernel.org/r/20211208111343.8130-6-bp@alien8.de
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/edac/synopsys_edac.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ arch/x86/kernel/cpu/mce/core.c | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
 
-diff --git a/drivers/edac/synopsys_edac.c b/drivers/edac/synopsys_edac.c
-index 1a801a5d3b08b..92906b56b1a2b 100644
---- a/drivers/edac/synopsys_edac.c
-+++ b/drivers/edac/synopsys_edac.c
-@@ -1351,8 +1351,7 @@ static int mc_probe(struct platform_device *pdev)
- 		}
+diff --git a/arch/x86/kernel/cpu/mce/core.c b/arch/x86/kernel/cpu/mce/core.c
+index 14b34963eb1f7..34fffffaf8730 100644
+--- a/arch/x86/kernel/cpu/mce/core.c
++++ b/arch/x86/kernel/cpu/mce/core.c
+@@ -1443,6 +1443,14 @@ noinstr void do_machine_check(struct pt_regs *regs)
+ 	if (worst != MCE_AR_SEVERITY && !kill_it)
+ 		goto out;
+ 
++	/*
++	 * Enable instrumentation around the external facilities like
++	 * task_work_add() (via queue_task_work()), fixup_exception() etc.
++	 * For now, that is. Fixing this properly would need a lot more involved
++	 * reorganization.
++	 */
++	instrumentation_begin();
++
+ 	/* Fault was in user mode and we need to take some action */
+ 	if ((m.cs & 3) == 3) {
+ 		/* If this triggers there is no way to recover. Die hard. */
+@@ -1468,6 +1476,9 @@ noinstr void do_machine_check(struct pt_regs *regs)
+ 		if (m.kflags & MCE_IN_KERNEL_COPYIN)
+ 			queue_task_work(&m, msg, kill_it);
  	}
- 
--	if (of_device_is_compatible(pdev->dev.of_node,
--				    "xlnx,zynqmp-ddrc-2.40a"))
-+	if (priv->p_data->quirks & DDR_ECC_INTR_SUPPORT)
- 		setup_address_map(priv);
- #endif
- 
++
++	instrumentation_end();
++
+ out:
+ 	mce_wrmsrl(MSR_IA32_MCG_STATUS, 0);
+ }
 -- 
 2.34.1
 
