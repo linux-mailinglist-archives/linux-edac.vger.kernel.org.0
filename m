@@ -2,47 +2,34 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E3898494228
-	for <lists+linux-edac@lfdr.de>; Wed, 19 Jan 2022 21:57:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 13A0C4948F7
+	for <lists+linux-edac@lfdr.de>; Thu, 20 Jan 2022 08:59:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244620AbiASU4i (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Wed, 19 Jan 2022 15:56:38 -0500
-Received: from mga17.intel.com ([192.55.52.151]:54135 "EHLO mga17.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229541AbiASU4h (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Wed, 19 Jan 2022 15:56:37 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1642625797; x=1674161797;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Zn3K2EdVeDLJCMJ0xbcykPqu/tTiNlke9kM/JdHhcyA=;
-  b=UKP5BPWQ+uw2sBH+BM1UqeeTghbHvgaSjb/HR8XqV2m/L0x+YVEmxOGG
-   flhgx042uwtvDmyFlbH1w3PHokLzPGv6z+k+i45vi98jaPXt+vr175APx
-   AbZt1GcjiOufYlT52vxr4qzItwd0SVdtcN8WG3VZf89UFYd8sgki/FTZ0
-   nAJVaJF3b9itTPyNWKR/tIDClRlUTOZwB+qhiCz2ulEGjz2iqqn3ekqLu
-   wBY0+mwl9tNWjORFuFbtJE0r88oQiNJ8px6dZJvxRVbsCoXYnnCWjk+qF
-   bKdDmFFe8Dlc4vZoy0A9phMp1kTFErGo9dZCebUQjx5RAQ/pMMDiEL2gZ
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10231"; a="225862988"
-X-IronPort-AV: E=Sophos;i="5.88,300,1635231600"; 
-   d="scan'208";a="225862988"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jan 2022 12:56:37 -0800
-X-IronPort-AV: E=Sophos;i="5.88,300,1635231600"; 
-   d="scan'208";a="615845335"
-Received: from smile.fi.intel.com ([10.237.72.61])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jan 2022 12:56:21 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1nAHz3-00CGxM-Ht;
-        Wed, 19 Jan 2022 22:55:09 +0200
-Date:   Wed, 19 Jan 2022 22:55:09 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Sergey Shtylyov <s.shtylyov@omp.ru>
-Cc:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>, Andrew Lunn <andrew@lunn.ch>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
+        id S1345422AbiATH6m (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Thu, 20 Jan 2022 02:58:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54668 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240049AbiATH6j (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Thu, 20 Jan 2022 02:58:39 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 649F6C061747
+        for <linux-edac@vger.kernel.org>; Wed, 19 Jan 2022 23:58:39 -0800 (PST)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1nASK7-0002RI-3O; Thu, 20 Jan 2022 08:57:35 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1nASJu-00BJom-IA; Thu, 20 Jan 2022 08:57:21 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1nASJt-000Bvo-3V; Thu, 20 Jan 2022 08:57:21 +0100
+Date:   Thu, 20 Jan 2022 08:57:18 +0100
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Andrew Lunn <andrew@lunn.ch>, Ulf Hansson <ulf.hansson@linaro.org>,
         Vignesh Raghavendra <vigneshr@ti.com>,
         KVM list <kvm@vger.kernel.org>,
         "Rafael J. Wysocki" <rafael@kernel.org>, linux-iio@vger.kernel.org,
@@ -54,15 +41,15 @@ Cc:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?=
         Thierry Reding <thierry.reding@gmail.com>,
         MTD Maling List <linux-mtd@lists.infradead.org>,
         Linux I2C <linux-i2c@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
         Miquel Raynal <miquel.raynal@bootlin.com>,
-        linux-phy@lists.infradead.org, netdev@vger.kernel.org,
-        linux-spi <linux-spi@vger.kernel.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
+        linux-phy@lists.infradead.org, Jiri Slaby <jirislaby@kernel.org>,
+        openipmi-developer@lists.sourceforge.net,
         Khuong Dinh <khuong@os.amperecomputing.com>,
         Florian Fainelli <f.fainelli@gmail.com>,
         Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
+        Joakim Zhang <qiangqing.zhang@nxp.com>,
         Kamal Dasu <kdasu.kdev@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Lee Jones <lee.jones@linaro.org>,
         Bartosz Golaszewski <brgl@bgdev.pl>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
@@ -71,53 +58,53 @@ Cc:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?=
         "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
         bcm-kernel-feedback-list <bcm-kernel-feedback-list@broadcom.com>,
         Zhang Rui <rui.zhang@intel.com>,
-        platform-driver-x86@vger.kernel.org,
         Linux PWM List <linux-pwm@vger.kernel.org>,
         Robert Richter <rric@kernel.org>,
         Saravanan Sekar <sravanhome@gmail.com>,
         Corey Minyard <minyard@acm.org>,
         Linux PM list <linux-pm@vger.kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
         John Garry <john.garry@huawei.com>,
-        Takashi Iwai <tiwai@suse.com>,
         Peter Korsgaard <peter@korsgaard.com>,
         William Breathitt Gray <vilhelm.gray@gmail.com>,
         Mark Gross <markgross@kernel.org>,
-        Hans de Goede <hdegoede@redhat.com>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
         Alex Williamson <alex.williamson@redhat.com>,
         Mark Brown <broonie@kernel.org>,
         Borislav Petkov <bp@alien8.de>,
+        Sebastian Reichel <sre@kernel.org>,
+        Eric Auger <eric.auger@redhat.com>,
         Jakub Kicinski <kuba@kernel.org>,
         Matthias Brugger <matthias.bgg@gmail.com>,
-        openipmi-developer@lists.sourceforge.net,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Takashi Iwai <tiwai@suse.com>,
+        platform-driver-x86@vger.kernel.org,
         Benson Leung <bleung@chromium.org>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
         Linux ARM <linux-arm-kernel@lists.infradead.org>,
         linux-edac@vger.kernel.org, Tony Luck <tony.luck@intel.com>,
-        Richard Weinberger <richard@nod.at>,
         Mun Yew Tham <mun.yew.tham@intel.com>,
-        Eric Auger <eric.auger@redhat.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Hans de Goede <hdegoede@redhat.com>, netdev@vger.kernel.org,
         Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
         Cornelia Huck <cohuck@redhat.com>,
         Linux MMC List <linux-mmc@vger.kernel.org>,
-        Joakim Zhang <qiangqing.zhang@nxp.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        linux-spi <linux-spi@vger.kernel.org>,
         Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Sergey Shtylyov <s.shtylyov@omp.ru>,
         Vinod Koul <vkoul@kernel.org>,
         James Morse <james.morse@arm.com>,
         Zha Qipeng <qipeng.zha@intel.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Niklas =?iso-8859-1?Q?S=F6derlund?= 
-        <niklas.soderlund@ragnatech.se>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Richard Weinberger <richard@nod.at>,
+        Niklas =?utf-8?Q?S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
         linux-mediatek@lists.infradead.org,
         Brian Norris <computersforpeace@gmail.com>,
         "David S. Miller" <davem@davemloft.net>
 Subject: Re: [PATCH] driver core: platform: Rename
  platform_get_irq_optional() to platform_get_irq_silent()
-Message-ID: <Yeh6rdBjEMiavLfh@smile.fi.intel.com>
-References: <CAMuHMdWsMGPiQaPS0-PJ_+Mc5VQ37YdLfbHr_aS40kB+SfW-aw@mail.gmail.com>
+Message-ID: <20220120075718.5qtrpc543kkykaow@pengutronix.de>
+References: <20220112085009.dbasceh3obfok5dc@pengutronix.de>
+ <CAMuHMdWsMGPiQaPS0-PJ_+Mc5VQ37YdLfbHr_aS40kB+SfW-aw@mail.gmail.com>
  <20220112213121.5ruae5mxwj6t3qiy@pengutronix.de>
  <Yd9L9SZ+g13iyKab@sirena.org.uk>
  <20220113110831.wvwbm75hbfysbn2d@pengutronix.de>
@@ -126,55 +113,137 @@ References: <CAMuHMdWsMGPiQaPS0-PJ_+Mc5VQ37YdLfbHr_aS40kB+SfW-aw@mail.gmail.com>
  <YeF05vBOzkN+xYCq@smile.fi.intel.com>
  <20220115154539.j3tsz5ioqexq2yuu@pengutronix.de>
  <YehdsUPiOTwgZywq@smile.fi.intel.com>
- <b7edb713-dd91-14e7-34ff-d8fb559e8e92@omp.ru>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="vtmtr3soi3npiqhl"
 Content-Disposition: inline
-In-Reply-To: <b7edb713-dd91-14e7-34ff-d8fb559e8e92@omp.ru>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+In-Reply-To: <YehdsUPiOTwgZywq@smile.fi.intel.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-edac@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Wed, Jan 19, 2022 at 10:47:06PM +0300, Sergey Shtylyov wrote:
-> On 1/19/22 9:51 PM, Andy Shevchenko wrote:
 
-> >>>>> It'd certainly be good to name anything that doesn't correspond to one
-> >>>>> of the existing semantics for the API (!) something different rather
-> >>>>> than adding yet another potentially overloaded meaning.
-> >>>>
-> >>>> It seems we're (at least) three who agree about this. Here is a patch
-> >>>> fixing the name.
-> >>>
-> >>> And similar number of people are on the other side.
-> >>
-> >> If someone already opposed to the renaming (and not only the name) I
-> >> must have missed that.
-> >>
-> >> So you think it's a good idea to keep the name
-> >> platform_get_irq_optional() despite the "not found" value returned by it
-> >> isn't usable as if it were a normal irq number?
-> > 
-> > I meant that on the other side people who are in favour of Sergey's patch.
-> > Since that I commented already that I opposed the renaming being a standalone
-> > change.
-> > 
-> > Do you agree that we have several issues with platform_get_irq*() APIs?
-> > 
-> > 1. The unfortunate naming
-> 
->    Mmm, "what's in a name?"... is this the topmost prio issue?
+--vtmtr3soi3npiqhl
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-The order is arbitrary.
+On Wed, Jan 19, 2022 at 08:51:29PM +0200, Andy Shevchenko wrote:
+> On Sat, Jan 15, 2022 at 04:45:39PM +0100, Uwe Kleine-K=F6nig wrote:
+> > On Fri, Jan 14, 2022 at 03:04:38PM +0200, Andy Shevchenko wrote:
+> > > On Thu, Jan 13, 2022 at 08:43:58PM +0100, Uwe Kleine-K=F6nig wrote:
+> > > > > It'd certainly be good to name anything that doesn't correspond t=
+o one
+> > > > > of the existing semantics for the API (!) something different rat=
+her
+> > > > > than adding yet another potentially overloaded meaning.
+> > > >=20
+> > > > It seems we're (at least) three who agree about this. Here is a pat=
+ch
+> > > > fixing the name.
+> > >=20
+> > > And similar number of people are on the other side.
+> >=20
+> > If someone already opposed to the renaming (and not only the name) I
+> > must have missed that.
+> >=20
+> > So you think it's a good idea to keep the name
+> > platform_get_irq_optional() despite the "not found" value returned by it
+> > isn't usable as if it were a normal irq number?
+>=20
+> I meant that on the other side people who are in favour of Sergey's patch.
+> Since that I commented already that I opposed the renaming being a standa=
+lone
+> change.
+>=20
+> Do you agree that we have several issues with platform_get_irq*() APIs?
+>=20
+> 1. The unfortunate naming
 
-> > 2. The vIRQ0 handling: a) WARN() followed by b) returned value 0
-> 
->    This is the most severe issue, I think...
-> 
-> > 3. The specific cookie for "IRQ not found, while no error happened" case
+unfortunate naming for the currently implemented semantic, yes.
 
--- 
-With Best Regards,
-Andy Shevchenko
+> 2. The vIRQ0 handling: a) WARN() followed by b) returned value 0
 
+I'm happy with the vIRQ0 handling. Today platform_get_irq() and it's
+silent variant returns either a valid and usuable irq number or a
+negative error value. That's totally fine.
 
+> 3. The specific cookie for "IRQ not found, while no error happened" case
+
+Not sure what you mean here. I have no problem that a situation I can
+cope with is called an error for the query function. I just do error
+handling and continue happily. So the part "while no error happened" is
+irrelevant to me.
+
+Additionally I see the problems:
+
+4. The semantic as implemented in Sergey's patch isn't better than the
+current one. platform_get_irq*() is still considerably different from
+(clk|gpiod)_get* because the not-found value for the _optional variant
+isn't usuable for the irq case. For clk and gpio I get rid of a whole if
+branch, for irq I only change the if-condition. (And if that change is
+considered good or bad seems to be subjective.)
+
+For the idea to add a warning to platform_get_irq_optional for all but
+-ENXIO (and -EPROBE_DEFER), I see the problem:
+
+5. platform_get_irq*() issuing an error message is only correct most of
+the time and given proper error handling in the caller (which might be
+able to handle not only -ENXIO but maybe also -EINVAL[1]) the error message
+is irritating. Today platform_get_irq() emits an error message for all
+but -EPROBE_DEFER. As soon as we find a driver that handles -EINVAL we
+need a function platform_get_irq_variant1 to be silent for -EINVAL,
+-EPROBE_DEFER and -ENXIO (or platform_get_irq_variant2 that is only
+silent for -EINVAL and -EPROBE_DEFER?)
+
+IMHO a query function should always be silent and let the caller do the
+error handling. And if it's only because
+
+	mydev: IRQ index 0 not found
+
+is worse than
+
+	mydev: neither TX irq not a muxed RX/TX irq found
+
+=2E Also "index 0" is irritating for devices that are expected to have
+only a single irq (i.e. the majority of all devices).
+
+Yes, I admit, we can safe some code by pushing the error message in a
+query function. But that doesn't only have advantages.
+
+Best regards
+Uwe
+
+[1] Looking through the source I wonder: What are the errors that can happen
+    in platform_get_irq*()? (calling everything but a valid irq number
+    an error) Looking at many callers, they only seem to expect "not
+    found" and some "probe defer" (even platform_get_irq() interprets
+    everything but -EPROBE_DEFER as "IRQ index %u not found\n".)
+    IMHO before we should consider to introduce a platform_get_irq*()
+    variant with improved semantics, some cleanup in the internals of
+    the irq lookup are necessary.
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--vtmtr3soi3npiqhl
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmHpFdoACgkQwfwUeK3K
+7AlpCwf8CIVWD1ztALs4saPfU+hCAXGdHPMYsVb4ZTfj+uT0g5uOPF3Vn08Dfosw
+tyqmKEnwGKIMZpavCJ+pScDwmT2FfANDq+R3xZzWj1hEcEvhjMFWB/IDU+s33/IB
+9pbnCAE8Oa/2PGjM3+FGf5OA6q8vCcuO8XHluolGQqPqvajsCulKZytLIFnnTc9t
+UXm+5HxATeIlvcxF5NHMcNFRt2ADkTGVGj0zrEOxinsiT3edhaWLDR5/vSnbXySV
+NKWnnkWO/T3Huohcr85IS2dVfqbqxuMmfU6RyQKdMat7ZUzOqtffi2I6KdXRRjog
+OHR+PLT7KSOdf6ODGMs+9P8AMEotwg==
+=El6G
+-----END PGP SIGNATURE-----
+
+--vtmtr3soi3npiqhl--
