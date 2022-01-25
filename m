@@ -2,130 +2,116 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 17BC049AAD8
-	for <lists+linux-edac@lfdr.de>; Tue, 25 Jan 2022 05:43:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1135749AAD1
+	for <lists+linux-edac@lfdr.de>; Tue, 25 Jan 2022 05:42:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S3415829AbiAYDqe (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Mon, 24 Jan 2022 22:46:34 -0500
-Received: from mga05.intel.com ([192.55.52.43]:15988 "EHLO mga05.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1314190AbiAYCu1 (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Mon, 24 Jan 2022 21:50:27 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643079027; x=1674615027;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=BQEKrxu8mZSdmInIO8R3Ao2+sKCwBgclP+u7CtUFXMo=;
-  b=Xt2C9bNQTChDT8rcGD+DV3ZrK4czsyAkvAaXCDFKCckAU3KI6e5t2hxn
-   poqluX25dA2+/+dwbGXCOHizctXXd94RF3YWcPrXz5l2ibbDT1gfVmuBy
-   gNLL1M8A/nCbnTgCrYHoXZ+t2gddo95beIEYJFR7vxwILmojys31bCkcc
-   gYLsZABVq+xBLZgjkUc5MY4VVxr4RUM8X9uuzWa6C7aOb8O2PGSfhsUdT
-   jo9Vha9UzHbrwO9VRVTlyyVICBH3nycIjhYB6oZY5ceYfMw7ECWWxBi0w
-   +BSnkDpQcjg+d/97MWLBUx9MPUWWLtJHqI7oJbkFcdhi9+jQG4gbz6mAQ
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10237"; a="332556566"
-X-IronPort-AV: E=Sophos;i="5.88,313,1635231600"; 
-   d="scan'208";a="332556566"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2022 18:36:21 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,313,1635231600"; 
-   d="scan'208";a="476945379"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 24 Jan 2022 18:36:19 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nCBgx-000JEd-4r; Tue, 25 Jan 2022 02:36:19 +0000
-Date:   Tue, 25 Jan 2022 10:35:31 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     lostway@zju.edu.cn, linux-kernel@vger.kernel.org,
-        linux-edac@vger.kernel.org, bp@alien8.de, tony.luck@intel.com
-Cc:     kbuild-all@lists.01.org
-Subject: Re: [PATCH] RAS: Report ARM processor information to userspace
-Message-ID: <202201250944.dyy7niOd-lkp@intel.com>
-References: <20220124093034.33095-1-lostway@zju.edu.cn>
+        id S3415231AbiAYDqU (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Mon, 24 Jan 2022 22:46:20 -0500
+Received: from out30-54.freemail.mail.aliyun.com ([115.124.30.54]:50742 "EHLO
+        out30-54.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1312859AbiAYCrG (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>);
+        Mon, 24 Jan 2022 21:47:06 -0500
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R891e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e01424;MF=xueshuai@linux.alibaba.com;NM=1;PH=DS;RN=11;SR=0;TI=SMTPD_---0V2oJpOQ_1643078732;
+Received: from 30.240.125.206(mailfrom:xueshuai@linux.alibaba.com fp:SMTPD_---0V2oJpOQ_1643078732)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Tue, 25 Jan 2022 10:45:33 +0800
+Message-ID: <98aae382-ac38-8811-f147-d00b953f608d@linux.alibaba.com>
+Date:   Tue, 25 Jan 2022 10:45:31 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220124093034.33095-1-lostway@zju.edu.cn>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.5.0
+Subject: Re: [RESEND PATCH v3 1/2] efi/cper: add cper_mem_err_status_str to
+ decode error description
+Content-Language: en-US
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     rric@kernel.org, mchehab@kernel.org, tony.luck@intel.com,
+        james.morse@arm.com, ardb@kernel.org, linux-edac@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-efi@vger.kernel.org,
+        zhangliguang@linux.alibaba.com, zhuo.song@linux.alibaba.com
+References: <20211210134019.28536-1-xueshuai@linux.alibaba.com>
+ <20220124024759.19176-2-xueshuai@linux.alibaba.com>
+ <Ye8XMvfXCetzJLTH@zn.tnic>
+From:   Shuai Xue <xueshuai@linux.alibaba.com>
+In-Reply-To: <Ye8XMvfXCetzJLTH@zn.tnic>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-Hi,
+Hi, Borislav,
 
-Thank you for the patch! Perhaps something to improve:
+Thank you for your valuable comments.
 
-[auto build test WARNING on linux/master]
-[also build test WARNING on rafael-pm/linux-next linus/master v5.17-rc1 next-20220124]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+在 2022/1/25 AM5:16, Borislav Petkov 写道:
+> On Mon, Jan 24, 2022 at 10:47:58AM +0800, Shuai Xue wrote:
+>> Introduce a new helper function cper_mem_err_status_str() which is used to
+>> decode the description of error status, and the cper_print_mem() will call
+>> it and report the details of error status.
+>>
+>> Signed-off-by: Shuai Xue <xueshuai@linux.alibaba.com>
+>> ---
+>>  drivers/firmware/efi/cper.c | 46 ++++++++++++++++++++++++++++++++++++-
+>>  include/linux/cper.h        |  1 +
+>>  2 files changed, 46 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/firmware/efi/cper.c b/drivers/firmware/efi/cper.c
+>> index 6ec8edec6329..addafccecd84 100644
+>> --- a/drivers/firmware/efi/cper.c
+>> +++ b/drivers/firmware/efi/cper.c
+>> @@ -211,6 +211,49 @@ const char *cper_mem_err_type_str(unsigned int etype)
+>>  }
+>>  EXPORT_SYMBOL_GPL(cper_mem_err_type_str);
+>>  
+>> +const char *cper_mem_err_status_str(u64 status)
+>> +{
+>> +	switch ((status >> 8) & 0xff) {
+>> +	case 1:
+>> +		return "Error detected internal to the component";
+> 
+> You can make that table a lot more compact:
+> 
+>         switch ((status >> 8) & 0xff) {
+>         case  1:        return "Error detected internal to the component";
+>         case  4:        return "Storage error in DRAM memory";
+>         case  5:        return "Storage error in TLB";
+>         case  6:        return "Storage error in cache";
+>         case  7:        return "Error in one or more functional units";
+>         case  8:        return "component failed self test";
+>         case  9:        return "Overflow or undervalue of internal queue";
+>         case 16:        return "Error detected in the bus";
+> 	...
+> 
+>> +	case 16:
+>> +		return "Error detected in the bus";
+> 
+> And yes, that 16 needs to come before 17, ofc.
 
-url:    https://github.com/0day-ci/linux/commits/lostway-zju-edu-cn/RAS-Report-ARM-processor-information-to-userspace/20220124-174203
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 2c271fe77d52a0555161926c232cd5bc07178b39
-config: x86_64-randconfig-m001-20220124 (https://download.01.org/0day-ci/archive/20220125/202201250944.dyy7niOd-lkp@intel.com/config)
-compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
+I will fix it in next version.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+>> @@ -334,7 +377,8 @@ static void cper_print_mem(const char *pfx, const struct cper_sec_mem_err *mem,
+>>  		return;
+>>  	}
+>>  	if (mem->validation_bits & CPER_MEM_VALID_ERROR_STATUS)
+>> -		printk("%s""error_status: 0x%016llx\n", pfx, mem->error_status);
+>> +		printk("%s""error_status: 0x%016llx, %s\n", pfx, mem->error_status,
+>> +				cper_mem_err_status_str(mem->error_status));
+> 
+> Arguments need to be aligned at opening brace, i.e.:
+> 
+>                 printk("%s""error_status: 0x%016llx, %s\n",
+>                         pfx, mem->error_status, cper_mem_err_status_str(mem->error_status));
+> 
+> 
+> Also, the naked error status number is not as user-friendly when we have
+> the decoded string. So the format should be:
+> 
+>                 printk("%s error_status: %s (0x%016llx)\n",
+>                         pfx, cper_mem_err_status_str(mem->error_status), mem->error_status);
+> 
 
-smatch warnings:
-drivers/ras/ras.c:51 log_arm_hw_error() warn: unsigned 'vsei_len' is never less than zero.
+Good point. Will fix it.
 
-vim +/vsei_len +51 drivers/ras/ras.c
-
-    23	
-    24	void log_arm_hw_error(struct cper_sec_proc_arm *err, const u8 sev)
-    25	{
-    26		u32 pei_len;
-    27		u32 ctx_len = 0;
-    28		u32 vsei_len;
-    29		u8 *pei_err;
-    30		u8 *ctx_err;
-    31		u8 *ven_err_data;
-    32		struct cper_arm_err_info *err_info;
-    33		struct cper_arm_ctx_info *ctx_info;
-    34		int n, sz;
-    35		int cpu;
-    36	
-    37		pei_len = sizeof(struct cper_arm_err_info) * err->err_info_num;
-    38		pei_err = (u8 *)err + sizeof(struct cper_sec_proc_arm);
-    39	
-    40		err_info = (struct cper_arm_err_info *)(err + 1);
-    41		ctx_info = (struct cper_arm_ctx_info *)(err_info + err->err_info_num);
-    42		ctx_err = (u8 *)ctx_info;
-    43		for (n = 0; n < err->context_info_num; n++) {
-    44			sz = sizeof(struct cper_arm_ctx_info) + ctx_info->size;
-    45			ctx_info = (struct cper_arm_ctx_info *)((long)ctx_info + sz);
-    46			ctx_len += sz;
-    47		}
-    48	
-    49		vsei_len = err->section_length - (sizeof(struct cper_sec_proc_arm) +
-    50							pei_len + ctx_len);
-  > 51		if (vsei_len < 0) {
-    52			pr_warn(FW_BUG
-    53				"section length: %d\n", err->section_length);
-    54			pr_warn(FW_BUG
-    55				"section length is too small\n");
-    56			pr_warn(FW_BUG
-    57				"firmware-generated error record is incorrect\n");
-    58			vsei_len = 0;
-    59		}
-    60		ven_err_data = (u8 *)ctx_info;
-    61	
-    62		cpu = GET_LOGICAL_INDEX(err->mpidr);
-    63		/* when return value is invalid, set cpu index to -1 */
-    64		if (cpu < 0)
-    65			cpu = -1;
-    66	
-    67		trace_arm_event(err, pei_err, pei_len, ctx_err, ctx_len,
-    68				ven_err_data, vsei_len, sev, cpu);
-    69	}
-    70	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Best Regard,
+Shuai
