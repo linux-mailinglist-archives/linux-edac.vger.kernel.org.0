@@ -2,464 +2,178 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BF2B449AAD4
-	for <lists+linux-edac@lfdr.de>; Tue, 25 Jan 2022 05:42:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C13A249AC10
+	for <lists+linux-edac@lfdr.de>; Tue, 25 Jan 2022 06:57:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S246263AbiAYDqW (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Mon, 24 Jan 2022 22:46:22 -0500
-Received: from out30-43.freemail.mail.aliyun.com ([115.124.30.43]:37794 "EHLO
-        out30-43.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1313913AbiAYCty (ORCPT
+        id S238080AbiAYFzd (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Tue, 25 Jan 2022 00:55:33 -0500
+Received: from mx0b-00069f02.pphosted.com ([205.220.177.32]:44568 "EHLO
+        mx0b-00069f02.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S237554AbiAYFwN (ORCPT
         <rfc822;linux-edac@vger.kernel.org>);
-        Mon, 24 Jan 2022 21:49:54 -0500
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R781e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04394;MF=xueshuai@linux.alibaba.com;NM=1;PH=DS;RN=12;SR=0;TI=SMTPD_---0V2oJqGQ_1643078984;
-Received: from localhost.localdomain(mailfrom:xueshuai@linux.alibaba.com fp:SMTPD_---0V2oJqGQ_1643078984)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Tue, 25 Jan 2022 10:49:45 +0800
-From:   Shuai Xue <xueshuai@linux.alibaba.com>
-To:     bp@alien8.de, rric@kernel.org
-Cc:     mchehab@kernel.org, tony.luck@intel.com, james.morse@arm.com,
-        ardb@kernel.org, linux-edac@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-efi@vger.kernel.org,
-        xueshuai@linux.alibaba.com, zhangliguang@linux.alibaba.com,
-        zhuo.song@linux.alibaba.com
-Subject: [PATCH v4 2/2] EDAC/ghes: use cper functions to avoid code duplication
-Date:   Tue, 25 Jan 2022 10:49:39 +0800
-Message-Id: <20220125024939.30635-3-xueshuai@linux.alibaba.com>
-X-Mailer: git-send-email 2.30.1 (Apple Git-130)
-In-Reply-To: <20211210134019.28536-1-xueshuai@linux.alibaba.com>
-References: <20211210134019.28536-1-xueshuai@linux.alibaba.com>
+        Tue, 25 Jan 2022 00:52:13 -0500
+Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20P1ZLnE022850;
+        Tue, 25 Jan 2022 05:52:01 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : content-type : mime-version; s=corp-2021-07-09;
+ bh=vsBcqelXqMImAhzK8aIgi6ri6Nu3urz0ed4+SngCWIs=;
+ b=bbB9kg7Oe/fRt1Gs1osnFAPsD9V0myrv2w3E4U9D9vmrkq6kf9AJBwAN59YRwpAqAyS/
+ kj91pilmiQJS6x9gCsAz00iW9RSU6u5Vo9/j02vuXDGHXLFd5jvUvCrN2E42SET7Domt
+ MYIftO9wKYbaomkp0AuXDQG2G6sEuDP4yF++Wh9Ngkyun19cKVOPF6hdSVQOBfII3Ymg
+ jizTBuq+KQG4qrsJpFDZBaV0mqD9vd2mroTrqXxMKLqJGspSoU10mKVhj2BPoGmloFh4
+ ZdQ/01PfSSsVf+o1bNf6J7+1eT5CAWR464mGx1TAtQVg/P61KCLbzQu8uBYkeRc4odgJ dQ== 
+Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
+        by mx0b-00069f02.pphosted.com with ESMTP id 3dsvmjae3m-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 25 Jan 2022 05:52:01 +0000
+Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
+        by aserp3020.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 20P5khnu101054;
+        Tue, 25 Jan 2022 05:52:01 GMT
+Received: from nam04-dm6-obe.outbound.protection.outlook.com (mail-dm6nam08lp2041.outbound.protection.outlook.com [104.47.73.41])
+        by aserp3020.oracle.com with ESMTP id 3dtax5s623-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 25 Jan 2022 05:52:00 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=KOXdazTDq5mqTOV/EYJ8wToU+PRU4BtU5T4bEPtzdwLg+Jdr3g/iTREU00wLMhxMB1xAjb6PccfJpxWq9eV20H6pyj9gN2neueGJDn08f3DYMzseLEFN5HSnzy13jCOMrjMMXG6guAVxHD5BLWIfTsOsVgZJu8qICm6edGywy7P7Pog9z9hsmDdaNUH+pU96e+Rk7AnOoCSGwgZotwYWcZvYNHaV6hXARosERzzLOan319lS8/qWSH2txS+6D6ClLC9rbqNIcAa75IeMDpOFH2b8hcL5rvGzhhXiLUvempnGwaAMkucu5rPk2axTuAwbVmlhvCMDKc2GFKDRg/QJsw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=vsBcqelXqMImAhzK8aIgi6ri6Nu3urz0ed4+SngCWIs=;
+ b=dAvYD7sBknMY7ZiiPBO/Zp/yOcAgu+ywxlWREAamy0FizjYfnitSIovL7Vb8Ow6ocRmabU5Tx9Y9Jkykpq7yTj7MVFG9og971/LgJD7wGbGKb/eG+erO9CXVcvlaQG32iS17yq+g1N2HXDxE0ku7x3nAiZG1TXNlnL52pL068R7PZTxn0/c8JkRO3esCD4Pv9Tiibe/yk3bKPRTjJFbbqNBZIo8XU64yKcHzMlfRhLBkv8CztQ35s/7cT4iTiuUZDUIXP6XjgUxSydDlXxgU6sIT9ZoGTZhE1SvHufr/0FoThX67M2h1XiioP2BAXRrVWYyGRrjNp21tbIFnmvB9Bw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=vsBcqelXqMImAhzK8aIgi6ri6Nu3urz0ed4+SngCWIs=;
+ b=LOoPUDkAKmZPCjxO4c/adHBq+CwDq3/fzMVlvV0tqJrglZfw9gziqWheEZYpEPGa1HgKzIg/4H2rbTmqZfa5v88v2OP+3daZGxF7p23pQtpMSLMICfd32pevNTU4Dx0CCt2bSCYF5BMHg/YsNalz5C7vXymehTT9lHgn15e0yhs=
+Received: from CY4PR1001MB2358.namprd10.prod.outlook.com
+ (2603:10b6:910:4a::32) by DM5PR10MB1401.namprd10.prod.outlook.com
+ (2603:10b6:3:f::15) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4909.12; Tue, 25 Jan
+ 2022 05:51:59 +0000
+Received: from CY4PR1001MB2358.namprd10.prod.outlook.com
+ ([fe80::cdcc:584:3514:f052]) by CY4PR1001MB2358.namprd10.prod.outlook.com
+ ([fe80::cdcc:584:3514:f052%5]) with mapi id 15.20.4909.017; Tue, 25 Jan 2022
+ 05:51:59 +0000
+Date:   Tue, 25 Jan 2022 08:51:47 +0300
+From:   Dan Carpenter <dan.carpenter@oracle.com>
+To:     qiuxu.zhuo@intel.com
+Cc:     linux-edac@vger.kernel.org
+Subject: [bug report] EDAC/igen6: Add EDAC driver for Intel client SoCs using
+ IBECC
+Message-ID: <20220125055147.GA30689@kili>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-ClientProxiedBy: ZR0P278CA0128.CHEP278.PROD.OUTLOOK.COM
+ (2603:10a6:910:40::7) To CY4PR1001MB2358.namprd10.prod.outlook.com
+ (2603:10b6:910:4a::32)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 65a58c7d-e411-4706-febe-08d9dfc6cd36
+X-MS-TrafficTypeDiagnostic: DM5PR10MB1401:EE_
+X-Microsoft-Antispam-PRVS: <DM5PR10MB14012B353D06D149BDEC82568E5F9@DM5PR10MB1401.namprd10.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:9508;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: XQquKZPbdZVESTfDyqpG5xXMTOL1L4EMgZq+CY9kfz7kqAiyeHhI3J5bX+g2vXZYROAk+Hm9vjN3TmgtzYJmpOp4roShXk/mJ3NqEsCxQ5CmxrOlBuQdrQ1zA04cBDlPUlETd/+rYTt0+M80OAhHCsWcR+tDNwQbGmLmjWxUz+q5Wb4/BMp579SmBNs48ha6R110PhkDP5tX0tvZcDcJ4W0IT5hb/l5P2Ik6hcYHnX35O/HYnQ0dw/UofpQhr9tCe6ldR8Iz4y1gmAXiz81oBPPE7jSm9NXd+GEJmF0/jYR5Fa522MuMy/xKGf8peQcEs16xWIcGY++zhEVw6pmwM2aYLlczxFtIfgHvnP4GvTjYBfFGNxlfncPZ9rFlg1tMzhIntQdGr3B4r2JsiviQ7ViZ9cR/QMjlLQWSEY6sepiRgpehEQ8K8T6A2amEE2klWSa+3bA/SP9VhVxAHivWewPQmuUnMwQGRwapk69doHGE3fbTiwGuk4WoORV2uk1RjNbOahJYXItqB0c+6J8ro8U7m3T0XX7tP4MX/mgsySQ28nfJcKA7fRiHTSDgJE0YP5NVG8++yOtTXboZsSfA/Dccm1bkjCy325hgrSjJMOGm3gSj5H0dRA8drpFNLzHhkKlffCfHf+J7muDOn6Yf+hwzPLRyRdwJjWtQctdK0oUARuyfgTaUSNIXYLSDk1TjVV6oRvg4Rwns3PjJ4Ql3Tw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY4PR1001MB2358.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(6029001)(7916004)(366004)(1076003)(186003)(52116002)(33656002)(6666004)(33716001)(44832011)(5660300002)(66946007)(508600001)(8676002)(2906002)(6486002)(66556008)(38100700002)(66476007)(8936002)(38350700002)(83380400001)(26005)(6512007)(9686003)(4326008)(6506007)(6916009)(86362001)(316002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?1qQqEMdZyEGz8/lp1TWfalolhLFDXcy91hK0By9f8ekB3KnealyzlCkSW0iR?=
+ =?us-ascii?Q?J7nVWdyjTdI3o6hsr0PLZ3/9F4/aJUnX6um0D0nU5Md4F87+6eC/NjyO78qm?=
+ =?us-ascii?Q?ELcUTl/CWijfANgSGOkQb+Ce4bAfpPjwsxdIMivqu+oR5bs0Onwpd6gkFgri?=
+ =?us-ascii?Q?OSzCdh4NjAb2bOg/wkv6oy/cmNKsIlHPNznOIs6VOo3zRHyIz90zgCHvcMam?=
+ =?us-ascii?Q?zLREMZ38KMOsIfTEMJ+ny5Gzll49EmAP3Mw3HFHWouNOqh1qSa7u/u0vHYJV?=
+ =?us-ascii?Q?xkgiFaM8REWD3lIw7R5opsJVocBWHNGRAHpfhJkZpK/5Tb0PKgTJJ6D7TlBr?=
+ =?us-ascii?Q?s5ROrx8kc6BuVx+1BqNrUJtkEMq5FjxlhkwnacOYjQQL9iEmv4TBnUkRkniW?=
+ =?us-ascii?Q?XiISK8jlZ06UMd3OdDnlK3v3Ag/KUKFKlgOIy054RYwShbDnr9TDnmMfNlN5?=
+ =?us-ascii?Q?+3V9cXKjIS+5LLXFrJWzsNOS2YV5vZugXCeKfU4UahBbHUZ0KTe+li/w/t0L?=
+ =?us-ascii?Q?h0BafWvhSn5HcnN0NLQhiOcbhcEw9KKQrUo2gJCu2c0hxMmyUM/UXqAtkISK?=
+ =?us-ascii?Q?ry+KzXFFhSFeowZByVmaj8IWqOmBbaM+EdvG6VopymlEidsAjyae6ldgSETB?=
+ =?us-ascii?Q?e4V5KSxAIbskzs+UeoO5AX4Jsow5EA/zGsju5oynFgbgIQri0gZrigwN3iyJ?=
+ =?us-ascii?Q?tKFokU+GPda8i1jvQyyonmviX1u2DslsYGfn3nSx+drlAoly3RBV2k/l5FO0?=
+ =?us-ascii?Q?ZgOk4ZLEoGjl1W/1wlIdkIZKKWzwa8OvEOdGtGD4QnA/H2QChcN2bxaclMfx?=
+ =?us-ascii?Q?2VKvIKuSW9DW3HQUdXeU3WtHiostdpqBvacCGdjeQmCYoLD6KLdjN3PqdlNU?=
+ =?us-ascii?Q?amQTk/OtIfv7DLRXQqZveKR8XuAeJT1Sf8PO0ne2s2fEqhra2xnUeDiAjuhR?=
+ =?us-ascii?Q?GZaHwQi6UAbdA4/X6+lsyzUDBVe7l9/7mFxQhGwxA4XINd93Heb363LPoZfT?=
+ =?us-ascii?Q?/EPclfIwQ0/COck0jt5BAkbV2iaYTEcDmaGDje6i8sj6bmSUhNvhO40+LAbU?=
+ =?us-ascii?Q?IAhxMH+dlffaSJWztoW1dSQ6flPA0g80j7RIBnyLcI8Rsv2jmOi1iaNhJyox?=
+ =?us-ascii?Q?pmsXMofBGv/QL/rgjMjWMbwCCi7bSb8l9tGuUVdb8VmMourJIWiHPj5kAvDr?=
+ =?us-ascii?Q?vyeySewzn4VcPodnTaT65ORqXXvEQTq5u1ynCnR5XYDHjTSK7SA/4oDPR5Hh?=
+ =?us-ascii?Q?tACh4JsPh8nzGw2PunXMZg/IwCpp2aUZfOAhUmxKi6RVxqi/grsstd2vCPna?=
+ =?us-ascii?Q?7NgIC8smd/Wj3hwsWMFW+VSeUyCbvgziUMQiX697KlBdqEOyQPJHHvHeLydd?=
+ =?us-ascii?Q?kz785L+/EZie2WOgCXWjmi435HSqGN1XI0A+w+rW9vaSezE8KYxBYn57WQDd?=
+ =?us-ascii?Q?Egb8Zhu30Y0kMfsMWzANL4IIHGGs1bmex8rF7cBNQwcoaBFgH9yNiKuTlC7l?=
+ =?us-ascii?Q?14mHy2GncDaubMT78nEKqRGvaccEL2uMODrqgRMf5h1UB098bS/XXuPkOD/M?=
+ =?us-ascii?Q?JXrqAnvvGy23Ox6dPRGRbBAlRsmvbTkRqhFT6u8Qakg96B/hzZeJ1cfRVu/7?=
+ =?us-ascii?Q?W/5+EklK7g4WUoeWkBbBcEO3VNPMQmDUcrkoq8QRBpdwwue06CRIzhg2Qv9K?=
+ =?us-ascii?Q?GhxZl/01MoA4Wa6HTBsZQmI/SwY=3D?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 65a58c7d-e411-4706-febe-08d9dfc6cd36
+X-MS-Exchange-CrossTenant-AuthSource: CY4PR1001MB2358.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Jan 2022 05:51:59.1587
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: evhca7MtxPcyLTYWSwqyMdTwy53dYReN7qJNTM32findohFAmfUU+xT9dl0KHaCNwspVnwHJt5rbKuUGsWBhqN++YYxhtuU1Vju8D0Uaq88=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR10MB1401
+X-Proofpoint-Virus-Version: vendor=nai engine=6300 definitions=10237 signatures=668683
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 bulkscore=0 mlxscore=0
+ phishscore=0 suspectscore=0 spamscore=0 mlxlogscore=999 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2201110000
+ definitions=main-2201250037
+X-Proofpoint-GUID: XHT4qichFy1oa3kDaCBDpxP3D__2O33g
+X-Proofpoint-ORIG-GUID: XHT4qichFy1oa3kDaCBDpxP3D__2O33g
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-The memory error location processing in ghes_edac_report_mem_error() have
-Duplicated Code with cper_mem_err_location(), cper_dimm_err_location(), and
-cper_mem_err_type_str() in drivers/firmware/efi/cper.c. To avoid the
-duplicated code, introduce the above cper_*() into
-ghes_edac_report_mem_error().
+Hello Qiuxu Zhuo,
 
-A side effect is that the report format in ghes_edac is changed. The
-changes are to:
+The patch 10590a9d4f23: "EDAC/igen6: Add EDAC driver for Intel client
+SoCs using IBECC" from Nov 5, 2020, leads to the following Smatch
+static checker warning:
 
-- add device info into ghes_edac
-- change bit_pos to bit_position, col to column, requestorID to
-  requestor_id, etc in ghes_edac
-- move requestor_id, responder_id, target_id and chip_id into memory error
-  location in ghes_edac
-- add "DIMM location: not present." for DIMM location in ghes_edac
-- remove the 'space' delimiter after the colon in cper_mem_err_location(), suggested by Robert
+drivers/edac/igen6_edac.c:1275 igen6_init() warn: strncmp() with weird length: 10 vs 11
+drivers/edac/i10nm_base.c:552 i10nm_init() warn: strncmp() with weird length: 10 vs 11
+drivers/edac/sb_edac.c:3510 sbridge_init() warn: strncmp() with weird length: 7 vs 8
+drivers/edac/skx_base.c:657 skx_init() warn: strncmp() with weird length: 8 vs 9
+drivers/edac/pnd2_edac.c:1554 pnd2_init() warn: strncmp() with weird length: 9 vs 10
+drivers/edac/amd64_edac.c:4266 amd64_edac_init() warn: strncmp() with weird length: 10 vs 11
 
-The original EDAC and cper error log are as follows (all Validation Bits
-are enabled):
---------------------------------------------------------------------
-[  281.759984] EDAC MC0: 1 CE Single-symbol ChipKill ECC on unknown memory (node:0 card:0 module:0 rank:0 bank:1793 bank_group:7 bank_address:1 row:5310 col:520 bit_pos:0 DIMM DMI handle: 0x0000 chipID: 0 page:0x8a5f45 offset:0x20 grain:1 syndrome:0x0 - APEI location: node:0 card:0 module:0 rank:0 bank:1793 bank_group:7 bank_address:1 row:5310 col:520 bit_pos:0 DIMM DMI handle: 0x0000 chipID: 0 status(0x0000000000000000): reserved requestorID: 0x0000000000000000 responderID: 0x0000000000000000 targetID: 0x0000000000000000)
-[  281.818273] {2}[Hardware Error]: Hardware error from APEI Generic Hardware Error Source: 2
-[  281.828878] {2}[Hardware Error]: It has been corrected by h/w and requires no further action
-[  281.839687] {2}[Hardware Error]: event severity: corrected
-[  281.847522] {2}[Hardware Error]:  Error 0, type: corrected
-[  281.855331] {2}[Hardware Error]:   section_type: memory error
-[  281.863389] {2}[Hardware Error]:   error_status: 0x0000000000000000
-[  281.871983] {2}[Hardware Error]:   physical_address: 0x00000008a5f45020
-[  281.880944] {2}[Hardware Error]:   physical_address_mask: 0x0000000000000000
-[  281.890361] {2}[Hardware Error]:   node: 0 card: 0 module: 0 rank: 0 bank: 1793 bank_group: 7 bank_address: 1 device: 0 row: 5310 column: 520 bit_position: 0 requestor_id: 0x0000000000000000 responder_id: 0x0000000000000000 target_id: 0x0000000000000000 chip_id: 0
-[  281.921361] {2}[Hardware Error]:   error_type: 4, single-symbol chipkill ECC
-[  281.931021] {2}[Hardware Error]:   DIMM location: not present. DMI handle: 0x0000
---------------------------------------------------------------------
+drivers/edac/igen6_edac.c
+    1265 };
+    1266 
+    1267 static int __init igen6_init(void)
+    1268 {
+    1269         const char *owner;
+    1270         int rc;
+    1271 
+    1272         edac_dbg(2, "\n");
+    1273 
+    1274         owner = edac_get_owner();
+--> 1275         if (owner && strncmp(owner, EDAC_MOD_STR, sizeof(EDAC_MOD_STR)))
 
-Now, the EDAC and cper error log are properly reporting the error as
-follows (all Validation Bits are enabled):
---------------------------------------------------------------------
-[ 2335.677847] EDAC MC0: 1 CE single-symbol chipkill ECC on 0x0000 (node:0 card:0 module:0 rank:0 bank:770 bank_group:3 bank_address:2 device:0 row:6510 column:1544 bit_position:0 requestor_id:0x0000000000000000 responder_id:0x0000000000000000 target_id:0x0000000000000000 chip_id:0 DIMM location: not present. DMI handle: 0x0000 page:0x8cb743 offset:0x20 grain:1 syndrome:0x0 - APEI location: node:0 card:0 module:0 rank:0 bank:770 bank_group:3 bank_address:2 device:0 row:6510 column:1544 bit_position:0 requestor_id: 0x0000000000000000 responder_id:0x0000000000000000 target_id:0x0000000000000000 chip_id:0 DIMM location: not present. DMI handle: 0x0000 status(0x0000000000000000): reserved)
-[ 2335.753234] {2}[Hardware Error]: Hardware error from APEI Generic Hardware Error Source: 2
-[ 2335.763930] {2}[Hardware Error]: It has been corrected by h/w and requires no further action
-[ 2335.774828] {2}[Hardware Error]: event severity: corrected
-[ 2335.782761] {2}[Hardware Error]:  Error 0, type: corrected
-[ 2335.790671] {2}[Hardware Error]:   section_type: memory error
-[ 2335.798838] {2}[Hardware Error]:   error_status: reserved (0x0000000000000000)
-[ 2335.808444] {2}[Hardware Error]:   physical_address: 0x00000008cb743020
-[ 2335.817552] {2}[Hardware Error]:   physical_address_mask: 0x0000000000000000
-[ 2335.827098] {2}[Hardware Error]:   node:0 card:0 module:0 rank:0 bank:770 bank_group:3 bank_address:2 device:0 row:6510 column:1544 bit_position:0 requestor_id: 0x0000000000000000 responder_id:0x0000000000000000 target_id:0x0000000000000000 chip_id:0
-[ 2335.857212] {2}[Hardware Error]:   error_type: 4, single-symbol chipkill ECC
-[ 2335.867001] {2}[Hardware Error]:   DIMM location: not present. DMI handle: 0x0000
---------------------------------------------------------------------
+Was strncmp() really intended?  Because this is 100% the equivalent to
+strcmp() with no limit.  Maybe sizeof(EDAC_MOD_STR) - 1?
 
-NOTE: Not all bits are populated by BIOS in my platform, I manually enable all
-validation bits during test so that we can see log message and differences of
-all fields more clearly. Therefore, the values of some fields look strange.
+    1276                 return -ENODEV;
+    1277 
+    1278         edac_op_state = EDAC_OPSTATE_NMI;
+    1279 
+    1280         rc = pci_register_driver(&igen6_driver);
+    1281         if (rc)
+    1282                 return rc;
+    1283 
+    1284         igen6_printk(KERN_INFO, "%s\n", IGEN6_REVISION);
+    1285 
+    1286         return 0;
+    1287 }
 
-        +       mem_err->validation_bits = 0xfffffffffffffff;
-
-Although the UEFI_CPER/EDAC_GHES dependency is always solved through
-ACPI_APEI_GHES/ACPI_APEI, add the UEFI_CPER dependency explicitly for
-EDAC_GHES in Kconfig.
-
-Signed-off-by: Shuai Xue <xueshuai@linux.alibaba.com>
----
- drivers/edac/Kconfig        |   1 +
- drivers/edac/ghes_edac.c    | 196 +++++++-----------------------------
- drivers/firmware/efi/cper.c |  36 +++----
- include/linux/cper.h        |   2 +
- 4 files changed, 56 insertions(+), 179 deletions(-)
-
-diff --git a/drivers/edac/Kconfig b/drivers/edac/Kconfig
-index 58ab63642e72..23f11554f400 100644
---- a/drivers/edac/Kconfig
-+++ b/drivers/edac/Kconfig
-@@ -55,6 +55,7 @@ config EDAC_DECODE_MCE
- config EDAC_GHES
- 	bool "Output ACPI APEI/GHES BIOS detected errors via EDAC"
- 	depends on ACPI_APEI_GHES && (EDAC=y)
-+	select UEFI_CPER
- 	help
- 	  Not all machines support hardware-driven error report. Some of those
- 	  provide a BIOS-driven error report mechanism via ACPI, using the
-diff --git a/drivers/edac/ghes_edac.c b/drivers/edac/ghes_edac.c
-index 6d1ddecbf0da..94e9f6b45817 100644
---- a/drivers/edac/ghes_edac.c
-+++ b/drivers/edac/ghes_edac.c
-@@ -235,10 +235,36 @@ static void ghes_scan_system(void)
- 	system_scanned = true;
- }
- 
-+static int ghes_edac_mem_err_other_detail(const struct cper_sec_mem_err *mem,
-+				char *msg, const char *location)
-+{
-+	u32 len, n;
-+
-+	if (!msg)
-+		return 0;
-+
-+	n = 0;
-+	len = 2 * CPER_REC_LEN - 1;
-+
-+	n += snprintf(msg + n, len - n, "APEI location: %s ", location);
-+
-+	if (mem->validation_bits & CPER_MEM_VALID_ERROR_STATUS) {
-+		u64 status = mem->error_status;
-+
-+		n += snprintf(msg + n, len - n,  "status(0x%016llx): ",
-+				(long long)status);
-+		n += snprintf(msg + n, len - n, "%s ", cper_mem_err_status_str(status));
-+	}
-+
-+	msg[n] = '\0';
-+	return n;
-+}
-+
- void ghes_edac_report_mem_error(int sev, struct cper_sec_mem_err *mem_err)
- {
- 	struct edac_raw_error_desc *e;
- 	struct mem_ctl_info *mci;
-+	struct cper_mem_err_compact cmem;
- 	struct ghes_pvt *pvt;
- 	unsigned long flags;
- 	char *p;
-@@ -292,60 +318,10 @@ void ghes_edac_report_mem_error(int sev, struct cper_sec_mem_err *mem_err)
- 
- 	/* Error type, mapped on e->msg */
- 	if (mem_err->validation_bits & CPER_MEM_VALID_ERROR_TYPE) {
-+		u8 etype = mem_err->error_type;
-+
- 		p = pvt->msg;
--		switch (mem_err->error_type) {
--		case 0:
--			p += sprintf(p, "Unknown");
--			break;
--		case 1:
--			p += sprintf(p, "No error");
--			break;
--		case 2:
--			p += sprintf(p, "Single-bit ECC");
--			break;
--		case 3:
--			p += sprintf(p, "Multi-bit ECC");
--			break;
--		case 4:
--			p += sprintf(p, "Single-symbol ChipKill ECC");
--			break;
--		case 5:
--			p += sprintf(p, "Multi-symbol ChipKill ECC");
--			break;
--		case 6:
--			p += sprintf(p, "Master abort");
--			break;
--		case 7:
--			p += sprintf(p, "Target abort");
--			break;
--		case 8:
--			p += sprintf(p, "Parity Error");
--			break;
--		case 9:
--			p += sprintf(p, "Watchdog timeout");
--			break;
--		case 10:
--			p += sprintf(p, "Invalid address");
--			break;
--		case 11:
--			p += sprintf(p, "Mirror Broken");
--			break;
--		case 12:
--			p += sprintf(p, "Memory Sparing");
--			break;
--		case 13:
--			p += sprintf(p, "Scrub corrected error");
--			break;
--		case 14:
--			p += sprintf(p, "Scrub uncorrected error");
--			break;
--		case 15:
--			p += sprintf(p, "Physical Memory Map-out event");
--			break;
--		default:
--			p += sprintf(p, "reserved error (%d)",
--				     mem_err->error_type);
--		}
-+		p += snprintf(p, sizeof(pvt->msg), "%s", cper_mem_err_type_str(etype));
- 	} else {
- 		strcpy(pvt->msg, "unknown error");
- 	}
-@@ -362,52 +338,19 @@ void ghes_edac_report_mem_error(int sev, struct cper_sec_mem_err *mem_err)
- 
- 	/* Memory error location, mapped on e->location */
- 	p = e->location;
--	if (mem_err->validation_bits & CPER_MEM_VALID_NODE)
--		p += sprintf(p, "node:%d ", mem_err->node);
--	if (mem_err->validation_bits & CPER_MEM_VALID_CARD)
--		p += sprintf(p, "card:%d ", mem_err->card);
--	if (mem_err->validation_bits & CPER_MEM_VALID_MODULE)
--		p += sprintf(p, "module:%d ", mem_err->module);
--	if (mem_err->validation_bits & CPER_MEM_VALID_RANK_NUMBER)
--		p += sprintf(p, "rank:%d ", mem_err->rank);
--	if (mem_err->validation_bits & CPER_MEM_VALID_BANK)
--		p += sprintf(p, "bank:%d ", mem_err->bank);
--	if (mem_err->validation_bits & CPER_MEM_VALID_BANK_GROUP)
--		p += sprintf(p, "bank_group:%d ",
--			     mem_err->bank >> CPER_MEM_BANK_GROUP_SHIFT);
--	if (mem_err->validation_bits & CPER_MEM_VALID_BANK_ADDRESS)
--		p += sprintf(p, "bank_address:%d ",
--			     mem_err->bank & CPER_MEM_BANK_ADDRESS_MASK);
--	if (mem_err->validation_bits & (CPER_MEM_VALID_ROW | CPER_MEM_VALID_ROW_EXT)) {
--		u32 row = mem_err->row;
--
--		row |= cper_get_mem_extension(mem_err->validation_bits, mem_err->extended);
--		p += sprintf(p, "row:%d ", row);
--	}
--	if (mem_err->validation_bits & CPER_MEM_VALID_COLUMN)
--		p += sprintf(p, "col:%d ", mem_err->column);
--	if (mem_err->validation_bits & CPER_MEM_VALID_BIT_POSITION)
--		p += sprintf(p, "bit_pos:%d ", mem_err->bit_pos);
-+	cper_mem_err_pack(mem_err, &cmem);
-+	p += cper_mem_err_location(&cmem, p);
-+
- 	if (mem_err->validation_bits & CPER_MEM_VALID_MODULE_HANDLE) {
--		const char *bank = NULL, *device = NULL;
- 		struct dimm_info *dimm;
- 
--		dmi_memdev_name(mem_err->mem_dev_handle, &bank, &device);
--		if (bank != NULL && device != NULL)
--			p += sprintf(p, "DIMM location:%s %s ", bank, device);
--		else
--			p += sprintf(p, "DIMM DMI handle: 0x%.4x ",
--				     mem_err->mem_dev_handle);
--
-+		p += cper_dimm_err_location(&cmem, p);
- 		dimm = find_dimm_by_handle(mci, mem_err->mem_dev_handle);
- 		if (dimm) {
- 			e->top_layer = dimm->idx;
- 			strcpy(e->label, dimm->label);
- 		}
- 	}
--	if (mem_err->validation_bits & CPER_MEM_VALID_CHIP_ID)
--		p += sprintf(p, "chipID: %d ",
--			     mem_err->extended >> CPER_MEM_CHIP_ID_SHIFT);
- 	if (p > e->location)
- 		*(p - 1) = '\0';
- 
-@@ -416,78 +359,7 @@ void ghes_edac_report_mem_error(int sev, struct cper_sec_mem_err *mem_err)
- 
- 	/* All other fields are mapped on e->other_detail */
- 	p = pvt->other_detail;
--	p += snprintf(p, sizeof(pvt->other_detail),
--		"APEI location: %s ", e->location);
--	if (mem_err->validation_bits & CPER_MEM_VALID_ERROR_STATUS) {
--		u64 status = mem_err->error_status;
--
--		p += sprintf(p, "status(0x%016llx): ", (long long)status);
--		switch ((status >> 8) & 0xff) {
--		case 1:
--			p += sprintf(p, "Error detected internal to the component ");
--			break;
--		case 16:
--			p += sprintf(p, "Error detected in the bus ");
--			break;
--		case 4:
--			p += sprintf(p, "Storage error in DRAM memory ");
--			break;
--		case 5:
--			p += sprintf(p, "Storage error in TLB ");
--			break;
--		case 6:
--			p += sprintf(p, "Storage error in cache ");
--			break;
--		case 7:
--			p += sprintf(p, "Error in one or more functional units ");
--			break;
--		case 8:
--			p += sprintf(p, "component failed self test ");
--			break;
--		case 9:
--			p += sprintf(p, "Overflow or undervalue of internal queue ");
--			break;
--		case 17:
--			p += sprintf(p, "Virtual address not found on IO-TLB or IO-PDIR ");
--			break;
--		case 18:
--			p += sprintf(p, "Improper access error ");
--			break;
--		case 19:
--			p += sprintf(p, "Access to a memory address which is not mapped to any component ");
--			break;
--		case 20:
--			p += sprintf(p, "Loss of Lockstep ");
--			break;
--		case 21:
--			p += sprintf(p, "Response not associated with a request ");
--			break;
--		case 22:
--			p += sprintf(p, "Bus parity error - must also set the A, C, or D Bits ");
--			break;
--		case 23:
--			p += sprintf(p, "Detection of a PATH_ERROR ");
--			break;
--		case 25:
--			p += sprintf(p, "Bus operation timeout ");
--			break;
--		case 26:
--			p += sprintf(p, "A read was issued to data that has been poisoned ");
--			break;
--		default:
--			p += sprintf(p, "reserved ");
--			break;
--		}
--	}
--	if (mem_err->validation_bits & CPER_MEM_VALID_REQUESTOR_ID)
--		p += sprintf(p, "requestorID: 0x%016llx ",
--			     (long long)mem_err->requestor_id);
--	if (mem_err->validation_bits & CPER_MEM_VALID_RESPONDER_ID)
--		p += sprintf(p, "responderID: 0x%016llx ",
--			     (long long)mem_err->responder_id);
--	if (mem_err->validation_bits & CPER_MEM_VALID_TARGET_ID)
--		p += sprintf(p, "targetID: 0x%016llx ",
--			     (long long)mem_err->responder_id);
-+	p += ghes_edac_mem_err_other_detail(mem_err, p, e->location);
- 	if (p > pvt->other_detail)
- 		*(p - 1) = '\0';
- 
-diff --git a/drivers/firmware/efi/cper.c b/drivers/firmware/efi/cper.c
-index 7f08d4ea906e..e49ccf131fad 100644
---- a/drivers/firmware/efi/cper.c
-+++ b/drivers/firmware/efi/cper.c
-@@ -236,7 +236,7 @@ const char *cper_mem_err_status_str(u64 status)
- }
- EXPORT_SYMBOL_GPL(cper_mem_err_status_str);
- 
--static int cper_mem_err_location(struct cper_mem_err_compact *mem, char *msg)
-+int cper_mem_err_location(struct cper_mem_err_compact *mem, char *msg)
- {
- 	u32 len, n;
- 
-@@ -246,51 +246,52 @@ static int cper_mem_err_location(struct cper_mem_err_compact *mem, char *msg)
- 	n = 0;
- 	len = CPER_REC_LEN;
- 	if (mem->validation_bits & CPER_MEM_VALID_NODE)
--		n += scnprintf(msg + n, len - n, "node: %d ", mem->node);
-+		n += scnprintf(msg + n, len - n, "node:%d ", mem->node);
- 	if (mem->validation_bits & CPER_MEM_VALID_CARD)
--		n += scnprintf(msg + n, len - n, "card: %d ", mem->card);
-+		n += scnprintf(msg + n, len - n, "card:%d ", mem->card);
- 	if (mem->validation_bits & CPER_MEM_VALID_MODULE)
--		n += scnprintf(msg + n, len - n, "module: %d ", mem->module);
-+		n += scnprintf(msg + n, len - n, "module:%d ", mem->module);
- 	if (mem->validation_bits & CPER_MEM_VALID_RANK_NUMBER)
--		n += scnprintf(msg + n, len - n, "rank: %d ", mem->rank);
-+		n += scnprintf(msg + n, len - n, "rank:%d ", mem->rank);
- 	if (mem->validation_bits & CPER_MEM_VALID_BANK)
--		n += scnprintf(msg + n, len - n, "bank: %d ", mem->bank);
-+		n += scnprintf(msg + n, len - n, "bank:%d ", mem->bank);
- 	if (mem->validation_bits & CPER_MEM_VALID_BANK_GROUP)
--		n += scnprintf(msg + n, len - n, "bank_group: %d ",
-+		n += scnprintf(msg + n, len - n, "bank_group:%d ",
- 			       mem->bank >> CPER_MEM_BANK_GROUP_SHIFT);
- 	if (mem->validation_bits & CPER_MEM_VALID_BANK_ADDRESS)
--		n += scnprintf(msg + n, len - n, "bank_address: %d ",
-+		n += scnprintf(msg + n, len - n, "bank_address:%d ",
- 			       mem->bank & CPER_MEM_BANK_ADDRESS_MASK);
- 	if (mem->validation_bits & CPER_MEM_VALID_DEVICE)
--		n += scnprintf(msg + n, len - n, "device: %d ", mem->device);
-+		n += scnprintf(msg + n, len - n, "device:%d ", mem->device);
- 	if (mem->validation_bits & (CPER_MEM_VALID_ROW | CPER_MEM_VALID_ROW_EXT)) {
- 		u32 row = mem->row;
- 
- 		row |= cper_get_mem_extension(mem->validation_bits, mem->extended);
--		n += scnprintf(msg + n, len - n, "row: %d ", row);
-+		n += scnprintf(msg + n, len - n, "row:%d ", row);
- 	}
- 	if (mem->validation_bits & CPER_MEM_VALID_COLUMN)
--		n += scnprintf(msg + n, len - n, "column: %d ", mem->column);
-+		n += scnprintf(msg + n, len - n, "column:%d ", mem->column);
- 	if (mem->validation_bits & CPER_MEM_VALID_BIT_POSITION)
--		n += scnprintf(msg + n, len - n, "bit_position: %d ",
-+		n += scnprintf(msg + n, len - n, "bit_position:%d ",
- 			       mem->bit_pos);
- 	if (mem->validation_bits & CPER_MEM_VALID_REQUESTOR_ID)
--		n += scnprintf(msg + n, len - n, "requestor_id: 0x%016llx ",
-+		n += scnprintf(msg + n, len - n, "requestor_id:0x%016llx ",
- 			       mem->requestor_id);
- 	if (mem->validation_bits & CPER_MEM_VALID_RESPONDER_ID)
--		n += scnprintf(msg + n, len - n, "responder_id: 0x%016llx ",
-+		n += scnprintf(msg + n, len - n, "responder_id:0x%016llx ",
- 			       mem->responder_id);
- 	if (mem->validation_bits & CPER_MEM_VALID_TARGET_ID)
--		n += scnprintf(msg + n, len - n, "target_id: 0x%016llx ",
-+		n += scnprintf(msg + n, len - n, "target_id:0x%016llx ",
- 			       mem->target_id);
- 	if (mem->validation_bits & CPER_MEM_VALID_CHIP_ID)
--		n += scnprintf(msg + n, len - n, "chip_id: %d ",
-+		n += scnprintf(msg + n, len - n, "chip_id:%d ",
- 			       mem->extended >> CPER_MEM_CHIP_ID_SHIFT);
- 
- 	return n;
- }
-+EXPORT_SYMBOL_GPL(cper_mem_err_location);
- 
--static int cper_dimm_err_location(struct cper_mem_err_compact *mem, char *msg)
-+int cper_dimm_err_location(struct cper_mem_err_compact *mem, char *msg)
- {
- 	u32 len, n;
- 	const char *bank = NULL, *device = NULL;
-@@ -309,6 +310,7 @@ static int cper_dimm_err_location(struct cper_mem_err_compact *mem, char *msg)
- 
- 	return n;
- }
-+EXPORT_SYMBOL_GPL(cper_dimm_err_location);
- 
- void cper_mem_err_pack(const struct cper_sec_mem_err *mem,
- 		       struct cper_mem_err_compact *cmem)
-diff --git a/include/linux/cper.h b/include/linux/cper.h
-index 5b1dd27b317d..eacb7dd7b3af 100644
---- a/include/linux/cper.h
-+++ b/include/linux/cper.h
-@@ -569,5 +569,7 @@ void cper_print_proc_arm(const char *pfx,
- 			 const struct cper_sec_proc_arm *proc);
- void cper_print_proc_ia(const char *pfx,
- 			const struct cper_sec_proc_ia *proc);
-+int cper_mem_err_location(struct cper_mem_err_compact *mem, char *msg);
-+int cper_dimm_err_location(struct cper_mem_err_compact *mem, char *msg);
- 
- #endif
--- 
-2.20.1.12.g72788fdb
-
+regards,
+dan carpenter
