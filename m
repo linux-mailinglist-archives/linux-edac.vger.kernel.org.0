@@ -2,65 +2,47 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 15F3B49B472
-	for <lists+linux-edac@lfdr.de>; Tue, 25 Jan 2022 14:01:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5412149B5B2
+	for <lists+linux-edac@lfdr.de>; Tue, 25 Jan 2022 15:07:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229453AbiAYM7X (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Tue, 25 Jan 2022 07:59:23 -0500
-Received: from mx1.tq-group.com ([93.104.207.81]:23582 "EHLO mx1.tq-group.com"
+        id S1385762AbiAYOHP (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Tue, 25 Jan 2022 09:07:15 -0500
+Received: from mga01.intel.com ([192.55.52.88]:34131 "EHLO mga01.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1359066AbiAYM4T (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Tue, 25 Jan 2022 07:56:19 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1643115378; x=1674651378;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=qmHH9G8TVCwWdo3uTby79rF+j0/3SailZLcBZpByLtg=;
-  b=MB4CtmBY/kKUZUkbx858aLxhxtieEwNP3ArjS4boMb6N8oV/9x7+oe+7
-   vBRLZ4YVEvZ/1JO2JM7klGULc8cKXlCkrMAODKUDhoRxB28SicAlb3MwA
-   z4BaKpNCiXG7OZsbwPxYNCX20Nvck+6x4Hz/LZ+ldX2fSU+OXD7ABJ1L3
-   qhCGVEW1kcKUCt7niPCL5EASKNk6v9jLS3splPrSApHD9OyMA3IK+xWnD
-   qyyDv4o+OVOldOqDDmEWH7qIkVMd4VmaPCCCi8zZkUsMRkMvEb3Tf3C3R
-   UUuaUcupgO11DYD/qAb/ED5oLYw/xNWULPE2SGkeHr9g/mXySY1kfHonr
+        id S1384953AbiAYOFM (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Tue, 25 Jan 2022 09:05:12 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643119511; x=1674655511;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=z6iO4goP/6mOntNu6iUnXj156J2xRO3zDzNJWbq5fzg=;
+  b=DlV+ovpEXn8N+TNyiZrsmwlK+kX+rXtW7PAPhXl/8FCqQabAj+873dU5
+   pXSJM6lOWgJei1+yLNHVWY+4sFX61lEV3Nym8AT3WP8b0dm7JZ2PkDB66
+   5X5WhhbXJOHbeBRwxYI4U3/i6+/cpN0sO3VmQyZPic00XxInOsPtTA40t
+   nPtu9vk/aVvpzaVrTbK9HJIUAt3Fm5iGENPSgJKUd55XROVXbPOJIWKle
+   S6yVXTKYrakaUWXGMy6T+ZNHjY9lbBcFfZ/LO9X7KDyZWKp9/8/ciG9pU
+   MH63qlKkPdcnkfO2EO6h+bh6tWlg8Vxe6QgUimUhf8l/VfvMzSPQOJ4MN
    w==;
-X-IronPort-AV: E=Sophos;i="5.88,315,1635199200"; 
-   d="scan'208";a="21697221"
-Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
-  by mx1-pgp.tq-group.com with ESMTP; 25 Jan 2022 13:56:08 +0100
-Received: from mx1.tq-group.com ([192.168.6.7])
-  by tq-pgp-pr1.tq-net.de (PGP Universal service);
-  Tue, 25 Jan 2022 13:56:09 +0100
-X-PGP-Universal: processed;
-        by tq-pgp-pr1.tq-net.de on Tue, 25 Jan 2022 13:56:09 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1643115368; x=1674651368;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=qmHH9G8TVCwWdo3uTby79rF+j0/3SailZLcBZpByLtg=;
-  b=DZazWES6Z7qX74NIrM+i69skWo5ObJhdpFykKEns/urrKSV7FmjkeM2t
-   YnBYyu8w987PyL5eZzlJ5LqVC1ihXP16gqLHPxLAtK9NLfyfbbnxMJjnE
-   xkheSFbGqZGupY07RAOmoaOCOMZDwMnZDGO5NYbNANthuHRau78001vK2
-   zJddEGsKEXtkeB0hUhuWkr3kF7tYn69GziEH85Y5mupr+z4GI7q8lpN8I
-   tHnvDwxI2K5PUlNNRZSdV0LyBsYg2DAs8tg6Mfpsr/QsP6qCBNv225Vhv
-   9E6GQFdFpwV+AAWYlFUvOpxFqY72lFs4EOW/dDH0eW9QyDbiOHxD6zCA3
-   Q==;
-X-IronPort-AV: E=Sophos;i="5.88,315,1635199200"; 
-   d="scan'208";a="21697220"
-Received: from vtuxmail01.tq-net.de ([10.115.0.20])
-  by mx1.tq-group.com with ESMTP; 25 Jan 2022 13:56:08 +0100
-Received: from schifferm-ubuntu (SCHIFFERM-M2.tq-net.de [10.121.201.138])
-        by vtuxmail01.tq-net.de (Postfix) with ESMTPA id 966B4280065;
-        Tue, 25 Jan 2022 13:56:07 +0100 (CET)
-Message-ID: <33e55c4c0a637b23d76db5d33872378ad04121bd.camel@ew.tq-group.com>
-Subject: Re: [PATCH] driver core: platform: Rename
- platform_get_irq_optional() to platform_get_irq_silent()
-From:   Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        Sergey Shtylyov <s.shtylyov@omp.ru>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Uwe =?ISO-8859-1?Q?Kleine-K=F6nig?= 
+X-IronPort-AV: E=McAfee;i="6200,9189,10237"; a="270750702"
+X-IronPort-AV: E=Sophos;i="5.88,315,1635231600"; 
+   d="scan'208";a="270750702"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2022 06:02:45 -0800
+X-IronPort-AV: E=Sophos;i="5.88,315,1635231600"; 
+   d="scan'208";a="695840276"
+Received: from smile.fi.intel.com ([10.237.72.61])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2022 06:02:27 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1nCMNp-00EGb4-Aj;
+        Tue, 25 Jan 2022 16:01:17 +0200
+Date:   Tue, 25 Jan 2022 16:01:17 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
+Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        Sergey Shtylyov <s.shtylyov@omp.ru>,
+        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
         <u.kleine-koenig@pengutronix.de>, Andrew Lunn <andrew@lunn.ch>,
         Ulf Hansson <ulf.hansson@linaro.org>,
         Vignesh Raghavendra <vigneshr@ti.com>,
@@ -126,182 +108,162 @@ Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         Zha Qipeng <qipeng.zha@intel.com>,
         Pengutronix Kernel Team <kernel@pengutronix.de>,
         Richard Weinberger <richard@nod.at>,
-        Niklas =?ISO-8859-1?Q?S=F6derlund?= 
+        Niklas =?iso-8859-1?Q?S=F6derlund?= 
         <niklas.soderlund@ragnatech.se>,
         linux-mediatek@lists.infradead.org,
         Brian Norris <computersforpeace@gmail.com>,
         "David S. Miller" <davem@davemloft.net>
-Date:   Tue, 25 Jan 2022 13:56:05 +0100
-In-Reply-To: <CAMuHMdXouECKa43OwUgQ6dA+gNeOqEZHZgOmQzqknzYiA924YA@mail.gmail.com>
-References: <CAMuHMdWsMGPiQaPS0-PJ_+Mc5VQ37YdLfbHr_aS40kB+SfW-aw@mail.gmail.com>
-         <20220112213121.5ruae5mxwj6t3qiy@pengutronix.de>
-         <Yd9L9SZ+g13iyKab@sirena.org.uk>
-         <20220113110831.wvwbm75hbfysbn2d@pengutronix.de>
-         <YeA7CjOyJFkpuhz/@sirena.org.uk>
-         <20220113194358.xnnbhsoyetihterb@pengutronix.de>
-         <YeF05vBOzkN+xYCq@smile.fi.intel.com>
-         <20220115154539.j3tsz5ioqexq2yuu@pengutronix.de>
-         <YehdsUPiOTwgZywq@smile.fi.intel.com>
-         <20220120075718.5qtrpc543kkykaow@pengutronix.de>
-         <Ye6/NgfxsZnpXE09@smile.fi.intel.com>
-         <15796e57-f7d4-9c66-3b53-0b026eaf31d8@omp.ru>
-         <CAMuHMdXouECKa43OwUgQ6dA+gNeOqEZHZgOmQzqknzYiA924YA@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5-0ubuntu1 
+Subject: Re: [PATCH] driver core: platform: Rename
+ platform_get_irq_optional() to platform_get_irq_silent()
+Message-ID: <YfACrffZCCeleOjK@smile.fi.intel.com>
+References: <YeA7CjOyJFkpuhz/@sirena.org.uk>
+ <20220113194358.xnnbhsoyetihterb@pengutronix.de>
+ <YeF05vBOzkN+xYCq@smile.fi.intel.com>
+ <20220115154539.j3tsz5ioqexq2yuu@pengutronix.de>
+ <YehdsUPiOTwgZywq@smile.fi.intel.com>
+ <20220120075718.5qtrpc543kkykaow@pengutronix.de>
+ <Ye6/NgfxsZnpXE09@smile.fi.intel.com>
+ <15796e57-f7d4-9c66-3b53-0b026eaf31d8@omp.ru>
+ <CAMuHMdXouECKa43OwUgQ6dA+gNeOqEZHZgOmQzqknzYiA924YA@mail.gmail.com>
+ <33e55c4c0a637b23d76db5d33872378ad04121bd.camel@ew.tq-group.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <33e55c4c0a637b23d76db5d33872378ad04121bd.camel@ew.tq-group.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Tue, 2022-01-25 at 09:25 +0100, Geert Uytterhoeven wrote:
-> Hi Sergey,
-> 
-> On Mon, Jan 24, 2022 at 10:02 PM Sergey Shtylyov <s.shtylyov@omp.ru>
-> wrote:
-> > On 1/24/22 6:01 PM, Andy Shevchenko wrote:
-> > > > > > > > > It'd certainly be good to name anything that doesn't
-> > > > > > > > > correspond to one
-> > > > > > > > > of the existing semantics for the API (!) something
-> > > > > > > > > different rather
-> > > > > > > > > than adding yet another potentially overloaded
-> > > > > > > > > meaning.
-> > > > > > > > 
-> > > > > > > > It seems we're (at least) three who agree about this.
-> > > > > > > > Here is a patch
-> > > > > > > > fixing the name.
-> > > > > > > 
-> > > > > > > And similar number of people are on the other side.
-> > > > > > 
-> > > > > > If someone already opposed to the renaming (and not only
-> > > > > > the name) I
-> > > > > > must have missed that.
-> > > > > > 
-> > > > > > So you think it's a good idea to keep the name
-> > > > > > platform_get_irq_optional() despite the "not found" value
-> > > > > > returned by it
-> > > > > > isn't usable as if it were a normal irq number?
+On Tue, Jan 25, 2022 at 01:56:05PM +0100, Matthias Schiffer wrote:
+> On Tue, 2022-01-25 at 09:25 +0100, Geert Uytterhoeven wrote:
+> > On Mon, Jan 24, 2022 at 10:02 PM Sergey Shtylyov <s.shtylyov@omp.ru>
+> > wrote:
+> > > On 1/24/22 6:01 PM, Andy Shevchenko wrote:
+
+...
+
+> > > > > > 2. The vIRQ0 handling: a) WARN() followed by b) returned
+> > > > > > value 0
 > > > > > 
-> > > > > I meant that on the other side people who are in favour of
-> > > > > Sergey's patch.
-> > > > > Since that I commented already that I opposed the renaming
-> > > > > being a standalone
-> > > > > change.
+> > > > > I'm happy with the vIRQ0 handling. Today platform_get_irq() and
+> > > > > it's
+> > > > > silent variant returns either a valid and usuable irq number or
+> > > > > a
+> > > > > negative error value. That's totally fine.
+> > > > 
+> > > > It might return 0.
+> > > > Actually it seems that the WARN() can only be issued in two
+> > > > cases:
+> > > > - SPARC with vIRQ0 in one of the array member
+> > > > - fallback to ACPI for GPIO IRQ resource with index 0
+> > > 
+> > >    You have probably missed the recent discovery that
+> > > arch/sh/boards/board-aps4*.c
+> > > causes IRQ0 to be passed as a direct IRQ resource?
+> > 
+> > So far no one reported seeing the big fat warning ;-)
+> 
+> FWIW, we had a similar issue with an IRQ resource passed from the
+> tqmx86 MFD driver do the GPIO driver, which we noticed due to this
+> warning, and which was fixed
+> in a946506c48f3bd09363c9d2b0a178e55733bcbb6
+> and 9b87f43537acfa24b95c236beba0f45901356eb2.
+
+No, it's not, unfortunately :-( You just band aided the warning issue, but the
+root cause is the WARN() and possibility to see valid (v)IRQ0 in the resources.
+See below.
+
+> I believe these changes are what promted this whole discussion and led
+> to my "Reported-by" on the patch?
+> 
+> It is not entirely clear to me when IRQ 0 is valid and when it isn't,
+> but the warning seems useful to me. Maybe it would make more sense to
+> warn when such an IRQ resource is registered for a platform device, and
+> not when it is looked up?
+> 
+> My opinion is that it would be very confusing if there are any places
+> in the kernel (on some platforms) where IRQ 0 is valid,
+
+And those places are board files like yours :( They have to be fixed
+eventually. Ideally by using IRQ domains. At least that's how it's
+done elsewhere.
+
+> but for
+> platform_get_irq() it would suddenly mean "not found". Keeping a
+> negative return value seems preferable to me for this reason.
+
+IRQ 0 is valid, vIRQ0 (or read it as cookie) is not.
+
+Now, the problem in your case is that you are talking about board files, while
+ACPI and DT never gives resource with vIRQ0. For board files some (legacy) code
+decides that it's fine to supply HW IRQ, while the de facto case is that
+platform_get_resource() returns whatever is in the resource, while
+platform_get_irq() should return a cookie.
+
+> (An alternative, more involved idea would be to add 1 to all IRQ
+> "cookies", so IRQ 0 would return 1, leaving 0 as a special value. I
+> have absolutely no idea how big the API surface is that would need
+> changes, and it is likely not worth the effort at all.)
+
+This is what IRQ domains do, they start vIRQs from 1.
+
+> > > > The bottom line here is the SPARC case. Anybody familiar with the
+> > > > platform
+> > > > can shed a light on this. If there is no such case, we may remove
+> > > > warning
+> > > > along with ret = 0 case from platfrom_get_irq().
+> > > 
+> > >    I'm afraid you're too fast here... :-)
+> > >    We'll have a really hard time if we continue to allow IRQ0 to be
+> > > returned by
+> > > platform_get_irq() -- we'll have oto fileter it out in the callers
+> > > then...
+> > 
+> > So far no one reported seeing the big fat warning?
+> > 
+> > > > > > 3. The specific cookie for "IRQ not found, while no error
+> > > > > > happened" case
 > > > > > 
-> > > > > Do you agree that we have several issues with
-> > > > > platform_get_irq*() APIs?
-> > [...]
-> > > > > 2. The vIRQ0 handling: a) WARN() followed by b) returned
-> > > > > value 0
+> > > > > Not sure what you mean here. I have no problem that a situation
+> > > > > I can
+> > > > > cope with is called an error for the query function. I just do
+> > > > > error
+> > > > > handling and continue happily. So the part "while no error
+> > > > > happened" is
+> > > > > irrelevant to me.
 > > > > 
-> > > > I'm happy with the vIRQ0 handling. Today platform_get_irq() and
-> > > > it's
-> > > > silent variant returns either a valid and usuable irq number or
-> > > > a
-> > > > negative error value. That's totally fine.
+> > > > I meant that instead of using special error code, 0 is very much
+> > > > good for
+> > > > the cases when IRQ is not found. It allows to distinguish -ENXIO
+> > > > from the
+> > > > low layer from -ENXIO with this magic meaning.
 > > > 
-> > > It might return 0.
-> > > Actually it seems that the WARN() can only be issued in two
-> > > cases:
-> > > - SPARC with vIRQ0 in one of the array member
-> > > - fallback to ACPI for GPIO IRQ resource with index 0
+> > >    I don't see how -ENXIO can trickle from the lower layers,
+> > > frankly...
 > > 
-> >    You have probably missed the recent discovery that
-> > arch/sh/boards/board-aps4*.c
-> > causes IRQ0 to be passed as a direct IRQ resource?
+> > It might one day, leading to very hard to track bugs.
 > 
-> So far no one reported seeing the big fat warning ;-)
+> As gregkh noted, changing the return value without also making the
+> compile fail will be a huge PITA whenever driver patches are back- or
+> forward-ported, as it would require subtle changes in error paths,
+> which can easily slip through unnoticed, in particular with half-
+> automated stable backports.
 
-FWIW, we had a similar issue with an IRQ resource passed from the
-tqmx86 MFD driver do the GPIO driver, which we noticed due to this
-warning, and which was fixed
-in a946506c48f3bd09363c9d2b0a178e55733bcbb6
-and 9b87f43537acfa24b95c236beba0f45901356eb2.
-I believe these changes are what promted this whole discussion and led
-to my "Reported-by" on the patch?
+Let's not modify kernel at all then, because in many cases it is a PITA
+for back- or forward-porting :-)
 
-It is not entirely clear to me when IRQ 0 is valid and when it isn't,
-but the warning seems useful to me. Maybe it would make more sense to
-warn when such an IRQ resource is registered for a platform device, and
-not when it is looked up?
+> Even if another return value like -ENODEV might be better aligned with
+> ...regulator_get_optional() and similar functions, or we even find a
+> way to make 0 usable for this, none of the proposed changes strike me
+> as big enough a win to outweigh the churn caused by making such a
+> change at all.
 
-My opinion is that it would be very confusing if there are any places
-in the kernel (on some platforms) where IRQ 0 is valid, but for
-platform_get_irq() it would suddenly mean "not found". Keeping a
-negative return value seems preferable to me for this reason.
+Yeah, let's continue to suffer from ugly interface and see more band aids
+landing around...
 
-(An alternative, more involved idea would be to add 1 to all IRQ
-"cookies", so IRQ 0 would return 1, leaving 0 as a special value. I
-have absolutely no idea how big the API surface is that would need
-changes, and it is likely not worth the effort at all.)
+-- 
+With Best Regards,
+Andy Shevchenko
 
-
-> 
-> > > The bottom line here is the SPARC case. Anybody familiar with the
-> > > platform
-> > > can shed a light on this. If there is no such case, we may remove
-> > > warning
-> > > along with ret = 0 case from platfrom_get_irq().
-> > 
-> >    I'm afraid you're too fast here... :-)
-> >    We'll have a really hard time if we continue to allow IRQ0 to be
-> > returned by
-> > platform_get_irq() -- we'll have oto fileter it out in the callers
-> > then...
-> 
-> So far no one reported seeing the big fat warning?
-> 
-> > > > > 3. The specific cookie for "IRQ not found, while no error
-> > > > > happened" case
-> > > > 
-> > > > Not sure what you mean here. I have no problem that a situation
-> > > > I can
-> > > > cope with is called an error for the query function. I just do
-> > > > error
-> > > > handling and continue happily. So the part "while no error
-> > > > happened" is
-> > > > irrelevant to me.
-> > > 
-> > > I meant that instead of using special error code, 0 is very much
-> > > good for
-> > > the cases when IRQ is not found. It allows to distinguish -ENXIO
-> > > from the
-> > > low layer from -ENXIO with this magic meaning.
-> > 
-> >    I don't see how -ENXIO can trickle from the lower layers,
-> > frankly...
-> 
-> It might one day, leading to very hard to track bugs.
-
-As gregkh noted, changing the return value without also making the
-compile fail will be a huge PITA whenever driver patches are back- or
-forward-ported, as it would require subtle changes in error paths,
-which can easily slip through unnoticed, in particular with half-
-automated stable backports.
-
-Even if another return value like -ENODEV might be better aligned with
-...regulator_get_optional() and similar functions, or we even find a
-way to make 0 usable for this, none of the proposed changes strike me
-as big enough a win to outweigh the churn caused by making such a
-change at all.
-
-Kind regards,
-Matthias
-
-
-
-> 
-> Gr{oetje,eeting}s,
-> 
->                         Geert
-> 
-> --
-> Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- 
-> geert@linux-m68k.org
-> 
-> In personal conversations with technical people, I call myself a
-> hacker. But
-> when I'm talking to journalists I just say "programmer" or something
-> like that.
->                                 -- Linus Torvalds
 
