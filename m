@@ -2,17 +2,17 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A487E49D308
-	for <lists+linux-edac@lfdr.de>; Wed, 26 Jan 2022 21:03:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2485C49D30F
+	for <lists+linux-edac@lfdr.de>; Wed, 26 Jan 2022 21:04:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229537AbiAZUD5 (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Wed, 26 Jan 2022 15:03:57 -0500
-Received: from mxout03.lancloud.ru ([45.84.86.113]:53846 "EHLO
-        mxout03.lancloud.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229640AbiAZUD5 (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Wed, 26 Jan 2022 15:03:57 -0500
+        id S229712AbiAZUEB (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Wed, 26 Jan 2022 15:04:01 -0500
+Received: from mxout04.lancloud.ru ([45.84.86.114]:35046 "EHLO
+        mxout04.lancloud.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229671AbiAZUD7 (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Wed, 26 Jan 2022 15:03:59 -0500
 Received: from LanCloud
-DKIM-Filter: OpenDKIM Filter v2.11.0 mxout03.lancloud.ru 7C0B020763E2
+DKIM-Filter: OpenDKIM Filter v2.11.0 mxout04.lancloud.ru 1159120ACBF1
 Received: from LanCloud
 Received: from LanCloud
 Received: from LanCloud
@@ -22,10 +22,13 @@ To:     Borislav Petkov <bp@alien8.de>,
         Tony Luck <tony.luck@intel.com>,
         James Morse <james.morse@arm.com>,
         Robert Richter <rric@kernel.org>, <linux-edac@vger.kernel.org>
-Subject: [PATCH 0/5] Stop calling request_irq(), etc. with invalid IRQs in the EDAC drivers
-Date:   Wed, 26 Jan 2022 23:03:48 +0300
-Message-ID: <20220126200353.14582-1-s.shtylyov@omp.ru>
+CC:     Dinh Nguyen <dinguyen@kernel.org>
+Subject: [PATCH 1/5] edac: altera: add IRQ checks for L2 cache and OCRAM
+Date:   Wed, 26 Jan 2022 23:03:49 +0300
+Message-ID: <20220126200353.14582-2-s.shtylyov@omp.ru>
 X-Mailer: git-send-email 2.26.3
+In-Reply-To: <20220126200353.14582-1-s.shtylyov@omp.ru>
+References: <20220126200353.14582-1-s.shtylyov@omp.ru>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7BIT
 Content-Type:   text/plain; charset=US-ASCII
@@ -36,25 +39,44 @@ Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-Here are 5 patches against the 'edac-for-next' branch of the 'ras.git' repo
-(for the lack of a better branch for fixes?).  The affected drivers call
-platform_get_irq() but largely ignore its result -- they blithely pass the
-negative error codes to request_irq() (and its ilk) which expects *unsigned*
-IRQ #. Stop doing that by checking what exactly platform_get_irq() returns.
+The driver neglects to check the result of platform_get_irq()'s calls
+and blithely passes the negative error codes to devm_request_irq()
+(which takes *unsigned* IRQ #), causing it to fail with -EINVAL,
+overriding the original error.  Stop calling devm_request_irq()
+with the invalid IRQ #s.
 
-Sergey Shtylyov (5):
-  edac: altera: add IRQ checks for L2 cache and OCRAM
-  edac: altera: add IRQ check for Arria10
-  edac: fsl_ddr: add IRQ check
-  edac: highbank_l2: add IRQ checks
-  edac: highbank_mc: add IRQ check
+Fixes: c3eea1942a16 ("EDAC, altera: Add Altera L2 cache and OCRAM support")
+Signed-off-by: Sergey Shtylyov <s.shtylyov@omp.ru>
+---
+ drivers/edac/altera_edac.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
- drivers/edac/altera_edac.c      | 17 ++++++++++++++---
- drivers/edac/fsl_ddr_edac.c     |  4 ++++
- drivers/edac/highbank_l2_edac.c |  8 ++++++++
- drivers/edac/highbank_mc_edac.c |  4 ++++
- 4 files changed, 30 insertions(+), 3 deletions(-)
-
+diff --git a/drivers/edac/altera_edac.c b/drivers/edac/altera_edac.c
+index 3a6d2416cb0f..3b6a2650cf5b 100644
+--- a/drivers/edac/altera_edac.c
++++ b/drivers/edac/altera_edac.c
+@@ -776,6 +776,10 @@ static int altr_edac_device_probe(struct platform_device *pdev)
+ 	}
+ 
+ 	drvdata->sb_irq = platform_get_irq(pdev, 0);
++	if (drvdata->sb_irq < 0) {
++		res = drvdata->sb_irq;
++		goto fail1;
++	}
+ 	res = devm_request_irq(&pdev->dev, drvdata->sb_irq,
+ 			       altr_edac_device_handler,
+ 			       0, dev_name(&pdev->dev), dci);
+@@ -783,6 +787,10 @@ static int altr_edac_device_probe(struct platform_device *pdev)
+ 		goto fail1;
+ 
+ 	drvdata->db_irq = platform_get_irq(pdev, 1);
++	if (drvdata->db_irq < 0) {
++		res = drvdata->db_irq;
++		goto fail1;
++	}
+ 	res = devm_request_irq(&pdev->dev, drvdata->db_irq,
+ 			       altr_edac_device_handler,
+ 			       0, dev_name(&pdev->dev), dci);
 -- 
 2.26.3
 
