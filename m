@@ -2,131 +2,254 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A66CF49BBC5
-	for <lists+linux-edac@lfdr.de>; Tue, 25 Jan 2022 20:09:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8661E49C1E3
+	for <lists+linux-edac@lfdr.de>; Wed, 26 Jan 2022 04:11:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229449AbiAYTJE (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Tue, 25 Jan 2022 14:09:04 -0500
-Received: from mail.skyhub.de ([5.9.137.197]:52008 "EHLO mail.skyhub.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229582AbiAYTJD (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Tue, 25 Jan 2022 14:09:03 -0500
-Received: from zn.tnic (dslb-088-067-221-104.088.067.pools.vodafone-ip.de [88.67.221.104])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 604A21EC0441;
-        Tue, 25 Jan 2022 20:08:57 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1643137737;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=5dre2/Xoj69vksLt8aXgzTbDFCPxTScJvpBPEiFuIbQ=;
-        b=IHzJITh+VdU95Z41M40ydSHyrkALBX7HVqwjLxp4UiekH8GB0N5/xLb5qCknqNI8wtf9pr
-        fo0NzV4rRS8gd3piweS+CnBXWxnaxks6r3gInZaMFULNRZk1ovT7fYgdI9ansMvlSuR1CS
-        tygs6LXYUSaeqh1d+PEEGciwvosrc1E=
-Date:   Tue, 25 Jan 2022 20:08:52 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Shuai Xue <xueshuai@linux.alibaba.com>
-Cc:     rric@kernel.org, mchehab@kernel.org, tony.luck@intel.com,
-        james.morse@arm.com, ardb@kernel.org, linux-edac@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-efi@vger.kernel.org,
-        zhangliguang@linux.alibaba.com, zhuo.song@linux.alibaba.com
-Subject: Re: [PATCH v4 1/2] efi/cper: add cper_mem_err_status_str to decode
- error description
-Message-ID: <YfBKxGFbRozNdJiD@zn.tnic>
-References: <20211210134019.28536-1-xueshuai@linux.alibaba.com>
- <20220125024939.30635-2-xueshuai@linux.alibaba.com>
+        id S236841AbiAZDLT (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Tue, 25 Jan 2022 22:11:19 -0500
+Received: from zg8tmtyylji0my4xnjqunzqa.icoremail.net ([162.243.164.74]:45761
+        "HELO zg8tmtyylji0my4xnjqunzqa.icoremail.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with SMTP id S236856AbiAZDLK (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>);
+        Tue, 25 Jan 2022 22:11:10 -0500
+X-Greylist: delayed 149902 seconds by postgrey-1.27 at vger.kernel.org; Tue, 25 Jan 2022 22:11:10 EST
+Received: from localhost.localdomain (unknown [123.60.114.22])
+        by mail-app3 (Coremail) with SMTP id cC_KCgAnLRlSu_BhEcpFDA--.1414S2;
+        Wed, 26 Jan 2022 11:09:07 +0800 (CST)
+From:   lostway@zju.edu.cn
+To:     linux-kernel@vger.kernel.org, linux-edac@vger.kernel.org,
+        bp@alien8.de, tony.luck@intel.com
+Subject: [PATCH v2] RAS: Report ARM processor information to userspace
+Date:   Wed, 26 Jan 2022 11:09:06 +0800
+Message-Id: <20220126030906.56765-1-lostway@zju.edu.cn>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220125024939.30635-2-xueshuai@linux.alibaba.com>
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: cC_KCgAnLRlSu_BhEcpFDA--.1414S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxtr4kuFWrKr18Kw47tr1xuFg_yoWxKrWDpF
+        n8CryYkr4rJFsxG3y3JFWF93y3Z34ruw1DK3sxXay7CFs5ur1qgFs0gr42kF93JF98J34a
+        q3Wqgry3Ca4DJrJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUk0b7Iv0xC_KF4lb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I2
+        0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rw
+        A2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xII
+        jxv20xvEc7CjxVAFwI0_Cr1j6rxdM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I
+        8E87Iv6xkF7I0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI
+        64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8Jw
+        Am72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lw4CEc2x0rVAKj4xxMxAIw28I
+        cxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2
+        IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0EwIxGrwCI
+        42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42
+        IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280
+        aVCY1x0267AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjxUcMmhUUUUU
+X-CM-SenderInfo: isrxjjaqquq6lmxovvfxof0/
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Tue, Jan 25, 2022 at 10:49:38AM +0800, Shuai Xue wrote:
-> Introduce a new helper function cper_mem_err_status_str() which is used to
-> decode the description of error status, and the cper_print_mem() will call
-> it and report the details of error status.
-> 
-> Signed-off-by: Shuai Xue <xueshuai@linux.alibaba.com>
-> ---
->  drivers/firmware/efi/cper.c | 29 ++++++++++++++++++++++++++++-
->  include/linux/cper.h        |  1 +
->  2 files changed, 29 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/firmware/efi/cper.c b/drivers/firmware/efi/cper.c
-> index 6ec8edec6329..7f08d4ea906e 100644
-> --- a/drivers/firmware/efi/cper.c
-> +++ b/drivers/firmware/efi/cper.c
-> @@ -211,6 +211,31 @@ const char *cper_mem_err_type_str(unsigned int etype)
->  }
->  EXPORT_SYMBOL_GPL(cper_mem_err_type_str);
->  
-> +const char *cper_mem_err_status_str(u64 status)
-> +{
-> +	switch ((status >> 8) & 0xff) {
-> +	case  1:	return "Error detected internal to the component";
-> +	case  4:	return "Storage error in DRAM memory";
-> +	case  5:	return "Storage error in TLB";
-> +	case  6:	return "Storage error in cache";
-> +	case  7:	return "Error in one or more functional units";
-> +	case  8:	return "component failed self test";
+From: Shengwei Luo <luoshengwei@huawei.com>
 
-Well, at least start them all with capital letters: "Component... " And
-yes, I know this is how it is in the spec but the spec has typos and
-other problems - doesn't mean we have to copy them too.
+The ARM processor error section includes several ARM processor error
+information, several ARM processor context information and several
+vendor specific error information structures. In addition to these
+info, there are error severity and cpu logical index about the event.
+Report all of these information to userspace via perf i/f.
 
-> +	case  9:	return "Overflow or undervalue of internal queue";
-> +	case 16:	return "Error detected in the bus";
-> +	case 17:	return "Virtual address not found on IO-TLB or IO-PDIR";
-> +	case 18:	return "Improper access error";
-> +	case 19:	return "Access to a memory address which is not mapped to any component";
-> +	case 20:	return "Loss of Lockstep";
-> +	case 21:	return "Response not associated with a request";
-> +	case 22:	return "Bus parity error - must also set the A, C, or D Bits";
-> +	case 23:	return "Detection of a PATH_ERROR ";
+Original-Author: Jason Tian <jason@os.amperecomputing.com>
+Signed-off-by: Shengwei Luo <luoshengwei@huawei.com>
+---
+v1->v2: Cleaned up ci warnings
+---
+ drivers/acpi/apei/ghes.c |  3 +--
+ drivers/ras/ras.c        | 46 ++++++++++++++++++++++++++++++++++++--
+ include/linux/ras.h      | 15 +++++++++++--
+ include/ras/ras_event.h  | 48 +++++++++++++++++++++++++++++++++++-----
+ 4 files changed, 101 insertions(+), 11 deletions(-)
 
-Trailing space here. Also what is PATH_ERROR?
-
-That "PATH_ERROR" is nowhere else explained in that big fat UEFI spec.
-2558 pages and they can't explain *that*. Geez.
-
-> +	case 25:	return "Bus operation timeout";
-> +	case 26:	return "A read was issued to data that has been poisoned";
-> +	default:	return "reserved";
-> +	}
-> +}
-> +EXPORT_SYMBOL_GPL(cper_mem_err_status_str);
-> +
->  static int cper_mem_err_location(struct cper_mem_err_compact *mem, char *msg)
->  {
->  	u32 len, n;
-> @@ -334,7 +359,9 @@ static void cper_print_mem(const char *pfx, const struct cper_sec_mem_err *mem,
->  		return;
->  	}
->  	if (mem->validation_bits & CPER_MEM_VALID_ERROR_STATUS)
-> -		printk("%s""error_status: 0x%016llx\n", pfx, mem->error_status);
-> +		printk("%s""error_status: %s (0x%016llx)\n",
-
-Why do you insist on having two back-to-back strings instead of one
-here?
-
-(And don't tell me it is because the other function calls here do it
-too.)
-
-FWIW, even checkpatch complains here:
-
-WARNING: Consecutive strings are generally better as a single string
-#87: FILE: drivers/firmware/efi/cper.c:362:
-+               printk("%s""error_status: %s (0x%016llx)\n",
-
-Btw, please integrate scripts/checkpatch.pl into your patch creation
-workflow. Some of the warnings/errors *actually* make sense.
-
+diff --git a/drivers/acpi/apei/ghes.c b/drivers/acpi/apei/ghes.c
+index 0c5c9acc6254..f824c26057b1 100644
+--- a/drivers/acpi/apei/ghes.c
++++ b/drivers/acpi/apei/ghes.c
+@@ -490,9 +490,8 @@ static bool ghes_handle_arm_hw_error(struct acpi_hest_generic_data *gdata, int s
+ 	int sec_sev, i;
+ 	char *p;
+ 
+-	log_arm_hw_error(err);
+-
+ 	sec_sev = ghes_severity(gdata->error_severity);
++	log_arm_hw_error(err, sec_sev);
+ 	if (sev != GHES_SEV_RECOVERABLE || sec_sev != GHES_SEV_RECOVERABLE)
+ 		return false;
+ 
+diff --git a/drivers/ras/ras.c b/drivers/ras/ras.c
+index 95540ea8dd9d..2a7f424d59b9 100644
+--- a/drivers/ras/ras.c
++++ b/drivers/ras/ras.c
+@@ -21,9 +21,51 @@ void log_non_standard_event(const guid_t *sec_type, const guid_t *fru_id,
+ 	trace_non_standard_event(sec_type, fru_id, fru_text, sev, err, len);
+ }
+ 
+-void log_arm_hw_error(struct cper_sec_proc_arm *err)
++void log_arm_hw_error(struct cper_sec_proc_arm *err, const u8 sev)
+ {
+-	trace_arm_event(err);
++	u32 pei_len;
++	u32 ctx_len = 0;
++	s32 vsei_len;
++	u8 *pei_err;
++	u8 *ctx_err;
++	u8 *ven_err_data;
++	struct cper_arm_err_info *err_info;
++	struct cper_arm_ctx_info *ctx_info;
++	int n, sz;
++	int cpu;
++
++	pei_len = sizeof(struct cper_arm_err_info) * err->err_info_num;
++	pei_err = (u8 *)err + sizeof(struct cper_sec_proc_arm);
++
++	err_info = (struct cper_arm_err_info *)(err + 1);
++	ctx_info = (struct cper_arm_ctx_info *)(err_info + err->err_info_num);
++	ctx_err = (u8 *)ctx_info;
++	for (n = 0; n < err->context_info_num; n++) {
++		sz = sizeof(struct cper_arm_ctx_info) + ctx_info->size;
++		ctx_info = (struct cper_arm_ctx_info *)((long)ctx_info + sz);
++		ctx_len += sz;
++	}
++
++	vsei_len = err->section_length - (sizeof(struct cper_sec_proc_arm) +
++						pei_len + ctx_len);
++	if (vsei_len < 0) {
++		pr_warn(FW_BUG
++			"section length: %d\n", err->section_length);
++		pr_warn(FW_BUG
++			"section length is too small\n");
++		pr_warn(FW_BUG
++			"firmware-generated error record is incorrect\n");
++		vsei_len = 0;
++	}
++	ven_err_data = (u8 *)ctx_info;
++
++	cpu = GET_LOGICAL_INDEX(err->mpidr);
++	/* when return value is invalid, set cpu index to -1 */
++	if (cpu < 0)
++		cpu = -1;
++
++	trace_arm_event(err, pei_err, pei_len, ctx_err, ctx_len,
++			ven_err_data, (u32)vsei_len, sev, cpu);
+ }
+ 
+ static int __init ras_init(void)
+diff --git a/include/linux/ras.h b/include/linux/ras.h
+index 1f4048bf2674..4529775374d0 100644
+--- a/include/linux/ras.h
++++ b/include/linux/ras.h
+@@ -24,7 +24,7 @@ int __init parse_cec_param(char *str);
+ void log_non_standard_event(const guid_t *sec_type,
+ 			    const guid_t *fru_id, const char *fru_text,
+ 			    const u8 sev, const u8 *err, const u32 len);
+-void log_arm_hw_error(struct cper_sec_proc_arm *err);
++void log_arm_hw_error(struct cper_sec_proc_arm *err, const u8 sev);
+ #else
+ static inline void
+ log_non_standard_event(const guid_t *sec_type,
+@@ -32,7 +32,18 @@ log_non_standard_event(const guid_t *sec_type,
+ 		       const u8 sev, const u8 *err, const u32 len)
+ { return; }
+ static inline void
+-log_arm_hw_error(struct cper_sec_proc_arm *err) { return; }
++log_arm_hw_error(struct cper_sec_proc_arm *err, const u8 sev) { return; }
+ #endif
+ 
++#if defined(CONFIG_ARM) || defined(CONFIG_ARM64)
++#include <asm/smp_plat.h>
++/*
++ * Include ARM specific SMP header which provides a function mapping mpidr to
++ * cpu logical index.
++ */
++#define GET_LOGICAL_INDEX(mpidr) get_logical_index(mpidr & MPIDR_HWID_BITMASK)
++#else
++#define GET_LOGICAL_INDEX(mpidr) -EINVAL
++#endif /* CONFIG_ARM || CONFIG_ARM64 */
++
+ #endif /* __RAS_H__ */
+diff --git a/include/ras/ras_event.h b/include/ras/ras_event.h
+index d0337a41141c..92cfb61bdb20 100644
+--- a/include/ras/ras_event.h
++++ b/include/ras/ras_event.h
+@@ -168,11 +168,24 @@ TRACE_EVENT(mc_event,
+  * This event is generated when hardware detects an ARM processor error
+  * has occurred. UEFI 2.6 spec section N.2.4.4.
+  */
++#define APEIL "ARM Processor Err Info data len"
++#define APEID "ARM Processor Err Info raw data"
++#define APECIL "ARM Processor Err Context Info data len"
++#define APECID "ARM Processor Err Context Info raw data"
++#define VSEIL "Vendor Specific Err Info data len"
++#define VSEID "Vendor Specific Err Info raw data"
+ TRACE_EVENT(arm_event,
+ 
+-	TP_PROTO(const struct cper_sec_proc_arm *proc),
++	TP_PROTO(const struct cper_sec_proc_arm *proc, const u8 *pei_err,
++			const u32 pei_len,
++			const u8 *ctx_err,
++			const u32 ctx_len,
++			const u8 *oem,
++			const u32 oem_len,
++			u8 sev,
++			int cpu),
+ 
+-	TP_ARGS(proc),
++	TP_ARGS(proc, pei_err, pei_len, ctx_err, ctx_len, oem, oem_len, sev, cpu),
+ 
+ 	TP_STRUCT__entry(
+ 		__field(u64, mpidr)
+@@ -180,6 +193,14 @@ TRACE_EVENT(arm_event,
+ 		__field(u32, running_state)
+ 		__field(u32, psci_state)
+ 		__field(u8, affinity)
++		__field(u32, pei_len)
++		__dynamic_array(u8, buf, pei_len)
++		__field(u32, ctx_len)
++		__dynamic_array(u8, buf1, ctx_len)
++		__field(u32, oem_len)
++		__dynamic_array(u8, buf2, oem_len)
++		__field(u8, sev)
++		__field(int, cpu)
+ 	),
+ 
+ 	TP_fast_assign(
+@@ -199,12 +220,29 @@ TRACE_EVENT(arm_event,
+ 			__entry->running_state = ~0;
+ 			__entry->psci_state = ~0;
+ 		}
++		__entry->pei_len = pei_len;
++		memcpy(__get_dynamic_array(buf), pei_err, pei_len);
++		__entry->ctx_len = ctx_len;
++		memcpy(__get_dynamic_array(buf1), ctx_err, ctx_len);
++		__entry->oem_len = oem_len;
++		memcpy(__get_dynamic_array(buf2), oem, oem_len);
++		__entry->sev = sev;
++		__entry->cpu = cpu;
+ 	),
+ 
+-	TP_printk("affinity level: %d; MPIDR: %016llx; MIDR: %016llx; "
+-		  "running state: %d; PSCI state: %d",
++	TP_printk("cpu: %d; error: %d; affinity level: %d; MPIDR: %016llx; MIDR: %016llx; "
++		  "running state: %d; PSCI state: %d; "
++		  "%s: %d; %s: %s; %s: %d; %s: %s; %s: %d; %s: %s",
++		  __entry->cpu,
++		  __entry->sev,
+ 		  __entry->affinity, __entry->mpidr, __entry->midr,
+-		  __entry->running_state, __entry->psci_state)
++		  __entry->running_state, __entry->psci_state,
++		  APEIL, __entry->pei_len, APEID,
++		  __print_hex(__get_dynamic_array(buf), __entry->pei_len),
++		  APECIL, __entry->ctx_len, APECID,
++		  __print_hex(__get_dynamic_array(buf1), __entry->ctx_len),
++		  VSEIL, __entry->oem_len, VSEID,
++		  __print_hex(__get_dynamic_array(buf2), __entry->oem_len))
+ );
+ 
+ /*
 -- 
-Regards/Gruss,
-    Boris.
+2.27.0
 
-https://people.kernel.org/tglx/notes-about-netiquette
