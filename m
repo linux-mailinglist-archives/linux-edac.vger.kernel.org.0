@@ -2,67 +2,64 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D6BF049D385
-	for <lists+linux-edac@lfdr.de>; Wed, 26 Jan 2022 21:35:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2063449D80B
+	for <lists+linux-edac@lfdr.de>; Thu, 27 Jan 2022 03:28:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230295AbiAZUfG (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Wed, 26 Jan 2022 15:35:06 -0500
-Received: from mxout03.lancloud.ru ([45.84.86.113]:55392 "EHLO
-        mxout03.lancloud.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230261AbiAZUfG (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Wed, 26 Jan 2022 15:35:06 -0500
-Received: from LanCloud
-DKIM-Filter: OpenDKIM Filter v2.11.0 mxout03.lancloud.ru 03DC8208D301
-Received: from LanCloud
-Received: from LanCloud
-Received: from LanCloud
-From:   Sergey Shtylyov <s.shtylyov@omp.ru>
-To:     Borislav Petkov <bp@alien8.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Tony Luck <tony.luck@intel.com>,
-        James Morse <james.morse@arm.com>,
-        Robert Richter <rric@kernel.org>, <linux-edac@vger.kernel.org>
-CC:     Khuong Dinh <khuong@os.amperecomputing.com>
-Subject: [PATCH] Revert "EDAC/xgene: Do not print a failure message to get an IRQ twice"
-Date:   Wed, 26 Jan 2022 23:35:03 +0300
-Message-ID: <20220126203503.16759-1-s.shtylyov@omp.ru>
-X-Mailer: git-send-email 2.26.3
+        id S231544AbiA0C2f (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Wed, 26 Jan 2022 21:28:35 -0500
+Received: from out30-133.freemail.mail.aliyun.com ([115.124.30.133]:33118 "EHLO
+        out30-133.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229518AbiA0C2d (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>);
+        Wed, 26 Jan 2022 21:28:33 -0500
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R161e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04407;MF=xueshuai@linux.alibaba.com;NM=1;PH=DS;RN=11;SR=0;TI=SMTPD_---0V2xgVBs_1643250509;
+Received: from 30.240.124.63(mailfrom:xueshuai@linux.alibaba.com fp:SMTPD_---0V2xgVBs_1643250509)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Thu, 27 Jan 2022 10:28:30 +0800
+Message-ID: <69183787-0a18-2d49-08c5-ca6e93c87b3a@linux.alibaba.com>
+Date:   Thu, 27 Jan 2022 10:28:28 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [192.168.11.198]
-X-ClientProxiedBy: LFEXT01.lancloud.ru (fd00:f066::141) To
- LFEX1907.lancloud.ru (fd00:f066::207)
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.5.0
+Subject: Re: [PATCH v5 0/2] EDAC/ghes: refactor memory error reporting to
+ avoid code duplication
+Content-Language: en-US
+To:     Boris Petkov <bp@alien8.de>
+Cc:     rric@kernel.org, mchehab@kernel.org,
+        zhangliguang@linux.alibaba.com, tony.luck@intel.com,
+        james.morse@arm.com, linux-edac@vger.kernel.org,
+        linux-efi@vger.kernel.org, ardb@kernel.org,
+        linux-kernel@vger.kernel.org, zhuo.song@linux.alibaba.com
+References: <20211210134019.28536-1-xueshuai@linux.alibaba.com>
+ <20220126081702.55167-1-xueshuai@linux.alibaba.com>
+ <YfEEN0ATgS+TakLV@zn.tnic>
+ <8d89ffe0-6e34-a82d-09f0-9dd803fc256f@linux.alibaba.com>
+ <5D5735C8-3922-49D9-9DD0-605746B5CCE4@alien8.de>
+From:   Shuai Xue <xueshuai@linux.alibaba.com>
+In-Reply-To: <5D5735C8-3922-49D9-9DD0-605746B5CCE4@alien8.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-This reverts commit e26124cd5f7099949109608845bba9e9bf96599c.
+Hi, Borislav,
 
-Calling platform_get_irq_optional() doesn't make sense if you then bail out
-on any error it returns.  Switch back to calling platform_get_irq(); note
-that calling dev_err_probe() from there is being discussed currently...
+在 2022/1/26 PM6:16, Boris Petkov 写道:
+> On January 26, 2022 9:26:01 AM UTC, Shuai Xue <xueshuai@linux.alibaba.com> wrote:
+>> By the way, I have a question about review process: after waiting for a period
+>> of time, how can I tell whether you have no comments or are still in review process?
+>>
+> 
+> A good sign for when review is done is to wait to see replies to every patch.
+> 
+> BUT, there are other people on CC too so they would need to get a chance to have a look too.
+> 
+> Regardless, you wait for a week and then you incorporate all review comments and resend - not before.
+> 
+> This constant spamming with the patchset is not productive. You're not the only one who sends patches and wants review - you should consider that there are others who would need to get reviewed too.
 
-Signed-off-by: Sergey Shtylyov <s.shtylyov@omp.ru>
----
-This patch is against the 'edac-for-next' branch of the 'ras.git' repo.
+Got it. Thank you very much.
 
-drivers/edac/xgene_edac.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/edac/xgene_edac.c b/drivers/edac/xgene_edac.c
-index 2ccd1db5e98f..1d2c27a00a4a 100644
---- a/drivers/edac/xgene_edac.c
-+++ b/drivers/edac/xgene_edac.c
-@@ -1916,7 +1916,7 @@ static int xgene_edac_probe(struct platform_device *pdev)
- 		int i;
- 
- 		for (i = 0; i < 3; i++) {
--			irq = platform_get_irq_optional(pdev, i);
-+			irq = platform_get_irq(pdev, i);
- 			if (irq < 0) {
- 				dev_err(&pdev->dev, "No IRQ resource\n");
- 				rc = -EINVAL;
--- 
-2.26.3
-
+Best Regards,
+Shuai
