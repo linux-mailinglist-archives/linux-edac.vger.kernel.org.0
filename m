@@ -2,83 +2,93 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E1CB749ED12
-	for <lists+linux-edac@lfdr.de>; Thu, 27 Jan 2022 22:10:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 868D94A0036
+	for <lists+linux-edac@lfdr.de>; Fri, 28 Jan 2022 19:37:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344155AbiA0VKw (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Thu, 27 Jan 2022 16:10:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59250 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344143AbiA0VKu (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Thu, 27 Jan 2022 16:10:50 -0500
-Received: from mail-qt1-x835.google.com (mail-qt1-x835.google.com [IPv6:2607:f8b0:4864:20::835])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2BB1C061757
-        for <linux-edac@vger.kernel.org>; Thu, 27 Jan 2022 13:10:49 -0800 (PST)
-Received: by mail-qt1-x835.google.com with SMTP id z1so2440315qto.3
-        for <linux-edac@vger.kernel.org>; Thu, 27 Jan 2022 13:10:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=wXM0hly6tyNlZq07rMipvtfpnu3wRqtV0B2JSV05g3E=;
-        b=m0D8ivz9PDCDCKh/arptMpR3/ao+LhFd+WDbL0Ndw6mZAYZf1UgxGLzVj40s+AmZjb
-         DuEwjd7NT9LFwA9OjKx7vr7puLYpS6zkJNbh+1BfuQgx4db+dU06Jgc7C75K093Hwjn/
-         9mCc5rYI5j3y1VvMx9vpxL5dad+OafMT9QhIQgFRN9dvv+QgByQ7o1yzKGSP02L54Znm
-         q7FBXWGkelfiR3xpWnnkdKDqg2UlG70uCnsM1s4SP7cRlEb+IJNQAjeVKHpZy42mZonq
-         RnHAdJAaDrxUHvlQWr6CsD5rnkBvpJUkcJOYzRgUFr/Bb7DCHALpPY9Ux9K4Rjywr0lt
-         YgYA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=wXM0hly6tyNlZq07rMipvtfpnu3wRqtV0B2JSV05g3E=;
-        b=KNZQx9dFncQxVa0GtWQgLKo5ycDPvPYxqOEP0oW/U9lQXIzMy2It088M6JRCuSgF1J
-         +DHns1XNvpjYhFsudS5WRdnn7BLKq+7Cv13RCG3q+2SNQrO5HE9iAIHWKoxZtOX2eSA8
-         TemWnbC2mnsrzWahtmbZ+TUSH+WVz0SWFPQzXrBk3RpdjeUlnpk+o/JtoGBuGG6m9fPP
-         mzASbK9qfWpJv7z+jnr9Ma+cvq9+uCfOFHQ2h2WyEzdcR+5yqu5cfulxkVKA8rm8T+sx
-         MPx63ytwgQRv59oLrEWOpKqZNhTFnaFDv2tteKmrzcXLCnlhnylbgu3LqtDXr8wOl0fr
-         Ro7A==
-X-Gm-Message-State: AOAM531H8odZ2FDsiByjkWkyXcPT5wQ9xFrsr82jCVNkEWIT2uQPQx89
-        Omggzn/2PqHESD+SaEy+ghjCWqGd80NJ0sH0uw0=
-X-Google-Smtp-Source: ABdhPJxjfwa8g49rNfb5xQ4Dtq316EM5E6QepnaR+uvM+BcTaI+qmB/caHz8VslukXXXqzp0798ys0wp0mZ+YQ4gMH8=
-X-Received: by 2002:ac8:4e48:: with SMTP id e8mr4202203qtw.64.1643317847801;
- Thu, 27 Jan 2022 13:10:47 -0800 (PST)
+        id S1343654AbiA1ShD (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Fri, 28 Jan 2022 13:37:03 -0500
+Received: from mail.skyhub.de ([5.9.137.197]:46250 "EHLO mail.skyhub.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S236970AbiA1ShD (ORCPT <rfc822;linux-edac@vger.kernel.org>);
+        Fri, 28 Jan 2022 13:37:03 -0500
+Received: from zn.tnic (dslb-088-067-221-104.088.067.pools.vodafone-ip.de [88.67.221.104])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 1D4B71EC0541;
+        Fri, 28 Jan 2022 19:36:58 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1643395018;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=UTed4USXY3nxzXuzbu+s/mzqv1DYGJhfhz7WzX15cqs=;
+        b=lLOExE5BCtqaoojoywH+hD6VLpZH+nO3Q2HPFtjNY6x6Y8/OASNic0L94kOFufc04h6toT
+        3FM+hBCfrPW6ZGMALUR8JNk7m9YjUsaD5GN4t/jf47dLUsajg3t8EFB9zUv3sHj+54h3P3
+        udRLAF2eG0zVG+ImAl9Di5EARRBb700=
+Date:   Fri, 28 Jan 2022 19:36:53 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Dinh Nguyen <dinguyen@kernel.org>
+Cc:     Sergey Shtylyov <s.shtylyov@omp.ru>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Tony Luck <tony.luck@intel.com>,
+        James Morse <james.morse@arm.com>,
+        Robert Richter <rric@kernel.org>, linux-edac@vger.kernel.org
+Subject: Re: [PATCH 1/2] edac: altera: fix deferred probing
+Message-ID: <YfQ3xUpLOPvDu5W+@zn.tnic>
+References: <20220124185503.6720-1-s.shtylyov@omp.ru>
+ <20220124185503.6720-2-s.shtylyov@omp.ru>
+ <7b964ac0-6356-9330-a745-b43e620d051b@kernel.org>
 MIME-Version: 1.0
-Received: by 2002:a05:6214:e4b:0:0:0:0 with HTTP; Thu, 27 Jan 2022 13:10:46
- -0800 (PST)
-Reply-To: eanna00111@gmail.com
-From:   Mrs Anna Edward <mussaaliooooo7@gmail.com>
-Date:   Thu, 27 Jan 2022 13:10:46 -0800
-Message-ID: <CAFbf-n2dj0f-EXo2OhZA4D_6QXVYoysuMB5_+AOQv9Sb_nGe0w@mail.gmail.com>
-Subject: Urgent Reply
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <7b964ac0-6356-9330-a745-b43e620d051b@kernel.org>
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-Greeting to you,
-Please forgive me for stressing you with my predicaments and I sorry
-to approach you through this media because it serves the fastest means
-of communication. I came across your E-mail from my personal search
-and I decided to contact you believing you will be honest to fulfill
-my final wish before I die.
+On Wed, Jan 26, 2022 at 10:52:20AM -0600, Dinh Nguyen wrote:
+> On 1/24/22 12:55, Sergey Shtylyov wrote:
+> > The driver overrides the error codes returned by platform_get_irq() to
+> > -ENODEV for some strange reason, so if it returns -EPROBE_DEFER, the
+> > driver will fail the probe permanently instead of the deferred probing.
+> > Switch to propagating the error codes upstream.
+> > 
+> > Fixes: 71bcada88b0f ("edac: altera: Add Altera SDRAM EDAC support")
+> > Signed-off-by: Sergey Shtylyov <s.shtylyov@omp.ru>
+> > ---
+> >   drivers/edac/altera_edac.c | 2 +-
+> >   1 file changed, 1 insertion(+), 1 deletion(-)
+> > 
+> > diff --git a/drivers/edac/altera_edac.c b/drivers/edac/altera_edac.c
+> > index 3a6d2416cb0f..5dd29789f97d 100644
+> > --- a/drivers/edac/altera_edac.c
+> > +++ b/drivers/edac/altera_edac.c
+> > @@ -350,7 +350,7 @@ static int altr_sdram_probe(struct platform_device *pdev)
+> >   	if (irq < 0) {
+> >   		edac_printk(KERN_ERR, EDAC_MC,
+> >   			    "No irq %d in DT\n", irq);
+> > -		return -ENODEV;
+> > +		return irq;
+> >   	}
+> >   	/* Arria10 has a 2nd IRQ */
+> 
+> 
+> Acked-by: Dinh Nguyen <dinguyen@kernel.org>
 
-I am Mrs Anna Edward, 63 years, from USA, I am childless and I am
-suffering from a pro-long critical cancer, my doctors confirmed I may
-not live beyond two months from now as my ill health has defiled all
-forms of medical treatment. Since my days are numbered, I have decided
-willingly to fulfill my long-time promise to donate you the sum
-($5.000.000.00) million dollars I inherited from my late husband Mr.
-Edward Herbart, foreign bank account over years. I need a very honest
-person who can assist in transfer of this money to his or her account
-and use the funds for charity work of God while you use 50% for
-yourself. I want you to know there is no risk involved; it is 100%
-hitch free & safe.
+It sounds to me like we want this CC: stable@ too?
 
-If you are interested in assisting in getting this fund into your
-account for a charity project to fulfill my promise before I die
-please let me know immediately.
+If so, looking at
 
-I will appreciate your utmost confidentiality as I wait for your reply.
-Best Regards,
-Mrs Anna Edward
+  2043727c2882 ("driver core: platform: Make use of the helper function dev_err_probe()")
+
+that added that dev_err_probe() call, which was in Nov. 2021, which
+would mean, even if stable, only 5.15 and not in all stable trees
+judging by the Fixes: tag which is a patch from 3.17, i.e., 2014.
+
+Right?
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
