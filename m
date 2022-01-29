@@ -2,63 +2,35 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2654F4A2C2D
-	for <lists+linux-edac@lfdr.de>; Sat, 29 Jan 2022 07:48:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 515374A2DAE
+	for <lists+linux-edac@lfdr.de>; Sat, 29 Jan 2022 11:33:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242070AbiA2Gsj (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Sat, 29 Jan 2022 01:48:39 -0500
-Received: from new4-smtp.messagingengine.com ([66.111.4.230]:39283 "EHLO
-        new4-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229958AbiA2Gsj (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>);
-        Sat, 29 Jan 2022 01:48:39 -0500
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailnew.nyi.internal (Postfix) with ESMTP id A95B05802DE;
-        Sat, 29 Jan 2022 01:48:38 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute3.internal (MEProxy); Sat, 29 Jan 2022 01:48:38 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm3; bh=oaNHubmYc/LmCt9wHslNMar6n23AnSzdqKTHyN
-        1xMik=; b=fIshGNgfSQgv1fa4PMRBDlfn0q+3a8NB23lHWKRZbSGg+xUuIIj2A+
-        OD0CfSgiZRaQuEG5HCxzUry4tiASuoGyKDCodQNtI8jFk51E7/t5D420j8OcRQEe
-        3Uhp3n8x9bg2o0KD6STorMyokFNeG0y8NgtC+lk/lyX/3rFc90jVDpF7jSPoJ3CV
-        1NKEH5osIN0D/XnYEguqK/STWmRB/54wLTraZp8GKpjcEfZ1lin216xO7mqSwGg+
-        W2W33Pmdws/RGGxNsap7l+Rujw9TNuGw6Qh3Ig05Ww914VrIGS/XxDBFPEErNTyy
-        zydRE+O7S3tV/a7qhy11Cb22Azs8gKMw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=oaNHubmYc/LmCt9wH
-        slNMar6n23AnSzdqKTHyN1xMik=; b=nN1pAzOFGiFdlKRdrL0LVJrz87rRxnyar
-        NeSbri0LaPiErSwqW/DQM/FK1Fnztxaxan4Yb/9xIdbck9orZV2BmEYCgUjqDqKI
-        U8VbvGzH5GooSRuS4iGrQwYMixZzoMeyu/e1tveJqtAdDMfnCUrxSOCT3ftKbWXP
-        M6ohuK9r+v2wk573BKvgXQqjxGb7V2EgFEEPivluMVRYELLP+4iZQl1Tk5hqkri5
-        mRu4bAtAiEFGWEVKmblbwnom5rxwB5m2RPCHVBW5yC0sfmec9d2bofElWxCabnJ3
-        jmSazSRjNf8gDNpHSDi4um0Dhs6kTrLKB0e0Hu71S9A0A9Z/JYGaw==
-X-ME-Sender: <xms:ReP0YUJ1XKVksc3zrdWRoMtRb88b0k1hUJQ-M0J-DJ4sCKeyLIw6Yw>
-    <xme:ReP0YUJVhRYYxP9C5nXCHOLP5jIPlJ_ES_LKCmeCmXDZxMJICloJyvrFs-AzIH7N-
-    gl9IsA3Cc0hbg>
-X-ME-Received: <xmr:ReP0YUvxli0NBPKJkOz-RhNAiZADn194aWtUHzjqkW5zccoRtdbIbhCtsYMUX_H2U6mtqAjZWXTHF7PnLC6pzb7z1LDeaLFs>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrfeeigdellecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpeffhffvuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepifhrvghgucfm
-    jfcuoehgrhgvgheskhhrohgrhhdrtghomheqnecuggftrfgrthhtvghrnhepveeuheejgf
-    ffgfeivddukedvkedtleelleeghfeljeeiueeggeevueduudekvdetnecuvehluhhsthgv
-    rhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepghhrvghgsehkrhhorghhrd
-    gtohhm
-X-ME-Proxy: <xmx:ReP0YRaLFcbxUyogZbLizfQlcESmQY3ekcT49V0g959ZPJc8WNPreQ>
-    <xmx:ReP0YbbArToSjr6lxg-OXvKOIAd2urBNOrkHpTGn0PjQLDTjwR93rg>
-    <xmx:ReP0YdAtzROWHwNRZuFEOcLCHTmzTHG2mlULSKr0uWtzb6pSu3TewQ>
-    <xmx:RuP0YTLMt7ERKS67wKB88wS8pW3DwMPSVdbvmhg_MqHZPhJWE4lxUw>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
- 29 Jan 2022 01:48:37 -0500 (EST)
-Date:   Sat, 29 Jan 2022 07:48:34 +0100
-From:   Greg KH <greg@kroah.com>
-To:     Borislav Petkov <bp@alien8.de>
+        id S229723AbiA2Kdn (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Sat, 29 Jan 2022 05:33:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57534 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229682AbiA2Kdl (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Sat, 29 Jan 2022 05:33:41 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 116C8C061714;
+        Sat, 29 Jan 2022 02:33:41 -0800 (PST)
+Received: from zn.tnic (dslb-088-067-221-104.088.067.pools.vodafone-ip.de [88.67.221.104])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 940E61EC0501;
+        Sat, 29 Jan 2022 11:33:35 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1643452415;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=nWuW5Rrkh3ELO0P84pcGinhQ5TcZuFPxDKPwk5ziKUw=;
+        b=qu5+zGxcAw0G6JWIUaU8wpDJ4dpnPD2qasN7Hl1fERehyXFjBI3f/n8v/rMfpGecgjZHp9
+        Pn2clm4UmnJbLBHKhldyHTFQrp7+zmgBxw8KMHtMkMvpyoq+F2GdHRU4hd7jx5lmS7N4Zx
+        MuqRIJO+1Mr97XuKXSsIbIq8K082Bms=
+Date:   Sat, 29 Jan 2022 11:33:35 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Greg KH <greg@kroah.com>
 Cc:     Sergey Shtylyov <s.shtylyov@omp.ru>,
         stable <stable@vger.kernel.org>,
         Dinh Nguyen <dinguyen@kernel.org>,
@@ -67,7 +39,7 @@ Cc:     Sergey Shtylyov <s.shtylyov@omp.ru>,
         James Morse <james.morse@arm.com>,
         Robert Richter <rric@kernel.org>, linux-edac@vger.kernel.org
 Subject: Re: [PATCH 1/2] edac: altera: fix deferred probing
-Message-ID: <YfTjQukS1ad9ZBmK@kroah.com>
+Message-ID: <YfUX/98NiydSGn9S@zn.tnic>
 References: <20220124185503.6720-1-s.shtylyov@omp.ru>
  <20220124185503.6720-2-s.shtylyov@omp.ru>
  <7b964ac0-6356-9330-a745-b43e620d051b@kernel.org>
@@ -77,33 +49,34 @@ References: <20220124185503.6720-1-s.shtylyov@omp.ru>
  <YfRBCPRPkf+gD18/@zn.tnic>
  <5bd9cbc1-12d2-aedc-6d64-ac9eaa2460b1@omp.ru>
  <YfRB8SSugBDHAcwH@zn.tnic>
+ <YfTjQukS1ad9ZBmK@kroah.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <YfRB8SSugBDHAcwH@zn.tnic>
+In-Reply-To: <YfTjQukS1ad9ZBmK@kroah.com>
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Fri, Jan 28, 2022 at 08:20:17PM +0100, Borislav Petkov wrote:
-> On Fri, Jan 28, 2022 at 10:17:55PM +0300, Sergey Shtylyov wrote:
-> >    My experience tells they do.
+On Sat, Jan 29, 2022 at 07:48:34AM +0100, Greg KH wrote:
+> If you know you want a patch in the stable tree, add cc: stable.
 > 
-> Let's ask them:
+> Because not all maintainers remember to do so, we do dig through all
+> patches with just the fixes: tag, and try to backport them if needed,
+> but it does not always happen, and there can be long lags as well.
 > 
-> @stable folks, do you guys take patches based only on Fixes: tags
-> nowadays or you still require CC:stable to be present in the commit
-> message?
+> So again, if you know you want it in a stable kernel, add the cc:
+> stable.
 
-If you know you want a patch in the stable tree, add cc: stable.
+Thanks for clarifying. I already did so - I figured having cc:stable
+won't hurt anyway. Besides, it is an explicit statement that "that patch
+is stable material" because Fixes: doesn't always necessarily mean,
+stable material.
 
-Because not all maintainers remember to do so, we do dig through all
-patches with just the fixes: tag, and try to backport them if needed,
-but it does not always happen, and there can be long lags as well.
+Thx.
 
-So again, if you know you want it in a stable kernel, add the cc:
-stable.
+-- 
+Regards/Gruss,
+    Boris.
 
-thanks,
-
-greg k-h
+https://people.kernel.org/tglx/notes-about-netiquette
