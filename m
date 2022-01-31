@@ -2,191 +2,90 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 474AE4A4A04
-	for <lists+linux-edac@lfdr.de>; Mon, 31 Jan 2022 16:15:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D326E4A519B
+	for <lists+linux-edac@lfdr.de>; Mon, 31 Jan 2022 22:38:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379053AbiAaPOi (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Mon, 31 Jan 2022 10:14:38 -0500
-Received: from mga18.intel.com ([134.134.136.126]:17029 "EHLO mga18.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1378391AbiAaPOW (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Mon, 31 Jan 2022 10:14:22 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643642062; x=1675178062;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=+exGFQd/cTQyWk2QAcEy4X66VsJFxyo/yocq2eE5qj4=;
-  b=clZGuHtXt2CIGzvmpQNKRCTstHpILMRliNXPW3NSmhGlLLH65M5sZdGx
-   4tHoGF+yjvJUc7fONE5QQZdtSTmhrfm8v0abEEYgSxb8nE+YUa/VvBebY
-   s2EpOpYISuQxYdqiH6QoGnXtFL6OIv8bps4OMoys7HEtf+zVidGtCmJAG
-   l2NhlwdbiCUkYILx8ZEZDJbnfcxgB4AU65/w5GjDtGnEK87IO1LgkXHi5
-   CGsSfc8yZZc516mM/JHIJrhxaTmSxfvkIjVs4xA5/2VZznNLRdksuX1ux
-   Qn0HFw3rgf13PqfkzBiuJlRfHiwFZ4P1T7x9b9h4o3QzF27u1Luxg7coD
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10243"; a="231050143"
-X-IronPort-AV: E=Sophos;i="5.88,331,1635231600"; 
-   d="scan'208";a="231050143"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jan 2022 07:14:15 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,331,1635231600"; 
-   d="scan'208";a="479189238"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga003.jf.intel.com with ESMTP; 31 Jan 2022 07:14:08 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 2FF2250C; Mon, 31 Jan 2022 17:14:16 +0200 (EET)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Wolfram Sang <wsa@kernel.org>, Jean Delvare <jdelvare@suse.de>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Tan Jui Nee <jui.nee.tan@intel.com>,
-        Kate Hsuan <hpa@redhat.com>,
-        Jonathan Yong <jonathan.yong@intel.com>,
-        linux-kernel@vger.kernel.org, linux-edac@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-gpio@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org
-Cc:     Borislav Petkov <bp@alien8.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Tony Luck <tony.luck@intel.com>,
-        James Morse <james.morse@arm.com>,
-        Robert Richter <rric@kernel.org>,
-        Jean Delvare <jdelvare@suse.com>,
-        Peter Tyser <ptyser@xes-inc.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Andy Shevchenko <andy@kernel.org>,
-        Mark Gross <markgross@kernel.org>,
-        Henning Schild <henning.schild@siemens.com>
-Subject: [PATCH v4 8/8] EDAC, pnd2: convert to use common P2SB accessor
-Date:   Mon, 31 Jan 2022 17:13:46 +0200
-Message-Id: <20220131151346.45792-9-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220131151346.45792-1-andriy.shevchenko@linux.intel.com>
-References: <20220131151346.45792-1-andriy.shevchenko@linux.intel.com>
+        id S1381231AbiAaVir (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Mon, 31 Jan 2022 16:38:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51554 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1381127AbiAaViM (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Mon, 31 Jan 2022 16:38:12 -0500
+Received: from mail-oi1-x241.google.com (mail-oi1-x241.google.com [IPv6:2607:f8b0:4864:20::241])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 182F5C061753
+        for <linux-edac@vger.kernel.org>; Mon, 31 Jan 2022 13:38:10 -0800 (PST)
+Received: by mail-oi1-x241.google.com with SMTP id e81so29406607oia.6
+        for <linux-edac@vger.kernel.org>; Mon, 31 Jan 2022 13:38:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=RcCyF58LaRxi/j1nHAT0ApLeXmQ9s66f3iMVqhPacvY=;
+        b=dEuqzCa7Zlz6s4mRGbRbRWXXanD59qsT+xmKk7tBbCVL8shmNgt9pnuL3r3GZQALql
+         Y63DqHUGCnZO0yzAtzp7ZNS2CuC8pMKUMaMtNqE3s9gB45FDt9/C7CdeYDqwmv7HZJbj
+         h6fZit5aG7dGp8FvXKTscfcGshyIKAGZl/Y4NFvWe+GDkg5MDDBzPsbgzyvzZ7B1mfX4
+         ltlQ0tRJrdsWlCdvxMPpvS+PhwNDM1Zp7MYHnfnHzWMTP4bbhrhxbQSB0Xw9LPR0gSp/
+         L2Vas/DZH4ZiZyplfhihUfOHaOD2GjtH1tg3ZI6lVgxDcwRnl8d4U3qCI5tj+07J/ZXk
+         SzvA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=RcCyF58LaRxi/j1nHAT0ApLeXmQ9s66f3iMVqhPacvY=;
+        b=y9rrrHq1sx7SjtHZBOptP7rXAWfpsP3c+bgvJCUokWE+d090V1dbA9EsTgeJnGzyGo
+         4mPsNbqnE9sBxma5zHeZgw/FX2oi0+Nsa41dObVug16wRyrS2/2MedVxePfW2dkPXlWV
+         9zSdzEUpAQqbS6yUHSvEOzzXfk/Tp8fGck3heV5qU12F4+zxu9g2eTIeeEOAPMO8AUGx
+         WRfP8oPf6slZJAT5U1y6xz9It92E+KxZd3iivPs48Aq5zWZ/IgcBkaF80JMscn/O13Iz
+         tNvdBzt7J4MYdVxgYT5mj3zLOOho4+gd9Yya2T5AyicfPDBN+mrj4KF0YFiHg3iWjC09
+         YHgQ==
+X-Gm-Message-State: AOAM530ia5+T+naycBYQdUz0k+1sN9EFDljjm2EB0B5MdPTCLKO/w+4j
+        HW831uqsH6h2VptC7hZ/0B6nMgwLJ1Fc5NSELBg=
+X-Google-Smtp-Source: ABdhPJzjG4nHBnpm1YeRsvfpKVsM6nmNJIeFJaztEJrNHMe+iyJctx1iGavTAT23A2IhS4j6LtYbunRiUquAn1xj08o=
+X-Received: by 2002:a54:4490:: with SMTP id v16mr14818764oiv.157.1643665089421;
+ Mon, 31 Jan 2022 13:38:09 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Received: by 2002:a4a:c30d:0:0:0:0:0 with HTTP; Mon, 31 Jan 2022 13:38:09
+ -0800 (PST)
+Reply-To: westerunion909@gmail.com
+From:   "Antonia Lloyd." <anthonylloydatmxxx04@gmail.com>
+Date:   Mon, 31 Jan 2022 13:38:09 -0800
+Message-ID: <CAExPwBBpihjV-rv_-+hYqb1WD3wpSWx81B_Q3ES15U3TXSPsyw@mail.gmail.com>
+Subject: Dear Email ID Owner.(USD$4000 IMF COMPENSATION FUND TO PICK UP TODAY).
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-Since we have a common P2SB accessor in tree we may use it instead of
-open coded variants.
+Dear Email ID Owner.
 
-Replace custom code by p2sb_bar() call.
+The IMF is compensating all the email address that was funds as one of
+the ward win Victims and your email address and your name is among the
+listed one of approved to pay the sum of $3.6 million U.S Dollars. We
+have concluded to effect your own payment through Western Union Money
+Transfer for easy pick-up of those funds in good condition,$4000 twice
+daily,till the $3.6 million is completely transferred to you.We now
+need your information where we will be sending the funds,such
+as;Receiver name(Your full Name)address and phone number.Contact
+Western Union agent with this Email: ( westerunion995@gmail.com  ) for
+your payment fund.
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Reviewed-by: Tony Luck <tony.luck@intel.com>
----
- drivers/edac/Kconfig     |  1 +
- drivers/edac/pnd2_edac.c | 55 ++++++++++++----------------------------
- 2 files changed, 17 insertions(+), 39 deletions(-)
+Ms.Maria Zatto
+E-mail:westerunion995@gmail.com
+Telephone: +229 682 97 169
 
-diff --git a/drivers/edac/Kconfig b/drivers/edac/Kconfig
-index 58ab63642e72..e566d66999a9 100644
---- a/drivers/edac/Kconfig
-+++ b/drivers/edac/Kconfig
-@@ -262,6 +262,7 @@ config EDAC_I10NM
- config EDAC_PND2
- 	tristate "Intel Pondicherry2"
- 	depends on PCI && X86_64 && X86_MCE_INTEL
-+	select P2SB if X86
- 	help
- 	  Support for error detection and correction on the Intel
- 	  Pondicherry2 Integrated Memory Controller. This SoC IP is
-diff --git a/drivers/edac/pnd2_edac.c b/drivers/edac/pnd2_edac.c
-index 7d1df120e24c..a20b299f1202 100644
---- a/drivers/edac/pnd2_edac.c
-+++ b/drivers/edac/pnd2_edac.c
-@@ -28,6 +28,8 @@
- #include <linux/bitmap.h>
- #include <linux/math64.h>
- #include <linux/mod_devicetable.h>
-+#include <linux/platform_data/x86/p2sb.h>
-+
- #include <asm/cpu_device_id.h>
- #include <asm/intel-family.h>
- #include <asm/processor.h>
-@@ -232,42 +234,14 @@ static u64 get_mem_ctrl_hub_base_addr(void)
- 	return U64_LSHIFT(hi.base, 32) | U64_LSHIFT(lo.base, 15);
- }
- 
--static u64 get_sideband_reg_base_addr(void)
--{
--	struct pci_dev *pdev;
--	u32 hi, lo;
--	u8 hidden;
--
--	pdev = pci_get_device(PCI_VENDOR_ID_INTEL, 0x19dd, NULL);
--	if (pdev) {
--		/* Unhide the P2SB device, if it's hidden */
--		pci_read_config_byte(pdev, 0xe1, &hidden);
--		if (hidden)
--			pci_write_config_byte(pdev, 0xe1, 0);
--
--		pci_read_config_dword(pdev, 0x10, &lo);
--		pci_read_config_dword(pdev, 0x14, &hi);
--		lo &= 0xfffffff0;
--
--		/* Hide the P2SB device, if it was hidden before */
--		if (hidden)
--			pci_write_config_byte(pdev, 0xe1, hidden);
--
--		pci_dev_put(pdev);
--		return (U64_LSHIFT(hi, 32) | U64_LSHIFT(lo, 0));
--	} else {
--		return 0xfd000000;
--	}
--}
--
- #define DNV_MCHBAR_SIZE  0x8000
- #define DNV_SB_PORT_SIZE 0x10000
- static int dnv_rd_reg(int port, int off, int op, void *data, size_t sz, char *name)
- {
- 	struct pci_dev *pdev;
- 	void __iomem *base;
--	u64 addr;
--	unsigned long size;
-+	struct resource r;
-+	int ret;
- 
- 	if (op == 4) {
- 		pdev = pci_get_device(PCI_VENDOR_ID_INTEL, 0x1980, NULL);
-@@ -279,20 +253,23 @@ static int dnv_rd_reg(int port, int off, int op, void *data, size_t sz, char *na
- 	} else {
- 		/* MMIO via memory controller hub base address */
- 		if (op == 0 && port == 0x4c) {
--			addr = get_mem_ctrl_hub_base_addr();
--			if (!addr)
-+			memset(&r, 0, sizeof(r));
-+
-+			r.start = get_mem_ctrl_hub_base_addr();
-+			if (!r.start)
- 				return -ENODEV;
--			size = DNV_MCHBAR_SIZE;
-+			r.end = r.start + DNV_MCHBAR_SIZE - 1;
- 		} else {
- 			/* MMIO via sideband register base address */
--			addr = get_sideband_reg_base_addr();
--			if (!addr)
--				return -ENODEV;
--			addr += (port << 16);
--			size = DNV_SB_PORT_SIZE;
-+			ret = p2sb_bar(NULL, 0, &r);
-+			if (ret)
-+				return ret;
-+
-+			r.start += (port << 16);
-+			r.end = r.start + DNV_SB_PORT_SIZE - 1;
- 		}
- 
--		base = ioremap((resource_size_t)addr, size);
-+		base = ioremap(r.start, resource_size(&r));
- 		if (!base)
- 			return -ENODEV;
- 
--- 
-2.34.1
+Contact Ms.Maria,immediately you get this mail through western union
+email address above to enable her speed-up.your payment and release
+the $4000 dollars MTCN today for you to pick up the payment OK.
 
+You are expected to provide us with the details as prescribed below to
+enable safe and easy release of your funds today.
+
+(1)Your Full name:
+(2)Your Phone number:
+(3)Your Country:
+(4)Your Age:
+
+Thank you,
+Dr.Antonia Lloyd.
+Contact Dir.Western Union Money Transfer,
+Cotonou-Benin Republic.
