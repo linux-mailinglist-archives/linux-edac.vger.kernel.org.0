@@ -2,85 +2,110 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D0BE4A85D1
-	for <lists+linux-edac@lfdr.de>; Thu,  3 Feb 2022 15:10:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EC204A85F5
+	for <lists+linux-edac@lfdr.de>; Thu,  3 Feb 2022 15:14:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350979AbiBCOJj (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Thu, 3 Feb 2022 09:09:39 -0500
-Received: from mail.skyhub.de ([5.9.137.197]:34426 "EHLO mail.skyhub.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S243066AbiBCOJi (ORCPT <rfc822;linux-edac@vger.kernel.org>);
-        Thu, 3 Feb 2022 09:09:38 -0500
-Received: from zn.tnic (dslb-088-067-221-104.088.067.pools.vodafone-ip.de [88.67.221.104])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        id S1347868AbiBCOOd (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Thu, 3 Feb 2022 09:14:33 -0500
+Received: from smtp-out1.suse.de ([195.135.220.28]:53144 "EHLO
+        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234727AbiBCOOb (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Thu, 3 Feb 2022 09:14:31 -0500
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 0F0401EC04C1;
-        Thu,  3 Feb 2022 15:09:33 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1643897373;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 305722114D;
+        Thu,  3 Feb 2022 14:14:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1643897670; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=coc9lO9lg0vxKzE3zJP7qZ/jv6rA7rh9wy96xSxsnSo=;
-        b=IMG8vWmofGMy55CNhTdTc62MGhpLLTN3dcyEgt12j576BwiS25Ec+FuSmtHHy/Ngu8i0hD
-        z332IQrtn+BvZvp42dC07F2/FdWT0u5G0MgnbRFP1Zi94PfmBIyZnhnAUqkzkKj5nwlfj/
-        n0PKMdI24C1UOzHLCayT+6BM0hV9CWM=
-Date:   Thu, 3 Feb 2022 15:09:32 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     William Roche <william.roche@oracle.com>
-Cc:     Yazen Ghannam <yazen.ghannam@amd.com>, linux-edac@vger.kernel.org,
-        linux-kernel@vger.kernel.org, mchehab@kernel.org,
-        tony.luck@intel.com, james.morse@arm.com, rric@kernel.org,
-        Smita.KoralahalliChannabasappa@amd.com
-Subject: Re: [PATCH v4 1/2] EDAC/amd64: Set memory type per DIMM
-Message-ID: <YfviHFrzzdapbwDt@zn.tnic>
-References: <20220202144307.2678405-1-yazen.ghannam@amd.com>
- <20220202144307.2678405-2-yazen.ghannam@amd.com>
- <a42a7696-0150-6d63-953e-adec19e25d02@oracle.com>
+        bh=IsVlcPPz4fb5Gf2ImKOnD8UP/Sqe6RXNED24nJE5qKY=;
+        b=TdvsgBazf40G3Zr1OXu884xSANl5KtoMWSjvIFL1QtFI6DEIRomHKAvbkSPCY8f8jade6c
+        gtkp/jGWUimi84/2NsyRq93Cl/PIU8PIsmijCSLm7nidDZnlde4c1dxU8QCxiYoe8nnKci
+        icwsJBsgbD4JpDws/ubGrlApiz7G2E4=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1643897670;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=IsVlcPPz4fb5Gf2ImKOnD8UP/Sqe6RXNED24nJE5qKY=;
+        b=fwkYbBPid4pC93NTSV6xWGdFvVUHzDurGFrnYL0GBEcvMzOIvcZoOcxSMwN3nzXk8fLfKb
+        /6KZpAwTIvHjfnAw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 706F313C0F;
+        Thu,  3 Feb 2022 14:14:29 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 4mTgGUXj+2HsVQAAMHmgww
+        (envelope-from <jdelvare@suse.de>); Thu, 03 Feb 2022 14:14:29 +0000
+Date:   Thu, 3 Feb 2022 15:14:24 +0100
+From:   Jean Delvare <jdelvare@suse.de>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Wolfram Sang <wsa@kernel.org>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Tan Jui Nee <jui.nee.tan@intel.com>,
+        Kate Hsuan <hpa@redhat.com>,
+        Jonathan Yong <jonathan.yong@intel.com>,
+        linux-kernel@vger.kernel.org, linux-edac@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-gpio@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org,
+        Borislav Petkov <bp@alien8.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Tony Luck <tony.luck@intel.com>,
+        James Morse <james.morse@arm.com>,
+        Robert Richter <rric@kernel.org>,
+        Peter Tyser <ptyser@xes-inc.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Andy Shevchenko <andy@kernel.org>,
+        Mark Gross <markgross@kernel.org>,
+        Henning Schild <henning.schild@siemens.com>
+Subject: Re: [PATCH v4 6/8] i2c: i801: convert to use common P2SB accessor
+Message-ID: <20220203151424.2a35c864@endymion>
+In-Reply-To: <20220131151346.45792-7-andriy.shevchenko@linux.intel.com>
+References: <20220131151346.45792-1-andriy.shevchenko@linux.intel.com>
+        <20220131151346.45792-7-andriy.shevchenko@linux.intel.com>
+Organization: SUSE Linux
+X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.32; x86_64-suse-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <a42a7696-0150-6d63-953e-adec19e25d02@oracle.com>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Thu, Feb 03, 2022 at 02:19:19PM +0100, William Roche wrote:
-> As we are moving the dram_type cached date from pvt to umc for family >=
-> 0x17, should we also add a small comment for the dram_type field in the
-> amd64_pvt structure to indicate that ?
+Hi Andy,
 
-Who would be that comment for? People who are looking at the code, so
-that they know which is which?
+On Mon, 31 Jan 2022 17:13:44 +0200, Andy Shevchenko wrote:
+> Since we have a common P2SB accessor in tree we may use it instead of
+> open coded variants.
+> 
+> Replace custom code by p2sb_bar() call.
+> 
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> Acked-by: Hans de Goede <hdegoede@redhat.com>
+> Acked-by: Linus Walleij <linus.walleij@linaro.org>
+> ---
+>  drivers/i2c/busses/Kconfig        |  1 +
+>  drivers/i2c/busses/i2c-i801.c     | 39 +++++++------------------------
+>  drivers/platform/x86/intel/p2sb.c |  6 +++++
+>  3 files changed, 16 insertions(+), 30 deletions(-)
+> (...)
 
-> Something like that for example:
-> 
-> @@ -385,7 +385,7 @@
->      /* place to store error injection parameters prior to issue */
->      struct error_injection injection;
-> 
-> -    /* cache the dram_type */
-> +    /* cache the dram_type for family<0x17 */
->      enum mem_type dram_type;
-> 
->      struct amd64_umc *umc;    /* UMC registers */
-> 
-> 
-> Just a suggestion.
-> The code looks good to me.
-> 
-> Reviewed-by: William Roche <william.roche@oracle.com>
-> 
-> W.
+Reviewed-by: Jean Delvare <jdelvare@suse.de>
 
-Btw, I'd appreciate it if you do not top-post.
-
-Thx.
+And thank you for taking the time to write this neat P2SB API and to
+convert all the code that was doing the same so far.
 
 -- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+Jean Delvare
+SUSE L3 Support
