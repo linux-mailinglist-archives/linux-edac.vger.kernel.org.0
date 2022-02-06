@@ -2,107 +2,74 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DD524AAF17
-	for <lists+linux-edac@lfdr.de>; Sun,  6 Feb 2022 12:55:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9981F4AB14B
+	for <lists+linux-edac@lfdr.de>; Sun,  6 Feb 2022 19:38:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232448AbiBFLx6 (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Sun, 6 Feb 2022 06:53:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41614 "EHLO
+        id S1346142AbiBFSij (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Sun, 6 Feb 2022 13:38:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230450AbiBFLx6 (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Sun, 6 Feb 2022 06:53:58 -0500
-X-Greylist: delayed 338 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 06 Feb 2022 03:53:57 PST
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 662EEC043182;
-        Sun,  6 Feb 2022 03:53:57 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        with ESMTP id S1346625AbiBFSii (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Sun, 6 Feb 2022 13:38:38 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DCC3C0401C4;
+        Sun,  6 Feb 2022 10:38:37 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id E50981F388;
-        Sun,  6 Feb 2022 11:48:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1644148097; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=oZ8Xjdv7kG8lFnid5+17QkbF2b+qiSsMNHXutjmdMEg=;
-        b=tiUwKLqNr+bIivolGbXjhA3SSj5fUtJEk3SvW7u25jvrDHHQy6eppBiVQ2bDYwqlfAfoNn
-        +haXTf7RP9uBRC8nteS9lr/dCeS0oMmuSfatIght2otsecrKEKWC5CsxopSrFK+IFIm2tA
-        xKXcd6rTD0uFR2RP+37gcHCs0lOIWeo=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1644148097;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=oZ8Xjdv7kG8lFnid5+17QkbF2b+qiSsMNHXutjmdMEg=;
-        b=qihg8HdpLQQ5h7f+8TqvjbwKVVoD2NjiqqB5DN59UZwccj5UIM/hJ4fR82WAMJkZKIMXlj
-        3viFNOKYe9WuMVAw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id CDB1613A47;
-        Sun,  6 Feb 2022 11:48:17 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id Ql//MIG1/2ELKgAAMHmgww
-        (envelope-from <bp@suse.de>); Sun, 06 Feb 2022 11:48:17 +0000
-Date:   Sun, 6 Feb 2022 12:48:10 +0100
-From:   Borislav Petkov <bp@suse.de>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-edac <linux-edac@vger.kernel.org>,
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 17AB061216;
+        Sun,  6 Feb 2022 18:38:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 7F8D5C340EF;
+        Sun,  6 Feb 2022 18:38:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1644172716;
+        bh=Wo2yBu/aTPpyMacSBuIn+0D0onIVmCmqqpZ0MuElrMA=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=qTGAXI6YVRm4XoxFI/6o/v5Lp3t+s23umi+BacX1An/Rv8Eo5t4D52Bo+sbNitKI0
+         ywhVMLkY8x5ngcWxXuOKkd7aQ4r9YmGpJkW6bgglk2MzeQZ05QxiUJ9roU0EK82Rec
+         0/fFBof7wfvmIBvBjSMq7aDYuI5nD5v79xGA271YPz/BY4VzLzXzVVm0BkbWot7MT0
+         qNFdjoHg2Y2iOutLuo0c3+8J6H/RFH9/cGSITbBoX8kDFkbzR3qfgeF90PEej2hpci
+         dNDS5FsUqZ4JGfQSVARikCJ0BF9oCBqmKxN0rW3QU8XFIXflrB7Tuo42rQ25esHLmU
+         euvu/3TO/ZL6w==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 6E756C6D4EA;
+        Sun,  6 Feb 2022 18:38:36 +0000 (UTC)
+Subject: Re: [GIT PULL] EDAC fixes for v5.17-rc3
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <Yf+1ehVTFHkihPfd@zn.tnic>
+References: <Yf+1ehVTFHkihPfd@zn.tnic>
+X-PR-Tracked-List-Id: <linux-edac.vger.kernel.org>
+X-PR-Tracked-Message-Id: <Yf+1ehVTFHkihPfd@zn.tnic>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/ras/ras.git tags/edac_urgent_for_v5.17_rc3
+X-PR-Tracked-Commit-Id: dfd0dfb9a7cc04acf93435b440dd34c2ca7b4424
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 898b5841ae37c8a7297214b7fd001d4c0f6fd89d
+Message-Id: <164417271644.9246.17463149362704352064.pr-tracker-bot@kernel.org>
+Date:   Sun, 06 Feb 2022 18:38:36 +0000
+To:     Borislav Petkov <bp@suse.de>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-edac <linux-edac@vger.kernel.org>,
         lkml <linux-kernel@vger.kernel.org>
-Subject: [GIT PULL] EDAC fixes for v5.17-rc3
-Message-ID: <Yf+1ehVTFHkihPfd@zn.tnic>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-Hi Linus,
+The pull request you sent on Sun, 6 Feb 2022 12:48:10 +0100:
 
-please pull two urgent EDAC fixes for 5.17.
+> git://git.kernel.org/pub/scm/linux/kernel/git/ras/ras.git tags/edac_urgent_for_v5.17_rc3
 
-Thx.
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/898b5841ae37c8a7297214b7fd001d4c0f6fd89d
 
----
-
-The following changes since commit e783362eb54cd99b2cac8b3a9aeac942e6f6ac07:
-
-  Linux 5.17-rc1 (2022-01-23 10:12:53 +0200)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/ras/ras.git tags/edac_urgent_for_v5.17_rc3
-
-for you to fetch changes up to dfd0dfb9a7cc04acf93435b440dd34c2ca7b4424:
-
-  EDAC/xgene: Fix deferred probing (2022-01-30 01:06:35 +0100)
-
-----------------------------------------------------------------
-- Fix altera and xgene EDAC drivers to propagate the correct error code
-from platform_get_irq() so that deferred probing still works
-
-----------------------------------------------------------------
-Sergey Shtylyov (2):
-      EDAC/altera: Fix deferred probing
-      EDAC/xgene: Fix deferred probing
-
- drivers/edac/altera_edac.c | 2 +-
- drivers/edac/xgene_edac.c  | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Thank you!
 
 -- 
-Regards/Gruss,
-    Boris.
-
-SUSE Software Solutions Germany GmbH, GF: Ivo Totev, HRB 36809, AG Nürnberg
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
