@@ -2,136 +2,84 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C5C34ABF85
-	for <lists+linux-edac@lfdr.de>; Mon,  7 Feb 2022 14:25:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 992DA4ACFB1
+	for <lists+linux-edac@lfdr.de>; Tue,  8 Feb 2022 04:21:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236733AbiBGNWP (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Mon, 7 Feb 2022 08:22:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51862 "EHLO
+        id S245548AbiBHDV1 (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Mon, 7 Feb 2022 22:21:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1442751AbiBGMVi (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Mon, 7 Feb 2022 07:21:38 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEC99C0401C2;
-        Mon,  7 Feb 2022 04:11:56 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id ECA70B8120F;
-        Mon,  7 Feb 2022 12:11:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C3B14C340EB;
-        Mon,  7 Feb 2022 12:11:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644235912;
-        bh=5gMb2sVTGroqNBeDfOf0Z9dK1PjhMmifCwWjbl/BngI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=WNOwgobMcO+5QbbaE5uTv5JtVOctLDnzVB4gkvkG5W/jtjnQaIJsSNcsSrARrFuFs
-         iUDRb3Mq8U7l1AvhGZK8k6QNixcs3joakKnTAF2FLadTB4hptjP1+qiiKnPmyX1TVk
-         G+LCuoyZemDy5D1/VXAC1R+7EOg8NZZXyYqc1nKI6ibKOR7cGRQzmgoYdLjqIMGeGR
-         mhhedWDNCz+r+PRDEMtApgyVPY9SSF0jn/CcIWp2OBv7lOFkus/6W/kWwZaiU4L0WC
-         n/2z4KIc73RpZd5Ceg8Z5tZQP4RWouTViAVcEnqf60beaG2Z4w466nsNq1plDnltY5
-         eN+/sLYwrsXSA==
-Date:   Mon, 7 Feb 2022 13:11:49 +0100
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Jean Delvare <jdelvare@suse.de>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Tan Jui Nee <jui.nee.tan@intel.com>,
-        Kate Hsuan <hpa@redhat.com>,
-        Jonathan Yong <jonathan.yong@intel.com>,
-        linux-kernel@vger.kernel.org, linux-edac@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-gpio@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org,
-        Borislav Petkov <bp@alien8.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Tony Luck <tony.luck@intel.com>,
-        James Morse <james.morse@arm.com>,
-        Robert Richter <rric@kernel.org>,
-        Jean Delvare <jdelvare@suse.com>,
-        Peter Tyser <ptyser@xes-inc.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Andy Shevchenko <andy@kernel.org>,
-        Mark Gross <markgross@kernel.org>,
-        Henning Schild <henning.schild@siemens.com>
-Subject: Re: [PATCH v4 6/8] i2c: i801: convert to use common P2SB accessor
-Message-ID: <YgEMhTT87aY76JQZ@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Jean Delvare <jdelvare@suse.de>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Tan Jui Nee <jui.nee.tan@intel.com>, Kate Hsuan <hpa@redhat.com>,
-        Jonathan Yong <jonathan.yong@intel.com>,
-        linux-kernel@vger.kernel.org, linux-edac@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-gpio@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org, Borislav Petkov <bp@alien8.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Tony Luck <tony.luck@intel.com>, James Morse <james.morse@arm.com>,
-        Robert Richter <rric@kernel.org>, Jean Delvare <jdelvare@suse.com>,
-        Peter Tyser <ptyser@xes-inc.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Andy Shevchenko <andy@kernel.org>,
-        Mark Gross <markgross@kernel.org>,
-        Henning Schild <henning.schild@siemens.com>
-References: <20220131151346.45792-1-andriy.shevchenko@linux.intel.com>
- <20220131151346.45792-7-andriy.shevchenko@linux.intel.com>
+        with ESMTP id S236142AbiBHDVZ (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Mon, 7 Feb 2022 22:21:25 -0500
+Received: from spam.unicloud.com (mx.gosinoic.com [220.194.70.58])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6252AC043188;
+        Mon,  7 Feb 2022 19:21:23 -0800 (PST)
+Received: from eage.unicloud.com ([220.194.70.35])
+        by spam.unicloud.com with ESMTP id 2183Kac4021080;
+        Tue, 8 Feb 2022 11:20:36 +0800 (GMT-8)
+        (envelope-from luofei@unicloud.com)
+Received: from localhost.localdomain (10.10.1.7) by zgys-ex-mb09.Unicloud.com
+ (10.10.0.24) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2375.17; Tue, 8
+ Feb 2022 11:20:35 +0800
+From:   luofei <luofei@unicloud.com>
+To:     <stable@vger.kernel.org>, <tony.luck@intel.com>, <bp@alien8.de>,
+        <tglx@linutronix.de>, <mingo@redhat.com>, <hpa@zytor.com>,
+        <x86@kernel.org>
+CC:     <linux-edac@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        luofei <luofei@unicloud.com>
+Subject: [PATCH] x86/mm, mm/hwpoison: Fix the unmap kernel 1:1 pages check condition
+Date:   Mon, 7 Feb 2022 22:20:28 -0500
+Message-ID: <20220208032028.852302-1-luofei@unicloud.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="q6vDFucLg0OY10c4"
-Content-Disposition: inline
-In-Reply-To: <20220131151346.45792-7-andriy.shevchenko@linux.intel.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.10.1.7]
+X-ClientProxiedBy: zgys-ex-mb10.Unicloud.com (10.10.0.6) To
+ zgys-ex-mb09.Unicloud.com (10.10.0.24)
+X-DNSRBL: 
+X-MAIL: spam.unicloud.com 2183Kac4021080
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
+[ Upstream commit fd0e786d9d09024f67bd71ec094b110237dc3840 ]
 
---q6vDFucLg0OY10c4
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+This commit solves the problem of unmap kernel 1:1 pages
+unconditionally, it appears in Linus's tree 4.16 and later
+versions, and is backported to 4.14.x and 4.15.x stable branches.
 
-On Mon, Jan 31, 2022 at 05:13:44PM +0200, Andy Shevchenko wrote:
-> Since we have a common P2SB accessor in tree we may use it instead of
-> open coded variants.
->=20
-> Replace custom code by p2sb_bar() call.
->=20
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> Acked-by: Hans de Goede <hdegoede@redhat.com>
-> Acked-by: Linus Walleij <linus.walleij@linaro.org>
+But the backported patch has its logic reversed when calling
+memory_failure() to determine whether it needs to unmap the
+kernel page. Only when memory_failure() returns successfully,
+the kernel page can be unmapped.
 
-Acked-by: Wolfram Sang <wsa@kernel.org>
+Signed-off-by: luofei <luofei@unicloud.com>
+Cc: stable@vger.kernel.org #v4.14.x
+Cc: stable@vger.kernel.org #v4.15.x
+---
+ arch/x86/kernel/cpu/mcheck/mce.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
+diff --git a/arch/x86/kernel/cpu/mcheck/mce.c b/arch/x86/kernel/cpu/mcheck/mce.c
+index 95c09db1bba2..d8399a689165 100644
+--- a/arch/x86/kernel/cpu/mcheck/mce.c
++++ b/arch/x86/kernel/cpu/mcheck/mce.c
+@@ -589,7 +589,7 @@ static int srao_decode_notifier(struct notifier_block *nb, unsigned long val,
+ 
+ 	if (mce_usable_address(mce) && (mce->severity == MCE_AO_SEVERITY)) {
+ 		pfn = mce->addr >> PAGE_SHIFT;
+-		if (memory_failure(pfn, MCE_VECTOR, 0))
++		if (!memory_failure(pfn, MCE_VECTOR, 0))
+ 			mce_unmap_kpfn(pfn);
+ 	}
+ 
+-- 
+2.27.0
 
---q6vDFucLg0OY10c4
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmIBDIUACgkQFA3kzBSg
-KbZUaA/8DRJuCj7W7r4GvotOsX0pfGB7yfmokP/mtSPdJf2Dwu7d1QFlD1LAT4Bn
-Ne9tAGHdPQ+I2fkolX/+mojLbwBWBMtQELFQYJEOKcLpt77H8IR+9d0HvGXuycal
-bA59hcNywNJB6BVWYJXxJgCovLxZmet5Pvl+vo3+ArxbJI2UzZNwhg+6SfEj+mwE
-S0ZjZyD7+BJfFYZ44AGQn9p8bqDiC0vz7T/yTUz5GVylNJ4blPLcjEZ/gFDvXgBL
-L0Cio2QiPf7V7q/awOxmQr8iIWMbAu8/kjjQbr+2astCs92x65sv0QakJzJt+2GG
-3MSzyWKJIzUpJLG07IJlP98ZK0aB+hAkd2XWC5LTN92HRINYKbIuSvOHBGWFk4eG
-nJMxbq35p67nOdx0ba4w7NjyrysdKmqZrTbZC+e1j7KJMezTCP7PGLlB/68ic0RN
-mg7gEuBRltMw1CqLIZzR8cQRiPSwMd47msNoJ9l84FLk/N+0arFI/sw7lrUUgWUR
-ug0VLz3WfSfF6t+g7Vsqnk4ZbQ0g5FMOYQdDryqhoFDy9d2V+aoC98AG3JqoJ5Mg
-ejSV//Jtw2fYvbmbgvNmKMavq3tsbpcpkYukU9l/dbJAfo/q39ptyKpKRjNMfkjF
-ZW96HlhXKStsI6ei/0BFzZ2Il/ztJKtxBxMIJ3NMtqWw0Ipscxk=
-=Y6Q6
------END PGP SIGNATURE-----
-
---q6vDFucLg0OY10c4--
