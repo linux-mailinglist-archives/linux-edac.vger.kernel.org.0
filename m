@@ -2,72 +2,275 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33CB24B34A7
-	for <lists+linux-edac@lfdr.de>; Sat, 12 Feb 2022 12:28:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 33B324B4022
+	for <lists+linux-edac@lfdr.de>; Mon, 14 Feb 2022 04:14:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234277AbiBLL2W (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Sat, 12 Feb 2022 06:28:22 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42282 "EHLO
+        id S237611AbiBNDOl (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Sun, 13 Feb 2022 22:14:41 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:50570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234312AbiBLL2U (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Sat, 12 Feb 2022 06:28:20 -0500
-Received: from out30-130.freemail.mail.aliyun.com (out30-130.freemail.mail.aliyun.com [115.124.30.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B17C26AEA;
-        Sat, 12 Feb 2022 03:28:15 -0800 (PST)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R171e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04395;MF=xueshuai@linux.alibaba.com;NM=1;PH=DS;RN=11;SR=0;TI=SMTPD_---0V4DXVLp_1644665291;
-Received: from 30.240.120.83(mailfrom:xueshuai@linux.alibaba.com fp:SMTPD_---0V4DXVLp_1644665291)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Sat, 12 Feb 2022 19:28:13 +0800
-Message-ID: <d26e3f1f-86b0-3638-0e9d-66d893a980b9@linux.alibaba.com>
-Date:   Sat, 12 Feb 2022 19:28:10 +0800
+        with ESMTP id S229715AbiBNDOl (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Sun, 13 Feb 2022 22:14:41 -0500
+X-Greylist: delayed 362 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 13 Feb 2022 19:14:30 PST
+Received: from zg8tmty1ljiyny4xntqumjca.icoremail.net (zg8tmty1ljiyny4xntqumjca.icoremail.net [165.227.154.27])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 5857750E3B;
+        Sun, 13 Feb 2022 19:14:30 -0800 (PST)
+Received: from localhost.localdomain (unknown [123.60.114.22])
+        by mail-app4 (Coremail) with SMTP id cS_KCgAXHQmcxwliUo4aCQ--.6446S2;
+        Mon, 14 Feb 2022 11:08:13 +0800 (CST)
+From:   lostway@zju.edu.cn
+To:     linux-kernel@vger.kernel.org, linux-edac@vger.kernel.org,
+        bp@alien8.de, tony.luck@intel.com, james.morse@arm.com
+Subject: [PATCH v3] RAS: Report ARM processor information to userspace
+Date:   Mon, 14 Feb 2022 11:08:12 +0800
+Message-Id: <20220214030813.135766-1-lostway@zju.edu.cn>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.5.1
-Subject: Re: [PATCH v5 2/2] EDAC/ghes: use cper functions to avoid code
- duplication
-Content-Language: en-US
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     rric@kernel.org, mchehab@kernel.org, tony.luck@intel.com,
-        james.morse@arm.com, ardb@kernel.org, linux-edac@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-efi@vger.kernel.org,
-        zhangliguang@linux.alibaba.com, zhuo.song@linux.alibaba.com
-References: <20211210134019.28536-1-xueshuai@linux.alibaba.com>
- <20220126081702.55167-3-xueshuai@linux.alibaba.com>
- <YfU8fW+lLiAgJ9D4@zn.tnic>
-From:   Shuai Xue <xueshuai@linux.alibaba.com>
-In-Reply-To: <YfU8fW+lLiAgJ9D4@zn.tnic>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-CM-TRANSID: cS_KCgAXHQmcxwliUo4aCQ--.6446S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxtF4rGw1xJry8CF1UJr1DKFg_yoW3Ar43pF
+        n8CryYkr4rJFsxG3y3JayF93y3X3s5uw1DK343Xay7CFs5ur1qqFs0gr42kF93Jr98J34a
+        q3Wqgry3Ca4DJrDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkYb7Iv0xC_tr1lb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I2
+        0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rw
+        A2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xII
+        jxv20xvEc7CjxVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwV
+        C2z280aVCY1x0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC
+        0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr
+        1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4kE6xkIj40Ew7xC0wCF04k2
+        0xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI
+        8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vIr41l
+        IxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIx
+        AIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2
+        jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7IU8dpnPUUUUU==
+X-CM-SenderInfo: isrxjjaqquq6lmxovvfxof0/
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-Hi, Borislav,
+From: Shengwei Luo <luoshengwei@huawei.com>
 
-在 2022/1/29 PM9:09, Borislav Petkov 写道:
-> On Wed, Jan 26, 2022 at 04:17:02PM +0800, Shuai Xue wrote:
->> The memory error location processing in ghes_edac_report_mem_error() have
-> 
-> I will look at this patch again after you have incorporated in all
-> review comments from last time:
-> 
-> https://lore.kernel.org/r/YctFli9oMBYTlf7h@zn.tnic
-> 
+The original arm_event trace code only traces out ARM processor error
+information data. It's not enough for user to take appropriate action.
 
-Happy Chinese New Year. Sorry for getting back to you late. I was on holiday
-last weak.
+According to UEFI_2_9 specification chapter N2.4.4, the ARM processor
+error section includes several ARM processor error information, several
+ARM processor context information and several vendor specific error
+information structures. In addition to these info, there are error
+severity and cpu logical index about the event. Report all of these
+information to userspace via perf i/f. So that the user can do cpu core
+isolation according to error severity and other info.
 
-I have try to address your comments in this version. If I missed your comments,
-please let me know, thank you.
+Signed-off-by: Shengwei Luo <luoshengwei@huawei.com>
+Signed-off-by: Jason Tian <jason@os.amperecomputing.com>
+---
+Links:
+https://lore.kernel.org/lkml/20220126030906.56765-1-lostway@zju.edu.cn/
+https://lore.kernel.org/lkml/20210205022229.313030-1-jason@os.amperecomputing.com/
 
-Best Regards,
-Shuai
+v2->v3:
+Add signed-off of original author.
+Fix commit message to explain why a change is being done.
 
+v1->v2:
+Cleaned up ci warnings.
+---
+ drivers/acpi/apei/ghes.c |  3 +--
+ drivers/ras/ras.c        | 46 ++++++++++++++++++++++++++++++++++++--
+ include/linux/ras.h      | 15 +++++++++++--
+ include/ras/ras_event.h  | 48 +++++++++++++++++++++++++++++++++++-----
+ 4 files changed, 101 insertions(+), 11 deletions(-)
 
+diff --git a/drivers/acpi/apei/ghes.c b/drivers/acpi/apei/ghes.c
+index 0c5c9acc6254..f824c26057b1 100644
+--- a/drivers/acpi/apei/ghes.c
++++ b/drivers/acpi/apei/ghes.c
+@@ -490,9 +490,8 @@ static bool ghes_handle_arm_hw_error(struct acpi_hest_generic_data *gdata, int s
+ 	int sec_sev, i;
+ 	char *p;
+ 
+-	log_arm_hw_error(err);
+-
+ 	sec_sev = ghes_severity(gdata->error_severity);
++	log_arm_hw_error(err, sec_sev);
+ 	if (sev != GHES_SEV_RECOVERABLE || sec_sev != GHES_SEV_RECOVERABLE)
+ 		return false;
+ 
+diff --git a/drivers/ras/ras.c b/drivers/ras/ras.c
+index 95540ea8dd9d..2a7f424d59b9 100644
+--- a/drivers/ras/ras.c
++++ b/drivers/ras/ras.c
+@@ -21,9 +21,51 @@ void log_non_standard_event(const guid_t *sec_type, const guid_t *fru_id,
+ 	trace_non_standard_event(sec_type, fru_id, fru_text, sev, err, len);
+ }
+ 
+-void log_arm_hw_error(struct cper_sec_proc_arm *err)
++void log_arm_hw_error(struct cper_sec_proc_arm *err, const u8 sev)
+ {
+-	trace_arm_event(err);
++	u32 pei_len;
++	u32 ctx_len = 0;
++	s32 vsei_len;
++	u8 *pei_err;
++	u8 *ctx_err;
++	u8 *ven_err_data;
++	struct cper_arm_err_info *err_info;
++	struct cper_arm_ctx_info *ctx_info;
++	int n, sz;
++	int cpu;
++
++	pei_len = sizeof(struct cper_arm_err_info) * err->err_info_num;
++	pei_err = (u8 *)err + sizeof(struct cper_sec_proc_arm);
++
++	err_info = (struct cper_arm_err_info *)(err + 1);
++	ctx_info = (struct cper_arm_ctx_info *)(err_info + err->err_info_num);
++	ctx_err = (u8 *)ctx_info;
++	for (n = 0; n < err->context_info_num; n++) {
++		sz = sizeof(struct cper_arm_ctx_info) + ctx_info->size;
++		ctx_info = (struct cper_arm_ctx_info *)((long)ctx_info + sz);
++		ctx_len += sz;
++	}
++
++	vsei_len = err->section_length - (sizeof(struct cper_sec_proc_arm) +
++						pei_len + ctx_len);
++	if (vsei_len < 0) {
++		pr_warn(FW_BUG
++			"section length: %d\n", err->section_length);
++		pr_warn(FW_BUG
++			"section length is too small\n");
++		pr_warn(FW_BUG
++			"firmware-generated error record is incorrect\n");
++		vsei_len = 0;
++	}
++	ven_err_data = (u8 *)ctx_info;
++
++	cpu = GET_LOGICAL_INDEX(err->mpidr);
++	/* when return value is invalid, set cpu index to -1 */
++	if (cpu < 0)
++		cpu = -1;
++
++	trace_arm_event(err, pei_err, pei_len, ctx_err, ctx_len,
++			ven_err_data, (u32)vsei_len, sev, cpu);
+ }
+ 
+ static int __init ras_init(void)
+diff --git a/include/linux/ras.h b/include/linux/ras.h
+index 1f4048bf2674..4529775374d0 100644
+--- a/include/linux/ras.h
++++ b/include/linux/ras.h
+@@ -24,7 +24,7 @@ int __init parse_cec_param(char *str);
+ void log_non_standard_event(const guid_t *sec_type,
+ 			    const guid_t *fru_id, const char *fru_text,
+ 			    const u8 sev, const u8 *err, const u32 len);
+-void log_arm_hw_error(struct cper_sec_proc_arm *err);
++void log_arm_hw_error(struct cper_sec_proc_arm *err, const u8 sev);
+ #else
+ static inline void
+ log_non_standard_event(const guid_t *sec_type,
+@@ -32,7 +32,18 @@ log_non_standard_event(const guid_t *sec_type,
+ 		       const u8 sev, const u8 *err, const u32 len)
+ { return; }
+ static inline void
+-log_arm_hw_error(struct cper_sec_proc_arm *err) { return; }
++log_arm_hw_error(struct cper_sec_proc_arm *err, const u8 sev) { return; }
+ #endif
+ 
++#if defined(CONFIG_ARM) || defined(CONFIG_ARM64)
++#include <asm/smp_plat.h>
++/*
++ * Include ARM specific SMP header which provides a function mapping mpidr to
++ * cpu logical index.
++ */
++#define GET_LOGICAL_INDEX(mpidr) get_logical_index(mpidr & MPIDR_HWID_BITMASK)
++#else
++#define GET_LOGICAL_INDEX(mpidr) -EINVAL
++#endif /* CONFIG_ARM || CONFIG_ARM64 */
++
+ #endif /* __RAS_H__ */
+diff --git a/include/ras/ras_event.h b/include/ras/ras_event.h
+index d0337a41141c..92cfb61bdb20 100644
+--- a/include/ras/ras_event.h
++++ b/include/ras/ras_event.h
+@@ -168,11 +168,24 @@ TRACE_EVENT(mc_event,
+  * This event is generated when hardware detects an ARM processor error
+  * has occurred. UEFI 2.6 spec section N.2.4.4.
+  */
++#define APEIL "ARM Processor Err Info data len"
++#define APEID "ARM Processor Err Info raw data"
++#define APECIL "ARM Processor Err Context Info data len"
++#define APECID "ARM Processor Err Context Info raw data"
++#define VSEIL "Vendor Specific Err Info data len"
++#define VSEID "Vendor Specific Err Info raw data"
+ TRACE_EVENT(arm_event,
+ 
+-	TP_PROTO(const struct cper_sec_proc_arm *proc),
++	TP_PROTO(const struct cper_sec_proc_arm *proc, const u8 *pei_err,
++			const u32 pei_len,
++			const u8 *ctx_err,
++			const u32 ctx_len,
++			const u8 *oem,
++			const u32 oem_len,
++			u8 sev,
++			int cpu),
+ 
+-	TP_ARGS(proc),
++	TP_ARGS(proc, pei_err, pei_len, ctx_err, ctx_len, oem, oem_len, sev, cpu),
+ 
+ 	TP_STRUCT__entry(
+ 		__field(u64, mpidr)
+@@ -180,6 +193,14 @@ TRACE_EVENT(arm_event,
+ 		__field(u32, running_state)
+ 		__field(u32, psci_state)
+ 		__field(u8, affinity)
++		__field(u32, pei_len)
++		__dynamic_array(u8, buf, pei_len)
++		__field(u32, ctx_len)
++		__dynamic_array(u8, buf1, ctx_len)
++		__field(u32, oem_len)
++		__dynamic_array(u8, buf2, oem_len)
++		__field(u8, sev)
++		__field(int, cpu)
+ 	),
+ 
+ 	TP_fast_assign(
+@@ -199,12 +220,29 @@ TRACE_EVENT(arm_event,
+ 			__entry->running_state = ~0;
+ 			__entry->psci_state = ~0;
+ 		}
++		__entry->pei_len = pei_len;
++		memcpy(__get_dynamic_array(buf), pei_err, pei_len);
++		__entry->ctx_len = ctx_len;
++		memcpy(__get_dynamic_array(buf1), ctx_err, ctx_len);
++		__entry->oem_len = oem_len;
++		memcpy(__get_dynamic_array(buf2), oem, oem_len);
++		__entry->sev = sev;
++		__entry->cpu = cpu;
+ 	),
+ 
+-	TP_printk("affinity level: %d; MPIDR: %016llx; MIDR: %016llx; "
+-		  "running state: %d; PSCI state: %d",
++	TP_printk("cpu: %d; error: %d; affinity level: %d; MPIDR: %016llx; MIDR: %016llx; "
++		  "running state: %d; PSCI state: %d; "
++		  "%s: %d; %s: %s; %s: %d; %s: %s; %s: %d; %s: %s",
++		  __entry->cpu,
++		  __entry->sev,
+ 		  __entry->affinity, __entry->mpidr, __entry->midr,
+-		  __entry->running_state, __entry->psci_state)
++		  __entry->running_state, __entry->psci_state,
++		  APEIL, __entry->pei_len, APEID,
++		  __print_hex(__get_dynamic_array(buf), __entry->pei_len),
++		  APECIL, __entry->ctx_len, APECID,
++		  __print_hex(__get_dynamic_array(buf1), __entry->ctx_len),
++		  VSEIL, __entry->oem_len, VSEID,
++		  __print_hex(__get_dynamic_array(buf2), __entry->oem_len))
+ );
+ 
+ /*
+-- 
+2.27.0
 
