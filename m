@@ -2,181 +2,268 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CFC224B73D5
-	for <lists+linux-edac@lfdr.de>; Tue, 15 Feb 2022 17:44:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 61C144B78FC
+	for <lists+linux-edac@lfdr.de>; Tue, 15 Feb 2022 21:53:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238756AbiBOQoE (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Tue, 15 Feb 2022 11:44:04 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33228 "EHLO
+        id S241941AbiBOQyS (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Tue, 15 Feb 2022 11:54:18 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233493AbiBOQoD (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Tue, 15 Feb 2022 11:44:03 -0500
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2055.outbound.protection.outlook.com [40.107.94.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C19491019E8;
-        Tue, 15 Feb 2022 08:43:53 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ewhKCgX7fW/dcNMKwwyPagWVUyzGxrobz4XuKKv0ONdS7JJaTohJunoquf9OcK1QpyBnuO8DBuEscrd802KBYvgTkH8XMORmjxO9yVpeJrB1daOnH3/LQofq6Sg82fx8exbVXpwBWKcLG3jULyAVYcy12Hq07FTN1sXwAJSrH2NE5XGXtwRYx45ejWL84ZjI77hK5V73H8hY8g71afAnjxpy3e1iRCXBTP/OXcDRznNzYtLDxNY7lmeO/r51pods+soKOYbVhIzM15BYWEqkzohi6Izjkm0OUcYOgrIEGPdib38upXn8zHmlY5KC9uOxeYm2m6MDSaAihsjde7nsXw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=5tXet1Y9nGALT4m+ie3AkChUDCGnLfr6cLMuWlqWI4s=;
- b=AFWYKtC2LMYJbQMzidA7JdNlDUeg8BYSlgA/XFMCtgP+yJs5yTucMPkYRmmR+DR2e0D5BE3/bLixY7pbqkLqP5jLWeFNnnkVHMo0CXC4MGR7KkWJomie+VOpdnk8gAQQhkEZgGF9CZhNDoHDIP2ZhfjzK6XGy6fHhk/LSeHkTEEO4+phFREm4NZR5yDSaSP1DuN5FbPvvbFC6qJPq4RGIW5mnYRO4QbT4IKwiWWn7Eh7+fkWCg4Qdcbat+1MhRtF5H4Bud+1YH8A5pLotc1zNqMSPI+OVo6Nw2ipgywTH6JpwUWLppBTcgNSDUxfgIeuQkIhiHNxpRTlP3fxzPE2CA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=5tXet1Y9nGALT4m+ie3AkChUDCGnLfr6cLMuWlqWI4s=;
- b=XNawLbWWYZQhY+f5jpACKkNgkgocbSV5sMvsYHRAKEoXZisvYydfR/Os1h8TB+SRHW/a+tpVwhKJqUYrqP/d80HYv/WF2ThD9P44kcM8bMsv8ypWGypMYu5sgy5RTHD/Er1J/3ttSTuudjTGbZQXFmNbfmHLup+tzuLni4Alfec=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from BN8PR12MB3108.namprd12.prod.outlook.com (2603:10b6:408:40::20)
- by BYAPR12MB2791.namprd12.prod.outlook.com (2603:10b6:a03:61::33) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4995.15; Tue, 15 Feb
- 2022 16:43:51 +0000
-Received: from BN8PR12MB3108.namprd12.prod.outlook.com
- ([fe80::f93a:9f04:fbd5:dc5a]) by BN8PR12MB3108.namprd12.prod.outlook.com
- ([fe80::f93a:9f04:fbd5:dc5a%6]) with mapi id 15.20.4975.019; Tue, 15 Feb 2022
- 16:43:51 +0000
-Date:   Tue, 15 Feb 2022 16:43:47 +0000
-From:   Yazen Ghannam <yazen.ghannam@amd.com>
-To:     Naveen Krishna Chatradhi <nchatrad@amd.com>
-Cc:     linux-edac@vger.kernel.org, x86@kernel.org,
-        linux-kernel@vger.kernel.org, bp@alien8.de, mingo@redhat.com,
-        mchehab@kernel.org, Muralidhara M K <muralimk@amd.com>
-Subject: Re: [PATCH v7 08/12] EDAC/amd64: Add Family ops to update GPU csrow
- and channel info
-Message-ID: <YgvYQ5RKpx5hZAAN@yaz-ubuntu>
-References: <20220203174942.31630-1-nchatrad@amd.com>
- <20220203174942.31630-9-nchatrad@amd.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220203174942.31630-9-nchatrad@amd.com>
-X-ClientProxiedBy: CH2PR14CA0001.namprd14.prod.outlook.com
- (2603:10b6:610:60::11) To BN8PR12MB3108.namprd12.prod.outlook.com
- (2603:10b6:408:40::20)
+        with ESMTP id S240870AbiBOQyP (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Tue, 15 Feb 2022 11:54:15 -0500
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E759D113DA1
+        for <linux-edac@vger.kernel.org>; Tue, 15 Feb 2022 08:54:04 -0800 (PST)
+Received: by mail-wm1-x32e.google.com with SMTP id x3-20020a05600c21c300b0037c01ad715bso1814660wmj.2
+        for <linux-edac@vger.kernel.org>; Tue, 15 Feb 2022 08:54:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=6dxUHfHd2thSyna+SP246lbFbUtj41Yjp+oFZyo2GbY=;
+        b=DCat5VP9YVrqN0n/0UgbjvOxszAmCAanPIP4ymZHjEC3Wd41GjjR1nrq1O+FrhOxy7
+         5MDQFMLJkVXiOsm8DeO85Hp4YFWeuEXdmvTkHvQ5onCspvycAdD3fP7dpBWoDNsQyRQp
+         veeJuqjHZXT0dAzG4sZGe4NC/IqSx/spfjcf+pNZmsV8Qs6kbiRCLE8BDRv5Q+q38qUk
+         ghhDR2hw8cfQxUGXUcD3pZ3Tzwe+4nJGBf+7Ynq6lK9rofaHsmXzRil+bhcbgZdJcPT8
+         W2u24tBzncuNzK1rZTCgJI+5DhG6jgB2c362c5jxtPHKDZKcBnkv9X1pdtBYpcGK/0+C
+         4q1w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=6dxUHfHd2thSyna+SP246lbFbUtj41Yjp+oFZyo2GbY=;
+        b=KFcLLIsq7sdeVsYyalP1AiZyDj/Y41+GVZZFt14AhJ6JPafST9O3TQLte9Oy1XoFwL
+         RqAUWb9Stvqm8Wlk3Wnv9UIN2so9EM5Jm9T6yKCa2UdSqrfS34apwUPRs9wMRn8Y99Hp
+         JCRFD/jkA8eQlg+D5+fDUMbNce+BX3LmPp9nNEQFKTdUZinQl4L5xjJsxLcPLPhYF1yY
+         X5lbeDJsSqiWGaos5cT/KzFyGytQFJeTnBCG0dPJeH8MsNGCtSiCSGanTGIiPF5SRr9h
+         QMeF5Ym5U2iwi8gmkFjtQ8+mnGlIvWGQZGroAuPPYpqQb6o55zDWz7KeieyTqT7WmGFT
+         qnCg==
+X-Gm-Message-State: AOAM531Qu6R9qM7S65hnR5jeuUROrl4cLJHjX0zWiLXvM349UqUHy+dQ
+        Nqs7yX8Ndxfp8CCT3OneftewWA==
+X-Google-Smtp-Source: ABdhPJwuKI+bNPJZZ1qflmVanE4vrI3VVZi31qJXYrb9UatcTi6G2+Lh1Fm0dLKpD/YcVimukmd//A==
+X-Received: by 2002:a1c:2645:: with SMTP id m66mr3917370wmm.39.1644944043162;
+        Tue, 15 Feb 2022 08:54:03 -0800 (PST)
+Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
+        by smtp.gmail.com with ESMTPSA id 7sm15721841wrb.43.2022.02.15.08.54.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 15 Feb 2022 08:54:02 -0800 (PST)
+Date:   Tue, 15 Feb 2022 16:54:00 +0000
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Wolfram Sang <wsa@kernel.org>, Jean Delvare <jdelvare@suse.de>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Tan Jui Nee <jui.nee.tan@intel.com>,
+        Kate Hsuan <hpa@redhat.com>,
+        Jonathan Yong <jonathan.yong@intel.com>,
+        linux-kernel@vger.kernel.org, linux-edac@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-gpio@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org,
+        Borislav Petkov <bp@alien8.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Tony Luck <tony.luck@intel.com>,
+        James Morse <james.morse@arm.com>,
+        Robert Richter <rric@kernel.org>,
+        Jean Delvare <jdelvare@suse.com>,
+        Peter Tyser <ptyser@xes-inc.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Andy Shevchenko <andy@kernel.org>,
+        Mark Gross <markgross@kernel.org>,
+        Henning Schild <henning.schild@siemens.com>
+Subject: Re: [PATCH v4 5/8] mfd: lpc_ich: Add support for pinctrl in non-ACPI
+ system
+Message-ID: <YgvaqBB8fNVWp1lN@google.com>
+References: <20220131151346.45792-1-andriy.shevchenko@linux.intel.com>
+ <20220131151346.45792-6-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: d70b3773-47a9-4737-fcca-08d9f0a258c5
-X-MS-TrafficTypeDiagnostic: BYAPR12MB2791:EE_
-X-Microsoft-Antispam-PRVS: <BYAPR12MB279119557A9A4D6AE32E5FDDF8349@BYAPR12MB2791.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:6790;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 7uow9vFboJ+eJOcdb1XRzxTZMtvTdy12qXvzq9eu40Zwb0P0momTKLR7Cj67eMHdxCkiL4sAnATgcaDGF9GKXXrQa4K7MFpwh5m49KqSPOSbYAOfpE+b7pWzt9TfgMQChm0vOxmHxHDibMvT4hIfe42DBBfE1o5qW7q3zT720mfKzFUxlBKJxE1EjJE4Pc3U/CKw7W6E2iCJHccHF5P0fMprRboOwlqE7etbBtfKrwuxrHHyzjfqCKwLJQSdcWGsQPr/qZ2QN3hmTDnBWSZ3gcYvo1iyh6PTlERi3HpadQ+ZwAPqC1tu2wdNOBDnR8NAcUFA+efScqnFvmPE1RJZCm0Rq7UjWWMXwegyIB+Pt7ourZgEDC4h/bPsk5NLVO0eiSni/z+kvpuXe9y+94Y69x0rlmuVJg1qsVo7+Z4ZxB+K8nf3xVP4I2xq487PseNiM9qMJjdx0Lxc1UxeBFsOQpu1LqBlcyIqC0AqCyzLzVktEbe7M1yK/u3kEmXLMDw2jraK9f9VkCF9s1+XgOYFDKFqmTd/Wm+cfFzL7uCmaScBZN35/ochvEqopCMQz/2bYsBk+gQii7Xr+vjXywi7w1xvAVUrBzg7FfJxQ1XU1LrbN7NO47bgwPPaBiAm+gOHzmUOaEl5ER+F7TFLOArPYg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3108.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(7916004)(366004)(6486002)(6666004)(6636002)(44832011)(6506007)(6862004)(66946007)(4326008)(316002)(8676002)(9686003)(6512007)(66556008)(66476007)(508600001)(33716001)(5660300002)(38100700002)(186003)(8936002)(83380400001)(86362001)(26005)(2906002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?EItWL2Gw+d7+VQ3iFlGCM4nJQo6F0zI+6+p9EANuHK5uFN47CXtdFDzx/hgh?=
- =?us-ascii?Q?EuvVldNXnGfVLi89Y3kvfa2Ccqcn22V8kG1cKrua6pHFjOSIuBSVyluOcUmA?=
- =?us-ascii?Q?uC5SD9x2n0/K4uSioQXF5ecCr8YVC+Q0makEPKUgLRU/F9yKp8DPLc9DaiIU?=
- =?us-ascii?Q?uDrexwQ03Z4C8r+KzKFqMAQ8Hswndv30zyT9nB1p7uc2DQil4Rv8ygOyfJzc?=
- =?us-ascii?Q?MAzMBG14xjQl2XYmjixTSl+ly6FE/twcVfPHHndl8WsCF5LGss+yWvqM4W3L?=
- =?us-ascii?Q?S1RHEHajkFKr5q8/SDr2zZACB/91kkdzWl4yqOOkhoosLPzOOiJElOHq13R/?=
- =?us-ascii?Q?FexlFCGZvOQBr9Tk1hnP6aqmAqS/d5g/cE2wm8e5FBKYDPzpEQ6NbFzs3LRc?=
- =?us-ascii?Q?AXRBK8SLFoMG6kbNL3ISrplAGbZK8TAqXlgHm4GqhmqKL6cRWuIiQO0RTBN8?=
- =?us-ascii?Q?yowk1NO7PFvyKp1t2ZbUvLq7vc0Vu6TRN9hHbomZQnvLjQiMXcEZDLUkyDt+?=
- =?us-ascii?Q?KaF361IFVQZ85KSAY+grma6tUEffKZwlBe0xp5IDWWu/tnBlVSfm+HKETXaR?=
- =?us-ascii?Q?X/uB25GU+s0YAKmX9aNj3G9NML+B3LVJ6gj5Pv3ofkvCAFYihDeCskbAXXnN?=
- =?us-ascii?Q?NueV6joa9CVXW5OEshbbJVowrmik4+6EHRvuLmd3rt4peYTpf+wii7Wje8At?=
- =?us-ascii?Q?nK/0G8C3APvzSANjomN660GySasGsKSQ7CcCRIxwl6ibT44e95spmUpSEXrH?=
- =?us-ascii?Q?3HAgrl2IHlPWxtDwdGmv3EeIyw0XaQfQuanxWqp6YZvBbK4blvjSkXRa0v7L?=
- =?us-ascii?Q?bhcC8Ky5zTnYfcwKpzJWvS9NGzoDDxtRj1/5nrpAQ/cXz6UikVCTTyIa6VWs?=
- =?us-ascii?Q?i4iK1wPW+Edd/KnssIVOSqPEniNJDCHsRDihkr3JwF6HGmRHP7CgJjzGqjk/?=
- =?us-ascii?Q?1U19TL67URfxTkr8uPVv4YFvhkJ9L7AB+fIs03Ma26kUiIwsid7Toah3j++z?=
- =?us-ascii?Q?FB7Ar5289Uie1ZmF+JHVA7xg19MdMbooooOYv5bP6XCpA5fNHVvi8aPZL8sT?=
- =?us-ascii?Q?jpXCMT9DQ6VUg3sLP9Ls1uAVxajAorJ5xyaOt3kJWWE1MUoOCEnLdz/O56LQ?=
- =?us-ascii?Q?aGJLCJti5s7mZTow/MOjjrNoifdk70//yssZSJkoutuSV+dgcWaHrF42c5nY?=
- =?us-ascii?Q?1YoUU/thTCoXOcEMDDdaKUQXR6ltrXaajQZeNaL6totMxo99Ued2gdSA+dFa?=
- =?us-ascii?Q?XI9HJJTJ9KXNGMo0PCYBsgefZByDFdk+7t5RBfa1Jsytv/w/IAOaz3yD0PS2?=
- =?us-ascii?Q?2M0xAi+iPfJ1RgI0HSk3jd+BpwQ49lkVKf4VOjCjDWjpD5b3F0JlF9xfP/rY?=
- =?us-ascii?Q?/0kjWYzLoPEMEH349OO+hb6wgk9JUs6hV/4xJKhZq7acybNv7PN+PfDUeKXC?=
- =?us-ascii?Q?FML/67pJW7AENVibVVL6wi/hHZEZuL4D3iIDTXxuqgya7erziWvUh61XK9km?=
- =?us-ascii?Q?fTVuY4HW5TwoKWrrnSRJ8Jhtw5K5Zgde3/5hBF3TQda9Dlf2xhn1/1Y5hR+8?=
- =?us-ascii?Q?8f0l6hQT0jEBqOW7mOacNdRoi8ISPhRq/kOXINVn6c4UasVFTdhqYzPnJnOp?=
- =?us-ascii?Q?4lpUAg/LfH3kbpphOFZyM5g=3D?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: d70b3773-47a9-4737-fcca-08d9f0a258c5
-X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3108.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Feb 2022 16:43:51.7186
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: KnoMgrcCMcD4jidBvqrLRNVQGaqeMjb4rrd6ecZHfiC+ByIx4MfR4ZoC1bj61ZxCVBrU9ZIG+uQhC6w4I8Cp6Q==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR12MB2791
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220131151346.45792-6-andriy.shevchenko@linux.intel.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Thu, Feb 03, 2022 at 11:49:38AM -0600, Naveen Krishna Chatradhi wrote:
-> GPU node has 'X' number of PHYs and 'Y' number of channels.
-> This results in 'X*Y' number of instances in the Data Fabric.
-> Therefore the Data Fabric ID of an instance in GPU as below:
->   df_inst_id = 'X' * number of channels per PHY + 'Y'
+On Mon, 31 Jan 2022, Andy Shevchenko wrote:
+
+> From: Tan Jui Nee <jui.nee.tan@intel.com>
 > 
-> On CPUs the Data Fabric ID of an instance on a CPU is equal to the
-> UMC number. since the UMC number and channel are equal in CPU nodes,
-> the channel can be used as the Data Fabric ID of the instance.
+> Add support for non-ACPI systems, such as system that uses
+> Advanced Boot Loader (ABL) whereby a platform device has to be created
+> in order to bind with pin control and GPIO.
 > 
-> Cc: Yazen Ghannam <yazen.ghannam@amd.com>
-> Co-developed-by: Muralidhara M K <muralimk@amd.com>
-> Signed-off-by: Muralidhara M K <muralimk@amd.com>
-> Signed-off-by: Naveen Krishna Chatradhi <nchatrad@amd.com>
+> At the moment, Intel Apollo Lake In-Vehicle Infotainment (IVI) system
+> requires a driver to hide and unhide P2SB to lookup P2SB BAR and pass
+> the PCI BAR address to GPIO.
+> 
+> Signed-off-by: Tan Jui Nee <jui.nee.tan@intel.com>
+> Co-developed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> Acked-by: Hans de Goede <hdegoede@redhat.com>
+> Acked-by: Linus Walleij <linus.walleij@linaro.org>
 > ---
-> v1->v7:
-> * New change in v7
+>  drivers/mfd/lpc_ich.c | 101 +++++++++++++++++++++++++++++++++++++++++-
+>  1 file changed, 100 insertions(+), 1 deletion(-)
 > 
->  drivers/edac/amd64_edac.c | 60 +++++++++++++++++++++++++++++++++++++--
->  drivers/edac/amd64_edac.h |  2 ++
->  2 files changed, 60 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/edac/amd64_edac.c b/drivers/edac/amd64_edac.c
-> index 10efe726a959..241419a0be93 100644
-> --- a/drivers/edac/amd64_edac.c
-> +++ b/drivers/edac/amd64_edac.c
-> @@ -3653,6 +3653,30 @@ static inline void decode_bus_error(int node_id, struct mce *m)
->  	__log_ecc_error(mci, &err, ecc_type);
+> diff --git a/drivers/mfd/lpc_ich.c b/drivers/mfd/lpc_ich.c
+> index 95dca5434917..e1bca5325ce7 100644
+> --- a/drivers/mfd/lpc_ich.c
+> +++ b/drivers/mfd/lpc_ich.c
+> @@ -8,7 +8,8 @@
+>   *  Configuration Registers.
+>   *
+>   *  This driver is derived from lpc_sch.
+> -
+> + *
+> + *  Copyright (c) 2017, 2021-2022 Intel Corporation
+>   *  Copyright (c) 2011 Extreme Engineering Solution, Inc.
+>   *  Author: Aaron Sierra <asierra@xes-inc.com>
+>   *
+> @@ -42,6 +43,7 @@
+>  #include <linux/errno.h>
+>  #include <linux/acpi.h>
+>  #include <linux/pci.h>
+> +#include <linux/pinctrl/pinctrl.h>
+>  #include <linux/mfd/core.h>
+>  #include <linux/mfd/lpc_ich.h>
+>  #include <linux/platform_data/itco_wdt.h>
+> @@ -140,6 +142,70 @@ static struct mfd_cell lpc_ich_gpio_cell = {
+>  	.ignore_resource_conflicts = true,
+>  };
+>  
+> +#define APL_GPIO_NORTH		0
+> +#define APL_GPIO_NORTHWEST	1
+> +#define APL_GPIO_WEST		2
+> +#define APL_GPIO_SOUTHWEST	3
+> +#define APL_GPIO_NR_DEVICES	4
+> +
+> +/* Offset data for Apollo Lake GPIO controllers */
+> +#define APL_GPIO_NORTH_OFFSET		0xc50000
+> +#define APL_GPIO_NORTHWEST_OFFSET	0xc40000
+> +#define APL_GPIO_WEST_OFFSET		0xc70000
+> +#define APL_GPIO_SOUTHWEST_OFFSET	0xc00000
+> +
+> +#define APL_GPIO_IRQ			14
+> +
+> +static struct resource apl_gpio_resources[APL_GPIO_NR_DEVICES][2] = {
+> +	[APL_GPIO_NORTH] = {
+> +		DEFINE_RES_MEM(APL_GPIO_NORTH_OFFSET, 0x1000),
+
+Are these 0x1000's being over-written in lpc_ich_init_pinctrl()?
+
+If so, why pre-initialise?
+
+> +		DEFINE_RES_IRQ(APL_GPIO_IRQ),
+> +	},
+> +	[APL_GPIO_NORTHWEST] = {
+> +		DEFINE_RES_MEM(APL_GPIO_NORTHWEST_OFFSET, 0x1000),
+> +		DEFINE_RES_IRQ(APL_GPIO_IRQ),
+> +	},
+> +	[APL_GPIO_WEST] = {
+> +		DEFINE_RES_MEM(APL_GPIO_WEST_OFFSET, 0x1000),
+> +		DEFINE_RES_IRQ(APL_GPIO_IRQ),
+> +	},
+> +	[APL_GPIO_SOUTHWEST] = {
+> +		DEFINE_RES_MEM(APL_GPIO_SOUTHWEST_OFFSET, 0x1000),
+> +		DEFINE_RES_IRQ(APL_GPIO_IRQ),
+> +	},
+> +};
+> +
+> +/* The order must be in sync with apl_pinctrl_soc_data */
+
+Why does the order matter if you've pre-enumerated them all?
+
+> +static const struct mfd_cell apl_gpio_devices[APL_GPIO_NR_DEVICES] = {
+> +	[APL_GPIO_NORTH] = {
+> +		.name = "apollolake-pinctrl",
+> +		.id = APL_GPIO_NORTH,
+> +		.num_resources = ARRAY_SIZE(apl_gpio_resources[APL_GPIO_NORTH]),
+> +		.resources = apl_gpio_resources[APL_GPIO_NORTH],
+> +		.ignore_resource_conflicts = true,
+> +	},
+> +	[APL_GPIO_NORTHWEST] = {
+> +		.name = "apollolake-pinctrl",
+> +		.id = APL_GPIO_NORTHWEST,
+> +		.num_resources = ARRAY_SIZE(apl_gpio_resources[APL_GPIO_NORTHWEST]),
+> +		.resources = apl_gpio_resources[APL_GPIO_NORTHWEST],
+> +		.ignore_resource_conflicts = true,
+> +	},
+> +	[APL_GPIO_WEST] = {
+> +		.name = "apollolake-pinctrl",
+> +		.id = APL_GPIO_WEST,
+> +		.num_resources = ARRAY_SIZE(apl_gpio_resources[APL_GPIO_WEST]),
+> +		.resources = apl_gpio_resources[APL_GPIO_WEST],
+> +		.ignore_resource_conflicts = true,
+> +	},
+> +	[APL_GPIO_SOUTHWEST] = {
+> +		.name = "apollolake-pinctrl",
+> +		.id = APL_GPIO_SOUTHWEST,
+> +		.num_resources = ARRAY_SIZE(apl_gpio_resources[APL_GPIO_SOUTHWEST]),
+> +		.resources = apl_gpio_resources[APL_GPIO_SOUTHWEST],
+> +		.ignore_resource_conflicts = true,
+> +	},
+> +};
+>  
+>  static struct mfd_cell lpc_ich_spi_cell = {
+>  	.name = "intel-spi",
+> @@ -1083,6 +1149,33 @@ static int lpc_ich_init_wdt(struct pci_dev *dev)
+>  	return ret;
 >  }
 >  
-> +/*
-> + * On CPUs, The Data Fabric ID of an instance is equal to the UMC number.
-> + * And since the UMC number and channel are equal in CPU nodes, the channel can be used
-> + * as the Data Fabric ID of the instance.
-> + */
-> +static int f17_df_inst_id(struct mem_ctl_info *mci, struct amd64_pvt *pvt,
-> +			  struct err_info *err)
+> +static int lpc_ich_init_pinctrl(struct pci_dev *dev)
 > +{
-> +	return err->channel;
+> +	struct resource base;
+> +	unsigned int i;
+> +	int ret;
+> +
+> +	/* Check, if GPIO has been exported as an ACPI device */
+> +	if (acpi_dev_present("INT3452", NULL, -1))
+> +		return -EEXIST;
+> +
+> +	ret = p2sb_bar(dev->bus, 0, &base);
+> +	if (ret)
+> +		return ret;
+> +
+> +	for (i = 0; i < ARRAY_SIZE(apl_gpio_devices); i++) {
+> +		struct resource *mem = &apl_gpio_resources[i][0];
+> +
+> +		/* Fill MEM resource */
+> +		mem->start += base.start;
+> +		mem->end += base.start;
+> +		mem->flags = base.flags;
+> +	}
+> +
+> +	return mfd_add_devices(&dev->dev, 0, apl_gpio_devices,
+> +			       ARRAY_SIZE(apl_gpio_devices), NULL, 0, NULL);
 > +}
 > +
-> +/*
-> + * A GPU node has 'X' number of PHYs and 'Y' number of channels.
-> + * This results in 'X*Y' number of instances in the Data Fabric.
-> + * Therefore the Data Fabric ID of an instance can be found with the following formula:
-> + * df_inst_id = 'X' * number of channels per PHY + 'Y'
-> + *
-> + */
-> +static int gpu_df_inst_id(struct mem_ctl_info *mci, struct amd64_pvt *pvt,
-> +			  struct err_info *err)
-> +{
-> +	return (err->csrow * pvt->channel_count / mci->nr_csrows) + err->channel;
-> +}
+>  static void lpc_ich_test_spi_write(struct pci_dev *dev, unsigned int devfn,
+>  				   struct intel_spi_boardinfo *info)
+>  {
+> @@ -1199,6 +1292,12 @@ static int lpc_ich_probe(struct pci_dev *dev,
+>  			cell_added = true;
+>  	}
+>  
+> +	if (priv->chipset == LPC_APL) {
+> +		ret = lpc_ich_init_pinctrl(dev);
+> +		if (!ret)
+> +			cell_added = true;
+> +	}
 > +
+>  	if (lpc_chipset_info[priv->chipset].spi_type) {
+>  		ret = lpc_ich_init_spi(dev);
+>  		if (!ret)
 
-The DF Instance ID needs to get adjusted again later in the translation code
-due to the fixed mapping of CSes to UMCs. Can that be done here instead? Also,
-I assume that fixed mapping is unique to each product, so that would make it a
-good fit for the family/pvt ops.
-
-Thanks,
-Yazen
-
+-- 
+Lee Jones [李琼斯]
+Principal Technical Lead - Developer Services
+Linaro.org │ Open source software for Arm SoCs
+Follow Linaro: Facebook | Twitter | Blog
