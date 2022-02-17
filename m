@@ -2,197 +2,118 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EFD0B4B9649
-	for <lists+linux-edac@lfdr.de>; Thu, 17 Feb 2022 04:03:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 202E64BA2B4
+	for <lists+linux-edac@lfdr.de>; Thu, 17 Feb 2022 15:16:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232283AbiBQDDm (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Wed, 16 Feb 2022 22:03:42 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:45384 "EHLO
+        id S241075AbiBQOQk (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Thu, 17 Feb 2022 09:16:40 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231782AbiBQDDm (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Wed, 16 Feb 2022 22:03:42 -0500
-Received: from spam.unicloud.com (mx.uniclinxens.com [220.194.70.58])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8ADAD225D31;
-        Wed, 16 Feb 2022 19:03:26 -0800 (PST)
-Received: from eage.unicloud.com ([220.194.70.35])
-        by spam.unicloud.com with ESMTP id 21H30oTu032234;
-        Thu, 17 Feb 2022 11:00:50 +0800 (GMT-8)
-        (envelope-from luofei@unicloud.com)
-Received: from localhost.localdomain (10.10.1.7) by zgys-ex-mb09.Unicloud.com
- (10.10.0.24) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2375.17; Thu, 17
- Feb 2022 11:00:49 +0800
-From:   luofei <luofei@unicloud.com>
-To:     <tony.luck@intel.com>, <bp@alien8.de>, <tglx@linutronix.de>,
-        <mingo@redhat.com>, <dave.hansen@linux.intel.com>,
-        <x86@kernel.org>, <akpm@linux-foundation.org>,
-        <naoya.horiguchi@nec.com>
-CC:     <hpa@zytor.com>, <linux-edac@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-mm@kvack.org>,
-        luofei <luofei@unicloud.com>
-Subject: [PATCH v2] hw/poison: Add in-use hugepage filter judgement and avoid filter page impact on mce handler
-Date:   Wed, 16 Feb 2022 22:00:38 -0500
-Message-ID: <20220217030038.1552124-1-luofei@unicloud.com>
-X-Mailer: git-send-email 2.27.0
+        with ESMTP id S237402AbiBQOQk (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Thu, 17 Feb 2022 09:16:40 -0500
+Received: from NAM02-DM3-obe.outbound.protection.outlook.com (mail-dm3nam07on2045.outbound.protection.outlook.com [40.107.95.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0833E1E5F1D;
+        Thu, 17 Feb 2022 06:16:25 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=AqOXYAfgk1h4ceiEAv+/jOm8x1ksXrbHFEEYvm60y276n5fqNCqmlkLRn5wEbEskbMwEz0BG1P8wi1D6fMAwCk+eIqrFb9VrVstKi6/mN/HV8gx+EU665gZNwZqmIDba5b8rfylIL+L88xb+sDVhqLa1R6cuz2QRAnU1/DUtCGdb0iNiXVDhHlihsYbrclq26+ZxcoSyA+Ue5U4jp/1jZHOhRMR7YAuUrdSP56TDlxR9KuzLFmoWRtGBATBMOAcVv/a5FhhacY0Gx9b9gvWarp8LvMS7wT/HFGVAt8jca0fY5qIrUI9JWVGQoOi9dlpIE0jdqIje5eVMa09XWxa8OA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=wQ6Xvk2sZBqMLshy3FBTov6sXiHdMX4/S1BqopCF5I8=;
+ b=mFMh54i1KfgJ7Ydk7RHfN88xfPt5xVx2hduEQe1gQRX93ThbSZp2L2Ghv8CFCqNru8Og1Xt9UqpGrL6+kCZ17g8AQPUUGu0HBNWzT0WVZ0DXDzJzyuseagdeFMqJD8KfA8zchzoXzVO0QO+NYW9tk9qo9dYgfURy6x6sfD4KxoSY/aJE7O8KOKKTk+T1my50Q1QH414KgW1yNoxrLXvr+CZFK/bVv2nw2/zzKiRVgNIZL1Or+Frghy/pkYfFRMoXpmMqBB5UHqDR488Rgoxxy3qGnSgxFAP+5yYToFphWBQxdRB0KOpG8CF/M+Op0HgSEws+1o+vWOBnHxblVYPkMQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=wQ6Xvk2sZBqMLshy3FBTov6sXiHdMX4/S1BqopCF5I8=;
+ b=YIIwuWFi+rapyZp3o4AtJ6OsULQ4DCrZ7bycZzeuFSs04aK/eE4QcmV3+5mFWZQ2Vy9fFBNx5iU0K7DBYofHsANJbp808K9oSOBERxGmKvkuVbMdRHPmpOtq5c2DE+TjtWXnwyO96Ae6QlbykQtatclLqKtsGMkW4SA3erE4b0w=
+Received: from BN9PR03CA0248.namprd03.prod.outlook.com (2603:10b6:408:ff::13)
+ by DM6PR12MB4185.namprd12.prod.outlook.com (2603:10b6:5:216::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4995.16; Thu, 17 Feb
+ 2022 14:16:23 +0000
+Received: from BN8NAM11FT055.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:ff:cafe::62) by BN9PR03CA0248.outlook.office365.com
+ (2603:10b6:408:ff::13) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4995.14 via Frontend
+ Transport; Thu, 17 Feb 2022 14:16:23 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com;
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ BN8NAM11FT055.mail.protection.outlook.com (10.13.177.62) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.4995.15 via Frontend Transport; Thu, 17 Feb 2022 14:16:22 +0000
+Received: from ethanolx50f7host.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.18; Thu, 17 Feb
+ 2022 08:16:21 -0600
+From:   Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>
+To:     <x86@kernel.org>, <linux-edac@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     Tony Luck <tony.luck@intel.com>, "H . Peter Anvin" <hpa@zytor.com>,
+        "Dave Hansen" <dave.hansen@linux.intel.com>,
+        Yazen Ghannam <yazen.ghannam@amd.com>,
+        Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>
+Subject: [RFC PATCH 0/2] Handle AMD threshold interrupt storms 
+Date:   Thu, 17 Feb 2022 08:16:07 -0600
+Message-ID: <20220217141609.119453-1-Smita.KoralahalliChannabasappa@amd.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.10.1.7]
-X-ClientProxiedBy: zgys-ex-mb11.Unicloud.com (10.10.0.28) To
- zgys-ex-mb09.Unicloud.com (10.10.0.24)
-X-DNSRBL: 
-X-MAIL: spam.unicloud.com 21H30oTu032234
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 1865a77d-30af-4fd8-3482-08d9f2201303
+X-MS-TrafficTypeDiagnostic: DM6PR12MB4185:EE_
+X-Microsoft-Antispam-PRVS: <DM6PR12MB41859443A43B32C0426D5D8690369@DM6PR12MB4185.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:4941;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: VbM+UEzCZD8oDDVuio8Zn151Zm8IFDDDCt1hKPIV/JreshrgxLOTejyuwKx6n7h0Jr6lnn182fhFZgqPPlntunoaVe1b5+wdjhvrNfw8QziSC33wCNUD7HRvvi2p3MNyncewq0h2wqLKg0FiT50ky3ZtvzUTneuk/EA4AfEHU7O2geIGtQIcCfyQ3HraiQJJz8S17u7zjZxafQ0NsSpMCKUH6atLO+MlXSJpGHCSInPaLaNAMGFA58KU4UNcEpYUdza6spWULWU5IVczM7/R4rATItLAu9hp8/QLgmjRJ3cTZ60r9E8nXQeT6RXSWjK8SQYKrc5im1dYkZjCU2Jgik5Bsz8UDleLoyeUdrFkLD6QvI218XiqlGRq4tnTm61gcTtIPuTd89RKjso19pP/tHzQ/JDGPgEPrFxygXAcBHzNJ/EnntOhODMvLeVtwxe7lJzunq3JvPNET2lVnCNZm5t1OekmTzw5v1NorDWOg9cWzoaZ3t9Au74lp1uYXLzxW2paK6CZ3oN6EF4tnvUY/JYvHdXOiERynT1YxtJpOCXT5WR9Urz7pnxlEuxGzCSTsVwtU9CcX7fbPZmCVrD/xJk7kiYcUgIILVM/Y7OVz7wBcNi/jb6mvcXMlse0agMgOSSdJ+ywtwPBeqRqIBk1upyL5uOJznOGr+khSUcwXevXlNPVg9PMs8ChxmgupTdySWVSyALA2VEFrx4Nwkj5sQ==
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230001)(4636009)(40470700004)(46966006)(36840700001)(86362001)(110136005)(54906003)(47076005)(508600001)(6666004)(36860700001)(5660300002)(7696005)(316002)(426003)(4743002)(82310400004)(2906002)(336012)(8936002)(40460700003)(356005)(1076003)(70206006)(70586007)(16526019)(2616005)(26005)(186003)(4744005)(36756003)(83380400001)(8676002)(4326008)(81166007)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Feb 2022 14:16:22.0863
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1865a77d-30af-4fd8-3482-08d9f2201303
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT055.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB4185
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-After successfully obtaining the reference count of the huge
-page, it is still necessary to call hwpoison_filter() to make a
-filter judgement, otherwise the filter hugepage will be unmaped
-and the related process may be killed.
+This series of patches handles interrupt storms in AMD threshold interrupt
+handler. Patch 1 takes care of handling the storms and Patch 2 does some
+refactoring and simplification to reuse the existing function.
 
-Also when the huge page meets the filter conditions, it should
-not be regarded as successful memory_failure() processing for
-mce handler, but should return a value to inform the caller,
-otherwise the caller regards the error page has been identified
-and isolated, which may lead to calling set_mce_nospec() to change
-page attribute, etc.
+Smita Koralahalli (2):
+  x86/mce: Handle AMD threshold interrupt storms
+  x86/mce: Simplify code in log_and_reset_block()
 
-Signed-off-by: luofei <luofei@unicloud.com>
----
- arch/x86/kernel/cpu/mce/core.c | 22 +++++++++++-----------
- include/linux/mm.h             |  1 +
- mm/memory-failure.c            | 25 +++++++++++++++++++++++--
- 3 files changed, 35 insertions(+), 13 deletions(-)
+ arch/x86/kernel/cpu/mce/amd.c      | 131 ++++++++++++++++++++++++++++-
+ arch/x86/kernel/cpu/mce/core.c     |  16 +++-
+ arch/x86/kernel/cpu/mce/intel.c    |   2 +-
+ arch/x86/kernel/cpu/mce/internal.h |   8 +-
+ 4 files changed, 148 insertions(+), 9 deletions(-)
 
-diff --git a/arch/x86/kernel/cpu/mce/core.c b/arch/x86/kernel/cpu/mce/core.c
-index 5818b837fd4d..c2b99c60225f 100644
---- a/arch/x86/kernel/cpu/mce/core.c
-+++ b/arch/x86/kernel/cpu/mce/core.c
-@@ -612,7 +612,7 @@ static int uc_decode_notifier(struct notifier_block *nb, unsigned long val,
- 		return NOTIFY_DONE;
- 
- 	pfn = mce->addr >> PAGE_SHIFT;
--	if (!memory_failure(pfn, 0)) {
-+	if (!memory_failure(pfn, MF_MCE_HANDLE)) {
- 		set_mce_nospec(pfn, whole_page(mce));
- 		mce->kflags |= MCE_HANDLED_UC;
- 	}
-@@ -1286,7 +1286,7 @@ static void kill_me_now(struct callback_head *ch)
- static void kill_me_maybe(struct callback_head *cb)
- {
- 	struct task_struct *p = container_of(cb, struct task_struct, mce_kill_me);
--	int flags = MF_ACTION_REQUIRED;
-+	int flags = MF_ACTION_REQUIRED | MF_MCE_HANDLE;
- 	int ret;
- 
- 	p->mce_count = 0;
-@@ -1300,14 +1300,14 @@ static void kill_me_maybe(struct callback_head *cb)
- 		set_mce_nospec(p->mce_addr >> PAGE_SHIFT, p->mce_whole_page);
- 		sync_core();
- 		return;
--	}
--
--	/*
--	 * -EHWPOISON from memory_failure() means that it already sent SIGBUS
--	 * to the current process with the proper error info, so no need to
--	 * send SIGBUS here again.
--	 */
--	if (ret == -EHWPOISON)
-+	} else if (ret == -EHWPOISON || ret == 1)
-+		/*
-+		 * -EHWPOISON from memory_failure() means that it already sent SIGBUS
-+		 * to the current process with the proper error info, so no need to
-+		 * send SIGBUS here again.
-+		 *
-+		 * 1 means it's a filter page, no need to deal with.
-+		 */
- 		return;
- 
- 	pr_err("Memory error not recovered");
-@@ -1320,7 +1320,7 @@ static void kill_me_never(struct callback_head *cb)
- 
- 	p->mce_count = 0;
- 	pr_err("Kernel accessed poison in user space at %llx\n", p->mce_addr);
--	if (!memory_failure(p->mce_addr >> PAGE_SHIFT, 0))
-+	if (!memory_failure(p->mce_addr >> PAGE_SHIFT, MF_MCE_HANDLE))
- 		set_mce_nospec(p->mce_addr >> PAGE_SHIFT, p->mce_whole_page);
- }
- 
-diff --git a/include/linux/mm.h b/include/linux/mm.h
-index 213cc569b192..f4703f948e9a 100644
---- a/include/linux/mm.h
-+++ b/include/linux/mm.h
-@@ -3188,6 +3188,7 @@ enum mf_flags {
- 	MF_MUST_KILL = 1 << 2,
- 	MF_SOFT_OFFLINE = 1 << 3,
- 	MF_UNPOISON = 1 << 4,
-+	MF_MCE_HANDLE = 1 << 5,
- };
- extern int memory_failure(unsigned long pfn, int flags);
- extern void memory_failure_queue(unsigned long pfn, int flags);
-diff --git a/mm/memory-failure.c b/mm/memory-failure.c
-index 97a9ed8f87a9..1a0bd91a685b 100644
---- a/mm/memory-failure.c
-+++ b/mm/memory-failure.c
-@@ -1526,7 +1526,10 @@ static int memory_failure_hugetlb(unsigned long pfn, int flags)
- 				if (TestClearPageHWPoison(head))
- 					num_poisoned_pages_dec();
- 				unlock_page(head);
--				return 0;
-+				if (flags & MF_MCE_HANDLE)
-+					return 1;
-+				else
-+					return 0;
- 			}
- 			unlock_page(head);
- 			res = MF_FAILED;
-@@ -1545,6 +1548,17 @@ static int memory_failure_hugetlb(unsigned long pfn, int flags)
- 	lock_page(head);
- 	page_flags = head->flags;
- 
-+	if (hwpoison_filter(p)) {
-+		if (TestClearPageHWPoison(head))
-+			num_poisoned_pages_dec();
-+		put_page(p);
-+		if (flags & MF_MCE_HANDLE)
-+			res = 1;
-+		else
-+			res = 0;
-+		goto out;
-+	}
-+
- 	/*
- 	 * TODO: hwpoison for pud-sized hugetlb doesn't work right now, so
- 	 * simply disable it. In order to make it work properly, we need
-@@ -1613,7 +1627,10 @@ static int memory_failure_dev_pagemap(unsigned long pfn, int flags,
- 		goto out;
- 
- 	if (hwpoison_filter(page)) {
--		rc = 0;
-+		if (flags & MF_MCE_HANDLE)
-+			rc = 1;
-+		else
-+			rc = 0;
- 		goto unlock;
- 	}
- 
-@@ -1837,6 +1854,10 @@ int memory_failure(unsigned long pfn, int flags)
- 			num_poisoned_pages_dec();
- 		unlock_page(p);
- 		put_page(p);
-+		if (flags & MF_MCE_HANDLE)
-+			res = 1;
-+		else
-+			res = 0;
- 		goto unlock_mutex;
- 	}
- 
 -- 
-2.27.0
+2.17.1
 
