@@ -2,51 +2,61 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9C614BB7AE
-	for <lists+linux-edac@lfdr.de>; Fri, 18 Feb 2022 12:07:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 916914BC8DD
+	for <lists+linux-edac@lfdr.de>; Sat, 19 Feb 2022 15:34:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234347AbiBRLHV (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Fri, 18 Feb 2022 06:07:21 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:50654 "EHLO
+        id S240738AbiBSOfB (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Sat, 19 Feb 2022 09:35:01 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231533AbiBRLHU (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Fri, 18 Feb 2022 06:07:20 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8B812A22B1;
-        Fri, 18 Feb 2022 03:07:03 -0800 (PST)
-Received: from zn.tnic (dslb-088-067-221-104.088.067.pools.vodafone-ip.de [88.67.221.104])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 441AF1EC0523;
-        Fri, 18 Feb 2022 12:06:58 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1645182418;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=c4c6I8GLhkF9RWrXeinlmv4me3VZ4wvoVq26Nzv3b44=;
-        b=lvRpPmqmF5peidcetEaGgL9OJ/9OdTFCY75wemCra+JHqNRGOEugflNH76wwA7UH+rDLYH
-        CvZwjmm7hP6hm4p7fOGxq80nZe1aoTqohfMdePVnvPecduIRC+bRnCZqkAOlZXsxmDWoy0
-        xNJtv02U06mRVEOCXXTaRpjn9F19eI4=
-Date:   Fri, 18 Feb 2022 12:07:04 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     "Luck, Tony" <tony.luck@intel.com>,
-        Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>
-Cc:     x86@kernel.org, linux-edac@vger.kernel.org,
-        linux-kernel@vger.kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Yazen Ghannam <yazen.ghannam@amd.com>
-Subject: Re: [RFC PATCH 1/2] x86/mce: Handle AMD threshold interrupt storms
-Message-ID: <Yg992OrUbfmtRizs@zn.tnic>
-References: <20220217141609.119453-1-Smita.KoralahalliChannabasappa@amd.com>
- <20220217141609.119453-2-Smita.KoralahalliChannabasappa@amd.com>
- <Yg6FqR2cMZDwdBdi@agluck-desk3.sc.intel.com>
+        with ESMTP id S238358AbiBSOfB (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Sat, 19 Feb 2022 09:35:01 -0500
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC29960DA1
+        for <linux-edac@vger.kernel.org>; Sat, 19 Feb 2022 06:34:41 -0800 (PST)
+Received: by mail-wr1-x42c.google.com with SMTP id v12so19312775wrv.2
+        for <linux-edac@vger.kernel.org>; Sat, 19 Feb 2022 06:34:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:sender:from:date:message-id:subject:to;
+        bh=Q3aoV/cLmnLwg58z2hJV12biD5inoZi1wHtPzY5nqyU=;
+        b=e9OYxS4W5zYtAj9wrdp9GhFHj/apI0A9jyZAN0/9Bst1gqJzhMojeTpzdny8fXmnQQ
+         p9S+5WRWiVHElCxPuvIeHwNuN9GXm9kAzEmgZ4t9O0XlOzwtUFsCDuRyKPr+zENfmAwY
+         5cVS0FwZIhmS1RfnrS4xeYIf3iTNZJQoxhCoTa8iMXf7n4gKyXnuroBGCNLbzDnyogdN
+         FmmCIEElSTAd+4gI4AO0MLflG0XV1ekK6VWg3w53uHQ0rZ4bvq27x8HV6pLQ9ITx8izn
+         bAxEsuRZ3FVIu8PZxGdG3mTSlFjo/pHNSAavmvIx4o6qlKQdaR/sbglhwZSygj1PnWRf
+         lQDQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
+         :to;
+        bh=Q3aoV/cLmnLwg58z2hJV12biD5inoZi1wHtPzY5nqyU=;
+        b=gRQMTmf1rfprRjX7tI9/j0ulZMpegSeTuduRuNlAMFqeSrewSaSWAo+tGrLqYgxV/D
+         RCSgWYDKLcdByWmW952vnGWygWJxeWUU3W3jTqWvHy4xKEDzcPNXsMMV35zuwAzTViSY
+         AA6ahntre+glx6kGHFJTo0HVuKqSLLDOQ+bTxCZmwJbnK8xm8be9IFuzm4OKzzxlCd+N
+         WsfN0CXnNbBrsWsTGYB7lGFdYREwlPfVZDm1Ru1Mn0UB/3wbdGxEkxefwWG6TqHErfV6
+         LCODG7lr4qWAhSWAZC1R/ohb6bNYnxC/0RXOlXOrosKYvSwYH4LRLQ0uMOfuh86XWU/A
+         MKeQ==
+X-Gm-Message-State: AOAM532Q63H2fDTm6eblQZcq3L4QhBrxabMx6mm6N6xmu3reRmIubcS2
+        x4VY6oCyVDeAIBc0nnomhLx6ouiLYi2OJpdfOII=
+X-Google-Smtp-Source: ABdhPJwj22q+1hn+ssWA1zh9dDs83vvkd4Ikzr2gljjOtuVFdTylqOI3bveDjZ9OlGBbKagzTrLB+9X+tILLrp7bACc=
+X-Received: by 2002:a5d:64e2:0:b0:1e8:e8e:c134 with SMTP id
+ g2-20020a5d64e2000000b001e80e8ec134mr9664718wri.537.1645281280230; Sat, 19
+ Feb 2022 06:34:40 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <Yg6FqR2cMZDwdBdi@agluck-desk3.sc.intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+Sender: ms.ammiratalianlee11@gmail.com
+Received: by 2002:adf:ed08:0:0:0:0:0 with HTTP; Sat, 19 Feb 2022 06:34:39
+ -0800 (PST)
+From:   Johanna Maaly Bob <johannamaalybob89@gmail.com>
+Date:   Sat, 19 Feb 2022 14:34:39 +0000
+X-Google-Sender-Auth: Ch_0F5a7OFIyGu8Pn62njMasiVY
+Message-ID: <CAEPijZnF6TjJA00R+SmAdvCsfTHkNP2=9t_YNJDohEpFBaTvkg@mail.gmail.com>
+Subject: Greetings
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.0 required=5.0 tests=BAYES_40,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,17 +64,11 @@ Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Thu, Feb 17, 2022 at 09:28:09AM -0800, Luck, Tony wrote:
-> I've been sitting on some partially done patches to re-work
-> storm handling for Intel ... which rips out all the existing
-> storm bits and replaces with something all new. I'll post the
-> 2-part series as replies to this.
-
-Which begs the obvious question: how much of that code can be shared
-between the two?
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+Good day.
+My Name Is Johanna Maaly Bob from Australia, I am very sorry If I
+interfere into your privacy,i will like to get acquainted with you. I
+will appreciate if granted this Privilege to know you more. Get back
+to me  for formal introduction.
+waiting earnestly to read from you.
+Your From
+Mrs.Johanna Maaly Bob
