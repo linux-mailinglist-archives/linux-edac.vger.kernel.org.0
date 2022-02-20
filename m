@@ -2,74 +2,103 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 24A9A4BD13D
-	for <lists+linux-edac@lfdr.de>; Sun, 20 Feb 2022 21:15:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 69DEA4BD16A
+	for <lists+linux-edac@lfdr.de>; Sun, 20 Feb 2022 21:26:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244778AbiBTUPX (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Sun, 20 Feb 2022 15:15:23 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35126 "EHLO
+        id S237588AbiBTU0V (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Sun, 20 Feb 2022 15:26:21 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238792AbiBTUPW (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Sun, 20 Feb 2022 15:15:22 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AC414C42E;
-        Sun, 20 Feb 2022 12:15:00 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        with ESMTP id S232742AbiBTU0U (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Sun, 20 Feb 2022 15:26:20 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CDD63968C;
+        Sun, 20 Feb 2022 12:25:55 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 55061B80DB6;
-        Sun, 20 Feb 2022 20:14:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 219CCC340E8;
-        Sun, 20 Feb 2022 20:14:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645388098;
-        bh=vTvrVsvOELmsKXEboyBj9jxLeG/JSHr9FcsA1TYbJik=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=NAXVWWoWYV8fxx828t8VdASdvCeZQaGE+FH6Dz9EoBfeo9ZQRbZbJozf0RFcHhJ7M
-         8LPmmQ7XXo4Or+3jQ3N8NOjHjnD+6swRJgxftM9vAImp2wcNLBPvRRFrlVXA0NjsWI
-         6e3hmcUh3HWnivWxwMUVt2riNbUqioPje1dspL9HvOrFXNuUlgO4dLTeIgRnoxOtIJ
-         ibhm6+g9pqQN8W8pfbQlz2lP8PwHLil0Gk54zJzooktpM7vwnhxzcPBsOy1weABKI1
-         6rjOi70tHJsBzuhEko9CgY6OygPckZA8zz3O7wirvEAlIDAJWtOsTBrzTloYbRG3wT
-         aGToFItR0iRiA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 10E2DE6D447;
-        Sun, 20 Feb 2022 20:14:58 +0000 (UTC)
-Subject: Re: [GIT PULL] EDAC fix for 5.17
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <YhIq94B0MpYGrEm2@zn.tnic>
-References: <YhIq94B0MpYGrEm2@zn.tnic>
-X-PR-Tracked-List-Id: <linux-edac.vger.kernel.org>
-X-PR-Tracked-Message-Id: <YhIq94B0MpYGrEm2@zn.tnic>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/ras/ras.git tags/edac_urgent_for_v5.17_rc5
-X-PR-Tracked-Commit-Id: f8efca92ae509c25e0a4bd5d0a86decea4f0c41e
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 6e8e752f705c2713005a3182c8444ef7b54f10aa
-Message-Id: <164538809806.22885.16950927019152123970.pr-tracker-bot@kernel.org>
-Date:   Sun, 20 Feb 2022 20:14:58 +0000
-To:     Borislav Petkov <bp@suse.de>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-edac <linux-edac@vger.kernel.org>,
+        by smtp-out2.suse.de (Postfix) with ESMTPS id B56BD1F38A;
+        Sun, 20 Feb 2022 20:25:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1645388753; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=cIujPNmLzAcbExdyDmdlncVPlTYaCUXow8+FxcIJUvI=;
+        b=YektIrWqMYcdViQHwohDwBXpNM/qjP8cXxJt1pcyTQ5hY3Ovw7cOeRaOTD6Az2jnCLwUK0
+        WfTWRPf/KkscT1acoM5UmettcHfGz7j3qN3Djkwb2GXVuMVRKqNGq2zUpSdWCOF0iXlUQO
+        pSH1lQawW+/dVovF83uYDdfVFdEROXo=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1645388753;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=cIujPNmLzAcbExdyDmdlncVPlTYaCUXow8+FxcIJUvI=;
+        b=n1XQ+auv8Snhqzoy6A7K//7+C3BZIGTaeDlyKqEYnNzh0PKYmmaU0OQ60UCZS0gxynj+YS
+        p+BntTi7w9IFXHAA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 95AD21331E;
+        Sun, 20 Feb 2022 20:25:53 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id l1TSI9GjEmJFIgAAMHmgww
+        (envelope-from <bp@suse.de>); Sun, 20 Feb 2022 20:25:53 +0000
+Date:   Sun, 20 Feb 2022 21:25:55 +0100
+From:   Borislav Petkov <bp@suse.de>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-edac <linux-edac@vger.kernel.org>,
         lkml <linux-kernel@vger.kernel.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Subject: Re: [GIT PULL] EDAC fix for 5.17
+Message-ID: <YhKj08BBnevqtbch@zn.tnic>
+References: <YhIq94B0MpYGrEm2@zn.tnic>
+ <CAHk-=whi4n6xvy99U-q_GrR_hHk8es4GtDKtywiL5nRFUWroAQ@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAHk-=whi4n6xvy99U-q_GrR_hHk8es4GtDKtywiL5nRFUWroAQ@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-The pull request you sent on Sun, 20 Feb 2022 12:50:15 +0100:
+On Sun, Feb 20, 2022 at 12:12:41PM -0800, Linus Torvalds wrote:
+> Or maybe the comment should be fixed instead, and talk about "natural
+> alignment" rather than "compiler alignment".
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/ras/ras.git tags/edac_urgent_for_v5.17_rc5
+Yah, where do I start... so, about this, I think I can simplify it by
+simply unconditionally aligning to 8. My gut feeling is telling me
+8-bytes alignment should simply work on everything. Because if it does,
+all that crap becomes a lot simpler. But maybe I'm being too simplistic
+here and there might be a corner-case where 8-bytes alignment just
+doesn't work...
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/6e8e752f705c2713005a3182c8444ef7b54f10aa
+Then, that edac_align_ptr() thing is an abomination. It probably has
+made sense at some point to allocate the whole structure, including the
+embedded pointers in one go but I can't recall of ever seeing something
+like that done somewhere else around the kernel. But maybe you'll know
+of another example and why that would have made sense in the past.
 
-Thank you!
+If not, I'm thinking of gradually converting all drivers to do normal
+structs allocation like the rest of the tree does and then getting rid
+of that thing. 
+
+And I keep hoping someone else would volunteer but no one has so far...
+
+Thx.
 
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+Regards/Gruss,
+    Boris.
+
+SUSE Software Solutions Germany GmbH, GF: Ivo Totev, HRB 36809, AG Nürnberg
