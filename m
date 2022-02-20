@@ -2,104 +2,99 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 65D1C4BCE43
-	for <lists+linux-edac@lfdr.de>; Sun, 20 Feb 2022 12:50:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1558F4BD139
+	for <lists+linux-edac@lfdr.de>; Sun, 20 Feb 2022 21:13:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231159AbiBTLui (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Sun, 20 Feb 2022 06:50:38 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33472 "EHLO
+        id S230148AbiBTUNW (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Sun, 20 Feb 2022 15:13:22 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229924AbiBTLuf (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Sun, 20 Feb 2022 06:50:35 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 047FC4B87C;
-        Sun, 20 Feb 2022 03:50:14 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 3A0C421991;
-        Sun, 20 Feb 2022 11:50:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1645357813; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=/im0JN/3aSOtHyIEyKZQNZI+WTUe+HXYcr39tkRxEuA=;
-        b=Yz22vOy5MOK2W9S4Ke7hKUGtQTCu/Ef7Jeec4+jUj7wxhwoi/LIrI4meQvHI4RnJTwwxNF
-        P1N1Zq5ny+qSQp5uYdD9PesARoj5jDI9mo+14ltGKOdZJ9g2UkK/HLtoNoqIicsq1bnXox
-        tRWOxkAoHxSZPko04rqc/l99+zx1Kdk=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1645357813;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=/im0JN/3aSOtHyIEyKZQNZI+WTUe+HXYcr39tkRxEuA=;
-        b=p8T+v/ingDVNtGfAfzemg94ORYPlmALoNfKZ/nljPX0n0pm5DllWlKr63vRjXkCE44OccB
-        5VgfJo4ekIs+vyAg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 2550D12FC5;
-        Sun, 20 Feb 2022 11:50:13 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id NPb+CPUqEmLTHgAAMHmgww
-        (envelope-from <bp@suse.de>); Sun, 20 Feb 2022 11:50:13 +0000
-Date:   Sun, 20 Feb 2022 12:50:15 +0100
-From:   Borislav Petkov <bp@suse.de>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
+        with ESMTP id S244777AbiBTUNV (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Sun, 20 Feb 2022 15:13:21 -0500
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3625837A02
+        for <linux-edac@vger.kernel.org>; Sun, 20 Feb 2022 12:13:00 -0800 (PST)
+Received: by mail-lf1-x129.google.com with SMTP id b11so14893220lfb.12
+        for <linux-edac@vger.kernel.org>; Sun, 20 Feb 2022 12:13:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=cFxI/E7GISHQoZSmk/0oS8AXoqkjxl7Cu/QeFTvV0Ys=;
+        b=dnnhS450j/2Trb5ywwsqiILXa4WHzzPx8XIZdP4lB5VS0nlDpw5/RaI8iGmnF1bKXp
+         BgJWyyrTd0n645DBU7Uv8OvZfuXr+eHfrWRH146QMxFda/S1HQav7o94a3+46wRg8tGK
+         lMjskL7Lbw91TY3BtMevVeE9MtjinmRyll0kg=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=cFxI/E7GISHQoZSmk/0oS8AXoqkjxl7Cu/QeFTvV0Ys=;
+        b=66kmHGU7Orc3XuRzKI8rAQLz4VoOzB1f+gCFL7z+EOOo5Gt0JZwTxBaS5t2mFQRJtD
+         cesCmnpEpZne2+NUqAnaF+SHz8H5e9G3h/8gOdIQRoh5kXKSDoJCqQzQkX/1zOlC4aTw
+         acshbdnBRxKXajWRqI+Gt4yPnLn+CTrsVp/elz0Qivv3M7v4GHu3+1D9BirCxON2Nsc0
+         F3yGEWEn+wybWn/gOpyIbK/GnXffwDPTTYp8KmithHKMTxDyWw5bamMNv3iHwKsBYi5C
+         ag49clx9yWKLwG1tvJ2eSoCdRHwPmh0HJdpwyZxhkrKs65Ayq0ndyXA0zJNPK4U87HpD
+         nZow==
+X-Gm-Message-State: AOAM5300dOvQgL+r9LAHOskKhUgOmZjI6yZM7tThCPyj3bsyjkTFVwpD
+        CqtF3cn1CKpjaK+B68nNnzyFBYlpfv01daA7
+X-Google-Smtp-Source: ABdhPJxly6VdBk7XE2KuAwV8+DoPYiJs8ScZ+/K/+o1AaaDwbX+uowBxxugJZSFYHAdjtWvGCX/q3w==
+X-Received: by 2002:a05:6512:150d:b0:442:aad5:2550 with SMTP id bq13-20020a056512150d00b00442aad52550mr12079756lfb.678.1645387978318;
+        Sun, 20 Feb 2022 12:12:58 -0800 (PST)
+Received: from mail-lf1-f42.google.com (mail-lf1-f42.google.com. [209.85.167.42])
+        by smtp.gmail.com with ESMTPSA id k9sm904208lfo.155.2022.02.20.12.12.57
+        for <linux-edac@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 20 Feb 2022 12:12:57 -0800 (PST)
+Received: by mail-lf1-f42.google.com with SMTP id u20so14949860lff.2
+        for <linux-edac@vger.kernel.org>; Sun, 20 Feb 2022 12:12:57 -0800 (PST)
+X-Received: by 2002:ac2:4211:0:b0:438:2f1:83c4 with SMTP id
+ y17-20020ac24211000000b0043802f183c4mr12021984lfh.435.1645387977368; Sun, 20
+ Feb 2022 12:12:57 -0800 (PST)
+MIME-Version: 1.0
+References: <YhIq94B0MpYGrEm2@zn.tnic>
+In-Reply-To: <YhIq94B0MpYGrEm2@zn.tnic>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Sun, 20 Feb 2022 12:12:41 -0800
+X-Gmail-Original-Message-ID: <CAHk-=whi4n6xvy99U-q_GrR_hHk8es4GtDKtywiL5nRFUWroAQ@mail.gmail.com>
+Message-ID: <CAHk-=whi4n6xvy99U-q_GrR_hHk8es4GtDKtywiL5nRFUWroAQ@mail.gmail.com>
+Subject: Re: [GIT PULL] EDAC fix for 5.17
+To:     Borislav Petkov <bp@suse.de>
 Cc:     linux-edac <linux-edac@vger.kernel.org>,
         lkml <linux-kernel@vger.kernel.org>
-Subject: [GIT PULL] EDAC fix for 5.17
-Message-ID: <YhIq94B0MpYGrEm2@zn.tnic>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-Hi Linus,
+On Sun, Feb 20, 2022 at 3:50 AM Borislav Petkov <bp@suse.de> wrote:
+>
+> please pull a fix for a long-standing, hard-to-catch issue in the EDAC
+> weird struct allocation code, for 5.17.
 
-please pull a fix for a long-standing, hard-to-catch issue in the EDAC
-weird struct allocation code, for 5.17.
+Heh. Yeah, that was subtly buggy.
 
-Thx.
+Side note: the comment says that it will align to at least as much as
+the compiler would do, but then it does something different, eg
 
----
+        if (size > sizeof(long))
+                align = sizeof(long long);
+        ...
 
-The following changes since commit 754e0b0e35608ed5206d6a67a791563c631cec07:
+and it might make sense to use "__alignof__()" instead of "sizeof()"
+just to make the code match the comment.
 
-  Linux 5.17-rc4 (2022-02-13 12:13:30 -0800)
+For example, on 32-bit x86, "sizeof(long long)" is 8, but
+"__alignof__(long long)" is only 4.
 
-are available in the Git repository at:
+And then we have m68k..
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/ras/ras.git tags/edac_urgent_for_v5.17_rc5
+Or maybe the comment should be fixed instead, and talk about "natural
+alignment" rather than "compiler alignment".
 
-for you to fetch changes up to f8efca92ae509c25e0a4bd5d0a86decea4f0c41e:
-
-  EDAC: Fix calculation of returned address and next offset in edac_align_ptr() (2022-02-15 15:54:46 +0100)
-
-----------------------------------------------------------------
-- Fix a long-standing struct alignment bug in the EDAC struct allocation code
-
-----------------------------------------------------------------
-Eliav Farber (1):
-      EDAC: Fix calculation of returned address and next offset in edac_align_ptr()
-
- drivers/edac/edac_mc.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
--- 
-Regards/Gruss,
-    Boris.
-
-SUSE Software Solutions Germany GmbH, GF: Ivo Totev, HRB 36809, AG Nürnberg
+             Linus
