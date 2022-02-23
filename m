@@ -2,91 +2,176 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB75B4C039C
-	for <lists+linux-edac@lfdr.de>; Tue, 22 Feb 2022 22:15:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 595FD4C0E2D
+	for <lists+linux-edac@lfdr.de>; Wed, 23 Feb 2022 09:24:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231452AbiBVVQE (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Tue, 22 Feb 2022 16:16:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42014 "EHLO
+        id S237670AbiBWIZB (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Wed, 23 Feb 2022 03:25:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229620AbiBVVQE (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Tue, 22 Feb 2022 16:16:04 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FAF1F1ADF;
-        Tue, 22 Feb 2022 13:15:38 -0800 (PST)
-Received: from zn.tnic (dslb-088-067-221-104.088.067.pools.vodafone-ip.de [88.67.221.104])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 19CAF1EC053F;
-        Tue, 22 Feb 2022 22:15:33 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1645564533;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=FY7rk9icL2QjQP9h0uce+oJPCClSEf6T3glXPW4y6A0=;
-        b=hRsf68l4Ok7Fg3MYi/GsyvKGo/21fJlMNCXpTP2YOdJpmWSfqLjknZbukSQqcemfq4wmTV
-        IZCEi6XduLIlJG33HfzEFmYe8Em7j/1/6aQEpSAlHdLgF2AiOcARzD8yTBWcQ/uVYnUgH2
-        R0P4XTxz5DZmTtWFQC2KTmhnYGIsX/w=
-Date:   Tue, 22 Feb 2022 22:15:37 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     "Koralahalli Channabasappa, Smita" <skoralah@amd.com>
-Cc:     Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>,
-        x86@kernel.org, linux-edac@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Tony Luck <tony.luck@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        James Morse <james.morse@arm.com>,
-        Robert Richter <rric@kernel.org>,
-        Yazen Ghannam <yazen.ghannam@amd.com>
-Subject: Re: [PATCH v3 3/4] x86/mce, EDAC/mce_amd: Cache MCA_CONFIG[McaX] in
- struct mce_bank
-Message-ID: <YhVSecR7DqhNvFod@zn.tnic>
-References: <20220211223442.254489-1-Smita.KoralahalliChannabasappa@amd.com>
- <20220211223442.254489-4-Smita.KoralahalliChannabasappa@amd.com>
- <YhUC1wW0mxC/Dmpv@zn.tnic>
- <66a6cc6e-55fa-45c4-1387-ff9d055eec23@amd.com>
+        with ESMTP id S231350AbiBWIZB (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Wed, 23 Feb 2022 03:25:01 -0500
+Received: from spam.unicloud.com (eage.unicloud.com [220.194.70.58])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D87C65A5A5;
+        Wed, 23 Feb 2022 00:24:32 -0800 (PST)
+Received: from eage.unicloud.com ([220.194.70.35])
+        by spam.unicloud.com with ESMTP id 21N8Lh1l031001;
+        Wed, 23 Feb 2022 16:21:43 +0800 (GMT-8)
+        (envelope-from luofei@unicloud.com)
+Received: from localhost.localdomain (10.10.1.7) by zgys-ex-mb09.Unicloud.com
+ (10.10.0.24) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2375.17; Wed, 23
+ Feb 2022 16:21:42 +0800
+From:   luofei <luofei@unicloud.com>
+To:     <tony.luck@intel.com>, <bp@alien8.de>, <tglx@linutronix.de>,
+        <mingo@redhat.com>, <dave.hansen@linux.intel.com>,
+        <x86@kernel.org>, <naoya.horiguchi@nec.com>,
+        <akpm@linux-foundation.org>
+CC:     <hpa@zytor.com>, <gregkh@linuxfoundation.org>, <rafael@kernel.org>,
+        <linux-edac@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-mm@kvack.org>, luofei <luofei@unicloud.com>
+Subject: [PATCH v5 1/2] mm/hwpoison: Avoid the impact of hwpoison_filter() return value on mce handler
+Date:   Wed, 23 Feb 2022 03:21:35 -0500
+Message-ID: <20220223082135.2769649-1-luofei@unicloud.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <66a6cc6e-55fa-45c4-1387-ff9d055eec23@amd.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.10.1.7]
+X-ClientProxiedBy: zgys-ex-mb08.Unicloud.com (10.10.0.14) To
+ zgys-ex-mb09.Unicloud.com (10.10.0.24)
+X-DNSRBL: 
+X-MAIL: spam.unicloud.com 21N8Lh1l031001
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Tue, Feb 22, 2022 at 02:47:44PM -0600, Koralahalli Channabasappa, Smita wrote:
-> But what do you think of severity? Will this make an impact when handling
-> panic severity levels? .. mce_severity_amd_smca().
+When the hwpoison page meets the filter conditions, it should
+not be regarded as successful memory_failure() processing for
+mce handler, but should return a distinct value, otherwise
+mce handler regards the error page has been identified and
+isolated, which may lead to calling set_mce_nospec() to change
+page attribute, etc.
 
-Well, look at the code: severity grading gets called when either polling
-or #MC handler gets to log an MCE. Reading an MSR costs a couple of
-hundred cycles. The whole MCE logging path costs maybe a couple of
-*orders* of magnitude more so that MSR read is in the noise when you
-have a 4GHz CPU executing 4 billion cycles per second.
+Here memory_failure() return -EOPNOTSUPP to indicate that the
+error event is filtered, mce handler should not take any action
+for this situation and hwpoison injector should treat as correct.
 
-Now, that's for a single MCE.
+Signed-off-by: luofei <luofei@unicloud.com>
+---
+ arch/x86/kernel/cpu/mce/core.c | 8 +++++---
+ drivers/base/memory.c          | 2 ++
+ mm/hwpoison-inject.c           | 3 ++-
+ mm/madvise.c                   | 2 ++
+ mm/memory-failure.c            | 9 +++++++--
+ 5 files changed, 18 insertions(+), 6 deletions(-)
 
-If it were more, say 10s, 100s, 1000s MCEs, then the MSR read is the
-least of your problems.
-
-But this is me conjecturing - I'm always interested in a real proof
-where it shows or it does not.
-
-I guess what I'm trying to say is, yeah, sure, speed is mostly a good
-argument. But you always need to consider at what cost you'd get that
-speed. And if at all. There are other important things like keeping the
-code base maintainable, readable and able to accept modifications for
-new features.
-
-So there's always this question of balance that needs to be asked...
-
+diff --git a/arch/x86/kernel/cpu/mce/core.c b/arch/x86/kernel/cpu/mce/core.c
+index 728f3b36ce2d..f4b56904db8a 100644
+--- a/arch/x86/kernel/cpu/mce/core.c
++++ b/arch/x86/kernel/cpu/mce/core.c
+@@ -1332,10 +1332,12 @@ static void kill_me_maybe(struct callback_head *cb)
+ 
+ 	/*
+ 	 * -EHWPOISON from memory_failure() means that it already sent SIGBUS
+-	 * to the current process with the proper error info, so no need to
+-	 * send SIGBUS here again.
++	 * to the current process with the proper error info,
++	 * -EOPNOTSUPP means hwpoison_filter() filtered the error event,
++	 *
++	 * In both cases, no further processing is required.
+ 	 */
+-	if (ret == -EHWPOISON)
++	if (ret == -EHWPOISON || ret == -EOPNOTSUPP)
+ 		return;
+ 
+ 	pr_err("Memory error not recovered");
+diff --git a/drivers/base/memory.c b/drivers/base/memory.c
+index 365cd4a7f239..abf407e45467 100644
+--- a/drivers/base/memory.c
++++ b/drivers/base/memory.c
+@@ -555,6 +555,8 @@ static ssize_t hard_offline_page_store(struct device *dev,
+ 		return -EINVAL;
+ 	pfn >>= PAGE_SHIFT;
+ 	ret = memory_failure(pfn, 0);
++	if (ret == -EOPNOTSUPP)
++		ret = 0;
+ 	return ret ? ret : count;
+ }
+ 
+diff --git a/mm/hwpoison-inject.c b/mm/hwpoison-inject.c
+index aff4d27ec235..a1d6fc3c78b9 100644
+--- a/mm/hwpoison-inject.c
++++ b/mm/hwpoison-inject.c
+@@ -48,7 +48,8 @@ static int hwpoison_inject(void *data, u64 val)
+ 
+ inject:
+ 	pr_info("Injecting memory failure at pfn %#lx\n", pfn);
+-	return memory_failure(pfn, 0);
++	err = memory_failure(pfn, 0);
++	return (err == -EOPNOTSUPP) ? 0 : err;
+ }
+ 
+ static int hwpoison_unpoison(void *data, u64 val)
+diff --git a/mm/madvise.c b/mm/madvise.c
+index ae35d72627ef..e7cb7a0751d6 100644
+--- a/mm/madvise.c
++++ b/mm/madvise.c
+@@ -1096,6 +1096,8 @@ static int madvise_inject_error(int behavior,
+ 			pr_info("Injecting memory failure for pfn %#lx at process virtual address %#lx\n",
+ 				 pfn, start);
+ 			ret = memory_failure(pfn, MF_COUNT_INCREASED);
++			if (ret == -EOPNOTSUPP)
++				ret = 0;
+ 		}
+ 
+ 		if (ret)
+diff --git a/mm/memory-failure.c b/mm/memory-failure.c
+index 662afe7b514f..7e16d31df0f3 100644
+--- a/mm/memory-failure.c
++++ b/mm/memory-failure.c
+@@ -1528,7 +1528,7 @@ static int memory_failure_hugetlb(unsigned long pfn, int flags)
+ 				if (TestClearPageHWPoison(head))
+ 					num_poisoned_pages_dec();
+ 				unlock_page(head);
+-				return 0;
++				return -EOPNOTSUPP;
+ 			}
+ 			unlock_page(head);
+ 			res = MF_FAILED;
+@@ -1615,7 +1615,7 @@ static int memory_failure_dev_pagemap(unsigned long pfn, int flags,
+ 		goto out;
+ 
+ 	if (hwpoison_filter(page)) {
+-		rc = 0;
++		rc = -EOPNOTSUPP;
+ 		goto unlock;
+ 	}
+ 
+@@ -1688,6 +1688,10 @@ static DEFINE_MUTEX(mf_mutex);
+  *
+  * Must run in process context (e.g. a work queue) with interrupts
+  * enabled and no spinlocks hold.
++ *
++ * Return: 0 for successfully handled the memory error,
++ *         -EOPNOTSUPP for memory_filter() filtered the error event,
++ *         < 0(except -EOPNOTSUPP) on failure.
+  */
+ int memory_failure(unsigned long pfn, int flags)
+ {
+@@ -1843,6 +1847,7 @@ int memory_failure(unsigned long pfn, int flags)
+ 			num_poisoned_pages_dec();
+ 		unlock_page(p);
+ 		put_page(p);
++		res = -EOPNOTSUPP;
+ 		goto unlock_mutex;
+ 	}
+ 
 -- 
-Regards/Gruss,
-    Boris.
+2.27.0
 
-https://people.kernel.org/tglx/notes-about-netiquette
