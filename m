@@ -2,138 +2,131 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 082A44C4861
-	for <lists+linux-edac@lfdr.de>; Fri, 25 Feb 2022 16:12:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B511D4C4EDD
+	for <lists+linux-edac@lfdr.de>; Fri, 25 Feb 2022 20:34:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238482AbiBYPNW convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-edac@lfdr.de>); Fri, 25 Feb 2022 10:13:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36320 "EHLO
+        id S234966AbiBYTed (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Fri, 25 Feb 2022 14:34:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232043AbiBYPNV (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Fri, 25 Feb 2022 10:13:21 -0500
-Received: from eos.fwall.u-szeged.hu (eos.fwall.u-szeged.hu [160.114.120.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05ED423BD7
-        for <linux-edac@vger.kernel.org>; Fri, 25 Feb 2022 07:12:47 -0800 (PST)
-Received: from esym.intra ([192.168.105.4] helo=esym.fwall.u-szeged.hu)
-        by eos.fwall.u-szeged.hu with esmtp (Exim 4.94.2)
-        (envelope-from <tibor.gyori@chem.u-szeged.hu>)
-        id 1nNcGp-00GWRV-3e; Fri, 25 Feb 2022 16:12:35 +0100
-X-AuditID: a07278f7-421bd7000000255f-5e-6218f1e22856
-Received: from eos.fwall.u-szeged.hu (eos.intra [192.168.105.3])
-        by esym.fwall.u-szeged.hu (Symantec Messaging Gateway) with SMTP id F4.25.09567.2E1F8126; Fri, 25 Feb 2022 16:12:34 +0100 (CET)
-Received: from sol.cc.u-szeged.hu ([160.114.8.24])
-        by eos.fwall.u-szeged.hu with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <tibor.gyori@chem.u-szeged.hu>)
-        id 1nNcGn-00GWRQ-3a; Fri, 25 Feb 2022 16:12:34 +0100
-Received: from apache by sol.cc.u-szeged.hu with local (Exim 4.80.1)
-        (envelope-from <tibor.gyori@chem.u-szeged.hu>)
-        id 1nNcGo-0002Xl-I2; Fri, 25 Feb 2022 16:12:34 +0100
-Received: from BC9CE9E9.catv.pool.telekom.hu (BC9CE9E9.catv.pool.telekom.hu
- [188.156.233.233]) by webmail.u-szeged.hu (Horde Framework) with HTTP; Fri,
- 25 Feb 2022 16:12:34 +0100
-Message-ID: <20220225161234.11073zpf0de419eq@webmail.u-szeged.hu>
-Date:   Fri, 25 Feb 2022 16:12:34 +0100
-From:   tibor.gyori@chem.u-szeged.hu
-To:     Yazen Ghannam <yazen.ghannam@amd.com>
-Cc:     linux-edac@vger.kernel.org
-Subject: Re: Meaning of negative memory_channel value in rasdaemon message
-References: <20220211234058.81443i8317qnq77e@webmail.u-szeged.hu>
- <Ygvb0MclEFfDNqnQ@yaz-ubuntu>
-In-Reply-To: <Ygvb0MclEFfDNqnQ@yaz-ubuntu>
+        with ESMTP id S234955AbiBYTec (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Fri, 25 Feb 2022 14:34:32 -0500
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2053.outbound.protection.outlook.com [40.107.237.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE3C51AAFF8;
+        Fri, 25 Feb 2022 11:33:59 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=CEMk03BZQe67r53HWoFHCLoLYS+4zRATtukxGwO3vn/+2YkkQKq4WCks/tNNm95/ao5kLx+mnS+4t9fD/ZaHgxwSTOySDXBHuqXR3afLBaAQPR+3jWaSxe1s4K2S70olwLdb2fk2r9KPttQZ/oXMXMK+uaS19aV5WU7TnaIKDgoejKmWme5h+NjIbxe+OUP3Ts39U9gK141e2XVJ/KzRMiAnkHWUsyEGrtKXP+p8Uoqr8adNTAWOLiqit4ElrPQQVghmAtfty9iV/AlvNcujybf/w9MUr7CQ7zC9AgB0YouZSwH85cWY0INBKx/IsQvZG4rxB5hajd5frUQU/emSwQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=o7yKMABXxPpKvxXaRqp5aI/TBJJ+C05ER1L2I1lWVbc=;
+ b=h543PgptTATuzzZdtc/1z5zcqCwZ/ZlDQ25DwSoqzplak9RSihPB0GleoMt7zq/5htC3rbzJC2nN5LGph/67FVDpGLB49L1Njwnv2fl0YdWS5ltaVu/qwQafHaoFku+FaLqeQuORSst6ypWy/DUApC3xl5uKbHmRJT32LY2NVXiwcv5rePl6clxzVIREeM6WeCWg5QZgELUNB00M6FfQMqvfpmOPD2FZGVtFS4w3C1NpYpTP3Ja1QL4nwQhG+JDkgD/hO9HQzXlqdKG7eHsTBrEU8FH5AOam2DsaX+bbYsJUStdxZ8kgskJxniTe86stTbuwi9YPQB1M2IKiutISxw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=o7yKMABXxPpKvxXaRqp5aI/TBJJ+C05ER1L2I1lWVbc=;
+ b=rTYwGLGRTJtu4c9fz5Xx557Ocn6U4KE9NelpFfMRbokbm3gOVqgzx21XOlX446TjDYAKy0eJaZ53XNFL8s+PS8SFOWL4IyTm6ogH2jPcJFypseShG89KvpoNi6/LUZqx4USY2DRC/wB6v8Pd4vDFYBTNqXsXWPIpmvUvhl63Of8=
+Received: from MW4PR04CA0203.namprd04.prod.outlook.com (2603:10b6:303:86::28)
+ by BY5PR12MB3956.namprd12.prod.outlook.com (2603:10b6:a03:1ab::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5017.26; Fri, 25 Feb
+ 2022 19:33:56 +0000
+Received: from CO1NAM11FT055.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:303:86:cafe::60) by MW4PR04CA0203.outlook.office365.com
+ (2603:10b6:303:86::28) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5017.24 via Frontend
+ Transport; Fri, 25 Feb 2022 19:33:56 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com;
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ CO1NAM11FT055.mail.protection.outlook.com (10.13.175.129) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5017.22 via Frontend Transport; Fri, 25 Feb 2022 19:33:55 +0000
+Received: from ethanolx50f7host.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.18; Fri, 25 Feb
+ 2022 13:33:54 -0600
+From:   Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>
+To:     <x86@kernel.org>, <linux-edac@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     Tony Luck <tony.luck@intel.com>, "H . Peter Anvin" <hpa@zytor.com>,
+        "Dave Hansen" <dave.hansen@linux.intel.com>,
+        James Morse <james.morse@arm.com>,
+        Robert Richter <rric@kernel.org>,
+        Yazen Ghannam <yazen.ghannam@amd.com>,
+        Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>
+Subject: [PATCH v4 0/3] x86/mce: Support extended MCA_ADDR address on SMCA systems
+Date:   Fri, 25 Feb 2022 13:33:39 -0600
+Message-ID: <20220225193342.215780-1-Smita.KoralahalliChannabasappa@amd.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=ISO-8859-2;
- DelSp="Yes";
- format="flowed"
-Content-Disposition: inline
-Content-Transfer-Encoding: 8BIT
-User-Agent: Internet Messaging Program (IMP) H3 (4.3.11)
-X-SZTE-local: YES
-X-SZTE-HU-local: YES
-X-Brightmail-Tracker: H4sIAAAAAAAAA11TfUwTdxjmrgWuXQ+PK21fy9csGDYchRETGCMqmC1kxsjM3B9sjrX2oB2l
-        JT06QZfwMXGFYWDqAnbEUSB8DUFwQ0gUDcoUBGUKS5RNmMCAKh9i+HKAu6N8FP97f/f8nud9
-        nnvuMA5Zy5NiGl0yZdAptDInPvd6pYYT8OQ5KIN6T4SEdneko6EtN/u5e9CorPtLTlEvGryi
-        0Rh+uIrSar6mDIG7vuSrL9/I4yQtEylTT+5x05GneA7Cw4DYCVm9tdwchI+RRCsCE9ctq4cs
-        FFotz1DboQaBurFeR9uhEYGZlgxHlo8TEWCu7OLkIBjGJbZDp1XFPnYiZFBUZnViZzfibXh8
-        YXblOofwgom7uRx2FhIfwaOmkpWZJBTQvbjgzM48wh+q8gZW5V2h/dwQ18aNhrpvm7nsKg7h
-        DhXLmO3xDii3PF1xICJCoWqMYkdgmKVFLraMblA8ZkXzETeznabZTtO8oWm20yxGuNWImKJT
-        E+VxRxVardwYQB+j4imVXG1sQJgWig0pc03IQtesvBVBMaQVOYShMil+lm89TAqVelWqWkGr
-        Y2mjMlFD0xq9TibCi/4GJemyjhmMWoqWeeHPX4qUpMSOQidpjmj0RjrWaNAyvWAcmRt+3sRw
-        cZUi9Rhl0NuorYg7xpVJcLI391OSiFckUwkUlUQZ1tAvMEzmiSMODg6k2MBYT4nTaJmvyN4T
-        4HunGF1Xe9hmaxt+a5GxJd1M3OwMxXityEFMINtq20LSSYpEWhNvv8ENlw+xztcgm7onPr7E
-        qIs3CPbKHUgidmWy7yqH5Or0OkrqgZ/1EitJEXtbbdRtziCV4ANsBsIOXVkifRMP2S1Rkls3
-        0ez3yFZqxMCKzCIYwryMM2x5rsy/9loIIR7BrhCsIrYMHvgEm0G0ft1eOriMUSSyBPBDIw3f
-        v+pCYeG7bhTmB6adYLG0EINzPcN8GMq4KIDCmRcCWC5vwSF7es4F2jsubIGezHkC+jJLXaF+
-        1iSEyu5rQhgteyCCiwV1Yvhz6JoEOpfa3GH53k0PKCmt94bm8axtUNJm8oH5tkkfaJj7zRea
-        7t/ZDrerh/2gqaDiLbhiyXwH/quaDIBXoyVyWG4YlluZ+tCN+pIVryd3w4NixWx9q9BafZ2L
-        K/WtE+yzS9PRikJRqs+zGO9B1z3HBUFj+yz7E5ba2o8m+qXVPJ6bOSQRPszsN0fcyeb1WnJV
-        vvXN1EHp6ODVwd/Nfup/YppqbuTX+fKjzlCx4T9X14yUfTPIi2z88a8QfVwcflgd5z798Sfj
-        VcUv66R396IxDg86c07m5ZV+/sekh7+pLvBfs9oyGpMQubvIOVq761RYcXKQOsN5tnN/4fFb
-        l5HzwolHISc829udUo9U9xWqC34KCH7vl5p9Ix5fTV0qGNnxQU+lPuz26UhvL++JmZ2khzZc
-        WZQWXH7J9/3PUrtN/YGnsj/kx4fl/0oLMk6H1UaadJyqvYWO1jSXh47tYZ6BB9yH4g6c3PKG
-        jEurFe/6cwy04n/h4AugwQUAAA==
-X-SZTE-AVcheck: YES
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 26ec3fcd-a1d1-4d80-fa6b-08d9f895c362
+X-MS-TrafficTypeDiagnostic: BY5PR12MB3956:EE_
+X-Microsoft-Antispam-PRVS: <BY5PR12MB39568CCB3093AA3D0823C390903E9@BY5PR12MB3956.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: i04IAXOn2cIXUIZLy0Uk78jhNVRQo2VwO/LeH4+Pd1siXlRMzgB1WoJYtw5++jJnIIviTVWoWgohBmrCPyCG4D01W8RxV2ttasR3YN7W9+9bNaQMviYavB81tGWBa0DMWZqH9YG2nAp8KGvChIZAsZgxOXMQxkyzscG1ElkGKVa1hYGHlf8tQ4nlWEHMHFHf0AbyVL3SfckEQ9YLBHBsQsNbEeCCgeAH7B0/G1bOGSKwKmOmGar1lj25Tu7xBwOKPNlVF11P0qyef7CKZ9X6TtfSB4QFGqTCLsNXFe/0aiPUxmQkV8dp0m+a/oDHqlYG9r4qkOVaWtu3oujdKj/Nw9tlNEqoSngbY0MaXwoTtK1sEzQzKeGuu0l7D/YDtsdq0dTk8rqfnbJqpXWx/yxaGl7UjD82m8fzdBhq1d2BFw0qlcC8xwjRe8Df54EHVlhvdXEBcsRQSshRexGk3SF2up8ZcW0KmgXIDAPklMPDMqwI23mE4x55kEsl1C1PZVRrf5VzP5XXJzgqmeazJMpZOXJFNEVWG6EANYxj+2uA6gtei+iXKP2kXm0TPDq+77LRdYJPgRnHGwoQwOnusKOEOtaWrD8phU7TWFCIyON4iSoKODlE6c1pvEtaVIEvq0cyAv511aZZOjwmrq6cYBfl+WJ3bS/Rsj146M+yNooMaplHmbgK0h5CrYvu+vII6xvowYXkRZj2JZxfHxIAzcs+BNypiPNY4TxQaprTtpF4lkMlTFCwOynbcnzZIP2Y8a3Q1kWSh1UGVWZ0GtY9QkQJAt1tB3g4rk1q3rwnVAnfRyE=
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230001)(4636009)(46966006)(36840700001)(40470700004)(1076003)(336012)(426003)(186003)(26005)(2616005)(4744005)(36860700001)(2906002)(83380400001)(16526019)(8676002)(8936002)(70586007)(508600001)(70206006)(316002)(82310400004)(86362001)(40460700003)(110136005)(54906003)(4326008)(356005)(36756003)(81166007)(6666004)(7696005)(966005)(5660300002)(47076005)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Feb 2022 19:33:55.9463
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 26ec3fcd-a1d1-4d80-fa6b-08d9f895c362
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT055.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR12MB3956
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-Idézet (Yazen Ghannam <yazen.ghannam@amd.com>):
+This series of patches adds support for extended physical address on newer
+AMD processors such as AMD 'Milan'.
 
-> On Fri, Feb 11, 2022 at 11:40:58PM +0100, tibor.gyori@chem.u-szeged.hu wrote:
->> Dear EDAC list,
->>
->> when rasdaemon reports a memory error, what does it mean for the
->> memory_channel value to be negative?
->>
->> Example:
->> Feb 11 22:34:40 CRD-MILAN-3 rasdaemon[918]:            <...>-42552 [001]
->> 0.007845: mce_record:           2022-02-11 22:34:40 +0100 Unified Memory
->> Controller (bank=18), status= 9c2040000000011b, Corrected error, no action
->> required., mci=CECC, mca= DRAM ECC error.
->> Feb 11 22:34:40 CRD-MILAN-3 rasdaemon[918]:  Memory Error 'mem-tx: generic
->> read, tx: generic, level: L3/generic', memory_channel=-1,csrow=3, cpu_type=
->> AMD Scalable MCA, cpu= 1, socketid= 0, misc= d01a0c7b01000000, addr=
->> 2fa07780, synd= e4da80000a800603, ipid= 9600350f00, mcgstatus=0, mcgcap=
->> 118, apicid= 1
->>
->> Is -1 a magic value for memory_channel? On the AMD Milan platform, I would
->> expect that memory channels would be numbered from 0 to 7. I googled for a
->> bit, but could not find where this sort of stuff would be documented.
->>
->
-> Hi Tibor,
->
-> Which version of rasdaemon are you using?
->
-> You may be missing the following commit which is including v0.6.7.
->
-> https://github.com/mchehab/rasdaemon/commit/854364ba44aee9bc5646f6537fc744b0b54aff37
->
-> Thanks,
-> Yazen
->
->
+The first patch provides a fix to avoid unnecessary padding in mce_bank
+struct.
 
-Dear Yazen,
+The second patch defines a separate helper function to extract
+MCA_ADDR[ErrorAddr].
 
-Thanks for taking the time to reply. Upon further investigation it  
-looks like the rasdaemon package provided by Ubuntu 20.04 is indeed  
-missing the commit you specified.
-Building rasdaemon from source has resolved this particular issue,  
-although I have to say it was not without bumps on the road.
-For what its worth, looking at the GitHub repo, I am somewhat  
-concerned that rasdaemon might be becoming unmaintained. No commits  
-have been made since Aug 2021, and reasonable-looking PRs are not  
-getting reviewed.
+Finally, the last patch adds support for extended ErrorAddr bits in
+MCA_ADDR.
 
-Best wishes,
-Tibor Gyõri
+Link:
+https://lkml.kernel.org/r/20220211223442.254489-1-Smita.KoralahalliChannabasappa@amd.com
 
-----------------------------------------------------------------
-This message was sent using IMP, the Internet Messaging Program.
+Smita Koralahalli (3):
+  x86/mce: Avoid unnecessary padding in struct mce_bank
+  x86/mce: Define function to extract ErrorAddr from MCA_ADDR
+  x86/mce: Add support for Extended Physical Address MCA changes
+
+ arch/x86/include/asm/mce.h         |  4 ++++
+ arch/x86/kernel/cpu/mce/amd.c      | 35 ++++++++++++++++++++++--------
+ arch/x86/kernel/cpu/mce/core.c     | 20 +++++------------
+ arch/x86/kernel/cpu/mce/internal.h | 16 ++++++++++++++
+ 4 files changed, 52 insertions(+), 23 deletions(-)
+
+-- 
+2.17.1
+
