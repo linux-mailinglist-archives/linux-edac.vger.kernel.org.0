@@ -2,43 +2,43 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EBB434C7181
-	for <lists+linux-edac@lfdr.de>; Mon, 28 Feb 2022 17:14:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 555B14C7182
+	for <lists+linux-edac@lfdr.de>; Mon, 28 Feb 2022 17:14:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231357AbiB1QPY (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Mon, 28 Feb 2022 11:15:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37812 "EHLO
+        id S237842AbiB1QP0 (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Mon, 28 Feb 2022 11:15:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237842AbiB1QPW (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Mon, 28 Feb 2022 11:15:22 -0500
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2078.outbound.protection.outlook.com [40.107.244.78])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51EC24552E
-        for <linux-edac@vger.kernel.org>; Mon, 28 Feb 2022 08:14:43 -0800 (PST)
+        with ESMTP id S235727AbiB1QP0 (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Mon, 28 Feb 2022 11:15:26 -0500
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2040.outbound.protection.outlook.com [40.107.236.40])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0972645069
+        for <linux-edac@vger.kernel.org>; Mon, 28 Feb 2022 08:14:47 -0800 (PST)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ZmPMnaoPh1GtkuNU4P+iVQTERYRY5sF/bEpMOnY2BR/XNvBVCeNGXq2Ck/FUMJz3il3lG1nAJMA1XBLKhLFrQKa0GfKAVGE22Dq5FjDdszPrLERJwoPyHG5ExircAqMyjJbFPLhNBjtLVns88EqYi8eDpvVcNoV9TpMfcrhxBNtbL+up0nsIPi1RL0Hb56Y5A6JRyQiuINl8wDqyXVoqqIb2JKKBKKGDtkzEy1fnPvWRz2PzEYzTw49Ye1Wxvdw3r1UwWI1mtK3cpnm9CbfTCR9Qe3+SUG5G2YdrNoBteN7Z4CXWYe/s3c1A//zQApVx+eCMw6BP0FaWeinMBPepKg==
+ b=ieQfr9ORJUtswVsfnu8uiD7qBp2K2N5kdi3x+tn2l7zW2PIwr979c4YGlF3fLHRbOuw7QGIqz/zXz0b6T3QzjKjTUK/22g9OHPfZuAf+n4VLRJx1BrMzRQjVE+hzq6OJs14e1XxCLFRwX+QIPixYfYr6B4P4v3/ToL5/kK6XpcP2m4Epa/hnEJLvzlJB6aQiXry663a/CdpfDo+/TXH6VeIDf1DTB6sv84M5n0Pug3tIZOO1XmsElOmT191RfNM5hVSDHBCOi6Saqdpn0IxXfwQxKcaHulhQhVZaJwQmR3DJF2t9hrqTXmNLr4wViPbDz0XyFsbkcLpl69l4Ysrm0w==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=bM1ZKUzt7Jg9MdO2fJFgcNGm0Uj0VnCDOQ6o87XbNHs=;
- b=mIbkxZczaQw9plAMtooubphpOIkB1MZtcaJGbiWpSR6W2VySDUhws6yQhaPkdNVH4gUUeqwSn8rO1TMffOHeQfSwCAiC6QRGu0t0put2emYIyLKeD3irA7ITykjIhCw6dJen7v6nLbu6KLcYL2wm1lJgbZAjcAea8UvxvSTLDFaTNCN8E7ShMZgzGVzSYtxyuq60DqjPOOAUg4IOrIhaG/b009Usd5tBVnRtxKveGmD0jVYm7B/tPslBtPvtZ6UR0vR3FWEyxy0E3Bd5jw7i4ij3swmHU0OMTt5eoiOO+jdoM6br7ED6suO+RRo+vEUEaI9nDZjYYsFQfYVc3VZvWw==
+ bh=/SECzATeStlzONTr4DtSWrw0W5IKHe8zt3AMBmILFCw=;
+ b=htXwYVnvP0UBLTvdMbwfBPk7jbD3fogr403F/3ReJUcIq6dDtSgKCpiroOYYe5kM27j3GkiehnQA5h8D/gECRo8x7ODXiyRNzFG53NyzsHyrkaRgFZD3w2dG2tb7yxh/ADQkWW/MCGSADpMqKa/a+EWTmOJloq0IhCtsTOi6CZ/CUdguqHPYd8eeDztXyz6hRBehq9K5PwMFturqyrwqEMuJoffaXZVG+KRa9ZRSsBgXazWLTP1uXKd2NnCvODgTd4mCRVWc8H/Vs1i1g7ERCpqhZ9npX6vJL+CCDFfWPR6OGB2YE/2w0yjIaoh3scD0waLfqo0Mzgm6h1eiuTcQ2A==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
  dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
  header.from=amd.com; dkim=none (message not signed); arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=bM1ZKUzt7Jg9MdO2fJFgcNGm0Uj0VnCDOQ6o87XbNHs=;
- b=WhSdJ7xExL1L5+b/TitxxuDQvyBiwGY8+i9OyUO/5yzY5G758IeeJ/7wUcVpJlm26xHTdhhB2qYAe1sjNzPgjze+yh3QDDzgOHqxolI3QUXcbV9JHdh8mGK3zxNSKJg7D1pdn1luhA9oApxuRbPft4DXazjErt8OT4J/D42shv4=
-Received: from BN8PR15CA0011.namprd15.prod.outlook.com (2603:10b6:408:c0::24)
- by BN6PR12MB1747.namprd12.prod.outlook.com (2603:10b6:404:106::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5017.21; Mon, 28 Feb
- 2022 16:14:41 +0000
-Received: from BN8NAM11FT030.eop-nam11.prod.protection.outlook.com
- (2603:10b6:408:c0:cafe::c4) by BN8PR15CA0011.outlook.office365.com
- (2603:10b6:408:c0::24) with Microsoft SMTP Server (version=TLS1_2,
+ bh=/SECzATeStlzONTr4DtSWrw0W5IKHe8zt3AMBmILFCw=;
+ b=DowcKAHzcbp4XEneDmIeNUM2HohrNmANfgcljhE4G44M3ot/bShQyjoGMZD7B5NelpJnX1JJ08GOh0bKCNBHxH9J9YTcEf4zN0Z3Exz4b5PmrAqzcRDBhqpnsKBJRRAGIJsfj4r7tUgs5b2OBoRgeu8tQ9BmG3JP/R4W+6kyHMo=
+Received: from BN6PR1701CA0007.namprd17.prod.outlook.com
+ (2603:10b6:405:15::17) by MN2PR12MB4583.namprd12.prod.outlook.com
+ (2603:10b6:208:26e::7) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5017.22; Mon, 28 Feb
+ 2022 16:14:44 +0000
+Received: from BN8NAM11FT057.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:405:15:cafe::a0) by BN6PR1701CA0007.outlook.office365.com
+ (2603:10b6:405:15::17) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5017.25 via Frontend
- Transport; Mon, 28 Feb 2022 16:14:42 +0000
+ Transport; Mon, 28 Feb 2022 16:14:44 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
  smtp.mailfrom=amd.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=amd.com;
@@ -46,21 +46,21 @@ Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
  165.204.84.17 as permitted sender) receiver=protection.outlook.com;
  client-ip=165.204.84.17; helo=SATLEXMB04.amd.com;
 Received: from SATLEXMB04.amd.com (165.204.84.17) by
- BN8NAM11FT030.mail.protection.outlook.com (10.13.177.146) with Microsoft SMTP
+ BN8NAM11FT057.mail.protection.outlook.com (10.13.177.49) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5017.22 via Frontend Transport; Mon, 28 Feb 2022 16:14:41 +0000
+ 15.20.5017.22 via Frontend Transport; Mon, 28 Feb 2022 16:14:44 +0000
 Received: from milan-ETHANOL-X.amd.com (10.180.168.240) by SATLEXMB04.amd.com
  (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.18; Mon, 28 Feb
- 2022 10:14:38 -0600
+ 2022 10:14:41 -0600
 From:   Naveen Krishna Chatradhi <nchatrad@amd.com>
 To:     <linux-edac@vger.kernel.org>
 CC:     <bp@alien8.de>, <mingo@redhat.com>, <mchehab@kernel.org>,
         <yazen.ghannam@amd.com>, Muralidhara M K <muralimk@amd.com>,
         "Naveen Krishna Chatradhi" <nchatrad@amd.com>
-Subject: [PATCH 09/14] EDAC/amd64: Add determine_edac_ctl_cap() into pvt->ops
-Date:   Mon, 28 Feb 2022 21:43:49 +0530
-Message-ID: <20220228161354.54923-10-nchatrad@amd.com>
+Subject: [PATCH 10/14] EDAC/amd64: Add setup_mci_misc_sttrs() into pvt->ops
+Date:   Mon, 28 Feb 2022 21:43:50 +0530
+Message-ID: <20220228161354.54923-11-nchatrad@amd.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20220228161354.54923-1-nchatrad@amd.com>
 References: <20220228161354.54923-1-nchatrad@amd.com>
@@ -71,24 +71,24 @@ X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
  (10.181.40.145)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: a5d77f04-27c5-437a-a895-08d9fad56d2b
-X-MS-TrafficTypeDiagnostic: BN6PR12MB1747:EE_
-X-Microsoft-Antispam-PRVS: <BN6PR12MB17474AACEB5A44D2E91A379EE8019@BN6PR12MB1747.namprd12.prod.outlook.com>
+X-MS-Office365-Filtering-Correlation-Id: 9ea8f937-9b9f-4b8b-d434-08d9fad56ec5
+X-MS-TrafficTypeDiagnostic: MN2PR12MB4583:EE_
+X-Microsoft-Antispam-PRVS: <MN2PR12MB4583CD8466BEB5085BFCA078E8019@MN2PR12MB4583.namprd12.prod.outlook.com>
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: IxTtSYGQx2bdJnzoJhPj2BbElVEPTd3Wpxf+lQgfWicNjCXf5CwO3c/1hO0wkjNJpXyAfQcOUtJcBtRMT2gyjr3/BpChXbR/yQFfaBXV4UByXEdHdeyCczLCIqtzPI5crYjN4Fj52jF45KGVUyvzt0z41lwE5XR9ivEop6NAixm/PrKd7/snTiX5D7JSBr4kcT+NEPjd51NkUQFtBbXMDW1B3g4GO0nhFBTu3qILlSd1S9qYbaMFluO799JG0RvFYDUQE1DVIhlD6jXlrRpptaT0NiBVZn7yOWUPra8usUIP8I57HvIjLj/v5oGtXWI1887gNkwpN+ICsJlXGA+LoFCuAfXDWaVHpX5g00U4glHOaBwWnPibeeeWwDtVM0HFgzvFh+Nk7h6ncHBoor1a5J6TTjL572Wstywrn3KOoIJt5NDCBS/WIc6cRRVfOHe8QL2GFJEkw3EwpYMdIO/lt8ab6k3Fwo55TpFQHAj9Df/FMCh50waR3gH/qxcnk5gy1ql59SxJk0bLx130GP/242ZCpNmmjkWqqE4BBzkd8EdA+JWt6doX38Tis0Nkltake9OyUNp1QvmU9ghufpZoxWDfjH1VE4U2YDk6VdfAnKAwxQi4HWmAN9UsWBoCILHd+W2P+r81pe5BkErK9PD3oVCRQf2nR5FKe+dY2R7jDMd5/xYwzF6GSUeE+K6c2kRWOsKjMRIGIoo9yUm6SGrmDaMa9JX6qDwxbTwmElj1Y7KdLLXbb4SCEdDUQS11qCZ6PWtAGxenBKRjkEwowTtJcWRRScxpSwjIJumqKDTG+4g=
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230001)(4636009)(46966006)(36840700001)(40470700004)(2616005)(2906002)(966005)(26005)(186003)(316002)(508600001)(16526019)(5660300002)(6916009)(54906003)(4326008)(8676002)(83380400001)(82310400004)(8936002)(7696005)(36860700001)(1076003)(70206006)(356005)(81166007)(70586007)(426003)(40460700003)(36756003)(47076005)(6666004)(336012)(36900700001);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: ZK1ZWJ1u/kyKuSvr4X27sxjrUKgPmxKk7d9vixaZGJi2+PhoAME9iYTCaRhm0gDd8PKIzVxCGturce7ilnkcXlZayjSNNw41mhAxZq6aDOCHx2xa9xkqxpalACxHCaCm9DbHLh/Oai8gqzhRdzQ8JfB/LMSnLIE7jin4CHCZqcT69bG5O1w3k5VrWZ84ORL1waM0MRVo+5MYszdhYZPZ4w91QQ5ev5EVLwx0QLz9jP0ZnpdG3Tzywbyqwlt4+6ealN+VqbvJUMSZswkCLSLiZ6QLCqqYwwv/OKS5jcKuaG4UFaMubsProPLRyFjT56abUfPkpa0g3aaX+3Eewc4KlzSYrqPy7M1/we0UyyDlgvDCWM+9ZWQfzTGmbxFo1WYWXvLJnc0Z/zRwy+ISYVQPmMIgrdIEEAsUcMeLlMhcgd0Kx+Rv8ypbaQkmgVU5Hj7WvPh3hdU2e3RCzRRZf5SGTccuY4Jll9r+90IVocFLtXwgjvrg5drqvtTczw/vBORveKJC0fs0Z9CH7jlhAZZEFtkZjOLXn6GVK+/XLf1n4sWkYAHuDwKH4ZjorxuF8DMg/TbI+LH0Bz2AT2ib0KTYENnGC/WFOhlCvgzE438r/7kx6Uqwo3hycUo6c0QT/9awNnQRoKzpVk7DC+pZjXLZdm9NtE7e+zwD9bUG7SPxKf0FIwy+fyvtg5iXqru+bIkAT7nKk5NEVb22XBWu6jtGbTAoUPn9+zOdfR9RnrYv9RkO3xGiqSw9+dNQH4MkrGXAZpa+FsyprN93kCl2zmkkHXQWRf5nQ70d1a2gDeyV/Es=
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230001)(4636009)(36840700001)(40470700004)(46966006)(81166007)(356005)(966005)(70206006)(6666004)(316002)(7696005)(6916009)(54906003)(36860700001)(36756003)(47076005)(83380400001)(508600001)(40460700003)(2616005)(8936002)(2906002)(26005)(4326008)(186003)(16526019)(82310400004)(1076003)(8676002)(426003)(336012)(5660300002)(70586007)(36900700001);DIR:OUT;SFP:1101;
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Feb 2022 16:14:41.5566
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Feb 2022 16:14:44.2447
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: a5d77f04-27c5-437a-a895-08d9fad56d2b
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9ea8f937-9b9f-4b8b-d434-08d9fad56ec5
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT030.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT057.eop-nam11.prod.protection.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN6PR12MB1747
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB4583
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -101,8 +101,8 @@ X-Mailing-List: linux-edac@vger.kernel.org
 
 From: Muralidhara M K <muralimk@amd.com>
 
-Add function pointer for determine_edac_ctl_cap() in pvt->ops and assign
-family specific determine_edac_ctl_cap() definitions appropriately.
+Add function pointer for setup_mci_misc_sttrs() in pvt->ops and assign
+family specific setup_mci_misc_sttrs() definitions appropriately
 
 Signed-off-by: Muralidhara M K <muralimk@amd.com>
 Signed-off-by: Naveen Krishna Chatradhi <nchatrad@amd.com>
@@ -110,116 +110,99 @@ Signed-off-by: Naveen Krishna Chatradhi <nchatrad@amd.com>
 This patch is created by splitting the 5/12th patch in series
 [v7 5/12] https://patchwork.kernel.org/project/linux-edac/patch/20220203174942.31630-6-nchatrad@amd.com/
 
- drivers/edac/amd64_edac.c | 30 +++++++++++++++++++-----------
+ drivers/edac/amd64_edac.c | 13 ++++++++++---
  drivers/edac/amd64_edac.h |  1 +
- 2 files changed, 20 insertions(+), 11 deletions(-)
+ 2 files changed, 11 insertions(+), 3 deletions(-)
 
 diff --git a/drivers/edac/amd64_edac.c b/drivers/edac/amd64_edac.c
-index af6711cf03e9..e3b0a0329f43 100644
+index e3b0a0329f43..c86674c3238d 100644
 --- a/drivers/edac/amd64_edac.c
 +++ b/drivers/edac/amd64_edac.c
-@@ -3716,7 +3716,17 @@ static bool f17_ecc_enabled(struct amd64_pvt *pvt)
+@@ -3756,7 +3756,7 @@ f17_determine_edac_ctl_cap(struct mem_ctl_info *mci, struct amd64_pvt *pvt)
+ 	}
  }
  
- static inline void
--f17h_determine_edac_ctl_cap(struct mem_ctl_info *mci, struct amd64_pvt *pvt)
-+f1x_determine_edac_ctl_cap(struct mem_ctl_info *mci, struct amd64_pvt *pvt)
-+{
-+	if (pvt->nbcap & NBCAP_SECDED)
-+		mci->edac_ctl_cap |= EDAC_FLAG_SECDED;
-+
-+	if (pvt->nbcap & NBCAP_CHIPKILL)
-+		mci->edac_ctl_cap |= EDAC_FLAG_S4ECD4ED;
-+}
-+
-+static inline void
-+f17_determine_edac_ctl_cap(struct mem_ctl_info *mci, struct amd64_pvt *pvt)
+-static void setup_mci_misc_attrs(struct mem_ctl_info *mci)
++static void f1x_setup_mci_misc_attrs(struct mem_ctl_info *mci)
  {
- 	u8 i, ecc_en = 1, cpk_en = 1, dev_x4 = 1, dev_x16 = 1;
+ 	struct amd64_pvt *pvt = mci->pvt_info;
  
-@@ -3753,15 +3763,7 @@ static void setup_mci_misc_attrs(struct mem_ctl_info *mci)
- 	mci->mtype_cap		= MEM_FLAG_DDR2 | MEM_FLAG_RDDR2;
- 	mci->edac_ctl_cap	= EDAC_FLAG_NONE;
- 
--	if (pvt->umc) {
--		f17h_determine_edac_ctl_cap(mci, pvt);
--	} else {
--		if (pvt->nbcap & NBCAP_SECDED)
--			mci->edac_ctl_cap |= EDAC_FLAG_SECDED;
--
--		if (pvt->nbcap & NBCAP_CHIPKILL)
--			mci->edac_ctl_cap |= EDAC_FLAG_S4ECD4ED;
--	}
-+	pvt->ops->determine_edac_ctl_cap(mci, pvt);
- 
- 	mci->edac_cap		= pvt->ops->determine_edac_cap(pvt);
- 	mci->mod_name		= EDAC_MOD_STR;
-@@ -3801,6 +3803,7 @@ static int per_family_init(struct amd64_pvt *pvt)
- 		pvt->ops->get_mc_regs			= read_mc_regs;
+@@ -3804,6 +3804,7 @@ static int per_family_init(struct amd64_pvt *pvt)
  		pvt->ops->ecc_enabled			= f1x_ecc_enabled;
  		pvt->ops->determine_edac_cap		= f1x_determine_edac_cap;
-+		pvt->ops->determine_edac_ctl_cap	= f1x_determine_edac_ctl_cap;
+ 		pvt->ops->determine_edac_ctl_cap	= f1x_determine_edac_ctl_cap;
++		pvt->ops->setup_mci_misc_attrs		= f1x_setup_mci_misc_attrs;
  		break;
  
  	case 0x10:
-@@ -3817,6 +3820,7 @@ static int per_family_init(struct amd64_pvt *pvt)
- 		pvt->ops->get_mc_regs			= read_mc_regs;
+@@ -3821,6 +3822,7 @@ static int per_family_init(struct amd64_pvt *pvt)
  		pvt->ops->ecc_enabled			= f1x_ecc_enabled;
  		pvt->ops->determine_edac_cap		= f1x_determine_edac_cap;
-+		pvt->ops->determine_edac_ctl_cap	= f1x_determine_edac_ctl_cap;
+ 		pvt->ops->determine_edac_ctl_cap	= f1x_determine_edac_ctl_cap;
++		pvt->ops->setup_mci_misc_attrs		= f1x_setup_mci_misc_attrs;
  		break;
  
  	case 0x15:
-@@ -3849,6 +3853,7 @@ static int per_family_init(struct amd64_pvt *pvt)
- 		pvt->ops->get_mc_regs			= read_mc_regs;
+@@ -3854,6 +3856,7 @@ static int per_family_init(struct amd64_pvt *pvt)
  		pvt->ops->ecc_enabled			= f1x_ecc_enabled;
  		pvt->ops->determine_edac_cap		= f1x_determine_edac_cap;
-+		pvt->ops->determine_edac_ctl_cap	= f1x_determine_edac_ctl_cap;
+ 		pvt->ops->determine_edac_ctl_cap	= f1x_determine_edac_ctl_cap;
++		pvt->ops->setup_mci_misc_attrs		= f1x_setup_mci_misc_attrs;
  		break;
  
  	case 0x16:
-@@ -3871,6 +3876,7 @@ static int per_family_init(struct amd64_pvt *pvt)
- 		pvt->ops->get_mc_regs			= read_mc_regs;
+@@ -3877,6 +3880,7 @@ static int per_family_init(struct amd64_pvt *pvt)
  		pvt->ops->ecc_enabled			= f1x_ecc_enabled;
  		pvt->ops->determine_edac_cap		= f1x_determine_edac_cap;
-+		pvt->ops->determine_edac_ctl_cap	= f1x_determine_edac_ctl_cap;
+ 		pvt->ops->determine_edac_ctl_cap	= f1x_determine_edac_ctl_cap;
++		pvt->ops->setup_mci_misc_attrs		= f1x_setup_mci_misc_attrs;
  		break;
  
  	case 0x17:
-@@ -3907,6 +3913,7 @@ static int per_family_init(struct amd64_pvt *pvt)
- 		pvt->ops->get_mc_regs			= __read_mc_regs_df;
+@@ -3914,6 +3918,7 @@ static int per_family_init(struct amd64_pvt *pvt)
  		pvt->ops->ecc_enabled			= f17_ecc_enabled;
  		pvt->ops->determine_edac_cap		= f17_determine_edac_cap;
-+		pvt->ops->determine_edac_ctl_cap	= f17_determine_edac_ctl_cap;
+ 		pvt->ops->determine_edac_ctl_cap	= f17_determine_edac_ctl_cap;
++		pvt->ops->setup_mci_misc_attrs		= f1x_setup_mci_misc_attrs;
  
  		if (pvt->fam == 0x18) {
  			pvt->ctl_name			= "F18h";
-@@ -3949,6 +3956,7 @@ static int per_family_init(struct amd64_pvt *pvt)
- 		pvt->ops->get_mc_regs			= __read_mc_regs_df;
+@@ -3957,6 +3962,7 @@ static int per_family_init(struct amd64_pvt *pvt)
  		pvt->ops->ecc_enabled			= f17_ecc_enabled;
  		pvt->ops->determine_edac_cap		= f17_determine_edac_cap;
-+		pvt->ops->determine_edac_ctl_cap	= f17_determine_edac_ctl_cap;
+ 		pvt->ops->determine_edac_ctl_cap	= f17_determine_edac_ctl_cap;
++		pvt->ops->setup_mci_misc_attrs		= f1x_setup_mci_misc_attrs;
  		break;
  
  	default:
-@@ -3961,7 +3969,7 @@ static int per_family_init(struct amd64_pvt *pvt)
+@@ -3969,7 +3975,8 @@ static int per_family_init(struct amd64_pvt *pvt)
  	    !pvt->ops->get_base_mask || !pvt->ops->prep_chip_selects ||
  	    !pvt->ops->determine_memory_type || !pvt->ops->determine_ecc_sym_sz ||
  	    !pvt->ops->get_mc_regs || !pvt->ops->ecc_enabled ||
--	    !pvt->ops->determine_edac_cap) {
-+	    !pvt->ops->determine_edac_cap || !pvt->ops->determine_edac_ctl_cap) {
+-	    !pvt->ops->determine_edac_cap || !pvt->ops->determine_edac_ctl_cap) {
++	    !pvt->ops->determine_edac_cap || !pvt->ops->determine_edac_ctl_cap ||
++	    !pvt->ops->setup_mci_misc_attrs) {
  		edac_dbg(1, "Common helper routines not defined.\n");
  		return -EFAULT;
  	}
+@@ -4064,7 +4071,7 @@ static int init_one_instance(struct amd64_pvt *pvt)
+ 	mci->pvt_info = pvt;
+ 	mci->pdev = &pvt->F3->dev;
+ 
+-	setup_mci_misc_attrs(mci);
++	pvt->ops->setup_mci_misc_attrs(mci);
+ 
+ 	if (init_csrows(mci))
+ 		mci->edac_cap = EDAC_FLAG_NONE;
 diff --git a/drivers/edac/amd64_edac.h b/drivers/edac/amd64_edac.h
-index 9a789cb01f4d..0e0715a16981 100644
+index 0e0715a16981..1ffee0009a53 100644
 --- a/drivers/edac/amd64_edac.h
 +++ b/drivers/edac/amd64_edac.h
-@@ -471,6 +471,7 @@ struct low_ops {
- 	void (*get_mc_regs)(struct amd64_pvt *pvt);
+@@ -472,6 +472,7 @@ struct low_ops {
  	bool (*ecc_enabled)(struct amd64_pvt *pvt);
  	unsigned long (*determine_edac_cap)(struct amd64_pvt *pvt);
-+	void (*determine_edac_ctl_cap)(struct mem_ctl_info *mci, struct amd64_pvt *pvt);
+ 	void (*determine_edac_ctl_cap)(struct mem_ctl_info *mci, struct amd64_pvt *pvt);
++	void (*setup_mci_misc_attrs)(struct mem_ctl_info *mci);
  };
  
  int __amd64_read_pci_cfg_dword(struct pci_dev *pdev, int offset,
