@@ -2,31 +2,31 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF9CF4C8542
-	for <lists+linux-edac@lfdr.de>; Tue,  1 Mar 2022 08:32:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E07164C85FD
+	for <lists+linux-edac@lfdr.de>; Tue,  1 Mar 2022 09:11:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233029AbiCAHdg (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Tue, 1 Mar 2022 02:33:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43410 "EHLO
+        id S233173AbiCAIMg (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Tue, 1 Mar 2022 03:12:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233024AbiCAHdf (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Tue, 1 Mar 2022 02:33:35 -0500
+        with ESMTP id S233166AbiCAIMe (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Tue, 1 Mar 2022 03:12:34 -0500
 Received: from gnuweeb.org (gnuweeb.org [51.81.211.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 806F14C40E;
-        Mon, 28 Feb 2022 23:32:53 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39E3883003;
+        Tue,  1 Mar 2022 00:11:54 -0800 (PST)
 Received: from integral2.. (unknown [182.2.70.248])
-        by gnuweeb.org (Postfix) with ESMTPSA id BE7957EDA5;
-        Tue,  1 Mar 2022 07:32:48 +0000 (UTC)
+        by gnuweeb.org (Postfix) with ESMTPSA id B483F7EC80;
+        Tue,  1 Mar 2022 08:11:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gnuweeb.org;
-        s=default; t=1646119973;
-        bh=oduq7UbWH4yY7hi8T5IT1C8abw9Vor905WGb4sLdUnQ=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=HuQM62qUDVA2m/+mUsRMZHMmvcAMkmpvLd5vOfYrpZsLksh8+RaR56PcmIe+IrJ5J
-         nlIqk9J2ieitqjQH1AcDqmwgK8fQa6UzcWqaft7XnMcWMyv5ELBJGg55azeSoQDPXo
-         ybiax+nczykFg6kf/JVUgLmmlE3/s/7qZ5gNkIH4ZFk5KQ1/H+KkvWqK0PwwrklR4s
-         7ti4/gEcUsTb2Ufq2ZII9IaszkR3moOQSkfpKtExzcH8eoGohjPXNrE34J3P1dmP8p
-         zlu1rJ9ohJdBPIZMWzqcnWI7DLHznKio6araFk1kzg1kAUYjdOASDIvIb0MSQz+53/
-         RnCenhzpj/B9A==
+        s=default; t=1646122313;
+        bh=zdjHxjV5WVf3cpuRmNxzzSq7B8CXjRT0mG4Lpjuog2o=;
+        h=From:To:Cc:Subject:Date:From;
+        b=MfhrwLxxD6kbQ0SCSfBIQCUUYcBnNglFhXQXnhx/zNIuKqnZ8rpvS9rEsrnnw+FY3
+         2+63aUj+4tLVqiBi/2dVnNroml53rrruClzZjOQq8C3sgSvFd78yqmU3jNm/4t7Ksy
+         dyi4+DiYLpgTO0D+lxna9FaZiWY3HRdpu9MKni9Na1lN3Vy6kSmckbp9ztBihmrgAc
+         NuYlJR243Pg6pdV9TQEW62Lr1qPmT4ROCcaR1JEldcAM8CzanzU3emU2jkd51JE8Dr
+         A+/gLVNsuNmxLnZyNcUkhHc3K45rVnugcvoa8bEomUH95jN+a0TLq18y9RVyAar8Y7
+         lv15MZzmpjdkA==
 From:   Ammar Faizi <ammarfaizi2@gnuweeb.org>
 To:     Borislav Petkov <bp@alien8.de>
 Cc:     Dave Hansen <dave.hansen@linux.intel.com>,
@@ -35,13 +35,12 @@ Cc:     Dave Hansen <dave.hansen@linux.intel.com>,
         Tony Luck <tony.luck@intel.com>, linux-edac@vger.kernel.org,
         linux-kernel@vger.kernel.org, gwml@vger.gnuweeb.org,
         x86@kernel.org, stable@vger.kernel.org,
+        Alviro Iskandar Setiawan <alviro.iskandar@gnuweeb.org>,
         Ammar Faizi <ammarfaizi2@gnuweeb.org>
-Subject: [PATCH v2 2/2] x86/mce/amd: Fix memory leak when `threshold_create_bank()` fails
-Date:   Tue,  1 Mar 2022 14:32:23 +0700
-Message-Id: <20220301073223.98236-3-ammarfaizi2@gnuweeb.org>
+Subject: [PATCH v3 0/2] Two x86 fixes
+Date:   Tue,  1 Mar 2022 15:11:31 +0700
+Message-Id: <20220301081133.106875-1-ammarfaizi2@gnuweeb.org>
 X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220301073223.98236-1-ammarfaizi2@gnuweeb.org>
-References: <20220301073223.98236-1-ammarfaizi2@gnuweeb.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -53,6 +52,41 @@ Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
+Hi,
+
+Two fixes for x86 arch.
+
+## Changelog
+v3:
+  - Fold in changes from Alviro, the previous version is still
+    leaking @bank[n].
+
+v2:
+  - Fix wrong copy/paste.
+
+## Summary
+[PATCH v3 1/2] x86/delay: Fix the wrong asm constraint in `delay_loop()`
+
+The asm constraint does not reflect that the asm statement can modify
+the value of @loops. But the asm statement in delay_loop() does change
+the @loops.
+
+If by any chance the compiler inlines this function, it may clobber
+random stuff (e.g. local variable, important temporary value in reg,
+etc.).
+
+Fortunately, delay_loop() is only called indirectly (so it can't
+inline), and then the register it clobbers is %rax (which is by the
+nature of the calling convention, it's a caller saved register), so it
+didn't yield any bug.
+
+^ That shouldn't be an excuse for using the wrong constraint anyway.
+
+This changes "a" (as an input) to "+a" (as an input and output).
+
+
+[PATCH v3 2/2] x86/mce/amd: Fix memory leak when `threshold_create_bank()` fails.
+
 @bp is a local variable, calling mce_threshold_remove_device() when
 threshold_create_bank() fails will not free the @bp. Note that
 mce_threshold_remove_device() frees the @bp only if it's already
@@ -62,12 +96,12 @@ At that point, the @threshold_banks per-CPU variable is still NULL,
 so the mce_threshold_remove_device() will just be a no-op and the
 @bp is leaked.
 
-Fix this by calling kfree() and early returning when we fail.
+Fix this by storing @bp to @threshold_banks before the loop, so in
+case we fail, mce_threshold_remove_device() will free the @bp.
 
 This bug is introduced by commit 6458de97fc15530b544 ("x86/mce/amd:
 Straighten CPU hotplug path") [1].
 
-Link: https://lore.kernel.org/all/20200403161943.1458-6-bp@alien8.de [1]
 
 Cc: Borislav Petkov <bp@alien8.de>
 Cc: Dave Hansen <dave.hansen@linux.intel.com>
@@ -75,37 +109,19 @@ Cc: "H. Peter Anvin" <hpa@zytor.com>
 Cc: Ingo Molnar <mingo@redhat.com>
 Cc: Thomas Gleixner <tglx@linutronix.de>
 Cc: Tony Luck <tony.luck@intel.com>
-Fixes: 6458de97fc15530b54477c4e2b70af653e8ac3d9 ("x86/mce/amd: Straighten CPU hotplug path")
-Cc: stable@vger.kernel.org # v5.8+
+Signed-off-by: Alviro Iskandar Setiawan <alviro.iskandar@gnuweeb.org>
 Signed-off-by: Ammar Faizi <ammarfaizi2@gnuweeb.org>
 ---
- arch/x86/kernel/cpu/mce/amd.c | 9 ++++-----
- 1 file changed, 4 insertions(+), 5 deletions(-)
+Ammar Faizi (2):
+  x86/delay: Fix the wrong asm constraint in `delay_loop()`
+  x86/mce/amd: Fix memory leak when `threshold_create_bank()` fails
 
-diff --git a/arch/x86/kernel/cpu/mce/amd.c b/arch/x86/kernel/cpu/mce/amd.c
-index 9f4b508886dd..75d019dfe8d6 100644
---- a/arch/x86/kernel/cpu/mce/amd.c
-+++ b/arch/x86/kernel/cpu/mce/amd.c
-@@ -1350,15 +1350,14 @@ int mce_threshold_create_device(unsigned int cpu)
- 		if (!(this_cpu_read(bank_map) & (1 << bank)))
- 			continue;
- 		err = threshold_create_bank(bp, cpu, bank);
--		if (err)
--			goto out_err;
-+		if (err) {
-+			kfree(bp);
-+			return err;
-+		}
- 	}
- 	this_cpu_write(threshold_banks, bp);
- 
- 	if (thresholding_irq_en)
- 		mce_threshold_vector = amd_threshold_interrupt;
- 	return 0;
--out_err:
--	mce_threshold_remove_device(cpu);
--	return err;
- }
+ arch/x86/kernel/cpu/mce/amd.c | 16 ++++++++++------
+ arch/x86/lib/delay.c          |  4 ++--
+ 2 files changed, 12 insertions(+), 8 deletions(-)
+
+
+base-commit: 7e57714cd0ad2d5bb90e50b5096a0e671dec1ef3
 -- 
 2.32.0
 
