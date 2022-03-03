@@ -2,58 +2,58 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F5DA4CB2FA
-	for <lists+linux-edac@lfdr.de>; Thu,  3 Mar 2022 00:51:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CCA184CB3BC
+	for <lists+linux-edac@lfdr.de>; Thu,  3 Mar 2022 01:35:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229450AbiCBXqF (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Wed, 2 Mar 2022 18:46:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52596 "EHLO
+        id S230096AbiCCAIU (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Wed, 2 Mar 2022 19:08:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229519AbiCBXqB (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Wed, 2 Mar 2022 18:46:01 -0500
+        with ESMTP id S230027AbiCCAHs (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Wed, 2 Mar 2022 19:07:48 -0500
 Received: from gnuweeb.org (gnuweeb.org [51.81.211.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDD6D239D5C;
-        Wed,  2 Mar 2022 15:43:54 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0878CB0EA2;
+        Wed,  2 Mar 2022 16:07:03 -0800 (PST)
 Received: from [192.168.43.69] (unknown [182.2.41.243])
-        by gnuweeb.org (Postfix) with ESMTPSA id 1DEAD7E6A5;
-        Wed,  2 Mar 2022 23:27:36 +0000 (UTC)
+        by gnuweeb.org (Postfix) with ESMTPSA id E76197E29A;
+        Thu,  3 Mar 2022 00:06:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gnuweeb.org;
-        s=default; t=1646263662;
-        bh=A0wJxlPbC6L5g/52O5FkT+betn2pvQrCWGTRFCIy5gg=;
-        h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
-        b=TfZn8Kq++xUqI9AHW+rba3Ml8VA1cFtpJ/+y9jbgAdML//eyjZyT0eIgzQf2AR677
-         xtQes501LvCiOoVx2OS2LSkTS6+xHOdawqZoF4Z06cJQSMDg8D8S4K3+Nt+8h00nCM
-         cce/fHLpJUg2RJa9xktbajVJjTqkNdiBuVLrKAMIoo3wXrvCjw6GvCe4jkKd6wMxcy
-         jxp8b56394wTwg0mS5VE5/TDSrTQk/2T9ADCCkRLF/ZO53une4ImRGKTRXO5q7CSUH
-         bpsAFuxdbSXLMEfWcQWdd4RvOTj65JM2ObXz/Fo3iXaWpQfvB+xB1EQmIZa2ruD09r
-         19BF0Q3n/Cjdg==
-Message-ID: <109a10da-d1d1-c47a-2f04-31796457f6ff@gnuweeb.org>
-Date:   Thu, 3 Mar 2022 06:27:33 +0700
+        s=default; t=1646266023;
+        bh=FXJ5RIO8Oqa50icw+tN38pTqQ1lL1MDXri2vESEbOg0=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=Qs9kOFlmA24f/j91hiJ5vZ3XiNoZkicH8EA217zJ1ThsXNvKfiiqjO7jYUumaa7bZ
+         8/H1DD9nGRCQUQtxXuWMDRO8pyV6jPga/5rXM6xOWVIfSdwY6xfzf3BPsDmR8bhJqj
+         r1vIt6IKpd4bg6BbOZmYLO+J2y+J+SPtJ6f6tA4CneYu8CmiviamL/qocX7V4NgVmK
+         T6HlKHPP7BApNnUeNaZJcy7aorzSN5XKQgcE1m3nGdxj1jgUJc3Pcc62v3lVZUFaPO
+         ulS5kViDcEBZDYlGNUCLG2i0PIWua8fPKz8gZ+m4wS15XdA6sysccIAUZHPAuVIvSV
+         Mf7KExPwK02Ew==
+Message-ID: <4f7d2b07-c5e5-33dc-f6a7-c62b1c5329b9@gnuweeb.org>
+Date:   Thu, 3 Mar 2022 07:06:52 +0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.5.0
-Subject: Re: [PATCH v4 2/2] x86/mce/amd: Fix memory leak when
- `threshold_create_bank()` fails
+Subject: Re: [PATCH v4 1/2] x86/delay: Fix the wrong asm constraint in
+ `delay_loop()`
 Content-Language: en-US
-From:   Ammar Faizi <ammarfaizi2@gnuweeb.org>
-To:     Yazen Ghannam <yazen.ghannam@amd.com>
+To:     Alviro Iskandar Setiawan <alviro.iskandar@gnuweeb.org>
 Cc:     Borislav Petkov <bp@alien8.de>,
         Dave Hansen <dave.hansen@linux.intel.com>,
         "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
         Thomas Gleixner <tglx@linutronix.de>,
         Tony Luck <tony.luck@intel.com>, linux-edac@vger.kernel.org,
-        linux-kernel@vger.kernel.org, gwml@vger.gnuweeb.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
         x86@kernel.org, stable@vger.kernel.org,
-        Alviro Iskandar Setiawan <alviro.iskandar@gnuweeb.org>,
         Jiri Hladky <hladky.jiri@googlemail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        David Laight <David.Laight@ACULAB.COM>
 References: <20220301094608.118879-1-ammarfaizi2@gnuweeb.org>
- <20220301094608.118879-3-ammarfaizi2@gnuweeb.org>
- <Yh+oyD/5M3TW5ZMM@yaz-ubuntu>
- <4371a592-6686-c535-4daf-993dedb43cd4@gnuweeb.org>
-In-Reply-To: <4371a592-6686-c535-4daf-993dedb43cd4@gnuweeb.org>
+ <20220301094608.118879-2-ammarfaizi2@gnuweeb.org>
+ <CAOG64qPgTv5tQNknuG9d-=oL2EPQQ1ys7xu2FoBpNLyzv1qYzA@mail.gmail.com>
+From:   Ammar Faizi <ammarfaizi2@gnuweeb.org>
+In-Reply-To: <CAOG64qPgTv5tQNknuG9d-=oL2EPQQ1ys7xu2FoBpNLyzv1qYzA@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
@@ -64,130 +64,50 @@ Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On 3/3/22 6:20 AM, Ammar Faizi wrote:
-> On 3/3/22 12:26 AM, Yazen Ghannam wrote:
->> Hi Ammar,
+On 3/1/22 6:33 PM, Alviro Iskandar Setiawan wrote:
+> hi sir, it might also be interesting to know that even if it never be
+> inlined, it's still potential to break.
 > 
-> Hi Yazen,
+> for example this code (https://godbolt.org/z/xWMTxhTET)
 > 
->> ...
->> The threshold interrupt handler uses this pointer. I think the goal here is to
->> set this pointer when the list is fully formed and clear this pointer before
->> making any changes to the list. Otherwise, the interrupt handler will operate
->> on incomplete data if an interrupt comes in the middle of these updates.
->>
->> The changes below should deal with memory leak issue while avoiding a race
->> with the threshold interrupt. What do you think?
+>    __attribute__((__noinline__)) static void x(int a)
+>    {
+>        asm("xorl\t%%r8d, %%r8d"::"a"(a));
+>    }
 > 
-> Thanks for taking a look into this. I didn't notice that before. The
-> changes look good to me, extra improvements:
+>    extern int p(void);
 > 
-> 1) _mce_threshold_remove_device() should be static as we don't use it
->     in another translation unit.
-> 2) Minor cleanup, we don't need "goto out_err", just early return
->     directly.
+>    int f(void)
+>    {
+>        int ret = p();
+>        x(ret);
+>        return ret;
+>    }
 > 
-> I will fold them in...
+> translates to this asm
 > 
+>    x:
+>            movl    %edi, %eax
+>            xorl    %r8d, %r8d
+>            ret
+>    f:
+>            subq    $8, %rsp
+>            call    p
+>            movl    %eax, %r8d
+>            movl    %eax, %edi
+>            call    x
+>            movl    %r8d, %eax
+>            addq    $8, %rsp
+>            ret
+> 
+> See the %r8d? It should be clobbered by a function call too. But since
+> no one tells the compiler that we clobber %r8d, it assumes %r8d never
+> changes after that call. The compiler thinks x() is static and will
+> not clobber %r8d, even the ABI says %r8d will be clobbered by a
+> function call. So i think it should be backported to the stable
+> kernel, it's still a fix
 
-Please review the patch below, if you think it looks good, I will
-send this for the v5 series. I added your sign-off.
-
- From cae3965734a67d11a5286c612dfddf52398defc8 Mon Sep 17 00:00:00 2001
-From: Ammar Faizi <ammarfaizi2@gnuweeb.org>
-Date: Thu, 3 Mar 2022 05:07:38 +0700
-Subject: [PATCH v5 2/2] x86/MCE/AMD: Fix memory leak when `threshold_create_bank()` fails
-
-In mce_threshold_create_device(), when threshold_create_bank() fails,
-the @bp will be leaked, because mce_threshold_remove_device() will
-not free the @bp. It only frees the @bp when we've already written
-the @bp to the @threshold_banks per-CPU variable, but at the point,
-we haven't.
-
-Fix this by extracting the cleanup part into a new static function
-_mce_threshold_remove_device(), then use it from create and remove
-device function.
-
-Also, eliminate the "goto out_err". Just early return inside the loop
-when we fail.
-
-Cc: Borislav Petkov <bp@alien8.de>
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: stable@vger.kernel.org # v5.8+
-Fixes: 6458de97fc15 ("x86/mce/amd: Straighten CPU hotplug path")
-Co-authored-by: Alviro Iskandar Setiawan <alviro.iskandar@gnuweeb.org>
-Signed-off-by: Alviro Iskandar Setiawan <alviro.iskandar@gnuweeb.org>
-Co-authored-by: Yazen Ghannam <yazen.ghannam@amd.com>
-Signed-off-by: Yazen Ghannam <yazen.ghannam@amd.com>
-Signed-off-by: Ammar Faizi <ammarfaizi2@gnuweeb.org>
----
-  arch/x86/kernel/cpu/mce/amd.c | 31 ++++++++++++++++++-------------
-  1 file changed, 18 insertions(+), 13 deletions(-)
-
-diff --git a/arch/x86/kernel/cpu/mce/amd.c b/arch/x86/kernel/cpu/mce/amd.c
-index 9f4b508886dd..ac7246a4de08 100644
---- a/arch/x86/kernel/cpu/mce/amd.c
-+++ b/arch/x86/kernel/cpu/mce/amd.c
-@@ -1293,10 +1293,22 @@ static void threshold_remove_bank(struct threshold_bank *bank)
-  	kfree(bank);
-  }
-  
-+static void _mce_threshold_remove_device(struct threshold_bank **bp)
-+{
-+	unsigned int bank, numbanks = this_cpu_read(mce_num_banks);
-+
-+	for (bank = 0; bank < numbanks; bank++) {
-+		if (bp[bank]) {
-+			threshold_remove_bank(bp[bank]);
-+			bp[bank] = NULL;
-+		}
-+	}
-+	kfree(bp);
-+}
-+
-  int mce_threshold_remove_device(unsigned int cpu)
-  {
-  	struct threshold_bank **bp = this_cpu_read(threshold_banks);
--	unsigned int bank, numbanks = this_cpu_read(mce_num_banks);
-  
-  	if (!bp)
-  		return 0;
-@@ -1307,13 +1319,7 @@ int mce_threshold_remove_device(unsigned int cpu)
-  	 */
-  	this_cpu_write(threshold_banks, NULL);
-  
--	for (bank = 0; bank < numbanks; bank++) {
--		if (bp[bank]) {
--			threshold_remove_bank(bp[bank]);
--			bp[bank] = NULL;
--		}
--	}
--	kfree(bp);
-+	_mce_threshold_remove_device(bp);
-  	return 0;
-  }
-  
-@@ -1350,15 +1356,14 @@ int mce_threshold_create_device(unsigned int cpu)
-  		if (!(this_cpu_read(bank_map) & (1 << bank)))
-  			continue;
-  		err = threshold_create_bank(bp, cpu, bank);
--		if (err)
--			goto out_err;
-+		if (err) {
-+			_mce_threshold_remove_device(bp);
-+			return err;
-+		}
-  	}
-  	this_cpu_write(threshold_banks, bp);
-  
-  	if (thresholding_irq_en)
-  		mce_threshold_vector = amd_threshold_interrupt;
-  	return 0;
--out_err:
--	mce_threshold_remove_device(cpu);
--	return err;
-  }
+Thanks. I will add CC stable in the v5.
 
 -- 
 Ammar Faizi
