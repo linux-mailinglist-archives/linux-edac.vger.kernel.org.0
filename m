@@ -2,89 +2,103 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A7794CB521
-	for <lists+linux-edac@lfdr.de>; Thu,  3 Mar 2022 03:52:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B2C34CBDC2
+	for <lists+linux-edac@lfdr.de>; Thu,  3 Mar 2022 13:26:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231853AbiCCCwU (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Wed, 2 Mar 2022 21:52:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53590 "EHLO
+        id S232881AbiCCM1X (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Thu, 3 Mar 2022 07:27:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231834AbiCCCwT (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Wed, 2 Mar 2022 21:52:19 -0500
-Received: from gnuweeb.org (gnuweeb.org [51.81.211.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D022162016;
-        Wed,  2 Mar 2022 18:51:34 -0800 (PST)
-Received: from mail-lf1-f48.google.com (mail-lf1-f48.google.com [209.85.167.48])
-        by gnuweeb.org (Postfix) with ESMTPSA id 7AFB77E6B2;
-        Thu,  3 Mar 2022 02:51:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gnuweeb.org;
-        s=default; t=1646275893;
-        bh=5R8CtEIQAKm9DWp0yzIHx+yDFFKxgK9WMLzK1eontrU=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=fTBKyPxtbjqj5dfmMrFfkpCL3i+b6lnI76IffnpZQN/DXazvWtHDrFp1qVKdO+OO9
-         PalyoMXD5foNdo/G/7M+woTNWma+yVH3pngxLco+u5pnSjyP7WlYshmdKV5+/gHVzK
-         /TKbm2eEQR8/r8UxSr9dwbMxBKjq8MZEbQGxUJapgk7Z8F+IeeZizEZ2xl04prQNZp
-         BUp0G18+T7+jRfsiTVJ0FtfAWMtFkUmH9x9qJck3P0tvlr9LCABZsGM4cnAyxjYOlj
-         DQb4HdJXLmdVWqVS98Gs59jgJoWrCI8HuX8/WTWj8iuWg1aBIe1087uXVQMxZwundU
-         oFYZvotz9YNWA==
-Received: by mail-lf1-f48.google.com with SMTP id g39so6039246lfv.10;
-        Wed, 02 Mar 2022 18:51:33 -0800 (PST)
-X-Gm-Message-State: AOAM530rmDL5eGZtyuhpkAiAg6j23hZGB83NeuTmXLerqhWBGZWoW8KN
-        R225Xz193qS1gNVG7U9O/h3ayFKK+3KsgjFGScA=
-X-Google-Smtp-Source: ABdhPJyv90IKXz8uZ/SLsv8Ivd2dShHqBxwheVBt3+dCnU5rpnzjNuNHTcMq6jBf+tbGvIfGopymNZ3oqMlZj8Km87A=
-X-Received: by 2002:ac2:4e85:0:b0:441:94b6:b2c with SMTP id
- o5-20020ac24e85000000b0044194b60b2cmr20570001lfr.610.1646275891428; Wed, 02
- Mar 2022 18:51:31 -0800 (PST)
+        with ESMTP id S231787AbiCCM1W (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Thu, 3 Mar 2022 07:27:22 -0500
+Received: from out30-45.freemail.mail.aliyun.com (out30-45.freemail.mail.aliyun.com [115.124.30.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 289A5179274;
+        Thu,  3 Mar 2022 04:26:35 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R171e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e01424;MF=xueshuai@linux.alibaba.com;NM=1;PH=DS;RN=12;SR=0;TI=SMTPD_---0V67YNvg_1646310388;
+Received: from localhost.localdomain(mailfrom:xueshuai@linux.alibaba.com fp:SMTPD_---0V67YNvg_1646310388)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Thu, 03 Mar 2022 20:26:32 +0800
+From:   Shuai Xue <xueshuai@linux.alibaba.com>
+To:     bp@alien8.de, rric@kernel.org
+Cc:     mchehab@kernel.org, tony.luck@intel.com, james.morse@arm.com,
+        ardb@kernel.org, linux-edac@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-efi@vger.kernel.org,
+        xueshuai@linux.alibaba.com, zhangliguang@linux.alibaba.com,
+        zhuo.song@linux.alibaba.com
+Subject: [PATCH v6 0/2] EDAC/ghes: refactor memory error reporting to avoid code duplication
+Date:   Thu,  3 Mar 2022 20:26:24 +0800
+Message-Id: <20220303122626.99740-1-xueshuai@linux.alibaba.com>
+X-Mailer: git-send-email 2.30.1 (Apple Git-130)
+In-Reply-To: <20211210134019.28536-1-xueshuai@linux.alibaba.com>
+References: <20211210134019.28536-1-xueshuai@linux.alibaba.com>
 MIME-Version: 1.0
-References: <20220301094608.118879-1-ammarfaizi2@gnuweeb.org>
- <20220301094608.118879-3-ammarfaizi2@gnuweeb.org> <Yh+oyD/5M3TW5ZMM@yaz-ubuntu>
- <4371a592-6686-c535-4daf-993dedb43cd4@gnuweeb.org> <109a10da-d1d1-c47a-2f04-31796457f6ff@gnuweeb.org>
- <20220303015826.4176416-1-alviro.iskandar@gnuweeb.org> <49313736-61f8-d001-0fe4-b6166c859585@gnuweeb.org>
- <9dfe087a-f941-1bc4-657d-7e7c198888ff@gnuweeb.org>
-In-Reply-To: <9dfe087a-f941-1bc4-657d-7e7c198888ff@gnuweeb.org>
-From:   Alviro Iskandar Setiawan <alviro.iskandar@gnuweeb.org>
-Date:   Thu, 3 Mar 2022 09:51:20 +0700
-X-Gmail-Original-Message-ID: <CAOG64qPHf3Y+m-9DcewPhqKUzHD7rOtkG_kRXfuMsH66g0P2Vg@mail.gmail.com>
-Message-ID: <CAOG64qPHf3Y+m-9DcewPhqKUzHD7rOtkG_kRXfuMsH66g0P2Vg@mail.gmail.com>
-Subject: Re: [PATCH v4 2/2] x86/mce/amd: Fix memory leak when
- `threshold_create_bank()` fails
-To:     Ammar Faizi <ammarfaizi2@gnuweeb.org>,
-        Yazen Ghannam <yazen.ghannam@amd.com>
-Cc:     Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Tony Luck <tony.luck@intel.com>, linux-edac@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "GNU/Weeb Mailing List" <gwml@vger.gnuweeb.org>, x86@kernel.org,
-        stable@vger.kernel.org, Jiri Hladky <hladky.jiri@googlemail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alviro Iskandar Setiawan <alviro.iskandar@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Thu, Mar 3, 2022 at 9:32 AM Ammar Faizi wrote:
-> On 3/3/22 9:07 AM, Ammar Faizi wrote:
-> > On 3/3/22 8:58 AM, Alviro Iskandar Setiawan wrote:
-> > > hi sir, i think this can be improved again, we can avoid calling
-> > > this_cpu_read(mce_num_banks) twice if we pass the numbanks as an
-> > > argument, plz review the changes below
-> >
-> > OK, nice improvement. I will fold this in...
-> >
->
-> It looks like this now. Yazen, Alviro, please review the
-> following patch. If you think it looks good, I will submit
-> it for the v5.
->
+ghes_edac_report_mem_error() in ghes_edac.c is a Long Method and have
+Duplicated Code with cper_mem_err_location(), cper_dimm_err_location(), and
+cper_mem_err_type_str() in drivers/firmware/efi/cper.c. In addition, the
+cper_print_mem() in drivers/firmware/efi/cper.c only reports the error
+status and misses its description.
 
-i think it looks good, thanks sir
+This patch set is to refactor ghes_edac_report_mem_error with:
 
--- Viro
+- Patch 01 is to wrap up error status decoding logics and reuse it in
+    cper_print_mem().
+- Patch 02 is to introduces cper_*(), into ghes_edac_report_mem_error(),
+  this can avoid bunch of duplicate code lines;
+  
+Changes since v5:
+- Delete change summary in commit log
+- Link: https://lore.kernel.org/all/20220126081702.55167-1-xueshuai@linux.alibaba.com/
+- Thanks Borislav Petkov for review comments.
+
+Changes since v4:
+- Fix alignment and format problem
+- Link: https://lore.kernel.org/all/20220125024939.30635-1-xueshuai@linux.alibaba.com/
+- Thanks Borislav Petkov for review comments.
+
+Changes since v3:
+
+- make cper_mem_err_status_str table a lot more compact
+- Fix alignment and format problem
+- Link: https://lore.kernel.org/all/20220124024759.19176-1-xueshuai@linux.alibaba.com/
+- Thanks Borislav Petkov for review comments.
+
+Changes since v2:
+
+- delete the unified patch
+- adjusted the order of patches
+- Link: https://lore.kernel.org/all/20211210134019.28536-1-xueshuai@linux.alibaba.com/
+- Thanks Borislav Petkov for review comments.
+
+Changes since v1:
+
+- add a new patch to unify ghes and cper before removing duplication.
+- document the changes in patch description
+- add EXPORT_SYMBOL_GPL()s for cper_*()
+- document and the dependency and add UEFI_CPER dependency explicitly
+- Link: https://lore.kernel.org/all/20211207031905.61906-2-xueshuai@linux.alibaba.com/
+- Thanks Robert Richter for review comments.
+
+Shuai Xue (2):
+  efi/cper: add cper_mem_err_status_str to decode error description
+  EDAC/ghes: use cper functions to avoid code duplication
+
+ drivers/edac/Kconfig        |   1 +
+ drivers/edac/ghes_edac.c    | 196 +++++++-----------------------------
+ drivers/firmware/efi/cper.c |  66 ++++++++----
+ include/linux/cper.h        |   3 +
+ 4 files changed, 86 insertions(+), 180 deletions(-)
+
+-- 
+2.20.1.12.g72788fdb
+
