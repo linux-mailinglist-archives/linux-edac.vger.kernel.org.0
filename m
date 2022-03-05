@@ -2,56 +2,56 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8DF64CE1EE
-	for <lists+linux-edac@lfdr.de>; Sat,  5 Mar 2022 02:38:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 413304CE1F0
+	for <lists+linux-edac@lfdr.de>; Sat,  5 Mar 2022 02:41:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229588AbiCEBjf (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Fri, 4 Mar 2022 20:39:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33270 "EHLO
+        id S230355AbiCEBmO (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Fri, 4 Mar 2022 20:42:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229454AbiCEBjf (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Fri, 4 Mar 2022 20:39:35 -0500
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8622554695;
-        Fri,  4 Mar 2022 17:38:45 -0800 (PST)
+        with ESMTP id S229454AbiCEBmN (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Fri, 4 Mar 2022 20:42:13 -0500
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB257CA73B;
+        Fri,  4 Mar 2022 17:41:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646444325; x=1677980325;
+  t=1646444484; x=1677980484;
   h=from:to:cc:subject:date:message-id:mime-version:
    content-transfer-encoding;
   bh=T1BLLpcj77s9dl2kYpzLwwHh62xO9d6FgWuFJjNZukw=;
-  b=Z+YMJ0zn+VcEamc/u78Y7VBYBlryljjNxwMOjbqvSXP6zkcUEfH929CB
-   Nq/NHfXdHAY1f0VgT/JJXddVLidS/Hgvn71NEJWkwRFJHcvoszxoXmkJZ
-   htnf/C7MEuah4caxLb9cQM/b4QdXDqhPQfkuweik4lJawE9v9MSYpPeDb
-   qz67qzxNzWD1tdD/XAFoJiGYz8wRTes4JvsL2pDnF7U7aIu4xZxnBhjot
-   la/+BNbqBGEtaTW+73/qdbbeDueBbnHWUKZOOt75Rj+o5dGFy2CwHHItx
-   rZTCNG5NxAoPqd+NTiwuBpxznpA6ynHPGGbX83mRd9fbMNGEEd8R4jeon
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10276"; a="254035892"
+  b=EmDW0I8GDDVA/XaCZ+hHpL2KVqqWMZ8Zx6Q4fT3aMzNweTjxzEpRDHWI
+   DckdU7FZZ7PZ+pCbutUuA3m1pDFH5JjtcIcroGykPnmimnOtAot/TWzTX
+   OSANYnLCgX/ZvhcO9E4bM7Qa8s6EhWOii72CIhCbGzEqaws0Ya4SAOIul
+   MHoIjSMujE1MV7vjvxHyAIXMftrmzlIqVOGKxRH9uAULgnnl85UFl3lpV
+   T/kFHF0OnIuNoc1gV2ynCBgv0eGHg2Mj85ZCA5wDY7IXYPXKjMA/pMXdw
+   yOoAWao9sGDaYmeXQzgCz7gR30kflmRJjIdLJ5ljtiUJdbbbY6t5h+fLe
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10276"; a="253831821"
 X-IronPort-AV: E=Sophos;i="5.90,156,1643702400"; 
-   d="scan'208";a="254035892"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Mar 2022 17:38:44 -0800
+   d="scan'208";a="253831821"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Mar 2022 17:41:23 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,156,1643702400"; 
-   d="scan'208";a="779805083"
+   d="scan'208";a="640761161"
 Received: from pglc00012.png.intel.com ([10.221.207.32])
-  by fmsmga006.fm.intel.com with ESMTP; 04 Mar 2022 17:38:42 -0800
+  by fmsmga002.fm.intel.com with ESMTP; 04 Mar 2022 17:41:20 -0800
 From:   niravkumar.l.rabara@intel.com
-To:     dinh.nguyen@kernel.org, bp@alien8.de, mchehab@kernel.org,
+To:     dinguyen@kernel.org, bp@alien8.de, mchehab@kernel.org,
         tony.luck@intel.com, james.morse@arm.com, rric@kernel.org,
         niravkumar.l.rabara@intel.com, linux-edac@vger.kernel.org
 Cc:     linux-kernel@vger.kernel.org
 Subject: [PATCH] EDAC: altera: Add SDRAM ECC check for U-Boot
-Date:   Sat,  5 Mar 2022 09:38:39 +0800
-Message-Id: <20220305013839.30740-1-niravkumar.l.rabara@intel.com>
+Date:   Sat,  5 Mar 2022 09:41:18 +0800
+Message-Id: <20220305014118.4794-1-niravkumar.l.rabara@intel.com>
 X-Mailer: git-send-email 2.19.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
