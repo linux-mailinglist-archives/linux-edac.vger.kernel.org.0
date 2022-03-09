@@ -2,125 +2,96 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 18EE94D335B
-	for <lists+linux-edac@lfdr.de>; Wed,  9 Mar 2022 17:21:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 57A894D3701
+	for <lists+linux-edac@lfdr.de>; Wed,  9 Mar 2022 18:44:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234560AbiCIQHg (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Wed, 9 Mar 2022 11:07:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44578 "EHLO
+        id S236714AbiCIRm0 (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Wed, 9 Mar 2022 12:42:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234457AbiCIQHN (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Wed, 9 Mar 2022 11:07:13 -0500
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2081.outbound.protection.outlook.com [40.107.94.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BBCF141FC2;
-        Wed,  9 Mar 2022 08:03:23 -0800 (PST)
+        with ESMTP id S237203AbiCIRmZ (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Wed, 9 Mar 2022 12:42:25 -0500
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2073.outbound.protection.outlook.com [40.107.220.73])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4085710E05F;
+        Wed,  9 Mar 2022 09:41:25 -0800 (PST)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=H4XESlXPeXOjxfTF27DQNhWp+Y0hQJd2C+jSFpDWjp6Yrj2/mmTU6MRFLlZis/NQzFoJASca7CrzheuZdSPGdo+JudU5KDfI2hQLER7yUwjk6ECqDLGGEsJUQLO2NWeXM5jgVbg4ee1q15zZRPMtEyqH2bpxNNy8XARK5iWd5cwaN6NXQL8v4I9iTGmvE/Me2WUwMkN1Lu8lWOzdb+Rr9aHrz9y7U2e6YeL2unEZvBPETeS6WtcdJANNhsQzeCgevdTG+ks5UyqxU9LD3/OyhOY+XsmoBxuZTvzY2vcqUT06aYO49IRMIGPVjQSgmHRaWD4fHEVnBQJ8ggv/CGGxGQ==
+ b=TtAYKsOKd4RpTYVTd/5cTzJ8Rs2Uc6M/91d+hTPDJXv/pFaelS7AamlBZ0oNISDSiHhrHAb6taKTKPjXA6poeutJm3Jc8gdZYKeOMKD3NxZyB7s5lyke3NI4TL+Af1rLuDBqOrlB3uguBXMJKjqXVPDBM8J966hPT14fXds3FlaD9uWnGS7rcCeQ96Svs3hzOI0ZujSeJcMQvNkiER+9d/0xzerpH2N3pYxa5quq1mhY9nKZXXQWZXi0th7zn5lDYgVYgUSne/mFxspUxMvCoEUebDTzmQoYOJ6UeQK7qcFcUlqdgs0aCXCKgsgHgffOKXBmblGqUw1cj03J7o5Xrw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=vrzP2UchQi43pCnpSUo0Ny3bsCPmouvmqf/3EbosyZ0=;
- b=cv4b4ZPDEvjkByYsm8KKxF4Bod2pNRkUxDW8Qi40IhgZiOW9OB6Nug4bNyYevZzUfC7a7F942+IiIBtAP9ltUwQSo1PaS+7flrf4SNScN1inCbzE9fbmO0eicOD3FKdwnHIRMKgitcejZwanZO8EU5e6g26hWEtxvWQ9fF1i0/K+i2EoPyya2Exzb2sNPDzNsePlrx0HMOcL3iPExGB/y6Q690l7Xb9LXLHaJnOTE2U7VSuTv5cjJY67Lcv/U0IGABPaI7468bBQFwO5v6AUEDOwpP5QrkNO9Htf/OH+/ARXvrWZn6iQCJ7yuEkLRmT8yUk6U7QNdyclhsHc4oPVPA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
+ bh=eCV9iZfMU0Umm/A0C9lE5BNEFZUXnPTwJPhrq++V8n4=;
+ b=Q98+oD8p3gWI2epW3iuDDCXBWjVJ9iqRJoDikWCd0Ps7f6UGb3Aof+OF0e/rpA64QFoCpkWrFE5GUiJJ/99LpleUtce4dew7TikG5WkGHfsanFroyY2f8uw60WEbwTGno+Sq/ZYAE5S6VyUCACsQI/77AoKAh0n7TSUEQDKxKBQTVuChPmA7lzsv+8eWWBLdWv/mPCEf3mKuZ3s52SdYOynpZQLYsrDJgztbQaoq6HI0HErg4LfBfFdf6CELzitWo8Bt9/FwmoqPajkMZ5u4PnGe1VGxJyicCHo/lxCPU94CShLZjmuku4AxQ71O07S/7Rr1wzK/hIIZj25/SA/orQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=alien8.de smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=vrzP2UchQi43pCnpSUo0Ny3bsCPmouvmqf/3EbosyZ0=;
- b=F4yzpfq+loHGNJhpMIukzSLrst1FLOqUmFutKjKJWHNFXAHNXXT+pmhSsBtyVcQ3w4iMCelMiM/P+JeaPz9gDmj8r6oxIRPvklr5P6neYP6ZQze/JdxfE/n36p0kNMbaWy/IjsHV+xg1/t8m2AsaxjxqshjRgIRn6euCfF4pBb0=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from BL1PR12MB5874.namprd12.prod.outlook.com (2603:10b6:208:396::17)
- by BYAPR12MB3126.namprd12.prod.outlook.com (2603:10b6:a03:df::28) with
+ bh=eCV9iZfMU0Umm/A0C9lE5BNEFZUXnPTwJPhrq++V8n4=;
+ b=kamb3Iw5D0A6k9WX/Nj/TWy8yNqzJLh+m+Uy9fnO54nMp83s6Yd8MdGIoeFuYA+oN6IugKlFFsVr/tTkVXQu67rrRrUmPVTU0b+EpGb5CC41r4lGVfjc4vKJDEI/mLHphswOEHTQbEHqpVROFvTM7+/YLLjcITb9gFnWyYfsf58=
+Received: from MW4PR04CA0148.namprd04.prod.outlook.com (2603:10b6:303:84::33)
+ by BN6PR1201MB0081.namprd12.prod.outlook.com (2603:10b6:405:4f::12) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5038.17; Wed, 9 Mar
- 2022 16:03:20 +0000
-Received: from BL1PR12MB5874.namprd12.prod.outlook.com
- ([fe80::8d44:d69b:b031:1d50]) by BL1PR12MB5874.namprd12.prod.outlook.com
- ([fe80::8d44:d69b:b031:1d50%5]) with mapi id 15.20.5038.027; Wed, 9 Mar 2022
- 16:03:20 +0000
-Message-ID: <7967cc8f-11af-0236-9ed6-ea9a84702965@amd.com>
-Date:   Wed, 9 Mar 2022 10:03:18 -0600
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.2
-Subject: Re: [PATCH] x86/mce: Unify vendors grading logic and provide AMD
- machine error checks
-Content-Language: en-US
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     tglx@linutronix.de, mingo@redhat.com, dave.hansen@linux.intel.com,
-        x86@kernel.org, yazen.ghannam@amd.com,
-        linux-kernel@vger.kernel.org, linux-edac@vger.kernel.org,
-        bilbao@vt.edu
-References: <20220308184133.712761-1-carlos.bilbao@amd.com>
- <YievKnn5hSK0AvMt@nazgul.tnic>
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5061.21; Wed, 9 Mar
+ 2022 17:41:22 +0000
+Received: from CO1NAM11FT031.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:303:84:cafe::f6) by MW4PR04CA0148.outlook.office365.com
+ (2603:10b6:303:84::33) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5038.16 via Frontend
+ Transport; Wed, 9 Mar 2022 17:41:22 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com;
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ CO1NAM11FT031.mail.protection.outlook.com (10.13.174.118) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5038.14 via Frontend Transport; Wed, 9 Mar 2022 17:41:21 +0000
+Received: from ethanolx1ade-milan-genesis.amd.com (10.180.168.240) by
+ SATLEXMB04.amd.com (10.181.40.145) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Wed, 9 Mar 2022 11:41:19 -0600
 From:   Carlos Bilbao <carlos.bilbao@amd.com>
-In-Reply-To: <YievKnn5hSK0AvMt@nazgul.tnic>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: MN2PR03CA0010.namprd03.prod.outlook.com
- (2603:10b6:208:23a::15) To BL1PR12MB5874.namprd12.prod.outlook.com
- (2603:10b6:208:396::17)
+To:     <bp@alien8.de>
+CC:     <tglx@linutronix.de>, <mingo@redhat.com>,
+        <dave.hansen@linux.intel.com>, <x86@kernel.org>,
+        <yazen.ghannam@amd.com>, <linux-kernel@vger.kernel.org>,
+        <linux-edac@vger.kernel.org>, <bilbao@vt.edu>,
+        Carlos Bilbao <carlos.bilbao@amd.com>
+Subject: [PATCH] x86/mce: Cover grading of AMD machine error checks
+Date:   Wed, 9 Mar 2022 11:41:07 -0600
+Message-ID: <20220309174107.6113-1-carlos.bilbao@amd.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 8cf39534-9a1c-4b52-01de-08da01e654cc
-X-MS-TrafficTypeDiagnostic: BYAPR12MB3126:EE_
-X-Microsoft-Antispam-PRVS: <BYAPR12MB3126608C4C7F0ED3529B03BDF80A9@BYAPR12MB3126.namprd12.prod.outlook.com>
+X-MS-Office365-Filtering-Correlation-Id: b664bd2c-8453-4236-e850-08da01f40612
+X-MS-TrafficTypeDiagnostic: BN6PR1201MB0081:EE_
+X-Microsoft-Antispam-PRVS: <BN6PR1201MB0081FA150082573B73E59A55F80A9@BN6PR1201MB0081.namprd12.prod.outlook.com>
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: z6hO++RVHRefkxYcbKx3XT/2Usg6OVrvP7pMnOfvfD8/fo0B5gf5IhkU9qnNQ5BYyMU3BNAJttNA9BwJxvlgY1eV4qp6plmoRtMX7XocKl9Lu88jxYkzuftKxi4Fi6pIle5GN4Y87j/zbQlbPSmhqM6TOgdMQIDZorGqtg8WYzvxyz2TeYNCc8TLRMnEZDTEuW+s2YKMYqjRkPVWEwWDNa3t/bP+ctppVzjd46YxIkPZTBOoro94ES0wBjSLw1vRnDtp4y5oYxXEmZxc+NHyloXZTSOTGeze8wJrseN8AO4RCegR4FIuoUFOif2HPOP2o5k6FsMNCzhLVEjoqpcnZqyibpDhBUglhTGMdfG4oViz3qFDM0XKy5UF9gAZDpuvkiigFSR/2oLBgXp2/qa4/BFqAgWnBuZsnnBAANNKPtKB8gAob8kb13nS7Kg5A7bzrqxc6nlnAMBc6YBtZ8PZZEqosQRLRBqd2KqbwQHREJv8rYoJjzG1p6CRt21vHGV2aMc5aguFajJhlt1J06wFCloTqMX25reLImr8L7/eCuGFqKsRuZuNcWqP0uCABAI50GqPJ2EKDikHksD+/FHmApYOZFlBTwQwyOQT5cv6IgmjgPSUpS6Lk1ht9krZ+Nyv+pmNiVqUko9/NBPNMPJ55t3LkL7IIC3fbpx9DVgva8d4sLH1FtUIf2SdmGvhIZB+8nXuPbArLHbTQaHXJ5VX5OwzXYZK7j/35J0qxL9bpOPT+lU7X3GtR7FJQ4xez4Tw
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL1PR12MB5874.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(6506007)(53546011)(8936002)(6486002)(6916009)(31686004)(36756003)(2906002)(508600001)(66476007)(66946007)(66556008)(31696002)(316002)(5660300002)(4326008)(8676002)(38100700002)(44832011)(83380400001)(26005)(186003)(2616005)(6512007)(86362001)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?V2JKQVR5MlpYK2R3QzFDVFdFZ2hZb0M1dmlRTzh4NkJCWnBKTEdhZVU5c1lC?=
- =?utf-8?B?RzVSc2FaaXQzM2thNng4cFBkK0VOSFl0T2Y4djlMSndZZXd2RmxLVU9rTUc3?=
- =?utf-8?B?Snc3dnQyaXNYM3lZT0RFYkNRNS9PSEhYVGN3ZzhBa29vaDVjOFNndjdUVTB1?=
- =?utf-8?B?Yjg2T0x6RzBTc2NFa2pTYmNOMisyK0tMOWw3RVdUcE1TdmZ2TENmbmlKQis2?=
- =?utf-8?B?UTd3QWJ6RmxLWjJ2bVNQeU11WHgxa1pEOUpFeWF1LzE3R1JTTlZxUWxEU24x?=
- =?utf-8?B?RS9OTFBIcHVqWlBoWW12eEkxeGp2TzF3blBJZTI1RDRzNjlKLzRPNmVNdjBl?=
- =?utf-8?B?eXpRSGVvUzc0UUx0R3dkSEc1NU9kalRmTEFOT3ZkTUZPSWpUdFowVlY4WmRZ?=
- =?utf-8?B?eXZvNEd4ajU1S1VTbi84REhlUkFON0JqR3dlMnRNRVJ4dzZPWERuZ2plMDhB?=
- =?utf-8?B?YkFUR1ZCMkRPSVM1OXNubjMvOUNrc0IwaFAyV1M0QzU0VzNBL0FIREVycmk4?=
- =?utf-8?B?SVBIbGFudm9IcENtNlVTQmo1eUhhQXlQMW5YR3JQQWZRTnhycXc1TEZwWmVY?=
- =?utf-8?B?cno4Y05nUHNsK3dieTFOYlNTU1ZpNnJrQzVqMUxVeGVvcEt4d2tsK1hMRDQ4?=
- =?utf-8?B?SGJrZzBIaWtkbUp1QVh2MDlRbWdPRjBFbG11cjBqRFFZNjdYUC9WTHFkRk11?=
- =?utf-8?B?N3ZLUHNSWFRXVk5UZDN5Z2F5dFBweThSRGZmWjBOWkM0Z3BGRTFRSm8rV3ps?=
- =?utf-8?B?MHZpYUt4aHJETEx3RG9GdWhRTytZQnYzSHNxelFBVWVudUROaUNuakR5dTFO?=
- =?utf-8?B?MGlJb1hFOGJ6ZCtXRVhXWmkrMndHODdwdEtnSW51S25Bb0lZbFE5VzVXOWpk?=
- =?utf-8?B?QkRNYzlwcjBhVnI1VmswM3JmdGJrMUR1ZUtSM3A2MlR0YjczUm1iYk1QS0dm?=
- =?utf-8?B?TmlDM3UrU1JjSCtTeXMzN0g0QktUWVVIQUV6dWVqZ3dGRWwwaXh0ODFUNmVH?=
- =?utf-8?B?TjZNQXZlb3Rrcy9EYVk1czZXZXJpQnQybkFXTmZKbWR3R29KT0FaOC85QUpF?=
- =?utf-8?B?aElVMTVWSGxZUGlISFBvZERRaVpLYi9wckhzSW1LVGNTVmhlQVpndmlqclBk?=
- =?utf-8?B?d29jcnVnZVFWd1lEbFhGV21LWjBvSU1BZG4xK2ZpOVBtU3g2WjE2T3BDYU9m?=
- =?utf-8?B?cEUreEp2T2FvYzE4QkhVYUZhWEZ5TGQxMXJnVCtQenpPbk1YMTBRWHVhL1BJ?=
- =?utf-8?B?alVZd3gvUWJzOVludmkvbDl4cDJzQ0JhckpYeGtNM1dYR3h4Y3JDQVBGTUNB?=
- =?utf-8?B?Y1FRY2pteTJPK3hJUTRWUzl0U0NVMHlvUjZIVlJtVkRKZitzblpjaTl4RWZj?=
- =?utf-8?B?ekJXUmRtSlI5UWJMNjRsTkdrRVNBQjVOeUlaMzA4dkorRERnWmI2b3IwbTRq?=
- =?utf-8?B?aWhHQkNCbXQveXNpRnJ2UysyZklScEVWbDd5bW9WWG0yTUk0dU1OakRuZHNC?=
- =?utf-8?B?elFjdTNlaFE1eEMzWEJha29icEhBQ3J3VmNqTzNWYkdHZ2JXdEozNTZ4USsw?=
- =?utf-8?B?MXpXaGc0aENIalhNSzYxejdiVlE3V0ZabFBTdmloL2x1dXZtcWwxK3FqTXlp?=
- =?utf-8?B?cXAxK1FQVTZtMm1LTTFpZXkrUjFNZ2dEY3dYeXZ6WmZYUlc3M0F3L2gzcTFI?=
- =?utf-8?B?SDZmM2JPNVhpRnZzZmRvVnRBdGFQb2JjSjE4dWNGYWZENUxtMm4rblc1R3pY?=
- =?utf-8?B?UFhJQkNqeVJ0VWJoZTZRZlBOY21Wd3Nhb3dJQ1pZZmppcE9UV1pEZjdtb1hX?=
- =?utf-8?B?S3llaFpsWXNlNHFEeS9DaEhwem1KRFdwY2U3OU1sV3I3cTliaVlhMGJDc2k5?=
- =?utf-8?B?VW9BMm13Q3lQd1JnZWgxc3lESlN6dUxuY2dHUzV0V3Y1ZzdUOGpORkc0Mmx6?=
- =?utf-8?B?KzRNR0ZTd3MvUGhKMWMzajVDc1NwMXJYZll2cXphVzN5RWphaEo5V1dBZXM5?=
- =?utf-8?B?WUlpU2dPWkQ4QWlHbDBNSGRtNGVKSTVHTVZoMER0Ujlnd0cvSUI2WFZkTkUy?=
- =?utf-8?B?a0w5bWlVekFaYTV6aGJyOEI5VUlZcEhzZFFLZVBGVUhnWDZEY2F2b1Ura0dR?=
- =?utf-8?B?QnZoR0FVS3NlRkxwRUY3cU1ON2tBR2tyOHdQM0xuWHpMZzBWNDhBdktaN0hZ?=
- =?utf-8?Q?KuK15eHni7ctfXfr/849ZYQ=3D?=
+X-Microsoft-Antispam-Message-Info: NxtLQbxqA04ZF/3Odhfw4Au4GjxO5MBa25vnl2aQMeURJbVtm/e8HtIJcO+9dZk+LIFX6Zuw1ghT5J/OIa75OROfyZrQNA2QficK7jAcS+fhw8qd7TKiGpgE/ubR28da5w2K6E01delgMiYaQB1NAkPnLkXfPvpZR4wQfpLRyxQH5IWaAlaNTRjoR3AJp6B+O0YNQVXzongczZcJ5j/60hGButO1N9smT9GuoU8bDc/wpJfC5mJ1PO5twW8CYlhJLr6s1uLpAUmF16ivWdy6UhptQu4SfhqNfMEe0bfToDazrJsPl98anrzy3Pv6iL36EiIE6Kid8B4PY81+hU4oUrDF5n2z8gn5onj43Ssfwlor1y1RFd0lAMJaBqi2DNe351P/lAw8Ufy3w1yGf6lKSwGNS9UeJAOiJbZ3KI0i2k/1uEJOLb8NOdUt5Ao2FZ3xkgP4rG7Pxg4eWo9NoBHPbJRrybCoDFnbsA1aBfzhpoLJRi6KjgSth///7fJY8ncKLcVLfRxl481zxwyf0NKlhRZrJLw/Ss8ecF/wpfoE9CVs0k2Hn1sTVkPftjqD5hILD6TObvMNIvHLlDnZvXHS0nZyI44sMveLbghzGacMwAvRQiQ8F/FfWPmMOyIE/OsmiBwpFwafkG3SbOaTmrVzYP9B7mas22nZ4AvFZeBA1Ii/pT8y04HSsRFRZ8qNUB8e3cmJSqFqTdOeftuQaJUULw==
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230001)(4636009)(36840700001)(40470700004)(46966006)(2616005)(316002)(426003)(54906003)(336012)(6916009)(4326008)(70586007)(8676002)(82310400004)(70206006)(508600001)(83380400001)(86362001)(40460700003)(5660300002)(26005)(186003)(6666004)(2906002)(8936002)(16526019)(7696005)(36860700001)(36756003)(44832011)(47076005)(1076003)(356005)(81166007)(36900700001);DIR:OUT;SFP:1101;
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8cf39534-9a1c-4b52-01de-08da01e654cc
-X-MS-Exchange-CrossTenant-AuthSource: BL1PR12MB5874.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Mar 2022 16:03:20.5764
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Mar 2022 17:41:21.0022
  (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Network-Message-Id: b664bd2c-8453-4236-e850-08da01f40612
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 0+5lKkU38iCRTkjq0yjCABz+I9KZ5jtaItD4dhY43rePxH6h5E+x0fCs6fzM2Wc5CqN9Tfb7bkNS0zCcEAAYiQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR12MB3126
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT031.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN6PR1201MB0081
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -129,42 +100,301 @@ Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On 3/8/2022 1:32 PM, Borislav Petkov wrote:
-> On Tue, Mar 08, 2022 at 12:41:34PM -0600, Carlos Bilbao wrote:
->> AMD's severity grading covers very few machine errors. In the graded cases
->> there are no user-readable messages, complicating debugging of critical
->> hardware errors. Furthermore, with the current implementation AMD MCEs have
->> no support for the severities-coverage file. Adding new severities for AMD
->> with the current logic would be too convoluted.
->>
->> Fix the above issues including AMD severities to the severity table, in
->> combination with Intel MCEs. Unify the severity grading logic of both
->> vendors. Label the vendor-specific cases (e.g. cases with different
->> registers) where checks cannot be implicit with the available features.
->>
->> Signed-off-by: Carlos Bilbao <carlos.bilbao@amd.com>
->> ---
->>  arch/x86/include/asm/mce.h         |   7 ++
->>  arch/x86/kernel/cpu/mce/severity.c | 188 +++++++++++++++--------------
->>  2 files changed, 103 insertions(+), 92 deletions(-)
-> 
-> Sorry, maybe you're too new to this and you probably haven't read the
-> old discussions we have had about the severity grading turd. In order to
-> save you some time: adding more to that macro insanity is not going to
-> happen.
-> 
-> The AMD severity grading functions are *actually* readable vs this
-> abomination which I hate with passion.
-> 
-> If you want to add more logic, you should add to mce_severity_amd(),
-> perhaps call other helper functions which grade based on a certain
-> aspect of the error type, split the logic, use comments, etc, but
-> *definitely* not this.
-> 
-> Thx.
-> 
+AMD's severity grading covers very few machine errors. In the graded cases
+there are no user-readable messages, complicating debugging of critical
+hardware errors.
 
-Understood, sending a new patch in that direction.
+Fix the above issues extending the current grading logic for AMD with cases
+not previously considered and their corresponding messages.
 
-Thanks,
-Carlos
+Signed-off-by: Carlos Bilbao <carlos.bilbao@amd.com>
+---
+ arch/x86/include/asm/mce.h         |   6 +
+ arch/x86/kernel/cpu/mce/severity.c | 232 +++++++++++++++++++++++++----
+ 2 files changed, 205 insertions(+), 33 deletions(-)
+
+diff --git a/arch/x86/include/asm/mce.h b/arch/x86/include/asm/mce.h
+index cc73061e7255..6b1ef40f8580 100644
+--- a/arch/x86/include/asm/mce.h
++++ b/arch/x86/include/asm/mce.h
+@@ -50,6 +50,12 @@
+ #define MCI_STATUS_POISON	BIT_ULL(43)  /* access poisonous data */
+ #define MCI_STATUS_SCRUB	BIT_ULL(40)  /* Error detected during scrub operation */
+ 
++/* AMD Error codes from PPR(s) section 3.1 Machine Check Architecture */
++#define ERRORCODE_T_MSK GENMASK(3, 2) /* Mask for transaction type bits */
++#define ERRORCODE_M_MSK GENMASK(7, 4) /* Mask for memory transaction type */
++#define ERRORCODE_T_DATA  0x4  /* Transaction type of error is Data */
++#define ERRORCODE_M_FETCH 0x50 /* Memory transaction type of error is Instruction Fetch */
++
+ /*
+  * McaX field if set indicates a given bank supports MCA extensions:
+  *  - Deferred error interrupt type is specifiable by bank.
+diff --git a/arch/x86/kernel/cpu/mce/severity.c b/arch/x86/kernel/cpu/mce/severity.c
+index 1add86935349..764c6caf4bfe 100644
+--- a/arch/x86/kernel/cpu/mce/severity.c
++++ b/arch/x86/kernel/cpu/mce/severity.c
+@@ -327,59 +327,225 @@ static __always_inline int mce_severity_amd_smca(struct mce *m, enum context err
+ }
+ 
+ /*
+- * See AMD Error Scope Hierarchy table in a newer BKDG. For example
+- * 49125_15h_Models_30h-3Fh_BKDG.pdf, section "RAS Features"
++ * Evaluate the severity of a data load error for AMD systems, depending
++ * on the context in which the MCE happened.
+  */
+-static noinstr int mce_severity_amd(struct mce *m, struct pt_regs *regs, char **msg, bool is_excp)
++static inline int mce_grade_data_amd(enum context ctx, char **severity_msg)
+ {
+-	enum context ctx = error_context(m, regs);
++	WARN_ON(!severity_msg);
++
++	switch (ctx) {
++	case IN_USER:
++		*severity_msg = "Action required: data load error in user process";
++		return MCE_AR_SEVERITY;
++	case IN_KERNEL_RECOV:
++		*severity_msg = "Action required: data load in kernel recoverable area";
++		return MCE_AR_SEVERITY;
++	case IN_KERNEL:
++		*severity_msg = "Data load in unrecoverable area of kernel";
++		return MCE_PANIC_SEVERITY;
++	default:
++		*severity_msg = "Data load in unknown context";
++		return MCE_PANIC_SEVERITY;
++	}
++}
+ 
+-	/* Processor Context Corrupt, no need to fumble too much, die! */
+-	if (m->status & MCI_STATUS_PCC)
++/*
++ * Evaluate the severity of an instruction fetch error for AMD systems,
++ * depending on the context in which the MCE happened.
++ */
++static inline int mce_grade_fetch_amd(enum context ctx, char **severity_msg)
++{
++	WARN_ON(!severity_msg);
++
++	switch (ctx) {
++	case IN_USER:
++		*severity_msg = "Action required: instruction fetch in user process";
++		return MCE_AR_SEVERITY;
++	case IN_KERNEL_RECOV:
++		*severity_msg = "Instruction fetch in kernel recoverable area";
++#ifdef CONFIG_MEMORY_FAILURE
++		return MCE_AR_SEVERITY;
++#else /* !MCE_PANIC_SEVERITY */
+ 		return MCE_PANIC_SEVERITY;
++#endif
++	case IN_KERNEL:
++		*severity_msg = "Instruction fetch error in kernel";
++		return MCE_PANIC_SEVERITY;
++	default:
++		*severity_msg = "Instruction fetch error in unknown context";
++		return MCE_PANIC_SEVERITY;
++	}
++}
+ 
+-	if (m->status & MCI_STATUS_UC) {
++/*
++ * Evaluate the severity of a memory poison error for AMD systems,
++ * depending on the context in which the MCE happened.
++ */
++static inline int mce_grade_poison_amd(enum context ctx, char **severity_msg)
++{
+ 
+-		if (ctx == IN_KERNEL)
+-			return MCE_PANIC_SEVERITY;
++	WARN_ON(!severity_msg);
++
++	switch (ctx) {
++	case IN_USER:
++		*severity_msg = "Attempt to consume poisoned data in user process";
++		return MCE_AR_SEVERITY;
++	case IN_KERNEL_RECOV:
++		*severity_msg = "Attempt to consume poisoned memory in kernel recoverable area";
++#ifdef CONFIG_MEMORY_FAILURE
++		return MCE_AR_SEVERITY;
++#else /* !CONFIG_MEMORY_FAILURE */
++		return MCE_PANIC_SEVERITY;
++#endif
++	case IN_KERNEL:
++		*severity_msg = "Attempt to consume poisoned data in kernel context";
++		return MCE_PANIC_SEVERITY;
++	default:
++		*severity_msg = "Poisoned data consumption in unknown context";
++		return MCE_PANIC_SEVERITY;
++	}
++}
++
++/*
++ * Evaluate the severity of deferred errors for AMD systems, for which only
++ * scrub error is interesting to notify an action requirement.
++ */
++static noinstr int mce_grade_deferred_amd(struct mce *m, enum context ctx, char **msg)
++{
++	int ret;
++
++	WARN_ON(!msg);
+ 
++	if (m->status & MCI_STATUS_SCRUB) {
++		ret = MCE_AR_SEVERITY;
++		*msg = "Action required: Error detected on a scrub operation";
++	} else {
+ 		/*
+-		 * On older systems where overflow_recov flag is not present, we
+-		 * should simply panic if an error overflow occurs. If
+-		 * overflow_recov flag is present and set, then software can try
+-		 * to at least kill process to prolong system operation.
++		 * deferred error: poll handler catches these and adds to mce_ring so
++		 * memory-failure can take recovery actions.
+ 		 */
+-		if (mce_flags.overflow_recov) {
+-			if (mce_flags.smca)
+-				return mce_severity_amd_smca(m, ctx);
++		ret = MCE_DEFERRED_SEVERITY;
++		*msg = "Deferred";
++	}
+ 
+-			/* kill current process */
+-			return MCE_AR_SEVERITY;
++	return ret;
++}
++
++/*
++ * Evaluate the severity of an overflow error for AMD systems, dependent on
++ * the recoverable features available.
++ */
++static noinstr int mce_grade_overflow_amd(struct mce *m, enum context ctx, char **msg)
++{
++	int ret;
++
++	WARN_ON(!msg);
++
++	if (ctx == IN_KERNEL) {
++		*msg = "Uncorrectable error in kernel context";
++		return MCE_PANIC_SEVERITY;
++	}
++
++	/*
++	 * On older systems where overflow_recov flag is not present, we
++	 * should simply panic if an error overflow occurs. If
++	 * overflow_recov flag is present and set, then software can try
++	 * to at least kill process to prolong system operation.
++	 */
++	if (mce_flags.overflow_recov) {
++		*msg = "Uncorrected recoverable error";
++		if (mce_flags.smca) {
++			ret = mce_severity_amd_smca(m, ctx);
++			if (ret == MCE_PANIC_SEVERITY)
++				*msg = "Uncorrected unrecoverable error";
+ 		} else {
+-			/* at least one error was not logged */
+-			if (m->status & MCI_STATUS_OVER)
+-				return MCE_PANIC_SEVERITY;
++			/* kill current process */
++			ret = MCE_AR_SEVERITY;
+ 		}
++		return ret;
++	}
+ 
+-		/*
+-		 * For any other case, return MCE_UC_SEVERITY so that we log the
+-		 * error and exit #MC handler.
+-		 */
+-		return MCE_UC_SEVERITY;
++	/* at least one error was not logged */
++	if (m->status & MCI_STATUS_OVER) {
++		*msg = "Overflow uncorrected";
++		return MCE_PANIC_SEVERITY;
+ 	}
+ 
+ 	/*
+-	 * deferred error: poll handler catches these and adds to mce_ring so
+-	 * memory-failure can take recovery actions.
++	 * For any other case, return MCE_UC_SEVERITY so that we log the
++	 * error and exit #MC handler.
+ 	 */
+-	if (m->status & MCI_STATUS_DEFERRED)
+-		return MCE_DEFERRED_SEVERITY;
++	*msg = "Uncorrected overflow error";
++	return MCE_UC_SEVERITY;
++}
++
++/*
++ * See AMD PPR(s) section 3.1 Machine Check Architecture
++ */
++static noinstr int mce_severity_amd(struct mce *m, struct pt_regs *regs, char **msg, bool is_excp)
++{
++	enum context ctx = error_context(m, regs);
++	char *severity_msg;
++	int ret;
+ 
+ 	/*
+-	 * corrected error: poll handler catches these and passes responsibility
+-	 * of decoding the error to EDAC
++	 * Default return values. The poll handler catches these and passes
++	 * responsibility of decoding them to EDAC
+ 	 */
+-	return MCE_KEEP_SEVERITY;
++	ret = MCE_KEEP_SEVERITY;
++	severity_msg = "Corrected error";
++
++	if (m->status & MCI_STATUS_DEFERRED) {
++		ret = mce_grade_deferred_amd(m, ctx, &severity_msg);
++		goto amd_severity;
++	}
++
++	/* If the UC bit is not set, the error has been corrected */
++	if (!(m->status & MCI_STATUS_UC)) {
++		ret = MCE_KEEP_SEVERITY;
++		severity_msg = "Corrected error";
++		goto amd_severity;
++	}
++
++	if (m->status & MCI_STATUS_POISON) {
++		ret = mce_grade_poison_amd(ctx, &severity_msg);
++		goto amd_severity;
++	}
++
++	/* Processor Context Corrupt, no need to fumble too much, die! */
++	if (m->status & MCI_STATUS_PCC) {
++		severity_msg = "Processor Context Corrupt";
++		ret = MCE_PANIC_SEVERITY;
++		goto amd_severity;
++	}
++
++	if ((m->status & ERRORCODE_T_MSK) == ERRORCODE_T_DATA) {
++		ret = mce_grade_data_amd(ctx, &severity_msg);
++		goto amd_severity;
++	}
++
++	if ((m->status & ERRORCODE_M_MSK) == ERRORCODE_M_FETCH) {
++		ret = mce_grade_fetch_amd(ctx, &severity_msg);
++		goto amd_severity;
++	}
++
++	if (m->status & MCI_STATUS_OVER) {
++		ret = mce_grade_overflow_amd(m, ctx, &severity_msg);
++		goto amd_severity;
++	}
++
++	if (ctx == IN_KERNEL) {
++		ret = MCE_PANIC_SEVERITY;
++		severity_msg = "Uncorrectable error in kernel context";
++	}
++
++amd_severity:
++
++	if (msg)
++		*msg = severity_msg;
++
++	return ret;
+ }
+ 
+ static noinstr int mce_severity_intel(struct mce *m, struct pt_regs *regs, char **msg, bool is_excp)
+
+base-commit: 7f1b8e0d6360178e3527d4f14e6921c254a86035
+-- 
+2.27.0
+
