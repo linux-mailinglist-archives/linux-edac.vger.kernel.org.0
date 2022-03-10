@@ -2,39 +2,39 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 483564D43E3
-	for <lists+linux-edac@lfdr.de>; Thu, 10 Mar 2022 10:54:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DC444D43EE
+	for <lists+linux-edac@lfdr.de>; Thu, 10 Mar 2022 10:54:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241007AbiCJJyB (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Thu, 10 Mar 2022 04:54:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34840 "EHLO
+        id S241063AbiCJJyS (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Thu, 10 Mar 2022 04:54:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240968AbiCJJx7 (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Thu, 10 Mar 2022 04:53:59 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 056733A1A5;
-        Thu, 10 Mar 2022 01:52:52 -0800 (PST)
+        with ESMTP id S241033AbiCJJyE (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Thu, 10 Mar 2022 04:54:04 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8163B434A1;
+        Thu, 10 Mar 2022 01:52:53 -0800 (PST)
 Received: from zn.tnic (p200300ea97193878fa50b3d92789953a.dip0.t-ipconnect.de [IPv6:2003:ea:9719:3878:fa50:b3d9:2789:953a])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 8DE4C1EC0628;
-        Thu, 10 Mar 2022 10:52:51 +0100 (CET)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 292681EC0644;
+        Thu, 10 Mar 2022 10:52:52 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1646905971;
+        t=1646905972;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=8HPBjAt12e9y+TmY1dLjbvw33G2uomnQGijd5JC3m8U=;
-        b=KGR5aVyoePUhfWWGQ90BrMCUmM2ACWD0mPuEAqaJktxQNn2is9iehnVj+35VLdirW+7gT3
-        MMnnlxVOyoMwOnRRoQeRiVOi0Se0mAvDStnRruhoowhMyGkU7azV+uYU0A6VFW+1bYCO7j
-        A/kWzzuhspgNAlmlK+XzcTyuyrQroz8=
+        bh=V0Fb300fSebS4i9B9w/sAZrMoYBxU/8cREsoOOVoTbM=;
+        b=Yp3eidbngjg7IwQDczK2Pm2FpoQo2PycDMK2CzW4MJdqHg8+FMfvGunUWnrf+4nKCw0BQA
+        Q+4LuiBqLoSAlSrWt5Lca5mFlELxdtsVwglrd72jhG/6Xuwhh+rLGfaLulkj49PgP1WGDh
+        wkc3W2lj5Qv5430qmZ6Shw7KdIU3hRw=
 From:   Borislav Petkov <bp@alien8.de>
 To:     linux-edac <linux-edac@vger.kernel.org>
 Cc:     LKML <linux-kernel@vger.kernel.org>
-Subject: [PATCH 1/5] EDAC/mc: Get rid of silly one-shot struct allocation in edac_mc_alloc()
-Date:   Thu, 10 Mar 2022 10:52:50 +0100
-Message-Id: <20220310095254.1510-2-bp@alien8.de>
+Subject: [PATCH 2/5] EDAC/pci: Get rid of the silly one-shot memory allocation in edac_pci_alloc_ctl_info()
+Date:   Thu, 10 Mar 2022 10:52:51 +0100
+Message-Id: <20220310095254.1510-3-bp@alien8.de>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20220310095254.1510-1-bp@alien8.de>
 References: <20220310095254.1510-1-bp@alien8.de>
@@ -51,93 +51,64 @@ X-Mailing-List: linux-edac@vger.kernel.org
 
 From: Borislav Petkov <bp@suse.de>
 
-This has probably meant something at some point but there's no need for
-it anymore - the struct mem_ctl_info allocation can happen with normal,
-boring k*alloc() calls like everyone else does it.
+Use boring kzalloc() instead.
 
-No functional changes.
+There should be no functional changes resulting from this.
 
 Signed-off-by: Borislav Petkov <bp@suse.de>
 ---
- drivers/edac/edac_mc.c | 41 +++++++++++++----------------------------
- 1 file changed, 13 insertions(+), 28 deletions(-)
+ drivers/edac/edac_pci.c | 25 ++++++++++++-------------
+ 1 file changed, 12 insertions(+), 13 deletions(-)
 
-diff --git a/drivers/edac/edac_mc.c b/drivers/edac/edac_mc.c
-index f5677d81bd2d..b9b298a59f46 100644
---- a/drivers/edac/edac_mc.c
-+++ b/drivers/edac/edac_mc.c
-@@ -257,6 +257,8 @@ static void mci_release(struct device *dev)
- 		}
- 		kfree(mci->csrows);
- 	}
-+	kfree(mci->pvt_info);
-+	kfree(mci->layers);
- 	kfree(mci);
- }
+diff --git a/drivers/edac/edac_pci.c b/drivers/edac/edac_pci.c
+index 48c844a72a27..2205d7e731db 100644
+--- a/drivers/edac/edac_pci.c
++++ b/drivers/edac/edac_pci.c
+@@ -29,32 +29,31 @@ static LIST_HEAD(edac_pci_list);
+ static atomic_t pci_indexes = ATOMIC_INIT(0);
  
-@@ -392,9 +394,8 @@ struct mem_ctl_info *edac_mc_alloc(unsigned int mc_num,
+ struct edac_pci_ctl_info *edac_pci_alloc_ctl_info(unsigned int sz_pvt,
+-						const char *edac_pci_name)
++						  const char *edac_pci_name)
  {
- 	struct mem_ctl_info *mci;
- 	struct edac_mc_layer *layer;
--	unsigned int idx, size, tot_dimms = 1;
-+	unsigned int idx, tot_dimms = 1;
- 	unsigned int tot_csrows = 1, tot_channels = 1;
--	void *pvt, *ptr = NULL;
- 	bool per_rank = false;
+ 	struct edac_pci_ctl_info *pci;
+-	void *p = NULL, *pvt;
+-	unsigned int size;
  
- 	if (WARN_ON(n_layers > EDAC_MAX_LAYERS || n_layers == 0))
-@@ -416,41 +417,25 @@ struct mem_ctl_info *edac_mc_alloc(unsigned int mc_num,
- 			per_rank = true;
- 	}
+ 	edac_dbg(1, "\n");
  
--	/* Figure out the offsets of the various items from the start of an mc
--	 * structure.  We want the alignment of each item to be at least as
--	 * stringent as what the compiler would provide if we could simply
--	 * hardcode everything into a single struct.
--	 */
--	mci	= edac_align_ptr(&ptr, sizeof(*mci), 1);
--	layer	= edac_align_ptr(&ptr, sizeof(*layer), n_layers);
--	pvt	= edac_align_ptr(&ptr, sz_pvt, 1);
--	size	= ((unsigned long)pvt) + sz_pvt;
+-	pci = edac_align_ptr(&p, sizeof(*pci), 1);
+-	pvt = edac_align_ptr(&p, 1, sz_pvt);
+-	size = ((unsigned long)pvt) + sz_pvt;
 -
--	edac_dbg(1, "allocating %u bytes for mci data (%d %s, %d csrows/channels)\n",
--		 size,
--		 tot_dimms,
--		 per_rank ? "ranks" : "dimms",
--		 tot_csrows * tot_channels);
--
--	mci = kzalloc(size, GFP_KERNEL);
--	if (mci == NULL)
-+	mci = kzalloc(sizeof(struct mem_ctl_info), GFP_KERNEL);
-+	if (!mci)
+-	/* Alloc the needed control struct memory */
+-	pci = kzalloc(size, GFP_KERNEL);
+-	if (pci  == NULL)
++	pci = kzalloc(sizeof(struct edac_pci_ctl_info), GFP_KERNEL);
++	if (!pci)
  		return NULL;
  
-+	mci->layers = kmalloc_array(n_layers, sizeof(struct edac_mc_layer), GFP_KERNEL | __GFP_ZERO);
-+	if (!mci->layers)
-+		goto error;
-+
-+	mci->pvt_info = kzalloc(sz_pvt, GFP_KERNEL);
-+	if (!mci->pvt_info)
-+		goto error;
-+
- 	mci->dev.release = mci_release;
- 	device_initialize(&mci->dev);
+-	/* Now much private space */
+-	pvt = sz_pvt ? ((char *)pci) + ((unsigned long)pvt) : NULL;
++	if (sz_pvt) {
++		pci->pvt_info = kzalloc(sz_pvt, GFP_KERNEL);
++		if (!pci->pvt_info)
++			goto free;
++	}
  
--	/* Adjust pointers so they point within the memory we just allocated
--	 * rather than an imaginary chunk of memory located at address 0.
--	 */
--	layer = (struct edac_mc_layer *)(((char *)mci) + ((unsigned long)layer));
--	pvt = sz_pvt ? (((char *)mci) + ((unsigned long)pvt)) : NULL;
--
- 	/* setup index and various internal pointers */
- 	mci->mc_idx = mc_num;
- 	mci->tot_dimms = tot_dimms;
--	mci->pvt_info = pvt;
- 	mci->n_layers = n_layers;
--	mci->layers = layer;
- 	memcpy(mci->layers, layers, sizeof(*layer) * n_layers);
- 	mci->nr_csrows = tot_csrows;
- 	mci->num_cschannel = tot_channels;
+-	pci->pvt_info = pvt;
+ 	pci->op_state = OP_ALLOC;
+ 
+ 	snprintf(pci->name, strlen(edac_pci_name) + 1, "%s", edac_pci_name);
+ 
+ 	return pci;
++
++free:
++	kfree(pci);
++	return NULL;
+ }
+ EXPORT_SYMBOL_GPL(edac_pci_alloc_ctl_info);
+ 
 -- 
 2.29.2
 
