@@ -2,88 +2,110 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 996604D5465
-	for <lists+linux-edac@lfdr.de>; Thu, 10 Mar 2022 23:13:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 01A654D5774
+	for <lists+linux-edac@lfdr.de>; Fri, 11 Mar 2022 02:43:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244576AbiCJWOt (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Thu, 10 Mar 2022 17:14:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42852 "EHLO
+        id S1345385AbiCKBoE (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Thu, 10 Mar 2022 20:44:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240292AbiCJWOt (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Thu, 10 Mar 2022 17:14:49 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4747262127;
-        Thu, 10 Mar 2022 14:13:43 -0800 (PST)
-Received: from zn.tnic (p200300ea97193878e79a34f2fb5add4f.dip0.t-ipconnect.de [IPv6:2003:ea:9719:3878:e79a:34f2:fb5a:dd4f])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 75D331EC0432;
-        Thu, 10 Mar 2022 23:13:37 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1646950417;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=4jApLr5h3MOaJR8HuPKksowRenJ+ECkFPNCumJIL5gg=;
-        b=fPcC7LKb6FEKoOPPuIoeYnIjVFnCCwhS1hvVH+uji3gXrXfxOxhPleLn+o/VOXs5Nsgqno
-        gFGwF1XE2u0OTG/Mi1kZS6wD8sGPPtdKB5i5QptvgPfh/eQiEc9CfyzjtA31zZUgWgYQNy
-        Qz/ZbBd0RgnhZlFYuWT65edUYAEjJYs=
-Date:   Thu, 10 Mar 2022 23:13:37 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Carlos Bilbao <carlos.bilbao@amd.com>
-Cc:     tglx@linutronix.de, mingo@redhat.com, dave.hansen@linux.intel.com,
-        x86@kernel.org, yazen.ghannam@amd.com,
-        linux-kernel@vger.kernel.org, linux-edac@vger.kernel.org,
-        bilbao@vt.edu
-Subject: Re: [PATCH] x86/mce: Cover grading of AMD machine error checks
-Message-ID: <Yip4EV69+lElCuPM@zn.tnic>
-References: <20220309174107.6113-1-carlos.bilbao@amd.com>
- <Yijz7dA1U0AMcYPZ@zn.tnic>
- <4a345de2-6a2c-fe26-c55c-34ce6ea431d4@amd.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <4a345de2-6a2c-fe26-c55c-34ce6ea431d4@amd.com>
+        with ESMTP id S233427AbiCKBoA (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Thu, 10 Mar 2022 20:44:00 -0500
+Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7452CF398;
+        Thu, 10 Mar 2022 17:42:57 -0800 (PST)
+Received: by mail-pg1-x529.google.com with SMTP id t187so6237658pgb.1;
+        Thu, 10 Mar 2022 17:42:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id;
+        bh=BP+86L+lIuRy6uRjMkCZyF2DvJ6c3trp41j9uZ3sVxs=;
+        b=hgM8E+RBZ0dTNuJknt6CD2fx09iOVPsZUQOoCi6PwmLUGtVGN3RgqG96s0iVGH7iB1
+         PH9jpN6UfH2GFamJQhWRogKeTgW4lZuDx45yvMMPWKv5WrEIz1RvJ71pj1kiqmygmZzU
+         qJyVi0bP6jd3Ve7c6d7VhrECwmEtHyc6klMW+mWvtlkxEVVD5snRHAiNOILiQQUmy5o3
+         G0Wi2ZgBtaXUwwh+Vrr67VWhCaWZD8gVVVLlyas8K5QS+f1NsHT7Wt8MJqHifrrMMf+F
+         DpAqwyx4NdEqlY4MJwewIvzkktkvOg88oS4iwFYqRZfsGZh/W8SFHaZL/ehrgxX52k3A
+         yUaQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=BP+86L+lIuRy6uRjMkCZyF2DvJ6c3trp41j9uZ3sVxs=;
+        b=pvg3g41TaY6JCbhqvKn2ZunPuJNN1x4z8f6BsyDSkGMCke+i3HnM0T40anfYWZ5mCd
+         l3lHkAsv2yKdjb8qED9ImBieuVEIU7Vv6cTEXK7+E1LtYNkO+OYV+Irk2xDMnKu7Vc5m
+         lHvNCUF80K4WnucWe5jLTYO/jtbWYSHZCtnNer3RlM/SeOxwqQQpAvRsy/nYAns0WOa/
+         4b/VN3GWY2o8kAMZN5SgEtauRVdcQwBzu/VagAKJAfwnGFasfPT6QVIskKx4SOSMqhRe
+         cBmIOLmmib7+pClpgGG6J/TwK+ut4BvyMWGMu230EqifvCnhKzltfjG2XfS7ZowZMWbV
+         oujA==
+X-Gm-Message-State: AOAM530rP5Y3N8K7iBfvYQPsrO94iBTPqRsBHgE06Jr27prb/j8NElC1
+        JEJqg7X0rLXhpn1+GUZ6KSM=
+X-Google-Smtp-Source: ABdhPJw4s8hxwtZjigPSX7XWokxaMTRbW0JF0Zac/tcWjw05dE0QhbsCicmgkB9Yqd+SzzZLuwA+fw==
+X-Received: by 2002:a62:55c4:0:b0:4f6:b396:9caa with SMTP id j187-20020a6255c4000000b004f6b3969caamr7728287pfb.19.1646962975583;
+        Thu, 10 Mar 2022 17:42:55 -0800 (PST)
+Received: from localhost.localdomain ([116.89.135.255])
+        by smtp.gmail.com with ESMTPSA id w5-20020a17090a6b8500b001bf564e624esm7194383pjj.39.2022.03.10.17.42.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Mar 2022 17:42:54 -0800 (PST)
+From:   Medad CChien <medadyoung@gmail.com>
+X-Google-Original-From: Medad CChien <ctcchien@nuvoton.com>
+To:     rric@kernel.org, james.morse@arm.com, tony.luck@intel.com,
+        mchehab@kernel.org, bp@alien8.de, robh+dt@kernel.org,
+        benjaminfair@google.com, yuenn@google.com, venture@google.com,
+        KWLIU@nuvoton.com, YSCHU@nuvoton.com, JJLIU0@nuvoton.com,
+        KFTING@nuvoton.com, avifishman70@gmail.com, tmaimon77@gmail.com,
+        tali.perry1@gmail.com, ctcchien@nuvoton.com
+Cc:     linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, openbmc@lists.ozlabs.org
+Subject: [PATCH v3 0/3] EDAC: nuvoton: Add nuvoton NPCM memory controller driver
+Date:   Fri, 11 Mar 2022 09:42:42 +0800
+Message-Id: <20220311014245.4612-1-ctcchien@nuvoton.com>
+X-Mailer: git-send-email 2.17.1
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Thu, Mar 10, 2022 at 12:24:08PM -0600, Carlos Bilbao wrote:
-> We will cover grading of MCEs like deferred memory scrub errors, attempts 
-> to access poisonous data, etc. I could list all new covered cases in the 
-> commit message if you think that'd be positive.
+Add support for Nuvoton NPCM SoC.
 
-So no actual use case - you want to grade error severity for all types
-of MCEs.
+Addressed comments from:
+ - Rob Herring : https://lkml.org/lkml/2022/2/25/1103
+ - Krzysztof Kozlowski : https://lkml.org/lkml/2022/2/27/63
+ - Rob Herring : https://lkml.org/lkml/2022/3/2/828
 
-> Hope that helps clarify,
+Changes since version 3:
+ - Rename npcm-edac.yaml as nuvoton,npcm-memory-controller.yaml.
+ - Drop 'EDAC' in title of nuvoton,npcm-memory-controller.yaml.
+ - Update compatible in nuvoton,npcm-memory-controller.yaml.
 
-Yes, it does a bit.
+Changes since version 2:
+ - Update description and compatible in npcm-edac.yaml.
+ - Remove address-cells and size-cells in npcm-edac.yaml.
+ - Reorder the items of examples in npcm-edac.yaml.
+ - Reorder header file in driver.
 
-It sounds to me like you want to do at least two patches:
+Changes since version 1:
+ - Add nuvoton,npcm750-memory-controller property in NPCM devicetree.
+ - Add new property in edac binding document.
+ - Add new driver for nuvoton NPCM memory controller.
 
-1. Extend the severity grading function with the new types of errors
+Medad CChien (3):
+  ARM: dts: nuvoton: Add new device node
+  dt-bindings: edac: nuvoton,npcm-memory-controller.yaml
+  EDAC: nuvoton: Add NPCM memory controller driver
 
-2. Add string descriptions of the error types mce_severity_amd() looks
-at, so that mce_panic() issues them.
-
-I.e., you want to decode the fatal MCEs which panic the machine.
-
-In general, what would help is if you think about what you're trying to
-achieve and write it down first. How to achieve that we can figure out
-later.
-
-What happens now is you send me a patch and I'm trying to decipher from
-the code why you're doing what you're doing. Which is kinda backwards if
-you think about it...
+ .../edac/nuvoton,npcm-memory-controller.yaml  |  62 ++
+ arch/arm/boot/dts/nuvoton-common-npcm7xx.dtsi |   7 +
+ drivers/edac/Kconfig                          |   9 +
+ drivers/edac/Makefile                         |   1 +
+ drivers/edac/npcm_edac.c                      | 714 ++++++++++++++++++
+ 5 files changed, 793 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/edac/nuvoton,npcm-memory-controller.yaml
+ create mode 100644 drivers/edac/npcm_edac.c
 
 -- 
-Regards/Gruss,
-    Boris.
+2.17.1
 
-https://people.kernel.org/tglx/notes-about-netiquette
