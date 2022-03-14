@@ -2,27 +2,27 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C12084D7926
-	for <lists+linux-edac@lfdr.de>; Mon, 14 Mar 2022 02:51:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 973C04D7935
+	for <lists+linux-edac@lfdr.de>; Mon, 14 Mar 2022 02:58:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231209AbiCNBw2 (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Sun, 13 Mar 2022 21:52:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47540 "EHLO
+        id S232596AbiCNCAB (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Sun, 13 Mar 2022 22:00:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230042AbiCNBw1 (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Sun, 13 Mar 2022 21:52:27 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 732861BEBF;
-        Sun, 13 Mar 2022 18:51:17 -0700 (PDT)
-Received: from canpemm500002.china.huawei.com (unknown [172.30.72.54])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4KGzxT0WnwzfYyq;
-        Mon, 14 Mar 2022 09:49:49 +0800 (CST)
+        with ESMTP id S229771AbiCNCAB (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Sun, 13 Mar 2022 22:00:01 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9BC82019E;
+        Sun, 13 Mar 2022 18:58:51 -0700 (PDT)
+Received: from canpemm500002.china.huawei.com (unknown [172.30.72.53])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4KH02C0TBDz1GCQ7;
+        Mon, 14 Mar 2022 09:53:55 +0800 (CST)
 Received: from [10.174.177.76] (10.174.177.76) by
  canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Mon, 14 Mar 2022 09:51:14 +0800
-Subject: Re: [PATCH v2 1/3] mm/memory-failure.c: fix race with changing page
- compound again
+ 15.1.2308.21; Mon, 14 Mar 2022 09:58:49 +0800
+Subject: Re: [PATCH v2 2/3] mm/memory-failure.c: avoid calling
+ invalidate_inode_page() with unexpected pages
 To:     =?UTF-8?B?SE9SSUdVQ0hJIE5BT1lBKOWggOWPoyDnm7TkuZ8p?= 
         <naoya.horiguchi@nec.com>
 CC:     "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
@@ -34,15 +34,15 @@ CC:     "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
         "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>
 References: <20220312074613.4798-1-linmiaohe@huawei.com>
- <20220312074613.4798-2-linmiaohe@huawei.com>
- <20220313234100.GA3010057@hori.linux.bs1.fc.nec.co.jp>
+ <20220312074613.4798-3-linmiaohe@huawei.com>
+ <20220313234157.GB3010057@hori.linux.bs1.fc.nec.co.jp>
 From:   Miaohe Lin <linmiaohe@huawei.com>
-Message-ID: <86d13611-dcd2-7c1b-eed8-28f9349f6201@huawei.com>
-Date:   Mon, 14 Mar 2022 09:51:14 +0800
+Message-ID: <8aa7cdd9-8104-2fea-879d-61519f6489d1@huawei.com>
+Date:   Mon, 14 Mar 2022 09:58:49 +0800
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
  Thunderbird/78.6.0
 MIME-Version: 1.0
-In-Reply-To: <20220313234100.GA3010057@hori.linux.bs1.fc.nec.co.jp>
+In-Reply-To: <20220313234157.GB3010057@hori.linux.bs1.fc.nec.co.jp>
 Content-Type: text/plain; charset="utf-8"
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
@@ -61,98 +61,63 @@ List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
 On 2022/3/14 7:41, HORIGUCHI NAOYA(堀口 直也) wrote:
-> On Sat, Mar 12, 2022 at 03:46:11PM +0800, Miaohe Lin wrote:
->> There is a race window where we got the compound_head, the hugetlb page
->> could be freed to buddy, or even changed to another compound page just
->> before we try to get hwpoison page. Think about the below race window:
->>   CPU 1					  CPU 2
->>   memory_failure_hugetlb
->>   struct page *head = compound_head(p);
->> 					  hugetlb page might be freed to
->> 					  buddy, or even changed to another
->> 					  compound page.
->>
->>   get_hwpoison_page -- page is not what we want now...
->>
->> If this race happens, just bail out. Also MF_MSG_DIFFERENT_PAGE_SIZE is
->> introduced to record this event.
+> On Sat, Mar 12, 2022 at 03:46:12PM +0800, Miaohe Lin wrote:
+>> Since commit 042c4f32323b ("mm/truncate: Inline invalidate_complete_page()
+> 
+> This commit ID does not exist in mainline (or in the latest mmotm?),
+> so you can't use it in patch description.  Could you update this part?
+> 
+
+This commit is in the mmotm but not in mainline yet:
+
+commit 042c4f32323beb28146c658202d3e69899e4f245
+Author: Matthew Wilcox (Oracle) <willy@infradead.org>
+Date:   Sat Feb 12 15:27:42 2022 -0500
+
+    mm/truncate: Inline invalidate_complete_page() into its one caller
+
+    invalidate_inode_page() is the only caller of invalidate_complete_page()
+    and inlining it reveals that the first check is unnecessary (because we
+    hold the page locked, and we just retrieved the mapping from the page).
+    Actually, it does make a difference, in that tail pages no longer fail
+    at this check, so it's now possible to remove a tail page from a mapping.
+
+    Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
+    Reviewed-by: John Hubbard <jhubbard@nvidia.com>
+    Reviewed-by: Christoph Hellwig <hch@lst.de>
+
+
+Am I "not" supposed to use this commit id as it's not "stable" now?
+
+Will update this part in next version. Many thanks.
+
+> Thanks,
+> Naoya Horiguchi
+> 
+>> into its one caller"), invalidate_inode_page() can invalidate the pages in
+>> the swap cache because the check of page->mapping != mapping is removed.
+>> But invalidate_inode_page() is not expected to deal with the pages in swap
+>> cache. Also non-lru movable page can reach here too. They're not page cache
+>> pages. Skip these pages by checking PageSwapCache and PageLRU.
 >>
 >> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
 >> ---
->>  include/linux/mm.h      |  1 +
->>  include/ras/ras_event.h |  1 +
->>  mm/memory-failure.c     | 12 ++++++++++++
->>  3 files changed, 14 insertions(+)
+>>  mm/memory-failure.c | 2 +-
+>>  1 file changed, 1 insertion(+), 1 deletion(-)
 >>
->> diff --git a/include/linux/mm.h b/include/linux/mm.h
->> index c9bada4096ac..ef98cff2b253 100644
->> --- a/include/linux/mm.h
->> +++ b/include/linux/mm.h
->> @@ -3253,6 +3253,7 @@ enum mf_action_page_type {
->>  	MF_MSG_BUDDY,
->>  	MF_MSG_DAX,
->>  	MF_MSG_UNSPLIT_THP,
->> +	MF_MSG_DIFFERENT_PAGE_SIZE,
->>  	MF_MSG_UNKNOWN,
->>  };
->>  
->> diff --git a/include/ras/ras_event.h b/include/ras/ras_event.h
->> index d0337a41141c..1e694fd239b9 100644
->> --- a/include/ras/ras_event.h
->> +++ b/include/ras/ras_event.h
->> @@ -374,6 +374,7 @@ TRACE_EVENT(aer_event,
->>  	EM ( MF_MSG_BUDDY, "free buddy page" )				\
->>  	EM ( MF_MSG_DAX, "dax page" )					\
->>  	EM ( MF_MSG_UNSPLIT_THP, "unsplit thp" )			\
->> +	EM ( MF_MSG_DIFFERENT_PAGE_SIZE, "different page size" )	\
->>  	EMe ( MF_MSG_UNKNOWN, "unknown page" )
->>  
->>  /*
 >> diff --git a/mm/memory-failure.c b/mm/memory-failure.c
->> index 5444a8ef4867..dabecd87ad3f 100644
+>> index dabecd87ad3f..2ff7dd2078c4 100644
 >> --- a/mm/memory-failure.c
 >> +++ b/mm/memory-failure.c
->> @@ -733,6 +733,7 @@ static const char * const action_page_types[] = {
->>  	[MF_MSG_BUDDY]			= "free buddy page",
->>  	[MF_MSG_DAX]			= "dax page",
->>  	[MF_MSG_UNSPLIT_THP]		= "unsplit thp",
->> +	[MF_MSG_DIFFERENT_PAGE_SIZE]	= "different page size",
->>  	[MF_MSG_UNKNOWN]		= "unknown page",
->>  };
->>  
->> @@ -1534,6 +1535,17 @@ static int memory_failure_hugetlb(unsigned long pfn, int flags)
+>> @@ -2190,7 +2190,7 @@ static int __soft_offline_page(struct page *page)
+>>  		return 0;
 >>  	}
 >>  
->>  	lock_page(head);
->> +
->> +	/**
-> 
-> This comment section starting with '/**' is considered as kernel-doc comment,
-> maybe that's not expected because it just describes an implementation detail.
-> So normal comment section with '/*' would be better.
-> 
-
-I see. Will change to use "/*".
-
-> Otherwise, looks good to me.
-> 
-> Acked-by: Naoya Horiguchi <naoya.horiguchi@nec.com>
-
-Many thanks for review and comment.
-
-> 
->> +	 * The page could have changed compound pages due to race window.
->> +	 * If this happens just bail out.
->> +	 */
->> +	if (!PageHuge(p) || compound_head(p) != head) {
->> +		action_result(pfn, MF_MSG_DIFFERENT_PAGE_SIZE, MF_IGNORED);
->> +		res = -EBUSY;
->> +		goto out;
->> +	}
->> +
->>  	page_flags = head->flags;
->>  
->>  	if (hwpoison_filter(p)) {
+>> -	if (!PageHuge(page))
+>> +	if (!PageHuge(page) && PageLRU(page) && !PageSwapCache(page))
+>>  		/*
+>>  		 * Try to invalidate first. This should work for
+>>  		 * non dirty unmapped page cache pages.
 >> -- 
 >> 2.23.0
 
