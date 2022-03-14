@@ -2,152 +2,153 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C5C674D7D8F
-	for <lists+linux-edac@lfdr.de>; Mon, 14 Mar 2022 09:24:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E10444D8ADA
+	for <lists+linux-edac@lfdr.de>; Mon, 14 Mar 2022 18:34:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234128AbiCNIZz (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Mon, 14 Mar 2022 04:25:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56188 "EHLO
+        id S240440AbiCNRfj (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Mon, 14 Mar 2022 13:35:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231159AbiCNIZx (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Mon, 14 Mar 2022 04:25:53 -0400
-Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AF2DE092;
-        Mon, 14 Mar 2022 01:24:43 -0700 (PDT)
-Received: by mail-lj1-x229.google.com with SMTP id q10so20668733ljc.7;
-        Mon, 14 Mar 2022 01:24:43 -0700 (PDT)
+        with ESMTP id S239124AbiCNRfj (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Mon, 14 Mar 2022 13:35:39 -0400
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D6BA6353;
+        Mon, 14 Mar 2022 10:34:29 -0700 (PDT)
+Received: by mail-pj1-x1029.google.com with SMTP id e3so15256979pjm.5;
+        Mon, 14 Mar 2022 10:34:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=Iq78d1j2Ue+2y6u1MiPwO8kxCr3UFeP2P8LyryGJ4Ic=;
-        b=Dws+yd7pP/4j0pJJ3NzE1FS+WEUDWo+U39fxUZEgwR/+CZjtWUFtDvpHGPP1Opi1d3
-         K8JgF8oICvaNNXvW3XJDL1sVNJvKBYy3Ad5urfijjOX24uX1AcF2hsAdIu5yNsuQx47c
-         +Ze4OWmVoR7A+h9PG1l8C+dHry7A7z0elHPZDRNEHWcUUU+aAmlsdIttF7nK/HXGlb8U
-         G1iiCd6lZ0tGbayACmVI3Yh55JwdqHQZGoL6W1grXKKE7YJc9EJnom6CwTpSr8VBBue8
-         13MHXJH/MeYe9AFjf9cyZLu3bGjKGHyYPfhcDfjJQ3ac75LrWPWdYE1utmyy6lZJ8rE0
-         BBYg==
+         :cc;
+        bh=CcHP8n4xtuNuolJ/LTK32L7lLsQLGVbj8PkneJtl+jA=;
+        b=I02igLL//BGsHnk7q1Iu0tjDOAKFUc7OCqxNL7bkuq06fsHUQHIaSR1pzgk7SqFgAq
+         Y4Hi1Xb5y6QuW6c1pu+nI109X+0KBIhFJMLsZEZfXZksr5YAAlSLVzzuKKrno1Mk4ikh
+         g3piJjUiAasrUkQGFJ1zZ8YNm+QId+ZssW5GomynQ9PGNQzy21JXYegtH85bTREuhL7I
+         /HAfztEvBTEqyedbbnxobKByArDB82xJuH9wmJA0d/PQ0UPJKbzB4p7mBwuCoX1+7U8F
+         9BK3O/bf/R0CiO9ayj65XaUrxvtp0nC3yVWAVUzDkTA/fkah6qV5xm49zTEy1HyUqa3k
+         V0QQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=Iq78d1j2Ue+2y6u1MiPwO8kxCr3UFeP2P8LyryGJ4Ic=;
-        b=RpZUcTACimeZPYSjYSVPKbLKRQTCORkfOYRYCf56falOO8CT19QjuR6puP9DX4n91C
-         WNR4zNFj3JLgtxVVtIp30yt+k+l3K/XTJN959yfVwpZkpkX6iBaDPb5ItPlM87jnf+AA
-         iymns7x47Fj8sbNzzXBrtol0yy8HTzfpeB1g5B7tLzGD0vcDDT4hg7wXA4oxmHP1/HWk
-         e5TX2pcX/J9bp6SLoKNe7A4yY4pfEKgkHF+scOrEWW3GRbMRSSYzbR1hXPxVjJzrCdRz
-         pAal/5T+DfaIEACWp0FAd8drgEEBn3licnc6X1U7517YvT0XCw+4LrUPJC26XnnTrvsQ
-         7vMw==
-X-Gm-Message-State: AOAM531m0R6Nyaubj0Bkr5li88bq6Wve7Lg4AHYJB4rTQA7CN0gotCqs
-        ibyIcrugTzUKK5WjA9wp9pYpb8GI+EyamfpOUzA=
-X-Google-Smtp-Source: ABdhPJzxE2RH8clRVTd3DJzDgV4Zn7Rxw0lvZpFtJUyiP64C1vhUYmtEx0zSbl5qIqZzxSeicOylaVy5JTHvrT+jWUQ=
-X-Received: by 2002:a2e:2202:0:b0:248:684:4476 with SMTP id
- i2-20020a2e2202000000b0024806844476mr13871061lji.64.1647246281586; Mon, 14
- Mar 2022 01:24:41 -0700 (PDT)
+         :message-id:subject:to:cc;
+        bh=CcHP8n4xtuNuolJ/LTK32L7lLsQLGVbj8PkneJtl+jA=;
+        b=KuV+6xwVTxHbdslt3RK2cLlor1wbRGeD1gc4caB1jxj1nx0wFzMTrHhgGk6eYS944M
+         n5YT5WGR/DDDpQ8zjqrF0reZX+VIG/VBRaP1evI8V9sJv04qGYUZwvNSDE3fY9xenqTt
+         ZOYGhhJWIi6ny5JQMiT/r3x5F+KKM6M/YHz2MvUJswT5sD2JyxWqsF2vK6rg3b34k+ZK
+         US6bzS9rNBLS1F5GBEuw0kBYCVW7IXm6tgoy6vUh020/mr7lZ0tN5yVfo/3OCeqnu0KB
+         qoks2dl3yPXH3CeWwrfa2rL+PEH5OSaxgqnVf6WcfaXBFnV2iH1jN/6QW1dcNycfaVyE
+         rjHg==
+X-Gm-Message-State: AOAM532bwSOGfJmYD8PfMa3qPN2SZaFnidw/4xWRSPBFTIhyJdHiE47n
+        wNI70V9O89ujR6H8Se9Q08ZpumxbPXIpwLrh6uGZ0SyX
+X-Google-Smtp-Source: ABdhPJyXmcMDtH2qOdtDOufWlVuBQ+aJdiEMM8xw+FZt5o4ecpnj24p8rZJYBpCOqw5nFxE1WR//PxQ8S2E0ELNFEXY=
+X-Received: by 2002:a17:903:124a:b0:151:99fe:1a10 with SMTP id
+ u10-20020a170903124a00b0015199fe1a10mr24476612plh.87.1647279268835; Mon, 14
+ Mar 2022 10:34:28 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220311014245.4612-1-ctcchien@nuvoton.com> <20220311014245.4612-4-ctcchien@nuvoton.com>
- <1f5e1e49-4ab0-5e06-fa8f-2a11b0fd1df9@canonical.com> <CAHpyw9dHau348qJB6g+fCcKqWByUsRHAGwb_mdUg=hjhW+xNsw@mail.gmail.com>
- <143db512-0223-1553-c141-2dc24a23c430@canonical.com>
-In-Reply-To: <143db512-0223-1553-c141-2dc24a23c430@canonical.com>
-From:   Medad Young <medadyoung@gmail.com>
-Date:   Mon, 14 Mar 2022 16:24:30 +0800
-Message-ID: <CAHpyw9dn=3sGfjcqtQN-GwdoCo=dfhOrofTGMZJc+2Jjpr7pAw@mail.gmail.com>
-Subject: Re: [PATCH v3 3/3] EDAC: nuvoton: Add NPCM memory controller driver
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Cc:     rric@kernel.org, James Morse <james.morse@arm.com>,
-        tony.luck@intel.com, Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Borislav Petkov <bp@alien8.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Benjamin Fair <benjaminfair@google.com>,
-        Nancy Yuen <yuenn@google.com>,
-        Patrick Venture <venture@google.com>, KWLIU@nuvoton.com,
-        YSCHU@nuvoton.com, JJLIU0@nuvoton.com, KFTING <KFTING@nuvoton.com>,
-        Avi Fishman <avifishman70@gmail.com>,
-        Tomer Maimon <tmaimon77@gmail.com>,
-        Tali Perry <tali.perry1@gmail.com>, ctcchien@nuvoton.com,
-        linux-edac <linux-edac@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        OpenBMC Maillist <openbmc@lists.ozlabs.org>
+References: <20220312074613.4798-1-linmiaohe@huawei.com> <20220312074613.4798-4-linmiaohe@huawei.com>
+In-Reply-To: <20220312074613.4798-4-linmiaohe@huawei.com>
+From:   Yang Shi <shy828301@gmail.com>
+Date:   Mon, 14 Mar 2022 10:34:17 -0700
+Message-ID: <CAHbLzkp_7iJts8NfCFQdEQuvh-o7YFpU3Axc+6ZCx1ZcJB7z1g@mail.gmail.com>
+Subject: Re: [PATCH v2 3/3] mm/memory-failure.c: make non-LRU movable pages unhandlable
+To:     Miaohe Lin <linmiaohe@huawei.com>
+Cc:     akpm@linux-foundation.org, tony.luck@intel.com, bp@alien8.de,
+        naoya.horiguchi@nec.com, mike.kravetz@oracle.com,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        linux-edac@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com> =E6=96=BC 2022=E5=
-=B9=B43=E6=9C=8814=E6=97=A5
-=E9=80=B1=E4=B8=80 =E4=B8=8B=E5=8D=883:36=E5=AF=AB=E9=81=93=EF=BC=9A
+On Fri, Mar 11, 2022 at 11:47 PM Miaohe Lin <linmiaohe@huawei.com> wrote:
 >
-> On 14/03/2022 06:32, Medad Young wrote:
-> > Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com> =E6=96=BC 2022=
-=E5=B9=B43=E6=9C=8811=E6=97=A5
-> > =E9=80=B1=E4=BA=94 =E4=B8=8B=E5=8D=885:15=E5=AF=AB=E9=81=93=EF=BC=9A
-> >>
-> >> On 11/03/2022 02:42, Medad CChien wrote:
-> >>> Add support for Nuvoton NPCM SoC.
-> >>>
-> >>> Signed-off-by: Medad CChien <ctcchien@nuvoton.com>
-> >>> ---
-> >>>  drivers/edac/Kconfig     |   9 +
-> >>>  drivers/edac/Makefile    |   1 +
-> >>>  drivers/edac/npcm_edac.c | 714 +++++++++++++++++++++++++++++++++++++=
-++
-> >>>  3 files changed, 724 insertions(+)
-> >>>  create mode 100644 drivers/edac/npcm_edac.c
-> >>>
-> >>> diff --git a/drivers/edac/Kconfig b/drivers/edac/Kconfig
-> >>> index 58ab63642e72..757e1d160640 100644
-> >>> --- a/drivers/edac/Kconfig
-> >>> +++ b/drivers/edac/Kconfig
-> >>> @@ -539,4 +539,13 @@ config EDAC_DMC520
-> >>>         Support for error detection and correction on the
-> >>>         SoCs with ARM DMC-520 DRAM controller.
-> >>>
-> >>> +config EDAC_NPCM
-> >>> +     tristate "Nuvoton NPCM DDR Memory Controller"
-> >>> +     depends on ARCH_NPCM
-> >>
-> >> || COMPILE_TEST
-> >> (and test if it compiles)
-> >>
-> >> (...)
-> >>
-> >>> +
-> >>> +MODULE_DEVICE_TABLE(of, npcm_edac_of_match);
-> >>> +
-> >>> +static int npcm_edac_mc_probe(struct platform_device *pdev)
-> >>> +{
-> >>> +     const struct npcm_edac_platform_data *npcm_chip;
-> >>> +     struct device *dev =3D &pdev->dev;
-> >>> +     struct edac_mc_layer layers[1];
-> >>> +     const struct of_device_id *id;
-> >>> +     struct priv_data *priv_data;
-> >>> +     struct mem_ctl_info *mci;
-> >>> +     struct resource *res;
-> >>> +     void __iomem *reg;
-> >>> +     int ret =3D -ENODEV;
-> >>> +     int irq;
-> >>> +
-> >>> +     id =3D of_match_device(npcm_edac_of_match, &pdev->dev);
-> >>> +     if (!id)
-> >>> +             return -ENODEV;
-> >>
-> >> Why do you need it? How such case is even possible?
-> > this driver is used for two nuvoton SOCs, one is NPCM845 and the other
-> > is NPCM750
+> We can not really handle non-LRU movable pages in memory failure. Typically
+> they are balloon, zsmalloc, etc. Assuming we run into a base (4K) non-LRU
+> movable page, we could reach as far as identify_page_state(), it should not
+> fall into any category except me_unknown. For the non-LRU compound movable
+> pages, they could be taken for transhuge pages but it's unexpected to split
+> non-LRU  movable pages using split_huge_page_to_list in memory_failure. So
+> we could just simply make non-LRU  movable pages unhandlable to avoid these
+> possible nasty cases.
 >
-> Yes and how NULL can happen for OF-only driver? Unless I missed
-> something and this is not an OF-only driver? Do you allow any other
-> matching methods?
+> Suggested-by: Yang Shi <shy828301@gmail.com>
+> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
 
-I got your point, thanks
+Reviewed-by: Yang Shi <shy828301@gmail.com>
 
-> Best regards,
-> Krzysztof
+> ---
+>  mm/memory-failure.c | 20 +++++++++++++-------
+>  1 file changed, 13 insertions(+), 7 deletions(-)
+>
+> diff --git a/mm/memory-failure.c b/mm/memory-failure.c
+> index 2ff7dd2078c4..ba621c6823ed 100644
+> --- a/mm/memory-failure.c
+> +++ b/mm/memory-failure.c
+> @@ -1177,12 +1177,18 @@ void ClearPageHWPoisonTakenOff(struct page *page)
+>   * does not return true for hugetlb or device memory pages, so it's assumed
+>   * to be called only in the context where we never have such pages.
+>   */
+> -static inline bool HWPoisonHandlable(struct page *page)
+> +static inline bool HWPoisonHandlable(struct page *page, unsigned long flags)
+>  {
+> -       return PageLRU(page) || __PageMovable(page) || is_free_buddy_page(page);
+> +       bool movable = false;
+> +
+> +       /* Soft offline could mirgate non-LRU movable pages */
+> +       if ((flags & MF_SOFT_OFFLINE) && __PageMovable(page))
+> +               movable = true;
+> +
+> +       return movable || PageLRU(page) || is_free_buddy_page(page);
+>  }
+>
+> -static int __get_hwpoison_page(struct page *page)
+> +static int __get_hwpoison_page(struct page *page, unsigned long flags)
+>  {
+>         struct page *head = compound_head(page);
+>         int ret = 0;
+> @@ -1197,7 +1203,7 @@ static int __get_hwpoison_page(struct page *page)
+>          * for any unsupported type of page in order to reduce the risk of
+>          * unexpected races caused by taking a page refcount.
+>          */
+> -       if (!HWPoisonHandlable(head))
+> +       if (!HWPoisonHandlable(head, flags))
+>                 return -EBUSY;
+>
+>         if (get_page_unless_zero(head)) {
+> @@ -1222,7 +1228,7 @@ static int get_any_page(struct page *p, unsigned long flags)
+>
+>  try_again:
+>         if (!count_increased) {
+> -               ret = __get_hwpoison_page(p);
+> +               ret = __get_hwpoison_page(p, flags);
+>                 if (!ret) {
+>                         if (page_count(p)) {
+>                                 /* We raced with an allocation, retry. */
+> @@ -1250,7 +1256,7 @@ static int get_any_page(struct page *p, unsigned long flags)
+>                 }
+>         }
+>
+> -       if (PageHuge(p) || HWPoisonHandlable(p)) {
+> +       if (PageHuge(p) || HWPoisonHandlable(p, flags)) {
+>                 ret = 1;
+>         } else {
+>                 /*
+> @@ -2308,7 +2314,7 @@ int soft_offline_page(unsigned long pfn, int flags)
+>
+>  retry:
+>         get_online_mems();
+> -       ret = get_hwpoison_page(page, flags);
+> +       ret = get_hwpoison_page(page, flags | MF_SOFT_OFFLINE);
+>         put_online_mems();
+>
+>         if (ret > 0) {
+> --
+> 2.23.0
+>
