@@ -2,112 +2,129 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 712F44D908E
-	for <lists+linux-edac@lfdr.de>; Tue, 15 Mar 2022 00:45:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F25944D942B
+	for <lists+linux-edac@lfdr.de>; Tue, 15 Mar 2022 06:55:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343730AbiCNXqY (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Mon, 14 Mar 2022 19:46:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49334 "EHLO
+        id S245197AbiCOF40 (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Tue, 15 Mar 2022 01:56:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237573AbiCNXqX (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Mon, 14 Mar 2022 19:46:23 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4B023150B;
-        Mon, 14 Mar 2022 16:45:12 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 695BE61496;
-        Mon, 14 Mar 2022 23:45:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77506C340E9;
-        Mon, 14 Mar 2022 23:45:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1647301511;
-        bh=Ju1DAPlgw5FMTla0jTg/jmHE1lxJHJq05Tdwhdan2zw=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=mOxloHx09cAsu6h0FKCFCiYZ5LpSNzc3AOEJI2K7Vmi8GcHtOOB9OWytTJCfQXMYL
-         +jcxJFn60wOin2XjByEPaMvqw3VIYp9Hk+pSuJaYOJoyg6TKZ+byey1CwtrMkk5QgW
-         38ZGi7NjNUsz4mCXhYjRJtw2+D/WLeJKVBf2a1Ac=
-Date:   Mon, 14 Mar 2022 16:45:10 -0700
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Miaohe Lin <linmiaohe@huawei.com>
-Cc:     HORIGUCHI =?UTF-8?B?TkFPWUE=?= (=?UTF-8?B?5aCA5Y+jIOebtOS5nw==?=) 
-        <naoya.horiguchi@nec.com>,
-        "tony.luck@intel.com" <tony.luck@intel.com>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "mike.kravetz@oracle.com" <mike.kravetz@oracle.com>,
-        "shy828301@gmail.com" <shy828301@gmail.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>
-Subject: Re: [PATCH v2 2/3] mm/memory-failure.c: avoid calling
- invalidate_inode_page() with unexpected pages
-Message-Id: <20220314164510.acf6157930122583808375e1@linux-foundation.org>
-In-Reply-To: <219aeec6-5ff6-5101-8192-13b9f761e7c9@huawei.com>
-References: <20220312074613.4798-1-linmiaohe@huawei.com>
-        <20220312074613.4798-3-linmiaohe@huawei.com>
-        <20220313234157.GB3010057@hori.linux.bs1.fc.nec.co.jp>
-        <8aa7cdd9-8104-2fea-879d-61519f6489d1@huawei.com>
-        <20220314025034.GA3061370@hori.linux.bs1.fc.nec.co.jp>
-        <219aeec6-5ff6-5101-8192-13b9f761e7c9@huawei.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
-Mime-Version: 1.0
+        with ESMTP id S237121AbiCOF40 (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Tue, 15 Mar 2022 01:56:26 -0400
+Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 149E236E2A;
+        Mon, 14 Mar 2022 22:55:15 -0700 (PDT)
+Received: by mail-pf1-x430.google.com with SMTP id s11so17884345pfu.13;
+        Mon, 14 Mar 2022 22:55:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=SV4CLPiAxFiZ9vJZfubS3i47B7zCkYU3tvd0pu0JO/Y=;
+        b=Lcouch33BK7VsQZOzvwVm7+tfFF2P4ZBVrzYpbYiC++2XGF1kxTKqoIUOOarueI359
+         YyBEdKPLcb79/SMvUjpXiTJHbqxCpRTdHHLB93bMYeZSfJUDfrWyrxWg92sMuTx76BjC
+         GUxeHEpWd5+vcaB2Z7CuWmtL+ojktOXi/S1XVx1d2BzfAmu+9+UgPj4r5BFPbi0DEoEC
+         Jyn+PtU8Vm88OYeqlokxmW9cnHQbuBXN29e7uWfooJUNDH6nr0PSNkPyn3eMMbU43qXq
+         zsvL3w748Is89x0ABoo8C2RJl96bffbeZlHC1kE5GoJDiRAoYWp950GF4h0s78JZw+tB
+         BPSA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=SV4CLPiAxFiZ9vJZfubS3i47B7zCkYU3tvd0pu0JO/Y=;
+        b=cJs9X2QgbJCTRAdR33mlv0hfxi/LD2vHx/h1ZgL5wcvg8Tp7uImcR4EFzlJ51xlo6s
+         dhDFNcGLczqN/ivOc76r5sV7wzNWvJimMuHFKPlkrETgmsCTJFj/ypwSIhGseSp9+/ft
+         LmJreLGGFpuomIXLM/mdE6CQhfokXw3O3zCgnuKp1DPwd/zM3YYdj6LfxgzdaaqPepNv
+         FVRNRgip7H6tBzgDFbJHwaLYgwM20uQb4U5HEUT0uKP/35Igz2xtraBewDycbQkv8ii7
+         uSagtPb0CYp9QqJ1ilWgl59zzZhV0KOGOO6VELOlHdrb1b7tyTnSKSx/aUnlVPUK4ac/
+         ryEg==
+X-Gm-Message-State: AOAM532q3lypBFvHJOsR3iFds2gzjJKsTvpmU1R69zun6vYyfnSDzRHu
+        UltjGt2LNpvyUUWVrKEqcSk=
+X-Google-Smtp-Source: ABdhPJynkqv+iB5TqmzLr7kHGGlCCmmXG20uJCopgsl2IFsJKNmDi2nONXmXFJXhU4BlSib2a/T7Ew==
+X-Received: by 2002:a63:4c2:0:b0:381:113e:2b07 with SMTP id 185-20020a6304c2000000b00381113e2b07mr16052787pge.100.1647323714453;
+        Mon, 14 Mar 2022 22:55:14 -0700 (PDT)
+Received: from localhost.localdomain ([116.89.135.255])
+        by smtp.gmail.com with ESMTPSA id w21-20020a634755000000b00368f3ba336dsm18679369pgk.88.2022.03.14.22.55.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 14 Mar 2022 22:55:13 -0700 (PDT)
+From:   Medad CChien <medadyoung@gmail.com>
+X-Google-Original-From: Medad CChien <ctcchien@nuvoton.com>
+To:     rric@kernel.org, james.morse@arm.com, tony.luck@intel.com,
+        mchehab@kernel.org, bp@alien8.de, robh+dt@kernel.org,
+        benjaminfair@google.com, yuenn@google.com, venture@google.com,
+        KWLIU@nuvoton.com, YSCHU@nuvoton.com, JJLIU0@nuvoton.com,
+        KFTING@nuvoton.com, avifishman70@gmail.com, tmaimon77@gmail.com,
+        tali.perry1@gmail.com, ctcchien@nuvoton.com
+Cc:     linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, openbmc@lists.ozlabs.org
+Subject: [PATCH v4 0/3] EDAC: nuvoton: Add nuvoton NPCM memory controller driver
+Date:   Tue, 15 Mar 2022 13:55:01 +0800
+Message-Id: <20220315055504.27671-1-ctcchien@nuvoton.com>
+X-Mailer: git-send-email 2.17.1
+MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Mon, 14 Mar 2022 10:59:40 +0800 Miaohe Lin <linmiaohe@huawei.com> wrote:
+Support memory controller for Nuvoton NPCM SoC.
 
-> On 2022/3/14 10:50, HORIGUCHI NAOYA(堀口 直也) wrote:
-> > On Mon, Mar 14, 2022 at 09:58:49AM +0800, Miaohe Lin wrote:
-> >> On 2022/3/14 7:41, HORIGUCHI NAOYA(堀口 直也) wrote:
-> >>> On Sat, Mar 12, 2022 at 03:46:12PM +0800, Miaohe Lin wrote:
-> >>>> Since commit 042c4f32323b ("mm/truncate: Inline invalidate_complete_page()
-> >>>
-> >>> This commit ID does not exist in mainline (or in the latest mmotm?),
-> >>> so you can't use it in patch description.  Could you update this part?
-> >>>
-> >>
-> >> This commit is in the mmotm but not in mainline yet:
-> >>
-> >> commit 042c4f32323beb28146c658202d3e69899e4f245
-> >> Author: Matthew Wilcox (Oracle) <willy@infradead.org>
-> >> Date:   Sat Feb 12 15:27:42 2022 -0500
-> >>
-> >>     mm/truncate: Inline invalidate_complete_page() into its one caller
-> >>
-> >>     invalidate_inode_page() is the only caller of invalidate_complete_page()
-> >>     and inlining it reveals that the first check is unnecessary (because we
-> >>     hold the page locked, and we just retrieved the mapping from the page).
-> >>     Actually, it does make a difference, in that tail pages no longer fail
-> >>     at this check, so it's now possible to remove a tail page from a mapping.
-> >>
-> >>     Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
-> >>     Reviewed-by: John Hubbard <jhubbard@nvidia.com>
-> >>     Reviewed-by: Christoph Hellwig <hch@lst.de>
-> >>
-> >> Am I "not" supposed to use this commit id as it's not "stable" now?
-> > 
-> > No, it's not stable yet. In whatever way you get the above commit (I guess
-> > you get it from https://github.com/hnaz/linux-mm), all acked mm-related
-> > patches are sent to Linus by Andrew *by email*, so the eventual commit IDs
-> > should be determined when they are applied to mainline.
-> > 
-> 
-> Many thanks for your explanation. (I get this commit id from linux-next tree:
-> https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git)
-> So I should remember always to get the commit id from mainline.
+Addressed comments from:
+ - Rob Herring : https://lkml.org/lkml/2022/2/25/1103
+ - Krzysztof Kozlowski : https://lkml.org/lkml/2022/2/27/63
+ - Rob Herring : https://lkml.org/lkml/2022/3/2/828
+ - Krzysztof Kozlowski : https://lkml.org/lkml/2022/3/11/294
+ - Jonathan Neuschäfer : https://lkml.org/lkml/2022/3/11/1167
+ - Krzysztof Kozlowski : https://lkml.org/lkml/2022/3/11/293
+ - Rob Herring : https://lkml.org/lkml/2022/3/11/575
+ - Krzysztof Kozlowski : https://lkml.org/lkml/2022/3/11/305
+ - Avi Fishman : https://lkml.org/lkml/2022/3/13/339
+ - Krzysztof Kozlowski : https://lkml.org/lkml/2022/3/14/93
+ - Krzysztof Kozlowski : https://lkml.org/lkml/2022/3/14/95
 
-It's likely that this commit ID will be the same once Matthew's patch
-goes into mainline.
+Changes since version 4:
+ - Update filename in nuvoton,npcm-memory-controller.yaml.
+ - Add COMPILE_TEST in Kconfig.
+ - Fix errors in npcm_edac.c.
+ - Remove unnecessary checking after of_match_device() and of_device_get_match_data().
 
-But this is why we include the patch title ("mm/truncate: Inline ...")
-when identifying commits.  Sometimes stuff happens...
+Changes since version 3:
+ - Rename npcm-edac.yaml as nuvoton,npcm-memory-controller.yaml.
+ - Drop 'EDAC' in title of nuvoton,npcm-memory-controller.yaml.
+ - Update compatible in nuvoton,npcm-memory-controller.yaml.
+
+Changes since version 2:
+ - Update description and compatible in npcm-edac.yaml.
+ - Remove address-cells and size-cells in npcm-edac.yaml.
+ - Reorder the items of examples in npcm-edac.yaml.
+ - Reorder header file in driver.
+
+Changes since version 1:
+ - Add nuvoton,npcm750-memory-controller property in NPCM devicetree.
+ - Add new property in edac binding document.
+ - Add new driver for nuvoton NPCM memory controller.
+
+Medad CChien (3):
+  ARM: dts: nuvoton: Add memory controller node
+  dt-bindings: edac: nuvoton: add NPCM memory controller
+  EDAC: nuvoton: Add NPCM memory controller driver
+
+ .../edac/nuvoton,npcm-memory-controller.yaml  |  62 ++
+ arch/arm/boot/dts/nuvoton-common-npcm7xx.dtsi |   7 +
+ drivers/edac/Kconfig                          |   9 +
+ drivers/edac/Makefile                         |   1 +
+ drivers/edac/npcm_edac.c                      | 710 ++++++++++++++++++
+ 5 files changed, 789 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/edac/nuvoton,npcm-memory-controller.yaml
+ create mode 100644 drivers/edac/npcm_edac.c
+
+-- 
+2.17.1
+
