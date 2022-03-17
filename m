@@ -2,830 +2,246 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 301414DBCC4
-	for <lists+linux-edac@lfdr.de>; Thu, 17 Mar 2022 02:59:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 37DD74DC0BD
+	for <lists+linux-edac@lfdr.de>; Thu, 17 Mar 2022 09:13:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358415AbiCQCAm (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Wed, 16 Mar 2022 22:00:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58458 "EHLO
+        id S230497AbiCQIOb (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Thu, 17 Mar 2022 04:14:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358393AbiCQCAl (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Wed, 16 Mar 2022 22:00:41 -0400
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 240311EAC9;
-        Wed, 16 Mar 2022 18:59:25 -0700 (PDT)
-Received: by mail-pj1-x102a.google.com with SMTP id v4so3690255pjh.2;
-        Wed, 16 Mar 2022 18:59:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=MQ0ILlOSVcWiV7J2dP2QTcXvSe3GeM50RvlPyOmm04U=;
-        b=bQJKT0rf5FY2gO0KYeKin4CepkBs2ls6+B/D70jBBDwwS4FbOWN8hq5hZ8iTZEDvtj
-         P2OxoLbpGU2+E9CkdQggfjo7Nrp36TlSlwJ+nEBGOgk1g7yu6AHeAA9aWKIzTqTyedHA
-         LFjlMedyca6ilC60ZdKESLNTAiyc5JR/lsS4RwixVVntd++ndA6dmyDIj/px67oPo4Pq
-         WdhO/HoUrgH8YWIkrAX2qTlhBro5cg+JpANMTLB3pPWB0OEls9BukMkjaw5OVIrPueYV
-         hjngoIdAy8yyEE6M2u/KqCYKdaeZhYxyxP5jixtdLoZZEJykHHamFwrg9HG7RP/4merm
-         owTA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=MQ0ILlOSVcWiV7J2dP2QTcXvSe3GeM50RvlPyOmm04U=;
-        b=vPnM6GRSJQ96f9rFzv9bOIc1DLPlHLhMsE/0Qtt8GC61AikWXrKrGIg2bTtE8k1JrE
-         GG/eeNxp9WdgKDsoQTsgty9482M8cycOQ5pdw6/3TDXKLGVF6xw8v3qVrCvNsid2qkhd
-         1BQWIPaZaXkVUUCfwkQscieklA5ytT6KvfTZ+4s1VQyfo3iswytBH9LDb2jEoIXER1cJ
-         s+6UynMQCtF7W1Zfy2g4HGS3UdSxMGd4bzSE8GaK+tn1FyenZFlp9UcKchGSTn7z7BZq
-         KbdYHXJ+srshyFs6y4RJQZ5Dok53erKJLmKfv3kkp41yuFtkkT4CE8cLCvoolIoqXq6g
-         LrPw==
-X-Gm-Message-State: AOAM5307RSD4GHnY2UxJsjqEAtQAY8zbgJu6wrD53ola4Vcmgc8YIZZ+
-        gPfjMqk1SUjP8rNTzaM50Fo=
-X-Google-Smtp-Source: ABdhPJwFAUkMXM0cHME3ZAZZSwOP6HecpHZdblLLAKkxY7glcLT9OC/CXhT1OWxY2ysoxU8O9KMIFQ==
-X-Received: by 2002:a17:90b:240e:b0:1b9:2963:d5a1 with SMTP id nr14-20020a17090b240e00b001b92963d5a1mr13173861pjb.227.1647482364367;
-        Wed, 16 Mar 2022 18:59:24 -0700 (PDT)
-Received: from localhost.localdomain ([116.89.135.255])
-        by smtp.gmail.com with ESMTPSA id nn15-20020a17090b38cf00b001bfceefd8cfsm7945528pjb.48.2022.03.16.18.59.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Mar 2022 18:59:23 -0700 (PDT)
-From:   Medad CChien <medadyoung@gmail.com>
-X-Google-Original-From: Medad CChien <ctcchien@nuvoton.com>
-To:     rric@kernel.org, james.morse@arm.com, tony.luck@intel.com,
-        mchehab@kernel.org, bp@alien8.de, robh+dt@kernel.org,
-        benjaminfair@google.com, yuenn@google.com, venture@google.com,
-        KWLIU@nuvoton.com, YSCHU@nuvoton.com, JJLIU0@nuvoton.com,
-        KFTING@nuvoton.com, avifishman70@gmail.com, tmaimon77@gmail.com,
-        tali.perry1@gmail.com, ctcchien@nuvoton.com
-Cc:     linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
+        with ESMTP id S230504AbiCQIOa (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Thu, 17 Mar 2022 04:14:30 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B19831342CB;
+        Thu, 17 Mar 2022 01:13:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647504791; x=1679040791;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=XfM++llsVg7AzR19XcfpPkISpAk7yp2WcnUrhhsvXJ0=;
+  b=Q9AYe2/sH/+ggaN2vMFuqprLxnOvnWHwVNe3Xlw7Bp3DrFeIwaoRkuOT
+   reAWLed9pvIh1FMB2efpJ4Xiccutfhk5lnBLNH00LxgWs0CfKxB0vQLZN
+   lbZYQZ1hQszAdkbRM2tO3YJ3AW01ZDqdZiRsPwKWHHpxwU8BjhNS6w3ML
+   LHejTYSs/5VIK+s/YX+49uMjzrp1Zh1/MOjaYTRGwi8NSYemkEEtMEgU/
+   3b5rLIYDs7qshcquxX5XrWPgP22WdKLNH3sIoUpoNSk3qLar6GpNESuhr
+   Zi3/kVR7QxC9gvnE1CWU4V+eFZeoWhG+mQczDhnSFGmZ2vEJmgVBiYBo0
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10288"; a="244266190"
+X-IronPort-AV: E=Sophos;i="5.90,188,1643702400"; 
+   d="scan'208";a="244266190"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2022 01:13:11 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,188,1643702400"; 
+   d="scan'208";a="498748509"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by orsmga003.jf.intel.com with ESMTP; 17 Mar 2022 01:13:05 -0700
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nUlFo-000DU7-HL; Thu, 17 Mar 2022 08:13:04 +0000
+Date:   Thu, 17 Mar 2022 16:13:00 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Medad CChien <medadyoung@gmail.com>, rric@kernel.org,
+        james.morse@arm.com, tony.luck@intel.com, mchehab@kernel.org,
+        bp@alien8.de, robh+dt@kernel.org, benjaminfair@google.com,
+        yuenn@google.com, venture@google.com, KWLIU@nuvoton.com,
+        YSCHU@nuvoton.com, JJLIU0@nuvoton.com, KFTING@nuvoton.com,
+        avifishman70@gmail.com, tmaimon77@gmail.com, tali.perry1@gmail.com,
+        ctcchien@nuvoton.com
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
         devicetree@vger.kernel.org, openbmc@lists.ozlabs.org
-Subject: [PATCH v5 3/3] EDAC: nuvoton: Add NPCM memory controller driver
-Date:   Thu, 17 Mar 2022 09:58:54 +0800
-Message-Id: <20220317015854.18864-4-ctcchien@nuvoton.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220317015854.18864-1-ctcchien@nuvoton.com>
-References: <20220317015854.18864-1-ctcchien@nuvoton.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [PATCH v5 3/3] EDAC: nuvoton: Add NPCM memory controller driver
+Message-ID: <202203171641.zYjMuQjO-lkp@intel.com>
+References: <20220317015854.18864-4-ctcchien@nuvoton.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220317015854.18864-4-ctcchien@nuvoton.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-Add support for Nuvoton NPCM SoC.
+Hi Medad,
 
-Signed-off-by: Medad CChien <ctcchien@nuvoton.com>
+Thank you for the patch! Perhaps something to improve:
+
+[auto build test WARNING on ras/edac-for-next]
+[also build test WARNING on robh/for-next v5.17-rc8 next-20220316]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/0day-ci/linux/commits/Medad-CChien/EDAC-nuvoton-Add-nuvoton-NPCM-memory-controller-driver/20220317-100014
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/ras/ras.git edac-for-next
+config: riscv-randconfig-r033-20220317 (https://download.01.org/0day-ci/archive/20220317/202203171641.zYjMuQjO-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project a6ec1e3d798f8eab43fb3a91028c6ab04e115fcb)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://github.com/0day-ci/linux/commit/94dbdfede018043818636c4c749ba374a45eaba1
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Medad-CChien/EDAC-nuvoton-Add-nuvoton-NPCM-memory-controller-driver/20220317-100014
+        git checkout 94dbdfede018043818636c4c749ba374a45eaba1
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/edac/
+
+If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+   In file included from drivers/edac/npcm_edac.c:8:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/riscv/include/asm/io.h:136:
+   include/asm-generic/io.h:464:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __raw_readb(PCI_IOBASE + addr);
+                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:477:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+                                                     ^
+   In file included from drivers/edac/npcm_edac.c:8:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/riscv/include/asm/io.h:136:
+   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+                                                     ^
+   In file included from drivers/edac/npcm_edac.c:8:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/riscv/include/asm/io.h:136:
+   include/asm-generic/io.h:501:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writeb(value, PCI_IOBASE + addr);
+                               ~~~~~~~~~~ ^
+   include/asm-generic/io.h:511:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:521:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:1024:55: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           return (port > MMIO_UPPER_LIMIT) ? NULL : PCI_IOBASE + port;
+                                                     ~~~~~~~~~~ ^
+>> drivers/edac/npcm_edac.c:370:6: warning: logical not is only applied to the left hand side of this bitwise operator [-Wlogical-not-parentheses]
+           if (!readl(priv->reg + npcm_chip->ecc_ctl_en_reg) & npcm_chip->ecc_ctl_ecc_enable_mask)
+               ^                                             ~
+   drivers/edac/npcm_edac.c:370:6: note: add parentheses after the '!' to evaluate the bitwise operator first
+           if (!readl(priv->reg + npcm_chip->ecc_ctl_en_reg) & npcm_chip->ecc_ctl_ecc_enable_mask)
+               ^
+                (                                                                                )
+   drivers/edac/npcm_edac.c:370:6: note: add parentheses around left hand side expression to silence this warning
+           if (!readl(priv->reg + npcm_chip->ecc_ctl_en_reg) & npcm_chip->ecc_ctl_ecc_enable_mask)
+               ^
+               (                                            )
+>> drivers/edac/npcm_edac.c:579:6: warning: mixing declarations and code is a C99 extension [-Wdeclaration-after-statement]
+           u32 ecc_en = readl(reg + npcm_chip->ecc_ctl_en_reg);
+               ^
+   9 warnings generated.
+
+
+vim +370 drivers/edac/npcm_edac.c
+
+   352	
+   353	static ssize_t forced_ecc_error_store(struct device *dev,
+   354					      struct device_attribute *mattr,
+   355					      const char *data, size_t count)
+   356	{
+   357		struct mem_ctl_info *mci = to_mci(dev);
+   358		struct priv_data *priv = mci->pvt_info;
+   359		const struct npcm_edac_platform_data *npcm_chip = priv->npcm_chip;
+   360		int	args_cnt;
+   361		int	ret;
+   362		char	**args;
+   363		u32	regval;
+   364		u8	bit_no;
+   365	
+   366		/* Split string buffer into separate parameters */
+   367		args = argv_split(GFP_KERNEL, data, &args_cnt);
+   368	
+   369		/* Check ecc enabled */
+ > 370		if (!readl(priv->reg + npcm_chip->ecc_ctl_en_reg) & npcm_chip->ecc_ctl_ecc_enable_mask)
+   371			return count;
+   372	
+   373		/* Check no write operation pending to controller*/
+   374		while (readl(priv->reg + npcm_chip->ddr_ctl_controller_busy_reg) &
+   375				CTL_CONTROLLER_BUSY_FLAG) {
+   376			usleep_range(1000, 10000);
+   377		}
+   378	
+   379		/* Write appropriate syndrome to xor_check_bit*/
+   380		if (!strcmp(args[0], "CE") && args_cnt == 3) {
+   381			ret = kstrtou8(args[2], 0, &bit_no);
+   382			if (ret)
+   383				return ret;
+   384			if (!strcmp(args[1], "checkcode")) {
+   385				if (bit_no > 7) {
+   386					edac_printk(KERN_INFO, NPCM_EDAC_MOD_NAME, "bit_no for checkcode must be 0~7\n");
+   387					return count;
+   388				}
+   389				regval = readl(priv->reg + npcm_chip->ecc_ctl_xor_check_bits_reg);
+   390				regval = (regval & ~(NPCM_ECC_CTL_XOR_BITS_MASK)) |
+   391					(check_synd[bit_no] << XOR_CHECK_BIT_SPLIT_WIDTH);
+   392				writel(regval, priv->reg + npcm_chip->ecc_ctl_xor_check_bits_reg);
+   393			} else if (!strcmp(args[1], "data")) {
+   394				if (bit_no > 63) {
+   395					edac_printk(KERN_INFO, NPCM_EDAC_MOD_NAME, "bit_no for data must be 0~63\n");
+   396					return count;
+   397				}
+   398				regval = readl(priv->reg + npcm_chip->ecc_ctl_xor_check_bits_reg);
+   399				regval = (regval & ~(NPCM_ECC_CTL_XOR_BITS_MASK)) |
+   400						 (data_synd[bit_no] << XOR_CHECK_BIT_SPLIT_WIDTH);
+   401				writel(regval, priv->reg + npcm_chip->ecc_ctl_xor_check_bits_reg);
+   402			}
+   403			/* Enable the ECC writeback_en for corrected error */
+   404			regval = readl(priv->reg + npcm_chip->ecc_ctl_xor_check_bits_reg);
+   405			writel((regval | NPCM_ECC_CTL_AUTO_WRITEBACK_EN),
+   406			       priv->reg + npcm_chip->ecc_ctl_xor_check_bits_reg);
+   407		} else if (!strcmp(args[0], "UE")) {
+   408			regval = readl(priv->reg + npcm_chip->ecc_ctl_xor_check_bits_reg);
+   409			regval = (regval & ~(NPCM_ECC_CTL_XOR_BITS_MASK)) |
+   410					 (ECC_DOUBLE_MULTI_ERR_SYND << XOR_CHECK_BIT_SPLIT_WIDTH);
+   411			writel(regval, priv->reg + npcm_chip->ecc_ctl_xor_check_bits_reg);
+   412		}
+   413	
+   414		/* Assert fwc */
+   415		writel((NPCM_ECC_CTL_FORCE_WC | readl(priv->reg + npcm_chip->ecc_ctl_xor_check_bits_reg)),
+   416		       priv->reg + npcm_chip->ecc_ctl_xor_check_bits_reg);
+   417	
+   418		return count;
+   419	}
+   420	
+
 ---
- drivers/edac/Kconfig     |   9 +
- drivers/edac/Makefile    |   1 +
- drivers/edac/npcm_edac.c | 710 +++++++++++++++++++++++++++++++++++++++
- 3 files changed, 720 insertions(+)
- create mode 100644 drivers/edac/npcm_edac.c
-
-diff --git a/drivers/edac/Kconfig b/drivers/edac/Kconfig
-index 58ab63642e72..bdca55fa6022 100644
---- a/drivers/edac/Kconfig
-+++ b/drivers/edac/Kconfig
-@@ -539,4 +539,13 @@ config EDAC_DMC520
- 	  Support for error detection and correction on the
- 	  SoCs with ARM DMC-520 DRAM controller.
- 
-+config EDAC_NPCM
-+	tristate "Nuvoton NPCM DDR Memory Controller"
-+	depends on (ARCH_NPCM || COMPILE_TEST)
-+	help
-+	  Support for error detection and correction on the
-+	  Nuvoton NPCM DDR memory controller.
-+	  First, ECC must be configured in the BootBlock header. Then, this driver
-+	  will expose error counters via the EDAC kernel framework.
-+
- endif # EDAC
-diff --git a/drivers/edac/Makefile b/drivers/edac/Makefile
-index 2d1641a27a28..db3c59d3ad84 100644
---- a/drivers/edac/Makefile
-+++ b/drivers/edac/Makefile
-@@ -84,3 +84,4 @@ obj-$(CONFIG_EDAC_QCOM)			+= qcom_edac.o
- obj-$(CONFIG_EDAC_ASPEED)		+= aspeed_edac.o
- obj-$(CONFIG_EDAC_BLUEFIELD)		+= bluefield_edac.o
- obj-$(CONFIG_EDAC_DMC520)		+= dmc520_edac.o
-+obj-$(CONFIG_EDAC_NPCM)			+= npcm_edac.o
-diff --git a/drivers/edac/npcm_edac.c b/drivers/edac/npcm_edac.c
-new file mode 100644
-index 000000000000..aa593d9383de
---- /dev/null
-+++ b/drivers/edac/npcm_edac.c
-@@ -0,0 +1,710 @@
-+// SPDX-License-Identifier: GPL-2.0
-+// Copyright (c) 2022 Nuvoton Technology corporation.
-+
-+#include <linux/bitfield.h>
-+#include <linux/delay.h>
-+#include <linux/edac.h>
-+#include <linux/init.h>
-+#include <linux/interrupt.h>
-+#include <linux/io.h>
-+#include <linux/module.h>
-+#include <linux/of_address.h>
-+#include <linux/of_device.h>
-+#include <linux/uaccess.h>
-+
-+#include "edac_module.h"
-+
-+#define NPCM_EDAC_MOD_NAME "npcm-edac"
-+#define FORCED_ECC_ERR_EVENT_SUPPORT	BIT(1)
-+#define EDAC_MSG_SIZE                  256
-+/* Granularity of reported error in bytes */
-+#define NPCM_EDAC_ERR_GRAIN		1
-+
-+#define MEM_TYPE_DDR4			0xA
-+
-+#define NPCM8XX_CHIP			0x800
-+#define NPCM7XX_CHIP			0x700
-+
-+/* Control register width definitions */
-+#define WDTH_16				(2)
-+#define WDTH_32				(1)
-+#define WDTH_64				(0)
-+#define CTL_MEM_MAX_WIDTH_MASK		GENMASK(4, 0)
-+#define CTL_REG_WIDTH_SHIFT		(32)
-+#define XOR_CHECK_BIT_SPLIT_WIDTH		(16)
-+#define CTL_CONTROLLER_BUSY_FLAG	BIT(0)
-+#define NPCM_ECC_CTL_FORCE_WC		BIT(8)
-+#define NPCM_ECC_CTL_AUTO_WRITEBACK_EN	BIT(24)
-+#define NPCM_ECC_CTL_XOR_BITS_MASK		GENMASK(23, 16)
-+#define NPCM_ECC_CTL_MTYPE_MASK			GENMASK(11, 8)
-+#define NPCM_ECC_CTL_GLOBAL_INT_DISABLE	BIT(31)
-+
-+#ifdef CONFIG_EDAC_DEBUG
-+
-+/* Syndrome values */
-+#define ECC_DOUBLE_MULTI_ERR_SYND	0x03
-+
-+static char data_synd[] = {
-+			0xf4, 0xf1, 0xec, 0xea, 0xe9, 0xe6, 0xe5, 0xe3,
-+			0xdc, 0xda, 0xd9, 0xd6, 0xd5, 0xd3, 0xce, 0xcb,
-+			0xb5, 0xb0, 0xad, 0xab, 0xa8, 0xa7, 0xa4, 0xa2,
-+			0x9d, 0x9b, 0x98, 0x97, 0x94, 0x92, 0x8f, 0x8a,
-+			0x75, 0x70, 0x6d, 0x6b, 0x68, 0x67, 0x64, 0x62,
-+			0x5e, 0x5b, 0x58, 0x57, 0x54, 0x52, 0x4f, 0x4a,
-+			0x34, 0x31, 0x2c, 0x2a, 0x29, 0x26, 0x25, 0x23,
-+			0x1c, 0x1a, 0x19, 0x16, 0x15, 0x13, 0x0e, 0x0b
-+		  };
-+
-+static char check_synd[] = {0x01, 0x02, 0x04, 0x08, 0x10, 0x20, 0x40, 0x80};
-+#endif
-+
-+struct npcm_edac_platform_data {
-+	/* force ECC event */
-+	u32 ip_features;
-+	u32 ddr_ctl_controller_busy_reg;
-+	u32 ecc_ctl_xor_check_bits_reg;
-+
-+	u32 chip;
-+
-+	/* DDR4 Controller Registers */
-+	u32 ddr_ctl_mem_type_reg;
-+	u32 ddr_ctl_mem_width_reg;
-+
-+	u32 ecc_ctl_en_reg;
-+	u32 ecc_ctl_int_mask;
-+	u32 ecc_ctl_int_status;
-+	u32 ecc_ctl_int_ack;
-+	u32 ecc_ctl_int_mask_master;
-+	u32 ecc_ctl_int_mask_ecc;
-+
-+	u32 ecc_sig_ecc_c_addr_l;
-+	u32 ecc_sig_ecc_c_addr_h;
-+	u32 ecc_sig_ecc_c_data_l;
-+	u32 ecc_sig_ecc_c_data_h;
-+	u32 ecc_sig_ecc_c_id;
-+	u32 ecc_sig_ecc_c_synd;
-+
-+	u32 ecc_sig_ecc_u_addr_l;
-+	u32 ecc_sig_ecc_u_addr_h;
-+	u32 ecc_sig_ecc_u_data_l;
-+	u32 ecc_sig_ecc_u_data_h;
-+	u32 ecc_sig_ecc_u_id;
-+	u32 ecc_sig_ecc_u_synd;
-+
-+	/* MASK */
-+	u32 ecc_ctl_ecc_enable_mask;
-+	u32 ecc_ctl_en_int_master_mask;
-+	u32 ecc_ctl_en_int_ecc_mask;
-+
-+	/* ECC IRQ Macros */
-+	u32 ecc_int_ce_event;
-+	u32 ecc_int_second_ce_event;
-+	u32 ecc_int_ue_event;
-+	u32 ecc_int_second_ue_event;
-+	u32 ecc_int_ce_ue_mask;
-+	u32 ecc_ce_intr_mask;
-+	u32 ecc_ue_intr_mask;
-+
-+	/* ECC Signature Macros */
-+	u32 ecc_sig_ecc_c_id_shift;
-+	u32 ecc_sig_ecc_c_synd_shift;
-+	u32 ecc_sig_ecc_c_addr_h_mask;
-+	u32 ecc_sig_ecc_c_id_mask;
-+	u32 ecc_sig_ecc_c_synd_mask;
-+
-+	u32 ecc_sig_ecc_u_id_shift;
-+	u32 ecc_sig_ecc_u_synd_shift;
-+	u32 ecc_sig_ecc_u_addr_h_mask;
-+	u32 ecc_sig_ecc_u_id_mask;
-+	u32 ecc_sig_ecc_u_synd_mask;
-+};
-+
-+struct priv_data {
-+	void __iomem *reg;
-+	u32 ce_cnt;
-+	u32 ue_cnt;
-+	char message[EDAC_MSG_SIZE];
-+	const struct npcm_edac_platform_data *npcm_chip;
-+};
-+
-+#ifdef CONFIG_EDAC_DEBUG
-+static void init_mem_layout(struct mem_ctl_info *mci)
-+{
-+	struct priv_data *priv = mci->pvt_info;
-+	const struct npcm_edac_platform_data *npcm_chip = priv->npcm_chip;
-+	struct csrow_info *csi;
-+	struct dimm_info *dimm;
-+	struct sysinfo inf;
-+	enum mem_type mtype;
-+	u32 val, width;
-+	u32 size, row;
-+	u8 j;
-+
-+	dimm = edac_get_dimm(mci, 0, 0, 0);
-+	if (!dimm) {
-+		si_meminfo(&inf);
-+		for (row = 0; row < mci->nr_csrows; row++) {
-+			csi = mci->csrows[row];
-+			size = inf.totalram * inf.mem_unit;
-+
-+			for (j = 0; j < csi->nr_channels; j++) {
-+				dimm            = csi->channels[j]->dimm;
-+				dimm->edac_mode = EDAC_FLAG_SECDED;
-+				/* Get memory type by reading hw registers*/
-+				val = readl(priv->reg + npcm_chip->ddr_ctl_mem_type_reg);
-+				mtype = val & NPCM_ECC_CTL_MTYPE_MASK;
-+
-+				if (mtype == MEM_TYPE_DDR4)
-+					dimm->mtype = MEM_DDR4;
-+				else
-+					dimm->mtype = MEM_EMPTY;
-+
-+				/*Get EDAC devtype width for the current mc*/
-+				width = readl(priv->reg + npcm_chip->ddr_ctl_mem_width_reg)
-+					      & CTL_MEM_MAX_WIDTH_MASK;
-+				switch (width) {
-+				case WDTH_16:
-+					dimm->dtype  = DEV_X2;
-+					break;
-+				case WDTH_32:
-+					dimm->dtype  = DEV_X4;
-+					break;
-+				case WDTH_64:
-+					dimm->dtype  = DEV_X8;
-+					break;
-+				default:
-+					dimm->dtype = DEV_UNKNOWN;
-+				}
-+
-+				dimm->nr_pages  = (size >> PAGE_SHIFT) /
-+					csi->nr_channels;
-+				dimm->grain     = NPCM_EDAC_ERR_GRAIN;
-+			}
-+		}
-+	}
-+}
-+#endif
-+
-+static void handle_ce(struct mem_ctl_info *mci)
-+{
-+	struct priv_data *priv = mci->pvt_info;
-+	const struct npcm_edac_platform_data *npcm_chip = priv->npcm_chip;
-+	u64 err_c_addr = 0x0;
-+	u64 err_c_data = 0x0;
-+	u32 err_c_synd, err_c_id;
-+	u32 sig_val_l, sig_val_h;
-+
-+	sig_val_l = readl(priv->reg + npcm_chip->ecc_sig_ecc_c_addr_l);
-+
-+	if (npcm_chip->chip == NPCM8XX_CHIP)
-+		sig_val_h = (readl(priv->reg + npcm_chip->ecc_sig_ecc_c_addr_h) &
-+				npcm_chip->ecc_sig_ecc_c_addr_h_mask);
-+	else
-+		sig_val_h = 0x0;
-+
-+	err_c_addr = (((err_c_addr | sig_val_h) <<
-+				CTL_REG_WIDTH_SHIFT) | sig_val_l);
-+
-+	sig_val_l = readl(priv->reg + npcm_chip->ecc_sig_ecc_c_data_l);
-+
-+	if (npcm_chip->chip == NPCM8XX_CHIP)
-+		sig_val_h = readl(priv->reg + npcm_chip->ecc_sig_ecc_c_data_h);
-+	else
-+		sig_val_h = 0x0;
-+
-+	err_c_data = (((err_c_data | sig_val_h) <<
-+				CTL_REG_WIDTH_SHIFT) | sig_val_l);
-+
-+	err_c_id = ((readl(priv->reg + npcm_chip->ecc_sig_ecc_c_id) &
-+				npcm_chip->ecc_sig_ecc_c_id_mask) >>
-+				npcm_chip->ecc_sig_ecc_c_id_shift);
-+
-+	err_c_synd = ((readl(priv->reg + npcm_chip->ecc_sig_ecc_c_synd) &
-+				npcm_chip->ecc_sig_ecc_c_synd_mask) >>
-+				npcm_chip->ecc_sig_ecc_c_synd_shift);
-+
-+	priv->ce_cnt = priv->ce_cnt + 1;
-+
-+	snprintf(priv->message,
-+		 EDAC_MSG_SIZE, "DDR ECC %s: data=0x%llx source_id=%#08x",
-+		 mci->ctl_name, err_c_data, err_c_id);
-+
-+	edac_mc_handle_error(HW_EVENT_ERR_CORRECTED, mci,
-+			     1,
-+			     err_c_addr >> PAGE_SHIFT,
-+			     err_c_addr & ~PAGE_MASK,
-+			     err_c_synd, 0, 0, -1,
-+			     priv->message, "");
-+}
-+
-+static void handle_ue(struct mem_ctl_info *mci)
-+{
-+	struct priv_data *priv = mci->pvt_info;
-+	const struct npcm_edac_platform_data *npcm_chip = priv->npcm_chip;
-+	u64 err_u_addr = 0x0;
-+	u64 err_u_data = 0x0;
-+	u32 err_u_synd, err_u_id;
-+	u32 sig_val_l, sig_val_h;
-+
-+	sig_val_l = readl(priv->reg + npcm_chip->ecc_sig_ecc_u_addr_l);
-+
-+	if (npcm_chip->chip == NPCM8XX_CHIP)
-+		sig_val_h = (readl(priv->reg + npcm_chip->ecc_sig_ecc_u_addr_h) &
-+				npcm_chip->ecc_sig_ecc_u_addr_h_mask);
-+	else
-+		sig_val_h = 0x0;
-+
-+	err_u_addr = (((err_u_addr | sig_val_h) <<
-+				CTL_REG_WIDTH_SHIFT) | sig_val_l);
-+
-+	sig_val_l = readl(priv->reg + npcm_chip->ecc_sig_ecc_u_data_l);
-+
-+	if (npcm_chip->chip == NPCM8XX_CHIP)
-+		sig_val_h = readl(priv->reg + npcm_chip->ecc_sig_ecc_u_data_h);
-+	else
-+		sig_val_h = 0x0;
-+
-+	err_u_data = (((err_u_data | sig_val_h) <<
-+				CTL_REG_WIDTH_SHIFT) | sig_val_l);
-+
-+	err_u_id = ((readl(priv->reg + npcm_chip->ecc_sig_ecc_u_id) &
-+				npcm_chip->ecc_sig_ecc_u_id_mask) >>
-+			npcm_chip->ecc_sig_ecc_u_id_shift);
-+
-+	err_u_synd = ((readl(priv->reg + npcm_chip->ecc_sig_ecc_u_synd) &
-+				npcm_chip->ecc_sig_ecc_u_synd_mask) >>
-+			npcm_chip->ecc_sig_ecc_u_synd_shift);
-+	priv->ue_cnt = priv->ue_cnt + 1;
-+
-+	snprintf(priv->message, EDAC_MSG_SIZE,
-+		 "DDR ECC %s: addr=0x%llx data=0x%llx source_id=%#08x",
-+		 mci->ctl_name, err_u_addr, err_u_data, err_u_id);
-+
-+	edac_mc_handle_error(HW_EVENT_ERR_UNCORRECTED, mci,
-+			     1,
-+			     err_u_addr >> PAGE_SHIFT,
-+			     err_u_addr & ~PAGE_MASK,
-+			     err_u_synd, 0, 0, -1,
-+			     priv->message, "");
-+}
-+
-+static irqreturn_t edac_ecc_isr(int irq, void *dev_id)
-+{
-+	struct mem_ctl_info *mci = dev_id;
-+	struct priv_data *priv = mci->pvt_info;
-+	const struct npcm_edac_platform_data *npcm_chip = priv->npcm_chip;
-+	u32 intr_status;
-+	u32 val;
-+
-+	/* Check the intr status and confirm ECC error intr */
-+	intr_status = readl(priv->reg + npcm_chip->ecc_ctl_int_status);
-+
-+	edac_dbg(3, "InterruptStatus : 0x%x\n", intr_status);
-+	val = intr_status & npcm_chip->ecc_int_ce_ue_mask;
-+	if (!((val & npcm_chip->ecc_ce_intr_mask) || (val & npcm_chip->ecc_ue_intr_mask)))
-+		return IRQ_NONE;
-+
-+	if (val & npcm_chip->ecc_ce_intr_mask) {
-+		handle_ce(mci);
-+
-+		/* Clear the interrupt source */
-+		if (val & npcm_chip->ecc_int_ce_event)
-+			writel(npcm_chip->ecc_int_ce_event, priv->reg + npcm_chip->ecc_ctl_int_ack);
-+		else if (val & npcm_chip->ecc_int_second_ce_event)
-+			writel(npcm_chip->ecc_int_second_ce_event,
-+			       priv->reg + npcm_chip->ecc_ctl_int_ack);
-+		else
-+			edac_printk(KERN_ERR, NPCM_EDAC_MOD_NAME, "Failed to clear IRQ\n");
-+	}
-+
-+	if (val & npcm_chip->ecc_ue_intr_mask) {
-+		handle_ue(mci);
-+
-+		/* Clear the interrupt source */
-+		if (val & npcm_chip->ecc_int_ue_event)
-+			writel(npcm_chip->ecc_int_ue_event, priv->reg + npcm_chip->ecc_ctl_int_ack);
-+		else if (val & npcm_chip->ecc_int_second_ue_event)
-+			writel(npcm_chip->ecc_int_second_ue_event,
-+			       priv->reg + npcm_chip->ecc_ctl_int_ack);
-+		else
-+			edac_printk(KERN_ERR, NPCM_EDAC_MOD_NAME, "Failed to clear IRQ\n");
-+	}
-+
-+	edac_dbg(3, "Total error count CE %d UE %d\n",
-+		 priv->ce_cnt, priv->ue_cnt);
-+
-+	return IRQ_HANDLED;
-+}
-+
-+#ifdef CONFIG_EDAC_DEBUG
-+
-+static ssize_t forced_ecc_error_show(struct device *dev,
-+				     struct device_attribute *mattr,
-+				     char *data)
-+{
-+	return sprintf(data, "CDNS-DDR4 Force Injection Help:\n"
-+		       "CE: Corrected\n"
-+		       "checkcode/data:source\n"
-+		       "bit [0-63] for data [0-7] for checkcode:bit number\n"
-+		       "--------------------------------------------------\n"
-+		       "UE: Uncorrected\n");
-+}
-+
-+static ssize_t forced_ecc_error_store(struct device *dev,
-+				      struct device_attribute *mattr,
-+				      const char *data, size_t count)
-+{
-+	struct mem_ctl_info *mci = to_mci(dev);
-+	struct priv_data *priv = mci->pvt_info;
-+	const struct npcm_edac_platform_data *npcm_chip = priv->npcm_chip;
-+	int	args_cnt;
-+	int	ret;
-+	char	**args;
-+	u32	regval;
-+	u8	bit_no;
-+
-+	/* Split string buffer into separate parameters */
-+	args = argv_split(GFP_KERNEL, data, &args_cnt);
-+
-+	/* Check ecc enabled */
-+	if (!readl(priv->reg + npcm_chip->ecc_ctl_en_reg) & npcm_chip->ecc_ctl_ecc_enable_mask)
-+		return count;
-+
-+	/* Check no write operation pending to controller*/
-+	while (readl(priv->reg + npcm_chip->ddr_ctl_controller_busy_reg) &
-+			CTL_CONTROLLER_BUSY_FLAG) {
-+		usleep_range(1000, 10000);
-+	}
-+
-+	/* Write appropriate syndrome to xor_check_bit*/
-+	if (!strcmp(args[0], "CE") && args_cnt == 3) {
-+		ret = kstrtou8(args[2], 0, &bit_no);
-+		if (ret)
-+			return ret;
-+		if (!strcmp(args[1], "checkcode")) {
-+			if (bit_no > 7) {
-+				edac_printk(KERN_INFO, NPCM_EDAC_MOD_NAME, "bit_no for checkcode must be 0~7\n");
-+				return count;
-+			}
-+			regval = readl(priv->reg + npcm_chip->ecc_ctl_xor_check_bits_reg);
-+			regval = (regval & ~(NPCM_ECC_CTL_XOR_BITS_MASK)) |
-+				(check_synd[bit_no] << XOR_CHECK_BIT_SPLIT_WIDTH);
-+			writel(regval, priv->reg + npcm_chip->ecc_ctl_xor_check_bits_reg);
-+		} else if (!strcmp(args[1], "data")) {
-+			if (bit_no > 63) {
-+				edac_printk(KERN_INFO, NPCM_EDAC_MOD_NAME, "bit_no for data must be 0~63\n");
-+				return count;
-+			}
-+			regval = readl(priv->reg + npcm_chip->ecc_ctl_xor_check_bits_reg);
-+			regval = (regval & ~(NPCM_ECC_CTL_XOR_BITS_MASK)) |
-+					 (data_synd[bit_no] << XOR_CHECK_BIT_SPLIT_WIDTH);
-+			writel(regval, priv->reg + npcm_chip->ecc_ctl_xor_check_bits_reg);
-+		}
-+		/* Enable the ECC writeback_en for corrected error */
-+		regval = readl(priv->reg + npcm_chip->ecc_ctl_xor_check_bits_reg);
-+		writel((regval | NPCM_ECC_CTL_AUTO_WRITEBACK_EN),
-+		       priv->reg + npcm_chip->ecc_ctl_xor_check_bits_reg);
-+	} else if (!strcmp(args[0], "UE")) {
-+		regval = readl(priv->reg + npcm_chip->ecc_ctl_xor_check_bits_reg);
-+		regval = (regval & ~(NPCM_ECC_CTL_XOR_BITS_MASK)) |
-+				 (ECC_DOUBLE_MULTI_ERR_SYND << XOR_CHECK_BIT_SPLIT_WIDTH);
-+		writel(regval, priv->reg + npcm_chip->ecc_ctl_xor_check_bits_reg);
-+	}
-+
-+	/* Assert fwc */
-+	writel((NPCM_ECC_CTL_FORCE_WC | readl(priv->reg + npcm_chip->ecc_ctl_xor_check_bits_reg)),
-+	       priv->reg + npcm_chip->ecc_ctl_xor_check_bits_reg);
-+
-+	return count;
-+}
-+
-+static DEVICE_ATTR_RW(forced_ecc_error);
-+static int create_sysfs_attributes(struct mem_ctl_info *mci)
-+{
-+	int rc;
-+
-+	rc = device_create_file(&mci->dev, &dev_attr_forced_ecc_error);
-+	if (rc < 0)
-+		return rc;
-+	return 0;
-+}
-+
-+static void remove_sysfs_attributes(struct mem_ctl_info *mci)
-+{
-+	device_remove_file(&mci->dev, &dev_attr_forced_ecc_error);
-+}
-+
-+#endif
-+
-+static const struct npcm_edac_platform_data npcm7xx_edac = {
-+	.chip = NPCM7XX_CHIP,
-+
-+	/* CDNS DDR4 Controller Registers */
-+	.ecc_ctl_en_reg = 0x174,
-+	.ecc_ctl_int_status = 0x1D0,
-+	.ecc_ctl_int_ack = 0x1D4,
-+	.ecc_ctl_int_mask_master = 0x1D8,
-+
-+	.ecc_sig_ecc_c_addr_l = 0x188,
-+	.ecc_sig_ecc_c_data_l = 0x190,
-+	.ecc_sig_ecc_c_id = 0x194,
-+	.ecc_sig_ecc_c_synd = 0x18C,
-+
-+	.ecc_sig_ecc_u_addr_l = 0x17C,
-+	.ecc_sig_ecc_u_data_l = 0x184,
-+	.ecc_sig_ecc_u_id = 0x194,
-+	.ecc_sig_ecc_u_synd = 0x180,
-+
-+	/* MASK */
-+	.ecc_ctl_ecc_enable_mask = BIT(24),
-+	.ecc_ctl_en_int_master_mask = GENMASK(30, 7) | GENMASK(2, 0),
-+
-+	/* ECC IRQ Macros */
-+	.ecc_int_ce_event = BIT(3),
-+	.ecc_int_second_ce_event = BIT(4),
-+	.ecc_int_ue_event = BIT(5),
-+	.ecc_int_second_ue_event = BIT(6),
-+	.ecc_int_ce_ue_mask = GENMASK(6, 3),
-+	.ecc_ce_intr_mask = GENMASK(4, 3),
-+	.ecc_ue_intr_mask = GENMASK(6, 5),
-+
-+	/* ECC Signature Macros */
-+	.ecc_sig_ecc_c_id_shift = 16,
-+	.ecc_sig_ecc_c_synd_shift = 0,
-+
-+	.ecc_sig_ecc_c_id_mask = GENMASK(29, 16),
-+	.ecc_sig_ecc_c_synd_mask = GENMASK(6, 0),
-+
-+	.ecc_sig_ecc_u_id_shift = 0,
-+	.ecc_sig_ecc_u_synd_shift = 0,
-+
-+	.ecc_sig_ecc_u_id_mask = GENMASK(13, 0),
-+	.ecc_sig_ecc_u_synd_mask = GENMASK(6, 0),
-+};
-+
-+static const struct npcm_edac_platform_data npcm8xx_edac = {
-+#ifdef CONFIG_EDAC_DEBUG
-+	.ip_features = FORCED_ECC_ERR_EVENT_SUPPORT,
-+	.ddr_ctl_controller_busy_reg = 0x20C,
-+	.ecc_ctl_xor_check_bits_reg = 0x174,
-+#endif
-+
-+	.chip = NPCM8XX_CHIP,
-+
-+	/* CDNS DDR4 Controller Registers */
-+	.ddr_ctl_mem_type_reg = 0x000,
-+	.ddr_ctl_mem_width_reg = 0x00c,
-+
-+	.ecc_ctl_en_reg = 0x16C,
-+	.ecc_ctl_int_status = 0x228,
-+	.ecc_ctl_int_ack = 0x244,
-+	.ecc_ctl_int_mask_master = 0x220,
-+	.ecc_ctl_int_mask_ecc = 0x260,
-+
-+	.ecc_sig_ecc_c_addr_l = 0x18C,
-+	.ecc_sig_ecc_c_addr_h = 0x190,
-+	.ecc_sig_ecc_c_data_l = 0x194,
-+	.ecc_sig_ecc_c_data_h = 0x198,
-+	.ecc_sig_ecc_c_id = 0x19C,
-+	.ecc_sig_ecc_c_synd = 0x190,
-+
-+	.ecc_sig_ecc_u_addr_l = 0x17C,
-+	.ecc_sig_ecc_u_addr_h = 0x180,
-+	.ecc_sig_ecc_u_data_l = 0x184,
-+	.ecc_sig_ecc_u_data_h = 0x188,
-+	.ecc_sig_ecc_u_id = 0x19C,
-+	.ecc_sig_ecc_u_synd = 0x180,
-+
-+	/* MASK */
-+	.ecc_ctl_ecc_enable_mask = GENMASK(17, 16),
-+	.ecc_ctl_en_int_master_mask = GENMASK(30, 3) | GENMASK(1, 0),
-+	.ecc_ctl_en_int_ecc_mask = GENMASK(8, 4),
-+
-+	/* ECC IRQ Macros */
-+	.ecc_int_ce_event = BIT(0),
-+	.ecc_int_second_ce_event = BIT(1),
-+	.ecc_int_ue_event = BIT(2),
-+	.ecc_int_second_ue_event = BIT(3),
-+	.ecc_int_ce_ue_mask = GENMASK(3, 0),
-+	.ecc_ce_intr_mask = GENMASK(1, 0),
-+	.ecc_ue_intr_mask = GENMASK(3, 2),
-+
-+	/* ECC Signature Macros */
-+	.ecc_sig_ecc_c_id_shift = 8,
-+	.ecc_sig_ecc_c_synd_shift = 8,
-+	.ecc_sig_ecc_c_addr_h_mask = GENMASK(1, 0),
-+	.ecc_sig_ecc_c_id_mask = GENMASK(29, 16),
-+	.ecc_sig_ecc_c_synd_mask = GENMASK(15, 8),
-+
-+	.ecc_sig_ecc_u_id_shift = 0,
-+	.ecc_sig_ecc_u_synd_shift = 8,
-+	.ecc_sig_ecc_u_addr_h_mask = GENMASK(1, 0),
-+	.ecc_sig_ecc_u_id_mask = GENMASK(13, 0),
-+	.ecc_sig_ecc_u_synd_mask = GENMASK(15, 8),
-+};
-+
-+static const struct of_device_id npcm_edac_of_match[] = {
-+	{ .compatible = "nuvoton,npcm845-memory-controller", .data = &npcm8xx_edac },
-+	{ .compatible = "nuvoton,npcm750-memory-controller", .data = &npcm7xx_edac },
-+	{},
-+};
-+
-+MODULE_DEVICE_TABLE(of, npcm_edac_of_match);
-+
-+static int npcm_edac_mc_probe(struct platform_device *pdev)
-+{
-+	const struct npcm_edac_platform_data *npcm_chip;
-+	struct device *dev = &pdev->dev;
-+	struct edac_mc_layer layers[1];
-+	const struct of_device_id *id;
-+	struct priv_data *priv_data;
-+	struct mem_ctl_info *mci;
-+	struct resource *res;
-+	void __iomem *reg;
-+	int ret = -ENODEV;
-+	int irq;
-+
-+	id = of_match_device(npcm_edac_of_match, &pdev->dev);
-+
-+	npcm_chip = of_device_get_match_data(&pdev->dev);
-+
-+	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-+	reg = devm_ioremap_resource(dev, res);
-+	if (IS_ERR(reg)) {
-+		edac_printk(KERN_ERR, NPCM_EDAC_MOD_NAME,
-+			    "cdns DDR4 mc regs are not defined\n");
-+		return PTR_ERR(reg);
-+	}
-+
-+	u32 ecc_en = readl(reg + npcm_chip->ecc_ctl_en_reg);
-+
-+	if ((ecc_en & npcm_chip->ecc_ctl_ecc_enable_mask) == npcm_chip->ecc_ctl_ecc_enable_mask) {
-+		edac_printk(KERN_INFO, NPCM_EDAC_MOD_NAME, "ECC reporting and correcting on. ");
-+	} else {
-+		edac_printk(KERN_INFO, NPCM_EDAC_MOD_NAME, "ECC disabled\n");
-+		return -ENXIO;
-+	}
-+
-+	edac_printk(KERN_INFO, NPCM_EDAC_MOD_NAME,
-+		    "IO mapped reg addr: %p\n", reg);
-+	layers[0].type = EDAC_MC_LAYER_ALL_MEM;
-+	layers[0].size = 1;
-+
-+	mci = edac_mc_alloc(0, ARRAY_SIZE(layers), layers,
-+			    sizeof(struct priv_data));
-+	if (!mci) {
-+		edac_printk(KERN_ERR, NPCM_EDAC_MOD_NAME,
-+			    "Failed memory allocation for mc instance\n");
-+		return -ENOMEM;
-+	}
-+	mci->pdev = &pdev->dev;
-+	priv_data = mci->pvt_info;
-+	priv_data->reg = reg;
-+	priv_data->npcm_chip = npcm_chip;
-+	priv_data->ce_cnt = 0;
-+	priv_data->ue_cnt = 0;
-+	platform_set_drvdata(pdev, mci);
-+
-+	/* Initialize controller capabilities */
-+	mci->mtype_cap = MEM_FLAG_DDR4;
-+	mci->edac_ctl_cap = EDAC_FLAG_SECDED;
-+	mci->scrub_cap = SCRUB_FLAG_HW_SRC;
-+	mci->scrub_mode = SCRUB_HW_SRC;
-+	mci->edac_cap = EDAC_FLAG_SECDED;
-+	mci->ctl_name = id->compatible;
-+	mci->dev_name = dev_name(&pdev->dev);
-+	mci->mod_name = NPCM_EDAC_MOD_NAME;
-+	mci->ctl_page_to_phys = NULL;
-+
-+	/* Interrupt feature is supported by cadence mc */
-+	edac_op_state = EDAC_OPSTATE_INT;
-+#ifdef CONFIG_EDAC_DEBUG
-+	init_mem_layout(mci);
-+#endif
-+	/* Setup Interrupt handler for ECC */
-+	irq = platform_get_irq(pdev, 0);
-+	if (!irq) {
-+		edac_printk(KERN_ERR, NPCM_EDAC_MOD_NAME,
-+			    "irq number not defined for ECC.\n");
-+		goto err;
-+	}
-+	ret = devm_request_irq(dev, irq, edac_ecc_isr, 0,
-+			       "cdns-edac-mc-ecc-irq", mci);
-+	if (ret) {
-+		edac_printk(KERN_ERR, NPCM_EDAC_MOD_NAME,
-+			    "request_irq fail for NPCM_EDAC irq\n");
-+		goto err;
-+	}
-+	ret = edac_mc_add_mc(mci);
-+	if (ret) {
-+		edac_printk(KERN_ERR, NPCM_EDAC_MOD_NAME,
-+			    "Failed to register with EDAC core\n");
-+		goto err;
-+	}
-+
-+#ifdef CONFIG_EDAC_DEBUG
-+	if ((npcm_chip->ip_features & FORCED_ECC_ERR_EVENT_SUPPORT) &&
-+	    npcm_chip->chip == NPCM8XX_CHIP) {
-+		if (create_sysfs_attributes(mci)) {
-+			edac_printk(KERN_ERR, NPCM_EDAC_MOD_NAME,
-+				    "Failed to create sysfs entries\n");
-+			goto err1;
-+		}
-+	}
-+#endif
-+
-+	/* Only enable MC interrupts with ECC - clear global int mask bit and ecc bit */
-+	writel(npcm_chip->ecc_ctl_en_int_master_mask,
-+	       priv_data->reg + npcm_chip->ecc_ctl_int_mask_master);
-+
-+	if (npcm_chip->chip == NPCM8XX_CHIP) {
-+		/* clear single and multi for ce and ue */
-+		writel(npcm_chip->ecc_ctl_en_int_ecc_mask,
-+		       priv_data->reg + npcm_chip->ecc_ctl_int_mask_ecc);
-+	}
-+
-+	return 0;
-+
-+err1:
-+	edac_mc_del_mc(&pdev->dev);
-+
-+err:
-+	edac_mc_free(mci);
-+	return ret;
-+}
-+
-+static int npcm_edac_mc_remove(struct platform_device *pdev)
-+{
-+	struct mem_ctl_info *mci = platform_get_drvdata(pdev);
-+	struct priv_data *priv = mci->pvt_info;
-+	const struct npcm_edac_platform_data *npcm_chip = priv->npcm_chip;
-+
-+	writel(NPCM_ECC_CTL_GLOBAL_INT_DISABLE, priv->reg + npcm_chip->ecc_ctl_int_mask_master);
-+
-+	/* Disable ecc feature before removing driver by writing 0 */
-+	writel((unsigned int)(~(npcm_chip->ecc_ctl_ecc_enable_mask)),
-+	       priv->reg + npcm_chip->ecc_ctl_en_reg);
-+
-+#ifdef CONFIG_EDAC_DEBUG
-+	remove_sysfs_attributes(mci);
-+#endif
-+	edac_mc_del_mc(&pdev->dev);
-+	edac_mc_free(mci);
-+
-+	return 0;
-+}
-+
-+static struct platform_driver npcm_edac_mc_driver = {
-+	.driver = {
-+		   .name = "npcm-edac",
-+		   .of_match_table = npcm_edac_of_match,
-+	},
-+	.probe = npcm_edac_mc_probe,
-+	.remove = npcm_edac_mc_remove,
-+};
-+
-+module_platform_driver(npcm_edac_mc_driver);
-+
-+MODULE_AUTHOR("Medad <ctcchien@nuvoton.com>");
-+MODULE_DESCRIPTION("Nuvoton NPCM EDAC Driver");
-+MODULE_LICENSE("GPL v2");
--- 
-2.17.1
-
+0-DAY CI Kernel Test Service
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
