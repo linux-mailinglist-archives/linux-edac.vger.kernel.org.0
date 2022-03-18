@@ -2,140 +2,125 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C456F4DD853
-	for <lists+linux-edac@lfdr.de>; Fri, 18 Mar 2022 11:45:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C6844DD8D7
+	for <lists+linux-edac@lfdr.de>; Fri, 18 Mar 2022 12:20:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230456AbiCRKnK (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Fri, 18 Mar 2022 06:43:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45060 "EHLO
+        id S235721AbiCRLVb (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Fri, 18 Mar 2022 07:21:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235576AbiCRKnA (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Fri, 18 Mar 2022 06:43:00 -0400
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2075.outbound.protection.outlook.com [40.107.92.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68A8D2D7AAE
-        for <linux-edac@vger.kernel.org>; Fri, 18 Mar 2022 03:41:14 -0700 (PDT)
+        with ESMTP id S233440AbiCRLVa (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Fri, 18 Mar 2022 07:21:30 -0400
+Received: from EUR04-VI1-obe.outbound.protection.outlook.com (mail-eopbgr80077.outbound.protection.outlook.com [40.107.8.77])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 669181F5196;
+        Fri, 18 Mar 2022 04:20:12 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Sfe5qxKNhCagBdtbfHabM4VXG1h31yyaGuYzjAedp5zfHB0RKRFr6zMZhEibHhN4zg9RLh74qU+nx37YcOnJ441+RHsrGM7/NMvxUZ3NaTvNl1BDU4cwdayEUm7r0D6LKlz3NY0F/GBqPxlOx8ph/gPG/A/7iNy5A91j+5FuZ4+KCrAabpYzv/hAqEe+EOPWjoqC6Dok+bhzDd3gwqrctPcvHghvFTdeZtxjJ32vItIGERvnUaonMi1tpFczQXj++8kiC633isflG7kIdewf4zZJwbYmN4afWfk7NPwmXsyVmANL0kmsrzuLRcGh0776+vQ8db1JwNC34oNVrYIWjw==
+ b=BwvRfMzRdzxZglWeIEhyrY6e5KqZm6pGetxfUzU5EFAy9Id0GHQIoIXvqOmWQAmke9gVyPNn9SN5TSE84I/xeYtMxYNdQ2+NUCCj7UK3T/bt1QZ/5rZsxiYJSvHVkGZ+nMQRjDvdpkPIapP3UVSQAD55kvyLTFBTMGasQLhN7/cWkUnm4fBCfwyvWko3wPb1aF3xBpVTHzEfcDglugYxxcVvSwQN8YxITK9FZcZkzN62M1ZdQqGeNYm7W2269qJnkRVLWsP+4LEYfnwszFrp/WZPydsktMqr4HoS4aG+wxnqhM6nm+yJq7rBho5tN67OHw4jJ16eLeClnQqPC6+u0w==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=9jn5f8Q/G0YRXNqCvPyCMVmXuUw9Nzv+6hSP1byYxrI=;
- b=bGDYpGYQokfqshp2US/7XWc6kPTVevqdK76+6w78X7QrDRht4lN4JLcbt5jYjxOrbkeULAAjJZ3Yj4xhOp4XEqr0fGK7QBxQAFBV2vWUpBnaXRen0WCMoEE0Xq6OguKnh3leNnW1L7VSSV27wzVbH7T8B2jChCI/F1ZLDUp0kpgDmQYCZJ8dP+ag1GgA8PsbujxnoHzbDDZxdXcj9jzxJ4pQQsoXItxIAlnPjONi0xmEKmBqbPIo7PacmFAu4ga2m+CAIOHU4leXoHbs3IU+1Z+8LJW2reto3225ipR2N3ucTkx6OGakefaZkCqcZUVeCCan3VDtoyr4/OGQi2G1fg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 149.199.62.198) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=xilinx.com;
- dmarc=pass (p=none sp=none pct=100) action=none header.from=xilinx.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
+ bh=laEAGPUJ1L8UiJ3Wsl54wlV9Ig3njOhaqGNLzy3ciG0=;
+ b=XXjq/RM92LLnyywL6Qet1DQpc55v6RR63MsZ1Z9p8Y5iRjoIOpxZtMdEFhad6OpY3nVpBvLqrkH8blddDHFr8aEiuVp01DHecwqre1X/Gcxrxf0ebcIZk2BTiDV9BZ/ff9hZcxbzwmpEgDmheShJr48MIsqJQXIe5QEuJz3//1Igsfzekm+cqUSkbcs/gnsV6PGxkT/cznGYP2535YPsY/d9YS5vii2aLNa8Hphd1ZEytL7ozUuFXpgZSEpK7z4WNkBwMrOQSIMg8fOlC0km1BomnZDEV+GfshYRcymoYwtKasdm1ZsOg72b38HIcj59tqzGn3PgVVyDF5PJkB9eQQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=9jn5f8Q/G0YRXNqCvPyCMVmXuUw9Nzv+6hSP1byYxrI=;
- b=qE3Za+PT2TkDHtDYu3oYWp8ybQPuBJ8JQolsd/+MsSiYyzzFdl9oCl7h0GlWWizJkGosmVtai0tGiVLfAcafNUSHRe8v2xILGfpR4eFmT1T5Nhfx8SG6nCdgo1r6AlMSxkQsrzJCaoR5zU466uEZI11JHBHqzKtaFmTve6KmrfQ=
-Received: from SN4PR0701CA0046.namprd07.prod.outlook.com
- (2603:10b6:803:2d::33) by DM6PR02MB5451.namprd02.prod.outlook.com
- (2603:10b6:5:32::13) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5081.14; Fri, 18 Mar
- 2022 10:41:12 +0000
-Received: from SN1NAM02FT0034.eop-nam02.prod.protection.outlook.com
- (2603:10b6:803:2d:cafe::5) by SN4PR0701CA0046.outlook.office365.com
- (2603:10b6:803:2d::33) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5081.18 via Frontend
- Transport; Fri, 18 Mar 2022 10:41:12 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 149.199.62.198)
- smtp.mailfrom=xilinx.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=xilinx.com;
-Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
- 149.199.62.198 as permitted sender) receiver=protection.outlook.com;
- client-ip=149.199.62.198; helo=xsj-pvapexch01.xlnx.xilinx.com;
-Received: from xsj-pvapexch01.xlnx.xilinx.com (149.199.62.198) by
- SN1NAM02FT0034.mail.protection.outlook.com (10.97.5.90) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5081.14 via Frontend Transport; Fri, 18 Mar 2022 10:41:12 +0000
-Received: from xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) by
- xsj-pvapexch01.xlnx.xilinx.com (172.19.86.40) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.14; Fri, 18 Mar 2022 03:41:10 -0700
-Received: from smtp.xilinx.com (172.19.127.96) by
- xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server id
- 15.1.2176.14 via Frontend Transport; Fri, 18 Mar 2022 03:41:10 -0700
-Envelope-to: git@xilinx.com,
- linux-edac@vger.kernel.org,
- rric@kernel.org,
- bp@alien8.de,
- mchehab@kernel.org,
- tony.luck@intel.com
-Received: from [10.254.241.50] (port=45326)
-        by smtp.xilinx.com with esmtp (Exim 4.90)
-        (envelope-from <michal.simek@xilinx.com>)
-        id 1nVA2g-000FyU-5P; Fri, 18 Mar 2022 03:41:10 -0700
-Message-ID: <cc43cae4-240f-1d62-c9bc-56335554a321@xilinx.com>
-Date:   Fri, 18 Mar 2022 11:41:07 +0100
+ bh=laEAGPUJ1L8UiJ3Wsl54wlV9Ig3njOhaqGNLzy3ciG0=;
+ b=mFWUiBBIMi1Qp2ghop5JDCdgFhZOBQY6OIqf2QqxWVffbVhOeUXIj7Yr1EH7v7aT2j6xf3kpoKp7qi55edOoJConH+jU9IV8LvKPqFVYcI58oCfl3QuLzZ+hrpsaJdmYtl60OQ3OQePr99aTe5TNfJaeBYk2C23RPdxiPQ1Dhzc=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from AS8PR04MB8404.eurprd04.prod.outlook.com (2603:10a6:20b:3f8::7)
+ by AM0PR04MB7108.eurprd04.prod.outlook.com (2603:10a6:208:19e::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5081.18; Fri, 18 Mar
+ 2022 11:20:09 +0000
+Received: from AS8PR04MB8404.eurprd04.prod.outlook.com
+ ([fe80::6972:1f59:5d1c:e557]) by AS8PR04MB8404.eurprd04.prod.outlook.com
+ ([fe80::6972:1f59:5d1c:e557%5]) with mapi id 15.20.5081.018; Fri, 18 Mar 2022
+ 11:20:09 +0000
+From:   Sherry Sun <sherry.sun@nxp.com>
+To:     bp@alien8.de, mchehab@kernel.org, michal.simek@xilinx.com,
+        tony.luck@intel.com, james.morse@arm.com, rric@kernel.org
+Cc:     linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-imx@nxp.com
+Subject: [PATCH 0/2] fix some bugs in V3.X Synopsys EDAC DDR driver 
+Date:   Fri, 18 Mar 2022 19:17:40 +0800
+Message-Id: <20220318111742.15730-1-sherry.sun@nxp.com>
+X-Mailer: git-send-email 2.17.1
+Content-Type: text/plain
+X-ClientProxiedBy: SG2PR06CA0088.apcprd06.prod.outlook.com
+ (2603:1096:3:14::14) To AS8PR04MB8404.eurprd04.prod.outlook.com
+ (2603:10a6:20b:3f8::7)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v2] edac: synopsys: Fix the issue in reporting of the
- error count
-Content-Language: en-US
-To:     Michal Simek <michal.simek@xilinx.com>,
-        Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>,
-        <linux-edac@vger.kernel.org>
-CC:     <rric@kernel.org>, <bp@alien8.de>, <mchehab@kernel.org>,
-        <tony.luck@intel.com>, <git@xilinx.com>
-References: <20220318101900.28872-1-shubhrajyoti.datta@xilinx.com>
- <b6821312-3aa8-6b76-81a5-45927d6cc1d0@xilinx.com>
-From:   Michal Simek <michal.simek@xilinx.com>
-In-Reply-To: <b6821312-3aa8-6b76-81a5-45927d6cc1d0@xilinx.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 27f02b07-e353-451c-f395-08da08cbd217
-X-MS-TrafficTypeDiagnostic: DM6PR02MB5451:EE_
-X-Microsoft-Antispam-PRVS: <DM6PR02MB54513D2DB8718EC63F34C1D7C6139@DM6PR02MB5451.namprd02.prod.outlook.com>
-X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
+X-MS-Office365-Filtering-Correlation-Id: 0ca2c191-77aa-4ab6-21a6-08da08d14332
+X-MS-TrafficTypeDiagnostic: AM0PR04MB7108:EE_
+X-Microsoft-Antispam-PRVS: <AM0PR04MB710821A880758B95FE429BE592139@AM0PR04MB7108.eurprd04.prod.outlook.com>
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 3qcvYvkf9KQ4tWXLRawHd90j5r/Hn9cob/nBQzBM2ojuzPx3awwbmxgR72UMP5FY+b7qykUQun82tkQ7MB5iqBjYuGB51ZW53WYfJBCKOJGW6PwTayl5usF8Zph/ES65sIz4WUbGQnl6A/KV8ASQOJi8uZ5vAcu+EGEPfd0SZRXwlw9NIjhqK+uX5nMDphw2tT7YsJ4WXbfPEY75/g6Fo5N32r+VHd7IG7zWWhb7oOJB4nnvJG+LWHD4mq/RNaYvbZ/fMmo4UsQAPAvDSTeoyhKXeLBEhTCIjihV6jMH9f9hh6wBXjbfNH3+bJVf3tfJ4C7kfC3xFM/W1+iLg29/VItGbD+huYIXChgvslcM8k/JCN9RPVefdIzvsTsPv3/3Gj6RX4YanfjsySYsb7WRdHx++8n6s1GRaG++Sh55IDzdlZw5S1uRLWQSfSfS0GcWz61qbxFz1FERiQHVhRD7jxoaypAYSxdmjDhdbLLXO3utdkPV67Xe34bNWdInuBF2RAvBHKXWA6kKRBy3hqrFMf1VTH92cQ3Y/vM5EeJJVM6GYCQ0sWf1NZlIrqin4q04J9OHukyS5swgWMuav4n/gG5+dM0U/jNVPeTxyFna1HvTqXSunuQk9edOtKO09RcF7aLo/dIwSTewxNyWsKvqP13/E979or7dBi0BFz+InXcIsP18U7M1m0kIkBwP4iaaZ453SNmfwgVMTHEfzaW7qUnhZHdzRVsF7ZwNbIUgCVY=
-X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch01.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(13230001)(4636009)(40470700004)(36840700001)(46966006)(53546011)(508600001)(36860700001)(336012)(316002)(426003)(31686004)(2906002)(47076005)(6666004)(36756003)(5660300002)(4744005)(2616005)(9786002)(8936002)(7636003)(107886003)(356005)(31696002)(26005)(186003)(70586007)(40460700003)(44832011)(82310400004)(54906003)(70206006)(110136005)(4326008)(8676002)(50156003)(43740500002);DIR:OUT;SFP:1101;
-X-OriginatorOrg: xilinx.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Mar 2022 10:41:12.1733
+X-Microsoft-Antispam-Message-Info: m1eXrRyrbKLueUSp59v40NjuAdpQdsi2w/XIucb9ZakEcy3oBTEmeuvCsJStpXXrh+wnApypisFtkd6lGrcJVwICJ7pF6CxQPUusAzTQtG5iOxvr3tCzTQTY57/8k/FxB3sJZNQ61dcBbV3MH95lBBg0vA+wZFm1lUJFILWwjrgwAJNDb+IEchb4eMtOiMW1DaUhdW9VncAzlZd1joshxmrHoUb2CnwRC5F7AwMyup4zhhJXmhf2oGEzvIO+7fvi+bKjb4XnwjoHy9Cd6V6d0mbJr8u5D7Goykkow+9rpv2Jkdvh2mEJvWDfBi2GJ8e6d+tt/ob9XZ8+bv9Yo37E7BPsCvgD0xVEQ+RgMqTVkVUeRZfeQLWamV2/e6vl6w1O6YpCXW7TwWnAoJFNhzgTD0FndJ6Lbt2DFwXBPtzQFaHgcdt/KQJ+03uoFp9liz60DIQ8EItzqzjasNfCPqi7rJQyG4OY3GsJfAxMQSZez9yMwoNKcBVYQzRECxcaMQ+W5nRj6Y+wO/KWrw9vu53CUuyczaAqubLtxugSwZSb4/Taw494LXUNFZryIu8BByFmRB4B17Tjl0jq9yFFZ9ApGVQyYvc7D0Iru6JvETXjNJjFxkoaX9pLYx9kAgz/ZZ0G7bCm0j9P4xv2cw9qB/qTMI9LJsAj9sInD+kNBaRpixgQfxcIM00Iua178bven87DJCwdni4Wlbtft/5oflJJGg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AS8PR04MB8404.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(6486002)(4326008)(8676002)(66476007)(66556008)(66946007)(4744005)(6666004)(6512007)(44832011)(316002)(2906002)(4743002)(83380400001)(36756003)(2616005)(26005)(186003)(1076003)(38100700002)(38350700002)(86362001)(508600001)(5660300002)(52116002)(6506007)(8936002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?AplEviC9Zg5deQZMo+9zyvRL7g981cmr9GDngxvzew/jG9pCiHOH4J0yL+vD?=
+ =?us-ascii?Q?7yUUmo++93TNPwFjecNgn+lPoUjRNLSkv/zi8al+hBZBWUL9Q1Ybh8yIYINX?=
+ =?us-ascii?Q?V3Qpp7M01D+dlmbp5f0T5DIkZI9z2xYXhcx/QUnCtxXMttiMNZlmnT97FTbD?=
+ =?us-ascii?Q?vjIdmSR8dYRrddzBvdnGzxQc6ciANnovqgKjlEWo02wPZR0Lp0DU1J4UBlMf?=
+ =?us-ascii?Q?Q9yTHA90N7NRzIMiyJfO+Bp8+y1KQo4EjKZJCosB8DlwFEamefC29nLS7UMs?=
+ =?us-ascii?Q?6tDIUggmL3bdTg1+cPzP5mOsRvUciqj3X6/xXsvZXGll5Fj3WRRCL8D2Wm/f?=
+ =?us-ascii?Q?kImwK62Sx2uhd5vxLrLM/9rF5WxTTyAvL/955xMTg/8AMU127qyCIUGyQcH7?=
+ =?us-ascii?Q?jHWOHo3dlbEbQlJ5JvpPgDACRu/NvD3gLzxZJf9Zg0OluUi1sBVQf4A8etfw?=
+ =?us-ascii?Q?JHWkO4YW3lT9FyQyj5cfHEIZ3s2f358rDRCxAuZOeMzgqctxxZPip011b/KJ?=
+ =?us-ascii?Q?TfSoXK4zMuN4HEchYfUZ8Bu/grRc9q6klxFJxZJnDmFp7sY8okbERgjuwLAW?=
+ =?us-ascii?Q?QuuknTEt8xdzUHVo/xnE3L6+Kw9n/k5u3BAbt/jICOvykcgDBRcgtsFK9f12?=
+ =?us-ascii?Q?3YxWvVipSwd+k0utVvXVbzOpl/PLXyzYKtws32ycxouui3V0KQlW39j11crT?=
+ =?us-ascii?Q?JnTwf/JFxrRcxqJqrxETXOQwDZWdng/Z+dOfYe91nV/cUBXAa/yBr45wDMbW?=
+ =?us-ascii?Q?uU2hxdvRwcELkfUqs/6MNX84MnXktrRJPlWl9dzkhZKjtBgfBLeDL85TlH7f?=
+ =?us-ascii?Q?9T6O63CdfD3wiGuArMSV2+C9ZvsQ5xkuU2o2aU/ACVxOkJJfZl9gIJAtA1uq?=
+ =?us-ascii?Q?+ZzAWHWwajBei5cMd3euXS9zFhjMC1lTgKmrqLovmFOBV0Kg6GudKL+Tgjrw?=
+ =?us-ascii?Q?zhxd02NP+/jhfIjEerFgmAcLaZAc9/zLW3dkRIEM887LMQW2cJ/+l1yOiLMM?=
+ =?us-ascii?Q?C6WZV2j6VDrOEnLHb7Q/wfISTiIZ4P3D3axCzgep9q8UoyULDq6Ta7moSM1s?=
+ =?us-ascii?Q?9qGAhTmoLyg1pjo1ztV3P+IAIw1q3l1RHGuauk2z0PiUIhimL8LxyfQoTP7g?=
+ =?us-ascii?Q?+mgmpgtCtUOo9wbRxbameDQ6tSquWj6KeIOym9yQg5APHEBqg0f7gWC6XU//?=
+ =?us-ascii?Q?dHxHrT/3XdclR3/lBLxtaHyKEfEa4HptbSt4i8n5AD4ar9MtOgziKEnzHq/5?=
+ =?us-ascii?Q?SmUpS0hukCVpypMKnMOBvEVbkxGzL9u1VigMr+a4qArr/96gIP9usoCzRM3n?=
+ =?us-ascii?Q?ZbNpBuXomDGCUc4StiW3mtIZXtqoyVo0MFf8322inyRWPq+hGjKivpBOkxtV?=
+ =?us-ascii?Q?9PXd4FF5qmIXcdPb0egA+S0L9XmV3qk4XOe6GVcD8HDECDUbG1mE9NGVOIK6?=
+ =?us-ascii?Q?VSR+7J8pXsnfw83FC77Skm4ThZc8GErd?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0ca2c191-77aa-4ab6-21a6-08da08d14332
+X-MS-Exchange-CrossTenant-AuthSource: AS8PR04MB8404.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Mar 2022 11:20:09.8004
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 27f02b07-e353-451c-f395-08da08cbd217
-X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.62.198];Helo=[xsj-pvapexch01.xlnx.xilinx.com]
-X-MS-Exchange-CrossTenant-AuthSource: SN1NAM02FT0034.eop-nam02.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR02MB5451
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 1b2bdLlOvP6SfoUP4dLMvo88sziBSXw8u0p5tnRqarqWZQpvk9fxxVRmxmEmOudXguQMHLpLA397KHvxVu2hEQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR04MB7108
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
+The two patches fix some issues for V3.X Synopsys EDAC DDR in synopsys_edac.c.
+For the details, please check the patch commit log. This has been verified on
+i.MX8MP platform.
 
+Sherry Sun (2):
+  EDAC: synopsys: Add disable_intr support for V3.X Synopsys EDAC DDR
+  EDAC: synopsys: re-enable the interrupts in intr_handler for V3.X
+    Synopsys EDAC DDR
 
-On 3/18/22 11:33, Michal Simek wrote:
-> 
-> 
-> On 3/18/22 11:19, Shubhrajyoti Datta wrote:
->> Currently the error count from status register is being read which
->> is not correct. Fix the issue by reading the count from the
->> error count register(ERRCNT).
->>
->> Signed-off-by: Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
->> ---
->> v2:
->> Remove the cumulative count change
-> 
-> 
-> CR number?
+ drivers/edac/synopsys_edac.c | 11 +++++++++--
+ 1 file changed, 9 insertions(+), 2 deletions(-)
 
-Please ignore my comment. I thought it is internal patch.
+-- 
+2.17.1
 
-Thanks,
-Michal
