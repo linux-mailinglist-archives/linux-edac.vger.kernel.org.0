@@ -2,102 +2,104 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C6844DD8D7
-	for <lists+linux-edac@lfdr.de>; Fri, 18 Mar 2022 12:20:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 529FB4DD8D9
+	for <lists+linux-edac@lfdr.de>; Fri, 18 Mar 2022 12:20:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235721AbiCRLVb (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Fri, 18 Mar 2022 07:21:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53606 "EHLO
+        id S235735AbiCRLVm (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Fri, 18 Mar 2022 07:21:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233440AbiCRLVa (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Fri, 18 Mar 2022 07:21:30 -0400
-Received: from EUR04-VI1-obe.outbound.protection.outlook.com (mail-eopbgr80077.outbound.protection.outlook.com [40.107.8.77])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 669181F5196;
-        Fri, 18 Mar 2022 04:20:12 -0700 (PDT)
+        with ESMTP id S235733AbiCRLVl (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Fri, 18 Mar 2022 07:21:41 -0400
+Received: from EUR04-VI1-obe.outbound.protection.outlook.com (mail-eopbgr80073.outbound.protection.outlook.com [40.107.8.73])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C0BD1F518A;
+        Fri, 18 Mar 2022 04:20:23 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=BwvRfMzRdzxZglWeIEhyrY6e5KqZm6pGetxfUzU5EFAy9Id0GHQIoIXvqOmWQAmke9gVyPNn9SN5TSE84I/xeYtMxYNdQ2+NUCCj7UK3T/bt1QZ/5rZsxiYJSvHVkGZ+nMQRjDvdpkPIapP3UVSQAD55kvyLTFBTMGasQLhN7/cWkUnm4fBCfwyvWko3wPb1aF3xBpVTHzEfcDglugYxxcVvSwQN8YxITK9FZcZkzN62M1ZdQqGeNYm7W2269qJnkRVLWsP+4LEYfnwszFrp/WZPydsktMqr4HoS4aG+wxnqhM6nm+yJq7rBho5tN67OHw4jJ16eLeClnQqPC6+u0w==
+ b=VvvaWFth86ra4ziMjczzUzZOEBG+pGnZAHqrL3JIiOj3K1meucr9hc/oymwhJSvjMEG1eMyAp95HODLZeXJIiB09PYHt4LWZPClitDcbPZQc+Sm3IXH91UUGBqxPAb+VDrXvabhiqJfafO7oe3/lLT75lCxyr1Z7gRTUiP+PUhxJjAxKkxiEN18weOGwU6siWUKIWnQ0JyYo/nOhDtmFmdvorr9r93iUpFcP1knY/vcsNe5FthMmfzWTplPZyH3WR5bcmOOZMI0Hue/ApmW7W2koNwl1GHf2wCOVHp24SgVglubYCL3zE63psrGI3DDKad81+wPDZi3yq2FewCmOSg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=laEAGPUJ1L8UiJ3Wsl54wlV9Ig3njOhaqGNLzy3ciG0=;
- b=XXjq/RM92LLnyywL6Qet1DQpc55v6RR63MsZ1Z9p8Y5iRjoIOpxZtMdEFhad6OpY3nVpBvLqrkH8blddDHFr8aEiuVp01DHecwqre1X/Gcxrxf0ebcIZk2BTiDV9BZ/ff9hZcxbzwmpEgDmheShJr48MIsqJQXIe5QEuJz3//1Igsfzekm+cqUSkbcs/gnsV6PGxkT/cznGYP2535YPsY/d9YS5vii2aLNa8Hphd1ZEytL7ozUuFXpgZSEpK7z4WNkBwMrOQSIMg8fOlC0km1BomnZDEV+GfshYRcymoYwtKasdm1ZsOg72b38HIcj59tqzGn3PgVVyDF5PJkB9eQQ==
+ bh=kKjoFKGx2M6FU4PRdgOwVCiZQLgMB2E+LoRP5l+zZuk=;
+ b=QRzZbfDoYgW9DIfzqAF17o3BfYS0qrOcRDfkhT4ZDAIAHNmAsnQPilrBUkfxkrbzdR1I6aaZqyFiqnVl7f+n3ktIWtMChvGxxqFKbW3zvlR5NLMRr08FNpQe0nOZ+jlvFk1JseeSECKf4jBtUbuUmI1xJl+2xQ3WgNitqaSVikM+iGqUNzLFVHrtM3yDb/9KMF49OpoN++4fzbQFL9aXQDGpEb4UDAH1oCj+cseMGk+BpoOAli1hOSXIvHVsch5qnwV+3/p1GtOoD1o0ELgLIh6Ohh2W8n+aqj2ag+vgX0m/IJe7ey3TwOgshbJ44m19fPEQPjj/ZL39S4HC1UDcPg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
  header.d=nxp.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=laEAGPUJ1L8UiJ3Wsl54wlV9Ig3njOhaqGNLzy3ciG0=;
- b=mFWUiBBIMi1Qp2ghop5JDCdgFhZOBQY6OIqf2QqxWVffbVhOeUXIj7Yr1EH7v7aT2j6xf3kpoKp7qi55edOoJConH+jU9IV8LvKPqFVYcI58oCfl3QuLzZ+hrpsaJdmYtl60OQ3OQePr99aTe5TNfJaeBYk2C23RPdxiPQ1Dhzc=
+ bh=kKjoFKGx2M6FU4PRdgOwVCiZQLgMB2E+LoRP5l+zZuk=;
+ b=b6XCZYdCwWy+BRId7/51+YyEy9uey4GvXFg51ZHLJXXt6krdqdPBFl4FHTQz9/kxt/pT/5y7Zs0GDK0sUwAnJmiZvtPqGJthYL1MWrQ1mPOzURR12JzUZY5Vanvu7CIcXQFIn13kcRt90EPeuDhitBe7xXHmMMtzaT1YF/jw8rM=
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=nxp.com;
 Received: from AS8PR04MB8404.eurprd04.prod.outlook.com (2603:10a6:20b:3f8::7)
  by AM0PR04MB7108.eurprd04.prod.outlook.com (2603:10a6:208:19e::21) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5081.18; Fri, 18 Mar
- 2022 11:20:09 +0000
+ 2022 11:20:20 +0000
 Received: from AS8PR04MB8404.eurprd04.prod.outlook.com
  ([fe80::6972:1f59:5d1c:e557]) by AS8PR04MB8404.eurprd04.prod.outlook.com
  ([fe80::6972:1f59:5d1c:e557%5]) with mapi id 15.20.5081.018; Fri, 18 Mar 2022
- 11:20:09 +0000
+ 11:20:19 +0000
 From:   Sherry Sun <sherry.sun@nxp.com>
 To:     bp@alien8.de, mchehab@kernel.org, michal.simek@xilinx.com,
         tony.luck@intel.com, james.morse@arm.com, rric@kernel.org
 Cc:     linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-imx@nxp.com
-Subject: [PATCH 0/2] fix some bugs in V3.X Synopsys EDAC DDR driver 
-Date:   Fri, 18 Mar 2022 19:17:40 +0800
-Message-Id: <20220318111742.15730-1-sherry.sun@nxp.com>
+Subject: [PATCH 1/2] EDAC: synopsys: Add disable_intr support for V3.X Synopsys EDAC DDR
+Date:   Fri, 18 Mar 2022 19:17:41 +0800
+Message-Id: <20220318111742.15730-2-sherry.sun@nxp.com>
 X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20220318111742.15730-1-sherry.sun@nxp.com>
+References: <20220318111742.15730-1-sherry.sun@nxp.com>
 Content-Type: text/plain
 X-ClientProxiedBy: SG2PR06CA0088.apcprd06.prod.outlook.com
  (2603:1096:3:14::14) To AS8PR04MB8404.eurprd04.prod.outlook.com
  (2603:10a6:20b:3f8::7)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 0ca2c191-77aa-4ab6-21a6-08da08d14332
+X-MS-Office365-Filtering-Correlation-Id: a6f639c8-e63d-4eec-e94e-08da08d148f3
 X-MS-TrafficTypeDiagnostic: AM0PR04MB7108:EE_
-X-Microsoft-Antispam-PRVS: <AM0PR04MB710821A880758B95FE429BE592139@AM0PR04MB7108.eurprd04.prod.outlook.com>
+X-Microsoft-Antispam-PRVS: <AM0PR04MB71083A58D8D0A9CA0C912B9492139@AM0PR04MB7108.eurprd04.prod.outlook.com>
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: m1eXrRyrbKLueUSp59v40NjuAdpQdsi2w/XIucb9ZakEcy3oBTEmeuvCsJStpXXrh+wnApypisFtkd6lGrcJVwICJ7pF6CxQPUusAzTQtG5iOxvr3tCzTQTY57/8k/FxB3sJZNQ61dcBbV3MH95lBBg0vA+wZFm1lUJFILWwjrgwAJNDb+IEchb4eMtOiMW1DaUhdW9VncAzlZd1joshxmrHoUb2CnwRC5F7AwMyup4zhhJXmhf2oGEzvIO+7fvi+bKjb4XnwjoHy9Cd6V6d0mbJr8u5D7Goykkow+9rpv2Jkdvh2mEJvWDfBi2GJ8e6d+tt/ob9XZ8+bv9Yo37E7BPsCvgD0xVEQ+RgMqTVkVUeRZfeQLWamV2/e6vl6w1O6YpCXW7TwWnAoJFNhzgTD0FndJ6Lbt2DFwXBPtzQFaHgcdt/KQJ+03uoFp9liz60DIQ8EItzqzjasNfCPqi7rJQyG4OY3GsJfAxMQSZez9yMwoNKcBVYQzRECxcaMQ+W5nRj6Y+wO/KWrw9vu53CUuyczaAqubLtxugSwZSb4/Taw494LXUNFZryIu8BByFmRB4B17Tjl0jq9yFFZ9ApGVQyYvc7D0Iru6JvETXjNJjFxkoaX9pLYx9kAgz/ZZ0G7bCm0j9P4xv2cw9qB/qTMI9LJsAj9sInD+kNBaRpixgQfxcIM00Iua178bven87DJCwdni4Wlbtft/5oflJJGg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AS8PR04MB8404.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(6486002)(4326008)(8676002)(66476007)(66556008)(66946007)(4744005)(6666004)(6512007)(44832011)(316002)(2906002)(4743002)(83380400001)(36756003)(2616005)(26005)(186003)(1076003)(38100700002)(38350700002)(86362001)(508600001)(5660300002)(52116002)(6506007)(8936002);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: qk1uH7b9m9rACMamdRQmtjzZNNq61rg4TGXBuj28X2wIfQRZXJ2Qh6MJLg7IPn6y/eVsjvLYF59X7BOKL/6XGBqeOTdYNcPmqEEt8YqwCTiZeeGSkebl9HIZQs9pOjsIM/8fh8xKTvHGOPiubK6QH6PgzhJnb6GeuWynkpLWlK2b48PeZb5BeGZ64Un4pZImd22Pf329XKnNAkd8+5PR2un2N1G30QH3rx79bAxKsFEfdx3Adq9LCfdoncfCEEiXYtUWw5Evkc9Z4P9VEf/SA0jW6yyd/Bth23E9bGXFprtq0H5mye3O9ITBxObTfcQpho6SJWz0oRKMwlDcnG5Nh6SPANjYB7mWI+0JFTjzJ2n/aYxpvp2YB8vNyx9z9RVeG3C2GXRk8TTLU51N6zXfFSmN/EDCw3Q6jyKI2GRx/fpr3jfmqm/Sl6wF3/DGm4Bw3u2uRRf9smG0S7+9hMKthnx4BTOzL+UQUyiJ1WdxjcjGeWPSMLmYoCYY6KYMZeEQLfNzdiP6/uSEhlkg41f7V59xdxPDO79JzgoK45fk/Y5/4Imuh32ckYFG+O1sg1RtqbutrIn+TOrAJeXLa6zHqkRayXfP8qbmqhK6XC+P5fGpe2K3EQ21N3XtLrrC2QhaGXGYDvJJ/JYSK42UkrJ8CX7b83KD7aIMsfW+boW2oXXkVz5VYfe0VY7DCgaJBJKgbJo1AtjafCuhIZRgrrbliQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AS8PR04MB8404.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(6486002)(4326008)(8676002)(66476007)(66556008)(66946007)(4744005)(6666004)(6512007)(44832011)(316002)(2906002)(83380400001)(36756003)(2616005)(26005)(186003)(1076003)(38100700002)(38350700002)(86362001)(508600001)(5660300002)(52116002)(6506007)(8936002);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?AplEviC9Zg5deQZMo+9zyvRL7g981cmr9GDngxvzew/jG9pCiHOH4J0yL+vD?=
- =?us-ascii?Q?7yUUmo++93TNPwFjecNgn+lPoUjRNLSkv/zi8al+hBZBWUL9Q1Ybh8yIYINX?=
- =?us-ascii?Q?V3Qpp7M01D+dlmbp5f0T5DIkZI9z2xYXhcx/QUnCtxXMttiMNZlmnT97FTbD?=
- =?us-ascii?Q?vjIdmSR8dYRrddzBvdnGzxQc6ciANnovqgKjlEWo02wPZR0Lp0DU1J4UBlMf?=
- =?us-ascii?Q?Q9yTHA90N7NRzIMiyJfO+Bp8+y1KQo4EjKZJCosB8DlwFEamefC29nLS7UMs?=
- =?us-ascii?Q?6tDIUggmL3bdTg1+cPzP5mOsRvUciqj3X6/xXsvZXGll5Fj3WRRCL8D2Wm/f?=
- =?us-ascii?Q?kImwK62Sx2uhd5vxLrLM/9rF5WxTTyAvL/955xMTg/8AMU127qyCIUGyQcH7?=
- =?us-ascii?Q?jHWOHo3dlbEbQlJ5JvpPgDACRu/NvD3gLzxZJf9Zg0OluUi1sBVQf4A8etfw?=
- =?us-ascii?Q?JHWkO4YW3lT9FyQyj5cfHEIZ3s2f358rDRCxAuZOeMzgqctxxZPip011b/KJ?=
- =?us-ascii?Q?TfSoXK4zMuN4HEchYfUZ8Bu/grRc9q6klxFJxZJnDmFp7sY8okbERgjuwLAW?=
- =?us-ascii?Q?QuuknTEt8xdzUHVo/xnE3L6+Kw9n/k5u3BAbt/jICOvykcgDBRcgtsFK9f12?=
- =?us-ascii?Q?3YxWvVipSwd+k0utVvXVbzOpl/PLXyzYKtws32ycxouui3V0KQlW39j11crT?=
- =?us-ascii?Q?JnTwf/JFxrRcxqJqrxETXOQwDZWdng/Z+dOfYe91nV/cUBXAa/yBr45wDMbW?=
- =?us-ascii?Q?uU2hxdvRwcELkfUqs/6MNX84MnXktrRJPlWl9dzkhZKjtBgfBLeDL85TlH7f?=
- =?us-ascii?Q?9T6O63CdfD3wiGuArMSV2+C9ZvsQ5xkuU2o2aU/ACVxOkJJfZl9gIJAtA1uq?=
- =?us-ascii?Q?+ZzAWHWwajBei5cMd3euXS9zFhjMC1lTgKmrqLovmFOBV0Kg6GudKL+Tgjrw?=
- =?us-ascii?Q?zhxd02NP+/jhfIjEerFgmAcLaZAc9/zLW3dkRIEM887LMQW2cJ/+l1yOiLMM?=
- =?us-ascii?Q?C6WZV2j6VDrOEnLHb7Q/wfISTiIZ4P3D3axCzgep9q8UoyULDq6Ta7moSM1s?=
- =?us-ascii?Q?9qGAhTmoLyg1pjo1ztV3P+IAIw1q3l1RHGuauk2z0PiUIhimL8LxyfQoTP7g?=
- =?us-ascii?Q?+mgmpgtCtUOo9wbRxbameDQ6tSquWj6KeIOym9yQg5APHEBqg0f7gWC6XU//?=
- =?us-ascii?Q?dHxHrT/3XdclR3/lBLxtaHyKEfEa4HptbSt4i8n5AD4ar9MtOgziKEnzHq/5?=
- =?us-ascii?Q?SmUpS0hukCVpypMKnMOBvEVbkxGzL9u1VigMr+a4qArr/96gIP9usoCzRM3n?=
- =?us-ascii?Q?ZbNpBuXomDGCUc4StiW3mtIZXtqoyVo0MFf8322inyRWPq+hGjKivpBOkxtV?=
- =?us-ascii?Q?9PXd4FF5qmIXcdPb0egA+S0L9XmV3qk4XOe6GVcD8HDECDUbG1mE9NGVOIK6?=
- =?us-ascii?Q?VSR+7J8pXsnfw83FC77Skm4ThZc8GErd?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?e39DSRySM5lwSskYRhRiKHq7uZsnmAn3pd3kPnBuBT0yx6wMLFZUC5EwVQYn?=
+ =?us-ascii?Q?mxsy5p55VGYX9VMCpBmXhzEbLBMvKJXnyQdfd9o1E1yluEcOUMSZ+eE3cQUU?=
+ =?us-ascii?Q?nOwY+d+sYRUGrdbDNZoJ+bBIc0lhivnT1DKDHJ5Eq4aB2j3AkLEN1U4GywUO?=
+ =?us-ascii?Q?cjppEnuTsKWKNFwc68Ho8OaffTfju93xV+RtJdQIWgh3QpyNP+PSggIjumD9?=
+ =?us-ascii?Q?S0S90mklzUc2NHQeit2SA6vfYXq64gIiO6xKKaoOnyrE8Z1knQHOJ/VApvJr?=
+ =?us-ascii?Q?CVKkBl9tS50X0pYLI9RvoXlcjAki+FOuEXA34YbOkxEy35JMt7Q39cAZ2vD+?=
+ =?us-ascii?Q?2uu/GlT6rLItK0BEW0hOTmGWTXBB/WgZEtTttUmMHPSU9c/UdvnPCVvtkwFT?=
+ =?us-ascii?Q?HFSqnUGdOEFOkmmNS675Xmn9lD4j2jHgw5ikOA6xvhtMCKN3tItmRAiHMQlS?=
+ =?us-ascii?Q?fci1ThO08lUj9g4Uw70j4lzTRWYXbbQIkxl57MQIL8QANTwV4pONWaojRSVg?=
+ =?us-ascii?Q?4FrADLe9f+p5+beNOl4CSJztNI988GTCeoqqNhB6RM7v40NG7zqe2xXmU34O?=
+ =?us-ascii?Q?c8lGswmzNEoUtnZg1XQq4HEJwGPGvsihvmOaYkxeghV7c3mEZKYswEg57Jiy?=
+ =?us-ascii?Q?Jy+4leTTzAie3Mze3BLjIKWwbIIAd5Ais5xZgpph8fRuOr5XoGMyvm9B5Rg9?=
+ =?us-ascii?Q?hjjqw9wXRtAdJUkKXmul3uIF+aSOziIbS89GUrQSBes/HbB7fhMaxj9NDkT2?=
+ =?us-ascii?Q?J32QoeBUBrzAjU3JdrjRwTDwZMmevb7o+Wmm2oe9KWh+NTFCIE+Ml+2M3RI5?=
+ =?us-ascii?Q?UYvsp98RvPSybql6I0KmRVPJt0BZzSgMgMHSDSGxNIjKwg7uX00yAY0Yp/Ia?=
+ =?us-ascii?Q?NiAIWGsuMKcICzW9kL0FeRwKBSA8UKa4sEfwLYu0PbrQGvExxS8EJATmH/iL?=
+ =?us-ascii?Q?FoOio5M06K9lQLeRa+1aJmVdbnXojeM/jWIylcccvDXE/OPIIgWm6eJ6GwUa?=
+ =?us-ascii?Q?16XXa80Qhpa5mGMb+rKPrq2PkAQcxWlonIEG8UavcpMUOOYRGO1QuPjR+9C8?=
+ =?us-ascii?Q?zR5QI4/Pl6bOQaK4CRfjefOi8aAZVKvv4H5Y2xlK3MAfM/yrLEfg68itdL79?=
+ =?us-ascii?Q?3uiOzCwRnKCT4XDyQqsRQzIu9CxRPZdmigQABpTgH7XCgDIkJOQuK/wUvWJI?=
+ =?us-ascii?Q?FG5WPQLVQiaAWHRzmOyQW7r2w59DoPqwPaD+h4Kum+Bd57Xg4fHnEX4utwQA?=
+ =?us-ascii?Q?l7vAjjGTvDkhb99EZcNWG1miKduc0oXzlBZtmlnuxQd2ZlTh6QFJypKXtojK?=
+ =?us-ascii?Q?rAwQTkG52CHL2Psk5+V9PpquLS+9onW59B4/uIzf5j1Yd3IMdw+JjvMtdRJm?=
+ =?us-ascii?Q?txO/nDV+1HfuL6cq1fh02sjOz3cfXo2yUMRZba8i9z9Vyc+envrZSRS3fXbJ?=
+ =?us-ascii?Q?Ff2AjCX+6fV5xbT70MyQm8oyuDpJgBon?=
 X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0ca2c191-77aa-4ab6-21a6-08da08d14332
+X-MS-Exchange-CrossTenant-Network-Message-Id: a6f639c8-e63d-4eec-e94e-08da08d148f3
 X-MS-Exchange-CrossTenant-AuthSource: AS8PR04MB8404.eurprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Mar 2022 11:20:09.8004
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Mar 2022 11:20:19.4290
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 1b2bdLlOvP6SfoUP4dLMvo88sziBSXw8u0p5tnRqarqWZQpvk9fxxVRmxmEmOudXguQMHLpLA397KHvxVu2hEQ==
+X-MS-Exchange-CrossTenant-UserPrincipalName: ousg/PiD6WsmVyf6Lnj/cS4fy5/ltYGDyTtE+pGJ1ubHP8Gcy80Ao7/UIC6PBFRLA1RtPoQY1MnOEESjreL3lg==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR04MB7108
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
@@ -109,18 +111,32 @@ Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-The two patches fix some issues for V3.X Synopsys EDAC DDR in synopsys_edac.c.
-For the details, please check the patch commit log. This has been verified on
-i.MX8MP platform.
+V3.X Synopsys EDAC DDR doesn't have the QOS Interrupt register, need
+to change to use the ECC Clear Register to disable the interrupts.
 
-Sherry Sun (2):
-  EDAC: synopsys: Add disable_intr support for V3.X Synopsys EDAC DDR
-  EDAC: synopsys: re-enable the interrupts in intr_handler for V3.X
-    Synopsys EDAC DDR
+Signed-off-by: Sherry Sun <sherry.sun@nxp.com>
+---
+ drivers/edac/synopsys_edac.c | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
- drivers/edac/synopsys_edac.c | 11 +++++++++--
- 1 file changed, 9 insertions(+), 2 deletions(-)
-
+diff --git a/drivers/edac/synopsys_edac.c b/drivers/edac/synopsys_edac.c
+index f05ff02c0656..1b630f0be119 100644
+--- a/drivers/edac/synopsys_edac.c
++++ b/drivers/edac/synopsys_edac.c
+@@ -859,8 +859,11 @@ static void enable_intr(struct synps_edac_priv *priv)
+ static void disable_intr(struct synps_edac_priv *priv)
+ {
+ 	/* Disable UE/CE Interrupts */
+-	writel(DDR_QOSUE_MASK | DDR_QOSCE_MASK,
+-			priv->baseaddr + DDR_QOS_IRQ_DB_OFST);
++	if (priv->p_data->quirks & DDR_ECC_INTR_SELF_CLEAR)
++		writel(0x0, priv->baseaddr + ECC_CLR_OFST);
++	else
++		writel(DDR_QOSUE_MASK | DDR_QOSCE_MASK,
++		       priv->baseaddr + DDR_QOS_IRQ_DB_OFST);
+ }
+ 
+ static int setup_irq(struct mem_ctl_info *mci,
 -- 
 2.17.1
 
