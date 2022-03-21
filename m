@@ -2,125 +2,107 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8D694E2418
-	for <lists+linux-edac@lfdr.de>; Mon, 21 Mar 2022 11:16:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B20F64E2B7E
+	for <lists+linux-edac@lfdr.de>; Mon, 21 Mar 2022 16:10:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346079AbiCUKRg (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Mon, 21 Mar 2022 06:17:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51660 "EHLO
+        id S238929AbiCUPLq (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Mon, 21 Mar 2022 11:11:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346225AbiCUKRf (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Mon, 21 Mar 2022 06:17:35 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50FA9986F0;
-        Mon, 21 Mar 2022 03:16:07 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        with ESMTP id S1344832AbiCUPLp (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Mon, 21 Mar 2022 11:11:45 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDBF2B7C78;
+        Mon, 21 Mar 2022 08:10:19 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id EF3D6210EC;
-        Mon, 21 Mar 2022 10:16:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1647857765; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=xvcSTlU5vKYFbBNHotaZrVuLA/p3fs8kSntrwRk3fk0=;
-        b=Zthas33+nHSZJ5CTxv7FyJg2z5QChe2SajEwqtWVuKS7loPcH/vWAeQxojWavIpToWOJfw
-        87Q97Kut2MSqcLOOKpu5Pwapa7zKljZV2Oj0AOWL/9tTbw1Pn0q3NsmLmNx443TVt28iWD
-        eQj1YNq1zDfEmBG1RRAkOvTxkkyLEQk=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1647857765;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=xvcSTlU5vKYFbBNHotaZrVuLA/p3fs8kSntrwRk3fk0=;
-        b=wPGcoGPteEi4YsUOyPrckTew+BIG39p9f3Xqw+giYOl9HjPF8R/3qvs+hkyCvxjtfg+iCV
-        zn8rgWcSgS5MflDA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id DF34E13AD5;
-        Mon, 21 Mar 2022 10:16:05 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id 7FF6NmVQOGLFdAAAMHmgww
-        (envelope-from <bp@suse.de>); Mon, 21 Mar 2022 10:16:05 +0000
-Date:   Mon, 21 Mar 2022 11:16:01 +0100
-From:   Borislav Petkov <bp@suse.de>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-edac <linux-edac@vger.kernel.org>,
-        lkml <linux-kernel@vger.kernel.org>
-Subject: [GIT PULL] EDAC updates for 5.18
-Message-ID: <YjhQYeGqsuiXAsSp@zn.tnic>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8989560F42;
+        Mon, 21 Mar 2022 15:10:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C582EC340E8;
+        Mon, 21 Mar 2022 15:10:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1647875418;
+        bh=2NhbbdTteLjcJ8tMp9FedI8DJRaiJl0VuMgB1aUaD9A=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=Bgv+FDLU4CzS47qsmq7TCpsMoQFGtqY2wumfl2GnWrdZN5+boxTTQa0iiHnLVpxzA
+         USvTK7rxbCiZ1POJDK5EeERbqEDJITvwfvLSfxJoUJVg2ljNr6kNyV8owypt/eOX32
+         au1kBUttruGWZkztlmkLupiYmLfBh0ndAmo3oKoKz/esS+ZX7xXx15s86OoZLuSr2K
+         bo7HKbei6wVDvyV83cB+/nRyOXuiuTMkps/WI1aqNi2FyHeJW7mLOVoIhGKi6hnjxW
+         fJD1ZvoIaRHW7/Y0Z2drcN2NXKVJh/rmkNRZbYwZY3fMsEbBsoSdpL6gkHRPDlK7uh
+         hAGB/rkIX8SPA==
+Message-ID: <79f5594f-2864-4df8-c04b-6d1c3f8a764c@kernel.org>
+Date:   Mon, 21 Mar 2022 10:10:16 -0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH -next] EDAC/altera: Remove unnecessary print function
+ dev_err()
+Content-Language: en-US
+To:     Yang Li <yang.lee@linux.alibaba.com>
+Cc:     bp@alien8.de, mchehab@kernel.org, tony.luck@intel.com,
+        james.morse@arm.com, rric@kernel.org, linux-edac@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Abaci Robot <abaci@linux.alibaba.com>
+References: <20220317233722.109036-1-yang.lee@linux.alibaba.com>
+From:   Dinh Nguyen <dinguyen@kernel.org>
+In-Reply-To: <20220317233722.109036-1-yang.lee@linux.alibaba.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-Hi Linus,
 
-please pull the small pile of EDAC updates accumulated in the last
-round.
 
-Thx.
+On 3/17/22 18:37, Yang Li wrote:
+> The print function dev_err() is redundant because platform_get_irq()
+> already prints an error.
+> 
+> Eliminate the follow coccicheck warnings:
+> ./drivers/edac/altera_edac.c:2153:2-9: line 2153 is redundant because
+> platform_get_irq() already prints an error
+> ./drivers/edac/altera_edac.c:2188:2-9: line 2188 is redundant because
+> platform_get_irq() already prints an error
+> 
+> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+> Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
+> ---
+>   drivers/edac/altera_edac.c | 8 ++------
+>   1 file changed, 2 insertions(+), 6 deletions(-)
+> 
+> diff --git a/drivers/edac/altera_edac.c b/drivers/edac/altera_edac.c
+> index e7e8e624a436..47dc35938fa8 100644
+> --- a/drivers/edac/altera_edac.c
+> +++ b/drivers/edac/altera_edac.c
+> @@ -2149,10 +2149,8 @@ static int altr_edac_a10_probe(struct platform_device *pdev)
+>   	}
+>   
+>   	edac->sb_irq = platform_get_irq(pdev, 0);
+> -	if (edac->sb_irq < 0) {
+> -		dev_err(&pdev->dev, "No SBERR IRQ resource\n");
+> +	if (edac->sb_irq < 0)
+>   		return edac->sb_irq;
+> -	}
+>   
+>   	irq_set_chained_handler_and_data(edac->sb_irq,
+>   					 altr_edac_a10_irq_handler,
+> @@ -2184,10 +2182,8 @@ static int altr_edac_a10_probe(struct platform_device *pdev)
+>   	}
+>   #else
+>   	edac->db_irq = platform_get_irq(pdev, 1);
+> -	if (edac->db_irq < 0) {
+> -		dev_err(&pdev->dev, "No DBERR IRQ resource\n");
+> +	if (edac->db_irq < 0)
+>   		return edac->db_irq;
+> -	}
+>   	irq_set_chained_handler_and_data(edac->db_irq,
+>   					 altr_edac_a10_irq_handler, edac);
+>   #endif
 
----
-
-The following changes since commit cfb92440ee71adcc2105b0890bb01ac3cddb8507:
-
-  Linux 5.17-rc5 (2022-02-20 13:07:20 -0800)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/ras/ras.git tags/edac_updates_for_v5.18_rc1
-
-for you to fetch changes up to 1422df58e5eb83dca131dc64e0f307a1f9e56078:
-
-  Merge branch 'edac-amd64' into edac-updates-for-v5.18 (2022-03-21 10:34:57 +0100)
-
-----------------------------------------------------------------
-- Add support for newer AMD family 0x19, models 0x10-... CPUs to amd64_edac
-
-- The usual amount of improvements and fixes
-
-----------------------------------------------------------------
-Borislav Petkov (1):
-      Merge branch 'edac-amd64' into edac-updates-for-v5.18
-
-Eliav Farber (1):
-      EDAC/mc: Remove unnecessary cast to char * in edac_align_ptr()
-
-Greg Kroah-Hartman (2):
-      EDAC: Use proper list of struct attribute for attributes
-      EDAC: Use default_groups in kobj_type
-
-Rabara Niravkumar L (1):
-      EDAC/altera: Add SDRAM ECC check for U-Boot
-
-Yazen Ghannam (2):
-      EDAC/amd64: Set memory type per DIMM
-      EDAC/amd64: Add new register offset support and related changes
-
- drivers/edac/altera_edac.c       |  40 +++++++++++++-
- drivers/edac/amd64_edac.c        | 109 +++++++++++++++++++++++++++++++--------
- drivers/edac/amd64_edac.h        |  24 ++++++++-
- drivers/edac/edac_device_sysfs.c |  31 ++++++-----
- drivers/edac/edac_mc.c           |   4 +-
- drivers/edac/edac_pci_sysfs.c    |  26 +++++-----
- 6 files changed, 183 insertions(+), 51 deletions(-)
-
--- 
-Regards/Gruss,
-    Boris.
-
-SUSE Software Solutions Germany GmbH, GF: Ivo Totev, HRB 36809, AG Nürnberg
+Acked-by: Dinh Nguyen <dinguyen@kernel.org>
