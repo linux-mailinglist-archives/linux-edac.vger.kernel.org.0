@@ -2,156 +2,119 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5EAFB4E463C
-	for <lists+linux-edac@lfdr.de>; Tue, 22 Mar 2022 19:47:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F25C74E4CC3
+	for <lists+linux-edac@lfdr.de>; Wed, 23 Mar 2022 07:32:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237570AbiCVSsx (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Tue, 22 Mar 2022 14:48:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47136 "EHLO
+        id S241966AbiCWGdj (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Wed, 23 Mar 2022 02:33:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234151AbiCVSsw (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Tue, 22 Mar 2022 14:48:52 -0400
-Received: from mail-qt1-x82c.google.com (mail-qt1-x82c.google.com [IPv6:2607:f8b0:4864:20::82c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E3BE21B5;
-        Tue, 22 Mar 2022 11:47:24 -0700 (PDT)
-Received: by mail-qt1-x82c.google.com with SMTP id b18so5430887qtk.13;
-        Tue, 22 Mar 2022 11:47:24 -0700 (PDT)
+        with ESMTP id S238602AbiCWGdj (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Wed, 23 Mar 2022 02:33:39 -0400
+Received: from mail-oi1-x243.google.com (mail-oi1-x243.google.com [IPv6:2607:f8b0:4864:20::243])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76529710F4
+        for <linux-edac@vger.kernel.org>; Tue, 22 Mar 2022 23:32:10 -0700 (PDT)
+Received: by mail-oi1-x243.google.com with SMTP id v75so778825oie.1
+        for <linux-edac@vger.kernel.org>; Tue, 22 Mar 2022 23:32:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=xv2SG83/A8VIj/Yvme6nER5PuyvERHQnlLaL0v26UZU=;
-        b=aAez4bENUsIVokJXzci6E7NcI8/EoYeRFg2MIV+bNEjy2Kg+goJXhVKVFZPjf2SVFx
-         gYBQG3VcfaihOrVQfxZ+uMwW26BrEl3hwrcimICXp97Bjx1wbQ2d/0g1GrqTz994/72n
-         z6vaIr51UvlczzhepIf6G7W9Sod3wqnfXhr5uKfb5yb3QHQ5jnqF8MgGMrPrpe5iSGIB
-         Vr2Mi0ALsIzRfAsxKOGreoLnU0lUsGBaSgVCePNALrEEPIwOr9DNVpmbiTXPlIKWQoec
-         IpEb3VLcDhhwZKuOW1fk4FPF42QyN1TwIRCiTTIVowmfJuIdZbMLiR/cH3IrBPOwkR0q
-         Vzdg==
+        h=mime-version:sender:from:date:message-id:subject:to;
+        bh=CNNPGySxSq7bZ1La6vvay1kp1T7RaMnfdFjrr49KhAk=;
+        b=ELHNnFp6MqSbFWD5yohJR2P6geJrnoRmAy99u/wb2i3YgbuP4pWakoRgQfTsGVZlvn
+         zLTN0T624N4/lL25GMK9qfuRfPiJigFyNydERiaTexgqTI/XwdMF2uLn+oQY6Yv0SKPc
+         9fDM/dzuYRq6DHijqM7s8dRKZ9B3qFT9YVKfGvkubS9pzTFGp+ptWDJ1xbaW35dktUYS
+         vQMaYGrLqckC16Dn5dH0kAKCcO9G9lvi+YvGK4hyOnMiksWl+nkM2HvljeUfWO+bKqus
+         e2w3/545UcSrcuUhEibwm9A9M8Z8TNTBNiSvHJqQS8nG/7p9h98oX7Y3hECJg4ch8kNB
+         OmQw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=xv2SG83/A8VIj/Yvme6nER5PuyvERHQnlLaL0v26UZU=;
-        b=Zvl+yaDk7DrRw9VFKjvPrm9CwvfuzmH869KqaxL/fY9jKNzKIyH8/2UOJNYUzlGOh0
-         /7/FbX8vII5vqY6RA083rZJ48wjKwCPbSTQJGK7B2WfbzpUdZ/C4uMlXnijncGioeCI9
-         fMQ9phdHJSpzDYZf7hz3nxFODyyJb1jtLBX6XPQtnAbrQDG2OIWYMuQVT1zEQOssTfhr
-         S9/b48y0VC40w2uinnlC0eA4lNLkjIbxIW/JzAnhKsKGcwwX94b9Xa192vuTMAxL7dS2
-         jqugcht6jygjXibXItb+A6Hn1oVpSrQzm7eRUOtFfHU3sqRUUC2or/l1Asb9Cj5FOE6j
-         cgGQ==
-X-Gm-Message-State: AOAM530EeAjHCxBuODbc5IXn9W/Si/zdvS4kvJUjLrKde0CbIFAFQwet
-        lEXM9vVZYnPJFXo+ZopY6tNka5FPEMhN3fdw
-X-Google-Smtp-Source: ABdhPJws46frHdp5v61m+kB2H/p59SY9YKS3aKTzXO3MMnX73gPrLba+XJeizaAl2d5LTf7HFiVLlw==
-X-Received: by 2002:ac8:5b05:0:b0:2e2:1ce8:1533 with SMTP id m5-20020ac85b05000000b002e21ce81533mr5919450qtw.428.1647974843416;
-        Tue, 22 Mar 2022 11:47:23 -0700 (PDT)
-Received: from localhost.localdomain ([136.56.17.68])
-        by smtp.gmail.com with ESMTPSA id bl3-20020a05620a1a8300b0067d4cd00231sm9356639qkb.135.2022.03.22.11.47.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Mar 2022 11:47:23 -0700 (PDT)
-From:   joshuahant@gmail.com
-To:     jbaron@akamai.com
-Cc:     linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
-        joshuahant@gmail.com
-Subject: [PATCH] EDAC/ie31200: Add Skylake-S support
-Date:   Tue, 22 Mar 2022 14:47:17 -0400
-Message-Id: <20220322184717.29882-1-joshuahant@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
+         :to;
+        bh=CNNPGySxSq7bZ1La6vvay1kp1T7RaMnfdFjrr49KhAk=;
+        b=zW7iGpXcXcHMdozan3QohCAEEwiXHJwauWFCFw9tE43JVllUWLm+tVsj2oR41CZ8Cv
+         OjJcFJMOKK7OCOOj9M97s06Opb7LR0v7cN8D/E7KdCeWeWSoX8NaKDv2Yz7437/EeD/h
+         5INb8ScXlt9kIFYZmUsSvm0kmJ/+gPjzd323XI/NbXf5aqjPqvWbeUmg7JWoa3BIYyCi
+         UhBZd6UXs+eQ2cMo8ICPoSaX3zrLzOgZHCZXjXtkq+VEm5bjRDRjKvCNCYsposh4p2oU
+         p7K5J3Iv6Drjvan4wyKoZzM6uTekasnsNbvTPM0DHKqiaqk6tLOGce+qv/OV9gn4jj6l
+         H0XA==
+X-Gm-Message-State: AOAM531FMVY2jK4zzSzTrYRkeWxV5w5Q7myacH2D+lrE0Sihr1AceZDf
+        AukQEpJqR9QeCwCmCUU73tFbHBPHIZ8pxArYxUI=
+X-Google-Smtp-Source: ABdhPJxwyT/N30ellZDc2KKS1Sx/fwQoRUjXkm5cAsQUvi6gnhJRO0h3xobcDWI8XIWK3kmGB7T+ggZxEkBhcyOBm/8=
+X-Received: by 2002:a05:6808:e8b:b0:2d9:d744:1eee with SMTP id
+ k11-20020a0568080e8b00b002d9d7441eeemr3868008oil.129.1648017129784; Tue, 22
+ Mar 2022 23:32:09 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Sender: mrslila88haber@gmail.com
+Received: by 2002:a4a:e08f:0:0:0:0:0 with HTTP; Tue, 22 Mar 2022 23:32:09
+ -0700 (PDT)
+From:   "Dr. Nance Terry Lee" <nance173terry@gmail.com>
+Date:   Wed, 23 Mar 2022 06:32:09 +0000
+X-Google-Sender-Auth: VggOCyHB4u8Az8-7N0FAK_YFxMA
+Message-ID: <CAODWenbVoYBDWP2tVL33-r+qC_C2ZzXk1s3bv0Kdd_yszEWk7g@mail.gmail.com>
+Subject: Hello My Dear Friend
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=7.3 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_SCAM,
+        LOTS_OF_MONEY,MONEY_FRAUD_5,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNDISC_MONEY autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:243 listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5000]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [nance173terry[at]gmail.com]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        *  0.0 LOTS_OF_MONEY Huge... sums of money
+        *  0.0 HK_SCAM No description available.
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  3.8 UNDISC_MONEY Undisclosed recipients + money/fraud signs
+        *  2.9 MONEY_FRAUD_5 Lots of money and many fraud phrases
+X-Spam-Level: *******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-From: Josh Hant <joshuahant@gmail.com>
+Hello My Dear Friend,
 
-Add device IDs for Skylake-S CPUs according to datasheet.
+I am Dr. Nance Terry Lee, the United Nations Representative Washington
+-DC - USA.
+I hereby inform you that your UN pending compensation funds the sum of
+$4.2million has been approved to be released to you through Diplomatic
+Courier Service.
 
-Signed-off-by: Josh Hant <joshuahant@gmail.com>
----
-Dear all,
+In the light of the above, you are advised to send your full receiving
+information as below:
 
-I found that edac-util -v shows no memory controllers when using an
-Intel i5-6100T with a Supermicro X11SAE motherboard. With this patch,
-the ECC memory is detected. I tried to follow previous patches
-that added new families of processors to the module.
+1. Your full name
+2. Full receiving address
+3. Your mobile number
+4. Nearest airport
 
-This is my first submission to the kernel so please let me know if I
-missed something in the process.
+Upon the receipt of the above information, I will proceed with the
+delivery process of your compensation funds to your door step through
+our special agent, if you have any questions, don't hesitate to ask
+me.
 
-Thanks,
-Josh Hant
+Kindly revert back to this office immediately.
 
- drivers/edac/ie31200_edac.c | 26 +++++++++++++++++---------
- 1 file changed, 17 insertions(+), 9 deletions(-)
-
-diff --git a/drivers/edac/ie31200_edac.c b/drivers/edac/ie31200_edac.c
-index 9a9ff5ad611a..96a3f70d06e6 100644
---- a/drivers/edac/ie31200_edac.c
-+++ b/drivers/edac/ie31200_edac.c
-@@ -20,11 +20,14 @@
-  * 0c08: Xeon E3-1200 v3 Processor DRAM Controller
-  * 1918: Xeon E3-1200 v5 Skylake Host Bridge/DRAM Registers
-  * 5918: Xeon E3-1200 Xeon E3-1200 v6/7th Gen Core Processor Host Bridge/DRAM Registers
-+ * 190f: 6th Gen Core Dual-Core Processor Host Bridge/DRAM Registers
-+ * 191f: 6th Gen Core Quad-Core Processor Host Bridge/DRAM Registers
-  * 3e..: 8th/9th Gen Core Processor Host Bridge/DRAM Registers
-  *
-  * Based on Intel specification:
-  * https://www.intel.com/content/dam/www/public/us/en/documents/datasheets/xeon-e3-1200v3-vol-2-datasheet.pdf
-  * http://www.intel.com/content/www/us/en/processors/xeon/xeon-e3-1200-family-vol-2-datasheet.html
-+ * https://www.intel.com/content/dam/www/public/us/en/documents/datasheets/desktop-6th-gen-core-family-datasheet-vol-2.pdf
-  * https://www.intel.com/content/www/us/en/processors/core/7th-gen-core-family-mobile-h-processor-lines-datasheet-vol-2.html
-  * https://www.intel.com/content/www/us/en/products/docs/processors/core/8th-gen-core-family-datasheet-vol-2.html
-  *
-@@ -53,15 +56,17 @@
- #define ie31200_printk(level, fmt, arg...) \
- 	edac_printk(level, "ie31200", fmt, ##arg)
-
--#define PCI_DEVICE_ID_INTEL_IE31200_HB_1 0x0108
--#define PCI_DEVICE_ID_INTEL_IE31200_HB_2 0x010c
--#define PCI_DEVICE_ID_INTEL_IE31200_HB_3 0x0150
--#define PCI_DEVICE_ID_INTEL_IE31200_HB_4 0x0158
--#define PCI_DEVICE_ID_INTEL_IE31200_HB_5 0x015c
--#define PCI_DEVICE_ID_INTEL_IE31200_HB_6 0x0c04
--#define PCI_DEVICE_ID_INTEL_IE31200_HB_7 0x0c08
--#define PCI_DEVICE_ID_INTEL_IE31200_HB_8 0x1918
--#define PCI_DEVICE_ID_INTEL_IE31200_HB_9 0x5918
-+#define PCI_DEVICE_ID_INTEL_IE31200_HB_1  0x0108
-+#define PCI_DEVICE_ID_INTEL_IE31200_HB_2  0x010c
-+#define PCI_DEVICE_ID_INTEL_IE31200_HB_3  0x0150
-+#define PCI_DEVICE_ID_INTEL_IE31200_HB_4  0x0158
-+#define PCI_DEVICE_ID_INTEL_IE31200_HB_5  0x015c
-+#define PCI_DEVICE_ID_INTEL_IE31200_HB_6  0x0c04
-+#define PCI_DEVICE_ID_INTEL_IE31200_HB_7  0x0c08
-+#define PCI_DEVICE_ID_INTEL_IE31200_HB_8  0x190F
-+#define PCI_DEVICE_ID_INTEL_IE31200_HB_9  0x1918
-+#define PCI_DEVICE_ID_INTEL_IE31200_HB_10 0x191F
-+#define PCI_DEVICE_ID_INTEL_IE31200_HB_11 0x5918
-
- /* Coffee Lake-S */
- #define PCI_DEVICE_ID_INTEL_IE31200_HB_CFL_MASK 0x3e00
-@@ -80,6 +85,7 @@
- #define DEVICE_ID_SKYLAKE_OR_LATER(did)                                        \
- 	(((did) == PCI_DEVICE_ID_INTEL_IE31200_HB_8) ||                        \
- 	 ((did) == PCI_DEVICE_ID_INTEL_IE31200_HB_9) ||                        \
-+	 ((did) == PCI_DEVICE_ID_INTEL_IE31200_HB_10) ||                       \
- 	 (((did) & PCI_DEVICE_ID_INTEL_IE31200_HB_CFL_MASK) ==                 \
- 	  PCI_DEVICE_ID_INTEL_IE31200_HB_CFL_MASK))
-
-@@ -577,6 +583,8 @@ static const struct pci_device_id ie31200_pci_tbl[] = {
- 	{ PCI_VEND_DEV(INTEL, IE31200_HB_7),      PCI_ANY_ID, PCI_ANY_ID, 0, 0, IE31200 },
- 	{ PCI_VEND_DEV(INTEL, IE31200_HB_8),      PCI_ANY_ID, PCI_ANY_ID, 0, 0, IE31200 },
- 	{ PCI_VEND_DEV(INTEL, IE31200_HB_9),      PCI_ANY_ID, PCI_ANY_ID, 0, 0, IE31200 },
-+	{ PCI_VEND_DEV(INTEL, IE31200_HB_10),     PCI_ANY_ID, PCI_ANY_ID, 0, 0, IE31200 },
-+	{ PCI_VEND_DEV(INTEL, IE31200_HB_11),     PCI_ANY_ID, PCI_ANY_ID, 0, 0, IE31200 },
- 	{ PCI_VEND_DEV(INTEL, IE31200_HB_CFL_1),  PCI_ANY_ID, PCI_ANY_ID, 0, 0, IE31200 },
- 	{ PCI_VEND_DEV(INTEL, IE31200_HB_CFL_2),  PCI_ANY_ID, PCI_ANY_ID, 0, 0, IE31200 },
- 	{ PCI_VEND_DEV(INTEL, IE31200_HB_CFL_3),  PCI_ANY_ID, PCI_ANY_ID, 0, 0, IE31200 },
---
-2.34.1
-
+Thanks.
+Dr. Nance Terry Lee.
+United Nations Representative
+Washington-DC USA.
+Tel: +1-703-9877 5463
+Fax: +1-703-9268 5422
