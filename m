@@ -2,193 +2,147 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CA434E6924
-	for <lists+linux-edac@lfdr.de>; Thu, 24 Mar 2022 20:13:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 493604E6BF8
+	for <lists+linux-edac@lfdr.de>; Fri, 25 Mar 2022 02:28:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346541AbiCXTOf (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Thu, 24 Mar 2022 15:14:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37294 "EHLO
+        id S1351790AbiCYB3p (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Thu, 24 Mar 2022 21:29:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229771AbiCXTOe (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Thu, 24 Mar 2022 15:14:34 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DD9A10D;
-        Thu, 24 Mar 2022 12:13:00 -0700 (PDT)
-Received: from zn.tnic (p2e55dff8.dip0.t-ipconnect.de [46.85.223.248])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 2723D1EC064C;
-        Thu, 24 Mar 2022 20:12:55 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1648149175;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=C1OkYvs9cReO/b4n86DotV7napDICScYJeQn5JQy0cw=;
-        b=XoiTeeUUxyO8kMPIsm9HNc/LrQ/O77aPApgys5fvyH+idB/sz8mneCuYiQ8SwU1wFL34MC
-        mOnRIWQG4xzBL8Qq2VQ6ZLkoipHxv/wyTujtXlcYQBD7y+z5cVSpq0nMfklrCcJ6KwN3T9
-        LoPiaWN9ufcr52goNDTCiSTSLcrIuy8=
-Date:   Thu, 24 Mar 2022 20:10:41 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Naveen Krishna Chatradhi <nchatrad@amd.com>
-Cc:     linux-edac@vger.kernel.org, x86@kernel.org,
-        linux-kernel@vger.kernel.org, mingo@redhat.com, mchehab@kernel.org,
-        yazen.ghannam@amd.com, Muralidhara M K <muralimk@amd.com>,
-        David Airlie <airlied@linux.ie>
-Subject: Re: [PATCH v2] x86/amd_nb: unexport amd_cache_northbridges()
-Message-ID: <YjzCMYxgraTI7wrY@zn.tnic>
-References: <20220324122729.221765-1-nchatrad@amd.com>
+        with ESMTP id S237448AbiCYB3o (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Thu, 24 Mar 2022 21:29:44 -0400
+Received: from EUR04-DB3-obe.outbound.protection.outlook.com (mail-eopbgr60085.outbound.protection.outlook.com [40.107.6.85])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 349F37647;
+        Thu, 24 Mar 2022 18:28:09 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Z6ZCL1jPXx6633ALulSBkGVeNUX9LwCaMvbdi8G/fjF0v0O9mSUJmZ8X3qFl22MvDhInotnEmrntyJH+Gclc7bakYHpjCeCol6UJQOc2mFdQkfPXQs0LPSD3Wg+OQHPGrcrnbLWpqAivgy0ioP1rQRRpxE4fNx/TdR8JpZEKNzkX31S4QzPneHKz/aDNFpbM0wXVfpjTn35KteJ4VCvi+0qJmatTA6+NTju954+WoUKTfm/5ITED8vcchpL/OvS2RzYrmnwBA82+YxamGHwhkmmQZ6l931PRFMzh4/nEReCCdEMs/LPHlN/N1wmNTa6VmYWw/WnL7NGODjq2niIhiA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=0HsHat4Zv6Z3zYYWR+e8XgrXp4k54VSovR7a1aHb8/o=;
+ b=jH8mTSdwjslvZ80laf8/T0aEKI3hBAl+NQkuuF+vcx/LegKNfANGi4uXLleCXeQ6w6GpTfuyHRAXsqAuDuPiXGN8tAw0IYu1GPLZnsmTCaNcdNKmvJtqx3b3n4WNZNAC5actD7LcY2gaDfuvXiztGMrCRRusDMLypDdGvt6lpu6ewUspxNpTQgoDX8CjzkjFxgc5WiD1Irmpu9a13ZZ7UA6OAB347HA5vF6WgoDOFPolN6MKjVhCb8XMLZZpmC2hhpCfc2IDLip0F0DaOJeeEHevWjskYBYYVKb1xZm7W6D/FXF3272dlvTkO5W8xc3oe3z0KvKYsIWkVoGtxFKtyw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=0HsHat4Zv6Z3zYYWR+e8XgrXp4k54VSovR7a1aHb8/o=;
+ b=pTKuiGrVuhiwexEIjQ7opx5BiBUKpCeNvG4+5UA0N077I8Js/fX17pzL5KH1mpdfZDdyzre2sTLEcbJrH523J0nvLv1lv/Obh1MR3vUsAD/eWLPnYEjAgI5mz2rAbjwkTfa8mxPGeLUv23VL9AIItbvPVmOiErk8Y66QvFghJLQ=
+Received: from AS8PR04MB8404.eurprd04.prod.outlook.com (2603:10a6:20b:3f8::7)
+ by AM0PR0402MB3794.eurprd04.prod.outlook.com (2603:10a6:208:e::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5102.17; Fri, 25 Mar
+ 2022 01:28:06 +0000
+Received: from AS8PR04MB8404.eurprd04.prod.outlook.com
+ ([fe80::6972:1f59:5d1c:e557]) by AS8PR04MB8404.eurprd04.prod.outlook.com
+ ([fe80::6972:1f59:5d1c:e557%7]) with mapi id 15.20.5102.019; Fri, 25 Mar 2022
+ 01:28:06 +0000
+From:   Sherry Sun <sherry.sun@nxp.com>
+To:     "bp@alien8.de" <bp@alien8.de>,
+        "mchehab@kernel.org" <mchehab@kernel.org>,
+        "michal.simek@xilinx.com" <michal.simek@xilinx.com>,
+        "tony.luck@intel.com" <tony.luck@intel.com>,
+        "james.morse@arm.com" <james.morse@arm.com>,
+        "rric@kernel.org" <rric@kernel.org>
+CC:     "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        dl-linux-imx <linux-imx@nxp.com>
+Subject: RE: [PATCH 0/2] fix some bugs in V3.X Synopsys EDAC DDR driver 
+Thread-Topic: [PATCH 0/2] fix some bugs in V3.X Synopsys EDAC DDR driver 
+Thread-Index: AQHYOrogKpzqNHgd/0yorlVfqzVePKzPWaZg
+Date:   Fri, 25 Mar 2022 01:28:06 +0000
+Message-ID: <AS8PR04MB8404C4B5BF4E405308942AA8921A9@AS8PR04MB8404.eurprd04.prod.outlook.com>
+References: <20220318111742.15730-1-sherry.sun@nxp.com>
+In-Reply-To: <20220318111742.15730-1-sherry.sun@nxp.com>
+Accept-Language: zh-CN, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 2c01ea77-b8e8-48cf-14e6-08da0dfeb6d8
+x-ms-traffictypediagnostic: AM0PR0402MB3794:EE_
+x-microsoft-antispam-prvs: <AM0PR0402MB3794B986522A38E8F92ECD11921A9@AM0PR0402MB3794.eurprd04.prod.outlook.com>
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: uooPUPrQPE5axXNHrkYybpjor1W8Qi6+RiXn9MDvJnVtuK/wUZT0Eks4fQ+f5zuoev+PEEggXADo6hBf2l9zlwuLEU0Xid+bHde++bOkIga1+02HWuO8DrsKabpBQixtBZrUy8YKkwRbj7EUM3HOuza/Y+L1zmp2sRxzgO+52NehuuiCnWcUrF36jaJ/7ReduOihqIsQW2+PO51eD8QYskpX0CIPfVAhd1C5Fp+6SbqmnCYu4ClArHAOoC20XV6GdOsws4lwg3CAd+ojBHdjRWJy2juivpBKkIBAkGZaedyoEaG/VQn9B0yklwx9CVR1KzhfC0ympB24D1tJzbf3z6tEMgVI+7AKkNM0NpO7V2eUa7Mx7KoADcRmo+Njypz1L5KQRJPlW/kwQXVFaYzMxpwNvOReAPUrhSvb5HzxZiWX91TxyVN9CEWw47gDb90uLOK2KxwUQDjutaB89vmTDg3uBsSwgNC8D8GScrv3Izny0vLEBYv8FT1MAq84CYLrpcKn/4VvGTthPteF4QwvZwVmqTqv7NxWZFCNA4FFoqlcUL7WpMU3xg0RpPYdwidxlojI1lrqu0+bfQgY2CbYHImrL76su6ma9etkKJnDwGz6y+3shqL+xIZIyTzUWscP/Pva87M80q2xV2PV4/v3QbeT+qDblLXcEBQDskSBcArxAvHN2nQdvmdS/kfMO6jT9IgKObghz91AuxDF4AgAEQ==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AS8PR04MB8404.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(52536014)(38100700002)(122000001)(4744005)(8936002)(33656002)(53546011)(44832011)(71200400001)(508600001)(5660300002)(54906003)(110136005)(86362001)(83380400001)(4743002)(55016003)(9686003)(186003)(38070700005)(26005)(66556008)(64756008)(66446008)(7696005)(6506007)(2906002)(76116006)(66946007)(66476007)(316002)(4326008)(8676002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?gb2312?B?aUtuSDRYcEZmUE5GaFAyL3FuQ1I2dDRTUkVKQld3TkRhZ2IvQ1FIT0dlRzMx?=
+ =?gb2312?B?MDJuY3ZMSEZoaGFTRzh2RFdsTEtPbVBwbVN1MmJUS1BkOG1CY2toR2docnZO?=
+ =?gb2312?B?Zks5SDl2Rk12bHJkT1ZpdmhONkM1cmUvQlF0a0ZtRnVobnJqQldnQS9Ud2Vw?=
+ =?gb2312?B?UFVQS29XY2hRQ0UxNjIzMFRNbUt5bXhMcFBuZ0RjK2JTTkp2VHhQd3FvY3dV?=
+ =?gb2312?B?V1lCdmxsZFpEb2VteFNuWmdVZXdGVEdxK2xjNEY0SldtclhrUDlZTnFRNUNE?=
+ =?gb2312?B?QlVYUi9vaTZqbTVYZTdIdWw1cGlJb1RpMHZELyt1VlBqcHlhSXN2clMvRWVq?=
+ =?gb2312?B?SGUrdGE5ZUtRTU9TaDdtbXQ4eDdMVzF0QWxaOTF3RHlCOE9VR3NnZHZzMHUz?=
+ =?gb2312?B?NUFpaGhnTmRmUS9hd21nTitmSlRjeGZoZ3dlQXhUbGoyMmhJVVlMYUg3Zm05?=
+ =?gb2312?B?L2FVMkhwdFBJdUNTZE5naWo0ajIrOVg3dVZhNFdqblZ6WjByOU1jK05tTm1q?=
+ =?gb2312?B?a2tUcXl2UlBuME5Pa1o2NDlidFZxOHZCcWdQVTIyT3ZNWTRza2RYR2t5ZkMv?=
+ =?gb2312?B?Qm9iNnFoRUpaL3VWZXNTMFhudEllT0NuRnBtVnFIL25YNG44cWQrYkJOS1h3?=
+ =?gb2312?B?VUViVzlEUFZhdmFITVY5bGFKSnU3aHM3ZzdqalJ0R00rYi90d2N3ZWxHZi9u?=
+ =?gb2312?B?bG5PVlA1VVh0Vno0Tjg2UEMzd2JKcm5taVlWNzBscEF0eXd2RnBTMjdieDF5?=
+ =?gb2312?B?NWRRK0gzaThpT3pYRlVxU3I1Z1oxL2RpbGFoSjdWVEFEVEZWNElrL3ZFOG50?=
+ =?gb2312?B?akdTT0d1QjFNZmsrei96WTUzZFhVb1hZRHo3VkpuY3ErSHY3R1owQk5QdktK?=
+ =?gb2312?B?eUdaaXJvRE0rWlVQOTdoay90TnNMcUgrbDJjK3dFVHpYYWpwQU11WWV3ZjFv?=
+ =?gb2312?B?bmZiL3R3amtLUmtUUTJJWDBHaVh5K3dtVWRSNGpqZXFpc2h0M2drbHNoTVRN?=
+ =?gb2312?B?UlJETXZXUlVoRjlqRm5qL01HQ25yejJtM0tteW42MzNvd1dETUZrS3FkOHJE?=
+ =?gb2312?B?Z0R2YVU5ZkV2dUZ0Vkl3Y1FwdnVFM3Q3NTY5S2hUS2FJazBkMVlPY3JXYWla?=
+ =?gb2312?B?aWhUUzNVaVc0RkMvSmRqQTc1V1hEQmJzNnJBeFk0a2F4UWplOW14QjZkbFp2?=
+ =?gb2312?B?ekdmYlR3MjE4RkhYOXhaeW9hM3JmVWFxMnZDV1hKTkxUU2ZJWXRSemN6dTZD?=
+ =?gb2312?B?S24xdjZJM2ZMYzFRNzdLaUgxYUVBMW1yZnZKMVFDekVjSGp5TGR5RkovWWU1?=
+ =?gb2312?B?YmhJKzdhYndmNHpvanBoVVNaWmxoeVhaa1YwejdUZUpEZmVUSTg1T2wxR29h?=
+ =?gb2312?B?dDByQ21CazZGS3ZSRE9wZm9sYlgvb1kzVjNuUllBYXBPK2RNdDl0VXBFSFdq?=
+ =?gb2312?B?eDhRRzNtZjZYS1N5Tlpac2dDejNaWm91MnpUaXdEc1AxdjVkaHRxb01XK0x1?=
+ =?gb2312?B?L0pIVnA0Q2pManJOb2Y0UWVvNTVhU200YkVPQ2l3dXNSQlhzMHZiN0V2TmtW?=
+ =?gb2312?B?UVBTY3diblJOSmlQN05tSGNETVlmMlNxREx2THJSQ3BMMnNOaWRHWi9WWHh5?=
+ =?gb2312?B?TURQcGpnamp6d3liYXFmelhuM21HWDI2anM0Z0hwV1JJQVYrcW1sWUVoeC9m?=
+ =?gb2312?B?Tk9DYVFPbnRyWGJyTVlGTjVtL0plMmcvZTdYTzE0Tk05dEQ0SUdyRlhENzgy?=
+ =?gb2312?B?TGhwTkc2WXRQaHlIU1lVaS9xZHB1ZlZvRGpSNkF6eDNBWkhCN2JjZXVOQ0hx?=
+ =?gb2312?B?enNPRzZlSldqS2o0QzNyK3FoNEdDd09vZXhFbGY3ZGQrYkpZNDZxSjVCN0ls?=
+ =?gb2312?B?MVl6YURvd3B1S2ovTHl1WS8yc1hKb0ZRNi9keGxmOUMzanFUY2ZwLzY0Q2RP?=
+ =?gb2312?Q?gGXzmZf3G4u0XeTByQgaDnJvAvL6p/OX?=
+Content-Type: text/plain; charset="gb2312"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220324122729.221765-1-nchatrad@amd.com>
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: AS8PR04MB8404.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2c01ea77-b8e8-48cf-14e6-08da0dfeb6d8
+X-MS-Exchange-CrossTenant-originalarrivaltime: 25 Mar 2022 01:28:06.6034
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 2sJdOuEtcOjmtxOESKIsLVyBIXhUE+N6ZDFhTGuWBOeeGlnfR6Ro6eSq9QZA7KupOzJxx2VDuM37Co2u3zNjbA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR0402MB3794
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Thu, Mar 24, 2022 at 05:57:29PM +0530, Naveen Krishna Chatradhi wrote:
-> From: Muralidhara M K <muralimk@amd.com>
-> 
-> amd_cache_northbridges() is exported by amd_nb.c and is used by
-> amd64-agp.c and amd64_edac.c modules.
-> 
-> init_amd_nbs() already calls amd_cache_northbridges() unconditionally,
-> during fs_initcall() phase, which happens before the device_initcall().
-
-No, that's not even trying. I went and did your work for you. Please
-try harder in the future to really really explain why you're doing what
-you're doing so that a reader of your commit message can easily follow
-your logic and not have to do research just to figure out why your
-change is ok.
-
----
-From f5e82ad4c749afb63cdebba6729452e516bc1fa9 Mon Sep 17 00:00:00 2001
-From: Muralidhara M K <muralimk@amd.com>
-Date: Thu, 24 Mar 2022 17:57:29 +0530
-Subject: [PATCH] x86/amd_nb: Unexport amd_cache_northbridges()
-
-amd_cache_northbridges() is exported by amd_nb.c and is called by
-amd64-agp.c and amd64_edac.c modules at module_init() time so that NB
-descriptors are properly cached before those drivers can use them.
-
-However, the init_amd_nbs() initcall already does call
-amd_cache_northbridges() unconditionally and thus makes sure the NB
-descriptors are enumerated.
-
-That initcall is a fs_initcall type which is on the 5th group (starting
-from 0) of initcalls that gets run in increasing numerical order by the
-init code.
-
-The module_init() call is turned into an __initcall() in the MODULE=n
-case and those are device-level initcalls, i.e., group 6.
-
-Therefore, the northbridges caching is already finished by the time
-module initialization starts and thus the correct initialization order
-is retained.
-
-Unexport amd_cache_northbridges(), update dependent modules to
-call amd_nb_num() instead. While at it, simplify the checks in
-amd_cache_northbridges().
-
-  [ bp: Heavily massage and *actually* explain why the change is ok. ]
-
-Signed-off-by: Muralidhara M K <muralimk@amd.com>
-Signed-off-by: Naveen Krishna Chatradhi <nchatrad@amd.com>
-Signed-off-by: Borislav Petkov <bp@suse.de>
-Link: https://lore.kernel.org/r/20220324122729.221765-1-nchatrad@amd.com
----
- arch/x86/include/asm/amd_nb.h | 1 -
- arch/x86/kernel/amd_nb.c      | 7 +++----
- drivers/char/agp/amd64-agp.c  | 2 +-
- drivers/edac/amd64_edac.c     | 2 +-
- 4 files changed, 5 insertions(+), 7 deletions(-)
-
-diff --git a/arch/x86/include/asm/amd_nb.h b/arch/x86/include/asm/amd_nb.h
-index 00d1a400b7a1..ed0eaf65c437 100644
---- a/arch/x86/include/asm/amd_nb.h
-+++ b/arch/x86/include/asm/amd_nb.h
-@@ -16,7 +16,6 @@ extern const struct amd_nb_bus_dev_range amd_nb_bus_dev_ranges[];
- 
- extern bool early_is_amd_nb(u32 value);
- extern struct resource *amd_get_mmconfig_range(struct resource *res);
--extern int amd_cache_northbridges(void);
- extern void amd_flush_garts(void);
- extern int amd_numa_init(void);
- extern int amd_get_subcaches(int);
-diff --git a/arch/x86/kernel/amd_nb.c b/arch/x86/kernel/amd_nb.c
-index 020c906f7934..190e0f763375 100644
---- a/arch/x86/kernel/amd_nb.c
-+++ b/arch/x86/kernel/amd_nb.c
-@@ -188,7 +188,7 @@ int amd_smn_write(u16 node, u32 address, u32 value)
- EXPORT_SYMBOL_GPL(amd_smn_write);
- 
- 
--int amd_cache_northbridges(void)
-+static int amd_cache_northbridges(void)
- {
- 	const struct pci_device_id *misc_ids = amd_nb_misc_ids;
- 	const struct pci_device_id *link_ids = amd_nb_link_ids;
-@@ -210,14 +210,14 @@ int amd_cache_northbridges(void)
- 	}
- 
- 	misc = NULL;
--	while ((misc = next_northbridge(misc, misc_ids)) != NULL)
-+	while ((misc = next_northbridge(misc, misc_ids)))
- 		misc_count++;
- 
- 	if (!misc_count)
- 		return -ENODEV;
- 
- 	root = NULL;
--	while ((root = next_northbridge(root, root_ids)) != NULL)
-+	while ((root = next_northbridge(root, root_ids)))
- 		root_count++;
- 
- 	if (root_count) {
-@@ -290,7 +290,6 @@ int amd_cache_northbridges(void)
- 
- 	return 0;
- }
--EXPORT_SYMBOL_GPL(amd_cache_northbridges);
- 
- /*
-  * Ignores subdevice/subvendor but as far as I can figure out
-diff --git a/drivers/char/agp/amd64-agp.c b/drivers/char/agp/amd64-agp.c
-index dc78a4fb879e..84a4aa9312cf 100644
---- a/drivers/char/agp/amd64-agp.c
-+++ b/drivers/char/agp/amd64-agp.c
-@@ -327,7 +327,7 @@ static int cache_nbs(struct pci_dev *pdev, u32 cap_ptr)
- {
- 	int i;
- 
--	if (amd_cache_northbridges() < 0)
-+	if (!amd_nb_num())
- 		return -ENODEV;
- 
- 	if (!amd_nb_has_feature(AMD_NB_GART))
-diff --git a/drivers/edac/amd64_edac.c b/drivers/edac/amd64_edac.c
-index fba609ada0e6..af2c578f8ab3 100644
---- a/drivers/edac/amd64_edac.c
-+++ b/drivers/edac/amd64_edac.c
-@@ -4269,7 +4269,7 @@ static int __init amd64_edac_init(void)
- 	if (!x86_match_cpu(amd64_cpuids))
- 		return -ENODEV;
- 
--	if (amd_cache_northbridges() < 0)
-+	if (!amd_nb_num())
- 		return -ENODEV;
- 
- 	opstate_init();
--- 
-2.35.1
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+R2VudGxlIHBpbmcuLi4NCg0KPiAtLS0tLU9yaWdpbmFsIE1lc3NhZ2UtLS0tLQ0KPiBGcm9tOiBT
+aGVycnkgU3VuDQo+IFNlbnQ6IDIwMjLE6jPUwjE4yNUgMTk6MjANCj4gVG86IGJwQGFsaWVuOC5k
+ZTsgbWNoZWhhYkBrZXJuZWwub3JnOyBtaWNoYWwuc2ltZWtAeGlsaW54LmNvbTsNCj4gdG9ueS5s
+dWNrQGludGVsLmNvbTsgamFtZXMubW9yc2VAYXJtLmNvbTsgcnJpY0BrZXJuZWwub3JnDQo+IENj
+OiBsaW51eC1lZGFjQHZnZXIua2VybmVsLm9yZzsgbGludXgta2VybmVsQHZnZXIua2VybmVsLm9y
+ZzsgbGludXgtYXJtLQ0KPiBrZXJuZWxAbGlzdHMuaW5mcmFkZWFkLm9yZzsgZGwtbGludXgtaW14
+IDxsaW51eC1pbXhAbnhwLmNvbT4NCj4gU3ViamVjdDogW1BBVENIIDAvMl0gZml4IHNvbWUgYnVn
+cyBpbiBWMy5YIFN5bm9wc3lzIEVEQUMgRERSIGRyaXZlcg0KPiANCj4gVGhlIHR3byBwYXRjaGVz
+IGZpeCBzb21lIGlzc3VlcyBmb3IgVjMuWCBTeW5vcHN5cyBFREFDIEREUiBpbg0KPiBzeW5vcHN5
+c19lZGFjLmMuDQo+IEZvciB0aGUgZGV0YWlscywgcGxlYXNlIGNoZWNrIHRoZSBwYXRjaCBjb21t
+aXQgbG9nLiBUaGlzIGhhcyBiZWVuIHZlcmlmaWVkIG9uDQo+IGkuTVg4TVAgcGxhdGZvcm0uDQo+
+IA0KPiBTaGVycnkgU3VuICgyKToNCj4gICBFREFDOiBzeW5vcHN5czogQWRkIGRpc2FibGVfaW50
+ciBzdXBwb3J0IGZvciBWMy5YIFN5bm9wc3lzIEVEQUMgRERSDQo+ICAgRURBQzogc3lub3BzeXM6
+IHJlLWVuYWJsZSB0aGUgaW50ZXJydXB0cyBpbiBpbnRyX2hhbmRsZXIgZm9yIFYzLlgNCj4gICAg
+IFN5bm9wc3lzIEVEQUMgRERSDQo+IA0KPiAgZHJpdmVycy9lZGFjL3N5bm9wc3lzX2VkYWMuYyB8
+IDExICsrKysrKysrKy0tDQo+ICAxIGZpbGUgY2hhbmdlZCwgOSBpbnNlcnRpb25zKCspLCAyIGRl
+bGV0aW9ucygtKQ0KPiANCj4gLS0NCj4gMi4xNy4xDQoNCg==
