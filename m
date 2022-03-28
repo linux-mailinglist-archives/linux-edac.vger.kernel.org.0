@@ -2,248 +2,153 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0743E4E9882
-	for <lists+linux-edac@lfdr.de>; Mon, 28 Mar 2022 15:42:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 994A64E989A
+	for <lists+linux-edac@lfdr.de>; Mon, 28 Mar 2022 15:47:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243370AbiC1NoX (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Mon, 28 Mar 2022 09:44:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39016 "EHLO
+        id S243437AbiC1Nsx (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Mon, 28 Mar 2022 09:48:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243378AbiC1NoW (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Mon, 28 Mar 2022 09:44:22 -0400
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2042.outbound.protection.outlook.com [40.107.244.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96B965EBCD;
-        Mon, 28 Mar 2022 06:42:40 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=RILOosgLowaHN/J4Q7gEIbaRcqSjO9QTqKPCPC4f9Y/UtWxZU346VeJ4lP2Puy7YBKvDyf+m9htmWUpvAw0rLIw4SdXIeCvVshKZxjtAzHJ2t2uHmyw3BNJWqw9xxGgMjsTPmdD69g1LFleHfxdjsnP4IyVi4dCIBrqcie6FrOrimABRAetjMRLbWHvhWWUsqAXzCA1NpWAi8bKuEHgLcUR9ab2+dU/L3RvU0YoGku6aIDcJzj3OZlVPwaDqF9hif8ZpNeIKhBMFKv1bQAxCCgcZ5rFdduCS2Er1JN2ob+J1QGMa9dPlqZuZLQeCVpZZP7mo70OCd0K+OXTuo5L/GA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ZteyEXqBRIKqXdNDV3sJusL9+V+WIS4yuBBDTbzMIJU=;
- b=JVZC5IuhwxhrCCKYShplSrSBSmsj85RT8hAfc7tMJVK4dF6MYMR5Y4ZflcbKH35HF2GJHtsTYIXSsw+1F9LMbey2kYKEM1O6FaVW8fFzgyp1Ae8r/lyAirXmqiLZAHzbJwYw0PeqzNMZmP9SOBNH+g77XomUaFwfLKEeQN3vuTZUyUt0l6qIL12/9xTwcBROyMgKP1zul2sX/tVs0T9ik3PZ5Zu1WUPJa0F5PUccRvx9DnM5Yi1s9DJSqkgoiWlcX0aSjIDy5bd+Sri1zDQLizC0sgf4fG9n7g2rbkfJsGN7cyNkEu20680DuGtOvoEMnbPp1ioHKXHBNg+GM+sCZA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=alien8.de smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ZteyEXqBRIKqXdNDV3sJusL9+V+WIS4yuBBDTbzMIJU=;
- b=rl6MiFibypDZ+jMWTGMY2nnuTjo2jNA3bpeECsz3J+3bk08IxpAqgLx8hKUMyM8M4xcKpt9204mZFdkWV9GKMVpTgS5xCMVMUrzBWvU0qtWzPSKDuchw5gTkfCU3cLBhfvNDbxbyseh4zRazX1M1zzIJVVkqvJt2rMV6f003C3g=
-Received: from DM5PR2001CA0004.namprd20.prod.outlook.com (2603:10b6:4:16::14)
- by SA1PR12MB5670.namprd12.prod.outlook.com (2603:10b6:806:239::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5102.16; Mon, 28 Mar
- 2022 13:42:38 +0000
-Received: from DM6NAM11FT055.eop-nam11.prod.protection.outlook.com
- (2603:10b6:4:16:cafe::3e) by DM5PR2001CA0004.outlook.office365.com
- (2603:10b6:4:16::14) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5102.17 via Frontend
- Transport; Mon, 28 Mar 2022 13:42:38 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com;
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- DM6NAM11FT055.mail.protection.outlook.com (10.13.173.103) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5102.17 via Frontend Transport; Mon, 28 Mar 2022 13:42:37 +0000
-Received: from ethanolx1ade-milan-genesis.amd.com (10.180.168.240) by
- SATLEXMB04.amd.com (10.181.40.145) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Mon, 28 Mar 2022 08:42:36 -0500
-From:   Carlos Bilbao <carlos.bilbao@amd.com>
-To:     <bp@alien8.de>
-CC:     <tglx@linutronix.de>, <mingo@redhat.com>,
-        <dave.hansen@linux.intel.com>, <x86@kernel.org>,
-        <yazen.ghannam@amd.com>, <linux-kernel@vger.kernel.org>,
-        <linux-edac@vger.kernel.org>, <bilbao@vt.edu>,
-        Carlos Bilbao <carlos.bilbao@amd.com>
-Subject: [PATCH 2/2] x86/mce: Add messages to describe panic machine errors on AMD's MCEs grading
-Date:   Mon, 28 Mar 2022 08:41:34 -0500
-Message-ID: <20220328134131.736572-3-carlos.bilbao@amd.com>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20220328134131.736572-1-carlos.bilbao@amd.com>
-References: <20220328134131.736572-1-carlos.bilbao@amd.com>
+        with ESMTP id S243426AbiC1Nsw (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Mon, 28 Mar 2022 09:48:52 -0400
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 306995E75A
+        for <linux-edac@vger.kernel.org>; Mon, 28 Mar 2022 06:47:10 -0700 (PDT)
+Received: by mail-wm1-x332.google.com with SMTP id v64-20020a1cac43000000b0038cfd1b3a6dso2924864wme.5
+        for <linux-edac@vger.kernel.org>; Mon, 28 Mar 2022 06:47:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=lqWUovhT3deFfz1zrmG2BdScTmfXFTXlEBWbC7kOkUc=;
+        b=Casp3ieHRH0PsmFMjKH7TFdpT/TNQBYWEewfJb+0xu+uR1ofg9WJFp8XZHfsoJ6hWp
+         C3nRcv1dmEeOPPKeVzOxrD+erWCy3JA6tU8mIHsAGm/8BjsYzwvx7P5mI7L1KmNHeogG
+         38uNEFuvu5fJtLpThq9lRBZu4UJTQpGAB9zPox6v7iYfXD/Z14PGXT9t5owO2tQYWh0P
+         3dUo+G/1/czVs79WbHUKkU/6h2niPOopvKPMU5QpP07x/qfD1LrC5Cesac25l5SMzvon
+         esMFddga3HKSH7nNwn2IpXtOjAEGaytpRSosc2jrznnt1TPvUIg3fMjEdTz9d4Vfr7yu
+         igag==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=lqWUovhT3deFfz1zrmG2BdScTmfXFTXlEBWbC7kOkUc=;
+        b=HbmmgSet9rwlpxUly3hTigdEiUkSxHtc9R7J0uANEaZ8Y7dPdXV17BsBH5SiTVdAsS
+         bKnnaGMhzWxdLxoycCANt84n3jNMxScEp8O7XMUskLiUtzKiWpFbEYYMa8bzmcyp+u89
+         x8yRVMoKXPDreqfmpomC+paeKDu817fYxYp5s/ePf9VO6PMqeWhlEtPz/uQfwKiIptor
+         +LAo9KDRnB0t/ESdrTg/2LNmdtTDbSNzXf6Djn7rzWqbKHdNZbeFlAq6SMBTNxn4i9Lq
+         c81D8cqyiSy+qywDXf1Vf22DGemInMPscqjP4lv8CL+MufzdmjS4KA4VFL9IuzMCMAag
+         CQXg==
+X-Gm-Message-State: AOAM5318FDcZfd5YbsZuehgMVVNB/ug7O7i0a8ZvZ+c7Hbkvl5sImEp2
+        nIVsNDYlM+J0GHFFkIccVBSqeg==
+X-Google-Smtp-Source: ABdhPJwB0pYnLloiCs6wa/2INWNx44L+qT5u6Nb9H+6gXgQ9TsmBu3vjwmvbBF2kaoxeBO0KJ0MWbQ==
+X-Received: by 2002:a05:600c:4401:b0:38c:8df8:9797 with SMTP id u1-20020a05600c440100b0038c8df89797mr35783652wmn.13.1648475228582;
+        Mon, 28 Mar 2022 06:47:08 -0700 (PDT)
+Received: from maple.lan (cpc141216-aztw34-2-0-cust174.18-1.cable.virginm.net. [80.7.220.175])
+        by smtp.gmail.com with ESMTPSA id t4-20020a05600001c400b00203fb5dcf29sm12145898wrx.40.2022.03.28.06.47.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 28 Mar 2022 06:47:08 -0700 (PDT)
+Date:   Mon, 28 Mar 2022 14:47:05 +0100
+From:   Daniel Thompson <daniel.thompson@linaro.org>
+To:     Benjamin =?utf-8?B?U3TDvHJ6?= <benni@stuerz.xyz>
+Cc:     sebastian.hesselbarth@gmail.com, gregory.clement@bootlin.com,
+        linux@armlinux.org.uk, linux@simtec.co.uk, krzk@kernel.org,
+        alim.akhtar@samsung.com, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, hpa@zytor.com,
+        robert.moore@intel.com, rafael.j.wysocki@intel.com,
+        lenb@kernel.org, 3chas3@gmail.com, laforge@gnumonks.org,
+        arnd@arndb.de, gregkh@linuxfoundation.org, mchehab@kernel.org,
+        tony.luck@intel.com, james.morse@arm.com, rric@kernel.org,
+        linus.walleij@linaro.org, brgl@bgdev.pl,
+        mike.marciniszyn@cornelisnetworks.com,
+        dennis.dalessandro@cornelisnetworks.com, jgg@ziepe.ca,
+        pali@kernel.org, dmitry.torokhov@gmail.com, isdn@linux-pingi.de,
+        benh@kernel.crashing.org, fbarrat@linux.ibm.com, ajd@linux.ibm.com,
+        davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com,
+        nico@fluxnic.net, loic.poulain@linaro.org, kvalo@kernel.org,
+        pkshih@realtek.com, bhelgaas@google.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org, linux-ia64@vger.kernel.org,
+        linux-acpi@vger.kernel.org, devel@acpica.org,
+        linux-atm-general@lists.sourceforge.net, netdev@vger.kernel.org,
+        linux-edac@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-rdma@vger.kernel.org, linux-input@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-media@vger.kernel.org,
+        wcn36xx@lists.infradead.org, linux-wireless@vger.kernel.org,
+        linux-pci@vger.kernel.org
+Subject: Re: [PATCH 00/22] Replace comments with C99 initializers
+Message-ID: <20220328134705.lnxwwznhw622r2pr@maple.lan>
+References: <20220326165909.506926-1-benni@stuerz.xyz>
+ <8f9271b6-0381-70a9-f0c2-595b2235866a@stuerz.xyz>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: a2b5ac85-a678-4216-555a-08da10c0d259
-X-MS-TrafficTypeDiagnostic: SA1PR12MB5670:EE_
-X-Microsoft-Antispam-PRVS: <SA1PR12MB5670A7F4A9F8EE0DA2604D64F81D9@SA1PR12MB5670.namprd12.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Gaagimj1HTvqcTqFuXrJVFfV3nw8KpQLtu0ncjvqyHdZbKBI7iPo/NKNEfRPTv/KCgKrc6z1Wk4k/gygfXsexuqGY1vHuZaUZQ8eeVHVWSg7r3YAQa+qxoWIHz1lEEsQJsR+pn9YCOiMqsOMpymdIMgVLd+u3CQ9vaJVjhpRrliRaAZpkMG1sTeyFBWUnXaXm1GH09kjcGaCCCpX2hl1oZ2Z4VRTDjo12w5VhSxu9FK6oojGy5kF9VviEm/r66VXPJjQuTGpKuSov+mNTYMEC9NDl1MZKwCIEe8MXVympoby7pOgnT6sRfV1XJMRbUxJgc+/1u5NcnIzomoUmwkQyZeLFlCOY144D/j2kTOHkbPveeNxQuacFaSLj65Jr88bllIa4MG9S4Dwo3IzxPcYEPORTYaUlX7A3PREHBDYKReLZlyCNoalMp+pUeSSRWjAiwyIvoMN1Di478fAa8MimYxuJtLYk5qURRPRy1V2TIjtxaWly+gIbj9Q5ZH+EUhX0WxcD2D3CrVn1W3koYX6ro+7y+Alun5u0shn6J7DJWEBKJGlOf9q6gr+c/XI3yjcvYiH29iT9NygGel1Bnoac0R7qE/b6hh4L48gZmNSTUymelKeklIqzBys9X9nScKtW7q6KPtKWuCHpQnVhanFaAuTrjU7f9Ya1ecuAqg9V1RhbE9qp0+xSve80aLmQWY+qBmE5fnnMJ/Z/t2zQznsbw==
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230001)(4636009)(40470700004)(36840700001)(46966006)(356005)(16526019)(40460700003)(86362001)(186003)(54906003)(6916009)(81166007)(8676002)(316002)(508600001)(36756003)(47076005)(5660300002)(4326008)(70206006)(15650500001)(8936002)(2906002)(70586007)(2616005)(426003)(7696005)(336012)(82310400004)(44832011)(1076003)(83380400001)(36860700001)(26005)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Mar 2022 13:42:37.4087
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: a2b5ac85-a678-4216-555a-08da10c0d259
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT055.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR12MB5670
+In-Reply-To: <8f9271b6-0381-70a9-f0c2-595b2235866a@stuerz.xyz>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-When a machine error is graded as PANIC by AMD grading logic, the MCE
-handler calls mce_panic(). The notification chain does not come into effect
-so the AMD EDAC driver does not decode the errors. In these cases, the
-messages displayed to the user are more cryptic and miss information
-that might be relevant, like the context in which the error took place.
+On Sun, Mar 27, 2022 at 02:46:00PM +0200, Benjamin Stürz wrote:
+> This patch series replaces comments with C99's designated initializers
+> in a few places. It also adds some enum initializers. This is my first
+> time contributing to the Linux kernel, therefore I'm probably doing a
+> lot of things the wrong way. I'm sorry for that.
 
-Fix the above issue including messages on AMD's grading logic for machine
-errors graded as PANIC.
+Welcome!
 
-Signed-off-by: Carlos Bilbao <carlos.bilbao@amd.com>
----
- arch/x86/kernel/cpu/mce/severity.c | 33 ++++++++++++++++++++++++++----
- 1 file changed, 29 insertions(+), 4 deletions(-)
 
-diff --git a/arch/x86/kernel/cpu/mce/severity.c b/arch/x86/kernel/cpu/mce/severity.c
-index 4a089e9dbbaf..11be63eaf7e5 100644
---- a/arch/x86/kernel/cpu/mce/severity.c
-+++ b/arch/x86/kernel/cpu/mce/severity.c
-@@ -330,10 +330,12 @@ static __always_inline int mce_severity_amd_smca(struct mce *m, enum context err
-  * Evaluate the severity of an overflow error for AMD systems, dependent on
-  * the recoverable features available.
-  */
--static noinstr int mce_grade_overflow_amd(struct mce *m, enum context ctx)
-+static noinstr int mce_grade_overflow_amd(struct mce *m, enum context ctx, char **msg)
- {
- 	int ret;
- 
-+	WARN_ON(!msg);
-+
- 	/*
- 	 * On older systems where overflow_recov flag is not present, we
- 	 * should simply panic if an error overflow occurs. If
-@@ -343,6 +345,8 @@ static noinstr int mce_grade_overflow_amd(struct mce *m, enum context ctx)
- 	if (mce_flags.overflow_recov) {
- 		if (mce_flags.smca) {
- 			ret = mce_severity_amd_smca(m, ctx);
-+			if (ret == MCE_PANIC_SEVERITY)
-+				*msg = "Uncorrected unrecoverable error";
- 		} else {
- 			/* kill current process */
- 			ret = MCE_AR_SEVERITY;
-@@ -351,8 +355,10 @@ static noinstr int mce_grade_overflow_amd(struct mce *m, enum context ctx)
- 	}
- 
- 	/* at least one error was not logged */
--	if (m->status & MCI_STATUS_OVER)
-+	if (m->status & MCI_STATUS_OVER) {
-+		*msg = "Overflow uncorrected";
- 		return MCE_PANIC_SEVERITY;
-+	}
- 
- 	/*
- 	 * For any other case, return MCE_UC_SEVERITY so that we log the
-@@ -367,6 +373,7 @@ static noinstr int mce_grade_overflow_amd(struct mce *m, enum context ctx)
- static noinstr int mce_severity_amd(struct mce *m, struct pt_regs *regs, char **msg, bool is_excp)
- {
- 	enum context ctx = error_context(m, regs);
-+	char *severity_msg;
- 	int ret;
- 
- 	/*
-@@ -411,13 +418,16 @@ static noinstr int mce_severity_amd(struct mce *m, struct pt_regs *regs, char **
- #ifdef CONFIG_MEMORY_FAILURE
- 			ret = MCE_AR_SEVERITY;
- #else
-+			severity_msg = "Consumed poisoned data in kernel recoverable area";
- 			ret = MCE_PANIC_SEVERITY;
- #endif
- 			break;
- 		case IN_KERNEL:
-+			severity_msg = "Attempt to consume poisoned data in kernel context";
- 			ret = MCE_PANIC_SEVERITY;
- 			break;
- 		default:
-+			severity_msg = "Attempt to consume poisoned data in unknown context";
- 			ret = MCE_PANIC_SEVERITY;
- 		}
- 
-@@ -426,6 +436,7 @@ static noinstr int mce_severity_amd(struct mce *m, struct pt_regs *regs, char **
- 
- 	/* Processor Context Corrupt, no need to fumble too much, die! */
- 	if (m->status & MCI_STATUS_PCC) {
-+		severity_msg = "Processor Context Corrupt";
- 		ret = MCE_PANIC_SEVERITY;
- 		goto amd_severity;
- 	}
-@@ -441,9 +452,11 @@ static noinstr int mce_severity_amd(struct mce *m, struct pt_regs *regs, char **
- 			ret = MCE_AR_SEVERITY;
- 			break;
- 		case IN_KERNEL:
-+			severity_msg = "Data load error in unrecoverable kernel context";
- 			ret = MCE_PANIC_SEVERITY;
- 			break;
- 		default:
-+			severity_msg = "Data load error in unknown context";
- 			ret = MCE_PANIC_SEVERITY;
- 		}
- 
-@@ -464,13 +477,16 @@ static noinstr int mce_severity_amd(struct mce *m, struct pt_regs *regs, char **
- #ifdef CONFIG_MEMORY_FAILURE
- 			ret = MCE_AR_SEVERITY;
- #else
-+			severity_msg = "Instruction fetch error in kernel recoverable area";
- 			ret = MCE_PANIC_SEVERITY;
- #endif
- 			break;
- 		case IN_KERNEL:
-+			severity_msg = "Instruction fetch error in kernel context";
- 			ret = MCE_PANIC_SEVERITY;
- 			break;
- 		default:
-+			severity_msg = "Instruction fetch error in unknown context";
- 			ret = MCE_PANIC_SEVERITY;
- 		}
- 
-@@ -478,15 +494,24 @@ static noinstr int mce_severity_amd(struct mce *m, struct pt_regs *regs, char **
- 	}
- 
- 	if (m->status & MCI_STATUS_OVER) {
--		ret = mce_grade_overflow_amd(m, ctx);
-+		ret = mce_grade_overflow_amd(m, ctx, &severity_msg);
- 		goto amd_severity;
- 	}
- 
--	if (ctx == IN_KERNEL)
-+	if (ctx == IN_KERNEL) {
-+		severity_msg = "Uncorrectable error in kernel context";
- 		ret = MCE_PANIC_SEVERITY;
-+	}
- 
- amd_severity:
- 
-+	/*
-+	 * It only makes sense to provide a message on panic scenarios,
-+	 * as otherwise EDAC will be notified and conduct the decoding.
-+	 */
-+	if (msg && ret == MCE_PANIC_SEVERITY)
-+		*msg = severity_msg;
-+
- 	return ret;
- }
- 
--- 
-2.27.0
+> I've gotten a few emails so far stating that this patch series is
+> unnecessary. Yes, in fact this patch series is not necessary by itself,
+> but it could help me understand how the whole process works and maybe I
+> could help somewhere, where help is actually needed.
 
+Have you been told the series is unnecessary or too big?
+
+Although all patches represent a variant of the same mechanical
+transformation but they are mostly unrelated to each other and, if
+accepted, they will be applied by many different people.
+
+Taken as a whole presenting this to maintainers as a 22 patch set is too
+big. I'd recommend starting with a smaller patch or patch series where
+all the patches get picked up by the same maintainer.
+
+
+> This patch itself is a no-op.
+
+PATCH 0/XX is for the covering letter. You should generate a template for
+it using the --cover-letter option of git format-patch. That way patch 0
+will contain the diffstat for the whole series (which is often useful
+to help understand what the series is for) and there is no need to
+make no-op changes.
+
+
+Daniel.
+
+> 
+> Signed-off-by: Benjamin Stürz <benni@stuerz.xyz>
+> ---
+>  .gitignore | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/.gitignore b/.gitignore
+> index 7afd412dadd2..706f667261eb 100644
+> --- a/.gitignore
+> +++ b/.gitignore
+> @@ -20,7 +20,7 @@
+>  *.dtb
+>  *.dtbo
+>  *.dtb.S
+> -*.dwo
+> +*.dwo
+>  *.elf
+>  *.gcno
+>  *.gz
+> -- 
+> 2.35.1
