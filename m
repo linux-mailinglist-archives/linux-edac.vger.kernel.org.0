@@ -2,112 +2,126 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 798D24E9D2C
-	for <lists+linux-edac@lfdr.de>; Mon, 28 Mar 2022 19:15:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C40514E9D5F
+	for <lists+linux-edac@lfdr.de>; Mon, 28 Mar 2022 19:21:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239872AbiC1RPv (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Mon, 28 Mar 2022 13:15:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41522 "EHLO
+        id S242258AbiC1RXL (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Mon, 28 Mar 2022 13:23:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238057AbiC1RPu (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Mon, 28 Mar 2022 13:15:50 -0400
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2065.outbound.protection.outlook.com [40.107.92.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CF77271E
-        for <linux-edac@vger.kernel.org>; Mon, 28 Mar 2022 10:14:09 -0700 (PDT)
+        with ESMTP id S236180AbiC1RXJ (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Mon, 28 Mar 2022 13:23:09 -0400
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2064.outbound.protection.outlook.com [40.107.92.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5BB760CD1;
+        Mon, 28 Mar 2022 10:21:27 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=S1im8qxFvCpcHL9tIVxbmK7XPMu6oh5cSNMsWYkuM4uGLbJ9Q3uCBTO8asnsxV7CEfzjyWEA2jS+iErwlnv/f+KNJ3uDcmGZ0yEVJQeS3n2n/NZ3Tn3ziokGJIphHEXMMupf7YkJrVbzZnWM8Lz/mfc3LJ9vGvB/B87ErCMhxiQB/sC75qkJiwMkc9/BfCINais/ARn1CcMw3p3MnBT8/tDIuUgIChtKpyjBBbj139vqpi9Wj7KjXBvZ5icwpNtJbhzhV4y2d7wcjmijQfQ9PqKaAhlKF/CbrS4IWuVfD+xm257hwGYkOAkQMYq49fb2O4Su49O68T30JFDGo7SEDQ==
+ b=H3kCu/ZpSatZQz0yJyAyRQLg3fDkpp1r6tY9lFkxHjEDvrW0tFqYEpQCeYvrU/CmTb176qlvSPKYMngLlJPf9MM0oHMiPKcaDHb86AQMOzDq1r4xlqBoQDgPW/q3pe6sBvB3en5iZs5edKBo76WE7cqCDOJIUVCJk7XBzIXsECoSWfBoqIvgw/RabxIAH8xI+025v7ZlIkcv6Y86sbw070b32mkDeiRmSV+72fs91tKk2W58fK5ew9te24xRvCdTOgcQQFdjaJXXKdq9sRI6ol7kj9OSdofoxvIJZQC4iFaaK31IWYuqUi4DxKptgzunsfWlF1DNIxTrkU7eQLjOag==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=2mYJmx2kT72n0vV5DIzXcjJlqP8/xyJMmoeT/SJ+ojg=;
- b=RMX6J9xwrD10s4Mna+5jJrwOsQgdwLNhtA412DWcZyYqT2o02kxeKSe5W8UIji9iNXWVJy1GStHySgq2xtjo6SUaEOYU25psQlfa1iC+10iopJSGR+agaZJX2KQuyOBqslD7/2jvRSHezmmpiJzf36ahU8O3Nz9rIqDP8gzC/Eqb2y+tR9QIl+oLY1LZopEPdnoWfpgO4117pesh98I3wsEYrlSOyE3KkLG/DQ4a6q47biaGdYW/Ayoc49vG9wKnAnJyh4ryoE/XOe39GYjkzvqYU20wk00d558XeFK2/XrUF+fQjfc63TBSyPhE9sfIzn/4ODJ1xGh+MO6bJ8tHMg==
+ bh=4TwfYpQftb5Z+ql+l+BnRH1B01AxN32bpLeXOPwrk/k=;
+ b=jyn/zu5bswrbGFz9dgDOZfmB8yQqGpBTGw6cCn+KqZ+tN3pNJRltz+s2l6j4k0H6ieMYv6sqHe+H7fKu19Vf6RN5GX9a6M3C0gQneAkKlSAhsgIZyZ5TIS/RBSIV/LQfxKB2EDz7f7oTr+aATxx6YLSEIMF/RYEWW75xpjlcpyo9kylZl+KJzyl6cgMfQasUNhfzm2ihWDNDApBvEy+/+1LT3uubai7/3pr0yJvIMzkiAhU459zI4CB/BB+m5a6LIHx+zLQNADuSYsJcEBSZcjEfVHp6et7IvkA4a38THhptw+RSp7eLUEtTj1agr8QTTRwGLrpgk8AXO4UF/WSfTA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
  header.d=amd.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=2mYJmx2kT72n0vV5DIzXcjJlqP8/xyJMmoeT/SJ+ojg=;
- b=R6m5WJvOc1L6qCJ+GoRnRdrRIPVKY8ujNoIzLlIahZ9QQoyRpvODvZZI31oi8A6LPOp7sECcm/f+dqCX6AY5I+097zYsc6/hDry5tvq4JbLQOWxjBe8XJdXdk5pjyc4eOoSaV/zBc+JG48uvKusfy3ykA08zQHMrAWDuhTSL3Qk=
+ bh=4TwfYpQftb5Z+ql+l+BnRH1B01AxN32bpLeXOPwrk/k=;
+ b=ofLVacwkbjogG+3dueIYYOf+zK7CwUx/8LOtZYKMjBe0/B+F6LZCohnFSW5m1gh53EpKGBtCl73g6MVS5WlCBskUKioF6AZRFb3HK6M/6iQsgbb+Iq5AzKRlQZELWsb62eGotaCnK6YU26d4LlY948y/fgT0naDl+RNnxYfzrA8=
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from BN8PR12MB3108.namprd12.prod.outlook.com (2603:10b6:408:40::20)
- by BN8PR12MB3252.namprd12.prod.outlook.com (2603:10b6:408:69::19) with
+Received: from BL1PR12MB5286.namprd12.prod.outlook.com (2603:10b6:208:31d::6)
+ by MW2PR12MB4668.namprd12.prod.outlook.com (2603:10b6:302:e::21) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5102.19; Mon, 28 Mar
- 2022 17:14:06 +0000
-Received: from BN8PR12MB3108.namprd12.prod.outlook.com
- ([fe80::6589:ebfc:1f11:3df0]) by BN8PR12MB3108.namprd12.prod.outlook.com
- ([fe80::6589:ebfc:1f11:3df0%5]) with mapi id 15.20.5102.023; Mon, 28 Mar 2022
- 17:14:06 +0000
-Date:   Mon, 28 Mar 2022 17:13:58 +0000
-From:   Yazen Ghannam <yazen.ghannam@amd.com>
-To:     Naveen Krishna Chatradhi <nchatrad@amd.com>
-Cc:     linux-edac@vger.kernel.org, bp@alien8.de, mingo@redhat.com,
-        mchehab@kernel.org, Muralidhara M K <muralimk@amd.com>
-Subject: Re: [PATCH 14/14] EDAC/amd64: Add get_umc_error_info() into pvt->ops
-Message-ID: <YkHs1lVDCPQWZcTO@yaz-ubuntu>
-References: <20220228161354.54923-1-nchatrad@amd.com>
- <20220228161354.54923-15-nchatrad@amd.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220228161354.54923-15-nchatrad@amd.com>
-X-ClientProxiedBy: MN2PR17CA0021.namprd17.prod.outlook.com
- (2603:10b6:208:15e::34) To BN8PR12MB3108.namprd12.prod.outlook.com
- (2603:10b6:408:40::20)
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5102.22; Mon, 28 Mar
+ 2022 17:21:25 +0000
+Received: from BL1PR12MB5286.namprd12.prod.outlook.com
+ ([fe80::c47b:31f3:4280:8cd]) by BL1PR12MB5286.namprd12.prod.outlook.com
+ ([fe80::c47b:31f3:4280:8cd%9]) with mapi id 15.20.5102.023; Mon, 28 Mar 2022
+ 17:21:24 +0000
+Message-ID: <b7652beb-470d-fa46-fa5e-996d45b38fad@amd.com>
+Date:   Mon, 28 Mar 2022 22:51:11 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.1.0
+Subject: Re: [PATCH v2] x86/amd_nb: unexport amd_cache_northbridges()
+Content-Language: en-US
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     linux-edac@vger.kernel.org, x86@kernel.org,
+        linux-kernel@vger.kernel.org, mingo@redhat.com, mchehab@kernel.org,
+        yazen.ghannam@amd.com, Muralidhara M K <muralimk@amd.com>,
+        David Airlie <airlied@linux.ie>
+References: <20220324122729.221765-1-nchatrad@amd.com>
+ <YjzCMYxgraTI7wrY@zn.tnic>
+From:   "Chatradhi, Naveen Krishna" <nchatrad@amd.com>
+In-Reply-To: <YjzCMYxgraTI7wrY@zn.tnic>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: PN1PR0101CA0050.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:c00:d::12) To BL1PR12MB5286.namprd12.prod.outlook.com
+ (2603:10b6:208:31d::6)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: dba99e2a-e301-4556-f18e-08da10de5d16
-X-MS-TrafficTypeDiagnostic: BN8PR12MB3252:EE_
-X-Microsoft-Antispam-PRVS: <BN8PR12MB325283129EA12A653B4B580FF81D9@BN8PR12MB3252.namprd12.prod.outlook.com>
+X-MS-Office365-Filtering-Correlation-Id: fd5e5467-6c24-40c6-85b2-08da10df6283
+X-MS-TrafficTypeDiagnostic: MW2PR12MB4668:EE_
+X-Microsoft-Antispam-PRVS: <MW2PR12MB466810FC01BA100F7160C3CBE81D9@MW2PR12MB4668.namprd12.prod.outlook.com>
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: QQgbLoCc2TOVDKSMDDf/Jp1Fv9Ck9zF+HahtDWVJJfBTUZcjNxFlNWO70inEulGuNq+YMHrFWLYnIeZ6AQS66hmO13BQj6TfT/rYcIxx5TLgt8SLVkACkn6NjhsVxoaejWTBUuwDqAgwmUzbbT/DZYvpbDwd0WfmdImxGY0WJm3s3uoIizMWF9yedhe28ee/OH2/a1fsK9AYAJxy/L1xNXils2/LZ5Jl79SdOmPYaXbGAjlnoQNXpx/ApKpHcz9fTjRpWXDSGDvdVWMbbs2+3iJVEHkGDP+rxumCtK6MzYlhunb6nhRr52XStdcepQFU+pyoKrMkoXqdVfzlocCz5ok7s//QtNnYYWM4KC6deYFwPkZcLE2Mv2aVawfhqVhYcDAohje4GDVa+Q1oM7uzi06EQQ6n3euQv1BkKk/vHrsICk9TG2CUDXZW339Jv6gpOYZ7j/EAfowI0/SbwG6wIk5dt05LZrzI5Q80O7Fh1hS+9QEKbQj1dj/hiMr+RCoCUxZbuwNYO2vCDUcWE/1caBtLdtGRqwfSV71cEaADfnhZA1JzDMqUsALlPWSraB2MG9JuJxnnjM0vq7SiOc1P8Ti5FSq22At4I0kY07/yIF2nWx7gN6sfOaKJtUSW79ybuLO20Fs+lV0RCITx0ppfcvosEiTL8ArPKnEn7J7I13r/t/DDSWxlGaq4K7y8VeLKnBk8D166UMcXows6vJ7nW8y5PTTFJ/ldkYtoRvT6YNk=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3108.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(7916004)(366004)(5660300002)(6512007)(9686003)(8936002)(66946007)(86362001)(508600001)(6506007)(83380400001)(66476007)(2906002)(44832011)(186003)(4326008)(6862004)(8676002)(66556008)(26005)(966005)(6486002)(316002)(38100700002)(6666004)(33716001)(6636002);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: 2mVCUz36RSsgelQi2Ilpbypoj7bBg1w+QD2cFAg/ukDObWjZcrrFesRj0IBdFWhUCEymoS7z1BTZ8sJFZObl9p1GTgi7vWJGvhJLyF1H5ueog5HY0UuqlljdICZdGj971zwl38F3UE8qhF7gGlGZ/ceICWiYY2ZLI9PXusraHhrwsKOMqtsy7lteOpjvmDE3mX6mqf+OTNWVQu591ruttquSkKKc3qsylasTuvHw+M5L8icii/YCF7aQMjT+8i1kyP/LNhaVgP0Lb1eYBgTkaBZ/l4EP5dwvHHR5EHGAhCZo5HUCq3PifYnfpe7W1FCtF1K1SvV4/VXvIAqnSayK0yyRoOLyM7VG/reH79ySudAX0+WO2ZyBoGgqshCcUtJ0MIDHvgKBrVyZsOFJ78gph5O7gCyLQqf1AzU0gUYFSKpf9WBVTfAkhifrPFRuTiIQY6XgiYFpJ2XnmwnZrDo1QJB5pys8jg7UJe4jz5LUpeAvK8wfB+XOJMhtxLq1T3GrUqDxc6MwjriJcVlzIiiY+bJ0TmdDa/4GsoMLdZ5YLcwgrlsIbAMfpWSaGOkoMiSe2kWy0uYpwQj4JdEz9X1bTU6ufz+oHJLrCUrGu8OcwxhDwEpYiIcqzqCI0d4jGqYH/Sc/nft3b3Y54fiuvLO5JPqTZFYhYzGri760e+aj6ATx2Yz8hZlPcz+5GffJJEHE2/+ki4Wnuoy7w9012hef35fSX0hrAG6dlEdiuly8xU8PVb0bIxrKnqzQiHEU5HPNTyA24cH6YCnQc24SHL4f9pYYxTEmeJh50IKMJZcEmepInn2oC9zwsTiypOW7mcyj7nQxehTTrS7bAS2YvMwkEIccxQUzdfw/OhcEM12rscY=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL1PR12MB5286.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(6506007)(6486002)(966005)(5660300002)(26005)(53546011)(2906002)(8936002)(31686004)(6666004)(4326008)(31696002)(38100700002)(66476007)(316002)(66556008)(186003)(8676002)(6916009)(54906003)(66946007)(36756003)(45080400002)(6512007)(508600001)(2616005)(83380400001)(43740500002)(45980500001);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?531QgVGWnetaEFCklVVC8a5hGfpxDu+VudYyha38C1D1dkizY+wshI1mzHdc?=
- =?us-ascii?Q?WMelgC974Zo+MxGDaRP2v4NwQMaC2b9slVXCKFhloyViQKxVwgQHFcO2BOYU?=
- =?us-ascii?Q?FOzf9qKIk8w9GMBvtxYQcq5v1Ui0u+BZMT0A4zaAz1VQ80UKNaRTgWQHJbgo?=
- =?us-ascii?Q?3g9RyNvfrqsE8yt+a+xFLydXM+GYKCFb6PBGoBmTtjiFOR+yG3LYRpHCQYU1?=
- =?us-ascii?Q?aMyHXQqckvWkhOe9GaO6U83y2hAPHQo1pdbew+f2khUxz7pSlrCJklQf5Ddp?=
- =?us-ascii?Q?ezz9cCe5ccXR+LLAL/REGOP1/GZ/oaj4/9U61FluSIxi8JizDTIb7yDnoh3D?=
- =?us-ascii?Q?GitBDdLVeeOlemJfWyOQ5q0C9fK1S5l/8Lha4u4JosRMnRMXCZtsfmyJnLzT?=
- =?us-ascii?Q?yXMSyGm8Y2gbuRR/EsKUA/w97xs7YRtV5NOd7cGkJjcyXrqVkM5uvqeNMQLr?=
- =?us-ascii?Q?0CQdAUQwmDBNI3dASynSY/9InaBpZQopf+3dgshqtWTAWIVvVrnkKSOkmDfy?=
- =?us-ascii?Q?IXMktt2HCGWyhWO8D9t3u4I92ImoOinCAiUhni2myYDiCw4G8CYBY5qpilFq?=
- =?us-ascii?Q?Rana9vhXn7jD0GdY1LJ4UDfa4UMblpHZr2NmlYAit/JQR7ImboNGa9mvbLwz?=
- =?us-ascii?Q?qOyZa17bBwK9z/jcfHkWOYwGGrbw8/iOFJDhw9KhUns4VFxPj/sxuVZZP2to?=
- =?us-ascii?Q?APjmjQJ3bi2PmOHjjOrKBGMUgRLF1kN/38dzpsZdtg5f3+xrXXCh8/nq0Vni?=
- =?us-ascii?Q?MtM96oz3huYTS0Zy2V9anH1alKiUfLXmS9mgZFMR/mljWWL0or05NHAkaXjM?=
- =?us-ascii?Q?0W+PFCmMS1di5XWCAk0b2CIUxHmrelQEUWGz4mOyTO1SiHKWxNWZ4xrhur4b?=
- =?us-ascii?Q?3WS3u6WFMKEYqLRNB/gGYv6wZDEdovLL/rbyT7VFj67zGQ/WQbfHZ58gAkoe?=
- =?us-ascii?Q?1GV7aW5z3gdpyIVTa8m4uYhDFiBXmlrCBZS1Y1HQ7og4SXlKRSzcQaHnlsUl?=
- =?us-ascii?Q?r3RVIygIRKqntaqRNer5ouGkHex2yCeAoVYckdp9GIh1fLIgOotgUZw562Qm?=
- =?us-ascii?Q?YyAEYHBt8IbKY0yNPzHt+PkUH1XgP6W6+X8VYQCXaVJ2Er3ZvTDQeggakO3L?=
- =?us-ascii?Q?lEO0uL3fYI+r37Sk4yCVYanyaVYAhm4XO/w7Ytm4QQ65gR9QXZYSZc/Vee/D?=
- =?us-ascii?Q?u1iI45grPB4b/rP4fM0PAqYjs4VGEwKXNOim1WmWOLKJ6MiQhwrUh/1pNyhG?=
- =?us-ascii?Q?DJcXa5YinJxhmUTMQmBUwgyquojVc3EzciKMfDnHano/BkfzDy09pFcSgKhp?=
- =?us-ascii?Q?JQzLX3gGNFNWLWXGeL8m4oGl+g30PzPeRzkyZNhknyjgTtUUHCCzEuVR5raG?=
- =?us-ascii?Q?UuIr1FFMMSXklM3FExMmn0dfNEUieJmln8bOE7804ByTy7P0S2aR6OpevrlQ?=
- =?us-ascii?Q?naEgX3tfA3YWfVjpNEaVtDok9EHQN89AFFFilzyx6Ul06NbFk9SHmgfBxTgS?=
- =?us-ascii?Q?CQ4b/wqfCxKeW5yrR6EW1H4NgMOnAnPlPdbPC55rEnrEskDaxtXncohefi7/?=
- =?us-ascii?Q?asdal/wo70Zs0g0sP0VyIzNiMHwbraBzaT8za39GbqERV6YLRLbv8NugIcsu?=
- =?us-ascii?Q?nBtH3o7VdCbu1PYCLcjVru4q6WS376gomvO4NqSRzeWaLhgQNKwDMIypFH00?=
- =?us-ascii?Q?JwO1EIQSARHF8CgRfEG+uDLZydyssMeyzGhFJBfktUowPcAeJiWbsGVw218J?=
- =?us-ascii?Q?V4bTYHd03w=3D=3D?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?OGhEaUQrTG5DSjcrUEduZHM4RFlzQmdkaGRyYzF1YlBWOUhSNERFYUJtQTdn?=
+ =?utf-8?B?U0tzZElBU015cnRtNzM2YzM2UE13UzdOSEErMFVTUUkvVVRHSHowcENkV2VO?=
+ =?utf-8?B?cWVOVDlkc1hTZUx3eWU4Q3pDVEpXbXRHMWpkckgxNnNJcEJMeG1jcThpN2Qv?=
+ =?utf-8?B?MmQ5dXU2LzNnY3pSZEZEOHJGdHJPTkhIZThHQkV2cUdEKzRPRTllajhwZU5M?=
+ =?utf-8?B?SzFwcFYreWg1UGZEWnAvcE1scndWTzJ6c0VYWTA4dll4ZGhhZ204QlphUlVN?=
+ =?utf-8?B?NnBOVGFIVlFaeHdQaFFtWTlqV243aS9aRVNJS2tyMnFYYjU4amlJaU56T3Ez?=
+ =?utf-8?B?Uk5QdlQvaitTdTkzcDR5TC9ocitqdlh3aGxVbTdxWWs1T01aYWNlcUNHS0Fk?=
+ =?utf-8?B?L1d4VHF0NDVZbFY4bjNMcW11ZGgzbEpsZ2JMVDNMRkU5VTBuODRwQ1BuSXdX?=
+ =?utf-8?B?eFFvRGhLMkMwR1VHcHgrOGdjUVZxMFRlZmNHRHJhTy9tTFE5N25mRlJ0Q2xY?=
+ =?utf-8?B?N2YzdnBxSmlKYmZ0L21jOURSQUI5T0tHMmRjdHREaWZyazY4ODVxZjNLSE9S?=
+ =?utf-8?B?UVZxSk9LVkErV2d1bzB2UU5nbi9YMXNaMG8yOWwzZlVxeVZWYzVWRUg2NVRl?=
+ =?utf-8?B?cTdPZFIyZkZYZG5VVFhaeHdnd2ZsV0FuUGY4MHhtdmZDQzdFK3J3aWR6SWkz?=
+ =?utf-8?B?K3VzVWhUa3I5TUJFWklWeWdNL2RDOHpVMDlHL21LNUdnckZHSnl5d0wwemFu?=
+ =?utf-8?B?MS8wdVN6anZUdFMrRW1LQ3NhZnNzaUJveEcvVU9ndHJxN0ExRVRMZEUzb0pN?=
+ =?utf-8?B?NHJsejVjYWNJQ0R0czErbk9uTnVCNzl5Z1Q5TEFQNk1uSll6OFFqVFNSYTlN?=
+ =?utf-8?B?QW5IQTd3WUNReGs3NStST3BCT0E0NUJnWkx6VVpPWnhYY1RhNlFtUlVLQnRX?=
+ =?utf-8?B?UER2OFlzZDNzWnpZR0dHQnA2S1c2STV5QkFzWXZPSjdFNXhHSzR3ZmxidGo0?=
+ =?utf-8?B?dURmVXY3MHBZLzFWWWo2ZHdOaDkzdjdFSVFBNGFTbUJDclVTejI4R2tFRnl0?=
+ =?utf-8?B?NU50WFREVFcrZlY4Z0JZQzlQeUZMbkIyWUlOL3AzTjZpNDlEU0dRaFFmdUxF?=
+ =?utf-8?B?L2twaTVrR3orYnlTcjNzSlZ3TXZRa1pMcS9UM2d1Rng3R3NjYmR0ajBqcmEv?=
+ =?utf-8?B?S1ExWHR1VC8xSURnRHNuTDFTc1JHc2YzMTNtTXBXdkJteEdQZ0FHVzJ1WjZ6?=
+ =?utf-8?B?eVpIenZsNFJRY2ptdGhjUzNLL0F0dmplVVAyMGpNT2xlNzVvN1Z3WndERHhB?=
+ =?utf-8?B?NzQ4ampUVitBYnM1V1BucHNwQVM3VUFQT3NjZnVwaS9USWxMeml2K1V0RUYv?=
+ =?utf-8?B?aUJXRm52VmpOam53UlJxbDZ2dnlQVVJneFkrM0VPbm1IVWRLZGRGbUNYTnRv?=
+ =?utf-8?B?MFlpZWhMVGYrbms1a1lnendYUnVxR1g0cFMzK2xSMy8xTDF0MmI3TUt1ckps?=
+ =?utf-8?B?UEpXQUNVTTlwSGJRdDliWTBvRXlmQitFMENIaWVWZUh2Wm9EWFppbjlPTXk3?=
+ =?utf-8?B?TnBoaURxemVRc3dTNVpFRWptQlVvNm5WNS9PRWNHYjBVYXRyc282eG0xVjRI?=
+ =?utf-8?B?RCszWXdRVEZmTmVoaCt6djgvSzdKNnJybDlGamF6QzNaakF4K0k4WldMWTR3?=
+ =?utf-8?B?MzFLdHMreUVpck4raStya3lmeStRc2sxZm9vMjRKWGRHN3N4aTlGSnE0QVB0?=
+ =?utf-8?B?U1dGblU3RUpIS3JzY1hvbGVGdkhON1ZhZEhnS1RKNzlCYkp2UnU2RVFjZlFn?=
+ =?utf-8?B?UThXemd0clBuMUhrOUhtTXJGV3hUNy9PQUZ1SXpHM2lkT3J6ZFVVMGV3aWE3?=
+ =?utf-8?B?dDhKTThkV2lsUWY5TE5NRDd6T0hVdURSWHVhWDRqeDhxVGFQZ29WT1F1WjdJ?=
+ =?utf-8?B?eHZDcDIwNlZNM3owWG1RVVRESFZwdCsySTIxdHhqNmJSVzVNbXd4Q3JEUU83?=
+ =?utf-8?B?YkZWTUFCbkRGQnFFeFpMaHdSUHp4UU9NRytZT3U5TTVPazN5dGtPOTBQUzlY?=
+ =?utf-8?B?YkdFNldBZ3Z4Uytqd1J2MGd0bWJlNUt2VU81YUNDNFREK1JxTWpSRll3VitT?=
+ =?utf-8?B?NlJQdHB6REJlMFMyTVhYSTVZSkFTVE43MVFTblNkcnVTbnRhem1uU21hak5K?=
+ =?utf-8?B?OTRyT1RYVjJqME0zYWF5SjdjVlJWcmxsMkNCbjBKd2N1K3dBeXVCSjVBN05k?=
+ =?utf-8?B?cEpjMGpmZ3ByRUtHeVZYNkZSSThLVGVlS21sdzRKUE9DNmZVSXVFNGlLazFU?=
+ =?utf-8?B?VEdjcnh2b2ZIWWhwRWo3RFk4bWVDWTdGZEtTaWE3cm5PdFkrMktZUT09?=
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: dba99e2a-e301-4556-f18e-08da10de5d16
-X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3108.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: fd5e5467-6c24-40c6-85b2-08da10df6283
+X-MS-Exchange-CrossTenant-AuthSource: BL1PR12MB5286.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Mar 2022 17:14:05.9571
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Mar 2022 17:21:24.6321
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Fbmxzc88JJ6u46DNdR5UB02/9parKeKRHrPhcgPiijmAh7hjTwcdASwK7zKX7NxaSpmcxEFNoP3feBnDPm3DSg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN8PR12MB3252
+X-MS-Exchange-CrossTenant-UserPrincipalName: z53RUFqt6ez2Oezwo+qChHJCi5h1HRD2YHRPiZMjqR2jdR7cdyoyDISs/e+YdzKKcZVb47BMpGGdB8RiZ1XeTg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW2PR12MB4668
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -116,98 +130,153 @@ Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Mon, Feb 28, 2022 at 09:43:54PM +0530, Naveen Krishna Chatradhi wrote:
-> From: Muralidhara M K <muralimk@amd.com>
-> 
-> Add function pointer for get_umc_error_info() in pvt->ops and assign
-> family specific get_umc_error_info() definitions appropriately.
->
+Hi Boris,
 
-Please include the "why".
- 
+On 3/25/2022 12:40 AM, Borislav Petkov wrote:
+> [CAUTION: External Email]
+>
+> On Thu, Mar 24, 2022 at 05:57:29PM +0530, Naveen Krishna Chatradhi wrote:
+>> From: Muralidhara M K <muralimk@amd.com>
+>>
+>> amd_cache_northbridges() is exported by amd_nb.c and is used by
+>> amd64-agp.c and amd64_edac.c modules.
+>>
+>> init_amd_nbs() already calls amd_cache_northbridges() unconditionally,
+>> during fs_initcall() phase, which happens before the device_initcall().
+> No, that's not even trying. I went and did your work for you. Please
+> try harder in the future to really really explain why you're doing what
+> you're doing so that a reader of your commit message can easily follow
+> your logic and not have to do research just to figure out why your
+> change is ok.
+
+Understood, will try and explain better for future patches.
+
+Thank you
+
+>
+> ---
+>  From f5e82ad4c749afb63cdebba6729452e516bc1fa9 Mon Sep 17 00:00:00 2001
+> From: Muralidhara M K <muralimk@amd.com>
+> Date: Thu, 24 Mar 2022 17:57:29 +0530
+> Subject: [PATCH] x86/amd_nb: Unexport amd_cache_northbridges()
+>
+> amd_cache_northbridges() is exported by amd_nb.c and is called by
+> amd64-agp.c and amd64_edac.c modules at module_init() time so that NB
+> descriptors are properly cached before those drivers can use them.
+>
+> However, the init_amd_nbs() initcall already does call
+> amd_cache_northbridges() unconditionally and thus makes sure the NB
+> descriptors are enumerated.
+>
+> That initcall is a fs_initcall type which is on the 5th group (starting
+> from 0) of initcalls that gets run in increasing numerical order by the
+> init code.
+>
+> The module_init() call is turned into an __initcall() in the MODULE=n
+> case and those are device-level initcalls, i.e., group 6.
+>
+> Therefore, the northbridges caching is already finished by the time
+> module initialization starts and thus the correct initialization order
+> is retained.
+>
+> Unexport amd_cache_northbridges(), update dependent modules to
+> call amd_nb_num() instead. While at it, simplify the checks in
+> amd_cache_northbridges().
+>
+>    [ bp: Heavily massage and *actually* explain why the change is ok. ]
+>
 > Signed-off-by: Muralidhara M K <muralimk@amd.com>
 > Signed-off-by: Naveen Krishna Chatradhi <nchatrad@amd.com>
+> Signed-off-by: Borislav Petkov <bp@suse.de>
+> Link: https://nam11.safelinks.protection.outlook.com/?url=https%3A%2F%2Flore.kernel.org%2Fr%2F20220324122729.221765-1-nchatrad%40amd.com&amp;data=04%7C01%7CNaveenKrishna.Chatradhi%40amd.com%7Cad77d5aa72554663e79d08da0dca506b%7C3dd8961fe4884e608e11a82d994e183d%7C0%7C0%7C637837460434170931%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000&amp;sdata=MsZNFF0%2F5x%2BJkuOPtL%2BNFZRxtBe548sVkEbyHOUcTcQ%3D&amp;reserved=0
 > ---
-> This patch is created by splitting the 5/12th patch in series
-> [v7 5/12] https://patchwork.kernel.org/project/linux-edac/patch/20220203174942.31630-6-nchatrad@amd.com/
-> 
->  drivers/edac/amd64_edac.c | 19 ++++++++++++++-----
->  drivers/edac/amd64_edac.h |  1 +
->  2 files changed, 15 insertions(+), 5 deletions(-)
-> 
+>   arch/x86/include/asm/amd_nb.h | 1 -
+>   arch/x86/kernel/amd_nb.c      | 7 +++----
+>   drivers/char/agp/amd64-agp.c  | 2 +-
+>   drivers/edac/amd64_edac.c     | 2 +-
+>   4 files changed, 5 insertions(+), 7 deletions(-)
+>
+> diff --git a/arch/x86/include/asm/amd_nb.h b/arch/x86/include/asm/amd_nb.h
+> index 00d1a400b7a1..ed0eaf65c437 100644
+> --- a/arch/x86/include/asm/amd_nb.h
+> +++ b/arch/x86/include/asm/amd_nb.h
+> @@ -16,7 +16,6 @@ extern const struct amd_nb_bus_dev_range amd_nb_bus_dev_ranges[];
+>
+>   extern bool early_is_amd_nb(u32 value);
+>   extern struct resource *amd_get_mmconfig_range(struct resource *res);
+> -extern int amd_cache_northbridges(void);
+>   extern void amd_flush_garts(void);
+>   extern int amd_numa_init(void);
+>   extern int amd_get_subcaches(int);
+> diff --git a/arch/x86/kernel/amd_nb.c b/arch/x86/kernel/amd_nb.c
+> index 020c906f7934..190e0f763375 100644
+> --- a/arch/x86/kernel/amd_nb.c
+> +++ b/arch/x86/kernel/amd_nb.c
+> @@ -188,7 +188,7 @@ int amd_smn_write(u16 node, u32 address, u32 value)
+>   EXPORT_SYMBOL_GPL(amd_smn_write);
+>
+>
+> -int amd_cache_northbridges(void)
+> +static int amd_cache_northbridges(void)
+>   {
+>          const struct pci_device_id *misc_ids = amd_nb_misc_ids;
+>          const struct pci_device_id *link_ids = amd_nb_link_ids;
+> @@ -210,14 +210,14 @@ int amd_cache_northbridges(void)
+>          }
+>
+>          misc = NULL;
+> -       while ((misc = next_northbridge(misc, misc_ids)) != NULL)
+> +       while ((misc = next_northbridge(misc, misc_ids)))
+>                  misc_count++;
+>
+>          if (!misc_count)
+>                  return -ENODEV;
+>
+>          root = NULL;
+> -       while ((root = next_northbridge(root, root_ids)) != NULL)
+> +       while ((root = next_northbridge(root, root_ids)))
+>                  root_count++;
+>
+>          if (root_count) {
+> @@ -290,7 +290,6 @@ int amd_cache_northbridges(void)
+>
+>          return 0;
+>   }
+> -EXPORT_SYMBOL_GPL(amd_cache_northbridges);
+>
+>   /*
+>    * Ignores subdevice/subvendor but as far as I can figure out
+> diff --git a/drivers/char/agp/amd64-agp.c b/drivers/char/agp/amd64-agp.c
+> index dc78a4fb879e..84a4aa9312cf 100644
+> --- a/drivers/char/agp/amd64-agp.c
+> +++ b/drivers/char/agp/amd64-agp.c
+> @@ -327,7 +327,7 @@ static int cache_nbs(struct pci_dev *pdev, u32 cap_ptr)
+>   {
+>          int i;
+>
+> -       if (amd_cache_northbridges() < 0)
+> +       if (!amd_nb_num())
+>                  return -ENODEV;
+>
+>          if (!amd_nb_has_feature(AMD_NB_GART))
 > diff --git a/drivers/edac/amd64_edac.c b/drivers/edac/amd64_edac.c
-> index 7a20f8a696de..ab4e16070a02 100644
+> index fba609ada0e6..af2c578f8ab3 100644
 > --- a/drivers/edac/amd64_edac.c
 > +++ b/drivers/edac/amd64_edac.c
-> @@ -3056,10 +3056,13 @@ static inline void decode_bus_error(int node_id, struct mce *m)
->   * Currently, we can derive the channel number by looking at the 6th nibble in
->   * the instance_id. For example, instance_id=0xYXXXXX where Y is the channel
->   * number.
-> + *
-> + * csrow can be derived from the lower 3 bits of MCA_SYND value.
-
-I think this comment can be expanded.
-
-For DRAM ECC errors, the Chip Select number is given in bits [2:0] of
-the MCA_SYND[ErrorInformation] field.
-
->   */
-> -static int find_umc_channel(struct mce *m)
-> +static void f17_umc_err_info(struct mce *m, struct err_info *err)
->  {
-> -	return (m->ipid & GENMASK(31, 0)) >> 20;
-> +	err->channel = (m->ipid & GENMASK(31, 0)) >> 20;
-> +	err->csrow = m->synd & 0x7;
->  }
->  
->  static void decode_umc_error(int node_id, struct mce *m)
-> @@ -3081,8 +3084,6 @@ static void decode_umc_error(int node_id, struct mce *m)
->  	if (m->status & MCI_STATUS_DEFERRED)
->  		ecc_type = 3;
->  
-> -	err.channel = find_umc_channel(m);
-> -
->  	if (!(m->status & MCI_STATUS_SYNDV)) {
->  		err.err_code = ERR_SYND;
->  		goto log_error;
-> @@ -3097,7 +3098,7 @@ static void decode_umc_error(int node_id, struct mce *m)
->  			err.err_code = ERR_CHANNEL;
->  	}
->  
-> -	err.csrow = m->synd & 0x7;
-> +	pvt->ops->get_umc_error_info(m, &err);
->  
->  	if (umc_normaddr_to_sysaddr(m->addr, pvt->mc_node_id, err.channel, &sys_addr)) {
->  		err.err_code = ERR_NORM_ADDR;
-> @@ -3927,6 +3928,7 @@ static int per_family_init(struct amd64_pvt *pvt)
->  		pvt->ops->populate_csrows		= init_csrows_df;
->  		pvt->ops->dump_misc_regs		= __dump_misc_regs_df;
->  		pvt->ops->get_cs_mode			= f17_get_cs_mode;
-> +		pvt->ops->get_umc_error_info		= f17_umc_err_info;
->  
->  		if (pvt->fam == 0x18) {
->  			pvt->ctl_name			= "F18h";
-> @@ -3974,6 +3976,7 @@ static int per_family_init(struct amd64_pvt *pvt)
->  		pvt->ops->populate_csrows		= init_csrows_df;
->  		pvt->ops->dump_misc_regs		= __dump_misc_regs_df;
->  		pvt->ops->get_cs_mode			= f17_get_cs_mode;
-> +		pvt->ops->get_umc_error_info		= f17_umc_err_info;
->  		break;
->  
->  	default:
-> @@ -3993,6 +3996,12 @@ static int per_family_init(struct amd64_pvt *pvt)
->  		return -EFAULT;
->  	}
->  
-> +	/* ops required for families 17h and later */
-> +	if (pvt->fam >= 0x17 && !pvt->ops->get_umc_error_info) {
-> +		edac_dbg(1, "Platform specific helper routines not defined.\n");
-> +		return -EFAULT;
-> +	}
-> +
-
-I think this is a case where having the Family 17h+ ops as default would make
-sense.
-
-Thanks,
-Yazen
+> @@ -4269,7 +4269,7 @@ static int __init amd64_edac_init(void)
+>          if (!x86_match_cpu(amd64_cpuids))
+>                  return -ENODEV;
+>
+> -       if (amd_cache_northbridges() < 0)
+> +       if (!amd_nb_num())
+>                  return -ENODEV;
+>
+>          opstate_init();
+> --
+> 2.35.1
+>
+> --
+> Regards/Gruss,
+>      Boris.
+>
+> https://nam11.safelinks.protection.outlook.com/?url=https%3A%2F%2Fpeople.kernel.org%2Ftglx%2Fnotes-about-netiquette&amp;data=04%7C01%7CNaveenKrishna.Chatradhi%40amd.com%7Cad77d5aa72554663e79d08da0dca506b%7C3dd8961fe4884e608e11a82d994e183d%7C0%7C0%7C637837460434170931%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000&amp;sdata=JAgdd9bpTtNaF2UG9seKB%2FLI3pF5wrWk4Sj1JurN860%3D&amp;reserved=0
