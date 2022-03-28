@@ -2,35 +2,38 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 420274E8AF9
-	for <lists+linux-edac@lfdr.de>; Mon, 28 Mar 2022 00:52:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A77024E8CFB
+	for <lists+linux-edac@lfdr.de>; Mon, 28 Mar 2022 06:13:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231181AbiC0WyI (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Sun, 27 Mar 2022 18:54:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51830 "EHLO
+        id S235674AbiC1EOs (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Mon, 28 Mar 2022 00:14:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229508AbiC0WyI (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Sun, 27 Mar 2022 18:54:08 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 004A9338A5;
-        Sun, 27 Mar 2022 15:52:28 -0700 (PDT)
-Received: from zn.tnic (p2e55dff8.dip0.t-ipconnect.de [46.85.223.248])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 223E81EC01A2;
-        Mon, 28 Mar 2022 00:52:23 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1648421543;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=fXK18M0KVpIRPx1rmbaiuZ7FWqGHqgKnqmOp0B4zeeI=;
-        b=GaWshRQG9YEh7hi3v6G7o2WOoPQsxZ47PZDGD+OCVzj7XsICK71UpDRwiUZ6GlGNh9x1th
-        vkcutIyO7RY1JTUqKsQDWOiYDWHNsNCX5mgU9DdhTVFzLR3I2/8SGXkrzQE9vGrBeFXCuL
-        vwdSRMu4G1L85J4Av5rMwFN2f2n14hI=
-Date:   Mon, 28 Mar 2022 00:52:19 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Ammar Faizi <ammarfaizi2@gnuweeb.org>
+        with ESMTP id S229734AbiC1EOr (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Mon, 28 Mar 2022 00:14:47 -0400
+Received: from gnuweeb.org (gnuweeb.org [51.81.211.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A63B233;
+        Sun, 27 Mar 2022 21:13:07 -0700 (PDT)
+Received: from [192.168.12.80] (unknown [182.2.37.32])
+        by gnuweeb.org (Postfix) with ESMTPSA id 227087E70A;
+        Mon, 28 Mar 2022 04:12:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gnuweeb.org;
+        s=default; t=1648440786;
+        bh=m8nJ0aUP+EcTvuSXye5QG/gDYxyUt/Fhy/dpUgbn7PE=;
+        h=Date:To:Cc:References:From:Subject:In-Reply-To:From;
+        b=Z8Ogbd1Bk+6QXwE5rWrlzy4uHfHeUYxjlVhGoxr3oGJNs5cjF0gkYj9VS2Fd50NU0
+         hKVT8gZUh78ToGtYx3VfhrdeyCzjfZOi6k50uBbrjdB6tN/JQcPHaYq0KsnQ67qrmd
+         zPhLTRawIV1BfEddcRKQamm7ta8r73mGCthagShH/q0rVdSW7OIVV/oRD4MeA0FM2v
+         6YlaBJDn8PaSO7LRfwbberrPonmMm6XDNZzdEMNuazQMgR0fAnmG/qKJWT7EniOa6F
+         wD4KLUg8e0K1pS1CHV7mla20JA6tbtduFndrCTMLrszNgEGObmm/jKsgRdw0vVdDoM
+         GkUHFqjxgwVQA==
+Message-ID: <82609267-8fc6-5b3d-c931-c0d93ab14788@gnuweeb.org>
+Date:   Mon, 28 Mar 2022 11:12:53 +0700
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Content-Language: en-US
+To:     Borislav Petkov <bp@alien8.de>
 Cc:     Thomas Gleixner <tglx@linutronix.de>,
         Alviro Iskandar Setiawan <alviro.iskandar@gmail.com>,
         Alviro Iskandar Setiawan <alviro.iskandar@gnuweeb.org>,
@@ -41,93 +44,105 @@ Cc:     Thomas Gleixner <tglx@linutronix.de>,
         Yazen Ghannam <yazen.ghannam@amd.com>,
         linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
         stable@vger.kernel.org, gwml@vger.gnuweeb.org, x86@kernel.org
+References: <20220310015306.445359-1-ammarfaizi2@gnuweeb.org>
+ <20220310015306.445359-3-ammarfaizi2@gnuweeb.org> <YkDqo2eEbABbtSGY@zn.tnic>
+From:   Ammar Faizi <ammarfaizi2@gnuweeb.org>
 Subject: Re: [PATCH v5 2/2] x86/MCE/AMD: Fix memory leak when
  `threshold_create_bank()` fails
-Message-ID: <YkDqo2eEbABbtSGY@zn.tnic>
-References: <20220310015306.445359-1-ammarfaizi2@gnuweeb.org>
- <20220310015306.445359-3-ammarfaizi2@gnuweeb.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220310015306.445359-3-ammarfaizi2@gnuweeb.org>
+In-Reply-To: <YkDqo2eEbABbtSGY@zn.tnic>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Thu, Mar 10, 2022 at 08:53:06AM +0700, Ammar Faizi wrote:
-> In mce_threshold_create_device(), if threshold_create_bank() fails, the
-> @bp will be leaked, because the call to mce_threshold_remove_device()
-> will not free the @bp. mce_threshold_remove_device() frees
-> @threshold_banks. At that point, the @bp has not been written to
-> @threshold_banks, @threshold_banks is NULL, so the call is just a nop.
+On 3/28/22 5:52 AM, Borislav Petkov wrote:
+[...]
+>> Fixes: 6458de97fc15 ("x86/mce/amd: Straighten CPU hotplug path")
 > 
-> Fix this by extracting the cleanup part into a new static function
-> _mce_threshold_remove_device(), then call it from create/remove device
-> functions.
+> How did you decide this is the commit that this is fixing?
+
+I examined the history in those lines by git blame. Will recheck after the below
+doubt is cleared.
+
+>> Link: https://lore.kernel.org/lkml/9dfe087a-f941-1bc4-657d-7e7c198888ff@gnuweeb.org
 > 
-> Also, eliminate the "goto out_err", just early return inside the loop
-> if the creation fails.
+> That Link tag is not needed.
 > 
-> Cc: Borislav Petkov <bp@alien8.de>
-> Cc: Thomas Gleixner <tglx@linutronix.de>
-> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Cc: stable@vger.kernel.org # v5.8+
-> Fixes: 6458de97fc15 ("x86/mce/amd: Straighten CPU hotplug path")
+>> Co-authored-by: Alviro Iskandar Setiawan <alviro.iskandar@gnuweeb.org>
+>> Signed-off-by: Alviro Iskandar Setiawan <alviro.iskandar@gnuweeb.org>
+>> Co-authored-by: Yazen Ghannam <yazen.ghannam@amd.com>
+> 
+> There's no "Co-authored-by".
+> 
+> The correct tag is described in
+> 
+> Documentation/process/submitting-patches.rst
 
-How did you decide this is the commit that this is fixing?
+Will fix them in the v6.
 
-> Link: https://lore.kernel.org/lkml/9dfe087a-f941-1bc4-657d-7e7c198888ff@gnuweeb.org
+> ...
+> 
+>> @@ -1350,15 +1357,14 @@ int mce_threshold_create_device(unsigned int cpu)
+>>   		if (!(this_cpu_read(bank_map) & (1 << bank)))
+>>   			continue;
+>>   		err = threshold_create_bank(bp, cpu, bank);
+>> -		if (err)
+>> -			goto out_err;
+>> +		if (err) {
+>> +			_mce_threshold_remove_device(bp, numbanks);
+>> +			return err;
+>> +		}
+>>   	}
+>>   	this_cpu_write(threshold_banks, bp);
+> 
+> Do I see it correctly that the publishing of the @bp pointer - i.e.,
+> this line - should be moved right above the for loop?
+> 
+> Then mce_threshold_remove_device() would properly free it in the error
+> case and your patch turns into a oneliner?
 
-That Link tag is not needed.
+Previously, in v4 I did that too. But after discussion with Yazen, we got a
+conclusion that placing `this_cpu_write(threshold_banks, bp);` before the for loop
+is not the right thing to do.
 
-> Co-authored-by: Alviro Iskandar Setiawan <alviro.iskandar@gnuweeb.org>
-> Signed-off-by: Alviro Iskandar Setiawan <alviro.iskandar@gnuweeb.org>
-> Co-authored-by: Yazen Ghannam <yazen.ghannam@amd.com>
+> And then your Fixes: tag would be correct too...
+The reason is based on the discussion with Yazen, the full discussion can be read in
+the Link tag above.
 
-There's no "Co-authored-by".
+==================
+The point is:
 
-The correct tag is described in
+On Wed, 2 Mar 2022 17:26:32 +0000, Yazen Ghannam <yazen.ghannam@amd.com> wrote:
+> The threshold interrupt handler uses this pointer. I think the goal here is to
+> set this pointer when the list is fully formed and clear this pointer before
+> making any changes to the list. Otherwise, the interrupt handler will operate
+> on incomplete data if an interrupt comes in the middle of these updates.
+==================
 
-Documentation/process/submitting-patches.rst
+Also, looking at the comment in mce_threshold_remove_device() function:
 
-Please make sure you've read that file before sending patches.
+	/*
+	 * Clear the pointer before cleaning up, so that the interrupt won't
+	 * touch anything of this.
+	 */
+	this_cpu_write(threshold_banks, NULL);
 
-> Signed-off-by: Yazen Ghannam <yazen.ghannam@amd.com>
-> Signed-off-by: Ammar Faizi <ammarfaizi2@gnuweeb.org>
-> ---
->  arch/x86/kernel/cpu/mce/amd.c | 32 +++++++++++++++++++-------------
->  1 file changed, 19 insertions(+), 13 deletions(-)
+I think it's reasonable to place `this_cpu_write(threshold_banks, bp);` after
+the "for loop" on the creation process for the similar reason. In short, don't
+let the interrupt sees incomplete data.
 
-...
+Although, I am not sure if that 100% guarantees mce_threshold_remove_device()
+will not mess up with the interrupt (e.g. freeing the data while the interrupt
+reading it), unless we're using RCU stuff.
 
-> @@ -1350,15 +1357,14 @@ int mce_threshold_create_device(unsigned int cpu)
->  		if (!(this_cpu_read(bank_map) & (1 << bank)))
->  			continue;
->  		err = threshold_create_bank(bp, cpu, bank);
-> -		if (err)
-> -			goto out_err;
-> +		if (err) {
-> +			_mce_threshold_remove_device(bp, numbanks);
-> +			return err;
-> +		}
->  	}
->  	this_cpu_write(threshold_banks, bp);
-
-Do I see it correctly that the publishing of the @bp pointer - i.e.,
-this line - should be moved right above the for loop?
-
-Then mce_threshold_remove_device() would properly free it in the error
-case and your patch turns into a oneliner?
-
-And then your Fixes: tag would be correct too...
+What do you think?
 
 -- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+Ammar Faizi
