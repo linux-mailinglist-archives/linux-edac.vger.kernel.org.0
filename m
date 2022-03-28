@@ -2,68 +2,76 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1B7B4E8F60
-	for <lists+linux-edac@lfdr.de>; Mon, 28 Mar 2022 09:54:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C22B74E8F74
+	for <lists+linux-edac@lfdr.de>; Mon, 28 Mar 2022 09:57:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235343AbiC1Hzy (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Mon, 28 Mar 2022 03:55:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35090 "EHLO
+        id S236713AbiC1H6r (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Mon, 28 Mar 2022 03:58:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235479AbiC1Hzy (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Mon, 28 Mar 2022 03:55:54 -0400
-X-Greylist: delayed 432 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 28 Mar 2022 00:54:14 PDT
-Received: from mail.ourpartnership.pl (mail.ourpartnership.pl [80.211.82.238])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7084F9FF3
-        for <linux-edac@vger.kernel.org>; Mon, 28 Mar 2022 00:54:14 -0700 (PDT)
-Received: by mail.ourpartnership.pl (Postfix, from userid 1001)
-        id A2DCC61B19; Mon, 28 Mar 2022 08:46:18 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ourpartnership.pl;
-        s=mail; t=1648453620;
-        bh=M1ZVeu3q6Upppe+FUx/3rgI7MKJXh389NZDbgCK1SX4=;
-        h=Date:From:To:Subject:From;
-        b=GmddHBurhyaxGGePWZaMTJ6JPqtND5Dzzn0Tigyzj+snCAvcn9Mhmj3g+tq6hF6Zy
-         bBHnXyLmNeHnMKciQnKAgrUiqsr+7jRs5jYlDxA64Rrar9NE/HUFQoaDYrGW2FEkAy
-         Oq0VwCelVBpp48okIOi946/4QIZYVjPivRhxOPDt2X/4TBtWv2N5tebi85AN7UXcXO
-         P9E/87FXW6Bnz8neAATsjSmvJ9ZirhX9f+fRma0HfyYclrd+EwEL6UxxvPI3VaOisw
-         ctfYyZH5BRFSBDapdwLNnM6Ciob0OyT2DKkgdcmfCzbbaE/l99NkmlbYnssJ7qFvoV
-         MRdPubljPs2Uw==
-Received: by mail.ourpartnership.pl for <linux-edac@vger.kernel.org>; Mon, 28 Mar 2022 07:46:04 GMT
-Message-ID: <20220328074501-0.1.9.29zb.0.od2or48kec@ourpartnership.pl>
-Date:   Mon, 28 Mar 2022 07:46:04 GMT
-From:   =?UTF-8?Q? "Arkadiusz_Soko=C5=82owski" ?= 
-        <arkadiusz.sokolowski@ourpartnership.pl>
-To:     <linux-edac@vger.kernel.org>
-Subject: Koszty instalacji fotowoltaicznej
-X-Mailer: mail.ourpartnership.pl
+        with ESMTP id S229463AbiC1H6r (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Mon, 28 Mar 2022 03:58:47 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 333E0E0B1;
+        Mon, 28 Mar 2022 00:57:07 -0700 (PDT)
+Received: from zn.tnic (p2e55dff8.dip0.t-ipconnect.de [46.85.223.248])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 7B8FB1EC03AD;
+        Mon, 28 Mar 2022 09:57:01 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1648454221;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=1SO2tTLkDgNIJB8WVLVL5gv7dKbkgH3H7QX1GII/UIg=;
+        b=geNHG+uC+BsHhRbcfEwekt/WScmoIXcO2OZGHyHPPoydbiaKPE45tjcJU8DmmK9M7jVewQ
+        eoLFH6K0JHXCpqjQpMwT8O4nczDfjXcVxVf0+SRGuLpOsmOD/vp6Pmv88L6A/h/wy/+Khc
+        yT6jeemg/vmJjDvhHZNtsSql8skjrpA=
+Date:   Mon, 28 Mar 2022 09:56:58 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Ammar Faizi <ammarfaizi2@gnuweeb.org>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Alviro Iskandar Setiawan <alviro.iskandar@gmail.com>,
+        Alviro Iskandar Setiawan <alviro.iskandar@gnuweeb.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Yazen Ghannam <yazen.ghannam@amd.com>,
+        linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org, gwml@vger.gnuweeb.org, x86@kernel.org,
+        David Laight <David.Laight@aculab.com>,
+        Jiri Hladky <hladky.jiri@googlemail.com>
+Subject: Re: [PATCH v5 1/2] x86/delay: Fix the wrong asm constraint in
+ `delay_loop()`
+Message-ID: <YkFqSr7dMSXPbmyo@zn.tnic>
+References: <20220310015306.445359-1-ammarfaizi2@gnuweeb.org>
+ <20220310015306.445359-2-ammarfaizi2@gnuweeb.org>
+ <YkDZY8n1k5SJw9st@zn.tnic>
+ <6f020f3a-da63-09a5-95f4-167429ff3727@gnuweeb.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <6f020f3a-da63-09a5-95f4-167429ff3727@gnuweeb.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-Dzie=C5=84 dobry,
+On Mon, Mar 28, 2022 at 11:29:26AM +0700, Ammar Faizi wrote:
+> See the example from Alviro here:
+> 
+>   https://lore.kernel.org/lkml/CAOG64qPgTv5tQNknuG9d-=oL2EPQQ1ys7xu2FoBpNLyzv1qYzA@mail.gmail.com/
 
-stworzyli=C5=9Bmy specjaln=C4=85 ofert=C4=99 dla firm, na kompleksow=C4=85=
- obs=C5=82ug=C4=99 inwestycji w fotowoltaik=C4=99. =20
+Not the same thing - see David's reply there.
 
-Specjalizujemy si=C4=99 w zakresie doboru, monta=C5=BCu i serwisie instal=
-acji fotowoltaicznych, dysponujemy najnowocze=C5=9Bniejszymi rozwi=C4=85z=
-ania, kt=C3=B3re zapewni=C4=85 Pa=C5=84stwu oczekiwane rezultaty.
+-- 
+Regards/Gruss,
+    Boris.
 
-Mo=C5=BCemy przygotowa=C4=87 dla Pa=C5=84stwa wst=C4=99pn=C4=85 kalkulacj=
-=C4=99 i przeanalizowa=C4=87 efekty mo=C5=BCliwe do osi=C4=85gni=C4=99cia=
-=2E
-
-Czy s=C4=85 Pa=C5=84stwo otwarci na wst=C4=99pn=C4=85 rozmow=C4=99 w tym =
-temacie?
-
-
-Pozdrawiam
-Arkadiusz Soko=C5=82owski
+https://people.kernel.org/tglx/notes-about-netiquette
