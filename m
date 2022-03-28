@@ -2,113 +2,90 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E2A874E9C0B
-	for <lists+linux-edac@lfdr.de>; Mon, 28 Mar 2022 18:17:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E2604E9C16
+	for <lists+linux-edac@lfdr.de>; Mon, 28 Mar 2022 18:19:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241695AbiC1QSs (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Mon, 28 Mar 2022 12:18:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52422 "EHLO
+        id S241837AbiC1QTd (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Mon, 28 Mar 2022 12:19:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235679AbiC1QSr (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Mon, 28 Mar 2022 12:18:47 -0400
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2058.outbound.protection.outlook.com [40.107.94.58])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 440243137F
-        for <linux-edac@vger.kernel.org>; Mon, 28 Mar 2022 09:17:07 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=nMVytat6p5KKTFDECLeRPs65PzDG9W7efbB4k/tSQdK4u9amJOzBszV/a/uHXbDDOEDa70YgXNKsDBpBmdaxrAGGoSGo05lxyvO06iBILR/qO0pw3hxyruz9dOe+Jy3oL/xHnDGmh7RZEVNgdEhCuS4AUpFqdCIrm4GZG5Bg1Fs76MPdLqS4UwGuWyThQmwM1vPA4ubZBS2eUIjWj0aLfbc41WhI58xPC/g3WXLLXnHeKtqQExCHVYYoS2075LtWjYbZNiDVmWHdDszIb8/tIOmVlB5N6FXhr//ixNQC4ESwpzD1+h3aP1uZgCvbmlWp6nrg3gtg0EBVzL6cc5bs8g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=zFYBc2y+1ebSEzAxMCJhqak4ULDIQHxgxu3FdAHdvoc=;
- b=klrzebX6DGu/ejZKQuFFiCY5tXwMqQYuohFXM3gvuRBRgwgR3iqq0ckBk622XDWhP6nvWywnHX0pFByfjmjxBs4ZeNBKjQNDSdHbI5QaKz7OVzYTdyj8xqS1X+qUb2ie4OVX1K7JzBH9N1CUK2hALE/7MpK7Uzlyn9r5dLLfXA56CJod8dxth5sZ/QTCa5rJPDkJJsWtIPHdwEWyJu/v+MKBOlt7YKzKnEV6EgeRSg8gmONvZgLBjgIT1wDKSr8AOdy9dtMlDehz2xAT0oi2RsZRm4UkG9q+r2mcSY7E5NYpSkERYcYW/RVyqeJsCjnWKGU0sMX504um2343Zbef8w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=zFYBc2y+1ebSEzAxMCJhqak4ULDIQHxgxu3FdAHdvoc=;
- b=sCSi3iFoBaZmYkR5ZD/sRcupNLS8noU3NjL36/OsDTRjDcbjf7DD12nOlmB96WmJ9MmyFVyZOezVHyOiQfJQX5/acoiPr92AnMn7XhuxB/0kUFAhScTy5Tkk8cpKxhX8AIXIUddCJdMZP6pU+swGrYFaxLPrG8RPp3Gc/i/XcmQ=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from BN8PR12MB3108.namprd12.prod.outlook.com (2603:10b6:408:40::20)
- by DM5PR1201MB2491.namprd12.prod.outlook.com (2603:10b6:3:eb::23) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5102.19; Mon, 28 Mar
- 2022 16:17:04 +0000
-Received: from BN8PR12MB3108.namprd12.prod.outlook.com
- ([fe80::6589:ebfc:1f11:3df0]) by BN8PR12MB3108.namprd12.prod.outlook.com
- ([fe80::6589:ebfc:1f11:3df0%5]) with mapi id 15.20.5102.023; Mon, 28 Mar 2022
- 16:17:04 +0000
-Date:   Mon, 28 Mar 2022 16:17:00 +0000
-From:   Yazen Ghannam <yazen.ghannam@amd.com>
-To:     Naveen Krishna Chatradhi <nchatrad@amd.com>
-Cc:     linux-edac@vger.kernel.org, bp@alien8.de, mingo@redhat.com,
-        mchehab@kernel.org, Muralidhara M K <muralimk@amd.com>
-Subject: Re: [PATCH 07/14] EDAC/amd64: Add ecc_enabled() into pvt->ops
-Message-ID: <YkHffKdAv9XByabw@yaz-ubuntu>
-References: <20220228161354.54923-1-nchatrad@amd.com>
- <20220228161354.54923-8-nchatrad@amd.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220228161354.54923-8-nchatrad@amd.com>
-X-ClientProxiedBy: BL1P222CA0004.NAMP222.PROD.OUTLOOK.COM
- (2603:10b6:208:2c7::9) To BN8PR12MB3108.namprd12.prod.outlook.com
- (2603:10b6:408:40::20)
+        with ESMTP id S241774AbiC1QT1 (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Mon, 28 Mar 2022 12:19:27 -0400
+Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D00E23E5DC;
+        Mon, 28 Mar 2022 09:17:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1648484267; x=1680020267;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=Eu7nJy5jkPS6ql5ANPoXUckpfZ6g40U1vF2Yo2ODg4c=;
+  b=lWeb1oJMQ0HozGS+eGbIRSBM70ecG0kNOWkFHmOM/8VfoOy75JCLoOb4
+   d47bbHtIXAkYOjAlBNW0AoXXVcWbG5tVN29cajuIQEVQ8nwDfHSXvscLI
+   8mEC8S3Z/VJIDvO+2/MEaYOobW+KYXjxtQ5n5Wam2hweqmslucbf1Rpki
+   4=;
+Received: from unknown (HELO ironmsg05-sd.qualcomm.com) ([10.53.140.145])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 28 Mar 2022 09:17:46 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg05-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Mar 2022 09:17:44 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Mon, 28 Mar 2022 09:17:44 -0700
+Received: from [10.110.35.108] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Mon, 28 Mar
+ 2022 09:17:41 -0700
+Message-ID: <f0ebc901-051a-c7fe-ca5a-bc798e7c31e7@quicinc.com>
+Date:   Mon, 28 Mar 2022 09:17:40 -0700
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: c7ba89d0-c9e8-409b-9623-08da10d66570
-X-MS-TrafficTypeDiagnostic: DM5PR1201MB2491:EE_
-X-Microsoft-Antispam-PRVS: <DM5PR1201MB249180847FF7D2946E1434D6F81D9@DM5PR1201MB2491.namprd12.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: rAZqt8uLxupTslVcjRcRCWhMDZ6ntUWcatzSX3qzA3AOum+Yk6C5gapagCJ/4RdJCWn2Z1adaHgeRwHgpwgc6XE/A9PKThfijyL3yr0c+6BmXaAtPTH5Zuh6AntKwGAZ3WE0gixX/oGz+m/Z9dZwuSOp2APTMSdazCFtTzlv26vPxUVTeUoUnf/Vq4x0bRRB+bm4IzWXKfKBhA+MUe+QhUoehjxGoGAaKDrXV6Rd/4RoBsSeYPauFMmHv29ZPuCwKr5N3ldRS5sHKOC8V0kisaF8QrOYxd0R6Jf3qh0AaWL6+EDji1TVlujD5Cq90grs8qqC1Hsl3dPGCvrwGhSP+v6Cj7Mba7vfL3JMdhX8gaIXmNpSIGgUFhM/fmK5WfPkplI6wVCEloXyYbzfdVt8OiG/DfLTMnANV/HY3HZXbX8Bw6QCueqs74UfWETeh14fEOrmaqAJY7Xh578jL9wvJ8XD9j16xavZx3E5MGnm9ds3KoAgXimGmJkeZalkCK5vTbeCo8Gz9wxi90n3yp58q/fHTiDU6BQEQj74iHbDaoZoX11TsrThROCndZzeQWLf7VQ/N/xyi9BgyjZjxuyzawL7Jz1dtkiEBqS3rsZYn6GJN8lTBfa16B0jg2rlRg5WMcQ8QxF5vp7WOPJ7G8JtJkzMPVPDFjAean08vWMPMZwFg/WHHuEylwYz0gcZXc8UnLbvud4lrJTTRJHlVKilWtvFbR218haEgCiXLugcWHE=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3108.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(7916004)(366004)(6666004)(26005)(508600001)(186003)(6486002)(966005)(44832011)(2906002)(5660300002)(316002)(66556008)(66946007)(4326008)(6862004)(8676002)(6636002)(66476007)(6512007)(9686003)(83380400001)(6506007)(33716001)(86362001)(8936002)(38100700002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?gcd6BRPkFRICvHJ+GodbXP30PwAnlmZk+eodIh+0KbhJRe+dMi8IE0F8yqW7?=
- =?us-ascii?Q?WFAWRDVoLX7nwX8H+jgnzh7lw2uxliyXD9MmKKYl7ZPV05HLbGICXpvJ38ah?=
- =?us-ascii?Q?dGzbGD+mbyhu09Ldaq/hKH68ISM2xFytXIEpC72oPJeLc4uNw7as0jjw9wmT?=
- =?us-ascii?Q?ws/lHSyt8aQbt+DHFvaymTK6XtKBxlajq9nH/PnKVKW716Ec/N5/dXHyOxqj?=
- =?us-ascii?Q?NCJF5/iNIiGJKEUl73EtL4mspyLnjrUt8RLKOmu/zkO/WqlaZYXxY5UXrshY?=
- =?us-ascii?Q?CV0+CtiH2X8PKzQwVq6JK2gDZAy2MwrbaD8wRo4qMetF2MEIqXqzSjZ6SB4j?=
- =?us-ascii?Q?ocrvlRhG1PzFotqsVD/yq25g7b+kbCwXr4Txdp92wKFSn0005xnp6f7NQJxq?=
- =?us-ascii?Q?JpwY3KslunfXzU3q7eXKCOTzLV0r3uD3b8N0kSXmbXjzeCwYKo3SdsSP3ejM?=
- =?us-ascii?Q?H2VQAAjaYc5W78kB4ZZsTckOnJe96L5Unpf26T621RoREgPWPARSZpu67xdl?=
- =?us-ascii?Q?ePGB2s1l0a3HmbmAuQP4dgL9HxRLekGHOn12M+kDLd0PLtQXRMcl4jpCllpL?=
- =?us-ascii?Q?bDJp+aswPHaQvGSFldBy6zPyes6zEsy+BAQm3ESTp/Y91TuYp/3m4+Z8g6iH?=
- =?us-ascii?Q?Nd4orrZTJDHC4TR+og+g0dder8AbB3eKD9m5laoGn1F803YrcIwKKt3j6gbJ?=
- =?us-ascii?Q?ZrzQK4m0YfktYzZlOSOp0ZCEYWwEG9hT4KfrgXENllzn75Gk1tmXDPpPPyuK?=
- =?us-ascii?Q?VYJkfUmLf/S8azJBu6DM2gSOs0r0SIVlfZHipqAnMz7CthrKxp++YyKQWemK?=
- =?us-ascii?Q?yGzGRkOq9FzSVlr73/7QbTnE6Vu34K9lzHPqnA44Bvn9QSCCNtvPZI0pYR6f?=
- =?us-ascii?Q?EUcV9Qtv9kYAx72kaMuCruBBqfMjqY/QFmnaVtube6rcgzUymw56AmcfeRVt?=
- =?us-ascii?Q?9uQ4oGEB34R5tMD+XToY0FM6Rwl8gRJBQndzbE3vLcvTwrSF8jlW6xG1X1JY?=
- =?us-ascii?Q?Z9SzrrB4kCKqq8+5xIGpO6NZjb/trkLQRFKMoqfsEnKuvKKf5D0v4GKuo71j?=
- =?us-ascii?Q?RmHT45IpM9W1/5pJdik925DTqooIy3otG+LghXQ0fsXcU0tvfO6U5fPlTSgN?=
- =?us-ascii?Q?CBL/6Gb5IzOCtSHjzBIZkduHZTKvfEVfn6lDXv9Y7L/dBNh1n+gssJp1Ixv7?=
- =?us-ascii?Q?L0yjx1SCqLPWJ4Md1gbW11ZzDcFqwzWko7Hs4m8ZgXeMBscZ/vkmGOYqEJso?=
- =?us-ascii?Q?UCXtWSlIIv59hXaEpaooi6PxVZcAWs9mfCQtE6BwJWOFnM9+7Pkhxr3huxnz?=
- =?us-ascii?Q?nUJLe6FQpzq0t0UoFRcf+gBLh+RU8NiBrg3VLs7CtCAz/iUl/gt4VoKRKSl8?=
- =?us-ascii?Q?AUc4JkObY36e2J2PTy9UXmmNgQbI3QYHCqMJkoOtFcH/jYn5DvVhev2yG+j+?=
- =?us-ascii?Q?l/o/pefsq0EnBAdTCCn1DQn8tfAQXRRtz5l5agRfO2YS4bsAh7AzvulrhdfN?=
- =?us-ascii?Q?Zb2YO1GjsxOrcZI9lGWNnQRH8pTRjtONBZqikJYuU2GyAxxhXXExCiJJLUMc?=
- =?us-ascii?Q?fjTotMN/g13zlP1PsZkfcCShW16mxOGE5JraOASdBAugzkSi3pU5kKSXBXw/?=
- =?us-ascii?Q?zJIY+g65IPpMB7MizIU3CIJ34FLnJ19sHBp8+UlTKqG6wmRJc668lkRdXl0d?=
- =?us-ascii?Q?4TrI7wQvg02o/P4xAuoO181sjmcHL3XsXhf1EhAzqj8Neb0YCfYmQ4JkL8/+?=
- =?us-ascii?Q?/IX48kq6lg=3D=3D?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c7ba89d0-c9e8-409b-9623-08da10d66570
-X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3108.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Mar 2022 16:17:03.9300
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: YNgNnQXWR9fYqPgH/1Mh6L2vCBC0nbYV3qixNB8P+QaIZEPM8x39lHRYIyacptUQvXRL8x+j46SX/mX//bfzIQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR1201MB2491
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH 19/22] wnc36xx: Replace comments with C99 initializers
+Content-Language: en-US
+To:     =?UTF-8?Q?Benjamin_St=c3=bcrz?= <benni@stuerz.xyz>,
+        <andrew@lunn.ch>
+CC:     <sebastian.hesselbarth@gmail.com>, <gregory.clement@bootlin.com>,
+        <linux@armlinux.org.uk>, <linux@simtec.co.uk>, <krzk@kernel.org>,
+        <alim.akhtar@samsung.com>, <tglx@linutronix.de>,
+        <mingo@redhat.com>, <bp@alien8.de>, <dave.hansen@linux.intel.com>,
+        <hpa@zytor.com>, <robert.moore@intel.com>,
+        <rafael.j.wysocki@intel.com>, <lenb@kernel.org>,
+        <3chas3@gmail.com>, <laforge@gnumonks.org>, <arnd@arndb.de>,
+        <gregkh@linuxfoundation.org>, <mchehab@kernel.org>,
+        <tony.luck@intel.com>, <james.morse@arm.com>, <rric@kernel.org>,
+        <linus.walleij@linaro.org>, <brgl@bgdev.pl>,
+        <mike.marciniszyn@cornelisnetworks.com>,
+        <dennis.dalessandro@cornelisnetworks.com>, <jgg@ziepe.ca>,
+        <pali@kernel.org>, <dmitry.torokhov@gmail.com>,
+        <isdn@linux-pingi.de>, <benh@kernel.crashing.org>,
+        <fbarrat@linux.ibm.com>, <ajd@linux.ibm.com>,
+        <davem@davemloft.net>, <kuba@kernel.org>, <pabeni@redhat.com>,
+        <nico@fluxnic.net>, <loic.poulain@linaro.org>, <kvalo@kernel.org>,
+        <pkshih@realtek.com>, <bhelgaas@google.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-samsung-soc@vger.kernel.org>, <linux-ia64@vger.kernel.org>,
+        <linux-acpi@vger.kernel.org>, <devel@acpica.org>,
+        <linux-atm-general@lists.sourceforge.net>,
+        <netdev@vger.kernel.org>, <linux-edac@vger.kernel.org>,
+        <linux-gpio@vger.kernel.org>, <linux-rdma@vger.kernel.org>,
+        <linux-input@vger.kernel.org>, <linuxppc-dev@lists.ozlabs.org>,
+        <linux-media@vger.kernel.org>, <wcn36xx@lists.infradead.org>,
+        <linux-wireless@vger.kernel.org>, <linux-pci@vger.kernel.org>
+References: <20220326165909.506926-1-benni@stuerz.xyz>
+ <20220326165909.506926-19-benni@stuerz.xyz>
+From:   Jeff Johnson <quic_jjohnson@quicinc.com>
+In-Reply-To: <20220326165909.506926-19-benni@stuerz.xyz>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UPPERCASE_50_75
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -116,120 +93,157 @@ Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Mon, Feb 28, 2022 at 09:43:47PM +0530, Naveen Krishna Chatradhi wrote:
-> From: Muralidhara M K <muralimk@amd.com>
+On 3/26/2022 9:59 AM, Benjamin Stürz wrote:
+> This replaces comments with C99's designated
+> initializers because the kernel supports them now.
 > 
-> Add function pointer for ecc_enabled() in pvt->ops and assign
-> family specific ecc_enabled() definitions appropriately.
->
-
-Please include the "why".
- 
-> Signed-off-by: Muralidhara M K <muralimk@amd.com>
-> Signed-off-by: Naveen Krishna Chatradhi <nchatrad@amd.com>
+> Signed-off-by: Benjamin Stürz <benni@stuerz.xyz>
 > ---
-> This patch is created by splitting the 5/12th patch in series
-> [v7 5/12] https://patchwork.kernel.org/project/linux-edac/patch/20220203174942.31630-6-nchatrad@amd.com/
+>   drivers/net/wireless/ath/wcn36xx/main.c | 122 ++++++++++++------------
+>   1 file changed, 61 insertions(+), 61 deletions(-)
 > 
->  drivers/edac/amd64_edac.c | 77 ++++++++++++++++++++++++---------------
->  drivers/edac/amd64_edac.h |  1 +
->  2 files changed, 48 insertions(+), 30 deletions(-)
-> 
-> diff --git a/drivers/edac/amd64_edac.c b/drivers/edac/amd64_edac.c
-> index 713ffe763e64..15d775a9ce7e 100644
-> --- a/drivers/edac/amd64_edac.c
-> +++ b/drivers/edac/amd64_edac.c
-> @@ -3649,49 +3649,60 @@ static void restore_ecc_error_reporting(struct ecc_settings *s, u16 nid,
->  		amd64_warn("Error restoring NB MCGCTL settings!\n");
->  }
->  
-> -static bool ecc_enabled(struct amd64_pvt *pvt)
-> +static bool f1x_ecc_enabled(struct amd64_pvt *pvt)
->  {
->  	u16 nid = pvt->mc_node_id;
->  	bool nb_mce_en = false;
-> -	u8 ecc_en = 0, i;
-> +	u8 ecc_en = 0;
->  	u32 value;
->  
-> -	if (boot_cpu_data.x86 >= 0x17) {
-> -		u8 umc_en_mask = 0, ecc_en_mask = 0;
-> -		struct amd64_umc *umc;
-> +	amd64_read_pci_cfg(pvt->F3, NBCFG, &value);
->  
-> -		for_each_umc(i) {
-> -			umc = &pvt->umc[i];
-> +	ecc_en = !!(value & NBCFG_ECC_ENABLE);
->  
-> -			/* Only check enabled UMCs. */
-> -			if (!(umc->sdp_ctrl & UMC_SDP_INIT))
-> -				continue;
-> +	nb_mce_en = nb_mce_bank_enabled_on_node(nid);
-> +	if (!nb_mce_en)
-> +		edac_dbg(0, "NB MCE bank disabled, set MSR 0x%08x[4] on node %d to enable.\n",
-> +			 MSR_IA32_MCG_CTL, nid);
->  
-> -			umc_en_mask |= BIT(i);
-> +	edac_dbg(3, "Node %d: DRAM ECC %s.\n", nid, (ecc_en ? "enabled" : "disabled"));
->  
-> -			if (umc->umc_cap_hi & UMC_ECC_ENABLED)
-> -				ecc_en_mask |= BIT(i);
-> -		}
-> +	if (!ecc_en || !nb_mce_en)
-> +		return false;
-> +	else
-> +		return true;
-> +}
->  
-> -		/* Check whether at least one UMC is enabled: */
-> -		if (umc_en_mask)
-> -			ecc_en = umc_en_mask == ecc_en_mask;
-> -		else
-> -			edac_dbg(0, "Node %d: No enabled UMCs.\n", nid);
-> +static bool f17_ecc_enabled(struct amd64_pvt *pvt)
-> +{
-> +	u8 umc_en_mask = 0, ecc_en_mask = 0;
-> +	u8 ecc_en = 0, i;
+> diff --git a/drivers/net/wireless/ath/wcn36xx/main.c b/drivers/net/wireless/ath/wcn36xx/main.c
+> index 95ea7d040d8c..0fed64bd37b4 100644
+> --- a/drivers/net/wireless/ath/wcn36xx/main.c
+> +++ b/drivers/net/wireless/ath/wcn36xx/main.c
+> @@ -193,67 +193,67 @@ static inline u8 get_sta_index(struct ieee80211_vif *vif,
+>   }
+>   
+>   static const char * const wcn36xx_caps_names[] = {
+> -	"MCC",				/* 0 */
+> -	"P2P",				/* 1 */
+> -	"DOT11AC",			/* 2 */
+> -	"SLM_SESSIONIZATION",		/* 3 */
+> -	"DOT11AC_OPMODE",		/* 4 */
+> -	"SAP32STA",			/* 5 */
+> -	"TDLS",				/* 6 */
+> -	"P2P_GO_NOA_DECOUPLE_INIT_SCAN",/* 7 */
+> -	"WLANACTIVE_OFFLOAD",		/* 8 */
+> -	"BEACON_OFFLOAD",		/* 9 */
+> -	"SCAN_OFFLOAD",			/* 10 */
+> -	"ROAM_OFFLOAD",			/* 11 */
+> -	"BCN_MISS_OFFLOAD",		/* 12 */
+> -	"STA_POWERSAVE",		/* 13 */
+> -	"STA_ADVANCED_PWRSAVE",		/* 14 */
+> -	"AP_UAPSD",			/* 15 */
+> -	"AP_DFS",			/* 16 */
+> -	"BLOCKACK",			/* 17 */
+> -	"PHY_ERR",			/* 18 */
+> -	"BCN_FILTER",			/* 19 */
+> -	"RTT",				/* 20 */
+> -	"RATECTRL",			/* 21 */
+> -	"WOW",				/* 22 */
+> -	"WLAN_ROAM_SCAN_OFFLOAD",	/* 23 */
+> -	"SPECULATIVE_PS_POLL",		/* 24 */
+> -	"SCAN_SCH",			/* 25 */
+> -	"IBSS_HEARTBEAT_OFFLOAD",	/* 26 */
+> -	"WLAN_SCAN_OFFLOAD",		/* 27 */
+> -	"WLAN_PERIODIC_TX_PTRN",	/* 28 */
+> -	"ADVANCE_TDLS",			/* 29 */
+> -	"BATCH_SCAN",			/* 30 */
+> -	"FW_IN_TX_PATH",		/* 31 */
+> -	"EXTENDED_NSOFFLOAD_SLOT",	/* 32 */
+> -	"CH_SWITCH_V1",			/* 33 */
+> -	"HT40_OBSS_SCAN",		/* 34 */
+> -	"UPDATE_CHANNEL_LIST",		/* 35 */
+> -	"WLAN_MCADDR_FLT",		/* 36 */
+> -	"WLAN_CH144",			/* 37 */
+> -	"NAN",				/* 38 */
+> -	"TDLS_SCAN_COEXISTENCE",	/* 39 */
+> -	"LINK_LAYER_STATS_MEAS",	/* 40 */
+> -	"MU_MIMO",			/* 41 */
+> -	"EXTENDED_SCAN",		/* 42 */
+> -	"DYNAMIC_WMM_PS",		/* 43 */
+> -	"MAC_SPOOFED_SCAN",		/* 44 */
+> -	"BMU_ERROR_GENERIC_RECOVERY",	/* 45 */
+> -	"DISA",				/* 46 */
+> -	"FW_STATS",			/* 47 */
+> -	"WPS_PRBRSP_TMPL",		/* 48 */
+> -	"BCN_IE_FLT_DELTA",		/* 49 */
+> -	"TDLS_OFF_CHANNEL",		/* 51 */
+> -	"RTT3",				/* 52 */
+> -	"MGMT_FRAME_LOGGING",		/* 53 */
+> -	"ENHANCED_TXBD_COMPLETION",	/* 54 */
+> -	"LOGGING_ENHANCEMENT",		/* 55 */
+> -	"EXT_SCAN_ENHANCED",		/* 56 */
+> -	"MEMORY_DUMP_SUPPORTED",	/* 57 */
+> -	"PER_PKT_STATS_SUPPORTED",	/* 58 */
+> -	"EXT_LL_STAT",			/* 60 */
+> -	"WIFI_CONFIG",			/* 61 */
+> -	"ANTENNA_DIVERSITY_SELECTION",	/* 62 */
+> +	[0]  = "MCC",
+> +	[1]  = "P2P",
+> +	[2]  = "DOT11AC",
+> +	[3]  = "SLM_SESSIONIZATION",
+> +	[4]  = "DOT11AC_OPMODE",
+> +	[5]  = "SAP32STA",
+> +	[6]  = "TDLS",
+> +	[7]  = "P2P_GO_NOA_DECOUPLE_INIT_SCAN",
+> +	[8]  = "WLANACTIVE_OFFLOAD",
+> +	[9]  = "BEACON_OFFLOAD",
+> +	[10] = "SCAN_OFFLOAD",
+> +	[11] = "ROAM_OFFLOAD",
+> +	[12] = "BCN_MISS_OFFLOAD",
+> +	[13] = "STA_POWERSAVE",
+> +	[14] = "STA_ADVANCED_PWRSAVE",
+> +	[15] = "AP_UAPSD",
+> +	[16] = "AP_DFS",
+> +	[17] = "BLOCKACK",
+> +	[18] = "PHY_ERR",
+> +	[19] = "BCN_FILTER",
+> +	[20] = "RTT",
+> +	[21] = "RATECTRL",
+> +	[22] = "WOW",
+> +	[23] = "WLAN_ROAM_SCAN_OFFLOAD",
+> +	[24] = "SPECULATIVE_PS_POLL",
+> +	[25] = "SCAN_SCH",
+> +	[26] = "IBSS_HEARTBEAT_OFFLOAD",
+> +	[27] = "WLAN_SCAN_OFFLOAD",
+> +	[28] = "WLAN_PERIODIC_TX_PTRN",
+> +	[29] = "ADVANCE_TDLS",
+> +	[30] = "BATCH_SCAN",
+> +	[31] = "FW_IN_TX_PATH",
+> +	[32] = "EXTENDED_NSOFFLOAD_SLOT",
+> +	[33] = "CH_SWITCH_V1",
+> +	[34] = "HT40_OBSS_SCAN",
+> +	[35] = "UPDATE_CHANNEL_LIST",
+> +	[36] = "WLAN_MCADDR_FLT",
+> +	[37] = "WLAN_CH144",
+> +	[38] = "NAN",
+> +	[39] = "TDLS_SCAN_COEXISTENCE",
+> +	[40] = "LINK_LAYER_STATS_MEAS",
+> +	[41] = "MU_MIMO",
+> +	[42] = "EXTENDED_SCAN",
+> +	[43] = "DYNAMIC_WMM_PS",
+> +	[44] = "MAC_SPOOFED_SCAN",
+> +	[45] = "BMU_ERROR_GENERIC_RECOVERY",
+> +	[46] = "DISA",
+> +	[47] = "FW_STATS",
+> +	[48] = "WPS_PRBRSP_TMPL",
+> +	[49] = "BCN_IE_FLT_DELTA",
+> +	[51] = "TDLS_OFF_CHANNEL",
+> +	[52] = "RTT3",
+> +	[53] = "MGMT_FRAME_LOGGING",
+> +	[54] = "ENHANCED_TXBD_COMPLETION",
+> +	[55] = "LOGGING_ENHANCEMENT",
+> +	[56] = "EXT_SCAN_ENHANCED",
+> +	[57] = "MEMORY_DUMP_SUPPORTED",
+> +	[58] = "PER_PKT_STATS_SUPPORTED",
+> +	[60] = "EXT_LL_STAT",
+> +	[61] = "WIFI_CONFIG",
+> +	[62] = "ANTENNA_DIVERSITY_SELECTION",
+>   };
+>   
+>   static const char *wcn36xx_get_cap_name(enum place_holder_in_cap_bitmap x)
 
-This line should go at the end to keep the longest->shortest line style.
+I know there has been much discussion on this series. For this specific 
+patch this would be a great change if you use the actual enumerations 
+from enum place_holder_in_cap_bitmap as the index values,
+i.e.
+  [MCC] = "MCC",
+  etc.
 
-> +	u16 nid = pvt->mc_node_id;
-> +	bool nb_mce_en = false;
-> +	struct amd64_umc *umc;
->  
-> -		/* Assume UMC MCA banks are enabled. */
-> -		nb_mce_en = true;
-> -	} else {
-> -		amd64_read_pci_cfg(pvt->F3, NBCFG, &value);
-> +	for_each_umc(i) {
-> +		umc = &pvt->umc[i];
-> +
-> +		/* Only check enabled UMCs. */
-> +		if (!(umc->sdp_ctrl & UMC_SDP_INIT))
-> +			continue;
->  
-> -		ecc_en = !!(value & NBCFG_ECC_ENABLE);
-> +		umc_en_mask |= BIT(i);
->  
-> -		nb_mce_en = nb_mce_bank_enabled_on_node(nid);
-> -		if (!nb_mce_en)
-> -			edac_dbg(0, "NB MCE bank disabled, set MSR 0x%08x[4] on node %d to enable.\n",
-> -				     MSR_IA32_MCG_CTL, nid);
-> +		if (umc->umc_cap_hi & UMC_ECC_ENABLED)
-> +			ecc_en_mask |= BIT(i);
->  	}
->  
-> +	/* Check whether at least one UMC is enabled: */
-> +	if (umc_en_mask)
-> +		ecc_en = umc_en_mask == ecc_en_mask;
-> +	else
-> +		edac_dbg(0, "Node %d: No enabled UMCs.\n", nid);
-> +
-> +	/* Assume UMC MCA banks are enabled. */
-> +	nb_mce_en = true;
-> +
+So a v2 for this patch would be appreciated
 
-The nb_mce_en variable can be dropped since this is now a separate function.
 
-Thanks,
-Yazen
+
