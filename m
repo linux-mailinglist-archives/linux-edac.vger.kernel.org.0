@@ -2,350 +2,136 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 82E514E96AD
-	for <lists+linux-edac@lfdr.de>; Mon, 28 Mar 2022 14:33:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 605F64E97D6
+	for <lists+linux-edac@lfdr.de>; Mon, 28 Mar 2022 15:17:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237327AbiC1Mf1 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-edac@lfdr.de>); Mon, 28 Mar 2022 08:35:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41798 "EHLO
+        id S243082AbiC1NTX (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Mon, 28 Mar 2022 09:19:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234500AbiC1Mf0 (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Mon, 28 Mar 2022 08:35:26 -0400
-Received: from mail-yb1-f169.google.com (mail-yb1-f169.google.com [209.85.219.169])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF14A634B;
-        Mon, 28 Mar 2022 05:33:45 -0700 (PDT)
-Received: by mail-yb1-f169.google.com with SMTP id o5so25732740ybe.2;
-        Mon, 28 Mar 2022 05:33:45 -0700 (PDT)
+        with ESMTP id S233955AbiC1NTW (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Mon, 28 Mar 2022 09:19:22 -0400
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E02275DA6E
+        for <linux-edac@vger.kernel.org>; Mon, 28 Mar 2022 06:17:38 -0700 (PDT)
+Received: by mail-wr1-x434.google.com with SMTP id w4so20313774wrg.12
+        for <linux-edac@vger.kernel.org>; Mon, 28 Mar 2022 06:17:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=tpXnN0VHB6iUEh42xZkIfKz+h2Jc2+CMtnusz63fzes=;
+        b=YPALESBKVO/yFKv+lXwz8leucUW/QtFuB0hl8JHZCqjO5xu4w5wIoQ5+pwQ+QRVXb9
+         3B2L4bQYw0N2jb7N56M5R7JWYxgho8xdRwRmv4vnJodlkTGVC2bN4KorM9+VarCUvhfz
+         rq7UuF1pwztE+IwdlG9cbNz+sqpgQ/NI9IDLUETHwbQomOpQYmH+MNVfGvC/MeWvzE8P
+         lVgleUzejo6opEuHS9sTuvN1v42e4fq5Sl4PYl0tj9Ag7RHSYKvKr2OYJJ4Wgi/PE7G+
+         XZp5RIOP+vUQXZXu/Ec0fSds9Y00Tni8973wJOMtSetYycYYe8h/qByU8h8Ok03tSfRP
+         ibtg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=96R3YZlaxPkbqjS50KOs84E9IviQBiQAWcWza7S6bDo=;
-        b=Eq2mSL2vnD6O8+ZRBdoVRBmAzgq1r6rWgZzq7LOOvHwzASWFDXpCszJbiVo012a9IS
-         KrdQT5R31WmUNLZrAECQeCnBglVyWTUqKuJ43nw8AZ9VfDU2zZaUklkvR9BnM3S/v78E
-         zUEVstpqnqhwc3lJonlMgYYtI1y0bew6v+5Nw08VU8nRs70VPZrmDlKjKP0DpLBs0biV
-         He4quWuPDU9CqDdVp3couqESWsolz3fKT7Q4/1GulbgxBEjtg140XPxti9KW6lzk1UAI
-         cpHx10t1/B7uG3mXCNP2ZxI2puZxYC58O+PR8RtoToBfa/oNEHrMarxQmK9uuTHRX7RS
-         cjKA==
-X-Gm-Message-State: AOAM533VjPY1pHRPQbGeOxrFqejjcPG0THMlugHn1enlAF/zPsUG+Z0U
-        lfUN+mUAfBg7cWBQ9Ob/ZuwBDI9lKmWFZP8RKQM=
-X-Google-Smtp-Source: ABdhPJx8Wg38N6VDkBqHhGiMOIVXRrg4vGvCYLhNlosUsWn6MZ6VqGYcxoBV2Rzxwr0C4NFzPtT0Oq2lDLGzpa8RiBA=
-X-Received: by 2002:a25:9d8a:0:b0:633:9668:c48a with SMTP id
- v10-20020a259d8a000000b006339668c48amr23154148ybp.153.1648470824874; Mon, 28
- Mar 2022 05:33:44 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220326165909.506926-1-benni@stuerz.xyz> <20220326165909.506926-5-benni@stuerz.xyz>
-In-Reply-To: <20220326165909.506926-5-benni@stuerz.xyz>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 28 Mar 2022 14:33:29 +0200
-Message-ID: <CAJZ5v0iJ=t26mnxHx9B+_A3ue7tVjgATN=TTtNNf2UNfuySd7Q@mail.gmail.com>
-Subject: Re: [PATCH 05/22] acpica: Replace comments with C99 initializers
-To:     =?UTF-8?Q?Benjamin_St=C3=BCrz?= <benni@stuerz.xyz>
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Russell King - ARM Linux <linux@armlinux.org.uk>,
-        linux@simtec.co.uk, Krzysztof Kozlowski <krzk@kernel.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Robert Moore <robert.moore@intel.com>,
-        Rafael Wysocki <rafael.j.wysocki@intel.com>,
-        Len Brown <lenb@kernel.org>, 3chas3@gmail.com,
-        laforge@gnumonks.org, Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Tony Luck <tony.luck@intel.com>,
-        James Morse <james.morse@arm.com>,
-        Robert Richter <rric@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=tpXnN0VHB6iUEh42xZkIfKz+h2Jc2+CMtnusz63fzes=;
+        b=771l5sYcV3SbQBR36o1UKCWkZz90mA23/4h4G+HMpjeUS1bwyb+kN4SPZIxXhUtO6G
+         /Yz3LshpUow9v5fLl0YSYESyh/HQ2Glb/00Eg/KmTfHoH56ZxkpF7SfafBzpvXaLspRs
+         2M6ZXOt3YObM/1JGBQZOZa6mrEINraHGcJ102fOwtqvCyzpNDVqscLG4xmiMqSOtWjt2
+         4NsE0RqCeUbPWnntoKRcOY6OSBiPy+i0Jf3m6jawNGR7oXs9KQlpUF6Fqu1jBTBHyCet
+         HgBdKjoBx10toKIbf9Zdok4p1cV0Zir4NcVXrBjfH81y/bj7EpJpfrH5uNJnMqvgE9B+
+         AuUw==
+X-Gm-Message-State: AOAM531YY5GWHOgqxYvpIoEMpRO4XgBBGtQYXr4N7GnC7L7ghPZqJ2TB
+        Th+RKkOCQBQJJR6Pr0NzTe2hnA==
+X-Google-Smtp-Source: ABdhPJxNq7t8QyUoAz9PQk4czd3rKFhq8Qof4HJlKz+Grc5sLrrh91AI45J9TNBzEfnY5jgV4oClHQ==
+X-Received: by 2002:a05:6000:1ac8:b0:204:2917:acd4 with SMTP id i8-20020a0560001ac800b002042917acd4mr23551818wry.31.1648473457317;
+        Mon, 28 Mar 2022 06:17:37 -0700 (PDT)
+Received: from maple.lan (cpc141216-aztw34-2-0-cust174.18-1.cable.virginm.net. [80.7.220.175])
+        by smtp.gmail.com with ESMTPSA id j7-20020a05600c410700b0038c72ef3f15sm15290807wmi.38.2022.03.28.06.17.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 28 Mar 2022 06:17:36 -0700 (PDT)
+Date:   Mon, 28 Mar 2022 14:17:33 +0100
+From:   Daniel Thompson <daniel.thompson@linaro.org>
+To:     Benjamin =?utf-8?B?U3TDvHJ6?= <benni@stuerz.xyz>
+Cc:     andrew@lunn.ch, sebastian.hesselbarth@gmail.com,
+        gregory.clement@bootlin.com, linux@armlinux.org.uk,
+        linux@simtec.co.uk, krzk@kernel.org, alim.akhtar@samsung.com,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, hpa@zytor.com, robert.moore@intel.com,
+        rafael.j.wysocki@intel.com, lenb@kernel.org, 3chas3@gmail.com,
+        laforge@gnumonks.org, arnd@arndb.de, gregkh@linuxfoundation.org,
+        mchehab@kernel.org, tony.luck@intel.com, james.morse@arm.com,
+        rric@kernel.org, linus.walleij@linaro.org, brgl@bgdev.pl,
         mike.marciniszyn@cornelisnetworks.com,
-        dennis.dalessandro@cornelisnetworks.com,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        =?UTF-8?Q?Pali_Roh=C3=A1r?= <pali@kernel.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        isdn@linux-pingi.de,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Frederic Barrat <fbarrat@linux.ibm.com>,
-        Andrew Donnellan <ajd@linux.ibm.com>,
-        David Miller <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, pabeni@redhat.com,
-        Nicolas Pitre <nico@fluxnic.net>,
-        Loic Poulain <loic.poulain@linaro.org>, kvalo@kernel.org,
-        pkshih@realtek.com, Bjorn Helgaas <bhelgaas@google.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Samsung SoC <linux-samsung-soc@vger.kernel.org>,
-        linux-ia64@vger.kernel.org,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        "open list:ACPI COMPONENT ARCHITECTURE (ACPICA)" <devel@acpica.org>,
-        linux-atm-general@lists.sourceforge.net,
-        netdev <netdev@vger.kernel.org>,
-        "open list:EDAC-CORE" <linux-edac@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        linux-rdma@vger.kernel.org,
-        linux-input <linux-input@vger.kernel.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        wcn36xx@lists.infradead.org,
-        "open list:NETWORKING DRIVERS (WIRELESS)" 
-        <linux-wireless@vger.kernel.org>,
-        Linux PCI <linux-pci@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+        dennis.dalessandro@cornelisnetworks.com, jgg@ziepe.ca,
+        pali@kernel.org, dmitry.torokhov@gmail.com, isdn@linux-pingi.de,
+        benh@kernel.crashing.org, fbarrat@linux.ibm.com, ajd@linux.ibm.com,
+        davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com,
+        nico@fluxnic.net, loic.poulain@linaro.org, kvalo@kernel.org,
+        pkshih@realtek.com, bhelgaas@google.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org, linux-ia64@vger.kernel.org,
+        linux-acpi@vger.kernel.org, devel@acpica.org,
+        linux-atm-general@lists.sourceforge.net, netdev@vger.kernel.org,
+        linux-edac@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-rdma@vger.kernel.org, linux-input@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-media@vger.kernel.org,
+        wcn36xx@lists.infradead.org, linux-wireless@vger.kernel.org,
+        linux-pci@vger.kernel.org
+Subject: Re: [PATCH 01/22] orion5x: Replace comments with C99 initializers
+Message-ID: <20220328131733.akhkwnldtldp7nyn@maple.lan>
+References: <20220326165909.506926-1-benni@stuerz.xyz>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220326165909.506926-1-benni@stuerz.xyz>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Sat, Mar 26, 2022 at 6:09 PM Benjamin StÃ¼rz <benni@stuerz.xyz> wrote:
->
+On Sat, Mar 26, 2022 at 05:58:48PM +0100, Benjamin Stürz wrote:
 > This replaces comments with C99's designated
 > initializers because the kernel supports them now.
 
-However, note that all of the ACPICA material should be submitted to
-the upstream ACPICA project via https://github.com/acpica/acpica
+This commit description seems wrong to me. This patch doesn't include
+use C99 designated initializers (or AFAICT any other language feature
+that has recently been enabled in the kernel).
 
-Also please note that the set of compilers that need to be supported
-by the ACPICA project is greater than the set of compilers that can
-build the Linux kernel.
+The changes here are just plain constant-expressions in enumeration
+lists and were included in C89/C90.
 
 
-> Signed-off-by: Benjamin StÃ¼rz <benni@stuerz.xyz>
+Daniel.
+
+
+> 
+> Signed-off-by: Benjamin Stürz <benni@stuerz.xyz>
 > ---
->  drivers/acpi/acpica/utdecode.c | 183 ++++++++++++++++-----------------
->  1 file changed, 90 insertions(+), 93 deletions(-)
->
-> diff --git a/drivers/acpi/acpica/utdecode.c b/drivers/acpi/acpica/utdecode.c
-> index bcd3871079d7..d19868d2ea46 100644
-> --- a/drivers/acpi/acpica/utdecode.c
-> +++ b/drivers/acpi/acpica/utdecode.c
-> @@ -156,37 +156,37 @@ static const char acpi_gbl_bad_type[] = "UNDEFINED";
->  /* Printable names of the ACPI object types */
->
->  static const char *acpi_gbl_ns_type_names[] = {
-> -       /* 00 */ "Untyped",
-> -       /* 01 */ "Integer",
-> -       /* 02 */ "String",
-> -       /* 03 */ "Buffer",
-> -       /* 04 */ "Package",
-> -       /* 05 */ "FieldUnit",
-> -       /* 06 */ "Device",
-> -       /* 07 */ "Event",
-> -       /* 08 */ "Method",
-> -       /* 09 */ "Mutex",
-> -       /* 10 */ "Region",
-> -       /* 11 */ "Power",
-> -       /* 12 */ "Processor",
-> -       /* 13 */ "Thermal",
-> -       /* 14 */ "BufferField",
-> -       /* 15 */ "DdbHandle",
-> -       /* 16 */ "DebugObject",
-> -       /* 17 */ "RegionField",
-> -       /* 18 */ "BankField",
-> -       /* 19 */ "IndexField",
-> -       /* 20 */ "Reference",
-> -       /* 21 */ "Alias",
-> -       /* 22 */ "MethodAlias",
-> -       /* 23 */ "Notify",
-> -       /* 24 */ "AddrHandler",
-> -       /* 25 */ "ResourceDesc",
-> -       /* 26 */ "ResourceFld",
-> -       /* 27 */ "Scope",
-> -       /* 28 */ "Extra",
-> -       /* 29 */ "Data",
-> -       /* 30 */ "Invalid"
-> +       [0]  = "Untyped",
-> +       [1]  = "Integer",
-> +       [2]  = "String",
-> +       [3]  = "Buffer",
-> +       [4]  = "Package",
-> +       [5]  = "FieldUnit",
-> +       [6]  = "Device",
-> +       [7]  = "Event",
-> +       [8]  = "Method",
-> +       [9]  = "Mutex",
-> +       [10] = "Region",
-> +       [11] = "Power",
-> +       [12] = "Processor",
-> +       [13] = "Thermal",
-> +       [14] = "BufferField",
-> +       [15] = "DdbHandle",
-> +       [16] = "DebugObject",
-> +       [17] = "RegionField",
-> +       [18] = "BankField",
-> +       [19] = "IndexField",
-> +       [20] = "Reference",
-> +       [21] = "Alias",
-> +       [22] = "MethodAlias",
-> +       [23] = "Notify",
-> +       [24] = "AddrHandler",
-> +       [25] = "ResourceDesc",
-> +       [26] = "ResourceFld",
-> +       [27] = "Scope",
-> +       [28] = "Extra",
-> +       [29] = "Data",
-> +       [30] = "Invalid"
+>  arch/arm/mach-orion5x/dns323-setup.c | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/arch/arm/mach-orion5x/dns323-setup.c b/arch/arm/mach-orion5x/dns323-setup.c
+> index 87cb47220e82..d762248c6512 100644
+> --- a/arch/arm/mach-orion5x/dns323-setup.c
+> +++ b/arch/arm/mach-orion5x/dns323-setup.c
+> @@ -61,9 +61,9 @@
+>  
+>  /* Exposed to userspace, do not change */
+>  enum {
+> -	DNS323_REV_A1,	/* 0 */
+> -	DNS323_REV_B1,	/* 1 */
+> -	DNS323_REV_C1,	/* 2 */
+> +	DNS323_REV_A1 = 0,
+> +	DNS323_REV_B1 = 1,
+> +	DNS323_REV_C1 = 2,
 >  };
->
->  const char *acpi_ut_get_type_name(acpi_object_type type)
-> @@ -284,22 +284,22 @@ const char *acpi_ut_get_node_name(void *object)
->  /* Printable names of object descriptor types */
->
->  static const char *acpi_gbl_desc_type_names[] = {
-> -       /* 00 */ "Not a Descriptor",
-> -       /* 01 */ "Cached Object",
-> -       /* 02 */ "State-Generic",
-> -       /* 03 */ "State-Update",
-> -       /* 04 */ "State-Package",
-> -       /* 05 */ "State-Control",
-> -       /* 06 */ "State-RootParseScope",
-> -       /* 07 */ "State-ParseScope",
-> -       /* 08 */ "State-WalkScope",
-> -       /* 09 */ "State-Result",
-> -       /* 10 */ "State-Notify",
-> -       /* 11 */ "State-Thread",
-> -       /* 12 */ "Tree Walk State",
-> -       /* 13 */ "Parse Tree Op",
-> -       /* 14 */ "Operand Object",
-> -       /* 15 */ "Namespace Node"
-> +       [0]  = "Not a Descriptor",
-> +       [1]  = "Cached Object",
-> +       [2]  = "State-Generic",
-> +       [3]  = "State-Update",
-> +       [4]  = "State-Package",
-> +       [5]  = "State-Control",
-> +       [6]  = "State-RootParseScope",
-> +       [7]  = "State-ParseScope",
-> +       [8]  = "State-WalkScope",
-> +       [9]  = "State-Result",
-> +       [10] = "State-Notify",
-> +       [11] = "State-Thread",
-> +       [12] = "Tree Walk State",
-> +       [13] = "Parse Tree Op",
-> +       [14] = "Operand Object",
-> +       [15] = "Namespace Node"
->  };
->
->  const char *acpi_ut_get_descriptor_name(void *object)
-> @@ -331,13 +331,13 @@ const char *acpi_ut_get_descriptor_name(void *object)
->  /* Printable names of reference object sub-types */
->
->  static const char *acpi_gbl_ref_class_names[] = {
-> -       /* 00 */ "Local",
-> -       /* 01 */ "Argument",
-> -       /* 02 */ "RefOf",
-> -       /* 03 */ "Index",
-> -       /* 04 */ "DdbHandle",
-> -       /* 05 */ "Named Object",
-> -       /* 06 */ "Debug"
-> +       [0] = "Local",
-> +       [1] = "Argument",
-> +       [2] = "RefOf",
-> +       [3] = "Index",
-> +       [4] = "DdbHandle",
-> +       [5] = "Named Object",
-> +       [6] = "Debug"
->  };
->
->  const char *acpi_ut_get_reference_name(union acpi_operand_object *object)
-> @@ -416,25 +416,22 @@ const char *acpi_ut_get_mutex_name(u32 mutex_id)
->  /* Names for Notify() values, used for debug output */
->
->  static const char *acpi_gbl_generic_notify[ACPI_GENERIC_NOTIFY_MAX + 1] = {
-> -       /* 00 */ "Bus Check",
-> -       /* 01 */ "Device Check",
-> -       /* 02 */ "Device Wake",
-> -       /* 03 */ "Eject Request",
-> -       /* 04 */ "Device Check Light",
-> -       /* 05 */ "Frequency Mismatch",
-> -       /* 06 */ "Bus Mode Mismatch",
-> -       /* 07 */ "Power Fault",
-> -       /* 08 */ "Capabilities Check",
-> -       /* 09 */ "Device PLD Check",
-> -       /* 0A */ "Reserved",
-> -       /* 0B */ "System Locality Update",
-> -                                                               /* 0C */ "Reserved (was previously Shutdown Request)",
-> -                                                               /* Reserved in ACPI 6.0 */
-> -       /* 0D */ "System Resource Affinity Update",
-> -                                                               /* 0E */ "Heterogeneous Memory Attributes Update",
-> -                                                               /* ACPI 6.2 */
-> -                                               /* 0F */ "Error Disconnect Recover"
-> -                                               /* ACPI 6.3 */
-> +       [0]  = "Bus Check",
-> +       [1]  = "Device Check",
-> +       [2]  = "Device Wake",
-> +       [3]  = "Eject Request",
-> +       [4]  = "Device Check Light",
-> +       [5]  = "Frequency Mismatch",
-> +       [6]  = "Bus Mode Mismatch",
-> +       [7]  = "Power Fault",
-> +       [8]  = "Capabilities Check",
-> +       [9]  = "Device PLD Check",
-> +       [10] = "Reserved",
-> +       [11] = "System Locality Update",
-> +       [12] = "Reserved (was previously Shutdown Request)",  /* Reserved in ACPI 6.0 */
-> +       [13] = "System Resource Affinity Update",
-> +       [14] = "Heterogeneous Memory Attributes Update",      /* ACPI 6.2 */
-> +       [15] = "Error Disconnect Recover"                     /* ACPI 6.3 */
->  };
->
->  static const char *acpi_gbl_device_notify[5] = {
-> @@ -521,26 +518,26 @@ const char *acpi_ut_get_notify_name(u32 notify_value, acpi_object_type type)
->   ******************************************************************************/
->
->  static const char *acpi_gbl_argument_type[20] = {
-> -       /* 00 */ "Unknown ARGP",
-> -       /* 01 */ "ByteData",
-> -       /* 02 */ "ByteList",
-> -       /* 03 */ "CharList",
-> -       /* 04 */ "DataObject",
-> -       /* 05 */ "DataObjectList",
-> -       /* 06 */ "DWordData",
-> -       /* 07 */ "FieldList",
-> -       /* 08 */ "Name",
-> -       /* 09 */ "NameString",
-> -       /* 0A */ "ObjectList",
-> -       /* 0B */ "PackageLength",
-> -       /* 0C */ "SuperName",
-> -       /* 0D */ "Target",
-> -       /* 0E */ "TermArg",
-> -       /* 0F */ "TermList",
-> -       /* 10 */ "WordData",
-> -       /* 11 */ "QWordData",
-> -       /* 12 */ "SimpleName",
-> -       /* 13 */ "NameOrRef"
-> +       [0x00] = "Unknown ARGP",
-> +       [0x01] = "ByteData",
-> +       [0x02] = "ByteList",
-> +       [0x03] = "CharList",
-> +       [0x04] = "DataObject",
-> +       [0x05] = "DataObjectList",
-> +       [0x06] = "DWordData",
-> +       [0x07] = "FieldList",
-> +       [0x08] = "Name",
-> +       [0x09] = "NameString",
-> +       [0x0A] = "ObjectList",
-> +       [0x0B] = "PackageLength",
-> +       [0x0C] = "SuperName",
-> +       [0x0D] = "Target",
-> +       [0x0E] = "TermArg",
-> +       [0x0F] = "TermList",
-> +       [0x10] = "WordData",
-> +       [0x11] = "QWordData",
-> +       [0x12] = "SimpleName",
-> +       [0x13] = "NameOrRef"
->  };
->
->  const char *acpi_ut_get_argument_type_name(u32 arg_type)
-> --
+>  
+>  
+> -- 
 > 2.35.1
->
+> 
