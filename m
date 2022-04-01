@@ -2,107 +2,116 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 57F094EE816
-	for <lists+linux-edac@lfdr.de>; Fri,  1 Apr 2022 08:19:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 511EB4EE824
+	for <lists+linux-edac@lfdr.de>; Fri,  1 Apr 2022 08:21:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245321AbiDAGTH (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Fri, 1 Apr 2022 02:19:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41576 "EHLO
+        id S245349AbiDAGWD (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Fri, 1 Apr 2022 02:22:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230349AbiDAGTG (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Fri, 1 Apr 2022 02:19:06 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A79A1E6E9F
-        for <linux-edac@vger.kernel.org>; Thu, 31 Mar 2022 23:17:17 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id lr4so3639818ejb.11
-        for <linux-edac@vger.kernel.org>; Thu, 31 Mar 2022 23:17:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=2TwJKrePsfMG+vTEocsT56Q0z7ebW1hBFsv6Y12aibY=;
-        b=aLVtx7qPaGlbo7sC9oaFRHo6sy3YxvNEi1YbDdnBX0tdlJV2Iec401aNv5l+WOJ4Ft
-         TRrCBOrXCVMJq2HtqciitvAi2coYs9KPozl9trDHNdqD6bOeotOatK4vpdC01We+E8/m
-         1RBFRn2qcyilCs0Jfxa1lgWdfVQb0vsisLeCHNZuaN6pVBr/KZPiylqwTsp1j1J5WP3v
-         JYP6GK53acRgy4zZzE5mkE4iIULUE8jN3KRs/N8nn0HYu5qYD0BteYidJWR/RdCTvhV3
-         jlTw6c2tsJvFFkeLlqffXRlngyYTjHRBffyVEZq387TvjThgLKXamxHS7xJjscmVbub0
-         k9kA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=2TwJKrePsfMG+vTEocsT56Q0z7ebW1hBFsv6Y12aibY=;
-        b=0yHMUeBNJxzcCq35XiRkESFRss6Ft1pbH/8ylbtPIrxBGP2P876eogmW3wjcgvpQAS
-         WtE9Uc5GK3tY9q3xIDR0VTkx6MEtJnT4l01LRoy+lr2ieOfdFA+mbEPqBjnlrU9BD2+n
-         U/gkd/D36ekg8gjw8GejTlU0s6Bl6T/QhPaL59EXQ9pbMv4kTLnfIzcxrgEZeCk8wzj/
-         VoLjtZzmWNLq/4PjSfMu6ovAChpT3ZcIw5bfG3y7pbe8LqPy51m/YQ3UsJ7zLqA6DqYs
-         8w7Mow6JEXwuonIU8B+2AMmdICp3CobvSBWjl91httgPk/7rtT9ru9devvN1YE5NXfIM
-         PpSg==
-X-Gm-Message-State: AOAM530jmN4ZhH+VYxYsqLlnINVTDhkYlK16nizSr10gyEYMIiKkUnA4
-        v+LeoxDG3u3MrdS5xTwN1HbuSQ==
-X-Google-Smtp-Source: ABdhPJx0+06TUOISc+VO1MjT01uD6Ml5n1QTeFunR8KRUAfAhDO43QTr7KtZezI5fbtl0e7HJ6cyaw==
-X-Received: by 2002:a17:907:1614:b0:6df:678a:a7d5 with SMTP id hb20-20020a170907161400b006df678aa7d5mr7836538ejc.719.1648793835880;
-        Thu, 31 Mar 2022 23:17:15 -0700 (PDT)
-Received: from [192.168.0.168] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
-        by smtp.gmail.com with ESMTPSA id fx3-20020a170906b74300b006daecedee44sm634137ejb.220.2022.03.31.23.17.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 31 Mar 2022 23:17:15 -0700 (PDT)
-Message-ID: <9fe715a5-8ab5-ff86-7d8f-de72eac72c97@linaro.org>
-Date:   Fri, 1 Apr 2022 08:17:14 +0200
+        with ESMTP id S245346AbiDAGWC (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Fri, 1 Apr 2022 02:22:02 -0400
+Received: from out30-54.freemail.mail.aliyun.com (out30-54.freemail.mail.aliyun.com [115.124.30.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4FC111987A;
+        Thu, 31 Mar 2022 23:20:12 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R181e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04423;MF=xueshuai@linux.alibaba.com;NM=1;PH=DS;RN=11;SR=0;TI=SMTPD_---0V8o8chS_1648794008;
+Received: from 30.240.122.30(mailfrom:xueshuai@linux.alibaba.com fp:SMTPD_---0V8o8chS_1648794008)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Fri, 01 Apr 2022 14:20:10 +0800
+Message-ID: <f0053246-10b8-4fb9-6cc1-5db9e797b1d0@linux.alibaba.com>
+Date:   Fri, 1 Apr 2022 14:20:07 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH] powerpc/85xx: Remove fsl,85... bindings
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.7.0
+Subject: Re: [PATCH v7 0/3] EDAC/ghes: refactor memory error reporting to
+ avoid code duplication
 Content-Language: en-US
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Rob Herring <robh+dt@kernel.org>,
-        Scott Wood <oss@buserror.net>,
-        Johannes Thumshirn <morbidrsa@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        devicetree@vger.kernel.org, linux-edac@vger.kernel.org,
-        Borislav Petkov <bp@alien8.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Tony Luck <tony.luck@intel.com>,
-        James Morse <james.morse@arm.com>,
-        Robert Richter <rric@kernel.org>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Michael Ellerman <mpe@ellerman.id.au>
-References: <82a8bc4450a4daee50ee5fada75621fecb3703ff.1648721299.git.christophe.leroy@csgroup.eu>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <82a8bc4450a4daee50ee5fada75621fecb3703ff.1648721299.git.christophe.leroy@csgroup.eu>
+To:     bp@alien8.de, rric@kernel.org
+Cc:     mchehab@kernel.org, tony.luck@intel.com, james.morse@arm.com,
+        ardb@kernel.org, linux-edac@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-efi@vger.kernel.org,
+        zhangliguang@linux.alibaba.com, zhuo.song@linux.alibaba.com
+References: <20211210134019.28536-1-xueshuai@linux.alibaba.com>
+ <20220308144053.49090-1-xueshuai@linux.alibaba.com>
+From:   Shuai Xue <xueshuai@linux.alibaba.com>
+In-Reply-To: <20220308144053.49090-1-xueshuai@linux.alibaba.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On 31/03/2022 12:13, Christophe Leroy wrote:
-> Since commit 8a4ab218ef70 ("powerpc/85xx: Change deprecated binding
-> for 85xx-based boards"), those bindings are not used anymore.
-> 
-> A comment in drivers/edac/mpc85xx_edac.c say they are to be removed
-> with kernel 2.6.30.
-> 
-> Remove them now.
-> 
-> Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
-> ---
->  .../bindings/memory-controllers/fsl/fsl,ddr.yaml   |  6 ------
->  .../devicetree/bindings/powerpc/fsl/l2cache.txt    |  6 ------
->  drivers/edac/mpc85xx_edac.c                        | 14 --------------
->  3 files changed, 26 deletions(-)
-> 
+Hi, Borislav,
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+在 2022/3/8 PM10:40, Shuai Xue 写道:
+> ghes_edac_report_mem_error() in ghes_edac.c is a Long Method and have
+> Duplicated Code with cper_mem_err_location(), cper_dimm_err_location(), and
+> cper_mem_err_type_str() in drivers/firmware/efi/cper.c. In addition, the
+> cper_print_mem() in drivers/firmware/efi/cper.c only reports the error
+> status and misses its description.
+> 
+> This patch set is to refactor ghes_edac_report_mem_error with:
+> 
+> - Patch 01 is to wrap up error status decoding logics and reuse it in
+>     cper_print_mem().
+> - Patch 02 is to introduces cper_*(), into ghes_edac_report_mem_error(),
+>   this can avoid bunch of duplicate code lines;
+> - Patch 03 is to improve report format  
+> 
+> Changes since v6:
+> - Rework patch 02 by Borislav Petkov
+> - add patch 03 to improve format
+> - Link: https://lore.kernel.org/r/20220303122626.99740-3-xueshuai@linux.alibaba.com
+>   
+> Changes since v5:
+> - Delete change summary in commit log
+> - Link: https://lore.kernel.org/all/20220126081702.55167-1-xueshuai@linux.alibaba.com/
+> - Thanks Borislav Petkov for review comments.
+> 
+> Changes since v4:
+> - Fix alignment and format problem
+> - Link: https://lore.kernel.org/all/20220125024939.30635-1-xueshuai@linux.alibaba.com/
+> 
+> Changes since v3:
+> 
+> - make cper_mem_err_status_str table a lot more compact
+> - Fix alignment and format problem
+> - Link: https://lore.kernel.org/all/20220124024759.19176-1-xueshuai@linux.alibaba.com/
+> 
+> Changes since v2:
+> 
+> - delete the unified patch
+> - adjusted the order of patches
+> - Link: https://lore.kernel.org/all/20211210134019.28536-1-xueshuai@linux.alibaba.com/
+> 
+> Changes since v1:
+> 
+> - add a new patch to unify ghes and cper before removing duplication.
+> - document the changes in patch description
+> - add EXPORT_SYMBOL_GPL()s for cper_*()
+> - document and the dependency and add UEFI_CPER dependency explicitly
+> - Link: https://lore.kernel.org/all/20211207031905.61906-2-xueshuai@linux.alibaba.com/
+> 
+> Shuai Xue (3):
+>   efi/cper: add cper_mem_err_status_str to decode error description
+>   EDAC/ghes: Unify CPER memory error location reporting
+>   efi/cper: reformat CPER memory error location to more readable
+> 
+>  drivers/edac/Kconfig        |   1 +
+>  drivers/edac/ghes_edac.c    | 200 +++++++-----------------------------
+>  drivers/firmware/efi/cper.c |  64 ++++++++----
+>  include/linux/cper.h        |   3 +
+>  4 files changed, 87 insertions(+), 181 deletions(-)
 
 
-Best regards,
-Krzysztof
+Ping. I am wondering if you have any comments on this series of patches?
+
+Best Regards,
+Shuai
