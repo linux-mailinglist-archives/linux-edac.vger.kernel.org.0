@@ -2,79 +2,87 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB9B84EEA1C
-	for <lists+linux-edac@lfdr.de>; Fri,  1 Apr 2022 11:08:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB0924EEAF4
+	for <lists+linux-edac@lfdr.de>; Fri,  1 Apr 2022 12:06:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230292AbiDAJKT (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Fri, 1 Apr 2022 05:10:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57100 "EHLO
+        id S1344943AbiDAKID (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Fri, 1 Apr 2022 06:08:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344322AbiDAJKS (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Fri, 1 Apr 2022 05:10:18 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8996CC6EEF
-        for <linux-edac@vger.kernel.org>; Fri,  1 Apr 2022 02:08:28 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        with ESMTP id S1344904AbiDAKHx (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Fri, 1 Apr 2022 06:07:53 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7B42173F4E;
+        Fri,  1 Apr 2022 03:06:03 -0700 (PDT)
+Received: from zn.tnic (p2e55dff8.dip0.t-ipconnect.de [46.85.223.248])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 40AD7B82278
-        for <linux-edac@vger.kernel.org>; Fri,  1 Apr 2022 09:08:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8DA14C2BBE4;
-        Fri,  1 Apr 2022 09:08:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648804105;
-        bh=VpWFoo8koXh3P8W57Qm6RmVDfV9MbF66XtP4UlJRLxI=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=l1IHSwha/sLmDnkMKXQYtTljiQB8SbgKdrjnBSyPaU0Hu4ERZ1u1vmm6ruIhCb/DO
-         w/jxwos+UvC2iTq3kfKn2bYNW92UHhGkZX/T5Mx4SZ/US5eC7JkAwYBg2MhAP60Mae
-         Vh1fwIzApAgNnZwCaG9mVd79E0Oerx21eJ47aSOU6ny9hwFpDM/NRSWsXCogPEJ89x
-         Nh6Cqp5V6B1ItZD1wVQSy4L1RacK5PdJdngTXJdI4fg5OPZMk1UC22V0ouv3W2V7hx
-         X7n4DT9ZmXkImSAg+xLi9hJpXafSpSZ9IzdDN15q2KJXSi522l0ZUsvIg6ayB37Wav
-         H21BEkRf6VC/w==
-Date:   Fri, 1 Apr 2022 11:08:21 +0200
-From:   Mauro Carvalho Chehab <mchehab@kernel.org>
-To:     Xiaofei Tan <tanxiaofei@huawei.com>
-Cc:     <linux-edac@vger.kernel.org>, <shiju.jose@huawei.com>,
-        <linuxarm@openeuler.org>, <jonathan.cameron@huawei.com>
-Subject: Re: [PATCH 0/4] rasdaemon: Some little fixes and add some modules
- support
-Message-ID: <20220401110821.751621ee@coco.lan>
-In-Reply-To: <20211020063340.26079-1-tanxiaofei@huawei.com>
-References: <20211020063340.26079-1-tanxiaofei@huawei.com>
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-redhat-linux-gnu)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 287B01EC04E0;
+        Fri,  1 Apr 2022 12:05:58 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1648807558;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=rYRUcibzVb3ckmbYqIdIxEGZb0sFcGrGt8Ae3WW1QWI=;
+        b=AVMN0pLDq+zP9Hdb3zEYkqcplHcFnlplTK8v/knUSnFRt9KJuP33WV87y4fh6wbj76GMcH
+        X1q/Wc3VuVGGnUrTyXMP2wW3JJjYAgiI/oF+QpIn0ZSY8cTgRUrtmXfllKQNBene6dmrSj
+        yPx5XrzSpaYTe6EKfi9yVDcE2Mq4O+w=
+Date:   Fri, 1 Apr 2022 12:05:55 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc:     Krzysztof Kozlowski <krzk@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Scott Wood <oss@buserror.net>,
+        Johannes Thumshirn <morbidrsa@gmail.com>,
+        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        devicetree@vger.kernel.org, linux-edac@vger.kernel.org,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Tony Luck <tony.luck@intel.com>,
+        James Morse <james.morse@arm.com>,
+        Robert Richter <rric@kernel.org>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Michael Ellerman <mpe@ellerman.id.au>
+Subject: Re: [PATCH] powerpc/85xx: Remove fsl,85... bindings
+Message-ID: <YkbOg4iLykg0gkKz@zn.tnic>
+References: <82a8bc4450a4daee50ee5fada75621fecb3703ff.1648721299.git.christophe.leroy@csgroup.eu>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <82a8bc4450a4daee50ee5fada75621fecb3703ff.1648721299.git.christophe.leroy@csgroup.eu>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-Em Wed, 20 Oct 2021 14:33:36 +0800
-Xiaofei Tan <tanxiaofei@huawei.com> escreveu:
-
-> Some little fixes and add some modules support for kunpeng series.
+On Thu, Mar 31, 2022 at 12:13:10PM +0200, Christophe Leroy wrote:
+> Since commit 8a4ab218ef70 ("powerpc/85xx: Change deprecated binding
+> for 85xx-based boards"), those bindings are not used anymore.
 > 
-> Xiaofei Tan (4):
->   rasdaemon: Fix the issue of sprintf data type mismatch in uuid_le()
->   rasdaemon: Fix the issue of command option -r for hip08
->   rasdaemon: Fix some print format issues for hisi common error section
->   rasdaemon: Add some modules supported by hisi common error section
+> A comment in drivers/edac/mpc85xx_edac.c say they are to be removed
+> with kernel 2.6.30.
 > 
->  non-standard-hisi_hip08.c  |  6 +++---
->  non-standard-hisilicon.c   | 32 +++++++++++++++++++++-----------
->  ras-extlog-handler.c       |  2 +-
->  ras-non-standard-handler.c |  4 ++--
->  4 files changed, 27 insertions(+), 17 deletions(-)
+> Remove them now.
 > 
+> Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+> ---
+>  .../bindings/memory-controllers/fsl/fsl,ddr.yaml   |  6 ------
+>  .../devicetree/bindings/powerpc/fsl/l2cache.txt    |  6 ------
+>  drivers/edac/mpc85xx_edac.c                        | 14 --------------
+>  3 files changed, 26 deletions(-)
 
-Patches applied, thanks!
 
+I'll take it through the EDAC tree of there are no objections.
 
-Thanks,
-Mauro
+Thx.
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
