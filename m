@@ -2,95 +2,113 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1905A4F09D5
-	for <lists+linux-edac@lfdr.de>; Sun,  3 Apr 2022 15:16:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A988D4F0B6C
+	for <lists+linux-edac@lfdr.de>; Sun,  3 Apr 2022 18:57:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358820AbiDCNSa (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Sun, 3 Apr 2022 09:18:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44912 "EHLO
+        id S238004AbiDCQ7h (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Sun, 3 Apr 2022 12:59:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358945AbiDCNSX (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Sun, 3 Apr 2022 09:18:23 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E3EDE54;
-        Sun,  3 Apr 2022 06:16:29 -0700 (PDT)
-Received: from zn.tnic (p2e55dff8.dip0.t-ipconnect.de [46.85.223.248])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id D7DB91EC01B5;
-        Sun,  3 Apr 2022 15:16:23 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1648991783;
+        with ESMTP id S236624AbiDCQ7g (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Sun, 3 Apr 2022 12:59:36 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79AB0326D9;
+        Sun,  3 Apr 2022 09:57:42 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1649005061;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=31OJMjqHClIj9JrX8Y21C+6EHoiVM7Hu/S7vtVGm6hA=;
-        b=UuFnoL7FgLyFDuh3Aqtle2b9A9Um6/ORZ1ABQn+mDiLS4P8/+8g6hlaPVItuI8nwV2+Tgu
-        M0yUwVFjQP4iK+hZtcOeRsbOG+V3sh8Pv1NSXQ5WHIZGU2Ha3L6UAL0jlKChuu4C7Ndx10
-        7Ht9IvWC+snnauTjR6fgKyFsIlnfAZs=
-Date:   Sun, 3 Apr 2022 15:16:20 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>
-Cc:     x86@kernel.org, linux-edac@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Tony Luck <tony.luck@intel.com>,
-        "H . Peter Anvin" <hpa@zytor.com>,
+         in-reply-to:in-reply-to:references:references;
+        bh=tfXrkBnVhjzrSwPZ0Laq9qOonGjVgWvsNc2Gv3Ncd+c=;
+        b=dvO3fnMR8Rqjh/M8WmNPijFfQ7EVMUklhEGzbPDD3IlHlBiI58R0d5aM32WjMV5AqmSXbu
+        jmtex8GkM13wX6Db/DejMcADu9QhrRZdauTKyjclSUKdExs+BkxUXcaQC9xvAYQGg05xXR
+        uzF+d1BUltlSSqr9Py8FTY5YXLgXf+c0a4b35Z6Z9UngSSCjOyZSh1hRBzcq9o2f/edgGv
+        3/aFpTMQ+J0Hpm6roDPTuY5F+drRLhHZFyfaRRDIgpuF9VFo9heJEX+AQijjLLLmPJUUVC
+        Jpd6QwKE50NKnkOW89E6BMBdXY4DDIEmVp/FreSp4PUOLaTx5XvYXaVaSkCvCQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1649005061;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=tfXrkBnVhjzrSwPZ0Laq9qOonGjVgWvsNc2Gv3Ncd+c=;
+        b=PNYRgzlU5vnuF03DCEere9Ai1yJR65djGR9xY/V4o8Hw6YV0C8ksumiS9+y2t6Z4dxYOMG
+        M5MKdjILbTSCrzDw==
+To:     Ammar Faizi <ammarfaizi2@gnuweeb.org>,
+        Borislav Petkov <bp@alien8.de>
+Cc:     Ammar Faizi <ammarfaizi2@gnuweeb.org>,
+        Alviro Iskandar Setiawan <alviro.iskandar@gnuweeb.org>,
         Dave Hansen <dave.hansen@linux.intel.com>,
-        James Morse <james.morse@arm.com>,
-        Robert Richter <rric@kernel.org>,
-        Yazen Ghannam <yazen.ghannam@amd.com>
-Subject: Re: [PATCH v4 2/3] x86/mce: Define function to extract ErrorAddr
- from MCA_ADDR
-Message-ID: <YkmeJFXXbu3aLzzw@zn.tnic>
-References: <20220225193342.215780-1-Smita.KoralahalliChannabasappa@amd.com>
- <20220225193342.215780-3-Smita.KoralahalliChannabasappa@amd.com>
- <YkWrlTIK/ZxsQekX@zn.tnic>
+        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Yazen Ghannam <yazen.ghannam@amd.com>,
+        Linux Edac Mailing List <linux-edac@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Stable Kernel <stable@vger.kernel.org>,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+        x86 Mailing List <x86@kernel.org>,
+        David Laight <David.Laight@ACULAB.COM>,
+        Jiri Hladky <hladky.jiri@googlemail.com>
+Subject: Re: [PATCH v6 1/2] x86/delay: Fix the wrong asm constraint in
+ `delay_loop()`
+In-Reply-To: <20220329104705.65256-2-ammarfaizi2@gnuweeb.org>
+References: <20220329104705.65256-1-ammarfaizi2@gnuweeb.org>
+ <20220329104705.65256-2-ammarfaizi2@gnuweeb.org>
+Date:   Sun, 03 Apr 2022 18:57:40 +0200
+Message-ID: <87zgl2ksu3.ffs@tglx>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <YkWrlTIK/ZxsQekX@zn.tnic>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Thu, Mar 31, 2022 at 03:24:37PM +0200, Borislav Petkov wrote:
-> diff --git a/arch/x86/kernel/cpu/mce/amd.c b/arch/x86/kernel/cpu/mce/amd.c
-> index 1940d305db1c..a1a4a5dc53e8 100644
-> --- a/arch/x86/kernel/cpu/mce/amd.c
-> +++ b/arch/x86/kernel/cpu/mce/amd.c
-> @@ -722,6 +722,19 @@ bool amd_mce_is_memory_error(struct mce *m)
->  	return m->bank == 4 && xec == 0x8;
->  }
->  
-> +/* Extract [55:<lsb>] where lsb is the LS-*valid* bit of the address bits. */
-> +void smca_extract_err_addr(struct mce *m)
+On Tue, Mar 29 2022 at 17:47, Ammar Faizi wrote:
+> The asm constraint does not reflect that the asm statement can modify
+> the value of @loops. But the asm statement in delay_loop() does modify
+> the @loops.
+>
+> Specifiying the wrong constraint may lead to undefined behavior, it may
+> clobber random stuff (e.g. local variable, important temporary value in
+> regs, etc.). This is especially dangerous when the compiler decides to
+> inline the function and since it doesn't know that the value gets
+> modified, it might decide to use it from a register directly without
+> reloading it.
+>
+> Fix this by changing the constraint from "a" (as an input) to "+a" (as
+> an input and output).
 
-In addition:
+This analysis is plain wrong. The assembly code operates on a register
+and not on memory:
 
-diff --git a/arch/x86/kernel/cpu/mce/amd.c b/arch/x86/kernel/cpu/mce/amd.c
-index 9ccc2ea0ea00..4acc7959be6e 100644
---- a/arch/x86/kernel/cpu/mce/amd.c
-+++ b/arch/x86/kernel/cpu/mce/amd.c
-@@ -723,7 +723,7 @@ bool amd_mce_is_memory_error(struct mce *m)
- }
- 
- /* Extract [55:<lsb>] where lsb is the LS-*valid* bit of the address bits. */
--void smca_extract_err_addr(struct mce *m)
-+void __always_inline smca_extract_err_addr(struct mce *m)
- {
- 	u8 lsb;
- 
+	asm volatile(
+		"	test %0,%0	\n"
+		"	jz 3f		\n"
+		"	jmp 1f		\n"
 
-because some compilers cause:
+		".align 16		\n"
+		"1:	jmp 2f		\n"
 
-vmlinux.o: warning: objtool: mce_read_aux()+0x82: call to smca_extract_err_addr() leaves .noinstr.text section
+		".align 16		\n"
+		"2:	dec %0		\n"
+		"	jnz 2b		\n"
+		"3:	dec %0		\n"
 
--- 
-Regards/Gruss,
-    Boris.
+		: /* we don't need output */
+---->		:"a" (loops)
 
-https://people.kernel.org/tglx/notes-about-netiquette
+This tells the compiler to use [RE]AX and initialize it from the
+variable 'loops'. It's never written back because all '%0' in the above
+assembly are substituted with [RE]AX. This also tells the compiler that
+the inline assembly clobbers [RE]AX and that's all it needs to know.
+
+Nothing to fix here, whether the code is inlined or not.
+
+Thanks,
+
+        tglx
