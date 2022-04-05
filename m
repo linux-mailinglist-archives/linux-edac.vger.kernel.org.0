@@ -2,88 +2,68 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA11B4F1F47
-	for <lists+linux-edac@lfdr.de>; Tue,  5 Apr 2022 00:46:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C27414F26A5
+	for <lists+linux-edac@lfdr.de>; Tue,  5 Apr 2022 10:05:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230244AbiDDWrp (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Mon, 4 Apr 2022 18:47:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60106 "EHLO
+        id S233252AbiDEIFg (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Tue, 5 Apr 2022 04:05:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344674AbiDDWqy (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Mon, 4 Apr 2022 18:46:54 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9710937BD7;
-        Mon,  4 Apr 2022 14:57:04 -0700 (PDT)
-Received: from zn.tnic (p2e55dff8.dip0.t-ipconnect.de [46.85.223.248])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 2554E1EC04AD;
-        Mon,  4 Apr 2022 23:56:59 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1649109419;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=1v8Nh6GMcNHzf1PKyvbirBT1D8L1EYpKSAB3t1pC2ok=;
-        b=hRsUotSJcUNsyuGu0M85tQbulpFIJ6YBu/iJsodQyWyxCLmysp5No/OERS6Tqs0H3vbW3k
-        HvAyG/nRv+rLVoHEYJjw23HxSrGIkv4Z0/kKAdf62dRpqZTkPlW/vfFmQqo5BC1/UkhXjv
-        LfM6EmuqVpbYvbNtAi7w6W8GaJfhJFI=
-Date:   Mon, 4 Apr 2022 23:56:56 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>, x86@kernel.org,
-        linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Tony Luck <tony.luck@intel.com>,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        James Morse <james.morse@arm.com>,
-        Robert Richter <rric@kernel.org>,
-        Yazen Ghannam <yazen.ghannam@amd.com>
-Subject: Re: [PATCH v4 2/3] x86/mce: Define function to extract ErrorAddr
- from MCA_ADDR
-Message-ID: <YktpqKye+t462Y1p@zn.tnic>
-References: <20220225193342.215780-1-Smita.KoralahalliChannabasappa@amd.com>
- <20220225193342.215780-3-Smita.KoralahalliChannabasappa@amd.com>
- <YkWrlTIK/ZxsQekX@zn.tnic>
- <YkmeJFXXbu3aLzzw@zn.tnic>
- <Yknsbp+zMh8Uev8+@zn.tnic>
- <87mth2kkhc.ffs@tglx>
- <YkoHKTuGaFfsF6qb@zn.tnic>
- <54599d6c-204e-d7f6-21b6-15df7acad53d@amd.com>
+        with ESMTP id S234361AbiDEH6L (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Tue, 5 Apr 2022 03:58:11 -0400
+X-Greylist: delayed 500 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 05 Apr 2022 00:52:21 PDT
+Received: from mail.bizcall.pl (mail.bizcall.pl [192.71.213.112])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AED0C1FCEC
+        for <linux-edac@vger.kernel.org>; Tue,  5 Apr 2022 00:52:20 -0700 (PDT)
+Received: by mail.bizcall.pl (Postfix, from userid 1001)
+        id C952041609; Tue,  5 Apr 2022 09:43:51 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=bizcall.pl; s=mail;
+        t=1649144634; bh=L7rZPDqncV/PGNK3vBL4eFyhOA8rMHMu3jCfxnl4mEc=;
+        h=Date:From:To:Subject:From;
+        b=UoNXzPqbUYjcOVKbJ5NsyB+djhJWnOlu48D5LLPdNCmDdyQjUzU8wJwGdFWyC490Q
+         CNMtkin22fKSGVais3SsyJdToDi58WmRzL4N7FXMbz6B/5rmxIofEPcWFXHzCsSZ+9
+         K7BjyM4Gm+bISYmhrb0krCblxAUCNGS29oOki7UIZEfAf+yTLGnMD0P4d8GAKDcX5R
+         pAZ/tQ8hOoeRDOsgOs+vfszt2ZBsm2bia7/Lyl0lYUG3UbUEhA+3LB/ThEWdEzDTEd
+         qciCfcxtglxiYDujvFA38nhh9iy4hPtNd/PGPGrKDW+lFWaHr/Q45Q6t/g25fW9bAA
+         Xl5VB6wUtzvXQ==
+Received: by mail.bizcall.pl for <linux-edac@vger.kernel.org>; Tue,  5 Apr 2022 07:43:50 GMT
+Message-ID: <20220405084501-0.1.1v.5hsd.0.jdhflwibp6@bizcall.pl>
+Date:   Tue,  5 Apr 2022 07:43:50 GMT
+From:   "Marek Onufrowicz" <marek.onufrowicz@bizcall.pl>
+To:     <linux-edac@vger.kernel.org>
+Subject: Prezentacja
+X-Mailer: mail.bizcall.pl
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <54599d6c-204e-d7f6-21b6-15df7acad53d@amd.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Mon, Apr 04, 2022 at 01:55:21PM -0700, Smita Koralahalli wrote:
-> I didn't quite understand what needs to be moved to mce/internal.h. Was that
-> addressed to me?  The function call smca_extract_err_addr() is in mce/core.c
-> and the definition in mce.h
+Dzie=C5=84 dobry!
 
-In your current v4, the function definition is in
-arch/x86/kernel/cpu/mce/amd.c
+Czy m=C3=B3g=C5=82bym przedstawi=C4=87 rozwi=C4=85zanie, kt=C3=B3re umo=C5=
+=BCliwia monitoring ka=C5=BCdego auta w czasie rzeczywistym w tym jego po=
+zycj=C4=99, zu=C5=BCycie paliwa i przebieg?
 
-However, since it needs to be inlined into both callsites because
-mce_read_aux() is marked noinstr, the definition should be
+Dodatkowo nasze narz=C4=99dzie minimalizuje koszty utrzymania samochod=C3=
+=B3w, skraca czas przejazd=C3=B3w, a tak=C5=BCe tworzenie planu tras czy =
+dostaw.
 
-static __always_inline void smca_extract_err_addr(struct mce *m)
+Z naszej wiedzy i do=C5=9Bwiadczenia korzysta ju=C5=BC ponad 49 tys. Klie=
+nt=C3=B3w. Monitorujemy 809 000 pojazd=C3=B3w na ca=C5=82ym =C5=9Bwiecie,=
+ co jest nasz=C4=85 najlepsz=C4=85 wizyt=C3=B3wk=C4=85.
 
-and that definition should be in the header mce/internal.h
+Bardzo prosz=C4=99 o e-maila zwrotnego, je=C5=9Bli mogliby=C5=9Bmy wsp=C3=
+=B3lnie om=C3=B3wi=C4=87 potencja=C5=82 wykorzystania takiego rozwi=C4=85=
+zania w Pa=C5=84stwa firmie.
 
-Thx.
 
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+Pozdrawiam,
+Marek Onufrowicz
