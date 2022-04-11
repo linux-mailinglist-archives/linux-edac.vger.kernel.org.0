@@ -2,59 +2,60 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A0804FB56D
-	for <lists+linux-edac@lfdr.de>; Mon, 11 Apr 2022 09:58:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8139B4FB590
+	for <lists+linux-edac@lfdr.de>; Mon, 11 Apr 2022 10:02:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245748AbiDKIAP (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Mon, 11 Apr 2022 04:00:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55838 "EHLO
+        id S1343523AbiDKIDy (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Mon, 11 Apr 2022 04:03:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241381AbiDKIAP (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Mon, 11 Apr 2022 04:00:15 -0400
-Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2256183B8;
-        Mon, 11 Apr 2022 00:58:01 -0700 (PDT)
-Received: by mail-lj1-x235.google.com with SMTP id c15so19022336ljr.9;
-        Mon, 11 Apr 2022 00:58:01 -0700 (PDT)
+        with ESMTP id S1343537AbiDKIDx (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Mon, 11 Apr 2022 04:03:53 -0400
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A60D81900E;
+        Mon, 11 Apr 2022 01:01:38 -0700 (PDT)
+Received: by mail-lf1-x12f.google.com with SMTP id p10so25064784lfa.12;
+        Mon, 11 Apr 2022 01:01:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc:content-transfer-encoding;
-        bh=IMcasM2PXwFO3pPL8keGLKPAAlGEHPxLC32XHN34NLQ=;
-        b=U0XUaMQ5tt4vKUweVNbljOWAJtiPEYBd5YlbplTVAuToU4xiavT1C7ARxnf1EBCCBH
-         MnCHlB+ZkZ4JAj7CG2Tiq+1QdnUZ1NTVZykJlt4ODm9pni0CXwlVCm5LSiSAp/bHWbJb
-         lgjQaPDDBcRYPYta5T4ctVgKgHPH3zMoA75HjCQGNvXkS4UFJxPS8BpyEXvhEsYWxxAx
-         kZb82CUVQZmolyF8OzFEVGi+zJA/0afLmLRwjU49E2VfP8YNrL7555POqrnHeod7ep8b
-         MNq6N0nC/7fhFg3KvgJ25aIiUqaLgzlE+J7Go3kwC+hJtJVRIuda9asI1ZEfjVqB28/a
-         X1Rg==
+        bh=dLagX0bznMYseBWYG2xpKUjyrFUW3pN56bkzoSU2tp0=;
+        b=cQkZQcy+MHkSXUoI9MDT/c+0IGaIn27ea7X86YOuBUMNrKg83hntaExUO3lD9XId0p
+         ly/XPa0D6U2DoNOg3j+gf5pkBCLsW1zW6vvL9c8PjlYdJ4tyQJAvIubVqSEIp2QNQDTF
+         5KoGJm0ZiXPohruC2B0c+94CQJV+X/C0xpl70Pt2ejLEWPG4heCAQmGwSfty2je2uFB/
+         QkEmv6M2fi3TlglcnxdMYhJ92xTA9jxJ29wn+Kcd4yqcD8Ahhj8ggyKnlkPN3+W4CzsT
+         LLhA9bxZEx35GUYJtOOVp5N8aR9yyQu7Eu27bjFvWXgpYATBUszDzcYc1kZ1fnSrmOeO
+         TEVA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc:content-transfer-encoding;
-        bh=IMcasM2PXwFO3pPL8keGLKPAAlGEHPxLC32XHN34NLQ=;
-        b=ZJRb5TCMJ60djHy5ghdYrRrf7yGNkb2m51ayeGuB0Jt920RbUXz7Fk1Zzfmtr+4BSt
-         JXbVOTI0AJBPZ2zaoQrjRVY9D8EvkvuP+A8c5YSSOzDLzUoyT1itd6SSPXgLOl8MF4f+
-         5VHzcnIyMPbaaA9JJwX4aouj5ylEdWG1BwcZokkhILOaOthmrpDy+Itl0d7+UptASlBu
-         E7Bwu9cK2YsV1LfqgE6jU1l2sCApjvsR+VXXfChXzYafaqT7hRJ/gvxYpw5fre0GFG/Y
-         9EYNiyQhisC8XcpAYKqB14gXBcrtVRKUwEk0O9rlY2saEY26NsTp6XAfeZKvyplQyITU
-         3chw==
-X-Gm-Message-State: AOAM533NyS9ruIf3w8fVlWzLtdcTqmJRurz5EmXmrFWDbPouO0as0pM0
-        KmdIMA53tSwUh65mXELzsc+IhWwy6L6igZ/7f5/g35NT46azeA==
-X-Google-Smtp-Source: ABdhPJyPAAdguzOq292jJl/qwqyh/fbTfn44rqQap5nOluCafw7d/O4zQ36Mqdux7bn5CWzO66s3VyAKwZ5+TQdv6jo=
-X-Received: by 2002:a2e:9b18:0:b0:24b:61f3:7beb with SMTP id
- u24-20020a2e9b18000000b0024b61f37bebmr3100487lji.487.1649663879833; Mon, 11
- Apr 2022 00:57:59 -0700 (PDT)
+        bh=dLagX0bznMYseBWYG2xpKUjyrFUW3pN56bkzoSU2tp0=;
+        b=j6JV2XzllgIkxszDut7I2L3VJkkjxmIPkEB83foREtAkd62FxuSJfACw5HqvmxtzTb
+         cEtTJCwwHJDHQZY4wmAn6Dy/nx2iOuwVQ1EnzXP+/A7T5ugmnhs8mfHqfvWHu7pGgriw
+         2DAbKv36sRlECpeyd/4W3EMWN3awuYcsNUKwx2hqlSrsaABZotsv1a4CW7F2af8ReCf5
+         fKVXZpvjj5jNtyk0HkyV5PpRWUp7KHc0M9SvyFEnxSWEvfmnWYiihTZSi7R+uD8PmDQ6
+         6Dz1vC1nJfW+IErsC0vz77Be4iV+pk28kndkAkdpwUSanCKHzzLgZzKSEynkz8OOo5Ht
+         OpDg==
+X-Gm-Message-State: AOAM533+xUD7AwFd4GuXufnsYd8fyPOKM5VVoedkz1lJbULwy2zIVZ43
+        yJNl5aHCxVY8tDbH0709UBhQTcAu+O299fIL6dY=
+X-Google-Smtp-Source: ABdhPJxgJUUuROZgRKb0LEDLbuJHGqQUY3ojRGDjYwhHu2TK5fuKy2HxIiB6oeFUznuhvW81hNnfqmy8On1RUDGf9mE=
+X-Received: by 2002:a05:6512:262a:b0:45d:b42d:3e46 with SMTP id
+ bt42-20020a056512262a00b0045db42d3e46mr20444462lfb.22.1649664096793; Mon, 11
+ Apr 2022 01:01:36 -0700 (PDT)
 MIME-Version: 1.0
 References: <20220322030152.19018-1-ctcchien@nuvoton.com> <20220322030152.19018-3-ctcchien@nuvoton.com>
- <YlBrbV2rstunqrW6@zn.tnic>
-In-Reply-To: <YlBrbV2rstunqrW6@zn.tnic>
+ <9cf20395-369a-2738-608d-dd5f1aabe48b@molgen.mpg.de>
+In-Reply-To: <9cf20395-369a-2738-608d-dd5f1aabe48b@molgen.mpg.de>
 From:   Medad Young <medadyoung@gmail.com>
-Date:   Mon, 11 Apr 2022 15:57:48 +0800
-Message-ID: <CAHpyw9eR9tcg9TSXnecOgJJsxSm=B=FyqKV9kOXd9We=o+RjKA@mail.gmail.com>
+Date:   Mon, 11 Apr 2022 16:01:25 +0800
+Message-ID: <CAHpyw9fByk_pyD3pb0MX=p_t1AuD5qXKaECKwrB0uog6ZxX5qw@mail.gmail.com>
 Subject: Re: [PATCH v6 2/3] dt-bindings: edac: nuvoton: add NPCM memory controller
-To:     Borislav Petkov <bp@alien8.de>
+To:     Paul Menzel <pmenzel@molgen.mpg.de>
 Cc:     rric@kernel.org, James Morse <james.morse@arm.com>,
         tony.luck@intel.com, Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Borislav Petkov <bp@alien8.de>,
         Rob Herring <robh+dt@kernel.org>,
         Benjamin Fair <benjaminfair@google.com>,
         Nancy Yuen <yuenn@google.com>,
@@ -63,10 +64,10 @@ Cc:     rric@kernel.org, James Morse <james.morse@arm.com>,
         Avi Fishman <avifishman70@gmail.com>,
         Tomer Maimon <tmaimon77@gmail.com>,
         Tali Perry <tali.perry1@gmail.com>, ctcchien@nuvoton.com,
-        linux-edac <linux-edac@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         devicetree <devicetree@vger.kernel.org>,
-        OpenBMC Maillist <openbmc@lists.ozlabs.org>
+        OpenBMC Maillist <openbmc@lists.ozlabs.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-edac <linux-edac@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -79,18 +80,119 @@ Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-Dear Borislav,
+Dear Paul,
 
-thanks for your comment
-I will revise it
+thanks for your comments
 
-B.R.
-Medad
-
-Borislav Petkov <bp@alien8.de> =E6=96=BC 2022=E5=B9=B44=E6=9C=889=E6=97=A5 =
-=E9=80=B1=E5=85=AD =E4=B8=8A=E5=8D=881:05=E5=AF=AB=E9=81=93=EF=BC=9A
+Paul Menzel <pmenzel@molgen.mpg.de> =E6=96=BC 2022=E5=B9=B44=E6=9C=889=E6=
+=97=A5 =E9=80=B1=E5=85=AD =E4=B8=8B=E5=8D=882:12=E5=AF=AB=E9=81=93=EF=BC=9A
 >
-> On Tue, Mar 22, 2022 at 11:01:51AM +0800, Medad CChien wrote:
+> Dear Medad,
+>
+>
+> Thank you for your patch.
+>
+> Am 22.03.22 um 04:01 schrieb Medad CChien:
+> > Added device tree binding documentation for Nuvoton BMC
+> > NPCM memory controller.
+>
+> Please use present tense, and spell *devicetree* without a space. The
+> line below even fits in 75 characters:
+>
+> Document devicetree bindings for the Nuvoton BMC NPCM memory controller.
+
+OK
+
+
+>
+> > Signed-off-by: Medad CChien <ctcchien@nuvoton.com>
+> > Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+> > ---
+> >   .../edac/nuvoton,npcm-memory-controller.yaml  | 62 ++++++++++++++++++=
++
+> >   1 file changed, 62 insertions(+)
+> >   create mode 100644 Documentation/devicetree/bindings/edac/nuvoton,npc=
+m-memory-controller.yaml
+> >
+> > diff --git a/Documentation/devicetree/bindings/edac/nuvoton,npcm-memory=
+-controller.yaml b/Documentation/devicetree/bindings/edac/nuvoton,npcm-memo=
+ry-controller.yaml
+> > new file mode 100644
+> > index 000000000000..97469294f4ba
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/edac/nuvoton,npcm-memory-contro=
+ller.yaml
+> > @@ -0,0 +1,62 @@
+> > +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+> > +%YAML 1.2
+> > +---
+> > +$id: http://devicetree.org/schemas/edac/nuvoton,npcm-memory-controller=
+.yaml#
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+> > +title: Nuvoton NPCM Memory Controller
+> > +
+> > +maintainers:
+> > +  - Medad CChien <ctcchien@nuvoton.com>
+> > +
+> > +description: |
+> > +  The Nuvoton BMC SoC supports DDR4 memory with and without ECC (error
+> > +  correction check).
+> > +
+> > +  The memory controller supports single bit error correction, double b=
+it
+> > +  error detection (in-line ECC in which a section (1/8th) of the
+> > +  memory device used to store data is used for ECC storage).
+>
+> *memory* fits on the line above?
+
+do you mean I should change the term "memory" to others?
+
+>
+> > +
+> > +  Note, the bootloader must configure ECC mode for the memory controll=
+er.
+> > +
+> > +properties:
+> > +  compatible:
+> > +    enum:
+> > +      - nuvoton,npcm845-memory-controller
+> > +      - nuvoton,npcm750-memory-controller
+>
+> Sort the entries?
+
+OK
+
+>
+>
+> Kind regards,
+>
+> Paul
+>
+>
+> > +
+> > +  reg:
+> > +    maxItems: 1
+> > +
+> > +  interrupts:
+> > +    minItems: 1
+> > +    items:
+> > +      - description: uncorrectable error interrupt
+> > +      - description: correctable error interrupt
+> > +
+> > +  interrupt-names:
+> > +    minItems: 1
+> > +    items:
+> > +      - const: ue
+> > +      - const: ce
+> > +
+> > +required:
+> > +  - compatible
+> > +  - reg
+> > +  - interrupts
+> > +
+> > +additionalProperties: false
+> > +
 > > +examples:
 > > +  - |
 > > +    #include <dt-bindings/interrupt-controller/arm-gic.h>
@@ -104,14 +206,3 @@ Borislav Petkov <bp@alien8.de> =E6=96=BC 2022=E5=B9=B44=E6=9C=889=E6=97=A5 =
 > > +        };
 > > +    };
 > > +
->
-> .git/rebase-apply/patch:73: new blank line at EOF.
-> +
-> warning: 1 line adds whitespace errors.
->
->
-> --
-> Regards/Gruss,
->     Boris.
->
-> https://people.kernel.org/tglx/notes-about-netiquette
