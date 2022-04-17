@@ -2,112 +2,101 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 456FF50472E
-	for <lists+linux-edac@lfdr.de>; Sun, 17 Apr 2022 10:35:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CF3950495B
+	for <lists+linux-edac@lfdr.de>; Sun, 17 Apr 2022 22:01:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232152AbiDQIhr (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Sun, 17 Apr 2022 04:37:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58386 "EHLO
+        id S234936AbiDQUDl (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Sun, 17 Apr 2022 16:03:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232855AbiDQIhp (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Sun, 17 Apr 2022 04:37:45 -0400
-Received: from mail-vk1-xa43.google.com (mail-vk1-xa43.google.com [IPv6:2607:f8b0:4864:20::a43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0ABAA1ADAD
-        for <linux-edac@vger.kernel.org>; Sun, 17 Apr 2022 01:35:09 -0700 (PDT)
-Received: by mail-vk1-xa43.google.com with SMTP id w128so5101577vkd.3
-        for <linux-edac@vger.kernel.org>; Sun, 17 Apr 2022 01:35:08 -0700 (PDT)
+        with ESMTP id S234937AbiDQUDk (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Sun, 17 Apr 2022 16:03:40 -0400
+Received: from mail-ej1-x643.google.com (mail-ej1-x643.google.com [IPv6:2a00:1450:4864:20::643])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B44351170;
+        Sun, 17 Apr 2022 13:01:02 -0700 (PDT)
+Received: by mail-ej1-x643.google.com with SMTP id u15so23752513ejf.11;
+        Sun, 17 Apr 2022 13:01:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=z+v8ugHyK4Bi1bsAOtuex5rzJWIULuLfF++ZnJg6JJs=;
-        b=oNJc2INf8Rhr5FB/7dmVLUtXIN32Zpr+JOws5mZo8yLIZkx20k3ktobg4cFsyHfo10
-         opyovUTmrMqZBrjIIPL8dwM3Cl42hbyZvaLR8TbrZDbPh7rgV94AneypUIz7gx5LvazE
-         zDLFkcDX1nbPbvLE1YDjvnnDO6sd+MeRRKk7hJojVtPLOuB8iX7Tisqm37Yqye5BOvOD
-         qrtEmC9HZPFnF8UhgjxviHDBiEkp+KFrjrNS6AiUfUOujeKcrIPlTDjJJypvibkN2ZRc
-         Fcc5bL7t8fX01QLLow126XRV2cU5sFntAnAB/7YbhrXrCEA2hg1PeuWagasZGrwW/+fq
-         MCiw==
+        h=message-id:from:mime-version:content-transfer-encoding
+         :content-description:subject:to:date:reply-to;
+        bh=eay0EUYLiuox0vdGN4o3I8zJaDIt6G96vlIeYyTE7ck=;
+        b=dC6qUspPjw5tWdVPOtykjQ8Wdc9Mst+wRO3PfuDY7u2WB3/qktQe59YVeiw0rQfwOQ
+         QIM6BDppKjX2onelnB0ZsAMnVykdPXl/CMciwYgHmlBHBdiZTq3kHqc+0iKRF37TS4L5
+         Je3AxPD+EH5AZhGvndCR3InU+YQ2+MoZVKTr3cGmJ8NM3X0jcFRQ0QSm3ROorQhziOw4
+         5SzslT2m2N5fjbD7ELJmcOFmO9RQd7c/aIBPCuU9alcAtPYH1wY75srf+g0/LOVo0G4m
+         6mmVjowR24CXMoeUddT13+9CO+7MUnCEiCcFtx5X3OOHuXBGBDG+RaQu3C0Ii6DAuVJM
+         9Rbw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=z+v8ugHyK4Bi1bsAOtuex5rzJWIULuLfF++ZnJg6JJs=;
-        b=UPq/wp1GqNg+c/U9uNywKdjERaqr5JkKF1IpoZnv25bwWD4Yq3CZnKq+jGxljxZFDe
-         XWOJh0FwqXGw76XxmWYwVA00/3oMUf7dPKgleHAZOinWvzb/QGn97Cnq+O3y5xEUdBd7
-         iSJAC10rFEWSY05batkS2ptjTFjnK67QORGulQUQyE+NP4kT4p+FK6HtLkZ0zcKuilue
-         tbNkFx3LZOMmX1i0hAyyMkHxWlZlgezQnhuBCvhdey1S9qKjX3HyahsqgMfyLOkK9/Z0
-         5iU3ABLXvIaM8YApQ6n0Cn/fY687QKGjhwDyTnsm4eUNpJ5QEYwK0bw2IZFwWuPjqkWm
-         xY3g==
-X-Gm-Message-State: AOAM532hGlcYWSojjPI0HLxC60cGnjznvl+2ub6JyKwg97R1q16jThvv
-        oshWeM5Pjw+hWepfgC+cCHMnJev+jsNElM33vvU=
-X-Google-Smtp-Source: ABdhPJw9Xt2OFrIK7hURg4kp9HjRikv5sLzHEzVl1NzDr5ZjkMyPbwTBECFNWcwqZlk35V3UQisOkE0Lf5eHqEkQTho=
-X-Received: by 2002:a1f:5105:0:b0:345:252e:b0f5 with SMTP id
- f5-20020a1f5105000000b00345252eb0f5mr1463329vkb.22.1650184508047; Sun, 17 Apr
- 2022 01:35:08 -0700 (PDT)
+        h=x-gm-message-state:message-id:from:mime-version
+         :content-transfer-encoding:content-description:subject:to:date
+         :reply-to;
+        bh=eay0EUYLiuox0vdGN4o3I8zJaDIt6G96vlIeYyTE7ck=;
+        b=0d1IBN+Nu0net71zTreJ9VKd3flMMbMgZE2l8Mc4vhLiFxprecczecn1Pjj3Jmksv0
+         8X5oq2pq+nTZrSv+UPO2If2sM6C6sXPmdPXhQ+2Bia3l6rMLyDD5evGavBKUOIckMXsr
+         Rmz2a33QBDdkwRaPEH6fU0fi4ketfbLkIzCnv7M1pnSKfMlDp6r/5QP4bY/seS8dQHld
+         Pvl1+Mj/2SaMjNYI+qg7zvtXcmXRSv6YJCY9aTN7JtBjzWbLj8NZqbVKsLpVzRmicWMt
+         teXDnn+QyDtJhKD5jtFvhAVPgXy0g3f5ymxcop/VQsbRXe04ZRnRfmE/i8C7tIXwzVMq
+         X8/Q==
+X-Gm-Message-State: AOAM532I9iYUJIm5aD558CL66O+CuL8/2zUvUspwoObsYGFPDCiAQ0M2
+        Wjtd2Vbtr/G/9x2kW2YJnHk=
+X-Google-Smtp-Source: ABdhPJwnhIUn+CtONHayEHvicQLj0Kbx4xYB5A4yDc6V4LQQPUbxVcWNSKDTvTkh30UA85Eny9zdsw==
+X-Received: by 2002:a17:906:e18:b0:6e8:69c2:528c with SMTP id l24-20020a1709060e1800b006e869c2528cmr6442403eji.439.1650225661348;
+        Sun, 17 Apr 2022 13:01:01 -0700 (PDT)
+Received: from [192.168.144.19] (mob-5-90-199-215.net.vodafone.it. [5.90.199.215])
+        by smtp.gmail.com with ESMTPSA id k15-20020aa7c04f000000b004229daeaf37sm4010853edo.40.2022.04.17.13.00.54
+        (version=TLS1 cipher=AES128-SHA bits=128/128);
+        Sun, 17 Apr 2022 13:01:01 -0700 (PDT)
+Message-ID: <625c71fd.1c69fb81.68fae.3a73@mx.google.com>
+From:   limburgmauro@gmail.com
+X-Google-Original-From: rolandohanger@gmail.com
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Received: by 2002:a05:612c:2303:b0:2a3:2b46:b7d with HTTP; Sun, 17 Apr 2022
- 01:35:07 -0700 (PDT)
-Reply-To: markwillima00@gmail.com
-From:   Mark <muhammadsuleima888@gmail.com>
-Date:   Sun, 17 Apr 2022 01:35:07 -0700
-Message-ID: <CANCcrFBrB3Qw8Ab_hBy19n0Ch6+XNpkXj3PjXKrc26cej7s+Kg@mail.gmail.com>
-Subject: Re: Greetings!
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=5.8 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:a43 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5000]
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [markwillima00[at]gmail.com]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [muhammadsuleima888[at]gmail.com]
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [muhammadsuleima888[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  3.7 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
+Content-Transfer-Encoding: quoted-printable
+Content-Description: Mail message body
+Subject: GOOD MORNING 
+To:     Recipients <rolandohanger@gmail.com>
+Date:   Sun, 17 Apr 2022 22:00:53 +0200
+Reply-To: richardwahl01011@gmail.com
+X-Antivirus: Avast (VPS 220417-10, 17/4/2022), Outbound message
+X-Antivirus-Status: Clean
+X-Spam-Status: No, score=3.3 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
+        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,REPTO_419_FRAUD_GM_LOOSE,
+        SPF_HELO_NONE,SPF_PASS,SUBJ_ALL_CAPS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Level: ***
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-Hello,
-
-The HSBC Bank is a financial institution in United Kingdom. We
-promotes long-term,sustainable and broad-based economic growth in
-developing and emerging countries by providing financial support like
-loans and investment to large, small and
-medium-sized companies (SMEs) as well as fast-growing enterprises
-which in turn helps to create secure and permanent jobs and reduce
-poverty.
-
-If you need fund to promotes your business, project(Project Funding),
-Loan, planning, budgeting and expansion of your business(s) , do not
-hesitate to indicate your interest as we are here to serve you better
-by granting your request.
+Good day,
+   
 
 
-Thank you
-Mr:Mark
+I am Mr. Richard Wahl, you have a Donation of  =E2=82=AC1,200,000.00 . I wo=
+n a fortune in the Power-ball lottery and i am donating part of it to Ten L=
+ucky people and Ten Charity organization. Your email came out victorious so=
+ Reply me urgently for more information via email   richardwahl01011@gmail.=
+com
+
+Sincerely,
+Mr. Richard Wahl
+=2E..............................................................
+
+Ich bin Herr Richard Wahl, Sie haben eine Spende in H=C3=B6he von 1.200.000=
+,00 =E2=82=AC. Ich habe ein Verm=C3=B6gen in der Power-Ball-Lotterie gewonn=
+en und spende einen Teil davon an Ten Lucky People und die Ten Charity-Orga=
+nisation. Ihre E-Mail war erfolgreich, also antworten Sie mir dringend f=C3=
+=BCr weitere Informationen per E-Mail richardwahl01011@gmail.com
+
+Aufrichtig,
+Herr Richard Wahl
+
+-- 
+This email has been checked for viruses by Avast antivirus software.
+https://www.avast.com/antivirus
+
