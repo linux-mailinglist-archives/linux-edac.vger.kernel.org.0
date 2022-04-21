@@ -2,102 +2,101 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A13EB509F7E
-	for <lists+linux-edac@lfdr.de>; Thu, 21 Apr 2022 14:19:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5535250A13F
+	for <lists+linux-edac@lfdr.de>; Thu, 21 Apr 2022 15:53:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383688AbiDUMVy (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Thu, 21 Apr 2022 08:21:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59932 "EHLO
+        id S1385949AbiDUN4T (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Thu, 21 Apr 2022 09:56:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1383743AbiDUMVx (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Thu, 21 Apr 2022 08:21:53 -0400
-Received: from mail-oa1-f42.google.com (mail-oa1-f42.google.com [209.85.160.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD07D2E09C;
-        Thu, 21 Apr 2022 05:19:02 -0700 (PDT)
-Received: by mail-oa1-f42.google.com with SMTP id 586e51a60fabf-d39f741ba0so5169172fac.13;
-        Thu, 21 Apr 2022 05:19:02 -0700 (PDT)
+        with ESMTP id S1385016AbiDUN4R (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Thu, 21 Apr 2022 09:56:17 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0AD651FCFE
+        for <linux-edac@vger.kernel.org>; Thu, 21 Apr 2022 06:53:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1650549207;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=ZJT9EPj2AF0BAgtE5D1IQ2psGEhfq4Pud3Pk1dFggms=;
+        b=SOS+yI3h83CZjsIKAXuWq/yWclqf2Mr5YVQWeoscReXh4NsyHYKJ9MpTRo6L5AFsxz7pq5
+        hmC3zl4Pjr4vXQe9r/M1AWZVBO26awGeZm55Qywh04ZpropiwYtlP3V8eEPwZx7yRsiXVw
+        yQLQeDgJuUUozSwrDaPt5vtpRnr/Alo=
+Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
+ [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-29-G1a0OgqRNwqiTXEduEqymA-1; Thu, 21 Apr 2022 09:53:26 -0400
+X-MC-Unique: G1a0OgqRNwqiTXEduEqymA-1
+Received: by mail-qk1-f199.google.com with SMTP id m23-20020a05620a221700b006809e1fa4fdso3349303qkh.6
+        for <linux-edac@vger.kernel.org>; Thu, 21 Apr 2022 06:53:26 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
-         :message-id;
-        bh=Bkyl59+yJGYlxOaG8bBfXwq3Mtz9w1jqTJhIUpZWLg0=;
-        b=WyuSLUeZD7PNGDOnQa4d6kLHCpfmyIVHkK20/jddjAOtyEAn17O5oQRxB+vVsQRzhY
-         0RgQbtGVXZKD48a0zpcudkpWOAjKXmG4Kx65FUCpJzJdoSTL+IF1G+C1uUfb7Bf5YCNr
-         HNlbPG5L+aibhDj5/eDQbR2ZIh7SkAA2KgRLzZ+R0VVmw5QeaO97kCwqrORGE/8U7Nb/
-         N5waX8y3w8FGToBLaw0Ng7FKGaKt/Rx1JjoaLPYTItvo8zo/frT+ARqoZAxWt6w1Rozo
-         6mgzAblk+2fLr6ONdt30YJtfLQY3D42z5EntEjuedkGpuKzb8QKFlv66r2bAmZCXtEX8
-         D4pQ==
-X-Gm-Message-State: AOAM533K5WZlm97L7L8fpu28aUxP7jL9exDD8xRYbCPSqUvpIA/opFm+
-        585gR6DoP/GpwGdbyVRPgw==
-X-Google-Smtp-Source: ABdhPJz96N7FmG2EahVdoLhvdwuy+bFDrSdoqpthix7QaE430aGKa4RhnG4KqOPXRu13Qv+Dq6w90g==
-X-Received: by 2002:a05:6870:460f:b0:dd:cd0e:d931 with SMTP id z15-20020a056870460f00b000ddcd0ed931mr3869779oao.196.1650543542181;
-        Thu, 21 Apr 2022 05:19:02 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id fz13-20020a056870ed8d00b000e593f1f26fsm1023756oab.18.2022.04.21.05.19.01
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ZJT9EPj2AF0BAgtE5D1IQ2psGEhfq4Pud3Pk1dFggms=;
+        b=RMedADPcV44dTsYRbjSXEJpmikC4lhkhkrvgmuyIH1J9pMy7WzDtioaouyDXSEcL0X
+         smhltEuIKVcdeFbEyHcUiQAFhdK5yHj6KRj4MgfajW7Qla5iSmVPOaznvBZRuMp2O6I/
+         +rsC/9PSnhpFMERNn5eZVQGZSXft/K0QKp+1rTAHfZL5/1N7/bJX1+EkZBrWi6T8nXx8
+         7TtXkkM6Y4En1XNDQyz5lKwQFA3h4Vf5+k/rMORyGMHHQ/kIvigE/+wLmWVxetWXkIgj
+         UYQeCu6KIo0rRM0RQ2UWeGOPwYq6X4NjCzH1HUIqC0JrSdbqo2Vs+NfVMvzZs4KHumOi
+         kzKA==
+X-Gm-Message-State: AOAM530KUTPvVfMrQHCNnps3XzUZxJvVCUaQxu43jveO9teABo69dlR5
+        2pQn2yq7eYEIvGMo0CblWN/hZjpShYwCVYSwu89C0ytw1tpnCViocjF4DWxQi5LqEq8W2C6uKI9
+        lDVKiWY6ofOCWmeqEFji1IA==
+X-Received: by 2002:a05:620a:472c:b0:69e:adc8:31bb with SMTP id bs44-20020a05620a472c00b0069eadc831bbmr10391133qkb.357.1650549205301;
+        Thu, 21 Apr 2022 06:53:25 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJxZ65Ni7KuvPVTHG9wXSVhaowghVkjzp4/JMCxuoAouEEprDA9UV4imd4z+Od6KwvJEfM7RhQ==
+X-Received: by 2002:a05:620a:472c:b0:69e:adc8:31bb with SMTP id bs44-20020a05620a472c00b0069eadc831bbmr10391122qkb.357.1650549205053;
+        Thu, 21 Apr 2022 06:53:25 -0700 (PDT)
+Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
+        by smtp.gmail.com with ESMTPSA id h123-20020a379e81000000b0069e955169e5sm2969054qke.2.2022.04.21.06.53.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 21 Apr 2022 05:19:01 -0700 (PDT)
-Received: (nullmailer pid 3204418 invoked by uid 1000);
-        Thu, 21 Apr 2022 12:19:00 -0000
-From:   Rob Herring <robh@kernel.org>
-To:     Medad CChien <medadyoung@gmail.com>
-Cc:     tali.perry1@gmail.com, devicetree@vger.kernel.org,
-        KWLIU@nuvoton.com, james.morse@arm.com, ctcchien@nuvoton.com,
-        rric@kernel.org, avifishman70@gmail.com, openbmc@lists.ozlabs.org,
-        JJLIU0@nuvoton.com, tmaimon77@gmail.com, tony.luck@intel.com,
-        venture@google.com, linux-kernel@vger.kernel.org,
-        robh+dt@kernel.org, benjaminfair@google.com, YSCHU@nuvoton.com,
-        bp@alien8.de, linux-edac@vger.kernel.org, KFTING@nuvoton.com,
-        mchehab@kernel.org, yuenn@google.com
-In-Reply-To: <20220421062836.16662-3-ctcchien@nuvoton.com>
-References: <20220421062836.16662-1-ctcchien@nuvoton.com> <20220421062836.16662-3-ctcchien@nuvoton.com>
-Subject: Re: [PATCH v7 2/3] dt-bindings: edac: nuvoton: add NPCM memory controller
-Date:   Thu, 21 Apr 2022 07:19:00 -0500
-Message-Id: <1650543540.622713.3204417.nullmailer@robh.at.kernel.org>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+        Thu, 21 Apr 2022 06:53:24 -0700 (PDT)
+From:   Tom Rix <trix@redhat.com>
+To:     mchehab@kernel.org, bp@alien8.de, tony.luck@intel.com,
+        james.morse@arm.com, rric@kernel.org
+Cc:     linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Tom Rix <trix@redhat.com>
+Subject: [PATCH] EDAC/ghes: change ghes_hw from global to static
+Date:   Thu, 21 Apr 2022 09:53:19 -0400
+Message-Id: <20220421135319.1508754-1-trix@redhat.com>
+X-Mailer: git-send-email 2.27.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Thu, 21 Apr 2022 14:28:35 +0800, Medad CChien wrote:
-> Document devicetree bindings for the Nuvoton BMC NPCM memory controller.
-> 
-> Signed-off-by: Medad CChien <ctcchien@nuvoton.com>
-> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-> Reviewed-by: Borislav Petkov <bp@alien8.de>
-> Reviewed-by: Paul Menzel <pmenzel@molgen.mpg.de>
-> ---
->  .../edac/nuvoton,npcm-memory-controller.yaml  | 61 +++++++++++++++++++
->  1 file changed, 61 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/edac/nuvoton,npcm-memory-controller.yaml
-> 
+Smatch reports this issue
+ghes_edac.c:44:3: warning: symbol 'ghes_hw' was not declared. Should it be static?
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+ghes_hw is only used in ghes_edac.c so change its
+storage-class specifier to static.
 
-yamllint warnings/errors:
-./Documentation/devicetree/bindings/edac/nuvoton,npcm-memory-controller.yaml:61:7: [error] no new line character at the end of file (new-line-at-end-of-file)
+Signed-off-by: Tom Rix <trix@redhat.com>
+---
+ drivers/edac/ghes_edac.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-dtschema/dtc warnings/errors:
-
-
-doc reference errors (make refcheckdocs):
-
-See https://patchwork.ozlabs.org/patch/
-
-This check can fail if there are any dependencies. The base for a patch
-series is generally the most recent rc1.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit.
+diff --git a/drivers/edac/ghes_edac.c b/drivers/edac/ghes_edac.c
+index 2805d5610300..59b0bedc9c24 100644
+--- a/drivers/edac/ghes_edac.c
++++ b/drivers/edac/ghes_edac.c
+@@ -38,7 +38,7 @@ static struct ghes_pvt *ghes_pvt;
+  * This driver's representation of the system hardware, as collected
+  * from DMI.
+  */
+-struct ghes_hw_desc {
++static struct ghes_hw_desc {
+ 	int num_dimms;
+ 	struct dimm_info *dimms;
+ } ghes_hw;
+-- 
+2.27.0
 
