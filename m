@@ -2,428 +2,130 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43B7F5091C8
-	for <lists+linux-edac@lfdr.de>; Wed, 20 Apr 2022 23:10:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6337C5094D7
+	for <lists+linux-edac@lfdr.de>; Thu, 21 Apr 2022 03:56:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382346AbiDTVND (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Wed, 20 Apr 2022 17:13:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51688 "EHLO
+        id S1383717AbiDUB7V (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Wed, 20 Apr 2022 21:59:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1382341AbiDTVNB (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Wed, 20 Apr 2022 17:13:01 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D25FA3B2A1;
-        Wed, 20 Apr 2022 14:10:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650489013; x=1682025013;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=qfPmzOXCy/jS0SbJp3UivrAfDR/oQbAAo+F+9aVF3VE=;
-  b=dnmYFtgA7/aarh7SunHKKMazkVlctFcERaYwTx5wqdhqI/J7F60vR+1s
-   OrPNJzv8fkE55rC3960YGE9NbY2E9YT8PLHqFrTRK45nGmYdLRbmnPH8i
-   E+Sv8M/Aw1GM4rPTraqDMUVD9WiRhCz2aW0/HOSXYmxfRKHhNDu6nW8ok
-   +1djghdXcp2LBnD/Chd5SFsoHiDZ470dFJzcObRFIyOJ0imGuyNTySo/v
-   H7/zgskK4shipJKsTeRsgMC544Y6wRRY9Wd61V7/dOWWnVShT4O0TSGcy
-   S74bcqiLma7Xtq14gByWOK0I0MBwZ4c27t5GKakHgudMuOCE4BO9yXjWD
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10323"; a="261755150"
-X-IronPort-AV: E=Sophos;i="5.90,276,1643702400"; 
-   d="scan'208";a="261755150"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Apr 2022 14:09:52 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,276,1643702400"; 
-   d="scan'208";a="647826870"
-Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 20 Apr 2022 14:09:48 -0700
-Received: from kbuild by 3abc53900bec with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nhHa8-0007Se-4D;
-        Wed, 20 Apr 2022 21:09:48 +0000
-Date:   Thu, 21 Apr 2022 05:09:35 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     patches@opensource.cirrus.com, ntb@lists.linux.dev,
-        linux-mm@kvack.org, linux-media@vger.kernel.org,
-        linux-kbuild@vger.kernel.org, linux-edac@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linaro-mm-sig@lists.linaro.org, io-uring@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, amd-gfx@lists.freedesktop.org,
-        Linux Memory Management List <linux-mm@kvack.org>
-Subject: [linux-next:master] BUILD REGRESSION
- f1244c81da13009dbf61cb807f45881501c44789
-Message-ID: <6260768f.VRPaab4qE9DNlcOi%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        with ESMTP id S1357029AbiDUB7U (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Wed, 20 Apr 2022 21:59:20 -0400
+Received: from EUR03-DBA-obe.outbound.protection.outlook.com (mail-dbaeur03on2087.outbound.protection.outlook.com [40.107.104.87])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1066333;
+        Wed, 20 Apr 2022 18:56:32 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=KUfxq91BvdtnnynEOcnSXOP9xnCdza97yJDHrFHEVUdrVsPyow9L5zZyzYU2ESWCS9gG4SLu5xffiEf+Wl1XE4TBnr8gfQTTJx7+NhRxrjHNTlnoRsAd86AS1HEceVXDawwmtbZpFYkINFOdJOkJok7dpQ6+PPQMuWDg4KCMRQD72VRWSc5nS4qh3V42rbLoFtvy8ar0hUIS0s3Y6Zy8UBA3dkEMakO5k68W9TbxKU1ZseIL14q+t+ODndboqoRJX83kfcWrnmTry3waiuxNCadUEwNE2ofGv6hrbiPgjr8M+MXNV3nRCfOn9h4H4LnYe/jOz7qy+GDFBp6cBoGQBg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=XE1qcmGqPDj+7rzP3atxN2WbTpyefKyxpTQuwx02mUE=;
+ b=I0B2mzUBEgAFTyjCLmoCSebHZtGPH8nzD9par0zGufuyIaGRxlKB/EbBuZnsaFq/h+4u8xoCWftUV9luW7ARTj6CdWqOMkeFcd9XYAEPB34/bUqIC5bS1RqUoqPdQPf8lO3t8EZ74PNyx9DV9xy9wwneXyxKmyBcqM9jt0ajFmvS9b8SBZDQHq3K6NYCIUJ80b+rfTjZ5EP628eZc4iRTu6NYvknJxeT56PKO4D/MycXVjqXTtsJbnOuTADKiDEgewxxeLh/07ljhR1zC9y9cR2W8yKMdy2biu+Gy8MIak/2VxvyYGc2rFv0qDZGuW48aaFoqwN0uF1XAFdtYn5tDw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=XE1qcmGqPDj+7rzP3atxN2WbTpyefKyxpTQuwx02mUE=;
+ b=FcB2MdOwkwVAPv57CDz2nUmNfQ+ignKfB/xRqc/cdXbZqR15YJVi8Q0dryAuajhB7ibf52LR9wSQk7vvFVfRYrhBzt8DFCLOdkVYOA2QPCl4yMz3XOkJFAJ4+IExeDiqcSFnSzxDDo4Bg4WeoDWJ8VQdSkpZHVKbYjI8bvwrY9w=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from AS8PR04MB8404.eurprd04.prod.outlook.com (2603:10a6:20b:3f8::7)
+ by DBBPR04MB7564.eurprd04.prod.outlook.com (2603:10a6:10:1f7::5) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5186.15; Thu, 21 Apr
+ 2022 01:56:30 +0000
+Received: from AS8PR04MB8404.eurprd04.prod.outlook.com
+ ([fe80::55a2:d9e8:2c99:1433]) by AS8PR04MB8404.eurprd04.prod.outlook.com
+ ([fe80::55a2:d9e8:2c99:1433%4]) with mapi id 15.20.5186.013; Thu, 21 Apr 2022
+ 01:56:29 +0000
+From:   Sherry Sun <sherry.sun@nxp.com>
+To:     michal.simek@xilinx.com, bp@alien8.de,
+        Shubhrajyoti.datta@xilinx.com, mchehab@kernel.org,
+        tony.luck@intel.com, james.morse@arm.com, rric@kernel.org
+Cc:     linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-imx@nxp.com
+Subject: [PATCH V2 0/2] EDAC: synopsys: fix some bugs in V3.X Synopsys EDAC DDR driver
+Date:   Thu, 21 Apr 2022 09:53:11 +0800
+Message-Id: <20220421015313.5747-1-sherry.sun@nxp.com>
+X-Mailer: git-send-email 2.17.1
+Content-Type: text/plain
+X-ClientProxiedBy: SI2PR02CA0009.apcprd02.prod.outlook.com
+ (2603:1096:4:194::11) To AS8PR04MB8404.eurprd04.prod.outlook.com
+ (2603:10a6:20b:3f8::7)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 1301086c-fb29-4ded-2006-08da233a26f6
+X-MS-TrafficTypeDiagnostic: DBBPR04MB7564:EE_
+X-Microsoft-Antispam-PRVS: <DBBPR04MB75644CFFC45F6AE310B03B1292F49@DBBPR04MB7564.eurprd04.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: o/7DnGg8F4WAwEVSRSacz/OH/O1cih4S04bIbqf325aK1VteEgKoLa3pRvxEU0XBdtITVPg3c9Rzn2f4080WpGcW8RRQglUF8lfXAnZTYypNtLY9D21Xxd739SyzVgN+4C23+E2nrfCtGNuhF/mDVS00tkt4nDn/h3QMxLA2hlcpTBlEgfFnmOdrCoXtMTDofOkg9IF0kAHzWe/c4EDNm2D0hoAgMPQo3kIS8W4O+Jt/9Gpy96kxfc914HeALXCt8155Ff/k3PR+iEu61XFXC0ukqIauhuW7cck0qSBSQAcc7W4i7ew1cE6KxfmTy6IgM2rChiYA5z4qy06FlBqVPy0jEofL4Pr8Zt1BRtFsBH+HHUAECDcolq2y9alg/EzMctYZd5HhIEWOqK+TftD+THwHGsrUea0iVyfn6KtE4boeYHbhV4zMQs+NeKzAQP1LW0HL7EOH86P2WN4nUCSJEtqzGoEWM62/xA4JbtKsnF14jiiQ7S2gAntLgUjAThp3Wb1eV5hSKkxJqzcJML1WVFsjmtnSwSK/VPBNVwiNtuNV3lDNQ6jmyQvbwtmn8o97hrg/WsUPzOQUNsXUbW4ygrSX9b3yO4fGr40rfQTq3cDZ6c3SpSpMPQEJP8lL64tqcNJF+hf49VSf76tkUHIhJ/7iMG3vRYegpdf/um/7HD3kPgO/h0JX0eoGhh3gEhIVGgrKzQUIq1CX4ExuTTRiYx4wtCr4QWB4uMyjBaBUxh0LD+Mwuj69yJ6lU6P+Nn3j
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AS8PR04MB8404.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(86362001)(7416002)(38100700002)(38350700002)(508600001)(8936002)(5660300002)(6486002)(316002)(52116002)(6506007)(4326008)(8676002)(66476007)(66556008)(66946007)(6666004)(186003)(36756003)(83380400001)(2906002)(2616005)(6512007)(26005)(44832011)(4744005)(1076003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?vW1xOOhOqyL2/eJl/KlOYcBnDKIMTGEhVSJRdPz+ouveVwahHgmcVyRz8Nm5?=
+ =?us-ascii?Q?yJrWDKD7iJQ/ytImNbrFIPtyRC6FLLOGVm1tonxfHPX24J0FW7sugQGRIhtS?=
+ =?us-ascii?Q?IxB4keHBMwoWw2HbZiRuNZ4Rw8nV5rbMzn/uNpLLV6anb1SgWKuGhb1/V52V?=
+ =?us-ascii?Q?Wfruiwj1WOs+z9GTlat6oAYLHsZ6Bg1vuuyq9VX3vS6RyV4oE75SpnO8v0Mj?=
+ =?us-ascii?Q?ekDoo4NknKw0o6IwrR82J8wPqHKt0pAhqKBhXug2ncepiaha8t3r4JoAH4zS?=
+ =?us-ascii?Q?nwkDpyRs3IBWT7ioIDpEK0M2sXPO3HbsA8xNj4B2gbbaZLX0zZ5ChvoON1d4?=
+ =?us-ascii?Q?mwvPwT1+XuYaMIIr18l5BuLZZyvSBF9hL71fXptlw1vFe4zN8xBD6COyK9Uk?=
+ =?us-ascii?Q?egzKzfQMTMHquZYtlE0DZRPFtFdUe3iG+p2I45YKnjxEDiaORxDYiaWpPOTo?=
+ =?us-ascii?Q?GiEDiLAwsDNGdoxN3353lOYi2VSS0yYOntRM7iCU9CNLANzFMbTGMLiqTFmw?=
+ =?us-ascii?Q?2ojETrAqmKP01lyiZGL5YgG847djQbNZd0Y1+BPJlmJNoo2bpGq0sSVroX1B?=
+ =?us-ascii?Q?PAhKhMH10jBntUUgO6Z5CioTXYzlzcZI8DpUJlSzTruEkSGzCNtqAjDcOVcV?=
+ =?us-ascii?Q?PFOYNmS1f25bcr9iXiVszBSDu9RdRCHtj1jLZH9UR+R0ao3zooniNsT5tVod?=
+ =?us-ascii?Q?R+hcls7E7AKn6CIZo8dUUhbU2N2fRfJpFXEMSZCki6jmsMOlWiiMuS1eqZhi?=
+ =?us-ascii?Q?pHQjoByJNEKe3aJTBb3OvysdqPWWzPS4LLb/DAdtF0/Bxe46Wwd9tqxpgb1S?=
+ =?us-ascii?Q?u3G9dEbCHzPQ5mPVCXC/L0TeMQuhe4tMSB86CG4HGxNIYizjR1TzX+yZYvSN?=
+ =?us-ascii?Q?RDPWxqViuKzW2axtgoK3zhkEaXpToQgRbiGMfem8j4rYqvXHH01gHbfHGi/8?=
+ =?us-ascii?Q?/Jm8021ZLoaG82RdJ5xwoLueGwObZeoy7LTnz/L7g65Sr33LgdQYy3wZuwii?=
+ =?us-ascii?Q?ywf0E9RA7fPprb4TqUr4IZI4cEkS5ISFufLA6rGMDLyCfJeAs05XBRGYMqA1?=
+ =?us-ascii?Q?aDs0gFUbwFQ9TVoJul78eDuuyZmhfEOeRWpv2a453fYIceQfIxsyo9JEx457?=
+ =?us-ascii?Q?cvyhsjvxpCHCycQcEjO8y0QMAyUmhXEmY4DXlOYA72lSNKPi/84KbQtO96GX?=
+ =?us-ascii?Q?hK5V8Li9whD7tBMhpDkNngAUfbK9wK8GYN386RgtZ56s8xXuWq94URlo1RoX?=
+ =?us-ascii?Q?MC7Kti/tkVE5gyn6xfDThkEUBTXYDIUJL+I5zsQuB032YOZYxBxfI8thrPMF?=
+ =?us-ascii?Q?nJAKIHvHLS8MdkOGAvYZUBcZIRU8it+0V9CnOXyxT2vu2snvtJvp0hTF6SRS?=
+ =?us-ascii?Q?qHBB7qBtQSf4Hs7Yeuv5WtKYVhOOCAXsX3LZoPqkJWRCqeaPF9y7WducAQVo?=
+ =?us-ascii?Q?ZqHqu8OxXGT6JtYRoBiOLbT7eS0LFrDcIt2RgJ3oHO3OceKKHNoHYdWaJqnF?=
+ =?us-ascii?Q?s8GeOX8eeGL/cwUoCF8+7j/dR43J/ikJvxmrciml+ZIz64Pim6wv9obMAN0q?=
+ =?us-ascii?Q?B4gKzTPBDYOalFA8THeLMzfMu0TtISYlA5bb5LVR4Isl9hjOOtaDkMCt22zD?=
+ =?us-ascii?Q?yJ7MrGhqEbI1x1KSreUlm6s3NQiDKUxzjfjp538qiRZOjYTWY5AGnHuXJYWf?=
+ =?us-ascii?Q?lnYAh3sPEsgXHvxj0znr+rq1EeacQ7WfKe97p0M/tUQIyZfSRQcSoal0ikO0?=
+ =?us-ascii?Q?jmxBjdnHlg=3D=3D?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1301086c-fb29-4ded-2006-08da233a26f6
+X-MS-Exchange-CrossTenant-AuthSource: AS8PR04MB8404.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Apr 2022 01:56:29.8210
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: C1nQxVUB/rDOfU63FTiKJUuB0wrUNQXhB5YFnC13OyjiDJPJ4Mn+dMF8qgp9DglOTVZUzkg1ch+WpWPWFjAXZg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DBBPR04MB7564
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-branch HEAD: f1244c81da13009dbf61cb807f45881501c44789  Add linux-next specific files for 20220420
+The two patches fix some issues for V3.X Synopsys EDAC DDR in synopsys_edac.c.
+For the details, please check the patch commit log. This has been verified on
+i.MX8MP platform.
 
-Error/Warning reports:
+Sherry Sun (2):
+  EDAC: synopsys: Add disable_intr support for V3.X Synopsys EDAC DDR
+  EDAC: synopsys: re-enable the interrupts in intr_handler for V3.X
+    Synopsys EDAC DDR
 
-https://lore.kernel.org/linux-mm/202204081656.6x4pfen4-lkp@intel.com
-https://lore.kernel.org/linux-mm/202204140108.DeRAhWEn-lkp@intel.com
-https://lore.kernel.org/linux-mm/202204202059.7tV9FkRy-lkp@intel.com
-https://lore.kernel.org/lkml/202204140043.Tx7BIBvI-lkp@intel.com
-https://lore.kernel.org/llvm/202203241958.Uw9bWfMD-lkp@intel.com
-
-Error/Warning: (recently discovered and may have been fixed)
-
-arch/arm/mach-versatile/integrator_ap.c:148:13: warning: no previous prototype for 'ap_init_early' [-Wmissing-prototypes]
-drivers/bus/mhi/host/main.c:787:13: warning: parameter 'event_quota' set but not used [-Wunused-but-set-parameter]
-drivers/ntb/hw/idt/ntb_hw_idt.c:1116:1: warning: the frame size of 1288 bytes is larger than 1280 bytes [-Wframe-larger-than=]
-
-Unverified Error/Warning (likely false positive, please contact us if interested):
-
-Makefile:684: arch/h8300/Makefile: No such file or directory
-arch/Kconfig:10: can't open file "arch/h8300/Kconfig"
-arch/s390/include/asm/spinlock.h:81:3: error: unexpected token in '.rept' directive
-arch/s390/include/asm/spinlock.h:81:3: error: unknown directive
-arch/s390/include/asm/spinlock.h:81:3: error: unmatched '.endr' directive
-arch/s390/lib/spinlock.c:78:3: error: unexpected token in '.rept' directive
-arch/s390/lib/spinlock.c:78:3: error: unknown directive
-arch/s390/lib/spinlock.c:78:3: error: unmatched '.endr' directive
-drivers/dma-buf/st-dma-fence-unwrap.c:125:13: warning: variable 'err' set but not used [-Wunused-but-set-variable]
-drivers/edac/edac_device.c:79 edac_device_alloc_ctl_info() warn: Please consider using kcalloc instead
-drivers/gpu/drm/amd/amdgpu/../display/dc/dcn31/dcn31_hubp.c:57:6: warning: no previous prototype for 'hubp31_program_extended_blank' [-Wmissing-prototypes]
-kernel/bpf/syscall.c:4944:13: warning: no previous prototype for function 'unpriv_ebpf_notify' [-Wmissing-prototypes]
-make[1]: *** No rule to make target 'arch/h8300/Makefile'.
-scripts/Makefile.clean:15: arch/h8300/Makefile: No such file or directory
-sound/soc/codecs/wm8731.c:654:1: internal compiler error: Segmentation fault
-
-Error/Warning ids grouped by kconfigs:
-
-gcc_recent_errors
-|-- alpha-allmodconfig
-|   `-- drivers-dma-buf-st-dma-fence-unwrap.c:warning:variable-err-set-but-not-used
-|-- alpha-allyesconfig
-|   `-- drivers-dma-buf-st-dma-fence-unwrap.c:warning:variable-err-set-but-not-used
-|-- alpha-randconfig-r024-20220420
-|   `-- drivers-dma-buf-st-dma-fence-unwrap.c:warning:variable-err-set-but-not-used
-|-- arc-allmodconfig
-|   `-- drivers-dma-buf-st-dma-fence-unwrap.c:warning:variable-err-set-but-not-used
-|-- arc-allyesconfig
-|   `-- drivers-dma-buf-st-dma-fence-unwrap.c:warning:variable-err-set-but-not-used
-|-- arc-randconfig-r002-20220420
-|   `-- drivers-dma-buf-st-dma-fence-unwrap.c:warning:variable-err-set-but-not-used
-|-- arc-randconfig-r043-20220420
-|   `-- drivers-dma-buf-st-dma-fence-unwrap.c:warning:variable-err-set-but-not-used
-|-- arm-allmodconfig
-|   `-- drivers-dma-buf-st-dma-fence-unwrap.c:warning:variable-err-set-but-not-used
-|-- arm-allyesconfig
-|   `-- drivers-dma-buf-st-dma-fence-unwrap.c:warning:variable-err-set-but-not-used
-|-- arm-integrator_defconfig
-|   `-- arch-arm-mach-versatile-integrator_ap.c:warning:no-previous-prototype-for-ap_init_early
-|-- arm-randconfig-c002-20220420
-|   `-- drivers-dma-buf-st-dma-fence-unwrap.c:warning:variable-err-set-but-not-used
-|-- arm64-allyesconfig
-|   `-- drivers-dma-buf-st-dma-fence-unwrap.c:warning:variable-err-set-but-not-used
-|-- arm64-randconfig-c023-20220420
-|   `-- drivers-dma-buf-st-dma-fence-unwrap.c:warning:variable-err-set-but-not-used
-|-- h8300-allyesconfig
-|   |-- Makefile:arch-h8300-Makefile:No-such-file-or-directory
-|   |-- arch-Kconfig:can-t-open-file-arch-h8300-Kconfig
-|   `-- make:No-rule-to-make-target-arch-h8300-Makefile-.
-|-- h8300-randconfig-r003-20220420
-|   `-- scripts-Makefile.clean:arch-h8300-Makefile:No-such-file-or-directory
-|-- h8300-randconfig-r032-20220420
-|   |-- Makefile:arch-h8300-Makefile:No-such-file-or-directory
-|   |-- arch-Kconfig:can-t-open-file-arch-h8300-Kconfig
-|   `-- make:No-rule-to-make-target-arch-h8300-Makefile-.
-|-- i386-allyesconfig
-|   |-- drivers-dma-buf-st-dma-fence-unwrap.c:warning:variable-err-set-but-not-used
-|   `-- drivers-gpu-drm-amd-amdgpu-..-display-dc-dcn31-dcn31_hubp.c:warning:no-previous-prototype-for-hubp31_program_extended_blank
-|-- i386-randconfig-m021
-|   `-- drivers-edac-edac_device.c-edac_device_alloc_ctl_info()-warn:Please-consider-using-kcalloc-instead
-|-- i386-randconfig-s001
-|   |-- fs-io_uring.c:sparse:sparse:marked-inline-but-without-a-definition
-|   |-- mm-memory.c:sparse:sparse:incorrect-type-in-initializer-(different-base-types)-expected-unsigned-long-zap_flags-got-restricted-zap_flags_t
-|   `-- mm-memory.c:sparse:sparse:symbol-vma_needs_copy-was-not-declared.-Should-it-be-static
-|-- i386-randconfig-s002
-|   |-- fs-hugetlbfs-inode.c:sparse:sparse:incorrect-type-in-argument-(different-base-types)-expected-unsigned-long-zap_flags-got-restricted-zap_flags_t-usertype
-|   |-- mm-hugetlb.c:sparse:sparse:restricted-zap_flags_t-degrades-to-integer
-|   |-- mm-memory.c:sparse:sparse:incorrect-type-in-initializer-(different-base-types)-expected-unsigned-long-zap_flags-got-restricted-zap_flags_t
-|   `-- mm-memory.c:sparse:sparse:symbol-vma_needs_copy-was-not-declared.-Should-it-be-static
-|-- ia64-allmodconfig
-|   `-- drivers-dma-buf-st-dma-fence-unwrap.c:warning:variable-err-set-but-not-used
-|-- ia64-allyesconfig
-|   `-- drivers-dma-buf-st-dma-fence-unwrap.c:warning:variable-err-set-but-not-used
-|-- ia64-buildonly-randconfig-r003-20220420
-|   `-- drivers-dma-buf-st-dma-fence-unwrap.c:warning:variable-err-set-but-not-used
-|-- ia64-randconfig-c003-20220420
-|   `-- drivers-dma-buf-st-dma-fence-unwrap.c:warning:variable-err-set-but-not-used
-|-- m68k-allmodconfig
-|   `-- drivers-dma-buf-st-dma-fence-unwrap.c:warning:variable-err-set-but-not-used
-|-- m68k-allyesconfig
-|   `-- drivers-dma-buf-st-dma-fence-unwrap.c:warning:variable-err-set-but-not-used
-|-- m68k-randconfig-r025-20220420
-|   `-- drivers-dma-buf-st-dma-fence-unwrap.c:warning:variable-err-set-but-not-used
-|-- microblaze-randconfig-s031-20220420
-|   |-- mm-memory.c:sparse:sparse:incorrect-type-in-initializer-(different-base-types)-expected-unsigned-long-zap_flags-got-restricted-zap_flags_t
-|   `-- mm-memory.c:sparse:sparse:symbol-vma_needs_copy-was-not-declared.-Should-it-be-static
-|-- mips-allmodconfig
-|   `-- drivers-dma-buf-st-dma-fence-unwrap.c:warning:variable-err-set-but-not-used
-|-- mips-allyesconfig
-|   `-- drivers-dma-buf-st-dma-fence-unwrap.c:warning:variable-err-set-but-not-used
-|-- nios2-allmodconfig
-|   `-- drivers-dma-buf-st-dma-fence-unwrap.c:warning:variable-err-set-but-not-used
-|-- nios2-allyesconfig
-|   `-- drivers-dma-buf-st-dma-fence-unwrap.c:warning:variable-err-set-but-not-used
-|-- nios2-randconfig-r016-20220420
-|   `-- drivers-dma-buf-st-dma-fence-unwrap.c:warning:variable-err-set-but-not-used
-|-- openrisc-randconfig-r004-20220420
-|   `-- drivers-dma-buf-st-dma-fence-unwrap.c:warning:variable-err-set-but-not-used
-|-- parisc-allyesconfig
-|   `-- drivers-dma-buf-st-dma-fence-unwrap.c:warning:variable-err-set-but-not-used
-|-- powerpc-allmodconfig
-|   `-- drivers-dma-buf-st-dma-fence-unwrap.c:warning:variable-err-set-but-not-used
-|-- powerpc-allyesconfig
-|   `-- drivers-dma-buf-st-dma-fence-unwrap.c:warning:variable-err-set-but-not-used
-|-- powerpc64-randconfig-c024-20220420
-|   `-- drivers-dma-buf-st-dma-fence-unwrap.c:warning:variable-err-set-but-not-used
-|-- powerpc64-randconfig-p002-20220420
-|   `-- drivers-dma-buf-st-dma-fence-unwrap.c:warning:variable-err-set-but-not-used
-|-- powerpc64-randconfig-r003-20220420
-|   |-- drivers-dma-buf-st-dma-fence-unwrap.c:warning:variable-err-set-but-not-used
-|   `-- drivers-gpu-drm-amd-amdgpu-..-display-dc-dcn31-dcn31_hubp.c:warning:no-previous-prototype-for-hubp31_program_extended_blank
-|-- powerpc64-randconfig-r033-20220420
-|   `-- drivers-gpu-drm-amd-amdgpu-..-display-dc-dcn31-dcn31_hubp.c:warning:no-previous-prototype-for-hubp31_program_extended_blank
-|-- riscv-allmodconfig
-|   `-- drivers-dma-buf-st-dma-fence-unwrap.c:warning:variable-err-set-but-not-used
-|-- riscv-allyesconfig
-|   `-- drivers-dma-buf-st-dma-fence-unwrap.c:warning:variable-err-set-but-not-used
-|-- riscv-randconfig-c023-20220420
-|   `-- sound-soc-codecs-wm8731.c:internal-compiler-error:Segmentation-fault
-|-- s390-allmodconfig
-|   `-- drivers-dma-buf-st-dma-fence-unwrap.c:warning:variable-err-set-but-not-used
-|-- s390-allyesconfig
-|   `-- drivers-dma-buf-st-dma-fence-unwrap.c:warning:variable-err-set-but-not-used
-|-- s390-randconfig-r034-20220420
-|   `-- drivers-ntb-hw-idt-ntb_hw_idt.c:warning:the-frame-size-of-bytes-is-larger-than-bytes
-|-- sh-allmodconfig
-|   `-- drivers-dma-buf-st-dma-fence-unwrap.c:warning:variable-err-set-but-not-used
-|-- sparc-allyesconfig
-|   `-- drivers-dma-buf-st-dma-fence-unwrap.c:warning:variable-err-set-but-not-used
-|-- sparc-randconfig-c004-20220420
-|   `-- drivers-dma-buf-st-dma-fence-unwrap.c:warning:variable-err-set-but-not-used
-|-- sparc-randconfig-m031-20220420
-|   `-- drivers-dma-buf-st-dma-fence-unwrap.c:warning:variable-err-set-but-not-used
-|-- x86_64-allyesconfig
-|   `-- drivers-dma-buf-st-dma-fence-unwrap.c:warning:variable-err-set-but-not-used
-|-- x86_64-randconfig-m001
-|   `-- drivers-edac-edac_device.c-edac_device_alloc_ctl_info()-warn:Please-consider-using-kcalloc-instead
-|-- x86_64-randconfig-s021
-|   |-- fs-io_uring.c:sparse:sparse:marked-inline-but-without-a-definition
-|   |-- mm-memory.c:sparse:sparse:incorrect-type-in-initializer-(different-base-types)-expected-unsigned-long-zap_flags-got-restricted-zap_flags_t
-|   `-- mm-memory.c:sparse:sparse:symbol-vma_needs_copy-was-not-declared.-Should-it-be-static
-|-- x86_64-randconfig-s022
-|   |-- fs-hugetlbfs-inode.c:sparse:sparse:incorrect-type-in-argument-(different-base-types)-expected-unsigned-long-zap_flags-got-restricted-zap_flags_t-usertype
-|   |-- mm-hugetlb.c:sparse:sparse:restricted-zap_flags_t-degrades-to-integer
-|   |-- mm-memory.c:sparse:sparse:incorrect-type-in-initializer-(different-base-types)-expected-unsigned-long-zap_flags-got-restricted-zap_flags_t
-|   `-- mm-memory.c:sparse:sparse:symbol-vma_needs_copy-was-not-declared.-Should-it-be-static
-|-- x86_64-rhel-8.3-kselftests
-|   |-- fs-hugetlbfs-inode.c:sparse:sparse:incorrect-type-in-argument-(different-base-types)-expected-unsigned-long-zap_flags-got-restricted-zap_flags_t-usertype
-|   |-- fs-io_uring.c:sparse:sparse:marked-inline-but-without-a-definition
-|   |-- mm-hugetlb.c:sparse:sparse:restricted-zap_flags_t-degrades-to-integer
-|   |-- mm-memory.c:sparse:sparse:incorrect-type-in-initializer-(different-base-types)-expected-unsigned-long-zap_flags-got-restricted-zap_flags_t
-|   `-- mm-memory.c:sparse:sparse:symbol-vma_needs_copy-was-not-declared.-Should-it-be-static
-|-- xtensa-allyesconfig
-|   `-- drivers-dma-buf-st-dma-fence-unwrap.c:warning:variable-err-set-but-not-used
-|-- xtensa-randconfig-r013-20220420
-|   `-- drivers-dma-buf-st-dma-fence-unwrap.c:warning:variable-err-set-but-not-used
-`-- xtensa-randconfig-r036-20220420
-    `-- drivers-dma-buf-st-dma-fence-unwrap.c:warning:variable-err-set-but-not-used
-
-clang_recent_errors
-|-- arm-randconfig-r005-20220420
-|   `-- drivers-bus-mhi-host-main.c:warning:parameter-event_quota-set-but-not-used
-|-- arm-randconfig-r006-20220420
-|   `-- drivers-bus-mhi-host-main.c:warning:parameter-event_quota-set-but-not-used
-|-- hexagon-buildonly-randconfig-r004-20220420
-|   `-- drivers-bus-mhi-host-main.c:warning:parameter-event_quota-set-but-not-used
-|-- hexagon-randconfig-r041-20220420
-|   |-- drivers-bus-mhi-host-main.c:warning:parameter-event_quota-set-but-not-used
-|   `-- kernel-bpf-syscall.c:warning:no-previous-prototype-for-function-unpriv_ebpf_notify
-|-- i386-randconfig-a011
-|   |-- drivers-bus-mhi-host-main.c:warning:parameter-event_quota-set-but-not-used
-|   `-- kernel-bpf-syscall.c:warning:no-previous-prototype-for-function-unpriv_ebpf_notify
-|-- i386-randconfig-a013
-|   |-- drivers-bus-mhi-host-main.c:warning:parameter-event_quota-set-but-not-used
-|   `-- kernel-bpf-syscall.c:warning:no-previous-prototype-for-function-unpriv_ebpf_notify
-|-- i386-randconfig-a015
-|   |-- drivers-bus-mhi-host-main.c:warning:parameter-event_quota-set-but-not-used
-|   `-- kernel-bpf-syscall.c:warning:no-previous-prototype-for-function-unpriv_ebpf_notify
-|-- riscv-buildonly-randconfig-r005-20220420
-|   `-- drivers-bus-mhi-host-main.c:warning:parameter-event_quota-set-but-not-used
-|-- riscv-randconfig-r042-20220420
-|   `-- drivers-bus-mhi-host-main.c:warning:parameter-event_quota-set-but-not-used
-|-- s390-buildonly-randconfig-r006-20220420
-|   |-- arch-s390-include-asm-spinlock.h:error:unexpected-token-in-.rept-directive
-|   |-- arch-s390-include-asm-spinlock.h:error:unknown-directive
-|   |-- arch-s390-include-asm-spinlock.h:error:unmatched-.endr-directive
-|   |-- arch-s390-lib-spinlock.c:error:unexpected-token-in-.rept-directive
-|   |-- arch-s390-lib-spinlock.c:error:unknown-directive
-|   |-- arch-s390-lib-spinlock.c:error:unmatched-.endr-directive
-|   `-- drivers-bus-mhi-host-main.c:warning:parameter-event_quota-set-but-not-used
-|-- s390-randconfig-r011-20220420
-|   |-- arch-s390-include-asm-spinlock.h:error:unexpected-token-in-.rept-directive
-|   |-- arch-s390-include-asm-spinlock.h:error:unknown-directive
-|   |-- arch-s390-include-asm-spinlock.h:error:unmatched-.endr-directive
-|   |-- arch-s390-lib-spinlock.c:error:unexpected-token-in-.rept-directive
-|   |-- arch-s390-lib-spinlock.c:error:unknown-directive
-|   |-- arch-s390-lib-spinlock.c:error:unmatched-.endr-directive
-|   `-- drivers-bus-mhi-host-main.c:warning:parameter-event_quota-set-but-not-used
-|-- s390-randconfig-r044-20220420
-|   |-- arch-s390-include-asm-spinlock.h:error:unexpected-token-in-.rept-directive
-|   |-- arch-s390-include-asm-spinlock.h:error:unknown-directive
-|   |-- arch-s390-include-asm-spinlock.h:error:unmatched-.endr-directive
-|   |-- arch-s390-lib-spinlock.c:error:unexpected-token-in-.rept-directive
-|   |-- arch-s390-lib-spinlock.c:error:unknown-directive
-|   |-- arch-s390-lib-spinlock.c:error:unmatched-.endr-directive
-|   `-- drivers-bus-mhi-host-main.c:warning:parameter-event_quota-set-but-not-used
-|-- x86_64-randconfig-a001
-|   |-- drivers-bus-mhi-host-main.c:warning:parameter-event_quota-set-but-not-used
-|   `-- kernel-bpf-syscall.c:warning:no-previous-prototype-for-function-unpriv_ebpf_notify
-|-- x86_64-randconfig-a005
-|   `-- drivers-bus-mhi-host-main.c:warning:parameter-event_quota-set-but-not-used
-|-- x86_64-randconfig-a012
-|   |-- drivers-bus-mhi-host-main.c:warning:parameter-event_quota-set-but-not-used
-|   `-- kernel-bpf-syscall.c:warning:no-previous-prototype-for-function-unpriv_ebpf_notify
-|-- x86_64-randconfig-a014
-|   `-- drivers-bus-mhi-host-main.c:warning:parameter-event_quota-set-but-not-used
-`-- x86_64-randconfig-a016
-    `-- drivers-bus-mhi-host-main.c:warning:parameter-event_quota-set-but-not-used
-
-elapsed time: 735m
-
-configs tested: 110
-configs skipped: 4
-
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm                              allmodconfig
-arm                              allyesconfig
-arm64                               defconfig
-i386                          randconfig-c001
-arc                              allyesconfig
-alpha                            allyesconfig
-nios2                            allyesconfig
-arm                       aspeed_g5_defconfig
-sh                              ul2_defconfig
-arc                        nsim_700_defconfig
-arm                            qcom_defconfig
-ia64                             alldefconfig
-mips                  maltasmvp_eva_defconfig
-powerpc                   motionpro_defconfig
-sh                   secureedge5410_defconfig
-sparc                            allyesconfig
-arm                      jornada720_defconfig
-arm                        shmobile_defconfig
-s390                       zfcpdump_defconfig
-powerpc                      bamboo_defconfig
-arm                         nhk8815_defconfig
-ia64                          tiger_defconfig
-arc                     haps_hs_smp_defconfig
-openrisc                         alldefconfig
-arc                     nsimosci_hs_defconfig
-m68k                        mvme147_defconfig
-sh                        dreamcast_defconfig
-mips                         cobalt_defconfig
-sh                   rts7751r2dplus_defconfig
-arm                  randconfig-c002-20220420
-x86_64                        randconfig-c001
-ia64                                defconfig
-ia64                             allmodconfig
-ia64                             allyesconfig
-m68k                             allyesconfig
-m68k                                defconfig
-m68k                             allmodconfig
-nios2                               defconfig
-alpha                               defconfig
-csky                                defconfig
-h8300                            allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-xtensa                           allyesconfig
-s390                             allyesconfig
-parisc                              defconfig
-parisc64                            defconfig
-s390                             allmodconfig
-parisc                           allyesconfig
-s390                                defconfig
-i386                   debian-10.3-kselftests
-i386                              debian-10.3
-i386                                defconfig
-i386                             allyesconfig
-sparc                               defconfig
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                           allnoconfig
-powerpc                          allmodconfig
-powerpc                          allyesconfig
-x86_64                        randconfig-a004
-x86_64                        randconfig-a002
-x86_64                        randconfig-a006
-x86_64                        randconfig-a013
-x86_64                        randconfig-a011
-x86_64                        randconfig-a015
-i386                          randconfig-a014
-i386                          randconfig-a012
-i386                          randconfig-a016
-arc                  randconfig-r043-20220420
-riscv                            allmodconfig
-riscv                    nommu_k210_defconfig
-riscv                    nommu_virt_defconfig
-riscv                             allnoconfig
-riscv                          rv32_defconfig
-riscv                            allyesconfig
-riscv                               defconfig
-x86_64                    rhel-8.3-kselftests
-um                           x86_64_defconfig
-um                             i386_defconfig
-x86_64                              defconfig
-x86_64                           allyesconfig
-x86_64                          rhel-8.3-func
-x86_64                               rhel-8.3
-x86_64                         rhel-8.3-kunit
-x86_64                                  kexec
-
-clang tested configs:
-mips                 randconfig-c004-20220420
-powerpc                        icon_defconfig
-arm                         shannon_defconfig
-powerpc                      katmai_defconfig
-mips                     loongson2k_defconfig
-powerpc                      pmac32_defconfig
-arm                         mv78xx0_defconfig
-powerpc                  mpc885_ads_defconfig
-mips                       lemote2f_defconfig
-x86_64                        randconfig-a001
-x86_64                        randconfig-a003
-x86_64                        randconfig-a005
-x86_64                        randconfig-a016
-x86_64                        randconfig-a012
-x86_64                        randconfig-a014
-i386                          randconfig-a013
-i386                          randconfig-a015
-i386                          randconfig-a011
-hexagon              randconfig-r041-20220420
-s390                 randconfig-r044-20220420
-hexagon              randconfig-r045-20220420
-riscv                randconfig-r042-20220420
+ drivers/edac/synopsys_edac.c | 12 ++++++++++--
+ 1 file changed, 10 insertions(+), 2 deletions(-)
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.17.1
+
