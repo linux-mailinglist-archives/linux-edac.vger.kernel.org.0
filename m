@@ -2,94 +2,116 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3643B509B9A
-	for <lists+linux-edac@lfdr.de>; Thu, 21 Apr 2022 11:07:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 977CE509BB1
+	for <lists+linux-edac@lfdr.de>; Thu, 21 Apr 2022 11:08:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1387072AbiDUJBK (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Thu, 21 Apr 2022 05:01:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39192 "EHLO
+        id S1387195AbiDUJDk convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-edac@lfdr.de>); Thu, 21 Apr 2022 05:03:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1387044AbiDUJBI (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Thu, 21 Apr 2022 05:01:08 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A7C820F75;
-        Thu, 21 Apr 2022 01:58:18 -0700 (PDT)
-Received: from zn.tnic (p200300ea971b58ed329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:971b:58ed:329c:23ff:fea6:a903])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 7C0A81EC0494;
-        Thu, 21 Apr 2022 10:58:13 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1650531493;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=K6LjJUiqWP9JmAH5pCtbEbi7a1uZ4YBTwFyxQHdf9Lg=;
-        b=Tujmid+xug5U5uZ16FWxKvjXm88Ez25HZB78FyF8+JEjZPHMRmRVh85xENutF6BN6j4sD+
-        HZbhBY8cixey6jD/WnGze8qIsSHA1Ic3364igLmUaZeogZKdgBEXUGIRYS30cY+2g7+SOV
-        jMNv1zGhX4M2PbqZiBbiT6FcB/U1Hgs=
-Date:   Thu, 21 Apr 2022 10:58:08 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Sherry Sun <sherry.sun@nxp.com>
-Cc:     michal.simek@xilinx.com, Shubhrajyoti.datta@xilinx.com,
-        mchehab@kernel.org, tony.luck@intel.com, james.morse@arm.com,
-        rric@kernel.org, linux-edac@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-imx@nxp.com
-Subject: Re: [PATCH V2 1/2] EDAC: synopsys: Add disable_intr support for V3.X
- Synopsys EDAC DDR
-Message-ID: <YmEcoIj63goth+aU@zn.tnic>
-References: <20220421015313.5747-1-sherry.sun@nxp.com>
- <20220421015313.5747-2-sherry.sun@nxp.com>
+        with ESMTP id S1387204AbiDUJDh (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Thu, 21 Apr 2022 05:03:37 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E762B222A4
+        for <linux-edac@vger.kernel.org>; Thu, 21 Apr 2022 02:00:38 -0700 (PDT)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <jlu@pengutronix.de>)
+        id 1nhSfj-0003ew-9G; Thu, 21 Apr 2022 11:00:19 +0200
+Received: from localhost ([127.0.0.1])
+        by ptx.hi.pengutronix.de with esmtp (Exim 4.92)
+        (envelope-from <jlu@pengutronix.de>)
+        id 1nhSfh-0005Jj-OZ; Thu, 21 Apr 2022 11:00:17 +0200
+Message-ID: <3f092daad178f60e021784d3e398288e15fda4b6.camel@pengutronix.de>
+Subject: Re: [PATCH] edac: Make use of the helper function
+ devm_platform_ioremap_resource()
+From:   Jan =?ISO-8859-1?Q?L=FCbbe?= <jlu@pengutronix.de>
+To:     cgel.zte@gmail.com, bp@alien8.de, mchehab@kernel.org
+Cc:     tony.luck@intel.com, james.morse@arm.com, rric@kernel.org,
+        linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Lv Ruyi <lv.ruyi@zte.com.cn>, Zeal Robot <zealci@zte.com.cn>
+Date:   Thu, 21 Apr 2022 11:00:17 +0200
+In-Reply-To: <20220421084621.2615517-1-lv.ruyi@zte.com.cn>
+References: <20220421084621.2615517-1-lv.ruyi@zte.com.cn>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.44.0 (by Flathub.org)) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220421015313.5747-2-sherry.sun@nxp.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: jlu@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-edac@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-> Subject: Re: [PATCH V2 1/2] EDAC: synopsys: Add disable_intr support for V3.X Synopsys EDAC DDR
+On Thu, 2022-04-21 at 08:46 +0000, cgel.zte@gmail.com wrote:
+> From: Lv Ruyi <lv.ruyi@zte.com.cn>
+> 
+> Use the devm_platform_ioremap_resource() helper instead of calling
+> platform_get_resource() and devm_ioremap_resource() separately.Make the
+> code simpler without functional changes.
+> 
+> Reported-by: Zeal Robot <zealci@zte.com.cn>
+> Signed-off-by: Lv Ruyi <lv.ruyi@zte.com.cn>
 
-EDAC tree subject prefixes are of the format:
+Reviewed-by: Jan Luebbe <jlu@pengutronix.de>
 
-EDAC/<driver name>: Bla...
+Thanks,
+Jan
 
-where "Bla starts with a capital letter".
-
-What is "disable_intr support"?
-
-I can figure it out when looking at the code but you need to make this
-human-readable. For example
-
-"Disable the error interrupt on Synopsys EDAC v3.x hardware"
-
-Also, is it all caps V3.X or is it simply v3.x?
-
-On Thu, Apr 21, 2022 at 09:53:12AM +0800, Sherry Sun wrote:
-> V3.X Synopsys EDAC DDR doesn't have the QOS Interrupt register, need
-> to change to use the ECC Clear Register to disable the interrupts.
-
-Not "need to change" but "change".
-
-From Documentation/process/submitting-patches.rst:
-
-"Describe your changes in imperative mood, e.g. "make xyzzy do frotz"
-instead of "[This patch] makes xyzzy do frotz" or "[I] changed xyzzy
-to do frotz", as if you are giving orders to the codebase to change
-its behaviour."
-
-Please have a look at that document.
-
-Thx.
+> ---
+>  drivers/edac/armada_xp_edac.c | 18 ++----------------
+>  1 file changed, 2 insertions(+), 16 deletions(-)
+> 
+> diff --git a/drivers/edac/armada_xp_edac.c b/drivers/edac/armada_xp_edac.c
+> index b1f46a974b9e..038abbb83f4b 100644
+> --- a/drivers/edac/armada_xp_edac.c
+> +++ b/drivers/edac/armada_xp_edac.c
+> @@ -286,17 +286,10 @@ static int axp_mc_probe(struct platform_device *pdev)
+>  	struct edac_mc_layer layers[1];
+>  	const struct of_device_id *id;
+>  	struct mem_ctl_info *mci;
+> -	struct resource *r;
+>  	void __iomem *base;
+>  	uint32_t config;
+>  
+> -	r = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+> -	if (!r) {
+> -		dev_err(&pdev->dev, "Unable to get mem resource\n");
+> -		return -ENODEV;
+> -	}
+> -
+> -	base = devm_ioremap_resource(&pdev->dev, r);
+> +	base = devm_platform_ioremap_resource(pdev, 0);
+>  	if (IS_ERR(base)) {
+>  		dev_err(&pdev->dev, "Unable to map regs\n");
+>  		return PTR_ERR(base);
+> @@ -516,15 +509,8 @@ static int aurora_l2_probe(struct platform_device *pdev)
+>  	const struct of_device_id *id;
+>  	uint32_t l2x0_aux_ctrl;
+>  	void __iomem *base;
+> -	struct resource *r;
+> -
+> -	r = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+> -	if (!r) {
+> -		dev_err(&pdev->dev, "Unable to get mem resource\n");
+> -		return -ENODEV;
+> -	}
+>  
+> -	base = devm_ioremap_resource(&pdev->dev, r);
+> +	base = devm_platform_ioremap_resource(pdev, 0);
+>  	if (IS_ERR(base)) {
+>  		dev_err(&pdev->dev, "Unable to map regs\n");
+>  		return PTR_ERR(base);
 
 -- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
