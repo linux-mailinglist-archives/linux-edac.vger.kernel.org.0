@@ -2,115 +2,113 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92BD250D5C5
-	for <lists+linux-edac@lfdr.de>; Mon, 25 Apr 2022 00:32:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B046450DAD4
+	for <lists+linux-edac@lfdr.de>; Mon, 25 Apr 2022 10:03:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239820AbiDXWft (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Sun, 24 Apr 2022 18:35:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42904 "EHLO
+        id S233519AbiDYIFf (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Mon, 25 Apr 2022 04:05:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239595AbiDXWfs (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Sun, 24 Apr 2022 18:35:48 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AD6C3EB9B;
-        Sun, 24 Apr 2022 15:32:46 -0700 (PDT)
-Received: from zn.tnic (p5de8eeb4.dip0.t-ipconnect.de [93.232.238.180])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 979E71EC04CB;
-        Mon, 25 Apr 2022 00:32:41 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1650839561;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=E3tWFCCoZ4AqC9DN7Y36E9oH45r+IOFCKmGU4NaYoGM=;
-        b=XMn87LB2mAo98qtdX6vdUPFXOY0zkGDkJj+9g0wTKuCI/t9Kn+5QHvcrJiFr1+sHlSQ/v/
-        QlwYLTWF33nxbzBdfw7XMKEZsd6EA1kOJ93tunwcm1+firf5cHvD7SNaf/L9dt7ds9wLAe
-        qOEc5jHoOxrJrSfBfyCgLRQ10RBha4s=
-Date:   Mon, 25 Apr 2022 00:32:37 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>
-Cc:     x86@kernel.org, linux-edac@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Tony Luck <tony.luck@intel.com>,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        Yazen Ghannam <yazen.ghannam@amd.com>
-Subject: Re: [PATCH v4 1/2] x86/mce: Check for writes ignored in MCA_STATUS
- register
-Message-ID: <YmXQBbCz2T/Opv5+@zn.tnic>
-References: <20220214233640.70510-1-Smita.KoralahalliChannabasappa@amd.com>
- <20220214233640.70510-2-Smita.KoralahalliChannabasappa@amd.com>
- <Yk267A1MKOo2AlXQ@zn.tnic>
- <6cda2827-af75-589d-3e43-a287d6683e7a@amd.com>
- <Yl/PupT3bAfc4IBW@zn.tnic>
- <5512261e-085b-65fa-605b-38692769f89c@amd.com>
+        with ESMTP id S234352AbiDYIFd (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Mon, 25 Apr 2022 04:05:33 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D32FD1139;
+        Mon, 25 Apr 2022 01:02:27 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D5C501FB;
+        Mon, 25 Apr 2022 01:02:26 -0700 (PDT)
+Received: from a077893.arm.com (unknown [10.163.40.250])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 0A9293F73B;
+        Mon, 25 Apr 2022 01:02:21 -0700 (PDT)
+From:   Anshuman Khandual <anshuman.khandual@arm.com>
+To:     linux-mm@kvack.org
+Cc:     Anshuman Khandual <anshuman.khandual@arm.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Tony Luck <tony.luck@intel.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] mm/memory-failure: Add new memory failure message MF_MSG_HUGE_ZERO
+Date:   Mon, 25 Apr 2022 13:33:06 +0530
+Message-Id: <20220425080306.1771480-1-anshuman.khandual@arm.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <5512261e-085b-65fa-605b-38692769f89c@amd.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Thu, Apr 21, 2022 at 12:10:07PM -0700, Smita Koralahalli wrote:
-> Also, should we move this slightly before? In inj_bank_set() after we check
-> for sw injection and before reading IPID value?
+Memory failure just gets ignored for global huge_zero_page even without a
+split attempt. But corresponding memory failure message MF_MSG_UNSPLIT_THP
+is misleading as if the THP page could not be split during memory failure
+handling. This adds a new message MF_MSG_HUGE_ZERO indicating that memory
+got ignored for being a huge zero page.
 
-If anything, the proper place for this would be to do the check in
-flags_write() where you set the injection type and bail out if one of
-the !sw types is chosen.
-
-However, you must do the prepare_mca_status() dance first in order to do
-the check.
-
-Which means, you'd have to poke at the STATUS MSR of some bank and
-carefully restore it to its original value so that you leave no changes
-after the check. And I thought about it but it sounded kinda yucky, thus
-the setting of hw_injection_possible at injection time.
-
-That doesn't mean you can't check that variable in flags_write() *after*
-the first injection has happened and it has been set properly, but the
-first injection needs to get attempted first.
-
-At least this is my idea, maybe you have a better one...
-
-Btw, we'd need some error messaging when the hw injection fails:
-
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: Tony Luck <tony.luck@intel.com>
+Cc: Borislav Petkov <bp@alien8.de>
+Cc: Naoya Horiguchi <naoya.horiguchi@nec.com>
+Cc: linux-mm@kvack.org
+Cc: linux-edac@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
 ---
-diff --git a/arch/x86/kernel/cpu/mce/inject.c b/arch/x86/kernel/cpu/mce/inject.c
-index 0fd1eea2f754..5ea1d603b124 100644
---- a/arch/x86/kernel/cpu/mce/inject.c
-+++ b/arch/x86/kernel/cpu/mce/inject.c
-@@ -345,6 +345,9 @@ static int __set_inj(const char *buf)
- 
- 	for (i = 0; i < N_INJ_TYPES; i++) {
- 		if (!strncmp(flags_options[i], buf, strlen(flags_options[i]))) {
-+			if (i > SW_INJ && !hw_injection_possible)
-+				continue;
-+
- 			inj_type = i;
- 			return 0;
- 		}
-@@ -382,7 +385,11 @@ static ssize_t flags_write(struct file *filp, const char __user *ubuf,
- 
- 	err = __set_inj(__buf);
- 	if (err) {
--		pr_err("%s: Invalid flags value: %s\n", __func__, __buf);
-+		pr_err("%s: Invalid flags value%s: %s\n", __func__,
-+			(!hw_injection_possible
-+			  ? " (SW-only injection possible on this platform)"
-+			  : ""),
-+			__buf);
- 		return err;
- 	}
- 
--- 
-Regards/Gruss,
-    Boris.
+This applies on v5.18-rc4
 
-https://people.kernel.org/tglx/notes-about-netiquette
+ include/linux/mm.h      | 1 +
+ include/ras/ras_event.h | 1 +
+ mm/memory-failure.c     | 3 ++-
+ 3 files changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/include/linux/mm.h b/include/linux/mm.h
+index 9f44254af8ce..a947d87b1ada 100644
+--- a/include/linux/mm.h
++++ b/include/linux/mm.h
+@@ -3236,6 +3236,7 @@ enum mf_action_page_type {
+ 	MF_MSG_SLAB,
+ 	MF_MSG_DIFFERENT_COMPOUND,
+ 	MF_MSG_HUGE,
++	MF_MSG_HUGE_ZERO,
+ 	MF_MSG_FREE_HUGE,
+ 	MF_MSG_NON_PMD_HUGE,
+ 	MF_MSG_UNMAP_FAILED,
+diff --git a/include/ras/ras_event.h b/include/ras/ras_event.h
+index 1e694fd239b9..feb9eafee966 100644
+--- a/include/ras/ras_event.h
++++ b/include/ras/ras_event.h
+@@ -359,6 +359,7 @@ TRACE_EVENT(aer_event,
+ 	EM ( MF_MSG_SLAB, "kernel slab page" )				\
+ 	EM ( MF_MSG_DIFFERENT_COMPOUND, "different compound page after locking" ) \
+ 	EM ( MF_MSG_HUGE, "huge page" )					\
++	EM ( MF_MSG_HUGE_ZERO, "huge zero page" )			\
+ 	EM ( MF_MSG_FREE_HUGE, "free huge page" )			\
+ 	EM ( MF_MSG_NON_PMD_HUGE, "non-pmd-sized huge page" )		\
+ 	EM ( MF_MSG_UNMAP_FAILED, "unmapping failed page" )		\
+diff --git a/mm/memory-failure.c b/mm/memory-failure.c
+index 27760c19bad7..efe99e8afb73 100644
+--- a/mm/memory-failure.c
++++ b/mm/memory-failure.c
+@@ -718,6 +718,7 @@ static const char * const action_page_types[] = {
+ 	[MF_MSG_SLAB]			= "kernel slab page",
+ 	[MF_MSG_DIFFERENT_COMPOUND]	= "different compound page after locking",
+ 	[MF_MSG_HUGE]			= "huge page",
++	[MF_MSG_HUGE_ZERO]		= "huge zero page",
+ 	[MF_MSG_FREE_HUGE]		= "free huge page",
+ 	[MF_MSG_NON_PMD_HUGE]		= "non-pmd-sized huge page",
+ 	[MF_MSG_UNMAP_FAILED]		= "unmapping failed page",
+@@ -1868,7 +1869,7 @@ int memory_failure(unsigned long pfn, int flags)
+ 		 * TODO: Handle memory failure of huge_zero_page thoroughly.
+ 		 */
+ 		if (is_huge_zero_page(hpage)) {
+-			action_result(pfn, MF_MSG_UNSPLIT_THP, MF_IGNORED);
++			action_result(pfn, MF_MSG_HUGE_ZERO, MF_IGNORED);
+ 			res = -EBUSY;
+ 			goto unlock_mutex;
+ 		}
+-- 
+2.20.1
+
