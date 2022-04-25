@@ -2,113 +2,97 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B046450DAD4
-	for <lists+linux-edac@lfdr.de>; Mon, 25 Apr 2022 10:03:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C86C50DD42
+	for <lists+linux-edac@lfdr.de>; Mon, 25 Apr 2022 11:55:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233519AbiDYIFf (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Mon, 25 Apr 2022 04:05:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60094 "EHLO
+        id S237932AbiDYJ6O (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Mon, 25 Apr 2022 05:58:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234352AbiDYIFd (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Mon, 25 Apr 2022 04:05:33 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D32FD1139;
-        Mon, 25 Apr 2022 01:02:27 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D5C501FB;
-        Mon, 25 Apr 2022 01:02:26 -0700 (PDT)
-Received: from a077893.arm.com (unknown [10.163.40.250])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 0A9293F73B;
-        Mon, 25 Apr 2022 01:02:21 -0700 (PDT)
-From:   Anshuman Khandual <anshuman.khandual@arm.com>
-To:     linux-mm@kvack.org
-Cc:     Anshuman Khandual <anshuman.khandual@arm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Tony Luck <tony.luck@intel.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] mm/memory-failure: Add new memory failure message MF_MSG_HUGE_ZERO
-Date:   Mon, 25 Apr 2022 13:33:06 +0530
-Message-Id: <20220425080306.1771480-1-anshuman.khandual@arm.com>
-X-Mailer: git-send-email 2.25.1
+        with ESMTP id S240263AbiDYJ5m (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Mon, 25 Apr 2022 05:57:42 -0400
+Received: from mail-yw1-x1141.google.com (mail-yw1-x1141.google.com [IPv6:2607:f8b0:4864:20::1141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 652951A056
+        for <linux-edac@vger.kernel.org>; Mon, 25 Apr 2022 02:54:38 -0700 (PDT)
+Received: by mail-yw1-x1141.google.com with SMTP id 00721157ae682-2f7c424c66cso50368977b3.1
+        for <linux-edac@vger.kernel.org>; Mon, 25 Apr 2022 02:54:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=s9IGPqOTuFEFxKMxMPq1P/MfyJrhGXNasZNiCUUGkGw=;
+        b=ATyrrXg7Zde9kNKDF5ZCIwB8sFwpTlj1alooHiv5B82ElZ6NtBEuNx95Avx3yfEG+v
+         SR3Pi9YiGn8JkKlYHD/qdytouxQeX3oJ0iJvxi83jqS7n6ODsQVEo3TYQchW3Es2L9VU
+         WpUkJmlaB6wVhppaQWj/4q6pjGxtcDa4HJW4QOfeOpSLK6Z6UVte2AgKSDjpTAjhaUvp
+         1vlu8JD8M0fsDcaE5ehzA10bFVyNVT/sZxFBm7wzmvCvDzerVUlRGvU96jP/8ljbUbru
+         odoIA7j0rE1KKiANkkvBpPl/x2AfmHungJLTzDrn645E4r+5rvRovpsE1TzToHsa3UvN
+         2Ivg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=s9IGPqOTuFEFxKMxMPq1P/MfyJrhGXNasZNiCUUGkGw=;
+        b=IwClrVhJc87GzPfLHvQMK1Rjv6QA78mJ5vmzRdHpcB3iAcxna/i7yoZLptemPc4SUh
+         omHyPn7JhLcfEn8+hl58B3Kqze6RGXZp8z8IFyUkg9CzVfNLc9VWaYOT83gVuRk32n8d
+         ppuKJ6VT1FtPYPao8Ape7Y96Vne5CwloT4jv2ESb1vXA//k3qQRZdhHDm6wNwzzVI5CO
+         kwmZHmRaLLe0/G8sjMF5JqTv5kFABC6ivXuGu9NDo9wmfYApun8rln6J3y52vE+BpEek
+         mOtA4P0M8aYmOP0sINOmCwfD7wO5urm1nNnxC/r1CH81ikFYzpoev0F41u/ry4xlsl8x
+         4sfA==
+X-Gm-Message-State: AOAM530DtEk8/plTLVTHwLzaESp06B1VJGaTeLoOSHPjB9hFC+9E5lXV
+        NoKDJMMDrMrZmsblNgy0xl+cSkiMofvrOF7irC0=
+X-Google-Smtp-Source: ABdhPJxQijnkVqO46AP9dZFBb+zIV+lJgA02aHBxz50/JloNDj/GM6qY165L4Ew15qf1giwmqZ6pYLM3j+WeCcqd3IM=
+X-Received: by 2002:a0d:d787:0:b0:2f4:dfc5:9a70 with SMTP id
+ z129-20020a0dd787000000b002f4dfc59a70mr16308194ywd.447.1650880477612; Mon, 25
+ Apr 2022 02:54:37 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Received: by 2002:a05:7000:bf06:0:0:0:0 with HTTP; Mon, 25 Apr 2022 02:54:37
+ -0700 (PDT)
+Reply-To: lawrencetansanco.y@gmail.com
+From:   Lawrence Tansanco <lt01102203@gmail.com>
+Date:   Mon, 25 Apr 2022 09:54:37 +0000
+Message-ID: <CAHP1huHfPzicY=hdR831QxbM-x=dFovv4_naSGV3EfxdN+Ra9g@mail.gmail.com>
+Subject: THANKS FOR YOUR RESPONSE AND GOD BLESS
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=5.9 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,SUBJ_ALL_CAPS,UNDISC_FREEM autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:1141 listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.4808]
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [lt01102203[at]gmail.com]
+        *  0.5 SUBJ_ALL_CAPS Subject is all capitals
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [lt01102203[at]gmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        *  3.6 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-Memory failure just gets ignored for global huge_zero_page even without a
-split attempt. But corresponding memory failure message MF_MSG_UNSPLIT_THP
-is misleading as if the THP page could not be split during memory failure
-handling. This adds a new message MF_MSG_HUGE_ZERO indicating that memory
-got ignored for being a huge zero page.
+.
+I will like to disclose something very important to you,
+get back for more details please.
 
-Cc: Andrew Morton <akpm@linux-foundation.org>
-Cc: Tony Luck <tony.luck@intel.com>
-Cc: Borislav Petkov <bp@alien8.de>
-Cc: Naoya Horiguchi <naoya.horiguchi@nec.com>
-Cc: linux-mm@kvack.org
-Cc: linux-edac@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
-Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
----
-This applies on v5.18-rc4
-
- include/linux/mm.h      | 1 +
- include/ras/ras_event.h | 1 +
- mm/memory-failure.c     | 3 ++-
- 3 files changed, 4 insertions(+), 1 deletion(-)
-
-diff --git a/include/linux/mm.h b/include/linux/mm.h
-index 9f44254af8ce..a947d87b1ada 100644
---- a/include/linux/mm.h
-+++ b/include/linux/mm.h
-@@ -3236,6 +3236,7 @@ enum mf_action_page_type {
- 	MF_MSG_SLAB,
- 	MF_MSG_DIFFERENT_COMPOUND,
- 	MF_MSG_HUGE,
-+	MF_MSG_HUGE_ZERO,
- 	MF_MSG_FREE_HUGE,
- 	MF_MSG_NON_PMD_HUGE,
- 	MF_MSG_UNMAP_FAILED,
-diff --git a/include/ras/ras_event.h b/include/ras/ras_event.h
-index 1e694fd239b9..feb9eafee966 100644
---- a/include/ras/ras_event.h
-+++ b/include/ras/ras_event.h
-@@ -359,6 +359,7 @@ TRACE_EVENT(aer_event,
- 	EM ( MF_MSG_SLAB, "kernel slab page" )				\
- 	EM ( MF_MSG_DIFFERENT_COMPOUND, "different compound page after locking" ) \
- 	EM ( MF_MSG_HUGE, "huge page" )					\
-+	EM ( MF_MSG_HUGE_ZERO, "huge zero page" )			\
- 	EM ( MF_MSG_FREE_HUGE, "free huge page" )			\
- 	EM ( MF_MSG_NON_PMD_HUGE, "non-pmd-sized huge page" )		\
- 	EM ( MF_MSG_UNMAP_FAILED, "unmapping failed page" )		\
-diff --git a/mm/memory-failure.c b/mm/memory-failure.c
-index 27760c19bad7..efe99e8afb73 100644
---- a/mm/memory-failure.c
-+++ b/mm/memory-failure.c
-@@ -718,6 +718,7 @@ static const char * const action_page_types[] = {
- 	[MF_MSG_SLAB]			= "kernel slab page",
- 	[MF_MSG_DIFFERENT_COMPOUND]	= "different compound page after locking",
- 	[MF_MSG_HUGE]			= "huge page",
-+	[MF_MSG_HUGE_ZERO]		= "huge zero page",
- 	[MF_MSG_FREE_HUGE]		= "free huge page",
- 	[MF_MSG_NON_PMD_HUGE]		= "non-pmd-sized huge page",
- 	[MF_MSG_UNMAP_FAILED]		= "unmapping failed page",
-@@ -1868,7 +1869,7 @@ int memory_failure(unsigned long pfn, int flags)
- 		 * TODO: Handle memory failure of huge_zero_page thoroughly.
- 		 */
- 		if (is_huge_zero_page(hpage)) {
--			action_result(pfn, MF_MSG_UNSPLIT_THP, MF_IGNORED);
-+			action_result(pfn, MF_MSG_HUGE_ZERO, MF_IGNORED);
- 			res = -EBUSY;
- 			goto unlock_mutex;
- 		}
--- 
-2.20.1
-
+Regards.
+Mr Lawrence Tansanco Y.
