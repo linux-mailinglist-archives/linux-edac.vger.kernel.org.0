@@ -2,143 +2,150 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E6C4512991
-	for <lists+linux-edac@lfdr.de>; Thu, 28 Apr 2022 04:33:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ABBD3512AA3
+	for <lists+linux-edac@lfdr.de>; Thu, 28 Apr 2022 06:41:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241517AbiD1Cgn (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Wed, 27 Apr 2022 22:36:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60272 "EHLO
+        id S230328AbiD1EoO (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Thu, 28 Apr 2022 00:44:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234530AbiD1Cgm (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Wed, 27 Apr 2022 22:36:42 -0400
-Received: from EUR05-VI1-obe.outbound.protection.outlook.com (mail-vi1eur05on2045.outbound.protection.outlook.com [40.107.21.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 060AC941A5;
-        Wed, 27 Apr 2022 19:33:29 -0700 (PDT)
+        with ESMTP id S242727AbiD1EoM (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Thu, 28 Apr 2022 00:44:12 -0400
+Received: from NAM02-SN1-obe.outbound.protection.outlook.com (mail-sn1anam02on2050.outbound.protection.outlook.com [40.107.96.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5357072E23
+        for <linux-edac@vger.kernel.org>; Wed, 27 Apr 2022 21:40:58 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=IdorFVm0rLiUpT3IS8WAjO44B0MmPPapCcCNuhtFTCereQzP0bClt54hsbJ9GvVDZXb9gAdLfaNNEQS6lICPSWxRdeUcoo3ld7OUOKf/YQFcRH7NciSd4/lf+VB5NeDAxJ8l89X5fhEDHv5sADpheqB3l1dcdSoznO6zzBdrQn+nrlfjYJqcIexhgWvXX6yfK2qkv1dVtr3OK4lfPl9ZWx8bjJjFbq17v/zYVHXr5LDu22dvGfZG4Zyw/oehH6CdX4u8JTnJcmMqtjuyZD6b+qSjmosRJ/Cx3IHwqKMuGa3GdKnvumCJrgpBAZWz0MFmuZZ1C0WR40le4qP+fOlvYw==
+ b=L2FYUyndeviXJKp6weNsi99m4e+9K25R3wQXzrQHojC7A36V9VOQGI652wp1Dbck/8HOxhzf+/Pvm14BIgwCBk+DtQCqTmgrEth5wXBGtH/JMCjZZC10XoyEJGeiK2LMr2l6LMbcCWOB0WgH8eLqz/LncMO3ijvrScJ5FH+DeKcd7gSJV0ubtPRuY1yIxMkyOwnm0TH49KZWj7+nnURfaAcyp4rWltfVN0avr2m54sbWnhbZ5CgUWMU0LCZdmdLUPE/uHbRjg0lX2CdWrJyShyJz2Q9+a8V1kOjVrSmlaltZscP8mwunqUq0A1qlzIkOndb0KiXc0AQWr37nS4VhBg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=BbrIfNF6E+84k5sFEpuyK2PAorsQ79gB8Cl9SADoRD0=;
- b=BVO15Pg8nAh3xcFaDJCiyZs6NJs23vES0KrwIFTT/z6ThrpNTj3T/NVyAb9pNZ2PyIm7y3tYKiOlFDJ0FVkZKebSQpLEgNVe/5U3YW2urcxeNfyutjX/qiGjr7BaQ8LL2E48xAAJwD0iG7oKtgh5HQD+bCLgE9IJBq4XB8vH+Hl6ZjCBlVek2g0iHElz8o7JbDSb9bzDF+yLuN2DtLoBt6/FrZvm0wMYiIlHF78T5BnFVLMpPztc/Pgj9naqvaj47U2wO3Gqh4DlKGUBrz4S95ZxMADn0W3BVkeUuJIm50eC/SKB4iUDyDz2lb3zjPaAU/zCgewlYEvD+PUsqHXOiQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ bh=BO3HHZakIqqSdouqyS5lNicSPr6LtC8aJLqF60RvKaM=;
+ b=D+8Wa1EcRZV9RHn2i2aaWLcRjNUZxF1HrSr5CKWkoOmWWaCljGuwePTOhB6BQEJuwiEPu9PxUmdV9IaI61ZszNHxt640ISeoYOgM8MAAfLGa+JtFMsNRtRIDZ6rAhc1lG1gaSMe31MF3X6YYSY62SBhxSEC6W07wbNUFgOmsJKAf/LHoBXZ22j1L41uMqsJVmmxMN4FElRVu4eomNqPzaAnG8ivGL4dYMnw12WlSwvic0P1YB9m/XHgq15BpxBsFPKdchTBRTVr55wkycdbHjJawMvkAq2Wyh28DJAFp78EFBLJ1Il/g0UxZPwej4lHOtbbk+LobbrXlmH0+ruHaRA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 149.199.62.198) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=xilinx.com;
+ dmarc=pass (p=none sp=none pct=100) action=none header.from=xilinx.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=BbrIfNF6E+84k5sFEpuyK2PAorsQ79gB8Cl9SADoRD0=;
- b=JnIq0jwfIml9XJiOndju/Ifccug04ocMXFkpb7taD1QZSgENzMkavqLPwS+XNOHQc3Crpvg2vBjbZdRpFAOucUtP/nvrfzOHnV3oN4z5PWGzQdKWhEQF0nHcc85pmdupUM/qzT9ZjoPjuJWdy2wII35Xjv358PCc4+mBnOHA/ZE=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from AS8PR04MB8404.eurprd04.prod.outlook.com (2603:10a6:20b:3f8::7)
- by VI1PR0401MB2560.eurprd04.prod.outlook.com (2603:10a6:800:58::23) with
+ bh=BO3HHZakIqqSdouqyS5lNicSPr6LtC8aJLqF60RvKaM=;
+ b=VJcUeug4Mi8iW/100MqkjEqcQOnk+Ti8/N9zFgBnjuI0JP1iDE9E+1GAELpNAyPx6vn86s6EuZE5uxTz39axoFBD3vO+7s0IU+Ys7iUpkgRUZ5hnkk/FfvUGyO86VtkYD06y9wo2sSGv3XAmMs/IaGYhEtp4/WeTyJy+mhTsn/0=
+Received: from SA0PR11CA0162.namprd11.prod.outlook.com (2603:10b6:806:1bb::17)
+ by CO6PR02MB7508.namprd02.prod.outlook.com (2603:10b6:303:a8::7) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5206.14; Thu, 28 Apr
- 2022 02:33:25 +0000
-Received: from AS8PR04MB8404.eurprd04.prod.outlook.com
- ([fe80::1cff:564b:c3cf:46e6]) by AS8PR04MB8404.eurprd04.prod.outlook.com
- ([fe80::1cff:564b:c3cf:46e6%5]) with mapi id 15.20.5206.013; Thu, 28 Apr 2022
- 02:33:25 +0000
-From:   Sherry Sun <sherry.sun@nxp.com>
-To:     bp@alien8.de, michal.simek@xilinx.com,
-        Shubhrajyoti.datta@xilinx.com, mchehab@kernel.org,
-        tony.luck@intel.com, james.morse@arm.com, rric@kernel.org
-Cc:     linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-imx@nxp.com
-Subject: [PATCH V2] EDAC/synopsys: Add edac driver support for i.MX platforms
-Date:   Thu, 28 Apr 2022 10:32:09 +0800
-Message-Id: <20220428023209.18087-1-sherry.sun@nxp.com>
-X-Mailer: git-send-email 2.17.1
-Content-Type: text/plain
-X-ClientProxiedBy: SG2PR06CA0219.apcprd06.prod.outlook.com
- (2603:1096:4:68::27) To AS8PR04MB8404.eurprd04.prod.outlook.com
- (2603:10a6:20b:3f8::7)
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5186.15; Thu, 28 Apr
+ 2022 04:40:56 +0000
+Received: from SN1NAM02FT0014.eop-nam02.prod.protection.outlook.com
+ (2603:10b6:806:1bb:cafe::22) by SA0PR11CA0162.outlook.office365.com
+ (2603:10b6:806:1bb::17) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5206.12 via Frontend
+ Transport; Thu, 28 Apr 2022 04:40:56 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 149.199.62.198)
+ smtp.mailfrom=xilinx.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=xilinx.com;
+Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
+ 149.199.62.198 as permitted sender) receiver=protection.outlook.com;
+ client-ip=149.199.62.198; helo=xsj-pvapexch01.xlnx.xilinx.com;
+Received: from xsj-pvapexch01.xlnx.xilinx.com (149.199.62.198) by
+ SN1NAM02FT0014.mail.protection.outlook.com (10.97.4.112) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5206.12 via Frontend Transport; Thu, 28 Apr 2022 04:40:55 +0000
+Received: from xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) by
+ xsj-pvapexch01.xlnx.xilinx.com (172.19.86.40) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.14; Wed, 27 Apr 2022 21:40:55 -0700
+Received: from smtp.xilinx.com (172.19.127.96) by
+ xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server id
+ 15.1.2176.14 via Frontend Transport; Wed, 27 Apr 2022 21:40:55 -0700
+Envelope-to: linux-edac@vger.kernel.org,
+ bp@alien8.de,
+ mchehab@kernel.org,
+ tony.luck@intel.com,
+ james.morse@arm.com
+Received: from [10.140.6.39] (port=55782 helo=xhdsgoud40.xilinx.com)
+        by smtp.xilinx.com with esmtp (Exim 4.90)
+        (envelope-from <shubhrajyoti.datta@xilinx.com>)
+        id 1njvxX-000FPU-5w; Wed, 27 Apr 2022 21:40:55 -0700
+From:   Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
+To:     <linux-edac@vger.kernel.org>
+CC:     <bp@alien8.de>, <mchehab@kernel.org>, <tony.luck@intel.com>,
+        <james.morse@arm.com>,
+        Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
+Subject: [PATCH] EDAC/synopsys: Fix the spdx header
+Date:   Thu, 28 Apr 2022 10:10:51 +0530
+Message-ID: <20220428044051.2842687-1-shubhrajyoti.datta@xilinx.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 1fd417f0-60eb-4932-bf7b-08da28bf7881
-X-MS-TrafficTypeDiagnostic: VI1PR0401MB2560:EE_
-X-Microsoft-Antispam-PRVS: <VI1PR0401MB25609DFB2076C141278AF6FB92FD9@VI1PR0401MB2560.eurprd04.prod.outlook.com>
+X-MS-Office365-Filtering-Correlation-Id: 517efc0e-ecbe-435f-16b2-08da28d148c6
+X-MS-TrafficTypeDiagnostic: CO6PR02MB7508:EE_
+X-Microsoft-Antispam-PRVS: <CO6PR02MB75088D7ACB0E36030B2C2AE4AAFD9@CO6PR02MB7508.namprd02.prod.outlook.com>
+X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: fCH/7QpueCL25FE8uyDpAtdaLD4H/ufdx/+2u/fbwrOt48EV9JzRcQ+BDSNq8s5behnmugdqcgezjfrRNMeqXi7gOqsYFaw45myjBble+m2GkIuNKCgM44LY1+D0vl8zPCnAgKcQ1TARVSJ5CX/hdr5lQPLAJAmwx/11Tlc0DYUDrezgBn6Z21ke2dBFkkrXqs51/EjfsVIKGbDQRHwTO0/qATr0C/vYenBdbDHYplTMQ29bz5T7LWxpkM9P1Clu4iFB99cvoW1I9dr7/Y09dvLotCyg+RjM4qoS0MJEKnSwZFMVe0YM/5fmeWx0R3+fNZ46sV0HE7Bk90tqG52dr2Uz5OZ5hWFxxYICmPrqvvDKhyKFNAzkBNo9pBNFNMM7omN4PQtdcI8xDgbJy6d0nl0sUi290AEZCaTqu5LksRzJZlX+WoGxFootEUTmsoNozN+1dJUdL1pvFcdudDzsExr3DswFV69SYefa7jta0vGwpu/xmjLry2nhdIT531XY/ev+0aNAZMz3Q9pcjlhVMIp73ZoCH5eLkWZGI6CHCSWxtnQr/g9QjV+0iazd/KSZ/S+3GyL8utPlDUwGtwVGJGhSqjRwWjK+Avbg/xm+RTk3U9RdzFX/cESjOctfo1a0m7apcYGLCfg2a7V6AdsMtJ8AQz84Te1Wt5KG0qR12QvN1ZhBwcvglXpE5suoz/ZxyU28+wVi7zX3L9OKv4swaQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AS8PR04MB8404.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(4744005)(1076003)(44832011)(316002)(4326008)(26005)(6512007)(2616005)(86362001)(6486002)(5660300002)(508600001)(38100700002)(38350700002)(8936002)(52116002)(6506007)(36756003)(6666004)(186003)(83380400001)(8676002)(66476007)(66946007)(66556008)(2906002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?d3bJZbco4pN1NqembIL8va8Zil+nadLKU3xusCOCm95OpwoPPYdmePS8FVzU?=
- =?us-ascii?Q?9RFuQZho4jAParkzJgYe1p70mREONYbKHlXtv5ubt8dsiZ/LSX/Jsu4DtSoZ?=
- =?us-ascii?Q?kewpx5P1p6QRnHQe9HXeQ29pHXdRaRS7rrACThkqZ8+gHzZ74wBWL4eWKNoh?=
- =?us-ascii?Q?5cbNopKVZtlberfQboiwnIdZfuWFVxTjQ9JHX7ObZtFLpsqsZAoDlo4mZAyC?=
- =?us-ascii?Q?OSS041UnCxHb7eVVFeRoUenjxDy79Ik5gnlQq+qn6M20+YTKuGlE2yzoYt/P?=
- =?us-ascii?Q?YNE20lP9ZfdLJ2i7vAkjlpb+CVnDpJouakOWnmMbrfgCEN3txQq8bamgVaYk?=
- =?us-ascii?Q?OiSeDvlIT5aigfIH6Mn7710wrZUdUiUNmRC2KEN/Tp20nAfp9Y1xBxQuLEhm?=
- =?us-ascii?Q?WoKgMTh0XNY/DP2+9NyDujaNDzeQqMrZoxYzNe+iyzZSrkejVHDmfjV9eQxL?=
- =?us-ascii?Q?AiszOfcUfLd+HdIzmzPL0dE1Q91LrSMbEVriCspaXRyBD8g2++oXkXvxADuf?=
- =?us-ascii?Q?+PAhLDanuTeL2OFcx2ig+6a5G/M/8prght0wBwMfw5EHQnHKl73OeaiiCMfy?=
- =?us-ascii?Q?hiciFZoCtFATZ8i0Mq+tGyRY5ra3KrwAQ2W7Tx9F61aPKjFbGuksvlfkPBTk?=
- =?us-ascii?Q?ZFeHLWIO5vNbPmfqpiDKjboIhaiRrKEzWUv5tiGnwnfTunHTIxuXJ5DmB7ZM?=
- =?us-ascii?Q?uD4xZYNT35VetFoxDZnAZnX36Eqnbko7omRCIQtDDnuyRaiZdyfa2yOnAYfk?=
- =?us-ascii?Q?fKXFzZczChx6hGpIEg4JBi8rX+HaKH58B8JtK/N9WlYJiHE+GUTX9WIF8Hv0?=
- =?us-ascii?Q?rAhV8qwZIEWvYcxoOjvX1VeYtKy/gOQC2hQKfT4YotbXfeNyiNG108A9eU6W?=
- =?us-ascii?Q?r2HSnfn2MN/Qsq06Q1EvG2QKfadTNu2Mq0Hjj+7OCF2pKvdyEGtuWKE6Aas5?=
- =?us-ascii?Q?opJhDidRTXGUKEaWSKg/e61W1wkgEANkN7AeumdSDeCdZWBo6Yi/0GVCWWlz?=
- =?us-ascii?Q?9T+dYqXMT6E0ctEPtggsDYvXtUxfVOAHpASt7UqQKn+/areBOJ5C73jws0wu?=
- =?us-ascii?Q?JVugWpv681I+x6BZ+rVluTvL/lEav1UUmuPzpWmZ7mJH6kNeogssOUoSaMIJ?=
- =?us-ascii?Q?NGNcUr65t7CYfIgG5HtNGPkom+UoXgFLtsJHIFuc9nINuRWnmjG9aTVDbtOw?=
- =?us-ascii?Q?Xfxp6/tGNDsaRD/KTUIIck0OM37uEr9XhzdYmeL6HXI2KPIfXyddwD6S2P9k?=
- =?us-ascii?Q?/3w1qAIv1QpDwPRNbVqf80Jlcb5x8ueOm9Nr3UHASP4h1DtzMF9dAY2sY+68?=
- =?us-ascii?Q?tHgi58c4GqLVQv37f1QAygDuYqXU53CYdnQdDGtrUgTqykAm1dp9RxQNhQYD?=
- =?us-ascii?Q?Y/lsByAq0kU8a3PB6XO3NcGcv2H0spM6F3LvivvtJ9f8eF0FfLaLrtz6H7eO?=
- =?us-ascii?Q?tNMx65a0uuCZU8z50S+rcOwHB+uiAjvjDQy/TOBcF5stJiaNfFwiIaSCueP9?=
- =?us-ascii?Q?yfCVAChMn5N4ePLqOXg4DhpOt0biHTIeaMZ+tTJrvdUsoVEeTdfDuWTN5+HL?=
- =?us-ascii?Q?bOEUF3/H//N+SP8hAMSqFAUAMVhGFeaXi48MHK/LyyoQj4mA4bD0vSxlQFFJ?=
- =?us-ascii?Q?xZTy7Xy3Rdk+A/dhDh6pi/6p5bhpp4aGAUU3aWcqX/3yTielr+pIIzxRXRMQ?=
- =?us-ascii?Q?eLg/V12gUsp1dQhkV3boZgF91CxrIEBWB0gF1XjM0gosZGBypeIARwJV/RYD?=
- =?us-ascii?Q?WAKgEHv1lw=3D=3D?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1fd417f0-60eb-4932-bf7b-08da28bf7881
-X-MS-Exchange-CrossTenant-AuthSource: AS8PR04MB8404.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Apr 2022 02:33:25.6198
+X-Microsoft-Antispam-Message-Info: S6K23vN4l+Ecujg+cTPugF+CXHSusRJrY4Brjw7Yeg1M8vO15jSq9yTCnvIuWPMRPt9/tFGnhvPNyBpEmbTQQjSvHI7ljW6LehEIkqbglcgCnBEBG5NzYyNHvSV3dswqxs6cpGd62BT/z+GI7Y7o7DKKU8o9BP/Q6QxyHN8xKAZ3av9N9bOkDaaPIaExU/9rNtmXe5d6AQ9lPaEH6SIWUzrAepHS8SQAlHlV8P6Gv72STGQ1L5yFDr2cid0Z9O9NiQuzttpBTasfo2jJ83sP0zU2sifayQsdMwY79kMJlYgrmWrX7QxLH7UzZTAoyoV+Epv84mFd1wMVWmUb9Xr1hMF5zkRocUcHb9C0iqzLKXJHhLs9oseg0qS6kGhdLAjWozAW8y7VCUuVUzQBgVBirOXjFHyqLa8zEuMc65GMWaqL/LcoWzBtlFXbEr/T06z5QDJs64rwmDdqUTQ40PU/0WXl5mW3F7wkynRsU09KOrQxV5cRxK0/JpkdMDOanQNBNUytVit4jBXCV3LN4af6PXiMAyZOmw+edOh5la3HDWJqTfw+agoQyaJc28jLVzQuuDU+isyMBSzQecY9Rg/hqX9gMlyfX2D9muGUPox2GOh9J8DLSpBxNmMKGmvxZIHKRRHt0N6dtMu15IuFQXtHG1GnBoZjosUvFPSq5TgWYIpdQ7UOPkoDltiWsqR41TH0wDXd5uNBl4AfCgtjOf3lKRxlJELeabVrU5uW8hxoBHo=
+X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch01.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(13230001)(4636009)(40470700004)(46966006)(36840700001)(7696005)(6666004)(9786002)(26005)(40460700003)(6916009)(316002)(54906003)(8676002)(70586007)(2906002)(70206006)(4326008)(508600001)(5660300002)(36756003)(8936002)(44832011)(1076003)(2616005)(47076005)(336012)(426003)(186003)(7636003)(83380400001)(356005)(107886003)(36860700001)(82310400005)(102446001)(2004002);DIR:OUT;SFP:1101;
+X-OriginatorOrg: xilinx.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Apr 2022 04:40:55.9782
  (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: vryl7LyOI19QgzRBxgeuVjcu6d9XaHFxBVRY0jfIwshi9MIAur/j0RrXbSzKVMnLpquRWYN2BMo1gTtoMiDkgg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR0401MB2560
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-Network-Message-Id: 517efc0e-ecbe-435f-16b2-08da28d148c6
+X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.62.198];Helo=[xsj-pvapexch01.xlnx.xilinx.com]
+X-MS-Exchange-CrossTenant-AuthSource: SN1NAM02FT0014.eop-nam02.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO6PR02MB7508
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-i.MX8MP use synopsys v3.70a ddr controller IP, so add edac support
-for i.MX8MP based on the EDAC_SYNOPSYS driver.
+Also fixes the below warning
 
-Signed-off-by: Sherry Sun <sherry.sun@nxp.com>
----
-Changes in V2:
-1. Improve the patch title and the commit message.
----
- drivers/edac/Kconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+WARNING: Missing or malformed SPDX-License-Identifier tag in line 1
++/*
 
-diff --git a/drivers/edac/Kconfig b/drivers/edac/Kconfig
-index 23f11554f400..d3e2477948c8 100644
---- a/drivers/edac/Kconfig
-+++ b/drivers/edac/Kconfig
-@@ -485,7 +485,7 @@ config EDAC_ARMADA_XP
+Signed-off-by: Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
+---
+ drivers/edac/synopsys_edac.c | 15 +--------------
+ 1 file changed, 1 insertion(+), 14 deletions(-)
+
+diff --git a/drivers/edac/synopsys_edac.c b/drivers/edac/synopsys_edac.c
+index f05ff02c0656..fbe2aa1e334a 100644
+--- a/drivers/edac/synopsys_edac.c
++++ b/drivers/edac/synopsys_edac.c
+@@ -1,22 +1,9 @@
++// SPDX-License-Identifier: GPL-2.0-only
+ /*
+  * Synopsys DDR ECC Driver
+  * This driver is based on ppc4xx_edac.c drivers
+  *
+  * Copyright (C) 2012 - 2014 Xilinx, Inc.
+- *
+- * This program is free software: you can redistribute it and/or modify
+- * it under the terms of the GNU General Public License as published by
+- * the Free Software Foundation, either version 2 of the License, or
+- * (at your option) any later version.
+- *
+- * This program is distributed in the hope that it will be useful,
+- * but WITHOUT ANY WARRANTY; without even the implied warranty of
+- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+- * GNU General Public License for more details.
+- *
+- * This file is subject to the terms and conditions of the GNU General Public
+- * License.  See the file "COPYING" in the main directory of this archive
+- * for more details
+  */
  
- config EDAC_SYNOPSYS
- 	tristate "Synopsys DDR Memory Controller"
--	depends on ARCH_ZYNQ || ARCH_ZYNQMP || ARCH_INTEL_SOCFPGA
-+	depends on ARCH_ZYNQ || ARCH_ZYNQMP || ARCH_INTEL_SOCFPGA || ARCH_MXC
- 	help
- 	  Support for error detection and correction on the Synopsys DDR
- 	  memory controller.
+ #include <linux/edac.h>
 -- 
-2.17.1
+2.25.1
 
