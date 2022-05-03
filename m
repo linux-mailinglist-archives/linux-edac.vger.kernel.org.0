@@ -2,148 +2,90 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D74F7518CE7
-	for <lists+linux-edac@lfdr.de>; Tue,  3 May 2022 21:13:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 54B59518FDC
+	for <lists+linux-edac@lfdr.de>; Tue,  3 May 2022 23:17:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241749AbiECTQf (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Tue, 3 May 2022 15:16:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44630 "EHLO
+        id S233315AbiECVRr (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Tue, 3 May 2022 17:17:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232835AbiECTQe (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Tue, 3 May 2022 15:16:34 -0400
-Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 028553F8A9;
-        Tue,  3 May 2022 12:13:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=YwqRVzAP9ZbrZ5VBMcTGFQUJhCIOHa56e0xcGxSMZUc=; b=g6wHrcBwrz2KwYvXjjVtORBiHn
-        IYMsR5GaRD/VR0xedfaxvBvF7rTbYR/J22t3j5lb3f06u/Fc1RouLR18wpSiKcYUFYo1Es0dUnLOJ
-        KS0gcPiTX1Gp43QoEXeB9qey3fro+JGWKqZb1HOFCCA1BT9LzygpBsI5rkGlNutynR2bG5HAOwC/E
-        tPyLP92RA6GDIRm0QuhAm+c5aBu4j0UaKxwKd9I7j0kUsDE4qHndJxIdGDBq1RIB7dNA6suRfXZwh
-        e21o4FfMtSVNbUCh0WQI73Gd4fdNm7+rXf7RsUeEiM3OYwwmkesCvbsvfiNKmEoMOIdut9FTHQRzP
-        TtMjBb/w==;
-Received: from [179.113.53.197] (helo=[192.168.1.60])
-        by fanzine2.igalia.com with esmtpsa 
-        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
-        id 1nlxwt-0003VB-Uo; Tue, 03 May 2022 21:12:40 +0200
-Message-ID: <adcf6d0e-c37c-6ede-479e-29959d03d8c0@igalia.com>
-Date:   Tue, 3 May 2022 16:12:09 -0300
+        with ESMTP id S229689AbiECVRq (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Tue, 3 May 2022 17:17:46 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 864F63A1B4;
+        Tue,  3 May 2022 14:14:12 -0700 (PDT)
+Received: from zn.tnic (p5de8eeb4.dip0.t-ipconnect.de [93.232.238.180])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id E02CE1EC0453;
+        Tue,  3 May 2022 23:14:06 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1651612446;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=ruAB55ZIvISsfAeVGDwXiQqs7sAbM7x1gmHct6nO5pU=;
+        b=gE212RmcmdxogT27q94YzSwKg4sgRH0nQ6Ft+pnFvZy3oV7LdoSejNrbc7dH9AKGS/4qY3
+        8bfOYHM9hdA254SgnK1H6vuy8UP4vsHmfgG18XzZAWy/MHjr+EpJjitafySlC1XOn9ebmO
+        xQIntC0em4p97QTjozm8ddaYR8R6vn0=
+Date:   Tue, 3 May 2022 23:14:05 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>
+Cc:     x86@kernel.org, linux-edac@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Tony Luck <tony.luck@intel.com>,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        Yazen Ghannam <yazen.ghannam@amd.com>
+Subject: Re: [PATCH v4 1/2] x86/mce: Check for writes ignored in MCA_STATUS
+ register
+Message-ID: <YnGbHcMkLCsauzXF@zn.tnic>
+References: <20220214233640.70510-1-Smita.KoralahalliChannabasappa@amd.com>
+ <20220214233640.70510-2-Smita.KoralahalliChannabasappa@amd.com>
+ <Yk267A1MKOo2AlXQ@zn.tnic>
+ <6cda2827-af75-589d-3e43-a287d6683e7a@amd.com>
+ <Yl/PupT3bAfc4IBW@zn.tnic>
+ <5512261e-085b-65fa-605b-38692769f89c@amd.com>
+ <YmXQBbCz2T/Opv5+@zn.tnic>
+ <3fd01af5-c665-6dbb-4ed4-dfc39109d63a@amd.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH 04/30] firmware: google: Convert regular spinlock into
- trylock on panic path
-Content-Language: en-US
-To:     Evan Green <evgreen@chromium.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>, bhe@redhat.com,
-        pmladek@suse.com, kexec@lists.infradead.org,
-        LKML <linux-kernel@vger.kernel.org>,
-        bcm-kernel-feedback-list@broadcom.com,
-        linuxppc-dev@lists.ozlabs.org, linux-alpha@vger.kernel.org,
-        linux-edac@vger.kernel.org, linux-hyperv@vger.kernel.org,
-        linux-leds@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org, Linux PM <linux-pm@vger.kernel.org>,
-        linux-remoteproc@vger.kernel.org, linux-s390@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-um@lists.infradead.org,
-        linux-xtensa@linux-xtensa.org, netdev@vger.kernel.org,
-        openipmi-developer@lists.sourceforge.net, rcu@vger.kernel.org,
-        sparclinux@vger.kernel.org, xen-devel@lists.xenproject.org,
-        x86@kernel.org, kernel-dev@igalia.com, kernel@gpiccoli.net,
-        halves@canonical.com, fabiomirmar@gmail.com,
-        alejandro.j.jimenez@oracle.com,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
-        Jonathan Corbet <corbet@lwn.net>, d.hatayama@jp.fujitsu.com,
-        dave.hansen@linux.intel.com, dyoung@redhat.com,
-        feng.tang@intel.com,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        mikelley@microsoft.com, hidehiro.kawai.ez@hitachi.com,
-        jgross@suse.com, john.ogness@linutronix.de,
-        Kees Cook <keescook@chromium.org>, luto@kernel.org,
-        mhiramat@kernel.org, mingo@redhat.com, paulmck@kernel.org,
-        peterz@infradead.org, rostedt@goodmis.org,
-        senozhatsky@chromium.org, Alan Stern <stern@rowland.harvard.edu>,
-        Thomas Gleixner <tglx@linutronix.de>, vgoyal@redhat.com,
-        vkuznets@redhat.com, Will Deacon <will@kernel.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        David Gow <davidgow@google.com>,
-        Julius Werner <jwerner@chromium.org>
-References: <20220427224924.592546-1-gpiccoli@igalia.com>
- <20220427224924.592546-5-gpiccoli@igalia.com>
- <CAE=gft5Pq25L4KFoPWbftkPF-JN1ex2yws77mMJ4GQnn9W0L2g@mail.gmail.com>
-From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
-In-Reply-To: <CAE=gft5Pq25L4KFoPWbftkPF-JN1ex2yws77mMJ4GQnn9W0L2g@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <3fd01af5-c665-6dbb-4ed4-dfc39109d63a@amd.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On 03/05/2022 15:03, Evan Green wrote:
-> [...]
-> gsmi_shutdown_reason() is a common function called in other scenarios
-> as well, like reboot and thermal trip, where it may still make sense
-> to wait to acquire a spinlock. Maybe we should add a parameter to
-> gsmi_shutdown_reason() so that you can get your change on panic, but
-> we don't convert other callbacks into try-fail scenarios causing us to
-> miss logs.
-> 
+On Mon, May 02, 2022 at 08:28:47PM -0700, Smita Koralahalli wrote:
+> I'm bit more inclined towards your previous approach of
+> hw_injection_possible
+> check in do_inject(). This seems better than doing it in flags_write().
 
-Hi Evan, thanks for your feedback, much appreciated!
-What I've done in other cases like this was to have a helper checking
-the spinlock in the panic notifier - if we can acquire that, go ahead
-but if not, bail out. For a proper example of an implementation, check
-patch 13 of the series:
-https://lore.kernel.org/lkml/20220427224924.592546-14-gpiccoli@igalia.com/ .
+If you don't do it in flags_write() then the user would do
 
-Do you agree with that, or prefer really a parameter in
-gsmi_shutdown_reason() ? I'll follow your choice =)
+   echo "hw" > flags
 
+the command will succeed and the user will think that hw injection is
+possible and then wonder why it fails later.
 
-> Though thinking more about it, is this really a Good Change (TM)? The
-> spinlock itself already disables interrupts, meaning the only case
-> where this change makes a difference is if the panic happens from
-> within the function that grabbed the spinlock (in which case the
-> callback is also likely to panic), or in an NMI that panics within
-> that window. The downside of this change is that if one core was
-> politely working through an event with the lock held, and another core
-> panics, we now might lose the panic log, even though it probably would
-> have gone through fine assuming the other core has a chance to
-> continue.
+I even actually think that in the first run, when hw_injection_possible
+is not determined yet, you should try to poke at MCi_STATUS of some
+non-reserved bank - and we enumerate which those are at boot in
+__mcheck_cpu_check_banks(), so you can pick a random, non-RAZ bank, save
+its MCi_STATUS, try to write it and if it succeeds, restore it.
 
-My feeling is that this is a good change, indeed - a lot of places are
-getting changed like this, in this series.
+This way you'll determine whether hw injection is possible, store it
+in the static hw_injection_possible and then query only that variable.
+I.e., you'll have to poke that MCi_STATUS only once on driver init. And
+this way it'll be the most optimal, methinks.
 
-Reasoning: the problem with your example is that, by default, secondary
-CPUs are disabled in the panic path, through an IPI mechanism. IPIs take
-precedence and interrupt the work in these CPUs, effectively
-interrupting the "polite work" with the lock held heh
+Thx.
 
-Then, such CPU is put to sleep and we finally reach the panic notifier
-hereby discussed, in the main CPU. If the other CPU was shut-off *with
-the lock held*, it's never finishing such work, so the lock is never to
-be released. Conclusion: the spinlock can't be acquired, hence we broke
-the machine (which is already broken, given it's panic) in the path of
-this notifier.
-This should be really rare, but..possible. So I think we should protect
-against this scenario.
+-- 
+Regards/Gruss,
+    Boris.
 
-We can grab others' feedback if you prefer, and of course you have the
-rights to refuse this change in the gsmi code, but from my
-point-of-view, I don't see any advantage in just assume the risk,
-specially since the change is very very simple.
-
-Cheers,
-
-
-Guilherme
+https://people.kernel.org/tglx/notes-about-netiquette
