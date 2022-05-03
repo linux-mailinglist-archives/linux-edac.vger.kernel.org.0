@@ -2,43 +2,42 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC82E517C3B
-	for <lists+linux-edac@lfdr.de>; Tue,  3 May 2022 05:34:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 49A74517C43
+	for <lists+linux-edac@lfdr.de>; Tue,  3 May 2022 05:34:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230400AbiECDcK (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Mon, 2 May 2022 23:32:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41086 "EHLO
+        id S230395AbiECDcJ (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Mon, 2 May 2022 23:32:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229960AbiECDcI (ORCPT
+        with ESMTP id S230375AbiECDcI (ORCPT
         <rfc822;linux-edac@vger.kernel.org>); Mon, 2 May 2022 23:32:08 -0400
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2072.outbound.protection.outlook.com [40.107.244.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CA9B1CFD7;
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2076.outbound.protection.outlook.com [40.107.223.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 282401CFDD;
         Mon,  2 May 2022 20:28:37 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=SVvCJW2gFG65A4MN8UPMQU9cg96M/FoWrZvKjhIm6Mtf/sHUnGr5J7RM8k1aqAdEVY56oiPF6sFIaJMT30ZQMYEOgcrX5RhQJ/4dJEp6b98a/AFvoQiIyAcwsb1ox9wIFg9JiCTTykHF2VX4mO7CZYKTJD5ShyRP45l8mOO9OKmOytit2I96l8gIuS7i/A+qWUDkiwWiohT5j2lHsxxTJBkNlscgjFkAMAUo5Khsai2v04cKioejyatCLwrAgaOG+rr6pRhoujqswqeXx/tQ9TfqlVyAMFnnRb6oL1R6gFwPlB2iWT0s9Ja347vKXfB8cRu30mY+JKC3GwbKlpU7gw==
+ b=Q4oPObwVW4qxPHJQk1Iy3nfW0t/XdfzQ9ATFnkbm2765jkL5+fpOQOFuiJeQllYDbjp7CLv1CWrzsspk7GRlJCxObFV0aFCX6ylC+RRY3WgqtJ8sdBj4sUYp2GD9auD/RhdU9fvKBO08ey8cMx9NVGFHVdhOW3jr+d3n2lHn4ky3xfLwLreZjHAyhmXrGMOZhynj52iPf4uZ4PjZ3KpZ/MS6kRfX7nBUc1qS+2poUn16q9eOYd+3rA6vKzh4H5xKmYG0SZQwjv/r/YhUQ733OHX8twxstNLkkycESUxnXc/z/MVSfPL1k5y2FXTUx0IeYE11rrqLByc+V/xKOrJdow==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=zT4HzeWBGI6YFO6NLSfGq/SZUJuq/ln1Vfz1suCpPBU=;
- b=Jcda1mhiTvLxj/NRJlmGX5XgDR5OoykEIDD7bAV4uAyQn0gjntArpNVA9cFb9q6Rz2gINREWTvWIHFb0po3aUFHb5g5Rst/W1wu6q4XhLqMVaV8mfSW/+dxr/qBLxYGC969eXxUG9NN2+dCjRD9x3Hz7neJ6XfcZMjsSaHPUa0pa/fvSPFOfvtmDG1awYgIP7UVb5sC84/aVqB9jYf/Sjz6Cvu1kicAZIhMesYvfdfJFguoZD/rqj9tzN47lEJU5ygwyclPPd1FXyGEOFlodH8Glje70BVPmGRhFo73eLnWVO0KAegS6pLYAZw+oz5RBfqeyDk69ziMt3KH26+g2CQ==
+ bh=VuXLU5yLJ0gmiIr00Sxe5RW0ouoQ0lTISqt4R9oYeoU=;
+ b=Nh20awRRF0biyMrtxk1BVVCsePLitKI+nbSWoHK5eAtYViF7BVvkCbyCCe76F8F6iSxoj620bPJBfP2pGpMB0JYcPyxm/DVOQf0aW39hUHMkJOvoaDjXCWDQuYRq05L17Qrv2BxGxVKts1kwyLFFnpllNSytxtgm1Iowy4bWacAuQejkwlwI6b03pceY+SybrJmayzmw9JzvDebeC4bW0aZrspp1sp20bVeUN+Fv0z1wW9Q0dw2gDJN49kuoIO59Qv5QwAFF6gHiyHXixXlpVjtOcF+CAacS+UiL6doC35n+93zWBmlBw8xFzLHWzbiLFjXQzLmsgcwXh5YP+LhjDQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
  dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
  header.from=amd.com; dkim=none (message not signed); arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=zT4HzeWBGI6YFO6NLSfGq/SZUJuq/ln1Vfz1suCpPBU=;
- b=HhH9wKLuM4PksbShU/qMXqpPkugzly3k1wmVPwvrFCEXBMaf4A8k6aQ2ecem/ziosG1T3jRkba62rrHOFg0drERbH8+EckRr74aJGX02YTGCN/2KVI6ieTPg9N/opW7FgU95MhuSGAfLnyoLzjda3b5MGJby4rcw+eukhg2PwrY=
-Received: from BN9PR03CA0375.namprd03.prod.outlook.com (2603:10b6:408:f7::20)
- by PH7PR12MB5877.namprd12.prod.outlook.com (2603:10b6:510:1d5::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5206.24; Tue, 3 May
- 2022 03:28:35 +0000
+ bh=VuXLU5yLJ0gmiIr00Sxe5RW0ouoQ0lTISqt4R9oYeoU=;
+ b=5XeFtRol6zkq6ucr6nc/RvV5cfIx5YTbsVn+CPXZ1/qOx7CqTzIlrG9HaVTEJQID14FZ7f7rRZ3wCtttF2X9lg5mUQoP5ljVWpD2DLqQGLwFTBWE4lB4Re7L3MVg5TCVjC0jEKJCAiafKVuQmyV14aXMeLmODhkRDDw2Lbn24x8=
+Received: from BN9PR03CA0369.namprd03.prod.outlook.com (2603:10b6:408:f7::14)
+ by DM4PR12MB6012.namprd12.prod.outlook.com (2603:10b6:8:6c::5) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5206.13; Tue, 3 May 2022 03:28:35 +0000
 Received: from BN8NAM11FT054.eop-nam11.prod.protection.outlook.com
- (2603:10b6:408:f7:cafe::43) by BN9PR03CA0375.outlook.office365.com
- (2603:10b6:408:f7::20) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5206.13 via Frontend
- Transport; Tue, 3 May 2022 03:28:34 +0000
+ (2603:10b6:408:f7:cafe::a4) by BN9PR03CA0369.outlook.office365.com
+ (2603:10b6:408:f7::14) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5206.12 via Frontend
+ Transport; Tue, 3 May 2022 03:28:35 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
  smtp.mailfrom=amd.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=amd.com;
@@ -48,22 +47,21 @@ Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
 Received: from SATLEXMB04.amd.com (165.204.84.17) by
  BN8NAM11FT054.mail.protection.outlook.com (10.13.177.102) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5206.12 via Frontend Transport; Tue, 3 May 2022 03:28:34 +0000
+ 15.20.5206.12 via Frontend Transport; Tue, 3 May 2022 03:28:35 +0000
 Received: from ethanolx50f7host.amd.com (10.180.168.240) by SATLEXMB04.amd.com
  (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Mon, 2 May
- 2022 22:28:33 -0500
+ 2022 22:28:34 -0500
 From:   Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>
 To:     <linux-edac@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         <x86@kernel.org>
 CC:     Tony Luck <tony.luck@intel.com>,
         Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>,
         <hpa@zytor.com>, Yazen Ghannam <yazen.ghannam@amd.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "Borislav Petkov" <bp@suse.de>
-Subject: [PATCH v5 1/3] x86/mce/mce-inject: Replace struct i_mce with struct inject_desc
-Date:   Mon, 2 May 2022 22:28:17 -0500
-Message-ID: <20220503032820.61667-2-Smita.KoralahalliChannabasappa@amd.com>
+        Dave Hansen <dave.hansen@linux.intel.com>
+Subject: [PATCH v5 2/3] x86/mce: Check for writes ignored in MCA_STATUS register
+Date:   Mon, 2 May 2022 22:28:18 -0500
+Message-ID: <20220503032820.61667-3-Smita.KoralahalliChannabasappa@amd.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20220503032820.61667-1-Smita.KoralahalliChannabasappa@amd.com>
 References: <20220503032820.61667-1-Smita.KoralahalliChannabasappa@amd.com>
@@ -74,24 +72,24 @@ X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
  (10.181.40.145)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 5250bd70-bf89-4648-10ed-08da2cb50141
-X-MS-TrafficTypeDiagnostic: PH7PR12MB5877:EE_
-X-Microsoft-Antispam-PRVS: <PH7PR12MB5877DF2271A2D6881DBB9EEF90C09@PH7PR12MB5877.namprd12.prod.outlook.com>
+X-MS-Office365-Filtering-Correlation-Id: 61088f95-61e0-4d10-4443-08da2cb501b8
+X-MS-TrafficTypeDiagnostic: DM4PR12MB6012:EE_
+X-Microsoft-Antispam-PRVS: <DM4PR12MB60121F40E1914933CA499FD990C09@DM4PR12MB6012.namprd12.prod.outlook.com>
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Koc/9SFJaEUeXVoegiD0t6mn6KM/5KAeg42WZmqreAVdIdShz7srcJZ/yezADXNn8jX76X2KH1TwELJmDtmaIXM44a4cq7RCqg5U4vPm6AP7r/Ao+x8aaEZeRhFuS4gBVjBnvLKtOAXkrPRpo2AGn2L7N2cEeeFA2HWZiJORCg/3S2RoYKeJcAZYXp1bAIFzNZ/S3Tl7fXLCyaEwrFLNNzrAYoMwKulr1aeIltpqRXvewCmrJ4AYotCqJocSi/UGo/plYk5nrddk56+nnwf/Rk2GuK0nMnJYCRmpRzwGn1myFE0890BMAUHmQlpi/+Sxbf3Y0yiVnf8rWAmrxx+fSL/DzKZsNNPfHnT6jZnQpo+A6d4UPmY0zuXjQoxTOzhQuxQOZtEvr0Jxbfg1X+xv0HUxb3tgBiYdVNNdfKclE8c/G1Q6ZqhO2UyDu5HKQSrTJzO/U3rtF7EsIzNdtNRy2XEmlnu2hglrgFWNpcsdCV9eY/DGJSxAl8ZQ3XtNlu6Jq1ASWb/aGyT9AXpuWXREX+BdMvqh+rB+FDK87ZTaHSskYHd51lKbZRlU8kyT+tMVmK68QaU2L7kdbbo8NHCGbFcqdf6GfwCGwSS/cj6moZSxSddhh4mIdXy6/znjyvcJxRNjlkFHJz+JMK3zbQZegmE0uXgzSdWFj42hW0I2e6g3oPo/fCB6hXE+ajyFKqme+3moHHW3/LZIPAHR6MvWwqjuJt2hto6IaEgGc9awxC3zPkonUGBBnHt/O/4eW9DDr2a/1cPd3m7rtUmbwXiUKaFfsPi500Le1U4838BpaMHvbzU2YSV+lIzW4CUcdUCC
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230001)(4636009)(36840700001)(46966006)(40470700004)(70206006)(316002)(8676002)(54906003)(82310400005)(36860700001)(70586007)(86362001)(4326008)(356005)(81166007)(966005)(336012)(186003)(426003)(1076003)(26005)(16526019)(2616005)(6666004)(7696005)(508600001)(40460700003)(83380400001)(47076005)(110136005)(2906002)(36756003)(8936002)(5660300002)(21314003)(36900700001);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: nzNCCIS9IDLFYoXyCnnIAC6EDC5UcPmCfKwGoK7/eYnmYGOC/Va0Ov10cPyazZibVHWaIcZtHbDPbT123ioRluTdx1Gh4BtlZc6puU9HM/aoBJH2onK+2cbWCrJKfioeEUgO+NcS57/VyBi0x+BiZGbthddQlMMYbqqstC+aikciiVLZq26RRGOY+NpWFqouHjcwNb4Na0FEJ4RAQyVn3Mp2UhXomGa5Mtr9F3a6XyOqQ4+o6SPHh0ZUqaUuDgcjHnStSQY5z99zceXgthddegJ4OhtQd4AYf6X5eNzEk2CiAb656t7KFa6rMym9TCzgimZvznNbusaV8XHgXZtUamQpaylYWL+JEGiCAOz/V/L3yBM7x4XVu2rK7OK9RYUu3P7jfAphCx42S/kDeDT0kk15I0Z+W6tnjYSsRZYlh3lzVo5xGOgA5JfULlki+v9OACdhWvPXKuGRy3cIoNxKC3FEGK2B64eTrW7VcfIqZuQdy8o964t/APXxxxOHxg/klwwJAPIrSXR3tGVJRaQRLYccj6w3ZY+kL4Q4dKJTwi6WAdrMNwWYsY7EVWkuZ0sdRoPq0FrOT+JgTItGCKt3nMAuFIei89LtVRej35ghUdsPxvbVe1+wfIMd3qIrYRGDGR+uTcSZjNbHXLgwoNy1ur4aQl4+PWxOQmEpJ8SRRpVF7j1retsytzt+dhBztF8ET3fbhg+sQ1fwmLdjAvosPLqSMgBKoHMzJ615bOc770vsU1B71FSKl8Nhb2LvDomjewCgwM6al2KS0KNFRRniZHXOGAMb+4h0h5nQbE/qOyj8BL4kIXND3daZNKhdEg/bzJwTyuyvsjEX+p2kDzpgwnehpuPha9wsJFJK4mVrFtQ=
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230001)(4636009)(36840700001)(46966006)(40470700004)(47076005)(186003)(16526019)(316002)(1076003)(6666004)(508600001)(36860700001)(966005)(426003)(36756003)(8936002)(86362001)(336012)(110136005)(54906003)(82310400005)(7696005)(356005)(81166007)(40460700003)(83380400001)(5660300002)(26005)(70586007)(8676002)(2906002)(4326008)(70206006)(2616005)(21314003)(36900700001);DIR:OUT;SFP:1101;
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 May 2022 03:28:34.7309
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 May 2022 03:28:35.5121
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5250bd70-bf89-4648-10ed-08da2cb50141
+X-MS-Exchange-CrossTenant-Network-Message-Id: 61088f95-61e0-4d10-4443-08da2cb501b8
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
 X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT054.eop-nam11.prod.protection.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB5877
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB6012
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -102,217 +100,115 @@ Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-Replace the existing struct i_mce with struct inject_desc. Extend the
-struct to include "error" field. This error field will be useful to
-return error codes to userspace when error injection fails.
+According to Section 2.1.16.3 under HWCR[McStatusWrEn] in "PPR for AMD
+Family 19h, Model 01h, Revision B1 Processors - 55898 Rev 0.35 - Feb 5,
+2021", the status register may sometimes enforce write ignored behavior
+independent of the value of HWCR[McStatusWrEn] depending on the platform
+settings.
 
-Suggested-by: Borislav Petkov <bp@suse.de>
-Signed-off-by: Borislav Petkov <bp@suse.de>
+Hence, evaluate for writes ignored for MCA_STATUS before doing hw error
+injection. If true, return the appropriate error code to userspace.
+
+Introduce "hw_injection_possible" flag to return early on subsequent
+hw error injections.
+
+Link: https://bugzilla.kernel.org/show_bug.cgi?id=206537
 Signed-off-by: Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>
-Link: https://lkml.kernel.org/r/Yk267A1MKOo2AlXQ@zn.tnic
 ---
- arch/x86/kernel/cpu/mce/inject.c | 94 ++++++++++++++++++--------------
- 1 file changed, 52 insertions(+), 42 deletions(-)
+Link:
+https://lkml.kernel.org/r/20220214233640.70510-2-Smita.KoralahalliChannabasappa@amd.com
+
+v2:
+	msr_ops -> mca_msr_reg().
+	simulation -> injection.
+	pr_info() -> pr_err().
+	Aligned on ",".
+v3:
+	Removed "x86/mce: Use mca_msr_reg() in prepare_msrs()" patch.
+	and made changes on the existing MCx_{STATUS, ADDR, MISC} macros.
+v4:
+	Simplified the code by just checking for writes ignored behavior in
+	MCA_STATUS register.
+	Introduced prepare_mca_status() and performed writes ignored checks
+	inside the function.
+	Rephrased error message.
+v5:
+	Replaced i_mce with inject_desc.
+	Introduction of hw_injection_possible flag to return early if HW
+	error injections are not possible.
+---
+ arch/x86/kernel/cpu/mce/inject.c   | 25 +++++++++++++++++++++++++
+ arch/x86/kernel/cpu/mce/internal.h |  2 +-
+ 2 files changed, 26 insertions(+), 1 deletion(-)
 
 diff --git a/arch/x86/kernel/cpu/mce/inject.c b/arch/x86/kernel/cpu/mce/inject.c
-index 5fbd7ffb3233..05581b718529 100644
+index 05581b718529..cce068a4478c 100644
 --- a/arch/x86/kernel/cpu/mce/inject.c
 +++ b/arch/x86/kernel/cpu/mce/inject.c
-@@ -33,10 +33,12 @@
+@@ -33,6 +33,8 @@
  
  #include "internal.h"
  
--/*
-- * Collect all the MCi_XXX settings
-- */
--static struct mce i_mce;
-+/* Collect all the MCi_XXX settings */
-+static struct inject_desc {
-+	struct mce m;
-+	int err;
-+} inj_desc;
++static bool hw_injection_possible = true;
 +
- static struct dentry *dfs_inj;
- 
- #define MAX_FLAG_OPT_SIZE	4
-@@ -110,9 +112,11 @@ static int inj_ipid_set(void *data, u64 val)
- 
- DEFINE_SIMPLE_ATTRIBUTE(ipid_fops, inj_ipid_get, inj_ipid_set, "%llx\n");
- 
--static void setup_inj_struct(struct mce *m)
-+static void setup_inj_struct(void)
- {
--	memset(m, 0, sizeof(struct mce));
-+	struct mce *m = &inj_desc.m;
-+
-+	memset(&inj_desc, 0, sizeof(struct inject_desc));
- 
- 	m->cpuvendor = boot_cpu_data.x86_vendor;
- 	m->time	     = ktime_get_real_seconds();
-@@ -470,56 +474,57 @@ static void toggle_nb_mca_mst_cpu(u16 nid)
+ /* Collect all the MCi_XXX settings */
+ static struct inject_desc {
+ 	struct mce m;
+@@ -474,11 +476,29 @@ static void toggle_nb_mca_mst_cpu(u16 nid)
  		       __func__, PCI_FUNC(F3->devfn), NBCFG);
  }
  
--static void prepare_msrs(void *info)
-+static void prepare_msrs(void *unused)
++static bool prepare_mca_status(void)
++{
++	u32 status_reg = mca_msr_reg(inj_desc.m.bank, MCA_STATUS);
++	u64 status_val = inj_desc.m.status;
++
++	wrmsrl(status_reg, status_val);
++	rdmsrl(status_reg, status_val);
++
++	return status_val == inj_desc.m.status;
++}
++
+ static void prepare_msrs(void *unused)
  {
--	struct mce m = *(struct mce *)info;
--	u8 b = m.bank;
-+	struct mce *m = &inj_desc.m;
-+	u8 b = inj_desc.m.bank;
+ 	struct mce *m = &inj_desc.m;
+ 	u8 b = inj_desc.m.bank;
  
--	wrmsrl(MSR_IA32_MCG_STATUS, m.mcgstatus);
-+	wrmsrl(MSR_IA32_MCG_STATUS, m->mcgstatus);
++	if (!prepare_mca_status()) {
++		pr_err("Platform does not allow error injection, try using APEI EINJ instead.\n");
++		inj_desc.err = -EINVAL;
++		hw_injection_possible = false;
++		return;
++	}
++
+ 	wrmsrl(MSR_IA32_MCG_STATUS, m->mcgstatus);
  
  	if (boot_cpu_has(X86_FEATURE_SMCA)) {
--		if (m.inject_flags == DFR_INT_INJ) {
--			wrmsrl(MSR_AMD64_SMCA_MCx_DESTAT(b), m.status);
--			wrmsrl(MSR_AMD64_SMCA_MCx_DEADDR(b), m.addr);
-+		if (m->inject_flags == DFR_INT_INJ) {
-+			wrmsrl(MSR_AMD64_SMCA_MCx_DESTAT(b), m->status);
-+			wrmsrl(MSR_AMD64_SMCA_MCx_DEADDR(b), m->addr);
- 		} else {
--			wrmsrl(MSR_AMD64_SMCA_MCx_STATUS(b), m.status);
--			wrmsrl(MSR_AMD64_SMCA_MCx_ADDR(b), m.addr);
-+			wrmsrl(MSR_AMD64_SMCA_MCx_STATUS(b), m->status);
-+			wrmsrl(MSR_AMD64_SMCA_MCx_ADDR(b), m->addr);
- 		}
- 
--		wrmsrl(MSR_AMD64_SMCA_MCx_MISC(b), m.misc);
--		wrmsrl(MSR_AMD64_SMCA_MCx_SYND(b), m.synd);
-+		wrmsrl(MSR_AMD64_SMCA_MCx_MISC(b), m->misc);
-+		wrmsrl(MSR_AMD64_SMCA_MCx_SYND(b), m->synd);
- 	} else {
--		wrmsrl(MSR_IA32_MCx_STATUS(b), m.status);
--		wrmsrl(MSR_IA32_MCx_ADDR(b), m.addr);
--		wrmsrl(MSR_IA32_MCx_MISC(b), m.misc);
-+		wrmsrl(MSR_IA32_MCx_STATUS(b), m->status);
-+		wrmsrl(MSR_IA32_MCx_ADDR(b), m->addr);
-+		wrmsrl(MSR_IA32_MCx_MISC(b), m->misc);
- 	}
- }
- 
--static void do_inject(void)
-+static int do_inject(void)
- {
-+	struct mce *m = &inj_desc.m;
-+	unsigned int cpu = m->extcpu;
- 	u64 mcg_status = 0;
--	unsigned int cpu = i_mce.extcpu;
--	u8 b = i_mce.bank;
-+	u8 b = m->bank;
- 
--	i_mce.tsc = rdtsc_ordered();
-+	m->tsc = rdtsc_ordered();
- 
--	i_mce.status |= MCI_STATUS_VAL;
-+	m->status |= MCI_STATUS_VAL;
- 
--	if (i_mce.misc)
--		i_mce.status |= MCI_STATUS_MISCV;
-+	if (m->misc)
-+		m->status |= MCI_STATUS_MISCV;
- 
--	if (i_mce.synd)
--		i_mce.status |= MCI_STATUS_SYNDV;
-+	if (m->synd)
-+		m->status |= MCI_STATUS_SYNDV;
- 
- 	if (inj_type == SW_INJ) {
--		mce_log(&i_mce);
--		return;
-+		mce_log(m);
-+		return 0;
+@@ -521,6 +541,11 @@ static int do_inject(void)
+ 		return 0;
  	}
  
++	if (!hw_injection_possible) {
++		pr_err("SW-only injection possible on this platform");
++		return -EINVAL;
++	}
++
  	/* prep MCE global settings for the injection */
  	mcg_status = MCG_STATUS_MCIP | MCG_STATUS_EIPV;
  
--	if (!(i_mce.status & MCI_STATUS_PCC))
-+	if (!(m->status & MCI_STATUS_PCC))
- 		mcg_status |= MCG_STATUS_RIPV;
+diff --git a/arch/x86/kernel/cpu/mce/internal.h b/arch/x86/kernel/cpu/mce/internal.h
+index 4ae0e603f7fa..7e03f5b7f6bd 100644
+--- a/arch/x86/kernel/cpu/mce/internal.h
++++ b/arch/x86/kernel/cpu/mce/internal.h
+@@ -211,7 +211,7 @@ noinstr u64 mce_rdmsrl(u32 msr);
  
- 	/*
-@@ -528,8 +533,8 @@ static void do_inject(void)
- 	 * - MCx_STATUS[UC] cleared: deferred errors are _not_ UC
- 	 */
- 	if (inj_type == DFR_INT_INJ) {
--		i_mce.status |= MCI_STATUS_DEFERRED;
--		i_mce.status &= ~MCI_STATUS_UC;
-+		m->status |= MCI_STATUS_DEFERRED;
-+		m->status &= ~MCI_STATUS_UC;
- 	}
- 
- 	/*
-@@ -550,12 +555,15 @@ static void do_inject(void)
- 
- 	toggle_hw_mce_inject(cpu, true);
- 
--	i_mce.mcgstatus = mcg_status;
--	i_mce.inject_flags = inj_type;
--	smp_call_function_single(cpu, prepare_msrs, &i_mce, 0);
-+	m->mcgstatus = mcg_status;
-+	m->inject_flags = inj_type;
-+	smp_call_function_single(cpu, prepare_msrs, NULL, 0);
- 
- 	toggle_hw_mce_inject(cpu, false);
- 
-+	if (inj_desc.err)
-+		goto err;
-+
- 	switch (inj_type) {
- 	case DFR_INT_INJ:
- 		smp_call_function_single(cpu, trigger_dfr_int, NULL, 0);
-@@ -570,6 +578,7 @@ static void do_inject(void)
- err:
- 	cpus_read_unlock();
- 
-+	return inj_desc.err;
- }
- 
- /*
-@@ -580,6 +589,7 @@ static int inj_bank_set(void *data, u64 val)
+ static __always_inline u32 mca_msr_reg(int bank, enum mca_msr reg)
  {
- 	struct mce *m = (struct mce *)data;
- 	u8 n_banks;
-+	int err;
- 	u64 cap;
- 
- 	/* Get bank count on target CPU so we can handle non-uniform values. */
-@@ -619,12 +629,12 @@ static int inj_bank_set(void *data, u64 val)
- 	}
- 
- inject:
--	do_inject();
-+	err = do_inject();
- 
- 	/* Reset injection struct */
--	setup_inj_struct(&i_mce);
-+	setup_inj_struct();
- 
--	return 0;
-+	return err;
- }
- 
- MCE_INJECT_GET(bank);
-@@ -714,7 +724,7 @@ static void __init debugfs_init(void)
- 
- 	for (i = 0; i < ARRAY_SIZE(dfs_fls); i++)
- 		debugfs_create_file(dfs_fls[i].name, dfs_fls[i].perm, dfs_inj,
--				    &i_mce, dfs_fls[i].fops);
-+				    &inj_desc.m, dfs_fls[i].fops);
- }
- 
- static int __init inject_init(void)
-@@ -727,7 +737,7 @@ static int __init inject_init(void)
- 	register_nmi_handler(NMI_LOCAL, mce_raise_notify, 0, "mce_notify");
- 	mce_register_injector_chain(&inject_nb);
- 
--	setup_inj_struct(&i_mce);
-+	setup_inj_struct();
- 
- 	pr_info("Machine check injector initialized\n");
- 
+-	if (mce_flags.smca) {
++	if (cpu_feature_enabled(X86_FEATURE_SMCA)) {
+ 		switch (reg) {
+ 		case MCA_CTL:	 return MSR_AMD64_SMCA_MCx_CTL(bank);
+ 		case MCA_ADDR:	 return MSR_AMD64_SMCA_MCx_ADDR(bank);
 -- 
 2.17.1
 
