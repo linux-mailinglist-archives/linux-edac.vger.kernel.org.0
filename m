@@ -2,113 +2,85 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8241551A4AB
-	for <lists+linux-edac@lfdr.de>; Wed,  4 May 2022 17:56:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D1C8151AF2F
+	for <lists+linux-edac@lfdr.de>; Wed,  4 May 2022 22:33:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352957AbiEDP7n (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Wed, 4 May 2022 11:59:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59308 "EHLO
+        id S1378075AbiEDUgf (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Wed, 4 May 2022 16:36:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352928AbiEDP7l (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Wed, 4 May 2022 11:59:41 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C327613D56;
-        Wed,  4 May 2022 08:56:04 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id l7so3761423ejn.2;
-        Wed, 04 May 2022 08:56:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=/MaG3ZRxc4+H0WC1x/YbpPIHfpEZGPdrdbB0R6rZ248=;
-        b=l85EWaFhKcWG+iEl6rrGnGCY5Z/crEoYwQzItVzAOzLGH1/pgHDyYECey8ScXdDXE1
-         n65+6TOfcYygLcOacv98c8wCphaSSVkRVF8oEBq4yhlWWizwq/NfPJOMFg8Nt99tsGcX
-         yxaAjJvv5XBmLHR022ucyQ36+vF/haWAgT0NZBxR9pIwneBvbqR2kueO412rO53RdTLk
-         tgpKcRBxxg4yXgE47Q9z7L7bVmgbsxkAfoxOg9ELUfKxhKIkh+Y5SCciLwneWVEOvamG
-         1LA6l6RRSbmUmPMrpJD3Ca9E9gA0jxiECssD2CjjnH8rLfkuSRk3fUmzJK7vePoB6dbt
-         QGow==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=/MaG3ZRxc4+H0WC1x/YbpPIHfpEZGPdrdbB0R6rZ248=;
-        b=iGwEWVibSdstU+8wMxIfYXSIbE4YkChIozM2bCiBHEGQGeZb8KU67uCw7uyWyRp/PE
-         dwAf8sHd005dNtQDIGphjVE23v8TXwG3bgx+mNS1GMxI7ZN528jjN8+0KBcuYKUdgvRA
-         cllMzczkSBZLVYCHB2Nlw8+tCUscRlvSHl4z2y1jcbygZA0xhUQ92xank4YEMXi64DBZ
-         UwveSk3WN98l7IX9xjXIV1ipZCU2v2Zk+/3DnOWezVBxioCKkBSleZH6p6MRY7LHCUo4
-         EXFVyeNkArrzBTISzX+naLMCPjiPZLyXN2OVUWZPUy76ulBVi6HSuzSRFsaoVu+m1vgn
-         41Hw==
-X-Gm-Message-State: AOAM531oM98uP/XfMl4WREhehczQM7eKr39Jrp+no341r2HkgiCtmUQ0
-        AVM9Dfq8mVCLaD1Rpg0s+wrM0WcXnqML8R+C6HE=
-X-Google-Smtp-Source: ABdhPJyuYBhJj9i6UkwxP4bpUHxcD+QUaErFF4VF/CmTnhrV4i0EhEIHGYVA9FLAQNnprizp2Z6JLR6wMNW70SZyAHw=
-X-Received: by 2002:a17:906:3ce9:b0:6ef:a8aa:ab46 with SMTP id
- d9-20020a1709063ce900b006efa8aaab46mr21027830ejh.579.1651679762802; Wed, 04
- May 2022 08:56:02 -0700 (PDT)
+        with ESMTP id S1378062AbiEDUgd (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Wed, 4 May 2022 16:36:33 -0400
+Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7659A4F448;
+        Wed,  4 May 2022 13:32:56 -0700 (PDT)
+Received: from uucp (helo=alpha)
+        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
+        id 1nmLg4-0003MI-01; Wed, 04 May 2022 22:32:52 +0200
+Received: by alpha.franken.de (Postfix, from userid 1000)
+        id B9C09C01D0; Wed,  4 May 2022 22:32:24 +0200 (CEST)
+Date:   Wed, 4 May 2022 22:32:24 +0200
+From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To:     "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+Cc:     akpm@linux-foundation.org, bhe@redhat.com, pmladek@suse.com,
+        kexec@lists.infradead.org, linux-kernel@vger.kernel.org,
+        bcm-kernel-feedback-list@broadcom.com, coresight@lists.linaro.org,
+        linuxppc-dev@lists.ozlabs.org, linux-alpha@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-edac@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, linux-leds@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        linux-s390@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-um@lists.infradead.org, linux-xtensa@linux-xtensa.org,
+        netdev@vger.kernel.org, openipmi-developer@lists.sourceforge.net,
+        rcu@vger.kernel.org, sparclinux@vger.kernel.org,
+        xen-devel@lists.xenproject.org, x86@kernel.org,
+        kernel-dev@igalia.com, kernel@gpiccoli.net, halves@canonical.com,
+        fabiomirmar@gmail.com, alejandro.j.jimenez@oracle.com,
+        andriy.shevchenko@linux.intel.com, arnd@arndb.de, bp@alien8.de,
+        corbet@lwn.net, d.hatayama@jp.fujitsu.com,
+        dave.hansen@linux.intel.com, dyoung@redhat.com,
+        feng.tang@intel.com, gregkh@linuxfoundation.org,
+        mikelley@microsoft.com, hidehiro.kawai.ez@hitachi.com,
+        jgross@suse.com, john.ogness@linutronix.de, keescook@chromium.org,
+        luto@kernel.org, mhiramat@kernel.org, mingo@redhat.com,
+        paulmck@kernel.org, peterz@infradead.org, rostedt@goodmis.org,
+        senozhatsky@chromium.org, stern@rowland.harvard.edu,
+        tglx@linutronix.de, vgoyal@redhat.com, vkuznets@redhat.com,
+        will@kernel.org
+Subject: Re: [PATCH 07/30] mips: ip22: Reword PANICED to PANICKED and remove
+ useless header
+Message-ID: <20220504203224.GA23475@alpha.franken.de>
+References: <20220427224924.592546-1-gpiccoli@igalia.com>
+ <20220427224924.592546-8-gpiccoli@igalia.com>
 MIME-Version: 1.0
-References: <20220131151346.45792-1-andriy.shevchenko@linux.intel.com>
- <20220308205016.2c0112ad@md1za8fc.ad001.siemens.net> <YnJ0tdGTzTRYEISn@smile.fi.intel.com>
- <20220504171007.2f641098@md1za8fc.ad001.siemens.net>
-In-Reply-To: <20220504171007.2f641098@md1za8fc.ad001.siemens.net>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Wed, 4 May 2022 17:55:26 +0200
-Message-ID: <CAHp75Vfh5DbiGQ4NLv+hhYyRx5wDbMjFmgO5sNZ7864ipRrDHg@mail.gmail.com>
-Subject: Re: [PATCH v4 0/8] platform/x86: introduce p2sb_bar() helper
-To:     Henning Schild <henning.schild@siemens.com>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Wolfram Sang <wsa@kernel.org>, Jean Delvare <jdelvare@suse.de>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Tan Jui Nee <jui.nee.tan@intel.com>,
-        Kate Hsuan <hpa@redhat.com>,
-        Jonathan Yong <jonathan.yong@intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-edac@vger.kernel.org, linux-i2c <linux-i2c@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Platform Driver <platform-driver-x86@vger.kernel.org>,
-        Borislav Petkov <bp@alien8.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Tony Luck <tony.luck@intel.com>,
-        James Morse <james.morse@arm.com>,
-        Robert Richter <rric@kernel.org>,
-        Jean Delvare <jdelvare@suse.com>,
-        Peter Tyser <ptyser@xes-inc.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Andy Shevchenko <andy@kernel.org>,
-        Mark Gross <markgross@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220427224924.592546-8-gpiccoli@igalia.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Wed, May 4, 2022 at 5:10 PM Henning Schild
-<henning.schild@siemens.com> wrote:
-> Am Wed, 4 May 2022 15:42:29 +0300
-> schrieb Andy Shevchenko <andriy.shevchenko@linux.intel.com>:
-> > On Tue, Mar 08, 2022 at 08:50:16PM +0100, Henning Schild wrote:
+On Wed, Apr 27, 2022 at 07:49:01PM -0300, Guilherme G. Piccoli wrote:
+> Many other place in the kernel prefer the latter, so let's keep
+> it consistent in MIPS code as well. Also, removes a useless header.
+> 
+> Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+> Signed-off-by: Guilherme G. Piccoli <gpiccoli@igalia.com>
+> ---
+>  arch/mips/sgi-ip22/ip22-reset.c | 11 +++++------
+>  1 file changed, 5 insertions(+), 6 deletions(-)
 
-...
+applied to mips-next.
 
-> > Can we have your formal Tested-by tag?
->
-> Sure. I will just put it here for you to take.
->
-> Tested-by: Henning Schild <henning.schild@siemens.com>
+Thomas.
 
-Thank you!
-
-> Let me know if you need it in another shape or form.
-
-Form is okay, just would be nice if you can retest what I have in the
-branch as an updated version.
-
---
-With Best Regards,
-Andy Shevchenko
+-- 
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]
