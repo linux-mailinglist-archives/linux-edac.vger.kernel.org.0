@@ -2,154 +2,135 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 32ECF519FDB
-	for <lists+linux-edac@lfdr.de>; Wed,  4 May 2022 14:46:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 87DAE51A00A
+	for <lists+linux-edac@lfdr.de>; Wed,  4 May 2022 14:53:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349939AbiEDMuJ (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Wed, 4 May 2022 08:50:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35938 "EHLO
+        id S1350036AbiEDM4h (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Wed, 4 May 2022 08:56:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235732AbiEDMuI (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Wed, 4 May 2022 08:50:08 -0400
-Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 447452CE37;
-        Wed,  4 May 2022 05:46:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=UDxTzr/LbFPHIhZF1U36kLmGFtpbBGYhm6tD7CfQBjM=; b=KDrxDW8Mnr1qToRh0yGaDv25Fu
-        TWpgQRScRF3dRjjU3pakegMZLqUHmycIdjATA6DbY60uPfya2zQOAwJ0e5erFJc5BJn7o3eV3sQ41
-        Tox4yunn4/jA8a3IjyUJT/sI3KcoYtb2p2FNUwcMM3f1g/ex9W0DrY0odKixjZjudGtrtbA3G1JPw
-        m7Nny7DVsQFLh+HpvU/q7Yc8/k1hRGwJeSWIAUBYmqnc5ZdThCMVxiKgVNOsyAMWZdrNHmIgXn40c
-        w6AF2HzVr+D+OvvIusg4XzuOUWHoF2AYp44ZOOo2CAb1BDljEp1qf8qc23J8WoJ9sqhtbxFJxmFVB
-        8aeUFBag==;
-Received: from [179.113.53.197] (helo=[192.168.1.60])
-        by fanzine2.igalia.com with esmtpsa 
-        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
-        id 1nmEOH-0003Ke-Oi; Wed, 04 May 2022 14:46:02 +0200
-Message-ID: <9581851d-6c61-a2ef-a3c4-6e2ce05eab12@igalia.com>
-Date:   Wed, 4 May 2022 09:45:31 -0300
+        with ESMTP id S236375AbiEDM4f (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Wed, 4 May 2022 08:56:35 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D9DF2AE12;
+        Wed,  4 May 2022 05:52:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651668779; x=1683204779;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=TAR0OSTmgPalp1GT6kqlq85T8vW4wKavBhWP3MJ2K2A=;
+  b=dHgtXRnpPjjVlbRuYsjwUesITQQlcyEAnpWwSqK8E3QnR3mvzJAk3x94
+   Hu9ol/3/ksX4ORH3dx2tVizgJRR0+gz8k9VyzFP6adFTdT1874uzhCCgL
+   53vkHKHmzs182tA6TySkrYpLdZubHRjf2xAKlqVuHhKUfiznQLBI0p3bL
+   JDOPsS/V9HQqtff/dd6WG2GAYw7LUiTRlIsMTZkesDf5ELsNhunkvacAQ
+   ECQ32eEAIs892VDOTYhsDJ6WQ3GEzNERyp1SuQgTXHuaBZveF0/YDEiil
+   IJWEZ0ENBVozZ3mkQphKUS0r8IIOwTRbrwRo64fW2SnagoJs9alYZNg/a
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10336"; a="292946346"
+X-IronPort-AV: E=Sophos;i="5.91,198,1647327600"; 
+   d="scan'208";a="292946346"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 May 2022 05:52:58 -0700
+X-IronPort-AV: E=Sophos;i="5.91,198,1647327600"; 
+   d="scan'208";a="734387769"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 May 2022 05:52:52 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1nmEUq-00Bssm-FU;
+        Wed, 04 May 2022 15:52:48 +0300
+Date:   Wed, 4 May 2022 15:52:48 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Lee Jones <lee.jones@linaro.org>
+Cc:     Wolfram Sang <wsa@kernel.org>, Jean Delvare <jdelvare@suse.de>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Tan Jui Nee <jui.nee.tan@intel.com>,
+        Kate Hsuan <hpa@redhat.com>,
+        Jonathan Yong <jonathan.yong@intel.com>,
+        linux-kernel@vger.kernel.org, linux-edac@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-gpio@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org,
+        Borislav Petkov <bp@alien8.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Tony Luck <tony.luck@intel.com>,
+        James Morse <james.morse@arm.com>,
+        Robert Richter <rric@kernel.org>,
+        Jean Delvare <jdelvare@suse.com>,
+        Peter Tyser <ptyser@xes-inc.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Andy Shevchenko <andy@kernel.org>,
+        Mark Gross <markgross@kernel.org>,
+        Henning Schild <henning.schild@siemens.com>
+Subject: Re: [PATCH v4 5/8] mfd: lpc_ich: Add support for pinctrl in non-ACPI
+ system
+Message-ID: <YnJ3IJoJtqjvFmBB@smile.fi.intel.com>
+References: <20220131151346.45792-1-andriy.shevchenko@linux.intel.com>
+ <20220131151346.45792-6-andriy.shevchenko@linux.intel.com>
+ <YgvaqBB8fNVWp1lN@google.com>
+ <YgveyspHVXCp2ul+@smile.fi.intel.com>
+ <YgvjDy1R06IC8FE5@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH 04/30] firmware: google: Convert regular spinlock into
- trylock on panic path
-Content-Language: en-US
-To:     Evan Green <evgreen@chromium.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>, bhe@redhat.com,
-        pmladek@suse.com, kexec@lists.infradead.org,
-        LKML <linux-kernel@vger.kernel.org>,
-        bcm-kernel-feedback-list@broadcom.com,
-        linuxppc-dev@lists.ozlabs.org, linux-alpha@vger.kernel.org,
-        linux-edac@vger.kernel.org, linux-hyperv@vger.kernel.org,
-        linux-leds@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org, Linux PM <linux-pm@vger.kernel.org>,
-        linux-remoteproc@vger.kernel.org, linux-s390@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-um@lists.infradead.org,
-        linux-xtensa@linux-xtensa.org, netdev@vger.kernel.org,
-        openipmi-developer@lists.sourceforge.net, rcu@vger.kernel.org,
-        sparclinux@vger.kernel.org, xen-devel@lists.xenproject.org,
-        x86@kernel.org, kernel-dev@igalia.com, kernel@gpiccoli.net,
-        halves@canonical.com, fabiomirmar@gmail.com,
-        alejandro.j.jimenez@oracle.com,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
-        Jonathan Corbet <corbet@lwn.net>, d.hatayama@jp.fujitsu.com,
-        dave.hansen@linux.intel.com, dyoung@redhat.com,
-        feng.tang@intel.com,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        mikelley@microsoft.com, hidehiro.kawai.ez@hitachi.com,
-        jgross@suse.com, john.ogness@linutronix.de,
-        Kees Cook <keescook@chromium.org>, luto@kernel.org,
-        mhiramat@kernel.org, mingo@redhat.com, paulmck@kernel.org,
-        peterz@infradead.org, rostedt@goodmis.org,
-        senozhatsky@chromium.org, Alan Stern <stern@rowland.harvard.edu>,
-        Thomas Gleixner <tglx@linutronix.de>, vgoyal@redhat.com,
-        vkuznets@redhat.com, Will Deacon <will@kernel.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        David Gow <davidgow@google.com>,
-        Julius Werner <jwerner@chromium.org>
-References: <20220427224924.592546-1-gpiccoli@igalia.com>
- <20220427224924.592546-5-gpiccoli@igalia.com>
- <CAE=gft5Pq25L4KFoPWbftkPF-JN1ex2yws77mMJ4GQnn9W0L2g@mail.gmail.com>
- <adcf6d0e-c37c-6ede-479e-29959d03d8c0@igalia.com>
- <CAE=gft623NxqetRssrZnaRmJLSP4BT5=-sVVwtYoHuspO_gULQ@mail.gmail.com>
-From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
-In-Reply-To: <CAE=gft623NxqetRssrZnaRmJLSP4BT5=-sVVwtYoHuspO_gULQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YgvjDy1R06IC8FE5@google.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On 03/05/2022 18:56, Evan Green wrote:
-> Hi Guilherme,
-> [...] 
->> Do you agree with that, or prefer really a parameter in
->> gsmi_shutdown_reason() ? I'll follow your choice =)
+On Tue, Feb 15, 2022 at 05:29:51PM +0000, Lee Jones wrote:
+> On Tue, 15 Feb 2022, Andy Shevchenko wrote:
+> > On Tue, Feb 15, 2022 at 04:54:00PM +0000, Lee Jones wrote:
+> > > On Mon, 31 Jan 2022, Andy Shevchenko wrote:
+
+> > Thank you for the review, my answers below.
+
+...
+
+> > > > +static struct resource apl_gpio_resources[APL_GPIO_NR_DEVICES][2] = {
+> > > > +	[APL_GPIO_NORTH] = {
+> > > > +		DEFINE_RES_MEM(APL_GPIO_NORTH_OFFSET, 0x1000),
+> > > 
+> > > Are these 0x1000's being over-written in lpc_ich_init_pinctrl()?
+> > > 
+> > > If so, why pre-initialise?
+> > 
+> > You mean to pre-initialize the offsets, but leave the length to be added
+> > in the function? It can be done, but it feels inconsistent, since we would
+> > have offsets and lengths in different places for the same thingy. That said,
+> > I prefer current way for the sake of consistency.
 > 
-> I'm fine with either, thanks for the link. Mostly I want to make sure
-> other paths to gsmi_shutdown_reason() aren't also converted to a try.
-
-Hi Evan, thanks for the prompt response! So, I'll proceed like I did in
-s390, for consistency.
-
-> [...]
->> Reasoning: the problem with your example is that, by default, secondary
->> CPUs are disabled in the panic path, through an IPI mechanism. IPIs take
->> precedence and interrupt the work in these CPUs, effectively
->> interrupting the "polite work" with the lock held heh
+> Don't you over-write this entry entirely?
 > 
-> The IPI can only interrupt a CPU with irqs disabled if the IPI is an
-> NMI. I haven't looked before to see if we use NMI IPIs to corral the
-> other CPUs on panic. On x86, I grepped my way down to
-> native_stop_other_cpus(), which looks like it does a normal IPI, waits
-> 1 second, then does an NMI IPI. So, if a secondary CPU has the lock
-> held, on x86 it has roughly 1s to finish what it's doing and re-enable
-> interrupts before smp_send_stop() brings the NMI hammer down. I think
-> this should be more than enough time for the secondary CPU to get out
-> and release the lock.
+>   for (i = 0; i < ARRAY_SIZE(apl_gpio_devices); i++) {
+>         struct resource *mem = &apl_gpio_resources[i][0];
 > 
-> So then it makes sense to me that you're fixing cases where we
-> panicked with the lock held, or hung with the lock held. Given the 1
-> second grace period x86 gives us, I'm on board, as that helps mitigate
-> the risk that we bailed out early with the try and should have spun a
-> bit longer instead. Thanks.
+>         /* Fill MEM resource */
+>         mem->start += base.start;
+>         mem->end += base.start;
+>         mem->flags = base.flags;
+>   }
 > 
-> -Evan
+> Oh wait, you're just adding the base value to the offsets.
+> 
+> In which case that comment is also confusing!
 
-Well, in the old path without "crash_kexec_post_notifiers", we indeed
-end-up relying on native_stop_other_cpus() for x86 as you said, and the
-"1s rule" makes sense. But after this series (or even before, if the
-kernel parameter "crash_kexec_post_notifiers" was used) the function
-used to stop CPUs in the panic path is crash_smp_send_stop(), and the
-call chain is like:
+I have realised that in current form it has a bug (*), so I re-do a bit the way
+that comment stays and the actual actions will be to *fill* the resource.
 
-Main CPU:
-crash_smp_send_stop()
---kdump_nmi_shootdown_cpus()
-----nmi_shootdown_cpus()
+*) unbinding and binding back will bring us to the completely wrong resources.
 
-Then, in each CPU (except the main one, running panic() path),
-we execute kdump_nmi_callback() in NMI context.
-
-So, we seem to indeed interrupt any context (even with IRQs disabled),
-increasing the likelihood of the potential lockups due to stopped CPUs
-holding the locks heheh
-
-Thanks again for the good discussion, let me know if anything I'm saying
-doesn't make sense - this crash path is a bit convoluted, specially in
-x86, I might have understood something wrongly =)
-Cheers,
+-- 
+With Best Regards,
+Andy Shevchenko
 
 
-Guilherme
