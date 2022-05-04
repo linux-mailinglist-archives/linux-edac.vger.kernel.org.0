@@ -2,80 +2,88 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 53C2E519FC6
-	for <lists+linux-edac@lfdr.de>; Wed,  4 May 2022 14:42:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 32ECF519FDB
+	for <lists+linux-edac@lfdr.de>; Wed,  4 May 2022 14:46:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349724AbiEDMqT (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Wed, 4 May 2022 08:46:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60850 "EHLO
+        id S1349939AbiEDMuJ (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Wed, 4 May 2022 08:50:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349701AbiEDMqS (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Wed, 4 May 2022 08:46:18 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6EB717E11;
-        Wed,  4 May 2022 05:42:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651668163; x=1683204163;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ITyYbB0V0Xb84R4YEw2hscxYMz0UNXJjyae1C700oaE=;
-  b=O7XZp0pslgtvRpBfV5gdhDRi+SYQHlEBvPo7F/4Ao2N9tfn/JhFbY394
-   catkVzg6OJc14Rn/eaOPGpHu5qobv6sncHcLnH3VHTOYO/kC2yY+ULSm6
-   Az7cxVcII626O4Z33Pgokn4PoENyuqyRcvt8zQe3E83Q04XI0+HQSWLcE
-   Vey0gwPeD0fQZHVvgukGujWZs6SAnFBqLrrzJF+heX9MnZHZtSbIlRbrW
-   7hwbzkU1amDZU0U+cpOPtGwrix1VpoW6JhnbnRQfLTmgJzwnxTL+raW1C
-   foK9qqWy4N+gUs/OJRyAUNVXaLzjpiJy9lJsLP/QYv6Xl0nKT2W5+4mv8
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10336"; a="266597886"
-X-IronPort-AV: E=Sophos;i="5.91,198,1647327600"; 
-   d="scan'208";a="266597886"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 May 2022 05:42:42 -0700
-X-IronPort-AV: E=Sophos;i="5.91,198,1647327600"; 
-   d="scan'208";a="631946059"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 May 2022 05:42:37 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1nmEKr-00BshX-SU;
-        Wed, 04 May 2022 15:42:29 +0300
-Date:   Wed, 4 May 2022 15:42:29 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Henning Schild <henning.schild@siemens.com>
-Cc:     Wolfram Sang <wsa@kernel.org>, Jean Delvare <jdelvare@suse.de>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Tan Jui Nee <jui.nee.tan@intel.com>,
-        Kate Hsuan <hpa@redhat.com>,
-        Jonathan Yong <jonathan.yong@intel.com>,
-        linux-kernel@vger.kernel.org, linux-edac@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-gpio@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org,
-        Borislav Petkov <bp@alien8.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Tony Luck <tony.luck@intel.com>,
-        James Morse <james.morse@arm.com>,
-        Robert Richter <rric@kernel.org>,
-        Jean Delvare <jdelvare@suse.com>,
-        Peter Tyser <ptyser@xes-inc.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Andy Shevchenko <andy@kernel.org>,
-        Mark Gross <markgross@kernel.org>
-Subject: Re: [PATCH v4 0/8] platform/x86: introduce p2sb_bar() helper
-Message-ID: <YnJ0tdGTzTRYEISn@smile.fi.intel.com>
-References: <20220131151346.45792-1-andriy.shevchenko@linux.intel.com>
- <20220308205016.2c0112ad@md1za8fc.ad001.siemens.net>
+        with ESMTP id S235732AbiEDMuI (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Wed, 4 May 2022 08:50:08 -0400
+Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 447452CE37;
+        Wed,  4 May 2022 05:46:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=UDxTzr/LbFPHIhZF1U36kLmGFtpbBGYhm6tD7CfQBjM=; b=KDrxDW8Mnr1qToRh0yGaDv25Fu
+        TWpgQRScRF3dRjjU3pakegMZLqUHmycIdjATA6DbY60uPfya2zQOAwJ0e5erFJc5BJn7o3eV3sQ41
+        Tox4yunn4/jA8a3IjyUJT/sI3KcoYtb2p2FNUwcMM3f1g/ex9W0DrY0odKixjZjudGtrtbA3G1JPw
+        m7Nny7DVsQFLh+HpvU/q7Yc8/k1hRGwJeSWIAUBYmqnc5ZdThCMVxiKgVNOsyAMWZdrNHmIgXn40c
+        w6AF2HzVr+D+OvvIusg4XzuOUWHoF2AYp44ZOOo2CAb1BDljEp1qf8qc23J8WoJ9sqhtbxFJxmFVB
+        8aeUFBag==;
+Received: from [179.113.53.197] (helo=[192.168.1.60])
+        by fanzine2.igalia.com with esmtpsa 
+        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
+        id 1nmEOH-0003Ke-Oi; Wed, 04 May 2022 14:46:02 +0200
+Message-ID: <9581851d-6c61-a2ef-a3c4-6e2ce05eab12@igalia.com>
+Date:   Wed, 4 May 2022 09:45:31 -0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220308205016.2c0112ad@md1za8fc.ad001.siemens.net>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH 04/30] firmware: google: Convert regular spinlock into
+ trylock on panic path
+Content-Language: en-US
+To:     Evan Green <evgreen@chromium.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>, bhe@redhat.com,
+        pmladek@suse.com, kexec@lists.infradead.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        bcm-kernel-feedback-list@broadcom.com,
+        linuxppc-dev@lists.ozlabs.org, linux-alpha@vger.kernel.org,
+        linux-edac@vger.kernel.org, linux-hyperv@vger.kernel.org,
+        linux-leds@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, Linux PM <linux-pm@vger.kernel.org>,
+        linux-remoteproc@vger.kernel.org, linux-s390@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-um@lists.infradead.org,
+        linux-xtensa@linux-xtensa.org, netdev@vger.kernel.org,
+        openipmi-developer@lists.sourceforge.net, rcu@vger.kernel.org,
+        sparclinux@vger.kernel.org, xen-devel@lists.xenproject.org,
+        x86@kernel.org, kernel-dev@igalia.com, kernel@gpiccoli.net,
+        halves@canonical.com, fabiomirmar@gmail.com,
+        alejandro.j.jimenez@oracle.com,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+        Jonathan Corbet <corbet@lwn.net>, d.hatayama@jp.fujitsu.com,
+        dave.hansen@linux.intel.com, dyoung@redhat.com,
+        feng.tang@intel.com,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        mikelley@microsoft.com, hidehiro.kawai.ez@hitachi.com,
+        jgross@suse.com, john.ogness@linutronix.de,
+        Kees Cook <keescook@chromium.org>, luto@kernel.org,
+        mhiramat@kernel.org, mingo@redhat.com, paulmck@kernel.org,
+        peterz@infradead.org, rostedt@goodmis.org,
+        senozhatsky@chromium.org, Alan Stern <stern@rowland.harvard.edu>,
+        Thomas Gleixner <tglx@linutronix.de>, vgoyal@redhat.com,
+        vkuznets@redhat.com, Will Deacon <will@kernel.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        David Gow <davidgow@google.com>,
+        Julius Werner <jwerner@chromium.org>
+References: <20220427224924.592546-1-gpiccoli@igalia.com>
+ <20220427224924.592546-5-gpiccoli@igalia.com>
+ <CAE=gft5Pq25L4KFoPWbftkPF-JN1ex2yws77mMJ4GQnn9W0L2g@mail.gmail.com>
+ <adcf6d0e-c37c-6ede-479e-29959d03d8c0@igalia.com>
+ <CAE=gft623NxqetRssrZnaRmJLSP4BT5=-sVVwtYoHuspO_gULQ@mail.gmail.com>
+From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+In-Reply-To: <CAE=gft623NxqetRssrZnaRmJLSP4BT5=-sVVwtYoHuspO_gULQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,134 +91,65 @@ Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Tue, Mar 08, 2022 at 08:50:16PM +0100, Henning Schild wrote:
-> Am Mon, 31 Jan 2022 17:13:38 +0200
-> schrieb Andy Shevchenko <andriy.shevchenko@linux.intel.com>:
+On 03/05/2022 18:56, Evan Green wrote:
+> Hi Guilherme,
+> [...] 
+>> Do you agree with that, or prefer really a parameter in
+>> gsmi_shutdown_reason() ? I'll follow your choice =)
 > 
-> > There are a few users and at least one more is coming (*) that would
-> > like to utilize P2SB mechanism of hiding and unhiding a device from
-> > the PCI configuration space.
-> > 
-> > Here is the series to consolidate p2sb handling code for existing
-> > users and provide a generic way for new comer(s).
-> > 
-> > It also includes a patch to enable GPIO controllers on Apollo Lake
-> > when it's used with ABL bootloader w/o ACPI support.
-> > 
-> > The patch that bring the helper ("platform/x86/intel: Add Primary
-> > to Sideband (P2SB) bridge support") has a commit message that
-> > sheds a light on what the P2SB is and why this is needed.
-> > 
-> > The changes made in v2 do not change the main idea and the
-> > functionality in a big scale. What we need is probably one more
-> > (RE-)test done by Henning. I hope to have it merged to v5.18-rc1 that
-> > Siemens can develop their changes based on this series.
+> I'm fine with either, thanks for the link. Mostly I want to make sure
+> other paths to gsmi_shutdown_reason() aren't also converted to a try.
+
+Hi Evan, thanks for the prompt response! So, I'll proceed like I did in
+s390, for consistency.
+
+> [...]
+>> Reasoning: the problem with your example is that, by default, secondary
+>> CPUs are disabled in the panic path, through an IPI mechanism. IPIs take
+>> precedence and interrupt the work in these CPUs, effectively
+>> interrupting the "polite work" with the lock held heh
 > 
-> I did test this series and it works as expected. Only problem is that
-> the leds driver will not work together with the pinctrl. Because two
-> "in tree drivers" will try to reserve the same memory region when both
-> are enabled. Who wins is a matter of probing order ...
-
-Can we have your formal Tested-by tag?
-
-> If you can take my changes into your series we will not have a problem.
-
-Yes, that's the plan, but your patches needs a bit of work I believe.
-
-> Otherwise we might need to create sort of a conflict which my series
-> would revert when switching apl lake to gpio.
+> The IPI can only interrupt a CPU with irqs disabled if the IPI is an
+> NMI. I haven't looked before to see if we use NMI IPIs to corral the
+> other CPUs on panic. On x86, I grepped my way down to
+> native_stop_other_cpus(), which looks like it does a normal IPI, waits
+> 1 second, then does an NMI IPI. So, if a secondary CPU has the lock
+> held, on x86 it has roughly 1s to finish what it's doing and re-enable
+> interrupts before smp_send_stop() brings the NMI hammer down. I think
+> this should be more than enough time for the secondary CPU to get out
+> and release the lock.
 > 
-> I would not know the process, let us see what the reviews bring and how
-> to continue here.
-
-I'm about to comment on the patches.
-
-> Thanks so much for taking care, especially the pinctrl coming up
-> without ACPI really improves the simatic leds on the apl lake.
-
-You are welcome!
-
-> In fact i will have to double check if i really need the p2sb for the
-> 427E wdt ... but until i have an answer, p2sb works just fine.
-
-Thanks!
-
-> > I have tested this on Apollo Lake platform (I'm able to see SPI NOR
-> > and since we have an ACPI device for GPIO I do not see any attempts
-> > to recreate one).
-> > 
-> > *) One in this series, and one is a due after merge in the Simatic
-> > IPC drivers
-> > 
-> > The series may be routed either via MFD (and I guess Lee would prefer
-> > that) or via PDx86, whichever seems better for you, folks. As of
-> > today patches are ACKed by the respective maintainers, but I2C one
-> > and one of the MFD.
-> > 
-> > Wolfram, can you ACK the patch against i2c-i801 driver, if you have no
-> > objections?
-> > 
-> > Changes in v4:
-> > - added tag to the entire series (Hans)
-> > - added tag to pin control patch (Mika)
-> > - dropped PCI core changes (PCI core doesn't want modifications to be
-> > made)
-> > - as a consequence of the above merged necessary bits into p2sb.c
-> > - added a check that p2sb is really hidden (Hans)
-> > - added EDAC patches (reviewed by maintainer internally)
-> > 
-> > Changes in v3:
-> > - resent with cover letter
-> > 
-> > Changes in v2:
-> > - added parentheses around bus in macros (Joe)
-> > - added tag (Jean)
-> > - fixed indentation and wrapping in the header (Christoph)
-> > - moved out of PCI realm to PDx86 as the best common denominator
-> > (Bjorn)
-> > - added a verbose commit message to explain P2SB thingy (Bjorn)
-> > - converted first parameter from pci_dev to pci_bus
-> > - made first two parameters (bus and devfn) optional (Henning, Lee)
-> > - added Intel pin control patch to the series (Henning, Mika)
-> > - fixed English style in the commit message of one of MFD patch (Lee)
-> > - added tags to my MFD LPC ICH patches (Lee)
-> > - used consistently (c) (Lee)
-> > - made indexing for MFD cell and resource arrays (Lee)
-> > - fixed the resource size in i801 (Jean)
-> > 
-> > Andy Shevchenko (6):
-> >   pinctrl: intel: Check against matching data instead of ACPI
-> > companion mfd: lpc_ich: Factor out lpc_ich_enable_spi_write()
-> >   mfd: lpc_ich: Switch to generic p2sb_bar()
-> >   i2c: i801: convert to use common P2SB accessor
-> >   EDAC, pnd2: Use proper I/O accessors and address space annotation
-> >   EDAC, pnd2: convert to use common P2SB accessor
-> > 
-> > Jonathan Yong (1):
-> >   platform/x86/intel: Add Primary to Sideband (P2SB) bridge support
-> > 
-> > Tan Jui Nee (1):
-> >   mfd: lpc_ich: Add support for pinctrl in non-ACPI system
-> > 
-> >  drivers/edac/Kconfig                   |   1 +
-> >  drivers/edac/pnd2_edac.c               |  62 ++---
-> >  drivers/i2c/busses/Kconfig             |   1 +
-> >  drivers/i2c/busses/i2c-i801.c          |  39 +---
-> >  drivers/mfd/Kconfig                    |   1 +
-> >  drivers/mfd/lpc_ich.c                  | 136 +++++++++--
-> >  drivers/pinctrl/intel/pinctrl-intel.c  |  14 +-
-> >  drivers/platform/x86/intel/Kconfig     |  12 +
-> >  drivers/platform/x86/intel/Makefile    |   1 +
-> >  drivers/platform/x86/intel/p2sb.c      | 305
-> > +++++++++++++++++++++++++ include/linux/platform_data/x86/p2sb.h |
-> > 27 +++ 11 files changed, 500 insertions(+), 99 deletions(-)
-> >  create mode 100644 drivers/platform/x86/intel/p2sb.c
-> >  create mode 100644 include/linux/platform_data/x86/p2sb.h
-> > 
+> So then it makes sense to me that you're fixing cases where we
+> panicked with the lock held, or hung with the lock held. Given the 1
+> second grace period x86 gives us, I'm on board, as that helps mitigate
+> the risk that we bailed out early with the try and should have spun a
+> bit longer instead. Thanks.
 > 
+> -Evan
 
--- 
-With Best Regards,
-Andy Shevchenko
+Well, in the old path without "crash_kexec_post_notifiers", we indeed
+end-up relying on native_stop_other_cpus() for x86 as you said, and the
+"1s rule" makes sense. But after this series (or even before, if the
+kernel parameter "crash_kexec_post_notifiers" was used) the function
+used to stop CPUs in the panic path is crash_smp_send_stop(), and the
+call chain is like:
+
+Main CPU:
+crash_smp_send_stop()
+--kdump_nmi_shootdown_cpus()
+----nmi_shootdown_cpus()
+
+Then, in each CPU (except the main one, running panic() path),
+we execute kdump_nmi_callback() in NMI context.
+
+So, we seem to indeed interrupt any context (even with IRQs disabled),
+increasing the likelihood of the potential lockups due to stopped CPUs
+holding the locks heheh
+
+Thanks again for the good discussion, let me know if anything I'm saying
+doesn't make sense - this crash path is a bit convoluted, specially in
+x86, I might have understood something wrongly =)
+Cheers,
 
 
+Guilherme
