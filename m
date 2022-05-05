@@ -2,244 +2,304 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E44EE51C69A
-	for <lists+linux-edac@lfdr.de>; Thu,  5 May 2022 19:55:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6666D51C88A
+	for <lists+linux-edac@lfdr.de>; Thu,  5 May 2022 20:57:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382913AbiEER7J (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Thu, 5 May 2022 13:59:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50190 "EHLO
+        id S1381920AbiEETBX (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Thu, 5 May 2022 15:01:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243661AbiEER7I (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Thu, 5 May 2022 13:59:08 -0400
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2828DF99;
-        Thu,  5 May 2022 10:55:26 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id be20so6054651edb.12;
-        Thu, 05 May 2022 10:55:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=DvqKRUHs9g2uMuNp+FYuMLs3aayOXPdFyQG23kdHRqY=;
-        b=DudUevCNc+oLtc3nwxIX8NTRuFKeSX4Skv8zt6HvMxThAXhx1bsTUBXh72T+2VOpxM
-         lHsJO2uJ3Lm93RBRHblNfPFzlPJOHEGmngDm7m8xZhdEmiMaEdOezLzzX1iherq621RY
-         cbPxMkAfqRJi7+WsRpqLjzDQ0lBh7qQRjFh/KYmqeurkb7eEwbF2tSY/IDkHLwJoECIJ
-         UGEkJMaEGOuxnvUsHoCFBcfazJzIK9QxxenBQI5WlR1EGOt7bDXJL+X7+8R3c9lDLXAM
-         077xC/xZ2bO9qNfIW2Y7zOGCVfttl9giSXnJxXUSrKVx7b1TAF2N+ileb8bjFSFOnC3m
-         +P+w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=DvqKRUHs9g2uMuNp+FYuMLs3aayOXPdFyQG23kdHRqY=;
-        b=5EDeiR0CoFDxUjK0N2oNlBN1Wp0GOvxaXAFotnjqpYVa88EoNSyoCzqeKtkqGxsfQf
-         sXO2quytNQV+wQk+pZq/g8QwuUo5NerJlSfgexuZWW/egdwBwWHAbbzCNRVaS/COMVZl
-         UXvO0dXX3IvvovNd+GmiGh9EkWnK73D/a0H1ZNFL8chk4pCWVfzBrPpyOmxWgW2daxKZ
-         6GTlQH4camRfJi6EAXy4ytkeMoOlTC1UJN+ycPt9GPuPwibB3Lg0sqT2UncVhYpSVmGV
-         2bh7Lf0bKuordPfat8J00JaLs29A8v41ICNZuksc/A4VW8EqmyT3Q2DeQUP0NQjkyr2T
-         ttsQ==
-X-Gm-Message-State: AOAM531uZvl9edutvRUa53svb1rysygm1JYECL68YaS4HUaNICteWb3G
-        Y/28F+LtZNGMyljqn4QiShSCo74Qlf9W0eAVUXs=
-X-Google-Smtp-Source: ABdhPJx+PJdrC/QFKjg1stJhB5uHqCtHeuJGq7Swfe7eYlgzS96gSmdkooTZ4WcoP7wYrnuhe8haCnjr6MuewXz/Xrk=
-X-Received: by 2002:a50:e696:0:b0:419:998d:5feb with SMTP id
- z22-20020a50e696000000b00419998d5febmr31971651edm.122.1651773325203; Thu, 05
- May 2022 10:55:25 -0700 (PDT)
+        with ESMTP id S1343580AbiEETBW (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Thu, 5 May 2022 15:01:22 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D7CD3633C;
+        Thu,  5 May 2022 11:57:41 -0700 (PDT)
+Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 245IsCDC021810;
+        Thu, 5 May 2022 18:56:22 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ subject : to : cc : references : from : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=XNUaK5MXNumQ2GC419CM2tT56hGe0D54FACFQZzubag=;
+ b=gSD1byPqJD9U14RM7yqXNGjhCvGv5EceJcS49ikn+rpVMYCw5l/cE2/RfhpfxgDrdFXF
+ bkw+3uP6vU/C7MIPvjf+1/BQcDGTmd58m1jCKBcC75Xc3IwagCsVfPCOPegq8b4MZ3p/
+ mQN9mkPuV1Btua3UKzIpudLBdtJkA5WoYucCFThdzTDSpYwo6Nc6tDpcKD+hvfEHi+OM
+ CWja8vfEeVW5JzydzGv1uvP94K0n/yjRgwV8RQXFJagBheg9E5Imh/dRMjKSs9LZirwJ
+ /CWejco2WiCA9LRB8XRjw7cjAD2OqALQniaNM+6CBO4ZnFoxNe9gtVMrz4B16UghR6hV VA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3fvm92012c-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 05 May 2022 18:56:22 +0000
+Received: from m0098419.ppops.net (m0098419.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 245IuAu6029325;
+        Thu, 5 May 2022 18:56:21 GMT
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3fvm92011f-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 05 May 2022 18:56:21 +0000
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 245IbA58012918;
+        Thu, 5 May 2022 18:55:39 GMT
+Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
+        by ppma03ams.nl.ibm.com with ESMTP id 3ftp7fvexe-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 05 May 2022 18:55:39 +0000
+Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
+        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 245ItaGm14352888
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 5 May 2022 18:55:36 GMT
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 8B81D11C05B;
+        Thu,  5 May 2022 18:55:36 +0000 (GMT)
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 6820611C04C;
+        Thu,  5 May 2022 18:55:10 +0000 (GMT)
+Received: from [9.211.36.212] (unknown [9.211.36.212])
+        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Thu,  5 May 2022 18:55:10 +0000 (GMT)
+Message-ID: <3c34d8e2-6f84-933f-a4ed-338cd300d6b0@linux.ibm.com>
+Date:   Fri, 6 May 2022 00:25:08 +0530
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH 08/30] powerpc/setup: Refactor/untangle panic notifiers
+Content-Language: en-US
+To:     "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
+        akpm@linux-foundation.org, bhe@redhat.com, pmladek@suse.com,
+        kexec@lists.infradead.org
+Cc:     linux-kernel@vger.kernel.org,
+        bcm-kernel-feedback-list@broadcom.com, coresight@lists.linaro.org,
+        linuxppc-dev@lists.ozlabs.org, linux-alpha@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-edac@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, linux-leds@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        linux-s390@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-um@lists.infradead.org, linux-xtensa@linux-xtensa.org,
+        netdev@vger.kernel.org, openipmi-developer@lists.sourceforge.net,
+        rcu@vger.kernel.org, sparclinux@vger.kernel.org,
+        xen-devel@lists.xenproject.org, x86@kernel.org,
+        kernel-dev@igalia.com, kernel@gpiccoli.net, halves@canonical.com,
+        fabiomirmar@gmail.com, alejandro.j.jimenez@oracle.com,
+        andriy.shevchenko@linux.intel.com, arnd@arndb.de, bp@alien8.de,
+        corbet@lwn.net, d.hatayama@jp.fujitsu.com,
+        dave.hansen@linux.intel.com, dyoung@redhat.com,
+        feng.tang@intel.com, gregkh@linuxfoundation.org,
+        mikelley@microsoft.com, hidehiro.kawai.ez@hitachi.com,
+        jgross@suse.com, john.ogness@linutronix.de, keescook@chromium.org,
+        luto@kernel.org, mhiramat@kernel.org, mingo@redhat.com,
+        paulmck@kernel.org, peterz@infradead.org, rostedt@goodmis.org,
+        senozhatsky@chromium.org, stern@rowland.harvard.edu,
+        tglx@linutronix.de, vgoyal@redhat.com, vkuznets@redhat.com,
+        will@kernel.org, Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Paul Mackerras <paulus@samba.org>
+References: <20220427224924.592546-1-gpiccoli@igalia.com>
+ <20220427224924.592546-9-gpiccoli@igalia.com>
+From:   Hari Bathini <hbathini@linux.ibm.com>
+In-Reply-To: <20220427224924.592546-9-gpiccoli@igalia.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: FmL43udCg7zOaYTyNU5fYcYIiC3L3tsY
+X-Proofpoint-ORIG-GUID: op15TFwB187r4kWWn80Xf8P42QMt9UB1
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-References: <20220131151346.45792-1-andriy.shevchenko@linux.intel.com>
- <20220131151346.45792-2-andriy.shevchenko@linux.intel.com> <20220505145503.GA25423@wunner.de>
-In-Reply-To: <20220505145503.GA25423@wunner.de>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Thu, 5 May 2022 19:54:49 +0200
-Message-ID: <CAHp75VdQqQj0fS6t5nYj+7rJ1tuSt7+5GT78eN06PShWnrDZgA@mail.gmail.com>
-Subject: Re: [PATCH v4 1/8] platform/x86/intel: Add Primary to Sideband (P2SB)
- bridge support
-To:     Lukas Wunner <lukas@wunner.de>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Wolfram Sang <wsa@kernel.org>, Jean Delvare <jdelvare@suse.de>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Tan Jui Nee <jui.nee.tan@intel.com>,
-        Kate Hsuan <hpa@redhat.com>,
-        Jonathan Yong <jonathan.yong@intel.com>,
-        linux-kernel@vger.kernel.org, linux-edac@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-gpio@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org,
-        Borislav Petkov <bp@alien8.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Tony Luck <tony.luck@intel.com>,
-        James Morse <james.morse@arm.com>,
-        Robert Richter <rric@kernel.org>,
-        Jean Delvare <jdelvare@suse.com>,
-        Peter Tyser <ptyser@xes-inc.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Andy Shevchenko <andy@kernel.org>,
-        Mark Gross <markgross@kernel.org>,
-        Henning Schild <henning.schild@siemens.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-05-05_08,2022-05-05_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ malwarescore=0 clxscore=1011 lowpriorityscore=0 bulkscore=0 mlxscore=0
+ mlxlogscore=999 spamscore=0 phishscore=0 suspectscore=0 impostorscore=0
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2205050125
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Thu, May 5, 2022 at 4:55 PM Lukas Wunner <lukas@wunner.de> wrote:
-> On Mon, Jan 31, 2022 at 05:13:39PM +0200, Andy Shevchenko wrote:
 
-Thanks for your review, Lukas! My answers below.
 
-...
+On 28/04/22 4:19 am, Guilherme G. Piccoli wrote:
+> The panic notifiers infrastructure is a bit limited in the scope of
+> the callbacks - basically every kind of functionality is dropped
+> in a list that runs in the same point during the kernel panic path.
+> This is not really on par with the complexities and particularities
+> of architecture / hypervisors' needs, and a refactor is ongoing.
+> 
+> As part of this refactor, it was observed that powerpc has 2 notifiers,
+> with mixed goals: one is just a KASLR offset dumper, whereas the other
+> aims to hard-disable IRQs (necessary on panic path), warn firmware of
+> the panic event (fadump) and run low-level platform-specific machinery
+> that might stop kernel execution and never come back.
+> 
+> Clearly, the 2nd notifier has opposed goals: disable IRQs / fadump
+> should run earlier while low-level platform actions should
+> run late since it might not even return. Hence, this patch decouples
+> the notifiers splitting them in three:
+> 
+> - First one is responsible for hard-disable IRQs and fadump,
+> should run early;
+> 
+> - The kernel KASLR offset dumper is really an informative notifier,
+> harmless and may run at any moment in the panic path;
+> 
+> - The last notifier should run last, since it aims to perform
+> low-level actions for specific platforms, and might never return.
+> It is also only registered for 2 platforms, pseries and ps3.
+> 
+> The patch better documents the notifiers and clears the code too,
+> also removing a useless header.
+> 
+> Currently no functionality change should be observed, but after
+> the planned panic refactor we should expect more panic reliability
+> with this patch.
+> 
+> Cc: Benjamin Herrenschmidt <benh@kernel.crashing.org>
+> Cc: Hari Bathini <hbathini@linux.ibm.com>
+> Cc: Michael Ellerman <mpe@ellerman.id.au>
+> Cc: Nicholas Piggin <npiggin@gmail.com>
+> Cc: Paul Mackerras <paulus@samba.org>
+> Signed-off-by: Guilherme G. Piccoli <gpiccoli@igalia.com>
 
-> > Background information
-> > ======================
->
-> The wealth of information in the commit message obscures what the
-> actual problem is, which is actually quite simple:  SoC features
-> such as GPIO are accessed via a reserved MMIO area, we don't know
-> its address but can obtain it from the BAR of the P2SB device,
-> that device is normally hidden so we have to temporarily unhide it.
+The change looks good. I have tested it on an LPAR (ppc64).
 
-Right, but this long commit message was a result of the previous
-discussions with Bjorn. If we're ever going to handle something like
-this in the PCI core, perhaps he won't be happy if I remove it. Maybe
-we can simply state what you wrote as a problem statement and move
-this chapter at the end?
+Reviewed-by: Hari Bathini <hbathini@linux.ibm.com>
 
-> > On top of that in some cases P2SB is represented by function 0 on PCI
-> > slot (in terms of B:D.F) and according to the PCI specification any
-> > other function can't be seen until function 0 is present and visible.
->
-> I find that paragraph confusing:  Do multi-function P2SB devices exist?
-> What are the other functions?  Are they visible but merely not enumerated
-> because function 0 is not visible?
-
-The case I see is when we want to read the BAR from another slot of a
-PCI device, 0 function of which is P2SB. Since P2SB is hidden, the
-other device is hidden as well. Any idea how to reformulate this? And
-yes, we have this in the existing SoCs.
-
-...
-
-> > P2SB unconditional unhiding awareness
-> > =====================================
-> > Technically it's possible to unhide the P2SB device and devices on
-> > the same PCI slot and access them at any time as needed. But there are
-> > several potential issues with that:
-> >
-> >  - the systems were never tested against such configuration and hence
-> >    nobody knows what kind of bugs it may bring, especially when we talk
-> >    about SPI NOR case which contains Intel FirmWare Image (IFWI) code
-> >    (including BIOS) and already known to be problematic in the past for
-> >    end users
-> >
-> >  - the PCI by its nature is a hotpluggable bus and in case somebody
-> >    attaches a driver to the functions of a P2SB slot device(s) the
-> >    end user experience and system behaviour can be unpredictable
-> >
-> >  - the kernel code would need some ugly hacks (or code looking as an
-> >    ugly hack) under arch/x86/pci in order to enable these devices on
-> >    only selected platforms (which may include CPU ID table followed by
-> >    a potentially growing number of DMI strings
->
-> Honestly I would have taken the step to always expose the device,
-> identify breakages and then fix those.
-
-Taking into account the history of the different issues on Intel Atom
-SoCs I would like to be on the safer side, that's why we don't want to
-expose it and keep the status quo for now. IIRC Hans and Mika are on
-the same page with me on this.
-
-> We had a similar issue with HD audio controllers on Nvidia GPUs
-> which were only visible when an HDMI cable was plugged in.
-> We always expose them since b516ea586d71 and I recall we merely
-> had a few cases that an audio device was exposed in cases when
-> the card had no HDMI connectors at all.  So there was a useless
-> HD audio card visible to the user but no real harm.
-
-...
-
-> > +     pci_unlock_rescan_remove();
->
-> Please add a code comment why you're calling pci_lock_rescan_remove(),
-
-Sure!
-
-> such as:
->
->         /*
->          * Prevent concurrent PCI bus scan from seeing the P2SB device
->          * while it is temporarily exposed.
->          */
->
-> Otherwise it looks like you're abusing that lock to prevent multiple
-> simultaneous RMW operations of the P2SBC_HIDE bit.
->
->
-> I think the first if-clause above can be simplified to
->
->         if (value & P2SBC_HIDE)
->
-> I don't understand why one of the two if-clauses adds "== P2SBC_HIDE".
-
-Agree.
-
-...
-
-> Do you really need all the complicated logic in __pci_bus_read_base()?
-> For comparison, simatic_ipc_get_membase0() in simatic-ipc.c merely does:
->
->         pci_bus_read_config_dword(bus, p2sb, PCI_BASE_ADDRESS_0, &bar0);
->
-> If that's sufficient for simatic-ipc.c, why is the more complicated code
-> necessary in p2sb.c?
-
-Since it's a PCI device I want to follow what PCI core does with it.
-As I explained somewhere that the current code (actually it's a
-simplified version of what is done in PCI core) follows what spec
-requires. I would like to be in alignment with the spec, while it
-still may work with less code. Besides that, it's theoretically
-possible that the base address may be 64-bit in new SoCs, I won't
-rewrite code again just because we abused the spec.
-
-> I'm wondering, since you're only retrieving the base address (and thus
-> temporarily expose the P2SB device) when it's actually needed by a driver,
-> would there be any harm in keeping the P2SB device exposed indefinitely
-> from the moment a driver first requests the base address?  I.e., unhide it
-> but don't hide it again.  That would allow you to call pci_scan_slot() and
-> pci_bus_add_devices(), thus instantiating a proper pci_dev which you can
-> access without the __pci_bus_read_base() kludge.
-
-Same as above about permanent unhide awareness.
-Don't forget that on the same SoCs but with different BIOSes the GPIO,
-for example, may or may not be exposed via ACPI, which means that we
-need to take precautions with the possible conflicts in device
-enumeration (we obviously prefer the ACPI enumeration over P2SB). If
-P2SB is always exposed it's theoretically possible and maybe even
-practically that base address is changed (by unbinding/binding cycle),
-while GPIO is enumerated via P2SB and hence we may end up with the
-completely wrong addresses in GPIO.
-
-...
-
-> > +     /*
-> > +      * I don't know how l can have all bits set.  Copied from old code.
-> > +      * Maybe it fixes a bug on some ancient platform.
-> > +      */
-> > +     if (PCI_POSSIBLE_ERROR(l))
-> > +             l = 0;
->
-> l can have all bits set if the device was hot-removed.  That can't happen
-> with a built-in device such as P2SB.
-
-Can be dropped, indeed. But that chicken bit emulates that :-) Anyway,
-we unhide the device before looking into it, so we shouldn't have the
-surprise "removals".
-
--- 
-With Best Regards,
-Andy Shevchenko
+> ---
+> 
+> We'd like to thanks specially the MiniCloud infrastructure [0] maintainers,
+> that allow us to test PowerPC code in a very complete, functional and FREE
+> environment (there's no need even for adding a credit card, like many "free"
+> clouds require ¬¬ ).
+> 
+> [0] https://openpower.ic.unicamp.br/minicloud
+> 
+>   arch/powerpc/kernel/setup-common.c | 74 ++++++++++++++++++++++--------
+>   1 file changed, 54 insertions(+), 20 deletions(-)
+> 
+> diff --git a/arch/powerpc/kernel/setup-common.c b/arch/powerpc/kernel/setup-common.c
+> index 518ae5aa9410..52f96b209a96 100644
+> --- a/arch/powerpc/kernel/setup-common.c
+> +++ b/arch/powerpc/kernel/setup-common.c
+> @@ -23,7 +23,6 @@
+>   #include <linux/console.h>
+>   #include <linux/screen_info.h>
+>   #include <linux/root_dev.h>
+> -#include <linux/notifier.h>
+>   #include <linux/cpu.h>
+>   #include <linux/unistd.h>
+>   #include <linux/serial.h>
+> @@ -680,8 +679,25 @@ int check_legacy_ioport(unsigned long base_port)
+>   }
+>   EXPORT_SYMBOL(check_legacy_ioport);
+>   
+> -static int ppc_panic_event(struct notifier_block *this,
+> -                             unsigned long event, void *ptr)
+> +/*
+> + * Panic notifiers setup
+> + *
+> + * We have 3 notifiers for powerpc, each one from a different "nature":
+> + *
+> + * - ppc_panic_fadump_handler() is a hypervisor notifier, which hard-disables
+> + *   IRQs and deal with the Firmware-Assisted dump, when it is configured;
+> + *   should run early in the panic path.
+> + *
+> + * - dump_kernel_offset() is an informative notifier, just showing the KASLR
+> + *   offset if we have RANDOMIZE_BASE set.
+> + *
+> + * - ppc_panic_platform_handler() is a low-level handler that's registered
+> + *   only if the platform wishes to perform final actions in the panic path,
+> + *   hence it should run late and might not even return. Currently, only
+> + *   pseries and ps3 platforms register callbacks.
+> + */
+> +static int ppc_panic_fadump_handler(struct notifier_block *this,
+> +				    unsigned long event, void *ptr)
+>   {
+>   	/*
+>   	 * panic does a local_irq_disable, but we really
+> @@ -691,45 +707,63 @@ static int ppc_panic_event(struct notifier_block *this,
+>   
+>   	/*
+>   	 * If firmware-assisted dump has been registered then trigger
+> -	 * firmware-assisted dump and let firmware handle everything else.
+> +	 * its callback and let the firmware handles everything else.
+>   	 */
+>   	crash_fadump(NULL, ptr);
+> -	if (ppc_md.panic)
+> -		ppc_md.panic(ptr);  /* May not return */
+> +
+>   	return NOTIFY_DONE;
+>   }
+>   
+> -static struct notifier_block ppc_panic_block = {
+> -	.notifier_call = ppc_panic_event,
+> -	.priority = INT_MIN /* may not return; must be done last */
+> -};
+> -
+> -/*
+> - * Dump out kernel offset information on panic.
+> - */
+>   static int dump_kernel_offset(struct notifier_block *self, unsigned long v,
+>   			      void *p)
+>   {
+>   	pr_emerg("Kernel Offset: 0x%lx from 0x%lx\n",
+>   		 kaslr_offset(), KERNELBASE);
+>   
+> -	return 0;
+> +	return NOTIFY_DONE;
+>   }
+>   
+> +static int ppc_panic_platform_handler(struct notifier_block *this,
+> +				      unsigned long event, void *ptr)
+> +{
+> +	/*
+> +	 * This handler is only registered if we have a panic callback
+> +	 * on ppc_md, hence NULL check is not needed.
+> +	 * Also, it may not return, so it runs really late on panic path.
+> +	 */
+> +	ppc_md.panic(ptr);
+> +
+> +	return NOTIFY_DONE;
+> +}
+> +
+> +static struct notifier_block ppc_fadump_block = {
+> +	.notifier_call = ppc_panic_fadump_handler,
+> +	.priority = INT_MAX, /* run early, to notify the firmware ASAP */
+> +};
+> +
+>   static struct notifier_block kernel_offset_notifier = {
+> -	.notifier_call = dump_kernel_offset
+> +	.notifier_call = dump_kernel_offset,
+> +};
+> +
+> +static struct notifier_block ppc_panic_block = {
+> +	.notifier_call = ppc_panic_platform_handler,
+> +	.priority = INT_MIN, /* may not return; must be done last */
+>   };
+>   
+>   void __init setup_panic(void)
+>   {
+> +	/* Hard-disables IRQs + deal with FW-assisted dump (fadump) */
+> +	atomic_notifier_chain_register(&panic_notifier_list,
+> +				       &ppc_fadump_block);
+> +
+>   	if (IS_ENABLED(CONFIG_RANDOMIZE_BASE) && kaslr_offset() > 0)
+>   		atomic_notifier_chain_register(&panic_notifier_list,
+>   					       &kernel_offset_notifier);
+>   
+> -	/* PPC64 always does a hard irq disable in its panic handler */
+> -	if (!IS_ENABLED(CONFIG_PPC64) && !ppc_md.panic)
+> -		return;
+> -	atomic_notifier_chain_register(&panic_notifier_list, &ppc_panic_block);
+> +	/* Low-level platform-specific routines that should run on panic */
+> +	if (ppc_md.panic)
+> +		atomic_notifier_chain_register(&panic_notifier_list,
+> +					       &ppc_panic_block);
+>   }
+>   
+>   #ifdef CONFIG_CHECK_CACHE_COHERENCY
