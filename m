@@ -2,179 +2,186 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AE0451B93E
-	for <lists+linux-edac@lfdr.de>; Thu,  5 May 2022 09:36:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EEE651C30C
+	for <lists+linux-edac@lfdr.de>; Thu,  5 May 2022 16:55:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242326AbiEEHkP (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Thu, 5 May 2022 03:40:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47696 "EHLO
+        id S233983AbiEEO6r (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Thu, 5 May 2022 10:58:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235142AbiEEHkO (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Thu, 5 May 2022 03:40:14 -0400
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2DD54838B;
-        Thu,  5 May 2022 00:36:35 -0700 (PDT)
-Received: by mail-lf1-x12f.google.com with SMTP id p10so6055080lfa.12;
-        Thu, 05 May 2022 00:36:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=EvNPzmObJdLQoZe7mkFbV9lZXE5XGs6QumW7oyIXLLg=;
-        b=HjL+/0qWmEWMgyiEe4e0unetPVu7pERTINMfTVtGtp3kO1zXtYJRAuyHyPv64jg1bh
-         YhLUSfmqysBZuPqmB6XCgmDb2SEY5ocC4kCAPKnGm51CwF0BiD38pNcOyF4A1UoZBD7m
-         amtR0IXtpKofD2GGI6cIygG6YvWki3kN90f+MFz/AkjrhMcFhggWvs700Lr13W33NalE
-         et2ptnCYotWOX5aLb2Chy4K6L3v76wD2TihnEObTIIsQtnO4rCv/q9TI21gHBTNUmlHI
-         7vgqOmq+Yl4hW020s6SrGYQZ+Az/+DposHcglABsHqAVxtMy21eDhHFXokAo/W2FLMUU
-         BCUA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=EvNPzmObJdLQoZe7mkFbV9lZXE5XGs6QumW7oyIXLLg=;
-        b=glmVIxJ1aPeGIErmNqCLZHIL4jD8CzyVyL7uoNO2wSgap4xs+KFWPGDvrcZ2XQ86oz
-         udKcqyIAsEmABMoy2Fft306t1mK9rt4KYu9wabvkVxmJJR/MgPRQ+1BuozF14AI9IW7P
-         s+yLV4jc8KRM1xt8Jsa/eISYqWdcx1DPDwOthfUOeRmYjYqTsw4QnslpunAcmv+GAyqG
-         c4jPjrkGV6ACYr1fkl5P+HePOy/NEIWjDybKCZt6nK6l4FaR6D5ieWWu3fTCzIfVU9vN
-         0cAQarF5i3mKVKiXoLc/fMpHU0gVknwLyfD93b5OKpcCeBelwHKqvuJDj3wgbwjeM/08
-         /62g==
-X-Gm-Message-State: AOAM530pogvbhQHz5AGtY/+Kb+MdH7KI8skTpER+N2V1ROFv3xEIikIz
-        eaTm0kK9Bd103fiJ6svzgJ16ZzVdYfw9hVKaBY0=
-X-Google-Smtp-Source: ABdhPJzlCwN+zu+ztaxXdspnktpkbaSmCvx647Fl1CfKZFFvfCQpdiXXJZmh6tGGVGJJg0JoGRfpxnCdKl/iqzeKPdA=
-X-Received: by 2002:ac2:42d0:0:b0:471:fc7b:e53a with SMTP id
- n16-20020ac242d0000000b00471fc7be53amr16112040lfl.185.1651736194069; Thu, 05
- May 2022 00:36:34 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220503094728.926-1-ctcchien@nuvoton.com> <20220503094728.926-4-ctcchien@nuvoton.com>
- <d09f0131-65e2-d382-27b9-29ded4f47d84@molgen.mpg.de>
-In-Reply-To: <d09f0131-65e2-d382-27b9-29ded4f47d84@molgen.mpg.de>
-From:   Medad Young <medadyoung@gmail.com>
-Date:   Thu, 5 May 2022 15:36:22 +0800
-Message-ID: <CAHpyw9e+d20dVM3PO0UfqvxpTnkvU541ccEa0CGLCZFgjTr8vw@mail.gmail.com>
-Subject: Re: [PATCH v8 3/3] EDAC: nuvoton: Add NPCM memory controller driver
-To:     Paul Menzel <pmenzel@molgen.mpg.de>
-Cc:     rric@kernel.org, James Morse <james.morse@arm.com>,
-        tony.luck@intel.com, Mauro Carvalho Chehab <mchehab@kernel.org>,
+        with ESMTP id S233840AbiEEO6q (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Thu, 5 May 2022 10:58:46 -0400
+Received: from bmailout1.hostsharing.net (bmailout1.hostsharing.net [IPv6:2a01:37:1000::53df:5f64:0])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02CF25A5B5;
+        Thu,  5 May 2022 07:55:05 -0700 (PDT)
+Received: from h08.hostsharing.net (h08.hostsharing.net [83.223.95.28])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256
+         client-signature RSA-PSS (4096 bits) client-digest SHA256)
+        (Client CN "*.hostsharing.net", Issuer "RapidSSL TLS DV RSA Mixed SHA256 2020 CA-1" (verified OK))
+        by bmailout1.hostsharing.net (Postfix) with ESMTPS id D70CF3000A3AD;
+        Thu,  5 May 2022 16:55:03 +0200 (CEST)
+Received: by h08.hostsharing.net (Postfix, from userid 100393)
+        id CB4F01D8B44; Thu,  5 May 2022 16:55:03 +0200 (CEST)
+Date:   Thu, 5 May 2022 16:55:03 +0200
+From:   Lukas Wunner <lukas@wunner.de>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Wolfram Sang <wsa@kernel.org>, Jean Delvare <jdelvare@suse.de>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Tan Jui Nee <jui.nee.tan@intel.com>,
+        Kate Hsuan <hpa@redhat.com>,
+        Jonathan Yong <jonathan.yong@intel.com>,
+        linux-kernel@vger.kernel.org, linux-edac@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-gpio@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org,
         Borislav Petkov <bp@alien8.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Benjamin Fair <benjaminfair@google.com>,
-        Nancy Yuen <yuenn@google.com>,
-        Patrick Venture <venture@google.com>, KWLIU@nuvoton.com,
-        YSCHU@nuvoton.com, JJLIU0@nuvoton.com, KFTING <KFTING@nuvoton.com>,
-        Avi Fishman <avifishman70@gmail.com>,
-        Tomer Maimon <tmaimon77@gmail.com>,
-        Tali Perry <tali.perry1@gmail.com>, ctcchien@nuvoton.com,
-        devicetree <devicetree@vger.kernel.org>,
-        OpenBMC Maillist <openbmc@lists.ozlabs.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-edac <linux-edac@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Tony Luck <tony.luck@intel.com>,
+        James Morse <james.morse@arm.com>,
+        Robert Richter <rric@kernel.org>,
+        Jean Delvare <jdelvare@suse.com>,
+        Peter Tyser <ptyser@xes-inc.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Andy Shevchenko <andy@kernel.org>,
+        Mark Gross <markgross@kernel.org>,
+        Henning Schild <henning.schild@siemens.com>
+Subject: Re: [PATCH v4 1/8] platform/x86/intel: Add Primary to Sideband
+ (P2SB) bridge support
+Message-ID: <20220505145503.GA25423@wunner.de>
+References: <20220131151346.45792-1-andriy.shevchenko@linux.intel.com>
+ <20220131151346.45792-2-andriy.shevchenko@linux.intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220131151346.45792-2-andriy.shevchenko@linux.intel.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-Dear Paul,
+On Mon, Jan 31, 2022 at 05:13:39PM +0200, Andy Shevchenko wrote:
+> Background information
+> ======================
 
-Paul Menzel <pmenzel@molgen.mpg.de> =E6=96=BC 2022=E5=B9=B45=E6=9C=883=E6=
-=97=A5 =E9=80=B1=E4=BA=8C =E4=B8=8B=E5=8D=885:58=E5=AF=AB=E9=81=93=EF=BC=9A
->
-> Dear Medad,
->
->
-> Thank you for v8.
->
-> Am 03.05.22 um 11:47 schrieb Medad CChien:
-> > Add memory controller support for Nuvoton NPCM SoC.
-> >
-> > Signed-off-by: Medad CChien <ctcchien@nuvoton.com>
-> > Reviewed-by: Borislav Petkov <bp@alien8.de>
-> > Reviewed-by: Paul Menzel <pmenzel@molgen.mpg.de>
-> > Reported-by: kernel test robot <lkp@intel.com>
->
-> This line is confusing.
+The wealth of information in the commit message obscures what the
+actual problem is, which is actually quite simple:  SoC features
+such as GPIO are accessed via a reserved MMIO area, we don't know
+its address but can obtain it from the BAR of the P2SB device,
+that device is normally hidden so we have to temporarily unhide it.
 
-OK, I will add more description.
 
->
-> > error:
-> >     macro "edac_printk" requires 4 arguments, but only 2 given
-> >
-> > warnings:
-> >     performing pointer arithmetic on a null pointer has undefined behav=
-ior [-Wnull-pointer-arithmetic]
-> >     logical not is only applied to the left hand side of this bitwise o=
-perator [-Wlogical-not-parentheses]
-> >     mixing declarations and code is a C99 extension [-Wdeclaration-afte=
-r-statement]
-> >
-> > Note:
-> >     you can force an ecc event by writing a string to edac sysfs node
-> >     and remember to define CONFIG_EDAC_DEBUG to enable this feature
-> >     example: force a correctable event on checkcode bit 0
-> >     echo "CE checkcode 0" > /sys/devices/system/edac/mc/mc0/forced_ecc_=
-error
->
-> Shouldn=E2=80=99t this go above all the tags?
+> On top of that in some cases P2SB is represented by function 0 on PCI
+> slot (in terms of B:D.F) and according to the PCI specification any
+> other function can't be seen until function 0 is present and visible.
 
-Yes, I should move this note above all the tags
+I find that paragraph confusing:  Do multi-function P2SB devices exist?
+What are the other functions?  Are they visible but merely not enumerated
+because function 0 is not visible?
 
->
-> > ---
-> >   drivers/edac/Kconfig     |   9 +
-> >   drivers/edac/Makefile    |   1 +
-> >   drivers/edac/npcm_edac.c | 680 ++++++++++++++++++++++++++++++++++++++=
-+
-> >   3 files changed, 690 insertions(+)
-> >   create mode 100644 drivers/edac/npcm_edac.c
-> >
-> > diff --git a/drivers/edac/Kconfig b/drivers/edac/Kconfig
-> > index 58ab63642e72..64149b524f98 100644
-> > --- a/drivers/edac/Kconfig
-> > +++ b/drivers/edac/Kconfig
-> > @@ -539,4 +539,13 @@ config EDAC_DMC520
-> >         Support for error detection and correction on the
-> >         SoCs with ARM DMC-520 DRAM controller.
-> >
-> > +config EDAC_NPCM
-> > +     tristate "Nuvoton NPCM DDR Memory Controller"
-> > +     depends on (ARCH_NPCM || COMPILE_TEST)
-> > +     help
-> > +       Support for error detection and correction on the Nuvoton NPCM =
-DDR
-> > +       memory controller.
->
-> Please add a blank line below.
->
-> > +       First, ECC must be configured in the BootBlock header. Then, th=
-is driver
-> > +       will expose error counters via the EDAC kernel framework.
-> > +
-> >   endif # EDAC
->
-> [=E2=80=A6]
-> > +module_platform_driver(npcm_edac_mc_driver);
-> > +
-> > +MODULE_AUTHOR("Medad CChien<ctcchien@nuvoton.com>");
->
-> Please add a space before the <.
 
-OK
+> P2SB unconditional unhiding awareness
+> =====================================
+> Technically it's possible to unhide the P2SB device and devices on
+> the same PCI slot and access them at any time as needed. But there are
+> several potential issues with that:
+> 
+>  - the systems were never tested against such configuration and hence
+>    nobody knows what kind of bugs it may bring, especially when we talk
+>    about SPI NOR case which contains Intel FirmWare Image (IFWI) code
+>    (including BIOS) and already known to be problematic in the past for
+>    end users
+> 
+>  - the PCI by its nature is a hotpluggable bus and in case somebody
+>    attaches a driver to the functions of a P2SB slot device(s) the
+>    end user experience and system behaviour can be unpredictable
+> 
+>  - the kernel code would need some ugly hacks (or code looking as an
+>    ugly hack) under arch/x86/pci in order to enable these devices on
+>    only selected platforms (which may include CPU ID table followed by
+>    a potentially growing number of DMI strings
 
->
-> > +MODULE_DESCRIPTION("Nuvoton NPCM EDAC Driver");
-> > +MODULE_LICENSE("GPL v2");
->
->
-> Kind regards,
->
-> Paul
+Honestly I would have taken the step to always expose the device,
+identify breakages and then fix those.
 
-B.R.
-Medad
+We had a similar issue with HD audio controllers on Nvidia GPUs
+which were only visible when an HDMI cable was plugged in.
+We always expose them since b516ea586d71 and I recall we merely
+had a few cases that an audio device was exposed in cases when
+the card had no HDMI connectors at all.  So there was a useless
+HD audio card visible to the user but no real harm.
+
+
+> +	pci_lock_rescan_remove();
+> +
+> +	/* Unhide the P2SB device, if needed */
+> +	pci_bus_read_config_dword(bus, devfn_p2sb, P2SBC, &value);
+> +	if ((value & P2SBC_HIDE) == P2SBC_HIDE)
+> +		pci_bus_write_config_dword(bus, devfn_p2sb, P2SBC, 0);
+> +
+> +	/* Read the first BAR of the device in question */
+> +	__pci_bus_read_base(bus, devfn, mem, PCI_BASE_ADDRESS_0);
+> +
+> +	/* Hide the P2SB device, if it was hidden */
+> +	if (value & P2SBC_HIDE)
+> +		pci_bus_write_config_dword(bus, devfn_p2sb, P2SBC, P2SBC_HIDE);
+> +
+> +	pci_unlock_rescan_remove();
+
+Please add a code comment why you're calling pci_lock_rescan_remove(),
+such as:
+
+	/*
+	 * Prevent concurrent PCI bus scan from seeing the P2SB device
+	 * while it is temporarily exposed.
+	 */
+
+Otherwise it looks like you're abusing that lock to prevent multiple
+simultaneous RMW operations of the P2SBC_HIDE bit.
+
+
+I think the first if-clause above can be simplified to
+
+	if (value & P2SBC_HIDE)
+
+I don't understand why one of the two if-clauses adds "== P2SBC_HIDE".
+
+
+Do you really need all the complicated logic in __pci_bus_read_base()?
+For comparison, simatic_ipc_get_membase0() in simatic-ipc.c merely does:
+
+	pci_bus_read_config_dword(bus, p2sb, PCI_BASE_ADDRESS_0, &bar0);
+
+If that's sufficient for simatic-ipc.c, why is the more complicated code
+necessary in p2sb.c?
+
+
+I'm wondering, since you're only retrieving the base address (and thus
+temporarily expose the P2SB device) when it's actually needed by a driver,
+would there be any harm in keeping the P2SB device exposed indefinitely
+from the moment a driver first requests the base address?  I.e., unhide it
+but don't hide it again.  That would allow you to call pci_scan_slot() and
+pci_bus_add_devices(), thus instantiating a proper pci_dev which you can
+access without the __pci_bus_read_base() kludge.
+
+
+> +	/*
+> +	 * I don't know how l can have all bits set.  Copied from old code.
+> +	 * Maybe it fixes a bug on some ancient platform.
+> +	 */
+> +	if (PCI_POSSIBLE_ERROR(l))
+> +		l = 0;
+
+l can have all bits set if the device was hot-removed.  That can't happen
+with a built-in device such as P2SB.
+
+Thanks,
+
+Lukas
