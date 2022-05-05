@@ -2,100 +2,110 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 726DF51B3EF
-	for <lists+linux-edac@lfdr.de>; Thu,  5 May 2022 02:08:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D77351B904
+	for <lists+linux-edac@lfdr.de>; Thu,  5 May 2022 09:30:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237104AbiEEAFu (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Wed, 4 May 2022 20:05:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41526 "EHLO
+        id S1344449AbiEEHdS (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Thu, 5 May 2022 03:33:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235709AbiEDX5i (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Wed, 4 May 2022 19:57:38 -0400
-Received: from mail-ot1-x343.google.com (mail-ot1-x343.google.com [IPv6:2607:f8b0:4864:20::343])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F4334EA36
-        for <linux-edac@vger.kernel.org>; Wed,  4 May 2022 16:54:00 -0700 (PDT)
-Received: by mail-ot1-x343.google.com with SMTP id c5-20020a9d75c5000000b00605ff3b9997so1966263otl.0
-        for <linux-edac@vger.kernel.org>; Wed, 04 May 2022 16:54:00 -0700 (PDT)
+        with ESMTP id S1344142AbiEEHdR (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Thu, 5 May 2022 03:33:17 -0400
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67A5D29801;
+        Thu,  5 May 2022 00:29:38 -0700 (PDT)
+Received: by mail-lf1-x12c.google.com with SMTP id j4so6046488lfh.8;
+        Thu, 05 May 2022 00:29:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=ampHH5WJLIBWSsxWwzVjbk5pO9UBFxn81pZ6QIDzZtY=;
-        b=Dn1MT8x7p4Rbn+pctwVkt7IgIdUxT0LRLjox/JaF9ttsZ2N8sUUglHFRxQa3sl75aK
-         h1U1JpCoOjPff8rV+LL0edQuBh+YvYlTbZ4zx127Qa80qMcS49J0d2nS2s7mVVadwp/M
-         vGp6wV8qQhR9tMRiQjyWHIJslgvG4HigF7p24aLxixJ1l99K68kLikab9Y0HgtSpkDYW
-         0+riuhXlj9dAnGs04evyYz4sFXKtm0FlJKiBI2Dtbo7ebvKr6E7XJkxgxzCXhReMwL1D
-         yv9OUeo9KjH+/RIlVXefhsYivAQRdlwo604eWoXrrvRFVxcSgXwgPis+UtVhyLpBWx3z
-         WyWg==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=6Z3ugqzs69IZl2+sRBwHWpG9kKlwl5WbPNjhplCiidk=;
+        b=NLnXMShaRN7PFstFtp8tEoVSOhftf8xxi0e83XfbK5BkN2iQ8x6cZgI8cOHrXkau6N
+         QCfJH+/eiJeveTWsc/Wy4YmWIIDlcr3IDSOQXHB8LXW1qOgYWCq52+SmQQ4VQQdBNrj4
+         6LwIQKCd6kqAdMSC4cHBaKQJIGP1MFrnrjRU0Pn5klIABxim8rvlc8nZbdFO9B67MrC8
+         iSchmvzpQDBS7k2oRxryDg7m/Tjm5LT5A3Xo6lWFQOYPZpNX1ieE9oZsgiXaKgWOuiS/
+         JE1SzzPfpZ7KWUpWof7vsPq0O/xAq3viH5rHjblyvfnM2t0IkX/k4du+kMlbaGzXxPEA
+         TMaQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=ampHH5WJLIBWSsxWwzVjbk5pO9UBFxn81pZ6QIDzZtY=;
-        b=PbAAhALr43bdN22IpDX4JUPBxAm8kFQUw8s8Jz11jvt581Qxn1Kjz8DadklmtdsWcH
-         /K/+Sz0/Qyiu5F/wYOujbw1lPhP1+++KvUeXYDvEAginpbV2jMKlb3cqBriFrctGpLG9
-         7FTGJJo/0XsfhGYYCD1om1ZpfLjUNrvV+l/0iz+L0ywaz87CoXzTLn3LqIW0I9tIOMj0
-         ykHHC89TpNq8XSB+lWeJIeUmZt/RrvefpXu2zkzIAsNrizDE07zfWEBvRQ8lKk5m5Wnu
-         D47mGLQMgMEqOZYiqTR0q9YDW3I4X7V3xHLUaklyFGtp9YgbGkxxLmU3IbtN8nd+YQFx
-         2bLw==
-X-Gm-Message-State: AOAM532pZ2wZqx17bHfbblo7BuYCH3fCeqJRq52yMCwF5NBWCCDfhB/p
-        leu1wq7dp+N0ZTWl09dc+qCCplGyyewdB85NKwk=
-X-Google-Smtp-Source: ABdhPJyXbFHNtxfp8+qt+M9kuv/iG7XfFeFFPd7I4/fmpdxuycMtmf6dIJw5ghtZAT2CwgvAVE/kUl0HxsirxLIU8v0=
-X-Received: by 2002:a9d:6b16:0:b0:605:e0eb:d3d6 with SMTP id
- g22-20020a9d6b16000000b00605e0ebd3d6mr8263208otp.213.1651708440302; Wed, 04
- May 2022 16:54:00 -0700 (PDT)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=6Z3ugqzs69IZl2+sRBwHWpG9kKlwl5WbPNjhplCiidk=;
+        b=mLv2mSDEcbj+eIIdShIqJ8hb+/B07epIfZdVvDouSyQraHm8wMVKf1hx6GFYKCRxzK
+         Z4JcVUTYtaHslIKOrkDvyDjTH80bDp+mRTAyhTB+Kw6Xz8XMt8Cdp3+xcX+Y7yCXGDmk
+         X5uOMXM+2VhfcpxCWgyIdB5LaudTaNvRrwrrK84z2w+NqeW6oODq97/cmGIBu0Y2EvPC
+         wqxedVO0tr7xZu+yEq2C8JatRxiZBkkxljib4OxlqJIPhmWZz5+U/ZcoNdz0Oe3pS/as
+         nk8Rc8URObEm8vACmVM6VuIR66yex/xNAEjPLqI9xjK6hcfFtvpEk0f7ASIpEWPdTn89
+         cFDA==
+X-Gm-Message-State: AOAM531Rxp/0gsqvKjq5pOWnYkn4RpUHLKVciodlBks4AC4H2rwaPXEk
+        PO6FbhfIum+Ll7h+8sO4QTjWwhKfrhm7r5pFl/w=
+X-Google-Smtp-Source: ABdhPJwWrkWiEJE8wFxjLWt23K89Z5Y+pMlvG1QF6O0ewp61J8ENn3UK3Mk3CGRcyf6V/ntmhPUqWSTVxcUQ2sMYgFo=
+X-Received: by 2002:a05:6512:c03:b0:447:7912:7e6b with SMTP id
+ z3-20020a0565120c0300b0044779127e6bmr17101977lfu.508.1651735776564; Thu, 05
+ May 2022 00:29:36 -0700 (PDT)
 MIME-Version: 1.0
-Received: by 2002:a05:6802:1a9:0:0:0:0 with HTTP; Wed, 4 May 2022 16:53:59
- -0700 (PDT)
-Reply-To: ortegainvestmmentforrealinvest@gmail.com
-From:   Info <joybhector64@gmail.com>
-Date:   Thu, 5 May 2022 05:23:59 +0530
-Message-ID: <CAP7KLYgH9LcKHS-KgR0zObHAgC6Fr3D+dOJSbDKurTc_12+iFw@mail.gmail.com>
-Subject: 
-To:     undisclosed-recipients:;
+References: <20220503094728.926-1-ctcchien@nuvoton.com> <20220503094728.926-2-ctcchien@nuvoton.com>
+ <776bb807-feba-7c75-d280-11c33e33f71d@molgen.mpg.de>
+In-Reply-To: <776bb807-feba-7c75-d280-11c33e33f71d@molgen.mpg.de>
+From:   Medad Young <medadyoung@gmail.com>
+Date:   Thu, 5 May 2022 15:29:25 +0800
+Message-ID: <CAHpyw9dJqzgf_LKD9cmumoPMCNX92Pd9+m5xxDwxoLsEyVX1gg@mail.gmail.com>
+Subject: Re: [PATCH v8 1/3] ARM: dts: nuvoton: Add memory controller node
+To:     Paul Menzel <pmenzel@molgen.mpg.de>
+Cc:     rric@kernel.org, James Morse <james.morse@arm.com>,
+        tony.luck@intel.com, Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Borislav Petkov <bp@alien8.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Benjamin Fair <benjaminfair@google.com>,
+        Nancy Yuen <yuenn@google.com>,
+        Patrick Venture <venture@google.com>, KWLIU@nuvoton.com,
+        YSCHU@nuvoton.com, JJLIU0@nuvoton.com, KFTING <KFTING@nuvoton.com>,
+        Avi Fishman <avifishman70@gmail.com>,
+        Tomer Maimon <tmaimon77@gmail.com>,
+        Tali Perry <tali.perry1@gmail.com>, ctcchien@nuvoton.com,
+        devicetree <devicetree@vger.kernel.org>,
+        OpenBMC Maillist <openbmc@lists.ozlabs.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-edac <linux-edac@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=5.3 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:343 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5000]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [joybhector64[at]gmail.com]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [joybhector64[at]gmail.com]
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  3.5 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
--- 
-I am an investor. I came from the USA and I have many investments all
-over the world.
+Dear Paul,
 
-I want you to partner with me to invest in your country I am into many
-investment such as real Estate or buying of properties i can also
-invest money in any of existing business with equity royalty or by %
-percentage so on,
-Warm regards
+Paul Menzel <pmenzel@molgen.mpg.de> =E6=96=BC 2022=E5=B9=B45=E6=9C=883=E6=
+=97=A5 =E9=80=B1=E4=BA=8C =E4=B8=8B=E5=8D=885:56=E5=AF=AB=E9=81=93=EF=BC=9A
+>
+> Dear Medad,
+>
+>
+> Thank you for v8.
+>
+> Am 03.05.22 um 11:47 schrieb Medad CChien:
+> > ECC must be configured in the BootBlock header.
+> > Then, you can read error counts via
+> > the EDAC kernel framework.
+>
+> Please reflow for 75 characters per line.
+
+OK, I will reflow for 75 characters per line.
+
+>
+> [=E2=80=A6]
+>
+>
+> Kind regards,
+>
+> Paul
+
+B.R.
+Medad
