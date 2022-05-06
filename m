@@ -2,63 +2,100 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89B0E51D2A5
-	for <lists+linux-edac@lfdr.de>; Fri,  6 May 2022 09:55:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E6D351D983
+	for <lists+linux-edac@lfdr.de>; Fri,  6 May 2022 15:42:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381824AbiEFH6k (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Fri, 6 May 2022 03:58:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47478 "EHLO
+        id S230141AbiEFNpl (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Fri, 6 May 2022 09:45:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353947AbiEFH6i (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Fri, 6 May 2022 03:58:38 -0400
-X-Greylist: delayed 526 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 06 May 2022 00:54:56 PDT
-Received: from mail.greatagencyonline.pl (mail.greatagencyonline.pl [89.40.125.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFFEA67D09
-        for <linux-edac@vger.kernel.org>; Fri,  6 May 2022 00:54:56 -0700 (PDT)
-Received: by mail.greatagencyonline.pl (Postfix, from userid 1001)
-        id 24990AA656; Fri,  6 May 2022 08:43:41 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=greatagencyonline.pl;
-        s=mail; t=1651823022;
-        bh=ksvwLPFdjL017OLwir5xHXy3Vmrj/5fhZ5DwBI62qzc=;
-        h=Date:From:To:Subject:From;
-        b=gEi7jR+A1t7RYS1bBq8J8ZC/oXDjmGtNa0pzzNePs4Fgt0D9JWJOJClcFdIO+oJ+C
-         1q6hxN8gNE/SGjfM9uLml7V9foaj7lj6uui1ojOlRYWPGMiTNxNHef8rdA8vRR+3kJ
-         wcC2r8+3IsGCTqdl+EVKuoObz4JNH+D4r1U+Br6d1hxtCwUCYk2yavQaBPAh7fTau5
-         /P36yuQqnwgHUGvKjt3RdeT/8qgw11bgoOnlIUlWmPQPB+60tb2JGmaNfzE86yQqym
-         sMcmppK78mb4gXUZq4L/v9X6ObRkDjM4SCcm0Sa3JBVzduGdglsCkoFVlxBBy883/7
-         wpHaycCkq4V2Q==
-Received: by mail.greatagencyonline.pl for <linux-edac@vger.kernel.org>; Fri,  6 May 2022 07:43:41 GMT
-Message-ID: <20220506073002-0.1.3r.k1fh.0.cf3qry1cip@greatagencyonline.pl>
-Date:   Fri,  6 May 2022 07:43:41 GMT
-From:   =?UTF-8?Q? "Miko=C5=82aj_Rudzik" ?= 
-        <mikolaj.rudzik@greatagencyonline.pl>
-To:     <linux-edac@vger.kernel.org>
-Subject: =?UTF-8?Q?Nap=C5=82yw_Klient=C3=B3w_ze_strony?=
-X-Mailer: mail.greatagencyonline.pl
+        with ESMTP id S1391462AbiEFNpd (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Fri, 6 May 2022 09:45:33 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC66348317
+        for <linux-edac@vger.kernel.org>; Fri,  6 May 2022 06:41:43 -0700 (PDT)
+Received: from fraeml735-chm.china.huawei.com (unknown [172.18.147.207])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4Kvs8j2zPdz67KsQ;
+        Fri,  6 May 2022 21:38:29 +0800 (CST)
+Received: from lhreml715-chm.china.huawei.com (10.201.108.66) by
+ fraeml735-chm.china.huawei.com (10.206.15.216) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Fri, 6 May 2022 15:41:41 +0200
+Received: from P_UKIT01-A7bmah.china.huawei.com (10.47.73.106) by
+ lhreml715-chm.china.huawei.com (10.201.108.66) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Fri, 6 May 2022 14:41:40 +0100
+From:   <shiju.jose@huawei.com>
+To:     <linux-edac@vger.kernel.org>, <mchehab@kernel.org>
+CC:     <linuxarm@huawei.com>, <tanxiaofei@huawei.com>,
+        <jonathan.cameron@huawei.com>, <prime.zeng@hisilicon.com>,
+        <luoshengwei@huawei.com>, <panjunchong@hisilicon.com>,
+        <fenglei47@h-partners.com>, <shiju.jose@huawei.com>
+Subject: [PATCH 00/10] rasdaemon: Add cpu fault isolation support and improvements to the HiSilicon vendor specific code
+Date:   Fri, 6 May 2022 14:32:57 +0100
+Message-ID: <20220506133307.1799-1-shiju.jose@huawei.com>
+X-Mailer: git-send-email 2.26.0.windows.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.47.73.106]
+X-ClientProxiedBy: lhreml744-chm.china.huawei.com (10.201.108.194) To
+ lhreml715-chm.china.huawei.com (10.201.108.66)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-Dzie=C5=84 dobry,
+From: Shiju Jose <shiju.jose@huawei.com>
 
-chcia=C5=82bym poinformowa=C4=87 Pa=C5=84stwa o mo=C5=BCliwo=C5=9Bci pozy=
-skania nowych zlece=C5=84 ze strony www.
+1. Support cpu fault isolation for the corrected and recoverable errors.
+2. Improvements to the HiSilicon vendor specific code.
+3. Bug fix for a memory out-of-bounds issue.
 
-Widzimy zainteresowanie potencjalnych Klient=C3=B3w Pa=C5=84stwa firm=C4=85=
-, dlatego ch=C4=99tnie pomo=C5=BCemy Pa=C5=84stwu dotrze=C4=87 z ofert=C4=
-=85 do wi=C4=99kszego grona odbiorc=C3=B3w poprzez efektywne metody pozyc=
-jonowania strony w Google.
+Shengwei Luo (2):
+  rasdaemon: Support cpu fault isolation for corrected errors
+  rasdaemon: Support cpu fault isolation for recoverable errors
 
-Czy m=C3=B3g=C5=82bym liczy=C4=87 na kontakt zwrotny?
+Shiju Jose (8):
+  rasdaemon: Modify recording Hisilicon common error data
+  rasdaemon: ras-mc-ctl: Modify error statistics for HiSilicon
+    KunPeng9xx common errors
+  rasdaemon: ras-mc-ctl: Reformat error info of the HiSilicon Kunpeng920
+  rasdaemon: ras-mc-ctl: Add printing usage if necessary parameters are
+    not passed for the vendor-error options
+  rasdaemon: ras-mc-ctl: Add support to display the HiSilicon vendor
+    errors for a specified module
+  rasdaemon: ras-mc-ctl: Relocate reading and display Kunpeng920 errors
+    to under Kunpeng9xx
+  rasdaemon: ras-mc-ctl: Updated HiSilicon platform name
+  rasdaemon: Fix for a memory out-of-bounds issue and optimized code to
+    remove duplicate function.
 
+ Makefile.am                |   6 +-
+ configure.ac               |  11 +
+ misc/rasdaemon.env         |  17 ++
+ non-standard-hisi_hip08.c  |   6 +-
+ non-standard-hisilicon.c   | 128 +++++++++---
+ queue.c                    | 119 +++++++++++
+ queue.h                    |  39 ++++
+ ras-arm-handler.c          | 113 +++++++++++
+ ras-arm-handler.h          |  18 ++
+ ras-cpu-isolation.c        | 405 +++++++++++++++++++++++++++++++++++++
+ ras-cpu-isolation.h        |  70 +++++++
+ ras-events.c               |   9 +-
+ ras-non-standard-handler.c |  16 +-
+ util/ras-mc-ctl.in         | 196 ++++++++++--------
+ 14 files changed, 1028 insertions(+), 125 deletions(-)
+ create mode 100644 queue.c
+ create mode 100644 queue.h
+ create mode 100644 ras-cpu-isolation.c
+ create mode 100644 ras-cpu-isolation.h
 
-Pozdrawiam,
-Miko=C5=82aj Rudzik
+-- 
+2.25.1
+
