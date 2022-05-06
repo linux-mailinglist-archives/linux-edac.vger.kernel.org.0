@@ -2,140 +2,97 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C3B651D97C
-	for <lists+linux-edac@lfdr.de>; Fri,  6 May 2022 15:42:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 41B6951E0B4
+	for <lists+linux-edac@lfdr.de>; Fri,  6 May 2022 23:06:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243922AbiEFNpo (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Fri, 6 May 2022 09:45:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44374 "EHLO
+        id S1444371AbiEFVJk (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Fri, 6 May 2022 17:09:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354797AbiEFNpc (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Fri, 6 May 2022 09:45:32 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A0D92459F
-        for <linux-edac@vger.kernel.org>; Fri,  6 May 2022 06:41:47 -0700 (PDT)
-Received: from fraeml710-chm.china.huawei.com (unknown [172.18.147.206])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4Kvs9J0W9Sz67xwN;
-        Fri,  6 May 2022 21:39:00 +0800 (CST)
-Received: from lhreml715-chm.china.huawei.com (10.201.108.66) by
- fraeml710-chm.china.huawei.com (10.206.15.59) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Fri, 6 May 2022 15:41:45 +0200
-Received: from P_UKIT01-A7bmah.china.huawei.com (10.47.73.106) by
- lhreml715-chm.china.huawei.com (10.201.108.66) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Fri, 6 May 2022 14:41:44 +0100
-From:   <shiju.jose@huawei.com>
-To:     <linux-edac@vger.kernel.org>, <mchehab@kernel.org>
-CC:     <linuxarm@huawei.com>, <tanxiaofei@huawei.com>,
-        <jonathan.cameron@huawei.com>, <prime.zeng@hisilicon.com>,
-        <luoshengwei@huawei.com>, <panjunchong@hisilicon.com>,
-        <fenglei47@h-partners.com>, <shiju.jose@huawei.com>
-Subject: [PATCH 10/10] rasdaemon: Fix for a memory out-of-bounds issue and optimized code to remove duplicate function.
-Date:   Fri, 6 May 2022 14:33:07 +0100
-Message-ID: <20220506133307.1799-11-shiju.jose@huawei.com>
-X-Mailer: git-send-email 2.26.0.windows.1
-In-Reply-To: <20220506133307.1799-1-shiju.jose@huawei.com>
-References: <20220506133307.1799-1-shiju.jose@huawei.com>
+        with ESMTP id S1444423AbiEFVJW (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Fri, 6 May 2022 17:09:22 -0400
+Received: from mail-pl1-x644.google.com (mail-pl1-x644.google.com [IPv6:2607:f8b0:4864:20::644])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E28AB1C936
+        for <linux-edac@vger.kernel.org>; Fri,  6 May 2022 14:05:35 -0700 (PDT)
+Received: by mail-pl1-x644.google.com with SMTP id s14so8590929plk.8
+        for <linux-edac@vger.kernel.org>; Fri, 06 May 2022 14:05:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:in-reply-to:references:from:date:message-id
+         :subject:to;
+        bh=VSSUIwdzgxQxnEkB7+u7pnweyPajIQMP3nQqWYs8VX0=;
+        b=gmmgqd2enKSblS7bCmnm2ivMD5ZTgpfnW/j/MNizwci6pH3rJEQXq3L9+ZdKL4HUTr
+         YB+Dhjpe2MkKztjhU+UDqenquKjwj+pPKOCMhVrtxmSec4u8GzSTlKnYmXQROsqwJ7YF
+         fpyt4ZWxoGKOIdNHSzn6X8527WsL9seFFIUc417Aceaz0HyqyfLzhrTyiK1hfEoe7bgf
+         O66BH+VPp/USBREXReLf48zIB9vdsgcsn+kPDpodP7afE/7TIv51GGMLWkNAhK51uLVF
+         lGR5deZqynPeLivFeL+j4lPiytJOppTfXKPKuEkvtzBoRNP5faKFInL0FLuVz9LTzW90
+         0CuA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:in-reply-to:references
+         :from:date:message-id:subject:to;
+        bh=VSSUIwdzgxQxnEkB7+u7pnweyPajIQMP3nQqWYs8VX0=;
+        b=3lOQd+ZcX2KscyzSXo389g8rbl7Lczo2dbXTVXnWJJrHv8yv+0Bdf1uM9tosUkGoGJ
+         0SAUcfZOH1sAtOOL6ChUvEfU6156iS0r3tum2cjtDIr/LXimdjFyJyLNdesxk5scs3Ez
+         UUeK/yUhDuPQx/KSGeysYLMI/SeQPwcPT7o4PfPUcqml9w2XC4zNGWhnEzrEvIHrnmeB
+         Rz6mvcDPdMciFX6G1kbEvAkPn2X89JcWEwuSrzMXYVXa7C8o8+wDEQQOYhqMmatosZfv
+         /nMKpJW06g2x4XYv8ziCEHLiKPJEXbMPBen5rTBZAFVECLBJCoiFDUu5is06K1ep3hxy
+         NlaQ==
+X-Gm-Message-State: AOAM532UH2N5+MbsqPjMxqhqR2CaDQoOhAXBGpKZziisHOtLtz4SXsfy
+        8j4uE0DCVnlOQ7POsgN8i8e9sA6+TaObg6l5HThOB1Xwxw==
+X-Google-Smtp-Source: ABdhPJyqTkc39jIaJ9/Rbqdi6sONfGmoHQRCW6ADRHNTA3OhSOJwlsoTVRnEtva6v71BUuTBbiWSrg7BAnP42QBwIqU=
+X-Received: by 2002:a17:902:a501:b0:153:f956:29f0 with SMTP id
+ s1-20020a170902a50100b00153f95629f0mr5598333plq.120.1651871135500; Fri, 06
+ May 2022 14:05:35 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.47.73.106]
-X-ClientProxiedBy: lhreml744-chm.china.huawei.com (10.201.108.194) To
- lhreml715-chm.china.huawei.com (10.201.108.66)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Received: by 2002:ac4:9906:0:b0:4ba:807b:b8f3 with HTTP; Fri, 6 May 2022
+ 14:05:33 -0700 (PDT)
+Reply-To: warren001buffett@gmail.com
+In-Reply-To: <CAD_xG_pvNZK6BFCW+28Xv4DE=_5rbDZXDok2BYNn9xw6Ma7iow@mail.gmail.com>
+References: <CAD_xG_pvNZK6BFCW+28Xv4DE=_5rbDZXDok2BYNn9xw6Ma7iow@mail.gmail.com>
+From:   Warren Buffett <guidayema@gmail.com>
+Date:   Fri, 6 May 2022 21:05:33 +0000
+Message-ID: <CAD_xG_o-NeOti3yu7R9R5-myJ=Pi4nnU5Tuumw-xPcT-nT8e=Q@mail.gmail.com>
+Subject: Fwd: My name is Warren Buffett, an American businessman.
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=5.1 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:644 listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.4989]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [guidayema[at]gmail.com]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  3.5 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-From: Shiju Jose <shiju.jose@huawei.com>
+My name is Warren Buffett, an American businessman and investor I have
+something important to discuss with you.
 
-Fixed a memory out-of-bounds issue with string pointers and
-optimized code structure to remove duplicate function.
-
-Signed-off-by: Lei Feng <fenglei47@h-partners.com>
-Signed-off-by: Shiju Jose <shiju.jose@huawei.com>
----
- non-standard-hisi_hip08.c  |  6 +++---
- non-standard-hisilicon.c   |  2 +-
- ras-non-standard-handler.c | 16 +---------------
- 3 files changed, 5 insertions(+), 19 deletions(-)
-
-diff --git a/non-standard-hisi_hip08.c b/non-standard-hisi_hip08.c
-index 9092183..4ef47ea 100644
---- a/non-standard-hisi_hip08.c
-+++ b/non-standard-hisi_hip08.c
-@@ -1014,15 +1014,15 @@ static int decode_hip08_pcie_local_error(struct ras_events *ras,
- 
- static struct ras_ns_ev_decoder hip08_ns_ev_decoder[] = {
- 	{
--		.sec_type = "1f8161e155d641e6bd107afd1dc5f7c5",
-+		.sec_type = "1f8161e1-55d6-41e6-bd10-7afd1dc5f7c5",
- 		.decode = decode_hip08_oem_type1_error,
- 	},
- 	{
--		.sec_type = "45534ea6ce2341158535e07ab3aef91d",
-+		.sec_type = "45534ea6-ce23-4115-8535-e07ab3aef91d",
- 		.decode = decode_hip08_oem_type2_error,
- 	},
- 	{
--		.sec_type = "b2889fc9e7d74f9da867af42e98be772",
-+		.sec_type = "b2889fc9-e7d7-4f9d-a867-af42e98be772",
- 		.decode = decode_hip08_pcie_local_error,
- 	},
- };
-diff --git a/non-standard-hisilicon.c b/non-standard-hisilicon.c
-index d1e1774..6ee9271 100644
---- a/non-standard-hisilicon.c
-+++ b/non-standard-hisilicon.c
-@@ -387,7 +387,7 @@ static int decode_hisi_common_section(struct ras_events *ras,
- 
- static struct ras_ns_ev_decoder hisi_section_ns_ev_decoder[]  = {
- 	{
--		.sec_type = "c8b328a899174af69a132e08ab2e7586",
-+		.sec_type = "c8b328a8-9917-4af6-9a13-2e08ab2e7586",
- 		.decode = decode_hisi_common_section,
- 	},
- };
-diff --git a/ras-non-standard-handler.c b/ras-non-standard-handler.c
-index 6d5a6f8..6932e58 100644
---- a/ras-non-standard-handler.c
-+++ b/ras-non-standard-handler.c
-@@ -52,20 +52,6 @@ static char *uuid_le(const char *uu)
- 	return uuid;
- }
- 
--static int uuid_le_cmp(const char *sec_type, const char *uuid2)
--{
--	static char uuid1[32];
--	char *p = uuid1;
--	int i;
--	static const unsigned char le[16] = {
--			3, 2, 1, 0, 5, 4, 7, 6, 8, 9, 10, 11, 12, 13, 14, 15};
--
--	for (i = 0; i < 16; i++)
--		p += sprintf(p, "%.2x", (unsigned char) sec_type[le[i]]);
--	*p = 0;
--	return strncmp(uuid1, uuid2, 32);
--}
--
- int register_ns_ev_decoder(struct ras_ns_ev_decoder *ns_ev_decoder)
- {
- 	struct ras_ns_ev_decoder *list;
-@@ -96,7 +82,7 @@ static int find_ns_ev_decoder(const char *sec_type, struct ras_ns_ev_decoder **p
- 
- 	ns_ev_decoder = ras_ns_ev_dec_list;
- 	while (ns_ev_decoder) {
--		if (uuid_le_cmp(sec_type, ns_ev_decoder->sec_type) == 0) {
-+		if (strcmp(uuid_le(sec_type), ns_ev_decoder->sec_type) == 0) {
- 			*p_ns_ev_dec = ns_ev_decoder;
- 			match  = 1;
- 			break;
--- 
-2.25.1
-
+Mr. Warren Buffett
+warren001buffett@gmail.com
+Chief Executive Officer: Berkshire Hathaway
+aphy/Warren-Edward-Buffett
