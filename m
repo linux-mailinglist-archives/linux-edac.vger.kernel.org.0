@@ -2,25 +2,25 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 508C351D985
-	for <lists+linux-edac@lfdr.de>; Fri,  6 May 2022 15:42:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC48851D981
+	for <lists+linux-edac@lfdr.de>; Fri,  6 May 2022 15:42:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1441864AbiEFNpj (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Fri, 6 May 2022 09:45:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44444 "EHLO
+        id S1351193AbiEFNpn (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Fri, 6 May 2022 09:45:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1441907AbiEFNpb (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Fri, 6 May 2022 09:45:31 -0400
+        with ESMTP id S1441824AbiEFNpe (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Fri, 6 May 2022 09:45:34 -0400
 Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2C4469495
-        for <linux-edac@vger.kernel.org>; Fri,  6 May 2022 06:41:45 -0700 (PDT)
-Received: from fraeml713-chm.china.huawei.com (unknown [172.18.147.207])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4Kvs9G2bLdz685FT;
-        Fri,  6 May 2022 21:38:58 +0800 (CST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DE9824942
+        for <linux-edac@vger.kernel.org>; Fri,  6 May 2022 06:41:48 -0700 (PDT)
+Received: from fraeml715-chm.china.huawei.com (unknown [172.18.147.201])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4Kvs7F1tTdz67tkx;
+        Fri,  6 May 2022 21:37:13 +0800 (CST)
 Received: from lhreml715-chm.china.huawei.com (10.201.108.66) by
- fraeml713-chm.china.huawei.com (10.206.15.32) with Microsoft SMTP Server
+ fraeml715-chm.china.huawei.com (10.206.15.34) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Fri, 6 May 2022 15:41:43 +0200
+ 15.1.2375.24; Fri, 6 May 2022 15:41:44 +0200
 Received: from P_UKIT01-A7bmah.china.huawei.com (10.47.73.106) by
  lhreml715-chm.china.huawei.com (10.201.108.66) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
@@ -31,9 +31,9 @@ CC:     <linuxarm@huawei.com>, <tanxiaofei@huawei.com>,
         <jonathan.cameron@huawei.com>, <prime.zeng@hisilicon.com>,
         <luoshengwei@huawei.com>, <panjunchong@hisilicon.com>,
         <fenglei47@h-partners.com>, <shiju.jose@huawei.com>
-Subject: [PATCH 06/10] rasdaemon: ras-mc-ctl: Add printing usage if necessary parameters are not passed for the vendor-error options
-Date:   Fri, 6 May 2022 14:33:03 +0100
-Message-ID: <20220506133307.1799-7-shiju.jose@huawei.com>
+Subject: [PATCH 07/10] rasdaemon: ras-mc-ctl: Add support to display the HiSilicon vendor errors for a specified module
+Date:   Fri, 6 May 2022 14:33:04 +0100
+Message-ID: <20220506133307.1799-8-shiju.jose@huawei.com>
 X-Mailer: git-send-email 2.26.0.windows.1
 In-Reply-To: <20220506133307.1799-1-shiju.jose@huawei.com>
 References: <20220506133307.1799-1-shiju.jose@huawei.com>
@@ -55,33 +55,270 @@ X-Mailing-List: linux-edac@vger.kernel.org
 
 From: Shiju Jose <shiju.jose@huawei.com>
 
-Add printing usage if necessary parameters are not passed
-for the vendor-errors options.
+Add support to display the HiSilicon vendor errors for a specified module.
 
 Signed-off-by: Shiju Jose <shiju.jose@huawei.com>
 ---
- util/ras-mc-ctl.in | 2 ++
- 1 file changed, 2 insertions(+)
+ util/ras-mc-ctl.in | 145 +++++++++++++++++++++++++++------------------
+ 1 file changed, 87 insertions(+), 58 deletions(-)
 
 diff --git a/util/ras-mc-ctl.in b/util/ras-mc-ctl.in
-index 8755b6f..959ea6b 100755
+index 959ea6b..296eb87 100755
 --- a/util/ras-mc-ctl.in
 +++ b/util/ras-mc-ctl.in
-@@ -1544,6 +1544,7 @@ sub vendor_errors_summary
+@@ -96,8 +96,9 @@ Usage: $prog [OPTIONS...]
+  --errors           Shows the errors stored at the error database.
+  --error-count      Shows the corrected and uncorrected error counts using sysfs.
+  --vendor-errors-summary <platform-id>    Presents a summary of the vendor-specific logged errors.
+- --vendor-errors         <platform-id>    Shows the vendor-specific errors stored in the error database.
+- --vendor-platforms Shows the supported platforms with platform-ids for the vendor-specific errors.
++ --vendor-errors    <platform-id>    Shows the vendor-specific errors stored in the error database.
++ --vendor-errors    <platform-id> <module-name>    Shows the vendor-specific errors for a specific module stored in the error database.
++ --vendor-platforms List the supported platforms with platform-ids for the vendor-specific errors.
+  --help             This help message.
+ EOF
+ 
+@@ -1535,12 +1536,14 @@ use constant {
+ sub vendor_errors_summary
+ {
+     require DBI;
+-    my ($num_args, $platform_id);
++    my ($num_args, $platform_id, $found_platform);
+     my ($query, $query_handle, $count, $out);
+     my ($module_id, $sub_module_id, $err_severity, $err_sev);
+ 
+     $num_args = $#ARGV + 1;
+     $platform_id = 0;
++    $found_platform = 0;
++
      if ($num_args ne 0) {
          $platform_id = $ARGV[0];
      } else {
-+        usage(1);
-         return;
+@@ -1552,6 +1555,7 @@ sub vendor_errors_summary
+ 
+     # HiSilicon Kunpeng920 errors
+     if ($platform_id eq HISILICON_KUNPENG_920) {
++	$found_platform = 1;
+         $query = "select err_severity, module_id, count(*) from hip08_oem_type1_event_v2 group by err_severity, module_id";
+         $query_handle = $dbh->prepare($query);
+         $query_handle->execute();
+@@ -1615,6 +1619,7 @@ sub vendor_errors_summary
+ 
+     # HiSilicon Kunpeng9xx common errors
+     if ($platform_id eq HISILICON_KUNPENG_9XX) {
++	$found_platform = 1;
+         $query = "select err_severity, module_id, count(*) from hisi_common_section_v2 group by err_severity, module_id";
+         $query_handle = $dbh->prepare($query);
+         $query_handle->execute();
+@@ -1636,21 +1641,31 @@ sub vendor_errors_summary
+         $query_handle->finish;
      }
  
-@@ -1651,6 +1652,7 @@ sub vendor_errors
++    if ($platform_id && !($found_platform)) {
++        print "Platform ID $platform_id is not valid\n";
++    }
++
+     undef($dbh);
+ }
+ 
+ sub vendor_errors
+ {
+     require DBI;
+-    my ($num_args, $platform_id);
++    my ($num_args, $platform_id, $found_platform, $module, $found_module);
+     my ($query, $query_handle, $id, $timestamp, $out);
+     my ($version, $soc_id, $socket_id, $totem_id, $nimbus_id, $sub_system_id, $core_id, $port_id);
+     my ($module_id, $sub_module_id, $err_severity, $err_type, $pcie_info, $regs);
+ 
+     $num_args = $#ARGV + 1;
+     $platform_id = 0;
++    $found_platform = 0;
++    $module = 0;
++    $found_module = 0;
      if ($num_args ne 0) {
          $platform_id = $ARGV[0];
++        if ($num_args gt 1) {
++            $module = $ARGV[1];
++        }
      } else {
-+        usage(1);
+         usage(1);
          return;
+@@ -1660,27 +1675,29 @@ sub vendor_errors
+ 
+     # HiSilicon Kunpeng920 errors
+     if ($platform_id eq HISILICON_KUNPENG_920) {
++	$found_platform = 1;
+         $query = "select id, timestamp, version, soc_id, socket_id, nimbus_id, module_id, sub_module_id, err_severity, regs_dump from hip08_oem_type1_event_v2 order by id, module_id, err_severity";
+         $query_handle = $dbh->prepare($query);
+         $query_handle->execute();
+         $query_handle->bind_columns(\($id, $timestamp, $version, $soc_id, $socket_id, $nimbus_id, $module_id, $sub_module_id, $err_severity, $regs));
+         $out = "";
+         while($query_handle->fetch()) {
+-            $out .= "$id. $timestamp Error Info: ";
+-            $out .= "version=$version, ";
+-            $out .= "soc_id=$soc_id, " if ($soc_id);
+-            $out .= "socket_id=$socket_id, " if ($socket_id);
+-            $out .= "nimbus_id=$nimbus_id, " if ($nimbus_id);
+-            $out .= "module_id=$module_id, " if ($module_id);
+-            $out .= "sub_module_id=$sub_module_id, " if ($sub_module_id);
+-            $out .= "err_severity=$err_severity, " if ($err_severity);
+-            $out .= "Error Registers: $regs " if ($regs);
+-            $out .= "\n\n";
++            if ($module eq 0 || ($module_id && uc($module) eq uc($module_id))) {
++                $out .= "$id. $timestamp Error Info: ";
++                $out .= "version=$version, ";
++                $out .= "soc_id=$soc_id, " if ($soc_id);
++                $out .= "socket_id=$socket_id, " if ($socket_id);
++                $out .= "nimbus_id=$nimbus_id, " if ($nimbus_id);
++                $out .= "module_id=$module_id, " if ($module_id);
++                $out .= "sub_module_id=$sub_module_id, " if ($sub_module_id);
++                $out .= "err_severity=$err_severity, " if ($err_severity);
++                $out .= "Error Registers: $regs " if ($regs);
++                $out .= "\n\n";
++                $found_module = 1;
++	    }
+         }
+         if ($out ne "") {
+             print "HiSilicon Kunpeng920 OEM type1 error events:\n$out\n";
+-        } else {
+-            print "No HiSilicon Kunpeng920 OEM type1 errors.\n";
+         }
+         $query_handle->finish;
+ 
+@@ -1690,21 +1707,22 @@ sub vendor_errors
+         $query_handle->bind_columns(\($id, $timestamp, $version, $soc_id, $socket_id, $nimbus_id, $module_id, $sub_module_id, $err_severity, $regs));
+         $out = "";
+         while($query_handle->fetch()) {
+-            $out .= "$id. $timestamp Error Info: ";
+-            $out .= "version=$version, ";
+-            $out .= "soc_id=$soc_id, " if ($soc_id);
+-            $out .= "socket_id=$socket_id, " if ($socket_id);
+-            $out .= "nimbus_id=$nimbus_id, " if ($nimbus_id);
+-            $out .= "module_id=$module_id, " if ($module_id);
+-            $out .= "sub_module_id=$sub_module_id, " if ($sub_module_id);
+-            $out .= "err_severity=$err_severity, " if ($err_severity);
+-            $out .= "Error Registers: $regs " if ($regs);
+-            $out .= "\n\n";
++            if ($module eq 0 || ($module_id && uc($module) eq uc($module_id))) {
++                $out .= "$id. $timestamp Error Info: ";
++                $out .= "version=$version, ";
++                $out .= "soc_id=$soc_id, " if ($soc_id);
++                $out .= "socket_id=$socket_id, " if ($socket_id);
++                $out .= "nimbus_id=$nimbus_id, " if ($nimbus_id);
++                $out .= "module_id=$module_id, " if ($module_id);
++                $out .= "sub_module_id=$sub_module_id, " if ($sub_module_id);
++                $out .= "err_severity=$err_severity, " if ($err_severity);
++                $out .= "Error Registers: $regs " if ($regs);
++                $out .= "\n\n";
++                $found_module = 1;
++	    }
+         }
+         if ($out ne "") {
+             print "HiSilicon Kunpeng920 OEM type2 error events:\n$out\n";
+-        } else {
+-            print "No HiSilicon Kunpeng920 OEM type2 errors.\n";
+         }
+         $query_handle->finish;
+ 
+@@ -1714,51 +1732,56 @@ sub vendor_errors
+         $query_handle->bind_columns(\($id, $timestamp, $version, $soc_id, $socket_id, $nimbus_id, $sub_module_id, $core_id, $port_id, $err_severity, $err_type, $regs));
+         $out = "";
+         while($query_handle->fetch()) {
+-            $out .= "$id. $timestamp Error Info: ";
+-            $out .= "version=$version, ";
+-            $out .= "soc_id=$soc_id, " if ($soc_id);
+-            $out .= "socket_id=$socket_id, " if ($socket_id);
+-            $out .= "nimbus_id=$nimbus_id, " if ($nimbus_id);
+-            $out .= "sub_module_id=$sub_module_id, " if ($sub_module_id);
+-            $out .= "core_id=$core_id, " if ($core_id);
+-            $out .= "port_id=$port_id, " if ($port_id);
+-            $out .= "err_severity=$err_severity, " if ($err_severity);
+-            $out .= "err_type=$err_type, " if ($err_type);
+-            $out .= "Error Registers: $regs " if ($regs);
+-            $out .= "\n\n";
++            if ($module eq 0 || ($sub_module_id && uc($module) eq uc($sub_module_id))) {
++                $out .= "$id. $timestamp Error Info: ";
++                $out .= "version=$version, ";
++                $out .= "soc_id=$soc_id, " if ($soc_id);
++                $out .= "socket_id=$socket_id, " if ($socket_id);
++                $out .= "nimbus_id=$nimbus_id, " if ($nimbus_id);
++                $out .= "sub_module_id=$sub_module_id, " if ($sub_module_id);
++                $out .= "core_id=$core_id, " if ($core_id);
++                $out .= "port_id=$port_id, " if ($port_id);
++                $out .= "err_severity=$err_severity, " if ($err_severity);
++                $out .= "err_type=$err_type, " if ($err_type);
++                $out .= "Error Registers: $regs " if ($regs);
++                $out .= "\n\n";
++                $found_module = 1;
++	    }
+         }
+         if ($out ne "") {
+             print "HiSilicon Kunpeng920 PCIe controller error events:\n$out\n";
+-        } else {
+-            print "No HiSilicon Kunpeng920 PCIe controller errors.\n";
+         }
+         $query_handle->finish;
      }
+ 
+     # HiSilicon Kunpeng9xx common errors
+     if ($platform_id eq HISILICON_KUNPENG_9XX) {
++	$found_platform = 1;
+         $query = "select id, timestamp, version, soc_id, socket_id, totem_id, nimbus_id, sub_system_id, module_id, sub_module_id, core_id, port_id, err_type, pcie_info, err_severity, regs_dump from hisi_common_section_v2 order by id, module_id, err_severity";
+         $query_handle = $dbh->prepare($query);
+         $query_handle->execute();
+         $query_handle->bind_columns(\($id, $timestamp, $version, $soc_id, $socket_id, $totem_id, $nimbus_id, $sub_system_id, $module_id, $sub_module_id, $core_id, $port_id, $err_type, $pcie_info, $err_severity, $regs));
+         $out = "";
+         while($query_handle->fetch()) {
+-            $out .= "$id. $timestamp Error Info: ";
+-            $out .= "version=$version, ";
+-            $out .= "soc_id=$soc_id, " if ($soc_id);
+-            $out .= "socket_id=$socket_id, " if ($socket_id);
+-            $out .= "totem_id=$totem_id, " if ($totem_id);
+-            $out .= "nimbus_id=$nimbus_id, " if ($nimbus_id);
+-            $out .= "sub_system_id=$sub_system_id, " if ($sub_system_id);
+-            $out .= "module_id=$module_id, " if ($module_id);
+-            $out .= "sub_module_id=$sub_module_id, " if ($sub_module_id);
+-            $out .= "core_id=$core_id, " if ($core_id);
+-            $out .= "port_id=$port_id, " if ($port_id);
+-            $out .= "err_type=$err_type, " if ($err_type);
+-            $out .= "pcie_info=$pcie_info, " if ($pcie_info);
+-            $out .= "err_severity=$err_severity, " if ($err_severity);
+-            $out .= "Error Registers: $regs" if ($regs);
+-            $out .= "\n\n";
++            if ($module eq 0 || ($module_id && uc($module) eq uc($module_id))) {
++                $out .= "$id. $timestamp Error Info: ";
++                $out .= "version=$version, ";
++                $out .= "soc_id=$soc_id, " if ($soc_id);
++                $out .= "socket_id=$socket_id, " if ($socket_id);
++                $out .= "totem_id=$totem_id, " if ($totem_id);
++                $out .= "nimbus_id=$nimbus_id, " if ($nimbus_id);
++                $out .= "sub_system_id=$sub_system_id, " if ($sub_system_id);
++                $out .= "module_id=$module_id, " if ($module_id);
++                $out .= "sub_module_id=$sub_module_id, " if ($sub_module_id);
++                $out .= "core_id=$core_id, " if ($core_id);
++                $out .= "port_id=$port_id, " if ($port_id);
++                $out .= "err_type=$err_type, " if ($err_type);
++                $out .= "pcie_info=$pcie_info, " if ($pcie_info);
++                $out .= "err_severity=$err_severity, " if ($err_severity);
++                $out .= "Error Registers: $regs" if ($regs);
++                $out .= "\n\n";
++                $found_module = 1;
++	    }
+         }
+         if ($out ne "") {
+             print "HiSilicon Kunpeng9xx common error events:\n$out\n";
+@@ -1768,6 +1791,12 @@ sub vendor_errors
+         $query_handle->finish;
+     }
+ 
++    if ($platform_id && !($found_platform)) {
++        print "Platform ID $platform_id is not valid\n";
++    } elsif ($module && !($found_module)) {
++        print "No error record for the module $module\n";
++    }
++
+     undef($dbh);
+ }
  
 -- 
 2.25.1
