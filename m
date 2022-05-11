@@ -2,197 +2,104 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F91F52253A
-	for <lists+linux-edac@lfdr.de>; Tue, 10 May 2022 22:13:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 45302522B1D
+	for <lists+linux-edac@lfdr.de>; Wed, 11 May 2022 06:39:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229498AbiEJUNQ (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Tue, 10 May 2022 16:13:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49742 "EHLO
+        id S235064AbiEKEjY (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Wed, 11 May 2022 00:39:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229660AbiEJUNM (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Tue, 10 May 2022 16:13:12 -0400
-Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D764F1A051;
-        Tue, 10 May 2022 13:13:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=gJbDvxZCHLE9Xc3dgTDCPLuG4mRgGmv6OD8aG7M3JDQ=; b=g3Nx+lB9bAjkoFhfBAw/tKnujE
-        HE49wVGnvYPT6LdjDh7XC7p9pg3dQOiKQmVqs5yBTQcMLD/Qb7loz7GoYe9PtUSJMIbL1xCX7WOmP
-        Vje/KjqWSNfESrwYFEgzZTAiGGwdZ+mo/M5Y4DNbzDEU8fdx1WAqo3dhuepVJxkwfJ6AyMl1hzYbL
-        37Bt4s+cXuNOUF+dflK9we5prMFoOFLTCAg4y4fzR8H75s0j2xAYXr1Tlb+YwkS4w97u5Z+/kankc
-        sGAGYvqPkX6LoRGzU4WQr1NirsakQGzt8bG3WfLCBDveLwXiZiOyOvqFNe/oiLGpRxJijV5VJBRHK
-        Ucite2AA==;
-Received: from [177.183.162.244] (helo=[192.168.0.5])
-        by fanzine2.igalia.com with esmtpsa 
-        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
-        id 1noWDn-0000dk-Tv; Tue, 10 May 2022 22:12:41 +0200
-Message-ID: <24a56892-adb3-809c-8c35-b5b5f001c283@igalia.com>
-Date:   Tue, 10 May 2022 17:11:08 -0300
+        with ESMTP id S235636AbiEKEjO (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Wed, 11 May 2022 00:39:14 -0400
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B611314C752
+        for <linux-edac@vger.kernel.org>; Tue, 10 May 2022 21:39:12 -0700 (PDT)
+Received: by mail-pl1-x632.google.com with SMTP id d22so730677plr.9
+        for <linux-edac@vger.kernel.org>; Tue, 10 May 2022 21:39:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:from:date:message-id:subject:to;
+        bh=s3Cdswvtyrq8qHVwuRB9YRoTAIoD9G/2//h6WeFZHzo=;
+        b=nrkBIDyCffFbQz5WNhQU88q5l+bx8m1CoLNL/nRcxBFZRgp3B2RwRJzpJi69hjmFPQ
+         Eotn36CVTQor8sTwq84btYhQQ+OsypTpYdHIfGkC/Ekjg8a9U0HkQq0T/gbcQg5/if4Y
+         i1yzcJYhTRMm8ny1NIiOYUNRazrfloxlCC/1XVxW2+TG0ItQpx2/G3cXjgMuOALgO1Rc
+         auxKHXwS3ghK6vFFIfR8essc70JXfRi2oIpi3YT/VLqISCMTaVWCOI/Xf0rWfpfTmlnw
+         XgqCFC8jOuHD5AjsEtox3h0b9tzcHlVM0fA1RrJyDFubK9aS707t1BYf/K43qSc4slo4
+         wrQw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=s3Cdswvtyrq8qHVwuRB9YRoTAIoD9G/2//h6WeFZHzo=;
+        b=FfXRBG6c4Pv4rUcW/zaNweMS0u1/YOCKCTW1ywxhRgRKsdYUA9xw9HQgxkwPXj9u/7
+         IuJVlg/kEl4tZMFvql4DZ7OMapxsMEzCl3uI+hDtUPdtxw3FsOZ9eHVJU4MboMR7fZ0W
+         C9JYcaomfxf0QVyEXL8592SgGLN1H+RkdOvZpf7jI9C1xcgbd1QW9hUhwpkUa2TZy6sZ
+         A/fN3UMiGz75VtD1/OYUTlsESr4DuDGqju7t4cd7ScDf65SjKYZya3bb3+9dAV+XyZSh
+         sJLd6+DxBlXnJ2mEMaffULHwGXeG/qWJQ25+9ZJHqyOfY9iV7cy8PVzLJ89UZ1aGtiOM
+         aDTA==
+X-Gm-Message-State: AOAM531BncqxiESq5gcu6lu8adnmmO51Obin+uKgxefxVZ6ohC/CQxPd
+        FWqFhsF6BtMuyWi5lTRJEaPPsjyHvTiKHkksIM8=
+X-Google-Smtp-Source: ABdhPJwbKHmbnZDflMHBZCcp2YbZAAZvFdPcM4owWeuPIkoxodmwIZJ+Xpgi08ylB1RFXLrw63SQRxJzumbwJKMTxhs=
+X-Received: by 2002:a17:90b:1007:b0:1dc:9862:68af with SMTP id
+ gm7-20020a17090b100700b001dc986268afmr3261389pjb.205.1652243951499; Tue, 10
+ May 2022 21:39:11 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH 01/30] x86/crash,reboot: Avoid re-disabling VMX in all
- CPUs on crash/restart
-Content-Language: en-US
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     akpm@linux-foundation.org, bhe@redhat.com, pmladek@suse.com,
-        kexec@lists.infradead.org, linux-kernel@vger.kernel.org,
-        bcm-kernel-feedback-list@broadcom.com,
-        linuxppc-dev@lists.ozlabs.org, linux-alpha@vger.kernel.org,
-        linux-edac@vger.kernel.org, linux-hyperv@vger.kernel.org,
-        linux-leds@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-remoteproc@vger.kernel.org, linux-s390@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-um@lists.infradead.org,
-        linux-xtensa@linux-xtensa.org, netdev@vger.kernel.org,
-        openipmi-developer@lists.sourceforge.net, rcu@vger.kernel.org,
-        sparclinux@vger.kernel.org, xen-devel@lists.xenproject.org,
-        x86@kernel.org, kernel-dev@igalia.com, kernel@gpiccoli.net,
-        halves@canonical.com, fabiomirmar@gmail.com,
-        alejandro.j.jimenez@oracle.com, andriy.shevchenko@linux.intel.com,
-        arnd@arndb.de, bp@alien8.de, corbet@lwn.net,
-        d.hatayama@jp.fujitsu.com, dave.hansen@linux.intel.com,
-        dyoung@redhat.com, feng.tang@intel.com, gregkh@linuxfoundation.org,
-        mikelley@microsoft.com, hidehiro.kawai.ez@hitachi.com,
-        jgross@suse.com, john.ogness@linutronix.de, keescook@chromium.org,
-        luto@kernel.org, mhiramat@kernel.org, mingo@redhat.com,
-        paulmck@kernel.org, peterz@infradead.org, rostedt@goodmis.org,
-        senozhatsky@chromium.org, stern@rowland.harvard.edu,
-        tglx@linutronix.de, vgoyal@redhat.com, vkuznets@redhat.com,
-        will@kernel.org, "David P . Reed" <dpreed@deepplum.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-References: <20220427224924.592546-1-gpiccoli@igalia.com>
- <20220427224924.592546-2-gpiccoli@igalia.com> <Ynk40U/KA+hLBZRC@google.com>
-From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
-In-Reply-To: <Ynk40U/KA+hLBZRC@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Received: by 2002:a05:6a10:319:0:0:0:0 with HTTP; Tue, 10 May 2022 21:39:10
+ -0700 (PDT)
+From:   Private Mail <privatemail1961@gmail.com>
+Date:   Tue, 10 May 2022 21:39:10 -0700
+Message-ID: <CANjAOAiiVcSrSv31FjThCVmeppS54UVvGVj3SRSvMfxOB+T8DA@mail.gmail.com>
+Subject: Have you had this? It is for your Benefit
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=4.3 required=5.0 tests=ADVANCE_FEE_4_NEW_MONEY,
+        BAYES_50,DEAR_BENEFICIARY,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,
+        DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,FREEMAIL_REPLY,
+        LOTS_OF_MONEY,MONEY_FRAUD_5,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNDISC_MONEY autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On 09/05/2022 12:52, Sean Christopherson wrote:
-> I find the shortlog to be very confusing, the bug has nothing to do with disabling
-> VMX and I distinctly remember wrapping VMXOFF with exception fixup to prevent doom
-> if VMX is already disabled :-).  The issue is really that nmi_shootdown_cpus() doesn't
-> play nice with being called twice.
-> 
+Our Ref: BG/WA0151/2022
 
-Hey Sean, OK - I agree with you, the issue is really about the double
-list addition.
+Dear Beneficiary
 
-> [...]
-> 
-> Call stacks for the two callers would be very, very helpful.
-> [...]
+Subject: An Estate of US$15.8 Million
 
-> This feels like were just adding more duct tape to the mess.  nmi_shootdown() is
-> still unsafe for more than one caller, and it takes a _lot_ of staring and searching
-> to understand that crash_smp_send_stop() is invoked iff CONFIG_KEXEC_CORE=y, i.e.
-> that it will call smp_ops.crash_stop_other_cpus() and not just smp_send_stop().
-> 
-> Rather than shared a flag between two relatively unrelated functions, what if we
-> instead disabling virtualization in crash_nmi_callback() and then turn the reboot
-> call into a nop if an NMI shootdown has already occurred?  That will also add a
-> bit of documentation about multiple shootdowns not working.
-> 
-> And I believe there's also a lurking bug in native_machine_emergency_restart() that
-> can be fixed with cleanup.  SVM can also block INIT and so should be disabled during
-> an emergency reboot.
-> 
-> The attached patches are compile tested only.  If they seem sane, I'll post an
-> official mini series.
+Blount and Griffin Genealogical Investigators specializes in probate
+research to locate missing heirs and beneficiaries to estates in the
+United Kingdom and Europe.
 
-Thanks Sean, it makes sense - my patch is more a "band-aid" whereas
-yours fixes it in a more generic way. Confess I found the logic of your
-patch complex, but as you said, it requires a *lot* of code analysis to
-understand these multiple shutdown patches, the problem is complicated
-by nature heh
+We can also help you find wills, obtain copies of certificates, help
+you to administer an estate, as well as calculating how an estate,
+intestacy or trust should be distributed.
 
-I've tested your patch 0001 and it works well for all cases [0], so go
-ahead and submit the miniseries, feel free to add:
+You may be entitled to a large pay out for an inheritance in Europe
+worth US$15.8 million. We have discovered an estate belonging to the
+late Depositor has remained unclaimed since he died in 2011 and we
+have strong reasons to believe you are the closest living relative to
+the deceased we can find.
 
-Reported-and-tested-by: Guilherme G. Piccoli <gpiccoli@igalia.com>
+You may unknowingly be the heir of this person who died without
+leaving a will (intestate). We will conduct a probate research to
+prove your entitlement, and can submit a claim on your behalf all at
+no risk to yourselves.
 
+Our service fee of 10% will be paid to us after you have received the estate.
 
-I've read patch 0002 and it makes sense to me as well, a good proactive
-bug fix =)
+The estate transfer process should take just a matter of days as we
+have the mechanism and expertise to get this done very quickly. This
+message may come to you as a shock, however we hope to work with you
+to transfer the estate to you as quickly as possible.
 
-With that said, I'll of course drop this one from V2 of this series.
-Cheers,
+Feel free to email our senior case worker Mr. Malcolm Casey on email:
+malcolmcasey68@yahoo.com for further discussions.
 
+With warm regards,
 
-Guilherme
-
-
-
-
-[0]
-A summary of my tests and the code paths that the panic shutdown take
-depending on some conditions:
-
-New function that disables VMX/SVM: cpu_crash_disable_virtualization()
-[should be executed in every online CPU on shutdown)
-
-The panic path triggers the following call stacks depending on kdump and
-post_notifiers:
-
-
-(1) kexec/kdump + !crash_kexec_post_notifiers
-->machine_crash_shutdown()
-----.crash_shutdown() <custom handler>
-------native_machine_crash_shutdown() [all custom handlers except Xen PV
-call the native generic function]
---------crash_smp_send_stop()
-----------kdump_nmi_shootdown_cpus()
-------------nmi_shootdown_cpus(kdump_nmi_callback)
---------------crash_nmi_callback()
-----------------kdump_nmi_callback()
-------------------cpu_crash_disable_virtualization()
-
-
-(2) kexec/kdump + crash_kexec_post_notifiers
-->crash_smp_send_stop()
-----kdump_nmi_shootdown_cpus()
-------nmi_shootdown_cpus(kdump_nmi_callback)
---------crash_nmi_callback()
-----------kdump_nmi_callback()
-------------cpu_crash_disable_virtualization()
-
-After this path, will execute machine_crash_shutdown() but
-crash_smp_send_stop()
-is guarded against double execution. Also, emergency restart calls
-emergency_vmx_disable_all() .
-
-
-(3) !kexec/kdump + crash_kexec_post_notifiers
-
-Same as (2)
-
-
-(4) !kexec/kdump + !crash_kexec_post_notifiers
--> smp_send_stop()
-----native_stop_other_cpus()
-------apic_send_IPI_allbutself(REBOOT_VECTOR)
---------sysvec_reboot
-----------cpu_emergency_vmxoff() <if the IPI approach succeeded, CPU
-stopped here>
-
-If not:
-------register_stop_handler()
---------apic_send_IPI_allbutself(NMI_VECTOR)
-----------smp_stop_nmi_callback()
-------------cpu_emergency_vmxoff()
-
-After that, emergency_vmx_disable_all() gets called in the emergency
-restart path as well.
+Mr. Blount W. Gort, CEO.
+Blount and Griffin Associates Inc
