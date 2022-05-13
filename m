@@ -2,72 +2,71 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A046F525651
-	for <lists+linux-edac@lfdr.de>; Thu, 12 May 2022 22:23:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 16D51525F02
+	for <lists+linux-edac@lfdr.de>; Fri, 13 May 2022 12:07:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358336AbiELUXo (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Thu, 12 May 2022 16:23:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54934 "EHLO
+        id S1379221AbiEMJ4P (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Fri, 13 May 2022 05:56:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358334AbiELUXc (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Thu, 12 May 2022 16:23:32 -0400
-Received: from mail.pekanbaru.go.id (mail.pekanbaru.go.id [103.131.245.194])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7ED7F7C17B;
-        Thu, 12 May 2022 13:23:28 -0700 (PDT)
-Received: from localhost (localhost.localdomain [127.0.0.1])
-        by mail.pekanbaru.go.id (Postfix) with ESMTP id E5BBF98AE0C;
-        Thu, 12 May 2022 10:45:45 +0700 (WIB)
-Received: from mail.pekanbaru.go.id ([127.0.0.1])
-        by localhost (mail.pekanbaru.go.id [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id YAVK-BNf_n1W; Thu, 12 May 2022 10:45:45 +0700 (WIB)
-Received: from localhost (localhost.localdomain [127.0.0.1])
-        by mail.pekanbaru.go.id (Postfix) with ESMTP id D070298AE14;
-        Thu, 12 May 2022 10:45:42 +0700 (WIB)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.pekanbaru.go.id D070298AE14
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pekanbaru.go.id;
-        s=EA5C5C9E-4206-11EC-835B-1ADACEA726A0; t=1652327143;
-        bh=WgQd2bW8hb2KeIDNbeIeW1Bb4lp6m29iibMhAQT/egc=;
-        h=MIME-Version:To:From:Date:Message-Id;
-        b=CrCThP8d7yHsqtIg3OjBD9gnnv0Zh0XRvH4hwS0OqFG4JDFE0UuRovwMhpv269Z9g
-         MH+bmAc7Xm1vG9kBtS9S6AINzDd9IkSZFd/+wQgdcMSaid/KMB6ENTcR2zE1AIsAL5
-         aoIcbp6xNQqky4Cbu7MAuL2YbwAUxNZls9Lo6EYSu63SZ6JP69caVwskkfvXd8DFOT
-         dlyZPsNpI01lJQ5MuV8ma0+F9ZHGCRkupMlVvKQY771clxmK7r1COqBxk2Hrc0c6GS
-         S2DgSnPd5Nx+BQ0HoqvcwzCCQ6dKkcO5Wx+lGN1Re0iGUE+NBGHvnJCr7CuUfRykrh
-         CpXUawB7nU9Rw==
-X-Virus-Scanned: amavisd-new at mail.pekanbaru.go.id
-Received: from mail.pekanbaru.go.id ([127.0.0.1])
-        by localhost (mail.pekanbaru.go.id [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id 0onm-4XDH2K4; Thu, 12 May 2022 10:45:42 +0700 (WIB)
-Received: from [192.168.15.101] (unknown [41.79.219.176])
-        by mail.pekanbaru.go.id (Postfix) with ESMTPSA id B511298ADEA;
-        Thu, 12 May 2022 10:45:32 +0700 (WIB)
-Content-Type: text/plain; charset="iso-8859-1"
+        with ESMTP id S1355353AbiEMJ4O (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Fri, 13 May 2022 05:56:14 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49D5C1402C;
+        Fri, 13 May 2022 02:56:12 -0700 (PDT)
+Received: from zn.tnic (p5de8eeb4.dip0.t-ipconnect.de [93.232.238.180])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id C6FDC1EC069A;
+        Fri, 13 May 2022 11:56:06 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1652435766;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=qZU+VowKBrdGf3U5Q1GiT7jwO9RXiaZ1Fk4oM0FeUKk=;
+        b=WlWppcm86nod9C3ir0FTP3z78QRW/KpU7UHINYTa+cp6idwyvSqu4+vvcCY1i6q3etuV/8
+        zVAS2BbTXLELLnPrtM5wXQ5+CSYrfiAXG3e0wck2uSb9gCg88OyZhHdX0ItNXV3eGk3n3D
+        QkY9X5XWzlKLKtDDjAAWN/1aM6ZPD80=
+Date:   Fri, 13 May 2022 11:56:08 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Yazen Ghannam <yazen.ghannam@amd.com>
+Cc:     linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Smita.KoralahalliChannabasappa@amd.com, muralidhara.mk@amd.com,
+        naveenkrishna.chatradhi@amd.com
+Subject: Re: [PATCH 04/18] EDAC/amd64: Remove PCI Function 0
+Message-ID: <Yn4rOD9CS9LFxzhx@zn.tnic>
+References: <20220509145534.44912-1-yazen.ghannam@amd.com>
+ <20220509145534.44912-5-yazen.ghannam@amd.com>
+ <YnuRUsAcnzT4Advm@zn.tnic>
+ <Yn0a9T9xqAkWnPWt@yaz-fattaah>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Description: Mail message body
-Subject: Awaiting your response 
-To:     Recipients <waterproject@pekanbaru.go.id>
-From:   waterproject@pekanbaru.go.id
-Date:   Thu, 12 May 2022 04:45:24 +0100
-Reply-To: test@hostnextdoor.com
-Message-Id: <20220512034532.B511298ADEA@mail.pekanbaru.go.id>
-X-Spam-Status: No, score=3.4 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_BL_SPAMCOP_NET,
-        RCVD_IN_SBL,RCVD_IN_VALIDITY_RPBL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: ***
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <Yn0a9T9xqAkWnPWt@yaz-fattaah>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-Hi =
+On Thu, May 12, 2022 at 02:34:29PM +0000, Yazen Ghannam wrote:
+> Also, there are five function pointers that are created in this patchset and
+> called from hw_info_get(). I think those pointers can be dropped and the
+> helper functions called from hw_info_get(). So I think it'd be good to make
+> hw_info_get() into a function pointer which gets set to a functoin that calls
+> the right collection of legacy, modern, and GPU helper functions. How does
+> that sound?
 
+Makes sense.
 
-Did you get my previous email? I have attempted over 3 times to open up com=
-munication with you. Please acknowledge if you receive this email. =
+Thx.
 
+-- 
+Regards/Gruss,
+    Boris.
 
-Regards
-Morten Friis
+https://people.kernel.org/tglx/notes-about-netiquette
