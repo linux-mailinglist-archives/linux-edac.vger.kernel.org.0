@@ -2,381 +2,149 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C014527ABD
-	for <lists+linux-edac@lfdr.de>; Mon, 16 May 2022 00:48:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F6F8527BF0
+	for <lists+linux-edac@lfdr.de>; Mon, 16 May 2022 04:31:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236401AbiEOWsi (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Sun, 15 May 2022 18:48:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45100 "EHLO
+        id S239392AbiEPCbK (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Sun, 15 May 2022 22:31:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234031AbiEOWsh (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Sun, 15 May 2022 18:48:37 -0400
-Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BF83E0EA;
-        Sun, 15 May 2022 15:48:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=93lwEQzS5IXDyIA/NgwVVg/rNYgBX/Ekc2xpjleQYUs=; b=kTFBpmweCVBGzCiXcny/Ei9sEB
-        uLvI0D7aJyCY9gW4MGXg7URDXPxUenVwWXA89vT+j9BRtrs1EQfNeJ4qB6gH1x3WL3JnCBSUAhoXN
-        1INIRQN5V3AcrCr4dPVHFH/5EtxkbxYQW14SNMurRWenslQKNiT8uXf6mSEvQOr2XsmvD7L3cVekK
-        G4ucrnvqt1/qzfQAz5Rre/uP6rIw96QRGg/Ntwc578rmZP+ob6saFKUKA0qaw+P9NiH2QNSqjbmfS
-        xeJNCdUwDvi5QchOtqGvFJPXe/AnKHhlIFK8hoqIAjFEroOQ6KccSYTKVhehD92Fv+lP928LorOpQ
-        iXFJTFmg==;
-Received: from [177.183.162.244] (helo=[192.168.0.5])
-        by fanzine2.igalia.com with esmtpsa 
-        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
-        id 1nqN22-005kj2-70; Mon, 16 May 2022 00:48:10 +0200
-Message-ID: <d313eec2-96b6-04e3-35cd-981f103d010e@igalia.com>
-Date:   Sun, 15 May 2022 19:47:39 -0300
+        with ESMTP id S239413AbiEPCbE (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Sun, 15 May 2022 22:31:04 -0400
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CB5915711;
+        Sun, 15 May 2022 19:31:01 -0700 (PDT)
+Received: by mail-lf1-x130.google.com with SMTP id d19so23462946lfj.4;
+        Sun, 15 May 2022 19:31:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=4s0OSmePhoJXuHiuMzZo1VwoeuQdSeAInIYJXLS5OyM=;
+        b=Qy577rTsVDyHwVUTciphWV+VNPU0RzZ4IdFO25T1sbgmjfn247DhYQoRqZJt/HbXFE
+         Zj8Mey1O+VdqkZZ75zH8Bm+J1PAP5/RrBud4ThJBNncM/Z42o929WNGKYOG4/MBvN2Nh
+         Q61UEZuPT1fm3yrTtQq9AQ+xgIQ39W8e1VCvdufdTFL0goCFzu7agfSiyJ3E/oqCjafc
+         Kk3PfZmbdiRqxvJfdvQaqQbSqvsIwc7cN0QFJqfI+srg1oLQV55jCxiOeM8dyAKl8olC
+         uwpBMzz7ZjXDprNlNz9GNVbpZF149gN4LpjWkkFxilg9y+WFyuiW58JfgXvtUl2ciLFw
+         H08w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=4s0OSmePhoJXuHiuMzZo1VwoeuQdSeAInIYJXLS5OyM=;
+        b=mzwbI/b2jvLcbOhf/0Swv4UgIgPajHVC+Af/GIj3qOBpDI/+KSO879+4XfC3NsXxP4
+         GVVvSohmE6sxOViRWNA2w2/Cmc7ZYNWCsVgo9M6El1vNu7uuEM2PYPbYg/fG7YMm/7xQ
+         5s2aBFPIsqJVhcmAXkDwf4FaxE8jC9Jj9LRG/wThUnL3XDZ3t83VLCxHEAxw52ypRlT/
+         zKzEn2oXjz+aGYv9ImSC7U7M3xEPv/KaJYBLpUB2f4WRaTDrtcOZVV14ntJM2ZMjLGex
+         JrFT+OSRVWlJQQ9KMrPfARhnrAj+vNaBC3RGs66Y3fVJaLUFAiexFFSATGX6M2aqy6fV
+         1gWA==
+X-Gm-Message-State: AOAM531qzA+dGWuoX8IX/fTMHPSIJwgPEJea8lLAXDNuyusIshjtQ8rm
+        0KTMrAqURr/HUL0F2iyl3ZXawctEFgcWwo972WukX/5FBFo=
+X-Google-Smtp-Source: ABdhPJxZq6+lnoKQQOPMomvc/GGVcnlfK80rcb3L0qena45Z2EZ6GSg202Ym+IGA0gz340U5CzyhYcNIOBuICW8aYzY=
+X-Received: by 2002:a05:6512:c03:b0:447:7912:7e6b with SMTP id
+ z3-20020a0565120c0300b0044779127e6bmr11291271lfu.508.1652668259368; Sun, 15
+ May 2022 19:30:59 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH 24/30] panic: Refactor the panic path
-Content-Language: en-US
-To:     Petr Mladek <pmladek@suse.com>,
-        "michael Kelley (LINUX)" <mikelley@microsoft.com>,
-        Baoquan He <bhe@redhat.com>, Dave Young <dyoung@redhat.com>,
-        d.hatayama@jp.fujitsu.com
-Cc:     akpm@linux-foundation.org, kexec@lists.infradead.org,
-        linux-kernel@vger.kernel.org,
-        bcm-kernel-feedback-list@broadcom.com,
-        linuxppc-dev@lists.ozlabs.org, linux-alpha@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-edac@vger.kernel.org,
-        linux-hyperv@vger.kernel.org, linux-leds@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
-        linux-s390@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-um@lists.infradead.org, linux-xtensa@linux-xtensa.org,
-        netdev@vger.kernel.org, openipmi-developer@lists.sourceforge.net,
-        rcu@vger.kernel.org, sparclinux@vger.kernel.org,
-        xen-devel@lists.xenproject.org, x86@kernel.org,
-        kernel-dev@igalia.com, kernel@gpiccoli.net, halves@canonical.com,
-        fabiomirmar@gmail.com, alejandro.j.jimenez@oracle.com,
-        andriy.shevchenko@linux.intel.com, arnd@arndb.de, bp@alien8.de,
-        corbet@lwn.net, dave.hansen@linux.intel.com, feng.tang@intel.com,
-        gregkh@linuxfoundation.org, hidehiro.kawai.ez@hitachi.com,
-        jgross@suse.com, john.ogness@linutronix.de, keescook@chromium.org,
-        luto@kernel.org, mhiramat@kernel.org, mingo@redhat.com,
-        paulmck@kernel.org, peterz@infradead.org, rostedt@goodmis.org,
-        senozhatsky@chromium.org, stern@rowland.harvard.edu,
-        tglx@linutronix.de, vgoyal@redhat.com, vkuznets@redhat.com,
-        will@kernel.org
-References: <20220427224924.592546-1-gpiccoli@igalia.com>
- <20220427224924.592546-25-gpiccoli@igalia.com> <Yn0TnsWVxCcdB2yO@alley>
-From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
-In-Reply-To: <Yn0TnsWVxCcdB2yO@alley>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220510031056.1657-1-ctcchien@nuvoton.com> <20220510031056.1657-3-ctcchien@nuvoton.com>
+ <8d46eeb8-7926-f842-6105-1975a5adc3fe@molgen.mpg.de>
+In-Reply-To: <8d46eeb8-7926-f842-6105-1975a5adc3fe@molgen.mpg.de>
+From:   Medad Young <medadyoung@gmail.com>
+Date:   Mon, 16 May 2022 10:30:48 +0800
+Message-ID: <CAHpyw9cvrEKMUpRBWYWp9hDZgA8ALHBkNAQr6ZDqjj4uH-MRTQ@mail.gmail.com>
+Subject: Re: [PATCH v9 2/3] dt-bindings: edac: nuvoton: add NPCM memory controller
+To:     Paul Menzel <pmenzel@molgen.mpg.de>
+Cc:     rric@kernel.org, James Morse <james.morse@arm.com>,
+        tony.luck@intel.com, Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Borislav Petkov <bp@alien8.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Benjamin Fair <benjaminfair@google.com>,
+        Nancy Yuen <yuenn@google.com>,
+        Patrick Venture <venture@google.com>, KWLIU@nuvoton.com,
+        YSCHU@nuvoton.com, JJLIU0@nuvoton.com, KFTING <KFTING@nuvoton.com>,
+        Avi Fishman <avifishman70@gmail.com>,
+        Tomer Maimon <tmaimon77@gmail.com>,
+        Tali Perry <tali.perry1@gmail.com>, ctcchien@nuvoton.com,
+        devicetree <devicetree@vger.kernel.org>,
+        OpenBMC Maillist <openbmc@lists.ozlabs.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-edac <linux-edac@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On 12/05/2022 11:03, Petr Mladek wrote:
-> Hello,
-> 
-> first, I am sorry for stepping into the discussion so late.
-> I was busy with some other stuff and this patchset is far
-> from trivial.
-> 
-> Second, thanks a lot for putting so much effort into it.
-> Most of the changes look pretty good, especially all
-> the fixes of particular notifiers and split into
-> four lists.
-> 
-> Though this patch will need some more love. See below
-> for more details.
+Dear Paul,
 
-Thanks a lot for your review Petr, it is much appreciated! No need for
-apologies, there is no urgency here =)
+thanks for your comment.
 
+Paul Menzel <pmenzel@molgen.mpg.de> =E6=96=BC 2022=E5=B9=B45=E6=9C=8810=E6=
+=97=A5 =E9=80=B1=E4=BA=8C =E4=B8=8B=E5=8D=882:14=E5=AF=AB=E9=81=93=EF=BC=9A
+>
+> Dear Medad,
+>
+>
+> Thank you for your patch.
+>
+> Am 10.05.22 um 05:10 schrieb Medad CChien:
+> > Document devicetree bindings for the Nuvoton BMC NPCM memory controller=
+.
+> >
+> > Signed-off-by: Medad CChien <ctcchien@nuvoton.com>
+> > Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+> > ---
+> >   .../edac/nuvoton,npcm-memory-controller.yaml  | 61 ++++++++++++++++++=
++
+> >   1 file changed, 61 insertions(+)
+> >   create mode 100644 Documentation/devicetree/bindings/edac/nuvoton,npc=
+m-memory-controller.yaml
+> >
+> > diff --git a/Documentation/devicetree/bindings/edac/nuvoton,npcm-memory=
+-controller.yaml b/Documentation/devicetree/bindings/edac/nuvoton,npcm-memo=
+ry-controller.yaml
+> > new file mode 100644
+> > index 000000000000..6f37211796a3
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/edac/nuvoton,npcm-memory-contro=
+ller.yaml
+> > @@ -0,0 +1,61 @@
+> > +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+> > +%YAML 1.2
+> > +---
+> > +$id: http://devicetree.org/schemas/edac/nuvoton,npcm-memory-controller=
+.yaml#
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+> > +title: Nuvoton NPCM Memory Controller
+> > +
+> > +maintainers:
+> > +  - Medad CChien <ctcchien@nuvoton.com>
+>
+> Just a side note, that in my experience functional like
+> <linux-npcm-memory-controller@nuvoton.com> instead of personal addresses
+> are useful, as you can configure on your side, who to deliver messages
+> to. For example, if you are on sick leave or vacation, you just
+> configure to deliver the message to a colleague of yours (or they get
+> messages in the first place anyway).
+>
+> Maybe you can bring that up at Nuvoton.
+>
 
-> [...] 
-> This talks only about kdump. The reality is much more complicated.
-> The level affect the order of:
-> 
->     + notifiers vs. kdump
->     + notifiers vs. crash_dump
->     + crash_dump vs. kdump
+I understand, but we do not have group email  address.
+so maybe I should add more maintainers?
 
-First of all, I'd like to ask you please to clarify to me *exactly* what
-are the differences between "crash_dump" and "kdump". I'm sorry if
-that's a silly question, I need to be 100% sure I understand the
-concepts the same way you do.
+> [=E2=80=A6]
+>
+>
+> Kind regards,
+>
+> Paul
 
-
-> There might theoretically many variants of the ordering of kdump,
-> crash_dump, and the 4 notifier list. Some variants do not make
-> much sense. You choose 5 variants and tried to select them by
-> a level number.
-> 
-> The question is if we really could easily describe the meaning this
-> way. It is not only about a "level" of notifiers before kdump. It is
-> also about the ordering of crash_dump vs. kdump. IMHO, "level"
-> semantic does not fit there.
-> 
-> Maybe more parameters might be easier to understand the effect.
-> Anyway, we first need to agree on the chosen variants.
-> I am going to discuss it more in the code, see below.
-> 
-> 
-> [...] 
-> Here is the code using the above functions. It helps to discuss
-> the design and logic.
-> 
-> <kernel/panic.c>
-> 	order_panic_notifiers_and_kdump();
-> 
-> 	/* If no level, we should kdump ASAP. */
-> 	if (!panic_notifiers_level)
-> 		__crash_kexec(NULL);
-> 
-> 	crash_smp_send_stop();
-> 	panic_notifier_hypervisor_once(buf);
-> 
-> 	if (panic_notifier_info_once(buf))
-> 		kmsg_dump(KMSG_DUMP_PANIC);
-> 
-> 	panic_notifier_pre_reboot_once(buf);
-> 
-> 	__crash_kexec(NULL);
-> 
-> 	panic_notifier_hypervisor_once(buf);
-> 
-> 	if (panic_notifier_info_once(buf))
-> 		kmsg_dump(KMSG_DUMP_PANIC);
-> 
-> 	panic_notifier_pre_reboot_once(buf);
-> </kernel/panic.c>
-> 
-> I have to say that the logic is very unclear. Almost all
-> functions are called twice:
-> 
->    + __crash_kexec()
->    + kmsg_dump()
->    + panic_notifier_hypervisor_once()
->    + panic_notifier_pre_reboot_once()
->    + panic_notifier_info_once()
-> 
-> It is pretty hard to find what functions are always called in the same
-> order and where the order can be inverted.
-> 
-> The really used code path is defined by order_panic_notifiers_and_kdump()
-> that encodes "level" into "bits". The bits are then flipped in
-> panic_notifier_*_once() calls that either do something or not.
-> kmsg_dump() is called according to the bit flip.
-> 
-> It is an interesting approach. I guess that you wanted to avoid too
-> many if/then/else levels in panic(). But honestly, it looks like
-> a black magic to me.
-> 
-> IMHO, it is always easier to follow if/then/else logic than using
-> a translation table that requires additional bit flips when
-> a value is used more times.
-> 
-> Also I guess that it is good proof that "level" abstraction does
-> not fit here. Normal levels would not need this kind of magic.
-
-Heheh OK, I appreciate your opinion, but I guess we'll need to agree in
-disagree here - I'm much more fond to this kind of code than a bunch of
-if/else blocks that almost give headaches. Encoding such "level" logic
-in the if/else scheme is very convoluted, generates a very big code. And
-the functions aren't so black magic - they map a level in bits, and the
-functions _once() are called...once! Although we switch the position in
-the code, so there are 2 calls, one of them is called and the other not.
-
-But that's totally fine to change - especially if we're moving away from
-the "level" logic. I see below you propose a much simpler approach - if
-we follow that, definitely we won't need the "black magic" approach heheh
-
-
-> 
-> OK, the question is how to make it better. Let's start with
-> a clear picture of the problem:
-> 
-> 1. panic() has basically two funtions:
-> 
->       + show/store debug information (optional ways and amount)
->       + do something with the system (reboot, stay hanged)
-> 
-> 
-> 2. There are 4 ways how to show/store the information:
-> 
->       + tell hypervisor to store what it is interested about
->       + crash_dump
->       + kmsg_dump()
->       + consoles
-> 
->   , where crash_dump and consoles are special:
-> 
->      + crash_dump does not return. Instead it ends up with reboot.
-> 
->      + Consoles work transparently. They just need an extra flush
->        before reboot or staying hanged.
-> 
-> 
-> 3. The various notifiers do things like:
-> 
->      + tell hypervisor about the crash
->      + print more information (also stop watchdogs)
->      + prepare system for reboot (touch some interfaces)
->      + prepare system for staying hanged (blinking)
-> 
->    Note that it pretty nicely matches the 4 notifier lists.
-> 
-
-I really appreciate the summary skill you have, to convert complex
-problems in very clear and concise ideas. Thanks for that, very useful!
-I agree with what was summarized above.
-
-
-> Now, we need to decide about the ordering. The main area is how
-> to store the debug information. Consoles are transparent so
-> the quesition is about:
-> 
->      + hypervisor
->      + crash_dump
->      + kmsg_dump
-> 
-> Some people need none and some people want all. There is a
-> risk that system might hung at any stage. This why people want to
-> make the order configurable.
-> 
-> But crash_dump() does not return when it succeeds. And kmsg_dump()
-> users havn't complained about hypervisor problems yet. So, that
-> two variants might be enough:
-> 
->     + crash_dump (hypervisor, kmsg_dump as fallback)
->     + hypervisor, kmsg_dump, crash_dump
-> 
-> One option "panic_prefer_crash_dump" should be enough.
-> And the code might look like:
-> 
-> void panic()
-> {
-> [...]
-> 	dump_stack();
-> 	kgdb_panic(buf);
-> 
-> 	< ---  here starts the reworked code --- >
-> 
-> 	/* crash dump is enough when enabled and preferred. */
-> 	if (panic_prefer_crash_dump)
-> 		__crash_kexec(NULL);
-> 
-> 	/* Stop other CPUs and focus on handling the panic state. */
-> 	if (has_kexec_crash_image)
-> 		crash_smp_send_stop();
-> 	else
-> 		smp_send_stop()
-> 
-
-Here we have a very important point. Why do we need 2 variants of SMP
-CPU stopping functions? I disagree with that - my understanding of this
-after some study in architectures is that the crash_() variant is
-"stronger", should work in all cases and if not, we should fix that -
-that'd be a bug.
-
-Such variant either maps to smp_send_stop() (in various architectures,
-including XEN/x86) or overrides the basic function with more proper
-handling for panic() case...I don't see why we still need such
-distinction, if you / others have some insight about that, I'd like to
-hear =)
-
-
-> 	/* Notify hypervisor about the system panic. */
-> 	atomic_notifier_call_chain(&panic_hypervisor_list, 0, NULL);
-> 
-> 	/*
-> 	 * No need to risk extra info when there is no kmsg dumper
-> 	 * registered.
-> 	 */
-> 	if (!has_kmsg_dumper())
-> 		__crash_kexec(NULL);
-> 
-> 	/* Add extra info from different subsystems. */
-> 	atomic_notifier_call_chain(&panic_info_list, 0, NULL);
-> 
-> 	kmsg_dump(KMSG_DUMP_PANIC);
-> 	__crash_kexec(NULL);
-> 
-> 	/* Flush console */
-> 	unblank_screen();
-> 	console_unblank();
-> 	debug_locks_off();
-> 	console_flush_on_panic(CONSOLE_FLUSH_PENDING);
-> 
-> 	if (panic_timeout > 0) {
-> 		delay()
-> 	}
-> 
-> 	/*
-> 	 * Prepare system for eventual reboot and allow custom
-> 	 * reboot handling.
-> 	 */
-> 	atomic_notifier_call_chain(&panic_reboot_list, 0, NULL);
-
-You had the order of panic_reboot_list VS. consoles flushing inverted.
-It might make sense, although I didn't do that in V1...
-Are you OK in having a helper for console flushing, as I did in V1? It
-makes code of panic() a bit less polluted / more focused I feel.
-
-
-> 
-> 	if (panic_timeout != 0) {
-> 		reboot();
-> 	}
-> 
-> 	/*
-> 	 * Prepare system for the infinite waiting, for example,
-> 	 * setup blinking.
-> 	 */
-> 	atomic_notifier_call_chain(&panic_loop_list, 0, NULL);
-> 
-> 	infinite_loop();
-> }
-> 
-> 
-> __crash_kexec() is there 3 times but otherwise the code looks
-> quite straight forward.
-> 
-> Note 1: I renamed the two last notifier list. The name 'post-reboot'
-> 	did sound strange from the logical POV ;-)
-> 
-> Note 2: We have to avoid the possibility to call "reboot" list
-> 	before kmsg_dump(). All callbacks providing info
-> 	have to be in the info list. It a callback combines
-> 	info and reboot functionality then it should be split.
-> 
-> 	There must be another way to calm down problematic
-> 	info callbacks. And it has to be solved when such
-> 	a problem is reported. Is there any known issue, please?
-> 
-> It is possible that I have missed something important.
-> But I would really like to make the logic as simple as possible.
-
-OK, I agree with you! It's indeed simpler and if others agree, I can
-happily change the logic to what you proposed. Although...currently the
-"crash_kexec_post_notifiers" allows to call _all_ panic_reboot_list
-callbacks _before kdump_.
-
-We need to mention this change in the commit messages, but I really
-would like to hear the opinions of heavy users of notifiers (as
-Michael/Hyper-V) and the kdump interested parties (like Baoquan / Dave
-Young / Hayatama). If we all agree on such approach, will change that
-for V2 =)
-
-Thanks again Petr, for the time spent in such detailed review!
-Cheers,
-
-
-Guilherme
+B.R.
+Medad
