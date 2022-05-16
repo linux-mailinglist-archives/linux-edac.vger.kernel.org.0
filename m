@@ -2,363 +2,329 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26ECF527C06
-	for <lists+linux-edac@lfdr.de>; Mon, 16 May 2022 04:36:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C97A35281B8
+	for <lists+linux-edac@lfdr.de>; Mon, 16 May 2022 12:21:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230308AbiEPCgT (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Sun, 15 May 2022 22:36:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45174 "EHLO
+        id S233657AbiEPKVz (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Mon, 16 May 2022 06:21:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239435AbiEPCgF (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Sun, 15 May 2022 22:36:05 -0400
-Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E95CBBCA8;
-        Sun, 15 May 2022 19:36:03 -0700 (PDT)
-Received: by mail-lj1-x22c.google.com with SMTP id o22so15619865ljp.8;
-        Sun, 15 May 2022 19:36:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=pbnTlSg+9lkzJZgvRMdLa+9B8pVRxX5+A47ByjDRmu8=;
-        b=ZihCwqrl9PpeLm5+Am/uEriWZHH63ZwRI8vnxF3gIuEyRDQXqDuvh/FoZPifsun4aE
-         7Gq3Fnkn2ruUfRnNo54tKViEbwdechsO70HNeCFP7LEnmmyi/Y8JfVm28r9ujbTvs3PC
-         J4BKygK5jDTRjyOuPrg0dQWjdoj/mW+A2TGUYuhgqQvE+1CRRu318gOJcZwn9vWdgBGX
-         SBgZq1O622dabZMlssWzYRb+l1DXRbKg0HGdvSH9gUZtB4dSJyeAy2Ae9m2X6f3BgPlw
-         MQHWarm53k6ajCNzb3jmf+LiIey2bQZFaZTfvP9xE6+igCeU7bL/AYKSkzFFEh6PuUXa
-         iTRA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=pbnTlSg+9lkzJZgvRMdLa+9B8pVRxX5+A47ByjDRmu8=;
-        b=JbLsIqhwRhB9XtwipTqTXw/LoHT5QADucaYluyXD1AxBO27jj/JQqntJj6Ld4EsL1d
-         MYh7qB4nT8R2PULgPnJod3T6XJAi9l8ZcucaK1TkQ/RsuSprHksEOEdeIu4VF7eq2pYq
-         mJHDf8VQr2pD5QJrpsY4+MdO0uGAjbRKQHVALFxe26P0ZvUfGJK8wxois6lliFxbFYkb
-         Ngkd6Y0tD9zMdC3L/yU+Km10+ZizGupXjqIAUcbTsmIUJCaWz269skq1I4+kX/N+vrdb
-         3Q/zr/KjMtOflKgD+MIJPqGjg7lNe0Lj+IcEhnYzKH8TBFw9RbYj7cKtjxgFMEvRPGtq
-         kc9Q==
-X-Gm-Message-State: AOAM530QoXEt9xfckEpXeY7nsfguF+FpnXseEUYxgulu6imW8NNnsqbb
-        YeVrdJtyAau1isoWSpQqwY7Ug9oK5OlKPGKu4Rc=
-X-Google-Smtp-Source: ABdhPJzzYv3UBxnxwNzl6OP7ju5c/5Mj2ZPE3GhdhiqDnR8gYF2Zyfq+Q3Pn4xGVcRozD8KllIWTw+lQmu8rolCRhKk=
-X-Received: by 2002:a2e:a801:0:b0:24a:ff0b:ae7a with SMTP id
- l1-20020a2ea801000000b0024aff0bae7amr9560575ljq.287.1652668561873; Sun, 15
- May 2022 19:36:01 -0700 (PDT)
+        with ESMTP id S232593AbiEPKVy (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Mon, 16 May 2022 06:21:54 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 840B0DEC9;
+        Mon, 16 May 2022 03:21:52 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 02AF51F930;
+        Mon, 16 May 2022 10:21:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1652696511; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=9SKwT5B95E5YN9xa81VvHUpO+QGR+zcfCsbhuV2Jgp4=;
+        b=LWTnDo04g2ZIMR91v0c2MAsYmxaUOl80sz+tTo9fRyqmuLzfAZ1jmcmhBu1F/2SwEKbidr
+        AAgP6W9p9YHXuK9IdMK0VKJ5T49DYuwEAzjkXZlkWl2knT/MPCmRsL91fAF4WZ26S0Lq+5
+        GaIq0ymGLcl5C1bryaGKOpn3k9Ph6bU=
+Received: from suse.cz (unknown [10.100.208.146])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 89FB92C141;
+        Mon, 16 May 2022 10:21:48 +0000 (UTC)
+Date:   Mon, 16 May 2022 12:21:48 +0200
+From:   Petr Mladek <pmladek@suse.com>
+To:     "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+Cc:     "michael Kelley (LINUX)" <mikelley@microsoft.com>,
+        Baoquan He <bhe@redhat.com>, Dave Young <dyoung@redhat.com>,
+        d.hatayama@jp.fujitsu.com, akpm@linux-foundation.org,
+        kexec@lists.infradead.org, linux-kernel@vger.kernel.org,
+        bcm-kernel-feedback-list@broadcom.com,
+        linuxppc-dev@lists.ozlabs.org, linux-alpha@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-edac@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, linux-leds@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        linux-s390@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-um@lists.infradead.org, linux-xtensa@linux-xtensa.org,
+        netdev@vger.kernel.org, openipmi-developer@lists.sourceforge.net,
+        rcu@vger.kernel.org, sparclinux@vger.kernel.org,
+        xen-devel@lists.xenproject.org, x86@kernel.org,
+        kernel-dev@igalia.com, kernel@gpiccoli.net, halves@canonical.com,
+        fabiomirmar@gmail.com, alejandro.j.jimenez@oracle.com,
+        andriy.shevchenko@linux.intel.com, arnd@arndb.de, bp@alien8.de,
+        corbet@lwn.net, dave.hansen@linux.intel.com, feng.tang@intel.com,
+        gregkh@linuxfoundation.org, hidehiro.kawai.ez@hitachi.com,
+        jgross@suse.com, john.ogness@linutronix.de, keescook@chromium.org,
+        luto@kernel.org, mhiramat@kernel.org, mingo@redhat.com,
+        paulmck@kernel.org, peterz@infradead.org, rostedt@goodmis.org,
+        senozhatsky@chromium.org, stern@rowland.harvard.edu,
+        tglx@linutronix.de, vgoyal@redhat.com, vkuznets@redhat.com,
+        will@kernel.org
+Subject: Re: [PATCH 24/30] panic: Refactor the panic path
+Message-ID: <YoIlvFxbqoiDsD1l@alley>
+References: <20220427224924.592546-1-gpiccoli@igalia.com>
+ <20220427224924.592546-25-gpiccoli@igalia.com>
+ <Yn0TnsWVxCcdB2yO@alley>
+ <d313eec2-96b6-04e3-35cd-981f103d010e@igalia.com>
 MIME-Version: 1.0
-References: <20220510031056.1657-1-ctcchien@nuvoton.com> <20220510031056.1657-4-ctcchien@nuvoton.com>
- <0a46ba6f-9eac-7138-c675-99df86750c83@molgen.mpg.de>
-In-Reply-To: <0a46ba6f-9eac-7138-c675-99df86750c83@molgen.mpg.de>
-From:   Medad Young <medadyoung@gmail.com>
-Date:   Mon, 16 May 2022 10:35:50 +0800
-Message-ID: <CAHpyw9epvs9E=DxHRD5oV3wzpiq7spogp+TZcuyNhD4Nk3exZg@mail.gmail.com>
-Subject: Re: [PATCH v9 3/3] EDAC: nuvoton: Add NPCM memory controller driver
-To:     Paul Menzel <pmenzel@molgen.mpg.de>
-Cc:     rric@kernel.org, James Morse <james.morse@arm.com>,
-        tony.luck@intel.com, Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Borislav Petkov <bp@alien8.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Benjamin Fair <benjaminfair@google.com>,
-        Nancy Yuen <yuenn@google.com>,
-        Patrick Venture <venture@google.com>, KWLIU@nuvoton.com,
-        YSCHU@nuvoton.com, JJLIU0@nuvoton.com, KFTING <KFTING@nuvoton.com>,
-        Avi Fishman <avifishman70@gmail.com>,
-        Tomer Maimon <tmaimon77@gmail.com>,
-        Tali Perry <tali.perry1@gmail.com>, ctcchien@nuvoton.com,
-        devicetree <devicetree@vger.kernel.org>,
-        OpenBMC Maillist <openbmc@lists.ozlabs.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-edac <linux-edac@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <d313eec2-96b6-04e3-35cd-981f103d010e@igalia.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-Dear Paul,
+On Sun 2022-05-15 19:47:39, Guilherme G. Piccoli wrote:
+> On 12/05/2022 11:03, Petr Mladek wrote:
+> > This talks only about kdump. The reality is much more complicated.
+> > The level affect the order of:
+> > 
+> >     + notifiers vs. kdump
+> >     + notifiers vs. crash_dump
+> >     + crash_dump vs. kdump
+> 
+> First of all, I'd like to ask you please to clarify to me *exactly* what
+> are the differences between "crash_dump" and "kdump". I'm sorry if
+> that's a silly question, I need to be 100% sure I understand the
+> concepts the same way you do.
 
-thanks for your comments.
+Ah, it should have been:
 
-Paul Menzel <pmenzel@molgen.mpg.de> =E6=96=BC 2022=E5=B9=B45=E6=9C=8810=E6=
-=97=A5 =E9=80=B1=E4=BA=8C =E4=B8=8B=E5=8D=883:49=E5=AF=AB=E9=81=93=EF=BC=9A
->
-> Dear Medad,
->
->
-> Am 10.05.22 um 05:10 schrieb Medad CChien:
-> > Add memory controller support for Nuvoton NPCM SoC.
->
-> It=E2=80=99d be great if you added the datasheet name, revision and secti=
-on used
-> to implement this.
->
+     + notifiers vs. kmsg_dump
+     + notifiers vs. crash_dump
+     + crash_dump vs. kmsg_dump
 
-OK, I will add those information.
+I am sorry for the confusion. Even "crash_dump" is slightly
+misleading because there is no function with this name.
+But it seems to be easier to understand than __crash_kexec().
 
-> > Note:
-> >     you can force an ecc event by writing a string to edac sysfs node
-> >     and remember to define CONFIG_EDAC_DEBUG to enable this feature
-> >     example: force a correctable event on checkcode bit 0
-> >     echo "CE checkcode 0" > /sys/devices/system/edac/mc/mc0/forced_ecc_=
-error
-> >
-> > Fix the following warnings and error:
-> > error:
-> >     error: macro "edac_printk" requires 4 arguments, but only 2 given i=
-n
-> >     driver/edac/npcm_edac.c
-> >     edac_printk(KERN_INFO, "bit_no for checkcode must be 0~7\n");
-> >
-> > warnings:
-> >     performing pointer arithmetic on a null pointer has undefined behav=
-ior.
-> >     logical not is only applied to the left hand side of this bitwise
-> >     operator.
-> >     mixing declarations and code is a C99 extension.
-> >
-> > Reported-by: kernel test robot <lkp@intel.com>
->
-> I find this line confusing as the kernel test robot did not report that
-> the memory controller driver is missing.
->
 
-Sorry, I did not get your point.
-but I add these due to kernel test robot reported some errors and warnings.
+> > There might theoretically many variants of the ordering of kdump,
+> > crash_dump, and the 4 notifier list. Some variants do not make
+> > much sense. You choose 5 variants and tried to select them by
+> > a level number.
+> > 
+> > The question is if we really could easily describe the meaning this
+> > way. It is not only about a "level" of notifiers before kdump. It is
+> > also about the ordering of crash_dump vs. kdump. IMHO, "level"
+> > semantic does not fit there.
+> > 
+> > Maybe more parameters might be easier to understand the effect.
+> > Anyway, we first need to agree on the chosen variants.
+> > I am going to discuss it more in the code, see below.
+> > 
+> > 
+> > [...] 
+> > Here is the code using the above functions. It helps to discuss
+> > the design and logic.
+> > 
+> > I have to say that the logic is very unclear. Almost all
+> > functions are called twice:
+> > 
+> > The really used code path is defined by order_panic_notifiers_and_kdump()
+> > that encodes "level" into "bits". The bits are then flipped in
+> > panic_notifier_*_once() calls that either do something or not.
+> > kmsg_dump() is called according to the bit flip.
+> > 
+> > Also I guess that it is good proof that "level" abstraction does
+> > not fit here. Normal levels would not need this kind of magic.
+> 
+> Heheh OK, I appreciate your opinion, but I guess we'll need to agree in
+> disagree here - I'm much more fond to this kind of code than a bunch of
+> if/else blocks that almost give headaches. Encoding such "level" logic
+> in the if/else scheme is very convoluted, generates a very big code. And
+> the functions aren't so black magic - they map a level in bits, and the
+> functions _once() are called...once! Although we switch the position in
+> the code, so there are 2 calls, one of them is called and the other not.
 
-> > Signed-off-by: Medad CChien <ctcchien@nuvoton.com>
-> > ---
-> >   drivers/edac/Kconfig     |  10 +
-> >   drivers/edac/Makefile    |   1 +
-> >   drivers/edac/npcm_edac.c | 680 ++++++++++++++++++++++++++++++++++++++=
-+
-> >   3 files changed, 691 insertions(+)
-> >   create mode 100644 drivers/edac/npcm_edac.c
-> >
-> > diff --git a/drivers/edac/Kconfig b/drivers/edac/Kconfig
-> > index 58ab63642e72..9c83202cbf65 100644
-> > --- a/drivers/edac/Kconfig
-> > +++ b/drivers/edac/Kconfig
-> > @@ -539,4 +539,14 @@ config EDAC_DMC520
-> >         Support for error detection and correction on the
-> >         SoCs with ARM DMC-520 DRAM controller.
-> >
-> > +config EDAC_NPCM
-> > +     tristate "Nuvoton NPCM DDR Memory Controller"
-> > +     depends on (ARCH_NPCM || COMPILE_TEST)
-> > +     help
-> > +       Support for error detection and correction on the Nuvoton NPCM =
-DDR
-> > +       memory controller.
->
-> Maybe add the information from the devicetree documentation:
->
-> The Nuvoton BMC SoC supports DDR4 memory with and without ECC (error
-> correction check).
->
-> The memory controller supports single bit error correction, double bit
-> error detection (in-line ECC in which a section (1/8th) of the memory
-> device used to store data is used for ECC storage).
->
+I see. Well, I would consider this as a warning that the approach is
+too complex. If the code, using if/then/else, would cause headaches
+then also understanding of the behavior would cause headaches for
+both users and programmers.
 
-OK, I will add that information.
 
-> > +
-> > +       First, ECC must be configured in the BootBlock header. Then, th=
-is driver
-> > +       will expose error counters via the EDAC kernel framework.
-> > +
-> >   endif # EDAC
-> > diff --git a/drivers/edac/Makefile b/drivers/edac/Makefile
-> > index 2d1641a27a28..db3c59d3ad84 100644
-> > --- a/drivers/edac/Makefile
-> > +++ b/drivers/edac/Makefile
-> > @@ -84,3 +84,4 @@ obj-$(CONFIG_EDAC_QCOM)                     +=3D qcom=
-_edac.o
-> >   obj-$(CONFIG_EDAC_ASPEED)           +=3D aspeed_edac.o
-> >   obj-$(CONFIG_EDAC_BLUEFIELD)                +=3D bluefield_edac.o
-> >   obj-$(CONFIG_EDAC_DMC520)           +=3D dmc520_edac.o
-> > +obj-$(CONFIG_EDAC_NPCM)                      +=3D npcm_edac.o
-> > diff --git a/drivers/edac/npcm_edac.c b/drivers/edac/npcm_edac.c
-> > new file mode 100644
-> > index 000000000000..5552dab242b1
-> > --- /dev/null
-> > +++ b/drivers/edac/npcm_edac.c
-> > @@ -0,0 +1,680 @@
-> > +// SPDX-License-Identifier: GPL-2.0
-> > +// Copyright (c) 2022 Nuvoton Technology corporation.
->
-> No dot/period is needed at the end, as corporation is not abbreviated.
-> Maybe also capitalize Corporation as done on the Web site.
+> But that's totally fine to change - especially if we're moving away from
+> the "level" logic. I see below you propose a much simpler approach - if
+> we follow that, definitely we won't need the "black magic" approach heheh
 
-OK
+I do not say that my proposal is fully correct. But we really need
+this kind of simpler approach.
 
->
-> > +
-> > +#include <linux/delay.h>
-> > +#include <linux/of_device.h>
-> > +
-> > +#include "edac_module.h"
-> > +
-> > +#define NPCM_EDAC_MOD_NAME "npcm-edac"
-> > +#define FORCED_ECC_ERR_EVENT_SUPPORT         BIT(1)
-> > +#define EDAC_MSG_SIZE                                                2=
-56
-> > +/* Granularity of reported error in bytes */
-> > +#define NPCM_EDAC_ERR_GRAIN                          1
-> > +
-> > +#define MEM_TYPE_DDR4                                                0=
-xA
-> > +
-> > +#define NPCM7XX_CHIP                                         0x700
-> > +#define NPCM8XX_CHIP                                         0x800
-> > +
-> > +/* Control register width definitions */
-> > +#define WDTH_16                                                       =
-       (2)
-> > +#define WDTH_32                                                       =
-       (1)
-> > +#define WDTH_64                                                       =
-       (0)
-> > +#define CTL_MEM_MAX_WIDTH_MASK                       GENMASK(4, 0)
-> > +#define CTL_REG_WIDTH_SHIFT                                  (32)
-> > +#define XOR_CHECK_BIT_SPLIT_WIDTH                    (16)
-> > +#define CTL_CONTROLLER_BUSY_FLAG                     BIT(0)
-> > +#define NPCM_ECC_CTL_FORCE_WC                                BIT(8)
-> > +#define NPCM_ECC_CTL_AUTO_WRITEBACK_EN       BIT(24)
-> > +#define NPCM_ECC_CTL_XOR_BITS_MASK                   GENMASK(23, 16)
-> > +#define NPCM_ECC_CTL_MTYPE_MASK                      GENMASK(11, 8)
-> > +#define NPCM_ECC_CTL_GLOBAL_INT_DISABLE              BIT(31)
-> > +
-> > +/* Syndrome values */
-> > +#define ECC_DOUBLE_MULTI_ERR_SYND                    0x03
-> > +
-> > +static char data_synd[] =3D {
-> > +                     0xf4, 0xf1, 0xec, 0xea, 0xe9, 0xe6, 0xe5, 0xe3,
-> > +                     0xdc, 0xda, 0xd9, 0xd6, 0xd5, 0xd3, 0xce, 0xcb,
-> > +                     0xb5, 0xb0, 0xad, 0xab, 0xa8, 0xa7, 0xa4, 0xa2,
-> > +                     0x9d, 0x9b, 0x98, 0x97, 0x94, 0x92, 0x8f, 0x8a,
-> > +                     0x75, 0x70, 0x6d, 0x6b, 0x68, 0x67, 0x64, 0x62,
-> > +                     0x5e, 0x5b, 0x58, 0x57, 0x54, 0x52, 0x4f, 0x4a,
-> > +                     0x34, 0x31, 0x2c, 0x2a, 0x29, 0x26, 0x25, 0x23,
-> > +                     0x1c, 0x1a, 0x19, 0x16, 0x15, 0x13, 0x0e, 0x0b
-> > +               };
->
-> This does not look correctly indented. At least the } should be at the
-> beginning. The values can just be indented by one tab I believe. (At
-> least that is what `indent --linux-style` does (GNU indent 2.2.12).
->
 
-OK
+> > OK, the question is how to make it better.
 
-> > +
-> > +static char check_synd[] =3D {0x01, 0x02, 0x04, 0x08, 0x10, 0x20, 0x40=
-, 0x80};
->
-> At least `indent --linux-style` add a space after { and before }.
->
+> > One option "panic_prefer_crash_dump" should be enough.
+> > And the code might look like:
+> > 
+> > void panic()
+> > {
+> > [...]
+> > 	dump_stack();
+> > 	kgdb_panic(buf);
+> > 
+> > 	< ---  here starts the reworked code --- >
+> > 
+> > 	/* crash dump is enough when enabled and preferred. */
+> > 	if (panic_prefer_crash_dump)
+> > 		__crash_kexec(NULL);
+> > 
+> > 	/* Stop other CPUs and focus on handling the panic state. */
+> > 	if (has_kexec_crash_image)
+> > 		crash_smp_send_stop();
+> > 	else
+> > 		smp_send_stop()
+> > 
+> 
+> Here we have a very important point. Why do we need 2 variants of SMP
+> CPU stopping functions? I disagree with that - my understanding of this
+> after some study in architectures is that the crash_() variant is
+> "stronger", should work in all cases and if not, we should fix that -
+> that'd be a bug.
+> 
+> Such variant either maps to smp_send_stop() (in various architectures,
+> including XEN/x86) or overrides the basic function with more proper
+> handling for panic() case...I don't see why we still need such
+> distinction, if you / others have some insight about that, I'd like to
+> hear =)
 
-OK
+The two variants were introduced by the commit 0ee59413c967c35a6dd
+("x86/panic: replace smp_send_stop() with kdump friendly version in
+panic path")
 
-> > +
-> > +struct npcm_edac_platform_data {
-> > +     /* force ECC event */
-> > +     u32 ip_features;
-> > +     u32 ddr_ctl_controller_busy_reg;
-> > +     u32 ecc_ctl_xor_check_bits_reg;
-> > +
-> > +     u32 chip;
-> > +
-> > +     /* DDR4 Controller Registers */
-> > +     u32 ddr_ctl_mem_type_reg;
-> > +     u32 ddr_ctl_mem_width_reg;
-> > +
-> > +     u32 ecc_ctl_en_reg;
-> > +     u32 ecc_ctl_int_mask;
-> > +     u32 ecc_ctl_int_status;
-> > +     u32 ecc_ctl_int_ack;
-> > +     u32 ecc_ctl_int_mask_master;
-> > +     u32 ecc_ctl_int_mask_ecc;
-> > +
-> > +     u32 ecc_sig_c_addr_l;
-> > +     u32 ecc_sig_c_addr_h;
-> > +     u32 ecc_sig_c_data_l;
-> > +     u32 ecc_sig_c_data_h;
-> > +     u32 ecc_sig_c_id;
-> > +     u32 ecc_sig_c_synd;
-> > +
-> > +     u32 ecc_sig_u_addr_l;
-> > +     u32 ecc_sig_u_addr_h;
-> > +     u32 ecc_sig_u_data_l;
-> > +     u32 ecc_sig_u_data_h;
-> > +     u32 ecc_sig_u_id;
-> > +     u32 ecc_sig_u_synd;
-> > +
-> > +     /* MASK */
-> > +     u32 ecc_ctl_ecc_enable_mask;
-> > +     u32 ecc_ctl_en_int_master_mask;
-> > +     u32 ecc_ctl_en_int_ecc_mask;
-> > +
-> > +     /* ECC IRQ Macros */
-> > +     u32 ecc_int_ce_event;
-> > +     u32 ecc_int_second_ce_event;
-> > +     u32 ecc_int_ue_event;
-> > +     u32 ecc_int_second_ue_event;
-> > +     u32 ecc_int_ce_ue_mask;
-> > +     u32 ecc_ce_intr_mask;
-> > +     u32 ecc_ue_intr_mask;
-> > +
-> > +     /* ECC Signature Macros */
-> > +     u32 ecc_sig_c_id_shift;
-> > +     u32 ecc_sig_c_synd_shift;
-> > +     u32 ecc_sig_c_addr_h_mask;
-> > +     u32 ecc_sig_c_id_mask;
-> > +     u32 ecc_sig_c_synd_mask;
-> > +
-> > +     u32 ecc_sig_u_id_shift;
-> > +     u32 ecc_sig_u_synd_shift;
-> > +     u32 ecc_sig_u_addr_h_mask;
-> > +     u32 ecc_sig_u_id_mask;
-> > +     u32 ecc_sig_u_synd_mask;
-> > +};
-> > +
-> > +struct priv_data {
-> > +     void __iomem *reg;
-> > +     u32 ce_cnt;
-> > +     u32 ue_cnt; > + char message[EDAC_MSG_SIZE];
-> > +     const struct npcm_edac_platform_data *npcm_chip;
-> > +};
-> > +
-> > +
-> > +static void init_mem_layout(struct mem_ctl_info *mci)
-> > +{
-> > +     struct priv_data *priv =3D mci->pvt_info;
-> > +     const struct npcm_edac_platform_data *npcm_chip =3D priv->npcm_ch=
-ip;
-> > +     struct csrow_info *csi;
-> > +     struct dimm_info *dimm;
-> > +     struct sysinfo info;
-> > +     enum mem_type mtype;
-> > +     u32 val, width;
-> > +     u32 size, row;
-> > +     u8 j;
->
-> At least for loop variables, the default size integers should be used [1]=
-.
->
+It points to https://lkml.org/lkml/2015/6/24/44 that talks about
+still running watchdogs.
 
-OK
+It is possible that the problem could be fixed another way. It is
+even possible that it has already been fixed by the notifiers
+that disable the watchdogs.
 
-> [=E2=80=A6]
+Anyway, any change of the smp_send_stop() behavior should be done
+in a separate patch. It will help with bisection of possible
+regression. Also it would require a good explanation in
+the commit message. I would personally do it in a separate
+patch(set).
+
+
+> > 	/* Notify hypervisor about the system panic. */
+> > 	atomic_notifier_call_chain(&panic_hypervisor_list, 0, NULL);
+> > 
+> > 	/*
+> > 	 * No need to risk extra info when there is no kmsg dumper
+> > 	 * registered.
+> > 	 */
+> > 	if (!has_kmsg_dumper())
+> > 		__crash_kexec(NULL);
+> > 
+> > 	/* Add extra info from different subsystems. */
+> > 	atomic_notifier_call_chain(&panic_info_list, 0, NULL);
+> > 
+> > 	kmsg_dump(KMSG_DUMP_PANIC);
+> > 	__crash_kexec(NULL);
+> > 
+> > 	/* Flush console */
+> > 	unblank_screen();
+> > 	console_unblank();
+> > 	debug_locks_off();
+> > 	console_flush_on_panic(CONSOLE_FLUSH_PENDING);
+> > 
+> > 	if (panic_timeout > 0) {
+> > 		delay()
+> > 	}
+> > 
+> > 	/*
+> > 	 * Prepare system for eventual reboot and allow custom
+> > 	 * reboot handling.
+> > 	 */
+> > 	atomic_notifier_call_chain(&panic_reboot_list, 0, NULL);
+> 
+> You had the order of panic_reboot_list VS. consoles flushing inverted.
+> It might make sense, although I didn't do that in V1...
+
+IMHO, it makes sense:
+
+  1. panic_reboot_list contains notifiers that do the reboot
+     immediately, for example, xen_panic_event, alpha_panic_event.
+     The consoles have to be flushed earlier.
+
+  2. console_flush_on_panic() ignores the result of console_trylock()
+     and always calls console_unlock(). As a result the lock should
+     be unlocked at the end. And any further printk() should be able
+     to printk the messages to the console immediately. It means
+     that any messages printed by the reboot notifiers should appear
+     on the console as well.
+
+> Are you OK in having a helper for console flushing, as I did in V1? It
+> makes code of panic() a bit less polluted / more focused I feel.
+
+Yes, it makes sense. Well, it would better to do it in a separate
+patch. The patch patch reworking the logic should be as small
+as possible. It will simplify the review.
+
+
+> > 	if (panic_timeout != 0) {
+> > 		reboot();
+> > 	}
+> > 
+> > 	/*
+> > 	 * Prepare system for the infinite waiting, for example,
+> > 	 * setup blinking.
+> > 	 */
+> > 	atomic_notifier_call_chain(&panic_loop_list, 0, NULL);
+> > 
+> > 	infinite_loop();
+> > }
+> > 
+> > 
+> > __crash_kexec() is there 3 times but otherwise the code looks
+> > quite straight forward.
+> > 
+> > Note 1: I renamed the two last notifier list. The name 'post-reboot'
+> > 	did sound strange from the logical POV ;-)
+> > 
+> > Note 2: We have to avoid the possibility to call "reboot" list
+> > 	before kmsg_dump(). All callbacks providing info
+> > 	have to be in the info list. It a callback combines
+> > 	info and reboot functionality then it should be split.
+> > 
+> > 	There must be another way to calm down problematic
+> > 	info callbacks. And it has to be solved when such
+> > 	a problem is reported. Is there any known issue, please?
+> > 
+> > It is possible that I have missed something important.
+> > But I would really like to make the logic as simple as possible.
+> 
+> OK, I agree with you! It's indeed simpler and if others agree, I can
+> happily change the logic to what you proposed. Although...currently the
+> "crash_kexec_post_notifiers" allows to call _all_ panic_reboot_list
+> callbacks _before kdump_.
 >
->
-> Kind regards,
->
-> Paul
->
->
-> [1]: https://notabs.org/coding/smallIntsBigPenalty.htm
+> We need to mention this change in the commit messages, but I really
+> would like to hear the opinions of heavy users of notifiers (as
+> Michael/Hyper-V) and the kdump interested parties (like Baoquan / Dave
+> Young / Hayatama). If we all agree on such approach, will change that
+> for V2 =)
+
+Sure, we need to make sure that we call everything that is needed.
+And it should be documented.
+
+I believe that this is the right way because:
+
+  + It was actually the motivation for this patchset. We split
+    the notifiers into separate lists because we want to call
+    only the really needed ones before kmsg_dump and crash_dump.
+
+  + If anything is needed for crash_dump that it should be called
+    even when crash_dump is called first. It should be either
+    hardcoded into crash_dump() or we would need another notifier
+    list that will be always called before crash_dump.
+
+
+Thanks a lot for working on this.
+
+Best Regards,
+Petr
