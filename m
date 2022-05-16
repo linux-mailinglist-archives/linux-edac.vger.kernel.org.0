@@ -2,42 +2,40 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C97A35281B8
-	for <lists+linux-edac@lfdr.de>; Mon, 16 May 2022 12:21:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 02589528648
+	for <lists+linux-edac@lfdr.de>; Mon, 16 May 2022 16:02:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233657AbiEPKVz (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Mon, 16 May 2022 06:21:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32998 "EHLO
+        id S244182AbiEPOCF (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Mon, 16 May 2022 10:02:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232593AbiEPKVy (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Mon, 16 May 2022 06:21:54 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 840B0DEC9;
-        Mon, 16 May 2022 03:21:52 -0700 (PDT)
+        with ESMTP id S235347AbiEPOCD (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Mon, 16 May 2022 10:02:03 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 290271A389;
+        Mon, 16 May 2022 07:02:02 -0700 (PDT)
 Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 02AF51F930;
-        Mon, 16 May 2022 10:21:51 +0000 (UTC)
+        by smtp-out1.suse.de (Postfix) with ESMTP id 2362F21F5C;
+        Mon, 16 May 2022 14:02:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1652696511; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+        t=1652709720; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=9SKwT5B95E5YN9xa81VvHUpO+QGR+zcfCsbhuV2Jgp4=;
-        b=LWTnDo04g2ZIMR91v0c2MAsYmxaUOl80sz+tTo9fRyqmuLzfAZ1jmcmhBu1F/2SwEKbidr
-        AAgP6W9p9YHXuK9IdMK0VKJ5T49DYuwEAzjkXZlkWl2knT/MPCmRsL91fAF4WZ26S0Lq+5
-        GaIq0ymGLcl5C1bryaGKOpn3k9Ph6bU=
-Received: from suse.cz (unknown [10.100.208.146])
+        bh=6xX/Xo1YcyoxhDGVtD+3aF7M9NKMVvtDcsL11SFSAQU=;
+        b=UAEfoymfYf+QAbCzE3oYFS/LnW9rFBs924Unv93LKXY9GoxfXpJbDSZbNYQc1AwPujLxjA
+        jmh7TvIJcQUwFXF0iE9L66PiKtfkKtU88t+hUCpM3m0czPO3TM37NQr+8KouKC5lf5Okex
+        k2McswvfGUIvb+tozWKmApBRPL9ucl0=
+Received: from suse.cz (unknown [10.100.201.202])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 89FB92C141;
-        Mon, 16 May 2022 10:21:48 +0000 (UTC)
-Date:   Mon, 16 May 2022 12:21:48 +0200
+        by relay2.suse.de (Postfix) with ESMTPS id D43112C141;
+        Mon, 16 May 2022 14:01:57 +0000 (UTC)
+Date:   Mon, 16 May 2022 16:01:57 +0200
 From:   Petr Mladek <pmladek@suse.com>
 To:     "Guilherme G. Piccoli" <gpiccoli@igalia.com>
-Cc:     "michael Kelley (LINUX)" <mikelley@microsoft.com>,
-        Baoquan He <bhe@redhat.com>, Dave Young <dyoung@redhat.com>,
-        d.hatayama@jp.fujitsu.com, akpm@linux-foundation.org,
+Cc:     akpm@linux-foundation.org, bhe@redhat.com,
         kexec@lists.infradead.org, linux-kernel@vger.kernel.org,
-        bcm-kernel-feedback-list@broadcom.com,
+        bcm-kernel-feedback-list@broadcom.com, coresight@lists.linaro.org,
         linuxppc-dev@lists.ozlabs.org, linux-alpha@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-edac@vger.kernel.org,
         linux-hyperv@vger.kernel.org, linux-leds@vger.kernel.org,
@@ -51,24 +49,59 @@ Cc:     "michael Kelley (LINUX)" <mikelley@microsoft.com>,
         kernel-dev@igalia.com, kernel@gpiccoli.net, halves@canonical.com,
         fabiomirmar@gmail.com, alejandro.j.jimenez@oracle.com,
         andriy.shevchenko@linux.intel.com, arnd@arndb.de, bp@alien8.de,
-        corbet@lwn.net, dave.hansen@linux.intel.com, feng.tang@intel.com,
-        gregkh@linuxfoundation.org, hidehiro.kawai.ez@hitachi.com,
+        corbet@lwn.net, d.hatayama@jp.fujitsu.com,
+        dave.hansen@linux.intel.com, dyoung@redhat.com,
+        feng.tang@intel.com, gregkh@linuxfoundation.org,
+        mikelley@microsoft.com, hidehiro.kawai.ez@hitachi.com,
         jgross@suse.com, john.ogness@linutronix.de, keescook@chromium.org,
         luto@kernel.org, mhiramat@kernel.org, mingo@redhat.com,
         paulmck@kernel.org, peterz@infradead.org, rostedt@goodmis.org,
         senozhatsky@chromium.org, stern@rowland.harvard.edu,
         tglx@linutronix.de, vgoyal@redhat.com, vkuznets@redhat.com,
-        will@kernel.org
-Subject: Re: [PATCH 24/30] panic: Refactor the panic path
-Message-ID: <YoIlvFxbqoiDsD1l@alley>
+        will@kernel.org, Alexander Gordeev <agordeev@linux.ibm.com>,
+        Andrea Parri <parri.andrea@gmail.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Brian Norris <computersforpeace@gmail.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        David Gow <davidgow@google.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Dexuan Cui <decui@microsoft.com>,
+        Doug Berger <opendmb@gmail.com>,
+        Evan Green <evgreen@chromium.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Hari Bathini <hbathini@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Julius Werner <jwerner@chromium.org>,
+        Justin Chen <justinpopo6@gmail.com>,
+        "K. Y. Srinivasan" <kys@microsoft.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Markus Mayer <mmayer@broadcom.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Mihai Carabas <mihai.carabas@oracle.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Paul Mackerras <paulus@samba.org>, Pavel Machek <pavel@ucw.cz>,
+        Scott Branden <scott.branden@broadcom.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Shile Zhang <shile.zhang@linux.alibaba.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Tianyu Lan <Tianyu.Lan@microsoft.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Wang ShaoBo <bobo.shaobowang@huawei.com>,
+        Wei Liu <wei.liu@kernel.org>,
+        zhenwei pi <pizhenwei@bytedance.com>
+Subject: Re: [PATCH 19/30] panic: Add the panic hypervisor notifier list
+Message-ID: <YoJZVZl/MH0KiE/J@alley>
 References: <20220427224924.592546-1-gpiccoli@igalia.com>
- <20220427224924.592546-25-gpiccoli@igalia.com>
- <Yn0TnsWVxCcdB2yO@alley>
- <d313eec2-96b6-04e3-35cd-981f103d010e@igalia.com>
+ <20220427224924.592546-20-gpiccoli@igalia.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <d313eec2-96b6-04e3-35cd-981f103d010e@igalia.com>
+In-Reply-To: <20220427224924.592546-20-gpiccoli@igalia.com>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
@@ -79,252 +112,154 @@ Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Sun 2022-05-15 19:47:39, Guilherme G. Piccoli wrote:
-> On 12/05/2022 11:03, Petr Mladek wrote:
-> > This talks only about kdump. The reality is much more complicated.
-> > The level affect the order of:
-> > 
-> >     + notifiers vs. kdump
-> >     + notifiers vs. crash_dump
-> >     + crash_dump vs. kdump
+On Wed 2022-04-27 19:49:13, Guilherme G. Piccoli wrote:
+> The goal of this new panic notifier is to allow its users to register
+> callbacks to run very early in the panic path. This aims hypervisor/FW
+> notification mechanisms as well as simple LED functions, and any other
+> simple and safe mechanism that should run early in the panic path; more
+> dangerous callbacks should execute later.
 > 
-> First of all, I'd like to ask you please to clarify to me *exactly* what
-> are the differences between "crash_dump" and "kdump". I'm sorry if
-> that's a silly question, I need to be 100% sure I understand the
-> concepts the same way you do.
-
-Ah, it should have been:
-
-     + notifiers vs. kmsg_dump
-     + notifiers vs. crash_dump
-     + crash_dump vs. kmsg_dump
-
-I am sorry for the confusion. Even "crash_dump" is slightly
-misleading because there is no function with this name.
-But it seems to be easier to understand than __crash_kexec().
-
-
-> > There might theoretically many variants of the ordering of kdump,
-> > crash_dump, and the 4 notifier list. Some variants do not make
-> > much sense. You choose 5 variants and tried to select them by
-> > a level number.
-> > 
-> > The question is if we really could easily describe the meaning this
-> > way. It is not only about a "level" of notifiers before kdump. It is
-> > also about the ordering of crash_dump vs. kdump. IMHO, "level"
-> > semantic does not fit there.
-> > 
-> > Maybe more parameters might be easier to understand the effect.
-> > Anyway, we first need to agree on the chosen variants.
-> > I am going to discuss it more in the code, see below.
-> > 
-> > 
-> > [...] 
-> > Here is the code using the above functions. It helps to discuss
-> > the design and logic.
-> > 
-> > I have to say that the logic is very unclear. Almost all
-> > functions are called twice:
-> > 
-> > The really used code path is defined by order_panic_notifiers_and_kdump()
-> > that encodes "level" into "bits". The bits are then flipped in
-> > panic_notifier_*_once() calls that either do something or not.
-> > kmsg_dump() is called according to the bit flip.
-> > 
-> > Also I guess that it is good proof that "level" abstraction does
-> > not fit here. Normal levels would not need this kind of magic.
+> For now, the patch is almost a no-op (although it changes a bit the
+> ordering in which some panic notifiers are executed). In a subsequent
+> patch, the panic path will be refactored, then the panic hypervisor
+> notifiers will effectively run very early in the panic path.
 > 
-> Heheh OK, I appreciate your opinion, but I guess we'll need to agree in
-> disagree here - I'm much more fond to this kind of code than a bunch of
-> if/else blocks that almost give headaches. Encoding such "level" logic
-> in the if/else scheme is very convoluted, generates a very big code. And
-> the functions aren't so black magic - they map a level in bits, and the
-> functions _once() are called...once! Although we switch the position in
-> the code, so there are 2 calls, one of them is called and the other not.
+> We also defer documenting it all properly in the subsequent refactor
+> patch. While at it, we removed some useless header inclusions and
+> fixed some notifiers return too (by using the standard NOTIFY_DONE).
 
-I see. Well, I would consider this as a warning that the approach is
-too complex. If the code, using if/then/else, would cause headaches
-then also understanding of the behavior would cause headaches for
-both users and programmers.
+> --- a/arch/mips/sgi-ip22/ip22-reset.c
+> +++ b/arch/mips/sgi-ip22/ip22-reset.c
+> @@ -195,7 +195,7 @@ static int __init reboot_setup(void)
+>  	}
+>  
+>  	timer_setup(&blink_timer, blink_timeout, 0);
+> -	atomic_notifier_chain_register(&panic_notifier_list, &panic_block);
+> +	atomic_notifier_chain_register(&panic_hypervisor_list, &panic_block);
 
+This notifier enables blinking. It is not much safe. It calls
+mod_timer() that takes a lock internally.
 
-> But that's totally fine to change - especially if we're moving away from
-> the "level" logic. I see below you propose a much simpler approach - if
-> we follow that, definitely we won't need the "black magic" approach heheh
+This kind of functionality should go into the last list called
+before panic() enters the infinite loop. IMHO, all the blinking
+stuff should go there.
 
-I do not say that my proposal is fully correct. But we really need
-this kind of simpler approach.
+>  
+>  	return 0;
+>  }
+> diff --git a/arch/mips/sgi-ip32/ip32-reset.c b/arch/mips/sgi-ip32/ip32-reset.c
+> index 18d1c115cd53..9ee1302c9d13 100644
+> --- a/arch/mips/sgi-ip32/ip32-reset.c
+> +++ b/arch/mips/sgi-ip32/ip32-reset.c
+> @@ -145,7 +144,7 @@ static __init int ip32_reboot_setup(void)
+>  	pm_power_off = ip32_machine_halt;
+>  
+>  	timer_setup(&blink_timer, blink_timeout, 0);
+> -	atomic_notifier_chain_register(&panic_notifier_list, &panic_block);
+> +	atomic_notifier_chain_register(&panic_hypervisor_list, &panic_block);
 
+Same here. Should be done only before the "loop".
 
-> > OK, the question is how to make it better.
+>  
+>  	return 0;
+>  }
+> --- a/drivers/firmware/google/gsmi.c
+> +++ b/drivers/firmware/google/gsmi.c
+> @@ -1034,7 +1034,7 @@ static __init int gsmi_init(void)
+>  
+>  	register_reboot_notifier(&gsmi_reboot_notifier);
+>  	register_die_notifier(&gsmi_die_notifier);
+> -	atomic_notifier_chain_register(&panic_notifier_list,
+> +	atomic_notifier_chain_register(&panic_hypervisor_list,
+>  				       &gsmi_panic_notifier);
 
-> > One option "panic_prefer_crash_dump" should be enough.
-> > And the code might look like:
-> > 
-> > void panic()
-> > {
-> > [...]
-> > 	dump_stack();
-> > 	kgdb_panic(buf);
-> > 
-> > 	< ---  here starts the reworked code --- >
-> > 
-> > 	/* crash dump is enough when enabled and preferred. */
-> > 	if (panic_prefer_crash_dump)
-> > 		__crash_kexec(NULL);
-> > 
-> > 	/* Stop other CPUs and focus on handling the panic state. */
-> > 	if (has_kexec_crash_image)
-> > 		crash_smp_send_stop();
-> > 	else
-> > 		smp_send_stop()
-> > 
-> 
-> Here we have a very important point. Why do we need 2 variants of SMP
-> CPU stopping functions? I disagree with that - my understanding of this
-> after some study in architectures is that the crash_() variant is
-> "stronger", should work in all cases and if not, we should fix that -
-> that'd be a bug.
-> 
-> Such variant either maps to smp_send_stop() (in various architectures,
-> including XEN/x86) or overrides the basic function with more proper
-> handling for panic() case...I don't see why we still need such
-> distinction, if you / others have some insight about that, I'd like to
-> hear =)
-
-The two variants were introduced by the commit 0ee59413c967c35a6dd
-("x86/panic: replace smp_send_stop() with kdump friendly version in
-panic path")
-
-It points to https://lkml.org/lkml/2015/6/24/44 that talks about
-still running watchdogs.
-
-It is possible that the problem could be fixed another way. It is
-even possible that it has already been fixed by the notifiers
-that disable the watchdogs.
-
-Anyway, any change of the smp_send_stop() behavior should be done
-in a separate patch. It will help with bisection of possible
-regression. Also it would require a good explanation in
-the commit message. I would personally do it in a separate
-patch(set).
+I am not sure about this one. It looks like some logging or
+pre_reboot stuff.
 
 
-> > 	/* Notify hypervisor about the system panic. */
-> > 	atomic_notifier_call_chain(&panic_hypervisor_list, 0, NULL);
-> > 
-> > 	/*
-> > 	 * No need to risk extra info when there is no kmsg dumper
-> > 	 * registered.
-> > 	 */
-> > 	if (!has_kmsg_dumper())
-> > 		__crash_kexec(NULL);
-> > 
-> > 	/* Add extra info from different subsystems. */
-> > 	atomic_notifier_call_chain(&panic_info_list, 0, NULL);
-> > 
-> > 	kmsg_dump(KMSG_DUMP_PANIC);
-> > 	__crash_kexec(NULL);
-> > 
-> > 	/* Flush console */
-> > 	unblank_screen();
-> > 	console_unblank();
-> > 	debug_locks_off();
-> > 	console_flush_on_panic(CONSOLE_FLUSH_PENDING);
-> > 
-> > 	if (panic_timeout > 0) {
-> > 		delay()
-> > 	}
-> > 
-> > 	/*
-> > 	 * Prepare system for eventual reboot and allow custom
-> > 	 * reboot handling.
-> > 	 */
-> > 	atomic_notifier_call_chain(&panic_reboot_list, 0, NULL);
-> 
-> You had the order of panic_reboot_list VS. consoles flushing inverted.
-> It might make sense, although I didn't do that in V1...
+>  
+>  	printk(KERN_INFO "gsmi version " DRIVER_VERSION " loaded\n");
+> --- a/drivers/leds/trigger/ledtrig-activity.c
+> +++ b/drivers/leds/trigger/ledtrig-activity.c
+> @@ -247,7 +247,7 @@ static int __init activity_init(void)
+>  	int rc = led_trigger_register(&activity_led_trigger);
+>  
+>  	if (!rc) {
+> -		atomic_notifier_chain_register(&panic_notifier_list,
+> +		atomic_notifier_chain_register(&panic_hypervisor_list,
+>  					       &activity_panic_nb);
 
-IMHO, it makes sense:
+The notifier is trivial. It just sets a variable.
 
-  1. panic_reboot_list contains notifiers that do the reboot
-     immediately, for example, xen_panic_event, alpha_panic_event.
-     The consoles have to be flushed earlier.
-
-  2. console_flush_on_panic() ignores the result of console_trylock()
-     and always calls console_unlock(). As a result the lock should
-     be unlocked at the end. And any further printk() should be able
-     to printk the messages to the console immediately. It means
-     that any messages printed by the reboot notifiers should appear
-     on the console as well.
-
-> Are you OK in having a helper for console flushing, as I did in V1? It
-> makes code of panic() a bit less polluted / more focused I feel.
-
-Yes, it makes sense. Well, it would better to do it in a separate
-patch. The patch patch reworking the logic should be as small
-as possible. It will simplify the review.
+But still, it is about blinking and should be done
+in the last "loop" list.
 
 
-> > 	if (panic_timeout != 0) {
-> > 		reboot();
-> > 	}
-> > 
-> > 	/*
-> > 	 * Prepare system for the infinite waiting, for example,
-> > 	 * setup blinking.
-> > 	 */
-> > 	atomic_notifier_call_chain(&panic_loop_list, 0, NULL);
-> > 
-> > 	infinite_loop();
-> > }
-> > 
-> > 
-> > __crash_kexec() is there 3 times but otherwise the code looks
-> > quite straight forward.
-> > 
-> > Note 1: I renamed the two last notifier list. The name 'post-reboot'
-> > 	did sound strange from the logical POV ;-)
-> > 
-> > Note 2: We have to avoid the possibility to call "reboot" list
-> > 	before kmsg_dump(). All callbacks providing info
-> > 	have to be in the info list. It a callback combines
-> > 	info and reboot functionality then it should be split.
-> > 
-> > 	There must be another way to calm down problematic
-> > 	info callbacks. And it has to be solved when such
-> > 	a problem is reported. Is there any known issue, please?
-> > 
-> > It is possible that I have missed something important.
-> > But I would really like to make the logic as simple as possible.
-> 
-> OK, I agree with you! It's indeed simpler and if others agree, I can
-> happily change the logic to what you proposed. Although...currently the
-> "crash_kexec_post_notifiers" allows to call _all_ panic_reboot_list
-> callbacks _before kdump_.
->
-> We need to mention this change in the commit messages, but I really
-> would like to hear the opinions of heavy users of notifiers (as
-> Michael/Hyper-V) and the kdump interested parties (like Baoquan / Dave
-> Young / Hayatama). If we all agree on such approach, will change that
-> for V2 =)
+>  		register_reboot_notifier(&activity_reboot_nb);
+>  	}
+> --- a/drivers/leds/trigger/ledtrig-heartbeat.c
+> +++ b/drivers/leds/trigger/ledtrig-heartbeat.c
+> @@ -190,7 +190,7 @@ static int __init heartbeat_trig_init(void)
+>  	int rc = led_trigger_register(&heartbeat_led_trigger);
+>  
+>  	if (!rc) {
+> -		atomic_notifier_chain_register(&panic_notifier_list,
+> +		atomic_notifier_chain_register(&panic_hypervisor_list,
+>  					       &heartbeat_panic_nb);
 
-Sure, we need to make sure that we call everything that is needed.
-And it should be documented.
+Same here. Blinking => loop list.
 
-I believe that this is the right way because:
+>  		register_reboot_notifier(&heartbeat_reboot_nb);
+>  	}
+> diff --git a/drivers/misc/bcm-vk/bcm_vk_dev.c b/drivers/misc/bcm-vk/bcm_vk_dev.c
+> index a16b99bdaa13..d9d5199cdb2b 100644
+> --- a/drivers/misc/bcm-vk/bcm_vk_dev.c
+> +++ b/drivers/misc/bcm-vk/bcm_vk_dev.c
+> @@ -1446,7 +1446,7 @@ static int bcm_vk_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
+>  
+>  	/* register for panic notifier */
+>  	vk->panic_nb.notifier_call = bcm_vk_on_panic;
+> -	err = atomic_notifier_chain_register(&panic_notifier_list,
+> +	err = atomic_notifier_chain_register(&panic_hypervisor_list,
+>  					     &vk->panic_nb);
 
-  + It was actually the motivation for this patchset. We split
-    the notifiers into separate lists because we want to call
-    only the really needed ones before kmsg_dump and crash_dump.
-
-  + If anything is needed for crash_dump that it should be called
-    even when crash_dump is called first. It should be either
-    hardcoded into crash_dump() or we would need another notifier
-    list that will be always called before crash_dump.
+It seems to reset some hardware or so. IMHO, it should go into the
+pre-reboot list.
 
 
-Thanks a lot for working on this.
+>  	if (err) {
+>  		dev_err(dev, "Fail to register panic notifier\n");
+> --- a/drivers/power/reset/ltc2952-poweroff.c
+> +++ b/drivers/power/reset/ltc2952-poweroff.c
+> @@ -279,7 +279,7 @@ static int ltc2952_poweroff_probe(struct platform_device *pdev)
+>  	pm_power_off = ltc2952_poweroff_kill;
+>  
+>  	data->panic_notifier.notifier_call = ltc2952_poweroff_notify_panic;
+> -	atomic_notifier_chain_register(&panic_notifier_list,
+> +	atomic_notifier_chain_register(&panic_hypervisor_list,
+>  				       &data->panic_notifier);
+
+I looks like this somehow triggers the reboot. IMHO, it should go
+into the pre_reboot list.
+
+>  	dev_info(&pdev->dev, "probe successful\n");
+>  
+> --- a/drivers/soc/bcm/brcmstb/pm/pm-arm.c
+> +++ b/drivers/soc/bcm/brcmstb/pm/pm-arm.c
+> @@ -814,7 +814,7 @@ static int brcmstb_pm_probe(struct platform_device *pdev)
+>  		goto out;
+>  	}
+>  
+> -	atomic_notifier_chain_register(&panic_notifier_list,
+> +	atomic_notifier_chain_register(&panic_hypervisor_list,
+>  				       &brcmstb_pm_panic_nb);
+
+I am not sure about this one. It instruct some HW to preserve DRAM.
+IMHO, it better fits into pre_reboot category but I do not have
+strong opinion.
+
+>  
+>  	pm_power_off = brcmstb_pm_poweroff;
 
 Best Regards,
 Petr
