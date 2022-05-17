@@ -2,43 +2,120 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00AED52A7D7
-	for <lists+linux-edac@lfdr.de>; Tue, 17 May 2022 18:23:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 90FEB52A847
+	for <lists+linux-edac@lfdr.de>; Tue, 17 May 2022 18:39:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350874AbiEQQXj (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Tue, 17 May 2022 12:23:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37070 "EHLO
+        id S1350108AbiEQQjc (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Tue, 17 May 2022 12:39:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234372AbiEQQXf (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Tue, 17 May 2022 12:23:35 -0400
-X-Greylist: delayed 2247 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 17 May 2022 09:23:35 PDT
-Received: from mail.neweas.com (mail.neweas.com [162.19.155.127])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24C7E3B3D1
-        for <linux-edac@vger.kernel.org>; Tue, 17 May 2022 09:23:34 -0700 (PDT)
-Received: by mail.neweas.com (Postfix, from userid 1002)
-        id 27E6C22D43; Tue, 17 May 2022 15:46:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=neweas.com; s=mail;
-        t=1652802367; bh=qQhd+6rcOH+OhrNQ6A9OWLCE/79cwvyTtb6LUe1aYuU=;
-        h=Date:From:To:Subject:From;
-        b=v4biqUp74abbAY8xWRXJo/iB+HjkTslIycVjXg5Oa7uRWRQXLgt8SQHiMreJZ7nV5
-         jxCwiMcY0jKpEriF4PGZ6cWOzlmrfDymQ/8XBr/dG1XLNRNcTzJKz55WVEFefQwS0q
-         kDlHOscdzc/M4ZfJayOxBXcS8mDjreGIFf9nh0w4zwKue1fEHxqT8AVKgCJ2yN+A2q
-         N1PzV8LdjDWO5Hd19ak/1ctFTsADLCefc3dkb/FJuM9t/hmtXRfQXKZ6CGsRrjtSwc
-         9bAEinGcG4kEtGqO0Jer86uYvJIBmTLXB+fuWPQSVQNG2aKKpv4ZXwHXG201DHWj1u
-         v8fAx2HA9s1fA==
-Received: by mail.neweas.com for <linux-edac@vger.kernel.org>; Tue, 17 May 2022 15:45:46 GMT
-Message-ID: <20220517141500-0.1.f.103v.0.hjtjk3zce2@neweas.com>
-Date:   Tue, 17 May 2022 15:45:46 GMT
-From:   "Luca Gauthier" <luca.gauthier@neweas.com>
-To:     <linux-edac@vger.kernel.org>
-Subject: New collaboration
-X-Mailer: mail.neweas.com
+        with ESMTP id S236502AbiEQQja (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Tue, 17 May 2022 12:39:30 -0400
+Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86B3A33E86;
+        Tue, 17 May 2022 09:39:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=nkckcEBnQlRsFTpASqSz6WprnZRaV0YhYSvPtBA0AVg=; b=GXitEwhCwUT4w9+D5pmH2zeSKa
+        60OoBts2cxKaTjkNlztKOiPg7JmJSxA8Nf6Mc3GM9eoyPx0kgrCnR1AZ6EjsP0NE4+IxyqcasC5FH
+        Bzs6mPDD2Ojz26SlVHGGSFKa4MS4PaKNy9b4ykBdp04iHw75Gq64zjSE08zAzR/RUXjez/E1PIcPr
+        w9iTODel9NpjUtjDaWlc8Esr0zkZKONhALq9dFCmuDS5Nj18Wn3hMj4H1VTlzFy6uMc+YdCA3ReKq
+        k/CxfFfQpOp3w1u8K+s1/QjiYVlCZZRZYeOFoWStjActxBApHl98rSBUYLtUajOsHPvmBlqZChf2A
+        VEU39bjw==;
+Received: from 200-161-159-120.dsl.telesp.net.br ([200.161.159.120] helo=[192.168.1.60])
+        by fanzine2.igalia.com with esmtpsa 
+        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
+        id 1nr0Da-008gju-GJ; Tue, 17 May 2022 18:38:42 +0200
+Message-ID: <b9ec2fc8-216f-f261-8417-77b6dd95e25c@igalia.com>
+Date:   Tue, 17 May 2022 13:37:58 -0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=0.6 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH 19/30] panic: Add the panic hypervisor notifier list
+Content-Language: en-US
+To:     Petr Mladek <pmladek@suse.com>, Evan Green <evgreen@chromium.org>,
+        David Gow <davidgow@google.com>,
+        Julius Werner <jwerner@chromium.org>
+Cc:     Scott Branden <scott.branden@broadcom.com>,
+        bcm-kernel-feedback-list@broadcom.com,
+        Sebastian Reichel <sre@kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>, bhe@redhat.com,
+        kexec@lists.infradead.org, LKML <linux-kernel@vger.kernel.org>,
+        linuxppc-dev@lists.ozlabs.org, linux-alpha@vger.kernel.org,
+        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
+        linux-edac@vger.kernel.org, linux-hyperv@vger.kernel.org,
+        linux-leds@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        linux-s390@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-um@lists.infradead.org, linux-xtensa@linux-xtensa.org,
+        netdev@vger.kernel.org, openipmi-developer@lists.sourceforge.net,
+        rcu@vger.kernel.org, sparclinux@vger.kernel.org,
+        xen-devel@lists.xenproject.org, x86@kernel.org,
+        kernel-dev@igalia.com, kernel@gpiccoli.net, halves@canonical.com,
+        fabiomirmar@gmail.com, alejandro.j.jimenez@oracle.com,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+        Jonathan Corbet <corbet@lwn.net>, d.hatayama@jp.fujitsu.com,
+        dave.hansen@linux.intel.com, dyoung@redhat.com,
+        feng.tang@intel.com,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        mikelley@microsoft.com, hidehiro.kawai.ez@hitachi.com,
+        jgross@suse.com, john.ogness@linutronix.de,
+        Kees Cook <keescook@chromium.org>, luto@kernel.org,
+        mhiramat@kernel.org, mingo@redhat.com, paulmck@kernel.org,
+        peterz@infradead.org, rostedt@goodmis.org,
+        senozhatsky@chromium.org, Alan Stern <stern@rowland.harvard.edu>,
+        Thomas Gleixner <tglx@linutronix.de>, vgoyal@redhat.com,
+        vkuznets@redhat.com, Will Deacon <will@kernel.org>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Andrea Parri <parri.andrea@gmail.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Brian Norris <computersforpeace@gmail.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        "David S. Miller" <davem@davemloft.net>,
+        Dexuan Cui <decui@microsoft.com>,
+        Doug Berger <opendmb@gmail.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Hari Bathini <hbathini@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Justin Chen <justinpopo6@gmail.com>,
+        "K. Y. Srinivasan" <kys@microsoft.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Markus Mayer <mmayer@broadcom.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Mihai Carabas <mihai.carabas@oracle.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Paul Mackerras <paulus@samba.org>, Pavel Machek <pavel@ucw.cz>,
+        Shile Zhang <shile.zhang@linux.alibaba.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Tianyu Lan <Tianyu.Lan@microsoft.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Wang ShaoBo <bobo.shaobowang@huawei.com>,
+        Wei Liu <wei.liu@kernel.org>,
+        zhenwei pi <pizhenwei@bytedance.com>,
+        Stephen Boyd <swboyd@chromium.org>
+References: <20220427224924.592546-1-gpiccoli@igalia.com>
+ <20220427224924.592546-20-gpiccoli@igalia.com> <YoJZVZl/MH0KiE/J@alley>
+ <ad082ce7-db50-13bb-3dbb-9b595dfa78be@igalia.com>
+ <CAE=gft7ds+dHfEkRz8rnSH1EbTpGTpKbi5Wxj9DW0Jr5mX_j4w@mail.gmail.com>
+ <YoOi9PFK/JnNwH+D@alley>
+From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+In-Reply-To: <YoOi9PFK/JnNwH+D@alley>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -46,26 +123,68 @@ Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-Hello,
+On 17/05/2022 10:28, Petr Mladek wrote:
+> [...]
+>>> Disagree here. I'm looping Google maintainers, so they can comment.
+>>> (CCed Evan, David, Julius)
+>>>
+>>> This notifier is clearly a hypervisor notification mechanism. I've fixed
+>>> a locking stuff there (in previous patch), I feel it's low-risk but even
+>>> if it's mid-risk, the class of such callback remains a perfect fit with
+>>> the hypervisor list IMHO.
+>>
+>> This logs a panic to our "eventlog", a tiny logging area in SPI flash
+>> for critical and power-related events. In some cases this ends up
+>> being the only clue we get in a Chromebook feedback report that a
+>> panic occurred, so from my perspective moving it to the front of the
+>> line seems like a good idea.
+> 
+> IMHO, this would really better fit into the pre-reboot notifier list:
+> 
+>    + the callback stores the log so it is similar to kmsg_dump()
+>      or console_flush_on_panic()
+> 
+>    + the callback should be proceed after "info" notifiers
+>      that might add some other useful information.
+> 
+> Honestly, I am not sure what exactly hypervisor callbacks do. But I
+> think that they do not try to extract the kernel log because they
+> would need to handle the internal format.
+> 
 
-are you looking for more business clients?
+I guess the main point in your response is : "I am not sure what exactly
+hypervisor callbacks do". We need to be sure about the semantics of such
+list, and agree on that.
 
-We would like to start working with you as a partner in acquiring or exch=
-anging leads, which directly translates into mutual benefits in the form =
-of an increased client portfolio.
+So, my opinion about this first list, that we call "hypervisor list",
+is: it contains callbacks that
 
-We work in the sector of internet marketing and as one of the first in Eu=
-rope SEO Agencies we=E2=80=99ve introduced the SEO 360 service which allo=
-ws your clients to gain the access to original SEO consultations.
+(1) should run early, preferably before kdump (or even if kdump isn't
+set, should run ASAP);
 
-By choosing to work with us you receive support in achieving your busines=
-s goals, and help in handling Digital Marketing for your clients.
+(2) these callbacks perform some communication with an abstraction that
+runs "below" the kernel, like a firmware or hypervisor. Classic example:
+pvpanic, that communicates with VMM (usually qemu) and allow such VMM to
+snapshot the full guest memory, for example.
 
-We support over 237 partner companies. We have one of the biggest executi=
-ve departments in Europe at our disposal, we=E2=80=99ve prepared over 200=
-0 campaigns in Europe and 200 in the USA and Canada.
+(3) Should be low-risk. What defines risk is the level of reliability of
+subsequent operations - if the callback have 50% of chance of "bricking"
+the system totally and prevent kdump / kmsg_dump() / reboot , this is
+high risk one for example.
 
-Are you interested in the details of our partnership programme?
+Some good fits IMO: pvpanic, sstate_panic_event() [sparc], fadump in
+powerpc, etc.
 
-Yours sincerely,
-Luca Gauthier
+So, this is a good case for the Google notifier as well - it's not
+collecting data like the dmesg (hence your second bullet seems to not
+apply here, info notifiers won't add info to be collected by gsmi). It
+is a firmware/hypervisor/whatever-gsmi-is notification mechanism, that
+tells such "lower" abstraction a panic occurred. It seems low risk and
+we want it to run ASAP, if possible.
+
+So, I'd like to keep it here, unless gsmi maintainers disagree or I'm
+perhaps misunderstanding the meaning of this first list.
+Cheers,
+
+
+Guilherme
