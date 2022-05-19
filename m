@@ -2,171 +2,176 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B57A52D24C
-	for <lists+linux-edac@lfdr.de>; Thu, 19 May 2022 14:20:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3286152D654
+	for <lists+linux-edac@lfdr.de>; Thu, 19 May 2022 16:43:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237804AbiESMUh (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Thu, 19 May 2022 08:20:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52332 "EHLO
+        id S234869AbiESOnJ (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Thu, 19 May 2022 10:43:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232584AbiESMUg (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Thu, 19 May 2022 08:20:36 -0400
-Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B947AB041F;
-        Thu, 19 May 2022 05:20:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=e6xrJm1a3ay+4weLnrCkh2SRSEeyZycIIB/twweqf9Y=; b=BhOEtl3IEpq+ZutVgH7P2rHsfA
-        mhGkC2PSuDrVyQ8IQfXtbB2pfD2fLPqKTP1L2vPLew3hLPbkforpZGHUalxvr86M8T2G/zNh0P/pw
-        wi++cJ5XXfisCo4sQPAYOpaVMhBvNWB3svhNAgbQKxYFPy0Oeko+Z9jhUOVMogS4VQkCRHPLo2bnq
-        jjqxb69zYzPORFRcZZlayXhHSqDz7B+6f3XjEVdBQ2ftzK2PDz+TwQa11JztdT1Ouzc0j+U1m1POY
-        rbklHHuyIwI+fwGIyQbgwTEldlCv1PEui/a5Qzds7nWr2ZDdu+bcGybfUaDSvUQ/88wOr+qjGKQ2s
-        3BFZ9Urg==;
-Received: from 200-161-159-120.dsl.telesp.net.br ([200.161.159.120] helo=[192.168.1.60])
-        by fanzine2.igalia.com with esmtpsa 
-        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
-        id 1nrf8d-00BEVm-Gn; Thu, 19 May 2022 14:20:19 +0200
-Message-ID: <edbaa4fa-561c-6f5e-f2ab-43ae68acaede@igalia.com>
-Date:   Thu, 19 May 2022 09:19:31 -0300
+        with ESMTP id S231368AbiESOnD (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Thu, 19 May 2022 10:43:03 -0400
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2045.outbound.protection.outlook.com [40.107.223.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93368D02A4;
+        Thu, 19 May 2022 07:43:00 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=LCt0Hakyd0B2VHcpi0FaWxzGp9Lk6ERIhiPA6TSxKgkeuHRvVkj7+Z75Z2it82+evUCPorIZ+rW8OAzaMe/bDYkuKMmHSr/r4zlbcDFCQDdBEwbZnmz90ELda9rRcY2SKS6NHH2kw5dfZgshwRz75MQJU4XeJ5xkHe8OBUKjFeTtFysGNtvd30KLuGzqsrxKxZZjz1HbdUhYKH4+IOcXyVOzMchZBRdkfQd+EasfASE0rxwbqA/m/1NuvzrxAOZLzq7D52nZ8H3xA8HLk47Os3p1x+9j4TSRZzsi1BHgrR+fVEY7pQyFREoSwCSxWfVQLjyrAQXSkaPYTewNdkb9JQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=uhwo5WGckuRL/7yilC7o8rVmjcO/wlcP+oDwJ0AKvPo=;
+ b=Pal/CMwl360SG+R1XBI5V+30RNSrF1oBaSHZZlIfI1yjUC0r5kM98BnjJlee2ix2nmBZ6m+rVhsxeOEw53TYmFLY+n0wQD+cwTRQ2i1iYjEx1s0xLS7NXsKDdd3fSVwdkkyNQPLrgJbyZ0Lv4lOn41Cr0GZdwqXosKQbvy+uzDod0Zk4j/dOf1ye/DQOK5Emi/zWKiVM7xROGqr9oqkvfM3Zu1Nsc86uF8SY+itHryk6B+c2jpvrgOJtLyBglE0gZT8tIf/842z/oTSkoXAXRBOEL1cSX3wqSPGfu/xY7sjpZoy80kpLKe/3j4nWAzauxvmOuipOiFnlKLitNqVvHA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=uhwo5WGckuRL/7yilC7o8rVmjcO/wlcP+oDwJ0AKvPo=;
+ b=oc1gaC0Kgl7O1OExteKKnabkz6L42DoAd7ADbQtBhIuLE9a3vX5gLM6Ls7/jvMcZMK6Fx9T8xTfWcVrQIC4OmvUkiHid3Yp6Oq24reKlJRXFR9EDJAJMvLut0CeKO/GGnqtdmZr24DzopyGBjGXbWRt3HX/bYSE6vTcDXb5SnEw=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from BN8PR12MB3108.namprd12.prod.outlook.com (2603:10b6:408:40::20)
+ by DM6PR12MB4313.namprd12.prod.outlook.com (2603:10b6:5:21e::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5273.13; Thu, 19 May
+ 2022 14:42:58 +0000
+Received: from BN8PR12MB3108.namprd12.prod.outlook.com
+ ([fe80::6c8e:2b32:b8fb:6928]) by BN8PR12MB3108.namprd12.prod.outlook.com
+ ([fe80::6c8e:2b32:b8fb:6928%2]) with mapi id 15.20.5273.014; Thu, 19 May 2022
+ 14:42:58 +0000
+Date:   Thu, 19 May 2022 14:42:55 +0000
+From:   Yazen Ghannam <yazen.ghannam@amd.com>
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Smita.KoralahalliChannabasappa@amd.com, muralidhara.mk@amd.com,
+        naveenkrishna.chatradhi@amd.com
+Subject: Re: [PATCH 06/18] EDAC/amd64: Add prep_chip_selects() into pvt->ops
+Message-ID: <YoZXb44DCGDMYqtg@yaz-fattaah>
+References: <20220509145534.44912-1-yazen.ghannam@amd.com>
+ <20220509145534.44912-7-yazen.ghannam@amd.com>
+ <YoSp3cSoAo4SkkfQ@zn.tnic>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YoSp3cSoAo4SkkfQ@zn.tnic>
+X-ClientProxiedBy: BL0PR02CA0091.namprd02.prod.outlook.com
+ (2603:10b6:208:51::32) To BN8PR12MB3108.namprd12.prod.outlook.com
+ (2603:10b6:408:40::20)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH 19/30] panic: Add the panic hypervisor notifier list
-Content-Language: en-US
-To:     Scott Branden <scott.branden@broadcom.com>,
-        Petr Mladek <pmladek@suse.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Desmond yan <desmond.yan@broadcom.com>
-Cc:     David Gow <davidgow@google.com>, Evan Green <evgreen@chromium.org>,
-        Julius Werner <jwerner@chromium.org>,
-        bcm-kernel-feedback-list@broadcom.com, linux-pm@vger.kernel.org,
-        akpm@linux-foundation.org, bhe@redhat.com,
-        kexec@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-alpha@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-edac@vger.kernel.org,
-        linux-hyperv@vger.kernel.org, linux-leds@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linux-remoteproc@vger.kernel.org, linux-s390@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-um@lists.infradead.org,
-        linux-xtensa@linux-xtensa.org, netdev@vger.kernel.org,
-        openipmi-developer@lists.sourceforge.net, rcu@vger.kernel.org,
-        sparclinux@vger.kernel.org, xen-devel@lists.xenproject.org,
-        x86@kernel.org, kernel-dev@igalia.com, kernel@gpiccoli.net,
-        halves@canonical.com, fabiomirmar@gmail.com,
-        alejandro.j.jimenez@oracle.com, andriy.shevchenko@linux.intel.com,
-        arnd@arndb.de, bp@alien8.de, corbet@lwn.net,
-        d.hatayama@jp.fujitsu.com, dave.hansen@linux.intel.com,
-        dyoung@redhat.com, feng.tang@intel.com, gregkh@linuxfoundation.org,
-        mikelley@microsoft.com, hidehiro.kawai.ez@hitachi.com,
-        jgross@suse.com, john.ogness@linutronix.de, keescook@chromium.org,
-        luto@kernel.org, mhiramat@kernel.org, mingo@redhat.com,
-        paulmck@kernel.org, peterz@infradead.org, rostedt@goodmis.org,
-        senozhatsky@chromium.org, stern@rowland.harvard.edu,
-        tglx@linutronix.de, vgoyal@redhat.com, vkuznets@redhat.com,
-        will@kernel.org, Alexander Gordeev <agordeev@linux.ibm.com>,
-        Andrea Parri <parri.andrea@gmail.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Brian Norris <computersforpeace@gmail.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        "David S. Miller" <davem@davemloft.net>,
-        Dexuan Cui <decui@microsoft.com>,
-        Doug Berger <opendmb@gmail.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Hari Bathini <hbathini@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Justin Chen <justinpopo6@gmail.com>,
-        "K. Y. Srinivasan" <kys@microsoft.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Markus Mayer <mmayer@broadcom.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Mihai Carabas <mihai.carabas@oracle.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Paul Mackerras <paulus@samba.org>, Pavel Machek <pavel@ucw.cz>,
-        Shile Zhang <shile.zhang@linux.alibaba.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Tianyu Lan <Tianyu.Lan@microsoft.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Wang ShaoBo <bobo.shaobowang@huawei.com>,
-        Wei Liu <wei.liu@kernel.org>,
-        zhenwei pi <pizhenwei@bytedance.com>
-References: <20220427224924.592546-1-gpiccoli@igalia.com>
- <20220427224924.592546-20-gpiccoli@igalia.com> <YoJZVZl/MH0KiE/J@alley>
- <ad082ce7-db50-13bb-3dbb-9b595dfa78be@igalia.com> <YoOpyW1+q+Z5as78@alley>
- <d72b9aab-675c-ac89-b73a-b1de4a0b722d@igalia.com>
- <81878a67-21f1-fee8-1add-f381bc8b05df@broadcom.com>
-From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
-In-Reply-To: <81878a67-21f1-fee8-1add-f381bc8b05df@broadcom.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 9aa352aa-8fe3-4b62-39cd-08da39a5de2a
+X-MS-TrafficTypeDiagnostic: DM6PR12MB4313:EE_
+X-Microsoft-Antispam-PRVS: <DM6PR12MB43135206B3E7968CB9308B5AF8D09@DM6PR12MB4313.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: M9hqoyrW5jnrPQksqhOR561nOor3R82TZ5GcclwReydzjOvbVbOsbisImYNjDzhGSnT2hNuiPw6TgjiDwRK33jrq+6/fagRBEfqk5tm0fk4hB+Wt0XoZ1fHqeOzG42+AcmmFl/xbU1hidcBOWFx3olTBWMVJJyQHNl2UUbX357Scv41YQK4WTZUhpFUjw7bGDLXQxgp5+1FhhLEXy1EPPHkyQlJQ+MbfPMdqs9//tlNk3qnW6PcFXTkN0JYqhIBdbD1BdvoqysKnuK2pWR7fQuWLIhnCGzIaGN9N5sUbcSd+U6X6QhdRnmiKjrXtLfO/TcDRuEpk7Cd55l7PfAUGbtfEb+6tR1Jd0f9nYqgTgMvyDOMS9lppZRK+z3QAU3apdLQ2uQAsnbBwh76QQNXgb3stt6j9+q7jgtgrpX+Fj9roX9FyOA7aa+yVJpHuJMBnu8JLt99iK2AJY3twp6XPwolIRPLSBBr6p2vH6dgIIA206SjK73ICeE5COj9rtJvE/OncSoLEb9PiQLvOei/dq/6/XD5guF6Ij4xfVKZXXK8yn48eOWHd+0jeg0F+S7qpofabWDZkWcaAHfiFDZdfIFDkQb1GV3PkA0HsC0KNSptGX314H/1+UHVCTrHcd1YR3kyVecr/syl3a7TEwUrH8g==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3108.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(7916004)(4636009)(366004)(2906002)(86362001)(33716001)(6506007)(316002)(6666004)(5660300002)(9686003)(66476007)(66946007)(6916009)(508600001)(6512007)(44832011)(6486002)(186003)(83380400001)(4326008)(8676002)(8936002)(26005)(66556008)(38100700002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?1DgWwytHSDQwxy2lg4PSOsvstuOifqmMyy+kpWes3CSoeGtKA8IaZC941WbG?=
+ =?us-ascii?Q?g9KD8JVKIQZ1pMIsiYPj5XA4m6kZCKXSoPtuQZEjFCNj2FlvU9rsccESpRAW?=
+ =?us-ascii?Q?Z5VGoggZce6b4LcQJfcWWlAQxk7bKEEFrOyM38QdFW/g0wW8/uc7/xBfOOTP?=
+ =?us-ascii?Q?LXu+/Zic7cQ+05h0zm13vqGgear8XRCfSXhVSYZRmVtCViXO/IfTFZ5W3q5s?=
+ =?us-ascii?Q?Hh4kXlf+WgLnT8KjOdZqxuBhNWlrD0Jtjd9LzCDcU7u0sDgWV9lQG73k0vXc?=
+ =?us-ascii?Q?MLi4Qzt50CjVdPy2mfh6zArAUm+kxTRxp2Hh09BFDjKKg5mxC0kqVkZYF0qv?=
+ =?us-ascii?Q?PkEymAw1J6cBI/K/zCAkMQn61ivLoY+wW+8kvCArR01jzuHbns7y1NsB46ok?=
+ =?us-ascii?Q?S+iQvsDHd0SxemXGZwExzEkEj/WGCBurUBnsDeHuAJKWQjxoMe42KkQo6fUc?=
+ =?us-ascii?Q?s8/WzeerXJh03GxG6W/PGJ61Y1OfCHsQS4PbGjlnf8ZUq9Md6fuSSTjQ3dJM?=
+ =?us-ascii?Q?TGxf4GClXbm7+Drm8jm/yHDZ9wLIrEd1PxQf47WHxa3ykr7u0Mr3LsNkaIOc?=
+ =?us-ascii?Q?kdzLuKIVzPN+j1GttZKFZaCX5dOk/roKjSt088ab0S8+mvxFFJZwvP+/91rl?=
+ =?us-ascii?Q?MsjSf1AY32EcJYO3uNI6uXeCXsfhQeZn5S7/PXCPOj28a+JZeRNbnj46wUFK?=
+ =?us-ascii?Q?UB6v/lOZOgVPU+kmXwcGPzLBH73HwIa1V7Cs8CEF4QOinGlzDbe0M2JsQbsV?=
+ =?us-ascii?Q?5kogG5kl18crvOdQynzgvsfdaDnuQiGFoEjUxPbz86eD1G0XGGDsheRCKKfN?=
+ =?us-ascii?Q?I3FvUAmvjJuoXw5VtXxnMhfOalSdQys8jMyEy4ee766YKMPdO5hvrx3/yJoP?=
+ =?us-ascii?Q?4WV+t8TWgFwIOjT3kshNCs9v9W/ihY+SdndLTtFfZ2jcRZHBY7gOTuh6GRBs?=
+ =?us-ascii?Q?C53nEbWC9opqldIiCnn4An1f0b3gIIc+lIuD0+OPAzqx1zKatlq5YvXurdu3?=
+ =?us-ascii?Q?9RC/n417Q+Jpa8DCEtILZ3tkiUO8pPIq/HAlmMOm+SbJpVvrFH6conzxPY6h?=
+ =?us-ascii?Q?Ma3fQzdN2G3vk0xcCxYzrSr1x3H+0aMiV3+YC04MWjGtmAdqqRZCIbUvOKsE?=
+ =?us-ascii?Q?fi1yG3PkYzCh+7+mrDTjeiVCkr1KNto58iMMY4/3ytmJMC6FUbutFVTUmUxP?=
+ =?us-ascii?Q?yEITl5qAWs+uNqN2Fg2fVOp9C3iqFAA8cgMDTB8LqkGN7H1i1GzvshTNaIdj?=
+ =?us-ascii?Q?CDtdD+oSd2rHMi8EC0am6xhlD6oJjY36v9cC1sMG+TOi/AnuIaSHSnG63rZP?=
+ =?us-ascii?Q?YoHX8LOBt8EYuxXtoXSzPVAtoJxtJvV09K1KkgLL2YxaQ3GYU3ojFwG6pnWw?=
+ =?us-ascii?Q?ZY8CK2cpZgTe3HEGU5o4aFAmIclBPNiGuuDlxdHeuXrpKPl4dU0BIKfbS4C5?=
+ =?us-ascii?Q?IHK6bsbDrJV8sa0VejZCofgmYal7DJzezbGhAFxLMtDHiwh+x/XEUBDYlYJX?=
+ =?us-ascii?Q?crYvm/0LbeyZz+v74osaop4V0jbz/8UoRekxfVOmN63ztlWlrOVs9n5RtiMy?=
+ =?us-ascii?Q?mvAFXPIsiWlt3DHzVDQEz6kVU56fGPTIx19qxmVGvH4Y/YaQvwgzZr0cPnec?=
+ =?us-ascii?Q?wiYMhd7aW/VEh2LupRRt5Bw7Stf3NJK+kw/XdccLK1x8w/6T24tSVi9KRmZh?=
+ =?us-ascii?Q?hF92+4E3CFgtYCuSiF3W4RHeqPjEaOXOtj2GTx7KIVSbCe5op27EKhwW0oX2?=
+ =?us-ascii?Q?+Ld6zFDOuQ=3D=3D?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9aa352aa-8fe3-4b62-39cd-08da39a5de2a
+X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3108.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 May 2022 14:42:58.8542
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: JJh3A1q/4QZItqkasWOc6zOWk7nwOnYbP3hU2eQ5/EZxft4LmR+KKqoxqIfA+LnaD5ZmGcb2SWVB1XBBHIVonw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB4313
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On 18/05/2022 19:17, Scott Branden wrote:
-> Hi Guilherme,
+On Wed, May 18, 2022 at 10:10:05AM +0200, Borislav Petkov wrote:
+> On Mon, May 09, 2022 at 02:55:22PM +0000, Yazen Ghannam wrote:
+> > From: Muralidhara M K <muralidhara.mk@amd.com>
+> > 
+> > GPU Nodes will need to set the number of available Chip Selects, i.e.
+> > Base and Mask values, differently than existing systems. A function
+> > pointer should be used rather than introduce another branching condition.
 > 
-> +Desmond
-> [...] 
->>>> I'm afraid it breaks kdump if this device is not reset beforehand - it's
->>>> a doorbell write, so not high risk I think...
->>>>
->>>> But in case the not-reset device can be probed normally in kdump kernel,
->>>> then I'm fine in moving this to the reboot list! I don't have the HW to
->>>> test myself.
->>>
->>> Good question. Well, it if has to be called before kdump then
->>> even "hypervisor" list is a wrong place because is not always
->>> called before kdump.
->> [...]
-> We register to the panic notifier so that we can kill the VK card ASAP
-> to stop DMAing things over to the host side.  If it is not notified then
-> memory may not be frozen when kdump is occurring.
-> Notifying the card on panic is also needed to allow for any type of 
-> reset to occur.
+> Yeah, it looks to me like all that detection logic should be split
+> eventually. Looking at read_mc_regs(), it has
 > 
-> So, the only thing preventing moving the notifier later is the chance
-> that memory is modified while kdump is occurring.  Or, if DMA is 
-> disabled before kdump already then this wouldn't be an issue and the 
-> notification to the card (to allow for clean resets) can be done later.
+>         if (pvt->umc) {
+>                 __read_mc_regs_df(pvt);
+> 
+>                 goto skip;
+>         }
+> 
+> at the top, then a whole bunch of legacy stuff and then at the skip
+> label some common stuff...
+> 
+> Another thing you could consider is to have common functionality carved
+> out into helpers with "common" in the name and then call those from both
+> UMC and DCT paths. Perhaps that'll help keep the init paths sane. That
+> is, short of splitting this driver.
+> 
+> We did the splitting for Intel and there we have a common, librarized
+> code which gets linked into a couple of drivers. You don't have to do
+> this too - just putting it out there as an alternative.
+> 
+> The per-family function pointers design could be good too, if done
+> right. The advantage being, you have a single driver for all, yadda
+> yadda...
+>
 
-Hi Scott / Desmond, thanks for the detailed answer! Is this adapter
-designed to run in x86 only or you have other architectures' use cases?
+Yep, I've actually considered splitting this driver. But I think at this point
+it'd be best to keep what we have, and then write a new driver if and when a
+major change happens in future platforms.
 
-I'm not expert on that, but I guess whether DMA is "kept" or not depends
-a bit if IOMMU is used. IIRC, there was a copy of the DMAR table in
-kdump (at least for Intel IOMMU). Also, devices are not properly
-quiesced on kdump IIUC, we don't call shutdown/reset handlers, they're
-skip due to the crash nature - so there is a risk of devices doing bad
-things in the new kernel.
+> > Prepare for this by adding prep_chip_selects() to pvt->ops and set it
+> > as needed based on currently supported systems.
+> > 
+> > Use a "umc" prefix for modern systems, since these use Unified Memory
+> > Controllers (UMCs).
+> > 
+> > Use a "dct" prefix for newly-defined legacy functions, since these
+> > systems use DRAM Controllers (DCTs).
+> > 
+> > Signed-off-by: Muralidhara M K <muralidhara.mk@amd.com>
+> > Signed-off-by: Naveen Krishna Chatradhi <naveenkrishna.chatradhi@amd.com>
+> 
+> What does Naveen's SOB mean here? Co-developed-by perhaps?
+>
 
-With that said, and given this is a lightweight notifier that ideally
-should run ASAP, I'd keep this one in the hypervisor list. We can
-"adjust" the semantic of this list to include lightweight notifiers that
-reset adapters.
+Yes, that's right. Sorry I missed it. I'll include it in the next revision.
 
-With that said, Petr has a point - not always such list is going to be
-called before kdump. So, that makes me think in another idea: what if we
-have another list, but not on panic path, but instead in the custom
-crash_shutdown()? Drivers could add callbacks there that must execute
-before kexec/kdump, no matter what.
-
-Let me know your thoughts Scott / Desmond / Petr and all interested parties.
-Cheers,
-
-
-Guilherme
+Thanks,
+Yazen
