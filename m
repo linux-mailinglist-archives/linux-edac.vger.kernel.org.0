@@ -2,92 +2,157 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 10A1452C6E1
-	for <lists+linux-edac@lfdr.de>; Thu, 19 May 2022 00:57:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C1B8752C8F5
+	for <lists+linux-edac@lfdr.de>; Thu, 19 May 2022 02:52:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230088AbiERW5S (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Wed, 18 May 2022 18:57:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45054 "EHLO
+        id S232426AbiESAwl (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Wed, 18 May 2022 20:52:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231178AbiERW47 (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Wed, 18 May 2022 18:56:59 -0400
-Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AB56EBA
-        for <linux-edac@vger.kernel.org>; Wed, 18 May 2022 15:56:55 -0700 (PDT)
-Received: by mail-yb1-xb35.google.com with SMTP id e78so6108693ybc.12
-        for <linux-edac@vger.kernel.org>; Wed, 18 May 2022 15:56:55 -0700 (PDT)
+        with ESMTP id S232329AbiESAwU (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Wed, 18 May 2022 20:52:20 -0400
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E88EA344E8;
+        Wed, 18 May 2022 17:52:17 -0700 (PDT)
+Received: by mail-lf1-x12a.google.com with SMTP id u23so6472538lfc.1;
+        Wed, 18 May 2022 17:52:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=mZ3wqB4NmL7z6lpFr/h15h1rYqsZKafJnUpMVahbEPg=;
-        b=ovbcf3BPb/ZrA/FpQ+ZjErGDIEZ9sF3fYOxqsE4Z0xdiTlYY9UY36hS3ty6MLllddq
-         FdZzNc2PcFHW5cwKZ0FlQqx6F8uTY06Ab/cmT+eL89dkm6I4fHT5v6DDGzwY+fqIjM8b
-         RjeYQt93Ckr4p0lPVWY342OwWKznH6xDl4nV36uj7bwrBPcHFh3ePzF5GNEmu/mQBhIV
-         GwWDekgJIDWSV60014hyLdzt2NtjUStY8MI6SiwBWMH8LEBnRGkE0W6Db0zUE9IYWmDQ
-         Ifd6nbhkESdcIbQrjo3sdEfmdPtb1VAIHCw/LAZv1DOtvQwqLYnhML4dVDmuoYeMmVFn
-         q7TQ==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=5igVcgabfc3GpqR+MTampE2W7vmBRqD9HW7OXsIkAag=;
+        b=VPQenJuW+OU2IPmWU2GFyZZVSj5wN32qJwvTtwmzGWsd2jWWlVg88/rrpXKyHvRjT3
+         Ml/wXy3LfZVPOn3QHJM8giH/EE0Kc+AiGW8Ss5XWWMXCNxna9kEiB3mjPnXRKVCtDUku
+         5UVHJx89alZ3m+0KkfExjcSlUaHVHzdfHlbdcfUJPgFAm/4j+53XqocxKIQWqb7BowTh
+         AE2vtuJqHk/nH2oNR/basBq1ZU+ZbQ6sO1ZAjwPSzNcWHrJ+6HdNns6FWCo2x+J6+583
+         KmnJIrbQrpksPKtbvmIaYPN2K6WKZhAciyRTbLo/Du99PBz0kvzJxxqUvvxu0IEAnMKa
+         BiDg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=mZ3wqB4NmL7z6lpFr/h15h1rYqsZKafJnUpMVahbEPg=;
-        b=7EbPGVkyBCP0DiGt6dEYxW0HiEPhV2qUae7PhDYQc5/crsv5xQ3O9jHbET5pVFMI5d
-         O7YrElyvB57x4S7igWmGAQ99Ku5F0JShw1ndxjYC8MGdScSbWiTrR1gporhg9Z/JJKnI
-         hGWjO6aVQ/R/QS/1zVjjgPSvDlq4VEJfd0GhIL+rUcwjYmktS93qmDpd/SsltNJl843P
-         ppTap8IHfOW36kquHyTrjovSYYzRQeTOPmZgWgXiibBVDvKVSYv1LdCBwySGnQFf6bbc
-         mpUkloFEb0TguYi9XWz94PQxUJOBHSMUFpMWe0O1SbVgCiNceDS1q5CZETZ63vzYhFbg
-         AHXw==
-X-Gm-Message-State: AOAM53375sYXztVWKbm2gSiOsgInnhQ6M7LNA2YSPQr/smTBCURYndXr
-        nTu0eNaOhFe2PVcTtZqc6fuQc8KdNdeY6+i/UWk=
-X-Google-Smtp-Source: ABdhPJyyLDAg+sVdsLTxwEXiZ5avjedwK/uWMP/Y3UWcChEjwDE+iXuY4kOycHY8vIqM/rcV0hLTcVdg0IN0RAQYgBc=
-X-Received: by 2002:a5b:f87:0:b0:64a:9aa6:e181 with SMTP id
- q7-20020a5b0f87000000b0064a9aa6e181mr1852277ybh.157.1652914614913; Wed, 18
- May 2022 15:56:54 -0700 (PDT)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=5igVcgabfc3GpqR+MTampE2W7vmBRqD9HW7OXsIkAag=;
+        b=iQZ2srCUPb+4LEpOkrR8sSYWwdAv04vEw8gYJyUMzVf5JEw9Vo5HLu8q9TwSs7Ux3J
+         HU1aMjPWgY0opUjJw8Wd2gc1WpVwfs6mAFRUIwALJyfRX6fuhMW8jY42+PVFJdBUtc3h
+         13719S5prwzW0+FXJz4zAxF9iR+aJBfnPb6KmGof+AXQT1gTFk+7UpB7hHgW4bYq2/Tc
+         llIhm4eOWtigshfqFF9C5SKlFE+lB60QncpGGmOg9qBLnlUBACFXsd7pLrVENjO64R8L
+         LfxUQgdQuZ8zJ+4KJREIM0K7O5r3otiw0jK1ZCKfhK1qtJhOR1YB8GARocYYj2UI3olt
+         I3Sg==
+X-Gm-Message-State: AOAM5317vz5dHRcNE/bDopYwje+2afHluKYQOZkKq1OHbQNviftOfBa6
+        9aF0z68Br2BQbduQQZILhiYs3bJKqo+rEVHJa5M=
+X-Google-Smtp-Source: ABdhPJzye9D8ZzBG1mW+oOdXc4HL1Ud/n9N+sNSiOtlLukstVs8BE5VN6OqqEqObbwvyuiEqu9nepwH/GRCVRJdO+nA=
+X-Received: by 2002:ac2:43a1:0:b0:472:1de:bbdc with SMTP id
+ t1-20020ac243a1000000b0047201debbdcmr1492978lfl.48.1652921535991; Wed, 18 May
+ 2022 17:52:15 -0700 (PDT)
 MIME-Version: 1.0
-Received: by 2002:a05:7000:7143:0:0:0:0 with HTTP; Wed, 18 May 2022 15:56:53
- -0700 (PDT)
-Reply-To: tonywenn@asia.com
-From:   Tony Wen <weboutloock4@gmail.com>
-Date:   Thu, 19 May 2022 06:56:53 +0800
-Message-ID: <CAE2_YrD=5bo8j9+ah-xptEBBV-HEC4=Gb0SRHf996phiopc3WQ@mail.gmail.com>
-Subject: engage
-To:     undisclosed-recipients:;
+References: <20220510031056.1657-1-ctcchien@nuvoton.com> <20220510031056.1657-3-ctcchien@nuvoton.com>
+ <8d46eeb8-7926-f842-6105-1975a5adc3fe@molgen.mpg.de> <CAHpyw9cvrEKMUpRBWYWp9hDZgA8ALHBkNAQr6ZDqjj4uH-MRTQ@mail.gmail.com>
+ <564c41fe-08cc-9c19-1506-c7b501458251@molgen.mpg.de>
+In-Reply-To: <564c41fe-08cc-9c19-1506-c7b501458251@molgen.mpg.de>
+From:   Medad Young <medadyoung@gmail.com>
+Date:   Thu, 19 May 2022 08:52:04 +0800
+Message-ID: <CAHpyw9dGfn8Q5zerjKDLWpVzcA6MmtfhOiJ_b7M1NLUFXDPMcA@mail.gmail.com>
+Subject: Re: [PATCH v9 2/3] dt-bindings: edac: nuvoton: add NPCM memory controller
+To:     Paul Menzel <pmenzel@molgen.mpg.de>
+Cc:     rric@kernel.org, James Morse <james.morse@arm.com>,
+        tony.luck@intel.com, Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Borislav Petkov <bp@alien8.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Benjamin Fair <benjaminfair@google.com>,
+        Nancy Yuen <yuenn@google.com>,
+        Patrick Venture <venture@google.com>, KWLIU@nuvoton.com,
+        YSCHU@nuvoton.com, JJLIU0@nuvoton.com, KFTING <KFTING@nuvoton.com>,
+        Avi Fishman <avifishman70@gmail.com>,
+        Tomer Maimon <tmaimon77@gmail.com>,
+        Tali Perry <tali.perry1@gmail.com>, ctcchien@nuvoton.com,
+        devicetree <devicetree@vger.kernel.org>,
+        OpenBMC Maillist <openbmc@lists.ozlabs.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-edac <linux-edac@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=5.2 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:b35 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.4959]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [weboutloock4[at]gmail.com]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [weboutloock4[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  3.4 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-Can I engage your services?
+Dear Paul,
+
+Paul Menzel <pmenzel@molgen.mpg.de> =E6=96=BC 2022=E5=B9=B45=E6=9C=8818=E6=
+=97=A5 =E9=80=B1=E4=B8=89 =E4=B8=8B=E5=8D=8812:33=E5=AF=AB=E9=81=93=EF=BC=
+=9A
+>
+> Dear Medad,
+>
+>
+> Am 16.05.22 um 04:30 schrieb Medad Young:
+>
+> > Paul Menzel =E6=96=BC 2022=E5=B9=B45=E6=9C=8810=E6=97=A5 =E9=80=B1=E4=
+=BA=8C =E4=B8=8B=E5=8D=882:14=E5=AF=AB=E9=81=93=EF=BC=9A
+>
+> >> Am 10.05.22 um 05:10 schrieb Medad CChien:
+> >>> Document devicetree bindings for the Nuvoton BMC NPCM memory controll=
+er.
+> >>>
+> >>> Signed-off-by: Medad CChien <ctcchien@nuvoton.com>
+> >>> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+> >>> ---
+> >>>    .../edac/nuvoton,npcm-memory-controller.yaml  | 61 +++++++++++++++=
+++++
+> >>>    1 file changed, 61 insertions(+)
+> >>>    create mode 100644 Documentation/devicetree/bindings/edac/nuvoton,=
+npcm-memory-controller.yaml
+> >>>
+> >>> diff --git a/Documentation/devicetree/bindings/edac/nuvoton,npcm-memo=
+ry-controller.yaml b/Documentation/devicetree/bindings/edac/nuvoton,npcm-me=
+mory-controller.yaml
+> >>> new file mode 100644
+> >>> index 000000000000..6f37211796a3
+> >>> --- /dev/null
+> >>> +++ b/Documentation/devicetree/bindings/edac/nuvoton,npcm-memory-cont=
+roller.yaml
+> >>> @@ -0,0 +1,61 @@
+> >>> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+> >>> +%YAML 1.2
+> >>> +---
+> >>> +$id: http://devicetree.org/schemas/edac/nuvoton,npcm-memory-controll=
+er.yaml#
+> >>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> >>> +
+> >>> +title: Nuvoton NPCM Memory Controller
+> >>> +
+> >>> +maintainers:
+> >>> +  - Medad CChien <ctcchien@nuvoton.com>
+> >>
+> >> Just a side note, that in my experience functional like
+> >> <linux-npcm-memory-controller@nuvoton.com> instead of personal address=
+es
+> >> are useful, as you can configure on your side, who to deliver messages
+> >> to. For example, if you are on sick leave or vacation, you just
+> >> configure to deliver the message to a colleague of yours (or they get
+> >> messages in the first place anyway).
+> >>
+> >> Maybe you can bring that up at Nuvoton.
+> >
+> > I understand, but we do not have group email  address.
+> > so maybe I should add more maintainers?
+>
+> If there are actually more maintainers, responsible and knowledgeable
+> for that driver, than yes, these should be added (until you get a
+> function address set up).
+>
+
+OK, thanks
+
+>
+> Kind regards,
+>
+> Paul
+
+B.R.
+Medad
