@@ -2,115 +2,128 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3286152D654
-	for <lists+linux-edac@lfdr.de>; Thu, 19 May 2022 16:43:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A55252DDAB
+	for <lists+linux-edac@lfdr.de>; Thu, 19 May 2022 21:21:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234869AbiESOnJ (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Thu, 19 May 2022 10:43:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39416 "EHLO
+        id S244465AbiESTVu (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Thu, 19 May 2022 15:21:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231368AbiESOnD (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Thu, 19 May 2022 10:43:03 -0400
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2045.outbound.protection.outlook.com [40.107.223.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93368D02A4;
-        Thu, 19 May 2022 07:43:00 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=LCt0Hakyd0B2VHcpi0FaWxzGp9Lk6ERIhiPA6TSxKgkeuHRvVkj7+Z75Z2it82+evUCPorIZ+rW8OAzaMe/bDYkuKMmHSr/r4zlbcDFCQDdBEwbZnmz90ELda9rRcY2SKS6NHH2kw5dfZgshwRz75MQJU4XeJ5xkHe8OBUKjFeTtFysGNtvd30KLuGzqsrxKxZZjz1HbdUhYKH4+IOcXyVOzMchZBRdkfQd+EasfASE0rxwbqA/m/1NuvzrxAOZLzq7D52nZ8H3xA8HLk47Os3p1x+9j4TSRZzsi1BHgrR+fVEY7pQyFREoSwCSxWfVQLjyrAQXSkaPYTewNdkb9JQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=uhwo5WGckuRL/7yilC7o8rVmjcO/wlcP+oDwJ0AKvPo=;
- b=Pal/CMwl360SG+R1XBI5V+30RNSrF1oBaSHZZlIfI1yjUC0r5kM98BnjJlee2ix2nmBZ6m+rVhsxeOEw53TYmFLY+n0wQD+cwTRQ2i1iYjEx1s0xLS7NXsKDdd3fSVwdkkyNQPLrgJbyZ0Lv4lOn41Cr0GZdwqXosKQbvy+uzDod0Zk4j/dOf1ye/DQOK5Emi/zWKiVM7xROGqr9oqkvfM3Zu1Nsc86uF8SY+itHryk6B+c2jpvrgOJtLyBglE0gZT8tIf/842z/oTSkoXAXRBOEL1cSX3wqSPGfu/xY7sjpZoy80kpLKe/3j4nWAzauxvmOuipOiFnlKLitNqVvHA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=uhwo5WGckuRL/7yilC7o8rVmjcO/wlcP+oDwJ0AKvPo=;
- b=oc1gaC0Kgl7O1OExteKKnabkz6L42DoAd7ADbQtBhIuLE9a3vX5gLM6Ls7/jvMcZMK6Fx9T8xTfWcVrQIC4OmvUkiHid3Yp6Oq24reKlJRXFR9EDJAJMvLut0CeKO/GGnqtdmZr24DzopyGBjGXbWRt3HX/bYSE6vTcDXb5SnEw=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from BN8PR12MB3108.namprd12.prod.outlook.com (2603:10b6:408:40::20)
- by DM6PR12MB4313.namprd12.prod.outlook.com (2603:10b6:5:21e::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5273.13; Thu, 19 May
- 2022 14:42:58 +0000
-Received: from BN8PR12MB3108.namprd12.prod.outlook.com
- ([fe80::6c8e:2b32:b8fb:6928]) by BN8PR12MB3108.namprd12.prod.outlook.com
- ([fe80::6c8e:2b32:b8fb:6928%2]) with mapi id 15.20.5273.014; Thu, 19 May 2022
- 14:42:58 +0000
-Date:   Thu, 19 May 2022 14:42:55 +0000
-From:   Yazen Ghannam <yazen.ghannam@amd.com>
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Smita.KoralahalliChannabasappa@amd.com, muralidhara.mk@amd.com,
-        naveenkrishna.chatradhi@amd.com
-Subject: Re: [PATCH 06/18] EDAC/amd64: Add prep_chip_selects() into pvt->ops
-Message-ID: <YoZXb44DCGDMYqtg@yaz-fattaah>
-References: <20220509145534.44912-1-yazen.ghannam@amd.com>
- <20220509145534.44912-7-yazen.ghannam@amd.com>
- <YoSp3cSoAo4SkkfQ@zn.tnic>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YoSp3cSoAo4SkkfQ@zn.tnic>
-X-ClientProxiedBy: BL0PR02CA0091.namprd02.prod.outlook.com
- (2603:10b6:208:51::32) To BN8PR12MB3108.namprd12.prod.outlook.com
- (2603:10b6:408:40::20)
+        with ESMTP id S244444AbiESTVq (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Thu, 19 May 2022 15:21:46 -0400
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08EB8541AD
+        for <linux-edac@vger.kernel.org>; Thu, 19 May 2022 12:21:38 -0700 (PDT)
+Received: by mail-pj1-x1036.google.com with SMTP id oe17-20020a17090b395100b001df77d29587so9606565pjb.2
+        for <linux-edac@vger.kernel.org>; Thu, 19 May 2022 12:21:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=broadcom.com; s=google;
+        h=message-id:date:mime-version:user-agent:subject:to:cc:references
+         :from:in-reply-to;
+        bh=KHrUcdRJEqSx/SrRcwXnuWoU56tW1t7+eIcYzzV/yY8=;
+        b=K5hk1kNQ0qY1cBI1u9rIjl80OWYNs9L417JazwV9/P/rfBvqDsGyH3neyQxhzYUSUM
+         WFX/BP8TNWREYWcd9TS1bvZALUfp4IsmI2T7fivUO1t843BNZ9CvrRP5ePBgkH4YI9k/
+         yp8ewcS3IOetUGpIKivTrODVFPBFcfTu+NKto=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :to:cc:references:from:in-reply-to;
+        bh=KHrUcdRJEqSx/SrRcwXnuWoU56tW1t7+eIcYzzV/yY8=;
+        b=MoqlNAxAxscEVgfwL9xLIVA/kwEJJjwqOPn1K6o/4pHu0Sgphn3SGD14oPp83aZ5XC
+         cdgmiVnoTlbABPSuGkhum2Q21SwpR0WsXiMvLuiufy/exc3nW4HasOjzVNpDrHboKgHF
+         PU7r/P4W/1M7neaydKQ72g0EMtPV0jO7q3g/KWhpTQGbsBYF48hPL+ml1TS8Dcw6Ii+z
+         Mp56iuf5qCovSBRyBoE2lxdI/UkHeun8biXYQRHv7pvpDsbUrYhRmRz4/SGSy9l55lMz
+         n/rg8tEXypT1PeXulvdQlLVgXmmH0Cf241Y3wrz8XjRX2NXONQrbsg9nl7dyIkP0Tv6K
+         TCiA==
+X-Gm-Message-State: AOAM532GeuhdQDRTbW7WdpFmAPiSyR9UAte6AZN0uWo7ZThMISnuqpS9
+        JH0wn0iEgIlEihxOn3tcgJQJFQ==
+X-Google-Smtp-Source: ABdhPJy10NyoQgp6RBZKGliXG8eNodnAGbYEZ6SUYrfrdh7Px/LOSRK6yXAE0oXiUJBwAYB6KTRkcw==
+X-Received: by 2002:a17:902:8644:b0:153:9f01:2090 with SMTP id y4-20020a170902864400b001539f012090mr5952326plt.101.1652988097307;
+        Thu, 19 May 2022 12:21:37 -0700 (PDT)
+Received: from [10.136.13.180] ([192.19.161.250])
+        by smtp.gmail.com with ESMTPSA id s13-20020a17090302cd00b0015e8d4eb244sm4097873plk.142.2022.05.19.12.20.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 19 May 2022 12:21:36 -0700 (PDT)
+Message-ID: <d1cc0bee-2a98-0c2e-8796-6fb7fae6b803@broadcom.com>
+Date:   Thu, 19 May 2022 12:20:54 -0700
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 9aa352aa-8fe3-4b62-39cd-08da39a5de2a
-X-MS-TrafficTypeDiagnostic: DM6PR12MB4313:EE_
-X-Microsoft-Antispam-PRVS: <DM6PR12MB43135206B3E7968CB9308B5AF8D09@DM6PR12MB4313.namprd12.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: M9hqoyrW5jnrPQksqhOR561nOor3R82TZ5GcclwReydzjOvbVbOsbisImYNjDzhGSnT2hNuiPw6TgjiDwRK33jrq+6/fagRBEfqk5tm0fk4hB+Wt0XoZ1fHqeOzG42+AcmmFl/xbU1hidcBOWFx3olTBWMVJJyQHNl2UUbX357Scv41YQK4WTZUhpFUjw7bGDLXQxgp5+1FhhLEXy1EPPHkyQlJQ+MbfPMdqs9//tlNk3qnW6PcFXTkN0JYqhIBdbD1BdvoqysKnuK2pWR7fQuWLIhnCGzIaGN9N5sUbcSd+U6X6QhdRnmiKjrXtLfO/TcDRuEpk7Cd55l7PfAUGbtfEb+6tR1Jd0f9nYqgTgMvyDOMS9lppZRK+z3QAU3apdLQ2uQAsnbBwh76QQNXgb3stt6j9+q7jgtgrpX+Fj9roX9FyOA7aa+yVJpHuJMBnu8JLt99iK2AJY3twp6XPwolIRPLSBBr6p2vH6dgIIA206SjK73ICeE5COj9rtJvE/OncSoLEb9PiQLvOei/dq/6/XD5guF6Ij4xfVKZXXK8yn48eOWHd+0jeg0F+S7qpofabWDZkWcaAHfiFDZdfIFDkQb1GV3PkA0HsC0KNSptGX314H/1+UHVCTrHcd1YR3kyVecr/syl3a7TEwUrH8g==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3108.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(7916004)(4636009)(366004)(2906002)(86362001)(33716001)(6506007)(316002)(6666004)(5660300002)(9686003)(66476007)(66946007)(6916009)(508600001)(6512007)(44832011)(6486002)(186003)(83380400001)(4326008)(8676002)(8936002)(26005)(66556008)(38100700002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?1DgWwytHSDQwxy2lg4PSOsvstuOifqmMyy+kpWes3CSoeGtKA8IaZC941WbG?=
- =?us-ascii?Q?g9KD8JVKIQZ1pMIsiYPj5XA4m6kZCKXSoPtuQZEjFCNj2FlvU9rsccESpRAW?=
- =?us-ascii?Q?Z5VGoggZce6b4LcQJfcWWlAQxk7bKEEFrOyM38QdFW/g0wW8/uc7/xBfOOTP?=
- =?us-ascii?Q?LXu+/Zic7cQ+05h0zm13vqGgear8XRCfSXhVSYZRmVtCViXO/IfTFZ5W3q5s?=
- =?us-ascii?Q?Hh4kXlf+WgLnT8KjOdZqxuBhNWlrD0Jtjd9LzCDcU7u0sDgWV9lQG73k0vXc?=
- =?us-ascii?Q?MLi4Qzt50CjVdPy2mfh6zArAUm+kxTRxp2Hh09BFDjKKg5mxC0kqVkZYF0qv?=
- =?us-ascii?Q?PkEymAw1J6cBI/K/zCAkMQn61ivLoY+wW+8kvCArR01jzuHbns7y1NsB46ok?=
- =?us-ascii?Q?S+iQvsDHd0SxemXGZwExzEkEj/WGCBurUBnsDeHuAJKWQjxoMe42KkQo6fUc?=
- =?us-ascii?Q?s8/WzeerXJh03GxG6W/PGJ61Y1OfCHsQS4PbGjlnf8ZUq9Md6fuSSTjQ3dJM?=
- =?us-ascii?Q?TGxf4GClXbm7+Drm8jm/yHDZ9wLIrEd1PxQf47WHxa3ykr7u0Mr3LsNkaIOc?=
- =?us-ascii?Q?kdzLuKIVzPN+j1GttZKFZaCX5dOk/roKjSt088ab0S8+mvxFFJZwvP+/91rl?=
- =?us-ascii?Q?MsjSf1AY32EcJYO3uNI6uXeCXsfhQeZn5S7/PXCPOj28a+JZeRNbnj46wUFK?=
- =?us-ascii?Q?UB6v/lOZOgVPU+kmXwcGPzLBH73HwIa1V7Cs8CEF4QOinGlzDbe0M2JsQbsV?=
- =?us-ascii?Q?5kogG5kl18crvOdQynzgvsfdaDnuQiGFoEjUxPbz86eD1G0XGGDsheRCKKfN?=
- =?us-ascii?Q?I3FvUAmvjJuoXw5VtXxnMhfOalSdQys8jMyEy4ee766YKMPdO5hvrx3/yJoP?=
- =?us-ascii?Q?4WV+t8TWgFwIOjT3kshNCs9v9W/ihY+SdndLTtFfZ2jcRZHBY7gOTuh6GRBs?=
- =?us-ascii?Q?C53nEbWC9opqldIiCnn4An1f0b3gIIc+lIuD0+OPAzqx1zKatlq5YvXurdu3?=
- =?us-ascii?Q?9RC/n417Q+Jpa8DCEtILZ3tkiUO8pPIq/HAlmMOm+SbJpVvrFH6conzxPY6h?=
- =?us-ascii?Q?Ma3fQzdN2G3vk0xcCxYzrSr1x3H+0aMiV3+YC04MWjGtmAdqqRZCIbUvOKsE?=
- =?us-ascii?Q?fi1yG3PkYzCh+7+mrDTjeiVCkr1KNto58iMMY4/3ytmJMC6FUbutFVTUmUxP?=
- =?us-ascii?Q?yEITl5qAWs+uNqN2Fg2fVOp9C3iqFAA8cgMDTB8LqkGN7H1i1GzvshTNaIdj?=
- =?us-ascii?Q?CDtdD+oSd2rHMi8EC0am6xhlD6oJjY36v9cC1sMG+TOi/AnuIaSHSnG63rZP?=
- =?us-ascii?Q?YoHX8LOBt8EYuxXtoXSzPVAtoJxtJvV09K1KkgLL2YxaQ3GYU3ojFwG6pnWw?=
- =?us-ascii?Q?ZY8CK2cpZgTe3HEGU5o4aFAmIclBPNiGuuDlxdHeuXrpKPl4dU0BIKfbS4C5?=
- =?us-ascii?Q?IHK6bsbDrJV8sa0VejZCofgmYal7DJzezbGhAFxLMtDHiwh+x/XEUBDYlYJX?=
- =?us-ascii?Q?crYvm/0LbeyZz+v74osaop4V0jbz/8UoRekxfVOmN63ztlWlrOVs9n5RtiMy?=
- =?us-ascii?Q?mvAFXPIsiWlt3DHzVDQEz6kVU56fGPTIx19qxmVGvH4Y/YaQvwgzZr0cPnec?=
- =?us-ascii?Q?wiYMhd7aW/VEh2LupRRt5Bw7Stf3NJK+kw/XdccLK1x8w/6T24tSVi9KRmZh?=
- =?us-ascii?Q?hF92+4E3CFgtYCuSiF3W4RHeqPjEaOXOtj2GTx7KIVSbCe5op27EKhwW0oX2?=
- =?us-ascii?Q?+Ld6zFDOuQ=3D=3D?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9aa352aa-8fe3-4b62-39cd-08da39a5de2a
-X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3108.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 May 2022 14:42:58.8542
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: JJh3A1q/4QZItqkasWOc6zOWk7nwOnYbP3hU2eQ5/EZxft4LmR+KKqoxqIfA+LnaD5ZmGcb2SWVB1XBBHIVonw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB4313
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH 19/30] panic: Add the panic hypervisor notifier list
+To:     "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
+        Petr Mladek <pmladek@suse.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Desmond yan <desmond.yan@broadcom.com>
+Cc:     David Gow <davidgow@google.com>, Evan Green <evgreen@chromium.org>,
+        Julius Werner <jwerner@chromium.org>,
+        bcm-kernel-feedback-list@broadcom.com, linux-pm@vger.kernel.org,
+        akpm@linux-foundation.org, bhe@redhat.com,
+        kexec@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-alpha@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-edac@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, linux-leds@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linux-remoteproc@vger.kernel.org, linux-s390@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-um@lists.infradead.org,
+        linux-xtensa@linux-xtensa.org, netdev@vger.kernel.org,
+        openipmi-developer@lists.sourceforge.net, rcu@vger.kernel.org,
+        sparclinux@vger.kernel.org, xen-devel@lists.xenproject.org,
+        x86@kernel.org, kernel-dev@igalia.com, kernel@gpiccoli.net,
+        halves@canonical.com, fabiomirmar@gmail.com,
+        alejandro.j.jimenez@oracle.com, andriy.shevchenko@linux.intel.com,
+        arnd@arndb.de, bp@alien8.de, corbet@lwn.net,
+        d.hatayama@jp.fujitsu.com, dave.hansen@linux.intel.com,
+        dyoung@redhat.com, feng.tang@intel.com, gregkh@linuxfoundation.org,
+        mikelley@microsoft.com, hidehiro.kawai.ez@hitachi.com,
+        jgross@suse.com, john.ogness@linutronix.de, keescook@chromium.org,
+        luto@kernel.org, mhiramat@kernel.org, mingo@redhat.com,
+        paulmck@kernel.org, peterz@infradead.org, rostedt@goodmis.org,
+        senozhatsky@chromium.org, stern@rowland.harvard.edu,
+        tglx@linutronix.de, vgoyal@redhat.com, vkuznets@redhat.com,
+        will@kernel.org, Alexander Gordeev <agordeev@linux.ibm.com>,
+        Andrea Parri <parri.andrea@gmail.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Brian Norris <computersforpeace@gmail.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        "David S. Miller" <davem@davemloft.net>,
+        Dexuan Cui <decui@microsoft.com>,
+        Doug Berger <opendmb@gmail.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Hari Bathini <hbathini@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Justin Chen <justinpopo6@gmail.com>,
+        "K. Y. Srinivasan" <kys@microsoft.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Markus Mayer <mmayer@broadcom.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Mihai Carabas <mihai.carabas@oracle.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Paul Mackerras <paulus@samba.org>, Pavel Machek <pavel@ucw.cz>,
+        Shile Zhang <shile.zhang@linux.alibaba.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Tianyu Lan <Tianyu.Lan@microsoft.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Wang ShaoBo <bobo.shaobowang@huawei.com>,
+        Wei Liu <wei.liu@kernel.org>,
+        zhenwei pi <pizhenwei@bytedance.com>
+References: <20220427224924.592546-1-gpiccoli@igalia.com>
+ <20220427224924.592546-20-gpiccoli@igalia.com> <YoJZVZl/MH0KiE/J@alley>
+ <ad082ce7-db50-13bb-3dbb-9b595dfa78be@igalia.com> <YoOpyW1+q+Z5as78@alley>
+ <d72b9aab-675c-ac89-b73a-b1de4a0b722d@igalia.com>
+ <81878a67-21f1-fee8-1add-f381bc8b05df@broadcom.com>
+ <edbaa4fa-561c-6f5e-f2ab-43ae68acaede@igalia.com>
+From:   Scott Branden <scott.branden@broadcom.com>
+In-Reply-To: <edbaa4fa-561c-6f5e-f2ab-43ae68acaede@igalia.com>
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+        boundary="00000000000061f3ff05df6248a6"
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -118,60 +131,154 @@ Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Wed, May 18, 2022 at 10:10:05AM +0200, Borislav Petkov wrote:
-> On Mon, May 09, 2022 at 02:55:22PM +0000, Yazen Ghannam wrote:
-> > From: Muralidhara M K <muralidhara.mk@amd.com>
-> > 
-> > GPU Nodes will need to set the number of available Chip Selects, i.e.
-> > Base and Mask values, differently than existing systems. A function
-> > pointer should be used rather than introduce another branching condition.
-> 
-> Yeah, it looks to me like all that detection logic should be split
-> eventually. Looking at read_mc_regs(), it has
-> 
->         if (pvt->umc) {
->                 __read_mc_regs_df(pvt);
-> 
->                 goto skip;
->         }
-> 
-> at the top, then a whole bunch of legacy stuff and then at the skip
-> label some common stuff...
-> 
-> Another thing you could consider is to have common functionality carved
-> out into helpers with "common" in the name and then call those from both
-> UMC and DCT paths. Perhaps that'll help keep the init paths sane. That
-> is, short of splitting this driver.
-> 
-> We did the splitting for Intel and there we have a common, librarized
-> code which gets linked into a couple of drivers. You don't have to do
-> this too - just putting it out there as an alternative.
-> 
-> The per-family function pointers design could be good too, if done
-> right. The advantage being, you have a single driver for all, yadda
-> yadda...
->
+--00000000000061f3ff05df6248a6
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Yep, I've actually considered splitting this driver. But I think at this point
-it'd be best to keep what we have, and then write a new driver if and when a
-major change happens in future platforms.
 
-> > Prepare for this by adding prep_chip_selects() to pvt->ops and set it
-> > as needed based on currently supported systems.
-> > 
-> > Use a "umc" prefix for modern systems, since these use Unified Memory
-> > Controllers (UMCs).
-> > 
-> > Use a "dct" prefix for newly-defined legacy functions, since these
-> > systems use DRAM Controllers (DCTs).
-> > 
-> > Signed-off-by: Muralidhara M K <muralidhara.mk@amd.com>
-> > Signed-off-by: Naveen Krishna Chatradhi <naveenkrishna.chatradhi@amd.com>
+
+On 2022-05-19 05:19, Guilherme G. Piccoli wrote:
+> On 18/05/2022 19:17, Scott Branden wrote:
+>> Hi Guilherme,
+>>
+>> +Desmond
+>> [...]
+>>>>> I'm afraid it breaks kdump if this device is not reset beforehand - it's
+>>>>> a doorbell write, so not high risk I think...
+>>>>>
+>>>>> But in case the not-reset device can be probed normally in kdump kernel,
+>>>>> then I'm fine in moving this to the reboot list! I don't have the HW to
+>>>>> test myself.
+>>>>
+>>>> Good question. Well, it if has to be called before kdump then
+>>>> even "hypervisor" list is a wrong place because is not always
+>>>> called before kdump.
+>>> [...]
+>> We register to the panic notifier so that we can kill the VK card ASAP
+>> to stop DMAing things over to the host side.  If it is not notified then
+>> memory may not be frozen when kdump is occurring.
+>> Notifying the card on panic is also needed to allow for any type of
+>> reset to occur.
+>>
+>> So, the only thing preventing moving the notifier later is the chance
+>> that memory is modified while kdump is occurring.  Or, if DMA is
+>> disabled before kdump already then this wouldn't be an issue and the
+>> notification to the card (to allow for clean resets) can be done later.
 > 
-> What does Naveen's SOB mean here? Co-developed-by perhaps?
->
+> Hi Scott / Desmond, thanks for the detailed answer! Is this adapter
+> designed to run in x86 only or you have other architectures' use cases?
+The adapter may be used in any PCIe design that supports DMA.
+So it may be possible to run in arm64 servers.
+> 
+> I'm not expert on that, but I guess whether DMA is "kept" or not depends
+> a bit if IOMMU is used. IIRC, there was a copy of the DMAR table in
+> kdump (at least for Intel IOMMU). Also, devices are not properly
+> quiesced on kdump IIUC, we don't call shutdown/reset handlers, they're
+> skip due to the crash nature - so there is a risk of devices doing bad
+> things in the new kernel.
+> 
+> With that said, and given this is a lightweight notifier that ideally
+> should run ASAP, I'd keep this one in the hypervisor list. We can
+> "adjust" the semantic of this list to include lightweight notifiers that
+> reset adapters.
+Sounds the best to keep system operating as tested today.
+> 
+> With that said, Petr has a point - not always such list is going to be
+> called before kdump. So, that makes me think in another idea: what if we
+> have another list, but not on panic path, but instead in the custom
+> crash_shutdown()? Drivers could add callbacks there that must execute
+> before kexec/kdump, no matter what.
+It may be beneficial for some other drivers but for our use we would 
+then need to register for the panic path and the crash_shutdown path. 
+We notify the VK card for 2 purposes: one to stop DMA so memory stop 
+changing during a kdump.  And also to get the card into a good state so 
+resets happen cleanly.
+> 
+> Let me know your thoughts Scott / Desmond / Petr and all interested parties.
+> Cheers,
+> 
+> 
+> Guilherme
 
-Yes, that's right. Sorry I missed it. I'll include it in the next revision.
+--00000000000061f3ff05df6248a6
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
 
-Thanks,
-Yazen
+MIIQcAYJKoZIhvcNAQcCoIIQYTCCEF0CAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
+gg3HMIIFDTCCA/WgAwIBAgIQeEqpED+lv77edQixNJMdADANBgkqhkiG9w0BAQsFADBMMSAwHgYD
+VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSMzETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
+AxMKR2xvYmFsU2lnbjAeFw0yMDA5MTYwMDAwMDBaFw0yODA5MTYwMDAwMDBaMFsxCzAJBgNVBAYT
+AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYDVQQDEyhHbG9iYWxTaWduIEdDQyBS
+MyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA
+vbCmXCcsbZ/a0fRIQMBxp4gJnnyeneFYpEtNydrZZ+GeKSMdHiDgXD1UnRSIudKo+moQ6YlCOu4t
+rVWO/EiXfYnK7zeop26ry1RpKtogB7/O115zultAz64ydQYLe+a1e/czkALg3sgTcOOcFZTXk38e
+aqsXsipoX1vsNurqPtnC27TWsA7pk4uKXscFjkeUE8JZu9BDKaswZygxBOPBQBwrA5+20Wxlk6k1
+e6EKaaNaNZUy30q3ArEf30ZDpXyfCtiXnupjSK8WU2cK4qsEtj09JS4+mhi0CTCrCnXAzum3tgcH
+cHRg0prcSzzEUDQWoFxyuqwiwhHu3sPQNmFOMwIDAQABo4IB2jCCAdYwDgYDVR0PAQH/BAQDAgGG
+MGAGA1UdJQRZMFcGCCsGAQUFBwMCBggrBgEFBQcDBAYKKwYBBAGCNxQCAgYKKwYBBAGCNwoDBAYJ
+KwYBBAGCNxUGBgorBgEEAYI3CgMMBggrBgEFBQcDBwYIKwYBBQUHAxEwEgYDVR0TAQH/BAgwBgEB
+/wIBADAdBgNVHQ4EFgQUljPR5lgXWzR1ioFWZNW+SN6hj88wHwYDVR0jBBgwFoAUj/BLf6guRSSu
+TVD6Y5qL3uLdG7wwegYIKwYBBQUHAQEEbjBsMC0GCCsGAQUFBzABhiFodHRwOi8vb2NzcC5nbG9i
+YWxzaWduLmNvbS9yb290cjMwOwYIKwYBBQUHMAKGL2h0dHA6Ly9zZWN1cmUuZ2xvYmFsc2lnbi5j
+b20vY2FjZXJ0L3Jvb3QtcjMuY3J0MDYGA1UdHwQvMC0wK6ApoCeGJWh0dHA6Ly9jcmwuZ2xvYmFs
+c2lnbi5jb20vcm9vdC1yMy5jcmwwWgYDVR0gBFMwUTALBgkrBgEEAaAyASgwQgYKKwYBBAGgMgEo
+CjA0MDIGCCsGAQUFBwIBFiZodHRwczovL3d3dy5nbG9iYWxzaWduLmNvbS9yZXBvc2l0b3J5LzAN
+BgkqhkiG9w0BAQsFAAOCAQEAdAXk/XCnDeAOd9nNEUvWPxblOQ/5o/q6OIeTYvoEvUUi2qHUOtbf
+jBGdTptFsXXe4RgjVF9b6DuizgYfy+cILmvi5hfk3Iq8MAZsgtW+A/otQsJvK2wRatLE61RbzkX8
+9/OXEZ1zT7t/q2RiJqzpvV8NChxIj+P7WTtepPm9AIj0Keue+gS2qvzAZAY34ZZeRHgA7g5O4TPJ
+/oTd+4rgiU++wLDlcZYd/slFkaT3xg4qWDepEMjT4T1qFOQIL+ijUArYS4owpPg9NISTKa1qqKWJ
+jFoyms0d0GwOniIIbBvhI2MJ7BSY9MYtWVT5jJO3tsVHwj4cp92CSFuGwunFMzCCA18wggJHoAMC
+AQICCwQAAAAAASFYUwiiMA0GCSqGSIb3DQEBCwUAMEwxIDAeBgNVBAsTF0dsb2JhbFNpZ24gUm9v
+dCBDQSAtIFIzMRMwEQYDVQQKEwpHbG9iYWxTaWduMRMwEQYDVQQDEwpHbG9iYWxTaWduMB4XDTA5
+MDMxODEwMDAwMFoXDTI5MDMxODEwMDAwMFowTDEgMB4GA1UECxMXR2xvYmFsU2lnbiBSb290IENB
+IC0gUjMxEzARBgNVBAoTCkdsb2JhbFNpZ24xEzARBgNVBAMTCkdsb2JhbFNpZ24wggEiMA0GCSqG
+SIb3DQEBAQUAA4IBDwAwggEKAoIBAQDMJXaQeQZ4Ihb1wIO2hMoonv0FdhHFrYhy/EYCQ8eyip0E
+XyTLLkvhYIJG4VKrDIFHcGzdZNHr9SyjD4I9DCuul9e2FIYQebs7E4B3jAjhSdJqYi8fXvqWaN+J
+J5U4nwbXPsnLJlkNc96wyOkmDoMVxu9bi9IEYMpJpij2aTv2y8gokeWdimFXN6x0FNx04Druci8u
+nPvQu7/1PQDhBjPogiuuU6Y6FnOM3UEOIDrAtKeh6bJPkC4yYOlXy7kEkmho5TgmYHWyn3f/kRTv
+riBJ/K1AFUjRAjFhGV64l++td7dkmnq/X8ET75ti+w1s4FRpFqkD2m7pg5NxdsZphYIXAgMBAAGj
+QjBAMA4GA1UdDwEB/wQEAwIBBjAPBgNVHRMBAf8EBTADAQH/MB0GA1UdDgQWBBSP8Et/qC5FJK5N
+UPpjmove4t0bvDANBgkqhkiG9w0BAQsFAAOCAQEAS0DbwFCq/sgM7/eWVEVJu5YACUGssxOGhigH
+M8pr5nS5ugAtrqQK0/Xx8Q+Kv3NnSoPHRHt44K9ubG8DKY4zOUXDjuS5V2yq/BKW7FPGLeQkbLmU
+Y/vcU2hnVj6DuM81IcPJaP7O2sJTqsyQiunwXUaMld16WCgaLx3ezQA3QY/tRG3XUyiXfvNnBB4V
+14qWtNPeTCekTBtzc3b0F5nCH3oO4y0IrQocLP88q1UOD5F+NuvDV0m+4S4tfGCLw0FREyOdzvcy
+a5QBqJnnLDMfOjsl0oZAzjsshnjJYS8Uuu7bVW/fhO4FCU29KNhyztNiUGUe65KXgzHZs7XKR1g/
+XzCCBU8wggQ3oAMCAQICDH2hdImkqeI7h1IaTzANBgkqhkiG9w0BAQsFADBbMQswCQYDVQQGEwJC
+RTEZMBcGA1UEChMQR2xvYmFsU2lnbiBudi1zYTExMC8GA1UEAxMoR2xvYmFsU2lnbiBHQ0MgUjMg
+UGVyc29uYWxTaWduIDIgQ0EgMjAyMDAeFw0yMTAyMjIxNDA5MDJaFw0yMjA5MjIxNDMxMTRaMIGQ
+MQswCQYDVQQGEwJJTjESMBAGA1UECBMJS2FybmF0YWthMRIwEAYDVQQHEwlCYW5nYWxvcmUxFjAU
+BgNVBAoTDUJyb2FkY29tIEluYy4xFjAUBgNVBAMTDVNjb3R0IEJyYW5kZW4xKTAnBgkqhkiG9w0B
+CQEWGnNjb3R0LmJyYW5kZW5AYnJvYWRjb20uY29tMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIB
+CgKCAQEAtKitgySOPXrCfmgJJ/6N4Bq2PYQ9C7pbBbEOgcLdGZyOHK9MJW3fcf8NXplv3OfFCQzp
+rm9QWjKvH806lCzDhSKgAg+vro9Alv6BTl7wBdSVpgFsV/Tl+kbDfeBxjE/AwOW+WNGIPJLH4WCo
+MMkaRzH4Lg/8h9DnzxR46++4CqLY4KQQ151a+4Ojb/u/YlVGYlZa/jmTEgk3It8dzv54hZ/UoZg1
+cRe0CRXA7ypOJSgxO/nOOyQoaJxT7CGg1npOeSpPjEuc3fE4xum3l0nvU85hj6MlKZu43hokdBh0
+D0nLyyhEwlR3AC/msdff/UGbM/JR9vk812RP4m/aNWZFJwIDAQABo4IB2zCCAdcwDgYDVR0PAQH/
+BAQDAgWgMIGjBggrBgEFBQcBAQSBljCBkzBOBggrBgEFBQcwAoZCaHR0cDovL3NlY3VyZS5nbG9i
+YWxzaWduLmNvbS9jYWNlcnQvZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAuY3J0MEEGCCsGAQUF
+BzABhjVodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9nc2djY3IzcGVyc29uYWxzaWduMmNhMjAy
+MDBNBgNVHSAERjBEMEIGCisGAQQBoDIBKAowNDAyBggrBgEFBQcCARYmaHR0cHM6Ly93d3cuZ2xv
+YmFsc2lnbi5jb20vcmVwb3NpdG9yeS8wCQYDVR0TBAIwADBJBgNVHR8EQjBAMD6gPKA6hjhodHRw
+Oi8vY3JsLmdsb2JhbHNpZ24uY29tL2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwLmNybDAlBgNV
+HREEHjAcgRpzY290dC5icmFuZGVuQGJyb2FkY29tLmNvbTATBgNVHSUEDDAKBggrBgEFBQcDBDAf
+BgNVHSMEGDAWgBSWM9HmWBdbNHWKgVZk1b5I3qGPzzAdBgNVHQ4EFgQUOhjEpl04Sz9dh5MI82E1
+V39lM/owDQYJKoZIhvcNAQELBQADggEBAA7Rlypx/esz/iq1yA4+KW7uwV/aBY344BWcXt6I+SNK
+VwFBgFWfLj5vaEud9TVv2fPSiaHJo0umemOJk+43QD+bsoqmgcFXd21PrOt7Jjs+jjVED9VC5kJq
+S4NNKUkS+BqijJwSegtVygrc/atrIlJbjI21q4qpemUo5fgwqCNm++BmBGTI8yA09vtGSNDRN42k
+lLX9hl3iEj5SBgkQqCbbnoE+ZjjKfqt7ED166WhgyQWNrl39yLcvLj+JRUB3RuvXKZjH0NQEEBII
+wZBDSkyneykLt3CBNIhSCTxKM6OWxVp936ALSa5K9FNy00TeWSpokR6NmzaW8VD/EjTgvqAxggJt
+MIICaQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYD
+VQQDEyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgx9oXSJpKniO4dS
+Gk8wDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEILXYB80rvGoONbSrKccJNuW/yt4P
+RwosxTdX9/zqPyCuMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIy
+MDUxOTE5MjEzN1owaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsG
+CWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFl
+AwQCATANBgkqhkiG9w0BAQEFAASCAQBsqFeeADkOUmIUQkOFTz4+tbTbcu1kJOu0o2LxolE41ACQ
+Jjl4mG3AxFObAA/vLQRFL2LzmM7+OQ1nUaL/1rIXCVF7a9/kONy4oIc1uslvIVE6XRS3TrWAZyJ1
+KXT1lLM7MUhCe5EkzcZxuapBiKdpmxfhxDzt27vOsC3LpZXW8YbnYGANBVAG0RYROLCIzpGsRUeh
+vHZtk9Zj5ppQPXoMCjx9Nah3XO3Uhnp0i0UbRd2dsZj60JkDxx2H+iX54btyjpq60IUp5n2ulZMN
+latE6tPUnpMceZbDhq45QMDYde9jGlCoU4/7lo4RwQhU+Kl7xsUECNDbTk4UszM1uyGJ
+--00000000000061f3ff05df6248a6--
