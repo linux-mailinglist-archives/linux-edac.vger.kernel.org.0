@@ -2,61 +2,59 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1B8752C8F5
-	for <lists+linux-edac@lfdr.de>; Thu, 19 May 2022 02:52:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 45EF652C909
+	for <lists+linux-edac@lfdr.de>; Thu, 19 May 2022 02:56:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232426AbiESAwl (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Wed, 18 May 2022 20:52:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35734 "EHLO
+        id S232285AbiESA4N (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Wed, 18 May 2022 20:56:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232329AbiESAwU (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Wed, 18 May 2022 20:52:20 -0400
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E88EA344E8;
-        Wed, 18 May 2022 17:52:17 -0700 (PDT)
-Received: by mail-lf1-x12a.google.com with SMTP id u23so6472538lfc.1;
-        Wed, 18 May 2022 17:52:17 -0700 (PDT)
+        with ESMTP id S232370AbiESA4L (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Wed, 18 May 2022 20:56:11 -0400
+Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23FD413F1E;
+        Wed, 18 May 2022 17:56:07 -0700 (PDT)
+Received: by mail-lj1-x236.google.com with SMTP id m23so4508325ljc.0;
+        Wed, 18 May 2022 17:56:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc:content-transfer-encoding;
-        bh=5igVcgabfc3GpqR+MTampE2W7vmBRqD9HW7OXsIkAag=;
-        b=VPQenJuW+OU2IPmWU2GFyZZVSj5wN32qJwvTtwmzGWsd2jWWlVg88/rrpXKyHvRjT3
-         Ml/wXy3LfZVPOn3QHJM8giH/EE0Kc+AiGW8Ss5XWWMXCNxna9kEiB3mjPnXRKVCtDUku
-         5UVHJx89alZ3m+0KkfExjcSlUaHVHzdfHlbdcfUJPgFAm/4j+53XqocxKIQWqb7BowTh
-         AE2vtuJqHk/nH2oNR/basBq1ZU+ZbQ6sO1ZAjwPSzNcWHrJ+6HdNns6FWCo2x+J6+583
-         KmnJIrbQrpksPKtbvmIaYPN2K6WKZhAciyRTbLo/Du99PBz0kvzJxxqUvvxu0IEAnMKa
-         BiDg==
+        bh=P/A63fdObVK1kzszX4o2zU+y2vARpab4MsV04+m6s4U=;
+        b=hp3N9QMKgrTlSBUboc3w51NUmHyBG4nsmCUhx73K1tr0DWGeN0n3vWlZxAKnC19K9+
+         xchUETOjGDjBHCKeJ2SZU+n5kOalPxfxheWKH/sjiYwdWqwbxG7nlYGHIajjMCPNO4rL
+         vxCt2+PPEJ2ydejgr0Zf0DdzYZjAAAmqxAq0FU2E+++d+AxVIAN7PMdvmSGWJh7AXg+w
+         0tV+CApwyyN44zJCihhdW4TS8Vagy9gn9Gg/5zW3X/yLC9qIxpX2btHVZ0N0SY0xg5rC
+         1mOMgjaernRWL38xx2hzVgf5/XwDqG07hAsJqc3Rw8kN5EbUTER2krgUEpLNyvXVgieJ
+         Kopg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc:content-transfer-encoding;
-        bh=5igVcgabfc3GpqR+MTampE2W7vmBRqD9HW7OXsIkAag=;
-        b=iQZ2srCUPb+4LEpOkrR8sSYWwdAv04vEw8gYJyUMzVf5JEw9Vo5HLu8q9TwSs7Ux3J
-         HU1aMjPWgY0opUjJw8Wd2gc1WpVwfs6mAFRUIwALJyfRX6fuhMW8jY42+PVFJdBUtc3h
-         13719S5prwzW0+FXJz4zAxF9iR+aJBfnPb6KmGof+AXQT1gTFk+7UpB7hHgW4bYq2/Tc
-         llIhm4eOWtigshfqFF9C5SKlFE+lB60QncpGGmOg9qBLnlUBACFXsd7pLrVENjO64R8L
-         LfxUQgdQuZ8zJ+4KJREIM0K7O5r3otiw0jK1ZCKfhK1qtJhOR1YB8GARocYYj2UI3olt
-         I3Sg==
-X-Gm-Message-State: AOAM5317vz5dHRcNE/bDopYwje+2afHluKYQOZkKq1OHbQNviftOfBa6
-        9aF0z68Br2BQbduQQZILhiYs3bJKqo+rEVHJa5M=
-X-Google-Smtp-Source: ABdhPJzye9D8ZzBG1mW+oOdXc4HL1Ud/n9N+sNSiOtlLukstVs8BE5VN6OqqEqObbwvyuiEqu9nepwH/GRCVRJdO+nA=
-X-Received: by 2002:ac2:43a1:0:b0:472:1de:bbdc with SMTP id
- t1-20020ac243a1000000b0047201debbdcmr1492978lfl.48.1652921535991; Wed, 18 May
- 2022 17:52:15 -0700 (PDT)
+        bh=P/A63fdObVK1kzszX4o2zU+y2vARpab4MsV04+m6s4U=;
+        b=CnDgS3pH+O5UNeg7YOHkVRF1yLlgqW5gmTKU3INc5P27hybuzO4biGqL/XKi3qSjzm
+         +VIflwGcY/3ydJIjcAtoQklfXfWnuBxhqohWc0f+Fiqc/t8dyUxfeZLzgp3YBCSXlh2x
+         wiMwcl6pzIvTsevKIQAsACs2e7+0ZsFjdCjWaCPWyZdxiseQrMHm1h1Kkqe5tmwNn4tD
+         lkWySDRt7HCATJnNukF7rHRpY0F9sTBuJslL92CLb2F5Ib5CU5zvoBTrmKJJinjHVWae
+         GEBBl77+USIAL/L47xFxbMZP57pqb9BCbiQE617sGwNZAk7krlGFNwCbDCBg5QYZn4+N
+         c1HQ==
+X-Gm-Message-State: AOAM531kg450hiXNY8kOJaDQWSXKCHTbUx5IEGqP8xbGtCjOB7UvjCQA
+        dQ2Vx0QzQg9rbAlBI/LxIRn8OjN5ewSVET0BTTs=
+X-Google-Smtp-Source: ABdhPJzzyBkkT9UcKeYwb2L46w/9p77j44udrFncFopXIIcNuuiPxeLDTWQt2NkOHcPGayjRR8/c17VPkT2d6Uwr6Os=
+X-Received: by 2002:a05:651c:1247:b0:253:caad:4ee2 with SMTP id
+ h7-20020a05651c124700b00253caad4ee2mr1121134ljh.281.1652921765326; Wed, 18
+ May 2022 17:56:05 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220510031056.1657-1-ctcchien@nuvoton.com> <20220510031056.1657-3-ctcchien@nuvoton.com>
- <8d46eeb8-7926-f842-6105-1975a5adc3fe@molgen.mpg.de> <CAHpyw9cvrEKMUpRBWYWp9hDZgA8ALHBkNAQr6ZDqjj4uH-MRTQ@mail.gmail.com>
- <564c41fe-08cc-9c19-1506-c7b501458251@molgen.mpg.de>
-In-Reply-To: <564c41fe-08cc-9c19-1506-c7b501458251@molgen.mpg.de>
+References: <20220510031056.1657-1-ctcchien@nuvoton.com> <20220510031056.1657-2-ctcchien@nuvoton.com>
+ <YoUwe6Tj4Uh6ukc8@zn.tnic>
+In-Reply-To: <YoUwe6Tj4Uh6ukc8@zn.tnic>
 From:   Medad Young <medadyoung@gmail.com>
-Date:   Thu, 19 May 2022 08:52:04 +0800
-Message-ID: <CAHpyw9dGfn8Q5zerjKDLWpVzcA6MmtfhOiJ_b7M1NLUFXDPMcA@mail.gmail.com>
-Subject: Re: [PATCH v9 2/3] dt-bindings: edac: nuvoton: add NPCM memory controller
-To:     Paul Menzel <pmenzel@molgen.mpg.de>
+Date:   Thu, 19 May 2022 08:55:53 +0800
+Message-ID: <CAHpyw9fjThEP4NuU08aNJ_raHpq9-j9KgBb8YuZ_shXTjhm3JA@mail.gmail.com>
+Subject: Re: [PATCH v9 1/3] ARM: dts: nuvoton: Add memory controller node
+To:     Borislav Petkov <bp@alien8.de>
 Cc:     rric@kernel.org, James Morse <james.morse@arm.com>,
         tony.luck@intel.com, Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Borislav Petkov <bp@alien8.de>,
         Rob Herring <robh+dt@kernel.org>,
         Benjamin Fair <benjaminfair@google.com>,
         Nancy Yuen <yuenn@google.com>,
@@ -65,94 +63,98 @@ Cc:     rric@kernel.org, James Morse <james.morse@arm.com>,
         Avi Fishman <avifishman70@gmail.com>,
         Tomer Maimon <tmaimon77@gmail.com>,
         Tali Perry <tali.perry1@gmail.com>, ctcchien@nuvoton.com,
-        devicetree <devicetree@vger.kernel.org>,
-        OpenBMC Maillist <openbmc@lists.ozlabs.org>,
+        linux-edac <linux-edac@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-edac <linux-edac@vger.kernel.org>
+        devicetree <devicetree@vger.kernel.org>,
+        OpenBMC Maillist <openbmc@lists.ozlabs.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_FILL_THIS_FORM_SHORT,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-Dear Paul,
+Dear Borislav,
 
-Paul Menzel <pmenzel@molgen.mpg.de> =E6=96=BC 2022=E5=B9=B45=E6=9C=8818=E6=
-=97=A5 =E9=80=B1=E4=B8=89 =E4=B8=8B=E5=8D=8812:33=E5=AF=AB=E9=81=93=EF=BC=
-=9A
+Borislav Petkov <bp@alien8.de> =E6=96=BC 2022=E5=B9=B45=E6=9C=8819=E6=97=A5=
+ =E9=80=B1=E5=9B=9B =E4=B8=8A=E5=8D=881:44=E5=AF=AB=E9=81=93=EF=BC=9A
 >
-> Dear Medad,
->
->
-> Am 16.05.22 um 04:30 schrieb Medad Young:
->
-> > Paul Menzel =E6=96=BC 2022=E5=B9=B45=E6=9C=8810=E6=97=A5 =E9=80=B1=E4=
-=BA=8C =E4=B8=8B=E5=8D=882:14=E5=AF=AB=E9=81=93=EF=BC=9A
->
-> >> Am 10.05.22 um 05:10 schrieb Medad CChien:
-> >>> Document devicetree bindings for the Nuvoton BMC NPCM memory controll=
-er.
-> >>>
-> >>> Signed-off-by: Medad CChien <ctcchien@nuvoton.com>
-> >>> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-> >>> ---
-> >>>    .../edac/nuvoton,npcm-memory-controller.yaml  | 61 +++++++++++++++=
-++++
-> >>>    1 file changed, 61 insertions(+)
-> >>>    create mode 100644 Documentation/devicetree/bindings/edac/nuvoton,=
-npcm-memory-controller.yaml
-> >>>
-> >>> diff --git a/Documentation/devicetree/bindings/edac/nuvoton,npcm-memo=
-ry-controller.yaml b/Documentation/devicetree/bindings/edac/nuvoton,npcm-me=
-mory-controller.yaml
-> >>> new file mode 100644
-> >>> index 000000000000..6f37211796a3
-> >>> --- /dev/null
-> >>> +++ b/Documentation/devicetree/bindings/edac/nuvoton,npcm-memory-cont=
-roller.yaml
-> >>> @@ -0,0 +1,61 @@
-> >>> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-> >>> +%YAML 1.2
-> >>> +---
-> >>> +$id: http://devicetree.org/schemas/edac/nuvoton,npcm-memory-controll=
-er.yaml#
-> >>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> >>> +
-> >>> +title: Nuvoton NPCM Memory Controller
-> >>> +
-> >>> +maintainers:
-> >>> +  - Medad CChien <ctcchien@nuvoton.com>
-> >>
-> >> Just a side note, that in my experience functional like
-> >> <linux-npcm-memory-controller@nuvoton.com> instead of personal address=
-es
-> >> are useful, as you can configure on your side, who to deliver messages
-> >> to. For example, if you are on sick leave or vacation, you just
-> >> configure to deliver the message to a colleague of yours (or they get
-> >> messages in the first place anyway).
-> >>
-> >> Maybe you can bring that up at Nuvoton.
+> On Tue, May 10, 2022 at 11:10:54AM +0800, Medad CChien wrote:
+> > ECC must be configured in the BootBlock header.
+> > Then, you can read error counts via the EDAC kernel framework.
 > >
-> > I understand, but we do not have group email  address.
-> > so maybe I should add more maintainers?
+> > Signed-off-by: Medad CChien <ctcchien@nuvoton.com>
+> > ---
+> >  arch/arm/boot/dts/nuvoton-common-npcm7xx.dtsi | 7 +++++++
+> >  1 file changed, 7 insertions(+)
+> >
+> > diff --git a/arch/arm/boot/dts/nuvoton-common-npcm7xx.dtsi b/arch/arm/b=
+oot/dts/nuvoton-common-npcm7xx.dtsi
+> > index 3696980a3da1..ba542b26941e 100644
+> > --- a/arch/arm/boot/dts/nuvoton-common-npcm7xx.dtsi
+> > +++ b/arch/arm/boot/dts/nuvoton-common-npcm7xx.dtsi
+> > @@ -106,6 +106,13 @@
+> >               interrupt-parent =3D <&gic>;
+> >               ranges;
+> >
+> > +             mc: memory-controller@f0824000 {
+> > +                     compatible =3D "nuvoton,npcm750-memory-controller=
+";
+> > +                     reg =3D <0x0 0xf0824000 0x0 0x1000>;
+> > +                     interrupts =3D <GIC_SPI 25 IRQ_TYPE_LEVEL_HIGH>;
+> > +                     status =3D "disabled";
+> > +             };
+> > +
+> >               rstc: rstc@f0801000 {
+> >                       compatible =3D "nuvoton,npcm750-reset";
+> >                       reg =3D <0xf0801000 0x70>;
+> > --
 >
-> If there are actually more maintainers, responsible and knowledgeable
-> for that driver, than yes, these should be added (until you get a
-> function address set up).
+> Please integrate scripts/checkpatch.pl into your patch creation
+> workflow. Some of the warnings/errors *actually* make sense.
+>
+> In this case:
+>
+> WARNING: DT compatible string "nuvoton,npcm750-memory-controller" appears=
+ un-documented -- check ./Documentation/devicetree/bindings/
+> #35: FILE: arch/arm/boot/dts/nuvoton-common-npcm7xx.dtsi:110:
+> +                       compatible =3D "nuvoton,npcm750-memory-controller=
+";
+>
+> For that I'm guessing patch 2 needs to go first in the series.
+>
+> In any case, the first two need an ACK from devicetree folks.
+>
+> WARNING: From:/Signed-off-by: email address mismatch: 'From: Medad CChien=
+ <medadyoung@gmail.com>' !=3D 'Signed-off-by: Medad CChien <ctcchien@nuvoto=
+n.com>'
+>
+> For this one I wasn't sure so I had to ask: I guess it kinda makes sense
+> to have the From: be the same as your SOB email. I.e., make sure the
+> right authorship and SOB is maintained even when sending from machines
+> with broken email setups.
+>
+> And that you can fix very easily: just add in your .git/config:
+>
+> [user]
+>         name =3D Medad CChien
+>         email =3D ctcchien@nuvoton.com
+>
+> and git would use that as the author and also slap a From: at the
+> beginning of the patch with the correct name and email address.
 >
 
-OK, thanks
+OK, I got it.
 
+> HTH.
 >
-> Kind regards,
+> --
+> Regards/Gruss,
+>     Boris.
 >
-> Paul
-
-B.R.
-Medad
+> https://people.kernel.org/tglx/notes-about-netiquette
