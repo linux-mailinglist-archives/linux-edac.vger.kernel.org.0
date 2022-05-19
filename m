@@ -2,159 +2,147 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45EF652C909
-	for <lists+linux-edac@lfdr.de>; Thu, 19 May 2022 02:56:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 57D9B52CC67
+	for <lists+linux-edac@lfdr.de>; Thu, 19 May 2022 09:04:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232285AbiESA4N (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Wed, 18 May 2022 20:56:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50916 "EHLO
+        id S232124AbiESHED (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Thu, 19 May 2022 03:04:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232370AbiESA4L (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Wed, 18 May 2022 20:56:11 -0400
-Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23FD413F1E;
-        Wed, 18 May 2022 17:56:07 -0700 (PDT)
-Received: by mail-lj1-x236.google.com with SMTP id m23so4508325ljc.0;
-        Wed, 18 May 2022 17:56:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=P/A63fdObVK1kzszX4o2zU+y2vARpab4MsV04+m6s4U=;
-        b=hp3N9QMKgrTlSBUboc3w51NUmHyBG4nsmCUhx73K1tr0DWGeN0n3vWlZxAKnC19K9+
-         xchUETOjGDjBHCKeJ2SZU+n5kOalPxfxheWKH/sjiYwdWqwbxG7nlYGHIajjMCPNO4rL
-         vxCt2+PPEJ2ydejgr0Zf0DdzYZjAAAmqxAq0FU2E+++d+AxVIAN7PMdvmSGWJh7AXg+w
-         0tV+CApwyyN44zJCihhdW4TS8Vagy9gn9Gg/5zW3X/yLC9qIxpX2btHVZ0N0SY0xg5rC
-         1mOMgjaernRWL38xx2hzVgf5/XwDqG07hAsJqc3Rw8kN5EbUTER2krgUEpLNyvXVgieJ
-         Kopg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=P/A63fdObVK1kzszX4o2zU+y2vARpab4MsV04+m6s4U=;
-        b=CnDgS3pH+O5UNeg7YOHkVRF1yLlgqW5gmTKU3INc5P27hybuzO4biGqL/XKi3qSjzm
-         +VIflwGcY/3ydJIjcAtoQklfXfWnuBxhqohWc0f+Fiqc/t8dyUxfeZLzgp3YBCSXlh2x
-         wiMwcl6pzIvTsevKIQAsACs2e7+0ZsFjdCjWaCPWyZdxiseQrMHm1h1Kkqe5tmwNn4tD
-         lkWySDRt7HCATJnNukF7rHRpY0F9sTBuJslL92CLb2F5Ib5CU5zvoBTrmKJJinjHVWae
-         GEBBl77+USIAL/L47xFxbMZP57pqb9BCbiQE617sGwNZAk7krlGFNwCbDCBg5QYZn4+N
-         c1HQ==
-X-Gm-Message-State: AOAM531kg450hiXNY8kOJaDQWSXKCHTbUx5IEGqP8xbGtCjOB7UvjCQA
-        dQ2Vx0QzQg9rbAlBI/LxIRn8OjN5ewSVET0BTTs=
-X-Google-Smtp-Source: ABdhPJzzyBkkT9UcKeYwb2L46w/9p77j44udrFncFopXIIcNuuiPxeLDTWQt2NkOHcPGayjRR8/c17VPkT2d6Uwr6Os=
-X-Received: by 2002:a05:651c:1247:b0:253:caad:4ee2 with SMTP id
- h7-20020a05651c124700b00253caad4ee2mr1121134ljh.281.1652921765326; Wed, 18
- May 2022 17:56:05 -0700 (PDT)
+        with ESMTP id S229850AbiESHEB (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Thu, 19 May 2022 03:04:01 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B09CC275;
+        Thu, 19 May 2022 00:04:00 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id CF6261F9DC;
+        Thu, 19 May 2022 07:03:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1652943838; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=395st/CngVntAAOn5uSBsdHcf6UJsehUQOcbe6ab9wI=;
+        b=qJ/FgyV3p4LuXUdkZjoAbs2+ewn4o7aNZN0S67D2rC96Mde70WoKxt5D1iYy3vIxFGNywX
+        NYQFStO7xXozlUSKqQPZCblT/M2McgEFa5ttVGDSrZzFsBjH4DUBLxqHsrlOhubnXz8Ip9
+        VRfQAfc3f6HDJx77hS/XQSQpNXuMeJQ=
+Received: from suse.cz (unknown [10.100.201.202])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 813A52C141;
+        Thu, 19 May 2022 07:03:55 +0000 (UTC)
+Date:   Thu, 19 May 2022 09:03:52 +0200
+From:   Petr Mladek <pmladek@suse.com>
+To:     "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+Cc:     David Gow <davidgow@google.com>, Evan Green <evgreen@chromium.org>,
+        Julius Werner <jwerner@chromium.org>,
+        Scott Branden <scott.branden@broadcom.com>,
+        bcm-kernel-feedback-list@broadcom.com,
+        Sebastian Reichel <sre@kernel.org>, linux-pm@vger.kernel.org,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        akpm@linux-foundation.org, bhe@redhat.com,
+        kexec@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-alpha@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-edac@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, linux-leds@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linux-remoteproc@vger.kernel.org, linux-s390@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-um@lists.infradead.org,
+        linux-xtensa@linux-xtensa.org, netdev@vger.kernel.org,
+        openipmi-developer@lists.sourceforge.net, rcu@vger.kernel.org,
+        sparclinux@vger.kernel.org, xen-devel@lists.xenproject.org,
+        x86@kernel.org, kernel-dev@igalia.com, kernel@gpiccoli.net,
+        halves@canonical.com, fabiomirmar@gmail.com,
+        alejandro.j.jimenez@oracle.com, andriy.shevchenko@linux.intel.com,
+        arnd@arndb.de, bp@alien8.de, corbet@lwn.net,
+        d.hatayama@jp.fujitsu.com, dave.hansen@linux.intel.com,
+        dyoung@redhat.com, feng.tang@intel.com, gregkh@linuxfoundation.org,
+        mikelley@microsoft.com, hidehiro.kawai.ez@hitachi.com,
+        jgross@suse.com, john.ogness@linutronix.de, keescook@chromium.org,
+        luto@kernel.org, mhiramat@kernel.org, mingo@redhat.com,
+        paulmck@kernel.org, peterz@infradead.org, rostedt@goodmis.org,
+        senozhatsky@chromium.org, stern@rowland.harvard.edu,
+        tglx@linutronix.de, vgoyal@redhat.com, vkuznets@redhat.com,
+        will@kernel.org, Alexander Gordeev <agordeev@linux.ibm.com>,
+        Andrea Parri <parri.andrea@gmail.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Brian Norris <computersforpeace@gmail.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        "David S. Miller" <davem@davemloft.net>,
+        Dexuan Cui <decui@microsoft.com>,
+        Doug Berger <opendmb@gmail.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Hari Bathini <hbathini@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Justin Chen <justinpopo6@gmail.com>,
+        "K. Y. Srinivasan" <kys@microsoft.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Markus Mayer <mmayer@broadcom.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Mihai Carabas <mihai.carabas@oracle.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Paul Mackerras <paulus@samba.org>, Pavel Machek <pavel@ucw.cz>,
+        Shile Zhang <shile.zhang@linux.alibaba.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Tianyu Lan <Tianyu.Lan@microsoft.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Wang ShaoBo <bobo.shaobowang@huawei.com>,
+        Wei Liu <wei.liu@kernel.org>,
+        zhenwei pi <pizhenwei@bytedance.com>
+Subject: Re: [PATCH 19/30] panic: Add the panic hypervisor notifier list
+Message-ID: <YoXr2AD+Jc/ukUhJ@alley>
+References: <20220427224924.592546-1-gpiccoli@igalia.com>
+ <20220427224924.592546-20-gpiccoli@igalia.com>
+ <YoJZVZl/MH0KiE/J@alley>
+ <ad082ce7-db50-13bb-3dbb-9b595dfa78be@igalia.com>
+ <YoOpyW1+q+Z5as78@alley>
+ <YoSnGmBJ3kYs5WMf@alley>
+ <fbbd0a8d-2ef4-4a39-4b75-354918e85778@igalia.com>
 MIME-Version: 1.0
-References: <20220510031056.1657-1-ctcchien@nuvoton.com> <20220510031056.1657-2-ctcchien@nuvoton.com>
- <YoUwe6Tj4Uh6ukc8@zn.tnic>
-In-Reply-To: <YoUwe6Tj4Uh6ukc8@zn.tnic>
-From:   Medad Young <medadyoung@gmail.com>
-Date:   Thu, 19 May 2022 08:55:53 +0800
-Message-ID: <CAHpyw9fjThEP4NuU08aNJ_raHpq9-j9KgBb8YuZ_shXTjhm3JA@mail.gmail.com>
-Subject: Re: [PATCH v9 1/3] ARM: dts: nuvoton: Add memory controller node
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     rric@kernel.org, James Morse <james.morse@arm.com>,
-        tony.luck@intel.com, Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Benjamin Fair <benjaminfair@google.com>,
-        Nancy Yuen <yuenn@google.com>,
-        Patrick Venture <venture@google.com>, KWLIU@nuvoton.com,
-        YSCHU@nuvoton.com, JJLIU0@nuvoton.com, KFTING <KFTING@nuvoton.com>,
-        Avi Fishman <avifishman70@gmail.com>,
-        Tomer Maimon <tmaimon77@gmail.com>,
-        Tali Perry <tali.perry1@gmail.com>, ctcchien@nuvoton.com,
-        linux-edac <linux-edac@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        OpenBMC Maillist <openbmc@lists.ozlabs.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_FILL_THIS_FORM_SHORT,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <fbbd0a8d-2ef4-4a39-4b75-354918e85778@igalia.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-Dear Borislav,
+On Wed 2022-05-18 10:16:20, Guilherme G. Piccoli wrote:
+> On 18/05/2022 04:58, Petr Mladek wrote:
+> > [...]
+> >> I does similar things like kmsg_dump() so it should be called in
+> >> the same location (after info notifier list and before kdump).
+> >>
+> >> A solution might be to put it at these notifiers at the very
+> >> end of the "info" list or make extra "dump" notifier list.
+> > 
+> > I just want to point out that the above idea has problems.
+> > Notifiers storing kernel log need to be treated as kmsg_dump().
+> > In particular, we would  need to know if there are any.
+> > We do not need to call "info" notifier list before kdump
+> > when there is no kernel log dumper registered.
+> > 
+> 
+> Notifiers respect the priority concept, which is just a number that
+> orders the list addition (and the list is called in order).
+> 
+> I've used the last position to panic_print() [in patch 25] - one idea
+> here is to "reserve" the last position (represented by INT_MIN) for
+> notifiers that act like kmsg_dump(). I couldn't find any IIRC, but that
+> doesn't prevent us to save this position and comment about that.
 
-Borislav Petkov <bp@alien8.de> =E6=96=BC 2022=E5=B9=B45=E6=9C=8819=E6=97=A5=
- =E9=80=B1=E5=9B=9B =E4=B8=8A=E5=8D=881:44=E5=AF=AB=E9=81=93=EF=BC=9A
->
-> On Tue, May 10, 2022 at 11:10:54AM +0800, Medad CChien wrote:
-> > ECC must be configured in the BootBlock header.
-> > Then, you can read error counts via the EDAC kernel framework.
-> >
-> > Signed-off-by: Medad CChien <ctcchien@nuvoton.com>
-> > ---
-> >  arch/arm/boot/dts/nuvoton-common-npcm7xx.dtsi | 7 +++++++
-> >  1 file changed, 7 insertions(+)
-> >
-> > diff --git a/arch/arm/boot/dts/nuvoton-common-npcm7xx.dtsi b/arch/arm/b=
-oot/dts/nuvoton-common-npcm7xx.dtsi
-> > index 3696980a3da1..ba542b26941e 100644
-> > --- a/arch/arm/boot/dts/nuvoton-common-npcm7xx.dtsi
-> > +++ b/arch/arm/boot/dts/nuvoton-common-npcm7xx.dtsi
-> > @@ -106,6 +106,13 @@
-> >               interrupt-parent =3D <&gic>;
-> >               ranges;
-> >
-> > +             mc: memory-controller@f0824000 {
-> > +                     compatible =3D "nuvoton,npcm750-memory-controller=
-";
-> > +                     reg =3D <0x0 0xf0824000 0x0 0x1000>;
-> > +                     interrupts =3D <GIC_SPI 25 IRQ_TYPE_LEVEL_HIGH>;
-> > +                     status =3D "disabled";
-> > +             };
-> > +
-> >               rstc: rstc@f0801000 {
-> >                       compatible =3D "nuvoton,npcm750-reset";
-> >                       reg =3D <0xf0801000 0x70>;
-> > --
->
-> Please integrate scripts/checkpatch.pl into your patch creation
-> workflow. Some of the warnings/errors *actually* make sense.
->
-> In this case:
->
-> WARNING: DT compatible string "nuvoton,npcm750-memory-controller" appears=
- un-documented -- check ./Documentation/devicetree/bindings/
-> #35: FILE: arch/arm/boot/dts/nuvoton-common-npcm7xx.dtsi:110:
-> +                       compatible =3D "nuvoton,npcm750-memory-controller=
-";
->
-> For that I'm guessing patch 2 needs to go first in the series.
->
-> In any case, the first two need an ACK from devicetree folks.
->
-> WARNING: From:/Signed-off-by: email address mismatch: 'From: Medad CChien=
- <medadyoung@gmail.com>' !=3D 'Signed-off-by: Medad CChien <ctcchien@nuvoto=
-n.com>'
->
-> For this one I wasn't sure so I had to ask: I guess it kinda makes sense
-> to have the From: be the same as your SOB email. I.e., make sure the
-> right authorship and SOB is maintained even when sending from machines
-> with broken email setups.
->
-> And that you can fix very easily: just add in your .git/config:
->
-> [user]
->         name =3D Medad CChien
->         email =3D ctcchien@nuvoton.com
->
-> and git would use that as the author and also slap a From: at the
-> beginning of the patch with the correct name and email address.
->
+I would ignore it for now. If anyone would want to safe the log
+then they would need to read it. They will most likely use
+the existing kmsg_dump() infastructure. In fact, they should
+use it to avoid a code duplication.
 
-OK, I got it.
-
-> HTH.
->
-> --
-> Regards/Gruss,
->     Boris.
->
-> https://people.kernel.org/tglx/notes-about-netiquette
+Best Regards,
+Petr
