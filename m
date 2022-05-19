@@ -2,50 +2,50 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C672A52CCDC
-	for <lists+linux-edac@lfdr.de>; Thu, 19 May 2022 09:25:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B1CE752CCEA
+	for <lists+linux-edac@lfdr.de>; Thu, 19 May 2022 09:26:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234771AbiESHZT (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Thu, 19 May 2022 03:25:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42818 "EHLO
+        id S232411AbiESHZ1 (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Thu, 19 May 2022 03:25:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234777AbiESHZM (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Thu, 19 May 2022 03:25:12 -0400
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D765F8720F;
-        Thu, 19 May 2022 00:25:09 -0700 (PDT)
-Received: by mail-pj1-x1034.google.com with SMTP id nk9-20020a17090b194900b001df2fcdc165so8047767pjb.0;
-        Thu, 19 May 2022 00:25:09 -0700 (PDT)
+        with ESMTP id S234791AbiESHZR (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Thu, 19 May 2022 03:25:17 -0400
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EC7484A25;
+        Thu, 19 May 2022 00:25:15 -0700 (PDT)
+Received: by mail-pl1-x634.google.com with SMTP id q4so4019619plr.11;
+        Thu, 19 May 2022 00:25:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=izhcXDphxsSYMgLi7WOIxwg7ve9I4BtGghSY1eoBQEs=;
-        b=jZzhFSYQ6xCZWQ48bdsBqBDao2zARJZkZyDZsUfdzMeDDlGumxtck1+YKCQVqhOiwn
-         zzWbwYkxaOrsQSp52OnMaLSG80Kz+x8GL3kyJJ0cVGc7kyQU7uCwQfPJF4Avk0KuCMYd
-         vDGTVqQUNFa83s4j8Pm0YxbfhwEDkje/lPcSgsyK6vkjd+u2dQuyckvBZnFBAHrHLT9s
-         Eh/40tmJitMVYZkEJBUC+q8QLiZVn+Go8EtS5x/iCKhb3Tt0EpSQhib0cLLtuzuj7wHH
-         jx2826dhlVarBTt6wtB8eDqqsBZHqrT+Mbaki/HCwiHKTJfdhqWO0aXDHqi8BCeAepP4
-         gMyQ==
+        bh=gmirLNjLGfJzW6YYZUOR8avyTXMQpr4Eec+Omnxr9sI=;
+        b=oUoSk7CnlRMCqq9hO54muVaLUmgCKKOAwoVTP2rtdSuWxwgURKiQUolQjUJBW7b8j5
+         mT9CWiPpZ2qoBfpSZN8MhHSPhRycuj8A+2bBTqjuVaSQe4yFlZHmxz3PcmYpOVEirtKq
+         VXuauTL45uJHKfrWF153GF4SkjsQj/mz3lUynt0uKi0FQKO+TLNGRjuM/qFFAzQlUX4V
+         eoruy5T+nX4NDK7TDZ3oRFukBxNjgoKqm7p8kFn8Q+Plc9+5Sh243x+FiqLvE1o9cJMZ
+         T2nUNAUXG5EbzX0V273RxUrvHhOFYXfDbbF7tfBenG0PcHsHggoUFhAfWejEqxKz7s9s
+         Bcig==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=izhcXDphxsSYMgLi7WOIxwg7ve9I4BtGghSY1eoBQEs=;
-        b=uMzI7muTf8g2wXdabfbD08l8e5c1gOPZG+6XXxle/kdw5HK8aBXlSuMoCeVIHwaDR+
-         GNXAvA44Q9sum+tWdSzEOVuxbBQHjnYMyfJCQLFk1Pzi90Cs4u9VnTkV002Yl1I8b1Tg
-         QiiLJ4xurzdc87boLrCwoBXaabR5X0f06v9YXdL2zK7zRY7pobbfn9tPyzkpb6IuiVed
-         3q4kJav2X5pERgCZ23valw3xz+SjUA0S/bT46BTxD5eFh08DEqCnr6W7OTlaueRXVmlO
-         4v6pt/yf/rifLakd2Mmrv+fNORnBynrO0sivzxEaM/p/J1Ad9AYhEBHO/U9qMozI1r2E
-         npJw==
-X-Gm-Message-State: AOAM530u1rLSwAZqv9Q+uFwnl8m0j52AXLuKoXiokMVLG8WNDtbQBK2Z
-        0GT0bx1WTJkEwJuLihSe2I0=
-X-Google-Smtp-Source: ABdhPJxRWMLiPZC1hEmCnRDpsE1fl+ZNEr/v7kfplga+jDdVtU/2eIrwAPw+PI8xO0UejtD6e40BnQ==
-X-Received: by 2002:a17:903:4044:b0:161:823e:6f93 with SMTP id n4-20020a170903404400b00161823e6f93mr3501687pla.172.1652945109335;
-        Thu, 19 May 2022 00:25:09 -0700 (PDT)
+        bh=gmirLNjLGfJzW6YYZUOR8avyTXMQpr4Eec+Omnxr9sI=;
+        b=pGpPHwO7eRVm91oT5SoZ+TR4TJ8as6Ie3ZUfNBWrJ8h7ZyAbcxOiAuvkfuZAJiCeTx
+         NFzqXJ7uuR0xveIl56XbwToulu2HRtG1j0j3zP2nMBssFOlzxGplQyxidzEZXcQAH7yI
+         uAu6Xia+lqFEOocq3kB7ksIyHNg7b0CVBvERGlGuOoR/Gz7xDrftL3EnLhBa260G2dKf
+         NKJxvz9iF6hwO5IZfXhnLwHXhaN3+BCmi2bUR1VjnGdiDjtYN/dVsL66qZ1FRQaEpu74
+         hGtnT07hA6twejxHIkC9GEYgpY6apitPmVN7Tnk7QtgPrneFfvVDUY+OGCalmQ7jweml
+         uYNQ==
+X-Gm-Message-State: AOAM532KXVcVuA/03ndMaewFgsQg1QYjumF6wm9fuHzU6Q400SEAsz8r
+        VhnKPmsYao3lv3j9AVHyqWM=
+X-Google-Smtp-Source: ABdhPJyaTGnm7nnQEQih6sRYmOiv45VMCDxaIAPaajssWkrJpJTlAmxvNDLzAAVtX/cFc8r0f3AwXQ==
+X-Received: by 2002:a17:90a:f08c:b0:1df:6f35:361d with SMTP id cn12-20020a17090af08c00b001df6f35361dmr4331336pjb.161.1652945114466;
+        Thu, 19 May 2022 00:25:14 -0700 (PDT)
 Received: from localhost.localdomain ([116.89.141.50])
-        by smtp.gmail.com with ESMTPSA id b12-20020a170902650c00b00161ac982b9esm2974159plk.185.2022.05.19.00.25.04
+        by smtp.gmail.com with ESMTPSA id b12-20020a170902650c00b00161ac982b9esm2974159plk.185.2022.05.19.00.25.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 May 2022 00:25:08 -0700 (PDT)
+        Thu, 19 May 2022 00:25:13 -0700 (PDT)
 From:   Medad CChien <medadyoung@gmail.com>
 X-Google-Original-From: Medad CChien <ctcchien@nuvoton.com>
 To:     rric@kernel.org, james.morse@arm.com, tony.luck@intel.com,
@@ -56,9 +56,9 @@ To:     rric@kernel.org, james.morse@arm.com, tony.luck@intel.com,
         tali.perry1@gmail.com, ctcchien@nuvoton.com
 Cc:     linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
         devicetree@vger.kernel.org, openbmc@lists.ozlabs.org
-Subject: [PATCH v10 1/3] dt-bindings: edac: nuvoton: add NPCM memory controller
-Date:   Thu, 19 May 2022 15:24:52 +0800
-Message-Id: <20220519072454.24063-2-ctcchien@nuvoton.com>
+Subject: [PATCH v10 2/3] ARM: dts: nuvoton: Add memory controller node
+Date:   Thu, 19 May 2022 15:24:53 +0800
+Message-Id: <20220519072454.24063-3-ctcchien@nuvoton.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20220519072454.24063-1-ctcchien@nuvoton.com>
 References: <20220519072454.24063-1-ctcchien@nuvoton.com>
@@ -72,83 +72,32 @@ Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-Document devicetree bindings for the Nuvoton BMC NPCM memory controller.
+ECC must be configured in the BootBlock header.
+Then, you can read error counts via the EDAC kernel framework.
 
 Signed-off-by: Medad CChien <ctcchien@nuvoton.com>
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 ---
- .../edac/nuvoton,npcm-memory-controller.yaml  | 62 +++++++++++++++++++
- 1 file changed, 62 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/edac/nuvoton,npcm-memory-controller.yaml
+ arch/arm/boot/dts/nuvoton-common-npcm7xx.dtsi | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/edac/nuvoton,npcm-memory-controller.yaml b/Documentation/devicetree/bindings/edac/nuvoton,npcm-memory-controller.yaml
-new file mode 100644
-index 000000000000..a5c8d332d1c1
---- /dev/null
-+++ b/Documentation/devicetree/bindings/edac/nuvoton,npcm-memory-controller.yaml
-@@ -0,0 +1,62 @@
-+# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/edac/nuvoton,npcm-memory-controller.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
+diff --git a/arch/arm/boot/dts/nuvoton-common-npcm7xx.dtsi b/arch/arm/boot/dts/nuvoton-common-npcm7xx.dtsi
+index 3696980a3da1..ba542b26941e 100644
+--- a/arch/arm/boot/dts/nuvoton-common-npcm7xx.dtsi
++++ b/arch/arm/boot/dts/nuvoton-common-npcm7xx.dtsi
+@@ -106,6 +106,13 @@
+ 		interrupt-parent = <&gic>;
+ 		ranges;
+ 
++		mc: memory-controller@f0824000 {
++			compatible = "nuvoton,npcm750-memory-controller";
++			reg = <0x0 0xf0824000 0x0 0x1000>;
++			interrupts = <GIC_SPI 25 IRQ_TYPE_LEVEL_HIGH>;
++			status = "disabled";
++		};
 +
-+title: Nuvoton NPCM Memory Controller
-+
-+maintainers:
-+  - Medad CChien <ctcchien@nuvoton.com>
-+  - Stanley Chu <yschu@nuvoton.com>
-+
-+description: |
-+  The Nuvoton BMC SoC supports DDR4 memory with and without ECC (error
-+  correction check).
-+
-+  The memory controller supports single bit error correction, double bit
-+  error detection (in-line ECC in which a section (1/8th) of the memory
-+  device used to store data is used for ECC storage).
-+
-+  Note, the bootloader must configure ECC mode for the memory controller.
-+
-+properties:
-+  compatible:
-+    enum:
-+      - nuvoton,npcm750-memory-controller
-+      - nuvoton,npcm845-memory-controller
-+
-+  reg:
-+    maxItems: 1
-+
-+  interrupts:
-+    minItems: 1
-+    items:
-+      - description: uncorrectable error interrupt
-+      - description: correctable error interrupt
-+
-+  interrupt-names:
-+    minItems: 1
-+    items:
-+      - const: ue
-+      - const: ce
-+
-+required:
-+  - compatible
-+  - reg
-+  - interrupts
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/interrupt-controller/arm-gic.h>
-+    ahb {
-+        #address-cells = <2>;
-+        #size-cells = <2>;
-+        mc: memory-controller@f0824000 {
-+            compatible = "nuvoton,npcm750-memory-controller";
-+            reg = <0x0 0xf0824000 0x0 0x1000>;
-+            interrupts = <GIC_SPI 25 IRQ_TYPE_LEVEL_HIGH>;
-+        };
-+    };
+ 		rstc: rstc@f0801000 {
+ 			compatible = "nuvoton,npcm750-reset";
+ 			reg = <0xf0801000 0x70>;
 -- 
 2.17.1
 
