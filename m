@@ -2,131 +2,85 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ABD2152EAB0
-	for <lists+linux-edac@lfdr.de>; Fri, 20 May 2022 13:24:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E5EE52EB92
+	for <lists+linux-edac@lfdr.de>; Fri, 20 May 2022 14:09:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345527AbiETLYc (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Fri, 20 May 2022 07:24:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36688 "EHLO
+        id S241533AbiETMJf (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Fri, 20 May 2022 08:09:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232303AbiETLYb (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Fri, 20 May 2022 07:24:31 -0400
-Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECA58B36CE;
-        Fri, 20 May 2022 04:24:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=DGPrrkXTp6oI8cbbgByz5QLKv15GNHxUgmjuIwTAy/E=; b=eqnE/suLTpG3xbkMCBtDpxLY3n
-        NIRgLQiaBi0sCvdNCD4AFRLhJwRt1fDLW5HSSGFY7WXFEGFCYXn6Q0dC8gIFph3vTjXA6DvyBiQwz
-        I5PwxVn4HFAkq1g0udGCDh7f8awWYDjllyLtGAcRh6eSoRE6OIuNpAwHVy7SfEQenDYcne2doKiCl
-        jXXzZQlRm486qDYGQtQ0jW8Ms6RtpLdk65Qcz7YJ7/YEdFvKdb+dzF1Re9Q6nwXZnFrLVKgAD5Mwb
-        LfHsy0RngN1antwERG5D/EtoEWfAXqtoLg2k7TzZKasJtkGm7zpf+kH+Fd2GGS1HnQh8pXfJiIePS
-        VAbFF/9w==;
-Received: from 200-161-159-120.dsl.telesp.net.br ([200.161.159.120] helo=[192.168.1.60])
-        by fanzine2.igalia.com with esmtpsa 
-        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
-        id 1ns0jj-00Cb4k-Od; Fri, 20 May 2022 13:24:04 +0200
-Message-ID: <ded31ec0-076b-2c5b-0fe6-0c274954821f@igalia.com>
-Date:   Fri, 20 May 2022 08:23:33 -0300
+        with ESMTP id S241234AbiETMJc (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Fri, 20 May 2022 08:09:32 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AE6514FC8F;
+        Fri, 20 May 2022 05:09:31 -0700 (PDT)
+Received: from zn.tnic (p200300ea974657be329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9746:57be:329c:23ff:fea6:a903])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 1D61B1EC0432;
+        Fri, 20 May 2022 14:09:26 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1653048566;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=wAUEpaxcn1VjODERDlTBwD2l2P5Ti2X7RxSfo/FhO7g=;
+        b=AqccEl2YFLgHBwWukfM15c26wLyTYp0BTcTwKa5inCPcJkkJ2RtctkhhZRtxbyPGKt3hqq
+        Fe8H2STvPhOoTipdnMQQYblJR7q+zAcAMhK9FaKkyY+rLrq3bTZNJn0a1+j8kB+iUppIny
+        oFERssQ2eEB/XA65/bk9GLDZJb0c+NQ=
+Date:   Fri, 20 May 2022 14:09:21 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Medad Young <medadyoung@gmail.com>
+Cc:     rric@kernel.org, James Morse <james.morse@arm.com>,
+        tony.luck@intel.com, Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Benjamin Fair <benjaminfair@google.com>,
+        Nancy Yuen <yuenn@google.com>,
+        Patrick Venture <venture@google.com>, KWLIU@nuvoton.com,
+        YSCHU@nuvoton.com, JJLIU0@nuvoton.com, KFTING <KFTING@nuvoton.com>,
+        Avi Fishman <avifishman70@gmail.com>,
+        Tomer Maimon <tmaimon77@gmail.com>,
+        Tali Perry <tali.perry1@gmail.com>, ctcchien@nuvoton.com,
+        linux-edac <linux-edac@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        OpenBMC Maillist <openbmc@lists.ozlabs.org>
+Subject: Re: [PATCH v9 1/3] ARM: dts: nuvoton: Add memory controller node
+Message-ID: <YoeE8cBhUkF3K44/@zn.tnic>
+References: <20220510031056.1657-1-ctcchien@nuvoton.com>
+ <20220510031056.1657-2-ctcchien@nuvoton.com>
+ <YoUwe6Tj4Uh6ukc8@zn.tnic>
+ <CAHpyw9fjThEP4NuU08aNJ_raHpq9-j9KgBb8YuZ_shXTjhm3JA@mail.gmail.com>
+ <YoYPGWreQuF9QZzc@zn.tnic>
+ <CAHpyw9es-n+bW9SsGBmmr3ghBFk8Q8E6ZTbE42BpU-6p8LfHtw@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH 24/30] panic: Refactor the panic path
-Content-Language: en-US
-To:     Baoquan He <bhe@redhat.com>, Petr Mladek <pmladek@suse.com>
-Cc:     "michael Kelley (LINUX)" <mikelley@microsoft.com>,
-        Dave Young <dyoung@redhat.com>, d.hatayama@jp.fujitsu.com,
-        akpm@linux-foundation.org, kexec@lists.infradead.org,
-        linux-kernel@vger.kernel.org,
-        bcm-kernel-feedback-list@broadcom.com,
-        linuxppc-dev@lists.ozlabs.org, linux-alpha@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-edac@vger.kernel.org,
-        linux-hyperv@vger.kernel.org, linux-leds@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
-        linux-s390@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-um@lists.infradead.org, linux-xtensa@linux-xtensa.org,
-        netdev@vger.kernel.org, openipmi-developer@lists.sourceforge.net,
-        rcu@vger.kernel.org, sparclinux@vger.kernel.org,
-        xen-devel@lists.xenproject.org, x86@kernel.org,
-        kernel-dev@igalia.com, kernel@gpiccoli.net, halves@canonical.com,
-        fabiomirmar@gmail.com, alejandro.j.jimenez@oracle.com,
-        andriy.shevchenko@linux.intel.com, arnd@arndb.de, bp@alien8.de,
-        corbet@lwn.net, dave.hansen@linux.intel.com, feng.tang@intel.com,
-        gregkh@linuxfoundation.org, hidehiro.kawai.ez@hitachi.com,
-        jgross@suse.com, john.ogness@linutronix.de, keescook@chromium.org,
-        luto@kernel.org, mhiramat@kernel.org, mingo@redhat.com,
-        paulmck@kernel.org, peterz@infradead.org, rostedt@goodmis.org,
-        senozhatsky@chromium.org, stern@rowland.harvard.edu,
-        tglx@linutronix.de, vgoyal@redhat.com, vkuznets@redhat.com,
-        will@kernel.org
-References: <20220427224924.592546-1-gpiccoli@igalia.com>
- <20220427224924.592546-25-gpiccoli@igalia.com> <Yn0TnsWVxCcdB2yO@alley>
- <d313eec2-96b6-04e3-35cd-981f103d010e@igalia.com>
- <20220519234502.GA194232@MiWiFi-R3L-srv>
-From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
-In-Reply-To: <20220519234502.GA194232@MiWiFi-R3L-srv>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <CAHpyw9es-n+bW9SsGBmmr3ghBFk8Q8E6ZTbE42BpU-6p8LfHtw@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On 19/05/2022 20:45, Baoquan He wrote:
-> [...]
->> I really appreciate the summary skill you have, to convert complex
->> problems in very clear and concise ideas. Thanks for that, very useful!
->> I agree with what was summarized above.
-> 
-> I want to say the similar words to Petr's reviewing comment when I went
-> through the patches and traced each reviewing sub-thread to try to
-> catch up. Petr has reivewed this series so carefully and given many
-> comments I want to ack immediately.
-> 
-> I agree with most of the suggestions from Petr to this patch, except of
-> one tiny concern, please see below inline comment.
+On Fri, May 20, 2022 at 10:31:05AM +0800, Medad Young wrote:
+> for the second warning, I did upadate my .git/config according to your
+> advise. but I thought I met orthe problem, I will try to fix it
 
-Hi Baoquan, thanks! I'm glad you're also reviewing that =)
+You need to do "git commit --amend" on the patch so that it updates the
+author.
 
+> for the first warning, did I really need to fix it?
 
-> [...]
-> 
-> I like the proposed skeleton of panic() and code style suggested by
-> Petr very much. About panic_prefer_crash_dump which might need be added,
-> I hope it has a default value true. This makes crash_dump execute at
-> first by default just as before, unless people specify
-> panic_prefer_crash_dump=0|n|off to disable it. Otherwise we need add
-> panic_prefer_crash_dump=1 in kernel and in our distros to enable kdump,
-> this is inconsistent with the old behaviour.
+Yes, you need to fix both.
 
-I'd like to understand better why the crash_kexec() must always be the
-first thing in your use case. If we keep that behavior, we'll see all
-sorts of workarounds - see the last patches of this series, Hyper-V and
-PowerPC folks hardcoded "crash_kexec_post_notifiers" in order to force
-execution of their relevant notifiers (like the vmbus disconnect,
-specially in arm64 that has no custom machine_crash_shutdown, or the
-fadump case in ppc). This led to more risk in kdump.
+Again, before you send, run checkpatch on your patches, one by one.
 
-The thing is: with the notifiers' split, we tried to keep only the most
-relevant/necessary stuff in this first list, things that ultimately
-should improve kdump reliability or if not, at least not break it. My
-feeling is that, with this series, we should change the idea/concept
-that kdump must run first nevertheless, not matter what. We're here
-trying to accommodate the antagonistic goals of hypervisors that need
-some clean-up (even for kdump to work) VS. kdump users, that wish a
-"pristine" system reboot ASAP after the crash.
+-- 
+Regards/Gruss,
+    Boris.
 
-Cheers,
-
-
-Guilherme
+https://people.kernel.org/tglx/notes-about-netiquette
