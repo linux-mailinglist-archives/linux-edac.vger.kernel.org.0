@@ -2,144 +2,192 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 32EEA53EB06
-	for <lists+linux-edac@lfdr.de>; Mon,  6 Jun 2022 19:09:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD35F53E6D0
+	for <lists+linux-edac@lfdr.de>; Mon,  6 Jun 2022 19:07:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241763AbiFFQXY (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Mon, 6 Jun 2022 12:23:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43224 "EHLO
+        id S241831AbiFFQl6 (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Mon, 6 Jun 2022 12:41:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241782AbiFFQXX (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Mon, 6 Jun 2022 12:23:23 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85C6D19FD58
-        for <linux-edac@vger.kernel.org>; Mon,  6 Jun 2022 09:23:19 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id q21so29995003ejm.1
-        for <linux-edac@vger.kernel.org>; Mon, 06 Jun 2022 09:23:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=IogAKhGoBa9QPMdAgVh78qOCFlabkTOpSN00yjBwN70=;
-        b=hLI71LLuvmQvq8871cWZGfhMcWY4f1heEmf3m3DgMTmnCVVbpuFtvpUF8dFUK2Qk9l
-         oBuEP72aDthvMoAd5dybXcTgfHjKtDqgAHi/k2dVpeXQfz2taullJArXSgP7pZLxftYF
-         E99+4BRAsc2ESyKLbeEwU4xEcdBNvgUsRVjD6xSpT+lYMqj4vcZhebYDgCCr7dD2tr/Z
-         /C0O3zd2IhoLi8IyaM8XQZNyYHjdKP6c/sj3g9RzkIgthSPLsBVnKlpVDXhFOcwjx8Wk
-         sKGpOlM5y91LA4ts2jqEmtSte8NYKq8/8669C3EPE5aQOD8RGJpHK/LMZm4uRuh4UIiI
-         rgTA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=IogAKhGoBa9QPMdAgVh78qOCFlabkTOpSN00yjBwN70=;
-        b=EGao8H0F9h65hsDOc8WXENhOYIRSvfheaHDrVUg1tvfZ47AIHC5+JGaqun5aDNZgXK
-         vi9dddbYVKV708wASi7Mn4Oup6nv+Xa5jUc70EIsibFWoJgCUW3wzIE+r1N+p2344m90
-         GE0Wfr4/6+CpVn53xjpgyN41KPanuRv2YwfAiWoU0afnM3Aa5Ndib1+PsMGKiHOFObFy
-         GHCHDN59qmZNfPKmkFjRH6v18D/y2ocLUIF+ldWWdhfDRtDB8zyxdJcXmY+zcn3pzU4t
-         QSik7JA7gLoLG+AhtrVFBmSQCIzzL5IrJEaJRi/ez7FK/go+8aP2YOrjwEVl6erQaEbH
-         57bg==
-X-Gm-Message-State: AOAM530rc62vU6XFb/vt/HYS9v0JGiytdSXv2I8rfaWCbDcyAuMAnce0
-        xY8VjthH7ofQzM8/grj6hnLEjZgn888eSLhpzZM=
-X-Google-Smtp-Source: ABdhPJyskN1cBWPXBRWqCVvg+orRfQ+IT6HWKQadQP9thf8GBxaKKEzYX/V7OLDHLJ1UioUmaM5c2+wl7SyJL/GzhRY=
-X-Received: by 2002:a17:907:3f0c:b0:6fe:feaa:bb04 with SMTP id
- hq12-20020a1709073f0c00b006fefeaabb04mr111977ejc.187.1654532596694; Mon, 06
- Jun 2022 09:23:16 -0700 (PDT)
+        with ESMTP id S230332AbiFFQl4 (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Mon, 6 Jun 2022 12:41:56 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EE722BD;
+        Mon,  6 Jun 2022 09:41:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1654533714; x=1686069714;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=PuD+XkjvNTTehA+a3gWnWgL8PXJajHjYvjG4npSfsms=;
+  b=e/eX0tu1d5GFE3q8GAreKP6R4T6UAHRB6StAyYBDbt5dYg48wWuto+/t
+   SPYdi3xWQ7F8XZdX32iSNa/6GtH/ne7PS6F1aw+CZwCUfCTKTz2yX6hii
+   ef8BUC+RJ22VNszbQ+K3K0WsMensvJdmRsJz/zWkXlvIjAigFeLSshugf
+   hBLVOK9OAUTys/rP269h8uiW+2OyOnY3VA+zrV2PnNFsUoQFOP30QNrvj
+   mWdt0CP8buo56SfxLi8ZmzNB8r2ggotSfMNRTlFVc0E0AlLJxsnaPaicP
+   eQdKTn+2/d6YkPw90dQpeVVHo1ssPVap9kPx8mhz7y0Aq6K/xP52dg30J
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10370"; a="257114169"
+X-IronPort-AV: E=Sophos;i="5.91,280,1647327600"; 
+   d="scan'208";a="257114169"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jun 2022 09:41:53 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,280,1647327600"; 
+   d="scan'208";a="647618752"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga004.fm.intel.com with ESMTP; 06 Jun 2022 09:41:47 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 4C80FF8; Mon,  6 Jun 2022 19:41:50 +0300 (EEST)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Tony Luck <tony.luck@intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Wolfram Sang <wsa@kernel.org>, Jean Delvare <jdelvare@suse.de>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Henning Schild <henning.schild@siemens.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Jonathan Yong <jonathan.yong@intel.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        linux-kernel@vger.kernel.org, linux-edac@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-leds@vger.kernel.org,
+        linux-gpio@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        linux-watchdog@vger.kernel.org
+Cc:     Borislav Petkov <bp@alien8.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Robert Richter <rric@kernel.org>,
+        Jean Delvare <jdelvare@suse.com>, Pavel Machek <pavel@ucw.cz>,
+        Peter Tyser <ptyser@xes-inc.com>,
+        Andy Shevchenko <andy@kernel.org>,
+        Mark Gross <markgross@kernel.org>
+Subject: [PATCH v6 00/12] platform/x86: introduce p2sb_bar() helper
+Date:   Mon,  6 Jun 2022 19:41:26 +0300
+Message-Id: <20220606164138.66535-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Received: by 2002:a54:3a86:0:0:0:0:0 with HTTP; Mon, 6 Jun 2022 09:23:14 -0700 (PDT)
-Reply-To: payenjane100@gmail.com
-From:   payen jane <sankarahamadou9@gmail.com>
-Date:   Mon, 6 Jun 2022 09:23:14 -0700
-Message-ID: <CABmAao9EWAxZdq2dMdoT4g2z+3LPYkb-xc=3jo3Wv4h3AdDEdg@mail.gmail.com>
-Subject: =?UTF-8?B?5oiR6ZyA6KaB5L2g55qE5biu5Yqp?=
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: base64
-X-Spam-Status: Yes, score=7.3 required=5.0 tests=BAYES_99,BAYES_999,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,FREEMAIL_REPLYTO,
-        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no autolearn_force=no
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2a00:1450:4864:20:0:0:0:636 listed in]
-        [list.dnswl.org]
-        *  3.5 BAYES_99 BODY: Bayes spam probability is 99 to 100%
-        *      [score: 1.0000]
-        *  0.2 BAYES_999 BODY: Bayes spam probability is 99.9 to 100%
-        *      [score: 1.0000]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [sankarahamadou9[at]gmail.com]
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [sankarahamadou9[at]gmail.com]
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [payenjane100[at]gmail.com]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  2.3 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-5oiR5biM5pyb5L2g6IO955CG6Kej6L+Z5p2h5L+h5oGv77yM5Zug5Li65oiR5q2j5Zyo5L2/55So
-57+76K+R57uZ5L2g5YaZ5L+h44CCDQoNCuaIkeaYr+eugMK35L2p5oGp5Lit5aOr5aSr5Lq644CC
-DQoNCuWcqOe+juWbvemZhuWGm+eahOWGm+S6i+mDqOmXqOOAgue+juWbve+8jOS4gOWQjeS4reWj
-q++8jDMyIOWyge+8jOaIkeaYr+adpeiHque+juWbveeUsOe6s+ilv+W3nuWFi+WIqeWkq+WFsOea
-hOWNlei6q++8jOebruWJjeWcqOWIqeavlOS6muePreWKoOilv+aJp+ihjOS4gOmhueeJueauiuS7
-u+WKoeOAgg0KDQrmiJHmmK/kuIDkuKrlhYXmu6HniLHlv4PjgIHor5rlrp7lkozmt7Hmg4XnmoTk
-urrvvIzlhbfmnInoia/lpb3nmoTlub3pu5jmhJ/vvIzmiJHllpzmrKLnu5Por4bmlrDmnIvlj4vl
-ubbkuobop6Pku5bku6znmoTnlJ/mtLvmlrnlvI/vvIzmiJHllpzmrKLnnIvliLDlpKfmtbfnmoTm
-s6LmtpvlkozlsbHohInnmoTnvo7kuL3ku6Xlj4rlpKfoh6rnhLbmiYDmi6XmnInnmoTkuIDliIfm
-j5DkvpvjgILlvojpq5jlhbTog73mm7TlpJrlnLDkuobop6PmgqjvvIzmiJHorqTkuLrmiJHku6zl
-j6/ku6Xlu7rnq4voia/lpb3nmoTllYbkuJrlj4vosIrjgIINCg0K5oiR5LiA55u05b6I5LiN5byA
-5b+D77yM5Zug5Li65Yeg5bm05p2l55Sf5rS75a+55oiR5LiN5YWs5bmz77yb5oiR5ZyoIDIxDQrl
-soHml7blpLHljrvkuobniLbmr43jgILmiJHniLbkurLnmoTlkI3lrZfmmK/luJXnibnph4zmlq/k
-vanmganlkozmiJHnmoTmr43kurLnjpvkuL3kvanmganjgILmsqHmnInkurrluK7liqnmiJHvvIzk
-vYbmiJHlvojpq5jlhbTmiJHnu4jkuo7lnKjnvo7lhpvkuK3mib7liLDkuoboh6rlt7HjgIINCg0K
-5oiR57uT5ama55Sf5LqG5LiA5Liq5a2p5a2Q77yM5L2G5LuW5Y675LiW5LqG77yM5Zyo5oiR5LiI
-5aSr5byA5aeL6IOM5Y+b5oiR5ZCO5LiN5LmF77yM5oiR5LiN5b6X5LiN5pS+5byD5ama5ae744CC
-DQoNCuaIkeS5n+W+iOW5uOi/kOWcqOaIkeeahOWbveWutue+juWbveWSjOWIqeavlOS6muePreWK
-oOilv+i/memHjOaLpeacieaIkeeUn+a0u+S4remcgOimgeeahOS4gOWIh++8jOS9huayoeacieS6
-uue7meaIkeW7uuiuruOAguaIkemcgOimgeS4gOS4quivmuWunueahOS6uuadpeS/oeS7u++8jOS7
-luS5n+S8muW7uuiuruaIkeWmguS9leaKlei1hOaIkeeahOmSseOAguWboOS4uuaIkeaYr+aIkeeI
-tuavjeWcqOS7luS7rOatu+WJjeeUn+S4i+eahOWUr+S4gOS4gOS4quWls+WtqeOAgg0KDQrmiJHk
-uI3orqTor4bkvaDvvIzkvYbmiJHorqTkuLrmnInkuIDkuKrlj6/ku6Xkv6Hku7vnmoTlpb3kurrv
-vIzlj6/ku6Xlu7rnq4vnnJ/mraPnmoTkv6Hku7vlkozoia/lpb3nmoTllYbkuJrlj4vosIrvvIzl
-poLmnpzkvaDnnJ/nmoTmnInkuIDkuKror5rlrp7nmoTlkI3lrZfvvIzmiJHkuZ/mnInkuIDkupvk
-uovmg4XopoHlkozkvaDliIbkuqvnm7jkv6HjgILlnKjkvaDouqvkuIrvvIzlm6DkuLrmiJHpnIDo
-poHkvaDnmoTluK7liqnjgILmiJHmi6XmnInmiJHlnKjliKnmr5Tkuprnj63liqDopb/otZrliLDn
-moTmgLvpop3vvIg0NzANCuS4h+e+juWFg++8ieOAguaIkeWwhuWcqOS4i+S4gOWwgeeUteWtkOmC
-ruS7tuS4reWRiuivieS9oOaIkeaYr+WmguS9leWBmuWIsOeahO+8jOS4jeimgeaDiuaFjO+8jOWu
-g+S7rOaYr+aXoOmjjumZqeeahO+8jOaIkei/mOWcqOS4jiBSZWQNCuacieiBlOezu+eahOS6uumB
-k+S4u+S5ieWMu+eUn+eahOW4ruWKqeS4i+Wwhui/meeslOmSseWtmOWFpeS6huS4gOWutumTtuih
-jOOAguaIkeW4jOacm+S9oOS7peaIkeeahOWPl+ebiuS6uui6q+S7veaOpeWPl+WfuumHke+8jOW5
-tuWcqOaIkeWcqOi/memHjOWujOaIkOWQjuWmpeWWhOS/neeuoeWug++8jOW5tuiOt+W+l+aIkeea
-hOWGm+S6i+mAmuihjOivge+8jOS7peS+v+WcqOS9oOeahOWbveWutuS4juS9oOS8mumdou+8m+S4
-jeimgeWus+aAlemTtuihjOS8mumAmui/h+eUteaxh+Wwhui1hOmHkei9rOe7meaCqO+8jOi/meWv
-ueaIkeS7rOadpeivtOWuieWFqOS4lOW/q+aNt+OAgg0KDQrnrJTorrA75oiR5LiN55+l6YGT5oiR
-5Lus6KaB5Zyo6L+Z6YeM5b6F5aSa5LmF5ZKM5oiR55qE5ZG96L+Q77yM5Zug5Li65oiR5Zyo6L+Z
-6YeM5bm45YWN5LqO5Lik5qyh54K45by56KKt5Ye777yM6L+Z5a+86Ie05oiR5a+75om+5LiA5Liq
-5YC85b6X5L+h6LWW55qE5Lq65p2l5biu5Yqp5oiR5o6l5pS25ZKM5oqV6LWE5Z+66YeR77yM5Zug
-5Li65oiR5bCG5p2l5Yiw5L2g55qE5Zu95a625Ye66Lqr5oqV6LWE77yM5byA5aeL5paw55Sf5rS7
-77yM5LiN5YaN5b2T5YW144CCDQoNCuWmguaenOaCqOaEv+aEj+iwqOaFjuWkhOeQhu+8jOivt+Wb
-nuWkjeaIkeOAguaIkeS8muWRiuivieS9oOaOpeS4i+adpeeahOa1geeoi++8jOW5tue7meS9oOWP
-kemAgeabtOWkmuWFs+S6juWfuumHkeWtmOWFpemTtuihjOeahOS/oeaBr+OAguS7peWPiumTtuih
-jOWwhuWmguS9leW4ruWKqeaIkeS7rOmAmui/h+eUteaxh+Wwhui1hOmHkei9rOenu+WIsOaCqOea
-hOWbveWutu+8jOeUteaxh+S5n+aYr+mTtuihjOWIsOmTtuihjOeahOi9rOW4kOOAguiLpeacieWF
-tOi2o+ivt+iBlOezu+acrOS6uuOAgg0K
+There are a few users that would like to utilize P2SB mechanism of hiding
+and unhiding a device from the PCI configuration space.
+
+Here is the series to consolidate p2sb handling code for existing users
+and to provide a generic way for new comer(s).
+
+It also includes a patch to enable GPIO controllers on Apollo Lake
+when it's used with ABL bootloader w/o ACPI support.
+
+The patch that brings the helper ("platform/x86/intel: Add Primary to
+Sideband (P2SB) bridge support") has a commit message that sheds a light
+on what the P2SB is and why this is needed.
+
+I have tested this on Apollo Lake platform (I'm able to see SPI NOR and
+since we have an ACPI device for GPIO I do not see any attempts to recreate
+one).
+
+The series is ready to be merged via MFD tree, but see below.
+
+The series also includes updates for Simatic IPC drivers that partially
+tagged by respective maintainers (the main question is if Pavel is okay
+with the last three patches, since I believe Hans is okay with removing
+some code under PDx86). Hence the first 8 patches can be merged right
+away and the rest when Pavel does his review.
+
+Changes in v6:
+- added tag to patch 5 (Lee)
+- incorporated Henning's series on top of v5
+
+Changes in v5:
+- rewritten patch 1 to use pci_scan_single_device() (Lukas, Bjorn)
+- rebased patch 2 on top of the new Intel SPI NOR codebase
+- fixed a potential bug and rewritten resource filling in patch 5 (Lee)
+- added many different tags in a few patches (Jean, Wolfram, Henning)
+
+Changes in v4:
+- added tag to the entire series (Hans)
+- added tag to pin control patch (Mika)
+- dropped PCI core changes (PCI core doesn't want modifications to be made)
+- as a consequence of the above merged necessary bits into p2sb.c
+- added a check that p2sb is really hidden (Hans)
+- added EDAC patches (reviewed by maintainer internally)
+
+Changes in v3:
+- resent with cover letter
+
+Changes in v2:
+- added parentheses around bus in macros (Joe)
+- added tag (Jean)
+- fixed indentation and wrapping in the header (Christoph)
+- moved out of PCI realm to PDx86 as the best common denominator (Bjorn)
+- added a verbose commit message to explain P2SB thingy (Bjorn)
+- converted first parameter from pci_dev to pci_bus
+- made first two parameters (bus and devfn) optional (Henning, Lee)
+- added Intel pin control patch to the series (Henning, Mika)
+- fixed English style in the commit message of one of MFD patch (Lee)
+- added tags to my MFD LPC ICH patches (Lee)
+- used consistently (c) (Lee)
+- made indexing for MFD cell and resource arrays (Lee)
+- fixed the resource size in i801 (Jean)
+
+Andy Shevchenko (6):
+  pinctrl: intel: Check against matching data instead of ACPI companion
+  mfd: lpc_ich: Factor out lpc_ich_enable_spi_write()
+  mfd: lpc_ich: Switch to generic p2sb_bar()
+  i2c: i801: convert to use common P2SB accessor
+  EDAC, pnd2: Use proper I/O accessors and address space annotation
+  EDAC, pnd2: convert to use common P2SB accessor
+
+Henning Schild (4):
+  watchdog: simatic-ipc-wdt: convert to use P2SB accessor
+  leds: simatic-ipc-leds: convert to use P2SB accessor
+  platform/x86: simatic-ipc: drop custom P2SB bar code
+  leds: simatic-ipc-leds-gpio: add GPIO version of Siemens driver
+
+Jonathan Yong (1):
+  platform/x86/intel: Add Primary to Sideband (P2SB) bridge support
+
+Tan Jui Nee (1):
+  mfd: lpc_ich: Add support for pinctrl in non-ACPI system
+
+ drivers/edac/Kconfig                          |   1 +
+ drivers/edac/pnd2_edac.c                      |  62 +++----
+ drivers/i2c/busses/Kconfig                    |   1 +
+ drivers/i2c/busses/i2c-i801.c                 |  39 +----
+ drivers/leds/simple/Kconfig                   |   6 +-
+ drivers/leds/simple/Makefile                  |   1 +
+ drivers/leds/simple/simatic-ipc-leds-gpio.c   | 105 ++++++++++++
+ drivers/leds/simple/simatic-ipc-leds.c        |  80 +--------
+ drivers/mfd/Kconfig                           |   1 +
+ drivers/mfd/lpc_ich.c                         | 161 ++++++++++++++----
+ drivers/pinctrl/intel/pinctrl-intel.c         |  14 +-
+ drivers/platform/x86/intel/Kconfig            |  12 ++
+ drivers/platform/x86/intel/Makefile           |   2 +
+ drivers/platform/x86/intel/p2sb.c             | 133 +++++++++++++++
+ drivers/platform/x86/simatic-ipc.c            |  43 +----
+ drivers/watchdog/Kconfig                      |   1 +
+ drivers/watchdog/simatic-ipc-wdt.c            |  15 +-
+ include/linux/platform_data/x86/p2sb.h        |  28 +++
+ .../platform_data/x86/simatic-ipc-base.h      |   2 -
+ 19 files changed, 464 insertions(+), 243 deletions(-)
+ create mode 100644 drivers/leds/simple/simatic-ipc-leds-gpio.c
+ create mode 100644 drivers/platform/x86/intel/p2sb.c
+ create mode 100644 include/linux/platform_data/x86/p2sb.h
+
+
+base-commit: 40b58e42584bf5bd9230481dc8946f714fb387de
+-- 
+2.35.1
+
