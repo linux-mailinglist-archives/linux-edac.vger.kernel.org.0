@@ -2,56 +2,56 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 24BB6545740
-	for <lists+linux-edac@lfdr.de>; Fri, 10 Jun 2022 00:21:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 88E51545732
+	for <lists+linux-edac@lfdr.de>; Fri, 10 Jun 2022 00:21:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344618AbiFIWVT (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Thu, 9 Jun 2022 18:21:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60382 "EHLO
+        id S1345498AbiFIWVc (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Thu, 9 Jun 2022 18:21:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345689AbiFIWVG (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Thu, 9 Jun 2022 18:21:06 -0400
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D70BB4EA3E
-        for <linux-edac@vger.kernel.org>; Thu,  9 Jun 2022 15:21:03 -0700 (PDT)
-Received: by mail-yb1-xb49.google.com with SMTP id l3-20020a257003000000b00663dca68ed8so8044753ybc.4
-        for <linux-edac@vger.kernel.org>; Thu, 09 Jun 2022 15:21:03 -0700 (PDT)
+        with ESMTP id S1345533AbiFIWVa (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Thu, 9 Jun 2022 18:21:30 -0400
+Received: from mail-pg1-x549.google.com (mail-pg1-x549.google.com [IPv6:2607:f8b0:4864:20::549])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D52A953A73
+        for <linux-edac@vger.kernel.org>; Thu,  9 Jun 2022 15:21:27 -0700 (PDT)
+Received: by mail-pg1-x549.google.com with SMTP id g129-20020a636b87000000b00401b8392ac8so478650pgc.4
+        for <linux-edac@vger.kernel.org>; Thu, 09 Jun 2022 15:21:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=v4Xn62a8gwv09PX197f2KX5K6c68JUg+Unaoh5Rs3zU=;
-        b=rIM31hja6TacLFy83ekGaYY6NocbE3+qp06k1AYSWqT3YCOM3vKnexoLoVRg3/QFrC
-         NK6lDPMraatUaGV4ysDVq7Ma73A8ej30mShvcnMynXPj4q1s4HwLXHsyE5NReacxVqEF
-         SN/r5DNjRMP1h9Yx1PS5+t5PqoRBJ1DmF1KeRqex3FpyMoNRbYlXt2tQwLA6Cftv+3aS
-         xU6s22QmO1Pl1Kwrbe6vsMz+d3Z4FRfHNfEK9twj222QTX3BVZNBOKgun1MV8xBDAQQA
-         +IscNJZzBGaDfdE3Gg++zvAyvxAsnUQ0EJis1knVDwKv7m2aWEOPArINp5NiPyNi+Z2n
-         h4Ig==
+        bh=+JW2n6LLjgkLeZpu0VrK7uVIniA8Omo9w9YQRrZ1ImQ=;
+        b=i42901GYNhaxsHQ0DOGoOky9iCPlDaMMKrye+1S6wrdYfiDoHAZcC7HTQX/ufq8JDc
+         FtLJH8ibG+4hcwJncrABH5MINqNlaiBQcg6AiUjnTwqlf664IuYPp0tvgNpDNS6s/GjQ
+         Wjh2TOa/isNuXc04yhOdZrj9wIAtXkGMKkDBH370v2doh3glFP/6lvE9gZpbXECpN/zv
+         UStKebGupQmmTtj2yMjnHwJiwJi/peKu25pYf9NTE11Ch6upWSa6FAa3CkIKEN5+Emo5
+         3UDTgqdqaohZKI3Gp3XYmJjjv1YwnDPf8AUi3y1kFAWlFzS3PLERdXTH2sKpk0ltR6ij
+         /vAw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=v4Xn62a8gwv09PX197f2KX5K6c68JUg+Unaoh5Rs3zU=;
-        b=6Smgrxwl9f9ftv+C3XdZ3uNJWXQj7flFf9NW8xMRqKUHbrc3uH+/sc2ZAwqXPwh8MW
-         tqmll8shgxfOsEINSbt6gZMbDoKKGRZs4cNBYi1xRw1iwEGKaigvGRCswm8+NyG+0rxQ
-         zJttbhr5eqNzwuq5ybZDdY9HyeTEMocyTRQi0FGE0QCf6oul4utCHFrIER53yF6LY5Sq
-         PTHCOtzOWdctMBszlmNDpslJM6at8nPe3HjRajRxD7wv0xe0KSo4OAwKiFrz2+3W+7ko
-         3oEkz319/IQelAtWbue5xVEk26nG62XZuEsuhpcgO2BL2kOgmXif/UkYzAOEAPwI2V1X
-         7IUQ==
-X-Gm-Message-State: AOAM530S8Ty+JIXL6XrhoMOb/FoEcjJsJn7Fo61DToZ36kI51aVJjcA+
-        mvbT5/1xwOPYQMwy9IXy6elR90ZJ
-X-Google-Smtp-Source: ABdhPJwSDxouzP8D6734EA8fpYrXSwixl1FJKKaGzKk8Ee6TEpQt79esVExDoO3PJGM+WWqOyJq6+ArWEg==
+        bh=+JW2n6LLjgkLeZpu0VrK7uVIniA8Omo9w9YQRrZ1ImQ=;
+        b=ahjbNMJngXfnLPa//0HHi+0Hq6oTeI4y8sGb0Xe6lQllIL0BkSkLxCnWjyg6Z/eUVI
+         qrSZ6UioNP4bf5Bk0xWG2zJZDtaKmeT8qEz96U7/VG/3VGnwZUU5NEDFxN3QbT+ytLqx
+         0wAHGgRPVYOcMgj/SgMtRh2PE1d/b9XyepcRNvE2hn2MRHYorwJIz3QuXZGQqWnoTVQt
+         QX7UPDkC6BfrGYvVybrJOMnqcaV+VTsjkViM2XeXOos4bslLtRS6XcERvxUxp+bCUBfM
+         RFQBjDd9YaFNCbey3AmoXxCHm5rP/0ZuYK+OHNGJs0wQNPfeWOtCfDrmjQaEclpyzmx2
+         LxTQ==
+X-Gm-Message-State: AOAM532RXyfGDGmihU17ReJpxQ8N4LrOwVnXz5+mwHn0yXTqqPJedYNZ
+        q8sQiw+EootRuyPchangcG0ZyMY1
+X-Google-Smtp-Source: ABdhPJxwIiVK0GwVN12g3ZMNH56OyPQzBgCjPEweYrbMYHqEsJdgXTONzisCGHUJLebHzTiLq5Vb6Q5FXg==
 X-Received: from fawn.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5795])
- (user=morbo job=sendgmr) by 2002:a25:76d5:0:b0:663:ad77:8d48 with SMTP id
- r204-20020a2576d5000000b00663ad778d48mr18678005ybc.633.1654813262959; Thu, 09
- Jun 2022 15:21:02 -0700 (PDT)
-Date:   Thu,  9 Jun 2022 22:16:29 +0000
+ (user=morbo job=sendgmr) by 2002:a63:409:0:b0:3fd:77f0:9a75 with SMTP id
+ 9-20020a630409000000b003fd77f09a75mr25262295pge.149.1654813287223; Thu, 09
+ Jun 2022 15:21:27 -0700 (PDT)
+Date:   Thu,  9 Jun 2022 22:16:30 +0000
 In-Reply-To: <20220609221702.347522-1-morbo@google.com>
-Message-Id: <20220609221702.347522-11-morbo@google.com>
+Message-Id: <20220609221702.347522-12-morbo@google.com>
 Mime-Version: 1.0
 References: <20220609221702.347522-1-morbo@google.com>
 X-Mailer: git-send-email 2.36.1.476.g0c4daa206d-goog
-Subject: [PATCH 10/12] ALSA: seq: use correct format characters
+Subject: [PATCH 11/12] ALSA: control: use correct format characters
 From:   Bill Wendling <morbo@google.com>
 To:     isanbard@gmail.com
 Cc:     Tony Luck <tony.luck@intel.com>, Borislav Petkov <bp@alien8.de>,
@@ -77,8 +77,8 @@ Cc:     Tony Luck <tony.luck@intel.com>, Borislav Petkov <bp@alien8.de>,
         Nathan Chancellor <nathan@kernel.org>,
         Nick Desaulniers <ndesaulniers@google.com>,
         Tom Rix <trix@redhat.com>,
-        Ross Philipson <ross.philipson@oracle.com>,
         Daniel Kiper <daniel.kiper@oracle.com>,
+        Ross Philipson <ross.philipson@oracle.com>,
         linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-acpi@vger.kernel.org, linux-mm@kvack.org,
         netfilter-devel@vger.kernel.org, coreteam@netfilter.org,
@@ -99,31 +99,31 @@ From: Bill Wendling <isanbard@gmail.com>
 
 When compiling with -Wformat, clang emits the following warnings:
 
-sound/core/sound.c:79:17: error: format string is not a string literal (potentially insecure) [-Werror,-Wformat-security]
-        request_module(str);
-                       ^~~
+sound/core/control.c:2062:24: error: format string is not a string literal (potentially insecure) [-Werror,-Wformat-security]
+        return request_module(module_name);
+                              ^~~~~~~~~~~
 
 Use a string literal for the format string.
 
 Link: https://github.com/ClangBuiltLinux/linux/issues/378
 Signed-off-by: Bill Wendling <isanbard@gmail.com>
 ---
- sound/core/sound.c | 2 +-
+ sound/core/control.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/sound/core/sound.c b/sound/core/sound.c
-index df5571d98629..7866f29621bf 100644
---- a/sound/core/sound.c
-+++ b/sound/core/sound.c
-@@ -76,7 +76,7 @@ static void snd_request_other(int minor)
- 	case SNDRV_MINOR_TIMER:		str = "snd-timer";	break;
- 	default:			return;
- 	}
--	request_module(str);
-+	request_module("%s", str);
+diff --git a/sound/core/control.c b/sound/core/control.c
+index a25c0d64d104..a1778137147d 100644
+--- a/sound/core/control.c
++++ b/sound/core/control.c
+@@ -2059,7 +2059,7 @@ int snd_ctl_request_layer(const char *module_name)
+ 	up_read(&snd_ctl_layer_rwsem);
+ 	if (lops)
+ 		return 0;
+-	return request_module(module_name);
++	return request_module("%s", module_name);
  }
+ EXPORT_SYMBOL_GPL(snd_ctl_request_layer);
  
- #endif	/* modular kernel */
 -- 
 2.36.1.255.ge46751e96f-goog
 
