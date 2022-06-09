@@ -2,56 +2,56 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE56C545717
-	for <lists+linux-edac@lfdr.de>; Fri, 10 Jun 2022 00:18:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 35CFF545719
+	for <lists+linux-edac@lfdr.de>; Fri, 10 Jun 2022 00:18:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235687AbiFIWSH (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Thu, 9 Jun 2022 18:18:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43872 "EHLO
+        id S1345623AbiFIWS3 (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Thu, 9 Jun 2022 18:18:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345563AbiFIWSE (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Thu, 9 Jun 2022 18:18:04 -0400
-Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3AAF3BF85
-        for <linux-edac@vger.kernel.org>; Thu,  9 Jun 2022 15:18:02 -0700 (PDT)
-Received: by mail-pl1-x64a.google.com with SMTP id l5-20020a170902f68500b00167654aeba1so8391090plg.2
-        for <linux-edac@vger.kernel.org>; Thu, 09 Jun 2022 15:18:02 -0700 (PDT)
+        with ESMTP id S1345599AbiFIWS2 (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Thu, 9 Jun 2022 18:18:28 -0400
+Received: from mail-pl1-x649.google.com (mail-pl1-x649.google.com [IPv6:2607:f8b0:4864:20::649])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B790220D6
+        for <linux-edac@vger.kernel.org>; Thu,  9 Jun 2022 15:18:26 -0700 (PDT)
+Received: by mail-pl1-x649.google.com with SMTP id q2-20020a170902dac200b00168b3978426so706764plx.17
+        for <linux-edac@vger.kernel.org>; Thu, 09 Jun 2022 15:18:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=SFFjvyZvefpU9NrWWzQ0TAmvQ8SzfCLTau1AjR7El54=;
-        b=Kr2RYZFWYOeNjzG0DXVZ1PIX9XZMzBF03Z569egSujYX+SETM8BM22isVSs7ZYg0je
-         vtmIi51QjRTMj1fwLrkgjqNVlwKBP1pP5HLG5JFnMd4QeQYx2K01nU1Ejrc/H0elX0dB
-         xVMAEAznym96CzfG/aOkwGNw3H9g+blFPI7HqqKYy6VdsppoXnWpV0WmljI7FHufbK83
-         ON+xFi3394AkXlTQEdIEaihpVBJQ8PGsd812EFScZ5x0FGwt1QmokUw/eccZEX97Itvg
-         V6YGaLMc68zBNDG7tvYESM8uNaTijhm4Fewwwm5H2YtyjsN07CoVm9f4qHoqAerZAXZJ
-         XTVA==
+        bh=zQ6igRU/lPsPPjITd4pdT0XeOfhGOx4hu6xL7AAJoM8=;
+        b=QJYSL92EGHv0Glqefsz+fZAyuHXsVDJ+MxqtY38p/rJWyzN9tqq38im0/nAHSSrAcw
+         XMQ6nAGoVVakkYRIOxtqwHJW03YmZH40gkW7E/YkdAEWc9hWN2V7ngXOGdkLxNXXFPVz
+         MM6SoDd9zGDwN7h4y2Zv5sUmYXsKm79QEart8XywqgYgGMlR5uKSmr2M8zPPYELNG0fC
+         sjbVW5cOWu2CabVPyhNOvTWLIe4OkL9eosbWQbgqXLmWmjLl4VHTPCfxGjF9R4eBYA8S
+         SWfDBEXFQ0GXfeXiQjFQ4xktd6Mieq2x7asfEjehSXBFdpIoHP2WaOku4Aej/pIaybf5
+         FCNQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=SFFjvyZvefpU9NrWWzQ0TAmvQ8SzfCLTau1AjR7El54=;
-        b=DBle3IcMy/1PmXwFhMKA6/cJ0YW07vh8UU2NVEJRUV9S6v98xPXuaMGbWt7Ivg/rCN
-         l1c0vSO/3Oyfb91RH56XtLavbIKNQ4flBc72jzc4lj3yeGTOaEOgVdr5OPW3g1kWPQUw
-         NvhPxhMsMas0orotnKqtv4l+WDDhXWHDtPNH/3he+e3m6ktB2G7RUuldBLpS+JISX4ab
-         ifIWpThZ+GKntLEUl8u+gjjUie/qOUiOgAg9IbK6WJX78PpkXkrjxwIr7BD+pFR5To1A
-         ZVnRDrnGcVUapin1x9XqkQWOUlnFS+lEJRYklOs4YVP7N7okQeedpg0kD5KECZMxOK0X
-         aZ/Q==
-X-Gm-Message-State: AOAM530nrNP3jR0GXPerAX8SmyDUFS7P/ycpZ094wiXREZcxpcWS1xmj
-        StMG7YU3YGOo5rruFQhTKfnQvAYs
-X-Google-Smtp-Source: ABdhPJweUcyR1bJf/XiwDrAaJ+hZ/VGm1qzwS+oRhWzjXi1BAcLnFDZIdAsYxk3A8uUCFP+evw6wWgyl2Q==
+        bh=zQ6igRU/lPsPPjITd4pdT0XeOfhGOx4hu6xL7AAJoM8=;
+        b=j3NWRw82074dXlJkqnnjLVBSEbVb7AKL0eExqG4XapFi+XAaPeJ9euRkJ1v830JlgP
+         iKVR+yPhUAU1M/OZe9C0msLmz7FqNRAfVoyXDS9jxGUwh2cg5pB9VFWkYv4JQ9kEoXtY
+         sEcC3pjqgoSeQFPj0bLqv6DuuGzLjKIxIfxKfbY+J391V80Bc/PgQWEP0+HyxUtE4Q4b
+         fA87JInZ+xlhDXRHrfTUfyOhvaDArB5I4FwnFa2RmI6PkMFmw6AVjsf05tPqtFfEqScm
+         ysgl521V4+UqnIU732VRfQ/tquqffW4V2dwOv1b78W4cjKaveZsrOVDlXtZLxe6Wl97e
+         Ca5g==
+X-Gm-Message-State: AOAM533ZG+FYlLp1UBhvFmEB9+JWS/1mzDkW1HAW4VVacxgf2YCWiIkN
+        c5cLxvbjBRQwFNxvWzjEmVWvn3ai
+X-Google-Smtp-Source: ABdhPJwaaQIFrsaGRD2eHE0bL/iy5r4Z+mF9XLusw0L85/0I2ggYu7uuJziQ3x377wlgzuNlbfNxKB4Iyw==
 X-Received: from fawn.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5795])
- (user=morbo job=sendgmr) by 2002:a63:35ce:0:b0:3fd:fb5a:a1c3 with SMTP id
- c197-20020a6335ce000000b003fdfb5aa1c3mr15000208pga.85.1654813082090; Thu, 09
- Jun 2022 15:18:02 -0700 (PDT)
-Date:   Thu,  9 Jun 2022 22:16:21 +0000
+ (user=morbo job=sendgmr) by 2002:a17:90a:249:b0:1e0:a8a3:3c6c with SMTP id
+ t9-20020a17090a024900b001e0a8a33c6cmr114285pje.0.1654813104885; Thu, 09 Jun
+ 2022 15:18:24 -0700 (PDT)
+Date:   Thu,  9 Jun 2022 22:16:22 +0000
 In-Reply-To: <20220609221702.347522-1-morbo@google.com>
-Message-Id: <20220609221702.347522-3-morbo@google.com>
+Message-Id: <20220609221702.347522-4-morbo@google.com>
 Mime-Version: 1.0
 References: <20220609221702.347522-1-morbo@google.com>
 X-Mailer: git-send-email 2.36.1.476.g0c4daa206d-goog
-Subject: [PATCH 02/12] x86/CPU/AMD: use correct format characters
+Subject: [PATCH 03/12] x86/e820: use correct format characters
 From:   Bill Wendling <morbo@google.com>
 To:     isanbard@gmail.com
 Cc:     Tony Luck <tony.luck@intel.com>, Borislav Petkov <bp@alien8.de>,
@@ -77,8 +77,8 @@ Cc:     Tony Luck <tony.luck@intel.com>, Borislav Petkov <bp@alien8.de>,
         Nathan Chancellor <nathan@kernel.org>,
         Nick Desaulniers <ndesaulniers@google.com>,
         Tom Rix <trix@redhat.com>,
-        Daniel Kiper <daniel.kiper@oracle.com>,
         Ross Philipson <ross.philipson@oracle.com>,
+        Daniel Kiper <daniel.kiper@oracle.com>,
         linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-acpi@vger.kernel.org, linux-mm@kvack.org,
         netfilter-devel@vger.kernel.org, coreteam@netfilter.org,
@@ -88,7 +88,7 @@ Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -99,67 +99,36 @@ From: Bill Wendling <isanbard@gmail.com>
 
 When compiling with -Wformat, clang emits the following warnings:
 
-arch/x86/kernel/cpu/mce/amd.c:1119:67: error: format string is not a string literal (potentially insecure) [-Werror,-Wformat-security]
-        err = kobject_init_and_add(&b->kobj, &threshold_ktype, tb->kobj, get_name(cpu, bank, b));
-                                                                         ^~~~~~~~~~~~~~~~~~~~~~
-arch/x86/kernel/cpu/mce/amd.c:1151:47: error: format string is not a string literal (potentially insecure) [-Werror,-Wformat-security]
-        err = kobject_add(&b->blocks->kobj, b->kobj, b->blocks->kobj.name);
-                                                     ^~~~~~~~~~~~~~~~~~~~
-arch/x86/kernel/cpu/mce/amd.c:1157:42: error: format string is not a string literal (potentially insecure) [-Werror,-Wformat-security]
-                err = kobject_add(&pos->kobj, b->kobj, pos->kobj.name);
-                                                       ^~~~~~~~~~~~~~
-arch/x86/kernel/cpu/mce/amd.c:1187:43: error: format string is not a string literal (potentially insecure) [-Werror,-Wformat-security]
-                        err = kobject_add(b->kobj, &dev->kobj, name);
-                                                               ^~~~
-                                                               "%s",
+arch/x86/kernel/e820.c:877:15: error: format string is not a string literal (potentially insecure) [-Werror,-Wformat-security]
+        early_printk(msg);
+                     ^~~
+arch/x86/kernel/e820.c:878:8: error: format string is not a string literal (potentially insecure) [-Werror,-Wformat-security]
+        panic(msg);
+              ^~~
 
 Use a string literal for the format string.
 
 Link: https://github.com/ClangBuiltLinux/linux/issues/378
 Signed-off-by: Bill Wendling <isanbard@gmail.com>
 ---
- arch/x86/kernel/cpu/mce/amd.c | 9 +++++----
- 1 file changed, 5 insertions(+), 4 deletions(-)
+ arch/x86/kernel/e820.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/arch/x86/kernel/cpu/mce/amd.c b/arch/x86/kernel/cpu/mce/amd.c
-index 1c87501e0fa3..d19bf0eb0abe 100644
---- a/arch/x86/kernel/cpu/mce/amd.c
-+++ b/arch/x86/kernel/cpu/mce/amd.c
-@@ -1116,7 +1116,8 @@ static int allocate_threshold_blocks(unsigned int cpu, struct threshold_bank *tb
- 	else
- 		tb->blocks = b;
+diff --git a/arch/x86/kernel/e820.c b/arch/x86/kernel/e820.c
+index f267205f2d5a..ca4634a0bdb5 100644
+--- a/arch/x86/kernel/e820.c
++++ b/arch/x86/kernel/e820.c
+@@ -874,8 +874,8 @@ unsigned long __init e820__end_of_low_ram_pfn(void)
  
--	err = kobject_init_and_add(&b->kobj, &threshold_ktype, tb->kobj, get_name(cpu, bank, b));
-+	err = kobject_init_and_add(&b->kobj, &threshold_ktype, tb->kobj, "%s",
-+				   get_name(cpu, bank, b));
- 	if (err)
- 		goto out_free;
- recurse:
-@@ -1148,13 +1149,13 @@ static int __threshold_add_blocks(struct threshold_bank *b)
- 	struct threshold_block *tmp = NULL;
- 	int err = 0;
+ static void __init early_panic(char *msg)
+ {
+-	early_printk(msg);
+-	panic(msg);
++	early_printk("%s", msg);
++	panic("%s", msg);
+ }
  
--	err = kobject_add(&b->blocks->kobj, b->kobj, b->blocks->kobj.name);
-+	err = kobject_add(&b->blocks->kobj, b->kobj, "%s", b->blocks->kobj.name);
- 	if (err)
- 		return err;
- 
- 	list_for_each_entry_safe(pos, tmp, head, miscj) {
- 
--		err = kobject_add(&pos->kobj, b->kobj, pos->kobj.name);
-+		err = kobject_add(&pos->kobj, b->kobj, "%s", pos->kobj.name);
- 		if (err) {
- 			list_for_each_entry_safe_reverse(pos, tmp, head, miscj)
- 				kobject_del(&pos->kobj);
-@@ -1184,7 +1185,7 @@ static int threshold_create_bank(struct threshold_bank **bp, unsigned int cpu,
- 		if (nb && nb->bank4) {
- 			/* yes, use it */
- 			b = nb->bank4;
--			err = kobject_add(b->kobj, &dev->kobj, name);
-+			err = kobject_add(b->kobj, &dev->kobj, "%s", name);
- 			if (err)
- 				goto out;
- 
+ static int userdef __initdata;
 -- 
 2.36.1.255.ge46751e96f-goog
 
