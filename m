@@ -2,57 +2,28 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B2EDD5457A5
-	for <lists+linux-edac@lfdr.de>; Fri, 10 Jun 2022 00:49:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C9B35457C8
+	for <lists+linux-edac@lfdr.de>; Fri, 10 Jun 2022 01:04:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239628AbiFIWth (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Thu, 9 Jun 2022 18:49:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45648 "EHLO
+        id S237586AbiFIXDs (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Thu, 9 Jun 2022 19:03:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345808AbiFIWtg (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Thu, 9 Jun 2022 18:49:36 -0400
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19068FF5BB
-        for <linux-edac@vger.kernel.org>; Thu,  9 Jun 2022 15:49:35 -0700 (PDT)
-Received: by mail-lf1-x133.google.com with SMTP id s6so40151404lfo.13
-        for <linux-edac@vger.kernel.org>; Thu, 09 Jun 2022 15:49:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=OAj7kkMIiekJ9rTKt4JAtAfIGa2quITOg+UqYlGq1Vc=;
-        b=h+XSjN/WVesJqDJFOPBbUOjCsElze90l5AUaZpaMfQE4BCHJP6262qTzyHWJva9Bl7
-         Ylea2b1VMRtuu3W6K04USb5N4DyE9/FJG1TJX23DJAAyMpmTkNe0IhcujfXyw2tL6Yzm
-         5AoAwHI63jQHxPEb7KgmYY7AsIWc/AhRsgnJ71aDa/ZsS0NcL3wur4vFJaN8UMyAklRE
-         aEGCgipKXq1q5OQuT+b1/Z3ZAjDVwg+cOz821DhKZdc3CbTWkxewf2eBhHZ6cA8kCpl2
-         vQoxv4lOBXpPPrGtb7sLkscBoEWxzlYML194UCnlDBfFSziOT58BYv12MhyX6zYq7k9Z
-         Vkrg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=OAj7kkMIiekJ9rTKt4JAtAfIGa2quITOg+UqYlGq1Vc=;
-        b=qtEfMHUsBS64w4jDRjpmz4PMOE8p7uhLd/E3877LH6ZVXYZvm7NK5UNPHfUo83AYpe
-         sYIH/WQoeTgGt2cVLxXhUd3Qh9WysT1XANayEQqwCCXozZUE1RL0kpzqZcmwwXioesYq
-         qCRQxQFhGFnwMHxOBftSbBcYOm1ESOIOs4T9sDhKHfp4JuB5PxmuNB73W9/Cic8iMZIt
-         HyyygJUfWVDSN0D/oQNRN88Qd+G1GT7X0ncz4bacFBEWbK96VH/yfRvXcf3D5vfnu9v0
-         UUh2JXmG9MFYGAcTdRs1yVT21siWdaXCfCXcRHgCYarg0Dj7FJGKWNWfFcrO7E001u6K
-         LWmA==
-X-Gm-Message-State: AOAM531yu8BB9bUfIrIdNllv58/rMq7ntDFX1LudhAzIUxX15QKSi1L+
-        JgqBu7GetBhEm8cDRHh0PFiOXGtEMwOPgqLQzKyC
-X-Google-Smtp-Source: ABdhPJxZXTnzcCwuX2K8dXo0GsWxPjCKHZ8xLR+ukHeOsc32GB8PW2KE6FFGhS4Nls3KDQ2FUv5nfKYIhCIQyfCKYvU=
-X-Received: by 2002:a05:6512:114e:b0:479:1e02:9318 with SMTP id
- m14-20020a056512114e00b004791e029318mr20896704lfg.156.1654814973186; Thu, 09
- Jun 2022 15:49:33 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220609221702.347522-1-morbo@google.com> <20220609152527.4ad7862d4126e276e6f76315@linux-foundation.org>
-In-Reply-To: <20220609152527.4ad7862d4126e276e6f76315@linux-foundation.org>
-From:   Bill Wendling <morbo@google.com>
-Date:   Thu, 9 Jun 2022 15:49:21 -0700
-Message-ID: <CAGG=3QXDt9AeCQOAp1311POFRSByJru4=Q=oFiQn3u2iZYk2_w@mail.gmail.com>
-Subject: Re: [PATCH 00/12] Clang -Wformat warning fixes
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Bill Wendling <isanbard@gmail.com>,
+        with ESMTP id S234341AbiFIXDl (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Thu, 9 Jun 2022 19:03:41 -0400
+Received: from a3.inai.de (a3.inai.de [IPv6:2a01:4f8:10b:45d8::f5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B069C3A8A4B;
+        Thu,  9 Jun 2022 16:03:37 -0700 (PDT)
+Received: by a3.inai.de (Postfix, from userid 25121)
+        id 3364758723354; Fri, 10 Jun 2022 01:03:36 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+        by a3.inai.de (Postfix) with ESMTP id 30D9E60C247C4;
+        Fri, 10 Jun 2022 01:03:36 +0200 (CEST)
+Date:   Fri, 10 Jun 2022 01:03:36 +0200 (CEST)
+From:   Jan Engelhardt <jengelh@inai.de>
+To:     Bill Wendling <morbo@google.com>
+cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Bill Wendling <isanbard@gmail.com>,
         Tony Luck <tony.luck@intel.com>,
         Borislav Petkov <bp@alien8.de>,
         Thomas Gleixner <tglx@linutronix.de>,
@@ -85,48 +56,46 @@ Cc:     Bill Wendling <isanbard@gmail.com>,
         coreteam@netfilter.org, Networking <netdev@vger.kernel.org>,
         alsa-devel@alsa-project.org,
         clang-built-linux <llvm@lists.linux.dev>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Subject: Re: [PATCH 00/12] Clang -Wformat warning fixes
+In-Reply-To: <CAGG=3QXDt9AeCQOAp1311POFRSByJru4=Q=oFiQn3u2iZYk2_w@mail.gmail.com>
+Message-ID: <nssn2ps-6n86-nqq6-9039-72847760nnq@vanv.qr>
+References: <20220609221702.347522-1-morbo@google.com> <20220609152527.4ad7862d4126e276e6f76315@linux-foundation.org> <CAGG=3QXDt9AeCQOAp1311POFRSByJru4=Q=oFiQn3u2iZYk2_w@mail.gmail.com>
+User-Agent: Alpine 2.25 (LSU 592 2021-09-18)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Thu, Jun 9, 2022 at 3:25 PM Andrew Morton <akpm@linux-foundation.org> wrote:
+
+On Friday 2022-06-10 00:49, Bill Wendling wrote:
+>On Thu, Jun 9, 2022 at 3:25 PM Andrew Morton <akpm@linux-foundation.org> wrote:
+>> On Thu,  9 Jun 2022 22:16:19 +0000 Bill Wendling <morbo@google.com> wrote:
+>>
+>> > This patch set fixes some clang warnings when -Wformat is enabled.
+>>
+>> tldr:
+>>
+>> -       printk(msg);
+>> +       printk("%s", msg);
+>>
+>> Otherwise these changes are a
+>> useless consumer of runtime resources.
 >
-> On Thu,  9 Jun 2022 22:16:19 +0000 Bill Wendling <morbo@google.com> wrote:
->
-> > This patch set fixes some clang warnings when -Wformat is enabled.
-> >
->
-> tldr:
->
-> -       printk(msg);
-> +       printk("%s", msg);
->
-> the only reason to make this change is where `msg' could contain a `%'.
-> Generally, it came from userspace.
+>Calling a "printf" style function is already insanely expensive.
+>[...]
+>The "printk" and similar functions all have the "__printf" attribute.
+>I don't know of a modification to that attribute which can turn off
+>this type of check.
 
-It helps kernel developers not accidentally to insert an unescaped '%'
-in their messages, potentially exposing their code to an attack
-vector.
+Perhaps you can split vprintk_store in the middle (after the call to
+vsnprintf), and offer the second half as a function of its own (e.g.
+"puts"). Then the tldr could be
 
-> Otherwise these changes are a
-> useless consumer of runtime resources.
-
-Calling a "printf" style function is already insanely expensive. :-) I
-understand that it's not okay blithely to increase runtime resources
-simply because it's already slow, but in this case it's worthwhile.
-
-> I think it would be better to quieten clang in some fashion.
-
-The "printk" and similar functions all have the "__printf" attribute.
-I don't know of a modification to that attribute which can turn off
-this type of check.
-
--bw
+- printk(msg);
++ puts(msg);
