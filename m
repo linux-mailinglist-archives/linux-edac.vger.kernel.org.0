@@ -2,27 +2,30 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 812075461E2
-	for <lists+linux-edac@lfdr.de>; Fri, 10 Jun 2022 11:25:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 386705466DF
+	for <lists+linux-edac@lfdr.de>; Fri, 10 Jun 2022 14:52:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349194AbiFJJZH (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Fri, 10 Jun 2022 05:25:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35156 "EHLO
+        id S229571AbiFJMw1 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-edac@lfdr.de>); Fri, 10 Jun 2022 08:52:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349762AbiFJJYX (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Fri, 10 Jun 2022 05:24:23 -0400
-Received: from a3.inai.de (a3.inai.de [IPv6:2a01:4f8:10b:45d8::f5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD513158744;
-        Fri, 10 Jun 2022 02:22:47 -0700 (PDT)
-Received: by a3.inai.de (Postfix, from userid 25121)
-        id 7182C5872870F; Fri, 10 Jun 2022 11:22:46 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-        by a3.inai.de (Postfix) with ESMTP id 70A0760C247D5;
-        Fri, 10 Jun 2022 11:22:46 +0200 (CEST)
-Date:   Fri, 10 Jun 2022 11:22:46 +0200 (CEST)
-From:   Jan Engelhardt <jengelh@inai.de>
-To:     David Laight <David.Laight@ACULAB.COM>
-cc:     'Bill Wendling' <morbo@google.com>,
+        with ESMTP id S234166AbiFJMwW (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Fri, 10 Jun 2022 08:52:22 -0400
+X-Greylist: delayed 460 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 10 Jun 2022 05:52:19 PDT
+Received: from relay5.hostedemail.com (smtprelay0015.hostedemail.com [216.40.44.15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89EF944A16
+        for <linux-edac@vger.kernel.org>; Fri, 10 Jun 2022 05:52:11 -0700 (PDT)
+Received: from omf09.hostedemail.com (a10.router.float.18 [10.200.18.1])
+        by unirelay12.hostedemail.com (Postfix) with ESMTP id 06E07121083;
+        Fri, 10 Jun 2022 12:44:30 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf09.hostedemail.com (Postfix) with ESMTPA id 08E1F2002A;
+        Fri, 10 Jun 2022 12:44:18 +0000 (UTC)
+Message-ID: <cd59f3eab3d2b4f069f4ebf169b33307eaa9e50d.camel@perches.com>
+Subject: Re: [PATCH 00/12] Clang -Wformat warning fixes
+From:   Joe Perches <joe@perches.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Bill Wendling <morbo@google.com>
+Cc:     Jan Engelhardt <jengelh@inai.de>,
         Andrew Morton <akpm@linux-foundation.org>,
         Bill Wendling <isanbard@gmail.com>,
         Tony Luck <tony.luck@intel.com>,
@@ -34,7 +37,6 @@ cc:     'Bill Wendling' <morbo@google.com>,
         "H. Peter Anvin" <hpa@zytor.com>,
         Phillip Potter <phil@philpotter.co.uk>,
         Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
         Jan Kara <jack@suse.com>,
         Pablo Neira Ayuso <pablo@netfilter.org>,
@@ -51,54 +53,92 @@ cc:     'Bill Wendling' <morbo@google.com>,
         Tom Rix <trix@redhat.com>,
         Ross Philipson <ross.philipson@oracle.com>,
         Daniel Kiper <daniel.kiper@oracle.com>,
-        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
+        linux-edac@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
         ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "netfilter-devel@vger.kernel.org" <netfilter-devel@vger.kernel.org>,
-        "coreteam@netfilter.org" <coreteam@netfilter.org>,
-        Networking <netdev@vger.kernel.org>,
-        "alsa-devel@alsa-project.org" <alsa-devel@alsa-project.org>,
+        linux-mm@kvack.org, netfilter-devel@vger.kernel.org,
+        coreteam@netfilter.org, Networking <netdev@vger.kernel.org>,
+        alsa-devel@alsa-project.org,
         clang-built-linux <llvm@lists.linux.dev>
-Subject: RE: [PATCH 00/12] Clang -Wformat warning fixes
-In-Reply-To: <724889aa6a8d4d41b8557733610c7657@AcuMS.aculab.com>
-Message-ID: <so239116-75sq-89rs-nron-35nsq660rs8n@vanv.qr>
-References: <20220609221702.347522-1-morbo@google.com> <20220609152527.4ad7862d4126e276e6f76315@linux-foundation.org> <CAGG=3QXDt9AeCQOAp1311POFRSByJru4=Q=oFiQn3u2iZYk2_w@mail.gmail.com> <01da36bfd13e421aadb2eff661e7a959@AcuMS.aculab.com>
- <o5496n8r-451p-751-3258-97112opns7s8@vanv.qr> <724889aa6a8d4d41b8557733610c7657@AcuMS.aculab.com>
-User-Agent: Alpine 2.25 (LSU 592 2021-09-18)
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Date:   Fri, 10 Jun 2022 05:44:18 -0700
+In-Reply-To: <YqLUn3RdZ9HAKZKu@kroah.com>
+References: <20220609221702.347522-1-morbo@google.com>
+         <20220609152527.4ad7862d4126e276e6f76315@linux-foundation.org>
+         <CAGG=3QXDt9AeCQOAp1311POFRSByJru4=Q=oFiQn3u2iZYk2_w@mail.gmail.com>
+         <nssn2ps-6n86-nqq6-9039-72847760nnq@vanv.qr>
+         <CAGG=3QU0XJhQKJXLMayOkQSiF2yjBi2p2TEZ9KNTzU5mmye-gg@mail.gmail.com>
+         <YqLUn3RdZ9HAKZKu@kroah.com>
+Content-Type: text/plain; charset="ISO-8859-1"
 Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Evolution 3.44.1-0ubuntu1 
+MIME-Version: 1.0
+X-Rspamd-Server: rspamout05
+X-Rspamd-Queue-Id: 08E1F2002A
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,FORGED_SPF_HELO,
+        KHOP_HELO_FCRDNS,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        UNPARSEABLE_RELAY autolearn=no autolearn_force=no version=3.4.6
+X-Stat-Signature: r8ecgxf89uwg9qffzdumnqfsj56kpo1p
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Session-ID: U2FsdGVkX19T013fSZHIO4BR28mlFWzRzi2PPI2hbJs=
+X-HE-Tag: 1654865058-93434
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
+On Fri, 2022-06-10 at 07:20 +0200, Greg Kroah-Hartman wrote:
+> On Thu, Jun 09, 2022 at 04:16:16PM -0700, Bill Wendling wrote:
+> > On Thu, Jun 9, 2022 at 4:03 PM Jan Engelhardt <jengelh@inai.de> wrote:
+> > > On Friday 2022-06-10 00:49, Bill Wendling wrote:
+> > > > On Thu, Jun 9, 2022 at 3:25 PM Andrew Morton <akpm@linux-foundation.org> wrote:
+> > > > > On Thu,  9 Jun 2022 22:16:19 +0000 Bill Wendling <morbo@google.com> wrote:
+> > > > > 
+> > > > > > This patch set fixes some clang warnings when -Wformat is enabled.
+> > > > > 
+> > > > > tldr:
+> > > > > 
+> > > > > -       printk(msg);
+> > > > > +       printk("%s", msg);
+> > > > > 
+> > > > > Otherwise these changes are a
+> > > > > useless consumer of runtime resources.
 
-On Friday 2022-06-10 11:14, David Laight wrote:
->> >Yep, IMHO definitely should be fixed.
->> >It is even possible that using "%s" is faster because the printf
->> >code doesn't have to scan the string for format effectors.
->> 
->> I see no special handling; the vsnprintf function just loops
->> over fmt as usual and I see no special casing of fmt by
->> e.g. strcmp(fmt, "%s") == 0 to take a shortcut.
->
->Consider the difference between:
->	printf("fubar");
->and
->	printf("%s", "fubar");
->In the former all of "fubar" is checked for '%'.
->In the latter only the length of "fubar" has to be counted.
+> > > > Calling a "printf" style function is already insanely expensive.
 
-To check the length of "fubar", printf first needs to know that there
-even is an argument to be pulled from the stack, which it does by
-evaluating the format string.
+I expect the printk code itself dominates, not the % scan cost.
 
-So, in fairness, it's more like:
+> > > Perhaps you can split vprintk_store in the middle (after the call to
+> > > vsnprintf), and offer the second half as a function of its own (e.g.
+> > > "puts"). Then the tldr could be
+> > > 
+> > > - printk(msg);
+> > > + puts(msg);
+> > 
+> > That might be a nice compromise. Andrew, what do you think?
+> 
+> You would need to do that for all of the dev_printk() variants, so I
+> doubt that would ever be all that useful as almost no one should be
+> using a "raw" printk() these days.
 
- >> In the latter, all of "%s" is checked for '%'.
+True.  The kernel has ~20K variants like that.
+
+$ git grep -P '\b(?:(?:\w+_){1,3}(?:alert|emerg|crit|err|warn|notice|info|cont|debug|dbg)|printk)\s*\(".*"\s*\)\s*;' | wc -l
+21160
+
+That doesn't include the ~3K uses like
+
+#define foo "bar"
+	printk(foo);
+
+$ git grep -P '\b(?:(?:\w+_){1,3}(?:alert|emerg|crit|err|warn|info|notice|debug|dbg|cont)|printk)\s*\((?:\s*\w+){1,3}\s*\)\s*;'|wc -l
+2922
+
+There are apparently only a few hundred uses of variants like:
+
+	printk("%s", foo)
+
+$ git grep -P '\b(?:(?:\w+_){1,3}(?:alert|emerg|crit|err|warn|info|notice|debug|dbg|cont)|printk)\s*\(\s*"%s(?:\\n)?"\s*,\s*(?:".*"|\w+)\s*\)\s*;' | wc -l
+305
+
+unless I screwed up my greps (which of course is quite possible)
+
