@@ -2,59 +2,37 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF31F54592C
-	for <lists+linux-edac@lfdr.de>; Fri, 10 Jun 2022 02:33:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A23D354597F
+	for <lists+linux-edac@lfdr.de>; Fri, 10 Jun 2022 03:19:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239500AbiFJAdD (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Thu, 9 Jun 2022 20:33:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52822 "EHLO
+        id S233260AbiFJBTW (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Thu, 9 Jun 2022 21:19:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238667AbiFJAdD (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Thu, 9 Jun 2022 20:33:03 -0400
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E3A836B50
-        for <linux-edac@vger.kernel.org>; Thu,  9 Jun 2022 17:33:00 -0700 (PDT)
-Received: by mail-lf1-x12b.google.com with SMTP id u23so40471687lfc.1
-        for <linux-edac@vger.kernel.org>; Thu, 09 Jun 2022 17:33:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=M1G6Hf9v6f6xyLP2a6Gh7yfuFJ+6ipgBJHHWwU80v1c=;
-        b=GzLaviOqRCp4B7LqsBfA2qFyX6V1uMUAbIpS5ZG+ymr/9aN/hsQn1QW3PtN+GmgInQ
-         He0Q1Uquu8aHzwNdzglLiDyax/ofVj35MhNvH0zBU7U/FgsC8lV4WZcV1MRSavA6givw
-         MwwoH6cUS805gA1B/kna/OiRrljxuadDNbWQe2uk3jqSGIPZTj1Nggn2aFmaJOxpn0ee
-         keyXmIa2x54GZzES+MYP7V0JK7Y0RzKUk9jyYpIawwn1bBhBPn8bT+rMBalAXRhKRGqN
-         ws66+mukc8/rRLkWY5c5tACdnnEguXj7+LFVYthISMqK0wDGsAxLLnOu3EGgFefxrZxd
-         +Qcg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=M1G6Hf9v6f6xyLP2a6Gh7yfuFJ+6ipgBJHHWwU80v1c=;
-        b=gY1VLMjOeMyoP1GD7SsQr+q6U0Ie/Tq4XEncDPAa2/yRAerM7p6ASN8R5C9KI/CKZm
-         0urRNGRyTNmer4dqAlQyNtxKscPVcVryG8er3gpJyR0ZcTKuhO6K3TsLHwl+wl5J+AjI
-         APi1dgjD1u+nJ5Wu5AstNg6JCiGY1vaWooawQ0zeben619XGZuSi5DIvgkGU83kQDJ2a
-         ttbe0YN8iqKz930BuU5g95BS56A08DF5SmR1aE3AzBUnABrUTsrnu8h6w55c7P40jNxH
-         n2/Q6fvUK8wSphom86ezkwGscjeWKcsE2oOTUqxsd8oiU6zq55CsNSNiR5Y2rVt7BW+3
-         WXDA==
-X-Gm-Message-State: AOAM5319jcPSmA2YlJ+vRP07dkgktOGZYqA4BmG+T+WvuIIiI27JgRGR
-        ezSefBfh9ov45wNrz66mrjqrNbGN+YwUJMa71Q9pKQ==
-X-Google-Smtp-Source: ABdhPJwmAai5PXOj7tGhLdM9ZQqNV5Wv1qkbCkukxf252/r1aHu4spL4q3u9asT4a5t/dEsKFtmgLChgmJAimWPi9do=
-X-Received: by 2002:a05:6512:ad6:b0:479:5599:d834 with SMTP id
- n22-20020a0565120ad600b004795599d834mr11951775lfu.103.1654821178297; Thu, 09
- Jun 2022 17:32:58 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220609221702.347522-1-morbo@google.com> <20220609152527.4ad7862d4126e276e6f76315@linux-foundation.org>
-In-Reply-To: <20220609152527.4ad7862d4126e276e6f76315@linux-foundation.org>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Thu, 9 Jun 2022 17:32:46 -0700
-Message-ID: <CAKwvOdmfC3kgGuimbtG8n74f8qJ5+vd3GeHg14oOxkKOfuQfBg@mail.gmail.com>
-Subject: Re: [PATCH 00/12] Clang -Wformat warning fixes
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        Bill Wendling <morbo@google.com>,
-        Randy Dunlap <rdunlap@infradead.org>
-Cc:     Bill Wendling <isanbard@gmail.com>,
+        with ESMTP id S231573AbiFJBTV (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Thu, 9 Jun 2022 21:19:21 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B7C536E2B;
+        Thu,  9 Jun 2022 18:19:20 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E1544616C9;
+        Fri, 10 Jun 2022 01:19:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 107EEC34114;
+        Fri, 10 Jun 2022 01:19:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1654823959;
+        bh=NUfNzI+Lzqk+ZMoLBcXdIunumPdQxiKPTgtDE7N0Sgk=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=k2K3VAI6SDQeixfuxmPLxZgpiSqDGd0SM+Ll9mgkEIzO4uveLGhDNJt0+TSFK+7Dy
+         zU2YexZB9zyyJafX9UAhTSLsmxBgnx4E4qwGlBqJCxclBsikRqriCf9H277tXNvHi5
+         35QHlBHe+SBvbWDdRMsPbHvFhnkfmzsajDvPN4sk=
+Date:   Thu, 9 Jun 2022 18:19:17 -0700
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Bill Wendling <morbo@google.com>
+Cc:     Jan Engelhardt <jengelh@inai.de>,
+        Bill Wendling <isanbard@gmail.com>,
         Tony Luck <tony.luck@intel.com>,
         Borislav Petkov <bp@alien8.de>,
         Thomas Gleixner <tglx@linutronix.de>,
@@ -77,100 +55,69 @@ Cc:     Bill Wendling <isanbard@gmail.com>,
         Jaroslav Kysela <perex@perex.cz>,
         Takashi Iwai <tiwai@suse.com>,
         Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
         Tom Rix <trix@redhat.com>,
         Ross Philipson <ross.philipson@oracle.com>,
         Daniel Kiper <daniel.kiper@oracle.com>,
         linux-edac@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
         ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        netfilter-devel@vger.kernel.org, coreteam@netfilter.org,
-        Network Development <netdev@vger.kernel.org>,
+        linux-mm@kvack.org, netfilter-devel@vger.kernel.org,
+        coreteam@netfilter.org, Networking <netdev@vger.kernel.org>,
         alsa-devel@alsa-project.org,
-        clang-built-linux <llvm@lists.linux.dev>,
-        Justin Stitt <jstitt007@gmail.com>,
-        Justin Stitt <justinstitt@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,T_TVD_FUZZY_SECURITIES,URIBL_BLOCKED,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+        clang-built-linux <llvm@lists.linux.dev>
+Subject: Re: [PATCH 00/12] Clang -Wformat warning fixes
+Message-Id: <20220609181917.32e0169b3d33e42b8eb8dcac@linux-foundation.org>
+In-Reply-To: <CAGG=3QU0XJhQKJXLMayOkQSiF2yjBi2p2TEZ9KNTzU5mmye-gg@mail.gmail.com>
+References: <20220609221702.347522-1-morbo@google.com>
+        <20220609152527.4ad7862d4126e276e6f76315@linux-foundation.org>
+        <CAGG=3QXDt9AeCQOAp1311POFRSByJru4=Q=oFiQn3u2iZYk2_w@mail.gmail.com>
+        <nssn2ps-6n86-nqq6-9039-72847760nnq@vanv.qr>
+        <CAGG=3QU0XJhQKJXLMayOkQSiF2yjBi2p2TEZ9KNTzU5mmye-gg@mail.gmail.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Thu, Jun 9, 2022 at 3:25 PM Andrew Morton <akpm@linux-foundation.org> wrote:
->
-> On Thu,  9 Jun 2022 22:16:19 +0000 Bill Wendling <morbo@google.com> wrote:
->
-> > This patch set fixes some clang warnings when -Wformat is enabled.
+On Thu, 9 Jun 2022 16:16:16 -0700 Bill Wendling <morbo@google.com> wrote:
 
-It looks like this series fixes -Wformat-security, which while being a
-member of the -Wformat group, is intentionally disabled in the kernel
-and somewhat orthogonal to enabling -Wformat with Clang.
-
--Wformat is a group flag (like -Wall) that enables multiple other
-flags implicitly.  Reading through
-clang/include/clang/Basic/DiagnosticGroups.td in clang's sources, it
-looks like:
-
-1. -Wformat is a group flag.
-2. -Wformat-security is a member of the -Wformat group; enabling
--Wformat will enable -Wformat-security.
-3. -Wformat itself is a member of -Wmost (never heard of -Wmost, but
-w/e). So -Wmost will enable -Wformat will enable -Wformat-security.
-4. -Wmost is itself a member of -Wall. -Wall enables -Wmost enables
--Wformat enables -Wformat security.
-
-Looking now at Kbuild:
-1. Makefile:523 adds -Wall to KBUILD_CFLAGS.
-2. The same assignment expression but on line 526 immediately disables
--Wformat-security via -Wno-format-security.
-3. scripts/Makefile.extrawarn disables -Wformat via -Wno-format only
-for clang (via guard of CONFIG_CC_IS_CLANG).
-
-We _want_ -Wformat enabled for clang so that developers aren't sending
-patches that trigger -Wformat with GCC (if they didn't happen to test
-their code with both).  It's disabled for clang until we can build the
-kernel cleanly with it enabled, which we'd like to do.
-
-I don't think that we need to enable -Wformat-security to build with
--Wformat for clang.
-
-I suspect based on Randy's comment on patch 1/12 that perhaps -Wformat
-was _added_ to KBUILD_CFLAGS in scripts/Makefile.extrawarn rather than
--Wno-format being _removed_.  The former would re-enable
--Wformat-security due to the grouping logic described above.  The
-latter is probably closer to our ultimate goal of enabling -Wformat
-coverage for clang (or rather not disabling the coverage via
--Wno-format; a double negative).
-
-I'm pretty sure the kernel doesn't support %n in format strings...see
-the comment above vsnprintf in lib/vsprintf.c.  Are there other
-attacks other than %n that -Wformat-security guards against? Maybe
-there's some context on the commit that added -Wno-format-security to
-the kernel?  Regardless, I don't think enabling -Wformat-security is a
-blocker for enabling -Wformat (or...disabling -Wno-format...two sides
-of the same coin) for clang.
-
+> On Thu, Jun 9, 2022 at 4:03 PM Jan Engelhardt <jengelh@inai.de> wrote:
+> > On Friday 2022-06-10 00:49, Bill Wendling wrote:
+> > >On Thu, Jun 9, 2022 at 3:25 PM Andrew Morton <akpm@linux-foundation.org> wrote:
+> > >> On Thu,  9 Jun 2022 22:16:19 +0000 Bill Wendling <morbo@google.com> wrote:
+> > >>
+> > >> > This patch set fixes some clang warnings when -Wformat is enabled.
+> > >>
+> > >> tldr:
+> > >>
+> > >> -       printk(msg);
+> > >> +       printk("%s", msg);
+> > >>
+> > >> Otherwise these changes are a
+> > >> useless consumer of runtime resources.
+> > >
+> > >Calling a "printf" style function is already insanely expensive.
+> > >[...]
+> > >The "printk" and similar functions all have the "__printf" attribute.
+> > >I don't know of a modification to that attribute which can turn off
+> > >this type of check.
 > >
->
-> tldr:
->
-> -       printk(msg);
-> +       printk("%s", msg);
->
-> the only reason to make this change is where `msg' could contain a `%'.
-> Generally, it came from userspace.  Otherwise these changes are a
-> useless consumer of runtime resources.
->
-> I think it would be better to quieten clang in some fashion.
+> > Perhaps you can split vprintk_store in the middle (after the call to
+> > vsnprintf), and offer the second half as a function of its own (e.g.
+> > "puts"). Then the tldr could be
+> >
+> > - printk(msg);
+> > + puts(msg);
+> 
+> That might be a nice compromise. Andrew, what do you think?
+> 
 
-
-
--- 
-Thanks,
-~Nick Desaulniers
+Sure.  It's surprising that we don't already have a puts().
