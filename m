@@ -2,49 +2,45 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B83A545B9E
-	for <lists+linux-edac@lfdr.de>; Fri, 10 Jun 2022 07:21:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 83950545E3C
+	for <lists+linux-edac@lfdr.de>; Fri, 10 Jun 2022 10:11:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345615AbiFJFUl (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Fri, 10 Jun 2022 01:20:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36338 "EHLO
+        id S1347162AbiFJILL (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Fri, 10 Jun 2022 04:11:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346132AbiFJFUk (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Fri, 10 Jun 2022 01:20:40 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83A643B3C2;
-        Thu,  9 Jun 2022 22:20:36 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 43230B830F6;
-        Fri, 10 Jun 2022 05:20:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6278AC34114;
-        Fri, 10 Jun 2022 05:20:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654838433;
-        bh=obJOg0nC5+NFcMbSl//FLvr+ceUwgMoc50Ko3u2Lf80=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=k/PjXRW3Ejm3OWA0ILi7O80zfEKst1OpP7BC0SxRltN5BaZsp6jjKtr3wXBUDO5zB
-         e4Raz/E5WEJs1UM/fE5IzTFZTwR5xBef7mdwfpGnTFs6jcYygdrsalBjswLqjAwcn8
-         xxzJxOn25O10o5RwvKHTCaY9QGZ0KZC/wv3VRoMA=
-Date:   Fri, 10 Jun 2022 07:20:31 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+        with ESMTP id S1347159AbiFJILK (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Fri, 10 Jun 2022 04:11:10 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 697F021E0EF;
+        Fri, 10 Jun 2022 01:11:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=w8J2KWjgjx9J/jKYFe8GjW3jNW9wYeGtv0q5FHV/ys4=; b=GB5aPyYFM6PkAx1k8v49cM2BwJ
+        WcHcAb9jUq2QalpM0aIhDr3+BATD+8EYM+eWrdcimaNJm2xzuBjssr8WpUOHCt60n94XAWc3FLON0
+        Ea9J0QBamM6uWTM+4HzYRBxWYDjskhw+JmLncWTsnFKFqxOWIxsmL4IFLm4L1tdnFjZSI0pPplO8o
+        9sJxX0TlKZO3aKYVSMxNIiHKcE1/kS+w9R9M0LWGRUAImkmbZyNxVDSII1uFSuj5x0bXfi1yfXOOK
+        c3DmI+O3f6cqKS1/lbJzaDxCojVk8Q1W7xF3ZeNStt9QC+dLwogmOOIHoLpghg/0Ij+XccRx5toAG
+        ilnXeRzQ==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nzZin-006gfR-MQ; Fri, 10 Jun 2022 08:10:21 +0000
+Date:   Fri, 10 Jun 2022 01:10:21 -0700
+From:   Christoph Hellwig <hch@infradead.org>
 To:     Bill Wendling <morbo@google.com>
-Cc:     Jan Engelhardt <jengelh@inai.de>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Bill Wendling <isanbard@gmail.com>,
-        Tony Luck <tony.luck@intel.com>,
+Cc:     isanbard@gmail.com, Tony Luck <tony.luck@intel.com>,
         Borislav Petkov <bp@alien8.de>,
         Thomas Gleixner <tglx@linutronix.de>,
         Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
         "H. Peter Anvin" <hpa@zytor.com>,
         Phillip Potter <phil@philpotter.co.uk>,
         Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
         Jan Kara <jack@suse.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
         Pablo Neira Ayuso <pablo@netfilter.org>,
         Jozsef Kadlecsik <kadlec@netfilter.org>,
         Florian Westphal <fw@strlen.de>,
@@ -59,26 +55,23 @@ Cc:     Jan Engelhardt <jengelh@inai.de>,
         Tom Rix <trix@redhat.com>,
         Ross Philipson <ross.philipson@oracle.com>,
         Daniel Kiper <daniel.kiper@oracle.com>,
-        linux-edac@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        linux-mm@kvack.org, netfilter-devel@vger.kernel.org,
-        coreteam@netfilter.org, Networking <netdev@vger.kernel.org>,
-        alsa-devel@alsa-project.org,
-        clang-built-linux <llvm@lists.linux.dev>
-Subject: Re: [PATCH 00/12] Clang -Wformat warning fixes
-Message-ID: <YqLUn3RdZ9HAKZKu@kroah.com>
+        linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-acpi@vger.kernel.org, linux-mm@kvack.org,
+        netfilter-devel@vger.kernel.org, coreteam@netfilter.org,
+        netdev@vger.kernel.org, alsa-devel@alsa-project.org,
+        llvm@lists.linux.dev
+Subject: Re: [PATCH 04/12] blk-cgroup: use correct format characters
+Message-ID: <YqL8bTQxrkQjlSBT@infradead.org>
 References: <20220609221702.347522-1-morbo@google.com>
- <20220609152527.4ad7862d4126e276e6f76315@linux-foundation.org>
- <CAGG=3QXDt9AeCQOAp1311POFRSByJru4=Q=oFiQn3u2iZYk2_w@mail.gmail.com>
- <nssn2ps-6n86-nqq6-9039-72847760nnq@vanv.qr>
- <CAGG=3QU0XJhQKJXLMayOkQSiF2yjBi2p2TEZ9KNTzU5mmye-gg@mail.gmail.com>
+ <20220609221702.347522-5-morbo@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAGG=3QU0XJhQKJXLMayOkQSiF2yjBi2p2TEZ9KNTzU5mmye-gg@mail.gmail.com>
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+In-Reply-To: <20220609221702.347522-5-morbo@google.com>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,41 +79,11 @@ Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Thu, Jun 09, 2022 at 04:16:16PM -0700, Bill Wendling wrote:
-> On Thu, Jun 9, 2022 at 4:03 PM Jan Engelhardt <jengelh@inai.de> wrote:
-> > On Friday 2022-06-10 00:49, Bill Wendling wrote:
-> > >On Thu, Jun 9, 2022 at 3:25 PM Andrew Morton <akpm@linux-foundation.org> wrote:
-> > >> On Thu,  9 Jun 2022 22:16:19 +0000 Bill Wendling <morbo@google.com> wrote:
-> > >>
-> > >> > This patch set fixes some clang warnings when -Wformat is enabled.
-> > >>
-> > >> tldr:
-> > >>
-> > >> -       printk(msg);
-> > >> +       printk("%s", msg);
-> > >>
-> > >> Otherwise these changes are a
-> > >> useless consumer of runtime resources.
-> > >
-> > >Calling a "printf" style function is already insanely expensive.
-> > >[...]
-> > >The "printk" and similar functions all have the "__printf" attribute.
-> > >I don't know of a modification to that attribute which can turn off
-> > >this type of check.
-> >
-> > Perhaps you can split vprintk_store in the middle (after the call to
-> > vsnprintf), and offer the second half as a function of its own (e.g.
-> > "puts"). Then the tldr could be
-> >
-> > - printk(msg);
-> > + puts(msg);
-> 
-> That might be a nice compromise. Andrew, what do you think?
+On Thu, Jun 09, 2022 at 10:16:23PM +0000, Bill Wendling wrote:
+>  	vsnprintf(bdi->dev_name, sizeof(bdi->dev_name), fmt, args);
+> -	dev = device_create(bdi_class, NULL, MKDEV(0, 0), bdi, bdi->dev_name);
+> +	dev = device_create(bdi_class, NULL, MKDEV(0, 0), bdi, "%s", bdi->dev_name);
 
-You would need to do that for all of the dev_printk() variants, so I
-doubt that would ever be all that useful as almost no one should be
-using a "raw" printk() these days.
+Please avoid the overly long line.  But given that bdi names aren't user
+input this warning seems to shoot from the hip a bit.
 
-thanks,
-
-greg k-h
