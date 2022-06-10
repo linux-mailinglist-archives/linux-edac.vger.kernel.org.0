@@ -2,51 +2,51 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF913545F7F
-	for <lists+linux-edac@lfdr.de>; Fri, 10 Jun 2022 10:43:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC780545F84
+	for <lists+linux-edac@lfdr.de>; Fri, 10 Jun 2022 10:44:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243080AbiFJInv (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Fri, 10 Jun 2022 04:43:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60012 "EHLO
+        id S1347688AbiFJIn7 (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Fri, 10 Jun 2022 04:43:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243453AbiFJInu (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Fri, 10 Jun 2022 04:43:50 -0400
-Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8386F205E3;
-        Fri, 10 Jun 2022 01:43:49 -0700 (PDT)
-Received: by mail-pg1-x532.google.com with SMTP id c14so24126729pgu.13;
-        Fri, 10 Jun 2022 01:43:49 -0700 (PDT)
+        with ESMTP id S243453AbiFJInz (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Fri, 10 Jun 2022 04:43:55 -0400
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F1DD205E3;
+        Fri, 10 Jun 2022 01:43:54 -0700 (PDT)
+Received: by mail-pf1-x432.google.com with SMTP id bo5so23296445pfb.4;
+        Fri, 10 Jun 2022 01:43:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Fnzztiv9XavT4IQNbT2bMnkx97CUI42MYbUmzR1Txe8=;
-        b=osnoxH5cTtQfl6/nlBpHZXqOKwchJOW7c6MPa94k864V/AAgr3P3DwrNci01DQafpm
-         fDQbtVzsLAwF9fIP3xHC1EOv/AGJea/tJ+39ydOMHEUSe1keNTiNsY8g8MzUBZ+9Fn/r
-         ROp2MBqAyfmCRvCaGOeUIat8fLsvtZ0LkD0mEu5xC3mrgOOcZdXwO0TnVF7u/Myd1K5A
-         alZvDpvEOPtcXYakblhG3iC5Mn1nVPTB1MCCYtsGNUUvYK31SPL3pFUyBgBY4fiSMVUQ
-         7WUcrM6yd/pmxTfyluVHwiG5dlx68ynTmlXgXHffDN8PaSXTEQvq9x/wxRkTMPCWoZyD
-         tlBw==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=8BinpoYpAj5+YbnUMIdRgheWrCsfK9f4139iiy8RFN8=;
+        b=c/XhrBKhkMfgbYzQNN1cSM+1mGAXc418ORaVkct/ctrTy9VIuIp7Y9VDoZlPJ4BIe7
+         SQi559COCxa/drLRpqeKa95TZY4rxltATjk0+E5QgtLanoowsHHu1biG3uGXZ6cVtoWQ
+         NKMfmQ78Wr64gcJSS5uiFJuy3GjD6N2PKwhqEk9hyUW/qiXwftc1L6NqwiDP6Bp28Mr1
+         MzbQNmAR6STG/yAuRWIO0qx3VdmhMD7HNvEfkDGfyygxOK1CNhjrZ9YlOn7T4lbEFqHT
+         +yuVnfkO/NoD5xSoJSN8aHlntBkHOSt5SNb9xWgpo7qf7BQCPXpcuKHG1ZZK7Vf+ek3+
+         TYNQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Fnzztiv9XavT4IQNbT2bMnkx97CUI42MYbUmzR1Txe8=;
-        b=AnIAzKxhw/sD+oLCd9GzziM/cCCF3PM4IBjUIExontpN6bGWyfYHQOm8P67VixiTAm
-         GAP2dnqqQVzCX3k9r4y9tpydQXWYOiUdwr1156caJ8KHRHGhSIaB0AZJSO5QC3K2S+58
-         N8dnQmB+8cUmOMV0lVFj9tZ1r0NN5X7M33ng1QRbfdAcgf13XljV0ua/ChUPLxdiX4gd
-         tK9ntwGQO2u7b3t8og7BppXuJG8pJj0dvnXteapIsYlziTx56n0tlNK6pnr5+EiuXUIt
-         NPWYZ4btrhOsxby9cEst2eQMfGF76CFdPkPhOcfs4uLgP1p7i2dVdpgwnQ3gSEn9bAmC
-         2Unw==
-X-Gm-Message-State: AOAM530FslniwsW5VUzno9S36XmNhGASg3cmEwLxukXNOzL77d9uQeOD
-        kWKF0JGNNOwFqZ6C+9PStK4=
-X-Google-Smtp-Source: ABdhPJzEYrGovMTXImTbXk9YA87MxIb9ZVrue/3Zo4riO+iJWCIyynA12osskNdE0FBUUb1xsJE/1w==
-X-Received: by 2002:a63:4726:0:b0:3fd:9e47:6b3f with SMTP id u38-20020a634726000000b003fd9e476b3fmr24629903pga.321.1654850628852;
-        Fri, 10 Jun 2022 01:43:48 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=8BinpoYpAj5+YbnUMIdRgheWrCsfK9f4139iiy8RFN8=;
+        b=BYaY8LdPbEY7yaKKMMaVekAbn+OY51B41WbsRHl6wc4msF4g/Zt3EEozwbA9ZZi8QA
+         YHLZPuZZ/D421S54c8x8Hp6DrxvjQ8SD93BjIulIDSaxBdNwCDeeN5OUja8t2lxHRMI6
+         rgDFmQR1P9yl7EsqGS7/CUqW3fpsOieuVYM71jtVNBbU7T6QJE7sYAckk5UMOLDygSYP
+         mZPSHANsEiSj6mFporydqUA9fTirCtHc4wzNBpD0a6qRfEZN2ejzcEvcS+YDm96I8mdJ
+         0VzpFrr7SqEQsIQ4pbSaCC6FQVlvIAvCHfI8dzXhxsTcg3A45AFyWFqStNyHiELz6sXL
+         Fp8A==
+X-Gm-Message-State: AOAM533/ZylE1tpIBp71pWdD2ODs7UQbFPGdLFSI4FVahie9rauKuxlO
+        /u2pqUhMxzsFq3HCiHqm964=
+X-Google-Smtp-Source: ABdhPJzdB4xwMzmg+uDv9DIOKt/Wd6Iu7dWq2cb34QW9s0pyIuAflbJsyYnSPJZG1WMApQRvAzwDJA==
+X-Received: by 2002:a63:ec14:0:b0:401:9e3e:7d23 with SMTP id j20-20020a63ec14000000b004019e3e7d23mr5871023pgh.235.1654850633659;
+        Fri, 10 Jun 2022 01:43:53 -0700 (PDT)
 Received: from localhost.localdomain ([1.200.147.12])
-        by smtp.gmail.com with ESMTPSA id c28-20020aa7953c000000b0051c01aa7d31sm11703568pfp.46.2022.06.10.01.43.44
+        by smtp.gmail.com with ESMTPSA id c28-20020aa7953c000000b0051c01aa7d31sm11703568pfp.46.2022.06.10.01.43.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Jun 2022 01:43:48 -0700 (PDT)
+        Fri, 10 Jun 2022 01:43:53 -0700 (PDT)
 From:   medadyoung@gmail.com
 X-Google-Original-From: ctcchien@nuvoton.com
 To:     rric@kernel.org, james.morse@arm.com, tony.luck@intel.com,
@@ -57,10 +57,12 @@ To:     rric@kernel.org, james.morse@arm.com, tony.luck@intel.com,
         tali.perry1@gmail.com, ctcchien@nuvoton.com
 Cc:     linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
         devicetree@vger.kernel.org, openbmc@lists.ozlabs.org
-Subject: [PATCH v12 0/3] EDAC: nuvoton: Add nuvoton NPCM memory controller driver
-Date:   Fri, 10 Jun 2022 16:43:37 +0800
-Message-Id: <20220610084340.2268-1-ctcchien@nuvoton.com>
+Subject: [PATCH v12 1/3] dt-bindings: edac: nuvoton: add NPCM memory controller
+Date:   Fri, 10 Jun 2022 16:43:38 +0800
+Message-Id: <20220610084340.2268-2-ctcchien@nuvoton.com>
 X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20220610084340.2268-1-ctcchien@nuvoton.com>
+References: <20220610084340.2268-1-ctcchien@nuvoton.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -76,106 +78,103 @@ X-Mailing-List: linux-edac@vger.kernel.org
 
 From: Medad CChien <ctcchien@nuvoton.com>
 
-Support memory controller for Nuvoton NPCM SoC.
+Document devicetree bindings for the Nuvoton BMC NPCM memory controller.
 
-Addressed comments from:
- - Rob Herring : https://lkml.org/lkml/2022/2/25/1103
- - Krzysztof Kozlowski : https://lkml.org/lkml/2022/2/27/63
- - Rob Herring : https://lkml.org/lkml/2022/3/2/828
- - Krzysztof Kozlowski : https://lkml.org/lkml/2022/3/11/294
- - Jonathan Neuschäfer : https://lkml.org/lkml/2022/3/11/1167
- - Krzysztof Kozlowski : https://lkml.org/lkml/2022/3/11/293
- - Rob Herring : https://lkml.org/lkml/2022/3/11/575
- - Krzysztof Kozlowski : https://lkml.org/lkml/2022/3/11/305
- - Avi Fishman : https://lkml.org/lkml/2022/3/13/339
- - Krzysztof Kozlowski : https://lkml.org/lkml/2022/3/14/93
- - Krzysztof Kozlowski : https://lkml.org/lkml/2022/3/14/95
- - Krzysztof Kozlowski : https://lkml.org/lkml/2022/3/15/378
- - Boris Petkov : https://lkml.org/lkml/2022/3/17/561
- - Paul Menzel : https://lkml.org/lkml/2022/4/9/47
- - Paul Menzel : https://lkml.org/lkml/2022/4/11/182
- - Borislav Petkov : https://lkml.org/lkml/2022/4/8/871
- - Paul Menzel : https://lkml.org/lkml/2022/4/9/51
- - Paul Menzel : https://lkml.org/lkml/2022/4/9/65
- - Rob Herring : https://lkml.org/lkml/2022/4/21/681
- - Paul Menzel : https://lkml.org/lkml/2022/5/3/307
- - Paul Menzel : https://lkml.org/lkml/2022/5/3/304
- - Borislav Petkov : https://lkml.org/lkml/2022/5/3/343
- - Paul Menzel https://lkml.org/lkml/2022/5/10/47
- - Paul Menzel https://lkml.org/lkml/2022/5/10/127
-
-Changes since version 12:
- - Pass ecc event count to edac_mc_handle_error.
-
-Changes since version 11:
- - Update MAINTAINERS file
-
-Changes since version 10:
- - Add one more maintainer.
- - Correct indentation in npcm_edac.c.
- - Add datasheet information in commit message.
-
-Changes since version 9:
- - Add a necessary blank line in Kconfig for EDAC_NPCM.
- - Reflow for 75 characters per line in commit message of devicetree file.
- - Remove wrong tags in all the commit message.
- - Reorder content in commit message of NPCM memory controller driver.
-
-Changes since version 8:
- - Add new line character at the end of file of yaml file
-
-Changes since version 7:
- - Refactor npcm_edac.c.
- - Sort strings in npcm_edac.c.
- - Reflow code for 75 characters per line.
- - Summarize errors and warnings reported by kernel test robot.
- - Shorten name of values to make them become more readable in npcm_edac.c.
- - Put spaces between the * and the text in npcm_edac.c.
-
-Changes since version 6:
- - Fix warnings in npcm_edac.c.
- - Add information reported by kernel test robot <lkp@intel.com>.
-
-Changes since version 5:
- - Update commit message for NPCM memory controller driver.
-
-Changes since version 4:
- - Update filename in nuvoton,npcm-memory-controller.yaml.
- - Add COMPILE_TEST in Kconfig.
- - Fix errors in npcm_edac.c.
- - Remove unnecessary checking after of_match_device() and of_device_get_match_data().
-
-Changes since version 3:
- - Rename npcm-edac.yaml as nuvoton,npcm-memory-controller.yaml.
- - Drop 'EDAC' in title of nuvoton,npcm-memory-controller.yaml.
- - Update compatible in nuvoton,npcm-memory-controller.yaml.
-
-Changes since version 2:
- - Update description and compatible in npcm-edac.yaml.
- - Remove address-cells and size-cells in npcm-edac.yaml.
- - Reorder the items of examples in npcm-edac.yaml.
- - Reorder header file in driver.
-
-Changes since version 1:
- - Add nuvoton,npcm750-memory-controller property in NPCM devicetree.
- - Add new property in edac binding document.
- - Add new driver for nuvoton NPCM memory controller.
-
-Medad CChien (3):
-  dt-bindings: edac: nuvoton: add NPCM memory controller
-  ARM: dts: nuvoton: Add memory controller node
-  EDAC: nuvoton: Add NPCM memory controller driver
-
- .../edac/nuvoton,npcm-memory-controller.yaml  |  62 ++
- MAINTAINERS                                   |   2 +
- arch/arm/boot/dts/nuvoton-common-npcm7xx.dtsi |   7 +
- drivers/edac/Kconfig                          |  17 +
- drivers/edac/Makefile                         |   1 +
- drivers/edac/npcm_edac.c                      | 680 ++++++++++++++++++
- 6 files changed, 769 insertions(+)
+Signed-off-by: Medad CChien <ctcchien@nuvoton.com>
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+---
+ .../edac/nuvoton,npcm-memory-controller.yaml  | 62 +++++++++++++++++++
+ MAINTAINERS                                   |  2 +
+ 2 files changed, 64 insertions(+)
  create mode 100644 Documentation/devicetree/bindings/edac/nuvoton,npcm-memory-controller.yaml
- create mode 100644 drivers/edac/npcm_edac.c
 
+diff --git a/Documentation/devicetree/bindings/edac/nuvoton,npcm-memory-controller.yaml b/Documentation/devicetree/bindings/edac/nuvoton,npcm-memory-controller.yaml
+new file mode 100644
+index 000000000000..a5c8d332d1c1
+--- /dev/null
++++ b/Documentation/devicetree/bindings/edac/nuvoton,npcm-memory-controller.yaml
+@@ -0,0 +1,62 @@
++# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/edac/nuvoton,npcm-memory-controller.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Nuvoton NPCM Memory Controller
++
++maintainers:
++  - Medad CChien <ctcchien@nuvoton.com>
++  - Stanley Chu <yschu@nuvoton.com>
++
++description: |
++  The Nuvoton BMC SoC supports DDR4 memory with and without ECC (error
++  correction check).
++
++  The memory controller supports single bit error correction, double bit
++  error detection (in-line ECC in which a section (1/8th) of the memory
++  device used to store data is used for ECC storage).
++
++  Note, the bootloader must configure ECC mode for the memory controller.
++
++properties:
++  compatible:
++    enum:
++      - nuvoton,npcm750-memory-controller
++      - nuvoton,npcm845-memory-controller
++
++  reg:
++    maxItems: 1
++
++  interrupts:
++    minItems: 1
++    items:
++      - description: uncorrectable error interrupt
++      - description: correctable error interrupt
++
++  interrupt-names:
++    minItems: 1
++    items:
++      - const: ue
++      - const: ce
++
++required:
++  - compatible
++  - reg
++  - interrupts
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/interrupt-controller/arm-gic.h>
++    ahb {
++        #address-cells = <2>;
++        #size-cells = <2>;
++        mc: memory-controller@f0824000 {
++            compatible = "nuvoton,npcm750-memory-controller";
++            reg = <0x0 0xf0824000 0x0 0x1000>;
++            interrupts = <GIC_SPI 25 IRQ_TYPE_LEVEL_HIGH>;
++        };
++    };
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 4383949ff654..7f832e6ed4e5 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -2367,12 +2367,14 @@ L:	openbmc@lists.ozlabs.org (moderated for non-subscribers)
+ S:	Supported
+ F:	Documentation/devicetree/bindings/*/*/*npcm*
+ F:	Documentation/devicetree/bindings/*/*npcm*
++F:	Documentation/devicetree/bindings/*/npcm-memory-controller.yaml
+ F:	arch/arm/boot/dts/nuvoton-npcm*
+ F:	arch/arm/mach-npcm/
+ F:	drivers/*/*npcm*
+ F:	drivers/*/*/*npcm*
+ F:	include/dt-bindings/clock/nuvoton,npcm7xx-clock.h
+ 
++
+ ARM/NUVOTON WPCM450 ARCHITECTURE
+ M:	Jonathan Neuschäfer <j.neuschaefer@gmx.net>
+ L:	openbmc@lists.ozlabs.org (moderated for non-subscribers)
 -- 
 2.17.1
 
