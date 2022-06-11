@@ -2,253 +2,195 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BC60546D37
-	for <lists+linux-edac@lfdr.de>; Fri, 10 Jun 2022 21:25:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 20E9A5473BF
+	for <lists+linux-edac@lfdr.de>; Sat, 11 Jun 2022 12:32:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346491AbiFJTZg (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Fri, 10 Jun 2022 15:25:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48460 "EHLO
+        id S231823AbiFKKcS (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Sat, 11 Jun 2022 06:32:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241580AbiFJTZd (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Fri, 10 Jun 2022 15:25:33 -0400
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2062.outbound.protection.outlook.com [40.107.223.62])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD3D41B1994;
-        Fri, 10 Jun 2022 12:25:31 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=DutfFkL4zrCO2BuiqjQYxnfzJrN5gH108LVk/X0Xu7HteECVXnAZMO4seTEjrsHEva1iVwRV9Fl0BHqj37nFSL426K+WiUTaDfCH4FfcAMjMbf1LjxpAfPzKsanpgPP/6Gm4lXraKybydBVy6dlfllZwGaSowicgxWFTot1WKggilkZ6X/7fDc2b9831EGdk/Z71mUB1aIGnZmBI7uB+gBI7LxQVweJWr1eNdj4bEyB+g0F3TaWWyTJb8xtJwQ2sC81lKFZlHr0JBCJ1TinF2dLUgF1n6RLqJpFCDMoD3ZmHq2rjuqre/TQHOrWv6863hIb04hYnaFEcGrji8VTM3Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=EeatT6JL6A31aLzAF0SkdgOX0N3zEa13oPHs6b5dDeg=;
- b=efvd7g+lWRmmBSo4R264P0wXtBNSU+MqzoW2gr9pvQjGylo8s2Y5wnBsAQvIICGBez0KsHevlHiExfpbPJfHj0oXIbZK8Vh+jNy5xoR0cadAskhB8fVWltn/zPbbDqNqpiMv62+ioZnrQ+D7RNDTwKqOY2Y+yU02GRL5iCkHRYYzsCwAIHoF9LfTYb9XwUgfkiZ7choHQvRGl7LTVasSHZm5ldhAQCXEymTKYQv5mSFGuPB1tQ4Swz5yLPU0JPkbn2No1W1AU7uPGAhqzFC23er1d1XOrFe7KovmqUp0v+fcDpAvst6/ablvZn0HXdvc61ZopbubZkxWxSkkYWGxdg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=EeatT6JL6A31aLzAF0SkdgOX0N3zEa13oPHs6b5dDeg=;
- b=2J/+QHNVHQxeJu82PNOjjHyFaRUVV40aQUygmVXcFPLZ0zOwFYEdw7IVlAfkkcWuboZ/oYsZWGnvUOcO6fnMWhkKSX1xe41XnZSV5JOO7DAF96PV6l7k9hb97L7cxEaRLVjbaSuO2B96FN9RrrDQQYdTIIYrNawhOBwXZylYuXg=
-Received: from MWHPR19CA0074.namprd19.prod.outlook.com (2603:10b6:320:1f::12)
- by BL0PR12MB4737.namprd12.prod.outlook.com (2603:10b6:208:8d::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5332.12; Fri, 10 Jun
- 2022 19:25:29 +0000
-Received: from CO1NAM11FT045.eop-nam11.prod.protection.outlook.com
- (2603:10b6:320:1f:cafe::18) by MWHPR19CA0074.outlook.office365.com
- (2603:10b6:320:1f::12) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5332.15 via Frontend
- Transport; Fri, 10 Jun 2022 19:25:29 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- CO1NAM11FT045.mail.protection.outlook.com (10.13.175.181) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5332.12 via Frontend Transport; Fri, 10 Jun 2022 19:25:28 +0000
-Received: from ethanolx50f7host.amd.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.28; Fri, 10 Jun
- 2022 14:25:27 -0500
-From:   Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>
-To:     <x86@kernel.org>, <linux-edac@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     Tony Luck <tony.luck@intel.com>, "H . Peter Anvin" <hpa@zytor.com>,
-        "Yazen Ghannam" <yazen.ghannam@amd.com>,
-        Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>
-Subject: [PATCH v5] x86/mce: Check for writes ignored in MCA_STATUS register
-Date:   Fri, 10 Jun 2022 19:25:15 +0000
-Message-ID: <20220610192515.98540-1-Smita.KoralahalliChannabasappa@amd.com>
-X-Mailer: git-send-email 2.17.1
+        with ESMTP id S230088AbiFKKcO (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Sat, 11 Jun 2022 06:32:14 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 32D98131
+        for <linux-edac@vger.kernel.org>; Sat, 11 Jun 2022 03:32:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1654943531;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=JD69J2sLUFBpAYD/xB2JKlPgocy/ryA5OTBJSpAmob4=;
+        b=XWrpXxXgRM7+4l6CBbJuYGdYIqQY9xSzpIO6DVzvCJWZeo3WwucYpLQJGaxST0iufilh1R
+        rFXyb1hAbMpv9I/kftMufRN2jYOGb8By5zL3Qji+Mmy2MEbNrPTr2tNGyrZIAqz3yVjbGi
+        I70o2b4Ih/KfycB+B2TKDeW8opKqWH0=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-213-Ktr_Xw39O5WI9C1k7jIHXA-1; Sat, 11 Jun 2022 06:32:05 -0400
+X-MC-Unique: Ktr_Xw39O5WI9C1k7jIHXA-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 773A485A580;
+        Sat, 11 Jun 2022 10:32:04 +0000 (UTC)
+Received: from file01.intranet.prod.int.rdu2.redhat.com (file01.intranet.prod.int.rdu2.redhat.com [10.11.5.7])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 6A1A22166B26;
+        Sat, 11 Jun 2022 10:32:04 +0000 (UTC)
+Received: from file01.intranet.prod.int.rdu2.redhat.com (localhost [127.0.0.1])
+        by file01.intranet.prod.int.rdu2.redhat.com (8.14.4/8.14.4) with ESMTP id 25BAW4bZ010370;
+        Sat, 11 Jun 2022 06:32:04 -0400
+Received: from localhost (mpatocka@localhost)
+        by file01.intranet.prod.int.rdu2.redhat.com (8.14.4/8.14.4/Submit) with ESMTP id 25BAW3gg010366;
+        Sat, 11 Jun 2022 06:32:03 -0400
+X-Authentication-Warning: file01.intranet.prod.int.rdu2.redhat.com: mpatocka owned process doing -bs
+Date:   Sat, 11 Jun 2022 06:32:03 -0400 (EDT)
+From:   Mikulas Patocka <mpatocka@redhat.com>
+X-X-Sender: mpatocka@file01.intranet.prod.int.rdu2.redhat.com
+To:     Yazen Ghannam <yazen.ghannam@amd.com>
+cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Borislav Petkov <bp@suse.de>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Tony Luck <tony.luck@intel.com>, linux-kernel@vger.kernel.org,
+        linux-edac@vger.kernel.org
+Subject: Re: Warnings when suspending to disk
+In-Reply-To: <YqD1YjeovGu28xsP@yaz-fattaah>
+Message-ID: <alpine.LRH.2.02.2206110625280.9999@file01.intranet.prod.int.rdu2.redhat.com>
+References: <alpine.LRH.2.02.2205301145540.25840@file01.intranet.prod.int.rdu2.redhat.com> <YpUcf19E+qgb6Eyu@kroah.com> <alpine.LRH.2.02.2205310324410.13770@file01.intranet.prod.int.rdu2.redhat.com> <Ypjr5yIMan1N0bqH@yaz-fattaah>
+ <alpine.LRH.2.02.2206031327190.25179@file01.intranet.prod.int.rdu2.redhat.com> <YqD1YjeovGu28xsP@yaz-fattaah>
+User-Agent: Alpine 2.02 (LRH 1266 2009-07-14)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 421965ae-3d90-4652-2bd2-08da4b16fa86
-X-MS-TrafficTypeDiagnostic: BL0PR12MB4737:EE_
-X-Microsoft-Antispam-PRVS: <BL0PR12MB4737E45CB1BC0C468D0E4C7490A69@BL0PR12MB4737.namprd12.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: VshlL2BvHesT5ZcK5qATEFu9/WT1SIsXzut5t5Bz6PDmX9QFiFZ41e0/miYckrK/ITqytgsOWJ4tpFPHu/9JBXN2spnHB0sQo5dGGYcJL0qUbYVC+GQ6t6CrigVdRX2xHJ5d+Mav/NbRG574Z8stQYC0JZE3Ak3XjBpcml35dEFrM1EMFulYj/JXAFvSxD0b9kwSQNbTLfFNeJPUAf+1X5GgT0uZqr2qWUH+sujb2thawRt/o6AilgmsDERgcU5JGke/55cs03F6Tg3N+GIsUDe99M+nTOJJbxUBPGshnoU2/NFjZPMyElauIBiG9xv5aX7BKKiKh+6f+WVands9V+Twqmj/fYdVEGP1gBSaQYOC73slFBKgiWCc7XaYWZkExX4NOhop1YDdU0WwlCQMEWpNxAnk7lQ/oDUagM7oHG11EJxwgH+IGNqCFcLSGmYlaPhFc7Zi12Zljd6aumIM6dMQn5Fy4Mk4fToOFrN0UAejkMBljsNMILnEgbkMH/+tyt0cZsa7sEDjBwkWm0TrLsyg1dxA+KAoq/Q+PB4Cja2FN0hdD8aQCkk0QijNkVFC70mDnEBiF0lKjU20kunhtX0cAXxP1RpzJiIt2bkNCCzBHLQyUU7qQMTgoxxStJWRMXEZuxa1T+7SwHG3lD73vYyeigVTUV+ICQOiKvYmeBXij51NyJsUTU0I4SwiKwLPNPK9I5+fQKk7uqFxojEp0exFjO/P4A323x5dFYo+e7UlnLB0sEmphPToH1rt9hw6XZSSodkf1WNpqTmFzj/nVJqJEpqvlThdPwv5d7WPFM30dotEGScYd2ixq17iysp6XedYK5sthKudxOw7rMtW6vLR6MLxEy4hvhVbnfRDskI=
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230016)(4636009)(40470700004)(36840700001)(46966006)(36756003)(356005)(82310400005)(70586007)(70206006)(8676002)(316002)(5660300002)(54906003)(81166007)(110136005)(4326008)(36860700001)(2906002)(7696005)(6666004)(26005)(336012)(86362001)(186003)(1076003)(8936002)(83380400001)(47076005)(16526019)(40460700003)(508600001)(966005)(426003)(2616005)(21314003)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Jun 2022 19:25:28.8932
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 421965ae-3d90-4652-2bd2-08da4b16fa86
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT045.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL0PR12MB4737
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: TEXT/PLAIN; charset=US-ASCII
+X-Scanned-By: MIMEDefang 2.78 on 10.11.54.6
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-According to Section 2.1.16.3 under HWCR[McStatusWrEn] in "PPR for AMD
-Family 19h, Model 01h, Revision B1 Processors - 55898 Rev 0.35 - Feb 5,
-2021", the status register may sometimes enforce write ignored behavior
-independent of the value of HWCR[McStatusWrEn] depending on the platform
-settings.
 
-Hence, evaluate for writes ignored for MCA_STATUS to determine if hardware
-error injection is possible. Perform this evaluation early during module
-init and store the result in the static "hw_injection_possible" variable.
-Query this variable for subsequent error injections and limit checking for
-MCA_STATUS only once on driver init.
 
-Avoid exporting mce_flags into modules and check for smca feature from
-'X86_FEATURE_SMCA' flag directly.
+On Wed, 8 Jun 2022, Yazen Ghannam wrote:
 
-Link: https://bugzilla.kernel.org/show_bug.cgi?id=206537
-Signed-off-by: Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>
----
-Link:
-https://lkml.kernel.org/r/20220214233640.70510-2-Smita.KoralahalliChannabasappa@amd.com
-v2:
-	msr_ops -> mca_msr_reg().
-	simulation -> injection.
-	pr_info() -> pr_err().
-	Aligned on ",".
-v3:
-	Removed "x86/mce: Use mca_msr_reg() in prepare_msrs()" patch.
-	and made changes on the existing MCx_{STATUS, ADDR, MISC} macros.
-v4:
-	Simplified the code by just checking for writes ignored behavior in
-	MCA_STATUS register.
-	Introduced prepare_mca_status() and performed writes ignored checks
-	inside the function.
-	Rephrased error message.
-v5:
-	Evaluated for writes ignored early and only once during module init.
-	Introduced "hw_injection_possible" variable to store the result of
-	writes ignored behavior of MCA_STATUS. This variable is checked
-	before performing subsequent hw error injections.
----
- arch/x86/kernel/cpu/mce/inject.c   | 50 +++++++++++++++++++++++++++++-
- arch/x86/kernel/cpu/mce/internal.h |  2 +-
- 2 files changed, 50 insertions(+), 2 deletions(-)
+> On Fri, Jun 03, 2022 at 01:34:26PM -0400, Mikulas Patocka wrote:
+> 
+> ...
+> 
+> > I tried this patch and it doesn't help.
+> 
+> Thanks Mikulas for testing.
+> 
+> I'm still not able to reproduce the exact issue. But I was able to reproduce
+> the same symptom by hacking the kernel and doing CPU hotplug.
 
-diff --git a/arch/x86/kernel/cpu/mce/inject.c b/arch/x86/kernel/cpu/mce/inject.c
-index 5fbd7ffb3233..ac5582691530 100644
---- a/arch/x86/kernel/cpu/mce/inject.c
-+++ b/arch/x86/kernel/cpu/mce/inject.c
-@@ -33,6 +33,8 @@
- 
- #include "internal.h"
- 
-+static bool hw_injection_possible = true;
-+
- /*
-  * Collect all the MCi_XXX settings
-  */
-@@ -339,6 +341,8 @@ static int __set_inj(const char *buf)
- 
- 	for (i = 0; i < N_INJ_TYPES; i++) {
- 		if (!strncmp(flags_options[i], buf, strlen(flags_options[i]))) {
-+			if (i > SW_INJ && !hw_injection_possible)
-+				continue;
- 			inj_type = i;
- 			return 0;
- 		}
-@@ -376,7 +380,11 @@ static ssize_t flags_write(struct file *filp, const char __user *ubuf,
- 
- 	err = __set_inj(__buf);
- 	if (err) {
--		pr_err("%s: Invalid flags value: %s\n", __func__, __buf);
-+		pr_err("%s: Invalid flags value: %s: %s\n", __func__,
-+			(!hw_injection_possible
-+			  ? " (SW-only injection possible on this platform)"
-+			  : ""),
-+		       __buf);
- 		return err;
- 	}
- 
-@@ -501,6 +509,8 @@ static void do_inject(void)
- 	unsigned int cpu = i_mce.extcpu;
- 	u8 b = i_mce.bank;
- 
-+	pr_info("Using '%s' error injection method", flags_options[inj_type]);
-+
- 	i_mce.tsc = rdtsc_ordered();
- 
- 	i_mce.status |= MCI_STATUS_VAL;
-@@ -717,11 +727,49 @@ static void __init debugfs_init(void)
- 				    &i_mce, dfs_fls[i].fops);
- }
- 
-+static void check_hw_inj_possible(void)
-+{
-+	u8 bank;
-+
-+	/*
-+	 * This behavior exists only on SMCA systems though its not directly
-+	 * related to SMCA.
-+	 */
-+	if (!cpu_feature_enabled(X86_FEATURE_SMCA))
-+		return;
-+
-+	get_cpu();
-+
-+	for (bank = 0; bank < MAX_NR_BANKS; ++bank) {
-+		u64 status = MCI_STATUS_VAL, ipid;
-+
-+		rdmsrl(MSR_AMD64_SMCA_MCx_IPID(bank), ipid);
-+
-+		if (!ipid)
-+			continue;
-+
-+		wrmsrl(mca_msr_reg(bank, MCA_STATUS), status);
-+		rdmsrl(mca_msr_reg(bank, MCA_STATUS), status);
-+
-+		if (!status) {
-+			hw_injection_possible = false;
-+			pr_warn("Platform does not allow error injection, try using APEI EINJ instead.\n");
-+		}
-+
-+		/* Exit after the check for first available MCA bank */
-+		break;
-+	}
-+
-+	put_cpu();
-+}
-+
- static int __init inject_init(void)
- {
- 	if (!alloc_cpumask_var(&mce_inject_cpumask, GFP_KERNEL))
- 		return -ENOMEM;
- 
-+	check_hw_inj_possible();
-+
- 	debugfs_init();
- 
- 	register_nmi_handler(NMI_LOCAL, mce_raise_notify, 0, "mce_notify");
-diff --git a/arch/x86/kernel/cpu/mce/internal.h b/arch/x86/kernel/cpu/mce/internal.h
-index 4ae0e603f7fa..7e03f5b7f6bd 100644
---- a/arch/x86/kernel/cpu/mce/internal.h
-+++ b/arch/x86/kernel/cpu/mce/internal.h
-@@ -211,7 +211,7 @@ noinstr u64 mce_rdmsrl(u32 msr);
- 
- static __always_inline u32 mca_msr_reg(int bank, enum mca_msr reg)
- {
--	if (mce_flags.smca) {
-+	if (cpu_feature_enabled(X86_FEATURE_SMCA)) {
- 		switch (reg) {
- 		case MCA_CTL:	 return MSR_AMD64_SMCA_MCx_CTL(bank);
- 		case MCA_ADDR:	 return MSR_AMD64_SMCA_MCx_ADDR(bank);
--- 
-2.17.1
+I also see the warnings when disabling cores.
+
+> Can you please try the following patch? This seems to work in my hacked case.
+> I also tried to write out a detailed description of the issue to the best of
+> my knowledge.
+
+This patch works - there are no longer any warnings on CPU disable or on 
+suspend to disk.
+
+Mikulas
+
+> Thanks,
+> Yazen
+> 
+> ========================
+> 
+> >From d1fa5cdc7f29bf810215f0a83f16bc7435e55240 Mon Sep 17 00:00:00 2001
+> From: Yazen Ghannam <yazen.ghannam@amd.com>
+> Date: Mon, 6 Jun 2022 19:45:56 +0000
+> Subject: [PATCH] x86/MCE/AMD: Decrement threshold_bank refcount when removing
+>  threshold blocks
+> 
+> AMD systems from Family 10h to 16h share MCA bank 4 across multiple CPUs.
+> Therefore, the threshold_bank structure for bank 4, and its threshold_block
+> structures, will be initialized once at boot time. And the kobject for the
+> shared bank will be added to each of the CPUs that share it. Furthermore,
+> the threshold_blocks for the shared bank will be added again to the bank's
+> kobject. These additions will increase the refcount for the bank's kobject.
+> 
+> For example, a shared bank with two blocks and shared across two CPUs will
+> be set up like this:
+> 
+> CPU0 init
+>   bank create and add; bank refcount = 1; threshold_create_bank()
+>     block 0 init and add; bank refcount = 2; allocate_threshold_blocks()
+>     block 1 init and add; bank refcount = 3; allocate_threshold_blocks()
+> CPU1 init
+>   bank add; bank refcount = 3; threshold_create_bank()
+>     block 0 add; bank refcount = 4; __threshold_add_blocks()
+>     block 1 add; bank refcount = 5; __threshold_add_blocks()
+> 
+> Currently in threshold_remove_bank(), if the bank is shared then
+> __threshold_remove_blocks() is called. Here the shared bank's kobject and
+> the bank's blocks' kobjects are deleted. This is done on the first call
+> even while the structures are still shared. Subsequent calls from other
+> CPUs that share the structures will attempt to delete the kobjects.
+> 
+> During kobject_del(), kobject->sd is removed. If the kobject is not part of
+> a kset with default_groups, then subsequent kobject_del() calls seem safe
+> even with kobject->sd == NULL.
+> 
+> Originally, the AMD MCA thresholding structures did not use default_groups.
+> And so the above behavior was not apparent.
+> 
+> However, a recent change implemented default_groups for the thresholding
+> structures. Therefore, kobject_del() will go down the sysfs_remove_groups()
+> code path. In this case, the first kobject_del() may succeed and remove
+> kobject->sd. But subsequent kobject_del() calls will give a WARNing in
+> kernfs_remove_by_name_ns() since kobject->sd == NULL.
+> 
+> Use kobject_put() on the shared bank's kobject when "removing" blocks. This
+> decrements the bank's refcount while keeping kobjects enabled until the
+> bank is no longer shared. At that point, kobject_put() will be called on
+> the blocks which drives their refcount to 0 and deletes them and also
+> decrementing the bank's refcount. And finally kobject_put() will be called
+> on the bank driving its refcount to 0 and deleting it.
+> 
+> With this patch and the example above:
+> 
+> CPU1 shutdown
+>   bank is shared; bank refcount = 5; threshold_remove_bank()
+>     block 0 put parent bank; bank refcount = 4; __threshold_remove_blocks()
+>     block 1 put parent bank; bank refcount = 3; __threshold_remove_blocks()
+> CPU0 shutdown
+>   bank is no longer shared; bank refcount = 3; threshold_remove_bank()
+>     block 0 put block; bank refcount = 2; deallocate_threshold_blocks()
+>     block 1 put block; bank refcount = 1; deallocate_threshold_blocks()
+>   put bank; bank refcount = 0; threshold_remove_bank()
+> 
+> Signed-off-by: Yazen Ghannam <yazen.ghannam@amd.com>
+
+Tested-by: Mikulas Patocka <mpatocka@redhat.com>
+
+> ---
+>  arch/x86/kernel/cpu/mce/amd.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/arch/x86/kernel/cpu/mce/amd.c b/arch/x86/kernel/cpu/mce/amd.c
+> index 2b7ee4a6c6ba..680b75d23a03 100644
+> --- a/arch/x86/kernel/cpu/mce/amd.c
+> +++ b/arch/x86/kernel/cpu/mce/amd.c
+> @@ -1260,10 +1260,10 @@ static void __threshold_remove_blocks(struct threshold_bank *b)
+>  	struct threshold_block *pos = NULL;
+>  	struct threshold_block *tmp = NULL;
+>  
+> -	kobject_del(b->kobj);
+> +	kobject_put(b->kobj);
+>  
+>  	list_for_each_entry_safe(pos, tmp, &b->blocks->miscj, miscj)
+> -		kobject_del(&pos->kobj);
+> +		kobject_put(b->kobj);
+>  }
+>  
+>  static void threshold_remove_bank(struct threshold_bank *bank)
+> -- 
+> 2.25.1
+> 
 
