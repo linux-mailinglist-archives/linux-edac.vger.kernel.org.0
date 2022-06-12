@@ -2,121 +2,149 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 435F75479ED
-	for <lists+linux-edac@lfdr.de>; Sun, 12 Jun 2022 13:32:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A51C1547B0A
+	for <lists+linux-edac@lfdr.de>; Sun, 12 Jun 2022 18:23:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230295AbiFLLcd (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Sun, 12 Jun 2022 07:32:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50400 "EHLO
+        id S231528AbiFLQX4 (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Sun, 12 Jun 2022 12:23:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236425AbiFLLcb (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Sun, 12 Jun 2022 07:32:31 -0400
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0FD22C67F
-        for <linux-edac@vger.kernel.org>; Sun, 12 Jun 2022 04:32:29 -0700 (PDT)
-Received: by mail-ed1-x52a.google.com with SMTP id d14so3908497eda.12
-        for <linux-edac@vger.kernel.org>; Sun, 12 Jun 2022 04:32:29 -0700 (PDT)
+        with ESMTP id S229452AbiFLQXz (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Sun, 12 Jun 2022 12:23:55 -0400
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21ACC5E15C
+        for <linux-edac@vger.kernel.org>; Sun, 12 Jun 2022 09:23:54 -0700 (PDT)
+Received: by mail-wm1-x331.google.com with SMTP id c130-20020a1c3588000000b0039c6fd897b4so354922wma.4
+        for <linux-edac@vger.kernel.org>; Sun, 12 Jun 2022 09:23:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:sender:from:date:message-id:subject:to;
-        bh=9FfohXFhB1sP403VxH1swwcmiEO4r97TnueS6gdgla0=;
-        b=HutqJca9cz10+fhpLBqF5pkCfmNuVpB/QmLPLH2RoeSpp+88FPj9DCRLsYlrV60IRI
-         yfGt8kTQJ3+U5hD05c9eQjOTUDndc3kFmmCKtoZcJTw6iEXGeaPRZUwBIb2hL10aHe3A
-         7EbObtS3e/RUerZDq6P0if6rMoEsasBL0IeuLIxwTHpNu3CceyHT/j7BTvAXuGh/jXn3
-         mZ2PnrRRlC0NrnYO4yqGRbm/BexgsBU/ybIJL5KQreT4XiaErEnB2fMcohiz3+qsoqp8
-         Xl5GKvTeAgRog3ZkHFVKaziM00o+HwG/FDCDlODVc32UellWfe2pLGmko+Rt8jRhNdyv
-         b+pA==
+        d=philpotter-co-uk.20210112.gappssmtp.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=Bp1t0MAX0vF2MFrixDjLhlmP3KLo6hgWxyC3M+usaE8=;
+        b=R/sEjCaZtQEnfPFaK+UnnTh0wg4bRV6svzZB+oS2hfNNJzpfcRRfcZmCJOP8EySmQd
+         g+xcBgfqADhJshLEY78CKFvKjnbnDQTiZlNPaYQ4krJN4DIZr0DcF9zio2w2kHV8Sq+E
+         bLM/i/SzIos3D8gnl2FjBUdtUwk4BOXJ/p4Gz7UFvasXpv6HXMR+5PupsiPSPR0TnZya
+         F4NsEqC4DRhyBo+zGRqyKs6C3D88H2ZM6iKWsmgHMRXInXx2VY+xkqjwHyZXLhqJ9DIi
+         GLX8O48hgFb+6agiYOXIOISy12Ll9TGb3KH9UckWOW5W3iIlklqwzjxaxwQD5RPR2Sdf
+         1JcA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
-         :to;
-        bh=9FfohXFhB1sP403VxH1swwcmiEO4r97TnueS6gdgla0=;
-        b=gMslvMuLP7O3Bke97ua57uAz2L3Cy3fMzK5ELxBZ5RfX0PTvOeiqG2TYOmuAM8j/EY
-         WhyGzQEhKFqqjAOoRoQlKb5d73hzoXw6q1haOjnSvGjy+AB2uH+rDho1HQzNqL3TykDa
-         MM5IFz3GrK3Q7UHWb4DJPfxSyRXiOefmIdKs51mqaIEReO+V6i4P14kfurvRZzAUe9ZA
-         xkiY/IGGo8E3YCA6CgCqsVmLNfUrbhG8y5HW5R3UTJxj45LQfg6OOuySusULqybY/Kye
-         zpSUsQixmGb82ohLv6ykqF6RTI2seu3zEk0kL1DG59Q53QLAmK0GXX7/Nxp4Mq647vxG
-         RmyA==
-X-Gm-Message-State: AOAM532Z5BkxO/HUVctL5ODMqPRL0Aa854xgBIfoJejmH3Hi3CUzJhEc
-        mAT5rJTaVjmZVLqObXp0543fZNKEZFci/2iUGXU=
-X-Google-Smtp-Source: ABdhPJwdx/ts4yT81TfY9H4jSVwEQwJ2e/fPBdkfFmfsPIbmOM0FEcnF1voZtHMiIfkmIVV3xB+6Fmj8j1iYk6t89oo=
-X-Received: by 2002:a05:6402:d05:b0:425:b5c8:faeb with SMTP id
- eb5-20020a0564020d0500b00425b5c8faebmr60549161edb.273.1655033547542; Sun, 12
- Jun 2022 04:32:27 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=Bp1t0MAX0vF2MFrixDjLhlmP3KLo6hgWxyC3M+usaE8=;
+        b=vVVIwP+UzTRs32YQs+Mp2/CPLt+uglzU+LWAl3rk3HznIHrPyV8YRsKVuczohuCmh2
+         1ph7klrQzzmCZCeSdKPcWp+qbhI+Nxkl/ynqymyh2ok5VIYk4QmLuiHMQt5jTkA0tedH
+         W0F+7MCuBeezSQVJ8k2PSj/CVbwPZ8ZpyqAdO8LpJEIv2e66FVAa50IAbFv5VynAeItD
+         buyilS9OCfYpGHUU+cpRDde0mXBfd59O5GL5DEpe6GXkXYcRQNY9VkMBypTdh3CISuMd
+         7E/5QvPSE22nnuNr6Aa+3I7eJBdzni/bvBg8RRCtUBVTUns7Kb2z6xGOsiTb2YXV/6lc
+         vNrA==
+X-Gm-Message-State: AOAM532rjYLjqW2qiNm6SXVmwXNX1F++dzrWR2TNIFFWvX8gPVtTBAyG
+        gxDZ2M/T2E9HAVhRqsTCAS5yXQ==
+X-Google-Smtp-Source: ABdhPJyPL0K+xAMvnRb2ONEX1jWjnGDkkA7zHOBZU3POgTFS7NF7cqaibZCvN8D1E1ysUwm9U4xflg==
+X-Received: by 2002:a05:600c:2682:b0:39c:8ec6:57d9 with SMTP id 2-20020a05600c268200b0039c8ec657d9mr3559545wmt.99.1655051032703;
+        Sun, 12 Jun 2022 09:23:52 -0700 (PDT)
+Received: from equinox (2.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.a.1.e.e.d.f.d.0.b.8.0.1.0.0.2.ip6.arpa. [2001:8b0:dfde:e1a0::2])
+        by smtp.gmail.com with ESMTPSA id bh8-20020a05600c3d0800b003942a244ee6sm6005715wmb.43.2022.06.12.09.23.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 12 Jun 2022 09:23:51 -0700 (PDT)
+Date:   Sun, 12 Jun 2022 17:23:47 +0100
+From:   Phillip Potter <phil@philpotter.co.uk>
+To:     Bill Wendling <morbo@google.com>
+Cc:     isanbard@gmail.com, Tony Luck <tony.luck@intel.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Phillip Potter <phil@philpotter.co.uk>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Jan Kara <jack@suse.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Pablo Neira Ayuso <pablo@netfilter.org>,
+        Jozsef Kadlecsik <kadlec@netfilter.org>,
+        Florian Westphal <fw@strlen.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>,
+        Ross Philipson <ross.philipson@oracle.com>,
+        Daniel Kiper <daniel.kiper@oracle.com>,
+        linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-acpi@vger.kernel.org, linux-mm@kvack.org,
+        netfilter-devel@vger.kernel.org, coreteam@netfilter.org,
+        netdev@vger.kernel.org, alsa-devel@alsa-project.org,
+        llvm@lists.linux.dev
+Subject: Re: [PATCH 08/12] cdrom: use correct format characters
+Message-ID: <YqYTExy0IpVbunBL@equinox>
+References: <20220609221702.347522-1-morbo@google.com>
+ <20220609221702.347522-9-morbo@google.com>
 MIME-Version: 1.0
-Sender: mariajohn0331@gmail.com
-Received: by 2002:a54:3a4a:0:0:0:0:0 with HTTP; Sun, 12 Jun 2022 04:32:26
- -0700 (PDT)
-From:   MARIA ROLAND <mariaroland74@gmail.com>
-Date:   Sun, 12 Jun 2022 04:32:26 -0700
-X-Google-Sender-Auth: Co32K8Guj2mgf2O-dHQRzwqxqMY
-Message-ID: <CAEmdD2WEq8iFu03odoUHJOLqaAfOodUu9x8Et1FumwjSBv0eHw@mail.gmail.com>
-Subject: Greetings,
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=5.1 required=5.0 tests=ADVANCE_FEE_5_NEW_MONEY,
-        BAYES_60,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,LOTS_OF_MONEY,MONEY_FRAUD_8,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNDISC_MONEY autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2a00:1450:4864:20:0:0:0:52a listed in]
-        [list.dnswl.org]
-        *  1.5 BAYES_60 BODY: Bayes spam probability is 60 to 80%
-        *      [score: 0.7116]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [mariajohn0331[at]gmail.com]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [mariaroland74[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        *  0.0 LOTS_OF_MONEY Huge... sums of money
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  0.0 MONEY_FRAUD_8 Lots of money and very many fraud phrases
-        *  3.0 ADVANCE_FEE_5_NEW_MONEY Advance Fee fraud and lots of money
-        *  0.6 UNDISC_MONEY Undisclosed recipients + money/fraud signs
-X-Spam-Level: *****
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220609221702.347522-9-morbo@google.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-Greetings,
+On Thu, Jun 09, 2022 at 10:16:27PM +0000, Bill Wendling wrote:
+> From: Bill Wendling <isanbard@gmail.com>
+> 
+> When compiling with -Wformat, clang emits the following warnings:
+> 
+> drivers/cdrom/cdrom.c:3454:48: error: format string is not a string literal (potentially insecure) [-Werror,-Wformat-security]
+>         ret = scnprintf(info + *pos, max_size - *pos, header);
+>                                                       ^~~~~~
+> 
+> Use a string literal for the format string.
+> 
+> Link: https://github.com/ClangBuiltLinux/linux/issues/378
+> Signed-off-by: Bill Wendling <isanbard@gmail.com>
+> ---
+>  drivers/cdrom/cdrom.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/cdrom/cdrom.c b/drivers/cdrom/cdrom.c
+> index 416f723a2dbb..52b40120c76e 100644
+> --- a/drivers/cdrom/cdrom.c
+> +++ b/drivers/cdrom/cdrom.c
+> @@ -3451,7 +3451,7 @@ static int cdrom_print_info(const char *header, int val, char *info,
+>  	struct cdrom_device_info *cdi;
+>  	int ret;
+>  
+> -	ret = scnprintf(info + *pos, max_size - *pos, header);
+> +	ret = scnprintf(info + *pos, max_size - *pos, "%s", header);
+>  	if (!ret)
+>  		return 1;
+>  
+> -- 
+> 2.36.1.255.ge46751e96f-goog
+> 
 
-I sent this mail praying it will find you in a good condition, since I
-myself am in a very critical health condition in which I sleep every
-night  without knowing if I may be alive to see the next day. I am
-Mrs. Maria Roland, a widow suffering from a long time illness. I have
-some funds I  inherited from my late husband, the sum of
-($11,000,000.00) my Doctor told me recently that I have serious
-sickness which is a cancer problem. What disturbs me most is my stroke
-sickness. Having known my condition, I decided to donate this fund to
-a good person that will utilize it the way I am going to instruct
-herein. I need a very honest God.
+Hi Bill,
 
-fearing a person who can claim this money and use it for Charity
-works, for orphanages, widows and also build schools for less
-privileges that will be named after my late husband if possible and to
-promote the word of God and the effort that the house of God is
-maintained. I do not want a situation where this money will be used in
-an ungodly manner. That's why I' making this decision. I'm not afraid
-of death so I know where I'm going. I accept this decision because I
-do not have any child who will inherit this money after I die. Please
-I want your sincere and urgent answer to know if you will be able to
-execute this project, and I will give you more information on how the
-fund will be transferred to your bank account. I am waiting for your reply,
+Thank you for the patch, much appreciated.
 
-May God Bless you,
+Looking at this though, all callers of cdrom_print_info() provide 'header'
+as a string literal defined within the driver, when making the call.
+Therefore, I'm not convinced this change is necessary for cdrom.c -
+that said, in this particular use case I don't think it would hurt
+either.
 
-Mrs. Maria Roland,
+I've followed the other responses on parts of this series, so I
+understand that a different solution is potentially in the works.
+Thought I'd respond anyway though out of courtesy.
+
+All the best,
+Phil (Uniform CDROM Maintainer)
