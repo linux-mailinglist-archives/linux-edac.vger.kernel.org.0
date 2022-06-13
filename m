@@ -2,57 +2,57 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 18BC1549E5D
-	for <lists+linux-edac@lfdr.de>; Mon, 13 Jun 2022 22:06:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A0B63549EA3
+	for <lists+linux-edac@lfdr.de>; Mon, 13 Jun 2022 22:12:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243364AbiFMUGL (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Mon, 13 Jun 2022 16:06:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44438 "EHLO
+        id S1349838AbiFMUMx (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Mon, 13 Jun 2022 16:12:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242358AbiFMUFw (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Mon, 13 Jun 2022 16:05:52 -0400
-Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1DCABA54F
-        for <linux-edac@vger.kernel.org>; Mon, 13 Jun 2022 11:40:21 -0700 (PDT)
-Received: by mail-lj1-x230.google.com with SMTP id d18so7180642ljc.4
-        for <linux-edac@vger.kernel.org>; Mon, 13 Jun 2022 11:40:21 -0700 (PDT)
+        with ESMTP id S239269AbiFMUMo (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Mon, 13 Jun 2022 16:12:44 -0400
+Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A90B425EA
+        for <linux-edac@vger.kernel.org>; Mon, 13 Jun 2022 11:47:31 -0700 (PDT)
+Received: by mail-lj1-x232.google.com with SMTP id s10so7147166ljh.12
+        for <linux-edac@vger.kernel.org>; Mon, 13 Jun 2022 11:47:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=SW1J4TxrbvE0J+NvABWMWUwXUDHi8O6WM5U0kmdXuvs=;
-        b=YcOMN9J8NO13M1lsQJ09hM7cCxE8MS8M7Gv1MrIUfDqyrowxYIz0M4kq/4DzZS1VvJ
-         X+WwlBoGf6CzRGJ8G1EjU7INISE4kKU0Z/BuQnIyh3+0qLr9mDdeVrnpP8AHGXywflLI
-         gn4vt4eUHsaKF6mpPhECp6pZ2U/kiDWVsOWPKlO9R4E2oApQGpBRq/kLZZK9nbrMH8Vs
-         rXrYvlBgBc2y9ISFPMRSym0HBSe8rRlM0D6NK0Ddpva36u6S2KIqGMmwmrN+Mz2tgqDy
-         Zm5vDhOTpucmZ8RQFhCIrZBcGzE3vnnOhB0faQ7Lbps3yLPlEQLVSwLrlcC8TPCjgrM+
-         10Rw==
+        bh=gnUSbe8CiTQ19HP1QRaMovzHPwVV5AH7oRueQxzbr2w=;
+        b=psqvyg4bPOOObXvl93Zxro9XA/ODLoG6iBN8VzURq2kWrUR7F3BHDeeHNMu0CFKyIh
+         Niks5hKvSuVELNC275GXW5lNVLONvG604XONrgXtzQCBbODYI+FiNC4UHOy01ziKEw6P
+         PnJJ8X8mCYdNE116ke64zsX9sSqEcXHCfXLltO9UXIpqgB60u1m1gOJgKSvqZ2Vu7Rt3
+         Fab5Mj4u35jsb3FBf1q2tLM98qhaB60LVo3lH+ODCh+pfDogtGE59OZmPCThjZAo5F3C
+         uARnmPJ0E0/9jMWP5IEUMjK7PRjAVPO04tktB/Od36POLALwftkbezadySNHJrj1LtR7
+         bRTQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=SW1J4TxrbvE0J+NvABWMWUwXUDHi8O6WM5U0kmdXuvs=;
-        b=SL1B5N5j7oyehVGjlsXTgyJg+Y5M0va6D1iMELxt8nAhh5UI5VNSLzZ4v2fS7iC0rc
-         VI5cNI/y2rmY5vbn+g0rnmlLxmPW7vV3clzA6b89oSqZT4BwtaAzbIQeeViclqdjKG52
-         meBp9yTaUZ69d5ySykhy8GOImA4p7+aRMwaBHPVVtEgmc6BIgiNcxfZp5jKUnyttUsKr
-         KIO3ifktnt8Zbz175xwaRK0iMV4kBC34rp7kZjs72XE9abf1znYiNz3iBTepZvKmuRTz
-         v26fNDOwplcNP8xsNp4szeLDo3e41KQpn16jI9CeVbmyITbtPyRDh5jRJ4E0if60q94/
-         p9qg==
-X-Gm-Message-State: AJIora+ye9P997NlbSL+EzLxkxbXyRAnt1PGwg/0rNJX+NueU0qa+hhA
-        JzYBXEor3aNJFfUhiliOB8AFetA0ZLci3AMEeVnH
-X-Google-Smtp-Source: AGRyM1sc5PXhrpO/NALvqllDtgfvAmsGr0nMSO+nh757PXQ+6BPBVtmdCaZdkhadYmRsZLgDd/bC0jYF0EiuvoWxC2E=
+        bh=gnUSbe8CiTQ19HP1QRaMovzHPwVV5AH7oRueQxzbr2w=;
+        b=Tui5/Zi8FcGRh8/YqhE0RS1VQy3TFeGPW7FFC1EyuXxL2D53ytQaXBsV0wD/cuYxIt
+         +G1Wklo98jZS2tLKApoI5JrCI5ZSzKHzsMtvoxVicdMYXCSHCm7ZcGNfSA2EhbHuC54Q
+         sExk6tC2TIbqoX1Rmm3f8HziNidUsaIh6upCGR5T0nueNTV0gMgICSelegiYvi2SEhGA
+         5wjk1sUR/l+8O5VtIQi8oLSe8WabQH6urysnVxMaE1fE1+bBLg29crLKW67S4z3a20Wa
+         h5/Q9ua+6SEGHU4C5SiqVi2YpXC74XY3KheIoNUkjUly2hud4e+0QhDQYj4n77lQYRsj
+         q3oQ==
+X-Gm-Message-State: AJIora8lgS5VGfb7QwUydpuKOTE4RD7LPcV1ZIjmGD9+eTSth/0KCq3X
+        aKcQvi/7nC9uBBfU8rIyQE1P9AhvBh9flht4HHta
+X-Google-Smtp-Source: AGRyM1uMA1RswQj/kRbYWxpa2gpbkIqW/H3Lhp9QgKWhkKjVKtC7uz71CWdrVgWOGoL64GzPA+QRw4qUugKbzHueGjo=
 X-Received: by 2002:a05:651c:1581:b0:255:48d1:fdae with SMTP id
- h1-20020a05651c158100b0025548d1fdaemr459115ljq.286.1655145619959; Mon, 13 Jun
- 2022 11:40:19 -0700 (PDT)
+ h1-20020a05651c158100b0025548d1fdaemr472476ljq.286.1655146049852; Mon, 13 Jun
+ 2022 11:47:29 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220609221702.347522-1-morbo@google.com> <20220609221702.347522-8-morbo@google.com>
- <YqLUORmZQgG1D6lc@kroah.com>
-In-Reply-To: <YqLUORmZQgG1D6lc@kroah.com>
+References: <20220609221702.347522-1-morbo@google.com> <20220609221702.347522-9-morbo@google.com>
+ <YqYTExy0IpVbunBL@equinox>
+In-Reply-To: <YqYTExy0IpVbunBL@equinox>
 From:   Bill Wendling <morbo@google.com>
-Date:   Mon, 13 Jun 2022 11:40:08 -0700
-Message-ID: <CAGG=3QV1DqiufpBRmUcYMEuH55OizMGLCcCiLhxaZ8FEwbn7gA@mail.gmail.com>
-Subject: Re: [PATCH 07/12] driver/char: use correct format characters
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Date:   Mon, 13 Jun 2022 11:47:18 -0700
+Message-ID: <CAGG=3QVc4STHym0hszpr1SP=RYWag5=J-MB-zhz4JzNZnRnbvg@mail.gmail.com>
+Subject: Re: [PATCH 08/12] cdrom: use correct format characters
+To:     Phillip Potter <phil@philpotter.co.uk>
 Cc:     Bill Wendling <isanbard@gmail.com>,
         Tony Luck <tony.luck@intel.com>,
         Borislav Petkov <bp@alien8.de>,
@@ -60,9 +60,8 @@ Cc:     Bill Wendling <isanbard@gmail.com>,
         Ingo Molnar <mingo@redhat.com>,
         Dave Hansen <dave.hansen@linux.intel.com>,
         "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Phillip Potter <phil@philpotter.co.uk>,
-        Arnd Bergmann <arnd@arndb.de>,
+        "H. Peter Anvin" <hpa@zytor.com>, Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
         Jan Kara <jack@suse.com>,
         Andrew Morton <akpm@linux-foundation.org>,
@@ -78,8 +77,8 @@ Cc:     Bill Wendling <isanbard@gmail.com>,
         Nathan Chancellor <nathan@kernel.org>,
         Nick Desaulniers <ndesaulniers@google.com>,
         Tom Rix <trix@redhat.com>,
-        Daniel Kiper <daniel.kiper@oracle.com>,
         Ross Philipson <ross.philipson@oracle.com>,
+        Daniel Kiper <daniel.kiper@oracle.com>,
         linux-edac@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
         ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
         linux-mm@kvack.org, netfilter-devel@vger.kernel.org,
@@ -98,59 +97,66 @@ Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Thu, Jun 9, 2022 at 10:18 PM Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
+On Sun, Jun 12, 2022 at 9:23 AM Phillip Potter <phil@philpotter.co.uk> wrote:
 >
-> On Thu, Jun 09, 2022 at 10:16:26PM +0000, Bill Wendling wrote:
+> On Thu, Jun 09, 2022 at 10:16:27PM +0000, Bill Wendling wrote:
 > > From: Bill Wendling <isanbard@gmail.com>
->
-> Why isn't that matching your From: line in the email?
->
-There must be something wrong with my .gitconfig file. I"ll check into it.
-
 > >
 > > When compiling with -Wformat, clang emits the following warnings:
->
-> Is that ever a default build option for the kernel?
->
-We want to enable -Wformat for clang. I believe that these specific
-warnings have been disabled, but I'm confused as to why, because
-they're valid warnings. When I compiled with the warning enabled,
-there were only a few (12) places that needed changes, so thought that
-patches would be a nice cleanup, even though the warning itself is
-disabled.
-
-> > drivers/char/mem.c:775:16: error: format string is not a string literal (potentially insecure) [-Werror,-Wformat-security]
-> >                               NULL, devlist[minor].name);
-> >                                     ^~~~~~~~~~~~~~~~~~~
+> >
+> > drivers/cdrom/cdrom.c:3454:48: error: format string is not a string literal (potentially insecure) [-Werror,-Wformat-security]
+> >         ret = scnprintf(info + *pos, max_size - *pos, header);
+> >                                                       ^~~~~~
 > >
 > > Use a string literal for the format string.
 > >
 > > Link: https://github.com/ClangBuiltLinux/linux/issues/378
 > > Signed-off-by: Bill Wendling <isanbard@gmail.com>
 > > ---
-> >  drivers/char/mem.c | 2 +-
+> >  drivers/cdrom/cdrom.c | 2 +-
 > >  1 file changed, 1 insertion(+), 1 deletion(-)
 > >
-> > diff --git a/drivers/char/mem.c b/drivers/char/mem.c
-> > index 84ca98ed1dad..32d821ba9e4d 100644
-> > --- a/drivers/char/mem.c
-> > +++ b/drivers/char/mem.c
-> > @@ -772,7 +772,7 @@ static int __init chr_dev_init(void)
-> >                       continue;
+> > diff --git a/drivers/cdrom/cdrom.c b/drivers/cdrom/cdrom.c
+> > index 416f723a2dbb..52b40120c76e 100644
+> > --- a/drivers/cdrom/cdrom.c
+> > +++ b/drivers/cdrom/cdrom.c
+> > @@ -3451,7 +3451,7 @@ static int cdrom_print_info(const char *header, int val, char *info,
+> >       struct cdrom_device_info *cdi;
+> >       int ret;
 > >
-> >               device_create(mem_class, NULL, MKDEV(MEM_MAJOR, minor),
-> > -                           NULL, devlist[minor].name);
-> > +                           NULL, "%s", devlist[minor].name);
+> > -     ret = scnprintf(info + *pos, max_size - *pos, header);
+> > +     ret = scnprintf(info + *pos, max_size - *pos, "%s", header);
+> >       if (!ret)
+> >               return 1;
+> >
+> > --
+> > 2.36.1.255.ge46751e96f-goog
+> >
 >
-> Please explain how this static string can ever be user controlled.
+> Hi Bill,
 >
-All someone would need to do is accidentally insert an errant '%' in
-one of the strings for this function call to perform unexpected
-actions---at the very least reading memory that's not allocated and
-may contain garbage, thereby decreasing performance and possibly
-overrunning some buffer. Perhaps in this specific scenario it's
-unlikely, but "device_create()" is used in a lot more places than
-here. This patch is a general code cleanup.
+> Thank you for the patch, much appreciated.
+>
+> Looking at this though, all callers of cdrom_print_info() provide 'header'
+> as a string literal defined within the driver, when making the call.
+> Therefore, I'm not convinced this change is necessary for cdrom.c -
+> that said, in this particular use case I don't think it would hurt
+> either.
+>
+> I've followed the other responses on parts of this series, so I
+> understand that a different solution is potentially in the works.
+> Thought I'd respond anyway though out of courtesy.
+>
+Thanks, Phillip.
 
+I pointed out in a separate response that this specific warning is
+disabled by default, but when I ran into while hacking stuff there
+weren't a lot of places where the warning popped up (at least for x86
+builds) and thought it would be a nice cleanup. I understand if you
+don't think this patch is necessary for your code. There are some
+places where visual inspection of the code is "good enough" to ensure
+that nothing untoward will happen (Greg pointed out a similar thing in
+an mm/ file).
+
+Cheers!
 -bw
