@@ -2,161 +2,149 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A0B63549EA3
-	for <lists+linux-edac@lfdr.de>; Mon, 13 Jun 2022 22:12:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4113C54B357
+	for <lists+linux-edac@lfdr.de>; Tue, 14 Jun 2022 16:37:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349838AbiFMUMx (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Mon, 13 Jun 2022 16:12:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50430 "EHLO
+        id S1348520AbiFNOgT (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Tue, 14 Jun 2022 10:36:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239269AbiFMUMo (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Mon, 13 Jun 2022 16:12:44 -0400
-Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A90B425EA
-        for <linux-edac@vger.kernel.org>; Mon, 13 Jun 2022 11:47:31 -0700 (PDT)
-Received: by mail-lj1-x232.google.com with SMTP id s10so7147166ljh.12
-        for <linux-edac@vger.kernel.org>; Mon, 13 Jun 2022 11:47:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=gnUSbe8CiTQ19HP1QRaMovzHPwVV5AH7oRueQxzbr2w=;
-        b=psqvyg4bPOOObXvl93Zxro9XA/ODLoG6iBN8VzURq2kWrUR7F3BHDeeHNMu0CFKyIh
-         Niks5hKvSuVELNC275GXW5lNVLONvG604XONrgXtzQCBbODYI+FiNC4UHOy01ziKEw6P
-         PnJJ8X8mCYdNE116ke64zsX9sSqEcXHCfXLltO9UXIpqgB60u1m1gOJgKSvqZ2Vu7Rt3
-         Fab5Mj4u35jsb3FBf1q2tLM98qhaB60LVo3lH+ODCh+pfDogtGE59OZmPCThjZAo5F3C
-         uARnmPJ0E0/9jMWP5IEUMjK7PRjAVPO04tktB/Od36POLALwftkbezadySNHJrj1LtR7
-         bRTQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=gnUSbe8CiTQ19HP1QRaMovzHPwVV5AH7oRueQxzbr2w=;
-        b=Tui5/Zi8FcGRh8/YqhE0RS1VQy3TFeGPW7FFC1EyuXxL2D53ytQaXBsV0wD/cuYxIt
-         +G1Wklo98jZS2tLKApoI5JrCI5ZSzKHzsMtvoxVicdMYXCSHCm7ZcGNfSA2EhbHuC54Q
-         sExk6tC2TIbqoX1Rmm3f8HziNidUsaIh6upCGR5T0nueNTV0gMgICSelegiYvi2SEhGA
-         5wjk1sUR/l+8O5VtIQi8oLSe8WabQH6urysnVxMaE1fE1+bBLg29crLKW67S4z3a20Wa
-         h5/Q9ua+6SEGHU4C5SiqVi2YpXC74XY3KheIoNUkjUly2hud4e+0QhDQYj4n77lQYRsj
-         q3oQ==
-X-Gm-Message-State: AJIora8lgS5VGfb7QwUydpuKOTE4RD7LPcV1ZIjmGD9+eTSth/0KCq3X
-        aKcQvi/7nC9uBBfU8rIyQE1P9AhvBh9flht4HHta
-X-Google-Smtp-Source: AGRyM1uMA1RswQj/kRbYWxpa2gpbkIqW/H3Lhp9QgKWhkKjVKtC7uz71CWdrVgWOGoL64GzPA+QRw4qUugKbzHueGjo=
-X-Received: by 2002:a05:651c:1581:b0:255:48d1:fdae with SMTP id
- h1-20020a05651c158100b0025548d1fdaemr472476ljq.286.1655146049852; Mon, 13 Jun
- 2022 11:47:29 -0700 (PDT)
+        with ESMTP id S1348440AbiFNOgG (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Tue, 14 Jun 2022 10:36:06 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 394A93DDE6;
+        Tue, 14 Jun 2022 07:36:05 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 8286121B97;
+        Tue, 14 Jun 2022 14:36:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1655217363; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=7h6hH0gYTond1cgiS/uMW2G4mVmL8aIozW74ouv+gK4=;
+        b=B9wTA4hA6Qxez4dhaQq2jaLjcRQqv8/C1d0oKbtJxHWYl3duIpfM3QjZ2J2ZIG1jByzjIk
+        ObTWFZbyZcppMylTomPCNwhynw9TlYQGEMrmiuv4k8IcEezBoIE3JYy9Oiijt3mtdocbSR
+        YntR36rSYs/Otfz0SDXm/BOtVHJZFAE=
+Received: from suse.cz (unknown [10.100.201.202])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 0C0ED2C142;
+        Tue, 14 Jun 2022 14:36:01 +0000 (UTC)
+Date:   Tue, 14 Jun 2022 16:36:01 +0200
+From:   Petr Mladek <pmladek@suse.com>
+To:     "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+Cc:     bhe@redhat.com, d.hatayama@jp.fujitsu.com,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Mark Rutland <mark.rutland@arm.com>, mikelley@microsoft.com,
+        vkuznets@redhat.com, akpm@linux-foundation.org,
+        kexec@lists.infradead.org, linux-kernel@vger.kernel.org,
+        bcm-kernel-feedback-list@broadcom.com,
+        linuxppc-dev@lists.ozlabs.org, linux-alpha@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-edac@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, linux-leds@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        linux-s390@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-um@lists.infradead.org, linux-xtensa@linux-xtensa.org,
+        netdev@vger.kernel.org, openipmi-developer@lists.sourceforge.net,
+        rcu@vger.kernel.org, sparclinux@vger.kernel.org,
+        xen-devel@lists.xenproject.org, x86@kernel.org,
+        kernel-dev@igalia.com, kernel@gpiccoli.net, halves@canonical.com,
+        fabiomirmar@gmail.com, alejandro.j.jimenez@oracle.com,
+        andriy.shevchenko@linux.intel.com, arnd@arndb.de, bp@alien8.de,
+        corbet@lwn.net, dave.hansen@linux.intel.com, dyoung@redhat.com,
+        feng.tang@intel.com, gregkh@linuxfoundation.org,
+        hidehiro.kawai.ez@hitachi.com, jgross@suse.com,
+        john.ogness@linutronix.de, keescook@chromium.org, luto@kernel.org,
+        mhiramat@kernel.org, mingo@redhat.com, paulmck@kernel.org,
+        peterz@infradead.org, rostedt@goodmis.org,
+        senozhatsky@chromium.org, stern@rowland.harvard.edu,
+        tglx@linutronix.de, vgoyal@redhat.com, will@kernel.org
+Subject: Re: [PATCH 24/30] panic: Refactor the panic path
+Message-ID: <Yqic0R8/UFqTbbMD@alley>
+References: <20220427224924.592546-1-gpiccoli@igalia.com>
+ <20220427224924.592546-25-gpiccoli@igalia.com>
+ <87fskzuh11.fsf@email.froward.int.ebiederm.org>
+ <0d084eed-4781-c815-29c7-ac62c498e216@igalia.com>
 MIME-Version: 1.0
-References: <20220609221702.347522-1-morbo@google.com> <20220609221702.347522-9-morbo@google.com>
- <YqYTExy0IpVbunBL@equinox>
-In-Reply-To: <YqYTExy0IpVbunBL@equinox>
-From:   Bill Wendling <morbo@google.com>
-Date:   Mon, 13 Jun 2022 11:47:18 -0700
-Message-ID: <CAGG=3QVc4STHym0hszpr1SP=RYWag5=J-MB-zhz4JzNZnRnbvg@mail.gmail.com>
-Subject: Re: [PATCH 08/12] cdrom: use correct format characters
-To:     Phillip Potter <phil@philpotter.co.uk>
-Cc:     Bill Wendling <isanbard@gmail.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>, Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Jan Kara <jack@suse.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Pablo Neira Ayuso <pablo@netfilter.org>,
-        Jozsef Kadlecsik <kadlec@netfilter.org>,
-        Florian Westphal <fw@strlen.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>,
-        Ross Philipson <ross.philipson@oracle.com>,
-        Daniel Kiper <daniel.kiper@oracle.com>,
-        linux-edac@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        linux-mm@kvack.org, netfilter-devel@vger.kernel.org,
-        coreteam@netfilter.org, Networking <netdev@vger.kernel.org>,
-        alsa-devel@alsa-project.org,
-        clang-built-linux <llvm@lists.linux.dev>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <0d084eed-4781-c815-29c7-ac62c498e216@igalia.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Sun, Jun 12, 2022 at 9:23 AM Phillip Potter <phil@philpotter.co.uk> wrote:
+On Thu 2022-05-26 13:25:57, Guilherme G. Piccoli wrote:
+> OK, so it seems we have some points in which agreement exists, and some
+> points that there is no agreement and instead, we have antagonistic /
+> opposite views and needs. Let's start with the easier part heh
 >
-> On Thu, Jun 09, 2022 at 10:16:27PM +0000, Bill Wendling wrote:
-> > From: Bill Wendling <isanbard@gmail.com>
-> >
-> > When compiling with -Wformat, clang emits the following warnings:
-> >
-> > drivers/cdrom/cdrom.c:3454:48: error: format string is not a string literal (potentially insecure) [-Werror,-Wformat-security]
-> >         ret = scnprintf(info + *pos, max_size - *pos, header);
-> >                                                       ^~~~~~
-> >
-> > Use a string literal for the format string.
-> >
-> > Link: https://github.com/ClangBuiltLinux/linux/issues/378
-> > Signed-off-by: Bill Wendling <isanbard@gmail.com>
-> > ---
-> >  drivers/cdrom/cdrom.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > diff --git a/drivers/cdrom/cdrom.c b/drivers/cdrom/cdrom.c
-> > index 416f723a2dbb..52b40120c76e 100644
-> > --- a/drivers/cdrom/cdrom.c
-> > +++ b/drivers/cdrom/cdrom.c
-> > @@ -3451,7 +3451,7 @@ static int cdrom_print_info(const char *header, int val, char *info,
-> >       struct cdrom_device_info *cdi;
-> >       int ret;
-> >
-> > -     ret = scnprintf(info + *pos, max_size - *pos, header);
-> > +     ret = scnprintf(info + *pos, max_size - *pos, "%s", header);
-> >       if (!ret)
-> >               return 1;
-> >
-> > --
-> > 2.36.1.255.ge46751e96f-goog
-> >
->
-> Hi Bill,
->
-> Thank you for the patch, much appreciated.
->
-> Looking at this though, all callers of cdrom_print_info() provide 'header'
-> as a string literal defined within the driver, when making the call.
-> Therefore, I'm not convinced this change is necessary for cdrom.c -
-> that said, in this particular use case I don't think it would hurt
-> either.
->
-> I've followed the other responses on parts of this series, so I
-> understand that a different solution is potentially in the works.
-> Thought I'd respond anyway though out of courtesy.
->
-Thanks, Phillip.
+> It seems everybody agrees that *we shouldn't over-engineer things*, and
+> as per Eric good words: making the panic path more feature-full or
+> increasing flexibility isn't a good idea. So, as a "corollary": the
+> panic level approach I'm proposing is not a good fit, I'll drop it and
+> let's go with something simpler.
 
-I pointed out in a separate response that this specific warning is
-disabled by default, but when I ran into while hacking stuff there
-weren't a lot of places where the warning popped up (at least for x86
-builds) and thought it would be a nice cleanup. I understand if you
-don't think this patch is necessary for your code. There are some
-places where visual inspection of the code is "good enough" to ensure
-that nothing untoward will happen (Greg pointed out a similar thing in
-an mm/ file).
+Makes sense.
 
-Cheers!
--bw
+> Another point of agreement seems to be that _notifier lists in the panic
+> path are dangerous_, for *2 different reasons*:
+> 
+> (a) We cannot guarantee that people won't add crazy callbacks there, we
+> can plan and document things the best as possible - it'll never be
+> enough, somebody eventually would slip a nonsense callback that would
+> break things and defeat the planned purpose of such a list;
+
+It is true that notifier lists might allow to add crazy stuff
+without proper review more easily. Things added into the core
+code would most likely get better review.
+
+But nothing is error-proof. And bugs will happen with any approach.
+
+
+> (b) As per Eric point, in a panic/crash situation we might have memory
+> corruption exactly in the list code / pointers, etc, so the notifier
+> lists are, by nature, a bit fragile. But I think we shouldn't consider
+> it completely "bollocks", since this approach has been used for a while
+> with a good success rate. So, lists aren't perfect at all, but at the
+> same time, they aren't completely useless.
+
+I am not able to judge this. Of course, any extra step increases
+the risk. I am just not sure how much more complicated it would
+be to hardcode the calls. Most of them are architecture
+and/or feature specific. And such code is often hard to
+review and maintain.
+
+> To avoid using a 4th list,
+
+4th or 5th? We already have "hypervisor", "info", "pre-reboot", and "pre-loop".
+The 5th might be pre-crash-exec.
+
+> especially given the list nature is a bit
+> fragile, I'd suggest one of the 3 following approaches - I *really
+> appreciate feedbacks* on that so I can implement the best solution and
+> avoid wasting time in some poor/disliked solution:
+
+Honestly, I am not able to decide what might be better without seeing
+the code.
+
+Most things fits pretty well into the 4 proposed lists:
+"hypervisor", "info", "pre-reboot", and "pre-loop". IMHO, the
+only question is the code that needs to be always called
+even before crash_dump.
+
+I suggest that you solve the crash_dump callbacks the way that
+looks best to you. Ideally do it in a separate patch so it can be
+reviewed and reworked more easily.
+
+I believe that a fresh code with an updated split and simplified
+logic would help us to move forward.
+
+Best Regards,
+Petr
