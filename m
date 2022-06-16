@@ -2,110 +2,79 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C97E54CAE1
-	for <lists+linux-edac@lfdr.de>; Wed, 15 Jun 2022 16:07:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 61E1F54DEDF
+	for <lists+linux-edac@lfdr.de>; Thu, 16 Jun 2022 12:25:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345845AbiFOOHu (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Wed, 15 Jun 2022 10:07:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54404 "EHLO
+        id S1376303AbiFPKZT (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Thu, 16 Jun 2022 06:25:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238853AbiFOOHt (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Wed, 15 Jun 2022 10:07:49 -0400
-X-Greylist: delayed 1893 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 15 Jun 2022 07:07:41 PDT
-Received: from m15112.mail.126.com (m15112.mail.126.com [220.181.15.112])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 447941263A
-        for <linux-edac@vger.kernel.org>; Wed, 15 Jun 2022 07:07:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=126.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=cQlyO
-        FmjcZobR7aTYosEqngYYxcwcNKmc5B9Yt/7tqc=; b=EJ4GIwj73lWbbNMkOT38h
-        zKj2yF8qwKAnjjRTaXESc12YN+7K3IpNxXQjFsX4MuYZ8TNBCVVqoNexX0WBIvcR
-        MYE6/Fe7GuguFE3WgiafKbt4I9peEHniJGDacoRG5p7gwnV69z31QIIURu+l0coq
-        9SpHuBAde37EnwTrQRJvIk=
-Received: from localhost.localdomain (unknown [124.16.139.61])
-        by smtp2 (Coremail) with SMTP id DMmowADH0wbV36liBxg5DQ--.45191S2;
-        Wed, 15 Jun 2022 21:34:14 +0800 (CST)
-From:   Liang He <windhl@126.com>
-To:     dinguyen@kernel.org, bp@alien8.de, mchehab@kernel.org,
-        tony.luck@intel.com, james.morse@arm.com, rric@kernel.org
-Cc:     linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Liang He <windhl@126.com>
-Subject: [PATCH] drivers: edac: Add missing of_node_put() in altera_edac.c
-Date:   Wed, 15 Jun 2022 21:34:13 +0800
-Message-Id: <20220615133413.3967379-1-windhl@126.com>
-X-Mailer: git-send-email 2.25.1
+        with ESMTP id S1345993AbiFPKZT (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Thu, 16 Jun 2022 06:25:19 -0400
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 240545A2D3
+        for <linux-edac@vger.kernel.org>; Thu, 16 Jun 2022 03:25:18 -0700 (PDT)
+Received: by mail-lf1-x132.google.com with SMTP id y32so1520571lfa.6
+        for <linux-edac@vger.kernel.org>; Thu, 16 Jun 2022 03:25:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=lLG88JCPgF7Yhflf4FNi4GQedsSNMbwmPtgneUr9Mu0=;
+        b=W910NhxhsjMJh8xmTqiBb+n/d8vNhkQvEK3uQsx019H/NVF/HsRkR91Mwgf5NoOA2o
+         +G9NG8HKS3dufLn4HoWATUwViMwR/sm7gdhYVGjSBp65IoH9/VzeePSRwsxtnWyD2IYd
+         /P+anhEIznyuyfYSv0fd8QvDY0LuzCx2TbyvmZF5dM2Nj4uA7+9FyoHxvD1xuHmQyiMU
+         TCzjnL3q1oIV583xyWy0s+D4KRyb2LgtwArAnNeV+m1AO8ORaxA26nm4VB9kA/9NXW1T
+         yHcu0NzK0YGRQb2+53awbQan+6daAbhIX2qCkYqY9Qavm2WmKJIEIH3npl/ZhVNAwvQV
+         qPgg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=lLG88JCPgF7Yhflf4FNi4GQedsSNMbwmPtgneUr9Mu0=;
+        b=o57DzmVyblZuyZAuhLvvFbdEX9wMuKeaLjA+rpRwc4iduhqGJGPV1Ml23bNT4wQGIF
+         fHgqZOG2pcUnmQM5RJNhOHBOfkWNqZOqeGI4DKEdKC7J0p1M+8gD1YpTS4A0oxsftFU7
+         afRjargWUlWIqax9HFKphLpmbD254NEW4JHCUZ29ze47cRjuBJ5wDCwnx2XmRvuuO8Uu
+         3PwokHKyCZd06kLiBej+vqtAObJZucQoWhhXWp9HSE69bePE9c1JbBkuKDH2tJLFTo68
+         8Z7mQApCUk53tlNLLtrndokAe6pvOytLg4PW4lIpgflj9RVD51nKxyYBQQNIGGkd0K0q
+         dyYw==
+X-Gm-Message-State: AJIora9hXd6CK3yNgt05X4eJF9J/KIqDC6Ts+4UlraG7i1yHxOojVjCw
+        cy4lAQF6fuqnwPaD/p0ItSuKiMGdhn6rrK+2GBY=
+X-Google-Smtp-Source: AGRyM1v2MTXGyROmKEYPPr3IJqOTubJyWU9u6UFQYhvDngD40bhPycsNsVME02FGDV5945mXaS61m+8B4cqbLiC7v1U=
+X-Received: by 2002:a05:6512:3448:b0:479:10f0:11c7 with SMTP id
+ j8-20020a056512344800b0047910f011c7mr2248569lfr.521.1655375117521; Thu, 16
+ Jun 2022 03:25:17 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: DMmowADH0wbV36liBxg5DQ--.45191S2
-X-Coremail-Antispam: 1Uf129KBjvJXoW7Zr1kJF4UCFy3GF13Aw43Jrb_yoW8AF15pF
-        48Ka90yFWIyr15WF1qv3Z5Zay5Xw1vv3y8urySy392kFsrJ3yvqryjvFZIyas8ArWrZ3y3
-        Xw4jy3yfC3WUCw7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0zR-_-dUUUUU=
-X-Originating-IP: [124.16.139.61]
-X-CM-SenderInfo: hzlqvxbo6rjloofrz/1tbizhYhF18RPTFd9QAAsE
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Received: by 2002:a05:6520:28c2:b0:1f3:cf5:e20d with HTTP; Thu, 16 Jun 2022
+ 03:25:16 -0700 (PDT)
+Reply-To: clmloans9@gmail.com
+From:   MR ANTHONY EDWARD <bashirusman02021@gmail.com>
+Date:   Thu, 16 Jun 2022 11:25:16 +0100
+Message-ID: <CAGOBX5aJ01nW_foH2aLY6UF6s28QePJ4_J3aCt=hjQSuJNsdog@mail.gmail.com>
+Subject: DARLEHENSANGEBOT
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=4.3 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_HK_NAME_FM_MR_MRS,
+        T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-In altr_portb_setup(), of_find_compatible_node() will return a node
-pointer with refcount incremented. We should use of_node_put() in
-fail path or when it is not used anymore.
+--=20
+Ben=C3=B6tigen Sie ein Gesch=C3=A4ftsdarlehen oder ein Darlehen jeglicher A=
+rt?
+Wenn ja, kontaktieren Sie uns
 
-Signed-off-by: Liang He <windhl@126.com>
----
- drivers/edac/altera_edac.c | 13 +++++++++++--
- 1 file changed, 11 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/edac/altera_edac.c b/drivers/edac/altera_edac.c
-index e7e8e624a436..f035d131751c 100644
---- a/drivers/edac/altera_edac.c
-+++ b/drivers/edac/altera_edac.c
-@@ -1528,7 +1528,8 @@ static int altr_portb_setup(struct altr_edac_device_dev *device)
- 		edac_printk(KERN_ERR, EDAC_DEVICE,
- 			    "%s: Unable to allocate PortB EDAC device\n",
- 			    ecc_name);
--		return -ENOMEM;
-+		rc = -ENOMEM;
-+		goto out_put;
- 	}
- 
- 	/* Initialize the PortB EDAC device structure from PortA structure */
-@@ -1536,7 +1537,10 @@ static int altr_portb_setup(struct altr_edac_device_dev *device)
- 	*altdev = *device;
- 
- 	if (!devres_open_group(&altdev->ddev, altr_portb_setup, GFP_KERNEL))
--		return -ENOMEM;
-+	{
-+		rc = -ENOMEM;
-+		goto out_put;
-+	}
- 
- 	/* Update PortB specific values */
- 	altdev->edac_dev_name = ecc_name;
-@@ -1605,6 +1609,9 @@ static int altr_portb_setup(struct altr_edac_device_dev *device)
- 		rc = -ENOMEM;
- 		goto err_release_group_1;
- 	}
-+	
-+	of_node_put(np);
-+	
- 	altr_create_edacdev_dbgfs(dci, prv);
- 
- 	list_add(&altdev->next, &altdev->edac->a10_ecc_devices);
-@@ -1618,6 +1625,8 @@ static int altr_portb_setup(struct altr_edac_device_dev *device)
- 	devres_release_group(&altdev->ddev, altr_portb_setup);
- 	edac_printk(KERN_ERR, EDAC_DEVICE,
- 		    "%s:Error setting up EDAC device: %d\n", ecc_name, rc);
-+out_put:
-+    of_node_put(np);	
- 	return rc;
- }
- 
--- 
-2.25.1
-
+*Vollst=C3=A4ndiger Name:
+* Ben=C3=B6tigte Menge:
+*Leihdauer:
+*Mobiltelefon:
+*Land:
