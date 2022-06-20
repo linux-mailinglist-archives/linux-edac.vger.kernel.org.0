@@ -2,79 +2,81 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6B3E54FA80
-	for <lists+linux-edac@lfdr.de>; Fri, 17 Jun 2022 17:41:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 36266552222
+	for <lists+linux-edac@lfdr.de>; Mon, 20 Jun 2022 18:21:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382853AbiFQPl1 (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Fri, 17 Jun 2022 11:41:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37762 "EHLO
+        id S244492AbiFTQVh (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Mon, 20 Jun 2022 12:21:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235707AbiFQPlY (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Fri, 17 Jun 2022 11:41:24 -0400
-X-Greylist: delayed 903 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 17 Jun 2022 08:41:21 PDT
-Received: from sv220.xserver.jp (sv220.xserver.jp [202.226.39.121])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A15F4F1E2;
-        Fri, 17 Jun 2022 08:41:21 -0700 (PDT)
-X-Virus-Status: clean(F-Secure/fsigk_smtp/521/virusgw2.xserver.jp)
-Received: from webmail.xserver.ne.jp (webmail.xserver.ne.jp [210.188.201.183])
-        by sv220.xserver.jp (Postfix) with ESMTPA id 038CD12025F434;
-        Sat, 18 Jun 2022 00:16:31 +0900 (JST)
+        with ESMTP id S243978AbiFTQVX (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Mon, 20 Jun 2022 12:21:23 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B40141A071;
+        Mon, 20 Jun 2022 09:21:22 -0700 (PDT)
+Received: from zn.tnic (p200300ea974657f0329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9746:57f0:329c:23ff:fea6:a903])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 7B55B1EC05ED;
+        Mon, 20 Jun 2022 18:21:16 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1655742076;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=T48rGXc2UHAUKkDOY5tz9vpt/ugxavpsm8or1kKDdLs=;
+        b=qnidU6MWxcN8zvm5swGUEpplVS2B6i5n6LyV6OlZGNmQYD2JT6ieZnQ0JmTscm0Yummm9Z
+        jFJe36mmrDvWlny0QJhDw34bVOgxqLtCHXU5BhiyLllCyCVtrZWtvtqZLKqocfl1lU70Q0
+        ETAbyh5EopQbk7pEbNS4FdUXCWVEUGc=
+Date:   Mon, 20 Jun 2022 18:21:11 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Yazen Ghannam <yazen.ghannam@amd.com>
+Cc:     linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Smita.KoralahalliChannabasappa@amd.com, muralidhara.mk@amd.com,
+        naveenkrishna.chatradhi@amd.com
+Subject: Re: [PATCH 12/18] EDAC/amd64: Add determine_edac_cap() into pvt->ops
+Message-ID: <YrCed0NnrVUjKoJh@zn.tnic>
+References: <20220509145534.44912-1-yazen.ghannam@amd.com>
+ <20220509145534.44912-13-yazen.ghannam@amd.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-Date:   Fri, 17 Jun 2022 23:16:31 +0800
-From:   Steve Dibenedetto <y-kitsuya@bell-group.co.jp>
-To:     undisclosed-recipients:;
-Subject: THIS IS VERY CONFIDENTIAL
-Reply-To: stevedibenedetto17@gmail.com
-Mail-Reply-To: stevedibenedetto17@gmail.com
-Message-ID: <ec1bb68d0d72aa3e007bad8b0e72f08f@bell-group.co.jp>
-X-Sender: y-kitsuya@bell-group.co.jp
-User-Agent: Roundcube Webmail/1.2.0
-X-Spam-Status: Yes, score=6.9 required=5.0 tests=BAYES_50,
-        FREEMAIL_FORGED_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,ODD_FREEM_REPTO,
-        SPF_HELO_PASS,SPF_SOFTFAIL,SUBJ_ALL_CAPS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5000]
-        * -0.0 SPF_HELO_PASS SPF: HELO matches SPF record
-        *  0.7 SPF_SOFTFAIL SPF: sender does not match SPF record (softfail)
-        *  0.5 SUBJ_ALL_CAPS Subject is all capitals
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [stevedibenedetto17[at]gmail.com]
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  2.6 ODD_FREEM_REPTO Has unusual reply-to header
-        *  2.1 FREEMAIL_FORGED_REPLYTO Freemail in Reply-To, but not From
-X-Spam-Level: ******
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220509145534.44912-13-yazen.ghannam@amd.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
+Back to those...
 
+On Mon, May 09, 2022 at 02:55:28PM +0000, Yazen Ghannam wrote:
+> From: Muralidhara M K <muralidhara.mk@amd.com>
+> 
+> GPU Nodes will have different criteria for checking the EDAC
+> capabilities of a controller. A function pointer should be used rather
+> than introduce another branching condition.
+> 
+> Prepare for this by adding determine_edac_cap() to pvt->ops and set it
+> as needed based on currently supported systems.
+> 
+> Use a "umc" prefix for modern systems, since these use Unified Memory
+> Controllers (UMCs).
+> 
+> Use a "dct" prefix for newly-defined legacy functions, since these
+> systems use DRAM Controllers (DCTs).
+
+Please refrain from adding those boilerplates to each commit message. Do
+it once for the first patch and then no need anymore. It is clear what's
+going on.
+
+Thx.
 
 -- 
-Hello,
+Regards/Gruss,
+    Boris.
 
-My name is Steve Dibenedetto.I apologize to have contacted you this way
-without a direct relationship. There is an opportunity to collaborate
-with me in the sourcing of some materials needed by our company for
-production of the different medicines we are researching.
-
-I'm aware that this might be totally outside your professional
-specialization, but it will be a great source for generating extra
-revenue. I  discovered a manufacturer who can supply us at a lower rate
-than our company's previous purchases.
-I will give you more specific details when/if I receive feedback from
-you showing interest.
-
-Warm Regards
-Steve Dibenedetto
-Production & Control Manager,
-Green Field Laboratories
-Gothic House, Barker Gate,
-Nottingham, NG1 1JU,
-United Kingdom.
+https://people.kernel.org/tglx/notes-about-netiquette
