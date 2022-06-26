@@ -2,51 +2,61 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7891555AA55
-	for <lists+linux-edac@lfdr.de>; Sat, 25 Jun 2022 15:10:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 950E155B10A
+	for <lists+linux-edac@lfdr.de>; Sun, 26 Jun 2022 12:13:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232902AbiFYNKN (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Sat, 25 Jun 2022 09:10:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57670 "EHLO
+        id S229565AbiFZKLa (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Sun, 26 Jun 2022 06:11:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231982AbiFYNKM (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Sat, 25 Jun 2022 09:10:12 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D771C5F55;
-        Sat, 25 Jun 2022 06:10:10 -0700 (PDT)
-Received: from zn.tnic (p200300ea97465768329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9746:5768:329c:23ff:fea6:a903])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id EEC151EC04DF;
-        Sat, 25 Jun 2022 15:10:04 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1656162605;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=370Qrppx8dskofbXGy4yS6jqi4CEYDJ1COeJ2ndjgf0=;
-        b=Yra84RmFjzXKqL6LqAmF4LFDULEf7dL2ikZ4PO/9h9Q2HoVLv8N5EMkC0zWpmBGgQmcb+T
-        RAp4aovPH2cNLOyIHVKPDd/yEu45QzfDc+hAtoJGodnTHfGYECQfBV/MCNk2aBoIUOKMkE
-        B6lzLdv4BrKUPbxcwh83YeTpUzNSr+A=
-Date:   Sat, 25 Jun 2022 15:10:00 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>
-Cc:     x86@kernel.org, linux-edac@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Tony Luck <tony.luck@intel.com>,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        Yazen Ghannam <yazen.ghannam@amd.com>
-Subject: Re: [PATCH v5] x86/mce: Check for writes ignored in MCA_STATUS
- register
-Message-ID: <YrcJKOUSJsmodo70@zn.tnic>
-References: <20220610192515.98540-1-Smita.KoralahalliChannabasappa@amd.com>
- <YrNRYJx0CNDNj3oX@zn.tnic>
- <d3f554b8-4fc5-efe8-1ca2-aa95c7e76eb8@amd.com>
+        with ESMTP id S229513AbiFZKLa (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Sun, 26 Jun 2022 06:11:30 -0400
+Received: from mail-pj1-x1042.google.com (mail-pj1-x1042.google.com [IPv6:2607:f8b0:4864:20::1042])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 382CADE99
+        for <linux-edac@vger.kernel.org>; Sun, 26 Jun 2022 03:11:29 -0700 (PDT)
+Received: by mail-pj1-x1042.google.com with SMTP id n16-20020a17090ade9000b001ed15b37424so6740660pjv.3
+        for <linux-edac@vger.kernel.org>; Sun, 26 Jun 2022 03:11:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:sender:from:date:message-id:subject:to;
+        bh=YeEFrOpnueqp49lpSsCtkyhW66cD5QzqZPU5hyS5TkM=;
+        b=LasKyUG7aDV4h4e/gS2Fbeb/OwYu3XTv/bikRfIZeRB28koZs8hGwtPCUxe00L3RST
+         jSof1ufc/UJSsJUfTAp4xa1V7sE+3HzfPoP4N1nLAXqLV5MJrVDWThrWDftFM6XgcGsW
+         y4JuHThWBW2Y9yyk2wJuX3WIvbPBW65FnLXOwQPQ8Qt7EWT68pUUT96Xu9wZJUtxf0Rq
+         HIBGwcgJyqw4vZE3Un9mqqIDoQq3+SAdv4J2kz2ICYaeJtJ1FSvsJ9wu6UAO7d2XKm/X
+         jd55PGeXp+oxu/qj3S10KZug4K+i+XIjI9Cfe+mMs3YX+uw1v8yj8sW+/FFWZDdEElzV
+         svRQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
+         :to;
+        bh=YeEFrOpnueqp49lpSsCtkyhW66cD5QzqZPU5hyS5TkM=;
+        b=tayP7M8m3J3dX7qOOAxfpoMiZxAsVkYXg1b0ATtbUSqcJiQu2uBvpHn9CN0OdzZvX8
+         N4/W8vpcTacBlRZKPLA4PjmVMVURU21IPohmi7LH4A7pv4mpF/8QoUb+lRZJ2kUFiB3a
+         kLYRcjTnO9g5LEfyDUeSgDE+rOoY+O2wI80ymkRM6qTdGtDCuaW1cA678Vxw8YmozY1r
+         UXRTh/xLPfs1MHQfaZF9JKa+oJMYd6spWIfhYb8n3gL7bdQu4b5dXzVdoKttAvIZX0Vf
+         lDUzVD56NdmV44RtaXYuBV4I2aDIxzCZOV0nxzUPxBh4/6QwNyWIHMt1N+UwqkX+FjCD
+         6SLA==
+X-Gm-Message-State: AJIora9Z/Yw70Z5YM9QSpftnckBQIgv5/9++mD9+PK1G99Qfe7MnYhnB
+        x2uLGmKKc+mq/RVTNHB2sTCJ6ywfuy8eiFBCmo4=
+X-Google-Smtp-Source: AGRyM1sNX36lDRPz/j2GmfEYEMAp/PEGaCkPijihlAe+phNwvLUSPCVPfj2k8MCpwSyJddntp1NPI7LcWQu7wRmBfrY=
+X-Received: by 2002:a17:90b:1d84:b0:1ed:5918:74e3 with SMTP id
+ pf4-20020a17090b1d8400b001ed591874e3mr2575718pjb.173.1656238288492; Sun, 26
+ Jun 2022 03:11:28 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <d3f554b8-4fc5-efe8-1ca2-aa95c7e76eb8@amd.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+Sender: bintaahmed2030@gmail.com
+Received: by 2002:a17:90b:4c47:0:0:0:0 with HTTP; Sun, 26 Jun 2022 03:11:27
+ -0700 (PDT)
+From:   Lisa Williams <lw23675851@gmail.com>
+Date:   Sun, 26 Jun 2022 11:11:27 +0100
+X-Google-Sender-Auth: pCqhE6bM0lAG0DF3-cbWcEcISy4
+Message-ID: <CAGQNKtTAAFj02-BBa4YX7eH-GdgPvvS8ZvNbCpkqjdrJBoeerw@mail.gmail.com>
+Subject: My name is Dr Lisa Williams
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,23 +64,16 @@ Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Fri, Jun 24, 2022 at 03:34:42PM -0700, Smita Koralahalli wrote:
-> The wrmsrl_safe() doesn't throw an error here.
-> I think we need to read back the written value and check for it whatsoever.
-> What do you think?
+Hi Dear,
 
-Ah, that's the write-ignored thing. Not the #GP-generating thing when
-McStatusWrEn=0.
+My name is Dr Lisa Williams from the United States.I am a French and
+American nationality (dual) living in the U.S and sometimes in France
+for Work Purpose.
 
-Sorry, I got confused.
+I hope you consider my friend request. I will share some of my pics
+and more details about myself when I get your response.
 
-Can you pls change that part back to reading the previously written
-value and send me a tested version?
+Thanks
 
-Thx.
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+With love
+Lisa
