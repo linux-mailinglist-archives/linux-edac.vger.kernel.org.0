@@ -2,38 +2,38 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D662755C1A1
-	for <lists+linux-edac@lfdr.de>; Tue, 28 Jun 2022 14:45:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB91E55CAFD
+	for <lists+linux-edac@lfdr.de>; Tue, 28 Jun 2022 14:59:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239936AbiF0Rgc (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Mon, 27 Jun 2022 13:36:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46442 "EHLO
+        id S239959AbiF0Rgi (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Mon, 27 Jun 2022 13:36:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236554AbiF0Rgb (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Mon, 27 Jun 2022 13:36:31 -0400
+        with ESMTP id S239945AbiF0Rgd (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Mon, 27 Jun 2022 13:36:33 -0400
 Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7765B7E8;
-        Mon, 27 Jun 2022 10:36:30 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1D6CB7E8;
+        Mon, 27 Jun 2022 10:36:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656351390; x=1687887390;
+  t=1656351392; x=1687887392;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=7U0bhTw0dtUrU2VGYXfIxm/WfRNBk8w0m06gn51Rzpw=;
-  b=FHbs0YWMjnfAQtsS+HLIjSvDp/ZfgTPz6nhW7ODmkkFOXzcHVOyuPmSx
-   DxJgSyJafCSztVGJzbXFOAZifDX7dHWViRJFP78Jc4wiJrM2JEqqXjJEb
-   2NHgm1CfPLWhJv9v17lKEDK8WEG4eYhfmTxTpATtZnwtkvGZtcbtMRRpz
-   bSSk1/UvFrCFM+nVk0Q/TwaULz/4oOrB0v3YnInIHd7Np6l3We2/IxgO1
-   o9sINfd6neg5j8JdP8nk1WAvTgH2Fyyf4NtHgyFaK7uEz86vcdPH0Ts/F
-   cj6dKplG2ieKAyP0PwlaV6FNq5CeuKr+n4x6IynPqdy/hLIMnd8bnJfcE
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10391"; a="270262450"
+  bh=TncpZtq+agDq/jm35/vtT+NeRvYHNeO9BO7ZjRMPXig=;
+  b=hmaXArTfrtjX0U27AKdBnu3iecp9ySRhE+veiSgOS1ym9XvellNV6P8V
+   F75DFd4ogoWpFGV/5RK7eQCRPle6Uhuk3zHaHN45Vdyu3sSlR5zdJZlgr
+   Fv7DC6LBMLhCt563z5mDAFPrgDKJiekPR8jD64PTer8a/mS5uK5FNdBlI
+   ltWsRaUrTjWiYuEgYrcG8x8si5FZCiBLjPnxIxg17bPIMxQJWPdL4QahN
+   s5qL8qj+p/1q614558luafos9rfFK4Ye1iA33gai9I6za8pxXxcFSVNe8
+   J34xrAmyhrv+9DzN3Xzkfm1+dOOzy2j51F9+uCCv3CP9h0wCLsW3FQUMO
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10391"; a="270262456"
 X-IronPort-AV: E=Sophos;i="5.92,226,1650956400"; 
-   d="scan'208";a="270262450"
+   d="scan'208";a="270262456"
 Received: from fmsmga007.fm.intel.com ([10.253.24.52])
   by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jun 2022 10:36:12 -0700
 X-IronPort-AV: E=Sophos;i="5.92,226,1650956400"; 
-   d="scan'208";a="594399454"
+   d="scan'208";a="594399457"
 Received: from agluck-desk3.sc.intel.com ([172.25.222.78])
   by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jun 2022 10:36:11 -0700
 From:   Tony Luck <tony.luck@intel.com>
@@ -43,9 +43,9 @@ Cc:     Smita.KoralahalliChannabasappa@amd.com,
         linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
         x86@kernel.org, yazen.ghannam@amd.com, patches@lists.linux.dev,
         Tony Luck <tony.luck@intel.com>
-Subject: [PATCH v2 3/5] x86/mce: Introduce mce_handle_storm() to deal with begin/end of storms
-Date:   Mon, 27 Jun 2022 10:36:03 -0700
-Message-Id: <20220627173605.514504-4-tony.luck@intel.com>
+Subject: [PATCH v2 4/5] x86/mce: Move storm handling to core.
+Date:   Mon, 27 Jun 2022 10:36:04 -0700
+Message-Id: <20220627173605.514504-5-tony.luck@intel.com>
 X-Mailer: git-send-email 2.35.3
 In-Reply-To: <20220627173605.514504-1-tony.luck@intel.com>
 References: <YrFSSZqjtWlm9rUr@agluck-desk3.sc.intel.com>
@@ -64,101 +64,263 @@ X-Mailing-List: linux-edac@vger.kernel.org
 
 From: Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>
 
-Intel and AMD need to take different actions when a storm begins or
-ends. Prepare for the storm code moving from intel.c into core.c by
-adding a function that checks CPU vendor to pick the right action.
+AMD's storm handling for threshold interrupts is similar to Intel's CMCI
+storm handling. Hence, make the storm handling code common by moving to
+core and removing the vendor exclusivity.
+
+On the contrary, setting different thresholds to reduce rate of interrupts
+in IA32_MCi_CTL2 register is kept Intel intact as the storm handling for
+AMD slightly differs where in it handles the storms by turning off the
+interrupts.
 
 No functional changes.
 
-[Tony: Changed from function pointer to regular function]
+[Tony: Same as Smita's original, plus changes rolled in from prior patches]
 
 Signed-off-by: Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>
 Signed-off-by: Tony Luck <tony.luck@intel.com>
 ---
- arch/x86/kernel/cpu/mce/core.c     |  9 +++++++++
- arch/x86/kernel/cpu/mce/intel.c    | 12 ++++++++++--
- arch/x86/kernel/cpu/mce/internal.h |  3 +++
- 3 files changed, 22 insertions(+), 2 deletions(-)
+ arch/x86/kernel/cpu/mce/core.c     | 81 ++++++++++++++++++++++++++
+ arch/x86/kernel/cpu/mce/intel.c    | 93 +-----------------------------
+ arch/x86/kernel/cpu/mce/internal.h | 18 ++++++
+ 3 files changed, 100 insertions(+), 92 deletions(-)
 
 diff --git a/arch/x86/kernel/cpu/mce/core.c b/arch/x86/kernel/cpu/mce/core.c
-index 776d4724b1e0..f4d2a7ba29f7 100644
+index f4d2a7ba29f7..d27daa199523 100644
 --- a/arch/x86/kernel/cpu/mce/core.c
 +++ b/arch/x86/kernel/cpu/mce/core.c
-@@ -1985,6 +1985,15 @@ static void mce_zhaoxin_feature_clear(struct cpuinfo_x86 *c)
- 	intel_clear_lmce();
- }
+@@ -613,6 +613,87 @@ static struct notifier_block mce_default_nb = {
+ 	.priority	= MCE_PRIO_LOWEST,
+ };
  
-+void mce_handle_storm(int bank, bool on)
++/*
++ * CMCI storm tracking state
++ *	stormy_bank_count: per-cpu count of MC banks in storm state
++ *	bank_history: bitmask tracking of corrected errors seen in each bank
++ *	bank_time_stamp: last time (in jiffies) that each bank was polled
++ */
++DEFINE_PER_CPU(int, stormy_bank_count);
++DEFINE_PER_CPU(u64 [MAX_NR_BANKS], bank_history);
++DEFINE_PER_CPU(bool [MAX_NR_BANKS], bank_storm);
++DEFINE_PER_CPU(unsigned long [MAX_NR_BANKS], bank_time_stamp);
++
++void cmci_storm_begin(int bank)
 +{
-+	switch (boot_cpu_data.x86_vendor) {
-+	case X86_VENDOR_INTEL:
-+		mce_intel_handle_storm(bank, on);
-+		break;
++	__set_bit(bank, this_cpu_ptr(mce_poll_banks));
++	this_cpu_write(bank_storm[bank], true);
++
++	/*
++	 * If this is the first bank on this CPU to enter storm mode
++	 * start polling
++	 */
++	if (this_cpu_inc_return(stormy_bank_count) == 1)
++		mce_timer_kick(true);
++}
++
++void cmci_storm_end(int bank)
++{
++	__clear_bit(bank, this_cpu_ptr(mce_poll_banks));
++	this_cpu_write(bank_history[bank], 0ull);
++	this_cpu_write(bank_storm[bank], false);
++
++	/* If no banks left in storm mode, stop polling */
++	if (!this_cpu_dec_return(stormy_bank_count))
++		mce_timer_kick(false);
++}
++
++void track_cmci_storm(int bank, u64 status)
++{
++	unsigned long now = jiffies, delta;
++	unsigned int shift = 1;
++	u64 history;
++
++	/*
++	 * When a bank is in storm mode it is polled once per second and
++	 * the history mask will record about the last minute of poll results.
++	 * If it is not in storm mode, then the bank is only checked when
++	 * there is a CMCI interrupt. Check how long it has been since
++	 * this bank was last checked, and adjust the amount of "shift"
++	 * to apply to history.
++	 */
++	if (!this_cpu_read(bank_storm[bank])) {
++		delta = now - this_cpu_read(bank_time_stamp[bank]);
++		shift = (delta + HZ) / HZ;
++	}
++
++	/* If has been a long time since the last poll, clear history */
++	if (shift >= 64)
++		history = 0;
++	else
++		history = this_cpu_read(bank_history[bank]) << shift;
++	this_cpu_write(bank_time_stamp[bank], now);
++
++	/* History keeps track of corrected errors. VAL=1 && UC=0 */
++	if ((status & (MCI_STATUS_VAL | MCI_STATUS_UC)) == MCI_STATUS_VAL)
++		history |= 1;
++	this_cpu_write(bank_history[bank], history);
++
++	if (this_cpu_read(bank_storm[bank])) {
++		if (history & GENMASK_ULL(STORM_END_POLL_THRESHOLD - 1, 0))
++			return;
++		pr_notice("CPU%d BANK%d CMCI storm subsided\n", smp_processor_id(), bank);
++		mce_handle_storm(bank, true);
++		cmci_storm_end(bank);
++	} else {
++		if (hweight64(history) < STORM_BEGIN_THRESHOLD)
++			return;
++		pr_notice("CPU%d BANK%d CMCI storm detected\n", smp_processor_id(), bank);
++		mce_handle_storm(bank, false);
++		cmci_storm_begin(bank);
 +	}
 +}
 +
- static void __mcheck_cpu_init_vendor(struct cpuinfo_x86 *c)
- {
- 	switch (c->x86_vendor) {
+ /*
+  * Read ADDR and MISC registers.
+  */
 diff --git a/arch/x86/kernel/cpu/mce/intel.c b/arch/x86/kernel/cpu/mce/intel.c
-index 4106877de028..4238b73c2143 100644
+index 4238b73c2143..6cc9aa97c092 100644
 --- a/arch/x86/kernel/cpu/mce/intel.c
 +++ b/arch/x86/kernel/cpu/mce/intel.c
-@@ -152,6 +152,14 @@ static void cmci_set_threshold(int bank, int thresh)
- 	raw_spin_unlock_irqrestore(&cmci_discover_lock, flags);
+@@ -47,17 +47,7 @@ static DEFINE_PER_CPU(mce_banks_t, mce_banks_owned);
+  */
+ static DEFINE_RAW_SPINLOCK(cmci_discover_lock);
+ 
+-/*
+- * CMCI storm tracking state
+- *	stormy_bank_count: per-cpu count of MC banks in storm state
+- *	bank_history: bitmask tracking of corrected errors seen in each bank
+- *	bank_time_stamp: last time (in jiffies) that each bank was polled
+- *	cmci_threshold: MCi_CTL2 threshold for each bank when there is no storm
+- */
+-static DEFINE_PER_CPU(int, stormy_bank_count);
+-static DEFINE_PER_CPU(u64 [MAX_NR_BANKS], bank_history);
+-static DEFINE_PER_CPU(bool [MAX_NR_BANKS], bank_storm);
+-static DEFINE_PER_CPU(unsigned long [MAX_NR_BANKS], bank_time_stamp);
++/* MCi_CTL2 threshold for each bank when there is no storm */
+ static int cmci_threshold[MAX_NR_BANKS];
+ 
+ /* Linux non-storm CMCI threshold (may be overridden by BIOS */
+@@ -70,17 +60,6 @@ static int cmci_threshold[MAX_NR_BANKS];
+  */
+ #define CMCI_STORM_THRESHOLD	32749
+ 
+-/*
+- * How many errors within the history buffer mark the start of a storm
+- */
+-#define STORM_BEGIN_THRESHOLD	5
+-
+-/*
+- * How many polls of machine check bank without an error before declaring
+- * the storm is over
+- */
+-#define STORM_END_POLL_THRESHOLD	30
+-
+ static int cmci_supported(int *banks)
+ {
+ 	u64 cap;
+@@ -160,76 +139,6 @@ void mce_intel_handle_storm(int bank, bool on)
+ 		cmci_set_threshold(bank, CMCI_STORM_THRESHOLD);
  }
  
-+void mce_intel_handle_storm(int bank, bool on)
-+{
-+	if (on)
-+		cmci_set_threshold(bank, cmci_threshold[bank]);
-+	else
-+		cmci_set_threshold(bank, CMCI_STORM_THRESHOLD);
-+}
-+
- static void cmci_storm_begin(int bank)
- {
- 	__set_bit(bank, this_cpu_ptr(mce_poll_banks));
-@@ -211,13 +219,13 @@ void track_cmci_storm(int bank, u64 status)
- 		if (history & GENMASK_ULL(STORM_END_POLL_THRESHOLD - 1, 0))
- 			return;
- 		pr_notice("CPU%d BANK%d CMCI storm subsided\n", smp_processor_id(), bank);
--		cmci_set_threshold(bank, cmci_threshold[bank]);
-+		mce_handle_storm(bank, true);
- 		cmci_storm_end(bank);
- 	} else {
- 		if (hweight64(history) < STORM_BEGIN_THRESHOLD)
- 			return;
- 		pr_notice("CPU%d BANK%d CMCI storm detected\n", smp_processor_id(), bank);
--		cmci_set_threshold(bank, CMCI_STORM_THRESHOLD);
-+		mce_handle_storm(bank, false);
- 		cmci_storm_begin(bank);
- 	}
- }
+-static void cmci_storm_begin(int bank)
+-{
+-	__set_bit(bank, this_cpu_ptr(mce_poll_banks));
+-	this_cpu_write(bank_storm[bank], true);
+-
+-	/*
+-	 * If this is the first bank on this CPU to enter storm mode
+-	 * start polling
+-	 */
+-	if (this_cpu_inc_return(stormy_bank_count) == 1)
+-		mce_timer_kick(true);
+-}
+-
+-static void cmci_storm_end(int bank)
+-{
+-	__clear_bit(bank, this_cpu_ptr(mce_poll_banks));
+-	this_cpu_write(bank_history[bank], 0ull);
+-	this_cpu_write(bank_storm[bank], false);
+-
+-	/* If no banks left in storm mode, stop polling */
+-	if (!this_cpu_dec_return(stormy_bank_count))
+-		mce_timer_kick(false);
+-}
+-
+-void track_cmci_storm(int bank, u64 status)
+-{
+-	unsigned long now = jiffies, delta;
+-	unsigned int shift = 1;
+-	u64 history;
+-
+-	/*
+-	 * When a bank is in storm mode it is polled once per second and
+-	 * the history mask will record about the last minute of poll results.
+-	 * If it is not in storm mode, then the bank is only checked when
+-	 * there is a CMCI interrupt. Check how long it has been since
+-	 * this bank was last checked, and adjust the amount of "shift"
+-	 * to apply to history.
+-	 */
+-	if (!this_cpu_read(bank_storm[bank])) {
+-		delta = now - this_cpu_read(bank_time_stamp[bank]);
+-		shift = (delta + HZ) / HZ;
+-	}
+-
+-	/* If has been a long time since the last poll, clear history */
+-	if (shift >= 64)
+-		history = 0;
+-	else
+-		history = this_cpu_read(bank_history[bank]) << shift;
+-	this_cpu_write(bank_time_stamp[bank], now);
+-
+-	/* History keeps track of corrected errors. VAL=1 && UC=0 */
+-	if ((status & (MCI_STATUS_VAL | MCI_STATUS_UC)) == MCI_STATUS_VAL)
+-		history |= 1;
+-	this_cpu_write(bank_history[bank], history);
+-
+-	if (this_cpu_read(bank_storm[bank])) {
+-		if (history & GENMASK_ULL(STORM_END_POLL_THRESHOLD - 1, 0))
+-			return;
+-		pr_notice("CPU%d BANK%d CMCI storm subsided\n", smp_processor_id(), bank);
+-		mce_handle_storm(bank, true);
+-		cmci_storm_end(bank);
+-	} else {
+-		if (hweight64(history) < STORM_BEGIN_THRESHOLD)
+-			return;
+-		pr_notice("CPU%d BANK%d CMCI storm detected\n", smp_processor_id(), bank);
+-		mce_handle_storm(bank, false);
+-		cmci_storm_begin(bank);
+-	}
+-}
+-
+ /*
+  * The interrupt handler. This is called on every event.
+  * Just call the poller directly to log any events.
 diff --git a/arch/x86/kernel/cpu/mce/internal.h b/arch/x86/kernel/cpu/mce/internal.h
-index ab451526f6df..78467f6cdd04 100644
+index 78467f6cdd04..d7cad839a6a9 100644
 --- a/arch/x86/kernel/cpu/mce/internal.h
 +++ b/arch/x86/kernel/cpu/mce/internal.h
-@@ -43,12 +43,14 @@ extern mce_banks_t mce_banks_ce_disabled;
- void track_cmci_storm(int bank, u64 status);
- 
- #ifdef CONFIG_X86_MCE_INTEL
-+void mce_intel_handle_storm(int bank, bool on);
- void cmci_disable_bank(int bank);
- void intel_init_cmci(void);
- void intel_init_lmce(void);
- void intel_clear_lmce(void);
- bool intel_filter_mce(struct mce *m);
- #else
-+static inline void mce_intel_handle_storm(int bank, bool on) { }
- static inline void cmci_disable_bank(int bank) { }
- static inline void intel_init_cmci(void) { }
- static inline void intel_init_lmce(void) { }
-@@ -57,6 +59,7 @@ static inline bool intel_filter_mce(struct mce *m) { return false; }
- #endif
+@@ -60,6 +60,24 @@ static inline bool intel_filter_mce(struct mce *m) { return false; }
  
  void mce_timer_kick(bool storm);
-+void mce_handle_storm(int bank, bool on);
+ void mce_handle_storm(int bank, bool on);
++void cmci_storm_begin(int bank);
++void cmci_storm_end(int bank);
++
++DECLARE_PER_CPU(int, stormy_bank_count);
++DECLARE_PER_CPU(u64 [MAX_NR_BANKS], bank_history);
++DECLARE_PER_CPU(bool [MAX_NR_BANKS], bank_storm);
++DECLARE_PER_CPU(unsigned long [MAX_NR_BANKS], bank_time_stamp);
++
++/*
++ * How many errors within the history buffer mark the start of a storm
++ */
++#define STORM_BEGIN_THRESHOLD	5
++
++/*
++ * How many polls of machine check bank without an error before declaring
++ * the storm is over
++ */
++#define STORM_END_POLL_THRESHOLD	30
  
  #ifdef CONFIG_ACPI_APEI
  int apei_write_mce(struct mce *m);
