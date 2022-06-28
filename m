@@ -2,96 +2,65 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 340FA55D4C9
-	for <lists+linux-edac@lfdr.de>; Tue, 28 Jun 2022 15:14:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 545D955E115
+	for <lists+linux-edac@lfdr.de>; Tue, 28 Jun 2022 15:33:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239752AbiF0VFo (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Mon, 27 Jun 2022 17:05:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49522 "EHLO
+        id S1343844AbiF1GyS (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Tue, 28 Jun 2022 02:54:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236108AbiF0VFn (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Mon, 27 Jun 2022 17:05:43 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF8DA95A4
-        for <linux-edac@vger.kernel.org>; Mon, 27 Jun 2022 14:05:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656363942; x=1687899942;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=uEEvdAzl6LQlAje4goE+0aBteyIvswsxqpTvMqyDcww=;
-  b=FSmjLRrQYjuDXHtisMSNlGeDXOyTVBKrfPuRl/ZuwtOrjQ3isnMAKMsd
-   o/mG/TP7Vn9tc+CHjeuBR5NioZExBDyE8EVbSsWNmiUUsvI3yhX8jt+9t
-   BqFAADtG9yaknk6afZM7Z3b2nkJKs3xYBQmbNBsImsdM8hjB4ESZicCVq
-   eCiaeJTBfoKZkFfDtKjvi+qfLAOD9NjTGEEipzlPyFiG51B8uLtHxYdrv
-   natF8OHSQYeKMtP4EG2apw3vo3yRwMCMLJP8OFD8lSKKu9pN3EkvqEjQX
-   BE9R0vUNF1f0kY3uJmZup0XxF4PBJNZ4ilLX4tcVtmicGB8XGU3q+IwTf
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10391"; a="282297232"
-X-IronPort-AV: E=Sophos;i="5.92,227,1650956400"; 
-   d="scan'208";a="282297232"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jun 2022 14:05:32 -0700
-X-IronPort-AV: E=Sophos;i="5.92,227,1650956400"; 
-   d="scan'208";a="646601197"
-Received: from agluck-desk3.sc.intel.com ([172.25.222.78])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jun 2022 14:05:31 -0700
-From:   Tony Luck <tony.luck@intel.com>
-To:     linux-edac@vger.kernel.org
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Tony Luck <tony.luck@intel.com>
-Subject: [PATCH] rasdaemon: Change default corrected error threshold from 50/day to 2/day
-Date:   Mon, 27 Jun 2022 14:05:25 -0700
-Message-Id: <20220627210525.515705-1-tony.luck@intel.com>
-X-Mailer: git-send-email 2.35.3
+        with ESMTP id S1343852AbiF1GyO (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Tue, 28 Jun 2022 02:54:14 -0400
+X-Greylist: delayed 391 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 27 Jun 2022 23:54:12 PDT
+Received: from mail.privatemain.com (mail.privatemain.com [45.86.209.156])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDB6D22BCE
+        for <linux-edac@vger.kernel.org>; Mon, 27 Jun 2022 23:54:12 -0700 (PDT)
+Received: by mail.privatemain.com (Postfix, from userid 1001)
+        id 25E8B82D09; Tue, 28 Jun 2022 02:46:06 -0400 (EDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=privatemain.com;
+        s=mail; t=1656398861;
+        bh=ydItAdwWOyX5wABuTqD9n+VESLmlWw/YxTJchbbqnDQ=;
+        h=Date:From:To:Subject:From;
+        b=bYsb8ZelvewO0p3C2vKm0dDKLUr1RP9rNQY/4axp/dgaZc2r28sioMXpQPR1GEQ5r
+         AbPfmHGSKLB2i0P8130th2w8aINcHQAt4YeIUtCNtGiZsdijMUXREa7xHim2kwy6uH
+         AhVKe3+nzovZl4gsX+NIBdHO+l1NqSd9po4TPF1E6kNgKZ6ZMqE4ubLPPkMhLy/Np7
+         rZrrrd1F6JIsez9R+X8mOuRxajru1AryBAmNXmJp0tzqoPSMg3LLhRL9us2kxZazr5
+         DtgP3RrogNuh33GH5u7zvp1mkibwcpl7aN6FSIJsQbsJKRfykDKI7hIBUimU9DejDI
+         A3yZhBlPZOvCQ==
+Received: by mail.privatemain.com for <linux-edac@vger.kernel.org>; Tue, 28 Jun 2022 06:46:02 GMT
+Message-ID: <20220628024500-0.1.26.1ex7.0.bhbigqodae@privatemain.com>
+Date:   Tue, 28 Jun 2022 06:46:02 GMT
+From:   "Maciej Kielar" <maciej.kielar@privatemain.com>
+To:     <linux-edac@vger.kernel.org>
+Subject: Prawne zabezpieczenie firmy
+X-Mailer: mail.privatemain.com
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-0.7 required=5.0 tests=BAYES_05,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-A large scale study of memory errors in data centers showed that it is
-best to aggressively take pages with corrected errors offline. This is
-the best strategy of using corrected errors as a predictor of future
-uncorrected errors.
+Dzie=C5=84 dobry,
 
-Signed-off-by: Tony Luck <tony.luck@intel.com>
+czy s=C4=85 Pa=C5=84stwo otwarci na rozmowe o wsp=C3=B3=C5=82pracy z nasz=
+a Kancelari=C4=85?
 
----
-Here's the link to the study. I thought of putting into the commit
-comment. But these links are sometimes changed as website is re-organised,
-making the link stale.
+Obs=C5=82ugujemy firmy z wojew=C3=B3dztwa pomorskiego w zakresie kompleks=
+owego wsparcia prawnego w rozszerzonym zakresie.=20
 
-https://www.intel.com/content/dam/www/public/us/en/documents/intel-and-samsung-mrt-improving-memory-reliability-at-data-centers.pdf
+Dzi=C4=99ki wieloletniej praktyce i wsp=C3=B3=C5=82pracy z dzia=C5=82alno=
+=C5=9Bciami Pa=C5=84stwa formatu jestem w stanie wypracowa=C4=87 korzystn=
+e rozwi=C4=85zania pod wzgl=C4=99dem podatkowym i organizacyjnym.
 
-Note that Boris has questions against my kernel patch that does the same
-on whether an unconditional change to "2" is the right value for other
-CPU & memory vendors.
-	https://lore.kernel.org/all/YrnBWjkX82OhXAtL@zn.tnic/
+Mo=C5=BCemy si=C4=99 spotka=C4=87 b=C4=85d=C5=BA porozmawia=C4=87 telefon=
+icznie?
 
----
- misc/rasdaemon.env | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/misc/rasdaemon.env b/misc/rasdaemon.env
-index 12fd76658430..5feab290cf01 100644
---- a/misc/rasdaemon.env
-+++ b/misc/rasdaemon.env
-@@ -14,7 +14,7 @@
- #
- # The two configs will only take no effect when PAGE_CE_ACTION is "off".
- PAGE_CE_REFRESH_CYCLE="24h"
--PAGE_CE_THRESHOLD="50"
-+PAGE_CE_THRESHOLD="2"
- 
- # Specify the internal action in rasdaemon to exceeding a page error threshold.
- #
--- 
-2.35.3
-
+Pozdrawiam,
+Mec. Maciej Kielar
