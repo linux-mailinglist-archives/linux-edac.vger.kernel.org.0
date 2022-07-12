@@ -2,111 +2,66 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B079B570942
-	for <lists+linux-edac@lfdr.de>; Mon, 11 Jul 2022 19:42:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CD7457172F
+	for <lists+linux-edac@lfdr.de>; Tue, 12 Jul 2022 12:21:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231572AbiGKRmE (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Mon, 11 Jul 2022 13:42:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43288 "EHLO
+        id S230334AbiGLKVx (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Tue, 12 Jul 2022 06:21:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231614AbiGKRmB (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Mon, 11 Jul 2022 13:42:01 -0400
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2074.outbound.protection.outlook.com [40.107.243.74])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 187B46E8B0;
-        Mon, 11 Jul 2022 10:42:00 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Lfa7OmN+cG3pH8QeudRXUBnL/G/1QROk32VHp2gOKoCn37uGl/LL+Yo1mBaGne/Ea1zWo3OHFRNp8NFhR52jx/idvQ9XvrsiD90HT2C1Xj++4ivantNa9aEGzi1FVKtJ34kO/vnE/x5/TqBzspM+VPsg8yWmdLSY/KmS11ccDaHp9anuZ6fm6HGom4dpnvqMBN1zwkG4ryZg/o2HDSsNoEo8kdFDnUFCXjrIKSYJoZSb6lp63NvRALLB81Acge4COn9VUXfuOnHgvF+sWVmNM2cXEC8KkTsEqIBtFmuIPpXSImQva9i6O5MhlJuWT8whXCUoz8NQ314C1y2yuglEpQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Y0QMAZ9j9tOggpdlUtj/iEHVvjwm4wQ7WsPJpP7zBP4=;
- b=TvflLqHkYTY1rBseosMHCCF+IeQIlimP0gNO4o0KU72NNBHf52qViKPXCGPH+KolOYr0blvl2G9HaOnjBvBcTgEeLslNH/C9mMoDl8GpNB4DIOIKlvAEg+NVjZWF1EwMq0SAyqzGZKrYw468ua74nt6F1KoB6w/KAf//Y0cWFUg0tDcWk8/HirKG6i+Q6gYWiHNoRe+3OtP2bxegsL+7qM7U2ecv2eq6ufNLsjihfyvUYOr/7LMAG6o3IICznlWVWnHlGJgdJyv2G620mwL2LCfcndn2dfiEclqHgzLc1sQq3GgqkpprbDM7cG2ZB76Vve37JsSSqrbqXLKULkAvVQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Y0QMAZ9j9tOggpdlUtj/iEHVvjwm4wQ7WsPJpP7zBP4=;
- b=yXCMhPkNNkSBo3yiv02QHhMXMMEnBMg9AAZuCbn8cAcmmXVjTV9FmxGd7FipaylSxi96jAAbQPk4vQW055i+V7GLH2k0FB/TbE3jOONsQ3aHGrz+wsl1ls+N6k7cPGGjKTbBIhkXFtt09Y2Dmsm5vfvcKbzlg5VGlbY5sIu8f2w=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from BN8PR12MB3108.namprd12.prod.outlook.com (2603:10b6:408:40::20)
- by DM5PR12MB1146.namprd12.prod.outlook.com (2603:10b6:3:73::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5417.25; Mon, 11 Jul
- 2022 17:41:57 +0000
-Received: from BN8PR12MB3108.namprd12.prod.outlook.com
- ([fe80::c9f3:8fbe:281a:454e]) by BN8PR12MB3108.namprd12.prod.outlook.com
- ([fe80::c9f3:8fbe:281a:454e%3]) with mapi id 15.20.5417.026; Mon, 11 Jul 2022
- 17:41:57 +0000
-Date:   Mon, 11 Jul 2022 17:41:54 +0000
-From:   Yazen Ghannam <yazen.ghannam@amd.com>
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
-        tony.luck@intel.com, x86@kernel.org,
-        Smita.KoralahalliChannabasappa@amd.com
-Subject: Re: [PATCH 3/3] EDAC/mce_amd: Add support for FRU Text in MCA
-Message-ID: <Ysxg4r1IAA2PasTC@yaz-fattaah>
-References: <20220418174440.334336-1-yazen.ghannam@amd.com>
- <20220418174440.334336-4-yazen.ghannam@amd.com>
- <YsKvVI/t2svrib1L@zn.tnic>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YsKvVI/t2svrib1L@zn.tnic>
-X-ClientProxiedBy: BL1PR13CA0408.namprd13.prod.outlook.com
- (2603:10b6:208:2c2::23) To BN8PR12MB3108.namprd12.prod.outlook.com
- (2603:10b6:408:40::20)
+        with ESMTP id S232632AbiGLKVu (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Tue, 12 Jul 2022 06:21:50 -0400
+Received: from mail-qk1-x731.google.com (mail-qk1-x731.google.com [IPv6:2607:f8b0:4864:20::731])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10C47ADD58;
+        Tue, 12 Jul 2022 03:21:48 -0700 (PDT)
+Received: by mail-qk1-x731.google.com with SMTP id z11so4401280qkz.13;
+        Tue, 12 Jul 2022 03:21:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=ju3dMMy387I8KJ90v34qgF9dDa8M7KnfAZaqnz942SY=;
+        b=XN0y2hOzC002RPOTy41oFPJkCfNO6fWg62USwJfIPzZYl/lzL1XMgE/9NZmstcGLhR
+         gZ0O3WQSBuR9zIRMmof9b1kdFijxT19nqJS3b9ObYN28vNsL3vjjalQQvC0PYS48TwJ7
+         dDko83C8P3siwbP3wfuN0LovSujneRqfMlAuiPqYVmbFS4HI8AKbJGqzvyTOjwLXtyx6
+         5NhrKFw6yl7eL3GnaWZW2okxjnpINRC9xjICM1EnhKKW9syeHYkzPlViDOmW1YYKCa6d
+         3BN66mqH6rmE9Y1jm/X9jJbbKd0LXc2wXBP7hkw01zQQUwQam1o4QRG7rRwfoElbnnIY
+         FOCg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=ju3dMMy387I8KJ90v34qgF9dDa8M7KnfAZaqnz942SY=;
+        b=haA66Ev/8r+wURQEruT+skE0OC3IwXNoMvNs+ooHpHR6ZyYUoA2k2yAUCFQPHf9Try
+         2fZUSGwcrThgZdKOMXrd2FdUqlbhh//5I607rzbNuli6LaWy3JMSgANL1e9ANTQm8fPI
+         Iy9biC264eFhYwPPg3dp2fyqQ+CPpMUE5ONrEFOV6Z1B6xrMPB+5nlA/cGrABpcSmiCz
+         cKDROUiN2wS8u+0TIHZS5wTD1ZE2a4PGIxf33U7DrU3eYjKSadiCKO+H+cLCWbQTwSqA
+         DpZGncenxZ7qZysGtoSj8uvat4NabFV2r7EaISblkmQGl4e98dpryrjtzf3wyP8tPt8R
+         sa9g==
+X-Gm-Message-State: AJIora+VZdu9C4kHNIp8L/91Qe+K6cBOshGLZ5m3YrqU8roBMyB6ZK5R
+        h1meg+7q5E7Jb0x33gW8lis=
+X-Google-Smtp-Source: AGRyM1sX7oW1+ZN3W1I/IZvVuZA53av5CErnYWuQpB+gETPBaBwBaSKvWgwrrw26KVMtTdcd+tIcRQ==
+X-Received: by 2002:a05:620a:bc9:b0:6a6:5d5a:4306 with SMTP id s9-20020a05620a0bc900b006a65d5a4306mr14649676qki.391.1657621308102;
+        Tue, 12 Jul 2022 03:21:48 -0700 (PDT)
+Received: from localhost.localdomain ([136.56.17.68])
+        by smtp.gmail.com with ESMTPSA id m3-20020a05620a24c300b006b53fe19c41sm9195177qkn.14.2022.07.12.03.21.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 12 Jul 2022 03:21:47 -0700 (PDT)
+From:   Josh Hant <joshuahant@gmail.com>
+To:     jbaron@akamai.com
+Cc:     joshuahant@gmail.com, linux-edac@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2] EDAC/ie31200: Add Skylake-S support
+Date:   Tue, 12 Jul 2022 06:21:21 -0400
+Message-Id: <20220712102121.20812-1-joshuahant@gmail.com>
+X-Mailer: git-send-email 2.34.3
+In-Reply-To: <8e44d499-ad55-d90a-d4e6-2a97aa6d0c41@akamai.com>
+References: <8e44d499-ad55-d90a-d4e6-2a97aa6d0c41@akamai.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: b3e82dd1-e4ad-402e-fe9c-08da6364a6c9
-X-MS-TrafficTypeDiagnostic: DM5PR12MB1146:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: POue+wDG5rQtgUBpfsxktuh6d7mgVY5jd7koorv8AwKYrJVvmGLBBgr0MzpcUV6mYPtzzHgCePkT9hTHz/lTbL1punRnaSav2Jpl9v3GMoqYYAVXBt3jYnb+lGKxnyzrjNv+PHTwXUoxLEPh5b0yD2HFHpEEDeJ0mJClWYaXEL1cIYtVy60lpDESeGi47+aSNe48HEqXbIvq8wlFQ0uBfbnUQ4cThfb2MC2jWUj1A8H6FxK4pGEkJTY2pwFzLh9VKbJ+6YdokKa7WKskex5Evm5r6NLG2EF+f2Iey9VMRgvzh/V0nYHj213bvmC+7RIbYHPnGPiG33lLGaGMZdpJ4V2aAX8+8dRjZMVcjRFAV4esXw5mdAIvA51Ty6ft3r+ATCrbSd/lhoG13oLfiaI5nRl3y/X8oTo00NhdndrMsOQ4MVGXfD8KyKS5BiJA2rfm1ftA+/Zd99bJLMkG+IODpAjpUlGDEucqjcWPSbVpsU4HhyHSv/buMYFV2AWVyDAvBMMA14aUP9lwM+BsmqtkA4iCrxDE/UvdP2h6x1jMTVfr9p58R0Dwx7wbk0ahywHwMEipk56Dt52eI5vyRB4c57LuE1T1nPffMYuSitdpCAod/QvZ44kI1/e4UBJSNASDs0+Y8NEoqhcVjONwpR6xmJeoqM0P/8qFYFFcBy4Ul9y4LV6M6uFIVSXvWQ+VHEYFFXdGiWcARh9CPz9tev2r1qYO1uiHczL5laOphcqqe/uFFH1Dj+RUNB+EQU3kpBI3LHjZ2Yo0OYX5tX9Uzri7Uw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3108.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(7916004)(39860400002)(346002)(366004)(136003)(376002)(396003)(6506007)(86362001)(6666004)(6512007)(41300700001)(8936002)(26005)(478600001)(6486002)(2906002)(83380400001)(5660300002)(316002)(186003)(33716001)(38100700002)(66946007)(9686003)(8676002)(66476007)(66556008)(6916009)(4326008)(44832011);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?mqpKWIta+iIirGNwEnBbZWq55h99GMNm9NDtWlzut7u/CKP5mGLG1OD94joG?=
- =?us-ascii?Q?QRVO3yxh1XTuXqWIuypyApt+KbggtmiibNkPt/QE4w2Osp/HPrBhIBbANube?=
- =?us-ascii?Q?4qwlXM3UbjxyK7sfmptDhevB6No1YLvCwR7VsZqbPm3SLz4iZmBeWKh0/9BH?=
- =?us-ascii?Q?G6RXxIVW9aPQxbXVEl6zcDNhmRLyGjaW7nAvolZDLyiHqPY+XKEfVu53lBp8?=
- =?us-ascii?Q?Oh61Kz/LBfA6NYGnzqx4/rXBMdUF0rjCGxxyRU6HPIBnMFSgnysuW8nr7fK6?=
- =?us-ascii?Q?LCYh4+aEQOBxEuYrIxgctPG68wNIWSe1rY3LVidjqQKIWlU7BH47HmaWhFCt?=
- =?us-ascii?Q?Xv7LNXOoKPOf8iHciQlHwSm3e4UjVQwtAD7V/T1bM4blIJZQ85jGBy/jWXsr?=
- =?us-ascii?Q?eHbDz6b4fTpjMtmPUC2O+XgzFoyWsfhDraZ6TJjzejurjnrJVh6E9i+6ZcHg?=
- =?us-ascii?Q?dnibNHoKVOdffFKGnaKgEXR39RDXMFVAv+uBtZIUHCvcoLg4xeat4qzAG8RQ?=
- =?us-ascii?Q?k5Yo2R11C6yTIVOx4JKIoc4l/9koycWNTnF5sqpC4OFW/V4guzOh1X2YpPIO?=
- =?us-ascii?Q?6c9QXigbGt65w4rT4RBbmynRNgxrpYsxGcSRFFjamB+uAiAzTVOhCi0XzovF?=
- =?us-ascii?Q?Qq3EUK7Zu2WIxnnyDy49pk0q3LrhiQkhDsBJ/M1qlNwHkmwbGBoWfok9qsuO?=
- =?us-ascii?Q?u3vrzn+Ve06cqYxFs55UUn1MWhcmRQQPv/GmNjB0qlmqNuHj33DLvI1fhMIF?=
- =?us-ascii?Q?oFzDUPk59UXb9ElkYcwYVUSUdaZmbnLYqgTfQK/5583NO7bq+sfO8NrdYKP7?=
- =?us-ascii?Q?NNFn9qRIkXSkRKD9pfzA7mgzmYHpaDpH4iX8xQuwm1Bx1kcqa3nbdGIilMBz?=
- =?us-ascii?Q?yyrRXp2orhR6F62zIe5odrvjG+hBMTMy5ecgsZ87uku+z1mqSUg93sbxUG/T?=
- =?us-ascii?Q?UQ1Xh+a7PVlLFkZlHMqizblBg1mJ4SB6Q7qyYDAITUpmprxPx9jmEVpCUC+q?=
- =?us-ascii?Q?lk/B5QFpjWEVk2dAX0hxun4CHKnL8Is1c7jH1ulKZ/G1BSj8WGVQXODpRGH1?=
- =?us-ascii?Q?d1IBLUof72/hupYoiKsdlMDlOJK/OKPfGtQOJcxnKDAp/MbjFqsDEyTsY0eb?=
- =?us-ascii?Q?HJV+Znknu52LguJDbtc7vGln0+n2X5ZtjQhaY2DcFzUNhj/AYmu3eky+3Qw+?=
- =?us-ascii?Q?UFRFcSsnfi6WmSiDG2DUIN4Kqa+PetyRdJbvuV38wKieFMbmJZoS30ErfktO?=
- =?us-ascii?Q?AxpFheU1qY3BLLLDmY/PrOWrSpkHPrG7uf5uRiR7RTKIx5khylQkDDNBk4J/?=
- =?us-ascii?Q?LU9b/QSZ3STI4UbGQO7Z+ujIKKfyvfPa1k5SjN6MbqwpxgOKjH09WMzkaa/D?=
- =?us-ascii?Q?ERy1FKuVzXFOJexOJqyh9dn/jI0rnrqmzzESBoKmO4QR9MiRYzQGrnoxjVSG?=
- =?us-ascii?Q?0SqOoFixdkriyPo6EogtksoX0EPMdWRkgSEGveXP6MbOdngY1moeJFPULKo4?=
- =?us-ascii?Q?hL8R8CRkdwlZvcpKFhN57wUkwN0q3nA2zlWxklOIj+RpGahe6n3RtoqcnBQc?=
- =?us-ascii?Q?aqwbrg16Ky9K1DcdVlfKtPgRpEODSS0kbwQTf1J9?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b3e82dd1-e4ad-402e-fe9c-08da6364a6c9
-X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3108.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Jul 2022 17:41:57.7637
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: WOlt4YKbOLOsBAuKMgPJa22uoYDIpeZQim0Gt9gV+5G5XvOfoJc1yv87O7/mzAShivHTQw6PGCmMOUHrrBbO4g==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR12MB1146
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -114,67 +69,89 @@ Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Mon, Jul 04, 2022 at 11:13:56AM +0200, Borislav Petkov wrote:
-> On Mon, Apr 18, 2022 at 05:44:40PM +0000, Yazen Ghannam wrote:
-> > @@ -1254,11 +1255,10 @@ amd_decode_mce(struct notifier_block *nb, unsigned long val, void *data)
-> >  		((m->status & MCI_STATUS_PCC)	? "PCC"	  : "-"));
-> >  
-> >  	if (boot_cpu_has(X86_FEATURE_SMCA)) {
-> > -		u32 low, high;
-> >  		u32 addr = MSR_AMD64_SMCA_MCx_CONFIG(m->bank);
-> >  
-> > -		if (!rdmsr_safe(addr, &low, &high) &&
-> > -		    (low & MCI_CONFIG_MCAX))
-> > +		if (!rdmsrl_safe_on_cpu(m->extcpu, addr, &mca_config) &&
-> 
-> This change needs to be mentioned in the commit message.
->
+Add device IDs for Skylake-S CPUs according to datasheet.
 
-Okay.
+Signed-off-by: Josh Hant <joshuahant@gmail.com>
+---
+Hi Jason,
 
-> > +		    (mca_config & MCI_CONFIG_MCAX))
-> >  			pr_cont("|%s", ((m->status & MCI_STATUS_TCC) ? "TCC" : "-"));
-> >  
-> >  		pr_cont("|%s", ((m->status & MCI_STATUS_SYNDV) ? "SyndV" : "-"));
-> > @@ -1300,6 +1300,17 @@ amd_decode_mce(struct notifier_block *nb, unsigned long val, void *data)
-> >  		pr_cont("\n");
-> 
-> So here above the code prints SYND1 and SYND2.
-> 
-> If they contain FRU strings, then this printing should be an if-else by
-> checking bit 9.
-> 
-> 	if (BIT(9))
-> 		print fru text
-> 	else
-> 		print naked syndromes
-> 
->
+Sorry for the late response. I added the missing check you asked for. I
+kept the documentation the same for now. I found the register in table 3
+of the original document I linked. If you would rather I provide the one
+you linked, I'll do that in the next patch.
 
-Okay, will change.
+I confirmed that the name and size in /proc/meminfo is consistent with
+what is in /sys/devices/system/edac/mc/mc0.
 
-> >  		decode_smca_error(m);
-> > +
-> > +		if (mca_config & BIT(9)) {
-> > +			char frutext[32];
-> 
-> Why 32?
->
+Thanks
+-Josh
+ drivers/edac/ie31200_edac.c | 27 ++++++++++++++++++---------
+ 1 file changed, 18 insertions(+), 9 deletions(-)
 
-I picked the next power of 2 after 16 in order to have some space for
-terminating NULL in the string. I can't think of a good reason it needs to be
-a power of 2, so I can change this to 17.
+diff --git a/drivers/edac/ie31200_edac.c b/drivers/edac/ie31200_edac.c
+index 9a9ff5ad611a..3d322603bce8 100644
+--- a/drivers/edac/ie31200_edac.c
++++ b/drivers/edac/ie31200_edac.c
+@@ -20,11 +20,14 @@
+  * 0c08: Xeon E3-1200 v3 Processor DRAM Controller
+  * 1918: Xeon E3-1200 v5 Skylake Host Bridge/DRAM Registers
+  * 5918: Xeon E3-1200 Xeon E3-1200 v6/7th Gen Core Processor Host Bridge/DRAM Registers
++ * 190f: 6th Gen Core Dual-Core Processor Host Bridge/DRAM Registers
++ * 191f: 6th Gen Core Quad-Core Processor Host Bridge/DRAM Registers
+  * 3e..: 8th/9th Gen Core Processor Host Bridge/DRAM Registers
+  *
+  * Based on Intel specification:
+  * https://www.intel.com/content/dam/www/public/us/en/documents/datasheets/xeon-e3-1200v3-vol-2-datasheet.pdf
+  * http://www.intel.com/content/www/us/en/processors/xeon/xeon-e3-1200-family-vol-2-datasheet.html
++ * https://www.intel.com/content/dam/www/public/us/en/documents/datasheets/desktop-6th-gen-core-family-datasheet-vol-2.pdf
+  * https://www.intel.com/content/www/us/en/processors/core/7th-gen-core-family-mobile-h-processor-lines-datasheet-vol-2.html
+  * https://www.intel.com/content/www/us/en/products/docs/processors/core/8th-gen-core-family-datasheet-vol-2.html
+  *
+@@ -53,15 +56,17 @@
+ #define ie31200_printk(level, fmt, arg...) \
+ 	edac_printk(level, "ie31200", fmt, ##arg)
 
-> > +			memset(frutext, 0, sizeof(frutext));
-> > +			memcpy(&frutext[0], &m->synd1, 8);
-> > +			memcpy(&frutext[8], &m->synd2, 8);
-> > +
-> > +			pr_emerg(HW_ERR "FRU Text: %s\n", frutext);
-> > +		}
-> > +
-> >  		goto err_code;
-> >  	}
->
+-#define PCI_DEVICE_ID_INTEL_IE31200_HB_1 0x0108
+-#define PCI_DEVICE_ID_INTEL_IE31200_HB_2 0x010c
+-#define PCI_DEVICE_ID_INTEL_IE31200_HB_3 0x0150
+-#define PCI_DEVICE_ID_INTEL_IE31200_HB_4 0x0158
+-#define PCI_DEVICE_ID_INTEL_IE31200_HB_5 0x015c
+-#define PCI_DEVICE_ID_INTEL_IE31200_HB_6 0x0c04
+-#define PCI_DEVICE_ID_INTEL_IE31200_HB_7 0x0c08
+-#define PCI_DEVICE_ID_INTEL_IE31200_HB_8 0x1918
+-#define PCI_DEVICE_ID_INTEL_IE31200_HB_9 0x5918
++#define PCI_DEVICE_ID_INTEL_IE31200_HB_1  0x0108
++#define PCI_DEVICE_ID_INTEL_IE31200_HB_2  0x010c
++#define PCI_DEVICE_ID_INTEL_IE31200_HB_3  0x0150
++#define PCI_DEVICE_ID_INTEL_IE31200_HB_4  0x0158
++#define PCI_DEVICE_ID_INTEL_IE31200_HB_5  0x015c
++#define PCI_DEVICE_ID_INTEL_IE31200_HB_6  0x0c04
++#define PCI_DEVICE_ID_INTEL_IE31200_HB_7  0x0c08
++#define PCI_DEVICE_ID_INTEL_IE31200_HB_8  0x190F
++#define PCI_DEVICE_ID_INTEL_IE31200_HB_9  0x1918
++#define PCI_DEVICE_ID_INTEL_IE31200_HB_10 0x191F
++#define PCI_DEVICE_ID_INTEL_IE31200_HB_11 0x5918
 
-Thanks,
-Yazen
+ /* Coffee Lake-S */
+ #define PCI_DEVICE_ID_INTEL_IE31200_HB_CFL_MASK 0x3e00
+@@ -80,6 +85,8 @@
+ #define DEVICE_ID_SKYLAKE_OR_LATER(did)                                        \
+ 	(((did) == PCI_DEVICE_ID_INTEL_IE31200_HB_8) ||                        \
+ 	 ((did) == PCI_DEVICE_ID_INTEL_IE31200_HB_9) ||                        \
++	 ((did) == PCI_DEVICE_ID_INTEL_IE31200_HB_10) ||                       \
++	 ((did) == PCI_DEVICE_ID_INTEL_IE31200_HB_11) ||                       \
+ 	 (((did) & PCI_DEVICE_ID_INTEL_IE31200_HB_CFL_MASK) ==                 \
+ 	  PCI_DEVICE_ID_INTEL_IE31200_HB_CFL_MASK))
+
+@@ -577,6 +584,8 @@ static const struct pci_device_id ie31200_pci_tbl[] = {
+ 	{ PCI_VEND_DEV(INTEL, IE31200_HB_7),      PCI_ANY_ID, PCI_ANY_ID, 0, 0, IE31200 },
+ 	{ PCI_VEND_DEV(INTEL, IE31200_HB_8),      PCI_ANY_ID, PCI_ANY_ID, 0, 0, IE31200 },
+ 	{ PCI_VEND_DEV(INTEL, IE31200_HB_9),      PCI_ANY_ID, PCI_ANY_ID, 0, 0, IE31200 },
++	{ PCI_VEND_DEV(INTEL, IE31200_HB_10),     PCI_ANY_ID, PCI_ANY_ID, 0, 0, IE31200 },
++	{ PCI_VEND_DEV(INTEL, IE31200_HB_11),     PCI_ANY_ID, PCI_ANY_ID, 0, 0, IE31200 },
+ 	{ PCI_VEND_DEV(INTEL, IE31200_HB_CFL_1),  PCI_ANY_ID, PCI_ANY_ID, 0, 0, IE31200 },
+ 	{ PCI_VEND_DEV(INTEL, IE31200_HB_CFL_2),  PCI_ANY_ID, PCI_ANY_ID, 0, 0, IE31200 },
+ 	{ PCI_VEND_DEV(INTEL, IE31200_HB_CFL_3),  PCI_ANY_ID, PCI_ANY_ID, 0, 0, IE31200 },
+--
+2.34.3
+
