@@ -2,51 +2,77 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D56857301B
-	for <lists+linux-edac@lfdr.de>; Wed, 13 Jul 2022 10:10:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AACAA5734CD
+	for <lists+linux-edac@lfdr.de>; Wed, 13 Jul 2022 12:58:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234206AbiGMIKQ (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Wed, 13 Jul 2022 04:10:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39426 "EHLO
+        id S230365AbiGMK6o (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Wed, 13 Jul 2022 06:58:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230384AbiGMIKP (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Wed, 13 Jul 2022 04:10:15 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99CB1E9211;
-        Wed, 13 Jul 2022 01:10:04 -0700 (PDT)
-Received: from dggpemm500020.china.huawei.com (unknown [172.30.72.54])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4LjVbK2b8Qz1L95Y;
-        Wed, 13 Jul 2022 16:07:25 +0800 (CST)
-Received: from dggpemm500001.china.huawei.com (7.185.36.107) by
- dggpemm500020.china.huawei.com (7.185.36.49) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Wed, 13 Jul 2022 16:09:46 +0800
-Received: from [10.67.100.236] (10.67.100.236) by
- dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Wed, 13 Jul 2022 16:09:45 +0800
-Message-ID: <767e9981-721a-f298-220c-4fd8bf3e9c70@huawei.com>
-Date:   Wed, 13 Jul 2022 16:09:45 +0800
+        with ESMTP id S235596AbiGMK6n (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Wed, 13 Jul 2022 06:58:43 -0400
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 064EDF598;
+        Wed, 13 Jul 2022 03:58:42 -0700 (PDT)
+Received: by mail-lf1-x132.google.com with SMTP id z25so18471355lfr.2;
+        Wed, 13 Jul 2022 03:58:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=a7EdAL1phybyF7skcIdHDSL8TqoETJjf/TfW70qlhQE=;
+        b=CmsqdFZkajcNWb4IErlxXvHJd2aIeR7WpcoDNsQIfxeOJc22txKTrcbrdZ0dGVV2+7
+         3b7gsgj7TmTLAsJ3B5AK5T8gaLFqJreAvmhJcilnwyaAPhQf6gInX9bg/bBwdbeMGDwK
+         28uWAvs6Fxn3MJPM4/+y9L+9vu3nbzkCgkJ2cwWEoMM0c/r4vacKwjBjog5FrMFRQ1MX
+         ExXvhxnfPVCtfFZSke56lYbvzpf8zfBJ92VaB0J82Ssr6gkhq84X5PFQTVHW+Eg0WfHr
+         ypf/I82xn6wcDzPEO0WXud2EXlrdem57gqlMTaK8tVjAm2o/IyoGJpG+gG8hV+HTspoY
+         ez+Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=a7EdAL1phybyF7skcIdHDSL8TqoETJjf/TfW70qlhQE=;
+        b=4TRFdfGpb7Dn4ykXLec0IbNmA8jbzgLZxOj8P0FGDW74JCMifOzi+pA0T9aIET2/P9
+         ftjaFC5lKGKOYg8Sfwciv1pEYMQffg/QaiizbzapKxP1oECZSpESlKJaaVPm26QfjNdl
+         TAesmOSvt2OMHMdMQJ2NEj9w48aYECJt+AHA/bIXER++AgDxa/GfBGqhy2TptPBR8Wtw
+         FuaJ/k7gZWLoY4G34ZmoTXRiiSSyJyIk7uVuWqtMT4XweHx219K55eLb5HBiWkwoydUK
+         bVTHgCCfBtQX7MGvORWrEkl+2ImM33ysMhDLia05zwI96w5+UbXKTR98Jvj5C70imHQ3
+         O3Bw==
+X-Gm-Message-State: AJIora+GJX6CAPAa9bzQTjkKrkGAjiLgFX+CVv5NeqvSD+MGNrsV+Yvk
+        oLJ1sowiOZguLecH/9UB2dI=
+X-Google-Smtp-Source: AGRyM1tiNi7tM+jPk95JdtfLPm+/s8q30CPmWWNXCMmYZzbl5lIlM6TOUtjwhjklfgMb0cCoqIVQnA==
+X-Received: by 2002:a05:6512:3c96:b0:489:e6c1:a5a7 with SMTP id h22-20020a0565123c9600b00489e6c1a5a7mr1797738lfv.38.1657709919880;
+        Wed, 13 Jul 2022 03:58:39 -0700 (PDT)
+Received: from orome (p200300e41f12c800f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f12:c800:f22f:74ff:fe1f:3a53])
+        by smtp.gmail.com with ESMTPSA id p23-20020a2e9ad7000000b0025d6f3f40b2sm1762183ljj.21.2022.07.13.03.58.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 13 Jul 2022 03:58:38 -0700 (PDT)
+Date:   Wed, 13 Jul 2022 12:58:36 +0200
+From:   Thierry Reding <thierry.reding@gmail.com>
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     arm-soc <arm@kernel.org>, SoC Team <soc@kernel.org>,
+        Jon Hunter <jonathanh@nvidia.com>,
+        "open list:TEGRA ARCHITECTURE SUPPORT" <linux-tegra@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-edac@vger.kernel.org, Borislav Petkov <bp@alien8.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Tony Luck <tony.luck@intel.com>,
+        James Morse <james.morse@arm.com>,
+        Robert Richter <rric@kernel.org>
+Subject: Re: [GIT PULL 1/7] soc/tegra: Changes for v5.20-rc1
+Message-ID: <Ys6lXD6BSxjH02mW@orome>
+References: <20220708185608.676474-1-thierry.reding@gmail.com>
+ <20220708185608.676474-2-thierry.reding@gmail.com>
+ <CAK8P3a1bKUr77t9xkNAX=-RqzRme6Hymr3V=36MSHT_sOFEW5A@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.2
-Subject: Re: [PATCH v3] RAS: Report ARM processor information to userspace
-To:     <james.morse@arm.com>
-References: <20220214030813.135766-1-lostway@zju.edu.cn>
-CC:     <linux-kernel@vger.kernel.org>, <linux-edac@vger.kernel.org>,
-        <bp@alien8.de>, <tony.luck@intel.com>,
-        <jason@os.amperecomputing.com>, <mchehab@kernel.org>,
-        <lostway@zju.edu.cn>, <mark.rutland@arm.com>, <rjw@rjwysocki.net>
-From:   tanxiaofei <tanxiaofei@huawei.com>
-In-Reply-To: <20220214030813.135766-1-lostway@zju.edu.cn>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.67.100.236]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- dggpemm500001.china.huawei.com (7.185.36.107)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="TIZRcbYAEqhPciQf"
+Content-Disposition: inline
+In-Reply-To: <CAK8P3a1bKUr77t9xkNAX=-RqzRme6Hymr3V=36MSHT_sOFEW5A@mail.gmail.com>
+User-Agent: Mutt/2.2.6 (2022-06-05)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,230 +81,110 @@ List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
 
-Hi James,
+--TIZRcbYAEqhPciQf
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-This patch is necceary for error collection of rasdaemon, and also cpu 
-core error  prediction feature . Please help to give some comment when 
-you are free. thanks.
+On Tue, Jul 12, 2022 at 03:27:16PM +0200, Arnd Bergmann wrote:
+> On Fri, Jul 8, 2022 at 8:56 PM Thierry Reding <thierry.reding@gmail.com> =
+wrote:
+> >   git://git.kernel.org/pub/scm/linux/kernel/git/tegra/linux.git tags/te=
+gra-for-5.20-soc
+> ...
+> > ----------------------------------------------------------------
+> > soc/tegra: Changes for v5.20-rc1
+> >
+> > The bulk of these changes is the new CBB driver which is used to provide
+> > (a lot of) information about SErrors when things go wrong, instead of
+> > the kernel just crashing or hanging.
+> >
+> > In addition more SoC information is exposed to sysfs and various minor
+> > issues are fixed.
+> >
+>=20
+> Hi Thierry,
+>=20
+> I fear I'm going to skip this for the current merge window. It looks like
+> the CBB driver you add here would fit into the existing drivers/edac/
+> subsystem, or at the minimum should have been reviewed by the
+> corresponding maintainers (added to Cc)  to decide whether it goes
+> there or not.
+>=20
+> I had not previously seen this driver, but I'll let them have a look firs=
+t.
 
+EDAC looks like it's used primarily for memory controllers, which this
+is not. But then I also see explicit references to non-memory-controller
+references in the infrastructure, so perhaps this does fit in there. The
+CBB driver is primarily a means to provide additional information about
+runtime errors, so it's not directly a means of discovering the errors
+(they would be detected anyway and cause a crash) and I don't think we
+have a means of correcting any of these errors.
 
-在 2022/2/14 11:08, lostway@zju.edu.cn 写道:
-> From: Shengwei Luo <luoshengwei@huawei.com>
-> 
-> The original arm_event trace code only traces out ARM processor error
-> information data. It's not enough for user to take appropriate action.
-> 
-> According to UEFI_2_9 specification chapter N2.4.4, the ARM processor
-> error section includes several ARM processor error information, several
-> ARM processor context information and several vendor specific error
-> information structures. In addition to these info, there are error
-> severity and cpu logical index about the event. Report all of these
-> information to userspace via perf i/f. So that the user can do cpu core
-> isolation according to error severity and other info.
-> 
-> Signed-off-by: Shengwei Luo <luoshengwei@huawei.com>
-> Signed-off-by: Jason Tian <jason@os.amperecomputing.com>
-> ---
-> Links:
-> https://lore.kernel.org/lkml/20220126030906.56765-1-lostway@zju.edu.cn/
-> https://lore.kernel.org/lkml/20210205022229.313030-1-jason@os.amperecomputing.com/
-> 
-> v2->v3:
-> Add signed-off of original author.
-> Fix commit message to explain why a change is being done.
-> 
-> v1->v2:
-> Cleaned up ci warnings.
-> ---
->   drivers/acpi/apei/ghes.c |  3 +--
->   drivers/ras/ras.c        | 46 ++++++++++++++++++++++++++++++++++++--
->   include/linux/ras.h      | 15 +++++++++++--
->   include/ras/ras_event.h  | 48 +++++++++++++++++++++++++++++++++++-----
->   4 files changed, 101 insertions(+), 11 deletions(-)
-> 
-> diff --git a/drivers/acpi/apei/ghes.c b/drivers/acpi/apei/ghes.c
-> index 0c5c9acc6254..f824c26057b1 100644
-> --- a/drivers/acpi/apei/ghes.c
-> +++ b/drivers/acpi/apei/ghes.c
-> @@ -490,9 +490,8 @@ static bool ghes_handle_arm_hw_error(struct acpi_hest_generic_data *gdata, int s
->   	int sec_sev, i;
->   	char *p;
->   
-> -	log_arm_hw_error(err);
-> -
->   	sec_sev = ghes_severity(gdata->error_severity);
-> +	log_arm_hw_error(err, sec_sev);
->   	if (sev != GHES_SEV_RECOVERABLE || sec_sev != GHES_SEV_RECOVERABLE)
->   		return false;
->   
-> diff --git a/drivers/ras/ras.c b/drivers/ras/ras.c
-> index 95540ea8dd9d..2a7f424d59b9 100644
-> --- a/drivers/ras/ras.c
-> +++ b/drivers/ras/ras.c
-> @@ -21,9 +21,51 @@ void log_non_standard_event(const guid_t *sec_type, const guid_t *fru_id,
->   	trace_non_standard_event(sec_type, fru_id, fru_text, sev, err, len);
->   }
->   
-> -void log_arm_hw_error(struct cper_sec_proc_arm *err)
-> +void log_arm_hw_error(struct cper_sec_proc_arm *err, const u8 sev)
->   {
-> -	trace_arm_event(err);
-> +	u32 pei_len;
-> +	u32 ctx_len = 0;
-> +	s32 vsei_len;
-> +	u8 *pei_err;
-> +	u8 *ctx_err;
-> +	u8 *ven_err_data;
-> +	struct cper_arm_err_info *err_info;
-> +	struct cper_arm_ctx_info *ctx_info;
-> +	int n, sz;
-> +	int cpu;
-> +
-> +	pei_len = sizeof(struct cper_arm_err_info) * err->err_info_num;
-> +	pei_err = (u8 *)err + sizeof(struct cper_sec_proc_arm);
-> +
-> +	err_info = (struct cper_arm_err_info *)(err + 1);
-> +	ctx_info = (struct cper_arm_ctx_info *)(err_info + err->err_info_num);
-> +	ctx_err = (u8 *)ctx_info;
-> +	for (n = 0; n < err->context_info_num; n++) {
-> +		sz = sizeof(struct cper_arm_ctx_info) + ctx_info->size;
-> +		ctx_info = (struct cper_arm_ctx_info *)((long)ctx_info + sz);
-> +		ctx_len += sz;
-> +	}
-> +
-> +	vsei_len = err->section_length - (sizeof(struct cper_sec_proc_arm) +
-> +						pei_len + ctx_len);
-> +	if (vsei_len < 0) {
-> +		pr_warn(FW_BUG
-> +			"section length: %d\n", err->section_length);
-> +		pr_warn(FW_BUG
-> +			"section length is too small\n");
-> +		pr_warn(FW_BUG
-> +			"firmware-generated error record is incorrect\n");
-> +		vsei_len = 0;
-> +	}
-> +	ven_err_data = (u8 *)ctx_info;
-> +
-> +	cpu = GET_LOGICAL_INDEX(err->mpidr);
-> +	/* when return value is invalid, set cpu index to -1 */
-> +	if (cpu < 0)
-> +		cpu = -1;
-> +
-> +	trace_arm_event(err, pei_err, pei_len, ctx_err, ctx_len,
-> +			ven_err_data, (u32)vsei_len, sev, cpu);
->   }
->   
->   static int __init ras_init(void)
-> diff --git a/include/linux/ras.h b/include/linux/ras.h
-> index 1f4048bf2674..4529775374d0 100644
-> --- a/include/linux/ras.h
-> +++ b/include/linux/ras.h
-> @@ -24,7 +24,7 @@ int __init parse_cec_param(char *str);
->   void log_non_standard_event(const guid_t *sec_type,
->   			    const guid_t *fru_id, const char *fru_text,
->   			    const u8 sev, const u8 *err, const u32 len);
-> -void log_arm_hw_error(struct cper_sec_proc_arm *err);
-> +void log_arm_hw_error(struct cper_sec_proc_arm *err, const u8 sev);
->   #else
->   static inline void
->   log_non_standard_event(const guid_t *sec_type,
-> @@ -32,7 +32,18 @@ log_non_standard_event(const guid_t *sec_type,
->   		       const u8 sev, const u8 *err, const u32 len)
->   { return; }
->   static inline void
-> -log_arm_hw_error(struct cper_sec_proc_arm *err) { return; }
-> +log_arm_hw_error(struct cper_sec_proc_arm *err, const u8 sev) { return; }
->   #endif
->   
-> +#if defined(CONFIG_ARM) || defined(CONFIG_ARM64)
-> +#include <asm/smp_plat.h>
-> +/*
-> + * Include ARM specific SMP header which provides a function mapping mpidr to
-> + * cpu logical index.
-> + */
-> +#define GET_LOGICAL_INDEX(mpidr) get_logical_index(mpidr & MPIDR_HWID_BITMASK)
-> +#else
-> +#define GET_LOGICAL_INDEX(mpidr) -EINVAL
-> +#endif /* CONFIG_ARM || CONFIG_ARM64 */
-> +
->   #endif /* __RAS_H__ */
-> diff --git a/include/ras/ras_event.h b/include/ras/ras_event.h
-> index d0337a41141c..92cfb61bdb20 100644
-> --- a/include/ras/ras_event.h
-> +++ b/include/ras/ras_event.h
-> @@ -168,11 +168,24 @@ TRACE_EVENT(mc_event,
->    * This event is generated when hardware detects an ARM processor error
->    * has occurred. UEFI 2.6 spec section N.2.4.4.
->    */
-> +#define APEIL "ARM Processor Err Info data len"
-> +#define APEID "ARM Processor Err Info raw data"
-> +#define APECIL "ARM Processor Err Context Info data len"
-> +#define APECID "ARM Processor Err Context Info raw data"
-> +#define VSEIL "Vendor Specific Err Info data len"
-> +#define VSEID "Vendor Specific Err Info raw data"
->   TRACE_EVENT(arm_event,
->   
-> -	TP_PROTO(const struct cper_sec_proc_arm *proc),
-> +	TP_PROTO(const struct cper_sec_proc_arm *proc, const u8 *pei_err,
-> +			const u32 pei_len,
-> +			const u8 *ctx_err,
-> +			const u32 ctx_len,
-> +			const u8 *oem,
-> +			const u32 oem_len,
-> +			u8 sev,
-> +			int cpu),
->   
-> -	TP_ARGS(proc),
-> +	TP_ARGS(proc, pei_err, pei_len, ctx_err, ctx_len, oem, oem_len, sev, cpu),
->   
->   	TP_STRUCT__entry(
->   		__field(u64, mpidr)
-> @@ -180,6 +193,14 @@ TRACE_EVENT(arm_event,
->   		__field(u32, running_state)
->   		__field(u32, psci_state)
->   		__field(u8, affinity)
-> +		__field(u32, pei_len)
-> +		__dynamic_array(u8, buf, pei_len)
-> +		__field(u32, ctx_len)
-> +		__dynamic_array(u8, buf1, ctx_len)
-> +		__field(u32, oem_len)
-> +		__dynamic_array(u8, buf2, oem_len)
-> +		__field(u8, sev)
-> +		__field(int, cpu)
->   	),
->   
->   	TP_fast_assign(
-> @@ -199,12 +220,29 @@ TRACE_EVENT(arm_event,
->   			__entry->running_state = ~0;
->   			__entry->psci_state = ~0;
->   		}
-> +		__entry->pei_len = pei_len;
-> +		memcpy(__get_dynamic_array(buf), pei_err, pei_len);
-> +		__entry->ctx_len = ctx_len;
-> +		memcpy(__get_dynamic_array(buf1), ctx_err, ctx_len);
-> +		__entry->oem_len = oem_len;
-> +		memcpy(__get_dynamic_array(buf2), oem, oem_len);
-> +		__entry->sev = sev;
-> +		__entry->cpu = cpu;
->   	),
->   
-> -	TP_printk("affinity level: %d; MPIDR: %016llx; MIDR: %016llx; "
-> -		  "running state: %d; PSCI state: %d",
-> +	TP_printk("cpu: %d; error: %d; affinity level: %d; MPIDR: %016llx; MIDR: %016llx; "
-> +		  "running state: %d; PSCI state: %d; "
-> +		  "%s: %d; %s: %s; %s: %d; %s: %s; %s: %d; %s: %s",
-> +		  __entry->cpu,
-> +		  __entry->sev,
->   		  __entry->affinity, __entry->mpidr, __entry->midr,
-> -		  __entry->running_state, __entry->psci_state)
-> +		  __entry->running_state, __entry->psci_state,
-> +		  APEIL, __entry->pei_len, APEID,
-> +		  __print_hex(__get_dynamic_array(buf), __entry->pei_len),
-> +		  APECIL, __entry->ctx_len, APECID,
-> +		  __print_hex(__get_dynamic_array(buf1), __entry->ctx_len),
-> +		  VSEIL, __entry->oem_len, VSEID,
-> +		  __print_hex(__get_dynamic_array(buf2), __entry->oem_len))
->   );
->   
->   /*
-> 
+I'll ask Sumit to work with the EDAC maintainers on this.
+
+> For the other patches, I found two more problems:
+>=20
+> > Bitan Biswas (1):
+> >       soc/tegra: fuse: Expose Tegra production status
+>=20
+> Please don't just add random attributes in the soc device infrastructure.
+> This one has a completely generic name but a SoC specific
+> meaning, and it lacks a description in Documentation/ABI.
+> Not sure what the right ABI is here, but this is something that needs
+> to be discussed more broadly when you send a new version.
+
+I wasn't aware that the SoC device infrastructure was restricted to only
+standardized attributes. Looks like there are a few other outliers that
+add custom attributes: UX500, ARM Integrator and RealView, and OMAP2.
+
+Do we have some other place where this kind of thing can be exposed? Or
+do we just need to come up with some better way of namespacing these?
+Perhaps it would also be sufficient if all of these were better
+documented so that people know what to look for on their platform of
+interest.
+
+> I see there are already some custom attributes in the same device,
+> we should probably not have added those either, but I suppose
+> we are stuck with those, so please add the missing documentation.
+
+Yeah, that's a good point. These should definitely be documented
+properly.
+
+>=20
+> > YueHaibing (1):
+> >      soc/tegra: fuse: Add missing DMADEVICES dependency
+>=20
+> This one fixes the warning the wrong way: we don't 'select' random
+> drivers from other subsystems, and selecting the entire
+> subsystem makes it worse. Just drop the 'select' here and
+> enable the drivers in the defconfig.
+
+This doesn't actually select the DMADEVICES property. It adds a
+dependency on DMADEVICES and if that is met it will select
+TEGRA20_APB_DMA.
+
+Thierry
+
+--TIZRcbYAEqhPciQf
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmLOpVkACgkQ3SOs138+
+s6HhfBAAr9dY2YR9GztcArzoolgqZsRvoAUpxcSx+Ht9WbmOw1o/FwryrFxIzMUL
+R2IdmvNdO7a6ZegRSIVKNADbrmTkENserrulCZmY0A92Izc2T3yxWvFR1f54GFc0
+CAtlHk2N7+v9f54yn3+OAz3CxX94oryjGvbfor9scNGbKZpIZ7HRu3gXAqXXeA3X
+HWpcRRJRIwYSSaDA27cd9g5q5fb7Dm2WJXwosVqsG9dzndMEqFRC4PssQDBV3G+7
+AobVS4Z1svgk1vsX++ATpz3FpNNDA+BbwGcos5SNNPyRe+Pk5IEMCY5ecRidH5cQ
+L/4C2EYu9+PiBL+tjX3hI8Go/9uRPI2F90K5uZdKQcNObu+YlfU/icbjIXMCUz6v
+s9MeTIk+yYIqmolxPeJalcGyvOR7v5St5WnAZYOKg53H75WKyVk8xJ5s9fysZHNg
+ooVk9BJl/LMio94lk58GYLePpS+SBxMF04+8QhPAYdKv0nBdsiZPkNwTK+t9o6+d
+VuyRMHZwHW5nOTLUKdo1CW59KspA8g1g8Wkp008+sCo5wUDGca3ueSeYjl5Fcy3Q
+bBPI6T+beYVzgdXzaIjU4vQ9bGs4bZWaCiJPfX0E8hcPxZE9drcppoAOjE+ROQ8Z
+hQxjbxcSah5MdAM2ICYjRzkfHoMVzWOiR9EhtZi6cLJFdAOPPYM=
+=Bpjo
+-----END PGP SIGNATURE-----
+
+--TIZRcbYAEqhPciQf--
