@@ -2,118 +2,191 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7077573675
-	for <lists+linux-edac@lfdr.de>; Wed, 13 Jul 2022 14:36:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 28D25573B61
+	for <lists+linux-edac@lfdr.de>; Wed, 13 Jul 2022 18:40:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231236AbiGMMg6 (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Wed, 13 Jul 2022 08:36:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54316 "EHLO
+        id S237145AbiGMQkk (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Wed, 13 Jul 2022 12:40:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230247AbiGMMg5 (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Wed, 13 Jul 2022 08:36:57 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E02A5F5D54;
-        Wed, 13 Jul 2022 05:36:55 -0700 (PDT)
-Received: from mail-yw1-f178.google.com ([209.85.128.178]) by
- mrelayeu.kundenserver.de (mreue106 [213.165.67.113]) with ESMTPSA (Nemesis)
- id 1MF418-1oMXpl415U-00FPBH; Wed, 13 Jul 2022 14:36:54 +0200
-Received: by mail-yw1-f178.google.com with SMTP id 00721157ae682-31c89653790so110655937b3.13;
-        Wed, 13 Jul 2022 05:36:53 -0700 (PDT)
-X-Gm-Message-State: AJIora8juM+Q6YDO4ZJStiPqrssrQjjnpw0L8X4PP7tauD0EjXW2AlLE
-        4ySaG3sh57XSc0n9At27GoQadJkORPN+clMyaXk=
-X-Google-Smtp-Source: AGRyM1sh6y2Q78V+7SEHOa4+tSkaz/9F3euOrnSe3woF61Ndiv4noQe+HMpJi5sccU+Otl07Nje5B04oP8knpINAaJ0=
-X-Received: by 2002:a0d:df0f:0:b0:31b:e000:7942 with SMTP id
- i15-20020a0ddf0f000000b0031be0007942mr3819236ywe.320.1657715812648; Wed, 13
- Jul 2022 05:36:52 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220708185608.676474-1-thierry.reding@gmail.com>
- <20220708185608.676474-2-thierry.reding@gmail.com> <CAK8P3a1bKUr77t9xkNAX=-RqzRme6Hymr3V=36MSHT_sOFEW5A@mail.gmail.com>
- <Ys6lXD6BSxjH02mW@orome> <CAK8P3a0cSq47B=acZ854TVu=RckJNfyfKdqQUMzCX7SsV7Wt0g@mail.gmail.com>
- <d12fa14a-bf0d-4e98-acd8-69229315d660@nvidia.com>
-In-Reply-To: <d12fa14a-bf0d-4e98-acd8-69229315d660@nvidia.com>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Wed, 13 Jul 2022 14:36:36 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a1sDbtEUaT7Z5k_SfUcA7OBUxkny7kmKOMFaE96qaGeXg@mail.gmail.com>
-Message-ID: <CAK8P3a1sDbtEUaT7Z5k_SfUcA7OBUxkny7kmKOMFaE96qaGeXg@mail.gmail.com>
-Subject: Re: [GIT PULL 1/7] soc/tegra: Changes for v5.20-rc1
-To:     Jon Hunter <jonathanh@nvidia.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        arm-soc <arm@kernel.org>, SoC Team <soc@kernel.org>,
-        "open list:TEGRA ARCHITECTURE SUPPORT" <linux-tegra@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-edac@vger.kernel.org, Borislav Petkov <bp@alien8.de>,
+        with ESMTP id S229913AbiGMQkj (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Wed, 13 Jul 2022 12:40:39 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60DB82E6B7;
+        Wed, 13 Jul 2022 09:40:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1657730435; x=1689266435;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=fnQOCgmmuU1mQ1zCnnmtaPsBptE0xg9rGXhM5D+1Tlk=;
+  b=hWU4FroW9OMoBpYUTMolV51NOTFZscGW/KnSVAVP/TbOmUICHknoe1Nr
+   UCb+ZaOPwJqHDEL+uOHM5CED5pHsJn4HhPLhZhqQ1Wa+1ubLjjgMVU0+i
+   1sTK+ypcxUsKhTNoHnvK0S5t25KpyoW7m+N9Jru7ABKRBoRqg/T39Nsnu
+   JlIBmj9ILsF8YAXUIIM1YzFIvhgD7e5cPyZ3r+9gNHA/AYur1WfpPOoJp
+   fzAIQpUuenkNitYEeLzo9Q1OKPNPvgnm8P5oEV1pWSHyEolQ8IyomQB44
+   vyS1DtlLo9LctL82Xl79KJu5XD53Wz3uXEqtakrxJnM2oM9fhQWOGxTGB
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10407"; a="265066890"
+X-IronPort-AV: E=Sophos;i="5.92,267,1650956400"; 
+   d="scan'208";a="265066890"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jul 2022 09:40:34 -0700
+X-IronPort-AV: E=Sophos;i="5.92,267,1650956400"; 
+   d="scan'208";a="722416355"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jul 2022 09:40:27 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1oBfPT-001CUH-2s;
+        Wed, 13 Jul 2022 19:40:23 +0300
+Date:   Wed, 13 Jul 2022 19:40:23 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Henning Schild <henning.schild@siemens.com>
+Cc:     Lee Jones <lee.jones@linaro.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Tony Luck <tony.luck@intel.com>, Wolfram Sang <wsa@kernel.org>,
+        Jean Delvare <jdelvare@suse.de>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Jonathan Yong <jonathan.yong@intel.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-edac@vger.kernel.org, linux-i2c <linux-i2c@vger.kernel.org>,
+        Linux LED Subsystem <linux-leds@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Platform Driver <platform-driver-x86@vger.kernel.org>,
+        LINUXWATCHDOG <linux-watchdog@vger.kernel.org>,
+        Borislav Petkov <bp@alien8.de>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Tony Luck <tony.luck@intel.com>,
         James Morse <james.morse@arm.com>,
-        Robert Richter <rric@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:vU5+L2oxFriovnRyAO0MXbwcIyZzlwPFR4vSSs/PuHF2+Wfpu/q
- EQDyKfZ8dlkwImvR209+qkY71AWXF6PiqsE1JG1vfj7zK1d2UMVjbvis/29EqSPWsQQ/rur
- DCZM12sJUtUadXRIEvo7yhsbxffsciBQfYR32+9BvFf77nDoGwwlsCuKiK08wpCsyCK1g3O
- yxsX/AcyLLdCMyW4eFr0w==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:gU5u+f4sApo=:Nj6WwAeNzoJE2YjSe0i/Wj
- OD9MhhC2GB45XGVdlKfP20CTVOs35RSruEDunGnnj0CRcnIPN7h7QrOyjHzAQZ22kBsKu7aFi
- ROleo4iEk/0KjbVtbbTYUPm3/7dWlvxjXez2JvHPmnZ7b7eVOBtXELN8xPTR9uyqhdkcqTsZ4
- il+hPkZL/ez+YJKN8jVwl2J8hJXhaFz8fVIdxfvH9BGiNRIMbjcNzS7yW/7k0WCAJGWokK/yo
- xFnGLogF6LobH7lsvo8rak0o+dBLSBG3fvS0UYQAnPeuhSLOfiI+gwieOY/tmjlkpL+w9cmgj
- AQsiVsdKoip1CQjs1tlhTCflK1WXiVLM64lZcQKm+8eoDzp4g1xMM0Hl/qpG0Ync0BZNqeGBU
- FoQlJLXdGW4vo6jOjAnFj9D5j6ZxzduMEE/7QJoo9nnA/NazAxUlTtLvzuOh+NfywjbCNgCYC
- yyzp80C4wKUhA2YO0HUx78n4wKDG0McV/7axtPHgVXC6BgiQ2bk7ZaF5Iv4wYTskqIl5vKyQA
- eqzL8ymVsdhOJvnojJzcxUJ3Ow29IbDf9Yj6ojqIhpT11DTAM1+yT8CfzWApiZYSBc0+D7npm
- T35llP0RDDusSrsmlGje4NWjAjyuqN5fHnAGOiubj7LOwaoUXA+YyvX4cunPZ9a4QUGyfBZZL
- gXTF9MDdPxikCrYaT9cKvfcz/h+nCCZxgIuOs71J5NoQ01PBLQtvBQhJI13lPDsNBXOozL6wL
- 6ZkrEC9zuUlGHj8fgUHAUrLTY5nmiiH7DHPhefiktv0BQCbucuf8tVtMN/bgKzoekwZghlwFi
- tMFPistT2F+cWK67x5W5RN8weg12BQN/VIfnxll+V4bzagfzRrvfr5IfyGyk7Tn9u0fd4M2XS
- +kK9AMTxN3mHbUikP/c1Ro16FPAa+rVa7QvfAmjuA=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Robert Richter <rric@kernel.org>,
+        Jean Delvare <jdelvare@suse.com>, Pavel Machek <pavel@ucw.cz>,
+        Peter Tyser <ptyser@xes-inc.com>,
+        Andy Shevchenko <andy@kernel.org>,
+        Mark Gross <markgross@kernel.org>
+Subject: Re: [PATCH v6 00/12] platform/x86: introduce p2sb_bar() helper
+Message-ID: <Ys71dyMdozGUAto0@smile.fi.intel.com>
+References: <20220606164138.66535-1-andriy.shevchenko@linux.intel.com>
+ <YqBS8I62YBPFC9iS@google.com>
+ <CAHp75Ve9Lju8AEQd5huz1aYGg4sOu-ae7tTdyDWCXPCBR=wXbQ@mail.gmail.com>
+ <YrGyWCaY+swYAYzH@smile.fi.intel.com>
+ <YryAXlZqcr/liN7n@smile.fi.intel.com>
+ <20220629191406.35965d5b@md1za8fc.ad001.siemens.net>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220629191406.35965d5b@md1za8fc.ad001.siemens.net>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Wed, Jul 13, 2022 at 2:19 PM Jon Hunter <jonathanh@nvidia.com> wrote:
-> On 13/07/2022 13:14, Arnd Bergmann wrote:
-> >>> For the other patches, I found two more problems:
-> >>>
-> >>>> Bitan Biswas (1):
-> >>>>        soc/tegra: fuse: Expose Tegra production status
-> >>>
-> >>> Please don't just add random attributes in the soc device infrastructure.
-> >>> This one has a completely generic name but a SoC specific
-> >>> meaning, and it lacks a description in Documentation/ABI.
-> >>> Not sure what the right ABI is here, but this is something that needs
-> >>> to be discussed more broadly when you send a new version.
-> >>
-> >> I wasn't aware that the SoC device infrastructure was restricted to only
-> >> standardized attributes. Looks like there are a few other outliers that
-> >> add custom attributes: UX500, ARM Integrator and RealView, and OMAP2.
-> >>
-> >> Do we have some other place where this kind of thing can be exposed? Or
-> >> do we just need to come up with some better way of namespacing these?
-> >> Perhaps it would also be sufficient if all of these were better
-> >> documented so that people know what to look for on their platform of
-> >> interest.
-> >
-> > It's not a 100% strict rule, I've just tried to limit it as much as possible,
-> > and sometimes missed drivers doing it anyway. My main goal here is
-> > to make things consistent between SoC families, so if one piece of
-> > information is provided by a number of them, I'd rather have a standard
-> > attribute, or a common way of encoding this in the existing attributes
-> > than to have too many custom attributes with similar names.
->
->
-> Makes sense. Any recommendations for this specific attribute? I could
-> imagine other vendors may have engineering devices and production
-> versions. This is slightly different from the silicon version.
+On Wed, Jun 29, 2022 at 07:14:06PM +0200, Henning Schild wrote:
+> Am Wed, 29 Jun 2022 19:39:58 +0300
+> schrieb Andy Shevchenko <andriy.shevchenko@linux.intel.com>:
+> 
+> > +Cc: Rafael
+> > 
+> > On Tue, Jun 21, 2022 at 02:58:16PM +0300, Andy Shevchenko wrote:
+> > > On Wed, Jun 08, 2022 at 12:50:44PM +0200, Andy Shevchenko wrote:  
+> > > > On Wed, Jun 8, 2022 at 9:42 AM Lee Jones <lee.jones@linaro.org>
+> > > > wrote:  
+> > > > > On Mon, 06 Jun 2022, Andy Shevchenko wrote:
+> > > > >  
+> > > > > > There are a few users that would like to utilize P2SB
+> > > > > > mechanism of hiding and unhiding a device from the PCI
+> > > > > > configuration space.
+> > > > > >
+> > > > > > Here is the series to consolidate p2sb handling code for
+> > > > > > existing users and to provide a generic way for new comer(s).
+> > > > > >
+> > > > > > It also includes a patch to enable GPIO controllers on Apollo
+> > > > > > Lake when it's used with ABL bootloader w/o ACPI support.
+> > > > > >
+> > > > > > The patch that brings the helper ("platform/x86/intel: Add
+> > > > > > Primary to Sideband (P2SB) bridge support") has a commit
+> > > > > > message that sheds a light on what the P2SB is and why this
+> > > > > > is needed.
+> > > > > >
+> > > > > > I have tested this on Apollo Lake platform (I'm able to see
+> > > > > > SPI NOR and since we have an ACPI device for GPIO I do not
+> > > > > > see any attempts to recreate one).
+> > > > > >
+> > > > > > The series is ready to be merged via MFD tree, but see below.
+> > > > > >
+> > > > > > The series also includes updates for Simatic IPC drivers that
+> > > > > > partially tagged by respective maintainers (the main question
+> > > > > > is if Pavel is okay with the last three patches, since I
+> > > > > > believe Hans is okay with removing some code under PDx86).
+> > > > > > Hence the first 8 patches can be merged right away and the
+> > > > > > rest when Pavel does his review.  
+> > > > >
+> > > > > Can we just wait for Pavel's review, then merge them all at
+> > > > > once?  
+> > > > 
+> > > > Sure, it would be the best course of action.  
+> > > 
+> > > Pavel, do you have a chance to review the patches (last three) that
+> > > touch LED drivers? What would be your verdict?  
+> > 
+> > Lee, Rafael,
+> > 
+> > It seems quite hard to get Pavel's attention to this series [1]. It's
+> > already passed more than 3 weeks for any sign of review of three top
+> > patches of the series that touched LED subsystem. The entire series
+> > has all necessary tags, but for LED changes.
+> > 
+> > Note, that the top of this series is not done by me and was sent for
+> > preliminary review much earlier [2], altogether it makes months of no
+> > response from the maintainer.
+> > 
+> > The nature of patches is pretty simple and doesn't touch any of other
+> > than Simatic LED drivers nor LED core. Moreover, it was written by
+> > Siemens, who produces the H/W in question and very well tested as a
+> > separate change and as part of the series.
+> 
+> The code has been reviewed and is in fact pretty simple. The only
+> questionable but pragmatic change that might catch the attention of a
+> pedantic reviewer is that i did put the gpio implementation of the
+> driver under the same/existing kernel config switch.
+> 
+> > I think to move forward we may ask Rafael to review it on behalf of
+> > good maintainer and with his approval apply entire series.
+> > 
+> > Thoughts?
+> 
+> Thanks for pushing this Andy. I was wondering how and when that story
+> would continue. Technically these changes should really go in one badge
+> or we need to find a way to separate them somehow. I would try to go
+> that extra mile to get out of your way. But i am kind of afraid such an
+> effort might also end up touching the same files and block us at the
+> same maintainer.
+> 
+> Did anyone check whether Pavel was active at all in those last months
+> and maybe other patches waiting for review? Hope he is fine and active
+> and just somehow forgot/overlooked/ignored this one.
 
-Not sure, I haven't seen this one referenced elsewhere so far.
+I have send a private mail to Pavel and have got no response.
+Can we move this forward, let's say, by applying first 8 patches?
 
-What is the actual information this encodes in your case? Is this fused
-down in a way that production devices lose access to certain features
-that could be security critical but are useful for development?
+> > [1]:
+> > https://lore.kernel.org/all/20220606164138.66535-1-andriy.shevchenko@linux.intel.com/
+> > [2]:
+> > https://lore.kernel.org/linux-leds/20220513083652.974-1-henning.schild@siemens.com/
+> 
 
-         Arnd
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
