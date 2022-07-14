@@ -2,47 +2,55 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D9A9574A8B
-	for <lists+linux-edac@lfdr.de>; Thu, 14 Jul 2022 12:23:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AFF69574AB4
+	for <lists+linux-edac@lfdr.de>; Thu, 14 Jul 2022 12:34:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238171AbiGNKX1 (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Thu, 14 Jul 2022 06:23:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34422 "EHLO
+        id S238383AbiGNKel (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Thu, 14 Jul 2022 06:34:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229923AbiGNKX0 (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Thu, 14 Jul 2022 06:23:26 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30396222B3;
-        Thu, 14 Jul 2022 03:23:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657794205; x=1689330205;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=UbzX0APp7Mo6B5jHE+G1Jm7JNvJbZu+NCDrRJ18nxbk=;
-  b=A078pS08PsHSUlv4nV1RA/3Meh7UKv8tMDzhnCopKBi1AqqJFv7+jDUi
-   CltXs6sXLwxyNsDURN/Y9hkUGPmFrKKbJLA12ALWhH0HjtVhh2ZtoWcXL
-   hFGIO2nLZfdtoN4G/WptmUWed2pikR5W7HOBflzghnz5/w3yFvnwAMzmL
-   o9jodb4x6g0xD+KMJfllGlS5yJqduK4iD/Xtinax7bCoVB0iXQdkSxhiE
-   in2QmOadHvQwT5gqkog9jjLrabH4vUXv1ldJcdYl43a3/gAbL0k7DiZR5
-   aE0dTKZtCLQVg3Z5abmPO/b/66uzCfyCIAWHWI9h3uzNVv/yWOrivgCao
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10407"; a="265262673"
-X-IronPort-AV: E=Sophos;i="5.92,269,1650956400"; 
-   d="scan'208";a="265262673"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jul 2022 03:23:23 -0700
-X-IronPort-AV: E=Sophos;i="5.92,269,1650956400"; 
-   d="scan'208";a="596044416"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jul 2022 03:23:17 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1oBw01-001D7R-0H;
-        Thu, 14 Jul 2022 13:23:13 +0300
-Date:   Thu, 14 Jul 2022 13:23:12 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Lee Jones <lee.jones@linaro.org>
+        with ESMTP id S237998AbiGNKej (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Thu, 14 Jul 2022 06:34:39 -0400
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 345234BD17
+        for <linux-edac@vger.kernel.org>; Thu, 14 Jul 2022 03:34:36 -0700 (PDT)
+Received: by mail-wm1-x32b.google.com with SMTP id f24-20020a1cc918000000b003a30178c022so800292wmb.3
+        for <linux-edac@vger.kernel.org>; Thu, 14 Jul 2022 03:34:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=W6txFljYfKmn6JSD3sjou2N7DJFkcDR6jeyYOHSyWrU=;
+        b=gvZ4kN1Ki6OChldKcT3MpnPrFEubJtUXdh8C24U5b24nOK5/h+IFIOOL4CSL0vw4tB
+         iVOziuWudewMTKVk3jRln6XJM9BdGVWQJpYrvPZoS0SRyNbLJDbnqmHX0OiTMC93EAOI
+         JcjhtEYjG85cPEi1tixKsAG20DrICDh0hKOQLzzsHeY4b0HCr55DYiwKJVRFDU7Kdu+O
+         mxNZJRlpNVvagt18yu/SJI6rr+Lj/fJT40FO71qf5KPgkWcpez7epwuyUNaFMA3yLK4j
+         Om94Y3m17NS1I+wO1+1v1Mu6M3C0Kq4jL6mLU3G2P9kcle0kBLSnLPUfLwZ0LLN/ruDR
+         duVw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=W6txFljYfKmn6JSD3sjou2N7DJFkcDR6jeyYOHSyWrU=;
+        b=KrFzvgcBV3ISRn42/kGVjcO9G2ptxISJ9pISl9uZrEZ/b8u1Ni6+jKlWnB5FIM8Dwt
+         A+93zBe0er3+R58+CcSU/TD9FpnhtRaSwbhP99gtuuztf0XLqQEmF/GroYOBS4QTT3VZ
+         QHhPd6XoDIx6LG8yPdFXfF9ahPWFja6dHOIwqCU1c8WP5Dw4UUTowrt5Zgr+pr50x9zE
+         PXiqYgTsNtMfDcVHQqrIDCb59+GnhAwCP+vuE6bmPfHqXl1GQehpNd+2dHuhkMhQxbYQ
+         GKT2lPrxT04k2xT8B44yt2WGGzI1tMoJEMaY/lG7JUXodnlsjoGxgDNVwMagnYyMaf2L
+         Q7ZQ==
+X-Gm-Message-State: AJIora84815Z7N6cyx9MYVJttlSJ/6yYCKYhWBIMh+1m+fwPGEr+E5Pz
+        3P56O1gfn6+gAYQ/tpcC1H8w0w==
+X-Google-Smtp-Source: AGRyM1s4Lh53O5b+jj1CVhSlBTSYJOqKGj742dw9wSLaQ2htY7KgAPxfs1Ue9vLFbkz25LTPVtIDCQ==
+X-Received: by 2002:a05:600c:1908:b0:3a0:bfaa:38c with SMTP id j8-20020a05600c190800b003a0bfaa038cmr8428781wmq.130.1657794874579;
+        Thu, 14 Jul 2022 03:34:34 -0700 (PDT)
+Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
+        by smtp.gmail.com with ESMTPSA id m9-20020a056000180900b0021d6a520ce9sm1094947wrh.47.2022.07.14.03.34.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 14 Jul 2022 03:34:34 -0700 (PDT)
+Date:   Thu, 14 Jul 2022 11:34:31 +0100
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 Cc:     Henning Schild <henning.schild@siemens.com>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
         Tony Luck <tony.luck@intel.com>, Wolfram Sang <wsa@kernel.org>,
@@ -69,7 +77,7 @@ Cc:     Henning Schild <henning.schild@siemens.com>,
         Andy Shevchenko <andy@kernel.org>,
         Mark Gross <markgross@kernel.org>
 Subject: Re: [PATCH v6 00/12] platform/x86: introduce p2sb_bar() helper
-Message-ID: <Ys/ukP8dqnwUoou4@smile.fi.intel.com>
+Message-ID: <Ys/xN+6P0DvMrDOC@google.com>
 References: <20220606164138.66535-1-andriy.shevchenko@linux.intel.com>
  <YqBS8I62YBPFC9iS@google.com>
  <CAHp75Ve9Lju8AEQd5huz1aYGg4sOu-ae7tTdyDWCXPCBR=wXbQ@mail.gmail.com>
@@ -79,48 +87,57 @@ References: <20220606164138.66535-1-andriy.shevchenko@linux.intel.com>
  <Ys71dyMdozGUAto0@smile.fi.intel.com>
  <20220713204827.0b290fd7@md1za8fc.ad001.siemens.net>
  <Ys/jz7HqhrxSCOnV@google.com>
+ <Ys/ukP8dqnwUoou4@smile.fi.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <Ys/jz7HqhrxSCOnV@google.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <Ys/ukP8dqnwUoou4@smile.fi.intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Thu, Jul 14, 2022 at 10:37:19AM +0100, Lee Jones wrote:
-> On Wed, 13 Jul 2022, Henning Schild wrote:
-> > Am Wed, 13 Jul 2022 19:40:23 +0300
-> > schrieb Andy Shevchenko <andriy.shevchenko@linux.intel.com>:
+On Thu, 14 Jul 2022, Andy Shevchenko wrote:
 
-...
-
-> > And maybe there is a way/process to escalate to another maintainer.
-> > Does anyone even know what is going on with Pavel? 
+> On Thu, Jul 14, 2022 at 10:37:19AM +0100, Lee Jones wrote:
+> > On Wed, 13 Jul 2022, Henning Schild wrote:
+> > > Am Wed, 13 Jul 2022 19:40:23 +0300
+> > > schrieb Andy Shevchenko <andriy.shevchenko@linux.intel.com>:
 > 
-> I'll take the hit.  He had his chance.
+> ...
 > 
-> I'm happy to move forward with Andy's review.
+> > > And maybe there is a way/process to escalate to another maintainer.
+> > > Does anyone even know what is going on with Pavel? 
+> > 
+> > I'll take the hit.  He had his chance.
+> > 
+> > I'm happy to move forward with Andy's review.
+> 
+> Thank you, Lee, much appreciated!
+> The patches (9..12) have my SoB, I think it should be enough, but if you thinks
+> they need my Rb tag, I can reply to them with it.
 
-Thank you, Lee, much appreciated!
-The patches (9..12) have my SoB, I think it should be enough, but if you thinks
-they need my Rb tag, I can reply to them with it.
+That's okay.  I've applied them and they are currently in soak.
 
-> (Side note: Seeing as Pavel hasn't been seen for 2 months, I'll also
->  follow-up on  the LED ML to offer to become temporary maintainer for a
->  bit)
+> > (Side note: Seeing as Pavel hasn't been seen for 2 months, I'll also
+> >  follow-up on  the LED ML to offer to become temporary maintainer for a
+> >  bit)
+> 
+> This is good news as well, because I noticed there are a few series there stuck
+> as well.
 
-This is good news as well, because I noticed there are a few series there stuck
-as well.
+Feel free to reply to object or in support:
+
+https://lore.kernel.org/all/Ys%2Fkruf8DE4ISo8M@google.com/
 
 -- 
-With Best Regards,
-Andy Shevchenko
-
-
+Lee Jones [李琼斯]
+Principal Technical Lead - Developer Services
+Linaro.org │ Open source software for Arm SoCs
+Follow Linaro: Facebook | Twitter | Blog
