@@ -2,97 +2,235 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 754FC574724
-	for <lists+linux-edac@lfdr.de>; Thu, 14 Jul 2022 10:37:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D5967574929
+	for <lists+linux-edac@lfdr.de>; Thu, 14 Jul 2022 11:37:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237427AbiGNIhS (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Thu, 14 Jul 2022 04:37:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60456 "EHLO
+        id S238303AbiGNJh0 (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Thu, 14 Jul 2022 05:37:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236064AbiGNIhE (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Thu, 14 Jul 2022 04:37:04 -0400
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 918083ED6D
-        for <linux-edac@vger.kernel.org>; Thu, 14 Jul 2022 01:37:01 -0700 (PDT)
-Received: by mail-lf1-x12a.google.com with SMTP id bp17so1651765lfb.3
-        for <linux-edac@vger.kernel.org>; Thu, 14 Jul 2022 01:37:01 -0700 (PDT)
+        with ESMTP id S238260AbiGNJhZ (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Thu, 14 Jul 2022 05:37:25 -0400
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF3D2371B2
+        for <linux-edac@vger.kernel.org>; Thu, 14 Jul 2022 02:37:23 -0700 (PDT)
+Received: by mail-wm1-x32b.google.com with SMTP id 8-20020a05600c024800b003a2fe343db1so863319wmj.1
+        for <linux-edac@vger.kernel.org>; Thu, 14 Jul 2022 02:37:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=H3bGT1ZyGPu3PRQJlJHyQI9TvTjBPuNSyHjFOzNfiP0=;
-        b=gaDZ6UkvWmoGLPkb5BiwWKXrxZqJRKNx4T2fn6EvGAM0nTMCvTzxyP4EuJ913j6Iv+
-         SvMX4/pvx4tmhR/0cDdL9pbkcCOAwg/dZQZJjKvYYHG5zoS6pTup2xrhZON7aPFodE61
-         jbdbe7f5x1iqsxnbqtRGk5VVyYe+GfguXyW53v/Jtk7m9BRLrugVau1mwPBhoM15I1rO
-         FgfB/JoMGOti2QefdfOSOcdpcygQeBiN0idXo3yCL6hW5Cz+uWpratECqWcSagxAB5xP
-         zT+sUZ3pJE3RjDVpLi/6z/hZ8yL43zLlaxwdm4ILJ3e9Bke6wVp5k2l7GAKtdogOGzmZ
-         5LQg==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=SzhVHfRoTJrnpDanrMQh8Ww74DmMD2/mZU8JBmDOY6U=;
+        b=w+SFia/W6qX5vP8nw0AjesFXx0zp6LOc8q909IC4Cp95MZ71BILXXzMnC/3WOsIdct
+         CkYau2KI5/JEJ94jeRt3YB5ZPPzWtM5XHvFatRoNYbDQHm9H3PyTO3kZoJtZQZbeFVex
+         wuXzGkhH5Omos/WJIs5Gmht6ZF8kawYZFanMIDuB+LmNS/xzLCiKfD6Qpd/G8xN3uwF5
+         vSLbfC2nRkiow5AqDQ0LkAPV2AlMYzgAjJZlb1n8JFE/uvm3zQI3xjVNyqv3H24yUvmN
+         F3+DR4PDRPQVSlxRXc5UIZrP4UcgIWHALHsSrTkHe+InkX1J5061qEIJSY3iZlzvjmfO
+         oVcQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=H3bGT1ZyGPu3PRQJlJHyQI9TvTjBPuNSyHjFOzNfiP0=;
-        b=KOfhOZ21SWXSR4skvCe6ersJ4E3/rji72sHVHomRsS9kdTLSCyx1gxlE785iX2YybF
-         hw9TYzTh/l+C0ZjUPqfkWsDbD3qo8vRfLqyJVW8uXIsSCUE+zK8+8lRhTo1HTK0yJ6Vj
-         DGj0LRANIYNqfITLVKZgkiusAmm+3XK5KCSMUgVyEDaCuZ3g8KL3JbZUHVJO4PlqJQUT
-         NoEd7l+2DsOJL7AGcgZ7xr25SLLSKXjuubFL6Kcyb4PGLg9dp8jobf2WnLbg9gvf9TiV
-         c2ktXnGYYypJeAS30IPS0XHaVmDZ6HXgjVER0+UZpwZStB53LwsGm+EeQ1lPY0bJIi9r
-         apEQ==
-X-Gm-Message-State: AJIora+dgmpq0RaaZolPk1oun+sklR2w1c0BvpjnfnhV8rqqtLNcnKjQ
-        spPLU841Pmz6DSYbqpL7d6SGCVqsgJShzu55MBQ=
-X-Google-Smtp-Source: AGRyM1vX4Zd9WIWDxqKGtP81mt11peMiDiT310/qUqT5enM4eeA2HoIqQaHp0s5sIeDBZVZu8TIFwya2pg7lDHDFDeo=
-X-Received: by 2002:a05:6512:4004:b0:48a:12dc:7f63 with SMTP id
- br4-20020a056512400400b0048a12dc7f63mr2033540lfb.131.1657787820892; Thu, 14
- Jul 2022 01:37:00 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=SzhVHfRoTJrnpDanrMQh8Ww74DmMD2/mZU8JBmDOY6U=;
+        b=i6+AxBdTJkpFCYSEfigNAbAZmRN426AWrcYpXzUjj5UiZLNbGXPXAbU8cOuyLunsd1
+         0xSHrWIgviSlvbO6C60EKfJF9c1BxfQMnKCtjgj3NHo6bjCP702psRUNU2nLZKsyBwc0
+         q8cmIyGvJq5bySUASTNcPSjXlhbv0GNcwzSKCvXl1IAEdKSjRtK3HhaPkFNN/Zj+q7T3
+         7O78TCP/zn9H2CDkW2wnQ/cL3BkVS0rCQgx5z22pTDi/j0xdCt9MjapSjNdRyxD1BnJR
+         yQaJ/NRBTBq44xE7qRwQUcy4SZ9+ILuQDp2vxLzSp427u+48aQyN6pPEU3W1NXTJO0Fv
+         f9PA==
+X-Gm-Message-State: AJIora8VDdLcka5FyBz0MkSUMGLIqWwrfvGoTJL3O6OjHY7AiBllabT0
+        hPgJEU1vL51kFTrd4NRUyj8tSw==
+X-Google-Smtp-Source: AGRyM1sYAcheIlzffIBizpYIN7jFiJ0gX1659DuMbABmoyKT1xnuz89E+Mbrc/U/du9waWQjzl2Ikg==
+X-Received: by 2002:a05:600c:1e18:b0:3a0:4865:3784 with SMTP id ay24-20020a05600c1e1800b003a048653784mr8096924wmb.139.1657791442299;
+        Thu, 14 Jul 2022 02:37:22 -0700 (PDT)
+Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
+        by smtp.gmail.com with ESMTPSA id z16-20020adff1d0000000b0021d65675583sm987947wro.52.2022.07.14.02.37.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 14 Jul 2022 02:37:21 -0700 (PDT)
+Date:   Thu, 14 Jul 2022 10:37:19 +0100
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Henning Schild <henning.schild@siemens.com>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Tony Luck <tony.luck@intel.com>, Wolfram Sang <wsa@kernel.org>,
+        Jean Delvare <jdelvare@suse.de>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Jonathan Yong <jonathan.yong@intel.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-edac@vger.kernel.org, linux-i2c <linux-i2c@vger.kernel.org>,
+        Linux LED Subsystem <linux-leds@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Platform Driver <platform-driver-x86@vger.kernel.org>,
+        LINUXWATCHDOG <linux-watchdog@vger.kernel.org>,
+        Borislav Petkov <bp@alien8.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Robert Richter <rric@kernel.org>,
+        Jean Delvare <jdelvare@suse.com>, Pavel Machek <pavel@ucw.cz>,
+        Peter Tyser <ptyser@xes-inc.com>,
+        Andy Shevchenko <andy@kernel.org>,
+        Mark Gross <markgross@kernel.org>
+Subject: Re: [PATCH v6 00/12] platform/x86: introduce p2sb_bar() helper
+Message-ID: <Ys/jz7HqhrxSCOnV@google.com>
+References: <20220606164138.66535-1-andriy.shevchenko@linux.intel.com>
+ <YqBS8I62YBPFC9iS@google.com>
+ <CAHp75Ve9Lju8AEQd5huz1aYGg4sOu-ae7tTdyDWCXPCBR=wXbQ@mail.gmail.com>
+ <YrGyWCaY+swYAYzH@smile.fi.intel.com>
+ <YryAXlZqcr/liN7n@smile.fi.intel.com>
+ <20220629191406.35965d5b@md1za8fc.ad001.siemens.net>
+ <Ys71dyMdozGUAto0@smile.fi.intel.com>
+ <20220713204827.0b290fd7@md1za8fc.ad001.siemens.net>
 MIME-Version: 1.0
-Received: by 2002:a2e:9041:0:0:0:0:0 with HTTP; Thu, 14 Jul 2022 01:37:00
- -0700 (PDT)
-Reply-To: abdwabbomaddahm@gmail.com
-From:   Abdwabbo Maddah <abdwabbomaddah746@gmail.com>
-Date:   Thu, 14 Jul 2022 09:37:00 +0100
-Message-ID: <CAFC-3ieta-vbGq7=-xp9Wgp2Sr8SYhFWTPWR2J6JsyQ_pZJxLQ@mail.gmail.com>
-Subject: Get back to me... URGENT
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=5.0 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220713204827.0b290fd7@md1za8fc.ad001.siemens.net>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2a00:1450:4864:20:0:0:0:12a listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.4974]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [abdwabbomaddah746[at]gmail.com]
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [abdwabbomaddah746[at]gmail.com]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  3.2 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
+On Wed, 13 Jul 2022, Henning Schild wrote:
+
+> Am Wed, 13 Jul 2022 19:40:23 +0300
+> schrieb Andy Shevchenko <andriy.shevchenko@linux.intel.com>:
+> 
+> > On Wed, Jun 29, 2022 at 07:14:06PM +0200, Henning Schild wrote:
+> > > Am Wed, 29 Jun 2022 19:39:58 +0300
+> > > schrieb Andy Shevchenko <andriy.shevchenko@linux.intel.com>:
+> > >   
+> > > > +Cc: Rafael
+> > > > 
+> > > > On Tue, Jun 21, 2022 at 02:58:16PM +0300, Andy Shevchenko wrote:  
+> > > > > On Wed, Jun 08, 2022 at 12:50:44PM +0200, Andy Shevchenko
+> > > > > wrote:    
+> > > > > > On Wed, Jun 8, 2022 at 9:42 AM Lee Jones
+> > > > > > <lee.jones@linaro.org> wrote:    
+> > > > > > > On Mon, 06 Jun 2022, Andy Shevchenko wrote:
+> > > > > > >    
+> > > > > > > > There are a few users that would like to utilize P2SB
+> > > > > > > > mechanism of hiding and unhiding a device from the PCI
+> > > > > > > > configuration space.
+> > > > > > > >
+> > > > > > > > Here is the series to consolidate p2sb handling code for
+> > > > > > > > existing users and to provide a generic way for new
+> > > > > > > > comer(s).
+> > > > > > > >
+> > > > > > > > It also includes a patch to enable GPIO controllers on
+> > > > > > > > Apollo Lake when it's used with ABL bootloader w/o ACPI
+> > > > > > > > support.
+> > > > > > > >
+> > > > > > > > The patch that brings the helper ("platform/x86/intel: Add
+> > > > > > > > Primary to Sideband (P2SB) bridge support") has a commit
+> > > > > > > > message that sheds a light on what the P2SB is and why
+> > > > > > > > this is needed.
+> > > > > > > >
+> > > > > > > > I have tested this on Apollo Lake platform (I'm able to
+> > > > > > > > see SPI NOR and since we have an ACPI device for GPIO I
+> > > > > > > > do not see any attempts to recreate one).
+> > > > > > > >
+> > > > > > > > The series is ready to be merged via MFD tree, but see
+> > > > > > > > below.
+> > > > > > > >
+> > > > > > > > The series also includes updates for Simatic IPC drivers
+> > > > > > > > that partially tagged by respective maintainers (the main
+> > > > > > > > question is if Pavel is okay with the last three patches,
+> > > > > > > > since I believe Hans is okay with removing some code
+> > > > > > > > under PDx86). Hence the first 8 patches can be merged
+> > > > > > > > right away and the rest when Pavel does his review.    
+> > > > > > >
+> > > > > > > Can we just wait for Pavel's review, then merge them all at
+> > > > > > > once?    
+> > > > > > 
+> > > > > > Sure, it would be the best course of action.    
+> > > > > 
+> > > > > Pavel, do you have a chance to review the patches (last three)
+> > > > > that touch LED drivers? What would be your verdict?    
+> > > > 
+> > > > Lee, Rafael,
+> > > > 
+> > > > It seems quite hard to get Pavel's attention to this series [1].
+> > > > It's already passed more than 3 weeks for any sign of review of
+> > > > three top patches of the series that touched LED subsystem. The
+> > > > entire series has all necessary tags, but for LED changes.
+> > > > 
+> > > > Note, that the top of this series is not done by me and was sent
+> > > > for preliminary review much earlier [2], altogether it makes
+> > > > months of no response from the maintainer.
+> > > > 
+> > > > The nature of patches is pretty simple and doesn't touch any of
+> > > > other than Simatic LED drivers nor LED core. Moreover, it was
+> > > > written by Siemens, who produces the H/W in question and very
+> > > > well tested as a separate change and as part of the series.  
+> > > 
+> > > The code has been reviewed and is in fact pretty simple. The only
+> > > questionable but pragmatic change that might catch the attention of
+> > > a pedantic reviewer is that i did put the gpio implementation of the
+> > > driver under the same/existing kernel config switch.
+> > >   
+> > > > I think to move forward we may ask Rafael to review it on behalf
+> > > > of good maintainer and with his approval apply entire series.
+> > > > 
+> > > > Thoughts?  
+> > > 
+> > > Thanks for pushing this Andy. I was wondering how and when that
+> > > story would continue. Technically these changes should really go in
+> > > one badge or we need to find a way to separate them somehow. I
+> > > would try to go that extra mile to get out of your way. But i am
+> > > kind of afraid such an effort might also end up touching the same
+> > > files and block us at the same maintainer.
+> > > 
+> > > Did anyone check whether Pavel was active at all in those last
+> > > months and maybe other patches waiting for review? Hope he is fine
+> > > and active and just somehow forgot/overlooked/ignored this one.  
+> > 
+> > I have send a private mail to Pavel and have got no response.
+> > Can we move this forward, let's say, by applying first 8 patches?
+> 
+> I am sorry that situation is now coming. Both simatic-ipc and that
+> appollo lake pinctrl driver compete for the same device memory. That
+> conflict was known and we agreed on sorting it out together somehow.
+> Not applying my patches could leave my LED drivers simply not working
+> any longer, or worse ... them making the apollolake platform stuff act
+> up somehow weird with unexpected EBUSY.
+> 
+> The series can not be split, or we have to write additional code to
+> properly deal with the conflict. I could envision my LED drivers still
+> accessing raw memory and ignoring EBUSY (very hacky! ... and touching
+> "we need Pavel code")
+> 
+> Another way could maybe be. Do the whole P2SB but do not make
+> apollolake pinctrl come up without ACPI. Somewhere in patches 1-8 there
+> is code which makes the pinctrl stuff come up for certain CPUs without
+> ACPI. It is really only some out of many CPUs which have pinctrl, and i
+> am not sure i remember what that has to do with the P2SB helpers as
+> such. The helpers are a refactoring, while the "bring up apollolake
+> pinctrl at all times" is a functional change ... now causing conflict.
+> 
+> And maybe there is a way/process to escalate to another maintainer.
+> Does anyone even know what is going on with Pavel? 
+
+I'll take the hit.  He had his chance.
+
+I'm happy to move forward with Andy's review.
+
+(Side note: Seeing as Pavel hasn't been seen for 2 months, I'll also
+ follow-up on  the LED ML to offer to become temporary maintainer for a
+ bit)
+
 -- 
-Dear,
-I had sent you a mail but i don't think you received it that's why am
-writing you again.It is important you get back to me as soon as you
-can.
-Abd-Wabbo Maddah
+Lee Jones [李琼斯]
+Principal Technical Lead - Developer Services
+Linaro.org │ Open source software for Arm SoCs
+Follow Linaro: Facebook | Twitter | Blog
