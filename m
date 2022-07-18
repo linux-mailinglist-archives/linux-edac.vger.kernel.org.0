@@ -2,130 +2,75 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52697578086
-	for <lists+linux-edac@lfdr.de>; Mon, 18 Jul 2022 13:19:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FDA057844A
+	for <lists+linux-edac@lfdr.de>; Mon, 18 Jul 2022 15:51:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234452AbiGRLR4 (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Mon, 18 Jul 2022 07:17:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44070 "EHLO
+        id S235515AbiGRNu7 (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Mon, 18 Jul 2022 09:50:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234213AbiGRLRy (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Mon, 18 Jul 2022 07:17:54 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F73A201A6;
-        Mon, 18 Jul 2022 04:17:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658143073; x=1689679073;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=DpqXmie6D9DsH9mDkAnCsfL2eLPGa6h9nC1O717sCwo=;
-  b=cURgWqaW9Lu9LegfsezxykDu/beK25EE3rbW0zMJcqSra9P939iuxMzp
-   0PcP0aOGZUWZyPIQIzTvSlFfkEPQtP/b+Swq40zFTICLPdm7MsFTCRpoq
-   FxlykXm/M79vT9CkFornHOeNs3nfESLH4hXCC5OvijSSk8/W4C0uganuw
-   ZneLsGIR8tddAZw8sD2/Qxv1mFDuOG6NpvQzNy6FUf5GybNIQ/kuU7CF2
-   IXC/zW7olnvselFsidhZCkbeTNxeX7yg33yUjKDotK3Kc2fNWRNYiPQIb
-   /i6BuUvIuRYCQ7erashf3Q3ZK1+VeHAx17M7adMoF6Vh0fVGHX/lIUtH8
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10411"; a="287342817"
-X-IronPort-AV: E=Sophos;i="5.92,280,1650956400"; 
-   d="scan'208";a="287342817"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jul 2022 04:17:52 -0700
-X-IronPort-AV: E=Sophos;i="5.92,280,1650956400"; 
-   d="scan'208";a="686702470"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jul 2022 04:17:46 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1oDOkw-001O8N-2k;
-        Mon, 18 Jul 2022 14:17:42 +0300
-Date:   Mon, 18 Jul 2022 14:17:42 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Tony Luck <tony.luck@intel.com>, Wolfram Sang <wsa@kernel.org>,
-        Jean Delvare <jdelvare@suse.de>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Henning Schild <henning.schild@siemens.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Jonathan Yong <jonathan.yong@intel.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        linux-kernel@vger.kernel.org, linux-edac@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-leds@vger.kernel.org,
-        linux-gpio@vger.kernel.org, platform-driver-x86@vger.kernel.org,
-        linux-watchdog@vger.kernel.org
-Cc:     Borislav Petkov <bp@alien8.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Robert Richter <rric@kernel.org>,
-        Jean Delvare <jdelvare@suse.com>, Pavel Machek <pavel@ucw.cz>,
-        Peter Tyser <ptyser@xes-inc.com>,
-        Andy Shevchenko <andy@kernel.org>,
-        Mark Gross <markgross@kernel.org>
-Subject: Re: [PATCH v6 00/12] platform/x86: introduce p2sb_bar() helper
-Message-ID: <YtVBViMLFIUfFpXa@smile.fi.intel.com>
-References: <20220606164138.66535-1-andriy.shevchenko@linux.intel.com>
+        with ESMTP id S235516AbiGRNu6 (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Mon, 18 Jul 2022 09:50:58 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AD8B26AEF;
+        Mon, 18 Jul 2022 06:50:57 -0700 (PDT)
+Received: from zn.tnic (p200300ea972976d7329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9729:76d7:329c:23ff:fea6:a903])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id D8FB81EC01D2;
+        Mon, 18 Jul 2022 15:50:50 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1658152250;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=Myws9jzNIvlu+C/HWGYwNJKA8xrY2FJWYccW1o6/lyA=;
+        b=XWFbQ54gpo7N6e0h0/l8Qfx8aJHoYYvkXOUPVTYxI2mYq9BuGUWttQA7SgRU8RYKijisrA
+        M2UlDRYDtBWMzUGPpKpJJ9V3owEoEjWs2liHebOxXP2Yi6mMgU3xv5HMJtQML7Ke2mzVzz
+        VHRizApbDH6MNyJiA0Qz3pW8eBGi7BQ=
+Date:   Mon, 18 Jul 2022 15:50:46 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Yazen Ghannam <yazen.ghannam@amd.com>
+Cc:     linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
+        tony.luck@intel.com, x86@kernel.org,
+        Smita.KoralahalliChannabasappa@amd.com
+Subject: Re: [PATCH 1/3] x86/MCE, EDAC/mce_amd: Add support for new
+ MCA_SYND{1,2} registers
+Message-ID: <YtVlNrW58cFmksln@zn.tnic>
+References: <20220418174440.334336-1-yazen.ghannam@amd.com>
+ <20220418174440.334336-2-yazen.ghannam@amd.com>
+ <Yr2CpuL+JHWblJMD@zn.tnic>
+ <YsxefXQDCiJ1zxLG@yaz-fattaah>
+ <YtUgb2Y/H/Wq9yIn@zn.tnic>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220606164138.66535-1-andriy.shevchenko@linux.intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <YtUgb2Y/H/Wq9yIn@zn.tnic>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Mon, Jun 06, 2022 at 07:41:26PM +0300, Andy Shevchenko wrote:
-> There are a few users that would like to utilize P2SB mechanism of hiding
-> and unhiding a device from the PCI configuration space.
-> 
-> Here is the series to consolidate p2sb handling code for existing users
-> and to provide a generic way for new comer(s).
-> 
-> It also includes a patch to enable GPIO controllers on Apollo Lake
-> when it's used with ABL bootloader w/o ACPI support.
-> 
-> The patch that brings the helper ("platform/x86/intel: Add Primary to
-> Sideband (P2SB) bridge support") has a commit message that sheds a light
-> on what the P2SB is and why this is needed.
-> 
-> I have tested this on Apollo Lake platform (I'm able to see SPI NOR and
-> since we have an ACPI device for GPIO I do not see any attempts to recreate
-> one).
-> 
-> The series is ready to be merged via MFD tree, but see below.
-> 
-> The series also includes updates for Simatic IPC drivers that partially
-> tagged by respective maintainers (the main question is if Pavel is okay
-> with the last three patches, since I believe Hans is okay with removing
-> some code under PDx86). Hence the first 8 patches can be merged right
-> away and the rest when Pavel does his review.
+On Mon, Jul 18, 2022 at 10:57:19AM +0200, Borislav Petkov wrote:
+> Lemme talk to rostedt.
 
-Kernel test bot seems found an issue with dependencies, because selection
-of P2SB is not enough.
+Right, he says __dynamic_array(). Grep the tree for examples.
 
-There are two solutions that I can see now:
-1) move P2SB out of X86_PLATFORM_DEVICES section (like PMC_ATOM);
-2) add 'depends on X86_PLATFORM_DEVICES' to the affected drivers.
+I'm thinking we can add a field called vendor_info or so, at the end of
+the TP and then dump whatever fields we want there.
 
-I think the first solution cleaner, because it would be strange to have
-the dependency on the drivers that quite unlikely be on server platforms
-(e.g. EDAC).
+We can even slap a flag in front of the whole thing saying what the
+vendor info type is. But we don't have to get ahead of ourselves and
+keep it simple first.
 
-In long term perhaps something like drivers/platform/x86/lib which is for
-platform libraries or so and independent on X86_PLATFORM_DEVICES?
-
-I will send a fix soon as per 1) above, feel free to comment here or there.
+How does that sound?
 
 -- 
-With Best Regards,
-Andy Shevchenko
+Regards/Gruss,
+    Boris.
 
-
+https://people.kernel.org/tglx/notes-about-netiquette
