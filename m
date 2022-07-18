@@ -2,52 +2,84 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FDA057844A
-	for <lists+linux-edac@lfdr.de>; Mon, 18 Jul 2022 15:51:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6404857871C
+	for <lists+linux-edac@lfdr.de>; Mon, 18 Jul 2022 18:19:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235515AbiGRNu7 (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Mon, 18 Jul 2022 09:50:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48590 "EHLO
+        id S234234AbiGRQT4 (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Mon, 18 Jul 2022 12:19:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235516AbiGRNu6 (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Mon, 18 Jul 2022 09:50:58 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AD8B26AEF;
-        Mon, 18 Jul 2022 06:50:57 -0700 (PDT)
-Received: from zn.tnic (p200300ea972976d7329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9729:76d7:329c:23ff:fea6:a903])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id D8FB81EC01D2;
-        Mon, 18 Jul 2022 15:50:50 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1658152250;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=Myws9jzNIvlu+C/HWGYwNJKA8xrY2FJWYccW1o6/lyA=;
-        b=XWFbQ54gpo7N6e0h0/l8Qfx8aJHoYYvkXOUPVTYxI2mYq9BuGUWttQA7SgRU8RYKijisrA
-        M2UlDRYDtBWMzUGPpKpJJ9V3owEoEjWs2liHebOxXP2Yi6mMgU3xv5HMJtQML7Ke2mzVzz
-        VHRizApbDH6MNyJiA0Qz3pW8eBGi7BQ=
-Date:   Mon, 18 Jul 2022 15:50:46 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Yazen Ghannam <yazen.ghannam@amd.com>
-Cc:     linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
-        tony.luck@intel.com, x86@kernel.org,
-        Smita.KoralahalliChannabasappa@amd.com
-Subject: Re: [PATCH 1/3] x86/MCE, EDAC/mce_amd: Add support for new
- MCA_SYND{1,2} registers
-Message-ID: <YtVlNrW58cFmksln@zn.tnic>
-References: <20220418174440.334336-1-yazen.ghannam@amd.com>
- <20220418174440.334336-2-yazen.ghannam@amd.com>
- <Yr2CpuL+JHWblJMD@zn.tnic>
- <YsxefXQDCiJ1zxLG@yaz-fattaah>
- <YtUgb2Y/H/Wq9yIn@zn.tnic>
+        with ESMTP id S233584AbiGRQTz (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Mon, 18 Jul 2022 12:19:55 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D13225C5D;
+        Mon, 18 Jul 2022 09:19:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1658161194; x=1689697194;
+  h=from:to:subject:date:message-id:references:in-reply-to:
+   content-transfer-encoding:mime-version;
+  bh=wx+2tefsnxjC6/SPkWBMHDk4yQRZKqq/stF6GFC0Kjs=;
+  b=Qw0wdlxfHPJhqrpIIq+yC4fgAyCV8CEGjS/uUKcU1fZlPqysjA4bRY+e
+   ad3M8KbFUpxguja9+da7AcdF39F1FOE7Dl+66POl3xP3G3gB8bptbEJ6J
+   QDrEuzxUKMC30VXgFBMdUrSeg3MdBvNXJ7ScMwBWXBZSZOFhI8Sfq/HQp
+   +F50rVHxDvQmf7jQwClWNr0pCmoaMrtAjVqoof/m7Owvj1oVpS/7QSzae
+   iUuW3RNmYa9fJYVH6r4/aQ08rZovqhQObaqd1kHt3RYaVCKW2toeyDPHX
+   zjkj89udEpTdcSz9JR52dRj+5yCtFf1Fb5jv9Ej24qaUBPop7WFO1ZHiu
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10412"; a="287004572"
+X-IronPort-AV: E=Sophos;i="5.92,281,1650956400"; 
+   d="scan'208";a="287004572"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jul 2022 09:19:53 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,281,1650956400"; 
+   d="scan'208";a="739527408"
+Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
+  by fmsmga001.fm.intel.com with ESMTP; 18 Jul 2022 09:19:53 -0700
+Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
+ fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.28; Mon, 18 Jul 2022 09:19:53 -0700
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.27; Mon, 18 Jul 2022 09:19:52 -0700
+Received: from fmsmsx610.amr.corp.intel.com ([10.18.126.90]) by
+ fmsmsx610.amr.corp.intel.com ([10.18.126.90]) with mapi id 15.01.2308.027;
+ Mon, 18 Jul 2022 09:19:52 -0700
+From:   "Luck, Tony" <tony.luck@intel.com>
+To:     Jane Chu <jane.chu@oracle.com>, "bp@alien8.de" <bp@alien8.de>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
+        "Williams, Dan J" <dan.j.williams@intel.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "hch@lst.de" <hch@lst.de>,
+        "nvdimm@lists.linux.dev" <nvdimm@lists.linux.dev>
+Subject: RE: [PATCH v3] x86/mce: retrieve poison range from hardware
+Thread-Topic: [PATCH v3] x86/mce: retrieve poison range from hardware
+Thread-Index: AQHYmje+5joA3gBAok2TIuU+DOldN62ETyBg
+Date:   Mon, 18 Jul 2022 16:19:51 +0000
+Message-ID: <41db4a4b17a848798e487a058a2bc237@intel.com>
+References: <20220717234805.1084386-1-jane.chu@oracle.com>
+In-Reply-To: <20220717234805.1084386-1-jane.chu@oracle.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+dlp-product: dlpe-windows
+dlp-reaction: no-action
+dlp-version: 11.6.500.17
+x-originating-ip: [10.22.254.132]
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <YtUgb2Y/H/Wq9yIn@zn.tnic>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,22 +87,17 @@ Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Mon, Jul 18, 2022 at 10:57:19AM +0200, Borislav Petkov wrote:
-> Lemme talk to rostedt.
++	m.misc =3D (MCI_MISC_ADDR_PHYS << 6) | __ffs64(mem_err->physical_addr_mas=
+k);
 
-Right, he says __dynamic_array(). Grep the tree for examples.
+Do we want to unconditionally trust the sanity of the BIOS provided physica=
+l_address_mask?
 
-I'm thinking we can add a field called vendor_info or so, at the end of
-the TP and then dump whatever fields we want there.
+There's a warning comment on the kernel __ffs64() function:
 
-We can even slap a flag in front of the whole thing saying what the
-vendor info type is. But we don't have to get ahead of ourselves and
-keep it simple first.
+ * The result is not defined if no bits are set, so check that @word
+ * is non-zero before calling this.
 
-How does that sound?
+Otherwise, this looks like a good idea.
 
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+-Tony
