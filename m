@@ -2,149 +2,123 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F85557A7CA
-	for <lists+linux-edac@lfdr.de>; Tue, 19 Jul 2022 21:58:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A821E57A994
+	for <lists+linux-edac@lfdr.de>; Wed, 20 Jul 2022 00:01:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239687AbiGST63 (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Tue, 19 Jul 2022 15:58:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44100 "EHLO
+        id S231635AbiGSWBz (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Tue, 19 Jul 2022 18:01:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240127AbiGST56 (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Tue, 19 Jul 2022 15:57:58 -0400
-Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5FAB5FAE1;
-        Tue, 19 Jul 2022 12:57:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-        s=20170329; h=Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:
-        Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=osYWLXybRPL1xf3tnhpVcbfelhXywT0IUwZfpUOrny0=; b=IXkzcOlBT4OGdUHgU7aHfj0gli
-        49Z2HkBI8rJTWZvNxtsQF3UUZvJboNHXnI209t363+SRKm0rCzJ8ics+R9zP8hPgfd6PUu8k+sbGp
-        2pOjkSQUBSbKuZ86jgn3hXy5lLltVdvfBB9GVgZHgKtZXE5LJvkQ6m6GClNOi2syoBYf8wnVstdQb
-        qbyDM3KLIK8M5eDBWF4Hw46IwDbnITXJBIpfke/l9omy1kBy4onAazVeSSt3RcZYuliplx/5YKaf/
-        PKugx+keEi1ue3p3eGyTIhz8EbJxCxjLfbT65IaCsF16pSIADVP1EVpnEvXe1xAcyJ85JNiwgocXU
-        SVRequxg==;
-Received: from 200-100-212-117.dial-up.telesp.net.br ([200.100.212.117] helo=localhost)
-        by fanzine2.igalia.com with esmtpsa 
-        (Cipher TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
-        id 1oDtLR-006fd6-O6; Tue, 19 Jul 2022 21:57:26 +0200
-From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
-To:     akpm@linux-foundation.org, bhe@redhat.com, pmladek@suse.com,
-        kexec@lists.infradead.org
-Cc:     linux-kernel@vger.kernel.org, linux-hyperv@vger.kernel.org,
-        netdev@vger.kernel.org, x86@kernel.org, kernel-dev@igalia.com,
-        kernel@gpiccoli.net, halves@canonical.com, fabiomirmar@gmail.com,
-        alejandro.j.jimenez@oracle.com, andriy.shevchenko@linux.intel.com,
-        arnd@arndb.de, bp@alien8.de, corbet@lwn.net,
-        d.hatayama@jp.fujitsu.com, dave.hansen@linux.intel.com,
-        dyoung@redhat.com, feng.tang@intel.com, gregkh@linuxfoundation.org,
-        mikelley@microsoft.com, hidehiro.kawai.ez@hitachi.com,
-        jgross@suse.com, john.ogness@linutronix.de, keescook@chromium.org,
-        luto@kernel.org, mhiramat@kernel.org, mingo@redhat.com,
-        paulmck@kernel.org, peterz@infradead.org, rostedt@goodmis.org,
-        senozhatsky@chromium.org, stern@rowland.harvard.edu,
-        tglx@linutronix.de, vgoyal@redhat.com, vkuznets@redhat.com,
-        will@kernel.org, "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
-        linux-edac@vger.kernel.org, Dinh Nguyen <dinguyen@kernel.org>,
-        Tony Luck <tony.luck@intel.com>
-Subject: [PATCH v2 10/13] EDAC/altera: Skip the panic notifier if kdump is loaded
-Date:   Tue, 19 Jul 2022 16:53:23 -0300
-Message-Id: <20220719195325.402745-11-gpiccoli@igalia.com>
-X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220719195325.402745-1-gpiccoli@igalia.com>
-References: <20220719195325.402745-1-gpiccoli@igalia.com>
+        with ESMTP id S231312AbiGSWBy (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Tue, 19 Jul 2022 18:01:54 -0400
+Received: from mx0a-002e3701.pphosted.com (mx0a-002e3701.pphosted.com [148.163.147.86])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F24895FAE2;
+        Tue, 19 Jul 2022 15:01:51 -0700 (PDT)
+Received: from pps.filterd (m0134422.ppops.net [127.0.0.1])
+        by mx0b-002e3701.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26JLddaZ028927;
+        Tue, 19 Jul 2022 22:01:27 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding; s=pps0720;
+ bh=b80BmTHDUvxgWBfZpilq92cpE2prsuFHX+9J9zCJOHY=;
+ b=CEqsIAL+zqLjfuQKWZMjNeehk2rQ51DvbAIPOu1ixprZYCjul14IckpA6EP+8KhJcN38
+ 0XXhWh65pv8/2BjjWQUmhjsWr64n9Dw5k0Q5ncNr903X+gRS4+EiFRRn0tfHQHkS7jAb
+ 3LbR972YUGMGmDfiqim/tEwWdpRbs8V+sf6IAd2PAy8LWiunX0Ii1r8rvO/rjZJ2NJKk
+ bTtxaP9jLgw8+VgSdYIkCVuM8vJQ39nJ5+k6EhQN10X8Hwup3S6I2kJ1C0eIBHA62Wp4
+ qEgoaGYD6jhUusIbN40KRV9zvJTmY896gBN+mkaUhbRfcYMslq8J7daTC5LkcA9cbSD1 lg== 
+Received: from p1lg14880.it.hpe.com (p1lg14880.it.hpe.com [16.230.97.201])
+        by mx0b-002e3701.pphosted.com (PPS) with ESMTPS id 3he4qcr4kf-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 19 Jul 2022 22:01:27 +0000
+Received: from p1lg14886.dc01.its.hpecorp.net (unknown [10.119.18.237])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by p1lg14880.it.hpe.com (Postfix) with ESMTPS id 66179800234;
+        Tue, 19 Jul 2022 22:01:26 +0000 (UTC)
+Received: from node1.hpecorp.net (unknown [16.231.227.36])
+        by p1lg14886.dc01.its.hpecorp.net (Postfix) with ESMTP id 7024E803965;
+        Tue, 19 Jul 2022 22:01:24 +0000 (UTC)
+From:   Toshi Kani <toshi.kani@hpe.com>
+To:     bp@alien8.de, rrichter@marvell.com, mchehab@kernel.org
+Cc:     toshi.kani@hpe.com, elliott@hpe.com, linux-edac@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Borislav Petkov <bp@suse.de>
+Subject: [PATCH] EDAC/ghes: Fix buffer overflow in ghes_edac_register()
+Date:   Tue, 19 Jul 2022 16:01:24 -0600
+Message-Id: <20220719220124.760359-1-toshi.kani@hpe.com>
+X-Mailer: git-send-email 2.35.3
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Proofpoint-ORIG-GUID: kXjlY3KTYTeeLIQ_X4HvqPMLR42WGhAv
+X-Proofpoint-GUID: kXjlY3KTYTeeLIQ_X4HvqPMLR42WGhAv
+X-HPE-SCL: -1
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-07-19_08,2022-07-19_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999 spamscore=0
+ mlxscore=0 malwarescore=0 bulkscore=0 phishscore=0 lowpriorityscore=0
+ priorityscore=1501 clxscore=1011 adultscore=0 suspectscore=0
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2206140000 definitions=main-2207190090
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-The altera_edac panic notifier performs some data collection with
-regards errors detected; such code relies in the regmap layer to
-perform reads/writes, so the code is abstracted and there is some
-risk level to execute that, since the panic path runs in atomic
-context, with interrupts/preemption and secondary CPUs disabled.
+The following buffer overflow BUG was observed on an HPE system.
+ghes_edac_register() called strlen() on an uninitialized label,
+which had non-zero values from krealloc_array().
+Change dimm_setup_label() to always initialize the label.
 
-Users want the information collected in this panic notifier though,
-so in order to balance the risk/benefit, let's skip the altera panic
-notifier if kdump is loaded. While at it, remove a useless header
-and encompass a macro inside the sole ifdef block it is used.
+ detected buffer overflow in __fortify_strlen
+ ------------[ cut here ]------------
+ kernel BUG at lib/string_helpers.c:983!
+ invalid opcode: 0000 [#1] PREEMPT SMP NOPTI
+ CPU: 1 PID: 1 Comm: swapper/0 Tainted: G          I       5.18.6-200.fc36.x86_64 #1
+ Hardware name: HPE ProLiant DL360 Gen10/ProLiant DL360 Gen10, BIOS U32 03/15/2019
+ RIP: 0010:fortify_panic+0xf/0x11
+ ...
+ Call Trace:
+  <TASK>
+  ghes_edac_register.cold+0x128/0x128
+  ghes_probe+0x142/0x3a0
+  platform_probe+0x41/0x90
+  really_probe+0x19e/0x370
+  __driver_probe_device+0xfc/0x170
+  driver_probe_device+0x1f/0x90
+  __driver_attach+0xbb/0x190
+  ? __device_attach_driver+0xe0/0xe0
+  bus_for_each_dev+0x5f/0x90
+  bus_add_driver+0x159/0x200
+  driver_register+0x89/0xd0
+  acpi_ghes_init+0x72/0xc3
+  acpi_init+0x441/0x493
+  ? acpi_sleep_proc_init+0x24/0x24
+  do_one_initcall+0x41/0x200
 
-Cc: Dinh Nguyen <dinguyen@kernel.org>
-Cc: Petr Mladek <pmladek@suse.com>
-Cc: Tony Luck <tony.luck@intel.com>
-Signed-off-by: Guilherme G. Piccoli <gpiccoli@igalia.com>
-
+Fixes: b9cae27728d1f ("EDAC/ghes: Scan the system once on driver init")
+Tested-by: Robert Elliott <elliott@hpe.com>
+Signed-off-by: Toshi Kani <toshi.kani@hpe.com>
+Cc: Robert Richter <rrichter@marvell.com>
+Cc: Borislav Petkov <bp@suse.de>
+Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
 ---
+ drivers/edac/ghes_edac.c |    2 ++
+ 1 file changed, 2 insertions(+)
 
-V2:
-- new patch, based on the discussion in [0].
-[0] https://lore.kernel.org/lkml/62a63fc2-346f-f375-043a-fa21385279df@igalia.com/
-
- drivers/edac/altera_edac.c | 16 ++++++++++++----
- 1 file changed, 12 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/edac/altera_edac.c b/drivers/edac/altera_edac.c
-index e7e8e624a436..741fe5539154 100644
---- a/drivers/edac/altera_edac.c
-+++ b/drivers/edac/altera_edac.c
-@@ -16,7 +16,6 @@
- #include <linux/kernel.h>
- #include <linux/mfd/altera-sysmgr.h>
- #include <linux/mfd/syscon.h>
--#include <linux/notifier.h>
- #include <linux/of_address.h>
- #include <linux/of_irq.h>
- #include <linux/of_platform.h>
-@@ -24,6 +23,7 @@
- #include <linux/platform_device.h>
- #include <linux/regmap.h>
- #include <linux/types.h>
-+#include <linux/kexec.h>
- #include <linux/uaccess.h>
+diff --git a/drivers/edac/ghes_edac.c b/drivers/edac/ghes_edac.c
+index 59b0bedc9c24..3ad3d5fc45e0 100644
+--- a/drivers/edac/ghes_edac.c
++++ b/drivers/edac/ghes_edac.c
+@@ -106,6 +106,8 @@ static void dimm_setup_label(struct dimm_info *dimm, u16 handle)
+ 	/* both strings must be non-zero */
+ 	if (bank && *bank && device && *device)
+ 		snprintf(dimm->label, sizeof(dimm->label), "%s %s", bank, device);
++	else
++		dimm->label[0] = '\0';
+ }
  
- #include "altera_edac.h"
-@@ -2063,22 +2063,30 @@ static const struct irq_domain_ops a10_eccmgr_ic_ops = {
- };
- 
- /************** Stratix 10 EDAC Double Bit Error Handler ************/
--#define to_a10edac(p, m) container_of(p, struct altr_arria10_edac, m)
--
- #ifdef CONFIG_64BIT
- /* panic routine issues reboot on non-zero panic_timeout */
- extern int panic_timeout;
- 
-+#define to_a10edac(p, m) container_of(p, struct altr_arria10_edac, m)
-+
- /*
-  * The double bit error is handled through SError which is fatal. This is
-  * called as a panic notifier to printout ECC error info as part of the panic.
-+ *
-+ * Notice that if kdump is set, we take the risk avoidance approach and
-+ * skip the notifier, given that users are expected to have access to a
-+ * full vmcore.
-  */
- static int s10_edac_dberr_handler(struct notifier_block *this,
- 				  unsigned long event, void *ptr)
- {
--	struct altr_arria10_edac *edac = to_a10edac(this, panic_notifier);
-+	struct altr_arria10_edac *edac;
- 	int err_addr, dberror;
- 
-+	if (kexec_crash_loaded())
-+		return NOTIFY_DONE;
-+
-+	edac = to_a10edac(this, panic_notifier);
- 	regmap_read(edac->ecc_mgr_map, S10_SYSMGR_ECC_INTSTAT_DERR_OFST,
- 		    &dberror);
- 	regmap_write(edac->ecc_mgr_map, S10_SYSMGR_UE_VAL_OFST, dberror);
--- 
-2.37.1
-
+ static void assign_dmi_dimm_info(struct dimm_info *dimm, struct memdev_dmi_entry *entry)
