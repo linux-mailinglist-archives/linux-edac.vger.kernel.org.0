@@ -2,68 +2,62 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE75357B5E2
-	for <lists+linux-edac@lfdr.de>; Wed, 20 Jul 2022 13:51:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 278AA57B89E
+	for <lists+linux-edac@lfdr.de>; Wed, 20 Jul 2022 16:40:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231420AbiGTLvf (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Wed, 20 Jul 2022 07:51:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33734 "EHLO
+        id S229820AbiGTOkD (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Wed, 20 Jul 2022 10:40:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229490AbiGTLve (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Wed, 20 Jul 2022 07:51:34 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBC5357206;
-        Wed, 20 Jul 2022 04:51:31 -0700 (PDT)
-Received: from zn.tnic (p200300ea97297623329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9729:7623:329c:23ff:fea6:a903])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 426401EC04D6;
-        Wed, 20 Jul 2022 13:51:26 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1658317886;
+        with ESMTP id S229526AbiGTOkC (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Wed, 20 Jul 2022 10:40:02 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 257762B186
+        for <linux-edac@vger.kernel.org>; Wed, 20 Jul 2022 07:40:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1658328001;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=G5tDrsT2sWzYk3Hji+KyAgj0z5FZBjNVpsVxlTCfyRU=;
-        b=o8Ka6MQersjBulW1eATTQ3ok9Y+q3VT63ez33EzV6yUOr4O4rAcqxO3cZOCXqMPFNzE4pg
-        +Ne2jrxAoKgxFcPKjWLNiZ6c+hxxz0aCvTF0kuCddVJTLfexDj0VzZ4T8vXaTCu8iYXd/t
-        arsTveHiAJ212DDda3ZyxOGleUbwJ7Y=
-Date:   Wed, 20 Jul 2022 13:51:21 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Toshi Kani <toshi.kani@hpe.com>
-Cc:     rrichter@marvell.com, mchehab@kernel.org, elliott@hpe.com,
-        linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Borislav Petkov <bp@suse.de>
-Subject: Re: [PATCH] EDAC/ghes: Fix buffer overflow in ghes_edac_register()
-Message-ID: <YtfsOcWbWREu1NnK@zn.tnic>
-References: <20220719220124.760359-1-toshi.kani@hpe.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220719220124.760359-1-toshi.kani@hpe.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+         to:to:cc:cc; bh=kBoBnHcQRgLrEstbVYYSM/6wH/EByp6aFCTHwOFX7Ts=;
+        b=Uva0G8gw9bBffrfq2f6cF6w+vOcClAzpTMe/lSMBJuNrL/g5veUUMINLyLeQsnG/D/BcnS
+        tevuD2Ppyck0GFupTdYOzI4txhvlvuBgE1nzsXXk4kZzcRKdBU9n4kOr4t1Jg4CWsg7xS1
+        f7023Sc13KcBMwwoKbyIo4vBsZzSyM0=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-390-S5Md_lOeO-WWbBINxU2FCQ-1; Wed, 20 Jul 2022 10:39:59 -0400
+X-MC-Unique: S5Md_lOeO-WWbBINxU2FCQ-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 227CD1C1BD23;
+        Wed, 20 Jul 2022 14:39:58 +0000 (UTC)
+Received: from napanee.usersys.redhat.com (unknown [10.2.16.113])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 159E818EA8;
+        Wed, 20 Jul 2022 14:39:58 +0000 (UTC)
+Received: by napanee.usersys.redhat.com (Postfix, from userid 1000)
+        id D345FC0521; Wed, 20 Jul 2022 10:39:57 -0400 (EDT)
+Message-ID: <20220720143957.795358633@redhat.com>
+User-Agent: quilt/0.66
+Date:   Wed, 20 Jul 2022 10:39:57 -0400
+From:   arozansk@redhat.com
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     linux-edac@vger.kernel.org
+Subject: [PATCH 0/3] rasdaemon: misc fixes
+X-Scanned-By: MIMEDefang 2.79 on 10.11.54.5
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Tue, Jul 19, 2022 at 04:01:24PM -0600, Toshi Kani wrote:
-> The following buffer overflow BUG was observed on an HPE system.
-> ghes_edac_register() called strlen() on an uninitialized label,
-> which had non-zero values from krealloc_array().
-> Change dimm_setup_label() to always initialize the label.
+These patches are for 3 issues found with covscan. None of them are likely to
+happen during regular use, but worth fixing anyway.
 
-Do we also know why dmi_memdev_name() doesn't give bank and/or device?
-
-SMBIOS handle wrong?
-
-Thx.
+Signed-off-by: Aristeu Rozanski <arozansk@redhat.com>
 
 -- 
-Regards/Gruss,
-    Boris.
+Aristeu
 
-https://people.kernel.org/tglx/notes-about-netiquette
