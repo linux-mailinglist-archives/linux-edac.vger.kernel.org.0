@@ -2,38 +2,38 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 189BB57EA3F
-	for <lists+linux-edac@lfdr.de>; Sat, 23 Jul 2022 01:34:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EDD4957EA3C
+	for <lists+linux-edac@lfdr.de>; Sat, 23 Jul 2022 01:34:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233902AbiGVXdx (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Fri, 22 Jul 2022 19:33:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40926 "EHLO
+        id S234190AbiGVXdy (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Fri, 22 Jul 2022 19:33:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232070AbiGVXdw (ORCPT
+        with ESMTP id S233326AbiGVXdw (ORCPT
         <rfc822;linux-edac@vger.kernel.org>); Fri, 22 Jul 2022 19:33:52 -0400
 Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 800F688CC7;
-        Fri, 22 Jul 2022 16:33:51 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E3DF88CE3;
+        Fri, 22 Jul 2022 16:33:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658532831; x=1690068831;
+  t=1658532832; x=1690068832;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=mLYExMQ8UHt3jObNveidiNRuSpjvL66K2gZRbegeAfs=;
-  b=MHKHRZpl4mPptQUbF6u/v+iJMY2tuzs+MhXYTCl09xnVZZrvm0Y0LH1s
-   Xqypzi3PXf08WdPSJRiqhIE8PGTLRpQcjQsd+qSrIbp2ljlLiSXxnhKK0
-   SGwPqKGHabBvZ51lZrlXHxKeEQ1Og8x38rLPdipS8grTzffPDEB+dd5da
-   IqhWL2e9BYPOTtUjVX5cqI0bIkkVxcP8F/G4WqJrnl3u9hz8rKh8XgKxt
-   ZBUd6Q3PPaa1/tPzSU7lkX+cAwATF24bxltHP8CHliEQRM8KJftKTqOsv
-   EqfaHFY0XOXT5lr5IDM5luDBSkjXxXPRTfPt/L0E86nT9h10oOxyW6LKD
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10416"; a="286185332"
+  bh=2eUb6jjFi44WtfaMDFPHfogl5CxsvKABtplSHamEE8o=;
+  b=YSvJiDydWYEBHan/JuhlO1j2yNlB55eEgFT9WxosCwUcVMqzY1tkH4t4
+   q10n1SNoMDSjS1VI7xBxyxMQs9nWN1YxwZHhF1PKqyNvvqqirpJRrs9eo
+   owUvQjEDdbGWigVv71/ZPATjeSKRh9UIgczFi7uZVZWDIBtq0ZT6VdDu/
+   bXZMeABTM+o2DisszO5uOTcPzLI95/dLv7fUqUOyk38zrcNZxaavprsYR
+   PY7KXntUko3JRwEEgrU+I4SaqD+Ix/bJRv++ErzPapKxPXliriU7C+nWL
+   d6I79hbyskF+Gz6kpClmChl/OyHs7epbe/E3n1MGJPzBXkGEkp3bZEipM
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10416"; a="286185333"
 X-IronPort-AV: E=Sophos;i="5.93,186,1654585200"; 
-   d="scan'208";a="286185332"
+   d="scan'208";a="286185333"
 Received: from orsmga006.jf.intel.com ([10.7.209.51])
   by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jul 2022 16:33:48 -0700
 X-IronPort-AV: E=Sophos;i="5.93,186,1654585200"; 
-   d="scan'208";a="574346061"
+   d="scan'208";a="574346064"
 Received: from agluck-desk3.sc.intel.com ([172.25.222.78])
   by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jul 2022 16:33:47 -0700
 From:   Tony Luck <tony.luck@intel.com>
@@ -43,9 +43,9 @@ Cc:     Qiuxu Zhuo <qiuxu.zhuo@intel.com>, Tony Luck <tony.luck@intel.com>,
         Borislav Petkov <bp@alien8.de>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         linux-kernel@vger.kernel.org, patches@lists.linux.dev
-Subject: [PATCH 1/4] EDAC/skx_common: Add ChipSelect ADXL component
-Date:   Fri, 22 Jul 2022 16:33:35 -0700
-Message-Id: <20220722233338.341567-2-tony.luck@intel.com>
+Subject: [PATCH 2/4] EDAC/i10nm: Retrieve and print retry_rd_err_log registers for HBM
+Date:   Fri, 22 Jul 2022 16:33:36 -0700
+Message-Id: <20220722233338.341567-3-tony.luck@intel.com>
 X-Mailer: git-send-email 2.35.3
 In-Reply-To: <20220722233338.341567-1-tony.luck@intel.com>
 References: <20220722233338.341567-1-tony.luck@intel.com>
@@ -62,80 +62,178 @@ X-Mailing-List: linux-edac@vger.kernel.org
 
 From: Qiuxu Zhuo <qiuxu.zhuo@intel.com>
 
-Each pseudo channel of HBM has its own retry_rd_err_log registers.
-The bit 0 of ChipSelect ADXL component encodes the pseudo channel
-number of HBM memory. So add ChipSelect ADXL component to get HBM
-pseudo channel number.
+An HBM memory channel is divided into two pseudo channels. Each
+pseudo channel has its own retry_rd_err_log registers. Retrieve and
+print retry_rd_err_log registers of the HBM pseudo channel if the
+memory error is from HBM.
 
 Signed-off-by: Qiuxu Zhuo <qiuxu.zhuo@intel.com>
 Signed-off-by: Tony Luck <tony.luck@intel.com>
 ---
- drivers/edac/skx_common.h | 4 ++++
- drivers/edac/skx_common.c | 5 +++++
- 2 files changed, 9 insertions(+)
+ drivers/edac/skx_common.h |  4 ++
+ drivers/edac/i10nm_base.c | 84 +++++++++++++++++++++++++++++++--------
+ 2 files changed, 71 insertions(+), 17 deletions(-)
 
 diff --git a/drivers/edac/skx_common.h b/drivers/edac/skx_common.h
-index 03ac067a80b9..70ec4f41911b 100644
+index 70ec4f41911b..dbf8e458ad2b 100644
 --- a/drivers/edac/skx_common.h
 +++ b/drivers/edac/skx_common.h
-@@ -108,16 +108,19 @@ enum {
- 	INDEX_MEMCTRL,
- 	INDEX_CHANNEL,
- 	INDEX_DIMM,
-+	INDEX_CS,
- 	INDEX_NM_FIRST,
- 	INDEX_NM_MEMCTRL = INDEX_NM_FIRST,
- 	INDEX_NM_CHANNEL,
- 	INDEX_NM_DIMM,
-+	INDEX_NM_CS,
- 	INDEX_MAX
+@@ -158,7 +158,11 @@ struct res_config {
+ 	int sad_all_offset;
+ 	/* Offsets of retry_rd_err_log registers */
+ 	u32 *offsets_scrub;
++	u32 *offsets_scrub_hbm0;
++	u32 *offsets_scrub_hbm1;
+ 	u32 *offsets_demand;
++	u32 *offsets_demand_hbm0;
++	u32 *offsets_demand_hbm1;
  };
  
- #define BIT_NM_MEMCTRL	BIT_ULL(INDEX_NM_MEMCTRL)
- #define BIT_NM_CHANNEL	BIT_ULL(INDEX_NM_CHANNEL)
- #define BIT_NM_DIMM	BIT_ULL(INDEX_NM_DIMM)
-+#define BIT_NM_CS	BIT_ULL(INDEX_NM_CS)
+ typedef int (*get_dimm_config_f)(struct mem_ctl_info *mci,
+diff --git a/drivers/edac/i10nm_base.c b/drivers/edac/i10nm_base.c
+index 6cf50ee0b77c..976d8e8a4d1b 100644
+--- a/drivers/edac/i10nm_base.c
++++ b/drivers/edac/i10nm_base.c
+@@ -77,18 +77,20 @@ static int retry_rd_err_log;
  
- struct decoded_addr {
- 	struct skx_dev *dev;
-@@ -129,6 +132,7 @@ struct decoded_addr {
- 	int	sktways;
- 	int	chanways;
- 	int	dimm;
-+	int	cs;
- 	int	rank;
- 	int	channel_rank;
- 	u64	rank_address;
-diff --git a/drivers/edac/skx_common.c b/drivers/edac/skx_common.c
-index 19c17c5198c5..ee074fb507d8 100644
---- a/drivers/edac/skx_common.c
-+++ b/drivers/edac/skx_common.c
-@@ -27,9 +27,11 @@ static const char * const component_names[] = {
- 	[INDEX_MEMCTRL]		= "MemoryControllerId",
- 	[INDEX_CHANNEL]		= "ChannelId",
- 	[INDEX_DIMM]		= "DimmSlotId",
-+	[INDEX_CS]		= "ChipSelect",
- 	[INDEX_NM_MEMCTRL]	= "NmMemoryControllerId",
- 	[INDEX_NM_CHANNEL]	= "NmChannelId",
- 	[INDEX_NM_DIMM]		= "NmDimmSlotId",
-+	[INDEX_NM_CS]		= "NmChipSelect",
- };
+ static u32 offsets_scrub_icx[]  = {0x22c60, 0x22c54, 0x22c5c, 0x22c58, 0x22c28, 0x20ed8};
+ static u32 offsets_scrub_spr[]  = {0x22c60, 0x22c54, 0x22f08, 0x22c58, 0x22c28, 0x20ed8};
++static u32 offsets_scrub_spr_hbm0[]  = {0x2860, 0x2854, 0x2b08, 0x2858, 0x2828, 0x0ed8};
++static u32 offsets_scrub_spr_hbm1[]  = {0x2c60, 0x2c54, 0x2f08, 0x2c58, 0x2c28, 0x0fa8};
+ static u32 offsets_demand_icx[] = {0x22e54, 0x22e60, 0x22e64, 0x22e58, 0x22e5c, 0x20ee0};
+ static u32 offsets_demand_spr[] = {0x22e54, 0x22e60, 0x22f10, 0x22e58, 0x22e5c, 0x20ee0};
++static u32 offsets_demand_spr_hbm0[] = {0x2a54, 0x2a60, 0x2b10, 0x2a58, 0x2a5c, 0x0ee0};
++static u32 offsets_demand_spr_hbm1[] = {0x2e54, 0x2e60, 0x2f10, 0x2e58, 0x2e5c, 0x0fb0};
  
- static int component_indices[ARRAY_SIZE(component_names)];
-@@ -139,10 +141,13 @@ static bool skx_adxl_decode(struct decoded_addr *res, bool error_in_1st_level_me
- 			       (int)adxl_values[component_indices[INDEX_NM_CHANNEL]] : -1;
- 		res->dimm    = (adxl_nm_bitmap & BIT_NM_DIMM) ?
- 			       (int)adxl_values[component_indices[INDEX_NM_DIMM]] : -1;
-+		res->cs      = (adxl_nm_bitmap & BIT_NM_CS) ?
-+			       (int)adxl_values[component_indices[INDEX_NM_CS]] : -1;
- 	} else {
- 		res->imc     = (int)adxl_values[component_indices[INDEX_MEMCTRL]];
- 		res->channel = (int)adxl_values[component_indices[INDEX_CHANNEL]];
- 		res->dimm    = (int)adxl_values[component_indices[INDEX_DIMM]];
-+		res->cs      = (int)adxl_values[component_indices[INDEX_CS]];
+-static void __enable_retry_rd_err_log(struct skx_imc *imc, int chan, bool enable)
++static void __enable_retry_rd_err_log(struct skx_imc *imc, int chan, bool enable,
++				      u32 *offsets_scrub, u32 *offsets_demand)
+ {
+ 	u32 s, d;
+ 
+-	if (!imc->mbase)
+-		return;
+-
+-	s = I10NM_GET_REG32(imc, chan, res_cfg->offsets_scrub[0]);
+-	d = I10NM_GET_REG32(imc, chan, res_cfg->offsets_demand[0]);
++	s = I10NM_GET_REG32(imc, chan, offsets_scrub[0]);
++	d = I10NM_GET_REG32(imc, chan, offsets_demand[0]);
+ 
+ 	if (enable) {
+ 		/* Save default configurations */
+@@ -115,21 +117,39 @@ static void __enable_retry_rd_err_log(struct skx_imc *imc, int chan, bool enable
+ 			d &= ~RETRY_RD_ERR_LOG_EN;
  	}
  
- 	if (res->imc > NUM_IMC - 1 || res->imc < 0) {
+-	I10NM_SET_REG32(imc, chan, res_cfg->offsets_scrub[0], s);
+-	I10NM_SET_REG32(imc, chan, res_cfg->offsets_demand[0], d);
++	I10NM_SET_REG32(imc, chan, offsets_scrub[0], s);
++	I10NM_SET_REG32(imc, chan, offsets_demand[0], d);
+ }
+ 
+ static void enable_retry_rd_err_log(bool enable)
+ {
++	struct skx_imc *imc;
+ 	struct skx_dev *d;
+ 	int i, j;
+ 
+ 	edac_dbg(2, "\n");
+ 
+ 	list_for_each_entry(d, i10nm_edac_list, list)
+-		for (i = 0; i < I10NM_NUM_IMC; i++)
+-			for (j = 0; j < I10NM_NUM_CHANNELS; j++)
+-				__enable_retry_rd_err_log(&d->imc[i], j, enable);
++		for (i = 0; i < I10NM_NUM_IMC; i++) {
++			imc = &d->imc[i];
++			if (!imc->mbase)
++				continue;
++
++			for (j = 0; j < I10NM_NUM_CHANNELS; j++) {
++				if (imc->hbm_mc) {
++					__enable_retry_rd_err_log(imc, j, enable,
++								  res_cfg->offsets_scrub_hbm0,
++								  res_cfg->offsets_demand_hbm0);
++					__enable_retry_rd_err_log(imc, j, enable,
++								  res_cfg->offsets_scrub_hbm1,
++								  res_cfg->offsets_demand_hbm1);
++				} else {
++					__enable_retry_rd_err_log(imc, j, enable,
++								  res_cfg->offsets_scrub,
++								  res_cfg->offsets_demand);
++				}
++			}
++	}
+ }
+ 
+ static void show_retry_rd_err_log(struct decoded_addr *res, char *msg,
+@@ -140,12 +160,24 @@ static void show_retry_rd_err_log(struct decoded_addr *res, char *msg,
+ 	u32 corr0, corr1, corr2, corr3;
+ 	u64 log2a, log5;
+ 	u32 *offsets;
+-	int n;
++	int n, pch;
+ 
+ 	if (!imc->mbase)
+ 		return;
+ 
+-	offsets = scrub_err ? res_cfg->offsets_scrub : res_cfg->offsets_demand;
++	if (imc->hbm_mc) {
++		pch = res->cs & 1;
++
++		if (pch)
++			offsets = scrub_err ? res_cfg->offsets_scrub_hbm1 :
++					      res_cfg->offsets_demand_hbm1;
++		else
++			offsets = scrub_err ? res_cfg->offsets_scrub_hbm0 :
++					      res_cfg->offsets_demand_hbm0;
++	} else {
++		offsets = scrub_err ? res_cfg->offsets_scrub :
++				      res_cfg->offsets_demand;
++	}
+ 
+ 	log0 = I10NM_GET_REG32(imc, res->channel, offsets[0]);
+ 	log1 = I10NM_GET_REG32(imc, res->channel, offsets[1]);
+@@ -163,10 +195,24 @@ static void show_retry_rd_err_log(struct decoded_addr *res, char *msg,
+ 			     log0, log1, log2, log3, log4, log5);
+ 	}
+ 
+-	corr0 = I10NM_GET_REG32(imc, res->channel, 0x22c18);
+-	corr1 = I10NM_GET_REG32(imc, res->channel, 0x22c1c);
+-	corr2 = I10NM_GET_REG32(imc, res->channel, 0x22c20);
+-	corr3 = I10NM_GET_REG32(imc, res->channel, 0x22c24);
++	if (imc->hbm_mc) {
++		if (pch) {
++			corr0 = I10NM_GET_REG32(imc, res->channel, 0x2c18);
++			corr1 = I10NM_GET_REG32(imc, res->channel, 0x2c1c);
++			corr2 = I10NM_GET_REG32(imc, res->channel, 0x2c20);
++			corr3 = I10NM_GET_REG32(imc, res->channel, 0x2c24);
++		} else {
++			corr0 = I10NM_GET_REG32(imc, res->channel, 0x2818);
++			corr1 = I10NM_GET_REG32(imc, res->channel, 0x281c);
++			corr2 = I10NM_GET_REG32(imc, res->channel, 0x2820);
++			corr3 = I10NM_GET_REG32(imc, res->channel, 0x2824);
++		}
++	} else {
++		corr0 = I10NM_GET_REG32(imc, res->channel, 0x22c18);
++		corr1 = I10NM_GET_REG32(imc, res->channel, 0x22c1c);
++		corr2 = I10NM_GET_REG32(imc, res->channel, 0x22c20);
++		corr3 = I10NM_GET_REG32(imc, res->channel, 0x22c24);
++	}
+ 
+ 	if (len - n > 0)
+ 		snprintf(msg + n, len - n,
+@@ -420,7 +466,11 @@ static struct res_config spr_cfg = {
+ 	.sad_all_devfn		= PCI_DEVFN(10, 0),
+ 	.sad_all_offset		= 0x300,
+ 	.offsets_scrub		= offsets_scrub_spr,
++	.offsets_scrub_hbm0	= offsets_scrub_spr_hbm0,
++	.offsets_scrub_hbm1	= offsets_scrub_spr_hbm1,
+ 	.offsets_demand		= offsets_demand_spr,
++	.offsets_demand_hbm0	= offsets_demand_spr_hbm0,
++	.offsets_demand_hbm1	= offsets_demand_spr_hbm1,
+ };
+ 
+ static const struct x86_cpu_id i10nm_cpuids[] = {
 -- 
 2.35.3
 
