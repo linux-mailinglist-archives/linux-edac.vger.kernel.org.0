@@ -2,80 +2,106 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45E9457FD38
-	for <lists+linux-edac@lfdr.de>; Mon, 25 Jul 2022 12:14:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B2F257FDCF
+	for <lists+linux-edac@lfdr.de>; Mon, 25 Jul 2022 12:45:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232971AbiGYKOf (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Mon, 25 Jul 2022 06:14:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41984 "EHLO
+        id S234772AbiGYKpb (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Mon, 25 Jul 2022 06:45:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231654AbiGYKOe (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Mon, 25 Jul 2022 06:14:34 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B49B164ED;
-        Mon, 25 Jul 2022 03:14:33 -0700 (PDT)
-Received: from zn.tnic (p200300ea972976f8329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9729:76f8:329c:23ff:fea6:a903])
+        with ESMTP id S234822AbiGYKp0 (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Mon, 25 Jul 2022 06:45:26 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05764CE05;
+        Mon, 25 Jul 2022 03:45:25 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id EA3AC1EC02AD;
-        Mon, 25 Jul 2022 12:14:26 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1658744067;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=UG3HyB+a1rEuod/npdxD9V9DqUguu9NB6mUos5iP184=;
-        b=Lq3tyrIyax/V1WQYaRZGfpC21SBrLPnzksuggi9y9EcQCe2hA531lfI3iR6Bt3zL+gvQXB
-        O6eRlG9m/yKACmGBma6zMLOGHb4J6Z87JoXhkWLUKft/IuJ2iYQHZmSxOynoRUYMk2bmCR
-        eF4lXkhsCgLg9j+hESxedamBcCdpqbo=
-Date:   Mon, 25 Jul 2022 12:14:21 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Robert Richter <rric@kernel.org>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7EEE460B6E;
+        Mon, 25 Jul 2022 10:45:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D3654C341C8;
+        Mon, 25 Jul 2022 10:45:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1658745924;
+        bh=8FN7wqx7Bn6NDn4fHaqkWhzadFtp7D8Qq1pnKah2Auc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=BsHkSMgzSXnEev+OixsDAfFJyitvX0T+kTPo44UA4XMte9zrAEt7yXx1M1D4qiA6K
+         Wo5pnCnrdgEfJwhReT6Rdn2i/8A/zjIFtUGwg5jd1BEc9Mf0E6jCDqCNAz2gOuX/BM
+         PfEuU61D2lrGnjoNQiF1uAQzd6r+Rv6evCnHlGh3Ku6ZX1t0hP3wWBlVJttTxhxCmy
+         43PKIxamZ3p9tA+qQj/sdOai5xu7wMe+DVsQMPujNiRgIau4bNLph4++T3DC/DpXJ1
+         fkIxS123/fMQeXqUV7at2lcZO4ThphXhDhPfQiHYwVn+x6cdwb5TeJrRb0Na5htz05
+         ZsNvizU2N6N8w==
+Date:   Mon, 25 Jul 2022 12:45:18 +0200
+From:   Robert Richter <rric@kernel.org>
+To:     Borislav Petkov <bp@alien8.de>
 Cc:     Toshi Kani <toshi.kani@hpe.com>, mchehab@kernel.org,
         elliott@hpe.com, linux-edac@vger.kernel.org,
         linux-kernel@vger.kernel.org
 Subject: Re: [PATCH v2] EDAC/ghes: Fix buffer overflow in ghes_edac_register()
-Message-ID: <Yt5s/f/jyRcFY1Md@zn.tnic>
+Message-ID: <Yt50Pp3kQRCtSqw6@rric.localdomain>
 References: <20220721180503.896050-1-toshi.kani@hpe.com>
  <YtqkMicKdZdPdUWB@zn.tnic>
  <Yt5oAjbZ5Koy9v5i@rric.localdomain>
+ <Yt5s/f/jyRcFY1Md@zn.tnic>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Yt5oAjbZ5Koy9v5i@rric.localdomain>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <Yt5s/f/jyRcFY1Md@zn.tnic>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Mon, Jul 25, 2022 at 11:53:06AM +0200, Robert Richter wrote:
-> The dimm->label buffer must be pre-initialized zero. This broke with:
+On 25.07.22 12:14:21, Borislav Petkov wrote:
+> On Mon, Jul 25, 2022 at 11:53:06AM +0200, Robert Richter wrote:
+> > The dimm->label buffer must be pre-initialized zero. This broke with:
+> > 
+> >  b9cae27728d1 EDAC/ghes: Scan the system once on driver init
+> > 
+> > since krealloc/krealloc_array() does not zero out the new allocated
+> > buffer for struct dimm_info in enumerate_dimms(). This uninitialized
+> > broken struct is then copied in ghes_edac_register() to the final
+> > dimm_info destination. Originally, before b9cae27728d1, the struct was
+> > zero initialized with kzalloc'ed by edac_mc_alloc() and directly used.
+> > Now, that a copy is created first, this copy must be also zero
+> > initialized.
+> > 
+> > IMO this is the proper fix:
 > 
->  b9cae27728d1 EDAC/ghes: Scan the system once on driver init
+> Maybe, but this needs fixing too:
 > 
-> since krealloc/krealloc_array() does not zero out the new allocated
-> buffer for struct dimm_info in enumerate_dimms(). This uninitialized
-> broken struct is then copied in ghes_edac_register() to the final
-> dimm_info destination. Originally, before b9cae27728d1, the struct was
-> zero initialized with kzalloc'ed by edac_mc_alloc() and directly used.
-> Now, that a copy is created first, this copy must be also zero
-> initialized.
+> 	/* both strings must be non-zero */
+> 	if (bank && *bank && device && *device)
 > 
-> IMO this is the proper fix:
+> Obviously one of those strings are zero coming from that BIOS...
 
-Maybe, but this needs fixing too:
+But the label is pre-initialized in edac_mc_alloc_dimms():
 
-	/* both strings must be non-zero */
-	if (bank && *bank && device && *device)
+	p = dimm->label;
+	n = snprintf(p, len, "mc#%u", mci->mc_idx);
 
-Obviously one of those strings are zero coming from that BIOS...
+You check if the label is emtpy when copying it in
+ghes_edac_register():
 
--- 
-Regards/Gruss,
-    Boris.
+	if (strlen(src->label))
+		memcpy(dst->label, src->label, sizeof(src->label));
 
-https://people.kernel.org/tglx/notes-about-netiquette
+So if there is nothing that comes from the bios, this default label
+string from edac_mc_alloc_dimms() will be used.
+
+If you write "N/A" to the label instead, the sysfs dimm_label values
+wont be unique any longer between dimms, which might break existing
+applications.
+
+-Robert
+
+> 
+> -- 
+> Regards/Gruss,
+>     Boris.
+> 
+> https://people.kernel.org/tglx/notes-about-netiquette
