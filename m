@@ -2,152 +2,104 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E16CC5817C8
-	for <lists+linux-edac@lfdr.de>; Tue, 26 Jul 2022 18:46:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A20D6581A0E
+	for <lists+linux-edac@lfdr.de>; Tue, 26 Jul 2022 21:04:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229747AbiGZQqx (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Tue, 26 Jul 2022 12:46:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55610 "EHLO
+        id S232951AbiGZTE5 (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Tue, 26 Jul 2022 15:04:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229738AbiGZQqw (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Tue, 26 Jul 2022 12:46:52 -0400
-Received: from mx0b-002e3701.pphosted.com (mx0b-002e3701.pphosted.com [148.163.143.35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A24D1148;
-        Tue, 26 Jul 2022 09:46:49 -0700 (PDT)
-Received: from pps.filterd (m0148664.ppops.net [127.0.0.1])
-        by mx0b-002e3701.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26QEW9gL003111;
-        Tue, 26 Jul 2022 16:46:35 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-transfer-encoding; s=pps0720;
- bh=uS1MGlPUgaNKgZxxo7vKiN1NvWRyGLcRebrPWn5jCHE=;
- b=iPXImH60lC0C0x89taIkoWrbBfIX64QjBXStw5YlQ9iWnbbnThCEJLmehQs9dVw5UqTd
- MbSaODC/KF0Pl8g+bAAEcqy/+P76oghuaq9RH+24I6CJUCeNkQfHggOHev0OPwaeYOI0
- EGMABiIVWSHHQP/Ynu+alAW04xFANdgO7rUE8bAAWkq9zJvrownbahxqDRnR3rfjSZi8
- aaNy5U13z299YTmxr2E8Rzg3p4peij81z87l/KzCHhD0JmI2rQufhL7cRSgDH65ZRrKu
- FSlBFpqIgNCJQiZ2RdiUcYl4EbOB5Bpg0KufXnqSzJ8waWUEMJOqaFxFdG5WjAxBGTBt qQ== 
-Received: from p1lg14878.it.hpe.com (p1lg14878.it.hpe.com [16.230.97.204])
-        by mx0b-002e3701.pphosted.com (PPS) with ESMTPS id 3hjew9ufv6-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 26 Jul 2022 16:46:35 +0000
-Received: from p1lg14885.dc01.its.hpecorp.net (unknown [10.119.18.236])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        with ESMTP id S231566AbiGZTE4 (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Tue, 26 Jul 2022 15:04:56 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5464C326CA
+        for <linux-edac@vger.kernel.org>; Tue, 26 Jul 2022 12:04:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1658862294;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type;
+        bh=Em43YBlGpD4Nb7ExErLSBmIS59vczgV4ujcOA8o45m8=;
+        b=KZX7dItBA0UR8gXZL+8Q+Foa6TjMVRkRRbf5i33NqE7ofKRdbsq24UVHFhFuxWk8dwosoR
+        RHfSWeyiCP2pkFAjyarcVn5Z4PpvwFSqlKGhbWxFlVKJPFmHZo95cYNgMzMnAgINfZfJN5
+        /An2MWrOIeL25fD/o1ZkSHxRHNrs8xI=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-393-c2uk0jwVMvWOFvQB3nxLlQ-1; Tue, 26 Jul 2022 15:04:50 -0400
+X-MC-Unique: c2uk0jwVMvWOFvQB3nxLlQ-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by p1lg14878.it.hpe.com (Postfix) with ESMTPS id EB714D2CA;
-        Tue, 26 Jul 2022 16:46:29 +0000 (UTC)
-Received: from node1.hpecorp.net (unknown [16.231.227.36])
-        by p1lg14885.dc01.its.hpecorp.net (Postfix) with ESMTP id 0E27A8041D3;
-        Tue, 26 Jul 2022 16:46:28 +0000 (UTC)
-From:   Toshi Kani <toshi.kani@hpe.com>
-To:     bp@alien8.de, rric@kernel.org, mchehab@kernel.org
-Cc:     toshi.kani@hpe.com, elliott@hpe.com, linux-edac@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v3] EDAC/ghes: Set the DIMM label unconditionally
-Date:   Tue, 26 Jul 2022 10:46:28 -0600
-Message-Id: <20220726164628.1756924-1-toshi.kani@hpe.com>
-X-Mailer: git-send-email 2.35.3
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id A2F669573A3;
+        Tue, 26 Jul 2022 19:04:49 +0000 (UTC)
+Received: from napanee.usersys.redhat.com (unknown [10.2.16.113])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 9710D492CA2;
+        Tue, 26 Jul 2022 19:04:49 +0000 (UTC)
+Received: by napanee.usersys.redhat.com (Postfix, from userid 1000)
+        id 58E12C04DD; Tue, 26 Jul 2022 15:04:49 -0400 (EDT)
+Date:   Tue, 26 Jul 2022 15:04:49 -0400
+From:   Aristeu Rozanski <aris@redhat.com>
+To:     linux-edac@vger.kernel.org
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Borislav Petkov <bp@suse.de>
+Subject: [PATCH] i5000_edac: fix slot number passed to determine_mtr()
+Message-ID: <20220726190449.6mwhxyar6vcyrvzl@redhat.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-ORIG-GUID: aupQqHlnyKAZUQCBZy1PbXMj4kEUfmSY
-X-Proofpoint-GUID: aupQqHlnyKAZUQCBZy1PbXMj4kEUfmSY
-X-HPE-SCL: -1
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-07-26_05,2022-07-26_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0
- priorityscore=1501 malwarescore=0 impostorscore=0 mlxlogscore=999
- phishscore=0 adultscore=0 lowpriorityscore=0 mlxscore=0 suspectscore=0
- bulkscore=0 clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2206140000 definitions=main-2207260065
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: NeoMutt/20220429
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.9
 X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-The following buffer overflow BUG was observed on an HPE system.
-ghes_edac_register() called strlen() on an uninitialized label,
-which had non-zero values from krealloc_array().
+When the logic mapping branch/slot/channel was reworked back in
+64e1fdaf55d6 ("i5000_edac: Fix the logic that retrieves memory information")
+i5000_init_csrows() was not updated and kept passing twice the number
+of slots to determine_mtr(), which leads to acessing past the end of
+i5000_pvt.b1_mtr[]. This was found by KASAN.
 
-  detected buffer overflow in __fortify_strlen
-   ------------[ cut here ]------------
-   kernel BUG at lib/string_helpers.c:983!
-   invalid opcode: 0000 [#1] PREEMPT SMP NOPTI
-   CPU: 1 PID: 1 Comm: swapper/0 Tainted: G          I       5.18.6-200.fc36.x86_64 #1
-   Hardware name: HPE ProLiant DL360 Gen10/ProLiant DL360 Gen10, BIOS U32 03/15/2019
-   RIP: 0010:fortify_panic
-   ...
-   Call Trace:
-    <TASK>
-    ghes_edac_register.cold
-    ghes_probe
-    platform_probe
-    really_probe
-    __driver_probe_device
-    driver_probe_device
-    __driver_attach
-    ? __device_attach_driver
-    bus_for_each_dev
-    bus_add_driver
-    driver_register
-    acpi_ghes_init
-    acpi_init
-    ? acpi_sleep_proc_init
-    do_one_initcall
+Fixes: 64e1fdaf55d6 ("i5000_edac: Fix the logic that retrieves memory information")
+Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc: Borislav Petkov <bp@suse.de>
+Signed-off-by: Aristeu Rozanski <aris@redhat.com>
 
-dimm_setup_label() only initializes the label when both bank and
-device are set.  This HPE BIOS only sets device since bank locator
-is unnecessary to locate a DIMM.
-
-  Handle 0x0020, DMI type 17, 84 bytes
-  Memory Device
-          Array Handle: 0x0013
-          Error Information Handle: Not Provided
-          Total Width: 72 bits
-          Data Width: 64 bits
-          Size: 32 GB
-          Form Factor: DIMM
-          Set: None
-          Locator: PROC 1 DIMM 1        <=== device
-          Bank Locator: Not Specified   <=== bank
-
-Change dimm_setup_label() to always initialize the label to fix the
-issue.  It sets to a null string in case BIOS does not provide both
-bank and device so that ghes_edac_register() keeps the default label
-from edac_mc_alloc_dimms().
-
-Fixes: b9cae27728d1f ("EDAC/ghes: Scan the system once on driver init")
-Signed-off-by: Toshi Kani <toshi.kani@hpe.com>
-Co-developed-by: Robert Richter <rric@kernel.org>
-Tested-by: Robert Elliott <elliott@hpe.com>
 ---
- drivers/edac/ghes_edac.c |   12 +++++++++---
- 1 file changed, 9 insertions(+), 3 deletions(-)
+ drivers/edac/i5000_edac.c |    4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-diff --git a/drivers/edac/ghes_edac.c b/drivers/edac/ghes_edac.c
-index 59b0bedc9c24..c229ed0ce678 100644
---- a/drivers/edac/ghes_edac.c
-+++ b/drivers/edac/ghes_edac.c
-@@ -103,9 +103,15 @@ static void dimm_setup_label(struct dimm_info *dimm, u16 handle)
+--- linus-2.6.orig/drivers/edac/i5000_edac.c	2022-07-25 15:26:40.093989879 -0400
++++ linus-2.6/drivers/edac/i5000_edac.c	2022-07-26 14:32:23.644694778 -0400
+@@ -1249,14 +1249,12 @@ static int i5000_init_csrows(struct mem_
+ 	struct i5000_pvt *pvt;
+ 	struct dimm_info *dimm;
+ 	int empty;
+-	int max_csrows;
+ 	int mtr;
+ 	int csrow_megs;
+ 	int channel;
+ 	int slot;
  
- 	dmi_memdev_name(handle, &bank, &device);
+ 	pvt = mci->pvt_info;
+-	max_csrows = pvt->maxdimmperch * 2;
  
--	/* both strings must be non-zero */
--	if (bank && *bank && device && *device)
--		snprintf(dimm->label, sizeof(dimm->label), "%s %s", bank, device);
-+	/* 
-+	 * Set a null string when both bank and device are zero.
-+	 * This keeps ghes_edac_register() preserving the default
-+	 * label from edac_mc_alloc_dimms().
-+	 */
-+	snprintf(dimm->label, sizeof(dimm->label), "%s%s%s",
-+			(bank && *bank) ? bank : "",
-+			(bank && *bank && device && *device) ? " " : "",
-+			(device && *device) ? device : "");
- }
+ 	empty = 1;		/* Assume NO memory */
  
- static void assign_dmi_dimm_info(struct dimm_info *dimm, struct memdev_dmi_entry *entry)
+@@ -1267,7 +1265,7 @@ struct i5000_pvt *pvt;
+ 	 * to map the dimms. A good cleanup would be to remove this array,
+ 	 * and do a loop here with branch, channel, slot
+ 	 */
+-	for (slot = 0; slot < max_csrows; slot++) {
++	for (slot = 0; slot < pvt->maxdimmperch; slot++) {
+ 		for (channel = 0; channel < pvt->maxch; channel++) {
+ 
+ 			mtr = determine_mtr(pvt, slot, channel);
+
+-- 
+Aristeu
+
