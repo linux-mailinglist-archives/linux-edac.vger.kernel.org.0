@@ -2,241 +2,183 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28D485833E0
-	for <lists+linux-edac@lfdr.de>; Wed, 27 Jul 2022 22:01:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F3D8F584523
+	for <lists+linux-edac@lfdr.de>; Thu, 28 Jul 2022 19:48:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229938AbiG0UBl (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Wed, 27 Jul 2022 16:01:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43064 "EHLO
+        id S232686AbiG1Rez (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Thu, 28 Jul 2022 13:34:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229508AbiG0UBk (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Wed, 27 Jul 2022 16:01:40 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 697F758B6B;
-        Wed, 27 Jul 2022 13:01:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658952099; x=1690488099;
-  h=date:from:to:subject:message-id:references:
-   content-transfer-encoding:in-reply-to:mime-version;
-  bh=JBcJbKVWuHJ3p5DaePn/htKUavn/coCRLFXsLiI2Jkg=;
-  b=TmtI1v1NXpW+YsL1vH5D4xq29zfsbHJ/Qj/RGzn+9oqNzcNXbn087LjI
-   BdXMQV2DdNOReLwzjcfd9vMmZ5m0XyLBAqqKa29CLjfUhBc3e9mIwmZNM
-   D6Fr5v8fmkC/wLriCivbQWhasvV2WhrbaSkjlBhBdGkx8A5jjulMkXHaI
-   Pgz52Uk7eawmgyuj9aFcivMromcnGil6V6m0iaVb/+dVtEOEdU2XAIELm
-   1AOxQiUWZ8x3qepNIcECxpnRONnCSWq2wetuC5i6ttjVXQP1D37PV0Kct
-   G8vyBxE64gLX8duAFOGM3iGyaHFm9tVUblQGF2UMc4kPhemv5B3XGTSlM
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10421"; a="374635787"
-X-IronPort-AV: E=Sophos;i="5.93,196,1654585200"; 
-   d="scan'208";a="374635787"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jul 2022 13:01:38 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,196,1654585200"; 
-   d="scan'208";a="668487485"
-Received: from orsmsx605.amr.corp.intel.com ([10.22.229.18])
-  by fmsmga004.fm.intel.com with ESMTP; 27 Jul 2022 13:01:38 -0700
-Received: from orsmsx609.amr.corp.intel.com (10.22.229.22) by
- ORSMSX605.amr.corp.intel.com (10.22.229.18) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.28; Wed, 27 Jul 2022 13:01:37 -0700
-Received: from orsmsx612.amr.corp.intel.com (10.22.229.25) by
- ORSMSX609.amr.corp.intel.com (10.22.229.22) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.28; Wed, 27 Jul 2022 13:01:37 -0700
-Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
- orsmsx612.amr.corp.intel.com (10.22.229.25) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.28 via Frontend Transport; Wed, 27 Jul 2022 13:01:37 -0700
-Received: from NAM04-BN8-obe.outbound.protection.outlook.com (104.47.74.46) by
- edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2375.28; Wed, 27 Jul 2022 13:01:36 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=WzRrUb06s3sztlNhmGRh9voS7Uzu1gZ4Rlgn03Xtt1iP/K6uxGSZKigwTXOmlVvBZvSIM/Zpw9iglkYxSAm5CQl9U3u5xZ3QihIiE8E0tTvqqpE78Oy6X95ZYDfvaNIjW879nWO7Mrz9QHB1Em+VBJIsLxOt04IdOXJA3uwqn6b6mH7iq8AlqyfneB72z3Hd59hCH4Cddy56VQVmHGtqVUJDUir4Wfq9PNSYEIQPswcn1ALIeO3WIC4O8TVSdOErnf+CLFf3+R4H3dOT4/9sb4vgP5wyW0G9zqWFN9Jl+Sfsw/5zf68tuML+V7BYqw1msYB+H8U22/2DtoAy3W9yYA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=LDjK4k3ShijVcP1ReO1kOCw0/MiQthQ3FFIEeELL98o=;
- b=gPk8mGilvmVXCAgNYxl33Fu2AxhWlx049drIgwIxpMbRCy77OZam7Cjpqsp1wrSwgz7iKRa5EQdK0d4/K2yMsXZATng9ihxqhsMFCkp/8iH68eBkBwJQ0Wd163vawNf64OibFoFYqcWdVVcMG+pyxjVv8Y/xbHVMj2SRWI+k8IOHO82O0SemX2ShQIQFvkN7CDkgR/R4oKdK1uPMNhJFC1EVOI0yGQIxz6ZjQmBr3sIDLoiplXrCsTf7JmRGjZdTJH2BoVNZdNnLPa1MEujqF6jSbkqTeNSUdDM9W9885oi6Crd3L7uhkI9lipJ8gZeJrEyG4cd8Lb8eFWdZ72NpXA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from MWHPR1101MB2126.namprd11.prod.outlook.com
- (2603:10b6:301:50::20) by CY4PR11MB1703.namprd11.prod.outlook.com
- (2603:10b6:903:28::23) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5458.23; Wed, 27 Jul
- 2022 20:01:34 +0000
-Received: from MWHPR1101MB2126.namprd11.prod.outlook.com
- ([fe80::6466:20a6:57b4:1edf]) by MWHPR1101MB2126.namprd11.prod.outlook.com
- ([fe80::6466:20a6:57b4:1edf%11]) with mapi id 15.20.5458.025; Wed, 27 Jul
- 2022 20:01:34 +0000
-Date:   Wed, 27 Jul 2022 13:01:31 -0700
-From:   Dan Williams <dan.j.williams@intel.com>
-To:     Jane Chu <jane.chu@oracle.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        "tony.luck@intel.com" <tony.luck@intel.com>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "hch@lst.de" <hch@lst.de>,
-        "nvdimm@lists.linux.dev" <nvdimm@lists.linux.dev>
-Subject: Re: [PATCH v4] x86/mce: retrieve poison range from hardware
-Message-ID: <62e1999b4121e_2d2079294ea@dwillia2-xfh.jf.intel.com.notmuch>
-References: <20220727184644.2685405-1-jane.chu@oracle.com>
- <62e18a687aac2_2d20792944b@dwillia2-xfh.jf.intel.com.notmuch>
- <f22faecf-b4ea-cb39-bed3-3647842b814e@oracle.com>
- <382e9410-d964-5600-4481-ccad90dbc97b@oracle.com>
- <8e817134-bfa9-72bc-3601-eeb1a138fe37@oracle.com>
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <8e817134-bfa9-72bc-3601-eeb1a138fe37@oracle.com>
-X-ClientProxiedBy: BY3PR05CA0022.namprd05.prod.outlook.com
- (2603:10b6:a03:254::27) To MWHPR1101MB2126.namprd11.prod.outlook.com
- (2603:10b6:301:50::20)
+        with ESMTP id S229625AbiG1Rex (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Thu, 28 Jul 2022 13:34:53 -0400
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2250B6FA29;
+        Thu, 28 Jul 2022 10:34:52 -0700 (PDT)
+Received: by mail-wr1-x430.google.com with SMTP id i8so3144573wro.11;
+        Thu, 28 Jul 2022 10:34:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=XZ4zIVvfcCsidkeWaZTdSTzaHcuDeTcNOjLwNCugDn8=;
+        b=gTHGJkgG1gude+JyHmX79TwGE73T2WZ9MFmNcKNHi30BzronT1LCyMcUDr/MqkoI5W
+         l04zpUFC92TcohG3T8lTEOUoIfo+qifgK8EtwRAme3upF5EmGtikt4Llltdtj9koqqt+
+         cp6otSuWw7/pJ4b6rz3Zpvckkm78stmSt2L3sORIM/YjuOPA9xdjcCbMhSDQ1qi6Gv6d
+         6oMQlGM/RzcHoEwB5FJ7xN9fz7Vrgfs05PvMkPWyynkrriEA/OdNY2DCpcpBD2S0r9iL
+         3MMjOtQZ3pF8VQP/8iRPpfpNF9H1eUTu9/ANn0rE4Mb7l5yTxX2dMF1Jb9E86as498rM
+         +KBg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=XZ4zIVvfcCsidkeWaZTdSTzaHcuDeTcNOjLwNCugDn8=;
+        b=f1ZzynZwS3OFda7yijKK3B+wcF+3q8WmfropHGYDnqy61K0oqKTKTwzBK3c+CSznh5
+         XJ2V9iGv3Itpj/o46cSy5vmebcIP4USXYTIi6MSXtJ3SaQDygV0i64El/fhHw2+vgi66
+         jAkks6tNQ8C+3IBqZMz07Dcck9upJrQX0WliDHfLCJUc2W4icvVUW9AW3EtKqwRcUdGH
+         lVgVsIFzdeLXQk6ZrIf0AHYnDd+Z8FdHpkIdptVq0Rpr4WYoHl0bgCH6xTYPSoZkaHXU
+         O3M8/teeIqOoGouJ9PgPMhd2j2YOnEVBb5R96L6D6f7P+mQa+yM49EfjqwDs26cI2IDQ
+         LA7Q==
+X-Gm-Message-State: ACgBeo38SUCTO4qAIFrSHSnATGGRnMTvCPU+KJ3nFMdY0hdYeg/BR4Kp
+        L7Q5kvOI7a008xGyoPzIWUEybrQNpk0=
+X-Google-Smtp-Source: AA6agR7/84BmZcJNcafcDcy5qOLjcy7UeHN75LEvTL+0j34k59OqIlFN5YLWf2olSxSoRNl7Q51BiQ==
+X-Received: by 2002:adf:d4c2:0:b0:21e:ddf3:8b14 with SMTP id w2-20020adfd4c2000000b0021eddf38b14mr6866wrk.355.1659029690542;
+        Thu, 28 Jul 2022 10:34:50 -0700 (PDT)
+Received: from orome (p200300e41f12c800f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f12:c800:f22f:74ff:fe1f:3a53])
+        by smtp.gmail.com with ESMTPSA id j20-20020a5d6e54000000b0021e5e5cd3a8sm1548650wrz.87.2022.07.28.10.34.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 28 Jul 2022 10:34:49 -0700 (PDT)
+Date:   Thu, 28 Jul 2022 19:34:47 +0200
+From:   Thierry Reding <thierry.reding@gmail.com>
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Sumit Gupta <sumitg@nvidia.com>, Borislav Petkov <bp@alien8.de>,
+        arm-soc <arm@kernel.org>, SoC Team <soc@kernel.org>,
+        Jon Hunter <jonathanh@nvidia.com>,
+        "open list:TEGRA ARCHITECTURE SUPPORT" <linux-tegra@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-edac@vger.kernel.org,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Tony Luck <tony.luck@intel.com>,
+        James Morse <james.morse@arm.com>,
+        Robert Richter <rric@kernel.org>, bbasu@nvidia.com,
+        Vikram Sethi <vsethi@nvidia.com>
+Subject: Re: [GIT PULL 1/7] soc/tegra: Changes for v5.20-rc1
+Message-ID: <YuLItw2p9k4TgoH2@orome>
+References: <20220708185608.676474-1-thierry.reding@gmail.com>
+ <20220708185608.676474-2-thierry.reding@gmail.com>
+ <CAK8P3a1bKUr77t9xkNAX=-RqzRme6Hymr3V=36MSHT_sOFEW5A@mail.gmail.com>
+ <Ys6lXD6BSxjH02mW@orome>
+ <CAK8P3a0cSq47B=acZ854TVu=RckJNfyfKdqQUMzCX7SsV7Wt0g@mail.gmail.com>
+ <YtAajDYfcVHRGl1U@nazgul.tnic>
+ <8dd2310d-cf1d-600e-0bd3-7b16c7b4ac18@nvidia.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 6f81fa35-56ef-40db-bd8b-08da700ace6a
-X-MS-TrafficTypeDiagnostic: CY4PR11MB1703:EE_
-X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 5KkL6NK64WcZ4HwwfZ29gOagXxn1gsR7wcTDlKKyx2LVTd93SOKaqaB3r1N3b4Z8v3T32HLHPHB7Z5b5eEdAUKzkN37SHNOqLaM60SaKb3HejcCO/L2jfqUcaGD4QtkqGxsmqLg95G8ClsNvd4Pxcpv0E4+Wp7W+Qi8aQlalvyjq5Of+bYl+eTdXr0TnWW8idEIZMf+DZc15scrBgfPpexw89tqEqYgvkMbXFj7AvHT+OwtKoRYcP0RiWJeZOAtEzpjPNm3oFclyVDUXheoX+f/dgs1runrg2KlHfDph5XWnhQVzbsvnit3TBGqllSseQO3LmILufeUm2BZbR3JqUM1CEiV6MPYIia7N4iADcBuf6D/IDHrXOuw0nX6LTFDsFdLaf67eUaW3YbTAciAnWhokroEhtBLB+aa0g3qzFYThE3Gc2EYTMBT0/JnxB1Nk4VTD1G2KeTUznXaqPdVCMUDX2hNs8AGJKIXe17q+9+OfPXb6cKKzUaueJpDRJXaM4lOQ+wt6AxXuXgxkPrCnknX0y6XeGw/EAXifwXBq7ht+HZJ7hkpN01UWLOm6PYgAB4i36vcEfVaZShk/VH6SYrFuerxLCShHwBIi4bsRV0Plu0TaDmoPVq6l+vbRNKgaVeVVrxpTy9Osvfi4cJ45ilBUZv1uGhmo87LOx1/raPbOlbS67HUBNcxcaMXX/N2Z7lzeSf1ctMZOTdsNv/H8CjRxfVJb34isIFFzKyMkne/Lw5YZHkgOUfoWOpd912wWFpL/s7ZtmXLfD1rp3UaJkMZkrzlxNOPNWE1pcgOdpsbXpM5g831QjGNYeVhE5bw9
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1101MB2126.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(136003)(396003)(39860400002)(376002)(346002)(366004)(83380400001)(6666004)(38100700002)(2906002)(82960400001)(66946007)(921005)(66556008)(110136005)(66476007)(86362001)(8676002)(26005)(7416002)(316002)(9686003)(966005)(8936002)(6506007)(6512007)(186003)(478600001)(41300700001)(6486002)(5660300002)(53546011);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?iso-8859-1?Q?gD2KfjzN2qtBGIPcZ3O7hh/QWkpYWBlp4ok+1HHhRrvg9Aie0RCuDIoSm6?=
- =?iso-8859-1?Q?D00hdhHAK/N6PGtSpbh/NbQFvQo7JSQcaG7imhDMxSAUyra+paPv66M8d6?=
- =?iso-8859-1?Q?8sxhqAU9bdV0AI7YIBUz0dcPqpOpeeNGv2knGw3OgqDk1afJMQLt+2ZHiU?=
- =?iso-8859-1?Q?zhak8T8xfWzZh7sbSvBRhFp3q/inoU5oYnsBF3s3YmVzIOSf68M+sElFgT?=
- =?iso-8859-1?Q?MFEIsDXctDyH1kfSzHY1/yZDTC3R7Zyi+qXW6g1mzI5mSCk9cRt14sPXN0?=
- =?iso-8859-1?Q?eNSihA7+lK3TTpafem/4MgUkjQUZ9wnP5qrcW/jIscjmdFQ5+8zs48oosm?=
- =?iso-8859-1?Q?6nNls7YNGcTTVO0xNA7o+DFVp/9yY0lax2wBT1KiewY559QQ1F43xa++3t?=
- =?iso-8859-1?Q?0yEO69twQMzodRwd4sM5t9p3gQm4fWQzG/+Ur2LX9rEi42ef6N9LF2ZO9l?=
- =?iso-8859-1?Q?xYzyCwQYbXHX3amHjzHBGX+EbCK9QnWT6/HqY401LB1qiN/ND5oAKtUy14?=
- =?iso-8859-1?Q?6IqXQN328KyCmyWF+wNEOkOg3WPA7HSN1HM1K1h7ztjOVVet4PQ/7fKZfP?=
- =?iso-8859-1?Q?xPuoMCNVufYt+/pIpEY3+yJpo18VvvVRuktyZd+jDy79fsILdo/VnAx8lB?=
- =?iso-8859-1?Q?ftBS44dYoWCzKIe71SFxscW3biVcSithJ/HMsFLOHBr4fI+F1B3aRDjOZA?=
- =?iso-8859-1?Q?eEP+1usEkaUcoZi4uzFGQR7hYhyemol6D6yZmg+1VFxH8SKiqLJEUi2Wv8?=
- =?iso-8859-1?Q?2MPl7SeG9K/xP25P3Ge4rA2MZprSs0E7ehGdSdf1yMdlOp1E9Xe4StHmvi?=
- =?iso-8859-1?Q?GWfJ2mGeWaGEXL8i3dz1AJWeUtXqm0td4niYE+tR0vUJetyAJf2GQaO6Ks?=
- =?iso-8859-1?Q?wqrllLpEfu3lXTYArFjOKPZJ44bScqkGmOQtH8megssdSOuIu9bKxqa6dF?=
- =?iso-8859-1?Q?Wyh2JNqfKNBWbJMz91EtmmT3ZbIcaw/jSpwEoY6DSeNupejOYH3qpy66SL?=
- =?iso-8859-1?Q?d2zZ7KQZ1F2zJF8n+whjWwXwGHGIRezRhNi+hJGnour3GvYvIXCoDwZevF?=
- =?iso-8859-1?Q?l/zlyrIB/r6LogehR9yWEQ8v/SO1UpdhgaYnl0dy+ymW0oQT0aHiNeZhuR?=
- =?iso-8859-1?Q?uHulULOd7i64W4JbjDOeGqRsbT4sXk/9ZTiWblPe8J6cf7CvCouXtEY86d?=
- =?iso-8859-1?Q?oBl+3LMsY08DkI26eOP6lvrfzYEGWvd6pLmBYFqS24jeRHxmpgon1JluaX?=
- =?iso-8859-1?Q?xZE5zqKl55Z5puqYGBrBzepX4L6wtnwvDfgMzv5+Bwz/+0vzlg8XV5qo87?=
- =?iso-8859-1?Q?6UlET32PJsAUI4oGsX7Ph+XZI0Tip/2QpyfvZhd9pIF6JBPv110xPk9bEe?=
- =?iso-8859-1?Q?izUQpeELVSHzzMQAB53zWZdJrUm20b7mVx8p0/f2u2y3b1fC7OC/TMs8kO?=
- =?iso-8859-1?Q?iBMZwdGp6O/DowGCmf2l5p8N0FCWCKOtcE2hB1GLLGX76tqtbNbgHcfQsD?=
- =?iso-8859-1?Q?6W2FSXNC0MgQirF56J5h3o01yrYNvrtj4Mk88gKnmgGA2lXxEQUniepsOA?=
- =?iso-8859-1?Q?ZYyAvbpWpa6YmN8gYs/x0Xj8N642sRLA/dNZGbLE6+VP1J9bjqWN68/vQ0?=
- =?iso-8859-1?Q?Ztm112WvfGTNRnHgYeTzGdCC5PM/mkB+34vgFqoDb7cYKTtfPrFUEjbQ?=
- =?iso-8859-1?Q?=3D=3D?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6f81fa35-56ef-40db-bd8b-08da700ace6a
-X-MS-Exchange-CrossTenant-AuthSource: MWHPR1101MB2126.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Jul 2022 20:01:34.3463
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: kSLluh61O7ag7tBKfgUx948SjvfFt+WZQh79wmP4mq4sd/a5E/juz6J2u1NULXby39Voa1W8zhMCaVzTUTZjVjVMuYtVcznCLEP+G6eW234=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR11MB1703
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="4Boa0tNoBXKDLUKH"
+Content-Disposition: inline
+In-Reply-To: <8dd2310d-cf1d-600e-0bd3-7b16c7b4ac18@nvidia.com>
+User-Agent: Mutt/2.2.6 (2022-06-05)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-Jane Chu wrote:
-> On 7/27/2022 12:30 PM, Jane Chu wrote:
-> > On 7/27/2022 12:24 PM, Jane Chu wrote:
-> >> On 7/27/2022 11:56 AM, Dan Williams wrote:
-> >>> Jane Chu wrote:
-> >>>> With Commit 7917f9cdb503 ("acpi/nfit: rely on mce->misc to determine
-> >>>> poison granularity") that changed nfit_handle_mce() callback to report
-> >>>> badrange according to 1ULL << MCI_MISC_ADDR_LSB(mce->misc), it's been
-> >>>> discovered that the mce->misc LSB field is 0x1000 bytes, hence 
-> >>>> injecting
-> >>>> 2 back-to-back poisons and the driver ends up logging 8 badblocks,
-> >>>> because 0x1000 bytes is 8 512-byte.
-> >>>>
-> >>>> Dan Williams noticed that apei_mce_report_mem_error() hardcode
-> >>>> the LSB field to PAGE_SHIFT instead of consulting the input
-> >>>> struct cper_sec_mem_err record.  So change to rely on hardware whenever
-> >>>> support is available.
-> >>>>
-> >>>> Link: 
-> >>>> https://lore.kernel.org/r/7ed50fd8-521e-cade-77b1-738b8bfb8502@oracle.com 
-> >>>>
-> >>>>
-> >>>> Reviewed-by: Dan Williams <dan.j.williams@intel.com>
-> >>>> Signed-off-by: Jane Chu <jane.chu@oracle.com>
-> >>>> ---
-> >>>>   arch/x86/kernel/cpu/mce/apei.c | 14 +++++++++++++-
-> >>>>   1 file changed, 13 insertions(+), 1 deletion(-)
-> >>>>
-> >>>> diff --git a/arch/x86/kernel/cpu/mce/apei.c 
-> >>>> b/arch/x86/kernel/cpu/mce/apei.c
-> >>>> index 717192915f28..26d63818b2de 100644
-> >>>> --- a/arch/x86/kernel/cpu/mce/apei.c
-> >>>> +++ b/arch/x86/kernel/cpu/mce/apei.c
-> >>>> @@ -29,15 +29,27 @@
-> >>>>   void apei_mce_report_mem_error(int severity, struct 
-> >>>> cper_sec_mem_err *mem_err)
-> >>>>   {
-> >>>>       struct mce m;
-> >>>> +    int grain = PAGE_SHIFT;
-> >>>>       if (!(mem_err->validation_bits & CPER_MEM_VALID_PA))
-> >>>>           return;
-> >>>> +    /*
-> >>>> +     * Even if the ->validation_bits are set for address mask,
-> >>>> +     * to be extra safe, check and reject an error radius '0',
-> >>>> +     * and fallback to the default page size.
-> >>>> +     */
-> >>>> +    if (mem_err->validation_bits & CPER_MEM_VALID_PA_MASK) {
-> >>>> +        grain = ~mem_err->physical_addr_mask + 1;
-> >>>> +        if (grain == 1)
-> >>>> +            grain = PAGE_SHIFT;
-> >>>
-> >>> Wait, if @grain is the number of bits to mask off the address, shouldn't
-> >>> this be something like:
-> >>>
-> >>>      grain = min_not_zero(PAGE_SHIFT, 
-> >>> hweight64(~mem_err->physical_addr_mask));
-> >>
-> >> I see. I guess what you meant is
-> >>     grain = min(PAGE_SHIFT, (1 + 
-> >> hweight64(~mem_err->physical_addr_mask)));
-> > 
-> > Sorry, take that back, it won't work either.
-> 
-> This will work,
->    grain = min_not_zero(PAGE_SHIFT - 1, 
-> hweight64(~mem_err->physical_addr_mask));
->    grain++;
-> but too sophisticated?  I guess I prefer the simple "if" expression.
 
-An "if" is fine, I was more pointing out that:
+--4Boa0tNoBXKDLUKH
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-    hweight64(~mem_err->physical_addr_mask) + 1
+On Fri, Jul 15, 2022 at 01:36:16PM +0530, Sumit Gupta wrote:
+> Hi Arnd, Boris,
+>=20
+> Thank you for your inputs.
+>=20
+> > > I think this is just a reflection of what other hardware can do:
+> > > most machines only detect memory errors, but the EDAC subsystem
+> > > can work with any type in principle. There are also a lot of
+> > > conditions elsewhere that can be detected but not corrected.
+> >=20
+> > Just a couple of thoughts from looking at this:
+> >=20
+> > So the EDAC thing reports *hardware* errors by using the RAS
+> > capabilities built into an IP block. So it started with memory
+> > controllers but it is getting extended to other blocks. AMD are looking
+> > at how to integrate GPU hw errors reporting into it, for example.
+> >=20
+> > Looking at that CBB thing, it looks like it is supposed to report not
+> > so much hardware errors but operational errors. Some of the hw errors
+> > reported by RAS hw are also operation-related but not the majority.
+> >=20
+>=20
+> CBB driver reports errors due to bad MMIO accesses within software.
+> The vast majority of the CBB errors tend to be programming errors in sett=
+ing
+> up address windows leading to decode errors.
+>=20
+> > Then, EDAC has this counters exposed in:
+> >=20
+> > $ grep -r . /sys/devices/system/edac/
+> > /sys/devices/system/edac/power/runtime_active_time:0
+> > /sys/devices/system/edac/power/runtime_status:unsupported
+> > /sys/devices/system/edac/power/runtime_suspended_time:0
+> > /sys/devices/system/edac/power/control:auto
+> > /sys/devices/system/edac/pci/edac_pci_log_pe:1
+> > /sys/devices/system/edac/pci/pci0/pe_count:0
+> > /sys/devices/system/edac/pci/pci0/npe_count:0
+> > /sys/devices/system/edac/pci/pci_parity_count:0
+> > /sys/devices/system/edac/pci/pci_nonparity_count:0
+> > /sys/devices/system/edac/pci/edac_pci_log_npe:1
+> > /sys/devices/system/edac/pci/edac_pci_panic_on_pe:0
+> > /sys/devices/system/edac/pci/check_pci_errors:0
+> > /sys/devices/system/edac/mc/power/runtime_active_time:0
+> > /sys/devices/system/edac/mc/power/runtime_status:unsupported
+> > ...
+> >=20
+> > with the respective hierarchy: memory controllers, PCI errors, etc.
+> >=20
+> > So the main question is, does it make sense for you to fit this into the
+> > EDAC hierarchy and what would even be the advantage of making it part of
+> > EDAC?
+> >=20
+>=20
+> I also think this doesn't seem to fit with the errors reported by EDAC wh=
+ich
+> are mainly hardware errors as Boris explained.
+> Please share your thoughts and if we can merge the patches as it is.
 
-...and:
+Arnd,
 
-    ~mem_err->physical_addr_mask + 1;
+any more thoughts on this? Looks like there is no consensus on where
+this should go. If it's okay for this to go in via ARM SoC after all,
+I could prepare another pull request including only the CBB changes
+along with some of the reference count fixes. I could possibly also
+rework the DMADEVICES dependency patch as discussed, or we could defer
+it if it's too risky at this point.
 
-...give different results.
+Thierry
+
+--4Boa0tNoBXKDLUKH
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmLiyLcACgkQ3SOs138+
+s6FTbhAAo04Ge2JStIVBs0J6WC1LlVc7vETptyeF5ISXjOh8JFDuqQgmrTOW+iLD
+hgw4V4ID1B8Y0LJzKJoWOHus9eXqLWvo4oWVeAjZ5foCYoh4hEmiP3n+iKxqJyyD
+CLOa/nlDeQrGWU+X46hN2pTRF5GyBQlhySviRd7Ub/VpeBrRjD7Tngz1vUXt8Qpw
+UKxhKZCYcPYu+509DJFRbBM5clzW1gS1wEEmdrUaHuRcxl/jbIZtWE5uR58R/4e6
+/mlFXWE9p5dcNmNkKbFNXNV5HtBAuo3wyNqMqXRdQrIuhh0Jqb4zxF2EmlEeJMhI
+bqpbRPqQGYVM0TgW9Jq15JOw4raTj5tIw+yEUWd39f9m67ohqsYjOTZdsU+tvLOU
+N7Zq3tMl5eGQSttzxO149bfmKMsnL7PUy/QfjDfZ0MXkv4QliQMZXWF3B3izb0xu
+B0Y6MVrVNSm6xWk0vU0nhFDq7FigXPLCWfUXSOGNpLNNXjGPcmIw4qwdL09QGJHy
+bNm9a8dmSVvurgYWwvsreWd/BlLNhiU/8+KC3MFFIr9K0dC8NRraUL0qSeKsjEGf
+Tb90vgsCLtnJ9hSKzkCjA3SI4jk/ShwiW8Bbrak86EzhbyqEosEkyAaO2KZBeqG4
+oXdAP76UtXa7BP/C9a3fRxAlTbjdeuwpaMY6+sD9/OlsURNLLOo=
+=tTDm
+-----END PGP SIGNATURE-----
+
+--4Boa0tNoBXKDLUKH--
