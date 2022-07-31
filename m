@@ -2,113 +2,73 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4A1F585E4C
-	for <lists+linux-edac@lfdr.de>; Sun, 31 Jul 2022 11:40:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD993586002
+	for <lists+linux-edac@lfdr.de>; Sun, 31 Jul 2022 18:55:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231904AbiGaJkb (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Sun, 31 Jul 2022 05:40:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46186 "EHLO
+        id S236777AbiGaQzu (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Sun, 31 Jul 2022 12:55:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229456AbiGaJka (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Sun, 31 Jul 2022 05:40:30 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A4A4E0E5;
-        Sun, 31 Jul 2022 02:40:29 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        with ESMTP id S237383AbiGaQzt (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Sun, 31 Jul 2022 12:55:49 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B81BF6472;
+        Sun, 31 Jul 2022 09:55:48 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id F29F938497;
-        Sun, 31 Jul 2022 09:40:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1659260426; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=HNOUpFYXc3QTc7PYzGt6rqrOHqypNorKziv3pX2Oxrs=;
-        b=fuDDQwKPp6Twiw5oE2io+An54KE11Ci2xLqBmQri6f0RPWnH6aNXYK9HwtqCBZ+E4UQI20
-        MrEKVZnp6AHifkKKUdMG59yFssXH2OfvCGjB6vIUE6+hxLbfoQpjRXZnUWSEdPrEvJEKck
-        ZiIOCRg2QLhAec7CW7hsKo7WHUQFXFU=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1659260427;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=HNOUpFYXc3QTc7PYzGt6rqrOHqypNorKziv3pX2Oxrs=;
-        b=14oU+14n2q/+IpfeUUc8BjpN89+x0ht8ZQsrXWmMwu3n4d73ulFQ33PoEoWarqe02CgDHV
-        yjA7Iv5w72g6etBQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id DA3AD13416;
-        Sun, 31 Jul 2022 09:40:26 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id 6g5BNQpO5mLjLQAAMHmgww
-        (envelope-from <bp@suse.de>); Sun, 31 Jul 2022 09:40:26 +0000
-Date:   Sun, 31 Jul 2022 11:40:18 +0200
-From:   Borislav Petkov <bp@suse.de>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-edac <linux-edac@vger.kernel.org>,
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6F3AEB80DB3;
+        Sun, 31 Jul 2022 16:55:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 1F0FBC433C1;
+        Sun, 31 Jul 2022 16:55:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1659286546;
+        bh=52xgJ0fYvA74FCngjrlN+Kb5uPrOE3AB0WPM27/0kUE=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=DRmhKvRvXwUB0qRwKvKuI298yVHXyuPEH++ed+zJLIemICSTjq2oMb0TCP14Auk00
+         5KB0utn+w4JSTVge6UQf4g98l4nV3y4tIrU51u7tj1/cZig5PyLqzcBrVm+xntkJ4c
+         lDiydDFA1vmnZFPUWHTU+T+CQ2D3hERZMqfVS/6X6TOyFqwi42XyFVypR459l5gbN1
+         9ZyCX/Y7Jd4RR45eBUfNdKeaPvN1yNKlPOx9r+f8OIOzNH5CFgQv5T3KNG8+Nbdp5V
+         aCg9zf8SivhPEXf4lkenmGGxWigzl57VSnJOE8/jrxQT2NqEHx6Blq5U78z0MWR91q
+         bAJPW9ngWZlog==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 0A8DEC43142;
+        Sun, 31 Jul 2022 16:55:46 +0000 (UTC)
+Subject: Re: [GIT PULL] EDAC fixes for 5.19
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <YuZOAlAdsg9i1YLt@zn.tnic>
+References: <YuZOAlAdsg9i1YLt@zn.tnic>
+X-PR-Tracked-List-Id: <linux-edac.vger.kernel.org>
+X-PR-Tracked-Message-Id: <YuZOAlAdsg9i1YLt@zn.tnic>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/ras/ras.git tags/edac_urgent_for_v5.19
+X-PR-Tracked-Commit-Id: 5e2805d5379619c4a2e3ae4994e73b36439f4bad
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: cd2715b7929bcaf6e38d13ac512e0a9bba8df10d
+Message-Id: <165928654603.8632.10369750834891343890.pr-tracker-bot@kernel.org>
+Date:   Sun, 31 Jul 2022 16:55:46 +0000
+To:     Borislav Petkov <bp@suse.de>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-edac <linux-edac@vger.kernel.org>,
         lkml <linux-kernel@vger.kernel.org>
-Subject: [GIT PULL] EDAC fixes for 5.19
-Message-ID: <YuZOAlAdsg9i1YLt@zn.tnic>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-Hi Linus,
+The pull request you sent on Sun, 31 Jul 2022 11:40:18 +0200:
 
-please pull some last-minute EDAC fixes for 5.19.
+> git://git.kernel.org/pub/scm/linux/kernel/git/ras/ras.git tags/edac_urgent_for_v5.19
 
-Thx.
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/cd2715b7929bcaf6e38d13ac512e0a9bba8df10d
 
----
-
-The following changes since commit ff6992735ade75aae3e35d16b17da1008d753d28:
-
-  Linux 5.19-rc7 (2022-07-17 13:30:22 -0700)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/ras/ras.git tags/edac_urgent_for_v5.19
-
-for you to fetch changes up to 5e2805d5379619c4a2e3ae4994e73b36439f4bad:
-
-  EDAC/ghes: Set the DIMM label unconditionally (2022-07-27 10:42:52 +0200)
-
-----------------------------------------------------------------
-- Relax the condition under which the DIMM label in ghes_edac is set in
-order to accomodate an HPE BIOS which sets only the device but not the
-bank
-
-- Two forgotten fixes to synopsys_edac when handling error interrupts
-
-----------------------------------------------------------------
-Sherry Sun (2):
-      EDAC/synopsys: Use the correct register to disable the error interrupt on v3 hw
-      EDAC/synopsys: Re-enable the error interrupts on v3 hw
-
-Toshi Kani (1):
-      EDAC/ghes: Set the DIMM label unconditionally
-
- drivers/edac/ghes_edac.c     | 11 ++++++++---
- drivers/edac/synopsys_edac.c | 44 +++++++++++++++++++++++++-------------------
- 2 files changed, 33 insertions(+), 22 deletions(-)
+Thank you!
 
 -- 
-Regards/Gruss,
-    Boris.
-
-SUSE Software Solutions Germany GmbH
-GF: Ivo Totev, Andrew Myers, Andrew McDonald, Martje Boudien Moerman
-(HRB 36809, AG Nürnberg)
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
