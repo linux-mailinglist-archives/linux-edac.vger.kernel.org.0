@@ -2,49 +2,58 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9C0058B0CC
-	for <lists+linux-edac@lfdr.de>; Fri,  5 Aug 2022 22:17:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B08E758B416
+	for <lists+linux-edac@lfdr.de>; Sat,  6 Aug 2022 08:45:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237373AbiHEURL (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Fri, 5 Aug 2022 16:17:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44884 "EHLO
+        id S231327AbiHFGpz (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Sat, 6 Aug 2022 02:45:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234198AbiHEURJ (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Fri, 5 Aug 2022 16:17:09 -0400
-X-Greylist: delayed 593 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 05 Aug 2022 13:17:08 PDT
-Received: from pleskserv.com (mail.drmagu.com [75.148.199.205])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 881FF1A3A3
-        for <linux-edac@vger.kernel.org>; Fri,  5 Aug 2022 13:17:08 -0700 (PDT)
-Received: by pleskserv.com (Postfix, from userid 10006)
-        id 2BCED2C06E300; Fri,  5 Aug 2022 15:07:08 -0500 (CDT)
-To:     linux-edac@vger.kernel.org
-Subject: =?us-ascii?Q?[M3PCS]_THE_WORLD_FINANCIAL_CRISIS_CAN_MAKE_YOU?=
- =?us-ascii?Q?_VERY_RICH!?=
-Date:   Fri, 5 Aug 2022 20:07:07 +0000
-From:   M3PCS <m3pcs@m3pcs.com>
-Reply-To: m3pcs@m3pcs.com
-Message-ID: <XhYrwODRiVXqrvZQLpbkMoL4ZNnO1ePmBv3EBOxH4@www.m3pcs.com>
-X-Mailer: PHPMailer 6.5.0 (https://github.com/PHPMailer/PHPMailer)
+        with ESMTP id S229666AbiHFGpx (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Sat, 6 Aug 2022 02:45:53 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1E901409C;
+        Fri,  5 Aug 2022 23:45:52 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4M0Cf72ql6z4x1J;
+        Sat,  6 Aug 2022 16:45:51 +1000 (AEST)
+From:   Michael Ellerman <patch-notifications@ellerman.id.au>
+To:     Nicholas Piggin <npiggin@gmail.com>, linux-edac@vger.kernel.org,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Michael Ellerman <mpe@ellerman.id.au>
+Cc:     linux-kernel@vger.kernel.org, kernel test robot <lkp@intel.com>,
+        linuxppc-dev@lists.ozlabs.org
+In-Reply-To: <993f5a7da371458cb819b5f3f569073c78523b01.1659436180.git.christophe.leroy@csgroup.eu>
+References: <993f5a7da371458cb819b5f3f569073c78523b01.1659436180.git.christophe.leroy@csgroup.eu>
+Subject: Re: [PATCH] EDAC/ppc_4xx: Include required of_irq header directly
+Message-Id: <165976833020.1752861.6222110588738974430.b4-ty@ellerman.id.au>
+Date:   Sat, 06 Aug 2022 16:45:30 +1000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-PPP-Message-ID: <20220805200707.26805.56059@mail.drmagu.com>
-X-PPP-Vhost: m3pcs.com
-X-Spam-Status: No, score=2.4 required=5.0 tests=BAYES_50,KHOP_HELO_FCRDNS,
-        SPF_HELO_SOFTFAIL,SPF_NONE,SUBJ_ALL_CAPS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: **
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-You sent the following message to M3PCS:
+On Tue, 2 Aug 2022 12:30:38 +0200, Christophe Leroy wrote:
+> Commit 4d5c5bad5193 ("powerpc: Remove asm/prom.h from asm/mpc52xx.h
+> and asm/pci.h") that cleans up powerpc's asm/prom.h leads to build
+> errors in ppc4xx_edac.c due to missing header. Include required
+> header directly to avoid the build failure.
+> 
+> 
 
-Message Body:
-CRYPTOCURRENCY WILL MAKE YOU A BILLIONAIRE https://telegra.ph/Cryptocurrency-makes-people-millionaires-at-15-people-per-hour---Page-387135-08-02
+Applied to powerpc/next.
 
-Thank you for your message.  We will follow up with you by the next business day.
---
-This e-mail was sent from a contact form on M3PCS (http://www.m3pcs.com)
+[1/1] EDAC/ppc_4xx: Include required of_irq header directly
+      https://git.kernel.org/powerpc/c/bce02f71e48f7b89b9b52424ad2df4e5bc87a8ec
 
+cheers
