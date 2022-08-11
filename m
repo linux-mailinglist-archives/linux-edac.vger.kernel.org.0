@@ -2,122 +2,79 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3232058F913
-	for <lists+linux-edac@lfdr.de>; Thu, 11 Aug 2022 10:29:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F75E58F9DF
+	for <lists+linux-edac@lfdr.de>; Thu, 11 Aug 2022 11:17:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234353AbiHKI3s (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Thu, 11 Aug 2022 04:29:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35310 "EHLO
+        id S234946AbiHKJRa (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Thu, 11 Aug 2022 05:17:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234506AbiHKI3o (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Thu, 11 Aug 2022 04:29:44 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05A1F8A7C6;
-        Thu, 11 Aug 2022 01:29:43 -0700 (PDT)
-Received: from zn.tnic (p200300ea971b9870329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:971b:9870:329c:23ff:fea6:a903])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 86DEC1EC04DF;
-        Thu, 11 Aug 2022 10:29:37 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1660206577;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=5PuTsblVh83NGZYPqHKM9oPxgYPO8vPv5belNAU2Cv4=;
-        b=JXAQHyJbUZe+T0dZK01NGhKmSZWCyuCmFniCO7F+auJu2FU5kjpDw1Cdx2EClLbfI10V5p
-        GvdqtvHJgVFy/1hUGNu4m+yLPdWoYsvgQuLGhbsMfAMmZ8TaZ+WB4MFKBP5yhK5NfHVaK0
-        k1eE1atd8IEgQz1v02u6q18zCmZRajQ=
-Date:   Thu, 11 Aug 2022 10:29:32 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Miaoqian Lin <linmq006@gmail.com>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Tony Luck <tony.luck@intel.com>,
+        with ESMTP id S234843AbiHKJR3 (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Thu, 11 Aug 2022 05:17:29 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5E83A3DBCD;
+        Thu, 11 Aug 2022 02:17:27 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A7779113E;
+        Thu, 11 Aug 2022 02:17:27 -0700 (PDT)
+Received: from entos-ampere-02.shanghai.arm.com (unknown [10.169.212.215])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 6F3D73F70D;
+        Thu, 11 Aug 2022 02:17:21 -0700 (PDT)
+From:   Jia He <justin.he@arm.com>
+To:     Ard Biesheuvel <ardb@kernel.org>, Len Brown <lenb@kernel.org>,
         James Morse <james.morse@arm.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
         Robert Richter <rric@kernel.org>,
-        Greg Kroah-Hartman <gregkh@suse.de>,
-        Doug Thompson <dougthompson@xmission.com>,
-        linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] EDAC: Fix some refcount leaks
-Message-ID: <YvS97Ixj2cbOBjek@zn.tnic>
-References: <20220512075906.21915-1-linmq006@gmail.com>
+        Robert Moore <robert.moore@intel.com>
+Cc:     linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-edac@vger.kernel.org, devel@acpica.org,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Shuai Xue <xueshuai@linux.alibaba.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>, linux-efi@vger.kernel.org,
+        nd@arm.com, toshi.kani@hpe.com, Jia He <justin.he@arm.com>
+Subject: [PATCH 0/2] Modularize ghes_edac driver
+Date:   Thu, 11 Aug 2022 09:17:11 +0000
+Message-Id: <20220811091713.10427-1-justin.he@arm.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220512075906.21915-1-linmq006@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Thu, May 12, 2022 at 11:59:06AM +0400, Miaoqian Lin wrote:
-> kobject_init_and_add() takes reference even when it fails.
-> According to the doc of kobject_init_and_add()
-> 
->    If this function returns an error, kobject_put() must be called to
->    properly clean up the memory associated with the object.
-> 
-> Fix this by calling kobject_put() when kobject_init_and_add() fails.
-> 
-> Fixes: b2ed215a3338 ("Kobject: change drivers/edac to use kobject_init_and_add")
-> Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-> ---
-> Changes on v2:
-> - fix wrong label
-> v1 link: https://lore.kernel.org/all/20220511081402.19784-1-linmq006@gmail.com/
-> ---
->  drivers/edac/edac_device_sysfs.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/edac/edac_device_sysfs.c b/drivers/edac/edac_device_sysfs.c
-> index 9a61d92bdf42..a48142a8ea6f 100644
-> --- a/drivers/edac/edac_device_sysfs.c
-> +++ b/drivers/edac/edac_device_sysfs.c
-> @@ -542,7 +542,7 @@ static int edac_device_create_block(struct edac_device_ctl_info *edac_dev,
->  		edac_dbg(1, "Failed to register instance '%s'\n", block->name);
->  		kobject_put(main_kobj);
->  		err = -ENODEV;
-> -		goto err_out;
-> +		goto err_on_attrib;
->  	}
->  
->  	/* If there are driver level block attributes, then added them
+Commit dc4e8c07e9e2 ("ACPI: APEI: explicit init of HEST and GHES in
+apci_init()") introduced a bug that ghes_edac_register() would be invoked
+before edac_init(). Because at that time, the bus "edac" hasn't been even
+registered, this created sysfs /devices/mc0 instead of
+/sys/devices/system/edac/mc/mc0 on an Ampere eMag server.
 
-Actually, on a second look, that's not necessary:
+The solution is modularizing the ghes_edac driver.
 
-                err = edac_device_create_block(edac_dev, instance,
-                                                &instance->blocks[i]);
-                if (err) {
-                        /* If any fail, remove all previous ones */
-                        for (j = 0; j < i; j++)
-                                edac_device_delete_block(edac_dev,
-                                                        &instance->blocks[j]);
-				^^^^^^^^^^^^^^
+I tested the cases as follows:
+1. build test with ghes_edac built-in and module on Aarch64
+2. build test with ghes_edac built-in and module on x86_64
+3. boot test with ghes_edac built-in and module on Aarch64
+4. modprobe and -r for multiple times on Aarch64.
+ 
+Jia He (2):
+  efi/cper: export several helpers for ghes edac to use
+  EDAC/ghes: Modularize ghes_edac driver to remove the dependency on
+    ghes
 
-that cleans up the kobjects.
-
-> @@ -640,7 +640,7 @@ static int edac_device_create_instance(struct edac_device_ctl_info *edac_dev,
->  		edac_dbg(2, "Failed to register instance '%s'\n",
->  			 instance->name);
->  		kobject_put(main_kobj);
-> -		goto err_out;
-> +		goto err_release_instance_kobj;
->  	}
->  
->  	edac_dbg(4, "now register '%d' blocks for instance %d\n",
-
-Ditto.
-
-But keep lookin' :-)
-
-Thx.
+ drivers/acpi/apei/ghes.c    | 49 ++++++++++++++++++++++--
+ drivers/edac/Kconfig        |  4 +-
+ drivers/edac/ghes_edac.c    | 74 ++++++++++++++++++++++++++-----------
+ drivers/firmware/efi/cper.c |  3 ++
+ include/acpi/ghes.h         | 33 ++++-------------
+ 5 files changed, 110 insertions(+), 53 deletions(-)
 
 -- 
-Regards/Gruss,
-    Boris.
+2.25.1
 
-https://people.kernel.org/tglx/notes-about-netiquette
