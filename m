@@ -2,75 +2,63 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76972590B8B
-	for <lists+linux-edac@lfdr.de>; Fri, 12 Aug 2022 07:36:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EBC42590BC3
+	for <lists+linux-edac@lfdr.de>; Fri, 12 Aug 2022 08:06:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236992AbiHLFf5 (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Fri, 12 Aug 2022 01:35:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42070 "EHLO
+        id S237190AbiHLGGY (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Fri, 12 Aug 2022 02:06:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236943AbiHLFfs (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Fri, 12 Aug 2022 01:35:48 -0400
-Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44CD97755B
-        for <linux-edac@vger.kernel.org>; Thu, 11 Aug 2022 22:35:47 -0700 (PDT)
-Received: by mail-pf1-x432.google.com with SMTP id p125so58598pfp.2
-        for <linux-edac@vger.kernel.org>; Thu, 11 Aug 2022 22:35:47 -0700 (PDT)
+        with ESMTP id S236800AbiHLGGX (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Fri, 12 Aug 2022 02:06:23 -0400
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02E2961D48
+        for <linux-edac@vger.kernel.org>; Thu, 11 Aug 2022 23:06:21 -0700 (PDT)
+Received: by mail-pj1-x102b.google.com with SMTP id gj1so141338pjb.0
+        for <linux-edac@vger.kernel.org>; Thu, 11 Aug 2022 23:06:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc;
-        bh=JGnD3l9t4SkK48ITST5G9Acthlp2sOgptI0b4WEHZr4=;
-        b=HvbTScr18fV1zTYfyM7LcIPhZVpK4f8i4MOC2xIoldmIw9qLjWgrjvzmXHFyREPFLX
-         eCr27APqcbRFW2lMknyaje3WlCld4GgahZYAFFkbHptL0JqXMhHG6hUXupvYk46RCJz+
-         pPyKo6beBZFHgeXPLiElikFL23Pb7hnJwJETEA14sAbfm+ujtgCA/dqU8+keHRsk6yfE
-         XqAUkSzwBdp5cgzlXAEgsS54VBKbZ5gX6MfnXb87d5OirO1Mm55DU+9twmgpMwgOLzIC
-         vgW64hEsEHZFJ7BwKgjQByQp9/EY4gM2pImBDrSKw82tcswI8HaT/qwYnCvHujSOvibT
-         oKPg==
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=CcWM54NC4cl7AlznbSLkB1kM/j9fV93ZW750WKkazeE=;
+        b=gz+I8WhRONQJki5/VFx4USGMCSR5kSLOXdmElkDPF5EQvizMr0C4bqcvJzc4+8qGOx
+         j6mjuSUhRdTpX0hYcFnEyq5LBRbuOCTVkgqSEwV877eTB+4dXV1+Z004s6uBf/feb/2x
+         WGEFr4Qq4T+eqrmP2KO0T8G2Fr3J6fcewJWdFPEg+HfBiFhEZjT5qTL+JedKCs7g9xu6
+         iZ5E7m2et3hOMbCyWRUQE/kjmdubcAIReKWT/9zaNGIfmx9Xiipz1EoFzrXFOyZ6xvBl
+         8pHQfzbqN+gumEzSYCQtEJVHOeAfAISS2Z18u/uEkW+HGWHNjy+czHs8MZYET9YCnxpI
+         TYFA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc;
-        bh=JGnD3l9t4SkK48ITST5G9Acthlp2sOgptI0b4WEHZr4=;
-        b=it2ZaJyKCxjT6+NtxoJxvzY7QBakydKmr66/Ox4T0M16WTpRRYhRTyp7TkELPSZQgp
-         pNFT+WIMoGfPyJeHA8CYNt76quYfo8BT6Z6VElAo4otI7zvQSigsZ38GAhVFFCnTBcnE
-         NMEo8GB0omlNTET6hN6Ic0uVDR4JRwrpyxBJPkLv9e5zeEeoOCAb9OW3D8j+wnp5wqhG
-         e6Mg/Z+MKtodhrQ789WhzIUJLXdE4no/J15Akyd/pHnPVPA2FjMpYOhXZtg6D+LMs1ON
-         JE/6EYw2R48lyjRYU6bS5WDdZGnmcb6/HH1y1A3wMG4s8LRx+RsBhICXVR41Au/sYlFd
-         DUJw==
-X-Gm-Message-State: ACgBeo1jG1pPpJ6YNCZT5Dfsbkqj93GwT0yaZuOfoYPkTsBvi4fn/SFI
-        uOG5Zs75fyqSSfeDEjtU/b3kNLZHbNlj
-X-Google-Smtp-Source: AA6agR6QKykT59/PsxCYm9H7RCEKDXN+emk2X2xl3Y+/vwPcq7Shj96oy/11FSIXJdyQo6aenYxg1g==
-X-Received: by 2002:a05:6a00:1a49:b0:52d:4ad7:3bea with SMTP id h9-20020a056a001a4900b0052d4ad73beamr2168009pfv.66.1660282546657;
-        Thu, 11 Aug 2022 22:35:46 -0700 (PDT)
-Received: from thinkpad ([59.92.103.103])
-        by smtp.gmail.com with ESMTPSA id d7-20020a170903230700b0016efc27ca98sm672477plh.169.2022.08.11.22.35.42
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=CcWM54NC4cl7AlznbSLkB1kM/j9fV93ZW750WKkazeE=;
+        b=VtDYG4Of5ium3OJ8WoKmz/kUL/w41KtmSOK7PPd/k2VY7UxKh2+ttYn/b901pu7XoW
+         e5Jj0v5lw7ZpHfXchWoZvmnkixUJ1I4ePUdiT4gSfXq7vcAaskpOzXBXip813eEYVLdp
+         LYNGVOgbPV2unDUHAsC0N40uCV9yVOz35BX0ZFndqHZCntxeeSqMvP+4FebiMraryQVD
+         Uigothlc4VbMjb/EJ6SDcmCaf37DTa6O/yOCdhHukYTYGCYwIlHbe31VmnB1WmAtwfgP
+         fTx+c2phOx2Q8ldnRro+/XBoCt22TffCobiifZnaY30srtsPlbWoNrfhCh+HwIoGaI7M
+         0uIw==
+X-Gm-Message-State: ACgBeo1S3aBKHe3fUWXNhaJE8QJ7hyyWxrD9XyZEsrA3bVbuZ4filycE
+        nbK7ZyLoFXL2XzoynqAu5AZk
+X-Google-Smtp-Source: AA6agR7djnIXswjqpcAUI3pmfD/jJMhqJxaoq8ta7AuLkJl5Hbj/RJREwAoS0k+8am8UEBR3rtQFcw==
+X-Received: by 2002:a17:903:1205:b0:171:4f8d:22a8 with SMTP id l5-20020a170903120500b001714f8d22a8mr2566362plh.11.1660284380481;
+        Thu, 11 Aug 2022 23:06:20 -0700 (PDT)
+Received: from localhost.localdomain ([59.92.103.103])
+        by smtp.gmail.com with ESMTPSA id f4-20020a170902684400b0016c4147e48asm732395pln.219.2022.08.11.23.06.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 11 Aug 2022 22:35:46 -0700 (PDT)
-Date:   Fri, 12 Aug 2022 11:05:40 +0530
+        Thu, 11 Aug 2022 23:06:20 -0700 (PDT)
 From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     Trilok Soni <quic_tsoni@quicinc.com>
-Cc:     Borislav Petkov <bp@alien8.de>, bjorn.andersson@linaro.org,
-        mchehab@kernel.org, james.morse@arm.com, rric@kernel.org,
+To:     bjorn.andersson@linaro.org, bp@alien8.de, mchehab@kernel.org
+Cc:     james.morse@arm.com, rric@kernel.org,
         linux-arm-msm@vger.kernel.org, linux-edac@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/2] Fix crash when using Qcom LLCC/EDAC drivers
-Message-ID: <20220812053540.GA4956@thinkpad>
-References: <20220811100924.79505-1-manivannan.sadhasivam@linaro.org>
- <YvTehUOIqJGqXgXY@zn.tnic>
- <YvTfqg0q/8kIMY91@zn.tnic>
- <20220811112032.GB29799@workstation>
- <YvTo8tE3DaHifrSp@zn.tnic>
- <20220811115334.GC29799@workstation>
- <20220811115711.GD29799@workstation>
- <343d1491-49a0-ea38-1b65-dc2bdfb4726d@quicinc.com>
+        linux-kernel@vger.kernel.org, quic_tsoni@quicinc.com,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Subject: [PATCH v2 0/3] Fix crash when using Qcom LLCC/EDAC drivers
+Date:   Fri, 12 Aug 2022 11:35:59 +0530
+Message-Id: <20220812060602.7672-1-manivannan.sadhasivam@linaro.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <343d1491-49a0-ea38-1b65-dc2bdfb4726d@quicinc.com>
 X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -81,58 +69,42 @@ Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Thu, Aug 11, 2022 at 09:08:14AM -0700, Trilok Soni wrote:
-> Hello Mani,
-> 
-> On 8/11/2022 4:57 AM, Manivannan Sadhasivam wrote:
-> > Clipped the bouncing email addresses...
-> > 
-> > On Thu, Aug 11, 2022 at 05:23:34PM +0530, Manivannan Sadhasivam wrote:
-> > > On Thu, Aug 11, 2022 at 01:33:06PM +0200, Borislav Petkov wrote:
-> > > > On Thu, Aug 11, 2022 at 04:50:32PM +0530, Manivannan Sadhasivam wrote:
-> > > > > I know get_maintainer.pl :) But the problem is, Qualcomm recently
-> > > > > switched their email domain from codeaurora.org to quicinc.com.
-> > > > 
-> > > > Great:
-> > > > 
-> > > > $ git grep codeaurora.org MAINTAINERS | wc -l
-> > > > 5
-> > > > 
-> > > 
-> > > Yep! Most of the active developers have already changed their domains in
-> > > MAINTAINERS file. But the left ones are either not actively maintained
-> > > (yeah bad) or the maintainers have left Qualcomm.
-> > > 
-> > > > ;-\
-> > > > 
-> > > > > So even if I use the maintainers codeaurora domain now, they will
-> > > > > bounce.
-> > > > 
-> > > > Hmm, so the mails I sent with codeaurora on Cc didn't bounce back - I
-> > > > got only the quicinc bounces. That doesn't mean that codeaurora actually
-> > > > gets delivered...
-> > > > 
-> > > 
-> > > Not sure why. It was supposed to bounce. But could be that Qualcomm IT
-> > > decided to not bounce anymore since they have got enough complaints from
-> > > developers ;)
-> > > 
-> > 
-> > Okay, seems to be bouncing for me:
-> > 
-> > The response from the remote server was:
-> > 585 5.1.1 <ckadabi@codeaurora.org>: Recipient address rejected: undeliverable address: No such user here.
-> > 585 5.1.1 <vnkgutta@codeaurora.org>: Recipient address rejected: undeliverable address: No such user here.
-> 
-> It is ok if someone from Linaro team becomes the maintainer for this driver.
-> 
+Hello,
 
-Thanks Trilok for the confirmation! I'll add myself as the maintainer.
+This series fixes the crash seen on the Qualcomm SM8450 chipset with the
+LLCC/EDAC drivers. The problem was due to the Qcom EDAC driver using the
+fixed LLCC register offsets for detecting the LLCC errors.
+
+This seems to have worked for SoCs till SM8450. But in SM8450, the LLCC
+register offsets were changed. So accessing the fixed offsets causes the
+crash on this platform.
+
+So for fixing this issue, and also to make it work on future SoCs, let's
+pass the LLCC offsets from the Qcom LLCC driver based on the individual
+SoCs and let the EDAC driver make use of them.
+
+This series has been tested on SM8450 based dev board.
 
 Thanks,
 Mani
 
-> ---Trilok Soni
+Changes in v2:
+
+* Volunteered myself as a maintainer for the EDAC driver since the current
+  maintainers have left Qualcomm and I couldn't get hold of them.
+
+Manivannan Sadhasivam (3):
+  soc: qcom: llcc: Pass SoC specific EDAC register offsets to EDAC
+    driver
+  EDAC/qcom: Get rid of hardcoded register offsets
+  MAINTAINERS: Add myself as the maintainer for qcom_edac driver
+
+ MAINTAINERS                        |   3 +-
+ drivers/edac/qcom_edac.c           | 112 ++++++++++++++---------------
+ drivers/soc/qcom/llcc-qcom.c       |  64 +++++++++++++++++
+ include/linux/soc/qcom/llcc-qcom.h |  35 +++++++--
+ 4 files changed, 148 insertions(+), 66 deletions(-)
 
 -- 
-மணிவண்ணன் சதாசிவம்
+2.25.1
+
