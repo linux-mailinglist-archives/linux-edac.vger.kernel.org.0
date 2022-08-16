@@ -2,59 +2,59 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C5435956B1
-	for <lists+linux-edac@lfdr.de>; Tue, 16 Aug 2022 11:39:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A56665957FD
+	for <lists+linux-edac@lfdr.de>; Tue, 16 Aug 2022 12:21:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233773AbiHPJic (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Tue, 16 Aug 2022 05:38:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41942 "EHLO
+        id S233264AbiHPKUR (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Tue, 16 Aug 2022 06:20:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233652AbiHPJh7 (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Tue, 16 Aug 2022 05:37:59 -0400
-Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67959D631E
-        for <linux-edac@vger.kernel.org>; Tue, 16 Aug 2022 00:59:33 -0700 (PDT)
-Received: by mail-lj1-x234.google.com with SMTP id v10so9859863ljh.9
-        for <linux-edac@vger.kernel.org>; Tue, 16 Aug 2022 00:59:33 -0700 (PDT)
+        with ESMTP id S232478AbiHPKTs (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Tue, 16 Aug 2022 06:19:48 -0400
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60B5CD31C4
+        for <linux-edac@vger.kernel.org>; Tue, 16 Aug 2022 01:06:17 -0700 (PDT)
+Received: by mail-lf1-x130.google.com with SMTP id e15so13816705lfs.0
+        for <linux-edac@vger.kernel.org>; Tue, 16 Aug 2022 01:06:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc;
-        bh=g9AVhSipbaf/eXJy1pQ1TuttjNQk/U+DsKSgY1pczUU=;
-        b=Uy6ZJgSKHU3wkm4PXrWnNLDqhjscMTqd0Ux0IrKuwQlJzNcE1idKJ01LVbbz+DwEbp
-         0NaniCFs53GfwgdvFUL+EbwjEVdbeR7nuZph0C0MUk/EE9srqfIBGfJl+0s7m33T2ky3
-         rDMpTTO/0Vx+ZD1eh/ZupuG3PU0Ir75fFSPVUn9b1F0J6rv7cBJBQyzuapg1lHhxFcBT
-         3FtOb1TMEKgs9M8oWOwqhMPFzmojkygIdW0YwbgBVcT+i9RHURGWJQmWs5oecGT3cGSo
-         ToFBbahVd1Hdr+pHXbUwBqiqDdKnUW6AWRKH415NRa6XxavubS5Q0WVCJXwc6CaJr6On
-         I1EA==
+        bh=qACRoIaUIx4q7Fq4+bP1/fvXnrMmd2GKs256tlkcKt4=;
+        b=BBO5LjKSiDFTYMhsWb3L99v5jd7KieKgdC3QskfSxYOOyAE7SNmfZ3GKt8U5fijlz0
+         UrobL5lUxrdDbTHHX/KYtanOIdwds87TbKepBUBpVz5HgeANmaBUry+m83dWcePHcQ/W
+         NeLyrbRPsqer3RC6HdC8/tti28uRzSYbtQQr5Qjw3mYAaujMqi8CtttKACVyLftkrpT0
+         /Jz59nJzkmCkuZ/YQQ126zpBfmWm7/pexFTT/APo1MqLcF2jY4vHas5fgOtWXdGa8xS6
+         yKcSy6pdp6TWQFpHW9hYEPXtUSeOoK/Q5aNJJVLlVEAOA4tP1tCvdgTWuJ7OK78K7S9L
+         P9RQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc;
-        bh=g9AVhSipbaf/eXJy1pQ1TuttjNQk/U+DsKSgY1pczUU=;
-        b=pV4Nd1Lkde0SHmSVTlB9plSF7TxBTyOPp8miGIyn3hFHVBCoNxodkeMmkG3iMTE44n
-         hRcuXbHO3IGJqTTqdaHfyC5z/4CK3HB0kCZ6ytH018U09XChCS0yKrGL4O/b4jIIKlzp
-         drF29cEUmk0eD4j1cVvWoWU/X07ueaw5FDIJtq3AMH3QPfTlD4avSCajjcKPRlxXuieb
-         dhv8ApeTQXGpPFuECq/d+RNG/Wg2Zt5QqWXMS+6r6luYfvFNp9TzkU7GR/0f9BF9g5J4
-         ulMEal1ZA8PIcIgSBtOcXiCh/fu2+Pfzg+Yl1sQQ4/3376COXfQWUnYSFBpGMg/HYTyQ
-         w/nA==
-X-Gm-Message-State: ACgBeo33cRYqj4Lm2KcihL3sKhcmvLtGMytOPQwzCytM1W8ml/EemsLF
-        6A6qcTQbTn9rlZOo+veihMLcAg==
-X-Google-Smtp-Source: AA6agR6xQcCDwa5Y7ZedEXSH3KPdCrhgYaOW8MRt2LmiBXBDpKyIkaGnAKC7W2LpJgA43dLKExvbYg==
-X-Received: by 2002:a2e:a78f:0:b0:25f:dedf:efb8 with SMTP id c15-20020a2ea78f000000b0025fdedfefb8mr6167930ljf.317.1660636771402;
-        Tue, 16 Aug 2022 00:59:31 -0700 (PDT)
+        bh=qACRoIaUIx4q7Fq4+bP1/fvXnrMmd2GKs256tlkcKt4=;
+        b=TPmckFlirK38y+QR1O2JiWjQvc1erW2WKCRsbcOgZPENu48SRy57rHfiJ2i4bIPPrO
+         kBZCvkZWIb7FGWWqgnlC/r+zXXtV3ZBb9r8hhklxXhc0picB114bmqbHbRW3z2n2SuHG
+         uHCxFOg5qCIWIO043GCBqJhJp7Ogfj8T7tbpgKNc9LfSnUwa8oxU41ea3aUZz6yyseC7
+         kd/RovtP7GUPZQGW7KmvDBDjOtJLasuj43tP48EuBMwAieBrNkYA3dXhjX9Gpiwt/lhy
+         Dmo82aFu0e/cF9Xm8hOiSsooDd5Y8q3MiJmSaFH7ALIqLz/FXANARFOX+C84g1XkjAIG
+         cT5w==
+X-Gm-Message-State: ACgBeo00yAY9nMmUQJnX7UqYy0vuZH+n5ELm/7phUdEZ7So+cWkKCnMF
+        KOLBktw60zRvI7YutyZMbJ+6wg==
+X-Google-Smtp-Source: AA6agR4ieUtBeNjjuanFgiNBKumVBvcQFgBFOIrRWccADDgSCX1mhvrhAIa2+vNHgbE9eqtjw/zKFg==
+X-Received: by 2002:a05:6512:250b:b0:48b:2c5:fe1e with SMTP id be11-20020a056512250b00b0048b02c5fe1emr7294718lfb.598.1660637176012;
+        Tue, 16 Aug 2022 01:06:16 -0700 (PDT)
 Received: from ?IPV6:2001:14bb:ae:539c:1782:dd68:b0c1:c1a4? (d15l54g8c71znbtrbzt-4.rev.dnainternet.fi. [2001:14bb:ae:539c:1782:dd68:b0c1:c1a4])
-        by smtp.gmail.com with ESMTPSA id m23-20020a2e8717000000b0025e5631194dsm1695640lji.21.2022.08.16.00.59.30
+        by smtp.gmail.com with ESMTPSA id f26-20020a2e381a000000b0025e2e70b41fsm1696716lja.71.2022.08.16.01.06.14
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 16 Aug 2022 00:59:30 -0700 (PDT)
-Message-ID: <c7146f96-fec6-5371-7137-9829e635ea20@linaro.org>
-Date:   Tue, 16 Aug 2022 10:59:29 +0300
+        Tue, 16 Aug 2022 01:06:15 -0700 (PDT)
+Message-ID: <e1f1be24-7178-ceae-9038-ec90ffd9a28f@linaro.org>
+Date:   Tue, 16 Aug 2022 11:06:13 +0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.12.0
-Subject: Re: [PATCH 1/2] dt-bindings: edac: Add bindings for Xilinx ZynqMP OCM
+Subject: Re: [PATCH 2/2] edac: zynqmp_ocm: Add EDAC support for ZynqMP OCM
 Content-Language: en-US
 To:     Sai Krishna Potthuri <sai.krishna.potthuri@amd.com>,
         Rob Herring <robh+dt@kernel.org>,
@@ -68,16 +68,16 @@ To:     Sai Krishna Potthuri <sai.krishna.potthuri@amd.com>,
 Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-kernel@vger.kernel.org, linux-edac@vger.kernel.org,
         saikrishna12468@gmail.com, git@amd.com,
-        Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
+        Shubhrajyoti Datta <shubhrajyoti.datta@amd.com>
 References: <20220816073203.27314-1-sai.krishna.potthuri@amd.com>
- <20220816073203.27314-2-sai.krishna.potthuri@amd.com>
+ <20220816073203.27314-3-sai.krishna.potthuri@amd.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220816073203.27314-2-sai.krishna.potthuri@amd.com>
+In-Reply-To: <20220816073203.27314-3-sai.krishna.potthuri@amd.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,77 +86,227 @@ List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
 On 16/08/2022 10:32, Sai Krishna Potthuri wrote:
-> From: Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
+> Add EDAC support for Xilinx ZynqMP OCM Controller, this driver
+> reports CE and UE errors based on the interrupts, and also creates ue/ce
+> sysfs entries for error injection.
 > 
-> Add bindings for Xilinx ZynqMP OCM controller.
-> 
-> Signed-off-by: Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
 > Signed-off-by: Sai Krishna Potthuri <sai.krishna.potthuri@amd.com>
+> Signed-off-by: Shubhrajyoti Datta <shubhrajyoti.datta@amd.com>
+
+A bit confusing SoB order, although sometimes rational. Are you sure
+about authorship here?
+
 > ---
->  .../bindings/edac/xlnx,zynqmp-ocmc.yaml       | 41 +++++++++++++++++++
->  1 file changed, 41 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/edac/xlnx,zynqmp-ocmc.yaml
+>  MAINTAINERS                    |   7 +
+>  drivers/edac/Kconfig           |   9 +
+>  drivers/edac/Makefile          |   1 +
+>  drivers/edac/zynqmp_ocm_edac.c | 643 +++++++++++++++++++++++++++++++++
+>  4 files changed, 660 insertions(+)
+>  create mode 100644 drivers/edac/zynqmp_ocm_edac.c
 > 
-> diff --git a/Documentation/devicetree/bindings/edac/xlnx,zynqmp-ocmc.yaml b/Documentation/devicetree/bindings/edac/xlnx,zynqmp-ocmc.yaml
-> new file mode 100644
-> index 000000000000..9bcecaccade2
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/edac/xlnx,zynqmp-ocmc.yaml
-> @@ -0,0 +1,41 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/edac/xlnx,zynqmp-ocmc.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index edc96cdb85e8..cd4c6c90bca3 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -21692,6 +21692,13 @@ F:	Documentation/devicetree/bindings/dma/xilinx/xlnx,zynqmp-dpdma.yaml
+>  F:	drivers/dma/xilinx/xilinx_dpdma.c
+>  F:	include/dt-bindings/dma/xlnx-zynqmp-dpdma.h
+>  
+> +XILINX ZYNQMP OCM EDAC DRIVER
+> +M:	Shubhrajyoti Datta <shubhrajyoti.datta@amd.com>
+> +M:	Sai Krishna Potthuri <sai.krishna.potthuri@amd.com>
+> +S:	Maintained
+> +F:	Documentation/devicetree/bindings/edac/xlnx,zynqmp-ocmc.yaml
+> +F:	drivers/edac/zynqmp_ocm_edac.c
 > +
-> +title: Xilinx Zynqmp OCM EDAC driver
+>  XILINX ZYNQMP PSGTR PHY DRIVER
+>  M:	Anurag Kumar Vulisha <anurag.kumar.vulisha@xilinx.com>
+>  M:	Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+> diff --git a/drivers/edac/Kconfig b/drivers/edac/Kconfig
+> index 58ab63642e72..fece60f586af 100644
+> --- a/drivers/edac/Kconfig
+> +++ b/drivers/edac/Kconfig
+> @@ -539,4 +539,13 @@ config EDAC_DMC520
+>  	  Support for error detection and correction on the
+>  	  SoCs with ARM DMC-520 DRAM controller.
+>  
+> +config EDAC_ZYNQMP_OCM
+> +	tristate "Xilinx ZynqMP OCM Controller"
+> +	depends on ARCH_ZYNQMP
 
-s/EDAC driver//
-Is it a memory controller?
+|| COMPILE_TEST
+
+
+> +	help
+> +	  Support for error de
+
+
+> +/**
+> + * zynqmp_ocm_edac_get_eccstate - Return the controller ecc status
+> + * @base:	Pointer to the ddr memory controller base address
+> + *
+> + * Get the ECC enable/disable status for the controller
+> + *
+> + * Return: ecc status 0/1.
+> + */
+> +static bool zynqmp_ocm_edac_get_eccstate(void __iomem *base)
+> +{
+> +	return readl(base + ECC_CTRL_OFST) & OCM_ECC_ENABLE_MASK;
+> +}
+> +
+> +static const struct of_device_id zynqmp_ocm_edac_match[] = {
+> +	{ .compatible = "xlnx,zynqmp-ocmc-1.0"},
+> +	{ /* end of table */ }
+> +};
+> +
+> +MODULE_DEVICE_TABLE(of, zynqmp_ocm_edac_match);
+
+This goes to the end. Do not embed static variables in the middle of the
+code.
+
 
 > +
-> +maintainers:
-> +  - Shubhrajyoti Datta <shubhrajyoti.datta@amd.com>
-> +  - Sai Krishna Potthuri <sai.krishna.potthuri@amd.com>
+> +/**
+> + * zynqmp_set_ocm_edac_sysfs_attributes - create sysfs attributes
+> + * @edac_dev:	Pointer to the edac device struct
+> + *
+> + * Creates sysfs entries for error injection
+> + */
+> +static void zynqmp_set_ocm_edac_sysfs_attributes(struct edac_device_ctl_info
+> +						*edac_dev)
+> +{
+> +	edac_dev->sysfs_attributes = zynqmp_ocm_edac_sysfs_attributes;
+> +}
 > +
-> +description: |
-> +  Xilinx ZynqMP OCM EDAC driver, it does reports the OCM ECC single bit errors
+> +/**
+> + * zynqmp_ocm_edac_probe - Check controller and bind driver
+> + * @pdev:	Pointer to the platform_device struct
+> + *
+> + * Probes a specific controller instance for binding with the driver.
+> + *
+> + * Return: 0 if the controller instance was successfully bound to the
+> + * driver; otherwise error code.
+> + */
 
-The same. Describe the hardware, not the Linux driver or its subsystem.
+Drop the kerneldoc for probe(). It's obvious and exactly the same
+everywhere. You could keep it if you write something different than theh
+same message for 1000 other probes.
 
-> +  that are corrected and double bit ecc errors that are detected by the OCM
+> +static int zynqmp_ocm_edac_probe(struct platform_device *pdev)
+> +{
+> +	struct zynqmp_ocm_edac_priv *priv;
+> +	struct edac_device_ctl_info *dci;
+> +	void __iomem *baseaddr;
+> +	struct resource *res;
+> +	int irq, ret;
+> +
+> +	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+> +	baseaddr = devm_ioremap_resource(&pdev->dev, res);
 
-s/ecc/ECC/
+There is a wrapper for these.
 
-> +  ECC controller.
+> +	if (IS_ERR(baseaddr))
+> +		return PTR_ERR(baseaddr);
 > +
-> +properties:
-> +  compatible:
-> +    const: xlnx,zynqmp-ocmc-1.0
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - interrupts
-> +
-> +unevaluatedProperties: false
-> +
-> +examples:
-> +  - |
-> +    memory-controller@ff960000 {
-> +      compatible = "xlnx,zynqmp-ocmc-1.0";
-> +      reg = <0xff960000 0x1000>;
-> +      interrupts = <0 10 4>;
+> +	if (!zynqmp_ocm_edac_get_eccstate(baseaddr)) {
+> +		edac_printk(KERN_INFO, EDAC_DEVICE,
+> +			    "ECC not enabled - Disabling EDAC driver\n");
 
-Isn't the interrupt using common flags? If so, use proper defines.
+How do you disable the driver? What if there are two devices - how does
+this disables the driver for second device?
 
-> +    };
+> +		return -ENXIO;
+> +	}
+> +
+> +	dci = edac_device_alloc_ctl_info(sizeof(*priv), ZYNQMP_OCM_EDAC_STRING,
+> +					 1, ZYNQMP_OCM_EDAC_STRING, 1, 0, NULL, 0,
+> +					 edac_device_alloc_index());
+> +	if (!dci) {
+> +		edac_printk(KERN_ERR, EDAC_DEVICE,
+> +			    "Unable to allocate EDAC device\n");
+
+No ENOMEM prints.
+
+> +		return -ENOMEM;
+> +	}
+> +
+> +	priv = dci->pvt_info;
+> +	platform_set_drvdata(pdev, dci);
+> +	dci->dev = &pdev->dev;
+> +	priv->baseaddr = baseaddr;
+> +	dci->mod_name = pdev->dev.driver->name;
+> +	dci->ctl_name = ZYNQMP_OCM_EDAC_STRING;
+> +	dci->dev_name = dev_name(&pdev->dev);
+> +
+> +	irq = platform_get_irq(pdev, 0);
+> +	if (irq < 0) {
+> +		edac_printk(KERN_ERR, EDAC_DEVICE,
+> +			    "No irq %d in DT\n", irq);
+
+The same, no need for printks. Core does it.
+
+> +		ret = irq;
+> +		goto free_dev_ctl;
+> +	}
+> +
+> +	ret = devm_request_irq(&pdev->dev, irq,
+> +			       zynqmp_ocm_edac_intr_handler,
+> +			       0, dev_name(&pdev->dev), dci);
+> +	if (ret) {
+> +		edac_printk(KERN_ERR, EDAC_DEVICE, "Failed to request Irq\n");
+> +		goto free_dev_ctl;
+> +	}
+> +
+> +	writel(OCM_CEUE_MASK, priv->baseaddr + OCM_IEN_OFST);
+> +
+> +	zynqmp_set_ocm_edac_sysfs_attributes(dci);
+> +	ret = edac_device_add_device(dci);
+> +	if (ret)
+> +		goto free_dev_ctl;
+> +
+> +	return 0;
+> +
+> +free_dev_ctl:
+> +	edac_device_free_ctl_info(dci);
+> +
+> +	return ret;
+> +}
+> +
+> +/**
+> + * zynqmp_ocm_edac_remove - Unbind driver from controller
+> + * @pdev:	Pointer to the platform_device struct
+> + *
+> + * Return: Unconditionally 0
+> + */
+
+Same comment for kerneldoc.
+
+> +static int zynqmp_ocm_edac_remove(struct platform_device *pdev)
+> +{
+> +	struct edac_device_ctl_info *dci = platform_get_drvdata(pdev);
+> +	struct zynqmp_ocm_edac_priv *priv = dci->pvt_info;
+> +
+> +	writel(OCM_CEUE_MASK, priv->baseaddr + OCM_IDS_OFST);
+> +	edac_device_del_device(&pdev->dev);
+> +	edac_device_free_ctl_info(dci);
+> +
+> +	return 0;
+> +}
+> +
+> +static struct platform_driver zynqmp_ocm_edac_driver = {
+> +	.driver = {
+> +		   .name = "zynqmp-ocm-edac",
+> +		   .of_match_table = zynqmp_ocm_edac_match,
+> +		   },
+> +	.probe = zynqmp_ocm_edac_probe,
+> +	.remove = zynqmp_ocm_edac_remove,
+> +};
+> +
+> +module_platform_driver(zynqmp_ocm_edac_driver);
+> +
+> +MODULE_AUTHOR("Advanced Micro Devices, Inc");
+> +MODULE_DESCRIPTION("ZynqMP OCM ECC driver");
+> +MODULE_LICENSE("GPL");
 
 
 Best regards,
