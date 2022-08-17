@@ -2,64 +2,66 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3552159786C
-	for <lists+linux-edac@lfdr.de>; Wed, 17 Aug 2022 23:00:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D580597888
+	for <lists+linux-edac@lfdr.de>; Wed, 17 Aug 2022 23:07:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242097AbiHQU4t (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Wed, 17 Aug 2022 16:56:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47548 "EHLO
+        id S242221AbiHQVCW (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Wed, 17 Aug 2022 17:02:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241930AbiHQU4q (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Wed, 17 Aug 2022 16:56:46 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77B26AA3F5;
-        Wed, 17 Aug 2022 13:56:37 -0700 (PDT)
+        with ESMTP id S242227AbiHQVCV (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Wed, 17 Aug 2022 17:02:21 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DA53AB427;
+        Wed, 17 Aug 2022 14:02:19 -0700 (PDT)
 Received: from zn.tnic (p200300ea971b98b0329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:971b:98b0:329c:23ff:fea6:a903])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 664C81EC04E4;
-        Wed, 17 Aug 2022 22:56:31 +0200 (CEST)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 751AA1EC050F;
+        Wed, 17 Aug 2022 23:02:13 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1660769791;
+        t=1660770133;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=tiVP7B7HqlfzlVZrDZyL75M10GyjhcXbSwt07RTWZz4=;
-        b=Ayv1JslMZL8aHi7lmTwUrwErDmFhCns2DXnPfcwP1ZOzGxyfumd79YfsIECTf3/8jtq4CY
-        OFkuFnmJ5Msr+LtZi1xc7pDi2lOdFj2RGpjwRv24vR0RAIJBt79eMbpWoUiJychaR4habb
-        Vc1dbgCzGJMjWOFJjJNo07kUBBkVQJM=
-Date:   Wed, 17 Aug 2022 22:56:26 +0200
+        bh=uZECItNhJdPNjavGxubtrXL0+yXBikF6DOM/KqS2u80=;
+        b=b7hT+f/JsqrlDXJwGOmfuimkYKB0/oh33XvT0jx0BM2Bc4a4tijQHcHePAxE0BR9Fy9hu+
+        8Fy2/lMRzSkD3Pm0ODl6fqBgv8Ov0DWOXe2bQ/wNfgDKKHKkgY8Z7dpY0ES764epXpTN62
+        dh5wMxHfa75JuW2trzFMuEyQ3QGfiG4=
+Date:   Wed, 17 Aug 2022 23:02:13 +0200
 From:   Borislav Petkov <bp@alien8.de>
-To:     "Kani, Toshi" <toshi.kani@hpe.com>
-Cc:     Justin He <Justin.He@arm.com>, Ard Biesheuvel <ardb@kernel.org>,
-        Len Brown <lenb@kernel.org>, James Morse <James.Morse@arm.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Robert Richter <rric@kernel.org>,
-        Robert Moore <robert.moore@intel.com>,
-        "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
-        "devel@acpica.org" <devel@acpica.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Shuai Xue <xueshuai@linux.alibaba.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        "linux-efi@vger.kernel.org" <linux-efi@vger.kernel.org>,
-        nd <nd@arm.com>, "stable@kernel.org" <stable@kernel.org>
-Subject: Re: [PATCH 2/2] EDAC/ghes: Modularize ghes_edac driver to remove the
- dependency on ghes
-Message-ID: <Yv1V+gWICIcuNXdE@zn.tnic>
-References: <20220811091713.10427-1-justin.he@arm.com>
- <20220811091713.10427-3-justin.he@arm.com>
- <YvZnrTrXhRn8FV3I@zn.tnic>
- <DBBPR08MB45389A9DB098F1AC14C19074F76B9@DBBPR08MB4538.eurprd08.prod.outlook.com>
- <PH7PR84MB1838203B478319EA45167BB4826A9@PH7PR84MB1838.NAMPRD84.PROD.OUTLOOK.COM>
- <YvyruNX+BUi+O3Df@zn.tnic>
- <PH7PR84MB183888AC20B37A3D891C332D826A9@PH7PR84MB1838.NAMPRD84.PROD.OUTLOOK.COM>
+To:     "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+Cc:     akpm@linux-foundation.org, bhe@redhat.com, pmladek@suse.com,
+        kexec@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, netdev@vger.kernel.org,
+        x86@kernel.org, kernel-dev@igalia.com, kernel@gpiccoli.net,
+        halves@canonical.com, fabiomirmar@gmail.com,
+        alejandro.j.jimenez@oracle.com, andriy.shevchenko@linux.intel.com,
+        arnd@arndb.de, corbet@lwn.net, d.hatayama@jp.fujitsu.com,
+        dave.hansen@linux.intel.com, dyoung@redhat.com,
+        feng.tang@intel.com, gregkh@linuxfoundation.org,
+        mikelley@microsoft.com, hidehiro.kawai.ez@hitachi.com,
+        jgross@suse.com, john.ogness@linutronix.de, keescook@chromium.org,
+        luto@kernel.org, mhiramat@kernel.org, mingo@redhat.com,
+        paulmck@kernel.org, peterz@infradead.org, rostedt@goodmis.org,
+        senozhatsky@chromium.org, stern@rowland.harvard.edu,
+        tglx@linutronix.de, vgoyal@redhat.com, vkuznets@redhat.com,
+        will@kernel.org, linux-edac@vger.kernel.org,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Tony Luck <tony.luck@intel.com>
+Subject: Re: [PATCH v2 10/13] EDAC/altera: Skip the panic notifier if kdump
+ is loaded
+Message-ID: <Yv1XVRmTXHLhOkER@zn.tnic>
+References: <20220719195325.402745-1-gpiccoli@igalia.com>
+ <20220719195325.402745-11-gpiccoli@igalia.com>
+ <Yv0mCY04heUXsGiC@zn.tnic>
+ <46137c67-25b4-6657-33b7-cffdc7afc0d7@igalia.com>
+ <Yv1C0Y25u2IB7PCs@zn.tnic>
+ <7f016d7f-a546-a45d-c65c-bc35269b4faa@igalia.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <PH7PR84MB183888AC20B37A3D891C332D826A9@PH7PR84MB1838.NAMPRD84.PROD.OUTLOOK.COM>
+In-Reply-To: <7f016d7f-a546-a45d-c65c-bc35269b4faa@igalia.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
@@ -70,18 +72,23 @@ Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Wed, Aug 17, 2022 at 08:22:58PM +0000, Kani, Toshi wrote:
-> ghes_edac is used on Arm. This original issue happened on a non-HPE
-> platform.
+On Wed, Aug 17, 2022 at 05:28:34PM -0300, Guilherme G. Piccoli wrote:
+> My understanding is the same as yours, i.e., this is not possible to
+> collect from vmcore, it requires register reading. But again: if you
+> kdump your machine today, you won't collect this information, patch
+> changed nothing in that regard.
 
-Remember: ghes_edac loads only on known-good platforms - not the other
-way around. If ARM folks wanna use it there, then I'd expect explicit
-enablement to do so.
+Why won't you be able to collect it? You can certainly access dmesg in
+the vmcore and see those errors logged there.
 
-> to keep it protected from any edac driver.
+> The one thing it changes is that you'd skip the altera register dump if
+> kdump is set AND you managed to also set "crash_kexec_post_notifiers".
 
-You got this all backwards. If anything, the kernel should be protected
-from ghes.
+What your patch changes is, it prevents s10_edac_dberr_handler() from
+logging potentially important fatal hw errors when kdump is loaded.
+
+If Dinh is fine with that, I'll take the patch. But it looks like a bad
+idea to me.
 
 -- 
 Regards/Gruss,
