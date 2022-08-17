@@ -2,133 +2,92 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB04C597333
-	for <lists+linux-edac@lfdr.de>; Wed, 17 Aug 2022 17:44:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B015359752A
+	for <lists+linux-edac@lfdr.de>; Wed, 17 Aug 2022 19:36:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240192AbiHQPil convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-edac@lfdr.de>); Wed, 17 Aug 2022 11:38:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58074 "EHLO
+        id S238193AbiHQRcE (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Wed, 17 Aug 2022 13:32:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240152AbiHQPik (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Wed, 17 Aug 2022 11:38:40 -0400
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD15C183B4
-        for <linux-edac@vger.kernel.org>; Wed, 17 Aug 2022 08:38:36 -0700 (PDT)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-42-tBvHS8GtOguVcAWJge1fiA-1; Wed, 17 Aug 2022 16:38:34 +0100
-X-MC-Unique: tBvHS8GtOguVcAWJge1fiA-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.38; Wed, 17 Aug 2022 16:38:33 +0100
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.040; Wed, 17 Aug 2022 16:38:33 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Jia He' <justin.he@arm.com>, Ard Biesheuvel <ardb@kernel.org>,
-        Len Brown <lenb@kernel.org>, James Morse <james.morse@arm.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Robert Richter <rric@kernel.org>,
-        Robert Moore <robert.moore@intel.com>,
-        Qiuxu Zhuo <qiuxu.zhuo@intel.com>,
-        Yazen Ghannam <yazen.ghannam@amd.com>
-CC:     "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
-        "devel@acpica.org" <devel@acpica.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Shuai Xue <xueshuai@linux.alibaba.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        "linux-efi@vger.kernel.org" <linux-efi@vger.kernel.org>,
-        "toshi.kani@hpe.com" <toshi.kani@hpe.com>,
-        "nd@arm.com" <nd@arm.com>, kernel test robot <lkp@intel.com>
-Subject: RE: [PATCH v2 6/7] apei/ghes: Use unrcu_pointer for cmpxchg
-Thread-Topic: [PATCH v2 6/7] apei/ghes: Use unrcu_pointer for cmpxchg
-Thread-Index: AQHYskbHFo9dfaPEtU2VF7GmkxsV462zOhBg
-Date:   Wed, 17 Aug 2022 15:38:33 +0000
-Message-ID: <6ca673e869c44b4690b5b6653c28ae11@AcuMS.aculab.com>
-References: <20220817143458.335938-1-justin.he@arm.com>
- <20220817143458.335938-7-justin.he@arm.com>
-In-Reply-To: <20220817143458.335938-7-justin.he@arm.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        with ESMTP id S238004AbiHQRcE (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Wed, 17 Aug 2022 13:32:04 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00A7749B61;
+        Wed, 17 Aug 2022 10:32:02 -0700 (PDT)
+Received: from zn.tnic (p200300ea971b98b0329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:971b:98b0:329c:23ff:fea6:a903])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 2A7411EC04E4;
+        Wed, 17 Aug 2022 19:31:57 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1660757517;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=dUKj+X8ljKS3x0J7PLstLS2kOGr7pWVjrGVNsA+POsw=;
+        b=OCrRjecizgJkhIrUuxZqNNRqYD/0fFaYs2TDejeDXW/mmrrYLWtuimSo/AnlefpOtU+AMj
+        bsL7N758/zQeINPpMpOiI/ASS6nWSKedONPjIH0T9YfOo5o9ytEmycBmsrGT973RrHO3j/
+        FA4Bt5FgbzcF1qKWUonHjI/9nn6LXBk=
+Date:   Wed, 17 Aug 2022 19:31:53 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+Cc:     akpm@linux-foundation.org, bhe@redhat.com, pmladek@suse.com,
+        kexec@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, netdev@vger.kernel.org,
+        x86@kernel.org, kernel-dev@igalia.com, kernel@gpiccoli.net,
+        halves@canonical.com, fabiomirmar@gmail.com,
+        alejandro.j.jimenez@oracle.com, andriy.shevchenko@linux.intel.com,
+        arnd@arndb.de, corbet@lwn.net, d.hatayama@jp.fujitsu.com,
+        dave.hansen@linux.intel.com, dyoung@redhat.com,
+        feng.tang@intel.com, gregkh@linuxfoundation.org,
+        mikelley@microsoft.com, hidehiro.kawai.ez@hitachi.com,
+        jgross@suse.com, john.ogness@linutronix.de, keescook@chromium.org,
+        luto@kernel.org, mhiramat@kernel.org, mingo@redhat.com,
+        paulmck@kernel.org, peterz@infradead.org, rostedt@goodmis.org,
+        senozhatsky@chromium.org, stern@rowland.harvard.edu,
+        tglx@linutronix.de, vgoyal@redhat.com, vkuznets@redhat.com,
+        will@kernel.org, linux-edac@vger.kernel.org,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Tony Luck <tony.luck@intel.com>
+Subject: Re: [PATCH v2 10/13] EDAC/altera: Skip the panic notifier if kdump
+ is loaded
+Message-ID: <Yv0mCY04heUXsGiC@zn.tnic>
+References: <20220719195325.402745-1-gpiccoli@igalia.com>
+ <20220719195325.402745-11-gpiccoli@igalia.com>
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220719195325.402745-11-gpiccoli@igalia.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-From: Jia He
-> Sent: 17 August 2022 15:35
+On Tue, Jul 19, 2022 at 04:53:23PM -0300, Guilherme G. Piccoli wrote:
+> The altera_edac panic notifier performs some data collection with
+> regards errors detected; such code relies in the regmap layer to
+> perform reads/writes, so the code is abstracted and there is some
+> risk level to execute that, since the panic path runs in atomic
+> context, with interrupts/preemption and secondary CPUs disabled.
 > 
-> ghes_estatus_caches should be add rcu annotation to avoid sparse warnings.
->    drivers/acpi/apei/ghes.c:733:25: sparse: sparse: incompatible types in comparison expression
-> (different address spaces):
->    drivers/acpi/apei/ghes.c:733:25: sparse:    struct ghes_estatus_cache [noderef] __rcu *
->    drivers/acpi/apei/ghes.c:733:25: sparse:    struct ghes_estatus_cache *
->    drivers/acpi/apei/ghes.c:813:25: sparse: sparse: incompatible types in comparison expression
-> (different address spaces):
->    drivers/acpi/apei/ghes.c:813:25: sparse:    struct ghes_estatus_cache [noderef] __rcu *
->    drivers/acpi/apei/ghes.c:813:25: sparse:    struct ghes_estatus_cache *
-> 
-> unrcu_pointer is to strip the __rcu in cmpxchg.
-> 
-> Reported-by: kernel test robot <lkp@intel.com>
-> Signed-off-by: Jia He <justin.he@arm.com>
-> ---
->  drivers/acpi/apei/ghes.c | 7 ++++---
->  1 file changed, 4 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/acpi/apei/ghes.c b/drivers/acpi/apei/ghes.c
-> index 9272d963b57d..92ae58f4f7bb 100644
-> --- a/drivers/acpi/apei/ghes.c
-> +++ b/drivers/acpi/apei/ghes.c
-> @@ -144,7 +144,7 @@ struct ghes_vendor_record_entry {
->  static struct gen_pool *ghes_estatus_pool;
->  static unsigned long ghes_estatus_pool_size_request;
-> 
-> -static struct ghes_estatus_cache *ghes_estatus_caches[GHES_ESTATUS_CACHES_SIZE];
-> +static struct ghes_estatus_cache __rcu *ghes_estatus_caches[GHES_ESTATUS_CACHES_SIZE];
->  static atomic_t ghes_estatus_cache_alloced;
-> 
->  static int ghes_panic_timeout __read_mostly = 30;
-> @@ -834,8 +834,9 @@ static void ghes_estatus_cache_add(
->  	}
->  	/* new_cache must be put into array after its contents are written */
->  	smp_wmb();
-> -	if (slot != -1 && cmpxchg(ghes_estatus_caches + slot,
-> -				  slot_cache, new_cache) == slot_cache) {
-> +	if (slot != -1 && unrcu_pointer(cmpxchg(ghes_estatus_caches + slot,
-> +				RCU_INITIALIZER(slot_cache),
-> +				RCU_INITIALIZER(new_cache)))) {
+> Users want the information collected in this panic notifier though,
+> so in order to balance the risk/benefit, let's skip the altera panic
+> notifier if kdump is loaded. While at it, remove a useless header
+> and encompass a macro inside the sole ifdef block it is used.
 
-Did you test this?
-There seems to be an == missing.
+How does the fact that kdump is loaded, obviate the need to print
+information about the errors?
 
-	David
+Are you suggesting that people who have the whole vmcore would be able
+to piece together the error information?
 
->  		if (slot_cache)
->  			call_rcu(&slot_cache->rcu, ghes_estatus_cache_rcu_free);
->  	} else
-> --
-> 2.25.1
+-- 
+Regards/Gruss,
+    Boris.
 
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
-
+https://people.kernel.org/tglx/notes-about-netiquette
