@@ -2,34 +2,34 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E0AA59A84F
-	for <lists+linux-edac@lfdr.de>; Sat, 20 Aug 2022 00:29:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A2C859A87B
+	for <lists+linux-edac@lfdr.de>; Sat, 20 Aug 2022 00:30:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240226AbiHSWTB (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Fri, 19 Aug 2022 18:19:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39934 "EHLO
+        id S241941AbiHSWYA (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Fri, 19 Aug 2022 18:24:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229802AbiHSWS7 (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Fri, 19 Aug 2022 18:18:59 -0400
+        with ESMTP id S241975AbiHSWXy (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Fri, 19 Aug 2022 18:23:54 -0400
 Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9984EB2851;
-        Fri, 19 Aug 2022 15:18:56 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76D9B23BD1;
+        Fri, 19 Aug 2022 15:23:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-        s=20170329; h=Content-Transfer-Encoding:MIME-Version:Message-Id:Date:Subject:
-        Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:Content-Description:
-        Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
-        In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        s=20170329; h=Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:
+        Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
         List-Post:List-Owner:List-Archive;
-        bh=pfV3W5tIDS7uvHHlXIEyDkDagWNi+Z86KWqZSqCzOrI=; b=sY1n8Aq6cKn+8C+zsSeV/uxggm
-        nsj/09ZQvFYE+q97bRBlzjnW1zw5RbFDAnFolBKYT6KrCpDrsXE1skijRnZWS19ElGNWcV5X4mpAU
-        dPTTKVW8Ybf0lsZ+/2nZtUSKRL8Tsrvh7PeUAO5+1gcci5JuGcxPHddWjR8qmRG7owXlYfJB4r7z2
-        gygAEeJyjzZWEZLKLqNxZ2NITsVeZECMoYr2HilmMgOn6hF92BWV6bQedzTrYdl8A4e5mubOIC1f3
-        GjHAfCmlUSyzNEzj/212l9Gi3pAbATQtzxezcnnn2wIWy1pePhpNmlSJIReIg6cL3Lz4Qmauejy6k
-        jX0jtSbQ==;
+        bh=OonmUPZkO/emCOphZ8VnLPwYmag4wEjaMQk7IMB+RMQ=; b=frivb87m1aODDLexRXHjILEpy0
+        zypuxM1lUa2+Sde0ChP8r+SpXKZTYYQ06rsm4azbLcf835GhtiU/63eTRWcbzZyjLucvdKKHJYKiK
+        /euCL6+qpMh2bq+mDBCmd4zfYMRfG4Tqf1qA8tyF9Sf9mTKWE49sFBT6zlM+mWR7kHQzFnNnWU6MW
+        lkll9FniO4rDprJKDPgb+tUp2okPeMrFiVLU/alXFetoW59OAkLnidfuhStQMFD628z2AmR0v5dqg
+        u9NF7VPoqZwVRcG9G6dqJ9Zqmry2mF8HYNj1eMF0SH2Nd3PIvrPYCM3Wwvafygev10hLlqXwn+n1L
+        GJahVPlA==;
 Received: from [179.232.144.59] (helo=localhost)
         by fanzine2.igalia.com with esmtpsa 
         (Cipher TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
-        id 1oPAJo-00Carb-O5; Sat, 20 Aug 2022 00:18:22 +0200
+        id 1oPAP0-00Cb74-3H; Sat, 20 Aug 2022 00:23:47 +0200
 From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
 To:     akpm@linux-foundation.org, bhe@redhat.com, pmladek@suse.com,
         kexec@lists.infradead.org
@@ -48,14 +48,14 @@ Cc:     linux-kernel@vger.kernel.org, linux-hyperv@vger.kernel.org,
         tglx@linutronix.de, vgoyal@redhat.com, vkuznets@redhat.com,
         will@kernel.org, xuqiang36@huawei.com,
         "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
-        bcm-kernel-feedback-list@broadcom.com, linux-alpha@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-edac@vger.kernel.org,
-        linux-efi@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linux-um@lists.infradead.org
-Subject: [PATCH V3 00/11] The panic notifiers refactor - fixes/clean-ups (V3)
-Date:   Fri, 19 Aug 2022 19:17:20 -0300
-Message-Id: <20220819221731.480795-1-gpiccoli@igalia.com>
+        linux-edac@vger.kernel.org, Tony Luck <tony.luck@intel.com>,
+        Dinh Nguyen <dinguyen@kernel.org>
+Subject: [PATCH V3 08/11] EDAC/altera: Skip the panic notifier if kdump is loaded
+Date:   Fri, 19 Aug 2022 19:17:28 -0300
+Message-Id: <20220819221731.480795-9-gpiccoli@igalia.com>
 X-Mailer: git-send-email 2.37.2
+In-Reply-To: <20220819221731.480795-1-gpiccoli@igalia.com>
+References: <20220819221731.480795-1-gpiccoli@igalia.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -67,90 +67,93 @@ Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-Hey everybody, this the third iteration of the panic notifiers
-fixes/clean-ups;
+The altera_edac panic notifier performs some data collection with
+regards errors detected; such code relies in the regmap layer to
+perform reads/writes, so the code is abstracted and there is some
+risk level to execute that, since the panic path runs in atomic
+context, with interrupts/preemption and secondary CPUs disabled.
 
-V2 available at:
-https://lore.kernel.org/lkml/20220719195325.402745-1-gpiccoli@igalia.com/
+Users want the information collected in this panic notifier though,
+so in order to balance the risk/benefit, let's skip the altera panic
+notifier if kdump is loaded. While at it, remove a useless header
+and encompass a macro inside the sole ifdef block it is used.
 
-V1 (including the refactor) available at:
-https://lore.kernel.org/lkml/20220427224924.592546-1-gpiccoli@igalia.com/
+Cc: Borislav Petkov <bp@alien8.de>
+Cc: Petr Mladek <pmladek@suse.com>
+Cc: Tony Luck <tony.luck@intel.com>
+Acked-by: Dinh Nguyen <dinguyen@kernel.org>
+Signed-off-by: Guilherme G. Piccoli <gpiccoli@igalia.com>
 
+---
 
-There wasn't much change here compared to V2 (the specifics are in the
-patches), but a global change is that I've rebased against 6.0-rc1.
-One patch got merged in -next, another one was re-submit in a standalone
-format (requested by maintainer), so both of these are not here anymore.
+V3:
+- added the ack tag from Dinh - thanks!
+- had a good discussion with Boris about that in V2 [0],
+hopefully we can continue and reach a consensus in this V3.
+[0] https://lore.kernel.org/lkml/46137c67-25b4-6657-33b7-cffdc7afc0d7@igalia.com/
 
-
-As usual, tested this series building for all affected architecture/drivers
-and also through some boot/runtime tests; below the test "matrix" used:
-
-Build tests (using cross-compilers): alpha, arm, arm64, parisc, um, x86_64.
-Boot/Runtime tests: x86_64 (QEMU guests and Steam Deck).
-
-Here is the link with the .config files used:
-https://people.igalia.com/gpiccoli/panic_notifiers_configs/6.0-rc1/
-
-
-About the merge strategy: I've noticed there is a difference in maintainers
-preferences (and my preference as well), so I see 3 strategies for merge:
-
-(a) Maintainers pick patches that are good from the series and merge in
-their trees;
-
-(b) Some maintainer would pick the whole series and merge, at once, given
-that everything is fine/ack/reviewed.
-
-(c) I must re-send patches individually once they are reviewed/acked, as
-standalone patches to the relevant maintainers, so they can merge it in
-their trees.
-
-I'm willing to do what's best for everybody - (a) is my choice when possible,
-(b) seems to stall things and potentially cause conflicts, (c) seems to be
-the compromise. I'll do that as per preference of the respective maintainers.
+V2:
+- new patch, based on the discussion in [1].
+[1] https://lore.kernel.org/lkml/62a63fc2-346f-f375-043a-fa21385279df@igalia.com/
 
 
-As usual, reviews / comments are always welcome, thanks in advance for them!
-Cheers,
+ drivers/edac/altera_edac.c | 16 ++++++++++++----
+ 1 file changed, 12 insertions(+), 4 deletions(-)
 
-Guilherme
-
-
-Guilherme G. Piccoli (11):
-  ARM: Disable FIQs (but not IRQs) on CPUs shutdown paths
-  notifier: Add panic notifiers info and purge trailing whitespaces
-  alpha: Clean-up the panic notifier code
-  um: Improve panic notifiers consistency and ordering
-  parisc: Replace regular spinlock with spin_trylock on panic path
-  tracing: Improve panic/die notifiers
-  notifiers: Add tracepoints to the notifiers infrastructure
-  EDAC/altera: Skip the panic notifier if kdump is loaded
-  video/hyperv_fb: Avoid taking busy spinlock on panic path
-  drivers/hv/vmbus, video/hyperv_fb: Untangle and refactor Hyper-V panic notifiers
-  panic: Fixes the panic_print NMI backtrace setting
-
- arch/alpha/kernel/setup.c        |  36 +++++-----
- arch/arm/kernel/machine_kexec.c  |   2 +
- arch/arm/kernel/smp.c            |   5 +-
- arch/parisc/include/asm/pdc.h    |   1 +
- arch/parisc/kernel/firmware.c    |  27 ++++++--
- arch/um/drivers/mconsole_kern.c  |   7 +-
- arch/um/kernel/um_arch.c         |   8 +--
- drivers/edac/altera_edac.c       |  16 +++--
- drivers/hv/ring_buffer.c         |  13 ++++
- drivers/hv/vmbus_drv.c           | 109 +++++++++++++++++++------------
- drivers/parisc/power.c           |  17 +++--
- drivers/video/fbdev/hyperv_fb.c  |  16 ++++-
- include/linux/hyperv.h           |   2 +
- include/linux/notifier.h         |   8 ++-
- include/trace/events/notifiers.h |  69 +++++++++++++++++++
- kernel/notifier.c                |   6 ++
- kernel/panic.c                   |  47 +++++++------
- kernel/trace/trace.c             |  55 ++++++++--------
- 18 files changed, 302 insertions(+), 142 deletions(-)
- create mode 100644 include/trace/events/notifiers.h
-
+diff --git a/drivers/edac/altera_edac.c b/drivers/edac/altera_edac.c
+index e7e8e624a436..741fe5539154 100644
+--- a/drivers/edac/altera_edac.c
++++ b/drivers/edac/altera_edac.c
+@@ -16,7 +16,6 @@
+ #include <linux/kernel.h>
+ #include <linux/mfd/altera-sysmgr.h>
+ #include <linux/mfd/syscon.h>
+-#include <linux/notifier.h>
+ #include <linux/of_address.h>
+ #include <linux/of_irq.h>
+ #include <linux/of_platform.h>
+@@ -24,6 +23,7 @@
+ #include <linux/platform_device.h>
+ #include <linux/regmap.h>
+ #include <linux/types.h>
++#include <linux/kexec.h>
+ #include <linux/uaccess.h>
+ 
+ #include "altera_edac.h"
+@@ -2063,22 +2063,30 @@ static const struct irq_domain_ops a10_eccmgr_ic_ops = {
+ };
+ 
+ /************** Stratix 10 EDAC Double Bit Error Handler ************/
+-#define to_a10edac(p, m) container_of(p, struct altr_arria10_edac, m)
+-
+ #ifdef CONFIG_64BIT
+ /* panic routine issues reboot on non-zero panic_timeout */
+ extern int panic_timeout;
+ 
++#define to_a10edac(p, m) container_of(p, struct altr_arria10_edac, m)
++
+ /*
+  * The double bit error is handled through SError which is fatal. This is
+  * called as a panic notifier to printout ECC error info as part of the panic.
++ *
++ * Notice that if kdump is set, we take the risk avoidance approach and
++ * skip the notifier, given that users are expected to have access to a
++ * full vmcore.
+  */
+ static int s10_edac_dberr_handler(struct notifier_block *this,
+ 				  unsigned long event, void *ptr)
+ {
+-	struct altr_arria10_edac *edac = to_a10edac(this, panic_notifier);
++	struct altr_arria10_edac *edac;
+ 	int err_addr, dberror;
+ 
++	if (kexec_crash_loaded())
++		return NOTIFY_DONE;
++
++	edac = to_a10edac(this, panic_notifier);
+ 	regmap_read(edac->ecc_mgr_map, S10_SYSMGR_ECC_INTSTAT_DERR_OFST,
+ 		    &dberror);
+ 	regmap_write(edac->ecc_mgr_map, S10_SYSMGR_UE_VAL_OFST, dberror);
 -- 
 2.37.2
 
