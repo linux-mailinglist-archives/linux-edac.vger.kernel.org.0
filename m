@@ -2,31 +2,31 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3266E59C891
-	for <lists+linux-edac@lfdr.de>; Mon, 22 Aug 2022 21:22:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F95859C8B0
+	for <lists+linux-edac@lfdr.de>; Mon, 22 Aug 2022 21:22:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238577AbiHVTWF (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Mon, 22 Aug 2022 15:22:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46772 "EHLO
+        id S238596AbiHVTWG (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Mon, 22 Aug 2022 15:22:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238721AbiHVTU7 (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Mon, 22 Aug 2022 15:20:59 -0400
+        with ESMTP id S238726AbiHVTVA (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Mon, 22 Aug 2022 15:21:00 -0400
 Received: from mail.baikalelectronics.com (mail.baikalelectronics.com [87.245.175.230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0512313D6D;
-        Mon, 22 Aug 2022 12:20:39 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 21B7B1835F;
+        Mon, 22 Aug 2022 12:20:41 -0700 (PDT)
 Received: from mail (mail.baikal.int [192.168.51.25])
-        by mail.baikalelectronics.com (Postfix) with ESMTP id ED464DAD;
-        Mon, 22 Aug 2022 22:23:37 +0300 (MSK)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.baikalelectronics.com ED464DAD
+        by mail.baikalelectronics.com (Postfix) with ESMTP id A9BF0DA4;
+        Mon, 22 Aug 2022 22:23:38 +0300 (MSK)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.baikalelectronics.com A9BF0DA4
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baikalelectronics.ru; s=mail; t=1661196217;
-        bh=ht7KqreX8ihKT1N4QxMPo0HkcPkOUBLxn2ek+VY5KSg=;
+        d=baikalelectronics.ru; s=mail; t=1661196218;
+        bh=/tarMJ/Lpj3lIo7Fjjl2T4vGuOsDP7eZcPqYpQHmyVA=;
         h=From:To:CC:Subject:Date:In-Reply-To:References:From;
-        b=Pw7HORzRAqthHhixeV0/T8FmbR+puEz3lYtBC/rl3W7FENwGAgdMRgnKRrAYh1dNN
-         I4sIR3y/RBcnvOvoH24LrTQZ52odiNr85xXZX9WwoIhPAyQI+hil3NK0CCBdbzENq+
-         RQdfM3xdn+lr1DX0u+//x34ez2sgPmRp6hVoBh2U=
+        b=AZgKD+ROYiobj4UbtS2PCkhDBf1p0+AAaqTuVPXRQZus1qjGmWJan6PRcgf3/MVMj
+         NJ27n6XkwcZr/ORq5JeGVY66k27tMRLBREGblr/90OoW0bB22xu9XbR12x983VFHhw
+         seyXp6YOdG3WNxxYeZoOJcRauBJ9jNlqM4tJP+Y4=
 Received: from localhost (192.168.168.10) by mail (192.168.51.25) with
- Microsoft SMTP Server (TLS) id 15.0.1395.4; Mon, 22 Aug 2022 22:20:23 +0300
+ Microsoft SMTP Server (TLS) id 15.0.1395.4; Mon, 22 Aug 2022 22:20:24 +0300
 From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
 To:     Michal Simek <michal.simek@xilinx.com>,
         Borislav Petkov <bp@alien8.de>,
@@ -48,9 +48,9 @@ CC:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
         <devicetree@vger.kernel.org>,
         <linux-arm-kernel@lists.infradead.org>,
         <linux-edac@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH 12/13] EDAC/synopsys: Drop vendor-specific arch dependency
-Date:   Mon, 22 Aug 2022 22:19:55 +0300
-Message-ID: <20220822191957.28546-13-Sergey.Semin@baikalelectronics.ru>
+Subject: [PATCH 13/13] EDAC/synopsys: Add Baikal-T1 DDRC support
+Date:   Mon, 22 Aug 2022 22:19:56 +0300
+Message-ID: <20220822191957.28546-14-Sergey.Semin@baikalelectronics.ru>
 In-Reply-To: <20220822191957.28546-1-Sergey.Semin@baikalelectronics.ru>
 References: <20220822191957.28546-1-Sergey.Semin@baikalelectronics.ru>
 MIME-Version: 1.0
@@ -67,27 +67,59 @@ Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-DW uMCTL2 DDRC EDAC driver is no longer specific to particular DDRC
-versions. It's generic in the most of the aspects now. So set its kernel
-config independently from the ZynqMP/IntelFPAG/MXC platforms.
+Baikal-T1 SoC is equipped with the DW uMCTl2 DDRC of v2.61a with 32-bit
+DQ-bus accepting DDR2/DDR3 SDRAMs of up to 2 ranks, 1:2 HIF/SDRAM clocks
+rate ratio, HIF interface burst length of 8 Full DQ-bus words, 40-bit
+System/Application address width and 128-bits data width, 3 System address
+regions with block size 256MB. There is SEC/DED ECC capability with Scrub
+(RMW) and Scrubber features.
+
+Since the Baikal-T1 DDR controller is capable of the ECC let's add it to
+the DW uMCTL2 DDRC EDAC driver. The most of the parameters above will be
+autodetected except HIF burst length and SAR block size, which will be set
+by means of the Baikal-T1-specific initialization method. The controller
+compatible string "baikal,bt1-ddrc" will be used to attach the driver to
+the kernel device. It's chosen in accordance with the just updated
+DT-bindings.
 
 Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
 ---
- drivers/edac/Kconfig | 1 -
- 1 file changed, 1 deletion(-)
+ drivers/edac/synopsys_edac.c | 15 +++++++++++++++
+ 1 file changed, 15 insertions(+)
 
-diff --git a/drivers/edac/Kconfig b/drivers/edac/Kconfig
-index 98bcdadf4143..6aa59a0bacf1 100644
---- a/drivers/edac/Kconfig
-+++ b/drivers/edac/Kconfig
-@@ -486,7 +486,6 @@ config EDAC_ARMADA_XP
+diff --git a/drivers/edac/synopsys_edac.c b/drivers/edac/synopsys_edac.c
+index f86d1be2702a..9780f61ac84c 100644
+--- a/drivers/edac/synopsys_edac.c
++++ b/drivers/edac/synopsys_edac.c
+@@ -1342,6 +1342,20 @@ static int zynqmp_init_plat(struct snps_edac_priv *priv)
+ 	return 0;
+ }
  
- config EDAC_SYNOPSYS
- 	tristate "Synopsys DDR Memory Controller"
--	depends on ARCH_ZYNQMP || ARCH_INTEL_SOCFPGA || ARCH_MXC
- 	help
- 	  Support for error detection and correction on the Synopsys DDR
- 	  memory controller.
++/*
++ * bt1_init_plat - Baikal-T1-specific platform initialization.
++ * @priv:	DDR memory controller private data.
++ *
++ * Return: always zero.
++ */
++static int bt1_init_plat(struct snps_edac_priv *priv)
++{
++	priv->info.hif_burst_len = SNPS_DDR_BL8;
++	priv->sys_app_map.minsize = DDR_MIN_SARSIZE;
++
++	return 0;
++}
++
+ /**
+  * snps_get_dtype - Return the controller memory width.
+  * @mstr:	Master CSR value.
+@@ -2470,6 +2484,7 @@ static int snps_mc_remove(struct platform_device *pdev)
+ 
+ static const struct of_device_id snps_edac_match[] = {
+ 	{ .compatible = "xlnx,zynqmp-ddrc-2.40a", .data = zynqmp_init_plat },
++	{ .compatible = "baikal,bt1-ddrc", .data = bt1_init_plat },
+ 	{ .compatible = "snps,ddrc-3.80a" },
+ 	{ }
+ };
 -- 
 2.35.1
 
