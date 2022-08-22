@@ -2,29 +2,29 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9BAA59C893
-	for <lists+linux-edac@lfdr.de>; Mon, 22 Aug 2022 21:22:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0695E59C8AA
+	for <lists+linux-edac@lfdr.de>; Mon, 22 Aug 2022 21:22:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238031AbiHVTV0 (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Mon, 22 Aug 2022 15:21:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47382 "EHLO
+        id S238526AbiHVTVp (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Mon, 22 Aug 2022 15:21:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238689AbiHVTUz (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Mon, 22 Aug 2022 15:20:55 -0400
+        with ESMTP id S238699AbiHVTU5 (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Mon, 22 Aug 2022 15:20:57 -0400
 Received: from mail.baikalelectronics.com (mail.baikalelectronics.com [87.245.175.230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 69FA113CD1;
-        Mon, 22 Aug 2022 12:20:19 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0CFC613D08;
+        Mon, 22 Aug 2022 12:20:21 -0700 (PDT)
 Received: from mail (mail.baikal.int [192.168.51.25])
-        by mail.baikalelectronics.com (Postfix) with ESMTP id 4C5A9DA4;
+        by mail.baikalelectronics.com (Postfix) with ESMTP id F3AD4DA5;
         Mon, 22 Aug 2022 22:23:29 +0300 (MSK)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.baikalelectronics.com 4C5A9DA4
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.baikalelectronics.com F3AD4DA5
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baikalelectronics.ru; s=mail; t=1661196209;
-        bh=UXtmUueoPfsyifWmupyxIMk+T8NNS2o323E8H+1gKCc=;
+        d=baikalelectronics.ru; s=mail; t=1661196210;
+        bh=hYISXOPwelQMZEnoI/XHwiZ9SYWjZeM4wKuUzRG7AZg=;
         h=From:To:CC:Subject:Date:In-Reply-To:References:From;
-        b=COpRbn+qAGFp6dbdqJbofrTsGYWMZroBQQbUDTNegCMkQIiutLOqB9en9y1baus4T
-         t1OlOwAi99jg2zy1IWxPeyJs3259zHegdK6Vz3LVlDWO1jERiRCd9NmxYnNO9ywx64
-         xRqCMy7mxQriFl4cSytl9M6rkUJ03bYP7noDVAgE=
+        b=CVqMr9a2i8OyAqPdjse8KdEXMb7CJiqMEPrqqZnHa83BaoCXuPH1Vqw/Pc8Ei87x4
+         zmAhXhx+IN+58j1KxMEiaJ47jHVCfoMEjwwjo77b5dxMU20QbkNSm19ArqSFu2wS6n
+         /p3p5/1qKZtUVG3102H1WmvwppI32aas0TxXsT44=
 Received: from localhost (192.168.168.10) by mail (192.168.51.25) with
  Microsoft SMTP Server (TLS) id 15.0.1395.4; Mon, 22 Aug 2022 22:20:15 +0300
 From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
@@ -32,9 +32,8 @@ To:     Michal Simek <michal.simek@xilinx.com>,
         Borislav Petkov <bp@alien8.de>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         Tony Luck <tony.luck@intel.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Manish Narani <manish.narani@xilinx.com>
+        James Morse <james.morse@arm.com>,
+        Robert Richter <rric@kernel.org>
 CC:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
         Serge Semin <fancer.lancer@gmail.com>,
         Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
@@ -42,22 +41,21 @@ CC:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
         Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
         Punnaiah Choudary Kalluri 
         <punnaiah.choudary.kalluri@xilinx.com>,
+        Manish Narani <manish.narani@xilinx.com>,
         Dinh Nguyen <dinguyen@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Robert Richter <rric@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         <devicetree@vger.kernel.org>,
         <linux-arm-kernel@lists.infradead.org>,
-        <linux-edac@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>
-Subject: [PATCH 02/13] dt-bindings: memory: snps: Add Baikal-T1 DDRC support
-Date:   Mon, 22 Aug 2022 22:19:45 +0300
-Message-ID: <20220822191957.28546-3-Sergey.Semin@baikalelectronics.ru>
+        <linux-edac@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH 03/13] EDAC/synopsys: Add multi-ranked memory support
+Date:   Mon, 22 Aug 2022 22:19:46 +0300
+Message-ID: <20220822191957.28546-4-Sergey.Semin@baikalelectronics.ru>
 In-Reply-To: <20220822191957.28546-1-Sergey.Semin@baikalelectronics.ru>
 References: <20220822191957.28546-1-Sergey.Semin@baikalelectronics.ru>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
 X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,
@@ -69,46 +67,81 @@ Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-Baikal-T1 DDR controller is based on the DW uMCTL2 DDRC IP-core v2.51a
-with up to DDR3 protocol capability and 32-bit data bus + 8-bit ECC. There
-are individual IRQs for each ECC and DFI events.The dedicated scrubber
-clock source is absent since it's fully synchronous to the core clock.
-In addition to that the DFI-DDR PHY CSRs can be accessed via a separate
-registers space.
+DW uMCTL2 DDRC supports multi-rank memory attached to the controller. If
+so the MSTR.active_ranks field will be set with the populated ranks
+bitfield. It is permitted to have one, two or four ranks activated at a
+time [1]. Since we now have the number of ranks determined in the
+controller configuration detection procedure, it can be easily used for
+accordingly extending the MCI chip-select layer. In case of the ECC errors
+the affected rank will be read from the CE/UE address CSRs [2].
+
+Note we need to drop the ranks from the total memory size calculation
+since multiple ranks are taken into account by means of the layer[0]
+definition.
+
+[1] DesignWare® Cores Enhanced Universal DDR Memory Controller (uMCTL2)
+    Databook, Version 3.91a, October 2020, p.739
+[2] DesignWare® Cores Enhanced Universal DDR Memory Controller (uMCTL2)
+    Databook, Version 3.91a, October 2020, p.821, p.832
 
 Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
 ---
- .../memory-controllers/snps,dw-umctl2-ddrc.yaml        | 10 +++++++++-
- 1 file changed, 9 insertions(+), 1 deletion(-)
+ drivers/edac/synopsys_edac.c | 14 ++++----------
+ 1 file changed, 4 insertions(+), 10 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/memory-controllers/snps,dw-umctl2-ddrc.yaml b/Documentation/devicetree/bindings/memory-controllers/snps,dw-umctl2-ddrc.yaml
-index 8db92210cfe1..899a6c5f9806 100644
---- a/Documentation/devicetree/bindings/memory-controllers/snps,dw-umctl2-ddrc.yaml
-+++ b/Documentation/devicetree/bindings/memory-controllers/snps,dw-umctl2-ddrc.yaml
-@@ -26,6 +26,7 @@ properties:
-     enum:
-       - snps,ddrc-3.80a
-       - xlnx,zynqmp-ddrc-2.40a
-+      - baikal,bt1-ddrc
+diff --git a/drivers/edac/synopsys_edac.c b/drivers/edac/synopsys_edac.c
+index 90b57986a9b5..872ad9a164a7 100644
+--- a/drivers/edac/synopsys_edac.c
++++ b/drivers/edac/synopsys_edac.c
+@@ -23,9 +23,6 @@
  
-   interrupts:
-     description:
-@@ -49,7 +50,14 @@ properties:
-           enum: [ ecc_ce, ecc_ue, ecc_ap, ecc_sbr, dfi_e ]
+ #include "edac_module.h"
  
-   reg:
--    maxItems: 1
-+    minItems: 1
-+    maxItems: 2
-+
-+  reg-names:
-+    minItems: 1
-+    items:
-+      - const: umctl2
-+      - const: phy
+-/* Number of cs_rows needed per memory controller */
+-#define SNPS_EDAC_NR_CSROWS		1
+-
+ /* Number of channels per memory controller */
+ #define SNPS_EDAC_NR_CHANS		1
  
-   clocks:
-     description:
+@@ -795,7 +792,7 @@ static void snps_handle_error(struct mem_ctl_info *mci, struct snps_ecc_status *
+ 
+ 		edac_mc_handle_error(HW_EVENT_ERR_CORRECTED, mci, p->ce_cnt,
+ 				     PHYS_PFN(sys), offset_in_page(sys),
+-				     pinf->syndrome, 0, 0, -1,
++				     pinf->syndrome, pinf->sdram.rank, 0, -1,
+ 				     priv->message, "");
+ 	}
+ 
+@@ -812,7 +809,7 @@ static void snps_handle_error(struct mem_ctl_info *mci, struct snps_ecc_status *
+ 
+ 		edac_mc_handle_error(HW_EVENT_ERR_UNCORRECTED, mci, p->ue_cnt,
+ 				     PHYS_PFN(sys), offset_in_page(sys),
+-				     pinf->syndrome, 0, 0, -1,
++				     pinf->syndrome, pinf->sdram.rank, 0, -1,
+ 				     priv->message, "");
+ 	}
+ 
+@@ -1411,10 +1408,7 @@ static u64 snps_get_sdram_size(struct snps_edac_priv *priv)
+ 			size++;
+ 	}
+ 
+-	for (i = 0; i < DDR_MAX_RANK_WIDTH; i++) {
+-		if (map->rank[i] != DDR_ADDRMAP_UNUSED)
+-			size++;
+-	}
++	/* Skip the ranks since the multi-rankness is determined by layer[0] */
+ 
+ 	return 1ULL << (size + priv->info.dq_width);
+ }
+@@ -1468,7 +1462,7 @@ static struct mem_ctl_info *snps_mc_create(struct snps_edac_priv *priv)
+ 	struct mem_ctl_info *mci;
+ 
+ 	layers[0].type = EDAC_MC_LAYER_CHIP_SELECT;
+-	layers[0].size = SNPS_EDAC_NR_CSROWS;
++	layers[0].size = priv->info.ranks;
+ 	layers[0].is_virt_csrow = true;
+ 	layers[1].type = EDAC_MC_LAYER_CHANNEL;
+ 	layers[1].size = SNPS_EDAC_NR_CHANS;
 -- 
 2.35.1
 
