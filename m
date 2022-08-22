@@ -2,31 +2,31 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D93D659C89F
-	for <lists+linux-edac@lfdr.de>; Mon, 22 Aug 2022 21:22:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B139259C88D
+	for <lists+linux-edac@lfdr.de>; Mon, 22 Aug 2022 21:22:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238541AbiHVTVs (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Mon, 22 Aug 2022 15:21:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47640 "EHLO
+        id S238473AbiHVTVg (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Mon, 22 Aug 2022 15:21:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238702AbiHVTU6 (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Mon, 22 Aug 2022 15:20:58 -0400
+        with ESMTP id S238696AbiHVTU5 (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Mon, 22 Aug 2022 15:20:57 -0400
 Received: from mail.baikalelectronics.com (mail.baikalelectronics.com [87.245.175.230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D4A9513D16;
-        Mon, 22 Aug 2022 12:20:24 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 92C8F13D35;
+        Mon, 22 Aug 2022 12:20:26 -0700 (PDT)
 Received: from mail (mail.baikal.int [192.168.51.25])
-        by mail.baikalelectronics.com (Postfix) with ESMTP id 34957DA7;
+        by mail.baikalelectronics.com (Postfix) with ESMTP id D8C49DA8;
         Mon, 22 Aug 2022 22:23:33 +0300 (MSK)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.baikalelectronics.com 34957DA7
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.baikalelectronics.com D8C49DA8
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=baikalelectronics.ru; s=mail; t=1661196213;
-        bh=5W87r9e5gmEIVrY+SuohfrbYYcVZMla2WpXatnUI8rQ=;
+        bh=vGDzPPboDDzeWQHOsdZSQJzQCZZGhH5NjkNxhCEEYhw=;
         h=From:To:CC:Subject:Date:In-Reply-To:References:From;
-        b=Kygu68Z+hzn9mm4veQd4PG3IupqXp7pBl8SZt9udcOBoHcGiEvRA4FFB4oy8JE12i
-         aKxoLZQLUZocobInTTksNRJ8ksc+YDMZaKNuooedh7IRsMC4H5ZIsD8PqmRysHiCZw
-         YBpl6A6nmq2/dmLGEzYhMX4QjLkpICWyknZObvIE=
+        b=CgvUDRQiqZUhU8TqDbgjKfWOZkBJFboNyIbn1ukSJEtMdfROnASrWQG/+aCUKTncT
+         qQIwsWgQTVcu5OStH3qVvsdmWg9OzL5yWc0tQCibDhZW1MO458DvYJK2buShOqD4kd
+         jlfgB7j2PCzb5kht4va7XVE87FbAEmUMK5pND+/4=
 Received: from localhost (192.168.168.10) by mail (192.168.51.25) with
- Microsoft SMTP Server (TLS) id 15.0.1395.4; Mon, 22 Aug 2022 22:20:17 +0300
+ Microsoft SMTP Server (TLS) id 15.0.1395.4; Mon, 22 Aug 2022 22:20:19 +0300
 From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
 To:     Michal Simek <michal.simek@xilinx.com>,
         Borislav Petkov <bp@alien8.de>,
@@ -48,9 +48,9 @@ CC:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
         <devicetree@vger.kernel.org>,
         <linux-arm-kernel@lists.infradead.org>,
         <linux-edac@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH 05/13] EDAC/synopsys: Drop ECC poison address from private data
-Date:   Mon, 22 Aug 2022 22:19:48 +0300
-Message-ID: <20220822191957.28546-6-Sergey.Semin@baikalelectronics.ru>
+Subject: [PATCH 06/13] EDAC/synopsys: Add data poisoning disable support
+Date:   Mon, 22 Aug 2022 22:19:49 +0300
+Message-ID: <20220822191957.28546-7-Sergey.Semin@baikalelectronics.ru>
 In-Reply-To: <20220822191957.28546-1-Sergey.Semin@baikalelectronics.ru>
 References: <20220822191957.28546-1-Sergey.Semin@baikalelectronics.ru>
 MIME-Version: 1.0
@@ -67,139 +67,106 @@ Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-Since the driver now has the generic Sys/SDRAM address translation
-interface there is no need in preserving the poisonous address in the
-driver private data especially seeing it is used in the framework of the
-DebugFS node anyway. So let's drop the snps_edac_priv.poison_addr field
-and just perform Sys/SDRAM back and forth address translation right in
-place of the "inject_data_error" node accessors.
+Even though being a pure-debug feature currently the data poison can't be
+disabled once it has been initialized and enabled. Irrespective to the way
+the feature has been implemented it doesn't seem right since the system
+may print false ECC errors in case if the poisoned address is accessed by
+the kernel or by the user-space applications. It's possible since the
+poisoned address isn't reserved in any kernel mm subsystems. Even though
+that doesn't seem right either at least it's tolerable since the ECC data
+poison is supposed to be utilized in the framework of the EDAC driver
+debugging, but having the feature unswitchable can't be justified that
+easy especially seeing it's not that hard to implement.
 
-It causes a bit more modifications than a simple field removal. Since the
-poisonous address is not preserved now there is no point in having the
-snps_data_poison_setup() method so its content can be moved right into the
-"inject_data_error" write operation. For the same reason there is no point
-in printing the ECCPOISONADDR{0,1} registers content in the
-"inject_data_error" read operation. Since the CSRs content is now parsed
-anyway let's print the SDRAM address instead.
+So in order to have the ECC data poison switchable we suggest to define
+three possible values acceptable by the "inject_data_poison" DebugFS node:
+1. "CE" - emit correctable error (as before).
+2. "UE" - emit uncorrectable error (used to be any non-"CE" value).
+3. Any other value - disable data poison feature.
+
+Note we have to redefine the macros describing the data poison-related
+fields of the ECC_CFG0 register in a way so they would be used to
+separately switch the feature on/off and to select the type of the ECC
+error. As a result the suggest solution turns into a proper ECC_CFG0 CSRs
+fields setup based on the value written to the "inject_data_poison"
+DebugFS node.
 
 Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
 ---
- drivers/edac/synopsys_edac.c | 68 +++++++++++++++++-------------------
- 1 file changed, 32 insertions(+), 36 deletions(-)
+ drivers/edac/synopsys_edac.c | 29 ++++++++++++++++++++---------
+ 1 file changed, 20 insertions(+), 9 deletions(-)
 
 diff --git a/drivers/edac/synopsys_edac.c b/drivers/edac/synopsys_edac.c
-index 2b8de7e8fae1..05201f5a284e 100644
+index 05201f5a284e..028a9ad70d49 100644
 --- a/drivers/edac/synopsys_edac.c
 +++ b/drivers/edac/synopsys_edac.c
-@@ -407,7 +407,6 @@ struct snps_ecc_status {
-  * @lock:		Concurrent CSRs access lock.
-  * @message:		Buffer for framing the event specific info.
-  * @stat:		ECC status information.
-- * @poison_addr:	Data poison address.
-  */
- struct snps_edac_priv {
- 	struct snps_ddrc_info info;
-@@ -418,9 +417,6 @@ struct snps_edac_priv {
- 	spinlock_t lock;
- 	char message[SNPS_EDAC_MSG_SIZE];
- 	struct snps_ecc_status stat;
--#ifdef CONFIG_EDAC_DEBUG
--	ulong poison_addr;
--#endif
- };
+@@ -118,6 +118,10 @@
+ #define ECC_CFG0_DIS_SCRUB		BIT(4)
+ #define ECC_CFG0_MODE_MASK		GENMASK(2, 0)
  
- /**
-@@ -1713,44 +1709,32 @@ static int snps_hif_sdram_map_show(struct seq_file *s, void *data)
++/* ECC CFG1 register definitions */
++#define ECC_CFG1_POISON_BIT		BIT(1)
++#define ECC_CFG1_POISON_EN		BIT(0)
++
+ /* ECC status register definitions */
+ #define ECC_STAT_UE_MASK		GENMASK(23, 16)
+ #define ECC_STAT_CE_MASK		GENMASK(15, 8)
+@@ -157,10 +161,6 @@
+ #define ECC_POISON1_BANK_MASK		GENMASK(26, 24)
+ #define ECC_POISON1_ROW_MASK		GENMASK(17, 0)
  
- DEFINE_SHOW_ATTRIBUTE(snps_hif_sdram_map);
+-/* DDRC ECC CE & UE poison mask */
+-#define ECC_CEPOISON_MASK		GENMASK(1, 0)
+-#define ECC_UEPOISON_MASK		BIT(0)
+-
+ /* DDRC address mapping parameters */
+ #define DDR_ADDRMAP_NREGS		12
  
--/**
-- * snps_data_poison_setup - Update poison registers.
-- * @priv:		DDR memory controller private instance data.
-- *
-- * Update poison registers as per DDR mapping.
-- * Return: none.
-- */
--static void snps_data_poison_setup(struct snps_edac_priv *priv)
--{
--	struct snps_sdram_addr sdram;
--	u32 regval;
--
--	snps_map_sys_to_sdram(priv, priv->poison_addr, &sdram);
--
--	regval = FIELD_PREP(ECC_POISON0_RANK_MASK, sdram.rank) |
--		 FIELD_PREP(ECC_POISON0_COL_MASK, sdram.col);
--	writel(regval, priv->baseaddr + ECC_POISON0_OFST);
--
--	regval = FIELD_PREP(ECC_POISON1_BANKGRP_MASK, sdram.bankgrp) |
--		 FIELD_PREP(ECC_POISON1_BANK_MASK, sdram.bank) |
--		 FIELD_PREP(ECC_POISON1_ROW_MASK, sdram.row);
--	writel(regval, priv->baseaddr + ECC_POISON1_OFST);
--}
--
- static ssize_t snps_inject_data_error_read(struct file *filep, char __user *ubuf,
- 					   size_t size, loff_t *offp)
- {
- 	struct mem_ctl_info *mci = filep->private_data;
- 	struct snps_edac_priv *priv = mci->pvt_info;
-+	struct snps_sdram_addr sdram;
- 	char buf[SNPS_DBGFS_BUF_LEN];
-+	dma_addr_t sys;
-+	u32 regval;
+@@ -1781,10 +1781,14 @@ static ssize_t snps_inject_data_poison_read(struct file *filep, char __user *ubu
  	int pos;
  
--	pos = scnprintf(buf, sizeof(buf), "Poison0 Addr: 0x%08x\n\r",
--			readl(priv->baseaddr + ECC_POISON0_OFST));
--	pos += scnprintf(buf + pos, sizeof(buf) - pos, "Poison1 Addr: 0x%08x\n\r",
--			 readl(priv->baseaddr + ECC_POISON1_OFST));
--	pos += scnprintf(buf + pos, sizeof(buf) - pos, "Error injection Address: 0x%lx\n\r",
--			 priv->poison_addr);
-+	regval = readl(priv->baseaddr + ECC_POISON0_OFST);
-+	sdram.rank = FIELD_GET(ECC_POISON0_RANK_MASK, regval);
-+	sdram.col = FIELD_GET(ECC_POISON0_COL_MASK, regval);
-+
-+	regval = readl(priv->baseaddr + ECC_POISON1_OFST);
-+	sdram.bankgrp = FIELD_PREP(ECC_POISON1_BANKGRP_MASK, regval);
-+	sdram.bank = FIELD_PREP(ECC_POISON1_BANK_MASK, regval);
-+	sdram.row = FIELD_PREP(ECC_POISON1_ROW_MASK, regval);
-+
-+	snps_map_sdram_to_sys(priv, &sdram, &sys);
-+
-+	pos = scnprintf(buf, sizeof(buf),
-+			"%pad: Row %hu Rank %hu Bank %hhu Bank Group %hhu Rank %hhu\n",
-+			&sys, sdram.row, sdram.col, sdram.bank, sdram.bankgrp,
-+			sdram.rank);
+ 	regval = readl(priv->baseaddr + ECC_CFG1_OFST);
+-	errstr = FIELD_GET(ECC_CEPOISON_MASK, regval) == ECC_CEPOISON_MASK ?
+-		 "Correctable Error" : "UnCorrectable Error";
++	if (!(regval & ECC_CFG1_POISON_EN))
++		errstr = "Off";
++	else if (regval & ECC_CFG1_POISON_BIT)
++		errstr = "CE";
++	else
++		errstr = "UE";
+ 
+-	pos = scnprintf(buf, sizeof(buf), "Data Poisoning: %s\n\r", errstr);
++	pos = scnprintf(buf, sizeof(buf), "%s\n", errstr);
  
  	return simple_read_from_buffer(ubuf, size, offp, buf, pos);
  }
-@@ -1760,13 +1744,25 @@ static ssize_t snps_inject_data_error_write(struct file *filep, const char __use
- {
+@@ -1795,6 +1799,7 @@ static ssize_t snps_inject_data_poison_write(struct file *filep, const char __us
  	struct mem_ctl_info *mci = filep->private_data;
  	struct snps_edac_priv *priv = mci->pvt_info;
-+	struct snps_sdram_addr sdram;
+ 	char buf[SNPS_DBGFS_BUF_LEN];
 +	u32 regval;
-+	u64 sys;
  	int rc;
  
--	rc = kstrtoul_from_user(ubuf, size, 0, &priv->poison_addr);
-+	rc = kstrtou64_from_user(ubuf, size, 0, &sys);
- 	if (rc)
+ 	rc = simple_write_to_buffer(buf, sizeof(buf), offp, ubuf, size);
+@@ -1802,10 +1807,16 @@ static ssize_t snps_inject_data_poison_write(struct file *filep, const char __us
  		return rc;
  
--	snps_data_poison_setup(priv);
-+	snps_map_sys_to_sdram(priv, sys, &sdram);
+ 	writel(0, priv->baseaddr + DDR_SWCTL);
 +
-+	regval = FIELD_PREP(ECC_POISON0_RANK_MASK, sdram.rank) |
-+		 FIELD_PREP(ECC_POISON0_COL_MASK, sdram.col);
-+	writel(regval, priv->baseaddr + ECC_POISON0_OFST);
++	regval = readl(priv->baseaddr + ECC_CFG1_OFST);
+ 	if (strncmp(buf, "CE", 2) == 0)
+-		writel(ECC_CEPOISON_MASK, priv->baseaddr + ECC_CFG1_OFST);
++		regval |= ECC_CFG1_POISON_BIT | ECC_CFG1_POISON_EN;
++	else if (strncmp(buf, "UE", 2) == 0)
++		regval = (regval & ~ECC_CFG1_POISON_BIT) | ECC_CFG1_POISON_EN;
+ 	else
+-		writel(ECC_UEPOISON_MASK, priv->baseaddr + ECC_CFG1_OFST);
++		regval &= ~ECC_CFG1_POISON_EN;
++	writel(regval, priv->baseaddr + ECC_CFG1_OFST);
 +
-+	regval = FIELD_PREP(ECC_POISON1_BANKGRP_MASK, sdram.bankgrp) |
-+		 FIELD_PREP(ECC_POISON1_BANK_MASK, sdram.bank) |
-+		 FIELD_PREP(ECC_POISON1_ROW_MASK, sdram.row);
-+	writel(regval, priv->baseaddr + ECC_POISON1_OFST);
+ 	writel(1, priv->baseaddr + DDR_SWCTL);
  
  	return size;
- }
 -- 
 2.35.1
 
