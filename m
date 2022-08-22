@@ -2,36 +2,39 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D1C8559C8AC
-	for <lists+linux-edac@lfdr.de>; Mon, 22 Aug 2022 21:22:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F6F259C892
+	for <lists+linux-edac@lfdr.de>; Mon, 22 Aug 2022 21:22:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237759AbiHVTVQ (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Mon, 22 Aug 2022 15:21:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46754 "EHLO
+        id S238511AbiHVTVl (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Mon, 22 Aug 2022 15:21:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238681AbiHVTUz (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Mon, 22 Aug 2022 15:20:55 -0400
+        with ESMTP id S238705AbiHVTU6 (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Mon, 22 Aug 2022 15:20:58 -0400
 Received: from mail.baikalelectronics.com (mail.baikalelectronics.com [87.245.175.230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2D7215F86;
-        Mon, 22 Aug 2022 12:20:15 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 55AF8FD17;
+        Mon, 22 Aug 2022 12:20:17 -0700 (PDT)
 Received: from mail (mail.baikal.int [192.168.51.25])
-        by mail.baikalelectronics.com (Postfix) with ESMTP id E443CDA2;
-        Mon, 22 Aug 2022 22:23:27 +0300 (MSK)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.baikalelectronics.com E443CDA2
+        by mail.baikalelectronics.com (Postfix) with ESMTP id 9495DDA3;
+        Mon, 22 Aug 2022 22:23:28 +0300 (MSK)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.baikalelectronics.com 9495DDA3
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=baikalelectronics.ru; s=mail; t=1661196208;
-        bh=KF3X090vcoA9grM0P07tsVKO0EiXk7h8wSJHSrQJgOo=;
-        h=From:To:CC:Subject:Date:From;
-        b=Gn/TCwquunznoofIfp0cPam7W9juapk3ZAlbNBTgO7CBhULSZjPpdPg0EIhuoJP2+
-         jfSorT349Mp40u+IXg7wtuJdvw8UGG27JvJpvl2KYiga3eZBUmNL1NXez0KTG+zkq0
-         mpWeGQOFp/TRnjt+Y9WrGDjaAAML3xFI/7B4NgxY=
+        bh=IGQU0ypa1PF4qcU+f0QqtuUCDe4v6kRCgIcvDETuAXs=;
+        h=From:To:CC:Subject:Date:In-Reply-To:References:From;
+        b=FqpLIxXjIw/4SRaZkPtgL+Rx0x7c1NPfQO0dYCv7PIy/VP8QVJ9dKvzqjR3o5fste
+         k+aW6TbAgH7X1gFp4kf8R7fHtVNLLm+D49fZejVkz1ORUHRrkyegJa5kNVLI3S+atc
+         EHMohewPQxKEIFwHaIQouweD4S4BFLgCtuA6Emis=
 Received: from localhost (192.168.168.10) by mail (192.168.51.25) with
- Microsoft SMTP Server (TLS) id 15.0.1395.4; Mon, 22 Aug 2022 22:20:13 +0300
+ Microsoft SMTP Server (TLS) id 15.0.1395.4; Mon, 22 Aug 2022 22:20:14 +0300
 From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
 To:     Michal Simek <michal.simek@xilinx.com>,
         Borislav Petkov <bp@alien8.de>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Tony Luck <tony.luck@intel.com>
+        Tony Luck <tony.luck@intel.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Manish Narani <manish.narani@xilinx.com>
 CC:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
         Serge Semin <fancer.lancer@gmail.com>,
         Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
@@ -39,18 +42,19 @@ CC:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
         Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
         Punnaiah Choudary Kalluri 
         <punnaiah.choudary.kalluri@xilinx.com>,
-        Manish Narani <manish.narani@xilinx.com>,
         Dinh Nguyen <dinguyen@kernel.org>,
         James Morse <james.morse@arm.com>,
         Robert Richter <rric@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         <devicetree@vger.kernel.org>,
         <linux-arm-kernel@lists.infradead.org>,
-        <linux-edac@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH 00/13] EDAC/synopsys: Add generic resources and Baikal-T1 support
-Date:   Mon, 22 Aug 2022 22:19:43 +0300
-Message-ID: <20220822191957.28546-1-Sergey.Semin@baikalelectronics.ru>
+        <linux-edac@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>
+Subject: [PATCH 01/13] dt-bindings: memory: snps: Extend schema with IRQs/resets/clocks props
+Date:   Mon, 22 Aug 2022 22:19:44 +0300
+Message-ID: <20220822191957.28546-2-Sergey.Semin@baikalelectronics.ru>
+In-Reply-To: <20220822191957.28546-1-Sergey.Semin@baikalelectronics.ru>
+References: <20220822191957.28546-1-Sergey.Semin@baikalelectronics.ru>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
@@ -65,101 +69,118 @@ Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-This patchset is a third one in the series created in the framework of my
-Baikal-T1 DDRC-related work:
+First of all the DW uMCTL2 DDRC IP-core supports the individual IRQ lines
+for each standard event: ECC Corrected Error, ECC Uncorrected Error, ECC
+Address Protection, Scrubber-Done signal, DFI Parity/CRC Error. It's
+possible that the platform engineers merge them up in the IRQ controller
+level. So let's add both configuration support to the DT-schema.
 
-[1: In-progress] EDAC/mc/synopsys: Various fixes and cleanups
-Link: https://lore.kernel.org/linux-edac/20220822190730.27277-1-Sergey.Semin@baikalelectronics.ru/
-[2: In-progress] EDAC/synopsys: Add generic DDRC info and address mapping
-Link: https://lore.kernel.org/linux-edac/20220822191427.27969-1-Sergey.Semin@baikalelectronics.ru/
-[3: In-progress] EDAC/synopsys: Add generic resources and Baikal-T1 support
-Link: ---you are looking at it---
-
-Note the patchsets above must be merged in the same order as they are
-placed in the list in order to prevent conflicts. Nothing prevents them
-from being reviewed synchronously though. Any tests are very welcome.
-Thanks in advance.
-
-This is a final patchset in the framework of my Synopsys DW uMCTL2 DDRC
-work, which completes the driver updates with the new functionality and
-at the closure introduces the Baikal-T1 DDRC support.
-
-The series starts from extending the Synopsys DW uMCTL2 DDRC DT-schema
-with the controller specific IRQs, clocks and resets properties. In
-addition to the Baikal-T1 DDRC is added to the DT-bindings since it's
-based on the DW uMCTL2 DDRC v2.61a.
-
-After that we suggest to finally inform the MCI core with the detected
-SDRAM ranks and make sure the detected errors are reported to the
-corresponding rank. Then we extend the DDRC capabilities with optional
-Scrub functionality. It's indeed possible to have the DW uMCTL2 controller
-with no HW-accelerated Scrub support (no RMW engine). In that case the MCI
-core is supposed to perform the erroneous location ECC update by means of
-the platform-specific scrub method.
-
-Then we get to fix the error-injection functionality a bit. First since
-the driver now has the Sys<->SDRAM address translation infrastructure we
-can use it to convert the supplied poisonous system address to the SDRAM
-one. Thus there is no longer need in preserving the address in the device
-private data. Second we suggest to add a DebuFS node-based command to
-disable the error-injection feature (no idea why it hasn't been done in
-the first place).
-
-Afterwards a series of the IRQ-related patches goes. First we introduce the
-individual DDRC event IRQs support in accordance with what has been added
-to the DT-bindings and what the native DW uMCTL2 DDR controller actually
-provides. Then aside to the ECC CE/UE errors detection we suggest to the
-DFI/SDRAM CRC/Parity errors report. It specifically useful for the DDR4
-memory which has dedicated ALARM_n signal, but can be still utilized in
-the framework of the older protocols if the device DFI-PHY calculates
-the HIF-interface signals parity. Third after adding the platform
-clock/resets request procedure we introduce the HW-accelerated Scrubber
-support. Its performance can be tuned by means of the sdram_scrub_rate
-SysFS node and the Core clock rate. Note it is possible to one-time-run
-the Scrubber in the back-to-back mode so to perform a burst-like scan of
-the whole SDRAM memory.
-
-At the patchset closure we finally fix the DW uMCTL2 DDRC kernel config to
-be available not only on the Xilinx, Intel and MXC platforms and add the
-Baikal-T1 DDRC support which the whole work has been dedicated for in the
-first place.
+Secondly each IP-core interface is supplied with a clock source like APB
+reference clock, AXI-ports clock, main DDRC core reference clock and
+Scrubber low-power clock. In addition to that each clock domain can have a
+dedicated reset signal. Let's add the properties for at least the denoted
+clock sources and the corresponding reset controls.
 
 Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Cc: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
-Cc: Michail Ivanov <Michail.Ivanov@baikalelectronics.ru>
-Cc: Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>
-Cc: Punnaiah Choudary Kalluri <punnaiah.choudary.kalluri@xilinx.com>
-Cc: Manish Narani <manish.narani@xilinx.com>
-Cc: Dinh Nguyen <dinguyen@kernel.org>
-Cc: James Morse <james.morse@arm.com>
-Cc: Robert Richter <rric@kernel.org>
-Cc: Rob Herring <robh+dt@kernel.org>
-Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc: devicetree@vger.kernel.org
-Cc: linux-arm-kernel@lists.infradead.org
-Cc: linux-edac@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
+---
+ .../snps,dw-umctl2-ddrc.yaml                  | 65 +++++++++++++++++--
+ 1 file changed, 60 insertions(+), 5 deletions(-)
 
-Serge Semin (13):
-  dt-bindings: memory: snps: Extend schema with IRQs/resets/clocks props
-  dt-bindings: memory: snps: Add Baikal-T1 DDRC support
-  EDAC/synopsys: Add multi-ranked memory support
-  EDAC/synopsys: Add optional ECC Scrub support
-  EDAC/synopsys: Drop ECC poison address from private data
-  EDAC/synopsys: Add data poisoning disable support
-  EDAC/synopsys: Split up ECC UE/CE IRQs handler
-  EDAC/synopsys: Add individual named ECC IRQs support
-  EDAC/synopsys: Add DFI alert_n IRQ support
-  EDAC/synopsys: Add reference clocks support
-  EDAC/synopsys: Add ECC Scrubber support
-  EDAC/synopsys: Drop vendor-specific arch dependency
-  EDAC/synopsys: Add Baikal-T1 DDRC support
-
- .../snps,dw-umctl2-ddrc.yaml                  |  75 +-
- drivers/edac/Kconfig                          |   1 -
- drivers/edac/synopsys_edac.c                  | 952 ++++++++++++++----
- 3 files changed, 830 insertions(+), 198 deletions(-)
-
+diff --git a/Documentation/devicetree/bindings/memory-controllers/snps,dw-umctl2-ddrc.yaml b/Documentation/devicetree/bindings/memory-controllers/snps,dw-umctl2-ddrc.yaml
+index 787d91d64eee..8db92210cfe1 100644
+--- a/Documentation/devicetree/bindings/memory-controllers/snps,dw-umctl2-ddrc.yaml
++++ b/Documentation/devicetree/bindings/memory-controllers/snps,dw-umctl2-ddrc.yaml
+@@ -13,13 +13,13 @@ maintainers:
+ 
+ description: |
+   Synopsys DesignWare Enhanced uMCTL2 DDR Memory Controller is cappable of
+-  working with DDR devices up to (LP)DDR4 protocol. It can be equipped
++  working with DDR devices upporting to (LP)DDR4 protocol. It can be equipped
+   with SEC/DEC ECC feature if DRAM data bus width is either 16-bits or
+   32-bits or 64-bits wide.
+ 
+-  The ZynqMP DDR controller is based on the DW uMCTL2 v2.40a controller.
+-  It has an optional SEC/DEC ECC support in 64-bit and 32-bit bus width
+-  configurations.
++  For instance the ZynqMP DDR controller is based on the DW uMCTL2 v2.40a
++  controller. It has an optional SEC/DEC ECC support in 64-bit and 32-bit
++  bus width configurations.
+ 
+ properties:
+   compatible:
+@@ -28,11 +28,55 @@ properties:
+       - xlnx,zynqmp-ddrc-2.40a
+ 
+   interrupts:
+-    maxItems: 1
++    description:
++      DW uMCTL2 DDRC IP-core provides individual IRQ signal for each event":"
++      ECC Corrected Error, ECC Uncorrected Error, ECC Address Protection,
++      Scrubber-Done signal, DFI Parity/CRC Error. Some platforms may have the
++      signals merged before they reach the IRQ controller or have some of them
++      absent in case if the corresponding feature is unavailable/disabled.
++    minItems: 1
++    maxItems: 5
++
++  interrupt-names:
++    minItems: 1
++    maxItems: 5
++    oneOf:
++      - description: Common ECC CE/UE/Scrubber/DFI Errors IRQ
++        items:
++          - const: ecc
++      - description: Individual ECC CE/UE/Scrubber/DFI Errors IRQs
++        items:
++          enum: [ ecc_ce, ecc_ue, ecc_ap, ecc_sbr, dfi_e ]
+ 
+   reg:
+     maxItems: 1
+ 
++  clocks:
++    description:
++      A standard set of the clock sources contains CSRs bus clock, AXI-ports
++      reference clock, DDRC core clock, Scrubber standalone clock
++      (synchronous to the DDRC clock).
++    minItems: 1
++    maxItems: 4
++
++  clock-names:
++    minItems: 1
++    maxItems: 4
++    items:
++      enum: [ pclk, aclk, core, sbr ]
++
++  resets:
++    description:
++      Each clock domain can have separate reset signal.
++    minItems: 1
++    maxItems: 4
++
++  reset-names:
++    minItems: 1
++    maxItems: 4
++    items:
++      enum: [ prst, arst, core, sbr ]
++
+ required:
+   - compatible
+   - reg
+@@ -48,4 +92,15 @@ examples:
+       interrupt-parent = <&gic>;
+       interrupts = <0 112 4>;
+     };
++  - |
++    memory-controller@fd070000 {
++      compatible = "snps,ddrc-3.80a";
++      reg = <0x3d400000 0x400000>;
++
++      interrupts = <0 147 4>, <0 148 4>, <0 149 4>, <0 150 4>;
++      interrupt-names = "ecc_ce", "ecc_ue", "ecc_sbr", "dfi_e";
++
++      clocks = <&rcu 0>, <&rcu 5>, <&rcu 6>, <&rcu 7>;
++      clock-names = "pclk", "aclk", "core", "sbr";
++    };
+ ...
 -- 
 2.35.1
 
