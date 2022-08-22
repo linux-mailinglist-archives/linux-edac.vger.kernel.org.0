@@ -2,31 +2,31 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49BC859C867
-	for <lists+linux-edac@lfdr.de>; Mon, 22 Aug 2022 21:16:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B973759C85B
+	for <lists+linux-edac@lfdr.de>; Mon, 22 Aug 2022 21:16:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238386AbiHVTPQ (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Mon, 22 Aug 2022 15:15:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43718 "EHLO
+        id S238405AbiHVTPR (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Mon, 22 Aug 2022 15:15:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238327AbiHVTOx (ORCPT
+        with ESMTP id S238348AbiHVTOx (ORCPT
         <rfc822;linux-edac@vger.kernel.org>); Mon, 22 Aug 2022 15:14:53 -0400
 Received: from mail.baikalelectronics.com (mail.baikalelectronics.com [87.245.175.230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 344A52CC85;
-        Mon, 22 Aug 2022 12:14:45 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4243D2B609;
+        Mon, 22 Aug 2022 12:14:47 -0700 (PDT)
 Received: from mail (mail.baikal.int [192.168.51.25])
-        by mail.baikalelectronics.com (Postfix) with ESMTP id F417BDA9;
-        Mon, 22 Aug 2022 22:17:47 +0300 (MSK)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.baikalelectronics.com F417BDA9
+        by mail.baikalelectronics.com (Postfix) with ESMTP id 9B660DAA;
+        Mon, 22 Aug 2022 22:17:48 +0300 (MSK)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.baikalelectronics.com 9B660DAA
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=baikalelectronics.ru; s=mail; t=1661195868;
-        bh=5GQ+Lu5cZ60j6lrIxqJ+5IoeFT+Ib3LpXYUblly4fgw=;
+        bh=S4Cpg3F9AoedZ1cfMlJGVURz8OADsydtqtvGr0KhezI=;
         h=From:To:CC:Subject:Date:In-Reply-To:References:From;
-        b=VxHKtOBKCmupuVgUwx44ECfZReAwyoEC+G9WUuq7V9pmyO3bH1goI500dA5CN6p2L
-         qK5HpM//a9OHI1o671uOL/ihciiFTXqGDwF+w2kcUU799WqEtcgQWZxuaYsYRUGjZs
-         td5gAY7gnAyO/uwir9Ss6CZwdSfKvXZwrGEydx44=
+        b=h+bT8RkjDOm7fmyJhnYYUGLPCtCDoa7TYf8uXnrCp8tKFOGDUSFS9cGpjin6WzVjl
+         evjrlOYibix15LOovSQ6iaKF4gySj8Y9b8Pm972Cz3oGuCKlxC3bKqx2xM3iOifoMx
+         YnLmymo6T7Z7n/dkdrGgao3AeCME0W5sTBB/H/pI=
 Received: from localhost (192.168.168.10) by mail (192.168.51.25) with
- Microsoft SMTP Server (TLS) id 15.0.1395.4; Mon, 22 Aug 2022 22:14:33 +0300
+ Microsoft SMTP Server (TLS) id 15.0.1395.4; Mon, 22 Aug 2022 22:14:34 +0300
 From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
 To:     Michal Simek <michal.simek@xilinx.com>,
         Borislav Petkov <bp@alien8.de>,
@@ -45,9 +45,9 @@ CC:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
         Dinh Nguyen <dinguyen@kernel.org>,
         <linux-arm-kernel@lists.infradead.org>,
         <linux-edac@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH 07/18] EDAC/synopsys: Parse ADDRMAP[7-8] CSRs for (LP)DDR4 only
-Date:   Mon, 22 Aug 2022 22:14:16 +0300
-Message-ID: <20220822191427.27969-8-Sergey.Semin@baikalelectronics.ru>
+Subject: [PATCH 08/18] EDAC/synopsys: Parse ADDRMAP[0] CSR for multi-ranks case only
+Date:   Mon, 22 Aug 2022 22:14:17 +0300
+Message-ID: <20220822191427.27969-9-Sergey.Semin@baikalelectronics.ru>
 In-Reply-To: <20220822191427.27969-1-Sergey.Semin@baikalelectronics.ru>
 References: <20220822191427.27969-1-Sergey.Semin@baikalelectronics.ru>
 MIME-Version: 1.0
@@ -64,57 +64,39 @@ Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-These CSRs contain the SDRAM Bank Groups and row[16]/row[17] bits mapping,
-which are applicable for the DDR4 and LPDDR4 memory only. For the rest of
-the memories the ADDRMAP[7-8] are unused by the controller and may be read
-as garbage (for instance, return an outcome of the previous read
-operation). The retrieved values might be perceived by the HIF/SDRAM
-mapping detection procedure as normal bit positions, which is wrong. So
-let's parse these registers only if they are applicable for the detected
-DDR protocol.
+The ADDRMAP[0] CSR contains the SDRAM Rank bits mapping. Obviously it's
+applicable for the multi-ranked memory only. If either the attached memory
+isn't multi-ranked or the controller simply doesn't support the multi-rank
+memory, parsing the ADDRMAP[0] CSR will be not just pointless, but in the
+later case erroneous since the CSR may contain garbage data. So make sure
+the ADDRMAP[0] register is only parsed if the multi-ranked memory setup
+has been detected.
 
 Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
 ---
- drivers/edac/synopsys_edac.c | 19 +++++++++++++------
- 1 file changed, 13 insertions(+), 6 deletions(-)
+ drivers/edac/synopsys_edac.c | 9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
 
 diff --git a/drivers/edac/synopsys_edac.c b/drivers/edac/synopsys_edac.c
-index b6296bbd1a45..998600670c75 100644
+index 998600670c75..e7f8d448850b 100644
 --- a/drivers/edac/synopsys_edac.c
 +++ b/drivers/edac/synopsys_edac.c
-@@ -1005,12 +1005,15 @@ static void snps_setup_row_address_map(struct snps_edac_priv *priv, u32 *addrmap
- 	priv->row_shift[15] = (((addrmap[6] >> 24) & ROW_MAX_VAL_MASK) ==
- 				ROW_MAX_VAL_MASK) ? 0 : (((addrmap[6] >> 24) &
- 				ROW_MAX_VAL_MASK) + ROW_B15_BASE);
--	priv->row_shift[16] = ((addrmap[7] & ROW_MAX_VAL_MASK) ==
--				ROW_MAX_VAL_MASK) ? 0 : ((addrmap[7] &
--				ROW_MAX_VAL_MASK) + ROW_B16_BASE);
--	priv->row_shift[17] = (((addrmap[7] >> 8) & ROW_MAX_VAL_MASK) ==
--				ROW_MAX_VAL_MASK) ? 0 : (((addrmap[7] >> 8) &
--				ROW_MAX_VAL_MASK) + ROW_B17_BASE);
-+
-+	if (priv->info.sdram_mode == MEM_DDR4 || priv->info.sdram_mode == MEM_LPDDR4) {
-+		priv->row_shift[16] = ((addrmap[7] & ROW_MAX_VAL_MASK) ==
-+					ROW_MAX_VAL_MASK) ? 0 : ((addrmap[7] &
-+					ROW_MAX_VAL_MASK) + ROW_B16_BASE);
-+		priv->row_shift[17] = (((addrmap[7] >> 8) & ROW_MAX_VAL_MASK) ==
-+					ROW_MAX_VAL_MASK) ? 0 : (((addrmap[7] >> 8) &
-+					ROW_MAX_VAL_MASK) + ROW_B17_BASE);
+@@ -1143,9 +1143,12 @@ static void snps_setup_bg_address_map(struct snps_edac_priv *priv, u32 *addrmap)
+ 
+ static void snps_setup_rank_address_map(struct snps_edac_priv *priv, u32 *addrmap)
+ {
+-	priv->rank_shift[0] = ((addrmap[0] & RANK_MAX_VAL_MASK) ==
+-				RANK_MAX_VAL_MASK) ? 0 : ((addrmap[0] &
+-				RANK_MAX_VAL_MASK) + RANK_B0_BASE);
++	/* Ranks mapping is unavailable for the single-ranked memory */
++	if (priv->info.ranks > 1) {
++		priv->rank_shift[0] = ((addrmap[0] & RANK_MAX_VAL_MASK) ==
++					RANK_MAX_VAL_MASK) ? 0 : ((addrmap[0] &
++					RANK_MAX_VAL_MASK) + RANK_B0_BASE);
 +	}
  }
  
- static void snps_setup_column_address_map(struct snps_edac_priv *priv, u32 *addrmap)
-@@ -1126,6 +1129,10 @@ static void snps_setup_bank_address_map(struct snps_edac_priv *priv, u32 *addrma
- 
- static void snps_setup_bg_address_map(struct snps_edac_priv *priv, u32 *addrmap)
- {
-+	/* Bank group signals are available on the DDR4 memory only */
-+	if (priv->info.sdram_mode != MEM_DDR4)
-+		return;
-+
- 	priv->bankgrp_shift[0] = (addrmap[8] &
- 				BANKGRP_MAX_VAL_MASK) + BANKGRP_B0_BASE;
- 	priv->bankgrp_shift[1] = (((addrmap[8] >> 8) & BANKGRP_MAX_VAL_MASK) ==
+ /**
 -- 
 2.35.1
 
