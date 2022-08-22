@@ -2,133 +2,178 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E37A259C331
-	for <lists+linux-edac@lfdr.de>; Mon, 22 Aug 2022 17:43:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1AC759C7DE
+	for <lists+linux-edac@lfdr.de>; Mon, 22 Aug 2022 21:07:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236740AbiHVPnM (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Mon, 22 Aug 2022 11:43:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51244 "EHLO
+        id S237555AbiHVTHg (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Mon, 22 Aug 2022 15:07:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236836AbiHVPmf (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Mon, 22 Aug 2022 11:42:35 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A942F1CB2D;
-        Mon, 22 Aug 2022 08:42:30 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A072C1424;
-        Mon, 22 Aug 2022 08:42:33 -0700 (PDT)
-Received: from entos-ampere-02.shanghai.arm.com (entos-ampere-02.shanghai.arm.com [10.169.212.212])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id E1ECB3F70D;
-        Mon, 22 Aug 2022 08:42:21 -0700 (PDT)
-From:   Jia He <justin.he@arm.com>
-To:     Len Brown <lenb@kernel.org>, James Morse <james.morse@arm.com>,
-        Tony Luck <tony.luck@intel.com>,
+        with ESMTP id S237405AbiHVTHf (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Mon, 22 Aug 2022 15:07:35 -0400
+Received: from mail.baikalelectronics.com (mail.baikalelectronics.com [87.245.175.230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 77D2013F92;
+        Mon, 22 Aug 2022 12:07:33 -0700 (PDT)
+Received: from mail (mail.baikal.int [192.168.51.25])
+        by mail.baikalelectronics.com (Postfix) with ESMTP id 3CF0EDA2;
+        Mon, 22 Aug 2022 22:10:46 +0300 (MSK)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.baikalelectronics.com 3CF0EDA2
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baikalelectronics.ru; s=mail; t=1661195446;
+        bh=EJsCN0YYd8iM5UM8xnboKosxyxlQkg+Bsj8ERpm8McY=;
+        h=From:To:CC:Subject:Date:From;
+        b=Xg3tMp2TRFPB7NGJpvc15j74XMqjEH/JmnFHV4zKwc9jPNLNISib3lLsXybnTB7Go
+         jLe3eMtUUldOSeNjDuUapDr7TZ8oRbEsuUx2b272NDOXJSEB96k1nt4C8rYuiUagGV
+         oXkGlE+7kWe4wLBZzgf3RvKJ5Bf+iK4oPDzH6N8k=
+Received: from localhost (192.168.168.10) by mail (192.168.51.25) with
+ Microsoft SMTP Server (TLS) id 15.0.1395.4; Mon, 22 Aug 2022 22:07:31 +0300
+From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
+To:     Rob Herring <robh@kernel.org>,
+        Michal Simek <michal.simek@xilinx.com>,
         Borislav Petkov <bp@alien8.de>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Tony Luck <tony.luck@intel.com>
+CC:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Michail Ivanov <Michail.Ivanov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Punnaiah Choudary Kalluri 
+        <punnaiah.choudary.kalluri@xilinx.com>,
+        Manish Narani <manish.narani@xilinx.com>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        James Morse <james.morse@arm.com>,
         Robert Richter <rric@kernel.org>,
-        Robert Moore <robert.moore@intel.com>,
-        Qiuxu Zhuo <qiuxu.zhuo@intel.com>,
-        Yazen Ghannam <yazen.ghannam@amd.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Jan Luebbe <jlu@pengutronix.de>,
-        Khuong Dinh <khuong@os.amperecomputing.com>,
-        Kani Toshi <toshi.kani@hpe.com>
-Cc:     Ard Biesheuvel <ardb@kernel.org>, linux-acpi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-edac@vger.kernel.org,
-        devel@acpica.org, "Rafael J . Wysocki" <rafael@kernel.org>,
-        Shuai Xue <xueshuai@linux.alibaba.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>, linux-efi@vger.kernel.org,
-        nd@arm.com, "Paul E. McKenney" <paulmck@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        linux-doc@vger.kernel.org, Jia He <justin.he@arm.com>
-Subject: [RESEND PATCH v3 9/9] edac: Don't load Arm specific edac drivers when ghes_edac is preferred
-Date:   Mon, 22 Aug 2022 15:40:48 +0000
-Message-Id: <20220822154048.188253-10-justin.he@arm.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220822154048.188253-1-justin.he@arm.com>
-References: <20220822154048.188253-1-justin.he@arm.com>
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-edac@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH 00/20] EDAC/mc/synopsys: Various fixes and cleanups
+Date:   Mon, 22 Aug 2022 22:07:10 +0300
+Message-ID: <20220822190730.27277-1-Sergey.Semin@baikalelectronics.ru>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,
+        T_SCC_BODY_TEXT_LINE,T_SPF_PERMERROR autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-edac_mc_add_mc* is too late in the init path and that check should happen
-as the very first thing in the driver init function.
+This patchset is a first one in the series created in the framework of
+my Baikal-T1 DDRC-related work:
 
-Signed-off-by: Jia He <justin.he@arm.com>
----
- drivers/edac/armada_xp_edac.c  | 3 +++
- drivers/edac/layerscape_edac.c | 3 +++
- drivers/edac/thunderx_edac.c   | 3 +++
- drivers/edac/xgene_edac.c      | 3 +++
- 4 files changed, 12 insertions(+)
+[1: In-progress] EDAC/mc/synopsys: Various fixes and cleanups
+Link: ---you are looking at it---
+[2: To be submitted] EDAC/synopsys: Add generic DDRC info and address mapping
+Link:
+[3: To be submitted] EDAC/synopsys: Add generic resources and Baikal-T1 support
+Link:
 
-diff --git a/drivers/edac/armada_xp_edac.c b/drivers/edac/armada_xp_edac.c
-index 038abbb83f4b..486532b92ce0 100644
---- a/drivers/edac/armada_xp_edac.c
-+++ b/drivers/edac/armada_xp_edac.c
-@@ -599,6 +599,9 @@ static int __init armada_xp_edac_init(void)
- {
- 	int res;
- 
-+	if (ghes_edac_preferred())
-+		return -EBUSY;
-+
- 	/* only polling is supported */
- 	edac_op_state = EDAC_OPSTATE_POLL;
- 
-diff --git a/drivers/edac/layerscape_edac.c b/drivers/edac/layerscape_edac.c
-index 94cac7686a56..60ff4c6674cd 100644
---- a/drivers/edac/layerscape_edac.c
-+++ b/drivers/edac/layerscape_edac.c
-@@ -38,6 +38,9 @@ static int __init fsl_ddr_mc_init(void)
- {
- 	int res;
- 
-+	if (ghes_edac_preferred())
-+		return -EBUSY;
-+
- 	/* make sure error reporting method is sane */
- 	switch (edac_op_state) {
- 	case EDAC_OPSTATE_POLL:
-diff --git a/drivers/edac/thunderx_edac.c b/drivers/edac/thunderx_edac.c
-index f13674081cb6..2c4baa6817a9 100644
---- a/drivers/edac/thunderx_edac.c
-+++ b/drivers/edac/thunderx_edac.c
-@@ -2114,6 +2114,9 @@ static int __init thunderx_edac_init(void)
- {
- 	int rc = 0;
- 
-+	if (ghes_edac_preferred())
-+		return -EBUSY;
-+
- 	rc = pci_register_driver(&thunderx_lmc_driver);
- 	if (rc)
- 		return rc;
-diff --git a/drivers/edac/xgene_edac.c b/drivers/edac/xgene_edac.c
-index 54081403db4f..9aa68220b625 100644
---- a/drivers/edac/xgene_edac.c
-+++ b/drivers/edac/xgene_edac.c
-@@ -2004,6 +2004,9 @@ static int __init xgene_edac_init(void)
- {
- 	int rc;
- 
-+	if (ghes_edac_preferred())
-+		return -EBUSY;
-+
- 	/* Make sure error reporting method is sane */
- 	switch (edac_op_state) {
- 	case EDAC_OPSTATE_POLL:
+Note the patchsets above must be merged in the same order as they are
+placed in the list in order to prevent conflicts. Nothing prevents them
+from being reviewed synchronously though. Any tests are very welcome.
+Thanks in advance.
+
+Regarding this series content. It's an initial patchset which
+traditionally provides various fixes, cleanups and modifications required
+for the more comfortable further features development. The main goal of it
+though is to detach the Xilinx Zynq A05 DDRC related code into the
+dedicated driver since first it has nothing to do with the Synopsys DW
+uMCTL2 DDR controller and second it will be a great deal obstacle on the
+way of extending the Synopsys-part functionality.
+
+The series starts with fixes patches, which in short concern the next
+aspects: touching the ZynqMP-specific CSRs on the Xilinx ZinqMP platform
+only, serializing an access to the ECCCLR register, adding correct memory
+devices type detection, setting a correct value to the
+mem_ctl_info.scrub_cap field, dropping an erroneous ADDRMAP[4] parsing and
+getting back a correct order of the ECC errors info detection procedure.
+
+Afterwards the patchset provides several cleanup patches required for the
+more coherent code splitting up (Xilinx Zynq A05 and Synopsys DW uMCTL2)
+so the provided modifications would be useful in both drivers. First we
+get to replace the platform resource manual IO-remapping with the
+devm_platform_ioremap_resource() method call. Secondly we suggest to drop:
+internal CE/UE errors counters, local to_mci() macros definition, some
+redundant ecc_error_info structure fields and redundant info from the
+error message, duplicated dimm->nr_pages debug printout and spaces from
+the MEM_TYPE flags declarations. (The later two updates concern the MCI
+core part.) Thirdly before splitting up the driver we need to add an
+unique MC index allocation infrastructure to the MCI core.  It's required
+since after splitting the driver up we'll need to make sure both device
+types could be correctly probed on the same platform. Finally the Xilinx
+Zynq A05 part of the driver is moved out to a dedicated driver where it
+should been originally placed. After that the platform-specific setups API
+is removed from the Synopsys DW uMCTL2 DDRC driver since it's no longer
+required.
+
+Finally as the cherry on the cake we suggest to unify the DW uMCTL2 DDRC
+driver entities naming and replace the open-coded "shift/mask" patter with
+the kernel helpers like BIT/GENMASK/FIELD_x in there. It shall
+significantly improve the code readability.
+
+Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
+Cc: Michail Ivanov <Michail.Ivanov@baikalelectronics.ru>
+Cc: Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>
+Cc: Punnaiah Choudary Kalluri <punnaiah.choudary.kalluri@xilinx.com>
+Cc: Manish Narani <manish.narani@xilinx.com>
+Cc: Dinh Nguyen <dinguyen@kernel.org>
+Cc: James Morse <james.morse@arm.com>
+Cc: Robert Richter <rric@kernel.org>
+Cc: Rob Herring <robh+dt@kernel.org>
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc: devicetree@vger.kernel.org
+Cc: linux-arm-kernel@lists.infradead.org
+Cc: linux-edac@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+
+Serge Semin (20):
+  EDAC/synopsys: Fix native uMCTL2 IRQs handling procedure
+  EDAC/synopsys: Fix generic device type detection procedure
+  EDAC/synopsys: Fix mci->scrub_cap field setting
+  EDAC/synopsys: Drop erroneous ADDRMAP4.addrmap_col_b10 parse
+  EDAC/synopsys: Fix reading errors count before ECC status
+  EDAC/synopsys: Use platform device devm ioremap method
+  EDAC/synopsys: Drop internal CE and UE counters
+  EDAC/synopsys: Drop local to_mci macro implementation
+  EDAC/synopsys: Drop struct ecc_error_info.blknr field
+  EDAC/synopsys: Shorten out struct ecc_error_info.bankgrpnr field name
+  EDAC/synopsys: Drop redundant info from error message
+  EDAC/mc: Replace spaces with tabs in memtype flags definition
+  EDAC/mc: Drop duplicated dimm->nr_pages debug printout
+  EDAC/mc: Init DIMM labels in MC registration method
+  EDAC/mc: Add MC unique index allocation procedure
+  dt-bindings: memory: snps: Detach Zynq DDRC controller support
+  EDAC/synopsys: Detach Zynq DDRC controller support
+  EDAC/synopsys: Drop unused platform-specific setup API
+  EDAC/synopsys: Unify the driver entities naming
+  EDAC/synopsys: Convert to using BIT/GENMASK/FIELD_x macros
+
+ .../snps,dw-umctl2-ddrc.yaml                  |  51 +
+ .../memory-controllers/synopsys,ddrc-ecc.yaml |  76 --
+ .../xlnx,zynq-ddrc-a05.yaml                   |  38 +
+ MAINTAINERS                                   |   3 +
+ drivers/edac/Kconfig                          |   9 +-
+ drivers/edac/Makefile                         |   1 +
+ drivers/edac/edac_mc.c                        | 136 ++-
+ drivers/edac/edac_mc.h                        |   4 +
+ drivers/edac/synopsys_edac.c                  | 902 ++++++------------
+ drivers/edac/zynq_edac.c                      | 504 ++++++++++
+ include/linux/edac.h                          |  30 +-
+ 11 files changed, 1037 insertions(+), 717 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/memory-controllers/snps,dw-umctl2-ddrc.yaml
+ delete mode 100644 Documentation/devicetree/bindings/memory-controllers/synopsys,ddrc-ecc.yaml
+ create mode 100644 Documentation/devicetree/bindings/memory-controllers/xlnx,zynq-ddrc-a05.yaml
+ create mode 100644 drivers/edac/zynq_edac.c
+
 -- 
-2.25.1
+2.35.1
 
