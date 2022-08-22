@@ -2,29 +2,29 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B9AE59C802
-	for <lists+linux-edac@lfdr.de>; Mon, 22 Aug 2022 21:08:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A419C59C7E3
+	for <lists+linux-edac@lfdr.de>; Mon, 22 Aug 2022 21:08:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238106AbiHVTIG (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Mon, 22 Aug 2022 15:08:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59994 "EHLO
+        id S238060AbiHVTH6 (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Mon, 22 Aug 2022 15:07:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238081AbiHVTIC (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Mon, 22 Aug 2022 15:08:02 -0400
+        with ESMTP id S238040AbiHVTH4 (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Mon, 22 Aug 2022 15:07:56 -0400
 Received: from mail.baikalelectronics.com (mail.baikalelectronics.com [87.245.175.230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0096A13F92;
-        Mon, 22 Aug 2022 12:07:51 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DBC8315725;
+        Mon, 22 Aug 2022 12:07:55 -0700 (PDT)
 Received: from mail (mail.baikal.int [192.168.51.25])
-        by mail.baikalelectronics.com (Postfix) with ESMTP id 42807DA9;
+        by mail.baikalelectronics.com (Postfix) with ESMTP id D8FD7DAA;
         Mon, 22 Aug 2022 22:10:51 +0300 (MSK)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.baikalelectronics.com 42807DA9
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.baikalelectronics.com D8FD7DAA
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=baikalelectronics.ru; s=mail; t=1661195451;
-        bh=rPnXGa4E/xeGmWWRdl2JzvAT9t1e1g5ZyBEEG7gtGKA=;
+        bh=KqgX1I5itcj9ylgq+A5rGVh0GU6++N5XRIwVSDAC6Vg=;
         h=From:To:CC:Subject:Date:In-Reply-To:References:From;
-        b=dlMppze5hfaT9XcEGB4Rhdb2khUYJQL36GunK5EFQfifRJ98ZHnxlJkSUwqOo/r4E
-         Sagaz/FI0ztBm/3pgycGqLEe2fuK8LjR/uerGHUKFqvPHhg9xaQpVnlBW1huDvsIOH
-         hr6M/vB5D7Qx6KVRH/Wx6+OCrGdzN0Yu0D/nPXz8=
+        b=eE5l7IPOUkPAwu16KELxO+Bx7KBGWUKJd/DOdvJqc/LtEm21BBt4K0GK65u2C0XSt
+         oQJRoBDM7PkbZqlOsXgw+DjhkSlnst7jqaCUfOIg8YPOpt2G0JfCER87/5BYCl+lX8
+         Quv3TDoxfXAuyWZxQaDqoI+21OF4kMpnWVN3d56c=
 Received: from localhost (192.168.168.10) by mail (192.168.51.25) with
  Microsoft SMTP Server (TLS) id 15.0.1395.4; Mon, 22 Aug 2022 22:07:37 +0300
 From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
@@ -49,9 +49,9 @@ CC:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
         <devicetree@vger.kernel.org>,
         <linux-arm-kernel@lists.infradead.org>,
         <linux-edac@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH 07/20] EDAC/synopsys: Drop internal CE and UE counters
-Date:   Mon, 22 Aug 2022 22:07:17 +0300
-Message-ID: <20220822190730.27277-8-Sergey.Semin@baikalelectronics.ru>
+Subject: [PATCH 08/20] EDAC/synopsys: Drop local to_mci macro implementation
+Date:   Mon, 22 Aug 2022 22:07:18 +0300
+Message-ID: <20220822190730.27277-9-Sergey.Semin@baikalelectronics.ru>
 In-Reply-To: <20220822190730.27277-1-Sergey.Semin@baikalelectronics.ru>
 References: <20220822190730.27277-1-Sergey.Semin@baikalelectronics.ru>
 MIME-Version: 1.0
@@ -68,51 +68,31 @@ Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-First of all they aren't exposed anyhow by the driver. Secondly the EDAC
-core already tracks the total amount of correctable and uncorrectable
-errors (see mem_ctl_info.{ce_mc,ue_mc} fields usage). Let's drop the
-useless internal counters then for good.
+The to_mci macro was added in commit 1a81361f75d8 ("EDAC, synopsys: Add
+Error Injection support for ZynqMP DDR controller") together with the
+errors injection debug feature. It turns our the macro with the same
+semantic and name has already been defined in the edac_mc.h (former
+edac_core.h) header file. No idea why it was needed to have a local
+version with the same semantic, but now there is no point in that. Drop
+the local implementation for good then.
 
 Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
 ---
- drivers/edac/synopsys_edac.c | 8 --------
- 1 file changed, 8 deletions(-)
+ drivers/edac/synopsys_edac.c | 1 -
+ 1 file changed, 1 deletion(-)
 
 diff --git a/drivers/edac/synopsys_edac.c b/drivers/edac/synopsys_edac.c
-index f38c326f2cf5..956de6fb3125 100644
+index 956de6fb3125..c51a25a28835 100644
 --- a/drivers/edac/synopsys_edac.c
 +++ b/drivers/edac/synopsys_edac.c
-@@ -308,8 +308,6 @@ struct synps_ecc_status {
-  * @message:		Buffer for framing the event specific info.
-  * @stat:		ECC status information.
-  * @p_data:		Platform data.
-- * @ce_cnt:		Correctable Error count.
-- * @ue_cnt:		Uncorrectable Error count.
-  * @poison_addr:	Data poison address.
-  * @row_shift:		Bit shifts for row bit.
-  * @col_shift:		Bit shifts for column bit.
-@@ -323,8 +321,6 @@ struct synps_edac_priv {
- 	char message[SYNPS_EDAC_MSG_SIZE];
- 	struct synps_ecc_status stat;
- 	const struct synps_platform_data *p_data;
--	u32 ce_cnt;
--	u32 ue_cnt;
+@@ -948,7 +948,6 @@ static const struct of_device_id synps_edac_match[] = {
+ MODULE_DEVICE_TABLE(of, synps_edac_match);
+ 
  #ifdef CONFIG_EDAC_DEBUG
- 	ulong poison_addr;
- 	u32 row_shift[18];
-@@ -594,12 +590,8 @@ static irqreturn_t intr_handler(int irq, void *dev_id)
- 	if (status)
- 		return IRQ_NONE;
+-#define to_mci(k) container_of(k, struct mem_ctl_info, dev)
  
--	priv->ce_cnt += priv->stat.ce_cnt;
--	priv->ue_cnt += priv->stat.ue_cnt;
- 	handle_error(mci, &priv->stat);
- 
--	edac_dbg(3, "Total error count CE %d UE %d\n",
--		 priv->ce_cnt, priv->ue_cnt);
- 
- 	if (priv->p_data->quirks & SYNPS_ZYNQMP_IRQ_REGS)
- 		writel(regval, priv->baseaddr + DDR_QOS_IRQ_STAT_OFST);
+ /**
+  * ddr_poison_setup -	Update poison registers.
 -- 
 2.35.1
 
