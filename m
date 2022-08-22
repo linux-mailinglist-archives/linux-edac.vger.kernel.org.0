@@ -2,31 +2,31 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF97059C7EB
-	for <lists+linux-edac@lfdr.de>; Mon, 22 Aug 2022 21:08:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8935559C805
+	for <lists+linux-edac@lfdr.de>; Mon, 22 Aug 2022 21:08:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238094AbiHVTIE (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Mon, 22 Aug 2022 15:08:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60026 "EHLO
+        id S237968AbiHVTHw (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Mon, 22 Aug 2022 15:07:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238061AbiHVTH6 (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Mon, 22 Aug 2022 15:07:58 -0400
+        with ESMTP id S237958AbiHVTHu (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Mon, 22 Aug 2022 15:07:50 -0400
 Received: from mail.baikalelectronics.com (mail.baikalelectronics.com [87.245.175.230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 750E9140DA;
-        Mon, 22 Aug 2022 12:07:47 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CDAE715725;
+        Mon, 22 Aug 2022 12:07:49 -0700 (PDT)
 Received: from mail (mail.baikal.int [192.168.51.25])
-        by mail.baikalelectronics.com (Postfix) with ESMTP id D11C3DA7;
-        Mon, 22 Aug 2022 22:10:49 +0300 (MSK)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.baikalelectronics.com D11C3DA7
+        by mail.baikalelectronics.com (Postfix) with ESMTP id 899D9DA8;
+        Mon, 22 Aug 2022 22:10:50 +0300 (MSK)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.baikalelectronics.com 899D9DA8
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baikalelectronics.ru; s=mail; t=1661195449;
-        bh=lHezRdyu8CznbTal0UlOdDCCHEtJN3WwOIX4vnqwe4w=;
+        d=baikalelectronics.ru; s=mail; t=1661195450;
+        bh=q91DyqQ/SWqxDFLeUL7pohnhto4DoB586/Hk37Kf6kQ=;
         h=From:To:CC:Subject:Date:In-Reply-To:References:From;
-        b=dw8fcb6Wqyum8u/X0R5V17/ks6znp9nOdFJTRGSryN8YSJJ9Vbc72Qvjczli+Zblz
-         f4XiBSFurKs2Jjw+gLrkKc9gA2tL+FvQygJL0sEwKTumWjdFqiKKGnB0GYDi9H3vV4
-         XEOrG+iiEPRyIpkcshK8wDCgpzt7Ec+UrrGaQjnc=
+        b=S1umW41wIp1rQsBrGlOtfMMhHqGNLJQtB3CRTn1QaaoAGJopLXwb234+76+BhN6wq
+         jDafWdPn5w7jMdJdtB6ZR9IOyQMNYRuG+fIuHc4eOLwtB50Ia5USFaxUZvo2MK4LO8
+         MMZnwjgkXN0Z+HLu9AeGsdYnx20rsUzPY7mC8hZE=
 Received: from localhost (192.168.168.10) by mail (192.168.51.25) with
- Microsoft SMTP Server (TLS) id 15.0.1395.4; Mon, 22 Aug 2022 22:07:35 +0300
+ Microsoft SMTP Server (TLS) id 15.0.1395.4; Mon, 22 Aug 2022 22:07:36 +0300
 From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
 To:     Rob Herring <robh@kernel.org>,
         Michal Simek <michal.simek@xilinx.com>,
@@ -34,8 +34,7 @@ To:     Rob Herring <robh@kernel.org>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         Tony Luck <tony.luck@intel.com>,
         James Morse <james.morse@arm.com>,
-        Robert Richter <rric@kernel.org>,
-        Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
+        Robert Richter <rric@kernel.org>
 CC:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
         Serge Semin <fancer.lancer@gmail.com>,
         Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
@@ -49,11 +48,10 @@ CC:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         <devicetree@vger.kernel.org>,
         <linux-arm-kernel@lists.infradead.org>,
-        <linux-edac@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Borislav Petkov <bp@suse.de>
-Subject: [PATCH 05/20] EDAC/synopsys: Fix reading errors count before ECC status
-Date:   Mon, 22 Aug 2022 22:07:15 +0300
-Message-ID: <20220822190730.27277-6-Sergey.Semin@baikalelectronics.ru>
+        <linux-edac@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH 06/20] EDAC/synopsys: Use platform device devm ioremap method
+Date:   Mon, 22 Aug 2022 22:07:16 +0300
+Message-ID: <20220822190730.27277-7-Sergey.Semin@baikalelectronics.ru>
 In-Reply-To: <20220822190730.27277-1-Sergey.Semin@baikalelectronics.ru>
 References: <20220822190730.27277-1-Sergey.Semin@baikalelectronics.ru>
 MIME-Version: 1.0
@@ -70,50 +68,33 @@ Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-Aside with fixing the errors count CSR usage the commit e2932d1f6f05
-("EDAC/synopsys: Read the error count from the correct register") all of
-the sudden has also changed the order of the errors status check
-procedure. So now the errors handler method first reads the number of CE
-and UE and only then makes sure that any of these errors have actually
-happened. It doesn't make much sense. Let's fix that by getting back the
-procedures order: first check the ECC status, then read the number of
-errors.
+DW DDRs CSRs resource descriptor is used by the devm_ioremap_resource()
+function invocation only in the driver probe method. Thus we can freely
+convert the platform_get_resource() and devm_ioremap_resource() couple to
+just a single devm_platform_ioremap_resource() method call.
 
-Fixes: e2932d1f6f05 ("EDAC/synopsys: Read the error count from the correct register")
 Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
 ---
- drivers/edac/synopsys_edac.c | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+ drivers/edac/synopsys_edac.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
 diff --git a/drivers/edac/synopsys_edac.c b/drivers/edac/synopsys_edac.c
-index 873dbc684fe6..14653b799901 100644
+index 14653b799901..f38c326f2cf5 100644
 --- a/drivers/edac/synopsys_edac.c
 +++ b/drivers/edac/synopsys_edac.c
-@@ -422,18 +422,18 @@ static int zynqmp_get_error_info(struct synps_edac_priv *priv)
- 	base = priv->baseaddr;
- 	p = &priv->stat;
+@@ -1336,11 +1336,9 @@ static int mc_probe(struct platform_device *pdev)
+ 	struct synps_edac_priv *priv;
+ 	struct mem_ctl_info *mci;
+ 	void __iomem *baseaddr;
+-	struct resource *res;
+ 	int rc;
  
--	regval = readl(base + ECC_ERRCNT_OFST);
--	p->ce_cnt = regval & ECC_ERRCNT_CECNT_MASK;
--	p->ue_cnt = (regval & ECC_ERRCNT_UECNT_MASK) >> ECC_ERRCNT_UECNT_SHIFT;
--	if (!p->ce_cnt)
--		goto ue_err;
--
- 	regval = readl(base + ECC_STAT_OFST);
- 	if (!regval)
- 		return 1;
+-	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+-	baseaddr = devm_ioremap_resource(&pdev->dev, res);
++	baseaddr = devm_platform_ioremap_resource(pdev, 0);
+ 	if (IS_ERR(baseaddr))
+ 		return PTR_ERR(baseaddr);
  
- 	p->ceinfo.bitpos = (regval & ECC_STAT_BITNUM_MASK);
- 
-+	regval = readl(base + ECC_ERRCNT_OFST);
-+	p->ce_cnt = regval & ECC_ERRCNT_CECNT_MASK;
-+	p->ue_cnt = (regval & ECC_ERRCNT_UECNT_MASK) >> ECC_ERRCNT_UECNT_SHIFT;
-+	if (!p->ce_cnt)
-+		goto ue_err;
-+
- 	regval = readl(base + ECC_CEADDR0_OFST);
- 	p->ceinfo.row = (regval & ECC_CEADDR0_RW_MASK);
- 	regval = readl(base + ECC_CEADDR1_OFST);
 -- 
 2.35.1
 
