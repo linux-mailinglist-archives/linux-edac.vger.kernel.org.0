@@ -2,322 +2,223 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EA8D5A005C
-	for <lists+linux-edac@lfdr.de>; Wed, 24 Aug 2022 19:27:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 473695A045F
+	for <lists+linux-edac@lfdr.de>; Thu, 25 Aug 2022 01:05:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240120AbiHXR1b (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Wed, 24 Aug 2022 13:27:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35352 "EHLO
+        id S229787AbiHXXFX (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Wed, 24 Aug 2022 19:05:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240121AbiHXR1a (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Wed, 24 Aug 2022 13:27:30 -0400
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F35197CA8B;
-        Wed, 24 Aug 2022 10:27:28 -0700 (PDT)
-Received: by mail-lf1-x131.google.com with SMTP id bt10so11972082lfb.1;
-        Wed, 24 Aug 2022 10:27:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=NjHy2o/fmB9DWprX09I0JSv6Fo77g+SVAQzwM2LyQ1s=;
-        b=i2hm69Zjvabebhj2pgzGV5LLIBxmREC02IKkyBWPCdAL0+T9HnTc0xijsUdUCbtp05
-         +XJFx2NiDzqpChpGH+D2qJ1xvHvIiFZaZbv0bif1MHdJHNF+kAxTJ6SwNOxHHIhcZr1r
-         P9vR9idYU+QL2Mr+gXF8eWGHTpNZus+PSFejVHv8x4LQSPKS79xwRncrP8NzQaTJjGEQ
-         A35/hPmDwwbbGg5T0DQURUAtMHF1BcpdFkIN/6Y0y2Hg39/P+BWS44shu/p3hzyY9rVA
-         JB1VRqoahR7f3252ykF15bMf8CW18lCnJP+l+Mz5JiWfOknR5G0VUv5fPoqrR7ZEEWyU
-         frWA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=NjHy2o/fmB9DWprX09I0JSv6Fo77g+SVAQzwM2LyQ1s=;
-        b=EEaJyhoYbfC3X2qAWd4Fi3NzLFUbd0oNoXyJloBlE6H+ql++viy4QKfRkXSD10YsJv
-         sLLOX5MpfdiXQkj2BPDq84v+XwwFv6v6nJxhfqHozRl4dgZjplPi4kvNeT9GY77InU6w
-         EHt9O16wdhYRAq0RjZQqak3UPR+MC227Zv2z1S2IjsMTdbkIxcu3xVe8NCpgYwYe6dhh
-         Duys+/mY5U4jUKeJHY8i1bnhMmAwc76Kailm98Jl7Cr+yhWu4WME6KHp/1CPRCeRKKTC
-         8PtQodLaL6dtqnW7rly2zudpnGK77MEBmDUfRlZSjwKijPFMie7g5nQzucK50rjQvj5R
-         NdBg==
-X-Gm-Message-State: ACgBeo25Xqwxe2agmFjFHzBt6ghPCSr2jSE1i6h8BJr4ZEjgbyhQkGkD
-        T5g4PVN2gmni0VAH89ovZGg=
-X-Google-Smtp-Source: AA6agR4DnbBzrlOOgaZWCVmMZ9PZai5HHLlQfDo6tn0Q2s5gEjc8K2piZQ/yZEvgNggo1olyuDwmqw==
-X-Received: by 2002:a05:6512:234a:b0:492:d80a:e570 with SMTP id p10-20020a056512234a00b00492d80ae570mr2697lfu.652.1661362047127;
-        Wed, 24 Aug 2022 10:27:27 -0700 (PDT)
-Received: from mobilestation ([95.79.140.178])
-        by smtp.gmail.com with ESMTPSA id i15-20020a2e540f000000b00261b9df2ca2sm13051ljb.51.2022.08.24.10.27.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 24 Aug 2022 10:27:26 -0700 (PDT)
-Date:   Wed, 24 Aug 2022 20:27:24 +0300
-From:   Serge Semin <fancer.lancer@gmail.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Rob Herring <robh@kernel.org>,
-        Michal Simek <michal.simek@xilinx.com>,
+        with ESMTP id S229497AbiHXXFV (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Wed, 24 Aug 2022 19:05:21 -0400
+Received: from mx0b-002e3701.pphosted.com (mx0b-002e3701.pphosted.com [148.163.143.35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B58274DC2;
+        Wed, 24 Aug 2022 16:05:17 -0700 (PDT)
+Received: from pps.filterd (m0148664.ppops.net [127.0.0.1])
+        by mx0b-002e3701.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27ON2wtF008929;
+        Wed, 24 Aug 2022 23:04:35 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=from : to : cc : subject
+ : date : message-id : references : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=pps0720;
+ bh=br185hFeo3GN9NsFW6byVcrCudUkHKTKn4ncsZLgEw0=;
+ b=H/mCJamO5xWLRtuFRgP67z4T9drcwuche8K5xZJCGqE4eUFx1ZDPqRB3/1NTKy6uqRTP
+ dE/dPaP7KTAtAKZ6MVECPSSeXHayGdakyQZg/PJ5yX2DE8gHQKsmP/DIu5mCJEs1vu4j
+ 7J5MF77rY/dUGZXQTZsxnhznChHGTasBXvpkUtg8Qa1K7pfj2r4pWHEHFXW1sUnqENa5
+ 5cpsCanzQayEUs9Uh/z50Wpz1aEASWkGsKGFI16BSIHpGTxfLNsxyvSXNdn0fpJK1gPM
+ X7dKIBii/NBdRuIYYxMlWykmC/AYRecaeSKA67Pn4ZM9123mJJla+lb49oRxFfkGcmdc cA== 
+Received: from p1lg14878.it.hpe.com (p1lg14878.it.hpe.com [16.230.97.204])
+        by mx0b-002e3701.pphosted.com (PPS) with ESMTPS id 3j5waeg0ea-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 24 Aug 2022 23:04:35 +0000
+Received: from p1wg14926.americas.hpqcorp.net (unknown [10.119.18.115])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by p1lg14878.it.hpe.com (Postfix) with ESMTPS id 5FADAD2E5;
+        Wed, 24 Aug 2022 23:04:31 +0000 (UTC)
+Received: from p1wg14923.americas.hpqcorp.net (10.119.18.111) by
+ p1wg14926.americas.hpqcorp.net (10.119.18.115) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.15; Wed, 24 Aug 2022 11:04:31 -1200
+Received: from P1WG14918.americas.hpqcorp.net (16.230.19.121) by
+ p1wg14923.americas.hpqcorp.net (10.119.18.111) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.15
+ via Frontend Transport; Wed, 24 Aug 2022 11:04:31 -1200
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (192.58.206.38)
+ by edge.it.hpe.com (16.230.19.121) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.15; Wed, 24 Aug 2022 23:04:30 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=MUseZlhWcXjQ1f9Gv1QCzzq1GpFfwvYAtgJjqttZiMHPjYt61AjVQ9bS6D1QuHEyoWr6yMyvwExlE9rjnO2lJ67CRhrMdofz9K/652r2Pp7wrl+2Q+3QPt+ZptwboBc6BVgUYEPdhtIisZvvyjHXmksWSAaGehSF8wdg/IzA4yGZh08ANRZ7/fK52TDVcBUxypEVFA9GILUn2yBbZo1z8UJeRiqh3l4ela5UwmfUGR0JfVE0H7DJodXiuA/VVLsEwRMAKnZFNwgk8d3SKPjtIwEOwGnlK54xEkQhhDx9uo8D+9+efsmcIzSpzbEsFvYNUTpIuulU6dhnEizBYMBLNA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=br185hFeo3GN9NsFW6byVcrCudUkHKTKn4ncsZLgEw0=;
+ b=GNosRtalhko/E77Oo2nxZD8fQnK26mmZl9MjOa6/eHxarzyLIUMp2k7ThuNjMBMQbFszF4Mq3Fj+ZtUippyivmrarwVa5xnqsTZKkNlv6VryneQiLl25QFRcKGtA1rfO4yFtlsU22hJrNj0K1UoQSaLgpAoChPQkiXGT8bcvMu8jzrwPkyWjhI7mDbQImGsKMmKBtLDsnKIL02ycLC3yhUU3wOdmyJiIpEuL3/d3H40dwc55OpyFAUhjhkHGEY7ndyuPx9U0L3y+D7k6WXOndDjMa1mdVSzS0Z4gpZCYLPaASXPoWRK3ESivXMXj3WkqSdxBhjya5Bzuvs8XC/dBFg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=hpe.com; dmarc=pass action=none header.from=hpe.com; dkim=pass
+ header.d=hpe.com; arc=none
+Received: from DM4PR84MB1853.NAMPRD84.PROD.OUTLOOK.COM (2603:10b6:8:4c::19) by
+ SJ0PR84MB1799.NAMPRD84.PROD.OUTLOOK.COM (2603:10b6:a03:435::9) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5546.21; Wed, 24 Aug 2022 23:04:28 +0000
+Received: from DM4PR84MB1853.NAMPRD84.PROD.OUTLOOK.COM
+ ([fe80::2033:298b:4062:29e6]) by DM4PR84MB1853.NAMPRD84.PROD.OUTLOOK.COM
+ ([fe80::2033:298b:4062:29e6%5]) with mapi id 15.20.5546.016; Wed, 24 Aug 2022
+ 23:04:28 +0000
+From:   "Kani, Toshi" <toshi.kani@hpe.com>
+To:     Jia He <justin.he@arm.com>, Len Brown <lenb@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Tony Luck <tony.luck@intel.com>,
         Borislav Petkov <bp@alien8.de>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Tony Luck <tony.luck@intel.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Manish Narani <manish.narani@xilinx.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Michail Ivanov <Michail.Ivanov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        Punnaiah Choudary Kalluri 
-        <punnaiah.choudary.kalluri@xilinx.com>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        James Morse <james.morse@arm.com>,
         Robert Richter <rric@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 16/20] dt-bindings: memory: snps: Detach Zynq DDRC
- controller support
-Message-ID: <20220824172724.ny2xpryn76h6ftv6@mobilestation>
-References: <20220822190730.27277-1-Sergey.Semin@baikalelectronics.ru>
- <20220822190730.27277-17-Sergey.Semin@baikalelectronics.ru>
- <a5a15749-1047-74ea-831e-54d27a6d6cdf@linaro.org>
- <20220823083243.aovlgu22j7uv73qv@mobilestation>
- <166c0198-17c4-3b19-77fe-632d65f17cb0@linaro.org>
- <20220823114516.4mcufkbmzy5gjdcr@mobilestation>
- <6661dcc1-cc93-efbb-b248-0d93f681a1bf@linaro.org>
+        Robert Moore <robert.moore@intel.com>,
+        Qiuxu Zhuo <qiuxu.zhuo@intel.com>,
+        Yazen Ghannam <yazen.ghannam@amd.com>,
+        "Jonathan Corbet" <corbet@lwn.net>,
+        Jan Luebbe <jlu@pengutronix.de>,
+        Khuong Dinh <khuong@os.amperecomputing.com>
+CC:     Ard Biesheuvel <ardb@kernel.org>,
+        "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
+        "devel@acpica.org" <devel@acpica.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Shuai Xue <xueshuai@linux.alibaba.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        "linux-efi@vger.kernel.org" <linux-efi@vger.kernel.org>,
+        "nd@arm.com" <nd@arm.com>, "Paul E. McKenney" <paulmck@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "Neeraj Upadhyay" <quic_neeraju@quicinc.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>
+Subject: RE: [RESEND PATCH v3 5/9] EDAC: Don't load chipset-specific edac
+ drivers when ghes_edac is preferred
+Thread-Topic: [RESEND PATCH v3 5/9] EDAC: Don't load chipset-specific edac
+ drivers when ghes_edac is preferred
+Thread-Index: AQHYtj3CtK4qzp4YK06O7QvReAOI3K2+qefQ
+Date:   Wed, 24 Aug 2022 23:04:28 +0000
+Message-ID: <DM4PR84MB1853A76B1374A4BEAD8A1E3982739@DM4PR84MB1853.NAMPRD84.PROD.OUTLOOK.COM>
+References: <20220822154048.188253-1-justin.he@arm.com>
+ <20220822154048.188253-6-justin.he@arm.com>
+In-Reply-To: <20220822154048.188253-6-justin.he@arm.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 28c7345c-e17a-483b-13c6-08da8624ff3b
+x-ms-traffictypediagnostic: SJ0PR84MB1799:EE_
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: zgYeOIuXRDaksJnWOwjKDJbLl67UW9MOJ+Z8qMRSLdtHECmW1fgW7mxckhAsLuOJ7RY8fgWhgXuKbsZOCjZkx2ORNdrVDDnr1lHmZtQ6IqXui+yRnoCoiXowP1fGixkUXuTdj9oqzy1PkQRFuT10DymKGfuSLPho4MtBo8caQ5gP5mfYOpK/tuj0140SK9B8r46BVrqswfFcjr4D4ljEPZ4hCufkgWFjiGHvBdKDbLLw6tEzOzIBvOIWYmwUM6UvZhQBNy+FmDNpU8GPbFG4MLWNkwS2wAqVjiuJYMnrEIh2LcERKZCph2Es2HZlE5wdt4Exj/KiVuWQ7+prbs0xQ4LFingwKOW/XrNfHMmFb9cV0xuf5rifWgIFFWMYioiKtQnoYY9RKfMVXJHZ1PpQFQMh6MWZE+A5gOUEzJsX84fgK+qg5FevjBhhDIpBBiKHxZL9jYYhySAFdwHXehlKnjPoJ3z+htSJKoFJlWPdrVhKTeVpSA8Q1326Xvw2LJS8CqWkQ9ciOzfGE2MZgDzyFG93mEiroS4NT77xIisNSsljvUdPybPlb/F/8S77OF4VIZ7Swiv5JVlW5PojsPxfC47cDrJ5FMpF7nKEV+gWrWjrhxhew4LjqFEf5Zd8tQ8a4ML3/cDQFDeQd/QIyif5daCLbQSrPXVR8YKGm9t6dQlnCKOPurDpE2hSmEuOvIIv4lCViBX/RN2g+cILDm9m59nL65oFXlI/M4b+9RB3gUsINT7KdRfesqlOEBJg5sGmetjrwhmxeYqA9W/rN5T2Dg==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR84MB1853.NAMPRD84.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230016)(346002)(396003)(39860400002)(136003)(376002)(366004)(110136005)(38100700002)(122000001)(316002)(186003)(54906003)(2906002)(7416002)(66446008)(71200400001)(4326008)(478600001)(38070700005)(64756008)(7406005)(52536014)(66476007)(8936002)(53546011)(86362001)(5660300002)(6506007)(66556008)(9686003)(66946007)(55016003)(8676002)(7696005)(82960400001)(76116006)(26005)(921005)(41300700001)(33656002);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?XzdB2/TiutyGVpQMh9aCJQSNqSBzd7Tvry8cSt9HagvnhMYdpSvA8vC2lWfM?=
+ =?us-ascii?Q?ywgtphFMQmwhjN49OYgHdgCo+1bnp0UXJq5q8ohZjKYRzgjFfh8SHcC700Vs?=
+ =?us-ascii?Q?vJKzi9LiZhe6GZNnleaIe2ng+fLy+J3OyTLErdxs7JobA7+vXetefMoYZUYY?=
+ =?us-ascii?Q?k7QfIKdLBClS+j9VhF/iB6aY6LXC+Ug6B0jOb8wkgWYe8cAjDUR5O3ZRL9hL?=
+ =?us-ascii?Q?vUBGqHnV7sTAicGB1g1moxqTi/eN6teXidZ67usFaavbp8iqDCH8zeDhtwgk?=
+ =?us-ascii?Q?vGyF8WYKx8KIG4rWr6kFl8MizHglC+A1dMeAwpFSaXPynaxIFBGz0FN/1Gho?=
+ =?us-ascii?Q?bbh1GSO5xFSqumogbBcmf79bosm2kUH1LmR57+h8SNN0f/eOoS1cdQeMwXKE?=
+ =?us-ascii?Q?QYVYSYVcIxMZd2Edj5JBaWYV7tBWSkZ/XEJFXK7cy65LaZ0eiU/xbySFoC9X?=
+ =?us-ascii?Q?sCReXM2uyY/gY9S+h/SuuvtdOrGm6++/+FewMrKMbKl/0BJ6A0dTQuhrzQLS?=
+ =?us-ascii?Q?QwIuv+LjyEAxqFL2tDQCQGk1oymYA9ETKdHu4H+4lMucyZI+k3KMu2qXcTKM?=
+ =?us-ascii?Q?3qnhsEdfU1jEbQCAC0hbFGMzcltM2pjrQph1yP0ZCrSKsQ2aQR0uDszARrde?=
+ =?us-ascii?Q?/9Tne9TPi+oF53IVDPuLXeYtIYoPWLvgFNvwelVi9ktwYvb5SjG7arA7e3nZ?=
+ =?us-ascii?Q?GQ3bjCVmmuNau0CvsYJaHkNo76QAfe/pQgIwXnf/9HqsP5FWeieoRS8NMjhc?=
+ =?us-ascii?Q?1hEF3rjPIsjy7Wz9Bq6n/WaoHZoOgK7fH1W1OxsvF5IA470X5xeeFhXCihMO?=
+ =?us-ascii?Q?Byt0BjFu0H51fRh3zJt0ke2/oNPu0lMtfrDJa0xCujQbcBkVcMLcc+H3iCEk?=
+ =?us-ascii?Q?rCvh873GEpLbQWb7wugIwhKCwGklUwuuvrZJZiimRBmXXlN0qatE7b8g+2te?=
+ =?us-ascii?Q?PZ79QToATl+HNAazGfNSN3dB/Yz+ZsR6tzzzYOgIevyiPNn781usaP8TdPo0?=
+ =?us-ascii?Q?cOwXKPOKJ7KELMQW94U/d70/0jNyQn8p/hTC1opgMRMYGfLzofdDvwZ1YD1v?=
+ =?us-ascii?Q?Ue8tnM1qiNkW7MvDid4yHUp/b+SrnphV4WKJ2JUNlBZaPPAQAHHl0ROwrQT+?=
+ =?us-ascii?Q?q1rRbPlHzR/Jvm1PH1qscKkY+lS2PsWRNm1YrL8JNnBUXsodBKmHQgu2IkIv?=
+ =?us-ascii?Q?pkhC4EC68AsIsajuN1oBiOMckkovv3OkEY1p6VQ2JzyVUUlzj20l1+uZImMl?=
+ =?us-ascii?Q?MPkCyFod4cOKSsczh4KSrmwsWLktASY9U9DAViL3HV3ka/uaAouih1iJVaGD?=
+ =?us-ascii?Q?C7y7zY/FsOnFumgL1tITYQngnIhtg11jarkNTwsD8hNnERtgxHjHj/L4gAQK?=
+ =?us-ascii?Q?pIuscH0hmol/YOfRIX9BKQIs6s07BtwFyXOOWwZ+K8JzP1sUvunmnjrFZqX3?=
+ =?us-ascii?Q?1xXo19YTdMJn7VbIPF6f9zIyoDcGzS2Lem0V6aNcSsrXuviZc38G3WT6qk7G?=
+ =?us-ascii?Q?jvlW+YMmBzEkYNTPvQkdizkLbTdlWkjhbKFFR8gF0o7aCUehbu/G9UCQG4Ey?=
+ =?us-ascii?Q?ExMm8gN1wGYMVRx4wI0z4f4umYWR1z8Kz9cJE5X2?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <6661dcc1-cc93-efbb-b248-0d93f681a1bf@linaro.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DM4PR84MB1853.NAMPRD84.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: 28c7345c-e17a-483b-13c6-08da8624ff3b
+X-MS-Exchange-CrossTenant-originalarrivaltime: 24 Aug 2022 23:04:28.4884
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 105b2061-b669-4b31-92ac-24d304d195dc
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: nobfnNppoUfGEfyJpF5aXI89jRK7RxNU08+tpJONNuR/1TLXVSmX0fo5a4lcu2DrptjzU3HrmY5tXfjlPernNg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR84MB1799
+X-OriginatorOrg: hpe.com
+X-Proofpoint-ORIG-GUID: eQT8xe2RLhK0F726wRUu52YerPmMbcdt
+X-Proofpoint-GUID: eQT8xe2RLhK0F726wRUu52YerPmMbcdt
+X-HPE-SCL: -1
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-08-24_15,2022-08-22_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ clxscore=1011 adultscore=0 mlxlogscore=802 phishscore=0 suspectscore=0
+ priorityscore=1501 spamscore=0 impostorscore=0 malwarescore=0 mlxscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2207270000 definitions=main-2208240087
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Tue, Aug 23, 2022 at 03:03:51PM +0300, Krzysztof Kozlowski wrote:
-> On 23/08/2022 14:45, Serge Semin wrote:
-> > On Tue, Aug 23, 2022 at 11:44:16AM +0300, Krzysztof Kozlowski wrote:
-> >> On 23/08/2022 11:32, Serge Semin wrote:
-> >>> On Tue, Aug 23, 2022 at 11:17:23AM +0300, Krzysztof Kozlowski wrote:
-> >>>> On 22/08/2022 22:07, Serge Semin wrote:
-> >>>>> The Zynq A05 DDRC controller has nothing in common with DW uMCTL2 DDRC:
-> >>>>> the CSRs layout is absolutely different and it doesn't has IRQ unlike DW
-> >>>>> uMCTL2 DDR controller of all versions (v1.x, v2.x and v3.x). Thus there is
-> >>>>> no any reason to have these controllers described by the same bindings.
-> >>>>> Thus let's split them up.
-> >>>>>
-> >>>>> While at it rename the original Synopsys uMCTL2 DT-schema file to a more
-> >>>>> descriptive - snps,dw-umctl2-ddrc.yaml and add a more detailed title and
-> >>>>> description of the device bindings.
-> >>>>
-> >>>
-> > 
-> >>>> Filename should be based on compatible, so if renaming then
-> >>>> snps,ddrc-3.80a.yaml or snps,ddrc.yaml... which leads to original
-> >>>> filename anyway. Therefore nack for rename.
-> > 
-> > Original name was synopsys,ddrc-ecc.yaml which doesn't match any of
-> > the compatible strings. 
-> > 
-> >>>
-> >>> New requirement? I've submitted not a single patch to the DT-bindings
-> >>> sources and didn't get any comment from Rob about that. 
-> >>
-> > 
-> >> This is not a new requirement. It has been since some time and Rob gave
-> >> such reviews.
-> >>
-> >> https://lore.kernel.org/linux-devicetree/YlhkwvGdcf4ozTzG@robh.at.kernel.org/
-> > 
-> > April 2022. So it's new. It would be nice to have it defined somewhere
-> > in docs (writing-bindings.rst?). So does the compatibles order (this
-> > was surprising to me too).
-> > 
-> >>
-> >> For devices with multiple compatibles that's a bit tricky, but assuming
-> >> the bindings describe both original design from Synopsys and it's
-> >> implementations, then something closer to Synopsys makes sense.
-> > 
-> > The closest name would be snps,dw-umctl2-ddrc.yaml. snps,ddrc is too
-> > generic especially for the IP-cores vendor. It doesn't have a
-> > reference to the actual IP-core the device in subject is based on.
-> 
+On Monday, August 22, 2022 9:41 AM, Jia He wrote:
+> diff --git a/drivers/acpi/apei/ghes.c b/drivers/acpi/apei/ghes.c
+> index e17e0ee8f842..327386f3cf33 100644
+> --- a/drivers/acpi/apei/ghes.c
+> +++ b/drivers/acpi/apei/ghes.c
+> @@ -1537,16 +1537,25 @@ static struct acpi_platform_list plat_list[] =3D =
+{
+>  	{ } /* End */
+>  };
+>=20
+> -struct list_head *ghes_get_devices(void)
+> +bool ghes_edac_preferred(void)
+>  {
+>  	int idx =3D -1;
+>=20
+>  	if (IS_ENABLED(CONFIG_X86)) {
+>  		idx =3D acpi_match_platform_list(plat_list);
+>  		if (idx < 0 && !ghes_edac_force)
+> -			return NULL;
+> +			return false;
+>  	}
+>=20
+> +	return true;
+> +}
+> +EXPORT_SYMBOL_GPL(ghes_edac_preferred);
+> +
+> +struct list_head *ghes_get_devices(void)
+> +{
+> +	if (!ghes_edac_preferred())
+> +		return NULL;
+> +
+>  	return &ghes_devs;
+>  }
 
-> You are aware that in such case mistake is not in the file name but in
-> the compatible?
+ghes_get_devices() changing multiple times in the series is=20
+confusing to me.   Can you simply introduce ghes_get_devices()
+and ghes_preferred() in the right state in a patch?  Perhaps,
+patch #2, #5, #6 can collapse to introduce the two funcs?
 
-Let's compare, what is defined for Synopsys DW uMCTL2 DDRC in the
-DT-bindings now:
-compatible string: snps,ddrc-3.80a
-file name: synopsys,ddrc-ecc.yaml
+The rest of patch #5 adding the call to ghes_edac_preferred()
+into other edac drivers can remain as a separate patch.
 
-First of all they don't match at all. Secondly none of the names refer
-to the actual IP-core the DT-bindings file is defined for. So in this
-case the problem is in both:
-1. file name has undefined vendor-prefix. It's supposed to be "snps".
-2. file name has "ecc" suffix, which is a device property, but has
-nothing to do with the device actual name.
-2. actual device name is different. It's DW uMCTL2 DDRC. Just DDRC
-doesn't identify the IP-core in subject.
-
-> 
-> > 
-> >>
-> >>
-> >>> In addition
-> >>> There are DT bindings with names different from what is defined in the
-> >>> compatible name. Moreover there are tons of bindings with various
-> >>> compatible names. What name to choose then? Finally the current name
-> >>> is too generic to use for actual DW uMCTL2 DDRC controller.
-> >>
-> > 
-> >> There are thousands of bugs, inconsistencies, naming differences in
-> >> kernel. I don't find these as arguments to repeat the practice...so the
-> >> bindings file name should be based on the compatible.
-> > 
-> > Did I ask for an exception? I justified why the renaming was necessary. You
-> > said it goes against the practice of having the DT-schema named as the
-> > device compatible strings and just nacked. But above in this message you said
-> > 
-> >> "assuming the bindings describe both original design from Synopsys
-> >> and it's implementations, then something closer to Synopsys makes sense"
-> > 
-> > What I suggest makes more sense than some abstract Synopsys DDRC,
-> > which may refer to a Synopsys DDR controller other than the subject
-> > one. So I see two solutions here:
-> > 1. Adding a new generic compatible string like "snps,dw-umctl2-ddrc"
-> > and deprecate the "snps,ddrc-3.80a". 
-> 
-
-> This might be good idea, although unfortunately replacing compatibles
-> takes quite a lot of time if you do not want to break any out-of-tree
-> users (read: other users of bindings).
-
-Well, I didn't imply the replacement, but "deprecation". It means to
-just mark the "snps,ddrc-3.80a" compatible string as deprecated in the
-bindings file and define a new one "snps,dw-umctl2-ddrc" which wouldn't have
-the "deprecated: true" property set. It shall at least implicitly warn
-people not to add new DTS-files with the deprecated device name. As I
-see it eventually the dtbs-check tool will be updated to auto-detect
-such attempts and, for instance, print a warning.
-
-> 
-> 
-> > It gets to be even more justified
-> > seeing the Synopsys IP-core version has been exported in the device
-> > CSRs since IP-core v3.20a. So having the version attached to the
-> > compatible string was absolutely redundant.
-> 
-
-> The version might have sense in a way to differentiate from some older
-> versions, pre 3.20a.
-
-I've almost fully refactored the device driver, and can say for sure
-that the driver doesn't implement any Synopsys IP-core versions
-specifics:
-1. "xlnx,zynq-ddrc-a05" - has absolutely nothing in common with the
-Synopsys DW uMCTL2 DDR controller (see the patch log for details).
-That's why I've split the driver and DT-bindings up.
-2. "xlnx,zynqmp-ddrc-2.40a" - ZynqMP DDR controller based on the
-Synopsys uMCTL2 DDRC v2.40a. The device name is vendor-specific
-anyway. So seeing there is no any other ZynqMP DDR controller added,
-having IP-core version attached to the compatible string has been
-redundant in the first place. Anyway the driver implements only the
-ZynqMP-platform specifics irrespective to the IP-core version.
-3. "snps,ddrc-3.80a" - without my patchsets this represents a
-Synopsys DW uMCTL2 DDR controller synthesized with 64-bit DQ-bus and
-8xSDRAM words burst config. The later settings have nothing to do with
-the IP-core version, meanwhile what is really v3.x-specific isn't
-implemented in the driver.
-
-> The binding was probably incomplete anyway.
-
-At the current state it's incomplete indeed. After applying all my
-DT-related patches it will get to be almost complete, at least in the
-CSRs, IRQs, clocks and resets resources part. There is always room for
-the device-specific properties though, but judging by my experience caught
-from Rob' reviews such properties aren't welcome if we have the IP-core
-version detectable and if we can add the platform-specific compatible
-string. The later one could be used to define the platform-specific
-parameters right in the driver so the DT-bindings could be kept
-relatively simple.
-
-> 
-> 
-> > 2. Just deprecate the generic compatible string, the new compatible
-> > devices will be supposed to use a vendor-specific compatible strings,
-> > but still rename the DT-bindings file. This makes sense since the
-> > current generic name isn't quiet well structured. It' prefix-part is
-> > too generic and at the same time it refers to a device reversion for
-> > no much reason.
-> 
-
-> You mean disallow entirely "snps,ddrc-3.80a" and expect everyone to use
-> device/implementation specific compatible?
-
-Yes as an alternative to the solution 1. described above.
-
-> I guess this depends whether
-> this custom block can be used without vendor specific addons. For
-> several other DW blocks we expect to have the generic snsp fallback and
-> this generic fallback can be used alone in Linux (pcie-designware-plat.c
-> binds to it).
-
-Just recently I've got a very long discussion with Rob regarding the
-generic fallback compatible string. What he said "drop the generic
-compatible fallback string. It proved to be useless." So I had to drop
-the generic fallback compatible string from the nodes of my local DTS
-files where it was appropriate and update all my DT-related patches to
-disallow having vendor-specific and generic compatible strings specified
-together.
-
-Note what Rob said concerned the generic compatible "fallback" case,
-not the generic compatible string in general. It's ok to have a
-generic device name defined irrespective to the platform vendor.
-Moreover it's applicable in case of the DW uMCTL2 DDRC IP-core since
-first IP-core version is auto-detectable starting from v3.20a and
-second I managed to implement auto-detection solutions for almost
-all the DDR/ECC-specific parameters. So I am more inclined to the
-solution 1) suggested by me in the previous email message:
-- deprecate "snps,ddrc-3.80a" string.
-- add new generic "snps,dw-umctl2-ddrc" compatible string.
-- rename the DT-bindings file.
-
-> 
-> Here the Linux driver also binds to generic synopsys compatible, so I
-> would assume it has a meaning and use case on its own.
-
-Please see my messages above regarding the current Synopsys DW uMCTL2
-EDAC driver implementation.
-
-> 
-> > 
-> > What do you think?
-> > 
-> > * Note I've got it you'd prefer the renaming being performed in a
-> > separate patch.
-> 
-> The rename could be in the split patch as here, but then I assume the
-> rename part to be detected by git and be a pure rename. However:
-> 1. The git did not mark it as rename (you might need to use custom
-> arguments to -M/-B/-C),
-
-Of course git hasn't detected it as rename, because aside with renaming
-I've split the bindings up. Splitting these two updates up into two
-patches will give us what you said. So to speak I suggest the next
-updates for v2:
-PATCH X. Detach the Zynq A05 DDRC DT-bindings to a separate schema.
-PATCH X + 1. Rename the Synopsys DW uMCTL2 DDRC bindings file and add a more
-descriptive generic compatible string name.
-
-What do you think?
-
-> 2. There were also changes in the process (allOf:if:then).
-
-Right. But this is in another patchset. I'll address your notes in there.
-
--Sergey
-
-> 
-> 
-> Best regards,
-> Krzysztof
+Toshi
