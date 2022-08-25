@@ -2,77 +2,95 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B9FC5A083B
-	for <lists+linux-edac@lfdr.de>; Thu, 25 Aug 2022 06:57:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD1725A08A3
+	for <lists+linux-edac@lfdr.de>; Thu, 25 Aug 2022 08:06:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232721AbiHYE50 (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Thu, 25 Aug 2022 00:57:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55084 "EHLO
+        id S233372AbiHYGGs (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Thu, 25 Aug 2022 02:06:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229510AbiHYE5Z (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Thu, 25 Aug 2022 00:57:25 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F45B7B1E6;
-        Wed, 24 Aug 2022 21:57:24 -0700 (PDT)
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27P0Y7Bo029865;
-        Thu, 25 Aug 2022 04:57:11 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=i/tdL/OqBzpmz5GlV+AB4U3tkhmbOr0CzNojWm8w4F0=;
- b=kvXVU0EhKUb81Na/5m6sntJmEnhf89/Im/Z/WXYz+FioMs/YvFTmUO9ouDYyx6pydvD1
- gVelxLnc8opumfJANVwEQ20vBvPhkBBQ8+UIhVaj8r9KOo+FhZSECiA6zu34FmHuNNAz
- xK7upx2+jdK3SIEmr2fQllbidWpDOb1gjNt4I9QtJ/bzd3ZQumCZb0F4QRU273/Z2gmR
- DafSt+Fc3ffN97hBSOaiIzcBsjGgx8psPqhInamyhSPsA0C81btAwXF1InE5rAYLYzli
- ODCKV7SQKXuRIVvQW+RzxKLxQrgU8Zuxm/F7msOuG6zShfsewBQoHKXffzg95IkHfrAw gA== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3j52pkdj1j-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 25 Aug 2022 04:57:11 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 27P4vAAR031556
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 25 Aug 2022 04:57:10 GMT
-Received: from [10.50.48.231] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Wed, 24 Aug
- 2022 21:57:07 -0700
-Message-ID: <cb5f62ac-be4d-3f91-bd84-f8391633543c@quicinc.com>
-Date:   Thu, 25 Aug 2022 10:27:03 +0530
+        with ESMTP id S233080AbiHYGGr (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Thu, 25 Aug 2022 02:06:47 -0400
+Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D2199F741
+        for <linux-edac@vger.kernel.org>; Wed, 24 Aug 2022 23:06:46 -0700 (PDT)
+Received: by mail-lj1-x22e.google.com with SMTP id s8so946568ljj.5
+        for <linux-edac@vger.kernel.org>; Wed, 24 Aug 2022 23:06:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=olx/ATZA2V0ZzWbXgDfIkW1Q9WuG7O6K9lzCa3iTnVQ=;
+        b=K7hkRlQGQAhrZwDVl0snou7VU3K79DIdp+9pBegNC7RbACR4+X7EJs3kPP14UHgsyE
+         pxVZVQb1T42Zf6Bddds/dlIvsLtZmSWY7IjO8uY8tTAaoiEIXuO/ijNF6cC4EpIBQ0kb
+         3nwcDAjmh7ns4PtwRfudGTkQqhe4mFeUlSt4t5FoF1ONA5nb9NpSU1B+jmvwyAwN3Wig
+         3qBjzJRG0U4O/p3BR0XWhrcZhZL9P+XW50t44CW53Gmtw3RaRQbMJiXweTTpRcQMhpJr
+         6uXstAIrkvvtxIhT43ZHV0jnuP0ujcBthinSkEz94Nu0J2ocvdibhRNJRDLEQGKyIYYr
+         fuIQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=olx/ATZA2V0ZzWbXgDfIkW1Q9WuG7O6K9lzCa3iTnVQ=;
+        b=y8GR8yOeMECKEz52Ru1TcDg1e/B+XKTtm5XukhZkvEEiqd3/LL7gOhwuskgGZSJoK4
+         7xF3TdYhinyCuE+BWnjJBOqRL0ZFG23OWWNGve1cO6/G3msPb5SP6ff5QR4hvzu5AnfH
+         zWyVKir3OoRcAxSMy1oScGF8mZ/s0KOvoVMa7jOtdZZnRQot+rhwMSZRDXgK79pWq/AB
+         X2gyY5uopW5iF8sYb1d8WvV4ScUk+/AZcVVb6zqp5m8ed3x1iPkbq/7nt9t2uLet0jZh
+         Rw0RbJr9/Oj6Rbq3X98nLYt420PkLw7fhGtepr3DMwEepSE5CnX1wW5F42o/jtDfkeTT
+         Ob4A==
+X-Gm-Message-State: ACgBeo1XweVHyltAWJSECKFpzU63zw3g1nDzC5rY3AU4Wc78mVhwUP/k
+        Z7D5KC3e/d7LEhGW5MpX9JBh9Q==
+X-Google-Smtp-Source: AA6agR5QBRKXZanSA8gmZ93Z6gOnhbSvg9XlOxZ5KCEOkCJ1wttIow4xsE77cP3aGxYyw1o/Zm4siw==
+X-Received: by 2002:a05:651c:4d1:b0:261:c74b:ca6a with SMTP id e17-20020a05651c04d100b00261c74bca6amr609991lji.294.1661407604483;
+        Wed, 24 Aug 2022 23:06:44 -0700 (PDT)
+Received: from [192.168.0.71] (82.131.98.15.cable.starman.ee. [82.131.98.15])
+        by smtp.gmail.com with ESMTPSA id s16-20020a056512215000b0048b17852938sm312759lfr.162.2022.08.24.23.06.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 24 Aug 2022 23:06:43 -0700 (PDT)
+Message-ID: <a04f6b56-4bca-cc86-c51f-3a7c6c7ef02a@linaro.org>
+Date:   Thu, 25 Aug 2022 09:06:42 +0300
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [PATCH v3 3/5] EDAC/qcom: Get rid of hardcoded register offsets
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH 16/20] dt-bindings: memory: snps: Detach Zynq DDRC
+ controller support
 Content-Language: en-US
-To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        <bjorn.andersson@linaro.org>, <bp@alien8.de>, <mchehab@kernel.org>
-CC:     <james.morse@arm.com>, <rric@kernel.org>,
-        <linux-arm-msm@vger.kernel.org>, <linux-edac@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <quic_tsoni@quicinc.com>
-References: <20220825043859.30066-1-manivannan.sadhasivam@linaro.org>
- <20220825043859.30066-4-manivannan.sadhasivam@linaro.org>
-From:   Sai Prakash Ranjan <quic_saipraka@quicinc.com>
-In-Reply-To: <20220825043859.30066-4-manivannan.sadhasivam@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+To:     Serge Semin <fancer.lancer@gmail.com>
+Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Rob Herring <robh@kernel.org>,
+        Michal Simek <michal.simek@xilinx.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Tony Luck <tony.luck@intel.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Manish Narani <manish.narani@xilinx.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Michail Ivanov <Michail.Ivanov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Punnaiah Choudary Kalluri 
+        <punnaiah.choudary.kalluri@xilinx.com>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Robert Richter <rric@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220822190730.27277-1-Sergey.Semin@baikalelectronics.ru>
+ <20220822190730.27277-17-Sergey.Semin@baikalelectronics.ru>
+ <a5a15749-1047-74ea-831e-54d27a6d6cdf@linaro.org>
+ <20220823083243.aovlgu22j7uv73qv@mobilestation>
+ <166c0198-17c4-3b19-77fe-632d65f17cb0@linaro.org>
+ <20220823114516.4mcufkbmzy5gjdcr@mobilestation>
+ <6661dcc1-cc93-efbb-b248-0d93f681a1bf@linaro.org>
+ <20220824172724.ny2xpryn76h6ftv6@mobilestation>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220824172724.ny2xpryn76h6ftv6@mobilestation>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: _kcTQgLFr42VZoWxEwWvzcafmCQLkTqn
-X-Proofpoint-ORIG-GUID: _kcTQgLFr42VZoWxEwWvzcafmCQLkTqn
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-08-25_03,2022-08-22_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015
- lowpriorityscore=0 adultscore=0 priorityscore=1501 malwarescore=0
- bulkscore=0 phishscore=0 impostorscore=0 mlxlogscore=939 spamscore=0
- suspectscore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2207270000 definitions=main-2208250017
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -81,319 +99,63 @@ Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On 8/25/2022 10:08 AM, Manivannan Sadhasivam wrote:
-> The LLCC EDAC register offsets varies between each SoC. Hardcoding the
-> register offsets won't work and will often result in crash due to
-> accessing the wrong locations.
->
-> Hence, get the register offsets from the LLCC driver matching the
-> individual SoCs.
->
-> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-> ---
->   drivers/edac/qcom_edac.c           | 116 ++++++++++++++---------------
->   include/linux/soc/qcom/llcc-qcom.h |   6 --
->   2 files changed, 58 insertions(+), 64 deletions(-)
+On 24/08/2022 20:27, Serge Semin wrote:
 
-Reviewed-by: Sai Prakash Ranjan <quic_saipraka@quicinc.com>
+> 
+> Note what Rob said concerned the generic compatible "fallback" case,
+> not the generic compatible string in general. It's ok to have a
+> generic device name defined irrespective to the platform vendor.
+> Moreover it's applicable in case of the DW uMCTL2 DDRC IP-core since
+> first IP-core version is auto-detectable starting from v3.20a and
+> second I managed to implement auto-detection solutions for almost
+> all the DDR/ECC-specific parameters. So I am more inclined to the
+> solution 1) suggested by me in the previous email message:
+> - deprecate "snps,ddrc-3.80a" string.
+> - add new generic "snps,dw-umctl2-ddrc" compatible string.
+> - rename the DT-bindings file.
+
+Sounds ok.
+
+> 
+>>
+>> Here the Linux driver also binds to generic synopsys compatible, so I
+>> would assume it has a meaning and use case on its own.
+> 
+> Please see my messages above regarding the current Synopsys DW uMCTL2
+> EDAC driver implementation.
+> 
+>>
+>>>
+>>> What do you think?
+>>>
+>>> * Note I've got it you'd prefer the renaming being performed in a
+>>> separate patch.
+>>
+>> The rename could be in the split patch as here, but then I assume the
+>> rename part to be detected by git and be a pure rename. However:
+>> 1. The git did not mark it as rename (you might need to use custom
+>> arguments to -M/-B/-C),
+> 
+> Of course git hasn't detected it as rename, because aside with renaming
+> I've split the bindings up. Splitting these two updates up into two
+> patches will give us what you said. So to speak I suggest the next
+> updates for v2:
+> PATCH X. Detach the Zynq A05 DDRC DT-bindings to a separate schema.
+> PATCH X + 1. Rename the Synopsys DW uMCTL2 DDRC bindings file and add a more
+> descriptive generic compatible string name.
+> 
+> What do you think?
+
+Regardless of the split the rename can be and should be detected by Git.
+That's why we have these options. If it is not detected, you changed too
+much during rename, so it is not a rename anymore. Relatively small
+amount of changes would still be detected.
+
+> 
+>> 2. There were also changes in the process (allOf:if:then).
+> 
+> Right. But this is in another patchset. I'll address your notes in there.
 
 
-Thanks,
-Sai
-
-> diff --git a/drivers/edac/qcom_edac.c b/drivers/edac/qcom_edac.c
-> index 97a27e42dd61..04df70b7fea3 100644
-> --- a/drivers/edac/qcom_edac.c
-> +++ b/drivers/edac/qcom_edac.c
-> @@ -21,30 +21,9 @@
->   #define TRP_SYN_REG_CNT                 6
->   #define DRP_SYN_REG_CNT                 8
->   
-> -#define LLCC_COMMON_STATUS0             0x0003000c
->   #define LLCC_LB_CNT_MASK                GENMASK(31, 28)
->   #define LLCC_LB_CNT_SHIFT               28
->   
-> -/* Single & double bit syndrome register offsets */
-> -#define TRP_ECC_SB_ERR_SYN0             0x0002304c
-> -#define TRP_ECC_DB_ERR_SYN0             0x00020370
-> -#define DRP_ECC_SB_ERR_SYN0             0x0004204c
-> -#define DRP_ECC_DB_ERR_SYN0             0x00042070
-> -
-> -/* Error register offsets */
-> -#define TRP_ECC_ERROR_STATUS1           0x00020348
-> -#define TRP_ECC_ERROR_STATUS0           0x00020344
-> -#define DRP_ECC_ERROR_STATUS1           0x00042048
-> -#define DRP_ECC_ERROR_STATUS0           0x00042044
-> -
-> -/* TRP, DRP interrupt register offsets */
-> -#define DRP_INTERRUPT_STATUS            0x00041000
-> -#define TRP_INTERRUPT_0_STATUS          0x00020480
-> -#define DRP_INTERRUPT_CLEAR             0x00041008
-> -#define DRP_ECC_ERROR_CNTR_CLEAR        0x00040004
-> -#define TRP_INTERRUPT_0_CLEAR           0x00020484
-> -#define TRP_ECC_ERROR_CNTR_CLEAR        0x00020440
-> -
->   /* Mask and shift macros */
->   #define ECC_DB_ERR_COUNT_MASK           GENMASK(4, 0)
->   #define ECC_DB_ERR_WAYS_MASK            GENMASK(31, 16)
-> @@ -60,15 +39,6 @@
->   #define DRP_TRP_INT_CLEAR               GENMASK(1, 0)
->   #define DRP_TRP_CNT_CLEAR               GENMASK(1, 0)
->   
-> -/* Config registers offsets*/
-> -#define DRP_ECC_ERROR_CFG               0x00040000
-> -
-> -/* Tag RAM, Data RAM interrupt register offsets */
-> -#define CMN_INTERRUPT_0_ENABLE          0x0003001c
-> -#define CMN_INTERRUPT_2_ENABLE          0x0003003c
-> -#define TRP_INTERRUPT_0_ENABLE          0x00020488
-> -#define DRP_INTERRUPT_ENABLE            0x0004100c
-> -
->   #define SB_ERROR_THRESHOLD              0x1
->   #define SB_ERROR_THRESHOLD_SHIFT        24
->   #define SB_DB_TRP_INTERRUPT_ENABLE      0x3
-> @@ -86,9 +56,6 @@ enum {
->   static const struct llcc_edac_reg_data edac_reg_data[] = {
->   	[LLCC_DRAM_CE] = {
->   		.name = "DRAM Single-bit",
-> -		.synd_reg = DRP_ECC_SB_ERR_SYN0,
-> -		.count_status_reg = DRP_ECC_ERROR_STATUS1,
-> -		.ways_status_reg = DRP_ECC_ERROR_STATUS0,
->   		.reg_cnt = DRP_SYN_REG_CNT,
->   		.count_mask = ECC_SB_ERR_COUNT_MASK,
->   		.ways_mask = ECC_SB_ERR_WAYS_MASK,
-> @@ -96,9 +63,6 @@ static const struct llcc_edac_reg_data edac_reg_data[] = {
->   	},
->   	[LLCC_DRAM_UE] = {
->   		.name = "DRAM Double-bit",
-> -		.synd_reg = DRP_ECC_DB_ERR_SYN0,
-> -		.count_status_reg = DRP_ECC_ERROR_STATUS1,
-> -		.ways_status_reg = DRP_ECC_ERROR_STATUS0,
->   		.reg_cnt = DRP_SYN_REG_CNT,
->   		.count_mask = ECC_DB_ERR_COUNT_MASK,
->   		.ways_mask = ECC_DB_ERR_WAYS_MASK,
-> @@ -106,9 +70,6 @@ static const struct llcc_edac_reg_data edac_reg_data[] = {
->   	},
->   	[LLCC_TRAM_CE] = {
->   		.name = "TRAM Single-bit",
-> -		.synd_reg = TRP_ECC_SB_ERR_SYN0,
-> -		.count_status_reg = TRP_ECC_ERROR_STATUS1,
-> -		.ways_status_reg = TRP_ECC_ERROR_STATUS0,
->   		.reg_cnt = TRP_SYN_REG_CNT,
->   		.count_mask = ECC_SB_ERR_COUNT_MASK,
->   		.ways_mask = ECC_SB_ERR_WAYS_MASK,
-> @@ -116,9 +77,6 @@ static const struct llcc_edac_reg_data edac_reg_data[] = {
->   	},
->   	[LLCC_TRAM_UE] = {
->   		.name = "TRAM Double-bit",
-> -		.synd_reg = TRP_ECC_DB_ERR_SYN0,
-> -		.count_status_reg = TRP_ECC_ERROR_STATUS1,
-> -		.ways_status_reg = TRP_ECC_ERROR_STATUS0,
->   		.reg_cnt = TRP_SYN_REG_CNT,
->   		.count_mask = ECC_DB_ERR_COUNT_MASK,
->   		.ways_mask = ECC_DB_ERR_WAYS_MASK,
-> @@ -126,7 +84,7 @@ static const struct llcc_edac_reg_data edac_reg_data[] = {
->   	},
->   };
->   
-> -static int qcom_llcc_core_setup(struct regmap *llcc_bcast_regmap)
-> +static int qcom_llcc_core_setup(struct llcc_drv_data *drv, struct regmap *llcc_bcast_regmap)
->   {
->   	u32 sb_err_threshold;
->   	int ret;
-> @@ -135,31 +93,31 @@ static int qcom_llcc_core_setup(struct regmap *llcc_bcast_regmap)
->   	 * Configure interrupt enable registers such that Tag, Data RAM related
->   	 * interrupts are propagated to interrupt controller for servicing
->   	 */
-> -	ret = regmap_update_bits(llcc_bcast_regmap, CMN_INTERRUPT_2_ENABLE,
-> +	ret = regmap_update_bits(llcc_bcast_regmap, drv->edac_reg_offset->cmn_interrupt_2_enable,
->   				 TRP0_INTERRUPT_ENABLE,
->   				 TRP0_INTERRUPT_ENABLE);
->   	if (ret)
->   		return ret;
->   
-> -	ret = regmap_update_bits(llcc_bcast_regmap, TRP_INTERRUPT_0_ENABLE,
-> +	ret = regmap_update_bits(llcc_bcast_regmap, drv->edac_reg_offset->trp_interrupt_0_enable,
->   				 SB_DB_TRP_INTERRUPT_ENABLE,
->   				 SB_DB_TRP_INTERRUPT_ENABLE);
->   	if (ret)
->   		return ret;
->   
->   	sb_err_threshold = (SB_ERROR_THRESHOLD << SB_ERROR_THRESHOLD_SHIFT);
-> -	ret = regmap_write(llcc_bcast_regmap, DRP_ECC_ERROR_CFG,
-> +	ret = regmap_write(llcc_bcast_regmap, drv->edac_reg_offset->drp_ecc_error_cfg,
->   			   sb_err_threshold);
->   	if (ret)
->   		return ret;
->   
-> -	ret = regmap_update_bits(llcc_bcast_regmap, CMN_INTERRUPT_2_ENABLE,
-> +	ret = regmap_update_bits(llcc_bcast_regmap, drv->edac_reg_offset->cmn_interrupt_2_enable,
->   				 DRP0_INTERRUPT_ENABLE,
->   				 DRP0_INTERRUPT_ENABLE);
->   	if (ret)
->   		return ret;
->   
-> -	ret = regmap_write(llcc_bcast_regmap, DRP_INTERRUPT_ENABLE,
-> +	ret = regmap_write(llcc_bcast_regmap, drv->edac_reg_offset->drp_interrupt_enable,
->   			   SB_DB_DRP_INTERRUPT_ENABLE);
->   	return ret;
->   }
-> @@ -173,24 +131,28 @@ qcom_llcc_clear_error_status(int err_type, struct llcc_drv_data *drv)
->   	switch (err_type) {
->   	case LLCC_DRAM_CE:
->   	case LLCC_DRAM_UE:
-> -		ret = regmap_write(drv->bcast_regmap, DRP_INTERRUPT_CLEAR,
-> +		ret = regmap_write(drv->bcast_regmap,
-> +				   drv->edac_reg_offset->drp_interrupt_clear,
->   				   DRP_TRP_INT_CLEAR);
->   		if (ret)
->   			return ret;
->   
-> -		ret = regmap_write(drv->bcast_regmap, DRP_ECC_ERROR_CNTR_CLEAR,
-> +		ret = regmap_write(drv->bcast_regmap,
-> +				   drv->edac_reg_offset->drp_ecc_error_cntr_clear,
->   				   DRP_TRP_CNT_CLEAR);
->   		if (ret)
->   			return ret;
->   		break;
->   	case LLCC_TRAM_CE:
->   	case LLCC_TRAM_UE:
-> -		ret = regmap_write(drv->bcast_regmap, TRP_INTERRUPT_0_CLEAR,
-> +		ret = regmap_write(drv->bcast_regmap,
-> +				   drv->edac_reg_offset->trp_interrupt_0_clear,
->   				   DRP_TRP_INT_CLEAR);
->   		if (ret)
->   			return ret;
->   
-> -		ret = regmap_write(drv->bcast_regmap, TRP_ECC_ERROR_CNTR_CLEAR,
-> +		ret = regmap_write(drv->bcast_regmap,
-> +				   drv->edac_reg_offset->trp_ecc_error_cntr_clear,
->   				   DRP_TRP_CNT_CLEAR);
->   		if (ret)
->   			return ret;
-> @@ -203,16 +165,54 @@ qcom_llcc_clear_error_status(int err_type, struct llcc_drv_data *drv)
->   	return ret;
->   }
->   
-> +struct qcom_llcc_syn_regs {
-> +	u32 synd_reg;
-> +	u32 count_status_reg;
-> +	u32 ways_status_reg;
-> +};
-> +
-> +static void get_reg_offsets(struct llcc_drv_data *drv, int err_type,
-> +			    struct qcom_llcc_syn_regs *syn_regs)
-> +{
-> +	const struct llcc_edac_reg_offset *edac_reg_offset = drv->edac_reg_offset;
-> +
-> +	switch (err_type) {
-> +	case LLCC_DRAM_CE:
-> +		syn_regs->synd_reg = edac_reg_offset->drp_ecc_sb_err_syn0;
-> +		syn_regs->count_status_reg = edac_reg_offset->drp_ecc_error_status1;
-> +		syn_regs->ways_status_reg = edac_reg_offset->drp_ecc_error_status0;
-> +		break;
-> +	case LLCC_DRAM_UE:
-> +		syn_regs->synd_reg = edac_reg_offset->drp_ecc_db_err_syn0;
-> +		syn_regs->count_status_reg = edac_reg_offset->drp_ecc_error_status1;
-> +		syn_regs->ways_status_reg = edac_reg_offset->drp_ecc_error_status0;
-> +		break;
-> +	case LLCC_TRAM_CE:
-> +		syn_regs->synd_reg = edac_reg_offset->trp_ecc_sb_err_syn0;
-> +		syn_regs->count_status_reg = edac_reg_offset->trp_ecc_error_status1;
-> +		syn_regs->ways_status_reg = edac_reg_offset->trp_ecc_error_status0;
-> +		break;
-> +	case LLCC_TRAM_UE:
-> +		syn_regs->synd_reg = edac_reg_offset->trp_ecc_db_err_syn0;
-> +		syn_regs->count_status_reg = edac_reg_offset->trp_ecc_error_status1;
-> +		syn_regs->ways_status_reg = edac_reg_offset->trp_ecc_error_status0;
-> +		break;
-> +	}
-> +}
-> +
->   /* Dump Syndrome registers data for Tag RAM, Data RAM bit errors*/
->   static int
->   dump_syn_reg_values(struct llcc_drv_data *drv, u32 bank, int err_type)
->   {
->   	struct llcc_edac_reg_data reg_data = edac_reg_data[err_type];
-> +	struct qcom_llcc_syn_regs regs = { };
->   	int err_cnt, err_ways, ret, i;
->   	u32 synd_reg, synd_val;
->   
-> +	get_reg_offsets(drv, err_type, &regs);
-> +
->   	for (i = 0; i < reg_data.reg_cnt; i++) {
-> -		synd_reg = reg_data.synd_reg + (i * 4);
-> +		synd_reg = regs.synd_reg + (i * 4);
->   		ret = regmap_read(drv->regmap, drv->offsets[bank] + synd_reg,
->   				  &synd_val);
->   		if (ret)
-> @@ -223,7 +223,7 @@ dump_syn_reg_values(struct llcc_drv_data *drv, u32 bank, int err_type)
->   	}
->   
->   	ret = regmap_read(drv->regmap,
-> -			  drv->offsets[bank] + reg_data.count_status_reg,
-> +			  drv->offsets[bank] + regs.count_status_reg,
->   			  &err_cnt);
->   	if (ret)
->   		goto clear;
-> @@ -234,7 +234,7 @@ dump_syn_reg_values(struct llcc_drv_data *drv, u32 bank, int err_type)
->   		    reg_data.name, err_cnt);
->   
->   	ret = regmap_read(drv->regmap,
-> -			  drv->offsets[bank] + reg_data.ways_status_reg,
-> +			  drv->offsets[bank] + regs.ways_status_reg,
->   			  &err_ways);
->   	if (ret)
->   		goto clear;
-> @@ -297,7 +297,7 @@ llcc_ecc_irq_handler(int irq, void *edev_ctl)
->   	/* Iterate over the banks and look for Tag RAM or Data RAM errors */
->   	for (i = 0; i < drv->num_banks; i++) {
->   		ret = regmap_read(drv->regmap,
-> -				  drv->offsets[i] + DRP_INTERRUPT_STATUS,
-> +				  drv->offsets[i] + drv->edac_reg_offset->drp_interrupt_status,
->   				  &drp_error);
->   
->   		if (!ret && (drp_error & SB_ECC_ERROR)) {
-> @@ -313,7 +313,7 @@ llcc_ecc_irq_handler(int irq, void *edev_ctl)
->   			irq_rc = IRQ_HANDLED;
->   
->   		ret = regmap_read(drv->regmap,
-> -				  drv->offsets[i] + TRP_INTERRUPT_0_STATUS,
-> +				  drv->offsets[i] + drv->edac_reg_offset->trp_interrupt_0_status,
->   				  &trp_error);
->   
->   		if (!ret && (trp_error & SB_ECC_ERROR)) {
-> @@ -340,7 +340,7 @@ static int qcom_llcc_edac_probe(struct platform_device *pdev)
->   	int ecc_irq;
->   	int rc;
->   
-> -	rc = qcom_llcc_core_setup(llcc_driv_data->bcast_regmap);
-> +	rc = qcom_llcc_core_setup(llcc_driv_data, llcc_driv_data->bcast_regmap);
->   	if (rc)
->   		return rc;
->   
-> diff --git a/include/linux/soc/qcom/llcc-qcom.h b/include/linux/soc/qcom/llcc-qcom.h
-> index bc2fb8343a94..d5b2d58e8857 100644
-> --- a/include/linux/soc/qcom/llcc-qcom.h
-> +++ b/include/linux/soc/qcom/llcc-qcom.h
-> @@ -57,9 +57,6 @@ struct llcc_slice_desc {
->   /**
->    * struct llcc_edac_reg_data - llcc edac registers data for each error type
->    * @name: Name of the error
-> - * @synd_reg: Syndrome register address
-> - * @count_status_reg: Status register address to read the error count
-> - * @ways_status_reg: Status register address to read the error ways
->    * @reg_cnt: Number of registers
->    * @count_mask: Mask value to get the error count
->    * @ways_mask: Mask value to get the error ways
-> @@ -68,9 +65,6 @@ struct llcc_slice_desc {
->    */
->   struct llcc_edac_reg_data {
->   	char *name;
-> -	u64 synd_reg;
-> -	u64 count_status_reg;
-> -	u64 ways_status_reg;
->   	u32 reg_cnt;
->   	u32 count_mask;
->   	u32 ways_mask;
-
+Best regards,
+Krzysztof
