@@ -2,659 +2,380 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 32E035A5959
-	for <lists+linux-edac@lfdr.de>; Tue, 30 Aug 2022 04:23:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 240615A5988
+	for <lists+linux-edac@lfdr.de>; Tue, 30 Aug 2022 04:50:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229897AbiH3CXV (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Mon, 29 Aug 2022 22:23:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40844 "EHLO
+        id S229543AbiH3Cui (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Mon, 29 Aug 2022 22:50:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229949AbiH3CXQ (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Mon, 29 Aug 2022 22:23:16 -0400
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F7559E686;
-        Mon, 29 Aug 2022 19:23:08 -0700 (PDT)
-Received: by mail-pj1-x102a.google.com with SMTP id fa2so2066466pjb.2;
-        Mon, 29 Aug 2022 19:23:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=references:in-reply-to:message-id:date:subject:cc:to:from:from:to
-         :cc;
-        bh=g1AQMzbtj/ySMj7qV3TtZ44I2Z9AH+CF3oK5qaKOq5g=;
-        b=kil9GVwdMzow8SSvw27uAZKljgZGixVFrU6MEIKMdlj9Y2vG+a2VvMiOTRWqOXCpsC
-         noojH2NaK0/GRB2qY4EV4T+dao1XZ1jenvZgYTkMurzsHvL96hSp9MnwxH2kIeRXCMQ8
-         MDX/L15PhmuXNW51D/hlvA0h38D61dIsSEn9F2QQ32RVjoJQed1md+9nqmMARUQhKKxh
-         RWXXTNSfikIlAUwo242SFQlrezOod5cmU6QQEh5oIZ4zRkcpVAwyanwh4NnakLSCEG/7
-         5U5p9PGJi9gveVBYfZjnLRqtvMDb2G6umKFyoKZcTs3eL8T2vXRGzJm5f4iERiZi+xMW
-         9AOg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=references:in-reply-to:message-id:date:subject:cc:to:from
-         :x-gm-message-state:from:to:cc;
-        bh=g1AQMzbtj/ySMj7qV3TtZ44I2Z9AH+CF3oK5qaKOq5g=;
-        b=OYC66kPnIAeuhj5+cPOc90k1naU0vtyn6iVtvq9kqNy2/oJYHbhDx09itg9VxFm6Uj
-         JLGCH5v4IQpZB35K6FJw3lwsd2/oH86lgi6h9An1W8otimKXi/zobC7A/aetveTTcARL
-         Fk3X9oaQb+Ihus41b52BbLiLvNtXE4Pi8f7fcjVof7A5UcG/m2ZEIVDnRJZlY5Mcuziz
-         n6mQamXdAajxWOiOPA/LfCriS4lAS2ykaQ1SL3QYm8VSwOYvQekLBK1C1wCagIStAdk+
-         qwuhv0noc2YXmyQwf+MY9J3kcguwvR1rkQDUpaTJ22n7jB4OLJmXgUZB+psOU45613gC
-         F34Q==
-X-Gm-Message-State: ACgBeo1AdtDNdJKX096tGZe624Lh8fVV7UIInBaXU8HDIzYFofSw8P19
-        fGMjhNe2vtWV1WTqGFTuYVepYc7w55VDFw==
-X-Google-Smtp-Source: AA6agR4B+ZltJVOQIeG5MVJLx47mFIdHsxYrLfKhOBNEG/Um1AFy7ctuf67fJJzC/jvveQT4eSQYTQ==
-X-Received: by 2002:a17:90a:c1:b0:1f4:f757:6b48 with SMTP id v1-20020a17090a00c100b001f4f7576b48mr21247459pjd.56.1661826186212;
-        Mon, 29 Aug 2022 19:23:06 -0700 (PDT)
-Received: from localhost.localdomain (60-250-192-107.hinet-ip.hinet.net. [60.250.192.107])
-        by smtp.gmail.com with ESMTPSA id c78-20020a621c51000000b00536531536adsm7916841pfc.47.2022.08.29.19.23.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 Aug 2022 19:23:05 -0700 (PDT)
-From:   Marvin Lin <milkfafa@gmail.com>
-To:     linux-edac@vger.kernel.org, rric@kernel.org, james.morse@arm.com,
-        tony.luck@intel.com, mchehab@kernel.org, bp@alien8.de,
-        robh+dt@kernel.org, linux-kernel@vger.kernel.org
-Cc:     devicetree@vger.kernel.org, openbmc@lists.ozlabs.org,
-        benjaminfair@google.com, yuenn@google.com, venture@google.com,
-        KWLIU@nuvoton.com, YSCHU@nuvoton.com, JJLIU0@nuvoton.com,
-        KFTING@nuvoton.com, avifishman70@gmail.com, tmaimon77@gmail.com,
-        tali.perry1@gmail.com, ctcchien@nuvoton.com, kflin@nuvoton.com,
-        Marvin Lin <milkfafa@gmail.com>
-Subject: [PATCH v14 3/3] EDAC/nuvoton: Add NPCM memory controller driver
-Date:   Tue, 30 Aug 2022 10:22:38 +0800
-Message-Id: <20220830022238.28379-4-milkfafa@gmail.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220830022238.28379-1-milkfafa@gmail.com>
-References: <20220830022238.28379-1-milkfafa@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S229456AbiH3Cug (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Mon, 29 Aug 2022 22:50:36 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C58E74E08;
+        Mon, 29 Aug 2022 19:50:34 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id DAE5ACE16D8;
+        Tue, 30 Aug 2022 02:50:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7BCCAC433D6;
+        Tue, 30 Aug 2022 02:50:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1661827831;
+        bh=Qibth7K0On2/Izrqj1DrG3Pqxf5F5IFn/kJ54oz3lUQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=jPiubH4qViZdL5yxfHXcS23Z1c/T5gWYLreOrg0iM4gnmoWHQsPUkPfR6vjXJ+uw1
+         eovOfHTgnY+6FRJ1fihS3xcixEFmOTiVqq94x0r5iAP+DhMz35DxmcWEU0474GK7gE
+         I2Os8Ra5YJ6YRfcr3IEa0v5ZpZOjvQMr6xby22RtPica/ekeh/vkHPg7IKXTFI+Lep
+         Eyq7l0/T30xJt5/ADrXXILQr9SI3MPMjMZSih30/uUVNCq5KKB5ojKq6fCVTZO5nMn
+         C9uMOGWylqO+UkglW0Csj/snF5D/ZzUrHAwH/9tXccOWmrCyUmITuD44GzhO+Rn/zP
+         hLJcDB1UNVzJg==
+Date:   Mon, 29 Aug 2022 21:50:28 -0500
+From:   Bjorn Andersson <andersson@kernel.org>
+To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Cc:     bjorn.andersson@linaro.org, bp@alien8.de, mchehab@kernel.org,
+        james.morse@arm.com, rric@kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-edac@vger.kernel.org,
+        linux-kernel@vger.kernel.org, quic_tsoni@quicinc.com,
+        quic_saipraka@quicinc.com
+Subject: Re: [PATCH v3 3/5] EDAC/qcom: Get rid of hardcoded register offsets
+Message-ID: <20220830025028.2uyipn7aqhwscz6v@builder.lan>
+References: <20220825043859.30066-1-manivannan.sadhasivam@linaro.org>
+ <20220825043859.30066-4-manivannan.sadhasivam@linaro.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220825043859.30066-4-manivannan.sadhasivam@linaro.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-Add driver for memory controller present on Nuvoton NPCM SoCs. The memory
-controller supports single bit error correction and double bit error
-detection.
+On Thu, Aug 25, 2022 at 10:08:57AM +0530, Manivannan Sadhasivam wrote:
+> The LLCC EDAC register offsets varies between each SoC. Hardcoding the
+> register offsets won't work and will often result in crash due to
+> accessing the wrong locations.
+> 
+> Hence, get the register offsets from the LLCC driver matching the
+> individual SoCs.
+> 
 
-Signed-off-by: Marvin Lin <milkfafa@gmail.com>
----
- MAINTAINERS              |   7 +
- drivers/edac/Kconfig     |  11 +
- drivers/edac/Makefile    |   1 +
- drivers/edac/npcm_edac.c | 516 +++++++++++++++++++++++++++++++++++++++
- 4 files changed, 535 insertions(+)
- create mode 100644 drivers/edac/npcm_edac.c
+I have applied patch 1 and 2 to the Qualcomm tree, please find a tag of
+this:
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 868bbf31603d..dde5b3e647ce 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -7409,6 +7409,13 @@ L:	linux-edac@vger.kernel.org
- S:	Maintained
- F:	drivers/edac/mpc85xx_edac.[ch]
- 
-+EDAC-NPCM
-+M:	Marvin Lin <kflin@nuvoton.com>
-+L:	linux-edac@vger.kernel.org
-+S:	Maintained
-+F:	Documentation/devicetree/bindings/edac/nuvoton,npcm-memory-controller.yaml
-+F:	drivers/edac/npcm_edac.c
-+
- EDAC-PASEMI
- M:	Egor Martovetsky <egor@pasemi.com>
- L:	linux-edac@vger.kernel.org
-diff --git a/drivers/edac/Kconfig b/drivers/edac/Kconfig
-index 17562cf1fe97..69b92dff7dbb 100644
---- a/drivers/edac/Kconfig
-+++ b/drivers/edac/Kconfig
-@@ -541,4 +541,15 @@ config EDAC_DMC520
- 	  Support for error detection and correction on the
- 	  SoCs with ARM DMC-520 DRAM controller.
- 
-+config EDAC_NPCM
-+	tristate "Nuvoton NPCM DDR Memory Controller"
-+	depends on (ARCH_NPCM || COMPILE_TEST)
-+	help
-+	  Support for error detection and correction on the Nuvoton NPCM DDR
-+	  memory controller.
-+
-+	  The memory controller supports single bit error correction, double bit
-+	  error detection (in-line ECC in which a section 1/8th of the memory
-+	  device used to store data is used for ECC storage).
-+
- endif # EDAC
-diff --git a/drivers/edac/Makefile b/drivers/edac/Makefile
-index 2d1641a27a28..db3c59d3ad84 100644
---- a/drivers/edac/Makefile
-+++ b/drivers/edac/Makefile
-@@ -84,3 +84,4 @@ obj-$(CONFIG_EDAC_QCOM)			+= qcom_edac.o
- obj-$(CONFIG_EDAC_ASPEED)		+= aspeed_edac.o
- obj-$(CONFIG_EDAC_BLUEFIELD)		+= bluefield_edac.o
- obj-$(CONFIG_EDAC_DMC520)		+= dmc520_edac.o
-+obj-$(CONFIG_EDAC_NPCM)			+= npcm_edac.o
-diff --git a/drivers/edac/npcm_edac.c b/drivers/edac/npcm_edac.c
-new file mode 100644
-index 000000000000..a68ba7357369
---- /dev/null
-+++ b/drivers/edac/npcm_edac.c
-@@ -0,0 +1,516 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+// Copyright (c) 2022 Nuvoton Technology Corporation
-+
-+#include <linux/debugfs.h>
-+#include <linux/iopoll.h>
-+#include <linux/of_device.h>
-+#include <linux/regmap.h>
-+#include "edac_module.h"
-+
-+#define EDAC_MOD_NAME	"npcm-edac"
-+#define EDAC_MSG_SIZE	256
-+
-+/* chip serials */
-+#define NPCM7XX_CHIP	BIT(0)
-+#define NPCM8XX_CHIP	BIT(1)
-+
-+/* syndrome values */
-+#define UE_SYNDROME	0x03
-+
-+static char data_synd[] = {
-+	0xf4, 0xf1, 0xec, 0xea, 0xe9, 0xe6, 0xe5, 0xe3,
-+	0xdc, 0xda, 0xd9, 0xd6, 0xd5, 0xd3, 0xce, 0xcb,
-+	0xb5, 0xb0, 0xad, 0xab, 0xa8, 0xa7, 0xa4, 0xa2,
-+	0x9d, 0x9b, 0x98, 0x97, 0x94, 0x92, 0x8f, 0x8a,
-+	0x75, 0x70, 0x6d, 0x6b, 0x68, 0x67, 0x64, 0x62,
-+	0x5e, 0x5b, 0x58, 0x57, 0x54, 0x52, 0x4f, 0x4a,
-+	0x34, 0x31, 0x2c, 0x2a, 0x29, 0x26, 0x25, 0x23,
-+	0x1c, 0x1a, 0x19, 0x16, 0x15, 0x13, 0x0e, 0x0b
-+};
-+
-+static struct regmap *npcm_regmap;
-+
-+struct npcm_platform_data {
-+	/* chip serials */
-+	int chip;
-+
-+	/* memory controller registers */
-+	u32 ctl_ecc_en;
-+	u32 ctl_int_status;
-+	u32 ctl_int_ack;
-+	u32 ctl_int_mask_master;
-+	u32 ctl_int_mask_ecc;
-+	u32 ctl_ce_addr_l;
-+	u32 ctl_ce_addr_h;
-+	u32 ctl_ce_data_l;
-+	u32 ctl_ce_data_h;
-+	u32 ctl_ce_synd;
-+	u32 ctl_ue_addr_l;
-+	u32 ctl_ue_addr_h;
-+	u32 ctl_ue_data_l;
-+	u32 ctl_ue_data_h;
-+	u32 ctl_ue_synd;
-+	u32 ctl_source_id;
-+	u32 ctl_controller_busy;
-+	u32 ctl_xor_check_bits;
-+
-+	/* masks and shifts */
-+	u32 ecc_en_mask;
-+	u32 int_status_ce_mask;
-+	u32 int_status_ue_mask;
-+	u32 int_ack_ce_mask;
-+	u32 int_ack_ue_mask;
-+	u32 int_mask_master_non_ecc_mask;
-+	u32 int_mask_master_global_mask;
-+	u32 int_mask_ecc_non_event_mask;
-+	u32 ce_addr_h_mask;
-+	u32 ce_synd_mask;
-+	u32 ce_synd_shift;
-+	u32 ue_addr_h_mask;
-+	u32 ue_synd_mask;
-+	u32 ue_synd_shift;
-+	u32 source_id_ce_mask;
-+	u32 source_id_ce_shift;
-+	u32 source_id_ue_mask;
-+	u32 source_id_ue_shift;
-+	u32 controller_busy_mask;
-+	u32 xor_check_bits_mask;
-+	u32 xor_check_bits_shift;
-+	u32 writeback_en_mask;
-+	u32 fwc_mask;
-+};
-+
-+struct priv_data {
-+	void __iomem *reg;
-+	char message[EDAC_MSG_SIZE];
-+	const struct npcm_platform_data *pdata;
-+
-+	/* error injection */
-+	struct dentry *debugfs;
-+	u8 error_type;
-+	u8 location;
-+	u8 bit;
-+};
-+
-+static void handle_ce(struct mem_ctl_info *mci)
-+{
-+	struct priv_data *priv = mci->pvt_info;
-+	const struct npcm_platform_data *pdata = priv->pdata;
-+	u64 addr = 0;
-+	u64 data = 0;
-+	u32 val_h = 0;
-+	u32 val_l, id, synd;
-+
-+	regmap_read(npcm_regmap, pdata->ctl_ce_addr_l, &val_l);
-+	if (pdata->chip == NPCM8XX_CHIP) {
-+		regmap_read(npcm_regmap, pdata->ctl_ce_addr_h, &val_h);
-+		val_h &= pdata->ce_addr_h_mask;
-+	}
-+	addr = ((addr | val_h) << 32) | val_l;
-+
-+	regmap_read(npcm_regmap, pdata->ctl_ce_data_l, &val_l);
-+	if (pdata->chip == NPCM8XX_CHIP)
-+		regmap_read(npcm_regmap, pdata->ctl_ce_data_h, &val_h);
-+	data = ((data | val_h) << 32) | val_l;
-+
-+	regmap_read(npcm_regmap, pdata->ctl_source_id, &id);
-+	id = (id & pdata->source_id_ce_mask) >> pdata->source_id_ce_shift;
-+
-+	regmap_read(npcm_regmap, pdata->ctl_ce_synd, &synd);
-+	synd = (synd & pdata->ce_synd_mask) >> pdata->ce_synd_shift;
-+
-+	snprintf(priv->message, EDAC_MSG_SIZE,
-+		 "addr = 0x%llx, data = 0x%llx, id = 0x%x", addr, data, id);
-+
-+	edac_mc_handle_error(HW_EVENT_ERR_CORRECTED, mci, 1, addr >> PAGE_SHIFT,
-+			     addr & ~PAGE_MASK, synd, 0, 0, -1, priv->message, "");
-+}
-+
-+static void handle_ue(struct mem_ctl_info *mci)
-+{
-+	struct priv_data *priv = mci->pvt_info;
-+	const struct npcm_platform_data *pdata = priv->pdata;
-+	u64 addr = 0;
-+	u64 data = 0;
-+	u32 val_h = 0;
-+	u32 val_l, id, synd;
-+
-+	regmap_read(npcm_regmap, pdata->ctl_ue_addr_l, &val_l);
-+	if (pdata->chip == NPCM8XX_CHIP) {
-+		regmap_read(npcm_regmap, pdata->ctl_ue_addr_h, &val_h);
-+		val_h &= pdata->ue_addr_h_mask;
-+	}
-+	addr = ((addr | val_h) << 32) | val_l;
-+
-+	regmap_read(npcm_regmap, pdata->ctl_ue_data_l, &val_l);
-+	if (pdata->chip == NPCM8XX_CHIP)
-+		regmap_read(npcm_regmap, pdata->ctl_ue_data_h, &val_h);
-+	data = ((data | val_h) << 32) | val_l;
-+
-+	regmap_read(npcm_regmap, pdata->ctl_source_id, &id);
-+	id = (id & pdata->source_id_ue_mask) >> pdata->source_id_ue_shift;
-+
-+	regmap_read(npcm_regmap, pdata->ctl_ue_synd, &synd);
-+	synd = (synd & pdata->ue_synd_mask) >> pdata->ue_synd_shift;
-+
-+	snprintf(priv->message, EDAC_MSG_SIZE,
-+		 "addr = 0x%llx, data = 0x%llx, id = 0x%x", addr, data, id);
-+
-+	edac_mc_handle_error(HW_EVENT_ERR_UNCORRECTED, mci, 1, addr >> PAGE_SHIFT,
-+			     addr & ~PAGE_MASK, synd, 0, 0, -1, priv->message, "");
-+}
-+
-+static irqreturn_t edac_ecc_isr(int irq, void *dev_id)
-+{
-+	struct mem_ctl_info *mci = dev_id;
-+	struct priv_data *priv = mci->pvt_info;
-+	const struct npcm_platform_data *pdata = priv->pdata;
-+	u32 status;
-+
-+	regmap_read(npcm_regmap, pdata->ctl_int_status, &status);
-+	if (status & pdata->int_status_ce_mask) {
-+		handle_ce(mci);
-+
-+		/* acknowledge the CE interrupt */
-+		regmap_write(npcm_regmap, pdata->ctl_int_ack,
-+			     pdata->int_ack_ce_mask);
-+		return IRQ_HANDLED;
-+	} else if (status & pdata->int_status_ue_mask) {
-+		handle_ue(mci);
-+
-+		/* acknowledge the UE interrupt */
-+		regmap_write(npcm_regmap, pdata->ctl_int_ack,
-+			     pdata->int_ack_ue_mask);
-+		return IRQ_HANDLED;
-+	}
-+
-+	return IRQ_NONE;
-+}
-+
-+static ssize_t force_ecc_error(struct file *file, const char __user *data,
-+				    size_t count, loff_t *ppos)
-+{
-+	struct device *dev = file->private_data;
-+	struct mem_ctl_info *mci = to_mci(dev);
-+	struct priv_data *priv = mci->pvt_info;
-+	const struct npcm_platform_data *pdata = priv->pdata;
-+	int ret;
-+	u32 val, syndrome;
-+
-+	/*
-+	 * error_type - 0: CE, 1: UE
-+	 * location   - 0: data, 1: checkcode
-+	 * bit        - 0 ~ 63 for data and 0 ~ 7 for checkcode
-+	 */
-+	edac_printk(KERN_INFO, EDAC_MOD_NAME,
-+		    "force an ECC error, type = %d, location = %d, bit = %d\n",
-+		    priv->error_type, priv->location, priv->bit);
-+
-+	/* ensure no pending writes */
-+	ret = regmap_read_poll_timeout(npcm_regmap, pdata->ctl_controller_busy,
-+				       val, !(val & pdata->controller_busy_mask),
-+				       1000, 10000);
-+	if (ret) {
-+		edac_printk(KERN_INFO, EDAC_MOD_NAME,
-+			    "wait pending writes timeout\n");
-+		return count;
-+	}
-+
-+	regmap_read(npcm_regmap, pdata->ctl_xor_check_bits, &val);
-+	val &= ~pdata->xor_check_bits_mask;
-+
-+	/* write syndrome to XOR_CHECK_BITS */
-+	if (priv->error_type == 0) {
-+		if (priv->location == 0 && priv->bit > 63) {
-+			edac_printk(KERN_INFO, EDAC_MOD_NAME,
-+				    "data bit should not exceed 63\n");
-+			return count;
-+		}
-+
-+		if (priv->location == 1 && priv->bit > 7) {
-+			edac_printk(KERN_INFO, EDAC_MOD_NAME,
-+				    "checkcode bit should not exceed 7\n");
-+			return count;
-+		}
-+
-+		syndrome = priv->location ? 1 << priv->bit :
-+			   data_synd[priv->bit];
-+
-+		regmap_write(npcm_regmap, pdata->ctl_xor_check_bits,
-+			     val | (syndrome << pdata->xor_check_bits_shift) |
-+			     pdata->writeback_en_mask);
-+	} else if (priv->error_type == 1) {
-+		regmap_write(npcm_regmap, pdata->ctl_xor_check_bits,
-+			     val | (UE_SYNDROME << pdata->xor_check_bits_shift));
-+	}
-+
-+	/* force write check */
-+	regmap_update_bits(npcm_regmap, pdata->ctl_xor_check_bits,
-+			   pdata->fwc_mask, pdata->fwc_mask);
-+
-+	return count;
-+}
-+
-+static const struct file_operations force_ecc_error_fops = {
-+	.open = simple_open,
-+	.write = force_ecc_error,
-+	.llseek = generic_file_llseek,
-+};
-+
-+static void setup_debugfs(struct mem_ctl_info *mci)
-+{
-+	struct priv_data *priv = mci->pvt_info;
-+
-+	priv->debugfs = edac_debugfs_create_dir(mci->mod_name);
-+	if (!priv->debugfs)
-+		return;
-+
-+	edac_debugfs_create_x8("error_type", 0644, priv->debugfs, &priv->error_type);
-+	edac_debugfs_create_x8("location", 0644, priv->debugfs, &priv->location);
-+	edac_debugfs_create_x8("bit", 0644, priv->debugfs, &priv->bit);
-+	edac_debugfs_create_file("force_ecc_error", 0200, priv->debugfs,
-+				 &mci->dev, &force_ecc_error_fops);
-+}
-+
-+static int setup_irq(struct mem_ctl_info *mci, struct platform_device *pdev)
-+{
-+	struct priv_data *priv = mci->pvt_info;
-+	const struct npcm_platform_data *pdata = priv->pdata;
-+	int ret, irq;
-+
-+	irq = platform_get_irq(pdev, 0);
-+	if (irq < 0) {
-+		edac_printk(KERN_ERR, EDAC_MOD_NAME, "IRQ not defined in DTS\n");
-+		return irq;
-+	}
-+
-+	ret = devm_request_irq(&pdev->dev, irq, edac_ecc_isr, 0,
-+			       dev_name(&pdev->dev), mci);
-+	if (ret < 0) {
-+		edac_printk(KERN_ERR, EDAC_MOD_NAME, "failed to request IRQ\n");
-+		return ret;
-+	}
-+
-+	/* enable the functional group of ECC and mask the others */
-+	regmap_write(npcm_regmap, pdata->ctl_int_mask_master,
-+		     pdata->int_mask_master_non_ecc_mask);
-+
-+	if (pdata->chip == NPCM8XX_CHIP)
-+		regmap_write(npcm_regmap, pdata->ctl_int_mask_ecc,
-+			     pdata->int_mask_ecc_non_event_mask);
-+
-+	return 0;
-+}
-+
-+static const struct regmap_config npcm_regmap_cfg = {
-+	.reg_bits	= 32,
-+	.reg_stride	= 4,
-+	.val_bits	= 32,
-+};
-+
-+static int edac_probe(struct platform_device *pdev)
-+{
-+	const struct npcm_platform_data *pdata;
-+	struct device *dev = &pdev->dev;
-+	struct edac_mc_layer layers[1];
-+	struct mem_ctl_info *mci;
-+	struct priv_data *priv;
-+	void __iomem *reg;
-+	int rc;
-+	u32 val;
-+
-+	reg = devm_platform_ioremap_resource(pdev, 0);
-+	if (IS_ERR(reg))
-+		return PTR_ERR(reg);
-+
-+	npcm_regmap = devm_regmap_init_mmio(dev, reg, &npcm_regmap_cfg);
-+	if (IS_ERR(npcm_regmap))
-+		return PTR_ERR(npcm_regmap);
-+
-+	pdata = of_device_get_match_data(dev);
-+	if (!pdata)
-+		return -EINVAL;
-+
-+	/* bail out if ECC is not enabled */
-+	regmap_read(npcm_regmap, pdata->ctl_ecc_en, &val);
-+	if (!(val & pdata->ecc_en_mask)) {
-+		edac_printk(KERN_ERR, EDAC_MOD_NAME, "ECC is not enabled\n");
-+		return -EPERM;
-+	}
-+
-+	edac_op_state = EDAC_OPSTATE_INT;
-+
-+	layers[0].type = EDAC_MC_LAYER_ALL_MEM;
-+	layers[0].size = 1;
-+
-+	mci = edac_mc_alloc(0, ARRAY_SIZE(layers), layers,
-+			    sizeof(struct priv_data));
-+	if (!mci)
-+		return -ENOMEM;
-+
-+	mci->pdev = &pdev->dev;
-+	priv = mci->pvt_info;
-+	priv->reg = reg;
-+	priv->pdata = pdata;
-+	platform_set_drvdata(pdev, mci);
-+
-+	mci->mtype_cap = MEM_FLAG_DDR4;
-+	mci->edac_ctl_cap = EDAC_FLAG_SECDED;
-+	mci->scrub_cap = SCRUB_FLAG_HW_SRC;
-+	mci->scrub_mode = SCRUB_HW_SRC;
-+	mci->edac_cap = EDAC_FLAG_SECDED;
-+	mci->ctl_name = "npcm_ddr_controller";
-+	mci->dev_name = dev_name(&pdev->dev);
-+	mci->mod_name = EDAC_MOD_NAME;
-+	mci->ctl_page_to_phys = NULL;
-+
-+	rc = setup_irq(mci, pdev);
-+	if (rc)
-+		goto free_edac_mc;
-+
-+	rc = edac_mc_add_mc(mci);
-+	if (rc)
-+		goto free_edac_mc;
-+
-+	if (IS_ENABLED(CONFIG_EDAC_DEBUG) && pdata->chip == NPCM8XX_CHIP)
-+		setup_debugfs(mci);
-+
-+	return rc;
-+
-+free_edac_mc:
-+	edac_mc_free(mci);
-+	return rc;
-+}
-+
-+static int edac_remove(struct platform_device *pdev)
-+{
-+	struct mem_ctl_info *mci = platform_get_drvdata(pdev);
-+	struct priv_data *priv = mci->pvt_info;
-+	const struct npcm_platform_data *pdata = priv->pdata;
-+
-+	regmap_write(npcm_regmap, pdata->ctl_int_mask_master,
-+		     pdata->int_mask_master_global_mask);
-+	regmap_update_bits(npcm_regmap, pdata->ctl_ecc_en, pdata->ecc_en_mask,
-+			   0);
-+
-+	edac_mc_del_mc(&pdev->dev);
-+	edac_mc_free(mci);
-+
-+	if (IS_ENABLED(CONFIG_EDAC_DEBUG) && pdata->chip == NPCM8XX_CHIP)
-+		edac_debugfs_remove_recursive(priv->debugfs);
-+
-+	return 0;
-+}
-+
-+static const struct npcm_platform_data npcm750_edac = {
-+	.chip				= NPCM7XX_CHIP,
-+
-+	/* memory controller registers */
-+	.ctl_ecc_en			= 0x174,
-+	.ctl_int_status			= 0x1d0,
-+	.ctl_int_ack			= 0x1d4,
-+	.ctl_int_mask_master		= 0x1d8,
-+	.ctl_ce_addr_l			= 0x188,
-+	.ctl_ce_data_l			= 0x190,
-+	.ctl_ce_synd			= 0x18c,
-+	.ctl_ue_addr_l			= 0x17c,
-+	.ctl_ue_data_l			= 0x184,
-+	.ctl_ue_synd			= 0x180,
-+	.ctl_source_id			= 0x194,
-+
-+	/* masks and shifts */
-+	.ecc_en_mask			= BIT(24),
-+	.int_status_ce_mask		= GENMASK(4, 3),
-+	.int_status_ue_mask		= GENMASK(6, 5),
-+	.int_ack_ce_mask		= GENMASK(4, 3),
-+	.int_ack_ue_mask		= GENMASK(6, 5),
-+	.int_mask_master_non_ecc_mask	= GENMASK(30, 7) | GENMASK(2, 0),
-+	.int_mask_master_global_mask	= BIT(31),
-+	.ce_synd_mask			= GENMASK(6, 0),
-+	.ce_synd_shift			= 0,
-+	.ue_synd_mask			= GENMASK(6, 0),
-+	.ue_synd_shift			= 0,
-+	.source_id_ce_mask		= GENMASK(29, 16),
-+	.source_id_ce_shift		= 16,
-+	.source_id_ue_mask		= GENMASK(13, 0),
-+	.source_id_ue_shift		= 0,
-+};
-+
-+static const struct npcm_platform_data npcm845_edac = {
-+	.chip =				NPCM8XX_CHIP,
-+
-+	/* memory controller registers */
-+	.ctl_ecc_en			= 0x16c,
-+	.ctl_int_status			= 0x228,
-+	.ctl_int_ack			= 0x244,
-+	.ctl_int_mask_master		= 0x220,
-+	.ctl_int_mask_ecc		= 0x260,
-+	.ctl_ce_addr_l			= 0x18c,
-+	.ctl_ce_addr_h			= 0x190,
-+	.ctl_ce_data_l			= 0x194,
-+	.ctl_ce_data_h			= 0x198,
-+	.ctl_ce_synd			= 0x190,
-+	.ctl_ue_addr_l			= 0x17c,
-+	.ctl_ue_addr_h			= 0x180,
-+	.ctl_ue_data_l			= 0x184,
-+	.ctl_ue_data_h			= 0x188,
-+	.ctl_ue_synd			= 0x180,
-+	.ctl_source_id			= 0x19c,
-+	.ctl_controller_busy		= 0x20c,
-+	.ctl_xor_check_bits		= 0x174,
-+
-+	/* masks and shifts */
-+	.ecc_en_mask			= GENMASK(17, 16),
-+	.int_status_ce_mask		= GENMASK(1, 0),
-+	.int_status_ue_mask		= GENMASK(3, 2),
-+	.int_ack_ce_mask		= GENMASK(1, 0),
-+	.int_ack_ue_mask		= GENMASK(3, 2),
-+	.int_mask_master_non_ecc_mask	= GENMASK(30, 3) | GENMASK(1, 0),
-+	.int_mask_master_global_mask	= BIT(31),
-+	.int_mask_ecc_non_event_mask	= GENMASK(8, 4),
-+	.ce_addr_h_mask			= GENMASK(1, 0),
-+	.ce_synd_mask			= GENMASK(15, 8),
-+	.ce_synd_shift			= 8,
-+	.ue_addr_h_mask			= GENMASK(1, 0),
-+	.ue_synd_mask			= GENMASK(15, 8),
-+	.ue_synd_shift			= 8,
-+	.source_id_ce_mask		= GENMASK(29, 16),
-+	.source_id_ce_shift		= 16,
-+	.source_id_ue_mask		= GENMASK(13, 0),
-+	.source_id_ue_shift		= 0,
-+	.controller_busy_mask		= BIT(0),
-+	.xor_check_bits_mask		= GENMASK(23, 16),
-+	.xor_check_bits_shift		= 16,
-+	.writeback_en_mask		= BIT(24),
-+	.fwc_mask			= BIT(8),
-+};
-+
-+static const struct of_device_id npcm_edac_of_match[] = {
-+	{
-+		.compatible = "nuvoton,npcm750-memory-controller",
-+		.data = &npcm750_edac
-+	},
-+	{
-+		.compatible = "nuvoton,npcm845-memory-controller",
-+		.data = &npcm845_edac
-+	},
-+	{},
-+};
-+
-+MODULE_DEVICE_TABLE(of, npcm_edac_of_match);
-+
-+static struct platform_driver npcm_edac_driver = {
-+	.driver = {
-+		.name = "npcm-edac",
-+		.of_match_table = npcm_edac_of_match,
-+	},
-+	.probe = edac_probe,
-+	.remove = edac_remove,
-+};
-+
-+module_platform_driver(npcm_edac_driver);
-+
-+MODULE_AUTHOR("Medad CChien <medadyoung@gmail.com>");
-+MODULE_AUTHOR("Marvin Lin <kflin@nuvoton.com>");
-+MODULE_DESCRIPTION("Nuvoton NPCM EDAC Driver");
-+MODULE_LICENSE("GPL");
--- 
-2.17.1
+https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git
+tags/20220825043859.30066-3-manivannan.sadhasivam@linaro.org
 
+Regards,
+Bjorn
+
+> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+> ---
+>  drivers/edac/qcom_edac.c           | 116 ++++++++++++++---------------
+>  include/linux/soc/qcom/llcc-qcom.h |   6 --
+>  2 files changed, 58 insertions(+), 64 deletions(-)
+> 
+> diff --git a/drivers/edac/qcom_edac.c b/drivers/edac/qcom_edac.c
+> index 97a27e42dd61..04df70b7fea3 100644
+> --- a/drivers/edac/qcom_edac.c
+> +++ b/drivers/edac/qcom_edac.c
+> @@ -21,30 +21,9 @@
+>  #define TRP_SYN_REG_CNT                 6
+>  #define DRP_SYN_REG_CNT                 8
+>  
+> -#define LLCC_COMMON_STATUS0             0x0003000c
+>  #define LLCC_LB_CNT_MASK                GENMASK(31, 28)
+>  #define LLCC_LB_CNT_SHIFT               28
+>  
+> -/* Single & double bit syndrome register offsets */
+> -#define TRP_ECC_SB_ERR_SYN0             0x0002304c
+> -#define TRP_ECC_DB_ERR_SYN0             0x00020370
+> -#define DRP_ECC_SB_ERR_SYN0             0x0004204c
+> -#define DRP_ECC_DB_ERR_SYN0             0x00042070
+> -
+> -/* Error register offsets */
+> -#define TRP_ECC_ERROR_STATUS1           0x00020348
+> -#define TRP_ECC_ERROR_STATUS0           0x00020344
+> -#define DRP_ECC_ERROR_STATUS1           0x00042048
+> -#define DRP_ECC_ERROR_STATUS0           0x00042044
+> -
+> -/* TRP, DRP interrupt register offsets */
+> -#define DRP_INTERRUPT_STATUS            0x00041000
+> -#define TRP_INTERRUPT_0_STATUS          0x00020480
+> -#define DRP_INTERRUPT_CLEAR             0x00041008
+> -#define DRP_ECC_ERROR_CNTR_CLEAR        0x00040004
+> -#define TRP_INTERRUPT_0_CLEAR           0x00020484
+> -#define TRP_ECC_ERROR_CNTR_CLEAR        0x00020440
+> -
+>  /* Mask and shift macros */
+>  #define ECC_DB_ERR_COUNT_MASK           GENMASK(4, 0)
+>  #define ECC_DB_ERR_WAYS_MASK            GENMASK(31, 16)
+> @@ -60,15 +39,6 @@
+>  #define DRP_TRP_INT_CLEAR               GENMASK(1, 0)
+>  #define DRP_TRP_CNT_CLEAR               GENMASK(1, 0)
+>  
+> -/* Config registers offsets*/
+> -#define DRP_ECC_ERROR_CFG               0x00040000
+> -
+> -/* Tag RAM, Data RAM interrupt register offsets */
+> -#define CMN_INTERRUPT_0_ENABLE          0x0003001c
+> -#define CMN_INTERRUPT_2_ENABLE          0x0003003c
+> -#define TRP_INTERRUPT_0_ENABLE          0x00020488
+> -#define DRP_INTERRUPT_ENABLE            0x0004100c
+> -
+>  #define SB_ERROR_THRESHOLD              0x1
+>  #define SB_ERROR_THRESHOLD_SHIFT        24
+>  #define SB_DB_TRP_INTERRUPT_ENABLE      0x3
+> @@ -86,9 +56,6 @@ enum {
+>  static const struct llcc_edac_reg_data edac_reg_data[] = {
+>  	[LLCC_DRAM_CE] = {
+>  		.name = "DRAM Single-bit",
+> -		.synd_reg = DRP_ECC_SB_ERR_SYN0,
+> -		.count_status_reg = DRP_ECC_ERROR_STATUS1,
+> -		.ways_status_reg = DRP_ECC_ERROR_STATUS0,
+>  		.reg_cnt = DRP_SYN_REG_CNT,
+>  		.count_mask = ECC_SB_ERR_COUNT_MASK,
+>  		.ways_mask = ECC_SB_ERR_WAYS_MASK,
+> @@ -96,9 +63,6 @@ static const struct llcc_edac_reg_data edac_reg_data[] = {
+>  	},
+>  	[LLCC_DRAM_UE] = {
+>  		.name = "DRAM Double-bit",
+> -		.synd_reg = DRP_ECC_DB_ERR_SYN0,
+> -		.count_status_reg = DRP_ECC_ERROR_STATUS1,
+> -		.ways_status_reg = DRP_ECC_ERROR_STATUS0,
+>  		.reg_cnt = DRP_SYN_REG_CNT,
+>  		.count_mask = ECC_DB_ERR_COUNT_MASK,
+>  		.ways_mask = ECC_DB_ERR_WAYS_MASK,
+> @@ -106,9 +70,6 @@ static const struct llcc_edac_reg_data edac_reg_data[] = {
+>  	},
+>  	[LLCC_TRAM_CE] = {
+>  		.name = "TRAM Single-bit",
+> -		.synd_reg = TRP_ECC_SB_ERR_SYN0,
+> -		.count_status_reg = TRP_ECC_ERROR_STATUS1,
+> -		.ways_status_reg = TRP_ECC_ERROR_STATUS0,
+>  		.reg_cnt = TRP_SYN_REG_CNT,
+>  		.count_mask = ECC_SB_ERR_COUNT_MASK,
+>  		.ways_mask = ECC_SB_ERR_WAYS_MASK,
+> @@ -116,9 +77,6 @@ static const struct llcc_edac_reg_data edac_reg_data[] = {
+>  	},
+>  	[LLCC_TRAM_UE] = {
+>  		.name = "TRAM Double-bit",
+> -		.synd_reg = TRP_ECC_DB_ERR_SYN0,
+> -		.count_status_reg = TRP_ECC_ERROR_STATUS1,
+> -		.ways_status_reg = TRP_ECC_ERROR_STATUS0,
+>  		.reg_cnt = TRP_SYN_REG_CNT,
+>  		.count_mask = ECC_DB_ERR_COUNT_MASK,
+>  		.ways_mask = ECC_DB_ERR_WAYS_MASK,
+> @@ -126,7 +84,7 @@ static const struct llcc_edac_reg_data edac_reg_data[] = {
+>  	},
+>  };
+>  
+> -static int qcom_llcc_core_setup(struct regmap *llcc_bcast_regmap)
+> +static int qcom_llcc_core_setup(struct llcc_drv_data *drv, struct regmap *llcc_bcast_regmap)
+>  {
+>  	u32 sb_err_threshold;
+>  	int ret;
+> @@ -135,31 +93,31 @@ static int qcom_llcc_core_setup(struct regmap *llcc_bcast_regmap)
+>  	 * Configure interrupt enable registers such that Tag, Data RAM related
+>  	 * interrupts are propagated to interrupt controller for servicing
+>  	 */
+> -	ret = regmap_update_bits(llcc_bcast_regmap, CMN_INTERRUPT_2_ENABLE,
+> +	ret = regmap_update_bits(llcc_bcast_regmap, drv->edac_reg_offset->cmn_interrupt_2_enable,
+>  				 TRP0_INTERRUPT_ENABLE,
+>  				 TRP0_INTERRUPT_ENABLE);
+>  	if (ret)
+>  		return ret;
+>  
+> -	ret = regmap_update_bits(llcc_bcast_regmap, TRP_INTERRUPT_0_ENABLE,
+> +	ret = regmap_update_bits(llcc_bcast_regmap, drv->edac_reg_offset->trp_interrupt_0_enable,
+>  				 SB_DB_TRP_INTERRUPT_ENABLE,
+>  				 SB_DB_TRP_INTERRUPT_ENABLE);
+>  	if (ret)
+>  		return ret;
+>  
+>  	sb_err_threshold = (SB_ERROR_THRESHOLD << SB_ERROR_THRESHOLD_SHIFT);
+> -	ret = regmap_write(llcc_bcast_regmap, DRP_ECC_ERROR_CFG,
+> +	ret = regmap_write(llcc_bcast_regmap, drv->edac_reg_offset->drp_ecc_error_cfg,
+>  			   sb_err_threshold);
+>  	if (ret)
+>  		return ret;
+>  
+> -	ret = regmap_update_bits(llcc_bcast_regmap, CMN_INTERRUPT_2_ENABLE,
+> +	ret = regmap_update_bits(llcc_bcast_regmap, drv->edac_reg_offset->cmn_interrupt_2_enable,
+>  				 DRP0_INTERRUPT_ENABLE,
+>  				 DRP0_INTERRUPT_ENABLE);
+>  	if (ret)
+>  		return ret;
+>  
+> -	ret = regmap_write(llcc_bcast_regmap, DRP_INTERRUPT_ENABLE,
+> +	ret = regmap_write(llcc_bcast_regmap, drv->edac_reg_offset->drp_interrupt_enable,
+>  			   SB_DB_DRP_INTERRUPT_ENABLE);
+>  	return ret;
+>  }
+> @@ -173,24 +131,28 @@ qcom_llcc_clear_error_status(int err_type, struct llcc_drv_data *drv)
+>  	switch (err_type) {
+>  	case LLCC_DRAM_CE:
+>  	case LLCC_DRAM_UE:
+> -		ret = regmap_write(drv->bcast_regmap, DRP_INTERRUPT_CLEAR,
+> +		ret = regmap_write(drv->bcast_regmap,
+> +				   drv->edac_reg_offset->drp_interrupt_clear,
+>  				   DRP_TRP_INT_CLEAR);
+>  		if (ret)
+>  			return ret;
+>  
+> -		ret = regmap_write(drv->bcast_regmap, DRP_ECC_ERROR_CNTR_CLEAR,
+> +		ret = regmap_write(drv->bcast_regmap,
+> +				   drv->edac_reg_offset->drp_ecc_error_cntr_clear,
+>  				   DRP_TRP_CNT_CLEAR);
+>  		if (ret)
+>  			return ret;
+>  		break;
+>  	case LLCC_TRAM_CE:
+>  	case LLCC_TRAM_UE:
+> -		ret = regmap_write(drv->bcast_regmap, TRP_INTERRUPT_0_CLEAR,
+> +		ret = regmap_write(drv->bcast_regmap,
+> +				   drv->edac_reg_offset->trp_interrupt_0_clear,
+>  				   DRP_TRP_INT_CLEAR);
+>  		if (ret)
+>  			return ret;
+>  
+> -		ret = regmap_write(drv->bcast_regmap, TRP_ECC_ERROR_CNTR_CLEAR,
+> +		ret = regmap_write(drv->bcast_regmap,
+> +				   drv->edac_reg_offset->trp_ecc_error_cntr_clear,
+>  				   DRP_TRP_CNT_CLEAR);
+>  		if (ret)
+>  			return ret;
+> @@ -203,16 +165,54 @@ qcom_llcc_clear_error_status(int err_type, struct llcc_drv_data *drv)
+>  	return ret;
+>  }
+>  
+> +struct qcom_llcc_syn_regs {
+> +	u32 synd_reg;
+> +	u32 count_status_reg;
+> +	u32 ways_status_reg;
+> +};
+> +
+> +static void get_reg_offsets(struct llcc_drv_data *drv, int err_type,
+> +			    struct qcom_llcc_syn_regs *syn_regs)
+> +{
+> +	const struct llcc_edac_reg_offset *edac_reg_offset = drv->edac_reg_offset;
+> +
+> +	switch (err_type) {
+> +	case LLCC_DRAM_CE:
+> +		syn_regs->synd_reg = edac_reg_offset->drp_ecc_sb_err_syn0;
+> +		syn_regs->count_status_reg = edac_reg_offset->drp_ecc_error_status1;
+> +		syn_regs->ways_status_reg = edac_reg_offset->drp_ecc_error_status0;
+> +		break;
+> +	case LLCC_DRAM_UE:
+> +		syn_regs->synd_reg = edac_reg_offset->drp_ecc_db_err_syn0;
+> +		syn_regs->count_status_reg = edac_reg_offset->drp_ecc_error_status1;
+> +		syn_regs->ways_status_reg = edac_reg_offset->drp_ecc_error_status0;
+> +		break;
+> +	case LLCC_TRAM_CE:
+> +		syn_regs->synd_reg = edac_reg_offset->trp_ecc_sb_err_syn0;
+> +		syn_regs->count_status_reg = edac_reg_offset->trp_ecc_error_status1;
+> +		syn_regs->ways_status_reg = edac_reg_offset->trp_ecc_error_status0;
+> +		break;
+> +	case LLCC_TRAM_UE:
+> +		syn_regs->synd_reg = edac_reg_offset->trp_ecc_db_err_syn0;
+> +		syn_regs->count_status_reg = edac_reg_offset->trp_ecc_error_status1;
+> +		syn_regs->ways_status_reg = edac_reg_offset->trp_ecc_error_status0;
+> +		break;
+> +	}
+> +}
+> +
+>  /* Dump Syndrome registers data for Tag RAM, Data RAM bit errors*/
+>  static int
+>  dump_syn_reg_values(struct llcc_drv_data *drv, u32 bank, int err_type)
+>  {
+>  	struct llcc_edac_reg_data reg_data = edac_reg_data[err_type];
+> +	struct qcom_llcc_syn_regs regs = { };
+>  	int err_cnt, err_ways, ret, i;
+>  	u32 synd_reg, synd_val;
+>  
+> +	get_reg_offsets(drv, err_type, &regs);
+> +
+>  	for (i = 0; i < reg_data.reg_cnt; i++) {
+> -		synd_reg = reg_data.synd_reg + (i * 4);
+> +		synd_reg = regs.synd_reg + (i * 4);
+>  		ret = regmap_read(drv->regmap, drv->offsets[bank] + synd_reg,
+>  				  &synd_val);
+>  		if (ret)
+> @@ -223,7 +223,7 @@ dump_syn_reg_values(struct llcc_drv_data *drv, u32 bank, int err_type)
+>  	}
+>  
+>  	ret = regmap_read(drv->regmap,
+> -			  drv->offsets[bank] + reg_data.count_status_reg,
+> +			  drv->offsets[bank] + regs.count_status_reg,
+>  			  &err_cnt);
+>  	if (ret)
+>  		goto clear;
+> @@ -234,7 +234,7 @@ dump_syn_reg_values(struct llcc_drv_data *drv, u32 bank, int err_type)
+>  		    reg_data.name, err_cnt);
+>  
+>  	ret = regmap_read(drv->regmap,
+> -			  drv->offsets[bank] + reg_data.ways_status_reg,
+> +			  drv->offsets[bank] + regs.ways_status_reg,
+>  			  &err_ways);
+>  	if (ret)
+>  		goto clear;
+> @@ -297,7 +297,7 @@ llcc_ecc_irq_handler(int irq, void *edev_ctl)
+>  	/* Iterate over the banks and look for Tag RAM or Data RAM errors */
+>  	for (i = 0; i < drv->num_banks; i++) {
+>  		ret = regmap_read(drv->regmap,
+> -				  drv->offsets[i] + DRP_INTERRUPT_STATUS,
+> +				  drv->offsets[i] + drv->edac_reg_offset->drp_interrupt_status,
+>  				  &drp_error);
+>  
+>  		if (!ret && (drp_error & SB_ECC_ERROR)) {
+> @@ -313,7 +313,7 @@ llcc_ecc_irq_handler(int irq, void *edev_ctl)
+>  			irq_rc = IRQ_HANDLED;
+>  
+>  		ret = regmap_read(drv->regmap,
+> -				  drv->offsets[i] + TRP_INTERRUPT_0_STATUS,
+> +				  drv->offsets[i] + drv->edac_reg_offset->trp_interrupt_0_status,
+>  				  &trp_error);
+>  
+>  		if (!ret && (trp_error & SB_ECC_ERROR)) {
+> @@ -340,7 +340,7 @@ static int qcom_llcc_edac_probe(struct platform_device *pdev)
+>  	int ecc_irq;
+>  	int rc;
+>  
+> -	rc = qcom_llcc_core_setup(llcc_driv_data->bcast_regmap);
+> +	rc = qcom_llcc_core_setup(llcc_driv_data, llcc_driv_data->bcast_regmap);
+>  	if (rc)
+>  		return rc;
+>  
+> diff --git a/include/linux/soc/qcom/llcc-qcom.h b/include/linux/soc/qcom/llcc-qcom.h
+> index bc2fb8343a94..d5b2d58e8857 100644
+> --- a/include/linux/soc/qcom/llcc-qcom.h
+> +++ b/include/linux/soc/qcom/llcc-qcom.h
+> @@ -57,9 +57,6 @@ struct llcc_slice_desc {
+>  /**
+>   * struct llcc_edac_reg_data - llcc edac registers data for each error type
+>   * @name: Name of the error
+> - * @synd_reg: Syndrome register address
+> - * @count_status_reg: Status register address to read the error count
+> - * @ways_status_reg: Status register address to read the error ways
+>   * @reg_cnt: Number of registers
+>   * @count_mask: Mask value to get the error count
+>   * @ways_mask: Mask value to get the error ways
+> @@ -68,9 +65,6 @@ struct llcc_slice_desc {
+>   */
+>  struct llcc_edac_reg_data {
+>  	char *name;
+> -	u64 synd_reg;
+> -	u64 count_status_reg;
+> -	u64 ways_status_reg;
+>  	u32 reg_cnt;
+>  	u32 count_mask;
+>  	u32 ways_mask;
+> -- 
+> 2.25.1
+> 
