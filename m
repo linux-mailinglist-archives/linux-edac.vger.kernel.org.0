@@ -2,315 +2,106 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C72565AA052
-	for <lists+linux-edac@lfdr.de>; Thu,  1 Sep 2022 21:43:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 748A65AA7F4
+	for <lists+linux-edac@lfdr.de>; Fri,  2 Sep 2022 08:18:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231936AbiIATnr (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Thu, 1 Sep 2022 15:43:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50828 "EHLO
+        id S235471AbiIBGQt (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Fri, 2 Sep 2022 02:16:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234706AbiIATnd (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Thu, 1 Sep 2022 15:43:33 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F14E9BB5A;
-        Thu,  1 Sep 2022 12:43:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662061412; x=1693597412;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=w4h4BOehZh3KOQ0TFBnp+WQud/kuPjA/m/SdaY7wrZ4=;
-  b=KTWSXLKFbPFJ5vPoCogLxiNv9gztTAiOgnZ3HNBzly9xtwzHn95eF5Bh
-   K5c7U/ftuVLXzT9KrOucIoB3bR+3JTEjYsgkU6Yw0CkTOsoQMtloic2q6
-   Td6tV4CB3Pd7H92HayBS5GaWlh0O3gj7A1ULF1G9+KGHqUMqU7NMaMyjW
-   PYErBFxX0Pu6eHI4P9Ip9dyt0unYEX/EGOYPAQjNlG9JQ5NOX4sni/I9s
-   zKTHL2wgJCrTaeD8vtzcGJrVvOWF1z2kJIPiqnImT5V9C2OghucqPRnjD
-   UeAmuecqRAxJ0y96DjwyS2+MRaY+mQKbboVL1PHawspQ0Z4SXU+cRbHOP
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10457"; a="295821697"
-X-IronPort-AV: E=Sophos;i="5.93,281,1654585200"; 
-   d="scan'208";a="295821697"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Sep 2022 12:43:22 -0700
-X-IronPort-AV: E=Sophos;i="5.93,281,1654585200"; 
-   d="scan'208";a="674020256"
-Received: from agluck-desk3.sc.intel.com ([172.25.222.78])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Sep 2022 12:43:20 -0700
-From:   Tony Luck <tony.luck@intel.com>
-To:     linux-edac@vger.kernel.org
-Cc:     Youquan Song <youquan.song@intel.com>,
-        Qiuxu Zhuo <qiuxu.zhuo@intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Aristeu Rozanski <aris@redhat.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-kernel@vger.kernel.org, patches@lists.linux.dev
-Subject: [PATCH 3/3] EDAC/i10nm: Add driver decoder for Ice Lake and Tremont CPUs
-Date:   Thu,  1 Sep 2022 12:43:10 -0700
-Message-Id: <20220901194310.115427-4-tony.luck@intel.com>
-X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220901194310.115427-1-tony.luck@intel.com>
-References: <20220901194310.115427-1-tony.luck@intel.com>
+        with ESMTP id S235474AbiIBGQl (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Fri, 2 Sep 2022 02:16:41 -0400
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93492915C4;
+        Thu,  1 Sep 2022 23:16:40 -0700 (PDT)
+Received: by mail-ed1-x52f.google.com with SMTP id t5so1299976edc.11;
+        Thu, 01 Sep 2022 23:16:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=aiWzycCBoIbbruOADleMkCk4b+tj8c7FcfdTIbVcXyE=;
+        b=gXbBJGQnKr/0+Kwbk9Pv0NByprxnRUodstMYhyuMmyfTySZ8jRGcj5PRr2i4XmkRp2
+         zRvLX6RNK3bu5TBdptCrAyNdHut4CYD5JxU0MCSxH5hkm5gq6707jKq1Z4B+7/9P1hcM
+         iFsuH8Prp9lnC9DLLfotwX+jNTbmQuxjIW1KgXKVWpSLCPO0VoXbDCeipJY8JZJRBpgv
+         hxtdYXQZQYxqQePUWnikGSEcD2ZRp9XSSJjjVEO8IBtw5L/7YqlXmNDWYxXLh7Eq28uE
+         r/RwwG9BDzWVv5S6UY9utfHi8h3fWXMLISU2EW3kYL864OQsTg5s7wBQPG//hInEEKkT
+         BnJA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=aiWzycCBoIbbruOADleMkCk4b+tj8c7FcfdTIbVcXyE=;
+        b=2/vSCeGxuXobB1rWqiqrlDBIhG0R+R8mpAD4QqFsXOg1dEyb97sns0vP9NObUa6n2N
+         CcR1LIHWjGZbkMxonT3RHom+skNvC1+vU5HhH6avID+GmYJTP4Y4cqhP622xuYaUaKTC
+         GVxVMOj/1XcrDMERJ6+3qZoHr0CpStp9aQmCrCu42sQoQehfwi0CiTuvmem7w7TNJQpM
+         z5Osh1sX5U/N+J7x87llugwfG9DvqUtjhlpWmxsTCXRWSsv30+WCLy8Xp8wYXy4vhDtY
+         o6aYDkEosQ18hOV64412abaO44TFPKQTwF6ee4MOyH4Y+iCyP4/waaftmlhFmybNR3fV
+         S+Uw==
+X-Gm-Message-State: ACgBeo115f/lek5Htq8XX9R6BOoUT3enP367NJ+oTKfRF6ZKpxrvCqqs
+        w9EBcCKVl7ZL/rKfUx5cw4x3s2C4gESLACWxtBE=
+X-Google-Smtp-Source: AA6agR7ffwCW0E/pGXEIeZCbLWCZa03s3qO/DMl52Zz0jW7ILT8w0hg410F8D96hAnOQk/HPn7gjJ3p/1TCpAEKoFPE=
+X-Received: by 2002:a05:6402:1215:b0:448:1431:465e with SMTP id
+ c21-20020a056402121500b004481431465emr24048836edw.395.1662099398839; Thu, 01
+ Sep 2022 23:16:38 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220830022238.28379-1-milkfafa@gmail.com> <20220830022238.28379-3-milkfafa@gmail.com>
+ <a3a93acc-434e-4a94-6ba6-6a71f2da8736@linaro.org>
+In-Reply-To: <a3a93acc-434e-4a94-6ba6-6a71f2da8736@linaro.org>
+From:   Kun-Fa Lin <milkfafa@gmail.com>
+Date:   Fri, 2 Sep 2022 14:16:27 +0800
+Message-ID: <CADnNmFqpNxdHTY619MgnSxPbMHw9s9C71GOxKAphWf_xwDGnXw@mail.gmail.com>
+Subject: Re: [PATCH v14 2/3] dt-bindings: edac: nuvoton: Add document for NPCM
+ memory controller
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     linux-edac <linux-edac@vger.kernel.org>, rric@kernel.org,
+        James Morse <james.morse@arm.com>, tony.luck@intel.com,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Borislav Petkov <bp@alien8.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        OpenBMC Maillist <openbmc@lists.ozlabs.org>,
+        Benjamin Fair <benjaminfair@google.com>,
+        Nancy Yuen <yuenn@google.com>,
+        Patrick Venture <venture@google.com>,
+        CS20 KWLiu <KWLIU@nuvoton.com>, YSCHU@nuvoton.com,
+        JJLIU0@nuvoton.com, KFTING <KFTING@nuvoton.com>,
+        Avi Fishman <avifishman70@gmail.com>,
+        Tomer Maimon <tmaimon77@gmail.com>,
+        Tali Perry <tali.perry1@gmail.com>, ctcchien@nuvoton.com,
+        Marvin Lin <kflin@nuvoton.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-From: Youquan Song <youquan.song@intel.com>
+Hi Krzysztof,
 
-Current i10nm_edac only supports firmware decoder (ACPI DSM methods).
-MCA bank registers of Ice Lake or Tremont CPUs contain the information
-to decode DDR memory errors. To get better decoding performance, add
-the driver decoder (decoding DDR memory errors via extracting error
-information from MCA bank registers) for Ice Lake and Tremont CPUs.
+> > +++ b/Documentation/devicetree/bindings/edac/nuvoton,npcm-memory-controller.yaml
+> > @@ -0,0 +1,54 @@
+> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> > +
+> > +%YAML 1.2
+> > +---
+> > +$id: http://devicetree.org/schemas/edac/nuvoton,npcm-memory-controller.yaml#
+>
+> This should be in memory-controllers directory.
 
-Co-developed-by: Qiuxu Zhuo <qiuxu.zhuo@intel.com>
-Signed-off-by: Qiuxu Zhuo <qiuxu.zhuo@intel.com>
-Signed-off-by: Youquan Song <youquan.song@intel.com>
-Signed-off-by: Tony Luck <tony.luck@intel.com>
----
- arch/x86/include/asm/mce.h |   1 +
- drivers/edac/skx_common.h  |   5 ++
- drivers/edac/i10nm_base.c  | 134 ++++++++++++++++++++++++++++++++++++-
- drivers/edac/skx_common.c  |   1 +
- 4 files changed, 139 insertions(+), 2 deletions(-)
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+> > +title: Nuvoton NPCM Memory Controller Device Tree Bindings
+>
+> s/Device Tree Bindings//
 
-diff --git a/arch/x86/include/asm/mce.h b/arch/x86/include/asm/mce.h
-index cc73061e7255..6e986088817d 100644
---- a/arch/x86/include/asm/mce.h
-+++ b/arch/x86/include/asm/mce.h
-@@ -42,6 +42,7 @@
- #define MCI_STATUS_CEC_SHIFT	38           /* Corrected Error Count */
- #define MCI_STATUS_CEC_MASK	GENMASK_ULL(52,38)
- #define MCI_STATUS_CEC(c)	(((c) & MCI_STATUS_CEC_MASK) >> MCI_STATUS_CEC_SHIFT)
-+#define MCI_STATUS_MSCOD(m)	(((m) >> 16) & 0xffff)
- 
- /* AMD-specific bits */
- #define MCI_STATUS_TCC		BIT_ULL(55)  /* Task context corrupt */
-diff --git a/drivers/edac/skx_common.h b/drivers/edac/skx_common.h
-index 880ecd15ca42..c542f1562825 100644
---- a/drivers/edac/skx_common.h
-+++ b/drivers/edac/skx_common.h
-@@ -10,6 +10,7 @@
- #define _SKX_COMM_EDAC_H
- 
- #include <linux/bits.h>
-+#include <asm/mce.h>
- 
- #define MSG_SIZE		1024
- 
-@@ -52,6 +53,9 @@
- #define IS_DIMM_PRESENT(r)		GET_BITFIELD(r, 15, 15)
- #define IS_NVDIMM_PRESENT(r, i)		GET_BITFIELD(r, i, i)
- 
-+#define MCI_MISC_ECC_MODE(m)	(((m) >> 59) & 15)
-+#define MCI_MISC_ECC_DDRT	8	/* read from DDRT */
-+
- /*
-  * Each cpu socket contains some pci devices that provide global
-  * information, and also some that are local to each of the two
-@@ -120,6 +124,7 @@ enum {
- #define BIT_NM_DIMM	BIT_ULL(INDEX_NM_DIMM)
- 
- struct decoded_addr {
-+	struct mce *mce;
- 	struct skx_dev *dev;
- 	u64	addr;
- 	int	socket;
-diff --git a/drivers/edac/i10nm_base.c b/drivers/edac/i10nm_base.c
-index 6cf50ee0b77c..817f618fcff0 100644
---- a/drivers/edac/i10nm_base.c
-+++ b/drivers/edac/i10nm_base.c
-@@ -74,6 +74,8 @@ static struct list_head *i10nm_edac_list;
- 
- static struct res_config *res_cfg;
- static int retry_rd_err_log;
-+static int decoding_via_mca;
-+static bool mem_cfg_2lm;
- 
- static u32 offsets_scrub_icx[]  = {0x22c60, 0x22c54, 0x22c5c, 0x22c58, 0x22c28, 0x20ed8};
- static u32 offsets_scrub_spr[]  = {0x22c60, 0x22c54, 0x22f08, 0x22c58, 0x22c28, 0x20ed8};
-@@ -231,6 +233,103 @@ static bool i10nm_check_2lm(struct res_config *cfg)
- 	return false;
- }
- 
-+/*
-+ * Check whether the error comes from DDRT by ICX/Tremont model specific error code.
-+ * Refer to SDM vol3B 16.11.3 Intel IMC MC error codes for IA32_MCi_STATUS.
-+ */
-+static bool i10nm_mscod_is_ddrt(u32 mscod)
-+{
-+	switch (mscod) {
-+	case 0x0106: case 0x0107:
-+	case 0x0800: case 0x0804:
-+	case 0x0806 ... 0x0808:
-+	case 0x080a ... 0x080e:
-+	case 0x0810: case 0x0811:
-+	case 0x0816: case 0x081e:
-+	case 0x081f:
-+		return true;
-+	}
-+
-+	return false;
-+}
-+
-+static bool i10nm_mc_decode_available(struct mce *mce)
-+{
-+	u8 bank;
-+
-+	if (!decoding_via_mca || mem_cfg_2lm)
-+		return false;
-+
-+	if ((mce->status & (MCI_STATUS_MISCV | MCI_STATUS_ADDRV))
-+			!= (MCI_STATUS_MISCV | MCI_STATUS_ADDRV))
-+		return false;
-+
-+	bank = mce->bank;
-+
-+	switch (res_cfg->type) {
-+	case I10NM:
-+		if (bank < 13 || bank > 26)
-+			return false;
-+
-+		/* DDRT errors can't be decoded from MCA bank registers */
-+		if (MCI_MISC_ECC_MODE(mce->misc) == MCI_MISC_ECC_DDRT)
-+			return false;
-+
-+		if (i10nm_mscod_is_ddrt(MCI_STATUS_MSCOD(mce->status)))
-+			return false;
-+
-+		/* Check whether one of {13,14,17,18,21,22,25,26} */
-+		return ((bank - 13) & BIT(1)) == 0;
-+	default:
-+		return false;
-+	}
-+}
-+
-+static bool i10nm_mc_decode(struct decoded_addr *res)
-+{
-+	struct mce *m = res->mce;
-+	struct skx_dev *d;
-+	u8 bank;
-+
-+	if (!i10nm_mc_decode_available(m))
-+		return false;
-+
-+	list_for_each_entry(d, i10nm_edac_list, list) {
-+		if (d->imc[0].src_id == m->socketid) {
-+			res->socket = m->socketid;
-+			res->dev = d;
-+			break;
-+		}
-+	}
-+
-+	switch (res_cfg->type) {
-+	case I10NM:
-+		bank = m->bank - 13;
-+		res->imc = bank / 4;
-+		res->channel = bank % 2;
-+		break;
-+	default:
-+		return false;
-+	}
-+
-+	if (!res->dev) {
-+		skx_printk(KERN_ERR, "No device for src_id %d imc %d\n",
-+			   m->socketid, res->imc);
-+		return false;
-+	}
-+
-+	res->column       = GET_BITFIELD(m->misc, 9, 18) << 2;
-+	res->row          = GET_BITFIELD(m->misc, 19, 39);
-+	res->bank_group   = GET_BITFIELD(m->misc, 40, 41);
-+	res->bank_address = GET_BITFIELD(m->misc, 42, 43);
-+	res->bank_group  |= GET_BITFIELD(m->misc, 44, 44) << 2;
-+	res->rank         = GET_BITFIELD(m->misc, 56, 58);
-+	res->dimm         = res->rank >> 2;
-+	res->rank         = res->rank % 4;
-+
-+	return true;
-+}
-+
- static int i10nm_get_ddr_munits(void)
- {
- 	struct pci_dev *mdev;
-@@ -574,7 +673,8 @@ static int __init i10nm_init(void)
- 		return -ENODEV;
- 	}
- 
--	skx_set_mem_cfg(i10nm_check_2lm(cfg));
-+	mem_cfg_2lm = i10nm_check_2lm(cfg);
-+	skx_set_mem_cfg(mem_cfg_2lm);
- 
- 	rc = i10nm_get_ddr_munits();
- 
-@@ -626,9 +726,11 @@ static int __init i10nm_init(void)
- 	setup_i10nm_debug();
- 
- 	if (retry_rd_err_log && res_cfg->offsets_scrub && res_cfg->offsets_demand) {
--		skx_set_decode(NULL, show_retry_rd_err_log);
-+		skx_set_decode(i10nm_mc_decode, show_retry_rd_err_log);
- 		if (retry_rd_err_log == 2)
- 			enable_retry_rd_err_log(true);
-+	} else {
-+		skx_set_decode(i10nm_mc_decode, NULL);
- 	}
- 
- 	i10nm_printk(KERN_INFO, "%s\n", I10NM_REVISION);
-@@ -658,6 +760,34 @@ static void __exit i10nm_exit(void)
- module_init(i10nm_init);
- module_exit(i10nm_exit);
- 
-+static int set_decoding_via_mca(const char *buf, const struct kernel_param *kp)
-+{
-+	unsigned long val;
-+	int ret;
-+
-+	ret = kstrtoul(buf, 0, &val);
-+
-+	if (ret || val > 1)
-+		return -EINVAL;
-+
-+	if (val && mem_cfg_2lm) {
-+		i10nm_printk(KERN_NOTICE, "Decoding errors via MCA banks for 2LM isn't supported yet\n");
-+		return -EIO;
-+	}
-+
-+	ret = param_set_int(buf, kp);
-+
-+	return ret;
-+}
-+
-+static const struct kernel_param_ops decoding_via_mca_param_ops = {
-+	.set = set_decoding_via_mca,
-+	.get = param_get_int,
-+};
-+
-+module_param_cb(decoding_via_mca, &decoding_via_mca_param_ops, &decoding_via_mca, 0644);
-+MODULE_PARM_DESC(decoding_via_mca, "decoding_via_mca: 0=off(default), 1=enable");
-+
- module_param(retry_rd_err_log, int, 0444);
- MODULE_PARM_DESC(retry_rd_err_log, "retry_rd_err_log: 0=off(default), 1=bios(Linux doesn't reset any control bits, but just reports values.), 2=linux(Linux tries to take control and resets mode bits, clear valid/UC bits after reading.)");
- 
-diff --git a/drivers/edac/skx_common.c b/drivers/edac/skx_common.c
-index 16ca3de57c24..7276ce3a33e1 100644
---- a/drivers/edac/skx_common.c
-+++ b/drivers/edac/skx_common.c
-@@ -651,6 +651,7 @@ int skx_mce_check_error(struct notifier_block *nb, unsigned long val,
- 		return NOTIFY_DONE;
- 
- 	memset(&res, 0, sizeof(res));
-+	res.mce  = mce;
- 	res.addr = mce->addr;
- 
- 	/* Try driver decoder first */
--- 
-2.37.1
+Thanks for the review. Next version will move YAML to
+memory-controllers directory and remove "Device Tree Bindings".
 
+Regards,
+Marvin
