@@ -2,106 +2,61 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 748A65AA7F4
-	for <lists+linux-edac@lfdr.de>; Fri,  2 Sep 2022 08:18:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B4BD5AA9AF
+	for <lists+linux-edac@lfdr.de>; Fri,  2 Sep 2022 10:14:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235471AbiIBGQt (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Fri, 2 Sep 2022 02:16:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32852 "EHLO
+        id S235773AbiIBIOr (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Fri, 2 Sep 2022 04:14:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235474AbiIBGQl (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Fri, 2 Sep 2022 02:16:41 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93492915C4;
-        Thu,  1 Sep 2022 23:16:40 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id t5so1299976edc.11;
-        Thu, 01 Sep 2022 23:16:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=aiWzycCBoIbbruOADleMkCk4b+tj8c7FcfdTIbVcXyE=;
-        b=gXbBJGQnKr/0+Kwbk9Pv0NByprxnRUodstMYhyuMmyfTySZ8jRGcj5PRr2i4XmkRp2
-         zRvLX6RNK3bu5TBdptCrAyNdHut4CYD5JxU0MCSxH5hkm5gq6707jKq1Z4B+7/9P1hcM
-         iFsuH8Prp9lnC9DLLfotwX+jNTbmQuxjIW1KgXKVWpSLCPO0VoXbDCeipJY8JZJRBpgv
-         hxtdYXQZQYxqQePUWnikGSEcD2ZRp9XSSJjjVEO8IBtw5L/7YqlXmNDWYxXLh7Eq28uE
-         r/RwwG9BDzWVv5S6UY9utfHi8h3fWXMLISU2EW3kYL864OQsTg5s7wBQPG//hInEEKkT
-         BnJA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=aiWzycCBoIbbruOADleMkCk4b+tj8c7FcfdTIbVcXyE=;
-        b=2/vSCeGxuXobB1rWqiqrlDBIhG0R+R8mpAD4QqFsXOg1dEyb97sns0vP9NObUa6n2N
-         CcR1LIHWjGZbkMxonT3RHom+skNvC1+vU5HhH6avID+GmYJTP4Y4cqhP622xuYaUaKTC
-         GVxVMOj/1XcrDMERJ6+3qZoHr0CpStp9aQmCrCu42sQoQehfwi0CiTuvmem7w7TNJQpM
-         z5Osh1sX5U/N+J7x87llugwfG9DvqUtjhlpWmxsTCXRWSsv30+WCLy8Xp8wYXy4vhDtY
-         o6aYDkEosQ18hOV64412abaO44TFPKQTwF6ee4MOyH4Y+iCyP4/waaftmlhFmybNR3fV
-         S+Uw==
-X-Gm-Message-State: ACgBeo115f/lek5Htq8XX9R6BOoUT3enP367NJ+oTKfRF6ZKpxrvCqqs
-        w9EBcCKVl7ZL/rKfUx5cw4x3s2C4gESLACWxtBE=
-X-Google-Smtp-Source: AA6agR7ffwCW0E/pGXEIeZCbLWCZa03s3qO/DMl52Zz0jW7ILT8w0hg410F8D96hAnOQk/HPn7gjJ3p/1TCpAEKoFPE=
-X-Received: by 2002:a05:6402:1215:b0:448:1431:465e with SMTP id
- c21-20020a056402121500b004481431465emr24048836edw.395.1662099398839; Thu, 01
- Sep 2022 23:16:38 -0700 (PDT)
+        with ESMTP id S235781AbiIBIOa (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Fri, 2 Sep 2022 04:14:30 -0400
+Received: from mail.connexion24.pl (mail.connexion24.pl [141.94.21.111])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5E33BD4C5
+        for <linux-edac@vger.kernel.org>; Fri,  2 Sep 2022 01:13:53 -0700 (PDT)
+Received: by mail.connexion24.pl (Postfix, from userid 1002)
+        id 2A51FAEEFD; Fri,  2 Sep 2022 07:51:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=connexion24.pl;
+        s=mail; t=1662105192;
+        bh=ChRcLNpIfKnVgp03/tSyWuRw1tWSTk/OEiEnuZMWs58=;
+        h=Date:From:To:Subject:From;
+        b=FnpS3gkzr8SSxpRBzQ/wtXMBZCte3au1YiIGEzyhBS6dtEBaBSfA0h0JkzOv+DDdD
+         Q2CUlMDNoLfXPUCgqRaoJTYroijiVd5hpC8ikpKCxZPKth7Fb4usq35La6x1CnZ7Hp
+         RZ96ABiZdys0ILotN/uXZN/ToPH2aclawB/ixIlKcoYp5K7AmK+TfZFljxMP0qw3My
+         9SQ4aZGkkzXk/JR9jVntrHZvEnWb6UydGflo7+0H36OGUgd80X9NVHIPdZTDStpQhR
+         XolXoajiIpa3qU0nlEvxJrulGN0/SSWRcNgRSSEZUDoxBpHIuKvzKpUo1E4Qqa/pFN
+         yJXpWrJ+Em4/Q==
+Received: by mail.connexion24.pl for <linux-edac@vger.kernel.org>; Fri,  2 Sep 2022 07:50:21 GMT
+Message-ID: <20220902064500-0.1.5l.yskt.0.sy85go87og@connexion24.pl>
+Date:   Fri,  2 Sep 2022 07:50:21 GMT
+From:   "Norbert Karecki" <norbert.karecki@connexion24.pl>
+To:     <linux-edac@vger.kernel.org>
+Subject: Wycena paneli fotowoltaicznych
+X-Mailer: mail.connexion24.pl
 MIME-Version: 1.0
-References: <20220830022238.28379-1-milkfafa@gmail.com> <20220830022238.28379-3-milkfafa@gmail.com>
- <a3a93acc-434e-4a94-6ba6-6a71f2da8736@linaro.org>
-In-Reply-To: <a3a93acc-434e-4a94-6ba6-6a71f2da8736@linaro.org>
-From:   Kun-Fa Lin <milkfafa@gmail.com>
-Date:   Fri, 2 Sep 2022 14:16:27 +0800
-Message-ID: <CADnNmFqpNxdHTY619MgnSxPbMHw9s9C71GOxKAphWf_xwDGnXw@mail.gmail.com>
-Subject: Re: [PATCH v14 2/3] dt-bindings: edac: nuvoton: Add document for NPCM
- memory controller
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     linux-edac <linux-edac@vger.kernel.org>, rric@kernel.org,
-        James Morse <james.morse@arm.com>, tony.luck@intel.com,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Borislav Petkov <bp@alien8.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        OpenBMC Maillist <openbmc@lists.ozlabs.org>,
-        Benjamin Fair <benjaminfair@google.com>,
-        Nancy Yuen <yuenn@google.com>,
-        Patrick Venture <venture@google.com>,
-        CS20 KWLiu <KWLIU@nuvoton.com>, YSCHU@nuvoton.com,
-        JJLIU0@nuvoton.com, KFTING <KFTING@nuvoton.com>,
-        Avi Fishman <avifishman70@gmail.com>,
-        Tomer Maimon <tmaimon77@gmail.com>,
-        Tali Perry <tali.perry1@gmail.com>, ctcchien@nuvoton.com,
-        Marvin Lin <kflin@nuvoton.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=0.0 required=5.0 tests=BAYES_20,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_SBL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_SBL_A autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-Hi Krzysztof,
+Dzie=C5=84 dobry,
 
-> > +++ b/Documentation/devicetree/bindings/edac/nuvoton,npcm-memory-controller.yaml
-> > @@ -0,0 +1,54 @@
-> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> > +
-> > +%YAML 1.2
-> > +---
-> > +$id: http://devicetree.org/schemas/edac/nuvoton,npcm-memory-controller.yaml#
->
-> This should be in memory-controllers directory.
+dostrzegam mo=C5=BCliwo=C5=9B=C4=87 wsp=C3=B3=C5=82pracy z Pa=C5=84stwa f=
+irm=C4=85.
 
-> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > +
-> > +title: Nuvoton NPCM Memory Controller Device Tree Bindings
->
-> s/Device Tree Bindings//
+=C5=9Awiadczymy kompleksow=C4=85 obs=C5=82ug=C4=99 inwestycji w fotowolta=
+ik=C4=99, kt=C3=B3ra obni=C5=BCa koszty energii elektrycznej nawet o 90%.
 
-Thanks for the review. Next version will move YAML to
-memory-controllers directory and remove "Device Tree Bindings".
+Czy s=C4=85 Pa=C5=84stwo zainteresowani weryfikacj=C4=85 wst=C4=99pnych p=
+ropozycji?
 
-Regards,
-Marvin
+
+Pozdrawiam,
+Norbert Karecki
