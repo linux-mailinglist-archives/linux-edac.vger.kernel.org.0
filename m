@@ -2,173 +2,65 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5C945AB74B
-	for <lists+linux-edac@lfdr.de>; Fri,  2 Sep 2022 19:14:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7119C5ACDC1
+	for <lists+linux-edac@lfdr.de>; Mon,  5 Sep 2022 10:34:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235064AbiIBROx (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Fri, 2 Sep 2022 13:14:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48434 "EHLO
+        id S237765AbiIEIce (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Mon, 5 Sep 2022 04:32:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234477AbiIBROv (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Fri, 2 Sep 2022 13:14:51 -0400
-Received: from mx0a-002e3701.pphosted.com (mx0a-002e3701.pphosted.com [148.163.147.86])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5A501139;
-        Fri,  2 Sep 2022 10:14:48 -0700 (PDT)
-Received: from pps.filterd (m0134421.ppops.net [127.0.0.1])
-        by mx0b-002e3701.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 282H9K9r016725;
-        Fri, 2 Sep 2022 17:14:13 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=from : to : cc : subject
- : date : message-id : references : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=pps0720;
- bh=YNIDse07olkYKVBqhkEPEy0X+2MsJwW+/NIatVrvILs=;
- b=aLfhrWS7SyLV8uZ/IHl/0TE0mYf4gVxcTVV/i3jwsiP5cgV5dYQXlZrvTK+2ThiT/LoT
- spGQBo9vIlnDU25TwiuyqR3L85QcxBznSswwqbPCGCOqpzsfPJ7EsN+AdU4lcERJE22u
- cyu00daLfwwXhQFD09IkOImeEi3wCi7GDSWEsB7jrl/uZHEaM4Fyrp3Q7zupottsJcUZ
- hP2zuo02TtGVQte8j5MKeieRKnFq8VfzQQLHLX+1gU8z0DAHHs6MfdhOYKMFFWnbHOg4
- xPdb2QefLxWqTp5i7PFDqCgSlhhh0sv1wGYflYvA2gb4zLTp99qehlMDQJJVQjB6u56W YQ== 
-Received: from p1lg14878.it.hpe.com (p1lg14878.it.hpe.com [16.230.97.204])
-        by mx0b-002e3701.pphosted.com (PPS) with ESMTPS id 3jbnyyg0wg-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 02 Sep 2022 17:14:12 +0000
-Received: from p1wg14926.americas.hpqcorp.net (unknown [10.119.18.115])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by p1lg14878.it.hpe.com (Postfix) with ESMTPS id D268DD281;
-        Fri,  2 Sep 2022 17:14:11 +0000 (UTC)
-Received: from p1wg14927.americas.hpqcorp.net (10.119.18.117) by
- p1wg14926.americas.hpqcorp.net (10.119.18.115) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.15; Fri, 2 Sep 2022 05:13:26 -1200
-Received: from p1wg14928.americas.hpqcorp.net (10.119.18.116) by
- p1wg14927.americas.hpqcorp.net (10.119.18.117) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.15; Fri, 2 Sep 2022 05:13:26 -1200
-Received: from p1wg14921.americas.hpqcorp.net (16.230.19.124) by
- p1wg14928.americas.hpqcorp.net (10.119.18.116) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.15
- via Frontend Transport; Fri, 2 Sep 2022 05:13:26 -1200
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (192.58.206.38)
- by edge.it.hpe.com (16.230.19.124) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.15; Fri, 2 Sep 2022 05:13:26 -1200
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=A8JXeRjAUCdGHetH4FyCDSZX8iCyXw+a4cu4E7kqyJqT+aDMgfBhr44MUNEM06bvsU6HDaP0TuCtfZNOw7OKrQnFj5Iw44cH683F75U47DRy4pi8oVR135Yj/ckUhBuqsGsurDAn7JCEGuu3wyvCGlI/yKQvcNpTG0lI9WrJWLIjf4kBLpsqSF4+FrfDPbTeNlAoxjo7UUSYSb6H9m/KvYXDo0BSlSs3MbVo2uLDCH/bmYASARKybdvRXzecFMevbh8pgZgKG3IWCdUbzmyD6WXadakV/vvMv3WWOWCrGkjNoimO35Fyrbk7oBBRuJ8qjPhASTzhCkSWj0npM9Dqlg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=YNIDse07olkYKVBqhkEPEy0X+2MsJwW+/NIatVrvILs=;
- b=ANMkg+pGg7yilAJb6Nzjbnn7K1xokGqu/lEmmCfIbSoujWKOdbwlNr2ZBfb462EuTw1t301PCQuLR1ztlrPnniY5QTa5H5/vUrLbmzo49WrzG2kC/P3iG2Z3B5orkHI9l1EvkPlUCOYlcEt59R4XqqhZqkkcbDAYGu8m8XYulxVPvasqKcP5umw6GJ/awzUWg1OQAJavyk0UwFu0GmtTf80gvkoGC/Hc7JkoIHrdFLP4Wq2pjkYUeILnKVQ8w3S22ZQ4eiYhvx3Ld7ojKvX1aB+bNvdoWoRw3xXyxsoJ/hXM8JVZzUb5QMzphXlh7nOWffxNU/Gk/Lzurugl19LuCw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=hpe.com; dmarc=pass action=none header.from=hpe.com; dkim=pass
- header.d=hpe.com; arc=none
-Received: from DM4PR84MB1853.NAMPRD84.PROD.OUTLOOK.COM (2603:10b6:8:4c::19) by
- SJ0PR84MB1532.NAMPRD84.PROD.OUTLOOK.COM (2603:10b6:a03:432::5) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5588.11; Fri, 2 Sep 2022 17:13:23 +0000
-Received: from DM4PR84MB1853.NAMPRD84.PROD.OUTLOOK.COM
- ([fe80::2033:298b:4062:29e6]) by DM4PR84MB1853.NAMPRD84.PROD.OUTLOOK.COM
- ([fe80::2033:298b:4062:29e6%4]) with mapi id 15.20.5566.021; Fri, 2 Sep 2022
- 17:13:23 +0000
-From:   "Kani, Toshi" <toshi.kani@hpe.com>
-To:     Jia He <justin.he@arm.com>, Len Brown <lenb@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Robert Richter <rric@kernel.org>,
-        Robert Moore <robert.moore@intel.com>,
-        Qiuxu Zhuo <qiuxu.zhuo@intel.com>,
-        Yazen Ghannam <yazen.ghannam@amd.com>,
-        Jan Luebbe <jlu@pengutronix.de>,
-        Khuong Dinh <khuong@os.amperecomputing.com>
-CC:     Ard Biesheuvel <ardb@kernel.org>,
-        "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
-        "devel@acpica.org" <devel@acpica.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Shuai Xue <xueshuai@linux.alibaba.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        "linux-efi@vger.kernel.org" <linux-efi@vger.kernel.org>,
-        "nd@arm.com" <nd@arm.com>
-Subject: RE: [PATCH v4 5/8] EDAC/ghes: Make ghes_edac a proper module to
- remove the dependency on ghes
-Thread-Topic: [PATCH v4 5/8] EDAC/ghes: Make ghes_edac a proper module to
- remove the dependency on ghes
-Thread-Index: AQHYvQ0gLFRG5y0niUeXpc2U7DO/1a3MXSXw
-Date:   Fri, 2 Sep 2022 17:13:23 +0000
-Message-ID: <DM4PR84MB1853F07391E61292D4119F21827A9@DM4PR84MB1853.NAMPRD84.PROD.OUTLOOK.COM>
-References: <20220831074027.13849-1-justin.he@arm.com>
- <20220831074027.13849-6-justin.he@arm.com>
-In-Reply-To: <20220831074027.13849-6-justin.he@arm.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: b2871d11-3818-411c-875b-08da8d0670fc
-x-ms-traffictypediagnostic: SJ0PR84MB1532:EE_
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: vwvau0PF9g8xlgdR2WnXCNXcnxsz9qATvdjsJP1G8B43fwHLyYn03/pL1CzL7dcPxBHXS2m0syJ0dqGm65M+zVejsRWbvy3PExzhf83FY8q/A9HgI0vJM150w265lFvpMqHShYuOTQEdnPsc793z7RQdZ0fFkf/5o1YN9sOW52XOaxxqo9VwI8fARD3EaUsi64bXzb2wffJyhHv/GRL8eM9jhzHtAvOuSfLVCWjwnjotkeY0vvPNtg9BhjJGHDWbmyNI1Fo8kmYhFxfspE1dtqa1LT5qOKSI1lnQwaNCRcR1culNoe+y3T8NwXrAViXuzy7viGr5bklNv0BWYxRuz7W3dSeD4Dbgcc+djflHqmPHa+aKievCxrxDYJJwcVAUFD3bLG1RyE+lwDJdaivAtLbWsKDqQpZA8QjnB5OpXVfIm4vHvI5NKS2/WE430nYJIKOjdT3T91lleSQQtk1s8pAkrah2GL5yXfprtuQGVEnaWN9myCdIGhzXNioIoDbr5Ozf8saXBWbdb2YIjgmcIarkKgP/ALrvQIEjAcsgB0cB/6WY8G+BXJU+R8hCI5gHr7OFpxC+WUIBgajXhKuzEob5cUTZjbaK0tJKHh9AQ6Pxil7FlOH5GSWYVUEhQTXuEX0cePRa4acBEDNDRSOSmxOAuYM9DaBcea3pGzPgDEjOvVpmADtSDEzOc8M+Swje61k4lt0vVGXe32f2bYFb/uv6knY/TR51nGu7VOXfoNRbF9HgeNJBz8aJ7b7JT74npd2dsXD3qVKufkctDqY8lqMMNU8jy7+/+DsOUB+kMCk=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR84MB1853.NAMPRD84.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230016)(366004)(346002)(376002)(39860400002)(136003)(396003)(4744005)(186003)(7416002)(52536014)(41300700001)(8936002)(26005)(33656002)(478600001)(4326008)(8676002)(66556008)(76116006)(66946007)(66476007)(66446008)(64756008)(2906002)(86362001)(7696005)(6506007)(53546011)(9686003)(55016003)(122000001)(38100700002)(5660300002)(54906003)(110136005)(38070700005)(316002)(82960400001)(921005)(71200400001)(83380400001);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?B8SY2ttwJtBTPHqzI7eYfwK7eCHy+RHvnP+IE318QpwOZala/dqggLOLxV2S?=
- =?us-ascii?Q?w6XbftFk0aaofJof0QcK0xGOSSR1hgkY872F7bO6AXP+8DcMw8khvQjUIU0y?=
- =?us-ascii?Q?OE8fdXlFbhdWDg3tA/Jfs4HSOIwdF8sQ4Rsk0QYBHYc9/guB8p528tF0SQHY?=
- =?us-ascii?Q?2lgRf7Oqvu7JsJd9sskncHfOyclrT901kwUk9CNxul7TIT5hFthGPm8i+LeL?=
- =?us-ascii?Q?Iil3SGI6Ir0aMLk0vzVLxQTACl1XkzxaQkaKbdAsE9u4GLlN8uyWONMrzcNY?=
- =?us-ascii?Q?WP6MB1gokxbkcnL6siLAbTp1CIK1GRyJSGIMsePWF/DgGTL3H3EAUNI6yZH+?=
- =?us-ascii?Q?wi1eBBsro8FdEsGAuhsN0PusuK2ZlGnsCc7gbnaaP8q6r2jkAsWpIhGAt5Mi?=
- =?us-ascii?Q?rhbHFQ8NVxD8lEla+G/D6/4oFWfOZTPXuhxEvqE4YSL4A8QEIzUDyF6tL3EM?=
- =?us-ascii?Q?lHXvLAVkrDim1PuuD1KDjkHs28YGcKL9MrBRYQGaM5YBlzBVzGdPPwPx/Oeb?=
- =?us-ascii?Q?Z8Zjbl8qfHPgw6guKjBCE9Z2/aCBZfs5wv2cCFj/W+mWWfuzI8DMtNVI6bPb?=
- =?us-ascii?Q?3GskLKFBjqYPqCqXmDEhoIpE2pQLI21cm2Tb9iqFbxNyaN32Jc4zeTHkht07?=
- =?us-ascii?Q?qWmDXYJrO/rSIeogHSHu94+ew/jp+mQd/qYA6OwzIe+YG1oOYdfZsd0kOX/9?=
- =?us-ascii?Q?24ji8wiW4iZ9wyQNbS0s1UewL1EZi3iokbi4PAaf8DPi9FwMG1+j1X3f9iD4?=
- =?us-ascii?Q?KaXIykHTqD4b66JN/ICI5VOa/RKrjQK6BXih3LVuuyn0gLxvVgJdorrBAslY?=
- =?us-ascii?Q?qhJAS/2aZsjutrKUr90KqrQKK3LbmqedPBexu0L0GnjNF47fsPuWxMYWgKgC?=
- =?us-ascii?Q?yMKzbILvl9Z2A5Srmn8aczT0spqafH7z2TqdF410gqxylMTlOiuNgssvcTYe?=
- =?us-ascii?Q?vA5Ph+oIoOHtfC5HgfQX7CsaIZ/GfFCigJsgdk4fphc+N+agk8fd5HEJSqqD?=
- =?us-ascii?Q?6xOE4UqhY7lIZTZD/SQrBIjQ50iRLvbaB/+MqrEhQ6ZY45QVgXkkm6fxYOOo?=
- =?us-ascii?Q?trhPFF/fmoo6ExNWd/G4zeImMn/c5lrb2zNoknhDczw5ikr5KNTyNE2g6hjx?=
- =?us-ascii?Q?jF0VHA0dnwuxKi2RIz7OdtGKd2YG9LRslPr9SCGVVXdRsNMe2hCrANBEFMLN?=
- =?us-ascii?Q?GftrDm4g5oENJvIwquZqDGEKHFa/u602N2SCszdN82Un4TV/8RjJ8mDwI0jX?=
- =?us-ascii?Q?/0VVdYaQ0wilZB0iJG1jVH6LItA1ppnNxNHP3smifWJCkW2EsY4C/fHkwhN/?=
- =?us-ascii?Q?9yDDXUWk3VLgcgL0ymt26wusjtCJ9wFBptTfn+aneP+yZcx+BrB6HLYeQKIu?=
- =?us-ascii?Q?HNVGqhXT29bgUxEEyatNH8WnKlar9sEoIs2inxKQLLcv6k+A4pf8Y7J0nebB?=
- =?us-ascii?Q?97WSR2OYhUbUeyLFR4BNpeZnjrHE/KwizYLayJKIg/EVNe/vTGAkG/GI2W9m?=
- =?us-ascii?Q?GFnuuYAtLINo54wHSWi92RIin5errHpls8HnU9jaXTW/Uehd0ViXMbrOe76K?=
- =?us-ascii?Q?2i9U7QmbLtdFz/4pKUf5aKwRRddKDWXi2DqpZL3U?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
-MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DM4PR84MB1853.NAMPRD84.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: b2871d11-3818-411c-875b-08da8d0670fc
-X-MS-Exchange-CrossTenant-originalarrivaltime: 02 Sep 2022 17:13:23.0952
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 105b2061-b669-4b31-92ac-24d304d195dc
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: fSVTM5OPEKf92sTxjblRYf9yRc7VmDJ9WWZbDBC92rZzMhkxCHkA+qtWVRf0MTKYFpuv++xzUgHFZK9Y8wjpsA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR84MB1532
-X-OriginatorOrg: hpe.com
-X-Proofpoint-ORIG-GUID: OpVxz5tH87eEQxRaMHCyYmmW9bjJf_CB
-X-Proofpoint-GUID: OpVxz5tH87eEQxRaMHCyYmmW9bjJf_CB
-X-HPE-SCL: -1
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-09-02_04,2022-08-31_03,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=792 bulkscore=0
- lowpriorityscore=0 spamscore=0 mlxscore=0 suspectscore=0 impostorscore=0
- priorityscore=1501 adultscore=0 phishscore=0 malwarescore=0 clxscore=1015
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2207270000
- definitions=main-2209020080
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        with ESMTP id S237747AbiIEIcI (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Mon, 5 Sep 2022 04:32:08 -0400
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 502D6D6A
+        for <linux-edac@vger.kernel.org>; Mon,  5 Sep 2022 01:31:32 -0700 (PDT)
+Received: by mail-pj1-x1035.google.com with SMTP id t11-20020a17090a510b00b001fac77e9d1fso11481167pjh.5
+        for <linux-edac@vger.kernel.org>; Mon, 05 Sep 2022 01:31:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=sifive.com; s=google;
+        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date;
+        bh=s3hOdjxXsap0YRXvjxYWIlEI0piYVKoTC0n9P5HnS8U=;
+        b=VJJzPQJ1cWBEZK1HBWOn5P3vqsLLo9JWaWwO7q2CaasS7NEA3XlpZk4YrMbS0ioQmx
+         2DUmKBWzVSo+TcyoNxbeoUPYTGV5zRpvAK88DxEdKCpeltfsC1tR14akp28UetRl3iu0
+         XeNtjMnphRjAPxDSYQYmMfiyTFe/k/YOPhufSCMz5yM9rBUupijYpLpOoiKHXN+Ke+1T
+         DFdXIBPXkmhEazPMWS9qvAiEJvTkBl2PBA98xz2lgeMQlFXLwzhpHfWCLZfcpqiafDpd
+         aY8s5bh12f0Z3IJJbQzwPfk92ut5OVuOlIm/FXXh17AZX7mPSC66s4M6bmkTNx5Nhv7J
+         b1RA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=s3hOdjxXsap0YRXvjxYWIlEI0piYVKoTC0n9P5HnS8U=;
+        b=5rXDvS03SPZFdwPBshDw3WCkjqBFMNByGXpLPOwWTQxpazkPMfgiMd/BnDH5hCzHVr
+         MTOHAM/6K0xsBteHCcZDj9Q+vb2A9vMaruwMDtJVJgK/q6yME0Yz0M3sb/U1R27mQCE2
+         +53wAEDl2C066B9y9ngyVMyvWKraJV6xhAV1I3Z69wc5oxid1dnWTgv2S4mX8TRCp0Fp
+         /SP5fBeQgrqolKpVCmwbsBh7w5vLPUxoefZKZAbReMfWE08+HBO6iSuYYH3rdY0Ak8GT
+         Pcp9DPKnIWbJus+pHj1LXZOyTJOrDhEpORyYeZpmSIF6xP/0Zd6wz2NwKJ1j1S446MFF
+         TLng==
+X-Gm-Message-State: ACgBeo1Kj57hJvZIJI2VT+LUhlMIDMS+f+/l1FT2BZmeTmuapOaBWLnb
+        iI5JxNJoRHDKNn9b2SciUGVoMQ==
+X-Google-Smtp-Source: AA6agR4nKAVKAuZX1ZISjF81oe65A4kGyO+0VV8EZk2A7ZosaG47IwTfakAHqqYoOBU8VO/tJRK1pg==
+X-Received: by 2002:a17:90b:1b52:b0:1ff:f536:1f3c with SMTP id nv18-20020a17090b1b5200b001fff5361f3cmr17807344pjb.232.1662366691713;
+        Mon, 05 Sep 2022 01:31:31 -0700 (PDT)
+Received: from localhost.localdomain (59-124-168-89.hinet-ip.hinet.net. [59.124.168.89])
+        by smtp.gmail.com with ESMTPSA id y3-20020aa79423000000b00537dfd6e67esm7089721pfo.48.2022.09.05.01.31.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 05 Sep 2022 01:31:30 -0700 (PDT)
+From:   Zong Li <zong.li@sifive.com>
+To:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        palmer@dabbelt.com, paul.walmsley@sifive.com,
+        aou@eecs.berkeley.edu, greentime.hu@sifive.com,
+        conor.dooley@microchip.com, ben.dooks@sifive.com, bp@alien8.de,
+        devicetree@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Zong Li <zong.li@sifive.com>
+Subject: [PATCH v2 0/6] Use composable cache instead of L2 cache
+Date:   Mon,  5 Sep 2022 08:31:19 +0000
+Message-Id: <20220905083125.29426-1-zong.li@sifive.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -176,31 +68,42 @@ Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Wednesday, August 31, 2022 1:40 AM, Jia He wrote:
-> @@ -454,7 +437,7 @@ int ghes_edac_register(struct ghes *ghes, struct
-> device *dev)
->  		pr_info("This system has a very crappy BIOS: It doesn't even
-> list the DIMMS.\n");
->  		pr_info("Its SMBIOS info is wrong. It is doubtful that the error
-> report would\n");
->  		pr_info("work on such system. Use this driver with
-> caution\n");
-> -	} else if (idx < 0) {
-> +	} else if (ghes_edac_force_load) {
+Since composable cache may be L3 cache if private L2 cache exists, we
+should use its original name "composable cache" to prevent confusion.
 
-This change causes the following messages to start showing up on Arm.
-Is that what you intend to do?
+This patchset contains the modification which is related to ccache, such
+as DT binding and EDAC driver.
 
-The messages can be avoided by not setting the force flag on Arm unconditio=
-nally.
-This will need some change to the flag check in ghes_edac_unregister() thou=
-gh.
+The DT binding is based on top of Conor's patch, it has got ready for
+merging, and it looks that it would be taken into the next few 6.0-rc
+version. If there is any change, the next version of this series will be
+posted as well.
+https://lore.kernel.org/linux-riscv/20220825180417.1259360-2-mail@conchuod.ie/
 
->  		pr_info("This EDAC driver relies on BIOS to enumerate
-> memory and get error reports.\n");
->  		pr_info("Unfortunately, not all BIOSes reflect the memory
-> layout correctly.\n");
->  		pr_info("So, the end result of using this driver varies from
-> vendor to vendor.\n");
+Ben Dooks (2):
+  soc: sifive: ccache: reduce printing on init
+  soc: sifive: ccache: use pr_fmt() to remove CCACHE: prefixes
 
- Toshi
+Greentime Hu (1):
+  soc: sifive: ccache: Rename SiFive L2 cache to Composable cache.
+
+Zong Li (3):
+  dt-bindings: sifive-ccache: change Sifive L2 cache to Composable cache
+  soc: sifive: ccache: determine the cache level from dts
+  EDAC/sifive: use sifive_ccache instead of sifive_l2
+
+ ...five-l2-cache.yaml => sifive,ccache0.yaml} |  28 ++-
+ drivers/edac/Kconfig                          |   2 +-
+ drivers/edac/sifive_edac.c                    |  12 +-
+ drivers/soc/sifive/Kconfig                    |   6 +-
+ drivers/soc/sifive/Makefile                   |   2 +-
+ .../{sifive_l2_cache.c => sifive_ccache.c}    | 183 +++++++++---------
+ .../{sifive_l2_cache.h => sifive_ccache.h}    |  16 +-
+ 7 files changed, 136 insertions(+), 113 deletions(-)
+ rename Documentation/devicetree/bindings/riscv/{sifive-l2-cache.yaml => sifive,ccache0.yaml} (83%)
+ rename drivers/soc/sifive/{sifive_l2_cache.c => sifive_ccache.c} (34%)
+ rename include/soc/sifive/{sifive_l2_cache.h => sifive_ccache.h} (12%)
+
+-- 
+2.17.1
+
