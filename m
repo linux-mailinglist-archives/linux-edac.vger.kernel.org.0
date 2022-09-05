@@ -2,68 +2,91 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30ABD5ACDB2
-	for <lists+linux-edac@lfdr.de>; Mon,  5 Sep 2022 10:34:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DBFF5ACFCD
+	for <lists+linux-edac@lfdr.de>; Mon,  5 Sep 2022 12:23:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237781AbiIEIdM (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Mon, 5 Sep 2022 04:33:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57180 "EHLO
+        id S237704AbiIEKQV (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Mon, 5 Sep 2022 06:16:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237747AbiIEIcg (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Mon, 5 Sep 2022 04:32:36 -0400
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5E2150045
-        for <linux-edac@vger.kernel.org>; Mon,  5 Sep 2022 01:31:51 -0700 (PDT)
-Received: by mail-pl1-x62f.google.com with SMTP id m2so7881957pls.4
-        for <linux-edac@vger.kernel.org>; Mon, 05 Sep 2022 01:31:51 -0700 (PDT)
+        with ESMTP id S237709AbiIEKQE (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Mon, 5 Sep 2022 06:16:04 -0400
+Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67E70B9D
+        for <linux-edac@vger.kernel.org>; Mon,  5 Sep 2022 03:14:25 -0700 (PDT)
+Received: by mail-lj1-x232.google.com with SMTP id bx38so8694354ljb.10
+        for <linux-edac@vger.kernel.org>; Mon, 05 Sep 2022 03:14:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sifive.com; s=google;
-        h=references:in-reply-to:message-id:date:subject:cc:to:from:from:to
-         :cc:subject:date;
-        bh=HegVDwbwdx7NAusLYsMykpD/qEuT4JpSnYO/rlTbGxI=;
-        b=aD8U5Io3OoxXQycA2E/XrSpXhrDZWnOitDIAExLsNLwS71FDEoPQQAl6KhpjPqcLp1
-         hrGHpZgt89aYD5cf8yebwHeLzegfd3Pev6ZFmtuleGtNs27UntabRVGWVEm6mS6rM6Zj
-         eYc58IE43GT2FlhHAZteW/hj/bK1AZmlsNNjPUkli5IsAM/VdhnQH48MhSseV6Hqj9Gy
-         A0ssJHtWErt8dNVzGQswEtmPgokxkkNrCHaLBwTTLMCQMnzHncxPCOfUA5PXCzHetMNO
-         H5SBpTUSeyQ4Z66XqmYAmAUSfNyJ8mpJJwE+tpo/rcnx7ZZ6Kiv2mvmbPZfO0lueCdvu
-         zsgw==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=krr00gq+2rnnQjH2jiDEWmx4uGy3f7Je/Uzv5Nqwo9w=;
+        b=mwaIK5ucn4NK+Emo4I4RNSP1OMgJjPAaZkgPI3hgHJCCTZ57pDEdIghsHLA4ob2pVz
+         fFG4DNOJAG50HsaiGoG2bEZEj36GRNNjqjxs36+pJfqMbomer3i83S6HPkhFzrQnRXWj
+         x9Tu425Of/dPX4NXWV/3M6zftLrzDebI2zELrjMDuLF+N/a3WV7sLsV5eedFhSwCQQLS
+         kNkMc58C4a+iKeXiSnvVKjknTcVAnD5NBM9AdbqGEGAKeyOXVVa1iQ5R/Dffz5Ch8YNY
+         Um2ZwaojYKOQM/oG/gEObStXDB5F8zS4m2E3JdCExsMLf5MpQt5uyahpe3mLfySt80L1
+         MrXw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=references:in-reply-to:message-id:date:subject:cc:to:from
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date;
-        bh=HegVDwbwdx7NAusLYsMykpD/qEuT4JpSnYO/rlTbGxI=;
-        b=Cw0Y6+pNrzqAGDU73/RpHw5Al1Kwz6rlaRjMGNuMKmnOgMWPOGIVIp4f9/3REPq98l
-         A47SBj7RDShYi+NeZnkw54JbV1KSup5XMvpck3PopBLifGyP45RqcDqYX3WTfaRX03u7
-         6vv8IpBkINSwLV+yzzTVmd6v8OoyGZKdyzFTViJnYEKR2mqtqGKG8SVjQMcWz1HqyX/f
-         WEW4vgOwxfs1UC8KdyfGu9rrrjLzRfU+2j3iuCnQ655QXUHMEsUBmuVCTzTAugBobhIs
-         7ItnaFyA17GdLI53CXh79/j12vJoYpIxa61g2ciCYAkUjrK9+Q8kZK/YOna3EDdWTI4J
-         Mz4Q==
-X-Gm-Message-State: ACgBeo02n8sOOA+GrMcnoJPFqw3fuTsXpRTtAOpN1teCoSjaUIRq9JES
-        tnlwgvxh4rFP3loIhRVE/Nck6w==
-X-Google-Smtp-Source: AA6agR4pHdfSbuKPjwJoHOYX5Z1xOFxftCcI/m+BGzP79RMUUHwyVC1NXoKympMNV/uj8PE+r/2RBg==
-X-Received: by 2002:a17:902:d486:b0:16f:15a1:6da3 with SMTP id c6-20020a170902d48600b0016f15a16da3mr48626724plg.134.1662366710366;
-        Mon, 05 Sep 2022 01:31:50 -0700 (PDT)
-Received: from localhost.localdomain (59-124-168-89.hinet-ip.hinet.net. [59.124.168.89])
-        by smtp.gmail.com with ESMTPSA id y3-20020aa79423000000b00537dfd6e67esm7089721pfo.48.2022.09.05.01.31.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 05 Sep 2022 01:31:49 -0700 (PDT)
-From:   Zong Li <zong.li@sifive.com>
-To:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        palmer@dabbelt.com, paul.walmsley@sifive.com,
-        aou@eecs.berkeley.edu, greentime.hu@sifive.com,
-        conor.dooley@microchip.com, ben.dooks@sifive.com, bp@alien8.de,
-        devicetree@vger.kernel.org, linux-riscv@lists.infradead.org,
+        bh=krr00gq+2rnnQjH2jiDEWmx4uGy3f7Je/Uzv5Nqwo9w=;
+        b=RKeDQ99QMAx72c2cUc1JK16L4vbWmtCZadaA8G0RgeCdfiTrlqqSNS6di+3ZUeM4j7
+         C5QY9ZBDsTeD0vuBVfJVJSDPF9rWi4KbZjLRYnqPmyqStRVlFY0IUPNgT+NS261+EBKH
+         TjLkIwmsxIYRt4eFwbofdYMzypmZw4/IC5AMC36ACug04le/yDytKMVjGgcMHcIXH+Jd
+         SJ9jHI7q/KVctep6ahn5zKSMMD3daDqOi7VO6N8HbZKvme3wOYrKV6N+IAf4IVkxeuwz
+         XiJvekgKsVy6ennfYBKLai6chZ40Sz1Z5+LuW+DMAeJkg5RmWsEGqXrdK9rr34jOMpSr
+         WubQ==
+X-Gm-Message-State: ACgBeo1LdotzUzm1DUZBc0ZoOTiS1ZCc1jCTPeDqLSY6dbLcoXQFiWJf
+        ELDMqanzwKBdsKX/qVAiBO6ObA==
+X-Google-Smtp-Source: AA6agR5Tinz3xo5jyO3I/Zhphm/crNPOKhfBViyw+9BkJpLbm7ZmZ00WF7qaieTcY+4S8GnLTFbEqg==
+X-Received: by 2002:a2e:a9a0:0:b0:268:5e62:acfb with SMTP id x32-20020a2ea9a0000000b002685e62acfbmr7929456ljq.326.1662372863427;
+        Mon, 05 Sep 2022 03:14:23 -0700 (PDT)
+Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id y10-20020a05651c106a00b0025e42f8e771sm1353110ljm.34.2022.09.05.03.14.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 05 Sep 2022 03:14:22 -0700 (PDT)
+Message-ID: <36b2b6d9-9ab4-a4bc-6476-bd5b5d3ef77e@linaro.org>
+Date:   Mon, 5 Sep 2022 12:14:21 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [PATCH 02/13] dt-bindings: memory: snps: Add Baikal-T1 DDRC
+ support
+Content-Language: en-US
+To:     Serge Semin <fancer.lancer@gmail.com>
+Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Michal Simek <michal.simek@xilinx.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Tony Luck <tony.luck@intel.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Manish Narani <manish.narani@xilinx.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Michail Ivanov <Michail.Ivanov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Punnaiah Choudary Kalluri 
+        <punnaiah.choudary.kalluri@xilinx.com>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Robert Richter <rric@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Zong Li <zong.li@sifive.com>
-Subject: [PATCH v2 6/6] EDAC/sifive: use sifive_ccache instead of sifive_l2
-Date:   Mon,  5 Sep 2022 08:31:25 +0000
-Message-Id: <20220905083125.29426-7-zong.li@sifive.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220905083125.29426-1-zong.li@sifive.com>
-References: <20220905083125.29426-1-zong.li@sifive.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+References: <20220822191957.28546-1-Sergey.Semin@baikalelectronics.ru>
+ <20220822191957.28546-3-Sergey.Semin@baikalelectronics.ru>
+ <0bda4ff9-fc08-77f2-0e06-7469dcaec6d8@linaro.org>
+ <20220826095447.qxfvty6xq4tufe75@mobilestation>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220826095447.qxfvty6xq4tufe75@mobilestation>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,80 +94,93 @@ Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-The sifive L2 has been renamed to sifive CCACHE, EDAC driver needs to
-apply the change as well
+On 26/08/2022 11:54, Serge Semin wrote:
+> On Tue, Aug 23, 2022 at 11:12:28AM +0300, Krzysztof Kozlowski wrote:
+>> On 22/08/2022 22:19, Serge Semin wrote:
+>>> Baikal-T1 DDR controller is based on the DW uMCTL2 DDRC IP-core v2.51a
+>>> with up to DDR3 protocol capability and 32-bit data bus + 8-bit ECC. There
+>>> are individual IRQs for each ECC and DFI events.The dedicated scrubber
+>>
+> 
+>> Missing space before "The".
+> 
+> Ok. Thanks.
+> 
+>>
+>>> clock source is absent since it's fully synchronous to the core clock.
+>>
+> 
+>> You need allOf:if-then restricting this per variant.
+> 
+> I really don't like the allOf-if-if-etc pattern because it gets to be
+> very bulky if all the vendor-specific and generic platform
+> peculiarities are placed in there. I am more keen of having a
+> generic DT-schema which would be then allOf-ed by the vendor-specific
+> device bindings. What do you think I'd provide such design in this
+> case too?
 
-Signed-off-by: Zong Li <zong.li@sifive.com>
----
- drivers/edac/Kconfig       |  2 +-
- drivers/edac/sifive_edac.c | 12 ++++++------
- 2 files changed, 7 insertions(+), 7 deletions(-)
+Sure, it would work.
 
-diff --git a/drivers/edac/Kconfig b/drivers/edac/Kconfig
-index 17562cf1fe97..456602d373b7 100644
---- a/drivers/edac/Kconfig
-+++ b/drivers/edac/Kconfig
-@@ -473,7 +473,7 @@ config EDAC_ALTERA_SDMMC
- 
- config EDAC_SIFIVE
- 	bool "Sifive platform EDAC driver"
--	depends on EDAC=y && SIFIVE_L2
-+	depends on EDAC=y && SIFIVE_CCACHE
- 	help
- 	  Support for error detection and correction on the SiFive SoCs.
- 
-diff --git a/drivers/edac/sifive_edac.c b/drivers/edac/sifive_edac.c
-index ee800aec7d47..b844e2626fd5 100644
---- a/drivers/edac/sifive_edac.c
-+++ b/drivers/edac/sifive_edac.c
-@@ -2,7 +2,7 @@
- /*
-  * SiFive Platform EDAC Driver
-  *
-- * Copyright (C) 2018-2019 SiFive, Inc.
-+ * Copyright (C) 2018-2022 SiFive, Inc.
-  *
-  * This driver is partially based on octeon_edac-pc.c
-  *
-@@ -10,7 +10,7 @@
- #include <linux/edac.h>
- #include <linux/platform_device.h>
- #include "edac_module.h"
--#include <soc/sifive/sifive_l2_cache.h>
-+#include <soc/sifive/sifive_ccache.h>
- 
- #define DRVNAME "sifive_edac"
- 
-@@ -32,9 +32,9 @@ int ecc_err_event(struct notifier_block *this, unsigned long event, void *ptr)
- 
- 	p = container_of(this, struct sifive_edac_priv, notifier);
- 
--	if (event == SIFIVE_L2_ERR_TYPE_UE)
-+	if (event == SIFIVE_CCACHE_ERR_TYPE_UE)
- 		edac_device_handle_ue(p->dci, 0, 0, msg);
--	else if (event == SIFIVE_L2_ERR_TYPE_CE)
-+	else if (event == SIFIVE_CCACHE_ERR_TYPE_CE)
- 		edac_device_handle_ce(p->dci, 0, 0, msg);
- 
- 	return NOTIFY_OK;
-@@ -67,7 +67,7 @@ static int ecc_register(struct platform_device *pdev)
- 		goto err;
- 	}
- 
--	register_sifive_l2_error_notifier(&p->notifier);
-+	register_sifive_ccache_error_notifier(&p->notifier);
- 
- 	return 0;
- 
-@@ -81,7 +81,7 @@ static int ecc_unregister(struct platform_device *pdev)
- {
- 	struct sifive_edac_priv *p = platform_get_drvdata(pdev);
- 
--	unregister_sifive_l2_error_notifier(&p->notifier);
-+	unregister_sifive_ccache_error_notifier(&p->notifier);
- 	edac_device_del_device(&pdev->dev);
- 	edac_device_free_ctl_info(p->dci);
- 
--- 
-2.17.1
+> 
+> But I'll need to move the compatible property definition to the
+> "select" property. Like this:
+> 
+> Documentation/devicetree/bindings/memory-controllers/snps,dw-umctl2-ddrc.yaml:
+> +[...]
+> +# Please create a separate DT-schema for your DW uMCTL2 DDR controller
+> +# and make sure it's assigned with the vendor-specific compatible string.
+> +select:
+> +  properties:
+> +    compatible:
+> +      oneOf:
+> +        - deprecated: true
+> +          description: Synopsys DW uMCTL2 DDR controller v3.80a
+> +          const: snps,ddrc-3.80a
+> +        - description: Synopsys DW uMCTL2 DDR controller
+> +          const: snps,dw-umctl2-ddrc
+> +        - description: Xilinx ZynqMP DDR controller v2.40a
+> +          const: xlnx,zynqmp-ddrc-2.40a
+> +  required:
+> +    - compatible
 
+Not entirely. If you need select, then add it with compatibles, but all
+descriptions and deprecated are staying in properties.
+
+
+> +
+> +properties:
+> +  compatible: true
+> +[...]
+> +required:
+> +  - compatible
+> +  - reg
+> +  - interrupts
+> +
+> +additionalProperties: true
+> 
+> After that the "snps,dw-umctl2-ddrc.yaml" schema can be referenced in the
+> allOf composition. Like this:
+> 
+> Documentation/devicetree/bindings/memory-controllers/baikal,bt1-ddrc.yaml:
+> +[...]
+> +allOf:
+> +  - $ref: /schemas/memory-controllers/snps,dw-umctl2-ddrc.yaml#
+> +[...]
+> 
+> At the same time the generic DT-schema will be used to evaluate the
+> "snps,ddrc-3.80a", "snps,dw-umctl2-ddrc" and "xlnx,zynqmp-ddrc-2.40a"
+> device nodes as before. What do you think about that?
+> 
+> One big positive side of this that even though the generic schema
+> can't define the IRQ/resets/clocks phandlers order because various
+> platforms may have different external signals setup, the
+> vendor-specific schema can and should. So I'll be able to describe the
+> Baikal-T1 DDRC specific properties (clocks, clock-names, interrupts,
+> interrupt-names, etc) in much more details including the reference
+> signals order what you asked in the previous patch review.
+
+It's ok. You need then second schema for your device, because something
+must end with additional/unevaluatedProperties false.
+
+Best regards,
+Krzysztof
