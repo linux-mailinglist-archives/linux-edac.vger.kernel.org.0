@@ -2,185 +2,200 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DBFF5ACFCD
-	for <lists+linux-edac@lfdr.de>; Mon,  5 Sep 2022 12:23:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 36B025AD4DA
+	for <lists+linux-edac@lfdr.de>; Mon,  5 Sep 2022 16:33:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237704AbiIEKQV (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Mon, 5 Sep 2022 06:16:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49864 "EHLO
+        id S237615AbiIEOd3 (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Mon, 5 Sep 2022 10:33:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237709AbiIEKQE (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Mon, 5 Sep 2022 06:16:04 -0400
-Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67E70B9D
-        for <linux-edac@vger.kernel.org>; Mon,  5 Sep 2022 03:14:25 -0700 (PDT)
-Received: by mail-lj1-x232.google.com with SMTP id bx38so8694354ljb.10
-        for <linux-edac@vger.kernel.org>; Mon, 05 Sep 2022 03:14:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=krr00gq+2rnnQjH2jiDEWmx4uGy3f7Je/Uzv5Nqwo9w=;
-        b=mwaIK5ucn4NK+Emo4I4RNSP1OMgJjPAaZkgPI3hgHJCCTZ57pDEdIghsHLA4ob2pVz
-         fFG4DNOJAG50HsaiGoG2bEZEj36GRNNjqjxs36+pJfqMbomer3i83S6HPkhFzrQnRXWj
-         x9Tu425Of/dPX4NXWV/3M6zftLrzDebI2zELrjMDuLF+N/a3WV7sLsV5eedFhSwCQQLS
-         kNkMc58C4a+iKeXiSnvVKjknTcVAnD5NBM9AdbqGEGAKeyOXVVa1iQ5R/Dffz5Ch8YNY
-         Um2ZwaojYKOQM/oG/gEObStXDB5F8zS4m2E3JdCExsMLf5MpQt5uyahpe3mLfySt80L1
-         MrXw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=krr00gq+2rnnQjH2jiDEWmx4uGy3f7Je/Uzv5Nqwo9w=;
-        b=RKeDQ99QMAx72c2cUc1JK16L4vbWmtCZadaA8G0RgeCdfiTrlqqSNS6di+3ZUeM4j7
-         C5QY9ZBDsTeD0vuBVfJVJSDPF9rWi4KbZjLRYnqPmyqStRVlFY0IUPNgT+NS261+EBKH
-         TjLkIwmsxIYRt4eFwbofdYMzypmZw4/IC5AMC36ACug04le/yDytKMVjGgcMHcIXH+Jd
-         SJ9jHI7q/KVctep6ahn5zKSMMD3daDqOi7VO6N8HbZKvme3wOYrKV6N+IAf4IVkxeuwz
-         XiJvekgKsVy6ennfYBKLai6chZ40Sz1Z5+LuW+DMAeJkg5RmWsEGqXrdK9rr34jOMpSr
-         WubQ==
-X-Gm-Message-State: ACgBeo1LdotzUzm1DUZBc0ZoOTiS1ZCc1jCTPeDqLSY6dbLcoXQFiWJf
-        ELDMqanzwKBdsKX/qVAiBO6ObA==
-X-Google-Smtp-Source: AA6agR5Tinz3xo5jyO3I/Zhphm/crNPOKhfBViyw+9BkJpLbm7ZmZ00WF7qaieTcY+4S8GnLTFbEqg==
-X-Received: by 2002:a2e:a9a0:0:b0:268:5e62:acfb with SMTP id x32-20020a2ea9a0000000b002685e62acfbmr7929456ljq.326.1662372863427;
-        Mon, 05 Sep 2022 03:14:23 -0700 (PDT)
-Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id y10-20020a05651c106a00b0025e42f8e771sm1353110ljm.34.2022.09.05.03.14.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 05 Sep 2022 03:14:22 -0700 (PDT)
-Message-ID: <36b2b6d9-9ab4-a4bc-6476-bd5b5d3ef77e@linaro.org>
-Date:   Mon, 5 Sep 2022 12:14:21 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH 02/13] dt-bindings: memory: snps: Add Baikal-T1 DDRC
- support
-Content-Language: en-US
-To:     Serge Semin <fancer.lancer@gmail.com>
-Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Michal Simek <michal.simek@xilinx.com>,
+        with ESMTP id S231635AbiIEOd2 (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Mon, 5 Sep 2022 10:33:28 -0400
+Received: from EUR04-HE1-obe.outbound.protection.outlook.com (mail-eopbgr70087.outbound.protection.outlook.com [40.107.7.87])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EE1344558;
+        Mon,  5 Sep 2022 07:33:27 -0700 (PDT)
+ARC-Seal: i=2; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=pass;
+ b=DWri+F+WRi0MqhONLe8fe2y1sxneugFJWJf0z2QUTlUAJ5hUojNUvQH+ndWUonq3mdau6kDVbq/Jvkgep/nBO5zDi3B81jKQJOMa3cMAWcr6EEQp2HP9/3t2a4rt2xRZKlyntlVwWtqfkjoLhwaKRPFDSzWJmDm+5rGJ3+UHr6tOXB/P6KRBm6a5TZRo/OTjWvOmWBGs0lQYEZprz1/EzqTRH4wsOkP16rz80TXZy9F388ci4F3BrFY7LbDSyN/ZEWUtuFw4UaH4IVaS8yj8nIwRVwvXxbBqGNgnlG70frzKgAwgLMeuabqnnHC+/UWkUDqdPJbqHWpUGswTfF/DnQ==
+ARC-Message-Signature: i=2; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=5k+rtzwD52E2mJV4rDYVMkPAZqJrBAs/8ARx//tFZ0A=;
+ b=FC8d40E0iysA1PwCrSV4ydSH/X5RdrsbTvw2fNo43YmjwgYYtt57n/htJSTpDfkgPcN1dxGec3fKqlcW8i0fKR8U84Q2eoCxA6RYI1PGQRbQADYiVG8EgX/zwzS+fqh7XNch/2Zf+bO4FlK3T8uS9xaIBHfY2r5LGxvHCts10YNv1xYK5yB/op32K8uQD/+j1NwW8nOjR6XSwu6ha2cG30zIJND50ptKx62oJrG57OUcrygVSkuQZnBE1PqP5t0wy2M1hARf5DgcZWreRrc6BciEnBZOqoaGvtXl9ySD8CLVHlRfMhIEA4/irT68ynlfg/Wqm0YtkCOHxlx4zEUJvg==
+ARC-Authentication-Results: i=2; mx.microsoft.com 1; spf=pass (sender ip is
+ 63.35.35.123) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=arm.com;
+ dmarc=pass (p=none sp=none pct=100) action=none header.from=arm.com;
+ dkim=pass (signature was verified) header.d=armh.onmicrosoft.com; arc=pass (0
+ oda=1 ltdi=1 spf=[1,1,smtp.mailfrom=arm.com] dkim=[1,1,header.d=arm.com]
+ dmarc=[1,1,header.from=arm.com])
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=armh.onmicrosoft.com;
+ s=selector2-armh-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=5k+rtzwD52E2mJV4rDYVMkPAZqJrBAs/8ARx//tFZ0A=;
+ b=R2RJYBmvtKpPESwLRGCliUUIenrzzKjbLlFpnzUIUVHT122jZub4i8SfEZC/bGgLLyihq3D9Azwyesrqljjq5Uo3lCHhJcC24Zi8zabVWmholqpNaHZYxUtffhTcyWnf61VNnPoWSHOeyWYHJUKUQjriU1qB/v784Ik3I/Q1e4c=
+Received: from DU2PR04CA0086.eurprd04.prod.outlook.com (2603:10a6:10:232::31)
+ by AS8PR08MB6535.eurprd08.prod.outlook.com (2603:10a6:20b:336::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5588.10; Mon, 5 Sep
+ 2022 14:33:24 +0000
+Received: from DBAEUR03FT050.eop-EUR03.prod.protection.outlook.com
+ (2603:10a6:10:232:cafe::5c) by DU2PR04CA0086.outlook.office365.com
+ (2603:10a6:10:232::31) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5588.18 via Frontend
+ Transport; Mon, 5 Sep 2022 14:33:24 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 63.35.35.123)
+ smtp.mailfrom=arm.com; dkim=pass (signature was verified)
+ header.d=armh.onmicrosoft.com;dmarc=pass action=none header.from=arm.com;
+Received-SPF: Pass (protection.outlook.com: domain of arm.com designates
+ 63.35.35.123 as permitted sender) receiver=protection.outlook.com;
+ client-ip=63.35.35.123; helo=64aa7808-outbound-1.mta.getcheckrecipient.com;
+ pr=C
+Received: from 64aa7808-outbound-1.mta.getcheckrecipient.com (63.35.35.123) by
+ DBAEUR03FT050.mail.protection.outlook.com (100.127.142.250) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5588.10 via Frontend Transport; Mon, 5 Sep 2022 14:33:24 +0000
+Received: ("Tessian outbound 73dd6a25223d:v123"); Mon, 05 Sep 2022 14:33:24 +0000
+X-CheckRecipientChecked: true
+X-CR-MTA-CID: bf4cc00f9f8f795d
+X-CR-MTA-TID: 64aa7808
+Received: from ceac383323c3.2
+        by 64aa7808-outbound-1.mta.getcheckrecipient.com id D3762454-DBA2-4F80-B2FA-053FA6D88EA9.1;
+        Mon, 05 Sep 2022 14:33:13 +0000
+Received: from EUR01-VE1-obe.outbound.protection.outlook.com
+    by 64aa7808-outbound-1.mta.getcheckrecipient.com with ESMTPS id ceac383323c3.2
+    (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384);
+    Mon, 05 Sep 2022 14:33:13 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=JrROeI8iheLu8I5On5nkCFvJ2sKmjpHdNLaj25PSmV2Y4YsqwxJLwgZ9kcOZQ4Wtv2Y2T0/yhu4DoyGuIN+CNOCjPMBJu4Ji4dytr5SOIzgpa8h47MBLihPIovAhr5UdykOZSAAC/7fnIrnsxrERvtxkeArpev+qRzBd1bSfOvm5eV+G69coxYnQPBkvdzYZmefksXDxTnpArgNIYP0lL8xkpZwvjK5RsNzbQ2BJhABVYm1QeHgjo4YktZpNeotCodu1j9Ufp7Aac837D/JLc94u+tFMaOKUI3oHi35rGSeepwmADG5biUPrbID+jgs13B88IZ3iRFFyss5UCaoYxA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=5k+rtzwD52E2mJV4rDYVMkPAZqJrBAs/8ARx//tFZ0A=;
+ b=nahB7v0YOlZMPZlMt/+bNNRRKlgvZEBuT4ytLkk1maR/JGzBeObuAggA3vO5+SZ28PdmGCCwrnJeOQGE8xzU4sX3wKH/vnFHUHH18I7xEMAnV72x7xqXmG/0fFmFCGLdk/Nm8AgXkfUjN1cL/C2b2DFIORNyYAGKzD8w7zOKtunQcBVdV5hdSzRqyLwXpcyRO32L1C0AYRiY153HeM++Xo6OGbY6AIg4It3gH/sQFcVh0787kkilk7cpb8PnQYtdpRLDgb18aci7T+FYVT77qDY2qSWdc43gRfj8dckUUJqRoDUt28VuxdmhQHCeUvCsjMqDjIqD/jUMYJ2CtBx2dg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=arm.com; dmarc=pass action=none header.from=arm.com; dkim=pass
+ header.d=arm.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=armh.onmicrosoft.com;
+ s=selector2-armh-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=5k+rtzwD52E2mJV4rDYVMkPAZqJrBAs/8ARx//tFZ0A=;
+ b=R2RJYBmvtKpPESwLRGCliUUIenrzzKjbLlFpnzUIUVHT122jZub4i8SfEZC/bGgLLyihq3D9Azwyesrqljjq5Uo3lCHhJcC24Zi8zabVWmholqpNaHZYxUtffhTcyWnf61VNnPoWSHOeyWYHJUKUQjriU1qB/v784Ik3I/Q1e4c=
+Received: from DBBPR08MB4538.eurprd08.prod.outlook.com (2603:10a6:10:d2::15)
+ by AM9PR08MB6099.eurprd08.prod.outlook.com (2603:10a6:20b:286::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5588.12; Mon, 5 Sep
+ 2022 14:33:10 +0000
+Received: from DBBPR08MB4538.eurprd08.prod.outlook.com
+ ([fe80::c426:e28d:64d9:9d0f]) by DBBPR08MB4538.eurprd08.prod.outlook.com
+ ([fe80::c426:e28d:64d9:9d0f%7]) with mapi id 15.20.5588.018; Mon, 5 Sep 2022
+ 14:33:10 +0000
+From:   Justin He <Justin.He@arm.com>
+To:     "Kani, Toshi" <toshi.kani@hpe.com>, Len Brown <lenb@kernel.org>,
+        James Morse <James.Morse@arm.com>,
+        Tony Luck <tony.luck@intel.com>,
         Borislav Petkov <bp@alien8.de>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Tony Luck <tony.luck@intel.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Manish Narani <manish.narani@xilinx.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Michail Ivanov <Michail.Ivanov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        Punnaiah Choudary Kalluri 
-        <punnaiah.choudary.kalluri@xilinx.com>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        James Morse <james.morse@arm.com>,
         Robert Richter <rric@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220822191957.28546-1-Sergey.Semin@baikalelectronics.ru>
- <20220822191957.28546-3-Sergey.Semin@baikalelectronics.ru>
- <0bda4ff9-fc08-77f2-0e06-7469dcaec6d8@linaro.org>
- <20220826095447.qxfvty6xq4tufe75@mobilestation>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220826095447.qxfvty6xq4tufe75@mobilestation>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Robert Moore <robert.moore@intel.com>,
+        Qiuxu Zhuo <qiuxu.zhuo@intel.com>,
+        Yazen Ghannam <yazen.ghannam@amd.com>,
+        Jan Luebbe <jlu@pengutronix.de>,
+        Khuong Dinh <khuong@os.amperecomputing.com>
+CC:     Ard Biesheuvel <ardb@kernel.org>,
+        "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
+        "devel@acpica.org" <devel@acpica.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Shuai Xue <xueshuai@linux.alibaba.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        "linux-efi@vger.kernel.org" <linux-efi@vger.kernel.org>,
+        nd <nd@arm.com>
+Subject: RE: [PATCH v4 5/8] EDAC/ghes: Make ghes_edac a proper module to
+ remove the dependency on ghes
+Thread-Topic: [PATCH v4 5/8] EDAC/ghes: Make ghes_edac a proper module to
+ remove the dependency on ghes
+Thread-Index: AQHYvQ0mwst0fCgW/0KIW0mdjbCxYq3MZIKAgAR7I1A=
+Date:   Mon, 5 Sep 2022 14:33:10 +0000
+Message-ID: <DBBPR08MB4538916D8C9AF314A71D2C29F77F9@DBBPR08MB4538.eurprd08.prod.outlook.com>
+References: <20220831074027.13849-1-justin.he@arm.com>
+ <20220831074027.13849-6-justin.he@arm.com>
+ <DM4PR84MB1853F07391E61292D4119F21827A9@DM4PR84MB1853.NAMPRD84.PROD.OUTLOOK.COM>
+In-Reply-To: <DM4PR84MB1853F07391E61292D4119F21827A9@DM4PR84MB1853.NAMPRD84.PROD.OUTLOOK.COM>
+Accept-Language: en-US, zh-CN
+Content-Language: zh-CN
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+Authentication-Results-Original: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=arm.com;
+X-MS-Office365-Filtering-Correlation-Id: a8df4ff8-2cea-491d-f269-08da8f4b971f
+x-ms-traffictypediagnostic: AM9PR08MB6099:EE_|DBAEUR03FT050:EE_|AS8PR08MB6535:EE_
+x-checkrecipientrouted: true
+nodisclaimer: true
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam-Untrusted: BCL:0;
+X-Microsoft-Antispam-Message-Info-Original: ODYdUG9vP5d3fCrqDOLnQ+bLyDjyA7G+plC7y53uezVQMRIGX+9OGQ+pT+5RGyr+d3QT9WAPgI99rCbOmnhN0xJuGlUq5Avnfd/nkdr1XLCJHRYgN4l+Qe4iZMfGLpIbRevlrxFGF8XFiqx4bk8hcPVg13GsvhI+5oMgqSlNLR6PC7p6V5/rv+QjRj1W7bRVOpulamfA7nR9RmrYq+1jvuvNIHd+V/D8BDgsxZsKeW4chc5AvSK1uc7tvLwm4n0DhbxOr/SbJbAehV5Oa6UJXtlwjtPdxNEdtFroN+97uly+wuXwp/o5C4OTg36FGzjfN59ckKfXdqDT6YM3SVOzvJ456UjBVJQPV21B4jOQzo95verk2s336TZuRL2jK4iQJk1rYqEyZCdE596v1wP/UR+ySdq/gt21qLmxNJTWRB0+T903dLDsML5g4U0ynweh+xmETEWlFI5aY/oSLTU9/JPbSDAqGou3K8cYRJJmARx4gTXr2g4XvJAcmBLvTaqjhbNJ5bkHSs9hatNz0ts2/+GdZZYAll3HoKwe+1UzcklCcBBIy5Z/ckPffnZXsCkhJ3rm97wzGQCCgFeKCeBcpS0l0gOBA1Fj3OYr8b+cbMyO7M3xtwG25qUhidreXUoJ7twuL6O5OG82NABJ7LqarI+paWM861Barp0KfP7dbpIBJYZFGQWHWv1PLmvTYnfK9YNbkyb8e1OOvSrKaQo0Jmdj8j0C4TodTlPDm4vjoFYtJkLuHZyeBWoGeJWjFffMpeNH/P3GXD36f3qoLIsJKzJyUm9omX9uLps1k1Cu8E8=
+X-Forefront-Antispam-Report-Untrusted: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DBBPR08MB4538.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(39860400002)(366004)(136003)(396003)(346002)(376002)(83380400001)(38100700002)(122000001)(66556008)(921005)(38070700005)(4326008)(55016003)(76116006)(66446008)(64756008)(8676002)(66946007)(296002)(110136005)(316002)(66476007)(54906003)(2906002)(8936002)(4744005)(7416002)(6506007)(7696005)(9686003)(26005)(186003)(52536014)(5660300002)(71200400001)(41300700001)(478600001)(33656002)(86362001);DIR:OUT;SFP:1101;
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM9PR08MB6099
+Original-Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=arm.com;
+X-EOPAttributedMessage: 0
+X-MS-Exchange-Transport-CrossTenantHeadersStripped: DBAEUR03FT050.eop-EUR03.prod.protection.outlook.com
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id-Prvs: 449fbc3e-b99a-49e6-b976-08da8f4b8eaf
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: yOWS7zELPWSZy9fK5xE2/h7xn/2ViUGwTpUKpEelMJ8BFt99RIlBNwa+DAdLwMGxVQ1N7RMOmEqE35tLG53p/6DTqikQqyGpUfPUDymqOY19l5tF8iO1wFe1XddV8Ii396WeXqrOo0bQzmXmGOeRNOCnXtJubo3/X1AeYLQeojLHnxM9cB0dNA7MvK8vpHrSoxXdf/M9GmSeiho1iRLqJjUkD1rPr8I+oBqMIZzIMw+DDc5jTCvVhvSYO9hw6E+aJzYPLVySwm/4DozQFm8nMMTuvGHhCSL3HH5nBYMdMhJN9F2n3Kmr8j6+oXHkzNIvasK6dLpy7SUS1PmIkMm6CqPGowIthY3MVBY0jYB/u4++nRxXYgCZItlBjZhZjWY1lExuDCi20tX/xgja/017YZB9UAqmCKUOhYue63DR2/ab7T+bgSEytqujyjWLnr9OTVrUJiixf/k85FzKx2lBapU8r7KW8XOX6r9mGge7UMCNAQwpzS2VjrycNKLtb4Wo8hlGfrezfzI+YQlejQcB5fc++U0m+CujNuFJUh73DSm+h4HB3CpiZRzUfcU7MlS2wX90Gwyh/GIBh8qSfa7bpEsWT1W++eUjsxTHrDvvg/OfLkEVUCKE7A2gfB+XYYuISgIGuvWqJkbxR+x2oc+InIr9uxwVWlfyfrunrubUnz/Yh7uHHWXA1NfyosV/KUieSXt9dd6R6s0WZsREFN12CmDNQ5yb7mLSu4nAAk2PWWqltoyC3Tn48XwJ3pVTlyiwnAUBy9B4jch1DCJNwd/Z2Ebs67mc7fTdGgtjPegSBcU=
+X-Forefront-Antispam-Report: CIP:63.35.35.123;CTRY:IE;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:64aa7808-outbound-1.mta.getcheckrecipient.com;PTR:ec2-63-35-35-123.eu-west-1.compute.amazonaws.com;CAT:NONE;SFS:(13230016)(4636009)(346002)(396003)(136003)(376002)(39860400002)(40470700004)(46966006)(36840700001)(26005)(7696005)(47076005)(186003)(336012)(40480700001)(52536014)(4744005)(5660300002)(8936002)(9686003)(6506007)(86362001)(33656002)(478600001)(41300700001)(2906002)(40460700003)(36860700001)(83380400001)(110136005)(8676002)(70206006)(82310400005)(316002)(70586007)(82740400003)(81166007)(921005)(356005)(54906003)(55016003)(450100002)(4326008);DIR:OUT;SFP:1101;
+X-OriginatorOrg: arm.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Sep 2022 14:33:24.6962
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: a8df4ff8-2cea-491d-f269-08da8f4b971f
+X-MS-Exchange-CrossTenant-Id: f34e5979-57d9-4aaa-ad4d-b122a662184d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=f34e5979-57d9-4aaa-ad4d-b122a662184d;Ip=[63.35.35.123];Helo=[64aa7808-outbound-1.mta.getcheckrecipient.com]
+X-MS-Exchange-CrossTenant-AuthSource: DBAEUR03FT050.eop-EUR03.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR08MB6535
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,FORGED_SPF_HELO,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On 26/08/2022 11:54, Serge Semin wrote:
-> On Tue, Aug 23, 2022 at 11:12:28AM +0300, Krzysztof Kozlowski wrote:
->> On 22/08/2022 22:19, Serge Semin wrote:
->>> Baikal-T1 DDR controller is based on the DW uMCTL2 DDRC IP-core v2.51a
->>> with up to DDR3 protocol capability and 32-bit data bus + 8-bit ECC. There
->>> are individual IRQs for each ECC and DFI events.The dedicated scrubber
->>
-> 
->> Missing space before "The".
-> 
-> Ok. Thanks.
-> 
->>
->>> clock source is absent since it's fully synchronous to the core clock.
->>
-> 
->> You need allOf:if-then restricting this per variant.
-> 
-> I really don't like the allOf-if-if-etc pattern because it gets to be
-> very bulky if all the vendor-specific and generic platform
-> peculiarities are placed in there. I am more keen of having a
-> generic DT-schema which would be then allOf-ed by the vendor-specific
-> device bindings. What do you think I'd provide such design in this
-> case too?
+Hi Kani
+As per your review for previous patches, I will update the commit log in th=
+e next version.
+Please see my comments below:
 
-Sure, it would work.
+> -----Original Message-----
+> > @@ -454,7 +437,7 @@ int ghes_edac_register(struct ghes *ghes, struct
+> > device *dev)
+> >  		pr_info("This system has a very crappy BIOS: It doesn't even list
+> > the DIMMS.\n");
+> >  		pr_info("Its SMBIOS info is wrong. It is doubtful that the error
+> > report would\n");
+> >  		pr_info("work on such system. Use this driver with caution\n");
+> > -	} else if (idx < 0) {
+> > +	} else if (ghes_edac_force_load) {
+>=20
+> This change causes the following messages to start showing up on Arm.
+> Is that what you intend to do?
+>=20
+No
 
-> 
-> But I'll need to move the compatible property definition to the
-> "select" property. Like this:
-> 
-> Documentation/devicetree/bindings/memory-controllers/snps,dw-umctl2-ddrc.yaml:
-> +[...]
-> +# Please create a separate DT-schema for your DW uMCTL2 DDR controller
-> +# and make sure it's assigned with the vendor-specific compatible string.
-> +select:
-> +  properties:
-> +    compatible:
-> +      oneOf:
-> +        - deprecated: true
-> +          description: Synopsys DW uMCTL2 DDR controller v3.80a
-> +          const: snps,ddrc-3.80a
-> +        - description: Synopsys DW uMCTL2 DDR controller
-> +          const: snps,dw-umctl2-ddrc
-> +        - description: Xilinx ZynqMP DDR controller v2.40a
-> +          const: xlnx,zynqmp-ddrc-2.40a
-> +  required:
-> +    - compatible
-
-Not entirely. If you need select, then add it with compatibles, but all
-descriptions and deprecated are staying in properties.
+> The messages can be avoided by not setting the force flag on Arm
+> unconditionally.
+> This will need some change to the flag check in ghes_edac_unregister() th=
+ough.
+Yes, looks like I can remove the ghes_edac_force_load check in the ghes_eda=
+c_unregister()
+since it had been checked in the ghes_edac_init
 
 
-> +
-> +properties:
-> +  compatible: true
-> +[...]
-> +required:
-> +  - compatible
-> +  - reg
-> +  - interrupts
-> +
-> +additionalProperties: true
-> 
-> After that the "snps,dw-umctl2-ddrc.yaml" schema can be referenced in the
-> allOf composition. Like this:
-> 
-> Documentation/devicetree/bindings/memory-controllers/baikal,bt1-ddrc.yaml:
-> +[...]
-> +allOf:
-> +  - $ref: /schemas/memory-controllers/snps,dw-umctl2-ddrc.yaml#
-> +[...]
-> 
-> At the same time the generic DT-schema will be used to evaluate the
-> "snps,ddrc-3.80a", "snps,dw-umctl2-ddrc" and "xlnx,zynqmp-ddrc-2.40a"
-> device nodes as before. What do you think about that?
-> 
-> One big positive side of this that even though the generic schema
-> can't define the IRQ/resets/clocks phandlers order because various
-> platforms may have different external signals setup, the
-> vendor-specific schema can and should. So I'll be able to describe the
-> Baikal-T1 DDRC specific properties (clocks, clock-names, interrupts,
-> interrupt-names, etc) in much more details including the reference
-> signals order what you asked in the previous patch review.
-
-It's ok. You need then second schema for your device, because something
-must end with additional/unevaluatedProperties false.
-
-Best regards,
-Krzysztof
