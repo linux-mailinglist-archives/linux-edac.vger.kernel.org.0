@@ -2,58 +2,57 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 660555ADCF7
-	for <lists+linux-edac@lfdr.de>; Tue,  6 Sep 2022 03:38:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A25DE5ADCFB
+	for <lists+linux-edac@lfdr.de>; Tue,  6 Sep 2022 03:40:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233097AbiIFBiZ (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Mon, 5 Sep 2022 21:38:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42604 "EHLO
+        id S230510AbiIFBkX (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Mon, 5 Sep 2022 21:40:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232371AbiIFBiY (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Mon, 5 Sep 2022 21:38:24 -0400
-Received: from mail-io1-xd2b.google.com (mail-io1-xd2b.google.com [IPv6:2607:f8b0:4864:20::d2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35EEC41D17;
-        Mon,  5 Sep 2022 18:38:23 -0700 (PDT)
-Received: by mail-io1-xd2b.google.com with SMTP id g1so2146783iob.13;
-        Mon, 05 Sep 2022 18:38:23 -0700 (PDT)
+        with ESMTP id S230116AbiIFBkW (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Mon, 5 Sep 2022 21:40:22 -0400
+Received: from mail-il1-x131.google.com (mail-il1-x131.google.com [IPv6:2607:f8b0:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9975B53D33;
+        Mon,  5 Sep 2022 18:40:21 -0700 (PDT)
+Received: by mail-il1-x131.google.com with SMTP id m16so2297593ilg.3;
+        Mon, 05 Sep 2022 18:40:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date;
-        bh=GJEP/iVPvYxmtbWHaBUVoD5GwAJSKprJOAI/GNdvJWQ=;
-        b=W15Ev3r0KlGw/5uuAOSgYh0lZOVrDoqyQzbu0Lv4ZC8FjdoAJM9yjz9xKqfKuri+ot
-         PkBfO/ogqR1JPNpRlxUutJ1xTMUejyeQLaUYwlnwb+SV8+dh06kUoPPwBP0RnT+d7Gp3
-         ox0hrBjbI97Z1gcCEMTYLZfarWhAL/M7HcPZpAto7qqEHuZxgRanEmILuIDoe6eNG2gm
-         u0xsuGoNbpkqqZGNA9XHaeQcqHqyD0TGR8q3dWBhNAQt2CXpOYTV/T55h0asX9nKlGUR
-         1UtAQqGPM39sl+naY/oqbBWff5pxdbttwzzcwHmIp23XdabbcT1n+oalhEkQGXLC8bVm
-         zMUw==
+        bh=BLCIYXFzxz6s1/j3ZB3Rou7Ui9yNjgppVcQ6BAlU/1M=;
+        b=iN5/LTKj7WXSBoAPfOm+dizqeEH3nd3bz8F9PsnSjjQLO/p85YuXMHNlLSMsjUhY0o
+         BzFK4uN56yXTXp6yJSvBhTJNI5TW8TeoF76QkeXZP9yY/1gdf1hqej9TQQgSlarAdNKS
+         0b+/hMzE2O9+c8SaMMaauZim7mlPpkwwKGJM3qy+3N7tGi5cs4N0sQpdMTCZiT7ctRvD
+         rOyLo89XGsThjyv57I3y/gyf/ZBrDNVGITxxVwj+5FSnZm7bCHwePiA4u9CgJWd/RERv
+         3LttJiXM8CO8tCpO6LElOPIpoGA8XpmrPxo2x+fPsUieIrSOd/qmD1qBSOv2MkmMF5R/
+         M6Dg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date;
-        bh=GJEP/iVPvYxmtbWHaBUVoD5GwAJSKprJOAI/GNdvJWQ=;
-        b=ULJIqXIbq2NCWkp6ITL2eVQgruo7d/e9paw7IjLxIuLJJ72V64QflwhLS0asN8v5ZG
-         jLXo0PVXQYXNZd/xFDViGftjmM1g7SuBxpsgpOJ5cJxzMw6OQrF3U1NPWkBz7Q7/6XNA
-         2FCNocnEbTSIqPvVfpChOwDmStXyOKTqbqVsQW1CSKQcQqPxdkfr1K8P1SxBECyRGEp4
-         fvL8bS1oHg/ZAmr1zHQ5lXKjwKWtPV0gQ4eun6/hVwKLF0JHVzsZIDRcKwaT9kpKIqoC
-         THwerusquZYKXtRmebOBzz15dqY9Vd4XLdEM44PnL1N0z4Fc0ngv0jrt2uZ2LYcXlQVU
-         Lsyw==
-X-Gm-Message-State: ACgBeo0QQpIiFyv/41NowNNiNslxgfd4/ulCPvPP4kXr9GOeRfXB8sH7
-        QM7izDRB/SXr26BBs0b9i6q2ljlsswPHlWQiA6KAHGMS
-X-Google-Smtp-Source: AA6agR4V2e1Ge5uXhw4Ptpim3ZA2pdfnnYdoi0fxbpqfbRDsSMT/0wAqhWFa96iFfjT0GY8Qkw32NhdzXFc0fuW+rNE=
-X-Received: by 2002:a05:6638:3047:b0:341:de2b:e489 with SMTP id
- u7-20020a056638304700b00341de2be489mr27895263jak.273.1662428302536; Mon, 05
- Sep 2022 18:38:22 -0700 (PDT)
+        bh=BLCIYXFzxz6s1/j3ZB3Rou7Ui9yNjgppVcQ6BAlU/1M=;
+        b=8IJzkhAkK57IqRqgoSN7Sn2ESYqnwDlK/VuCZiMBqKl9Ci/5ubmNK0je5h4JTGtNPx
+         IjMm6Gzmiu5afVFEHrRKBqcX0LVaWVhvaq14cbQcMxV7/LoiuL8U4nfQxhcnzF9p53a+
+         pmaHvRAHoRVUd+k3rjX7oFQvoqzm+D43gAokh+vw+zFDnlcKgZIxuOhAjQyumQW2vkLO
+         NCRcD/Q4+TNiKQZBTIY2F9yzylgdEgz2fxlaAfCHO5ckEil7eCsUQXw2uSyueRA44Gsi
+         t2cx7VBVXJtqTUqB2SXRF2PXMVq6OfVY6wqGZl7KtnpaDGM+4TEq9TUE7J9xWKmz9YcQ
+         epAQ==
+X-Gm-Message-State: ACgBeo3sBZ/sDAKVbrydvoYDSHEYOAnZWBt2EVG8RegICLH6Ueei6QVU
+        9bUpxaFDwn6DGSNcKp1w+h09F+mWv7Ua4aZhsNo=
+X-Google-Smtp-Source: AA6agR4eBl0Sp41QNwnOSoe9ia/irlsn0OpEr0CLRY8Gg8i8RT5dVJIdLkrElwQcDzWSvKyr6N+dmyy34ht87oRs1+Q=
+X-Received: by 2002:a05:6e02:1645:b0:2f1:574e:a862 with SMTP id
+ v5-20020a056e02164500b002f1574ea862mr4544828ilu.163.1662428420973; Mon, 05
+ Sep 2022 18:40:20 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220905083125.29426-1-zong.li@sifive.com> <20220905083125.29426-6-zong.li@sifive.com>
- <74571708-be33-bee2-fdc2-01492f121cda@microchip.com>
-In-Reply-To: <74571708-be33-bee2-fdc2-01492f121cda@microchip.com>
+References: <20220905083125.29426-1-zong.li@sifive.com> <20220905083125.29426-5-zong.li@sifive.com>
+ <490336f2-5028-499f-d78f-620e083b3c61@microchip.com>
+In-Reply-To: <490336f2-5028-499f-d78f-620e083b3c61@microchip.com>
 From:   Zong Li <zongbox@gmail.com>
-Date:   Tue, 6 Sep 2022 09:38:10 +0800
-Message-ID: <CA+ZOyahFAQGPb4Ffqb_6NcaoxNLCdyBEeoY=ySJ4zLK8bhqWkg@mail.gmail.com>
-Subject: Re: [PATCH v2 5/6] soc: sifive: ccache: use pr_fmt() to remove
- CCACHE: prefixes
+Date:   Tue, 6 Sep 2022 09:40:09 +0800
+Message-ID: <CA+ZOyah2Sw4vO5nDbOGHr_cP+VDh6JWH8A-82YBFkDnM5ks3+A@mail.gmail.com>
+Subject: Re: [PATCH v2 4/6] soc: sifive: ccache: reduce printing on init
 To:     Conor.Dooley@microchip.com
 Cc:     zong.li@sifive.com, robh+dt@kernel.org,
         krzysztof.kozlowski+dt@linaro.org, palmer@dabbelt.com,
@@ -74,7 +73,7 @@ List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
 <Conor.Dooley@microchip.com> =E6=96=BC 2022=E5=B9=B49=E6=9C=886=E6=97=A5 =
-=E9=80=B1=E4=BA=8C =E5=87=8C=E6=99=A82:47=E5=AF=AB=E9=81=93=EF=BC=9A
+=E9=80=B1=E4=BA=8C =E5=87=8C=E6=99=A83:18=E5=AF=AB=E9=81=93=EF=BC=9A
 >
 > On 05/09/2022 09:31, Zong Li wrote:
 > > EXTERNAL EMAIL: Do not click links or open attachments unless you know =
@@ -82,111 +81,79 @@ the content is safe
 > >
 > > From: Ben Dooks <ben.dooks@sifive.com>
 > >
-> > Use the pr_fmt() macro to prefix all the output with "CCACHE:"
-> > to avoid having to write it out each time, or make a large diff
-> > when the next change comes along.
+> > The driver prints out 6 lines on startup, which can easily be redcued
+> > to two lines without losing any information.
+> >
+> > Note, to make the types work better, uint64_t has been replaced with
+> > ULL to make the unsigned long long match the format in the print
+> > statement.
 > >
 > > Signed-off-by: Ben Dooks <ben.dooks@sifive.com>
 >
-> Missing your SoB again here Zong Li btw, other than that:
-> Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
-
-Thanks, I would add it in V3.
-
+> Hey Zong,
+> Missing your SoB after Ben's here btw.
 >
+
+Ok, I would add it in V3.
+
 > > ---
-> >  drivers/soc/sifive/sifive_ccache.c | 15 +++++++++------
-> >  1 file changed, 9 insertions(+), 6 deletions(-)
+> >  drivers/soc/sifive/sifive_ccache.c | 25 +++++++++++--------------
+> >  1 file changed, 11 insertions(+), 14 deletions(-)
 > >
 > > diff --git a/drivers/soc/sifive/sifive_ccache.c b/drivers/soc/sifive/si=
 five_ccache.c
-> > index 401c67a485e2..d749600c0bf8 100644
+> > index 0e0eb85c94d8..401c67a485e2 100644
 > > --- a/drivers/soc/sifive/sifive_ccache.c
 > > +++ b/drivers/soc/sifive/sifive_ccache.c
-> > @@ -5,6 +5,9 @@
-> >   * Copyright (C) 2018-2022 SiFive, Inc.
-> >   *
-> >   */
-> > +
-> > +#define pr_fmt(fmt) "CCACHE: " fmt
-> > +
-> >  #include <linux/debugfs.h>
-> >  #include <linux/interrupt.h>
-> >  #include <linux/of_irq.h>
-> > @@ -85,13 +88,13 @@ static void ccache_config_read(void)
+> > @@ -81,20 +81,17 @@ static void setup_sifive_debug(void)
 > >
-> >         cfg =3D readl(ccache_base + SIFIVE_CCACHE_CONFIG);
-> >
-> > -       pr_info("CCACHE: %u banks, %u ways, sets/bank=3D%llu, bytes/blo=
+> >  static void ccache_config_read(void)
+> >  {
+> > -       u32 regval, val;
+> > -
+> > -       regval =3D readl(ccache_base + SIFIVE_CCACHE_CONFIG);
+> > -       val =3D regval & 0xFF;
+> > -       pr_info("CCACHE: No. of Banks in the cache: %d\n", val);
+> > -       val =3D (regval & 0xFF00) >> 8;
+> > -       pr_info("CCACHE: No. of ways per bank: %d\n", val);
+> > -       val =3D (regval & 0xFF0000) >> 16;
+> > -       pr_info("CCACHE: Sets per bank: %llu\n", (uint64_t)1 << val);
+> > -       val =3D (regval & 0xFF000000) >> 24;
+> > -       pr_info("CCACHE: Bytes per cache block: %llu\n", (uint64_t)1 <<=
+ val);
+> > -
+> > -       regval =3D readl(ccache_base + SIFIVE_CCACHE_WAYENABLE);
+> > -       pr_info("CCACHE: Index of the largest way enabled: %d\n", regva=
+l);
+> > +       u32 cfg;
+> > +
+> > +       cfg =3D readl(ccache_base + SIFIVE_CCACHE_CONFIG);
+> > +
+> > +       pr_info("CCACHE: %u banks, %u ways, sets/bank=3D%llu, bytes/blo=
 ck=3D%llu\n",
-> > +       pr_info("%u banks, %u ways, sets/bank=3D%llu, bytes/block=3D%ll=
-u\n",
-> >                 (cfg & 0xff), (cfg >> 8) & 0xff,
-> >                 BIT_ULL((cfg >> 16) & 0xff),
-> >                 BIT_ULL((cfg >> 24) & 0xff));
-> >
-> >         cfg =3D readl(ccache_base + SIFIVE_CCACHE_WAYENABLE);
-> > -       pr_info("CCACHE: Index of the largest way enabled: %d\n", cfg);
-> > +       pr_info("Index of the largest way enabled: %d\n", cfg);
+> > +               (cfg & 0xff), (cfg >> 8) & 0xff,
+> > +               BIT_ULL((cfg >> 16) & 0xff),
+> > +               BIT_ULL((cfg >> 24) & 0xff));
+>
+> Could we use defines please for the register shifts please?
+>
+
+Yes, let me define them in V3
+
+> > +
+> > +       cfg =3D readl(ccache_base + SIFIVE_CCACHE_WAYENABLE);
+> > +       pr_info("CCACHE: Index of the largest way enabled: %d\n", cfg);
+>
+> %u here no?
+
+Thanks for point it out. I would change it in V3.
+
+> Thanks,
+> Conor.
+>
 > >  }
 > >
 > >  static const struct of_device_id sifive_ccache_ids[] =3D {
-> > @@ -154,7 +157,7 @@ static irqreturn_t ccache_int_handler(int irq, void=
- *device)
-> >         if (irq =3D=3D g_irq[DIR_CORR]) {
-> >                 add_h =3D readl(ccache_base + SIFIVE_CCACHE_DIRECCFIX_H=
-IGH);
-> >                 add_l =3D readl(ccache_base + SIFIVE_CCACHE_DIRECCFIX_L=
-OW);
-> > -               pr_err("CCACHE: DirError @ 0x%08X.%08X\n", add_h, add_l=
-);
-> > +               pr_err("DirError @ 0x%08X.%08X\n", add_h, add_l);
-> >                 /* Reading this register clears the DirError interrupt =
-sig */
-> >                 readl(ccache_base + SIFIVE_CCACHE_DIRECCFIX_COUNT);
-> >                 atomic_notifier_call_chain(&ccache_err_chain, SIFIVE_CC=
-ACHE_ERR_TYPE_CE,
-> > @@ -172,7 +175,7 @@ static irqreturn_t ccache_int_handler(int irq, void=
- *device)
-> >         if (irq =3D=3D g_irq[DATA_CORR]) {
-> >                 add_h =3D readl(ccache_base + SIFIVE_CCACHE_DATECCFIX_H=
-IGH);
-> >                 add_l =3D readl(ccache_base + SIFIVE_CCACHE_DATECCFIX_L=
-OW);
-> > -               pr_err("CCACHE: DataError @ 0x%08X.%08X\n", add_h, add_=
-l);
-> > +               pr_err("DataError @ 0x%08X.%08X\n", add_h, add_l);
-> >                 /* Reading this register clears the DataError interrupt=
- sig */
-> >                 readl(ccache_base + SIFIVE_CCACHE_DATECCFIX_COUNT);
-> >                 atomic_notifier_call_chain(&ccache_err_chain, SIFIVE_CC=
-ACHE_ERR_TYPE_CE,
-> > @@ -181,7 +184,7 @@ static irqreturn_t ccache_int_handler(int irq, void=
- *device)
-> >         if (irq =3D=3D g_irq[DATA_UNCORR]) {
-> >                 add_h =3D readl(ccache_base + SIFIVE_CCACHE_DATECCFAIL_=
-HIGH);
-> >                 add_l =3D readl(ccache_base + SIFIVE_CCACHE_DATECCFAIL_=
-LOW);
-> > -               pr_err("CCACHE: DataFail @ 0x%08X.%08X\n", add_h, add_l=
-);
-> > +               pr_err("DataFail @ 0x%08X.%08X\n", add_h, add_l);
-> >                 /* Reading this register clears the DataFail interrupt =
-sig */
-> >                 readl(ccache_base + SIFIVE_CCACHE_DATECCFAIL_COUNT);
-> >                 atomic_notifier_call_chain(&ccache_err_chain, SIFIVE_CC=
-ACHE_ERR_TYPE_UE,
-> > @@ -221,7 +224,7 @@ static int __init sifive_ccache_init(void)
-> >                 g_irq[i] =3D irq_of_parse_and_map(np, i);
-> >                 rc =3D request_irq(g_irq[i], ccache_int_handler, 0, "cc=
-ache_ecc", NULL);
-> >                 if (rc) {
-> > -                       pr_err("CCACHE: Could not request IRQ %d\n", g_=
-irq[i]);
-> > +                       pr_err("Could not request IRQ %d\n", g_irq[i]);
-> >                         return rc;
-> >                 }
-> >         }
 > > --
 > > 2.17.1
 > >
