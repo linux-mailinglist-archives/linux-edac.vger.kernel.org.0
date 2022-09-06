@@ -2,57 +2,58 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A25DE5ADCFB
-	for <lists+linux-edac@lfdr.de>; Tue,  6 Sep 2022 03:40:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 320575ADD07
+	for <lists+linux-edac@lfdr.de>; Tue,  6 Sep 2022 03:44:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230510AbiIFBkX (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Mon, 5 Sep 2022 21:40:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46584 "EHLO
+        id S231893AbiIFBoP (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Mon, 5 Sep 2022 21:44:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230116AbiIFBkW (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Mon, 5 Sep 2022 21:40:22 -0400
-Received: from mail-il1-x131.google.com (mail-il1-x131.google.com [IPv6:2607:f8b0:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9975B53D33;
-        Mon,  5 Sep 2022 18:40:21 -0700 (PDT)
-Received: by mail-il1-x131.google.com with SMTP id m16so2297593ilg.3;
-        Mon, 05 Sep 2022 18:40:21 -0700 (PDT)
+        with ESMTP id S231154AbiIFBoO (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Mon, 5 Sep 2022 21:44:14 -0400
+Received: from mail-io1-xd2e.google.com (mail-io1-xd2e.google.com [IPv6:2607:f8b0:4864:20::d2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE9B76B16D;
+        Mon,  5 Sep 2022 18:44:13 -0700 (PDT)
+Received: by mail-io1-xd2e.google.com with SMTP id q81so7846696iod.9;
+        Mon, 05 Sep 2022 18:44:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date;
-        bh=BLCIYXFzxz6s1/j3ZB3Rou7Ui9yNjgppVcQ6BAlU/1M=;
-        b=iN5/LTKj7WXSBoAPfOm+dizqeEH3nd3bz8F9PsnSjjQLO/p85YuXMHNlLSMsjUhY0o
-         BzFK4uN56yXTXp6yJSvBhTJNI5TW8TeoF76QkeXZP9yY/1gdf1hqej9TQQgSlarAdNKS
-         0b+/hMzE2O9+c8SaMMaauZim7mlPpkwwKGJM3qy+3N7tGi5cs4N0sQpdMTCZiT7ctRvD
-         rOyLo89XGsThjyv57I3y/gyf/ZBrDNVGITxxVwj+5FSnZm7bCHwePiA4u9CgJWd/RERv
-         3LttJiXM8CO8tCpO6LElOPIpoGA8XpmrPxo2x+fPsUieIrSOd/qmD1qBSOv2MkmMF5R/
-         M6Dg==
+        bh=e08D4SbYcUhaLYKlJn1NPNEeQS9ZOdXgn69FJxpJUWU=;
+        b=aSf23VvqYq9Z9jdxRlZRJnEDJ7mvD/LHSdN8oA/u47qteegSQ8x0ao1esHDGm4oa2C
+         k+Dvbmdxt4429HmYjGNYHNbMjVa5CqcDHeMYlS5YiX4Y/RNeIfYnazKP7CCcKpzO6m1B
+         bq/tkOXVBPUmE4dMXlE6r/L96eop3rSNYx0TCPDvJeibI3ol0i+lyQCTxv64UVhq7hJk
+         cHVHMwzGYpwtoJtc9vGXnxL8zK0m48T+eDHXBYjmkP5/eB818ZK5eOT+7ovgZS9mNSHN
+         yekuhVwAYg598tep+YJ++aQU/Dlbrd18IzF5iXb9sWesBBQxxTlJ/AjtM9cE1sTgxTyw
+         d7zA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date;
-        bh=BLCIYXFzxz6s1/j3ZB3Rou7Ui9yNjgppVcQ6BAlU/1M=;
-        b=8IJzkhAkK57IqRqgoSN7Sn2ESYqnwDlK/VuCZiMBqKl9Ci/5ubmNK0je5h4JTGtNPx
-         IjMm6Gzmiu5afVFEHrRKBqcX0LVaWVhvaq14cbQcMxV7/LoiuL8U4nfQxhcnzF9p53a+
-         pmaHvRAHoRVUd+k3rjX7oFQvoqzm+D43gAokh+vw+zFDnlcKgZIxuOhAjQyumQW2vkLO
-         NCRcD/Q4+TNiKQZBTIY2F9yzylgdEgz2fxlaAfCHO5ckEil7eCsUQXw2uSyueRA44Gsi
-         t2cx7VBVXJtqTUqB2SXRF2PXMVq6OfVY6wqGZl7KtnpaDGM+4TEq9TUE7J9xWKmz9YcQ
-         epAQ==
-X-Gm-Message-State: ACgBeo3sBZ/sDAKVbrydvoYDSHEYOAnZWBt2EVG8RegICLH6Ueei6QVU
-        9bUpxaFDwn6DGSNcKp1w+h09F+mWv7Ua4aZhsNo=
-X-Google-Smtp-Source: AA6agR4eBl0Sp41QNwnOSoe9ia/irlsn0OpEr0CLRY8Gg8i8RT5dVJIdLkrElwQcDzWSvKyr6N+dmyy34ht87oRs1+Q=
-X-Received: by 2002:a05:6e02:1645:b0:2f1:574e:a862 with SMTP id
- v5-20020a056e02164500b002f1574ea862mr4544828ilu.163.1662428420973; Mon, 05
- Sep 2022 18:40:20 -0700 (PDT)
+        bh=e08D4SbYcUhaLYKlJn1NPNEeQS9ZOdXgn69FJxpJUWU=;
+        b=XoPJF87Su9j79iTIL/PJ73mSYmXzb9ePaB9ZT6FBnEhuMuIfFVq9DVSuXUsUJfZSB0
+         sVerqnMfYm6A5RwLqBhMcWPsp2az24z/dnEk2vo0r6IPRLgEpQ6p2px2o9Yohe/bcbQB
+         YUNwXb+nap3MTE4yQHAfvNcwGY2C47BxNwL9x+Gi/GYGYZVKHkQcuUz7QzKrsb9aysJ5
+         HevJ7FsNiPwqV+rEZUGuP5Iyqvo3OiLQvTGoixyZv4KZxfHQxp/Wc9Sx8HIGau9LNZj6
+         bmYBOtTPlSvia0OOrBe4WyklLOydRYka38BjMOwerN4JQneqCHJy+ctiyMLMei+GbCgI
+         CHvA==
+X-Gm-Message-State: ACgBeo1bbbdpjbShfgMBa5jCw14PTRIcoVYDXCHy2Zs8pC2QEBI9je1u
+        ZQw9wVrngZCWeeilSpv6g0n4LoMaiktMZ4MeMr4=
+X-Google-Smtp-Source: AA6agR7xh1vB2jFhH2LWVWFGJ55z+0Yj4EDaWMZotdc41OWc9x+Bg1vM4mSD3IyJX4nRCXIrG/8QekXPK7zob+GxIfI=
+X-Received: by 2002:a05:6602:1482:b0:688:d06b:223e with SMTP id
+ a2-20020a056602148200b00688d06b223emr23881601iow.3.1662428653335; Mon, 05 Sep
+ 2022 18:44:13 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220905083125.29426-1-zong.li@sifive.com> <20220905083125.29426-5-zong.li@sifive.com>
- <490336f2-5028-499f-d78f-620e083b3c61@microchip.com>
-In-Reply-To: <490336f2-5028-499f-d78f-620e083b3c61@microchip.com>
+References: <20220905083125.29426-1-zong.li@sifive.com> <20220905083125.29426-3-zong.li@sifive.com>
+ <2a22c6ac-dc0e-7066-8f5f-04c428c77ee2@microchip.com>
+In-Reply-To: <2a22c6ac-dc0e-7066-8f5f-04c428c77ee2@microchip.com>
 From:   Zong Li <zongbox@gmail.com>
-Date:   Tue, 6 Sep 2022 09:40:09 +0800
-Message-ID: <CA+ZOyah2Sw4vO5nDbOGHr_cP+VDh6JWH8A-82YBFkDnM5ks3+A@mail.gmail.com>
-Subject: Re: [PATCH v2 4/6] soc: sifive: ccache: reduce printing on init
+Date:   Tue, 6 Sep 2022 09:44:01 +0800
+Message-ID: <CA+ZOyah199Vsa9haepO=uizymy947aLv3tMoO=5ye=FHqhkYCA@mail.gmail.com>
+Subject: Re: [PATCH v2 2/6] soc: sifive: ccache: Rename SiFive L2 cache to
+ Composable cache.
 To:     Conor.Dooley@microchip.com
 Cc:     zong.li@sifive.com, robh+dt@kernel.org,
         krzysztof.kozlowski+dt@linaro.org, palmer@dabbelt.com,
@@ -73,88 +74,66 @@ List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
 <Conor.Dooley@microchip.com> =E6=96=BC 2022=E5=B9=B49=E6=9C=886=E6=97=A5 =
-=E9=80=B1=E4=BA=8C =E5=87=8C=E6=99=A83:18=E5=AF=AB=E9=81=93=EF=BC=9A
+=E9=80=B1=E4=BA=8C =E5=87=8C=E6=99=A82:48=E5=AF=AB=E9=81=93=EF=BC=9A
+>
+> Noticed a another thing, sorry..
 >
 > On 05/09/2022 09:31, Zong Li wrote:
 > > EXTERNAL EMAIL: Do not click links or open attachments unless you know =
 the content is safe
 > >
-> > From: Ben Dooks <ben.dooks@sifive.com>
+> > From: Greentime Hu <greentime.hu@sifive.com>
 > >
-> > The driver prints out 6 lines on startup, which can easily be redcued
-> > to two lines without losing any information.
+> > Since composable cache may be L3 cache if pL2 cache exists, we should u=
+se
+> > its original name composable cache to prevent confusion.
 > >
-> > Note, to make the types work better, uint64_t has been replaced with
-> > ULL to make the unsigned long long match the format in the print
-> > statement.
+> > Apart from renaming, we also add the compatible "sifive,ccache0" into I=
+D
+> > table.
 > >
-> > Signed-off-by: Ben Dooks <ben.dooks@sifive.com>
->
-> Hey Zong,
-> Missing your SoB after Ben's here btw.
->
-
-Ok, I would add it in V3.
-
+> > Signed-off-by: Greentime Hu <greentime.hu@sifive.com>
+> > Signed-off-by: Zong Li <zong.li@sifive.com>
 > > ---
-> >  drivers/soc/sifive/sifive_ccache.c | 25 +++++++++++--------------
-> >  1 file changed, 11 insertions(+), 14 deletions(-)
+> >  drivers/soc/sifive/Kconfig                    |   6 +-
+> >  drivers/soc/sifive/Makefile                   |   2 +-
+> >  .../{sifive_l2_cache.c =3D> sifive_ccache.c}    | 163 +++++++++-------=
+--
+> >  .../{sifive_l2_cache.h =3D> sifive_ccache.h}    |  16 +-
+> >  4 files changed, 94 insertions(+), 93 deletions(-)
+> >  rename drivers/soc/sifive/{sifive_l2_cache.c =3D> sifive_ccache.c} (35=
+%)
+> >  rename include/soc/sifive/{sifive_l2_cache.h =3D> sifive_ccache.h} (12=
+%)
 > >
-> > diff --git a/drivers/soc/sifive/sifive_ccache.c b/drivers/soc/sifive/si=
-five_ccache.c
-> > index 0e0eb85c94d8..401c67a485e2 100644
-> > --- a/drivers/soc/sifive/sifive_ccache.c
-> > +++ b/drivers/soc/sifive/sifive_ccache.c
-> > @@ -81,20 +81,17 @@ static void setup_sifive_debug(void)
-> >
-> >  static void ccache_config_read(void)
+>
+> > -static ssize_t l2_write(struct file *file, const char __user *data,
+> > +static ssize_t ccache_write(struct file *file, const char __user *data=
+,
+> >                         size_t count, loff_t *ppos)
+>
+> You need to fix the alignment here as per checkpatch:
+> CHECK: Alignment should match open parenthesis
+> #112: FILE: drivers/soc/sifive/sifive_ccache.c:53:
+> +static ssize_t ccache_write(struct file *file, const char __user *data,
+> +                       size_t count, loff_t *ppos)
+>
+
+I'm not sure why I don't see that by checkpatch, but it looks that it
+is actually misalignment there, I would re-check all indents in
+source. Thanks.
+
 > >  {
-> > -       u32 regval, val;
-> > -
-> > -       regval =3D readl(ccache_base + SIFIVE_CCACHE_CONFIG);
-> > -       val =3D regval & 0xFF;
-> > -       pr_info("CCACHE: No. of Banks in the cache: %d\n", val);
-> > -       val =3D (regval & 0xFF00) >> 8;
-> > -       pr_info("CCACHE: No. of ways per bank: %d\n", val);
-> > -       val =3D (regval & 0xFF0000) >> 16;
-> > -       pr_info("CCACHE: Sets per bank: %llu\n", (uint64_t)1 << val);
-> > -       val =3D (regval & 0xFF000000) >> 24;
-> > -       pr_info("CCACHE: Bytes per cache block: %llu\n", (uint64_t)1 <<=
- val);
-> > -
-> > -       regval =3D readl(ccache_base + SIFIVE_CCACHE_WAYENABLE);
-> > -       pr_info("CCACHE: Index of the largest way enabled: %d\n", regva=
-l);
-> > +       u32 cfg;
-> > +
-> > +       cfg =3D readl(ccache_base + SIFIVE_CCACHE_CONFIG);
-> > +
-> > +       pr_info("CCACHE: %u banks, %u ways, sets/bank=3D%llu, bytes/blo=
-ck=3D%llu\n",
-> > +               (cfg & 0xff), (cfg >> 8) & 0xff,
-> > +               BIT_ULL((cfg >> 16) & 0xff),
-> > +               BIT_ULL((cfg >> 24) & 0xff));
->
-> Could we use defines please for the register shifts please?
->
-
-Yes, let me define them in V3
-
-> > +
-> > +       cfg =3D readl(ccache_base + SIFIVE_CCACHE_WAYENABLE);
-> > +       pr_info("CCACHE: Index of the largest way enabled: %d\n", cfg);
->
-> %u here no?
-
-Thanks for point it out. I would change it in V3.
-
-> Thanks,
-> Conor.
->
+> >         unsigned int val;
+> > @@ -57,75 +57,76 @@ static ssize_t l2_write(struct file *file, const ch=
+ar __user *data,
+> >         if (kstrtouint_from_user(data, count, 0, &val))
+> >                 return -EINVAL;
+> >         if ((val < 0xFF) || (val >=3D 0x10000 && val < 0x100FF))
+> > -               writel(val, l2_base + SIFIVE_L2_ECCINJECTERR);
+> > +               writel(val, ccache_base + SIFIVE_CCACHE_ECCINJECTERR);
+> >         else
+> >                 return -EINVAL;
+> >         return count;
 > >  }
 > >
-> >  static const struct of_device_id sifive_ccache_ids[] =3D {
-> > --
-> > 2.17.1
-> >
->
