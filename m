@@ -2,40 +2,36 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E88EF5B484C
-	for <lists+linux-edac@lfdr.de>; Sat, 10 Sep 2022 21:45:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 78EA55B4858
+	for <lists+linux-edac@lfdr.de>; Sat, 10 Sep 2022 21:50:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229897AbiIJTpK (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Sat, 10 Sep 2022 15:45:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35886 "EHLO
+        id S229516AbiIJTuV (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Sat, 10 Sep 2022 15:50:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229901AbiIJToU (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Sat, 10 Sep 2022 15:44:20 -0400
+        with ESMTP id S229459AbiIJTuU (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Sat, 10 Sep 2022 15:50:20 -0400
 Received: from mail.baikalelectronics.com (mail.baikalelectronics.com [87.245.175.230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 08B45422CB;
-        Sat, 10 Sep 2022 12:43:48 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 32EB229C86;
+        Sat, 10 Sep 2022 12:50:19 -0700 (PDT)
 Received: from mail (mail.baikal.int [192.168.51.25])
-        by mail.baikalelectronics.com (Postfix) with ESMTP id E512DDC7;
-        Sat, 10 Sep 2022 22:46:44 +0300 (MSK)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.baikalelectronics.com E512DDC7
+        by mail.baikalelectronics.com (Postfix) with ESMTP id 1FB2BDA3;
+        Sat, 10 Sep 2022 22:54:09 +0300 (MSK)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.baikalelectronics.com 1FB2BDA3
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baikalelectronics.ru; s=mail; t=1662839204;
-        bh=3FE9Ja6dIdq52+yDjkeRftC8U1bvC0LxjX1pOa168Go=;
-        h=From:To:CC:Subject:Date:In-Reply-To:References:From;
-        b=JasfJddh0oikqK77h2sGSEocpi1AJqqiGluVhcFbfYxlWeLqqRscqs7FurpTdkELF
-         L263eRhwOfWGLp1QsjliqLPoPx1rayt48+hBP0RPmdphJvOykhIVZ2d7IQMfNaYD8Z
-         10oIoztPxuphYAnCKha33G8Eh5gfAUvW+r3+YiMI=
+        d=baikalelectronics.ru; s=mail; t=1662839649;
+        bh=IweD942MZOoOOu0jp63XfXx5pfgiid/lLTQ1w8nMtAA=;
+        h=From:To:CC:Subject:Date:From;
+        b=GM5HEI9skOQnX4tiaB39FSS7wLES1qu9zsdItmUc4NrevXtmw3+4jjIrJWlNE8+O1
+         mQZATfJ8ZP5nwQOxEkXjC6B2m+ZWWOC0ehJRjV/cGlHQcTW4wKSocAdsn8LzqXBLd1
+         4UaBTj7kE/G3jdLT4MW2XRtfCnb5vRgw5xdwpbRk=
 Received: from localhost (192.168.168.10) by mail (192.168.51.25) with
- Microsoft SMTP Server (TLS) id 15.0.1395.4; Sat, 10 Sep 2022 22:42:54 +0300
+ Microsoft SMTP Server (TLS) id 15.0.1395.4; Sat, 10 Sep 2022 22:50:18 +0300
 From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Michal Simek <michal.simek@xilinx.com>,
+To:     Michal Simek <michal.simek@xilinx.com>,
         Borislav Petkov <bp@alien8.de>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Tony Luck <tony.luck@intel.com>,
-        James Morse <james.morse@arm.com>,
-        Robert Richter <rric@kernel.org>
+        Tony Luck <tony.luck@intel.com>
 CC:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
         Serge Semin <fancer.lancer@gmail.com>,
         Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
@@ -45,16 +41,13 @@ CC:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
         <punnaiah.choudary.kalluri@xilinx.com>,
         Manish Narani <manish.narani@xilinx.com>,
         Dinh Nguyen <dinguyen@kernel.org>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        <devicetree@vger.kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Robert Richter <rric@kernel.org>,
         <linux-arm-kernel@lists.infradead.org>,
         <linux-edac@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH v2 19/19] EDAC/synopsys: Convert to using BIT/GENMASK/FIELD_x macros
-Date:   Sat, 10 Sep 2022 22:42:37 +0300
-Message-ID: <20220910194237.10142-20-Sergey.Semin@baikalelectronics.ru>
-In-Reply-To: <20220910194237.10142-1-Sergey.Semin@baikalelectronics.ru>
-References: <20220910194237.10142-1-Sergey.Semin@baikalelectronics.ru>
+Subject: [PATCH RESEND v2 00/18] EDAC/synopsys: Add generic DDRC info and address mapping
+Date:   Sat, 10 Sep 2022 22:49:49 +0300
+Message-ID: <20220910195007.11027-1-Sergey.Semin@baikalelectronics.ru>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
@@ -68,245 +61,127 @@ Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-Instead of using the very handy helpers denoted in the subject the driver
-has been created with the open-coded {mask,shift} statements. It makes the
-code bulky, prone to mistakes and much harder to read. Seeing there are
-many places in the driver implementing the CSR fields get/set pattern
-let's use the FIELD_GET()/FIELD_PREP() macros introduced in the kernel
-specifically for that case. In addition we suggest to use the BIT() and
-GENMASK() macros to generate the CSR flags/masks. While at it unify the
-row, column, rank, bank and bank group macros names to be looking in the
-same way as the fields of the snps_ecc_error_info structure.
+This patchset is a second one in the series created in the framework of my
+Baikal-T1 DDRC-related work:
+
+[1: In-progress] EDAC/mc/synopsys: Various fixes and cleanups
+Link: https://lore.kernel.org/linux-edac/20220910194237.10142-1-Sergey.Semin@baikalelectronics.ru
+[2: In-progress] EDAC/synopsys: Add generic DDRC info and address mapping
+Link: ---you are looking at it---
+[3: In-progress] EDAC/synopsys: Add generic resources and Baikal-T1 support
+Link: https://lore.kernel.org/linux-edac/20220822191957.28546-1-Sergey.Semin@baikalelectronics.ru
+
+Note the patchsets above must be merged in the same order as they are
+placed in the list in order to prevent conflicts. Nothing prevents them
+from being reviewed synchronously though. Any tests are very welcome.
+Thanks in advance.
+
+The second patchset mainly concerns converting the DW uMCTL2 DDRC driver
+to being more generic so later it would be extended with our DDR
+controller support and further with the new DW uMCTL2 DDRC IP-core
+compilations.
+
+The series starts with the Error-injection functionality movement to
+DebugFS. Indeed the Debug-parts should be in the dedicated DebugFS. SysFS
+is not a place for it, moreover seeing later we'll add some more debug
+nodes.
+
+Afterwards even though it isn't advertised but even at this stage the DW
+uMCTL2 DDRC driver supports a bit more DDR protocols than it actually
+specifies in the mem_ctrl_info.mtype_cap field. So first we suggest to
+extend the MCI core memory types enumeration with LPDDR (mDDR) and LPDDR2,
+which support can be enabled in the DW uMCTL2 DDR controller. Second we
+need to make sure all the possible DDR protocol types are correctly
+detected during the DW uMCTL DDRC probe procedure.
+
+Then a bit painful patch goes. Alas we have to deviate the driver from the
+EDAC standard private data allocation/initialization pattern. Since we are
+going to add the DW uMCTL2 IP-core specific parameters detection procedure
+and later on implement additional platform resources requests there is no
+other choice but to allocate the driver private data at the early stage of
+the device probe procedure even before it's possible to allocate the MCI
+descriptor. The DW uMCTL2 DDRC platform resources and configuration info
+will be then utilized to properly allocate and initialize the
+mem_ctrl_info structure instance.
+
+Third patch in the series is very important. It provides the DW uMCTL2
+DDRC parameters detection procedure. The DDRC and ECC parameters detected
+at this stage will be then utilized to make the driver working with much
+wider set of the DW uMCTL2 revisions and configurations. In particular
+from now the driver will retrieve the next DDRC info at the probe stage:
+ECC type, SDRAM protocol (DDR type), Full and actual DQ-bus width, SDRAM
+and HIF burst length, Core/SDRAM frequency ration, number of SDRAM ranks.
+The DDRC parameters structure will be extended with some more fields later
+in this and the next patchset. The provided private DDRC parameters
+infrastructure can be utilized to implement the platform-specific
+capabilities so the platform data and its quirks are replaced with it.
+
+The detected at the probe stage DW uMCTL2 DDRC parameters can be now used
+to implement the configuration specific functionality. In particular first
+we introduce the conditional ADDRMAP* CSRs mapping since some of these
+CSRs and their fields are left unused by the controller in some cases.
+Secondly actual DIMM ECC errors grain, ECC corrected bit, full data
+pattern and syndrome are determined based on the DDRC parameters.
+
+Afterwards goes a series of the patches which introduce an interface to
+generically determine the system address based on the SDRAM address and
+vice-versa. Thus we'll be able to report actual PFN and offset in case of
+the corrected and uncorrected errors. So first we get to convert the
+currently available HIF/SDRAM mapping table utilized for the
+errors-injection functionality into a more generic Sys<->SDRAM address
+translation interface. Secondly we suggest to conform the SDRAM column
+address mapping detection algorithm with what is defined in the DW uMCTL2
+DDRC hw reference manual. After adding a handy DebugFS node to read the
+HIF/SDRAM mapping and the system address regions support we finally
+introduce the erroneous page-frame/offset reporting to the MCI core. Since
+the full SDRAM address mapping is now always available we suggest to use
+it for the attached memory size calculation, which is a more correct
+approach rather than the si_meminfo()-based one.
+
+Link: https://lore.kernel.org/linux-edac/20220822191427.27969-1-Sergey.Semin@baikalelectronics.ru
+Changelog v2:
+- Rebase onto the latest version of the patchset:
+[PATCH v2 00/19] EDAC/mc/synopsys: Various fixes and cleanups
+- Just resend.
 
 Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
----
- drivers/edac/synopsys_edac.c | 123 +++++++++++++++++------------------
- 1 file changed, 60 insertions(+), 63 deletions(-)
+Cc: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
+Cc: Michail Ivanov <Michail.Ivanov@baikalelectronics.ru>
+Cc: Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>
+Cc: Punnaiah Choudary Kalluri <punnaiah.choudary.kalluri@xilinx.com>
+Cc: Manish Narani <manish.narani@xilinx.com>
+Cc: Dinh Nguyen <dinguyen@kernel.org>
+Cc: James Morse <james.morse@arm.com>
+Cc: Robert Richter <rric@kernel.org>
+Cc: linux-arm-kernel@lists.infradead.org
+Cc: linux-edac@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
 
-diff --git a/drivers/edac/synopsys_edac.c b/drivers/edac/synopsys_edac.c
-index 49bb28af448b..7833bcff3e2e 100644
---- a/drivers/edac/synopsys_edac.c
-+++ b/drivers/edac/synopsys_edac.c
-@@ -7,6 +7,7 @@
-  */
- 
- #include <linux/bitfield.h>
-+#include <linux/bits.h>
- #include <linux/edac.h>
- #include <linux/module.h>
- #include <linux/platform_device.h>
-@@ -91,22 +92,19 @@
- #define DDR_MSTR_DEV_X8			0x1
- #define DDR_MSTR_DEV_X16		0x2
- #define DDR_MSTR_DEV_X32		0x3
--#define DDR_MSTR_BUSWIDTH_MASK		0x3000
--#define DDR_MSTR_BUSWIDTH_SHIFT		12
-+#define DDR_MSTR_BUSWIDTH_MASK		GENMASK(13, 12)
- #define DDRCTL_EWDTH_16			2
- #define DDRCTL_EWDTH_32			1
- #define DDRCTL_EWDTH_64			0
- 
- /* ECC CFG0 register definitions */
--#define ECC_CFG0_MODE_MASK		0x7
-+#define ECC_CFG0_MODE_MASK		GENMASK(2, 0)
- #define ECC_CFG0_MODE_SECDED		0x4
- 
- /* ECC status register definitions */
--#define ECC_STAT_UECNT_MASK		0xF0000
--#define ECC_STAT_UECNT_SHIFT		16
--#define ECC_STAT_CECNT_MASK		0xF00
--#define ECC_STAT_CECNT_SHIFT		8
--#define ECC_STAT_BITNUM_MASK		0x7F
-+#define ECC_STAT_UE_MASK		GENMASK(23, 16)
-+#define ECC_STAT_CE_MASK		GENMASK(15, 8)
-+#define ECC_STAT_BITNUM_MASK		GENMASK(6, 0)
- 
- /* ECC control/clear register definitions */
- #define ECC_CTRL_CLR_CE_ERR		BIT(0)
-@@ -117,49 +115,41 @@
- #define ECC_CTRL_EN_UE_IRQ		BIT(9)
- 
- /* ECC error count register definitions */
--#define ECC_ERRCNT_UECNT_MASK		0xFFFF0000
--#define ECC_ERRCNT_UECNT_SHIFT		16
--#define ECC_ERRCNT_CECNT_MASK		0xFFFF
-+#define ECC_ERRCNT_UECNT_MASK		GENMASK(31, 16)
-+#define ECC_ERRCNT_CECNT_MASK		GENMASK(15, 0)
- 
- /* DDR QOS Interrupt register definitions */
- #define DDR_QOS_IRQ_STAT_OFST		0x20200
--#define DDR_QOSUE_MASK			0x4
--#define	DDR_QOSCE_MASK			0x2
--#define	ECC_CE_UE_INTR_MASK		0x6
-+#define DDR_QOSUE_MASK			BIT(2)
-+#define DDR_QOSCE_MASK			BIT(1)
-+#define ECC_CE_UE_INTR_MASK		(DDR_QOSUE_MASK | DDR_QOSCE_MASK)
- #define DDR_QOS_IRQ_EN_OFST		0x20208
- #define DDR_QOS_IRQ_DB_OFST		0x2020C
- 
- /* ECC Corrected Error Register Mask and Shifts*/
--#define ECC_CEADDR0_RW_MASK		0x3FFFF
--#define ECC_CEADDR0_RNK_MASK		BIT(24)
--#define ECC_CEADDR1_BNKGRP_MASK		0x3000000
--#define ECC_CEADDR1_BNKNR_MASK		0x70000
--#define ECC_CEADDR1_COL_MASK		0xFFF
--#define ECC_CEADDR1_BNKGRP_SHIFT	24
--#define ECC_CEADDR1_BNKNR_SHIFT		16
-+#define ECC_CEADDR0_RANK_MASK		GENMASK(27, 24)
-+#define ECC_CEADDR0_ROW_MASK		GENMASK(17, 0)
-+#define ECC_CEADDR1_BANKGRP_MASK	GENMASK(25, 24)
-+#define ECC_CEADDR1_BANK_MASK		GENMASK(23, 16)
-+#define ECC_CEADDR1_COL_MASK		GENMASK(11, 0)
- 
- /* ECC Poison register shifts */
--#define ECC_POISON0_RANK_SHIFT		24
--#define ECC_POISON0_RANK_MASK		BIT(24)
--#define ECC_POISON0_COLUMN_SHIFT	0
--#define ECC_POISON0_COLUMN_MASK		0xFFF
--#define ECC_POISON1_BG_SHIFT		28
--#define ECC_POISON1_BG_MASK		0x30000000
--#define ECC_POISON1_BANKNR_SHIFT	24
--#define ECC_POISON1_BANKNR_MASK		0x7000000
--#define ECC_POISON1_ROW_SHIFT		0
--#define ECC_POISON1_ROW_MASK		0x3FFFF
-+#define ECC_POISON0_RANK_MASK		GENMASK(27, 24)
-+#define ECC_POISON0_COL_MASK		GENMASK(11, 0)
-+#define ECC_POISON1_BANKGRP_MASK	GENMASK(29, 28)
-+#define ECC_POISON1_BANK_MASK		GENMASK(26, 24)
-+#define ECC_POISON1_ROW_MASK		GENMASK(17, 0)
- 
- /* DDR Memory type defines */
--#define MEM_TYPE_DDR3			0x1
--#define MEM_TYPE_LPDDR3			0x8
--#define MEM_TYPE_DDR2			0x4
--#define MEM_TYPE_DDR4			0x10
--#define MEM_TYPE_LPDDR4			0x20
-+#define MEM_TYPE_DDR3			BIT(0)
-+#define MEM_TYPE_DDR2			BIT(2)
-+#define MEM_TYPE_LPDDR3			BIT(3)
-+#define MEM_TYPE_DDR4			BIT(4)
-+#define MEM_TYPE_LPDDR4			BIT(5)
- 
- /* DDRC ECC CE & UE poison mask */
--#define ECC_CEPOISON_MASK		0x3
--#define ECC_UEPOISON_MASK		0x1
-+#define ECC_CEPOISON_MASK		GENMASK(1, 0)
-+#define ECC_UEPOISON_MASK		BIT(0)
- 
- /* DDRC Device config shifts/masks */
- #define DDR_MAX_ROW_SHIFT		18
-@@ -304,38 +294,40 @@ static int snps_get_error_info(struct snps_edac_priv *priv)
- 	if (!regval)
- 		return 1;
- 
--	p->ceinfo.bitpos = (regval & ECC_STAT_BITNUM_MASK);
-+	p->ceinfo.bitpos = FIELD_GET(ECC_STAT_BITNUM_MASK, regval);
- 
- 	regval = readl(base + ECC_ERRCNT_OFST);
--	p->ce_cnt = regval & ECC_ERRCNT_CECNT_MASK;
--	p->ue_cnt = (regval & ECC_ERRCNT_UECNT_MASK) >> ECC_ERRCNT_UECNT_SHIFT;
-+	p->ce_cnt = FIELD_GET(ECC_ERRCNT_CECNT_MASK, regval);
-+	p->ue_cnt = FIELD_GET(ECC_ERRCNT_UECNT_MASK, regval);
- 	if (!p->ce_cnt)
- 		goto ue_err;
- 
- 	regval = readl(base + ECC_CEADDR0_OFST);
--	p->ceinfo.row = (regval & ECC_CEADDR0_RW_MASK);
-+	p->ceinfo.row = FIELD_GET(ECC_CEADDR0_ROW_MASK, regval);
-+
- 	regval = readl(base + ECC_CEADDR1_OFST);
--	p->ceinfo.bank = (regval & ECC_CEADDR1_BNKNR_MASK) >>
--					ECC_CEADDR1_BNKNR_SHIFT;
--	p->ceinfo.bankgrp = (regval & ECC_CEADDR1_BNKGRP_MASK) >>
--					ECC_CEADDR1_BNKGRP_SHIFT;
--	p->ceinfo.col = (regval & ECC_CEADDR1_COL_MASK);
-+	p->ceinfo.bank = FIELD_GET(ECC_CEADDR1_BANK_MASK, regval);
-+	p->ceinfo.bankgrp = FIELD_GET(ECC_CEADDR1_BANKGRP_MASK, regval);
-+	p->ceinfo.col = FIELD_GET(ECC_CEADDR1_COL_MASK, regval);
-+
- 	p->ceinfo.data = readl(base + ECC_CSYND0_OFST);
-+
- 	edac_dbg(2, "ECCCSYN0: 0x%08X ECCCSYN1: 0x%08X ECCCSYN2: 0x%08X\n",
- 		 readl(base + ECC_CSYND0_OFST), readl(base + ECC_CSYND1_OFST),
- 		 readl(base + ECC_CSYND2_OFST));
-+
- ue_err:
- 	if (!p->ue_cnt)
- 		goto out;
- 
- 	regval = readl(base + ECC_UEADDR0_OFST);
--	p->ueinfo.row = (regval & ECC_CEADDR0_RW_MASK);
-+	p->ueinfo.row = FIELD_GET(ECC_CEADDR0_ROW_MASK, regval);
-+
- 	regval = readl(base + ECC_UEADDR1_OFST);
--	p->ueinfo.bankgrp = (regval & ECC_CEADDR1_BNKGRP_MASK) >>
--					ECC_CEADDR1_BNKGRP_SHIFT;
--	p->ueinfo.bank = (regval & ECC_CEADDR1_BNKNR_MASK) >>
--					ECC_CEADDR1_BNKNR_SHIFT;
--	p->ueinfo.col = (regval & ECC_CEADDR1_COL_MASK);
-+	p->ueinfo.bankgrp = FIELD_GET(ECC_CEADDR1_BANKGRP_MASK, regval);
-+	p->ueinfo.bank = FIELD_GET(ECC_CEADDR1_BANK_MASK, regval);
-+	p->ueinfo.col = FIELD_GET(ECC_CEADDR1_COL_MASK, regval);
-+
- 	p->ueinfo.data = readl(base + ECC_UESYND0_OFST);
- 
- out:
-@@ -510,7 +502,8 @@ static bool snps_get_ecc_state(void __iomem *base)
- {
- 	u32 regval;
- 
--	regval = readl(base + ECC_CFG0_OFST) & ECC_CFG0_MODE_MASK;
-+	regval = readl(base + ECC_CFG0_OFST);
-+	regval = FIELD_GET(ECC_CFG0_MODE_MASK, regval);
- 
- 	return (regval == ECC_CFG0_MODE_SECDED);
- }
-@@ -697,13 +690,13 @@ static void snps_data_poison_setup(struct snps_edac_priv *priv)
- 	if (priv->rank_shift[0])
- 		rank = (hif_addr >> priv->rank_shift[0]) & BIT(0);
- 
--	regval = (rank << ECC_POISON0_RANK_SHIFT) & ECC_POISON0_RANK_MASK;
--	regval |= (col << ECC_POISON0_COLUMN_SHIFT) & ECC_POISON0_COLUMN_MASK;
-+	regval = FIELD_PREP(ECC_POISON0_RANK_MASK, rank) |
-+		 FIELD_PREP(ECC_POISON0_COL_MASK, col);
- 	writel(regval, priv->baseaddr + ECC_POISON0_OFST);
- 
--	regval = (bankgrp << ECC_POISON1_BG_SHIFT) & ECC_POISON1_BG_MASK;
--	regval |= (bank << ECC_POISON1_BANKNR_SHIFT) & ECC_POISON1_BANKNR_MASK;
--	regval |= (row << ECC_POISON1_ROW_SHIFT) & ECC_POISON1_ROW_MASK;
-+	regval = FIELD_PREP(ECC_POISON1_BANKGRP_MASK, bankgrp) |
-+		 FIELD_PREP(ECC_POISON1_BANK_MASK, bank) |
-+		 FIELD_PREP(ECC_POISON1_ROW_MASK, row);
- 	writel(regval, priv->baseaddr + ECC_POISON1_OFST);
- }
- 
-@@ -742,10 +735,14 @@ static ssize_t inject_data_poison_show(struct device *dev,
- {
- 	struct mem_ctl_info *mci = to_mci(dev);
- 	struct snps_edac_priv *priv = mci->pvt_info;
-+	const char *errstr;
-+	u32 regval;
-+
-+	regval = readl(priv->baseaddr + ECC_CFG1_OFST);
-+	errstr = FIELD_GET(ECC_CEPOISON_MASK, regval) == ECC_CEPOISON_MASK ?
-+		 "Correctable Error" : "UnCorrectable Error";
- 
--	return sprintf(data, "Data Poisoning: %s\n\r",
--			(((readl(priv->baseaddr + ECC_CFG1_OFST)) & 0x3) == 0x3)
--			? ("Correctable Error") : ("UnCorrectable Error"));
-+	return sprintf(data, "Data Poisoning: %s\n\r", errstr);
- }
- 
- static ssize_t inject_data_poison_store(struct device *dev,
-@@ -852,7 +849,7 @@ static void snps_setup_column_address_map(struct snps_edac_priv *priv, u32 *addr
- 	int index;
- 
- 	memtype = readl(priv->baseaddr + DDR_MSTR_OFST);
--	width = (memtype & DDR_MSTR_BUSWIDTH_MASK) >> DDR_MSTR_BUSWIDTH_SHIFT;
-+	width = FIELD_GET(DDR_MSTR_BUSWIDTH_MASK, memtype);
- 
- 	priv->col_shift[0] = 0;
- 	priv->col_shift[1] = 1;
+Serge Semin (18):
+  EDAC/synopsys: Convert sysfs nodes to debugfs ones
+  EDAC/mc: Extend memtypes with LPDDR(mDDR) and LPDDR2
+  EDAC/synopsys: Extend memtypes supported by controller
+  EDAC/synopsys: Detach private data from mci instance
+  EDAC/synopsys: Add DDRC basic parameters infrastructure
+  EDAC/synopsys: Convert plat-data to plat-init function
+  EDAC/synopsys: Parse ADDRMAP[7-8] CSRs for (LP)DDR4 only
+  EDAC/synopsys: Parse ADDRMAP[0] CSR for multi-ranks case only
+  EDAC/synopsys: Set actual DIMM ECC errors grain
+  EDAC/synopsys: Get corrected bit position
+  EDAC/synopsys: Read full data pattern on errors
+  EDAC/synopsys: Read data syndrome on errors
+  EDAC/synopsys: Introduce System/SDRAM address translation interface
+  EDAC/synopsys: Simplify HIF/SDRAM column mapping get procedure
+  EDAC/synopsys: Add HIF/SDRAM mapping debugfs node
+  EDAC/synopsys: Add erroneous page-frame/offset reporting
+  EDAC/synopsys: Add system address regions support
+  EDAC/synopsys: Add mapping-based memory size calculation
+
+ drivers/edac/edac_mc.c       |    2 +
+ drivers/edac/synopsys_edac.c | 1772 ++++++++++++++++++++++++----------
+ include/linux/edac.h         |    6 +
+ 3 files changed, 1291 insertions(+), 489 deletions(-)
+
 -- 
 2.37.2
 
