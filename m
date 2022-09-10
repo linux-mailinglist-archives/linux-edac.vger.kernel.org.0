@@ -2,29 +2,29 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 499F45B4821
-	for <lists+linux-edac@lfdr.de>; Sat, 10 Sep 2022 21:45:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 29C995B4828
+	for <lists+linux-edac@lfdr.de>; Sat, 10 Sep 2022 21:45:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229655AbiIJTnP (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Sat, 10 Sep 2022 15:43:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35180 "EHLO
+        id S229695AbiIJTnU (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Sat, 10 Sep 2022 15:43:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229626AbiIJTnK (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Sat, 10 Sep 2022 15:43:10 -0400
+        with ESMTP id S229643AbiIJTnP (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Sat, 10 Sep 2022 15:43:15 -0400
 Received: from mail.baikalelectronics.com (mail.baikalelectronics.com [87.245.175.230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CCE8A4662B;
-        Sat, 10 Sep 2022 12:43:00 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 20E5F42AE8;
+        Sat, 10 Sep 2022 12:43:03 -0700 (PDT)
 Received: from mail (mail.baikal.int [192.168.51.25])
-        by mail.baikalelectronics.com (Postfix) with ESMTP id E6746DB3;
-        Sat, 10 Sep 2022 22:46:33 +0300 (MSK)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.baikalelectronics.com E6746DB3
+        by mail.baikalelectronics.com (Postfix) with ESMTP id 99E11DB9;
+        Sat, 10 Sep 2022 22:46:34 +0300 (MSK)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.baikalelectronics.com 99E11DB9
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baikalelectronics.ru; s=mail; t=1662839193;
-        bh=k5NLeuK9ITgf2CMQL9Y8laggFAjsfMQJFc5UPn87Kgo=;
+        d=baikalelectronics.ru; s=mail; t=1662839194;
+        bh=gE9kv3YrzFeBzVnkwDeL/iNcijqP7kKHeYIL2hqIdeY=;
         h=From:To:CC:Subject:Date:In-Reply-To:References:From;
-        b=CIfeKSL/Y3PMHL8v45oe0+1sS9N52uuiWOQjtl0FNtzMfMfIgkSzlAfj4FGQjIW4l
-         zYbmkBEUoi8gcKwAvBUHkupmpvOTZimlDeAp2CyvdyI0g6Ik8t18Xt/e60K+BSKMGN
-         AMdl8cbqOzPLYXHElkuMMVHK/e/lbTtU3VtyXPDc=
+        b=Hq5RAO+qTHGrUwHPW8alBeJ4Vr2sndwAWnvcLUFjLbFNGPENINemwRNePHpGJGo1I
+         fp3DyeZSCvBVHJu+i69xNlWPIqqpK0/55nSswV1rMqF2vsmbnpjyObwUer7BiS7pPP
+         i89/cdq5XeOMkMowRXLwINa0cOI1oXOqXxbH8Cm8=
 Received: from localhost (192.168.168.10) by mail (192.168.51.25) with
  Microsoft SMTP Server (TLS) id 15.0.1395.4; Sat, 10 Sep 2022 22:42:43 +0300
 From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
@@ -36,7 +36,7 @@ To:     Rob Herring <robh+dt@kernel.org>,
         Tony Luck <tony.luck@intel.com>,
         James Morse <james.morse@arm.com>,
         Robert Richter <rric@kernel.org>,
-        Manish Narani <manish.narani@xilinx.com>
+        Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
 CC:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
         Serge Semin <fancer.lancer@gmail.com>,
         Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
@@ -44,6 +44,7 @@ CC:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
         Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
         Punnaiah Choudary Kalluri 
         <punnaiah.choudary.kalluri@xilinx.com>,
+        Manish Narani <manish.narani@xilinx.com>,
         Dinh Nguyen <dinguyen@kernel.org>,
         Rob Herring <robh@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
@@ -51,9 +52,9 @@ CC:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
         <linux-arm-kernel@lists.infradead.org>,
         <linux-edac@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         Borislav Petkov <bp@suse.de>
-Subject: [PATCH v2 04/19] EDAC/synopsys: Drop erroneous ADDRMAP4.addrmap_col_b10 parse
-Date:   Sat, 10 Sep 2022 22:42:22 +0300
-Message-ID: <20220910194237.10142-5-Sergey.Semin@baikalelectronics.ru>
+Subject: [PATCH v2 05/19] EDAC/synopsys: Fix reading errors count before ECC status
+Date:   Sat, 10 Sep 2022 22:42:23 +0300
+Message-ID: <20220910194237.10142-6-Sergey.Semin@baikalelectronics.ru>
 In-Reply-To: <20220910194237.10142-1-Sergey.Semin@baikalelectronics.ru>
 References: <20220910194237.10142-1-Sergey.Semin@baikalelectronics.ru>
 MIME-Version: 1.0
@@ -69,35 +70,50 @@ Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-Currently the ADDRMAP4.addrmap_col_b10 field gets to be parsed in case of
-the LPDDR3 memory and Quarter DQ bus width mode. It's wrong since that
-field is marked as unused for that mode in all the available DW uMCTL2
-DDRC releases (up to IP-core v3.91a). Most likely the field parsing has
-been added by mistake as a result of the copy-paste from the Half DW bus
-width mode part of the same function. Drop it from the driver for good
-then.
+Aside with fixing the errors count CSR usage the commit e2932d1f6f05
+("EDAC/synopsys: Read the error count from the correct register") all of
+the sudden has also changed the order of the errors status check
+procedure. So now the errors handler method first reads the number of CE
+and UE and only then makes sure that any of these errors have actually
+happened. It doesn't make much sense. Let's fix that by getting back the
+procedures order: first check the ECC status, then read the number of
+errors.
 
-Fixes: 1a81361f75d8 ("EDAC, synopsys: Add Error Injection support for ZynqMP DDR controller")
+Fixes: e2932d1f6f05 ("EDAC/synopsys: Read the error count from the correct register")
 Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
 ---
- drivers/edac/synopsys_edac.c | 4 ----
- 1 file changed, 4 deletions(-)
+ drivers/edac/synopsys_edac.c | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
 diff --git a/drivers/edac/synopsys_edac.c b/drivers/edac/synopsys_edac.c
-index c6f3b383e5ff..da1d90a87778 100644
+index da1d90a87778..558d3b3e6864 100644
 --- a/drivers/edac/synopsys_edac.c
 +++ b/drivers/edac/synopsys_edac.c
-@@ -1239,10 +1239,6 @@ static void setup_column_address_map(struct synps_edac_priv *priv, u32 *addrmap)
- 				COL_MAX_VAL_MASK) == COL_MAX_VAL_MASK) ? 0 :
- 				(((addrmap[3] >> 24) & COL_MAX_VAL_MASK) +
- 				 COL_B9_BASE);
--			priv->col_shift[13] = ((addrmap[4] &
--				COL_MAX_VAL_MASK) == COL_MAX_VAL_MASK) ? 0 :
--				((addrmap[4] & COL_MAX_VAL_MASK) +
--				 COL_B10_BASE);
- 		} else {
- 			priv->col_shift[11] = (((addrmap[3] >> 16) &
- 				COL_MAX_VAL_MASK) == COL_MAX_VAL_MASK) ? 0 :
+@@ -423,18 +423,18 @@ static int zynqmp_get_error_info(struct synps_edac_priv *priv)
+ 	base = priv->baseaddr;
+ 	p = &priv->stat;
+ 
+-	regval = readl(base + ECC_ERRCNT_OFST);
+-	p->ce_cnt = regval & ECC_ERRCNT_CECNT_MASK;
+-	p->ue_cnt = (regval & ECC_ERRCNT_UECNT_MASK) >> ECC_ERRCNT_UECNT_SHIFT;
+-	if (!p->ce_cnt)
+-		goto ue_err;
+-
+ 	regval = readl(base + ECC_STAT_OFST);
+ 	if (!regval)
+ 		return 1;
+ 
+ 	p->ceinfo.bitpos = (regval & ECC_STAT_BITNUM_MASK);
+ 
++	regval = readl(base + ECC_ERRCNT_OFST);
++	p->ce_cnt = regval & ECC_ERRCNT_CECNT_MASK;
++	p->ue_cnt = (regval & ECC_ERRCNT_UECNT_MASK) >> ECC_ERRCNT_UECNT_SHIFT;
++	if (!p->ce_cnt)
++		goto ue_err;
++
+ 	regval = readl(base + ECC_CEADDR0_OFST);
+ 	p->ceinfo.row = (regval & ECC_CEADDR0_RW_MASK);
+ 	regval = readl(base + ECC_CEADDR1_OFST);
 -- 
 2.37.2
 
