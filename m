@@ -2,31 +2,31 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DAD55B483D
-	for <lists+linux-edac@lfdr.de>; Sat, 10 Sep 2022 21:45:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0053A5B4825
+	for <lists+linux-edac@lfdr.de>; Sat, 10 Sep 2022 21:45:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229659AbiIJTom (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Sat, 10 Sep 2022 15:44:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35310 "EHLO
+        id S229838AbiIJTos (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Sat, 10 Sep 2022 15:44:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229657AbiIJTn4 (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Sat, 10 Sep 2022 15:43:56 -0400
+        with ESMTP id S229867AbiIJToJ (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Sat, 10 Sep 2022 15:44:09 -0400
 Received: from mail.baikalelectronics.com (mail.baikalelectronics.com [87.245.175.230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 677FA4A125;
-        Sat, 10 Sep 2022 12:43:41 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4DB7349B79;
+        Sat, 10 Sep 2022 12:43:45 -0700 (PDT)
 Received: from mail (mail.baikal.int [192.168.51.25])
-        by mail.baikalelectronics.com (Postfix) with ESMTP id A4136DC5;
-        Sat, 10 Sep 2022 22:46:43 +0300 (MSK)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.baikalelectronics.com A4136DC5
+        by mail.baikalelectronics.com (Postfix) with ESMTP id 57CB7DC6;
+        Sat, 10 Sep 2022 22:46:44 +0300 (MSK)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.baikalelectronics.com 57CB7DC6
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baikalelectronics.ru; s=mail; t=1662839203;
-        bh=vymTmbsj4Dty9qgI7c/VvysZtEU6iHpGFUY7A4JeqK8=;
+        d=baikalelectronics.ru; s=mail; t=1662839204;
+        bh=fPJGr+fRiay+OwhUxaPDrHmcEmm0Rw4HLNrGzVLplxw=;
         h=From:To:CC:Subject:Date:In-Reply-To:References:From;
-        b=QRT7D0U8dQHfkch1c/RCI6t4bYCzEJ4Qw6WRvtC9iwzfH9oOuoj8yc6zU4ONVZPvy
-         YwEmAzLholkprAKmlfy9AsrvEjhOyFP7Kwpzflcjy6riiT/MgxM3qA5SwqH6+uT+6Q
-         xH65WO7dXpuCTOHQfRQGI6EDFpfUvbKKcYqnnxUA=
+        b=OXV1jxKbYIr3qFD3WcIp7tBOT1Qy3zK0ACg5MoTPCOTUsVWEj7QcNz47Y6zsLcXo7
+         Q5YFR2I4Uim+ecmqQprLTOSgYO1VbLNSjcFB3wAIMxPWRgqbXan0Mavj0e0snm0TSI
+         Q88p1GNSOltz8vFVBKo+g8k90KXILrJ54VeAC2rs=
 Received: from localhost (192.168.168.10) by mail (192.168.51.25) with
- Microsoft SMTP Server (TLS) id 15.0.1395.4; Sat, 10 Sep 2022 22:42:52 +0300
+ Microsoft SMTP Server (TLS) id 15.0.1395.4; Sat, 10 Sep 2022 22:42:53 +0300
 From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
 To:     Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
@@ -50,9 +50,9 @@ CC:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
         <devicetree@vger.kernel.org>,
         <linux-arm-kernel@lists.infradead.org>,
         <linux-edac@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH v2 17/19] EDAC/synopsys: Drop unused platform-specific setup API
-Date:   Sat, 10 Sep 2022 22:42:35 +0300
-Message-ID: <20220910194237.10142-18-Sergey.Semin@baikalelectronics.ru>
+Subject: [PATCH v2 18/19] EDAC/synopsys: Unify the driver entities naming
+Date:   Sat, 10 Sep 2022 22:42:36 +0300
+Message-ID: <20220910194237.10142-19-Sergey.Semin@baikalelectronics.ru>
 In-Reply-To: <20220910194237.10142-1-Sergey.Semin@baikalelectronics.ru>
 References: <20220910194237.10142-1-Sergey.Semin@baikalelectronics.ru>
 MIME-Version: 1.0
@@ -68,409 +68,758 @@ Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-The driver now works with the Synopys DW uMCTL2 DDR IP-core only (Xilinx
-Zynq A05 DDRc support has been moved to the dedicated driver). Pretty much
-all the currently available IP-core revisions have got the same ECC and
-main DDR-config CSRs map. Thus there is no point in supporting the no
-longer used platform-specific API like the callbacks responsible for
-getting the ECC errors info, memory and device types, ECC state. All of
-that data can be retrieved in the same way on all the Synopys DW uMCTL2
-DDR controller versions. Similarly there is no longer need in the
-DDR_ECC_INTR_SUPPORT and DDR_ECC_DATA_POISON_SUPPORT quirk flags since DW
-uMCTL2 always supports IRQs and data poisoning. Let's drop that
-infrastructure for good then.
+Currently the driver naming schema is kind of random. There are structures
+and methods with the "synps" prefix, there are structures and methods
+with no driver-specific prefix, there are methods with the "edac" prefix,
+there are structure instances with "zynqmp" and "synopsys" prefixes, there
+are macros with "SYNPS", "ECC" and "DDR" prefixes. Moreover some time ago
+some of function names were shortened out by completely removing the
+vendor-specific prefixes thus leaving the driver with no strict entities
+naming convention (see commit bb894bc46ed0 ("EDAC, synopsys: Shorten
+static function names")).
+
+All of that makes the code much harder to read for no much reason (except
+shorter names utilization) since there is no easy way to distinguish now
+the local, EDAC core and global name spaces right from the code context.
+Similarly the kernel code index services (like elixir) gets to find the
+different functions with the same name, which harden the kernel hacking.
+
+Let's fix all of that by unifying the driver local entity names like
+functions, structures and non-CSR-related macros especially seeing the
+same approach has been used in the most of the EDAC LLDD. We suggest to
+use the "snps" prefix here as the shortest version of the controller
+vendor name. While at it add a more detailed controller name (DW uMCTL2
+DDRC) to the driver comments and string literals where it's appropriate.
 
 Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
 
 ---
 
+Note "dw" prefix would be even shorter alternative. But we decided to
+stick with "snps" since "synopsys" has already been used in the module
+name.
+
 Changelog v2:
-- Drop the no longer used "priv" pointer from the mc_init() function.
+- Forgot to fix some of the SYNPS_ZYNQMP_IRQ_REGS macro utilizations.
   (@tbot)
 ---
- drivers/edac/synopsys_edac.c | 197 +++++++++--------------------------
- 1 file changed, 51 insertions(+), 146 deletions(-)
+ drivers/edac/synopsys_edac.c | 240 +++++++++++++++++------------------
+ 1 file changed, 120 insertions(+), 120 deletions(-)
 
 diff --git a/drivers/edac/synopsys_edac.c b/drivers/edac/synopsys_edac.c
-index f48b3a2938f7..26694f4fa162 100644
+index 26694f4fa162..49bb28af448b 100644
 --- a/drivers/edac/synopsys_edac.c
 +++ b/drivers/edac/synopsys_edac.c
-@@ -32,9 +32,7 @@
- #define SYNPS_EDAC_MOD_VER		"1"
+@@ -1,6 +1,6 @@
+ // SPDX-License-Identifier: GPL-2.0-only
+ /*
+- * Synopsys DDR ECC Driver
++ * Synopsys DW uMCTL2 DDR ECC Driver
+  * This driver is based on ppc4xx_edac.c drivers
+  *
+  * Copyright (C) 2012 - 2014 Xilinx, Inc.
+@@ -18,23 +18,23 @@
+ #include "edac_module.h"
+ 
+ /* Number of cs_rows needed per memory controller */
+-#define SYNPS_EDAC_NR_CSROWS		1
++#define SNPS_EDAC_NR_CSROWS		1
+ 
+ /* Number of channels per memory controller */
+-#define SYNPS_EDAC_NR_CHANS		1
++#define SNPS_EDAC_NR_CHANS		1
+ 
+ /* Granularity of reported error in bytes */
+-#define SYNPS_EDAC_ERR_GRAIN		1
++#define SNPS_EDAC_ERR_GRAIN		1
+ 
+-#define SYNPS_EDAC_MSG_SIZE		256
++#define SNPS_EDAC_MSG_SIZE		256
+ 
+-#define SYNPS_EDAC_MOD_STRING		"synps_edac"
+-#define SYNPS_EDAC_MOD_VER		"1"
++#define SNPS_EDAC_MOD_STRING		"snps_edac"
++#define SNPS_EDAC_MOD_VER		"1"
  
  /* DDR ECC Quirks */
--#define DDR_ECC_INTR_SUPPORT		BIT(0)
--#define DDR_ECC_DATA_POISON_SUPPORT	BIT(1)
--#define SYNPS_ZYNQMP_IRQ_REGS		BIT(2)
-+#define SYNPS_ZYNQMP_IRQ_REGS		BIT(0)
+-#define SYNPS_ZYNQMP_IRQ_REGS		BIT(0)
++#define SNPS_ZYNQMP_IRQ_REGS		BIT(0)
  
- /* Synopsys DDR memory controller registers that are relevant to ECC */
+-/* Synopsys DDR memory controller registers that are relevant to ECC */
++/* Synopsys uMCTL2 DDR controller registers that are relevant to ECC */
  
-@@ -279,28 +277,20 @@ struct synps_edac_priv {
- };
+ /* DDRC master0 Register */
+ #define DDR_MSTR_OFST			0x0
+@@ -215,7 +215,7 @@
+ #define RANK_B0_BASE			6
  
  /**
-- * struct synps_platform_data -  synps platform data structure.
-- * @get_error_info:	Get EDAC error info.
-- * @get_mtype:		Get mtype.
-- * @get_dtype:		Get dtype.
-- * @get_ecc_state:	Get ECC state.
-- * @quirks:		To differentiate IPs.
-+ * struct synps_platform_data - Synopsys uMCTL2 DDRC platform data.
-+ * @quirks:	IP-core specific quirks.
+- * struct ecc_error_info - ECC error log information.
++ * struct snps_ecc_error_info - ECC error log information.
+  * @row:	Row number.
+  * @col:	Column number.
+  * @bank:	Bank number.
+@@ -223,7 +223,7 @@
+  * @bitpos:	Bit position.
+  * @data:	Data causing the error.
   */
- struct synps_platform_data {
--	int (*get_error_info)(struct synps_edac_priv *priv);
--	enum mem_type (*get_mtype)(const void __iomem *base);
--	enum dev_type (*get_dtype)(const void __iomem *base);
--	bool (*get_ecc_state)(void __iomem *base);
--	int quirks;
-+	u32 quirks;
+-struct ecc_error_info {
++struct snps_ecc_error_info {
+ 	u32 row;
+ 	u32 col;
+ 	u32 bank;
+@@ -233,21 +233,21 @@ struct ecc_error_info {
  };
  
  /**
-- * zynqmp_get_error_info - Get the current ECC error info.
-+ * synps_get_error_info - Get the current ECC error info.
+- * struct synps_ecc_status - ECC status information to report.
++ * struct snps_ecc_status - ECC status information to report.
+  * @ce_cnt:	Correctable error count.
+  * @ue_cnt:	Uncorrectable error count.
+  * @ceinfo:	Correctable error log information.
+  * @ueinfo:	Uncorrectable error log information.
+  */
+-struct synps_ecc_status {
++struct snps_ecc_status {
+ 	u32 ce_cnt;
+ 	u32 ue_cnt;
+-	struct ecc_error_info ceinfo;
+-	struct ecc_error_info ueinfo;
++	struct snps_ecc_error_info ceinfo;
++	struct snps_ecc_error_info ueinfo;
+ };
+ 
+ /**
+- * struct synps_edac_priv - DDR memory controller private instance data.
++ * struct snps_edac_priv - DDR memory controller private data.
+  * @baseaddr:		Base address of the DDR controller.
+  * @lock:		Concurrent CSRs access lock.
+  * @message:		Buffer for framing the event specific info.
+@@ -260,12 +260,12 @@ struct synps_ecc_status {
+  * @bankgrp_shift:	Bit shifts for bank group bit.
+  * @rank_shift:		Bit shifts for rank bit.
+  */
+-struct synps_edac_priv {
++struct snps_edac_priv {
+ 	void __iomem *baseaddr;
+ 	spinlock_t lock;
+-	char message[SYNPS_EDAC_MSG_SIZE];
+-	struct synps_ecc_status stat;
+-	const struct synps_platform_data *p_data;
++	char message[SNPS_EDAC_MSG_SIZE];
++	struct snps_ecc_status stat;
++	const struct snps_platform_data *p_data;
+ #ifdef CONFIG_EDAC_DEBUG
+ 	ulong poison_addr;
+ 	u32 row_shift[18];
+@@ -277,22 +277,22 @@ struct synps_edac_priv {
+ };
+ 
+ /**
+- * struct synps_platform_data - Synopsys uMCTL2 DDRC platform data.
++ * struct snps_platform_data - Synopsys uMCTL2 DDRC platform data.
+  * @quirks:	IP-core specific quirks.
+  */
+-struct synps_platform_data {
++struct snps_platform_data {
+ 	u32 quirks;
+ };
+ 
+ /**
+- * synps_get_error_info - Get the current ECC error info.
++ * snps_get_error_info - Get the current ECC error info.
   * @priv:	DDR memory controller private instance data.
   *
   * Return: one if there is no error otherwise returns zero.
   */
--static int zynqmp_get_error_info(struct synps_edac_priv *priv)
-+static int synps_get_error_info(struct synps_edac_priv *priv)
+-static int synps_get_error_info(struct synps_edac_priv *priv)
++static int snps_get_error_info(struct snps_edac_priv *priv)
  {
- 	struct synps_ecc_status *p;
+-	struct synps_ecc_status *p;
++	struct snps_ecc_status *p;
  	u32 regval, clearval;
-@@ -375,17 +365,11 @@ static void handle_error(struct mem_ctl_info *mci, struct synps_ecc_status *p)
+ 	unsigned long flags;
+ 	void __iomem *base;
+@@ -352,21 +352,21 @@ static int synps_get_error_info(struct synps_edac_priv *priv)
+ }
+ 
+ /**
+- * handle_error - Handle Correctable and Uncorrectable errors.
++ * snps_handle_error - Handle Correctable and Uncorrectable errors.
+  * @mci:	EDAC memory controller instance.
+  * @p:		Synopsys ECC status structure.
+  *
+  * Handles ECC correctable and uncorrectable errors.
+  */
+-static void handle_error(struct mem_ctl_info *mci, struct synps_ecc_status *p)
++static void snps_handle_error(struct mem_ctl_info *mci, struct snps_ecc_status *p)
+ {
+-	struct synps_edac_priv *priv = mci->pvt_info;
+-	struct ecc_error_info *pinf;
++	struct snps_edac_priv *priv = mci->pvt_info;
++	struct snps_ecc_error_info *pinf;
  
  	if (p->ce_cnt) {
  		pinf = &p->ceinfo;
--		if (priv->p_data->quirks & DDR_ECC_INTR_SUPPORT) {
--			snprintf(priv->message, SYNPS_EDAC_MSG_SIZE,
--				 "Row %d Col %d Bank %d Bank Group %d Bit %d Data 0x%08x",
--				 pinf->row, pinf->col, pinf->bank, pinf->bankgrp,
--				 pinf->bitpos, pinf->data);
--		} else {
--			snprintf(priv->message, SYNPS_EDAC_MSG_SIZE,
--				 "Row %d Bank %d Col %d Bit: %d Data: 0x%08x",
--				 pinf->row, pinf->bank, pinf->col,
--				 pinf->bitpos, pinf->data);
--		}
-+
-+		snprintf(priv->message, SYNPS_EDAC_MSG_SIZE,
-+			 "Row %d Col %d Bank %d Bank Group %d Bit %d Data 0x%08x",
-+			 pinf->row, pinf->col, pinf->bank, pinf->bankgrp,
-+			 pinf->bitpos, pinf->data);
  
- 		edac_mc_handle_error(HW_EVENT_ERR_CORRECTED, mci,
- 				     p->ce_cnt, 0, 0, 0, 0, 0, -1,
-@@ -394,15 +378,10 @@ static void handle_error(struct mem_ctl_info *mci, struct synps_ecc_status *p)
- 
+-		snprintf(priv->message, SYNPS_EDAC_MSG_SIZE,
++		snprintf(priv->message, SNPS_EDAC_MSG_SIZE,
+ 			 "Row %d Col %d Bank %d Bank Group %d Bit %d Data 0x%08x",
+ 			 pinf->row, pinf->col, pinf->bank, pinf->bankgrp,
+ 			 pinf->bitpos, pinf->data);
+@@ -379,7 +379,7 @@ static void handle_error(struct mem_ctl_info *mci, struct synps_ecc_status *p)
  	if (p->ue_cnt) {
  		pinf = &p->ueinfo;
--		if (priv->p_data->quirks & DDR_ECC_INTR_SUPPORT) {
--			snprintf(priv->message, SYNPS_EDAC_MSG_SIZE,
--				 "Row %d Col %d Bank %d Bank Group %d",
--				 pinf->row, pinf->col, pinf->bank, pinf->bankgrp);
--		} else {
--			snprintf(priv->message, SYNPS_EDAC_MSG_SIZE,
--				 "Row %d Bank %d Col %d",
--				 pinf->row, pinf->bank, pinf->col);
--		}
-+
-+		snprintf(priv->message, SYNPS_EDAC_MSG_SIZE,
-+			 "Row %d Col %d Bank %d Bank Group %d",
-+			 pinf->row, pinf->col, pinf->bank, pinf->bankgrp);
  
- 		edac_mc_handle_error(HW_EVENT_ERR_UNCORRECTED, mci,
- 				     p->ue_cnt, 0, 0, 0, 0, 0, -1,
-@@ -461,13 +440,11 @@ static void disable_intr(struct synps_edac_priv *priv)
-  */
- static irqreturn_t intr_handler(int irq, void *dev_id)
+-		snprintf(priv->message, SYNPS_EDAC_MSG_SIZE,
++		snprintf(priv->message, SNPS_EDAC_MSG_SIZE,
+ 			 "Row %d Col %d Bank %d Bank Group %d",
+ 			 pinf->row, pinf->col, pinf->bank, pinf->bankgrp);
+ 
+@@ -391,12 +391,12 @@ static void handle_error(struct mem_ctl_info *mci, struct synps_ecc_status *p)
+ 	memset(p, 0, sizeof(*p));
+ }
+ 
+-static void enable_intr(struct synps_edac_priv *priv)
++static void snps_enable_irq(struct snps_edac_priv *priv)
  {
--	const struct synps_platform_data *p_data;
+ 	unsigned long flags;
+ 
+ 	/* Enable UE/CE Interrupts */
+-	if (priv->p_data->quirks & SYNPS_ZYNQMP_IRQ_REGS) {
++	if (priv->p_data->quirks & SNPS_ZYNQMP_IRQ_REGS) {
+ 		writel(DDR_QOSUE_MASK | DDR_QOSCE_MASK,
+ 		       priv->baseaddr + DDR_QOS_IRQ_EN_OFST);
+ 
+@@ -412,12 +412,12 @@ static void enable_intr(struct synps_edac_priv *priv)
+ 	spin_unlock_irqrestore(&priv->lock, flags);
+ }
+ 
+-static void disable_intr(struct synps_edac_priv *priv)
++static void snps_disable_irq(struct snps_edac_priv *priv)
+ {
+ 	unsigned long flags;
+ 
+ 	/* Disable UE/CE Interrupts */
+-	if (priv->p_data->quirks & SYNPS_ZYNQMP_IRQ_REGS) {
++	if (priv->p_data->quirks & SNPS_ZYNQMP_IRQ_REGS) {
+ 		writel(DDR_QOSUE_MASK | DDR_QOSCE_MASK,
+ 		       priv->baseaddr + DDR_QOS_IRQ_DB_OFST);
+ 
+@@ -432,42 +432,42 @@ static void disable_intr(struct synps_edac_priv *priv)
+ }
+ 
+ /**
+- * intr_handler - Interrupt Handler for ECC interrupts.
++ * snps_irq_handler - Interrupt Handler for ECC interrupts.
+  * @irq:        IRQ number.
+  * @dev_id:     Device ID.
+  *
+  * Return: IRQ_NONE, if interrupt not set or IRQ_HANDLED otherwise.
+  */
+-static irqreturn_t intr_handler(int irq, void *dev_id)
++static irqreturn_t snps_irq_handler(int irq, void *dev_id)
+ {
  	struct mem_ctl_info *mci = dev_id;
- 	struct synps_edac_priv *priv;
+-	struct synps_edac_priv *priv;
++	struct snps_edac_priv *priv;
  	int status, regval;
  
  	priv = mci->pvt_info;
--	p_data = priv->p_data;
  
- 	if (priv->p_data->quirks & SYNPS_ZYNQMP_IRQ_REGS) {
+-	if (priv->p_data->quirks & SYNPS_ZYNQMP_IRQ_REGS) {
++	if (priv->p_data->quirks & SNPS_ZYNQMP_IRQ_REGS) {
  		regval = readl(priv->baseaddr + DDR_QOS_IRQ_STAT_OFST);
-@@ -476,7 +453,7 @@ static irqreturn_t intr_handler(int irq, void *dev_id)
+ 		regval &= (DDR_QOSCE_MASK | DDR_QOSUE_MASK);
+ 		if (!(regval & ECC_CE_UE_INTR_MASK))
  			return IRQ_NONE;
  	}
  
--	status = p_data->get_error_info(priv);
-+	status = synps_get_error_info(priv);
+-	status = synps_get_error_info(priv);
++	status = snps_get_error_info(priv);
  	if (status)
  		return IRQ_NONE;
  
-@@ -490,34 +467,7 @@ static irqreturn_t intr_handler(int irq, void *dev_id)
+-	handle_error(mci, &priv->stat);
++	snps_handle_error(mci, &priv->stat);
+ 
+ 
+-	if (priv->p_data->quirks & SYNPS_ZYNQMP_IRQ_REGS)
++	if (priv->p_data->quirks & SNPS_ZYNQMP_IRQ_REGS)
+ 		writel(regval, priv->baseaddr + DDR_QOS_IRQ_STAT_OFST);
+ 
+ 	return IRQ_HANDLED;
  }
  
  /**
-- * check_errors - Check controller for ECC errors.
-- * @mci:	EDAC memory controller instance.
-- *
-- * Check and post ECC errors. Called by the polling thread.
-- */
--static void check_errors(struct mem_ctl_info *mci)
--{
--	const struct synps_platform_data *p_data;
--	struct synps_edac_priv *priv;
--	int status;
--
--	priv = mci->pvt_info;
--	p_data = priv->p_data;
--
--	status = p_data->get_error_info(priv);
--	if (status)
--		return;
--
--	priv->ce_cnt += priv->stat.ce_cnt;
--	priv->ue_cnt += priv->stat.ue_cnt;
--	handle_error(mci, &priv->stat);
--
--	edac_dbg(3, "Total error count CE %d UE %d\n",
--		 priv->ce_cnt, priv->ue_cnt);
--}
--
--/**
-- * zynqmp_get_dtype - Return the controller memory width.
-+ * synps_get_dtype - Return the controller memory width.
+- * synps_get_dtype - Return the controller memory width.
++ * snps_get_dtype - Return the controller memory width.
   * @base:	DDR memory controller base address.
   *
   * Get the EDAC device type width appropriate for the current controller
-@@ -525,7 +475,7 @@ static void check_errors(struct mem_ctl_info *mci)
+@@ -475,7 +475,7 @@ static irqreturn_t intr_handler(int irq, void *dev_id)
   *
   * Return: a device type width enumeration.
   */
--static enum dev_type zynqmp_get_dtype(const void __iomem *base)
-+static enum dev_type synps_get_dtype(const void __iomem *base)
+-static enum dev_type synps_get_dtype(const void __iomem *base)
++static enum dev_type snps_get_dtype(const void __iomem *base)
  {
  	u32 regval;
  
-@@ -549,14 +499,14 @@ static enum dev_type zynqmp_get_dtype(const void __iomem *base)
+@@ -499,14 +499,14 @@ static enum dev_type synps_get_dtype(const void __iomem *base)
  }
  
  /**
-- * zynqmp_get_ecc_state - Return the controller ECC enable/disable status.
-+ * synps_get_ecc_state - Return the controller ECC enable/disable status.
+- * synps_get_ecc_state - Return the controller ECC enable/disable status.
++ * snps_get_ecc_state - Return the controller ECC enable/disable status.
   * @base:	DDR memory controller base address.
   *
   * Get the ECC enable/disable status for the controller.
   *
   * Return: a ECC status boolean i.e true/false - enabled/disabled.
   */
--static bool zynqmp_get_ecc_state(void __iomem *base)
-+static bool synps_get_ecc_state(void __iomem *base)
+-static bool synps_get_ecc_state(void __iomem *base)
++static bool snps_get_ecc_state(void __iomem *base)
  {
  	u32 regval;
  
-@@ -580,7 +530,7 @@ static u32 get_memsize(void)
+@@ -516,11 +516,11 @@ static bool synps_get_ecc_state(void __iomem *base)
  }
  
  /**
-- * zynqmp_get_mtype - Returns controller memory type.
-+ * synps_get_mtype - Returns controller memory type.
+- * get_memsize - Read the size of the attached memory device.
++ * snps_get_memsize - Read the size of the attached memory device.
+  *
+  * Return: the memory size in bytes.
+  */
+-static u32 get_memsize(void)
++static u32 snps_get_memsize(void)
+ {
+ 	struct sysinfo inf;
+ 
+@@ -530,7 +530,7 @@ static u32 get_memsize(void)
+ }
+ 
+ /**
+- * synps_get_mtype - Returns controller memory type.
++ * snps_get_mtype - Returns controller memory type.
   * @base:	Synopsys ECC status structure.
   *
   * Get the EDAC memory type appropriate for the current controller
-@@ -588,7 +538,7 @@ static u32 get_memsize(void)
+@@ -538,7 +538,7 @@ static u32 get_memsize(void)
   *
   * Return: a memory type enumeration.
   */
--static enum mem_type zynqmp_get_mtype(const void __iomem *base)
-+static enum mem_type synps_get_mtype(const void __iomem *base)
+-static enum mem_type synps_get_mtype(const void __iomem *base)
++static enum mem_type snps_get_mtype(const void __iomem *base)
  {
  	enum mem_type mt;
  	u32 memtype;
-@@ -617,14 +567,11 @@ static enum mem_type zynqmp_get_mtype(const void __iomem *base)
- static void init_csrows(struct mem_ctl_info *mci)
+@@ -558,15 +558,15 @@ static enum mem_type synps_get_mtype(const void __iomem *base)
+ }
+ 
+ /**
+- * init_csrows - Initialize the csrow data.
++ * snps_init_csrows - Initialize the csrow data.
+  * @mci:	EDAC memory controller instance.
+  *
+  * Initialize the chip select rows associated with the EDAC memory
+  * controller instance.
+  */
+-static void init_csrows(struct mem_ctl_info *mci)
++static void snps_init_csrows(struct mem_ctl_info *mci)
  {
- 	struct synps_edac_priv *priv = mci->pvt_info;
--	const struct synps_platform_data *p_data;
+-	struct synps_edac_priv *priv = mci->pvt_info;
++	struct snps_edac_priv *priv = mci->pvt_info;
  	struct csrow_info *csi;
  	struct dimm_info *dimm;
  	u32 size, row;
- 	int j;
+@@ -574,21 +574,21 @@ static void init_csrows(struct mem_ctl_info *mci)
  
--	p_data = priv->p_data;
--
  	for (row = 0; row < mci->nr_csrows; row++) {
  		csi = mci->csrows[row];
- 		size = get_memsize();
-@@ -632,10 +579,10 @@ static void init_csrows(struct mem_ctl_info *mci)
+-		size = get_memsize();
++		size = snps_get_memsize();
+ 
  		for (j = 0; j < csi->nr_channels; j++) {
  			dimm		= csi->channels[j]->dimm;
  			dimm->edac_mode	= EDAC_SECDED;
--			dimm->mtype	= p_data->get_mtype(priv->baseaddr);
-+			dimm->mtype	= synps_get_mtype(priv->baseaddr);
+-			dimm->mtype	= synps_get_mtype(priv->baseaddr);
++			dimm->mtype	= snps_get_mtype(priv->baseaddr);
  			dimm->nr_pages	= (size >> PAGE_SHIFT) / csi->nr_channels;
- 			dimm->grain	= SYNPS_EDAC_ERR_GRAIN;
--			dimm->dtype	= p_data->get_dtype(priv->baseaddr);
-+			dimm->dtype	= synps_get_dtype(priv->baseaddr);
+-			dimm->grain	= SYNPS_EDAC_ERR_GRAIN;
+-			dimm->dtype	= synps_get_dtype(priv->baseaddr);
++			dimm->grain	= SNPS_EDAC_ERR_GRAIN;
++			dimm->dtype	= snps_get_dtype(priv->baseaddr);
  		}
  	}
  }
-@@ -651,10 +598,7 @@ static void init_csrows(struct mem_ctl_info *mci)
+ 
+ /**
+- * mc_init - Initialize one driver instance.
++ * snps_mc_init - Initialize one driver instance.
+  * @mci:	EDAC memory controller instance.
+  * @pdev:	platform device.
+  *
+@@ -596,7 +596,7 @@ static void init_csrows(struct mem_ctl_info *mci)
+  * related driver-private data associated with the memory controller the
+  * instance is bound to.
   */
- static void mc_init(struct mem_ctl_info *mci, struct platform_device *pdev)
+-static void mc_init(struct mem_ctl_info *mci, struct platform_device *pdev)
++static void snps_mc_init(struct mem_ctl_info *mci, struct platform_device *pdev)
  {
--	struct synps_edac_priv *priv;
--
  	mci->pdev = &pdev->dev;
--	priv = mci->pvt_info;
  	platform_set_drvdata(pdev, mci);
+@@ -608,21 +608,22 @@ static void mc_init(struct mem_ctl_info *mci, struct platform_device *pdev)
+ 	mci->scrub_mode = SCRUB_NONE;
  
- 	/* Initialize controller capabilities and configuration */
-@@ -668,12 +612,7 @@ static void mc_init(struct mem_ctl_info *mci, struct platform_device *pdev)
- 	mci->dev_name = SYNPS_EDAC_MOD_STRING;
- 	mci->mod_name = SYNPS_EDAC_MOD_VER;
+ 	mci->edac_cap = EDAC_FLAG_SECDED;
+-	mci->ctl_name = "synps_ddr_controller";
+-	mci->dev_name = SYNPS_EDAC_MOD_STRING;
+-	mci->mod_name = SYNPS_EDAC_MOD_VER;
++	mci->ctl_name = "snps_umctl2_ddrc";
++	mci->dev_name = SNPS_EDAC_MOD_STRING;
++	mci->mod_name = SNPS_EDAC_MOD_VER;
  
--	if (priv->p_data->quirks & DDR_ECC_INTR_SUPPORT) {
--		edac_op_state = EDAC_OPSTATE_INT;
--	} else {
--		edac_op_state = EDAC_OPSTATE_POLL;
--		mci->edac_check = check_errors;
--	}
-+	edac_op_state = EDAC_OPSTATE_INT;
+ 	edac_op_state = EDAC_OPSTATE_INT;
  
  	mci->ctl_page_to_phys = NULL;
  
-@@ -705,47 +644,6 @@ static int setup_irq(struct mem_ctl_info *mci,
+-	init_csrows(mci);
++	snps_init_csrows(mci);
+ }
+ 
+-static int setup_irq(struct mem_ctl_info *mci,
+-		     struct platform_device *pdev)
++
++
++static int snps_setup_irq(struct mem_ctl_info *mci, struct platform_device *pdev)
+ {
+-	struct synps_edac_priv *priv = mci->pvt_info;
++	struct snps_edac_priv *priv = mci->pvt_info;
+ 	int ret, irq;
+ 
+ 	irq = platform_get_irq(pdev, 0);
+@@ -632,14 +633,14 @@ static int setup_irq(struct mem_ctl_info *mci,
+ 		return irq;
+ 	}
+ 
+-	ret = devm_request_irq(&pdev->dev, irq, intr_handler,
++	ret = devm_request_irq(&pdev->dev, irq, snps_irq_handler,
+ 			       0, dev_name(&pdev->dev), mci);
+ 	if (ret < 0) {
+ 		edac_printk(KERN_ERR, EDAC_MC, "Failed to request IRQ\n");
+ 		return ret;
+ 	}
+ 
+-	enable_intr(priv);
++	snps_enable_irq(priv);
+ 
+ 	return 0;
+ }
+@@ -647,13 +648,13 @@ static int setup_irq(struct mem_ctl_info *mci,
+ #ifdef CONFIG_EDAC_DEBUG
+ 
+ /**
+- * ddr_poison_setup -	Update poison registers.
++ * snps_data_poison_setup - Update poison registers.
+  * @priv:		DDR memory controller private instance data.
+  *
+  * Update poison registers as per DDR mapping.
+  * Return: none.
+  */
+-static void ddr_poison_setup(struct synps_edac_priv *priv)
++static void snps_data_poison_setup(struct snps_edac_priv *priv)
+ {
+ 	int col = 0, row = 0, bank = 0, bankgrp = 0, rank = 0, regval;
+ 	int index;
+@@ -711,7 +712,7 @@ static ssize_t inject_data_error_show(struct device *dev,
+ 				      char *data)
+ {
+ 	struct mem_ctl_info *mci = to_mci(dev);
+-	struct synps_edac_priv *priv = mci->pvt_info;
++	struct snps_edac_priv *priv = mci->pvt_info;
+ 
+ 	return sprintf(data, "Poison0 Addr: 0x%08x\n\rPoison1 Addr: 0x%08x\n\r"
+ 			"Error injection Address: 0x%lx\n\r",
+@@ -725,12 +726,12 @@ static ssize_t inject_data_error_store(struct device *dev,
+ 				       const char *data, size_t count)
+ {
+ 	struct mem_ctl_info *mci = to_mci(dev);
+-	struct synps_edac_priv *priv = mci->pvt_info;
++	struct snps_edac_priv *priv = mci->pvt_info;
+ 
+ 	if (kstrtoul(data, 0, &priv->poison_addr))
+ 		return -EINVAL;
+ 
+-	ddr_poison_setup(priv);
++	snps_data_poison_setup(priv);
+ 
+ 	return count;
+ }
+@@ -740,7 +741,7 @@ static ssize_t inject_data_poison_show(struct device *dev,
+ 				       char *data)
+ {
+ 	struct mem_ctl_info *mci = to_mci(dev);
+-	struct synps_edac_priv *priv = mci->pvt_info;
++	struct snps_edac_priv *priv = mci->pvt_info;
+ 
+ 	return sprintf(data, "Data Poisoning: %s\n\r",
+ 			(((readl(priv->baseaddr + ECC_CFG1_OFST)) & 0x3) == 0x3)
+@@ -752,7 +753,7 @@ static ssize_t inject_data_poison_store(struct device *dev,
+ 					const char *data, size_t count)
+ {
+ 	struct mem_ctl_info *mci = to_mci(dev);
+-	struct synps_edac_priv *priv = mci->pvt_info;
++	struct snps_edac_priv *priv = mci->pvt_info;
+ 
+ 	writel(0, priv->baseaddr + DDR_SWCTL);
+ 	if (strncmp(data, "CE", 2) == 0)
+@@ -767,7 +768,7 @@ static ssize_t inject_data_poison_store(struct device *dev,
+ static DEVICE_ATTR_RW(inject_data_error);
+ static DEVICE_ATTR_RW(inject_data_poison);
+ 
+-static int edac_create_sysfs_attributes(struct mem_ctl_info *mci)
++static int snps_create_sysfs_attributes(struct mem_ctl_info *mci)
+ {
+ 	int rc;
+ 
+@@ -780,13 +781,13 @@ static int edac_create_sysfs_attributes(struct mem_ctl_info *mci)
+ 	return 0;
+ }
+ 
+-static void edac_remove_sysfs_attributes(struct mem_ctl_info *mci)
++static void snps_remove_sysfs_attributes(struct mem_ctl_info *mci)
+ {
+ 	device_remove_file(&mci->dev, &dev_attr_inject_data_error);
+ 	device_remove_file(&mci->dev, &dev_attr_inject_data_poison);
+ }
+ 
+-static void setup_row_address_map(struct synps_edac_priv *priv, u32 *addrmap)
++static void snps_setup_row_address_map(struct snps_edac_priv *priv, u32 *addrmap)
+ {
+ 	u32 addrmap_row_b2_10;
+ 	int index;
+@@ -845,7 +846,7 @@ static void setup_row_address_map(struct synps_edac_priv *priv, u32 *addrmap)
+ 				ROW_MAX_VAL_MASK) + ROW_B17_BASE);
+ }
+ 
+-static void setup_column_address_map(struct synps_edac_priv *priv, u32 *addrmap)
++static void snps_setup_column_address_map(struct snps_edac_priv *priv, u32 *addrmap)
+ {
+ 	u32 width, memtype;
+ 	int index;
+@@ -947,7 +948,7 @@ static void setup_column_address_map(struct synps_edac_priv *priv, u32 *addrmap)
+ 
+ }
+ 
+-static void setup_bank_address_map(struct synps_edac_priv *priv, u32 *addrmap)
++static void snps_setup_bank_address_map(struct snps_edac_priv *priv, u32 *addrmap)
+ {
+ 	priv->bank_shift[0] = (addrmap[1] & BANK_MAX_VAL_MASK) + BANK_B0_BASE;
+ 	priv->bank_shift[1] = ((addrmap[1] >> 8) &
+@@ -959,7 +960,7 @@ static void setup_bank_address_map(struct synps_edac_priv *priv, u32 *addrmap)
+ 
+ }
+ 
+-static void setup_bg_address_map(struct synps_edac_priv *priv, u32 *addrmap)
++static void snps_setup_bg_address_map(struct snps_edac_priv *priv, u32 *addrmap)
+ {
+ 	priv->bankgrp_shift[0] = (addrmap[8] &
+ 				BANKGRP_MAX_VAL_MASK) + BANKGRP_B0_BASE;
+@@ -969,7 +970,7 @@ static void setup_bg_address_map(struct synps_edac_priv *priv, u32 *addrmap)
+ 
+ }
+ 
+-static void setup_rank_address_map(struct synps_edac_priv *priv, u32 *addrmap)
++static void snps_setup_rank_address_map(struct snps_edac_priv *priv, u32 *addrmap)
+ {
+ 	priv->rank_shift[0] = ((addrmap[0] & RANK_MAX_VAL_MASK) ==
+ 				RANK_MAX_VAL_MASK) ? 0 : ((addrmap[0] &
+@@ -977,14 +978,14 @@ static void setup_rank_address_map(struct synps_edac_priv *priv, u32 *addrmap)
+ }
+ 
+ /**
+- * setup_address_map -	Set Address Map by querying ADDRMAP registers.
++ * snps_setup_address_map -	Set Address Map by querying ADDRMAP registers.
+  * @priv:		DDR memory controller private instance data.
+  *
+  * Set Address Map by querying ADDRMAP registers.
+  *
+  * Return: none.
+  */
+-static void setup_address_map(struct synps_edac_priv *priv)
++static void snps_setup_address_map(struct snps_edac_priv *priv)
+ {
+ 	u32 addrmap[12];
+ 	int index;
+@@ -996,20 +997,20 @@ static void setup_address_map(struct synps_edac_priv *priv)
+ 		addrmap[index] = readl(priv->baseaddr + addrmap_offset);
+ 	}
+ 
+-	setup_row_address_map(priv, addrmap);
++	snps_setup_row_address_map(priv, addrmap);
+ 
+-	setup_column_address_map(priv, addrmap);
++	snps_setup_column_address_map(priv, addrmap);
+ 
+-	setup_bank_address_map(priv, addrmap);
++	snps_setup_bank_address_map(priv, addrmap);
+ 
+-	setup_bg_address_map(priv, addrmap);
++	snps_setup_bg_address_map(priv, addrmap);
+ 
+-	setup_rank_address_map(priv, addrmap);
++	snps_setup_rank_address_map(priv, addrmap);
+ }
+ #endif /* CONFIG_EDAC_DEBUG */
+ 
+ /**
+- * mc_probe - Check controller and bind driver.
++ * snps_mc_probe - Check controller and bind driver.
+  * @pdev:	platform device.
+  *
+  * Probe a specific controller instance for binding with the driver.
+@@ -1017,11 +1018,11 @@ static void setup_address_map(struct synps_edac_priv *priv)
+  * Return: 0 if the controller instance was successfully bound to the
+  * driver; otherwise, < 0 on error.
+  */
+-static int mc_probe(struct platform_device *pdev)
++static int snps_mc_probe(struct platform_device *pdev)
+ {
+-	const struct synps_platform_data *p_data;
++	const struct snps_platform_data *p_data;
+ 	struct edac_mc_layer layers[2];
+-	struct synps_edac_priv *priv;
++	struct snps_edac_priv *priv;
+ 	struct mem_ctl_info *mci;
+ 	void __iomem *baseaddr;
+ 	int rc;
+@@ -1034,20 +1035,20 @@ static int mc_probe(struct platform_device *pdev)
+ 	if (!p_data)
+ 		return -ENODEV;
+ 
+-	if (!synps_get_ecc_state(baseaddr)) {
++	if (!snps_get_ecc_state(baseaddr)) {
+ 		edac_printk(KERN_INFO, EDAC_MC, "ECC not enabled\n");
+ 		return -ENXIO;
+ 	}
+ 
+ 	layers[0].type = EDAC_MC_LAYER_CHIP_SELECT;
+-	layers[0].size = SYNPS_EDAC_NR_CSROWS;
++	layers[0].size = SNPS_EDAC_NR_CSROWS;
+ 	layers[0].is_virt_csrow = true;
+ 	layers[1].type = EDAC_MC_LAYER_CHANNEL;
+-	layers[1].size = SYNPS_EDAC_NR_CHANS;
++	layers[1].size = SNPS_EDAC_NR_CHANS;
+ 	layers[1].is_virt_csrow = false;
+ 
+ 	mci = edac_mc_alloc(EDAC_AUTO_MC_NUM, ARRAY_SIZE(layers), layers,
+-			    sizeof(struct synps_edac_priv));
++			    sizeof(struct snps_edac_priv));
+ 	if (!mci) {
+ 		edac_printk(KERN_ERR, EDAC_MC,
+ 			    "Failed memory allocation for mc instance\n");
+@@ -1059,9 +1060,9 @@ static int mc_probe(struct platform_device *pdev)
+ 	priv->p_data = p_data;
+ 	spin_lock_init(&priv->lock);
+ 
+-	mc_init(mci, pdev);
++	snps_mc_init(mci, pdev);
+ 
+-	rc = setup_irq(mci, pdev);
++	rc = snps_setup_irq(mci, pdev);
+ 	if (rc)
+ 		goto free_edac_mc;
+ 
+@@ -1073,13 +1074,13 @@ static int mc_probe(struct platform_device *pdev)
+ 	}
+ 
+ #ifdef CONFIG_EDAC_DEBUG
+-	rc = edac_create_sysfs_attributes(mci);
++	rc = snps_create_sysfs_attributes(mci);
+ 	if (rc) {
+ 		edac_printk(KERN_ERR, EDAC_MC, "Failed to create sysfs entries\n");
+ 		goto free_edac_mc;
+ 	}
+ 
+-	setup_address_map(priv);
++	snps_setup_address_map(priv);
+ #endif
+ 
+ 	return rc;
+@@ -1091,20 +1092,20 @@ static int mc_probe(struct platform_device *pdev)
+ }
+ 
+ /**
+- * mc_remove - Unbind driver from controller.
++ * snps_mc_remove - Unbind driver from device.
+  * @pdev:	Platform device.
+  *
+  * Return: Unconditionally 0
+  */
+-static int mc_remove(struct platform_device *pdev)
++static int snps_mc_remove(struct platform_device *pdev)
+ {
+ 	struct mem_ctl_info *mci = platform_get_drvdata(pdev);
+-	struct synps_edac_priv *priv = mci->pvt_info;
++	struct snps_edac_priv *priv = mci->pvt_info;
+ 
+-	disable_intr(priv);
++	snps_disable_irq(priv);
+ 
+ #ifdef CONFIG_EDAC_DEBUG
+-	edac_remove_sysfs_attributes(mci);
++	snps_remove_sysfs_attributes(mci);
+ #endif
+ 
+ 	edac_mc_del_mc(&pdev->dev);
+@@ -1113,32 +1114,31 @@ static int mc_remove(struct platform_device *pdev)
  	return 0;
  }
  
 -static const struct synps_platform_data zynqmp_edac_def = {
--	.get_error_info	= zynqmp_get_error_info,
--	.get_mtype	= zynqmp_get_mtype,
--	.get_dtype	= zynqmp_get_dtype,
--	.get_ecc_state	= zynqmp_get_ecc_state,
--	.quirks         = (DDR_ECC_INTR_SUPPORT | SYNPS_ZYNQMP_IRQ_REGS
--#ifdef CONFIG_EDAC_DEBUG
--			  | DDR_ECC_DATA_POISON_SUPPORT
--#endif
--			  ),
--};
--
+-	.quirks = SYNPS_ZYNQMP_IRQ_REGS,
++static const struct snps_platform_data zynqmp_edac_def = {
++	.quirks = SNPS_ZYNQMP_IRQ_REGS,
+ };
+ 
 -static const struct synps_platform_data synopsys_edac_def = {
--	.get_error_info	= zynqmp_get_error_info,
--	.get_mtype	= zynqmp_get_mtype,
--	.get_dtype	= zynqmp_get_dtype,
--	.get_ecc_state	= zynqmp_get_ecc_state,
--	.quirks         = (DDR_ECC_INTR_SUPPORT
--#ifdef CONFIG_EDAC_DEBUG
--			  | DDR_ECC_DATA_POISON_SUPPORT
--#endif
--			  ),
--};
--
--
++static const struct snps_platform_data snps_edac_def = {
+ 	.quirks = 0,
+ };
+ 
 -static const struct of_device_id synps_edac_match[] = {
--	{
--		.compatible = "xlnx,zynqmp-ddrc-2.40a",
--		.data = (void *)&zynqmp_edac_def
--	},
--	{
--		.compatible = "snps,ddrc-3.80a",
--		.data = (void *)&synopsys_edac_def
--	},
--	{
--		/* end of table */
--	}
--};
--
++static const struct of_device_id snps_edac_match[] = {
+ 	{ .compatible = "xlnx,zynqmp-ddrc-2.40a", .data = &zynqmp_edac_def },
+-	{ .compatible = "snps,ddrc-3.80a", .data = &synopsys_edac_def },
++	{ .compatible = "snps,ddrc-3.80a", .data = &snps_edac_def },
+ 	{ }
+ };
 -MODULE_DEVICE_TABLE(of, synps_edac_match);
--
- #ifdef CONFIG_EDAC_DEBUG
++MODULE_DEVICE_TABLE(of, snps_edac_match);
  
- /**
-@@ -1136,7 +1034,7 @@ static int mc_probe(struct platform_device *pdev)
- 	if (!p_data)
- 		return -ENODEV;
- 
--	if (!p_data->get_ecc_state(baseaddr)) {
-+	if (!synps_get_ecc_state(baseaddr)) {
- 		edac_printk(KERN_INFO, EDAC_MC, "ECC not enabled\n");
- 		return -ENXIO;
- 	}
-@@ -1163,11 +1061,9 @@ static int mc_probe(struct platform_device *pdev)
- 
- 	mc_init(mci, pdev);
- 
--	if (priv->p_data->quirks & DDR_ECC_INTR_SUPPORT) {
--		rc = setup_irq(mci, pdev);
--		if (rc)
--			goto free_edac_mc;
--	}
-+	rc = setup_irq(mci, pdev);
-+	if (rc)
-+		goto free_edac_mc;
- 
- 	rc = edac_mc_add_mc(mci);
- 	if (rc) {
-@@ -1177,17 +1073,13 @@ static int mc_probe(struct platform_device *pdev)
- 	}
- 
- #ifdef CONFIG_EDAC_DEBUG
--	if (priv->p_data->quirks & DDR_ECC_DATA_POISON_SUPPORT) {
--		rc = edac_create_sysfs_attributes(mci);
--		if (rc) {
--			edac_printk(KERN_ERR, EDAC_MC,
--					"Failed to create sysfs entries\n");
--			goto free_edac_mc;
--		}
-+	rc = edac_create_sysfs_attributes(mci);
-+	if (rc) {
-+		edac_printk(KERN_ERR, EDAC_MC, "Failed to create sysfs entries\n");
-+		goto free_edac_mc;
- 	}
- 
--	if (priv->p_data->quirks & DDR_ECC_INTR_SUPPORT)
--		setup_address_map(priv);
-+	setup_address_map(priv);
- #endif
- 
- 	return rc;
-@@ -1209,12 +1101,10 @@ static int mc_remove(struct platform_device *pdev)
- 	struct mem_ctl_info *mci = platform_get_drvdata(pdev);
- 	struct synps_edac_priv *priv = mci->pvt_info;
- 
--	if (priv->p_data->quirks & DDR_ECC_INTR_SUPPORT)
--		disable_intr(priv);
-+	disable_intr(priv);
- 
- #ifdef CONFIG_EDAC_DEBUG
--	if (priv->p_data->quirks & DDR_ECC_DATA_POISON_SUPPORT)
--		edac_remove_sysfs_attributes(mci);
-+	edac_remove_sysfs_attributes(mci);
- #endif
- 
- 	edac_mc_del_mc(&pdev->dev);
-@@ -1223,6 +1113,21 @@ static int mc_remove(struct platform_device *pdev)
- 	return 0;
- }
- 
-+static const struct synps_platform_data zynqmp_edac_def = {
-+	.quirks = SYNPS_ZYNQMP_IRQ_REGS,
-+};
-+
-+static const struct synps_platform_data synopsys_edac_def = {
-+	.quirks = 0,
-+};
-+
-+static const struct of_device_id synps_edac_match[] = {
-+	{ .compatible = "xlnx,zynqmp-ddrc-2.40a", .data = &zynqmp_edac_def },
-+	{ .compatible = "snps,ddrc-3.80a", .data = &synopsys_edac_def },
-+	{ }
-+};
-+MODULE_DEVICE_TABLE(of, synps_edac_match);
-+
- static struct platform_driver synps_edac_mc_driver = {
+-static struct platform_driver synps_edac_mc_driver = {
++static struct platform_driver snps_edac_mc_driver = {
  	.driver = {
- 		   .name = "synopsys-edac",
+-		   .name = "synopsys-edac",
+-		   .of_match_table = synps_edac_match,
++		   .name = "snps-edac",
++		   .of_match_table = snps_edac_match,
+ 		   },
+-	.probe = mc_probe,
+-	.remove = mc_remove,
++	.probe = snps_mc_probe,
++	.remove = snps_mc_remove,
+ };
+-
+-module_platform_driver(synps_edac_mc_driver);
++module_platform_driver(snps_edac_mc_driver);
+ 
+ MODULE_AUTHOR("Xilinx Inc");
+-MODULE_DESCRIPTION("Synopsys DDR ECC driver");
++MODULE_DESCRIPTION("Synopsys uMCTL2 DDR ECC driver");
+ MODULE_LICENSE("GPL v2");
 -- 
 2.37.2
 
