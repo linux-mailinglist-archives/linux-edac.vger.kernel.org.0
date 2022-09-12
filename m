@@ -2,71 +2,62 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D6725B54A0
-	for <lists+linux-edac@lfdr.de>; Mon, 12 Sep 2022 08:41:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 227AF5B54BA
+	for <lists+linux-edac@lfdr.de>; Mon, 12 Sep 2022 08:50:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229552AbiILGlL (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Mon, 12 Sep 2022 02:41:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36926 "EHLO
+        id S229944AbiILGuo (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Mon, 12 Sep 2022 02:50:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229664AbiILGlK (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Mon, 12 Sep 2022 02:41:10 -0400
-Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4157C22BFF
-        for <linux-edac@vger.kernel.org>; Sun, 11 Sep 2022 23:41:08 -0700 (PDT)
-Received: by mail-lj1-x233.google.com with SMTP id z20so9385933ljq.3
-        for <linux-edac@vger.kernel.org>; Sun, 11 Sep 2022 23:41:08 -0700 (PDT)
+        with ESMTP id S229658AbiILGuh (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Mon, 12 Sep 2022 02:50:37 -0400
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0F9D1BEAB
+        for <linux-edac@vger.kernel.org>; Sun, 11 Sep 2022 23:50:36 -0700 (PDT)
+Received: by mail-pj1-x1033.google.com with SMTP id q3so7062846pjg.3
+        for <linux-edac@vger.kernel.org>; Sun, 11 Sep 2022 23:50:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=sifive.com; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=IUm/MN9hYg83su7ZYahLGm5MEwsIsG/QUzjstSeG6Mo=;
-        b=kI34oFaT/0WS4Cfj03tST6nGUpXjNT380JwZ8FEdZt75QHxAkIIf6k0og+uTwf9eTq
-         NucX3cDSq5+0xiCS0rQXRopsfEykwrDtmoLfDq5k1ccgq58Ym+3kbNX/k38bz/lnJhfd
-         a5yFamW9SM3CFIxVNuRbQoPP7Su31yvXtOON777PIstuoMTTkLMqG/H/F6ObCibwPlCQ
-         NEH3rmwq85391FHz4YrWGLtUoGLzBJgCcB04MAVXh/Kel3ysSkw/tN011zrV6s6epDp5
-         IE+auP7GxK133EIlSC8Ez0IiUkBvtfxpVv8in9PJQMvU6spqLCbJIYuXosuQfHsL3edu
-         xQdQ==
+        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date;
+        bh=ouf6fZur6LuUgpPfN2BtmMmKETEefZcd37KbqJNHwP8=;
+        b=MKYat+CAUn4trfJaDAE1pwd5fdLDnZso377mQnrLXJnzBgcDFugu5NEH99edoku8if
+         SY60Nd2YBsrXLBdBSASbVDGeCtz7dp3wFUDHUcdKeX0/sLnEq9cTQJbXtCa+V9BGEs7v
+         jJUfUR1yl+fstGbMcuVj1LNXc1px+4ozY4n2vdOEUi8uaOUL0flfNqNHZpD3bDDvNgPQ
+         uogTmp8/jeAMRO4BM1AP8MPC8I7A/TpMGcqRxQ6fy2aIV34Mw355C2mbywvRxHusYK3l
+         ekNEQmxfAK2tl6VLiOyW/MCC2hbt4bd0GMP9z8wk9l8q33O6PQJiE1EM4GfOym+Lnhu5
+         rmKw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=IUm/MN9hYg83su7ZYahLGm5MEwsIsG/QUzjstSeG6Mo=;
-        b=wjHzFtnBJNenzfBQ19Yo+aiXm42ZsTvFLroz0rSOUdO1rwoXTLO3/VfBSfkURJjXKI
-         DTLjuJKEnTGE1jSFFTz0CLER1TZEZSZ0gBTux5a5f//0ZB+bN0UeWkpuHNhuxVE4jXZ+
-         YLzB2rRbh2Kz+aEhFUbQd9JiP1AmxeGYNQ+8iy1mmNX5EEh8+QL0wnNm5ZPErV9tIGak
-         sK/3LIPkcOm5ag9yp1o3M0/NQaMncaAYXHh7vlIt4RUfsrz0qPgM8bJpOI8nD+xuuOgW
-         GwY4au7JT9NIk61WWHgt/dZXC6B7V4wZ0bwV/kqCbWNPzbKrdclL7v00YSFXhKXMDqrI
-         9F2w==
-X-Gm-Message-State: ACgBeo1+V8V4ku9v0vpYUEjHjquVXOiCR5YCgARR2HrT/HjX32YaVWCv
-        Ww2GPGNxC3HjagiXbtH9f9wkIfBp6GqxOnLbGVMPdw==
-X-Google-Smtp-Source: AA6agR5s2whA7uWOJa+KmUu83OmHts4XhTJeLfLamvGr/SSqHLqGGJ3PE6/vnSEQ3bawMQV3MgXyResxjLGZLowFb1s=
-X-Received: by 2002:a2e:7314:0:b0:26a:ca18:60eb with SMTP id
- o20-20020a2e7314000000b0026aca1860ebmr6790851ljc.69.1662964866499; Sun, 11
- Sep 2022 23:41:06 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220908144424.4232-1-zong.li@sifive.com> <20220908144424.4232-6-zong.li@sifive.com>
- <36fe0073-7fa2-9733-7041-d9f70da1a5ea@microchip.com>
-In-Reply-To: <36fe0073-7fa2-9733-7041-d9f70da1a5ea@microchip.com>
+        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=ouf6fZur6LuUgpPfN2BtmMmKETEefZcd37KbqJNHwP8=;
+        b=0CJkfCatOA6H/d9Rjx+b1WbXmGguun1P4m+tt8LQff94QQBAVd7T9TCJNymKgzTNkS
+         BbPyHu2O8PxY6ju7kCa153vqv0SOHka4UpIk5c4sb2a2gyJkY2e5Ouiexdr33dU0q/vC
+         SOsc9dKkDs66DBnH8zun0/PrblwoZNqtE/Q+pC6WqiL4z+EnM+QBmCtddwwZ4vjXEFdg
+         iqVq61a4e/q5wh2FwSwmObv27ieyX+wMogVnPpyl8qnpHsnbshPOMrePwmiTkcKAvTl9
+         NzqMfqH8SPIoce7C9W+wuhwqSJXuP5NqeyKR202CUyNVpIvMCbAL4t27f3bj688ytc/4
+         y6iA==
+X-Gm-Message-State: ACgBeo2K7AKiKR69XPtICW1kp2VugxLQLFI5da5R3aq8d52pfzFBnc0d
+        oy4VUB/Ioi3mtQ/C5GJNd5BPPg==
+X-Google-Smtp-Source: AA6agR51HrLD4Ud2goFx43rUQhv8zP1ZxiUocnM6NglxFLvzViS0mNZeLyKBtzXZQlgBAj5V2CxzXA==
+X-Received: by 2002:a17:902:8b8b:b0:178:1de4:1fe0 with SMTP id ay11-20020a1709028b8b00b001781de41fe0mr9434054plb.68.1662965436075;
+        Sun, 11 Sep 2022 23:50:36 -0700 (PDT)
+Received: from localhost.localdomain (59-124-168-89.hinet-ip.hinet.net. [59.124.168.89])
+        by smtp.gmail.com with ESMTPSA id v62-20020a632f41000000b00430c6fd7ffbsm4705716pgv.84.2022.09.11.23.50.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 11 Sep 2022 23:50:35 -0700 (PDT)
 From:   Zong Li <zong.li@sifive.com>
-Date:   Mon, 12 Sep 2022 14:40:55 +0800
-Message-ID: <CANXhq0rRZhPtrpRQOnwbJj-GRVSCHErLxvGnPAxqfJBk8rNRPQ@mail.gmail.com>
-Subject: Re: [PATCH v3 5/6] soc: sifive: ccache: use pr_fmt() to remove
- CCACHE: prefixes
-To:     Conor Dooley <Conor.Dooley@microchip.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        krzysztof.kozlowski+dt@linaro.org,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Greentime Hu <greentime.hu@sifive.com>,
-        Ben Dooks <ben.dooks@sifive.com>, bp@alien8.de,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        linux-edac@vger.kernel.org,
-        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+To:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        palmer@dabbelt.com, paul.walmsley@sifive.com,
+        aou@eecs.berkeley.edu, greentime.hu@sifive.com,
+        conor.dooley@microchip.com, ben.dooks@sifive.com, bp@alien8.de,
+        devicetree@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Zong Li <zong.li@sifive.com>
+Subject: [PATCH v4 0/6] Use composable cache instead of L2 cache
+Date:   Mon, 12 Sep 2022 06:50:23 +0000
+Message-Id: <20220912065029.1793-1-zong.li@sifive.com>
+X-Mailer: git-send-email 2.17.1
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -77,97 +68,57 @@ Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Fri, Sep 9, 2022 at 2:40 AM <Conor.Dooley@microchip.com> wrote:
->
-> On 08/09/2022 15:44, Zong Li wrote:
-> > EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
-> >
-> > From: Ben Dooks <ben.dooks@sifive.com>
-> >
-> > Use the pr_fmt() macro to prefix all the output with "CCACHE:"
-> > to avoid having to write it out each time, or make a large diff
-> > when the next change comes along.
-> >
-> > Signed-off-by: Ben Dooks <ben.dooks@sifive.com>
-> > Signed-off-by: Zong Li <zong.li@sifive.com>
-> > Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
->
-> btw, I think Ben missed a print - a pr_err() in init().
->
+Since composable cache may be L3 cache if private L2 cache exists, we
+should use its original name "composable cache" to prevent confusion.
 
-I got that one, I will fix it in v4
+This patchset contains the modification which is related to ccache, such
+as DT binding and EDAC driver.
 
-> > ---
-> >  drivers/soc/sifive/sifive_ccache.c | 15 +++++++++------
-> >  1 file changed, 9 insertions(+), 6 deletions(-)
-> >
-> > diff --git a/drivers/soc/sifive/sifive_ccache.c b/drivers/soc/sifive/sifive_ccache.c
-> > index 58d14f11a63a..b3929c4d6d5b 100644
-> > --- a/drivers/soc/sifive/sifive_ccache.c
-> > +++ b/drivers/soc/sifive/sifive_ccache.c
-> > @@ -5,6 +5,9 @@
-> >   * Copyright (C) 2018-2022 SiFive, Inc.
-> >   *
-> >   */
-> > +
-> > +#define pr_fmt(fmt) "CCACHE: " fmt
-> > +
-> >  #include <linux/debugfs.h>
-> >  #include <linux/interrupt.h>
-> >  #include <linux/of_irq.h>
-> > @@ -85,13 +88,13 @@ static void ccache_config_read(void)
-> >
-> >         cfg = readl(ccache_base + SIFIVE_CCACHE_CONFIG);
-> >
-> > -       pr_info("CCACHE: %u banks, %u ways, sets/bank=%llu, bytes/block=%llu\n",
-> > +       pr_info("%u banks, %u ways, sets/bank=%llu, bytes/block=%llu\n",
-> >                 (cfg & 0xff), (cfg >> 8) & 0xff,
-> >                 BIT_ULL((cfg >> 16) & 0xff),
-> >                 BIT_ULL((cfg >> 24) & 0xff));
-> >
-> >         cfg = readl(ccache_base + SIFIVE_CCACHE_WAYENABLE);
-> > -       pr_info("CCACHE: Index of the largest way enabled: %u\n", cfg);
-> > +       pr_info("Index of the largest way enabled: %u\n", cfg);
-> >  }
-> >
-> >  static const struct of_device_id sifive_ccache_ids[] = {
-> > @@ -155,7 +158,7 @@ static irqreturn_t ccache_int_handler(int irq, void *device)
-> >         if (irq == g_irq[DIR_CORR]) {
-> >                 add_h = readl(ccache_base + SIFIVE_CCACHE_DIRECCFIX_HIGH);
-> >                 add_l = readl(ccache_base + SIFIVE_CCACHE_DIRECCFIX_LOW);
-> > -               pr_err("CCACHE: DirError @ 0x%08X.%08X\n", add_h, add_l);
-> > +               pr_err("DirError @ 0x%08X.%08X\n", add_h, add_l);
-> >                 /* Reading this register clears the DirError interrupt sig */
-> >                 readl(ccache_base + SIFIVE_CCACHE_DIRECCFIX_COUNT);
-> >                 atomic_notifier_call_chain(&ccache_err_chain,
-> > @@ -175,7 +178,7 @@ static irqreturn_t ccache_int_handler(int irq, void *device)
-> >         if (irq == g_irq[DATA_CORR]) {
-> >                 add_h = readl(ccache_base + SIFIVE_CCACHE_DATECCFIX_HIGH);
-> >                 add_l = readl(ccache_base + SIFIVE_CCACHE_DATECCFIX_LOW);
-> > -               pr_err("CCACHE: DataError @ 0x%08X.%08X\n", add_h, add_l);
-> > +               pr_err("DataError @ 0x%08X.%08X\n", add_h, add_l);
-> >                 /* Reading this register clears the DataError interrupt sig */
-> >                 readl(ccache_base + SIFIVE_CCACHE_DATECCFIX_COUNT);
-> >                 atomic_notifier_call_chain(&ccache_err_chain,
-> > @@ -185,7 +188,7 @@ static irqreturn_t ccache_int_handler(int irq, void *device)
-> >         if (irq == g_irq[DATA_UNCORR]) {
-> >                 add_h = readl(ccache_base + SIFIVE_CCACHE_DATECCFAIL_HIGH);
-> >                 add_l = readl(ccache_base + SIFIVE_CCACHE_DATECCFAIL_LOW);
-> > -               pr_err("CCACHE: DataFail @ 0x%08X.%08X\n", add_h, add_l);
-> > +               pr_err("DataFail @ 0x%08X.%08X\n", add_h, add_l);
-> >                 /* Reading this register clears the DataFail interrupt sig */
-> >                 readl(ccache_base + SIFIVE_CCACHE_DATECCFAIL_COUNT);
-> >                 atomic_notifier_call_chain(&ccache_err_chain,
-> > @@ -227,7 +230,7 @@ static int __init sifive_ccache_init(void)
-> >                 rc = request_irq(g_irq[i], ccache_int_handler, 0, "ccache_ecc",
-> >                                  NULL);
-> >                 if (rc) {
-> > -                       pr_err("CCACHE: Could not request IRQ %d\n", g_irq[i]);
-> > +                       pr_err("Could not request IRQ %d\n", g_irq[i]);
-> >                         return rc;
-> >                 }
-> >         }
-> > --
-> > 2.17.1
-> >
->
+The DT binding is based on top of Conor's patch, it has got ready for
+merging, and it looks that it would be taken into the next few 6.0-rc
+version. If there is any change, the next version of this series will be
+posted as well.
+https://lore.kernel.org/linux-riscv/20220825180417.1259360-2-mail@conchuod.ie/
+
+Change log in v4:
+ - Change the return value from from ENODEV to ENOENT
+ - Apply pr_fmt refinement to all pr_err
+
+Change log in v3:
+ - Merged the EDAC patch into L2 rename patch
+ - Define the macro for register shift and refine the relative code
+ - Fix some indent issues
+
+Change log in v2:
+ - Separate the rename and diff to different patches
+ - Rebase the dt-bindings based on Conor's modification
+ - Include the patches of Ben for refinement of printing message
+
+
+Ben Dooks (2):
+  soc: sifive: ccache: reduce printing on init
+  soc: sifive: ccache: use pr_fmt() to remove CCACHE: prefixes
+
+Greentime Hu (1):
+  soc: sifive: ccache: Rename SiFive L2 cache to Composable cache.
+
+Zong Li (3):
+  dt-bindings: sifive-ccache: change Sifive L2 cache to Composable cache
+  soc: sifive: ccache: determine the cache level from dts
+  soc: sifive: ccache: define the macro for the register shifts
+
+ ...five-l2-cache.yaml => sifive,ccache0.yaml} |  28 ++-
+ drivers/edac/Kconfig                          |   2 +-
+ drivers/edac/sifive_edac.c                    |  12 +-
+ drivers/soc/sifive/Kconfig                    |   6 +-
+ drivers/soc/sifive/Makefile                   |   2 +-
+ .../{sifive_l2_cache.c => sifive_ccache.c}    | 200 ++++++++++--------
+ .../{sifive_l2_cache.h => sifive_ccache.h}    |  16 +-
+ 7 files changed, 151 insertions(+), 115 deletions(-)
+ rename Documentation/devicetree/bindings/riscv/{sifive-l2-cache.yaml => sifive,ccache0.yaml} (83%)
+ rename drivers/soc/sifive/{sifive_l2_cache.c => sifive_ccache.c} (31%)
+ rename include/soc/sifive/{sifive_l2_cache.h => sifive_ccache.h} (12%)
+
+-- 
+2.17.1
+
