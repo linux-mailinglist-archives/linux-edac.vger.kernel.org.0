@@ -2,51 +2,51 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 252AD5B67B2
-	for <lists+linux-edac@lfdr.de>; Tue, 13 Sep 2022 08:18:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A2DF65B67B6
+	for <lists+linux-edac@lfdr.de>; Tue, 13 Sep 2022 08:18:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230026AbiIMGSb (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Tue, 13 Sep 2022 02:18:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59038 "EHLO
+        id S230240AbiIMGSf (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Tue, 13 Sep 2022 02:18:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230200AbiIMGS2 (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Tue, 13 Sep 2022 02:18:28 -0400
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C31DE5726F
-        for <linux-edac@vger.kernel.org>; Mon, 12 Sep 2022 23:18:27 -0700 (PDT)
-Received: by mail-pj1-x1030.google.com with SMTP id fv3so10288130pjb.0
-        for <linux-edac@vger.kernel.org>; Mon, 12 Sep 2022 23:18:27 -0700 (PDT)
+        with ESMTP id S230221AbiIMGSc (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Tue, 13 Sep 2022 02:18:32 -0400
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7FBE5724E
+        for <linux-edac@vger.kernel.org>; Mon, 12 Sep 2022 23:18:30 -0700 (PDT)
+Received: by mail-pl1-x629.google.com with SMTP id k21so248156pls.11
+        for <linux-edac@vger.kernel.org>; Mon, 12 Sep 2022 23:18:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=sifive.com; s=google;
         h=references:in-reply-to:message-id:date:subject:cc:to:from:from:to
          :cc:subject:date;
-        bh=BkU0QN86DJwgcVuXYkBLFx05g7OxXCcrOHXHdeHhmx0=;
-        b=byruooSXjxanC2WKqwYGjjup7+zSxnsY6qM7gRY7oF8vX+RlTHULq4L4HqHoFA/YU1
-         BFhkc0GKe7oG1ktodZpQo9u1Kma0LUeLmCW2mCrABOPYNpNMS77fOY33Sw6b4ikYLNKV
-         qB+H5bxtAep3WFbBbTKuCrmRCDLQlNf6Xk1fhvg7YWV3V7syjwhVXG5UWuz8j6A+j3VS
-         m9CtJfKL4ihqkkLEQJcUSKZZvxjIx1GW6PWNedr5CUl7qoGqYFUaPFiYm0/0nJO/SErc
-         QSzAXwSBAfz5loaizCaq4+vSJDekrVd8K18Ry8aoxDrnaD88hG+jUPFwQQUTnLzhTYaw
-         JsUA==
+        bh=5SuaG6Ukq0CemB7A8qUbJlhfLaxFef4FQZrGHxKHG2c=;
+        b=BxnwPf+fpcuUeoMOBFiIVF6GHPwR8N7wtmhjkzuwd7S85bMbwBTG04SyBwGazBpOhm
+         UIBnJYNyO9BSMWCfUhGqzBZ80JRPT0UtNPOB5Gekgqw+/iskn9MtKSBwqWX30ZmFVj61
+         brbnf1r0JJj5DXBT3nyyySMJG6q2a8fbiqwz8U4ksoJRvQvYAwbd1v/sRCw0kaRbpbwT
+         SrWujwSh9rvHxtEwv2jJSWS3eXcRt/icUylIx99blrpFCA2uVuWeYmRkTrOtPQExCdUt
+         +oNiLSXbOYy2EjDouY3rfg+miWdcuTX4fUvlT5s/0YZ7mLfVlrZQWPjBSWBE/EgCJHFN
+         zmBA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=references:in-reply-to:message-id:date:subject:cc:to:from
          :x-gm-message-state:from:to:cc:subject:date;
-        bh=BkU0QN86DJwgcVuXYkBLFx05g7OxXCcrOHXHdeHhmx0=;
-        b=M1JreYrxSwSL/o5orPUOM0MpZe4cqJGXAfw+wTieXnrN2yQ4iCDQfPWzz11EKOQFsz
-         /nz/03UGgaRNrfoTCdC81kOOKrHUKIKJYcCjDuiZzwlIDJFEhbJeRJmIfpAOBYYlZlX5
-         ibGHOqKWuudvaAJzezfAotSgDHXmcergSQbuGhNZJlqhbhzfqo0SbEnPOVilY1UNg88O
-         FuTcE1C3Qs9z3rM/ENwknx1P+zPQtyvKzk0mFXXHz+DRVetL8EanajBbOlZ8rfQuhWx0
-         Z0Hhhi/1zPqHVV9ysgs54uL+++RcK+M8BVhRixyXNK6VYAREL1zftQfSJ+aYLk3SffEp
-         LrQA==
-X-Gm-Message-State: ACgBeo24EDfWDTxAofg4+jjKchgk2ipPBc/NZ5xE7zEixkl7Sq7TTX6D
-        kQ/zE6pz5KJDh5lPY0HupNy8UA==
-X-Google-Smtp-Source: AA6agR71/x637VLoOitLNPRbvBMn4pFyl+GH1k75dmYQ8qdnNj8sE9cFc/sHeApHkFyW7heqG5PqlQ==
-X-Received: by 2002:a17:902:6b4c:b0:171:38ab:e762 with SMTP id g12-20020a1709026b4c00b0017138abe762mr30297830plt.42.1663049907158;
-        Mon, 12 Sep 2022 23:18:27 -0700 (PDT)
+        bh=5SuaG6Ukq0CemB7A8qUbJlhfLaxFef4FQZrGHxKHG2c=;
+        b=ARQljZLIEVArRtP0VkBctODcDoa9HycgKHLH7oaIjb6cTqHE+ZcNCzMCiRxC6wMOcW
+         tX847ZxmQcXZ6pZPiCvzP7U3GIUHap+PXkb1p3l5YO6tMsfZgJWNTGJxPD54Noo4ZGJS
+         q6PRXIXAaR8ECEB4bYHHMutC6SMBGhNhlW8T3WOIPmce1V8tyIs/wzQEIKauODWmpdZs
+         QEqo8/EdEKIP+qonFJK79wOKY05+uWLe6+0ZtAlXuNq79B9gRJN6Cqc5JQOpHNAY1iaT
+         dVc6iAH+9cFg1pwL1og4M3EtSlC7wZLpHiEtJFZZ5iXKV8SvY3/EqOsUA+Aat5AwAfMN
+         FZTQ==
+X-Gm-Message-State: ACgBeo1zUIGEA8M9I4E2iYXpP2PrDZAI4kE3flPlAD8iYNmaeKHbPx/j
+        Ts9DtrPGepw3hy2KrieiAA1qyA==
+X-Google-Smtp-Source: AA6agR6OlwHyk8FJs7XtdkGIwg05Lw3uAr7G0cfBqHKHB1V/b4v5zp7wXLbOrI85NU3c9iRG2Os2LQ==
+X-Received: by 2002:a17:90b:4d12:b0:202:f027:557e with SMTP id mw18-20020a17090b4d1200b00202f027557emr2339267pjb.1.1663049910178;
+        Mon, 12 Sep 2022 23:18:30 -0700 (PDT)
 Received: from localhost.localdomain (59-124-168-89.hinet-ip.hinet.net. [59.124.168.89])
-        by smtp.gmail.com with ESMTPSA id z11-20020a170902cccb00b00173cfaed233sm7296332ple.62.2022.09.12.23.18.24
+        by smtp.gmail.com with ESMTPSA id z11-20020a170902cccb00b00173cfaed233sm7296332ple.62.2022.09.12.23.18.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 12 Sep 2022 23:18:26 -0700 (PDT)
+        Mon, 12 Sep 2022 23:18:29 -0700 (PDT)
 From:   Zong Li <zong.li@sifive.com>
 To:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
         palmer@dabbelt.com, paul.walmsley@sifive.com,
@@ -55,15 +55,15 @@ To:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
         devicetree@vger.kernel.org, linux-riscv@lists.infradead.org,
         linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc:     Zong Li <zong.li@sifive.com>
-Subject: [PATCH v5 1/7] dt-bindings: sifive-ccache: change Sifive L2 cache to Composable cache
-Date:   Tue, 13 Sep 2022 06:18:11 +0000
-Message-Id: <20220913061817.22564-2-zong.li@sifive.com>
+Subject: [PATCH v5 2/7] soc: sifive: ccache: Rename SiFive L2 cache to Composable cache.
+Date:   Tue, 13 Sep 2022 06:18:12 +0000
+Message-Id: <20220913061817.22564-3-zong.li@sifive.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20220913061817.22564-1-zong.li@sifive.com>
 References: <20220913061817.22564-1-zong.li@sifive.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,97 +71,480 @@ Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-Since composable cache may be L3 cache if private L2 cache exists, we
-should use its original name Composable cache to prevent confusion.
+From: Greentime Hu <greentime.hu@sifive.com>
 
+Since composable cache may be L3 cache if there is a L2 cache, we should
+use its original name composable cache to prevent confusion.
+
+There are some new lines were generated due to adding the compatible
+"sifive,ccache0" into ID table and indent requirement.
+
+The sifive L2 has been renamed to sifive CCACHE, EDAC driver needs to
+apply the change as well.
+
+Signed-off-by: Greentime Hu <greentime.hu@sifive.com>
 Signed-off-by: Zong Li <zong.li@sifive.com>
-Suggested-by: Conor Dooley <conor.dooley@microchip.com>
-Suggested-by: Ben Dooks <ben.dooks@sifive.com>
+Co-developed-by: Zong Li <zong.li@sifive.com>
 Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
-Reviewed-by: Rob Herring <robh@kernel.org>
 ---
- ...five-l2-cache.yaml => sifive,ccache0.yaml} | 28 +++++++++++++++----
- 1 file changed, 23 insertions(+), 5 deletions(-)
- rename Documentation/devicetree/bindings/riscv/{sifive-l2-cache.yaml => sifive,ccache0.yaml} (83%)
+ drivers/edac/Kconfig                          |   2 +-
+ drivers/edac/sifive_edac.c                    |  12 +-
+ drivers/soc/sifive/Kconfig                    |   6 +-
+ drivers/soc/sifive/Makefile                   |   2 +-
+ .../{sifive_l2_cache.c => sifive_ccache.c}    | 174 +++++++++---------
+ .../{sifive_l2_cache.h => sifive_ccache.h}    |  16 +-
+ 6 files changed, 110 insertions(+), 102 deletions(-)
+ rename drivers/soc/sifive/{sifive_l2_cache.c => sifive_ccache.c} (34%)
+ rename include/soc/sifive/{sifive_l2_cache.h => sifive_ccache.h} (12%)
 
-diff --git a/Documentation/devicetree/bindings/riscv/sifive-l2-cache.yaml b/Documentation/devicetree/bindings/riscv/sifive,ccache0.yaml
-similarity index 83%
-rename from Documentation/devicetree/bindings/riscv/sifive-l2-cache.yaml
-rename to Documentation/devicetree/bindings/riscv/sifive,ccache0.yaml
-index ca3b9be58058..bf3f07421f7e 100644
---- a/Documentation/devicetree/bindings/riscv/sifive-l2-cache.yaml
-+++ b/Documentation/devicetree/bindings/riscv/sifive,ccache0.yaml
-@@ -2,18 +2,18 @@
- # Copyright (C) 2020 SiFive, Inc.
- %YAML 1.2
- ---
--$id: http://devicetree.org/schemas/riscv/sifive-l2-cache.yaml#
-+$id: http://devicetree.org/schemas/riscv/sifive,ccache0.yaml#
- $schema: http://devicetree.org/meta-schemas/core.yaml#
+diff --git a/drivers/edac/Kconfig b/drivers/edac/Kconfig
+index 17562cf1fe97..456602d373b7 100644
+--- a/drivers/edac/Kconfig
++++ b/drivers/edac/Kconfig
+@@ -473,7 +473,7 @@ config EDAC_ALTERA_SDMMC
  
--title: SiFive L2 Cache Controller
-+title: SiFive Composable Cache Controller
+ config EDAC_SIFIVE
+ 	bool "Sifive platform EDAC driver"
+-	depends on EDAC=y && SIFIVE_L2
++	depends on EDAC=y && SIFIVE_CCACHE
+ 	help
+ 	  Support for error detection and correction on the SiFive SoCs.
  
- maintainers:
-   - Sagar Kadam <sagar.kadam@sifive.com>
-   - Paul Walmsley  <paul.walmsley@sifive.com>
+diff --git a/drivers/edac/sifive_edac.c b/drivers/edac/sifive_edac.c
+index ee800aec7d47..b844e2626fd5 100644
+--- a/drivers/edac/sifive_edac.c
++++ b/drivers/edac/sifive_edac.c
+@@ -2,7 +2,7 @@
+ /*
+  * SiFive Platform EDAC Driver
+  *
+- * Copyright (C) 2018-2019 SiFive, Inc.
++ * Copyright (C) 2018-2022 SiFive, Inc.
+  *
+  * This driver is partially based on octeon_edac-pc.c
+  *
+@@ -10,7 +10,7 @@
+ #include <linux/edac.h>
+ #include <linux/platform_device.h>
+ #include "edac_module.h"
+-#include <soc/sifive/sifive_l2_cache.h>
++#include <soc/sifive/sifive_ccache.h>
  
- description:
--  The SiFive Level 2 Cache Controller is used to provide access to fast copies
--  of memory for masters in a Core Complex. The Level 2 Cache Controller also
-+  The SiFive Composable Cache Controller is used to provide access to fast copies
-+  of memory for masters in a Core Complex. The Composable Cache Controller also
-   acts as directory-based coherency manager.
-   All the properties in ePAPR/DeviceTree specification applies for this platform.
+ #define DRVNAME "sifive_edac"
  
-@@ -22,6 +22,7 @@ select:
-     compatible:
-       contains:
-         enum:
-+          - sifive,ccache0
-           - sifive,fu540-c000-ccache
-           - sifive,fu740-c000-ccache
+@@ -32,9 +32,9 @@ int ecc_err_event(struct notifier_block *this, unsigned long event, void *ptr)
  
-@@ -33,6 +34,7 @@ properties:
-     oneOf:
-       - items:
-           - enum:
-+              - sifive,ccache0
-               - sifive,fu540-c000-ccache
-               - sifive,fu740-c000-ccache
-           - const: cache
-@@ -45,7 +47,7 @@ properties:
-     const: 64
+ 	p = container_of(this, struct sifive_edac_priv, notifier);
  
-   cache-level:
--    const: 2
-+    enum: [2, 3]
+-	if (event == SIFIVE_L2_ERR_TYPE_UE)
++	if (event == SIFIVE_CCACHE_ERR_TYPE_UE)
+ 		edac_device_handle_ue(p->dci, 0, 0, msg);
+-	else if (event == SIFIVE_L2_ERR_TYPE_CE)
++	else if (event == SIFIVE_CCACHE_ERR_TYPE_CE)
+ 		edac_device_handle_ce(p->dci, 0, 0, msg);
  
-   cache-sets:
-     enum: [1024, 2048]
-@@ -115,6 +117,22 @@ allOf:
-         cache-sets:
-           const: 1024
+ 	return NOTIFY_OK;
+@@ -67,7 +67,7 @@ static int ecc_register(struct platform_device *pdev)
+ 		goto err;
+ 	}
  
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            const: sifive,ccache0
+-	register_sifive_l2_error_notifier(&p->notifier);
++	register_sifive_ccache_error_notifier(&p->notifier);
+ 
+ 	return 0;
+ 
+@@ -81,7 +81,7 @@ static int ecc_unregister(struct platform_device *pdev)
+ {
+ 	struct sifive_edac_priv *p = platform_get_drvdata(pdev);
+ 
+-	unregister_sifive_l2_error_notifier(&p->notifier);
++	unregister_sifive_ccache_error_notifier(&p->notifier);
+ 	edac_device_del_device(&pdev->dev);
+ 	edac_device_free_ctl_info(p->dci);
+ 
+diff --git a/drivers/soc/sifive/Kconfig b/drivers/soc/sifive/Kconfig
+index 58cf8c40d08d..ed4c571f8771 100644
+--- a/drivers/soc/sifive/Kconfig
++++ b/drivers/soc/sifive/Kconfig
+@@ -2,9 +2,9 @@
+ 
+ if SOC_SIFIVE
+ 
+-config SIFIVE_L2
+-	bool "Sifive L2 Cache controller"
++config SIFIVE_CCACHE
++	bool "Sifive Composable Cache controller"
+ 	help
+-	  Support for the L2 cache controller on SiFive platforms.
++	  Support for the composable cache controller on SiFive platforms.
+ 
+ endif
+diff --git a/drivers/soc/sifive/Makefile b/drivers/soc/sifive/Makefile
+index b5caff77938f..1f5dc339bf82 100644
+--- a/drivers/soc/sifive/Makefile
++++ b/drivers/soc/sifive/Makefile
+@@ -1,3 +1,3 @@
+ # SPDX-License-Identifier: GPL-2.0
+ 
+-obj-$(CONFIG_SIFIVE_L2)	+= sifive_l2_cache.o
++obj-$(CONFIG_SIFIVE_CCACHE)	+= sifive_ccache.o
+diff --git a/drivers/soc/sifive/sifive_l2_cache.c b/drivers/soc/sifive/sifive_ccache.c
+similarity index 34%
+rename from drivers/soc/sifive/sifive_l2_cache.c
+rename to drivers/soc/sifive/sifive_ccache.c
+index 59640a1d0b28..949b824e89ad 100644
+--- a/drivers/soc/sifive/sifive_l2_cache.c
++++ b/drivers/soc/sifive/sifive_ccache.c
+@@ -1,8 +1,8 @@
+ // SPDX-License-Identifier: GPL-2.0
+ /*
+- * SiFive L2 cache controller Driver
++ * SiFive composable cache controller Driver
+  *
+- * Copyright (C) 2018-2019 SiFive, Inc.
++ * Copyright (C) 2018-2022 SiFive, Inc.
+  *
+  */
+ #include <linux/debugfs.h>
+@@ -11,33 +11,33 @@
+ #include <linux/of_address.h>
+ #include <linux/device.h>
+ #include <asm/cacheinfo.h>
+-#include <soc/sifive/sifive_l2_cache.h>
++#include <soc/sifive/sifive_ccache.h>
+ 
+-#define SIFIVE_L2_DIRECCFIX_LOW 0x100
+-#define SIFIVE_L2_DIRECCFIX_HIGH 0x104
+-#define SIFIVE_L2_DIRECCFIX_COUNT 0x108
++#define SIFIVE_CCACHE_DIRECCFIX_LOW 0x100
++#define SIFIVE_CCACHE_DIRECCFIX_HIGH 0x104
++#define SIFIVE_CCACHE_DIRECCFIX_COUNT 0x108
+ 
+-#define SIFIVE_L2_DIRECCFAIL_LOW 0x120
+-#define SIFIVE_L2_DIRECCFAIL_HIGH 0x124
+-#define SIFIVE_L2_DIRECCFAIL_COUNT 0x128
++#define SIFIVE_CCACHE_DIRECCFAIL_LOW 0x120
++#define SIFIVE_CCACHE_DIRECCFAIL_HIGH 0x124
++#define SIFIVE_CCACHE_DIRECCFAIL_COUNT 0x128
+ 
+-#define SIFIVE_L2_DATECCFIX_LOW 0x140
+-#define SIFIVE_L2_DATECCFIX_HIGH 0x144
+-#define SIFIVE_L2_DATECCFIX_COUNT 0x148
++#define SIFIVE_CCACHE_DATECCFIX_LOW 0x140
++#define SIFIVE_CCACHE_DATECCFIX_HIGH 0x144
++#define SIFIVE_CCACHE_DATECCFIX_COUNT 0x148
+ 
+-#define SIFIVE_L2_DATECCFAIL_LOW 0x160
+-#define SIFIVE_L2_DATECCFAIL_HIGH 0x164
+-#define SIFIVE_L2_DATECCFAIL_COUNT 0x168
++#define SIFIVE_CCACHE_DATECCFAIL_LOW 0x160
++#define SIFIVE_CCACHE_DATECCFAIL_HIGH 0x164
++#define SIFIVE_CCACHE_DATECCFAIL_COUNT 0x168
+ 
+-#define SIFIVE_L2_CONFIG 0x00
+-#define SIFIVE_L2_WAYENABLE 0x08
+-#define SIFIVE_L2_ECCINJECTERR 0x40
++#define SIFIVE_CCACHE_CONFIG 0x00
++#define SIFIVE_CCACHE_WAYENABLE 0x08
++#define SIFIVE_CCACHE_ECCINJECTERR 0x40
+ 
+-#define SIFIVE_L2_MAX_ECCINTR 4
++#define SIFIVE_CCACHE_MAX_ECCINTR 4
+ 
+-static void __iomem *l2_base;
+-static int g_irq[SIFIVE_L2_MAX_ECCINTR];
+-static struct riscv_cacheinfo_ops l2_cache_ops;
++static void __iomem *ccache_base;
++static int g_irq[SIFIVE_CCACHE_MAX_ECCINTR];
++static struct riscv_cacheinfo_ops ccache_cache_ops;
+ 
+ enum {
+ 	DIR_CORR = 0,
+@@ -49,83 +49,84 @@ enum {
+ #ifdef CONFIG_DEBUG_FS
+ static struct dentry *sifive_test;
+ 
+-static ssize_t l2_write(struct file *file, const char __user *data,
+-			size_t count, loff_t *ppos)
++static ssize_t ccache_write(struct file *file, const char __user *data,
++			    size_t count, loff_t *ppos)
+ {
+ 	unsigned int val;
+ 
+ 	if (kstrtouint_from_user(data, count, 0, &val))
+ 		return -EINVAL;
+ 	if ((val < 0xFF) || (val >= 0x10000 && val < 0x100FF))
+-		writel(val, l2_base + SIFIVE_L2_ECCINJECTERR);
++		writel(val, ccache_base + SIFIVE_CCACHE_ECCINJECTERR);
+ 	else
+ 		return -EINVAL;
+ 	return count;
+ }
+ 
+-static const struct file_operations l2_fops = {
++static const struct file_operations ccache_fops = {
+ 	.owner = THIS_MODULE,
+ 	.open = simple_open,
+-	.write = l2_write
++	.write = ccache_write
+ };
+ 
+ static void setup_sifive_debug(void)
+ {
+-	sifive_test = debugfs_create_dir("sifive_l2_cache", NULL);
++	sifive_test = debugfs_create_dir("sifive_ccache_cache", NULL);
+ 
+ 	debugfs_create_file("sifive_debug_inject_error", 0200,
+-			    sifive_test, NULL, &l2_fops);
++			    sifive_test, NULL, &ccache_fops);
+ }
+ #endif
+ 
+-static void l2_config_read(void)
++static void ccache_config_read(void)
+ {
+ 	u32 regval, val;
+ 
+-	regval = readl(l2_base + SIFIVE_L2_CONFIG);
++	regval = readl(ccache_base + SIFIVE_CCACHE_CONFIG);
+ 	val = regval & 0xFF;
+-	pr_info("L2CACHE: No. of Banks in the cache: %d\n", val);
++	pr_info("CCACHE: No. of Banks in the cache: %d\n", val);
+ 	val = (regval & 0xFF00) >> 8;
+-	pr_info("L2CACHE: No. of ways per bank: %d\n", val);
++	pr_info("CCACHE: No. of ways per bank: %d\n", val);
+ 	val = (regval & 0xFF0000) >> 16;
+-	pr_info("L2CACHE: Sets per bank: %llu\n", (uint64_t)1 << val);
++	pr_info("CCACHE: Sets per bank: %llu\n", (uint64_t)1 << val);
+ 	val = (regval & 0xFF000000) >> 24;
+-	pr_info("L2CACHE: Bytes per cache block: %llu\n", (uint64_t)1 << val);
++	pr_info("CCACHE: Bytes per cache block: %llu\n", (uint64_t)1 << val);
+ 
+-	regval = readl(l2_base + SIFIVE_L2_WAYENABLE);
+-	pr_info("L2CACHE: Index of the largest way enabled: %d\n", regval);
++	regval = readl(ccache_base + SIFIVE_CCACHE_WAYENABLE);
++	pr_info("CCACHE: Index of the largest way enabled: %d\n", regval);
+ }
+ 
+-static const struct of_device_id sifive_l2_ids[] = {
++static const struct of_device_id sifive_ccache_ids[] = {
+ 	{ .compatible = "sifive,fu540-c000-ccache" },
+ 	{ .compatible = "sifive,fu740-c000-ccache" },
+-	{ /* end of table */ },
++	{ .compatible = "sifive,ccache0" },
++	{ /* end of table */ }
+ };
+ 
+-static ATOMIC_NOTIFIER_HEAD(l2_err_chain);
++static ATOMIC_NOTIFIER_HEAD(ccache_err_chain);
+ 
+-int register_sifive_l2_error_notifier(struct notifier_block *nb)
++int register_sifive_ccache_error_notifier(struct notifier_block *nb)
+ {
+-	return atomic_notifier_chain_register(&l2_err_chain, nb);
++	return atomic_notifier_chain_register(&ccache_err_chain, nb);
+ }
+-EXPORT_SYMBOL_GPL(register_sifive_l2_error_notifier);
++EXPORT_SYMBOL_GPL(register_sifive_ccache_error_notifier);
+ 
+-int unregister_sifive_l2_error_notifier(struct notifier_block *nb)
++int unregister_sifive_ccache_error_notifier(struct notifier_block *nb)
+ {
+-	return atomic_notifier_chain_unregister(&l2_err_chain, nb);
++	return atomic_notifier_chain_unregister(&ccache_err_chain, nb);
+ }
+-EXPORT_SYMBOL_GPL(unregister_sifive_l2_error_notifier);
++EXPORT_SYMBOL_GPL(unregister_sifive_ccache_error_notifier);
+ 
+-static int l2_largest_wayenabled(void)
++static int ccache_largest_wayenabled(void)
+ {
+-	return readl(l2_base + SIFIVE_L2_WAYENABLE) & 0xFF;
++	return readl(ccache_base + SIFIVE_CCACHE_WAYENABLE) & 0xFF;
+ }
+ 
+ static ssize_t number_of_ways_enabled_show(struct device *dev,
+ 					   struct device_attribute *attr,
+ 					   char *buf)
+ {
+-	return sprintf(buf, "%u\n", l2_largest_wayenabled());
++	return sprintf(buf, "%u\n", ccache_largest_wayenabled());
+ }
+ 
+ static DEVICE_ATTR_RO(number_of_ways_enabled);
+@@ -139,99 +140,106 @@ static const struct attribute_group priv_attr_group = {
+ 	.attrs = priv_attrs,
+ };
+ 
+-static const struct attribute_group *l2_get_priv_group(struct cacheinfo *this_leaf)
++static const struct attribute_group *ccache_get_priv_group(struct cacheinfo
++							   *this_leaf)
+ {
+-	/* We want to use private group for L2 cache only */
++	/* We want to use private group for composable cache only */
+ 	if (this_leaf->level == 2)
+ 		return &priv_attr_group;
+ 	else
+ 		return NULL;
+ }
+ 
+-static irqreturn_t l2_int_handler(int irq, void *device)
++static irqreturn_t ccache_int_handler(int irq, void *device)
+ {
+ 	unsigned int add_h, add_l;
+ 
+ 	if (irq == g_irq[DIR_CORR]) {
+-		add_h = readl(l2_base + SIFIVE_L2_DIRECCFIX_HIGH);
+-		add_l = readl(l2_base + SIFIVE_L2_DIRECCFIX_LOW);
+-		pr_err("L2CACHE: DirError @ 0x%08X.%08X\n", add_h, add_l);
++		add_h = readl(ccache_base + SIFIVE_CCACHE_DIRECCFIX_HIGH);
++		add_l = readl(ccache_base + SIFIVE_CCACHE_DIRECCFIX_LOW);
++		pr_err("CCACHE: DirError @ 0x%08X.%08X\n", add_h, add_l);
+ 		/* Reading this register clears the DirError interrupt sig */
+-		readl(l2_base + SIFIVE_L2_DIRECCFIX_COUNT);
+-		atomic_notifier_call_chain(&l2_err_chain, SIFIVE_L2_ERR_TYPE_CE,
++		readl(ccache_base + SIFIVE_CCACHE_DIRECCFIX_COUNT);
++		atomic_notifier_call_chain(&ccache_err_chain,
++					   SIFIVE_CCACHE_ERR_TYPE_CE,
+ 					   "DirECCFix");
+ 	}
+ 	if (irq == g_irq[DIR_UNCORR]) {
+-		add_h = readl(l2_base + SIFIVE_L2_DIRECCFAIL_HIGH);
+-		add_l = readl(l2_base + SIFIVE_L2_DIRECCFAIL_LOW);
++		add_h = readl(ccache_base + SIFIVE_CCACHE_DIRECCFAIL_HIGH);
++		add_l = readl(ccache_base + SIFIVE_CCACHE_DIRECCFAIL_LOW);
+ 		/* Reading this register clears the DirFail interrupt sig */
+-		readl(l2_base + SIFIVE_L2_DIRECCFAIL_COUNT);
+-		atomic_notifier_call_chain(&l2_err_chain, SIFIVE_L2_ERR_TYPE_UE,
++		readl(ccache_base + SIFIVE_CCACHE_DIRECCFAIL_COUNT);
++		atomic_notifier_call_chain(&ccache_err_chain,
++					   SIFIVE_CCACHE_ERR_TYPE_UE,
+ 					   "DirECCFail");
+-		panic("L2CACHE: DirFail @ 0x%08X.%08X\n", add_h, add_l);
++		panic("CCACHE: DirFail @ 0x%08X.%08X\n", add_h, add_l);
+ 	}
+ 	if (irq == g_irq[DATA_CORR]) {
+-		add_h = readl(l2_base + SIFIVE_L2_DATECCFIX_HIGH);
+-		add_l = readl(l2_base + SIFIVE_L2_DATECCFIX_LOW);
+-		pr_err("L2CACHE: DataError @ 0x%08X.%08X\n", add_h, add_l);
++		add_h = readl(ccache_base + SIFIVE_CCACHE_DATECCFIX_HIGH);
++		add_l = readl(ccache_base + SIFIVE_CCACHE_DATECCFIX_LOW);
++		pr_err("CCACHE: DataError @ 0x%08X.%08X\n", add_h, add_l);
+ 		/* Reading this register clears the DataError interrupt sig */
+-		readl(l2_base + SIFIVE_L2_DATECCFIX_COUNT);
+-		atomic_notifier_call_chain(&l2_err_chain, SIFIVE_L2_ERR_TYPE_CE,
++		readl(ccache_base + SIFIVE_CCACHE_DATECCFIX_COUNT);
++		atomic_notifier_call_chain(&ccache_err_chain,
++					   SIFIVE_CCACHE_ERR_TYPE_CE,
+ 					   "DatECCFix");
+ 	}
+ 	if (irq == g_irq[DATA_UNCORR]) {
+-		add_h = readl(l2_base + SIFIVE_L2_DATECCFAIL_HIGH);
+-		add_l = readl(l2_base + SIFIVE_L2_DATECCFAIL_LOW);
+-		pr_err("L2CACHE: DataFail @ 0x%08X.%08X\n", add_h, add_l);
++		add_h = readl(ccache_base + SIFIVE_CCACHE_DATECCFAIL_HIGH);
++		add_l = readl(ccache_base + SIFIVE_CCACHE_DATECCFAIL_LOW);
++		pr_err("CCACHE: DataFail @ 0x%08X.%08X\n", add_h, add_l);
+ 		/* Reading this register clears the DataFail interrupt sig */
+-		readl(l2_base + SIFIVE_L2_DATECCFAIL_COUNT);
+-		atomic_notifier_call_chain(&l2_err_chain, SIFIVE_L2_ERR_TYPE_UE,
++		readl(ccache_base + SIFIVE_CCACHE_DATECCFAIL_COUNT);
++		atomic_notifier_call_chain(&ccache_err_chain,
++					   SIFIVE_CCACHE_ERR_TYPE_UE,
+ 					   "DatECCFail");
+ 	}
+ 
+ 	return IRQ_HANDLED;
+ }
+ 
+-static int __init sifive_l2_init(void)
++static int __init sifive_ccache_init(void)
+ {
+ 	struct device_node *np;
+ 	struct resource res;
+ 	int i, rc, intr_num;
+ 
+-	np = of_find_matching_node(NULL, sifive_l2_ids);
++	np = of_find_matching_node(NULL, sifive_ccache_ids);
+ 	if (!np)
+ 		return -ENODEV;
+ 
+ 	if (of_address_to_resource(np, 0, &res))
+ 		return -ENODEV;
+ 
+-	l2_base = ioremap(res.start, resource_size(&res));
+-	if (!l2_base)
++	ccache_base = ioremap(res.start, resource_size(&res));
++	if (!ccache_base)
+ 		return -ENOMEM;
+ 
+ 	intr_num = of_property_count_u32_elems(np, "interrupts");
+ 	if (!intr_num) {
+-		pr_err("L2CACHE: no interrupts property\n");
++		pr_err("CCACHE: no interrupts property\n");
+ 		return -ENODEV;
+ 	}
+ 
+ 	for (i = 0; i < intr_num; i++) {
+ 		g_irq[i] = irq_of_parse_and_map(np, i);
+-		rc = request_irq(g_irq[i], l2_int_handler, 0, "l2_ecc", NULL);
++		rc = request_irq(g_irq[i], ccache_int_handler, 0, "ccache_ecc",
++				 NULL);
+ 		if (rc) {
+-			pr_err("L2CACHE: Could not request IRQ %d\n", g_irq[i]);
++			pr_err("CCACHE: Could not request IRQ %d\n", g_irq[i]);
+ 			return rc;
+ 		}
+ 	}
+ 
+-	l2_config_read();
++	ccache_config_read();
+ 
+-	l2_cache_ops.get_priv_group = l2_get_priv_group;
+-	riscv_set_cacheinfo_ops(&l2_cache_ops);
++	ccache_cache_ops.get_priv_group = ccache_get_priv_group;
++	riscv_set_cacheinfo_ops(&ccache_cache_ops);
+ 
+ #ifdef CONFIG_DEBUG_FS
+ 	setup_sifive_debug();
+ #endif
+ 	return 0;
+ }
+-device_initcall(sifive_l2_init);
 +
-+    then:
-+      properties:
-+        cache-level:
-+          enum: [2, 3]
-+
-+    else:
-+      properties:
-+        cache-level:
-+          const: 2
-+
- additionalProperties: false
++device_initcall(sifive_ccache_init);
+diff --git a/include/soc/sifive/sifive_l2_cache.h b/include/soc/sifive/sifive_ccache.h
+similarity index 12%
+rename from include/soc/sifive/sifive_l2_cache.h
+rename to include/soc/sifive/sifive_ccache.h
+index 92ade10ed67e..4d4ed49388a0 100644
+--- a/include/soc/sifive/sifive_l2_cache.h
++++ b/include/soc/sifive/sifive_ccache.h
+@@ -1,16 +1,16 @@
+ /* SPDX-License-Identifier: GPL-2.0 */
+ /*
+- * SiFive L2 Cache Controller header file
++ * SiFive Composable Cache Controller header file
+  *
+  */
  
- required:
+-#ifndef __SOC_SIFIVE_L2_CACHE_H
+-#define __SOC_SIFIVE_L2_CACHE_H
++#ifndef __SOC_SIFIVE_CCACHE_H
++#define __SOC_SIFIVE_CCACHE_H
+ 
+-extern int register_sifive_l2_error_notifier(struct notifier_block *nb);
+-extern int unregister_sifive_l2_error_notifier(struct notifier_block *nb);
++extern int register_sifive_ccache_error_notifier(struct notifier_block *nb);
++extern int unregister_sifive_ccache_error_notifier(struct notifier_block *nb);
+ 
+-#define SIFIVE_L2_ERR_TYPE_CE 0
+-#define SIFIVE_L2_ERR_TYPE_UE 1
++#define SIFIVE_CCACHE_ERR_TYPE_CE 0
++#define SIFIVE_CCACHE_ERR_TYPE_UE 1
+ 
+-#endif /* __SOC_SIFIVE_L2_CACHE_H */
++#endif /* __SOC_SIFIVE_CCACHE_H */
 -- 
 2.17.1
 
