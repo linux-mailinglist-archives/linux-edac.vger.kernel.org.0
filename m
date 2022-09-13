@@ -2,105 +2,128 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F18665B5CE1
-	for <lists+linux-edac@lfdr.de>; Mon, 12 Sep 2022 17:02:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E9C95B67B3
+	for <lists+linux-edac@lfdr.de>; Tue, 13 Sep 2022 08:18:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229692AbiILPCB (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Mon, 12 Sep 2022 11:02:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54048 "EHLO
+        id S230212AbiIMGSa (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Tue, 13 Sep 2022 02:18:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229514AbiILPB7 (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Mon, 12 Sep 2022 11:01:59 -0400
-Received: from mail-oa1-f51.google.com (mail-oa1-f51.google.com [209.85.160.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F54015FF5;
-        Mon, 12 Sep 2022 08:01:58 -0700 (PDT)
-Received: by mail-oa1-f51.google.com with SMTP id 586e51a60fabf-1225219ee46so24140467fac.2;
-        Mon, 12 Sep 2022 08:01:58 -0700 (PDT)
+        with ESMTP id S230026AbiIMGS0 (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Tue, 13 Sep 2022 02:18:26 -0400
+Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE5635725A
+        for <linux-edac@vger.kernel.org>; Mon, 12 Sep 2022 23:18:24 -0700 (PDT)
+Received: by mail-pg1-x534.google.com with SMTP id i19so7115463pgi.1
+        for <linux-edac@vger.kernel.org>; Mon, 12 Sep 2022 23:18:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=sifive.com; s=google;
+        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date;
+        bh=y5P7by1jIpQzIvb2tD2gXNIWnK8iruU4UUaIlQg1bkU=;
+        b=FURSNvAsrwuNMGImdijAMz8mE4g8/oBqhm2etPnz9/VXqv0Wwf67+KLa1RQz8Xk13f
+         XiBgKDhzEU69AdabcMPz2RN3RilK93j0H1dS9dyPpWaQXYvGadDCcnqn1tsNr0VyzOqr
+         EPQxGjZpaq3hOYm55EQ8n/LM7JO2D10khgdiMI88KNnABIowBIcPHZWrm/4YUlM8ivWu
+         in3n05qIeaKrUeslPFcz9TDWIF85hPMvzC/tmIdmSXcBjHcwMxXPoooWmOXdtNveXf5R
+         kLjeFBC324DCi0GbpIqmAGBPinp81KwIPJCEeYT+DFP+W+7EW75m4UdWiR+agje4LkfQ
+         W5/A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=icGwLkwBgSanb78rbaWZRFroT8eXmRJqz1deDK67DlU=;
-        b=3yXHz+bLMss8UYSYUMnkRNwH8dSiOktjaMpSsvYBjllT14E2tX/ivxFgMLXcM5fGqr
-         aObz1Mj9Tmz+GgyV38E41YSLOl1VQZydwsVDPfgqE7g8FwTgOwG6kPfNqp8s2VsEW7s6
-         KChVD4gZF+08GrqLxPrIVFrOhHZ3E26Un1maaTI+nFhx50F9e5McjMqRCm9nkU28HSNh
-         LvZ5cv1sn2iqfQzfnMnOh312WZb3HvwCHBb+g6aYcA84ba6/z4+0/EdwkGIWjx5Emz6G
-         XCa5CWJJppnZuvS0h0tnm7CQQT6QjHLM2ANVw/Al7LSxATnscc+bxhIN1iC4dkIEMfDK
-         7JXg==
-X-Gm-Message-State: ACgBeo2wun7q6So0mtLVjkxHgmCLb3W5kuakwClucST6sL586zW2ZZIc
-        g1uMtuoNoAjR1QAwDUbV6Q==
-X-Google-Smtp-Source: AA6agR4/6wu/CPLi4SIxeoXhNkjWjchRVuTqWxjwX+Q5/bDKC1MiNY5SAPU++3SVfhj6DHkFTZXwAA==
-X-Received: by 2002:a05:6870:63a6:b0:12b:85ee:59ff with SMTP id t38-20020a05687063a600b0012b85ee59ffmr3330458oap.98.1662994916859;
-        Mon, 12 Sep 2022 08:01:56 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id p21-20020a9d76d5000000b006396521c804sm4665634otl.55.2022.09.12.08.01.55
+        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=y5P7by1jIpQzIvb2tD2gXNIWnK8iruU4UUaIlQg1bkU=;
+        b=ZF/JXW0maqmHVZ7XCT4C7o+LT+e0ebo7xDvmmuIEM4pU66ZNthQWoy05SZmM1+RCxh
+         NKkjy9vCrY7Z13fJdJUQ19hMtytsOzJgPaDI73Lw5jxScDt3U+A2rzVufAu4TfmOMcoI
+         gE/ZUsQIIU8AwqMJLP6FiXrXsn/YbR+1qWn9+ENoo+WjhNHpxbTiCQDndJXgPkS7iJvk
+         yTNp4XGqH1ONrPPlfcCOIslHMQYKQ++Y9/pLr2Ht7PflsPjzBvYJpa75VAmfJSovMh9o
+         XkAmdYq0DmSjuEmfikxkispl3xM/q8tWWUmvdLPbdg58/eQwlmm4kvbab0DhVCCEj1T8
+         JRHQ==
+X-Gm-Message-State: ACgBeo2ol1RZ5/NJE1Uu9sSNWy0MX3D9Nt8uFZ+gw6ZLZKaZEakU0KfF
+        JuTfmcuGyt8/cvjr/s5j/K3CDA==
+X-Google-Smtp-Source: AA6agR5kuFJvWnGaHooiefmgt6Shu6OXVYfwtD+luhjkdQ8TycC57b+ASOg3PzAvilZOrJNJZdasbQ==
+X-Received: by 2002:a05:6a00:21c8:b0:52e:3404:eba5 with SMTP id t8-20020a056a0021c800b0052e3404eba5mr31522452pfj.67.1663049904141;
+        Mon, 12 Sep 2022 23:18:24 -0700 (PDT)
+Received: from localhost.localdomain (59-124-168-89.hinet-ip.hinet.net. [59.124.168.89])
+        by smtp.gmail.com with ESMTPSA id z11-20020a170902cccb00b00173cfaed233sm7296332ple.62.2022.09.12.23.18.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 12 Sep 2022 08:01:56 -0700 (PDT)
-Received: (nullmailer pid 1293608 invoked by uid 1000);
-        Mon, 12 Sep 2022 15:01:55 -0000
-Date:   Mon, 12 Sep 2022 10:01:55 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Cc:     Michail Ivanov <Michail.Ivanov@baikalelectronics.ru>,
-        James Morse <james.morse@arm.com>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        Tony Luck <tony.luck@intel.com>, devicetree@vger.kernel.org,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Robert Richter <rric@kernel.org>,
-        Punnaiah Choudary Kalluri 
-        <punnaiah.choudary.kalluri@xilinx.com>,
-        Manish Narani <manish.narani@xilinx.com>,
-        Michal Simek <michal.simek@xilinx.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-edac@vger.kernel.org, Serge Semin <fancer.lancer@gmail.com>,
-        linux-kernel@vger.kernel.org,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        linux-arm-kernel@lists.infradead.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Borislav Petkov <bp@alien8.de>
-Subject: Re: [PATCH v2 04/15] dt-bindings: memory: Add Baikal-T1 DDRC
- DT-schema
-Message-ID: <20220912150155.GA1293565-robh@kernel.org>
-References: <20220910195659.11843-1-Sergey.Semin@baikalelectronics.ru>
- <20220910195659.11843-5-Sergey.Semin@baikalelectronics.ru>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220910195659.11843-5-Sergey.Semin@baikalelectronics.ru>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+        Mon, 12 Sep 2022 23:18:23 -0700 (PDT)
+From:   Zong Li <zong.li@sifive.com>
+To:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        palmer@dabbelt.com, paul.walmsley@sifive.com,
+        aou@eecs.berkeley.edu, greentime.hu@sifive.com,
+        conor.dooley@microchip.com, ben.dooks@sifive.com, bp@alien8.de,
+        devicetree@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Zong Li <zong.li@sifive.com>
+Subject: [PATCH v5 0/7] Use composable cache instead of L2 cache
+Date:   Tue, 13 Sep 2022 06:18:10 +0000
+Message-Id: <20220913061817.22564-1-zong.li@sifive.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Sat, 10 Sep 2022 22:56:48 +0300, Serge Semin wrote:
-> Baikal-T1 DDR controller is based on the DW uMCTL2 DDRC IP-core v2.51a
-> with up to DDR3 protocol capability and 32-bit data bus + 8-bit ECC. There
-> are individual IRQs for each ECC and DFI events. The dedicated scrubber
-> clock source is absent since it's fully synchronous to the core clock.
-> In addition to that the DFI-DDR PHY CSRs can be accessed via a separate
-> registers space.
-> 
-> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> 
-> ---
-> 
-> Changelog v2:
-> - Keep the alphabetically ordered compatible strings list. (@Krzysztof)
-> - Fix grammar nitpicks in the patch log. (@Krzysztof)
-> - Drop the PHY CSR region. (@Rob)
-> - Move the device bindings to the separate DT-schema.
-> ---
->  .../memory-controllers/baikal,bt1-ddrc.yaml   | 91 +++++++++++++++++++
->  1 file changed, 91 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/memory-controllers/baikal,bt1-ddrc.yaml
-> 
+Since composable cache may be L3 cache if private L2 cache exists, we
+should use its original name "composable cache" to prevent confusion.
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+This patchset contains the modification which is related to ccache, such
+as DT binding and EDAC driver.
+
+The DT binding is based on top of Conor's patch, it has got ready for
+merging, and it looks that it would be taken into the next few 6.0-rc
+version. If there is any change, the next version of this series will be
+posted as well.
+https://lore.kernel.org/linux-riscv/20220825180417.1259360-2-mail@conchuod.ie/
+
+Change log in v5:
+ - Add a patch to modify aux vector for sysconf
+
+Change log in v4:
+ - Change the return value from from ENODEV to ENOENT
+ - Apply pr_fmt refinement to all pr_err
+
+Change log in v3:
+ - Merged the EDAC patch into L2 rename patch
+ - Define the macro for register shift and refine the relative code
+ - Fix some indent issues
+
+Change log in v2:
+ - Separate the rename and diff to different patches
+ - Rebase the dt-bindings based on Conor's modification
+ - Include the patches of Ben for refinement of printing message
+
+Ben Dooks (2):
+  soc: sifive: ccache: reduce printing on init
+  soc: sifive: ccache: use pr_fmt() to remove CCACHE: prefixes
+
+Greentime Hu (2):
+  soc: sifive: ccache: Rename SiFive L2 cache to Composable cache.
+  riscv: Add cache information in AUX vector
+
+Zong Li (3):
+  dt-bindings: sifive-ccache: change Sifive L2 cache to Composable cache
+  soc: sifive: ccache: determine the cache level from dts
+  soc: sifive: ccache: define the macro for the register shifts
+
+ ...five-l2-cache.yaml => sifive,ccache0.yaml} |  28 ++-
+ arch/riscv/include/asm/elf.h                  |   4 +
+ arch/riscv/include/uapi/asm/auxvec.h          |   4 +-
+ drivers/edac/Kconfig                          |   2 +-
+ drivers/edac/sifive_edac.c                    |  12 +-
+ drivers/soc/sifive/Kconfig                    |   6 +-
+ drivers/soc/sifive/Makefile                   |   2 +-
+ .../{sifive_l2_cache.c => sifive_ccache.c}    | 200 ++++++++++--------
+ .../{sifive_l2_cache.h => sifive_ccache.h}    |  16 +-
+ 9 files changed, 158 insertions(+), 116 deletions(-)
+ rename Documentation/devicetree/bindings/riscv/{sifive-l2-cache.yaml => sifive,ccache0.yaml} (83%)
+ rename drivers/soc/sifive/{sifive_l2_cache.c => sifive_ccache.c} (31%)
+ rename include/soc/sifive/{sifive_l2_cache.h => sifive_ccache.h} (12%)
+
+-- 
+2.17.1
+
