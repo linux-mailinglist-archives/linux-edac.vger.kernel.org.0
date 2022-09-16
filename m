@@ -2,74 +2,75 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 051FE5BB25D
-	for <lists+linux-edac@lfdr.de>; Fri, 16 Sep 2022 20:44:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B6A085BB263
+	for <lists+linux-edac@lfdr.de>; Fri, 16 Sep 2022 20:46:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229501AbiIPSo6 (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Fri, 16 Sep 2022 14:44:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44018 "EHLO
+        id S229532AbiIPSqo (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Fri, 16 Sep 2022 14:46:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229533AbiIPSo5 (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Fri, 16 Sep 2022 14:44:57 -0400
-Received: from mail-ot1-f54.google.com (mail-ot1-f54.google.com [209.85.210.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BC0619037;
-        Fri, 16 Sep 2022 11:44:53 -0700 (PDT)
-Received: by mail-ot1-f54.google.com with SMTP id cm7-20020a056830650700b006587fe87d1aso4950219otb.10;
-        Fri, 16 Sep 2022 11:44:53 -0700 (PDT)
+        with ESMTP id S229744AbiIPSqn (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Fri, 16 Sep 2022 14:46:43 -0400
+Received: from mail-oa1-f45.google.com (mail-oa1-f45.google.com [209.85.160.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C3F4B8A45;
+        Fri, 16 Sep 2022 11:46:42 -0700 (PDT)
+Received: by mail-oa1-f45.google.com with SMTP id 586e51a60fabf-1274ec87ad5so53444426fac.0;
+        Fri, 16 Sep 2022 11:46:42 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=AcISesseQOa+PI6N+Szu0u2ec8VrM0pL1w8wMuhGk+A=;
-        b=fkBpxGN26ox4PV5QyHbKCkS2ZXsyUmYj9zFYabQjyUILI29ms8+4pbCE14sCRW9x/1
-         bmnw+TB5DiYfgua1lGIc2L1ZN5W5CFS5t4dCBueeP0mKD8XER4EFoM6IjMTmxSpCEaLD
-         wA5FJjj8j/1rb+KJFl16i7sPGHpG1GFjGXD7i1WxwoNzszrfQuwwT13uFLsxkkVjc+u7
-         053QA8Lr2iGDW3A0bFvlitGrOQMMgZF8c8k0j8tRKU6U9rtmrhfp7WujgpFhAsilLSaE
-         MC0ztBjgnVXVM6aV9PC5cEXC9OwvZ4SPXxzwVk4+BtLRDfSWd+XJcKrb4Go5iE1XMGFG
-         4dUQ==
-X-Gm-Message-State: ACrzQf36znK9GLSQS6of72ujQApAnQyayHr+bFah68KFtyNrq1I7cSAr
-        17b5C6s+DQdUkXX3buNwJg==
-X-Google-Smtp-Source: AMsMyM4ZAUR0TYm2dSOQ/wwRxqpVT9kMdKEEWitydHl4jnUcSMBwbd/m+VsvzleoQWixieqvsTeOrg==
-X-Received: by 2002:a05:6830:2a17:b0:636:f7fc:98bb with SMTP id y23-20020a0568302a1700b00636f7fc98bbmr2900347otu.223.1663353892663;
-        Fri, 16 Sep 2022 11:44:52 -0700 (PDT)
+        bh=QUdpooO9e0LGNAHrNgijCx8KjhavOiFYv353gJdgjLg=;
+        b=6fKTJ4lySyYBKr56yMQhxs1PC92EbgOo4V6+AbMbNixwP8yR6RF3drgVhXQJnsjkD1
+         GA+yPKyCAigZZ70cR0WxyHMO2NlM11yptSGS06yYTn4zmm+L9/OYjbbPFV+BeTN8bIbI
+         qvoosgB+3d34IJUIgTCnEyxA6hpg5JUwzlm95jSVCi+2N+zJ9VputjJ6b5LnNvlonDoH
+         ZixqD8fyg8vHpZlb6qAZVC6zypBMgR7oGnR7B2oKJl/VmR0Hhn85frQkhhLIq4gaaXeM
+         PkYBK8nZiY2FoW9icH+tiPoj7ihteF5L+quj4PLuGLh/e5irlMuj/buVkhlN2M4r7K7N
+         pMxQ==
+X-Gm-Message-State: ACgBeo1SNYtqc3cRGoMgQQ+URMeC1ruPumL+P4EogYTuitBP0lQc1VOZ
+        2OuxfHmuswiEJV0NWLzUpw==
+X-Google-Smtp-Source: AA6agR6KmphzttLac6xuaL6iI0nS11BIfzySChDgOV0I3cczYqIwZ94ESDSla3WlqkrWI/woZzMqcw==
+X-Received: by 2002:a05:6870:a710:b0:127:b0be:3d39 with SMTP id g16-20020a056870a71000b00127b0be3d39mr9253715oam.119.1663354001504;
+        Fri, 16 Sep 2022 11:46:41 -0700 (PDT)
 Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id l9-20020a056870204900b00127a6357bd5sm3353805oad.49.2022.09.16.11.44.51
+        by smtp.gmail.com with ESMTPSA id j17-20020a056830271100b00638ac7ddb77sm10290804otu.10.2022.09.16.11.46.40
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 16 Sep 2022 11:44:52 -0700 (PDT)
-Received: (nullmailer pid 1054596 invoked by uid 1000);
-        Fri, 16 Sep 2022 18:44:51 -0000
-Date:   Fri, 16 Sep 2022 13:44:51 -0500
+        Fri, 16 Sep 2022 11:46:40 -0700 (PDT)
+Received: (nullmailer pid 1057721 invoked by uid 1000);
+        Fri, 16 Sep 2022 18:46:40 -0000
+Date:   Fri, 16 Sep 2022 13:46:40 -0500
 From:   Rob Herring <robh@kernel.org>
 To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Cc:     Serge Semin <fancer.lancer@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Robert Richter <rric@kernel.org>,
-        Michal Simek <michal.simek@xilinx.com>,
-        Rob Herring <robh+dt@kernel.org>, linux-edac@vger.kernel.org,
-        Manish Narani <manish.narani@xilinx.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        devicetree@vger.kernel.org,
-        Punnaiah Choudary Kalluri 
-        <punnaiah.choudary.kalluri@xilinx.com>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        Michail Ivanov <Michail.Ivanov@baikalelectronics.ru>,
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Serge Semin <fancer.lancer@gmail.com>,
         linux-arm-kernel@lists.infradead.org,
         Dinh Nguyen <dinguyen@kernel.org>,
+        Manish Narani <manish.narani@xilinx.com>,
+        linux-kernel@vger.kernel.org,
+        Punnaiah Choudary Kalluri 
+        <punnaiah.choudary.kalluri@xilinx.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
         Borislav Petkov <bp@alien8.de>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Michail Ivanov <Michail.Ivanov@baikalelectronics.ru>,
         Tony Luck <tony.luck@intel.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        linux-kernel@vger.kernel.org, James Morse <james.morse@arm.com>
-Subject: Re: [PATCH v2 14/19] dt-bindings: memory: snps: Detach Zynq DDRC
- controller support
-Message-ID: <20220916184451.GA1054535-robh@kernel.org>
+        James Morse <james.morse@arm.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        linux-edac@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Michal Simek <michal.simek@xilinx.com>,
+        devicetree@vger.kernel.org, Robert Richter <rric@kernel.org>
+Subject: Re: [PATCH v2 15/19] dt-bindings: memory: snps: Use more descriptive
+ device name
+Message-ID: <20220916184640.GA1057644-robh@kernel.org>
 References: <20220910194237.10142-1-Sergey.Semin@baikalelectronics.ru>
- <20220910194237.10142-15-Sergey.Semin@baikalelectronics.ru>
+ <20220910194237.10142-16-Sergey.Semin@baikalelectronics.ru>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220910194237.10142-15-Sergey.Semin@baikalelectronics.ru>
+In-Reply-To: <20220910194237.10142-16-Sergey.Semin@baikalelectronics.ru>
 X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
@@ -81,30 +82,39 @@ Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Sat, 10 Sep 2022 22:42:32 +0300, Serge Semin wrote:
-> The Zynq A05 DDRC controller has nothing in common with DW uMCTL2 DDRC:
-> the CSRs layout is absolutely different and it doesn't support IRQs unlike
-> DW uMCTL2 DDR controller of all versions (v1.x, v2.x and v3.x). Thus there
-> is no any reason to have these controllers described in the same bindings.
-> Let's split the DT-schema up.
+On Sat, 10 Sep 2022 22:42:33 +0300, Serge Semin wrote:
+> The DT-schema name and the corresponding generic compatible string look
+> inappropriate in the current DW uMCTL2 DDRC DT-bindings:
+> 1. DT-schema name contains undefined vendor-prefix. It's supposed to be
+> "snps", not "synopsys".
+> 2. DT-schema name has "ecc" suffix. That is a device property, and has
+> nothing to do with the controller actual name.
+> 3. The controller name is different. It's DW uMCTL2 DDRC. Just DDRC
+> doesn't identify the IP-core in subject.
+> 4. There is no much point in using the IP-core version in the device name
+> since it can be retrieved from the corresponding device CSR. Moreover the
+> DW uMCTL2 DDRC driver doesn't differentiate the IP-core version at the
+> current state.
 > 
-> Note since the synopsys,ddrc-ecc.yaml schema describes the Synopsys DW
-> uMCTL2 DDR controller only, we need to accordingly fix the device
-> descriptions.
+> In order to fix all the inconsistencies described above we suggest to
+> rename the DT-schema to "snps,dw-umctl2-ddrc.yaml", deprecate the
+> compatible string "snps,ddrc-3.80a" and define a new generic device
+> name as "snps,dw-umctl2-ddrc".
 > 
 > Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
 > 
 > ---
 > 
 > Changelog v2:
-> - Move Synopsys DW uMCTL2 DDRC bindings file renaming to a separate
->   patch. (@Krzysztof)
+> - This is a new patch created on v2 by detaching the DT-schema renaming
+>   from the previous patch in the series. (@Krzysztof)
+> - Fix the compatible string name so one would match the new DT-schema
+>   name.
 > ---
->  .../memory-controllers/synopsys,ddrc-ecc.yaml | 63 ++++++-------------
->  .../xlnx,zynq-ddrc-a05.yaml                   | 38 +++++++++++
->  MAINTAINERS                                   |  1 +
->  3 files changed, 59 insertions(+), 43 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/memory-controllers/xlnx,zynq-ddrc-a05.yaml
+>  .../{synopsys,ddrc-ecc.yaml => snps,dw-umctl2-ddrc.yaml}   | 7 +++++--
+>  MAINTAINERS                                                | 1 +
+>  2 files changed, 6 insertions(+), 2 deletions(-)
+>  rename Documentation/devicetree/bindings/memory-controllers/{synopsys,ddrc-ecc.yaml => snps,dw-umctl2-ddrc.yaml} (83%)
 > 
 
 Reviewed-by: Rob Herring <robh@kernel.org>
