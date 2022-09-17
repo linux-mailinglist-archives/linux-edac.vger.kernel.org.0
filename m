@@ -2,119 +2,122 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6A085BB263
-	for <lists+linux-edac@lfdr.de>; Fri, 16 Sep 2022 20:46:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 280D85BBAF7
+	for <lists+linux-edac@lfdr.de>; Sun, 18 Sep 2022 01:21:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229532AbiIPSqo (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Fri, 16 Sep 2022 14:46:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47306 "EHLO
+        id S229483AbiIQXVF (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Sat, 17 Sep 2022 19:21:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229744AbiIPSqn (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Fri, 16 Sep 2022 14:46:43 -0400
-Received: from mail-oa1-f45.google.com (mail-oa1-f45.google.com [209.85.160.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C3F4B8A45;
-        Fri, 16 Sep 2022 11:46:42 -0700 (PDT)
-Received: by mail-oa1-f45.google.com with SMTP id 586e51a60fabf-1274ec87ad5so53444426fac.0;
-        Fri, 16 Sep 2022 11:46:42 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=QUdpooO9e0LGNAHrNgijCx8KjhavOiFYv353gJdgjLg=;
-        b=6fKTJ4lySyYBKr56yMQhxs1PC92EbgOo4V6+AbMbNixwP8yR6RF3drgVhXQJnsjkD1
-         GA+yPKyCAigZZ70cR0WxyHMO2NlM11yptSGS06yYTn4zmm+L9/OYjbbPFV+BeTN8bIbI
-         qvoosgB+3d34IJUIgTCnEyxA6hpg5JUwzlm95jSVCi+2N+zJ9VputjJ6b5LnNvlonDoH
-         ZixqD8fyg8vHpZlb6qAZVC6zypBMgR7oGnR7B2oKJl/VmR0Hhn85frQkhhLIq4gaaXeM
-         PkYBK8nZiY2FoW9icH+tiPoj7ihteF5L+quj4PLuGLh/e5irlMuj/buVkhlN2M4r7K7N
-         pMxQ==
-X-Gm-Message-State: ACgBeo1SNYtqc3cRGoMgQQ+URMeC1ruPumL+P4EogYTuitBP0lQc1VOZ
-        2OuxfHmuswiEJV0NWLzUpw==
-X-Google-Smtp-Source: AA6agR6KmphzttLac6xuaL6iI0nS11BIfzySChDgOV0I3cczYqIwZ94ESDSla3WlqkrWI/woZzMqcw==
-X-Received: by 2002:a05:6870:a710:b0:127:b0be:3d39 with SMTP id g16-20020a056870a71000b00127b0be3d39mr9253715oam.119.1663354001504;
-        Fri, 16 Sep 2022 11:46:41 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id j17-20020a056830271100b00638ac7ddb77sm10290804otu.10.2022.09.16.11.46.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 16 Sep 2022 11:46:40 -0700 (PDT)
-Received: (nullmailer pid 1057721 invoked by uid 1000);
-        Fri, 16 Sep 2022 18:46:40 -0000
-Date:   Fri, 16 Sep 2022 13:46:40 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Manish Narani <manish.narani@xilinx.com>,
-        linux-kernel@vger.kernel.org,
-        Punnaiah Choudary Kalluri 
-        <punnaiah.choudary.kalluri@xilinx.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Borislav Petkov <bp@alien8.de>,
-        Michail Ivanov <Michail.Ivanov@baikalelectronics.ru>,
-        Tony Luck <tony.luck@intel.com>,
-        James Morse <james.morse@arm.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        linux-edac@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        with ESMTP id S229471AbiIQXVE (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Sat, 17 Sep 2022 19:21:04 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4BC826578
+        for <linux-edac@vger.kernel.org>; Sat, 17 Sep 2022 16:21:01 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1oZh78-0003t7-TV; Sun, 18 Sep 2022 01:20:46 +0200
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1oZh73-001MeL-Ed; Sun, 18 Sep 2022 01:20:40 +0200
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1oZh71-001bve-9O; Sun, 18 Sep 2022 01:20:39 +0200
+From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+To:     Borislav Petkov <bp@alien8.de>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Michal Simek <michal.simek@xilinx.com>,
-        devicetree@vger.kernel.org, Robert Richter <rric@kernel.org>
-Subject: Re: [PATCH v2 15/19] dt-bindings: memory: snps: Use more descriptive
- device name
-Message-ID: <20220916184640.GA1057644-robh@kernel.org>
-References: <20220910194237.10142-1-Sergey.Semin@baikalelectronics.ru>
- <20220910194237.10142-16-Sergey.Semin@baikalelectronics.ru>
+        Tony Luck <tony.luck@intel.com>
+Cc:     James Morse <james.morse@arm.com>,
+        Robert Richter <rric@kernel.org>, linux-edac@vger.kernel.org,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        linuxppc-dev@lists.ozlabs.org, kernel@pengutronix.de
+Subject: [PATCH] EDAC/ppc_4xx: Reorder symbols to get rid of a few forward declarations
+Date:   Sun, 18 Sep 2022 01:20:13 +0200
+Message-Id: <20220917232013.489931-1-u.kleine-koenig@pengutronix.de>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220910194237.10142-16-Sergey.Semin@baikalelectronics.ru>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1771; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=Y8QcBD4loAyk1wJEysGCZ6PxinejNLQzcd1oiGzfRSg=; b=owEBbQGS/pANAwAKAcH8FHityuwJAcsmYgBjJlYjoUc4kPj6zGg/lWDXKedUN4+a6OA+WNDKBB8f l9//kGiJATMEAAEKAB0WIQR+cioWkBis/z50pAvB/BR4rcrsCQUCYyZWIwAKCRDB/BR4rcrsCQ1TB/ 9O/ON8lj0TtOVlO38wdGp0yEP0nqvv7oKvvJG9LOJ7YqNA+4rUP8tHwmtQLekQ3rW5+dOzinBABe4a nuKMCV3AklMsHwXKTg8Mlf9MVn5bJr3h0aOgRddveTSN/dkP5NmYjyEdMt23HNm/4qNgkTFL+QkeOG qKreguEP7/hMTRthIuR2L6rmsdqekGNGP0zGs1MOnQhUnDJULzkKl/aolQ5ZIEPqnzalcK2oF7CmdU eD80D2WqgPKul4LzujB7WflEqQpOhReuVWBBPWJo56MAEYRAl0skjCTuWOqiZFPxDhDgNA3biYl/r2 RALVdEPxcws5IkCv0U45AeVju1ilLy
+X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-edac@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Sat, 10 Sep 2022 22:42:33 +0300, Serge Semin wrote:
-> The DT-schema name and the corresponding generic compatible string look
-> inappropriate in the current DW uMCTL2 DDRC DT-bindings:
-> 1. DT-schema name contains undefined vendor-prefix. It's supposed to be
-> "snps", not "synopsys".
-> 2. DT-schema name has "ecc" suffix. That is a device property, and has
-> nothing to do with the controller actual name.
-> 3. The controller name is different. It's DW uMCTL2 DDRC. Just DDRC
-> doesn't identify the IP-core in subject.
-> 4. There is no much point in using the IP-core version in the device name
-> since it can be retrieved from the corresponding device CSR. Moreover the
-> DW uMCTL2 DDRC driver doesn't differentiate the IP-core version at the
-> current state.
-> 
-> In order to fix all the inconsistencies described above we suggest to
-> rename the DT-schema to "snps,dw-umctl2-ddrc.yaml", deprecate the
-> compatible string "snps,ddrc-3.80a" and define a new generic device
-> name as "snps,dw-umctl2-ddrc".
-> 
-> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> 
-> ---
-> 
-> Changelog v2:
-> - This is a new patch created on v2 by detaching the DT-schema renaming
->   from the previous patch in the series. (@Krzysztof)
-> - Fix the compatible string name so one would match the new DT-schema
->   name.
-> ---
->  .../{synopsys,ddrc-ecc.yaml => snps,dw-umctl2-ddrc.yaml}   | 7 +++++--
->  MAINTAINERS                                                | 1 +
->  2 files changed, 6 insertions(+), 2 deletions(-)
->  rename Documentation/devicetree/bindings/memory-controllers/{synopsys,ddrc-ecc.yaml => snps,dw-umctl2-ddrc.yaml} (83%)
-> 
+When moving the definition of ppc4xx_edac_driver further down, the
+forward declarations can just be dropped.
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+Do this to reduce line needless repetition.
+
+Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+---
+ drivers/edac/ppc4xx_edac.c | 23 +++++++++--------------
+ 1 file changed, 9 insertions(+), 14 deletions(-)
+
+diff --git a/drivers/edac/ppc4xx_edac.c b/drivers/edac/ppc4xx_edac.c
+index 0bc670778c99..046969b4e82e 100644
+--- a/drivers/edac/ppc4xx_edac.c
++++ b/drivers/edac/ppc4xx_edac.c
+@@ -178,11 +178,6 @@ struct ppc4xx_ecc_status {
+ 	u32 wmirq;
+ };
+ 
+-/* Function Prototypes */
+-
+-static int ppc4xx_edac_probe(struct platform_device *device);
+-static int ppc4xx_edac_remove(struct platform_device *device);
+-
+ /* Global Variables */
+ 
+ /*
+@@ -197,15 +192,6 @@ static const struct of_device_id ppc4xx_edac_match[] = {
+ };
+ MODULE_DEVICE_TABLE(of, ppc4xx_edac_match);
+ 
+-static struct platform_driver ppc4xx_edac_driver = {
+-	.probe			= ppc4xx_edac_probe,
+-	.remove			= ppc4xx_edac_remove,
+-	.driver = {
+-		.name = PPC4XX_EDAC_MODULE_NAME,
+-		.of_match_table = ppc4xx_edac_match,
+-	},
+-};
+-
+ /*
+  * TODO: The row and channel parameters likely need to be dynamically
+  * set based on the aforementioned variant controller realizations.
+@@ -1391,6 +1377,15 @@ ppc4xx_edac_opstate_init(void)
+ 			     EDAC_OPSTATE_UNKNOWN_STR)));
+ }
+ 
++static struct platform_driver ppc4xx_edac_driver = {
++	.probe			= ppc4xx_edac_probe,
++	.remove			= ppc4xx_edac_remove,
++	.driver = {
++		.name = PPC4XX_EDAC_MODULE_NAME,
++		.of_match_table = ppc4xx_edac_match,
++	},
++};
++
+ /**
+  * ppc4xx_edac_init - driver/module insertion entry point
+  *
+
+base-commit: 568035b01cfb107af8d2e4bd2fb9aea22cf5b868
+-- 
+2.37.2
+
