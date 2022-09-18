@@ -2,122 +2,119 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 280D85BBAF7
-	for <lists+linux-edac@lfdr.de>; Sun, 18 Sep 2022 01:21:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7346C5BBE43
+	for <lists+linux-edac@lfdr.de>; Sun, 18 Sep 2022 16:11:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229483AbiIQXVF (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Sat, 17 Sep 2022 19:21:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53440 "EHLO
+        id S229583AbiIROLd (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Sun, 18 Sep 2022 10:11:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229471AbiIQXVE (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Sat, 17 Sep 2022 19:21:04 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4BC826578
-        for <linux-edac@vger.kernel.org>; Sat, 17 Sep 2022 16:21:01 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1oZh78-0003t7-TV; Sun, 18 Sep 2022 01:20:46 +0200
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1oZh73-001MeL-Ed; Sun, 18 Sep 2022 01:20:40 +0200
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1oZh71-001bve-9O; Sun, 18 Sep 2022 01:20:39 +0200
-From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-To:     Borislav Petkov <bp@alien8.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Tony Luck <tony.luck@intel.com>
-Cc:     James Morse <james.morse@arm.com>,
-        Robert Richter <rric@kernel.org>, linux-edac@vger.kernel.org,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        linuxppc-dev@lists.ozlabs.org, kernel@pengutronix.de
-Subject: [PATCH] EDAC/ppc_4xx: Reorder symbols to get rid of a few forward declarations
-Date:   Sun, 18 Sep 2022 01:20:13 +0200
-Message-Id: <20220917232013.489931-1-u.kleine-koenig@pengutronix.de>
-X-Mailer: git-send-email 2.37.2
+        with ESMTP id S229517AbiIROLc (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Sun, 18 Sep 2022 10:11:32 -0400
+Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 352D217A9D;
+        Sun, 18 Sep 2022 07:11:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=bwmvJwxPeNYhJEAaFgEWNBX/KyHgDekYx6WCRbaGWM0=; b=KZIkD3cmZfcEiXmABlPjjaLiDb
+        bJNCdA+1Q7QBMN9nFMUF1H65lNIZlsbpgHyFW5q4VwWHXYhYbxMez0r/7aGSVr9Mkja8EO8MWEeQj
+        lrjejbImGizBzW+8AgwyGLN4sifu6bi7V+tm3s55Fxmk2AK/+8MIuSfEy9CqMADv36A3TsLYZen9N
+        KDoIEGQoTK5GSQTRFs8z9adomivJAtykmQZbdkrSrCI3Wd5/XkK4ejy4ayTqK2ESRa9XWRhsuVkoj
+        okKLPL03XBWw1PbW0w+MsrxIcrcH/Fbb839uUfQTMb4OfciqtWsH6enCr3/CvRYrUbfVntwIzJFeZ
+        OauP3Qdg==;
+Received: from 201-27-35-168.dsl.telesp.net.br ([201.27.35.168] helo=[192.168.1.60])
+        by fanzine2.igalia.com with esmtpsa 
+        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
+        id 1oZv0s-0081ni-U0; Sun, 18 Sep 2022 16:11:15 +0200
+Message-ID: <742d2a7e-efee-e212-178e-ba642ec94e2a@igalia.com>
+Date:   Sun, 18 Sep 2022 11:10:47 -0300
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH V3 08/11] EDAC/altera: Skip the panic notifier if kdump is
+ loaded
+Content-Language: en-US
+To:     bhe@redhat.com, kexec@lists.infradead.org,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Tony Luck <tony.luck@intel.com>, linux-edac@vger.kernel.org,
+        bp@alien8.de
+Cc:     pmladek@suse.com, akpm@linux-foundation.org,
+        linux-kernel@vger.kernel.org, linux-hyperv@vger.kernel.org,
+        netdev@vger.kernel.org, x86@kernel.org, kernel-dev@igalia.com,
+        kernel@gpiccoli.net, halves@canonical.com, fabiomirmar@gmail.com,
+        alejandro.j.jimenez@oracle.com, andriy.shevchenko@linux.intel.com,
+        arnd@arndb.de, corbet@lwn.net, d.hatayama@jp.fujitsu.com,
+        dave.hansen@linux.intel.com, dyoung@redhat.com,
+        feng.tang@intel.com, gregkh@linuxfoundation.org,
+        mikelley@microsoft.com, hidehiro.kawai.ez@hitachi.com,
+        jgross@suse.com, john.ogness@linutronix.de, keescook@chromium.org,
+        luto@kernel.org, mhiramat@kernel.org, mingo@redhat.com,
+        paulmck@kernel.org, peterz@infradead.org, rostedt@goodmis.org,
+        senozhatsky@chromium.org, stern@rowland.harvard.edu,
+        tglx@linutronix.de, vgoyal@redhat.com, vkuznets@redhat.com,
+        will@kernel.org, xuqiang36@huawei.com
+References: <20220819221731.480795-1-gpiccoli@igalia.com>
+ <20220819221731.480795-9-gpiccoli@igalia.com>
+From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+In-Reply-To: <20220819221731.480795-9-gpiccoli@igalia.com>
 Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1771; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=Y8QcBD4loAyk1wJEysGCZ6PxinejNLQzcd1oiGzfRSg=; b=owEBbQGS/pANAwAKAcH8FHityuwJAcsmYgBjJlYjoUc4kPj6zGg/lWDXKedUN4+a6OA+WNDKBB8f l9//kGiJATMEAAEKAB0WIQR+cioWkBis/z50pAvB/BR4rcrsCQUCYyZWIwAKCRDB/BR4rcrsCQ1TB/ 9O/ON8lj0TtOVlO38wdGp0yEP0nqvv7oKvvJG9LOJ7YqNA+4rUP8tHwmtQLekQ3rW5+dOzinBABe4a nuKMCV3AklMsHwXKTg8Mlf9MVn5bJr3h0aOgRddveTSN/dkP5NmYjyEdMt23HNm/4qNgkTFL+QkeOG qKreguEP7/hMTRthIuR2L6rmsdqekGNGP0zGs1MOnQhUnDJULzkKl/aolQ5ZIEPqnzalcK2oF7CmdU eD80D2WqgPKul4LzujB7WflEqQpOhReuVWBBPWJo56MAEYRAl0skjCTuWOqiZFPxDhDgNA3biYl/r2 RALVdEPxcws5IkCv0U45AeVju1ilLy
-X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-edac@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-When moving the definition of ppc4xx_edac_driver further down, the
-forward declarations can just be dropped.
+On 19/08/2022 19:17, Guilherme G. Piccoli wrote:
+> The altera_edac panic notifier performs some data collection with
+> regards errors detected; such code relies in the regmap layer to
+> perform reads/writes, so the code is abstracted and there is some
+> risk level to execute that, since the panic path runs in atomic
+> context, with interrupts/preemption and secondary CPUs disabled.
+> 
+> Users want the information collected in this panic notifier though,
+> so in order to balance the risk/benefit, let's skip the altera panic
+> notifier if kdump is loaded. While at it, remove a useless header
+> and encompass a macro inside the sole ifdef block it is used.
+> 
+> Cc: Borislav Petkov <bp@alien8.de>
+> Cc: Petr Mladek <pmladek@suse.com>
+> Cc: Tony Luck <tony.luck@intel.com>
+> Acked-by: Dinh Nguyen <dinguyen@kernel.org>
+> Signed-off-by: Guilherme G. Piccoli <gpiccoli@igalia.com>
+> 
+> ---
+> 
+> V3:
+> - added the ack tag from Dinh - thanks!
+> - had a good discussion with Boris about that in V2 [0],
+> hopefully we can continue and reach a consensus in this V3.
+> [0] https://lore.kernel.org/lkml/46137c67-25b4-6657-33b7-cffdc7afc0d7@igalia.com/
+> 
+> V2:
+> - new patch, based on the discussion in [1].
+> [1] https://lore.kernel.org/lkml/62a63fc2-346f-f375-043a-fa21385279df@igalia.com/
+> 
+> [...]
 
-Do this to reduce line needless repetition.
+Hi Dinh, Tony, Boris - sorry for the ping.
 
-Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
----
- drivers/edac/ppc4xx_edac.c | 23 +++++++++--------------
- 1 file changed, 9 insertions(+), 14 deletions(-)
+Appreciate reviews on this one - Dinh already ACKed the patch but Boris
+raised some points in the past version [0], so any opinions or
+discussions are welcome!
 
-diff --git a/drivers/edac/ppc4xx_edac.c b/drivers/edac/ppc4xx_edac.c
-index 0bc670778c99..046969b4e82e 100644
---- a/drivers/edac/ppc4xx_edac.c
-+++ b/drivers/edac/ppc4xx_edac.c
-@@ -178,11 +178,6 @@ struct ppc4xx_ecc_status {
- 	u32 wmirq;
- };
- 
--/* Function Prototypes */
--
--static int ppc4xx_edac_probe(struct platform_device *device);
--static int ppc4xx_edac_remove(struct platform_device *device);
--
- /* Global Variables */
- 
- /*
-@@ -197,15 +192,6 @@ static const struct of_device_id ppc4xx_edac_match[] = {
- };
- MODULE_DEVICE_TABLE(of, ppc4xx_edac_match);
- 
--static struct platform_driver ppc4xx_edac_driver = {
--	.probe			= ppc4xx_edac_probe,
--	.remove			= ppc4xx_edac_remove,
--	.driver = {
--		.name = PPC4XX_EDAC_MODULE_NAME,
--		.of_match_table = ppc4xx_edac_match,
--	},
--};
--
- /*
-  * TODO: The row and channel parameters likely need to be dynamically
-  * set based on the aforementioned variant controller realizations.
-@@ -1391,6 +1377,15 @@ ppc4xx_edac_opstate_init(void)
- 			     EDAC_OPSTATE_UNKNOWN_STR)));
- }
- 
-+static struct platform_driver ppc4xx_edac_driver = {
-+	.probe			= ppc4xx_edac_probe,
-+	.remove			= ppc4xx_edac_remove,
-+	.driver = {
-+		.name = PPC4XX_EDAC_MODULE_NAME,
-+		.of_match_table = ppc4xx_edac_match,
-+	},
-+};
-+
- /**
-  * ppc4xx_edac_init - driver/module insertion entry point
-  *
+Thanks,
 
-base-commit: 568035b01cfb107af8d2e4bd2fb9aea22cf5b868
--- 
-2.37.2
 
+Guilherme
+
+
+[0]
+https://lore.kernel.org/lkml/46137c67-25b4-6657-33b7-cffdc7afc0d7@igalia.com/
