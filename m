@@ -2,100 +2,102 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB4665D50FE
-	for <lists+linux-edac@lfdr.de>; Wed, 21 Sep 2022 20:10:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 48D8D5E4F78
+	for <lists+linux-edac@lfdr.de>; Wed, 21 Sep 2022 20:32:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230247AbiIUSKR (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Wed, 21 Sep 2022 14:10:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43702 "EHLO
+        id S229669AbiIUScq (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Wed, 21 Sep 2022 14:32:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230000AbiIUSKR (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Wed, 21 Sep 2022 14:10:17 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F0AE4A105
-        for <linux-edac@vger.kernel.org>; Wed, 21 Sep 2022 11:10:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1663783814;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type;
-        bh=QPOWo1x2Q3bZBJvf/RMV+nk/IY7PTjChXYr7c51rS48=;
-        b=Jia8ZBNPYrAW51vtXXlNaN2s8ye4JeEjEGiLlwAXNLgqJI5wUDY2UesxyGwgco/TsVjwdm
-        O0jLZyh5cTcBB15LrYf7S5aWW6chL9PIGmMRBeHGLO9CAhF14CQwAnbnXHsvhsqXvv4h9t
-        9+pFboWG660EDrbRpWklJUPhWNJ+xVs=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-26-mRIz5uSDP2SqLmw3FFR0bw-1; Wed, 21 Sep 2022 14:10:11 -0400
-X-MC-Unique: mRIz5uSDP2SqLmw3FFR0bw-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 584813817A67;
-        Wed, 21 Sep 2022 18:10:10 +0000 (UTC)
-Received: from napanee.usersys.redhat.com (unknown [10.2.16.113])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 4AA801121314;
-        Wed, 21 Sep 2022 18:10:10 +0000 (UTC)
-Received: by napanee.usersys.redhat.com (Postfix, from userid 1000)
-        id D18ECC04E2; Wed, 21 Sep 2022 14:10:09 -0400 (EDT)
-Date:   Wed, 21 Sep 2022 14:10:09 -0400
-From:   Aristeu Rozanski <aris@redhat.com>
-To:     linux-edac@vger.kernel.org
-Cc:     mchehab@kernel.org, bp@suse.de, arozansk@redhat.com
-Subject: [RESEND PATCH] i5000_edac: fix slot number passed to determine_mtr()
-Message-ID: <20220921181009.oxytvicy6sry6it7@redhat.com>
+        with ESMTP id S229519AbiIUSco (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Wed, 21 Sep 2022 14:32:44 -0400
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7135C9FA87
+        for <linux-edac@vger.kernel.org>; Wed, 21 Sep 2022 11:32:43 -0700 (PDT)
+Received: by mail-lf1-x12c.google.com with SMTP id a2so10657741lfb.6
+        for <linux-edac@vger.kernel.org>; Wed, 21 Sep 2022 11:32:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
+        bh=KpQl/fpFQi0WzrdZvxEbMAul4LrjeiUgy45pvWtrUZw=;
+        b=Q6bV4x7B/wS2piLzjPI8S2AFFfG9OoXAoz3V3v4bpF4xnb1VnvqkFX0kWFxmcW33kk
+         3RGvOsyl9iAajpfumk4y4oeEgybafPVcVh4wyORBlzGRuY62MWX/OeukG0iIusGvSISd
+         u+eG4GO7M6ynNWYK8UqZmGnIDb7pIfV8kZE0MuXNLCvYWZ9D5/pdTHQbL3+LafTc+kXj
+         YtnQV5IsqsHNFw1HMcT6uZKLKJbosYTjSBJTA1RbDHejKYDWdRJoh2723MLBa25KkGpf
+         Q1CJRKnUOXrL1zgJ4HYozeS+lPU37iQ9hTOEVrgWNtwvc7YHDbaFhFJG4jKK058a1h2F
+         9aGg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=KpQl/fpFQi0WzrdZvxEbMAul4LrjeiUgy45pvWtrUZw=;
+        b=Y7uPHj5drWPnWmGsjOO8y2L8kTDYsMyFJH+F+rotidkJKHKJ/Qh1CWqMifUKUb8W9d
+         U2Th0RnDgBfLPCY0UJTP0XVKMOqSk7wKDbl2j4pirQ8uJPjj3983Nq1qs0rgGyeRJcGS
+         CIJkPK8uaayVY5GrMkPwNZp8tBGUXo/YkrbrefrU58e1K9VX7q3itmUVi7hPrnKBccYu
+         SQeMQ8LoNU2ik5cmDwGfLR7Fzz27cjJ6phwB8UCpHqEqVEwez3pYqH/66g0isnMQw9Cq
+         Q+RQZ4YDnKxhNfXxjvzOSrYYhvvh/qXN/Au0N5Ott18ldsbTUbdcp1RtpeFTehbZXqJZ
+         xVxQ==
+X-Gm-Message-State: ACrzQf1kk5qvBAkmLKb580NGE/NE5111kIYIfYTeYR1khFlef4ECV56A
+        9M0W9IazFUFX3gv8YNeSnELSYg==
+X-Google-Smtp-Source: AMsMyM7jjPC7hCTwA0n33gWBuiRoixZRhdPfpyrVT4SguIv08DybininZsm8klfDAHYdEizBbjvVGQ==
+X-Received: by 2002:a05:6512:32c7:b0:49f:53f2:a51a with SMTP id f7-20020a05651232c700b0049f53f2a51amr10927467lfg.236.1663785161772;
+        Wed, 21 Sep 2022 11:32:41 -0700 (PDT)
+Received: from krzk-bin.. (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id j12-20020a056512344c00b00494a1b242dasm551602lfr.14.2022.09.21.11.32.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 21 Sep 2022 11:32:41 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     mchehab@kernel.org, robh+dt@kernel.org,
+        Tony Luck <tony.luck@intel.com>, michal.simek@xilinx.com,
+        Sergey.Semin@baikalelectronics.ru, manish.narani@xilinx.com,
+        krzysztof.kozlowski+dt@linaro.org, bp@alien8.de
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        linux-arm-kernel@lists.infradead.org,
+        punnaiah.choudary.kalluri@xilinx.com, krzk@kernel.org,
+        linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
+        rric@kernel.org, james.morse@arm.com,
+        Alexey.Malahov@baikalelectronics.ru, dinguyen@kernel.org,
+        robh@kernel.org, Michail.Ivanov@baikalelectronics.ru,
+        devicetree@vger.kernel.org, Pavel.Parkhomenko@baikalelectronics.ru,
+        fancer.lancer@gmail.com
+Subject: Re: (subset) [PATCH v2 14/19] dt-bindings: memory: snps: Detach Zynq DDRC controller support
+Date:   Wed, 21 Sep 2022 20:32:36 +0200
+Message-Id: <166378514628.18111.5147960761937324813.b4-ty@linaro.org>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220910194237.10142-15-Sergey.Semin@baikalelectronics.ru>
+References: <20220910194237.10142-1-Sergey.Semin@baikalelectronics.ru> <20220910194237.10142-15-Sergey.Semin@baikalelectronics.ru>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: NeoMutt/20220429
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-When the logic mapping branch/slot/channel was reworked back in
-64e1fdaf55d6 ("i5000_edac: Fix the logic that retrieves memory information")
-i5000_init_csrows() was not updated and kept passing twice the number
-of slots to determine_mtr(), which leads to acessing past the end of
-i5000_pvt.b1_mtr[]. This was found by KASAN.
+On Sat, 10 Sep 2022 22:42:32 +0300, Serge Semin wrote:
+> The Zynq A05 DDRC controller has nothing in common with DW uMCTL2 DDRC:
+> the CSRs layout is absolutely different and it doesn't support IRQs unlike
+> DW uMCTL2 DDR controller of all versions (v1.x, v2.x and v3.x). Thus there
+> is no any reason to have these controllers described in the same bindings.
+> Let's split the DT-schema up.
+> 
+> Note since the synopsys,ddrc-ecc.yaml schema describes the Synopsys DW
+> uMCTL2 DDR controller only, we need to accordingly fix the device
+> descriptions.
+> 
+> [...]
 
-Fixes: 64e1fdaf55d6 ("i5000_edac: Fix the logic that retrieves memory information")
-Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc: Borislav Petkov <bp@suse.de>
-Signed-off-by: Aristeu Rozanski <aris@redhat.com>
+Applied, thanks!
 
----
- drivers/edac/i5000_edac.c |    4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+[14/19] dt-bindings: memory: snps: Detach Zynq DDRC controller support
+        https://git.kernel.org/krzk/linux-mem-ctrl/c/845081313632b6a27dff576cf102b4aecb4654cf
 
---- linus-2.6.orig/drivers/edac/i5000_edac.c	2022-07-25 15:26:40.093989879 -0400
-+++ linus-2.6/drivers/edac/i5000_edac.c	2022-07-26 14:32:23.644694778 -0400
-@@ -1249,14 +1249,12 @@ static int i5000_init_csrows(struct mem_
- 	struct i5000_pvt *pvt;
- 	struct dimm_info *dimm;
- 	int empty;
--	int max_csrows;
- 	int mtr;
- 	int csrow_megs;
- 	int channel;
- 	int slot;
- 
- 	pvt = mci->pvt_info;
--	max_csrows = pvt->maxdimmperch * 2;
- 
- 	empty = 1;		/* Assume NO memory */
- 
-@@ -1267,7 +1265,7 @@ struct i5000_pvt *pvt;
- 	 * to map the dimms. A good cleanup would be to remove this array,
- 	 * and do a loop here with branch, channel, slot
- 	 */
--	for (slot = 0; slot < max_csrows; slot++) {
-+	for (slot = 0; slot < pvt->maxdimmperch; slot++) {
- 		for (channel = 0; channel < pvt->maxch; channel++) {
- 
- 			mtr = determine_mtr(pvt, slot, channel);
-
+Best regards,
+-- 
+Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
