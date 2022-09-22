@@ -2,101 +2,89 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 05E865E61D8
-	for <lists+linux-edac@lfdr.de>; Thu, 22 Sep 2022 13:58:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D91845E6413
+	for <lists+linux-edac@lfdr.de>; Thu, 22 Sep 2022 15:48:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229488AbiIVL6J (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Thu, 22 Sep 2022 07:58:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39474 "EHLO
+        id S230209AbiIVNsM (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Thu, 22 Sep 2022 09:48:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229673AbiIVL6G (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Thu, 22 Sep 2022 07:58:06 -0400
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CACB6A7A8C;
-        Thu, 22 Sep 2022 04:58:03 -0700 (PDT)
-Received: by mail-wm1-x336.google.com with SMTP id o20-20020a05600c4fd400b003b4a516c479so1181209wmq.1;
-        Thu, 22 Sep 2022 04:58:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date;
-        bh=y0QyeuPhDk8uxFx0nK/eAlzQ8Bem6mgCmbuKgEvACF0=;
-        b=nE0JMsVyHqfw2b5Z/lYjvldXs7JYJZ5jv3r26+yQqUzUw/W+1FvfdORQdPs6q0egfO
-         2Wq07+yRq38FB641HlEr08nkt/ZL0mTzqXUZJvP6+DKKNZ7wnRk5cY7EdLOLRUB+HBvd
-         ToEH8a9BQs743qKc3TprsNf9yXzbLUFJ4dYPOTIXMw0gcF3rC70aS9V0anaWu2Q02g3/
-         twIB2OdguQVHaRcHGF7vSZKQAyrTieHCgpOU3dBrXv7g3tN7QIry3CfKxtZn7xN95Z2r
-         +zVFvBOCllPC3FRwI/8E+/gH/Cny2hVwY/knLqGY4uR4qfjDlGDIXNsnvOpgyON9hvNz
-         Q4TQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=y0QyeuPhDk8uxFx0nK/eAlzQ8Bem6mgCmbuKgEvACF0=;
-        b=G4aZaWSVAC1Zs1f5r0hJdWD+aDN8G16adKaCyDqNoLz5E8EPJtCYcPn7XJY3DZ8I9N
-         IjKPRSonx+FwdpA+phlCCSRWy1UtfOxxHre5bnGUyEHFxmyOm2RdzzMgi0yGNBedjJZO
-         joSqCZ0kYhQQtXSR0kxDZrgqYydb/27j3E0cyBrKMcwPwMrxkp/PakIoTeCF+tdvO1SK
-         5EIZJJqQu9qfyYbWmV2YBlv2SuvTBpVl7bFtd2QWDbeESQN4NTh0V6DRidZS2EQ8voK1
-         DTOHdA0ue7ixkInvc6LINHR9YwEe9JSTDtx5+g/3ynboX7V8vqMP2ccV+L9VPNiOhGaS
-         LNmQ==
-X-Gm-Message-State: ACrzQf3UXJr6sYt7dQXd+6In3XfiCTgty9sJ9aqRl5I7T8XNe2jB8v+R
-        2JYXe4AaCOZvgeVpTJxIMrdVB/oM0Lc=
-X-Google-Smtp-Source: AMsMyM5SYQwYXSbsvCmTlOmw/gUCeJuGDnYOZH7FZZkQtS1cRCKsSRv8n/Kn9qVWvyUy+P7SNKbFvQ==
-X-Received: by 2002:a05:600c:4f56:b0:3b4:b6b0:42d4 with SMTP id m22-20020a05600c4f5600b003b4b6b042d4mr2083843wmq.143.1663847881832;
-        Thu, 22 Sep 2022 04:58:01 -0700 (PDT)
-Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.gmail.com with ESMTPSA id ay16-20020a5d6f10000000b0022af70874a1sm6696472wrb.36.2022.09.22.04.58.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 22 Sep 2022 04:58:01 -0700 (PDT)
-From:   Colin Ian King <colin.i.king@gmail.com>
-To:     Tony Luck <tony.luck@intel.com>, Borislav Petkov <bp@alien8.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Robert Richter <rric@kernel.org>, linux-edac@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] EDAC, pnd2: remove redundant initialization to variable mot_intlv_bit
-Date:   Thu, 22 Sep 2022 12:58:00 +0100
-Message-Id: <20220922115800.1372740-1-colin.i.king@gmail.com>
-X-Mailer: git-send-email 2.37.1
+        with ESMTP id S231684AbiIVNrv (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Thu, 22 Sep 2022 09:47:51 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D358CF162E
+        for <linux-edac@vger.kernel.org>; Thu, 22 Sep 2022 06:47:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1663854422;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=NGEl6LqWKLvSypDLQWoU7iz6FLzava7tusAf8V+Uyf0=;
+        b=hG87I0WmJnUvUkYHBohsIaWpmsdzw8qH5R2YusQfebPR+eBnoAupdyBdlLWQZnS9hAVbkn
+        A93dA1duC27H3qeWFv4nx2/SI+hGm7kxHFqtZaWMJtFrqB4TKG7pNR56Liayw9Dvh1rjV5
+        ixgkL7Ip340RZnu1goivRaj/+cCoSSI=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-107-6hTGikOjNyGaHsE_q3FerQ-1; Thu, 22 Sep 2022 09:47:00 -0400
+X-MC-Unique: 6hTGikOjNyGaHsE_q3FerQ-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 51A983C0ED52;
+        Thu, 22 Sep 2022 13:47:00 +0000 (UTC)
+Received: from napanee.usersys.redhat.com (unknown [10.2.16.113])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 42CA040C6EC3;
+        Thu, 22 Sep 2022 13:47:00 +0000 (UTC)
+Received: by napanee.usersys.redhat.com (Postfix, from userid 1000)
+        id C79E0C04E2; Thu, 22 Sep 2022 09:46:59 -0400 (EDT)
+Date:   Thu, 22 Sep 2022 09:46:59 -0400
+From:   Aristeu Rozanski <aris@redhat.com>
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     linux-edac@vger.kernel.org, mchehab@kernel.org
+Subject: Re: [RESEND PATCH] i5000_edac: fix slot number passed to
+ determine_mtr()
+Message-ID: <20220922134659.biiy6g743qplzgiq@redhat.com>
+References: <20220921181009.oxytvicy6sry6it7@redhat.com>
+ <YytoHtVULW7w3/8Z@zn.tnic>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YytoHtVULW7w3/8Z@zn.tnic>
+User-Agent: NeoMutt/20220429
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-Variable mot_intlv_bit is being initialized with a value that
-is never read, it is being reassigned later on with a different
-value. The initialization is redundant and can be removed.
+On Wed, Sep 21, 2022 at 09:38:06PM +0200, Borislav Petkov wrote:
+> So it looks to me like back then, the number of CS rows was twice the
+> DIMMs per channel, implying two CS rows per DIMM, I guess dual-ranked
+> DIMMs or so.
+> 
+> Now you're saying the number CS rows is the number of DIMMs. Which
+> means, single-ranked DIMMs?
 
-Cleans up clang scan-build warning:
-drivers/edac/pnd2_edac.c:627:6: warning: Value stored to 'mot_intlv_bit'
-during its initialization is never read [deadcode.DeadStores]
+I'm only fixing a out of bounds access, on purpose.
+Look at 64e1fdaf55d6 and the new version of determine_mtr().
 
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
----
- drivers/edac/pnd2_edac.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+> But all this is broken as it needs to deal with both single-ranked and
+> dual-ranked DIMMs elegantly and not assume any DIMM types...
 
-diff --git a/drivers/edac/pnd2_edac.c b/drivers/edac/pnd2_edac.c
-index a20b299f1202..eba2e6d9bd8f 100644
---- a/drivers/edac/pnd2_edac.c
-+++ b/drivers/edac/pnd2_edac.c
-@@ -624,8 +624,7 @@ static int hash_by_mask(u64 addr, u64 mask)
- static int sys2pmi(const u64 addr, u32 *pmiidx, u64 *pmiaddr, char *msg)
- {
- 	u64 contig_addr, contig_base, contig_offset, contig_base_adj;
--	int mot_intlv_bit = two_slices ? MOT_CHAN_INTLV_BIT_2SLC_2CH :
--						MOT_CHAN_INTLV_BIT_1SLC_2CH;
-+	int mot_intlv_bit;
- 	int slice_intlv_bit_rm = SELECTOR_DISABLED;
- 	int chan_intlv_bit_rm = SELECTOR_DISABLED;
- 	/* Determine if address is in the MOT region. */
+That's correct, while talking to Mauro he suggested fixing the entire
+thing.
+
+> Do we have hardware where we can test this or can we declare this hw for
+> dead?
+
+And this is the reason why I decided to not do it. We do have the hardware
+but last time I checked none of them had functional EINJ.
+
 -- 
-2.37.1
+Aristeu
 
