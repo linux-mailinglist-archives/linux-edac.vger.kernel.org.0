@@ -2,38 +2,38 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F1405E6C09
-	for <lists+linux-edac@lfdr.de>; Thu, 22 Sep 2022 21:52:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F9C15E6C10
+	for <lists+linux-edac@lfdr.de>; Thu, 22 Sep 2022 21:52:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230079AbiIVTv6 (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Thu, 22 Sep 2022 15:51:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49102 "EHLO
+        id S232027AbiIVTv7 (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Thu, 22 Sep 2022 15:51:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232312AbiIVTvs (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Thu, 22 Sep 2022 15:51:48 -0400
+        with ESMTP id S232495AbiIVTvw (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Thu, 22 Sep 2022 15:51:52 -0400
 Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1508E10C78E;
-        Thu, 22 Sep 2022 12:51:46 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6040310C7AB;
+        Thu, 22 Sep 2022 12:51:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663876307; x=1695412307;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=1Dio6FuAowFSRZXpVJEI0kJ8UFwvjWovjlQsBMPapkk=;
-  b=DVsai5c1GpFcgrO2K9GFywrgT3u3exlF3Tw1Fv8w29M1TSHv73nmk1EF
-   LmP5bAVZCw4HC562Y+yyIw8FRwfUV5uq1CzsvOs/It792ysFJeUY3fxO6
-   szdT5QEXU5aPgKskw3vMGEMMEfl94jbloJTRXmDWXOyjTkdPI7apZPZJE
-   /ldw2R/BXfGWuBJ8acT85hMiOyaHP63eEFC+ahQnQLhHhP9I+YVMXignw
-   T/ni1rNtWwikW92CXUNcLSzta2iUDIfd3gBSi0enufARHKHajQDKWZWrz
-   h/dYMC6mrLPWT3jTbcNd2gf3Qi5jycjDIXEuAPi3ICPx/jI9bnxxrVEH5
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10478"; a="280783420"
+  t=1663876309; x=1695412309;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=O1l2uVNEbdwj40S1UTdkiiCL6HpII17U25snIiNO9Ho=;
+  b=DdUpUNcM6+UYg/jdVTkOqLQb5rtC42qM0G20dJEkpcyMEGt++J7eL3s3
+   SPz4Zxzy6xGmHLp10425iT5l3pH/fV/PPUuBk+kNld1fGgn7oq2RKPBRI
+   Dp3SHieyIR7jO9ABuwQ/6fox0Aa8J1XlF4VIU+FMZHleiCUGFeGRoTtNM
+   lnh/SSo3UU5+IP/dktu+XuCszhWAObyTNWwNot+QAvfeC5+5jEh31eog5
+   uJZvhqlD5TnX7XFUr9jPIcsGEkTnL7pipOX/UK7Y+Gplk9x+nGBjSS+Tw
+   ZwwfGqcqkWgY6Z+WhZe7NHap+HT2k0XmpLmDq2vdpSiX+0qZcnpTcE5jf
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10478"; a="280783421"
 X-IronPort-AV: E=Sophos;i="5.93,337,1654585200"; 
-   d="scan'208";a="280783420"
+   d="scan'208";a="280783421"
 Received: from fmsmga007.fm.intel.com ([10.253.24.52])
   by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Sep 2022 12:51:45 -0700
 X-IronPort-AV: E=Sophos;i="5.93,337,1654585200"; 
-   d="scan'208";a="622246712"
+   d="scan'208";a="622246715"
 Received: from agluck-desk3.sc.intel.com ([172.25.222.78])
   by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Sep 2022 12:51:45 -0700
 From:   Tony Luck <tony.luck@intel.com>
@@ -43,10 +43,12 @@ Cc:     Yazen Ghannam <yazen.ghannam@amd.com>,
         Carlos Bilbao <carlos.bilbao@amd.com>, x86@kernel.org,
         linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
         Tony Luck <tony.luck@intel.com>
-Subject: [PATCH 0/2] Dump stack after certain machine checks
-Date:   Thu, 22 Sep 2022 12:51:34 -0700
-Message-Id: <20220922195136.54575-1-tony.luck@intel.com>
+Subject: [PATCH 1/2] x86/mce: Use severity table to handle uncorrected errors in kernel
+Date:   Thu, 22 Sep 2022 12:51:35 -0700
+Message-Id: <20220922195136.54575-2-tony.luck@intel.com>
 X-Mailer: git-send-email 2.37.3
+In-Reply-To: <20220922195136.54575-1-tony.luck@intel.com>
+References: <20220922195136.54575-1-tony.luck@intel.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -58,56 +60,49 @@ Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-In general it isn't very useful to dump the kernel stack in the panic
-from a fatal machine check. The problem is almost always hardware
-related, so knowing how the kernel got to the routine that triggered the
-machine check isn't useful.
+mce_severity_intel() has a special case to promote UC and AR errors
+in kernel context to PANIC severity.
 
-But Linux now has the capability to recover from most user mode and a
-few kernel mode memory related machine checks. Validation folks are
-testing that out and occasionally bring a kernel log like this to me:
+The "AR" case is already handled with separate entries in the severity
+table for all instruction fetch errors, and those data fetch errors that
+are not in a recoverable area of the kernel (i.e. have an extable fixup
+entry).
 
-[69608.047771] mce: [Hardware Error]: Machine check: Data load in unrecoverable area of kernel
-[69608.021729] mce: [Hardware Error]: TSC 7874eb580177 ADDR 43bb84bd00 MISC 86 PPIN 9f061818e1a92082 
-[69608.047773] Kernel panic - not syncing: Fatal local machine check
-[69608.021720] mce: [Hardware Error]: RIP 10:<ffffffff8b767517> {copy_page+0x7/0x10}
+Add an entry to the severity table for UC errors in kernel context that
+reports severity = PANIC. Delete the special case code from
+mce_severity_intel().
 
-All I can tell them is that Linux was copying a page and hit poison in
-the source of the copy. But there are lots of reasons why Linux may be
-copying a page. A stack trace would help figure out if:
-1) the test was bad and just injected an error into the wrong location
-2) an injected error sat around in memory and was later consumed
+Signed-off-by: Tony Luck <tony.luck@intel.com>
+---
+ arch/x86/kernel/cpu/mce/severity.c | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
 
-Case 2 will help identify places where Linux might use a "safe" copy
-function that returns an error to the caller which may attempt some sort
-of recovery.
-
-Patch 1 cleans up the Intel severity calculation by using a new severity
-table entry instead of some, now dubious, code to adjust the severity
-for errors in kernel context.
-
-Patch 2 adds a new severity level that triggers printing a stack trace.
-
-I've only updated the Intel severity calculation to use this new
-severity level. I'm not sure if AMD also has situations where this would
-be useful. If so, then mce_severity_amd() would need to be updated too
-to return different severity for IN_KERNEL and IN_KERNEL_RECOV cases.
-
-I've tested this out on systems that do both broadcast and local machine
-checks.
-
-Tony Luck (2):
-  x86/mce: Use severity table to handle uncorrected errors in kernel
-  x86/mce: Dump the stack for recoverable machine checks in kernel
-    context
-
- arch/x86/kernel/cpu/mce/internal.h |  1 +
- arch/x86/kernel/cpu/mce/core.c     | 11 +++++++++--
- arch/x86/kernel/cpu/mce/severity.c | 10 ++++++----
- 3 files changed, 16 insertions(+), 6 deletions(-)
-
-
-base-commit: 521a547ced6477c54b4b0cc206000406c221b4d6
+diff --git a/arch/x86/kernel/cpu/mce/severity.c b/arch/x86/kernel/cpu/mce/severity.c
+index 00483d1c27e4..c4477162c07d 100644
+--- a/arch/x86/kernel/cpu/mce/severity.c
++++ b/arch/x86/kernel/cpu/mce/severity.c
+@@ -202,6 +202,11 @@ static struct severity {
+ 		PANIC, "Overflowed uncorrected",
+ 		BITSET(MCI_STATUS_OVER|MCI_STATUS_UC)
+ 		),
++	MCESEV(
++		PANIC, "Uncorrected in kernel",
++		BITSET(MCI_STATUS_UC),
++		KERNEL
++		),
+ 	MCESEV(
+ 		UC, "Uncorrected",
+ 		BITSET(MCI_STATUS_UC)
+@@ -391,9 +396,6 @@ static noinstr int mce_severity_intel(struct mce *m, struct pt_regs *regs, char
+ 			*msg = s->msg;
+ 		s->covered = 1;
+ 
+-		if (s->sev >= MCE_UC_SEVERITY && ctx == IN_KERNEL)
+-			return MCE_PANIC_SEVERITY;
+-
+ 		return s->sev;
+ 	}
+ }
 -- 
 2.37.3
 
