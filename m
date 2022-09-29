@@ -2,35 +2,34 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C42B5F16F6
-	for <lists+linux-edac@lfdr.de>; Sat,  1 Oct 2022 02:14:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6808E5F170A
+	for <lists+linux-edac@lfdr.de>; Sat,  1 Oct 2022 02:14:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232169AbiJAAOV (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Fri, 30 Sep 2022 20:14:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33894 "EHLO
+        id S232448AbiJAAOf (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Fri, 30 Sep 2022 20:14:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231233AbiJAAOU (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Fri, 30 Sep 2022 20:14:20 -0400
-X-Greylist: delayed 603 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 30 Sep 2022 17:14:15 PDT
+        with ESMTP id S232240AbiJAAOY (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Fri, 30 Sep 2022 20:14:24 -0400
 Received: from post.baikalelectronics.com (post.baikalelectronics.com [213.79.110.86])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 342701BC63B;
-        Fri, 30 Sep 2022 17:14:15 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 66B741BCAE7;
+        Fri, 30 Sep 2022 17:14:22 -0700 (PDT)
 Received: from post.baikalelectronics.com (localhost.localdomain [127.0.0.1])
-        by post.baikalelectronics.com (Proxmox) with ESMTP id D0730E0ED1;
-        Fri, 30 Sep 2022 02:36:31 +0300 (MSK)
+        by post.baikalelectronics.com (Proxmox) with ESMTP id 9582FE0ED3;
+        Fri, 30 Sep 2022 02:36:32 +0300 (MSK)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         baikalelectronics.ru; h=cc:cc:content-transfer-encoding
         :content-type:content-type:date:from:from:in-reply-to:message-id
         :mime-version:references:reply-to:subject:subject:to:to; s=post;
-         bh=KwyTjzyrYNEk+t6o0jftTpBsKJZt6rkkthg6rtDJxmo=; b=e62heODP16sy
-        DbIiprblRcI8bjvBG+q9iPcX4NTWXYlDCgzE83YrXHAT59ElB6M5uH3cGE7MJb3F
-        SPA4um1/95cQqDZxIHLlBwa0yx2yYOf0SO4OmS6b/c0ZCivSQd61oaT2Xjx1FXVn
-        yAMo9+UELWtobuNdk61cSx4is5B1tqs=
+         bh=6GaOmAq8KPADTMmGO9X/WYnD6CsMKjU7OKo7AXwWH/M=; b=uya/LzR59mnc
+        sP2+vDjCEcK114o8JUhXIyluj9hq1B3IdgHMsSUi5QZzlWFIgON97P3pnDp/gTES
+        bzvBRKUEKHiAPx9r+jHTfJlc7z2Xm0PjojcPK7/KzJ/zXHYqkc4TK4s25VbJibUV
+        tIjVaTIgKfkBqgQMqKacpiHIcHL3TFo=
 Received: from mail.baikal.int (mail.baikal.int [192.168.51.25])
-        by post.baikalelectronics.com (Proxmox) with ESMTP id C16CCE0E70;
-        Fri, 30 Sep 2022 02:36:31 +0300 (MSK)
+        by post.baikalelectronics.com (Proxmox) with ESMTP id 88672E0E70;
+        Fri, 30 Sep 2022 02:36:32 +0300 (MSK)
 Received: from localhost (192.168.168.10) by mail (192.168.51.25) with
- Microsoft SMTP Server (TLS) id 15.0.1395.4; Fri, 30 Sep 2022 02:36:32 +0300
+ Microsoft SMTP Server (TLS) id 15.0.1395.4; Fri, 30 Sep 2022 02:36:33 +0300
 From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
 To:     Michal Simek <michal.simek@xilinx.com>,
         Borislav Petkov <bp@alien8.de>,
@@ -49,15 +48,15 @@ CC:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
         Dinh Nguyen <dinguyen@kernel.org>,
         <linux-arm-kernel@lists.infradead.org>,
         <linux-edac@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH RESEND v3 01/18] EDAC/synopsys: Convert sysfs nodes to debugfs ones
-Date:   Fri, 30 Sep 2022 02:35:13 +0300
-Message-ID: <20220929233530.13016-2-Sergey.Semin@baikalelectronics.ru>
+Subject: [PATCH RESEND v3 02/18] EDAC/mc: Extend memtypes with LPDDR(mDDR) and LPDDR2
+Date:   Fri, 30 Sep 2022 02:35:14 +0300
+Message-ID: <20220929233530.13016-3-Sergey.Semin@baikalelectronics.ru>
 X-Mailer: git-send-email 2.37.3
 In-Reply-To: <20220929233530.13016-1-Sergey.Semin@baikalelectronics.ru>
 References: <20220929233530.13016-1-Sergey.Semin@baikalelectronics.ru>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
 X-Originating-IP: [192.168.168.10]
 X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -69,295 +68,86 @@ Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-The DW uMCTL2 DDRC EDAC driver supports creating two sysfs nodes:
-"inject_data_error" and "inject_data_poison". First of them is responsible
-for setting the error-injecting physical address up. The second one is
-supposed to be used to enable the hardware capability of the correctable
-and uncorrectable error injection. As you can see the semantics of these
-nodes is pure debug. They are even created only if the EDAC_DEBUG kernel
-config is enabled. Thus there is no point in having these nodes exported
-in the sysfs. Let's move them to DebugFS in the device private directory
-as this should have been done in the first place.
+These are normal memory types [1] which can be met on the real hardware.
+DW uMCTL2 DDRC IP-core can be configured to have them supported [2,3].
+Let's extend the EDAC memory types enumeration with the corresponding IDs
+then.
 
-While at it we suggest to move the address map initialization procedure
-invocation to the DebugFS nodes creating function and create an empty
-snps_create_debugfs_nodes() method in case if the EDAC_DEBUG config is
-disabled. Thus the DW uMCTL2 DDRC EDAC probe procedure will get to be a
-bit simpler.
+[1] https://en.wikipedia.org/wiki/LPDDR
+[2] DesignWare® Cores Enhanced Universal DDR Memory Controller (uMCTL2)
+Databook, Version 3.91a, October 2020, p.501
+[3] DesignWare® Cores Enhanced Universal DDR Memory Controller (uMCTL2)
+Databook, Version 3.91a, October 2020, p.1717
 
 Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
 ---
- drivers/edac/synopsys_edac.c | 221 +++++++++++++++++++----------------
- 1 file changed, 122 insertions(+), 99 deletions(-)
+ drivers/edac/edac_mc.c | 2 ++
+ include/linux/edac.h   | 6 ++++++
+ 2 files changed, 8 insertions(+)
 
-diff --git a/drivers/edac/synopsys_edac.c b/drivers/edac/synopsys_edac.c
-index 7833bcff3e2e..b2a2f938045c 100644
---- a/drivers/edac/synopsys_edac.c
-+++ b/drivers/edac/synopsys_edac.c
-@@ -9,6 +9,7 @@
- #include <linux/bitfield.h>
- #include <linux/bits.h>
- #include <linux/edac.h>
-+#include <linux/fs.h>
- #include <linux/module.h>
- #include <linux/platform_device.h>
- #include <linux/spinlock.h>
-@@ -640,6 +641,16 @@ static int snps_setup_irq(struct mem_ctl_info *mci, struct platform_device *pdev
- 
- #ifdef CONFIG_EDAC_DEBUG
- 
-+#define SNPS_DEBUGFS_FOPS(__name, __read, __write) \
-+	static const struct file_operations __name = {	\
-+		.owner = THIS_MODULE,		\
-+		.open = simple_open,		\
-+		.read = __read,			\
-+		.write = __write,		\
-+	}
-+
-+#define SNPS_DBGFS_BUF_LEN 128
-+
- /**
-  * snps_data_poison_setup - Update poison registers.
-  * @priv:		DDR memory controller private instance data.
-@@ -700,90 +711,6 @@ static void snps_data_poison_setup(struct snps_edac_priv *priv)
- 	writel(regval, priv->baseaddr + ECC_POISON1_OFST);
- }
- 
--static ssize_t inject_data_error_show(struct device *dev,
--				      struct device_attribute *mattr,
--				      char *data)
--{
--	struct mem_ctl_info *mci = to_mci(dev);
--	struct snps_edac_priv *priv = mci->pvt_info;
--
--	return sprintf(data, "Poison0 Addr: 0x%08x\n\rPoison1 Addr: 0x%08x\n\r"
--			"Error injection Address: 0x%lx\n\r",
--			readl(priv->baseaddr + ECC_POISON0_OFST),
--			readl(priv->baseaddr + ECC_POISON1_OFST),
--			priv->poison_addr);
--}
--
--static ssize_t inject_data_error_store(struct device *dev,
--				       struct device_attribute *mattr,
--				       const char *data, size_t count)
--{
--	struct mem_ctl_info *mci = to_mci(dev);
--	struct snps_edac_priv *priv = mci->pvt_info;
--
--	if (kstrtoul(data, 0, &priv->poison_addr))
--		return -EINVAL;
--
--	snps_data_poison_setup(priv);
--
--	return count;
--}
--
--static ssize_t inject_data_poison_show(struct device *dev,
--				       struct device_attribute *mattr,
--				       char *data)
--{
--	struct mem_ctl_info *mci = to_mci(dev);
--	struct snps_edac_priv *priv = mci->pvt_info;
--	const char *errstr;
--	u32 regval;
--
--	regval = readl(priv->baseaddr + ECC_CFG1_OFST);
--	errstr = FIELD_GET(ECC_CEPOISON_MASK, regval) == ECC_CEPOISON_MASK ?
--		 "Correctable Error" : "UnCorrectable Error";
--
--	return sprintf(data, "Data Poisoning: %s\n\r", errstr);
--}
--
--static ssize_t inject_data_poison_store(struct device *dev,
--					struct device_attribute *mattr,
--					const char *data, size_t count)
--{
--	struct mem_ctl_info *mci = to_mci(dev);
--	struct snps_edac_priv *priv = mci->pvt_info;
--
--	writel(0, priv->baseaddr + DDR_SWCTL);
--	if (strncmp(data, "CE", 2) == 0)
--		writel(ECC_CEPOISON_MASK, priv->baseaddr + ECC_CFG1_OFST);
--	else
--		writel(ECC_UEPOISON_MASK, priv->baseaddr + ECC_CFG1_OFST);
--	writel(1, priv->baseaddr + DDR_SWCTL);
--
--	return count;
--}
--
--static DEVICE_ATTR_RW(inject_data_error);
--static DEVICE_ATTR_RW(inject_data_poison);
--
--static int snps_create_sysfs_attributes(struct mem_ctl_info *mci)
--{
--	int rc;
--
--	rc = device_create_file(&mci->dev, &dev_attr_inject_data_error);
--	if (rc < 0)
--		return rc;
--	rc = device_create_file(&mci->dev, &dev_attr_inject_data_poison);
--	if (rc < 0)
--		return rc;
--	return 0;
--}
--
--static void snps_remove_sysfs_attributes(struct mem_ctl_info *mci)
--{
--	device_remove_file(&mci->dev, &dev_attr_inject_data_error);
--	device_remove_file(&mci->dev, &dev_attr_inject_data_poison);
--}
--
- static void snps_setup_row_address_map(struct snps_edac_priv *priv, u32 *addrmap)
- {
- 	u32 addrmap_row_b2_10;
-@@ -1004,7 +931,115 @@ static void snps_setup_address_map(struct snps_edac_priv *priv)
- 
- 	snps_setup_rank_address_map(priv, addrmap);
- }
--#endif /* CONFIG_EDAC_DEBUG */
-+
-+static ssize_t snps_inject_data_error_read(struct file *filep, char __user *ubuf,
-+					   size_t size, loff_t *offp)
-+{
-+	struct mem_ctl_info *mci = filep->private_data;
-+	struct snps_edac_priv *priv = mci->pvt_info;
-+	char buf[SNPS_DBGFS_BUF_LEN];
-+	int pos;
-+
-+	pos = scnprintf(buf, sizeof(buf), "Poison0 Addr: 0x%08x\n\r",
-+			readl(priv->baseaddr + ECC_POISON0_OFST));
-+	pos += scnprintf(buf + pos, sizeof(buf) - pos, "Poison1 Addr: 0x%08x\n\r",
-+			 readl(priv->baseaddr + ECC_POISON1_OFST));
-+	pos += scnprintf(buf + pos, sizeof(buf) - pos, "Error injection Address: 0x%lx\n\r",
-+			 priv->poison_addr);
-+
-+	return simple_read_from_buffer(ubuf, size, offp, buf, pos);
-+}
-+
-+static ssize_t snps_inject_data_error_write(struct file *filep, const char __user *ubuf,
-+					    size_t size, loff_t *offp)
-+{
-+	struct mem_ctl_info *mci = filep->private_data;
-+	struct snps_edac_priv *priv = mci->pvt_info;
-+	int rc;
-+
-+	rc = kstrtoul_from_user(ubuf, size, 0, &priv->poison_addr);
-+	if (rc)
-+		return rc;
-+
-+	snps_data_poison_setup(priv);
-+
-+	return size;
-+}
-+
-+SNPS_DEBUGFS_FOPS(snps_inject_data_error, snps_inject_data_error_read,
-+		  snps_inject_data_error_write);
-+
-+static ssize_t snps_inject_data_poison_read(struct file *filep, char __user *ubuf,
-+					    size_t size, loff_t *offp)
-+{
-+	struct mem_ctl_info *mci = filep->private_data;
-+	struct snps_edac_priv *priv = mci->pvt_info;
-+	char buf[SNPS_DBGFS_BUF_LEN];
-+	const char *errstr;
-+	u32 regval;
-+	int pos;
-+
-+	regval = readl(priv->baseaddr + ECC_CFG1_OFST);
-+	errstr = FIELD_GET(ECC_CEPOISON_MASK, regval) == ECC_CEPOISON_MASK ?
-+		 "Correctable Error" : "UnCorrectable Error";
-+
-+	pos = scnprintf(buf, sizeof(buf), "Data Poisoning: %s\n\r", errstr);
-+
-+	return simple_read_from_buffer(ubuf, size, offp, buf, pos);
-+}
-+
-+static ssize_t snps_inject_data_poison_write(struct file *filep, const char __user *ubuf,
-+					     size_t size, loff_t *offp)
-+{
-+	struct mem_ctl_info *mci = filep->private_data;
-+	struct snps_edac_priv *priv = mci->pvt_info;
-+	char buf[SNPS_DBGFS_BUF_LEN];
-+	int rc;
-+
-+	rc = simple_write_to_buffer(buf, sizeof(buf), offp, ubuf, size);
-+	if (rc < 0)
-+		return rc;
-+
-+	writel(0, priv->baseaddr + DDR_SWCTL);
-+	if (strncmp(buf, "CE", 2) == 0)
-+		writel(ECC_CEPOISON_MASK, priv->baseaddr + ECC_CFG1_OFST);
-+	else
-+		writel(ECC_UEPOISON_MASK, priv->baseaddr + ECC_CFG1_OFST);
-+	writel(1, priv->baseaddr + DDR_SWCTL);
-+
-+	return size;
-+}
-+
-+SNPS_DEBUGFS_FOPS(snps_inject_data_poison, snps_inject_data_poison_read,
-+		  snps_inject_data_poison_write);
-+
-+/**
-+ * snps_create_debugfs_nodes -	Create DebugFS nodes.
-+ * @mci:	EDAC memory controller instance.
-+ *
-+ * Create DW uMCTL2 EDAC driver DebugFS nodes in the device private
-+ * DebugFS directory.
-+ *
-+ * Return: none.
-+ */
-+static void snps_create_debugfs_nodes(struct mem_ctl_info *mci)
-+{
-+	struct snps_edac_priv *priv = mci->pvt_info;
-+
-+	snps_setup_address_map(priv);
-+
-+	edac_debugfs_create_file("inject_data_error", 0600, mci->debugfs, mci,
-+				 &snps_inject_data_error);
-+
-+	edac_debugfs_create_file("inject_data_poison", 0600, mci->debugfs, mci,
-+				 &snps_inject_data_poison);
-+}
-+
-+#else /* !CONFIG_EDAC_DEBUG */
-+
-+static inline void snps_create_debugfs_nodes(struct mem_ctl_info *mci) {}
-+
-+#endif /* !CONFIG_EDAC_DEBUG */
- 
- /**
-  * snps_mc_probe - Check controller and bind driver.
-@@ -1070,17 +1105,9 @@ static int snps_mc_probe(struct platform_device *pdev)
- 		goto free_edac_mc;
- 	}
- 
--#ifdef CONFIG_EDAC_DEBUG
--	rc = snps_create_sysfs_attributes(mci);
--	if (rc) {
--		edac_printk(KERN_ERR, EDAC_MC, "Failed to create sysfs entries\n");
--		goto free_edac_mc;
--	}
-+	snps_create_debugfs_nodes(mci);
- 
--	snps_setup_address_map(priv);
--#endif
--
--	return rc;
-+	return 0;
- 
- free_edac_mc:
- 	edac_mc_free(mci);
-@@ -1101,10 +1128,6 @@ static int snps_mc_remove(struct platform_device *pdev)
- 
- 	snps_disable_irq(priv);
- 
--#ifdef CONFIG_EDAC_DEBUG
--	snps_remove_sysfs_attributes(mci);
--#endif
--
- 	edac_mc_del_mc(&pdev->dev);
- 	edac_mc_free(mci);
- 
+diff --git a/drivers/edac/edac_mc.c b/drivers/edac/edac_mc.c
+index 634c41ea7804..e353e98e01e2 100644
+--- a/drivers/edac/edac_mc.c
++++ b/drivers/edac/edac_mc.c
+@@ -151,10 +151,12 @@ const char * const edac_mem_types[] = {
+ 	[MEM_RDR]	= "Registered-SDR",
+ 	[MEM_DDR]	= "Unbuffered-DDR",
+ 	[MEM_RDDR]	= "Registered-DDR",
++	[MEM_LPDDR]	= "Low-Power-(m)DDR-RAM",
+ 	[MEM_RMBS]	= "RMBS",
+ 	[MEM_DDR2]	= "Unbuffered-DDR2",
+ 	[MEM_FB_DDR2]	= "FullyBuffered-DDR2",
+ 	[MEM_RDDR2]	= "Registered-DDR2",
++	[MEM_LPDDR2]	= "Low-Power-DDR2-RAM",
+ 	[MEM_XDR]	= "XDR",
+ 	[MEM_DDR3]	= "Unbuffered-DDR3",
+ 	[MEM_RDDR3]	= "Registered-DDR3",
+diff --git a/include/linux/edac.h b/include/linux/edac.h
+index fa4bda2a70f6..89167a4459d5 100644
+--- a/include/linux/edac.h
++++ b/include/linux/edac.h
+@@ -157,6 +157,7 @@ static inline char *mc_event_error_type(const unsigned int err_type)
+  *			This is a variant of the DDR memories.
+  *			A registered memory has a buffer inside it, hiding
+  *			part of the memory details to the memory controller.
++ * @MEM_LPDDR:		Low-Power DDR memory (mDDR).
+  * @MEM_RMBS:		Rambus DRAM, used on a few Pentium III/IV controllers.
+  * @MEM_DDR2:		DDR2 RAM, as described at JEDEC JESD79-2F.
+  *			Those memories are labeled as "PC2-" instead of "PC" to
+@@ -167,6 +168,7 @@ static inline char *mc_event_error_type(const unsigned int err_type)
+  *			a chip select signal.
+  * @MEM_RDDR2:		Registered DDR2 RAM
+  *			This is a variant of the DDR2 memories.
++ * @MEM_LPDDR2:		Low-Power DDR2 memory.
+  * @MEM_XDR:		Rambus XDR
+  *			It is an evolution of the original RAMBUS memories,
+  *			created to compete with DDR2. Weren't used on any
+@@ -199,10 +201,12 @@ enum mem_type {
+ 	MEM_RDR,
+ 	MEM_DDR,
+ 	MEM_RDDR,
++	MEM_LPDDR,
+ 	MEM_RMBS,
+ 	MEM_DDR2,
+ 	MEM_FB_DDR2,
+ 	MEM_RDDR2,
++	MEM_LPDDR2,
+ 	MEM_XDR,
+ 	MEM_DDR3,
+ 	MEM_RDDR3,
+@@ -230,10 +234,12 @@ enum mem_type {
+ #define MEM_FLAG_RDR		BIT(MEM_RDR)
+ #define MEM_FLAG_DDR		BIT(MEM_DDR)
+ #define MEM_FLAG_RDDR		BIT(MEM_RDDR)
++#define MEM_FLAG_LPDDR		BIT(MEM_LPDDR)
+ #define MEM_FLAG_RMBS		BIT(MEM_RMBS)
+ #define MEM_FLAG_DDR2		BIT(MEM_DDR2)
+ #define MEM_FLAG_FB_DDR2	BIT(MEM_FB_DDR2)
+ #define MEM_FLAG_RDDR2		BIT(MEM_RDDR2)
++#define MEM_FLAG_LPDDR2		BIT(MEM_LPDDR2)
+ #define MEM_FLAG_XDR		BIT(MEM_XDR)
+ #define MEM_FLAG_DDR3		BIT(MEM_DDR3)
+ #define MEM_FLAG_RDDR3		BIT(MEM_RDDR3)
 -- 
 2.37.3
 
