@@ -2,62 +2,49 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 643115EDD1C
-	for <lists+linux-edac@lfdr.de>; Wed, 28 Sep 2022 14:48:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 322CB5EEBDD
+	for <lists+linux-edac@lfdr.de>; Thu, 29 Sep 2022 04:37:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233454AbiI1MsX (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Wed, 28 Sep 2022 08:48:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55450 "EHLO
+        id S231419AbiI2Chp (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Wed, 28 Sep 2022 22:37:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232346AbiI1MsW (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Wed, 28 Sep 2022 08:48:22 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6FC959275
-        for <linux-edac@vger.kernel.org>; Wed, 28 Sep 2022 05:48:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1664369301;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=ZWE7KfdcZtxhkWQU9uQ9pU8FY5mThZavTiu1UzdFtM4=;
-        b=Au5UBdCU7EfoFnyhoJeucZkrea/R+LUvh752oLZdthhUEAm7kQ2CEVCat6Ulcq7fhV7ESh
-        s5XxIjEnubNjyMUc6ziPjYErbJcvrw/xF5o+QQgaB1UsXX4smge5sZtps3fjILIPggPm+d
-        3d21oq1PhqGCnj3XsOJsYmydsGwVrJk=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-326-Si9dWJZtM--5SPJW6jAR5g-1; Wed, 28 Sep 2022 08:48:16 -0400
-X-MC-Unique: Si9dWJZtM--5SPJW6jAR5g-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 6B9C03817962;
-        Wed, 28 Sep 2022 12:48:16 +0000 (UTC)
-Received: from napanee.usersys.redhat.com (unknown [10.2.16.113])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 5E2B99D470;
-        Wed, 28 Sep 2022 12:48:16 +0000 (UTC)
-Received: by napanee.usersys.redhat.com (Postfix, from userid 1000)
-        id 1E752C0502; Wed, 28 Sep 2022 08:48:15 -0400 (EDT)
-Date:   Wed, 28 Sep 2022 08:48:15 -0400
-From:   Aristeu Rozanski <aris@redhat.com>
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     linux-edac@vger.kernel.org, mchehab@kernel.org
-Subject: [PATCH] i5000_edac: mark as BROKEN
-Message-ID: <20220928124815.ta6k4jiiyy6diudr@redhat.com>
-References: <20220921181009.oxytvicy6sry6it7@redhat.com>
- <YytoHtVULW7w3/8Z@zn.tnic>
- <20220922134659.biiy6g743qplzgiq@redhat.com>
- <YyxpbRkuLPIcW1Om@zn.tnic>
- <20220926165138.kyp24vhh2czvmu2z@redhat.com>
- <YzHpRLVHc+ykfhY7@zn.tnic>
+        with ESMTP id S229836AbiI2Cho (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Wed, 28 Sep 2022 22:37:44 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 20E1411D60B;
+        Wed, 28 Sep 2022 19:37:43 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 5819F1477;
+        Wed, 28 Sep 2022 19:37:49 -0700 (PDT)
+Received: from entos-ampere-02.shanghai.arm.com (entos-ampere-02.shanghai.arm.com [10.169.212.212])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 3BE733F73B;
+        Wed, 28 Sep 2022 19:37:35 -0700 (PDT)
+From:   Jia He <justin.he@arm.com>
+To:     Len Brown <lenb@kernel.org>, James Morse <james.morse@arm.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Robert Richter <rric@kernel.org>,
+        Robert Moore <robert.moore@intel.com>,
+        Qiuxu Zhuo <qiuxu.zhuo@intel.com>,
+        Yazen Ghannam <yazen.ghannam@amd.com>,
+        Jan Luebbe <jlu@pengutronix.de>,
+        Khuong Dinh <khuong@os.amperecomputing.com>,
+        Kani Toshi <toshi.kani@hpe.com>
+Cc:     Ard Biesheuvel <ardb@kernel.org>, linux-acpi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-edac@vger.kernel.org,
+        devel@acpica.org, "Rafael J . Wysocki" <rafael@kernel.org>,
+        Shuai Xue <xueshuai@linux.alibaba.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>, linux-efi@vger.kernel.org,
+        nd@arm.com, Jia He <justin.he@arm.com>
+Subject: [PATCH v7 0/8] Make ghes_edac a proper module
+Date:   Thu, 29 Sep 2022 02:37:18 +0000
+Message-Id: <20220929023726.73727-1-justin.he@arm.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YzHpRLVHc+ykfhY7@zn.tnic>
-User-Agent: NeoMutt/20220429
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,22 +52,76 @@ Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-i5000_edac supports very old hardware which isn't available and it's
-been broken for single/dual channel for many years without anyone
-noticing. Marking as BROKEN.
+Commit dc4e8c07e9e2 ("ACPI: APEI: explicit init of HEST and GHES in
+apci_init()") introduced a bug that ghes_edac_register() would be invoked
+before edac_init(). Because at that time, the bus "edac" hasn't been even
+registered, this created sysfs /devices/mc0 instead of
+/sys/devices/system/edac/mc/mc0 on an Ampere eMag server.
 
-Signed-off-by: Aristeu Rozanski <aris@redhat.com>
+The proper solution is to make ghes_edac a proper module.
 
-diff --git a/drivers/edac/Kconfig b/drivers/edac/Kconfig
-index 17562cf1fe97..e659e4712a25 100644
---- a/drivers/edac/Kconfig
-+++ b/drivers/edac/Kconfig
-@@ -211,6 +211,7 @@ config EDAC_R82600
- config EDAC_I5000
- 	tristate "Intel Greencreek/Blackford chipset"
- 	depends on X86 && PCI
-+	depends on BROKEN
- 	help
- 	  Support for error detection and correction the Intel
- 	  Greekcreek/Blackford chipsets.
+Changelog:
+v7:
+ - remove the ghes_edac_preferred and ghes_present (suggested by Borislav)
+ - adjust the patch splitting, no major functional changes
+ - remove the r-b tag in those changed patches
+v6:https://www.spinics.net/lists/kernel/msg4511453.html
+ - no code changes from v5 patches
+ - add the reviewed and acked by from Toshi
+ - describe the removal of ghes_edac_force_enable checking in Patch 05
+v5: https://www.spinics.net/lists/kernel/msg4502787.html
+ - add the review-by from Toshi for patch 04 and 06
+ - refine the commit msg
+ - remove the unconditional set of ghes_edac_force_enable on Arm
+v4: https://lore.kernel.org/lkml/20220831074027.13849-6-justin.he@arm.com/
+ - move the kernel boot option to ghes module parameter
+ - collapse th ghes_present and ghes_edac_preferred into one patch
+v3: https://lore.kernel.org/lkml/20220822154048.188253-1-justin.he@arm.com/
+ - refine the commit logs
+ - introduce ghes preferred and present flag (by Toshi)
+ - move force_load to setup parameter
+ - add the ghes_edac_preferred() check for x86/Arm edac drivers
+v2: https://lore.kernel.org/lkml/20220817143458.335938-1-justin.he@arm.com/
+ - add acked-by tag of Patch 1 from Ard
+ - split the notifier patch
+ - add 2 patch to get regular drivers selected when ghes edac is not loaded
+ - fix an errno in igen6 driver
+ - add a patch to fix the sparse warning of ghes
+ - refine the commit logs
+v1: https://lore.kernel.org/lkml/20220811091713.10427-1-justin.he@arm.com/
+
+Jia He (8):
+  efi/cper: export several helpers for ghes_edac to use
+  EDAC/ghes: Add a notifier for reporting memory errors
+  EDAC:ghes: Move ghes_edac.force_load to ghes module parameter
+  ghes: Introduce a helper ghes_get_devices()
+  EDAC/ghes: Make ghes_edac a proper module to remove the dependency on
+    ghes
+  EDAC: Add the ghes_get_devices() check for chipset-specific edac
+    drivers
+  apei/ghes: Use unrcu_pointer for cmpxchg
+  EDAC/igen6: Return consistent errno when another edac driver is
+    enabled
+
+ drivers/acpi/apei/ghes.c       | 70 +++++++++++++++++++++++++---
+ drivers/edac/Kconfig           |  4 +-
+ drivers/edac/amd64_edac.c      |  3 ++
+ drivers/edac/armada_xp_edac.c  |  3 ++
+ drivers/edac/edac_module.h     |  1 +
+ drivers/edac/ghes_edac.c       | 83 ++++++++++++++++++++++------------
+ drivers/edac/i10nm_base.c      |  3 ++
+ drivers/edac/igen6_edac.c      |  5 +-
+ drivers/edac/layerscape_edac.c |  3 ++
+ drivers/edac/pnd2_edac.c       |  3 ++
+ drivers/edac/sb_edac.c         |  3 ++
+ drivers/edac/skx_base.c        |  3 ++
+ drivers/edac/thunderx_edac.c   |  3 ++
+ drivers/edac/xgene_edac.c      |  3 ++
+ drivers/firmware/efi/cper.c    |  3 ++
+ include/acpi/apei.h            |  2 +
+ include/acpi/ghes.h            | 34 ++++----------
+ 17 files changed, 166 insertions(+), 63 deletions(-)
+
+-- 
+2.25.1
 
