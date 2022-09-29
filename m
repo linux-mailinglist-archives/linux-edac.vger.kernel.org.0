@@ -2,34 +2,34 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5EF0C5F1707
-	for <lists+linux-edac@lfdr.de>; Sat,  1 Oct 2022 02:14:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0678E5F16F7
+	for <lists+linux-edac@lfdr.de>; Sat,  1 Oct 2022 02:14:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232405AbiJAAOb (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Fri, 30 Sep 2022 20:14:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33920 "EHLO
+        id S232233AbiJAAOW (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Fri, 30 Sep 2022 20:14:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232268AbiJAAOW (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Fri, 30 Sep 2022 20:14:22 -0400
+        with ESMTP id S231859AbiJAAOU (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Fri, 30 Sep 2022 20:14:20 -0400
 Received: from post.baikalelectronics.com (post.baikalelectronics.com [213.79.110.86])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 061FD1BE78B;
-        Fri, 30 Sep 2022 17:14:19 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6D2F81BE784;
+        Fri, 30 Sep 2022 17:14:15 -0700 (PDT)
 Received: from post.baikalelectronics.com (localhost.localdomain [127.0.0.1])
-        by post.baikalelectronics.com (Proxmox) with ESMTP id 35A7FE0EDD;
+        by post.baikalelectronics.com (Proxmox) with ESMTP id C8A69E0EDE;
         Fri, 30 Sep 2022 02:36:38 +0300 (MSK)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         baikalelectronics.ru; h=cc:cc:content-transfer-encoding
         :content-type:content-type:date:from:from:in-reply-to:message-id
         :mime-version:references:reply-to:subject:subject:to:to; s=post;
-         bh=5HTx6NrGNhUuUhPPQ4xkTclpyzTSLmPdDl9Zc08M8zY=; b=VSyQzXKxmT2M
-        q6sWVtySyHyvmyAynfpBVDz3I3jyWBF8G3hrVbR8IQcNZ95WKL6I4kMWCUolhMUO
-        YdfJMOIFf2U9mkCOE8fH8hlqANjhTIDLujdeOnRkmCMjr34vMFwvknx8BTvrl2L4
-        3dHy+17f3rr7IFvLIhKUpI9ZZq8yfB4=
+         bh=okIVpyfoGlEW1Hxvcm8w+CRE1E3C28Kn50cbDgxN1aw=; b=DoaSgVqbi6VV
+        tvW2KlYOXGxYxz5e9HaIf/DaByJs3heDLdMyB1I6VGMiUNMGQiAMg26XvQRP6D+W
+        h1vW66UZ5CpkHrOnNM0ianigCDTfukDYSRaWmzLVc0veCpvrNIgbLIb5RPX2R+xP
+        WF2Hfo10bX1OksN7gUIITsUHrYjndPQ=
 Received: from mail.baikal.int (mail.baikal.int [192.168.51.25])
-        by post.baikalelectronics.com (Proxmox) with ESMTP id 27EF4E0E70;
+        by post.baikalelectronics.com (Proxmox) with ESMTP id BD331E0E70;
         Fri, 30 Sep 2022 02:36:38 +0300 (MSK)
 Received: from localhost (192.168.168.10) by mail (192.168.51.25) with
- Microsoft SMTP Server (TLS) id 15.0.1395.4; Fri, 30 Sep 2022 02:36:38 +0300
+ Microsoft SMTP Server (TLS) id 15.0.1395.4; Fri, 30 Sep 2022 02:36:39 +0300
 From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
 To:     Michal Simek <michal.simek@xilinx.com>,
         Borislav Petkov <bp@alien8.de>,
@@ -48,9 +48,9 @@ CC:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
         Dinh Nguyen <dinguyen@kernel.org>,
         <linux-arm-kernel@lists.infradead.org>,
         <linux-edac@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH RESEND v3 10/18] EDAC/synopsys: Get corrected bit position
-Date:   Fri, 30 Sep 2022 02:35:22 +0300
-Message-ID: <20220929233530.13016-11-Sergey.Semin@baikalelectronics.ru>
+Subject: [PATCH RESEND v3 11/18] EDAC/synopsys: Read full data pattern on errors
+Date:   Fri, 30 Sep 2022 02:35:23 +0300
+Message-ID: <20220929233530.13016-12-Sergey.Semin@baikalelectronics.ru>
 X-Mailer: git-send-email 2.37.3
 In-Reply-To: <20220929233530.13016-1-Sergey.Semin@baikalelectronics.ru>
 References: <20220929233530.13016-1-Sergey.Semin@baikalelectronics.ru>
@@ -68,71 +68,77 @@ Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-Since the DQ-bus width is now available in the driver we can use it to
-calculate the bit-position corrected by the ECC engine. It can be done
-based on the offsets provided in the table [1]. Using info from that table
-let's introduce a new inline method snps_get_bitpos() which would provide
-the actual CE bit-position based on the value read from the
-ECCSTAT.corrected_bit_num field and the DQ-bus width. The method will be
-called if a corrected error is detected.
+DW uMCTL2 DDRC calculates ECC for the DQ-bus word. If non-Full bus width
+mode is activated the leftover DQ-bits will be padded with zeros, but the
+ECC syndrome is calculated for the whole width anyway [1]. For some reason
+the DW uMCTL2 DDRC driver currently doesn't read the whole SDRAM word in
+case of the ECC errors even though the 64-bit DQ-bus has been supported
+for a long time. Let's fix that by extending the data field of the ECC
+error info structure and reading the upper 32-bits part of the data
+pattern if an ECC error happens and the DDR controller has been configured
+with the 64-bits DQ bus. As before the data will be printed as a part of
+the custom error message passed to the edac_mc_handle_error() method.
 
 [1] DesignWare® Cores Enhanced Universal DDR Memory Controller (uMCTL2)
-    Databook, Version 3.91a, October 2020, p.426-427
+    Databook, Version 3.91a, October 2020, p.424-425
 
 Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
 ---
- drivers/edac/synopsys_edac.c | 24 ++++++++++++++++++++++++
- 1 file changed, 24 insertions(+)
+ drivers/edac/synopsys_edac.c | 13 +++++++++----
+ 1 file changed, 9 insertions(+), 4 deletions(-)
 
 diff --git a/drivers/edac/synopsys_edac.c b/drivers/edac/synopsys_edac.c
-index c0e5476d5c85..1cfbc5a2a564 100644
+index 1cfbc5a2a564..00417f368893 100644
 --- a/drivers/edac/synopsys_edac.c
 +++ b/drivers/edac/synopsys_edac.c
-@@ -10,6 +10,7 @@
- #include <linux/bits.h>
- #include <linux/edac.h>
- #include <linux/fs.h>
-+#include <linux/log2.h>
- #include <linux/module.h>
- #include <linux/platform_device.h>
- #include <linux/seq_file.h>
-@@ -357,6 +358,27 @@ struct snps_edac_priv {
- #endif
+@@ -309,7 +309,7 @@ struct snps_ecc_error_info {
+ 	u32 bank;
+ 	u32 bankgrp;
+ 	u32 bitpos;
+-	u32 data;
++	u64 data;
  };
  
-+/**
-+ * snps_get_bitpos - Get DQ-bus corrected bit position.
-+ * @bitnum:	Bit number retrieved from the ECCSTAT.corrected_bit_num field.
-+ * @dq_width:	Controller DQ-bus width.
-+ *
-+ * Return: actual corrected DQ-bus bit position starting from 0.
-+ */
-+static inline u32 snps_get_bitpos(u32 bitnum, enum snps_dq_width dq_width)
-+{
-+	/* ecc[0] bit */
-+	if (bitnum == 0)
-+		return BITS_PER_BYTE << dq_width;
-+
-+	/* ecc[1:x] bit */
-+	if (is_power_of_2(bitnum))
-+		return (BITS_PER_BYTE << dq_width) + ilog2(bitnum) + 1;
-+
-+	/* data[0:y] bit */
-+	return bitnum - ilog2(bitnum) - 2;
-+}
-+
  /**
-  * snps_get_error_info - Get the current ECC error info.
-  * @priv:	DDR memory controller private instance data.
-@@ -385,6 +407,8 @@ static int snps_get_error_info(struct snps_edac_priv *priv)
- 	if (!p->ce_cnt)
- 		goto ue_err;
+@@ -418,6 +418,8 @@ static int snps_get_error_info(struct snps_edac_priv *priv)
+ 	p->ceinfo.col = FIELD_GET(ECC_CEADDR1_COL_MASK, regval);
  
-+	p->ceinfo.bitpos = snps_get_bitpos(p->ceinfo.bitpos, priv->info.dq_width);
-+
- 	regval = readl(base + ECC_CEADDR0_OFST);
- 	p->ceinfo.row = FIELD_GET(ECC_CEADDR0_ROW_MASK, regval);
+ 	p->ceinfo.data = readl(base + ECC_CSYND0_OFST);
++	if (priv->info.dq_width == SNPS_DQ_64)
++		p->ceinfo.data |= (u64)readl(base + ECC_CSYND1_OFST) << 32;
  
+ 	edac_dbg(2, "ECCCSYN0: 0x%08X ECCCSYN1: 0x%08X ECCCSYN2: 0x%08X\n",
+ 		 readl(base + ECC_CSYND0_OFST), readl(base + ECC_CSYND1_OFST),
+@@ -436,6 +438,8 @@ static int snps_get_error_info(struct snps_edac_priv *priv)
+ 	p->ueinfo.col = FIELD_GET(ECC_CEADDR1_COL_MASK, regval);
+ 
+ 	p->ueinfo.data = readl(base + ECC_UESYND0_OFST);
++	if (priv->info.dq_width == SNPS_DQ_64)
++		p->ueinfo.data |= (u64)readl(base + ECC_UESYND1_OFST) << 32;
+ 
+ out:
+ 	spin_lock_irqsave(&priv->lock, flags);
+@@ -466,7 +470,7 @@ static void snps_handle_error(struct mem_ctl_info *mci, struct snps_ecc_status *
+ 		pinf = &p->ceinfo;
+ 
+ 		snprintf(priv->message, SNPS_EDAC_MSG_SIZE,
+-			 "Row %d Col %d Bank %d Bank Group %d Bit %d Data 0x%08x",
++			 "Row %d Col %d Bank %d Bank Group %d Bit %d Data 0x%08llx",
+ 			 pinf->row, pinf->col, pinf->bank, pinf->bankgrp,
+ 			 pinf->bitpos, pinf->data);
+ 
+@@ -479,8 +483,9 @@ static void snps_handle_error(struct mem_ctl_info *mci, struct snps_ecc_status *
+ 		pinf = &p->ueinfo;
+ 
+ 		snprintf(priv->message, SNPS_EDAC_MSG_SIZE,
+-			 "Row %d Col %d Bank %d Bank Group %d",
+-			 pinf->row, pinf->col, pinf->bank, pinf->bankgrp);
++			 "Row %d Col %d Bank %d Bank Group %d Data 0x%08llx",
++			 pinf->row, pinf->col, pinf->bank, pinf->bankgrp,
++			 pinf->data);
+ 
+ 		edac_mc_handle_error(HW_EVENT_ERR_UNCORRECTED, mci,
+ 				     p->ue_cnt, 0, 0, 0, 0, 0, -1,
 -- 
 2.37.3
 
