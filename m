@@ -2,131 +2,147 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 05AAF5F1725
-	for <lists+linux-edac@lfdr.de>; Sat,  1 Oct 2022 02:21:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C97715F27AF
+	for <lists+linux-edac@lfdr.de>; Mon,  3 Oct 2022 04:43:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232786AbiJAAVG (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Fri, 30 Sep 2022 20:21:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43978 "EHLO
+        id S229506AbiJCCmu (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Sun, 2 Oct 2022 22:42:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232660AbiJAAUg (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Fri, 30 Sep 2022 20:20:36 -0400
-Received: from post.baikalelectronics.com (post.baikalelectronics.com [213.79.110.86])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9D59336DC8;
-        Fri, 30 Sep 2022 17:19:11 -0700 (PDT)
-Received: from post.baikalelectronics.com (localhost.localdomain [127.0.0.1])
-        by post.baikalelectronics.com (Proxmox) with ESMTP id CE36EE0EF4;
-        Fri, 30 Sep 2022 02:41:35 +0300 (MSK)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        baikalelectronics.ru; h=cc:cc:content-transfer-encoding
-        :content-type:content-type:date:from:from:in-reply-to:message-id
-        :mime-version:references:reply-to:subject:subject:to:to; s=post;
-         bh=tIFko1L6or88/GVnsEDwf0248T9U3azU2y4h1UIalJo=; b=nXFrPkkrCooC
-        cJf+DC2Xy1Xgu8TZDAoy5YzJXJA5J4axFdnC3opfES1zF87HNqaZLto+5mqgQXed
-        hpLKnda9hvmyw3J53/pivKYRjYrZ24tOOI0dAJZL3rHsIlUbxYICNKxBPAOqA6+/
-        9rgsdEzvbi39SST5OoKnU8OTqMczQec=
-Received: from mail.baikal.int (mail.baikal.int [192.168.51.25])
-        by post.baikalelectronics.com (Proxmox) with ESMTP id C2824E0EEA;
-        Fri, 30 Sep 2022 02:41:35 +0300 (MSK)
-Received: from localhost (192.168.168.10) by mail (192.168.51.25) with
- Microsoft SMTP Server (TLS) id 15.0.1395.4; Fri, 30 Sep 2022 02:41:36 +0300
-From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Michal Simek <michal.simek@xilinx.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Tony Luck <tony.luck@intel.com>,
-        James Morse <james.morse@arm.com>,
-        Robert Richter <rric@kernel.org>
-CC:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Michail Ivanov <Michail.Ivanov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        Punnaiah Choudary Kalluri 
-        <punnaiah.choudary.kalluri@xilinx.com>,
-        Manish Narani <manish.narani@xilinx.com>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-edac@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH v3 13/13] EDAC/synopsys: Add Baikal-T1 DDRC support
-Date:   Fri, 30 Sep 2022 02:41:21 +0300
-Message-ID: <20220929234121.13955-14-Sergey.Semin@baikalelectronics.ru>
-X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220929234121.13955-1-Sergey.Semin@baikalelectronics.ru>
-References: <20220929234121.13955-1-Sergey.Semin@baikalelectronics.ru>
+        with ESMTP id S229494AbiJCCmt (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Sun, 2 Oct 2022 22:42:49 -0400
+Received: from mail-oi1-x235.google.com (mail-oi1-x235.google.com [IPv6:2607:f8b0:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0CE62BE19
+        for <linux-edac@vger.kernel.org>; Sun,  2 Oct 2022 19:42:47 -0700 (PDT)
+Received: by mail-oi1-x235.google.com with SMTP id w13so10166362oiw.8
+        for <linux-edac@vger.kernel.org>; Sun, 02 Oct 2022 19:42:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=sifive.com; s=google;
+        h=to:subject:message-id:date:from:in-reply-to:references:mime-version
+         :from:to:cc:subject:date;
+        bh=kZ54JuJ/U11o6QZTC2tSUVSElKXkiA2E63Q+E0+5Ows=;
+        b=M1kro5I7v0dN31CoUeGS0m8+9Yf45ZG6QCrky+SzJN7D4wnopN5pJ1iD4DKfrqhsd7
+         934qA5PX17Ao3ydsvtEhSgZTHMUBPtu9uNl6vusKBV/tkvItvV7gEknxWTsRhMdrLnr7
+         aTywdmbcaSLkjs79ZkeUk79OrjF/ylKboifLPFppb3jJFw2413QcVXHbF/Q3wCsNNnLE
+         iOITOomXo7ldNNpnYi9z0wDF/PInT0aSIDKnQloOkU8uB+WqmqBx36HVPhH8yLTBe46j
+         f4uOuwUtsnAaxRH9Z1trhygCxS190M6IkQj2h2d4WdUJiqa8Km70cxZ6PfucdC7AljWf
+         wOXw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:subject:message-id:date:from:in-reply-to:references:mime-version
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=kZ54JuJ/U11o6QZTC2tSUVSElKXkiA2E63Q+E0+5Ows=;
+        b=030X0Yy/cTrI0weY1E900pNXoXCCnn/yA/6Z1+HL5WPUcHp/9EepdCCl9hysUgTHyC
+         IQmIQ5MJLND42DhN8322doOkDQKbsbXG/yT40FmBO+ES/KoEm86yoVZkvzPepSM38Fpy
+         MyvvMNIZi0fegCNT1nAkHIkeu9sAwin/kGKyg5bidHj1OWmMIKORH49Kemm5lYY7l1v/
+         t0FgA+x8EmN3pdMS5E8MNfdIXIqzgMKYMc4Zwi4sV45bPXA7Dhyl0C29KoJ+e17vMZfT
+         +I5TUW+d1AX9sbawx8wqXIlDe5v8NZaMnuiyNMUkEjP6dt50owrk56rcZjwrnw8LZUEm
+         jmJg==
+X-Gm-Message-State: ACrzQf34x6qwFqvm66l02R7/WraxSIQtNzIOCvQptFshE/xlzAEsjMOY
+        mX5xs8FMCA3US1wFYkfe8z+HjtLFT4aQJdx+OLgQkQ==
+X-Google-Smtp-Source: AMsMyM5DzDNSJT7AYl3fCNPwDNPYomK9PSogJsIgE6W4jeqpRQGpNrt9ZTjcXZGRKMdL84uSEn0+9KxizakSfJAtYG8=
+X-Received: by 2002:a05:6808:150c:b0:350:df64:edf6 with SMTP id
+ u12-20020a056808150c00b00350df64edf6mr3125398oiw.283.1664764966993; Sun, 02
+ Oct 2022 19:42:46 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [192.168.168.10]
-X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
+References: <20220913061817.22564-1-zong.li@sifive.com> <CANXhq0qG-aEEHxWbtRgC+RO-wC36MtPUfu+eMpX89wOtqGJL0w@mail.gmail.com>
+In-Reply-To: <CANXhq0qG-aEEHxWbtRgC+RO-wC36MtPUfu+eMpX89wOtqGJL0w@mail.gmail.com>
+From:   Zong Li <zong.li@sifive.com>
+Date:   Mon, 3 Oct 2022 10:42:34 +0800
+Message-ID: <CANXhq0qnvUytyLOgGUiTP3nnic=FgRrezM_9vYwaGNaooU9J3w@mail.gmail.com>
+Subject: Re: [PATCH v5 0/7] Use composable cache instead of L2 cache
+To:     Rob Herring <robh+dt@kernel.org>,
+        krzysztof.kozlowski+dt@linaro.org,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Greentime Hu <greentime.hu@sifive.com>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Ben Dooks <ben.dooks@sifive.com>, bp@alien8.de,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        linux-edac@vger.kernel.org,
+        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-Baikal-T1 SoC is equipped with the DW uMCTl2 DDRC of v2.61a with 32-bit
-DQ-bus accepting DDR2/DDR3 SDRAMs of up to 2 ranks, 1:2 HIF/SDRAM clocks
-rate ratio, HIF interface burst length of 8 Full DQ-bus words, 40-bit
-System/Application address width and 128-bits data width, 3 System address
-regions with block size 256MB. There is SEC/DED ECC capability with Scrub
-(RMW) and Scrubber features.
+On Wed, Sep 21, 2022 at 1:09 PM Zong Li <zong.li@sifive.com> wrote:
+>
+> On Tue, Sep 13, 2022 at 2:18 PM Zong Li <zong.li@sifive.com> wrote:
+> >
+> > Since composable cache may be L3 cache if private L2 cache exists, we
+> > should use its original name "composable cache" to prevent confusion.
+> >
+> > This patchset contains the modification which is related to ccache, such
+> > as DT binding and EDAC driver.
+> >
+> > The DT binding is based on top of Conor's patch, it has got ready for
+> > merging, and it looks that it would be taken into the next few 6.0-rc
+> > version. If there is any change, the next version of this series will be
+> > posted as well.
+> > https://lore.kernel.org/linux-riscv/20220825180417.1259360-2-mail@conchuod.ie/
+> >
+> > Change log in v5:
+> >  - Add a patch to modify aux vector for sysconf
+> >
+> > Change log in v4:
+> >  - Change the return value from from ENODEV to ENOENT
+> >  - Apply pr_fmt refinement to all pr_err
+> >
+> > Change log in v3:
+> >  - Merged the EDAC patch into L2 rename patch
+> >  - Define the macro for register shift and refine the relative code
+> >  - Fix some indent issues
+> >
+> > Change log in v2:
+> >  - Separate the rename and diff to different patches
+> >  - Rebase the dt-bindings based on Conor's modification
+> >  - Include the patches of Ben for refinement of printing message
+> >
+> > Ben Dooks (2):
+> >   soc: sifive: ccache: reduce printing on init
+> >   soc: sifive: ccache: use pr_fmt() to remove CCACHE: prefixes
+> >
+> > Greentime Hu (2):
+> >   soc: sifive: ccache: Rename SiFive L2 cache to Composable cache.
+> >   riscv: Add cache information in AUX vector
+> >
+> > Zong Li (3):
+> >   dt-bindings: sifive-ccache: change Sifive L2 cache to Composable cache
+> >   soc: sifive: ccache: determine the cache level from dts
+> >   soc: sifive: ccache: define the macro for the register shifts
+> >
+> >  ...five-l2-cache.yaml => sifive,ccache0.yaml} |  28 ++-
+> >  arch/riscv/include/asm/elf.h                  |   4 +
+> >  arch/riscv/include/uapi/asm/auxvec.h          |   4 +-
+> >  drivers/edac/Kconfig                          |   2 +-
+> >  drivers/edac/sifive_edac.c                    |  12 +-
+> >  drivers/soc/sifive/Kconfig                    |   6 +-
+> >  drivers/soc/sifive/Makefile                   |   2 +-
+> >  .../{sifive_l2_cache.c => sifive_ccache.c}    | 200 ++++++++++--------
+> >  .../{sifive_l2_cache.h => sifive_ccache.h}    |  16 +-
+> >  9 files changed, 158 insertions(+), 116 deletions(-)
+> >  rename Documentation/devicetree/bindings/riscv/{sifive-l2-cache.yaml => sifive,ccache0.yaml} (83%)
+> >  rename drivers/soc/sifive/{sifive_l2_cache.c => sifive_ccache.c} (31%)
+> >  rename include/soc/sifive/{sifive_l2_cache.h => sifive_ccache.h} (12%)
+> >
+> > --
+> > 2.17.1
+> >
+>
+> Hi Palmer,
+> I was wondering if this series looks good to you, and could you please
+> help us to take it into riscv-tree?
+> Thanks.
 
-Since the Baikal-T1 DDR controller is capable of the ECC let's add it to
-the DW uMCTL2 DDRC EDAC driver. The most of the parameters above will be
-autodetected except HIF burst length and SAR block size, which will be set
-by means of the Baikal-T1-specific initialization method. The controller
-compatible string "baikal,bt1-ddrc" will be used to attach the driver to
-the kernel device. It's chosen in accordance with the just updated
-DT-bindings.
-
-Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
----
- drivers/edac/synopsys_edac.c | 15 +++++++++++++++
- 1 file changed, 15 insertions(+)
-
-diff --git a/drivers/edac/synopsys_edac.c b/drivers/edac/synopsys_edac.c
-index 0a00e80ddeb9..24cd8f23242a 100644
---- a/drivers/edac/synopsys_edac.c
-+++ b/drivers/edac/synopsys_edac.c
-@@ -1342,6 +1342,20 @@ static int zynqmp_init_plat(struct snps_edac_priv *priv)
- 	return 0;
- }
- 
-+/*
-+ * bt1_init_plat - Baikal-T1-specific platform initialization.
-+ * @priv:	DDR memory controller private data.
-+ *
-+ * Return: always zero.
-+ */
-+static int bt1_init_plat(struct snps_edac_priv *priv)
-+{
-+	priv->info.hif_burst_len = SNPS_DDR_BL8;
-+	priv->sys_app_map.minsize = DDR_MIN_SARSIZE;
-+
-+	return 0;
-+}
-+
- /**
-  * snps_get_dtype - Return the controller memory width.
-  * @mstr:	Master CSR value.
-@@ -2470,6 +2484,7 @@ static int snps_mc_remove(struct platform_device *pdev)
- 
- static const struct of_device_id snps_edac_match[] = {
- 	{ .compatible = "xlnx,zynqmp-ddrc-2.40a", .data = zynqmp_init_plat },
-+	{ .compatible = "baikal,bt1-ddrc", .data = bt1_init_plat },
- 	{ .compatible = "snps,ddrc-3.80a" },
- 	{ }
- };
--- 
-2.37.3
-
-
+Hi Palmer,
+The new merge window is going to open, do you think is it suitable to
+merge this series this time? Thanks.
