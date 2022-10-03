@@ -2,69 +2,68 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C97715F27AF
-	for <lists+linux-edac@lfdr.de>; Mon,  3 Oct 2022 04:43:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5373A5F28F3
+	for <lists+linux-edac@lfdr.de>; Mon,  3 Oct 2022 09:04:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229506AbiJCCmu (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Sun, 2 Oct 2022 22:42:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43100 "EHLO
+        id S229618AbiJCHEW (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Mon, 3 Oct 2022 03:04:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229494AbiJCCmt (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Sun, 2 Oct 2022 22:42:49 -0400
-Received: from mail-oi1-x235.google.com (mail-oi1-x235.google.com [IPv6:2607:f8b0:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0CE62BE19
-        for <linux-edac@vger.kernel.org>; Sun,  2 Oct 2022 19:42:47 -0700 (PDT)
-Received: by mail-oi1-x235.google.com with SMTP id w13so10166362oiw.8
-        for <linux-edac@vger.kernel.org>; Sun, 02 Oct 2022 19:42:47 -0700 (PDT)
+        with ESMTP id S229605AbiJCHEV (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Mon, 3 Oct 2022 03:04:21 -0400
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B914633E27
+        for <linux-edac@vger.kernel.org>; Mon,  3 Oct 2022 00:04:20 -0700 (PDT)
+Received: by mail-pj1-x102a.google.com with SMTP id h8-20020a17090a054800b00205ccbae31eso14426069pjf.5
+        for <linux-edac@vger.kernel.org>; Mon, 03 Oct 2022 00:04:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sifive.com; s=google;
-        h=to:subject:message-id:date:from:in-reply-to:references:mime-version
-         :from:to:cc:subject:date;
-        bh=kZ54JuJ/U11o6QZTC2tSUVSElKXkiA2E63Q+E0+5Ows=;
-        b=M1kro5I7v0dN31CoUeGS0m8+9Yf45ZG6QCrky+SzJN7D4wnopN5pJ1iD4DKfrqhsd7
-         934qA5PX17Ao3ydsvtEhSgZTHMUBPtu9uNl6vusKBV/tkvItvV7gEknxWTsRhMdrLnr7
-         aTywdmbcaSLkjs79ZkeUk79OrjF/ylKboifLPFppb3jJFw2413QcVXHbF/Q3wCsNNnLE
-         iOITOomXo7ldNNpnYi9z0wDF/PInT0aSIDKnQloOkU8uB+WqmqBx36HVPhH8yLTBe46j
-         f4uOuwUtsnAaxRH9Z1trhygCxS190M6IkQj2h2d4WdUJiqa8Km70cxZ6PfucdC7AljWf
-         wOXw==
+        d=linaro.org; s=google;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date;
+        bh=Jcb3UBBRzz+mGxXYoE2+emv0xptsMTPozlXn5m1i4W8=;
+        b=N+rVwqMabhmxD8pIXwz/aVabWlGDyVggecTor4pV2g6UnfdhatAY4k3yl4wO98ZNfF
+         a5McjKhjjdF3ibhdHmIGqcpg/jY5ffsrJyUnoevXC03WUY9v1izlQ/zx8LUtUdS45t5T
+         GNqINUu/Qe437UUnwlEbjHFH1zRB7kJZRhj2ERboX5mnKf6rq6qlgUyWFic9o4KliFNw
+         AMiXohlUkoTiqjqc8dnf01W+3f9pf6wRxCejvrqIXvj86VczTMXtENSNH/ejzxGy2iFS
+         TXppcDEq2kiwydHXBmKa2ML3vJQJUXUQJIo5Vxm/3FJxEs76prujPaL2j5bIIKAsOyat
+         zfrw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:in-reply-to:references:mime-version
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
          :x-gm-message-state:from:to:cc:subject:date;
-        bh=kZ54JuJ/U11o6QZTC2tSUVSElKXkiA2E63Q+E0+5Ows=;
-        b=030X0Yy/cTrI0weY1E900pNXoXCCnn/yA/6Z1+HL5WPUcHp/9EepdCCl9hysUgTHyC
-         IQmIQ5MJLND42DhN8322doOkDQKbsbXG/yT40FmBO+ES/KoEm86yoVZkvzPepSM38Fpy
-         MyvvMNIZi0fegCNT1nAkHIkeu9sAwin/kGKyg5bidHj1OWmMIKORH49Kemm5lYY7l1v/
-         t0FgA+x8EmN3pdMS5E8MNfdIXIqzgMKYMc4Zwi4sV45bPXA7Dhyl0C29KoJ+e17vMZfT
-         +I5TUW+d1AX9sbawx8wqXIlDe5v8NZaMnuiyNMUkEjP6dt50owrk56rcZjwrnw8LZUEm
-         jmJg==
-X-Gm-Message-State: ACrzQf34x6qwFqvm66l02R7/WraxSIQtNzIOCvQptFshE/xlzAEsjMOY
-        mX5xs8FMCA3US1wFYkfe8z+HjtLFT4aQJdx+OLgQkQ==
-X-Google-Smtp-Source: AMsMyM5DzDNSJT7AYl3fCNPwDNPYomK9PSogJsIgE6W4jeqpRQGpNrt9ZTjcXZGRKMdL84uSEn0+9KxizakSfJAtYG8=
-X-Received: by 2002:a05:6808:150c:b0:350:df64:edf6 with SMTP id
- u12-20020a056808150c00b00350df64edf6mr3125398oiw.283.1664764966993; Sun, 02
- Oct 2022 19:42:46 -0700 (PDT)
+        bh=Jcb3UBBRzz+mGxXYoE2+emv0xptsMTPozlXn5m1i4W8=;
+        b=zOZI5gomlJmUZWOKkHwgjv/9oENv2N88jZOX9fPtg5SMuPGKCFJS/JfYQ2sOiNDtEA
+         RxGkb8piwDnjlTlobdThfO3H8FWXloBstE5XImT9Olrnw1pHYzszrhDINll/0AAcDsFF
+         jjoCrW6TmV1c4aC/fj+1XzJPR+dPJu7HdZ6nsSmXTKH8EhUhu8tTx60YheAWUAkhzpoP
+         q7mRUcjrY8A09mRr3fZ/8+Xk2JXexy6Esy4yO009bUgOQY68PWoZGhhkIOfxvcSAl9tZ
+         fX7muoXHbV4+d2pABiK27sYzZSuq5YTBcYevQZqV+ujrcCr0u+oHmJz3lGryRoGsytHX
+         NKTg==
+X-Gm-Message-State: ACrzQf31bUV4k3Ej7zwrA/U3Fh7Dk4scBG3CVkg3Qf9Hs6spAXYs8SyH
+        FxFaMlUm47ZHXEkRp7y3OSeM
+X-Google-Smtp-Source: AMsMyM7D4iiJFu/+i+8olYH+0b+Wf+Ao6TXBxAphSavaF8S5gy8jINq4ng0gwpXE+DiZYA+RrINpCQ==
+X-Received: by 2002:a17:902:e744:b0:178:6d7b:6d08 with SMTP id p4-20020a170902e74400b001786d7b6d08mr21355787plf.128.1664780660195;
+        Mon, 03 Oct 2022 00:04:20 -0700 (PDT)
+Received: from thinkpad ([220.158.159.17])
+        by smtp.gmail.com with ESMTPSA id mn23-20020a17090b189700b00205d70ccfeesm6979092pjb.33.2022.10.03.00.04.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 03 Oct 2022 00:04:19 -0700 (PDT)
+Date:   Mon, 3 Oct 2022 12:34:15 +0530
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     bjorn.andersson@linaro.org, bp@alien8.de, mchehab@kernel.org
+Cc:     james.morse@arm.com, rric@kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-edac@vger.kernel.org,
+        linux-kernel@vger.kernel.org, quic_tsoni@quicinc.com,
+        quic_saipraka@quicinc.com
+Subject: Re: [PATCH v3 0/5] Fix crash when using Qcom LLCC/EDAC drivers
+Message-ID: <20221003070415.GC5398@thinkpad>
+References: <20220825043859.30066-1-manivannan.sadhasivam@linaro.org>
 MIME-Version: 1.0
-References: <20220913061817.22564-1-zong.li@sifive.com> <CANXhq0qG-aEEHxWbtRgC+RO-wC36MtPUfu+eMpX89wOtqGJL0w@mail.gmail.com>
-In-Reply-To: <CANXhq0qG-aEEHxWbtRgC+RO-wC36MtPUfu+eMpX89wOtqGJL0w@mail.gmail.com>
-From:   Zong Li <zong.li@sifive.com>
-Date:   Mon, 3 Oct 2022 10:42:34 +0800
-Message-ID: <CANXhq0qnvUytyLOgGUiTP3nnic=FgRrezM_9vYwaGNaooU9J3w@mail.gmail.com>
-Subject: Re: [PATCH v5 0/7] Use composable cache instead of L2 cache
-To:     Rob Herring <robh+dt@kernel.org>,
-        krzysztof.kozlowski+dt@linaro.org,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Greentime Hu <greentime.hu@sifive.com>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Ben Dooks <ben.dooks@sifive.com>, bp@alien8.de,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        linux-edac@vger.kernel.org,
-        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220825043859.30066-1-manivannan.sadhasivam@linaro.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -74,75 +73,64 @@ Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Wed, Sep 21, 2022 at 1:09 PM Zong Li <zong.li@sifive.com> wrote:
->
-> On Tue, Sep 13, 2022 at 2:18 PM Zong Li <zong.li@sifive.com> wrote:
-> >
-> > Since composable cache may be L3 cache if private L2 cache exists, we
-> > should use its original name "composable cache" to prevent confusion.
-> >
-> > This patchset contains the modification which is related to ccache, such
-> > as DT binding and EDAC driver.
-> >
-> > The DT binding is based on top of Conor's patch, it has got ready for
-> > merging, and it looks that it would be taken into the next few 6.0-rc
-> > version. If there is any change, the next version of this series will be
-> > posted as well.
-> > https://lore.kernel.org/linux-riscv/20220825180417.1259360-2-mail@conchuod.ie/
-> >
-> > Change log in v5:
-> >  - Add a patch to modify aux vector for sysconf
-> >
-> > Change log in v4:
-> >  - Change the return value from from ENODEV to ENOENT
-> >  - Apply pr_fmt refinement to all pr_err
-> >
-> > Change log in v3:
-> >  - Merged the EDAC patch into L2 rename patch
-> >  - Define the macro for register shift and refine the relative code
-> >  - Fix some indent issues
-> >
-> > Change log in v2:
-> >  - Separate the rename and diff to different patches
-> >  - Rebase the dt-bindings based on Conor's modification
-> >  - Include the patches of Ben for refinement of printing message
-> >
-> > Ben Dooks (2):
-> >   soc: sifive: ccache: reduce printing on init
-> >   soc: sifive: ccache: use pr_fmt() to remove CCACHE: prefixes
-> >
-> > Greentime Hu (2):
-> >   soc: sifive: ccache: Rename SiFive L2 cache to Composable cache.
-> >   riscv: Add cache information in AUX vector
-> >
-> > Zong Li (3):
-> >   dt-bindings: sifive-ccache: change Sifive L2 cache to Composable cache
-> >   soc: sifive: ccache: determine the cache level from dts
-> >   soc: sifive: ccache: define the macro for the register shifts
-> >
-> >  ...five-l2-cache.yaml => sifive,ccache0.yaml} |  28 ++-
-> >  arch/riscv/include/asm/elf.h                  |   4 +
-> >  arch/riscv/include/uapi/asm/auxvec.h          |   4 +-
-> >  drivers/edac/Kconfig                          |   2 +-
-> >  drivers/edac/sifive_edac.c                    |  12 +-
-> >  drivers/soc/sifive/Kconfig                    |   6 +-
-> >  drivers/soc/sifive/Makefile                   |   2 +-
-> >  .../{sifive_l2_cache.c => sifive_ccache.c}    | 200 ++++++++++--------
-> >  .../{sifive_l2_cache.h => sifive_ccache.h}    |  16 +-
-> >  9 files changed, 158 insertions(+), 116 deletions(-)
-> >  rename Documentation/devicetree/bindings/riscv/{sifive-l2-cache.yaml => sifive,ccache0.yaml} (83%)
-> >  rename drivers/soc/sifive/{sifive_l2_cache.c => sifive_ccache.c} (31%)
-> >  rename include/soc/sifive/{sifive_l2_cache.h => sifive_ccache.h} (12%)
-> >
-> > --
-> > 2.17.1
-> >
->
-> Hi Palmer,
-> I was wondering if this series looks good to you, and could you please
-> help us to take it into riscv-tree?
-> Thanks.
+On Thu, Aug 25, 2022 at 10:08:54AM +0530, Manivannan Sadhasivam wrote:
+> Hello,
+> 
+> This series fixes the crash seen on the Qualcomm SM8450 chipset with the
+> LLCC/EDAC drivers. The problem was due to the Qcom EDAC driver using the
+> fixed LLCC register offsets for detecting the LLCC errors.
+> 
+> This seems to have worked for SoCs till SM8450. But in SM8450, the LLCC
+> register offsets were changed. So accessing the fixed offsets causes the
+> crash on this platform.
+> 
+> So for fixing this issue, and also to make it work on future SoCs, let's
+> pass the LLCC offsets from the Qcom LLCC driver based on the individual
+> SoCs and let the EDAC driver make use of them.
+> 
+> This series has been tested on SM8450 based dev board.
+> 
 
-Hi Palmer,
-The new merge window is going to open, do you think is it suitable to
-merge this series this time? Thanks.
+Since the LLCC patches are already merged, can we get the EDAC patches to be
+merged for v6.1?
+
+Thanks,
+Mani
+
+> Thanks,
+> Mani
+> 
+> Changes in v3:
+> 
+> * Instead of using SoC specific register offset naming convention, used
+>   LLCC version based as suggested by Sai
+> * Fixed the existing reg_offset naming convention to clearly represent
+>   the LLCC version from which the offsets were changed
+> * Added Sai's Acked-by to MAINTAINERS patch
+> * Added a new patch that removes an extra error no assignment
+> 
+> Changes in v2:
+> 
+> * Volunteered myself as a maintainer for the EDAC driver since the current
+>   maintainers have left Qualcomm and I couldn't get hold of them.
+> 
+> Manivannan Sadhasivam (5):
+>   soc: qcom: llcc: Rename reg_offset structs to reflect LLCC version
+>   soc: qcom: llcc: Pass LLCC version based register offsets to EDAC
+>     driver
+>   EDAC/qcom: Get rid of hardcoded register offsets
+>   EDAC/qcom: Remove extra error no assignment in qcom_llcc_core_setup()
+>   MAINTAINERS: Add myself as the maintainer for qcom_edac driver
+> 
+>  MAINTAINERS                        |   3 +-
+>  drivers/edac/qcom_edac.c           | 119 ++++++++++++++---------------
+>  drivers/soc/qcom/llcc-qcom.c       |  92 +++++++++++++++++++---
+>  include/linux/soc/qcom/llcc-qcom.h |  36 +++++++--
+>  4 files changed, 170 insertions(+), 80 deletions(-)
+> 
+> -- 
+> 2.25.1
+> 
+
+-- 
+மணிவண்ணன் சதாசிவம்
