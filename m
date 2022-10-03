@@ -2,23 +2,23 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF2665F3346
+	by mail.lfdr.de (Postfix) with ESMTP id 5C3B15F3345
 	for <lists+linux-edac@lfdr.de>; Mon,  3 Oct 2022 18:18:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229593AbiJCQSC (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Mon, 3 Oct 2022 12:18:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35882 "EHLO
+        id S229534AbiJCQSB (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Mon, 3 Oct 2022 12:18:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229624AbiJCQRv (ORCPT
+        with ESMTP id S229593AbiJCQRv (ORCPT
         <rfc822;linux-edac@vger.kernel.org>); Mon, 3 Oct 2022 12:17:51 -0400
 Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B67B356D8
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E171E356E2
         for <linux-edac@vger.kernel.org>; Mon,  3 Oct 2022 09:17:42 -0700 (PDT)
-Received: from fraeml706-chm.china.huawei.com (unknown [172.18.147.226])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4Mh5YZ4qTgz67MmR;
-        Tue,  4 Oct 2022 00:16:18 +0800 (CST)
+Received: from fraeml705-chm.china.huawei.com (unknown [172.18.147.200])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4Mh5Yb0d5Sz67yc5;
+        Tue,  4 Oct 2022 00:16:19 +0800 (CST)
 Received: from lhrpeml500006.china.huawei.com (7.191.161.198) by
- fraeml706-chm.china.huawei.com (10.206.15.55) with Microsoft SMTP Server
+ fraeml705-chm.china.huawei.com (10.206.15.54) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
  15.1.2375.31; Mon, 3 Oct 2022 18:17:39 +0200
 Received: from P_UKIT01-A7bmah.china.huawei.com (10.48.152.147) by
@@ -31,9 +31,9 @@ CC:     <linuxarm@huawei.com>, <tanxiaofei@huawei.com>,
         <jonathan.cameron@huawei.com>, <prime.zeng@hisilicon.com>,
         <luoshengwei@huawei.com>, <panjunchong@hisilicon.com>,
         <fenglei47@h-partners.com>, <shiju.jose@huawei.com>
-Subject: [PATCH v2 02/10] rasdaemon: Support cpu fault isolation for recoverable errors
-Date:   Mon, 3 Oct 2022 17:17:34 +0100
-Message-ID: <20221003161742.1697-3-shiju.jose@huawei.com>
+Subject: [PATCH v2 03/10] rasdaemon: Modify recording Hisilicon common error data
+Date:   Mon, 3 Oct 2022 17:17:35 +0100
+Message-ID: <20221003161742.1697-4-shiju.jose@huawei.com>
 X-Mailer: git-send-email 2.26.0.windows.1
 In-Reply-To: <20221003161742.1697-1-shiju.jose@huawei.com>
 References: <20221003161742.1697-1-shiju.jose@huawei.com>
@@ -53,149 +53,228 @@ Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-From: Shengwei Luo <luoshengwei@huawei.com>
+From: Shiju Jose <shiju.jose@huawei.com>
 
-When the recoverable errors in cpu core occurred, try to offline
-the related cpu core.
+The error statistics for the Hisilicon common
+error need to do based on module, error severity etc.
 
-Signed-off-by: Shengwei Luo <luoshengwei@huawei.com>
-Signed-off-by: Junchong Pan <panjunchong@hisilicon.com>
-Signed-off-by: Lei Feng <fenglei47@h-partners.com>
+Modify recording Hisilicon common error data as separate fields
+in the sql db table instead of the combined single field.
+
 Signed-off-by: Shiju Jose <shiju.jose@huawei.com>
 ---
- ras-arm-handler.c   | 22 +++++++++++++++++++---
- ras-cpu-isolation.c | 17 +++++++++++++++++
- ras-cpu-isolation.h |  4 +++-
- 3 files changed, 39 insertions(+), 4 deletions(-)
+ non-standard-hisilicon.c | 126 ++++++++++++++++++++++++++++++++-------
+ 1 file changed, 104 insertions(+), 22 deletions(-)
 
-diff --git a/ras-arm-handler.c b/ras-arm-handler.c
-index 9c7a3c3..a0dfc51 100644
---- a/ras-arm-handler.c
-+++ b/ras-arm-handler.c
-@@ -26,6 +26,7 @@
+diff --git a/non-standard-hisilicon.c b/non-standard-hisilicon.c
+index 1432163..d1e1774 100644
+--- a/non-standard-hisilicon.c
++++ b/non-standard-hisilicon.c
+@@ -17,6 +17,7 @@
+ #include "non-standard-hisilicon.h"
  
- #define ARM_ERR_VALID_ERROR_COUNT BIT(0)
- #define ARM_ERR_VALID_FLAGS BIT(1)
-+#define BIT2 2
+ #define HISI_BUF_LEN	2048
++#define HISI_PCIE_INFO_BUF_LEN	256
  
- void display_raw_data(struct trace_seq *s,
- 		const uint8_t *buf,
-@@ -47,7 +48,20 @@ void display_raw_data(struct trace_seq *s,
- }
- 
- #ifdef HAVE_CPU_FAULT_ISOLATION
--static int count_errors(struct ras_arm_event *ev)
-+static int is_core_failure(struct ras_arm_err_info *err_info)
-+{
-+	if (err_info->validation_bits & ARM_ERR_VALID_FLAGS) {
-+		/*
-+		 * core failure:
-+		 * Bit 0\1\3: (at lease 1)
-+		 * Bit 2: 0
-+		 */
-+		return (err_info->flags & 0xf) && !(err_info->flags & (0x1 << BIT2));
-+	}
-+	return 0;
-+}
-+
-+static int count_errors(struct ras_arm_event *ev, int sev)
- {
- 	struct ras_arm_err_info *err_info;
- 	int num_pei;
-@@ -75,6 +89,8 @@ static int count_errors(struct ras_arm_event *ev)
- 			 */
- 			error_count = err_info->multiple_error + 1;
- 		}
-+		if (sev == GHES_SEV_RECOVERABLE && !is_core_failure(err_info))
-+			error_count = 0;
- 
- 		num += error_count;
- 		err_info += 1;
-@@ -118,8 +134,8 @@ static int ras_handle_cpu_error(struct trace_seq *s,
- 	}
- 	trace_seq_printf(s, "\n severity: %s", severity);
- 
--	if (val == GHES_SEV_CORRECTED) {
--		int nums = count_errors(ev);
-+	if (val == GHES_SEV_CORRECTED || val == GHES_SEV_RECOVERABLE) {
-+		int nums = count_errors(ev, val);
- 
- 		if (nums > 0) {
- 			err_info.nums = nums;
-diff --git a/ras-cpu-isolation.c b/ras-cpu-isolation.c
-index 1694a08..90633fd 100644
---- a/ras-cpu-isolation.c
-+++ b/ras-cpu-isolation.c
-@@ -126,6 +126,7 @@ static int init_cpu_info(unsigned int cpus)
- 
- 	for (unsigned int i = 0; i < cpus; ++i) {
- 		cpu_infos[i].ce_nums = 0;
-+		cpu_infos[i].uce_nums = 0;
- 		cpu_infos[i].state = get_cpu_status(i);
- 		cpu_infos[i].ce_queue = init_queue();
- 
-@@ -306,6 +307,15 @@ static int do_ce_handler(unsigned int cpu)
- 	return HANDLE_NOTHING;
- }
- 
-+static int do_uce_handler(unsigned int cpu)
-+{
-+	if (cpu_infos[cpu].uce_nums > 0) {
-+		log(TERM, LOG_INFO, "Uncorrected Errors occurred, try to offline cpu%u\n", cpu);
-+		return do_cpu_offline(cpu);
-+	}
-+	return HANDLE_NOTHING;
-+}
-+
- static int error_handler(unsigned int cpu, struct error_info *err_info)
- {
- 	int ret = HANDLE_NOTHING;
-@@ -314,6 +324,9 @@ static int error_handler(unsigned int cpu, struct error_info *err_info)
- 	case CE:
- 		ret = do_ce_handler(cpu);
- 		break;
-+	case UCE:
-+		ret = do_uce_handler(cpu);
-+		break;
- 	default:
- 		break;
- 	}
-@@ -336,6 +349,9 @@ static void record_error_info(unsigned int cpu, struct error_info *err_info)
- 		cpu_infos[cpu].ce_nums += err_info->nums;
- 		break;
- 	}
-+	case UCE:
-+		cpu_infos[cpu].uce_nums++;
-+		break;
- 	default:
- 		break;
- 	}
-@@ -382,6 +398,7 @@ void ras_record_cpu_error(struct error_info *err_info, int cpu)
- 			cpu, cpu_state[cpu_infos[cpu].state]);
- 		clear_queue(cpu_infos[cpu].ce_queue);
- 		cpu_infos[cpu].ce_nums = 0;
-+		cpu_infos[cpu].uce_nums = 0;
- 	} else
- 		log(TERM, LOG_WARNING, "Offline cpu%d fail, the state is %s\n",
- 			cpu, cpu_state[cpu_infos[cpu].state]);
-diff --git a/ras-cpu-isolation.h b/ras-cpu-isolation.h
-index 35b5225..5682106 100644
---- a/ras-cpu-isolation.h
-+++ b/ras-cpu-isolation.h
-@@ -45,10 +45,12 @@ enum error_handle_result {
+ struct hisi_common_error_section {
+ 	uint32_t   val_bits;
+@@ -63,12 +64,25 @@ enum {
+ enum {
+ 	HISI_COMMON_FIELD_ID,
+ 	HISI_COMMON_FIELD_TIMESTAMP,
+-	HISI_COMMON_FIELD_ERR_INFO,
++	HISI_COMMON_FIELD_VERSION,
++	HISI_COMMON_FIELD_SOC_ID,
++	HISI_COMMON_FIELD_SOCKET_ID,
++	HISI_COMMON_FIELD_TOTEM_ID,
++	HISI_COMMON_FIELD_NIMBUS_ID,
++	HISI_COMMON_FIELD_SUB_SYSTEM_ID,
++	HISI_COMMON_FIELD_MODULE_ID,
++	HISI_COMMON_FIELD_SUB_MODULE_ID,
++	HISI_COMMON_FIELD_CORE_ID,
++	HISI_COMMON_FIELD_PORT_ID,
++	HISI_COMMON_FIELD_ERR_TYPE,
++	HISI_COMMON_FIELD_PCIE_INFO,
++	HISI_COMMON_FIELD_ERR_SEVERITY,
+ 	HISI_COMMON_FIELD_REGS_DUMP,
  };
  
- enum error_type {
--	CE = 1
-+	CE = 1,
-+	UCE
+ struct hisi_event {
+ 	char error_msg[HISI_BUF_LEN];
++	char pcie_info[HISI_PCIE_INFO_BUF_LEN];
+ 	char reg_msg[HISI_BUF_LEN];
  };
  
- struct cpu_info {
-+	unsigned long uce_nums;
- 	unsigned long ce_nums;
- 	struct link_queue *ce_queue;
- 	enum cpu_state state;
+@@ -132,14 +146,26 @@ int step_vendor_data_tab(struct ras_ns_ev_decoder *ev_decoder, const char *name)
+ 
+ #ifdef HAVE_SQLITE3
+ static const struct db_fields hisi_common_section_fields[] = {
+-	{ .name = "id",                 .type = "INTEGER PRIMARY KEY" },
+-	{ .name = "timestamp",          .type = "TEXT" },
+-	{ .name = "err_info",		.type = "TEXT" },
++	{ .name = "id",			.type = "INTEGER PRIMARY KEY" },
++	{ .name = "timestamp",		.type = "TEXT" },
++	{ .name = "version",		.type = "INTEGER" },
++	{ .name = "soc_id",		.type = "INTEGER" },
++	{ .name = "socket_id",		.type = "INTEGER" },
++	{ .name = "totem_id",		.type = "INTEGER" },
++	{ .name = "nimbus_id",		.type = "INTEGER" },
++	{ .name = "sub_system_id",	.type = "INTEGER" },
++	{ .name = "module_id",		.type = "TEXT" },
++	{ .name = "sub_module_id",	.type = "INTEGER" },
++	{ .name = "core_id",		.type = "INTEGER" },
++	{ .name = "port_id",		.type = "INTEGER" },
++	{ .name = "err_type",		.type = "INTEGER" },
++	{ .name = "pcie_info",		.type = "TEXT" },
++	{ .name = "err_severity",	.type = "TEXT" },
+ 	{ .name = "regs_dump",		.type = "TEXT" },
+ };
+ 
+ static const struct db_table_descriptor hisi_common_section_tab = {
+-	.name = "hisi_common_section",
++	.name = "hisi_common_section_v2",
+ 	.fields = hisi_common_section_fields,
+ 	.num_fields = ARRAY_SIZE(hisi_common_section_fields),
+ };
+@@ -199,12 +225,20 @@ static const char* get_soc_desc(uint8_t soc_id)
+ 	return soc_desc[soc_id];
+ }
+ 
+-static void decode_module(struct hisi_event *event, uint8_t module_id)
++static void decode_module(struct ras_ns_ev_decoder *ev_decoder,
++			  struct hisi_event *event, uint8_t module_id)
+ {
+-	if (module_id >= sizeof(module_name)/sizeof(char *))
++	if (module_id >= sizeof(module_name)/sizeof(char *)) {
+ 		HISI_SNPRINTF(event->error_msg, "module=unknown(id=%hhu) ", module_id);
+-	else
++		record_vendor_data(ev_decoder, HISI_OEM_DATA_TYPE_TEXT,
++				   HISI_COMMON_FIELD_MODULE_ID,
++				   0, "unknown");
++	} else {
+ 		HISI_SNPRINTF(event->error_msg, "module=%s ", module_name[module_id]);
++		record_vendor_data(ev_decoder, HISI_OEM_DATA_TYPE_TEXT,
++				   HISI_COMMON_FIELD_MODULE_ID,
++				   0, module_name[module_id]);
++	}
+ }
+ 
+ static void decode_hisi_common_section_hdr(struct ras_ns_ev_decoder *ev_decoder,
+@@ -212,43 +246,93 @@ static void decode_hisi_common_section_hdr(struct ras_ns_ev_decoder *ev_decoder,
+ 					  struct hisi_event *event)
+ {
+ 	HISI_SNPRINTF(event->error_msg, "[ table_version=%hhu", err->version);
+-	if (err->val_bits & BIT(HISI_COMMON_VALID_SOC_ID))
++	record_vendor_data(ev_decoder, HISI_OEM_DATA_TYPE_INT,
++			   HISI_COMMON_FIELD_VERSION,
++			   err->version, NULL);
++	if (err->val_bits & BIT(HISI_COMMON_VALID_SOC_ID)) {
+ 		HISI_SNPRINTF(event->error_msg, "soc=%s", get_soc_desc(err->soc_id));
++		record_vendor_data(ev_decoder, HISI_OEM_DATA_TYPE_INT,
++				   HISI_COMMON_FIELD_SOC_ID,
++				   err->soc_id, NULL);
++	}
+ 
+-	if (err->val_bits & BIT(HISI_COMMON_VALID_SOCKET_ID))
++	if (err->val_bits & BIT(HISI_COMMON_VALID_SOCKET_ID)) {
+ 		HISI_SNPRINTF(event->error_msg, "socket_id=%hhu", err->socket_id);
++		record_vendor_data(ev_decoder, HISI_OEM_DATA_TYPE_INT,
++				   HISI_COMMON_FIELD_SOCKET_ID,
++				   err->socket_id, NULL);
++	}
+ 
+-	if (err->val_bits & BIT(HISI_COMMON_VALID_TOTEM_ID))
++	if (err->val_bits & BIT(HISI_COMMON_VALID_TOTEM_ID)) {
+ 		HISI_SNPRINTF(event->error_msg, "totem_id=%hhu", err->totem_id);
++		record_vendor_data(ev_decoder, HISI_OEM_DATA_TYPE_INT,
++				   HISI_COMMON_FIELD_TOTEM_ID,
++				   err->totem_id, NULL);
++	}
+ 
+-	if (err->val_bits & BIT(HISI_COMMON_VALID_NIMBUS_ID))
++	if (err->val_bits & BIT(HISI_COMMON_VALID_NIMBUS_ID)) {
+ 		HISI_SNPRINTF(event->error_msg, "nimbus_id=%hhu", err->nimbus_id);
++		record_vendor_data(ev_decoder, HISI_OEM_DATA_TYPE_INT,
++				   HISI_COMMON_FIELD_NIMBUS_ID,
++				   err->nimbus_id, NULL);
++	}
+ 
+-	if (err->val_bits & BIT(HISI_COMMON_VALID_SUBSYSTEM_ID))
++	if (err->val_bits & BIT(HISI_COMMON_VALID_SUBSYSTEM_ID)) {
+ 		HISI_SNPRINTF(event->error_msg, "subsystem_id=%hhu", err->subsystem_id);
++		record_vendor_data(ev_decoder, HISI_OEM_DATA_TYPE_INT,
++				   HISI_COMMON_FIELD_SUB_SYSTEM_ID,
++				   err->subsystem_id, NULL);
++	}
+ 
+ 	if (err->val_bits & BIT(HISI_COMMON_VALID_MODULE_ID))
+-		decode_module(event, err->module_id);
++		decode_module(ev_decoder, event, err->module_id);
+ 
+-	if (err->val_bits & BIT(HISI_COMMON_VALID_SUBMODULE_ID))
++	if (err->val_bits & BIT(HISI_COMMON_VALID_SUBMODULE_ID)) {
+ 		HISI_SNPRINTF(event->error_msg, "submodule_id=%hhu", err->submodule_id);
++		record_vendor_data(ev_decoder, HISI_OEM_DATA_TYPE_INT,
++				   HISI_COMMON_FIELD_SUB_MODULE_ID,
++				   err->submodule_id, NULL);
++	}
+ 
+-	if (err->val_bits & BIT(HISI_COMMON_VALID_CORE_ID))
++	if (err->val_bits & BIT(HISI_COMMON_VALID_CORE_ID)) {
+ 		HISI_SNPRINTF(event->error_msg, "core_id=%hhu", err->core_id);
++		record_vendor_data(ev_decoder, HISI_OEM_DATA_TYPE_INT,
++				   HISI_COMMON_FIELD_CORE_ID,
++				   err->core_id, NULL);
++	}
+ 
+-	if (err->val_bits & BIT(HISI_COMMON_VALID_PORT_ID))
++	if (err->val_bits & BIT(HISI_COMMON_VALID_PORT_ID)) {
+ 		HISI_SNPRINTF(event->error_msg, "port_id=%hhu", err->port_id);
++		record_vendor_data(ev_decoder, HISI_OEM_DATA_TYPE_INT,
++				   HISI_COMMON_FIELD_PORT_ID,
++				   err->port_id, NULL);
++	}
+ 
+-	if (err->val_bits & BIT(HISI_COMMON_VALID_ERR_TYPE))
++	if (err->val_bits & BIT(HISI_COMMON_VALID_ERR_TYPE)) {
+ 		HISI_SNPRINTF(event->error_msg, "err_type=%hu", err->err_type);
++		record_vendor_data(ev_decoder, HISI_OEM_DATA_TYPE_INT,
++				   HISI_COMMON_FIELD_ERR_TYPE,
++				   err->err_type, NULL);
++	}
+ 
+-	if (err->val_bits & BIT(HISI_COMMON_VALID_PCIE_INFO))
++	if (err->val_bits & BIT(HISI_COMMON_VALID_PCIE_INFO)) {
+ 		HISI_SNPRINTF(event->error_msg, "pcie_device_id=%04x:%02x:%02x.%x",
+ 			      err->pcie_info.segment, err->pcie_info.bus,
+ 			      err->pcie_info.device, err->pcie_info.function);
++		HISI_SNPRINTF(event->pcie_info, "%04x:%02x:%02x.%x",
++			      err->pcie_info.segment, err->pcie_info.bus,
++			      err->pcie_info.device, err->pcie_info.function);
++		record_vendor_data(ev_decoder, HISI_OEM_DATA_TYPE_TEXT,
++				   HISI_COMMON_FIELD_PCIE_INFO,
++				   0, event->pcie_info);
++	}
+ 
+-	if (err->val_bits & BIT(HISI_COMMON_VALID_ERR_SEVERITY))
++	if (err->val_bits & BIT(HISI_COMMON_VALID_ERR_SEVERITY)) {
+ 		HISI_SNPRINTF(event->error_msg, "err_severity=%s", err_severity(err->err_severity));
++		record_vendor_data(ev_decoder, HISI_OEM_DATA_TYPE_TEXT,
++				   HISI_COMMON_FIELD_ERR_SEVERITY,
++				   0, err_severity(err->err_severity));
++	}
+ 
+ 	HISI_SNPRINTF(event->error_msg, "]");
+ }
+@@ -293,8 +377,6 @@ static int decode_hisi_common_section(struct ras_events *ras,
+ 		record_vendor_data(ev_decoder, HISI_OEM_DATA_TYPE_TEXT,
+ 				   HISI_COMMON_FIELD_TIMESTAMP,
+ 				   0, event->timestamp);
+-		record_vendor_data(ev_decoder, HISI_OEM_DATA_TYPE_TEXT,
+-				   HISI_COMMON_FIELD_ERR_INFO, 0, hevent.error_msg);
+ 		record_vendor_data(ev_decoder, HISI_OEM_DATA_TYPE_TEXT,
+ 				   HISI_COMMON_FIELD_REGS_DUMP, 0, hevent.reg_msg);
+ 		step_vendor_data_tab(ev_decoder, "hisi_common_section_tab");
 -- 
 2.25.1
 
