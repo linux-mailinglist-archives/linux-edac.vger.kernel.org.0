@@ -2,140 +2,153 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66FAC5F334D
-	for <lists+linux-edac@lfdr.de>; Mon,  3 Oct 2022 18:18:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EE415F3DF6
+	for <lists+linux-edac@lfdr.de>; Tue,  4 Oct 2022 10:12:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229805AbiJCQSI (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Mon, 3 Oct 2022 12:18:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35936 "EHLO
+        id S230120AbiJDIMy (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Tue, 4 Oct 2022 04:12:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229806AbiJCQRx (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Mon, 3 Oct 2022 12:17:53 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE3B6357D8
-        for <linux-edac@vger.kernel.org>; Mon,  3 Oct 2022 09:17:46 -0700 (PDT)
-Received: from fraeml743-chm.china.huawei.com (unknown [172.18.147.207])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4Mh5Zr5h6fz6HJLg;
-        Tue,  4 Oct 2022 00:17:24 +0800 (CST)
-Received: from lhrpeml500006.china.huawei.com (7.191.161.198) by
- fraeml743-chm.china.huawei.com (10.206.15.224) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Mon, 3 Oct 2022 18:17:44 +0200
-Received: from P_UKIT01-A7bmah.china.huawei.com (10.48.152.147) by
- lhrpeml500006.china.huawei.com (7.191.161.198) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Mon, 3 Oct 2022 17:17:43 +0100
-From:   <shiju.jose@huawei.com>
-To:     <linux-edac@vger.kernel.org>, <mchehab@kernel.org>
-CC:     <linuxarm@huawei.com>, <tanxiaofei@huawei.com>,
-        <jonathan.cameron@huawei.com>, <prime.zeng@hisilicon.com>,
-        <luoshengwei@huawei.com>, <panjunchong@hisilicon.com>,
-        <fenglei47@h-partners.com>, <shiju.jose@huawei.com>
-Subject: [PATCH v2 10/10] rasdaemon: Fix for a memory out-of-bounds issue and optimized code to remove duplicate function.
-Date:   Mon, 3 Oct 2022 17:17:42 +0100
-Message-ID: <20221003161742.1697-11-shiju.jose@huawei.com>
-X-Mailer: git-send-email 2.26.0.windows.1
-In-Reply-To: <20221003161742.1697-1-shiju.jose@huawei.com>
-References: <20221003161742.1697-1-shiju.jose@huawei.com>
+        with ESMTP id S229897AbiJDIL7 (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Tue, 4 Oct 2022 04:11:59 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D580710FCA;
+        Tue,  4 Oct 2022 01:11:38 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 28AA71F8EF;
+        Tue,  4 Oct 2022 08:11:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1664871097; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=S2SV4sBQ+XUgfItYvZCJqyJXYJEs+CPrHSsEm73LHoU=;
+        b=eBtsR6fSKBXa1VAYDBSRZU3G2zMoNM5DXHOQk6gPuqqhMVQ9ZCuM+r6I2NyslvOO80GtwZ
+        nIn/ff/JRI5eB8sr1pLXEgiZV2xc2xt9Z0c7CZZ1DzxzpRvPpxJ5I0Cn1Ri5+5w8WQcDWG
+        rllWVd2XmhdH2xF/NW3OOLiQJlnVc9I=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1664871097;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=S2SV4sBQ+XUgfItYvZCJqyJXYJEs+CPrHSsEm73LHoU=;
+        b=Se9ABfbv+TJViWJBbE2SytqZJgM6Bsgd6F3B1bIDZTjcbHHTPzt1Q2KpdKtDEJMhRyqivv
+        Dpkb0MykqEIjWuDQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 1D684139EF;
+        Tue,  4 Oct 2022 08:11:37 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id D58nB7nqO2OtSAAAMHmgww
+        (envelope-from <bp@suse.de>); Tue, 04 Oct 2022 08:11:37 +0000
+Date:   Tue, 4 Oct 2022 10:11:32 +0200
+From:   Borislav Petkov <bp@suse.de>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-edac <linux-edac@vger.kernel.org>,
+        lkml <linux-kernel@vger.kernel.org>
+Subject: [GIT PULL] EDAC updates for v6.1
+Message-ID: <YzvqtD2dVN9YPI1K@zn.tnic>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.48.152.147]
-X-ClientProxiedBy: lhrpeml100002.china.huawei.com (7.191.160.241) To
- lhrpeml500006.china.huawei.com (7.191.161.198)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-From: Shiju Jose <shiju.jose@huawei.com>
+Hi Linus,
 
-Fixed a memory out-of-bounds issue with string pointers and
-optimized code structure to remove duplicate function.
+please pull the accumulated EDAC pile for 6.1.
 
-Signed-off-by: Lei Feng <fenglei47@h-partners.com>
-Signed-off-by: Shiju Jose <shiju.jose@huawei.com>
+Thx.
+
 ---
- non-standard-hisi_hip08.c  |  6 +++---
- non-standard-hisilicon.c   |  2 +-
- ras-non-standard-handler.c | 16 +---------------
- 3 files changed, 5 insertions(+), 19 deletions(-)
 
-diff --git a/non-standard-hisi_hip08.c b/non-standard-hisi_hip08.c
-index 9092183..4ef47ea 100644
---- a/non-standard-hisi_hip08.c
-+++ b/non-standard-hisi_hip08.c
-@@ -1014,15 +1014,15 @@ static int decode_hip08_pcie_local_error(struct ras_events *ras,
- 
- static struct ras_ns_ev_decoder hip08_ns_ev_decoder[] = {
- 	{
--		.sec_type = "1f8161e155d641e6bd107afd1dc5f7c5",
-+		.sec_type = "1f8161e1-55d6-41e6-bd10-7afd1dc5f7c5",
- 		.decode = decode_hip08_oem_type1_error,
- 	},
- 	{
--		.sec_type = "45534ea6ce2341158535e07ab3aef91d",
-+		.sec_type = "45534ea6-ce23-4115-8535-e07ab3aef91d",
- 		.decode = decode_hip08_oem_type2_error,
- 	},
- 	{
--		.sec_type = "b2889fc9e7d74f9da867af42e98be772",
-+		.sec_type = "b2889fc9-e7d7-4f9d-a867-af42e98be772",
- 		.decode = decode_hip08_pcie_local_error,
- 	},
- };
-diff --git a/non-standard-hisilicon.c b/non-standard-hisilicon.c
-index d1e1774..6ee9271 100644
---- a/non-standard-hisilicon.c
-+++ b/non-standard-hisilicon.c
-@@ -387,7 +387,7 @@ static int decode_hisi_common_section(struct ras_events *ras,
- 
- static struct ras_ns_ev_decoder hisi_section_ns_ev_decoder[]  = {
- 	{
--		.sec_type = "c8b328a899174af69a132e08ab2e7586",
-+		.sec_type = "c8b328a8-9917-4af6-9a13-2e08ab2e7586",
- 		.decode = decode_hisi_common_section,
- 	},
- };
-diff --git a/ras-non-standard-handler.c b/ras-non-standard-handler.c
-index 6d5a6f8..6932e58 100644
---- a/ras-non-standard-handler.c
-+++ b/ras-non-standard-handler.c
-@@ -52,20 +52,6 @@ static char *uuid_le(const char *uu)
- 	return uuid;
- }
- 
--static int uuid_le_cmp(const char *sec_type, const char *uuid2)
--{
--	static char uuid1[32];
--	char *p = uuid1;
--	int i;
--	static const unsigned char le[16] = {
--			3, 2, 1, 0, 5, 4, 7, 6, 8, 9, 10, 11, 12, 13, 14, 15};
--
--	for (i = 0; i < 16; i++)
--		p += sprintf(p, "%.2x", (unsigned char) sec_type[le[i]]);
--	*p = 0;
--	return strncmp(uuid1, uuid2, 32);
--}
--
- int register_ns_ev_decoder(struct ras_ns_ev_decoder *ns_ev_decoder)
- {
- 	struct ras_ns_ev_decoder *list;
-@@ -96,7 +82,7 @@ static int find_ns_ev_decoder(const char *sec_type, struct ras_ns_ev_decoder **p
- 
- 	ns_ev_decoder = ras_ns_ev_dec_list;
- 	while (ns_ev_decoder) {
--		if (uuid_le_cmp(sec_type, ns_ev_decoder->sec_type) == 0) {
-+		if (strcmp(uuid_le(sec_type), ns_ev_decoder->sec_type) == 0) {
- 			*p_ns_ev_dec = ns_ev_decoder;
- 			match  = 1;
- 			break;
+The following changes since commit 1c23f9e627a7b412978b4e852793c5e3c3efc555:
+
+  Linux 6.0-rc2 (2022-08-21 17:32:54 -0700)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/ras/ras.git tags/edac_updates_for_v6.1
+
+for you to fetch changes up to c257795609e9c9f063c92a6c7ea2e798417700c4:
+
+  Merge branches 'edac-drivers' and 'edac-misc' into edac-updates-for-v6.1 (2022-10-04 10:00:25 +0200)
+
+----------------------------------------------------------------
+- Add support for Skylake-S CPUs to ie31200_edac
+
+- Improve error decoding speed of the Intel drivers by avoiding the ACPI facilities
+  but doing decoding in the driver itself
+
+- Other misc improvements to the Intel drivers
+
+- The usual cleanups and fixlets all over EDAC land
+
+----------------------------------------------------------------
+Borislav Petkov (1):
+      Merge branches 'edac-drivers' and 'edac-misc' into edac-updates-for-v6.1
+
+Colin Ian King (1):
+      EDAC/i7300: Correct the i7300_exit() function name in comment
+
+Gaosheng Cui (1):
+      EDAC: Remove obsolete declarations in edac_module.h
+
+Josh Hant (1):
+      EDAC/ie31200: Add Skylake-S support
+
+Qiuxu Zhuo (5):
+      EDAC/skx_common: Use driver decoder first
+      EDAC/skx_common: Make output format similar
+      EDAC/skx_common: Add ChipSelect ADXL component
+      EDAC/i10nm: Retrieve and print retry_rd_err_log registers for HBM
+      EDAC/i10nm: Print an extra register set of retry_rd_err_log
+
+Serge Semin (2):
+      EDAC/mc: Replace spaces with tabs in memtype flags definition
+      EDAC/mc: Drop duplicated dimm->nr_pages debug printout
+
+Uwe Kleine-König (1):
+      EDAC/ppc_4xx: Reorder symbols to get rid of a few forward declarations
+
+Youquan Song (2):
+      EDAC/i10nm: Add driver decoder for Ice Lake and Tremont CPUs
+      x86/sb_edac: Add row column translation for Broadwell
+
+ran jianping (1):
+      EDAC/wq: Remove unneeded flush_workqueue()
+
+ arch/x86/include/asm/mce.h  |   1 +
+ drivers/edac/edac_mc.c      |   1 -
+ drivers/edac/edac_module.h  |   4 -
+ drivers/edac/i10nm_base.c   | 287 ++++++++++++++++++++++++++++++++++++++++----
+ drivers/edac/i7300_edac.c   |   2 +-
+ drivers/edac/ie31200_edac.c |  28 +++--
+ drivers/edac/ppc4xx_edac.c  |  23 ++--
+ drivers/edac/sb_edac.c      | 148 +++++++++++++++++++++--
+ drivers/edac/skx_base.c     |   9 +-
+ drivers/edac/skx_common.c   |  26 ++--
+ drivers/edac/skx_common.h   |  16 +++
+ drivers/edac/wq.c           |   1 -
+ include/linux/edac.h        |  30 ++---
+ 13 files changed, 486 insertions(+), 90 deletions(-)
+
 -- 
-2.25.1
+Regards/Gruss,
+    Boris.
 
+SUSE Software Solutions Germany GmbH
+GF: Ivo Totev, Andrew Myers, Andrew McDonald, Martje Boudien Moerman
+(HRB 36809, AG Nürnberg)
