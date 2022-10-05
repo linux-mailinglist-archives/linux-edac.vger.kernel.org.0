@@ -2,106 +2,104 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7906F5F573E
-	for <lists+linux-edac@lfdr.de>; Wed,  5 Oct 2022 17:14:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 474D85F575D
+	for <lists+linux-edac@lfdr.de>; Wed,  5 Oct 2022 17:22:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230357AbiJEPOH (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Wed, 5 Oct 2022 11:14:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47632 "EHLO
+        id S230392AbiJEPWE (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Wed, 5 Oct 2022 11:22:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230074AbiJEPOH (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Wed, 5 Oct 2022 11:14:07 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F05E26E2C3;
-        Wed,  5 Oct 2022 08:14:05 -0700 (PDT)
-Received: from zn.tnic (p200300ea9733e7a3329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9733:e7a3:329c:23ff:fea6:a903])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 767291EC0529;
-        Wed,  5 Oct 2022 17:14:00 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1664982840;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=R3TwZBSPpDKUiyo8k8CnrauVQH4WeXZyWPcE47XsIJk=;
-        b=qKqinGoSJi+3VUWCGlae2nlKs2V2fhVgFevONbjO9DEbdCoMplq60XbnVrfUhQrlhuL634
-        e2Kk8oQrIY8yvOCIA/dGIRrYX0q8RKrB4+XAG/XuesE8yaeD+GWGwQx8i3+Qn3BL8LhFZi
-        p6g8Hp1GV24CTvWxVV3PHdx+vz/DADQ=
-Date:   Wed, 5 Oct 2022 17:13:55 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Jia He <justin.he@arm.com>
-Cc:     Len Brown <lenb@kernel.org>, James Morse <james.morse@arm.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Robert Richter <rric@kernel.org>,
-        Robert Moore <robert.moore@intel.com>,
-        Qiuxu Zhuo <qiuxu.zhuo@intel.com>,
-        Yazen Ghannam <yazen.ghannam@amd.com>,
-        Jan Luebbe <jlu@pengutronix.de>,
-        Khuong Dinh <khuong@os.amperecomputing.com>,
-        Kani Toshi <toshi.kani@hpe.com>,
-        Ard Biesheuvel <ardb@kernel.org>, linux-acpi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-edac@vger.kernel.org,
-        devel@acpica.org, "Rafael J . Wysocki" <rafael@kernel.org>,
-        Shuai Xue <xueshuai@linux.alibaba.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>, linux-efi@vger.kernel.org,
-        nd@arm.com
-Subject: Re: [PATCH v7 3/8] EDAC:ghes: Move ghes_edac.force_load to ghes
- module parameter
-Message-ID: <Yz2fM+IbEkKmt8Ct@zn.tnic>
-References: <20220929023726.73727-1-justin.he@arm.com>
- <20220929023726.73727-4-justin.he@arm.com>
+        with ESMTP id S230042AbiJEPWE (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Wed, 5 Oct 2022 11:22:04 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8906F48E82
+        for <linux-edac@vger.kernel.org>; Wed,  5 Oct 2022 08:22:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1664983323; x=1696519323;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=KPCSxquOQf/e8YuO+dXRNc7Q1ss7JIRkLg20+rfAdTI=;
+  b=g4RH/yIYyNGIZNOBr6/WU79YI8qpk8+SDLupqHM377OYqnVKJQ2FDt0p
+   3XejLumLt+R4+SucrASEgLZqmlo0393CpN2O1jK8TfZDjLLnWz7VOdjrL
+   mzZX3jCzwnr244Y7k8ULAuZd1H7uhag1czrJJ4HBFiHDIUziSCRZUSOQc
+   ZAC1lXsOTagmgR5SD980LsbSWqxEIKhiBoZMmddN8NeoLQTe7+Lx/Sm2A
+   Wwyz6agI8kSMI+rDXoqUdthZDdk2JyZfnUwEpuW7JONJQF7VdVn5EQG/m
+   UOvv2S+gyYAFuKDWpOIyPrq6qhRT638iha9bngbWNFe1GWhKCSrhm3Yg5
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10491"; a="304754637"
+X-IronPort-AV: E=Sophos;i="5.95,161,1661842800"; 
+   d="scan'208";a="304754637"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Oct 2022 08:21:55 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10491"; a="655200786"
+X-IronPort-AV: E=Sophos;i="5.95,161,1661842800"; 
+   d="scan'208";a="655200786"
+Received: from agluck-desk3.sc.intel.com ([172.25.222.78])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Oct 2022 08:21:55 -0700
+Date:   Wed, 5 Oct 2022 08:21:53 -0700
+From:   Tony Luck <tony.luck@intel.com>
+To:     Christian Lorenz <Christian.Lorenz@gromeck.de>,
+        Jason Baron <jbaron@akamai.com>
+Cc:     linux-edac@vger.kernel.org
+Subject: Re: EDAC support for 'Rocket Lake'
+Message-ID: <Yz2hEY9XFlNJudfw@agluck-desk3.sc.intel.com>
+References: <1b2f0acd-c03a-9403-406e-3c7dea7b84f5@gromeck.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220929023726.73727-4-justin.he@arm.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <1b2f0acd-c03a-9403-406e-3c7dea7b84f5@gromeck.de>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Thu, Sep 29, 2022 at 02:37:21AM +0000, Jia He wrote:
-> ghes_edac_register() is too late to set this module flag ghes_edac.force_load.
-> Also, other edac drivers should not be able to control this flag.
+On Wed, Oct 05, 2022 at 02:13:13PM +0200, Christian Lorenz wrote:
+> Hi,
 > 
-> Move this flag to the module parameter in ghes instead.
+> we are using the EDAC interface on Linux for our internal ECC DIMM
+> hardware monitoring.
 > 
-> Suggested-by: Toshi Kani <toshi.kani@hpe.com>
-> Signed-off-by: Jia He <justin.he@arm.com>
-> Reviewed-by: Toshi Kani <toshi.kani@hpe.com>
-> ---
->  drivers/acpi/apei/ghes.c |  8 ++++++++
->  drivers/edac/ghes_edac.c | 10 +++-------
->  include/acpi/apei.h      |  2 ++
->  3 files changed, 13 insertions(+), 7 deletions(-)
+> With Sky Lake CPUs, the kernel driver in use is 'skx_edac'.
 > 
-> diff --git a/drivers/acpi/apei/ghes.c b/drivers/acpi/apei/ghes.c
-> index 8cb65f757d06..b0a6445c6da2 100644
-> --- a/drivers/acpi/apei/ghes.c
-> +++ b/drivers/acpi/apei/ghes.c
-> @@ -109,6 +109,14 @@ static inline bool is_hest_type_generic_v2(struct ghes *ghes)
->  bool ghes_disable;
->  module_param_named(disable, ghes_disable, bool, 0);
->  
-> +/*
-> + * "ghes.edac_force_enable" forcibly enables ghes_edac and skips the platform
-> + * check.
-> + */
-> +bool ghes_edac_force_enable;
-> +EXPORT_SYMBOL(ghes_edac_force_enable);
-> +module_param_named(edac_force_enable, ghes_edac_force_enable, bool, 0);
+> We have now received servers with the following CPUs, for which there
+> does not seem to be kernel EDAC support:
+> 
+>   processor       : 11
+>   vendor_id       : GenuineIntel
+>   cpu family      : 6
+>   model           : 167
+>   model name      : Intel(R) Xeon(R) E-2386G CPU @ 3.50GHz
+>   external link   : see [1] at the end of this mail
+> 
+> We have observed that there seems to be no EDAC support for this CPU,
+> /sys/devices/system/edac is not populated, tools like edac-utils or
+> rasdaemon do not function without it.
+> 
+> We have tested this with the same result on:
+> 
+>   - RHEL 8.6 -- kernel version 4.18.0-372
+>   - AlmaLinux 8.6 -- kernel version 4.18.0-372
+>   - RHEL 9.0 -- kernel version 5.14.0
+> 
+> According to documentation, the E-2386G codename is 'formerly Rocket Lake'.
+> 
+> Our question: Is there or will there be EDAC support for this 'Rocket Lake'
+> Xeon E-23XX CPU?
 
-Why is this exported?
+Christian,
 
-In the exemplary patch I sent you, that thing is static.
+Historically Intel has provided EDAC drivers for the "big" Xeon
+systems (formery "-E5" and "-E7", currently "-SP" Xeon models).
 
--- 
-Regards/Gruss,
-    Boris.
+Support for the Xeon-E3 models had been provided by members of
+the community. Most recent update for the ie31200_edac driver
+to support Kaby Lake was from Jason Baron (added to this e-mail).
 
-https://people.kernel.org/tglx/notes-about-netiquette
+Jason: Are you looking at Rocket Lake?
+
+-Tony
