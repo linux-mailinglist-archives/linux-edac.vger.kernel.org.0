@@ -2,35 +2,35 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 715275F8F99
-	for <lists+linux-edac@lfdr.de>; Mon, 10 Oct 2022 00:10:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 54D9F5F914C
+	for <lists+linux-edac@lfdr.de>; Mon, 10 Oct 2022 00:31:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230268AbiJIWKk (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Sun, 9 Oct 2022 18:10:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42060 "EHLO
+        id S232524AbiJIWbF (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Sun, 9 Oct 2022 18:31:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231142AbiJIWJ0 (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Sun, 9 Oct 2022 18:09:26 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB5AE27FFA;
-        Sun,  9 Oct 2022 15:08:55 -0700 (PDT)
+        with ESMTP id S232071AbiJIW1E (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Sun, 9 Oct 2022 18:27:04 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81CC63DF24;
+        Sun,  9 Oct 2022 15:18:57 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6507FB80DD7;
-        Sun,  9 Oct 2022 22:08:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DF87EC433D7;
-        Sun,  9 Oct 2022 22:08:45 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DF14BB80DED;
+        Sun,  9 Oct 2022 22:16:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6313CC433B5;
+        Sun,  9 Oct 2022 22:15:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1665353327;
+        s=k20201202; t=1665353760;
         bh=/LmuOibYq4SSvlEYG9tQkbKyOyx/DdrdHV6RwtqcukY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Nycm77E36xDLKRLiIjEDBqPw1O22Z/tb4iZZ0F+5jvHyEYuYwoKmnoX2HbHMOPCUc
-         II6TVrIGDSsVKHG2p7FlWthZWuGqH9rDEC016rpXO8XRPFIOpNPoZQkGvf2Oh9OAu0
-         h7lSgkFPqHnBwQRB2UEZjoT/3bR7HfLjlFxlYKlmM51tMT7uVbyfH4gGcK4vI4Ix+K
-         yOaJuYJ+oMO4pLB0r01zyFA9GSgLfD2S6AielDwKisK/gmAJGsxaUMde/u5ho8qTDF
-         NsOQcB+7MydyI8D7QLcugT0g//7LQS37L+Ih6jO18yMoGOO1sWMAfxOdzSc0tBUfVS
-         VzedjSRXDL+ZQ==
+        b=O6SIeW1UPjnBgqb2rjStoWTeZtiGNc3PubEgJn0neKfwZYzOzQ5IzUUDjnQ6a2p7P
+         3R3u8NvLV1y8NhcuNg5D2CqjEGaqBCvKrytjbsV5NkiNGbSgIfnoTlm0Ltuw1pqKEW
+         nK4d5z8PgvGqqoTBXjeW7SNtZCUXaw8bhuIv/26LcJbDPvZC/Ra6EUi4yUhimUVaY1
+         iSMYRocMp1EGZXuYMuQrUFtA2km2cxWEB+TnnHD9JmiIh+7Klt/vo45gvAdQmhmsLF
+         OMycVsueM2jsOVgv4uBABuCgyTUO7BGCCIxFUI6FZbf3Gqyv8dYzmaj7HxmDj6uUuJ
+         tfmekPwCgmCBg==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Jane Chu <jane.chu@oracle.com>, Borislav Petkov <bp@suse.de>,
@@ -39,12 +39,12 @@ Cc:     Jane Chu <jane.chu@oracle.com>, Borislav Petkov <bp@suse.de>,
         Sasha Levin <sashal@kernel.org>, bp@alien8.de,
         tglx@linutronix.de, mingo@redhat.com, dave.hansen@linux.intel.com,
         x86@kernel.org, linux-edac@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.0 19/77] x86/mce: Retrieve poison range from hardware
-Date:   Sun,  9 Oct 2022 18:06:56 -0400
-Message-Id: <20221009220754.1214186-19-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.19 16/73] x86/mce: Retrieve poison range from hardware
+Date:   Sun,  9 Oct 2022 18:13:54 -0400
+Message-Id: <20221009221453.1216158-16-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20221009220754.1214186-1-sashal@kernel.org>
-References: <20221009220754.1214186-1-sashal@kernel.org>
+In-Reply-To: <20221009221453.1216158-1-sashal@kernel.org>
+References: <20221009221453.1216158-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
