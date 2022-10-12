@@ -2,59 +2,59 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A7B25FCC6F
-	for <lists+linux-edac@lfdr.de>; Wed, 12 Oct 2022 22:55:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA6225FCD4E
+	for <lists+linux-edac@lfdr.de>; Wed, 12 Oct 2022 23:31:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229772AbiJLUzk (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Wed, 12 Oct 2022 16:55:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39660 "EHLO
+        id S229507AbiJLVbl (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Wed, 12 Oct 2022 17:31:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229755AbiJLUzi (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Wed, 12 Oct 2022 16:55:38 -0400
-Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6EF1A478;
-        Wed, 12 Oct 2022 13:55:37 -0700 (PDT)
-Received: by mail-lj1-x230.google.com with SMTP id bn8so22068721ljb.6;
-        Wed, 12 Oct 2022 13:55:37 -0700 (PDT)
+        with ESMTP id S229803AbiJLVbY (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Wed, 12 Oct 2022 17:31:24 -0400
+Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E3CD120EDF;
+        Wed, 12 Oct 2022 14:31:18 -0700 (PDT)
+Received: by mail-lj1-x22c.google.com with SMTP id r22so68061ljn.10;
+        Wed, 12 Oct 2022 14:31:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=t94iU6tiDOrr2Z3ZKXKEtLbEQqYDhthkqiU9i1YH9OE=;
-        b=ninVkB9GUhO57bjgFgbl1StVZevTrq0zFzJBAvW68mWeHoY229TuMBta4JS9Tvwcp3
-         Bk/SD2031yWLCS//kymgyY65ZKkh2rnOVAdOkVE6+aZG8tUbTy5mKnF/5JV9CrGnYvBj
-         GSS9A6MxVRzvuUX10vRPhcLOYh8nxx4+nm8IR3ofrRlzM3+dfZGqajfsegUTA09h6301
-         eNeLDoWd+y91Hxur9PEAw2Yvo7avLRxa2G1f9cEvHkZxtQ4+ucT4x1ztE/0Z/Ud3QmDy
-         DTCSdhpH1NtqsrbzXdRJBix0u2FcX8h+/LQ62N2H76HpBJNbXwrUlKW+rONL4MuCBX6a
-         4ROw==
+        bh=+u5zTxsQpjiuj7kJ8NImmHJwlmXGjiHmqr7wGB9659Y=;
+        b=SaKHthR+wG3Es3kmvRYC96e31d2/qYDWIOmiGR64bxw/8Lt4fTC/kE4uLXiyeboZNk
+         twGw7vqpIpx4oGsX6MbkWCaA8NwOvtixhXZHPSd7BO8L0cWMcRkcREjQviGLVTXWLRiz
+         pdmrvSGH+Pt/KP0e1njrrcYVWVcAMKHoiIyH5zwTgsoLR1P0ZAWs2PLZ1RDm3cdit4a9
+         CMVfKoYZt956B2Rg2W9vO0mwciR45C9t1LUpDehaDBFjouoF46YBpPLpzhYUR4CCJpYs
+         qWzUC7S4RmG5DSfjR8KWie8jTR3qyEA8Gu2BIuL/oAzRaQRKQA0eR6zwMNSmvDs7w/m9
+         K6rA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=t94iU6tiDOrr2Z3ZKXKEtLbEQqYDhthkqiU9i1YH9OE=;
-        b=DujCY4IXNgJYqQTi1ijNMNN14j+TVIJKNg/M3nhHccMvB3g6142rifMsnxUnA6a/+9
-         Hus5T1+MYJ9mWV6SAEoV/jX+2PxHVVmMbnYBJcn6p6PggCCTOLU37lskxTMS39HamVwp
-         mIWUikBd9OA2xlBcu9mkan/4keKENMQNz6y9NP5TOj01eXCy/xHvrgrX1qHvkdW2enQJ
-         1zLpfoObrCnDNvHIq7qOek625NA2YtcTj/mrvOs9Mknv8Sp1oJLf26K/hhVTlCze8Amq
-         kZsv3+RqDSYI7o+qnVaG1LIRB73LbHcXHxelSfWX2pVB+17ZTIT8czSXyZ25pxBxYOqv
-         wcIg==
-X-Gm-Message-State: ACrzQf1zZcdPZv6p8XENWNG/qc6UK6ofg7srsYk7njjlo2mQeLjFXzXc
-        MtTcP8YIA8zIPCNv3s9u16YbFE75D5mpyQ==
-X-Google-Smtp-Source: AMsMyM4+9+bYISlmz2xYMf7b5a3yNjLlkesrHctQO6qJpsGL+rStXibgcJcOtp8/RsiRapDieqUiig==
-X-Received: by 2002:a05:651c:1509:b0:26f:a762:7139 with SMTP id e9-20020a05651c150900b0026fa7627139mr6179680ljf.416.1665608136181;
-        Wed, 12 Oct 2022 13:55:36 -0700 (PDT)
+        bh=+u5zTxsQpjiuj7kJ8NImmHJwlmXGjiHmqr7wGB9659Y=;
+        b=YLLyXHIbqHobMhO4Q1UQtwX760CcEG0DJPKrDJCpF3m+uavsHZNglMJkfYvwrpnBaG
+         s9cE/SSh5GquGwc2eFhje6mSMXWlHEKTEC0PgYD3eMP9sBOA3aebF0F0uvwfRkZzO2aW
+         furOwH316C6NAh2JM1G635/LrNW3HIlH4DAOc7gxkKXpNhccBxYYj9hohsTjDy17tdF9
+         ESy71hX8866m0bdMWwMEUbsKhKELUjxZvLowCawm07CArw192BwsKZXl2Lw8h4AFwMd0
+         BFSob6gXRQVFvTISAVop16NnFMw62EqPlABbTYjObPgzzuZP+Ymy0XgM/beAIp22FyzW
+         g/pA==
+X-Gm-Message-State: ACrzQf2pz8agXCSS06RHTzKHhcdGLzyWvKq4uvAOFffmnyFwT1Mygolh
+        1EWr/nue/NQVSfjRrSgkSRI=
+X-Google-Smtp-Source: AMsMyM5nPJG9As/+UNLN3CVpn76zI3Ad1+oKSu/NW+qfUWOTHWvdb5VmDyFjw0EgSUpbKK7OxzVZHg==
+X-Received: by 2002:a2e:a887:0:b0:26a:ba85:8fbe with SMTP id m7-20020a2ea887000000b0026aba858fbemr10875427ljq.14.1665610276205;
+        Wed, 12 Oct 2022 14:31:16 -0700 (PDT)
 Received: from mobilestation ([95.79.133.202])
-        by smtp.gmail.com with ESMTPSA id m7-20020a056512114700b0049aa7a56715sm93926lfg.267.2022.10.12.13.55.34
+        by smtp.gmail.com with ESMTPSA id t18-20020a056512209200b004946bec4e7fsm119652lfr.41.2022.10.12.14.31.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Oct 2022 13:55:35 -0700 (PDT)
-Date:   Wed, 12 Oct 2022 23:55:33 +0300
+        Wed, 12 Oct 2022 14:31:15 -0700 (PDT)
+Date:   Thu, 13 Oct 2022 00:31:13 +0300
 From:   Serge Semin <fancer.lancer@gmail.com>
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+To:     Tony Luck <tony.luck@intel.com>
+Cc:     Borislav Petkov <bp@alien8.de>,
+        Serge Semin <Sergey.Semin@baikalelectronics.ru>,
         Michal Simek <michal.simek@xilinx.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Tony Luck <tony.luck@intel.com>,
         James Morse <james.morse@arm.com>,
         Robert Richter <rric@kernel.org>,
         Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
@@ -70,22 +70,19 @@ Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
         Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH RESEND v3 14/17] EDAC/synopsys: Detach Zynq DDRC
- controller support
-Message-ID: <20221012205533.kp45dht3j5zk4bdx@mobilestation>
+Subject: Re: [PATCH RESEND v3 13/17] EDAC/mc: Add MC unique index allocation
+ procedure
+Message-ID: <20221012213113.fop4kqqtu43hka4b@mobilestation>
 References: <20220929232712.12202-1-Sergey.Semin@baikalelectronics.ru>
- <20220929232712.12202-15-Sergey.Semin@baikalelectronics.ru>
- <YzcAV2I/rhILfhwR@zn.tnic>
- <20221006121740.ksugoodbagr45fky@mobilestation>
- <Yz7XVqeopgGVR7+3@zn.tnic>
- <20221008004224.owqbzbdctclua2hb@mobilestation>
- <Y0b5UAMXPWbDC6HK@zn.tnic>
- <20221012192743.ihy4nidkzxweqebj@mobilestation>
- <Y0cZAGhUAzH6S9vI@zn.tnic>
+ <20220929232712.12202-14-Sergey.Semin@baikalelectronics.ru>
+ <Y0b5cq4evSg1nfb0@zn.tnic>
+ <20221012200154.7fq3i7igbgkcy2mx@mobilestation>
+ <Y0ckn5r3KN416Jeg@zn.tnic>
+ <Y0cnS0uOtjmYL7fQ@agluck-desk3.sc.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y0cZAGhUAzH6S9vI@zn.tnic>
+In-Reply-To: <Y0cnS0uOtjmYL7fQ@agluck-desk3.sc.intel.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -96,44 +93,42 @@ Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Wed, Oct 12, 2022 at 09:44:00PM +0200, Borislav Petkov wrote:
-> On Wed, Oct 12, 2022 at 10:27:43PM +0300, Serge Semin wrote:
-> > ... inter-device parts of the core. The registration procedure is
-> > protected by the mutex and RCU. So it seems as the EDAC core developer
+On Wed, Oct 12, 2022 at 01:44:59PM -0700, Tony Luck wrote:
+> On Wed, Oct 12, 2022 at 10:33:35PM +0200, Borislav Petkov wrote:
+> > On Wed, Oct 12, 2022 at 11:01:54PM +0300, Serge Semin wrote:
 > 
-> Seems, schmeems. As I said already, EDAC has always had a single
-> chipset-specific driver. Period. So if one needs to run more than one
-> chipset-specific driver concurrently, then the whole code needs to be
-> audited because this hasn't been done before.
+> > "A new special MC index is introduced here. It's defined by the
+> > EDAC_AUTO_MC_NUM macro with a value specifically chosen as the least
+> > probable value used for the real MC index. In case if the EDAC_AUTO_MC_NUM
+> > index is specified by the EDAC LLDD, the MC index will be either retrieved
+> > from the MC device OF-node alias index ("mc[:number:]") or automatically
+> > generated as the next-free MC index found by the ID allocation procedure."
 > 
-> > If it has never needed to, then please explain why did you let the
-> > Synopsys EDAC driver being accepted like that then? 
-> 
-> I think I already did.
 
-Kind of. What you didn't explain was the driver-specific problem in the
-edac_mc core. What is the difference in the EDAC core handling
-two devices (including of difference types) on the same platform and
-handling the same devices each probed by two different drivers? (Consider
-the drivers are designed thread-safe and we are talking about the EDAC
-MC core.)
+> Just curious.If I have an EDAC driver using EDAC_AUTO_MC_NUM, and I
+> unload and reload the driver a bunch of times. Do I get the same memory
+> controller numbers each reload, or get an ever increasing set each time?
 
-> 
-> > In my case it's a single EDAC driver per-chip. There can be several
-> > DDR-controllers installed on the same SoC, but all of them of the same
-> > type (Synopsys DW uMCTL2 v2.61a).
-> 
-> Good.
-> 
-> I'll look at your patches as time allows.
+You'll get the same numbers if no other device-driver allocated them
+(which we already established isn't relevant to EDAC since only one
+driver per system is supposed to work). In order to implement what you
+said I should have called idr_alloc_cyclic() instead.
 
-Ok. Thanks in advance.
+Here is what the suggested implementation implies:
+
+1. If there is a particular ID assigned in the framework of the dts aliases
+(i.e. mcX = &ddr0) then that value will be selected for the controller.
+2. If no particular ID is assigned but there are mcX-like aliases
+defined in DTS, then the next free id greater than the last mcX value
+will be assigned.
+3. If none if the above is relevant the first free ID in the pool will be
+allocated.
+4. On the driver unload the driver remove method will be called thus
+the allocated ID will be freed on the MC-controller de-registration.
+Thus on the next driver loading the freed IDs will be reused by the
+idr_alloc() method design.
 
 -Sergey
 
 > 
-> -- 
-> Regards/Gruss,
->     Boris.
-> 
-> https://people.kernel.org/tglx/notes-about-netiquette
+> -Tony
