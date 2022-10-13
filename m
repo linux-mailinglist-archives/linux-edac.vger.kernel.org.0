@@ -2,67 +2,67 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C68AD5FD732
-	for <lists+linux-edac@lfdr.de>; Thu, 13 Oct 2022 11:38:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC2A15FDB05
+	for <lists+linux-edac@lfdr.de>; Thu, 13 Oct 2022 15:37:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229495AbiJMJiw (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Thu, 13 Oct 2022 05:38:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38818 "EHLO
+        id S229550AbiJMNhz (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Thu, 13 Oct 2022 09:37:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229494AbiJMJiv (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Thu, 13 Oct 2022 05:38:51 -0400
+        with ESMTP id S229567AbiJMNhx (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Thu, 13 Oct 2022 09:37:53 -0400
 Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 407A91217F9;
-        Thu, 13 Oct 2022 02:38:50 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E84AA5143F;
+        Thu, 13 Oct 2022 06:37:51 -0700 (PDT)
 Received: from zn.tnic (p200300ea9733e733329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9733:e733:329c:23ff:fea6:a903])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id C35B21EC053B;
-        Thu, 13 Oct 2022 11:38:44 +0200 (CEST)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 1DB8C1EC054C;
+        Thu, 13 Oct 2022 15:37:46 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1665653924;
+        t=1665668266;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=7sFMAuZJzUPv1j5Nd1UXqoUcoLytDTmELcFfg6XdXbI=;
-        b=UkfI9X4nygXICvQV52k1J8hwljulApTQLTNIi7MOwkzbgsvqYYHYuYnNu+FJaG1Z3N+9rY
-        lq2edsvl2cTGRsLoRUyhiugNuI4SUIjaHzo8Un66CpOwlEZUuauIwVoEvb/ZO2tfTdEVkb
-        DHDvHBKrJGdhcQZybcXqlqGiRO0W078=
-Date:   Thu, 13 Oct 2022 11:38:41 +0200
+        bh=EmYBLVOiMUuM+RODYtYXcffudc/+Ogx/DDE0gYCil7U=;
+        b=OZUMz+OxHh+lwtAeniW1/rexhDd7+lG+ovqcaYcrkDTFT04h1cESWqeeg3thaNhiGLIGtD
+        JsisTkujOaQQTE6wtJCyxLdAsP/PE4nGhCB3pNuPGQgKxei5++Nf6fW8Jy6m9U5jmm7guf
+        U2pmYireE6tvSKMYuKu0KXPvDsvceok=
+Date:   Thu, 13 Oct 2022 15:37:42 +0200
 From:   Borislav Petkov <bp@alien8.de>
-To:     Serge Semin <fancer.lancer@gmail.com>
-Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Michal Simek <michal.simek@xilinx.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
+To:     Justin He <Justin.He@arm.com>
+Cc:     Len Brown <lenb@kernel.org>, James Morse <James.Morse@arm.com>,
         Tony Luck <tony.luck@intel.com>,
-        James Morse <james.morse@arm.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
         Robert Richter <rric@kernel.org>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Michail Ivanov <Michail.Ivanov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        Punnaiah Choudary Kalluri 
-        <punnaiah.choudary.kalluri@xilinx.com>,
-        Manish Narani <manish.narani@xilinx.com>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH RESEND v3 13/17] EDAC/mc: Add MC unique index allocation
- procedure
-Message-ID: <Y0fcoSVN0mKMuCjo@zn.tnic>
-References: <20220929232712.12202-1-Sergey.Semin@baikalelectronics.ru>
- <20220929232712.12202-14-Sergey.Semin@baikalelectronics.ru>
- <Y0b5cq4evSg1nfb0@zn.tnic>
- <20221012200154.7fq3i7igbgkcy2mx@mobilestation>
- <Y0ckn5r3KN416Jeg@zn.tnic>
- <20221012223039.upbjsiywiipdrjjk@mobilestation>
+        Robert Moore <robert.moore@intel.com>,
+        Qiuxu Zhuo <qiuxu.zhuo@intel.com>,
+        Yazen Ghannam <yazen.ghannam@amd.com>,
+        Jan Luebbe <jlu@pengutronix.de>,
+        Khuong Dinh <khuong@os.amperecomputing.com>,
+        Kani Toshi <toshi.kani@hpe.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
+        "devel@acpica.org" <devel@acpica.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Shuai Xue <xueshuai@linux.alibaba.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        "linux-efi@vger.kernel.org" <linux-efi@vger.kernel.org>,
+        nd <nd@arm.com>, kernel test robot <lkp@intel.com>
+Subject: Re: [PATCH v8 6/7] apei/ghes: Use unrcu_pointer for cmpxchg
+Message-ID: <Y0gUpoaUBKw/jjaD@zn.tnic>
+References: <20221010023559.69655-1-justin.he@arm.com>
+ <20221010023559.69655-7-justin.he@arm.com>
+ <Y0VGkUxpqiIzIFzB@zn.tnic>
+ <DBBPR08MB4538A9F831FA96545BA35D9FF7239@DBBPR08MB4538.eurprd08.prod.outlook.com>
+ <Y0WBklS1XpB5as+m@zn.tnic>
+ <DBBPR08MB4538D5A85F707632ACCB70A4F7229@DBBPR08MB4538.eurprd08.prod.outlook.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20221012223039.upbjsiywiipdrjjk@mobilestation>
+In-Reply-To: <DBBPR08MB4538D5A85F707632ACCB70A4F7229@DBBPR08MB4538.eurprd08.prod.outlook.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
@@ -72,37 +72,24 @@ Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Thu, Oct 13, 2022 at 01:30:39AM +0300, Serge Semin wrote:
-> A level of completeness can be relative to each person. For all the
-> years I've submitting the patches to the kernel I couldn't even
-> remember the last request to elaborate my logs. In no means I want to
-> say they were perfect. I could just be too immersed into the problem
-> so thought that the provided text was descriptive enough especially
-> for the subsystem maintainer. So to speak asking for more details
-> would be more than enough.
+On Wed, Oct 12, 2022 at 12:04:57PM +0000, Justin He wrote:
+> I have a concern about what if cmpxchg failed? Do we have to still
+> guarantee the ordering since cmpxchg will not imply a smp_mb if it
+> failed.
 
-Dude, are you even reading what I'm writing to you?!
+Of course it will imply that. At least on x86 it does. smp_wmb() is a
+compiler barrier there and cmpxchg() already has that barrier semantics
+by clobbering "memory". I'm pretty sure you should have the same thing
+on ARM.
 
-I don't care how immersed you were in the problem and who asked or
-didn't ask you to elaborate your logs. If you're submitting patches
-to the EDAC tree, those logs need to be complete and explain things
-sufficiently and exactly. Period.
+And even if that weren't the case, the write barrier is, as the comment
+says, "new_cache must be put into array after its contents are written".
 
-> So you need more details. You should have just asked. I can't read
-> your mind after all.
+Are we writing anything into the cache if cmpxchg fails?
 
-And I can't read yours too. And I asked like three times already. And
-yet, you still are not giving me a concrete answer.
+> Besides, I didn't find the paired smp_mb or smp_rmb for this smp_wmb.
 
-I said "exact pointers please". That means, you point me to a driver and
-the *exact* *code* in there which you think is doing something which
-needs fixing.
-
-What you've given me again is the same spiel as before.
-
-So let me save you and me some time: your patches are not going anywhere
-until they explain the thing they're fixing properly and precisely. End
-of story.
+Why would there be pairs? I don't understand that statement here.
 
 -- 
 Regards/Gruss,
