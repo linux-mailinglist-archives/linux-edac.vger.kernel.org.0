@@ -2,116 +2,217 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE8EE6010BD
-	for <lists+linux-edac@lfdr.de>; Mon, 17 Oct 2022 16:06:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 708D2601147
+	for <lists+linux-edac@lfdr.de>; Mon, 17 Oct 2022 16:39:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229722AbiJQOG3 (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Mon, 17 Oct 2022 10:06:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33860 "EHLO
+        id S229738AbiJQOjo (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Mon, 17 Oct 2022 10:39:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229939AbiJQOG2 (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Mon, 17 Oct 2022 10:06:28 -0400
-Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5611A25C51;
-        Mon, 17 Oct 2022 07:06:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:References:
-        Cc:To:From:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=nnNaPHsK6FwMseLsC5mx5u23AVdFa4nC/67pGYTx9iw=; b=VnO3i3W9PnC25b/uABFAWH4zD9
-        IddvmWj5M3YARUxvtiYJK9qOj9HsnaTXguCNUswoIDWihuxqgA0z7Td2FjR78uWHBvcy+a7MouxzO
-        1ugt/DYFA1Lgg4Qfzki6NpD8qJbKPgg0OYXn1Jee7JsOdT3DPkQOl31y6AESAsFkdH5I40wha5BPs
-        /BZtAPyrnYLzNk5NXdWpCnb0ZcB2xcASRfSNL/vA50luXoXH2aFpANFoii+++U5P/OCWXal++FJva
-        NVxuR2YBT6IE5QidG5q30Mj/tkJnoKBETl2z1fasjEJLkbmLG+AjZLtpC7qOGEXBxs/bsk8YLuC0z
-        EnRJofeg==;
-Received: from [179.113.159.85] (helo=[192.168.1.60])
-        by fanzine2.igalia.com with esmtpsa 
-        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
-        id 1okQkz-000OT3-Sj; Mon, 17 Oct 2022 16:06:17 +0200
-Message-ID: <1df38599-ace7-5673-4cbd-7861de385d79@igalia.com>
-Date:   Mon, 17 Oct 2022 11:05:53 -0300
+        with ESMTP id S230303AbiJQOjn (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Mon, 17 Oct 2022 10:39:43 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7644DF43;
+        Mon, 17 Oct 2022 07:39:37 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3F8316117D;
+        Mon, 17 Oct 2022 14:39:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 97457C43144;
+        Mon, 17 Oct 2022 14:39:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666017576;
+        bh=S3adBKWWRCbdw9aTgDVjLyyamcpV9tzhi9nN0qio5y8=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=bkZec/mpzcK73DGRsO+9WMq/Vf5m3ykC5aBPApPU4IlCMDH/aVBUT6I0Xcr+eR1vi
+         latXBJJn9/vjqk+Cmg3zR8EZ18LjveNkJxgSQHO0b6oqQ6sJKJIbwom6zZh0xOBWSj
+         oHmxLPQjjacMwWcJYTQwvXDUYaKLd7RgFWyrS/gaymZeeCaCBcw04K6kOKaMdH52hC
+         8kuWJnaipTMtjkAqtwXBGuaU5bF3t1m6zpN3iz03ulc7N9sigKx9tZEeE2aeow9XLA
+         V8xWJnLvFkTABpmBnID3kfXpocnADmMUA6jchPTPVMC3emP5huEQdY4kYMT0HLUvXE
+         bV3P5Rn20U/ow==
+Received: by mail-lf1-f49.google.com with SMTP id f37so17819625lfv.8;
+        Mon, 17 Oct 2022 07:39:36 -0700 (PDT)
+X-Gm-Message-State: ACrzQf2pjYg+1o41l68BmIxh8yBnAO5i7KDzKrgd/e+wnqkIykLzGOvU
+        sXRLt4OS1YyVbb2ewwussiAIqtl+5bzRftrNXJ0=
+X-Google-Smtp-Source: AMsMyM55z/nkRG2B+V8V1IwJyHIiMNsM2xHM1VyPrZy9VQr+/mQ4Twt2BgzGR8m3xY0sgjtNJw8gKq0UoiD0ohuDQKQ=
+X-Received: by 2002:ac2:4c47:0:b0:4a2:c07b:4b62 with SMTP id
+ o7-20020ac24c47000000b004a2c07b4b62mr3839451lfk.426.1666017574462; Mon, 17
+ Oct 2022 07:39:34 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.2
-Subject: Re: [PATCH V3 08/11] EDAC/altera: Skip the panic notifier if kdump is
- loaded
-Content-Language: en-US
-From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
-To:     Dinh Nguyen <dinguyen@kernel.org>, Tony Luck <tony.luck@intel.com>,
-        linux-edac@vger.kernel.org, bp@alien8.de
-Cc:     kexec@lists.infradead.org, bhe@redhat.com, pmladek@suse.com,
-        akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
-        linux-hyperv@vger.kernel.org, netdev@vger.kernel.org,
-        x86@kernel.org, kernel-dev@igalia.com, kernel@gpiccoli.net,
-        halves@canonical.com, fabiomirmar@gmail.com,
-        alejandro.j.jimenez@oracle.com, andriy.shevchenko@linux.intel.com,
-        arnd@arndb.de, corbet@lwn.net, d.hatayama@jp.fujitsu.com,
-        dave.hansen@linux.intel.com, dyoung@redhat.com,
-        feng.tang@intel.com, gregkh@linuxfoundation.org,
-        mikelley@microsoft.com, hidehiro.kawai.ez@hitachi.com,
-        jgross@suse.com, john.ogness@linutronix.de, keescook@chromium.org,
-        luto@kernel.org, mhiramat@kernel.org, mingo@redhat.com,
-        paulmck@kernel.org, peterz@infradead.org, rostedt@goodmis.org,
-        senozhatsky@chromium.org, stern@rowland.harvard.edu,
-        tglx@linutronix.de, vgoyal@redhat.com, vkuznets@redhat.com,
-        will@kernel.org, xuqiang36@huawei.com
-References: <20220819221731.480795-1-gpiccoli@igalia.com>
- <20220819221731.480795-9-gpiccoli@igalia.com>
- <742d2a7e-efee-e212-178e-ba642ec94e2a@igalia.com>
-In-Reply-To: <742d2a7e-efee-e212-178e-ba642ec94e2a@igalia.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221017130140.420986-1-justin.he@arm.com> <20221017130140.420986-7-justin.he@arm.com>
+In-Reply-To: <20221017130140.420986-7-justin.he@arm.com>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Mon, 17 Oct 2022 16:39:22 +0200
+X-Gmail-Original-Message-ID: <CAMj1kXEge+PtOHug2FhnbAetDLOTJ4jguC4uwA4oORbu-25YiA@mail.gmail.com>
+Message-ID: <CAMj1kXEge+PtOHug2FhnbAetDLOTJ4jguC4uwA4oORbu-25YiA@mail.gmail.com>
+Subject: Re: [PATCH v9 6/7] apei/ghes: Use xchg_release() for updating new
+ cache slot instead of cmpxchg()
+To:     Jia He <justin.he@arm.com>
+Cc:     Len Brown <lenb@kernel.org>, Tony Luck <tony.luck@intel.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Robert Richter <rric@kernel.org>,
+        Robert Moore <robert.moore@intel.com>,
+        Qiuxu Zhuo <qiuxu.zhuo@intel.com>,
+        Yazen Ghannam <yazen.ghannam@amd.com>,
+        Jan Luebbe <jlu@pengutronix.de>,
+        Khuong Dinh <khuong@os.amperecomputing.com>,
+        Kani Toshi <toshi.kani@hpe.com>,
+        James Morse <james.morse@arm.com>, linux-acpi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-edac@vger.kernel.org,
+        devel@acpica.org, "Rafael J . Wysocki" <rafael@kernel.org>,
+        Shuai Xue <xueshuai@linux.alibaba.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>, linux-efi@vger.kernel.org,
+        nd@arm.com, Peter Zijlstra <peterz@infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On 18/09/2022 11:10, Guilherme G. Piccoli wrote:
-> On 19/08/2022 19:17, Guilherme G. Piccoli wrote:
->> The altera_edac panic notifier performs some data collection with
->> regards errors detected; such code relies in the regmap layer to
->> perform reads/writes, so the code is abstracted and there is some
->> risk level to execute that, since the panic path runs in atomic
->> context, with interrupts/preemption and secondary CPUs disabled.
->>
->> Users want the information collected in this panic notifier though,
->> so in order to balance the risk/benefit, let's skip the altera panic
->> notifier if kdump is loaded. While at it, remove a useless header
->> and encompass a macro inside the sole ifdef block it is used.
->>
->> Cc: Borislav Petkov <bp@alien8.de>
->> Cc: Petr Mladek <pmladek@suse.com>
->> Cc: Tony Luck <tony.luck@intel.com>
->> Acked-by: Dinh Nguyen <dinguyen@kernel.org>
->> Signed-off-by: Guilherme G. Piccoli <gpiccoli@igalia.com>
->>
->> ---
->>
->> V3:
->> - added the ack tag from Dinh - thanks!
->> - had a good discussion with Boris about that in V2 [0],
->> hopefully we can continue and reach a consensus in this V3.
->> [0] https://lore.kernel.org/lkml/46137c67-25b4-6657-33b7-cffdc7afc0d7@igalia.com/
->>
->> V2:
->> - new patch, based on the discussion in [1].
->> [1] https://lore.kernel.org/lkml/62a63fc2-346f-f375-043a-fa21385279df@igalia.com/
->>
->> [...]
-> 
-> Hi Dinh, Tony, Boris - sorry for the ping.
+On Mon, 17 Oct 2022 at 15:02, Jia He <justin.he@arm.com> wrote:
+>
+> From: Ard Biesheuvel <ardb@kernel.org>
+>
+> From: Ard Biesheuvel <ardb@kernel.org>
+>
+> ghes_estatus_cache_add() selects a slot, and either succeeds in
+> replacing its contents with a pointer to a new cached item, or it just
+> gives up and frees the new item again, without attempting to select
+> another slot even if one might be available.
+>
+> Since only inserting new items is needed, the race can only cause a failure
+> if the selected slot was updated with another new item concurrently,
+> which means that it is arbitrary which of those two items gets
+> dropped. This means the cmpxchg() and the special case are not necessary,
+> and hence just drop the existing item unconditionally. Note that this
+> does not result in loss of error events, it simply means we might
+> cause a false cache miss, and report the same event one additional
+> time in quick succession even if the cache should have prevented that.
+>
+> Move the xchg_release() and call_rcu out of rcu_read_lock/unlock section
+> since there is no actually dereferencing the pointer at all.
+>
+> Co-developed-by: Jia He <justin.he@arm.com>
+> Signed-off-by: Jia He <justin.he@arm.com>
+> Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
+> ---
+>  drivers/acpi/apei/ghes.c | 47 +++++++++++++++++++++-------------------
+>  1 file changed, 25 insertions(+), 22 deletions(-)
+>
+> diff --git a/drivers/acpi/apei/ghes.c b/drivers/acpi/apei/ghes.c
+> index 27c72b175e4b..5d7754053ca0 100644
+> --- a/drivers/acpi/apei/ghes.c
+> +++ b/drivers/acpi/apei/ghes.c
+> @@ -150,7 +150,7 @@ struct ghes_vendor_record_entry {
+>  static struct gen_pool *ghes_estatus_pool;
+>  static unsigned long ghes_estatus_pool_size_request;
+>
+> -static struct ghes_estatus_cache *ghes_estatus_caches[GHES_ESTATUS_CACHES_SIZE];
+> +static struct ghes_estatus_cache __rcu *ghes_estatus_caches[GHES_ESTATUS_CACHES_SIZE];
+>  static atomic_t ghes_estatus_cache_alloced;
+>
+>  static int ghes_panic_timeout __read_mostly = 30;
+> @@ -785,31 +785,26 @@ static struct ghes_estatus_cache *ghes_estatus_cache_alloc(
+>         return cache;
+>  }
+>
+> -static void ghes_estatus_cache_free(struct ghes_estatus_cache *cache)
+> +static void ghes_estatus_cache_rcu_free(struct rcu_head *head)
+>  {
+> +       struct ghes_estatus_cache *cache;
+>         u32 len;
+>
+> +       cache = container_of(head, struct ghes_estatus_cache, rcu);
+>         len = cper_estatus_len(GHES_ESTATUS_FROM_CACHE(cache));
+>         len = GHES_ESTATUS_CACHE_LEN(len);
+>         gen_pool_free(ghes_estatus_pool, (unsigned long)cache, len);
+>         atomic_dec(&ghes_estatus_cache_alloced);
+>  }
+>
+> -static void ghes_estatus_cache_rcu_free(struct rcu_head *head)
+> -{
+> -       struct ghes_estatus_cache *cache;
+> -
+> -       cache = container_of(head, struct ghes_estatus_cache, rcu);
+> -       ghes_estatus_cache_free(cache);
+> -}
+> -
+>  static void ghes_estatus_cache_add(
+>         struct acpi_hest_generic *generic,
+>         struct acpi_hest_generic_status *estatus)
+>  {
+>         int i, slot = -1, count;
+>         unsigned long long now, duration, period, max_period = 0;
+> -       struct ghes_estatus_cache *cache, *slot_cache = NULL, *new_cache;
+> +       struct ghes_estatus_cache *cache, *new_cache;
+> +       struct ghes_estatus_cache __rcu *victim;
+>
+>         new_cache = ghes_estatus_cache_alloc(generic, estatus);
+>         if (new_cache == NULL)
+> @@ -820,13 +815,11 @@ static void ghes_estatus_cache_add(
+>                 cache = rcu_dereference(ghes_estatus_caches[i]);
+>                 if (cache == NULL) {
+>                         slot = i;
+> -                       slot_cache = NULL;
+>                         break;
+>                 }
+>                 duration = now - cache->time_in;
+>                 if (duration >= GHES_ESTATUS_IN_CACHE_MAX_NSEC) {
+>                         slot = i;
+> -                       slot_cache = cache;
+>                         break;
+>                 }
+>                 count = atomic_read(&cache->count);
+> @@ -835,18 +828,28 @@ static void ghes_estatus_cache_add(
+>                 if (period > max_period) {
+>                         max_period = period;
+>                         slot = i;
+> -                       slot_cache = cache;
+>                 }
+>         }
+> -       /* new_cache must be put into array after its contents are written */
+> -       smp_wmb();
+> -       if (slot != -1 && cmpxchg(ghes_estatus_caches + slot,
+> -                                 slot_cache, new_cache) == slot_cache) {
+> -               if (slot_cache)
+> -                       call_rcu(&slot_cache->rcu, ghes_estatus_cache_rcu_free);
+> -       } else
+> -               ghes_estatus_cache_free(new_cache);
+>         rcu_read_unlock();
+> +
+> +       if (slot != -1) {
+> +               /*
+> +                * Use release semantics to ensure that ghes_estatus_cached()
+> +                * running on another CPU will see the updated cache fields if
+> +                * it can see the new value of the pointer.
+> +                */
+> +               victim = xchg_release(&ghes_estatus_caches[slot], new_cache);
+> +
 
-Hey folks, apologies for the new ping.
+This still lacks the RCU_INITIALIZER()
 
-Is there anything to improve here maybe? Reviews / opinions are very
-appreciated!
-Cheers,
+> +               /*
+> +                * At this point, victim may point to a cached item different
+> +                * from the one based on which we selected the slot. Instead of
+> +                * going to the loop again to pick another slot, let's just
+> +                * drop the other item anyway: this may cause a false cache
+> +                * miss later on, but that won't cause any problems.
+> +                */
+> +               if (victim)
+> +                       call_rcu(unrcu_pointer(&victim->rcu), ghes_estatus_cache_rcu_free);
 
+Please use &unrcu_pointer(victim)->rcu here.
 
-Guilherme
+> +       }
+>  }
+>
+>  static void __ghes_panic(struct ghes *ghes,
+> --
+> 2.25.1
+>
