@@ -2,48 +2,48 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 545C0605F1F
-	for <lists+linux-edac@lfdr.de>; Thu, 20 Oct 2022 13:42:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9707E60607F
+	for <lists+linux-edac@lfdr.de>; Thu, 20 Oct 2022 14:45:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231400AbiJTLmP (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Thu, 20 Oct 2022 07:42:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53390 "EHLO
+        id S229961AbiJTMpI (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Thu, 20 Oct 2022 08:45:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229629AbiJTLmO (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Thu, 20 Oct 2022 07:42:14 -0400
+        with ESMTP id S230136AbiJTMpH (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Thu, 20 Oct 2022 08:45:07 -0400
 Received: from smtp-fw-6002.amazon.com (smtp-fw-6002.amazon.com [52.95.49.90])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7CC41DDDC7;
-        Thu, 20 Oct 2022 04:42:12 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E09AFF8FE;
+        Thu, 20 Oct 2022 05:45:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1666266133; x=1697802133;
+  t=1666269905; x=1697805905;
   h=from:to:cc:subject:date:message-id:mime-version:
    content-transfer-encoding;
-  bh=2hlgTccoFkFoWBMR73SLtJ14tsBB/9sAvZeBjcUcGqI=;
-  b=BTA/QkVMIzJUtLwhQ0LYre/rWsHcpckXeKEs9c2VRrMqTTvWVXz17sIR
-   s2BJ4iH1eFJAv3bhiS7JX19bB+AYyBZ7ZrXxC4TGxsoS2xQ1K0XCNucAv
-   bKYqLGNdk8cCr6SpQszOuP4JKNhUiM+Xrw/F/cXcfR7DNgvYTImVtAIao
-   A=;
+  bh=g+Mj6CRyj2LV1ySn2gOnQJn4NQ7XWVLANWajuKVQIGI=;
+  b=eQZ0V3ZLWnl1AWwHWO4dXzuw7D7RDcRajyUkDSx0x6P0rih0T3HIOIl6
+   fNe27++bUIJ314uzrHiM87S5W56RQDZY//nRY4cRsDEiLEBudJbxaHOH6
+   w6mHufeVyF5q9TdJxhhTgsOyKgLyJ6NMw++USa7i5WEiFg1tIfCHcVOQ2
+   o=;
 X-IronPort-AV: E=Sophos;i="5.95,198,1661817600"; 
-   d="scan'208";a="257667255"
-Received: from iad12-co-svc-p1-lb1-vlan3.amazon.com (HELO email-inbound-relay-pdx-2c-m6i4x-fad5e78e.us-west-2.amazon.com) ([10.43.8.6])
-  by smtp-border-fw-6002.iad6.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Oct 2022 11:42:08 +0000
-Received: from EX13MTAUWB001.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan3.pdx.amazon.com [10.236.137.198])
-        by email-inbound-relay-pdx-2c-m6i4x-fad5e78e.us-west-2.amazon.com (Postfix) with ESMTPS id BF524A0F7E;
-        Thu, 20 Oct 2022 11:42:06 +0000 (UTC)
-Received: from EX19D013UWB004.ant.amazon.com (10.13.138.62) by
- EX13MTAUWB001.ant.amazon.com (10.43.161.249) with Microsoft SMTP Server (TLS)
- id 15.0.1497.42; Thu, 20 Oct 2022 11:42:04 +0000
-Received: from EX13MTAUWA001.ant.amazon.com (10.43.160.58) by
- EX19D013UWB004.ant.amazon.com (10.13.138.62) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.1118.15; Thu, 20 Oct 2022 11:42:04 +0000
+   d="scan'208";a="257694944"
+Received: from iad12-co-svc-p1-lb1-vlan3.amazon.com (HELO email-inbound-relay-iad-1a-e823fbde.us-east-1.amazon.com) ([10.43.8.6])
+  by smtp-border-fw-6002.iad6.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Oct 2022 12:45:02 +0000
+Received: from EX13MTAUWB001.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan3.iad.amazon.com [10.40.163.38])
+        by email-inbound-relay-iad-1a-e823fbde.us-east-1.amazon.com (Postfix) with ESMTPS id 30B70C0A0C;
+        Thu, 20 Oct 2022 12:44:59 +0000 (UTC)
+Received: from EX19D013UWA004.ant.amazon.com (10.13.138.207) by
+ EX13MTAUWB001.ant.amazon.com (10.43.161.207) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.42; Thu, 20 Oct 2022 12:44:59 +0000
+Received: from EX13MTAUEB002.ant.amazon.com (10.43.60.12) by
+ EX19D013UWA004.ant.amazon.com (10.13.138.207) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1118.15;
+ Thu, 20 Oct 2022 12:44:59 +0000
 Received: from dev-dsk-farbere-1a-46ecabed.eu-west-1.amazon.com
- (172.19.116.181) by mail-relay.amazon.com (10.43.160.118) with Microsoft SMTP
- Server id 15.0.1497.42 via Frontend Transport; Thu, 20 Oct 2022 11:42:04
+ (172.19.116.181) by mail-relay.amazon.com (10.43.60.234) with Microsoft SMTP
+ Server id 15.0.1497.42 via Frontend Transport; Thu, 20 Oct 2022 12:44:58
  +0000
 Received: by dev-dsk-farbere-1a-46ecabed.eu-west-1.amazon.com (Postfix, from userid 14301484)
-        id BC8184BB3; Thu, 20 Oct 2022 11:42:03 +0000 (UTC)
+        id 2E7284BBA; Thu, 20 Oct 2022 12:44:58 +0000 (UTC)
 From:   Eliav Farber <farbere@amazon.com>
 To:     <bp@alien8.de>, <mchehab@kernel.org>, <tony.luck@intel.com>,
         <james.morse@arm.com>, <rric@kernel.org>,
@@ -51,9 +51,9 @@ To:     <bp@alien8.de>, <mchehab@kernel.org>, <tony.luck@intel.com>,
 CC:     <talel@amazon.com>, <jonnyc@amazon.com>, <hhhawa@amazon.com>,
         <hanochu@amazon.com>, <farbere@amazon.com>, <itamark@amazon.com>,
         <shellykz@amazon.com>, <amitlavi@amazon.com>, <dkl@amazon.com>
-Subject: [PATCH] edac: fix period calculation in edac_device_reset_delay_period()
-Date:   Thu, 20 Oct 2022 11:42:03 +0000
-Message-ID: <20221020114203.10985-1-farbere@amazon.com>
+Subject: [PATCH v2] edac: fix period calculation in edac_device_reset_delay_period()
+Date:   Thu, 20 Oct 2022 12:44:58 +0000
+Message-ID: <20221020124458.22153-1-farbere@amazon.com>
 X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -74,22 +74,35 @@ milli-seconds.
 
 Signed-off-by: Eliav Farber <farbere@amazon.com>
 ---
- drivers/edac/edac_device.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+v2 --> v1:
+- Fix the bug without modifying jiffs which is used to set
+  edac_dev->delay.
+
+ drivers/edac/edac_device.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
 diff --git a/drivers/edac/edac_device.c b/drivers/edac/edac_device.c
-index 19522c568aa5..88942a6edc2c 100644
+index 19522c568aa5..e944dd9b3593 100644
 --- a/drivers/edac/edac_device.c
 +++ b/drivers/edac/edac_device.c
-@@ -399,7 +399,7 @@ void edac_device_reset_delay_period(struct edac_device_ctl_info *edac_dev,
+@@ -398,13 +398,13 @@ void edac_device_reset_delay_period(struct edac_device_ctl_info *edac_dev,
+ {
  	unsigned long jiffs = msecs_to_jiffies(value);
  
- 	if (value == 1000)
+-	if (value == 1000)
 -		jiffs = round_jiffies_relative(value);
-+		jiffs = round_jiffies_relative(jiffs);
- 
+-
  	edac_dev->poll_msec = value;
  	edac_dev->delay	    = jiffs;
+ 
+-	edac_mod_work(&edac_dev->work, jiffs);
++	if (value == 1000)
++		edac_mod_work(&edac_dev->work, round_jiffies_relative(jiffs));
++	else
++		edac_mod_work(&edac_dev->work, jiffs);
+ }
+ 
+ int edac_device_alloc_index(void)
 -- 
 2.37.1
 
