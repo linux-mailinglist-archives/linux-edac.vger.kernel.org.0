@@ -2,183 +2,284 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5298260C225
-	for <lists+linux-edac@lfdr.de>; Tue, 25 Oct 2022 05:14:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3852260C6DE
+	for <lists+linux-edac@lfdr.de>; Tue, 25 Oct 2022 10:49:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229689AbiJYDN7 (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Mon, 24 Oct 2022 23:13:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49510 "EHLO
+        id S231679AbiJYItA (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Tue, 25 Oct 2022 04:49:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230474AbiJYDN5 (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Mon, 24 Oct 2022 23:13:57 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 454EE1B9D3
-        for <linux-edac@vger.kernel.org>; Mon, 24 Oct 2022 20:13:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1666667636; x=1698203636;
-  h=from:to:subject:date:message-id:references:in-reply-to:
-   content-transfer-encoding:mime-version;
-  bh=OjOqUU3sf/lEXSs9qxfF1o2akrko+k2Oo3fEhNjh0DY=;
-  b=N6WGPEDn8vZCIBa6hZ7DSNv3Qmi7eg19bMpIMI5nyNz5mcThjBVX4T9j
-   xuapkF90AHRfqeHwbt4pscCJtu3cejCXSISp0TGnMT085qeIXNQf9nU53
-   4N9NYQUobWdojPRPQCxtCaHXGWhO/RVyRkSkfYvypB6d9a4fzbAZ6p6Pe
-   VZZr7cyeyYGjOa++39Q0gGMkDMs5uEekX3wKnN/7WVaI/EqvMHvQ+9sMG
-   Rk7jhTNcf2fZS3ARpx23m5t591padTBqnmMNB/Ch9IFnxjkYu7OLJljY2
-   pkHpQzKAlEfzROsulPVdQ5MNyDR3E1ouQCICRGVZh9xMch+BbPYmB15T+
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10510"; a="309263547"
-X-IronPort-AV: E=Sophos;i="5.95,210,1661842800"; 
-   d="scan'208";a="309263547"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Oct 2022 20:13:55 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10510"; a="876652344"
-X-IronPort-AV: E=Sophos;i="5.95,210,1661842800"; 
-   d="scan'208";a="876652344"
-Received: from orsmsx601.amr.corp.intel.com ([10.22.229.14])
-  by fmsmga006.fm.intel.com with ESMTP; 24 Oct 2022 20:13:55 -0700
-Received: from orsmsx612.amr.corp.intel.com (10.22.229.25) by
- ORSMSX601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Mon, 24 Oct 2022 20:13:54 -0700
-Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
- ORSMSX612.amr.corp.intel.com (10.22.229.25) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Mon, 24 Oct 2022 20:13:54 -0700
-Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
- orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31 via Frontend Transport; Mon, 24 Oct 2022 20:13:54 -0700
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (104.47.56.172)
- by edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2375.31; Mon, 24 Oct 2022 20:13:54 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Kp+QMpv1MA3fOfmIJVUiaiPi7we4D2W4uz0XmDOl37DlH2WgrNbTaweBh+k2yflsABUGCBFpqba6dofdw/0TdPIRMMtNmsRczF8G4/TZA69xYmPDjAJMM99OvdciTE0mzmkLphG62h6x9OSn8GXAE5sH8xfQABB7kpMkeRhIBu9WBtMUxpuTzSISeofIAvLvZQ/jPa0eJ+2EXqgAJXXYwJ+CSSSc2BDQBMNZ6EqbwPEHP7i0Bfi279HJ0nHrRimUMIVSguEGy354XmvS2a+CiCVnBMYrNVg7HwG88XbpzgnC+wKYfEsI7qZrdssQCYe76WoTDboogBWdV150Oy2hrA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=OjOqUU3sf/lEXSs9qxfF1o2akrko+k2Oo3fEhNjh0DY=;
- b=RDEPB7cazz92UZiN7yYv27wsfCxxD5zYZS+12H+/1Zk1ED1ZxLhU56VbsQLnWNNZ63dspLk9IgKrsqar9EM9jnQISYQFK3omLjFgaBwk2HR3pIRnoXEVkYV0j3ZAYdWbqlPR0hZ/L8ftlIgnzQQxo2mZcxlaPwOj5xme7TRwopKMTdG2x1ogd0sMhFE5BcQn5LwbJRoPSPLAXbGAbnB0nZbbuFysgMPXV9XoailkBy03ynx6pnrH6od0zNUR1Bkdv08skNEE7xIv+pe+3uj5l8vnoV5qsO+UAoYmgg+4MnHoSuIiPZd5SeJKMnPH5cg5NvblzSJpkWvlL4xSPCB/lw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from IA1PR11MB6171.namprd11.prod.outlook.com (2603:10b6:208:3e9::13)
- by SJ0PR11MB4944.namprd11.prod.outlook.com (2603:10b6:a03:2ae::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5746.23; Tue, 25 Oct
- 2022 03:13:53 +0000
-Received: from IA1PR11MB6171.namprd11.prod.outlook.com
- ([fe80::f21b:ac04:aef5:2017]) by IA1PR11MB6171.namprd11.prod.outlook.com
- ([fe80::f21b:ac04:aef5:2017%4]) with mapi id 15.20.5746.028; Tue, 25 Oct 2022
- 03:13:53 +0000
-From:   "Zhuo, Qiuxu" <qiuxu.zhuo@intel.com>
-To:     Orion Poplawski <orion@nwra.com>,
-        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>
-Subject: RE: EDAC igen6 error messages at boot
-Thread-Topic: EDAC igen6 error messages at boot
-Thread-Index: AQHY5WeuDAdwH4Nwnk+1Shv6FHJ5fq4ebGxQgAAEN4CAAALJYA==
-Date:   Tue, 25 Oct 2022 03:13:52 +0000
-Message-ID: <IA1PR11MB61715701ED05952113AEF26389319@IA1PR11MB6171.namprd11.prod.outlook.com>
-References: <11240651-e924-8d8b-c2f7-c6e031e6b95a@nwra.com>
- <IA1PR11MB61719B0624357D88C44426E589319@IA1PR11MB6171.namprd11.prod.outlook.com>
- <1233d52b-37f1-1629-1bca-162b72da22cb@nwra.com>
-In-Reply-To: <1233d52b-37f1-1629-1bca-162b72da22cb@nwra.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-dlp-product: dlpe-windows
-dlp-reaction: no-action
-dlp-version: 11.6.500.17
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: IA1PR11MB6171:EE_|SJ0PR11MB4944:EE_
-x-ms-office365-filtering-correlation-id: 3e3d79e5-a12e-4bc2-2802-08dab636f1e2
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: MItz+0wZ8kYYDYtww8aRI9b7yBiw17GRB7B/JJAUw5M2tFiJfC/tz9PpcOMR3p7yxG8hJ6/oLS9T9k5lFTlO9+qmnMWY9dEUbhwB62xlRA4KYE88yLaWPuf4BoTgp0Z6lFNMz0/LFu9exBS7l533gmhcldFmhTlsmtY8r9WKllLOzv+uiQq04exMtuPT63iiUFqKAYSL+YB7IQ99e+DXh0JN02TkfKscgN1utOXNebUvls4fvDkEtVYgsv2Fs+e1GYncSOgbhTSXRWCwAzetPzNO8/7rdPkSrq0ANXCTjtuWGY5HT210ClkOSDO5nww1rd3XvAb2yL0EeJCQB/WmbImI/tn989h9CVzk9gbb60Igb/ZStqvdKL7Ny0fLDbYulme+ycBja5VRvxt8iYY6BnMloYtZ2MEm+9unXrSeCieZLSqYYyoQbdLxISKsHDmdZxS0Oq+mgs9AccN4UFNipvDA6dHIIAKtPHxIxNfmVU1auFvpQ/CAY6ysyCkV2Rk7JvGGhj/d72O4RxI+bysAXU8aTTp8dDN6TAFjKDL7nvQIUq0+NsJUgjyd9/OVhgiw3J6dreTslxNCIos2q2KQJsF/DVYE/8aIhWM9nkSSf2aw/1Mc3qOTQ8Q7OyvXVrB7zo4JKVQvrOAH6WQgXRP3Xc+S6bcwrpw83nF2JCffXWJ4r+hNB/TxkF8NxN6yA4BM6BVvg17jncRxYmb0BTp/3TtWhVWt4WKrgvVWrobH9U/TTJWrLiQBnZI7upeMxvB3uwmyZa/ka229PQcJvy/xug==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:IA1PR11MB6171.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(366004)(346002)(376002)(396003)(136003)(39860400002)(451199015)(8676002)(186003)(82960400001)(66476007)(76116006)(66946007)(66446008)(66556008)(55016003)(122000001)(2906002)(110136005)(41300700001)(86362001)(316002)(38070700005)(5660300002)(33656002)(7696005)(26005)(9686003)(6506007)(52536014)(64756008)(8936002)(478600001)(71200400001)(38100700002);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?K1pZcnNYRzZoTkhDYVY5MTNPZlg5NWpWa3MzWHpEdHJlQ1Fac2t6NWhja1JZ?=
- =?utf-8?B?VXIrY2hPM1MzaUh4eUZxemxXN1oxbXJBYXhxaUJ6U0RHd2Q1a2JuY0pJUWU4?=
- =?utf-8?B?VjkyZmUzZHZhaDdqaGhhSHF0djJSYWZTR2hjTjllckRhUVREQWNPNERROE96?=
- =?utf-8?B?NnpjMnZXQ1VaRnZkeXpGajR4T3hhT3lERTBtaU5ReHJvby91Y0dHRmY2clZK?=
- =?utf-8?B?c0lPNWhLSnRjM0gvdCtNZ0ZXd1d0VSsxQmhDeUhocFdpZHo5dFo0U1EwT1Fv?=
- =?utf-8?B?dENNVFhVbWtlMVNtRmNRN01vaVRsUlIrZENqKzg0ZFhtOUJVZWhDbVBST1lK?=
- =?utf-8?B?M0FmTFZDV0REVUQyYTYxWkJGZUM3YnpubGhMdmhOZHJiRUVtRXZkbGplZHlU?=
- =?utf-8?B?MUtkTDd2aUdNK0JYL1hjMW5YT21LaE53YWlkbTFVRGdBSnV3Nk9vcE5Ed2pR?=
- =?utf-8?B?QUlvZ2hUS3daQUd4SllVOE83aytrNUhaVGo5Tk5Ud1V5eCtmU01PS0ZuWU15?=
- =?utf-8?B?U2pIR2kyS1FLNEUwSDNTekNCWnRJMGlWL1BiRkNsVlE5S3ZzU3hhZmEvUVhk?=
- =?utf-8?B?dUIxcWxTZzljbDVRNDE4NHNaWGtuQjBMRDVMV2FoT1l4N2FsZlJCRWk1Z2M5?=
- =?utf-8?B?aFpjcjJXMEMwRUt5YzhkdjlzdCtGZU5heW9JYXhoenZ6M3lLOCtxeS96RWhK?=
- =?utf-8?B?OVhSa0sxYWEvRjZQWlQybDZ3Y2EzUVlrQnV0aHEwSm5RTWsyV3U5d21zVGhp?=
- =?utf-8?B?bkRYUGtyVEN2ZzRsV1p3UHg0cWRQbitid21pTWVKajlyTkZ2eEgxVW1pdTdj?=
- =?utf-8?B?N0ZqK2ovQ2NpT2RMckdKYSs0aER5UFNmOEFaaVdZMW9OME04c1R0bi9BWWhi?=
- =?utf-8?B?VTZDQ2lnaU9mM0ZkaCtFNmJGd1o5SkkzR0xGQWRXeURXVUlReSt6blpFU0NY?=
- =?utf-8?B?NzY0THI2bDYrY3o2WUliN08wdVhrSGNBVUtqc2gxZEJpQ29xVFlYRHd5cGs5?=
- =?utf-8?B?Y0pZaGpiNkFNWXVOano0NkJ6aUl5NFoyd1JFWFU1aDZjSWttY0RqekVBS1N1?=
- =?utf-8?B?MTc2Ung5SkNCK0VtU09TU0Z1T2lGU3BRUUg5dEtncHIwYWFteU1PbjNOeXdX?=
- =?utf-8?B?WUx0bkpxaklnK1JRTmFSeU82eVhRR0ZyTytmT1h6dVpSZUhRRkU4UktBcFp2?=
- =?utf-8?B?VG5XQWFLT0wyVlo0NEczM1V5UEx6M1R4NStZa2ptd3c1Y09VU2laRnZjUGxy?=
- =?utf-8?B?aGRTTDYrZW9VeDBWNHpCc0o2Vy9kVm15SEcxOTdvbU5PYkNNVU9XQ2E4VlhH?=
- =?utf-8?B?YlJFb2xHU21qY2RQaVJOc3JpYzAzK3daU1FQWkdueVFPY2tJajhwUVVqbnRa?=
- =?utf-8?B?Um0rQ2M0VU5wZWJJdExpcUJCWE9Tc0NKcGs3ak1rQ3JhSnhuTDdtbU9wODdz?=
- =?utf-8?B?eStVSE13cGJKRmhjbG1iYWVUN2hWa3VJQ0d2bEZpcmZjZGxCVDE0Z3ovbEx3?=
- =?utf-8?B?Z1AzT29zSmhINjIxVDBGRHM5bGYyS0Fsb3dwTm8yWUZ6SlY4VkgxZnVtR09s?=
- =?utf-8?B?SnkySnI3U1ZpOW9rb2NNNU96Q3V1d05tRUdLTmJFcml0Y2hvU1cxcWpKWEFH?=
- =?utf-8?B?YWFrSXdVUnpJUTBvclZaNGRabHg3MUtyYnFVRVk1SytCNFIzRktZQ1RIOUFY?=
- =?utf-8?B?VDVEbWhkaXEwUTBNblVhb3loelNMK3gxMUMwYjZWMStjQTJWcGhFVTNJbkNn?=
- =?utf-8?B?N2xmWTN0UUJkSWdhYi9tMm14dlhEcUVWL1NwRWszWE1SbDVwODJYc2h0dFF0?=
- =?utf-8?B?NTA1YVlLVnZua0FJZEltU1c3ZjVkZklITGZIWTNOcUNWcDhERGlyUlJ0Nnd0?=
- =?utf-8?B?MGpFSWQ1WHlYRk5zT01sSG5MbmhkMWlLQlVJZTJWMGQySzdPeHpnRDRTQTZB?=
- =?utf-8?B?dktzbXRiVlFJeitWOFpSRGcwVDBaaTUrRm1nT2pzdmZQNWVkR0dScEpSK1dR?=
- =?utf-8?B?aHpzcWNBMjJyd0krUGJldGNxVE9JbUNmVC9GUERrcVQwNWRPNXRLRkkxTTB1?=
- =?utf-8?B?RGNhUTh6ZWlIT240SE5OMHIyazk3VGcvWDBZd3JzODZJU2R3dFNDdEc2MEhZ?=
- =?utf-8?Q?wjVxGowMTYopZC3/sWKfVyM02?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        with ESMTP id S231650AbiJYIs7 (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Tue, 25 Oct 2022 04:48:59 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C60B6119BE8;
+        Tue, 25 Oct 2022 01:48:58 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5BE7F61800;
+        Tue, 25 Oct 2022 08:48:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BA3A2C43145;
+        Tue, 25 Oct 2022 08:48:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666687737;
+        bh=ALIxJODN8NmEqkhMN2hY8APBG9FTNhCT6kj466I4hUw=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=CtSn2D0fFEh6IEUzioIUUeXuNYUMwvDIwFCgUVr+EUlH9OHceRmf9ksLvMt9hgh2y
+         M4J17CAUi6Ny9CsgZzQN0U4DIlk3AGxL1YtZF5VpuNp2TV1DY3krHI77JU8ejMqp8A
+         Z3BdLH4U5TbRpCqE8S/s4Wcfh8UX21XNtM3MZC/nQRO2ZSN1GplJFXHR0S7+gESe4I
+         VivLkNzgZHOaIZLDWTCW/3OU0hoRem7ud+l6OHfF2L0wvykgCM3lkGraDvyYy8NBpd
+         xcuh4ytAG9znVtIB0Yclv6dZ7JClwVevfP1bBuygxvUHQkdXLkuf8e8EtyAqnOXn7z
+         J7Ja7v1mGnTvw==
+Received: by mail-lj1-f178.google.com with SMTP id a15so11215931ljb.7;
+        Tue, 25 Oct 2022 01:48:57 -0700 (PDT)
+X-Gm-Message-State: ACrzQf36Rx6NzWtoykWvLAS/4Uag6mB0TZZXE/U7DwpgANgd+3I7sXoj
+        BfFRE8HeBlpydpJC2rbgoqCXa6VNL9n8j3tVtCA=
+X-Google-Smtp-Source: AMsMyM5ruveAK0IGw1O/2pni0OsgQxULbYs2QLIbQuz2DUemeGnjHpRMJjxOsbwBcn0lW/rgzmNDw73f7Aj9mi9iRzg=
+X-Received: by 2002:a2e:9a81:0:b0:26c:5b63:7a83 with SMTP id
+ p1-20020a2e9a81000000b0026c5b637a83mr14800333lji.291.1666687735537; Tue, 25
+ Oct 2022 01:48:55 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: IA1PR11MB6171.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3e3d79e5-a12e-4bc2-2802-08dab636f1e2
-X-MS-Exchange-CrossTenant-originalarrivaltime: 25 Oct 2022 03:13:52.8341
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: KxG8I6lTCcYSvGmX+lb7LMEByJd0nEl8GC+RAXGm98bRXlF9PN9TDS4EWxv4xKKl2KU0c+iSeFsBvKGDUXr07w==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR11MB4944
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20221018082214.569504-1-justin.he@arm.com> <20221018082214.569504-7-justin.he@arm.com>
+ <Y1OtRpLRwPPG/4Il@zn.tnic> <CAMj1kXFu36faTPoGSGPs9KhcKsoh_DE9X2rmwdenxaJwa3P_yw@mail.gmail.com>
+ <Y1O/QN32d2AlzEiA@zn.tnic> <Y1ayrYZgLqjp7WOG@zn.tnic>
+In-Reply-To: <Y1ayrYZgLqjp7WOG@zn.tnic>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Tue, 25 Oct 2022 10:48:43 +0200
+X-Gmail-Original-Message-ID: <CAMj1kXEXV6XwLV9ydNrM1Ap_TjTXna=x8xdAM6D2_BwhM9KmZg@mail.gmail.com>
+Message-ID: <CAMj1kXEXV6XwLV9ydNrM1Ap_TjTXna=x8xdAM6D2_BwhM9KmZg@mail.gmail.com>
+Subject: Re: [PATCH] apei/ghes: Use xchg_release() for updating new cache slot
+ instead of cmpxchg()
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
+        Jia He <justin.he@arm.com>, Len Brown <lenb@kernel.org>,
+        Tony Luck <tony.luck@intel.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Robert Richter <rric@kernel.org>,
+        Robert Moore <robert.moore@intel.com>,
+        Qiuxu Zhuo <qiuxu.zhuo@intel.com>,
+        Yazen Ghannam <yazen.ghannam@amd.com>,
+        Jan Luebbe <jlu@pengutronix.de>,
+        Khuong Dinh <khuong@os.amperecomputing.com>,
+        Kani Toshi <toshi.kani@hpe.com>,
+        James Morse <james.morse@arm.com>, linux-acpi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-edac@vger.kernel.org,
+        devel@acpica.org, Shuai Xue <xueshuai@linux.alibaba.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>, linux-efi@vger.kernel.org,
+        nd@arm.com, Peter Zijlstra <peterz@infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-PiBGcm9tOiBPcmlvbiBQb3BsYXdza2kgPG9yaW9uQG53cmEuY29tPg0KPiBTZW50OiBUdWVzZGF5
-LCBPY3RvYmVyIDI1LCAyMDIyIDEwOjU5IEFNDQo+IC4uLg0KPiA+PiBbICAgIDAuOTgxNjQxXSBF
-REFDIE1DOiBWZXI6IDMuMC4wDQo+ID4+IFsgICAzMS44MDExMjZdIGNhbGxlciBpZ2VuNl9wcm9i
-ZSsweDE3Ni8weDdiMCBbaWdlbjZfZWRhY10gbWFwcGluZw0KPiBtdWx0aXBsZQ0KPiA+PiBCQVJz
-DQo+ID4+IFsgICAzMS44MDUyNzJdIEVEQUMgTUMwOiBHaXZpbmcgb3V0IGRldmljZSB0byBtb2R1
-bGUgaWdlbjZfZWRhYyBjb250cm9sbGVyDQo+ID4+IEludGVsX2NsaWVudF9Tb0MgTUMjMDogREVW
-IDAwMDA6MDA6MDAuMCAoSU5URVJSVVBUKQ0KPiA+PiBbICAgMzEuODEwNTk5XSBFREFDIE1DMTog
-R2l2aW5nIG91dCBkZXZpY2UgdG8gbW9kdWxlIGlnZW42X2VkYWMgY29udHJvbGxlcg0KPiA+PiBJ
-bnRlbF9jbGllbnRfU29DIE1DIzE6IERFViAwMDAwOjAwOjAwLjAgKElOVEVSUlVQVCkNCj4gPj4g
-WyAgIDMxLjgxMDYxNl0gRURBQyBpZ2VuNiBNQzE6IEhBTkRMSU5HIElCRUNDIE1FTU9SWSBFUlJP
-Ug0KPiA+PiBbICAgMzEuODEwNjE3XSBFREFDIGlnZW42IE1DMTogQUREUiAweDdmZmZmZmZmZTAN
-Cj4gPj4gWyAgIDMxLjgxMDYxOV0gRURBQyBpZ2VuNiBNQzA6IEhBTkRMSU5HIElCRUNDIE1FTU9S
-WSBFUlJPUg0KPiA+PiBbICAgMzEuODEwNjIwXSBFREFDIGlnZW42IE1DMDogQUREUiAweDdmZmZm
-ZmZmZTANCj4gPg0KPiA+IERpZCB5b3Ugc3RpbGwgc2VlIHRoZSBlcnJvciBsb2cgYWZ0ZXIgeW91
-IHJlLWJvb3QgdGhlIG1hY2hpbmU/DQo+IA0KPiBOb3QgcXVpdGUgc3VyZSB3aGF0IHlvdSBtZWFu
-LiAgSSBzZWUgaXQgZXZlcnkgYm9vdCBpdCB0aGUgbG9ncy4gIEFyZSB5b3UNCj4gaW50ZXJlc3Rl
-ZCBpbiB0aGUgZGlmZmVyZW5jZSBiZXR3ZWVuIGEgcmVib290IGFuZCBhIHBvd2VyIGN5Y2xlPw0K
-DQpZZXMsIGNhbiB5b3UgdHJ5IGEgcG93ZXIgY3ljbGUgb24gdGhlIG1hY2hpbmUgYW5kIGNoZWNr
-IHdoZXRoZXIgdGhlIGVycm9yIGxvZyBzdGlsbCBvY2N1cj8NClRoYW5rcyENCg==
+On Mon, 24 Oct 2022 at 17:43, Borislav Petkov <bp@alien8.de> wrote:
+>
+> Ok,
+>
+> here's what I've done to it, holler if something's still missing.
+>
+> @rjw, if you wanna take this through your tree, it should work too - it
+> is unrelated to the ghes_edac changes we're doing. Or I can carry it,
+> whatever you prefer.
+>
+
+Thanks for summarizing that, I'm sure it will be helpful some day :-)
+
+
+
+> ---
+> From: Ard Biesheuvel <ardb@kernel.org>
+>
+> Some documentation first, about how this machinery works:
+>
+> It seems, the intent of the GHES error records cache is to collect
+> already reported errors - see the ghes_estatus_cached() checks. There's
+> even a sentence trying to say what this does:
+>
+>   /*
+>    * GHES error status reporting throttle, to report more kinds of
+>    * errors, instead of just most frequently occurred errors.
+>    */
+>
+> New elements are added to the cache this way:
+>
+>   if (!ghes_estatus_cached(estatus)) {
+>           if (ghes_print_estatus(NULL, ghes->generic, estatus))
+>                   ghes_estatus_cache_add(ghes->generic, estatus);
+>
+> The intent being, once this new error record is reported, it gets cached
+> so that it doesn't get reported for a while due to too many, same-type
+> error records getting reported in burst-like scenarios. I.e., new,
+> unreported error types can have a higher chance of getting reported.
+>
+> Now, the loop in ghes_estatus_cache_add() is trying to pick out the
+> oldest element in there. Meaning, something which got reported already
+> but a long while ago, i.e., a LRU-type scheme.
+>
+> And the cmpxchg() is there presumably to make sure when that selected
+> element slot_cache is removed, it really *is* that element that gets
+> removed and not one which replaced it in the meantime.
+>
+> Now, ghes_estatus_cache_add() selects a slot, and either succeeds in
+> replacing its contents with a pointer to a newly cached item, or it just
+> gives up and frees the new item again, without attempting to select
+> another slot even if one might be available.
+>
+> Since only inserting new items is being done here, the race can only
+> cause a failure if the selected slot was updated with another new item
+> concurrently, which means that it is arbitrary which of those two items
+> gets dropped.
+>
+> And "dropped" here means, the item doesn't get added to the cache so
+> the next time it is seen, it'll get reported again and an insertion
+> attempt will be done again. Eventually, it'll get inserted and all those
+> times when the insertion fails, the item will get reported although the
+> cache is supposed to prevent that and "ratelimit" those repeated error
+> records. Not a big deal in any case.
+>
+> This means the cmpxchg() and the special case are not necessary.
+> Therefore, just drop the existing item unconditionally.
+>
+> Move the xchg_release() and call_rcu() out of rcu_read_lock/unlock
+> section since there is no actually dereferencing the pointer at all.
+>
+>   [ bp:
+>     - Flesh out and summarize what was discussed on the thread now
+>       that that cache contraption is understood;
+>     - Touch up code style. ]
+>
+> Co-developed-by: Jia He <justin.he@arm.com>
+> Signed-off-by: Jia He <justin.he@arm.com>
+> Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
+> Signed-off-by: Borislav Petkov <bp@suse.de>
+> Link: https://lore.kernel.org/r/20221010023559.69655-7-justin.he@arm.com
+> ---
+>  drivers/acpi/apei/ghes.c | 60 ++++++++++++++++++++++------------------
+>  1 file changed, 33 insertions(+), 27 deletions(-)
+>
+> diff --git a/drivers/acpi/apei/ghes.c b/drivers/acpi/apei/ghes.c
+> index 249cd01cb920..6164bf737ee6 100644
+> --- a/drivers/acpi/apei/ghes.c
+> +++ b/drivers/acpi/apei/ghes.c
+> @@ -154,7 +154,7 @@ struct ghes_vendor_record_entry {
+>  static struct gen_pool *ghes_estatus_pool;
+>  static unsigned long ghes_estatus_pool_size_request;
+>
+> -static struct ghes_estatus_cache *ghes_estatus_caches[GHES_ESTATUS_CACHES_SIZE];
+> +static struct ghes_estatus_cache __rcu *ghes_estatus_caches[GHES_ESTATUS_CACHES_SIZE];
+>  static atomic_t ghes_estatus_cache_alloced;
+>
+>  static int ghes_panic_timeout __read_mostly = 30;
+> @@ -789,48 +789,42 @@ static struct ghes_estatus_cache *ghes_estatus_cache_alloc(
+>         return cache;
+>  }
+>
+> -static void ghes_estatus_cache_free(struct ghes_estatus_cache *cache)
+> +static void ghes_estatus_cache_rcu_free(struct rcu_head *head)
+>  {
+> +       struct ghes_estatus_cache *cache;
+>         u32 len;
+>
+> +       cache = container_of(head, struct ghes_estatus_cache, rcu);
+>         len = cper_estatus_len(GHES_ESTATUS_FROM_CACHE(cache));
+>         len = GHES_ESTATUS_CACHE_LEN(len);
+>         gen_pool_free(ghes_estatus_pool, (unsigned long)cache, len);
+>         atomic_dec(&ghes_estatus_cache_alloced);
+>  }
+>
+> -static void ghes_estatus_cache_rcu_free(struct rcu_head *head)
+> -{
+> -       struct ghes_estatus_cache *cache;
+> -
+> -       cache = container_of(head, struct ghes_estatus_cache, rcu);
+> -       ghes_estatus_cache_free(cache);
+> -}
+> -
+> -static void ghes_estatus_cache_add(
+> -       struct acpi_hest_generic *generic,
+> -       struct acpi_hest_generic_status *estatus)
+> +static void
+> +ghes_estatus_cache_add(struct acpi_hest_generic *generic,
+> +                      struct acpi_hest_generic_status *estatus)
+>  {
+> -       int i, slot = -1, count;
+>         unsigned long long now, duration, period, max_period = 0;
+> -       struct ghes_estatus_cache *cache, *slot_cache = NULL, *new_cache;
+> +       struct ghes_estatus_cache *cache, *new_cache;
+> +       struct ghes_estatus_cache __rcu *victim;
+> +       int i, slot = -1, count;
+>
+>         new_cache = ghes_estatus_cache_alloc(generic, estatus);
+> -       if (new_cache == NULL)
+> +       if (!new_cache)
+>                 return;
+> +
+>         rcu_read_lock();
+>         now = sched_clock();
+>         for (i = 0; i < GHES_ESTATUS_CACHES_SIZE; i++) {
+>                 cache = rcu_dereference(ghes_estatus_caches[i]);
+>                 if (cache == NULL) {
+>                         slot = i;
+> -                       slot_cache = NULL;
+>                         break;
+>                 }
+>                 duration = now - cache->time_in;
+>                 if (duration >= GHES_ESTATUS_IN_CACHE_MAX_NSEC) {
+>                         slot = i;
+> -                       slot_cache = cache;
+>                         break;
+>                 }
+>                 count = atomic_read(&cache->count);
+> @@ -839,18 +833,30 @@ static void ghes_estatus_cache_add(
+>                 if (period > max_period) {
+>                         max_period = period;
+>                         slot = i;
+> -                       slot_cache = cache;
+>                 }
+>         }
+> -       /* new_cache must be put into array after its contents are written */
+> -       smp_wmb();
+> -       if (slot != -1 && cmpxchg(ghes_estatus_caches + slot,
+> -                                 slot_cache, new_cache) == slot_cache) {
+> -               if (slot_cache)
+> -                       call_rcu(&slot_cache->rcu, ghes_estatus_cache_rcu_free);
+> -       } else
+> -               ghes_estatus_cache_free(new_cache);
+>         rcu_read_unlock();
+> +
+> +       if (slot != -1) {
+> +               /*
+> +                * Use release semantics to ensure that ghes_estatus_cached()
+> +                * running on another CPU will see the updated cache fields if
+> +                * it can see the new value of the pointer.
+> +                */
+> +               victim = xchg_release(&ghes_estatus_caches[slot],
+> +                                     RCU_INITIALIZER(new_cache));
+> +
+> +               /*
+> +                * At this point, victim may point to a cached item different
+> +                * from the one based on which we selected the slot. Instead of
+> +                * going to the loop again to pick another slot, let's just
+> +                * drop the other item anyway: this may cause a false cache
+> +                * miss later on, but that won't cause any problems.
+> +                */
+> +               if (victim)
+> +                       call_rcu(&unrcu_pointer(victim)->rcu,
+> +                                ghes_estatus_cache_rcu_free);
+> +       }
+>  }
+>
+>  static void __ghes_panic(struct ghes *ghes,
+> --
+> 2.35.1
+>
+> --
+> Regards/Gruss,
+>     Boris.
+>
+> https://people.kernel.org/tglx/notes-about-netiquette
