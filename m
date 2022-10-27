@@ -2,128 +2,119 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 68A4D60EA08
-	for <lists+linux-edac@lfdr.de>; Wed, 26 Oct 2022 22:12:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 24A0060F674
+	for <lists+linux-edac@lfdr.de>; Thu, 27 Oct 2022 13:46:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235107AbiJZUMZ (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Wed, 26 Oct 2022 16:12:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50440 "EHLO
+        id S234161AbiJ0Lqe (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Thu, 27 Oct 2022 07:46:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235115AbiJZUMW (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Wed, 26 Oct 2022 16:12:22 -0400
+        with ESMTP id S234664AbiJ0Lqb (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Thu, 27 Oct 2022 07:46:31 -0400
 Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B419A143A79;
-        Wed, 26 Oct 2022 13:12:21 -0700 (PDT)
-Received: from zn.tnic (p200300ea9733e7b8329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9733:e7b8:329c:23ff:fea6:a903])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F069A57BCF;
+        Thu, 27 Oct 2022 04:46:29 -0700 (PDT)
+Received: from zn.tnic (p200300ea9733e7cb329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9733:e7cb:329c:23ff:fea6:a903])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 1537A1EC06BD;
-        Wed, 26 Oct 2022 22:12:20 +0200 (CEST)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 5E8211EC05DD;
+        Thu, 27 Oct 2022 13:46:28 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1666815140;
+        t=1666871188;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=JRPU/VosrpVRR+iXu5ifunnhEheX6vmVtTupYdvcy3w=;
-        b=Z9BTwCQlOjSc0gmsajldgC8unz0qOWgec9dWC8Sr2ro4ysB7DQOehw7MfQRfTGFSW/I+BX
-        esaqgLhAxa0lAy4UTawwwUKyUB5FLyTXFbYueSfGBBb11icL8QVV4cLH2rNvEQXQWZzM4K
-        DB8C6oDKfMGXfaIaKfVZJJR6ZbpHFYM=
-Date:   Wed, 26 Oct 2022 22:12:15 +0200
+        bh=70WD3mKzdGoHmhK5moaB/k6Uf9rZZRmGn5dGSO3eq/s=;
+        b=qJeclvGdAvnulcRu52rAc1S+0jkFbyWONDuF7mG17QnXwJAvcji53ofqzEWuX3094Xln14
+        tK+5oyYm3q9IU2hENTiIDBC1lQ0tOnAD/6romLeKZnaDoFRVkl4rvYFlDquH1jpOtUCz0u
+        lDCixK7X9oNdQFAIcqHNRYXgQg9i/I0=
+Date:   Thu, 27 Oct 2022 13:46:24 +0200
 From:   Borislav Petkov <bp@alien8.de>
 To:     Yazen Ghannam <yazen.ghannam@amd.com>
-Cc:     Greg KH <gregkh@linuxfoundation.org>, linux-edac@vger.kernel.org,
-        linux-kernel@vger.kernel.org, tony.luck@intel.com, x86@kernel.org,
-        Smita.KoralahalliChannabasappa@amd.com, mpatocka@redhat.com
-Subject: Re: [PATCH] x86/MCE/AMD: Decrement threshold_bank refcount when
- removing threshold blocks
-Message-ID: <Y1mUn/xvx1RYPqAQ@zn.tnic>
-References: <20220614174346.3648305-1-yazen.ghannam@amd.com>
- <Yql9TqFtebd2h9Z9@kroah.com>
- <Yqnj88FPkZ6kBU7k@yaz-fattaah>
- <Y1kJCHBtatohj/JK@zn.tnic>
- <Y1kiNBh3/XBNe6uv@kroah.com>
- <Y1lUo08UzaqIaI7r@yaz-fattaah>
- <Y1l8nx1KnTFP1xKj@zn.tnic>
- <Y1mOEfEM6MdnV8CX@yaz-fattaah>
+Cc:     linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
+        tony.luck@intel.com, x86@kernel.org,
+        Smita.KoralahalliChannabasappa@amd.com
+Subject: Re: [PATCH] x86/MCE/AMD: Clear DFR errors found in THR handler
+Message-ID: <Y1pvkIJ/Uipxolqy@zn.tnic>
+References: <20220621155943.33623-1-yazen.ghannam@amd.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <Y1mOEfEM6MdnV8CX@yaz-fattaah>
+In-Reply-To: <20220621155943.33623-1-yazen.ghannam@amd.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Wed, Oct 26, 2022 at 07:44:17PM +0000, Yazen Ghannam wrote:
-> 1) Apply the patch I submitted as a simple fix/workaround for the presented
-> symptom. I tried to keep it small and well described to be a stable backport.
-> Obviously I wrote it without knowing the shared kobject behavior isn't ideal.
+On Tue, Jun 21, 2022 at 03:59:43PM +0000, Yazen Ghannam wrote:
+> AMD's MCA Thresholding feature counts errors of all severites not just
+> correctable errors. If a deferred error causes the threshold limit to be
+> reached (it was the error that caused the overflow), then both a
+> deferred error interrupt and a thresholding interrupt will be triggered.
+> 
+> The order of the interrupts is not guaranteed. If the threshold
+> interrupt handler is executed first, then it will clear MCA_STATUS for
+> the error. It will not check or clear MCA_DESTAT which also holds a copy
+> of the deferred error. When the deferred error interrupt handler runs it
+> will not find an error in MCA_STATUS, but it will find the error in
+> MCA_DESTAT. This will cause two errors to be logged.
+> 
+> Check for deferred errors when handling a threshold interrupt. If a bank
+> contains a deferred error, then clear the bank's MCA_DESTAT register.
+> 
+> Define a new helper function to do the deferred error check and clearing
+> of MCA_DESTAT.
+> 
+> Fixes: 37d43acfd79f ("x86/mce/AMD: Redo error logging from APIC LVT interrupt handlers")
+> Signed-off-by: Yazen Ghannam <yazen.ghannam@amd.com>
+> Cc: stable@vger.kernel.org
+> ---
+>  arch/x86/kernel/cpu/mce/amd.c | 37 +++++++++++++++++++++++------------
+>  1 file changed, 24 insertions(+), 13 deletions(-)
+> 
+> diff --git a/arch/x86/kernel/cpu/mce/amd.c b/arch/x86/kernel/cpu/mce/amd.c
+> index 1c87501e0fa3..ab1145cf8328 100644
+> --- a/arch/x86/kernel/cpu/mce/amd.c
+> +++ b/arch/x86/kernel/cpu/mce/amd.c
+> @@ -788,6 +788,28 @@ _log_error_bank(unsigned int bank, u32 msr_stat, u32 msr_addr, u64 misc)
+>  	return status & MCI_STATUS_DEFERRED;
+>  }
+>  
+> +static bool _log_error_deferred(unsigned int bank, u32 misc)
+> +{
+> +	bool defrd;
+> +
+> +	defrd = _log_error_bank(bank, mca_msr_reg(bank, MCA_STATUS),
+> +				mca_msr_reg(bank, MCA_ADDR), misc);
+> +
+> +	if (!defrd)
+> +		return false;
 
-We'll see.
+I've zapped that defrd variable:
 
-> 2) Address the shared kobject thing.
->    Here are some options:
->    a. Only set up the thresholding kobject on a single CPU per "AMD Node".
->    Technically MCA Bank 4 is "shared" on legacy systems. But AFAICT from
->    looking at old BKDG docs, in practice only the "Node Base Core" can access
->    the registers. This behavior is controlled by a bit in NB which BIOS is
->    supposed to set. Maybe some BIOSes don't do this, but I think that's a
->    "broken BIOS on legacy system" issue if so.
-
-I guess we can do that. And I even think we have some code which finds
-out which the NBC is...
-
-/me greps a bit:
-
-ah, there it is: get_nbc_for_node() in arch/x86/kernel/cpu/mce/inject.c.
-
-
->    b. Disable the MCA Thresholding interface for Families before 0x17.
-
-Can't. It is user-visible and you don't know for sure whether someone is
-using it or not.
-
-Believe me, I have been wanting to disable this thing forever. I've
-never heard of anyone using it and all the energy we put in it was for
-nothing. :-\
-
-We could try to deprecate it, though, make it default=n in Kconfig and
-see who complains. And after a couple of releases, kill it.
-
->    This is an undocumented interface, 
-
-Of course it is documented - it is in the old BKDGs.
-
-> and I don't know if anyone is using it on older systems.
-
-Yap.
-
-> The issue we're discussing here started because of a splat during
-> suspend/resume/CPU hotplug. In disable_err_thresholding(), we disable
-> MCA Thresholding for bank 4 on Family 15h, so there's some precedent.
-> c. Do nothing at the moment. I *really* want to clean up the MCA
-> Thresholding interface, and the shared kobject thing may get resolved
-> in that.
-
-Clean it up how exactly?
-
-Put it behind a Kconfig item, disable it and remove it after a while?
-
-:-)
-
-If so, I wouldn't mind. No one's using this. At least I haven't heard of
-a single bug report or of a use case. Only when CPU hotplug explodes and
-that thing is involved, only then.
-
-Might as well remove it. And then remove it in the hardware too. RAS
-folks would love to get rid of some of that crap which takes up verif
-resources for no good reason.
-
-:-)
+diff --git a/arch/x86/kernel/cpu/mce/amd.c b/arch/x86/kernel/cpu/mce/amd.c
+index ab1145cf8328..6ae7edea3270 100644
+--- a/arch/x86/kernel/cpu/mce/amd.c
++++ b/arch/x86/kernel/cpu/mce/amd.c
+@@ -790,12 +790,8 @@ _log_error_bank(unsigned int bank, u32 msr_stat, u32 msr_addr, u64 misc)
+ 
+ static bool _log_error_deferred(unsigned int bank, u32 misc)
+ {
+-	bool defrd;
+-
+-	defrd = _log_error_bank(bank, mca_msr_reg(bank, MCA_STATUS),
+-				mca_msr_reg(bank, MCA_ADDR), misc);
+-
+-	if (!defrd)
++	if (!_log_error_bank(bank, mca_msr_reg(bank, MCA_STATUS),
++			     mca_msr_reg(bank, MCA_ADDR), misc))
+ 		return false;
+ 
+ 	/*
 
 -- 
 Regards/Gruss,
