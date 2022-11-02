@@ -2,60 +2,60 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 566C9616DD7
-	for <lists+linux-edac@lfdr.de>; Wed,  2 Nov 2022 20:31:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 35A7E616DE1
+	for <lists+linux-edac@lfdr.de>; Wed,  2 Nov 2022 20:35:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229548AbiKBTbs (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Wed, 2 Nov 2022 15:31:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51356 "EHLO
+        id S229949AbiKBTfp (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Wed, 2 Nov 2022 15:35:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230017AbiKBTbr (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Wed, 2 Nov 2022 15:31:47 -0400
-Received: from mail-qt1-x832.google.com (mail-qt1-x832.google.com [IPv6:2607:f8b0:4864:20::832])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 894E1C18
-        for <linux-edac@vger.kernel.org>; Wed,  2 Nov 2022 12:31:46 -0700 (PDT)
-Received: by mail-qt1-x832.google.com with SMTP id h21so7004744qtu.2
-        for <linux-edac@vger.kernel.org>; Wed, 02 Nov 2022 12:31:46 -0700 (PDT)
+        with ESMTP id S229534AbiKBTfn (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Wed, 2 Nov 2022 15:35:43 -0400
+Received: from mail-qk1-x72d.google.com (mail-qk1-x72d.google.com [IPv6:2607:f8b0:4864:20::72d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42A951006
+        for <linux-edac@vger.kernel.org>; Wed,  2 Nov 2022 12:35:42 -0700 (PDT)
+Received: by mail-qk1-x72d.google.com with SMTP id s20so6062367qkg.5
+        for <linux-edac@vger.kernel.org>; Wed, 02 Nov 2022 12:35:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=p0AELgS4t8UtXBBZgsDFgqP0jEWoHaAvuWjU6NHb6SQ=;
-        b=Iakb+OUj9IoilnGvfeNtzEsL01KAarcp13cLMMRklCOMDpUZqiV5lhRzKtuL4rhArf
-         i86demCzggw4H1Y2OzwMK4JhIzr4OErllpHp3t0O9k47rbLa0WfnYA770SYQ1WcN9zHM
-         AN4RhKtqNB7cdTuT5iqbc11WObd2zQtQRWByyVcyIJn2lAqerE2GLV2QDKgbGd9fEvi0
-         ptEVDjLcIFX3YUZd9zcDARKXOnd8Q8CI+qy35CXOeYqSvEQF/jVVCeAxHQTcVzSimtyN
-         2tfylbIGALreo1vIg86tFpNtO2ZF922+jvMI0N62YJdpViBKvHdRCPu4BQ+FTXK2Ij36
-         +iBg==
+        bh=l7fpwX3iuP/zRSVMLX/z8sQpgHHvxDjtxeWt7bMXmDs=;
+        b=rvZ9KYITMLxR7E/yjyqn+LP17JgRmLJCkK0UpwnSLrnF4iK18fwdGL5jP2OGh116f+
+         jDUoI0PGmLm3lMxawo6pV2vKP+lgVUvpDwgBj0PMzX14z6BJ0pUfzjzREn8vzH6SEnqu
+         Y3PlteDnTg7mm21e/arclTQhJIhiviYuy+ggt72IE6n9tDDaRITW6HLndQsrmLjUSqjV
+         3N8wfRZfZSRSBVciPwZAyAIzYrXpjzalfKr1LA/CjiFSBCz+h4uCEHn1uKi9FXAi9rVL
+         MQVIRWgTk3FP3br71z5ApEtL6Jz67w/+VmiZgxM3UvSMllFqHHklPqigGSP1nQ8JIdDt
+         WFwg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=p0AELgS4t8UtXBBZgsDFgqP0jEWoHaAvuWjU6NHb6SQ=;
-        b=aNfFEa1wGA/iB/MRoTFvSWnj/c5wezoty/MHDlKxEyQrOn2YRNM1rlUoOucOTRkSTx
-         +8mg3JIfUO61fQAyr+2H/VFMw6nruIXjfZ41qUDeeTA+gYTq4AKyskjmNudhbJBQsXAy
-         FMAVG/vd6f0v9/QiTO0wI5dvFB9dCXSYcho/Hc4AEFXs+Rgbc9gyG/dFF6Pnd4AqjJwV
-         /qzkDiASs5v5ZK8rB+ggBHRNDsyAtj23Uf4BBp/n045HVc5dgPB8KCwpiI4LWxouZYTW
-         Q294sHEisZSphyCLYtOdn7u1c1uIlQ13ppPy+ivhyLDot7RFQuZtZOIDD04X+Xip4gMD
-         oqsA==
-X-Gm-Message-State: ACrzQf38ov2BSyaSDSBNyDSpQA5TbSTUO70dw8HBuVI8/PHZ0Vtxw91V
-        DQjZiBxCuXHN0TIjGRLw42al8w==
-X-Google-Smtp-Source: AMsMyM7z7rNWIYSPNcicrFJh2jxX77Z71tEvf2c8Chs+n6Cl1yTZ2zCa80YAN1l/iW4cVHjm6qBoaw==
-X-Received: by 2002:ac8:4c9a:0:b0:3a5:30b5:ff7c with SMTP id j26-20020ac84c9a000000b003a530b5ff7cmr11768311qtv.10.1667417505672;
-        Wed, 02 Nov 2022 12:31:45 -0700 (PDT)
+        bh=l7fpwX3iuP/zRSVMLX/z8sQpgHHvxDjtxeWt7bMXmDs=;
+        b=tUdT2fX3sTVpyHGGhJLOOgOEwoa3Q4oSzh9vGAm3VuIaUG4quS1gaMag02CbSJIJ0k
+         2TUNDw131TumyAAMYbWu8MUHXGBFdqjDy3h3kmd7q1c8z/otCvJW/WS1HO2hflGJ5A94
+         ZMantjfAE9mD4uGJ9cMZE2Bfht5TlmnNqU2ym1O0NqKWQz1nqEc9ORnZACNUy22VdLBo
+         5TtwsZne7GqeW77aI+nl+3DYEiAUGrmBJImt57kK4uS46WXlwmu1BQR6uEIE4cB7KkN8
+         vcJ81/TtKfFpGe4NEMo5DI35QGsxSBHf0FCnAGncwy3d3JN8lvEM6MtujBHsKDzcfGZs
+         7QEA==
+X-Gm-Message-State: ACrzQf3zFtH4aMdAieAJ2jDnXLzQKRvfps/qmT0+JkPJUBfm78mfVEJG
+        LNza0iLyD/CyuOYFsWcq/fi0pA==
+X-Google-Smtp-Source: AMsMyM6jg4D/5LY2L+VXLIUJ0PGwphhTbwZZWoQAPfOpQNGXQrhOt0FEu6lXoVyOrgMvG/Y27GlT6A==
+X-Received: by 2002:a05:620a:258a:b0:6cf:ca19:1ec2 with SMTP id x10-20020a05620a258a00b006cfca191ec2mr19410586qko.630.1667417741441;
+        Wed, 02 Nov 2022 12:35:41 -0700 (PDT)
 Received: from ?IPV6:2601:586:5000:570:28d9:4790:bc16:cc93? ([2601:586:5000:570:28d9:4790:bc16:cc93])
-        by smtp.gmail.com with ESMTPSA id c5-20020ac80545000000b00399d5d564b7sm6962288qth.56.2022.11.02.12.31.44
+        by smtp.gmail.com with ESMTPSA id j6-20020a05620a288600b006fa00941e9dsm8867292qkp.136.2022.11.02.12.35.40
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 02 Nov 2022 12:31:45 -0700 (PDT)
-Message-ID: <7aa2b5f4-c033-89e6-c6a3-f5fcf8c36afa@linaro.org>
-Date:   Wed, 2 Nov 2022 15:31:43 -0400
+        Wed, 02 Nov 2022 12:35:40 -0700 (PDT)
+Message-ID: <5520fc8b-e59f-d17b-33c8-5a6e869c6408@linaro.org>
+Date:   Wed, 2 Nov 2022 15:35:39 -0400
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.4.1
-Subject: Re: [PATCH 2/2] edac: xilinx: Added EDAC support for Xilinx DDR
- controller
+Subject: Re: [PATCH 1/2] dt-bindings: edac: Add bindings for Xilinx Versal
+ EDAC for DDRMC
 Content-Language: en-US
 To:     Shubhrajyoti Datta <shubhrajyoti.datta@amd.com>,
         linux-edac@vger.kernel.org
@@ -63,9 +63,9 @@ Cc:     git@amd.com, devicetree@vger.kernel.org, michal.simek@xilinx.com,
         rric@kernel.org, james.morse@arm.com, tony.luck@intel.com,
         mchehab@kernel.org, bp@alien8.de, robh+dt@kernel.org
 References: <20221102084608.28894-1-shubhrajyoti.datta@amd.com>
- <20221102084608.28894-3-shubhrajyoti.datta@amd.com>
+ <20221102084608.28894-2-shubhrajyoti.datta@amd.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221102084608.28894-3-shubhrajyoti.datta@amd.com>
+In-Reply-To: <20221102084608.28894-2-shubhrajyoti.datta@amd.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -78,45 +78,64 @@ List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
 On 02/11/2022 04:46, Shubhrajyoti Datta wrote:
-> This patch adds EDAC support for Xilinx DDR Controller, this driver
+> This patch adds device tree bindings for Xilinx Versal EDAC for DDR
 
 Do not use "This commit/patch".
 https://elixir.bootlin.com/linux/v5.17.1/source/Documentation/process/submitting-patches.rst#L95
 
-> reports Correctable and Uncorrectable errors , and also creates
-
-No spaces before comma.
-
-> debugfs entries for error injection.
+> controller.
 > 
 > Co-developed-by: Sai Krishna Potthuri <sai.krishna.potthuri@amd.com>
 > Signed-off-by: Sai Krishna Potthuri <sai.krishna.potthuri@amd.com>
 > Signed-off-by: Shubhrajyoti Datta <shubhrajyoti.datta@amd.com>
 > ---
 > 
->  MAINTAINERS                      |    7 +
->  drivers/edac/Kconfig             |   11 +
->  drivers/edac/Makefile            |    1 +
->  drivers/edac/xilinx_ddrmc_edac.c | 1250 ++++++++++++++++++++++++++++++
->  4 files changed, 1269 insertions(+)
->  create mode 100644 drivers/edac/xilinx_ddrmc_edac.c
+>  .../xlnx,versal-ddrmc-edac.yaml               | 57 +++++++++++++++++++
+>  1 file changed, 57 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/memory-controllers/xlnx,versal-ddrmc-edac.yaml
 > 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index cf0f18502372..cfeece1d75c5 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -22631,6 +22631,13 @@ S:	Maintained
->  F:	drivers/soc/xilinx/xlnx_event_manager.c
->  F:	include/linux/firmware/xlnx-event-manager.h
->  
-> +XILINX VERSAL DDRMC EDAC DRIVER
-> +M:	Shubhrajyoti Datta <shubhrajyoti.datta@amd.com>
-> +M:	Sai Krishna Potthuri <sai.krishna.potthuri@amd.com>
-> +S:	Maintained
-> +F:	Documentation/devicetree/bindings/memory-controllers/xlnx,versal-ddrmc-edac.yaml
-> +F:	drivers/edac/xilinx_ddrmc_edac.c
+> diff --git a/Documentation/devicetree/bindings/memory-controllers/xlnx,versal-ddrmc-edac.yaml b/Documentation/devicetree/bindings/memory-controllers/xlnx,versal-ddrmc-edac.yaml
+> new file mode 100644
+> index 000000000000..6717bc0f3be9
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/memory-controllers/xlnx,versal-ddrmc-edac.yaml
+> @@ -0,0 +1,57 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/memory-controllers/xlnx,versal-ddrmc-edac.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
 > +
+> +title: Xilinx Versal DDRMC (Integrated DDR Memory Controller)
+> +
+> +maintainers:
+> +  - Shubhrajyoti Datta <shubhrajyoti.datta@amd.com>
+> +  - Sai Krishna Potthuri <sai.krishna.potthuri@amd.com>
+> +
+> +description:
+> +  The integrated DDR Memory Controllers (DDRMCs) support both DDR4 and LPDDR4/
+> +  4X memory interfaces. Versal DDR memory controller has an optional ECC support
+> +  which correct single bit ECC errors and detect double bit ECC errors.
+> +
+> +properties:
+> +  compatible:
+> +    const: xlnx,versal-ddrmc-edac
 
+Drop "edac". That's a Linuxism.
+
+> +
+> +  reg:
+> +    items:
+> +      - description: DDR Memory Controller registers
+> +      - description: NOC registers corresponding to DDR Memory Controller
+> +
+> +  reg-names:
+> +    items:
+> +      - const: ddrmc_base
+> +      - const: ddrmc_noc_base
+
+Drop redundant parts from names, so these could be "base" and "noc" or
+"ddrmc" and "noc". Or anything a bit more reasonable...
 
 Best regards,
 Krzysztof
