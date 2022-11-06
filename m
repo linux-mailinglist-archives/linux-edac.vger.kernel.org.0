@@ -2,93 +2,70 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C0AF61DEE7
-	for <lists+linux-edac@lfdr.de>; Sat,  5 Nov 2022 22:48:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A14961E263
+	for <lists+linux-edac@lfdr.de>; Sun,  6 Nov 2022 14:39:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229825AbiKEVsF (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Sat, 5 Nov 2022 17:48:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39598 "EHLO
+        id S229845AbiKFNjR (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Sun, 6 Nov 2022 08:39:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229479AbiKEVsD (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Sat, 5 Nov 2022 17:48:03 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CB6F13CCD;
-        Sat,  5 Nov 2022 14:48:02 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 264E6B801BF;
-        Sat,  5 Nov 2022 21:48:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 37383C433D6;
-        Sat,  5 Nov 2022 21:47:58 +0000 (UTC)
-Date:   Sat, 5 Nov 2022 17:47:56 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Anna-Maria Gleixner <anna-maria@linutronix.de>,
-        Andrew Morton <akpm@linux-foundation.org>, rcu@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-s390@vger.kernel.org,
-        linux-sh@vger.kernel.org, linux-edac@vger.kernel.org,
-        cgroups@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-acpi@vger.kernel.org,
-        linux-atm-general@lists.sourceforge.net, netdev@vger.kernel.org,
-        linux-pm@vger.kernel.org, drbd-dev@lists.linbit.com,
-        linux-bluetooth@vger.kernel.org,
-        openipmi-developer@lists.sourceforge.net,
-        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linaro-mm-sig@lists.linaro.org, intel-gfx@lists.freedesktop.org,
-        linux-input@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linux-leds@vger.kernel.org, intel-wired-lan@lists.osuosl.org,
-        linux-usb@vger.kernel.org, linux-wireless@vger.kernel.org,
-        linux-scsi@vger.kernel.org, linux-staging@lists.linux.dev,
-        linux-ext4@vger.kernel.org, linux-nilfs@vger.kernel.org,
-        bridge@lists.linux-foundation.org, netfilter-devel@vger.kernel.org,
-        coreteam@netfilter.org, lvs-devel@vger.kernel.org,
-        linux-afs@lists.infradead.org, linux-nfs@vger.kernel.org,
-        tipc-discussion@lists.sourceforge.net, alsa-devel@alsa-project.org
-Subject: Re: [PATCH v4a 00/38] timers: Use timer_shutdown*() before freeing
- timers
-Message-ID: <20221105174756.38062fce@rorschach.local.home>
-In-Reply-To: <CAHk-=wjkkomrdcrAxxFijs-Lih6vHze+A2TgM+v7-Z7ZkXT+WA@mail.gmail.com>
-References: <20221105060024.598488967@goodmis.org>
-        <CAHk-=wi95dGkg7DiuOZ27gGW+mxJipn9ykB6LHB-HrbbLG6OMQ@mail.gmail.com>
-        <20221105123642.596371c7@rorschach.local.home>
-        <Y2bPlllkHo5DUmLY@zx2c4.com>
-        <CAHk-=wjkkomrdcrAxxFijs-Lih6vHze+A2TgM+v7-Z7ZkXT+WA@mail.gmail.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        with ESMTP id S229804AbiKFNjQ (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Sun, 6 Nov 2022 08:39:16 -0500
+X-Greylist: delayed 73 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 06 Nov 2022 05:39:15 PST
+Received: from jari.cn (unknown [218.92.28.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6DC20F1E
+        for <linux-edac@vger.kernel.org>; Sun,  6 Nov 2022 05:39:15 -0800 (PST)
+Received: by ajax-webmail-localhost.localdomain (Coremail) ; Sun, 6 Nov 2022
+ 21:33:01 +0800 (GMT+08:00)
+X-Originating-IP: [182.148.13.29]
+Date:   Sun, 6 Nov 2022 21:33:01 +0800 (GMT+08:00)
+X-CM-HeaderCharset: UTF-8
+From:   wangkailong@jari.cn
+To:     bp@alien8.de, mchehab@kernel.org, tony.luck@intel.com,
+        james.morse@arm.com, rric@kernel.org
+Cc:     linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject:  [PATCH] EDAC: altera: Remove unnecessary print function dev_err()
+X-Priority: 3
+X-Mailer: Coremail Webmail Server Version XT6.0.1 build 20210329(c53f3fee)
+ Copyright (c) 2002-2022 www.mailtech.cn
+ mispb-4e503810-ca60-4ec8-a188-7102c18937cf-zhkzyfz.cn
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=UTF-8
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Message-ID: <cf4581a.ba.1844d24fef3.Coremail.wangkailong@jari.cn>
+X-Coremail-Locale: zh_CN
+X-CM-TRANSID: AQAAfwB3jOKOt2djuokBAA--.55W
+X-CM-SenderInfo: 5zdqwypdlo00nj6mt2flof0/1tbiAQATB2FEYx0CNQAJsw
+X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VWxJw
+        CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
+        daVFxhVjvjDU=
+X-Spam-Status: No, score=2.2 required=5.0 tests=BAYES_00,RCVD_IN_PBL,RDNS_NONE,
+        T_SPF_HELO_PERMERROR,T_SPF_PERMERROR,XPRIO autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Level: **
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Sat, 5 Nov 2022 14:13:14 -0700
-Linus Torvalds <torvalds@linux-foundation.org> wrote:
-
-> (Comparing output is also fun because the ordering of the patches is
-> random, so consecutive runs with the same rule will give different
-> patches. I assume that it's just because it's done in parallel, but it
-> doesn't help the "try to see what changes when you change the script"
-> ;)
-
-What I do to compare is:
-
- patch -p1 < cocci1.patch
- git commit -a
- git show | patch -p1 -R
- patch -p1 < cocci2.patch
- git diff
-
-Then I see how things changed. This is how I was able to show you the
-tweaks I made.
-
--- Steve
+RWxpbWluYXRlIHRoZSBmb2xsb3cgY29jY2ljaGVjayB3YXJuaW5nOgoKLi9kcml2ZXJzL2VkYWMv
+YWx0ZXJhX2VkYWMuYzoyMTUzOjItOTogbGluZSAyMTUzIGlzIHJlZHVuZGFudCBiZWNhdXNlCnBs
+YXRmb3JtX2dldF9pcnEoKSBhbHJlYWR5IHByaW50cyBhbiBlcnJvcgouL2RyaXZlcnMvZWRhYy9h
+bHRlcmFfZWRhYy5jOjIxODg6Mi05OiBsaW5lIDIxODggaXMgcmVkdW5kYW50IGJlY2F1c2UKcGxh
+dGZvcm1fZ2V0X2lycSgpIGFscmVhZHkgcHJpbnRzIGFuIGVycm9yCgpTaWduZWQtb2ZmLWJ5OiBL
+YWlMb25nIFdhbmcgPHdhbmdrYWlsb25nQGphcmkuY24+Ci0tLQogZHJpdmVycy9lZGFjL2FsdGVy
+YV9lZGFjLmMgfCAyIC0tCiAxIGZpbGUgY2hhbmdlZCwgMiBkZWxldGlvbnMoLSkKCmRpZmYgLS1n
+aXQgYS9kcml2ZXJzL2VkYWMvYWx0ZXJhX2VkYWMuYyBiL2RyaXZlcnMvZWRhYy9hbHRlcmFfZWRh
+Yy5jCmluZGV4IGU3ZThlNjI0YTQzNi4uYmQ1YjE1Y2ViODcyIDEwMDY0NAotLS0gYS9kcml2ZXJz
+L2VkYWMvYWx0ZXJhX2VkYWMuYworKysgYi9kcml2ZXJzL2VkYWMvYWx0ZXJhX2VkYWMuYwpAQCAt
+MjE1MCw3ICsyMTUwLDYgQEAgc3RhdGljIGludCBhbHRyX2VkYWNfYTEwX3Byb2JlKHN0cnVjdCBw
+bGF0Zm9ybV9kZXZpY2UgKnBkZXYpCiAKIAllZGFjLT5zYl9pcnEgPSBwbGF0Zm9ybV9nZXRfaXJx
+KHBkZXYsIDApOwogCWlmIChlZGFjLT5zYl9pcnEgPCAwKSB7Ci0JCWRldl9lcnIoJnBkZXYtPmRl
+diwgIk5vIFNCRVJSIElSUSByZXNvdXJjZVxuIik7CiAJCXJldHVybiBlZGFjLT5zYl9pcnE7CiAJ
+fQogCkBAIC0yMTg1LDcgKzIxODQsNiBAQCBzdGF0aWMgaW50IGFsdHJfZWRhY19hMTBfcHJvYmUo
+c3RydWN0IHBsYXRmb3JtX2RldmljZSAqcGRldikKICNlbHNlCiAJZWRhYy0+ZGJfaXJxID0gcGxh
+dGZvcm1fZ2V0X2lycShwZGV2LCAxKTsKIAlpZiAoZWRhYy0+ZGJfaXJxIDwgMCkgewotCQlkZXZf
+ZXJyKCZwZGV2LT5kZXYsICJObyBEQkVSUiBJUlEgcmVzb3VyY2VcbiIpOwogCQlyZXR1cm4gZWRh
+Yy0+ZGJfaXJxOwogCX0KIAlpcnFfc2V0X2NoYWluZWRfaGFuZGxlcl9hbmRfZGF0YShlZGFjLT5k
+Yl9pcnEsCi0tIAoyLjI1LjEK
