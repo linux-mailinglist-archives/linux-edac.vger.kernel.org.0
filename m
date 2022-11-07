@@ -2,89 +2,57 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9A1F61ECD3
-	for <lists+linux-edac@lfdr.de>; Mon,  7 Nov 2022 09:25:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D532461EE49
+	for <lists+linux-edac@lfdr.de>; Mon,  7 Nov 2022 10:10:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230487AbiKGIZN (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Mon, 7 Nov 2022 03:25:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38674 "EHLO
+        id S231601AbiKGJKI (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Mon, 7 Nov 2022 04:10:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231191AbiKGIZJ (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Mon, 7 Nov 2022 03:25:09 -0500
-Received: from mail.gromeck.de (mail.gromeck.de [188.68.46.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31E1914000
-        for <linux-edac@vger.kernel.org>; Mon,  7 Nov 2022 00:25:04 -0800 (PST)
-Received: from trillian.site (111-128-165-046.ip-addr.inexio.net [46.165.128.111])
-        by mail.gromeck.de (Postfix) with ESMTPA id 9823580154;
-        Mon,  7 Nov 2022 09:25:01 +0100 (CET)
-Received: from [10.0.50.1] (111-128-165-046.ip-addr.inexio.net [46.165.128.111])
-        by trillian.site (Postfix) with ESMTPSA id 0F3FF20280;
-        Mon,  7 Nov 2022 09:20:45 +0100 (CET)
-Message-ID: <9b38a9cc-74eb-b291-216c-b2c3e2cc34a2@gromeck.de>
-Date:   Mon, 7 Nov 2022 09:20:44 +0100
+        with ESMTP id S230515AbiKGJKC (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Mon, 7 Nov 2022 04:10:02 -0500
+X-Greylist: delayed 400 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 07 Nov 2022 01:10:00 PST
+Received: from mellanox.co.il (mail-il-dmz.mellanox.com [193.47.165.129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AC66A63EF
+        for <linux-edac@vger.kernel.org>; Mon,  7 Nov 2022 01:10:00 -0800 (PST)
+Received: from Internal Mail-Server by MTLPINE1 (envelope-from shravankr@mellanox.com)
+        with SMTP; 7 Nov 2022 11:03:18 +0200
+Received: from bu-vnc02.mtbu.labs.mlnx (bu-vnc02.mtbu.labs.mlnx [10.15.2.65])
+        by mtbu-labmailer.labs.mlnx (8.14.4/8.14.4) with ESMTP id 2A793Hlg028154;
+        Mon, 7 Nov 2022 04:03:17 -0500
+Received: (from shravankr@localhost)
+        by bu-vnc02.mtbu.labs.mlnx (8.14.7/8.13.8/Submit) id 2A793BTq008287;
+        Mon, 7 Nov 2022 04:03:11 -0500
+From:   Shravan Kumar Ramani <shravankr@nvidia.com>
+To:     James Morse <james.morse@arm.com>
+Cc:     Shravan Kumar Ramani <shravankr@nvidia.com>,
+        linux-edac@vger.kernel.org
+Subject: [PATCH v1 0/2] EDAC: Updates to bluefield_edac
+Date:   Mon,  7 Nov 2022 04:02:52 -0500
+Message-Id: <cover.1667561793.git.shravankr@nvidia.com>
+X-Mailer: git-send-email 2.30.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: EDAC support for 'Rocket Lake'
-Content-Language: de-DE
-From:   Christian Lorenz <Christian.Lorenz@gromeck.de>
-To:     "Luck, Tony" <tony.luck@intel.com>, Jason Baron <jbaron@akamai.com>
-Cc:     "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>
-References: <1b2f0acd-c03a-9403-406e-3c7dea7b84f5@gromeck.de>
- <Yz2hEY9XFlNJudfw@agluck-desk3.sc.intel.com>
- <4718dc61-d5a6-c3a7-a30e-a09d261589fd@akamai.com>
- <SJ1PR11MB608325D0EFE4BE2E72324395FC5C9@SJ1PR11MB6083.namprd11.prod.outlook.com>
- <7d76be22-ef32-b7e7-1450-ecd9ec86bdb3@gromeck.de>
-In-Reply-To: <7d76be22-ef32-b7e7-1450-ecd9ec86bdb3@gromeck.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,T_SPF_PERMERROR autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,UNPARSEABLE_RELAY
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
+The first patch adds secure read/write calls for accessing
+the BlueField EMI registers. The second patch updates the
+license and copyright info for the same driver.
 
+Shravan Kumar Ramani (2):
+  EDAC/bluefield_edac: Add SMC support
+  EDAC/bluefield_edac: Update license and copyright info
 
-Am 21.10.22 um 14:00 schrieb Christian Lorenz:
-> 
-> Am 06.10.22 um 19:03 schrieb Luck, Tony:
->>> I've really only added hardware I have access to, and we don't have
->>> 'Rocket Lake'. I'm happy to help work on support if you have a datasheet
->>> and can test. It may be as easy as adding some new pci ids for example:
->>
->> Jason,
->>
->> Some web searching hasn't turned up a public data sheet. The EDS volume 2
->> is Intel Doc # 615924. Do you have access through Akamai? If that confirms that
->> you just need to add some new PCI IDs etc. then I can get someone to make
->> it OK to post a patch.
->>
->> Testing is harder. I can probably get access to a rocket lake internally. But
->> I don't think those support ACPI error injection. So would only be able to basic
->> "does the driver load" test. Not "does it report memory errors correctly".
->>
->> -Tony
-> 
-> Hi,
-> 
-> I can try to organize a piece of HW.
-> Let me know if that would help, and who and where this HW would be needed.
-> I will check with our HW vendor and we will see if things can be made possible.
-> 
-> Christian
+ drivers/edac/bluefield_edac.c | 184 +++++++++++++++++++++++++++++-----
+ 1 file changed, 160 insertions(+), 24 deletions(-)
 
-Hi,
+-- 
+2.30.1
 
-as I didn't get any response, I would like to ask again.
-I understood that adding/fixing the EDAC support for Rocket Lake is lacking
-available HW.
-Is there any demand from one of you for Rocket Lake HW?
-Let me know, so that we can check with our vendor.
-
-Thanks.
-
-Christian
