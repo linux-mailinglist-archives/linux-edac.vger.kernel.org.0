@@ -2,97 +2,83 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9EAD6216C7
-	for <lists+linux-edac@lfdr.de>; Tue,  8 Nov 2022 15:32:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D5A63621C09
+	for <lists+linux-edac@lfdr.de>; Tue,  8 Nov 2022 19:39:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233521AbiKHOcT (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Tue, 8 Nov 2022 09:32:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36254 "EHLO
+        id S231862AbiKHSj0 (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Tue, 8 Nov 2022 13:39:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233767AbiKHObO (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Tue, 8 Nov 2022 09:31:14 -0500
-Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AC6A13D1C
-        for <linux-edac@vger.kernel.org>; Tue,  8 Nov 2022 06:31:05 -0800 (PST)
-Received: by mail-pg1-x535.google.com with SMTP id 130so1160095pgc.5
-        for <linux-edac@vger.kernel.org>; Tue, 08 Nov 2022 06:31:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=SzBlYeGeT15Xra75w9IZDBjQ7Da3XKSmRdlnDJDYrko=;
-        b=plCZMl07mNxOy4FwEnJyPWecERqsJQyrHYHIsHPByWrtU1k24II845ABLvzsZ/utuV
-         xrfZ6D/e/ZRoyRjpbZ5oMDY9h9ndbu6gtWFiQs/CjHcVVSqci/vjYPMMyy1pnVJ69u5N
-         OM2Kwkcs/9db1KNzWi4t4Kki8xmdjDy37F969+9phg4q7Iutyq/zyteGqROU9T6wdO4n
-         lS/c2RFkn8H1h3UlswE5jNY6oMt5wQG8oq965L41J8fDh6fe1zek7KZifUk151Do70De
-         k9oKwcRkEhDvguAg4zcTYagV5rrGsvTLwyNtdWlzI5EY/CPrjAga8S7nNTzf3DHImH9S
-         a/jQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=SzBlYeGeT15Xra75w9IZDBjQ7Da3XKSmRdlnDJDYrko=;
-        b=DETc0LQWNgYgZ+J8QS5RWcqOb10+nSxl7oNzX4Ugv4pqC2V0Ak2eVsltE5KK6BUXEy
-         FO+/JRxHHefyOttKvmcWQbpnPJ1I56q2vxWBvdBiNJRtE0qb5ZYQzQx5YRvhTUmIbjKj
-         RuhjZaZELzVyr4oVGUXZnN7gDgFW1XvKS4XcJrN9YeorHXJc/crv/xc0J0aJLFC4wIdB
-         ZAfWmVpktZZSvWLQttZHHoNeMRJvKNQFHvxKZYRmMSMZNfzTVjsmFHGb9f7uzVGN6SE/
-         Pdp8NwMHS7duSv/Y9PaQ+C4o1sZLV55xgz9hs+BmzcORTnHUGUDBYBdVBZjucAt6G2Oy
-         V1OQ==
-X-Gm-Message-State: ACrzQf2u+fADu7muWLP1yitkKYDPsnMq4NmWWvNYYDkONpRXx0GDZlTs
-        TUDtUgoVEwMF8A2vRAVBzDq7XPJ9az6Ds55yP7I=
-X-Google-Smtp-Source: AMsMyM5cpw1VKvG8gEasOMmG4UhkblJY7gBReqfbYX80x9OXEWSZokzXOm90JDY4L5h3JbfU+3ckCU+QNWhG8SGrNVo=
-X-Received: by 2002:a05:6a00:1da6:b0:56c:318a:f8ab with SMTP id
- z38-20020a056a001da600b0056c318af8abmr56843835pfw.82.1667917864342; Tue, 08
- Nov 2022 06:31:04 -0800 (PST)
+        with ESMTP id S231868AbiKHSjN (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Tue, 8 Nov 2022 13:39:13 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0A1A5654B;
+        Tue,  8 Nov 2022 10:39:09 -0800 (PST)
+Received: from zn.tnic (p200300ea9733e764329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9733:e764:329c:23ff:fea6:a903])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id ED7821EC0430;
+        Tue,  8 Nov 2022 19:39:07 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1667932748;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=8fLhmoHxNKU+a+bc3xohiwQRE4EoG7MAtkbqTpQZLlw=;
+        b=mPXbp6FmjW7vXaUgvrmqFNU/7eex8aszg6F8EqeAIN7Fxm7uqSZpr9oT/RQsNKzfXT1yJu
+        gfZ8GTIeyksuECZAYikvBRPCJ1T15c8otctpg41kl6K8MkdwNgODuBP+SF0TuobytFnnU/
+        vnp4C8FZ4NbYz58keDmRznfRiYdA4KY=
+Date:   Tue, 8 Nov 2022 19:39:02 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Sai Krishna Potthuri <sai.krishna.potthuri@amd.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Michal Simek <michal.simek@xilinx.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Tony Luck <tony.luck@intel.com>,
+        James Morse <james.morse@arm.com>,
+        Robert Richter <rric@kernel.org>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-edac@vger.kernel.org, saikrishna12468@gmail.com, git@amd.com,
+        Shubhrajyoti Datta <shubhrajyoti.datta@amd.com>,
+        kernel test robot <lkp@intel.com>
+Subject: Re: [PATCH v6 2/2] EDAC/zynqmp: Add EDAC support for Xilinx ZynqMP
+ OCM
+Message-ID: <Y2qiRoiYepte/R4W@zn.tnic>
+References: <20221102070655.247511-1-sai.krishna.potthuri@amd.com>
+ <20221102070655.247511-3-sai.krishna.potthuri@amd.com>
 MIME-Version: 1.0
-Received: by 2002:ac4:c8c2:0:b0:56a:d900:eb11 with HTTP; Tue, 8 Nov 2022
- 06:31:03 -0800 (PST)
-Reply-To: mr.abraham022@gmail.com
-From:   "Mr.Abraham" <davidbraddy01@gmail.com>
-Date:   Tue, 8 Nov 2022 14:31:03 +0000
-Message-ID: <CAHGOU4PvdrNhE2KifzdPkFxZTCG5gy+23qf130PwnSmJcLRSew@mail.gmail.com>
-Subject: Greeting
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=5.0 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_HK_NAME_FM_MR_MRS,
-        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:535 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.4782]
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [mr.abraham022[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [davidbraddy01[at]gmail.com]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [davidbraddy01[at]gmail.com]
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        *  0.0 T_HK_NAME_FM_MR_MRS No description available.
-        *  2.9 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20221102070655.247511-3-sai.krishna.potthuri@amd.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-My Greeting, Did you receive the letter i sent to you. Please answer me.
-Regard, Mr.Abraham
+On Wed, Nov 02, 2022 at 12:36:55PM +0530, Sai Krishna Potthuri wrote:
+> Add EDAC support for Xilinx ZynqMP OCM Controller, this driver
+
+So a while ago you said that this driver is for the on chip memory
+controller. Is it possible for such a system to have another memory
+controller too for which another EDAC driver gets loaded?
+
+Because the EDAC core - at least on x86 - assumes that a single driver
+runs on the system and I don't think I've ever had the case where we
+need multiple drivers. And in such case to audit it for concurrency
+issues.
+
+So I guess the question is, can a system have zynqmp_ocm_edac and say,
+synopsys_edac or some other EDAC driver loaded at the same time?
+
+Thx.
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
