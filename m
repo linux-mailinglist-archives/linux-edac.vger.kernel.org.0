@@ -2,85 +2,98 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CC5E623F64
-	for <lists+linux-edac@lfdr.de>; Thu, 10 Nov 2022 11:05:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 330DB623F6A
+	for <lists+linux-edac@lfdr.de>; Thu, 10 Nov 2022 11:06:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229764AbiKJKFf (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Thu, 10 Nov 2022 05:05:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45698 "EHLO
+        id S229629AbiKJKGH (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Thu, 10 Nov 2022 05:06:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229850AbiKJKFd (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Thu, 10 Nov 2022 05:05:33 -0500
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00BFB6AEEF
-        for <linux-edac@vger.kernel.org>; Thu, 10 Nov 2022 02:05:30 -0800 (PST)
-Received: by mail-lf1-x130.google.com with SMTP id bp15so2176013lfb.13
-        for <linux-edac@vger.kernel.org>; Thu, 10 Nov 2022 02:05:30 -0800 (PST)
+        with ESMTP id S229985AbiKJKGG (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Thu, 10 Nov 2022 05:06:06 -0500
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B78FC6AEEF
+        for <linux-edac@vger.kernel.org>; Thu, 10 Nov 2022 02:06:05 -0800 (PST)
+Received: by mail-lf1-x133.google.com with SMTP id be13so2240662lfb.4
+        for <linux-edac@vger.kernel.org>; Thu, 10 Nov 2022 02:06:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=X/BGQNvtEQU0Zkdn8ico89/ZYG7ZgZLkYbLjl92xS8Y=;
-        b=GsX68UwJRBGHkokd1fUHeO4YD4SZq1KKz8dHlxKC34ROOJPGhC5YY0V9Ly3UthiP5R
-         Ihrk0oDRg8lBWE8k7UOBaKMbQLU8Ki8OcKFOoT5TnNtRBNtnkpUrrmRl/NvNZzId856o
-         ryw8Ej88HcYlTSafGUMC9J4CSj0meiwU8TeaLj+YjhPrZ8i/5NkDYHjmdXrdG7WbrE6u
-         Dt18pbfww8rydY+fKm4rgKPbYkDOIZaEFn0QGnUsnQ17/+i/zA8afZuOqDVO3cI0hV0t
-         4/eYV31PCUYkfjR7oTa9FWicp/fVx26PGbGU+3y7DtBOSoK0dMbTnlfVcHZyM3jLsmFD
-         AG+A==
+        bh=2AdJhsrJuCd17XVzv1AFyW3WiHJofroqL+A5YSWcKpQ=;
+        b=jWMGKnqi1fFNAyt/pMgYYjqh8RhNCfwijW5IgNRMoMD13X3b8U7soTI9fWgq7ZDa+S
+         RXsOYmosrKq3QJUzKhdINYzj1Pxf5iYI5U5EiQynoas7GT3xmg4vChtKBhC8VlVX1Jby
+         Dy+XP/JA2wHT9QF9zOXYA9EM49B42YFR3TV4PQc76uqTfCJAFpXkzguMOSOTyqHHWh8R
+         ADFZ1g6pNDaNILHQjEwL4I67+XbCazsYVLpZGHEQTcV/ORLGlDCSlYRZq0FoUOUqjweL
+         xZ4pLz2uPD09z01rsq1kEBLohdYyUwjXaZTEunu0rshWY18W5WadoqsS+zcB6ZelvFGY
+         GPKg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=X/BGQNvtEQU0Zkdn8ico89/ZYG7ZgZLkYbLjl92xS8Y=;
-        b=rYejGOtCkyRKUyxNHb94+qeMsawRvoSk08OAzDx8xvq2rtXdqR7kK6QN6ZdUYJhCKX
-         qz8u6jbuT+bh4BdZxV8IExl9sJ1rz+BhMBTa911M9LKEJPUBAx43CzvOEAReKrFib1ts
-         0e4KiRsRNS/YdkYYvGDjnnFua/XGGl0+/vGTryEzOw60OsMPRRalWKCx7Bx3EvnI8I6G
-         oanyG/nTz4gBi4hAkRr1UPVxmM3vAZtAKXWOtsDzxc5M3JMyOK8hPmkRPjCrG1QQfZeq
-         a00SHg6O2qnq8BFk/ct/Cfp88qBdeT/EUwefsEGlPPeMI8h01jxAK1JFhgg0lIrW1jjm
-         A+lg==
-X-Gm-Message-State: ACrzQf1vFhJzbI4BrDPm7JEO7ePp+e0Kh3bk+Rjpbv/bha19o5oYpu2q
-        OMNwpBuWNpzfu9tj49/GUTEFNA==
-X-Google-Smtp-Source: AMsMyM7TJSe5u5hAbHxg8Ypr3Uf3gEepR+pqxmJZuwtctzc6FgifZlhFlluQyioLoTjmy2eyNcCLzw==
-X-Received: by 2002:a19:650c:0:b0:4b0:38df:e825 with SMTP id z12-20020a19650c000000b004b038dfe825mr1419804lfb.471.1668074729379;
-        Thu, 10 Nov 2022 02:05:29 -0800 (PST)
+        bh=2AdJhsrJuCd17XVzv1AFyW3WiHJofroqL+A5YSWcKpQ=;
+        b=KcIDZ/kdTy1RfIRmY66b5VBQV6qeV6TZv6JHv7tk70HvIGzLJkrDtHlFQASvRoSJp+
+         bJQ7plctLJu9dqGHwWIllOiXpNBgMpNouvfKKWvDvdctk4LXKw60RIvIjGb0LPklBKP/
+         mxeQtj639c2KWHPk9PIaJeZMYORyuWbOUUAPGRDAB+VNZMyqtwk+ZBmEUzPVpWU/szOs
+         3b1MX5DfN02wfRt3kpz6nXGTfdzWYoHStaw+HuSql/vilnXj/B1v5tkQzALC2nIXvuD+
+         m+YX/skqg+lPDtX0OIHnYS+OBKGC+qGMTJuNXzWO4QNQIemt5OHe6Z9wB/qn/OT459TO
+         IqIw==
+X-Gm-Message-State: ACrzQf1zfZCw+w7B1f/hwZJuVmQgNk8lcvbKU1+Lnp2ZyNXFb/rJR9pN
+        S3ixEQNuP4qk6anOPOnV8WgMxg==
+X-Google-Smtp-Source: AMsMyM5V9WA0E12dujf7GpL24pjVsXlRKKQ7/rvFQbDsd7A/5Zo4zoRLz724vZpWjXx6G06ZN+6P4w==
+X-Received: by 2002:a05:6512:139c:b0:4aa:b25c:51f5 with SMTP id p28-20020a056512139c00b004aab25c51f5mr20701651lfa.120.1668074764143;
+        Thu, 10 Nov 2022 02:06:04 -0800 (PST)
 Received: from [192.168.0.20] (088156142199.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.199])
-        by smtp.gmail.com with ESMTPSA id w28-20020a197b1c000000b00498fc3d4d15sm2665544lfc.190.2022.11.10.02.05.28
+        by smtp.gmail.com with ESMTPSA id c15-20020a056512074f00b0049476667228sm2694076lfs.65.2022.11.10.02.06.02
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 10 Nov 2022 02:05:28 -0800 (PST)
-Message-ID: <e26bd133-bac3-e95f-23ba-7bff5c85e3a9@linaro.org>
-Date:   Thu, 10 Nov 2022 11:05:27 +0100
+        Thu, 10 Nov 2022 02:06:03 -0800 (PST)
+Message-ID: <c16bf765-42b4-fa56-2cf8-5bcae2dda6f4@linaro.org>
+Date:   Thu, 10 Nov 2022 11:06:02 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.4.2
-Subject: Re: [PATCH v2 1/2] dt-bindings: edac: Add bindings for Xilinx Versal
- EDAC for DDRMC
+Subject: Re: [PATCH v6 1/2] dt-bindings: edac: Add bindings for Xilinx ZynqMP
+ OCM
 Content-Language: en-US
-To:     Shubhrajyoti Datta <shubhrajyoti.datta@amd.com>,
-        linux-edac@vger.kernel.org
-Cc:     git@amd.com, devicetree@vger.kernel.org, michal.simek@xilinx.com,
-        rric@kernel.org, james.morse@arm.com, tony.luck@intel.com,
-        mchehab@kernel.org, bp@alien8.de, robh+dt@kernel.org
-References: <20221107062413.9642-1-shubhrajyoti.datta@amd.com>
- <20221107062413.9642-2-shubhrajyoti.datta@amd.com>
+To:     Sai Krishna Potthuri <sai.krishna.potthuri@amd.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Michal Simek <michal.simek@xilinx.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Tony Luck <tony.luck@intel.com>,
+        James Morse <james.morse@arm.com>,
+        Robert Richter <rric@kernel.org>
+Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-edac@vger.kernel.org,
+        saikrishna12468@gmail.com, git@amd.com,
+        Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
+References: <20221102070655.247511-1-sai.krishna.potthuri@amd.com>
+ <20221102070655.247511-2-sai.krishna.potthuri@amd.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221107062413.9642-2-shubhrajyoti.datta@amd.com>
+In-Reply-To: <20221102070655.247511-2-sai.krishna.potthuri@amd.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On 07/11/2022 07:24, Shubhrajyoti Datta wrote:
-> Add device tree bindings for Xilinx Versal EDAC for DDR
-> controller.
+On 02/11/2022 08:06, Sai Krishna Potthuri wrote:
+> From: Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
+> 
+> Add bindings for Xilinx ZynqMP OCM controller.
+> 
+> Signed-off-by: Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
+> Co-developed-by: Sai Krishna Potthuri <sai.krishna.potthuri@amd.com>
+> Signed-off-by: Sai Krishna Potthuri <sai.krishna.potthuri@amd.com>
+> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
 Use subject prefixes matching the subsystem (git log --oneline -- ...).
 
@@ -88,12 +101,7 @@ Subsystem is memory-controllers.
 
 Drop redundant, second "bindings" (so "bindings for").
 
-
-> 
-> Co-developed-by: Sai Krishna Potthuri <sai.krishna.potthuri@amd.com>
-> Signed-off-by: Sai Krishna Potthuri <sai.krishna.potthuri@amd.com>
-> Signed-off-by: Shubhrajyoti Datta <shubhrajyoti.datta@amd.com>
-> ---
+With changes above my tag can stay.
 
 Best regards,
 Krzysztof
