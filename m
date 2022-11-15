@@ -2,25 +2,25 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE6F9629E6A
+	by mail.lfdr.de (Postfix) with ESMTP id 723B9629E69
 	for <lists+linux-edac@lfdr.de>; Tue, 15 Nov 2022 17:04:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229640AbiKOQEp (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Tue, 15 Nov 2022 11:04:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57742 "EHLO
+        id S229546AbiKOQEo (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Tue, 15 Nov 2022 11:04:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231424AbiKOQEk (ORCPT
+        with ESMTP id S232856AbiKOQEk (ORCPT
         <rfc822;linux-edac@vger.kernel.org>); Tue, 15 Nov 2022 11:04:40 -0500
 Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D18BC2609
-        for <linux-edac@vger.kernel.org>; Tue, 15 Nov 2022 08:04:37 -0800 (PST)
-Received: from fraeml711-chm.china.huawei.com (unknown [172.18.147.201])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4NBW8v2ZsMz67MSg;
-        Tue, 15 Nov 2022 23:59:59 +0800 (CST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66F9C1B1
+        for <linux-edac@vger.kernel.org>; Tue, 15 Nov 2022 08:04:38 -0800 (PST)
+Received: from fraeml709-chm.china.huawei.com (unknown [172.18.147.226])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4NBWCT20CKz6H76L;
+        Wed, 16 Nov 2022 00:02:13 +0800 (CST)
 Received: from lhrpeml500006.china.huawei.com (7.191.161.198) by
- fraeml711-chm.china.huawei.com (10.206.15.60) with Microsoft SMTP Server
+ fraeml709-chm.china.huawei.com (10.206.15.37) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Tue, 15 Nov 2022 17:04:35 +0100
+ 15.1.2375.31; Tue, 15 Nov 2022 17:04:36 +0100
 Received: from P_UKIT01-A7bmah.china.huawei.com (10.48.156.200) by
  lhrpeml500006.china.huawei.com (7.191.161.198) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
@@ -31,9 +31,9 @@ CC:     <linuxarm@huawei.com>, <tanxiaofei@huawei.com>,
         <jonathan.cameron@huawei.com>, <prime.zeng@hisilicon.com>,
         <luoshengwei@huawei.com>, <panjunchong@hisilicon.com>,
         <fenglei47@h-partners.com>, <shiju.jose@huawei.com>
-Subject: [PATCH v3 03/11] rasdaemon: Modify recording Hisilicon common error data
-Date:   Tue, 15 Nov 2022 16:04:11 +0000
-Message-ID: <20221115160419.355-4-shiju.jose@huawei.com>
+Subject: [PATCH v3 04/11] rasdaemon: ras-mc-ctl: Modify error statistics for HiSilicon KunPeng9xx common errors
+Date:   Tue, 15 Nov 2022 16:04:12 +0000
+Message-ID: <20221115160419.355-5-shiju.jose@huawei.com>
 X-Mailer: git-send-email 2.26.0.windows.1
 In-Reply-To: <20221115160419.355-1-shiju.jose@huawei.com>
 References: <20221115160419.355-1-shiju.jose@huawei.com>
@@ -55,226 +55,94 @@ X-Mailing-List: linux-edac@vger.kernel.org
 
 From: Shiju Jose <shiju.jose@huawei.com>
 
-The error statistics for the Hisilicon common
-error need to do based on module, error severity etc.
-
-Modify recording Hisilicon common error data as separate fields
-in the sql db table instead of the combined single field.
+Modify the error statistics for the HiSilicon KunPeng9xx platforms common errors
+to display the statistics and error info based on the module and the error severity.
 
 Signed-off-by: Shiju Jose <shiju.jose@huawei.com>
 ---
- non-standard-hisilicon.c | 126 ++++++++++++++++++++++++++++++++-------
- 1 file changed, 104 insertions(+), 22 deletions(-)
+ util/ras-mc-ctl.in | 40 +++++++++++++++++++++++++++++-----------
+ 1 file changed, 29 insertions(+), 11 deletions(-)
 
-diff --git a/non-standard-hisilicon.c b/non-standard-hisilicon.c
-index 1432163..d1e1774 100644
---- a/non-standard-hisilicon.c
-+++ b/non-standard-hisilicon.c
-@@ -17,6 +17,7 @@
- #include "non-standard-hisilicon.h"
+diff --git a/util/ras-mc-ctl.in b/util/ras-mc-ctl.in
+index b22dd60..08eb287 100755
+--- a/util/ras-mc-ctl.in
++++ b/util/ras-mc-ctl.in
+@@ -1537,7 +1537,7 @@ sub vendor_errors_summary
+     require DBI;
+     my ($num_args, $platform_id);
+     my ($query, $query_handle, $count, $out);
+-    my ($module_id, $sub_module_id, $err_severity, $err_sev, $err_info);
++    my ($module_id, $sub_module_id, $err_severity, $err_sev);
  
- #define HISI_BUF_LEN	2048
-+#define HISI_PCIE_INFO_BUF_LEN	256
+     $num_args = $#ARGV + 1;
+     $platform_id = 0;
+@@ -1614,13 +1614,18 @@ sub vendor_errors_summary
  
- struct hisi_common_error_section {
- 	uint32_t   val_bits;
-@@ -63,12 +64,25 @@ enum {
- enum {
- 	HISI_COMMON_FIELD_ID,
- 	HISI_COMMON_FIELD_TIMESTAMP,
--	HISI_COMMON_FIELD_ERR_INFO,
-+	HISI_COMMON_FIELD_VERSION,
-+	HISI_COMMON_FIELD_SOC_ID,
-+	HISI_COMMON_FIELD_SOCKET_ID,
-+	HISI_COMMON_FIELD_TOTEM_ID,
-+	HISI_COMMON_FIELD_NIMBUS_ID,
-+	HISI_COMMON_FIELD_SUB_SYSTEM_ID,
-+	HISI_COMMON_FIELD_MODULE_ID,
-+	HISI_COMMON_FIELD_SUB_MODULE_ID,
-+	HISI_COMMON_FIELD_CORE_ID,
-+	HISI_COMMON_FIELD_PORT_ID,
-+	HISI_COMMON_FIELD_ERR_TYPE,
-+	HISI_COMMON_FIELD_PCIE_INFO,
-+	HISI_COMMON_FIELD_ERR_SEVERITY,
- 	HISI_COMMON_FIELD_REGS_DUMP,
- };
+     # HiSilicon Kunpeng9xx common errors
+     if ($platform_id eq HISILICON_KUNPENG_9XX) {
+-        $query = "select err_info, count(*) from hisi_common_section";
++        $query = "select err_severity, module_id, count(*) from hisi_common_section_v2 group by err_severity, module_id";
+         $query_handle = $dbh->prepare($query);
+         $query_handle->execute();
+-        $query_handle->bind_columns(\($err_info, $count));
++        $query_handle->bind_columns(\($err_severity, $module_id, $count));
+         $out = "";
++        $err_sev = "";
+         while($query_handle->fetch()) {
+-            $out .= "\terrors: $count\n";
++            if ($err_severity ne $err_sev) {
++                $out .= "$err_severity errors:\n";
++                $err_sev = $err_severity;
++            }
++            $out .= "\t$module_id: $count\n";
+         }
+         if ($out ne "") {
+             print "HiSilicon Kunpeng9xx common error events summary:\n$out\n";
+@@ -1638,8 +1643,8 @@ sub vendor_errors
+     require DBI;
+     my ($num_args, $platform_id);
+     my ($query, $query_handle, $id, $timestamp, $out);
+-    my ($version, $soc_id, $socket_id, $nimbus_id, $core_id, $port_id);
+-    my ($module_id, $sub_module_id, $err_severity, $err_type, $err_info, $regs);
++    my ($version, $soc_id, $socket_id, $totem_id, $nimbus_id, $sub_system_id, $core_id, $port_id);
++    my ($module_id, $sub_module_id, $err_severity, $err_type, $pcie_info, $regs);
  
- struct hisi_event {
- 	char error_msg[HISI_BUF_LEN];
-+	char pcie_info[HISI_PCIE_INFO_BUF_LEN];
- 	char reg_msg[HISI_BUF_LEN];
- };
+     $num_args = $#ARGV + 1;
+     $platform_id = 0;
+@@ -1727,15 +1732,28 @@ sub vendor_errors
  
-@@ -132,14 +146,26 @@ int step_vendor_data_tab(struct ras_ns_ev_decoder *ev_decoder, const char *name)
- 
- #ifdef HAVE_SQLITE3
- static const struct db_fields hisi_common_section_fields[] = {
--	{ .name = "id",                 .type = "INTEGER PRIMARY KEY" },
--	{ .name = "timestamp",          .type = "TEXT" },
--	{ .name = "err_info",		.type = "TEXT" },
-+	{ .name = "id",			.type = "INTEGER PRIMARY KEY" },
-+	{ .name = "timestamp",		.type = "TEXT" },
-+	{ .name = "version",		.type = "INTEGER" },
-+	{ .name = "soc_id",		.type = "INTEGER" },
-+	{ .name = "socket_id",		.type = "INTEGER" },
-+	{ .name = "totem_id",		.type = "INTEGER" },
-+	{ .name = "nimbus_id",		.type = "INTEGER" },
-+	{ .name = "sub_system_id",	.type = "INTEGER" },
-+	{ .name = "module_id",		.type = "TEXT" },
-+	{ .name = "sub_module_id",	.type = "INTEGER" },
-+	{ .name = "core_id",		.type = "INTEGER" },
-+	{ .name = "port_id",		.type = "INTEGER" },
-+	{ .name = "err_type",		.type = "INTEGER" },
-+	{ .name = "pcie_info",		.type = "TEXT" },
-+	{ .name = "err_severity",	.type = "TEXT" },
- 	{ .name = "regs_dump",		.type = "TEXT" },
- };
- 
- static const struct db_table_descriptor hisi_common_section_tab = {
--	.name = "hisi_common_section",
-+	.name = "hisi_common_section_v2",
- 	.fields = hisi_common_section_fields,
- 	.num_fields = ARRAY_SIZE(hisi_common_section_fields),
- };
-@@ -199,12 +225,20 @@ static const char* get_soc_desc(uint8_t soc_id)
- 	return soc_desc[soc_id];
- }
- 
--static void decode_module(struct hisi_event *event, uint8_t module_id)
-+static void decode_module(struct ras_ns_ev_decoder *ev_decoder,
-+			  struct hisi_event *event, uint8_t module_id)
- {
--	if (module_id >= sizeof(module_name)/sizeof(char *))
-+	if (module_id >= sizeof(module_name)/sizeof(char *)) {
- 		HISI_SNPRINTF(event->error_msg, "module=unknown(id=%hhu) ", module_id);
--	else
-+		record_vendor_data(ev_decoder, HISI_OEM_DATA_TYPE_TEXT,
-+				   HISI_COMMON_FIELD_MODULE_ID,
-+				   0, "unknown");
-+	} else {
- 		HISI_SNPRINTF(event->error_msg, "module=%s ", module_name[module_id]);
-+		record_vendor_data(ev_decoder, HISI_OEM_DATA_TYPE_TEXT,
-+				   HISI_COMMON_FIELD_MODULE_ID,
-+				   0, module_name[module_id]);
-+	}
- }
- 
- static void decode_hisi_common_section_hdr(struct ras_ns_ev_decoder *ev_decoder,
-@@ -212,43 +246,93 @@ static void decode_hisi_common_section_hdr(struct ras_ns_ev_decoder *ev_decoder,
- 					  struct hisi_event *event)
- {
- 	HISI_SNPRINTF(event->error_msg, "[ table_version=%hhu", err->version);
--	if (err->val_bits & BIT(HISI_COMMON_VALID_SOC_ID))
-+	record_vendor_data(ev_decoder, HISI_OEM_DATA_TYPE_INT,
-+			   HISI_COMMON_FIELD_VERSION,
-+			   err->version, NULL);
-+	if (err->val_bits & BIT(HISI_COMMON_VALID_SOC_ID)) {
- 		HISI_SNPRINTF(event->error_msg, "soc=%s", get_soc_desc(err->soc_id));
-+		record_vendor_data(ev_decoder, HISI_OEM_DATA_TYPE_INT,
-+				   HISI_COMMON_FIELD_SOC_ID,
-+				   err->soc_id, NULL);
-+	}
- 
--	if (err->val_bits & BIT(HISI_COMMON_VALID_SOCKET_ID))
-+	if (err->val_bits & BIT(HISI_COMMON_VALID_SOCKET_ID)) {
- 		HISI_SNPRINTF(event->error_msg, "socket_id=%hhu", err->socket_id);
-+		record_vendor_data(ev_decoder, HISI_OEM_DATA_TYPE_INT,
-+				   HISI_COMMON_FIELD_SOCKET_ID,
-+				   err->socket_id, NULL);
-+	}
- 
--	if (err->val_bits & BIT(HISI_COMMON_VALID_TOTEM_ID))
-+	if (err->val_bits & BIT(HISI_COMMON_VALID_TOTEM_ID)) {
- 		HISI_SNPRINTF(event->error_msg, "totem_id=%hhu", err->totem_id);
-+		record_vendor_data(ev_decoder, HISI_OEM_DATA_TYPE_INT,
-+				   HISI_COMMON_FIELD_TOTEM_ID,
-+				   err->totem_id, NULL);
-+	}
- 
--	if (err->val_bits & BIT(HISI_COMMON_VALID_NIMBUS_ID))
-+	if (err->val_bits & BIT(HISI_COMMON_VALID_NIMBUS_ID)) {
- 		HISI_SNPRINTF(event->error_msg, "nimbus_id=%hhu", err->nimbus_id);
-+		record_vendor_data(ev_decoder, HISI_OEM_DATA_TYPE_INT,
-+				   HISI_COMMON_FIELD_NIMBUS_ID,
-+				   err->nimbus_id, NULL);
-+	}
- 
--	if (err->val_bits & BIT(HISI_COMMON_VALID_SUBSYSTEM_ID))
-+	if (err->val_bits & BIT(HISI_COMMON_VALID_SUBSYSTEM_ID)) {
- 		HISI_SNPRINTF(event->error_msg, "subsystem_id=%hhu", err->subsystem_id);
-+		record_vendor_data(ev_decoder, HISI_OEM_DATA_TYPE_INT,
-+				   HISI_COMMON_FIELD_SUB_SYSTEM_ID,
-+				   err->subsystem_id, NULL);
-+	}
- 
- 	if (err->val_bits & BIT(HISI_COMMON_VALID_MODULE_ID))
--		decode_module(event, err->module_id);
-+		decode_module(ev_decoder, event, err->module_id);
- 
--	if (err->val_bits & BIT(HISI_COMMON_VALID_SUBMODULE_ID))
-+	if (err->val_bits & BIT(HISI_COMMON_VALID_SUBMODULE_ID)) {
- 		HISI_SNPRINTF(event->error_msg, "submodule_id=%hhu", err->submodule_id);
-+		record_vendor_data(ev_decoder, HISI_OEM_DATA_TYPE_INT,
-+				   HISI_COMMON_FIELD_SUB_MODULE_ID,
-+				   err->submodule_id, NULL);
-+	}
- 
--	if (err->val_bits & BIT(HISI_COMMON_VALID_CORE_ID))
-+	if (err->val_bits & BIT(HISI_COMMON_VALID_CORE_ID)) {
- 		HISI_SNPRINTF(event->error_msg, "core_id=%hhu", err->core_id);
-+		record_vendor_data(ev_decoder, HISI_OEM_DATA_TYPE_INT,
-+				   HISI_COMMON_FIELD_CORE_ID,
-+				   err->core_id, NULL);
-+	}
- 
--	if (err->val_bits & BIT(HISI_COMMON_VALID_PORT_ID))
-+	if (err->val_bits & BIT(HISI_COMMON_VALID_PORT_ID)) {
- 		HISI_SNPRINTF(event->error_msg, "port_id=%hhu", err->port_id);
-+		record_vendor_data(ev_decoder, HISI_OEM_DATA_TYPE_INT,
-+				   HISI_COMMON_FIELD_PORT_ID,
-+				   err->port_id, NULL);
-+	}
- 
--	if (err->val_bits & BIT(HISI_COMMON_VALID_ERR_TYPE))
-+	if (err->val_bits & BIT(HISI_COMMON_VALID_ERR_TYPE)) {
- 		HISI_SNPRINTF(event->error_msg, "err_type=%hu", err->err_type);
-+		record_vendor_data(ev_decoder, HISI_OEM_DATA_TYPE_INT,
-+				   HISI_COMMON_FIELD_ERR_TYPE,
-+				   err->err_type, NULL);
-+	}
- 
--	if (err->val_bits & BIT(HISI_COMMON_VALID_PCIE_INFO))
-+	if (err->val_bits & BIT(HISI_COMMON_VALID_PCIE_INFO)) {
- 		HISI_SNPRINTF(event->error_msg, "pcie_device_id=%04x:%02x:%02x.%x",
- 			      err->pcie_info.segment, err->pcie_info.bus,
- 			      err->pcie_info.device, err->pcie_info.function);
-+		HISI_SNPRINTF(event->pcie_info, "%04x:%02x:%02x.%x",
-+			      err->pcie_info.segment, err->pcie_info.bus,
-+			      err->pcie_info.device, err->pcie_info.function);
-+		record_vendor_data(ev_decoder, HISI_OEM_DATA_TYPE_TEXT,
-+				   HISI_COMMON_FIELD_PCIE_INFO,
-+				   0, event->pcie_info);
-+	}
- 
--	if (err->val_bits & BIT(HISI_COMMON_VALID_ERR_SEVERITY))
-+	if (err->val_bits & BIT(HISI_COMMON_VALID_ERR_SEVERITY)) {
- 		HISI_SNPRINTF(event->error_msg, "err_severity=%s", err_severity(err->err_severity));
-+		record_vendor_data(ev_decoder, HISI_OEM_DATA_TYPE_TEXT,
-+				   HISI_COMMON_FIELD_ERR_SEVERITY,
-+				   0, err_severity(err->err_severity));
-+	}
- 
- 	HISI_SNPRINTF(event->error_msg, "]");
- }
-@@ -293,8 +377,6 @@ static int decode_hisi_common_section(struct ras_events *ras,
- 		record_vendor_data(ev_decoder, HISI_OEM_DATA_TYPE_TEXT,
- 				   HISI_COMMON_FIELD_TIMESTAMP,
- 				   0, event->timestamp);
--		record_vendor_data(ev_decoder, HISI_OEM_DATA_TYPE_TEXT,
--				   HISI_COMMON_FIELD_ERR_INFO, 0, hevent.error_msg);
- 		record_vendor_data(ev_decoder, HISI_OEM_DATA_TYPE_TEXT,
- 				   HISI_COMMON_FIELD_REGS_DUMP, 0, hevent.reg_msg);
- 		step_vendor_data_tab(ev_decoder, "hisi_common_section_tab");
+     # HiSilicon Kunpeng9xx common errors
+     if ($platform_id eq HISILICON_KUNPENG_9XX) {
+-        $query = "select id, timestamp, err_info, regs_dump from hisi_common_section order by id";
++        $query = "select id, timestamp, version, soc_id, socket_id, totem_id, nimbus_id, sub_system_id, module_id, sub_module_id, core_id, port_id, err_type, pcie_info, err_severity, regs_dump from hisi_common_section_v2 order by id, module_id, err_severity";
+         $query_handle = $dbh->prepare($query);
+         $query_handle->execute();
+-        $query_handle->bind_columns(\($id, $timestamp, $err_info, $regs));
++        $query_handle->bind_columns(\($id, $timestamp, $version, $soc_id, $socket_id, $totem_id, $nimbus_id, $sub_system_id, $module_id, $sub_module_id, $core_id, $port_id, $err_type, $pcie_info, $err_severity, $regs));
+         $out = "";
+         while($query_handle->fetch()) {
+-            $out .= "$id. $timestamp ";
+-            $out .= "Error Info:$err_info \n" if ($err_info);
+-            $out .= "Error Registers: $regs\n\n" if ($regs);
++            $out .= "$id. $timestamp Error Info: ";
++            $out .= "version=$version, ";
++            $out .= "soc_id=$soc_id, " if ($soc_id);
++            $out .= "socket_id=$socket_id, " if ($socket_id);
++            $out .= "totem_id=$totem_id, " if ($totem_id);
++            $out .= "nimbus_id=$nimbus_id, " if ($nimbus_id);
++            $out .= "sub_system_id=$sub_system_id, " if ($sub_system_id);
++            $out .= "module_id=$module_id, " if ($module_id);
++            $out .= "sub_module_id=$sub_module_id, " if ($sub_module_id);
++            $out .= "core_id=$core_id, " if ($core_id);
++            $out .= "port_id=$port_id, " if ($port_id);
++            $out .= "err_type=$err_type, " if ($err_type);
++            $out .= "pcie_info=$pcie_info, " if ($pcie_info);
++            $out .= "err_severity=$err_severity, " if ($err_severity);
++            $out .= "Error Registers: $regs" if ($regs);
++            $out .= "\n\n";
+         }
+         if ($out ne "") {
+             print "HiSilicon Kunpeng9xx common error events:\n$out\n";
 -- 
 2.25.1
 
