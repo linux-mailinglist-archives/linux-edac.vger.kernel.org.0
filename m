@@ -2,106 +2,119 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8C9C62C0ED
-	for <lists+linux-edac@lfdr.de>; Wed, 16 Nov 2022 15:33:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 71A4862C0F6
+	for <lists+linux-edac@lfdr.de>; Wed, 16 Nov 2022 15:34:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229931AbiKPOc7 (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Wed, 16 Nov 2022 09:32:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55678 "EHLO
+        id S229863AbiKPOeH (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Wed, 16 Nov 2022 09:34:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229489AbiKPOc7 (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Wed, 16 Nov 2022 09:32:59 -0500
-Received: from mx0a-00190b01.pphosted.com (mx0a-00190b01.pphosted.com [IPv6:2620:100:9001:583::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A7057669;
-        Wed, 16 Nov 2022 06:32:58 -0800 (PST)
-Received: from pps.filterd (m0050095.ppops.net [127.0.0.1])
-        by m0050095.ppops.net-00190b01. (8.17.1.19/8.17.1.19) with ESMTP id 2AGDn4ZZ018984;
-        Wed, 16 Nov 2022 14:32:47 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=akamai.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=jan2016.eng;
- bh=Lsxlj5AabKJ7AffYDE479PSqYgJV4h1n1KSkSjcCA2Y=;
- b=mj/WxlNKFw7cyX3RIcWfDrAUXpFQicfBuUFDaCzLwx/m+AoS9L+d4DEnzJ0L2L65Tcg1
- 1cnnWnwX26vohEcNhEtdWwJDrzd2vFI93H2VIuzHepLmcOFa/mhcTeZuSlGBvOqeHKGU
- LSKQ/msh0i7zyCObRZsvSv9OGaS2mX/VjmbOCAfWND2jExMrGorAZawvaIkepC8CkZmW
- 2hPfOQ3jkd+TIgxI+K03joYFjXPBMyIur7saGG5fe/dDdUeiYvarNORS74AhG2ueFyGV
- NI8VDCEwwCoqAtcJqEEtqaQFZWA9hcaoe8UFLt2dExTnpS4dvh+h3i4XwjcZipwa4ZaK oA== 
-Received: from prod-mail-ppoint1 (prod-mail-ppoint1.akamai.com [184.51.33.18] (may be forged))
-        by m0050095.ppops.net-00190b01. (PPS) with ESMTPS id 3kw132h1k3-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 16 Nov 2022 14:32:46 +0000
-Received: from pps.filterd (prod-mail-ppoint1.akamai.com [127.0.0.1])
-        by prod-mail-ppoint1.akamai.com (8.17.1.5/8.17.1.5) with ESMTP id 2AGDcLCJ022718;
-        Wed, 16 Nov 2022 09:32:42 -0500
-Received: from prod-mail-relay10.akamai.com ([172.27.118.251])
-        by prod-mail-ppoint1.akamai.com (PPS) with ESMTP id 3kt7q49sf9-1;
-        Wed, 16 Nov 2022 09:32:41 -0500
-Received: from [172.19.33.48] (bos-lpa4700a.bos01.corp.akamai.com [172.19.33.48])
-        by prod-mail-relay10.akamai.com (Postfix) with ESMTP id BE5CD5306A;
-        Wed, 16 Nov 2022 14:32:41 +0000 (GMT)
-Message-ID: <f1afc4ed-505e-109f-9c4c-1053af2c1bcd@akamai.com>
-Date:   Wed, 16 Nov 2022 09:32:41 -0500
+        with ESMTP id S233110AbiKPOeE (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Wed, 16 Nov 2022 09:34:04 -0500
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54C851159
+        for <linux-edac@vger.kernel.org>; Wed, 16 Nov 2022 06:34:02 -0800 (PST)
+Received: by mail-pj1-x1034.google.com with SMTP id d13-20020a17090a3b0d00b00213519dfe4aso2549073pjc.2
+        for <linux-edac@vger.kernel.org>; Wed, 16 Nov 2022 06:34:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=+/SHZcrxN5eQeobSyOJvg3Ur+b277t0vco7kXHtgdjI=;
+        b=rlSBeNwhXWAL/1If07zkKwLTQAz2Zzm0OsE/tksZey5KqQuR4+mGvciN7sgZlqa4cy
+         al3Wcfb9LILwBKj5XamR3dC/9Y2QHnAvECOwyK6tz8dNSIyplIBsLd8SJXCEsoEDgsWA
+         zrnIqDD/XunC5SHCKyKGn19DlwR6YqrEUJ9jZJNx/0kzr3GQ3Qp66cD66loAbzRixrXC
+         rHvMHC8k31n637V+HNyFwLDLoH8OhUvdlGQj5wOgsrWDOnPHID0JibaMLFH3ZDTSTYQl
+         rez7A6Hs8F00yoXDm1GNuPIIMlC3lgyHRY9eUHDzpN10TOdkPpJ5HNWOeox1yHnNwaqx
+         NLPw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=+/SHZcrxN5eQeobSyOJvg3Ur+b277t0vco7kXHtgdjI=;
+        b=jXZZo3mPEf26GUiIHmqgotL3S13VLbfaom/CY03Zvhy/b0SgBvpps21umbEcn17jMv
+         Pgj6vo5Ztt42ylxYxbblietvn5OrQpOE9ZaRtgHkx1V3O7BWMrCuLKfAiKmtLP7xerXY
+         NhbylKWpfiih/ch/Yno/3SpqjBcCIc+In3B+47CS/9ZusuOVEfl9S7wCgESD9Gs60sqH
+         SZWZ867SX6w3of870gYUipTZq4Lpmb5ad1J+IanCJ8QduiHkHP7NlwvMA2/kSfeHqqOn
+         peSDVklneihtjBwQPQgdW8HdCrpMeME3q047g0nI68RYO+qGy+BUwBQYEna0aXdWxNeS
+         G5Pw==
+X-Gm-Message-State: ANoB5pk02by3np/4/FpOGT+cEI4bb/iPFsXFDCT5hb0Sduvq8MUsfJFj
+        WDsJ1YOXS8s+R8gNyKTc1ZK9
+X-Google-Smtp-Source: AA0mqf4Sihej52LGqgAbJCIBVvCjfpw7x4oR05cKcDlEDXxTX3MzZprcWoUQ3FfYrf3okdBqT38XeQ==
+X-Received: by 2002:a17:90b:1217:b0:213:36b7:1b77 with SMTP id gl23-20020a17090b121700b0021336b71b77mr4031415pjb.94.1668609241810;
+        Wed, 16 Nov 2022 06:34:01 -0800 (PST)
+Received: from localhost.localdomain ([59.92.100.153])
+        by smtp.gmail.com with ESMTPSA id e8-20020a63e008000000b0043c732e1536sm9560974pgh.45.2022.11.16.06.33.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 16 Nov 2022 06:34:00 -0800 (PST)
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     bjorn.andersson@linaro.org, bp@alien8.de, mchehab@kernel.org
+Cc:     james.morse@arm.com, rric@kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-edac@vger.kernel.org,
+        linux-kernel@vger.kernel.org, quic_saipraka@quicinc.com,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Subject: [PATCH v4 0/2] Fix crash when using Qcom LLCC/EDAC drivers
+Date:   Wed, 16 Nov 2022 20:03:50 +0530
+Message-Id: <20221116143352.289303-1-manivannan.sadhasivam@linaro.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] EDAC/edac_module: order edac_init() before
- ghes_edac_register()
-Content-Language: en-US
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Tony Luck <tony.luck@intel.com>,
-        James Morse <james.morse@arm.com>,
-        Robert Richter <rric@kernel.org>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Shuai Xue <xueshuai@linux.alibaba.com>, stable@vger.kernel.org
-References: <20221116003729.194802-1-jbaron@akamai.com>
- <Y3TGFJn7ykeUMk+O@zn.tnic>
-From:   Jason Baron <jbaron@akamai.com>
-In-Reply-To: <Y3TGFJn7ykeUMk+O@zn.tnic>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-11-16_03,2022-11-16_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 adultscore=0 spamscore=0
- bulkscore=0 suspectscore=0 phishscore=0 mlxlogscore=732 mlxscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2210170000
- definitions=main-2211160101
-X-Proofpoint-GUID: bkzVylsBtnEldxcXcuRCKIb6CFa6CAgp
-X-Proofpoint-ORIG-GUID: bkzVylsBtnEldxcXcuRCKIb6CFa6CAgp
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-11-16_03,2022-11-16_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 impostorscore=0
- malwarescore=0 bulkscore=0 priorityscore=1501 clxscore=1015
- mlxlogscore=675 mlxscore=0 phishscore=0 lowpriorityscore=0 spamscore=0
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2210170000 definitions=main-2211160100
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
+Hello,
 
-On 11/16/22 06:14, Borislav Petkov wrote:
-> On Tue, Nov 15, 2022 at 07:37:29PM -0500, Jason Baron wrote:
->> Currently, ghes_edac_register() is called via ghes_init() from acpi_init()
-> https://urldefense.com/v3/__https://git.kernel.org/pub/scm/linux/kernel/git/ras/ras.git/log/?h=edac-ghes__;!!GjvTz_vk!RVsGvU3qNqFLwWDFImJScVgizbxofNbNY-8NF2inDqKTrn3IWJdJdcQJ6FoKxFkWhEPRpYmwzw$ 
->
-Hi Boris,
+This series fixes the crash seen on the Qualcomm SM8450 chipset with the
+LLCC/EDAC drivers. The problem was due to the Qcom EDAC driver using the
+fixed LLCC register offsets for detecting the LLCC errors.
 
-Thanks, yes this looks like it will address the regression. Is this
-planned for 6.1?
+This seems to have worked for SoCs till SM8450. But in SM8450, the LLCC
+register offsets were changed. So accessing the fixed offsets causes the
+crash on this platform.
 
-Or 5.15 stable, which is where we hit this regression?
+So for fixing this issue, and also to make it work on future SoCs, let's
+pass the LLCC offsets from the Qcom LLCC driver based on the individual
+SoCs and let the EDAC driver make use of them.
+
+This series has been tested on SM8450 based dev board.
 
 Thanks,
+Mani
 
--Jason
+Changes in v4:
+
+* Dropped the patches that were already applied
+* Rebased on top of v6.1-rc5
+
+Changes in v3:
+
+* Instead of using SoC specific register offset naming convention, used
+  LLCC version based as suggested by Sai
+* Fixed the existing reg_offset naming convention to clearly represent
+  the LLCC version from which the offsets were changed
+* Added Sai's Acked-by to MAINTAINERS patch
+* Added a new patch that removes an extra error no assignment
+
+Changes in v2:
+
+* Volunteered myself as a maintainer for the EDAC driver since the current
+  maintainers have left Qualcomm and I couldn't get hold of them.
+
+Manivannan Sadhasivam (2):
+  EDAC/qcom: Get rid of hardcoded register offsets
+  EDAC/qcom: Remove extra error no assignment in qcom_llcc_core_setup()
+
+ drivers/edac/qcom_edac.c           | 119 ++++++++++++++---------------
+ include/linux/soc/qcom/llcc-qcom.h |   6 --
+ 2 files changed, 59 insertions(+), 66 deletions(-)
+
+-- 
+2.25.1
 
