@@ -2,112 +2,81 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A78862C814
-	for <lists+linux-edac@lfdr.de>; Wed, 16 Nov 2022 19:46:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E01962D40A
+	for <lists+linux-edac@lfdr.de>; Thu, 17 Nov 2022 08:28:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233694AbiKPSpj (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Wed, 16 Nov 2022 13:45:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43288 "EHLO
+        id S239280AbiKQH2F (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Thu, 17 Nov 2022 02:28:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234209AbiKPSoj (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Wed, 16 Nov 2022 13:44:39 -0500
-Received: from mx0b-00190b01.pphosted.com (mx0b-00190b01.pphosted.com [IPv6:2620:100:9005:57f::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71101C68;
-        Wed, 16 Nov 2022 10:43:31 -0800 (PST)
-Received: from pps.filterd (m0050096.ppops.net [127.0.0.1])
-        by m0050096.ppops.net-00190b01. (8.17.1.19/8.17.1.19) with ESMTP id 2AGITFN2017459;
-        Wed, 16 Nov 2022 18:43:12 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=akamai.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=jan2016.eng;
- bh=PVz8DE1+if9pFWMMr73CQxHTxNV1L8eNQQuz00I9uic=;
- b=mRUHzOh+j/uvoHasB/pC6B6JaZjKGpynafWrDTP24IQ0B+eBnC71AfN4snTJ3yqYhgFs
- tWJEHaVyQ3Nl39a+/1Lc7k3gpgKATpiiCVjBpn9UAqUKltezBwxPzTmt9GQ12bVrekWg
- 7rE/Qd4H8Eco8GH+GLMg1fYyfb7JaGjV9Efw3441mHhIVvTxaEM4xL8iNJGTpE3eWq/S
- 2Vw9dcimO8LWOeRaODl5eBOTBi/IzIthV8nsDi20skog2xm/RMcpF7ek3mvHNXWuRK+r
- OTRSOZGOs1RIWIqBW2kS67LDCK7uQe9uBbPS1/Q0WVQ8SuW7OIS6qwHjjT1wfsu7vTYr Ww== 
-Received: from prod-mail-ppoint7 (a72-247-45-33.deploy.static.akamaitechnologies.com [72.247.45.33] (may be forged))
-        by m0050096.ppops.net-00190b01. (PPS) with ESMTPS id 3kvv5ap2cp-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 16 Nov 2022 18:43:12 +0000
-Received: from pps.filterd (prod-mail-ppoint7.akamai.com [127.0.0.1])
-        by prod-mail-ppoint7.akamai.com (8.17.1.5/8.17.1.5) with ESMTP id 2AGHn1X1023866;
-        Wed, 16 Nov 2022 13:43:11 -0500
-Received: from prod-mail-relay19.dfw02.corp.akamai.com ([172.27.165.173])
-        by prod-mail-ppoint7.akamai.com (PPS) with ESMTP id 3kt7q4nmf4-1;
-        Wed, 16 Nov 2022 13:43:11 -0500
-Received: from [172.19.33.48] (bos-lpa4700a.bos01.corp.akamai.com [172.19.33.48])
-        by prod-mail-relay19.dfw02.corp.akamai.com (Postfix) with ESMTP id D1EFF600CD;
-        Wed, 16 Nov 2022 18:43:10 +0000 (GMT)
-Message-ID: <ea9bb9e6-17a5-7ca8-91cc-6c7bcbeac355@akamai.com>
-Date:   Wed, 16 Nov 2022 13:43:10 -0500
+        with ESMTP id S234615AbiKQH16 (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Thu, 17 Nov 2022 02:27:58 -0500
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C056B4299C
+        for <linux-edac@vger.kernel.org>; Wed, 16 Nov 2022 23:27:56 -0800 (PST)
+Received: from dggpemm500020.china.huawei.com (unknown [172.30.72.57])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4NCWhW3gbmzHw09;
+        Thu, 17 Nov 2022 15:27:23 +0800 (CST)
+Received: from dggpemm500007.china.huawei.com (7.185.36.183) by
+ dggpemm500020.china.huawei.com (7.185.36.49) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Thu, 17 Nov 2022 15:27:54 +0800
+Received: from huawei.com (10.175.103.91) by dggpemm500007.china.huawei.com
+ (7.185.36.183) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Thu, 17 Nov
+ 2022 15:27:54 +0800
+From:   Yang Yingliang <yangyingliang@huawei.com>
+To:     <linux-edac@vger.kernel.org>
+CC:     <tony.luck@intel.com>, <bp@alien8.de>, <mchehab@kernel.org>,
+        <james.morse@arm.com>, <rric@kernel.org>,
+        <yangyingliang@huawei.com>
+Subject: [PATCH] EDAC/i10nm: fix refcount leak in pci_get_dev_wrapper()
+Date:   Thu, 17 Nov 2022 15:26:20 +0800
+Message-ID: <20221117072620.3931912-1-yangyingliang@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] EDAC/edac_module: order edac_init() before
- ghes_edac_register()
-Content-Language: en-US
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Tony Luck <tony.luck@intel.com>,
-        James Morse <james.morse@arm.com>,
-        Robert Richter <rric@kernel.org>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Shuai Xue <xueshuai@linux.alibaba.com>, stable@vger.kernel.org
-References: <20221116003729.194802-1-jbaron@akamai.com>
- <Y3TGFJn7ykeUMk+O@zn.tnic> <f1afc4ed-505e-109f-9c4c-1053af2c1bcd@akamai.com>
- <Y3Ut4L18XI+PGCze@zn.tnic>
-From:   Jason Baron <jbaron@akamai.com>
-In-Reply-To: <Y3Ut4L18XI+PGCze@zn.tnic>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-11-16_03,2022-11-16_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 mlxscore=0 spamscore=0
- suspectscore=0 adultscore=0 malwarescore=0 mlxlogscore=500 phishscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2210170000
- definitions=main-2211160127
-X-Proofpoint-ORIG-GUID: 5gYJ-NpzmG-Zuom9DnaRClrDbnDT5AtT
-X-Proofpoint-GUID: 5gYJ-NpzmG-Zuom9DnaRClrDbnDT5AtT
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-11-16_03,2022-11-16_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 lowpriorityscore=0
- adultscore=0 phishscore=0 mlxlogscore=393 clxscore=1015 mlxscore=0
- priorityscore=1501 malwarescore=0 bulkscore=0 suspectscore=0
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2210170000 definitions=main-2211160128
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.103.91]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ dggpemm500007.china.huawei.com (7.185.36.183)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
+As comment of pci_get_domain_bus_and_slot() says, it returns
+a pci device with refcount increment, so it don't need call
+an extra pci_dev_get() in pci_get_dev_wrapper(), and the pci
+device need be put in the error path.
 
-On 11/16/22 13:37, Borislav Petkov wrote:
-> Hi,
->
-> On Wed, Nov 16, 2022 at 09:32:41AM -0500, Jason Baron wrote:
->> Thanks, yes this looks like it will address the regression. Is this
->> planned for 6.1?
-> 6.2.
->
->> Or 5.15 stable, which is where we hit this regression?
-> No, I don't think it is stable material.
->
-> Thx.
->
-Ok, thanks. Is there any plan to address this in 5.15 stable/6.1 ?
+Fixes: d4dc89d069aa ("EDAC, i10nm: Add a driver for Intel 10nm server processors")
+Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+---
+ drivers/edac/i10nm_base.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-Either with a revert or fixup as I proposed or something else?
-
-Thanks,
-
--Jason
+diff --git a/drivers/edac/i10nm_base.c b/drivers/edac/i10nm_base.c
+index a22ea053f8e1..8af4d2523194 100644
+--- a/drivers/edac/i10nm_base.c
++++ b/drivers/edac/i10nm_base.c
+@@ -304,11 +304,10 @@ static struct pci_dev *pci_get_dev_wrapper(int dom, unsigned int bus,
+ 	if (unlikely(pci_enable_device(pdev) < 0)) {
+ 		edac_dbg(2, "Failed to enable device %02x:%02x.%x\n",
+ 			 bus, dev, fun);
++		pci_dev_put(pdev);
+ 		return NULL;
+ 	}
+ 
+-	pci_dev_get(pdev);
+-
+ 	return pdev;
+ }
+ 
+-- 
+2.25.1
 
