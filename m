@@ -2,72 +2,64 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FE7C63B994
-	for <lists+linux-edac@lfdr.de>; Tue, 29 Nov 2022 06:54:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FB7E63BA5F
+	for <lists+linux-edac@lfdr.de>; Tue, 29 Nov 2022 08:12:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235610AbiK2FyB (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Tue, 29 Nov 2022 00:54:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35650 "EHLO
+        id S229920AbiK2HM4 (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Tue, 29 Nov 2022 02:12:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235634AbiK2Fx7 (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Tue, 29 Nov 2022 00:53:59 -0500
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CE814FFAF
-        for <linux-edac@vger.kernel.org>; Mon, 28 Nov 2022 21:53:57 -0800 (PST)
-Received: by mail-pj1-x1033.google.com with SMTP id hd14-20020a17090b458e00b0021909875bccso416168pjb.1
-        for <linux-edac@vger.kernel.org>; Mon, 28 Nov 2022 21:53:57 -0800 (PST)
+        with ESMTP id S229865AbiK2HMz (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Tue, 29 Nov 2022 02:12:55 -0500
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B3191EAC2
+        for <linux-edac@vger.kernel.org>; Mon, 28 Nov 2022 23:12:54 -0800 (PST)
+Received: by mail-pf1-x436.google.com with SMTP id 9so12821963pfx.11
+        for <linux-edac@vger.kernel.org>; Mon, 28 Nov 2022 23:12:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=QGUEPx1xzxhjCBjmyfak65lMBIhLucPqClHTEgv0v+Q=;
-        b=VwfG/CQdnAymgSvzcRNNCSRZrRkblh4qro+UykiPwg0yquXUtChJ1t0+eAeOC2m54g
-         9H5541QUKuRXUmcQjNkTZ86LBsxKqY+FI5vLZCgiJcsRyHJBbVrff0Szv7O37DtNbGGj
-         mwXUUk+t7+jrh4nWqywyqo+LB5PoyM46jbQBybzkF4MapNsD8MOAe9Em3tnOpoFZgI9J
-         9IJcGj+BgB6X+FAVduyqT6sSuX8HjoWQqK8IrJWIJ2z2U6byMvWoN2i9Z8n7o0yP2ubh
-         5dcD3Ds0vboDBrp8VM9rJ1r0HJOplIzSrPIhRQ+WPXnoRWs1T9wthISuCoBICaugiIlO
-         O1Mw==
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=1BYbRDXPGcQcPqTkrRbe5deFveMBdsfHu4xmu6DCjgI=;
+        b=mdX4Jq7Gyk1rEVAiudR1pYpqGjGHLrK89wTJNOntjp4sXsiU4+okSAw+FpWlqCBCV1
+         ZRwRftH+oNnCAGs6Naumkg7aXI5oJPJMAqCuiHQoZ7vg1m2IfVI4BZZrKxrF1WkxDGji
+         A6Kx9Na35bj7jVToM02a1ogZNGqcagtlxZgch0VxfvclH3edHEk/GSj5oL0nHq0KNOKG
+         CLZERW3VUPDAc14NF8MOt76ZAkCC5mo4DTyK3TzhVqkO5i6gfEco2rCShOeeZAkUmk3S
+         o5up2fwoTw8lRRy/S1oGpqPnH2XFiE8Wj+C+DfeN7Utkm+JKf4FVF5hO+COr6qp66xZg
+         i+3Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=QGUEPx1xzxhjCBjmyfak65lMBIhLucPqClHTEgv0v+Q=;
-        b=2VPn3KmmEbm1/u5+i4sQduUT9J12w8B5JQPt6qhb4mO+Nv52G/cbYM/K3k6GbGV0Wl
-         jFOxFcsnfGEkB06mSahkxsnNNTJiK8tsA9P7T13cw/RfhDnUxeH+w4+0aVWGYx3JRpyB
-         AbVllBpGO+vrJ8ETMxxZzA8NUz2MiZjtyBfqOzjpImbU0M3jpVrNBvGUMhX3t/7pMtxH
-         EsW30+6k8xJFpIfPGwDCCz9ZAP1SP0zzJQ741PgIbZ9E9ek4Q3iTRrghQmJSid+cI+xq
-         YWJbEhugEXOTXQ2fJhNLLJUaz4rg8QlNxrJj6xY/68dELh36g7eD69h2GfayQyxqMRB1
-         SFrw==
-X-Gm-Message-State: ANoB5pnCokTa8rXg9R2WysT4sCocF9rTz6uswfBuFxs73KdKK3eMsfSc
-        Z5Z4jJbJffRXO85jM1dBUlCS
-X-Google-Smtp-Source: AA0mqf4agF2oc0K3ovVJmPb81+pPhrHenKyRWvpFKt8Me3twmKftFTAZIzSSqrl0TGA3bY5+Z5p9NQ==
-X-Received: by 2002:a17:90a:4745:b0:213:1442:24be with SMTP id y5-20020a17090a474500b00213144224bemr62656499pjg.15.1669701236727;
-        Mon, 28 Nov 2022 21:53:56 -0800 (PST)
-Received: from workstation ([117.207.29.115])
-        by smtp.gmail.com with ESMTPSA id h7-20020a632107000000b0044046aec036sm7614112pgh.81.2022.11.28.21.53.52
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Mon, 28 Nov 2022 21:53:55 -0800 (PST)
-Date:   Tue, 29 Nov 2022 11:23:51 +0530
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=1BYbRDXPGcQcPqTkrRbe5deFveMBdsfHu4xmu6DCjgI=;
+        b=EieduS9cW330cVubsxEfVmyMDvi4KieDD1GDa6vYOpo4eMO5ZSnUcMNHsqI45BmCkU
+         rVplPTv2WnCju8iEn9+NglsdnZYobYknHlrlQdPzRXEk2vI+EyJVm24c1Hc/endKHo5W
+         /9qn28pInhrw0uW3/xPRekdDd/4YGy0RqSSHQvMpRPxIZ+KI2zay8L3gCOJvGZc5iG58
+         LO3YQAqWDYIHjDanUZabA2iHgPl8ThczimDekrGdKOmpLg3ZmZPB9JlxTcjZDAqh2C8Q
+         yRU4inpcd/4PFTqRmyDooNw5nuIQ0SMuBI2fOwPxWDB3Xq5ezs1o0xcKNqPXsPyMYM0D
+         S7Rg==
+X-Gm-Message-State: ANoB5pkxlHDeVRMjNTN1KsObUa71Nl9uztRaaHoh7qWO1x9iNbz42aRp
+        DkXlZn1lzdiKpuQMz2z2DyK0scbmVFj+
+X-Google-Smtp-Source: AA0mqf5kR2s3CRihNNEGNGCFgRcYag0fXK4jste277loSBYWcTYuwsAmeukb9ePjg76TXasGspwCwg==
+X-Received: by 2002:a63:f845:0:b0:478:1187:b58 with SMTP id v5-20020a63f845000000b0047811870b58mr8757510pgj.43.1669705973588;
+        Mon, 28 Nov 2022 23:12:53 -0800 (PST)
+Received: from localhost.localdomain ([117.248.1.95])
+        by smtp.gmail.com with ESMTPSA id u6-20020a170903124600b00188fc6766d6sm10009264plh.219.2022.11.28.23.12.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 28 Nov 2022 23:12:52 -0800 (PST)
 From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     bjorn.andersson@linaro.org, mchehab@kernel.org,
-        james.morse@arm.com, rric@kernel.org,
+To:     andersson@kernel.org, bp@alien8.de, mchehab@kernel.org
+Cc:     james.morse@arm.com, rric@kernel.org,
         linux-arm-msm@vger.kernel.org, linux-edac@vger.kernel.org,
-        linux-kernel@vger.kernel.org, quic_saipraka@quicinc.com
-Subject: Re: [PATCH v4 1/2] EDAC/qcom: Get rid of hardcoded register offsets
-Message-ID: <20221129055351.GA4931@workstation>
-References: <20221116143352.289303-1-manivannan.sadhasivam@linaro.org>
- <20221116143352.289303-2-manivannan.sadhasivam@linaro.org>
- <Y4SmtfSzLbYea+f0@zn.tnic>
- <20221128181705.GP62721@thinkpad>
- <Y4T/YlDdDk7gVdfB@zn.tnic>
+        linux-kernel@vger.kernel.org, quic_saipraka@quicinc.com,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Subject: [PATCH v5 0/3] Fix crash when using Qcom LLCC/EDAC drivers
+Date:   Tue, 29 Nov 2022 12:41:58 +0530
+Message-Id: <20221129071201.30024-1-manivannan.sadhasivam@linaro.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y4T/YlDdDk7gVdfB@zn.tnic>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -77,52 +69,59 @@ Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Mon, Nov 28, 2022 at 07:35:14PM +0100, Borislav Petkov wrote:
-> On Mon, Nov 28, 2022 at 11:47:05PM +0530, Manivannan Sadhasivam wrote:
-> > Well, yes but that would imply both LLCC and EDAC patches going together.
-> > Splitting them will break the build, which is worse.
-> 
-> Sounds like you need to check out:
-> 
-> Documentation/process/stable-kernel-rules.rst
-> 
-> first.
-> 
-> Hint: there are provisions in there how to specify dependencies between
-> commits.
-> 
+Hello,
 
-Hmm, I did miss reading this. Thanks for pointing out.
+This series fixes the crash seen on the Qualcomm SM8450 chipset with the
+LLCC/EDAC drivers. The problem was due to the Qcom EDAC driver using the
+fixed LLCC register offsets for detecting the LLCC errors.
 
-> > Sorry, it is because I only tried building for ARM64 architecture. The
-> > error you are seeing is for x86-64 and I could now reproduce it as
-> > well.
-> 
-> Yes, because arch doesn't matter here - the .config does.
-> 
+This seems to have worked for SoCs till SM8450. But in SM8450, the LLCC
+register offsets were changed. So accessing the fixed offsets causes the
+crash on this platform.
 
-Well, arch does matter here. LLCC driver depends on ARCH_QCOM ||
-COMPILE_TEST. In the case of ARCH_QCOM, the REGMAP_MMIO is implicitly
-selected and you won't see the error with built-in or as a module.
+So for fixing this issue, and also to make it work on future SoCs, let's
+pass the LLCC offsets from the Qcom LLCC driver based on the individual
+SoCs and let the EDAC driver make use of them.
 
-Only if you unselect ARCH_QCOM and use x86_64 (or any other arch) with
-COMPILE_TEST, then you'll see the error with both built-in and module.
-
-> Therefore, as requested:
-> 
-> "For the next version, you'd need to fix all possible Kconfig build
-> errors before sending."
-> 
-
-Sure.
+This series has been tested on SM8450 based dev board.
 
 Thanks,
 Mani
 
-> Thx.
-> 
-> -- 
-> Regards/Gruss,
->     Boris.
-> 
-> https://people.kernel.org/tglx/notes-about-netiquette
+Changes in v5:
+
+* Added fixes tag and CCed stable mentioning the dependency
+* Added a patch to fix the build error with COMPILE_TEST
+
+Changes in v4:
+
+* Dropped the patches that were already applied
+* Rebased on top of v6.1-rc5
+
+Changes in v3:
+
+* Instead of using SoC specific register offset naming convention, used
+  LLCC version based as suggested by Sai
+* Fixed the existing reg_offset naming convention to clearly represent
+  the LLCC version from which the offsets were changed
+* Added Sai's Acked-by to MAINTAINERS patch
+* Added a new patch that removes an extra error no assignment
+
+Changes in v2:
+
+* Volunteered myself as a maintainer for the EDAC driver since the current
+  maintainers have left Qualcomm and I couldn't get hold of them.
+
+Manivannan Sadhasivam (3):
+  soc: qcom: Select REMAP_MMIO for LLCC driver
+  EDAC/qcom: Remove extra error no assignment in qcom_llcc_core_setup()
+  EDAC/qcom: Get rid of hardcoded register offsets
+
+ drivers/edac/qcom_edac.c           | 119 ++++++++++++++---------------
+ drivers/soc/qcom/Kconfig           |   1 +
+ include/linux/soc/qcom/llcc-qcom.h |   6 --
+ 3 files changed, 60 insertions(+), 66 deletions(-)
+
+-- 
+2.25.1
+
