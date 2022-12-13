@@ -2,60 +2,60 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E10A164B9BB
-	for <lists+linux-edac@lfdr.de>; Tue, 13 Dec 2022 17:30:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ECD6464B9BE
+	for <lists+linux-edac@lfdr.de>; Tue, 13 Dec 2022 17:30:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235505AbiLMQaR (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Tue, 13 Dec 2022 11:30:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39362 "EHLO
+        id S235953AbiLMQaw (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Tue, 13 Dec 2022 11:30:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235670AbiLMQaO (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Tue, 13 Dec 2022 11:30:14 -0500
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 548E5218A1
-        for <linux-edac@vger.kernel.org>; Tue, 13 Dec 2022 08:30:13 -0800 (PST)
-Received: by mail-lf1-x12a.google.com with SMTP id c1so5794661lfi.7
-        for <linux-edac@vger.kernel.org>; Tue, 13 Dec 2022 08:30:13 -0800 (PST)
+        with ESMTP id S235932AbiLMQaq (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Tue, 13 Dec 2022 11:30:46 -0500
+Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 106282189D
+        for <linux-edac@vger.kernel.org>; Tue, 13 Dec 2022 08:30:45 -0800 (PST)
+Received: by mail-lj1-x22f.google.com with SMTP id z4so3832681ljq.6
+        for <linux-edac@vger.kernel.org>; Tue, 13 Dec 2022 08:30:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=/3SSmm/UrY9ov0YZBX9cLDjY5MgUVcBzj1GBqULYveA=;
-        b=gepmD4P5WmaNihLk4FLDqomNV87KQP+3LlASTHvoA2eFcfvo/ed0fb9i5qx4ghQcw9
-         E0c3CeC5AY7ZgILK4aKW6BbihZcSppuu7JLcTFjHRLLuJgSLn8oTe+ZLuYhSYEcdgHtO
-         DTVxEsZHkOU3JArxgshFX9BTcMshDrAl061n7BE2Ex8STa2wVEiv3EnbJDimGGqaXBQF
-         CTuGIGsFM4E2Cc/v0YHb7QxRfuzToRaXvOY13jSk8b97UkawHuW57qtv9mJNi6NoWWbY
-         OfA9ZS1izz3BwPd6GzJMP8JI/4N8HS1xsabtJrktbx6WW0wfpPw/0YDSCd0ITpehnWFG
-         kjtw==
+        bh=h3woSRz2y/SJrD6ltZKFreTP0REPpiU9kQzFQVw4B5o=;
+        b=THCDeyPPTCP/Jm99TmZvxdg+u2Ogh6K7AsvPOu+FmZUsLwfxiSeIkxAGrP1RCji18/
+         n0PjaqHYMjXXIHYR1D7wa8YCRfoHn8sm6+nHTq0LDr7/jeocDvbut2r2U7VWQu6hmUqj
+         4VBSL1eIZcWvVfLvz20cmhjghxfEbjGD6wnPwMj+T8FKIHlexJcENhtQLgNlFnbKmasx
+         eocVIl1K+hktmzVCpOWCYRjE/dAoxm5I3/+btXyd1KHx/GFpqb/gWsmzm6i4qWUUqARE
+         p/vE6WIpfEwT7YgZCfPQXC+gLxOV+17lhJ36DgSRiqSHjvyPlKrQsyhjJJzaQlI2W856
+         efHQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=/3SSmm/UrY9ov0YZBX9cLDjY5MgUVcBzj1GBqULYveA=;
-        b=8OoJ6oV43+qgOP8YHoaeTl9dkC5guaiq1vIxQwkoMeeY6TQpPVQ/bo7jtU4OtxfEqR
-         Ae25dfH6/VVh19yysWUwv5NctcYD5SKV5yyODUC4rGKiBtO+V+Nn4eShrt53YHi+SmsL
-         wB9wC+dVq/pcguIlWMhxQ6herGjkFL2jFn5y1k/Up+R3YdLvaWXPUpzk2bXfb0PwyIZL
-         pzExnfy2kXt1oY4c1IrQtTqDcUKVZP6sBss/wGJWrWUx+T+HFUTuQzJ/GEA2pbK414XR
-         0GaCv+54UR91MImFAS6EHD+aNB7iaQ2WlMgoko6D3PKszqTvJzR4cr5rk0udVAODErom
-         SfNg==
-X-Gm-Message-State: ANoB5pkMjxPZIXtL3DRRdD1oo+nu/qP9rdZM3bHhwgHvff+h38a0iPeF
-        ShjPdvRPIUz7onXZYmufZ1Jn/Q==
-X-Google-Smtp-Source: AA0mqf5QSLmfigRkLLT+tYJeVGs57UO57i8jBpV/wkL/rUs/C66Kzm9lt9pLeU8yVNXpkoSHB6LQfA==
-X-Received: by 2002:ac2:5bc9:0:b0:4b5:76a2:8ad4 with SMTP id u9-20020ac25bc9000000b004b576a28ad4mr5922231lfn.0.1670949011589;
-        Tue, 13 Dec 2022 08:30:11 -0800 (PST)
+        bh=h3woSRz2y/SJrD6ltZKFreTP0REPpiU9kQzFQVw4B5o=;
+        b=nS09tUlYrYAmvNdFz1JFc/nacD1mDXbCiMCcZ/WwMDTeBlEJeFuLUF3IYMYwpOk4VQ
+         S2E4309+S+KNmda6UAMGChs2to3bYBG3HlK7l7zOo7lrQr/B+Uk1OjaBFW+J+JRka1L6
+         ZoXeOjdWehak9AguJEnepOIB58zPhVv16reCVjC8C/NPeXD2GYN71J9jbTjeZ5nqxZLJ
+         2FUoOqaCFzYAyHuk1hcovW+MEjXB7Jgwvu19nteyjFXQGCYvJcaJEFyULzQwfPIOeuC4
+         iJOMnNh0egHjbJ6XrM93ZyqyYby7EJu6uxJI2wmzCsZuAQYgQppaXcR7T6wChZ7R6R8H
+         OiFw==
+X-Gm-Message-State: ANoB5pkxi5FL9HXj8306+khVbUpJatrNoVikcxPlHUx9WnRpYe2tyfLS
+        UV+SNbtBeowKOszfEUlGbhqFUQ==
+X-Google-Smtp-Source: AA0mqf5yAXlgWBn08FkBH926iDaxsB58klZ6Lr/bs3tzdlW1LbEeQVTcWr7RcysmpUSuopHwPywu0w==
+X-Received: by 2002:a2e:a809:0:b0:277:4fa8:8eb3 with SMTP id l9-20020a2ea809000000b002774fa88eb3mr5275404ljq.18.1670949043370;
+        Tue, 13 Dec 2022 08:30:43 -0800 (PST)
 Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id t27-20020ac24c1b000000b004a0589786ddsm430835lfq.69.2022.12.13.08.30.10
+        by smtp.gmail.com with ESMTPSA id i66-20020a2e2245000000b0027a099ad7efsm314091lji.35.2022.12.13.08.30.42
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 13 Dec 2022 08:30:11 -0800 (PST)
-Message-ID: <e57ffec7-6757-5cd8-7764-28f6edb95985@linaro.org>
-Date:   Tue, 13 Dec 2022 17:30:09 +0100
+        Tue, 13 Dec 2022 08:30:43 -0800 (PST)
+Message-ID: <d1f4ad81-1612-77e8-9c2d-4abde1ca8b5c@linaro.org>
+Date:   Tue, 13 Dec 2022 17:30:41 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.5.1
-Subject: Re: [PATCH v2 04/13] arm64: dts: qcom: sc7180: Remove reg-names
- property from LLCC node
+Subject: Re: [PATCH v2 05/13] arm64: dts: qcom: sc7280: Fix the base addresses
+ of LLCC banks
 Content-Language: en-US
 To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
         andersson@kernel.org, robh+dt@kernel.org,
@@ -67,9 +67,9 @@ Cc:     quic_saipraka@quicinc.com, konrad.dybcio@linaro.org,
         linux-edac@vger.kernel.org, quic_ppareek@quicinc.com,
         luca.weiss@fairphone.com, stable@vger.kernel.org
 References: <20221212123311.146261-1-manivannan.sadhasivam@linaro.org>
- <20221212123311.146261-5-manivannan.sadhasivam@linaro.org>
+ <20221212123311.146261-6-manivannan.sadhasivam@linaro.org>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221212123311.146261-5-manivannan.sadhasivam@linaro.org>
+In-Reply-To: <20221212123311.146261-6-manivannan.sadhasivam@linaro.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -88,43 +88,18 @@ On 12/12/2022 13:33, Manivannan Sadhasivam wrote:
 > banks with a single offset/size. Instead, the individual bank's base
 > address needs to be specified in devicetree with the exact size.
 > 
-> On SC7180, there is only one LLCC bank available. So only change needed is
-> to remove the reg-names property from LLCC node to conform to the binding.
+> While at it, let's also fix the size of the llcc_broadcast_base to cover
+> the whole region.
 > 
+> Also, let's get rid of reg-names property as it is not needed anymore.
 > The driver is expected to parse the reg field based on index to get the
 > addresses of each LLCC banks.
 > 
-> Cc: <stable@vger.kernel.org> # 5.6
-
-Oh, no, there is no single bug here. Binding from v5.6+ (which cannot be
-changed) required/defined such reg-names. This is neither a bug nor
-possible to backport.
-
-> Fixes: c831fa299996 ("arm64: dts: qcom: sc7180: Add Last level cache controller node")
-
-Drop.
-
+> Cc: <stable@vger.kernel.org> # 5.13
+> Fixes: 0392968dbe09 ("arm64: dts: qcom: sc7280: Add device tree node for LLCC")
 > Reported-by: Parikshit Pareek <quic_ppareek@quicinc.com>
-> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-> ---
->  arch/arm64/boot/dts/qcom/sc7180.dtsi | 1 -
->  1 file changed, 1 deletion(-)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/sc7180.dtsi b/arch/arm64/boot/dts/qcom/sc7180.dtsi
-> index f71cf21a8dd8..b0d524bbf051 100644
-> --- a/arch/arm64/boot/dts/qcom/sc7180.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sc7180.dtsi
-> @@ -2759,7 +2759,6 @@ dc_noc: interconnect@9160000 {
->  		system-cache-controller@9200000 {
->  			compatible = "qcom,sc7180-llcc";
->  			reg = <0 0x09200000 0 0x50000>, <0 0x09600000 0 0x50000>;
-> -			reg-names = "llcc_base", "llcc_broadcast_base";
 
-That's an ABI break...
-
->  			interrupts = <GIC_SPI 582 IRQ_TYPE_LEVEL_HIGH>;
->  		};
->  
+Same comments here and in all further patches.
 
 Best regards,
 Krzysztof
