@@ -2,301 +2,162 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 145B164BB45
-	for <lists+linux-edac@lfdr.de>; Tue, 13 Dec 2022 18:44:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C6B8464BB6D
+	for <lists+linux-edac@lfdr.de>; Tue, 13 Dec 2022 18:57:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235907AbiLMRoR (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Tue, 13 Dec 2022 12:44:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57746 "EHLO
+        id S236173AbiLMR5v (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Tue, 13 Dec 2022 12:57:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235488AbiLMRoQ (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Tue, 13 Dec 2022 12:44:16 -0500
-Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E93C52126A
-        for <linux-edac@vger.kernel.org>; Tue, 13 Dec 2022 09:44:14 -0800 (PST)
-Received: by mail-pg1-x52d.google.com with SMTP id w37so340864pga.5
-        for <linux-edac@vger.kernel.org>; Tue, 13 Dec 2022 09:44:14 -0800 (PST)
+        with ESMTP id S236048AbiLMR5s (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Tue, 13 Dec 2022 12:57:48 -0500
+Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2877065FB
+        for <linux-edac@vger.kernel.org>; Tue, 13 Dec 2022 09:57:46 -0800 (PST)
+Received: by mail-pf1-x431.google.com with SMTP id c13so2741520pfp.5
+        for <linux-edac@vger.kernel.org>; Tue, 13 Dec 2022 09:57:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=in-reply-to:content-transfer-encoding:content-disposition
          :mime-version:references:message-id:subject:cc:to:from:date:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=/pTb3bmFNJAoW4OTXZevQvKRa3GaR4zJvxJl+2o4gSw=;
-        b=SUw8T6MW5blOavkLjRFKUF3uKeaFGj4ARONjFQcL4evy+zxbGwoN3MWQz12plsh43w
-         FrDGn9ctk+kuo4SstmBtIGEpXML/KUPJOXQmzFaE72RlddSRdh3tOABkrzRxggnDmz8P
-         SZUalZbNB1BU0NeTwPieXc9+kRGVnAVIL05btz/KjXByzbPt83PiAmrETlioiFVce+tn
-         VcnbRJ/0xOzfN4LzZN/8XGB7hjgVUOoPDJ2VjXgme5nv2Ws3KRjk3JDjEOi5NlZHZUUr
-         923oIzW55rT88uYom7Uj9b/344zhtAhcuWrnTN9JJvZcvBmUn1eyTpX+MDmXf9l0wa7l
-         6IpQ==
+        bh=opAga5NytnN90LYH/jNZqiNTmgPT7NfAYJd2Euocw8U=;
+        b=h5lH2SaAjfj5nZRgT3MlmV0bU4ktCOBs1Us5zj/vVE/eHkYdKdWHa9z2rOsNxE23Zp
+         AvEASOnPtLEGudWCQE2Aou29D4FLJKnsu8EZ177IllFGVSqEu88pq6wR1wfudFu21/47
+         OXkLOZuGm7c4zCDnCT810zUnH9DkhWZIWgnc66Dm8lfmKyuDURNCgk+c7dmSxzcNZ+4i
+         oh8tnabQghXCOI02SQFz71NmJW92BfTj7hd3S3yjUXxwS4WXoIb5awcV9blzVnKSW4YR
+         PIvNcH1iQ/Pz02G6EBxYZYFx1Jgrbe6lx5w/Q1W3Y9QDzoVOS8/JoRtc+iQAN1PYzxcB
+         bLqg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-transfer-encoding:content-disposition
          :mime-version:references:message-id:subject:cc:to:from:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=/pTb3bmFNJAoW4OTXZevQvKRa3GaR4zJvxJl+2o4gSw=;
-        b=KEP/Y1yYSfrc9433JW/AkdPmjUuRcLjK2Lnpljmpa4AokI3jS6KL8AVj4zNyUfyh7H
-         2+9+22wIcsCfafkgblCyC8WBx6HZTjUkw+L9r2XH2lYuO/dYJGRxJeYXDrVHo4ox86hm
-         UwJLBUgBwMKNmnxgqVK+j63FCZOQOrIJSZnW2eML81E+pMJduCVtTZHUoMpzZjF+fMyy
-         X2NP3cF+DDJHcFA1Zgta2Qsogl+xTgD+28GBZDyWjUHvCM9Tz6W6AehKV96kxDPG68Hi
-         wngXGfjlqZiHlsp2kb1G3AaORPx+UZZeQDjA+0Yc47gMV6dZa0hPBCoMflQ9D67DtfMn
-         zA5g==
-X-Gm-Message-State: ANoB5plvlCukvbu6LDvoYuhyVKcIIQo09UEUkS196w/T0mkt/1JUD1Av
-        zEGiBAYvePJmfIuLm13C7czJ
-X-Google-Smtp-Source: AA0mqf54qJPb7YmooDC3RdnMvRXNS/ebqWefbj6rMHkzZfj0B3BtOhiWuI6WORqIQeiqmO1v20bQzA==
-X-Received: by 2002:a62:1488:0:b0:56b:b890:6ccd with SMTP id 130-20020a621488000000b0056bb8906ccdmr20416983pfu.4.1670953454385;
-        Tue, 13 Dec 2022 09:44:14 -0800 (PST)
+        bh=opAga5NytnN90LYH/jNZqiNTmgPT7NfAYJd2Euocw8U=;
+        b=31w3EGOAmk+O5n8O/jB/t0B59Zl4i2JaSB5i5L87JwpgDbW9EctraIZl6vM9s9PTes
+         PVmgDIW/GiwECWukfxkcarFEHiergaxgN3dCLYcecXo5ceQK2MsrW+eE285xaj0HGX7X
+         hipZ93THXyXRks2gdEcH5tM5azVwelx51BBSoPwjemlfEZxXCDTzE3jKike9BMoTCn/Y
+         yOIaEqqqU3HA6oLLh/OEwl6xfxnhSxSNGqYt7bnGezrnA1Eo12xdGr2cqZ7RDA/5KEcU
+         n1T6J9B6Qx5oPTtpxJH0Rk3CoOWkL/6wU3pzUY1X1AxlsVbbEWr1acguLrHIeCcMnSuJ
+         FwPg==
+X-Gm-Message-State: ANoB5pk1ESii9/KZdURqwB6JQz0mnQga92LKlodpiOaUSu3V9pVKc4/+
+        0ab0SnU/t8iV8CNFWE3PjWnX/Gce6FgA2c8=
+X-Google-Smtp-Source: AA0mqf6pTOvUT+TVngBCj6bDScNP+fRE5DB00eZbQPooYfnBCOCmTI1M7ZZsxiAv4tRky/H9QIHriw==
+X-Received: by 2002:aa7:828d:0:b0:574:9a46:6306 with SMTP id s13-20020aa7828d000000b005749a466306mr21729213pfm.20.1670954265596;
+        Tue, 13 Dec 2022 09:57:45 -0800 (PST)
 Received: from thinkpad ([27.111.75.5])
-        by smtp.gmail.com with ESMTPSA id g28-20020aa79ddc000000b00573769811d6sm7936930pfq.44.2022.12.13.09.44.08
+        by smtp.gmail.com with ESMTPSA id x8-20020aa79ac8000000b0056da63c8515sm8179465pfp.91.2022.12.13.09.57.40
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Dec 2022 09:44:13 -0800 (PST)
-Date:   Tue, 13 Dec 2022 23:14:06 +0530
+        Tue, 13 Dec 2022 09:57:44 -0800 (PST)
+Date:   Tue, 13 Dec 2022 23:27:38 +0530
 From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     andersson@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, bp@alien8.de,
-        tony.luck@intel.com, quic_saipraka@quicinc.com,
+Cc:     Andrew Halaney <ahalaney@redhat.com>, andersson@kernel.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        bp@alien8.de, tony.luck@intel.com, quic_saipraka@quicinc.com,
         konrad.dybcio@linaro.org, linux-arm-msm@vger.kernel.org,
         linux-kernel@vger.kernel.org, james.morse@arm.com,
         mchehab@kernel.org, rric@kernel.org, linux-edac@vger.kernel.org,
-        quic_ppareek@quicinc.com, luca.weiss@fairphone.com,
-        stable@vger.kernel.org
-Subject: Re: [PATCH v2 12/13] qcom: llcc/edac: Fix the base address used for
- accessing LLCC banks
-Message-ID: <20221213174406.GH4862@thinkpad>
+        quic_ppareek@quicinc.com, luca.weiss@fairphone.com
+Subject: Re: [PATCH v2 00/13] Qcom: LLCC/EDAC: Fix base address used for LLCC
+ banks
+Message-ID: <20221213175738.GI4862@thinkpad>
 References: <20221212123311.146261-1-manivannan.sadhasivam@linaro.org>
- <20221212123311.146261-13-manivannan.sadhasivam@linaro.org>
- <ccd54883-d369-8387-881a-b5ac7a377c97@linaro.org>
+ <20221212192340.evgtbpzmw7hcdolb@halaney-x13s>
+ <20221213052802.GB4862@thinkpad>
+ <ec64e3a0-085d-7830-fd4e-6969c1c9bbdf@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <ccd54883-d369-8387-881a-b5ac7a377c97@linaro.org>
+In-Reply-To: <ec64e3a0-085d-7830-fd4e-6969c1c9bbdf@linaro.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Tue, Dec 13, 2022 at 05:37:37PM +0100, Krzysztof Kozlowski wrote:
-> On 12/12/2022 13:33, Manivannan Sadhasivam wrote:
-> > The Qualcomm LLCC/EDAC drivers were using a fixed register stride for
-> > accessing the (Control and Status Registers) CSRs of each LLCC bank.
-> > This stride only works for some SoCs like SDM845 for which driver
-> > support was initially added.
+On Tue, Dec 13, 2022 at 05:54:56PM +0100, Krzysztof Kozlowski wrote:
+> On 13/12/2022 06:28, Manivannan Sadhasivam wrote:
+> > On Mon, Dec 12, 2022 at 01:23:40PM -0600, Andrew Halaney wrote:
+> >> On Mon, Dec 12, 2022 at 06:02:58PM +0530, Manivannan Sadhasivam wrote:
+> >>> The Qualcomm LLCC/EDAC drivers were using a fixed register stride for
+> >>> accessing the (Control and Status Regsiters) CSRs of each LLCC bank.
+> >>> This offset only works for some SoCs like SDM845 for which driver support
+> >>> was initially added.
+> >>>
+> >>> But the later SoCs use different register stride that vary between the
+> >>> banks with holes in-between. So it is not possible to use a single register
+> >>> stride for accessing the CSRs of each bank. By doing so could result in a
+> >>> crash with the current drivers. So far this crash is not reported since
+> >>> EDAC_QCOM driver is not enabled in ARM64 defconfig and no one tested the
+> >>> driver extensively by triggering the EDAC IRQ (that's where each bank
+> >>> CSRs are accessed).
+> >>>
+> >>> For fixing this issue, let's obtain the base address of each LLCC bank from
+> >>> devicetree and get rid of the fixed stride.
+> >>>
+> >>> This series affects multiple platforms but I have only tested this on
+> >>> SM8250 and SM8450. Testing on other platforms is welcomed.
+> >>>
+> >>
+> >> Tested-by: Andrew Halaney <ahalaney@redhat.com> # sa8540p-ride
+> >>
 > > 
-> > But the later SoCs use different register stride that vary between the
-> > banks with holes in-between. So it is not possible to use a single register
-> > stride for accessing the CSRs of each bank. By doing so could result in a
-> > crash.
+> > Thanks!
 > > 
-> > For fixing this issue, let's obtain the base address of each LLCC bank from
-> > devicetree and get rid of the fixed stride. This also means, we no longer
-> > need to rely on reg-names property and get the base addresses using index.
+> >> I took this for a quick spin on the qdrive3 I've got access to without
+> >> any issue:
+> >>
+> >>     [root@localhost ~]# modprobe qcom_edac
+> >>     [root@localhost ~]# dmesg | grep -i edac
+> >>     [    0.620723] EDAC MC: Ver: 3.0.0
+> >>     [    1.165417] ghes_edac: GHES probing device list is empty
+> >>     [  594.688103] EDAC DEVICE0: Giving out device to module qcom_llcc_edac controller llcc: DEV qcom_llcc_edac (INTERRUPT)
+> >>     [root@localhost ~]# cat /proc/interrupts | grep ecc
+> >>     174:          0          0          0          0          0          0          0          0     GICv3 614 Level     llcc_ecc
+> >>     [root@localhost ~]#
+> >>
+> >> Potentially stupid question, but are users expected to manually load the
+> >> driver as I did? I don't see how it would be loaded automatically in the
+> >> current state, but thought it was funny that I needed to modprobe
+> >> myself.
+> >>
+> >> Please let me know if you want me to do any more further testing!
+> >>
 > > 
-> > First index is LLCC bank 0 and last index is LLCC broadcast. If the SoC
-> > supports more than one bank, then those needs to be defined in devicetree
-> > for index from 1..N-1.
+> > Well, I always ended up using the driver as a built-in. I do make it module for
+> > build test but never really used it as a module, so didn't catch this issue.
 > > 
-> > Cc: <stable@vger.kernel.org> # 4.20
-> > Fixes: a3134fb09e0b ("drivers: soc: Add LLCC driver")
-> > Fixes: 27450653f1db ("drivers: edac: Add EDAC driver support for QCOM SoCs")
-> 
-> Your previous patches in the series had incorrect CC-stable/Fixes tags,
-> thus I have doubts also here.
-> 
-
-Sorry I do not agree with you. I wanted to backport binding, dts and driver
-patches to possible LTS kernels together and that's why I tagged stable list.
-
-Either all goes to stable or none. If your question is more towards what if one
-goes before the other, then in that case I may need to specify the dependency
-of commits but that will look messy. I took the gamble because, the driver is
-already broken in stable kernels.
-
-> Can you confirm, that this patch alone (alone! Without DTS patches) when
-> backported to v4.20, still works perfectly fine for sdm845?
-> 
-
-It won't and that's why I also tagged dts patches for backporting.
-
-> > Reported-by: Parikshit Pareek <quic_ppareek@quicinc.com>
-> > Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-> > ---
-> >  drivers/edac/qcom_edac.c           | 14 +++---
-> >  drivers/soc/qcom/llcc-qcom.c       | 72 +++++++++++++++++-------------
-> >  include/linux/soc/qcom/llcc-qcom.h |  6 +--
-> >  3 files changed, 48 insertions(+), 44 deletions(-)
+> > This is due to the module alias not exported by the qcom_edac driver. Below
+> > diff allows kernel to autoload it:
 > > 
 > > diff --git a/drivers/edac/qcom_edac.c b/drivers/edac/qcom_edac.c
-> > index 97a27e42dd61..5be93577fc03 100644
+> > index f7afb5375293..13919d01c22d 100644
 > > --- a/drivers/edac/qcom_edac.c
 > > +++ b/drivers/edac/qcom_edac.c
-> > @@ -213,7 +213,7 @@ dump_syn_reg_values(struct llcc_drv_data *drv, u32 bank, int err_type)
+> > @@ -419,3 +419,4 @@ module_platform_driver(qcom_llcc_edac_driver);
 > >  
-> >  	for (i = 0; i < reg_data.reg_cnt; i++) {
-> >  		synd_reg = reg_data.synd_reg + (i * 4);
-> > -		ret = regmap_read(drv->regmap, drv->offsets[bank] + synd_reg,
-> > +		ret = regmap_read(drv->regmaps[bank], synd_reg,
-> >  				  &synd_val);
-> >  		if (ret)
-> >  			goto clear;
-> > @@ -222,8 +222,7 @@ dump_syn_reg_values(struct llcc_drv_data *drv, u32 bank, int err_type)
-> >  			    reg_data.name, i, synd_val);
-> >  	}
-> >  
-> > -	ret = regmap_read(drv->regmap,
-> > -			  drv->offsets[bank] + reg_data.count_status_reg,
-> > +	ret = regmap_read(drv->regmaps[bank], reg_data.count_status_reg,
-> >  			  &err_cnt);
-> >  	if (ret)
-> >  		goto clear;
-> > @@ -233,8 +232,7 @@ dump_syn_reg_values(struct llcc_drv_data *drv, u32 bank, int err_type)
-> >  	edac_printk(KERN_CRIT, EDAC_LLCC, "%s: Error count: 0x%4x\n",
-> >  		    reg_data.name, err_cnt);
-> >  
-> > -	ret = regmap_read(drv->regmap,
-> > -			  drv->offsets[bank] + reg_data.ways_status_reg,
-> > +	ret = regmap_read(drv->regmaps[bank], reg_data.ways_status_reg,
-> >  			  &err_ways);
-> >  	if (ret)
-> >  		goto clear;
-> > @@ -296,8 +294,7 @@ llcc_ecc_irq_handler(int irq, void *edev_ctl)
-> >  
-> >  	/* Iterate over the banks and look for Tag RAM or Data RAM errors */
-> >  	for (i = 0; i < drv->num_banks; i++) {
-> > -		ret = regmap_read(drv->regmap,
-> > -				  drv->offsets[i] + DRP_INTERRUPT_STATUS,
-> > +		ret = regmap_read(drv->regmaps[i], DRP_INTERRUPT_STATUS,
-> >  				  &drp_error);
-> >  
-> >  		if (!ret && (drp_error & SB_ECC_ERROR)) {
-> > @@ -312,8 +309,7 @@ llcc_ecc_irq_handler(int irq, void *edev_ctl)
-> >  		if (!ret)
-> >  			irq_rc = IRQ_HANDLED;
-> >  
-> > -		ret = regmap_read(drv->regmap,
-> > -				  drv->offsets[i] + TRP_INTERRUPT_0_STATUS,
-> > +		ret = regmap_read(drv->regmaps[i], TRP_INTERRUPT_0_STATUS,
-> >  				  &trp_error);
-> >  
-> >  		if (!ret && (trp_error & SB_ECC_ERROR)) {
-> > diff --git a/drivers/soc/qcom/llcc-qcom.c b/drivers/soc/qcom/llcc-qcom.c
-> > index 23ce2f78c4ed..a29f22dad7fa 100644
-> > --- a/drivers/soc/qcom/llcc-qcom.c
-> > +++ b/drivers/soc/qcom/llcc-qcom.c
-> > @@ -62,8 +62,6 @@
-> >  #define LLCC_TRP_WRSC_CACHEABLE_EN    0x21f2c
-> >  #define LLCC_TRP_ALGO_CFG8	      0x21f30
-> >  
-> > -#define BANK_OFFSET_STRIDE	      0x80000
-> > -
-> >  #define LLCC_VERSION_2_0_0_0          0x02000000
-> >  #define LLCC_VERSION_2_1_0_0          0x02010000
-> >  #define LLCC_VERSION_4_1_0_0          0x04010000
-> > @@ -898,8 +896,8 @@ static int qcom_llcc_remove(struct platform_device *pdev)
-> >  	return 0;
-> >  }
-> >  
-> > -static struct regmap *qcom_llcc_init_mmio(struct platform_device *pdev,
-> > -		const char *name)
-> > +static struct regmap *qcom_llcc_init_mmio(struct platform_device *pdev, u8 index,
-> > +					  const char *name)
-> >  {
-> >  	void __iomem *base;
-> >  	struct regmap_config llcc_regmap_config = {
-> > @@ -909,7 +907,7 @@ static struct regmap *qcom_llcc_init_mmio(struct platform_device *pdev,
-> >  		.fast_io = true,
-> >  	};
-> >  
-> > -	base = devm_platform_ioremap_resource_byname(pdev, name);
-> > +	base = devm_platform_ioremap_resource(pdev, index);
-> >  	if (IS_ERR(base))
-> >  		return ERR_CAST(base);
-> >  
-> > @@ -927,6 +925,7 @@ static int qcom_llcc_probe(struct platform_device *pdev)
-> >  	const struct llcc_slice_config *llcc_cfg;
-> >  	u32 sz;
-> >  	u32 version;
-> > +	struct regmap *regmap;
-> >  
-> >  	drv_data = devm_kzalloc(dev, sizeof(*drv_data), GFP_KERNEL);
-> >  	if (!drv_data) {
-> > @@ -934,21 +933,51 @@ static int qcom_llcc_probe(struct platform_device *pdev)
-> >  		goto err;
-> >  	}
-> >  
-> > -	drv_data->regmap = qcom_llcc_init_mmio(pdev, "llcc_base");
-> > -	if (IS_ERR(drv_data->regmap)) {
-> > -		ret = PTR_ERR(drv_data->regmap);
-> > +	/* Initialize the first LLCC bank regmap */
-> > +	regmap = qcom_llcc_init_mmio(pdev, i, "llcc0_base");
+> >  MODULE_DESCRIPTION("QCOM EDAC driver");
+> >  MODULE_LICENSE("GPL v2");
+> > +MODULE_ALIAS("platform:qcom_llcc_edac");
 > 
-> What is the value of "i" here? Looks like not initialized in my next.
+> While this is a way to fix it, but instead of creating aliases for wrong
+> names, either a correct name should be used or driver should receive ID
+> table.
 > 
 
-Yes, this was a mistake and been reported by kernel bot. It will be fixed in
-next version.
-
-> > +	if (IS_ERR(regmap)) {
-> > +		ret = PTR_ERR(regmap);
-> >  		goto err;
-> >  	}
-> >  
-> > -	drv_data->bcast_regmap =
-> > -		qcom_llcc_init_mmio(pdev, "llcc_broadcast_base");
-> > +	cfg = of_device_get_match_data(&pdev->dev);
-> > +
-> > +	ret = regmap_read(regmap, cfg->reg_offset[LLCC_COMMON_STATUS0], &num_banks);
-> > +	if (ret)
-> > +		goto err;
-> > +
-> > +	num_banks &= LLCC_LB_CNT_MASK;
-> > +	num_banks >>= LLCC_LB_CNT_SHIFT;
-> > +	drv_data->num_banks = num_banks;
-> > +
-> > +	drv_data->regmaps = devm_kcalloc(dev, num_banks, sizeof(*drv_data->regmaps), GFP_KERNEL);
-> > +	if (!drv_data->regmaps) {
-> > +		ret = -ENOMEM;
-> > +		goto err;
-> > +	}
-> > +
-> > +	drv_data->regmaps[0] = regmap;
-> > +
-> > +	/* Initialize rest of LLCC bank regmaps */
-> > +	for (i = 1; i < num_banks; i++) {
-> > +		char *base = kasprintf(GFP_KERNEL, "llcc%d_base", i);
-> > +
-> > +		drv_data->regmaps[i] = qcom_llcc_init_mmio(pdev, i, base);
-> > +		if (IS_ERR(drv_data->regmaps[i])) {
-> > +			ret = PTR_ERR(drv_data->regmaps[i]);
-> > +			kfree(base);
-> > +			goto err;
-> 
-> This looks like the ABI break so:
-> 1. Existing users are broken,
-
-I fixed the dts for all affected SoCs, then who are all other existing users?
-
-> 2. It cannot be backported.
-> 
-
-This is a bug fix and clearly needs to be backported along with the dts
-changes. For this purpose only I have tagged both dts and driver patches for
-backporting. Am I missing anything here?
+I'm not sure how you'd fix it with a _correct_ name here. Also, the id table is
+an overkill since there is only one driver that is making use of it. And
+moreover, there is no definite ID to use.
 
 Thanks,
 Mani
 
-> 
-> > +		}
-> > +
-> > +		kfree(base);
-> > +	}
-> > +
-> 
 > Best regards,
 > Krzysztof
 > 
