@@ -2,165 +2,184 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6B8464BB6D
-	for <lists+linux-edac@lfdr.de>; Tue, 13 Dec 2022 18:57:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 50CB464BC1C
+	for <lists+linux-edac@lfdr.de>; Tue, 13 Dec 2022 19:34:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236173AbiLMR5v (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Tue, 13 Dec 2022 12:57:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37340 "EHLO
+        id S236579AbiLMSe0 (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Tue, 13 Dec 2022 13:34:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236048AbiLMR5s (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Tue, 13 Dec 2022 12:57:48 -0500
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2877065FB
-        for <linux-edac@vger.kernel.org>; Tue, 13 Dec 2022 09:57:46 -0800 (PST)
-Received: by mail-pf1-x431.google.com with SMTP id c13so2741520pfp.5
-        for <linux-edac@vger.kernel.org>; Tue, 13 Dec 2022 09:57:46 -0800 (PST)
+        with ESMTP id S236493AbiLMSeZ (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Tue, 13 Dec 2022 13:34:25 -0500
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A45B24F12
+        for <linux-edac@vger.kernel.org>; Tue, 13 Dec 2022 10:34:24 -0800 (PST)
+Received: by mail-lf1-x135.google.com with SMTP id g7so6377035lfv.5
+        for <linux-edac@vger.kernel.org>; Tue, 13 Dec 2022 10:34:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=opAga5NytnN90LYH/jNZqiNTmgPT7NfAYJd2Euocw8U=;
-        b=h5lH2SaAjfj5nZRgT3MlmV0bU4ktCOBs1Us5zj/vVE/eHkYdKdWHa9z2rOsNxE23Zp
-         AvEASOnPtLEGudWCQE2Aou29D4FLJKnsu8EZ177IllFGVSqEu88pq6wR1wfudFu21/47
-         OXkLOZuGm7c4zCDnCT810zUnH9DkhWZIWgnc66Dm8lfmKyuDURNCgk+c7dmSxzcNZ+4i
-         oh8tnabQghXCOI02SQFz71NmJW92BfTj7hd3S3yjUXxwS4WXoIb5awcV9blzVnKSW4YR
-         PIvNcH1iQ/Pz02G6EBxYZYFx1Jgrbe6lx5w/Q1W3Y9QDzoVOS8/JoRtc+iQAN1PYzxcB
-         bLqg==
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=LwmxyaNur8jKjOfvpVRgHgye5ddXEkHrwqTF14n3GIU=;
+        b=bmX/7cVRLT6mUcKaU8Rm9as/CVZ45LEyMoZOz/+X2mGKx1FDf0aSAmDpqdMW0qlYo7
+         vfL8uiMCI2v5eFDSYznjo2aPYAFahJF0LrOXnhtjXW3m5IX++9KSkpm2LBXNV8J0bw+v
+         H21wVnf1D6SYvx/Tankio4cWWlgEw4zLs3tiC5OR/Ar3qbczBJ918uMXpr7yM/NMbJbM
+         m/R8/fJq3d7tH99RpyOoD9Yw8lI30zjZYon4fKKXTJaOZ16QRDr6SxGP86YLxbiyOjZV
+         6nBJLTL4AOL/lJj3poacMTbcaWVxq5a7IzKj77gJSuG/u1tWVhx67y3OkpK8MHhpCMjp
+         jVJg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=opAga5NytnN90LYH/jNZqiNTmgPT7NfAYJd2Euocw8U=;
-        b=31w3EGOAmk+O5n8O/jB/t0B59Zl4i2JaSB5i5L87JwpgDbW9EctraIZl6vM9s9PTes
-         PVmgDIW/GiwECWukfxkcarFEHiergaxgN3dCLYcecXo5ceQK2MsrW+eE285xaj0HGX7X
-         hipZ93THXyXRks2gdEcH5tM5azVwelx51BBSoPwjemlfEZxXCDTzE3jKike9BMoTCn/Y
-         yOIaEqqqU3HA6oLLh/OEwl6xfxnhSxSNGqYt7bnGezrnA1Eo12xdGr2cqZ7RDA/5KEcU
-         n1T6J9B6Qx5oPTtpxJH0Rk3CoOWkL/6wU3pzUY1X1AxlsVbbEWr1acguLrHIeCcMnSuJ
-         FwPg==
-X-Gm-Message-State: ANoB5pk1ESii9/KZdURqwB6JQz0mnQga92LKlodpiOaUSu3V9pVKc4/+
-        0ab0SnU/t8iV8CNFWE3PjWnX/Gce6FgA2c8=
-X-Google-Smtp-Source: AA0mqf6pTOvUT+TVngBCj6bDScNP+fRE5DB00eZbQPooYfnBCOCmTI1M7ZZsxiAv4tRky/H9QIHriw==
-X-Received: by 2002:aa7:828d:0:b0:574:9a46:6306 with SMTP id s13-20020aa7828d000000b005749a466306mr21729213pfm.20.1670954265596;
-        Tue, 13 Dec 2022 09:57:45 -0800 (PST)
-Received: from thinkpad ([27.111.75.5])
-        by smtp.gmail.com with ESMTPSA id x8-20020aa79ac8000000b0056da63c8515sm8179465pfp.91.2022.12.13.09.57.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Dec 2022 09:57:44 -0800 (PST)
-Date:   Tue, 13 Dec 2022 23:27:38 +0530
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Andrew Halaney <ahalaney@redhat.com>, andersson@kernel.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        bp@alien8.de, tony.luck@intel.com, quic_saipraka@quicinc.com,
+        bh=LwmxyaNur8jKjOfvpVRgHgye5ddXEkHrwqTF14n3GIU=;
+        b=zCPibvyKR7GT0phd6h5749fZcmz7KyIQGjN1GhZtnCTbc+Q6tuT4sBfzQu1bnXz6kI
+         gdFU8fcbbuVnCRTXb9J2CAgbBbhpcjagxN5PLB4AkiKEkST56N9dBHKjJmGuMYlSv0l+
+         byR98sxdfls5kwhwFFXCRe4R7Yj5NV+bh/RJylr4qlTuaZmfaitTqfUuxHtMtrNn33BT
+         qXRCsHySH/6/GFsb5m8owhmLuBEm8Al7k2+Yre0vlwSKPGfMmks8kwwrpe5KQdCuZR5D
+         QRibMOmjYPrUVk4JukKT0845Z7PrzbrtmvmCcJCAY3Uw2dEf5BZVNXG2GUY7Xmc6QUiS
+         7MfQ==
+X-Gm-Message-State: ANoB5pkIOkxKdL9LXrGk+OaIgi8QRJpj64CyhTihuiVdARgMsX7GINas
+        FypKrzTp0bmrvD0ZzMrkpYJwOA==
+X-Google-Smtp-Source: AA0mqf5am1mE53czDccYmZ1WU9RYdh/9zwwSr4DXmrm9ha4e0t6VnJUQD2XqrEjZ/fkkP3OlsxFdfQ==
+X-Received: by 2002:a19:434a:0:b0:4b5:b7a7:ebf1 with SMTP id m10-20020a19434a000000b004b5b7a7ebf1mr4730650lfj.12.1670956462543;
+        Tue, 13 Dec 2022 10:34:22 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id m5-20020a056512114500b004b57db96aabsm471637lfg.52.2022.12.13.10.34.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 13 Dec 2022 10:34:22 -0800 (PST)
+Message-ID: <1007b829-6573-5de5-3c8e-88621ef6d73e@linaro.org>
+Date:   Tue, 13 Dec 2022 19:34:20 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Subject: Re: [PATCH v2 02/13] dt-bindings: arm: msm: Fix register regions used
+ for LLCC banks
+Content-Language: en-US
+To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Cc:     andersson@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, bp@alien8.de,
+        tony.luck@intel.com, quic_saipraka@quicinc.com,
         konrad.dybcio@linaro.org, linux-arm-msm@vger.kernel.org,
         linux-kernel@vger.kernel.org, james.morse@arm.com,
         mchehab@kernel.org, rric@kernel.org, linux-edac@vger.kernel.org,
-        quic_ppareek@quicinc.com, luca.weiss@fairphone.com
-Subject: Re: [PATCH v2 00/13] Qcom: LLCC/EDAC: Fix base address used for LLCC
- banks
-Message-ID: <20221213175738.GI4862@thinkpad>
+        quic_ppareek@quicinc.com, luca.weiss@fairphone.com,
+        stable@vger.kernel.org
 References: <20221212123311.146261-1-manivannan.sadhasivam@linaro.org>
- <20221212192340.evgtbpzmw7hcdolb@halaney-x13s>
- <20221213052802.GB4862@thinkpad>
- <ec64e3a0-085d-7830-fd4e-6969c1c9bbdf@linaro.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <ec64e3a0-085d-7830-fd4e-6969c1c9bbdf@linaro.org>
+ <20221212123311.146261-3-manivannan.sadhasivam@linaro.org>
+ <aa692a69-fc8d-472e-e5ae-276c3d6d7d78@linaro.org>
+ <20221213173023.GG4862@thinkpad>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221213173023.GG4862@thinkpad>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Tue, Dec 13, 2022 at 05:54:56PM +0100, Krzysztof Kozlowski wrote:
-> On 13/12/2022 06:28, Manivannan Sadhasivam wrote:
-> > On Mon, Dec 12, 2022 at 01:23:40PM -0600, Andrew Halaney wrote:
-> >> On Mon, Dec 12, 2022 at 06:02:58PM +0530, Manivannan Sadhasivam wrote:
-> >>> The Qualcomm LLCC/EDAC drivers were using a fixed register stride for
-> >>> accessing the (Control and Status Regsiters) CSRs of each LLCC bank.
-> >>> This offset only works for some SoCs like SDM845 for which driver support
-> >>> was initially added.
-> >>>
-> >>> But the later SoCs use different register stride that vary between the
-> >>> banks with holes in-between. So it is not possible to use a single register
-> >>> stride for accessing the CSRs of each bank. By doing so could result in a
-> >>> crash with the current drivers. So far this crash is not reported since
-> >>> EDAC_QCOM driver is not enabled in ARM64 defconfig and no one tested the
-> >>> driver extensively by triggering the EDAC IRQ (that's where each bank
-> >>> CSRs are accessed).
-> >>>
-> >>> For fixing this issue, let's obtain the base address of each LLCC bank from
-> >>> devicetree and get rid of the fixed stride.
-> >>>
-> >>> This series affects multiple platforms but I have only tested this on
-> >>> SM8250 and SM8450. Testing on other platforms is welcomed.
-> >>>
-> >>
-> >> Tested-by: Andrew Halaney <ahalaney@redhat.com> # sa8540p-ride
-> >>
-> > 
-> > Thanks!
-> > 
-> >> I took this for a quick spin on the qdrive3 I've got access to without
-> >> any issue:
-> >>
-> >>     [root@localhost ~]# modprobe qcom_edac
-> >>     [root@localhost ~]# dmesg | grep -i edac
-> >>     [    0.620723] EDAC MC: Ver: 3.0.0
-> >>     [    1.165417] ghes_edac: GHES probing device list is empty
-> >>     [  594.688103] EDAC DEVICE0: Giving out device to module qcom_llcc_edac controller llcc: DEV qcom_llcc_edac (INTERRUPT)
-> >>     [root@localhost ~]# cat /proc/interrupts | grep ecc
-> >>     174:          0          0          0          0          0          0          0          0     GICv3 614 Level     llcc_ecc
-> >>     [root@localhost ~]#
-> >>
-> >> Potentially stupid question, but are users expected to manually load the
-> >> driver as I did? I don't see how it would be loaded automatically in the
-> >> current state, but thought it was funny that I needed to modprobe
-> >> myself.
-> >>
-> >> Please let me know if you want me to do any more further testing!
-> >>
-> > 
-> > Well, I always ended up using the driver as a built-in. I do make it module for
-> > build test but never really used it as a module, so didn't catch this issue.
-> > 
-> > This is due to the module alias not exported by the qcom_edac driver. Below
-> > diff allows kernel to autoload it:
-> > 
-> > diff --git a/drivers/edac/qcom_edac.c b/drivers/edac/qcom_edac.c
-> > index f7afb5375293..13919d01c22d 100644
-> > --- a/drivers/edac/qcom_edac.c
-> > +++ b/drivers/edac/qcom_edac.c
-> > @@ -419,3 +419,4 @@ module_platform_driver(qcom_llcc_edac_driver);
-> >  
-> >  MODULE_DESCRIPTION("QCOM EDAC driver");
-> >  MODULE_LICENSE("GPL v2");
-> > +MODULE_ALIAS("platform:qcom_llcc_edac");
+On 13/12/2022 18:30, Manivannan Sadhasivam wrote:
+> On Tue, Dec 13, 2022 at 05:24:45PM +0100, Krzysztof Kozlowski wrote:
+>> On 12/12/2022 13:33, Manivannan Sadhasivam wrote:
+>>> Register regions of the LLCC banks are located at separate addresses.
+>>> Currently, the binding just lists the LLCC0 base address and specifies
+>>> the size to cover all banks. This is not the correct approach since,
+>>> there are holes and other registers located in between.
+>>>
+>>> So let's specify the base address of each LLCC bank and get rid of
+>>> reg-names property as it is not needed anymore. It should be noted that
+>>> the bank count differs for each SoC, so that also needs to be taken into
+>>> account in the binding.
+>>>
+>>> Cc: <stable@vger.kernel.org> # 4.19
+>>> Fixes: 7e5700ae64f6 ("dt-bindings: Documentation for qcom, llcc")
+>>> Reported-by: Parikshit Pareek <quic_ppareek@quicinc.com>
+>>> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+>>> ---
+>>>  .../bindings/arm/msm/qcom,llcc.yaml           | 97 ++++++++++++++++---
+>>>  1 file changed, 83 insertions(+), 14 deletions(-)
+>>>
+>>> diff --git a/Documentation/devicetree/bindings/arm/msm/qcom,llcc.yaml b/Documentation/devicetree/bindings/arm/msm/qcom,llcc.yaml
+>>> index d1df49ffcc1b..260bc87629a7 100644
+>>> --- a/Documentation/devicetree/bindings/arm/msm/qcom,llcc.yaml
+>>> +++ b/Documentation/devicetree/bindings/arm/msm/qcom,llcc.yaml
+>>> @@ -33,14 +33,8 @@ properties:
+>>>        - qcom,sm8550-llcc
+>>>  
+>>>    reg:
+>>> -    items:
+>>> -      - description: LLCC base register region
+>>> -      - description: LLCC broadcast base register region
+>>> -
+>>> -  reg-names:
+>>> -    items:
+>>> -      - const: llcc_base
+>>> -      - const: llcc_broadcast_base
+>>> +    minItems: 2
+>>> +    maxItems: 9
+>>>  
+>>>    interrupts:
+>>>      maxItems: 1
+>>> @@ -48,7 +42,76 @@ properties:
+>>>  required:
+>>>    - compatible
+>>>    - reg
+>>> -  - reg-names
+>>> +
+>>> +allOf:
+>>> +  - if:
+>>> +      properties:
+>>> +        compatible:
+>>> +          contains:
+>>> +            enum:
+>>> +              - qcom,sc7180-llcc
+>>> +              - qcom,sm6350-llcc
+>>> +    then:
+>>> +      properties:
+>>> +        reg:
+>>> +          items:
+>>> +            - description: LLCC0 base register region
+>>> +            - description: LLCC broadcast base register region
+>>> +
+>>> +  - if:
+>>> +      properties:
+>>> +        compatible:
+>>> +          contains:
+>>> +            enum:
+>>> +              - qcom,sc7280-llcc
+>>> +    then:
+>>> +      properties:
+>>> +        reg:
+>>> +          items:
+>>> +            - description: LLCC0 base register region
+>>> +            - description: LLCC1 base register region
+>>> +            - description: LLCC broadcast base register region
+>>
+>> This will break all existing users (all systems, bootloaders/firmwares),
+>> so you need to explain that in commit msg - why breaking is allowed, who
+>> is or is not going to be affected etc. Otherwise judging purely by
+>> bindings this is an ABI break.
+>>
+>> Reason "This is not the correct approach since, there are holes and
+>> other registers located in between." is not enough, because this
+>> suggests previous approach was just not the best and you have something
+>> better. Better is not a reason for ABI break.
+>>
 > 
-> While this is a way to fix it, but instead of creating aliases for wrong
-> names, either a correct name should be used or driver should receive ID
-> table.
+> Maybe I need to reword the commit message a bit. But clearly the binding was
+> wrong for rest of the SoCs other than SDM845 as the total size of the LLCC
+> region includes registers of other peripherals like memory controller.
 > 
+> In that case, will you let the binding to be wrong or fix it?
 
-I'm not sure how you'd fix it with a _correct_ name here. Also, the id table is
-an overkill since there is only one driver that is making use of it. And
-moreover, there is no definite ID to use.
+Sure it needs fixing, but as I said you need to explain why breaking ABI
+is okay and who/where is going to be affected.
 
-Thanks,
-Mani
+Best regards,
+Krzysztof
 
-> Best regards,
-> Krzysztof
-> 
-
--- 
-மணிவண்ணன் சதாசிவம்
