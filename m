@@ -2,172 +2,238 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9FEE64BC4F
-	for <lists+linux-edac@lfdr.de>; Tue, 13 Dec 2022 19:47:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 51D4A64C19C
+	for <lists+linux-edac@lfdr.de>; Wed, 14 Dec 2022 02:03:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236404AbiLMSrw (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Tue, 13 Dec 2022 13:47:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41914 "EHLO
+        id S236712AbiLNBDo (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Tue, 13 Dec 2022 20:03:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236694AbiLMSrX (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Tue, 13 Dec 2022 13:47:23 -0500
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CD0625286
-        for <linux-edac@vger.kernel.org>; Tue, 13 Dec 2022 10:47:21 -0800 (PST)
-Received: by mail-lf1-x131.google.com with SMTP id cf42so6461505lfb.1
-        for <linux-edac@vger.kernel.org>; Tue, 13 Dec 2022 10:47:21 -0800 (PST)
+        with ESMTP id S236731AbiLNBDn (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Tue, 13 Dec 2022 20:03:43 -0500
+Received: from mail-vs1-xe2d.google.com (mail-vs1-xe2d.google.com [IPv6:2607:f8b0:4864:20::e2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DA7E19C35;
+        Tue, 13 Dec 2022 17:03:42 -0800 (PST)
+Received: by mail-vs1-xe2d.google.com with SMTP id i2so16485819vsc.1;
+        Tue, 13 Dec 2022 17:03:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=YRwOpyUTyKwZUBQY9S8LUeQA/QLa8sJtEGHZbXqLC9M=;
-        b=sGK1i122jhMTjX3eHGkDcjeDAPF73PChEdmzvJsp5X/8qyzjl0rYuKS8H8KKD1St1M
-         3OmZ+wPhD4Vlm2UelB8tfS06WQqTNEtXjAHhQgZiwTReGH5hXqz8js+HUGvCTVS+2Dbg
-         q1NXNe9Ze62Kr5/Rqg/5/fhnnp2ixYRQDqwhQpQXiBHHyQBPzJe+I7shXo6Tz7v5Szk3
-         yV6Et3779dABbPSG/Rksz3t1F2hDgaWsMah3p2sgIkjr/W23kqr57Lt6Ao9m44BPsdOH
-         tKEw1IN1sGiQ6SoYx0GwhYSuB0v9RmrnlC9/NrH2T0JoMp/sHXtDC/nl70lZ1f3nc7As
-         kUmg==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:subject:from:cc:to:content-language
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=JGrvT4OV0InN5SJsTwsJ4Wj96hMY1O01ImoY2ZUC2Fs=;
+        b=dWolur7TyaFyhOKFqEIiBlqm2oFvcqupqAq53wPf4AEGToG9nNnGNOlGg8yjlJNpfJ
+         0nKNQ7AySPWilWXr3c0XcxngKTYFjLfmfotvMwjCW94vc9+Ekz7Xdd78BJNsdqA6Rgsl
+         /c6kiW5aA2xZx6GQSLGhAY/PbGwFQ3T0Lt68DmyZrahNTvghn69XvOKUeNcjIhcKgvog
+         4eG8zFZ7FIyI2mdygW0N7Y+KSt9jnoni79vBqJ2c/MIKHimfS8/wv5AAGTZ85YSPHmKA
+         CRBJSFHugg4MpCV3ByAts8BeJwcnydbQuk3+Qtx5MJJNX4cxLqY18u7lUZFofZ0MgSMw
+         RjMg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=YRwOpyUTyKwZUBQY9S8LUeQA/QLa8sJtEGHZbXqLC9M=;
-        b=L5HTOwVUge42hKbL9QWRp8zt8If89vv6QB2uGykIh1B5QfQ4n4JMwytlC5mJre0W+y
-         h7qQG1BM4Hb3sGUK1QE1M/gIfDgXON/32fnICiHO50Qy8vYDxNcSACztZgabKlhtUDot
-         gM1PAt/bSJHG7Q9pCfQCMVitAeXk8zTP9ZH1kgT8aHqiFe0aIMVnow19Zo4tdmz6+3rr
-         S/LJO2prX7gis/ZuG8hQexJzFr0Y4H3kwJO/1Hg/2bqMQoWhQbiF7n6y0+GuNd9ZTLVB
-         /+Kr1/r/plOw0Bu2Zkn94aC/zZWrR131deP5g2N6JB/I/uNOSWuu4yluld8VNJPfKvtO
-         o+vw==
-X-Gm-Message-State: ANoB5pmwoaD7tpLILL+dyP2yDdL07zCgUP4fiEejE+ORbrxVw1pHrkCS
-        Z1ChyU0r+YM5xqGtExdqsEjdUg==
-X-Google-Smtp-Source: AA0mqf4EzlyeUXlRyVVkTE9zBWWT/0m5aa7Czf1yi3T8wBUtLN19XL5M4jOioVNHsNguthRiFxrysg==
-X-Received: by 2002:ac2:4c24:0:b0:4b4:900c:3a28 with SMTP id u4-20020ac24c24000000b004b4900c3a28mr5168648lfq.60.1670957239616;
-        Tue, 13 Dec 2022 10:47:19 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id 25-20020ac25699000000b004b58d457f2dsm471838lfr.61.2022.12.13.10.47.18
+        h=content-transfer-encoding:subject:from:cc:to:content-language
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=JGrvT4OV0InN5SJsTwsJ4Wj96hMY1O01ImoY2ZUC2Fs=;
+        b=kzC9QK9NVyiMo0KGqGQAWf0Pbs6jyJt+62PMaAovPV8u8TnQMS13lnMz68vxKGxb/2
+         T6Bniiq0UXs5aj/oN9Dv60GLw6lbHDWSNJGtmoEqVp25MwfCEh+Tukms+GKVIr/ks5o5
+         qjvYVa0+93uAwyqsi3oiN40q2ZyqQFt/6C48F3rnB5kHoIb6Sy2bVVh27/K+B5gHpz3D
+         /e4P22hA1uOGFAhvDiwYkDp0criTbi3OlKp7xiU3aY6e6Yj7PE2P3nWfqyjsgWAEtFSr
+         3MY3fiwcRqGzVaxJDcl3pxXwlISwtmqLLttFwlvWkAj1avdbUHvrFyQJjbnFXDxB85pQ
+         1tCg==
+X-Gm-Message-State: ANoB5pmsH3nXVDK2M76xXJ6u8ibLAp9XgnbJEm0QxFfWbNXhw+GTje+Z
+        EKXJRumH+nIKFf+wXZlEsg==
+X-Google-Smtp-Source: AA0mqf7CPdAi9hC17KPupxvN+AYZqoaPD4l4n0eWDN7VN70EfmI1uWBWNtpBQNpqEfGs8TYa/TfxFg==
+X-Received: by 2002:a67:ea0d:0:b0:3aa:1298:ca2 with SMTP id g13-20020a67ea0d000000b003aa12980ca2mr12161019vso.28.1670979821580;
+        Tue, 13 Dec 2022 17:03:41 -0800 (PST)
+Received: from ?IPV6:2603:7080:a33a:d95d:20:71fc:7eaf:858a? (2603-7080-a33a-d95d-0020-71fc-7eaf-858a.res6.spectrum.com. [2603:7080:a33a:d95d:20:71fc:7eaf:858a])
+        by smtp.gmail.com with ESMTPSA id v19-20020a05620a0f1300b006e16dcf99c8sm8976662qkl.71.2022.12.13.17.03.40
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 13 Dec 2022 10:47:19 -0800 (PST)
-Message-ID: <195a55f1-76e7-3f00-da1f-4ae84f7943c0@linaro.org>
-Date:   Tue, 13 Dec 2022 19:47:17 +0100
+        Tue, 13 Dec 2022 17:03:41 -0800 (PST)
+Message-ID: <fee7bcaa-f7d3-0457-9c55-c88b2ffa7da1@gmail.com>
+Date:   Tue, 13 Dec 2022 20:03:39 -0500
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Subject: Re: [PATCH v2 00/13] Qcom: LLCC/EDAC: Fix base address used for LLCC
- banks
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.6.0
 Content-Language: en-US
-To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Cc:     Andrew Halaney <ahalaney@redhat.com>, andersson@kernel.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        bp@alien8.de, tony.luck@intel.com, quic_saipraka@quicinc.com,
-        konrad.dybcio@linaro.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, james.morse@arm.com,
-        mchehab@kernel.org, rric@kernel.org, linux-edac@vger.kernel.org,
-        quic_ppareek@quicinc.com, luca.weiss@fairphone.com
-References: <20221212123311.146261-1-manivannan.sadhasivam@linaro.org>
- <20221212192340.evgtbpzmw7hcdolb@halaney-x13s>
- <20221213052802.GB4862@thinkpad>
- <ec64e3a0-085d-7830-fd4e-6969c1c9bbdf@linaro.org>
- <20221213175738.GI4862@thinkpad>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221213175738.GI4862@thinkpad>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+To:     ardb@kernel.org, lenb@kernel.org, tony.luck@intel.com,
+        bp@alien8.de, mchehab@kernel.org, rric@kernel.org,
+        robert.moore@intel.com, qiuxu.zhuo@intel.com,
+        yazen.ghannam@amd.com, jlu@pengutronix.de
+Cc:     khuong@os.amperecomputing.com, toshi.kani@hpe.com,
+        justin.he@arm.com, James Morse <james.morse@arm.com>,
+        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-edac@vger.kernel.org, devel@acpica.org
+From:   Seija Kijin <doremylover123@gmail.com>
+Subject: [PATCH] drivers: correct parameters passed to strncmp
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On 13/12/2022 18:57, Manivannan Sadhasivam wrote:
-> On Tue, Dec 13, 2022 at 05:54:56PM +0100, Krzysztof Kozlowski wrote:
->> On 13/12/2022 06:28, Manivannan Sadhasivam wrote:
->>> On Mon, Dec 12, 2022 at 01:23:40PM -0600, Andrew Halaney wrote:
->>>> On Mon, Dec 12, 2022 at 06:02:58PM +0530, Manivannan Sadhasivam wrote:
->>>>> The Qualcomm LLCC/EDAC drivers were using a fixed register stride for
->>>>> accessing the (Control and Status Regsiters) CSRs of each LLCC bank.
->>>>> This offset only works for some SoCs like SDM845 for which driver support
->>>>> was initially added.
->>>>>
->>>>> But the later SoCs use different register stride that vary between the
->>>>> banks with holes in-between. So it is not possible to use a single register
->>>>> stride for accessing the CSRs of each bank. By doing so could result in a
->>>>> crash with the current drivers. So far this crash is not reported since
->>>>> EDAC_QCOM driver is not enabled in ARM64 defconfig and no one tested the
->>>>> driver extensively by triggering the EDAC IRQ (that's where each bank
->>>>> CSRs are accessed).
->>>>>
->>>>> For fixing this issue, let's obtain the base address of each LLCC bank from
->>>>> devicetree and get rid of the fixed stride.
->>>>>
->>>>> This series affects multiple platforms but I have only tested this on
->>>>> SM8250 and SM8450. Testing on other platforms is welcomed.
->>>>>
->>>>
->>>> Tested-by: Andrew Halaney <ahalaney@redhat.com> # sa8540p-ride
->>>>
->>>
->>> Thanks!
->>>
->>>> I took this for a quick spin on the qdrive3 I've got access to without
->>>> any issue:
->>>>
->>>>     [root@localhost ~]# modprobe qcom_edac
->>>>     [root@localhost ~]# dmesg | grep -i edac
->>>>     [    0.620723] EDAC MC: Ver: 3.0.0
->>>>     [    1.165417] ghes_edac: GHES probing device list is empty
->>>>     [  594.688103] EDAC DEVICE0: Giving out device to module qcom_llcc_edac controller llcc: DEV qcom_llcc_edac (INTERRUPT)
->>>>     [root@localhost ~]# cat /proc/interrupts | grep ecc
->>>>     174:          0          0          0          0          0          0          0          0     GICv3 614 Level     llcc_ecc
->>>>     [root@localhost ~]#
->>>>
->>>> Potentially stupid question, but are users expected to manually load the
->>>> driver as I did? I don't see how it would be loaded automatically in the
->>>> current state, but thought it was funny that I needed to modprobe
->>>> myself.
->>>>
->>>> Please let me know if you want me to do any more further testing!
->>>>
->>>
->>> Well, I always ended up using the driver as a built-in. I do make it module for
->>> build test but never really used it as a module, so didn't catch this issue.
->>>
->>> This is due to the module alias not exported by the qcom_edac driver. Below
->>> diff allows kernel to autoload it:
->>>
->>> diff --git a/drivers/edac/qcom_edac.c b/drivers/edac/qcom_edac.c
->>> index f7afb5375293..13919d01c22d 100644
->>> --- a/drivers/edac/qcom_edac.c
->>> +++ b/drivers/edac/qcom_edac.c
->>> @@ -419,3 +419,4 @@ module_platform_driver(qcom_llcc_edac_driver);
->>>  
->>>  MODULE_DESCRIPTION("QCOM EDAC driver");
->>>  MODULE_LICENSE("GPL v2");
->>> +MODULE_ALIAS("platform:qcom_llcc_edac");
->>
->> While this is a way to fix it, but instead of creating aliases for wrong
->> names, either a correct name should be used or driver should receive ID
->> table.
->>
-> 
-> I'm not sure how you'd fix it with a _correct_ name here. 
+Many times when strncmp is called with the intent of ignoring the NULL terminator, the null terminator is accidentally included in that comparison, which in practice is just an strcmp with extra steps.
 
-Hm, I assumed that it would be enough if driver name would match device
-name. Currently these two are not in sync. Maybe it's not enough when
-built as module?
+Subtract from the places where the intent seems to be to do a comparison without the NULL terminator.
 
-> Also, the id table is
-> an overkill since there is only one driver that is making use of it. And
-> moreover, there is no definite ID to use.
+Signed-off-by: Seija Kijin <doremylover123@gmail.com>
+---
+  arch/arm/mach-omap2/sr_device.c                 | 8 ++++----
+  drivers/edac/amd64_edac.c                       | 2 +-
+  drivers/edac/i10nm_base.c                       | 2 +-
+  drivers/edac/igen6_edac.c                       | 2 +-
+  drivers/edac/pnd2_edac.c                        | 2 +-
+  drivers/edac/sb_edac.c                          | 2 +-
+  drivers/edac/skx_base.c                         | 2 +-
+  drivers/media/pci/bt8xx/bttv-cards.c            | 2 +-
+  drivers/net/ethernet/cavium/liquidio/lio_main.c | 2 +-
+  drivers/staging/nvec/nvec_power.c               | 2 +-
+  10 files changed, 13 insertions(+), 13 deletions(-)
 
-Every driver with a single device support has usually ID table and it's
-not a problem...
+diff --git a/arch/arm/mach-omap2/sr_device.c b/arch/arm/mach-omap2/sr_device.c
+index db672cf19a51..883f3078e233 100644
+--- a/arch/arm/mach-omap2/sr_device.c
++++ b/arch/arm/mach-omap2/sr_device.c
+@@ -94,12 +94,12 @@ static int __init sr_init_by_name(const char *name, const char *voltdm)
+      struct omap_volt_data *volt_data;
+      static int i;
 
-Best regards,
-Krzysztof
+-    if (!strncmp(name, "smartreflex_mpu_iva", 20) ||
+-        !strncmp(name, "smartreflex_mpu", 16))
++    if (!strncmp(name, "smartreflex_mpu_iva", 19) ||
++        !strncmp(name, "smartreflex_mpu", 15))
+          sr_data = &omap_sr_pdata[OMAP_SR_MPU];
+-    else if (!strncmp(name, "smartreflex_core", 17))
++    else if (!strncmp(name, "smartreflex_core", 16))
+          sr_data = &omap_sr_pdata[OMAP_SR_CORE];
+-    else if (!strncmp(name, "smartreflex_iva", 16))
++    else if (!strncmp(name, "smartreflex_iva", 15))
+          sr_data = &omap_sr_pdata[OMAP_SR_IVA];
+
+      if (!sr_data) {
+diff --git a/drivers/edac/amd64_edac.c b/drivers/edac/amd64_edac.c
+index e3318e5575a3..1d832f484f8d 100644
+--- a/drivers/edac/amd64_edac.c
++++ b/drivers/edac/amd64_edac.c
+@@ -4333,7 +4333,7 @@ static int __init amd64_edac_init(void)
+          return -EBUSY;
+
+      owner = edac_get_owner();
+-    if (owner && strncmp(owner, EDAC_MOD_STR, sizeof(EDAC_MOD_STR)))
++    if (owner && strncmp(owner, EDAC_MOD_STR, sizeof(EDAC_MOD_STR) - 1))
+          return -EBUSY;
+
+      if (!x86_match_cpu(amd64_cpuids))
+diff --git a/drivers/edac/i10nm_base.c b/drivers/edac/i10nm_base.c
+index 65aeea53e2df..546dd9fc5cc5 100644
+--- a/drivers/edac/i10nm_base.c
++++ b/drivers/edac/i10nm_base.c
+@@ -759,7 +759,7 @@ static int __init i10nm_init(void)
+          return -EBUSY;
+
+      owner = edac_get_owner();
+-    if (owner && strncmp(owner, EDAC_MOD_STR, sizeof(EDAC_MOD_STR)))
++    if (owner && strncmp(owner, EDAC_MOD_STR, sizeof(EDAC_MOD_STR) - 1))
+          return -EBUSY;
+
+      if (cpu_feature_enabled(X86_FEATURE_HYPERVISOR))
+diff --git a/drivers/edac/igen6_edac.c b/drivers/edac/igen6_edac.c
+index 544dd19072ea..7df2b3a82221 100644
+--- a/drivers/edac/igen6_edac.c
++++ b/drivers/edac/igen6_edac.c
+@@ -1275,7 +1275,7 @@ static int __init igen6_init(void)
+          return -EBUSY;
+
+      owner = edac_get_owner();
+-    if (owner && strncmp(owner, EDAC_MOD_STR, sizeof(EDAC_MOD_STR)))
++    if (owner && strncmp(owner, EDAC_MOD_STR, sizeof(EDAC_MOD_STR) - 1))
+          return -EBUSY;
+
+      edac_op_state = EDAC_OPSTATE_NMI;
+diff --git a/drivers/edac/pnd2_edac.c b/drivers/edac/pnd2_edac.c
+index 2b306f2cc605..08aeab382cb4 100644
+--- a/drivers/edac/pnd2_edac.c
++++ b/drivers/edac/pnd2_edac.c
+@@ -1532,7 +1532,7 @@ static int __init pnd2_init(void)
+          return -EBUSY;
+
+      owner = edac_get_owner();
+-    if (owner && strncmp(owner, EDAC_MOD_STR, sizeof(EDAC_MOD_STR)))
++    if (owner && strncmp(owner, EDAC_MOD_STR, sizeof(EDAC_MOD_STR) - 1))
+          return -EBUSY;
+
+      if (cpu_feature_enabled(X86_FEATURE_HYPERVISOR))
+diff --git a/drivers/edac/sb_edac.c b/drivers/edac/sb_edac.c
+index 0c779a0326b6..6f8904b55213 100644
+--- a/drivers/edac/sb_edac.c
++++ b/drivers/edac/sb_edac.c
+@@ -3638,7 +3638,7 @@ static int __init sbridge_init(void)
+          return -EBUSY;
+
+      owner = edac_get_owner();
+-    if (owner && strncmp(owner, EDAC_MOD_STR, sizeof(EDAC_MOD_STR)))
++    if (owner && strncmp(owner, EDAC_MOD_STR, sizeof(EDAC_MOD_STR) - 1))
+          return -EBUSY;
+
+      if (cpu_feature_enabled(X86_FEATURE_HYPERVISOR))
+diff --git a/drivers/edac/skx_base.c b/drivers/edac/skx_base.c
+index 9397abb42c49..ea38449710f5 100644
+--- a/drivers/edac/skx_base.c
++++ b/drivers/edac/skx_base.c
+@@ -657,7 +657,7 @@ static int __init skx_init(void)
+          return -EBUSY;
+
+      owner = edac_get_owner();
+-    if (owner && strncmp(owner, EDAC_MOD_STR, sizeof(EDAC_MOD_STR)))
++    if (owner && strncmp(owner, EDAC_MOD_STR, sizeof(EDAC_MOD_STR) - 1))
+          return -EBUSY;
+
+      if (cpu_feature_enabled(X86_FEATURE_HYPERVISOR))
+diff --git a/drivers/media/pci/bt8xx/bttv-cards.c b/drivers/media/pci/bt8xx/bttv-cards.c
+index c2b5ab287dd7..c24cc2f46d2f 100644
+--- a/drivers/media/pci/bt8xx/bttv-cards.c
++++ b/drivers/media/pci/bt8xx/bttv-cards.c
+@@ -2968,7 +2968,7 @@ static void identify_by_eeprom(struct bttv *btv, unsigned char eeprom_data[256])
+
+      if (0 == strncmp(eeprom_data,"GET MM20xPCTV",13))
+          type = BTTV_BOARD_MODTEC_205;
+-    else if (0 == strncmp(eeprom_data+20,"Picolo",7))
++    else if (0 == strncmp(eeprom_data + 20, "Picolo", 6))
+          type = BTTV_BOARD_EURESYS_PICOLO;
+      else if (eeprom_data[0] == 0x84 && eeprom_data[2]== 0)
+          type = BTTV_BOARD_HAUPPAUGE; /* old bt848 */
+diff --git a/drivers/net/ethernet/cavium/liquidio/lio_main.c b/drivers/net/ethernet/cavium/liquidio/lio_main.c
+index fd7c80edb6e8..549ea559463b 100644
+--- a/drivers/net/ethernet/cavium/liquidio/lio_main.c
++++ b/drivers/net/ethernet/cavium/liquidio/lio_main.c
+@@ -912,7 +912,7 @@ liquidio_probe(struct pci_dev *pdev, const struct pci_device_id __maybe_unused *
+  static bool fw_type_is_auto(void)
+  {
+      return strncmp(fw_type, LIO_FW_NAME_TYPE_AUTO,
+-               sizeof(LIO_FW_NAME_TYPE_AUTO)) == 0;
++               sizeof(LIO_FW_NAME_TYPE_AUTO) - 1) == 0;
+  }
+
+  /**
+diff --git a/drivers/staging/nvec/nvec_power.c b/drivers/staging/nvec/nvec_power.c
+index b1ef196e1cfe..3ed9e06e32de 100644
+--- a/drivers/staging/nvec/nvec_power.c
++++ b/drivers/staging/nvec/nvec_power.c
+@@ -207,7 +207,7 @@ static int nvec_power_bat_notifier(struct notifier_block *nb,
+           * This differs a little from the spec fill in more if you find
+           * some.
+           */
+-        if (!strncmp(power->bat_type, "Li", 30))
++        if (!strncmp(power->bat_type, "Li", 2))
+              power->bat_type_enum = POWER_SUPPLY_TECHNOLOGY_LION;
+          else
+              power->bat_type_enum = POWER_SUPPLY_TECHNOLOGY_UNKNOWN;
+-- 
+2.38.2
+
 
