@@ -2,53 +2,53 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54BA2651208
-	for <lists+linux-edac@lfdr.de>; Mon, 19 Dec 2022 19:33:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9893365120B
+	for <lists+linux-edac@lfdr.de>; Mon, 19 Dec 2022 19:33:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232618AbiLSSdX (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Mon, 19 Dec 2022 13:33:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46134 "EHLO
+        id S232455AbiLSSdt (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Mon, 19 Dec 2022 13:33:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231978AbiLSScZ (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Mon, 19 Dec 2022 13:32:25 -0500
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29CCA13E05
-        for <linux-edac@vger.kernel.org>; Mon, 19 Dec 2022 10:31:34 -0800 (PST)
-Received: by mail-pl1-x62b.google.com with SMTP id 4so9882089plj.3
-        for <linux-edac@vger.kernel.org>; Mon, 19 Dec 2022 10:31:34 -0800 (PST)
+        with ESMTP id S232518AbiLSScx (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Mon, 19 Dec 2022 13:32:53 -0500
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD2E4140DF
+        for <linux-edac@vger.kernel.org>; Mon, 19 Dec 2022 10:31:40 -0800 (PST)
+Received: by mail-pl1-x636.google.com with SMTP id w20so3276710ply.12
+        for <linux-edac@vger.kernel.org>; Mon, 19 Dec 2022 10:31:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=d0mC3YHxzlEQlwMPao/Y7ASve0hKwhscYa/RkKUoFYA=;
-        b=XP3AwAH3vWxz0xfNNFiGJ5EgonMs84vx5Gf0ya1zoxdRXLS4mgG7GJljlIBSp3sWSp
-         pE/P+777utad613pX0v1LpwSeiQaQvT4BLznyztZI4BRxJ5UCdxvQf89huY3c6odg0BZ
-         beom1cAixCxe2nouy47FZellniD8Vj/wWCeqrhrqnkFR5Qq6FVs9El10bowukBUYxbJ0
-         xPlgcxMmxk4q03q9VnvSF3FMGZEKbhc1dlcU1cDCt9J7ry2zH1y19dccMivVxxN4upEw
-         VJcf3SeWyVV/qqV6sPnsX4Li7PS8XBkntHkOC/PKcKZHZEyaZWDgxxizO3meAyubPNKE
-         VQZg==
+        bh=/mWLM+xjtkcHtTlHLK0FQlJaaC6ncfnZviWhmaPi0lM=;
+        b=qZ0DvYBLrUPKCItDG/754HTBRDZshK7oQme3AAh5u9MJcyEo9DpFvFWLCor+S5AkX+
+         OhTdL8gEbszkP7lyRdCbap2/6+1yQrFS3x9xCvH4+RGMPXfFnn1SCf0lv9y/mZ5JsTW4
+         b8nv6GP929ZKxgu+tEFRKz7wor582zzTRHERLtFa4NSOdFJToPXKQxbmB+Y5o3KXEbfw
+         Zp3TwqN4C22wdmth7phpaCUnjJL89Y/xuiornJ8jZ5J4OfNWZrNZgiQ8Yk2fg+TYVX+X
+         69f/U1j+SPZJrRLtpaN245C9QOLBdAPE76PCnHA3s73j0fWvewj0XSXW3MVKDxO8tBEs
+         qxLg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=d0mC3YHxzlEQlwMPao/Y7ASve0hKwhscYa/RkKUoFYA=;
-        b=b5EcCOcOrm3s3ucdkbFP4VIvkbsqklXemjJ/2FWaIe5GdIjCunnSkOgvibQu/bKCGY
-         O89iHBDGxTrpxLGCjz7TNurQqeEK0WJ0P9eJkanjEEegAXOz2Dk6eo/4TN5XhsLGLpUt
-         7KQH2C+FChSQfQdziF6i+dISYWxastR+EUTYQYVk7QEF08ylmr8tQvfmJO5FNRuiL/0O
-         pdh3motehyP1uIHosYdhxmli0qBDDaf9G7mCrssjdahllWjzkyZARDKgmASILD9Gz1M0
-         v0XnClTe3ZB3iIPWDjHR7QNLumoJK1D64REVUiRojFfc4DuDorsH9sNUO0WSX5qqcMG9
-         BRjQ==
-X-Gm-Message-State: ANoB5pmffFyWz6hkMLsLsWie66Vxj0/rl8S1gWqYt9j6CNKNjdb+tdtL
-        8fKH0lKtiPzjWkhgN18ENXdWgvchA0OBgCc=
-X-Google-Smtp-Source: AA0mqf68ucZQ4pkSIP4B+LV1flkcOGQPj3b5PkGW/rCTTB9ay4fMMIaU9BVc6OCx2wDMonxlDiHDWg==
-X-Received: by 2002:a17:903:251:b0:189:7891:574d with SMTP id j17-20020a170903025100b001897891574dmr50681181plh.47.1671474693614;
-        Mon, 19 Dec 2022 10:31:33 -0800 (PST)
+        bh=/mWLM+xjtkcHtTlHLK0FQlJaaC6ncfnZviWhmaPi0lM=;
+        b=eh428yuzuhHPBA6d/F9hUMA38oAjMcjfGDHK0LICf7Al2wHEuWhDbgclFau9vI+Xlo
+         PMyOVJx1/4jsfaCThshZfgi0VbY7cBUin069Uxm/8yUTr6TKEbZDw6QvbOIeD66r5vSL
+         nO/ZXgevc0t9wASStAR0IOQbHgV1b8r9AqxFKtHmOrq1bba0LdSYmOXYvJD/iCQLtahy
+         5tN4vGCnVBtTk7kj76k8QvGwnYUrveFGzaQmumxoe16mLYaSZlp13fkWw39wub3++MNf
+         3df/WdPO1V/DWsO4AsYb5L9VPfoCtqN2/LM4N5IDJ2+gEcvAlQAIZls4Fn8H/DMq4CW4
+         ReaQ==
+X-Gm-Message-State: ANoB5pkuHUfd4l1m5ObQRtQ5BSWHVWljz/BA4mRfa7bYmd1gh12Bj19V
+        LNN1tr1cgYqfqxsGXaRkXHA1
+X-Google-Smtp-Source: AA0mqf55NYWXIIemHerLmljoYqXyTYYTKw+2SQmde47ZvnjotMfseOOnCrPdpivq4q+wuMescLn8uQ==
+X-Received: by 2002:a17:902:9a43:b0:187:16c2:d52c with SMTP id x3-20020a1709029a4300b0018716c2d52cmr40519635plv.50.1671474699946;
+        Mon, 19 Dec 2022 10:31:39 -0800 (PST)
 Received: from localhost.localdomain ([220.158.159.17])
-        by smtp.gmail.com with ESMTPSA id d2-20020a170903230200b00186e34524e3sm7480979plh.136.2022.12.19.10.31.28
+        by smtp.gmail.com with ESMTPSA id d2-20020a170903230200b00186e34524e3sm7480979plh.136.2022.12.19.10.31.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 19 Dec 2022 10:31:32 -0800 (PST)
+        Mon, 19 Dec 2022 10:31:38 -0800 (PST)
 From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 To:     andersson@kernel.org, robh+dt@kernel.org,
         krzysztof.kozlowski+dt@linaro.org, bp@alien8.de,
@@ -58,11 +58,10 @@ Cc:     quic_saipraka@quicinc.com, konrad.dybcio@linaro.org,
         james.morse@arm.com, mchehab@kernel.org, rric@kernel.org,
         linux-edac@vger.kernel.org, quic_ppareek@quicinc.com,
         luca.weiss@fairphone.com, ahalaney@redhat.com,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        stable@vger.kernel.org
-Subject: [PATCH v3 12/15] EDAC/device: Make use of poll_msec value in edac_device_ctl_info struct
-Date:   Mon, 19 Dec 2022 23:59:55 +0530
-Message-Id: <20221219182958.476231-13-manivannan.sadhasivam@linaro.org>
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Subject: [PATCH v3 13/15] EDAC/qcom: Add platform_device_id table for module autoloading
+Date:   Mon, 19 Dec 2022 23:59:56 +0530
+Message-Id: <20221219182958.476231-14-manivannan.sadhasivam@linaro.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20221219182958.476231-1-manivannan.sadhasivam@linaro.org>
 References: <20221219182958.476231-1-manivannan.sadhasivam@linaro.org>
@@ -78,30 +77,39 @@ Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-The EDAC drivers may optionally pass the poll_msec value. Use that value if
-available, else fall back to 1000ms.
+platform_device_id table needs to be added so that the driver can be
+autoloaded when the associated platform device gets registered.
 
-Cc: <stable@vger.kernel.org> # 4.9
-Fixes: e27e3dac6517 ("drivers/edac: add edac_device class")
-Reported-by: Luca Weiss <luca.weiss@fairphone.com>
+Reported-by: Andrew Halaney <ahalaney@redhat.com>
 Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 ---
- drivers/edac/edac_device.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/edac/qcom_edac.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/drivers/edac/edac_device.c b/drivers/edac/edac_device.c
-index 19522c568aa5..19c3ab2a434e 100644
---- a/drivers/edac/edac_device.c
-+++ b/drivers/edac/edac_device.c
-@@ -447,7 +447,7 @@ int edac_device_add_device(struct edac_device_ctl_info *edac_dev)
- 		 * enable workq processing on this instance,
- 		 * default = 1000 msec
- 		 */
--		edac_device_workq_setup(edac_dev, 1000);
-+		edac_device_workq_setup(edac_dev, edac_dev->poll_msec ? edac_dev->poll_msec : 1000);
- 	} else {
- 		edac_dev->op_state = OP_RUNNING_INTERRUPT;
- 	}
+diff --git a/drivers/edac/qcom_edac.c b/drivers/edac/qcom_edac.c
+index 97a27e42dd61..9e77fa84e84f 100644
+--- a/drivers/edac/qcom_edac.c
++++ b/drivers/edac/qcom_edac.c
+@@ -397,12 +397,19 @@ static int qcom_llcc_edac_remove(struct platform_device *pdev)
+ 	return 0;
+ }
+ 
++static const struct platform_device_id qcom_llcc_edac_id_table[] = {
++	{ .name = "qcom_llcc_edac" },
++	{}
++};
++MODULE_DEVICE_TABLE(platform, qcom_llcc_edac_id_table);
++
+ static struct platform_driver qcom_llcc_edac_driver = {
+ 	.probe = qcom_llcc_edac_probe,
+ 	.remove = qcom_llcc_edac_remove,
+ 	.driver = {
+ 		.name = "qcom_llcc_edac",
+ 	},
++	.id_table = qcom_llcc_edac_id_table,
+ };
+ module_platform_driver(qcom_llcc_edac_driver);
+ 
 -- 
 2.25.1
 
