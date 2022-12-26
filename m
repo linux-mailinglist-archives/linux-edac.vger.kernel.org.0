@@ -2,110 +2,233 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8AFB6550F5
-	for <lists+linux-edac@lfdr.de>; Fri, 23 Dec 2022 14:23:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A6BF6655F9E
+	for <lists+linux-edac@lfdr.de>; Mon, 26 Dec 2022 04:51:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230287AbiLWNX6 (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Fri, 23 Dec 2022 08:23:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37894 "EHLO
+        id S231490AbiLZDvK (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Sun, 25 Dec 2022 22:51:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236410AbiLWNXh (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Fri, 23 Dec 2022 08:23:37 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C5234AF22;
-        Fri, 23 Dec 2022 05:23:12 -0800 (PST)
-Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 9A2571EC0716;
-        Fri, 23 Dec 2022 14:23:10 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1671801790;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=SSvDsZpTjzmrUNmjyZT5I2QHEjJaFSOc5HqeqmJ/KDs=;
-        b=Z0k+/b49p2pLiHOwTv71cT+c0uqCQo5Qig6N/jS+AbXYF3yqw/F56MXVprdE/JJyFb3/xP
-        QQE7sZDI1P7mqZb79CE1Jod8RC+pjzdn39GppUAMjE40wGM+UsVmmbfHQPOttStWVHKB3z
-        jjfsLhFKBvBBN9YK3l9XykKzbS4Evpw=
-Date:   Fri, 23 Dec 2022 14:23:05 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Yazen Ghannam <yazen.ghannam@amd.com>
-Cc:     linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
-        tony.luck@intel.com, x86@kernel.org,
-        Smita.KoralahalliChannabasappa@amd.com,
-        Borislav Petkov <bp@suse.de>
-Subject: Re: [PATCH v6 1/4] x86/mce: Cleanup bank processing on init
-Message-ID: <Y6WrucZu4fE8Mt3k@zn.tnic>
-References: <20221206173607.1185907-1-yazen.ghannam@amd.com>
- <20221206173607.1185907-2-yazen.ghannam@amd.com>
+        with ESMTP id S229595AbiLZDvI (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Sun, 25 Dec 2022 22:51:08 -0500
+Received: from mail-vs1-xe31.google.com (mail-vs1-xe31.google.com [IPv6:2607:f8b0:4864:20::e31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C693F4D;
+        Sun, 25 Dec 2022 19:51:07 -0800 (PST)
+Received: by mail-vs1-xe31.google.com with SMTP id 128so9396715vsz.12;
+        Sun, 25 Dec 2022 19:51:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=ebdzjNZkPM5tKxMYiRS8XjnRbsm2WIJ55zWlFIDdo/M=;
+        b=MblcnAWS481tElFFCtcHLHp/1bPzKgl42LGIunOJDMq/cyFIfuNEH4PhXP5wO3p+h1
+         AA7U0R2Rcur3i3kidhnOFtdTL2uSlKc8bG9PN/K620uCQBIvm1Trli0lvc45dK3+lxCF
+         tXD1RLPlndPfgZw6EkuDBl9UGPQYaFpDCb+tU6MVaOxefhdxRaDbIf2q7xs0bL9xYveH
+         i+3iJD1NSDavycLLPvi3FG8BMIxkT2gmb0zRI8LMQjah1vomnCt5G0wuDTffveUvFMJp
+         GurW/p8kYzEka0SE8Q8XWG0aKG/wlaknT5iaONCXk/MDLJET8P56lKvhSq4R0v6dvX5Z
+         EBVg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ebdzjNZkPM5tKxMYiRS8XjnRbsm2WIJ55zWlFIDdo/M=;
+        b=TFFFTJ+pXKB73LG1mAzNNaozkpJM+foariq36lhkH8keUXW1wRY0SN6AAggzro/l6g
+         PAXXP8AlDtMEUqfW3SqCyJnPJ5PZ1Uymv/HQ1txIQE8iXjBNIuP5Et7UyCE8Q9go1vIV
+         RU8BT2G3xVf5FLv0bG1VDaiJs+jgYBkRjgw/FrBM/KsJkyiAA4fQE512UFWzuevmuYFQ
+         lZSeaqyCjaSnAnI9ppBHSL1HrqTcHuWYfCArHs1vaZFtHB9q/lEAYh81I1CD7JK0GOLb
+         jQ743dviGfjihfYo1/aZUiLwl6lE1MjeLt4MUA7UZrqtxfu5JgBeyrbLUTVvbHgRA79A
+         072g==
+X-Gm-Message-State: AFqh2koVKv/6/RXeBUWlBYDAfDHAx5WRBUGNFNyneDvuRJOkKOysh6HA
+        YpB+q9AOv6IE5CEp8QiLOEYVri/ZVkttrWe1u2Y=
+X-Google-Smtp-Source: AMrXdXv7O/NhidrnpBGzUMwPNfsTKnYtgU/aAn85pdY6ULJakn7iPm/W42Lju4MTmpWQuMZLKSjjRpip2rnB5HnPrGA=
+X-Received: by 2002:a05:6102:e94:b0:3b1:3231:ac9e with SMTP id
+ l20-20020a0561020e9400b003b13231ac9emr1815373vst.50.1672026666154; Sun, 25
+ Dec 2022 19:51:06 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20221206173607.1185907-2-yazen.ghannam@amd.com>
+References: <20221223032859.3055638-1-milkfafa@gmail.com> <20221223032859.3055638-4-milkfafa@gmail.com>
+ <Y6WniKjA6BHLknP6@zn.tnic>
+In-Reply-To: <Y6WniKjA6BHLknP6@zn.tnic>
+From:   Kun-Fa Lin <milkfafa@gmail.com>
+Date:   Mon, 26 Dec 2022 11:50:54 +0800
+Message-ID: <CADnNmFqQ5_OQ-FiqdSZAtXFdG2X=qociXBykqL0TqtMw9r_=_A@mail.gmail.com>
+Subject: Re: [PATCH v17 3/3] EDAC/npcm: Add NPCM memory controller driver
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     krzysztof.kozlowski@linaro.org, robh+dt@kernel.org,
+        tony.luck@intel.com, james.morse@arm.com, mchehab@kernel.org,
+        rric@kernel.org, benjaminfair@google.com, yuenn@google.com,
+        venture@google.com, avifishman70@gmail.com, tmaimon77@gmail.com,
+        tali.perry1@gmail.com, linux-edac@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        openbmc@lists.ozlabs.org, KWLIU@nuvoton.com, YSCHU@nuvoton.com,
+        ctcchien@nuvoton.com, kflin@nuvoton.com
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Tue, Dec 06, 2022 at 11:36:04AM -0600, Yazen Ghannam wrote:
-> -static void __mcheck_cpu_init_clear_banks(void)
-> +static void __mcheck_cpu_init_prepare_banks(void)
->  {
->  	struct mce_bank *mce_banks = this_cpu_ptr(mce_banks_array);
-> +	mce_banks_t all_banks;
-> +	u64 msrval;
->  	int i;
->  
-> -	for (i = 0; i < this_cpu_read(mce_num_banks); i++) {
-> -		struct mce_bank *b = &mce_banks[i];
-> -
-> -		if (!b->init)
-> -			continue;
-> -		wrmsrl(mca_msr_reg(i, MCA_CTL), b->ctl);
-> -		wrmsrl(mca_msr_reg(i, MCA_STATUS), 0);
-> +	/*
-> +	 * Log the machine checks left over from the previous reset. Log them
-> +	 * only, do not start processing them. That will happen in mcheck_late_init()
-> +	 * when all consumers have been registered on the notifier chain.
-> +	 */
-> +	if (mca_cfg.bootlog) {
-> +		bitmap_fill(all_banks, MAX_NR_BANKS);
-> +		machine_check_poll(MCP_UC | MCP_QUEUE_LOG, &all_banks);
->  	}
+Hi Boris,
 
-Yeah, just a nit ontop - lemme move all_banks into the if branch so that
-it is closer and obvious:
+Thanks for the review.
 
----
-diff --git a/arch/x86/kernel/cpu/mce/core.c b/arch/x86/kernel/cpu/mce/core.c
-index 5f406d135d32..a90d3eb6fcd8 100644
---- a/arch/x86/kernel/cpu/mce/core.c
-+++ b/arch/x86/kernel/cpu/mce/core.c
-@@ -1755,7 +1755,6 @@ static void __mcheck_cpu_init_generic(void)
- static void __mcheck_cpu_init_prepare_banks(void)
- {
- 	struct mce_bank *mce_banks = this_cpu_ptr(mce_banks_array);
--	mce_banks_t all_banks;
- 	u64 msrval;
- 	int i;
- 
-@@ -1765,6 +1764,8 @@ static void __mcheck_cpu_init_prepare_banks(void)
- 	 * when all consumers have been registered on the notifier chain.
- 	 */
- 	if (mca_cfg.bootlog) {
-+		mce_banks_t all_banks;
-+
- 		bitmap_fill(all_banks, MAX_NR_BANKS);
- 		machine_check_poll(MCP_UC | MCP_QUEUE_LOG, &all_banks);
- 	}
+> > +     u64 addr = 0;
+> > +     u64 data = 0;
+> > +     u32 val_h = 0;
+> > +     u32 val_l, id, synd;
+>
+>         u32 val_h = 0, val_l, id, synd;
+>         u64 addr = 0, data = 0;
+>
+> Also, for all your functions:
+>
+> The EDAC tree preferred ordering of variable declarations at the
+> beginning of a function is reverse fir tree order::
+>
+>         struct long_struct_name *descriptive_name;
+>         unsigned long foo, bar;
+>         unsigned int tmp;
+>         int ret;
+>
+> The above is faster to parse than the reverse ordering::
+>
+>         int ret;
+>         unsigned int tmp;
+>         unsigned long foo, bar;
+>         struct long_struct_name *descriptive_name;
+>
+> And even more so than random ordering::
+>
+>         unsigned long foo, bar;
+>         int ret;
+>         struct long_struct_name *descriptive_name;
+>         unsigned int tmp;
 
--- 
-Regards/Gruss,
-    Boris.
+I'll check all functions and follow this order.
 
-https://people.kernel.org/tglx/notes-about-netiquette
+> > +     edac_mc_handle_error(HW_EVENT_ERR_CORRECTED, mci, 1, addr >> PAGE_SHIFT,
+> > +                          addr & ~PAGE_MASK, synd, 0, 0, -1, priv->message,
+>
+> No need for that linebreak with the trailing piece.
+>
+> > +                          "");
+
+> > +     u64 addr = 0;
+> > +     u64 data = 0;
+> > +     u32 val_h = 0;
+> > +     u32 val_l, id, synd;
+>
+> As above.
+
+Check.
+
+> > +     regmap_read(npcm_regmap, pdata->ctl_int_status, &status);
+> > +     if (status & pdata->int_status_ce_mask) {
+> > +             handle_ce(mci);
+> > +
+> > +             /* acknowledge the CE interrupt */
+> > +             regmap_write(npcm_regmap, pdata->ctl_int_ack,
+> > +                          pdata->int_ack_ce_mask);
+> > +             return IRQ_HANDLED;
+> > +     } else if (status & pdata->int_status_ue_mask) {
+> > +             handle_ue(mci);
+> > +
+> > +             /* acknowledge the UE interrupt */
+> > +             regmap_write(npcm_regmap, pdata->ctl_int_ack,
+> > +                          pdata->int_ack_ue_mask);
+> > +             return IRQ_HANDLED;
+> > +     }
+>
+>         WARN_ON_ONCE(1);
+>
+> to catch weird cases.
+
+OK.
+
+> > +     /* write syndrome to XOR_CHECK_BITS */
+> > +     if (priv->error_type == 0) {
+>
+>         if (priv->error_type == ERROR_TYPE_CORRECTABLE
+>
+> Use defines. Below too.
+>
+> > +             if (priv->location == 0 && priv->bit > 63) {
+
+Will add defines.
+
+> > +                     edac_printk(KERN_INFO, EDAC_MOD_NAME,
+> > +                                 "data bit should not exceed 63\n");
+>
+>                                 "data bit should not exceed 63 (%d)\n", priv->bit...)
+>
+> Below too.
+>
+> > +                     return count;
+> > +             }
+> > +
+> > +             if (priv->location == 1 && priv->bit > 7) {
+> > +                     edac_printk(KERN_INFO, EDAC_MOD_NAME,
+> > +                                 "checkcode bit should not exceed 7\n");
+
+OK.
+
+> > +             syndrome = priv->location ? 1 << priv->bit :
+> > +                        data_synd[priv->bit];
+>
+>                 syndrome = priv->location ? 1 << priv->bit
+>                                           : data_synd[priv->bit];
+
+Just to confirm the indentation, is it right as follows?
+
+syndrome = priv->location ? 1 << priv->bit
+                                           : data_synd[priv->bit];
+
+And I was wondering if I should just remove the line break and let it stick out?
+
+> I'd find it helpful if there were a short recipe in a comment here
+> explaining how the injection should be done...
+>
+> > +static void setup_debugfs(struct mem_ctl_info *mci)
+> > +{
+
+OK, will add some injection examples here.
+
+> > +     regmap_update_bits(npcm_regmap, pdata->ctl_ecc_en, pdata->ecc_en_mask,
+> > +                        0);
+>
+> You have a bunch of those things: the 80 cols rule is not a rigid and a
+> static one - you should rather apply common sense. As in:
+>
+> Does it make sense to have this ugly linebreak with only the 0 argument there?
+>
+>         regmap_update_bits(npcm_regmap, pdata->ctl_ecc_en, pdata->ecc_en_mask,
+>                            0);
+>
+> or should I simply let it stick out:
+>
+>         regmap_update_bits(npcm_regmap, pdata->ctl_ecc_en, pdata->ecc_en_mask, 0);
+>
+> and have much more readable code?
+>
+> Please apply common sense to all your linebreaks above.
+
+Thanks for the guide.
+
+> > +     edac_mc_del_mc(&pdev->dev);
+> > +     edac_mc_free(mci);
+>
+> <--- What happens if someone tries to inject errors right at this
+> moment, when you've freed the mci?
+>
+> Hint: you should destroy resources in the opposite order you've
+> allocated them.
+
+Understand. I'll correct the destroy order.
+
+Regards,
+Marvin
