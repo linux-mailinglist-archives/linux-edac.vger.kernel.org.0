@@ -2,89 +2,86 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1248C657620
-	for <lists+linux-edac@lfdr.de>; Wed, 28 Dec 2022 12:58:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DD30E657677
+	for <lists+linux-edac@lfdr.de>; Wed, 28 Dec 2022 13:34:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232938AbiL1L61 (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Wed, 28 Dec 2022 06:58:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39962 "EHLO
+        id S230205AbiL1MeU (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Wed, 28 Dec 2022 07:34:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232997AbiL1L6Z (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Wed, 28 Dec 2022 06:58:25 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 188031056B;
-        Wed, 28 Dec 2022 03:58:24 -0800 (PST)
-Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id A04C81EC0513;
-        Wed, 28 Dec 2022 12:58:22 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1672228702;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=HOVJZnJ/R8ek1UUS5jD9wfvHwKSwnPgONwwBtSALwi0=;
-        b=aDo7CJuakVA88/2RmyW3Ln7wOCtgBZymrp+HSNgxWEisTnJZdp+NYMBrO/RffqhSX4k69/
-        rYAHVxMWwvo+VImkQ4GknTLicQea1kgcLa+DxAOyNuJ8eqhUKU2Cp5I7TJSk/SxFYyXyS1
-        JqKI/FOXqaLTHttV07oBOvnJwJFniOM=
-Date:   Wed, 28 Dec 2022 12:58:22 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Cc:     andersson@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, tony.luck@intel.com,
-        quic_saipraka@quicinc.com, konrad.dybcio@linaro.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        james.morse@arm.com, mchehab@kernel.org, rric@kernel.org,
-        linux-edac@vger.kernel.org, quic_ppareek@quicinc.com,
-        luca.weiss@fairphone.com, ahalaney@redhat.com, steev@kali.org,
-        stable@vger.kernel.org
-Subject: Re: [PATCH v5 03/17] EDAC/qcom: Do not pass llcc_driv_data as
- edac_device_ctl_info's pvt_info
-Message-ID: <Y6wvXoIZVm96JP/D@zn.tnic>
-References: <20221228084028.46528-1-manivannan.sadhasivam@linaro.org>
- <20221228084028.46528-4-manivannan.sadhasivam@linaro.org>
+        with ESMTP id S233132AbiL1Mdi (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Wed, 28 Dec 2022 07:33:38 -0500
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2A7910553;
+        Wed, 28 Dec 2022 04:33:33 -0800 (PST)
+Received: from canpemm500002.china.huawei.com (unknown [172.30.72.53])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4NhrSM4T6qz9t2Y;
+        Wed, 28 Dec 2022 20:29:39 +0800 (CST)
+Received: from [10.174.151.185] (10.174.151.185) by
+ canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.34; Wed, 28 Dec 2022 20:33:32 +0800
+Subject: Re: [PATCH] mce: fix missing stack-dumping in mce_panic()
+From:   Miaohe Lin <linmiaohe@huawei.com>
+To:     <bp@alien8.de>, <tglx@linutronix.de>, <mingo@redhat.com>,
+        <dave.hansen@linux.intel.com>, "hpa@zytor.com" <hpa@zytor.com>
+CC:     <x86@kernel.org>, <linux-edac@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, Tony Luck <tony.luck@intel.com>
+References: <20221202163728.392509-1-linmiaohe@huawei.com>
+ <470ffd37-3f65-7ad1-71cb-a1d4547d8afa@huawei.com>
+Message-ID: <8e91609c-2130-8acd-37c9-88277ea9ae39@huawei.com>
+Date:   Wed, 28 Dec 2022 20:33:31 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20221228084028.46528-4-manivannan.sadhasivam@linaro.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <470ffd37-3f65-7ad1-71cb-a1d4547d8afa@huawei.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.151.185]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ canpemm500002.china.huawei.com (7.192.104.244)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Wed, Dec 28, 2022 at 02:10:14PM +0530, Manivannan Sadhasivam wrote:
-> The memory for "llcc_driv_data" is allocated by the LLCC driver. But when
-> it is passed as "pvt_info" to the EDAC core, it will get freed during the
-> qcom_edac driver release. So when the qcom_edac driver gets probed again,
-> it will try to use the freed data leading to the use-after-free bug.
+On 2022/12/10 10:28, Miaohe Lin wrote:
+> On 2022/12/3 0:37, Miaohe Lin wrote:
+>> When machine check exception occurs, there is no stack-dumping now in
+>> mce_panic(). It's because bust_spinlocks(1) is called prematurely so
+>> oops_in_progress will be >= 2 when trying to call dump_stack() in
+>> panic(). Thus dump_stack() won't be called as this is considered as
+>> nested stack-dumping.
+>>
+>> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
 > 
-> Fix this by not passing "llcc_driv_data" as pvt_info but rather reference
+> Friendly ping. ;)
 
-"Do not pass ..."
+Friendly ping after busy merge window. :)
 
-> it using the "platform_data" in the qcom_edac driver.
 > 
-> Cc: <stable@vger.kernel.org> # 4.20
-> Fixes: 27450653f1db ("drivers: edac: Add EDAC driver support for QCOM SoCs")
-> Tested-by: Steev Klimaszewski <steev@kali.org> # Thinkpad X13s
-> Tested-by: Andrew Halaney <ahalaney@redhat.com> # sa8540p-ride
-> Reported-by: Steev Klimaszewski <steev@kali.org>
-> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-> ---
->  drivers/edac/qcom_edac.c | 5 ++---
->  1 file changed, 2 insertions(+), 3 deletions(-)
+>> ---
+>>  arch/x86/kernel/cpu/mce/core.c | 1 -
+>>  1 file changed, 1 deletion(-)
+>>
+>> diff --git a/arch/x86/kernel/cpu/mce/core.c b/arch/x86/kernel/cpu/mce/core.c
+>> index 2c8ec5c71712..c40dad1a6749 100644
+>> --- a/arch/x86/kernel/cpu/mce/core.c
+>> +++ b/arch/x86/kernel/cpu/mce/core.c
+>> @@ -254,7 +254,6 @@ static noinstr void mce_panic(const char *msg, struct mce *final, char *exp)
+>>  			wait_for_panic();
+>>  		barrier();
+>>  
+>> -		bust_spinlocks(1);
+>>  		console_verbose();
+>>  	} else {
+>>  		/* Don't log too much for fake panic */
+>>
+> 
 
-with that:
-
-Reviewed-by: Borislav Petkov (AMD) <bp@alien8.de>
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
