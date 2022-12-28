@@ -2,83 +2,112 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2079E6574B1
-	for <lists+linux-edac@lfdr.de>; Wed, 28 Dec 2022 10:35:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 889476574DA
+	for <lists+linux-edac@lfdr.de>; Wed, 28 Dec 2022 10:44:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230183AbiL1Jfx (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Wed, 28 Dec 2022 04:35:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40064 "EHLO
+        id S232775AbiL1Jnq (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Wed, 28 Dec 2022 04:43:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232023AbiL1Jfw (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Wed, 28 Dec 2022 04:35:52 -0500
-Received: from mail-vk1-xa2a.google.com (mail-vk1-xa2a.google.com [IPv6:2607:f8b0:4864:20::a2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D16701E1;
-        Wed, 28 Dec 2022 01:35:49 -0800 (PST)
-Received: by mail-vk1-xa2a.google.com with SMTP id 6so7217450vkz.0;
-        Wed, 28 Dec 2022 01:35:49 -0800 (PST)
+        with ESMTP id S232888AbiL1Jnn (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Wed, 28 Dec 2022 04:43:43 -0500
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C55706445
+        for <linux-edac@vger.kernel.org>; Wed, 28 Dec 2022 01:43:41 -0800 (PST)
+Received: by mail-lf1-x12f.google.com with SMTP id f34so22890445lfv.10
+        for <linux-edac@vger.kernel.org>; Wed, 28 Dec 2022 01:43:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=3sibGBIP0qfr15zCs+LR1FWj+O5p4xMBAwTb8KT3ZFo=;
-        b=ElMpyQfw4EjT7pVErCiIjYzpl5WTibySHAZpxETa4BVArl7fsr9mjYahaMf6ueUx2c
-         fEUyFA/phIDj0kaDm1T7kVDXym+9sfa+9uSKDBEqj5DZ9pql1gHqg0vlmt/JBBtGCYIu
-         tznZtG8UmydP1EyOcSVE7mSEQgCf+gQTkUQFApLOspcKpw3NX0s0AmHkVGPTG2gUOEoX
-         3LKwW5YdaA1BFznohGea70qC55P2RpSE7TCV2ZdAV54U5ivgkl8S0qcjl3lbWcSwOg7h
-         8BNGsxMW8nQvtRBZO8WM+xUKQXXmUCjiUz/pAYHrogYIzMuDIFo5TduYS/h1w3+Eo5Wk
-         9wwQ==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=tLt2/tARhWw9FJ/bni+IKZjdgOEWGbMZLOXuNNZkku0=;
+        b=U0Bj45Iogz3JHSFeVGGW2wvY1Jj1j1BQ1UryTKBa6lZ4x0gip4tyfOhRGJ+aXfMdzV
+         fIrr4ITa3vKoXn6SiVB1UjGHBZUsBg4t4Dc+I2NHePNJSN34WiwpPxYX50fol9013W+h
+         xf+zsbS3VdwbOedPh7CHLO0II6b5QAPB5KKjf4a5GemYLyG/P0qi+HASdWrcICyl6RgO
+         NE7ES7EaQmddk5iomCaEq7blNgpeeHbp9ujaBYUr03KF7oLCG8SLuLRBmZK25RBLcK3v
+         jMQvFG8R/VV3uCD+vYMVGT187EmnvT+CA4UC1qlZvwncq5ig9Zx33jFFTxN8mlXymuEA
+         Sd/w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=3sibGBIP0qfr15zCs+LR1FWj+O5p4xMBAwTb8KT3ZFo=;
-        b=nhCzcq/kN41EavFOGKtnZ3eppx8eX3Md94Qle8/970f6CqgyvfT5+U80ljJSTUQWlv
-         62LxJ/Z6N2Xy/ETCQe2pexAoSgVpfdasUBYd0iX+PYxnQIcggExTaD0klIkDcWPJbJEC
-         BVvrgeMtPeFirtJPQjlBpgCG+sRZkyk5FlUTxJWZ4/HdX2WdPPSfvesk8vmuDNWXQvZ1
-         MUoRyuuLrG96sK8fmcZbOlaeAgdDzJunnvyjdYmbsqFDkiH5QidR17IVCdKdObE+uh4+
-         k/eZeT6GjlLTNLEMthl3YUou6+J1eMdEaubUk/e4U4c/4uw1gh8byutbub788Uc3Ze9J
-         faKA==
-X-Gm-Message-State: AFqh2krCiOrzo4Pd4OnFyx0UJrDNi6iK0mBJrl4BvWizaXwOBycXeEgG
-        eLM3hrsg6jA91287qVOCZDvxghIqtkzXvyH6dE8=
-X-Google-Smtp-Source: AMrXdXu2vG/opw86gJxJic7D2pXoI0xu8KoLJ3tKlVtyUwLrpZVECwWc7O02O0XkPUZCRxdlL3IsKI++4Td+5L4funY=
-X-Received: by 2002:a1f:a954:0:b0:3b8:ba98:bd43 with SMTP id
- s81-20020a1fa954000000b003b8ba98bd43mr2717589vke.34.1672220148952; Wed, 28
- Dec 2022 01:35:48 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=tLt2/tARhWw9FJ/bni+IKZjdgOEWGbMZLOXuNNZkku0=;
+        b=CKFNl4dBJIAPZdiGpmdpem8RFpsv5I8kvMy1rVdg4SQLtnSRwtSqauhNydYtpZQv30
+         zK8XFNqfyXRQYLBWFBPSxGc5/Oa+l3OidA7xkrhomRy39Z0em6ZCZ6gAG+KBn3CSljYp
+         kqENJWOUfm8WSUnwMcemdil1/AEu7Dp0LH8cnHB6TB9/0xJUWlI8hRqb6bQBibpbDMnh
+         k2DbA6TTKh4V2+ObJ3oN68pJOhnv8PvBTA9aPiK+xUhH/2nUONDENRGwoVt+Yr63bCR/
+         N1ITLa2ow+MCytEmxxtC7GwKbXYNJZSDHlAiksh2rKxeOyDByS4S0cU7UV9PUDDIQlOR
+         ua6A==
+X-Gm-Message-State: AFqh2kq1F0x7qgc9YG1j83HCdAsRvrK3NsptdfjU/EvBncANb45tCjzL
+        DTmQixEeKrNo+ig4/6Eoq8PD4w==
+X-Google-Smtp-Source: AMrXdXtqX2zL6xY+y3eU9K9EZc2nA2JVwP5IsjM2v6VK3zH36XfOdkqEoUKKJ3WS1HsjUni7g//1hA==
+X-Received: by 2002:a05:6512:2821:b0:4b5:26f3:2247 with SMTP id cf33-20020a056512282100b004b526f32247mr8029985lfb.69.1672220620149;
+        Wed, 28 Dec 2022 01:43:40 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id v14-20020a2e7a0e000000b0027fd474e7aasm2193ljc.74.2022.12.28.01.43.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 28 Dec 2022 01:43:39 -0800 (PST)
+Message-ID: <e6144427-6759-8a08-d6dd-4dc0a499c4d4@linaro.org>
+Date:   Wed, 28 Dec 2022 10:43:38 +0100
 MIME-Version: 1.0
-References: <20221223032859.3055638-1-milkfafa@gmail.com> <20221223032859.3055638-3-milkfafa@gmail.com>
- <2a88ee33-91ab-431f-b9ce-472dc64f7430@linaro.org>
-In-Reply-To: <2a88ee33-91ab-431f-b9ce-472dc64f7430@linaro.org>
-From:   Kun-Fa Lin <milkfafa@gmail.com>
-Date:   Wed, 28 Dec 2022 17:35:37 +0800
-Message-ID: <CADnNmFrchhZqv_KzXq1RGQXhFF5A8G_CkXzgT+7Rj+--7cfdtw@mail.gmail.com>
-Subject: Re: [PATCH v17 2/3] dt-bindings: edac: nuvoton: Add document for NPCM
- memory controller
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     robh+dt@kernel.org, bp@alien8.de, tony.luck@intel.com,
-        james.morse@arm.com, mchehab@kernel.org, rric@kernel.org,
-        benjaminfair@google.com, yuenn@google.com, venture@google.com,
-        avifishman70@gmail.com, tmaimon77@gmail.com, tali.perry1@gmail.com,
-        linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, openbmc@lists.ozlabs.org,
-        KWLIU@nuvoton.com, YSCHU@nuvoton.com, ctcchien@nuvoton.com,
-        kflin@nuvoton.com, Rob Herring <robh@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v4 15/16] qcom: llcc/edac: Fix the base address used for
+ accessing LLCC banks
+Content-Language: en-US
+To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        Bjorn Andersson <andersson@kernel.org>
+Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        bp@alien8.de, tony.luck@intel.com, quic_saipraka@quicinc.com,
+        konrad.dybcio@linaro.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, james.morse@arm.com,
+        mchehab@kernel.org, rric@kernel.org, linux-edac@vger.kernel.org,
+        quic_ppareek@quicinc.com, luca.weiss@fairphone.com,
+        ahalaney@redhat.com, steev@kali.org
+References: <20221222131656.49584-1-manivannan.sadhasivam@linaro.org>
+ <20221222131656.49584-16-manivannan.sadhasivam@linaro.org>
+ <20221228042944.g4g6vvaapiln6ces@builder.lan>
+ <20221228065353.GB30143@thinkpad>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221228065353.GB30143@thinkpad>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-> > Add dt-bindings document for Nuvoton NPCM memory controller.
->
-> Subject: use "memory-controllers" prefix, not edac.
+On 28/12/2022 07:53, Manivannan Sadhasivam wrote:
+> On Tue, Dec 27, 2022 at 10:29:44PM -0600, Bjorn Andersson wrote:
+>> On Thu, Dec 22, 2022 at 06:46:55PM +0530, Manivannan Sadhasivam wrote:
+>>> First index is LLCC bank 0 and last index is LLCC broadcast. If the SoC
+>>> supports more than one bank, then those needs to be defined in devicetree
+>>> for index from 1..N-1.
+>>>
+>>
+>> What happened to my request for dropping the reliance on reg-names and
+>> pick reg entries per the logic you describe here?
+>>
+>> Was it request just lost or was there a reason why you stuck with the
+>> reg-names?
+>>
+> 
+> The driver uses index to map the resources from DT and not using reg-names.
+> See qcom_llcc_init_mmio().
+> 
+> But the reg-names property is kept in the devicetree as per Krzysztof's
+> request. I've recorded these in the changelog.
 
-Thanks for the review. I'll correct it in the next patch.
+For the record, my comment was about keeping the reg-names in the DTS
+and bindings (as non-required, although that part I maybe did not
+express explicitly).
 
-Regards,
-Marvin
+Best regards,
+Krzysztof
+
