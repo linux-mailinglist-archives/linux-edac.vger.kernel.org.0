@@ -2,116 +2,88 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6881A658991
-	for <lists+linux-edac@lfdr.de>; Thu, 29 Dec 2022 06:48:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8677D658C72
+	for <lists+linux-edac@lfdr.de>; Thu, 29 Dec 2022 12:55:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229644AbiL2Fsi (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Thu, 29 Dec 2022 00:48:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57528 "EHLO
+        id S231251AbiL2LzH (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Thu, 29 Dec 2022 06:55:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229538AbiL2Fsh (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Thu, 29 Dec 2022 00:48:37 -0500
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A6151275A;
-        Wed, 28 Dec 2022 21:48:35 -0800 (PST)
-Received: by mail-pj1-x1033.google.com with SMTP id v13-20020a17090a6b0d00b00219c3be9830so18014833pjj.4;
-        Wed, 28 Dec 2022 21:48:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=4W0s6Vcwe3tgxRphK3rNr3wMCLErEs9BbnZK8mgAHes=;
-        b=jo5SgIpWKjfwxooVy7t329MfTXrDhgKnkSHOOLgLeY2b9CFSJ81opr6jvlDvDFtPao
-         cPWb3MNDVeyz5o2Dt01tyLD1AKzmaZxG75eSXWbOV/VrdM3ldyQpTm3Xwq7uLjLkja9P
-         nSt2nt7zhAT5fOZ7xrWP0uhwgkAny6zzh+PUXhGgbieovFgAATQ/M4xE8X+aBNdfGk0D
-         oL1nXLYW0MGSaugA7JtdJS3A8RgEI/VFFrnTYxieFq62+pc4zlgirC/gRDQoS2Sll69h
-         sGyv7+0sM8/8nh2w28G01+E0Bk+IDII/Xobz1jYpU4MxGOkN45n/a3lTg+hiQf1+Se6j
-         WDtA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=4W0s6Vcwe3tgxRphK3rNr3wMCLErEs9BbnZK8mgAHes=;
-        b=KXU84YiARrEH33FOIQHsQ0tEFhqEFwnOBaDUtIHi6pcgnSwlm7rrk0pdWTT18w4MY1
-         OuXjOgnOVH0MTla9rSOTCp6hi21cx9J5Hio+TrXrhE+GZuinQr441yPGB/S+OusrLrO6
-         ez7MxG9jqb22XO8U7EGn2AyKOP1t6Koq7DhshRWGw/fUnBFCQrVAbQ+wqki2jIug51zI
-         pEfJEZ0abS9JnJOWmKUV2pjpNCwL+JIvR3cnoAH2cjq/rcOHXaevPQTTXwyhQrpOY/LU
-         oVVo4uykWWd9bCDTISE/0fMTdOxgXhbw8eYiEtm6ylvKJ9Em0proodKWwdT1olJezyaE
-         JvpA==
-X-Gm-Message-State: AFqh2kohPD9o2yXLJHhAUES15wIPo+ImjG5zT2L/teMwZAf9PsdsysLo
-        ZdeV3DCxOrqjZLWPpOwjmcI=
-X-Google-Smtp-Source: AMrXdXuI4gReujWBOjsXlS/Y8uekhUDShEClQW43vE4X0/gfunRcrnapmR1UA5Q306CRVSk9m708kA==
-X-Received: by 2002:a17:902:ab4d:b0:189:d0e1:4fcd with SMTP id ij13-20020a170902ab4d00b00189d0e14fcdmr33476734plb.55.1672292914910;
-        Wed, 28 Dec 2022 21:48:34 -0800 (PST)
-Received: from localhost.localdomain ([202.120.234.246])
-        by smtp.googlemail.com with ESMTPSA id l2-20020a170902f68200b00177faf558b5sm11888274plg.250.2022.12.28.21.48.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Dec 2022 21:48:34 -0800 (PST)
-From:   Miaoqian Lin <linmq006@gmail.com>
-To:     Andre Przywara <andre.przywara@arm.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Tony Luck <tony.luck@intel.com>,
-        James Morse <james.morse@arm.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Robert Richter <rric@kernel.org>,
-        Rob Herring <rob.herring@calxeda.com>,
-        linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     linmq006@gmail.com
-Subject: [PATCH] EDAC: highbank: Fix memory leak in highbank_mc_probe
-Date:   Thu, 29 Dec 2022 09:48:24 +0400
-Message-Id: <20221229054825.1361993-1-linmq006@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        with ESMTP id S233151AbiL2Lyk (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Thu, 29 Dec 2022 06:54:40 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E5DB13F37;
+        Thu, 29 Dec 2022 03:54:39 -0800 (PST)
+Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 323C01EC052A;
+        Thu, 29 Dec 2022 12:54:38 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1672314878;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=gNxqtzX2InN3wXWaN0Gi+XlNilpsZ6f9kbafeCoRqOs=;
+        b=IBCSNfWHoh41q06mBf4XKcHHng5hjb8qwji368HubzrTtf/zXTlbW4iPP9V85NzqS2n0aT
+        MhJNLskTC8FS2wb0ol+kZNHoSJC2k3RBz3aWz35WYe88ToFLn+oNcD3LrbHZoKcUPYnnHe
+        RxofTRp0NcPTLTfT5UbpzF/kbnaLG/8=
+Date:   Thu, 29 Dec 2022 12:54:33 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Miaohe Lin <linmiaohe@huawei.com>
+Cc:     "Luck, Tony" <tony.luck@intel.com>,
+        "x86@kernel.org" <x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>,
+        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>
+Subject: Re: [PATCH] mce: fix missing stack-dumping in mce_panic()
+Message-ID: <Y61/+V47qH/8OVxp@zn.tnic>
+References: <20221202163728.392509-1-linmiaohe@huawei.com>
+ <SJ1PR11MB60830CE8C3F79C9531C8567AFC179@SJ1PR11MB6083.namprd11.prod.outlook.com>
+ <5cf492bf-9807-a091-6ac2-a953fce276da@huawei.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <5cf492bf-9807-a091-6ac2-a953fce276da@huawei.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-edac_mc_alloc() allocates memory. The memory are not released
-when devres_open_group() fails, which causes memory leak.
-Call edac_mc_free() in the error handling to fix this.
+On Sat, Dec 03, 2022 at 10:19:32AM +0800, Miaohe Lin wrote:
+> So I think it's better to have at least one stack dumps. Also what the commit
+> 6e6f0a1f0fa6 ("panic: don't print redundant backtraces on oops") and commit
+> 026ee1f66aaa ("panic: fix stack dump print on direct call to panic()") want
+> to do is avoiding nested stack-dumping to have the original oops data being
+> scrolled away on a 80x50 screen but to have *at least one backtraces*. So
+> this patch acts more like a BUGFIX to ensure having at least one backtraces
+> in mce_panic().
 
-Fixes: a1b01edb2745 ("edac: add support for Calxeda highbank memory controller")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
----
-altr_sdram_probe() performs similar operations,
-I take it as reference.
----
- drivers/edac/highbank_mc_edac.c | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+So which commit broke this?
 
-diff --git a/drivers/edac/highbank_mc_edac.c b/drivers/edac/highbank_mc_edac.c
-index 61b76ec226af..19fba258ae10 100644
---- a/drivers/edac/highbank_mc_edac.c
-+++ b/drivers/edac/highbank_mc_edac.c
-@@ -174,8 +174,10 @@ static int highbank_mc_probe(struct platform_device *pdev)
- 	drvdata = mci->pvt_info;
- 	platform_set_drvdata(pdev, mci);
- 
--	if (!devres_open_group(&pdev->dev, NULL, GFP_KERNEL))
--		return -ENOMEM;
-+	if (!devres_open_group(&pdev->dev, NULL, GFP_KERNEL)) {
-+		res = -ENOMEM;
-+		goto free;
-+	}
- 
- 	r = platform_get_resource(pdev, IORESOURCE_MEM, 0);
- 	if (!r) {
-@@ -243,6 +245,7 @@ static int highbank_mc_probe(struct platform_device *pdev)
- 	edac_mc_del_mc(&pdev->dev);
- err:
- 	devres_release_group(&pdev->dev, NULL);
-+free:
- 	edac_mc_free(mci);
- 	return res;
- }
+One of the two above or
+
+004429956b48 ("handle recursive calls to bust_spinlocks()")
+
+or
+
+d896a940ef4f ("x86, mce: remove oops_begin() use in 64bit machine check")
+
+or...?
+
+By looking at their dates, they're pretty much too old so that this can
+go to *all* stable kernels.
+
+Hmmm.
+
 -- 
-2.25.1
+Regards/Gruss,
+    Boris.
 
+https://people.kernel.org/tglx/notes-about-netiquette
