@@ -2,138 +2,106 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1ECCE659979
-	for <lists+linux-edac@lfdr.de>; Fri, 30 Dec 2022 15:48:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EE9FB65A59E
+	for <lists+linux-edac@lfdr.de>; Sat, 31 Dec 2022 17:02:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235071AbiL3OsL (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Fri, 30 Dec 2022 09:48:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36608 "EHLO
+        id S230053AbiLaQCW (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Sat, 31 Dec 2022 11:02:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235034AbiL3OsK (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Fri, 30 Dec 2022 09:48:10 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8952CB84D;
-        Fri, 30 Dec 2022 06:48:06 -0800 (PST)
-Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 0B1DC1EC064A;
-        Fri, 30 Dec 2022 15:48:05 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1672411685;
+        with ESMTP id S229450AbiLaQCV (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Sat, 31 Dec 2022 11:02:21 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38A7DE36
+        for <linux-edac@vger.kernel.org>; Sat, 31 Dec 2022 08:01:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1672502491;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=D8sh2IxPMw6n2bzVvHUCXWtyK943VHmfJSYwXW9Zz/M=;
-        b=agDQ4GxxoXEsC19IJOa2d2on/k1krQbu/8gwkOoIwR1BrNouEe7/U86KO55VW2iek8IWVf
-        A+Dk39F91IKG01cy4wUmbLRfTNb3kdN/RUNaYBDPYzJYLd2+a7kNEB3byinTIoLxdxkC/d
-        aHdu9Hs359m0H1mXQlpU1IO3brGZxuA=
-Date:   Fri, 30 Dec 2022 15:48:01 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     "Farber, Eliav" <farbere@amazon.com>
-Cc:     mchehab@kernel.org, tony.luck@intel.com, james.morse@arm.com,
-        rric@kernel.org, linux-edac@vger.kernel.org,
-        linux-kernel@vger.kernel.org, talel@amazon.com, jonnyc@amazon.com,
-        hhhawa@amazon.com, hanochu@amazon.com, itamark@amazon.com,
-        shellykz@amazon.com, amitlavi@amazon.com, dkl@amazon.com
-Subject: Re: [PATCH v2] edac: fix period calculation in
- edac_device_reset_delay_period()
-Message-ID: <Y676ITA0tCjEo3av@zn.tnic>
-References: <20221020124458.22153-1-farbere@amazon.com>
- <Y62xA548/wQAggRL@zn.tnic>
- <aebd2f07-674c-b848-69e7-5479d111bad1@amazon.com>
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=OVTkT6J2Hrxy6D3i2AFBcsY5vLlTPz0/Nv+lU2zXc/I=;
+        b=YN2WYl6nvl7ZIa8tI4KoJsIx1Jv+v1nRT7MgCuLDL1oQGed3L4+iaGy4pwZbBxlgvhQZ+G
+        QpI9FCunhhxUuLh+74i3n9+KaznUEZgDuPed0skTrcZe5V6iuFhFPuFXyWIWe63SNFwKeM
+        f8kC9gG6g0GbSEFtKzeuru2Bm95koq0=
+Received: from mail-oa1-f70.google.com (mail-oa1-f70.google.com
+ [209.85.160.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-297-QIGZ6bICMLiytYlDjC1Now-1; Sat, 31 Dec 2022 11:01:29 -0500
+X-MC-Unique: QIGZ6bICMLiytYlDjC1Now-1
+Received: by mail-oa1-f70.google.com with SMTP id 586e51a60fabf-1502de563fcso4402958fac.15
+        for <linux-edac@vger.kernel.org>; Sat, 31 Dec 2022 08:01:29 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=OVTkT6J2Hrxy6D3i2AFBcsY5vLlTPz0/Nv+lU2zXc/I=;
+        b=bFUcksnKPmM80NKUvq4dc9It0SDnadXnMdI7Ywx3cir87BVR99yuU9BlxWoQZEMvBx
+         /4TSjNu1pZNBq/zrdkfPf0gcRUIMKi/8cFrmntK43/euQPp9ugUvYyXUROoeyiL5fdcn
+         Fl9cobomGt1Ifc+YYqmIOYNV9H11o8QviUNWREzu2Ggh9vADopJvU8gjp8xIJtXNLcaG
+         pS0gvRvo7zdQGISggxfHe6mv4qCqB14J4NCHZZFD1i5ZKiOhkciGO3uMyaSzwjVXMtlJ
+         mKJngKHv8c9oRWVqRlwkgmjnB2DQbh44r11rWsL2aeJY3/tWNpLD2C+hrapABO/BsziF
+         iQng==
+X-Gm-Message-State: AFqh2kqAgvtIvBU6ALIvFXACpk8KTPTtmNz0yMexCd+t7rCbeA+te7Qs
+        RvzmJtpU8SSk2fp41xVdbVw9aXay1FB18cIDEsm+/AGnXuOeNJwdD1JD4dJA9kv7ha5pxhDiF9V
+        VgeSImK/tdLTRoW3n1ZkWeA==
+X-Received: by 2002:a05:6870:1b87:b0:148:25f1:bf35 with SMTP id hm7-20020a0568701b8700b0014825f1bf35mr17865911oab.28.1672502488377;
+        Sat, 31 Dec 2022 08:01:28 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXsSM/oqnmzUCIQJkwhDRJi02tD3ISDY+eIi3zQNdrKd2rTGfyr/RZxYwiuZlE+NJ0nqAP3tgw==
+X-Received: by 2002:a05:6870:1b87:b0:148:25f1:bf35 with SMTP id hm7-20020a0568701b8700b0014825f1bf35mr17865888oab.28.1672502488165;
+        Sat, 31 Dec 2022 08:01:28 -0800 (PST)
+Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
+        by smtp.gmail.com with ESMTPSA id b23-20020ac87557000000b003a5c60686b0sm14601158qtr.22.2022.12.31.08.01.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 31 Dec 2022 08:01:27 -0800 (PST)
+From:   Tom Rix <trix@redhat.com>
+To:     bp@alien8.de, mchehab@kernel.org, tony.luck@intel.com,
+        james.morse@arm.com, rric@kernel.org
+Cc:     linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Tom Rix <trix@redhat.com>
+Subject: [PATCH] EDAC: add parameters to edac stub macros
+Date:   Sat, 31 Dec 2022 11:01:19 -0500
+Message-Id: <20221231160119.2994264-1-trix@redhat.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <aebd2f07-674c-b848-69e7-5479d111bad1@amazon.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Thu, Dec 29, 2022 at 10:17:48PM +0200, Farber, Eliav wrote:
-> The one-liner below will not work. See the comment in
-> edac_device_workq_setup() that explains why round is used:
+cppcheck reports this error
+[drivers/edac/amd8111_edac.c:175]: (error) failed to expand 'edac_pci_handle_npe',
+  Wrong number of parameters for macro 'edac_pci_handle_npe'.
 
-Bah, right you are - there's that "optimization".
+cppcheck is testing the stubs which do not have parameters.
+Add parameters to match function call.
 
-Ok, I've applied this:
-
+Signed-off-by: Tom Rix <trix@redhat.com>
 ---
-From: Eliav Farber <farbere@amazon.com>
-Date: Thu, 20 Oct 2022 12:44:58 +0000
-Subject: [PATCH] EDAC/device: Fix period calculation in
- edac_device_reset_delay_period()
+ drivers/edac/edac_module.h | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Fix period calculation in case user sets a value of 1000.  The input of
-round_jiffies_relative() should be in jiffies and not in milli-seconds.
-
-  [ bp: Use the same code pattern as in edac_device_workq_setup() for
-    clarity. ]
-
-Fixes: c4cf3b454eca ("EDAC: Rework workqueue handling")
-Signed-off-by: Eliav Farber <farbere@amazon.com>
-Signed-off-by: Borislav Petkov (AMD) <bp@alien8.de>
-Link: https://lore.kernel.org/r/20221020124458.22153-1-farbere@amazon.com
----
- drivers/edac/edac_device.c | 17 ++++++++---------
- drivers/edac/edac_module.h |  2 +-
- 2 files changed, 9 insertions(+), 10 deletions(-)
-
-diff --git a/drivers/edac/edac_device.c b/drivers/edac/edac_device.c
-index 19522c568aa5..878deb4880cd 100644
---- a/drivers/edac/edac_device.c
-+++ b/drivers/edac/edac_device.c
-@@ -394,17 +394,16 @@ static void edac_device_workq_teardown(struct edac_device_ctl_info *edac_dev)
-  *	Then restart the workq on the new delay
-  */
- void edac_device_reset_delay_period(struct edac_device_ctl_info *edac_dev,
--					unsigned long value)
-+				    unsigned long msec)
- {
--	unsigned long jiffs = msecs_to_jiffies(value);
--
--	if (value == 1000)
--		jiffs = round_jiffies_relative(value);
--
--	edac_dev->poll_msec = value;
--	edac_dev->delay	    = jiffs;
-+	edac_dev->poll_msec = msec;
-+	edac_dev->delay	    = msecs_to_jiffies(msec);
- 
--	edac_mod_work(&edac_dev->work, jiffs);
-+	/* See comment in edac_device_workq_setup() above */
-+	if (edac_dev->poll_msec == 1000)
-+		edac_mod_work(&edac_dev->work, round_jiffies_relative(edac_dev->delay));
-+	else
-+		edac_mod_work(&edac_dev->work, edac_dev->delay);
- }
- 
- int edac_device_alloc_index(void)
 diff --git a/drivers/edac/edac_module.h b/drivers/edac/edac_module.h
-index 763c076d96f2..47593afdc234 100644
+index 50ed9f2425bb..fe6b4e004432 100644
 --- a/drivers/edac/edac_module.h
 +++ b/drivers/edac/edac_module.h
-@@ -53,7 +53,7 @@ bool edac_stop_work(struct delayed_work *work);
- bool edac_mod_work(struct delayed_work *work, unsigned long delay);
+@@ -117,8 +117,8 @@ extern void edac_pci_handle_npe(struct edac_pci_ctl_info *pci,
+ #define edac_sysfs_pci_teardown()
+ #define edac_pci_get_check_errors()
+ #define edac_pci_get_poll_msec()
+-#define edac_pci_handle_pe()
+-#define edac_pci_handle_npe()
++#define edac_pci_handle_pe(pci, msg)
++#define edac_pci_handle_npe(pci, msg)
+ #endif				/* CONFIG_PCI */
  
- extern void edac_device_reset_delay_period(struct edac_device_ctl_info
--					   *edac_dev, unsigned long value);
-+					   *edac_dev, unsigned long msec);
- extern void edac_mc_reset_delay_period(unsigned long value);
- 
- /*
+ #endif				/* __EDAC_MODULE_H__ */
 -- 
-2.35.1
+2.27.0
 
-Thx.
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
