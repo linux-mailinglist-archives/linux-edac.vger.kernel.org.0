@@ -2,178 +2,110 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 61B3965B50E
-	for <lists+linux-edac@lfdr.de>; Mon,  2 Jan 2023 17:26:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 31DDC65B5ED
+	for <lists+linux-edac@lfdr.de>; Mon,  2 Jan 2023 18:31:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234025AbjABQ0A (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Mon, 2 Jan 2023 11:26:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37986 "EHLO
+        id S234924AbjABRbF (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Mon, 2 Jan 2023 12:31:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236650AbjABQZa (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Mon, 2 Jan 2023 11:25:30 -0500
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76D49D9E
-        for <linux-edac@vger.kernel.org>; Mon,  2 Jan 2023 08:25:29 -0800 (PST)
-Received: by mail-lf1-x135.google.com with SMTP id bq39so34396904lfb.0
-        for <linux-edac@vger.kernel.org>; Mon, 02 Jan 2023 08:25:29 -0800 (PST)
+        with ESMTP id S236486AbjABRay (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Mon, 2 Jan 2023 12:30:54 -0500
+Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79FD3E5C
+        for <linux-edac@vger.kernel.org>; Mon,  2 Jan 2023 09:30:52 -0800 (PST)
+Received: by mail-pg1-x536.google.com with SMTP id f3so18680382pgc.2
+        for <linux-edac@vger.kernel.org>; Mon, 02 Jan 2023 09:30:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=QCwebXWXkrMQ13JeeM+iArGWaEZiPUi0wYVUo7hFptg=;
-        b=AYZhyIf0Ijda3w83Yvv1quXMyDHCcTFeOd4hmKjjPcuy5Bxk/DJqwWBHBAPedcMvVc
-         XlABwbkXPU6HHaO/wi3hZsJnsUlxe9uBVqiRiZLqwBa1vx6oEyZaF1higTnUvGe7PuLv
-         yvLe7z8+9mReXDRpaSxeTxCiwlJ+WuxPF9YaZe2qbqnUMjajlwUyzw7EKy0agTgnZXws
-         c7HXXZHoIOUaNag8yrbRFuamyD4tHtY5LyLytS1IRERCQ87ufoHr9XFcmcHj0jdPnp8D
-         fap3Dd/kzmbEjm62PQLRotFF+nM9XWR+n+fIdq6s8BfDqckSHLmjN8VnvIrkYdizhGyG
-         BQIA==
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=4s4wsz0Tk2Jz2ceTAUaJ6etP/WVSBkTpQfdDdNo8WCc=;
+        b=DpPx6wfB2HnOq2BBjbvvIxqTb0V7oVXkys0a+9vVYmu6kd7dh4YkESkKpARAH9vR6A
+         jHkpAqIvLr65TsVny4PE9y43+4HLxDD4NdyJ6CAH18egz90QLtrLkuwJpsAHSwRfOl0/
+         q5tPr9nOADl8DFxsqzfaMdRk27+rUOoyNgjrYdwgFJfBRi9k2oTomkQFNqfKi8xxinpv
+         lSfYOehB7y3IsL7R0oANqXtl7JzJHCA0OE9vMAt3D87yDEQyB0WAcAChe2AyBg5658Jr
+         ccVX1PUzlcvtoRAF7sgkXLLHN4pxEcr33n2oz7iCPYbGBuSGgyEKB/6U6khBWxjSeMOf
+         0krQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=QCwebXWXkrMQ13JeeM+iArGWaEZiPUi0wYVUo7hFptg=;
-        b=MzxIO7KHdRwruJwCyj//UfbPpAm2oSsPYQ1urDgrU9KhwsOmrViQlDunGuFRaPUevz
-         EyF4FTGytLLrEmXOXiK747D4gHE2S6h5RVK2xwcni/a3v/PZ1uGQu6Ua26+3391NDsT1
-         ZJPNSKwJA4bvWjXuZ8hn8/AM+K271l59RmGLF54u9kWkXoyK9b0IxR6nZ4yNxOEhQBf7
-         4R1/FbVccP/Up+9yciMpbQyaR6Gh5WPs+oriak/HZiGsw67ItfV39hj1NtIARpyb+DvE
-         NOx3IOWrRHt1vHynnDSMDNrnoKRWtStAKkk2KZKDfTQyQdnWZhT0IUH/41Gx9ie6usRT
-         iOng==
-X-Gm-Message-State: AFqh2kqRzYioHLW6QIW//NVoXuUWPIR0+29vaCBfB3RLeEiIJFjD9QdK
-        hbeyT0FVsrgkd5qNhY3du2PJfg==
-X-Google-Smtp-Source: AMrXdXsaCYJK9sCYGbd2yKAmU3AzaHCauQM8dFQuNo8yFwgzLbNKIlCiLnoga3i0KDxyZtL8ks3wrQ==
-X-Received: by 2002:a05:6512:1597:b0:4b6:f4bb:e53f with SMTP id bp23-20020a056512159700b004b6f4bbe53fmr12505234lfb.60.1672676727459;
-        Mon, 02 Jan 2023 08:25:27 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id w37-20020a0565120b2500b004cb2e3089a7sm993647lfu.38.2023.01.02.08.25.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 02 Jan 2023 08:25:26 -0800 (PST)
-Message-ID: <60d2899e-aed3-a98d-4f3e-8203918a23f9@linaro.org>
-Date:   Mon, 2 Jan 2023 17:25:25 +0100
+        bh=4s4wsz0Tk2Jz2ceTAUaJ6etP/WVSBkTpQfdDdNo8WCc=;
+        b=GRtnB/wFoJxxgi+LlCD9vTDl6kWZmvojZWuBdob/XzYkEGKb5J4veNEQLpfbC+Hylf
+         TG3dZ0njj7I8NhIQUPEZNFl/6j2LNN5Toz9zWQHuAjrHvweibECpC0o2yFXUmCoIQKM9
+         IKfRiUzpwaHTkRdUH2EYtjv6oQrZCYy3n7P4id9ukfl/582QKQnvtxqHiEKh2qQNvKg+
+         AJQ62GQElffw3qfj2o0K0Yusbbqh05Jf8rRSqSTURTaCXXfyVpBWVeJ014sjGN6f6ASp
+         xZbd7D+ZmIRAVZXHxKvU9g7sa1Va7jC7MI/PlyaQBRz/PEwqRvXO+EemACMPrAzka5/w
+         S2cg==
+X-Gm-Message-State: AFqh2kpmtgrXDXmJPowYvs1X8pMW9kNQ09JePtayPn/bKz+tjiceop6R
+        ieVJGut8mSk0hFFuclr3D6mT
+X-Google-Smtp-Source: AMrXdXt5RpPjZsD7c+56DP2frozOtIwA9hlgCrBcqheqig1WsrUF9YF8gSP+pm/elGNIQSHCpk5gZQ==
+X-Received: by 2002:aa7:8043:0:b0:573:487d:e852 with SMTP id y3-20020aa78043000000b00573487de852mr49354904pfm.4.1672680651935;
+        Mon, 02 Jan 2023 09:30:51 -0800 (PST)
+Received: from thinkpad ([220.158.159.123])
+        by smtp.gmail.com with ESMTPSA id j186-20020a6255c3000000b00576259507c0sm18779367pfb.100.2023.01.02.09.30.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 02 Jan 2023 09:30:50 -0800 (PST)
+Date:   Mon, 2 Jan 2023 23:00:45 +0530
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     andersson@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, tony.luck@intel.com,
+        quic_saipraka@quicinc.com, konrad.dybcio@linaro.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        james.morse@arm.com, mchehab@kernel.org, rric@kernel.org,
+        linux-edac@vger.kernel.org, quic_ppareek@quicinc.com,
+        luca.weiss@fairphone.com, ahalaney@redhat.com, steev@kali.org
+Subject: Re: [PATCH v5 00/17] Qcom: LLCC/EDAC: Fix base address used for LLCC
+ banks
+Message-ID: <20230102173045.GB16638@thinkpad>
+References: <20221228084028.46528-1-manivannan.sadhasivam@linaro.org>
+ <Y6wcFjqpBUoxAkdk@zn.tnic>
+ <20221228164711.GB256211@thinkpad>
+ <Y6yDI43UZYfGDuOm@zn.tnic>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: RFC on drivers/memory vs drivers/edac memory mapping for DDR
- Controller
-Content-Language: en-US
-To:     "Shenhar, Talel" <talel@amazon.com>, bp@alien8.de
-Cc:     talelshenhar@gmail.com, shellykz@amazon.com,
-        linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <2511c7aa-8ce6-a803-a1ea-6121df79c677@amazon.com>
- <8b844f3a-e9b0-28d5-200a-611fe3068bc0@linaro.org>
- <4bd90224-d09a-1f21-92e6-51c967d68a39@amazon.com>
- <21c6dd41-3e6f-26c6-d6ca-25102e992c18@linaro.org>
- <567f14ef-7940-25c5-9323-c673b98e585a@amazon.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <567f14ef-7940-25c5-9323-c673b98e585a@amazon.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <Y6yDI43UZYfGDuOm@zn.tnic>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On 02/01/2023 17:21, Shenhar, Talel wrote:
+On Wed, Dec 28, 2022 at 06:55:47PM +0100, Borislav Petkov wrote:
+> On Wed, Dec 28, 2022 at 10:17:11PM +0530, Manivannan Sadhasivam wrote:
+> > Well, some maintainers prefer to pick the independent patches through their
+> > tree. That's why I moved those patches to the start of the series.
 > 
-> On 1/2/2023 3:59 PM, Krzysztof Kozlowski wrote:
->>
->> On 02/01/2023 14:44, Shenhar, Talel wrote:
->>> On 1/2/2023 2:47 PM, Krzysztof Kozlowski wrote:
->>>>
->>>> On 02/01/2023 13:17, Shenhar, Talel wrote:
->>>>
->>>>> Things we had in mind:
->>>>> 1) map more specific region to avoid conflict (we don't need the same
->>>>> registers on both entity so if we do very specific multiple mapping this
->>>>> shall be resolved)
->>>>> 2) use other kernel API for mapping that doesn't do request_mem_region
->>>>> (or use the reserve only for one of them)
->>>>> 3) have single driver (edac mc) handle also the refresh rate
->>>>> 4) export edac_mc.h and have the drivers/memory have all the needed code
->>>>> to do both edac and refresh rate under drivers/memory
->>>> None of these address the core problem - possibly inaccurate hardware
->>>> description...
->>> Can you elaborate on this inaccurate hardware description?
->> I explained - using same IO address suggests you used Linux driver
->> structure in your hardware description. I assume we talk here about
->> Devicetree. If not, that's quite different case... then I guess ACPI,
->> which I do not care - I am not it's maintainer.
->>
->>> Also, I'd like to write down my understanding of your response from above:
->>>
->>> it seems you see as possible solution both using different API that
->>> allow overlapping (solution 2) and also for splitting the IO address
->>> space to finer pieces to achieve full HW description (solution 1)
->> No. Sorry, we probably talk about two different things.
->>
->> You started writing that you have a hardware described as one IO address
->> space and now have a problem developing drivers for it.
->>
->> The driver model for this is entirely different problem than problem of
->> accurate hardware description. Whether you described HW correct or not,
->> I don't know. You did not provide any details here, like DTS or bindings
->> (if we talk about Devicetree).
->>
->> Having multiple drivers using similar resources is already solved many
->> times (MFD, syscon).
->>
->> Whether the solution is correct or not is one more (third) topic: poking
->> to same IO address space from two different drivers is error-prone. This
->> one is solvable with splitting IO address space.
->>
->> Best regards,
->> Krzysztof
+> Once some maintainers experience a crazy dependency hell between trees,
+> they would find routing it all through a single tree a lot easier the
+> next time.
 > 
+> > If you are fine with all patches going through qcom tree, I do not
+> > have any issue :)
 > 
-> You are right.
+> I'm reviewing.
 > 
-> Let me elaborate on this.
-> 
-> We will write down the hardware description via device tree.
-> 
-> Then we will write the driver which will honor that binding.
-> 
-> So the question is what is the best practice there assuming there is no 
-> shared registers however there is overlapping.
 
-The correct solution is to describe hardware. The hardware is memory
-controller. There is no hardware called "scaller of memory controller".
-There is no hardware called "EDAC" because that's purely a Linux term.
+Ok! I'll wait for your reviews on the rest of the EDAC patches before doing the
+respin.
 
-Your DTS should accurately describe the hardware, not drivers. Then
-drivers can do whatever they want with it - have safe, non-concurrent
-access or keep poking same registers and break things...
+Thanks,
+Mani
 
+> -- 
+> Regards/Gruss,
+>     Boris.
 > 
-> e.g. the EDAC driver needs register 0,1,2,4,5 and refresh-rate needs 
-> register 3.
+> https://people.kernel.org/tglx/notes-about-netiquette
 
-I don't think there is EDAC and "refresh-rate" hardwares. There is
-memory controller.
-
-> 
-> If we would only have EDAC driver than we would do IO address mapping 
-> from 0 with size 5 (not caring mapping register 3 even that its not used).
-> 
-> However, with the other driver (refresh rate) that need register 3 we am 
-> facing a problem.
-> 
-> So looking for the best solution here.
-> 
-> I don't think this is a problem that is specific to drivers/edac and to 
-> drivers/memory, however, due to the nature of those two libraries this 
-> conflict is more expected.
-
-All these problems look like started from wrong hardware description, so
-not sure if it is worth fixing something where the basis is already not
-correct.
-
-Best regards,
-Krzysztof
-
+-- 
+மணிவண்ணன் சதாசிவம்
