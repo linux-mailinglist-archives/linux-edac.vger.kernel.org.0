@@ -2,106 +2,105 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE9FB65A59E
-	for <lists+linux-edac@lfdr.de>; Sat, 31 Dec 2022 17:02:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 04A8C65B1DF
+	for <lists+linux-edac@lfdr.de>; Mon,  2 Jan 2023 13:17:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230053AbiLaQCW (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Sat, 31 Dec 2022 11:02:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51518 "EHLO
+        id S231917AbjABMRi (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Mon, 2 Jan 2023 07:17:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229450AbiLaQCV (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Sat, 31 Dec 2022 11:02:21 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38A7DE36
-        for <linux-edac@vger.kernel.org>; Sat, 31 Dec 2022 08:01:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1672502491;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=OVTkT6J2Hrxy6D3i2AFBcsY5vLlTPz0/Nv+lU2zXc/I=;
-        b=YN2WYl6nvl7ZIa8tI4KoJsIx1Jv+v1nRT7MgCuLDL1oQGed3L4+iaGy4pwZbBxlgvhQZ+G
-        QpI9FCunhhxUuLh+74i3n9+KaznUEZgDuPed0skTrcZe5V6iuFhFPuFXyWIWe63SNFwKeM
-        f8kC9gG6g0GbSEFtKzeuru2Bm95koq0=
-Received: from mail-oa1-f70.google.com (mail-oa1-f70.google.com
- [209.85.160.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-297-QIGZ6bICMLiytYlDjC1Now-1; Sat, 31 Dec 2022 11:01:29 -0500
-X-MC-Unique: QIGZ6bICMLiytYlDjC1Now-1
-Received: by mail-oa1-f70.google.com with SMTP id 586e51a60fabf-1502de563fcso4402958fac.15
-        for <linux-edac@vger.kernel.org>; Sat, 31 Dec 2022 08:01:29 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=OVTkT6J2Hrxy6D3i2AFBcsY5vLlTPz0/Nv+lU2zXc/I=;
-        b=bFUcksnKPmM80NKUvq4dc9It0SDnadXnMdI7Ywx3cir87BVR99yuU9BlxWoQZEMvBx
-         /4TSjNu1pZNBq/zrdkfPf0gcRUIMKi/8cFrmntK43/euQPp9ugUvYyXUROoeyiL5fdcn
-         Fl9cobomGt1Ifc+YYqmIOYNV9H11o8QviUNWREzu2Ggh9vADopJvU8gjp8xIJtXNLcaG
-         pS0gvRvo7zdQGISggxfHe6mv4qCqB14J4NCHZZFD1i5ZKiOhkciGO3uMyaSzwjVXMtlJ
-         mKJngKHv8c9oRWVqRlwkgmjnB2DQbh44r11rWsL2aeJY3/tWNpLD2C+hrapABO/BsziF
-         iQng==
-X-Gm-Message-State: AFqh2kqAgvtIvBU6ALIvFXACpk8KTPTtmNz0yMexCd+t7rCbeA+te7Qs
-        RvzmJtpU8SSk2fp41xVdbVw9aXay1FB18cIDEsm+/AGnXuOeNJwdD1JD4dJA9kv7ha5pxhDiF9V
-        VgeSImK/tdLTRoW3n1ZkWeA==
-X-Received: by 2002:a05:6870:1b87:b0:148:25f1:bf35 with SMTP id hm7-20020a0568701b8700b0014825f1bf35mr17865911oab.28.1672502488377;
-        Sat, 31 Dec 2022 08:01:28 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXsSM/oqnmzUCIQJkwhDRJi02tD3ISDY+eIi3zQNdrKd2rTGfyr/RZxYwiuZlE+NJ0nqAP3tgw==
-X-Received: by 2002:a05:6870:1b87:b0:148:25f1:bf35 with SMTP id hm7-20020a0568701b8700b0014825f1bf35mr17865888oab.28.1672502488165;
-        Sat, 31 Dec 2022 08:01:28 -0800 (PST)
-Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
-        by smtp.gmail.com with ESMTPSA id b23-20020ac87557000000b003a5c60686b0sm14601158qtr.22.2022.12.31.08.01.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 31 Dec 2022 08:01:27 -0800 (PST)
-From:   Tom Rix <trix@redhat.com>
-To:     bp@alien8.de, mchehab@kernel.org, tony.luck@intel.com,
-        james.morse@arm.com, rric@kernel.org
-Cc:     linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Tom Rix <trix@redhat.com>
-Subject: [PATCH] EDAC: add parameters to edac stub macros
-Date:   Sat, 31 Dec 2022 11:01:19 -0500
-Message-Id: <20221231160119.2994264-1-trix@redhat.com>
-X-Mailer: git-send-email 2.27.0
+        with ESMTP id S229447AbjABMRi (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Mon, 2 Jan 2023 07:17:38 -0500
+Received: from smtp-fw-6001.amazon.com (smtp-fw-6001.amazon.com [52.95.48.154])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02C39DFE;
+        Mon,  2 Jan 2023 04:17:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1672661858; x=1704197858;
+  h=message-id:date:mime-version:to:cc:from:subject:
+   content-transfer-encoding;
+  bh=g7PwYlA7h+ObpASfr72fHpdIOcqLRnjFhNhLUHOoiJE=;
+  b=uiKMySjdMcwkGjKqpL+xVTz5+JjbBxxM54+5sOD2yJ6nDHaCF3WZzFUA
+   tmSVz9qJCC8/vtCOHiX06KmRFhDamTAIWSzynkhyH0hefkuP8iXlLQ6bf
+   sr24sABwqU05rReOMRBABgP/dwZb6ok9HPZj/9yKPGq4x6FnwQHDOpDS4
+   E=;
+X-IronPort-AV: E=Sophos;i="5.96,294,1665446400"; 
+   d="scan'208";a="284304429"
+Received: from iad12-co-svc-p1-lb1-vlan2.amazon.com (HELO email-inbound-relay-pdx-2b-m6i4x-ed19f671.us-west-2.amazon.com) ([10.43.8.2])
+  by smtp-border-fw-6001.iad6.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jan 2023 12:17:35 +0000
+Received: from EX13D40EUA003.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan3.pdx.amazon.com [10.236.137.198])
+        by email-inbound-relay-pdx-2b-m6i4x-ed19f671.us-west-2.amazon.com (Postfix) with ESMTPS id 07892821B0;
+        Mon,  2 Jan 2023 12:17:32 +0000 (UTC)
+Received: from EX19D001EUA003.ant.amazon.com (10.252.50.232) by
+ EX13D40EUA003.ant.amazon.com (10.43.165.253) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.42; Mon, 2 Jan 2023 12:17:31 +0000
+Received: from [192.168.7.187] (10.43.162.56) by EX19D001EUA003.ant.amazon.com
+ (10.252.50.232) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1118.7; Mon, 2 Jan 2023
+ 12:17:28 +0000
+Message-ID: <2511c7aa-8ce6-a803-a1ea-6121df79c677@amazon.com>
+Date:   Mon, 2 Jan 2023 14:17:24 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Content-Language: en-US
+To:     <krzysztof.kozlowski@linaro.org>, <bp@alien8.de>
+CC:     <talel@amazon.com>, <talelshenhar@gmail.com>,
+        <shellykz@amazon.com>, <linux-edac@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+From:   "Shenhar, Talel" <talel@amazon.com>
+Subject: RFC on drivers/memory vs drivers/edac memory mapping for DDR
+ Controller
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.43.162.56]
+X-ClientProxiedBy: EX13D25UWC001.ant.amazon.com (10.43.162.44) To
+ EX19D001EUA003.ant.amazon.com (10.252.50.232)
+X-Spam-Status: No, score=-11.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-cppcheck reports this error
-[drivers/edac/amd8111_edac.c:175]: (error) failed to expand 'edac_pci_handle_npe',
-  Wrong number of parameters for macro 'edac_pci_handle_npe'.
+Hi,
 
-cppcheck is testing the stubs which do not have parameters.
-Add parameters to match function call.
+Want to consult on a topic that involve both drivers/memory and 
+drivers/edac.
 
-Signed-off-by: Tom Rix <trix@redhat.com>
----
- drivers/edac/edac_module.h | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+* We want to introduce driver that reads DDR controller RAS register and 
+notify for ECC errors by using EDAC MC API found in drivers/edac.
+* We also want to have a capability to dynamically change DDR refresh 
+rate based on thermal values (best to be done in drivers/memory ?).
 
-diff --git a/drivers/edac/edac_module.h b/drivers/edac/edac_module.h
-index 50ed9f2425bb..fe6b4e004432 100644
---- a/drivers/edac/edac_module.h
-+++ b/drivers/edac/edac_module.h
-@@ -117,8 +117,8 @@ extern void edac_pci_handle_npe(struct edac_pci_ctl_info *pci,
- #define edac_sysfs_pci_teardown()
- #define edac_pci_get_check_errors()
- #define edac_pci_get_poll_msec()
--#define edac_pci_handle_pe()
--#define edac_pci_handle_npe()
-+#define edac_pci_handle_pe(pci, msg)
-+#define edac_pci_handle_npe(pci, msg)
- #endif				/* CONFIG_PCI */
- 
- #endif				/* __EDAC_MODULE_H__ */
--- 
-2.27.0
+The pain point here is that both capabilities are controlled from the 
+DDR controller.
+This create issue while using 
+devm_platform_ioremap_resource*->devm_request_mem_region which prevent 
+two mapping of same area.
+
+It seems to be expected problem as we have 2 "framework" (edac and 
+memory) split while both aim for same HW unit.
+What is the recommended way to face such conflicts?
+
+We had several concept in mind but would love to get your point of view 
+first.
+
+Things we had in mind:
+1) map more specific region to avoid conflict (we don't need the same 
+registers on both entity so if we do very specific multiple mapping this 
+shall be resolved)
+2) use other kernel API for mapping that doesn't do request_mem_region 
+(or use the reserve only for one of them)
+3) have single driver (edac mc) handle also the refresh rate
+4) export edac_mc.h and have the drivers/memory have all the needed code 
+to do both edac and refresh rate under drivers/memory
+
+Your recommendation shall be appreciated!
+
+Thanks,
+Talel.
 
