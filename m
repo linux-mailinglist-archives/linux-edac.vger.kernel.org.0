@@ -2,180 +2,173 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1367965C8A7
-	for <lists+linux-edac@lfdr.de>; Tue,  3 Jan 2023 22:12:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 30E2665CEA4
+	for <lists+linux-edac@lfdr.de>; Wed,  4 Jan 2023 09:46:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230166AbjACVMN (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Tue, 3 Jan 2023 16:12:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48834 "EHLO
+        id S234428AbjADIqd (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Wed, 4 Jan 2023 03:46:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234115AbjACVMH (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Tue, 3 Jan 2023 16:12:07 -0500
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0CEB1401C;
-        Tue,  3 Jan 2023 13:12:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1672780326; x=1704316326;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=uWwyLsG1BJVU98RtkNacC6nnJi0N+PKV3cJiXuAEBCw=;
-  b=Z+igQZKWR6qyCbn2UaiqHqJ475VAhs+qIaupentg8Zz7UlBTeX8dZjnB
-   vIKpvD/QrxBbK5Ep0APHyxUZb5oFfePxdYnjC1dLBs72uR52vn+cj8kfd
-   qDgWPtMMyvZVlDqZMjKcmkjTwLj+9JsbOSsEIw8eBs6poDXehmsJPNpFh
-   MdL1NIGNxsph8OVFifZqgxI7nWhL9YIYQTsUkuJXjfADX4fyy7tXxzuQd
-   NRXmmKYuUQ40FZd3FftD/90Lo16f/XQFSni15pk/FYqfMsq78IqRvEJMO
-   JUbrB/SC3S0eKlqSFQyVoXeVgSIJSYowkcaoQC1QGyQsrHC+4Owi2UAg/
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10579"; a="301444306"
-X-IronPort-AV: E=Sophos;i="5.96,297,1665471600"; 
-   d="scan'208";a="301444306"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jan 2023 13:12:06 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10579"; a="743633115"
-X-IronPort-AV: E=Sophos;i="5.96,297,1665471600"; 
-   d="scan'208";a="743633115"
-Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
-  by FMSMGA003.fm.intel.com with ESMTP; 03 Jan 2023 13:12:06 -0800
-Received: from fmsmsx612.amr.corp.intel.com (10.18.126.92) by
- fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Tue, 3 Jan 2023 13:12:06 -0800
-Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
- fmsmsx612.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16 via Frontend Transport; Tue, 3 Jan 2023 13:12:06 -0800
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (104.47.57.173)
- by edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.16; Tue, 3 Jan 2023 13:12:04 -0800
+        with ESMTP id S234516AbjADIqF (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Wed, 4 Jan 2023 03:46:05 -0500
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2070.outbound.protection.outlook.com [40.107.94.70])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26E3118B3C;
+        Wed,  4 Jan 2023 00:45:54 -0800 (PST)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=bDD29kNK4RpY9LxDzZGxoO9p+cgegYobr32Sa01TyiiqJvn3kSCH0CNKIM/gw0xvlpL5rf/7qAchgUlvCB6ekVAqaRpNWlMRVtad0OZHRhgtBJlrf+RqkSSOLWmMeIhBU8Tg8BMLtth1n4XyFGz9PLUunwTHjRCnDi/Rl+P97f6478x99/T+LaQ4BK2yGbRztLYelToPaXg9bHhztBrjR8mKN/Q9abPuM8MNYA6h1fyupNkJnnYgQjeumXSDHQ1a70VQx+ZS+HfR6s26IHOa8/d/31Kkhj0OdNwqCRRmVZ74BfuC/kM5nIvQFkb5zfIBMLRf3JMUuESzTrBJuLYrcA==
+ b=BkbXcd8MPuh2svqppW4DAOUoYyqk+WrAXiknsp/3GJA5xTBxopTOHYcYjEtnR0FDfXEwTCVBZMu4RSuW31XaSKQwm/Wi6yBhdo1g0jgM0Wmkrt4qg1O+cdPz4n9SxJ4Zka4GXafc1h9FSzsHJzErqUWI80DvUhPbHDv3jhsUCXGmme04Uem8eu8fvoxB+9vW/YTk+JQJs4hMN3O6mndEOJBmDQUNhv5b0W/8usCSyJIEoWNLjH52lz3qO1HcV9exka7t7hwglFUMClas3kCcp7WpoGU3OZRnBwFDMAROtIYkKNKsnLMa4WyoJ0Y5WPWLGST1tz0sHazT5nO2vHCgng==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=uWwyLsG1BJVU98RtkNacC6nnJi0N+PKV3cJiXuAEBCw=;
- b=Gsob8+PvAVuNfa8PfATI6FjrHb6C3QdQNLGHixJmQZbaiDyMeHAxLPONFdAGiviXmLWpm3glF9i+4E8VBAdAcGRzNVpoLWTh+Ppc5N2rluQ1UIPwq7koUnfb6tVYD1x+mcAdtCCtOufRr97t7755P7Wu6A+mbSiJKkSypSSrO2Uj0C432Ta77ATaTdb6xVS6k3ubhjNGYDVlhLn24DFhAAANESG7S2mF7PnmmN9VMQueZgKqBiQG6kueJNHD8ZhRqY11g8/gXwlXDs037xt7yvEzuHJ8uj5THTVdMJr0o3cFdIJ2yQ6f9Iuep8iyiWAYDLnuVIyUfS9MaA1eut5RrQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from SJ1PR11MB6083.namprd11.prod.outlook.com (2603:10b6:a03:48a::9)
- by DM8PR11MB5589.namprd11.prod.outlook.com (2603:10b6:8:26::7) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5944.19; Tue, 3 Jan 2023 21:12:02 +0000
-Received: from SJ1PR11MB6083.namprd11.prod.outlook.com
- ([fe80::3c14:aeca:37e2:c679]) by SJ1PR11MB6083.namprd11.prod.outlook.com
- ([fe80::3c14:aeca:37e2:c679%7]) with mapi id 15.20.5944.019; Tue, 3 Jan 2023
- 21:12:02 +0000
-From:   "Luck, Tony" <tony.luck@intel.com>
-To:     Miaohe Lin <linmiaohe@huawei.com>, Borislav Petkov <bp@alien8.de>
-CC:     "x86@kernel.org" <x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>,
-        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>
-Subject: RE: [PATCH] mce: fix missing stack-dumping in mce_panic()
-Thread-Topic: [PATCH] mce: fix missing stack-dumping in mce_panic()
-Thread-Index: AQHZBiod8rBYaoP1F0+0JAoGaAcDUa5aqxswgADD7ACAKX1GgIAACwCAgAAE7YCAANthAIAHiZWQ
-Date:   Tue, 3 Jan 2023 21:12:02 +0000
-Message-ID: <SJ1PR11MB60831AB2202FF0C3CF99EF1DFCF49@SJ1PR11MB6083.namprd11.prod.outlook.com>
-References: <20221202163728.392509-1-linmiaohe@huawei.com>
- <SJ1PR11MB60830CE8C3F79C9531C8567AFC179@SJ1PR11MB6083.namprd11.prod.outlook.com>
- <5cf492bf-9807-a091-6ac2-a953fce276da@huawei.com> <Y61/+V47qH/8OVxp@zn.tnic>
- <1e97c11d-99b6-c06f-b67f-c56ba6653d27@huawei.com> <Y62NVThhnGtnj71u@zn.tnic>
- <276c9e6b-d647-6f7f-7bd1-c1f45ca23261@huawei.com>
-In-Reply-To: <276c9e6b-d647-6f7f-7bd1-c1f45ca23261@huawei.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: SJ1PR11MB6083:EE_|DM8PR11MB5589:EE_
-x-ms-office365-filtering-correlation-id: 044384dc-3649-4c09-296a-08daedcf28f4
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: GPkTeu2o5ee7bYQYcXSk6yxIiAmIa/bIbgafKPTbflfJpJSVkeiWEJ3j9l0SjRWpyredgHihAMawcoGXmKs5kEbrxBEidonpxmjDheQbzhWajeA42vXLExUP49xw8Gc6GZbTx+7k6NpA4plLXY7u0hx5578EmCgVBsnhSv8BV/pfyRY7V0z6i51lBKCQMvQbqhOYCL489yM3y43Kk1Zi30Got15gJ8feRX9UT+LNMTbuhOn5hKI3YALVZ3eY4CZa5iSZTTXfr40SGmUEx3GpzCkXFU51ma1NvwITApcHkQRo28Fd20uCkekOjBSJrjjzibXp8kb+FTTQyAW4wtInilM/Re5e2WqNHwbBl+3IvyYbDEcNXD/ZKJJkWtvQRH9kmNg89geAMQXTi2XhUYuCbla6djxxFQr63D/YehNJOiAPG/hCq5LGBrZmx+cLBFacbizkCGMfySTqtc3HhnY4r1ETfIWEjszPC7RN0KhHf+57EycwW6m8eAFf6eI7zw3P6SyzMUwrprv2htRjJ3MjcLP+iUmz4Yvp6G0+4Zk4MKt89E9cPIa4UnGHAkXfG9cnMGqUgJbN3toy89qGwuLnXZOZo5NgNP+xVQrjE5QwmDKeYx/MDRvDyYUro8mOlk8qOTBkRL+49BsXRoMm6R1R7S7PAYWKtWzW7NEsWNyuLfHxl2Gsz3yriMa1BpQD6MB0yRgHfpl6gxuOqAeGEZNFsdwBNAsClgZ7nwwDBMIP8oI=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ1PR11MB6083.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(39860400002)(346002)(136003)(396003)(366004)(376002)(451199015)(83380400001)(186003)(9686003)(26005)(33656002)(7696005)(6506007)(55016003)(86362001)(38070700005)(38100700002)(82960400001)(122000001)(41300700001)(8676002)(4326008)(5660300002)(2906002)(4744005)(8936002)(52536014)(316002)(71200400001)(66556008)(478600001)(76116006)(66946007)(66476007)(54906003)(110136005)(64756008)(66446008)(22166006);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?N3VOMUhhSHNwWEg4ckJmUHRoRFRLTXBqcGtwWmgrZWZaa2FVZU1MWm1jcCs3?=
- =?utf-8?B?S3JUYnJRczdmSHVubEIyYW5UNnlPVUNOMTVqem83Y09wd2tFYXd2YlpMNGVQ?=
- =?utf-8?B?MlNNcHg3aklpUlQ1cDMrKzI4Ri9PN2FSM012SlhqNVhFWWZlamQ0S2Ivb09C?=
- =?utf-8?B?TFZjRWhEZGFEL1V4THpxaEFXNHB6U3V2VC9aUGVwSHc4Nk9aYytNS3pxbUhU?=
- =?utf-8?B?bVBVb0QxN0lON1VmUy9uY0l0LzZneGo1dnlOVzFpaGY1U2N2OHRxRUhOWVBJ?=
- =?utf-8?B?Skg0cUVkbmtla1UzZEQ5TkVRUFBmKzZIbCtPKzdhRFlSL3hRMzRTMDVaSG1Z?=
- =?utf-8?B?eGl4WFgrNU9HbkhnV2R2ZjAzUXVwZFFaU2JpNnQzdWRNbE1hOW85ajNuTHNH?=
- =?utf-8?B?aS9MR2F0cktua2taQTFVM0J0NVMrRjlFRWZmWk9hMld6VXBuRU9ibFRLSThI?=
- =?utf-8?B?RFdyaUdEZ2w4REhjbUdpVjdaVG03dE82Zkd4QWZ1aVNqeldaVGJicVVMNWFS?=
- =?utf-8?B?VW13aTcyTHVVbW9GeWhXOWRqbDVINGthY3ZwT1pVWFlkejZxeklkSzhQTFJ3?=
- =?utf-8?B?MTl5ZDB3UzNDR2FtWWd6VEpZOHRyZEY3WEpEdUYwNlJNNno2bXBmckxHR3JI?=
- =?utf-8?B?andESjlEZ25zeTZWaWFKaVd2Wit0Tlc2L2VIakFkQXZ6KzNzOUdMQlhZcUtj?=
- =?utf-8?B?NXhCb0RvQWoweVJQREpiSjU1dzdQWjNLREg3OGtzK25nbktPdTZyM01QcEpn?=
- =?utf-8?B?bjFKVDZwWDVxZW5QS2FkZVp3bXRTMUpnL282RFJ2K3JJWldqbXViT2JRTjFl?=
- =?utf-8?B?d2xwVGxDMk1BWVVVY2FLM0FGQmJpcGlSRFcxNzVWcUFmYThzY2FWQ01ITjR5?=
- =?utf-8?B?Ri9MS2Z5N3lVSHUwWEl5MmRkeWRsSzJDV0dpbXRQQ29kZG5Rb1h6MkhQVVhh?=
- =?utf-8?B?a1VmSnJsMy9nK1dFM0g4MDdvbFRqMzgyUGp2ZEJzQ3ZvSGV4cjhvWStGSFJO?=
- =?utf-8?B?TXBhNEVIaXk4ZkF2Qkx0ZWVLWmNUc2UyRjFmKzRVcnM2MjJMQlRLNFAzUEdO?=
- =?utf-8?B?dEFKeXl2ZG1qZmZBNk1BUmFRNWg2dDBscUdZdDZMb3FHWkQ4OHhpdGJjY1Fo?=
- =?utf-8?B?ejl3UEFubHRySE82dnM4T296ZllHZDJZL1pLTXpwVHVmak9CMUNpMjNBa3VB?=
- =?utf-8?B?T2ozdmZCcHlmRWk5RWhFaUVmRkU1UlZUU284TklJUE1YZEhoUmRVa2lhUDUy?=
- =?utf-8?B?WnBEZ2ZoN1lLMVJhVjVrMTgwVlpJcjFyNVovaTJhd1BVUFluN2VtaE5PaTdG?=
- =?utf-8?B?SHpKTW1STEFMZHdaRldnM0xuK01SUXhvNnh3bHAyK21QRmJBaytkQkxZU2pB?=
- =?utf-8?B?aERyYmptWFNDYmRzZGxwNk5ZODQ5bERiRmROcUlwaGhKWnBrSEpKdlAxUmx3?=
- =?utf-8?B?eGwzbjRVaU0wSWJCUkJvNmNCZXR0UFpNZzk0MXl2VXJ3UC9ZR3lBL2lYYTR3?=
- =?utf-8?B?a0N2N01LSEZHN0h1QzZZb0lmczhFRXoyUlIzZE1LWHFvYThDc3Bsd0U3RmtT?=
- =?utf-8?B?NFBVSEdvcWhOYTJDUWNTQ29pMElndFZJS095ek9CcFdyNXN5UnV4dVZ6VHBY?=
- =?utf-8?B?YmZjb2JwM1J2SWFlT2NWc2RmakdXQzFxNEtySnZsSk5tUHU4THpvSmxyTmpV?=
- =?utf-8?B?bVowYTl2SlJrZ2xnQ1F2ekNvRlJTbzBzdEdua2o0RHZId21ZYXNIMmhYbFVz?=
- =?utf-8?B?dXN4ZndLQ2gzT2tOV0FBVzRoQjBwNnFFTHEvOVBQTldROXdXVmZwU2ppV3ZI?=
- =?utf-8?B?WFZoNE11eS8rUGJNcXFDOHUxT3FYaVhOUEUwclVtVUt2T3dZNlhaR2Q1Q2E3?=
- =?utf-8?B?NG9DcE9MVXdtSjJFQS9GS0NGY0NTaDFtS2RHWFB2N1o1ODd0OXdmelJEMmpv?=
- =?utf-8?B?WFpQTkl0ZGN1YjJ0Um0xRU1ReDBNWnVHZ3paWEttMldkdURFM2dRS0JGeENi?=
- =?utf-8?B?SzhLR1ArSUtldTdTdlZuOTQ4c29BRWZLVmp2eVVmWW1WZDBORFRDSXZKbDdN?=
- =?utf-8?B?RkUyWnU4bnNZSmZjaVdraldjbHk4MU0zUWI0aWNSZTRVRTZkd2dsdGVxeVh1?=
- =?utf-8?Q?eJkixts2PexIWFN7X1uUI4u59?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+ bh=P9DRz61tYaKyVo5e8+t3w/hhVLA6iVetsBIlDVf6XLg=;
+ b=QHrV0B/qc2VvyUJTcbyv3xKoCD+27ffKwc/IdzjlZjvcB30nCejtxmQm6DJf2BLDdzubJkXL2zWTh6TaIK9x9AUs1DARJKI2lliR3UAmGlLxcaBOwx/2WWYCSkwPmnR0boaZQplrSJ1j28DPAGT3aK6zIMUGkxWkrc8GdCBg3f+64YRzEc2PcVHOKk4wMYNNoHCidJo3QCDuNr8hQJZ7xyc8zvu8qnoLo25VJJg+JwheNsVQe5wRrdKHUdYqoC6ztlpGOsr7XmUHgqSgKIl9xRR97nN+xhC9Ep5msi3K8xkOxxEc7Ov6+2BxUxyVZ8ANJfBp+3JlxpMeXIx4cBqW+A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=P9DRz61tYaKyVo5e8+t3w/hhVLA6iVetsBIlDVf6XLg=;
+ b=xmgbvMf3xf0Qs+2rsmWitUvt92+ws24lWP4RDc9OW6Ng1opX700smbrcglCzNfsYGQhmeXXqy0YM9HTrUSrkhh2rq6u2lpat6PsjRxDSwVcCEsftRIh/Fcp58t9wqyuvtiWQe4TbuTP5pn8je8rDYjFVqrQeF/pDwD4Rwtv+90E=
+Received: from MW4PR04CA0305.namprd04.prod.outlook.com (2603:10b6:303:82::10)
+ by PH7PR12MB5952.namprd12.prod.outlook.com (2603:10b6:510:1db::6) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5944.19; Wed, 4 Jan
+ 2023 08:45:52 +0000
+Received: from CO1NAM11FT089.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:303:82:cafe::71) by MW4PR04CA0305.outlook.office365.com
+ (2603:10b6:303:82::10) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5966.19 via Frontend
+ Transport; Wed, 4 Jan 2023 08:45:52 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB03.amd.com; pr=C
+Received: from SATLEXMB03.amd.com (165.204.84.17) by
+ CO1NAM11FT089.mail.protection.outlook.com (10.13.175.179) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5986.14 via Frontend Transport; Wed, 4 Jan 2023 08:45:51 +0000
+Received: from SATLEXMB06.amd.com (10.181.40.147) by SATLEXMB03.amd.com
+ (10.181.40.144) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Wed, 4 Jan
+ 2023 02:45:50 -0600
+Received: from SATLEXMB04.amd.com (10.181.40.145) by SATLEXMB06.amd.com
+ (10.181.40.147) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Wed, 4 Jan
+ 2023 02:45:50 -0600
+Received: from xhdlakshmis40.xilinx.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server id 15.1.2375.34 via Frontend
+ Transport; Wed, 4 Jan 2023 02:45:46 -0600
+From:   Sai Krishna Potthuri <sai.krishna.potthuri@amd.com>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Michal Simek <michal.simek@xilinx.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Tony Luck <tony.luck@intel.com>,
+        James Morse <james.morse@arm.com>,
+        "Robert Richter" <rric@kernel.org>
+CC:     <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-edac@vger.kernel.org>,
+        <saikrishna12468@gmail.com>, <git@amd.com>,
+        Sai Krishna Potthuri <sai.krishna.potthuri@amd.com>
+Subject: [PATCH v7 0/2] EDAC: Add support for Xilinx ZynqMP OCM EDAC
+Date:   Wed, 4 Jan 2023 14:15:10 +0530
+Message-ID: <20230104084512.1855243-1-sai.krishna.potthuri@amd.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SJ1PR11MB6083.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 044384dc-3649-4c09-296a-08daedcf28f4
-X-MS-Exchange-CrossTenant-originalarrivaltime: 03 Jan 2023 21:12:02.7137
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CO1NAM11FT089:EE_|PH7PR12MB5952:EE_
+X-MS-Office365-Filtering-Correlation-Id: 0843cff8-57ee-4273-7ccb-08daee3015e5
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: k8dYcTMZmlPMLM8TeUSd9S0vKZpLEvp0EeHDCImJT4pH9OtsKznZQZ83nO5lxAMkpmzUUbwUg5CWk+toZRDR0pplijk6q17i9ZjtA5TviQvT4i7EAOHIFef+J1eFP4pHsw16Kgi2Dmsgp4Gl7RkcquwHLboX658TCsneToXm60zMOD3GFD7VIszQtKRfG7jw6Fvv5jld2E8za8FH1XphG79L7LNyFzTxZFbSv/ijLfHG441UjteOGRqbv2o5yoA54Hfvv5r8qP9cFKvqwwFBGL0v1fV2k2UaBAQoHYG/4BT+jUWKvaMQJ87hr/iecKvPN3Uml2xDAHlJ5ZSNt+wIiKs7aykNUv54uIx/BQ1RBLyw6KiYxKZi1K3jxmALOyf+j4yN5DEN36Z9+cb1N34ZjOMWEXknrGZrjeRWDx+AOsNjLfEKHR5bWe1wmS/91ck3HP3IgjpH5qG76wZIFuFKS0KHdjyYvibXqXWZPoapgwQrq7C5gC5QLf4hxDIvkH384+EFj+biFreTZEiKbrTW0R8tGQbHhgQDXA9AqLfZFI/moJKWuU9MSf5XSW5CUfuyTdbKrmiay28WuuIYB2oA6L8Zs0qvQ0hp1wItIRsjuWPnRKrT4Rx1+L2+/AQRcYYB3HIDqMCbp5ABMTbsvy+iFKs2b3RifVuBcPfhTZPea37S8Ga9MDSh4dymi+TTgY9lWm56pEpmeRCi5Vfqqpeo+PoXb9auANDP+25/ViuXRmo=
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB03.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(376002)(136003)(39860400002)(396003)(346002)(451199015)(36840700001)(46966006)(40470700004)(83380400001)(36860700001)(82740400003)(103116003)(4326008)(356005)(86362001)(5660300002)(7416002)(70586007)(70206006)(8676002)(2906002)(47076005)(26005)(41300700001)(40480700001)(82310400005)(6666004)(186003)(1076003)(426003)(54906003)(110136005)(316002)(40460700003)(81166007)(8936002)(478600001)(336012)(2616005)(66899015)(36756003)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Jan 2023 08:45:51.7986
  (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: NbA0spXssRWpO7813Y7g3Mq8b4k+zSlFZgfeCOk9OMaZrOouzxh8cOscqRNKX11W/1j2SeFeEfZneZHzEyt+/g==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM8PR11MB5589
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0843cff8-57ee-4273-7ccb-08daee3015e5
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB03.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT089.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB5952
+X-Spam-Status: No, score=-1.1 required=5.0 tests=AC_FROM_MANY_DOTS,BAYES_00,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-Pj4gSSBndWVzcyB0aGUgb3JpZ2luYWwgaXNzdWUgdGhhdCBjb21taXQgd2FzIGZpeGluZyBpcyB0
-byBzYXZlIHRoYXQNCj4+IHJlZHVuZGFudCBvb3BzIG1lc3NhZ2UgYnV0IFRvbnkgc2VlbXMgdG8g
-d2FudCB0byBzZWUgaXQgbm93IGFuZCBJJ20gbm90DQo+PiBzdXJlIGhvdyBtdWNoIHdlIGNhcmUg
-YWJvdXQgODB4NTAgc2NyZWVucyBub3dhZGF5cy4uLiA6LSkNCg0KSSB3YW50IGEgc3RhY2sgZHVt
-cCBmb3IgdGhlIHNwZWNpZmljIGNhc2Ugb2YgYSByZWNvdmVyYWJsZSBtYWNoaW5lIGNoZWNrIGNh
-dXNlZCBieQ0KcG9pc29uIGNvbnN1bXB0aW9uIGluIGtlcm5lbCBjb2RlIHRoYXQgZG9lc24ndCBo
-YXZlIGFuIGV4dGFibGVbXSBlbnRyeSBmb3IgYSByZWNvdmVyeQ0KcGF0aC4gVGhhdCdzIGEgcG90
-ZW50aWFsIGNhbmRpZGF0ZSBmb3IgZnV0dXJlIGtlcm5lbCBjaGFuZ2UgdG8gbWFrZSB0aGF0IHJl
-Y292ZXJhYmxlDQooaWYgdGhlIGNvZGUgcGF0aCBzZWVtcyBjb21tb24gZW5vdWdoIHRvIHdhcnJh
-bnQgdGhlIGNodXJuKSwgYW5kIHRoZXJlIGlzIHNvbWUNCnBsYXVzaWJsZSB3YXkgZm9yIHMvdyB0
-byAicmVjb3ZlciIpLg0KDQpGb3IgbW9zdCBvdGhlciBtYWNoaW5lIGNoZWNrcyB0aGUgZHVtcCBp
-cyB2ZXJ5IGxpa2VseSB1c2VsZXNzLiBFLmcuIHNvbWUgQ1BVIGNvcmUgc3RhbGxlZA0Kc28gdGhh
-dCB0aGUgc3lzdGVtIGdlbmVyYXRlcyBhIGJyb2FkY2FzdCBtYWNoaW5lIGNoZWNrIGJlY2F1c2Ug
-aW5zdHJ1Y3Rpb25zIGFyZSBub3QNCmJlaW5nIHJldGlyZWQgb24gdGhhdCBDUFUgY29yZS4gSW4g
-dGhpcyBjYXNlIHRoZSBtYWNoaW5lIGNoZWNrICJtb25hcmNoIiBpcyBhbG1vc3QgY2VydGFpbmx5
-DQpzb21lIGlubm9jZW50IGJ5c3RhbmRlciB0aGF0IHdhcyBleGVjdXRpbmcgbm9ybWFsbHkuIFN0
-YWNrIGR1bXAgZnJvbSB0aGF0IENQVSBpcyBnb2luZw0KdG8gdGVsbCB5b3Ugbm90aGluZyBhYm91
-dCB0aGUgbWFjaGluZSBjaGVjay4NCg0KLVRvbnkNCg0KDQo=
+Add dt-binding and driver for Xilinx ZynqMP OCM controller.
+
+changes in v7:
+-> 2/2 - Renamed the driver file name to zynqmp_edac.c.
+-> 2/2 - Update the UE error injection logic to use string separator,
+also removed the inject_cebitpos() or inject_uebitpos() and handled in the
+top level inject functions.
+-> 2/2 - Changed the name of the debugfs directory to "ocm" to make it
+simple.
+-> 2/2 - Fixed few more comments like update commit description, used
+IS_ENABLED(CONFIG_EDAC_DEBUG) instead of #ifdef, removing "controller"
+string, local variable ordering.
+
+changes in v6:
+-> 2/2 - Updated subject prefix and commit description.
+-> 2/2 - Used Debugfs instead of sysfs for error injection and
+placed the injection logic under CONFIG_EDAC_DEBUG.
+-> 2/2 - Dropped zynqmp_ocm prefix for all static APIs and structures.
+-> 2/2 - Fixed few more comments related to using caps for acronyms,
+dealing error info, UE logic simplification, using BIT() definitions.
+
+changes in v5:
+-> 1/2, 2/2 - Added 'Co-developed-by' tag.
+-> 2/2 - Updated the driver hep text to be more clear about the hardware
+this driver is targeted.
+-> 2/2 - Fixed the warning reported by kernel test robot.
+
+changes in v4:
+-> 2/2 - Replaced \n\r with \n.
+
+changes in v3:
+-> 1/2 - Moved the binding from edac to memory-controllers directory.
+-> 1/2 - Changed the file name to match with the compatible.
+-> 1/2 - Used additionalProperties instead of unevaluatedProperties.
+-> 1/2 - Used macro instead of constant value.
+
+changes in v2:
+-> 1/2 - Used define for interrupt flag.
+-> 1/2 - Updated the description and title.
+-> 2/2 - Removed Kernel doc for probe and remove.
+-> 2/2 - Used COMPILE_TEST, used wrapper for get and ioremap resource.
+-> 2/2 - Fixed few comments related to static variable declaration
+and print statements.
+
+Sai Krishna Potthuri (1):
+  EDAC/zynqmp: Add EDAC support for Xilinx ZynqMP OCM
+
+Shubhrajyoti Datta (1):
+  dt-bindings: edac: Add bindings for Xilinx ZynqMP OCM
+
+ .../xlnx,zynqmp-ocmc-1.0.yaml                 |  45 ++
+ MAINTAINERS                                   |   7 +
+ drivers/edac/Kconfig                          |   9 +
+ drivers/edac/Makefile                         |   1 +
+ drivers/edac/zynqmp_edac.c                    | 465 ++++++++++++++++++
+ 5 files changed, 527 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/memory-controllers/xlnx,zynqmp-ocmc-1.0.yaml
+ create mode 100644 drivers/edac/zynqmp_edac.c
+
+-- 
+2.25.1
+
