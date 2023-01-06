@@ -2,70 +2,89 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 745B065D339
-	for <lists+linux-edac@lfdr.de>; Wed,  4 Jan 2023 13:54:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F13DF65F952
+	for <lists+linux-edac@lfdr.de>; Fri,  6 Jan 2023 02:57:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231795AbjADMyp (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Wed, 4 Jan 2023 07:54:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35498 "EHLO
+        id S229532AbjAFB5S (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Thu, 5 Jan 2023 20:57:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234317AbjADMye (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Wed, 4 Jan 2023 07:54:34 -0500
-Received: from mail-qk1-x733.google.com (mail-qk1-x733.google.com [IPv6:2607:f8b0:4864:20::733])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89F9F1D0CF
-        for <linux-edac@vger.kernel.org>; Wed,  4 Jan 2023 04:54:32 -0800 (PST)
-Received: by mail-qk1-x733.google.com with SMTP id k2so16210749qkk.7
-        for <linux-edac@vger.kernel.org>; Wed, 04 Jan 2023 04:54:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=g2m/uNsCm/OsAUZxAnJOSdXXDa9Gh4wg88n4VPL2lMU=;
-        b=WgtPiGBL7pKpeGAONT7jyOZBlPA87PF+BcZ0At3DRbjh8r4a90VkFTuegmf7v5I05U
-         8O8yRsMlEC8d3azBuhTVnh5a19IMri1yaM5CNo7nGSQjhbPmAzApkJwS9Ixgc01L8XVA
-         9+oXPryfLJjc92HnUP6sxIyah9VARXZTMfFxXMcqBFJ6snOmablGghR0F2+Y0sgoHgie
-         QmoiaDCXomaXijXUVGiYmzsfSWGfWMMdh1Ev9V0gp78bfPbYO2S9uBzuU4GRDkm7vJO6
-         RsJ5hkLkj5KAchsYozNwRuUxQUGpmscZ9Mbjv/HN5G//qfUumyrbxcj+0dSg+lcPq80U
-         5Wuw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=g2m/uNsCm/OsAUZxAnJOSdXXDa9Gh4wg88n4VPL2lMU=;
-        b=oKg+8E8DIMpcmP78yWhImOGa0/228XoWQ3dCAMMM3YMeZqOru8WRUHGMl1idfJhwQP
-         0IO187V2D8FPpzEslWTUjWFvPszGTpe3mpR9g57W1WEzUXsYKeKF7swPGN1/5G9/JWmx
-         2/m1cxV4+lmIIolNVgW6xVWC4+RFQvEgQ/TMJfI7DlXDbxOP3b0Wy8VARgMlunMU1t4Y
-         kViH1Yc23/rN+WrfL8hawboIDrQlXucW8TlnCnynWPn5sbiXZtm7ekNrYACx7vDCjIcQ
-         WI4xgzSoI+0pha+saNjUKA32cDm8FJwRm+41Va0NeCJjHnIEE3uT4g9NMUi7gFoEjHz1
-         KPOg==
-X-Gm-Message-State: AFqh2krGZvNn8G4qUpSpAbPNuI/ZA8ZZRZVcOt6PTItNs12D9G4J7xEL
-        gBZ+uTPj4gnPNKGalaxHxoWh8QhxvFFUY+rqZ0A=
-X-Google-Smtp-Source: AMrXdXulKMdRBV/p4kXNikXMHFtLk5IOIYLDRJA7lpoRUfUF8+2cEqH8pHXLi4qSeE4J34Id+Th3n/mMQjaZgJWZFyc=
-X-Received: by 2002:a05:620a:8502:b0:704:ad9e:ad7 with SMTP id
- pe2-20020a05620a850200b00704ad9e0ad7mr1970941qkn.574.1672836871311; Wed, 04
- Jan 2023 04:54:31 -0800 (PST)
+        with ESMTP id S229455AbjAFB5R (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Thu, 5 Jan 2023 20:57:17 -0500
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7A0C13D75;
+        Thu,  5 Jan 2023 17:57:15 -0800 (PST)
+Received: from canpemm500002.china.huawei.com (unknown [172.30.72.57])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Np5z35QDhzJrFL;
+        Fri,  6 Jan 2023 09:55:59 +0800 (CST)
+Received: from [10.174.151.185] (10.174.151.185) by
+ canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.34; Fri, 6 Jan 2023 09:57:12 +0800
+Subject: Re: [PATCH] mce: fix missing stack-dumping in mce_panic()
+To:     "Luck, Tony" <tony.luck@intel.com>
+CC:     "x86@kernel.org" <x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>,
+        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        Borislav Petkov <bp@alien8.de>
+References: <20221202163728.392509-1-linmiaohe@huawei.com>
+ <SJ1PR11MB60830CE8C3F79C9531C8567AFC179@SJ1PR11MB6083.namprd11.prod.outlook.com>
+ <5cf492bf-9807-a091-6ac2-a953fce276da@huawei.com> <Y61/+V47qH/8OVxp@zn.tnic>
+ <1e97c11d-99b6-c06f-b67f-c56ba6653d27@huawei.com> <Y62NVThhnGtnj71u@zn.tnic>
+ <276c9e6b-d647-6f7f-7bd1-c1f45ca23261@huawei.com>
+ <SJ1PR11MB60831AB2202FF0C3CF99EF1DFCF49@SJ1PR11MB6083.namprd11.prod.outlook.com>
+From:   Miaohe Lin <linmiaohe@huawei.com>
+Message-ID: <b63056f9-0709-736b-ea5b-5e903410cb1d@huawei.com>
+Date:   Fri, 6 Jan 2023 09:57:12 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 MIME-Version: 1.0
-Received: by 2002:a05:6200:5d91:b0:4a5:78e9:2012 with HTTP; Wed, 4 Jan 2023
- 04:54:30 -0800 (PST)
-Reply-To: Gregdenzell9@gmail.com
-From:   Greg Denzell <mzsophie@gmail.com>
-Date:   Wed, 4 Jan 2023 12:54:30 +0000
-Message-ID: <CAEoj5=a-iCsZoe4s4S8=o2P=8nfbDVvG8sm_YZ9wpP37ZOqYKA@mail.gmail.com>
-Subject: 
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=4.6 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
-        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: ****
+In-Reply-To: <SJ1PR11MB60831AB2202FF0C3CF99EF1DFCF49@SJ1PR11MB6083.namprd11.prod.outlook.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.151.185]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ canpemm500002.china.huawei.com (7.192.104.244)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-Seasons Greetings!
+On 2023/1/4 5:12, Luck, Tony wrote:
+>>> I guess the original issue that commit was fixing is to save that
+>>> redundant oops message but Tony seems to want to see it now and I'm not
+>>> sure how much we care about 80x50 screens nowadays... :-)
+> 
 
-This will remind you again that I have not yet received your reply to
-my last message to you.
+Many thanks for your thought. :)
+
+> I want a stack dump for the specific case of a recoverable machine check caused by
+> poison consumption in kernel code that doesn't have an extable[] entry for a recovery
+> path. That's a potential candidate for future kernel change to make that recoverable
+
+Sure, in this case a stack dump will be really helpful. We can gather these stack dumps
+and try to make the most frequent machine check scene recoverable.
+
+> (if the code path seems common enough to warrant the churn), and there is some
+> plausible way for s/w to "recover").
+> 
+> For most other machine checks the dump is very likely useless. E.g. some CPU core stalled
+> so that the system generates a broadcast machine check because instructions are not
+> being retired on that CPU core. In this case the machine check "monarch" is almost certainly
+> some innocent bystander that was executing normally. Stack dump from that CPU is going
+> to tell you nothing about the machine check.
+
+Agree. A stack dump won't be helpful in this case. But I tend to keep the stack dump in case
+it would be helpful and also make mce_panic() dumps the stack as expected. What do you think?
+
+Thanks,
+Miaohe Lin
