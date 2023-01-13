@@ -2,41 +2,41 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1523C668A1B
-	for <lists+linux-edac@lfdr.de>; Fri, 13 Jan 2023 04:29:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DBC7668A22
+	for <lists+linux-edac@lfdr.de>; Fri, 13 Jan 2023 04:31:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231169AbjAMD24 (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Thu, 12 Jan 2023 22:28:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46682 "EHLO
+        id S231347AbjAMDa3 (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Thu, 12 Jan 2023 22:30:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232678AbjAMD23 (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Thu, 12 Jan 2023 22:28:29 -0500
+        with ESMTP id S232726AbjAMD2a (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Thu, 12 Jan 2023 22:28:30 -0500
 Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0586E0BE;
-        Thu, 12 Jan 2023 19:28:26 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 123C61A21A;
+        Thu, 12 Jan 2023 19:28:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1673580506; x=1705116506;
+  t=1673580509; x=1705116509;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references;
-  bh=YeWtQNX9AjCiNG5++5pmYcJReh+RFVKd/BHotyPMTjI=;
-  b=WPT6mayHy9giJFd6osnyB0Ar0x+L4R2TIF9Qn/VSXPV+Ka8ZqgHIEA9l
-   RBakir8I0u3R3P4FsieNggtYeNW07/w0I2fB1FPtOUU6FW3AEW3YNZ2ui
-   FOVYXAdHuV9rpolBLPpuSsnc/q04cYF8NonNiDEVW1tvPTChVuCdK5dz6
-   LceJ5v+SZj/7T2wbcw2Jla6plQriNldj3UbepzcMCZFDOPRN23UgSyNUc
-   iY5rMmCo2pAD6a/Qsvnxnd6mFKvvenHI4ndCpe+W0l/EMKluxZ8v5gh0G
-   0kyh/9jwoOcInfZo2I8VabqlRX2QSH7FNUoZWT6741D6KMTLQOfIGa/lS
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10588"; a="410138852"
+  bh=WFGpcb2BGEaC7cyAn+o6T1CTx9FgSPGQkWdb0KmwAws=;
+  b=VP0C4JJheK72BsrgrrWe0IKxTYJBvfijJIxLN8RWMDNwJwWy4RHx9aL9
+   6AI8wrwWMGCQhfPoRIJdEuoEV68BjMUnFSl8ALWijpYymJswTxHLwdVLA
+   qlss7PiiVgIGo9xJ1nVuXw+aQfQnhwbPQdVlen/ZFCmBx8ySNDsd2Pi7b
+   Jmym/MEpDp75nKjRcL3x3HtazJc60O9AFy1XlY57AdfOVlpipWpBGJ8/O
+   4esyaniSNnXq42Tl/w3CiKG9auZQwRiLlT+x0A0aGPozGAZgelOCnYK4Y
+   SKpYEXN9BWjIWhFLauwgNBYALb2fuxPWfGZdFZSMe2Yz63dHiqZ4wSKuE
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10588"; a="410138859"
 X-IronPort-AV: E=Sophos;i="5.97,212,1669104000"; 
-   d="scan'208";a="410138852"
+   d="scan'208";a="410138859"
 Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2023 19:28:26 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10588"; a="651386218"
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2023 19:28:28 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10588"; a="651386230"
 X-IronPort-AV: E=Sophos;i="5.97,212,1669104000"; 
-   d="scan'208";a="651386218"
+   d="scan'208";a="651386230"
 Received: from qiuxu-clx.sh.intel.com ([10.239.53.105])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2023 19:28:23 -0800
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2023 19:28:26 -0800
 From:   Qiuxu Zhuo <qiuxu.zhuo@intel.com>
 To:     Tony Luck <tony.luck@intel.com>
 Cc:     Qiuxu Zhuo <qiuxu.zhuo@intel.com>, Borislav Petkov <bp@alien8.de>,
@@ -45,9 +45,9 @@ Cc:     Qiuxu Zhuo <qiuxu.zhuo@intel.com>, Borislav Petkov <bp@alien8.de>,
         Youquan Song <youquan.song@intel.com>,
         Li Zhang <li4.zhang@intel.com>, linux-edac@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 2/5] EDAC/skx_common: Delete duplicated and unreachable code
-Date:   Fri, 13 Jan 2023 11:27:59 +0800
-Message-Id: <20230113032802.41752-3-qiuxu.zhuo@intel.com>
+Subject: [PATCH 3/5] EDAC/i10nm: Add Intel Emerald Rapids server support
+Date:   Fri, 13 Jan 2023 11:28:00 +0800
+Message-Id: <20230113032802.41752-4-qiuxu.zhuo@intel.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20230113032802.41752-1-qiuxu.zhuo@intel.com>
 References: <20230113032802.41752-1-qiuxu.zhuo@intel.com>
@@ -60,86 +60,28 @@ Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-skx_mce_check_error() returns early if the error isn't from memory.
-So when skx_mce_output_error() is invoked from skx_mce_check_error(),
-it doesn't need to re-check whether the error is from memory. Delete
-the duplicated and unreachable code from skx_mce_output_error().
+The Emerald Rapids CPU model uses similar memory controller registers
+as Sapphire Rapids server. Add Emerald Rapids CPU model number ID for
+EDAC support.
 
+Tested-by: Li Zhang <li4.zhang@intel.com>
 Signed-off-by: Qiuxu Zhuo <qiuxu.zhuo@intel.com>
 ---
- drivers/edac/skx_common.c | 58 ++++++++++++++-------------------------
- 1 file changed, 21 insertions(+), 37 deletions(-)
+ drivers/edac/i10nm_base.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/edac/skx_common.c b/drivers/edac/skx_common.c
-index 5fdcb6d5b96b..fd8186fe005c 100644
---- a/drivers/edac/skx_common.c
-+++ b/drivers/edac/skx_common.c
-@@ -560,44 +560,28 @@ static void skx_mce_output_error(struct mem_ctl_info *mci,
- 		tp_event = HW_EVENT_ERR_CORRECTED;
- 	}
- 
--	/*
--	 * According to Intel Architecture spec vol 3B,
--	 * Table 15-10 "IA32_MCi_Status [15:0] Compound Error Code Encoding"
--	 * memory errors should fit one of these masks:
--	 *	000f 0000 1mmm cccc (binary)
--	 *	000f 0010 1mmm cccc (binary)	[RAM used as cache]
--	 * where:
--	 *	f = Correction Report Filtering Bit. If 1, subsequent errors
--	 *	    won't be shown
--	 *	mmm = error type
--	 *	cccc = channel
--	 * If the mask doesn't match, report an error to the parsing logic
--	 */
--	if (!((errcode & 0xef80) == 0x80 || (errcode & 0xef80) == 0x280)) {
--		optype = "Can't parse: it is not a mem";
--	} else {
--		switch (optypenum) {
--		case 0:
--			optype = "generic undef request error";
--			break;
--		case 1:
--			optype = "memory read error";
--			break;
--		case 2:
--			optype = "memory write error";
--			break;
--		case 3:
--			optype = "addr/cmd error";
--			break;
--		case 4:
--			optype = "memory scrubbing error";
--			scrub_err = true;
--			break;
--		default:
--			optype = "reserved";
--			break;
--		}
-+	switch (optypenum) {
-+	case 0:
-+		optype = "generic undef request error";
-+		break;
-+	case 1:
-+		optype = "memory read error";
-+		break;
-+	case 2:
-+		optype = "memory write error";
-+		break;
-+	case 3:
-+		optype = "addr/cmd error";
-+		break;
-+	case 4:
-+		optype = "memory scrubbing error";
-+		scrub_err = true;
-+		break;
-+	default:
-+		optype = "reserved";
-+		break;
- 	}
-+
- 	if (res->decoded_by_adxl) {
- 		len = snprintf(skx_msg, MSG_SIZE, "%s%s err_code:0x%04x:0x%04x %s",
- 			 overflow ? " OVERFLOW" : "",
+diff --git a/drivers/edac/i10nm_base.c b/drivers/edac/i10nm_base.c
+index 65aeea53e2df..e11726f7fe36 100644
+--- a/drivers/edac/i10nm_base.c
++++ b/drivers/edac/i10nm_base.c
+@@ -637,6 +637,7 @@ static const struct x86_cpu_id i10nm_cpuids[] = {
+ 	X86_MATCH_INTEL_FAM6_MODEL_STEPPINGS(ICELAKE_X,		X86_STEPPINGS(0x4, 0xf), &i10nm_cfg1),
+ 	X86_MATCH_INTEL_FAM6_MODEL_STEPPINGS(ICELAKE_D,		X86_STEPPINGS(0x0, 0xf), &i10nm_cfg1),
+ 	X86_MATCH_INTEL_FAM6_MODEL_STEPPINGS(SAPPHIRERAPIDS_X,	X86_STEPPINGS(0x0, 0xf), &spr_cfg),
++	X86_MATCH_INTEL_FAM6_MODEL_STEPPINGS(EMERALDRAPIDS_X,	X86_STEPPINGS(0x0, 0xf), &spr_cfg),
+ 	{}
+ };
+ MODULE_DEVICE_TABLE(x86cpu, i10nm_cpuids);
 -- 
 2.17.1
 
