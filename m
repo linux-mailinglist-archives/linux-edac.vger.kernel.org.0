@@ -2,52 +2,53 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6072267209D
-	for <lists+linux-edac@lfdr.de>; Wed, 18 Jan 2023 16:09:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A0AF86720A4
+	for <lists+linux-edac@lfdr.de>; Wed, 18 Jan 2023 16:09:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231591AbjARPJg (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Wed, 18 Jan 2023 10:09:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41140 "EHLO
+        id S231536AbjARPJi (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Wed, 18 Jan 2023 10:09:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231601AbjARPJO (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Wed, 18 Jan 2023 10:09:14 -0500
-Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C34E4E3A0
-        for <linux-edac@vger.kernel.org>; Wed, 18 Jan 2023 07:09:13 -0800 (PST)
-Received: by mail-pg1-x536.google.com with SMTP id b12so24713227pgj.6
-        for <linux-edac@vger.kernel.org>; Wed, 18 Jan 2023 07:09:13 -0800 (PST)
+        with ESMTP id S230083AbjARPJV (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Wed, 18 Jan 2023 10:09:21 -0500
+Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18C931E5FD
+        for <linux-edac@vger.kernel.org>; Wed, 18 Jan 2023 07:09:20 -0800 (PST)
+Received: by mail-pf1-x429.google.com with SMTP id a184so26405546pfa.9
+        for <linux-edac@vger.kernel.org>; Wed, 18 Jan 2023 07:09:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=gJRpDkAWdNVeG+3ux4pXN9X9wp3s1VOm2aF1gDmoa0E=;
-        b=N5jLJ5iTNyZpiLoDMHJQRhnO+YbrZvnSwRFOp/YFXp6rJ1NpFoKZBfPC+gD65c1zmF
-         786APahvfRyOO8v9N5vI1ojuskFWN+LBwLBjxSgAcT/6N1SHp5e7JQIPjHT6cH9bxNkd
-         xZZnPIvQleeF/SqNdElbdeVdJCQg+fXTBh8VvojT+xMn+87m4D5fco7ydyC57hfkZ3DR
-         PGxgAnIHq0JOyZS36ib0gMqtzPVy1VD7fNo5CI93dSiDtPJlZ14v1wWhbcszI2eYG+yh
-         pyq/rM9YBRN7i29/O0H62NpSGoZo6rldORMwvPdkTFZ+lD3D6O7Z250Y24DxzqHv8sIG
-         FDUw==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=5b3A1ENOut7aNsWCrE1p0bbYMaJf6g4gCfGrBW3niiU=;
+        b=V0GP2xZ9ALQYbIs2LpKz6ECcKJ0MwWRBh+9tbtdCd69NptGSqFuVgnCHV6YB3wnpcS
+         Ed4f0BxPWm19o496hKKuim/EzFn0+HVy31f4wVz1JbLRVw6wAgA4t/o+fidVDwn5TJO8
+         S5i8dxfc8PolN013w5Vza0OsMLzqhRD/kd9NE32WHFrbj7JBlFfWJ6LEja8cHUCw5oKK
+         kl2Rq9EWsPy8u1s5Ok5LBK01d7Txsy+Ue6ahfFK7M26noXN8L0OVCxszE9sfOJ7iB1/g
+         Ac3KKs+4TNRxLrq7WylSVABz0FipAs6S7Z6vN070gKKBNuaGiD/A2gbwWd5k7NLmoFEr
+         Uazg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=gJRpDkAWdNVeG+3ux4pXN9X9wp3s1VOm2aF1gDmoa0E=;
-        b=kIo/9e9DhzVuEGStibuGM2tyFG2x8RSjDRrhOGY+uWIW4IaiNor05KAEIipNqiDpXU
-         gWT6h7L1I5IGC2+F5NyMB/ogar/PAH1F1792tEhpoNWeSTr6RApK0xWZYaPp6lNIQXsJ
-         FhcoH6CorpXJHMk6huN/Y1bpTZaDiXkNEGNtAHGTmmrAiGN6dTHc4oW9WDEPi9FEpb4Z
-         yBWGTxcGMHI3aShCRcBVPufW1YTrO4HQGzxwO3aRsxcrwzbVqd9bTLwab95bzMB0FHYt
-         IO0PoRpzeG3i1f+uc3VW6tpywAyWq4GAn0FwjshTBXQ0C2z9zYWlb/biWJzn/GY+Rfr5
-         Dj5w==
-X-Gm-Message-State: AFqh2krQgA874OsSws7PU6IWwPGcddz70cC8vxMUmFAcV9pBqZsjbWE8
-        M6L4+aIU6OpFSLpeQPutmbjk
-X-Google-Smtp-Source: AMrXdXvSilF39mYwBYHz843iCklsdE2CDWk1LmcEd6ufWUM17OBhnwXxwqYBQopC/dczMRMohwX77A==
-X-Received: by 2002:a05:6a00:70f:b0:581:1f4b:d1e5 with SMTP id 15-20020a056a00070f00b005811f4bd1e5mr8195246pfl.12.1674054553291;
-        Wed, 18 Jan 2023 07:09:13 -0800 (PST)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=5b3A1ENOut7aNsWCrE1p0bbYMaJf6g4gCfGrBW3niiU=;
+        b=L533Trswy23c22SnlGoYwL+BOV7U52GyFjdjGpqtPq0N+bVA4oatNE0RcH81Wofuu6
+         Xvq+p3vNHTIfpl3x3sB73x/YqGjjS13VEDZeBNcRP1ALJmu6s9HerODGphpqhAlOvOuy
+         LHV1S4qAM4zURA2uvUprzIZAnzebrgk+Vr5ymTMRw8gZJTOv+ozJoO8oZZTKHLB9o+IU
+         kyGLjvg4nkXM5wxHfcdSqh9jCnYfMle60AFxIZid9HBaEvO4UcFsjbd/cqxjxjUwmJhI
+         dGZ1uvQ3Psr6s5el1+o4Yi9fKCKd2oHKcuZZHea2S0i38rrPUkg0ZDniA2F12AlZChJK
+         7MBw==
+X-Gm-Message-State: AFqh2kqNi1gbHut8hjP5XPHDE3IXwtUh0Q44ca8FHOB8M6kCGdYJM545
+        P/3o0qnQ2PgqzZ7Ef+lfxYJ9
+X-Google-Smtp-Source: AMrXdXsLTWywF4NbchUpZhySfS8ietOm7jmmeDUYkw4BmqGHBpj3Pb/+0uYWijxasklhMlDHCZX1FQ==
+X-Received: by 2002:aa7:8d11:0:b0:587:f436:6ea8 with SMTP id j17-20020aa78d11000000b00587f4366ea8mr6651438pfe.16.1674054559488;
+        Wed, 18 Jan 2023 07:09:19 -0800 (PST)
 Received: from localhost.localdomain ([27.111.75.61])
-        by smtp.gmail.com with ESMTPSA id i15-20020aa796ef000000b0058d9623e7f1sm6721544pfq.73.2023.01.18.07.09.07
+        by smtp.gmail.com with ESMTPSA id i15-20020aa796ef000000b0058d9623e7f1sm6721544pfq.73.2023.01.18.07.09.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 Jan 2023 07:09:12 -0800 (PST)
+        Wed, 18 Jan 2023 07:09:18 -0800 (PST)
 From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 To:     andersson@kernel.org, robh+dt@kernel.org,
         krzysztof.kozlowski+dt@linaro.org, bp@alien8.de,
@@ -57,11 +58,14 @@ Cc:     quic_saipraka@quicinc.com, konrad.dybcio@linaro.org,
         james.morse@arm.com, mchehab@kernel.org, rric@kernel.org,
         linux-edac@vger.kernel.org, quic_ppareek@quicinc.com,
         luca.weiss@fairphone.com, ahalaney@redhat.com, steev@kali.org,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Subject: [PATCH v6 00/17] Qcom: LLCC/EDAC: Fix base address used for LLCC banks
-Date:   Wed, 18 Jan 2023 20:38:47 +0530
-Message-Id: <20230118150904.26913-1-manivannan.sadhasivam@linaro.org>
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        stable@vger.kernel.org
+Subject: [PATCH v6 01/17] EDAC/device: Respect any driver-supplied workqueue polling value
+Date:   Wed, 18 Jan 2023 20:38:48 +0530
+Message-Id: <20230118150904.26913-2-manivannan.sadhasivam@linaro.org>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20230118150904.26913-1-manivannan.sadhasivam@linaro.org>
+References: <20230118150904.26913-1-manivannan.sadhasivam@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -74,104 +78,77 @@ Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-The Qualcomm LLCC/EDAC drivers were using a fixed register stride for
-accessing the (Control and Status Regsiters) CSRs of each LLCC bank.
-This offset only works for some SoCs like SDM845 for which driver support
-was initially added.
-    
-But the later SoCs use different register stride that vary between the
-banks with holes in-between. So it is not possible to use a single register
-stride for accessing the CSRs of each bank. By doing so could result in a
-crash with the current drivers. So far this crash is not reported since
-EDAC_QCOM driver is not enabled in ARM64 defconfig and no one tested the
-driver extensively by triggering the EDAC IRQ (that's where each bank
-CSRs are accessed).
+The EDAC drivers may optionally pass the poll_msec value. Use that value
+if available, else fall back to 1000ms.
 
-For fixing this issue, let's obtain the base address of each LLCC bank from
-devicetree and get rid of the fixed stride.
+  [ bp: Touchups. ]
 
-This series has been tested on SM8250, SM8450, SM6350, SC8280XP, SA8540P,
-and SDM845.
+Fixes: e27e3dac6517 ("drivers/edac: add edac_device class")
+Reported-by: Luca Weiss <luca.weiss@fairphone.com>
+Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Signed-off-by: Borislav Petkov (AMD) <bp@alien8.de>
+Tested-by: Steev Klimaszewski <steev@kali.org> # Thinkpad X13s
+Tested-by: Andrew Halaney <ahalaney@redhat.com> # sa8540p-ride
+Cc: <stable@vger.kernel.org> # 4.9
+Link: https://lore.kernel.org/r/COZYL8MWN97H.MROQ391BGA09@otso
+---
+ drivers/edac/edac_device.c | 15 +++++++--------
+ 1 file changed, 7 insertions(+), 8 deletions(-)
 
-Merging strategy
-----------------
-
-All patches should be merged to qcom tree due to LLCC dependency.
-
-Thanks,
-Mani
-
-Changes in v6:
-
-* Incorporated comments from Borislav for the EDAC patches and collected
-  review tags.
-
-Changes in v5:
-
-* Reduced the size of llcc0 to 0x45000 on SDM845 due to overlapping with BWMON
-* Added a patch to disable creation of EDAC platform device on SDM845
-* Rebase on top of v6.2-rc1
-* Moved the EDAC specific patches to the start so that they can be applied
-  independently of LLCC patches
-
-Changes in v4:
-
-* Added a patch that fixes the use-after-free bug in qcom_edac driver
-
-Changes in v3:
-
-* Brought back reg-names property for compatibility (Krzysztof)
-* Removed Fixes tag and stable list as backporting the drivers/binding/dts
-  patches alone would break (Krzysztof)
-* Fixed the uninitialized variable issue (Kbot)
-* Added a patch to make use of driver supplied polling interval (Luca)
-* Added a patch for module autoloading (Andrew)
-* Didn't collect Review tags from Sai as the dts patches were changed.
-
-Changes in v2:
-
-* Removed reg-names property and used index of reg property to parse LLCC
-  bank base address (Bjorn)
-* Collected Ack from Sai for binding
-* Added a new patch for polling mode (Luca)
-* Renamed subject of patches targeting SC7180 and SM6350
-
-Manivannan Sadhasivam (17):
-  EDAC/device: Respect any driver-supplied workqueue polling value
-  EDAC/qcom: Add platform_device_id table for module autoloading
-  EDAC/qcom: Do not pass llcc_driv_data as edac_device_ctl_info's
-    pvt_info
-  dt-bindings: arm: msm: Update the maintainers for LLCC
-  dt-bindings: arm: msm: Fix register regions used for LLCC banks
-  arm64: dts: qcom: sdm845: Fix the base addresses of LLCC banks
-  arm64: dts: qcom: sc7180: Fix the base addresses of LLCC banks
-  arm64: dts: qcom: sc7280: Fix the base addresses of LLCC banks
-  arm64: dts: qcom: sc8280xp: Fix the base addresses of LLCC banks
-  arm64: dts: qcom: sm8150: Fix the base addresses of LLCC banks
-  arm64: dts: qcom: sm8250: Fix the base addresses of LLCC banks
-  arm64: dts: qcom: sm8350: Fix the base addresses of LLCC banks
-  arm64: dts: qcom: sm8450: Fix the base addresses of LLCC banks
-  arm64: dts: qcom: sm6350: Fix the base addresses of LLCC banks
-  qcom: llcc/edac: Fix the base address used for accessing LLCC banks
-  qcom: llcc/edac: Support polling mode for ECC handling
-  soc: qcom: llcc: Do not create EDAC platform device on SDM845
-
- .../bindings/arm/msm/qcom,llcc.yaml           | 128 ++++++++++++++++--
- arch/arm64/boot/dts/qcom/sc7180.dtsi          |   2 +-
- arch/arm64/boot/dts/qcom/sc7280.dtsi          |   5 +-
- arch/arm64/boot/dts/qcom/sc8280xp.dtsi        |  10 +-
- arch/arm64/boot/dts/qcom/sdm845.dtsi          |   7 +-
- arch/arm64/boot/dts/qcom/sm6350.dtsi          |   2 +-
- arch/arm64/boot/dts/qcom/sm8150.dtsi          |   7 +-
- arch/arm64/boot/dts/qcom/sm8250.dtsi          |   7 +-
- arch/arm64/boot/dts/qcom/sm8350.dtsi          |   7 +-
- arch/arm64/boot/dts/qcom/sm8450.dtsi          |   7 +-
- drivers/edac/edac_device.c                    |  15 +-
- drivers/edac/qcom_edac.c                      |  76 ++++++-----
- drivers/soc/qcom/llcc-qcom.c                  |  80 ++++++-----
- include/linux/soc/qcom/llcc-qcom.h            |   6 +-
- 14 files changed, 253 insertions(+), 106 deletions(-)
-
+diff --git a/drivers/edac/edac_device.c b/drivers/edac/edac_device.c
+index 19522c568aa5..a50b7bcfb731 100644
+--- a/drivers/edac/edac_device.c
++++ b/drivers/edac/edac_device.c
+@@ -34,6 +34,9 @@
+ static DEFINE_MUTEX(device_ctls_mutex);
+ static LIST_HEAD(edac_device_list);
+ 
++/* Default workqueue processing interval on this instance, in msecs */
++#define DEFAULT_POLL_INTERVAL 1000
++
+ #ifdef CONFIG_EDAC_DEBUG
+ static void edac_device_dump_device(struct edac_device_ctl_info *edac_dev)
+ {
+@@ -336,7 +339,7 @@ static void edac_device_workq_function(struct work_struct *work_req)
+ 	 * whole one second to save timers firing all over the period
+ 	 * between integral seconds
+ 	 */
+-	if (edac_dev->poll_msec == 1000)
++	if (edac_dev->poll_msec == DEFAULT_POLL_INTERVAL)
+ 		edac_queue_work(&edac_dev->work, round_jiffies_relative(edac_dev->delay));
+ 	else
+ 		edac_queue_work(&edac_dev->work, edac_dev->delay);
+@@ -366,7 +369,7 @@ static void edac_device_workq_setup(struct edac_device_ctl_info *edac_dev,
+ 	 * timers firing on sub-second basis, while they are happy
+ 	 * to fire together on the 1 second exactly
+ 	 */
+-	if (edac_dev->poll_msec == 1000)
++	if (edac_dev->poll_msec == DEFAULT_POLL_INTERVAL)
+ 		edac_queue_work(&edac_dev->work, round_jiffies_relative(edac_dev->delay));
+ 	else
+ 		edac_queue_work(&edac_dev->work, edac_dev->delay);
+@@ -398,7 +401,7 @@ void edac_device_reset_delay_period(struct edac_device_ctl_info *edac_dev,
+ {
+ 	unsigned long jiffs = msecs_to_jiffies(value);
+ 
+-	if (value == 1000)
++	if (value == DEFAULT_POLL_INTERVAL)
+ 		jiffs = round_jiffies_relative(value);
+ 
+ 	edac_dev->poll_msec = value;
+@@ -443,11 +446,7 @@ int edac_device_add_device(struct edac_device_ctl_info *edac_dev)
+ 		/* This instance is NOW RUNNING */
+ 		edac_dev->op_state = OP_RUNNING_POLL;
+ 
+-		/*
+-		 * enable workq processing on this instance,
+-		 * default = 1000 msec
+-		 */
+-		edac_device_workq_setup(edac_dev, 1000);
++		edac_device_workq_setup(edac_dev, edac_dev->poll_msec ?: DEFAULT_POLL_INTERVAL);
+ 	} else {
+ 		edac_dev->op_state = OP_RUNNING_INTERRUPT;
+ 	}
 -- 
 2.25.1
 
