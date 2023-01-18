@@ -2,99 +2,170 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FE8267176E
-	for <lists+linux-edac@lfdr.de>; Wed, 18 Jan 2023 10:23:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CC85A672097
+	for <lists+linux-edac@lfdr.de>; Wed, 18 Jan 2023 16:08:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229769AbjARJXg (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Wed, 18 Jan 2023 04:23:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45472 "EHLO
+        id S231165AbjARPIy (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Wed, 18 Jan 2023 10:08:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230186AbjARJVR (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Wed, 18 Jan 2023 04:21:17 -0500
-Received: from mail.bostmarktrun.com (mail.bostmarktrun.com [135.125.238.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 143ED5D7F5
-        for <linux-edac@vger.kernel.org>; Wed, 18 Jan 2023 00:46:06 -0800 (PST)
-Received: by mail.bostmarktrun.com (Postfix, from userid 1002)
-        id BD75CA2845; Wed, 18 Jan 2023 08:45:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=bostmarktrun.com;
-        s=mail; t=1674031564;
-        bh=gfWmJwOZk+B/IN1TMPg7emKhIvoExrJdUiyEL8yd2Jk=;
-        h=Date:From:To:Subject:From;
-        b=uxVSXgrI/xDZpm+l2SMtn6aVNLUTAI91r5lKhDKZBGvaOROQdwIZ2yPYFXCnwbeZz
-         P77ONosK+gcYCZHkpvhZUTGXd1zKneQP8lwaUaWdpfEWI3klkOCDTmGgh64wpKts1b
-         3N7zEG4EvFIy0RD0EuNl0ck3D/PlGwxLrdHeX3GyjOphcHF+mnXm7nHeRlRuZZ0aAy
-         JniKQNc489DRCNF0gEWWIZRQ7fxeR2TppxOmIKlWYhV2RT+LweLxvGjUxoUvFJrrYM
-         zz3Ksc3y8yrUXiVe9w2DXgQ8FhknJCwuVMv9f2Up8GaxmzR/eNKA5lduLx6rHBQf5b
-         c6/X5hNsw4cFg==
-Received: by mail.bostmarktrun.com for <linux-edac@vger.kernel.org>; Wed, 18 Jan 2023 08:45:33 GMT
-Message-ID: <20230118074500-0.1.4p.wrck.0.5yn43ydilr@bostmarktrun.com>
-Date:   Wed, 18 Jan 2023 08:45:33 GMT
-From:   "Corey Webb" <corey.webb@bostmarktrun.com>
-To:     <linux-edac@vger.kernel.org>
-Subject: Custom Software Development
-X-Mailer: mail.bostmarktrun.com
+        with ESMTP id S229663AbjARPIx (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Wed, 18 Jan 2023 10:08:53 -0500
+Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D71F3C21
+        for <linux-edac@vger.kernel.org>; Wed, 18 Jan 2023 07:08:52 -0800 (PST)
+Received: by mail-pg1-x52a.google.com with SMTP id f3so24715804pgc.2
+        for <linux-edac@vger.kernel.org>; Wed, 18 Jan 2023 07:08:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=SKmSPzWqZ8ALeqBUAuKuTur5DqPtQNtoVkZGVtUKqkc=;
+        b=SEB1fd7t26dvqJ6O9uhv8Lq/OAzXBLBnnzcNMfGa0vrE61hl7P3K8rUjbUxbeFiCTM
+         qBoNJwKVW+Mb5qc/2OQADOVnzVrt6w8bRRLXdOAtK7dPGEEuVLr1StSF0N5QMUNo8wSN
+         Eg3C8C9QxHdlnqxGw3laUnLCQRX2zLuH38fMQpBEb0Fd2H5Nupo7MEfko1abDxzSsUO5
+         VbBC7oXB+sRc9b0zl5r1nCz4VNMkPScd0/yA+WJsTwq/jumhXW18EQLZsygpnyma3h38
+         YJCYHcAulTneVgauNe8+x021oODQ4WD7DljhJ2FMsUy1AiVQd6VlbDaND6FmOeveGaay
+         Ss6A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=SKmSPzWqZ8ALeqBUAuKuTur5DqPtQNtoVkZGVtUKqkc=;
+        b=AtdxgbBgdXmy5BTB5IUb+5d8p6KnA5d5p11tkVXUkOCDTjmHg2Ib9aMRo7NXNALLww
+         knqA+tRV+8+LQLgW6W/qQL6YtSat9iYdBqJ6ZR3V508ssd1hDWZDpqLE7p6b9uxrTeRY
+         f6tGzL+o6AB6kdwviYmyF/lLD1QlLt8DbbRhooqzQr5l/klGhmGKhKzh9vCANaRSlTRE
+         aqZkrc1rOCv7RNn2ljXkhKzxIqGGrOlqCmR0ezVkLLbqnznjirTk7T/vJ84zt9goxUSK
+         fUCwEtvm9nWebNYLHvQU5DLSJqeE+7OShPKnzcgg5qJzqjAwzig7BxXbThxBe1z7udFG
+         GNHQ==
+X-Gm-Message-State: AFqh2kqGHO9LBBii52kwj/XfRs8sToASze/pY2RmEMkAr7KL5rmM0yU7
+        hsDNBE3t9K+sL5KTgveGbS43
+X-Google-Smtp-Source: AMrXdXu94e9EBaH7QPB/HyWRyS4Rsufzb4HDL+QkHGMa7jn5NgIhx74pF99ENGwO2XLSyADrPs7hUw==
+X-Received: by 2002:aa7:874c:0:b0:57f:f2cd:6180 with SMTP id g12-20020aa7874c000000b0057ff2cd6180mr7572104pfo.0.1674054531780;
+        Wed, 18 Jan 2023 07:08:51 -0800 (PST)
+Received: from thinkpad ([27.111.75.61])
+        by smtp.gmail.com with ESMTPSA id y1-20020aa79e01000000b005809a3c1b6asm5835524pfq.201.2023.01.18.07.08.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 18 Jan 2023 07:08:50 -0800 (PST)
+Date:   Wed, 18 Jan 2023 20:38:44 +0530
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     andersson@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, tony.luck@intel.com,
+        quic_saipraka@quicinc.com, konrad.dybcio@linaro.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        james.morse@arm.com, mchehab@kernel.org, rric@kernel.org,
+        linux-edac@vger.kernel.org, quic_ppareek@quicinc.com,
+        luca.weiss@fairphone.com, ahalaney@redhat.com, steev@kali.org
+Subject: Re: [PATCH v5 16/17] qcom: llcc/edac: Support polling mode for ECC
+ handling
+Message-ID: <20230118150844.GB4690@thinkpad>
+References: <20221228084028.46528-1-manivannan.sadhasivam@linaro.org>
+ <20221228084028.46528-17-manivannan.sadhasivam@linaro.org>
+ <Y8Kv0GIk69MhcOjT@zn.tnic>
+ <20230115040825.GB6568@thinkpad>
+ <Y8Up1kjaIRLlxemH@zn.tnic>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: Yes, score=6.5 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_SBL_CSS,SPF_HELO_NONE,
-        SPF_PASS,URIBL_CSS_A,URIBL_DBL_SPAM autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Report: *  2.5 URIBL_DBL_SPAM Contains a spam URL listed in the Spamhaus DBL
-        *      blocklist
-        *      [URIs: bostmarktrun.com]
-        *  3.3 RCVD_IN_SBL_CSS RBL: Received via a relay in Spamhaus SBL-CSS
-        *      [135.125.238.46 listed in zen.spamhaus.org]
-        *  0.1 URIBL_CSS_A Contains URL's A record listed in the Spamhaus CSS
-        *      blocklist
-        *      [URIs: bostmarktrun.com]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5001]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-X-Spam-Level: ******
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <Y8Up1kjaIRLlxemH@zn.tnic>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-Hi,=20
+On Mon, Jan 16, 2023 at 11:41:26AM +0100, Borislav Petkov wrote:
+> On Sun, Jan 15, 2023 at 09:38:25AM +0530, Manivannan Sadhasivam wrote:
+> > > You need to request the IRQ first and then set edac_op_state above. I.e., this
+> > > devm_request_irq() needs to move in the if (ecc_irq > 0) branch above.
+> > 
+> > May I know why? I also checked other drivers, most of them are doing the same.
+> 
+> If the others do it, that doesn't mean it is clean.
+> 
+> What happens to edac_op_state if devm_request_irq() fails?
+> 
+> I know I know, the probe function will fail and the driver won't load but still,
+> this is sloppy. And it could come down to bite us later, when someone
+> reorganizes that function.
+> 
 
-I would like to reach the person responsible for the implementation of yo=
-ur company's goals, vision and mission or the decision-maker in the devel=
-opment of your technology strategy.
+OK. I just wanted to know the reasoning behind it.
 
-I represent provider of lucrative IT solutions that remove the barriers t=
-o process development resulting from limited access to appropriate IT res=
-ources.
+Thanks,
+Mani
 
-We guarantee you access to the knowledge and experience of outstanding 3,=
-000 software developers from Poland and 500 professional consultants and =
-senior developers in the United States and other Western countries. =20
+> So, do all the error checking method determination - polling or interrupt - in
+> one place.  Something like this (totally untested ofc, pasting here the whole
+> thing to show what I mean):
+> 
+> static int qcom_llcc_edac_probe(struct platform_device *pdev)
+> {
+>         struct llcc_drv_data *llcc_driv_data = pdev->dev.platform_data;
+>         struct edac_device_ctl_info *edev_ctl;
+>         struct device *dev = &pdev->dev;
+>         int ecc_irq;
+>         int rc;
+> 
+>         rc = qcom_llcc_core_setup(llcc_driv_data->bcast_regmap);
+>         if (rc)
+>                 return rc;
+> 
+>         /* Allocate edac control info */
+>         edev_ctl = edac_device_alloc_ctl_info(0, "qcom-llcc", 1, "bank",
+>                                               llcc_driv_data->num_banks, 1,
+>                                               NULL, 0,
+>                                               edac_device_alloc_index());
+> 
+>         if (!edev_ctl)
+>                 return -ENOMEM;
+> 
+>         edev_ctl->dev = dev;
+>         edev_ctl->mod_name = dev_name(dev);
+>         edev_ctl->dev_name = dev_name(dev);
+>         edev_ctl->ctl_name = "llcc";
+>         edev_ctl->panic_on_ue = LLCC_ERP_PANIC_ON_UE;
+> 
+>         /* Check if LLCC driver has passed ECC IRQ */
+>         ecc_irq = llcc_driv_data->ecc_irq;
+>         if (ecc_irq > 0) {
+>                 rc = devm_request_irq(dev, ecc_irq, llcc_ecc_irq_handler,
+>                                       IRQF_TRIGGER_HIGH, "llcc_ecc", edev_ctl);
+>                 if (!rc) {
+>                         edac_op_state = EDAC_OPSTATE_INT;
+>                         goto irq_done;
+>                 }
+>         }
+> 
+>         /* Fall back to polling mode otherwise */
+>         edev_ctl->poll_msec = ECC_POLL_MSEC;
+>         edev_ctl->edac_check = llcc_ecc_check;
+>         edac_op_state = EDAC_OPSTATE_POLL;
+> 
+> irq_done:
+>         rc = edac_device_add_device(edev_ctl);
+>         if (rc) {
+>                 edac_device_free_ctl_info(edev_ctl);
+>                 return rc;
+>         }
+> 
+>         platform_set_drvdata(pdev, edev_ctl);
+> 
+>         return rc;
+> }
+> 
+> -- 
+> Regards/Gruss,
+>     Boris.
+> 
+> https://people.kernel.org/tglx/notes-about-netiquette
 
-We respond to a variety of needs, ranging from expanding your project tea=
-m with specialists with specific skills to supporting project managers, e=
-xperienced innovation teams to creating a Minimum Viable Project (MVP).
-
-The comprehensiveness of our services guarantees you dynamic software dev=
-elopment including creation, testing and implementation systems that are =
-the backbone of effective management of the entire organization.
-
-A partnership that lasts for years is the best proof that our clients mee=
-t their unique requirements within a specific timeframe, introduce new op=
-portunities and grow their business while we solve their problems.
-
-Are you available for a brief call? I will be looking forward to hearing =
-from you.
-
-
-Best regards
-Corey Webb
+-- 
+மணிவண்ணன் சதாசிவம்
