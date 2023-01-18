@@ -2,160 +2,145 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EAD26672473
-	for <lists+linux-edac@lfdr.de>; Wed, 18 Jan 2023 18:07:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EF26967256D
+	for <lists+linux-edac@lfdr.de>; Wed, 18 Jan 2023 18:48:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229934AbjARRHD (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Wed, 18 Jan 2023 12:07:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39680 "EHLO
+        id S229798AbjARRsD (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Wed, 18 Jan 2023 12:48:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230395AbjARRG7 (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Wed, 18 Jan 2023 12:06:59 -0500
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4274C4ABD6
-        for <linux-edac@vger.kernel.org>; Wed, 18 Jan 2023 09:06:54 -0800 (PST)
-Received: by mail-wr1-x42b.google.com with SMTP id r9so11839964wrw.4
-        for <linux-edac@vger.kernel.org>; Wed, 18 Jan 2023 09:06:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=VWQ584Y2nMdX85zP2zBoUd1q5AWvsub5/EGESd2pImA=;
-        b=nUdxqOrzGd38yu2vPUk7VSI0BgJXhO3l0fnqMHCB8GWyTziBjYokyUPf3Bbjv9CPbQ
-         rU7uwbqxYQdTJCN3A8viBxq7Erjj5/JafRMQqBpvOALxf6wS7XGIDjDN8DR1/T4YOnlm
-         /7sxj/OlcgRgIO2hC5cpZSFW3dHFy/HfifJW5v2HngVr2oQGDwYGdUs5qkfJa5DWMSwb
-         Dk5xC1xoxbLs4nk2L6YAPBKwYTx4DPiw+f7ZVRRTNVfyQBJ5ILQEedHFE/g+9YI+wP9I
-         hE5oOAHeEYZarW27Fzff6320VNDfHCedb2k5G+ZeY0JhWMgFXdUl6ZSAUBz4UVD58vr+
-         mEPA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=VWQ584Y2nMdX85zP2zBoUd1q5AWvsub5/EGESd2pImA=;
-        b=lfq4DTxF3OuEyVkDquLUHDPVsz/GhuJ2YK5t2OPf8Fpwp5sWreDOxE3eHUvK6P1A3y
-         +xpcX41fwmJ3prOgtIcoXh+5z78vsbetjsjVZPvlhECbHFSo7leVhWBj/NEt3q+cC/0m
-         wq/TQOYMUI9v+Oth5Z+jjKao9mWEB8T2Uwr2kvHyr3NGKMyItvRq87vCoEQuPsVWfZHO
-         3A/wbilgrooDQ4CdTCbCS4Yg1srqWWs35heewYoqIpZLTu5j4SUSNupbXeCC9rZzQbtt
-         +Ez8cvf4S2n1bv5B1b7srT+pYVcHuc8nDLsDEm6eTLl8ZOo5rdpRucNNDdglTkRK6OZy
-         buTA==
-X-Gm-Message-State: AFqh2koSGzNaEOrGG6a8GuhLo7ey8NdEDm3WLwPWoVxkRvvUIpaqhSPa
-        bTcucE3YZKdZnlJPvGV3E1jO1R2D940XmevV
-X-Google-Smtp-Source: AMrXdXtjSaoQnGJL2cmOmv2BcbWJCZQKa03nVTS+9kuhJZfyeGFyGYalXJkIr65AlcO8+X1nnDSepw==
-X-Received: by 2002:a5d:684d:0:b0:263:9208:2dd with SMTP id o13-20020a5d684d000000b00263920802ddmr14442437wrw.18.1674061613357;
-        Wed, 18 Jan 2023 09:06:53 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id t17-20020a05600001d100b00241d21d4652sm31405992wrx.21.2023.01.18.09.06.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 18 Jan 2023 09:06:52 -0800 (PST)
-Message-ID: <978b0335-ae9d-7d7a-ad70-6861d6dfcc43@linaro.org>
-Date:   Wed, 18 Jan 2023 18:06:50 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.0
-Subject: Re: [PATCH v6 17/17] soc: qcom: llcc: Do not create EDAC platform
- device on SDM845
-Content-Language: en-US
+        with ESMTP id S229831AbjARRrr (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Wed, 18 Jan 2023 12:47:47 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D9E05CFD7;
+        Wed, 18 Jan 2023 09:46:32 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id BB46ACE1B53;
+        Wed, 18 Jan 2023 17:46:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A58C4C433F0;
+        Wed, 18 Jan 2023 17:46:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674063988;
+        bh=MWdNzb1aQw4NJSMQBvu2jSlHNAYyl/IhJuxAJiXZHWc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Ol5PtcjeQNn+GhJ8Y0tkDbOmz6I1a6MuIpO0o+ECwx+qtLepmgkkSFN+XzFPUwF9Y
+         OE5kcKAHreizCqXe5hiHEYN9PeZ4EY2nc4KOlhgGVBOQGRldjGyqH9GoCZhOwCx4I7
+         MgBU2EoMBvhaT8NiDcHbQthWohhLpmWAiQQHwTh+zprkwvS/UkZP29uOKyVUEUSll2
+         QcFFgOmjmi6qKEup3A3yCn19kDiLCgwqUxa2qb9y36Yq8P9d1IWTb8G0rlQQoUcuoH
+         YFhNldU8FD01eYT0tq+Tn2YrCluJAZQFgz3B1DhQ2DuiqiW8U+6eWTMDFbsDvr6lIF
+         U6qc/sXrcfLJw==
+Date:   Wed, 18 Jan 2023 11:46:25 -0600
+From:   Bjorn Andersson <andersson@kernel.org>
 To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Cc:     andersson@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, bp@alien8.de,
-        tony.luck@intel.com, quic_saipraka@quicinc.com,
+Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        bp@alien8.de, tony.luck@intel.com, quic_saipraka@quicinc.com,
         konrad.dybcio@linaro.org, linux-arm-msm@vger.kernel.org,
         linux-kernel@vger.kernel.org, james.morse@arm.com,
         mchehab@kernel.org, rric@kernel.org, linux-edac@vger.kernel.org,
         quic_ppareek@quicinc.com, luca.weiss@fairphone.com,
         ahalaney@redhat.com, steev@kali.org, stable@vger.kernel.org
+Subject: Re: [PATCH v6 01/17] EDAC/device: Respect any driver-supplied
+ workqueue polling value
+Message-ID: <20230118174625.oo5gi36q45kfbgoq@builder.lan>
 References: <20230118150904.26913-1-manivannan.sadhasivam@linaro.org>
- <20230118150904.26913-18-manivannan.sadhasivam@linaro.org>
- <d3cd9b7a-6286-a140-d205-6d4b6ca8092d@linaro.org>
- <20230118155919.GD4690@thinkpad>
- <3ca41414-df2e-4ba0-9dc7-cacea2413fe6@linaro.org>
- <20230118162657.GE4690@thinkpad>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230118162657.GE4690@thinkpad>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+ <20230118150904.26913-2-manivannan.sadhasivam@linaro.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230118150904.26913-2-manivannan.sadhasivam@linaro.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On 18/01/2023 17:26, Manivannan Sadhasivam wrote:
-> On Wed, Jan 18, 2023 at 05:05:28PM +0100, Krzysztof Kozlowski wrote:
->> On 18/01/2023 16:59, Manivannan Sadhasivam wrote:
->>> On Wed, Jan 18, 2023 at 04:37:29PM +0100, Krzysztof Kozlowski wrote:
->>>> On 18/01/2023 16:09, Manivannan Sadhasivam wrote:
->>>>> The platforms based on SDM845 SoC locks the access to EDAC registers in the
->>>>> bootloader. So probing the EDAC driver will result in a crash. Hence,
->>>>> disable the creation of EDAC platform device on all SDM845 devices.
->>>>>
->>>>> The issue has been observed on Lenovo Yoga C630 and DB845c.
->>>>>
->>>>> Cc: <stable@vger.kernel.org> # 5.10
->>>>> Reported-by: Steev Klimaszewski <steev@kali.org>
->>>>> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
->>>>> ---
->>>>>  drivers/soc/qcom/llcc-qcom.c | 17 ++++++++++++-----
->>>>>  1 file changed, 12 insertions(+), 5 deletions(-)
->>>>>
->>>>> diff --git a/drivers/soc/qcom/llcc-qcom.c b/drivers/soc/qcom/llcc-qcom.c
->>>>> index 7b7c5a38bac6..8d840702df50 100644
->>>>> --- a/drivers/soc/qcom/llcc-qcom.c
->>>>> +++ b/drivers/soc/qcom/llcc-qcom.c
->>>>> @@ -1012,11 +1012,18 @@ static int qcom_llcc_probe(struct platform_device *pdev)
->>>>>  
->>>>>  	drv_data->ecc_irq = platform_get_irq_optional(pdev, 0);
->>>>>  
->>>>> -	llcc_edac = platform_device_register_data(&pdev->dev,
->>>>> -					"qcom_llcc_edac", -1, drv_data,
->>>>> -					sizeof(*drv_data));
->>>>> -	if (IS_ERR(llcc_edac))
->>>>> -		dev_err(dev, "Failed to register llcc edac driver\n");
->>>>> +	/*
->>>>> +	 * The platforms based on SDM845 SoC locks the access to EDAC registers
->>>>> +	 * in bootloader. So probing the EDAC driver will result in a crash.
->>>>> +	 * Hence, disable the creation of EDAC platform device on SDM845.
->>>>> +	 */
->>>>> +	if (!of_device_is_compatible(dev->of_node, "qcom,sdm845-llcc")) {
->>>>
->>>> Don't spread of_device_is_compatible() in driver code. You have driver
->>>> data for this.
->>>>
->>>
->>> Yeah, but there is no ID to in the driver data to identify an SoC. 
->>
->> What do you mean there is no? You use exactly the same compatible as the
->> one in driver data.
->>
+On Wed, Jan 18, 2023 at 08:38:48PM +0530, Manivannan Sadhasivam wrote:
+> The EDAC drivers may optionally pass the poll_msec value. Use that value
+> if available, else fall back to 1000ms.
 > 
-> Right, but I was saying that there is no unique field to identify an SoC.
+>   [ bp: Touchups. ]
 > 
->>
->>> I could add
->>> one but is that really worth doing so? Is using of_device_is_compatible() in
->>> drivers discouraged nowadays?
->>
->> Because it spreads variant matching all over. It does not scale. drv
->> data fields are the way or better quirks/flags.
->>
-> 
-> The driver quirk/flags are usually beneficial if it applies to multiple
-> platforms, otherwise they are a bit overkill IMO just like in this case.
-> 
-> One can argue that this matching could spread to other SoCs in the future, but
-> I don't think that could happen for this case.
+> Fixes: e27e3dac6517 ("drivers/edac: add edac_device class")
+> Reported-by: Luca Weiss <luca.weiss@fairphone.com>
+> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 
-That's the argument for every flag/quirk/field. Driver already uses it -
-see need_llcc_cfg being set for only one (!!!) variant. Now you add
-orthogonal field just as of_device_is_compatible(). No, that's why we
-have driver data and as I said - it is already used.
+Your S-o-b should be the last one to indicate that you are the  one
+certifying the origin of this patch.
 
-Best regards,
-Krzysztof
+> Signed-off-by: Borislav Petkov (AMD) <bp@alien8.de>
 
+If the two of you wrote the patch, please add a Co-developed-by.
+
+Thanks,
+Bjorn
+
+> Tested-by: Steev Klimaszewski <steev@kali.org> # Thinkpad X13s
+> Tested-by: Andrew Halaney <ahalaney@redhat.com> # sa8540p-ride
+> Cc: <stable@vger.kernel.org> # 4.9
+> Link: https://lore.kernel.org/r/COZYL8MWN97H.MROQ391BGA09@otso
+> ---
+>  drivers/edac/edac_device.c | 15 +++++++--------
+>  1 file changed, 7 insertions(+), 8 deletions(-)
+> 
+> diff --git a/drivers/edac/edac_device.c b/drivers/edac/edac_device.c
+> index 19522c568aa5..a50b7bcfb731 100644
+> --- a/drivers/edac/edac_device.c
+> +++ b/drivers/edac/edac_device.c
+> @@ -34,6 +34,9 @@
+>  static DEFINE_MUTEX(device_ctls_mutex);
+>  static LIST_HEAD(edac_device_list);
+>  
+> +/* Default workqueue processing interval on this instance, in msecs */
+> +#define DEFAULT_POLL_INTERVAL 1000
+> +
+>  #ifdef CONFIG_EDAC_DEBUG
+>  static void edac_device_dump_device(struct edac_device_ctl_info *edac_dev)
+>  {
+> @@ -336,7 +339,7 @@ static void edac_device_workq_function(struct work_struct *work_req)
+>  	 * whole one second to save timers firing all over the period
+>  	 * between integral seconds
+>  	 */
+> -	if (edac_dev->poll_msec == 1000)
+> +	if (edac_dev->poll_msec == DEFAULT_POLL_INTERVAL)
+>  		edac_queue_work(&edac_dev->work, round_jiffies_relative(edac_dev->delay));
+>  	else
+>  		edac_queue_work(&edac_dev->work, edac_dev->delay);
+> @@ -366,7 +369,7 @@ static void edac_device_workq_setup(struct edac_device_ctl_info *edac_dev,
+>  	 * timers firing on sub-second basis, while they are happy
+>  	 * to fire together on the 1 second exactly
+>  	 */
+> -	if (edac_dev->poll_msec == 1000)
+> +	if (edac_dev->poll_msec == DEFAULT_POLL_INTERVAL)
+>  		edac_queue_work(&edac_dev->work, round_jiffies_relative(edac_dev->delay));
+>  	else
+>  		edac_queue_work(&edac_dev->work, edac_dev->delay);
+> @@ -398,7 +401,7 @@ void edac_device_reset_delay_period(struct edac_device_ctl_info *edac_dev,
+>  {
+>  	unsigned long jiffs = msecs_to_jiffies(value);
+>  
+> -	if (value == 1000)
+> +	if (value == DEFAULT_POLL_INTERVAL)
+>  		jiffs = round_jiffies_relative(value);
+>  
+>  	edac_dev->poll_msec = value;
+> @@ -443,11 +446,7 @@ int edac_device_add_device(struct edac_device_ctl_info *edac_dev)
+>  		/* This instance is NOW RUNNING */
+>  		edac_dev->op_state = OP_RUNNING_POLL;
+>  
+> -		/*
+> -		 * enable workq processing on this instance,
+> -		 * default = 1000 msec
+> -		 */
+> -		edac_device_workq_setup(edac_dev, 1000);
+> +		edac_device_workq_setup(edac_dev, edac_dev->poll_msec ?: DEFAULT_POLL_INTERVAL);
+>  	} else {
+>  		edac_dev->op_state = OP_RUNNING_INTERRUPT;
+>  	}
+> -- 
+> 2.25.1
+> 
