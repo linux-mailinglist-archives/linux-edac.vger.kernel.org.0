@@ -2,33 +2,33 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6ACC9673FBE
-	for <lists+linux-edac@lfdr.de>; Thu, 19 Jan 2023 18:19:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DFF4673FBF
+	for <lists+linux-edac@lfdr.de>; Thu, 19 Jan 2023 18:19:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230250AbjASRTD (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Thu, 19 Jan 2023 12:19:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60386 "EHLO
+        id S230175AbjASRTF (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Thu, 19 Jan 2023 12:19:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230132AbjASRS6 (ORCPT
+        with ESMTP id S229924AbjASRS6 (ORCPT
         <rfc822;linux-edac@vger.kernel.org>); Thu, 19 Jan 2023 12:18:58 -0500
 Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D23E45891;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DC0345BCA;
         Thu, 19 Jan 2023 09:18:35 -0800 (PST)
 Received: from lhrpeml500006.china.huawei.com (unknown [172.18.147.226])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4NyTq22wj9z689QP;
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4NyTq24BfYz6J9b0;
         Fri, 20 Jan 2023 01:18:06 +0800 (CST)
 Received: from P_UKIT01-A7bmah.china.huawei.com (10.48.145.221) by
  lhrpeml500006.china.huawei.com (7.191.161.198) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.34; Thu, 19 Jan 2023 17:18:32 +0000
+ 15.1.2375.34; Thu, 19 Jan 2023 17:18:33 +0000
 From:   <shiju.jose@huawei.com>
 To:     <linux-edac@vger.kernel.org>, <linux-cxl@vger.kernel.org>,
         <mchehab@kernel.org>
 CC:     <jonathan.cameron@huawei.com>, <linuxarm@huawei.com>,
         <shiju.jose@huawei.com>
-Subject: [RFC PATCH 2/4] rasdaemon: Add support for the CXL poison events
-Date:   Thu, 19 Jan 2023 17:18:07 +0000
-Message-ID: <20230119171809.1406-3-shiju.jose@huawei.com>
+Subject: [RFC PATCH 3/4] rasdaemon: Add support for the CXL AER uncorrectable errors
+Date:   Thu, 19 Jan 2023 17:18:08 +0000
+Message-ID: <20230119171809.1406-4-shiju.jose@huawei.com>
 X-Mailer: git-send-email 2.26.0.windows.1
 In-Reply-To: <20230119171809.1406-1-shiju.jose@huawei.com>
 References: <20230119171809.1406-1-shiju.jose@huawei.com>
@@ -50,138 +50,109 @@ X-Mailing-List: linux-edac@vger.kernel.org
 
 From: Shiju Jose <shiju.jose@huawei.com>
 
-Add support to log and record the CXL poison events.
+Add support to log and record the CXL AER uncorrectable errors.
 
-The corresponding Kernel patches here:
-https://lore.kernel.org/lkml/cover.1668115235.git.alison.schofield@intel.com/
+The corresponding Kernel patch here:
+https://patchwork.kernel.org/project/cxl/patch/166974413388.1608150.5875712482260436188.stgit@djiang5-desk3.ch.intel.com/
 
-Presently RFC draft version for logging, could be extended for the policy
-based recovery action for the frequent poison events depending on the above
-kernel patches.
+Note: It was found that the header log data to be converted to the
+      big-endian format to correctly store in the SQLite database, likely
+      because the SQLite database seems uses the big-endian storage.
 
 Signed-off-by: Shiju Jose <shiju.jose@huawei.com>
 ---
- Makefile.am       |   8 ++-
- configure.ac      |  11 ++++
- ras-cxl-handler.c | 162 ++++++++++++++++++++++++++++++++++++++++++++++
- ras-cxl-handler.h |  24 +++++++
- ras-events.c      |  15 +++++
+ ras-cxl-handler.c | 125 ++++++++++++++++++++++++++++++++++++++++++++++
+ ras-cxl-handler.h |   5 ++
+ ras-events.c      |   9 ++++
  ras-events.h      |   1 +
- ras-record.c      |  81 +++++++++++++++++++++++
- ras-record.h      |  20 ++++++
- ras-report.c      |  83 ++++++++++++++++++++++++
+ ras-record.c      |  65 ++++++++++++++++++++++++
+ ras-record.h      |  16 ++++++
+ ras-report.c      |  69 +++++++++++++++++++++++++
  ras-report.h      |   2 +
- 10 files changed, 406 insertions(+), 1 deletion(-)
- create mode 100644 ras-cxl-handler.c
- create mode 100644 ras-cxl-handler.h
+ 8 files changed, 292 insertions(+)
 
-diff --git a/Makefile.am b/Makefile.am
-index a322b9a..4216370 100644
---- a/Makefile.am
-+++ b/Makefile.am
-@@ -69,13 +69,19 @@ endif
- if WITH_AMP_NS_DECODE
-    rasdaemon_SOURCES += non-standard-ampere.c
- endif
-+
-+if WITH_CXL
-+   rasdaemon_SOURCES += ras-cxl-handler.c
-+endif
-+
- rasdaemon_LDADD = -lpthread $(SQLITE3_LIBS) libtrace/libtrace.a
- 
- include_HEADERS = config.h  ras-events.h  ras-logger.h  ras-mc-handler.h \
- 		  ras-aer-handler.h ras-mce-handler.h ras-record.h bitfield.h ras-report.h \
- 		  ras-extlog-handler.h ras-arm-handler.h ras-non-standard-handler.h \
- 		  ras-devlink-handler.h ras-diskerror-handler.h rbtree.h ras-page-isolation.h \
--		  non-standard-hisilicon.h non-standard-ampere.h ras-memory-failure-handler.h
-+		  non-standard-hisilicon.h non-standard-ampere.h ras-memory-failure-handler.h \
-+		  ras-cxl-handler.h
- 
- # This rule can't be called with more than one Makefile job (like make -j8)
- # I can't figure out a way to fix that
-diff --git a/configure.ac b/configure.ac
-index a77991f..c18a67d 100644
---- a/configure.ac
-+++ b/configure.ac
-@@ -161,6 +161,16 @@ AS_IF([test "x$enable_amp_ns_decode" = "xyes" || test "x$enable_all" == "xyes"],
- AM_CONDITIONAL([WITH_AMP_NS_DECODE], [test x$enable_amp_ns_decode = xyes || test x$enable_all == xyes])
- AM_COND_IF([WITH_AMP_NS_DECODE], [USE_AMP_NS_DECODE="yes"], [USE_AMP_NS_DECODE="no"])
- 
-+AC_ARG_ENABLE([cxl],
-+    AS_HELP_STRING([--enable-cxl], [enable CXL events (currently experimental)]))
-+
-+AS_IF([test "x$enable_cxl" = "xyes" || test "x$enable_all" == "xyes"], [
-+  AC_DEFINE(HAVE_CXL,1,"have CXL events collect")
-+  AC_SUBST([WITH_CXL])
-+])
-+AM_CONDITIONAL([WITH_CXL], [test x$enable_cxl = xyes || test x$enable_all == xyes])
-+AM_COND_IF([WITH_CXL], [USE_CXL="yes"], [USE_CXL="no"])
-+
- test "$sysconfdir" = '${prefix}/etc' && sysconfdir=/etc
- 
- CFLAGS="$CFLAGS -Wall -Wmissing-prototypes -Wstrict-prototypes"
-@@ -201,4 +211,5 @@ compile time options summary
-     Memory Failure      : $USE_MEMORY_FAILURE
-     Memory CE PFA       : $USE_MEMORY_CE_PFA
-     AMP RAS errors      : $USE_AMP_NS_DECODE
-+    CXL events          : $USE_CXL
- EOF
 diff --git a/ras-cxl-handler.c b/ras-cxl-handler.c
-new file mode 100644
-index 0000000..11531ef
---- /dev/null
+index 11531ef..b1aedd7 100644
+--- a/ras-cxl-handler.c
 +++ b/ras-cxl-handler.c
-@@ -0,0 +1,162 @@
-+/*
-+ * Copyright (c) Huawei Technologies Co., Ltd. 2023. All rights reserved.
-+ *
-+ * This program is free software; you can redistribute it and/or modify
-+ * it under the terms of the GNU General Public License as published by
-+ * the Free Software Foundation; either version 2 of the License, or
-+ * (at your option) any later version.
-+ *
-+ * This program is distributed in the hope that it will be useful,
-+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
-+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-+ * GNU General Public License for more details.
-+ */
+@@ -21,6 +21,7 @@
+ #include "ras-record.h"
+ #include "ras-logger.h"
+ #include "ras-report.h"
++#include <endian.h>
+ 
+ /* Poison List: Payload out flags */
+ #define CXL_POISON_FLAG_MORE            BIT(0)
+@@ -160,3 +161,127 @@ int ras_cxl_poison_event_handler(struct trace_seq *s,
+ 
+ 	return 0;
+ }
 +
-+#include <stdio.h>
-+#include <stdlib.h>
-+#include <string.h>
-+#include <unistd.h>
-+#include "libtrace/kbuffer.h"
-+#include "ras-cxl-handler.h"
-+#include "ras-record.h"
-+#include "ras-logger.h"
-+#include "ras-report.h"
++/* CXL AER Errors */
 +
-+/* Poison List: Payload out flags */
-+#define CXL_POISON_FLAG_MORE            BIT(0)
-+#define CXL_POISON_FLAG_OVERFLOW        BIT(1)
-+#define CXL_POISON_FLAG_SCANNING        BIT(2)
++#define CXL_AER_UE_CACHE_DATA_PARITY	BIT(0)
++#define CXL_AER_UE_CACHE_ADDR_PARITY	BIT(1)
++#define CXL_AER_UE_CACHE_BE_PARITY	BIT(2)
++#define CXL_AER_UE_CACHE_DATA_ECC	BIT(3)
++#define CXL_AER_UE_MEM_DATA_PARITY	BIT(4)
++#define CXL_AER_UE_MEM_ADDR_PARITY	BIT(5)
++#define CXL_AER_UE_MEM_BE_PARITY	BIT(6)
++#define CXL_AER_UE_MEM_DATA_ECC		BIT(7)
++#define CXL_AER_UE_REINIT_THRESH	BIT(8)
++#define CXL_AER_UE_RSVD_ENCODE		BIT(9)
++#define CXL_AER_UE_POISON		BIT(10)
++#define CXL_AER_UE_RECV_OVERFLOW	BIT(11)
++#define CXL_AER_UE_INTERNAL_ERR		BIT(14)
++#define CXL_AER_UE_IDE_TX_ERR		BIT(15)
++#define CXL_AER_UE_IDE_RX_ERR		BIT(16)
 +
-+/* CXL poison - source types */
-+enum cxl_poison_source {
-+	CXL_POISON_SOURCE_UNKNOWN = 0,
-+	CXL_POISON_SOURCE_EXTERNAL = 1,
-+	CXL_POISON_SOURCE_INTERNAL = 2,
-+	CXL_POISON_SOURCE_INJECTED = 3,
-+	CXL_POISON_SOURCE_VENDOR = 7,
++struct cxl_error_list {
++	uint32_t bit;
++	const char *error;
 +};
 +
-+int ras_cxl_poison_event_handler(struct trace_seq *s,
++static const struct cxl_error_list cxl_aer_ue[] = {
++	{ .bit = CXL_AER_UE_CACHE_DATA_PARITY, .error = "Cache Data Parity Error" },
++	{ .bit = CXL_AER_UE_CACHE_ADDR_PARITY, .error = "Cache Address Parity Error" },
++	{ .bit = CXL_AER_UE_CACHE_BE_PARITY, .error = "Cache Byte Enable Parity Error" },
++	{ .bit = CXL_AER_UE_CACHE_DATA_ECC, .error = "Cache Data ECC Error" },
++	{ .bit = CXL_AER_UE_MEM_DATA_PARITY, .error = "Memory Data Parity Error" },
++	{ .bit = CXL_AER_UE_MEM_ADDR_PARITY, .error = "Memory Address Parity Error" },
++	{ .bit = CXL_AER_UE_MEM_BE_PARITY, .error = "Memory Byte Enable Parity Error" },
++	{ .bit = CXL_AER_UE_MEM_DATA_ECC, .error = "Memory Data ECC Error" },
++	{ .bit = CXL_AER_UE_REINIT_THRESH, .error = "REINIT Threshold Hit" },
++	{ .bit = CXL_AER_UE_RSVD_ENCODE, .error = "Received Unrecognized Encoding" },
++	{ .bit = CXL_AER_UE_POISON, .error = "Received Poison From Peer" },
++	{ .bit = CXL_AER_UE_RECV_OVERFLOW, .error = "Receiver Overflow" },
++	{ .bit = CXL_AER_UE_INTERNAL_ERR, .error = "Component Specific Error" },
++	{ .bit = CXL_AER_UE_IDE_TX_ERR, .error = "IDE Tx Error" },
++	{ .bit = CXL_AER_UE_IDE_RX_ERR, .error = "IDE Rx Error" },
++};
++
++static void decode_cxl_error_status(struct trace_seq *s, uint32_t status,
++				   const struct cxl_error_list *cxl_error_list,
++				   uint8_t num_elems)
++{
++	int i;
++
++	for (i = 0; i < num_elems; i++) {
++		if (status & cxl_error_list[i].bit)
++			trace_seq_printf(s, "\'%s\' ", cxl_error_list[i].error);
++	}
++}
++
++int ras_cxl_aer_ue_event_handler(struct trace_seq *s,
 +				 struct pevent_record *record,
 +				 struct event_format *event, void *context)
 +{
-+	int len;
++	int len, i;
 +	unsigned long long val;
-+	struct ras_events *ras = context;
 +	time_t now;
 +	struct tm *tm;
-+	struct ras_cxl_poison_event ev;
++	struct ras_events *ras = context;
++	struct ras_cxl_aer_ue_event ev;
 +
++	memset(&ev, 0, sizeof(ev));
 +	now = record->ts/user_hz + ras->uptime_diff;
 +	tm = localtime(&now);
 +	if (tm)
@@ -191,366 +162,262 @@ index 0000000..11531ef
 +		strncpy(ev.timestamp, "1970-01-01 00:00:00 +0000", sizeof(ev.timestamp));
 +	trace_seq_printf(s, "%s ", ev.timestamp);
 +
-+	ev.memdev = pevent_get_field_raw(s, event, "memdev",
++	ev.dev_name = pevent_get_field_raw(s, event, "dev_name",
 +					   record, &len, 1);
-+	if (!ev.memdev)
++	if (!ev.dev_name)
 +		return -1;
-+	trace_seq_printf(s, "memdev:%s ", ev.memdev);
++	trace_seq_printf(s, "dev_name:%s ", ev.dev_name);
 +
-+	ev.pcidev = pevent_get_field_raw(s, event, "pcidev",
-+					   record, &len, 1);
-+	if (!ev.pcidev)
++	if (pevent_get_field_val(s, event, "status", record, &val, 1) < 0)
 +		return -1;
-+	trace_seq_printf(s, "pcidev:%s ", ev.pcidev);
++	ev.error_status = val;
 +
-+	ev.region = pevent_get_field_raw(s, event, "region",
-+					   record, &len, 1);
-+	if (!ev.region)
++	trace_seq_printf(s, "error status:");
++	decode_cxl_error_status(s, ev.error_status,
++				cxl_aer_ue, ARRAY_SIZE(cxl_aer_ue));
++
++	if (pevent_get_field_val(s,  event, "first_error", record, &val, 1) < 0)
 +		return -1;
-+	trace_seq_printf(s, "region:%s ", ev.region);
++	ev.first_error = val;
 +
-+	ev.uuid = pevent_get_field_raw(s, event, "uuid",
-+				       record, &len, 1);
-+	if (!ev.uuid)
++	trace_seq_printf(s, "first error:");
++	decode_cxl_error_status(s, ev.first_error,
++				cxl_aer_ue, ARRAY_SIZE(cxl_aer_ue));
++
++	ev.header_log = pevent_get_field_raw(s, event, "header_log",
++					     record, &len, 1);
++	if (!ev.header_log)
 +		return -1;
-+	trace_seq_printf(s, "uuid:%s ", ev.uuid);
-+
-+	if (pevent_get_field_val(s, event, "hpa", record, &val, 1) < 0)
-+		return -1;
-+	ev.hpa = val;
-+	trace_seq_printf(s, "poison list: hpa:0x%llx ", (unsigned long long)ev.hpa);
-+
-+	if (pevent_get_field_val(s, event, "dpa", record, &val, 1) < 0)
-+		return -1;
-+	ev.dpa = val;
-+	trace_seq_printf(s, "dpa:0x%llx ", (unsigned long long)ev.dpa);
-+
-+	if (pevent_get_field_val(s, event, "length", record, &val, 1) < 0)
-+		return -1;
-+	ev.length = val;
-+	trace_seq_printf(s, "length:%d ", ev.length);
-+
-+	if (pevent_get_field_val(s,  event, "source", record, &val, 1) < 0)
-+		return -1;
-+
-+	switch (val) {
-+	case CXL_POISON_SOURCE_UNKNOWN:
-+		ev.source = "Unknown";
-+		break;
-+	case CXL_POISON_SOURCE_EXTERNAL:
-+		ev.source = "External";
-+		break;
-+	case CXL_POISON_SOURCE_INTERNAL:
-+		ev.source = "Internal";
-+		break;
-+	case CXL_POISON_SOURCE_INJECTED:
-+		ev.source = "Injected";
-+		break;
-+	case CXL_POISON_SOURCE_VENDOR:
-+		ev.source = "Vendor";
-+		break;
-+	default:
-+		ev.source = "Invalid";
++	trace_seq_printf(s, "header log:\n");
++	for (i = 0; i < CXL_HEADERLOG_SIZE_U32; i++) {
++		trace_seq_printf(s, "%08x ", ev.header_log[i]);
++		if ((i > 0) && ((i % 20) == 0))
++			trace_seq_printf(s, "\n");
++		/* Convert header log data to the big-endian format because
++		 * the SQLite database seems uses the big-endian storage.
++		 */
++		ev.header_log[i] = htobe32(ev.header_log[i]);
 +	}
-+	trace_seq_printf(s, "source:%s ", ev.source);
-+
-+	if (pevent_get_field_val(s,  event, "flags", record, &val, 1) < 0)
-+		return -1;
-+	ev.flags = val;
-+	trace_seq_printf(s, "flags:%d ", ev.flags);
-+
-+	if (ev.flags & CXL_POISON_FLAG_OVERFLOW) {
-+		if (pevent_get_field_val(s,  event, "overflow_t", record, &val, 1) < 0)
-+			return -1;
-+		if (val) {
-+			/* CXL Specification 3.0
-+			 * Overflow timestamp - The number of unsigned nanoseconds
-+			 * that have elapsed since midnight, 01-Jan-1970 UTC
-+			 */
-+			time_t ovf_ts_secs = val / 1000000000ULL;
-+
-+			tm = localtime(&ovf_ts_secs);
-+			if (tm) {
-+				strftime(ev.overflow_ts, sizeof(ev.overflow_ts),
-+					 "%Y-%m-%d %H:%M:%S %z", tm);
-+			}
-+		}
-+		if (!val || !tm)
-+			strncpy(ev.overflow_ts, "1970-01-01 00:00:00 +0000",
-+				sizeof(ev.overflow_ts));
-+	} else
-+		strncpy(ev.overflow_ts, "1970-01-01 00:00:00 +0000", sizeof(ev.overflow_ts));
-+	trace_seq_printf(s, "overflow timestamp:%s ", ev.overflow_ts);
-+	trace_seq_printf(s, "\n");
 +
 +	/* Insert data into the SGBD */
 +#ifdef HAVE_SQLITE3
-+	ras_store_cxl_poison_event(ras, &ev);
++	ras_store_cxl_aer_ue_event(ras, &ev);
 +#endif
 +
 +#ifdef HAVE_ABRT_REPORT
 +	/* Report event to ABRT */
-+	ras_report_cxl_poison_event(ras, &ev);
++	ras_report_cxl_aer_ue_event(ras, &ev);
 +#endif
 +
 +	return 0;
 +}
 diff --git a/ras-cxl-handler.h b/ras-cxl-handler.h
-new file mode 100644
-index 0000000..4508624
---- /dev/null
+index 4508624..f96ed35 100644
+--- a/ras-cxl-handler.h
 +++ b/ras-cxl-handler.h
-@@ -0,0 +1,24 @@
-+/*
-+ * Copyright (c) Huawei Technologies Co., Ltd. 2023. All rights reserved.
-+ *
-+ * This program is free software; you can redistribute it and/or modify
-+ * it under the terms of the GNU General Public License as published by
-+ * the Free Software Foundation; either version 2 of the License, or
-+ * (at your option) any later version.
-+ *
-+ * This program is distributed in the hope that it will be useful,
-+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
-+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-+ * GNU General Public License for more details.
-+ */
+@@ -21,4 +21,9 @@
+ int ras_cxl_poison_event_handler(struct trace_seq *s,
+ 			 struct pevent_record *record,
+ 			 struct event_format *event, void *context);
 +
-+#ifndef __RAS_CXL_HANDLER_H
-+#define __RAS_CXL_HANDLER_H
++int ras_cxl_aer_ue_event_handler(struct trace_seq *s,
++				 struct pevent_record *record,
++				 struct event_format *event, void *context);
 +
-+#include "ras-events.h"
-+#include "libtrace/event-parse.h"
-+
-+int ras_cxl_poison_event_handler(struct trace_seq *s,
-+			 struct pevent_record *record,
-+			 struct event_format *event, void *context);
-+#endif
+ #endif
 diff --git a/ras-events.c b/ras-events.c
-index 39cab20..09142f2 100644
+index 09142f2..5688878 100644
 --- a/ras-events.c
 +++ b/ras-events.c
-@@ -39,6 +39,7 @@
- #include "ras-devlink-handler.h"
- #include "ras-diskerror-handler.h"
- #include "ras-memory-failure-handler.h"
-+#include "ras-cxl-handler.h"
- #include "ras-record.h"
- #include "ras-logger.h"
- #include "ras-page-isolation.h"
-@@ -237,6 +238,10 @@ int toggle_ras_mc_event(int enable)
- 	rc |= __toggle_ras_mc_event(ras, "ras", "memory_failure_event", enable);
+@@ -240,6 +240,7 @@ int toggle_ras_mc_event(int enable)
+ 
+ #ifdef HAVE_CXL
+ 	rc |= __toggle_ras_mc_event(ras, "cxl", "cxl_poison", enable);
++	rc |= __toggle_ras_mc_event(ras, "cxl", "cxl_aer_uncorrectable_error", enable);
  #endif
  
-+#ifdef HAVE_CXL
-+	rc |= __toggle_ras_mc_event(ras, "cxl", "cxl_poison", enable);
-+#endif
-+
  free_ras:
- 	free(ras);
- 	return rc;
-@@ -925,6 +930,16 @@ int handle_ras_events(int record_events)
- 		    "ras", "memory_failure_event");
- #endif
- 
-+#ifdef HAVE_CXL
-+	rc = add_event_handler(ras, pevent, page_size, "cxl", "cxl_poison",
-+			       ras_cxl_poison_event_handler, NULL, CXL_POISON_EVENT);
+@@ -938,6 +939,14 @@ int handle_ras_events(int record_events)
+ 	else
+ 		log(ALL, LOG_ERR, "Can't get traces from %s:%s\n",
+ 		    "cxl", "cxl_poison");
++
++	rc = add_event_handler(ras, pevent, page_size, "cxl", "cxl_aer_uncorrectable_error",
++			       ras_cxl_aer_ue_event_handler, NULL, CXL_AER_UE_EVENT);
 +	if (!rc)
 +		num_events++;
 +	else
 +		log(ALL, LOG_ERR, "Can't get traces from %s:%s\n",
-+		    "cxl", "cxl_poison");
-+#endif
-+
++		    "cxl", "cxl_aer_uncorrectable_error");
+ #endif
+ 
  	if (!num_events) {
- 		log(ALL, LOG_INFO,
- 		    "Failed to trace all supported RAS events. Aborting.\n");
 diff --git a/ras-events.h b/ras-events.h
-index dfd690c..24f7ccc 100644
+index 24f7ccc..b9ae336 100644
 --- a/ras-events.h
 +++ b/ras-events.h
-@@ -39,6 +39,7 @@ enum {
- 	DEVLINK_EVENT,
+@@ -40,6 +40,7 @@ enum {
  	DISKERROR_EVENT,
  	MF_EVENT,
-+	CXL_POISON_EVENT,
+ 	CXL_POISON_EVENT,
++	CXL_AER_UE_EVENT,
  	NR_EVENTS
  };
  
 diff --git a/ras-record.c b/ras-record.c
-index d845f81..c3bc961 100644
+index c3bc961..4b4c068 100644
 --- a/ras-record.c
 +++ b/ras-record.c
-@@ -559,6 +559,67 @@ int ras_store_mf_event(struct ras_events *ras, struct ras_mf_event *ev)
- }
- #endif
+@@ -618,6 +618,54 @@ int ras_store_cxl_poison_event(struct ras_events *ras, struct ras_cxl_poison_eve
  
-+#ifdef HAVE_CXL
+ 	return rc;
+ }
++
 +/*
-+ * Table and functions to handle cxl:cxl_poison
++ * Table and functions to handle cxl:cxl_aer_uncorrectable_error
 + */
-+static const struct db_fields cxl_poison_event_fields[] = {
++static const struct db_fields cxl_aer_ue_event_fields[] = {
 +	{ .name = "id",                   .type = "INTEGER PRIMARY KEY" },
 +	{ .name = "timestamp",            .type = "TEXT" },
-+	{ .name = "memdev",               .type = "TEXT" },
-+	{ .name = "pcidev",               .type = "TEXT" },
-+	{ .name = "region",               .type = "TEXT" },
-+	{ .name = "uuid",                 .type = "TEXT" },
-+	{ .name = "hpa",                  .type = "INTEGER" },
-+	{ .name = "dpa",                  .type = "INTEGER" },
-+	{ .name = "length",               .type = "INTEGER" },
-+	{ .name = "source",               .type = "TEXT" },
-+	{ .name = "flags",                .type = "INTEGER" },
-+	{ .name = "overflow_ts",          .type = "TEXT" },
++	{ .name = "dev_name",             .type = "TEXT" },
++	{ .name = "error_status",         .type = "INTEGER" },
++	{ .name = "first_error",          .type = "INTEGER" },
++	{ .name = "header_log",           .type = "BLOB" },
 +};
 +
-+static const struct db_table_descriptor cxl_poison_event_tab = {
-+	.name = "cxl_poison_event",
-+	.fields = cxl_poison_event_fields,
-+	.num_fields = ARRAY_SIZE(cxl_poison_event_fields),
++static const struct db_table_descriptor cxl_aer_ue_event_tab = {
++	.name = "cxl_aer_ue_event",
++	.fields = cxl_aer_ue_event_fields,
++	.num_fields = ARRAY_SIZE(cxl_aer_ue_event_fields),
 +};
 +
-+int ras_store_cxl_poison_event(struct ras_events *ras, struct ras_cxl_poison_event *ev)
++int ras_store_cxl_aer_ue_event(struct ras_events *ras, struct ras_cxl_aer_ue_event *ev)
 +{
 +	int rc;
 +	struct sqlite3_priv *priv = ras->db_priv;
 +
-+	if (!priv || !priv->stmt_cxl_poison_event)
++	if (!priv || !priv->stmt_cxl_aer_ue_event)
 +		return 0;
-+	log(TERM, LOG_INFO, "cxl_poison_event store: %p\n", priv->stmt_cxl_poison_event);
++	log(TERM, LOG_INFO, "cxl_aer_ue_event store: %p\n", priv->stmt_cxl_aer_ue_event);
 +
-+	sqlite3_bind_text(priv->stmt_cxl_poison_event, 1, ev->timestamp, -1, NULL);
-+	sqlite3_bind_text(priv->stmt_cxl_poison_event, 2, ev->memdev, -1, NULL);
-+	sqlite3_bind_text(priv->stmt_cxl_poison_event, 3, ev->pcidev, -1, NULL);
-+	sqlite3_bind_text(priv->stmt_cxl_poison_event, 4, ev->region, -1, NULL);
-+	sqlite3_bind_text(priv->stmt_cxl_poison_event, 5, ev->uuid, -1, NULL);
-+	sqlite3_bind_int64(priv->stmt_cxl_poison_event, 6, ev->hpa);
-+	sqlite3_bind_int64(priv->stmt_cxl_poison_event, 7, ev->dpa);
-+	sqlite3_bind_int(priv->stmt_cxl_poison_event, 8, ev->length);
-+	sqlite3_bind_text(priv->stmt_cxl_poison_event, 9, ev->source, -1, NULL);
-+	sqlite3_bind_int(priv->stmt_cxl_poison_event, 10, ev->flags);
-+	sqlite3_bind_text(priv->stmt_cxl_poison_event, 11, ev->overflow_ts, -1, NULL);
++	sqlite3_bind_text(priv->stmt_cxl_aer_ue_event, 1, ev->timestamp, -1, NULL);
++	sqlite3_bind_text(priv->stmt_cxl_aer_ue_event, 2, ev->dev_name, -1, NULL);
++	sqlite3_bind_int(priv->stmt_cxl_aer_ue_event, 3, ev->error_status);
++	sqlite3_bind_int(priv->stmt_cxl_aer_ue_event, 4, ev->first_error);
++	sqlite3_bind_blob(priv->stmt_cxl_aer_ue_event, 5, ev->header_log, CXL_HEADERLOG_SIZE, NULL);
 +
-+	rc = sqlite3_step(priv->stmt_cxl_poison_event);
++	rc = sqlite3_step(priv->stmt_cxl_aer_ue_event);
 +	if (rc != SQLITE_OK && rc != SQLITE_DONE)
 +		log(TERM, LOG_ERR,
-+		    "Failed to do cxl_poison_event step on sqlite: error = %d\n", rc);
-+	rc = sqlite3_reset(priv->stmt_cxl_poison_event);
++		    "Failed to do cxl_aer_ue_event step on sqlite: error = %d\n", rc);
++	rc = sqlite3_reset(priv->stmt_cxl_aer_ue_event);
 +	if (rc != SQLITE_OK && rc != SQLITE_DONE)
 +		log(TERM, LOG_ERR,
-+		    "Failed reset cxl_poison_event on sqlite: error = %d\n",
++		    "Failed reset cxl_aer_ue_event on sqlite: error = %d\n",
 +		    rc);
 +	log(TERM, LOG_INFO, "register inserted at db\n");
 +
 +	return rc;
 +}
-+#endif
 +
- /*
-  * Generic code
-  */
-@@ -896,6 +957,16 @@ int ras_mc_event_opendb(unsigned cpu, struct ras_events *ras)
- 	}
  #endif
  
-+#ifdef HAVE_CXL
-+	rc = ras_mc_create_table(priv, &cxl_poison_event_tab);
+ /*
+@@ -965,6 +1013,15 @@ int ras_mc_event_opendb(unsigned cpu, struct ras_events *ras)
+ 		if (rc != SQLITE_OK)
+ 			goto error;
+ 	}
++
++	rc = ras_mc_create_table(priv, &cxl_aer_ue_event_tab);
 +	if (rc == SQLITE_OK) {
-+		rc = ras_mc_prepare_stmt(priv, &priv->stmt_cxl_poison_event,
-+					 &cxl_poison_event_tab);
++		rc = ras_mc_prepare_stmt(priv, &priv->stmt_cxl_aer_ue_event,
++					 &cxl_aer_ue_event_tab);
 +		if (rc != SQLITE_OK)
 +			goto error;
 +	}
-+#endif
 +
- 	ras->db_priv = priv;
- 	return 0;
- 
-@@ -1008,6 +1079,16 @@ int ras_mc_event_closedb(unsigned int cpu, struct ras_events *ras)
- 	}
  #endif
  
-+#ifdef HAVE_CXL
-+	if (priv->stmt_cxl_poison_event) {
-+		rc = sqlite3_finalize(priv->stmt_cxl_poison_event);
+ 	ras->db_priv = priv;
+@@ -1087,6 +1144,14 @@ int ras_mc_event_closedb(unsigned int cpu, struct ras_events *ras)
+ 			    "cpu %u: Failed to finalize cxl_poison_event sqlite: error = %d\n",
+ 			    cpu, rc);
+ 	}
++
++	if (priv->stmt_cxl_aer_ue_event) {
++		rc = sqlite3_finalize(priv->stmt_cxl_aer_ue_event);
 +		if (rc != SQLITE_OK)
 +			log(TERM, LOG_ERR,
-+			    "cpu %u: Failed to finalize cxl_poison_event sqlite: error = %d\n",
++			    "cpu %u: Failed to finalize cxl_aer_ue_event sqlite: error = %d\n",
 +			    cpu, rc);
 +	}
-+#endif
-+
+ #endif
+ 
  	rc = sqlite3_close_v2(db);
- 	if (rc != SQLITE_OK)
- 		log(TERM, LOG_ERR,
 diff --git a/ras-record.h b/ras-record.h
-index 219f10b..e5bf483 100644
+index e5bf483..0e2c178 100644
 --- a/ras-record.h
 +++ b/ras-record.h
-@@ -114,6 +114,20 @@ struct ras_mf_event {
- 	const char *action_result;
+@@ -128,6 +128,18 @@ struct ras_cxl_poison_event {
+ 	char overflow_ts[64];
  };
  
-+struct ras_cxl_poison_event {
++#define SZ_512                          0x200
++#define CXL_HEADERLOG_SIZE              SZ_512
++#define CXL_HEADERLOG_SIZE_U32          (SZ_512 / sizeof(uint32_t))
++
++struct ras_cxl_aer_ue_event {
 +	char timestamp[64];
-+	const char *memdev;
-+	const char *pcidev;
-+	const char *region;
-+	const char *uuid;
-+	uint64_t hpa;
-+	uint64_t dpa;
-+	uint32_t length;
-+	const char *source;
-+	uint8_t flags;
-+	char overflow_ts[64];
++	const char *dev_name;
++	uint32_t error_status;
++	uint32_t first_error;
++	uint32_t *header_log;
 +};
 +
  struct ras_mc_event;
  struct ras_aer_event;
  struct ras_extlog_event;
-@@ -123,6 +137,7 @@ struct mce_event;
- struct devlink_event;
+@@ -138,6 +150,7 @@ struct devlink_event;
  struct diskerror_event;
  struct ras_mf_event;
-+struct ras_cxl_poison_event;
+ struct ras_cxl_poison_event;
++struct ras_cxl_aer_ue_event;
  
  #ifdef HAVE_SQLITE3
  
-@@ -155,6 +170,9 @@ struct sqlite3_priv {
- #ifdef HAVE_MEMORY_FAILURE
- 	sqlite3_stmt	*stmt_mf_event;
+@@ -172,6 +185,7 @@ struct sqlite3_priv {
  #endif
-+#ifdef HAVE_CXL
-+	sqlite3_stmt	*stmt_cxl_poison_event;
-+#endif
+ #ifdef HAVE_CXL
+ 	sqlite3_stmt	*stmt_cxl_poison_event;
++	sqlite3_stmt	*stmt_cxl_aer_ue_event;
+ #endif
  };
  
- struct db_fields {
-@@ -182,6 +200,7 @@ int ras_store_arm_record(struct ras_events *ras, struct ras_arm_event *ev);
- int ras_store_devlink_event(struct ras_events *ras, struct devlink_event *ev);
+@@ -201,6 +215,7 @@ int ras_store_devlink_event(struct ras_events *ras, struct devlink_event *ev);
  int ras_store_diskerror_event(struct ras_events *ras, struct diskerror_event *ev);
  int ras_store_mf_event(struct ras_events *ras, struct ras_mf_event *ev);
-+int ras_store_cxl_poison_event(struct ras_events *ras, struct ras_cxl_poison_event *ev);
+ int ras_store_cxl_poison_event(struct ras_events *ras, struct ras_cxl_poison_event *ev);
++int ras_store_cxl_aer_ue_event(struct ras_events *ras, struct ras_cxl_aer_ue_event *ev);
  
  #else
  static inline int ras_mc_event_opendb(unsigned cpu, struct ras_events *ras) { return 0; };
-@@ -195,6 +214,7 @@ static inline int ras_store_arm_record(struct ras_events *ras, struct ras_arm_ev
- static inline int ras_store_devlink_event(struct ras_events *ras, struct devlink_event *ev) { return 0; };
+@@ -215,6 +230,7 @@ static inline int ras_store_devlink_event(struct ras_events *ras, struct devlink
  static inline int ras_store_diskerror_event(struct ras_events *ras, struct diskerror_event *ev) { return 0; };
  static inline int ras_store_mf_event(struct ras_events *ras, struct ras_mf_event *ev) { return 0; };
-+static inline int ras_store_cxl_poison_event(struct ras_events *ras, struct ras_cxl_poison_event *ev) { return 0; };
+ static inline int ras_store_cxl_poison_event(struct ras_events *ras, struct ras_cxl_poison_event *ev) { return 0; };
++static inline int ras_store_cxl_aer_ue_event(struct ras_events *ras, struct ras_cxl_aer_ue_event *ev) { return 0; };
  
  #endif
  
 diff --git a/ras-report.c b/ras-report.c
-index ea3a9b6..415920a 100644
+index 415920a..d040ec1 100644
 --- a/ras-report.c
 +++ b/ras-report.c
-@@ -331,6 +331,42 @@ static int set_mf_event_backtrace(char *buf, struct ras_mf_event *ev)
+@@ -367,6 +367,28 @@ static int set_cxl_poison_event_backtrace(char *buf, struct ras_cxl_poison_event
  	return 0;
  }
  
-+static int set_cxl_poison_event_backtrace(char *buf, struct ras_cxl_poison_event *ev)
++static int set_cxl_aer_ue_event_backtrace(char *buf, struct ras_cxl_aer_ue_event *ev)
 +{
 +	char bt_buf[MAX_BACKTRACE_SIZE];
 +
@@ -559,27 +426,13 @@ index ea3a9b6..415920a 100644
 +
 +	sprintf(bt_buf, "BACKTRACE="	\
 +						"timestamp=%s\n"	\
-+						"memdev=%s\n"		\
-+						"pcidev=%s\n"		\
-+						"region=%s\n"		\
-+						"uuid=%s\n"		\
-+						"hpa=0x%lx\n"		\
-+						"dpa=0x%lx\n"		\
-+						"length=%d\n"		\
-+						"source=%s\n"		\
-+						"flags=%d\n"		\
-+						"overflow_timestamp=%s\n" \
++						"dev_name=%s\n"		\
++						"error_status=%u\n"	\
++						"first_error=%u\n"	\
 +						ev->timestamp,		\
-+						ev->memdev,		\
-+						ev->pcidev,		\
-+						ev->region,		\
-+						ev->uuid,		\
-+						ev->hpa,		\
-+						ev->dpa,		\
-+						ev->length,		\
-+						ev->source,		\
-+						ev->flags,		\
-+						ev->overflow_ts);
++						ev->dev_name,		\
++						ev->error_status,	\
++						ev->first_error);
 +
 +	strcat(buf, bt_buf);
 +
@@ -589,22 +442,22 @@ index ea3a9b6..415920a 100644
  static int commit_report_backtrace(int sockfd, int type, void *ev){
  	char buf[MAX_BACKTRACE_SIZE];
  	char *pbuf = buf;
-@@ -368,6 +404,9 @@ static int commit_report_backtrace(int sockfd, int type, void *ev){
- 	case MF_EVENT:
- 		rc = set_mf_event_backtrace(buf, (struct ras_mf_event *)ev);
+@@ -407,6 +429,9 @@ static int commit_report_backtrace(int sockfd, int type, void *ev){
+ 	case CXL_POISON_EVENT:
+ 		rc = set_cxl_poison_event_backtrace(buf, (struct ras_cxl_poison_event *)ev);
  		break;
-+	case CXL_POISON_EVENT:
-+		rc = set_cxl_poison_event_backtrace(buf, (struct ras_cxl_poison_event *)ev);
++	case CXL_AER_UE_EVENT:
++		rc = set_cxl_aer_ue_event_backtrace(buf, (struct ras_cxl_aer_ue_event *)ev);
 +		break;
  	default:
  		return -1;
  	}
-@@ -776,3 +815,47 @@ mf_fail:
+@@ -859,3 +884,47 @@ cxl_poison_fail:
  	else
  		return -1;
  }
 +
-+int ras_report_cxl_poison_event(struct ras_events *ras, struct ras_cxl_poison_event *ev)
++int ras_report_cxl_aer_ue_event(struct ras_events *ras, struct ras_cxl_aer_ue_event *ev)
 +{
 +	char buf[MAX_MESSAGE_SIZE];
 +	int sockfd = 0;
@@ -619,25 +472,25 @@ index ea3a9b6..415920a 100644
 +
 +	rc = commit_report_basic(sockfd);
 +	if (rc < 0)
-+		goto cxl_poison_fail;
++		goto cxl_aer_ue_fail;
 +
-+	rc = commit_report_backtrace(sockfd, CXL_POISON_EVENT, ev);
++	rc = commit_report_backtrace(sockfd, CXL_AER_UE_EVENT, ev);
 +	if (rc < 0)
-+		goto cxl_poison_fail;
++		goto cxl_aer_ue_fail;
 +
-+	sprintf(buf, "ANALYZER=%s", "rasdaemon-cxl-poison");
++	sprintf(buf, "ANALYZER=%s", "rasdaemon-cxl-aer-uncorrectable-error");
 +	rc = write(sockfd, buf, strlen(buf) + 1);
 +	if (rc < strlen(buf) + 1)
-+		goto cxl_poison_fail;
++		goto cxl_aer_ue_fail;
 +
-+	sprintf(buf, "REASON=%s", "CXL poison");
++	sprintf(buf, "REASON=%s", "CXL AER uncorrectable error");
 +	rc = write(sockfd, buf, strlen(buf) + 1);
 +	if (rc < strlen(buf) + 1)
-+		goto cxl_poison_fail;
++		goto cxl_aer_ue_fail;
 +
 +	done = 1;
 +
-+cxl_poison_fail:
++cxl_aer_ue_fail:
 +
 +	if (sockfd >= 0)
 +		close(sockfd);
@@ -648,22 +501,22 @@ index ea3a9b6..415920a 100644
 +		return -1;
 +}
 diff --git a/ras-report.h b/ras-report.h
-index e605eb1..d1591ce 100644
+index d1591ce..dfe89d1 100644
 --- a/ras-report.h
 +++ b/ras-report.h
-@@ -39,6 +39,7 @@ int ras_report_arm_event(struct ras_events *ras, struct ras_arm_event *ev);
- int ras_report_devlink_event(struct ras_events *ras, struct devlink_event *ev);
+@@ -40,6 +40,7 @@ int ras_report_devlink_event(struct ras_events *ras, struct devlink_event *ev);
  int ras_report_diskerror_event(struct ras_events *ras, struct diskerror_event *ev);
  int ras_report_mf_event(struct ras_events *ras, struct ras_mf_event *ev);
-+int ras_report_cxl_poison_event(struct ras_events *ras, struct ras_cxl_poison_event *ev);
+ int ras_report_cxl_poison_event(struct ras_events *ras, struct ras_cxl_poison_event *ev);
++int ras_report_cxl_aer_ue_event(struct ras_events *ras, struct ras_cxl_aer_ue_event *ev);
  
  #else
  
-@@ -50,6 +51,7 @@ static inline int ras_report_arm_event(struct ras_events *ras, struct ras_arm_ev
- static inline int ras_report_devlink_event(struct ras_events *ras, struct devlink_event *ev) { return 0; };
+@@ -52,6 +53,7 @@ static inline int ras_report_devlink_event(struct ras_events *ras, struct devlin
  static inline int ras_report_diskerror_event(struct ras_events *ras, struct diskerror_event *ev) { return 0; };
  static inline int ras_report_mf_event(struct ras_events *ras, struct ras_mf_event *ev) { return 0; };
-+static inline int ras_report_cxl_poison_event(struct ras_events *ras, struct ras_cxl_poison_event *ev) { return 0; };
+ static inline int ras_report_cxl_poison_event(struct ras_events *ras, struct ras_cxl_poison_event *ev) { return 0; };
++static inline int ras_report_cxl_aer_ue_event(struct ras_events *ras, struct ras_cxl_aer_ue_event *ev) { return 0; };
  
  #endif
  
