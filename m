@@ -2,61 +2,57 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72A886759CD
-	for <lists+linux-edac@lfdr.de>; Fri, 20 Jan 2023 17:22:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 60B94675C79
+	for <lists+linux-edac@lfdr.de>; Fri, 20 Jan 2023 19:11:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229509AbjATQWE (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Fri, 20 Jan 2023 11:22:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57514 "EHLO
+        id S229763AbjATSL2 (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Fri, 20 Jan 2023 13:11:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229936AbjATQWD (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Fri, 20 Jan 2023 11:22:03 -0500
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8DB556482;
-        Fri, 20 Jan 2023 08:21:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674231704; x=1705767704;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=edKhluzHQ0Su9r4KXV8/1hevugq1jYX8fo6P12R4gYo=;
-  b=ghhXnvkVlmBCAW91+hn0GwSz9m8iCbB4qhwFFLrKHnvbWw9IQ+UMgA88
-   NKZ67ZALdPKu91/zaw9k2FDoMa3x3/jRTGFL9X+Du8isqTOgECfYCqLCG
-   gI1nrsMRSmD7FbMQ5Zc6FyN6rdo0OlOeH5Qs/OKTZ6dzkqOEwZCK5KTgo
-   XXYhXfMv3C2RHjqh4z6zUB2nQdKZadHCJzA/Q5kMyLuIQjUycbhq9FgQo
-   fjgN3PZhyDNtNh7w75fC6GniLmG9Xc2hP0fezpcpdDF2bhRzqWs2k9Aiz
-   fNyuFDY09AErUjSxLnTn9D8BwNwBlIiJMf6tU/VZHZiepwYCGkWVWRRvl
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10596"; a="324303968"
-X-IronPort-AV: E=Sophos;i="5.97,232,1669104000"; 
-   d="scan'208";a="324303968"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jan 2023 08:21:44 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10596"; a="691103440"
-X-IronPort-AV: E=Sophos;i="5.97,232,1669104000"; 
-   d="scan'208";a="691103440"
-Received: from djiang5-mobl3.amr.corp.intel.com (HELO [10.212.69.198]) ([10.212.69.198])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jan 2023 08:21:43 -0800
-Message-ID: <0c0a61f7-66da-a83d-7ea5-5d036b255a05@intel.com>
-Date:   Fri, 20 Jan 2023 09:21:42 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.6.0
-Subject: Re: [RFC PATCH 3/4] rasdaemon: Add support for the CXL AER
+        with ESMTP id S229489AbjATSL1 (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Fri, 20 Jan 2023 13:11:27 -0500
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF0AE170D;
+        Fri, 20 Jan 2023 10:11:22 -0800 (PST)
+Received: from lhrpeml100006.china.huawei.com (unknown [172.18.147.200])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4Nz6xQ4gsxz67tG2;
+        Sat, 21 Jan 2023 02:10:50 +0800 (CST)
+Received: from lhrpeml500006.china.huawei.com (7.191.161.198) by
+ lhrpeml100006.china.huawei.com (7.191.160.224) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.34; Fri, 20 Jan 2023 18:11:20 +0000
+Received: from lhrpeml500006.china.huawei.com ([7.191.161.198]) by
+ lhrpeml500006.china.huawei.com ([7.191.161.198]) with mapi id 15.01.2375.034;
+ Fri, 20 Jan 2023 18:11:20 +0000
+From:   Shiju Jose <shiju.jose@huawei.com>
+To:     Dave Jiang <dave.jiang@intel.com>,
+        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
+        "linux-cxl@vger.kernel.org" <linux-cxl@vger.kernel.org>,
+        "mchehab@kernel.org" <mchehab@kernel.org>
+CC:     Jonathan Cameron <jonathan.cameron@huawei.com>,
+        Linuxarm <linuxarm@huawei.com>
+Subject: RE: [RFC PATCH 3/4] rasdaemon: Add support for the CXL AER
  uncorrectable errors
-Content-Language: en-US
-To:     shiju.jose@huawei.com, linux-edac@vger.kernel.org,
-        linux-cxl@vger.kernel.org, mchehab@kernel.org
-Cc:     jonathan.cameron@huawei.com, linuxarm@huawei.com
+Thread-Topic: [RFC PATCH 3/4] rasdaemon: Add support for the CXL AER
+ uncorrectable errors
+Thread-Index: AQHZLCoPYYZJeK+FlE+hopLxQ2ZZUa6nfjsAgAAYVlA=
+Date:   Fri, 20 Jan 2023 18:11:20 +0000
+Message-ID: <291e8b782189415f87209a61c4e4c250@huawei.com>
 References: <20230119171809.1406-1-shiju.jose@huawei.com>
  <20230119171809.1406-4-shiju.jose@huawei.com>
-From:   Dave Jiang <dave.jiang@intel.com>
-In-Reply-To: <20230119171809.1406-4-shiju.jose@huawei.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+ <0c0a61f7-66da-a83d-7ea5-5d036b255a05@intel.com>
+In-Reply-To: <0c0a61f7-66da-a83d-7ea5-5d036b255a05@intel.com>
+Accept-Language: en-GB, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.48.157.78]
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,483 +60,320 @@ Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-
-
-On 1/19/23 10:18 AM, shiju.jose@huawei.com wrote:
-> From: Shiju Jose <shiju.jose@huawei.com>
-> 
-> Add support to log and record the CXL AER uncorrectable errors.
-> 
-> The corresponding Kernel patch here:
-> https://patchwork.kernel.org/project/cxl/patch/166974413388.1608150.5875712482260436188.stgit@djiang5-desk3.ch.intel.com/
-> 
-> Note: It was found that the header log data to be converted to the
->        big-endian format to correctly store in the SQLite database, likely
->        because the SQLite database seems uses the big-endian storage.
-
-A general question. Is it typical of rasdaemon to have function return 
--1 on error instead of standard -errno values?
-
-Otherwise looks good to me.
-
-> 
-> Signed-off-by: Shiju Jose <shiju.jose@huawei.com> > ---
->   ras-cxl-handler.c | 125 ++++++++++++++++++++++++++++++++++++++++++++++
->   ras-cxl-handler.h |   5 ++
->   ras-events.c      |   9 ++++
->   ras-events.h      |   1 +
->   ras-record.c      |  65 ++++++++++++++++++++++++
->   ras-record.h      |  16 ++++++
->   ras-report.c      |  69 +++++++++++++++++++++++++
->   ras-report.h      |   2 +
->   8 files changed, 292 insertions(+)
-> 
-> diff --git a/ras-cxl-handler.c b/ras-cxl-handler.c
-> index 11531ef..b1aedd7 100644
-> --- a/ras-cxl-handler.c
-> +++ b/ras-cxl-handler.c
-> @@ -21,6 +21,7 @@
->   #include "ras-record.h"
->   #include "ras-logger.h"
->   #include "ras-report.h"
-> +#include <endian.h>
->   
->   /* Poison List: Payload out flags */
->   #define CXL_POISON_FLAG_MORE            BIT(0)
-> @@ -160,3 +161,127 @@ int ras_cxl_poison_event_handler(struct trace_seq *s,
->   
->   	return 0;
->   }
-> +
-> +/* CXL AER Errors */
-> +
-> +#define CXL_AER_UE_CACHE_DATA_PARITY	BIT(0)
-> +#define CXL_AER_UE_CACHE_ADDR_PARITY	BIT(1)
-> +#define CXL_AER_UE_CACHE_BE_PARITY	BIT(2)
-> +#define CXL_AER_UE_CACHE_DATA_ECC	BIT(3)
-> +#define CXL_AER_UE_MEM_DATA_PARITY	BIT(4)
-> +#define CXL_AER_UE_MEM_ADDR_PARITY	BIT(5)
-> +#define CXL_AER_UE_MEM_BE_PARITY	BIT(6)
-> +#define CXL_AER_UE_MEM_DATA_ECC		BIT(7)
-> +#define CXL_AER_UE_REINIT_THRESH	BIT(8)
-> +#define CXL_AER_UE_RSVD_ENCODE		BIT(9)
-> +#define CXL_AER_UE_POISON		BIT(10)
-> +#define CXL_AER_UE_RECV_OVERFLOW	BIT(11)
-> +#define CXL_AER_UE_INTERNAL_ERR		BIT(14)
-> +#define CXL_AER_UE_IDE_TX_ERR		BIT(15)
-> +#define CXL_AER_UE_IDE_RX_ERR		BIT(16)
-> +
-> +struct cxl_error_list {
-> +	uint32_t bit;
-> +	const char *error;
-> +};
-> +
-> +static const struct cxl_error_list cxl_aer_ue[] = {
-> +	{ .bit = CXL_AER_UE_CACHE_DATA_PARITY, .error = "Cache Data Parity Error" },
-> +	{ .bit = CXL_AER_UE_CACHE_ADDR_PARITY, .error = "Cache Address Parity Error" },
-> +	{ .bit = CXL_AER_UE_CACHE_BE_PARITY, .error = "Cache Byte Enable Parity Error" },
-> +	{ .bit = CXL_AER_UE_CACHE_DATA_ECC, .error = "Cache Data ECC Error" },
-> +	{ .bit = CXL_AER_UE_MEM_DATA_PARITY, .error = "Memory Data Parity Error" },
-> +	{ .bit = CXL_AER_UE_MEM_ADDR_PARITY, .error = "Memory Address Parity Error" },
-> +	{ .bit = CXL_AER_UE_MEM_BE_PARITY, .error = "Memory Byte Enable Parity Error" },
-> +	{ .bit = CXL_AER_UE_MEM_DATA_ECC, .error = "Memory Data ECC Error" },
-> +	{ .bit = CXL_AER_UE_REINIT_THRESH, .error = "REINIT Threshold Hit" },
-> +	{ .bit = CXL_AER_UE_RSVD_ENCODE, .error = "Received Unrecognized Encoding" },
-> +	{ .bit = CXL_AER_UE_POISON, .error = "Received Poison From Peer" },
-> +	{ .bit = CXL_AER_UE_RECV_OVERFLOW, .error = "Receiver Overflow" },
-> +	{ .bit = CXL_AER_UE_INTERNAL_ERR, .error = "Component Specific Error" },
-> +	{ .bit = CXL_AER_UE_IDE_TX_ERR, .error = "IDE Tx Error" },
-> +	{ .bit = CXL_AER_UE_IDE_RX_ERR, .error = "IDE Rx Error" },
-> +};
-> +
-> +static void decode_cxl_error_status(struct trace_seq *s, uint32_t status,
-> +				   const struct cxl_error_list *cxl_error_list,
-> +				   uint8_t num_elems)
-> +{
-> +	int i;
-> +
-> +	for (i = 0; i < num_elems; i++) {
-> +		if (status & cxl_error_list[i].bit)
-> +			trace_seq_printf(s, "\'%s\' ", cxl_error_list[i].error);
-> +	}
-> +}
-> +
-> +int ras_cxl_aer_ue_event_handler(struct trace_seq *s,
-> +				 struct pevent_record *record,
-> +				 struct event_format *event, void *context)
-> +{
-> +	int len, i;
-> +	unsigned long long val;
-> +	time_t now;
-> +	struct tm *tm;
-> +	struct ras_events *ras = context;
-> +	struct ras_cxl_aer_ue_event ev;
-> +
-> +	memset(&ev, 0, sizeof(ev));
-> +	now = record->ts/user_hz + ras->uptime_diff;
-> +	tm = localtime(&now);
-> +	if (tm)
-> +		strftime(ev.timestamp, sizeof(ev.timestamp),
-> +			 "%Y-%m-%d %H:%M:%S %z", tm);
-> +	else
-> +		strncpy(ev.timestamp, "1970-01-01 00:00:00 +0000", sizeof(ev.timestamp));
-> +	trace_seq_printf(s, "%s ", ev.timestamp);
-> +
-> +	ev.dev_name = pevent_get_field_raw(s, event, "dev_name",
-> +					   record, &len, 1);
-> +	if (!ev.dev_name)
-> +		return -1;
-> +	trace_seq_printf(s, "dev_name:%s ", ev.dev_name);
-> +
-> +	if (pevent_get_field_val(s, event, "status", record, &val, 1) < 0)
-> +		return -1;
-> +	ev.error_status = val;
-> +
-> +	trace_seq_printf(s, "error status:");
-> +	decode_cxl_error_status(s, ev.error_status,
-> +				cxl_aer_ue, ARRAY_SIZE(cxl_aer_ue));
-> +
-> +	if (pevent_get_field_val(s,  event, "first_error", record, &val, 1) < 0)
-> +		return -1;
-> +	ev.first_error = val;
-> +
-> +	trace_seq_printf(s, "first error:");
-> +	decode_cxl_error_status(s, ev.first_error,
-> +				cxl_aer_ue, ARRAY_SIZE(cxl_aer_ue));
-> +
-> +	ev.header_log = pevent_get_field_raw(s, event, "header_log",
-> +					     record, &len, 1);
-> +	if (!ev.header_log)
-> +		return -1;
-> +	trace_seq_printf(s, "header log:\n");
-> +	for (i = 0; i < CXL_HEADERLOG_SIZE_U32; i++) {
-> +		trace_seq_printf(s, "%08x ", ev.header_log[i]);
-> +		if ((i > 0) && ((i % 20) == 0))
-> +			trace_seq_printf(s, "\n");
-> +		/* Convert header log data to the big-endian format because
-> +		 * the SQLite database seems uses the big-endian storage.
-> +		 */
-> +		ev.header_log[i] = htobe32(ev.header_log[i]);
-> +	}
-> +
-> +	/* Insert data into the SGBD */
-> +#ifdef HAVE_SQLITE3
-> +	ras_store_cxl_aer_ue_event(ras, &ev);
-> +#endif
-> +
-> +#ifdef HAVE_ABRT_REPORT
-> +	/* Report event to ABRT */
-> +	ras_report_cxl_aer_ue_event(ras, &ev);
-> +#endif
-> +
-> +	return 0;
-> +}
-> diff --git a/ras-cxl-handler.h b/ras-cxl-handler.h
-> index 4508624..f96ed35 100644
-> --- a/ras-cxl-handler.h
-> +++ b/ras-cxl-handler.h
-> @@ -21,4 +21,9 @@
->   int ras_cxl_poison_event_handler(struct trace_seq *s,
->   			 struct pevent_record *record,
->   			 struct event_format *event, void *context);
-> +
-> +int ras_cxl_aer_ue_event_handler(struct trace_seq *s,
-> +				 struct pevent_record *record,
-> +				 struct event_format *event, void *context);
-> +
->   #endif
-> diff --git a/ras-events.c b/ras-events.c
-> index 09142f2..5688878 100644
-> --- a/ras-events.c
-> +++ b/ras-events.c
-> @@ -240,6 +240,7 @@ int toggle_ras_mc_event(int enable)
->   
->   #ifdef HAVE_CXL
->   	rc |= __toggle_ras_mc_event(ras, "cxl", "cxl_poison", enable);
-> +	rc |= __toggle_ras_mc_event(ras, "cxl", "cxl_aer_uncorrectable_error", enable);
->   #endif
->   
->   free_ras:
-> @@ -938,6 +939,14 @@ int handle_ras_events(int record_events)
->   	else
->   		log(ALL, LOG_ERR, "Can't get traces from %s:%s\n",
->   		    "cxl", "cxl_poison");
-> +
-> +	rc = add_event_handler(ras, pevent, page_size, "cxl", "cxl_aer_uncorrectable_error",
-> +			       ras_cxl_aer_ue_event_handler, NULL, CXL_AER_UE_EVENT);
-> +	if (!rc)
-> +		num_events++;
-> +	else
-> +		log(ALL, LOG_ERR, "Can't get traces from %s:%s\n",
-> +		    "cxl", "cxl_aer_uncorrectable_error");
->   #endif
->   
->   	if (!num_events) {
-> diff --git a/ras-events.h b/ras-events.h
-> index 24f7ccc..b9ae336 100644
-> --- a/ras-events.h
-> +++ b/ras-events.h
-> @@ -40,6 +40,7 @@ enum {
->   	DISKERROR_EVENT,
->   	MF_EVENT,
->   	CXL_POISON_EVENT,
-> +	CXL_AER_UE_EVENT,
->   	NR_EVENTS
->   };
->   
-> diff --git a/ras-record.c b/ras-record.c
-> index c3bc961..4b4c068 100644
-> --- a/ras-record.c
-> +++ b/ras-record.c
-> @@ -618,6 +618,54 @@ int ras_store_cxl_poison_event(struct ras_events *ras, struct ras_cxl_poison_eve
->   
->   	return rc;
->   }
-> +
-> +/*
-> + * Table and functions to handle cxl:cxl_aer_uncorrectable_error
-> + */
-> +static const struct db_fields cxl_aer_ue_event_fields[] = {
-> +	{ .name = "id",                   .type = "INTEGER PRIMARY KEY" },
-> +	{ .name = "timestamp",            .type = "TEXT" },
-> +	{ .name = "dev_name",             .type = "TEXT" },
-> +	{ .name = "error_status",         .type = "INTEGER" },
-> +	{ .name = "first_error",          .type = "INTEGER" },
-> +	{ .name = "header_log",           .type = "BLOB" },
-> +};
-> +
-> +static const struct db_table_descriptor cxl_aer_ue_event_tab = {
-> +	.name = "cxl_aer_ue_event",
-> +	.fields = cxl_aer_ue_event_fields,
-> +	.num_fields = ARRAY_SIZE(cxl_aer_ue_event_fields),
-> +};
-> +
-> +int ras_store_cxl_aer_ue_event(struct ras_events *ras, struct ras_cxl_aer_ue_event *ev)
-> +{
-> +	int rc;
-> +	struct sqlite3_priv *priv = ras->db_priv;
-> +
-> +	if (!priv || !priv->stmt_cxl_aer_ue_event)
-> +		return 0;
-> +	log(TERM, LOG_INFO, "cxl_aer_ue_event store: %p\n", priv->stmt_cxl_aer_ue_event);
-> +
-> +	sqlite3_bind_text(priv->stmt_cxl_aer_ue_event, 1, ev->timestamp, -1, NULL);
-> +	sqlite3_bind_text(priv->stmt_cxl_aer_ue_event, 2, ev->dev_name, -1, NULL);
-> +	sqlite3_bind_int(priv->stmt_cxl_aer_ue_event, 3, ev->error_status);
-> +	sqlite3_bind_int(priv->stmt_cxl_aer_ue_event, 4, ev->first_error);
-> +	sqlite3_bind_blob(priv->stmt_cxl_aer_ue_event, 5, ev->header_log, CXL_HEADERLOG_SIZE, NULL);
-> +
-> +	rc = sqlite3_step(priv->stmt_cxl_aer_ue_event);
-> +	if (rc != SQLITE_OK && rc != SQLITE_DONE)
-> +		log(TERM, LOG_ERR,
-> +		    "Failed to do cxl_aer_ue_event step on sqlite: error = %d\n", rc);
-> +	rc = sqlite3_reset(priv->stmt_cxl_aer_ue_event);
-> +	if (rc != SQLITE_OK && rc != SQLITE_DONE)
-> +		log(TERM, LOG_ERR,
-> +		    "Failed reset cxl_aer_ue_event on sqlite: error = %d\n",
-> +		    rc);
-> +	log(TERM, LOG_INFO, "register inserted at db\n");
-> +
-> +	return rc;
-> +}
-> +
->   #endif
->   
->   /*
-> @@ -965,6 +1013,15 @@ int ras_mc_event_opendb(unsigned cpu, struct ras_events *ras)
->   		if (rc != SQLITE_OK)
->   			goto error;
->   	}
-> +
-> +	rc = ras_mc_create_table(priv, &cxl_aer_ue_event_tab);
-> +	if (rc == SQLITE_OK) {
-> +		rc = ras_mc_prepare_stmt(priv, &priv->stmt_cxl_aer_ue_event,
-> +					 &cxl_aer_ue_event_tab);
-> +		if (rc != SQLITE_OK)
-> +			goto error;
-> +	}
-> +
->   #endif
->   
->   	ras->db_priv = priv;
-> @@ -1087,6 +1144,14 @@ int ras_mc_event_closedb(unsigned int cpu, struct ras_events *ras)
->   			    "cpu %u: Failed to finalize cxl_poison_event sqlite: error = %d\n",
->   			    cpu, rc);
->   	}
-> +
-> +	if (priv->stmt_cxl_aer_ue_event) {
-> +		rc = sqlite3_finalize(priv->stmt_cxl_aer_ue_event);
-> +		if (rc != SQLITE_OK)
-> +			log(TERM, LOG_ERR,
-> +			    "cpu %u: Failed to finalize cxl_aer_ue_event sqlite: error = %d\n",
-> +			    cpu, rc);
-> +	}
->   #endif
->   
->   	rc = sqlite3_close_v2(db);
-> diff --git a/ras-record.h b/ras-record.h
-> index e5bf483..0e2c178 100644
-> --- a/ras-record.h
-> +++ b/ras-record.h
-> @@ -128,6 +128,18 @@ struct ras_cxl_poison_event {
->   	char overflow_ts[64];
->   };
->   
-> +#define SZ_512                          0x200
-> +#define CXL_HEADERLOG_SIZE              SZ_512
-> +#define CXL_HEADERLOG_SIZE_U32          (SZ_512 / sizeof(uint32_t))
-> +
-> +struct ras_cxl_aer_ue_event {
-> +	char timestamp[64];
-> +	const char *dev_name;
-> +	uint32_t error_status;
-> +	uint32_t first_error;
-> +	uint32_t *header_log;
-> +};
-> +
->   struct ras_mc_event;
->   struct ras_aer_event;
->   struct ras_extlog_event;
-> @@ -138,6 +150,7 @@ struct devlink_event;
->   struct diskerror_event;
->   struct ras_mf_event;
->   struct ras_cxl_poison_event;
-> +struct ras_cxl_aer_ue_event;
->   
->   #ifdef HAVE_SQLITE3
->   
-> @@ -172,6 +185,7 @@ struct sqlite3_priv {
->   #endif
->   #ifdef HAVE_CXL
->   	sqlite3_stmt	*stmt_cxl_poison_event;
-> +	sqlite3_stmt	*stmt_cxl_aer_ue_event;
->   #endif
->   };
->   
-> @@ -201,6 +215,7 @@ int ras_store_devlink_event(struct ras_events *ras, struct devlink_event *ev);
->   int ras_store_diskerror_event(struct ras_events *ras, struct diskerror_event *ev);
->   int ras_store_mf_event(struct ras_events *ras, struct ras_mf_event *ev);
->   int ras_store_cxl_poison_event(struct ras_events *ras, struct ras_cxl_poison_event *ev);
-> +int ras_store_cxl_aer_ue_event(struct ras_events *ras, struct ras_cxl_aer_ue_event *ev);
->   
->   #else
->   static inline int ras_mc_event_opendb(unsigned cpu, struct ras_events *ras) { return 0; };
-> @@ -215,6 +230,7 @@ static inline int ras_store_devlink_event(struct ras_events *ras, struct devlink
->   static inline int ras_store_diskerror_event(struct ras_events *ras, struct diskerror_event *ev) { return 0; };
->   static inline int ras_store_mf_event(struct ras_events *ras, struct ras_mf_event *ev) { return 0; };
->   static inline int ras_store_cxl_poison_event(struct ras_events *ras, struct ras_cxl_poison_event *ev) { return 0; };
-> +static inline int ras_store_cxl_aer_ue_event(struct ras_events *ras, struct ras_cxl_aer_ue_event *ev) { return 0; };
->   
->   #endif
->   
-> diff --git a/ras-report.c b/ras-report.c
-> index 415920a..d040ec1 100644
-> --- a/ras-report.c
-> +++ b/ras-report.c
-> @@ -367,6 +367,28 @@ static int set_cxl_poison_event_backtrace(char *buf, struct ras_cxl_poison_event
->   	return 0;
->   }
->   
-> +static int set_cxl_aer_ue_event_backtrace(char *buf, struct ras_cxl_aer_ue_event *ev)
-> +{
-> +	char bt_buf[MAX_BACKTRACE_SIZE];
-> +
-> +	if (!buf || !ev)
-> +		return -1;
-> +
-> +	sprintf(bt_buf, "BACKTRACE="	\
-> +						"timestamp=%s\n"	\
-> +						"dev_name=%s\n"		\
-> +						"error_status=%u\n"	\
-> +						"first_error=%u\n"	\
-> +						ev->timestamp,		\
-> +						ev->dev_name,		\
-> +						ev->error_status,	\
-> +						ev->first_error);
-> +
-> +	strcat(buf, bt_buf);
-> +
-> +	return 0;
-> +}
-> +
->   static int commit_report_backtrace(int sockfd, int type, void *ev){
->   	char buf[MAX_BACKTRACE_SIZE];
->   	char *pbuf = buf;
-> @@ -407,6 +429,9 @@ static int commit_report_backtrace(int sockfd, int type, void *ev){
->   	case CXL_POISON_EVENT:
->   		rc = set_cxl_poison_event_backtrace(buf, (struct ras_cxl_poison_event *)ev);
->   		break;
-> +	case CXL_AER_UE_EVENT:
-> +		rc = set_cxl_aer_ue_event_backtrace(buf, (struct ras_cxl_aer_ue_event *)ev);
-> +		break;
->   	default:
->   		return -1;
->   	}
-> @@ -859,3 +884,47 @@ cxl_poison_fail:
->   	else
->   		return -1;
->   }
-> +
-> +int ras_report_cxl_aer_ue_event(struct ras_events *ras, struct ras_cxl_aer_ue_event *ev)
-> +{
-> +	char buf[MAX_MESSAGE_SIZE];
-> +	int sockfd = 0;
-> +	int done = 0;
-> +	int rc = -1;
-> +
-> +	memset(buf, 0, sizeof(buf));
-> +
-> +	sockfd = setup_report_socket();
-> +	if (sockfd < 0)
-> +		return -1;
-> +
-> +	rc = commit_report_basic(sockfd);
-> +	if (rc < 0)
-> +		goto cxl_aer_ue_fail;
-> +
-> +	rc = commit_report_backtrace(sockfd, CXL_AER_UE_EVENT, ev);
-> +	if (rc < 0)
-> +		goto cxl_aer_ue_fail;
-> +
-> +	sprintf(buf, "ANALYZER=%s", "rasdaemon-cxl-aer-uncorrectable-error");
-> +	rc = write(sockfd, buf, strlen(buf) + 1);
-> +	if (rc < strlen(buf) + 1)
-> +		goto cxl_aer_ue_fail;
-> +
-> +	sprintf(buf, "REASON=%s", "CXL AER uncorrectable error");
-> +	rc = write(sockfd, buf, strlen(buf) + 1);
-> +	if (rc < strlen(buf) + 1)
-> +		goto cxl_aer_ue_fail;
-> +
-> +	done = 1;
-> +
-> +cxl_aer_ue_fail:
-> +
-> +	if (sockfd >= 0)
-> +		close(sockfd);
-> +
-> +	if (done)
-> +		return 0;
-> +	else
-> +		return -1;
-> +}
-> diff --git a/ras-report.h b/ras-report.h
-> index d1591ce..dfe89d1 100644
-> --- a/ras-report.h
-> +++ b/ras-report.h
-> @@ -40,6 +40,7 @@ int ras_report_devlink_event(struct ras_events *ras, struct devlink_event *ev);
->   int ras_report_diskerror_event(struct ras_events *ras, struct diskerror_event *ev);
->   int ras_report_mf_event(struct ras_events *ras, struct ras_mf_event *ev);
->   int ras_report_cxl_poison_event(struct ras_events *ras, struct ras_cxl_poison_event *ev);
-> +int ras_report_cxl_aer_ue_event(struct ras_events *ras, struct ras_cxl_aer_ue_event *ev);
->   
->   #else
->   
-> @@ -52,6 +53,7 @@ static inline int ras_report_devlink_event(struct ras_events *ras, struct devlin
->   static inline int ras_report_diskerror_event(struct ras_events *ras, struct diskerror_event *ev) { return 0; };
->   static inline int ras_report_mf_event(struct ras_events *ras, struct ras_mf_event *ev) { return 0; };
->   static inline int ras_report_cxl_poison_event(struct ras_events *ras, struct ras_cxl_poison_event *ev) { return 0; };
-> +static inline int ras_report_cxl_aer_ue_event(struct ras_events *ras, struct ras_cxl_aer_ue_event *ev) { return 0; };
->   
->   #endif
->   
+SGkgRGF2ZSwNCg0KVGhhbmtzIGZvciB0aGUgZmVlZGJhY2suDQoNCj4tLS0tLU9yaWdpbmFsIE1l
+c3NhZ2UtLS0tLQ0KPkZyb206IERhdmUgSmlhbmcgPGRhdmUuamlhbmdAaW50ZWwuY29tPg0KPlNl
+bnQ6IDIwIEphbnVhcnkgMjAyMyAxNjoyMg0KPlRvOiBTaGlqdSBKb3NlIDxzaGlqdS5qb3NlQGh1
+YXdlaS5jb20+OyBsaW51eC1lZGFjQHZnZXIua2VybmVsLm9yZzsgbGludXgtDQo+Y3hsQHZnZXIu
+a2VybmVsLm9yZzsgbWNoZWhhYkBrZXJuZWwub3JnDQo+Q2M6IEpvbmF0aGFuIENhbWVyb24gPGpv
+bmF0aGFuLmNhbWVyb25AaHVhd2VpLmNvbT47IExpbnV4YXJtDQo+PGxpbnV4YXJtQGh1YXdlaS5j
+b20+DQo+U3ViamVjdDogUmU6IFtSRkMgUEFUQ0ggMy80XSByYXNkYWVtb246IEFkZCBzdXBwb3J0
+IGZvciB0aGUgQ1hMIEFFUg0KPnVuY29ycmVjdGFibGUgZXJyb3JzDQo+DQo+DQo+DQo+T24gMS8x
+OS8yMyAxMDoxOCBBTSwgc2hpanUuam9zZUBodWF3ZWkuY29tIHdyb3RlOg0KPj4gRnJvbTogU2hp
+anUgSm9zZSA8c2hpanUuam9zZUBodWF3ZWkuY29tPg0KPj4NCj4+IEFkZCBzdXBwb3J0IHRvIGxv
+ZyBhbmQgcmVjb3JkIHRoZSBDWEwgQUVSIHVuY29ycmVjdGFibGUgZXJyb3JzLg0KPj4NCj4+IFRo
+ZSBjb3JyZXNwb25kaW5nIEtlcm5lbCBwYXRjaCBoZXJlOg0KPj4gaHR0cHM6Ly9wYXRjaHdvcmsu
+a2VybmVsLm9yZy9wcm9qZWN0L2N4bC9wYXRjaC8xNjY5NzQ0MTMzODguMTYwODE1MC41OA0KPj4g
+NzU3MTI0ODIyNjA0MzYxODguc3RnaXRAZGppYW5nNS1kZXNrMy5jaC5pbnRlbC5jb20vDQo+Pg0K
+Pj4gTm90ZTogSXQgd2FzIGZvdW5kIHRoYXQgdGhlIGhlYWRlciBsb2cgZGF0YSB0byBiZSBjb252
+ZXJ0ZWQgdG8gdGhlDQo+PiAgICAgICAgYmlnLWVuZGlhbiBmb3JtYXQgdG8gY29ycmVjdGx5IHN0
+b3JlIGluIHRoZSBTUUxpdGUgZGF0YWJhc2UsIGxpa2VseQ0KPj4gICAgICAgIGJlY2F1c2UgdGhl
+IFNRTGl0ZSBkYXRhYmFzZSBzZWVtcyB1c2VzIHRoZSBiaWctZW5kaWFuIHN0b3JhZ2UuDQo+DQo+
+QSBnZW5lcmFsIHF1ZXN0aW9uLiBJcyBpdCB0eXBpY2FsIG9mIHJhc2RhZW1vbiB0byBoYXZlIGZ1
+bmN0aW9uIHJldHVybg0KPi0xIG9uIGVycm9yIGluc3RlYWQgb2Ygc3RhbmRhcmQgLWVycm5vIHZh
+bHVlcz8NCj4NClRoZSBldmVudCBoYW5kbGluZyBmdW5jdGlvbnMgaW4gdGhlIHJhc2RhZW1vbiBm
+b3VuZCBnZW5lcmFsbHkgdXNlIHJldHVybiAgLTEuICAgIA0KSG93ZXZlciBJIGNhbiBsb29rIGZv
+ciBhZGRpbmcgIHJldHVybiBzdGFuZGFyZCAtZXJybm8gdmFsdWVzLg0KDQo+T3RoZXJ3aXNlIGxv
+b2tzIGdvb2QgdG8gbWUuDQo+DQo+Pg0KPj4gU2lnbmVkLW9mZi1ieTogU2hpanUgSm9zZSA8c2hp
+anUuam9zZUBodWF3ZWkuY29tPiA+IC0tLQ0KPj4gICByYXMtY3hsLWhhbmRsZXIuYyB8IDEyNQ0K
+PisrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysNCj4+ICAgcmFz
+LWN4bC1oYW5kbGVyLmggfCAgIDUgKysNCj4+ICAgcmFzLWV2ZW50cy5jICAgICAgfCAgIDkgKysr
+Kw0KPj4gICByYXMtZXZlbnRzLmggICAgICB8ICAgMSArDQo+PiAgIHJhcy1yZWNvcmQuYyAgICAg
+IHwgIDY1ICsrKysrKysrKysrKysrKysrKysrKysrKw0KPj4gICByYXMtcmVjb3JkLmggICAgICB8
+ICAxNiArKysrKysNCj4+ICAgcmFzLXJlcG9ydC5jICAgICAgfCAgNjkgKysrKysrKysrKysrKysr
+KysrKysrKysrKw0KPj4gICByYXMtcmVwb3J0LmggICAgICB8ICAgMiArDQo+PiAgIDggZmlsZXMg
+Y2hhbmdlZCwgMjkyIGluc2VydGlvbnMoKykNCj4+DQo+PiBkaWZmIC0tZ2l0IGEvcmFzLWN4bC1o
+YW5kbGVyLmMgYi9yYXMtY3hsLWhhbmRsZXIuYyBpbmRleA0KPj4gMTE1MzFlZi4uYjFhZWRkNyAx
+MDA2NDQNCj4+IC0tLSBhL3Jhcy1jeGwtaGFuZGxlci5jDQo+PiArKysgYi9yYXMtY3hsLWhhbmRs
+ZXIuYw0KPj4gQEAgLTIxLDYgKzIxLDcgQEANCj4+ICAgI2luY2x1ZGUgInJhcy1yZWNvcmQuaCIN
+Cj4+ICAgI2luY2x1ZGUgInJhcy1sb2dnZXIuaCINCj4+ICAgI2luY2x1ZGUgInJhcy1yZXBvcnQu
+aCINCj4+ICsjaW5jbHVkZSA8ZW5kaWFuLmg+DQo+Pg0KPj4gICAvKiBQb2lzb24gTGlzdDogUGF5
+bG9hZCBvdXQgZmxhZ3MgKi8NCj4+ICAgI2RlZmluZSBDWExfUE9JU09OX0ZMQUdfTU9SRSAgICAg
+ICAgICAgIEJJVCgwKQ0KPj4gQEAgLTE2MCwzICsxNjEsMTI3IEBAIGludCByYXNfY3hsX3BvaXNv
+bl9ldmVudF9oYW5kbGVyKHN0cnVjdA0KPj4gdHJhY2Vfc2VxICpzLA0KPj4NCj4+ICAgCXJldHVy
+biAwOw0KPj4gICB9DQo+PiArDQo+PiArLyogQ1hMIEFFUiBFcnJvcnMgKi8NCj4+ICsNCj4+ICsj
+ZGVmaW5lIENYTF9BRVJfVUVfQ0FDSEVfREFUQV9QQVJJVFkJQklUKDApDQo+PiArI2RlZmluZSBD
+WExfQUVSX1VFX0NBQ0hFX0FERFJfUEFSSVRZCUJJVCgxKQ0KPj4gKyNkZWZpbmUgQ1hMX0FFUl9V
+RV9DQUNIRV9CRV9QQVJJVFkJQklUKDIpDQo+PiArI2RlZmluZSBDWExfQUVSX1VFX0NBQ0hFX0RB
+VEFfRUNDCUJJVCgzKQ0KPj4gKyNkZWZpbmUgQ1hMX0FFUl9VRV9NRU1fREFUQV9QQVJJVFkJQklU
+KDQpDQo+PiArI2RlZmluZSBDWExfQUVSX1VFX01FTV9BRERSX1BBUklUWQlCSVQoNSkNCj4+ICsj
+ZGVmaW5lIENYTF9BRVJfVUVfTUVNX0JFX1BBUklUWQlCSVQoNikNCj4+ICsjZGVmaW5lIENYTF9B
+RVJfVUVfTUVNX0RBVEFfRUNDCQlCSVQoNykNCj4+ICsjZGVmaW5lIENYTF9BRVJfVUVfUkVJTklU
+X1RIUkVTSAlCSVQoOCkNCj4+ICsjZGVmaW5lIENYTF9BRVJfVUVfUlNWRF9FTkNPREUJCUJJVCg5
+KQ0KPj4gKyNkZWZpbmUgQ1hMX0FFUl9VRV9QT0lTT04JCUJJVCgxMCkNCj4+ICsjZGVmaW5lIENY
+TF9BRVJfVUVfUkVDVl9PVkVSRkxPVwlCSVQoMTEpDQo+PiArI2RlZmluZSBDWExfQUVSX1VFX0lO
+VEVSTkFMX0VSUgkJQklUKDE0KQ0KPj4gKyNkZWZpbmUgQ1hMX0FFUl9VRV9JREVfVFhfRVJSCQlC
+SVQoMTUpDQo+PiArI2RlZmluZSBDWExfQUVSX1VFX0lERV9SWF9FUlIJCUJJVCgxNikNCj4+ICsN
+Cj4+ICtzdHJ1Y3QgY3hsX2Vycm9yX2xpc3Qgew0KPj4gKwl1aW50MzJfdCBiaXQ7DQo+PiArCWNv
+bnN0IGNoYXIgKmVycm9yOw0KPj4gK307DQo+PiArDQo+PiArc3RhdGljIGNvbnN0IHN0cnVjdCBj
+eGxfZXJyb3JfbGlzdCBjeGxfYWVyX3VlW10gPSB7DQo+PiArCXsgLmJpdCA9IENYTF9BRVJfVUVf
+Q0FDSEVfREFUQV9QQVJJVFksIC5lcnJvciA9ICJDYWNoZSBEYXRhDQo+UGFyaXR5IEVycm9yIiB9
+LA0KPj4gKwl7IC5iaXQgPSBDWExfQUVSX1VFX0NBQ0hFX0FERFJfUEFSSVRZLCAuZXJyb3IgPSAi
+Q2FjaGUgQWRkcmVzcw0KPlBhcml0eSBFcnJvciIgfSwNCj4+ICsJeyAuYml0ID0gQ1hMX0FFUl9V
+RV9DQUNIRV9CRV9QQVJJVFksIC5lcnJvciA9ICJDYWNoZSBCeXRlIEVuYWJsZQ0KPlBhcml0eSBF
+cnJvciIgfSwNCj4+ICsJeyAuYml0ID0gQ1hMX0FFUl9VRV9DQUNIRV9EQVRBX0VDQywgLmVycm9y
+ID0gIkNhY2hlIERhdGEgRUNDDQo+RXJyb3IiIH0sDQo+PiArCXsgLmJpdCA9IENYTF9BRVJfVUVf
+TUVNX0RBVEFfUEFSSVRZLCAuZXJyb3IgPSAiTWVtb3J5IERhdGENCj5QYXJpdHkgRXJyb3IiIH0s
+DQo+PiArCXsgLmJpdCA9IENYTF9BRVJfVUVfTUVNX0FERFJfUEFSSVRZLCAuZXJyb3IgPSAiTWVt
+b3J5IEFkZHJlc3MNCj5QYXJpdHkgRXJyb3IiIH0sDQo+PiArCXsgLmJpdCA9IENYTF9BRVJfVUVf
+TUVNX0JFX1BBUklUWSwgLmVycm9yID0gIk1lbW9yeSBCeXRlIEVuYWJsZQ0KPlBhcml0eSBFcnJv
+ciIgfSwNCj4+ICsJeyAuYml0ID0gQ1hMX0FFUl9VRV9NRU1fREFUQV9FQ0MsIC5lcnJvciA9ICJN
+ZW1vcnkgRGF0YSBFQ0MNCj5FcnJvciIgfSwNCj4+ICsJeyAuYml0ID0gQ1hMX0FFUl9VRV9SRUlO
+SVRfVEhSRVNILCAuZXJyb3IgPSAiUkVJTklUIFRocmVzaG9sZCBIaXQiIH0sDQo+PiArCXsgLmJp
+dCA9IENYTF9BRVJfVUVfUlNWRF9FTkNPREUsIC5lcnJvciA9ICJSZWNlaXZlZCBVbnJlY29nbml6
+ZWQNCj5FbmNvZGluZyIgfSwNCj4+ICsJeyAuYml0ID0gQ1hMX0FFUl9VRV9QT0lTT04sIC5lcnJv
+ciA9ICJSZWNlaXZlZCBQb2lzb24gRnJvbSBQZWVyIiB9LA0KPj4gKwl7IC5iaXQgPSBDWExfQUVS
+X1VFX1JFQ1ZfT1ZFUkZMT1csIC5lcnJvciA9ICJSZWNlaXZlciBPdmVyZmxvdyINCj59LA0KPj4g
+Kwl7IC5iaXQgPSBDWExfQUVSX1VFX0lOVEVSTkFMX0VSUiwgLmVycm9yID0gIkNvbXBvbmVudCBT
+cGVjaWZpYw0KPkVycm9yIiB9LA0KPj4gKwl7IC5iaXQgPSBDWExfQUVSX1VFX0lERV9UWF9FUlIs
+IC5lcnJvciA9ICJJREUgVHggRXJyb3IiIH0sDQo+PiArCXsgLmJpdCA9IENYTF9BRVJfVUVfSURF
+X1JYX0VSUiwgLmVycm9yID0gIklERSBSeCBFcnJvciIgfSwgfTsNCj4+ICsNCj4+ICtzdGF0aWMg
+dm9pZCBkZWNvZGVfY3hsX2Vycm9yX3N0YXR1cyhzdHJ1Y3QgdHJhY2Vfc2VxICpzLCB1aW50MzJf
+dCBzdGF0dXMsDQo+PiArCQkJCSAgIGNvbnN0IHN0cnVjdCBjeGxfZXJyb3JfbGlzdCAqY3hsX2Vy
+cm9yX2xpc3QsDQo+PiArCQkJCSAgIHVpbnQ4X3QgbnVtX2VsZW1zKQ0KPj4gK3sNCj4+ICsJaW50
+IGk7DQo+PiArDQo+PiArCWZvciAoaSA9IDA7IGkgPCBudW1fZWxlbXM7IGkrKykgew0KPj4gKwkJ
+aWYgKHN0YXR1cyAmIGN4bF9lcnJvcl9saXN0W2ldLmJpdCkNCj4+ICsJCQl0cmFjZV9zZXFfcHJp
+bnRmKHMsICJcJyVzXCcgIiwgY3hsX2Vycm9yX2xpc3RbaV0uZXJyb3IpOw0KPj4gKwl9DQo+PiAr
+fQ0KPj4gKw0KPj4gK2ludCByYXNfY3hsX2Flcl91ZV9ldmVudF9oYW5kbGVyKHN0cnVjdCB0cmFj
+ZV9zZXEgKnMsDQo+PiArCQkJCSBzdHJ1Y3QgcGV2ZW50X3JlY29yZCAqcmVjb3JkLA0KPj4gKwkJ
+CQkgc3RydWN0IGV2ZW50X2Zvcm1hdCAqZXZlbnQsIHZvaWQgKmNvbnRleHQpIHsNCj4+ICsJaW50
+IGxlbiwgaTsNCj4+ICsJdW5zaWduZWQgbG9uZyBsb25nIHZhbDsNCj4+ICsJdGltZV90IG5vdzsN
+Cj4+ICsJc3RydWN0IHRtICp0bTsNCj4+ICsJc3RydWN0IHJhc19ldmVudHMgKnJhcyA9IGNvbnRl
+eHQ7DQo+PiArCXN0cnVjdCByYXNfY3hsX2Flcl91ZV9ldmVudCBldjsNCj4+ICsNCj4+ICsJbWVt
+c2V0KCZldiwgMCwgc2l6ZW9mKGV2KSk7DQo+PiArCW5vdyA9IHJlY29yZC0+dHMvdXNlcl9oeiAr
+IHJhcy0+dXB0aW1lX2RpZmY7DQo+PiArCXRtID0gbG9jYWx0aW1lKCZub3cpOw0KPj4gKwlpZiAo
+dG0pDQo+PiArCQlzdHJmdGltZShldi50aW1lc3RhbXAsIHNpemVvZihldi50aW1lc3RhbXApLA0K
+Pj4gKwkJCSAiJVktJW0tJWQgJUg6JU06JVMgJXoiLCB0bSk7DQo+PiArCWVsc2UNCj4+ICsJCXN0
+cm5jcHkoZXYudGltZXN0YW1wLCAiMTk3MC0wMS0wMSAwMDowMDowMCArMDAwMCIsDQo+c2l6ZW9m
+KGV2LnRpbWVzdGFtcCkpOw0KPj4gKwl0cmFjZV9zZXFfcHJpbnRmKHMsICIlcyAiLCBldi50aW1l
+c3RhbXApOw0KPj4gKw0KPj4gKwlldi5kZXZfbmFtZSA9IHBldmVudF9nZXRfZmllbGRfcmF3KHMs
+IGV2ZW50LCAiZGV2X25hbWUiLA0KPj4gKwkJCQkJICAgcmVjb3JkLCAmbGVuLCAxKTsNCj4+ICsJ
+aWYgKCFldi5kZXZfbmFtZSkNCj4+ICsJCXJldHVybiAtMTsNCj4+ICsJdHJhY2Vfc2VxX3ByaW50
+ZihzLCAiZGV2X25hbWU6JXMgIiwgZXYuZGV2X25hbWUpOw0KPj4gKw0KPj4gKwlpZiAocGV2ZW50
+X2dldF9maWVsZF92YWwocywgZXZlbnQsICJzdGF0dXMiLCByZWNvcmQsICZ2YWwsIDEpIDwgMCkN
+Cj4+ICsJCXJldHVybiAtMTsNCj4+ICsJZXYuZXJyb3Jfc3RhdHVzID0gdmFsOw0KPj4gKw0KPj4g
+Kwl0cmFjZV9zZXFfcHJpbnRmKHMsICJlcnJvciBzdGF0dXM6Iik7DQo+PiArCWRlY29kZV9jeGxf
+ZXJyb3Jfc3RhdHVzKHMsIGV2LmVycm9yX3N0YXR1cywNCj4+ICsJCQkJY3hsX2Flcl91ZSwgQVJS
+QVlfU0laRShjeGxfYWVyX3VlKSk7DQo+PiArDQo+PiArCWlmIChwZXZlbnRfZ2V0X2ZpZWxkX3Zh
+bChzLCAgZXZlbnQsICJmaXJzdF9lcnJvciIsIHJlY29yZCwgJnZhbCwgMSkgPCAwKQ0KPj4gKwkJ
+cmV0dXJuIC0xOw0KPj4gKwlldi5maXJzdF9lcnJvciA9IHZhbDsNCj4+ICsNCj4+ICsJdHJhY2Vf
+c2VxX3ByaW50ZihzLCAiZmlyc3QgZXJyb3I6Iik7DQo+PiArCWRlY29kZV9jeGxfZXJyb3Jfc3Rh
+dHVzKHMsIGV2LmZpcnN0X2Vycm9yLA0KPj4gKwkJCQljeGxfYWVyX3VlLCBBUlJBWV9TSVpFKGN4
+bF9hZXJfdWUpKTsNCj4+ICsNCj4+ICsJZXYuaGVhZGVyX2xvZyA9IHBldmVudF9nZXRfZmllbGRf
+cmF3KHMsIGV2ZW50LCAiaGVhZGVyX2xvZyIsDQo+PiArCQkJCQkgICAgIHJlY29yZCwgJmxlbiwg
+MSk7DQo+PiArCWlmICghZXYuaGVhZGVyX2xvZykNCj4+ICsJCXJldHVybiAtMTsNCj4+ICsJdHJh
+Y2Vfc2VxX3ByaW50ZihzLCAiaGVhZGVyIGxvZzpcbiIpOw0KPj4gKwlmb3IgKGkgPSAwOyBpIDwg
+Q1hMX0hFQURFUkxPR19TSVpFX1UzMjsgaSsrKSB7DQo+PiArCQl0cmFjZV9zZXFfcHJpbnRmKHMs
+ICIlMDh4ICIsIGV2LmhlYWRlcl9sb2dbaV0pOw0KPj4gKwkJaWYgKChpID4gMCkgJiYgKChpICUg
+MjApID09IDApKQ0KPj4gKwkJCXRyYWNlX3NlcV9wcmludGYocywgIlxuIik7DQo+PiArCQkvKiBD
+b252ZXJ0IGhlYWRlciBsb2cgZGF0YSB0byB0aGUgYmlnLWVuZGlhbiBmb3JtYXQgYmVjYXVzZQ0K
+Pj4gKwkJICogdGhlIFNRTGl0ZSBkYXRhYmFzZSBzZWVtcyB1c2VzIHRoZSBiaWctZW5kaWFuIHN0
+b3JhZ2UuDQo+PiArCQkgKi8NCj4+ICsJCWV2LmhlYWRlcl9sb2dbaV0gPSBodG9iZTMyKGV2Lmhl
+YWRlcl9sb2dbaV0pOw0KPj4gKwl9DQo+PiArDQo+PiArCS8qIEluc2VydCBkYXRhIGludG8gdGhl
+IFNHQkQgKi8NCj4+ICsjaWZkZWYgSEFWRV9TUUxJVEUzDQo+PiArCXJhc19zdG9yZV9jeGxfYWVy
+X3VlX2V2ZW50KHJhcywgJmV2KTsgI2VuZGlmDQo+PiArDQo+PiArI2lmZGVmIEhBVkVfQUJSVF9S
+RVBPUlQNCj4+ICsJLyogUmVwb3J0IGV2ZW50IHRvIEFCUlQgKi8NCj4+ICsJcmFzX3JlcG9ydF9j
+eGxfYWVyX3VlX2V2ZW50KHJhcywgJmV2KTsgI2VuZGlmDQo+PiArDQo+PiArCXJldHVybiAwOw0K
+Pj4gK30NCj4+IGRpZmYgLS1naXQgYS9yYXMtY3hsLWhhbmRsZXIuaCBiL3Jhcy1jeGwtaGFuZGxl
+ci5oIGluZGV4DQo+PiA0NTA4NjI0Li5mOTZlZDM1IDEwMDY0NA0KPj4gLS0tIGEvcmFzLWN4bC1o
+YW5kbGVyLmgNCj4+ICsrKyBiL3Jhcy1jeGwtaGFuZGxlci5oDQo+PiBAQCAtMjEsNCArMjEsOSBA
+QA0KPj4gICBpbnQgcmFzX2N4bF9wb2lzb25fZXZlbnRfaGFuZGxlcihzdHJ1Y3QgdHJhY2Vfc2Vx
+ICpzLA0KPj4gICAJCQkgc3RydWN0IHBldmVudF9yZWNvcmQgKnJlY29yZCwNCj4+ICAgCQkJIHN0
+cnVjdCBldmVudF9mb3JtYXQgKmV2ZW50LCB2b2lkICpjb250ZXh0KTsNCj4+ICsNCj4+ICtpbnQg
+cmFzX2N4bF9hZXJfdWVfZXZlbnRfaGFuZGxlcihzdHJ1Y3QgdHJhY2Vfc2VxICpzLA0KPj4gKwkJ
+CQkgc3RydWN0IHBldmVudF9yZWNvcmQgKnJlY29yZCwNCj4+ICsJCQkJIHN0cnVjdCBldmVudF9m
+b3JtYXQgKmV2ZW50LCB2b2lkICpjb250ZXh0KTsNCj4+ICsNCj4+ICAgI2VuZGlmDQo+PiBkaWZm
+IC0tZ2l0IGEvcmFzLWV2ZW50cy5jIGIvcmFzLWV2ZW50cy5jIGluZGV4IDA5MTQyZjIuLjU2ODg4
+NzggMTAwNjQ0DQo+PiAtLS0gYS9yYXMtZXZlbnRzLmMNCj4+ICsrKyBiL3Jhcy1ldmVudHMuYw0K
+Pj4gQEAgLTI0MCw2ICsyNDAsNyBAQCBpbnQgdG9nZ2xlX3Jhc19tY19ldmVudChpbnQgZW5hYmxl
+KQ0KPj4NCj4+ICAgI2lmZGVmIEhBVkVfQ1hMDQo+PiAgIAlyYyB8PSBfX3RvZ2dsZV9yYXNfbWNf
+ZXZlbnQocmFzLCAiY3hsIiwgImN4bF9wb2lzb24iLCBlbmFibGUpOw0KPj4gKwlyYyB8PSBfX3Rv
+Z2dsZV9yYXNfbWNfZXZlbnQocmFzLCAiY3hsIiwNCj4+ICsiY3hsX2Flcl91bmNvcnJlY3RhYmxl
+X2Vycm9yIiwgZW5hYmxlKTsNCj4+ICAgI2VuZGlmDQo+Pg0KPj4gICBmcmVlX3JhczoNCj4+IEBA
+IC05MzgsNiArOTM5LDE0IEBAIGludCBoYW5kbGVfcmFzX2V2ZW50cyhpbnQgcmVjb3JkX2V2ZW50
+cykNCj4+ICAgCWVsc2UNCj4+ICAgCQlsb2coQUxMLCBMT0dfRVJSLCAiQ2FuJ3QgZ2V0IHRyYWNl
+cyBmcm9tICVzOiVzXG4iLA0KPj4gICAJCSAgICAiY3hsIiwgImN4bF9wb2lzb24iKTsNCj4+ICsN
+Cj4+ICsJcmMgPSBhZGRfZXZlbnRfaGFuZGxlcihyYXMsIHBldmVudCwgcGFnZV9zaXplLCAiY3hs
+IiwNCj4iY3hsX2Flcl91bmNvcnJlY3RhYmxlX2Vycm9yIiwNCj4+ICsJCQkgICAgICAgcmFzX2N4
+bF9hZXJfdWVfZXZlbnRfaGFuZGxlciwgTlVMTCwNCj5DWExfQUVSX1VFX0VWRU5UKTsNCj4+ICsJ
+aWYgKCFyYykNCj4+ICsJCW51bV9ldmVudHMrKzsNCj4+ICsJZWxzZQ0KPj4gKwkJbG9nKEFMTCwg
+TE9HX0VSUiwgIkNhbid0IGdldCB0cmFjZXMgZnJvbSAlczolc1xuIiwNCj4+ICsJCSAgICAiY3hs
+IiwgImN4bF9hZXJfdW5jb3JyZWN0YWJsZV9lcnJvciIpOw0KPj4gICAjZW5kaWYNCj4+DQo+PiAg
+IAlpZiAoIW51bV9ldmVudHMpIHsNCj4+IGRpZmYgLS1naXQgYS9yYXMtZXZlbnRzLmggYi9yYXMt
+ZXZlbnRzLmggaW5kZXggMjRmN2NjYy4uYjlhZTMzNiAxMDA2NDQNCj4+IC0tLSBhL3Jhcy1ldmVu
+dHMuaA0KPj4gKysrIGIvcmFzLWV2ZW50cy5oDQo+PiBAQCAtNDAsNiArNDAsNyBAQCBlbnVtIHsN
+Cj4+ICAgCURJU0tFUlJPUl9FVkVOVCwNCj4+ICAgCU1GX0VWRU5ULA0KPj4gICAJQ1hMX1BPSVNP
+Tl9FVkVOVCwNCj4+ICsJQ1hMX0FFUl9VRV9FVkVOVCwNCj4+ICAgCU5SX0VWRU5UUw0KPj4gICB9
+Ow0KPj4NCj4+IGRpZmYgLS1naXQgYS9yYXMtcmVjb3JkLmMgYi9yYXMtcmVjb3JkLmMgaW5kZXgg
+YzNiYzk2MS4uNGI0YzA2OCAxMDA2NDQNCj4+IC0tLSBhL3Jhcy1yZWNvcmQuYw0KPj4gKysrIGIv
+cmFzLXJlY29yZC5jDQo+PiBAQCAtNjE4LDYgKzYxOCw1NCBAQCBpbnQgcmFzX3N0b3JlX2N4bF9w
+b2lzb25fZXZlbnQoc3RydWN0IHJhc19ldmVudHMNCj4+ICpyYXMsIHN0cnVjdCByYXNfY3hsX3Bv
+aXNvbl9ldmUNCj4+DQo+PiAgIAlyZXR1cm4gcmM7DQo+PiAgIH0NCj4+ICsNCj4+ICsvKg0KPj4g
+KyAqIFRhYmxlIGFuZCBmdW5jdGlvbnMgdG8gaGFuZGxlIGN4bDpjeGxfYWVyX3VuY29ycmVjdGFi
+bGVfZXJyb3IgICovDQo+PiArc3RhdGljIGNvbnN0IHN0cnVjdCBkYl9maWVsZHMgY3hsX2Flcl91
+ZV9ldmVudF9maWVsZHNbXSA9IHsNCj4+ICsJeyAubmFtZSA9ICJpZCIsICAgICAgICAgICAgICAg
+ICAgIC50eXBlID0gIklOVEVHRVIgUFJJTUFSWSBLRVkiIH0sDQo+PiArCXsgLm5hbWUgPSAidGlt
+ZXN0YW1wIiwgICAgICAgICAgICAudHlwZSA9ICJURVhUIiB9LA0KPj4gKwl7IC5uYW1lID0gImRl
+dl9uYW1lIiwgICAgICAgICAgICAgLnR5cGUgPSAiVEVYVCIgfSwNCj4+ICsJeyAubmFtZSA9ICJl
+cnJvcl9zdGF0dXMiLCAgICAgICAgIC50eXBlID0gIklOVEVHRVIiIH0sDQo+PiArCXsgLm5hbWUg
+PSAiZmlyc3RfZXJyb3IiLCAgICAgICAgICAudHlwZSA9ICJJTlRFR0VSIiB9LA0KPj4gKwl7IC5u
+YW1lID0gImhlYWRlcl9sb2ciLCAgICAgICAgICAgLnR5cGUgPSAiQkxPQiIgfSwNCj4+ICt9Ow0K
+Pj4gKw0KPj4gK3N0YXRpYyBjb25zdCBzdHJ1Y3QgZGJfdGFibGVfZGVzY3JpcHRvciBjeGxfYWVy
+X3VlX2V2ZW50X3RhYiA9IHsNCj4+ICsJLm5hbWUgPSAiY3hsX2Flcl91ZV9ldmVudCIsDQo+PiAr
+CS5maWVsZHMgPSBjeGxfYWVyX3VlX2V2ZW50X2ZpZWxkcywNCj4+ICsJLm51bV9maWVsZHMgPSBB
+UlJBWV9TSVpFKGN4bF9hZXJfdWVfZXZlbnRfZmllbGRzKSwNCj4+ICt9Ow0KPj4gKw0KPj4gK2lu
+dCByYXNfc3RvcmVfY3hsX2Flcl91ZV9ldmVudChzdHJ1Y3QgcmFzX2V2ZW50cyAqcmFzLCBzdHJ1
+Y3QNCj4+ICtyYXNfY3hsX2Flcl91ZV9ldmVudCAqZXYpIHsNCj4+ICsJaW50IHJjOw0KPj4gKwlz
+dHJ1Y3Qgc3FsaXRlM19wcml2ICpwcml2ID0gcmFzLT5kYl9wcml2Ow0KPj4gKw0KPj4gKwlpZiAo
+IXByaXYgfHwgIXByaXYtPnN0bXRfY3hsX2Flcl91ZV9ldmVudCkNCj4+ICsJCXJldHVybiAwOw0K
+Pj4gKwlsb2coVEVSTSwgTE9HX0lORk8sICJjeGxfYWVyX3VlX2V2ZW50IHN0b3JlOiAlcFxuIiwN
+Cj4+ICtwcml2LT5zdG10X2N4bF9hZXJfdWVfZXZlbnQpOw0KPj4gKw0KPj4gKwlzcWxpdGUzX2Jp
+bmRfdGV4dChwcml2LT5zdG10X2N4bF9hZXJfdWVfZXZlbnQsIDEsIGV2LT50aW1lc3RhbXAsIC0N
+Cj4xLCBOVUxMKTsNCj4+ICsJc3FsaXRlM19iaW5kX3RleHQocHJpdi0+c3RtdF9jeGxfYWVyX3Vl
+X2V2ZW50LCAyLCBldi0+ZGV2X25hbWUsIC0NCj4xLCBOVUxMKTsNCj4+ICsJc3FsaXRlM19iaW5k
+X2ludChwcml2LT5zdG10X2N4bF9hZXJfdWVfZXZlbnQsIDMsIGV2LT5lcnJvcl9zdGF0dXMpOw0K
+Pj4gKwlzcWxpdGUzX2JpbmRfaW50KHByaXYtPnN0bXRfY3hsX2Flcl91ZV9ldmVudCwgNCwgZXYt
+PmZpcnN0X2Vycm9yKTsNCj4+ICsJc3FsaXRlM19iaW5kX2Jsb2IocHJpdi0+c3RtdF9jeGxfYWVy
+X3VlX2V2ZW50LCA1LCBldi0+aGVhZGVyX2xvZywNCj4+ICtDWExfSEVBREVSTE9HX1NJWkUsIE5V
+TEwpOw0KPj4gKw0KPj4gKwlyYyA9IHNxbGl0ZTNfc3RlcChwcml2LT5zdG10X2N4bF9hZXJfdWVf
+ZXZlbnQpOw0KPj4gKwlpZiAocmMgIT0gU1FMSVRFX09LICYmIHJjICE9IFNRTElURV9ET05FKQ0K
+Pj4gKwkJbG9nKFRFUk0sIExPR19FUlIsDQo+PiArCQkgICAgIkZhaWxlZCB0byBkbyBjeGxfYWVy
+X3VlX2V2ZW50IHN0ZXAgb24gc3FsaXRlOiBlcnJvciA9DQo+JWRcbiIsIHJjKTsNCj4+ICsJcmMg
+PSBzcWxpdGUzX3Jlc2V0KHByaXYtPnN0bXRfY3hsX2Flcl91ZV9ldmVudCk7DQo+PiArCWlmIChy
+YyAhPSBTUUxJVEVfT0sgJiYgcmMgIT0gU1FMSVRFX0RPTkUpDQo+PiArCQlsb2coVEVSTSwgTE9H
+X0VSUiwNCj4+ICsJCSAgICAiRmFpbGVkIHJlc2V0IGN4bF9hZXJfdWVfZXZlbnQgb24gc3FsaXRl
+OiBlcnJvciA9ICVkXG4iLA0KPj4gKwkJICAgIHJjKTsNCj4+ICsJbG9nKFRFUk0sIExPR19JTkZP
+LCAicmVnaXN0ZXIgaW5zZXJ0ZWQgYXQgZGJcbiIpOw0KPj4gKw0KPj4gKwlyZXR1cm4gcmM7DQo+
+PiArfQ0KPj4gKw0KPj4gICAjZW5kaWYNCj4+DQo+PiAgIC8qDQo+PiBAQCAtOTY1LDYgKzEwMTMs
+MTUgQEAgaW50IHJhc19tY19ldmVudF9vcGVuZGIodW5zaWduZWQgY3B1LCBzdHJ1Y3QNCj5yYXNf
+ZXZlbnRzICpyYXMpDQo+PiAgIAkJaWYgKHJjICE9IFNRTElURV9PSykNCj4+ICAgCQkJZ290byBl
+cnJvcjsNCj4+ICAgCX0NCj4+ICsNCj4+ICsJcmMgPSByYXNfbWNfY3JlYXRlX3RhYmxlKHByaXYs
+ICZjeGxfYWVyX3VlX2V2ZW50X3RhYik7DQo+PiArCWlmIChyYyA9PSBTUUxJVEVfT0spIHsNCj4+
+ICsJCXJjID0gcmFzX21jX3ByZXBhcmVfc3RtdChwcml2LCAmcHJpdi0NCj4+c3RtdF9jeGxfYWVy
+X3VlX2V2ZW50LA0KPj4gKwkJCQkJICZjeGxfYWVyX3VlX2V2ZW50X3RhYik7DQo+PiArCQlpZiAo
+cmMgIT0gU1FMSVRFX09LKQ0KPj4gKwkJCWdvdG8gZXJyb3I7DQo+PiArCX0NCj4+ICsNCj4+ICAg
+I2VuZGlmDQo+Pg0KPj4gICAJcmFzLT5kYl9wcml2ID0gcHJpdjsNCj4+IEBAIC0xMDg3LDYgKzEx
+NDQsMTQgQEAgaW50IHJhc19tY19ldmVudF9jbG9zZWRiKHVuc2lnbmVkIGludCBjcHUsDQo+c3Ry
+dWN0IHJhc19ldmVudHMgKnJhcykNCj4+ICAgCQkJICAgICJjcHUgJXU6IEZhaWxlZCB0byBmaW5h
+bGl6ZSBjeGxfcG9pc29uX2V2ZW50IHNxbGl0ZToNCj5lcnJvciA9ICVkXG4iLA0KPj4gICAJCQkg
+ICAgY3B1LCByYyk7DQo+PiAgIAl9DQo+PiArDQo+PiArCWlmIChwcml2LT5zdG10X2N4bF9hZXJf
+dWVfZXZlbnQpIHsNCj4+ICsJCXJjID0gc3FsaXRlM19maW5hbGl6ZShwcml2LT5zdG10X2N4bF9h
+ZXJfdWVfZXZlbnQpOw0KPj4gKwkJaWYgKHJjICE9IFNRTElURV9PSykNCj4+ICsJCQlsb2coVEVS
+TSwgTE9HX0VSUiwNCj4+ICsJCQkgICAgImNwdSAldTogRmFpbGVkIHRvIGZpbmFsaXplIGN4bF9h
+ZXJfdWVfZXZlbnQgc3FsaXRlOg0KPmVycm9yID0gJWRcbiIsDQo+PiArCQkJICAgIGNwdSwgcmMp
+Ow0KPj4gKwl9DQo+PiAgICNlbmRpZg0KPj4NCj4+ICAgCXJjID0gc3FsaXRlM19jbG9zZV92Mihk
+Yik7DQo+PiBkaWZmIC0tZ2l0IGEvcmFzLXJlY29yZC5oIGIvcmFzLXJlY29yZC5oIGluZGV4IGU1
+YmY0ODMuLjBlMmMxNzggMTAwNjQ0DQo+PiAtLS0gYS9yYXMtcmVjb3JkLmgNCj4+ICsrKyBiL3Jh
+cy1yZWNvcmQuaA0KPj4gQEAgLTEyOCw2ICsxMjgsMTggQEAgc3RydWN0IHJhc19jeGxfcG9pc29u
+X2V2ZW50IHsNCj4+ICAgCWNoYXIgb3ZlcmZsb3dfdHNbNjRdOw0KPj4gICB9Ow0KPj4NCj4+ICsj
+ZGVmaW5lIFNaXzUxMiAgICAgICAgICAgICAgICAgICAgICAgICAgMHgyMDANCj4+ICsjZGVmaW5l
+IENYTF9IRUFERVJMT0dfU0laRSAgICAgICAgICAgICAgU1pfNTEyDQo+PiArI2RlZmluZSBDWExf
+SEVBREVSTE9HX1NJWkVfVTMyICAgICAgICAgIChTWl81MTIgLyBzaXplb2YodWludDMyX3QpKQ0K
+Pj4gKw0KPj4gK3N0cnVjdCByYXNfY3hsX2Flcl91ZV9ldmVudCB7DQo+PiArCWNoYXIgdGltZXN0
+YW1wWzY0XTsNCj4+ICsJY29uc3QgY2hhciAqZGV2X25hbWU7DQo+PiArCXVpbnQzMl90IGVycm9y
+X3N0YXR1czsNCj4+ICsJdWludDMyX3QgZmlyc3RfZXJyb3I7DQo+PiArCXVpbnQzMl90ICpoZWFk
+ZXJfbG9nOw0KPj4gK307DQo+PiArDQo+PiAgIHN0cnVjdCByYXNfbWNfZXZlbnQ7DQo+PiAgIHN0
+cnVjdCByYXNfYWVyX2V2ZW50Ow0KPj4gICBzdHJ1Y3QgcmFzX2V4dGxvZ19ldmVudDsNCj4+IEBA
+IC0xMzgsNiArMTUwLDcgQEAgc3RydWN0IGRldmxpbmtfZXZlbnQ7DQo+PiAgIHN0cnVjdCBkaXNr
+ZXJyb3JfZXZlbnQ7DQo+PiAgIHN0cnVjdCByYXNfbWZfZXZlbnQ7DQo+PiAgIHN0cnVjdCByYXNf
+Y3hsX3BvaXNvbl9ldmVudDsNCj4+ICtzdHJ1Y3QgcmFzX2N4bF9hZXJfdWVfZXZlbnQ7DQo+Pg0K
+Pj4gICAjaWZkZWYgSEFWRV9TUUxJVEUzDQo+Pg0KPj4gQEAgLTE3Miw2ICsxODUsNyBAQCBzdHJ1
+Y3Qgc3FsaXRlM19wcml2IHsNCj4+ICAgI2VuZGlmDQo+PiAgICNpZmRlZiBIQVZFX0NYTA0KPj4g
+ICAJc3FsaXRlM19zdG10CSpzdG10X2N4bF9wb2lzb25fZXZlbnQ7DQo+PiArCXNxbGl0ZTNfc3Rt
+dAkqc3RtdF9jeGxfYWVyX3VlX2V2ZW50Ow0KPj4gICAjZW5kaWYNCj4+ICAgfTsNCj4+DQo+PiBA
+QCAtMjAxLDYgKzIxNSw3IEBAIGludCByYXNfc3RvcmVfZGV2bGlua19ldmVudChzdHJ1Y3QgcmFz
+X2V2ZW50cyAqcmFzLA0KPnN0cnVjdCBkZXZsaW5rX2V2ZW50ICpldik7DQo+PiAgIGludCByYXNf
+c3RvcmVfZGlza2Vycm9yX2V2ZW50KHN0cnVjdCByYXNfZXZlbnRzICpyYXMsIHN0cnVjdA0KPmRp
+c2tlcnJvcl9ldmVudCAqZXYpOw0KPj4gICBpbnQgcmFzX3N0b3JlX21mX2V2ZW50KHN0cnVjdCBy
+YXNfZXZlbnRzICpyYXMsIHN0cnVjdCByYXNfbWZfZXZlbnQgKmV2KTsNCj4+ICAgaW50IHJhc19z
+dG9yZV9jeGxfcG9pc29uX2V2ZW50KHN0cnVjdCByYXNfZXZlbnRzICpyYXMsIHN0cnVjdA0KPj4g
+cmFzX2N4bF9wb2lzb25fZXZlbnQgKmV2KTsNCj4+ICtpbnQgcmFzX3N0b3JlX2N4bF9hZXJfdWVf
+ZXZlbnQoc3RydWN0IHJhc19ldmVudHMgKnJhcywgc3RydWN0DQo+PiArcmFzX2N4bF9hZXJfdWVf
+ZXZlbnQgKmV2KTsNCj4+DQo+PiAgICNlbHNlDQo+PiAgIHN0YXRpYyBpbmxpbmUgaW50IHJhc19t
+Y19ldmVudF9vcGVuZGIodW5zaWduZWQgY3B1LCBzdHJ1Y3QNCj4+IHJhc19ldmVudHMgKnJhcykg
+eyByZXR1cm4gMDsgfTsgQEAgLTIxNSw2ICsyMzAsNyBAQCBzdGF0aWMgaW5saW5lIGludA0KPnJh
+c19zdG9yZV9kZXZsaW5rX2V2ZW50KHN0cnVjdCByYXNfZXZlbnRzICpyYXMsIHN0cnVjdCBkZXZs
+aW5rDQo+PiAgIHN0YXRpYyBpbmxpbmUgaW50IHJhc19zdG9yZV9kaXNrZXJyb3JfZXZlbnQoc3Ry
+dWN0IHJhc19ldmVudHMgKnJhcywgc3RydWN0DQo+ZGlza2Vycm9yX2V2ZW50ICpldikgeyByZXR1
+cm4gMDsgfTsNCj4+ICAgc3RhdGljIGlubGluZSBpbnQgcmFzX3N0b3JlX21mX2V2ZW50KHN0cnVj
+dCByYXNfZXZlbnRzICpyYXMsIHN0cnVjdA0KPnJhc19tZl9ldmVudCAqZXYpIHsgcmV0dXJuIDA7
+IH07DQo+PiAgIHN0YXRpYyBpbmxpbmUgaW50IHJhc19zdG9yZV9jeGxfcG9pc29uX2V2ZW50KHN0
+cnVjdCByYXNfZXZlbnRzICpyYXMsDQo+PiBzdHJ1Y3QgcmFzX2N4bF9wb2lzb25fZXZlbnQgKmV2
+KSB7IHJldHVybiAwOyB9Ow0KPj4gK3N0YXRpYyBpbmxpbmUgaW50IHJhc19zdG9yZV9jeGxfYWVy
+X3VlX2V2ZW50KHN0cnVjdCByYXNfZXZlbnRzICpyYXMsDQo+PiArc3RydWN0IHJhc19jeGxfYWVy
+X3VlX2V2ZW50ICpldikgeyByZXR1cm4gMDsgfTsNCj4+DQo+PiAgICNlbmRpZg0KPj4NCj4+IGRp
+ZmYgLS1naXQgYS9yYXMtcmVwb3J0LmMgYi9yYXMtcmVwb3J0LmMgaW5kZXggNDE1OTIwYS4uZDA0
+MGVjMSAxMDA2NDQNCj4+IC0tLSBhL3Jhcy1yZXBvcnQuYw0KPj4gKysrIGIvcmFzLXJlcG9ydC5j
+DQo+PiBAQCAtMzY3LDYgKzM2NywyOCBAQCBzdGF0aWMgaW50IHNldF9jeGxfcG9pc29uX2V2ZW50
+X2JhY2t0cmFjZShjaGFyDQo+KmJ1Ziwgc3RydWN0IHJhc19jeGxfcG9pc29uX2V2ZW50DQo+PiAg
+IAlyZXR1cm4gMDsNCj4+ICAgfQ0KPj4NCj4+ICtzdGF0aWMgaW50IHNldF9jeGxfYWVyX3VlX2V2
+ZW50X2JhY2t0cmFjZShjaGFyICpidWYsIHN0cnVjdA0KPj4gK3Jhc19jeGxfYWVyX3VlX2V2ZW50
+ICpldikgew0KPj4gKwljaGFyIGJ0X2J1ZltNQVhfQkFDS1RSQUNFX1NJWkVdOw0KPj4gKw0KPj4g
+KwlpZiAoIWJ1ZiB8fCAhZXYpDQo+PiArCQlyZXR1cm4gLTE7DQo+PiArDQo+PiArCXNwcmludGYo
+YnRfYnVmLCAiQkFDS1RSQUNFPSIJXA0KPj4gKwkJCQkJCSJ0aW1lc3RhbXA9JXNcbiIJXA0KPj4g
+KwkJCQkJCSJkZXZfbmFtZT0lc1xuIg0KPglcDQo+PiArCQkJCQkJImVycm9yX3N0YXR1cz0ldVxu
+IglcDQo+PiArCQkJCQkJImZpcnN0X2Vycm9yPSV1XG4iCVwNCj4+ICsJCQkJCQlldi0+dGltZXN0
+YW1wLA0KPglcDQo+PiArCQkJCQkJZXYtPmRldl9uYW1lLA0KPglcDQo+PiArCQkJCQkJZXYtPmVy
+cm9yX3N0YXR1cywJXA0KPj4gKwkJCQkJCWV2LT5maXJzdF9lcnJvcik7DQo+PiArDQo+PiArCXN0
+cmNhdChidWYsIGJ0X2J1Zik7DQo+PiArDQo+PiArCXJldHVybiAwOw0KPj4gK30NCj4+ICsNCj4+
+ICAgc3RhdGljIGludCBjb21taXRfcmVwb3J0X2JhY2t0cmFjZShpbnQgc29ja2ZkLCBpbnQgdHlw
+ZSwgdm9pZCAqZXYpew0KPj4gICAJY2hhciBidWZbTUFYX0JBQ0tUUkFDRV9TSVpFXTsNCj4+ICAg
+CWNoYXIgKnBidWYgPSBidWY7DQo+PiBAQCAtNDA3LDYgKzQyOSw5IEBAIHN0YXRpYyBpbnQgY29t
+bWl0X3JlcG9ydF9iYWNrdHJhY2UoaW50IHNvY2tmZCwgaW50DQo+dHlwZSwgdm9pZCAqZXYpew0K
+Pj4gICAJY2FzZSBDWExfUE9JU09OX0VWRU5UOg0KPj4gICAJCXJjID0gc2V0X2N4bF9wb2lzb25f
+ZXZlbnRfYmFja3RyYWNlKGJ1ZiwgKHN0cnVjdA0KPnJhc19jeGxfcG9pc29uX2V2ZW50ICopZXYp
+Ow0KPj4gICAJCWJyZWFrOw0KPj4gKwljYXNlIENYTF9BRVJfVUVfRVZFTlQ6DQo+PiArCQlyYyA9
+IHNldF9jeGxfYWVyX3VlX2V2ZW50X2JhY2t0cmFjZShidWYsIChzdHJ1Y3QNCj5yYXNfY3hsX2Fl
+cl91ZV9ldmVudCAqKWV2KTsNCj4+ICsJCWJyZWFrOw0KPj4gICAJZGVmYXVsdDoNCj4+ICAgCQly
+ZXR1cm4gLTE7DQo+PiAgIAl9DQo+PiBAQCAtODU5LDMgKzg4NCw0NyBAQCBjeGxfcG9pc29uX2Zh
+aWw6DQo+PiAgIAllbHNlDQo+PiAgIAkJcmV0dXJuIC0xOw0KPj4gICB9DQo+PiArDQo+PiAraW50
+IHJhc19yZXBvcnRfY3hsX2Flcl91ZV9ldmVudChzdHJ1Y3QgcmFzX2V2ZW50cyAqcmFzLCBzdHJ1
+Y3QNCj4+ICtyYXNfY3hsX2Flcl91ZV9ldmVudCAqZXYpIHsNCj4+ICsJY2hhciBidWZbTUFYX01F
+U1NBR0VfU0laRV07DQo+PiArCWludCBzb2NrZmQgPSAwOw0KPj4gKwlpbnQgZG9uZSA9IDA7DQo+
+PiArCWludCByYyA9IC0xOw0KPj4gKw0KPj4gKwltZW1zZXQoYnVmLCAwLCBzaXplb2YoYnVmKSk7
+DQo+PiArDQo+PiArCXNvY2tmZCA9IHNldHVwX3JlcG9ydF9zb2NrZXQoKTsNCj4+ICsJaWYgKHNv
+Y2tmZCA8IDApDQo+PiArCQlyZXR1cm4gLTE7DQo+PiArDQo+PiArCXJjID0gY29tbWl0X3JlcG9y
+dF9iYXNpYyhzb2NrZmQpOw0KPj4gKwlpZiAocmMgPCAwKQ0KPj4gKwkJZ290byBjeGxfYWVyX3Vl
+X2ZhaWw7DQo+PiArDQo+PiArCXJjID0gY29tbWl0X3JlcG9ydF9iYWNrdHJhY2Uoc29ja2ZkLCBD
+WExfQUVSX1VFX0VWRU5ULCBldik7DQo+PiArCWlmIChyYyA8IDApDQo+PiArCQlnb3RvIGN4bF9h
+ZXJfdWVfZmFpbDsNCj4+ICsNCj4+ICsJc3ByaW50ZihidWYsICJBTkFMWVpFUj0lcyIsICJyYXNk
+YWVtb24tY3hsLWFlci11bmNvcnJlY3RhYmxlLQ0KPmVycm9yIik7DQo+PiArCXJjID0gd3JpdGUo
+c29ja2ZkLCBidWYsIHN0cmxlbihidWYpICsgMSk7DQo+PiArCWlmIChyYyA8IHN0cmxlbihidWYp
+ICsgMSkNCj4+ICsJCWdvdG8gY3hsX2Flcl91ZV9mYWlsOw0KPj4gKw0KPj4gKwlzcHJpbnRmKGJ1
+ZiwgIlJFQVNPTj0lcyIsICJDWEwgQUVSIHVuY29ycmVjdGFibGUgZXJyb3IiKTsNCj4+ICsJcmMg
+PSB3cml0ZShzb2NrZmQsIGJ1Ziwgc3RybGVuKGJ1ZikgKyAxKTsNCj4+ICsJaWYgKHJjIDwgc3Ry
+bGVuKGJ1ZikgKyAxKQ0KPj4gKwkJZ290byBjeGxfYWVyX3VlX2ZhaWw7DQo+PiArDQo+PiArCWRv
+bmUgPSAxOw0KPj4gKw0KPj4gK2N4bF9hZXJfdWVfZmFpbDoNCj4+ICsNCj4+ICsJaWYgKHNvY2tm
+ZCA+PSAwKQ0KPj4gKwkJY2xvc2Uoc29ja2ZkKTsNCj4+ICsNCj4+ICsJaWYgKGRvbmUpDQo+PiAr
+CQlyZXR1cm4gMDsNCj4+ICsJZWxzZQ0KPj4gKwkJcmV0dXJuIC0xOw0KPj4gK30NCj4+IGRpZmYg
+LS1naXQgYS9yYXMtcmVwb3J0LmggYi9yYXMtcmVwb3J0LmggaW5kZXggZDE1OTFjZS4uZGZlODlk
+MSAxMDA2NDQNCj4+IC0tLSBhL3Jhcy1yZXBvcnQuaA0KPj4gKysrIGIvcmFzLXJlcG9ydC5oDQo+
+PiBAQCAtNDAsNiArNDAsNyBAQCBpbnQgcmFzX3JlcG9ydF9kZXZsaW5rX2V2ZW50KHN0cnVjdCBy
+YXNfZXZlbnRzICpyYXMsDQo+c3RydWN0IGRldmxpbmtfZXZlbnQgKmV2KTsNCj4+ICAgaW50IHJh
+c19yZXBvcnRfZGlza2Vycm9yX2V2ZW50KHN0cnVjdCByYXNfZXZlbnRzICpyYXMsIHN0cnVjdA0K
+PmRpc2tlcnJvcl9ldmVudCAqZXYpOw0KPj4gICBpbnQgcmFzX3JlcG9ydF9tZl9ldmVudChzdHJ1
+Y3QgcmFzX2V2ZW50cyAqcmFzLCBzdHJ1Y3QgcmFzX21mX2V2ZW50DQo+KmV2KTsNCj4+ICAgaW50
+IHJhc19yZXBvcnRfY3hsX3BvaXNvbl9ldmVudChzdHJ1Y3QgcmFzX2V2ZW50cyAqcmFzLCBzdHJ1
+Y3QNCj4+IHJhc19jeGxfcG9pc29uX2V2ZW50ICpldik7DQo+PiAraW50IHJhc19yZXBvcnRfY3hs
+X2Flcl91ZV9ldmVudChzdHJ1Y3QgcmFzX2V2ZW50cyAqcmFzLCBzdHJ1Y3QNCj4+ICtyYXNfY3hs
+X2Flcl91ZV9ldmVudCAqZXYpOw0KPj4NCj4+ICAgI2Vsc2UNCj4+DQo+PiBAQCAtNTIsNiArNTMs
+NyBAQCBzdGF0aWMgaW5saW5lIGludCByYXNfcmVwb3J0X2RldmxpbmtfZXZlbnQoc3RydWN0DQo+
+cmFzX2V2ZW50cyAqcmFzLCBzdHJ1Y3QgZGV2bGluDQo+PiAgIHN0YXRpYyBpbmxpbmUgaW50IHJh
+c19yZXBvcnRfZGlza2Vycm9yX2V2ZW50KHN0cnVjdCByYXNfZXZlbnRzICpyYXMsIHN0cnVjdA0K
+PmRpc2tlcnJvcl9ldmVudCAqZXYpIHsgcmV0dXJuIDA7IH07DQo+PiAgIHN0YXRpYyBpbmxpbmUg
+aW50IHJhc19yZXBvcnRfbWZfZXZlbnQoc3RydWN0IHJhc19ldmVudHMgKnJhcywgc3RydWN0DQo+
+cmFzX21mX2V2ZW50ICpldikgeyByZXR1cm4gMDsgfTsNCj4+ICAgc3RhdGljIGlubGluZSBpbnQg
+cmFzX3JlcG9ydF9jeGxfcG9pc29uX2V2ZW50KHN0cnVjdCByYXNfZXZlbnRzDQo+PiAqcmFzLCBz
+dHJ1Y3QgcmFzX2N4bF9wb2lzb25fZXZlbnQgKmV2KSB7IHJldHVybiAwOyB9Ow0KPj4gK3N0YXRp
+YyBpbmxpbmUgaW50IHJhc19yZXBvcnRfY3hsX2Flcl91ZV9ldmVudChzdHJ1Y3QgcmFzX2V2ZW50
+cyAqcmFzLA0KPj4gK3N0cnVjdCByYXNfY3hsX2Flcl91ZV9ldmVudCAqZXYpIHsgcmV0dXJuIDA7
+IH07DQo+Pg0KPj4gICAjZW5kaWYNCj4+DQoNClRoYW5rcywNClNoaWp1DQo=
