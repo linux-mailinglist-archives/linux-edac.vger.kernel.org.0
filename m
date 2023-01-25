@@ -2,145 +2,176 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 261D567B784
-	for <lists+linux-edac@lfdr.de>; Wed, 25 Jan 2023 17:56:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ACCCB67BFFA
+	for <lists+linux-edac@lfdr.de>; Wed, 25 Jan 2023 23:35:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235707AbjAYQ4b (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Wed, 25 Jan 2023 11:56:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49236 "EHLO
+        id S229577AbjAYWfE (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Wed, 25 Jan 2023 17:35:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236020AbjAYQ4T (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Wed, 25 Jan 2023 11:56:19 -0500
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E56633460;
-        Wed, 25 Jan 2023 08:56:02 -0800 (PST)
+        with ESMTP id S229499AbjAYWfD (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Wed, 25 Jan 2023 17:35:03 -0500
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F33BB5A826;
+        Wed, 25 Jan 2023 14:35:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674665762; x=1706201762;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=HW4FdeSfhdUqE3R4uMkz87TxYBxrxsRLbudqObWF6ck=;
-  b=UZYjDI19rDQF3tgN/FvQAk+rU2zfNxLouHZa+GPQ89qpBwbNDTxhqnYq
-   SPoDDaM/34VkyQtaYPoVvQwRqUqxAr3GjjFupdrYOMrZvNS/avo0oRe1P
-   3yzNqtyIqJlh+x/FP5XrY8x7a/PU3olPnBZ4rQl/S5IDLAZNd6uKRDyaF
-   ivXIgwquiSySvgquklcHV5PEueTEb2ULIugkBBiuHf+rOn7ARbOCFN/3R
-   ic2Bki7c8k1RqmH73l/frJEHFrwYPdVhWrPnMjt6CmO9Zgz4kpXO1zdiw
-   UfWaX4CXW6kHqv/N+QOuhsssQvLaLvPOaogpBa50EFrfmLnIS/sW2kRwc
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10601"; a="326633862"
-X-IronPort-AV: E=Sophos;i="5.97,245,1669104000"; 
-   d="scan'208";a="326633862"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2023 08:56:02 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10601"; a="694795703"
-X-IronPort-AV: E=Sophos;i="5.97,245,1669104000"; 
-   d="scan'208";a="694795703"
-Received: from djiang5-mobl3.amr.corp.intel.com (HELO [10.209.145.70]) ([10.209.145.70])
-  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2023 08:56:01 -0800
-Message-ID: <58fee79c-9148-1802-3ac2-4ecb19c951bc@intel.com>
-Date:   Wed, 25 Jan 2023 09:56:00 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.6.0
-Subject: Re: [PATCH V2 4/4] rasdaemon: Add support for the CXL AER correctable
- errors
-Content-Language: en-US
-To:     shiju.jose@huawei.com, linux-edac@vger.kernel.org,
-        linux-cxl@vger.kernel.org, mchehab@kernel.org
-Cc:     jonathan.cameron@huawei.com, linuxarm@huawei.com
+  t=1674686102; x=1706222102;
+  h=date:from:to:cc:subject:message-id:references:
+   in-reply-to:mime-version;
+  bh=jviVyKeyDwQyFZz+LlTMgpSWagNrofCnothU8XE542g=;
+  b=i7e9esklFOHe4uTRLRqZjfLEfjDJRVHvlU0vlHFig9yZZ4OZMC/9NFnJ
+   KUEXdDx4RDMjdinqf0SpiRINvmPSNyxtO/bg54UXklfQNaMv3ITfldrWN
+   zOw/sIDJHUlsiFRxbBoT5ZWwRYuRMWNPxsCxGETByuakEWNXaQs36PKgb
+   43nRp7006Jgcw5RisBqsuErmoKgK9NNwA7VWGx9/RfNeIqTB0wRUVOp9v
+   zZxVUzNKpNTG+ix+p8S8GAXfjePnYunRiTZO3c/EyOEiOOd/ZKVvh9CSD
+   bmlTKgASnjlTDA7kck/wKvluAzrtjqmSu435XMGhZm7QcELK4f7vrd2f7
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10601"; a="389038567"
+X-IronPort-AV: E=Sophos;i="5.97,246,1669104000"; 
+   d="scan'208";a="389038567"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2023 14:34:58 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10601"; a="786602977"
+X-IronPort-AV: E=Sophos;i="5.97,246,1669104000"; 
+   d="scan'208";a="786602977"
+Received: from orsmsx602.amr.corp.intel.com ([10.22.229.15])
+  by orsmga004.jf.intel.com with ESMTP; 25 Jan 2023 14:34:58 -0800
+Received: from orsmsx612.amr.corp.intel.com (10.22.229.25) by
+ ORSMSX602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Wed, 25 Jan 2023 14:34:57 -0800
+Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
+ orsmsx612.amr.corp.intel.com (10.22.229.25) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16 via Frontend Transport; Wed, 25 Jan 2023 14:34:57 -0800
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (104.47.55.102)
+ by edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.16; Wed, 25 Jan 2023 14:34:57 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=SOXShjwdwRPhXj5wDsQSZ1mfTOLYirq6XZ5r2HsrTzuoiHbyn0f05IV8wg0/FyInbO51wu8dQll+uUsvpx05or6Xdj7TIrZS13qzI25CN5Vyun/i2CaU9irzO7tVL9CBo9zlI3mSfNKs1FzGzE+jEM8eKYeV6Bo4GeCoCY6EFeHCIe3F/kEhIeLPd/dfwa41ZOl+viVzGmjFq4hgafR5FjDcgosfq4pbr2SuctjoWWwNcaFMVYqe2o1w8xGZtC62nTTHaFxrrbdeythxEG5o37pccrs48HkL0Ld2dQpcmzHXgXusgUl+K7iec1XtCZHWKUtEVKHE2eCIsfJ8QxGaqQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=85si054GwEHOpv+PwIO4IqoQvvFp1b7R35oIf6VBMEA=;
+ b=k71fsIUuYNpseXOtYWsBIsKXltecx2z6DpyfQ8c3nEaWWUg4m+M7atGuHN7pb237ZTMjPVy8PeiEezRRjVo9kMbOwQAslqN3XHsa2sUndV5wmy8VrilIClYc0A4+taOcAy2tTlDzJ5pFXnlmqvMqKzLV64lBJc0Z8GEUG+SUtZt9plj/KBoafRNjwuO5YGRzrkkI/ocJZGj+2GVvWwPO4dHj8YUqQeGdrV2Niqf0vxdOF2hRwa/a445itCiH5NRu6oym8f6XurxskuwxfwcCyhVANjDlf556xv6RnpOdtBJLHgzHHryyLju4weQjNCbg1ubZuZQ9hsxGxBbpUdiwow==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from SA1PR11MB6733.namprd11.prod.outlook.com (2603:10b6:806:25c::17)
+ by SJ1PR11MB6106.namprd11.prod.outlook.com (2603:10b6:a03:48b::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6043.21; Wed, 25 Jan
+ 2023 22:34:56 +0000
+Received: from SA1PR11MB6733.namprd11.prod.outlook.com
+ ([fe80::6851:3db2:1166:dda6]) by SA1PR11MB6733.namprd11.prod.outlook.com
+ ([fe80::6851:3db2:1166:dda6%7]) with mapi id 15.20.6002.027; Wed, 25 Jan 2023
+ 22:34:56 +0000
+Date:   Wed, 25 Jan 2023 14:34:53 -0800
+From:   Ira Weiny <ira.weiny@intel.com>
+To:     <shiju.jose@huawei.com>, <linux-edac@vger.kernel.org>,
+        <linux-cxl@vger.kernel.org>, <mchehab@kernel.org>
+CC:     <jonathan.cameron@huawei.com>, <linuxarm@huawei.com>,
+        <shiju.jose@huawei.com>
+Subject: Re: [PATCH V2 2/4] rasdaemon: Add support for the CXL poison events
+Message-ID: <63d1ae8d41b2b_3e042294ab@iweiny-mobl.notmuch>
 References: <20230124165733.1452-1-shiju.jose@huawei.com>
- <20230124165733.1452-5-shiju.jose@huawei.com>
-From:   Dave Jiang <dave.jiang@intel.com>
-In-Reply-To: <20230124165733.1452-5-shiju.jose@huawei.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+ <20230124165733.1452-3-shiju.jose@huawei.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20230124165733.1452-3-shiju.jose@huawei.com>
+X-ClientProxiedBy: SJ0PR03CA0051.namprd03.prod.outlook.com
+ (2603:10b6:a03:33e::26) To SA1PR11MB6733.namprd11.prod.outlook.com
+ (2603:10b6:806:25c::17)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SA1PR11MB6733:EE_|SJ1PR11MB6106:EE_
+X-MS-Office365-Filtering-Correlation-Id: 2f108f46-857d-4f11-399e-08daff24625e
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 3ovp7xCvQg1coYKHtHUUPO7mLOvIbnpX5NdRmRLsXIskIj1PnAr4AoWfslS+bT+enycbALOzyyE2DbXuhfm6qH1xqgiVbgKZkSSKFCUr432OqzmXJD9J9zhs7P1OfiAE1o6hc1kbcXWMFOAmPmE8ti8qDosjW8xBSZKfUQqAYcefwKuWxQPWVZpRNzZp4otlCt/1m8srL0Nec1NpOHgvMzdzvkLObCnzZbh4YnVTOojeo59SrUWm5Z/+995bJVvKl+a9Wz1CvOg+8lg0qy5vH31bFsSgXhwihwknARchwqNggFNJqSe0UQzpQ1zD2S6j6Gy+0i7K6/ifRrR9L0P/8N+Hcq4sejO5Hb3wIv+CT5NC7isOJDAmre2ww5Mlv9ISsrJkmxWRlL+YdkcKLYdQfqV/2eieHBCdfetaZjB0+TTRj4cDraJR263u2qZ86dkPAToMGS3YOukq5i39JtIsfGexchj2dPynXVD6BxjJUwMW92WG1q0SdbPn0zdn024mkYZg4Yu7r/n1Jmuyn7TZVkzY5vNxMFZzV9U1102vfbrPK+Sw9QOavO3Sl0QAPeNG5jnM74b/dKqncVuQXN+jnfjDFlJmYMKfmSihrqvT5Av0xD+0iiP0iY+9Ra6KwVZuHKs3eSoTWBkP7mSCMet74dXWKA1zdhy+/8GAJn/G1JwHYR1ZGvwFPNv1+9H4s+qE
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA1PR11MB6733.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(396003)(346002)(366004)(39860400002)(376002)(136003)(451199018)(6666004)(478600001)(966005)(6486002)(86362001)(6506007)(9686003)(316002)(26005)(6512007)(186003)(8676002)(4326008)(66556008)(66946007)(66476007)(38100700002)(8936002)(41300700001)(44832011)(83380400001)(5660300002)(82960400001)(2906002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?e2BN1RkMhoVQWRJz6lTPQpQyA3UuDAimogkh+YaVedooMXoJPJqrZPYou5mb?=
+ =?us-ascii?Q?WMDSLbrvoQYndgCtNkXSL0xzOTF8bdrbsHBbVzm2vAiw0rfJNc37pidsKCpr?=
+ =?us-ascii?Q?wSAY5oGYv+siR3PGNXYmtK81fDh+0bSnRH77smEHMHqFOkc3I4e0e6Z2/qif?=
+ =?us-ascii?Q?Wogl1r3GRlg+a89KvRBS6/GPyg75N0E4VLluvGOjHh8oh7uGeCLssFpJWblU?=
+ =?us-ascii?Q?pq66b80rCMR/6zxRXt1Fwfh4eKa3W/dI/hGwaVdL7E/h6DC/2Nkn3STImRmB?=
+ =?us-ascii?Q?bKeV+MaM/bIk5P6Jf3uVCi9UvK+kz6b8tq5SYDaJ8TDU/RJnmf+PRsBfJbOh?=
+ =?us-ascii?Q?3wHYPq3ANRrEGuIPfZeNrZryaqfbHdHY311AImjzP3p+Ce7ckjOjL6gBTEBb?=
+ =?us-ascii?Q?9gGT6iqpaOobhWjntjk/0vUVO0wCxJGlbqv5apyIoHx0RFCkB6aZ5iV1YyZJ?=
+ =?us-ascii?Q?gQJsT8mn2w0U+nqp0gnb9CVA/cAMd/I7qPgUT4zFdu21GuJbH836YLk+CKfx?=
+ =?us-ascii?Q?kGUTOyrE3DbHGPSdzXPw8gSBhH+Jw/XCN1iTvmNPh1Drz0bb+srMIN/7OrH5?=
+ =?us-ascii?Q?6f65wjXc7xiiJNnhtIqoMljIBgWxa6cekcrXSBWz4vjFFgiKdzIyUVgH7Gq8?=
+ =?us-ascii?Q?NG1T0rAX0CkgFL/T5m22mMqx2EdROOkcylQzR/V44Ldg6RMpmRoH3xe7xkdM?=
+ =?us-ascii?Q?2R9CWR0zRv53TXp7y+EhsFwmusdT/YlvzhW5GdMjzBlZuKjGG1dqDHV+lJj3?=
+ =?us-ascii?Q?LFPsQbbJy18OFUGYVA6zMahPzlz6jec3CEEQDWj3WBqplBb4Z+cLI0+Mc1sx?=
+ =?us-ascii?Q?ieedNDfVEn28B1JNpK/mlmxRFJVurdLyBYaMCO7XXt88V6JFg+MmHo3FD2jj?=
+ =?us-ascii?Q?cBeVeCpn/ZlyfIWFMPzKZZQn/qN0sOB5mzfdnM/rSnMFr1aqdlqPr2jD5bSj?=
+ =?us-ascii?Q?p/DTP8D07uzjgq2+TzixmQyecHzchbyF1rONXU7j3KlUM2QyiMBaI85I+Lp5?=
+ =?us-ascii?Q?+wuulX+NSn1g5Mcpk22fxwKxBH3DSmUkSqyqERyJgyOPldYdXhVT8VXZx6we?=
+ =?us-ascii?Q?OI2LaoZWnKNef3PxUvQfxlHtJtn8fK3xJhyuS8P9i/kz07FcFWA+JPDTkafD?=
+ =?us-ascii?Q?ilMygz01dZpIwsUxQhBhs1Rn5yBwxN8jcgnNkxkrQYxPl470uzp8M2py0Y2L?=
+ =?us-ascii?Q?9cA8hOsWXu6zsUthVk72ov/MMDnEAvRQ6bcyvrW6B/i14IbYMUeQw+u/gjt1?=
+ =?us-ascii?Q?V1yUOgBoLs2WWOVXGXmIp44uu6sVIba3f1DrEHrD7ZG3cpdWc07lf/g2emGU?=
+ =?us-ascii?Q?d3QcPA596Zjs3S0rAsxSvi5n6EvHfQBUEjk5d0aXRB4LFTVjfW3z6/yk+hpP?=
+ =?us-ascii?Q?NGHpl3BA8g15FGeJvQj4VlTM/HlVwm/P4/1hRk22aduT6yHfPWukGjQRSKMX?=
+ =?us-ascii?Q?Ck2miAnG7spyyxXVDjy4Qyj0zaa2OS+vEUKQ75e8STSuarFMJa2LEENqattK?=
+ =?us-ascii?Q?sbd05Yk/fR5qKMiR0UTN0TTFo7WaOU/bGnrxSL1lssCoNhUHkjGtD0XlHeGV?=
+ =?us-ascii?Q?OZBC6T9zcj5EkRYH4GibBTaEnhCnNVfjNqP3p241?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2f108f46-857d-4f11-399e-08daff24625e
+X-MS-Exchange-CrossTenant-AuthSource: SA1PR11MB6733.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Jan 2023 22:34:56.4031
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 2OdPyBaNy5FD/K1AtMLeCluF/6cPPomIZDUA1EIvFp8KwFQkpwDG5Vr+fjGhbel8qZkf40jwRXCEC6KW/cMIWA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ1PR11MB6106
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-
-
-On 1/24/23 9:57 AM, shiju.jose@huawei.com wrote:
+shiju.jose@ wrote:
 > From: Shiju Jose <shiju.jose@huawei.com>
 > 
-> Add support to log and record the CXL AER correctable errors.
+> Add support to log and record the CXL poison events.
 > 
-> The corresponding Kernel patch here:
-> https://patchwork.kernel.org/project/cxl/patch/166974413388.1608150.5875712482260436188.stgit@djiang5-desk3.ch.intel.com/
+> The corresponding Kernel patches here:
+> https://lore.kernel.org/linux-cxl/de11785ff05844299b40b100f8e0f56c7eef7f08.1674070170.git.alison.schofield@intel.com/
+> 
+> Presently RFC draft version for logging, could be extended for the policy
+> based recovery action for the frequent poison events depending on the above
+> kernel patches.
 > 
 > Signed-off-by: Shiju Jose <shiju.jose@huawei.com>
 > Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 
-Same comments as previous patch.
+[snip]
 
-> ---
->   ras-cxl-handler.c | 64 ++++++++++++++++++++++++++++++++++++++++++++
->   ras-cxl-handler.h |  3 +++
->   ras-events.c      |  9 +++++++
->   ras-events.h      |  1 +
->   ras-record.c      | 57 ++++++++++++++++++++++++++++++++++++++++
->   ras-record.h      | 10 +++++++
->   ras-report.c      | 67 +++++++++++++++++++++++++++++++++++++++++++++++
->   ras-report.h      |  2 ++
->   8 files changed, 213 insertions(+)
-> 
-> diff --git a/ras-cxl-handler.c b/ras-cxl-handler.c
-> index d042dc9..c2775c8 100644
-> --- a/ras-cxl-handler.c
-> +++ b/ras-cxl-handler.c
-> @@ -180,6 +180,14 @@ int ras_cxl_poison_event_handler(struct trace_seq *s,
->   #define CXL_AER_UE_IDE_TX_ERR		BIT(15)
->   #define CXL_AER_UE_IDE_RX_ERR		BIT(16)
->   
-> +#define CXL_AER_CE_CACHE_DATA_ECC	BIT(0)
-> +#define CXL_AER_CE_MEM_DATA_ECC		BIT(1)
-> +#define CXL_AER_CE_CRC_THRESH		BIT(2)
-> +#define CXL_AER_CE_RETRY_THRESH		BIT(3)
-> +#define CXL_AER_CE_CACHE_POISON		BIT(4)
-> +#define CXL_AER_CE_MEM_POISON		BIT(5)
-> +#define CXL_AER_CE_PHYS_LAYER_ERR	BIT(6)
 > +
->   struct cxl_error_list {
->   	uint32_t bit;
->   	const char *error;
-> @@ -203,6 +211,16 @@ static const struct cxl_error_list cxl_aer_ue[] = {
->   	{ .bit = CXL_AER_UE_IDE_RX_ERR, .error = "IDE Rx Error" },
->   };
->   
-> +static const struct cxl_error_list cxl_aer_ce[] = {
-> +	{ .bit = CXL_AER_CE_CACHE_DATA_ECC, .error = "Cache Data ECC Error" },
-> +	{ .bit = CXL_AER_CE_MEM_DATA_ECC, .error = "Memory Data ECC Error" },
-> +	{ .bit = CXL_AER_CE_CRC_THRESH, .error = "CRC Threshold Hit" },
-> +	{ .bit = CXL_AER_CE_RETRY_THRESH, .error = "Retry Threshold" },
-> +	{ .bit = CXL_AER_CE_CACHE_POISON, .error = "Received Cache Poison From Peer" },
-> +	{ .bit = CXL_AER_CE_MEM_POISON, .error = "Received Memory Poison From Peer" },
-> +	{ .bit = CXL_AER_CE_PHYS_LAYER_ERR, .error = "Received Error From Physical Layer" },
-> +};
-> +
->   static void decode_cxl_error_status(struct trace_seq *s, uint32_t status,
->   				   const struct cxl_error_list *cxl_error_list,
->   				   uint8_t num_elems)
-> @@ -285,3 +303,49 @@ int ras_cxl_aer_ue_event_handler(struct trace_seq *s,
->   
->   	return 0;
->   }
-> +
-> +int ras_cxl_aer_ce_event_handler(struct trace_seq *s,
+> +int ras_cxl_poison_event_handler(struct trace_seq *s,
 > +				 struct tep_record *record,
 > +				 struct tep_event *event, void *context)
 > +{
 > +	int len;
 > +	unsigned long long val;
+> +	struct ras_events *ras = context;
 > +	time_t now;
 > +	struct tm *tm;
-> +	struct ras_events *ras = context;
-> +	struct ras_cxl_aer_ce_event ev;
+> +	struct ras_cxl_poison_event ev;
 > +
 > +	now = record->ts/user_hz + ras->uptime_diff;
 > +	tm = localtime(&now);
@@ -151,319 +182,174 @@ Same comments as previous patch.
 > +		strncpy(ev.timestamp, "1970-01-01 00:00:00 +0000", sizeof(ev.timestamp));
 > +	trace_seq_printf(s, "%s ", ev.timestamp);
 > +
-> +	ev.dev_name = tep_get_field_raw(s, event, "dev_name",
-> +					record, &len, 1);
-> +	if (!ev.dev_name)
+> +	ev.memdev = tep_get_field_raw(s, event, "memdev",
+> +				      record, &len, 1);
+> +	if (!ev.memdev)
 > +		return -1;
-> +	trace_seq_printf(s, "dev_name:%s ", ev.dev_name);
+> +	trace_seq_printf(s, "memdev:%s ", ev.memdev);
 > +
-> +	if (tep_get_field_val(s, event, "status", record, &val, 1) < 0)
+> +	ev.pcidev = tep_get_field_raw(s, event, "pcidev",
+> +				      record, &len, 1);
+> +	if (!ev.pcidev)
 > +		return -1;
-> +	ev.error_status = val;
-> +	trace_seq_printf(s, "error status:");
-> +	decode_cxl_error_status(s, ev.error_status,
-> +				cxl_aer_ce, ARRAY_SIZE(cxl_aer_ce));
+> +	trace_seq_printf(s, "pcidev:%s ", ev.pcidev);
+> +
+> +	ev.region = tep_get_field_raw(s, event, "region",
+> +				      record, &len, 1);
+> +	if (!ev.region)
+> +		return -1;
+> +	trace_seq_printf(s, "region:%s ", ev.region);
+> +
+> +	ev.uuid = tep_get_field_raw(s, event, "uuid",
+> +				    record, &len, 1);
+> +	if (!ev.uuid)
+> +		return -1;
+> +	trace_seq_printf(s, "region_uuid:%s ", ev.uuid);
+> +
+> +	if (tep_get_field_val(s, event, "hpa", record, &val, 1) < 0)
+> +		return -1;
+> +	ev.hpa = val;
+> +	trace_seq_printf(s, "poison list: hpa:0x%llx ", (unsigned long long)ev.hpa);
+> +
+> +	if (tep_get_field_val(s, event, "dpa", record, &val, 1) < 0)
+> +		return -1;
+> +	ev.dpa = val;
+> +	trace_seq_printf(s, "dpa:0x%llx ", (unsigned long long)ev.dpa);
+> +
+> +	if (tep_get_field_val(s, event, "length", record, &val, 1) < 0)
+> +		return -1;
+> +	ev.length = val;
+> +	trace_seq_printf(s, "length:%d ", ev.length);
+> +
+> +	if (tep_get_field_val(s,  event, "source", record, &val, 1) < 0)
+> +		return -1;
+> +
+> +	switch (val) {
+> +	case CXL_POISON_SOURCE_UNKNOWN:
+> +		ev.source = "Unknown";
+> +		break;
+> +	case CXL_POISON_SOURCE_EXTERNAL:
+> +		ev.source = "External";
+> +		break;
+> +	case CXL_POISON_SOURCE_INTERNAL:
+> +		ev.source = "Internal";
+> +		break;
+> +	case CXL_POISON_SOURCE_INJECTED:
+> +		ev.source = "Injected";
+> +		break;
+> +	case CXL_POISON_SOURCE_VENDOR:
+> +		ev.source = "Vendor";
+> +		break;
+> +	default:
+> +		ev.source = "Invalid";
+> +	}
+> +	trace_seq_printf(s, "source:%s ", ev.source);
+> +
+> +	if (tep_get_field_val(s,  event, "flags", record, &val, 1) < 0)
+> +		return -1;
+> +	ev.flags = val;
+> +	trace_seq_printf(s, "flags:%d ", ev.flags);
+> +
+> +	if (ev.flags & CXL_POISON_FLAG_OVERFLOW) {
+> +		if (tep_get_field_val(s,  event, "overflow_t", record, &val, 1) < 0)
+> +			return -1;
+> +		if (val) {
+> +			/* CXL Specification 3.0
+> +			 * Overflow timestamp - The number of unsigned nanoseconds
+> +			 * that have elapsed since midnight, 01-Jan-1970 UTC
+> +			 */
+> +			time_t ovf_ts_secs = val / 1000000000ULL;
+> +
+> +			tm = localtime(&ovf_ts_secs);
+> +			if (tm) {
+> +				strftime(ev.overflow_ts, sizeof(ev.overflow_ts),
+> +					 "%Y-%m-%d %H:%M:%S %z", tm);
+> +			}
+> +		}
+> +		if (!val || !tm)
+> +			strncpy(ev.overflow_ts, "1970-01-01 00:00:00 +0000",
+> +				sizeof(ev.overflow_ts));
+> +	} else
+> +		strncpy(ev.overflow_ts, "1970-01-01 00:00:00 +0000", sizeof(ev.overflow_ts));
+> +	trace_seq_printf(s, "overflow timestamp:%s ", ev.overflow_ts);
+> +	trace_seq_printf(s, "\n");
 > +
 > +	/* Insert data into the SGBD */
 > +#ifdef HAVE_SQLITE3
-> +	ras_store_cxl_aer_ce_event(ras, &ev);
+> +	ras_store_cxl_poison_event(ras, &ev);
 > +#endif
-> +
-> +#ifdef HAVE_ABRT_REPORT
-> +	/* Report event to ABRT */
-> +	ras_report_cxl_aer_ce_event(ras, &ev);
-> +#endif
-> +
-> +	return 0;
-> +}
-> diff --git a/ras-cxl-handler.h b/ras-cxl-handler.h
-> index 18b3120..711daf4 100644
-> --- a/ras-cxl-handler.h
-> +++ b/ras-cxl-handler.h
-> @@ -26,4 +26,7 @@ int ras_cxl_aer_ue_event_handler(struct trace_seq *s,
->   				 struct tep_record *record,
->   				 struct tep_event *event, void *context);
->   
-> +int ras_cxl_aer_ce_event_handler(struct trace_seq *s,
-> +				 struct tep_record *record,
-> +				 struct tep_event *event, void *context);
->   #endif
-> diff --git a/ras-events.c b/ras-events.c
-> index ead792b..3691311 100644
-> --- a/ras-events.c
-> +++ b/ras-events.c
-> @@ -247,6 +247,7 @@ int toggle_ras_mc_event(int enable)
->   #ifdef HAVE_CXL
->   	rc |= __toggle_ras_mc_event(ras, "cxl", "cxl_poison", enable);
->   	rc |= __toggle_ras_mc_event(ras, "cxl", "cxl_aer_uncorrectable_error", enable);
-> +	rc |= __toggle_ras_mc_event(ras, "cxl", "cxl_aer_correctable_error", enable);
->   #endif
->   
->   free_ras:
-> @@ -973,6 +974,14 @@ int handle_ras_events(int record_events)
->   	else
->   		log(ALL, LOG_ERR, "Can't get traces from %s:%s\n",
->   		    "cxl", "cxl_aer_uncorrectable_error");
-> +
-> +	rc = add_event_handler(ras, pevent, page_size, "cxl", "cxl_aer_correctable_error",
-> +			       ras_cxl_aer_ce_event_handler, NULL, CXL_AER_CE_EVENT);
-> +	if (!rc)
-> +		num_events++;
-> +	else
-> +		log(ALL, LOG_ERR, "Can't get traces from %s:%s\n",
-> +		    "cxl", "cxl_aer_correctable_error");
->   #endif
->   
->   	if (!num_events) {
-> diff --git a/ras-events.h b/ras-events.h
-> index 65f9d9a..dc7bdfb 100644
-> --- a/ras-events.h
-> +++ b/ras-events.h
-> @@ -41,6 +41,7 @@ enum {
->   	MF_EVENT,
->   	CXL_POISON_EVENT,
->   	CXL_AER_UE_EVENT,
-> +	CXL_AER_CE_EVENT,
->   	NR_EVENTS
->   };
->   
-> diff --git a/ras-record.c b/ras-record.c
-> index 4703790..c318a18 100644
+
+I know nothing about the rasdaemon build system but it seems like this
+needs a ifdef HAVE_CXL around it?
+
+[snip]
+
 > --- a/ras-record.c
 > +++ b/ras-record.c
-> @@ -666,6 +666,48 @@ int ras_store_cxl_aer_ue_event(struct ras_events *ras, struct ras_cxl_aer_ue_eve
->   	return rc;
->   }
->   
+> @@ -559,6 +559,67 @@ int ras_store_mf_event(struct ras_events *ras, struct ras_mf_event *ev)
+>  }
+>  #endif
+>  
+> +#ifdef HAVE_CXL
 > +/*
-> + * Table and functions to handle cxl:cxl_aer_correctable_error
+> + * Table and functions to handle cxl:cxl_poison
 > + */
-> +static const struct db_fields cxl_aer_ce_event_fields[] = {
+> +static const struct db_fields cxl_poison_event_fields[] = {
 > +	{ .name = "id",                   .type = "INTEGER PRIMARY KEY" },
 > +	{ .name = "timestamp",            .type = "TEXT" },
-> +	{ .name = "dev_name",             .type = "TEXT" },
-> +	{ .name = "error_status",         .type = "INTEGER" },
+> +	{ .name = "memdev",               .type = "TEXT" },
+> +	{ .name = "pcidev",               .type = "TEXT" },
+> +	{ .name = "region",               .type = "TEXT" },
+> +	{ .name = "region_uuid",          .type = "TEXT" },
+> +	{ .name = "hpa",                  .type = "INTEGER" },
+> +	{ .name = "dpa",                  .type = "INTEGER" },
+> +	{ .name = "length",               .type = "INTEGER" },
+> +	{ .name = "source",               .type = "TEXT" },
+> +	{ .name = "flags",                .type = "INTEGER" },
+> +	{ .name = "overflow_ts",          .type = "TEXT" },
 > +};
 > +
-> +static const struct db_table_descriptor cxl_aer_ce_event_tab = {
-> +	.name = "cxl_aer_ce_event",
-> +	.fields = cxl_aer_ce_event_fields,
-> +	.num_fields = ARRAY_SIZE(cxl_aer_ce_event_fields),
+> +static const struct db_table_descriptor cxl_poison_event_tab = {
+> +	.name = "cxl_poison_event",
+> +	.fields = cxl_poison_event_fields,
+> +	.num_fields = ARRAY_SIZE(cxl_poison_event_fields),
 > +};
 > +
-> +int ras_store_cxl_aer_ce_event(struct ras_events *ras, struct ras_cxl_aer_ce_event *ev)
-> +{
-> +	int rc;
-> +	struct sqlite3_priv *priv = ras->db_priv;
-> +
-> +	if (!priv || !priv->stmt_cxl_aer_ce_event)
-> +		return 0;
-> +	log(TERM, LOG_INFO, "cxl_aer_ce_event store: %p\n", priv->stmt_cxl_aer_ce_event);
-> +
-> +	sqlite3_bind_text(priv->stmt_cxl_aer_ce_event, 1, ev->timestamp, -1, NULL);
-> +	sqlite3_bind_text(priv->stmt_cxl_aer_ce_event, 2, ev->dev_name, -1, NULL);
-> +	sqlite3_bind_int(priv->stmt_cxl_aer_ce_event, 3, ev->error_status);
-> +
-> +	rc = sqlite3_step(priv->stmt_cxl_aer_ce_event);
-> +	if (rc != SQLITE_OK && rc != SQLITE_DONE)
-> +		log(TERM, LOG_ERR,
-> +		    "Failed to do cxl_aer_ce_event step on sqlite: error = %d\n", rc);
-> +	rc = sqlite3_reset(priv->stmt_cxl_aer_ce_event);
-> +	if (rc != SQLITE_OK && rc != SQLITE_DONE)
-> +		log(TERM, LOG_ERR,
-> +		    "Failed reset cxl_aer_ce_event on sqlite: error = %d\n",
-> +		    rc);
-> +	log(TERM, LOG_INFO, "register inserted at db\n");
-> +
-> +	return rc;
-> +}
->   #endif
->   
->   /*
-> @@ -1022,6 +1064,13 @@ int ras_mc_event_opendb(unsigned cpu, struct ras_events *ras)
->   			goto error;
->   	}
->   
-> +	rc = ras_mc_create_table(priv, &cxl_aer_ce_event_tab);
-> +	if (rc == SQLITE_OK) {
-> +		rc = ras_mc_prepare_stmt(priv, &priv->stmt_cxl_aer_ce_event,
-> +					 &cxl_aer_ce_event_tab);
-> +		if (rc != SQLITE_OK)
-> +			goto error;
-> +	}
->   #endif
->   
->   	ras->db_priv = priv;
-> @@ -1152,6 +1201,14 @@ int ras_mc_event_closedb(unsigned int cpu, struct ras_events *ras)
->   			    "cpu %u: Failed to finalize cxl_aer_ue_event sqlite: error = %d\n",
->   			    cpu, rc);
->   	}
-> +
-> +	if (priv->stmt_cxl_aer_ce_event) {
-> +		rc = sqlite3_finalize(priv->stmt_cxl_aer_ce_event);
-> +		if (rc != SQLITE_OK)
-> +			log(TERM, LOG_ERR,
-> +			    "cpu %u: Failed to finalize cxl_aer_ce_event sqlite: error = %d\n",
-> +			    cpu, rc);
-> +	}
->   #endif
->   
->   	rc = sqlite3_close_v2(db);
-> diff --git a/ras-record.h b/ras-record.h
-> index 0e2c178..1f28cc1 100644
-> --- a/ras-record.h
-> +++ b/ras-record.h
-> @@ -140,6 +140,12 @@ struct ras_cxl_aer_ue_event {
->   	uint32_t *header_log;
->   };
->   
-> +struct ras_cxl_aer_ce_event {
-> +	char timestamp[64];
-> +	const char *dev_name;
-> +	uint32_t error_status;
-> +};
-> +
->   struct ras_mc_event;
->   struct ras_aer_event;
->   struct ras_extlog_event;
-> @@ -151,6 +157,7 @@ struct diskerror_event;
->   struct ras_mf_event;
->   struct ras_cxl_poison_event;
->   struct ras_cxl_aer_ue_event;
-> +struct ras_cxl_aer_ce_event;
->   
->   #ifdef HAVE_SQLITE3
->   
-> @@ -186,6 +193,7 @@ struct sqlite3_priv {
->   #ifdef HAVE_CXL
->   	sqlite3_stmt	*stmt_cxl_poison_event;
->   	sqlite3_stmt	*stmt_cxl_aer_ue_event;
-> +	sqlite3_stmt	*stmt_cxl_aer_ce_event;
->   #endif
->   };
->   
-> @@ -216,6 +224,7 @@ int ras_store_diskerror_event(struct ras_events *ras, struct diskerror_event *ev
->   int ras_store_mf_event(struct ras_events *ras, struct ras_mf_event *ev);
->   int ras_store_cxl_poison_event(struct ras_events *ras, struct ras_cxl_poison_event *ev);
->   int ras_store_cxl_aer_ue_event(struct ras_events *ras, struct ras_cxl_aer_ue_event *ev);
-> +int ras_store_cxl_aer_ce_event(struct ras_events *ras, struct ras_cxl_aer_ce_event *ev);
->   
->   #else
->   static inline int ras_mc_event_opendb(unsigned cpu, struct ras_events *ras) { return 0; };
-> @@ -231,6 +240,7 @@ static inline int ras_store_diskerror_event(struct ras_events *ras, struct diske
->   static inline int ras_store_mf_event(struct ras_events *ras, struct ras_mf_event *ev) { return 0; };
->   static inline int ras_store_cxl_poison_event(struct ras_events *ras, struct ras_cxl_poison_event *ev) { return 0; };
->   static inline int ras_store_cxl_aer_ue_event(struct ras_events *ras, struct ras_cxl_aer_ue_event *ev) { return 0; };
-> +static inline int ras_store_cxl_aer_ce_event(struct ras_events *ras, struct ras_cxl_aer_ce_event *ev) { return 0; };
->   
->   #endif
->   
-> diff --git a/ras-report.c b/ras-report.c
-> index 4c09061..796abab 100644
-> --- a/ras-report.c
-> +++ b/ras-report.c
-> @@ -389,6 +389,26 @@ static int set_cxl_aer_ue_event_backtrace(char *buf, struct ras_cxl_aer_ue_event
->   	return 0;
->   }
->   
-> +static int set_cxl_aer_ce_event_backtrace(char *buf, struct ras_cxl_aer_ce_event *ev)
-> +{
-> +	char bt_buf[MAX_BACKTRACE_SIZE];
-> +
-> +	if (!buf || !ev)
-> +		return -1;
-> +
-> +	sprintf(bt_buf, "BACKTRACE="	\
-> +						"timestamp=%s\n"	\
-> +						"dev_name=%s\n"		\
-> +						"error_status=%u\n"	\
-> +						ev->timestamp,		\
-> +						ev->dev_name,		\
-> +						ev->error_status);
-> +
-> +	strcat(buf, bt_buf);
-> +
-> +	return 0;
-> +}
-> +
->   static int commit_report_backtrace(int sockfd, int type, void *ev){
->   	char buf[MAX_BACKTRACE_SIZE];
->   	char *pbuf = buf;
-> @@ -432,6 +452,9 @@ static int commit_report_backtrace(int sockfd, int type, void *ev){
->   	case CXL_AER_UE_EVENT:
->   		rc = set_cxl_aer_ue_event_backtrace(buf, (struct ras_cxl_aer_ue_event *)ev);
->   		break;
-> +	case CXL_AER_CE_EVENT:
-> +		rc = set_cxl_aer_ce_event_backtrace(buf, (struct ras_cxl_aer_ce_event *)ev);
-> +		break;
->   	default:
->   		return -1;
->   	}
-> @@ -928,3 +951,47 @@ cxl_aer_ue_fail:
->   	else
->   		return -1;
->   }
-> +
-> +int ras_report_cxl_aer_ce_event(struct ras_events *ras, struct ras_cxl_aer_ce_event *ev)
-> +{
-> +	char buf[MAX_MESSAGE_SIZE];
-> +	int sockfd = 0;
-> +	int done = 0;
-> +	int rc = -1;
-> +
-> +	memset(buf, 0, sizeof(buf));
-> +
-> +	sockfd = setup_report_socket();
-> +	if (sockfd < 0)
-> +		return -1;
-> +
-> +	rc = commit_report_basic(sockfd);
-> +	if (rc < 0)
-> +		goto cxl_aer_ce_fail;
-> +
-> +	rc = commit_report_backtrace(sockfd, CXL_AER_CE_EVENT, ev);
-> +	if (rc < 0)
-> +		goto cxl_aer_ce_fail;
-> +
-> +	sprintf(buf, "ANALYZER=%s", "rasdaemon-cxl-aer-correctable-error");
-> +	rc = write(sockfd, buf, strlen(buf) + 1);
-> +	if (rc < strlen(buf) + 1)
-> +		goto cxl_aer_ce_fail;
-> +
-> +	sprintf(buf, "REASON=%s", "CXL AER correctable error");
-> +	rc = write(sockfd, buf, strlen(buf) + 1);
-> +	if (rc < strlen(buf) + 1)
-> +		goto cxl_aer_ce_fail;
-> +
-> +	done = 1;
-> +
-> +cxl_aer_ce_fail:
-> +
-> +	if (sockfd >= 0)
-> +		close(sockfd);
-> +
-> +	if (done)
-> +		return 0;
-> +	else
-> +		return -1;
-> +}
-> diff --git a/ras-report.h b/ras-report.h
-> index dfe89d1..46155ee 100644
-> --- a/ras-report.h
-> +++ b/ras-report.h
-> @@ -41,6 +41,7 @@ int ras_report_diskerror_event(struct ras_events *ras, struct diskerror_event *e
->   int ras_report_mf_event(struct ras_events *ras, struct ras_mf_event *ev);
->   int ras_report_cxl_poison_event(struct ras_events *ras, struct ras_cxl_poison_event *ev);
->   int ras_report_cxl_aer_ue_event(struct ras_events *ras, struct ras_cxl_aer_ue_event *ev);
-> +int ras_report_cxl_aer_ce_event(struct ras_events *ras, struct ras_cxl_aer_ce_event *ev);
->   
->   #else
->   
-> @@ -54,6 +55,7 @@ static inline int ras_report_diskerror_event(struct ras_events *ras, struct disk
->   static inline int ras_report_mf_event(struct ras_events *ras, struct ras_mf_event *ev) { return 0; };
->   static inline int ras_report_cxl_poison_event(struct ras_events *ras, struct ras_cxl_poison_event *ev) { return 0; };
->   static inline int ras_report_cxl_aer_ue_event(struct ras_events *ras, struct ras_cxl_aer_ue_event *ev) { return 0; };
-> +static inline int ras_report_cxl_aer_ce_event(struct ras_events *ras, struct ras_cxl_aer_ce_event *ev) { return 0; };
->   
->   #endif
->   
+> +int ras_store_cxl_poison_event(struct ras_events *ras, struct ras_cxl_poison_event *ev)
+
+Because I believe this is not defined if (!HAVE_CXL and HAVE_SQLITE3)
+
+[snip]
+
+>  
+>  #ifdef HAVE_SQLITE3
+>  
+> @@ -155,6 +170,9 @@ struct sqlite3_priv {
+>  #ifdef HAVE_MEMORY_FAILURE
+>  	sqlite3_stmt	*stmt_mf_event;
+>  #endif
+> +#ifdef HAVE_CXL
+> +	sqlite3_stmt	*stmt_cxl_poison_event;
+> +#endif
+>  };
+>  
+>  struct db_fields {
+> @@ -182,6 +200,7 @@ int ras_store_arm_record(struct ras_events *ras, struct ras_arm_event *ev);
+>  int ras_store_devlink_event(struct ras_events *ras, struct devlink_event *ev);
+>  int ras_store_diskerror_event(struct ras_events *ras, struct diskerror_event *ev);
+>  int ras_store_mf_event(struct ras_events *ras, struct ras_mf_event *ev);
+> +int ras_store_cxl_poison_event(struct ras_events *ras, struct ras_cxl_poison_event *ev);
+>  
+>  #else
+>  static inline int ras_mc_event_opendb(unsigned cpu, struct ras_events *ras) { return 0; };
+> @@ -195,6 +214,7 @@ static inline int ras_store_arm_record(struct ras_events *ras, struct ras_arm_ev
+>  static inline int ras_store_devlink_event(struct ras_events *ras, struct devlink_event *ev) { return 0; };
+>  static inline int ras_store_diskerror_event(struct ras_events *ras, struct diskerror_event *ev) { return 0; };
+>  static inline int ras_store_mf_event(struct ras_events *ras, struct ras_mf_event *ev) { return 0; };
+> +static inline int ras_store_cxl_poison_event(struct ras_events *ras, struct ras_cxl_poison_event *ev) { return 0; };
+
+But I could be missing something.
+
+Ira
+
+[snip]
