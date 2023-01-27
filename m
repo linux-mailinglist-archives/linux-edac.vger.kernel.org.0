@@ -2,41 +2,41 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AB9967EC20
-	for <lists+linux-edac@lfdr.de>; Fri, 27 Jan 2023 18:08:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D0AE67EC05
+	for <lists+linux-edac@lfdr.de>; Fri, 27 Jan 2023 18:06:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235163AbjA0RI0 (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Fri, 27 Jan 2023 12:08:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60808 "EHLO
+        id S235018AbjA0RGE (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Fri, 27 Jan 2023 12:06:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235059AbjA0RIK (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Fri, 27 Jan 2023 12:08:10 -0500
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2041.outbound.protection.outlook.com [40.107.236.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD2048A56B;
-        Fri, 27 Jan 2023 09:07:13 -0800 (PST)
+        with ESMTP id S234944AbjA0RFn (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Fri, 27 Jan 2023 12:05:43 -0500
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on20606.outbound.protection.outlook.com [IPv6:2a01:111:f400:fe5a::606])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FDCA77502;
+        Fri, 27 Jan 2023 09:05:07 -0800 (PST)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=GWo1EYkOfKTmVap3is1i/9AsuEW+dK3lOIA1T75Bf4TrY8so8SmO1yxHs4wYhA6lZSyRQCGJcHiScEQa137vjTdQRACaGJbdnmeQbc2O4knHLlzTOwq5oFHQOXLbKAOzCgGh+vpmq49yt/bin1WFMerrpmiZJS3BEEPJ9c61iDRG+qTOBuZlZ+Q/IqjnTGqTEwzX8tGlKFAopVXEgLO6+stn2vx0B0PGlWgigk+S9NXWp5JX9/twyW5mD9ADmJWOVfcClSyEK+waroc9GJl3QfPBBR2HiX3D5KIPFU2ruAI6g96V1Liqg19WTASy7FVBerQzjcZn8VS7GTkIBo08wQ==
+ b=AXNEkzrEMMoaOPPCDgI5mTPzxfR+vAbGPpL9LN/HkgQvOHGd+5x3A8pNL2GXHd8BPijholVCecGgshejc4r2IszA/n29SCbO4AVWMu9f9dqncpzwK3xsUoWkfI1XBg1Y8xyBw96WPzM1EMBk39NFFPLsFCsYwKXb8IF5a+jLIBLfGJxRFHfgy1xPUz8/O0wCGCJPhzyfX3iO9oPFArryE2XqKbbmGz14Ggyh5mTM+9ilHtcN5PVz0vvMKowkuYBfWFYRmoE29wW9pmCwDGtJ5/hZU5RY+vWSWXmgw33gBIsfCFrJkkRC1dBOkFzPCT2/JS+wYjakZNYgqGuL0JMjwA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=LJcRiDJO6FOk9wacaTHCS1n1XjUQ5/6Bsb1cxdMhFcc=;
- b=ZJ/6lSGy3UZZ5H/INQRC08+ugL00bS0LeazSSUfqwrH/upfrcq0A5P0dfFSi2uARrP2g0QdG9THLHVwuiWArgmlCL47G1BtuSXL3UaUTaTVoLQAAGnJXyX5L4vq6ERyTGRjskgKpiqVEzGMQxqrDrQqDeTBLyTI64y+Cc/VvgBk9Te/S3rPZaNnmb/3lyV1wn0VVSX5nXClo3UBzQUL2PAS2i4eVwWrXR+uN0mv/5hiXL4yca6Tv69V1CB17DF0qDCT6XNOALRZJ/XRQd+Li4eEF0xrHFXTtEorLyJ9zbMGB5Jck2dQErT+thJ06zFNlVFZ2CzvspAcc8uE3D+mYyg==
+ bh=Q161Gkx4OKsPgU/TegAPI0ZEFw1VE8VzRgmq/AUf6n8=;
+ b=OZQmdkzOM+tx4UIexRaaEZiURVqtHmNZnNcX6EcMS5Z0VM6mruCD1Dl+L5v1gM8Pgca4pO+FKClS65KsPrjKkQPuM0DGP7hf8mxryu7lPJs/THbJ3T2uwq9rskUOmwpPDjcBXA49b2AuO343OYrWVBoWFPif246Y6ggxcRg8roH2c2nTrz0XvwLn/YfYIa16XxbOqEPpnKnqRiV6OAfvTlKNOdVxqakWA/2L+J+n7vAs8ocgBDKjELR10viqlNVGge8FEraNLrgcQt/kJwM2gTN5Ai0EPkhmz/xbB1Em4Y1u2zrtKtRmYs15ZlOJulHqV53KIDe+jS7MwE5r41Gscw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  165.204.84.17) smtp.rcpttodomain=alien8.de smtp.mailfrom=amd.com; dmarc=pass
  (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
  dkim=none (message not signed); arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=LJcRiDJO6FOk9wacaTHCS1n1XjUQ5/6Bsb1cxdMhFcc=;
- b=2NlFMv5kUX9pYWGA7ubZKQozYXRvYfjmQ53xtk9okHi3tdVIgjJlcSQd9MjHRgFkpMlfQZvAqI0+9hyOp5fjibJ4OvUIsL9hwmgraWhe3ZX8MBvIaViUVqUeM6tOV2u5hOsc4vOadm2gT1RWJ0/MLLWo92vFVtKYsx0MV7kmEtg=
-Received: from BN8PR04CA0043.namprd04.prod.outlook.com (2603:10b6:408:d4::17)
- by DS0PR12MB7701.namprd12.prod.outlook.com (2603:10b6:8:130::21) with
+ bh=Q161Gkx4OKsPgU/TegAPI0ZEFw1VE8VzRgmq/AUf6n8=;
+ b=wrZC0EXrujG5s0bsPv7sI2vBwDwpB8FSCK1MWmy5+OXC+AxM3cpRJSlKC29r3MoQhM/jMYfE/Q5ZfP/5f3909HbIIZW4JiiL8ioGgxept7Rg/oViNni9XpQXP9GB+TkXA9TYQ41s5qKV/bzm4w1WUGlTta7Uh5DSTD3FKJnL8s0=
+Received: from BN8PR04CA0058.namprd04.prod.outlook.com (2603:10b6:408:d4::32)
+ by PH7PR12MB6587.namprd12.prod.outlook.com (2603:10b6:510:211::17) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6043.25; Fri, 27 Jan
- 2023 17:04:38 +0000
+ 2023 17:04:39 +0000
 Received: from BN8NAM11FT089.eop-nam11.prod.protection.outlook.com
- (2603:10b6:408:d4:cafe::1f) by BN8PR04CA0043.outlook.office365.com
- (2603:10b6:408:d4::17) with Microsoft SMTP Server (version=TLS1_2,
+ (2603:10b6:408:d4:cafe::c0) by BN8PR04CA0058.outlook.office365.com
+ (2603:10b6:408:d4::32) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6043.25 via Frontend
  Transport; Fri, 27 Jan 2023 17:04:38 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
@@ -52,15 +52,15 @@ Received: from SATLEXMB04.amd.com (165.204.84.17) by
 Received: from yaz-ethanolx.amd.com (10.180.168.240) by SATLEXMB04.amd.com
  (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Fri, 27 Jan
- 2023 11:04:37 -0600
+ 2023 11:04:38 -0600
 From:   Yazen Ghannam <yazen.ghannam@amd.com>
 To:     <bp@alien8.de>, <linux-edac@vger.kernel.org>
 CC:     <linux-kernel@vger.kernel.org>, <muralidhara.mk@amd.com>,
         <naveenkrishna.chatradhi@amd.com>,
         Yazen Ghannam <yazen.ghannam@amd.com>
-Subject: [PATCH v2 20/22] EDAC/amd64: Split init_csrows() into dct/umc functions
-Date:   Fri, 27 Jan 2023 17:04:17 +0000
-Message-ID: <20230127170419.1824692-21-yazen.ghannam@amd.com>
+Subject: [PATCH v2 21/22] EDAC/amd64: Split dump_misc_regs() into dct/umc functions
+Date:   Fri, 27 Jan 2023 17:04:18 +0000
+Message-ID: <20230127170419.1824692-22-yazen.ghannam@amd.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230127170419.1824692-1-yazen.ghannam@amd.com>
 References: <20230127170419.1824692-1-yazen.ghannam@amd.com>
@@ -72,27 +72,26 @@ X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
  (10.181.40.145)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN8NAM11FT089:EE_|DS0PR12MB7701:EE_
-X-MS-Office365-Filtering-Correlation-Id: 679ea1c0-acea-41b3-aece-08db008892f3
+X-MS-TrafficTypeDiagnostic: BN8NAM11FT089:EE_|PH7PR12MB6587:EE_
+X-MS-Office365-Filtering-Correlation-Id: 85bc5f61-0004-4e79-33ca-08db0088933b
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: c5gp5dBSwMBMg/NeDDngb6QlY4cEUqZAsPg8VAjpSbQaH9Lv6Yy29s+bVa68n1WN+Wxc8+Sgl2H2fQp+XXJ2BJy6JL1rabvOnb4DCwrtkeMXDuV6gsGxHHpOCFIRFxpHBijaKEWUxfHINDvfdzgZ1aIQR0yaSRw5YxlJmrk6n518mSbcxKwiTtNxLxMZUMx6Yfec6HXmFwVPR3faRBkHVOEIz24H3dyi7SjJRwtwdkTFEmnX+hkrdTNWxtsxlUrXpbs6Kvdm+/a/28Yoi6WfB5d5jmDk92KP5jhIFlf1u4QLgVd0zYx6kJ4uHJHu+2XUAYky0Ea+u6SBXEAMWBjrtRkbmlB79ymclFWpLwZD9xCLvt1V/ix+EiuGMnHRaxe1GHtuUpaCq68j4qva16bwzdqBomSUAszEtgpo1/WJ8zN95eB1dM8GN6elbAk7mchFkvqcTg1RqVWpLlLZnHi3ruD+JCwI7MjwDl+QwtX5Jn55N5cp7cV88y2hv3hi+IZDfywR4JcrtXVPtasNygC2dHXnQgGDVRrhwUaJpUj2ITDvOOzdCFVDMIGQvv46ClLYWgATWqLnpTwaPFM3mnfYwpgLb8Bk6qd2MHlQjgJx39GvwAy7goRimhHs7vOSur7dGrZCRGLqBvMjL+ueVR7i6nRcl6C2Bk63T8j0Ni2XAc3D4mr1RZFrAZs4n2L8B+2WNajnp9Vk3xM4e7seDdrsf3D+cHfDIh94e01Ce6KedUKXBplbgA3p61YegHmO9CITUWE4dDgEmzIBC2GbUyPrtA==
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230025)(4636009)(376002)(39860400002)(346002)(136003)(396003)(451199018)(46966006)(36840700001)(40470700004)(336012)(70586007)(70206006)(47076005)(5660300002)(4326008)(6666004)(40480700001)(7696005)(44832011)(316002)(8676002)(86362001)(83380400001)(426003)(40460700003)(36756003)(26005)(82310400005)(356005)(1076003)(966005)(81166007)(186003)(16526019)(82740400003)(2906002)(36860700001)(41300700001)(478600001)(110136005)(54906003)(8936002)(2616005)(36900700001);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: au85aBI1tlkf/aZA0y+7ldcJT+2t3I76/OBy6Z+7FSRqS90vvAf68mNk+Wk+1A2ZDcxPOkND15X66nFePbJsZFNI/D6JvCPgpg/MXemJQtXh/hyYslO/k0ZwSs/zpboMi2HJp4M9qtgvjspejny/qkZ9XtSVernjszOf3YF1Kp1bJUY1aLBQek8UQ+nR0mlVjbDikzvgi1Bo1tQ896n8js9/mpRQhhkAsgDp9JogXAMjmE+8j6d46lvZ40vqHBO3iQPGZYLBMahueRhWoSvTdr/t3I2/ahyzfPX25P4lN0PjoH4GxapOtTvODhM2O1DsClEnz3sG15cX/6ObmaHeDv6WXIovtEhLh7tyep9NVGwPsEZKP2M9gcjEYv4fuGPBdOcx4oDRMMjuhgyaAHP11eyO2y4nQ4UxpAeTmU4mIfD2kktnAeHMwPz3NXNQlt/8kL+cg6DMu2UUUIfZO9O1szIcsJVigXUAbUGATTSxotpwZsAKsoEpJXz1K/+D3bbDDhFnm5r1SzLleVDWMjptmtHek7NwJtEV5K/9bicbFQzgdE7KZCCTg5B4MqSAcs/6oIZ5Zmlc/MLACrlKDfODTcBFqst91MqqL+qfohsK8LsfizdCoOTKPP9qtu3TAubefJqCYVupSeEpr/sUlIT6At+eBGuvgDoW1bJGu6cJRLU0hGlYF1MslELBmjVJV1P5lvqG6n6ieynsJgFCqAncOaUVAltvosxNnr+U+kzKYkEGiGQAuunLvBC4cIblNfG0f5CrY09zkLBeioeoSrJksw==
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230025)(4636009)(376002)(39860400002)(136003)(346002)(396003)(451199018)(36840700001)(46966006)(40470700004)(70586007)(4326008)(8676002)(2616005)(36860700001)(41300700001)(8936002)(54906003)(316002)(110136005)(36756003)(82310400005)(1076003)(356005)(16526019)(26005)(186003)(81166007)(40460700003)(5660300002)(70206006)(2906002)(426003)(83380400001)(82740400003)(336012)(47076005)(966005)(6666004)(7696005)(40480700001)(44832011)(86362001)(478600001)(36900700001);DIR:OUT;SFP:1101;
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Jan 2023 17:04:38.3584
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Jan 2023 17:04:38.8271
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 679ea1c0-acea-41b3-aece-08db008892f3
+X-MS-Exchange-CrossTenant-Network-Message-Id: 85bc5f61-0004-4e79-33ca-08db0088933b
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
 X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT089.eop-nam11.prod.protection.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB7701
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB6587
 X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,SPF_HELO_PASS,
+        SPF_NONE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -101,11 +100,7 @@ X-Mailing-List: linux-edac@vger.kernel.org
 
 From: Muralidhara M K <muralidhara.mk@amd.com>
 
-...and call them from their respective setup_mci_misc_attrs() paths.
-
-Also, drop the check for an "empty" device, i.e. one without memory.
-This is redundant and already done in instance_has_memory() earlier in
-the init path.
+...and add a function pointer to pvt->ops.
 
 No functional change is intended.
 
@@ -117,117 +112,92 @@ Co-developed-by: Yazen Ghannam <yazen.ghannam@amd.com>
 Signed-off-by: Yazen Ghannam <yazen.ghannam@amd.com>
 ---
 Link:
-https://lore.kernel.org/r/20220509145534.44912-16-yazen.ghannam@amd.com
+https://lore.kernel.org/r/20220509145534.44912-17-yazen.ghannam@amd.com
 
 v1->v2:
 * Call function directly instead of using pointers.
-* Clean up redundant code.
 
- drivers/edac/amd64_edac.c | 23 +++++++----------------
- 1 file changed, 7 insertions(+), 16 deletions(-)
+ drivers/edac/amd64_edac.c | 19 ++++++-------------
+ drivers/edac/amd64_edac.h |  1 +
+ 2 files changed, 7 insertions(+), 13 deletions(-)
 
 diff --git a/drivers/edac/amd64_edac.c b/drivers/edac/amd64_edac.c
-index f1c613107a22..ddf2178dabff 100644
+index ddf2178dabff..6b450544a892 100644
 --- a/drivers/edac/amd64_edac.c
 +++ b/drivers/edac/amd64_edac.c
-@@ -3250,13 +3250,12 @@ static u32 umc_get_csrow_nr_pages(struct amd64_pvt *pvt, u8 dct, int csrow_nr_or
- 	return nr_pages;
- }
- 
--static int init_csrows_df(struct mem_ctl_info *mci)
-+static void umc_init_csrows(struct mem_ctl_info *mci)
- {
- 	struct amd64_pvt *pvt = mci->pvt_info;
- 	enum edac_type edac_mode = EDAC_NONE;
- 	enum dev_type dev_type = DEV_UNKNOWN;
- 	struct dimm_info *dimm;
--	int empty = 1;
- 	u8 umc, cs;
- 
- 	if (mci->edac_ctl_cap & EDAC_FLAG_S16ECD16ED) {
-@@ -3277,7 +3276,6 @@ static int init_csrows_df(struct mem_ctl_info *mci)
- 			if (!csrow_enabled(cs, umc, pvt))
- 				continue;
- 
--			empty = 0;
- 			dimm = mci->csrows[cs]->channels[umc]->dimm;
- 
- 			edac_dbg(1, "MC node: %d, csrow: %d\n",
-@@ -3290,27 +3288,22 @@ static int init_csrows_df(struct mem_ctl_info *mci)
- 			dimm->grain = 64;
- 		}
+@@ -1525,7 +1525,7 @@ static void umc_debug_display_dimm_sizes(struct amd64_pvt *pvt, u8 ctrl)
  	}
--
--	return empty;
  }
  
- /*
-  * Initialize the array of csrow attribute instances, based on the values
-  * from pci config hardware registers.
-  */
--static int init_csrows(struct mem_ctl_info *mci)
-+static void dct_init_csrows(struct mem_ctl_info *mci)
+-static void __dump_misc_regs_df(struct amd64_pvt *pvt)
++static void umc_dump_misc_regs(struct amd64_pvt *pvt)
  {
- 	struct amd64_pvt *pvt = mci->pvt_info;
- 	enum edac_type edac_mode = EDAC_NONE;
- 	struct csrow_info *csrow;
- 	struct dimm_info *dimm;
--	int i, j, empty = 1;
- 	int nr_pages = 0;
-+	int i, j;
- 	u32 val;
+ 	struct amd64_umc *umc;
+ 	u32 i, tmp, umc_base;
+@@ -1568,8 +1568,7 @@ static void __dump_misc_regs_df(struct amd64_pvt *pvt)
+ 	}
+ }
  
+-/* Display and decode various NB registers for debug purposes. */
+-static void __dump_misc_regs(struct amd64_pvt *pvt)
++static void dct_dump_misc_regs(struct amd64_pvt *pvt)
+ {
+ 	edac_dbg(1, "F3xE8 (NB Cap): 0x%08x\n", pvt->nbcap);
+ 
+@@ -1606,15 +1605,6 @@ static void __dump_misc_regs(struct amd64_pvt *pvt)
+ 	amd64_info("using x%u syndromes.\n", pvt->ecc_sym_sz);
+ }
+ 
+-/* Display and decode various NB registers for debug purposes. */
+-static void dump_misc_regs(struct amd64_pvt *pvt)
+-{
 -	if (pvt->umc)
--		return init_csrows_df(mci);
+-		__dump_misc_regs_df(pvt);
+-	else
+-		__dump_misc_regs(pvt);
+-}
 -
- 	amd64_read_pci_cfg(pvt->F3, NBCFG, &val);
+ /*
+  * See BKDG, F2x[1,0][5C:40], F2[1,0][6C:60]
+  */
+@@ -3694,6 +3684,7 @@ static struct low_ops umc_ops = {
+ 	.hw_info_get			= umc_hw_info_get,
+ 	.ecc_enabled			= umc_ecc_enabled,
+ 	.setup_mci_misc_attrs		= umc_setup_mci_misc_attrs,
++	.dump_misc_regs			= umc_dump_misc_regs,
+ };
  
- 	pvt->nbcfg = val;
-@@ -3333,7 +3326,6 @@ static int init_csrows(struct mem_ctl_info *mci)
- 			continue;
+ /* Use Family 16h versions for defaults and adjust as needed below. */
+@@ -3703,6 +3694,7 @@ static struct low_ops dct_ops = {
+ 	.hw_info_get			= dct_hw_info_get,
+ 	.ecc_enabled			= dct_ecc_enabled,
+ 	.setup_mci_misc_attrs		= dct_setup_mci_misc_attrs,
++	.dump_misc_regs			= dct_dump_misc_regs,
+ };
  
- 		csrow = mci->csrows[i];
--		empty = 0;
+ static int per_family_init(struct amd64_pvt *pvt)
+@@ -3953,7 +3945,8 @@ static int probe_one_instance(unsigned int nid)
  
- 		edac_dbg(1, "MC node: %d, csrow: %d\n",
- 			    pvt->mc_node_id, i);
-@@ -3367,8 +3359,6 @@ static int init_csrows(struct mem_ctl_info *mci)
- 			dimm->grain = 64;
- 		}
- 	}
--
--	return empty;
- }
+ 	amd64_info("%s detected (node %d).\n", pvt->ctl_name, pvt->mc_node_id);
  
- /* get all cores on this DCT */
-@@ -3642,6 +3632,8 @@ static void dct_setup_mci_misc_attrs(struct mem_ctl_info *mci)
- 	/* memory scrubber interface */
- 	mci->set_sdram_scrub_rate = set_scrub_rate;
- 	mci->get_sdram_scrub_rate = get_scrub_rate;
-+
-+	dct_init_csrows(mci);
- }
+-	dump_misc_regs(pvt);
++	/* Display and decode various registers for debug purposes. */
++	pvt->ops->dump_misc_regs(pvt);
  
- static void umc_setup_mci_misc_attrs(struct mem_ctl_info *mci)
-@@ -3658,6 +3650,8 @@ static void umc_setup_mci_misc_attrs(struct mem_ctl_info *mci)
- 	mci->ctl_name		= pvt->ctl_name;
- 	mci->dev_name		= pci_name(pvt->F3);
- 	mci->ctl_page_to_phys	= NULL;
-+
-+	umc_init_csrows(mci);
- }
+ 	return ret;
  
- static int dct_hw_info_get(struct amd64_pvt *pvt)
-@@ -3873,9 +3867,6 @@ static int init_one_instance(struct amd64_pvt *pvt)
+diff --git a/drivers/edac/amd64_edac.h b/drivers/edac/amd64_edac.h
+index 1fb39d7981a2..1c64fd4a14b1 100644
+--- a/drivers/edac/amd64_edac.h
++++ b/drivers/edac/amd64_edac.h
+@@ -469,6 +469,7 @@ struct low_ops {
+ 	int (*hw_info_get)(struct amd64_pvt *pvt);
+ 	bool (*ecc_enabled)(struct amd64_pvt *pvt);
+ 	void (*setup_mci_misc_attrs)(struct mem_ctl_info *mci);
++	void (*dump_misc_regs)(struct amd64_pvt *pvt);
+ };
  
- 	pvt->ops->setup_mci_misc_attrs(mci);
- 
--	if (init_csrows(mci))
--		mci->edac_cap = EDAC_FLAG_NONE;
--
- 	ret = -ENODEV;
- 	if (edac_mc_add_mc_with_groups(mci, amd64_edac_attr_groups)) {
- 		edac_dbg(1, "failed edac_mc_add_mc()\n");
+ int __amd64_read_pci_cfg_dword(struct pci_dev *pdev, int offset,
 -- 
 2.25.1
 
