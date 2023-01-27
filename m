@@ -2,42 +2,42 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A199467EC00
-	for <lists+linux-edac@lfdr.de>; Fri, 27 Jan 2023 18:05:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 97E0B67EC01
+	for <lists+linux-edac@lfdr.de>; Fri, 27 Jan 2023 18:05:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234885AbjA0RFs (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Fri, 27 Jan 2023 12:05:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60826 "EHLO
+        id S234934AbjA0RFu (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Fri, 27 Jan 2023 12:05:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234915AbjA0RFf (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Fri, 27 Jan 2023 12:05:35 -0500
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on20603.outbound.protection.outlook.com [IPv6:2a01:111:f400:7e88::603])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F75B4F353;
-        Fri, 27 Jan 2023 09:05:04 -0800 (PST)
+        with ESMTP id S234892AbjA0RFn (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Fri, 27 Jan 2023 12:05:43 -0500
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on20610.outbound.protection.outlook.com [IPv6:2a01:111:f400:fe5b::610])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F90B3C3C;
+        Fri, 27 Jan 2023 09:05:05 -0800 (PST)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=HA6OdXntSpgM+tF8J6bCP0vlUbsEKV/nQxoOQ59TpXhzmGH2a/drVQutbmIsvEPq/EHFQrYQOMR3WMflg8RRCGsa3I8gsmDdgG7dfQVPJUbcneWXmONcMcISJykxJtzL1tyHGuh/0kv7eq7nPcqWRdP31vCKvMP6nkiqx/2psxH3jtiCpjt739zxc6cu5zoZC0Fzhys3FvwvyCBkRYhN+xMaDKjoRssFEc4JXlYwMWL3KkugCn2PbL2jwx9dJjNOKSjXFAnnLossv0OTHID5FnrMvnEq4Q6dpuWq6lNePmYoAAeV/1LABAgSRssZ12AL0mSdk0fotUH5qNX6+Am49w==
+ b=dSbNQQZ2NqNbBsjmcTaQ6aaQVJN2dS0PsdefXvQaH8WKhGCZsTIAz82b8ZBcI70CL2Xcz9UzZ3Nq6tN4LbUk2bkKA6+MOLXS+gNqKZTQTDQzEObyEODdwHRsEq6jqkmswwAfVxHvoycprKg4Bn5r1ZCccut6ZDu044P3m+xpifi/MqD1+ajduZgoemZ0xQbDo2Yw+Te/SzoebXcQ1ilhaJWVwMjIfiHbeLBU8D4tGgT4jku6FgV6NCdwbA0tD+jc0pxccuTU8mIx7JcUKjFFEKn5awacNgHPR5zLsc1Ns2q9elOBo5Qoa0Zv/Aipo869P8b2hqkkYLqUDqdomPVK0A==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=p7w12skH6KD0cJOo1BHf+ijczs+5VKURFoXGVYzrId0=;
- b=ek9RkDnXcS+B0Fv+4wNZvLiJQIVgAuGsH2d9exvJuL3BByD9K7uQLNINSrw/ABSUqXY0rfbrMz8MzwxArsVvB8wC/NVxygBb/h2zOuRMeU1a6vQhhi8Cl6RRvkcaNwj5PK19iTVBaWYbN2qBXH900nr9aWgwe49xG0QRh1op2DlpD1lJ0mfcv/rCa0aODe70U9oOto2ecrCxt3AbDax5vyVsb3TQVKVc5SEV/jNN8BW2rX+NQyWCzRU4uNuUXNEku/DfcZTtirPX9Po62f+EYgdGkibxh1EiZPar8jPAfVh3hiObgr2iG8CH7ykMID2D2BLD4KdP3fN34/G8qwXh0g==
+ bh=ayhba4cEA7/yo1GcA4RjdHbPDbQhVhhgqHmosB+Rqhw=;
+ b=TBJBhTmWU4g5LgIXjFV+Ds+mdudhaOJRSyROs01x8wUjrBsXCoonvf/3CsiIFTzL9fsZRt0eRZCWKaqvjxa1w/F4wtP89Qct4mS+P2wBNqoYTB0VnO/UNMlndOaYYUHMHrIr74uNO9qz5Y5M+t8WeH00ityg5xAW8Vcf6NPJlOjsYK7/WlNzlfyXEMq5P7q9dhHsqWpc6nBpMAofZEpMrSCmI3Jph/I9fJAZjfzhnJiVlqErEEMsXX0BRVORe4UPyjurnpVMiEduy9ku8nakKY9FTgfYkgf3J8EHA7l2yoeSe2NbqPbmfpFF79Rv7b5Sknp+AG7/qlZUYl17SM83lQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  165.204.84.17) smtp.rcpttodomain=alien8.de smtp.mailfrom=amd.com; dmarc=pass
  (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
  dkim=none (message not signed); arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=p7w12skH6KD0cJOo1BHf+ijczs+5VKURFoXGVYzrId0=;
- b=se0X02cTCERhbHsyMvk9i8YbJDaUu/+lrifMTZquYP4rNxD5RBMHPQE8qiaJ1UGP8kowBQLgurkU3wKH3LGWfVuUhC57ePvVvehMWfBCkl8t9riT+BBCGm4JPo/PpWZobGbmD6aIpDqKcrFsfFwMOklHITHNm2dxIws/RpgM73o=
-Received: from BN9PR03CA0477.namprd03.prod.outlook.com (2603:10b6:408:139::32)
- by MN2PR12MB4221.namprd12.prod.outlook.com (2603:10b6:208:1d2::23) with
+ bh=ayhba4cEA7/yo1GcA4RjdHbPDbQhVhhgqHmosB+Rqhw=;
+ b=nuxYrSRYXk46LSZa2y662uvgjzNsa8j0qeDeI7e3eAmp2MFAG0mJzYWL4AFCAs3UV3UhdyyDZ55gIb/fmM6QzP9QEGghGALub9qCejwzMlgUD+ndE3REY/2Uxy+fvNPhMSRzstu+4fIJzqdLFWUOwAGZPfV02OrJF4TGHqL235I=
+Received: from BN9PR03CA0467.namprd03.prod.outlook.com (2603:10b6:408:139::22)
+ by DM4PR12MB5818.namprd12.prod.outlook.com (2603:10b6:8:62::15) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6043.22; Fri, 27 Jan
  2023 17:04:37 +0000
 Received: from BN8NAM11FT016.eop-nam11.prod.protection.outlook.com
- (2603:10b6:408:139:cafe::6f) by BN9PR03CA0477.outlook.office365.com
- (2603:10b6:408:139::32) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6043.23 via Frontend
+ (2603:10b6:408:139:cafe::3e) by BN9PR03CA0467.outlook.office365.com
+ (2603:10b6:408:139::22) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6043.25 via Frontend
  Transport; Fri, 27 Jan 2023 17:04:37 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
  smtp.mailfrom=amd.com; dkim=none (message not signed)
@@ -58,9 +58,9 @@ To:     <bp@alien8.de>, <linux-edac@vger.kernel.org>
 CC:     <linux-kernel@vger.kernel.org>, <muralidhara.mk@amd.com>,
         <naveenkrishna.chatradhi@amd.com>,
         Yazen Ghannam <yazen.ghannam@amd.com>
-Subject: [PATCH v2 16/22] EDAC/amd64: Split ecc_enabled() into dct/umc functions
-Date:   Fri, 27 Jan 2023 17:04:13 +0000
-Message-ID: <20230127170419.1824692-17-yazen.ghannam@amd.com>
+Subject: [PATCH v2 17/22] EDAC/amd64: Split setup_mci_misc_attrs() into dct/umc functions
+Date:   Fri, 27 Jan 2023 17:04:14 +0000
+Message-ID: <20230127170419.1824692-18-yazen.ghannam@amd.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230127170419.1824692-1-yazen.ghannam@amd.com>
 References: <20230127170419.1824692-1-yazen.ghannam@amd.com>
@@ -72,23 +72,23 @@ X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
  (10.181.40.145)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN8NAM11FT016:EE_|MN2PR12MB4221:EE_
-X-MS-Office365-Filtering-Correlation-Id: 0a0c78a5-6ea7-4bd4-1e98-08db00889259
+X-MS-TrafficTypeDiagnostic: BN8NAM11FT016:EE_|DM4PR12MB5818:EE_
+X-MS-Office365-Filtering-Correlation-Id: 9168336e-46f9-4d7c-7eec-08db0088927a
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: CWJ3glBxyPM4Avt9XevRke0EPbSa6cZDXR8eF5L7exAxT7Bw66Wx6+qgDRh1lBOzIEtiv5/k3ww+l+ykjNOZbHwmruYGj7vs/aK2zkaDfcIKKIa0gAkdMPZ07f51VTCD7ALpczjAXrZ2iOepP5CBB9jXFB93I+s69W/c6LsPFLofzG0svsg3XQjjfo26lhVZU1N0Vj2zG/EXio9hLMLp0FuVbSe/+lx8uCLdFkIAcufskHT3m8JhLfETDZumFhuL+OTjUhHbzGE8lt73cJQYDtCtZ6+sIjL9JgH9DhMGUiEXaWTKzyrFze2zjORQqQ/D7AJDbykA2BsdGUl3OKyvdy5/J/+zphuBVrCk54hodpsAtfieIrn6gW9wa6gwyJgeGJyMIDLwqAKJPUDkM18U0IxxOY4iYnMcxTZ5Cd1AD2/eHTU5pCl0d0zqJhDroMGN5u0zTq500Rw/M36LiGzn0zFz4fBSG326Um533NxM+VEEo62Vd4+rB32QkRZwS7wAo29NhAfVW/gfdrETzoR83AwQQusBlw1RhOWw24JY4SnjC8tJJ/l3sTiuQzVC0vP8znKwnok1kdLFu39AbPhUn55X78fkn7Y7lxrPWWK3M4Pp5/krtaWL22KqgCHLvqznBscr3PuSck8oTJsD5DzMcmRXF0XMpN/gOT5p5usI12tWg91sicvW3kg7BMOdSRJ6Ntp3z0xXF5MkXv5NiHVBTK62lH7/E1OfVNk5Ogp1LyCERfNvKa+xxFL1ftPGsis6WR0yJ/I5b3k0ZKpp38uEHw==
+X-Microsoft-Antispam-Message-Info: JjTrKWd9KYOmAZsLh3d9hFG7TcTzXa/ddR7Y+OvudkAOuRk2itH389bp7KWKzRlHEWtx+YMGOcKz950fX5RTn3C8Ajyakp3VRquuGPkthtpyC7m0tXax2bPIrdHMWeHnoxglKSmtZAcz8KlAAGGINiyBc62qSaHv36xXuCdOUnGyzGlVFV9D1t3rs91ghlR0w2QpRA9Kw45DPBOIztbeoobYn5y7rOpV4406+hlwpXiOnDcCgvzQdtuNd0wUrmGm7L1E3eQOnYueWNV+M695jhkHYZThjQ23w6I7ogeX6IMa7xCWGAWo3rDU/1ar8jlpJaPomxNa24CisBegKFhHyi2N1y7gq2h2KeeXGU30XKXTA9WzBtN6NfNCGeiq9z6SCSnjqa/lmFhNCLSvuA+B6UdUU8yRUqPEKeUF4T04erzt86iX41qVpnfI2ImeuDBpDV3Njx6rK2m7n04HcbJEHtRF3kUDl/ygKYOuoj+JzeAvOAZCf+UrGxSjMmpcOpUTsyixbJ+9VCNTjoQovDxosv+Jdoq1tjEEuhdu/16fUHNAIWS/t35ESFSOLvRJri4P2l8B/zfeui+8E+tEYHT9RhfyNE2b4hqwrhMOymSkWn2B9Qt0FkrjbbxLEOA8OlkVtfe054sZMDy0dIXOLXVaxa/jcrABCboyzpFotFNvrDTP7nv3iJ8X8lLZGBjK4uYQ1gNwmsAifzSpKiJCOynFrWVQaYsq7/OiwYQkdjlhkGcpIScL41GqPYwl5o5tR2Xn6HoWQm0NYBv2GkivRTqN5g==
 X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230025)(4636009)(136003)(396003)(39860400002)(346002)(376002)(451199018)(40470700004)(36840700001)(46966006)(7696005)(16526019)(186003)(26005)(478600001)(966005)(47076005)(2616005)(336012)(82310400005)(426003)(83380400001)(6666004)(316002)(54906003)(41300700001)(8676002)(81166007)(356005)(1076003)(70206006)(82740400003)(110136005)(8936002)(44832011)(40460700003)(86362001)(4326008)(5660300002)(70586007)(36756003)(40480700001)(36860700001)(2906002)(36900700001);DIR:OUT;SFP:1101;
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Jan 2023 17:04:37.3454
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Jan 2023 17:04:37.5642
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0a0c78a5-6ea7-4bd4-1e98-08db00889259
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9168336e-46f9-4d7c-7eec-08db0088927a
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
 X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT016.eop-nam11.prod.protection.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB4221
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB5818
 X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,SPF_HELO_PASS,
         SPF_NONE autolearn=no autolearn_force=no version=3.4.6
@@ -100,10 +100,8 @@ X-Mailing-List: linux-edac@vger.kernel.org
 
 From: Muralidhara M K <muralidhara.mk@amd.com>
 
-...and call them using a function pointer in pvt->ops. The "ECC enabled"
-check is done outside of the hardware information gathering done in
-hw_info_get(). So a high-level function pointer is needed to separate
-the legacy and modern paths.
+The init_one_instance() path is shared between legacy and modern
+systems. So add the new functions to a function pointer in pvt->ops.
 
 No functional change is intended.
 
@@ -115,142 +113,112 @@ Co-developed-by: Yazen Ghannam <yazen.ghannam@amd.com>
 Signed-off-by: Yazen Ghannam <yazen.ghannam@amd.com>
 ---
 Link:
-https://lore.kernel.org/r/20220509145534.44912-12-yazen.ghannam@amd.com
+https://lore.kernel.org/r/20220509145534.44912-15-yazen.ghannam@amd.com
 
 v1->v2:
-* Update commit message.
+* Split function instead of just defining function pointer.
 
- drivers/edac/amd64_edac.c | 69 ++++++++++++++++++++++-----------------
+ drivers/edac/amd64_edac.c | 37 ++++++++++++++++++++++++-------------
  drivers/edac/amd64_edac.h |  1 +
- 2 files changed, 40 insertions(+), 30 deletions(-)
+ 2 files changed, 25 insertions(+), 13 deletions(-)
 
 diff --git a/drivers/edac/amd64_edac.c b/drivers/edac/amd64_edac.c
-index 757d35fad2a6..ecffe2f1ea9a 100644
+index ecffe2f1ea9a..f9254d8da5a3 100644
 --- a/drivers/edac/amd64_edac.c
 +++ b/drivers/edac/amd64_edac.c
-@@ -3527,52 +3527,59 @@ static void restore_ecc_error_reporting(struct ecc_settings *s, u16 nid,
- 		amd64_warn("Error restoring NB MCGCTL settings!\n");
+@@ -3616,22 +3616,18 @@ f17h_determine_edac_ctl_cap(struct mem_ctl_info *mci, struct amd64_pvt *pvt)
+ 	}
  }
  
--static bool ecc_enabled(struct amd64_pvt *pvt)
-+static bool dct_ecc_enabled(struct amd64_pvt *pvt)
+-static void setup_mci_misc_attrs(struct mem_ctl_info *mci)
++static void dct_setup_mci_misc_attrs(struct mem_ctl_info *mci)
  {
- 	u16 nid = pvt->mc_node_id;
- 	bool nb_mce_en = false;
--	u8 ecc_en = 0, i;
-+	u8 ecc_en = 0;
- 	u32 value;
+ 	struct amd64_pvt *pvt = mci->pvt_info;
  
--	if (boot_cpu_data.x86 >= 0x17) {
--		u8 umc_en_mask = 0, ecc_en_mask = 0;
--		struct amd64_umc *umc;
-+	amd64_read_pci_cfg(pvt->F3, NBCFG, &value);
+ 	mci->mtype_cap		= MEM_FLAG_DDR2 | MEM_FLAG_RDDR2;
+ 	mci->edac_ctl_cap	= EDAC_FLAG_NONE;
  
--		for_each_umc(i) {
--			umc = &pvt->umc[i];
-+	ecc_en = !!(value & NBCFG_ECC_ENABLE);
- 
--			/* Only check enabled UMCs. */
--			if (!(umc->sdp_ctrl & UMC_SDP_INIT))
--				continue;
-+	nb_mce_en = nb_mce_bank_enabled_on_node(nid);
-+	if (!nb_mce_en)
-+		edac_dbg(0, "NB MCE bank disabled, set MSR 0x%08x[4] on node %d to enable.\n",
-+			 MSR_IA32_MCG_CTL, nid);
- 
--			umc_en_mask |= BIT(i);
-+	edac_dbg(3, "Node %d: DRAM ECC %s.\n", nid, (ecc_en ? "enabled" : "disabled"));
- 
--			if (umc->umc_cap_hi & UMC_ECC_ENABLED)
--				ecc_en_mask |= BIT(i);
--		}
-+	if (!ecc_en || !nb_mce_en)
-+		return false;
-+	else
-+		return true;
-+}
- 
--		/* Check whether at least one UMC is enabled: */
--		if (umc_en_mask)
--			ecc_en = umc_en_mask == ecc_en_mask;
--		else
--			edac_dbg(0, "Node %d: No enabled UMCs.\n", nid);
-+static bool umc_ecc_enabled(struct amd64_pvt *pvt)
-+{
-+	u8 umc_en_mask = 0, ecc_en_mask = 0;
-+	u16 nid = pvt->mc_node_id;
-+	struct amd64_umc *umc;
-+	u8 ecc_en = 0, i;
- 
--		/* Assume UMC MCA banks are enabled. */
--		nb_mce_en = true;
+-	if (pvt->umc) {
+-		f17h_determine_edac_ctl_cap(mci, pvt);
 -	} else {
--		amd64_read_pci_cfg(pvt->F3, NBCFG, &value);
-+	for_each_umc(i) {
-+		umc = &pvt->umc[i];
+-		if (pvt->nbcap & NBCAP_SECDED)
+-			mci->edac_ctl_cap |= EDAC_FLAG_SECDED;
++	if (pvt->nbcap & NBCAP_SECDED)
++		mci->edac_ctl_cap |= EDAC_FLAG_SECDED;
+ 
+-		if (pvt->nbcap & NBCAP_CHIPKILL)
+-			mci->edac_ctl_cap |= EDAC_FLAG_S4ECD4ED;
+-	}
++	if (pvt->nbcap & NBCAP_CHIPKILL)
++		mci->edac_ctl_cap |= EDAC_FLAG_S4ECD4ED;
+ 
+ 	mci->edac_cap		= determine_edac_cap(pvt);
+ 	mci->mod_name		= EDAC_MOD_STR;
+@@ -3639,14 +3635,27 @@ static void setup_mci_misc_attrs(struct mem_ctl_info *mci)
+ 	mci->dev_name		= pci_name(pvt->F3);
+ 	mci->ctl_page_to_phys	= NULL;
+ 
+-	if (pvt->fam >= 0x17)
+-		return;
+-
+ 	/* memory scrubber interface */
+ 	mci->set_sdram_scrub_rate = set_scrub_rate;
+ 	mci->get_sdram_scrub_rate = get_scrub_rate;
+ }
+ 
++static void umc_setup_mci_misc_attrs(struct mem_ctl_info *mci)
++{
++	struct amd64_pvt *pvt = mci->pvt_info;
 +
-+		/* Only check enabled UMCs. */
-+		if (!(umc->sdp_ctrl & UMC_SDP_INIT))
-+			continue;
- 
--		ecc_en = !!(value & NBCFG_ECC_ENABLE);
-+		umc_en_mask |= BIT(i);
- 
--		nb_mce_en = nb_mce_bank_enabled_on_node(nid);
--		if (!nb_mce_en)
--			edac_dbg(0, "NB MCE bank disabled, set MSR 0x%08x[4] on node %d to enable.\n",
--				     MSR_IA32_MCG_CTL, nid);
-+		if (umc->umc_cap_hi & UMC_ECC_ENABLED)
-+			ecc_en_mask |= BIT(i);
- 	}
- 
-+	/* Check whether at least one UMC is enabled: */
-+	if (umc_en_mask)
-+		ecc_en = umc_en_mask == ecc_en_mask;
-+	else
-+		edac_dbg(0, "Node %d: No enabled UMCs.\n", nid);
++	mci->mtype_cap		= MEM_FLAG_DDR4 | MEM_FLAG_RDDR4;
++	mci->edac_ctl_cap	= EDAC_FLAG_NONE;
 +
- 	edac_dbg(3, "Node %d: DRAM ECC %s.\n", nid, (ecc_en ? "enabled" : "disabled"));
- 
--	if (!ecc_en || !nb_mce_en)
-+	if (!ecc_en)
- 		return false;
- 	else
- 		return true;
-@@ -3678,6 +3685,7 @@ static void hw_info_put(struct amd64_pvt *pvt)
- 
++	f17h_determine_edac_ctl_cap(mci, pvt);
++
++	mci->edac_cap		= determine_edac_cap(pvt);
++	mci->mod_name		= EDAC_MOD_STR;
++	mci->ctl_name		= pvt->ctl_name;
++	mci->dev_name		= pci_name(pvt->F3);
++	mci->ctl_page_to_phys	= NULL;
++}
++
+ static int dct_hw_info_get(struct amd64_pvt *pvt)
+ {
+ 	int ret = reserve_mc_sibling_devs(pvt, pvt->f1_id, pvt->f2_id);
+@@ -3686,6 +3695,7 @@ static void hw_info_put(struct amd64_pvt *pvt)
  static struct low_ops umc_ops = {
  	.hw_info_get			= umc_hw_info_get,
-+	.ecc_enabled			= umc_ecc_enabled,
+ 	.ecc_enabled			= umc_ecc_enabled,
++	.setup_mci_misc_attrs		= umc_setup_mci_misc_attrs,
  };
  
  /* Use Family 16h versions for defaults and adjust as needed below. */
-@@ -3685,6 +3693,7 @@ static struct low_ops dct_ops = {
- 	.map_sysaddr_to_csrow		= f1x_map_sysaddr_to_csrow,
+@@ -3694,6 +3704,7 @@ static struct low_ops dct_ops = {
  	.dbam_to_cs			= f16_dbam_to_chip_select,
  	.hw_info_get			= dct_hw_info_get,
-+	.ecc_enabled			= dct_ecc_enabled,
+ 	.ecc_enabled			= dct_ecc_enabled,
++	.setup_mci_misc_attrs		= dct_setup_mci_misc_attrs,
  };
  
  static int per_family_init(struct amd64_pvt *pvt)
-@@ -3910,7 +3919,7 @@ static int probe_one_instance(unsigned int nid)
- 		goto err_enable;
- 	}
+@@ -3856,7 +3867,7 @@ static int init_one_instance(struct amd64_pvt *pvt)
+ 	mci->pvt_info = pvt;
+ 	mci->pdev = &pvt->F3->dev;
  
--	if (!ecc_enabled(pvt)) {
-+	if (!pvt->ops->ecc_enabled(pvt)) {
- 		ret = -ENODEV;
+-	setup_mci_misc_attrs(mci);
++	pvt->ops->setup_mci_misc_attrs(mci);
  
- 		if (!ecc_enable_override)
+ 	if (init_csrows(mci))
+ 		mci->edac_cap = EDAC_FLAG_NONE;
 diff --git a/drivers/edac/amd64_edac.h b/drivers/edac/amd64_edac.h
-index 00b3f32e3cbb..103cd38a6302 100644
+index 103cd38a6302..1fb39d7981a2 100644
 --- a/drivers/edac/amd64_edac.h
 +++ b/drivers/edac/amd64_edac.h
-@@ -467,6 +467,7 @@ struct low_ops {
- 	int  (*dbam_to_cs)(struct amd64_pvt *pvt, u8 dct,
+@@ -468,6 +468,7 @@ struct low_ops {
  			   unsigned int cs_mode, int cs_mask_nr);
  	int (*hw_info_get)(struct amd64_pvt *pvt);
-+	bool (*ecc_enabled)(struct amd64_pvt *pvt);
+ 	bool (*ecc_enabled)(struct amd64_pvt *pvt);
++	void (*setup_mci_misc_attrs)(struct mem_ctl_info *mci);
  };
  
  int __amd64_read_pci_cfg_dword(struct pci_dev *pdev, int offset,
