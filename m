@@ -2,1144 +2,190 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94A82680227
-	for <lists+linux-edac@lfdr.de>; Sun, 29 Jan 2023 23:11:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 931326803D5
+	for <lists+linux-edac@lfdr.de>; Mon, 30 Jan 2023 03:32:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235266AbjA2WLJ (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Sun, 29 Jan 2023 17:11:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39312 "EHLO
+        id S232876AbjA3Ccc (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Sun, 29 Jan 2023 21:32:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230365AbjA2WLJ (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Sun, 29 Jan 2023 17:11:09 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F1911C33D;
-        Sun, 29 Jan 2023 14:11:04 -0800 (PST)
-Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id D25D41EC0513;
-        Sun, 29 Jan 2023 23:11:01 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1675030262;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=hEE3etqCxFjPAKFas1zS76ikeOSRqUC1N58ZfnfEbGg=;
-        b=Q9WzbXPvmLVtYQS78yAepKQrT+pxuWNpeQZ4W8+VxxW4Fk96jBGS+S90R1tjnWc+9YEL7u
-        x6dR/aLV3S9hzfN71YZS6Td5QY2E06YaF2qYj2GbQqjNe1VC8vELbE1JY3looucmSv2w4X
-        OSS4rz170KBfdvwgwrnpdNW4n5lK9m8=
-Date:   Sun, 29 Jan 2023 23:10:56 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Shubhrajyoti Datta <shubhrajyoti.datta@amd.com>
-Cc:     linux-edac@vger.kernel.org, git@amd.com, michal.simek@xilinx.com,
-        devicetree@vger.kernel.org, krzysztof.kozlowski@linaro.org,
-        robh+dt@kernel.org, mchehab@kernel.org, tony.luck@intel.com
-Subject: Re: [PATCH v3 2/2] edac: xilinx: Added EDAC support for Xilinx DDR
- controller
-Message-ID: <Y9bu8CpiVKvFS1d+@zn.tnic>
-References: <20230117054100.8377-1-shubhrajyoti.datta@amd.com>
- <20230117054100.8377-3-shubhrajyoti.datta@amd.com>
+        with ESMTP id S232637AbjA3Ccb (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Sun, 29 Jan 2023 21:32:31 -0500
+Received: from APC01-TYZ-obe.outbound.protection.outlook.com (mail-tyzapc01on2054.outbound.protection.outlook.com [40.107.117.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72348166D3;
+        Sun, 29 Jan 2023 18:32:29 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=A2+SxQxuIkWqjQYbv4SLWr3zzPoQMxKGSRZbsgeEYqKg59L2pZ32zWsrZQ7bPKllUsqY4ve0VeYuCO47TIS5kr63Ca5PnWyjSfgNuBYPlwQqDnzWvKB/QkSk1SJBJcAR05NPvTgnA7eTZhwtB/brxtIb3c5XpY9M0CuuGdO1LwsGrA9GD6EM/AgXQfeaY6szI/jVkX5Clo7IOiF7F0zpOGXmGjA1JOjVZh0kXf0F9/fXMiQRoIFFb7ju/f1wJHTMr6VFDAS8uxIcULtZtxzDwGTZiH1d+gxAoCk/mVGrF5JUUvEiaZJxPSsx06rj2BjN/VrmMXk48OMrMqg2ExBLVQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=su+pPM3I19OaiTLWj/Pn0icaDbjOcH0IEnpZS+M4/Ro=;
+ b=U5HCwLD39r6KXKCEqTpHRTcNXxDRxj8u5beq+EKEsdfNCAJ4CZsDfloR2t18W2897YNJXiIDQPlnGamVTUi4fFtLae8xPQWapM7lbeVSxaKBf9ntiH+4CFF3+aAyCMVnCSj9Pg+0etNKYYZs/IgZT6cdY4GVQ1SM7AFKWfZSxnDbnsvGKPg1/hsSZ2JkSup75CMnq1kz3K2wU/PZAeKPGtInp0cqG//qzKOc3nKoGj4gkUrrI/fcuwZyv3oMSI01h+66d7MvOopZWEWPoUMtUf+HyEbvDw543MIe+hEbr0uORmd5az8zzAPEgmQ11yRK1ZBXzCfz3HU7Ithk2WEMug==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nec.com; dmarc=pass action=none header.from=nec.com; dkim=pass
+ header.d=nec.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nec.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=su+pPM3I19OaiTLWj/Pn0icaDbjOcH0IEnpZS+M4/Ro=;
+ b=ERgtyjDpDrSeBiMTAA4d3FBeL+UNaHMs3VKemhPUx8bT7M77wve1KHBmDKcD77+j8ViqaDgfb1BZ/pXgJaFG64xl5gisKRM3cukjo37DHOJK/RS09EV2Liw8IH1EU9d4neYHfJ+POO0B8ciLeSJV/+2XakEZl/IhjTCm53ZodLY=
+Received: from TYWPR01MB8591.jpnprd01.prod.outlook.com (2603:1096:400:13c::10)
+ by OS0PR01MB5379.jpnprd01.prod.outlook.com (2603:1096:604:a6::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6043.36; Mon, 30 Jan
+ 2023 02:32:27 +0000
+Received: from TYWPR01MB8591.jpnprd01.prod.outlook.com
+ ([fe80::f495:bf26:717c:c45b]) by TYWPR01MB8591.jpnprd01.prod.outlook.com
+ ([fe80::f495:bf26:717c:c45b%3]) with mapi id 15.20.6043.023; Mon, 30 Jan 2023
+ 02:32:27 +0000
+From:   =?utf-8?B?SE9SSUdVQ0hJIE5BT1lBKOWggOWPo+OAgOebtOS5nyk=?= 
+        <naoya.horiguchi@nec.com>
+To:     Tony Luck <tony.luck@intel.com>
+CC:     Borislav Petkov <bp@alien8.de>, "x86@kernel.org" <x86@kernel.org>,
+        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "patches@lists.linux.dev" <patches@lists.linux.dev>,
+        Zhiquan Li <zhiquan1.li@intel.com>,
+        Youquan Song <youquan.song@intel.com>
+Subject: Re: [PATCH] x86/mce: Set PG_hwpoison page flag to avoid the capture
+ kernel panic
+Thread-Topic: [PATCH] x86/mce: Set PG_hwpoison page flag to avoid the capture
+ kernel panic
+Thread-Index: AQHZMfHKlFBLaxkfiUOM52KUXu/6vq62QkoA
+Date:   Mon, 30 Jan 2023 02:32:27 +0000
+Message-ID: <20230130023226.GA3955454@hori.linux.bs1.fc.nec.co.jp>
+References: <20230127015030.30074-1-tony.luck@intel.com>
+In-Reply-To: <20230127015030.30074-1-tony.luck@intel.com>
+Accept-Language: ja-JP, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nec.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: TYWPR01MB8591:EE_|OS0PR01MB5379:EE_
+x-ms-office365-filtering-correlation-id: 5a64aaa5-0ff1-44f4-108b-08db026a3a87
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: orhQhcIeJrCbf5Rlz793kvaFdjDOud86DeYfO9oYl34dq2jqWunfBw68t1Ew/j9ikgoK9Z7ZZCaVh/PYWRFUOWX4kwG6lEKl35SCaHoVGIs1ED5qNg0cRtHyUzVnGEf31gkT/tjTmaJYhddVkUH781LYD+53WRRZ/rR9XoouBPTwpqZb24ACQ8n50Z+HSv3atNDtoZdOEElN9ziQ+hOnL7WvduEFjzQKqznnc0tfo/zJ9+XytF+WZvz3Psu/ljxx4rxxmENoQZRl/g2rmAH7yu9Uft3/z1XwRUyTbUGIvkzvl7GWzxhcNiBYOOg9Zqk2wR6QwvFia3EbTOP0/MjW3m4+P6vMWHSKpyyjeb4hPjCMaelHdXQk6MDYza/Q1uBH0pvVPkb9Ao9XYQWBREEqlamy/2nfgFtfUn6NP1O7HqO128Cn7tPzga/F+6W3hmkin3Kly0gIDvpNa3bR25yuw8ofAZFdnFCa361WIAincoWgLEqQw2DuQ2GFK2LN5/nZpBG/JKEE4DUXcauos8swJeazGG+5avKx/8bp6/vt6uqU+dPn5FUBoTItgxWnfTPQ+awaj10Ej2i5Lse4IhjWaPu5Fozz1ZXAEu1Mqm4oxVFWlfUsPfXpxkTlm5lfey2gXYAT9xH2rJ0miLhi9qUdfsLs1sPEwlSiiXPCzaWHH33DMbAN8sek37PVgC3o+uiG7Wr4+P3MyzSso2GRdLhClg==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYWPR01MB8591.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(39860400002)(136003)(366004)(346002)(376002)(396003)(451199018)(2906002)(5660300002)(38070700005)(86362001)(82960400001)(83380400001)(8936002)(41300700001)(71200400001)(478600001)(6486002)(1076003)(6512007)(26005)(9686003)(85182001)(6506007)(186003)(33656002)(66556008)(66946007)(38100700002)(66476007)(6916009)(66446008)(64756008)(76116006)(4326008)(8676002)(54906003)(122000001)(316002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?Z0JjaU0yZXM3OVBpU2UwWkZkZ0FpN0FicnhqWDRXNC9EckJpcWg2ejEzZ0I4?=
+ =?utf-8?B?d3hjUW9CVHpQK283V24yVUQ2Y0FJNlBVOTdoak9ZSThlSEhOallUc3JVNFVX?=
+ =?utf-8?B?dDl0S3Y4V0UrbjZVNjcwQmpHTzZrR25aRzZzSThGVVlWZ3ZrOEdMNGhjWVpl?=
+ =?utf-8?B?Qm1NK0RpRG5YQ1pDMVhNbWcxZkpFQjdzM3M2YUlIRE54UHpxamZrOUVweGJX?=
+ =?utf-8?B?SW94bGtPKzBheU0vOEl0R2hXSkhVZDI2RCtkSDZRd3JuVWZwS0FVWXBsSzYy?=
+ =?utf-8?B?RS94L1czNzFtdlRFN2VFMnY0NVJZcFlPWkYyemFVWUQzWUhnc3FQRlhreWJo?=
+ =?utf-8?B?Mk92M0dUV3U2bXFkVWU3S2phYkFtdXY1R3RKVTZEeFVkTVlQRmtzS0lsNkF3?=
+ =?utf-8?B?VDJadk1LSlQwaGZ5UERFNkNaZ1JZVXR2QUFibjRmNkloSmpJVUUyb1JFczNt?=
+ =?utf-8?B?QWs1aUhmOUFtM3M5NjdKN05QaTEydU1xSXZWekRtZ1pxV3dvUzQ4Zkppd2s0?=
+ =?utf-8?B?b09zMVZNd2ZHK01ZM3dTY005alFYQXd4bDJLNk1UUkxMTXRxSCtQQUIyMHlM?=
+ =?utf-8?B?VU9iM2lWbWhYMTJDb3pPazJ2VG41ZG9qQStqYkFVRmxGcTMxYnlhLzlXTzkw?=
+ =?utf-8?B?VjJROHQrWWFUNVhMK2xHMDFiQU1jVGRsWFdSeWdMMWtQNFNHNHhScEJvbmNX?=
+ =?utf-8?B?bmFSTkZzcFhhMzE4YUEwcm54NEtOY3RySkgxR3QyUmV6UzlHcWY0UmhsY211?=
+ =?utf-8?B?UTg1T3BCa0ZxUncyN3JSTkFRUDEvTEU3TTlhL0RadUZVVWNGZTVsSEhUQ2Ix?=
+ =?utf-8?B?RTJIYkMwRWNjWGhocXpOMUFLVWJiSUZBZXpJZzVSakxiRUNFSytDZFhlK241?=
+ =?utf-8?B?OFk4d29vRUdxQXNLVGZ4eEhFb09sL1ByUitOWXpSbUxPVkd5amlpQm1MV1hy?=
+ =?utf-8?B?bDVSZnBRd3ViajZzbTdVOEdiVG00Ym9LdDBSMkRiVkVsdGUwTEpnN056TCtq?=
+ =?utf-8?B?MFFXVW05bi9GTUZXNUVZRkZGbGk2T000eWZHblg5T1RFTkZpWSs0RTMram5Y?=
+ =?utf-8?B?bENPcmxOTklsMkRmVmkxb0p4WTFQK0Jwd0ZiL3JYT0t1UVk4RzBFaEtKWnRQ?=
+ =?utf-8?B?Rmg5bVdDQ3dBVENGZGcwZnh4WDdFam5UOTc2cnpsMzNCd3F6dHdzZEdjV1cv?=
+ =?utf-8?B?a0k5V2o2WTJlc2lUdDJqSzFibEMyemFrRnludFFBWkdnUGRyb3AvdXk2a2N6?=
+ =?utf-8?B?L29aOHBzVlNyRnEzb0N1TVJjTk1nNURnNHRPclZDbGVlcWlhdEx1T01vZEhO?=
+ =?utf-8?B?MVpDTGNFdWRKTCtueUUxNUI0UjZZQTZDRFZhMGQ2cnpBVTN3WHV5T3BJZWlv?=
+ =?utf-8?B?Z2Jic1RvOVR4VkFKRUJOeTFobTZtaksyNlN4TXFrYU9zdGNwVWh6UlJJSXJl?=
+ =?utf-8?B?clBRODVaOFJZQVdjZW5Kdk9UQlczbFMweUR2V1VTWmJWTzRZVmp0R3I2ancy?=
+ =?utf-8?B?WmVBNlBYZytOaGNpaHpEeC8vSXpOUStCSGs5cHAzM2I0NzErVUdzUUI5SlZB?=
+ =?utf-8?B?ZlEzU3BxTXBoWTRRdDZWNmJoQjZwempKMWdNNDRramlFMnNBUjkyVTNOOFY4?=
+ =?utf-8?B?NlZZbDFPRU9JanlzZ284N0QvV2hqeWRJTXkyanFQbXl0TjVaSDZQeGJJV1NY?=
+ =?utf-8?B?aHQ2YUh3L2ZNOVFseTB6eEFCRDhubVBUL1ZoSHpjdkF4N0c0aVRhWG5FTE5V?=
+ =?utf-8?B?SDNzd2hqdHRjY29hWmlxY25VSmUxOXVNOTlyWlpTQXVOYUw0amF2ZWdNSXY0?=
+ =?utf-8?B?MFJ5bUFzeTJXazlLYVFVMEtRUkFER0YzY3ZvWUY4YmwxdjQ2azhyQVlrOXds?=
+ =?utf-8?B?TWJIZmVScDVuY1k5dUVZK205UE5pdFNab3F5Z2tVYm5GSEwvNU9OM2QrRVRq?=
+ =?utf-8?B?OVlnT0NmQWVMYmI4MlEzckYzeE5Fd0lZajdxS0RTSWZDcFg5VTI2V0pMeExR?=
+ =?utf-8?B?bzJEcTcyb2tRU0tHYUowVzB0YTVRd1JQVWVHanZuYlpiZUdtWHozOTRGQVI1?=
+ =?utf-8?B?RDlUR0VnVVVackJGSTJPNEx6L2YyUGptdmlvSUUxNnRSd0ZxelVtYUoyUW5q?=
+ =?utf-8?B?ZThFM0M5ajB1K20wMm1QM29SMkVURGhsZjkxWURZM1R2U3pqcURsSXoxQzNI?=
+ =?utf-8?B?OWc9PQ==?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <751AD2C82DE89742AE2057F4B26B469B@jpnprd01.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230117054100.8377-3-shubhrajyoti.datta@amd.com>
+X-OriginatorOrg: nec.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: TYWPR01MB8591.jpnprd01.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5a64aaa5-0ff1-44f4-108b-08db026a3a87
+X-MS-Exchange-CrossTenant-originalarrivaltime: 30 Jan 2023 02:32:27.4463
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: e67df547-9d0d-4f4d-9161-51c6ed1f7d11
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: JBVTs/7+tPTQRpClYLaKZVo0+7naEjbrYSggc93PEP6iR9EBsUkr3m643CmFJQBWwfUuhjJP0aUrYiz3HVMjmA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: OS0PR01MB5379
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Tue, Jan 17, 2023 at 11:11:00AM +0530, Shubhrajyoti Datta wrote:
-
-> Subject: Re: [PATCH v3 2/2] edac: xilinx: Added EDAC support for Xilinx DDR  controller
-
-The subject format in the EDAC subsystem is:
-
-EDAC/<driver>: <Verb> ...
-
-Yours should be something like:
-
-EDAC/versal: Add a Xilinx Versal memory controller driver
-
-Please don't be afraid to do
-
-$ git log -p drivers/edac/
-
-and look at previous patches to get an idea.
-
-> Add EDAC support for Xilinx DDR Controller, this driver
-> reports Correctable and Uncorrectable errors , and also creates
-
-No need to write error types capitalized.
-
-> debugfs entries for error injection.
-> 
-> Co-developed-by: Sai Krishna Potthuri <sai.krishna.potthuri@amd.com>
-> Signed-off-by: Sai Krishna Potthuri <sai.krishna.potthuri@amd.com>
-> Signed-off-by: Shubhrajyoti Datta <shubhrajyoti.datta@amd.com>
-> ---
-> 
-> Changes in v3:
-> Rebased and resent.
-> 
-> Changes in v2:
-> Update a missed out file
-> remove edac from compatible name
-> rename ddrmc_noc_base and ddrmc_base
-> 
->  MAINTAINERS                          |    7 +
->  drivers/edac/Kconfig                 |   11 +
->  drivers/edac/Makefile                |    1 +
->  drivers/edac/xilinx_ddrmc_edac.c     | 1251 ++++++++++++++++++++++++++
->  include/linux/firmware/xlnx-zynqmp.h |   10 +
->  5 files changed, 1280 insertions(+)
->  create mode 100644 drivers/edac/xilinx_ddrmc_edac.c
-> 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index cf0f18502372..cfeece1d75c5 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -22631,6 +22631,13 @@ S:	Maintained
->  F:	drivers/soc/xilinx/xlnx_event_manager.c
->  F:	include/linux/firmware/xlnx-event-manager.h
->  
-> +XILINX VERSAL DDRMC EDAC DRIVER
-
-I wanna say that "DDRMC" needs to go. What's the poignancy of this "DDR Memory
-Controller" and why does it have to be there?
-
-> +M:	Shubhrajyoti Datta <shubhrajyoti.datta@amd.com>
-> +M:	Sai Krishna Potthuri <sai.krishna.potthuri@amd.com>
-> +S:	Maintained
-> +F:	Documentation/devicetree/bindings/memory-controllers/xlnx,versal-ddrmc-edac.yaml
-> +F:	drivers/edac/xilinx_ddrmc_edac.c
-> +
->  XILLYBUS DRIVER
->  M:	Eli Billauer <eli.billauer@gmail.com>
->  L:	linux-kernel@vger.kernel.org
-> diff --git a/drivers/edac/Kconfig b/drivers/edac/Kconfig
-> index 456602d373b7..6c32fa4b980d 100644
-> --- a/drivers/edac/Kconfig
-> +++ b/drivers/edac/Kconfig
-> @@ -541,4 +541,15 @@ config EDAC_DMC520
->  	  Support for error detection and correction on the
->  	  SoCs with ARM DMC-520 DRAM controller.
->  
-> +config EDAC_XILINX_DDR
-
-EDAC_VERSAL and so on.
-
-Please check all your nomenclature, choose a special naming and stick with it -
-not a row of abbreviations which don't mean a whole lot to users. See how the
-other drivers are called - that might give you a good idea.
-
-> +	tristate "Xilinx Versal DDR Memory Controller"
-> +	depends on ARCH_ZYNQMP || COMPILE_TEST
-> +	help
-> +	  Support for error detection and correction on the Xilinx Versal DDR
-> +	  memory controller.
-> +
-> +	  Report both Single Bit Errors (CE) and Double Bit Errors (UE).
-> +	  Support injecting both Correctable and UnCorrectable errors for debug
-> +	  purpose using sysfs entries.
-
-No need for capitalized words - this is not vendor documentation. Please check
-all your strings.
-
->  endif # EDAC
-> diff --git a/drivers/edac/Makefile b/drivers/edac/Makefile
-> index 2d1641a27a28..2f20e0f53ca6 100644
-> --- a/drivers/edac/Makefile
-> +++ b/drivers/edac/Makefile
-> @@ -83,4 +83,5 @@ obj-$(CONFIG_EDAC_TI)			+= ti_edac.o
->  obj-$(CONFIG_EDAC_QCOM)			+= qcom_edac.o
->  obj-$(CONFIG_EDAC_ASPEED)		+= aspeed_edac.o
->  obj-$(CONFIG_EDAC_BLUEFIELD)		+= bluefield_edac.o
-> +obj-$(CONFIG_EDAC_XILINX_DDR)		+= xilinx_ddrmc_edac.o
-
-This is what I mean: there's "Xilinx", "DDR", "ddrmc", "Versal" and so on.
-
->  obj-$(CONFIG_EDAC_DMC520)		+= dmc520_edac.o
-> diff --git a/drivers/edac/xilinx_ddrmc_edac.c b/drivers/edac/xilinx_ddrmc_edac.c
-> new file mode 100644
-> index 000000000000..a5ea6ce0fe63
-> --- /dev/null
-> +++ b/drivers/edac/xilinx_ddrmc_edac.c
-
-Why can't this simply be called
-
-versal_edac.c
-
-?
-
-We already have a ZynqMP one which is called zynqmp_edac...
-
-> @@ -0,0 +1,1251 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Xilinx Versal DDRC ECC Driver
-
-I guess this "DDRC" is supposed to mean "DDRMC". And can you folks pls dial down
-on the abbreviations? Why can't you simply say:
-
-"Xilinx Versal memory controller driver"
-
-?
-
-
-> + * Copyright (C) 2023 Advanced Micro Devices, Inc.
-> + */
-> +
-> +#include <linux/edac.h>
-> +#include <linux/interrupt.h>
-> +#include <linux/module.h>
-> +#include <linux/of.h>
-> +#include <linux/of_address.h>
-> +#include <linux/of_device.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/sizes.h>
-> +#include <linux/firmware/xlnx-zynqmp.h>
-> +#include <linux/firmware/xlnx-event-manager.h>
-> +#include <linux/debugfs.h>
-> +
-> +#include "edac_module.h"
-> +
-> +/* Granularity of reported error in bytes */
-> +#define XDDR_EDAC_ERR_GRAIN			1
-> +
-> +#define XDDR_EDAC_MSG_SIZE			256
-> +
-> +#define XDDR_PCSR_OFFSET			0xC
-> +#define XDDR_ISR_OFFSET				0x14
-> +#define XDDR_IRQ_EN_OFFSET			0x20
-> +#define XDDR_IRQ1_EN_OFFSET			0x2C
-> +#define XDDR_IRQ_DIS_OFFSET			0x24
-> +#define XDDR_IRQ_CE_MASK			GENMASK(18, 15)
-> +#define XDDR_IRQ_UE_MASK			GENMASK(14, 11)
-> +
-> +#define XDDR_REG_CONFIG0_OFFSET			0x258
-> +#define XDDR_REG_CONFIG0_BUS_WIDTH_MASK		GENMASK(19, 18)
-> +#define XDDR_REG_CONFIG0_BUS_WIDTH_SHIFT	18
-> +#define XDDR_REG_CONFIG0_NUM_CHANS_MASK		BIT(17)
-> +#define XDDR_REG_CONFIG0_NUM_CHANS_SHIFT	17
-> +#define XDDR_REG_CONFIG0_NUM_RANKS_MASK		GENMASK(15, 14)
-> +#define XDDR_REG_CONFIG0_NUM_RANKS_SHIFT	14
-> +#define XDDR_REG_CONFIG0_SIZE_MASK		GENMASK(10, 8)
-> +#define XDDR_REG_CONFIG0_SIZE_SHIFT		8
-> +
-> +#define XDDR_REG_PINOUT_OFFSET			0x25C
-> +#define XDDR_REG_PINOUT_ECC_EN_MASK		GENMASK(7, 5)
-> +
-> +#define ECCW0_FLIP_CTRL				0x109C
-> +#define ECCW0_FLIP0_OFFSET			0x10A0
-> +#define ECCW1_FLIP_CTRL				0x10AC
-> +#define ECCW1_FLIP0_OFFSET			0x10B0
-> +#define ECCR0_CERR_STAT_OFFSET			0x10BC
-> +#define ECCR0_CE_ADDR_LO_OFFSET			0x10C0
-> +#define ECCR0_CE_ADDR_LO_OFFSET			0x10C0
-
-Oh look, those are repeated.
-
-Please check them *all* for duplicates.
-
-> +#define ECCR0_CE_ADDR_HI_OFFSET			0x10C4
-> +#define ECCR0_CE_DATA_LO_OFFSET			0x10C8
-> +#define ECCR0_CE_DATA_HI_OFFSET			0x10CC
-> +#define ECCR0_CE_DATA_PAR_OFFSET		0x10D0
-> +
-> +#define ECCR0_UERR_STAT_OFFSET			0x10D4
-> +#define ECCR0_UE_ADDR_LO_OFFSET			0x10D8
-> +#define ECCR0_UE_ADDR_HI_OFFSET			0x10DC
-> +#define ECCR0_UE_DATA_LO_OFFSET			0x10E0
-> +#define ECCR0_UE_DATA_HI_OFFSET			0x10E4
-> +#define ECCR0_UE_DATA_PAR_OFFSET		0x10E8
-> +
-> +#define ECCR1_CERR_STAT_OFFSET			0x10F4
-> +#define ECCR1_CE_ADDR_LO_OFFSET			0x10F8
-> +#define ECCR1_CE_ADDR_HI_OFFSET			0x10FC
-> +#define ECCR1_CE_DATA_LO_OFFSET			0x1100
-> +#define ECCR1_CE_DATA_HI_OFFSET			0x110C
-> +#define ECCR1_CE_DATA_PAR_OFFSET		0x1108
-> +
-> +#define ECCR1_UERR_STAT_OFFSET			0x110C
-> +#define ECCR1_UE_ADDR_LO_OFFSET			0x1110
-> +#define ECCR1_UE_ADDR_HI_OFFSET			0x1114
-> +#define ECCR1_UE_DATA_LO_OFFSET			0x1118
-> +#define ECCR1_UE_DATA_HI_OFFSET			0x111C
-> +#define ECCR1_UE_DATA_PAR_OFFSET		0x1120
-> +
-> +#define XDDR_NOC_REG_ADEC4_OFFSET		0x44
-> +#define RANK_0_MASK				GENMASK(5, 0)
-> +#define RANK_1_MASK				GENMASK(11, 6)
-> +#define RANK_1_SHIFT				6
-> +#define LRANK_0_MASK				GENMASK(17, 12)
-> +#define LRANK_0_SHIFT				12
-> +#define LRANK_1_MASK				GENMASK(23, 18)
-> +#define LRANK_1_SHIFT				18
-> +#define LRANK_2_MASK				GENMASK(29, 24)
-> +#define LRANK_2_SHIFT				24
-> +
-> +#define XDDR_NOC_REG_ADEC5_OFFSET		0x48
-> +#define ROW_0_MASK				GENMASK(5, 0)
-> +#define ROW_1_MASK				GENMASK(11, 6)
-> +#define ROW_1_SHIFT				6
-> +#define ROW_2_MASK				GENMASK(17, 12)
-> +#define ROW_2_SHIFT				12
-> +#define ROW_3_MASK				GENMASK(23, 18)
-> +#define ROW_3_SHIFT				18
-> +#define ROW_4_MASK				GENMASK(29, 24)
-> +#define ROW_4_SHIFT				24
-> +
-> +#define XDDR_NOC_REG_ADEC6_OFFSET		0x4C
-> +#define ROW_5_MASK				GENMASK(5, 0)
-> +#define ROW_6_MASK				GENMASK(11, 6)
-> +#define ROW_6_SHIFT				6
-> +#define ROW_7_MASK				GENMASK(17, 12)
-> +#define ROW_7_SHIFT				12
-> +#define ROW_8_MASK				GENMASK(23, 18)
-> +#define ROW_8_SHIFT				18
-> +#define ROW_9_MASK				GENMASK(29, 24)
-> +#define ROW_9_SHIFT				24
-> +
-> +#define XDDR_NOC_REG_ADEC7_OFFSET		0x50
-> +#define ROW_10_MASK				GENMASK(5, 0)
-> +#define ROW_11_MASK				GENMASK(11, 6)
-> +#define ROW_11_SHIFT				6
-> +#define ROW_12_MASK				GENMASK(17, 12)
-> +#define ROW_12_SHIFT				12
-> +#define ROW_13_MASK				GENMASK(23, 18)
-> +#define ROW_13_SHIFT				18
-> +#define ROW_14_MASK				GENMASK(29, 24)
-> +#define ROW_14_SHIFT				24
-> +
-> +#define XDDR_NOC_REG_ADEC8_OFFSET		0x54
-> +#define ROW_15_MASK				GENMASK(5, 0)
-> +#define ROW_16_MASK				GENMASK(11, 6)
-> +#define ROW_16_SHIFT				6
-> +#define ROW_17_MASK				GENMASK(17, 12)
-> +#define ROW_17_SHIFT				12
-> +#define ROW_18_MASK				GENMASK(23, 18)
-> +#define ROW_18_SHIFT				18
-> +#define COL_0_MASK				GENMASK(29, 24)
-> +#define COL_0_SHIFT				24
-> +
-> +#define XDDR_NOC_REG_ADEC9_OFFSET		0x58
-> +#define COL_1_MASK				GENMASK(5, 0)
-> +#define COL_2_MASK				GENMASK(11, 6)
-> +#define COL_2_SHIFT				6
-> +#define COL_3_MASK				GENMASK(17, 12)
-> +#define COL_3_SHIFT				12
-> +#define COL_4_MASK				GENMASK(23, 18)
-> +#define COL_4_SHIFT				18
-> +#define COL_5_MASK				GENMASK(29, 24)
-> +#define COL_5_SHIFT				24
-> +
-> +#define XDDR_NOC_REG_ADEC10_OFFSET		0x5C
-> +#define COL_6_MASK				GENMASK(5, 0)
-> +#define COL_7_MASK				GENMASK(11, 6)
-> +#define COL_7_SHIFT				6
-> +#define COL_8_MASK				GENMASK(17, 12)
-> +#define COL_8_SHIFT				12
-> +#define COL_9_MASK				GENMASK(23, 18)
-> +#define COL_9_SHIFT				18
-> +#define BANK_0_MASK				GENMASK(29, 24)
-> +#define BANK_0_SHIFT				24
-> +
-> +#define XDDR_NOC_REG_ADEC11_OFFSET		0x60
-> +#define BANK_1_MASK				GENMASK(5, 0)
-> +#define GRP_0_MASK				GENMASK(11, 6)
-> +#define GRP_0_SHIFT				6
-> +#define GRP_1_MASK				GENMASK(17, 12)
-> +#define GRP_1_SHIFT				12
-> +#define CH_0_MASK				GENMASK(23, 18)
-> +#define CH_0_SHIFT				18
-> +
-> +#define XDDR_NOC_REG_ADEC12_OFFSET		0x71C
-> +#define XDDR_NOC_REG_ADEC13_OFFSET		0x720
-> +
-> +#define XDDR_NOC_REG_ADEC14_OFFSET		0x724
-> +#define XDDR_NOC_ROW_MATCH_MASK			GENMASK(17, 0)
-> +#define XDDR_NOC_COL_MATCH_MASK			GENMASK(27, 18)
-> +#define XDDR_NOC_COL_MATCH_SHIFT		18
-> +#define XDDR_NOC_BANK_MATCH_MASK		GENMASK(29, 28)
-> +#define XDDR_NOC_BANK_MATCH_SHIFT		28
-> +#define XDDR_NOC_GRP_MATCH_MASK			GENMASK(31, 30)
-> +#define XDDR_NOC_GRP_MATCH_SHIFT		30
-> +
-> +#define XDDR_NOC_REG_ADEC15_OFFSET		0x728
-> +#define XDDR_NOC_RANK_MATCH_MASK		GENMASK(1, 0)
-> +#define XDDR_NOC_LRANK_MATCH_MASK		GENMASK(4, 2)
-> +#define XDDR_NOC_LRANK_MATCH_SHIFT		2
-> +#define XDDR_NOC_CH_MATCH_MASK			BIT(5)
-> +#define XDDR_NOC_CH_MATCH_SHIFT			5
-> +#define XDDR_NOC_MOD_SEL_MASK			BIT(6)
-> +#define XDDR_NOC_MATCH_EN_MASK			BIT(8)
-> +
-> +#define ECCR_UE_CE_ADDR_LO_BP_MASK		GENMASK(2, 0)
-> +#define ECCR_UE_CE_ADDR_LO_LRANK_MASK		GENMASK(5, 3)
-> +#define ECCR_UE_CE_ADDR_LO_LRANK_SHIFT		3
-> +#define ECCR_UE_CE_ADDR_LO_RANK_MASK		GENMASK(7, 6)
-> +#define ECCR_UE_CE_ADDR_LO_RANK_SHIFT		6
-> +#define ECCR_UE_CE_ADDR_LO_GRP_MASK		GENMASK(9, 8)
-> +#define ECCR_UE_CE_ADDR_LO_GRP_SHIFT		8
-> +#define ECCR_UE_CE_ADDR_LO_BANK_MASK		GENMASK(11, 10)
-> +#define ECCR_UE_CE_ADDR_LO_BANK_SHIFT		10
-> +#define ECCR_UE_CE_ADDR_LO_COL_MASK		GENMASK(21, 12)
-> +#define ECCR_UE_CE_ADDR_LO_COL_SHIFT		12
-> +#define ECCR_UE_CE_ADDR_LO_ROW_MASK		GENMASK(31, 22)
-> +#define ECCR_UE_CE_ADDR_LO_ROW_SHIFT		22
-> +#define ECCR_UE_CE_ADDR_HI_ROW_MASK		GENMASK(7, 0)
-> +#define ECCR_UE_CE_ADDR_HI_ROW_SHIFT		10
-> +
-> +#define XDDR_EDAC_NR_CSROWS			1
-> +#define XDDR_EDAC_NR_CHANS			1
-> +
-> +#define XDDR_BUS_WIDTH_64			0
-> +#define XDDR_BUS_WIDTH_32			1
-> +#define XDDR_BUS_WIDTH_16			2
-> +
-> +#define ECC_CEPOISON_MASK			0x1
-> +#define ECC_UEPOISON_MASK			0x3
-> +
-> +#define XDDR_MAX_ROW_CNT			18
-> +#define XDDR_MAX_COL_CNT			10
-> +#define XDDR_MAX_RANK_CNT			2
-> +#define XDDR_MAX_LRANK_CNT			3
-> +#define XDDR_MAX_BANK_CNT			2
-> +#define XDDR_MAX_GRP_CNT			2
-> +
-> +#define PCSR_UNLOCK_VAL				0xF9E8D7C6
-> +#define XDDR_ERR_TYPE_CE			0
-> +#define XDDR_ERR_TYPE_UE			1
-> +
-> +#define XILINX_DRAM_SIZE_4G			0
-> +#define XILINX_DRAM_SIZE_6G			1
-> +#define XILINX_DRAM_SIZE_8G			2
-> +#define XILINX_DRAM_SIZE_12G			3
-> +#define XILINX_DRAM_SIZE_16G			4
-> +#define XILINX_DRAM_SIZE_32G			5
-
-Oh wow, that's a *lot* of defines!
-
-How about unifying them?
-
-All those rank masks look the same.
-
-> +#define XDDR_CE_TRIGGER_CHAR            'C'
-
-<---- newline here.
-
-And trigger character?
-
-> +/**
-> + * struct ecc_error_info - ECC error log information.
-> + * @rank:		Rank number.
-> + * @lrank:		Logical Rank number.
-> + * @row:		Row number.
-> + * @col:		Column number.
-> + * @bank:		Bank number.
-> + * @group:		Group number.
-> + * @burstpos:		Burst position.
-> + */
-> +struct ecc_error_info {
-> +	u32 rank;
-> +	u32 lrank;
-> +	u32 row;
-> +	u32 col;
-> +	u32 bank;
-> +	u32 group;
-> +	u32 burstpos;
-> +};
-> +
-> +/**
-> + * struct ecc_status - ECC status information to report.
-> + * @ceinfo:	Correctable error log information.
-> + * @ueinfo:	Uncorrectable error log information.
-> + * @channel:	Channel number.
-> + * @error_type:	Error type information.
-> + */
-> +struct ecc_status {
-> +	struct ecc_error_info ceinfo[2];
-> +	struct ecc_error_info ueinfo[2];
-> +	u32 channel;
-> +	u8 error_type;
-> +};
-> +
-> +/**
-> + * struct edac_priv - DDR memory controller private instance data.
-> + * @ddrmc_baseaddr:	Base address of the DDR controller.
-> + * @ddrmc_noc_baseaddr:	Base address of the DDRMC NOC.
-> + * @message:		Buffer for framing the event specific info.
-> + * @mc_id:		Memory controller ID.
-> + * @ce_cnt:		Correctable error count.
-> + * @ue_cnt:		UnCorrectable error count.
-> + * @stat:		ECC status information.
-> + * @lrank_bit:		Bit shifts for lrank bit.
-> + * @rank_bit:		Bit shifts for rank bit.
-> + * @row_bit:		Bit shifts for row bit.
-> + * @col_bit:		Bit shifts for column bit.
-> + * @bank_bit:		Bit shifts for bank bit.
-> + * @grp_bit:		Bit shifts for group bit.
-> + * @ch_bit:		Bit shifts for channel bit.
-> + * @err_inject_addr:	Data poison address.
-> + * @debugfs:		Debugfs handle.
-> + */
-> +struct edac_priv {
-> +	void __iomem *ddrmc_baseaddr;
-> +	void __iomem *ddrmc_noc_baseaddr;
-> +	char message[XDDR_EDAC_MSG_SIZE];
-> +	u32 mc_id;
-> +	u32 ce_cnt;
-> +	u32 ue_cnt;
-> +	struct ecc_status stat;
-> +	u32 lrank_bit[3];
-> +	u32 rank_bit[2];
-> +	u32 row_bit[18];
-> +	u32 col_bit[10];
-> +	u32 bank_bit[2];
-> +	u32 grp_bit[2];
-> +	u32 ch_bit;
-> +#ifdef CONFIG_EDAC_DEBUG
-> +	u32 err_inject_addr;
-> +#endif
-> +	struct dentry *debugfs;
-
-All your debugfs code should be behind CONFIG_EDAC_DEBUG. Audit your whole
-driver.
-
-> +};
-> +
-> +static struct dentry *xddr_debugfs;
-
-No, this is not how this is done. See how drivers/edac/zynqmp_edac.c does it.
-
-> +
-> +/**
-> + * get_error_info - Get the current ECC error info.
-> + * @priv:	DDR memory controller private instance data.
-> + *
-> + * Return: one if there is no error otherwise returns zero.
-
-Let's look at the callsite:
-
-        status = get_error_info(priv);
-        if (status)
-                return IRQ_NONE;
-
-This is far from intuitive.
-
-So this function wants to be bool:
-
-bool get_error_info()
-
-and you do
-
-	if (!get_error_info(priv))
-		return IRQ_NONE;
-
-> + */
-> +static int get_error_info(struct edac_priv *priv)
-> +{
-> +	u32 eccr0_ceval, eccr1_ceval, eccr0_ueval, eccr1_ueval, regval;
-> +	void __iomem *ddrmc_base;
-> +	struct ecc_status *p;
-> +
-> +	ddrmc_base = priv->ddrmc_baseaddr;
-> +	p = &priv->stat;
-> +
-> +	eccr0_ceval = readl(ddrmc_base + ECCR0_CERR_STAT_OFFSET);
-> +	eccr1_ceval = readl(ddrmc_base + ECCR1_CERR_STAT_OFFSET);
-> +	eccr0_ueval = readl(ddrmc_base + ECCR0_UERR_STAT_OFFSET);
-> +	eccr1_ueval = readl(ddrmc_base + ECCR1_UERR_STAT_OFFSET);
-> +
-> +	if (!eccr0_ceval && !eccr1_ceval && !eccr0_ueval && !eccr1_ueval)
-> +		return 1;
-> +	else if (!eccr0_ceval && !eccr1_ceval)
-> +		goto ue_err;
-> +	else if (!eccr0_ceval)
-> +		p->channel = 1;
-> +	else
-> +		p->channel = 0;
-
-This looks weird. Why don't you test directly?
-
-	if (eccr0_ceval || eccr1_ceval)
-		return get_ce_error_info()
-	else if (eccr0_ueval || eccr1_ueval)
-		return get_ue_error_info();
-
-and the rest you handle in those helpers where you put all those humongous
-picking apart of values from registers.
-
-> +
-> +	p->error_type = XDDR_ERR_TYPE_CE;
-> +	regval = readl(ddrmc_base + ECCR0_CE_ADDR_LO_OFFSET);
-> +	p->ceinfo[0].burstpos = (regval & ECCR_UE_CE_ADDR_LO_BP_MASK);
-> +	p->ceinfo[0].lrank = (regval & ECCR_UE_CE_ADDR_LO_LRANK_MASK) >>
-> +					ECCR_UE_CE_ADDR_LO_LRANK_SHIFT;
-> +	p->ceinfo[0].rank = (regval & ECCR_UE_CE_ADDR_LO_RANK_MASK) >>
-> +					ECCR_UE_CE_ADDR_LO_RANK_SHIFT;
-> +	p->ceinfo[0].group = (regval & ECCR_UE_CE_ADDR_LO_GRP_MASK) >>
-> +					ECCR_UE_CE_ADDR_LO_GRP_SHIFT;
-> +	p->ceinfo[0].bank = (regval & ECCR_UE_CE_ADDR_LO_BANK_MASK) >>
-> +					ECCR_UE_CE_ADDR_LO_BANK_SHIFT;
-> +	p->ceinfo[0].col = (regval & ECCR_UE_CE_ADDR_LO_COL_MASK) >>
-> +					ECCR_UE_CE_ADDR_LO_COL_SHIFT;
-> +	p->ceinfo[0].row = (regval & ECCR_UE_CE_ADDR_LO_ROW_MASK) >>
-> +					ECCR_UE_CE_ADDR_LO_ROW_SHIFT;
-> +	regval = readl(ddrmc_base + ECCR0_CE_ADDR_HI_OFFSET);
-> +	p->ceinfo[0].row |= ((regval & ECCR_UE_CE_ADDR_HI_ROW_MASK) <<
-> +					ECCR_UE_CE_ADDR_HI_ROW_SHIFT);
-
-Seeing how this regval is split into fields, this is begging to be a u32
-bitfield where you can read in the register value and the compiler would do the
-splitting for you.
-
-And then you won't need all those defines and unreadable manipulations.
-
-...
-
-> +
-> +/**
-> + * convert_to_physical - Convert to physical address.
-> + * @priv:	DDR memory controller private instance data.
-> + * @pinf:	ECC error info structure.
-> + *
-> + * Return: Physical address of the DDR memory.
-> + */
-> +static ulong convert_to_physical(struct edac_priv *priv,
-
-Please stick to one type - there's "ulong" and "unsigned long" in this driver.
-I'd advise against that typedef and simply use "unsigned long".
-
-> +				 struct ecc_error_info pinf)
-> +{
-> +	ulong err_addr = 0;
-> +	u32 index;
-> +
-> +	for (index = 0; index < XDDR_MAX_ROW_CNT; index++) {
-> +		err_addr |= (pinf.row & BIT(0)) << priv->row_bit[index];
-> +		pinf.row >>= 1;
-> +	}
-> +
-> +	for (index = 0; index < XDDR_MAX_COL_CNT; index++) {
-> +		err_addr |= (pinf.col & BIT(0)) << priv->col_bit[index];
-> +		pinf.col >>= 1;
-> +	}
-> +
-> +	for (index = 0; index < XDDR_MAX_BANK_CNT; index++) {
-> +		err_addr |= (pinf.bank & BIT(0)) << priv->bank_bit[index];
-> +		pinf.bank >>= 1;
-> +	}
-> +
-> +	for (index = 0; index < XDDR_MAX_GRP_CNT; index++) {
-> +		err_addr |= (pinf.group & BIT(0)) << priv->grp_bit[index];
-> +		pinf.group >>= 1;
-> +	}
-> +
-> +	for (index = 0; index < XDDR_MAX_RANK_CNT; index++) {
-> +		err_addr |= (pinf.rank & BIT(0)) << priv->rank_bit[index];
-> +		pinf.rank >>= 1;
-> +	}
-> +
-> +	for (index = 0; index < XDDR_MAX_LRANK_CNT; index++) {
-> +		err_addr |= (pinf.lrank & BIT(0)) << priv->lrank_bit[index];
-> +		pinf.lrank >>= 1;
-> +	}
-
-Oh wow, 6 loops!
-
-I'm wondering if you could "unroll" those loops and work on each component with
-a single mask and such...
-
-> +
-> +	err_addr |= (priv->stat.channel & BIT(0)) << priv->ch_bit;
-> +
-> +	return err_addr;
-> +}
-> +
-> +/**
-> + * handle_error - Handle Correctable and Uncorrectable errors.
-> + * @mci:	EDAC memory controller instance.
-> + * @stat:	ECC status structure.
-> + *
-> + * Handles ECC correctable and uncorrectable errors.
-> + */
-> +static void handle_error(struct mem_ctl_info *mci, struct ecc_status *stat)
-> +{
-> +	struct edac_priv *priv = mci->pvt_info;
-> +	struct ecc_error_info pinf;
-> +
-> +	if (stat->error_type == XDDR_ERR_TYPE_CE) {
-> +		priv->ce_cnt++;
-> +		pinf = stat->ceinfo[stat->channel];
-
-That ->channel thing is u32 but the ceinfo array says there can be only two
-channels. Why the waste?
-
-> +		snprintf(priv->message, XDDR_EDAC_MSG_SIZE,
-> +			 "Error type:%s MC ID: %d Addr at %lx Burst Pos: %d\n",
-> +			 "CE", priv->mc_id,
-> +			 convert_to_physical(priv, pinf), pinf.burstpos);
-> +
-> +		edac_mc_handle_error(HW_EVENT_ERR_CORRECTED, mci,
-> +				     priv->ce_cnt, 0, 0, 0, 0, 0, -1,
-> +				     priv->message, "");
-> +	}
-> +
-> +	if (stat->error_type == XDDR_ERR_TYPE_UE) {
-> +		priv->ue_cnt++;
-> +		pinf = stat->ueinfo[stat->channel];
-
-Ditto.
-
-> +		snprintf(priv->message, XDDR_EDAC_MSG_SIZE,
-> +			 "Error type:%s MC ID: %d Addr at %lx Burst Pos: %d\n",
-> +			 "UE", priv->mc_id,
-> +			 convert_to_physical(priv, pinf), pinf.burstpos);
-> +
-> +		edac_mc_handle_error(HW_EVENT_ERR_UNCORRECTED, mci,
-> +				     priv->ue_cnt, 0, 0, 0, 0, 0, -1,
-> +				     priv->message, "");
-> +	}
-> +
-> +	memset(stat, 0, sizeof(*stat));
-> +}
-> +
-> +/**
-> + * intr_handler - Interrupt Handler for ECC interrupts.
-> + * @irq:	IRQ number
-> + * @dev_id:	Device ID
-> + *
-> + * Return: IRQ_NONE, if interrupt not set or IRQ_HANDLED otherwise.
-> + */
-> +static irqreturn_t intr_handler(int irq, void *dev_id)
-> +{
-> +	struct mem_ctl_info *mci = dev_id;
-> +	struct edac_priv *priv;
-> +	int status, regval;
-> +
-> +	priv = mci->pvt_info;
-> +	regval = readl(priv->ddrmc_baseaddr + XDDR_ISR_OFFSET);
-
-<---- newline here.
-
-> +	regval &= (XDDR_IRQ_CE_MASK | XDDR_IRQ_UE_MASK);
-> +	if (!regval)
-> +		return IRQ_NONE;
-> +
-> +	/* Unlock the PCSR registers */
-> +	writel(PCSR_UNLOCK_VAL, priv->ddrmc_baseaddr + XDDR_PCSR_OFFSET);
-> +
-> +	/* Clear the ISR */
-> +	writel(regval, priv->ddrmc_baseaddr + XDDR_ISR_OFFSET);
-
-Does that ISR clearing reenable the interrupt? If so, you can't do that here.
-
-> +
-> +	/* Lock the PCSR registers */
-> +	writel(1, priv->ddrmc_baseaddr + XDDR_PCSR_OFFSET);
-> +
-> +	status = get_error_info(priv);
-> +	if (status)
-> +		return IRQ_NONE;
-> +
-> +	handle_error(mci, &priv->stat);
-> +
-> +	edac_dbg(3, "Total error count CE %d UE %d\n",
-> +		 priv->ce_cnt, priv->ue_cnt);
-> +
-> +	return IRQ_HANDLED;
-> +}
-> +
-> +/**
-> + * err_callback - Handle Correctable and Uncorrectable errors.
-
-handle_error() does the same. What's the difference?
-
-Why is this thing registered with some Xilinx event manager thing and yet you
-have error interrupts too?
-
-> + * @payload:	payload data.
-> + * @data:	mci controller data.
-> + *
-> + * Handles ECC correctable and uncorrectable errors.
-> + */
-> +static void err_callback(const u32 *payload, void *data)
-> +{
-> +	struct mem_ctl_info *mci = (struct mem_ctl_info *)data;
-> +	struct edac_priv *priv;
-> +	struct ecc_status *p;
-> +	int status, regval;
-> +
-> +	priv = mci->pvt_info;
-> +	p = &priv->stat;
-> +
-> +	regval = readl(priv->ddrmc_baseaddr + XDDR_ISR_OFFSET);
-> +	regval &= (XDDR_IRQ_CE_MASK | XDDR_IRQ_UE_MASK);
-> +	if (!regval)
-> +		return;
-> +
-> +	/* Unlock the PCSR registers */
-> +	writel(PCSR_UNLOCK_VAL, priv->ddrmc_baseaddr + XDDR_PCSR_OFFSET);
-> +
-> +	/* Clear the ISR */
-> +	writel(regval, priv->ddrmc_baseaddr + XDDR_ISR_OFFSET);
-> +	/* Lock the PCSR registers */
-> +
-
-Wrong newline
-
-> +	writel(1, priv->ddrmc_baseaddr + XDDR_PCSR_OFFSET);
-
-That unlock-clear-lock sequence appears here again. Make that a separate
-function to not have code duplication.
-
-> +	if (payload[2] == XPM_EVENT_ERROR_MASK_DDRMC_CR)
-> +		p->error_type = XDDR_ERR_TYPE_CE;
-> +	if (payload[2] == XPM_EVENT_ERROR_MASK_DDRMC_NCR)
-
-2? A magic number?
-
-> +		p->error_type = XDDR_ERR_TYPE_UE;
-> +
-> +	status = get_error_info(priv);
-> +	if (status)
-> +		return;
-> +
-> +	handle_error(mci, &priv->stat);
-> +
-> +	edac_dbg(3, "Total error count CE %d UE %d\n",
-> +		 priv->ce_cnt, priv->ue_cnt);
-> +}
-> +
-> +/**
-> + * get_dwidth - Return the controller memory width.
-> + * @base:	DDR memory controller base address.
-> + *
-> + * Get the EDAC device type width appropriate for the controller
-> + * configuration.
-> + *
-> + * Return: a device type width enumeration.
-> + */
-> +static enum dev_type get_dwidth(const void __iomem *base)
-> +{
-> +	enum dev_type dt;
-> +	u32 regval;
-> +
-> +	regval = readl(base + XDDR_REG_CONFIG0_OFFSET);
-> +	regval = (regval & XDDR_REG_CONFIG0_BUS_WIDTH_MASK) >>
-> +				XDDR_REG_CONFIG0_BUS_WIDTH_SHIFT;
-
-Split that for better readability:
-
-	regval   = readl(base + XDDR_REG_CONFIG0_OFFSET);
-	regval  &= XDDR_REG_CONFIG0_BUS_WIDTH_MASK;
-	regval >>= XDDR_REG_CONFIG0_BUS_WIDTH_SHIFT;
-
-and do the same for the others below.
-
-> +	switch (regval) {
-> +	case XDDR_BUS_WIDTH_16:
-> +		dt = DEV_X2;
-> +		break;
-> +	case XDDR_BUS_WIDTH_32:
-> +		dt = DEV_X4;
-> +		break;
-> +	case XDDR_BUS_WIDTH_64:
-> +		dt = DEV_X8;
-> +		break;
-> +	default:
-> +		dt = DEV_UNKNOWN;
-> +	}
-> +
-> +	return dt;
-> +}
-> +
-> +/**
-> + * get_ecc_state - Return the controller ECC enable/disable status.
-> + * @base:	DDR memory controller base address.
-> + *
-> + * Get the ECC enable/disable status for the controller.
-> + *
-> + * Return: a ECC status boolean i.e true/false - enabled/disabled.
-> + */
-> +static bool get_ecc_state(void __iomem *base)
-> +{
-> +	enum dev_type dt;
-> +	u32 ecctype;
-> +
-> +	dt = get_dwidth(base);
-> +	if (dt == DEV_UNKNOWN)
-> +		return false;
-> +
-> +	ecctype = readl(base + XDDR_REG_PINOUT_OFFSET);
-> +	ecctype &= XDDR_REG_PINOUT_ECC_EN_MASK;
-
-Exactly, like here.
-
-> +	if (ecctype)
-> +		return true;
-> +
-> +	return false;
-
-Simplify that to:
-
-	return !!ecctype;
-
-> +}
-> +
-> +/**
-> + * get_memsize - Get the size of the attached memory device.
-> + * @priv:	DDR memory controller private instance data.
-> + *
-> + * Return: the memory size in bytes.
-> + */
-> +static u64 get_memsize(struct edac_priv *priv)
-> +{
-> +	u32 regval;
-> +	u64 size;
-> +
-> +	regval = readl(priv->ddrmc_baseaddr + XDDR_REG_CONFIG0_OFFSET) &
-> +				XDDR_REG_CONFIG0_SIZE_MASK;
-> +	regval >>= XDDR_REG_CONFIG0_SIZE_SHIFT;
-> +	switch (regval) {
-> +	case XILINX_DRAM_SIZE_4G:
-> +		size = (4U * SZ_1G);
-		       ^^^^^^^^^^^^^^
-
-No need for the brackets in all those.
-
-> +		break;
-> +	case XILINX_DRAM_SIZE_6G:
-> +		size = (6U * SZ_1G);
-> +		break;
-> +	case XILINX_DRAM_SIZE_8G:
-> +		size = (8U * SZ_1G);
-> +		break;
-> +	case XILINX_DRAM_SIZE_12G:
-> +		size = (12U * SZ_1G);
-> +		break;
-> +	case XILINX_DRAM_SIZE_16G:
-> +		size = (16U * SZ_1G);
-> +		break;
-> +	case XILINX_DRAM_SIZE_32G:
-> +		size = (32U * SZ_1G);
-> +		break;
-> +	default:
-> +		/* Invalid configuration */
-> +		size = 0;
-> +		break;
-> +	}
-
-You can make that a lot simpler and easier to read:
-
-        switch (regval) {
-        case XILINX_DRAM_SIZE_4G:       size = 4U;      break;
-        case XILINX_DRAM_SIZE_6G:       size = 6U;      break;  
-        case XILINX_DRAM_SIZE_8G:       size = 8U;      break;  
-        case XILINX_DRAM_SIZE_12G:      size = 12U;     break;  
-        case XILINX_DRAM_SIZE_16G:      size = 16U;     break;
-        case XILINX_DRAM_SIZE_32G:      size = 32U;     break;
-        /* Invalid configuration */
-        default: break; 
-        }       
-
-        size *= SZ_1G;
-
-        return size;
-
-
-> +
-> +	return size;
-> +}
-> +
-> +/**
-> + * init_csrows - Initialize the csrow data.
-> + * @mci:	EDAC memory controller instance.
-> + *
-> + * Initialize the chip select rows associated with the EDAC memory
-> + * controller instance.
-> + */
-> +static void init_csrows(struct mem_ctl_info *mci)
-> +{
-> +	struct edac_priv *priv = mci->pvt_info;
-> +	struct csrow_info *csi;
-> +	struct dimm_info *dimm;
-> +	unsigned long size;
-> +	u32 row;
-> +	int ch;
-> +
-> +	size = get_memsize(priv);
-> +	for (row = 0; row < mci->nr_csrows; row++) {
-> +		csi = mci->csrows[row];
-> +		for (ch = 0; ch < csi->nr_channels; ch++) {
-> +			dimm = csi->channels[ch]->dimm;
-> +			dimm->edac_mode	= EDAC_SECDED;
-> +			dimm->mtype = MEM_DDR4;
-> +			dimm->nr_pages = (size >> PAGE_SHIFT) /
-> +						csi->nr_channels;
-
-Let that line stick out.
-
-> +			dimm->grain = XDDR_EDAC_ERR_GRAIN;
-> +			dimm->dtype = get_dwidth(priv->ddrmc_baseaddr);
-> +		}
-> +	}
-> +}
-
-...
-
-> +static int setup_irq(struct mem_ctl_info *mci, struct platform_device *pdev)
-> +{
-> +	int ret, irq;
-> +
-> +	irq = platform_get_irq(pdev, 0);
-> +	if (irq < 0) {
-> +		edac_printk(KERN_ERR, EDAC_MC,
-> +			    "No IRQ %d in DT\n", irq);
-> +		return irq;
-> +	}
-> +
-> +	ret = devm_request_irq(&pdev->dev, irq, intr_handler,
-> +			       IRQF_SHARED, dev_name(&pdev->dev), mci);
-> +	if (ret < 0) {
-> +		edac_printk(KERN_ERR, EDAC_MC, "Failed to request IRQ\n");
-> +		return ret;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +#ifdef CONFIG_EDAC_DEBUG
-> +#define to_mci(k) container_of(k, struct mem_ctl_info, dev)
-
-I'd like to have the injection algorithm documented here, in a comment at
-least. See the zynqmp_edac driver for an example.
-
-...
-
-> +static int mc_probe(struct platform_device *pdev)
-> +{
-> +	void __iomem *ddrmc_baseaddr, *ddrmc_noc_baseaddr;
-> +	struct edac_mc_layer layers[2];
-> +	struct mem_ctl_info *mci;
-> +	u8 num_chans, num_csrows;
-> +	struct edac_priv *priv;
-> +	u32 edac_mc_id, regval;
-> +	int rc;
-> +
-> +	ddrmc_baseaddr = devm_platform_ioremap_resource_byname(pdev, "base");
-> +	if (IS_ERR(ddrmc_baseaddr))
-> +		return PTR_ERR(ddrmc_baseaddr);
-> +
-> +	ddrmc_noc_baseaddr = devm_platform_ioremap_resource_byname(pdev, "noc");
-> +	if (IS_ERR(ddrmc_noc_baseaddr))
-> +		return PTR_ERR(ddrmc_noc_baseaddr);
-> +
-> +	if (!get_ecc_state(ddrmc_baseaddr))
-> +		return -ENXIO;
-> +
-> +	/* Allocate ID number for our EMIF controller */
-> +	edac_mc_id = emif_get_id(pdev->dev.of_node);
-> +	if (edac_mc_id < 0)
-> +		return -EINVAL;
-> +
-> +	regval = readl(ddrmc_baseaddr + XDDR_REG_CONFIG0_OFFSET);
-> +	num_chans = (regval & XDDR_REG_CONFIG0_NUM_CHANS_MASK) >>
-> +			XDDR_REG_CONFIG0_NUM_CHANS_SHIFT;
-> +	num_chans++;
-> +
-> +	num_csrows = (regval & XDDR_REG_CONFIG0_NUM_RANKS_MASK) >>
-> +			XDDR_REG_CONFIG0_NUM_RANKS_SHIFT;
-> +	num_csrows *= 2;
-> +	if (!num_csrows)
-> +		num_csrows = 1;
-> +
-> +	layers[0].type = EDAC_MC_LAYER_CHIP_SELECT;
-> +	layers[0].size = num_csrows;
-> +	layers[0].is_virt_csrow = true;
-> +	layers[1].type = EDAC_MC_LAYER_CHANNEL;
-> +	layers[1].size = num_chans;
-> +	layers[1].is_virt_csrow = false;
-> +
-> +	mci = edac_mc_alloc(edac_mc_id, ARRAY_SIZE(layers), layers,
-> +			    sizeof(struct edac_priv));
-> +	if (!mci) {
-> +		edac_printk(KERN_ERR, EDAC_MC,
-> +			    "Failed memory allocation for mc instance\n");
-> +		return -ENOMEM;
-> +	}
-> +
-> +	priv = mci->pvt_info;
-> +	priv->ddrmc_baseaddr = ddrmc_baseaddr;
-> +	priv->ddrmc_noc_baseaddr = ddrmc_noc_baseaddr;
-> +	priv->ce_cnt = 0;
-> +	priv->ue_cnt = 0;
-> +	priv->mc_id = edac_mc_id;
-> +
-> +	mc_init(mci, pdev);
-> +
-> +	rc = edac_mc_add_mc(mci);
-> +	if (rc) {
-> +		edac_printk(KERN_ERR, EDAC_MC,
-> +			    "Failed to register with EDAC core\n");
-> +		goto free_edac_mc;
-> +	}
-> +
-> +#ifdef CONFIG_EDAC_DEBUG
-> +	if (edac_create_debugfs_attributes(mci)) {
-> +		edac_printk(KERN_ERR, EDAC_MC,
-> +			    "Failed to create debugfs entries\n");
-> +		goto del_edac_mc;
-
-I don't think you have to fail if it cannot allocate debugfs nodes - the driver
-is functional - you just can't inject.
-
-> +	}
-> +
-> +	setup_address_map(priv);
-> +#endif
-> +
-> +	rc = xlnx_register_event(PM_NOTIFY_CB, EVENT_ERROR_PMC_ERR1,
-> +				 XPM_EVENT_ERROR_MASK_DDRMC_CR | XPM_EVENT_ERROR_MASK_DDRMC_NCR,
-> +				 false, err_callback, mci);
-> +	if (rc == -ENODEV) {
-> +		rc = setup_irq(mci, pdev);
-> +		if (rc)
-> +			goto del_edac_debugfs;
-> +	}
-> +	if (rc) {
-> +		if (rc == -EACCES)
-> +			rc = -EPROBE_DEFER;
-> +
-> +		goto del_edac_debugfs;
-> +	}
-> +
-> +	enable_intr(priv);
-> +	return rc;
-> +
-> +del_edac_debugfs:
-> +	edac_debugfs_remove_recursive(xddr_debugfs);
-> +#ifdef CONFIG_EDAC_DEBUG
-> +del_edac_mc:
-> +#endif
-> +	edac_mc_del_mc(&pdev->dev);
-> +free_edac_mc:
-> +	edac_mc_free(mci);
-> +
-> +	return rc;
-> +}
-
-...
-
-Thx.
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+T24gVGh1LCBKYW4gMjYsIDIwMjMgYXQgMDU6NTA6MzBQTSAtMDgwMCwgVG9ueSBMdWNrIHdyb3Rl
+Og0KPiBGcm9tOiBaaGlxdWFuIExpIDx6aGlxdWFuMS5saUBpbnRlbC5jb20+DQo+IA0KPiBLZHVt
+cCBjYW4gZXhjbHVkZSB0aGUgSFdQb3Npb24gcGFnZSB0byBhdm9pZCB0b3VjaCB0aGUgZXJyb3Ig
+cGFnZQ0KPiBhZ2FpbiwgdGhlIHByZXJlcXVpc2l0ZSBpcyB0aGUgUEdfaHdwb2lzb24gcGFnZSBm
+bGFnIGlzIHNldC4NCj4gSG93ZXZlciwgZm9yIHNvbWUgTUNFIGZhdGFsIGVycm9yIGNhc2VzLCB0
+aGVyZSBhcmUgbm8gb3Bwb3J0dW5pdHkNCj4gdG8gcXVldWUgYSB0YXNrIGZvciBjYWxsaW5nIG1l
+bW9yeV9mYWlsdXJlKCksIGFzIGEgcmVzdWx0LA0KPiB0aGUgY2FwdHVyZSBrZXJuZWwgdG91Y2hl
+cyB0aGUgZXJyb3IgcGFnZSBhZ2FpbiBhbmQgcGFuaWNzLg0KPiANCj4gQWRkIGZ1bmN0aW9uIG1j
+ZV9zZXRfcGFnZV9od3BvaXNvbl9ub3coKSB3aGljaCBtYXJrIGEgcGFnZSBhcw0KPiBIV1BvaXNv
+biBiZWZvcmUga2VybmVsIHBhbmljKCkgZm9yIE1DRSBlcnJvciwgc28gdGhhdCB0aGUgZHVtcA0K
+PiBwcm9ncmFtIGNhbiBjaGVjayBhbmQgc2tpcCB0aGUgZXJyb3IgcGFnZSBhbmQgcHJldmVudCB0
+aGUgY2FwdHVyZQ0KPiBrZXJuZWwgcGFuaWMuDQo+IA0KPiBbVG9ueTogQ2hhbmdlZCBUZXN0U2V0
+UGFnZUhXUG9pc29uKCkgdG8gU2V0UGFnZUhXUG9pc29uKCldDQo+IA0KPiBDby1kZXZlbG9wZWRk
+LWJ5OiBZb3VxdWFuIFNvbmcgPHlvdXF1YW4uc29uZ0BpbnRlbC5jb20+DQo+IFNpZ25lZC1vZmYt
+Ynk6IFlvdXF1YW4gU29uZyA8eW91cXVhbi5zb25nQGludGVsLmNvbT4NCj4gU2lnbmVkLW9mZi1i
+eTogWmhpcXVhbiBMaSA8emhpcXVhbjEubGlAaW50ZWwuY29tPg0KPiBTaWduZWQtb2ZmLWJ5OiBU
+b255IEx1Y2sgPHRvbnkubHVja0BpbnRlbC5jb20+DQoNCkhpLA0KVGhhbmsgeW91IGZvciB0aGUg
+cGF0Y2guDQoNCj4gLS0tDQo+ICBhcmNoL3g4Ni9rZXJuZWwvY3B1L21jZS9jb3JlLmMgfCAyMCAr
+KysrKysrKysrKysrKysrKysrKw0KPiAgMSBmaWxlIGNoYW5nZWQsIDIwIGluc2VydGlvbnMoKykN
+Cj4gDQo+IGRpZmYgLS1naXQgYS9hcmNoL3g4Ni9rZXJuZWwvY3B1L21jZS9jb3JlLmMgYi9hcmNo
+L3g4Ni9rZXJuZWwvY3B1L21jZS9jb3JlLmMNCj4gaW5kZXggMmM4ZWM1YzcxNzEyLi4wNjMwOTk5
+YzYzMTEgMTAwNjQ0DQo+IC0tLSBhL2FyY2gveDg2L2tlcm5lbC9jcHUvbWNlL2NvcmUuYw0KPiAr
+KysgYi9hcmNoL3g4Ni9rZXJuZWwvY3B1L21jZS9jb3JlLmMNCj4gQEAgLTE2Miw2ICsxNjIsMjQg
+QEAgdm9pZCBtY2VfdW5yZWdpc3Rlcl9kZWNvZGVfY2hhaW4oc3RydWN0IG5vdGlmaWVyX2Jsb2Nr
+ICpuYikNCj4gIH0NCj4gIEVYUE9SVF9TWU1CT0xfR1BMKG1jZV91bnJlZ2lzdGVyX2RlY29kZV9j
+aGFpbik7DQo+ICANCj4gKy8qDQo+ICsgKiBLZHVtcCBjYW4gZXhjbHVkZSB0aGUgSFdQb3Npb24g
+cGFnZSB0byBhdm9pZCB0b3VjaCB0aGUgZXJyb3IgcGFnZSBhZ2FpbiwNCj4gKyAqIHRoZSBwcmVy
+ZXF1aXNpdGUgaXMgdGhlIFBHX2h3cG9pc29uIHBhZ2UgZmxhZyBpcyBzZXQuIEhvd2V2ZXIsIGZv
+ciBzb21lDQo+ICsgKiBNQ0UgZmF0YWwgZXJyb3IgY2FzZXMsIHRoZXJlIGFyZSBubyBvcHBvcnR1
+bml0eSB0byBxdWV1ZSBhIHRhc2sNCj4gKyAqIGZvciBjYWxsaW5nIG1lbW9yeV9mYWlsdXJlKCks
+IGFzIGEgcmVzdWx0LCB0aGUgY2FwdHVyZSBrZXJuZWwgcGFuaWMuDQoNCnMvcGFuaWMvcGFuaWNz
+LyA/DQoNCj4gKyAqIFRoaXMgZnVuY3Rpb24gbWFyayB0aGUgcGFnZSBhcyBIV1BvaXNvbiBiZWZv
+cmUga2VybmVsIHBhbmljKCkgZm9yIE1DRS4NCg0Kcy9tYXJrL21hcmtzLw0KDQo+ICsgKi8NCj4g
+K3N0YXRpYyB2b2lkIG1jZV9zZXRfcGFnZV9od3BvaXNvbl9ub3codW5zaWduZWQgbG9uZyBwZm4p
+DQo+ICt7DQo+ICsJc3RydWN0IHBhZ2UgKnA7DQo+ICsNCj4gKwkvKiBUT0RPOiBuZWVkIHRvIGhh
+bmRsZSBvdGhlciBzb3J0IG9mIHBhZ2UsIGxpa2UgU0dYLCBQTUVNIGFuZA0KPiArCSAqIEh1Z2VU
+TEIgcGFnZXMqLw0KDQpBbHRob3VnaCBJJ20gbm90IHN1cmUgdGhhdCBTR1ggbWVtb3J5IG9yIFBN
+RU0gcGFnZXMgYXJlIGV4cGVjdGVkIHRvIGJlDQppbmNsdWRlZCBpbiBrZHVtcCwgYnV0IHNpbXBs
+eSBzZXR0aW5nIFBhZ2VIV1BvaXNvbiBkb2VzIG5vdCB3b3JrIGZvciB0aGVtPw0KKE1heWJlIHRo
+YXQgZGVwZW5kcyBvbiBob3cga2R1bXAgaGFuZGxlcyB0aGVzZSB0eXBlcyBvZiBtZW1vcnkuKQ0K
+DQpBcyBmb3IgSHVnZVRMQiwga2R1bXAgdXRpbGl0eSBzaG91bGQgcGFyc2UgdGhlIHN0cnVjdCBw
+YWdlIGFuZCBiZSBhd2FyZSBvZg0KSHVnZVRMQiBwYWdlcywgc28gbWF5YmUgc2V0dGluZyBQYWdl
+SFdQb2lzb24gb24gdGhlIGhlYWQgcGFnZSBjb3VsZCB3b3JrLg0KDQo+ICsJcCA9IHBmbl90b19v
+bmxpbmVfcGFnZShwZm4pOw0KPiArCWlmIChwKQ0KPiArCQlTZXRQYWdlSFdQb2lzb24ocCk7DQo+
+ICt9DQo+ICsNCj4gIHN0YXRpYyB2b2lkIF9fcHJpbnRfbWNlKHN0cnVjdCBtY2UgKm0pDQo+ICB7
+DQo+ICAJcHJfZW1lcmcoSFdfRVJSICJDUFUgJWQ6IE1hY2hpbmUgQ2hlY2slczogJUx4IEJhbmsg
+JWQ6ICUwMTZMeFxuIiwNCj4gQEAgLTI5Miw2ICszMTAsOCBAQCBzdGF0aWMgbm9pbnN0ciB2b2lk
+IG1jZV9wYW5pYyhjb25zdCBjaGFyICptc2csIHN0cnVjdCBtY2UgKmZpbmFsLCBjaGFyICpleHAp
+DQo+ICAJaWYgKCFmYWtlX3BhbmljKSB7DQo+ICAJCWlmIChwYW5pY190aW1lb3V0ID09IDApDQo+
+ICAJCQlwYW5pY190aW1lb3V0ID0gbWNhX2NmZy5wYW5pY190aW1lb3V0Ow0KPiArCQlpZiAoZmlu
+YWwgJiYgKGZpbmFsLT5zdGF0dXMgJiBNQ0lfU1RBVFVTX0FERFJWKSkNCj4gKwkJCSBtY2Vfc2V0
+X3BhZ2VfaHdwb2lzb25fbm93KGZpbmFsLT5hZGRyID4+IFBBR0VfU0hJRlQpOw0KPiAgCQlwYW5p
+Yyhtc2cpOw0KDQpJIHRoaW5rIHRoYXQgc2V0dGluZyBQYWdlSFdQb2lzb24gb3V0c2lkZSBod3Bv
+aXNvbiBzdWJzeXN0ZW0gaXMgT0sgaGVyZSwNCmJlY2F1c2UgdGhpcyBpcyBjYWxsZWQganVzdCBi
+ZWZvcmUgY2FsbGluZyBwYW5pYygpIHNvIGl0J3MgZXhwZWN0ZWQgdG8gbm90DQpjb25mbGljdCB3
+aXRoIG90aGVyIGh3cG9pc29uLXJlbGF0ZWQgY29kZS4NCg0KVGhhbmtzLA0KTmFveWEgSG9yaWd1
+Y2hp
