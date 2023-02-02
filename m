@@ -2,63 +2,103 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C609686313
-	for <lists+linux-edac@lfdr.de>; Wed,  1 Feb 2023 10:45:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C96368863B
+	for <lists+linux-edac@lfdr.de>; Thu,  2 Feb 2023 19:18:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230502AbjBAJpz (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Wed, 1 Feb 2023 04:45:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33418 "EHLO
+        id S232344AbjBBSSy (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Thu, 2 Feb 2023 13:18:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230461AbjBAJpx (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Wed, 1 Feb 2023 04:45:53 -0500
-X-Greylist: delayed 1199 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 01 Feb 2023 01:45:52 PST
-Received: from mail.corrib.pl (mail.corrib.pl [185.58.226.145])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADF4D3589
-        for <linux-edac@vger.kernel.org>; Wed,  1 Feb 2023 01:45:52 -0800 (PST)
-Received: by mail.corrib.pl (Postfix, from userid 1001)
-        id 74856A4217; Wed,  1 Feb 2023 09:06:52 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=corrib.pl; s=mail;
-        t=1675242442; bh=X6IEpSISwJiYlJ3uA866lskXve3r+4o2hf4z7VM6m5o=;
-        h=Date:From:To:Subject:From;
-        b=SzUnvNLDtJpdJIiyIniY1iovZBuhku4MCMp3kL9XvEJTCupcKx8AoTNowciVcS+kL
-         fmkquNtF15iilPOOq1hbpyGzJLuwyzfNWByIXbPzSi1KQyMft7oLdrNbHrrq8PiIsj
-         S7sdOV0RzAeJ/URM2rPb5Mg4o9Z1lDmfS1dj1TlXiZyZFlp13c1WokC0E/zFuw2yyW
-         1BpJsumQvjwDy4ONUgOlrRhZh+yKe9AzWmDsMQfEi7KvxbkCG2jSIy3Gi4hVQIDXQm
-         eijhzdTwxZOfaytb2jQBD4eGxZoEZudOgn3EKH2+aZ6Zi46x0k1F1iiV/T+FUR3Hos
-         iC+Fbtva0D7Zg==
-Received: by mail.corrib.pl for <linux-edac@vger.kernel.org>; Wed,  1 Feb 2023 09:06:19 GMT
-Message-ID: <20230201074500-0.1.58.fia4.0.vzkdlchini@corrib.pl>
-Date:   Wed,  1 Feb 2023 09:06:19 GMT
-From:   =?UTF-8?Q? "Szczepan_Kie=C5=82basa" ?= 
-        <szczepan.kielbasa@corrib.pl>
-To:     <linux-edac@vger.kernel.org>
-Subject: Faktoring
-X-Mailer: mail.corrib.pl
+        with ESMTP id S231510AbjBBSSx (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Thu, 2 Feb 2023 13:18:53 -0500
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C79A60CBD;
+        Thu,  2 Feb 2023 10:18:52 -0800 (PST)
+Received: from lhrpeml500006.china.huawei.com (unknown [172.18.147.226])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4P76Pj2Rdpz688J2;
+        Fri,  3 Feb 2023 02:14:33 +0800 (CST)
+Received: from P_UKIT01-A7bmah.china.huawei.com (10.48.151.167) by
+ lhrpeml500006.china.huawei.com (7.191.161.198) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.34; Thu, 2 Feb 2023 18:18:50 +0000
+From:   <shiju.jose@huawei.com>
+To:     <mchehab@kernel.org>, <linux-edac@vger.kernel.org>,
+        <linux-cxl@vger.kernel.org>
+CC:     <jonathan.cameron@huawei.com>, <linuxarm@huawei.com>,
+        <shiju.jose@huawei.com>
+Subject: [RESEND PATCH V3 0/4] rasdaemon: Add support for the CXL error events
+Date:   Thu, 2 Feb 2023 18:18:42 +0000
+Message-ID: <20230202181846.692-1-shiju.jose@huawei.com>
+X-Mailer: git-send-email 2.26.0.windows.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_VALIDITY_RPBL,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.48.151.167]
+X-ClientProxiedBy: lhrpeml500003.china.huawei.com (7.191.162.67) To
+ lhrpeml500006.china.huawei.com (7.191.161.198)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-Dzie=C5=84 dobry,
+From: Shiju Jose <shiju.jose@huawei.com>
 
-rozwa=C5=BCali Pa=C5=84stwo wyb=C3=B3r finansowania, kt=C3=B3re spe=C5=82=
-ni potrzeby firmy, zapewniaj=C4=85c natychmiastowy dost=C4=99p do got=C3=B3=
-wki, bez zb=C4=99dnych przestoj=C3=B3w?=20
+Log and record the following CXL errors reported through the kernel
+trace events. CXL poison errors, CXL AER uncorrectable errors and CXL AER
+correctable errors.
 
-Przygotowali=C5=9Bmy rozwi=C4=85zania faktoringowe dopasowane do Pa=C5=84=
-stwa bran=C5=BCy i wielko=C5=9Bci firmy, dzi=C4=99ki kt=C3=B3rym, nie mus=
-z=C4=85 Pa=C5=84stwo martwi=C4=87 si=C4=99 o niewyp=C5=82acalno=C5=9B=C4=87=
- kontrahent=C3=B3w, poniewa=C5=BC transakcje s=C4=85 zabezpieczone i posi=
-adaj=C4=85 gwarancj=C4=99 sp=C5=82aty.=20
-Chc=C4=85 Pa=C5=84stwo przeanalizowa=C4=87 dost=C4=99pne opcje?
+Note1: This V3 patch set resend due to email delivery issues to
+some of the recipients.
 
 
-Pozdrawiam
-Szczepan Kie=C5=82basa
+Note2: The default poll and read method in the rasdaemon to receive
+the trace events do not work due to a commit in the kernel trace system.
+Thus instead used the pthread way for testing the CXL error events.
+To do so, please make following change in the ras-events.c
+<change start ...>
+/* rc = read_ras_event_all_cpus(data, cpus); */
+rc = -255;
+< ...change end >
+/* Poll doesn't work on this kernel. Fallback to pthread way */
+if (rc == -255) {
+...
+
+Shiju Jose (4):
+  rasdaemon: Move definition for BIT and BIT_ULL to a common file
+  rasdaemon: Add support for the CXL poison events
+  rasdaemon: Add support for the CXL AER uncorrectable errors
+  rasdaemon: Add support for the CXL AER correctable errors
+
+Changes:
+RFC V2 -> V3
+1. Fix for the comments from Dave Jiang.
+
+RFC V1 -> V2
+1. Rename uuid to region_uuid in the log and SQLite DB.
+2. Rebase to the latest rasdaemon code.
+3. Modify to match the name changes of interface structures and
+   functions in the latest libtraceevent-dev, use in the rasdaemon. 
+
+ Makefile.am                |   7 +-
+ configure.ac               |  11 ++
+ ras-cxl-handler.c          | 378 +++++++++++++++++++++++++++++++++++++
+ ras-cxl-handler.h          |  32 ++++
+ ras-events.c               |  33 ++++
+ ras-events.h               |   3 +
+ ras-non-standard-handler.h |   3 -
+ ras-record.c               | 203 ++++++++++++++++++++
+ ras-record.h               |  49 +++++
+ ras-report.c               | 219 +++++++++++++++++++++
+ ras-report.h               |   6 +
+ 11 files changed, 940 insertions(+), 4 deletions(-)
+ create mode 100644 ras-cxl-handler.c
+ create mode 100644 ras-cxl-handler.h
+
+-- 
+2.25.1
+
