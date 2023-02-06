@@ -2,135 +2,230 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C26168AC1A
-	for <lists+linux-edac@lfdr.de>; Sat,  4 Feb 2023 20:34:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9162768B3AA
+	for <lists+linux-edac@lfdr.de>; Mon,  6 Feb 2023 02:14:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230222AbjBDTd7 (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Sat, 4 Feb 2023 14:33:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40998 "EHLO
+        id S229448AbjBFBOy (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Sun, 5 Feb 2023 20:14:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229746AbjBDTd6 (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Sat, 4 Feb 2023 14:33:58 -0500
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCD2C2B090;
-        Sat,  4 Feb 2023 11:33:53 -0800 (PST)
-Received: from lhrpeml500006.china.huawei.com (unknown [172.18.147.207])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4P8Mzq6hCkz67K2n;
-        Sun,  5 Feb 2023 03:29:59 +0800 (CST)
-Received: from P_UKIT01-A7bmah.china.huawei.com (10.195.244.18) by
- lhrpeml500006.china.huawei.com (7.191.161.198) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.17; Sat, 4 Feb 2023 19:33:50 +0000
-From:   <shiju.jose@huawei.com>
-To:     <mchehab@kernel.org>, <linux-edac@vger.kernel.org>
-CC:     <rostedt@goodmis.org>, <mhiramat@kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-trace-kernel@vger.kernel.org>, <tanxiaofei@huawei.com>,
-        <jonathan.cameron@huawei.com>, <linuxarm@huawei.com>,
-        <shiju.jose@huawei.com>
-Subject: [RFC PATCH V2 1/1] rasdaemon: Fix poll() on per_cpu trace_pipe_raw blocks indefinitely
-Date:   Sat, 4 Feb 2023 19:33:45 +0000
-Message-ID: <20230204193345.842-1-shiju.jose@huawei.com>
-X-Mailer: git-send-email 2.26.0.windows.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.195.244.18]
-X-ClientProxiedBy: lhrpeml500004.china.huawei.com (7.191.163.9) To
- lhrpeml500006.china.huawei.com (7.191.161.198)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        with ESMTP id S229447AbjBFBOx (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Sun, 5 Feb 2023 20:14:53 -0500
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69531166D6;
+        Sun,  5 Feb 2023 17:14:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1675646092; x=1707182092;
+  h=from:to:cc:subject:date:message-id;
+  bh=NnZ0DjAoK3VKE8oYmo9VgC6ZUrWIdd+pJwpV0fpDuLo=;
+  b=MZibL9Gcj2c1Hzzd/j0Wwng7q0Nb02p9aSQafYQp+24XKa7LbqLb7bpD
+   wcw58+3S2HUYLT9Mt1Cjhdvay2gcpkGZ/uHYW3h6ZGu/IVwu0bRY8Zp87
+   HcR4k88nupIWQRT4P1NBSR2b1MNAKtso76iwBSJDYl5nQafzeRPhFNuRj
+   ohn89UCDHR9cJg+x7CbgSgRQFSKnhOQP4kx/Z0UfChzI+a4QCSaboeGjU
+   sAK0Mh+JgHNFyg083G7c3alejyTNhW0bhIoSsgxc07H8JpT+lZkG8yxFD
+   0qXeK9QIsCLg6xJTKkSm87GmB8J9J2OU0KUsIe44tfWcgblXVE2/yuY6k
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10612"; a="356465156"
+X-IronPort-AV: E=Sophos;i="5.97,276,1669104000"; 
+   d="scan'208";a="356465156"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Feb 2023 17:14:52 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10612"; a="995117311"
+X-IronPort-AV: E=Sophos;i="5.97,276,1669104000"; 
+   d="scan'208";a="995117311"
+Received: from qiuxu-clx.sh.intel.com ([10.239.53.105])
+  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Feb 2023 17:14:50 -0800
+From:   Qiuxu Zhuo <qiuxu.zhuo@intel.com>
+To:     Tony Luck <tony.luck@intel.com>
+Cc:     Youquan Song <youquan.song@intel.com>,
+        Qiuxu Zhuo <qiuxu.zhuo@intel.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Aristeu Rozanski <aris@redhat.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 1/1] EDAC/i10nm: Add driver decoder for Sapphire Rapids server
+Date:   Mon,  6 Feb 2023 09:14:23 +0800
+Message-Id: <20230206011423.50559-1-qiuxu.zhuo@intel.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-From: Shiju Jose <shiju.jose@huawei.com>
+From: Youquan Song <youquan.song@intel.com>
 
-The error events are not received in the rasdaemon since kernel 6.1-rc6.
-This issue is firstly detected and reported, when testing the CXL error
-events in the rasdaemon.
+Intel SDM (December 2022) vol3B 17.13.2 contains IMC MC error codes
+for Sapphire Rapids. Current i10nm_edac only supports firmware decoder
+(ACPI DSM methods) for Sapphire Rapids. So add the driver decoder
+(decoding DDR memory errors via extracting error information from the
+IMC MC error codes) for Sapphire Rapids for better decoding performance.
 
-Debugging showed, poll() on trace_pipe_raw in the ras-events.c do not
-return and this issue is seen after the commit
-42fb0a1e84ff525ebe560e2baf9451ab69127e2b ("tracing/ring-buffer: Have
-polling block on watermark").
-
-This also verified using a test application for poll()
-and select() on trace_pipe_raw.
-
-There is also a bug reported on this issue,
-https://lore.kernel.org/all/31eb3b12-3350-90a4-a0d9-d1494db7cf74@oracle.com/
-
-This issue occurs for the per_cpu case, which calls the
-ring_buffer_poll_wait(), in kernel/trace/ring_buffer.c, with the
-buffer_percent > 0 and then wait until the percentage of pages are
-available.The default value set for the buffer_percent is 50 in the
-kernel/trace/trace.c. However poll() does not return even met the percentage
-of pages condition.
-
-As a fix, rasdaemon set buffer_percent as 0 through the
-/sys/kernel/debug/tracing/instances/rasdaemon/buffer_percent, then the
-task will wake up as soon as data is added to any of the specific cpu
-buffer and poll() on per_cpu/cpuX/trace_pipe_raw does not block
-indefinitely.
-
-Dependency on the kernel RFC patch
-tracing: Fix poll() and select() do not work on per_cpu trace_pipe and trace_pipe_raw
-
-Signed-off-by: Shiju Jose <shiju.jose@huawei.com>
-
-Changes:
-RFC V1 -> RFC V2
-1. Rename the patch header subject.
-2. Changes for the backward compatability to the old kernels.
+Co-developed-by: Qiuxu Zhuo <qiuxu.zhuo@intel.com>
+Signed-off-by: Qiuxu Zhuo <qiuxu.zhuo@intel.com>
+Signed-off-by: Youquan Song <youquan.song@intel.com>
 ---
- ras-events.c | 22 ++++++++++++++++++++++
- 1 file changed, 22 insertions(+)
+On top of the branch 'edac-for-next' of RAS git tree
 
-diff --git a/ras-events.c b/ras-events.c
-index 3691311..e505a0e 100644
---- a/ras-events.c
-+++ b/ras-events.c
-@@ -383,6 +383,8 @@ static int read_ras_event_all_cpus(struct pthread_data *pdata,
- 	int warnonce[n_cpus];
- 	char pipe_raw[PATH_MAX];
- 	int legacy_kernel = 0;
-+	int fd;
-+	char buf[10];
- #if 0
- 	int need_sleep = 0;
- #endif
-@@ -402,6 +404,26 @@ static int read_ras_event_all_cpus(struct pthread_data *pdata,
- 		return -ENOMEM;
+ drivers/edac/i10nm_base.c | 102 ++++++++++++++++++++++++++------------
+ 1 file changed, 69 insertions(+), 33 deletions(-)
+
+diff --git a/drivers/edac/i10nm_base.c b/drivers/edac/i10nm_base.c
+index 46034310b78e..0a4691792801 100644
+--- a/drivers/edac/i10nm_base.c
++++ b/drivers/edac/i10nm_base.c
+@@ -434,20 +434,39 @@ static bool i10nm_check_2lm(struct res_config *cfg)
+ }
+ 
+ /*
+- * Check whether the error comes from DDRT by ICX/Tremont model specific error code.
+- * Refer to SDM vol3B 16.11.3 Intel IMC MC error codes for IA32_MCi_STATUS.
++ * Check whether the error comes from DDRT by ICX/Tremont/SPR model specific error code.
++ * Refer to SDM vol3B 17.11.3/17.13.2 Intel IMC MC error codes for IA32_MCi_STATUS.
+  */
+ static bool i10nm_mscod_is_ddrt(u32 mscod)
+ {
+-	switch (mscod) {
+-	case 0x0106: case 0x0107:
+-	case 0x0800: case 0x0804:
+-	case 0x0806 ... 0x0808:
+-	case 0x080a ... 0x080e:
+-	case 0x0810: case 0x0811:
+-	case 0x0816: case 0x081e:
+-	case 0x081f:
+-		return true;
++	switch (res_cfg->type) {
++	case I10NM:
++		switch (mscod) {
++		case 0x0106: case 0x0107:
++		case 0x0800: case 0x0804:
++		case 0x0806 ... 0x0808:
++		case 0x080a ... 0x080e:
++		case 0x0810: case 0x0811:
++		case 0x0816: case 0x081e:
++		case 0x081f:
++			return true;
++		}
++
++		break;
++	case SPR:
++		switch (mscod) {
++		case 0x0800: case 0x0804:
++		case 0x0806 ... 0x0808:
++		case 0x080a ... 0x080e:
++		case 0x0810: case 0x0811:
++		case 0x0816: case 0x081e:
++		case 0x081f:
++			return true;
++		}
++
++		break;
++	default:
++		return false;
  	}
  
-+	/* Fix for poll() on the per_cpu trace_pipe and trace_pipe_raw blocks
-+	 * indefinitely with the default buffer_percent in the kernel trace system,
-+	 * which is introduced by the following change in the kernel.
-+	 * https://lore.kernel.org/all/20221020231427.41be3f26@gandalf.local.home/T/#u.
-+	 * Set buffer_percent to 0 so that poll() will return immediately
-+	 * when the trace data is available in the ras per_cpu trace pipe_raw
-+	 */
-+	fd = open_trace(pdata[0].ras, "buffer_percent", O_WRONLY);
-+	if (fd >= 0) {
-+		/* For the backward compatabilty to the old kernel, do not return
-+		 * if fail to set the buffer_percent.
-+		 */
-+		snprintf(buf, sizeof(buf), "0");
-+		size = write(fd, buf, strlen(buf));
-+		if (size <= 0)
-+			log(TERM, LOG_WARNING, "can't write to buffer_percent\n");
-+		close(fd);
-+	} else
-+		log(TERM, LOG_WARNING, "Can't open buffer_percent\n");
-+
- 	for (i = 0; i < (n_cpus + 1); i++)
- 		fds[i].fd = -1;
+ 	return false;
+@@ -455,6 +474,7 @@ static bool i10nm_mscod_is_ddrt(u32 mscod)
  
+ static bool i10nm_mc_decode_available(struct mce *mce)
+ {
++#define ICX_IMCx_CHy		0x06666000
+ 	u8 bank;
+ 
+ 	if (!decoding_via_mca || mem_cfg_2lm)
+@@ -468,21 +488,26 @@ static bool i10nm_mc_decode_available(struct mce *mce)
+ 
+ 	switch (res_cfg->type) {
+ 	case I10NM:
+-		if (bank < 13 || bank > 26)
+-			return false;
+-
+-		/* DDRT errors can't be decoded from MCA bank registers */
+-		if (MCI_MISC_ECC_MODE(mce->misc) == MCI_MISC_ECC_DDRT)
++		/* Check whether the bank is one of {13,14,17,18,21,22,25,26} */
++		if (!(ICX_IMCx_CHy & (1 << bank)))
+ 			return false;
+-
+-		if (i10nm_mscod_is_ddrt(MCI_STATUS_MSCOD(mce->status)))
++		break;
++	case SPR:
++		if (bank < 13 || bank > 20)
+ 			return false;
+-
+-		/* Check whether one of {13,14,17,18,21,22,25,26} */
+-		return ((bank - 13) & BIT(1)) == 0;
++		break;
+ 	default:
+ 		return false;
+ 	}
++
++	/* DDRT errors can't be decoded from MCA bank registers */
++	if (MCI_MISC_ECC_MODE(mce->misc) == MCI_MISC_ECC_DDRT)
++		return false;
++
++	if (i10nm_mscod_is_ddrt(MCI_STATUS_MSCOD(mce->status)))
++		return false;
++
++	return true;
+ }
+ 
+ static bool i10nm_mc_decode(struct decoded_addr *res)
+@@ -504,9 +529,29 @@ static bool i10nm_mc_decode(struct decoded_addr *res)
+ 
+ 	switch (res_cfg->type) {
+ 	case I10NM:
+-		bank = m->bank - 13;
+-		res->imc = bank / 4;
+-		res->channel = bank % 2;
++		bank              = m->bank - 13;
++		res->imc          = bank / 4;
++		res->channel      = bank % 2;
++		res->column       = GET_BITFIELD(m->misc, 9, 18) << 2;
++		res->row          = GET_BITFIELD(m->misc, 19, 39);
++		res->bank_group   = GET_BITFIELD(m->misc, 40, 41);
++		res->bank_address = GET_BITFIELD(m->misc, 42, 43);
++		res->bank_group  |= GET_BITFIELD(m->misc, 44, 44) << 2;
++		res->rank         = GET_BITFIELD(m->misc, 56, 58);
++		res->dimm         = res->rank >> 2;
++		res->rank         = res->rank % 4;
++		break;
++	case SPR:
++		bank              = m->bank - 13;
++		res->imc          = bank / 2;
++		res->channel      = bank % 2;
++		res->column       = GET_BITFIELD(m->misc, 9, 18) << 2;
++		res->row          = GET_BITFIELD(m->misc, 19, 36);
++		res->bank_group   = GET_BITFIELD(m->misc, 37, 38);
++		res->bank_address = GET_BITFIELD(m->misc, 39, 40);
++		res->bank_group  |= GET_BITFIELD(m->misc, 41, 41) << 2;
++		res->rank         = GET_BITFIELD(m->misc, 57, 57);
++		res->dimm         = GET_BITFIELD(m->misc, 58, 58);
+ 		break;
+ 	default:
+ 		return false;
+@@ -518,15 +563,6 @@ static bool i10nm_mc_decode(struct decoded_addr *res)
+ 		return false;
+ 	}
+ 
+-	res->column       = GET_BITFIELD(m->misc, 9, 18) << 2;
+-	res->row          = GET_BITFIELD(m->misc, 19, 39);
+-	res->bank_group   = GET_BITFIELD(m->misc, 40, 41);
+-	res->bank_address = GET_BITFIELD(m->misc, 42, 43);
+-	res->bank_group  |= GET_BITFIELD(m->misc, 44, 44) << 2;
+-	res->rank         = GET_BITFIELD(m->misc, 56, 58);
+-	res->dimm         = res->rank >> 2;
+-	res->rank         = res->rank % 4;
+-
+ 	return true;
+ }
+ 
+
+base-commit: 4c5be17ae44513686885ad939471cc2bd758237e
 -- 
-2.25.1
+2.17.1
 
