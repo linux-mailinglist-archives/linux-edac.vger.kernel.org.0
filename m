@@ -2,129 +2,116 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46D15694F11
-	for <lists+linux-edac@lfdr.de>; Mon, 13 Feb 2023 19:18:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5ADE1695078
+	for <lists+linux-edac@lfdr.de>; Mon, 13 Feb 2023 20:16:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230252AbjBMSSW (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Mon, 13 Feb 2023 13:18:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38718 "EHLO
+        id S230160AbjBMTQG (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Mon, 13 Feb 2023 14:16:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230059AbjBMSSW (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Mon, 13 Feb 2023 13:18:22 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E617E3BD;
-        Mon, 13 Feb 2023 10:18:21 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C62D6B81601;
-        Mon, 13 Feb 2023 18:18:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 06D0FC433EF;
-        Mon, 13 Feb 2023 18:18:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1676312298;
-        bh=plxL0IpanD4+o7p9KsPW9YVmlD3aZBjrcEcomkvSXeo=;
-        h=From:Date:Subject:To:Cc:From;
-        b=PVT0ltpXYv6TCBrFDg6YckuccXtr689CM3M/kU6cXPDLg+Zpv/dzxDFMWU+HwPtDx
-         ZOHH9XenDy5rUV13jWfhX983Ky7+tqEN+4ZCVIMKooMwEzIygRRK0rJB/x8oBdAwun
-         PaGLPvnuNMCdjgatPyuDnc8LMky8CYnkEP140S4mwZI+h8U8tLJ5t+6CXF+ugL6eeW
-         jadEIrtrxpXDWCWv98FViX97xZYttCazpWnibX/afZZTqKwYM05e1E7Ssk8T0WNMjT
-         SY3nWfCeLsbJ581/0p+nsmCAJEJNuU/PEAiEGjBVgiEzlm6bpoX6t/VHwirqQjLEBO
-         HaF5Wv93uYPxw==
-From:   Nathan Chancellor <nathan@kernel.org>
-Date:   Mon, 13 Feb 2023 11:17:49 -0700
-Subject: [PATCH] EDAC/amd64: Avoid clang -Wsometimes-uninitialized in
- hw_info_get()
+        with ESMTP id S230267AbjBMTQF (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Mon, 13 Feb 2023 14:16:05 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 179EB20066
+        for <linux-edac@vger.kernel.org>; Mon, 13 Feb 2023 11:15:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1676315718;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=uhQrqnCkN4d3EAtVP7068dcMTmtPV8cpYn4riXUGRrk=;
+        b=Gybqfe3Ki77KOqK4GYR/DqkGwlkTALWHORQuz2tarJd1qio9bWvqKyt6tEqQruv/jdeUje
+        LQCs0ObBhXCc2K+eRGrMdXjRnrGe6XALIvClRlhPKTFOdyyFS1l6V/QlUQ8y9UUAemaM9M
+        LD8SkToRRWyx4SCQIIgk4pcHE8lgfn4=
+Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
+ [209.85.222.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-21-TkDFbRWYMfmJ4Mc58RRK-g-1; Mon, 13 Feb 2023 14:15:17 -0500
+X-MC-Unique: TkDFbRWYMfmJ4Mc58RRK-g-1
+Received: by mail-qk1-f200.google.com with SMTP id x14-20020a05620a14ae00b0072f7f0f356bso8048649qkj.1
+        for <linux-edac@vger.kernel.org>; Mon, 13 Feb 2023 11:15:17 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=uhQrqnCkN4d3EAtVP7068dcMTmtPV8cpYn4riXUGRrk=;
+        b=XkCiuc3lCq+wUPpjLB5p1LeuoF1v4p3gIVSCrG1coc5PwRxx8IAzpRj8vc0/wI4MZ8
+         WKsEB6R/VnNQyVk7L+u3xbDycNHpRiHQCPGZTPIwbJhVI3iy6QKnYvENExXYmXu2CxJb
+         282qDaNI7p9GExeu4Dy1NDUVZt4yh4qp0CLyKi4mWeJ17fwqHGS615070pEhO358Z9LZ
+         3TS07VyuffE9p/OA2ijAgJJYxZUDWlD+tXs0bpuxJp25yLZMuX0ZTRCIcrVk/cVSTBoh
+         E+ScMeu2q4DKqrsk0SzmLDHW+5+V7nrFUQkt/ZWa6X7chwPjwPYV52zS3ihMaVHUUNh0
+         0QSQ==
+X-Gm-Message-State: AO0yUKWdg4Sge0U6S749hmGqTSqPj8px6jAdIeK0g/5DxFEYc1XjG27v
+        7xbyHVjz8U1MzXPyfYe54BzRZ4fjul0inTNvcbF0fIlCtb8yq2BRj4JjeshMs1pc4Le4fLQr0V7
+        IifoCmTzoYqG4HuTdTNE3Bg==
+X-Received: by 2002:a05:622a:1052:b0:3b6:313a:e27a with SMTP id f18-20020a05622a105200b003b6313ae27amr47315512qte.40.1676315716712;
+        Mon, 13 Feb 2023 11:15:16 -0800 (PST)
+X-Google-Smtp-Source: AK7set/KmINhbbACstO8ce6LNNQliPHLREUZooeeCezZ8zbOQ7+H4IMEPVrjOT/6IhGN4zaXKyioQA==
+X-Received: by 2002:a05:622a:1052:b0:3b6:313a:e27a with SMTP id f18-20020a05622a105200b003b6313ae27amr47315471qte.40.1676315716450;
+        Mon, 13 Feb 2023 11:15:16 -0800 (PST)
+Received: from borg.redhat.com (024-205-208-113.res.spectrum.com. [24.205.208.113])
+        by smtp.gmail.com with ESMTPSA id o62-20020a374141000000b0072ad54e36b2sm10248485qka.93.2023.02.13.11.15.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 13 Feb 2023 11:15:16 -0800 (PST)
+From:   Tom Rix <trix@redhat.com>
+To:     yazen.ghannam@amd.com, bp@alien8.de, tony.luck@intel.com,
+        james.morse@arm.com, mchehab@kernel.org, rric@kernel.org
+Cc:     linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Tom Rix <trix@redhat.com>
+Subject: [PATCH] EDAC/amd64: remove unneeded call to reserve_mc_sibling_devs()
+Date:   Mon, 13 Feb 2023 11:15:10 -0800
+Message-Id: <20230213191510.2237360-1-trix@redhat.com>
+X-Mailer: git-send-email 2.26.3
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230213-amd64_edac-wsometimes-uninitialized-v1-1-5bde32b89e02@kernel.org>
-X-B4-Tracking: v=1; b=H4sIAMx+6mMC/x2NWwrCMBAAr1Ly7UL6oBCvIiKb7NYumFSyqYqld
- zf1cxiY2YxyFlZzbjaT+SUqS6rQnhoTZkx3BqHKprNdb7u2B4w0DjcmDPDWJXKRyAprkiRF8CF
- fJnCePE2DdW5kU0selcFnTGE+WhG1cD7EM/Mkn//+ct33HxNQiE6OAAAA
-To:     yazen.ghannam@amd.com, bp@alien8.de, tony.luck@intel.com
-Cc:     james.morse@arm.com, mchehab@kernel.org, rric@kernel.org,
-        linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Nathan Chancellor <nathan@kernel.org>
-X-Mailer: b4 0.12.1
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3027; i=nathan@kernel.org;
- h=from:subject:message-id; bh=plxL0IpanD4+o7p9KsPW9YVmlD3aZBjrcEcomkvSXeo=;
- b=owGbwMvMwCEmm602sfCA1DTG02pJDMmv6l6uniDg8sQq4dizTbN7RG+4yPvs9VOSXNAn35Hvs
- 2BxJXNpRykLgxgHg6yYIkv1Y9XjhoZzzjLeODUJZg4rE8gQBi5OAZjInhMM/ysN/X/wLS7UlnBa
- fmhVgcJzBrb4kh5FTo05fTJuPxay1DIy9O5Yl6G8cumZG2eex159l1ryeGnwekNdr00l5kU7pfn
- ncgEA
-X-Developer-Key: i=nathan@kernel.org; a=openpgp;
- fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-Clang warns:
+cpp_check reports
+drivers/edac/amd64_edac.c:3943:37: error: Uninitialized variable: pci_id1 [uninitvar]
+ ret = reserve_mc_sibling_devs(pvt, pci_id1, pci_id2);
+                                    ^
+drivers/edac/amd64_edac.c:3943:46: error: Uninitialized variable: pci_id2 [uninitvar]
+ ret = reserve_mc_sibling_devs(pvt, pci_id1, pci_id2);
+                                             ^
+The call to reserve_mc_sibling_devs() will not fail because
+  if (pvt->umc)
+    return 0;
 
-  drivers/edac/amd64_edac.c:3936:7: error: variable 'pci_id1' is used uninitialized whenever 'if' condition is false [-Werror,-Wsometimes-uninitialized]
-                  if (!pvt->umc)
-                      ^~~~~~~~~
-  drivers/edac/amd64_edac.c:3943:37: note: uninitialized use occurs here
-          ret = reserve_mc_sibling_devs(pvt, pci_id1, pci_id2);
-                                             ^~~~~~~
-  ...
-  drivers/edac/amd64_edac.c:3936:7: error: variable 'pci_id2' is used uninitialized whenever 'if' condition is false [-Werror,-Wsometimes-uninitialized]
-                  if (!pvt->umc)
-                      ^~~~~~~~~
-  drivers/edac/amd64_edac.c:3943:46: note: uninitialized use occurs here
-          ret = reserve_mc_sibling_devs(pvt, pci_id1, pci_id2);
-                                                      ^~~~~~~
+reserve_mc_sibling_devs() is only called by hw_info_get() and pvt->umc is only set
+in hw_info_get(), so with fam >= 0x17, the call to reserver_mc_siblings will
+just return, so the call the call is not needed.  And when that call is moved
+the check for umc is not needed.
 
-This is technically a false postive, as it is not possible for pci_id1
-or pci_id2 to be used in reserve_mc_sibling_devs() when pvt->umc is not
-NULL, since it returns right away. However, clang does not perform
-interprodecural analysis for this warning, so it cannot tell that from
-the way the code is currently written.
-
-To silence the warning, reduce the scope of the local variables and the
-call to reserve_mc_sibling_devs() to the else branch, which will not
-functionally change anything.
-
-Link: https://github.com/ClangBuiltLinux/linux/issues/1803
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+Signed-off-by: Tom Rix <trix@redhat.com>
 ---
-I left the check for 'pvt->umc' alone in reserve_mc_sibling_devs() in
-case it was ever called from a different path but if I should remove, I
-am happy to do so in another revision.
-
-Since this is technically a false positive, I did not include fixes
-tags. If they are so desired:
-
-Fixes: 6229235f7c66 ("EDAC/amd64: Remove PCI Function 6")
-Fixes: cf981562e627 ("EDAC/amd64: Remove PCI Function 0")
----
- drivers/edac/amd64_edac.c | 14 +++++++-------
- 1 file changed, 7 insertions(+), 7 deletions(-)
+ drivers/edac/amd64_edac.c | 11 ++++-------
+ 1 file changed, 4 insertions(+), 7 deletions(-)
 
 diff --git a/drivers/edac/amd64_edac.c b/drivers/edac/amd64_edac.c
-index 1c4bef1cdf28..a9dd66988b1d 100644
+index 1c4bef1cdf28..f6d50561c106 100644
 --- a/drivers/edac/amd64_edac.c
 +++ b/drivers/edac/amd64_edac.c
-@@ -3928,21 +3928,21 @@ static const struct attribute_group *amd64_edac_attr_groups[] = {
- 
- static int hw_info_get(struct amd64_pvt *pvt)
+@@ -3179,9 +3179,6 @@ static void decode_umc_error(int node_id, struct mce *m)
+ static int
+ reserve_mc_sibling_devs(struct amd64_pvt *pvt, u16 pci_id1, u16 pci_id2)
  {
--	u16 pci_id1, pci_id2;
--	int ret;
+-	if (pvt->umc)
+-		return 0;
 -
- 	if (pvt->fam >= 0x17) {
- 		pvt->umc = kcalloc(fam_type->max_mcs, sizeof(struct amd64_umc), GFP_KERNEL);
- 		if (!pvt->umc)
- 			return -ENOMEM;
+ 	/* Reserve the ADDRESS MAP Device */
+ 	pvt->F1 = pci_get_related_function(pvt->F3->vendor, pci_id1, pvt->F3);
+ 	if (!pvt->F1) {
+@@ -3938,11 +3935,11 @@ static int hw_info_get(struct amd64_pvt *pvt)
  	} else {
-+		u16 pci_id1, pci_id2;
-+		int ret;
-+
  		pci_id1 = fam_type->f1_id;
  		pci_id2 = fam_type->f2_id;
 -	}
@@ -139,12 +126,6 @@ index 1c4bef1cdf28..a9dd66988b1d 100644
  
  	read_mc_regs(pvt);
  
-
----
-base-commit: c4605bde334367b22bbf43cbbef0d1b7c75433dc
-change-id: 20230213-amd64_edac-wsometimes-uninitialized-9bdbdf40996e
-
-Best regards,
 -- 
-Nathan Chancellor <nathan@kernel.org>
+2.26.3
 
