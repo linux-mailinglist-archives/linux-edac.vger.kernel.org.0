@@ -2,66 +2,104 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E50169408F
-	for <lists+linux-edac@lfdr.de>; Mon, 13 Feb 2023 10:16:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 080C56948C2
+	for <lists+linux-edac@lfdr.de>; Mon, 13 Feb 2023 15:53:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229947AbjBMJQD (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Mon, 13 Feb 2023 04:16:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42448 "EHLO
+        id S230508AbjBMOxO (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Mon, 13 Feb 2023 09:53:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230018AbjBMJQC (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Mon, 13 Feb 2023 04:16:02 -0500
-Received: from mail.tryweryn.pl (mail.tryweryn.pl [5.196.29.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5D24B461
-        for <linux-edac@vger.kernel.org>; Mon, 13 Feb 2023 01:16:01 -0800 (PST)
-Received: by mail.tryweryn.pl (Postfix, from userid 1002)
-        id 51366A2E1A; Mon, 13 Feb 2023 09:15:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=tryweryn.pl; s=mail;
-        t=1676279760; bh=Bo+/jg3TCpOeS79PpZREuOWEeqJV//jojylD9dSrSik=;
-        h=Date:From:To:Subject:From;
-        b=uEtHkayW+ad/K06L2/aGu6GleTh7rueu5g0QL8vdJsL6gf3P+XMtjx3Z4VcjedUzY
-         XjlF80X9KH0CmC7q2cmSWKnCQiZx/tfNkAmY7kgg96lC0xJICb8fVAQrPkPHS7P6Er
-         7ap2+JANlGtpj53d9xtJUtzv+zDOPxDMvdrNR1pU2tQ+i1nP72YkZsBqMq5eId3zi/
-         UzWXKkpMkChhC9SQhhXNAQWl9tS7sdsCgI5mx4s9Ewkexr2H+bBDVfAz/pei5ygAeu
-         nZafUxYOHoq0K+r2lu91j04simLw9D6ZzUnmIfIXQDhpHXmHOILJ6NltC0zMdfSSi+
-         RjNrRmUBw9QjA==
-Received: by mail.tryweryn.pl for <linux-edac@vger.kernel.org>; Mon, 13 Feb 2023 09:15:46 GMT
-Message-ID: <20230213074500-0.1.84.2y8nj.0.d1k2ep10w0@tryweryn.pl>
-Date:   Mon, 13 Feb 2023 09:15:46 GMT
-From:   "Karol Michun" <karol.michun@tryweryn.pl>
-To:     <linux-edac@vger.kernel.org>
-Subject: Prezentacja
-X-Mailer: mail.tryweryn.pl
+        with ESMTP id S230254AbjBMOw7 (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Mon, 13 Feb 2023 09:52:59 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EA585BBD;
+        Mon, 13 Feb 2023 06:52:52 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 50D57B81253;
+        Mon, 13 Feb 2023 14:52:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8D46EC433D2;
+        Mon, 13 Feb 2023 14:52:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1676299966;
+        bh=iaTwyMeXVbSfNX13/sjGveL8wS0o/ORCi1VArT9rfeM=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=SnTOwsLJoFysLxLlyUTeggtnBXgSQebZFo2Djxw4XmYh82330r1X3ixf1djZuFo8B
+         m3dNNYTgAYGjTQfjWwHlejAtB+yNqh1lZbrZTm8ZQhlyFwnpv0hUGCJuWbYrw5ecRp
+         elobrqaJpqPUd8KYvXhf7rPxEmI4jK8Y6sq+ZYUU=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     stable@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        patches@lists.linux.dev, mhiramat@kernel.org, mchehab@kernel.org,
+        linux-edac@vger.kernel.org, Shiju Jose <shiju.jose@huawei.com>,
+        "Steven Rostedt (Google)" <rostedt@goodmis.org>
+Subject: [PATCH 6.1 012/114] tracing: Fix poll() and select() do not work on per_cpu trace_pipe and trace_pipe_raw
+Date:   Mon, 13 Feb 2023 15:47:27 +0100
+Message-Id: <20230213144742.839768052@linuxfoundation.org>
+X-Mailer: git-send-email 2.39.1
+In-Reply-To: <20230213144742.219399167@linuxfoundation.org>
+References: <20230213144742.219399167@linuxfoundation.org>
+User-Agent: quilt/0.67
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-Dzie=C5=84 dobry!
+From: Shiju Jose <shiju.jose@huawei.com>
 
-Czy m=C3=B3g=C5=82bym przedstawi=C4=87 rozwi=C4=85zanie, kt=C3=B3re umo=C5=
-=BCliwia monitoring ka=C5=BCdego auta w czasie rzeczywistym w tym jego po=
-zycj=C4=99, zu=C5=BCycie paliwa i przebieg?
+commit 3e46d910d8acf94e5360126593b68bf4fee4c4a1 upstream.
 
-Dodatkowo nasze narz=C4=99dzie minimalizuje koszty utrzymania samochod=C3=
-=B3w, skraca czas przejazd=C3=B3w, a tak=C5=BCe tworzenie planu tras czy =
-dostaw.
+poll() and select() on per_cpu trace_pipe and trace_pipe_raw do not work
+since kernel 6.1-rc6. This issue is seen after the commit
+42fb0a1e84ff525ebe560e2baf9451ab69127e2b ("tracing/ring-buffer: Have
+polling block on watermark").
 
-Z naszej wiedzy i do=C5=9Bwiadczenia korzysta ju=C5=BC ponad 49 tys. Klie=
-nt=C3=B3w. Monitorujemy 809 000 pojazd=C3=B3w na ca=C5=82ym =C5=9Bwiecie,=
- co jest nasz=C4=85 najlepsz=C4=85 wizyt=C3=B3wk=C4=85.
+This issue is firstly detected and reported, when testing the CXL error
+events in the rasdaemon and also erified using the test application for poll()
+and select().
 
-Bardzo prosz=C4=99 o e-maila zwrotnego, je=C5=9Bli mogliby=C5=9Bmy wsp=C3=
-=B3lnie om=C3=B3wi=C4=87 potencja=C5=82 wykorzystania takiego rozwi=C4=85=
-zania w Pa=C5=84stwa firmie.
+This issue occurs for the per_cpu case, when calling the ring_buffer_poll_wait(),
+in kernel/trace/ring_buffer.c, with the buffer_percent > 0 and then wait until the
+percentage of pages are available. The default value set for the buffer_percent is 50
+in the kernel/trace/trace.c.
+
+As a fix, allow userspace application could set buffer_percent as 0 through
+the buffer_percent_fops, so that the task will wake up as soon as data is added
+to any of the specific cpu buffer.
+
+Link: https://lore.kernel.org/linux-trace-kernel/20230202182309.742-2-shiju.jose@huawei.com
+
+Cc: <mhiramat@kernel.org>
+Cc: <mchehab@kernel.org>
+Cc: <linux-edac@vger.kernel.org>
+Cc: stable@vger.kernel.org
+Fixes: 42fb0a1e84ff5 ("tracing/ring-buffer: Have polling block on watermark")
+Signed-off-by: Shiju Jose <shiju.jose@huawei.com>
+Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+---
+ kernel/trace/trace.c |    3 ---
+ 1 file changed, 3 deletions(-)
+
+--- a/kernel/trace/trace.c
++++ b/kernel/trace/trace.c
+@@ -9144,9 +9144,6 @@ buffer_percent_write(struct file *filp,
+ 	if (val > 100)
+ 		return -EINVAL;
+ 
+-	if (!val)
+-		val = 1;
+-
+ 	tr->buffer_percent = val;
+ 
+ 	(*ppos)++;
 
 
-Pozdrawiam
-Karol Michun
