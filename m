@@ -2,20 +2,20 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0211696248
-	for <lists+linux-edac@lfdr.de>; Tue, 14 Feb 2023 12:22:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0731E696249
+	for <lists+linux-edac@lfdr.de>; Tue, 14 Feb 2023 12:22:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231611AbjBNLWP (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        id S232296AbjBNLWP (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
         Tue, 14 Feb 2023 06:22:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35972 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232711AbjBNLV7 (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Tue, 14 Feb 2023 06:21:59 -0500
+        with ESMTP id S232723AbjBNLWA (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Tue, 14 Feb 2023 06:22:00 -0500
 Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3446810425;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 480DC11675;
         Tue, 14 Feb 2023 03:21:56 -0800 (PST)
 Received: from lhrpeml500006.china.huawei.com (unknown [172.18.147.206])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4PGJf635BZz67HtH;
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4PGJf640P6z6J9cV;
         Tue, 14 Feb 2023 19:20:14 +0800 (CST)
 Received: from P_UKIT01-A7bmah.china.huawei.com (10.195.244.26) by
  lhrpeml500006.china.huawei.com (7.191.161.198) with Microsoft SMTP Server
@@ -26,13 +26,15 @@ To:     <mchehab@kernel.org>, <linux-edac@vger.kernel.org>,
         <linux-cxl@vger.kernel.org>
 CC:     <jonathan.cameron@huawei.com>, <linuxarm@huawei.com>,
         <shiju.jose@huawei.com>
-Subject: [PATCH V4 0/4] rasdaemon: Add support for the CXL error events
-Date:   Tue, 14 Feb 2023 11:21:39 +0000
-Message-ID: <20230214112143.798-1-shiju.jose@huawei.com>
+Subject: [PATCH V4 1/4] rasdaemon: Move definition for BIT and BIT_ULL to a common file
+Date:   Tue, 14 Feb 2023 11:21:40 +0000
+Message-ID: <20230214112143.798-2-shiju.jose@huawei.com>
 X-Mailer: git-send-email 2.26.0.windows.1
+In-Reply-To: <20230214112143.798-1-shiju.jose@huawei.com>
+References: <20230214112143.798-1-shiju.jose@huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="yes"
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
 X-Originating-IP: [10.195.244.26]
 X-ClientProxiedBy: lhrpeml100002.china.huawei.com (7.191.160.241) To
  lhrpeml500006.china.huawei.com (7.191.161.198)
@@ -48,66 +50,45 @@ X-Mailing-List: linux-edac@vger.kernel.org
 
 From: Shiju Jose <shiju.jose@huawei.com>
 
-Log and record the following CXL errors reported through the kernel
-trace events. CXL poison errors, CXL AER uncorrectable errors and CXL AER
-correctable errors.
+Move definition for BIT() and BIT_ULL() to the
+common file ras-record.h
 
-Note1: The default poll method in the rasdaemon to receive
-the trace events does not work due to a commit in the kernel trace system.
-Solution 1:
-3e46d910d8acf94e5360126593b68bf4fee4c4a1("tracing: Fix poll() and select()
- do not work on per_cpu trace_pipe an……d trace_pipe_raw") in Linux 6.2-rc7
- or later. and
-https://lore.kernel.org/lkml/20230204193345.842-1-shiju.jose@huawei.com/T/
+Signed-off-by: Shiju Jose <shiju.jose@huawei.com>
+Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Reviewed-by: Dave Jiang <dave.jiang@intel.com>
+---
+ ras-non-standard-handler.h | 3 ---
+ ras-record.h               | 3 +++
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Solution 2: 
-Thus instead used the pthread way for testing the CXL error events.
-To do so, please make following change in the ras-events.c
-<change start ...>
-/* rc = read_ras_event_all_cpus(data, cpus); */
-rc = -255;
-< ...change end >
-/* Poll doesn't work on this kernel. Fallback to pthread way */
-if (rc == -255) {
-...
-
-Shiju Jose (4):
-  rasdaemon: Move definition for BIT and BIT_ULL to a common file
-  rasdaemon: Add support for the CXL poison events
-  rasdaemon: Add support for the CXL AER uncorrectable errors
-  rasdaemon: Add support for the CXL AER correctable errors
-
-Changes:
-V3 -> V4
-1. Modifications for the changes in the kernel patches
-   a) https://lore.kernel.org/lkml/cover.1675983077.git.alison.schofield@intel.com/
-   b) https://lore.kernel.org/linux-cxl/63e5ed38d77d9_138fbc2947a@iweiny-mobl.notmuch/T/#t
-
-V2 -> V3
-1. Fix for the comments from Dave Jiang.
-
-RFC V1 -> V2
-1. Rename uuid to region_uuid in the log and SQLite DB.
-2. Rebase to the latest rasdaemon code.
-3. Modify to match the name changes of interface structures and
-   functions in the latest libtraceevent-dev, use in the rasdaemon. 
-
-
- Makefile.am                |   7 +-
- configure.ac               |  11 +
- ras-cxl-handler.c          | 398 +++++++++++++++++++++++++++++++++++++
- ras-cxl-handler.h          |  32 +++
- ras-events.c               |  33 +++
- ras-events.h               |   3 +
- ras-non-standard-handler.h |   3 -
- ras-record.c               | 209 +++++++++++++++++++
- ras-record.h               |  52 +++++
- ras-report.c               | 225 +++++++++++++++++++++
- ras-report.h               |   6 +
- 11 files changed, 975 insertions(+), 4 deletions(-)
- create mode 100644 ras-cxl-handler.c
- create mode 100644 ras-cxl-handler.h
-
+diff --git a/ras-non-standard-handler.h b/ras-non-standard-handler.h
+index 4d9f938..c360eaf 100644
+--- a/ras-non-standard-handler.h
++++ b/ras-non-standard-handler.h
+@@ -17,9 +17,6 @@
+ #include "ras-events.h"
+ #include <traceevent/event-parse.h>
+ 
+-#define BIT(nr)                 (1UL << (nr))
+-#define BIT_ULL(nr)             (1ULL << (nr))
+-
+ struct ras_ns_ev_decoder {
+ 	struct ras_ns_ev_decoder *next;
+ 	const char *sec_type;
+diff --git a/ras-record.h b/ras-record.h
+index d9f7733..219f10b 100644
+--- a/ras-record.h
++++ b/ras-record.h
+@@ -25,6 +25,9 @@
+ 
+ #define ARRAY_SIZE(x) (sizeof(x)/sizeof(*(x)))
+ 
++#define BIT(nr)                 (1UL << (nr))
++#define BIT_ULL(nr)             (1ULL << (nr))
++
+ extern long user_hz;
+ 
+ struct ras_events;
 -- 
 2.25.1
 
