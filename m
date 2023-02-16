@@ -2,91 +2,167 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9988E6969E8
-	for <lists+linux-edac@lfdr.de>; Tue, 14 Feb 2023 17:39:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 583AD699388
+	for <lists+linux-edac@lfdr.de>; Thu, 16 Feb 2023 12:47:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232135AbjBNQj4 (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Tue, 14 Feb 2023 11:39:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56296 "EHLO
+        id S229636AbjBPLrm (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Thu, 16 Feb 2023 06:47:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232398AbjBNQja (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Tue, 14 Feb 2023 11:39:30 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 540B02C67E;
-        Tue, 14 Feb 2023 08:38:57 -0800 (PST)
-Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id ACED71EC072E;
-        Tue, 14 Feb 2023 17:38:55 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1676392735;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=jN+gT+FJIz779Sj865bJgIneG1lAlFolCGrR66aWtEk=;
-        b=NL2wkTCtLcfwDipURL4tDYqN5u+XawepQ8kgZ3RzxFPFJI4U3JkhBUdm0o77ppAXKNeL4f
-        vb/K/2iNIyxAyWzgLfT3zQ4qu9Iotetq/xqmU3S5lopqoqhW042FR/OrLE8JNynN8057qj
-        fYhAUDdGnSLR4tBsfdSKjn/MmKiK0JE=
-Date:   Tue, 14 Feb 2023 17:38:51 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Nathan Chancellor <nathan@kernel.org>
-Cc:     Yazen Ghannam <yazen.ghannam@amd.com>, Tom Rix <trix@redhat.com>,
-        tony.luck@intel.com, james.morse@arm.com, mchehab@kernel.org,
-        rric@kernel.org, linux-edac@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] EDAC/amd64: Shut up an -Werror,-Wsometimes-uninitialized
- clang false positive
-Message-ID: <Y+u5GytbjF1be9sw@zn.tnic>
-References: <20230213191510.2237360-1-trix@redhat.com>
- <Y+qZthCMRL1m0p4B@yaz-fattaah>
- <Y+qcU2M5gchfzbky@zn.tnic>
- <Y+qdVHidnrrKvxiD@dev-arch.thelio-3990X>
- <03b91ce8-c6d0-63e7-561c-8cada0ece2fe@redhat.com>
- <Y+q1mhrAKTobp3fa@yaz-fattaah>
- <Y+q2pXYI02qAje8N@dev-arch.thelio-3990X>
- <Y+tapzerW7h9vMvp@zn.tnic>
- <Y+ubhHlWFv4ifmGn@dev-arch.thelio-3990X>
+        with ESMTP id S229546AbjBPLrl (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Thu, 16 Feb 2023 06:47:41 -0500
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A01675593;
+        Thu, 16 Feb 2023 03:47:39 -0800 (PST)
+Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1pScjg-0000CY-Ra; Thu, 16 Feb 2023 12:47:36 +0100
+Message-ID: <286293b4-5ae6-1348-9d69-7049ef5adf35@leemhuis.info>
+Date:   Thu, 16 Feb 2023 12:47:36 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <Y+ubhHlWFv4ifmGn@dev-arch.thelio-3990X>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.2
+Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
+Subject: Re: [RFC PATCH V2 1/1] rasdaemon: Fix poll() on per_cpu
+ trace_pipe_raw blocks indefinitely
+Content-Language: en-US, de-DE
+To:     rostedt@goodmis.org
+Cc:     mhiramat@kernel.org, linux-kernel@vger.kernel.org,
+        linux-trace-kernel@vger.kernel.org, tanxiaofei@huawei.com,
+        jonathan.cameron@huawei.com, linuxarm@huawei.com,
+        Linux kernel regressions list <regressions@lists.linux.dev>,
+        shiju.jose@huawei.com, mchehab@kernel.org,
+        linux-edac@vger.kernel.org
+References: <20230204193345.842-1-shiju.jose@huawei.com>
+From:   "Linux regression tracking (Thorsten Leemhuis)" 
+        <regressions@leemhuis.info>
+In-Reply-To: <20230204193345.842-1-shiju.jose@huawei.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1676548059;509d3c9d;
+X-HE-SMSGID: 1pScjg-0000CY-Ra
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Tue, Feb 14, 2023 at 07:32:36AM -0700, Nathan Chancellor wrote:
-> So I disagree with the characterization that clang is "overeager to
-> report false positives" and I think the opinionated parts of the commit
-> message could be replaced with some of the technical analysis that Tom
-> and I did to show why this is a false positive but not one clang can
-> reason about with the way the code is structured (since the warning does
-> not perform interprocedural analysis).
+Hi, this is your Linux kernel regression tracker.
 
-I'm sure you can create all kinds of cases like this one if
-interprocedural analysis or aggressive inlining doesn't happen. So I'm
-rather surprised that this is the first false positive to happen. But
-whateva.
+On 04.02.23 20:33, shiju.jose@huawei.com wrote:
+> From: Shiju Jose <shiju.jose@huawei.com>
+> 
+> The error events are not received in the rasdaemon since kernel 6.1-rc6.
+> This issue is firstly detected and reported, when testing the CXL error
+> events in the rasdaemon.
 
-And since we're disagreeing with things: I don't mind if this is a false
-positive - I don't care. What I don't agree with is having -Werror fail
-the build because of it and forcing us to "wag the dog", so to speak.
+Thanks for working on this. This submission looks stalled, unless I
+missed something. This is unfortunate, as this afaics is fixing a
+regression (caused by a commit from Steven). Hence it would be good to
+get this fixed rather sooner than later. Or is the RFC in the subject
+the reason why there was no progress? Is it maybe time to remove it?
 
-And you can imagine that this has been happening for a while now. And it
-can explain my reaction to yet another compiler fix.
+> Debugging showed, poll() on trace_pipe_raw in the ras-events.c do not
+> return and this issue is seen after the commit
+> 42fb0a1e84ff525ebe560e2baf9451ab69127e2b ("tracing/ring-buffer: Have
+> polling block on watermark").
+> 
+> This also verified using a test application for poll()
+> and select() on trace_pipe_raw.
+> 
+> There is also a bug reported on this issue,
+> https://lore.kernel.org/all/31eb3b12-3350-90a4-a0d9-d1494db7cf74@oracle.com/
 
-But ok, we've wasted enough time on this, lemme tone down the commit
-message and commit it.
 
-Thx.
 
--- 
-Regards/Gruss,
-    Boris.
 
-https://people.kernel.org/tglx/notes-about-netiquette
+> This issue occurs for the per_cpu case, which calls the
+> ring_buffer_poll_wait(), in kernel/trace/ring_buffer.c, with the
+> buffer_percent > 0 and then wait until the percentage of pages are
+> available.The default value set for the buffer_percent is 50 in the
+> kernel/trace/trace.c. However poll() does not return even met the percentage
+> of pages condition.
+> 
+> As a fix, rasdaemon set buffer_percent as 0 through the
+> /sys/kernel/debug/tracing/instances/rasdaemon/buffer_percent, then the
+> task will wake up as soon as data is added to any of the specific cpu
+> buffer and poll() on per_cpu/cpuX/trace_pipe_raw does not block
+> indefinitely.
+> 
+> Dependency on the kernel RFC patch
+> tracing: Fix poll() and select() do not work on per_cpu trace_pipe and trace_pipe_raw
+
+BTW, this patch afaics should have these tags:
+
+Fixes: 42fb0a1e84ff ("tracing/ring-buffer: Have polling block on watermark")
+Reported-by: Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
+Link:
+https://lore.kernel.org/r/31eb3b12-3350-90a4-a0d9-d1494db7cf74@oracle.com/
+
+An likely a
+
+Cc: <stable@vger.kernel.org> # 6.1.x
+
+Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+--
+Everything you wanna know about Linux kernel regression tracking:
+https://linux-regtracking.leemhuis.info/about/#tldr
+If I did something stupid, please tell me, as explained on that page.
+
+#regzbot poke
+#regzbot ^backmonitor:
+https://lore.kernel.org/r/31eb3b12-3350-90a4-a0d9-d1494db7cf74@oracle.com/
+
+> Signed-off-by: Shiju Jose <shiju.jose@huawei.com>
+> 
+> Changes:
+> RFC V1 -> RFC V2
+> 1. Rename the patch header subject.
+> 2. Changes for the backward compatability to the old kernels.
+> ---
+>  ras-events.c | 22 ++++++++++++++++++++++
+>  1 file changed, 22 insertions(+)
+> 
+> diff --git a/ras-events.c b/ras-events.c
+> index 3691311..e505a0e 100644
+> --- a/ras-events.c
+> +++ b/ras-events.c
+> @@ -383,6 +383,8 @@ static int read_ras_event_all_cpus(struct pthread_data *pdata,
+>  	int warnonce[n_cpus];
+>  	char pipe_raw[PATH_MAX];
+>  	int legacy_kernel = 0;
+> +	int fd;
+> +	char buf[10];
+>  #if 0
+>  	int need_sleep = 0;
+>  #endif
+> @@ -402,6 +404,26 @@ static int read_ras_event_all_cpus(struct pthread_data *pdata,
+>  		return -ENOMEM;
+>  	}
+>  
+> +	/* Fix for poll() on the per_cpu trace_pipe and trace_pipe_raw blocks
+> +	 * indefinitely with the default buffer_percent in the kernel trace system,
+> +	 * which is introduced by the following change in the kernel.
+> +	 * https://lore.kernel.org/all/20221020231427.41be3f26@gandalf.local.home/T/#u.
+> +	 * Set buffer_percent to 0 so that poll() will return immediately
+> +	 * when the trace data is available in the ras per_cpu trace pipe_raw
+> +	 */
+> +	fd = open_trace(pdata[0].ras, "buffer_percent", O_WRONLY);
+> +	if (fd >= 0) {
+> +		/* For the backward compatabilty to the old kernel, do not return
+> +		 * if fail to set the buffer_percent.
+> +		 */
+> +		snprintf(buf, sizeof(buf), "0");
+> +		size = write(fd, buf, strlen(buf));
+> +		if (size <= 0)
+> +			log(TERM, LOG_WARNING, "can't write to buffer_percent\n");
+> +		close(fd);
+> +	} else
+> +		log(TERM, LOG_WARNING, "Can't open buffer_percent\n");
+> +
+>  	for (i = 0; i < (n_cpus + 1); i++)
+>  		fds[i].fd = -1;
+>  
