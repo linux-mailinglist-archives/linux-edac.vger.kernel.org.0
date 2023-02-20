@@ -2,132 +2,104 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7372769BA8A
-	for <lists+linux-edac@lfdr.de>; Sat, 18 Feb 2023 15:59:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A81069CD1D
+	for <lists+linux-edac@lfdr.de>; Mon, 20 Feb 2023 14:46:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229522AbjBRO76 (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Sat, 18 Feb 2023 09:59:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47456 "EHLO
+        id S232278AbjBTNqk (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Mon, 20 Feb 2023 08:46:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229461AbjBRO76 (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Sat, 18 Feb 2023 09:59:58 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F7EB17143;
-        Sat, 18 Feb 2023 06:59:56 -0800 (PST)
-Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
+        with ESMTP id S232273AbjBTNqh (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Mon, 20 Feb 2023 08:46:37 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15E3C1E1F0;
+        Mon, 20 Feb 2023 05:46:18 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 926221EC0441;
-        Sat, 18 Feb 2023 15:59:54 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1676732394;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:references;
-        bh=2C3jRRp9ayMNM+6Ergo2xeSP37WKJLkL8aS+1RjwZRM=;
-        b=OM1wQ4RxJcXgpUGs27g9av768jb4hj0ppqkKdlk8RNXxBx1xG5R/wZMKKfE0R8lWZ5vRvx
-        ZK9jNPboFcoKoEG7C4jR16G71iRbgKZDcgKmm+WdMWXoOscGOA6IjmUQX1F1QX0jmhq2h/
-        YdadT/tQqtjJUgc94Coe1jaxJiYHMok=
-Date:   Sat, 18 Feb 2023 15:59:49 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-edac <linux-edac@vger.kernel.org>,
-        lkml <linux-kernel@vger.kernel.org>
-Subject: [GIT PULL] EDAC updates for 6.3
-Message-ID: <Y/Dn5bXwGxiDh8RI@zn.tnic>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C97F660E9D;
+        Mon, 20 Feb 2023 13:46:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D329DC4339C;
+        Mon, 20 Feb 2023 13:46:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1676900776;
+        bh=IIAZkeSpEKS2KPTxBOcC+lHxfz0OjPj0TExQ7GtJOlo=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=EiwCTSGV9XSZiocjWRMQQ/uVnxP+la+RGFQQptkzP9I+6xa+zayKl1uxcy0GX3cVj
+         gPdS27aKzP8ycwDSc6HZLt/H6kCBLMEa33hEk65GbeEDND5OK/U8SM0lC/Go1lqlgT
+         fzmVw1Ygp3VI5mPjqhlylZ7TSn4dIecT2bzvZMJQ=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     stable@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        patches@lists.linux.dev, mhiramat@kernel.org, mchehab@kernel.org,
+        linux-edac@vger.kernel.org, Shiju Jose <shiju.jose@huawei.com>,
+        "Steven Rostedt (Google)" <rostedt@goodmis.org>
+Subject: [PATCH 5.4 063/156] tracing: Fix poll() and select() do not work on per_cpu trace_pipe and trace_pipe_raw
+Date:   Mon, 20 Feb 2023 14:35:07 +0100
+Message-Id: <20230220133604.973586507@linuxfoundation.org>
+X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230220133602.515342638@linuxfoundation.org>
+References: <20230220133602.515342638@linuxfoundation.org>
+User-Agent: quilt/0.67
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-Hi Linus,
+From: Shiju Jose <shiju.jose@huawei.com>
 
-please pull the pile of EDAC updates for 6.3. I'm sending a bit early
-but I know you prefer that.
+commit 3e46d910d8acf94e5360126593b68bf4fee4c4a1 upstream.
 
-Thx.
+poll() and select() on per_cpu trace_pipe and trace_pipe_raw do not work
+since kernel 6.1-rc6. This issue is seen after the commit
+42fb0a1e84ff525ebe560e2baf9451ab69127e2b ("tracing/ring-buffer: Have
+polling block on watermark").
 
+This issue is firstly detected and reported, when testing the CXL error
+events in the rasdaemon and also erified using the test application for poll()
+and select().
+
+This issue occurs for the per_cpu case, when calling the ring_buffer_poll_wait(),
+in kernel/trace/ring_buffer.c, with the buffer_percent > 0 and then wait until the
+percentage of pages are available. The default value set for the buffer_percent is 50
+in the kernel/trace/trace.c.
+
+As a fix, allow userspace application could set buffer_percent as 0 through
+the buffer_percent_fops, so that the task will wake up as soon as data is added
+to any of the specific cpu buffer.
+
+Link: https://lore.kernel.org/linux-trace-kernel/20230202182309.742-2-shiju.jose@huawei.com
+
+Cc: <mhiramat@kernel.org>
+Cc: <mchehab@kernel.org>
+Cc: <linux-edac@vger.kernel.org>
+Cc: stable@vger.kernel.org
+Fixes: 42fb0a1e84ff5 ("tracing/ring-buffer: Have polling block on watermark")
+Signed-off-by: Shiju Jose <shiju.jose@huawei.com>
+Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
+ kernel/trace/trace.c |    3 ---
+ 1 file changed, 3 deletions(-)
 
-The following changes since commit b7bfaa761d760e72a969d116517eaa12e404c262:
+--- a/kernel/trace/trace.c
++++ b/kernel/trace/trace.c
+@@ -8298,9 +8298,6 @@ buffer_percent_write(struct file *filp,
+ 	if (val > 100)
+ 		return -EINVAL;
+ 
+-	if (!val)
+-		val = 1;
+-
+ 	tr->buffer_percent = val;
+ 
+ 	(*ppos)++;
 
-  Linux 6.2-rc3 (2023-01-08 11:49:43 -0600)
 
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/ras/ras.git tags/edac_updates_for_v6.3
-
-for you to fetch changes up to 28980db94742f9f2fb0f68ea35f2171b38007bae:
-
-  EDAC/amd64: Shut up an -Werror,-Wsometimes-uninitialized clang false positive (2023-02-14 17:56:14 +0100)
-
-----------------------------------------------------------------
-- Add a driver for the RAS functionality on Xilinx's on chip memory
-  controller
-
-- Add support for decoding errors from the first and second level memory
-  on SKL-based hardware
-
-- Add support for the memory controllers in Intel Granite Rapids and
-  Emerald Rapids machines
-
-- First round of amd64_edac driver simplification and removal of
-  unneeded functionality
-
-- The usual cleanups and fixes
-
-----------------------------------------------------------------
-Manivannan Sadhasivam (1):
-      EDAC/qcom: Add platform_device_id table for module autoloading
-
-Qiuxu Zhuo (5):
-      EDAC/skx_common: Enable EDAC support for the "near" memory
-      EDAC/skx_common: Delete duplicated and unreachable code
-      EDAC/i10nm: Add Intel Emerald Rapids server support
-      EDAC/i10nm: Make more configurations CPU model specific
-      EDAC/i10nm: Add Intel Granite Rapids server support
-
-Sai Krishna Potthuri (1):
-      EDAC/zynqmp: Add EDAC support for Xilinx ZynqMP OCM
-
-Shubhrajyoti Datta (1):
-      dt-bindings: edac: Add bindings for Xilinx ZynqMP OCM
-
-Yazen Ghannam (6):
-      EDAC/amd64: Don't set up EDAC PCI control on Family 17h+
-      EDAC/amd64: Remove scrub rate control for Family 17h and later
-      EDAC/amd64: Remove PCI Function 6
-      EDAC/amd64: Remove PCI Function 0
-      EDAC/amd64: Remove early_channel_count()
-      EDAC/amd64: Shut up an -Werror,-Wsometimes-uninitialized clang false positive
-
-Youquan Song (1):
-      EDAC/i10nm: Add driver decoder for Sapphire Rapids server
-
- .../memory-controllers/xlnx,zynqmp-ocmc-1.0.yaml   |  45 ++
- MAINTAINERS                                        |   7 +
- drivers/edac/Kconfig                               |   8 +
- drivers/edac/Makefile                              |   1 +
- drivers/edac/amd64_edac.c                          | 217 +---------
- drivers/edac/amd64_edac.h                          |  24 +-
- drivers/edac/i10nm_base.c                          | 459 ++++++++++++++++----
- drivers/edac/qcom_edac.c                           |   7 +
- drivers/edac/skx_common.c                          |  76 ++--
- drivers/edac/skx_common.h                          |  61 ++-
- drivers/edac/zynqmp_edac.c                         | 467 +++++++++++++++++++++
- 11 files changed, 1013 insertions(+), 359 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/memory-controllers/xlnx,zynqmp-ocmc-1.0.yaml
- create mode 100644 drivers/edac/zynqmp_edac.c
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
