@@ -2,73 +2,112 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4583B69E5E2
-	for <lists+linux-edac@lfdr.de>; Tue, 21 Feb 2023 18:24:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D670069EA4F
+	for <lists+linux-edac@lfdr.de>; Tue, 21 Feb 2023 23:40:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229546AbjBURYv (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Tue, 21 Feb 2023 12:24:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38650 "EHLO
+        id S229672AbjBUWkJ (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Tue, 21 Feb 2023 17:40:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235066AbjBURYp (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Tue, 21 Feb 2023 12:24:45 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25604728B;
-        Tue, 21 Feb 2023 09:24:44 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B380061158;
-        Tue, 21 Feb 2023 17:24:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 26033C433D2;
-        Tue, 21 Feb 2023 17:24:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677000283;
-        bh=zEazf+VbCzG+CDO1J2YJlktuJ6Ydxs1YM7+UI1g/Tm8=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=IAnBSRx9mA8GIpii5Ezyc/gjkPwBgUh1xrAh+fcqAA/tlZJdBRiuPFCrFgGAo27hR
-         ZKc++rNf457xCl6TiuwNv/Jb+KagdZmWZl1UCUfCzO1BetKuINrcUGqnyn25L1CrNB
-         XXeMUx7yOIC7ibP4PWl57dfFre+L5I28Eg9U4gJUTUcmTHGiYK33XPBo38n5a29Uo7
-         lkJfZ/exLYZgerT51tfotzwLJUgLJWhX/Ape+aAXA2NCzbasJP+OVpzm7xdhLhHKFe
-         mNNT+Tci+0SnnqnLYPQvvVuqtIN9H+1z58D5EoF+eNaOd9b6/4GPa9Bxc8MzAm9SFr
-         xZ0TTImda5Zkg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 1019DC43158;
-        Tue, 21 Feb 2023 17:24:43 +0000 (UTC)
-Subject: Re: [GIT PULL] EDAC updates for 6.3
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <Y/Dn5bXwGxiDh8RI@zn.tnic>
-References: <Y/Dn5bXwGxiDh8RI@zn.tnic>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <Y/Dn5bXwGxiDh8RI@zn.tnic>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/ras/ras.git tags/edac_updates_for_v6.3
-X-PR-Tracked-Commit-Id: 28980db94742f9f2fb0f68ea35f2171b38007bae
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: d9de5ce8a5ec8f97c9468244fd85ff1a10363b60
-Message-Id: <167700028305.32027.2642909732954967762.pr-tracker-bot@kernel.org>
-Date:   Tue, 21 Feb 2023 17:24:43 +0000
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-edac <linux-edac@vger.kernel.org>,
-        lkml <linux-kernel@vger.kernel.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S230055AbjBUWkI (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Tue, 21 Feb 2023 17:40:08 -0500
+Received: from mail-qk1-x730.google.com (mail-qk1-x730.google.com [IPv6:2607:f8b0:4864:20::730])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EC6233447
+        for <linux-edac@vger.kernel.org>; Tue, 21 Feb 2023 14:39:45 -0800 (PST)
+Received: by mail-qk1-x730.google.com with SMTP id c200so1070073qke.2
+        for <linux-edac@vger.kernel.org>; Tue, 21 Feb 2023 14:39:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=student.uny.ac.id; s=google;
+        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=twdHZET46/F5vizXZVz+VqY+7tyjVRdIagVq9V6tRJk=;
+        b=cVKJtoxl0acMJJIwk2hPq/3OBRAVc3EM9BTjXkgsWpgp3u8vCPV+mvlUgevijcZKdW
+         yKj8d3Y4qZ/9Eg4qdy1/0Sjmdyk4QHndg3BF3zGn01jkeCIG/n84qxJOD+5RCglv7RTg
+         zgbWh0R5Qoo5t2ONfaAYyTgxRyLLvUHoBz9kA=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=twdHZET46/F5vizXZVz+VqY+7tyjVRdIagVq9V6tRJk=;
+        b=iccXJ5WD9yELPfSoVRgzf3El1yxlNpsF8bOyWQ6CjE2Y/OF8DmwqWQEeWW//IHHi5h
+         L2j8XRBWTJxIpT1BJcVZ6EYK1pTer0nmjFKlGwoqNDjQ9WPqN+1gExvlnI+10Zhw+CQ6
+         oVAsDN3EyQzkD9Vrd92IFu5zEMlUJP78SoxoM9Ho0Hxk8qrkFy0JL9fT9njTPUilo3tr
+         drZ1j+pkUlBT5tzinCp/JDHHnKip+F5qqGe6KaIuxAHoGkhg7NhRm8ZoKjCQhB9eLeKg
+         53MNloeww5e1gYFbKj7SRJ0lLepUBnLYzBMz+PcRqCGAx/Y634mEEp4hVp0UZAizm6gS
+         O2yg==
+X-Gm-Message-State: AO0yUKW+0QU2fg/l1TZa1yMAacSc/gX9vmLVaxL1ioMjoAlhtueFsC5g
+        4toqTBmld9ZJ+2qdkB0TlvFuUIEOUFyjjKJotfBZvqAlkGEnHUHzHiEwT866KoVtFhNdjXfBxh3
+        RRY2tIDsun6cee/Cv6+6AWWBD3wEj13w=
+X-Google-Smtp-Source: AK7set9PVR2O2g1LA2BTqu0GQ4mejJLHgcyO/A2UM74GZNzISHf07Zjuehx61mmaKFvYJflBCdhC2Mef2eDCGiE0d3s=
+X-Received: by 2002:a37:c407:0:b0:71f:b89c:5acc with SMTP id
+ d7-20020a37c407000000b0071fb89c5accmr797707qki.13.1677019183596; Tue, 21 Feb
+ 2023 14:39:43 -0800 (PST)
+MIME-Version: 1.0
+Received: by 2002:a05:6214:3d03:b0:571:1c44:3b16 with HTTP; Tue, 21 Feb 2023
+ 14:39:43 -0800 (PST)
+Reply-To: fdx.s@yahoo.com
+From:   CommonWealth Of Nation Donation 
+        <fadilahutami.2018@student.uny.ac.id>
+Date:   Tue, 21 Feb 2023 23:39:43 +0100
+Message-ID: <CAMHH5kh2fSea_DnxFXF520qiR7hbQih-aLXeS_FAaRA+aiNE6g@mail.gmail.com>
+Subject: Your Bank Draft Of $800,000
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: Yes, score=7.1 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_REPLYTO,LOTS_OF_MONEY,
+        MONEY_FREEMAIL_REPTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        UNDISC_MONEY,XFER_LOTSA_MONEY autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:730 listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5000]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        *  0.0 LOTS_OF_MONEY Huge... sums of money
+        *  2.1 FREEMAIL_FORGED_REPLYTO Freemail in Reply-To, but not From
+        *  0.0 MONEY_FREEMAIL_REPTO Lots of money from someone using free
+        *      email?
+        *  1.0 XFER_LOTSA_MONEY Transfer a lot of money
+        *  3.3 UNDISC_MONEY Undisclosed recipients + money/fraud signs
+X-Spam-Level: *******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-The pull request you sent on Sat, 18 Feb 2023 15:59:49 +0100:
+The Commonwealth of Nations wishes to inform you that the
+A sum of $ 800,000.00 USD has been donated to you.This is a donation
+relief for Covid-19. Please contact for Claims
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/ras/ras.git tags/edac_updates_for_v6.3
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/d9de5ce8a5ec8f97c9468244fd85ff1a10363b60
+Regards
+Kerry Russell
 
-Thank you!
+--=20
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+
+
+-------------------------------------------Untuk mendukung =E2=80=9CGerakan=
+ UNY=20
+Hijau=E2=80=9D, disarankan tidak mencetak email ini dan lampirannya.
+(To support=20
+the =E2=80=9CGreen UNY movement=E2=80=9D, it is recommended not to print th=
+e contents of=20
+this email and its attachments)
+Universitas Negeri Yogyakarta
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=20
+www.uny.ac.id <http://www.uny.ac.id>
+-------------------------------------------
+
