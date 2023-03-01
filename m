@@ -2,139 +2,158 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 05C956A76A9
-	for <lists+linux-edac@lfdr.de>; Wed,  1 Mar 2023 23:14:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A29DF6A76AF
+	for <lists+linux-edac@lfdr.de>; Wed,  1 Mar 2023 23:16:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229732AbjCAWOh (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Wed, 1 Mar 2023 17:14:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34018 "EHLO
+        id S229764AbjCAWQs (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Wed, 1 Mar 2023 17:16:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229471AbjCAWOg (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Wed, 1 Mar 2023 17:14:36 -0500
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2072.outbound.protection.outlook.com [40.107.223.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAD8D4392E;
-        Wed,  1 Mar 2023 14:14:34 -0800 (PST)
+        with ESMTP id S229781AbjCAWQp (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Wed, 1 Mar 2023 17:16:45 -0500
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68A43515D8;
+        Wed,  1 Mar 2023 14:16:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1677709004; x=1709245004;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=7ZpT32gTFSvcFteLfdUjcSbbQ4yBOYmHKx5wV5GJdpM=;
+  b=GUYk75WFrd6Mkm4MBXL3XR6hWpW0EaGghouGQPROF6i8o1WVWoo+Z89X
+   mImLsWnLztRZnQVYfHNuODzw2bdM/es1Ny475BJQ0Ket3byN1It1Iw6W7
+   zvnoSPdNkf/vU/Oqfg/MmnsDojSezMMMPp09RPobRNVtasgB3nDODZw5g
+   WikhK0cGEN2AsrkBWihgRv97QEs/whPSN3k6qO+SZm9F8LnIC5BH8ii9f
+   5y2g0Ry9Zhl4wFoyLqevwLm6NYcsWZ/RL4OC+PANm6y8UzKafU65Uh7Hy
+   hyxnXT3PPK7OMvtiKMDclsED3H/kW0mUDGLRX5egg02EkaABzZFB8yzRb
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10636"; a="333259497"
+X-IronPort-AV: E=Sophos;i="5.98,225,1673942400"; 
+   d="scan'208";a="333259497"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Mar 2023 14:16:43 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10636"; a="707162164"
+X-IronPort-AV: E=Sophos;i="5.98,225,1673942400"; 
+   d="scan'208";a="707162164"
+Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
+  by orsmga001.jf.intel.com with ESMTP; 01 Mar 2023 14:16:42 -0800
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Wed, 1 Mar 2023 14:16:42 -0800
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Wed, 1 Mar 2023 14:16:42 -0800
+Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
+ fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21 via Frontend Transport; Wed, 1 Mar 2023 14:16:42 -0800
+Received: from NAM02-SN1-obe.outbound.protection.outlook.com (104.47.57.44) by
+ edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.16; Wed, 1 Mar 2023 14:16:42 -0800
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=HrDlQuIUV/XE1K1H3qVZjMk0Ah+EFBM5U1K8avZm0plsBEAwBkgz2ZLUEs0k5sI/vFm7+CA1kitYa0c5NubOFy40rSDknXmg3nTAMEC0desQZqSbAaF2Zfrks8RKTVuO2DqjuyZz0bmbZRzRa9n5rBeCzu1RggzVHA0uD28nCpyNvfeO0w8jQhoK/4nUqk0n5E8teEREkeCkqDjy6JiUq6WB+k7jdWerXVvyoaqn0ZJWSvPR+k38/GmXSa8a+vYpZE3tsaLGYXMv3ILaOoEe8bOv4jwQTgpjG7wcMi+EUb4d8ockLRIm1y6I4d16q4f9v3PfKYJMrPU2sLj9WaZviA==
+ b=liD8ubq99cWY7vlNJYxsHDw8IduvZejX/T452Mwx+uaAHrdmEwGMcLaMT05jdiWHUskoj53X4k2pSNC38PkqCVI5VXU5NpyqCdhRmy1dxxYPnVvPlbY+7zxv4FqqGhnSlQo+spkthuvCp36X5dmzwDtZo/4KOvsc0fu7ignWHExaBDYt7WAHg7BoaVFtDdfPX/qofacwGqXNdvDAPUe/w4r4ExOvah2Qf9sBRA8i40cWFFAE4BGrRNUYs4rAVrgqJVplTwciWaYbb1Qf4YDY9/U7oXZRdcdxnY1EuZ4t//jxRobVe6wfkz1gVmZ5tSxuWM4X33NVpnBQ0fAIDJu6BQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=bIIs7J4ikaeZk6ki8Ci/PnQREADdnADwzcj6SVAg3pc=;
- b=T1JOhgWGHafY9Ye8KQq/IvAWGtIx01Z8DhNxd8iBsDlB0zQwks45SaqDlftFp4wvceaqSSoUplSTCXtIhOajMya/2Gpt6tIUpYkroPch/YPREArghCi12p1E8UxYvs1OUCKCTeeFf6wMaNUlv0XvB5IThJ/cDlNG3c3fRdnWkE9BDvVNVXAM4Rsbp1F4TNIv1W8HwJBJJXwNnfZ8EthSU8YlsAhbxhJZkA2Qju2mCwXy6SmVMA53c+4iEhxU04IGtUODpAb4mJHDnQTZrpY1k1DOcmZ8aIim1s3VxkkELzL3i1PWw/GHfEG4pxLLh4iTkEEDb0kU3G81PFdQjWdE/g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=bIIs7J4ikaeZk6ki8Ci/PnQREADdnADwzcj6SVAg3pc=;
- b=3hea4znY3+1C7WVye2RFUVnxjtePLYwFfj26KHWXBs10vxZYZdLbt+JwyP9LETr3G/EOwHuWlS/Oy0SPtDZZrJJW3NTzJMjlGAEYx5mQbinY3OniswB60ax/FbyoEJAaemOWfWWlkhDb3rnjXpDnkU3C9iysRcS/yXLnL+qIyrE=
-Received: from MW4PR04CA0256.namprd04.prod.outlook.com (2603:10b6:303:88::21)
- by IA1PR12MB8555.namprd12.prod.outlook.com (2603:10b6:208:44f::14) with
+ bh=7ZpT32gTFSvcFteLfdUjcSbbQ4yBOYmHKx5wV5GJdpM=;
+ b=gq9JhQzBd+E9RM0mNMafq0cKni+n8XPbx/WFtoy379oe5sXBD+jSsheqt16rwSMpJ05PCOgmzgthXjenROE0jd1sourCqGQdHa2YIUvoKHaP6YQiVkhU3FFpCZX9eoTaG19gYZVHcyxF5Fx7o7CsLE4aVWVG63kKkIEE+diZXpkWy+iel2Ee4HXku5bTwLDMXCBzy1FIsv55BRUstwxCaNpzIsMYU1sLnuyR3UBvdBOYRe/F4jgMkG9VkSCK+0Pwz81+Tkci/zbSC5qZzbhZNlu095m4TNiL/s7OMEpx505vIuwg1fcFPQ5/A97Cg2iqVDnhs5B/E2DCWfUFWidT1Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from SJ1PR11MB6083.namprd11.prod.outlook.com (2603:10b6:a03:48a::9)
+ by SN7PR11MB6679.namprd11.prod.outlook.com (2603:10b6:806:269::19) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6134.30; Wed, 1 Mar
- 2023 22:14:32 +0000
-Received: from CO1NAM11FT063.eop-nam11.prod.protection.outlook.com
- (2603:10b6:303:88:cafe::c0) by MW4PR04CA0256.outlook.office365.com
- (2603:10b6:303:88::21) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6156.18 via Frontend
- Transport; Wed, 1 Mar 2023 22:14:32 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- CO1NAM11FT063.mail.protection.outlook.com (10.13.175.37) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6156.12 via Frontend Transport; Wed, 1 Mar 2023 22:14:32 +0000
-Received: from yaz-ethanolx.amd.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Wed, 1 Mar
- 2023 16:14:31 -0600
-From:   Yazen Ghannam <yazen.ghannam@amd.com>
-To:     <linux-edac@vger.kernel.org>
-CC:     <linux-kernel@vger.kernel.org>, <tony.luck@intel.com>,
-        <x86@kernel.org>, Yazen Ghannam <yazen.ghannam@amd.com>
-Subject: [PATCH v2] x86/mce: Schedule work after restart from sysfs update
-Date:   Wed, 1 Mar 2023 22:14:20 +0000
-Message-ID: <20230301221420.2203184-1-yazen.ghannam@amd.com>
-X-Mailer: git-send-email 2.34.1
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6156.18; Wed, 1 Mar
+ 2023 22:16:40 +0000
+Received: from SJ1PR11MB6083.namprd11.prod.outlook.com
+ ([fe80::ee6a:b9b2:6f37:86a1]) by SJ1PR11MB6083.namprd11.prod.outlook.com
+ ([fe80::ee6a:b9b2:6f37:86a1%9]) with mapi id 15.20.6134.026; Wed, 1 Mar 2023
+ 22:16:39 +0000
+From:   "Luck, Tony" <tony.luck@intel.com>
+To:     Yazen Ghannam <yazen.ghannam@amd.com>,
+        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>
+CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "x86@kernel.org" <x86@kernel.org>
+Subject: RE: [PATCH v2] x86/mce: Schedule work after restart from sysfs update
+Thread-Topic: [PATCH v2] x86/mce: Schedule work after restart from sysfs
+ update
+Thread-Index: AQHZTIs72xd8z6iXVkqJharqMuIVQq7mfbRQ
+Date:   Wed, 1 Mar 2023 22:16:39 +0000
+Message-ID: <SJ1PR11MB6083E48E4CCF947B25C91801FCAD9@SJ1PR11MB6083.namprd11.prod.outlook.com>
+References: <20230301221420.2203184-1-yazen.ghannam@amd.com>
+In-Reply-To: <20230301221420.2203184-1-yazen.ghannam@amd.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: SJ1PR11MB6083:EE_|SN7PR11MB6679:EE_
+x-ms-office365-filtering-correlation-id: 7b287688-a783-4817-e615-08db1aa2a16f
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 2smABmWb3MqFNX5Qg5FU+hsvgua1a0merheZoG8UhN+OTMGEHUGRHcapQ8X6uz393AxG/1c/2nVlbByC42gW17sRGYZIkoAoOvxCiSAAvc2XFoDM5mw9StAs/tMKWHxJPQZ79pG9H4L/JXBT3tIY0nAt8NajNH7qAVYkXjV8X776iDFyr3pLBHPZyNwEgZNaAIZtkVSUGBrUkYPEQzKaIkhx4/PiLD5tgWa0HqYnaCfuTzmhe+wGZEdMcnwXkx8BJlTzQ/ANoxgLYVGmeBwSvP7EJzJcKOoQrxscF2kel17xrq6af4BOuJu/dPW1z94lCSEGHK2SrzWmIXVcDzSm4qTSNm50nqAPxQ/vvzYhXwL36JbU8FYB8p6GUFgGGofMG0uC+U0erJtZW7g1OJRTNgGHa5cv9X2faLsskTMIeNBCLvi7m72Rwl8JS6yxct9h8+6QNi1bBXtCPgc5t7eHYJ4nrx8piS8aVCTa9lhgGsLn8Se4S+otz4b2DE41RKVq51o1RHegJS1hoPGyyo3byM2oKpzpUPZzUi+dcNsP9euR5Z/UIeL/0HsKZdiTsLHyltYfL1I4cmnuherDmLoqOm8O8zXpUJmdWY0Ieh2+3VWAz2n6CeStPq89URad2azB3JxtCfdHukdohJCeYdYeywXZMeMffBVXwFy3rgjMsvn752IN29IeSCp0HYq3+bF+CsQJYJmR4MOfI4BqVmoTQg==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ1PR11MB6083.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(346002)(39860400002)(366004)(376002)(396003)(136003)(451199018)(6506007)(9686003)(186003)(26005)(316002)(110136005)(54906003)(41300700001)(4326008)(64756008)(66446008)(66476007)(66556008)(76116006)(8676002)(7696005)(2906002)(52536014)(71200400001)(8936002)(5660300002)(82960400001)(478600001)(33656002)(38100700002)(122000001)(86362001)(558084003)(38070700005)(55016003)(66946007);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?7LefLfrliTgya3qE+xyUJJhO8OLmdaep6i/EVUHvDWOGBsog/NqQkVMOdCdC?=
+ =?us-ascii?Q?/dPBRgF5oh3I7ylLx5Z5CIiJtm79scA6ZqJ4xzCvNoqPvAaD7JEFZ2SF3DBV?=
+ =?us-ascii?Q?twkk+n8O+LCSm7v9QtkAFWWFpr1llkkjKxOnfRVKdKZjz1BTrAkVZw2EtvyL?=
+ =?us-ascii?Q?kzPFczbUIk0zqJmJSQ0/m5Sex12ut6fNIOinpk1qFD3L0TqgmPGgmh6zZ8Za?=
+ =?us-ascii?Q?ETIsmATdpcldqXhJgQaQNid98ppheoIiOZGmRK/CRJS/EcbXZTQSEMu666CV?=
+ =?us-ascii?Q?gYSY4yFgQ0iqkevZE+XUckFPigkEEEXTMh0zpdOAzOiMe/iWBaj3KZHopJNz?=
+ =?us-ascii?Q?rlOUpC72uAHP1Xbmx5U/dWp0pzFt8nutWsz0D7KkII0JRYNbfpCxZ8yDuBdl?=
+ =?us-ascii?Q?SomEvgKLm/eB5oCh1sTcykFzDLtVWCNIXt2ZhedBCexI6bZ91k3VHoaQPwe/?=
+ =?us-ascii?Q?SNEOU622hjdtzfJNOR84O4ykRVJFuaHCQ/LtXy32P0IWWRuZGbrEHt9TcoLW?=
+ =?us-ascii?Q?/+9Ny5aKc/WLjQyztunsgbvfHZVb3M03ucVBsdff1YouO07K8264DLndHiKj?=
+ =?us-ascii?Q?oS8d4B7qNfcuF42vOQ9hi568xwuuhIshLbCJRxGwDdyxjvZ3tfOQ5LJCur6d?=
+ =?us-ascii?Q?+iZXGlKfbhpHFHWArE9p3INCAz/PURJYI1mB9jKqdSej46vTzf0LPdM8m8Db?=
+ =?us-ascii?Q?CyjX6Qtwqg1COUui8+PAH0l1nRQ9Ianf5tbhVWIWJ7loBaqJY2YtKzHLGgYf?=
+ =?us-ascii?Q?fvjTl7DBeYeJ1ygb/r/n+9SBBmho1l+gfsp/7ULKR9y2qFR0c3BRY7yS36hm?=
+ =?us-ascii?Q?lkThc/XV/vts53IcwwJhSUXTA4JINXCF5tqYBr0NKftRwQXOc6kS5COBFws3?=
+ =?us-ascii?Q?Xbf9TwaMFm0u78I4sPdFTgHT14h9miWiKK9oZ2CIfg/0Z/PL2Z2i0880lJbz?=
+ =?us-ascii?Q?lTtZly0bDautnWFjD2csrbUfdW1o+50tp8T1fdg1lk7tvIEh3i10kf45IwI8?=
+ =?us-ascii?Q?CXvG9MO53w9Eq9rWBMEIIK1ZhrJ23b7/q3+Z/2MOczQvFTew8qnecmPp5Ddn?=
+ =?us-ascii?Q?MTLDvtfuIWPHVDthWrx27oxVVyvubqiqoyCN97dQdbWMcy0MP1XCHdL3Ivqq?=
+ =?us-ascii?Q?WPwFpdGJfdmydfeJ87kTtGaBTxglBQj+yV9Kwn+UciIb4bqRRSh+z7mS5LH/?=
+ =?us-ascii?Q?vb8nt0jktJS+KGhzCHck8Zc7VZEx59J8pP1DrDbxj/Ls9JZW7Bk1w11yQGFi?=
+ =?us-ascii?Q?v2ZSWz/enTBeclbeMYYUme92FMlkkfdij9UYzmf5hcL/vj5XMiVYNm0+lG4M?=
+ =?us-ascii?Q?oWAyz0vn/RBoKeXX3Alzw+5TzbjPkgtglrTSYebmN/OgL86L2vlhgpHOgbOB?=
+ =?us-ascii?Q?agViXCjwkfubkTenQHN50O0HmnEBiGWibybt0BeKMq0ZKwCuOWGD1IVqu77X?=
+ =?us-ascii?Q?s3ckP8+yhyHzxmVXMiX3vBIBmRjK0S8vRiDTRwx1Ev1oL9hHUKAT42+lfPDw?=
+ =?us-ascii?Q?UEJBax8xeEjQKgSFWS3YRFOAb38ojDfBV3faU6qjdVciTB3kvg4IFSCu+m2l?=
+ =?us-ascii?Q?gGPpcpCPbp0wPZTXTY+MpE7PYhf0v2IJ5qTIk2/q?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO1NAM11FT063:EE_|IA1PR12MB8555:EE_
-X-MS-Office365-Filtering-Correlation-Id: 4ac8a115-f164-418d-448b-08db1aa25576
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: ygf3aoYCbkbN3msN8lEiJyeMdfV+005mKEKh9+gFxwqSJBi09S8rGMKI6KPnfpCAQWcXVfDjnnhAax+DnZc2uH8Eb+epjDg9iNNhjqcypOtt2NKHa2rWvXZzyX8UXSlQ2+u+axRFgc0tQF23gzjh4UJILy3UjN5YuBwe+8kqKKdIhX6uUF2WcUQWFkEAcYTX/IkqLnX9JBrzdqOlseEwo3c9EEcRFbxIuwI23op74G10i74UrIGHC7Fg5LZ2rIWqPNy3A+s5V+VDgv5AMsKRNJdmeUTrzoPDTrUSs6uoI7zvwAbFpbDgMF1k5XfdYzULTMS5GVtHCVV+hTOZEnaXklU9pxFGr7jNukIQY5GBqB93s/bEJE+U0yyXU/drZD60xWA6s9D3orA/MfABVXLHtGQ4iPj+NK8uo2isHyrcGq01yWsaCjpzC1pDLHuyT7y4LwkvJt2MTh1hqfwTiQ54rm5gdM40GIVxv3UgvPaieTcjCeAXhmwwjznEJyiRYuW5HJFZWNbZf18WwCTfPw+kUmt2d9dJl0tUvJ63ORtPlDk/kBz/WFs7xTR3SLMRQxB6NdbYrrsUmOtfP3Yhg5UJwX8uuxcP/esgbhlkCi4Gp55NpqJFqt2imuHwrGRicKYrKl+EqTJhQCMk3kB92BwbvqqWp2JcfIN5HKEF/HOs/EDzcBwu6qIGTLDeBiTET3XC5S1+ZNEXvbdin1YOauciRAK+aRvuICs+9gI7a+bM3mE=
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230025)(4636009)(346002)(396003)(376002)(136003)(39860400002)(451199018)(40470700004)(36840700001)(46966006)(36860700001)(82740400003)(81166007)(86362001)(70206006)(356005)(7696005)(2906002)(44832011)(6916009)(4326008)(5660300002)(41300700001)(8936002)(40480700001)(15650500001)(8676002)(70586007)(82310400005)(40460700003)(336012)(2616005)(16526019)(1076003)(26005)(186003)(47076005)(83380400001)(426003)(316002)(478600001)(54906003)(966005)(36756003)(6666004)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Mar 2023 22:14:32.2489
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: SJ1PR11MB6083.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7b287688-a783-4817-e615-08db1aa2a16f
+X-MS-Exchange-CrossTenant-originalarrivaltime: 01 Mar 2023 22:16:39.8234
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4ac8a115-f164-418d-448b-08db1aa25576
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT063.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB8555
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: h/ix3I5JuDrG297kykc8VRmLEzsJOQj2Tuy0b6qBu15lnkJQDUvVcGsKz7PpjwYyV2YOlXcLldydFa6HbkgwYg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR11MB6679
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-A recent change introduced a flag to queue up errors found during
-boot-time polling. These errors will be processed during late init once
-the MCE subsystem is fully set up.
+> Call mce_schedule_work() at the end of mce_restart() so that queued
+> errors are processed.
 
-A number of sysfs updates call mce_restart() which goes through a subset
-of the CPU init flow. This includes polling MCA banks and logging any
-errors found. Since the same function is used as boot-time polling,
-errors will be queued. However, the system is now past late init, so the
-errors will remain queued until another error is found and the workqueue
-is triggered.
+Reviewed-by: Tony Luck <tony.luck@intel.com>
 
-Call mce_schedule_work() at the end of mce_restart() so that queued
-errors are processed.
-
-Fixes: 3bff147b187d ("x86/mce: Defer processing of early errors")
-Cc: stable@vger.kernel.org
-Signed-off-by: Yazen Ghannam <yazen.ghannam@amd.com>
----
-Link:
-https://lore.kernel.org/r/20230301202623.2092271-1-yazen.ghannam@amd.com
-
-v1->v2:
-* Refer to correct function in commit message.
-
- arch/x86/kernel/cpu/mce/core.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/arch/x86/kernel/cpu/mce/core.c b/arch/x86/kernel/cpu/mce/core.c
-index 7832a69d170e..2eec60f50057 100644
---- a/arch/x86/kernel/cpu/mce/core.c
-+++ b/arch/x86/kernel/cpu/mce/core.c
-@@ -2355,6 +2355,7 @@ static void mce_restart(void)
- {
- 	mce_timer_delete_all();
- 	on_each_cpu(mce_cpu_restart, NULL, 1);
-+	mce_schedule_work();
- }
- 
- /* Toggle features for corrected errors */
--- 
-2.34.1
-
+-Tony
