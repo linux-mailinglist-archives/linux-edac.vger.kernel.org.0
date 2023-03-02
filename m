@@ -2,70 +2,65 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC2436A76B5
-	for <lists+linux-edac@lfdr.de>; Wed,  1 Mar 2023 23:19:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A63F16A795C
+	for <lists+linux-edac@lfdr.de>; Thu,  2 Mar 2023 03:12:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229546AbjCAWTC (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Wed, 1 Mar 2023 17:19:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37960 "EHLO
+        id S229498AbjCBCMD (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Wed, 1 Mar 2023 21:12:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229529AbjCAWTB (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Wed, 1 Mar 2023 17:19:01 -0500
-Received: from mail-qt1-x835.google.com (mail-qt1-x835.google.com [IPv6:2607:f8b0:4864:20::835])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11CFF3E633
-        for <linux-edac@vger.kernel.org>; Wed,  1 Mar 2023 14:19:00 -0800 (PST)
-Received: by mail-qt1-x835.google.com with SMTP id r5so16136126qtp.4
-        for <linux-edac@vger.kernel.org>; Wed, 01 Mar 2023 14:19:00 -0800 (PST)
+        with ESMTP id S229462AbjCBCMC (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Wed, 1 Mar 2023 21:12:02 -0500
+Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D56BC4ECC6;
+        Wed,  1 Mar 2023 18:11:57 -0800 (PST)
+Received: by mail-pf1-x435.google.com with SMTP id ce7so9201738pfb.9;
+        Wed, 01 Mar 2023 18:11:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sladewatkins.net; s=googled;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=+jqKSehvjQWC1EOCPbF8m9aVkKIe1OZTk6hTi4G4sOk=;
-        b=Ts5PzH0HkbaorXR5DioO8sIiQL3k4jnzQt2NgMmN3jFkQI/2bS36gC/D9nQa7wdzBv
-         6UJOqW9MhQUL/nKn6203RrWK9FoR6ckeUpMDl/NRnDEH+hx7BVW6onAjM7v+cAFiGWsk
-         ohhqgK9OPzKz7xaQFs+xbwgICEnFhBynnhjhye1vzDX2H0+qA1k6jnQv46fCAko/lQ/4
-         yWL21Lw3lwoaHh+qXZLETLYvgb6+ASjTmh5Z3SbldrvYPx2hvmUdfYLNys2uOM10oWXo
-         4rfmhu8nLqjNI1YXq04XP25r7EabIXW7QWotlWWhz9YcU7pRxTX1jb+XTs7Mmzqg1Xid
-         P0FQ==
+        d=gmail.com; s=20210112; t=1677723117;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=24xhtn5pOGlNyXauP9v8s38FVO7Lz36wZKCTgeWwtN4=;
+        b=A1puC179kyNF2Wi5naOSf/hbfXO+twruywzION9SF7H8pNqSHT3jeLCNFAYpSw3Aog
+         dpfrktB9xB+QH23IXEOXUlWzTNneV0B4Fy8PiLrRQcKpS4z6yCf6YecRgdG8mKXuH7iv
+         0vagJLMM5QAOsqtP6ZCVHLRvuHI83j+FimPNVSdlvFRp0TsIXgWVR0sr36hh7wupyJGe
+         1nXj6cbPcRInL3JzTOS/dkC03hIElT/4Bw8rbbCbZ17OpvayzuvPOQJuan9ZoX09dUzr
+         t+Wj/p3bFXXV8hQR6mE2VLZuy/F62VQcoY9EiIgrt9ytT5NNQPrbLUBfC4QY3+38TZZB
+         CaaA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=+jqKSehvjQWC1EOCPbF8m9aVkKIe1OZTk6hTi4G4sOk=;
-        b=hyGpyTvAP+rDOP+q5Ai+To4EHE9pY/e9tGyu2QGiBigZWyQ59HlEFnlb6MBg7lvDy+
-         c1I/7GGa1Wo40kYj52p+LGFYZqwayHBnlwHhIuFV50TlBdmw/nSO9FSsPqgG3dVit8eU
-         XsuexljcfsYoRzxJmZ5R4N0iqahvo8ErdXdH8lxioZ2XzImHS3afaALvZbUxhVeP0DvP
-         5oxzHhMOL+md4KpG/YfMHlWQYwFr2nR4V5HxeHG8IlP0WFOBWURl7c0cwG8QqRphAXuG
-         RJ29Z8AoDXLjBzzfv2mxaxffyJSGHOsLmyhjVaZcwOLBPba43/SjtN6OOEB9/Nt5LEtE
-         dVyQ==
-X-Gm-Message-State: AO0yUKU5Syg4U6Os2L7yoX/a8b1N0b1758k/VsqGfuvdVpCLbSUq0H6C
-        u67IO0J/dq2/CLcunhvUhIKgqsLSTV6PorBfPHuR4NbU
-X-Google-Smtp-Source: AK7set9FtgcFB2eVz2Np08Jn1hOMIkiMk2aiDuI56GeAVTTKG+dTkDQmZaTx1Iv1+TCiGA0uCUHl4A==
-X-Received: by 2002:ac8:7f0c:0:b0:3bf:b614:bcaf with SMTP id f12-20020ac87f0c000000b003bfb614bcafmr14296580qtk.67.1677709138947;
-        Wed, 01 Mar 2023 14:18:58 -0800 (PST)
-Received: from ghost.leviathan.sladewatkins.net (pool-108-44-32-49.albyny.fios.verizon.net. [108.44.32.49])
-        by smtp.gmail.com with ESMTPSA id n3-20020ac86743000000b003bfbf3afe51sm8939439qtp.93.2023.03.01.14.18.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 01 Mar 2023 14:18:58 -0800 (PST)
-Message-ID: <ce6204a1-1e37-1cf6-d402-8340a42fd66e@sladewatkins.net>
-Date:   Wed, 1 Mar 2023 17:18:57 -0500
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v2] x86/mce: Schedule work after restart from sysfs update
-Content-Language: en-US
-To:     Yazen Ghannam <yazen.ghannam@amd.com>
+        d=1e100.net; s=20210112; t=1677723117;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=24xhtn5pOGlNyXauP9v8s38FVO7Lz36wZKCTgeWwtN4=;
+        b=6Kffs3JDjaxIFsxUkLPCynh1oKF/nOzjSaU528HMI9zDATD8ZRfcez8hoLez5NejFf
+         OLdcqQ0nAWmc0FSHFMCGGqzfQOdQFlp5phRpNpdXRN3TPqxwfERL8BvnoZXvzTshcR4y
+         wI0N6mgVbpsTc5uRwuyCcKAqbO4gmaPVbwl40e4qS7B0b5R99VQPEuAvxWkhD3fRAifz
+         opHj/uIc6/SLsNWIH479o8LbgCUBTbp4LtOFIzjNdLJhmml22V1yxMXLuNnout1o2L76
+         i6G5PXfgnO4N0EA7RYUjfQ1vkKwR1NTcg25XuGbSp3/kmR+mnWKBvmB747GWt+uenEyp
+         wy9g==
+X-Gm-Message-State: AO0yUKX0/RSjaZWfv0WC0aU999ecxHyDvRZRnP52um4qdX1vYTWRY7BO
+        d0NY4sZ3+3FViA9zJccEhyA=
+X-Google-Smtp-Source: AK7set9Jqp6pjTROlUSuAzL5Ondds55aDqug14UYNOrL+KL0YpHWUm1qtHvSA58NeeZYpLKcDTlFfA==
+X-Received: by 2002:a62:25c4:0:b0:5ec:702c:5880 with SMTP id l187-20020a6225c4000000b005ec702c5880mr6585839pfl.32.1677723117167;
+        Wed, 01 Mar 2023 18:11:57 -0800 (PST)
+Received: from localhost.localdomain ([61.72.178.125])
+        by smtp.gmail.com with ESMTPSA id b1-20020a6567c1000000b00502ea3898a7sm8093777pgs.31.2023.03.01.18.11.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 01 Mar 2023 18:11:56 -0800 (PST)
+From:   Jongwoo Han <jongwooo.han@gmail.com>
+To:     bp@alien8.de, tony.luck@intel.com, james.morse@arm.com,
+        mchehab@kernel.org, rric@kernel.org
 Cc:     linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
-        tony.luck@intel.com, x86@kernel.org
-References: <20230301221420.2203184-1-yazen.ghannam@amd.com>
-From:   Slade Watkins <srw@sladewatkins.net>
-In-Reply-To: <20230301221420.2203184-1-yazen.ghannam@amd.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,
+        Jongwoo Han <jongwooo.han@gmail.com>
+Subject: [PATCH] EDAC/i5100: Fix typo in comment
+Date:   Thu,  2 Mar 2023 11:11:20 +0900
+Message-Id: <20230302021120.56794-1-jongwooo.han@gmail.com>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -74,27 +69,26 @@ Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On 3/1/23 17:14, Yazen Ghannam wrote:
-> A recent change introduced a flag to queue up errors found during
-> boot-time polling. These errors will be processed during late init once
-> the MCE subsystem is fully set up.
-> 
-> A number of sysfs updates call mce_restart() which goes through a subset
-> of the CPU init flow. This includes polling MCA banks and logging any
-> errors found. Since the same function is used as boot-time polling,
-> errors will be queued. However, the system is now past late init, so the
-> errors will remain queued until another error is found and the workqueue
-> is triggered.
-> 
-> Call mce_schedule_work() at the end of mce_restart() so that queued
-> errors are processed.
-> 
-> Fixes: 3bff147b187d ("x86/mce: Defer processing of early errors")
-> Cc: stable@vger.kernel.org
+Correct typo from 'preform' to 'perform' in comment.
 
-Yazen,
-Despite Cc: stable@vger.kernel.org being here, the list wasn't Cc'd on this
-email. Figured I'd let you know in case you create a v3 or resend at any point :).
+Signed-off-by: Jongwoo Han <jongwooo.han@gmail.com>
+---
+ drivers/edac/i5100_edac.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Cheers,
--- Slade
+diff --git a/drivers/edac/i5100_edac.c b/drivers/edac/i5100_edac.c
+index f5d82518c..8db680b6a 100644
+--- a/drivers/edac/i5100_edac.c
++++ b/drivers/edac/i5100_edac.c
+@@ -909,7 +909,7 @@ static void i5100_do_inject(struct mem_ctl_info *mci)
+ 	 *
+ 	 * The injection code don't work without setting this register.
+ 	 * The register needs to be flipped off then on else the hardware
+-	 * will only preform the first injection.
++	 * will only perform the first injection.
+ 	 *
+ 	 * Stop condition bits 7:4
+ 	 * 1010 - Stop after one injection
+-- 
+2.34.1
+
