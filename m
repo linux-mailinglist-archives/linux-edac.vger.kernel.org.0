@@ -2,42 +2,42 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C4C1B6C0290
+	by mail.lfdr.de (Postfix) with ESMTP id 7A4FF6C028F
 	for <lists+linux-edac@lfdr.de>; Sun, 19 Mar 2023 16:02:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230378AbjCSPCH (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Sun, 19 Mar 2023 11:02:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37918 "EHLO
+        id S229851AbjCSPCG (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Sun, 19 Mar 2023 11:02:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230049AbjCSPCE (ORCPT
+        with ESMTP id S229635AbjCSPCE (ORCPT
         <rfc822;linux-edac@vger.kernel.org>); Sun, 19 Mar 2023 11:02:04 -0400
-Received: from mail-il1-f177.google.com (mail-il1-f177.google.com [209.85.166.177])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D963D22100;
-        Sun, 19 Mar 2023 08:01:48 -0700 (PDT)
-Received: by mail-il1-f177.google.com with SMTP id l15so3796187ilv.4;
-        Sun, 19 Mar 2023 08:01:48 -0700 (PDT)
+Received: from mail-io1-f41.google.com (mail-io1-f41.google.com [209.85.166.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8477022107;
+        Sun, 19 Mar 2023 08:01:51 -0700 (PDT)
+Received: by mail-io1-f41.google.com with SMTP id h83so4400277iof.8;
+        Sun, 19 Mar 2023 08:01:51 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679238108;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=n9RoQfRmP4GF9U1NfRinA4rTciPH5Jr0EXMy8qOud8Y=;
-        b=FVn7C6NB2LVVbQRrI0BaXFRhOAyw07wTt6+KM/sqeYOIVzV8stsn+BBzqimbAkERMn
-         vaLRvEQ6Nx9klWtDNGndjCkb04BRt5ZzLP5lygHJzYIiSb+DdMMT2vubYxmWMUgTnpO2
-         BrBg8/wlbcsg+cA1SY0CLHT676I2VRurrWZ6bsb7TEm3DvLgvD8KsXqW2p1Bp8je10ZD
-         DmrXX7XEJ1JDc0jv4WpN28AH4CecOFqKkk/ksM247mpuNaIjc0SeE+UqunGDuqIckEek
-         sv5fEmLWZZG4YOVuJTM8ErYtkxjtdhfjlMJjes6ygi0OQ9jVD/98xpuSUTeX/wIUWuxY
-         4oIg==
-X-Gm-Message-State: AO0yUKWxhYt/P0LbqCdm0FKZZstGd5q9mSTvTeqo9zOKopRpBXKYKGHf
-        jzODaykvBqZsSLwybmE00Q==
-X-Google-Smtp-Source: AK7set+cVhBvDHtDGUm7InWYjtZhoIIh9y1fNxd9MscUJ3CpB+m35zGQ9u/8G8wNdd2ckt3KFS5eiQ==
-X-Received: by 2002:a92:d903:0:b0:323:2468:ba20 with SMTP id s3-20020a92d903000000b003232468ba20mr3232316iln.10.1679238107977;
-        Sun, 19 Mar 2023 08:01:47 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1679238110;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=qcynOfjIuREpUDqg4X2bQ6SnlpBnwbLqLNtaFgxSan4=;
+        b=bTqLEVb/uBSSvsU5lpXgxGgrf0fuFwbG3Em8TfiNXbzSRTbbPBprdQ0mwx210/pSpC
+         /WGnpNp2RVij5SRtnQF/xOD8OYgTNJWwVSSfXVjoX3curPq6S9X+jQnyZjn8RBWAUG5c
+         XwlpDBEInKo23YpaR7uRz55X8+FsrXBVa7TSmgKrX/xhoCuOAPvJ6Mh9aArf5Z+UbiS3
+         rsTiY1t54PlQuBSqpUFQRbhdTp8kYGLaKoXsb84TOdbj7B3YdQt/SkGKqlnwe187HVCo
+         U904yxoahyn7liAEQytCT1d8KEgfmbWoPk6CX5skxeaFSmhXjENZIGU5nx4x/xKGiq1Q
+         uNAA==
+X-Gm-Message-State: AO0yUKXSdfZ57xX+RQTGRpion/ke9RcYHK/q4VECqpi7nws71yVLh4l9
+        qYdqaxY4Ok5GiCoYpi6etA==
+X-Google-Smtp-Source: AK7set9z8akr7zP0UlxXNKqvdjoKU4aalgZfpNrcG/+V0aIKBuMAlMEaq6AsXxfdMm1vqSCECQ9/rw==
+X-Received: by 2002:a05:6602:2c4e:b0:753:87a1:3198 with SMTP id x14-20020a0566022c4e00b0075387a13198mr4139847iov.5.1679238110713;
+        Sun, 19 Mar 2023 08:01:50 -0700 (PDT)
 Received: from robh_at_kernel.org ([2605:ef80:80c4:7b93:58f2:478b:84fd:941e])
-        by smtp.gmail.com with ESMTPSA id g10-20020a056e020d0a00b00313b281ecd2sm2154126ilj.70.2023.03.19.08.01.46
+        by smtp.gmail.com with ESMTPSA id p5-20020a056638190500b003ff471861a4sm2419377jal.90.2023.03.19.08.01.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 19 Mar 2023 08:01:47 -0700 (PDT)
-Received: (nullmailer pid 67920 invoked by uid 1000);
+        Sun, 19 Mar 2023 08:01:50 -0700 (PDT)
+Received: (nullmailer pid 67940 invoked by uid 1000);
         Sun, 19 Mar 2023 15:01:44 -0000
 From:   Rob Herring <robh@kernel.org>
 To:     Borislav Petkov <bp@alien8.de>, Tony Luck <tony.luck@intel.com>,
@@ -45,10 +45,12 @@ To:     Borislav Petkov <bp@alien8.de>, Tony Luck <tony.luck@intel.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         Robert Richter <rric@kernel.org>
 Cc:     linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 1/2] edac: cpc925: Drop unused memory size DT parsing
-Date:   Sun, 19 Mar 2023 10:01:40 -0500
-Message-Id: <20230319150141.67824-1-robh@kernel.org>
+Subject: [PATCH 2/2] edac: cpc925: Use of_get_cpu_hwid() to read CPU node 'reg'
+Date:   Sun, 19 Mar 2023 10:01:41 -0500
+Message-Id: <20230319150141.67824-2-robh@kernel.org>
 X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230319150141.67824-1-robh@kernel.org>
+References: <20230319150141.67824-1-robh@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
@@ -61,75 +63,35 @@ Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-The 'total_mem' memory size is parsed from DT, but never used anywhere.
-Just drop it as drivers shouldn't really do their own parsing of common
-bindings, and memblock would be a better way to get memory size now
-anyways.
+Replace open coded reading of CPU nodes' "reg" properties with
+of_get_cpu_hwid() dedicated for this purpose.
 
 Signed-off-by: Rob Herring <robh@kernel.org>
 ---
- drivers/edac/cpc925_edac.c | 34 ----------------------------------
- 1 file changed, 34 deletions(-)
+ drivers/edac/cpc925_edac.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
 diff --git a/drivers/edac/cpc925_edac.c b/drivers/edac/cpc925_edac.c
-index 9797e6d60dde..ee193aae8e14 100644
+index ee193aae8e14..0182436c1b5a 100644
 --- a/drivers/edac/cpc925_edac.c
 +++ b/drivers/edac/cpc925_edac.c
-@@ -263,7 +263,6 @@ enum brgctrl_bits {
- /* Private structure for edac memory controller */
- struct cpc925_mc_pdata {
- 	void __iomem *vbase;
--	unsigned long total_mem;
- 	const char *name;
- 	int edac_idx;
- };
-@@ -280,37 +279,6 @@ struct cpc925_dev_info {
- 	void (*check)(struct edac_device_ctl_info *edac_dev);
- };
+@@ -557,13 +557,13 @@ static u32 cpc925_cpu_mask_disabled(void)
+ 	mask = APIMASK_ADI0 | APIMASK_ADI1;
  
--/* Get total memory size from Open Firmware DTB */
--static void get_total_mem(struct cpc925_mc_pdata *pdata)
--{
--	struct device_node *np = NULL;
--	const unsigned int *reg, *reg_end;
--	int len, sw, aw;
--	unsigned long start, size;
--
--	np = of_find_node_by_type(NULL, "memory");
--	if (!np)
--		return;
--
--	aw = of_n_addr_cells(np);
--	sw = of_n_size_cells(np);
--	reg = (const unsigned int *)of_get_property(np, "reg", &len);
--	reg_end = reg + len/4;
--
--	pdata->total_mem = 0;
--	do {
--		start = of_read_number(reg, aw);
--		reg += aw;
--		size = of_read_number(reg, sw);
--		reg += sw;
--		edac_dbg(1, "start 0x%lx, size 0x%lx\n", start, size);
--		pdata->total_mem += size;
--	} while (reg < reg_end);
--
--	of_node_put(np);
--	edac_dbg(0, "total_mem 0x%lx\n", pdata->total_mem);
--}
--
- static void cpc925_init_csrows(struct mem_ctl_info *mci)
- {
- 	struct cpc925_mc_pdata *pdata = mci->pvt_info;
-@@ -321,8 +289,6 @@ static void cpc925_init_csrows(struct mem_ctl_info *mci)
- 	u32 mbmr, mbbar, bba, grain;
- 	unsigned long row_size, nr_pages, last_nr_pages = 0;
+ 	for_each_of_cpu_node(cpunode) {
+-		const u32 *reg = of_get_property(cpunode, "reg", NULL);
+-		if (reg == NULL || *reg > 2) {
++		int hwid = of_get_cpu_hwid(cpunode, 0);
++		if ((hwid < 0) || (hwid > 2)) {
+ 			cpc925_printk(KERN_ERR, "Bad reg value at %pOF\n", cpunode);
+ 			continue;
+ 		}
  
--	get_total_mem(pdata);
--
- 	for (index = 0; index < mci->nr_csrows; index++) {
- 		mbmr = __raw_readl(pdata->vbase + REG_MBMR_OFFSET +
- 				   0x20 * index);
+-		mask &= ~APIMASK_ADI(*reg);
++		mask &= ~APIMASK_ADI(hwid);
+ 	}
+ 
+ 	if (mask != (APIMASK_ADI0 | APIMASK_ADI1)) {
 -- 
 2.39.2
 
