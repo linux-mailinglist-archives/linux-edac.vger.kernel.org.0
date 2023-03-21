@@ -2,104 +2,79 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FF6D6C2DCB
-	for <lists+linux-edac@lfdr.de>; Tue, 21 Mar 2023 10:26:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F0906C3E69
+	for <lists+linux-edac@lfdr.de>; Wed, 22 Mar 2023 00:22:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229746AbjCUJ0R convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-edac@lfdr.de>); Tue, 21 Mar 2023 05:26:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55538 "EHLO
+        id S229871AbjCUXV7 (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Tue, 21 Mar 2023 19:21:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229715AbjCUJ0Q (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Tue, 21 Mar 2023 05:26:16 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 523991CAE9
-        for <linux-edac@vger.kernel.org>; Tue, 21 Mar 2023 02:26:14 -0700 (PDT)
-Received: from lhrpeml500004.china.huawei.com (unknown [172.18.147.226])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4PgmRt3GkNz6J7P6;
-        Tue, 21 Mar 2023 17:25:46 +0800 (CST)
-Received: from lhrpeml500006.china.huawei.com (7.191.161.198) by
- lhrpeml500004.china.huawei.com (7.191.163.9) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Tue, 21 Mar 2023 09:26:11 +0000
-Received: from lhrpeml500006.china.huawei.com ([7.191.161.198]) by
- lhrpeml500006.china.huawei.com ([7.191.161.198]) with mapi id 15.01.2507.021;
- Tue, 21 Mar 2023 09:26:11 +0000
-From:   Shiju Jose <shiju.jose@huawei.com>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>
-CC:     "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
-        tanxiaofei <tanxiaofei@huawei.com>,
-        fenglei <fenglei47@h-partners.com>,
-        Jonathan Cameron <jonathan.cameron@huawei.com>,
-        Linuxarm <linuxarm@huawei.com>
-Subject: RE: [PATCH 1/1] rasdaemon: Fix for regression in
- ras_mc_create_table() if some cpus are offline at the system start
-Thread-Topic: [PATCH 1/1] rasdaemon: Fix for regression in
- ras_mc_create_table() if some cpus are offline at the system start
-Thread-Index: AQHZVmPPJ39H1ai4fkiTv9Y4giisiq8APIWAgATDsFA=
-Date:   Tue, 21 Mar 2023 09:26:11 +0000
-Message-ID: <ea2afdc810954b03bf272199fcefd87b@huawei.com>
-References: <20230314105725.1184-1-shiju.jose@huawei.com>
- <20230318093553.3e524594@coco.lan>
-In-Reply-To: <20230318093553.3e524594@coco.lan>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.48.149.198]
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 8BIT
+        with ESMTP id S229511AbjCUXV6 (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Tue, 21 Mar 2023 19:21:58 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21892591EF;
+        Tue, 21 Mar 2023 16:21:56 -0700 (PDT)
+Received: from zn.tnic (p5de8e687.dip0.t-ipconnect.de [93.232.230.135])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 31A7B1EC0373;
+        Wed, 22 Mar 2023 00:21:54 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1679440914;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=PGCFWeab8ZV/Tn/2SCNtHE0y9R5qY4L9uu7+uRgdIFc=;
+        b=bHDtlXwPPZfyZUtmVdx+n+imrELBclzn+YdkHGeqzFHTO6xTxdLdsap5QgXMUeAvQEp/yg
+        YahQrVz/13z7M7p4USx9Beu5fHvtb+E49ynAwmQnT3S6KJsDLCp44l3usOmqOymv8j2CCH
+        QLfOa1GaywPHv7eHK1y5EIJHKCgt/1k=
+Date:   Wed, 22 Mar 2023 00:21:48 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Deepak R Varma <drv@mailo.com>
+Cc:     Dinh Nguyen <dinguyen@kernel.org>, Tony Luck <tony.luck@intel.com>,
+        James Morse <james.morse@arm.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Robert Richter <rric@kernel.org>, linux-edac@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Saurabh Singh Sengar <ssengar@microsoft.com>,
+        pk.drv@ubun2204.myguest.virtualbox.org
+Subject: Re: [PATCH RESEND] EDAC/altera: Remove redundant error logging
+Message-ID: <20230321232148.GDZBo8DNnxBNmvOUhP@fat_crate.local>
+References: <Y/+j27kqdhflPtaj@ubun2204.myguest.virtualbox.org>
 MIME-Version: 1.0
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <Y/+j27kqdhflPtaj@ubun2204.myguest.virtualbox.org>
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-Hi Mauro,
+On Thu, Mar 02, 2023 at 12:43:31AM +0530, Deepak R Varma wrote:
+> A call to platform_get_irq() already prints an error on failure within
+> its own implementation. So printing another error based on its return
+> value in the caller is redundant and should be removed. The clean up
+> also makes if condition block braces unnecessary. Remove that as well.
+> 
+> Issue identified using platform_get_irq.cocci coccinelle semantic patch.
+> 
+> Signed-off-by: Deepak R Varma <drv@mailo.com>
+> ---
+> Note:
+>    The change was compile tested only.
+>    Resending the patch for a review and feedback.
+>      
+>  drivers/edac/altera_edac.c | 9 +++------
+>  1 file changed, 3 insertions(+), 6 deletions(-)
 
->-----Original Message-----
->From: Mauro Carvalho Chehab <mchehab@kernel.org>
->Sent: 18 March 2023 08:36
->To: Shiju Jose <shiju.jose@huawei.com>
->Cc: linux-edac@vger.kernel.org; tanxiaofei <tanxiaofei@huawei.com>; fenglei
-><fenglei47@h-partners.com>; Jonathan Cameron
-><jonathan.cameron@huawei.com>; Linuxarm <linuxarm@huawei.com>
->Subject: Re: [PATCH 1/1] rasdaemon: Fix for regression in
->ras_mc_create_table() if some cpus are offline at the system start
->
->Hi Jose,
->
->Em Tue, 14 Mar 2023 10:57:25 +0000
-><shiju.jose@huawei.com> escreveu:
->
->> From: Shiju Jose <shiju.jose@huawei.com>
->>
->> Issues:
->> Regression in the ras_mc_create_table() if some of the cpus are
->> offline at the system start when run the rasdaemon. This issue is
->> reproducible in ras_mc_create_table() with decode and record
->> non-standard events and reproducible sometimes with
->> ras_mc_create_table() for the standard events.
->> Also in the multi thread way, there is memory leak in
->> ras_mc_event_opendb() as struct sqlite3_priv *priv and sqlite3 *db
->> allocated/initialized per thread, but stored in the common struct
->> ras_events ras in pthread data, which is shared across the threads.
->
->Could you please submit rasdaemon patches via github pull requests?
->
->It is currently easier to me to pick patches from there. You can still send then to
->the ML in case you want others to take a look and review them, but I'll be
->applying them only after the PR at rasdaemon.
+Applied, thanks.
 
-I  will  submit the pull request in the github.
- 
->
->Regards,
->Mauro
->
-Thanks,
-Shiju
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
