@@ -2,362 +2,172 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64B136C71A1
-	for <lists+linux-edac@lfdr.de>; Thu, 23 Mar 2023 21:24:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AC3A06C71A4
+	for <lists+linux-edac@lfdr.de>; Thu, 23 Mar 2023 21:26:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230335AbjCWUYr (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Thu, 23 Mar 2023 16:24:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42780 "EHLO
+        id S229682AbjCWU0Q (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Thu, 23 Mar 2023 16:26:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229502AbjCWUYr (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Thu, 23 Mar 2023 16:24:47 -0400
-Received: from mx0b-002e3701.pphosted.com (mx0b-002e3701.pphosted.com [148.163.143.35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80D7F23C6F;
-        Thu, 23 Mar 2023 13:24:45 -0700 (PDT)
-Received: from pps.filterd (m0134425.ppops.net [127.0.0.1])
-        by mx0b-002e3701.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32NIqxa9010676;
-        Thu, 23 Mar 2023 20:24:25 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-transfer-encoding; s=pps0720;
- bh=xJbSLKxPzmw1dFHRUfgRRXz+JkoGSWETzLUX8F2zI3M=;
- b=Lo5wrP3R/SpVVRugIAcgBisNu5U9bOkDnsa9BoSYqBQAInK2Qm8rsoaFhy+phwGZomeF
- HI9Cd78igMghmqQ/vbIA6QS4KBSAHj5vwen8nNrUnqmGmicRxExdTiC9lgVlnGFYb5GX
- 6HmiH6UTv9JGulGc27xjObZwMgWSoCW4I3roLQfFjG8xIDNDPFonfCjmPf8FDUDB2Cpx
- n4r4P2usBAS+zIzdoOsvILY8qSJ0ToU0sD6/pSAfKztLGNeqA55MKgdNF/pWE9vHczmb
- MtSNbJc//+Mjt+qRWGP0/aflSFdj//8SOn+264XQxyQi9ZcEVp824bJKeAa2sXc2Nd6c zw== 
-Received: from p1lg14879.it.hpe.com (p1lg14879.it.hpe.com [16.230.97.200])
-        by mx0b-002e3701.pphosted.com (PPS) with ESMTPS id 3pgvec8my2-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 23 Mar 2023 20:24:25 +0000
-Received: from p1lg14885.dc01.its.hpecorp.net (unknown [10.119.18.236])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by p1lg14879.it.hpe.com (Postfix) with ESMTPS id 4341B13096;
-        Thu, 23 Mar 2023 20:24:24 +0000 (UTC)
-Received: from dog.eag.rdlabs.hpecorp.net (unknown [16.231.227.36])
-        by p1lg14885.dc01.its.hpecorp.net (Postfix) with ESMTP id 9932D813D8E;
-        Thu, 23 Mar 2023 20:24:23 +0000 (UTC)
-Received: by dog.eag.rdlabs.hpecorp.net (Postfix, from userid 48777)
-        id E0DF930062B07; Thu, 23 Mar 2023 15:24:22 -0500 (CDT)
-From:   kyle-meyer <kyle.meyer@hpe.com>
-To:     dimitri.sivanich@hpe.com, steve.wahl@hpe.com, tglx@linutronix.de,
-        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
-        x86@kernel.org, hpa@zytor.com, tony.luck@intel.com,
-        qiuxu.zhuo@intel.com, yazen.ghannam@amd.com,
-        linux-kernel@vger.kernel.org, linux-edac@vger.kernel.org
-Cc:     kyle.meyer@hpe.com
-Subject: [PATCH] RAS/CEC: Move non-debug attributes out of debugfs
-Date:   Thu, 23 Mar 2023 15:22:01 -0500
-Message-Id: <20230323202158.37937-1-kyle.meyer@hpe.com>
-X-Mailer: git-send-email 2.26.2
+        with ESMTP id S229499AbjCWU0P (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Thu, 23 Mar 2023 16:26:15 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B79D1E9F1;
+        Thu, 23 Mar 2023 13:26:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1679603174; x=1711139174;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=ZY0HacO+iNpkXn6EWyfAF7mECdamcaIwAWzG+BKr9kY=;
+  b=mCzi8l6V0ws3akAKv1dQMeaNVlkrg6o0IvEVZAcv3WvUOqVCMLTPVP3w
+   ShoZWaTPU17Yn99sBAsAdj7gHKott768sz5mKcfjTFxVrVDgzqsnJlHuM
+   Jd6Ev1v8jd/cMZirMFDRA1rordFQP9T7fnEn9b8CVmSMLXDOkNC1QIQSt
+   VkOkTZnowFFvgUi3m+CQ3wMdJWSrysqSBQKFW2gWGGVsNC3ILcNp9BEAL
+   iMaor16LnbdNO+GMFHJosk44CgTfZHe7gGdNpj5wiFN0O6APG0MggAB0T
+   JGl/5fcCFinjCpMFyITb5eu0DbxE05Pqd51GjXKTS73DGaz93vR+0Y/Dv
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10658"; a="402195457"
+X-IronPort-AV: E=Sophos;i="5.98,285,1673942400"; 
+   d="scan'208";a="402195457"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Mar 2023 13:26:13 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10658"; a="659764921"
+X-IronPort-AV: E=Sophos;i="5.98,285,1673942400"; 
+   d="scan'208";a="659764921"
+Received: from fmsmsx603.amr.corp.intel.com ([10.18.126.83])
+  by orsmga006.jf.intel.com with ESMTP; 23 Mar 2023 13:26:09 -0700
+Received: from fmsmsx602.amr.corp.intel.com (10.18.126.82) by
+ fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Thu, 23 Mar 2023 13:26:05 -0700
+Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
+ fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21 via Frontend Transport; Thu, 23 Mar 2023 13:26:05 -0700
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (104.47.70.107)
+ by edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.21; Thu, 23 Mar 2023 13:26:05 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=b9xqYFiL0qzoP/xM3fuN7bxJgsdgljygUi+4oDjljkeoA7dllSC/uLLDPpNZq+7ObLV1BolUbIaeG7bzWOeGZTSKuNCSFD0Qs6jrLPMj0lwL1rbNzvFtYfaVnmjzbdfsxabGmI/1k5rRHP2nr14mrwq42xJq43X4YNNGjz/3zsET0mQlFk0Nzi1FlDdKE9fvHE7vzHP4nMmHuxvTUy37sgEQB+HCIGGSfhqBs8TsZngYA6/16GxIip1N6vgovgc8KKDR2b6RroHEfQRve/KTVdm1paibBmJmfoyxG8iCyZgBhWFINFm0z+gyD3YcKpGp8O13huRr/p5rCYq1kYlkXg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=JFhCjeb5zfSsUYUBw/SBd5qDS9LHKc5Sb1wEYocqK+Q=;
+ b=Tx1RNCk5tU4BqhwqUz+pq21CHGgTEQwqjUh14k5TT9/VgszRWvNP1CcqjN/ANbConYpAQ8OMRXuYIaS/5c5ePedHn7dxsAb4KnLA0Xzg4hGa+0XIueD6dQnhKtvxRdShS481m7fZOpuyjmVA+jhtXVGStTlNkvuf0GIdV1ThBpL+Kv45v/at3yxcIqC5i9wUvpCMNs7KnkJptp5NCuzJWB7lKR/zPccxWZ3iLocTMCgOgHLQJQXsYpOZ88rGJtcMS0NunePN0M2ZCYF3bfSd9nfpeSP+3SiDA+2taTgPN/xQAeyRRoU5K0XdAkJJGruc4oN1bLVI4vQmf8AydsdqAA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from SJ1PR11MB6083.namprd11.prod.outlook.com (2603:10b6:a03:48a::9)
+ by DM4PR11MB6480.namprd11.prod.outlook.com (2603:10b6:8:8d::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.37; Thu, 23 Mar
+ 2023 20:26:02 +0000
+Received: from SJ1PR11MB6083.namprd11.prod.outlook.com
+ ([fe80::a47:481:d644:a8b5]) by SJ1PR11MB6083.namprd11.prod.outlook.com
+ ([fe80::a47:481:d644:a8b5%7]) with mapi id 15.20.6178.037; Thu, 23 Mar 2023
+ 20:26:02 +0000
+From:   "Luck, Tony" <tony.luck@intel.com>
+To:     Yazen Ghannam <yazen.ghannam@amd.com>
+CC:     Borislav Petkov <bp@alien8.de>,
+        "Smita.KoralahalliChannabasappa@amd.com" 
+        <Smita.KoralahalliChannabasappa@amd.com>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "patches@lists.linux.dev" <patches@lists.linux.dev>
+Subject: RE: [PATCH v3 4/5] x86/mce: Move storm handling to core.
+Thread-Topic: [PATCH v3 4/5] x86/mce: Move storm handling to core.
+Thread-Index: AQHZWPTgJ4wIXq7BtEGVPo9uGmSDaK8IhfAAgAArnhCAACa0kA==
+Date:   Thu, 23 Mar 2023 20:26:02 +0000
+Message-ID: <SJ1PR11MB6083D33BC6860AB9FE2A292BFC879@SJ1PR11MB6083.namprd11.prod.outlook.com>
+References: <ZBR+GMH0olGoDMGs@yaz-fattaah>
+ <20230317172042.117201-1-tony.luck@intel.com>
+ <20230317172042.117201-5-tony.luck@intel.com>
+ <ZBxvyqb5Mnt13341@yaz-khff.amd.com>
+ <SJ1PR11MB60835D7F85097FEF454DD74CFC879@SJ1PR11MB6083.namprd11.prod.outlook.com>
+In-Reply-To: <SJ1PR11MB60835D7F85097FEF454DD74CFC879@SJ1PR11MB6083.namprd11.prod.outlook.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: SJ1PR11MB6083:EE_|DM4PR11MB6480:EE_
+x-ms-office365-filtering-correlation-id: 950f57fc-6041-4e58-e303-08db2bdcd264
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: HYkb1VcqKk7a+6JQ/hRabeG8wNzi3L+q45/+0HZi8POmUE9S3mRurZDPOCpgaV25ewx741bV6u20hR/x7Z8pkfLGcqiKh7w2OZbs1fDDMn8x8jEAKd5H2sOwfyjCptMYdhn3VLbCXXMXY1ywkk7kOxj/c7/r8YqiQzOXZML8BjakURPMeaFNLp9xjxb2efayWE7si1FV/DnpOPrDeEsMYqJ+oRZRb0K343xlv6FDm7vXkCCeKXvrohWtzB7dptLQd4i5+889nTNB59pYW5sjRNlUTD8PV3QDJWFWMULt8VZk36yj/QeqSUeKT6nju98odRUBb4GnvDl3ButKNICZ3sN8HMk16qj3BwWrxy1Z3LcEre+QOC2MI2DwvUN95jvH4Lq5/bIka7Sj43C2R5MxT1jv+zDBrNYG2/cSkZJYJz7t7zAfpMjK7or0qZpDT8CjOMnaG0MyQO+wvwrxSKusvr67RU/bTKKy8dHTSax3kYA70vy5YepaO9Pf08LhQEtCxyMh+ILgiEzicRkwZ5NBfAjosnYwl+blJh296Q3UivMfq313waiE72wZflpj6CnTEiMsd+t8mcI5r5oLL1ONvhkJ8n9NG7epgiGWZwC++/H1H4GSmwSj7Ugx4TlMycgJrKMCm6oW8+xew62qecm4ZkqkKvETkM4j6cwwx0ZFzd6qyENyace455U0kuIbGwRqotUT94B9uc7hK24jjUjJWQ==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ1PR11MB6083.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(39860400002)(136003)(346002)(376002)(396003)(366004)(451199018)(478600001)(66476007)(64756008)(4326008)(66446008)(76116006)(8676002)(66556008)(66946007)(6916009)(4744005)(52536014)(122000001)(5660300002)(82960400001)(41300700001)(26005)(8936002)(6506007)(2940100002)(186003)(9686003)(316002)(7696005)(54906003)(86362001)(33656002)(71200400001)(55016003)(38100700002)(38070700005)(2906002);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?qE7ZwQFJWKqdMEi47UaQRbj/x8NZ7lrNbKM8qRLirMdfChyvq4t3A3DOjbXj?=
+ =?us-ascii?Q?7RdjJa0iNVn2cFfRARJTZNlocxy0jIpQzAufHaxrejotyTr2WilwHlev4ebt?=
+ =?us-ascii?Q?PyXyVY6GOX/qrj99qCF8Qr0JRNX9Bvcz01rD9tGERU67RaAs4X3O31WPdhAp?=
+ =?us-ascii?Q?z1VozuAa7OVuwnevSMMN/P7KzxXIhb9toQ71FqbTKGrSR/088WKWyHXzZFa9?=
+ =?us-ascii?Q?gNmAa/DrdWa8gX7uy9a8LBssB4Jpu6ois7zpnqJ5UMW0xLc5BUWTCThjxYB7?=
+ =?us-ascii?Q?VxyWRNuc0N3zLOjwYS06r7nyDjAmaiuQEiBeg7hi5FcaE3LJ2KIFbcJdlHJG?=
+ =?us-ascii?Q?+q0cd0B0ZcmO4wfwNE8xdNfONRWeEsfKm5mftlrYui7PrTeebg8jT22Ytt4b?=
+ =?us-ascii?Q?ysEPAhLcZ58PXw5qKJy3hqEqw7qvznJeQaRaaS9AigN1N4o+wyO2qimKLBEj?=
+ =?us-ascii?Q?pecSHb00oJwKcRAm9BVBJ/sczSf1HuIepM25EbUYFXB5lz29AYklxUkfZGIY?=
+ =?us-ascii?Q?giInCwW9QLXid/gE0UBTBQX6E5WU9EqI+r+KvNEd6y31yb2JxdHvfU3is5Dx?=
+ =?us-ascii?Q?oss9/mrHORW+8SdIUJtiE2UxoGExqmFZTGZNbW3h0qxsgLrLyG/3hKvCCqEL?=
+ =?us-ascii?Q?Lgb7a16LwBpiHOGo6sPZyJe4XUO2+yt2I0EgtmB+k+xqhky+6nAVt9zN5cW7?=
+ =?us-ascii?Q?uQpD0mZ2H2whDBg8ivob508Wdkjgs5eAlrD5n4LNtcStnjR4HmBPP1jQi94v?=
+ =?us-ascii?Q?C5v1/tE94GF6bEDH6n3pHuHy39e1QsEuvwn+A6BefzgQFIdbse46J7N6r9FO?=
+ =?us-ascii?Q?XYw2t6OyyGt0LFAgTffBp/qKs3xRR+moLNMXQs2OBRZ7kvRGDsoG16S+hiaR?=
+ =?us-ascii?Q?l7E7igajbvl4/Lbp50ULs9LomVhVqXvVqYE1eyoYoiX0JsPFILiiuUgZoWWE?=
+ =?us-ascii?Q?k1qPFzLSJh0hNxHWM+V5lEJstMYWFZfVoRYw749nOEOaVzHTySzPBlMEkIep?=
+ =?us-ascii?Q?FQrcBUcuZn99xWeRX9Lx9+Nh6jkP62WWR2JT91aUJac4m8/FfVaCOa199JvH?=
+ =?us-ascii?Q?3UY1c8kXNY+Bm8+XVghl+6HoLozQ/fQwszbnsO8XpV9dk/hdRsmTxeQgSq9y?=
+ =?us-ascii?Q?JmSY/1fMBbAzS2G2TNNU20f5uYs3+6/r5UPdskwwcFgy3JHd93hzFqPymhR+?=
+ =?us-ascii?Q?Qq+3KYtqYvY5+r/pa3GNOwtjtCME2qRO31YzEry9F2WjKQH/l349brZDbljL?=
+ =?us-ascii?Q?CvqDqtmLOHYyOo50R6TPcRVbizy88mUAKUIsUKj6L5SO5oXhoKqawSHcGGIL?=
+ =?us-ascii?Q?uT3AOC3EeMby5YZlPKsJYzyO5VJHpn4jDcjkIWAwfMx4pTq4i424r214w39x?=
+ =?us-ascii?Q?0ktLODF9t9jU+Lw2Y4iyh65epal/Nyw9A4DBOjKdXxBpynExldlR2HKxt8G4?=
+ =?us-ascii?Q?bdqOwzDLz2yd7ik2IPjRdt+PWK4DfLp8kPNF/2SWPhjJtgUZ8i2egCt4dHad?=
+ =?us-ascii?Q?VthUEZykllbg/0jegL7R4A6qTguv/beV+H1kmYyqGd10oO3xdl7TE9KmX+1C?=
+ =?us-ascii?Q?9RNBaUKYc/+ukQPs86M=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-GUID: qXr59J__IJfRcOr108swO29VeHPtH2So
-X-Proofpoint-ORIG-GUID: qXr59J__IJfRcOr108swO29VeHPtH2So
-X-HPE-SCL: -1
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-23_13,2023-03-23_02,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 clxscore=1011
- bulkscore=0 spamscore=0 adultscore=0 mlxscore=0 mlxlogscore=999
- impostorscore=0 lowpriorityscore=0 suspectscore=0 malwarescore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303150002 definitions=main-2303230150
-X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: SJ1PR11MB6083.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 950f57fc-6041-4e58-e303-08db2bdcd264
+X-MS-Exchange-CrossTenant-originalarrivaltime: 23 Mar 2023 20:26:02.5058
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 2X85XX4m9x/fbcZHQmzYmI5lOu2GFUYpYMevrVMPo/e51CHTj5sVa904hGuPJFVMnPrC4IUIbLVR5E9gBKpi8w==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR11MB6480
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-From: Kyle Meyer <kyle.meyer@hpe.com>
+Yazen,
 
-When kernel lockdown is in effect, use of debugfs is not permitted. Move
-decay_interval and action_threshold out of debugfs, from debugfs/ras/cec
-to sysfs/system/devices/machinecheck/cec.
+I folded the fixes for the issues you pointed to in patch 3/5 into the seri=
+es and rebased to v6.3-rc3
 
-Reviewed-by: Dimitri Sivanich <dimitri.sivanich@hpe.com>
-Reviewed-by: Steve Wahl <steve.wahl@hpe.com>
-Signed-off-by: Kyle Meyer <kyle.meyer@hpe.com>
----
- arch/x86/include/asm/mce.h     |   1 +
- arch/x86/kernel/cpu/mce/core.c |   3 +-
- arch/x86/ras/Kconfig           |   4 +-
- drivers/ras/cec.c              | 141 ++++++++++++++++++++++-----------
- 4 files changed, 101 insertions(+), 48 deletions(-)
+Resulting tree pushed here:
 
-diff --git a/arch/x86/include/asm/mce.h b/arch/x86/include/asm/mce.h
-index 9646ed6e8c0b..c5d358499899 100644
---- a/arch/x86/include/asm/mce.h
-+++ b/arch/x86/include/asm/mce.h
-@@ -206,6 +206,7 @@ static inline void enable_copy_mc_fragile(void)
- struct cper_ia_proc_ctx;
- 
- #ifdef CONFIG_X86_MCE
-+extern struct bus_type mce_subsys;
- int mcheck_init(void);
- void mcheck_cpu_init(struct cpuinfo_x86 *c);
- void mcheck_cpu_clear(struct cpuinfo_x86 *c);
-diff --git a/arch/x86/kernel/cpu/mce/core.c b/arch/x86/kernel/cpu/mce/core.c
-index 2eec60f50057..1a3eaa501ae4 100644
---- a/arch/x86/kernel/cpu/mce/core.c
-+++ b/arch/x86/kernel/cpu/mce/core.c
-@@ -2376,10 +2376,11 @@ static void mce_enable_ce(void *all)
- 		__mcheck_cpu_init_timer();
- }
- 
--static struct bus_type mce_subsys = {
-+struct bus_type mce_subsys = {
- 	.name		= "machinecheck",
- 	.dev_name	= "machinecheck",
- };
-+EXPORT_SYMBOL_GPL(mce_subsys);
- 
- DEFINE_PER_CPU(struct device *, mce_device);
- 
-diff --git a/arch/x86/ras/Kconfig b/arch/x86/ras/Kconfig
-index 7488c715427e..5f5f6f9a5f3c 100644
---- a/arch/x86/ras/Kconfig
-+++ b/arch/x86/ras/Kconfig
-@@ -1,7 +1,7 @@
- # SPDX-License-Identifier: GPL-2.0
- config RAS_CEC
- 	bool "Correctable Errors Collector"
--	depends on X86_MCE && MEMORY_FAILURE && DEBUG_FS
-+	depends on X86_MCE && MEMORY_FAILURE
- 	help
- 	  This is a small cache which collects correctable memory errors per 4K
- 	  page PFN and counts their repeated occurrence. Once the counter for a
-@@ -15,7 +15,7 @@ config RAS_CEC
- config RAS_CEC_DEBUG
- 	bool "CEC debugging machinery"
- 	default n
--	depends on RAS_CEC
-+	depends on RAS_CEC && DEBUG_FS
- 	help
- 	  Add extra files to (debugfs)/ras/cec to test the correctable error
- 	  collector feature. "pfn" is a writable file that allows user to
-diff --git a/drivers/ras/cec.c b/drivers/ras/cec.c
-index 321af498ee11..b45b4e90b8de 100644
---- a/drivers/ras/cec.c
-+++ b/drivers/ras/cec.c
-@@ -7,6 +7,7 @@
- #include <linux/ras.h>
- #include <linux/kernel.h>
- #include <linux/workqueue.h>
-+#include <linux/device.h>
- 
- #include <asm/mce.h>
- 
-@@ -394,53 +395,96 @@ static int cec_add_elem(u64 pfn)
- 	return ret;
- }
- 
--static int u64_get(void *data, u64 *val)
--{
--	*val = *(u64 *)data;
-+static struct kobject *cec_kobj;
- 
--	return 0;
-+static ssize_t decay_interval_show(struct kobject *kobj,
-+				   struct kobj_attribute *attr, char *buf)
-+{
-+	return sysfs_emit(buf, "%llu\n", decay_interval);
- }
- 
--static int pfn_set(void *data, u64 val)
-+static ssize_t decay_interval_store(struct kobject *kobj,
-+				    struct kobj_attribute *attr,
-+				    const char *buf, size_t count)
- {
--	*(u64 *)data = val;
-+	unsigned long long res;
-+	int ret;
- 
--	cec_add_elem(val);
-+	ret = kstrtoull(buf, 10, &res);
-+	if (ret)
-+		return ret;
- 
--	return 0;
-+	if (res < CEC_DECAY_MIN_INTERVAL)
-+		return -EINVAL;
-+
-+	if (res > CEC_DECAY_MAX_INTERVAL)
-+		return -EINVAL;
-+
-+	decay_interval = res;
-+
-+	cec_mod_work(decay_interval);
-+
-+	return count;
- }
- 
--DEFINE_DEBUGFS_ATTRIBUTE(pfn_ops, u64_get, pfn_set, "0x%llx\n");
-+static ssize_t action_threshold_show(struct kobject *kobj,
-+				     struct kobj_attribute *attr, char *buf)
-+{
-+	return sysfs_emit(buf, "%llu\n", action_threshold);
-+}
- 
--static int decay_interval_set(void *data, u64 val)
-+static ssize_t action_threshold_store(struct kobject *kobj,
-+				      struct kobj_attribute *attr,
-+				      const char *buf, size_t count)
- {
--	if (val < CEC_DECAY_MIN_INTERVAL)
--		return -EINVAL;
-+	unsigned long long res;
-+	int ret;
- 
--	if (val > CEC_DECAY_MAX_INTERVAL)
--		return -EINVAL;
-+	ret = kstrtoull(buf, 10, &res);
-+	if (ret)
-+		return ret;
- 
--	*(u64 *)data   = val;
--	decay_interval = val;
-+	if (res > COUNT_MASK)
-+		res = COUNT_MASK;
- 
--	cec_mod_work(decay_interval);
-+	action_threshold = res;
-+
-+	return count;
-+}
-+
-+static struct kobj_attribute decay_interval_attr =
-+	__ATTR_RW_MODE(decay_interval, 0600);
-+
-+static struct kobj_attribute action_threshold_attr =
-+	__ATTR_RW_MODE(action_threshold, 0600);
-+
-+static struct attribute *cec_attrs[] = {
-+	&decay_interval_attr.attr,
-+	&action_threshold_attr.attr,
-+	NULL
-+};
-+
-+static const struct attribute_group cec_attr_group = {
-+	.attrs = cec_attrs
-+};
-+
-+static int u64_get(void *data, u64 *val)
-+{
-+	*val = *(u64 *)data;
- 
- 	return 0;
- }
--DEFINE_DEBUGFS_ATTRIBUTE(decay_interval_ops, u64_get, decay_interval_set, "%lld\n");
- 
--static int action_threshold_set(void *data, u64 val)
-+static int pfn_set(void *data, u64 val)
- {
- 	*(u64 *)data = val;
- 
--	if (val > COUNT_MASK)
--		val = COUNT_MASK;
--
--	action_threshold = val;
-+	cec_add_elem(val);
- 
- 	return 0;
- }
--DEFINE_DEBUGFS_ATTRIBUTE(action_threshold_ops, u64_get, action_threshold_set, "%lld\n");
-+
-+DEFINE_DEBUGFS_ATTRIBUTE(pfn_ops, u64_get, pfn_set, "0x%llx\n");
- 
- static const char * const bins[] = { "00", "01", "10", "11" };
- 
-@@ -480,7 +524,7 @@ DEFINE_SHOW_ATTRIBUTE(array);
- 
- static int __init create_debugfs_nodes(void)
- {
--	struct dentry *d, *pfn, *decay, *count, *array;
-+	struct dentry *d, *pfn, *array;
- 
- 	d = debugfs_create_dir("cec", ras_debugfs_dir);
- 	if (!d) {
-@@ -488,23 +532,6 @@ static int __init create_debugfs_nodes(void)
- 		return -1;
- 	}
- 
--	decay = debugfs_create_file("decay_interval", S_IRUSR | S_IWUSR, d,
--				    &decay_interval, &decay_interval_ops);
--	if (!decay) {
--		pr_warn("Error creating decay_interval debugfs node!\n");
--		goto err;
--	}
--
--	count = debugfs_create_file("action_threshold", S_IRUSR | S_IWUSR, d,
--				    &action_threshold, &action_threshold_ops);
--	if (!count) {
--		pr_warn("Error creating action_threshold debugfs node!\n");
--		goto err;
--	}
--
--	if (!IS_ENABLED(CONFIG_RAS_CEC_DEBUG))
--		return 0;
--
- 	pfn = debugfs_create_file("pfn", S_IRUSR | S_IWUSR, d, &dfs_pfn, &pfn_ops);
- 	if (!pfn) {
- 		pr_warn("Error creating pfn debugfs node!\n");
-@@ -553,6 +580,8 @@ static struct notifier_block cec_nb = {
- 
- static int __init cec_init(void)
- {
-+	int ret;
-+
- 	if (ce_arr.disabled)
- 		return -ENODEV;
- 
-@@ -570,9 +599,22 @@ static int __init cec_init(void)
- 		return -ENOMEM;
- 	}
- 
--	if (create_debugfs_nodes()) {
--		free_page((unsigned long)ce_arr.array);
--		return -ENOMEM;
-+	cec_kobj = kobject_create_and_add("cec", &mce_subsys.dev_root->kobj);
-+	if (!cec_kobj) {
-+		pr_err("Error creating CEC kobject!\n");
-+		ret = -ENOMEM;
-+		goto err_kobject;
-+	}
-+
-+	ret = sysfs_create_group(cec_kobj, &cec_attr_group);
-+	if (ret) {
-+		pr_err("Error creating CEC attribute group!\n");
-+		goto err_group;
-+	}
-+
-+	if (IS_ENABLED(CONFIG_RAS_CEC_DEBUG) && create_debugfs_nodes()) {
-+		ret = -ENOMEM;
-+		goto err_debug;
- 	}
- 
- 	INIT_DELAYED_WORK(&cec_work, cec_work_fn);
-@@ -582,6 +624,15 @@ static int __init cec_init(void)
- 
- 	pr_info("Correctable Errors collector initialized.\n");
- 	return 0;
-+
-+err_debug:
-+	sysfs_remove_group(cec_kobj, &cec_attr_group);
-+err_group:
-+	kobject_put(cec_kobj);
-+err_kobject:
-+	free_page((unsigned long)ce_arr.array);
-+
-+	return ret;
- }
- late_initcall(cec_init);
- 
--- 
-2.26.2
+git://git.kernel.org/pub/scm/linux/kernel/git/aegl/linux.git     try-storm-=
+on6-3
 
+Builds, boots, and passes my storm tests here.
+
+How is testing going on the AMD side of this series?
+
+-Tony
