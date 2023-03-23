@@ -2,44 +2,44 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 83E886C6C31
-	for <lists+linux-edac@lfdr.de>; Thu, 23 Mar 2023 16:22:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 708A56C6C44
+	for <lists+linux-edac@lfdr.de>; Thu, 23 Mar 2023 16:27:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232029AbjCWPWa (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Thu, 23 Mar 2023 11:22:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43494 "EHLO
+        id S232136AbjCWP1O (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Thu, 23 Mar 2023 11:27:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231857AbjCWPW3 (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Thu, 23 Mar 2023 11:22:29 -0400
-Received: from NAM04-BN8-obe.outbound.protection.outlook.com (mail-bn8nam04on2064.outbound.protection.outlook.com [40.107.100.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 227992CC63;
-        Thu, 23 Mar 2023 08:22:28 -0700 (PDT)
+        with ESMTP id S232096AbjCWP1N (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Thu, 23 Mar 2023 11:27:13 -0400
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2089.outbound.protection.outlook.com [40.107.93.89])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8F6D1B574;
+        Thu, 23 Mar 2023 08:27:12 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=QzW8QikTs5FmQqprHAdavtki4UNxFqpzwIxK3zDnSsrmfIxGIcENNh+ey75Pv4pmOb5TDANnPu6yx9SbAGceRkZx9xFth8hfsJpEJaIlOemENj5D1Zea11ErgxGayETd2PTuweMg3K3SY5b8nQKYWEBdIx2KKBR4d63SCjPQUHLqURoGsqqMEAytH8Xi6aiFGnPQXAmbPVo20qF51FgF+EOhBbM1/fTLsh7HVaz4B2a5G67lfyoZ3Cf33krvE/scXdCRrAxwOAxHOVhm6KtLxTTocaPN6eqkkvOASPQF3H4RQMcvOK+JEDl75+flzToKD4Qci98BL2yQxTxbylUfaA==
+ b=fFTP+RnpdaW7N8SYezoGHkovgjfjd4LAbcUMy7EKjJmfBjJEz4iO87lpspH2g3RpVyZpgAnnVS0hhqxYeAF2VnhJLELH4s0aKE9J+xRLhyLhcq+rmIP/6k3uRTZxL8mQqdgOHYMXtVH84GsxsDmk1vwJ2pSKEQ4z6jvR5GjM+BNqEJuOuFiXqgvLN94hsu+ugUaIPLs6BJi+UKzoCS6ycV1KqoToMDx3k6vXTRZdn8SJMYG1X6ztRTdoqJ6R/vsOlZELQPCsw7PKETLpAErfcnhIu5K1gis3nUvAZeidTv4YV83YSbt3xPHZXrW2m9O87L1rfa/DUaZefhnI0PwZ8w==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=/1DDLG9u1ChE5Dwscg/h4/U4C8zNApcIiKHYNDuILcI=;
- b=FkoRVWe3T4FG0mqQhlbhhePx3It2qvm9r942/3S8SQkKGOlu5CzisKk1Unoo2BDjZLWcehh/IWEWDo3H4YFNTSvnw6sOAJfhTMfYcfL8IJzh8B20BGG8UTaLxwxG1/+h6kcWmC1wpmq7V1zlaBiJFaskP5xJ2Rrn9PiDMSK+ALIlbUCE7AWabTIFt1rArz2ZpLaeeZq2dvC09rW+IUJdU2hvWFVfCYt/vc+HfAnTs2r3h9va+TkWycbIXd1HwcuxaHopHQBDPjAVL5sEdMmSN4vrbdBKNeS7VP43EM54pNjMb20Kh4ztIw6qz/g4V2sDX0afWnsUd3/uAQa78xmIWQ==
+ bh=9FwYwe3zU1p2+ieKfEP9HtYrteHDThs/+HGV9B8iEO8=;
+ b=R0Aw2pzT0lXgwVjn5CfUzW2ukNh+MqJOqr2XajzaClnKYCXAP9wMHWUSwDsGiXgS6zSODjdMxrsxNicW/xAJI4XbOz098SOoD/HKZkTiOzOsimiwtGKcSQC2QKRgCTomw7qBCG5yJqU795htHqYuQVXcfrh8KjhlKg27EfVcQWmlzvdrJ65q9HHn8pUfXfquG0aNWKoQwgElIoo7XizbqH2anVprSMdPLySbVxrEFpP8FR2enyz9WWHeHoDIT0xSW0Z8nxRaYHHMZOLKtTVlNjJe16YCdbWn7d67byPKyTTedAP6F3VVlGe+XXTIKIn2g8f6Y5JlBXJeYmilpha0ug==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
  header.d=amd.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=/1DDLG9u1ChE5Dwscg/h4/U4C8zNApcIiKHYNDuILcI=;
- b=vJxwLEjEoBpZWEadXTAfC68aHfGNR7O5FROnjSoP/rcnrTAmraL04prArdXDfbySDO2Te3Oebpqkvjmp6+vHmc2Hb6J5aNzjAzMQ8q7hMDFaINE3H7ADcmB60iywBvPtcFapd15/B4VTya1oDZxH26mDgjUcO3DUmSvcQ0iz8Zk=
+ bh=9FwYwe3zU1p2+ieKfEP9HtYrteHDThs/+HGV9B8iEO8=;
+ b=j7oO9JggkGYh+kBIfB++bPwsxxHGW4yPlydRye+AVVkJ5m9GZS0oeAicpwkkVc6pJgNaInpcx8GeMiPBpuxylv9t8V9qGpfDinOk711wNG0/Xb71PjxKV9+s6YkZLg9HogMvu1aD4ESAZJZysJ1Z4H/UgCLu56mEo9LfTBp9KsI=
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=amd.com;
 Received: from BN8PR12MB3108.namprd12.prod.outlook.com (2603:10b6:408:40::20)
- by CY8PR12MB7537.namprd12.prod.outlook.com (2603:10b6:930:94::18) with
+ by IA0PR12MB8647.namprd12.prod.outlook.com (2603:10b6:208:480::8) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.38; Thu, 23 Mar
- 2023 15:22:25 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.37; Thu, 23 Mar
+ 2023 15:27:10 +0000
 Received: from BN8PR12MB3108.namprd12.prod.outlook.com
  ([fe80::e62f:89e5:df27:9e45]) by BN8PR12MB3108.namprd12.prod.outlook.com
  ([fe80::e62f:89e5:df27:9e45%6]) with mapi id 15.20.6178.037; Thu, 23 Mar 2023
- 15:22:25 +0000
-Date:   Thu, 23 Mar 2023 11:22:22 -0400
+ 15:27:10 +0000
+Date:   Thu, 23 Mar 2023 11:27:06 -0400
 From:   Yazen Ghannam <yazen.ghannam@amd.com>
 To:     Tony Luck <tony.luck@intel.com>
 Cc:     Borislav Petkov <bp@alien8.de>,
@@ -47,66 +47,65 @@ Cc:     Borislav Petkov <bp@alien8.de>,
         dave.hansen@linux.intel.com, hpa@zytor.com,
         linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
         x86@kernel.org, patches@lists.linux.dev
-Subject: Re: [PATCH v3 3/5] x86/mce: Introduce mce_handle_storm() to deal
- with begin/end of storms
-Message-ID: <ZBxurh8ZC39pzZ0a@yaz-khff.amd.com>
+Subject: Re: [PATCH v3 4/5] x86/mce: Move storm handling to core.
+Message-ID: <ZBxvyqb5Mnt13341@yaz-khff.amd.com>
 References: <ZBR+GMH0olGoDMGs@yaz-fattaah>
  <20230317172042.117201-1-tony.luck@intel.com>
- <20230317172042.117201-4-tony.luck@intel.com>
+ <20230317172042.117201-5-tony.luck@intel.com>
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230317172042.117201-4-tony.luck@intel.com>
-X-ClientProxiedBy: CH0PR03CA0442.namprd03.prod.outlook.com
- (2603:10b6:610:10e::32) To BN8PR12MB3108.namprd12.prod.outlook.com
+In-Reply-To: <20230317172042.117201-5-tony.luck@intel.com>
+X-ClientProxiedBy: CH2PR03CA0023.namprd03.prod.outlook.com
+ (2603:10b6:610:59::33) To BN8PR12MB3108.namprd12.prod.outlook.com
  (2603:10b6:408:40::20)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN8PR12MB3108:EE_|CY8PR12MB7537:EE_
-X-MS-Office365-Filtering-Correlation-Id: 5d0f7fb8-bed3-4d59-e51f-08db2bb26823
+X-MS-TrafficTypeDiagnostic: BN8PR12MB3108:EE_|IA0PR12MB8647:EE_
+X-MS-Office365-Filtering-Correlation-Id: 54ac2e2d-1079-47c2-6d8e-08db2bb31202
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: f5ygUx9InVE640DG+sPggHpJkqOAsFKeNspLkYT4CJTixhEZ6V83re0RqvkeMEotR5/EYCl5VvfCsTsoyEAkr1nNcxcTdvZaO5WrKuYZEl2uX9i5KfqHxtUkdcaXVxUttcy6ssaNTjLKZMW4Ne9YhQ9UyqgmGQmCJ3QAy3X3EH4M67aeCVQK9kz0FExKTe40arGKzA0nsBK07fcOJCoCbGJvTknPt+rSvTK3pxATxuWqkBDHvPKEdKz+yvjWCwfzF3CySR3/8FGYg2LiMe2tmzkONOo2Rj8ZyYJyvk3bOBdgT7B1vdvPpLIxImEXAw4RTP+nUmUb5uB3WpWA1+eMvLMGUaQ4XVkNZqcYrQJJfpMrvvMrnjsktigksDjMJs/UT7GoPLukG38yTPd25OnxdVK+iyKgOwaN14baC425qyrOos5q3WeANxyFFK5fPc1rcmL1xkQOvcAerUYmjg+DW16ftXXYy7hxvCs6Lsal5+prWaw6cFGSF0dnfqn7MN5R9XxQseigFwNxxeEC53OAwqQDXtx9BuN3VK0QO6D1pd+2En4JZSpOP2b692SaxyoVb8fIrkeIjpTMTumFvMaJ1kE1c0q8fqUFR80Ihl+au2GTTHm8Vf42ZU4VpW4WETb0bi3gh4HUr8YWU7/pdWyyxQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3108.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(366004)(136003)(376002)(346002)(396003)(39860400002)(451199018)(38100700002)(2906002)(83380400001)(478600001)(6486002)(186003)(86362001)(66556008)(8676002)(66946007)(66476007)(4326008)(6916009)(8936002)(6666004)(26005)(6512007)(6506007)(316002)(5660300002)(44832011)(41300700001);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: fu+sCh8DvuDaw/D5z2XVs83bkUH1icqR7yrUR1Kt40UXBjs0SM7fggIRC1B62NodN+Yz8Ds9q7B71jWzJnfY/qoiDQERKwHaEdEGDFEdxPdOYJsuMcInLnf5MM2MJXms7pfPvTbFMQ+BioUdjy5didM9SXtDTc06+hKs4vCCn/C2u+hlkob+VnU4PKuHJFHjx1GgW8HzmZzr/2kH0CSq67lFQ0QHDt3aWHLpOHj7l+cPFXa08m6vEbTR2qqFSWyj0lw1GJI6sjupLBSXR6S0svh+1UWkBXVumtUxeMVAkA1l/FcShrcgPNOkH9FHJnLVtg5JEVEy6sdKqcersI80vY8TstRRhEKNRICfPJlgULAd9jgDbqnD+gNSZKyIOrqycoFcCZHA/rxjsYg4s6RwcnDIhEYmC/OcPgWGqWqI+zXUkFLJuYM8SZRqPb4o/faOHnpww6+hvtAtRk0Tan3BouRgyjHaD07qB+9frUjDqSL+D45T7qNQxaxL0GlTMTSY/74OrsYaUyMS0rTepJe6xJ+MdTNKHpakEZ3RhuWlhACErQGmV78UtrE77xgqsyzqfScJRnxYeXLxiTc/5xYkknO7/ZZ4zb1/w74JEIk5IgR+8hMhke4WprL870q4Sz24WdnuFFjxmlkTJ4H3w3apWQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3108.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(39860400002)(396003)(346002)(376002)(136003)(366004)(451199018)(66556008)(8676002)(4326008)(6916009)(66946007)(66476007)(4744005)(5660300002)(44832011)(41300700001)(8936002)(26005)(6512007)(6506007)(316002)(6666004)(186003)(478600001)(6486002)(86362001)(38100700002)(2906002);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?Cup7iCCv+D8jjiBRaDVfmBtZ75A8oOE06AUNfxTjfq3f4CBtxiGO6vMYz/XU?=
- =?us-ascii?Q?mPaKN/0ThXpYDG99IFqhxLP136PmlRKuJmzvs+mbZNlsBmuw/raMLg8gGpyt?=
- =?us-ascii?Q?Lv7+h3uk1BEAUXyQ1rOa4HcljK5ho2x+GyPxrpCjDQMlZCA3SaT269l2KDYm?=
- =?us-ascii?Q?25IbsuKLrAwTzr8uPhsLjVvjZcGGMOSDVJ1VqkL3CZTC38Eg/XKvqe9fLrcF?=
- =?us-ascii?Q?N/NQVeZCLptw1yP04sOBXdIh2/Rs+1n0KXRXH5eHPjshTBDsRldX1knrcWu2?=
- =?us-ascii?Q?Z3vQAg1ZDQCbO2JrXEvv9bz1RlxRLPnOJLYPo+w1/iH4PSP+NcINwLC5i9tL?=
- =?us-ascii?Q?FGweNuWJBOxrUuFYHwH3XBT4yZmAdiWA0o5y+/Ldh52LKfiFlKIutc3IBVMG?=
- =?us-ascii?Q?0h5UcYhYPTVW7yMvuCD4OZjG4pLsvjfvARq7pZZExRhFGJBsmae72NP24ixB?=
- =?us-ascii?Q?mwGZldbV1bIJuUY3hLBUZbS4pjF4gbFl4g6nAORpWj4NP8kIX1xqpUurl3IA?=
- =?us-ascii?Q?7mYG6UClejyhf1gG9VYVbi2+dBI8npWbU8nhfeFgatIrVE+PeQEe/YLisoZ8?=
- =?us-ascii?Q?W/ShH0NzgLLpy/qrwH9pqGpbVpHLRfxtnXQmjal+7csyjsX5dIp9k+Bm049+?=
- =?us-ascii?Q?nfOKD9uEIvaVe+znMmLOVmULFfxNQtHJ8n7JxMwRt0pXheqYWZdxDn30G7Wo?=
- =?us-ascii?Q?Gk2IdXHGNcnMZ/T68LkpoW4D+4YCUu1KLaJ1ce5f238N09P1bOfe81xzk4Yv?=
- =?us-ascii?Q?NE+MN4d+/fvcb25vaGmcyBa8nlvQ+fKMhHjgHQ+OTc7qfviAsSqCTUFSBDoF?=
- =?us-ascii?Q?1uUJOMKpwDZbzXN13p2+ilQEClucRoZWl53WUOSH+DHn0FvCUIj1vnlYXVYa?=
- =?us-ascii?Q?G+by8/SrSu2iXZGwgrFHESIkzYYSSSRdF+cKYooppV45JihkAv/FDBp7BtpM?=
- =?us-ascii?Q?9Dqm/Cse9zhSfcXIFRXHLEH5e0SdfL2r7f7tc1lcapLMm45GAfEsYK0F00mj?=
- =?us-ascii?Q?9nyGVEvZlrzU3HUGu+yxlqS7MwGIYYSVOWHw1rLl4KEIAKChMZpg1kEsiKhG?=
- =?us-ascii?Q?s8Hw0V/pi1lkfntBMvPzWMZ0ZnqUbxq5YdDbVKfQzMlTze+9j002+veQH8xT?=
- =?us-ascii?Q?pqJ0Znp51QQuivy2uZdfWe4CwvStxAO/WyW/7LeHHJQiUiz2cLvNrdB5hFpx?=
- =?us-ascii?Q?ScNg2kSTwYj1GmuKFfmeW5hmQ1xQdMV6D5xsySRZeoIr21bZuPpmYuGmW19P?=
- =?us-ascii?Q?yywDUw6cYCLKrQ3WwSuMKll+6O9injDCT2zyE2HlZ/HnwfoWP3M2193tQRxC?=
- =?us-ascii?Q?lvwenE65nZxdXiE6FKB7iNHs647rAv7CmKR193iBis4JElPvhSmikVueQDCv?=
- =?us-ascii?Q?YkYS3o4GhcTOOQkWPTkKjzY/sB2B/KkkMHZjVulthn7ivaXAA4VXLrtrZ2UW?=
- =?us-ascii?Q?WDtuX2zSjQdvEMmJen+LYlNSfC7q+odBEMd+so4xbkYfv1Wc/MtEYFgRNgDH?=
- =?us-ascii?Q?Oxh0irGZa6iQ+dpSdDUUYH9PxW2rEGdKSfFEEns5RTyoNPXIYJhW5hr5KLzj?=
- =?us-ascii?Q?cKV37urFuE2fcjt1Y83FfsyL7UiP+VF+hI0GeR3E?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?PqA7GAeOjKOzqmZ8co4CXN4gs8kUwvEP/h5BQVeufoNyRDqj/VoJemtGQA+/?=
+ =?us-ascii?Q?vbhAHjpbCA0EnOJYhm5ZYJUR5uuwQCBu42f6qBoHyfTxyH74la2nR3KzNVx+?=
+ =?us-ascii?Q?1llMY/iIQn1kQeXQUtTayPeGaSFeu1zJw3wCbtxeTlJYtTdI9fNVdE5juQYB?=
+ =?us-ascii?Q?CSCUG54qahzFlOcaisRB7cMtzNULiWt/45yJv3/nv36ttlyOPITNotccghlI?=
+ =?us-ascii?Q?ifNI8WctILlg2JJ0/rTzJ6qelOsdk+ClimGv7HpVAFuEWAzYcqBxuCflOM9O?=
+ =?us-ascii?Q?RsfhHLnSSaxTjs/SzY1EHorhli3bM36zdvRb1oGU5c5FN57ytqqjZA/llB87?=
+ =?us-ascii?Q?iT565JqEEE7GpeTr3aGb8gQbHzqGL8wV25VO8DGgq/0uRpKE2yYeLuNo2E97?=
+ =?us-ascii?Q?oYSVyxVOYrcW+7RK8Da+Pbaa48XD+zti8v+Ylexk5IRigatrv1PfnoZ/0krX?=
+ =?us-ascii?Q?DjqZWEtlWhZ3/bfPltWo4f6ZCoP6qUNiOGmU8DD62XqNGYG/RrMrQliLUc+/?=
+ =?us-ascii?Q?70Ydz6Bhzwo4sDtmZvJtaGZrIMSBBkxdyYoJKi7zKY7CqyUz4hQCav8nVI6A?=
+ =?us-ascii?Q?jR84fTWayx28rdkpYupxw5k86WduWbwmPwjuaNSIuEyBOji8ybtL6FzrY180?=
+ =?us-ascii?Q?TxR1jHfBC6Ui7dsUq5chpQKKYg0Zy5Ya37KVUTMnCYfkXASerB7JPY+3tgRW?=
+ =?us-ascii?Q?vEm/se6dTT/AcOqD0h+KlY1A2td1D0wMPUofq8hqsYKKSNnfwrX9LlAz1pHv?=
+ =?us-ascii?Q?JXa+xVof1XfP/RWO2z4roRwPADcohArEVVibifh9JMeJ4t0FWY3pbgitAe9z?=
+ =?us-ascii?Q?z7iMdatNH57Ey5wJ4qF3euEuBhBTQa7Fgu/u6U5XgXjk0K/9dsgJUCBk5lhr?=
+ =?us-ascii?Q?93cz+Q55UnlgBkbVq/c3NN+v8/G7g0mTqmZOqr5AAy0ijRy6tlxqopkU43pY?=
+ =?us-ascii?Q?G9QpeQrDKKOyTGiJs6NGbM9llFD7P6Anhs0qFAELDZN1SYpfUeCDYWBS2NIv?=
+ =?us-ascii?Q?uBnnbwdKVYbi6VOIKki11dohjnMpqA1bDRn2zGwW579DR/CGVJNADOEFWfUR?=
+ =?us-ascii?Q?XCGAx+xLRE7FCcqLXa6rc8iNdDaG0mJm3A1rGco5N8iMdeZZ43uvzaUcUycT?=
+ =?us-ascii?Q?vbt/iOTET2CsZxSKuk/YiwKFaSN4HwmgR2GZO5FLLdkD8LBjYclKy2uNb4jy?=
+ =?us-ascii?Q?s5jqhgDEWRxVHfwyXQLi015dc9aC1+PAsH0R+zkWrrVrPLtDQ6JgIpUINHGn?=
+ =?us-ascii?Q?yX4SYMUTqiVMYMl52MJA2YQSArtzWNcGtMOb1Ak8jBk/46FRUK1CQZmlA/Vx?=
+ =?us-ascii?Q?XxEehiT6rerEP0s8w+d4IKIspV80YeVfwxmWDSbaNXlo7VJBAtsI848/tc4N?=
+ =?us-ascii?Q?UEB/L744CbzM2HeS1MXm3BI7HjRsNi13ax1pwhtfIiji8zX2mHCflsWzJa0m?=
+ =?us-ascii?Q?uCGmLj35uqQfveaLVJCk+nUCoGVTaIfP0rVEqJlpeP2EoawSLNys/15q8TJb?=
+ =?us-ascii?Q?NGN8y9EE5NtCSRI6wFOppLwGQ1GoG6fArCaL52J/yEPed+Op5Kt+PMks9Z4T?=
+ =?us-ascii?Q?PZMqqigrRYJJe3qAS/7xCmgC6pNW+2HOTGiZaBcl?=
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5d0f7fb8-bed3-4d59-e51f-08db2bb26823
+X-MS-Exchange-CrossTenant-Network-Message-Id: 54ac2e2d-1079-47c2-6d8e-08db2bb31202
 X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3108.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Mar 2023 15:22:25.6756
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Mar 2023 15:27:10.5283
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: TaWpWs6bCLQLBWJaXdLF2YmlgWEjlmvnnuvjbBkfl1KZ2OdMTIs4PJSas5oXWsBZDhTZja4gooQs8f8xbVMJgQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY8PR12MB7537
+X-MS-Exchange-CrossTenant-UserPrincipalName: ENzP9MWasziyYojsZly9KrC+yNnfpO37XqKESqeGDSVcG03hWxI016pTQ0tUucrMAs7JQ1UsCm+X34Mj0aFn+A==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA0PR12MB8647
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
         DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE autolearn=unavailable
@@ -117,118 +116,32 @@ Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Fri, Mar 17, 2023 at 10:20:40AM -0700, Tony Luck wrote:
+On Fri, Mar 17, 2023 at 10:20:41AM -0700, Tony Luck wrote:
 > From: Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>
 > 
-> Intel and AMD need to take different actions when a storm begins or
-> ends. Prepare for the storm code moving from intel.c into core.c by
-> adding a function that checks CPU vendor to pick the right action.
+> AMD's storm handling for threshold interrupts is similar to Intel's CMCI
+> storm handling. Hence, make the storm handling code common by moving to
+> core and removing the vendor exclusivity.
+> 
+> On the contrary, setting different thresholds to reduce rate of interrupts
+> in IA32_MCi_CTL2 register is kept Intel intact as the storm handling for
+> AMD slightly differs where in it handles the storms by turning off the
+> interrupts.
 > 
 > No functional changes.
 > 
-> [Tony: Changed from function pointer to regular function]
+> [Tony: Same as Smita's original, plus changes rolled in from prior patches]
 > 
 > Signed-off-by: Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>
 > Signed-off-by: Tony Luck <tony.luck@intel.com>
 > ---
->  arch/x86/kernel/cpu/mce/internal.h |  3 +++
->  arch/x86/kernel/cpu/mce/core.c     |  9 +++++++++
->  arch/x86/kernel/cpu/mce/intel.c    | 12 ++++++++++--
->  3 files changed, 22 insertions(+), 2 deletions(-)
-> 
-> diff --git a/arch/x86/kernel/cpu/mce/internal.h b/arch/x86/kernel/cpu/mce/internal.h
-> index 72fbec8f6c3c..f37816b4d4cf 100644
-> --- a/arch/x86/kernel/cpu/mce/internal.h
-> +++ b/arch/x86/kernel/cpu/mce/internal.h
-> @@ -43,12 +43,14 @@ extern mce_banks_t mce_banks_ce_disabled;
->  void track_cmci_storm(int bank, u64 status);
->  
->  #ifdef CONFIG_X86_MCE_INTEL
-> +void mce_intel_handle_storm(int bank, bool on);
->  void cmci_disable_bank(int bank);
->  void intel_init_cmci(void);
->  void intel_init_lmce(void);
->  void intel_clear_lmce(void);
->  bool intel_filter_mce(struct mce *m);
->  #else
-> +static inline void mce_intel_handle_storm(int bank, bool on) { }
->  static inline void cmci_disable_bank(int bank) { }
->  static inline void intel_init_cmci(void) { }
->  static inline void intel_init_lmce(void) { }
-> @@ -57,6 +59,7 @@ static inline bool intel_filter_mce(struct mce *m) { return false; }
->  #endif
->  
->  void mce_timer_kick(bool storm);
-> +void mce_handle_storm(int bank, bool on);
->  
->  #ifdef CONFIG_ACPI_APEI
->  int apei_write_mce(struct mce *m);
-> diff --git a/arch/x86/kernel/cpu/mce/core.c b/arch/x86/kernel/cpu/mce/core.c
-> index 776d4724b1e0..f4d2a7ba29f7 100644
-> --- a/arch/x86/kernel/cpu/mce/core.c
-> +++ b/arch/x86/kernel/cpu/mce/core.c
-> @@ -1985,6 +1985,15 @@ static void mce_zhaoxin_feature_clear(struct cpuinfo_x86 *c)
->  	intel_clear_lmce();
->  }
->  
-> +void mce_handle_storm(int bank, bool on)
-> +{
-> +	switch (boot_cpu_data.x86_vendor) {
-> +	case X86_VENDOR_INTEL:
-> +		mce_intel_handle_storm(bank, on);
-> +		break;
-> +	}
-> +}
-> +
->  static void __mcheck_cpu_init_vendor(struct cpuinfo_x86 *c)
->  {
->  	switch (c->x86_vendor) {
-> diff --git a/arch/x86/kernel/cpu/mce/intel.c b/arch/x86/kernel/cpu/mce/intel.c
-> index 4106877de028..4238b73c2143 100644
-> --- a/arch/x86/kernel/cpu/mce/intel.c
-> +++ b/arch/x86/kernel/cpu/mce/intel.c
-> @@ -152,6 +152,14 @@ static void cmci_set_threshold(int bank, int thresh)
->  	raw_spin_unlock_irqrestore(&cmci_discover_lock, flags);
->  }
->  
-> +void mce_intel_handle_storm(int bank, bool on)
-> +{
-> +	if (on)
-> +		cmci_set_threshold(bank, cmci_threshold[bank]);
-> +	else
-> +		cmci_set_threshold(bank, CMCI_STORM_THRESHOLD);
 
-I think these conditions are reversed. When storm handling is 'on' we should
-use CMCI_STORM_THRESHOLD, and when off use the saved bank threshold.
+Can this patch and the previous two be squashed together?
 
-> +}
-> +
->  static void cmci_storm_begin(int bank)
->  {
->  	__set_bit(bank, this_cpu_ptr(mce_poll_banks));
-> @@ -211,13 +219,13 @@ void track_cmci_storm(int bank, u64 status)
->  		if (history & GENMASK_ULL(STORM_END_POLL_THRESHOLD - 1, 0))
->  			return;
->  		pr_notice("CPU%d BANK%d CMCI storm subsided\n", smp_processor_id(), bank);
-> -		cmci_set_threshold(bank, cmci_threshold[bank]);
-> +		mce_handle_storm(bank, true);
-
-Should be 'false' when the storm subsides.
-
->  		cmci_storm_end(bank);
->  	} else {
->  		if (hweight64(history) < STORM_BEGIN_THRESHOLD)
->  			return;
->  		pr_notice("CPU%d BANK%d CMCI storm detected\n", smp_processor_id(), bank);
-> -		cmci_set_threshold(bank, CMCI_STORM_THRESHOLD);
-> +		mce_handle_storm(bank, false);
-
-Should be 'true' when the storm starts.
-
->  		cmci_storm_begin(bank);
->  	}
->  }
-> --
+Like so?
+ Patch 1: Remove old code.
+ Patch 2: Add new common and Intel-specific code.
+ Patch 3: Add AMD-specific code.
 
 Thanks,
 Yazen
