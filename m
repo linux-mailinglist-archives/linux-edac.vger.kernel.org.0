@@ -2,196 +2,139 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 072F76CC143
-	for <lists+linux-edac@lfdr.de>; Tue, 28 Mar 2023 15:43:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E43366CCA95
+	for <lists+linux-edac@lfdr.de>; Tue, 28 Mar 2023 21:27:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233045AbjC1Nno (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Tue, 28 Mar 2023 09:43:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47166 "EHLO
+        id S229586AbjC1T10 (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Tue, 28 Mar 2023 15:27:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233267AbjC1Nna (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Tue, 28 Mar 2023 09:43:30 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A5D686AC;
-        Tue, 28 Mar 2023 06:43:12 -0700 (PDT)
-Received: from zn.tnic (p5de8e687.dip0.t-ipconnect.de [93.232.230.135])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 79FDB1EC0338;
-        Tue, 28 Mar 2023 15:43:10 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1680010990;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:
-         content-transfer-encoding:content-transfer-encoding:in-reply-to:
-         references; bh=3XNLULs5F+FAVGIo2HpX+YyLGYGVF4c35mHywkE1ikQ=;
-        b=DP5jAVvkHgPdKxNr++aP6OJJ3NimIfAXYaohqE84iAByv6WD1Pc03PikLct5wlkTGElF2E
-        WbpfJK7EjdFljaMVdxatewhmJYqplbuaWgFBHPgS/u15swUeNpyiOg5mqAXYMaqpt7liUw
-        YSPuihQAXOMoYR7XtplaRhTiYhWAq7I=
-From:   Borislav Petkov <bp@alien8.de>
-To:     linux-edac <linux-edac@vger.kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>
-Subject: [PATCH] EDAC: Sanitize MODULE_AUTHOR strings
-Date:   Tue, 28 Mar 2023 15:43:09 +0200
-Message-Id: <20230328134309.23159-1-bp@alien8.de>
-X-Mailer: git-send-email 2.35.1
+        with ESMTP id S229505AbjC1T1Z (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Tue, 28 Mar 2023 15:27:25 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3584F2D72;
+        Tue, 28 Mar 2023 12:27:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net; s=s31663417;
+        t=1680031599; i=j.neuschaefer@gmx.net;
+        bh=GpTAz3PVKqdxb2IFGjJH8mZ47/kFakfrUqF4ZFqc1C8=;
+        h=X-UI-Sender-Class:Date:From:To:Cc:Subject:References:In-Reply-To;
+        b=S1A17IVqw3ppej2WszO5YvAS1VJZCvbmDpIpfprkturEbdd1T9kUjIY0kP7IwJRt2
+         IFN7aWBqOXs0/5S/SxHrRWUEpqpzfKxAI/mRPGpTcJh2GsmD7klc1Z/fisNoz2+YGj
+         MRsMUXRed9yoCk4DLRakklrYXKp/qJsRHTlvvZ1WnR9OBwJh1GJ27jB6j0o2GuJInQ
+         /lkIavTNlLmQY0An5tTJ2WGAj+NUvZ1gIjAstMBCAQliUhGCI6mKCrwV8wAnGUqmoy
+         ueNlhvGezH2w59A4ZvZIeNupLIcOUAKecto827A0fn5uB+3brMZibzbmkFTnLpKWMq
+         wM7GpmS04ja7g==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from probook ([95.223.44.193]) by mail.gmx.net (mrgmx005
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MNKm0-1q4vga49cY-00OmM1; Tue, 28
+ Mar 2023 21:26:39 +0200
+Date:   Tue, 28 Mar 2023 21:26:37 +0200
+From:   Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
+        linux-edac@vger.kernel.org, Tony Luck <tony.luck@intel.com>,
+        James Morse <james.morse@arm.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Robert Richter <rric@kernel.org>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] EDAC/amd81*1: Remove "\n" from MODULE_AUTHOR
+Message-ID: <ZCM/bUZqQ+hbvZrG@probook>
+References: <20230129165054.1675554-1-j.neuschaefer@gmx.net>
+ <20230319192011.GEZBdga+n600nFi/tA@fat_crate.local>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,T_PDS_OTHER_BAD_TLD
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="NijduwC7+Emm27A2"
+Content-Disposition: inline
+In-Reply-To: <20230319192011.GEZBdga+n600nFi/tA@fat_crate.local>
+X-Provags-ID: V03:K1:tDCNtKgoEtXFWvbpEy6+TeWPwsuw/ajsQHTKVPm7Bo4bsn/qVfT
+ EEFUizyGQ3X3u9rLDAH8oNM1q2Hd1YcfiRXX1VPf2Wusm5b19SuimPlQO8UVMIuEMCycTO6
+ g68mcmK9N3RWooPKOHkM05+wbLYEoyzQhKP9TQPNx7F4tLvIHfjLF8IvQfYeK5U7cxRvuo/
+ C3ipyAd2ust+5Xp2GM+tw==
+UI-OutboundReport: notjunk:1;M01:P0:BO/FGDFFOAE=;ZQA4nmsrkrTRP8O+uSKOf9F/5CF
+ T+fn3jD/o96OqQOmAOXgzakbJbByAxO/p8C8XKhML6AeqJASg8Gs9IZnh/be0JoO5Ri7cC5yX
+ YCHi6w184/7pgfUxBvQsgLxpXfz2W5OTU/gn43ald/08jZ3Kn/dJCPjs96RDki2rbhbnVYMZC
+ wFsEoeSGVYckS1o/wZeF+o8bzkmHuZYvxXDFAXJZhNhRhffil+eU7XrWSlCwnmm+ubjH1KtxC
+ Y8XK7sWgEl8IdgJb7CBU5NyxtCa9LayFx9+nI4n/SLaM/hNR3gVQINdmpyDTG2/WC0hw71ER6
+ WGoOOdAwjcZe6FmHG7lGr1wEdI60futQ7et+LAW/QX+XKsLQ1SOZxT0aBzV8mURhy7/wI/zSH
+ XARahyVyaaCxxNBmQaQac+8OL5fDLc3et2QvN4N0VuMXtqzOCAjd1iZlHg3x3opKFVc6+O3RC
+ ke2yNSraYiZI86sPZf93jq4Y8D9dqwfEisdSlp8Tq6YKTo1q3w2Lw7q9dIX/zdNUF5PqUxceB
+ TdtnVWjHPWIm6VnLXqnorS/+E0rjU6ojYhJxnF4HBefjN0HiMPMbSxR89/dtqkR1F+TkRNXT4
+ g3hFSpfmNvFqtsZ1dV0QQ/GMQxU8j9kirqb7HZ5okons/fMmlGxQvxiEhNJcWY0CZL0kdhjo2
+ KoruHtTBExdPEUtg5P6Kaq7mbolpaW42vFa5PDE9NdhvV5bsMiKYDS2wjEqhgOgnaKUgth/zd
+ BQQe3dwNOveBlhYTPf5bXFr5VW6ptfVvQS3qQh53mvtpbAPlOHG8QEaHpiAPJfwX0ZUarfcBY
+ jIaQPKsVbfa7U/PtvvUrE7tp1xIWttpDKKPFIBhNW6fCFqrEe5B+otgdRXX3GJBz1Q8e4IN17
+ xQ0ARYRAio72Xct65TiBtNsZ1RaHJeDH7rLqOujQfsKn6YW1OQ+8/flwZQNpr4nQ5864LK7cm
+ Hnq6T63AOhhkvvX9J4uMH4+jC9k=
+X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-From: "Borislav Petkov (AMD)" <bp@alien8.de>
 
-Fixup the remaining MODULE_AUTHOR strings to not contain newlines.
-Shorten and unbreak others.
+--NijduwC7+Emm27A2
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-No functional changes.
+On Sun, Mar 19, 2023 at 08:20:11PM +0100, Borislav Petkov wrote:
+> On Sun, Jan 29, 2023 at 05:50:54PM +0100, Jonathan Neusch=C3=A4fer wrote:
+[...]
+> Wanna fix the other two in the EDAC tree:
+>=20
+> drivers/edac/e752x_edac.c:1465:MODULE_AUTHOR("Linux Networx (http://lnxi.=
+com) Tom Zimmerman\n");
+> drivers/edac/e7xxx_edac.c:599:MODULE_AUTHOR("Linux Networx (http://lnxi.c=
+om) Thayne Harbaugh et al\n"
+>=20
+> ?
+>=20
+> That macro takes:
+>=20
+> /*
+>  * Author(s), use "Name <email>" or just "Name", for multiple
+>  * authors use multiple MODULE_AUTHOR() statements/lines.
+>  */
+> #define MODULE_AUTHOR(_author) MODULE_INFO(author, _author)
+>=20
+> and not prose.
+>=20
+> You can move the prose to the top comment in the respective file, if it
+> doesn't contain it yet.
+>=20
+> Thx.
 
-Signed-off-by: Borislav Petkov (AMD) <bp@alien8.de>
----
- drivers/edac/amd64_edac.c      | 6 ++----
- drivers/edac/e752x_edac.c      | 2 +-
- drivers/edac/e7xxx_edac.c      | 3 +--
- drivers/edac/i5000_edac.c      | 7 ++-----
- drivers/edac/i5100_edac.c      | 3 +--
- drivers/edac/i82860_edac.c     | 3 +--
- drivers/edac/layerscape_edac.c | 3 +--
- drivers/edac/mpc85xx_edac.c    | 3 +--
- drivers/edac/r82600_edac.c     | 3 +--
- 9 files changed, 11 insertions(+), 22 deletions(-)
+Sorry for the late reply. I'm replying now because I saw that you
+applied the patch.
 
-diff --git a/drivers/edac/amd64_edac.c b/drivers/edac/amd64_edac.c
-index 5b42533f306a..8b16ebf5fe12 100644
---- a/drivers/edac/amd64_edac.c
-+++ b/drivers/edac/amd64_edac.c
-@@ -4244,10 +4244,8 @@ module_init(amd64_edac_init);
- module_exit(amd64_edac_exit);
- 
- MODULE_LICENSE("GPL");
--MODULE_AUTHOR("SoftwareBitMaker: Doug Thompson, "
--		"Dave Peterson, Thayne Harbaugh");
--MODULE_DESCRIPTION("MC support for AMD64 memory controllers - "
--		EDAC_AMD64_VERSION);
-+MODULE_AUTHOR("SoftwareBitMaker: Doug Thompson, Dave Peterson, Thayne Harbaugh; AMD");
-+MODULE_DESCRIPTION("MC support for AMD64 memory controllers - " EDAC_AMD64_VERSION);
- 
- module_param(edac_op_state, int, 0444);
- MODULE_PARM_DESC(edac_op_state, "EDAC Error Reporting state: 0=Poll,1=NMI");
-diff --git a/drivers/edac/e752x_edac.c b/drivers/edac/e752x_edac.c
-index ac7c9b42d4c7..7221b4bb6df2 100644
---- a/drivers/edac/e752x_edac.c
-+++ b/drivers/edac/e752x_edac.c
-@@ -1462,7 +1462,7 @@ module_init(e752x_init);
- module_exit(e752x_exit);
- 
- MODULE_LICENSE("GPL");
--MODULE_AUTHOR("Linux Networx (http://lnxi.com) Tom Zimmerman\n");
-+MODULE_AUTHOR("Linux Networx (http://lnxi.com) Tom Zimmerman");
- MODULE_DESCRIPTION("MC support for Intel e752x/3100 memory controllers");
- 
- module_param(force_function_unhide, int, 0444);
-diff --git a/drivers/edac/e7xxx_edac.c b/drivers/edac/e7xxx_edac.c
-index 497e710fca3d..5852b95fa470 100644
---- a/drivers/edac/e7xxx_edac.c
-+++ b/drivers/edac/e7xxx_edac.c
-@@ -596,8 +596,7 @@ module_init(e7xxx_init);
- module_exit(e7xxx_exit);
- 
- MODULE_LICENSE("GPL");
--MODULE_AUTHOR("Linux Networx (http://lnxi.com) Thayne Harbaugh et al\n"
--		"Based on.work by Dan Hollis et al");
-+MODULE_AUTHOR("Linux Networx (http://lnxi.com) Thayne Harbaugh et al");
- MODULE_DESCRIPTION("MC support for Intel e7xxx memory controllers");
- module_param(edac_op_state, int, 0444);
- MODULE_PARM_DESC(edac_op_state, "EDAC Error Reporting state: 0=Poll,1=NMI");
-diff --git a/drivers/edac/i5000_edac.c b/drivers/edac/i5000_edac.c
-index ba46057d4220..4b5a71f8739d 100644
---- a/drivers/edac/i5000_edac.c
-+++ b/drivers/edac/i5000_edac.c
-@@ -1573,13 +1573,10 @@ module_init(i5000_init);
- module_exit(i5000_exit);
- 
- MODULE_LICENSE("GPL");
--MODULE_AUTHOR
--    ("Linux Networx (http://lnxi.com) Doug Thompson <norsk5@xmission.com>");
--MODULE_DESCRIPTION("MC Driver for Intel I5000 memory controllers - "
--		I5000_REVISION);
-+MODULE_AUTHOR("Linux Networx (http://lnxi.com) Doug Thompson <norsk5@xmission.com>");
-+MODULE_DESCRIPTION("MC Driver for Intel I5000 memory controllers - " I5000_REVISION);
- 
- module_param(edac_op_state, int, 0444);
- MODULE_PARM_DESC(edac_op_state, "EDAC Error Reporting state: 0=Poll,1=NMI");
- module_param(misc_messages, int, 0444);
- MODULE_PARM_DESC(misc_messages, "Log miscellaneous non fatal messages");
--
-diff --git a/drivers/edac/i5100_edac.c b/drivers/edac/i5100_edac.c
-index 8db680b6ae9b..d470afe65001 100644
---- a/drivers/edac/i5100_edac.c
-+++ b/drivers/edac/i5100_edac.c
-@@ -1220,6 +1220,5 @@ module_init(i5100_init);
- module_exit(i5100_exit);
- 
- MODULE_LICENSE("GPL");
--MODULE_AUTHOR
--    ("Arthur Jones <ajones@riverbed.com>");
-+MODULE_AUTHOR("Arthur Jones <ajones@riverbed.com>");
- MODULE_DESCRIPTION("MC Driver for Intel I5100 memory controllers");
-diff --git a/drivers/edac/i82860_edac.c b/drivers/edac/i82860_edac.c
-index fbec90d00f1e..b8a497f0de28 100644
---- a/drivers/edac/i82860_edac.c
-+++ b/drivers/edac/i82860_edac.c
-@@ -355,8 +355,7 @@ module_init(i82860_init);
- module_exit(i82860_exit);
- 
- MODULE_LICENSE("GPL");
--MODULE_AUTHOR("Red Hat Inc. (http://www.redhat.com) "
--		"Ben Woodard <woodard@redhat.com>");
-+MODULE_AUTHOR("Red Hat Inc. (http://www.redhat.com) Ben Woodard <woodard@redhat.com>");
- MODULE_DESCRIPTION("ECC support for Intel 82860 memory hub controllers");
- 
- module_param(edac_op_state, int, 0444);
-diff --git a/drivers/edac/layerscape_edac.c b/drivers/edac/layerscape_edac.c
-index 35ceaca578e1..7c5e2b3c0daa 100644
---- a/drivers/edac/layerscape_edac.c
-+++ b/drivers/edac/layerscape_edac.c
-@@ -72,5 +72,4 @@ module_exit(fsl_ddr_mc_exit);
- MODULE_LICENSE("GPL");
- MODULE_AUTHOR("NXP Semiconductor");
- module_param(edac_op_state, int, 0444);
--MODULE_PARM_DESC(edac_op_state,
--		 "EDAC Error Reporting state: 0=Poll, 2=Interrupt");
-+MODULE_PARM_DESC(edac_op_state, "EDAC Error Reporting state: 0=Poll, 2=Interrupt");
-diff --git a/drivers/edac/mpc85xx_edac.c b/drivers/edac/mpc85xx_edac.c
-index e50d7928bf8f..55320546c174 100644
---- a/drivers/edac/mpc85xx_edac.c
-+++ b/drivers/edac/mpc85xx_edac.c
-@@ -711,5 +711,4 @@ module_exit(mpc85xx_mc_exit);
- MODULE_LICENSE("GPL");
- MODULE_AUTHOR("Montavista Software, Inc.");
- module_param(edac_op_state, int, 0444);
--MODULE_PARM_DESC(edac_op_state,
--		 "EDAC Error Reporting state: 0=Poll, 2=Interrupt");
-+MODULE_PARM_DESC(edac_op_state, "EDAC Error Reporting state: 0=Poll, 2=Interrupt");
-diff --git a/drivers/edac/r82600_edac.c b/drivers/edac/r82600_edac.c
-index d0aef83dca2a..61e979d5437a 100644
---- a/drivers/edac/r82600_edac.c
-+++ b/drivers/edac/r82600_edac.c
-@@ -415,8 +415,7 @@ module_init(r82600_init);
- module_exit(r82600_exit);
- 
- MODULE_LICENSE("GPL");
--MODULE_AUTHOR("Tim Small <tim@buttersideup.com> - WPAD Ltd. "
--		"on behalf of EADS Astrium");
-+MODULE_AUTHOR("Tim Small <tim@buttersideup.com> - WPAD Ltd. on behalf of EADS Astrium");
- MODULE_DESCRIPTION("MC support for Radisys 82600 memory controllers");
- 
- module_param(disable_hardware_scrub, bool, 0644);
--- 
-2.35.1
+I might fix the above if/when I get around to it, but there's currently
+no guarantee of that.
 
+
+Best regards,
+Jonathan
+
+--NijduwC7+Emm27A2
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEvHAHGBBjQPVy+qvDCDBEmo7zX9sFAmQjP0sACgkQCDBEmo7z
+X9vtiRAAuEXuauavQAOoTTRGRjGu4a87HjFMk+x8irORL565RuL5jm8jTi6s+wrk
+ETyaWP1HYFAoBo/tPcvnVNAaqMCbmmSs/nQxXR+Immxk8c0MtRbcxwRCPQrN9JqN
+BH0Q+ojVXxQsVz4+zZmUp55bA5ZgIzaQml+e5Ttj1O/CD4ICzWBtX/WxA4tqSv86
+Fowq/2RF++zk0vA2aheOjOlHwJzSm8Ic4rkgC7tWCscvpBG7Ulb8DvAwhD6GzrX2
+OdOlXByq6EsdlmQM6Ucm09cplHk5dsXLSoiyq3BI63Rp+aJfiF+EU8mO/DIEuPvA
+ReP/dQLvszKNrgIRYFnUFWN63cWMzKt4yxay3ok1e39qw/N8zHB+V3Pu+Sw00t4i
+0n5QL4YRC2ntVnYSj6yd25raNsZBoL20wwdd67+ay8HJdo4OIyIGAApEZi6V7yf4
+HdYO8qvcngAts7YGmmdpDs42Egqtq/uJ7/+dvyb0OfvJvzROuK0XCNq/dBQOG/Rh
+fHwGv6uMJ0rg1Wzmfx8r1Fm/6xv1uMrNr5Li3MItwexnhzg7Gm+svh5s977RQhL+
+LouHoSsfH/6RXGbIx8QHCVVL4gP2s6yVXvqQqprWPE002XmKDQvT5Hkfv0hRxSdD
+pCqilHrfFP4I7AIOIIrLgS2trPB+40it/EAatji615Dej648RTQ=
+=S5Jm
+-----END PGP SIGNATURE-----
+
+--NijduwC7+Emm27A2--
