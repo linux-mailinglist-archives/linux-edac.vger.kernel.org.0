@@ -2,49 +2,48 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 68A916CB16C
-	for <lists+linux-edac@lfdr.de>; Tue, 28 Mar 2023 00:07:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4676E6CC13B
+	for <lists+linux-edac@lfdr.de>; Tue, 28 Mar 2023 15:43:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229501AbjC0WHO (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Mon, 27 Mar 2023 18:07:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43816 "EHLO
+        id S232936AbjC1Nm6 (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Tue, 28 Mar 2023 09:42:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229476AbjC0WHN (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Mon, 27 Mar 2023 18:07:13 -0400
+        with ESMTP id S232394AbjC1Nmx (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Tue, 28 Mar 2023 09:42:53 -0400
 Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51F4919AB;
-        Mon, 27 Mar 2023 15:07:11 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F668BDD6;
+        Tue, 28 Mar 2023 06:42:48 -0700 (PDT)
 Received: from zn.tnic (p5de8e687.dip0.t-ipconnect.de [93.232.230.135])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id A78CF1EC0529;
-        Tue, 28 Mar 2023 00:07:09 +0200 (CEST)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 8B2071EC0338;
+        Tue, 28 Mar 2023 15:42:46 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1679954829;
+        t=1680010966;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=uTvrkvRBOkm6k6Rg1Q92jvvbdCcLR4Zco9jZIpniGC0=;
-        b=FNeUThu0H61wHvzS9RH6RzIAXY+hZZd1+8Ne/HLEXwKfr0azNvXeAloZ6Hu+cKd1LBf5+u
-        UMcnJF14EOb2HbjSsYwoPb3sNGbwvyoKnVJ+Pw+ODaX7Xkg6nf3recMrx2mD+FZ55n9TwI
-        Yi/8szHGNEdIJoWfuk7O1aEpAifW/0M=
-Date:   Tue, 28 Mar 2023 00:07:05 +0200
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=A78xYloQ+yZx5Ifx41UP+WIUtAPbUFWRbtDnsZCyfoU=;
+        b=fFEyh6Ig0XjRpwc2iR0PqsACwkxdtXelTmgj5gAlmKYzIS9hXz/w8dU7iwDbwMTWOKif+/
+        gULhbXpECPMNL/EkKL/15gXdxbjGir/jpNY7II2fka/JROHbsviQkoE/uAyxlFfXQfK975
+        3hqmZW/GQ3kgCLAim59TFKGf2XLmLJM=
+Date:   Tue, 28 Mar 2023 15:42:42 +0200
 From:   Borislav Petkov <bp@alien8.de>
-To:     Yazen Ghannam <yazen.ghannam@amd.com>
-Cc:     kyle-meyer <kyle.meyer@hpe.com>, dimitri.sivanich@hpe.com,
-        steve.wahl@hpe.com, tglx@linutronix.de, mingo@redhat.com,
-        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-        tony.luck@intel.com, qiuxu.zhuo@intel.com,
-        linux-kernel@vger.kernel.org, linux-edac@vger.kernel.org
-Subject: Re: [PATCH] RAS/CEC: Move non-debug attributes out of debugfs
-Message-ID: <20230327220705.GFZCITiXbkfun7oh21@fat_crate.local>
-References: <20230323202158.37937-1-kyle.meyer@hpe.com>
- <20230324004919.GHZBzzj1FzwEZclTCL@fat_crate.local>
- <ZB4NFzrf09D1J47m@yaz-khff.amd.com>
+To:     Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
+Cc:     linux-edac@vger.kernel.org, Tony Luck <tony.luck@intel.com>,
+        James Morse <james.morse@arm.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Robert Richter <rric@kernel.org>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] EDAC/amd81*1: Remove "\n" from MODULE_AUTHOR
+Message-ID: <20230328134242.GBZCLu0o9mJm9h9jEL@fat_crate.local>
+References: <20230129165054.1675554-1-j.neuschaefer@gmx.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <ZB4NFzrf09D1J47m@yaz-khff.amd.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230129165054.1675554-1-j.neuschaefer@gmx.net>
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
         DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
@@ -54,32 +53,40 @@ Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Fri, Mar 24, 2023 at 04:50:31PM -0400, Yazen Ghannam wrote:
-> How about "/sys/ras" to collect global RAS interfaces?
+On Sun, Jan 29, 2023 at 05:50:54PM +0100, Jonathan Neuschäfer wrote:
+> MODULE_AUTHOR strings don't usually include a newline character.
+> 
+> Signed-off-by: Jonathan Neuschäfer <j.neuschaefer@gmx.net>
+> ---
+>  drivers/edac/amd8111_edac.c | 2 +-
+>  drivers/edac/amd8131_edac.c | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/edac/amd8111_edac.c b/drivers/edac/amd8111_edac.c
+> index 7508aa416ddbd..ca718f63fcbcd 100644
+> --- a/drivers/edac/amd8111_edac.c
+> +++ b/drivers/edac/amd8111_edac.c
+> @@ -593,5 +593,5 @@ module_init(amd8111_edac_init);
+>  module_exit(amd8111_edac_exit);
+> 
+>  MODULE_LICENSE("GPL");
+> -MODULE_AUTHOR("Cao Qingtao <qingtao.cao@windriver.com>\n");
+> +MODULE_AUTHOR("Cao Qingtao <qingtao.cao@windriver.com>");
+>  MODULE_DESCRIPTION("AMD8111 HyperTransport I/O Hub EDAC kernel module");
+> diff --git a/drivers/edac/amd8131_edac.c b/drivers/edac/amd8131_edac.c
+> index 1693537109826..28610ba514f4d 100644
+> --- a/drivers/edac/amd8131_edac.c
+> +++ b/drivers/edac/amd8131_edac.c
+> @@ -354,5 +354,5 @@ module_init(amd8131_edac_init);
+>  module_exit(amd8131_edac_exit);
+> 
+>  MODULE_LICENSE("GPL");
+> -MODULE_AUTHOR("Cao Qingtao <qingtao.cao@windriver.com>\n");
+> +MODULE_AUTHOR("Cao Qingtao <qingtao.cao@windriver.com>");
+>  MODULE_DESCRIPTION("AMD8131 HyperTransport PCI-X Tunnel EDAC kernel module");
+> --
 
-Looking a bit at
-
-Documentation/admin-guide/sysfs-rules.rst
-
-it does sound like /sys/<subsystem> could be a good place. Might wanna
-run it by Greg, though, first.
-
-> Maybe it can link to other directories like "/sys/devices/*" for
-> hardware things like MCA,
-
-Those are at
-
-/sys/devices/system/machinecheck/
-
-> and "/sys/kernel/*" for kernel things like CEC.
-
-Or /sys/drivers
-
-Remember there's also
-
-/sys/devices/system/edac/
-
-so a lot of RAS junk spread all over the place.
+Applied, thanks.
 
 -- 
 Regards/Gruss,
