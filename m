@@ -2,44 +2,49 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A2046D2442
-	for <lists+linux-edac@lfdr.de>; Fri, 31 Mar 2023 17:44:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED86B6D309C
+	for <lists+linux-edac@lfdr.de>; Sat,  1 Apr 2023 13:57:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233258AbjCaPoX (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Fri, 31 Mar 2023 11:44:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37486 "EHLO
+        id S230132AbjDAL52 (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Sat, 1 Apr 2023 07:57:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233262AbjCaPoU (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Fri, 31 Mar 2023 11:44:20 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B10C31EFC8;
-        Fri, 31 Mar 2023 08:44:18 -0700 (PDT)
+        with ESMTP id S229942AbjDAL5K (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Sat, 1 Apr 2023 07:57:10 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44B6724413;
+        Sat,  1 Apr 2023 04:56:41 -0700 (PDT)
 Received: from zn.tnic (p5de8e687.dip0.t-ipconnect.de [93.232.230.135])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 1E8AD1EC054E;
-        Fri, 31 Mar 2023 17:44:17 +0200 (CEST)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 8E4591EC0420;
+        Sat,  1 Apr 2023 13:56:26 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1680277457;
+        t=1680350186;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=uOXvk0lXz8sOScAFN5PiHAvC4fkV3slYbSlEtYIkG9o=;
-        b=mjvV+leo+m6gctb9bQve0ooLZD8L9ZxWZcThxRYs6xZvpC8682Vcrf/aLFEwklxKBTfvgv
-        f9E8cjRUO2OSySh+fEJoIwWYvQBQsBpyaj0qRI20/4fA5p1Vq3BTLQTbfPTNoBqPwBcOZh
-        I2Kom+byeEF0IhgAwEV7sC226qr1Nu0=
-Date:   Fri, 31 Mar 2023 17:44:12 +0200
+        bh=BRoEIkIG+7eAVhs9duV3p3lIy/wXARVavujoy8JQa7o=;
+        b=OCWazxffDgwyQU8bVPdKGu4Zw3dZA3N5/z1oKXVCZXRotfDERE9Xg2dIWiZx/sEu5F+seO
+        PAqFKHBg+lqfXA6aXejznrl5r2BS/d/lQVd7/F7O02876bTo5oOqCJjlidLgrRTctSp535
+        DeXPuEz3b9ikdIvVwMQSRF3CtoYCdPY=
+Date:   Sat, 1 Apr 2023 13:56:23 +0200
 From:   Borislav Petkov <bp@alien8.de>
-To:     Avadhut Naik <avadnaik@amd.com>
-Cc:     linux-edac@vger.kernel.org, yazen.ghannam@amd.com,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] EDAC/mce_amd: Update SMCA bank error descriptions
-Message-ID: <20230331154412.GBZCb/zO/BGR3a/bVT@fat_crate.local>
-References: <20230329192200.110813-1-avadnaik@amd.com>
+To:     Nick Alcock <nick.alcock@oracle.com>
+Cc:     mcgrof@kernel.org, linux-modules@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Tony Luck <tony.luck@intel.com>, linux-edac@vger.kernel.org
+Subject: Re: [PATCH 23/24] kbuild, EDAC, altera: remove MODULE_LICENSE in
+ non-modules
+Message-ID: <20230401115623.GBZCgb50aBhMs/nUlO@fat_crate.local>
+References: <20230217141059.392471-1-nick.alcock@oracle.com>
+ <20230217141059.392471-24-nick.alcock@oracle.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230329192200.110813-1-avadnaik@amd.com>
+In-Reply-To: <20230217141059.392471-24-nick.alcock@oracle.com>
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
         DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
@@ -49,54 +54,45 @@ Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Wed, Mar 29, 2023 at 07:22:00PM +0000, Avadhut Naik wrote:
-> diff --git a/drivers/edac/mce_amd.c b/drivers/edac/mce_amd.c
-> index cc5c63feb26a..869dcca5e2f4 100644
-> --- a/drivers/edac/mce_amd.c
-> +++ b/drivers/edac/mce_amd.c
-> @@ -192,24 +192,24 @@ static const char * const smca_ls2_mce_desc[] = {
->  	"A SystemReadDataError error was reported on read data returned from L2 for an SCB store",
->  	"A SystemReadDataError error was reported on read data returned from L2 for a WCB store",
->  	"A hardware assertion error was reported",
-> -	"A parity error was detected in an STLF, SCB EMEM entry or SRB store data by any access",
-> +	"A parity error was detected in an STLF, SCB EMEM entry, store data mask or SRB store data by any access",
+On Fri, Feb 17, 2023 at 02:10:58PM +0000, Nick Alcock wrote:
+> Since commit 8b41fc4454e ("kbuild: create modules.builtin without
+> Makefile.modbuiltin or tristate.conf"), MODULE_LICENSE declarations
+> are used to identify modules. As a consequence, uses of the macro
+> in non-modules will cause modprobe to misidentify their containing
+> object file as a module when it is not (false positives), and modprobe
+> might succeed rather than failing with a suitable error message.
+> 
+> So remove it in the files in this commit, none of which can be built as
+> modules.
+> 
+> Signed-off-by: Nick Alcock <nick.alcock@oracle.com>
+> Suggested-by: Luis Chamberlain <mcgrof@kernel.org>
+> Cc: Luis Chamberlain <mcgrof@kernel.org>
+> Cc: linux-modules@vger.kernel.org
+> Cc: linux-kernel@vger.kernel.org
+> Cc: Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>
+> Cc: Dinh Nguyen <dinguyen@kernel.org>
+> Cc: Borislav Petkov <bp@alien8.de>
+> Cc: Tony Luck <tony.luck@intel.com>
+> Cc: linux-edac@vger.kernel.org
+> ---
+>  drivers/edac/altera_edac.c | 1 -
+>  1 file changed, 1 deletion(-)
+> 
+> diff --git a/drivers/edac/altera_edac.c b/drivers/edac/altera_edac.c
+> index e7e8e624a436..ba325d4c5e83 100644
+> --- a/drivers/edac/altera_edac.c
+> +++ b/drivers/edac/altera_edac.c
+> @@ -2226,6 +2226,5 @@ static struct platform_driver altr_edac_a10_driver = {
+>  };
+>  module_platform_driver(altr_edac_a10_driver);
+>  
+> -MODULE_LICENSE("GPL v2");
+>  MODULE_AUTHOR("Thor Thayer");
+>  MODULE_DESCRIPTION("EDAC Driver for Altera Memories");
+> -- 
 
-I'm assuming that "by any access" is not needed because
-amd_decode_err_code() would say "GEN"-eric for the transaction type
-which is the same thing, basically.
-
->  static const char * const smca_if_mce_desc[] = {
-> -	"Op Cache Microtag Probe Port Parity Error",
-> +	"Op Cache Microtag Parity Error",
->  	"IC Microtag or Full Tag Multi-hit Error",
->  	"IC Full Tag Parity Error",
->  	"IC Data Array Parity Error",
-> -	"Decoupling Queue PhysAddr Parity Error",
-> +	"PRQ Parity Error",
->  	"L0 ITLB Parity Error",
-> -	"L1 ITLB Parity Error",
-> -	"L2 ITLB Parity Error",
-> +	"L1-TLB Parity Error",
-> +	"L2-TLB Parity Error",
->  	"BPQ Thread 0 Snoop Parity Error",
->  	"BPQ Thread 1 Snoop Parity Error",
-> -	"L1 BTB Multi-Match Error",
-> -	"L2 BTB Multi-Match Error",
-> +	"BP L1-BTB Multi-Hit Error",
-> +	"BP L2-BTB Multi-Hit Error",
->  	"L2 Cache Response Poison Error",
-> -	"System Read Data Error",
-> +	"L2 Cache Error Response",
-
-Hmm, so I don't think we can do that - I'll bet on older Zens, this was
-"System Read Data Error" and on newer it is "L2 Cache Error Response"
-which are not the same thing.
-
-Right?
-
-If so, we can't really "update" descriptions like that. If we had to be
-precise, we will have to differentiate by family here. Not sure if we
-care enough but still...
+Applied, thanks.
 
 -- 
 Regards/Gruss,
