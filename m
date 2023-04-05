@@ -2,78 +2,108 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE2C66D678F
-	for <lists+linux-edac@lfdr.de>; Tue,  4 Apr 2023 17:37:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 91F366D75F4
+	for <lists+linux-edac@lfdr.de>; Wed,  5 Apr 2023 09:56:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235857AbjDDPhS (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Tue, 4 Apr 2023 11:37:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56166 "EHLO
+        id S237170AbjDEH4w (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Wed, 5 Apr 2023 03:56:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235861AbjDDPhI (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Tue, 4 Apr 2023 11:37:08 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83A27448F;
-        Tue,  4 Apr 2023 08:36:47 -0700 (PDT)
-Received: from zn.tnic (p5de8e687.dip0.t-ipconnect.de [93.232.230.135])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id BFCAB1EC0529;
-        Tue,  4 Apr 2023 17:36:40 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1680622600;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=2sPBGWr54kw4A2qEKLOZq6gkXB3eP7VzA6/tCd+AW20=;
-        b=oBkj6A5fT8ySiQgv98D/jFVpT6KTJBURwchEloRkx8+74BagyFD94b+5/2gA/M+JqAm2F1
-        iB973uHrvUpqzQADqUefFfsQrA9ix+brKRJdoIasP1amCoL25YiNEHIAjM0ysuPSsArfwK
-        htCiJeGmyY+o6nRzjRmvkOjhd3W2DOE=
-Date:   Tue, 4 Apr 2023 17:36:40 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Yang Li <yang.lee@linux.alibaba.com>
-Cc:     yazen.ghannam@amd.com, tony.luck@intel.com, james.morse@arm.com,
-        mchehab@kernel.org, rric@kernel.org, linux-edac@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Abaci Robot <abaci@linux.alibaba.com>
-Subject: Re: [PATCH -next v2] EDAC/amd64: clean up some inconsistent
- indentings
-Message-ID: <20230404153640.GAZCxECKKfsQoYGM6p@fat_crate.local>
-References: <20230404022557.46409-1-yang.lee@linux.alibaba.com>
+        with ESMTP id S237182AbjDEH4u (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Wed, 5 Apr 2023 03:56:50 -0400
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE8144C17
+        for <linux-edac@vger.kernel.org>; Wed,  5 Apr 2023 00:56:47 -0700 (PDT)
+Received: by mail-ed1-x536.google.com with SMTP id y4so139000689edo.2
+        for <linux-edac@vger.kernel.org>; Wed, 05 Apr 2023 00:56:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1680681406;
+        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Q2eIUIgQam+Znm92t75ub3SSql/5kD/CSnGjaZOIeRE=;
+        b=TbfE/M3KLTLcH5vT2Fre6fZYOYPWvvtxQkGTov6z1yTYm3WWX0o+lTIhTOG+wcSwIr
+         Shh1zY364kogmQhRAc0fmFUnYMo7ZU5Ky8ffXUG3ryGAwkPV8ypCT8eTFfjq9CYDvF34
+         wd9tQF0WuIJQpr3lhmr30HlFr0l1LwFrvYdgr8mH0O6e9FfWr5OPxhkLBM/13q30F9ig
+         EG1EUr+OVaWTOJKmPFrxHNqGlS+65K8SsVkrarg61QTLcPElkQBRwd5OoyrukvetA/wf
+         Vqy9Mst7SvFcranOTqZhNf+dN08TZqf8qZtRsH7Kuac3IsmXwWAy0wOKyifHo22AsbGf
+         ub3A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680681406;
+        h=to:subject:message-id:date:from:reply-to:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Q2eIUIgQam+Znm92t75ub3SSql/5kD/CSnGjaZOIeRE=;
+        b=64F7njYJ6B1KO0ZES4YCaSW8MsYEQPxvF9is8YB+QSinHEXzjSvM+e20Cw88lCK7i6
+         fnu+LZ7almSxg4MAo9F6PwHVyaovYUet9/z+uEViTJP0PCF21i4os50d45QlYaH4sk2u
+         zCp7mRJOblKLtBsngr407tYp7WxBEr9FFcvQjtIlOMPxTLX5ZoSdXkNE9yyLiJl6OMVy
+         fBxEAh40zhbt99+4sp+y9jae1Q3ohGKoCvmh+CIIldlcxXr84O1LQmg2ztdlSFVyhf6S
+         dOZ536O+iqxGgspQ13DIJrYQbkS306hModhQqbkSOqFnDfRL2yK+ZHSbSothZNTpSKFR
+         0/Ow==
+X-Gm-Message-State: AAQBX9cruwRNOlWGLgD3U6MoTRA+YxKaq3d7YvmsPsgwTaJ75gan0pTH
+        E0Ylmzt0yxrXgwK238zs7iRJAkMHRuNttX7BUaM=
+X-Google-Smtp-Source: AKy350aKLqDIJOBs2+w17/O65tIzNsWo0HsCJMoNyTEOl6/xftBTjTFN3K+wYTFKjUWLGLXPGVtupVTP2HNAQxlPhhQ=
+X-Received: by 2002:a17:906:f8db:b0:92b:ec37:e4b7 with SMTP id
+ lh27-20020a170906f8db00b0092bec37e4b7mr1145683ejb.14.1680681406051; Wed, 05
+ Apr 2023 00:56:46 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230404022557.46409-1-yang.lee@linux.alibaba.com>
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Received: by 2002:a05:7208:2202:b0:65:e547:3943 with HTTP; Wed, 5 Apr 2023
+ 00:56:45 -0700 (PDT)
+Reply-To: tamimbinhamadalthani00@gmail.com
+From:   Tamim Mohammed Taher <cisskhadidiatou890@gmail.com>
+Date:   Wed, 5 Apr 2023 00:56:45 -0700
+Message-ID: <CAAYY=dY1_XALb_mD3qTfxhx_hk9X7aOuccJ_bL2QrungoJAyKA@mail.gmail.com>
+Subject: RE:Saudi Arabia-Inquiry about your products.!!
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=5.9 required=5.0 tests=DEAR_SOMETHING,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UNDISC_FREEM autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2a00:1450:4864:20:0:0:0:536 listed in]
+        [list.dnswl.org]
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [tamimbinhamadalthani00[at]gmail.com]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [cisskhadidiatou890[at]gmail.com]
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [cisskhadidiatou890[at]gmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  1.7 DEAR_SOMETHING BODY: Contains 'Dear (something)'
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        *  2.9 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Tue, Apr 04, 2023 at 10:25:57AM +0800, Yang Li wrote:
-> Use consistent indentation to improve the readability and eliminate
-> the below warning:
-> 
-> drivers/edac/amd64_edac.c:1279 umc_determine_edac_cap() warn: inconsistent indenting
-> 
-> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-> Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=4639
-> Fixes: f6a4b4a1aa16 ("EDAC/amd64: Split determine_edac_cap() into dct/umc functions")
-> Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
-> ---
-> 
-> change in v2:
-> --According to yazen's suggestion, include a fixes tag and
->   describe the changes in the commit message
-> 
->  drivers/edac/amd64_edac.c | 20 ++++++++++----------
->  1 file changed, 10 insertions(+), 10 deletions(-)
+Dear Sir/Madam,
 
-Applied, thanks.
 
--- 
-Regards/Gruss,
-    Boris.
 
-https://people.kernel.org/tglx/notes-about-netiquette
+Can you supply your products to  the government of (Saudi Arabia). We
+buy in larger quantity if your company can supply please reply with
+your products detail for more information.
+
+Looking forward to hearing from you.
+
+Thanks and Regards
+
+ Mr.Tamim Mohammed Taher
+
+Email:tamimbinhamadalthani00@gmail.com
