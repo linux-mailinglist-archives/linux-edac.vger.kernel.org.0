@@ -2,124 +2,101 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F3456E6AEF
-	for <lists+linux-edac@lfdr.de>; Tue, 18 Apr 2023 19:27:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 21B346E6B66
+	for <lists+linux-edac@lfdr.de>; Tue, 18 Apr 2023 19:50:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231398AbjDRR1z (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Tue, 18 Apr 2023 13:27:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36252 "EHLO
+        id S232318AbjDRRuF (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Tue, 18 Apr 2023 13:50:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231741AbjDRR1o (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Tue, 18 Apr 2023 13:27:44 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 181E9B768;
-        Tue, 18 Apr 2023 10:27:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681838855; x=1713374855;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=FXgDRy7QEJxBTFnmKuyXp+5XXVFQ7tDgBlizVK+nwUo=;
-  b=j9UqY3v7p6N2pQfWwuI+ZeOQdtUTTVmnGCzuNl8PYuO7BTquzmRjCzEZ
-   ievHX9nT4dsES8T/Oy6VqlL+WnqUTTc2KhcigTudECvkn+AKXV5t9wds4
-   pXQFa4o/zvCWyBMVHxdKPvakKzifR6AvreB7d3e6lel78EPoPU9aA4ipj
-   cYG6aQ5/X1ltgbSNWNjHZNSh5bMeu+4ntOyiiyKYlqu3ypvVSbG7uua1M
-   RHEav/e0KOY0OeOAydkvxjvOz+X/aFr3jpam3EBM1rLg6TkQASbEJjrxx
-   /Bb0RMTTEGX4cuG2WQNaNYPCcKRhKu0I9H6xZs3vcCrqEkS/F8mc6gd6s
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10684"; a="347993626"
-X-IronPort-AV: E=Sophos;i="5.99,207,1677571200"; 
-   d="scan'208";a="347993626"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Apr 2023 10:27:34 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10684"; a="684665437"
-X-IronPort-AV: E=Sophos;i="5.99,207,1677571200"; 
-   d="scan'208";a="684665437"
-Received: from agluck-desk3.sc.intel.com ([172.25.222.78])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Apr 2023 10:27:34 -0700
-Date:   Tue, 18 Apr 2023 10:27:33 -0700
-From:   Tony Luck <tony.luck@intel.com>
-To:     Yazen Ghannam <yazen.ghannam@amd.com>
-Cc:     Borislav Petkov <bp@alien8.de>, x86@kernel.org,
-        linux-kernel@vger.kernel.org, linux-edac@vger.kernel.org,
-        patches@lists.linux.dev
-Subject: Re: [PATCH] x86/mce: Check that memory address is usable for recovery
-Message-ID: <ZD7TBZex278dSYmc@agluck-desk3.sc.intel.com>
-References: <20230322005131.174499-1-tony.luck@intel.com>
- <a5d0c575-ba4f-1120-c7ee-bc37e8d40402@amd.com>
+        with ESMTP id S231701AbjDRRuE (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Tue, 18 Apr 2023 13:50:04 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D3A09EDB;
+        Tue, 18 Apr 2023 10:50:02 -0700 (PDT)
+Received: from zn.tnic (p5de8e687.dip0.t-ipconnect.de [93.232.230.135])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id BEDDB1EC0441;
+        Tue, 18 Apr 2023 19:50:00 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1681840200;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=j6JRsg/QQhsYzAJktxr6sLk4o83928DEGlAGxEQB5P0=;
+        b=aCdj6oEopa2TZ/eZ1bIiakdEACXSFwPCOyedKNL6frPBiI6sICrS4DmY7+pR4upiMF3Tby
+        M8Lf9tQUqUxJKQi0t3NS18y5xbvScGe6HFiSaWXCOTxGX+acTHTi485NV+HKI1xRuHOxhS
+        gUrf30jLknoeAF2FgopglYbebOd/WQ0=
+Date:   Tue, 18 Apr 2023 19:50:00 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Tony Luck <tony.luck@intel.com>, James Morse <james.morse@arm.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Robert Richter <rric@kernel.org>, linux-edac@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/2] edac: cpc925: Use of_get_cpu_hwid() to read CPU node
+ 'reg'
+Message-ID: <20230418175000.GLZD7YSNkIKk8ltGIw@fat_crate.local>
+References: <20230319150141.67824-1-robh@kernel.org>
+ <20230319150141.67824-2-robh@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <a5d0c575-ba4f-1120-c7ee-bc37e8d40402@amd.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230319150141.67824-2-robh@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Tue, Apr 18, 2023 at 12:41:17PM -0400, Yazen Ghannam wrote:
-> On 3/21/23 20:51, Tony Luck wrote:
-> > uc_decode_notifier() includes a check that "struct mce"
-> > contains a valid address for recovery. But the machine
-> > check recovery code does not include a similar check.
-> > 
-> > Use mce_usable_address() to check that there is a valid
-> > address.
-> > 
-> > Signed-off-by: Tony Luck <tony.luck@intel.com>
-> > ---
-> >  arch/x86/kernel/cpu/mce/core.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > 
-> > diff --git a/arch/x86/kernel/cpu/mce/core.c b/arch/x86/kernel/cpu/mce/core.c
-> > index 2eec60f50057..fa28b3f7d945 100644
-> > --- a/arch/x86/kernel/cpu/mce/core.c
-> > +++ b/arch/x86/kernel/cpu/mce/core.c
-> > @@ -1533,7 +1533,7 @@ noinstr void do_machine_check(struct pt_regs *regs)
-> >  		/* If this triggers there is no way to recover. Die hard. */
-> >  		BUG_ON(!on_thread_stack() || !user_mode(regs));
-> >  
-> > -		if (kill_current_task)
-> > +		if (kill_current_task || !mce_usable_address(&m))
-> >  			queue_task_work(&m, msg, kill_me_now);
-> >  		else
-> >  			queue_task_work(&m, msg, kill_me_maybe);
+On Sun, Mar 19, 2023 at 10:01:41AM -0500, Rob Herring wrote:
+> Replace open coded reading of CPU nodes' "reg" properties with
+> of_get_cpu_hwid() dedicated for this purpose.
 > 
-> I think it should be like this:
+> Signed-off-by: Rob Herring <robh@kernel.org>
+> ---
+>  drivers/edac/cpc925_edac.c | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
 > 
-> 	if (mce_usable_address(&m))
-> 		queue_task_work(&m, msg, kill_me_maybe);
-> 	else
-> 		queue_task_work(&m, msg, kill_me_now);
-> 
-> A usable address should always go through memory_failure() so that the page is
-> marked as poison. If !RIPV, then memory_failure() will get the MF_MUST_KILL
-> flag and try to kill all processes after the page is poisoned.
-> 
-> I had a similar patch a while back:
-> https://lore.kernel.org/linux-edac/20210504174712.27675-3-Yazen.Ghannam@amd.com/
-> 
-> We could also get rid of kill_me_now() like you had suggested.
+> diff --git a/drivers/edac/cpc925_edac.c b/drivers/edac/cpc925_edac.c
+> index ee193aae8e14..0182436c1b5a 100644
+> --- a/drivers/edac/cpc925_edac.c
+> +++ b/drivers/edac/cpc925_edac.c
+> @@ -557,13 +557,13 @@ static u32 cpc925_cpu_mask_disabled(void)
+>  	mask = APIMASK_ADI0 | APIMASK_ADI1;
+>  
+>  	for_each_of_cpu_node(cpunode) {
+> -		const u32 *reg = of_get_property(cpunode, "reg", NULL);
+> -		if (reg == NULL || *reg > 2) {
+> +		int hwid = of_get_cpu_hwid(cpunode, 0);
+> +		if ((hwid < 0) || (hwid > 2)) {
+>  			cpc925_printk(KERN_ERR, "Bad reg value at %pOF\n", cpunode);
+>  			continue;
+>  		}
+>  
+> -		mask &= ~APIMASK_ADI(*reg);
+> +		mask &= ~APIMASK_ADI(hwid);
+>  	}
+>  
+>  	if (mask != (APIMASK_ADI0 | APIMASK_ADI1)) {
+> -- 
 
-Can we also get rid of "kill_current_task"? It is only set when there is
-no valid return address:
+$ grep CPC925 .config
+CONFIG_EDAC_CPC925=m
 
-        if (!(m.mcgstatus & MCG_STATUS_RIPV))
-                kill_current_task = 1;
+$ make ARCH=powerpc CROSS_COMPILE=/home/boris/src/crosstool/gcc-11.1.0-nolibc/powerpc64-linux/bin/powerpc64-linux-
+...
+ERROR: modpost: ".of_get_cpu_hwid" [drivers/edac/cpc925_edac.ko] undefined!
+make[1]: *** [scripts/Makefile.modpost:136: Module.symvers] Error 1
+make: *** [Makefile:1980: modpost] Error 2
 
-kill_me_maybe() does an equivalent check:
+-- 
+Regards/Gruss,
+    Boris.
 
-	if (!p->mce_ripv)
-                flags |= MF_MUST_KILL;
-
-Which only leaves this check to resolve in some way:
-
-        if (worst != MCE_AR_SEVERITY && !kill_current_task)
-                goto out;
-
--Tony
+https://people.kernel.org/tglx/notes-about-netiquette
