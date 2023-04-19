@@ -2,113 +2,116 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 073486E7CC4
-	for <lists+linux-edac@lfdr.de>; Wed, 19 Apr 2023 16:33:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7ADD76E8165
+	for <lists+linux-edac@lfdr.de>; Wed, 19 Apr 2023 20:45:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232135AbjDSOdg (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Wed, 19 Apr 2023 10:33:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36060 "EHLO
+        id S230298AbjDSSpw (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Wed, 19 Apr 2023 14:45:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232327AbjDSOdg (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Wed, 19 Apr 2023 10:33:36 -0400
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89F3ABBBE
-        for <linux-edac@vger.kernel.org>; Wed, 19 Apr 2023 07:33:13 -0700 (PDT)
-Received: by mail-wm1-x332.google.com with SMTP id v20-20020a05600c471400b003ed8826253aso2345473wmo.0
-        for <linux-edac@vger.kernel.org>; Wed, 19 Apr 2023 07:33:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681914792; x=1684506792;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=PDz5wPoF6mzki4uB+KT49albEFl80CleY3DhTbU8L2w=;
-        b=Z++1M0L8+XjbKDxJ+5jLQ1ulABYi5IrM3t5phLmdBNgqjn81Lkb2LIp7FSGUmsNb+M
-         JHuwtcVLu0m5djow1Hg0/b0/nFVeNDqtkrsfRrBHfdCrCh+hKaOUs2FrCXtHajsp6Z9v
-         rIaJXNoh4MefZnAeV764MV72uGPrjvgfy5Rw11cXLmgmY/ERQL6XCMwXcXq+IxUWdd10
-         LqgziErqQeqP3w7x0iLIpkdZctdgM83xeMFZ/XWW99CSv67HuSc4TcmruB1ZyH0I1pPJ
-         4VxW13O4HjMtrK0nj4rGHZM2V0U303KzJXs5j452O7cyFfDK8n1qafAKRoDigP/+Odic
-         mQBQ==
+        with ESMTP id S230346AbjDSSpu (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Wed, 19 Apr 2023 14:45:50 -0400
+Received: from mail-oo1-f45.google.com (mail-oo1-f45.google.com [209.85.161.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 980015B94;
+        Wed, 19 Apr 2023 11:45:49 -0700 (PDT)
+Received: by mail-oo1-f45.google.com with SMTP id 006d021491bc7-546dad86345so24126eaf.0;
+        Wed, 19 Apr 2023 11:45:49 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681914792; x=1684506792;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=PDz5wPoF6mzki4uB+KT49albEFl80CleY3DhTbU8L2w=;
-        b=jjG/NTmhHWBaYjI3eOt4qlFX9NckxDuZdOHOCLkkIMixto95P5bjmusnlRCCrg0GMT
-         T3e0+5u+gn20trfMrmgUVbhM8r2XJUKHzTkhPT7paCiBL3MP9OIL5p6AnI3Mc4hlgNNi
-         hk7bHj92WBqesgB7M5DMz9evdJVt+vTZcmkkouasgILGymr+sYixus++9h/RInnglLZb
-         afYNJN+6lgBU2hN4pQIeQ4oqRjJdepkUZTgXoVIthOsEQMx/362YjPYxwOetqo9ugQW5
-         N1Hy4eNgDpVzip4Ge8dPk2Fk7e0cataOb5rLGH/HdmS85BXke7HzbEgUFfJHfjCsSBSK
-         1qUQ==
-X-Gm-Message-State: AAQBX9e6bnNcZrENTq3oVE04ua9Xzu57WPP71KDZ1k4UZjNtHNKSeaFT
-        YgN9/t3Elpw8dwtnTvWaw6hGPummv/WjJ4YGGFA4Hlko
-X-Google-Smtp-Source: AKy350YxycphWPSIxU0WlcO3m9WQwKv3e1t+Dkir0iCpMfZ+j4GbdbPfsoS72IIw+oop73NCEUIy/Q==
-X-Received: by 2002:a7b:ce99:0:b0:3f1:75b3:60dd with SMTP id q25-20020a7bce99000000b003f175b360ddmr7275341wmj.22.1681914792066;
-        Wed, 19 Apr 2023 07:33:12 -0700 (PDT)
-Received: from localhost ([102.36.222.112])
-        by smtp.gmail.com with ESMTPSA id g9-20020a05600c000900b003f0aa490336sm2377802wmc.26.2023.04.19.07.33.11
+        d=1e100.net; s=20221208; t=1681929949; x=1684521949;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=j1u6wDxEFqR3nc6mJ3LnzSqMuNsw7ywTC5vr5ltaIYE=;
+        b=EnBHRGivCscuuUaZmAPe+RUmmO/9vv1gBwh4vQyhZ6JIwSG+7ZJNsGZRhBqm2jpFD0
+         xypN5PLW9bm69fnBmT43nYLzGUfaX7nqq1+WOuEiBKXGyx+VqwK5h0I9kxw4vo/jlzKB
+         9l19bQvfBbkoPI1vK5oKdF9UJAB/NrgyodOueDZZVs+ezr4+7V8Gk0Zl9hiO8nA6pPtN
+         H8CK2DUUgZszgPL85p5aznR8ZPqxAUaoXozBp67AFB27JyTHIgEXoY1/7Lb9FVGzibdk
+         HzFgYmjfV5yE/mdyK8e6YTApi9KHiHR9RWJYxgvYMsHvuRBhM2vNiayFjK+6qTUAZW7p
+         T0rA==
+X-Gm-Message-State: AAQBX9cYPAR9mPRSrRaWkig3mKnrneIzUBB2rM/R1UigvW/98CquPDwn
+        /yubfLv/8O5afkn1pSDBPg==
+X-Google-Smtp-Source: AKy350axA4KSuP1rGO4qpDY6pI13A7IRsrcc2RYlSrdOQlat0tH+KBoNonedj/aMdVHHSE2OXUdVHA==
+X-Received: by 2002:a05:6808:1382:b0:387:1a46:8317 with SMTP id c2-20020a056808138200b003871a468317mr4028314oiw.13.1681929948854;
+        Wed, 19 Apr 2023 11:45:48 -0700 (PDT)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id z9-20020a4a9849000000b005413682e16dsm7390043ooi.3.2023.04.19.11.45.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Apr 2023 07:33:11 -0700 (PDT)
-Date:   Wed, 19 Apr 2023 17:33:08 +0300
-From:   Dan Carpenter <dan.carpenter@linaro.org>
-To:     thor.thayer@linux.intel.com
-Cc:     linux-edac@vger.kernel.org
-Subject: [bug report] EDAC/altera: Initialize peripheral FIFOs in probe()
-Message-ID: <0a108941-4158-4dbe-a993-691c7c8fb338@kili.mountain>
+        Wed, 19 Apr 2023 11:45:48 -0700 (PDT)
+Received: (nullmailer pid 513861 invoked by uid 1000);
+        Wed, 19 Apr 2023 18:45:47 -0000
+Date:   Wed, 19 Apr 2023 13:45:47 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     Tony Luck <tony.luck@intel.com>, James Morse <james.morse@arm.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Robert Richter <rric@kernel.org>, linux-edac@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/2] edac: cpc925: Use of_get_cpu_hwid() to read CPU node
+ 'reg'
+Message-ID: <20230419184547.GA4013083-robh@kernel.org>
+References: <20230319150141.67824-1-robh@kernel.org>
+ <20230319150141.67824-2-robh@kernel.org>
+ <20230418175000.GLZD7YSNkIKk8ltGIw@fat_crate.local>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230418175000.GLZD7YSNkIKk8ltGIw@fat_crate.local>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-Hello Thor Thayer,
+On Tue, Apr 18, 2023 at 07:50:00PM +0200, Borislav Petkov wrote:
+> On Sun, Mar 19, 2023 at 10:01:41AM -0500, Rob Herring wrote:
+> > Replace open coded reading of CPU nodes' "reg" properties with
+> > of_get_cpu_hwid() dedicated for this purpose.
+> > 
+> > Signed-off-by: Rob Herring <robh@kernel.org>
+> > ---
+> >  drivers/edac/cpc925_edac.c | 6 +++---
+> >  1 file changed, 3 insertions(+), 3 deletions(-)
+> > 
+> > diff --git a/drivers/edac/cpc925_edac.c b/drivers/edac/cpc925_edac.c
+> > index ee193aae8e14..0182436c1b5a 100644
+> > --- a/drivers/edac/cpc925_edac.c
+> > +++ b/drivers/edac/cpc925_edac.c
+> > @@ -557,13 +557,13 @@ static u32 cpc925_cpu_mask_disabled(void)
+> >  	mask = APIMASK_ADI0 | APIMASK_ADI1;
+> >  
+> >  	for_each_of_cpu_node(cpunode) {
+> > -		const u32 *reg = of_get_property(cpunode, "reg", NULL);
+> > -		if (reg == NULL || *reg > 2) {
+> > +		int hwid = of_get_cpu_hwid(cpunode, 0);
+> > +		if ((hwid < 0) || (hwid > 2)) {
+> >  			cpc925_printk(KERN_ERR, "Bad reg value at %pOF\n", cpunode);
+> >  			continue;
+> >  		}
+> >  
+> > -		mask &= ~APIMASK_ADI(*reg);
+> > +		mask &= ~APIMASK_ADI(hwid);
+> >  	}
+> >  
+> >  	if (mask != (APIMASK_ADI0 | APIMASK_ADI1)) {
+> > -- 
+> 
+> $ grep CPC925 .config
+> CONFIG_EDAC_CPC925=m
+> 
+> $ make ARCH=powerpc CROSS_COMPILE=/home/boris/src/crosstool/gcc-11.1.0-nolibc/powerpc64-linux/bin/powerpc64-linux-
+> ...
+> ERROR: modpost: ".of_get_cpu_hwid" [drivers/edac/cpc925_edac.ko] undefined!
+> make[1]: *** [scripts/Makefile.modpost:136: Module.symvers] Error 1
+> make: *** [Makefile:1980: modpost] Error 2
 
-The patch 788586efd116: "EDAC/altera: Initialize peripheral FIFOs in
-probe()" from Mar 26, 2019, leads to the following Smatch static
-checker warning:
+I'd rather not export of_get_cpu_hwid() which is otherwise only used in 
+arch code. I think I'll rewrite this in terms of for_each_possible_cpu() 
+and topology_core_id(). Though that would make a UP build not enable 
+core 1, but that seems undesirable anyways. 
 
-drivers/edac/altera_edac.c:1650 socfpga_init_sdmmc_ecc()
-warn: inconsistent refcounting 'child->kobj.kref.refcount.refs.counter':
-  inc on: 1646
-  dec on: 1650
-
-drivers/edac/altera_edac.c
-    1624 static int __init socfpga_init_sdmmc_ecc(struct altr_edac_device_dev *device)
-    1625 {
-    1626         int rc = -ENODEV;
-    1627         struct device_node *child;
-    1628 
-    1629         child = of_find_compatible_node(NULL, NULL, "altr,socfpga-sdmmc-ecc");
-    1630         if (!child)
-    1631                 return -ENODEV;
-    1632 
-    1633         if (!of_device_is_available(child))
-    1634                 goto exit;
-    1635 
-    1636         if (validate_parent_available(child))
-    1637                 goto exit;
-    1638 
-    1639         /* Init portB */
-    1640         rc = altr_init_a10_ecc_block(child, ALTR_A10_SDMMC_IRQ_MASK,
-    1641                                      a10_sdmmceccb_data.ecc_enable_mask, 1);
-    1642         if (rc)
-    1643                 goto exit;
-    1644 
-    1645         /* Setup portB */
-    1646         return altr_portb_setup(device);
-
-Should we call of_node_put() if altr_portb_setup() fails?
-
-    1647 
-    1648 exit:
-    1649         of_node_put(child);
---> 1650         return rc;
-    1651 }
-
-regards,
-dan carpenter
+Rob
