@@ -2,157 +2,113 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 327746E7A4B
-	for <lists+linux-edac@lfdr.de>; Wed, 19 Apr 2023 15:08:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 073486E7CC4
+	for <lists+linux-edac@lfdr.de>; Wed, 19 Apr 2023 16:33:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232832AbjDSNIL (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Wed, 19 Apr 2023 09:08:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48052 "EHLO
+        id S232135AbjDSOdg (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Wed, 19 Apr 2023 10:33:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231400AbjDSNIJ (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Wed, 19 Apr 2023 09:08:09 -0400
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2064.outbound.protection.outlook.com [40.107.94.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F7BB9EF2;
-        Wed, 19 Apr 2023 06:08:06 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=co0Kr+Z8Aj36LDmf1ZpC2iipB/vDe3URusGtZkoLmfRkASsbQ95KmbU7qRSun1sTV/FQNaWQ6Dbp8xXiVX0fxg7V/l5eoe2vT2z3RKwhO3hIqGKm1JorzNgfiKzrj+bmSy9A886pJ2kfxWP7Xa3pYITL3LJfPa9ys7wyE9thMUdLzpjc+7D4hDROKmXHbYxdkVj+uEoV2hjRf0OevK3B/ECsq3I/jdsSj2kvPODzCKmrynl8hP34YYyEf17pQRWF9pVJgilPdS2LvVucIxf3X0p+66KgBggTJsnGSiGrMdvx9zM7UxxBuCsoVhr4jY1GXv/UCx5xI0dO/8yVEC5ViA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=pJOWIXxwxL+EEKdFdZm+AVbjNp1kUwNz/edItKkuqiQ=;
- b=QFWlRzblAaEUu3VbFZnQgSdz29jFBsq3jzd6D11+nNi304YEqddCdu3DjSXXmDQvj6wytQAZtQYr9dSiwme/caRtxRFmpv0EioVB5aVHL1R4guWLdCPq6c7fBCurSPGlRVjTkZfgqe9F3RzL/IOluqb830w2DLe2yO0TujfHLJGYiY7+jJhXvHQGR681jr3HKqXj90oX+Uwv8l32sAVX8/pxCz4lDih0ubIs1QP8C9wdRHdgAAawMeAoY3V737HKvRTmREY5dX0RfsynTclo+5wuIYE6IF4fyGaHgawefItygyhkVopN9RCXtlx3yrx4pookFQ86V27igiwIkLKjtg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=pJOWIXxwxL+EEKdFdZm+AVbjNp1kUwNz/edItKkuqiQ=;
- b=5EpOABuEjc3mFBOlWEk1+oQkH81S6ZQq2nqEVk9Q7l3h9i/aaOv+VVLEVScwYZs95++Fy0jYjmqPqpXj7uy1keaytSpq71QucpQp4WUqhLGcoeBIsmzdHUU0Ji28cnQBA+/Zj9ZcWvkvGk0qug4NQcUsV2zO4VzSFT73yudlIig=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from BN8PR12MB3108.namprd12.prod.outlook.com (2603:10b6:408:40::20)
- by CY8PR12MB8314.namprd12.prod.outlook.com (2603:10b6:930:7b::6) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6298.45; Wed, 19 Apr
- 2023 13:08:03 +0000
-Received: from BN8PR12MB3108.namprd12.prod.outlook.com
- ([fe80::b911:e5f7:65a1:5ea2]) by BN8PR12MB3108.namprd12.prod.outlook.com
- ([fe80::b911:e5f7:65a1:5ea2%5]) with mapi id 15.20.6319.022; Wed, 19 Apr 2023
- 13:08:02 +0000
-Message-ID: <0bf7ed90-7231-d280-fd52-5906d693fbe1@amd.com>
-Date:   Wed, 19 Apr 2023 09:08:00 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Cc:     yazen.ghannam@amd.com, "x86@kernel.org" <x86@kernel.org>,
-        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "patches@lists.linux.dev" <patches@lists.linux.dev>
-Subject: Re: [PATCH v2] x86/mce: Always call memory_failure() when there is a
- valid address
-Content-Language: en-US
-To:     "Luck, Tony" <tony.luck@intel.com>, Borislav Petkov <bp@alien8.de>
-References: <a5d0c575-ba4f-1120-c7ee-bc37e8d40402@amd.com>
- <20230418180343.19167-1-tony.luck@intel.com>
- <93d0e5e9-eec1-cdab-be5b-cd65f792e5ac@amd.com>
- <SJ1PR11MB6083BF7037C9C86E097FCAA0FC9D9@SJ1PR11MB6083.namprd11.prod.outlook.com>
-From:   Yazen Ghannam <yazen.ghannam@amd.com>
-In-Reply-To: <SJ1PR11MB6083BF7037C9C86E097FCAA0FC9D9@SJ1PR11MB6083.namprd11.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: BN9P221CA0018.NAMP221.PROD.OUTLOOK.COM
- (2603:10b6:408:10a::35) To BN8PR12MB3108.namprd12.prod.outlook.com
- (2603:10b6:408:40::20)
+        with ESMTP id S232327AbjDSOdg (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Wed, 19 Apr 2023 10:33:36 -0400
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89F3ABBBE
+        for <linux-edac@vger.kernel.org>; Wed, 19 Apr 2023 07:33:13 -0700 (PDT)
+Received: by mail-wm1-x332.google.com with SMTP id v20-20020a05600c471400b003ed8826253aso2345473wmo.0
+        for <linux-edac@vger.kernel.org>; Wed, 19 Apr 2023 07:33:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1681914792; x=1684506792;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=PDz5wPoF6mzki4uB+KT49albEFl80CleY3DhTbU8L2w=;
+        b=Z++1M0L8+XjbKDxJ+5jLQ1ulABYi5IrM3t5phLmdBNgqjn81Lkb2LIp7FSGUmsNb+M
+         JHuwtcVLu0m5djow1Hg0/b0/nFVeNDqtkrsfRrBHfdCrCh+hKaOUs2FrCXtHajsp6Z9v
+         rIaJXNoh4MefZnAeV764MV72uGPrjvgfy5Rw11cXLmgmY/ERQL6XCMwXcXq+IxUWdd10
+         LqgziErqQeqP3w7x0iLIpkdZctdgM83xeMFZ/XWW99CSv67HuSc4TcmruB1ZyH0I1pPJ
+         4VxW13O4HjMtrK0nj4rGHZM2V0U303KzJXs5j452O7cyFfDK8n1qafAKRoDigP/+Odic
+         mQBQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681914792; x=1684506792;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=PDz5wPoF6mzki4uB+KT49albEFl80CleY3DhTbU8L2w=;
+        b=jjG/NTmhHWBaYjI3eOt4qlFX9NckxDuZdOHOCLkkIMixto95P5bjmusnlRCCrg0GMT
+         T3e0+5u+gn20trfMrmgUVbhM8r2XJUKHzTkhPT7paCiBL3MP9OIL5p6AnI3Mc4hlgNNi
+         hk7bHj92WBqesgB7M5DMz9evdJVt+vTZcmkkouasgILGymr+sYixus++9h/RInnglLZb
+         afYNJN+6lgBU2hN4pQIeQ4oqRjJdepkUZTgXoVIthOsEQMx/362YjPYxwOetqo9ugQW5
+         N1Hy4eNgDpVzip4Ge8dPk2Fk7e0cataOb5rLGH/HdmS85BXke7HzbEgUFfJHfjCsSBSK
+         1qUQ==
+X-Gm-Message-State: AAQBX9e6bnNcZrENTq3oVE04ua9Xzu57WPP71KDZ1k4UZjNtHNKSeaFT
+        YgN9/t3Elpw8dwtnTvWaw6hGPummv/WjJ4YGGFA4Hlko
+X-Google-Smtp-Source: AKy350YxycphWPSIxU0WlcO3m9WQwKv3e1t+Dkir0iCpMfZ+j4GbdbPfsoS72IIw+oop73NCEUIy/Q==
+X-Received: by 2002:a7b:ce99:0:b0:3f1:75b3:60dd with SMTP id q25-20020a7bce99000000b003f175b360ddmr7275341wmj.22.1681914792066;
+        Wed, 19 Apr 2023 07:33:12 -0700 (PDT)
+Received: from localhost ([102.36.222.112])
+        by smtp.gmail.com with ESMTPSA id g9-20020a05600c000900b003f0aa490336sm2377802wmc.26.2023.04.19.07.33.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 19 Apr 2023 07:33:11 -0700 (PDT)
+Date:   Wed, 19 Apr 2023 17:33:08 +0300
+From:   Dan Carpenter <dan.carpenter@linaro.org>
+To:     thor.thayer@linux.intel.com
+Cc:     linux-edac@vger.kernel.org
+Subject: [bug report] EDAC/altera: Initialize peripheral FIFOs in probe()
+Message-ID: <0a108941-4158-4dbe-a993-691c7c8fb338@kili.mountain>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN8PR12MB3108:EE_|CY8PR12MB8314:EE_
-X-MS-Office365-Filtering-Correlation-Id: 1bbc1256-0a37-4f19-41ef-08db40d71b71
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 9C4PibeIWQlJq8Yw3Z6AKB52CCHJHwAbYHzjWTdiMV2vU5PZRLh6jL3Q1paL6qgN0pPnGCF+W2EiKxj5/LY9SVveO3fyh7ZlVKXJr5ftAqfyRgpry8pRjSpRjDkrcnvSfhYbJecM7fbW7MIKJY5jONDNGJSuLmKwyzgl/x5WnodOKj4WuPzZbLp7tdQmIvP+T1OxBUL8vXKTBB0dWNqz6jOJq9ehxnkdWSwEPvS63xVp6sCEWDLqdrK7LIRLLFRC1CHt2KOnpm0Orerd1E+p9Ta2DLgQutsjKZKpYUQB/JVCkZWNrDJqoVWVLaXYYOkcQ5LvCIjK1ZQ6xWwGjvtLZ2ApgWI2agtqzKunuzKR9bhxXB12nmY9Nk3DmxesIqAkLTOLxFKiYG3tr8d3ZsttZi+5t51OqFxT22RXDiPW/KoBDkSByu329gpAr2muYckEzciKfrQ/GeWJICF02sBEt6lBw7rnTuybK31TeuIvty/0otzY9Uu9pyquDGOMjd5v9xL6JOOKqSiMSD3+GhNGsQ4NGeKDdGiYbZ+CcYIGDc8brGnY0C8jCU+JYENtWSvs6FDeQ+jdx3FY3YyUdZw2lTNGAgEJ0MXvoZkd17DZzwNp8Dv8md4DBRK1fRdsleKdeZNLEy/S6CA4ZoU0hcSYHw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3108.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(39860400002)(346002)(136003)(396003)(376002)(451199021)(83380400001)(2616005)(26005)(6512007)(53546011)(6506007)(31686004)(478600001)(6486002)(54906003)(4326008)(66476007)(66946007)(66556008)(44832011)(316002)(86362001)(8676002)(36756003)(41300700001)(8936002)(5660300002)(186003)(110136005)(2906002)(4744005)(31696002)(38100700002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?K0Y5M1FhWUFTZ3Zxak1JZ0tWZUVYeFRPSVlHTE1nNXVRS2hZM1RFVXBiUVZY?=
- =?utf-8?B?b29tV1hiMzcvdnh0SzQ4aTVkWmtMSUZVbVg2cTNMWWtVdDg0dXkzUmJIMHRk?=
- =?utf-8?B?SUpSemVPcjNvc2hkUzNKZ2tXa0NzV0kzY3JEY0ZpY0xWSUlVNllta0c2WjZu?=
- =?utf-8?B?NHlWWnBzZVJCUE14YjFJVjQ2cWxFR2FoRDFhK2xTbnhBeTI3L0dmbE5GYU91?=
- =?utf-8?B?endvb2oxMVVjSXB2SHZJOG5mUnBoclE2V0xNWEdDTFZoZmYrd05rS2RCNDhP?=
- =?utf-8?B?cGlnVmd0ejNVREtqbFhQY3ZNeVJGeTdVeUVaWmcxYTl4T084Z1JkMC8xdm5X?=
- =?utf-8?B?Q0ovOUw4N1gycnNlemRLOVlqSU84QkJiT0hybFlWNjM4VExRTzJjNnlTcFJU?=
- =?utf-8?B?RGJaVGVxT29QbFpZTWNVYVl6SkpzVlZveTlxUTZJMktFbnlIZGFod0hhMTRK?=
- =?utf-8?B?QlRJR3gxQXppS1dRSkxGaTdEU05Bclo0TC9lUGR2Q2xCcmthQWIrR0Q3TXJZ?=
- =?utf-8?B?N0NUVFhiNGRMZk1sSm1WSVZybS8wYUMvVm5EclZ5aDM5SVcwMnRmVDREaGV0?=
- =?utf-8?B?eE94VWtLSkVIZHB0ZWJDdVI2TmxHQUN3Zit5SVI1b3JwTWhta1lIU29FTSt4?=
- =?utf-8?B?ckxzUy9jS0pyTHgrVFp5R2ZWUXIvRnFCNHRncmMvZnVveDFPTDJVR0JzTUMy?=
- =?utf-8?B?aG84TGZzMWdBb3Y5V3lRQUs0dEVoQUcrV1crZmdxOVZYdE9XbEZkSnc3NUNK?=
- =?utf-8?B?ZkxMS2tRVWwyTzZFTmU2V3pDOE5pbVZMaU9MU2lPR2FhdHlMbTNwZFIraTUy?=
- =?utf-8?B?UDdEbU1rV2ZCOEl3b1EzSVo0OHZoeUkxU2FqektBZUgrR29nbEtudXNRb0VC?=
- =?utf-8?B?N2lUM2hyMmRiQ2l5VFllUUVmRGptaGRKWTQyVDNpQi9NcVdHS2w3aUhKMldy?=
- =?utf-8?B?RUFXR1F3c3FUbjlDYitJS28rdTVjMk5JRVQ2Uk1jNCt2NXVFbUthb1Q3aTR6?=
- =?utf-8?B?MUdNa29IYWI5Mmd4VjljcmQ2NThYWDRsNmkwMU12dWlWTlVJWDRwSXptWTA4?=
- =?utf-8?B?NnFYN1piYkxKWVB6dDN4RUE3V1M4aW9OL3RoeTFjK3Nya0REdVI0MDE0aHRW?=
- =?utf-8?B?a25QMU5yaXY1UmltZzZ3NGk0OUtOZS9wSDFrRDgyTUVtNkJibHlxME5wWE9E?=
- =?utf-8?B?SHl4TFlTTllpNUx4OEY3Y0xIRzBFdElUWU5aVUdMUU1obnV3WkFaK0EvbjZn?=
- =?utf-8?B?M0U2dEFJU09MWHJTUFVDYnhEQUprWE11bWtMcUVpbGdtTVhDMFc3UFFMaWtQ?=
- =?utf-8?B?M01VUG5XZHk2ZmMwQk9UUDlnQ3ZjOGdDbnF6ZzlNWWhLSU9mTDdBM2pYaU12?=
- =?utf-8?B?bTRFeDIveFp2UjZZQmc5eVhZcUk0QlJ0azRrM3NDcVNtb1dMUGo2LzE3Z2xl?=
- =?utf-8?B?L2xuTXVpbldoWjZkNUxFTThIVTQ0REFJRk5OQ2JiendzRGx6MmpMdU5wSXo5?=
- =?utf-8?B?Mzh1U3ZOcWkwZ0ZnMER2d3oxeUJPZ0NYRXNHVkcrc21DdUpncmc2TXBYUWFs?=
- =?utf-8?B?QzFGZDVyTDBCUDR5NFk4NWhkS00rMWYwZ0ZEL2pmdUo2bm82emM4L21LR25D?=
- =?utf-8?B?Z2tYTFVrbG9zZFMwUlV1a0RjYXZWYWozcVZDTWtqY3hTLzVGK3hwdTIyZ0Z1?=
- =?utf-8?B?TlRNbm1Nak5hQlQxQURzSktoMjFldklhV3lJSTIzWXB4WUFxRnJINmN4RHQ2?=
- =?utf-8?B?RTRJSzBrWlgwQ0NQVk9yVlFVcSsrajdXaGZMc2Yzb3VwaHRKQjBtSXo2QXJy?=
- =?utf-8?B?alhKOWl2YVFvdi9LZXRQVExDZzRFY1Q3RWhCdkZLSjdVQldkcm9aYk1GcFBE?=
- =?utf-8?B?dmUycStsTisrVS9RRHFUZkIrWmlPOGtGRVN4NU1XVEtCUGFYcGY0Tng5bmhp?=
- =?utf-8?B?YU90ME80MEVublp0TnRqaXEyK25wWFZTMHdEQzMwWmJCUzI4cm9HZVYrYkN5?=
- =?utf-8?B?REN0ajNobFBRMW9xcnFDdjJNRWN3VmhBeTlhQXd0QnpVSWhmNFdnRDN5WGhm?=
- =?utf-8?B?QlpjNnQveDV4Y21LM0JiV2JSd0V6VnU0aUtZZUkxZGFVQVl5N2R6MUdSTDNn?=
- =?utf-8?Q?UA6kzMYEnxwehD0gpE1lyP1o5?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1bbc1256-0a37-4f19-41ef-08db40d71b71
-X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3108.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Apr 2023 13:08:02.7411
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: tq90u8fa5xiUqBwuUILbYgS6iCz1oSO6aDj70paJpCXdYn/1Z0t1FkfKSzRK7efPLUyE1eMRfsNtY6tHxJ5vhQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY8PR12MB8314
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On 4/18/23 15:34, Luck, Tony wrote:
->>> +		if (mce_usable_address(&m))
->>
->> This should be !mce_usable_address().
-> 
->> Copying old patch here. Feel free to reuse any of the commit message if
->> it helps.
-> 
-> Might as well just take your version. The commit message seems fine.
-> 
-> Reviewed-by: Tony Luck <tony.luck@intel.com>
-> 
+Hello Thor Thayer,
 
-Thanks!
+The patch 788586efd116: "EDAC/altera: Initialize peripheral FIFOs in
+probe()" from Mar 26, 2019, leads to the following Smatch static
+checker warning:
 
-> 
->> From: Yazen Ghannam <yazen.ghannam@amd.com>
->> Date: Fri, 8 Jan 2021 04:00:35 +0000
-> 
-> 2021 - wow!
-> 
+drivers/edac/altera_edac.c:1650 socfpga_init_sdmmc_ecc()
+warn: inconsistent refcounting 'child->kobj.kref.refcount.refs.counter':
+  inc on: 1646
+  dec on: 1650
 
-Yeah, I've been distracted lately with other things. >_>
+drivers/edac/altera_edac.c
+    1624 static int __init socfpga_init_sdmmc_ecc(struct altr_edac_device_dev *device)
+    1625 {
+    1626         int rc = -ENODEV;
+    1627         struct device_node *child;
+    1628 
+    1629         child = of_find_compatible_node(NULL, NULL, "altr,socfpga-sdmmc-ecc");
+    1630         if (!child)
+    1631                 return -ENODEV;
+    1632 
+    1633         if (!of_device_is_available(child))
+    1634                 goto exit;
+    1635 
+    1636         if (validate_parent_available(child))
+    1637                 goto exit;
+    1638 
+    1639         /* Init portB */
+    1640         rc = altr_init_a10_ecc_block(child, ALTR_A10_SDMMC_IRQ_MASK,
+    1641                                      a10_sdmmceccb_data.ecc_enable_mask, 1);
+    1642         if (rc)
+    1643                 goto exit;
+    1644 
+    1645         /* Setup portB */
+    1646         return altr_portb_setup(device);
 
--Yazen
+Should we call of_node_put() if altr_portb_setup() fails?
 
+    1647 
+    1648 exit:
+    1649         of_node_put(child);
+--> 1650         return rc;
+    1651 }
+
+regards,
+dan carpenter
