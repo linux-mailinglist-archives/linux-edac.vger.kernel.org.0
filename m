@@ -2,118 +2,120 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4C5C6EE1C0
-	for <lists+linux-edac@lfdr.de>; Tue, 25 Apr 2023 14:18:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 81FAC6EE624
+	for <lists+linux-edac@lfdr.de>; Tue, 25 Apr 2023 18:55:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233903AbjDYMSs (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Tue, 25 Apr 2023 08:18:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43046 "EHLO
+        id S234600AbjDYQzh (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Tue, 25 Apr 2023 12:55:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233943AbjDYMSq (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Tue, 25 Apr 2023 08:18:46 -0400
-Received: from out30-131.freemail.mail.aliyun.com (out30-131.freemail.mail.aliyun.com [115.124.30.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 398BFCC27;
-        Tue, 25 Apr 2023 05:18:43 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R401e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046056;MF=xueshuai@linux.alibaba.com;NM=1;PH=DS;RN=10;SR=0;TI=SMTPD_---0Vh-RnH7_1682425110;
-Received: from localhost.localdomain(mailfrom:xueshuai@linux.alibaba.com fp:SMTPD_---0Vh-RnH7_1682425110)
-          by smtp.aliyun-inc.com;
-          Tue, 25 Apr 2023 20:18:40 +0800
-From:   Shuai Xue <xueshuai@linux.alibaba.com>
-To:     bp@alien8.de, tony.luck@intel.com
-Cc:     tglx@linutronix.de, mingo@redhat.com, dave.hansen@linux.intel.com,
-        x86@kernel.org, hpa@zytor.com, baolin.wang@linux.alibaba.com,
-        linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] x86/mce/amd: init mce severity to handle deferred memory failure
-Date:   Tue, 25 Apr 2023 20:18:29 +0800
-Message-Id: <20230425121829.61755-1-xueshuai@linux.alibaba.com>
-X-Mailer: git-send-email 2.34.1
+        with ESMTP id S234014AbjDYQzg (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Tue, 25 Apr 2023 12:55:36 -0400
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 704E6D307
+        for <linux-edac@vger.kernel.org>; Tue, 25 Apr 2023 09:55:34 -0700 (PDT)
+Received: by mail-ej1-x635.google.com with SMTP id a640c23a62f3a-94f109b1808so1133606666b.1
+        for <linux-edac@vger.kernel.org>; Tue, 25 Apr 2023 09:55:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google; t=1682441732; x=1685033732;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=jIA68ceP7iZzPJ+vVNyRxj8lFQGUcY9/Iscq0YFStw0=;
+        b=G49hTlL8E/5vGR8fm0auT2wYkKZaWNXVWQAKwkH+MOpk8DXQqAIjTIlHh1ahlr9LOy
+         aNaix5qXGgNhkaYDX5tWl/KQ4BiaYNKjv05NRHZopTyTqjryGWP87mKWzT+hpHe1LTLa
+         fE8ZsYyUvS1m6TQVWaR1kDmGBOjMnFyDGXbtA=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682441732; x=1685033732;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=jIA68ceP7iZzPJ+vVNyRxj8lFQGUcY9/Iscq0YFStw0=;
+        b=R6M+Ta98d5mizuKDAGtyYTylUeBtEl3htEkLVqBHXmYeaGZ6ze61FXM9m8ay+6CZbl
+         KDrQSTdVaiIolMJD5saPh+qyk2vVJLO2O+e7o6vM8FlwUdd51pxbpp8hck4rOG2613Jm
+         D9BND2clyvrkI9IjK9+xKUDwNEkGqW4aA5vN5mHzVwlmjfPvfRSmVaGqb3uSUrIXQ4LR
+         8ggXHYvDvFQoFyiFlrGA0/NTJb2m3ABdw2+ftVVVBvVn85EZf61xR43RYi/7uk8UcVCf
+         Fp52yChR7y6oEDBRcZmQfBGArYjBB7MWIHiSroxshATz2nHmNLMznmMGmf/iSekYyAZq
+         nVbg==
+X-Gm-Message-State: AAQBX9fJJtYW7aK7sB+srbRSy9lNJxnOGidWhTeB2vQ/HLPEqIajOSRI
+        iqObGVugW/Vouxxx+kCyV0BCtIc51pYd6iud8opk/H9H
+X-Google-Smtp-Source: AKy350Y58Ljt0STvFi2QM7nhSzzbkTggz/VEhuKGhUqO8gYo/ysTNSz8MnfXqTfES7YgLYuEbfg+eQ==
+X-Received: by 2002:a17:906:4d0d:b0:930:3916:df17 with SMTP id r13-20020a1709064d0d00b009303916df17mr15508933eju.0.1682441732605;
+        Tue, 25 Apr 2023 09:55:32 -0700 (PDT)
+Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com. [209.85.208.53])
+        by smtp.gmail.com with ESMTPSA id w27-20020a17090633db00b0094ed0370f8fsm7077947eja.147.2023.04.25.09.55.31
+        for <linux-edac@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 25 Apr 2023 09:55:32 -0700 (PDT)
+Received: by mail-ed1-f53.google.com with SMTP id 4fb4d7f45d1cf-506b8c6bc07so10159357a12.2
+        for <linux-edac@vger.kernel.org>; Tue, 25 Apr 2023 09:55:31 -0700 (PDT)
+X-Received: by 2002:a50:fb8e:0:b0:506:843f:2f27 with SMTP id
+ e14-20020a50fb8e000000b00506843f2f27mr14643641edq.11.1682441731504; Tue, 25
+ Apr 2023 09:55:31 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,
-        URIBL_BLOCKED,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20230424072836.GAZEYvpDGrV3bXx690@fat_crate.local>
+In-Reply-To: <20230424072836.GAZEYvpDGrV3bXx690@fat_crate.local>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Tue, 25 Apr 2023 09:55:14 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wgrN-uPnNTamBwrxMgibBH9N9zX57nbDW7_hLdi4SstQw@mail.gmail.com>
+Message-ID: <CAHk-=wgrN-uPnNTamBwrxMgibBH9N9zX57nbDW7_hLdi4SstQw@mail.gmail.com>
+Subject: Re: [GIT PULL] EDAC updates for v6.4
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     linux-edac <linux-edac@vger.kernel.org>,
+        lkml <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-When a deferred UE error is detected, e.g by background patrol scruber, it
-will be handled in APIC interrupt handler amd_deferred_error_interrupt().
-The handler will collect MCA banks, init mce struct and process it by
-nofitying the registered MCE decode chain.
+On Mon, Apr 24, 2023 at 12:28=E2=80=AFAM Borislav Petkov <bp@alien8.de> wro=
+te:
+>
+> For some stupid reason (juggling gazillion things at the same time,
+> probably) I have based the edac-amd64 branch *not* ontop of plain
+> v6.3-rc3 but there are a couple more of your merges ontop.
 
-The uc_decode_notifier, one of MCE decode chain, will process memory
-failure but only limit to MCE_AO_SEVERITY and MCE_DEFERRED_SEVERITY.
-However, APIC interrupt handler does not init mce severity and the
-uninitialized severity is 0 (MCE_NO_SEVERITY).
+It's fine. Mistakes happen, and honestly, the "base your work on top
+of a stable point" is - like almost everything else in life - a
+recommendation for everybody's sanity, rather than any kind of
+black-and-white rule.
 
-To handle the deferred memory failure case, init mce severity when logging
-MCA banks.
+And it comes mainly from people actively mis-using git, and merging
+random upstream state without thought, and trying to set that kind of
+behavior right, and have people _think_ about it.
 
-Signed-off-by: Shuai Xue <xueshuai@linux.alibaba.com>
+IOW, it's not some "this gets enforced" thing - it's more of a "you
+did something else horribly wrong, so let's clarify what the 'good
+thoughtful git behavior' should be".
 
----
-Steps to reproduce:
+Sometimes starting at a random point can even be a feature - random
+cleanups that depend on some helper that was added last release, and
+it's just much more convenient to start at point X ratherr than wait
+for the next -rc.
 
-step 1: inject a patrol scrub error by ras-tools
-#einj_mem_uc patrol
+Now, the thing I do hope that people actively try to avoid is picking
+a "kernel of the day" during the merge window to start on, but even
+that is less about "well-defined starting point" and more about just
+the fact that the merge window kernel *can* be really unstable and is
+a really bad base.
 
-step 2: check dmesg, no memory failure log
-#dmesg -c
-[51295.686806] mce: [Hardware Error]: Machine check events logged
-[51295.693566] mce->status: 0x942031000400011b
-[51295.698248] mce->misc: 0x00000000
-[51295.701952] mce->severity: 0x00000000	# Manually added printk  
-[51295.726640] [Hardware Error]: Deferred error, no action required.
-[51295.733448] [Hardware Error]: CPU:65 (19:11:1) MC21_STATUS[-|-|-|AddrV|-|-|SyndV|UECC|Deferred|-|Scrub]: 0x942031000400011b
-[51295.733452] [Hardware Error]: Error Addr: 0x0000000006350a00
-[51295.733453] [Hardware Error]: PPIN: 0x02b69e294c148024
-[51295.733453] [Hardware Error]: IPID: 0x0000109600250f00, Syndrome: 0x9a4a00000b800000
-[51295.733455] [Hardware Error]: Unified Memory Controller Ext. Error Code: 0, DRAM ECC error.
-[51295.733463] mce: umc_normaddr_to_sysaddr: Invalid DramBaseAddress range: 0x0.
-[51295.733471] EDAC MC0: 1 UE Cannot decode normalized address on mc#0csrow#0channel#2 (csrow:0 channel:2 page:0x0 offset:0x0 grain:64)
-[51295.733471] [Hardware Error]: cache level: L3/GEN, tx: GEN, mem-tx: RD
+But some "rc3+" kernel is certainly not that kind of _horribly_ bad
+kernel to start at. It's probably better than starting at a rc1
+release in practice.
 
-After this fix:
+So the "try to use a reasonably stable starting point" really is a
+general recommendation, and mostly a reaction against people who tend
+to do more of a mindless "rebase/merge to today's kernels without any
+thought" kind of workflow.
 
-[  514.966892] mce: [Hardware Error]: Machine check events logged
-[  514.966912] mce->status: 0x942031000400011b
-[  514.978093] mce->misc: 0x00000000
-[  514.981796] mce->severity: 0x00000001
-[  514.985885] <uc_decode_notifier> pre_handler: p->addr = 0x00000000e09e69e4, ip = ffffffff8104b955, flags = 0x282
-[  514.997253] <uc_decode_notifier> post_handler: p->addr = 0x00000000e09e69e4, flags = 0x282
-[  515.006501] Memory failure: 0x5dc2: recovery action for free buddy page: Recovered
-[  515.015188] [Hardware Error]: Deferred error, no action required.
-[  515.022006] [Hardware Error]: CPU:67 (19:11:1) MC21_STATUS[-|-|-|AddrV|-|-|SyndV|UECC|Deferred|-|Scrub]: 0x942031000400011b
-[  515.034440] [Hardware Error]: Error Addr: 0x0000000005dc2a00
-[  515.034442] [Hardware Error]: PPIN: 0x02b69e294c148024
-[  515.034443] [Hardware Error]: IPID: 0x0000109600650f00, Syndrome: 0x9a4a00000b800008
-[  515.034445] [Hardware Error]: Unified Memory Controller Ext. Error Code: 0, DRAM ECC error.
-[  515.034453] umc_normaddr_to_sysaddr: Invalid DramBaseAddress range: 0x0.
-[  515.034458] EDAC MC1: 1 UE Cannot decode normalized address on mc#1csrow#0channel#6 (csrow:0 channel:6 page:0x0 offset:0x0 grain:64)
-[  515.034461] [Hardware Error]: cache level: L3/GEN, tx: GEN, mem-tx: RD
+So I'm not asking for surgical precision. I'm asking for "reasonable
+workflow", where people avoid doing pointlessly silly things.
 
-Note, the memory_failure handles wrong physical address because
-umc_normaddr_to_sysaddr fails. I don't figure out why it fails.
----
- arch/x86/kernel/cpu/mce/amd.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/arch/x86/kernel/cpu/mce/amd.c b/arch/x86/kernel/cpu/mce/amd.c
-index 23c5072fbbb7..b5e1a27b0881 100644
---- a/arch/x86/kernel/cpu/mce/amd.c
-+++ b/arch/x86/kernel/cpu/mce/amd.c
-@@ -734,6 +734,7 @@ static void __log_error(unsigned int bank, u64 status, u64 addr, u64 misc)
- 	m.misc   = misc;
- 	m.bank   = bank;
- 	m.tsc	 = rdtsc();
-+	m.severity = mce_severity(&m, NULL, NULL, false);
- 
- 	if (m.status & MCI_STATUS_ADDRV) {
- 		m.addr = addr;
--- 
-2.20.1.12.g72788fdb
-
+                 Linus
