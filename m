@@ -2,90 +2,107 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EAC86F1C0B
-	for <lists+linux-edac@lfdr.de>; Fri, 28 Apr 2023 17:57:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9786E6F1C05
+	for <lists+linux-edac@lfdr.de>; Fri, 28 Apr 2023 17:55:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229615AbjD1P47 (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Fri, 28 Apr 2023 11:56:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33578 "EHLO
+        id S229662AbjD1Pz0 (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Fri, 28 Apr 2023 11:55:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229491AbjD1P46 (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Fri, 28 Apr 2023 11:56:58 -0400
-X-Greylist: delayed 336 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 28 Apr 2023 08:56:57 PDT
-Received: from lobo.ruivo.org (lobo.ruivo.org [173.14.175.98])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FA0812B
-        for <linux-edac@vger.kernel.org>; Fri, 28 Apr 2023 08:56:57 -0700 (PDT)
-Received: by lobo.ruivo.org (Postfix, from userid 1011)
-        id 4D9F352E79; Fri, 28 Apr 2023 11:51:20 -0400 (EDT)
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
-        lindbergh.monkeyblade.net
-X-Spam-Level: 
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
-Received: from jake.ruivo.org (bob.qemu.ruivo [192.168.72.19])
-        by lobo.ruivo.org (Postfix) with ESMTPA id 0602652975;
-        Fri, 28 Apr 2023 11:51:03 -0400 (EDT)
-Received: by jake.ruivo.org (Postfix, from userid 1000)
-        id EFC4E2200DC; Fri, 28 Apr 2023 11:51:02 -0400 (EDT)
-Date:   Fri, 28 Apr 2023 11:51:02 -0400
-From:   Aristeu Rozanski <aris@ruivo.org>
-To:     "Luck, Tony" <tony.luck@intel.com>
-Cc:     Borislav Petkov <bp@alien8.de>,
-        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
-        "aris@redhat.com" <aris@redhat.com>
-Subject: Re: [RFC PATCH] mce: prevent concurrent polling of MCE events
-Message-ID: <20230428155102.GE2449174@cathedrallabs.org>
-References: <Y8WtE7BNJ0gTrqIS@cathedrallabs.org>
- <SJ1PR11MB6083410C8464DEC926C0BDB9FCC69@SJ1PR11MB6083.namprd11.prod.outlook.com>
+        with ESMTP id S229615AbjD1PzZ (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Fri, 28 Apr 2023 11:55:25 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80D672D51
+        for <linux-edac@vger.kernel.org>; Fri, 28 Apr 2023 08:55:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1682697324; x=1714233324;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=vWQ6HuHvMfoZwIRbm0AfKIPepmhNW+hfiTMObR9wbaE=;
+  b=UroVtqXHShCr87MZj5eA4ccxgjn55l9jqQc/MAm+/W2AO+2JZxo+CNF5
+   RzxKaE6ukKflCQTvdFQK3CiD/LWztVewBiT92BKAvYD5Z6MDls/xUAmtz
+   U3ssJhrWzlMplgesRCt0Fortoq2uvtpco6YNFyHmgZ83wmV13reM4DkGJ
+   LQvqBuNhW9tOvKA380yhHjK0+7mL/v94C7/Rv+fwTKx+Tzqg/wQwYdrI7
+   3Ktx39rkhf9ImaiDM+N2p4BwLngFXVnFK47cw3XOHhH8mA+6HGcUQY6Lz
+   wFxrGw+3ea4H55SoHfKLyT0NqOrRWKnCTfYQKW04fV/kn8VmHghoAyf8D
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10694"; a="332100751"
+X-IronPort-AV: E=Sophos;i="5.99,235,1677571200"; 
+   d="scan'208";a="332100751"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Apr 2023 08:55:24 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10694"; a="645184887"
+X-IronPort-AV: E=Sophos;i="5.99,235,1677571200"; 
+   d="scan'208";a="645184887"
+Received: from agluck-desk3.sc.intel.com ([172.25.222.78])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Apr 2023 08:55:23 -0700
+Date:   Fri, 28 Apr 2023 08:55:22 -0700
+From:   Tony Luck <tony.luck@intel.com>
+To:     Alexander Wetzel <alexander@wetzel-home.de>
+Cc:     linux-edac@vger.kernel.org
+Subject: Re: ECC DDR5 ram with i9-12950HX
+Message-ID: <ZEvsamYDRi7wZr/b@agluck-desk3.sc.intel.com>
+References: <b14a8fd2-4c11-1d76-f27d-e9d10c94ca9d@wetzel-home.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <SJ1PR11MB6083410C8464DEC926C0BDB9FCC69@SJ1PR11MB6083.namprd11.prod.outlook.com>
-User-Agent: Mutt/2.2.9 (2022-11-12)
+In-Reply-To: <b14a8fd2-4c11-1d76-f27d-e9d10c94ca9d@wetzel-home.de>
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+        lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-Hi Tony,
-
-On Tue, Jan 17, 2023 at 05:42:36PM +0000, Luck, Tony wrote:
-> > +static DEFINE_RAW_SPINLOCK(timer_fn_lock);
-> >
-> >  static unsigned long mce_adjust_timer_default(unsigned long interval)
-> >  {
-> > @@ -1628,7 +1629,9 @@ static void mce_timer_fn(struct timer_list *t)
-> >       iv = __this_cpu_read(mce_next_interval);
-> >
-> >       if (mce_available(this_cpu_ptr(&cpu_info))) {
-> > +             raw_spin_lock(&timer_fn_lock);
-> >               machine_check_poll(0, this_cpu_ptr(&mce_poll_banks));
-> > +             raw_spin_unlock(&timer_fn_lock);
-> >
-> >               if (mce_intel_cmci_poll()) {
-> >                       iv = mce_adjust_timer(iv);
+On Sat, Apr 15, 2023 at 10:21:07PM +0200, Alexander Wetzel wrote:
+> Hello,
 > 
-> If the CMCI polling interrupts on those large number of CPUs are
-> staggered at different times, then this should be fine. But if a largish
-> number of CPUs get in lockstep with each other, then this could get
-> ugly.  I.e. 200 CPUs all take the "CMCI poll" interrupt together. Then
-> get stuck in a convoy here as one at a time step through checking
-> the machine check banks.
+> I've problems getting ECC ram working in a Thinkpad P16.
 > 
-> I'm not sure if that is just a theoretical issue, or how bad it might
-> actually be if it happened.
+> The processor is a i9-12950HX with ECC ram but at least a 6.2.11 kernel is
+> not detecting the memory controller:
 > 
-> One option to avoid this might be to change from a fixed five minute
-> polling interval to "five minute plus/minus rand(50) jiffies". Then even
-> if some CPUs did sync up, they'd quickly diverge again.
+> # edac-util
+> edac-util: Error: No memory controller data found.
+> 
+> The only reference to edac on kernel boot is that here:
+> [    1.237414] EDAC MC: Ver: 3.0.0
+> 
+> For my understanding this here looks like the memory controller:
+> 0000:00:14.2 RAM memory: Intel Corporation Alder Lake-S PCH Shared SRAM (rev
+> 11)
+> 
+> But there is no driver for the device (8086:7aa7) in 6.2.11 I can find.
+> I was assuming that igen6_edac is supporting Alder Lake CPUs but even when
+> loaded manually it's not working...
+> 
+> Is there a way to get ECC working with linux? Are there any patches I could
+> apply?
 
-I did experiment different ranges including forcing a minimum difference
-based on cpu number but eventually I'd see repeated events. Perhaps a
-combination would be acceptable? Set the first run of each cpu spaced based on
-CPU number then use a spinlock to synchronize it? That way we minimize the
-chance of a big number of CPUs stuck on the same lock but at same time
-guarantee we won't have duplicated events.
+Alexander
 
--- 
-Aristeu
+You don't need an EDAC driver to turn on ECC. Your BIOS should have
+done all the necessary memory controller and chipset magic to enable
+ECC. So you should already be getting the extra reliability that
+ECC memory provides.
 
+EDAC driver serve two purposes:
+
+1) To provide an accurate enumeration of which size/type DIMMs are in
+each slot. This is required by large HPC clusters to check that the
+DIMM configuration on every node of the thousands in their cluster
+without having to physically open each machine.
+
+2) When there are memory errors, translate the physical address recorded
+by the CPU to the specific DIMM that was the source of the error (to
+speed up diagnosis of the problem and fixing it in one try).
+
+I'm sorry that there isn't an EDAC driver for your system. Most
+of the effort here goes to EDAC for server systems.
+
+-Tony
