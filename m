@@ -2,124 +2,108 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 566EB6F1DC5
-	for <lists+linux-edac@lfdr.de>; Fri, 28 Apr 2023 19:59:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 82FC56F1F32
+	for <lists+linux-edac@lfdr.de>; Fri, 28 Apr 2023 22:18:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346460AbjD1R7l convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-edac@lfdr.de>); Fri, 28 Apr 2023 13:59:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43496 "EHLO
+        id S229862AbjD1US5 (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Fri, 28 Apr 2023 16:18:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346338AbjD1R7k (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Fri, 28 Apr 2023 13:59:40 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA12159EA;
-        Fri, 28 Apr 2023 10:59:37 -0700 (PDT)
-Received: from lhrpeml100003.china.huawei.com (unknown [172.18.147.206])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4Q7L323YN4z67H7Q;
-        Sat, 29 Apr 2023 01:59:26 +0800 (CST)
-Received: from lhrpeml500006.china.huawei.com (7.191.161.198) by
- lhrpeml100003.china.huawei.com (7.191.160.210) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Fri, 28 Apr 2023 18:59:34 +0100
-Received: from lhrpeml500006.china.huawei.com ([7.191.161.198]) by
- lhrpeml500006.china.huawei.com ([7.191.161.198]) with mapi id 15.01.2507.023;
- Fri, 28 Apr 2023 18:59:34 +0100
-From:   Shiju Jose <shiju.jose@huawei.com>
-To:     "mchehab@kernel.org" <mchehab@kernel.org>,
-        "linux-cxl@vger.kernel.org" <linux-cxl@vger.kernel.org>,
-        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>
-CC:     Jonathan Cameron <jonathan.cameron@huawei.com>,
-        Linuxarm <linuxarm@huawei.com>
-Subject: RE: [PATCH V6 0/4] rasdaemon: Add support for the CXL error events
-Thread-Topic: [PATCH V6 0/4] rasdaemon: Add support for the CXL error events
-Thread-Index: AQHZY9bqcqHPirFZW06LN1NEM4B8/q9BLchw
-Date:   Fri, 28 Apr 2023 17:59:34 +0000
-Message-ID: <c49dd10e62ae4e3d8850c119bba70523@huawei.com>
-References: <20230331134404.1315-1-shiju.jose@huawei.com>
-In-Reply-To: <20230331134404.1315-1-shiju.jose@huawei.com>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.195.32.40]
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 8BIT
+        with ESMTP id S229479AbjD1US4 (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Fri, 28 Apr 2023 16:18:56 -0400
+Received: from ns2.wdyn.eu (ns2.wdyn.eu [5.252.227.236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DE865F1
+        for <linux-edac@vger.kernel.org>; Fri, 28 Apr 2023 13:18:54 -0700 (PDT)
+Message-ID: <d33f0103-b281-55c5-42fc-4d6eea215763@wetzel-home.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=wetzel-home.de;
+        s=wetzel-home; t=1682713131;
+        bh=nIfhgEhP/2S+qTVEh3UqzNrI4aH5Uuq9+UxSzIjH+NU=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To;
+        b=UrOpTCMn2UBW9STBJFfL6hPwxvJGdsLZ7QTWZyz5mXpKeqScA0C+z1o6qVe5yHm5E
+         p17HWV0JZGj9osdNJr0UR/rxwpyz6FDYLIWXgXjSArDqYOz4naVlRlAdoTmfCULVxT
+         cjwLAh5ETvk4Z2VSzgSHowgKGIAwaAEvIqFOJBiA=
+Date:   Fri, 28 Apr 2023 22:18:50 +0200
 MIME-Version: 1.0
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: ECC DDR5 ram with i9-12950HX
+Content-Language: en-US
+To:     Tony Luck <tony.luck@intel.com>
+Cc:     linux-edac@vger.kernel.org
+References: <b14a8fd2-4c11-1d76-f27d-e9d10c94ca9d@wetzel-home.de>
+ <ZEvsamYDRi7wZr/b@agluck-desk3.sc.intel.com>
+From:   Alexander Wetzel <alexander@wetzel-home.de>
+In-Reply-To: <ZEvsamYDRi7wZr/b@agluck-desk3.sc.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-Hi All,
+On 28.04.23 17:55, Tony Luck wrote:
+> On Sat, Apr 15, 2023 at 10:21:07PM +0200, Alexander Wetzel wrote:
+>> Hello,
+>>
+>> I've problems getting ECC ram working in a Thinkpad P16.
+>>
+>> The processor is a i9-12950HX with ECC ram but at least a 6.2.11 kernel is
+>> not detecting the memory controller:
+>>
+>> # edac-util
+>> edac-util: Error: No memory controller data found.
+>>
+>> The only reference to edac on kernel boot is that here:
+>> [    1.237414] EDAC MC: Ver: 3.0.0
+>>
+>> For my understanding this here looks like the memory controller:
+>> 0000:00:14.2 RAM memory: Intel Corporation Alder Lake-S PCH Shared SRAM (rev
+>> 11)
+>>
+>> But there is no driver for the device (8086:7aa7) in 6.2.11 I can find.
+>> I was assuming that igen6_edac is supporting Alder Lake CPUs but even when
+>> loaded manually it's not working...
+>>
+>> Is there a way to get ECC working with linux? Are there any patches I could
+>> apply?
+> 
+> Alexander
+> 
+> You don't need an EDAC driver to turn on ECC. Your BIOS should have
+> done all the necessary memory controller and chipset magic to enable
+> ECC. So you should already be getting the extra reliability that
+> ECC memory provides.
+> 
+I would just have like to have a way to see it's working:-)
 
-Pull request has submitted for this series.
-https://github.com/mchehab/rasdaemon/pull/96
+In the meantime I also checked with Win11 and the official drivers 
+installed. Even Windows claims, that only single bit errors are fixed.
+Now since that seems to be the new default with DDR5 ram I was wondering 
+if I really have benefit by using "real" ECC ram or if something if 
+wrong. Looks like I have to "trust" the vendors here...
 
-Thanks,
-Shiju
+> EDAC driver serve two purposes:
+> 
+> 1) To provide an accurate enumeration of which size/type DIMMs are in
+> each slot. This is required by large HPC clusters to check that the
+> DIMM configuration on every node of the thousands in their cluster
+> without having to physically open each machine.
+> 
+> 2) When there are memory errors, translate the physical address recorded
+> by the CPU to the specific DIMM that was the source of the error (to
+> speed up diagnosis of the problem and fixing it in one try).
+> 
+> I'm sorry that there isn't an EDAC driver for your system. Most > of the effort here goes to EDAC for server systems.
 
------Original Message-----
-From: Shiju Jose <shiju.jose@huawei.com> 
-Sent: 31 March 2023 14:44
-To: mchehab@kernel.org; linux-cxl@vger.kernel.org; linux-edac@vger.kernel.org
-Cc: Jonathan Cameron <jonathan.cameron@huawei.com>; Linuxarm <linuxarm@huawei.com>; Shiju Jose <shiju.jose@huawei.com>
-Subject: [PATCH V6 0/4] rasdaemon: Add support for the CXL error events
+Thanks for the explanation.
 
-From: Shiju Jose <shiju.jose@huawei.com>
+Alexander
 
-Log and record the following CXL error records reported through the kernel trace events. CXL poison errors, CXL AER uncorrectable errors and CXL AER correctable errors.
-
-Shiju Jose (4):
-  rasdaemon: Move definition for BIT and BIT_ULL to a common file
-  rasdaemon: Add support for the CXL poison events
-  rasdaemon: Add support for the CXL AER uncorrectable errors
-  rasdaemon: Add support for the CXL AER correctable errors
-
-Changes:
-V5 -> V6
-1. Following modification in the CXL poison due to
-   changes in the kernel patches for the cxl_poison.
-  - length -> dpa_length
-  - add field trace_type
-  
-V4 -> V5
-1. Add logging of device serial number for the CXL AER uncorrectable and
-    CXL AER correctable errors.
-2. Rebased.
-3. Updated the patches description.	
-
-V3 -> V4
-1. Modification for the changes in the kernel patches
-   a) https://lore.kernel.org/lkml/cover.1675983077.git.alison.schofield@intel.com/
-   b) https://lore.kernel.org/linux-cxl/63e5ed38d77d9_138fbc2947a@iweiny-mobl.notmuch/T/#t
-
-V2 -> V3
-1. Fix for the comments from Dave Jiang.
-
-RFC V1 -> V2
-1. Rename uuid to region_uuid in the log and SQLite DB.
-2. Rebase to the latest rasdaemon code.
-3. Modify to match the name changes of interface structures and
-   functions in the latest libtraceevent-dev, use in the rasdaemon. 
-
- Makefile.am                |   7 +-
- configure.ac               |  11 +
- ras-cxl-handler.c          | 426 +++++++++++++++++++++++++++++++++++++
- ras-cxl-handler.h          |  32 +++
- ras-events.c               |  33 +++
- ras-events.h               |   3 +
- ras-non-standard-handler.h |   3 -
- ras-record.c               | 215 +++++++++++++++++++
- ras-record.h               |  55 +++++
- ras-report.c               | 231 ++++++++++++++++++++
- ras-report.h               |   6 +
- 11 files changed, 1018 insertions(+), 4 deletions(-)  create mode 100644 ras-cxl-handler.c  create mode 100644 ras-cxl-handler.h
-
---
-2.25.1
+> 
+> -Tony
 
