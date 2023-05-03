@@ -2,42 +2,42 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 873C96F4EFC
-	for <lists+linux-edac@lfdr.de>; Wed,  3 May 2023 05:06:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2856E6F4EFE
+	for <lists+linux-edac@lfdr.de>; Wed,  3 May 2023 05:06:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229584AbjECDGh (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Tue, 2 May 2023 23:06:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52786 "EHLO
+        id S229642AbjECDGv (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Tue, 2 May 2023 23:06:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229559AbjECDGf (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Tue, 2 May 2023 23:06:35 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1903D1FD2;
-        Tue,  2 May 2023 20:06:33 -0700 (PDT)
+        with ESMTP id S229649AbjECDGs (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Tue, 2 May 2023 23:06:48 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3601C2682;
+        Tue,  2 May 2023 20:06:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1683083193; x=1714619193;
+  t=1683083205; x=1714619205;
   h=from:to:cc:subject:date:message-id:mime-version:
    content-transfer-encoding;
-  bh=GR2N4HkxWLNSZ1b/uSNGEa2IIa7pPjdOtf4BvJc6jws=;
-  b=QsJci4NMNjgfuVIO0Jd6W1ILUseiV/6ThWQiLv1HsQERl4RPhE8rskeC
-   wpTvO9WpjVaJ0h64EtAvSUFSYWcm+HJmMRLyPeceqishP12T+n1Iih/FO
-   ugTqlXarxrw5v8TddWBs5Xf4hLM1S1MMk20cjmxRKRH3dQbk1fvHOVsJo
-   GljHmnjTstHv7x6CLq882OCZkSfgOCFGHxsDC6zLCMjqe+veu+OPM2Lcj
-   VL08lC+zQRKKTeXvNVfKipvTuOEoW9u8fLPJSoEhlpcnSVuKuY/tf0NRq
-   LuwfKD9mX3k6GDaA4e+jBvqQnT6oFuBACSn2KYVevWgFnyn3R3zsgCAw2
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10698"; a="350629350"
+  bh=7Ighfp5E/Al9/svQfOrOI4+bSPRt3bo1pMOcWF2LXzY=;
+  b=DZV63wtMLR186izXzEPdxw2DxMqMkxGyTAp7bb8ExzsSUMnqF8vDofHI
+   m0X+8NxDcZDyuhJblJKbP4vKPAp/mCQy8QXlWupMF8H/L3AbILocwkdHJ
+   ovxRJNou18q0baKidJNK+JctVRFwuFVL9e4/cxV/Jgp6Ge9ESpzqHEC5u
+   cSt+XxQIh6w6fkUQBcjTGoPUzh0T1r0F5E0MEh/x7bGAbTOu04/sVxU4v
+   B+qUmFaY5kx7hWZjGJoQ1Ho1CTYa5veCPI5xOSx7utIEK4prlGZJ0MxnY
+   ylXVTWeGyHjFaxWXOAzFwpPxPGvEf/ZPuvsNGfpAwF9NDuiT0bT3LicZ9
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10698"; a="347370808"
 X-IronPort-AV: E=Sophos;i="5.99,246,1677571200"; 
-   d="scan'208";a="350629350"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 May 2023 20:06:32 -0700
+   d="scan'208";a="347370808"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 May 2023 20:06:44 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10698"; a="840541281"
+X-IronPort-AV: E=McAfee;i="6600,9927,10698"; a="765983747"
 X-IronPort-AV: E=Sophos;i="5.99,246,1677571200"; 
-   d="scan'208";a="840541281"
+   d="scan'208";a="765983747"
 Received: from unknown (HELO localhost.localdomain) ([10.226.216.116])
-  by fmsmga001.fm.intel.com with ESMTP; 02 May 2023 20:06:30 -0700
+  by fmsmga004.fm.intel.com with ESMTP; 02 May 2023 20:06:42 -0700
 From:   niravkumar.l.rabara@intel.com
 To:     Dinh Nguyen <dinguyen@kernel.org>, Borislav Petkov <bp@alien8.de>,
         Tony Luck <tony.luck@intel.com>,
@@ -46,17 +46,16 @@ To:     Dinh Nguyen <dinguyen@kernel.org>, Borislav Petkov <bp@alien8.de>,
         Robert Richter <rric@kernel.org>, linux-edac@vger.kernel.org
 Cc:     linux-kernel@vger.kernel.org,
         Niravkumar L Rabara <niravkumar.l.rabara@intel.com>
-Subject: [PATCH 0/2] EDAC/altera: Check previous DDR DBE during driver probe
-Date:   Wed,  3 May 2023 11:06:22 +0800
-Message-Id: <20230503030622.3269205-1-niravkumar.l.rabara@intel.com>
+Subject: [PATCH 1/2] firmware: stratix10-svc: Add command to get SEU error info
+Date:   Wed,  3 May 2023 11:06:39 +0800
+Message-Id: <20230503030639.3269266-1-niravkumar.l.rabara@intel.com>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -65,25 +64,42 @@ X-Mailing-List: linux-edac@vger.kernel.org
 
 From: Niravkumar L Rabara <niravkumar.l.rabara@intel.com>
 
-Starting from SoCFPGA Agilex7, new SDM mailbox command is introduced
-to read Single Event Update Error information, SEU detects both
-corrected and uncorrected error.
+Introduce a new command to get Single Event Upset Error information.
 
-If the previous HPS reboot caused by the DDR double bit error, bit-31 is
-set high of boot scratch register 8. EDAC driver probe will check this
-bit status and sends the SMC command to Arm Trusted Firmware.
-Firmware will send mailbox command to SDM to get the SEU error
-information and pass it to EDAC driver, driver will print error count,
-sector address and error data for previous DDR DBE.
+Signed-off-by: Niravkumar L Rabara <niravkumar.l.rabara@intel.com>
+---
+ include/linux/firmware/intel/stratix10-smc.h | 20 ++++++++++++++++++++
+ 1 file changed, 20 insertions(+)
 
-Niravkumar L Rabara (2):
-  firmware: stratix10-svc: Add command to get SEU error info
-  EDAC/altera: Check previous DDR DBE during driver probe
-
- drivers/edac/altera_edac.c                   | 29 ++++++++++++++++----
- include/linux/firmware/intel/stratix10-smc.h | 20 ++++++++++++++
- 2 files changed, 44 insertions(+), 5 deletions(-)
-
+diff --git a/include/linux/firmware/intel/stratix10-smc.h b/include/linux/firmware/intel/stratix10-smc.h
+index a718f853d457..7eb1799e8d8a 100644
+--- a/include/linux/firmware/intel/stratix10-smc.h
++++ b/include/linux/firmware/intel/stratix10-smc.h
+@@ -595,4 +595,24 @@ INTEL_SIP_SMC_FAST_CALL_VAL(INTEL_SIP_SMC_FUNCID_FPGA_CONFIG_COMPLETED_WRITE)
+ #define INTEL_SIP_SMC_FCS_GET_PROVISION_DATA \
+ 	INTEL_SIP_SMC_FAST_CALL_VAL(INTEL_SIP_SMC_FUNCID_FCS_GET_PROVISION_DATA)
+ 
++/**
++ * Request INTEL_SIP_SMC_READ_SEU_ERR
++ * Sync call to get Single Event Upsate Error information
++ * SEU detects both corrected and uncorrected error
++ *
++ * Call register usage:
++ * a0 INTEL_SIP_SMC_READ_SEU_ERR
++ * a1-7 not used
++ *
++ * Return status:
++ * a0 INTEL_SIP_SMC_STATUS_OK, INTEL_SIP_SMC_STATUS_NOT_SUPPORTED or
++ *    INTEL_SIP_SMC_STATUS_ERROR
++ * a1 error count of response data
++ * a2 sector address of response data
++ * a3 error data
++ */
++#define INTEL_SIP_SMC_FUNCID_SEU_ERR_STATUS 143
++#define INTEL_SIP_SMC_READ_SEU_ERR \
++		INTEL_SIP_SMC_FAST_CALL_VAL(INTEL_SIP_SMC_FUNCID_SEU_ERR_STATUS)
++
+ #endif
 -- 
 2.25.1
 
