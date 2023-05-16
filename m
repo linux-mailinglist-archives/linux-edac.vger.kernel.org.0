@@ -2,40 +2,40 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C843E7058B7
-	for <lists+linux-edac@lfdr.de>; Tue, 16 May 2023 22:25:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE6B97058BA
+	for <lists+linux-edac@lfdr.de>; Tue, 16 May 2023 22:25:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230104AbjEPUYu (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        id S230447AbjEPUYu (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
         Tue, 16 May 2023 16:24:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44352 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229502AbjEPUYt (ORCPT
+        with ESMTP id S229736AbjEPUYt (ORCPT
         <rfc822;linux-edac@vger.kernel.org>); Tue, 16 May 2023 16:24:49 -0400
-Received: from NAM02-DM3-obe.outbound.protection.outlook.com (mail-dm3nam02on2067.outbound.protection.outlook.com [40.107.95.67])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E44F81BE;
-        Tue, 16 May 2023 13:24:47 -0700 (PDT)
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2046.outbound.protection.outlook.com [40.107.243.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 200311717;
+        Tue, 16 May 2023 13:24:48 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=IoHbg6wZawJXxqbjAnr6O4shmPT3L2ngPdzxYOB1g1ZByi47HVOB7MnMnX7ZRrBUYVpF+spYJkmnWrd9vonOBDpgG3r3KaZBTkkUJct/+ZYgyvmIpRt7qBbyBA4h5SUoIjY5b9n93QWBpp6Uz8wc8B0KKmsotw8ArYRCyL6CmMngqPNKs5LtwaXLvTI3d9UB/Ry78PlhqUyMkV3kB141fHcQVwtnh1988PVphveBp9qrfvmGN2CJINvgHbegnUwTe8YZxIcsgjsDWVlWx/TzbUG7QANU5L2x1EqfZGwJ5O6huovbsswvG8kMcgUUxAEHolYG+9/G6dJ8IZzceRdtyw==
+ b=B7BXCUXy5wmBPr3HXhuf+rx62SjAb9bvyD6jO04dBaxgVXyps44DQL4KSzLjGCIvAXt2e19Z4mkMeBhKVnJ5gN1CnuiPmd0xklvcqrmrxt44nT52qrszfy6xHnu00Mxat7aLYVGylTmdrXIUEbRSnxABA7wiRCKFRJH/F+NW95+qDME840kKyjOqu7OraTzJ7tSeJ8svcMgZKZb+m84EAfla/Bp1++Aw9MPA3Megh5PKtb9jIGP2ypMK1FSSjehyGhjcRVBs1gnIdpUJ0HQs84FfhAJKgJneSQ4gbgxK3ad6xcya1oRSvtCBUbtc0Yd7kVMLEFHAx5S2ELn2VECMzg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=LAzisWRfZWd22mAbmFONFpOpFpclthfHs3VYehaG4KQ=;
- b=KZCeun03IQ/b3tUbfd2+NothKLba9m547pzjxESHDNFLy3xQ3EJXWC+MryNRUGBHuz5ufFXsQXHByjsgzXKszLvmexFYEcexR/XaHinPJ5k+VeE6VbvPSpvWauVGa4u+YIQRGLG+DKkLC38FfcZ34jXSg9BNp1w/R/FUwk/VhoyHVHyr0GN/HdasIX1l3eb509kfFDAIN/NZG+OMo8xU4uN2onZoNusm0phs3/AvchQWzLmJamYAyTPHebw3w/69wHW2EEDpzpuMjUHtHXKci7KOAHu+cYFKDOgKR58xuLQqoxBD+xZezCIeNCO0q5+HJzHOEUm7K/mxV80QT3FuNA==
+ bh=kkEwh9HfAWv7u9CsXT/BePK4o1Goki4vrlncZTzHYmM=;
+ b=aMs4LiFm6znKLi278+pgoMe/jbQZRkXaO2f/EIVO5VM5lIrk0LqPjeuYCpiug+PbhBO1l8oDIy8Nj6uXztQuvSjeejThINJm5k93mzTOe6MceTIlB7/Npbulzhxkim6uBv79CECM+iIzc0UGYXQsX1FOAoR6A6A78jtACh8VxnSyy9+Bik+T+DoRGQBOvdBDT012Tyj9aJ9tqX5yEfuzEarZ8B7QZA/pbm7w1Y1jH1MXB3vEO4s247xOi3EaEmA1Gf5rapaaAt5QrvdHlXPvplfTVesiZfn1bMlvZdrLqliqcOHlxSoHNmJRLx3iiKQtM06N5RkkD0kkIgQvMX8+UA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
  (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
  dkim=none (message not signed); arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=LAzisWRfZWd22mAbmFONFpOpFpclthfHs3VYehaG4KQ=;
- b=zSDex7EcRkwrrD64Lge4rSgUPMQpkcqRuDfvfeX7Hj1DTvWtM7XJyeH+7XeNnjhD6sR6AMBp2hT9dTDc/a4dRXm76NL5I/WpTBuvDnxXYZ1Iokz/CCKwmDHXKQF7wmnkgUCXcoQnE7TOKSIJawWvYnBwOGzUMrzW+1F18BmX9AU=
+ bh=kkEwh9HfAWv7u9CsXT/BePK4o1Goki4vrlncZTzHYmM=;
+ b=0EgbkKcsA+Nx/C09ct78SrpGg2Aa23j+et9F4IFP3Q3w248KbSyS3dKDUMLuoXJHA6GZ98qfVhDEg7cnADIUinHf1vifRMqx8x5RUSWY8WQbm87OPndKqpHSKTKBGYyrsytjtfnHa1VqkRuPszl0sUyUgvJ/2jQHr2FrOqHnY1g=
 Received: from BN7PR06CA0047.namprd06.prod.outlook.com (2603:10b6:408:34::24)
- by SN7PR12MB7252.namprd12.prod.outlook.com (2603:10b6:806:2ac::9) with
+ by CO6PR12MB5458.namprd12.prod.outlook.com (2603:10b6:5:35b::10) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6387.30; Tue, 16 May
- 2023 20:24:45 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6387.33; Tue, 16 May
+ 2023 20:24:46 +0000
 Received: from BN8NAM11FT036.eop-nam11.prod.protection.outlook.com
- (2603:10b6:408:34:cafe::84) by BN7PR06CA0047.outlook.office365.com
+ (2603:10b6:408:34:cafe::a5) by BN7PR06CA0047.outlook.office365.com
  (2603:10b6:408:34::24) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6387.33 via Frontend
  Transport; Tue, 16 May 2023 20:24:45 +0000
@@ -52,7 +52,7 @@ Received: from SATLEXMB04.amd.com (165.204.84.17) by
 Received: from quartz-7b1chost.amd.com (10.180.168.240) by SATLEXMB04.amd.com
  (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Tue, 16 May
- 2023 15:24:42 -0500
+ 2023 15:24:44 -0500
 From:   Yazen Ghannam <yazen.ghannam@amd.com>
 To:     <x86@kernel.org>
 CC:     <linux-kernel@vger.kernel.org>,
@@ -62,10 +62,12 @@ CC:     <linux-kernel@vger.kernel.org>,
         <jdelvare@suse.com>, <linux@roeck-us.net>,
         <linux-hwmon@vger.kernel.org>, <mario.limonciello@amd.com>,
         <babu.moger@amd.com>, Yazen Ghannam <yazen.ghannam@amd.com>
-Subject: [PATCH 0/6] Enhance AMD SMN Error Checking
-Date:   Tue, 16 May 2023 15:24:24 -0500
-Message-ID: <20230516202430.4157216-1-yazen.ghannam@amd.com>
+Subject: [PATCH 1/6] EDAC/amd64: Remove unused register accesses
+Date:   Tue, 16 May 2023 15:24:25 -0500
+Message-ID: <20230516202430.4157216-2-yazen.ghannam@amd.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230516202430.4157216-1-yazen.ghannam@amd.com>
+References: <20230516202430.4157216-1-yazen.ghannam@amd.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
@@ -74,23 +76,23 @@ X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
  (10.181.40.145)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN8NAM11FT036:EE_|SN7PR12MB7252:EE_
-X-MS-Office365-Filtering-Correlation-Id: ff68931a-9e88-42a1-12c0-08db564b96a8
+X-MS-TrafficTypeDiagnostic: BN8NAM11FT036:EE_|CO6PR12MB5458:EE_
+X-MS-Office365-Filtering-Correlation-Id: 0f7341db-1685-43c8-216f-08db564b96f9
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: GCq1XuVPh9ga5tMqWShXTXdcZLScgd2on4unsxI/yiZ7SCSixWls5XJFSz8YU7LtrQEBfkxOQlCAgCbjzr6S9giykM8Jsv9oQUZksWvRikvKRMH79t99KVKhrn6Ngxf1jbYsyHOt6SxQ3LwB0B8vxdsYiztfsAzb8410QqK/fcOKsR5g1RoJl1SaDk/9CIXIOcRuRBywtVYuvZu8xrI3yOBIcNDGqQC2AUrm535TiPj+NlI42N9XUzJ/Ym4N68Mt6vrm9nYUdK3NKwJUSFhgyPBe3QZNnlKlI6tmIa8MdhAmtMAm60IMnYNg7TLIivrtsuq/AaCgNdKJjd6CpeRygi9WHLk28ZMFIjS6GhPznh2yq/X7mSK+AAd56bQxzUEv3JrRwN+VBuBoYf3Cj6W4Ur9VYxKOIjle0GMLVN4uP7DH4SB3ddfdwlkzICEdEg4hGMW34jFg4MPgWMuZ/631Ahgmi4OUrg65x9Z/KdDwxrZtOdLRGzG6881TGYqtyNOyRRR+Pcybd+bGH80bPmjzCSJkPL1xy9CHbwyDr3AYcgz+CLTBWieL3xEuR7Hh/s5C2LBQH3oByVdA9o4BcQ7Z4CNw9agSdKN0WV55/TeSwtPTn3o5oZ/aQl6OgWrT3AJ7dJCinETskqtSAhofo6nfSx9R3OO6gtBlxxotiOAnZ2RmCJYh88Oe3uf7Kotel2YK+L6j9029okw4RuuzbYq3FO9o4mgy7csu/Cmaa5Xo5L6cvHxIkOpNu/aVQhWTiq7PkUJ90dw11nSItamlz+yQJQ==
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(396003)(376002)(136003)(346002)(39860400002)(451199021)(36840700001)(46966006)(40470700004)(478600001)(8676002)(6666004)(41300700001)(316002)(40480700001)(81166007)(82740400003)(356005)(6916009)(70206006)(4326008)(70586007)(40460700003)(54906003)(8936002)(186003)(16526019)(36756003)(82310400005)(2616005)(26005)(1076003)(2906002)(47076005)(44832011)(83380400001)(426003)(36860700001)(86362001)(336012)(966005)(7416002)(7696005)(5660300002)(36900700001);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: LQM+uTdMTQeFALC6X1WjROUCqJsxRvT7dTiuK/GF3VwOo0wgSXaxI6xj1edXCxInSEAb3zsQI7AeqIq6vfbED9wHsZGoKP0AWG9bNQuYrnaMc3KniSACRIjv+y1L0Dn0vX6zJH62L68fbQIFxCJ3H1//peEjJUm1B9+wH2rltg8I6jzexD7Wom5H1GmfNZQh79gnauimjvFq/AB6uG2OcZVYATob3nLydeUBxBE1EQwYzWguCB7W1d9XQDR+LUC1lagvsBA4pyROdm0kIbq81cMKMgMtQO5CoPxvXQvME82AcwPL9SHNSNV2F1LSEHZULO1OcCDXKRv1/9J9Q4mVMO5WIgIKwdQQpk9pMnN9QrDg7lKzCj3LHoo1S04f8c/AtbH8Q1g7FeWNwB5LE5eEMlmbDBtQqqGZPDV6dPhZDiJtwbONUssvzQC3aDYqKWx6+CTcPzKIHeyzMOpQvxg4i4i4Y3F/kxOLc7rZTLHYILKEepObv6B6QVNFiEz5FoXrfSGcgk2D+UPyKkyIodciIKrLp34iePMExVx4hAkljjU7tTY2YkFlh1mhj7UlJ3W8J2+OAfDbVPME+qOIdNbWY38EgOB4EFD5+4cTaIadExFeTXvQ/hOpwcT4vQVubLDHeBAm6xFlzNtf+ZVl6lxh1yPIqNjP9GI1Q8GSrWZ/of9yiP1CNr/MT6nrY5v1VRDCAVN2OcG/Rs1ZMThdLYg9knFBB98UCAVnqsKwS2oPtFXEcV6CfURM4jowaVRxgR92QWZ8TRYdAEw8ut5LWMs9vA==
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(376002)(396003)(136003)(346002)(39860400002)(451199021)(46966006)(36840700001)(40470700004)(316002)(8676002)(8936002)(4326008)(6916009)(70206006)(5660300002)(86362001)(82310400005)(7416002)(70586007)(356005)(54906003)(81166007)(44832011)(82740400003)(2906002)(41300700001)(478600001)(6666004)(7696005)(36756003)(1076003)(36860700001)(26005)(336012)(426003)(16526019)(40460700003)(186003)(83380400001)(47076005)(40480700001)(2616005)(36900700001);DIR:OUT;SFP:1101;
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 May 2023 20:24:45.2721
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 May 2023 20:24:45.8033
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: ff68931a-9e88-42a1-12c0-08db564b96a8
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0f7341db-1685-43c8-216f-08db564b96f9
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
 X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT036.eop-nam11.prod.protection.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR12MB7252
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO6PR12MB5458
 X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
         RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
@@ -102,47 +104,88 @@ Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-Hi all,
+A number of UMC registers are read only for the purpose of debug
+printing. They are not used in any calculations. Nor do they have any
+specific debug value.
 
-This set implements more robust error checking for AMD System Management
-Network (SMN) accesses.
+Remove these register accesses.
 
-This set is a follow up to this discussion:
-https://lore.kernel.org/lkml/20230403164244.471141-1-yazen.ghannam@amd.com/
+Signed-off-by: Yazen Ghannam <yazen.ghannam@amd.com>
+Cc: stable@vger.kernel.org
+---
+ drivers/edac/amd64_edac.c | 17 +----------------
+ drivers/edac/amd64_edac.h |  4 ----
+ 2 files changed, 1 insertion(+), 20 deletions(-)
 
-Patches 1-3:
-	- Pre-patches in AMD64 EDAC and K10Temp modules.
-	- Required in order to avoid build warnings with the
-	  introduction of the __must_check attribute in patch 4.
-Patch 4:
-	- Introduces __must_check attribute for SMN access functions.
-	- Handles "PCI Error Response" behavior for SMN reads.
-Patches 5-6:
-	- Optional cleanup patches in k10temp.
-	- Not required for the SMN access issue, but I thought they may
-	  be good to do.
-
-I've included x86 platform driver folks for awareness, since there are
-some AMD SMN users there.
-
-Thanks,
-Yazen
-
-Yazen Ghannam (6):
-  EDAC/amd64: Remove unused register accesses
-  EDAC/amd64: Check return value of amd_smn_read()
-  hwmon: (k10temp) Check return value of amd_smn_read()
-  x86/amd_nb: Enhance SMN access error checking
-  hwmon: (k10temp) Define helper function to read CCD temp
-  hwmon: (k10temp) Reduce k10temp_get_ccd_support() parameters
-
- arch/x86/include/asm/amd_nb.h |  4 +--
- arch/x86/kernel/amd_nb.c      | 46 +++++++++++++++++++++++++----
- drivers/edac/amd64_edac.c     | 55 ++++++++++++++++++-----------------
- drivers/edac/amd64_edac.h     |  4 ---
- drivers/hwmon/k10temp.c       | 45 ++++++++++++++++++----------
- 5 files changed, 100 insertions(+), 54 deletions(-)
-
+diff --git a/drivers/edac/amd64_edac.c b/drivers/edac/amd64_edac.c
+index de3ea2c1807d..fda6537c80be 100644
+--- a/drivers/edac/amd64_edac.c
++++ b/drivers/edac/amd64_edac.c
+@@ -19,7 +19,6 @@ static inline u32 get_umc_reg(struct amd64_pvt *pvt, u32 reg)
+ 		return reg;
+ 
+ 	switch (reg) {
+-	case UMCCH_ADDR_CFG:		return UMCCH_ADDR_CFG_DDR5;
+ 	case UMCCH_ADDR_MASK_SEC:	return UMCCH_ADDR_MASK_SEC_DDR5;
+ 	case UMCCH_DIMM_CFG:		return UMCCH_DIMM_CFG_DDR5;
+ 	}
+@@ -1528,7 +1527,7 @@ static void umc_debug_display_dimm_sizes(struct amd64_pvt *pvt, u8 ctrl)
+ static void umc_dump_misc_regs(struct amd64_pvt *pvt)
+ {
+ 	struct amd64_umc *umc;
+-	u32 i, tmp, umc_base;
++	u32 i, umc_base;
+ 
+ 	for_each_umc(i) {
+ 		umc_base = get_umc_base(i);
+@@ -1538,12 +1537,6 @@ static void umc_dump_misc_regs(struct amd64_pvt *pvt)
+ 		edac_dbg(1, "UMC%d UMC cfg: 0x%x\n", i, umc->umc_cfg);
+ 		edac_dbg(1, "UMC%d SDP ctrl: 0x%x\n", i, umc->sdp_ctrl);
+ 		edac_dbg(1, "UMC%d ECC ctrl: 0x%x\n", i, umc->ecc_ctrl);
+-
+-		amd_smn_read(pvt->mc_node_id, umc_base + UMCCH_ECC_BAD_SYMBOL, &tmp);
+-		edac_dbg(1, "UMC%d ECC bad symbol: 0x%x\n", i, tmp);
+-
+-		amd_smn_read(pvt->mc_node_id, umc_base + UMCCH_UMC_CAP, &tmp);
+-		edac_dbg(1, "UMC%d UMC cap: 0x%x\n", i, tmp);
+ 		edac_dbg(1, "UMC%d UMC cap high: 0x%x\n", i, umc->umc_cap_hi);
+ 
+ 		edac_dbg(1, "UMC%d ECC capable: %s, ChipKill ECC capable: %s\n",
+@@ -1556,14 +1549,6 @@ static void umc_dump_misc_regs(struct amd64_pvt *pvt)
+ 		edac_dbg(1, "UMC%d x16 DIMMs present: %s\n",
+ 				i, (umc->dimm_cfg & BIT(7)) ? "yes" : "no");
+ 
+-		if (umc->dram_type == MEM_LRDDR4 || umc->dram_type == MEM_LRDDR5) {
+-			amd_smn_read(pvt->mc_node_id,
+-				     umc_base + get_umc_reg(pvt, UMCCH_ADDR_CFG),
+-				     &tmp);
+-			edac_dbg(1, "UMC%d LRDIMM %dx rank multiply\n",
+-					i, 1 << ((tmp >> 4) & 0x3));
+-		}
+-
+ 		umc_debug_display_dimm_sizes(pvt, i);
+ 	}
+ }
+diff --git a/drivers/edac/amd64_edac.h b/drivers/edac/amd64_edac.h
+index 0bde0db76f7a..a6cd42731e30 100644
+--- a/drivers/edac/amd64_edac.h
++++ b/drivers/edac/amd64_edac.h
+@@ -255,15 +255,11 @@
+ #define UMCCH_ADDR_MASK			0x20
+ #define UMCCH_ADDR_MASK_SEC		0x28
+ #define UMCCH_ADDR_MASK_SEC_DDR5	0x30
+-#define UMCCH_ADDR_CFG			0x30
+-#define UMCCH_ADDR_CFG_DDR5		0x40
+ #define UMCCH_DIMM_CFG			0x80
+ #define UMCCH_DIMM_CFG_DDR5		0x90
+ #define UMCCH_UMC_CFG			0x100
+ #define UMCCH_SDP_CTRL			0x104
+ #define UMCCH_ECC_CTRL			0x14C
+-#define UMCCH_ECC_BAD_SYMBOL		0xD90
+-#define UMCCH_UMC_CAP			0xDF0
+ #define UMCCH_UMC_CAP_HI		0xDF4
+ 
+ /* UMC CH bitfields */
 -- 
 2.34.1
 
