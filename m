@@ -2,84 +2,140 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EEA41706568
-	for <lists+linux-edac@lfdr.de>; Wed, 17 May 2023 12:38:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C9658706711
+	for <lists+linux-edac@lfdr.de>; Wed, 17 May 2023 13:46:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229673AbjEQKiU (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Wed, 17 May 2023 06:38:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55174 "EHLO
+        id S230378AbjEQLqs (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Wed, 17 May 2023 07:46:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229585AbjEQKiT (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Wed, 17 May 2023 06:38:19 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F281897;
-        Wed, 17 May 2023 03:38:17 -0700 (PDT)
-Received: from zn.tnic (p5de8e8ea.dip0.t-ipconnect.de [93.232.232.234])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 1ECC51EC055F;
-        Wed, 17 May 2023 12:38:16 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1684319896;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=BatpuZgGB297seHuJ1mf9A2oYI8Ey7cYqz+SD9MShzA=;
-        b=DTcdYb5tLQuCNKHO13AecWbgmkfxmuXtwxeDV+7wclnNFMSFy60iBnUdnkMrEDj8sRIhJ7
-        hZTouQxaMTrZ6BzrEM+Fh7JnHlQNm383EDF0K4qylnp1goIvyV1ytD2TU4uQ0M7bR/4RVF
-        lTDkzOhkrse5A27l1yz3bJdCqQty4DE=
-Date:   Wed, 17 May 2023 12:38:15 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Cc:     andersson@kernel.org, mchehab@kernel.org, james.morse@arm.com,
-        rric@kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
-        dmitry.baryshkov@linaro.org, stable@vger.kernel.org
-Subject: Re: [RESEND PATCH v7 2/2] EDAC/qcom: Get rid of hardcoded register
- offsets
-Message-ID: <20230517103815.GCZGSul9wCk4K8/XkN@fat_crate.local>
-References: <20230517062859.57371-1-manivannan.sadhasivam@linaro.org>
- <20230517062859.57371-3-manivannan.sadhasivam@linaro.org>
+        with ESMTP id S229937AbjEQLqq (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Wed, 17 May 2023 07:46:46 -0400
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0CE240EB
+        for <linux-edac@vger.kernel.org>; Wed, 17 May 2023 04:46:44 -0700 (PDT)
+Received: by mail-pj1-x102a.google.com with SMTP id 98e67ed59e1d1-24de9c66559so602560a91.0
+        for <linux-edac@vger.kernel.org>; Wed, 17 May 2023 04:46:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1684324004; x=1686916004;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=RFzuu4N5fQjgRDDnnSeSZLGRU4lI0OQgLcecIxUQhiw=;
+        b=zbIyMbv7Wj7QKL0JlRXH1I1LWAzjbwqYQZELjaaH5JBLnOMywqLLxlnqGGz90Nv0YD
+         cOaR0Vx97w3xYx/z/lHkW5pzUvjdB+AJHz65heCAKNVgbhqhKDxsJSjSjytEebiU2iHD
+         51P7j7JRY8echQFn1xXxQG9WyTGTCOn2WxfOMSukSGGugX8Ml1+Bqyk9eTQ/P/OfAdqH
+         VUMfS2zM7xQOBj0hjfUYpc5NVV9GYPgw4FUDMfeyNQohgzo9d5MoosOeuSC8wySKOu4b
+         yUSLoKvwWrXwQLSRFvboh2RvJPVo3mHI/VzPCGrcjWwK6mKvOoLEkOTtbX1Z0bZrMEA2
+         2XgQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684324004; x=1686916004;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=RFzuu4N5fQjgRDDnnSeSZLGRU4lI0OQgLcecIxUQhiw=;
+        b=NdjmiubYtSY29eXYjQw4n+oMkvEkh40MgEIb3EVsuPADmbEz9uGmyW49VUkFSM1KdE
+         8TteWjKgp7xX1TPWxtKdo+4msQnd5FPFWSJoHbWWMqOROF5VLtE2VEBR0wQcyLbCya5n
+         Vnaq199M1rGBAv5UkPbQ+/u+k/OMK29CHUwV/A6pJgkvetYB6cF3489/6GJaTj458BSu
+         mOhDAm6NaO/qop8iPtUYQ895MP5SIQD1xOE9I7qc0Wbz9jJBKAbqpyX6bAzGYXPX57y6
+         vdE1CyacBo2X5uSJHFeMkD21Oy67+op4TAZNSKb66uHh2x5pxYAlSq83dKIQPuX11snm
+         7HVA==
+X-Gm-Message-State: AC+VfDxfFBjNX5itllKd8Wz3Ug1G3AfA8mOv+yDlHcb9Qo2lyeVVyq5F
+        e/IHs2dtK0i2ZjBi07s8Ll9u
+X-Google-Smtp-Source: ACHHUZ6fMetp6J+mojm2mXSpPEDIeSGJUTqYYffReV3Lh5yumI/isAX6OLVOH1wtaSGSvIEsoPXaDQ==
+X-Received: by 2002:a17:90a:de91:b0:24b:2f85:13eb with SMTP id n17-20020a17090ade9100b0024b2f8513ebmr39318239pjv.30.1684324004344;
+        Wed, 17 May 2023 04:46:44 -0700 (PDT)
+Received: from localhost.localdomain ([117.207.26.28])
+        by smtp.gmail.com with ESMTPSA id s12-20020a17090aba0c00b0025289bc1ce4sm1366971pjr.17.2023.05.17.04.46.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 17 May 2023 04:46:43 -0700 (PDT)
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     andersson@kernel.org, bp@alien8.de, mchehab@kernel.org
+Cc:     james.morse@arm.com, rric@kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-edac@vger.kernel.org,
+        linux-kernel@vger.kernel.org, dmitry.baryshkov@linaro.org,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Subject: [PATCH v8 0/2] Fix crash when using Qcom LLCC/EDAC drivers
+Date:   Wed, 17 May 2023 17:16:33 +0530
+Message-Id: <20230517114635.76358-1-manivannan.sadhasivam@linaro.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230517062859.57371-3-manivannan.sadhasivam@linaro.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Wed, May 17, 2023 at 11:58:59AM +0530, Manivannan Sadhasivam wrote:
-> The LLCC EDAC register offsets varies between each SoC. Hardcoding the
-> register offsets won't work and will often result in crash due to
-> accessing the wrong locations.
-> 
-> Hence, get the register offsets from the LLCC driver matching the
-> individual SoCs.
-> 
-> Cc: <stable@vger.kernel.org> # 6.0: 5365cea199c7 ("soc: qcom: llcc: Rename reg_offset structs to reflect LLCC version")
-> Cc: <stable@vger.kernel.org> # 6.0: c13d7d261e36 ("soc: qcom: llcc: Pass LLCC version based register offsets to EDAC driver")
-> Cc: <stable@vger.kernel.org> # 6.0
-> Fixes: a6e9d7ef252c ("soc: qcom: llcc: Add configuration data for SM8450 SoC")
-> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-> ---
->  drivers/edac/qcom_edac.c           | 116 ++++++++++++++---------------
->  include/linux/soc/qcom/llcc-qcom.h |   6 --
->  2 files changed, 58 insertions(+), 64 deletions(-)
+Hello,
 
-In case Bjorn wants to pick this up:
+This series fixes the crash seen on the Qualcomm SM8450 chipset with the
+LLCC/EDAC drivers. The problem was due to the Qcom EDAC driver using the
+fixed LLCC register offsets for detecting the LLCC errors.
 
-Acked-by: Borislav Petkov (AMD) <bp@alien8.de>
+This seems to have worked for SoCs till SM8450. But in SM8450, the LLCC
+register offsets were changed. So accessing the fixed offsets causes the
+crash on this platform.
 
-Thx.
+So for fixing this issue, and also to make it work on future SoCs, let's
+pass the LLCC offsets from the Qcom LLCC driver based on the individual
+SoCs and let the EDAC driver make use of them.
+
+This series has been tested on SM8450 based dev board.
+
+Thanks,
+Mani
+
+Changes in v8:
+
+* Collected Ack
+* Modified the patch 1/2 to remove the ret variable initialization
+
+Changes in v7:
+
+* Rebased on top of v6.4-rc1
+
+Changes in v6:
+
+* Rebased on top of v6.3-rc1
+* Dropped the Kconfig patch that got applied
+
+Changes in v5:
+
+* Added fixes tag and CCed stable mentioning the dependency
+* Added a patch to fix the build error with COMPILE_TEST
+
+Changes in v4:
+
+* Dropped the patches that were already applied
+* Rebased on top of v6.1-rc5
+
+Changes in v3:
+
+* Instead of using SoC specific register offset naming convention, used
+  LLCC version based as suggested by Sai
+* Fixed the existing reg_offset naming convention to clearly represent
+  the LLCC version from which the offsets were changed
+* Added Sai's Acked-by to MAINTAINERS patch
+* Added a new patch that removes an extra error no assignment
+
+Changes in v2:
+
+* Volunteered myself as a maintainer for the EDAC driver since the current
+  maintainers have left Qualcomm and I couldn't get hold of them.
+
+Manivannan Sadhasivam (2):
+  EDAC/qcom: Remove superfluous return variable assignment in
+    qcom_llcc_core_setup()
+  EDAC/qcom: Get rid of hardcoded register offsets
+
+ drivers/edac/qcom_edac.c           | 118 ++++++++++++++---------------
+ include/linux/soc/qcom/llcc-qcom.h |   6 --
+ 2 files changed, 59 insertions(+), 65 deletions(-)
 
 -- 
-Regards/Gruss,
-    Boris.
+2.25.1
 
-https://people.kernel.org/tglx/notes-about-netiquette
