@@ -2,55 +2,55 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F32D8706825
-	for <lists+linux-edac@lfdr.de>; Wed, 17 May 2023 14:30:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC29D706831
+	for <lists+linux-edac@lfdr.de>; Wed, 17 May 2023 14:33:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230391AbjEQMa4 (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Wed, 17 May 2023 08:30:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45304 "EHLO
+        id S231536AbjEQMdE (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Wed, 17 May 2023 08:33:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229717AbjEQMaz (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Wed, 17 May 2023 08:30:55 -0400
-Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D510B171C;
-        Wed, 17 May 2023 05:30:54 -0700 (PDT)
-Received: by mail-pf1-x42a.google.com with SMTP id d2e1a72fcca58-6439e6f5a33so487159b3a.2;
-        Wed, 17 May 2023 05:30:54 -0700 (PDT)
+        with ESMTP id S230418AbjEQMdD (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Wed, 17 May 2023 08:33:03 -0400
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B219910DA;
+        Wed, 17 May 2023 05:33:02 -0700 (PDT)
+Received: by mail-pj1-x102a.google.com with SMTP id 98e67ed59e1d1-2533ed4f1dcso560979a91.1;
+        Wed, 17 May 2023 05:33:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684326654; x=1686918654;
+        d=gmail.com; s=20221208; t=1684326782; x=1686918782;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=rgEoimwM/+QRDs1JjtBHOrcpHPooX0wlKo5SY0pkI2c=;
-        b=GBM6Dx/LkOFQdL+ZvmG8JcOzBZPcctXeVfY3Lzwj2vgwWMI8rej1tIbtXoQp8Cbnhd
-         ZgXtWsfNWDO7aUfOIenSjY6kIiy455yMcZhFuUYqI124l6DFwemovMwgyYjzyURGWLwN
-         g4Mzd1wK5z51TMwjXad2Ucuhxt4kpyx9q3Fz0Ad8TU+Iyn0cQk//HFSCxj3SfaVUwh1O
-         bt0sCb6a7WK7F38f2i0m+BSTyoHmNJuBhgD4hvwRCHvN4BMPWhmJMfZ5tkv+PG1xY0YV
-         WrOt9GfnmqsfuadsPFWjiw7VX7ionk4i+hs0r/ydSo7c8J6KmTuQBM9FG1U57I5/dHMl
-         ttWg==
+        bh=7D3rDce72bLIoO6oLXhfpSEMdrIa1Yjrhw5vz5N95a8=;
+        b=Ij/SkTnSNg1uVouGd8+mzwQ9Kd07RBue4VFoqhXQrnSVECRTHVcLGCdRNIhvPZcosX
+         Pe0vi63jACRiH9ypKtby6g8iIs6C5+q0tmuhC8nO/yWzzRyTvZgAo1PjCeX52nEn3ZeF
+         Xi/6Cro5Pep/fMoqYlDW1kGgkyUhuNd8Cwjs+lio4Ndgj5VRbtMtcTjM7SArWfKJjhS0
+         3tg6EF9TBz3mHWRpljaEyhYArUicbxpzHhrH9I2k6h5oCS2J85QcwB3Yt6bduNZABFxs
+         kNpNICDKrqxt/vz5dCwoXPPnxK5JaVRE2ccqCv21j9BMyTe388CLOp119PjJ5Gag6pt0
+         yxfQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684326654; x=1686918654;
+        d=1e100.net; s=20221208; t=1684326782; x=1686918782;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=rgEoimwM/+QRDs1JjtBHOrcpHPooX0wlKo5SY0pkI2c=;
-        b=ePxo6aMQI7MuTFBUp/onwtoE4OeZKrA0mfxKlg5lbl+RD9WunSQH5LZT+U9F16DIX4
-         b3DKXGo6sN1XVJUwgUMA9e0Rd6GjxOufFFjue2ShWf2IX9/gxOkLg2mL4PAmon4wWDVt
-         uzK/YQzdGFI8xVWD7jf098f5+qyCHWkuUkceoAGzS7dqWfo6O7xcPSFp2gDvTmOlQWgI
-         huA55LkSYng9Qh9I//Gx1o1xUZngq6VM3jWkGQkqI/gqMEWnxnNeJYw2OcpSyOCFGiKd
-         flGm/nIj33HcKPrjgHdv0ronfovjeG5/BOobU5XNTdkDbOfEJ+MAZvZwM/93jWl3Ht78
-         IGUQ==
-X-Gm-Message-State: AC+VfDz53zwwQC7d5kvUkzYlWHxIrMS/RtxclEsEcm4djgGasb2XGpGL
-        zHCZ6O7jyY6BA5RUhHU7FBA=
-X-Google-Smtp-Source: ACHHUZ43afd6eVMigQVij11C03RJRNMdYwZrR1GD5NadMeNu9kn587ZFOSmr9JKyP0Yz/hkVCIwAeQ==
-X-Received: by 2002:a17:902:ced1:b0:1ac:5def:d203 with SMTP id d17-20020a170902ced100b001ac5defd203mr46531082plg.35.1684326654241;
-        Wed, 17 May 2023 05:30:54 -0700 (PDT)
+        bh=7D3rDce72bLIoO6oLXhfpSEMdrIa1Yjrhw5vz5N95a8=;
+        b=PXf3f7MRGWtGZK/2ovHXejBl4G4LtiwTMFSZ5OkZ3XfW9M2FjjsL9qNOcpgaFQJamG
+         q74Hdsx2EKxJD0d0bsvTyexFT6IQJ0q1REcdWSN8UQz7hhMW97vYucIUjSNyMFeQOgPt
+         /d9U9qxujoeN/E81Z8UX9TQKtZ0MnxGMZ5jagLpZEAtOTcXzwV3CvGKhIMuqh4OMFDA/
+         m2L3Nce3j9S4lMpLZ78cCM1NYYrpTmBZ5V4+81qdHFOoDRwad5SPyQCMdgpIrngAMRf/
+         XgNu4NceIYnHngzojaxp8PonYJDzJYnGX1EKvgcsxkLXaR+63n4/TxY4bVtpohczJChL
+         jeAg==
+X-Gm-Message-State: AC+VfDymlM9WdR+wiyPtRBgTFjffYVFJGf3bGsJ9qcnu8R93eMcjIAb8
+        rDXg02VI0QNX+C2m0O3WtBw=
+X-Google-Smtp-Source: ACHHUZ7xLJWFnp0aOOOLPyCBWRSErrcjlxEjfVKX6+gY6tQgxhV4ZDDSGp6vtV9P7HYnUmOyj+3uBg==
+X-Received: by 2002:a17:90a:e518:b0:253:283e:be53 with SMTP id t24-20020a17090ae51800b00253283ebe53mr4596803pjy.42.1684326782125;
+        Wed, 17 May 2023 05:33:02 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id q4-20020a170902788400b001a69d1bc32csm17424924pll.238.2023.05.17.05.30.53
+        by smtp.gmail.com with ESMTPSA id np12-20020a17090b4c4c00b0025063e893c9sm1430863pjb.55.2023.05.17.05.33.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 May 2023 05:30:53 -0700 (PDT)
+        Wed, 17 May 2023 05:33:01 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Wed, 17 May 2023 05:30:52 -0700
+Date:   Wed, 17 May 2023 05:33:00 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
 To:     Yazen Ghannam <yazen.ghannam@amd.com>
 Cc:     x86@kernel.org, linux-kernel@vger.kernel.org,
@@ -59,15 +59,15 @@ Cc:     x86@kernel.org, linux-kernel@vger.kernel.org,
         linux-edac@vger.kernel.org, clemens@ladisch.de, jdelvare@suse.com,
         linux-hwmon@vger.kernel.org, mario.limonciello@amd.com,
         babu.moger@amd.com
-Subject: Re: [PATCH 5/6] hwmon: (k10temp) Define helper function to read CCD
- temp
-Message-ID: <f61f548b-0007-404e-9c9d-d84a2a657983@roeck-us.net>
+Subject: Re: [PATCH 6/6] hwmon: (k10temp) Reduce k10temp_get_ccd_support()
+ parameters
+Message-ID: <612fc1c9-f9e1-4d88-9f5c-bbcf006d6a2b@roeck-us.net>
 References: <20230516202430.4157216-1-yazen.ghannam@amd.com>
- <20230516202430.4157216-6-yazen.ghannam@amd.com>
+ <20230516202430.4157216-7-yazen.ghannam@amd.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230516202430.4157216-6-yazen.ghannam@amd.com>
+In-Reply-To: <20230516202430.4157216-7-yazen.ghannam@amd.com>
 X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
@@ -79,81 +79,86 @@ Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Tue, May 16, 2023 at 03:24:29PM -0500, Yazen Ghannam wrote:
-> The CCD temperature register is read in two places. These reads are done
-> using an AMD SMN access, and a number of parameters are needed for the
-> operation.
+On Tue, May 16, 2023 at 03:24:30PM -0500, Yazen Ghannam wrote:
+> Currently, k10temp_get_ccd_support() takes as input "pdev" and "data".
+> However, "pdev" is already included in "data". Furthermore, the "pdev"
+> parameter is no longer used in k10temp_get_ccd_support(), since its use
+> was moved into read_ccd_temp_reg().
 > 
-> Move the SMN access and parameter gathering into a helper function in
-> order to simply the code flow. This also has a benefit of centralizing
-> the hardware register access in a single place in case fixes or special
-> decoding is required.
+> Drop the "pdev" input parameter as it is no longer needed.
+> 
+> No functional change is intended.
 > 
 > Signed-off-by: Yazen Ghannam <yazen.ghannam@amd.com>
+
+Acked-by: Guenter Roeck <linux@roeck-us.net>
+
 > ---
->  drivers/hwmon/k10temp.c | 19 ++++++++++++++-----
->  1 file changed, 14 insertions(+), 5 deletions(-)
+>  drivers/hwmon/k10temp.c | 17 ++++++++---------
+>  1 file changed, 8 insertions(+), 9 deletions(-)
 > 
 > diff --git a/drivers/hwmon/k10temp.c b/drivers/hwmon/k10temp.c
-> index 6ea1fa62b7c1..06af1fe38af7 100644
+> index 06af1fe38af7..873dbe0f5806 100644
 > --- a/drivers/hwmon/k10temp.c
 > +++ b/drivers/hwmon/k10temp.c
-> @@ -150,6 +150,18 @@ static void read_tempreg_nb_zen(struct pci_dev *pdev, u32 *regval)
->  		*regval = 0;
->  }
+> @@ -379,8 +379,7 @@ static const struct hwmon_chip_info k10temp_chip_info = {
+>  	.info = k10temp_info,
+>  };
 >  
-> +static int read_ccd_temp_reg(struct k10temp_data *data, int ccd, u32 *regval)
-> +{
-> +	u16 node_id = amd_pci_dev_to_node_id(data->pdev);
-> +	u32 tmp;
-> +
-> +	if (amd_smn_read(node_id, ZEN_CCD_TEMP(data->ccd_offset, ccd), &tmp))
-> +		return -EINVAL;
-
-As mentioned before, this is not appropriate. The error code
-from amd_smn_read() should be returned.
-
-> +
-> +	*regval = tmp;
-
-This seems pointless. Why not just pass regval as parameter
-to amd_smn_read() ?
-
-This function should be reduced to
-
-	return amd_smn_read(node_id, ZEN_CCD_TEMP(data->ccd_offset, ccd), regval));
-
-> +	return 0;
-> +}
-> +
->  static long get_raw_temp(struct k10temp_data *data)
+> -static void k10temp_get_ccd_support(struct pci_dev *pdev,
+> -				    struct k10temp_data *data, int limit)
+> +static void k10temp_get_ccd_support(struct k10temp_data *data, int limit)
 >  {
 >  	u32 regval;
-> @@ -214,9 +226,7 @@ static int k10temp_read_temp(struct device *dev, u32 attr, int channel,
->  				*val = 0;
->  			break;
->  		case 2 ... 13:		/* Tccd{1-12} */
-> -			if (amd_smn_read(amd_pci_dev_to_node_id(data->pdev),
-> -					 ZEN_CCD_TEMP(data->ccd_offset, channel - 2),
-> -					 &regval))
-> +			if (read_ccd_temp_reg(data, channel - 2, &regval))
->  				return -EINVAL;
-
-Now this is really wrong, no matter what. Why bother replacing the
-error code in read_ccd_temp_reg() only to replace it again ?
-
->  
->  			*val = (regval & ZEN_CCD_TEMP_MASK) * 125 - 49000;
-> @@ -376,8 +386,7 @@ static void k10temp_get_ccd_support(struct pci_dev *pdev,
 >  	int i;
->  
->  	for (i = 0; i < limit; i++) {
-> -		if (amd_smn_read(amd_pci_dev_to_node_id(pdev),
-> -				 ZEN_CCD_TEMP(data->ccd_offset, i), &regval))
-> +		if (read_ccd_temp_reg(data, i, &regval))
->  			continue;
->  
->  		if (regval & ZEN_CCD_TEMP_VALID)
+> @@ -435,18 +434,18 @@ static int k10temp_probe(struct pci_dev *pdev, const struct pci_device_id *id)
+>  		case 0x11:	/* Zen APU */
+>  		case 0x18:	/* Zen+ APU */
+>  			data->ccd_offset = 0x154;
+> -			k10temp_get_ccd_support(pdev, data, 4);
+> +			k10temp_get_ccd_support(data, 4);
+>  			break;
+>  		case 0x31:	/* Zen2 Threadripper */
+>  		case 0x60:	/* Renoir */
+>  		case 0x68:	/* Lucienne */
+>  		case 0x71:	/* Zen2 */
+>  			data->ccd_offset = 0x154;
+> -			k10temp_get_ccd_support(pdev, data, 8);
+> +			k10temp_get_ccd_support(data, 8);
+>  			break;
+>  		case 0xa0 ... 0xaf:
+>  			data->ccd_offset = 0x300;
+> -			k10temp_get_ccd_support(pdev, data, 8);
+> +			k10temp_get_ccd_support(data, 8);
+>  			break;
+>  		}
+>  	} else if (boot_cpu_data.x86 == 0x19) {
+> @@ -459,21 +458,21 @@ static int k10temp_probe(struct pci_dev *pdev, const struct pci_device_id *id)
+>  		case 0x21:		/* Zen3 Ryzen Desktop */
+>  		case 0x50 ... 0x5f:	/* Green Sardine */
+>  			data->ccd_offset = 0x154;
+> -			k10temp_get_ccd_support(pdev, data, 8);
+> +			k10temp_get_ccd_support(data, 8);
+>  			break;
+>  		case 0x40 ... 0x4f:	/* Yellow Carp */
+>  			data->ccd_offset = 0x300;
+> -			k10temp_get_ccd_support(pdev, data, 8);
+> +			k10temp_get_ccd_support(data, 8);
+>  			break;
+>  		case 0x60 ... 0x6f:
+>  		case 0x70 ... 0x7f:
+>  			data->ccd_offset = 0x308;
+> -			k10temp_get_ccd_support(pdev, data, 8);
+> +			k10temp_get_ccd_support(data, 8);
+>  			break;
+>  		case 0x10 ... 0x1f:
+>  		case 0xa0 ... 0xaf:
+>  			data->ccd_offset = 0x300;
+> -			k10temp_get_ccd_support(pdev, data, 12);
+> +			k10temp_get_ccd_support(data, 12);
+>  			break;
+>  		}
+>  	} else {
 > -- 
 > 2.34.1
 > 
