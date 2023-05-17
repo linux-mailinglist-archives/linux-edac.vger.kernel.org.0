@@ -2,119 +2,171 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC4AD706181
-	for <lists+linux-edac@lfdr.de>; Wed, 17 May 2023 09:43:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB62170619B
+	for <lists+linux-edac@lfdr.de>; Wed, 17 May 2023 09:47:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229506AbjEQHnj (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Wed, 17 May 2023 03:43:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40816 "EHLO
+        id S230155AbjEQHrr (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Wed, 17 May 2023 03:47:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229607AbjEQHni (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Wed, 17 May 2023 03:43:38 -0400
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D9D6DA;
-        Wed, 17 May 2023 00:43:37 -0700 (PDT)
-Received: by mail-pl1-x632.google.com with SMTP id d9443c01a7336-1aad5245632so3849265ad.3;
-        Wed, 17 May 2023 00:43:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684309416; x=1686901416;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=AU3J/HsqQVRlMwMH3f4tzrQckFj4RWJ9EFF4TdzVoM8=;
-        b=p+8Y7nCSjBwd0Txc/uaBFWBkCts5w/Wz2jfTlH8jSaaeD6afKtohm+W6cUHyuEthE2
-         r1znL/TCEGb17+VRn4amdwez5DWS4KPl0S6pnf+ijgSn+2EGyuVALEPThGqQyk9S6tqW
-         IQJ08tUDEDWT2JXKi9ptN2ZsWMqQbx0mOSXsiqI1EH3NAmhrgvy/AaBSP1Mw3wSEeUcM
-         7Iuv/uwzl1qC6zRH7ARkMFR/ItKgqdSvcthV212A2OdgpDyYKk9mtpyXJG+aPL4D3Rtu
-         3CgghUQEyNvoZwuQ1xaY3klsBtTaEepFPqnh0+irhlv75NHR+gTe9m01Ns47Rrl2IrZj
-         C2Mg==
+        with ESMTP id S230200AbjEQHrp (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Wed, 17 May 2023 03:47:45 -0400
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A757C3ABC
+        for <linux-edac@vger.kernel.org>; Wed, 17 May 2023 00:47:43 -0700 (PDT)
+Received: from mail-pf1-f197.google.com (mail-pf1-f197.google.com [209.85.210.197])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 3D9353F436
+        for <linux-edac@vger.kernel.org>; Wed, 17 May 2023 07:47:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1684309658;
+        bh=Prp+gvCFzgWy8Wr4AdCPMHWn8zkQL1ei83GgGU4GXHc=;
+        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+         To:Cc:Content-Type;
+        b=qaOWXoCC+8ZS/x3mPNaFVuGzssozdvh+pnN6vUaGFETdaKSCGvwephz2AASeWoVhE
+         e7mMQIyififEl8rc8KqLZ7vAuyIU6cRqRXRVob91AE5eP8Z82og5FL4haVY4lCR5w1
+         0V+X+NHlRRONfSBShni2u82T2ykGporBIOKHjcbh0gfjt8IN0/seqDxDQ/nLl0e/P+
+         sMlGOFFc+hGHxtJS362hgCKGkuzErTCyadLWcMFrBz3z3ATdPvFfed6MOvEXZx6oTw
+         97+A1/ZYC5OnOFxzKoDIlgkXbS4ZZqnDyw0QWyA8Xe8NOKrEnmEqr5H2VTzZT3Ylvp
+         O1P+L1qLMwH+g==
+Received: by mail-pf1-f197.google.com with SMTP id d2e1a72fcca58-643fdc3e994so520770b3a.2
+        for <linux-edac@vger.kernel.org>; Wed, 17 May 2023 00:47:38 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684309416; x=1686901416;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=AU3J/HsqQVRlMwMH3f4tzrQckFj4RWJ9EFF4TdzVoM8=;
-        b=htG5ZQYsN0YkNSCj3qdQWkwrkDR5/yaikD7sxfZAQn9veDK3OFFWvV7LgA4rv0fYwp
-         Tkqp3xsb65Om4JMTmQhQHbuRmjPucvpb6m39yKZBF8cMHovEL7nGr0jIRQ2/E3LLOycf
-         7kubi9/SyG7anhf+zXQEk36nx7IsApZ31BEyw1b2IZH8p49mYBGa2fsfXGmRinNgpk4V
-         D1FGiB2EYDiciFXH8nvweMjn2uNqs/QmnwwAZRdv1i+cNPGLBoj8glSB9Lhao7kCUhvh
-         F7fn2t8Peny5jiOpqpSDGdxe+rQyuLGPpf93vpnvMN50tDkKH0fX1fFok/qS34Z+OP/2
-         P+Bw==
-X-Gm-Message-State: AC+VfDzEaQWEcGic8XNWcMEsBuRaPiAvrM5jzlHBGM3ZoP5/DGIJ7kNE
-        +GkAJVOItGft9U9bmdQXPUw=
-X-Google-Smtp-Source: ACHHUZ7LYASxbc0VHDUh+FhBTnPCiL8PXB7RwPBFPbT1QNVrZmsdjcVwlmt4xOIrIpCOV5roWAL5fw==
-X-Received: by 2002:a17:902:ecc4:b0:1ad:8c8f:afb1 with SMTP id a4-20020a170902ecc400b001ad8c8fafb1mr31335207plh.39.1684309416523;
-        Wed, 17 May 2023 00:43:36 -0700 (PDT)
-Received: from [192.168.43.80] (subs02-180-214-232-12.three.co.id. [180.214.232.12])
-        by smtp.gmail.com with ESMTPSA id g14-20020a1709029f8e00b001ac6b926621sm15174961plq.292.2023.05.17.00.43.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 17 May 2023 00:43:36 -0700 (PDT)
-Message-ID: <723b9f11-d427-6c5d-5d99-969550244129@gmail.com>
-Date:   Wed, 17 May 2023 14:43:30 +0700
+        d=1e100.net; s=20221208; t=1684309656; x=1686901656;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Prp+gvCFzgWy8Wr4AdCPMHWn8zkQL1ei83GgGU4GXHc=;
+        b=Er9Aehzh1bDMXP/kpLOX/Fc4vIVFDos8tNi1Uhw7UQYqqbvAvuB8yM9iXDPU7PX2YX
+         QSGKKoCBHVsnp7YrWV0RIJxMbGwCYIwRdR/SSL5dgZ8VT1dWkEovgs8TnNZTx8L7pj1z
+         +b3rOVZ25m7v/Gj4iVr+q/pX3tk2nqRjl1UTDFrPli1nN5lsUWdjwRs4ksIJPD7VGgbi
+         /YEof49STBEAglkttbReTu5yxjBuVAhms194/elKiLaV7SfbznwZePXhnGQNTfYrGFvn
+         j64d29n85MOtg/UPEDSggTJ25CHSTlepYW+0F5tOWYa+SIiB0LNwqq38UZSuXTy/1WnG
+         syPA==
+X-Gm-Message-State: AC+VfDyfRQJnIaBSZzMiim5gCB2jSg0dg2c6ua9X1KjFh+jR/sbuSEdm
+        Ulgf4J87j14oTB4l0irTv4at/Cyy7XvPGWk087Tjg8NgtHz7SUwr0qCHZnnIOwC9+K6q62XibCK
+        +UfqbyyEVonOyhI9i/3NvUX/F301CGQKkh/Lbou8q4OntG1MK82KCG6E=
+X-Received: by 2002:a05:6a00:1507:b0:647:3de:c0ff with SMTP id q7-20020a056a00150700b0064703dec0ffmr42340786pfu.30.1684309656001;
+        Wed, 17 May 2023 00:47:36 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ6FbqLaYDTzFocG4a36CQQQ8fpuelvbMljb0kxtZcB09ddwN59whDaYuDB+DUJU+o/+04EHIOdHNRiwUhdTurg=
+X-Received: by 2002:a05:6a00:1507:b0:647:3de:c0ff with SMTP id
+ q7-20020a056a00150700b0064703dec0ffmr42340764pfu.30.1684309655711; Wed, 17
+ May 2023 00:47:35 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH] EDAC: Expose node link in sysfs if CONFIG_NUMA
-Content-Language: en-US
-To:     Yajun Deng <yajun.deng@linux.dev>, bp@alien8.de,
-        tony.luck@intel.com, james.morse@arm.com, mchehab@kernel.org,
-        rric@kernel.org, corbet@lwn.net
-Cc:     linux-kernel@vger.kernel.org, linux-edac@vger.kernel.org,
-        linux-doc@vger.kernel.org
-References: <20230516080748.3155788-1-yajun.deng@linux.dev>
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-In-Reply-To: <20230516080748.3155788-1-yajun.deng@linux.dev>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20230516033133.340936-1-kai.heng.feng@canonical.com> <IA1PR11MB61718EFB6DB1BF95CB1CEA5089799@IA1PR11MB6171.namprd11.prod.outlook.com>
+In-Reply-To: <IA1PR11MB61718EFB6DB1BF95CB1CEA5089799@IA1PR11MB6171.namprd11.prod.outlook.com>
+From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
+Date:   Wed, 17 May 2023 15:47:24 +0800
+Message-ID: <CAAd53p5YhCpFgHat6Qv+T6id53NhJ=5W85wVeJvO6BW_W06kFg@mail.gmail.com>
+Subject: Re: [PATCH] EDAC/Intel: Fix shift-out-of-bounds when DIMM/NVDIMM is absent
+To:     "Zhuo, Qiuxu" <qiuxu.zhuo@intel.com>
+Cc:     "Luck, Tony" <tony.luck@intel.com>,
+        "kao, acelan" <acelan.kao@canonical.com>,
+        Borislav Petkov <bp@alien8.de>,
+        James Morse <james.morse@arm.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Robert Richter <rric@kernel.org>,
+        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On 5/16/23 15:07, Yajun Deng wrote:
-> +
-> +What:		/sys/devices/system/edac/mc/mc*/node*
-> +Date:		May 2023
-> +Contact:	Yajun Deng <yajun.deng@linux.dev>
-> +		linux-edac@vger.kernel.org
-> +Description:	When CONFIG_NUMA is enabled, a symbolic link that points to the
-> +		corresponding NUMA node directory.
-> +
-> +		For example, the following symbolic link is created for node0 on mc0
-> +		and mc1:
-> +
+On Tue, May 16, 2023 at 8:53=E2=80=AFPM Zhuo, Qiuxu <qiuxu.zhuo@intel.com> =
+wrote:
+>
+> > From: Kai-Heng Feng <kai.heng.feng@canonical.com>
+> > ...
+> > Subject: [PATCH] EDAC/Intel: Fix shift-out-of-bounds when DIMM/NVDIMM
+> > is absent
+> >
+> > The following splat can be found on many systems equipped with EDAC:
+> > [   13.875276] UBSAN: shift-out-of-bounds in
+> > drivers/edac/skx_common.c:369:16
+> > [   13.875279] shift exponent -66 is negative
+> > [   13.875280] CPU: 11 PID: 519 Comm: systemd-udevd Not tainted 6.4.0-r=
+c1+
+> > #1
+> > [   13.875282] Hardware name: HP HP Z4 G5 Workstation Desktop PC/8962,
+> > BIOS U61 Ver. 01.01.15 04/19/2023
+> > [   13.875283] Call Trace:
+> > [   13.875285]  <TASK>
+> > [   13.875287]  dump_stack_lvl+0x48/0x70
+> > [   13.875295]  dump_stack+0x10/0x20
+> > [   13.875297]  __ubsan_handle_shift_out_of_bounds+0x156/0x310
+> > [   13.875302]  ? __kmem_cache_alloc_node+0x196/0x300
+> > [   13.875307]  skx_get_dimm_info.cold+0xac/0x15d [i10nm_edac]
+> > [   13.875312]  i10nm_get_dimm_config+0x240/0x360 [i10nm_edac]
+> > [   13.875316]  ? kasprintf+0x4e/0x80
+> > [   13.875321]  skx_register_mci+0x12b/0x1d0 [i10nm_edac]
+> > [   13.875324]  ? __pfx_i10nm_get_dimm_config+0x10/0x10 [i10nm_edac]
+> > [   13.875329]  i10nm_init+0x89f/0x1d10 [i10nm_edac]
+> > [   13.875333]  ? __pfx_i10nm_init+0x10/0x10 [i10nm_edac]
+> > [   13.875337]  do_one_initcall+0x46/0x240
+> > [   13.875342]  ? kmalloc_trace+0x2a/0xb0
+> > [   13.875346]  do_init_module+0x6a/0x280
+> > [   13.875350]  load_module+0x2419/0x2500
+> > [   13.875353]  ? security_kernel_post_read_file+0x5c/0x80
+> > [   13.875358]  __do_sys_finit_module+0xcc/0x150
+> > [   13.875360]  ? __do_sys_finit_module+0xcc/0x150
+> > [   13.875363]  __x64_sys_finit_module+0x18/0x30
+> > [   13.875365]  do_syscall_64+0x59/0x90
+> > [   13.875368]  ? syscall_exit_to_user_mode+0x2a/0x50
+> > [   13.875371]  ? do_syscall_64+0x69/0x90
+> > [   13.875372]  ? do_syscall_64+0x69/0x90
+> > [   13.875373]  ? do_syscall_64+0x69/0x90
+> > [   13.875374]  ? do_syscall_64+0x69/0x90
+> > [   13.875375]  ? syscall_exit_to_user_mode+0x2a/0x50
+> > [   13.875376]  ? do_syscall_64+0x69/0x90
+> > [   13.875377]  ? do_syscall_64+0x69/0x90
+> > [   13.875378]  ? do_syscall_64+0x69/0x90
+> > [   13.875379]  ? sysvec_call_function+0x4e/0xb0
+> > [   13.875381]  entry_SYSCALL_64_after_hwframe+0x72/0xdc
+> >
+> > When a DIMM slot is empty, the read value of mtr can be 0xffffffff, the=
+refore
+>
+> Looked like a buggy BIOS/hw that didn't set the mtr register.
 
-"For example, on node0 with two memory control directories mc0 and mc1
-the symlinks are::" (I prefer using literal code block here).
+If that's the case, I suspect the bug comes from Intel BIOS RC,
+because the issue happens on different vendors' hardware.
 
-> +		/sys/devices/system/edac/mc/mc0/node0 -> ../../../node/node0
-> +		/sys/devices/system/edac/mc/mc1/node0 -> ../../../node/node0
+>
+> 1. Did you print the mtr register whose value was 0xffffffff?
 
-Or bullet lists should better fit listing above?
+Yes, 0xffffffff is the value. mcddrtcfg is also 0xffffffff.
 
-> +
-> +What:		/sys/devices/system/node/node*/mc*
-> +Date:		May 2023
-> +Contact:	Yajun Deng <yajun.deng@linux.dev>
-> +		linux-edac@vger.kernel.org
-> +Description:	When CONFIG_NUMA is enabled, a symbolic link that points to the
-> +		corresponding memory control directory.
-> +
-> +		For example, the following symbolic link is created for mc0 and mc1
-> +		on node0:
-> +
-> +		/sys/devices/system/node/node0/mc0 -> ../../edac/mc/mc0
-> +		/sys/devices/system/node/node0/mc1 -> ../../edac/mc/mc1
+> 2. Can you take a dmesg log with kernel "CONFIG_EDAC_DEBUG=3Dy" enabled?
+> 3. What was the CPU? Please take the output of "lscpu".
 
-Similar as my review above.
+Both attached in Bugzlla [1].
 
-Thanks.
+> 4. Did you verify your patch that the issue was fixed on your systems?
 
--- 
-An old man doll... just what I always wanted! - Clara
+I did, that's why I sent the patch to mailing list.
 
+[1] https://bugzilla.kernel.org/show_bug.cgi?id=3D217453
+
+Kai-Heng
+
+>
+> Thanks!
+> -Qiuxu
+>
+> > the wrong "ranks" value creates shift-out-of-bounds error. The same iss=
+ue
+> > can be found on NVDIMM too.
+> >
+> > So only consider DIMM/NVDIMM is present when the value of
+> > mtr/mcddrtcfg is not ~0.
+> > ...
