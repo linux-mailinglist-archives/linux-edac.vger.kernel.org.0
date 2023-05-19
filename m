@@ -2,156 +2,74 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C178D7077C6
-	for <lists+linux-edac@lfdr.de>; Thu, 18 May 2023 04:03:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC79170961C
+	for <lists+linux-edac@lfdr.de>; Fri, 19 May 2023 13:17:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229557AbjERCDO (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Wed, 17 May 2023 22:03:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50562 "EHLO
+        id S231617AbjESLRt (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Fri, 19 May 2023 07:17:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229458AbjERCDN (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Wed, 17 May 2023 22:03:13 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71B6B2D7B;
-        Wed, 17 May 2023 19:03:12 -0700 (PDT)
-Received: from dggpemm500001.china.huawei.com (unknown [172.30.72.53])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4QMCnP0TQlzqSRl;
-        Thu, 18 May 2023 09:58:49 +0800 (CST)
-Received: from [10.174.177.243] (10.174.177.243) by
- dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Thu, 18 May 2023 10:03:10 +0800
-Message-ID: <d13b2730-bc20-3e32-a6c0-44c525ca9f0b@huawei.com>
-Date:   Thu, 18 May 2023 10:03:09 +0800
+        with ESMTP id S231670AbjESLRr (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Fri, 19 May 2023 07:17:47 -0400
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 449491B4
+        for <linux-edac@vger.kernel.org>; Fri, 19 May 2023 04:17:44 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id a640c23a62f3a-96f683e8855so81564566b.2
+        for <linux-edac@vger.kernel.org>; Fri, 19 May 2023 04:17:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684495063; x=1687087063;
+        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=YmxaI1amCfTksu6ynk2557PwK0HJxrBQmYIx/Pz5hBs=;
+        b=Eiw4JAU3c1Q2BJpBu1tvSTZba4z8SbBucbbhiR3frhv7VlB6Qa8tbmbHXfQfqk9GA8
+         UEo8VemXoK1wKqQFZOpC8T91jLsWsbwSFdtaaLUeA/Vwz81AcxZdsuKZX4h/NtnKKzmC
+         2tvQXLcfGBiepPGjbJe1B2KwvsVp0S6ct1r4pwgcr9Ad/erjUhWNo2wdI7StoD2mJqjA
+         ZgBYyriSfxevToJukWdFsz73GWHJq4E4bG+PiaobB+o5pECZFFXEF2f8vPMokQOdAjd1
+         Rc2Wj9xb+DHV8rPGR9rM6kDSkczPvwBV4gzggVrmfXpI6aMAOJ5GMWJqos/IT+JfHY7l
+         hIXw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684495063; x=1687087063;
+        h=to:subject:message-id:date:from:reply-to:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=YmxaI1amCfTksu6ynk2557PwK0HJxrBQmYIx/Pz5hBs=;
+        b=Ip5Itl4cpYPYX700khIngQO1VlY+CZhfKNem7qkxInTFh8VS6r6muIpRVpHHBh99bw
+         OOw3oY8ISWyUqQV65/rzbZW0WW4uFUN8Tct1DKB8XVopYwBGiBeg2VV3V44QUE3Vv9pl
+         3WodXGJ/KESkQURNN65f1VDSlDjRJ40wJVnwy1ooBDpjTeJCz5uYWGdKnpXqQrLHm0Jw
+         RWajmWnuBfd0n/vBEImkLb7ms8U891Z3rZanPoofgA0xt/UO/dOVnw8Vv4ti9zhXQ735
+         l60GtLdkO5dM0cSRjryxc1x7EhRIQ5aViljGPX44K2HdyiXATIQupz1rxFp5HvvMpCV8
+         deFA==
+X-Gm-Message-State: AC+VfDyfeO9i7HeRmwNLlKbNUc7r853/hTosGpxJgUv6W8cUhrkL5SSN
+        Ut637OG4CO4C9OAgd+XOxayrmK4RO52lB0gbHek=
+X-Google-Smtp-Source: ACHHUZ4GcdKjctEWmkMJD/Q5ZDCusH7zrjV+w4c4EgP8GDbM+BMa7NNuPpP4cOMUW2oAUk/kOHHzW6hqw5zKR98kQX0=
+X-Received: by 2002:a17:907:1b12:b0:8b8:c06e:52d8 with SMTP id
+ mp18-20020a1709071b1200b008b8c06e52d8mr1298232ejc.36.1684495062361; Fri, 19
+ May 2023 04:17:42 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Subject: Re: [PATCH] x86/mce: set MCE_IN_KERNEL_COPYIN for all MC-Safe Copy
-Content-Language: en-US
-To:     Tony Luck <tony.luck@intel.com>, Borislav Petkov <bp@alien8.de>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>
-CC:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>, <x86@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        <linux-edac@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-mm@kvack.org>, <jane.chu@oracle.com>
-References: <20230508022233.13890-1-wangkefeng.wang@huawei.com>
-From:   Kefeng Wang <wangkefeng.wang@huawei.com>
-In-Reply-To: <20230508022233.13890-1-wangkefeng.wang@huawei.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.177.243]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- dggpemm500001.china.huawei.com (7.185.36.107)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Received: by 2002:a17:907:7dab:b0:94f:7d03:8e8b with HTTP; Fri, 19 May 2023
+ 04:17:41 -0700 (PDT)
+Reply-To: ninacoulibaly03@myself.com
+From:   nina coulibaly <ninacoulibaly199@gmail.com>
+Date:   Fri, 19 May 2023 04:17:41 -0700
+Message-ID: <CAM7Z2JAd00KW6b=O8M27vwRnsJ1w3AmDO5tP+gSmzkaHvk6=CA@mail.gmail.com>
+Subject: from nina coulibaly
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=4.8 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-Hi Tony and all x86 maintainers, kindly ping, thanks.
+Dear,
 
-On 2023/5/8 10:22, Kefeng Wang wrote:
-> Both EX_TYPE_FAULT_MCE_SAFE and EX_TYPE_DEFAULT_MCE_SAFE exception
-> fixup types are used to identify fixups which allow in kernel #MC
-> recovery, that is the Machine Check Safe Copy.
-> 
-> For now, the MCE_IN_KERNEL_COPYIN flag is only set for EX_TYPE_COPY
-> and EX_TYPE_UACCESS when copy from user, and corrupted page is
-> isolated in this case, for MC-safe copy, memory_failure() is not
-> always called, some places, like __wp_page_copy_user, copy_subpage,
-> copy_user_gigantic_page and ksm_might_need_to_copy manually call
-> memory_failure_queue() to cope with such unhandled error pages,
-> recently coredump hwposion recovery support[1] is asked to do the
-> same thing, and there are some other already existed MC-safe copy
-> scenarios, eg, nvdimm, dm-writecache, dax, which has similar issue.
-> 
-> The best way to fix them is set MCE_IN_KERNEL_COPYIN to MCE_SAFE
-> exception, then kill_me_never() will be queued to call memory_failure()
-> in do_machine_check() to isolate corrupted page, which avoid calling
-> memory_failure_queue() after every MC-safe copy return.
-> 
-> [1] https://lkml.kernel.org/r/20230417045323.11054-1-wangkefeng.wang@huawei.com
-> 
-> Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
-> ---
->   arch/x86/kernel/cpu/mce/severity.c |  3 +--
->   mm/ksm.c                           |  1 -
->   mm/memory.c                        | 12 +++---------
->   3 files changed, 4 insertions(+), 12 deletions(-)
-> 
-> diff --git a/arch/x86/kernel/cpu/mce/severity.c b/arch/x86/kernel/cpu/mce/severity.c
-> index c4477162c07d..63e94484c5d6 100644
-> --- a/arch/x86/kernel/cpu/mce/severity.c
-> +++ b/arch/x86/kernel/cpu/mce/severity.c
-> @@ -293,12 +293,11 @@ static noinstr int error_context(struct mce *m, struct pt_regs *regs)
->   	case EX_TYPE_COPY:
->   		if (!copy_user)
->   			return IN_KERNEL;
-> -		m->kflags |= MCE_IN_KERNEL_COPYIN;
->   		fallthrough;
->   
->   	case EX_TYPE_FAULT_MCE_SAFE:
->   	case EX_TYPE_DEFAULT_MCE_SAFE:
-> -		m->kflags |= MCE_IN_KERNEL_RECOV;
-> +		m->kflags |= MCE_IN_KERNEL_RECOV | MCE_IN_KERNEL_COPYIN;
->   		return IN_KERNEL_RECOV;
->   
->   	default:
-> diff --git a/mm/ksm.c b/mm/ksm.c
-> index 0156bded3a66..7abdf4892387 100644
-> --- a/mm/ksm.c
-> +++ b/mm/ksm.c
-> @@ -2794,7 +2794,6 @@ struct page *ksm_might_need_to_copy(struct page *page,
->   	if (new_page) {
->   		if (copy_mc_user_highpage(new_page, page, address, vma)) {
->   			put_page(new_page);
-> -			memory_failure_queue(page_to_pfn(page), 0);
->   			return ERR_PTR(-EHWPOISON);
->   		}
->   		SetPageDirty(new_page);
-> diff --git a/mm/memory.c b/mm/memory.c
-> index 5e2c6b1fc00e..c0f586257017 100644
-> --- a/mm/memory.c
-> +++ b/mm/memory.c
-> @@ -2814,10 +2814,8 @@ static inline int __wp_page_copy_user(struct page *dst, struct page *src,
->   	unsigned long addr = vmf->address;
->   
->   	if (likely(src)) {
-> -		if (copy_mc_user_highpage(dst, src, addr, vma)) {
-> -			memory_failure_queue(page_to_pfn(src), 0);
-> +		if (copy_mc_user_highpage(dst, src, addr, vma))
->   			return -EHWPOISON;
-> -		}
->   		return 0;
->   	}
->   
-> @@ -5852,10 +5850,8 @@ static int copy_user_gigantic_page(struct folio *dst, struct folio *src,
->   
->   		cond_resched();
->   		if (copy_mc_user_highpage(dst_page, src_page,
-> -					  addr + i*PAGE_SIZE, vma)) {
-> -			memory_failure_queue(page_to_pfn(src_page), 0);
-> +					  addr + i*PAGE_SIZE, vma))
->   			return -EHWPOISON;
-> -		}
->   	}
->   	return 0;
->   }
-> @@ -5871,10 +5867,8 @@ static int copy_subpage(unsigned long addr, int idx, void *arg)
->   	struct copy_subpage_arg *copy_arg = arg;
->   
->   	if (copy_mc_user_highpage(copy_arg->dst + idx, copy_arg->src + idx,
-> -				  addr, copy_arg->vma)) {
-> -		memory_failure_queue(page_to_pfn(copy_arg->src + idx), 0);
-> +				  addr, copy_arg->vma))
->   		return -EHWPOISON;
-> -	}
->   	return 0;
->   }
->   
+Please grant me permission to share a very crucial discussion with
+you. I am looking forward to hearing from you at your earliest
+convenience.
+
+Mrs. Nina Coulibal
