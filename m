@@ -2,20 +2,20 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E0FB07186FE
-	for <lists+linux-edac@lfdr.de>; Wed, 31 May 2023 18:06:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 42BE77186FF
+	for <lists+linux-edac@lfdr.de>; Wed, 31 May 2023 18:06:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229526AbjEaQGz (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        id S229529AbjEaQGz (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
         Wed, 31 May 2023 12:06:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44112 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229529AbjEaQGx (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Wed, 31 May 2023 12:06:53 -0400
+        with ESMTP id S229476AbjEaQGy (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Wed, 31 May 2023 12:06:54 -0400
 Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69CB5D9
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 811CBE2
         for <linux-edac@vger.kernel.org>; Wed, 31 May 2023 09:06:50 -0700 (PDT)
 Received: from lhrpeml500006.china.huawei.com (unknown [172.18.147.226])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4QWYxt5hC6z6D8WQ;
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4QWYxt6Rzjz6D8WW;
         Thu,  1 Jun 2023 00:05:06 +0800 (CST)
 Received: from SecurePC30232.china.huawei.com (10.122.247.234) by
  lhrpeml500006.china.huawei.com (7.191.161.198) with Microsoft SMTP Server
@@ -26,9 +26,9 @@ To:     <mchehab@kernel.org>, <linux-edac@vger.kernel.org>
 CC:     <jonathan.cameron@huawei.com>, <linuxarm@huawei.com>,
         <tanxiaofei@huawei.com>, <lvying6@huawei.com>,
         <fenglei47@h-partners.com>, <shiju.jose@huawei.com>
-Subject: [RFC PATCH V2 1/3] rasdaemon: fix return value type issue of read/write function from unistd.h
-Date:   Thu, 1 Jun 2023 00:06:24 +0800
-Message-ID: <20230531160627.1506-2-shiju.jose@huawei.com>
+Subject: [RFC PATCH V2 2/3] rasdaemon: fix issue of signed and unsigned integer comparison and remove redundant header file
+Date:   Thu, 1 Jun 2023 00:06:25 +0800
+Message-ID: <20230531160627.1506-3-shiju.jose@huawei.com>
 X-Mailer: git-send-email 2.35.1.windows.2
 In-Reply-To: <20230531160627.1506-1-shiju.jose@huawei.com>
 References: <20230531160627.1506-1-shiju.jose@huawei.com>
@@ -50,92 +50,111 @@ X-Mailing-List: linux-edac@vger.kernel.org
 
 From: Xiaofei Tan <tanxiaofei@huawei.com>
 
-The return value type of read/write function from unistd.h is ssize_t.
-It's signed normally, and return -1 on error. Fix incorrect use in the
-function read_ras_event_all_cpus().
+1. The return value of ARRAY_SIZE() is unsigned integer. It isn't right to
+compare it with a signed integer. This patch fix them.
 
-BTW, make setting buffer_percent as a separate function.
+2. Remove redundant header file and adjust the header files sequence.
 
-Fixes: 94750bcf9309 ("rasdaemon: Fix poll() on per_cpu trace_pipe_raw blocks indefinitely")
 Signed-off-by: Xiaofei Tan <tanxiaofei@huawei.com>
 Signed-off-by: Shiju Jose <shiju.jose@huawei.com>
 ---
- ras-events.c | 45 ++++++++++++++++++++++++++++++---------------
- 1 file changed, 30 insertions(+), 15 deletions(-)
+ non-standard-hisi_hip08.c    | 2 +-
+ non-standard-hisilicon.c     | 8 ++++----
+ ras-diskerror-handler.c      | 2 +-
+ ras-memory-failure-handler.c | 7 +++----
+ 4 files changed, 9 insertions(+), 10 deletions(-)
 
-diff --git a/ras-events.c b/ras-events.c
-index 2662467..d041828 100644
---- a/ras-events.c
-+++ b/ras-events.c
-@@ -368,10 +368,37 @@ static int get_num_cpus(struct ras_events *ras)
- #endif
- }
+diff --git a/non-standard-hisi_hip08.c b/non-standard-hisi_hip08.c
+index 4ef47ea..61f12eb 100644
+--- a/non-standard-hisi_hip08.c
++++ b/non-standard-hisi_hip08.c
+@@ -1029,7 +1029,7 @@ static struct ras_ns_ev_decoder hip08_ns_ev_decoder[] = {
  
-+static int set_buffer_percent(struct ras_events *ras, int percent)
-+{
-+	char buf[16];
-+	ssize_t size;
-+	int res = 0;
-+	int fd;
-+
-+	fd = open_trace(ras, "buffer_percent", O_WRONLY);
-+	if (fd >= 0) {
-+		/* For the backward compatibility to the old kernels, do not return
-+		 * if fail to set the buffer_percent.
-+		 */
-+		snprintf(buf, sizeof(buf), "%d", percent);
-+		size = write(fd, buf, strlen(buf));
-+		if (size <= 0) {
-+			log(TERM, LOG_WARNING, "can't write to buffer_percent\n");
-+			res = -1;
-+		}
-+		close(fd);
-+	} else {
-+		log(TERM, LOG_WARNING, "Can't open buffer_percent\n");
-+		res = -1;
-+	}
-+
-+	return res;
-+}
-+
- static int read_ras_event_all_cpus(struct pthread_data *pdata,
- 				   unsigned n_cpus)
+ static void __attribute__((constructor)) hip08_init(void)
  {
--	unsigned size;
-+	ssize_t size;
- 	unsigned long long time_stamp;
- 	void *data;
- 	int ready, i, count_nready;
-@@ -383,8 +410,6 @@ static int read_ras_event_all_cpus(struct pthread_data *pdata,
- 	int warnonce[n_cpus];
- 	char pipe_raw[PATH_MAX];
- 	int legacy_kernel = 0;
--	int fd;
--	char buf[16];
- #if 0
- 	int need_sleep = 0;
- #endif
-@@ -411,18 +436,8 @@ static int read_ras_event_all_cpus(struct pthread_data *pdata,
- 	 * Set buffer_percent to 0 so that poll() will return immediately
- 	 * when the trace data is available in the ras per_cpu trace pipe_raw
- 	 */
--	fd = open_trace(pdata[0].ras, "buffer_percent", O_WRONLY);
--	if (fd >= 0) {
--		/* For the backward compatibility to the old kernels, do not return
--		 * if fail to set the buffer_percent.
--		 */
--		snprintf(buf, sizeof(buf), "0");
--		size = write(fd, buf, strlen(buf));
--		if (size <= 0)
--			log(TERM, LOG_WARNING, "can't write to buffer_percent\n");
--		close(fd);
--	} else
--		log(TERM, LOG_WARNING, "Can't open buffer_percent\n");
-+	if (set_buffer_percent(pdata[0].ras, 0))
-+		log(TERM, LOG_WARNING, "Set buffer_percent failed\n");
+-	int i;
++	unsigned int i;
  
- 	for (i = 0; i < (n_cpus + 1); i++)
- 		fds[i].fd = -1;
+ 	for (i = 0; i < ARRAY_SIZE(hip08_ns_ev_decoder); i++)
+ 		register_ns_ev_decoder(&hip08_ns_ev_decoder[i]);
+diff --git a/non-standard-hisilicon.c b/non-standard-hisilicon.c
+index 2b00ed6..721821e 100644
+--- a/non-standard-hisilicon.c
++++ b/non-standard-hisilicon.c
+@@ -366,13 +366,13 @@ static int decode_hisi_common_section(struct ras_events *ras,
+ 	trace_seq_printf(s, "%s\n", hevent.error_msg);
+ 
+ 	if (err->val_bits & BIT(HISI_COMMON_VALID_REG_ARRAY_SIZE) && err->reg_array_size > 0) {
+-		int i;
++		unsigned int i;
+ 
+ 		trace_seq_printf(s, "Register Dump:\n");
+ 		for (i = 0; i < err->reg_array_size / sizeof(uint32_t); i++) {
+-			trace_seq_printf(s, "reg%02d=0x%08x\n", i,
++			trace_seq_printf(s, "reg%02u=0x%08x\n", i,
+ 					 err->reg_array[i]);
+-			HISI_SNPRINTF(hevent.reg_msg, "reg%02d=0x%08x",
++			HISI_SNPRINTF(hevent.reg_msg, "reg%02u=0x%08x",
+ 				      i, err->reg_array[i]);
+ 		}
+ 	}
+@@ -398,7 +398,7 @@ static struct ras_ns_ev_decoder hisi_section_ns_ev_decoder[]  = {
+ 
+ static void __attribute__((constructor)) hisi_ns_init(void)
+ {
+-	int i;
++	unsigned int i;
+ 
+ 	for (i = 0; i < ARRAY_SIZE(hisi_section_ns_ev_decoder); i++)
+ 		register_ns_ev_decoder(&hisi_section_ns_ev_decoder[i]);
+diff --git a/ras-diskerror-handler.c b/ras-diskerror-handler.c
+index 38d0a36..638cb4d 100644
+--- a/ras-diskerror-handler.c
++++ b/ras-diskerror-handler.c
+@@ -52,7 +52,7 @@ static const struct {
+ 
+ static const char *get_blk_error(int err)
+ {
+-	int i;
++	unsigned int i;
+ 
+ 	for (i = 0; i < ARRAY_SIZE(blk_errors); i++)
+ 		if (blk_errors[i].error == err)
+diff --git a/ras-memory-failure-handler.c b/ras-memory-failure-handler.c
+index 72c65de..c74541f 100644
+--- a/ras-memory-failure-handler.c
++++ b/ras-memory-failure-handler.c
+@@ -15,11 +15,10 @@
+ #include <stdio.h>
+ #include <stdlib.h>
+ #include <string.h>
+-#include <traceevent/kbuffer.h>
+-#include "ras-memory-failure-handler.h"
+ #include "ras-record.h"
+ #include "ras-logger.h"
+ #include "ras-report.h"
++#include "ras-memory-failure-handler.h"
+ 
+ /* Memory failure - various types of pages */
+ enum mf_action_page_type {
+@@ -99,7 +98,7 @@ static const struct {
+ 
+ static const char *get_page_type(int page_type)
+ {
+-	int i;
++	unsigned int i;
+ 
+ 	for (i = 0; i < ARRAY_SIZE(mf_page_type); i++)
+ 		if (mf_page_type[i].type == page_type)
+@@ -110,7 +109,7 @@ static const char *get_page_type(int page_type)
+ 
+ static const char *get_action_result(int result)
+ {
+-	int i;
++	unsigned int i;
+ 
+ 	for (i = 0; i < ARRAY_SIZE(mf_action_result); i++)
+ 		if (mf_action_result[i].result == result)
 -- 
 2.25.1
 
