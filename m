@@ -2,70 +2,123 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 757A6725BCB
-	for <lists+linux-edac@lfdr.de>; Wed,  7 Jun 2023 12:46:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C4DB72619B
+	for <lists+linux-edac@lfdr.de>; Wed,  7 Jun 2023 15:47:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239007AbjFGKpv (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Wed, 7 Jun 2023 06:45:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55998 "EHLO
+        id S235683AbjFGNrq (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Wed, 7 Jun 2023 09:47:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239237AbjFGKpp (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Wed, 7 Jun 2023 06:45:45 -0400
-Received: from mx1.zhaoxin.com (MX1.ZHAOXIN.COM [210.0.225.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D6E41BDC
-        for <linux-edac@vger.kernel.org>; Wed,  7 Jun 2023 03:45:36 -0700 (PDT)
-X-ASG-Debug-ID: 1686134727-086e2331360ea40001-QCVQLf
-Received: from ZXSHMBX3.zhaoxin.com (ZXSHMBX3.zhaoxin.com [10.28.252.165]) by mx1.zhaoxin.com with ESMTP id LnX0CAUL1HqirAtV (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NO); Wed, 07 Jun 2023 18:45:27 +0800 (CST)
-X-Barracuda-Envelope-From: TonyWWang-oc@zhaoxin.com
-X-Barracuda-RBL-Trusted-Forwarder: 10.28.252.165
-Received: from zxbjmbx1.zhaoxin.com (10.29.252.163) by ZXSHMBX3.zhaoxin.com
- (10.28.252.165) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.16; Wed, 7 Jun
- 2023 18:45:27 +0800
-Received: from tony-HX002EA.zhaoxin.com (10.32.65.162) by zxbjmbx1.zhaoxin.com
- (10.29.252.163) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.16; Wed, 7 Jun
- 2023 18:45:25 +0800
-X-Barracuda-RBL-Trusted-Forwarder: 10.28.252.165
-From:   Tony W Wang-oc <TonyWWang-oc@zhaoxin.com>
-X-Barracuda-RBL-Trusted-Forwarder: 10.29.252.163
-To:     <tglx@linutronix.de>, <mingo@redhat.com>, <bp@alien8.de>,
-        <dave.hansen@linux.intel.com>, <hpa@zytor.com>,
-        <tony.luck@intel.com>, <youquan.song@intel.com>,
-        <qiuxu.zhuo@intel.com>, <arnd@arndb.de>,
-        <aleksander.lobakin@intel.com>, <linux-edac@vger.kernel.org>,
-        <x86@kernel.org>, <linux-kernel@vger.kernel.org>,
-        <TonyWWang-oc@zhaoxin.com>
-CC:     <CobeChen@zhaoxin.com>, <TimGuo@zhaoxin.com>,
-        <LeoLiu-oc@zhaoxin.com>
-Subject: [PATCH 3/3] x86/mce: add Zhaoxin another CPU Vendor ID support
-Date:   Wed, 7 Jun 2023 18:45:27 +0800
-X-ASG-Orig-Subj: [PATCH 3/3] x86/mce: add Zhaoxin another CPU Vendor ID support
-Message-ID: <20230607104527.3298-3-TonyWWang-oc@zhaoxin.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20230607104527.3298-1-TonyWWang-oc@zhaoxin.com>
-References: <20230607104527.3298-1-TonyWWang-oc@zhaoxin.com>
+        with ESMTP id S235549AbjFGNrp (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Wed, 7 Jun 2023 09:47:45 -0400
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2041.outbound.protection.outlook.com [40.107.236.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56FD01993;
+        Wed,  7 Jun 2023 06:47:43 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=KLH2Q0eiKaWtDFBj/ZsCqTfpL7qxNKauekflhcvBQ2urWEnSz26aQyINhJhNVEr9aaHc7icjoOK40uS+82im89JsLjZqB3RMfq6SyoQsJp1ngW1HnocFqSo0H1abQysxZyrMw/KcjUx47GMt3tgctuwDU2QLrz0/+NFtudqAcgKVnj22ZmWEb8Jihs11+wt1ufOT0utdWINa8wUsIpDQ9tVvafwfV4S2ml9g7bqH1tVc7HlQBVeajdrTRrJwo9d0Sckbd4sw0+iiFEihg4jGQE5nd3LiQzu+zILECYVKD0UIn13O4aGJsNsSS5DSKljMkEgnFQ9l9wFwN2cxaxtM2Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=OzzQl71VrMSHAgl9EdVJ+7sxVrqoY7kWzLSrBUg8weQ=;
+ b=kEA2W5DcocY+O/LCOPZ0AunPaF7nrDLj9UjSNuijL9pftWv1SuZ4DWy8KTIAdDJxszxWCRlbfUkl6PBs86QozNR5JuO8Plzf3zyZtBNOvsh3/sQ6abmeTnQnE1cO/8RyKS7E1FSiRtHEvFDt25Am5ynmT/5bGSsGJmnIbKUU6MJyAJtgd91KNCowD+ZXmwn3L2v0ofDXUnCsfuY7luXsFyUd4iFg9TkkhY0fZWKTaJH7bs+Vy9h2c592QMXNTBOXUATs2TA6LxOHNqj0HEwawTiimUl2ug2S1xX5ki+nSqDAU+uw1nvsKalHOu2eGiMd0WCjfCZlo8QS2WWg8tQBGQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=OzzQl71VrMSHAgl9EdVJ+7sxVrqoY7kWzLSrBUg8weQ=;
+ b=sfjoBap4W0auTWD8CvX3o1lmiX2psaPAxCePcs4UukLuOnn731oMCcUdSlkZEI+7Y7PE84eTcHi5fGlUvNZKElwRt/moGVMNFjssdU9OW4prKWP8GT81g25DVhh8xlc4F6MFuaPuGwUz/g4ByPlFMrJgevlu9rYVXs/Ncdi70lA=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from BN8PR12MB3108.namprd12.prod.outlook.com (2603:10b6:408:40::20)
+ by SJ0PR12MB7458.namprd12.prod.outlook.com (2603:10b6:a03:48d::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.33; Wed, 7 Jun
+ 2023 13:47:40 +0000
+Received: from BN8PR12MB3108.namprd12.prod.outlook.com
+ ([fe80::ca6a:7f77:6bb7:17fb]) by BN8PR12MB3108.namprd12.prod.outlook.com
+ ([fe80::ca6a:7f77:6bb7:17fb%3]) with mapi id 15.20.6455.028; Wed, 7 Jun 2023
+ 13:47:40 +0000
+Message-ID: <0b8c44c1-1456-5d3a-5db7-00b67a5e4960@amd.com>
+Date:   Wed, 7 Jun 2023 09:47:37 -0400
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Cc:     yazen.ghannam@amd.com, linux-kernel@vger.kernel.org, bp@alien8.de,
+        mingo@redhat.com, mchehab@kernel.org, tony.luck@intel.com,
+        nchatrad@amd.com, Muralidhara M K <muralidhara.mk@amd.com>
+Subject: Re: [PATCH] EDAC/mc: Add new HBM3 memory type
+Content-Language: en-US
+To:     Muralidhara M K <muralimk@amd.com>, linux-edac@vger.kernel.org,
+        x86@kernel.org
+References: <20230523085550.391768-1-muralimk@amd.com>
+From:   Yazen Ghannam <yazen.ghannam@amd.com>
+In-Reply-To: <20230523085550.391768-1-muralimk@amd.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: BN8PR03CA0009.namprd03.prod.outlook.com
+ (2603:10b6:408:94::22) To BN8PR12MB3108.namprd12.prod.outlook.com
+ (2603:10b6:408:40::20)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.32.65.162]
-X-ClientProxiedBy: zxbjmbx1.zhaoxin.com (10.29.252.163) To
- zxbjmbx1.zhaoxin.com (10.29.252.163)
-X-Barracuda-Connect: ZXSHMBX3.zhaoxin.com[10.28.252.165]
-X-Barracuda-Start-Time: 1686134727
-X-Barracuda-Encrypted: ECDHE-RSA-AES128-GCM-SHA256
-X-Barracuda-URL: https://10.28.252.35:4443/cgi-mod/mark.cgi
-X-Virus-Scanned: by bsmtpd at zhaoxin.com
-X-Barracuda-Scan-Msg-Size: 3335
-X-Barracuda-BRTS-Status: 1
-X-Barracuda-Bayes: INNOCENT GLOBAL 0.0000 1.0000 -2.0210
-X-Barracuda-Spam-Score: -2.02
-X-Barracuda-Spam-Status: No, SCORE=-2.02 using global scores of TAG_LEVEL=1000.0 QUARANTINE_LEVEL=1000.0 KILL_LEVEL=9.0 tests=
-X-Barracuda-Spam-Report: Code version 3.2, rules version 3.2.3.109718
-        Rule breakdown below
-         pts rule name              description
-        ---- ---------------------- --------------------------------------------------
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN8PR12MB3108:EE_|SJ0PR12MB7458:EE_
+X-MS-Office365-Filtering-Correlation-Id: 7e9647ae-c177-4908-7f7d-08db675dc325
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: sXiyANJ1sgSTcCuXswYQaoQaUqhIvvFMlSFtKIBmMPOeEkEy+n+rMDLTcmKvyp+QLqd7RfDAFttkCeBQa9n/TC5O7ApjemJwqcbdC7zxxAesp6Xrg2cduV9HjYRKYGfLTjoXgWFLPVRHH5+6PjdiXiAgYkDPvmxs1DSVSqPAdW5MzvQbtfAvTU2XYhi9lVonlQ7+VoqGF5KzQ29Q5xqULMKEG0yhMtpwQ4igN2woMIguUMXnvegmXtGr+9xHEIYASj+u6kVMIVAuY2hDJAztnHL1EzeYj2f8hbhfbDYRkrc+ilmA0ncy3TlOsAK5yEfeQ2PjGS8z2trRNG/07P6hDhbDPKlaMVZn1dJ6LzRNp5vSwd9fxt47SBdNq43Pdnd7vSC/O8V7sWRhnCxzI+m8Ntw/piPZbrnnUqhgiYDtLEp6kypXqUiglVRcDVw/GwBxm/qi7L9wdYz5eNE0PdFaHEaixzo0nijmJNIIvCLT6qLUMUajv/uaO5njncb6PxGmGhpMQ2aUEiwp0dYHtbicb56i7VFBvu88ZayoKuO8a/NYR3hxlHwGBt4i6qS+rju4jL1F42gmcC1i8doPuIYegoJkXLlc5r8JUmh3V6f2JxXsrBQT4ssHsCnhwsW8MGioO3crakd/e1CEh2hEN7wz/A==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3108.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(376002)(366004)(396003)(39860400002)(136003)(346002)(451199021)(86362001)(478600001)(44832011)(8936002)(8676002)(316002)(41300700001)(66476007)(66556008)(66946007)(38100700002)(5660300002)(4326008)(31696002)(4744005)(6486002)(6666004)(36756003)(2906002)(6512007)(26005)(186003)(6506007)(31686004)(53546011)(2616005)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?QWtiWUdxbXl4VGk1L3EvUnJlZ0g4cmY4ZTFrMFcwcitQa3FxSzJPUmFGVFB1?=
+ =?utf-8?B?K3A4TEVKREY0dk1DL2dEd0R6bjR2aDVrUnQ2ZFMvVUxvb2xkVzdXZ0tIVGtK?=
+ =?utf-8?B?emZuTUxKVlV5aEwydjZGMEhmbFNSc1hOazkvUG1tdTU3bWF2Y0Vsa3VENUlz?=
+ =?utf-8?B?T0hqSmlnWjJ1eXU3TFQvR3hlR2NtVzJ3YTdMOEgrZ2tMaEtYRmUwRHV1OEE3?=
+ =?utf-8?B?RDdsdWxjblpqQTNNSk5MTnZjcFVuSTE0bElDdVJPQUtDZG0vTlVKeU5tRWJO?=
+ =?utf-8?B?R29ZQnJRdXk5Z1NGMWwvMXpOWDkyRjR6QkNJQVN2ZTViQVFrakV0RDdMaEps?=
+ =?utf-8?B?NGxQKzkxUzNKcFpJNTJJdURpcXhJbWN2QjZ0RzdObzJXRFpoTUF3MWk4V2sw?=
+ =?utf-8?B?RUJWRmEwVExYSEVEWFl6ZG1PY2g1ZlQwMlovYkh6ZG1QWGN0RFo0dmUxaGFB?=
+ =?utf-8?B?cjJuRS9mMFIrQlRZK0JhcG44WTZwd2RRQzlhZzRqT1VNN1JhS0srODlJMUpo?=
+ =?utf-8?B?R1lIbVFFZEpYeGJkV1I2NTh0dEdzbDhucTIxV1pTSzlQTlIrMzhmSWtvYmRT?=
+ =?utf-8?B?WGFxbllmOEN2Y0FBcUVQdWtQVExWRHp4MWtFcXQ3VzBES2NSMDlPeUYzbkUr?=
+ =?utf-8?B?WDJZZy9LY3VLeEZCamR3NEpPRHZXNmRscjBsMWJNc3ZscjU4QnhpWEJVOUZQ?=
+ =?utf-8?B?WkhzelZkWkkwTm5PSGdoaFp2ZUV4QVMxZ2lIUzVHQzRlV1hWaHBPd2VGTzBh?=
+ =?utf-8?B?R0x4L1Zmdy9wUjIwVG16clFCaDlhK0xabnpPTXpnL3ZYVXB6Y29yMXZTQkxm?=
+ =?utf-8?B?VW9PejRwdXFkUFN4QWJZUVhCQnVsODVWa0MrT3AzOWJpaG1ubUh6azYwUEZH?=
+ =?utf-8?B?R3pyb1RUdnlSMDJCUGJPWmV3VmIxeWs1dFdTMy9haTl0ZXF4M0VIQTM2UEJS?=
+ =?utf-8?B?d1cyMkNBTGVSWHIxNkp1dGExQ3B3d3NFUmt3TU9yeU5aOE0ycTB0TlZUNWts?=
+ =?utf-8?B?ZnFOWVlKWGVRZzZwQ0VXaGY2SnNWeFQ4enJBK1lWbVRrSVZGSlZtY3kvbkRV?=
+ =?utf-8?B?eTV5ZWt3bWU4NTRtSjlYK0piZndNcXlZbFBRaDJZbUV6azQxQXFGTTZSNmxF?=
+ =?utf-8?B?RzJDOEszOHpJelJwcmtZV1MzR3E0UGxBQ1lkSTV4cjZpUC9SRmFvNlM5bU52?=
+ =?utf-8?B?M3MvNy9EZ2xMblRhUGI3eFJoZ1VQRWZDRXByWFdxUjJaYVBDSDV6RjZmOVJw?=
+ =?utf-8?B?RllpNTBGaVkrRFpSS2tzcmphUFNxZWlmbWNDWE55N3oyaS9rZU9ucjlrTHhF?=
+ =?utf-8?B?Ny9XQXhrZ2s3aTBtWktWNkZ4UURvdGsxVkNuUXNvWW1SaXQ4aTBpVWJyZFZu?=
+ =?utf-8?B?Vk43cjFVMXRnN2tlcUNxTE5pWWdpOEJaVklJZVJzTmpvOCtFVGtkNnZsTXZQ?=
+ =?utf-8?B?RWRndUJYdDR0amljRGFtbjMvYmlvK2R0VUFXRWswZzBNbjhGUmRrOEgzVDRm?=
+ =?utf-8?B?Q1J2NnNqYzVuc0JiUkJ5ZTVzd0h4L05UTWN1NVFBemszNEsya1hKMkF0VGM3?=
+ =?utf-8?B?Yk90aC9jMkR0U1ZOMmlvcytjNkV6WllObzBZN255OUp3WjAyMFdrcFprY0Yr?=
+ =?utf-8?B?TGp5WXArTzlzT3FISHJQaDZnWkZ6dkp4SkNlbTlHaFpJKzVmem9KNjJ2YmJL?=
+ =?utf-8?B?TlhvN1RjMFlOVXgvdURTN0xMVE94SlFWd2o1Z1k2QlR1RGZ5NEpnYytHNXhJ?=
+ =?utf-8?B?S0hpM3Y1a2pmUG9rZkdVVnpES3NnUzRJQkoxdEEyajZ3WE1SWGcwaCs2UEtm?=
+ =?utf-8?B?MGEvVHR2cjE0dUNXVDB5SzFBQjlpWmlYbHNKVXB5VENLMU9PcGtpdWx6R0pT?=
+ =?utf-8?B?a3RIcXB5WCtjejJNWTY5Tkpva2k1YWNsNFRFbHM4M0JlVHMxcHFlai9ha2Nh?=
+ =?utf-8?B?eDl2NkZFK3hHQjgvcmhidHo5TFlCdjJMSWNXTmRuRytZZ0lVaVlzQ3VscTBK?=
+ =?utf-8?B?a0g2b2daM1FCQ0xXU01uZDEwdjA4Vmg1MTZBcXJaQ1RySXJ4NURXQmRZTTVF?=
+ =?utf-8?B?VGxubVVmdHZuamFlbXF1ZzE4QkZndG1zVmdPVFRqbm4yckpoYUJJVlZtOWpD?=
+ =?utf-8?Q?r89ZXm4Z/hsOfS2KU12cNfxf3?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7e9647ae-c177-4908-7f7d-08db675dc325
+X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3108.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Jun 2023 13:47:40.8470
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 1fUtDBGqsdiHeuIX2HM8IjDedoOAkrCg5WWiuWbhzU1dF94TarjjzXlWkOU2g4Boc0WJwrMHkJhdcqbdI5R8Bw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR12MB7458
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,96 +126,26 @@ Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-Add Zhaoxin CPUs with Vendor ID "CentaurHauls" support for CMCI/LMCE.
+On 5/23/23 4:55 AM, Muralidhara M K wrote:
+> From: Muralidhara M K <muralidhara.mk@amd.com>
+> 
+> Add a new entry to 'enum mem_type' and a new string to 'edac_mem_types[]'
+> for HBM3 (High Bandwidth Memory Gen 3) new memory type.
+> 
+> Signed-off-by: Muralidhara M K <muralidhara.mk@amd.com>
+> ---
+>  drivers/edac/edac_mc.c | 1 +
+>  include/linux/edac.h   | 3 +++
+>  2 files changed, 4 insertions(+)
+>
 
-Signed-off-by: Tony W Wang-oc <TonyWWang-oc@zhaoxin.com>
----
- arch/x86/kernel/cpu/mce/core.c  | 15 +++++++++++----
- arch/x86/kernel/cpu/mce/intel.c |  3 ++-
- 2 files changed, 13 insertions(+), 5 deletions(-)
+Hi Murali,
 
-diff --git a/arch/x86/kernel/cpu/mce/core.c b/arch/x86/kernel/cpu/mce/core.c
-index f919fa3ab69d..38228021fe99 100644
---- a/arch/x86/kernel/cpu/mce/core.c
-+++ b/arch/x86/kernel/cpu/mce/core.c
-@@ -466,7 +466,8 @@ int mce_usable_address(struct mce *m)
- 
- 	/* Checks after this one are Intel/Zhaoxin-specific: */
- 	if (boot_cpu_data.x86_vendor != X86_VENDOR_INTEL &&
--	    boot_cpu_data.x86_vendor != X86_VENDOR_ZHAOXIN)
-+	    boot_cpu_data.x86_vendor != X86_VENDOR_ZHAOXIN &&
-+	    boot_cpu_data.x86_vendor != X86_VENDOR_CENTAUR)
- 		return 1;
- 
- 	if (!(m->status & MCI_STATUS_MISCV))
-@@ -491,6 +492,7 @@ bool mce_is_memory_error(struct mce *m)
- 
- 	case X86_VENDOR_INTEL:
- 	case X86_VENDOR_ZHAOXIN:
-+	case X86_VENDOR_CENTAUR:
- 		/*
- 		 * Intel SDM Volume 3B - 15.9.2 Compound Error Codes
- 		 *
-@@ -1192,7 +1194,8 @@ static noinstr bool mce_check_crashing_cpu(void)
- 
- 		mcgstatus = __rdmsr(MSR_IA32_MCG_STATUS);
- 
--		if (boot_cpu_data.x86_vendor == X86_VENDOR_ZHAOXIN) {
-+		if (boot_cpu_data.x86_vendor == X86_VENDOR_ZHAOXIN ||
-+			boot_cpu_data.x86_vendor == X86_VENDOR_CENTAUR) {
- 			if (mcgstatus & MCG_STATUS_LMCES)
- 				return false;
- 		}
-@@ -1466,7 +1469,8 @@ noinstr void do_machine_check(struct pt_regs *regs)
- 	 * on Intel, Zhaoxin only.
- 	 */
- 	if (m.cpuvendor == X86_VENDOR_INTEL ||
--	    m.cpuvendor == X86_VENDOR_ZHAOXIN)
-+	    m.cpuvendor == X86_VENDOR_ZHAOXIN ||
-+	    m.cpuvendor == X86_VENDOR_CENTAUR)
- 		lmce = m.mcgstatus & MCG_STATUS_LMCES;
- 
- 	/*
-@@ -1981,6 +1985,7 @@ static void __mcheck_cpu_init_vendor(struct cpuinfo_x86 *c)
- 		break;
- 
- 	case X86_VENDOR_ZHAOXIN:
-+	case X86_VENDOR_CENTAUR:
- 		mce_zhaoxin_feature_init();
- 		mce_adjust_timer = cmci_intel_adjust_timer;
- 		break;
-@@ -1998,6 +2003,7 @@ static void __mcheck_cpu_clear_vendor(struct cpuinfo_x86 *c)
- 		break;
- 
- 	case X86_VENDOR_ZHAOXIN:
-+	case X86_VENDOR_CENTAUR:
- 		mce_zhaoxin_feature_clear();
- 		break;
- 
-@@ -2282,7 +2288,8 @@ static void vendor_disable_error_reporting(void)
- 	if (boot_cpu_data.x86_vendor == X86_VENDOR_INTEL ||
- 	    boot_cpu_data.x86_vendor == X86_VENDOR_HYGON ||
- 	    boot_cpu_data.x86_vendor == X86_VENDOR_AMD ||
--	    boot_cpu_data.x86_vendor == X86_VENDOR_ZHAOXIN)
-+	    boot_cpu_data.x86_vendor == X86_VENDOR_ZHAOXIN ||
-+	    boot_cpu_data.x86_vendor == X86_VENDOR_CENTAUR)
- 		return;
- 
- 	mce_disable_error_reporting();
-diff --git a/arch/x86/kernel/cpu/mce/intel.c b/arch/x86/kernel/cpu/mce/intel.c
-index 95275a5e57e0..92f7104c86ad 100644
---- a/arch/x86/kernel/cpu/mce/intel.c
-+++ b/arch/x86/kernel/cpu/mce/intel.c
-@@ -86,7 +86,8 @@ static int cmci_supported(int *banks)
- 	 * makes sure none of the backdoors are entered otherwise.
- 	 */
- 	if (boot_cpu_data.x86_vendor != X86_VENDOR_INTEL &&
--	    boot_cpu_data.x86_vendor != X86_VENDOR_ZHAOXIN)
-+	    boot_cpu_data.x86_vendor != X86_VENDOR_ZHAOXIN &&
-+	    boot_cpu_data.x86_vendor != X86_VENDOR_CENTAUR)
- 		return 0;
- 
- 	if (!boot_cpu_has(X86_FEATURE_APIC) || lapic_get_maxlvt() < 6)
--- 
-2.17.1
+This patch is completely within EDAC, so it's not necessary to copy the
+x86 or TIP maintainers.
 
+Also, this change is not currently used, so the patch should be included
+as part of a set when it is needed.
+
+Thanks,
+Yazen
