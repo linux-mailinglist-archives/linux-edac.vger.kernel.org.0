@@ -2,173 +2,173 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FCB172625B
-	for <lists+linux-edac@lfdr.de>; Wed,  7 Jun 2023 16:08:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2AE2572727C
+	for <lists+linux-edac@lfdr.de>; Thu,  8 Jun 2023 00:56:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239831AbjFGOIz (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Wed, 7 Jun 2023 10:08:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43646 "EHLO
+        id S233333AbjFGW4o (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Wed, 7 Jun 2023 18:56:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235770AbjFGOIz (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Wed, 7 Jun 2023 10:08:55 -0400
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2052.outbound.protection.outlook.com [40.107.94.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFD241FD5;
-        Wed,  7 Jun 2023 07:08:29 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=KCmxOSP8ac3FpLSKrFtlXlJMO417JTMFZrlcU6NanlL6tMFlPZ3DwnG9K9rJbVNGLhSmf+4nbtQ4GAeItFjXMDaumklqVkX3YHovU938vWqEMbn8e4TD6EWB4P/hOI0TgWONWoqkMIYQ6uNPTraIPjr4I3rlwi7ahJ6q4TESYGgFDYfKm3/stSv1ybRTelLsItR8sYnLPHHJ5u83kEEaIFR9rsAk3vKwBFoq/Gpi5ApjKRKjR1O6WxQIdgx+5lo5LFiSNuAzfP7ifpAzfNLC/R+2fXuNa68u55lRCT6o1Kkkox0c9haXReOJz35NowYAhaHZuhr4H/MBn1xcsTIptA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=HmKXde6l//YB9SvA7td1OEZ0SiGiJJ2TVtY0yfV9bH4=;
- b=V0qC+7LUe/mLh0ShZPvN7bm8uyJjxcc1VRPJnyt38jUZ/gdP6f1VJtQXn+MEDgZAGw5RVThYKlnXp8P0Cxp/vpJwb6ozws5gehv8y/SHW4j/BQIsDzLF0kKVR9HFY3i6JuXPquDOf9l6VGwh5rb1EZDSujCZZU9yYV24AHa17LGWeVnpXs+Z52TpHIy6kKV7QsxiAw7RfrP9UcHrnSPVmzRCHb5NKcFz+xLeV/9cPphAXuyPoT41+PGqZdqkIe63lfhlwgIuwtRvOoJcU6xFjW3+0fBml2PWPzi4UE9860YdOnZJOc9oo2NhE0qZlanQUerKXV0sY+pkHgyOIQPbZg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=HmKXde6l//YB9SvA7td1OEZ0SiGiJJ2TVtY0yfV9bH4=;
- b=KQrLIYgF74FexpUATK4FJ+9XPJyNLKl6QzquUc0bfklbO02P7nWvGmC7pPjoNV57QeayDUk8Got25ms70aQgK23xttqgMu/bCGUTGQfs2ky6USvlsWQtUa3z6mwj23EARnA0Yol2vu9nNqi1EJV4iULBBLXjxqxxOh7t+W98mCk=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from BN8PR12MB3108.namprd12.prod.outlook.com (2603:10b6:408:40::20)
- by MN2PR12MB4238.namprd12.prod.outlook.com (2603:10b6:208:199::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.36; Wed, 7 Jun
- 2023 14:07:52 +0000
-Received: from BN8PR12MB3108.namprd12.prod.outlook.com
- ([fe80::ca6a:7f77:6bb7:17fb]) by BN8PR12MB3108.namprd12.prod.outlook.com
- ([fe80::ca6a:7f77:6bb7:17fb%3]) with mapi id 15.20.6455.028; Wed, 7 Jun 2023
- 14:07:52 +0000
-Message-ID: <c84f5983-930d-0bbe-b7fe-01875c045815@amd.com>
-Date:   Wed, 7 Jun 2023 10:07:49 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Cc:     yazen.ghannam@amd.com, linux-kernel@vger.kernel.org, bp@alien8.de,
-        mingo@redhat.com, mchehab@kernel.org, tony.luck@intel.com,
-        nchatrad@amd.com, Muralidhara M K <muralidhara.mk@amd.com>
-Subject: Re: [PATCH] EDAC/mce_amd: Remove SMCA Extended Error code
- descriptions
-Content-Language: en-US
-To:     Muralidhara M K <muralimk@amd.com>, linux-edac@vger.kernel.org,
-        x86@kernel.org
-References: <20230523085550.391768-1-muralimk@amd.com>
- <20230523085550.391768-2-muralimk@amd.com>
-From:   Yazen Ghannam <yazen.ghannam@amd.com>
-In-Reply-To: <20230523085550.391768-2-muralimk@amd.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: BN0PR04CA0170.namprd04.prod.outlook.com
- (2603:10b6:408:eb::25) To BN8PR12MB3108.namprd12.prod.outlook.com
- (2603:10b6:408:40::20)
+        with ESMTP id S233206AbjFGW4R (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Wed, 7 Jun 2023 18:56:17 -0400
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7312213D
+        for <linux-edac@vger.kernel.org>; Wed,  7 Jun 2023 15:56:14 -0700 (PDT)
+Received: by mail-ed1-x52b.google.com with SMTP id 4fb4d7f45d1cf-5149c76f4dbso2563729a12.1
+        for <linux-edac@vger.kernel.org>; Wed, 07 Jun 2023 15:56:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686178573; x=1688770573;
+        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=lwmqmz3SLTAm/5XHn54kA2Qkz1KiGdBlOiEDAaxIk1A=;
+        b=Vs2O3FJiGjOSsYkVdVVwQ8usUW0Na2c1JkRxzODLflg+DQkLHMSvDUTON1eOgoDd5p
+         icZX7jz85gtt675JIQoCg2qYDeGvdgrlIlnYsBqJCXY6A+wwUH4Pzx63GHJ70nVIOHpq
+         q8q4NwQWw9O7Ka1WcBWhtc95lIatv8n89RH1nSmTaJwpto6eirRVCg2zeJDk+R5CA+KG
+         ThXmo+FVEx7rMo/R9HxHw2025VcLT8t8EGl5ZKxML6giyeJpWVWuCmdmhwVTBmwvl+lO
+         4Pyzwb5XpDz845p07KZNMlaubUmeRc4L02Q7u93h4SKEXfacqvhkSvKzrJS0PjXfy7pG
+         yWrw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686178573; x=1688770573;
+        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=lwmqmz3SLTAm/5XHn54kA2Qkz1KiGdBlOiEDAaxIk1A=;
+        b=VTPb580HnAoHN/MheUCPhcMOimcGd1F0PUXejUIC8rsTv0EATCyCeDVnHU16CFYzwx
+         nrQfpUk3g7AV2fXZ8IaU2JzS0gV+srXuU8TQtBm4YHsOjyh0EKTNprL9rE2dS4LPr2aE
+         KQoMHtYLQWHUXOtCSzM/seq/dI1wtU6CeR3sfCUP/nJgFWtJSzBICqyfISNAEO3WDkYo
+         nJb+DbiesJUqLs6UrYs793AD+O0t0s+OUhJwqxCvk6ZVrG+g2oPO551BuHZmjb1POTxn
+         2jDfltqOofNipJCyRDEEnIsWCwBLV1+h4TzZSy3JxwLGAar7UiHUffKmQOYLPbwEZlT2
+         2u5w==
+X-Gm-Message-State: AC+VfDyVs9ET1nuduVLpYvhVpmR4pQT2jURjXLb1nDmjPnz7EQEjSB8/
+        6i5ZcfTjgyIMYQHt6jNY5dI1WEFpSaEe46/l1uNmaacX8vq+2A==
+X-Google-Smtp-Source: ACHHUZ5lc5uNG0II8N/7owu97MNYayebO2FU5BOHITGRdvZTCXANx0Yi1fv5Th/dfzvi0zTuZAaSCLE67mXxoPl8ud4=
+X-Received: by 2002:a17:907:8a08:b0:973:ad8f:ef9b with SMTP id
+ sc8-20020a1709078a0800b00973ad8fef9bmr8009971ejc.5.1686178552696; Wed, 07 Jun
+ 2023 15:55:52 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN8PR12MB3108:EE_|MN2PR12MB4238:EE_
-X-MS-Office365-Filtering-Correlation-Id: a59edfe3-4d1c-4014-bc9f-08db6760950f
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 7pAK2C4X70WwcLzG1RsR6JNi0dSr0WG6bNXWQyNwrxiMI+pZi743Uo2joxiK4Jsj9dthB9ri0bdA9MNq+OyEz541fBhkM+Y2It+RNqeZGxXtN3oX/U1HpEnsxfNv0POnTV9He0waq941BYE4RNYZPN498msQZmqM8yfz2mB/FB8UkKxmuSN8Lw/6ifZbjQ6V4POB4TQICnAvb5j0P0yEeelhOFBrKTckgDuLFZ3Odnm3PhhtvoncLcBHA0AwYI3T4YOzY7b1sRanrCC4JIdMhQcf9SMZA2DOygS7D9bisXLRWioYXO33vRaYLgMlK+fOJ3SmBuVIuujL2g/360pmy+EHqKMUfPYUgdwS/52TiooRYXgmywHGlo9w4RkBG90UosuHqeG1lkp7rZ9jpI13VYJum+rQ3odj6tYx/+Rb+brwy0rwO0Xd2tNGN8DLnZMjBNnzGAp1MRzC5eFu0dshYwi1Rpb30zjdeixDYJ5uTt4myDlr6isOGLbXRsY3mpYbbs/zT5yZO/RPxzcdO8u0W/f2nlMnBZY65vy0kMXBqKNstcVAyio7gDG1ZikynzmlFR2P7rmpdoycsPWhBafVWuDxLJUQZTAPYbOg5VA4lhT4V6iUtDKxN8W6OuHfT5BKEzoN8+vnLRVXVVNjO4VoAw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3108.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(346002)(136003)(376002)(366004)(39860400002)(451199021)(6486002)(6666004)(2906002)(66946007)(66556008)(66476007)(36756003)(38100700002)(5660300002)(8936002)(86362001)(8676002)(44832011)(31696002)(41300700001)(4326008)(316002)(478600001)(2616005)(53546011)(26005)(6512007)(6506007)(31686004)(186003)(83380400001)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?Z3ZFYVBlTTB3VTdvNlkvM2s4d1RDVTc5UzNnMmZ6MlNWYkxZNnZTbjlBQzYr?=
- =?utf-8?B?dnBYb3ptZDVMY2w4bGRxdHB2bGxTNGI2S1d3QlZIRWZuRzhMMmNCTnF1cmZh?=
- =?utf-8?B?d2hrN3FpOTNZMHdRVllrMCtreHJ3UDh1ZkVuQmtRd29mcGovaDZHaFBEb1hV?=
- =?utf-8?B?MGM1YTBQVGwvVG1LUnluaXkwOWNxTFE2UmVPTjJxUjZDeWdwb25JblJZbmVC?=
- =?utf-8?B?L01SN2xvdE5MdlBIUkN5RjdtK0lGOG95R3N3YmN0cS9aM2dlNmw5V2VCR3Fa?=
- =?utf-8?B?c0l5cFZ3N1FEWGdKdjFWWnAvV2diRThPU2FpZHVqMlJmcXVFbUdjZFZXMWJY?=
- =?utf-8?B?VmxvbC9YcTZSQWxlaTJOcDRIVFY3dHZYTmxkQ0JyL2QzYnBTaDd3YytrRkJC?=
- =?utf-8?B?TDFvYmlnS0pxMjRNZkhLZ3VWaEF0d2RFWGFrNDRhU3ZaR2JmcTloRW5MSUVl?=
- =?utf-8?B?bFFoYzVXem1uVURoNHl4SDRnd0F2enVqdW83V2ZuTTdjb0NJcmxRMkEzRVk3?=
- =?utf-8?B?c3RKbkN4aSsxQ252T0JjLzhGRE8vbk00NlFBcjhXeVd5VkZyV0NjOWEzRG1Q?=
- =?utf-8?B?K2VEaEQrcS9qNGpCWFJPRGJBc0hUMHlQanlTREZJa2dJOFV4STdNZjRMRlhQ?=
- =?utf-8?B?ZzNsMitaalFsZlhHelBSVk5nbVJnMnFmdTY4RlpPV3NoaXE0MWJGUnVlejNu?=
- =?utf-8?B?SVNxZlBubFA1S2FuRFBXd2J2MFRwKzRrRldBRnZsOTNjS3dHR0czNWJUVmRa?=
- =?utf-8?B?UVJ0MzlqMFl4NEgvTHpnVUhvaTB5QTFsWWZxdVhvQjZGeFRYS3pjck15djMv?=
- =?utf-8?B?bFhRRGxOZ05lZXBmak5WS0xTeW9aNm9oVE1nMFp2U1ZCcytGa2p0YkRUWTJi?=
- =?utf-8?B?WUFaS0xHeU1icVFJc3NiWm9ZNC9TVldlNHhTWWlXeHErT0xKeFJJSVRjTkpy?=
- =?utf-8?B?MXk5M0hnOGxVOFBoRXpuWFFWdiswRkFCV0gwWFhSa2V2WkI1blpaN00zVWZj?=
- =?utf-8?B?cVNuQmlIM1NZWU8zaW04YmRrdERNeURrdlk0ejVlTFFlcXFMQ1lOVHlZS3VI?=
- =?utf-8?B?K3pYZ1pzYWdvZ2VaTDEwMTZ2VVBBM25sWUdScTZmZDN1Vkx3OFZqaVdqc25X?=
- =?utf-8?B?QU1LUG5lWkpobmIyMXNLRE5NQ2NyVk1wanc4K2NmSXV0ZjRxdnd0KzRFcGVN?=
- =?utf-8?B?ZHR0UkpEWEJxaUtUMUVneS9MdWlBMmdPL0FEakNoYUN0VDd3NWRueTBGaFRO?=
- =?utf-8?B?Slc2dC8rMlV3SGRLYTIzdlljNlBMWHdEM0hJa0R1V2Fjd2VkWHhZdXNpQkE5?=
- =?utf-8?B?dzFrMW9sdlYwRkZndkFRRlZDZzUzcjZ3YzJpNzFEZnpGVVNaOHVvQTRsOXpw?=
- =?utf-8?B?RDg0ZVlzbDBiOHBINEQ4OTEzaTFmRmhqaVRINVhpQ2NaTHpNMmNFcGdUMUVT?=
- =?utf-8?B?eEFsSk5kOCsyYVhmOC94MFV3VWsydkF3M3BwMWc2djgzZmlpeGVyT29jWlI5?=
- =?utf-8?B?REEvRW1QSGdQR3BBYUpkVitpNGRKVWZwSFRnWUlXSVRaQmg0VHhuWFBFMXNI?=
- =?utf-8?B?M3dEaEtkeE5mMWpKOHBRTzkvVXJLZDRjQmZQSjhBQllXbms2aW5KYXJobGFI?=
- =?utf-8?B?YjdxcStjSHpINnlyaDRVZFliRCtEYzZSTHkzSitzRVFTLzRMK2EyV0hmN1J2?=
- =?utf-8?B?NHJIaThTMDUwTlFjeU9pRHNOWWIzaXVleC80dEpJNXhqbWtkeVllL0FCWm5v?=
- =?utf-8?B?QWdLajJ4Q1duNzh4UzRtKzRXU0hQVWRmMEQrRGYwNTl2R3VVOGdMRkorY0wx?=
- =?utf-8?B?Y2ErNC9lMWV4Zlh2Vk1saWpGdnNaUmhDVVZhSzBCeFplQkI3bFgzQThVWk5Z?=
- =?utf-8?B?eVJTcExDOGFhVzJ4aTNxcmFrT3pZTnBCQm9hTjkyb05VcFczTlF1RHZRUGtN?=
- =?utf-8?B?RnNDNndGdzQxbENoNnU1a3Z6R1prMStaZERFMVo4N1FINDlCZjVXZWFaVloy?=
- =?utf-8?B?dVFUL1VLd3lNTjh6a2w2NzFTV0d4SC9FaDNYTEVKbzFVMnI5K0daaE5GZ1ox?=
- =?utf-8?B?QWFoazNmOTdKOXFPTHpFdUdOZDZvMzZVSHZtOE5kdmZpaWFEU2tWWEg4REFx?=
- =?utf-8?Q?pyqCH0YFWENoYOvHa6bZwZCHk?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: a59edfe3-4d1c-4014-bc9f-08db6760950f
-X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3108.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Jun 2023 14:07:51.9750
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: MGhFGhSV509R3YmLG+aCgdWT+0cM0XybYuH8xePS3ADy6d51PgRV/XcCC2KrZ/RAvulupUvvt7bDcxX1aMMy0Q==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB4238
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+Received: by 2002:a54:2409:0:b0:217:72a9:f646 with HTTP; Wed, 7 Jun 2023
+ 15:55:52 -0700 (PDT)
+Reply-To: unitednationcompensationcoordinatortreasury@hotmail.com
+From:   "UNITED NATION DEPUTY SECRETARY-GENERAL (U.N)" 
+        <successikolo@gmail.com>
+Date:   Wed, 7 Jun 2023 15:55:52 -0700
+Message-ID: <CADFNGJ8EwbrtVXBod+yuxOPvcNStu1uNZVywED0Ra-jpG92ATw@mail.gmail.com>
+Subject: CONTACT DHL OFFICE IMMEDIATELY FOR YOUR ATM MASTER CARD 1.5 MILLION,
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: Yes, score=6.6 required=5.0 tests=ADVANCE_FEE_3_NEW_FRM_MNY,
+        BAYES_50,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        FILL_THIS_FORM,FORM_FRAUD_5,FREEMAIL_FROM,FREEMAIL_REPLYTO,
+        LOTS_OF_MONEY,MONEY_FORM,MONEY_FRAUD_5,MONEY_FREEMAIL_REPTO,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,SUBJ_ALL_CAPS,
+        T_FILL_THIS_FORM_LOAN,T_SCC_BODY_TEXT_LINE,UNDISC_FREEM,UNDISC_MONEY
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2a00:1450:4864:20:0:0:0:52b listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5000]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [successikolo[at]gmail.com]
+        *  0.5 SUBJ_ALL_CAPS Subject is all capitals
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        *  0.0 LOTS_OF_MONEY Huge... sums of money
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  2.7 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  0.2 MONEY_FREEMAIL_REPTO Lots of money from someone using free
+        *      email?
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+        *  0.0 FILL_THIS_FORM Fill in a form with personal information
+        *  0.0 T_FILL_THIS_FORM_LOAN Answer loan question(s)
+        *  0.0 MONEY_FORM Lots of money if you fill out a form
+        *  1.3 UNDISC_MONEY Undisclosed recipients + money/fraud signs
+        *  0.0 ADVANCE_FEE_3_NEW_FRM_MNY Advance Fee fraud form and lots of
+        *      money
+        *  0.2 MONEY_FRAUD_5 Lots of money and many fraud phrases
+        *  0.0 FORM_FRAUD_5 Fill a form and many fraud phrases
+X-Spam-Level: ******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On 5/23/23 4:55 AM, Muralidhara M K wrote:
-> From: Muralidhara M K <muralidhara.mk@amd.com>
-> 
-> On AMD systems with Scalable MCA, each machine check error of a SMCA bank
-> type has an associated bit position in the bank's control (CTL) register.
-> 
-> An error's bit position in the CTL register is used during error decoding
-> for offsetting into the corresponding bank's error description structure.
-> As new errors are being added in newer AMD systems for existing SMCA bank
-> types, the underlying SMCA architecture guarantees that the bit positions
-> of existing errors are not altered.
-> 
-> However, on some AMD systems some of the existing bit definitions in the
-> CTL register of SMCA bank type are reassigned without defining new HWID
-> and McaType. Consequently, the errors whose bit definitions have been
-> reassigned in the CTL register are being erroneously decoded.
-> 
-> Remove SMCA Extended Error Code descriptions. This avoids decoding issues
-> for incorrectly reassigned bits, and avoids the related maintenance burden
-> in the kernel. This decoding can be done in external tools or by referring
-> to AMD documentation. The bank type and Extended Error Code value for an
-> error will continue to be printed as a convenience
->
+UNITED NATION DEPUTY SECRETARY-GENERAL.
 
-Minor nit: there should be a (.) at the end of the last sentence.
+This is to official inform you that we have been having meetings for
+the past three (3) weeks which ended two days ago with MR. JIM YONG
+KIM the world bank president and other seven continent presidents on
+the congress we treated on solution to scam victim problems.
 
-> Signed-off-by: Muralidhara M K <muralidhara.mk@amd.com>
-> ---
->  drivers/edac/mce_amd.c | 480 -----------------------------------------
->  1 file changed, 480 deletions(-)
-> 
+ Note: we have decided to contact you following the reports we
+received from anti-fraud international monitoring group your
+name/email has been submitted to us therefore the united nations have
+agreed to compensate you with the sum of (USD$ 1.5 Million) this
+compensation is also including international business that failed you
+in the past due to government problems etc.
 
-This patch is completely within EDAC, so it's not necessary to copy the
-x86 or TIP maintainers.
+ We have arranged your payment through our ATM Master Card and
+deposited it in DHL Office to deliver it to you which is the latest
+instruction from the World Bank president MR. JIM YONG KIM, For your
+information=E2=80=99s, the delivery charges already paid by U.N treasury, t=
+he
+only money you will send to DHL office south Korea is
+($500). for security keeping fee, U.N coordinator already paid for
+others charges fees for delivery except the security keeping fee, the
+director of DHL refused to collect the security keeping fee from U.N
+coordinator, the Director of DHL office said that they don=E2=80=99t know
+exactly time you will contact them to reconfirm your details to avoid
+counting demur-rage that is why they refused collecting the ($500) .
+for security keeping fee.
 
-Also, this patch was sent in-reply-to another patch that is not related.
-Each of these can be sent independently.
+ Therefore be advice to contact DHL Office agent south Korea. Rev:John
+Lee Tae-seok
+who is in position to deliver your ATM
+Master Card to your location address, contact DHL Office immediately
+with the bellow email & phone number as listed below.
 
-Otherwise, this looks good to me.
+ Contact name: John Lee Tae-seok
 
-Reviewed-by: Yazen Ghannam <yazen.ghannam@amd.com>
+ Email:( dhlgeneralheadquartersrepublic@gmail.com )
 
-Thanks,
-Yazen
+ Do not hesitate to Contact Rev: John Lee Tae-seok, as soon as you
+
+ read this message. Email:( dhlgeneralheadquartersrepublic@gmail.com )
+
+ Make sure you reconfirmed DHL Office your details ASAP as stated
+below to avoid wrong delivery.
+
+ Your full name..........
+
+ Home address:.........
+
+ Your country...........
+
+ Your city..............
+
+ Telephone......
+
+ Occupation:.......
+
+ Age:=E2=80=A6=E2=80=A6=E2=80=A6=E2=80=A6=E2=80=A6=E2=80=A6..
+
+ Let us know as soon as possible you receive your ATM MasterCard
+for proper verification.
+
+ Regards,
+
+ Mrs Vivian kakadu.
+
+ DEPUTY SECRETARY-GENERAL (U.N)
