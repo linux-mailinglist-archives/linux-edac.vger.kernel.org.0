@@ -2,100 +2,78 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9757972E574
-	for <lists+linux-edac@lfdr.de>; Tue, 13 Jun 2023 16:16:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A204572EA32
+	for <lists+linux-edac@lfdr.de>; Tue, 13 Jun 2023 19:46:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242463AbjFMONX (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Tue, 13 Jun 2023 10:13:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38256 "EHLO
+        id S232428AbjFMRqO (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Tue, 13 Jun 2023 13:46:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242798AbjFMONP (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Tue, 13 Jun 2023 10:13:15 -0400
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2089.outbound.protection.outlook.com [40.107.220.89])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77121171D;
-        Tue, 13 Jun 2023 07:12:43 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Q0+iO20cVOmgERwuUNwJYKKYuqHJPcowOK3cnjlqL5TNjqm0FPd+NgSskpPl+xfptCc2B661zm+UMdzoI7gT12cK32bPYsJWt6ootPRXHAN/LztrJGdFlCs4g9uGTXhvGfwo8gxKU/8F28lzZD6KkSHQKgKiB3jbmY8L5yzvQy5Gm6Y+8t17kF7ZBC03iXQm8KBvX9FTfyt8oDy1Hf5TCvy7heZgBNm3PRoo0LU7IF+B93UxXnHq1IPPb9Kt5pq3KPpX7AV3ytcFvl4CqT7tW/E4ID2lARk4vrDJtXRkVZwr+RD2Ibu0mXO1hV9ZkTaoBlNrcg3D1oLLJLayYjPNvg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=OknFUpUS6NV3oSK+Q5pt3OHk6ugygcYsNI6Yrx1Ldqc=;
- b=VGg38zn96HrqQzhYInZYhx+AZtX55svkU97doygYfuu/NnUZJV0s3JB3EynuCV53lEg+PzbW+82Y3a0GAiUFU69ZVS46EP5YSOkyXFhJ/OZbE2Ccvry3reI4GUxPkhDw76l53Irm9GiOIu2dqfJaErHoOt2Ihn75VuK4TetbVrdVGuM/14sGd+JvVVx0V316vbQSpCSayZkgcLY95hNNUfo4rGhBjbJhdmUtScDslFlEb4OfcWlQWKLevBqC7O0NOggIPXeAUPn1NQmgZiiCY5PwtbRfS+SQ+rsoI1HKuW60rePqdg4iLh3MGQw5w8A9HukBm78r1sQAU0yWi7eC3Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=OknFUpUS6NV3oSK+Q5pt3OHk6ugygcYsNI6Yrx1Ldqc=;
- b=oltlhZRwh9k58c3aip2hBs49s5PDXNek6B23RSuPitqgrd0RhErFn2AFtdqSZt7oD2fRDwhchixuc51julySkwJCScoyXzCNW99+D4J6UPnI4p75tOFS1lFJ3P0d9oTuMGZo4c05oiq9yrkQtVNJXUNFKL4qdA7Q+gMqtg6bHoA=
-Received: from CY5PR15CA0235.namprd15.prod.outlook.com (2603:10b6:930:66::7)
- by PH7PR12MB6657.namprd12.prod.outlook.com (2603:10b6:510:1fe::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.42; Tue, 13 Jun
- 2023 14:12:40 +0000
-Received: from CY4PEPF0000EDD2.namprd03.prod.outlook.com
- (2603:10b6:930:66:cafe::1) by CY5PR15CA0235.outlook.office365.com
- (2603:10b6:930:66::7) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6477.35 via Frontend
- Transport; Tue, 13 Jun 2023 14:12:40 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- CY4PEPF0000EDD2.mail.protection.outlook.com (10.167.241.206) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6500.23 via Frontend Transport; Tue, 13 Jun 2023 14:12:40 +0000
-Received: from quartz-7b1chost.amd.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Tue, 13 Jun
- 2023 09:12:37 -0500
-From:   Yazen Ghannam <yazen.ghannam@amd.com>
-To:     <linux-edac@vger.kernel.org>
-CC:     <linux-kernel@vger.kernel.org>, <tony.luck@intel.com>,
-        <x86@kernel.org>, <muralidhara.mk@amd.com>,
-        <joao.m.martins@oracle.com>, <william.roche@oracle.com>,
-        <boris.ostrovsky@oracle.com>, <john.allen@amd.com>,
-        <xueshuai@linux.alibaba.com>, <baolin.wang@linux.alibaba.com>,
-        Yazen Ghannam <yazen.ghannam@amd.com>
-Subject: [PATCH 3/3] x86/mce: Fixup mce_usable_address()
-Date:   Tue, 13 Jun 2023 09:11:42 -0500
-Message-ID: <20230613141142.36801-4-yazen.ghannam@amd.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230613141142.36801-1-yazen.ghannam@amd.com>
-References: <20230613141142.36801-1-yazen.ghannam@amd.com>
+        with ESMTP id S229552AbjFMRqN (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Tue, 13 Jun 2023 13:46:13 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BF1EE6;
+        Tue, 13 Jun 2023 10:46:12 -0700 (PDT)
+Received: from mail.alien8.de (mail.alien8.de [IPv6:2a01:4f9:3051:3f93::2])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id BB05D1EC0501;
+        Tue, 13 Jun 2023 19:46:10 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1686678370;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=LWlHFe9nJlKqdUvnuqyzsMA1rnJcw+tnScqqI8D68Os=;
+        b=S9IYp7r/EjBmBONAYEjmfIF2DIG9kX9uDgtsCK0F+hsZCba1IW5mnxvjtrlFWqekUwiDJV
+        7pdw5ETe1hsq6km5kiD/ZQAGEzdSz+dOwZR4SXzovlPV7PBJj0FTC3rvHO3u5Q6V2JXkDM
+        JLQDH95WPYHnhtdcZUga5zQObw8jZ98=
+X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
+Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
+        header.d=alien8.de
+Received: from mail.alien8.de ([127.0.0.1])
+        by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id a_ZbYUs7shpD; Tue, 13 Jun 2023 17:46:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
+        t=1686678366; bh=LWlHFe9nJlKqdUvnuqyzsMA1rnJcw+tnScqqI8D68Os=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=NijJ/2E3rBi9qsK2j2nMzs74AT2r93nvVkLzHiHxhh4SfHxTDnME2anPvOuk5mQ2n
+         UljsDOrpjWkFbi4FRKc9WnjRtt55YfZyryCTb+DG8Dr8Ht7dB7DyGGp9lE377Cb671
+         feKQrdGfVBpefef9DlsTluO7BSX6oC4gMOHwTcBItM0FRZPGMkOX3vVsJi1agaVWfw
+         hu7zr+RDEyKQaDhrKCc4ESyLUUhigWr+up4ft526rbndNcVQ5hKPSrNjEQq9fqBnrs
+         4D5VRaO1+PtAQ7riegnE8160aRwcbFqmAcS5QJq92UrunyyuXankGhr9aPrCFWHbze
+         I9oJywEKv1xpHoWPafcCBsC0QTKAem5hQditkaGEdbtdWZreB8WGgQ3Uwwt4+LG2b/
+         pN1wYyno+nrj6URTT2n0eYdC/CqKu6V3MFC2PMyZWll4TMwmT4Yo3w19olWBlnjIJQ
+         C1KsnBMRuM7XLZpB1BatLgFWOhRCJg3koZeqYsdeb+NvjUbf6povYU53u22FDO4e2b
+         IJuYMpABArOa29jx+/DPqbG8s9/d+3R57oqQ+Ax8b9rCSdBJz5q6tL2Au3jsETqovC
+         53Yum5BaW7IWXugMuMQzHRMelA4e99p1n6BY4kvUQG0ZwPBXAqrQm8VehPS8/zDovi
+         yM031q2vIpye1Duauay6/7Es=
+Received: from zn.tnic (p200300EA971Dc5F7329C23FFfEa6A903.dip0.t-ipconnect.de [IPv6:2003:ea:971d:c5f7:329c:23ff:fea6:a903])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
+        (No client certificate requested)
+        by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 3835140E01D0;
+        Tue, 13 Jun 2023 17:45:58 +0000 (UTC)
+Date:   Tue, 13 Jun 2023 19:45:53 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Tony Luck <tony.luck@intel.com>
+Cc:     Yazen Ghannam <yazen.ghannam@amd.com>,
+        Smita.KoralahalliChannabasappa@amd.com,
+        dave.hansen@linux.intel.com, x86@kernel.org,
+        linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
+        patches@lists.linux.dev
+Subject: Re: [PATCH v5 2/5] x86/mce: Add per-bank CMCI storm mitigation
+Message-ID: <20230613174553.GDZIirUaTo6Kd8gq4W@fat_crate.local>
+References: <20230403210716.347773-1-tony.luck@intel.com>
+ <20230411173841.70491-1-tony.luck@intel.com>
+ <20230411173841.70491-3-tony.luck@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CY4PEPF0000EDD2:EE_|PH7PR12MB6657:EE_
-X-MS-Office365-Filtering-Correlation-Id: eff67e79-7c29-47ca-82f6-08db6c183fb9
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: iWmorLm9h0RpcA3WaU66TsHRwsmipw1dHH3kL0jk9/Zmb64a9r2/IaH2HWyLEt+xLujDj2W0xB3ruSHhXw/bXslRW5BYM523AxSdxv2ZbcC/WhQ+jZWT+trXpEd/8kbUfGs98pIP0KtZ0KdlPzf19mhIKE8nTQ+6PofYkJzg0cp2SDj2sVzZ3+41MTZiUxy1nvJCwCk3CD8MQov9NLB19U8/QAuxlclCin1LoUDnQ7yqNm2UKk1RRiTdiFjrbebfO6MDi3TRCRxTa1M9etfHP4WHbxT3yqcjJVQAX9I0uVcH/QCDtpkkttI4WATSsWQAfTyHiKuLVMjn4p8mEZUlQ8z+h1/iKI4ev5Cwl/77+Vj6h3Exr85AJ1Mdg3G+3hNIlRhFPbjKm6gabQobctBu37H+1w6GyYLiREYGQWZoFT8KrptbUuSJIepoCqNfYPamyLu1YMMKN8vEA9HviafrIRzuJMtsya9lyQ+4pR0CxAcl9cDyKlclZ3xuCbmy+QBlQOc74GCmhIIwHsZKqmFeZsz3tMvWGGm4G1GKrqv5Sd01FDY8vtXsgyLswVGs8ENZ3VbwejeRb6sk9aoY38Fo1iRVSD5+EmEzjMz3MAnKsG/5Dk6Fd22XiPUPE5jI4TDscr+dw/R580n0xohL7A2T5z8gxorN927B63C6rXKyU0iQB1AGm02WJSP6HfSkf6235HOieQJeRV+Nkz79glSmBFed8bAvbSsiIHmUMDkz/3MuZswFMQ7T0j9SmEocXJzvxKeZCT/laW2JQdn0H186Tw==
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(346002)(39860400002)(396003)(376002)(136003)(451199021)(40470700004)(36840700001)(46966006)(8936002)(8676002)(44832011)(5660300002)(4326008)(70586007)(70206006)(6916009)(316002)(54906003)(2906002)(41300700001)(36860700001)(40460700003)(6666004)(478600001)(7696005)(356005)(81166007)(40480700001)(426003)(336012)(36756003)(186003)(16526019)(83380400001)(1076003)(47076005)(2616005)(26005)(82740400003)(86362001)(82310400005)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Jun 2023 14:12:40.6100
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: eff67e79-7c29-47ca-82f6-08db6c183fb9
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: CY4PEPF0000EDD2.namprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB6657
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230411173841.70491-3-tony.luck@intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -103,131 +81,231 @@ Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-Move Intel-specific checks into a helper function.
+On Tue, Apr 11, 2023 at 10:38:38AM -0700, Tony Luck wrote:
+> @@ -1587,6 +1589,7 @@ static unsigned long check_interval = INITIAL_CHECK_INTERVAL;
+>  
+>  static DEFINE_PER_CPU(unsigned long, mce_next_interval); /* in jiffies */
+>  static DEFINE_PER_CPU(struct timer_list, mce_timer);
+> +static DEFINE_PER_CPU(bool, storm_poll_mode);
 
-Explicitly use "bool" for return type.
+See comment below about putting all those storm-related vars in a struct.
 
-No functional change intended.
+Also, there's another bool - bank_storm - which looks like it does the
+same.
 
-Signed-off-by: Yazen Ghannam <yazen.ghannam@amd.com>
----
- arch/x86/include/asm/mce.h         |  2 +-
- arch/x86/kernel/cpu/mce/core.c     | 33 +++++++++---------------------
- arch/x86/kernel/cpu/mce/intel.c    | 20 ++++++++++++++++++
- arch/x86/kernel/cpu/mce/internal.h |  2 ++
- 4 files changed, 33 insertions(+), 24 deletions(-)
+>  static void __start_timer(struct timer_list *t, unsigned long interval)
+>  {
+> @@ -1622,22 +1625,29 @@ static void mce_timer_fn(struct timer_list *t)
+>  	else
+>  		iv = min(iv * 2, round_jiffies_relative(check_interval * HZ));
+>  
+> -	__this_cpu_write(mce_next_interval, iv);
+> -	__start_timer(t, iv);
+> +	if (__this_cpu_read(storm_poll_mode)) {
+> +		__start_timer(t, HZ);
+> +	} else {
+> +		__this_cpu_write(mce_next_interval, iv);
+> +		__start_timer(t, iv);
+> +	}
+>  }
+>  
+>  /*
+> - * Ensure that the timer is firing in @interval from now.
+> + * When a storm starts on any bank on this CPU, switch to polling
+> + * once per second. When the storm ends, revert to the default
+> + * polling interval.
+>   */
+> -void mce_timer_kick(unsigned long interval)
+> +void mce_timer_kick(bool storm)
+>  {
+>  	struct timer_list *t = this_cpu_ptr(&mce_timer);
+> -	unsigned long iv = __this_cpu_read(mce_next_interval);
+>  
+> -	__start_timer(t, interval);
+> +	__this_cpu_write(storm_poll_mode, storm);
+>  
+> -	if (interval < iv)
+> -		__this_cpu_write(mce_next_interval, interval);
+> +	if (storm)
+> +		__start_timer(t, HZ);
+> +	else
+> +		__this_cpu_write(mce_next_interval, check_interval * HZ);
 
-diff --git a/arch/x86/include/asm/mce.h b/arch/x86/include/asm/mce.h
-index 180b1cbfcc4e..6de6e1d95952 100644
---- a/arch/x86/include/asm/mce.h
-+++ b/arch/x86/include/asm/mce.h
-@@ -245,7 +245,7 @@ static inline void cmci_recheck(void) {}
- int mce_available(struct cpuinfo_x86 *c);
- bool mce_is_memory_error(struct mce *m);
- bool mce_is_correctable(struct mce *m);
--int mce_usable_address(struct mce *m);
-+bool mce_usable_address(struct mce *m);
- 
- DECLARE_PER_CPU(unsigned, mce_exception_count);
- DECLARE_PER_CPU(unsigned, mce_poll_count);
-diff --git a/arch/x86/kernel/cpu/mce/core.c b/arch/x86/kernel/cpu/mce/core.c
-index 859ce20dd730..c17e2b54853b 100644
---- a/arch/x86/kernel/cpu/mce/core.c
-+++ b/arch/x86/kernel/cpu/mce/core.c
-@@ -453,35 +453,22 @@ static void mce_irq_work_cb(struct irq_work *entry)
- 	mce_schedule_work();
- }
- 
--/*
-- * Check if the address reported by the CPU is in a format we can parse.
-- * It would be possible to add code for most other cases, but all would
-- * be somewhat complicated (e.g. segment offset would require an instruction
-- * parser). So only support physical addresses up to page granularity for now.
-- */
--int mce_usable_address(struct mce *m)
-+bool mce_usable_address(struct mce *m)
- {
- 	if (!(m->status & MCI_STATUS_ADDRV))
--		return 0;
-+		return false;
- 
--	if (m->cpuvendor == X86_VENDOR_AMD)
-+	switch (m->cpuvendor) {
-+	case X86_VENDOR_AMD:
- 		return amd_mce_usable_address(m);
- 
--	/* Checks after this one are Intel/Zhaoxin-specific: */
--	if (boot_cpu_data.x86_vendor != X86_VENDOR_INTEL &&
--	    boot_cpu_data.x86_vendor != X86_VENDOR_ZHAOXIN)
--		return 1;
--
--	if (!(m->status & MCI_STATUS_MISCV))
--		return 0;
--
--	if (MCI_MISC_ADDR_LSB(m->misc) > PAGE_SHIFT)
--		return 0;
--
--	if (MCI_MISC_ADDR_MODE(m->misc) != MCI_MISC_ADDR_PHYS)
--		return 0;
-+	case X86_VENDOR_INTEL:
-+	case X86_VENDOR_ZHAOXIN:
-+		return intel_mce_usable_address(m);
- 
--	return 1;
-+	default:
-+		return true;
-+	}
- }
- EXPORT_SYMBOL_GPL(mce_usable_address);
- 
-diff --git a/arch/x86/kernel/cpu/mce/intel.c b/arch/x86/kernel/cpu/mce/intel.c
-index 95275a5e57e0..56ecf128a534 100644
---- a/arch/x86/kernel/cpu/mce/intel.c
-+++ b/arch/x86/kernel/cpu/mce/intel.c
-@@ -519,3 +519,23 @@ bool intel_filter_mce(struct mce *m)
- 
- 	return false;
- }
-+
-+/*
-+ * Check if the address reported by the CPU is in a format we can parse.
-+ * It would be possible to add code for most other cases, but all would
-+ * be somewhat complicated (e.g. segment offset would require an instruction
-+ * parser). So only support physical addresses up to page granularity for now.
-+ */
-+bool intel_mce_usable_address(struct mce *m)
-+{
-+	if (!(m->status & MCI_STATUS_MISCV))
-+		return false;
-+
-+	if (MCI_MISC_ADDR_LSB(m->misc) > PAGE_SHIFT)
-+		return false;
-+
-+	if (MCI_MISC_ADDR_MODE(m->misc) != MCI_MISC_ADDR_PHYS)
-+		return false;
-+
-+	return true;
-+}
-diff --git a/arch/x86/kernel/cpu/mce/internal.h b/arch/x86/kernel/cpu/mce/internal.h
-index 0d4c5b83ed93..962b3134991d 100644
---- a/arch/x86/kernel/cpu/mce/internal.h
-+++ b/arch/x86/kernel/cpu/mce/internal.h
-@@ -49,6 +49,7 @@ void intel_init_cmci(void);
- void intel_init_lmce(void);
- void intel_clear_lmce(void);
- bool intel_filter_mce(struct mce *m);
-+bool intel_mce_usable_address(struct mce *m);
- #else
- # define cmci_intel_adjust_timer mce_adjust_timer_default
- static inline bool mce_intel_cmci_poll(void) { return false; }
-@@ -58,6 +59,7 @@ static inline void intel_init_cmci(void) { }
- static inline void intel_init_lmce(void) { }
- static inline void intel_clear_lmce(void) { }
- static inline bool intel_filter_mce(struct mce *m) { return false; }
-+static inline bool intel_mce_usable_address(struct mce *m) { return false; }
- #endif
- 
- void mce_timer_kick(unsigned long interval);
+This looks very familiar to what mce_timer_fn() above does. Add
+a helper.
+
+>  /* Must not be called in IRQ context where del_timer_sync() can deadlock */
+> diff --git a/arch/x86/kernel/cpu/mce/intel.c b/arch/x86/kernel/cpu/mce/intel.c
+> index 052bf2708391..4106877de028 100644
+> --- a/arch/x86/kernel/cpu/mce/intel.c
+> +++ b/arch/x86/kernel/cpu/mce/intel.c
+> @@ -47,8 +47,40 @@ static DEFINE_PER_CPU(mce_banks_t, mce_banks_owned);
+>   */
+>  static DEFINE_RAW_SPINLOCK(cmci_discover_lock);
+>  
+> +/*
+> + * CMCI storm tracking state
+> + *	stormy_bank_count: per-cpu count of MC banks in storm state
+> + *	bank_history: bitmask tracking of corrected errors seen in each bank
+
+	bank_storm: determines whether the bank is in storm mode
+
+> + *	bank_time_stamp: last time (in jiffies) that each bank was polled
+> + *	cmci_threshold: MCi_CTL2 threshold for each bank when there is no storm
+> + */
+> +static DEFINE_PER_CPU(int, stormy_bank_count);
+> +static DEFINE_PER_CPU(u64 [MAX_NR_BANKS], bank_history);
+> +static DEFINE_PER_CPU(bool [MAX_NR_BANKS], bank_storm);
+> +static DEFINE_PER_CPU(unsigned long [MAX_NR_BANKS], bank_time_stamp);
+
+All those are begging to be a
+
+struct mca_storm_desc {
+
+	....
+
+};
+
+or so, so that they don't "dangle" randomly all over the place and one
+doesn't know what they belong to.
+
+Every time you then do storm management, you get the percpu pointer and
+do
+
+	storm_desc->bank_history[bank] ...
+	storm_desc->bank_count
+	...
+
+and so on.
+
+> +static int cmci_threshold[MAX_NR_BANKS];
+
+Why do we have to save per-bank thresholds instead of writing a default
+non-storm value into all? Why are they each special?
+
+> +
+> +/* Linux non-storm CMCI threshold (may be overridden by BIOS */
+
+Missing ")".
+
+>  #define CMCI_THRESHOLD		1
+>  
+> +/*
+> + * High threshold to limit CMCI rate during storms. Max supported is
+> + * 0x7FFF. Use this slightly smaller value so it has a distinctive
+> + * signature when some asks "Why am I not seeing all corrected errors?"
+> + */
+> +#define CMCI_STORM_THRESHOLD	32749
+
+Why if you can simply clear CMCI_EN and disable CMCI for this bank while
+the storm goes on?
+
+And reenable it when it subsides?
+
+> +void track_cmci_storm(int bank, u64 status)
+
+cmci_track_storm
+
+> +{
+> +	unsigned long now = jiffies, delta;
+> +	unsigned int shift = 1;
+> +	u64 history;
+> +
+> +	/*
+> +	 * When a bank is in storm mode it is polled once per second and
+> +	 * the history mask will record about the last minute of poll results.
+> +	 * If it is not in storm mode, then the bank is only checked when
+> +	 * there is a CMCI interrupt. Check how long it has been since
+> +	 * this bank was last checked, and adjust the amount of "shift"
+> +	 * to apply to history.
+> +	 */
+> +	if (!this_cpu_read(bank_storm[bank])) {
+> +		delta = now - this_cpu_read(bank_time_stamp[bank]);
+> +		shift = (delta + HZ) / HZ;
+> +	}
+> +
+> +	/* If has been a long time since the last poll, clear history */
+> +	if (shift >= 64)
+> +		history = 0;
+> +	else
+> +		history = this_cpu_read(bank_history[bank]) << shift;
+
+<---- newline here.
+
+> +	this_cpu_write(bank_time_stamp[bank], now);
+> +
+> +	/* History keeps track of corrected errors. VAL=1 && UC=0 */
+> +	if ((status & (MCI_STATUS_VAL | MCI_STATUS_UC)) == MCI_STATUS_VAL)
+> +		history |= 1;
+
+Ditto.
+
+> +	this_cpu_write(bank_history[bank], history);
+> +
+> +	if (this_cpu_read(bank_storm[bank])) {
+
+You just read bank_storm and now you're reading it again. Just do
+a struct pls.
+
+> +		if (history & GENMASK_ULL(STORM_END_POLL_THRESHOLD - 1, 0))
+
+"- 1" because you start from 0? So define the STORM_END_POLL_THRESHOLD
+thing above as (30 - 1) and explain why.
+
+> +			return;
+
+<---- newline here.
+
+> +		pr_notice("CPU%d BANK%d CMCI storm subsided\n", smp_processor_id(), bank);
+> +		cmci_set_threshold(bank, cmci_threshold[bank]);
+> +		cmci_storm_end(bank);
+> +	} else {
+> +		if (hweight64(history) < STORM_BEGIN_THRESHOLD)
+
+How am I to understand this? Is that the "5 in this RFC code for ease of
+testing" thing from the commit message?
+
+> +			return;
+
+<---- newline here.
+
+> +		pr_notice("CPU%d BANK%d CMCI storm detected\n", smp_processor_id(), bank);
+> +		cmci_set_threshold(bank, CMCI_STORM_THRESHOLD);
+> +		cmci_storm_begin(bank);
+> +	}
+> +}
+> +
+>  /*
+>   * The interrupt handler. This is called on every event.
+>   * Just call the poller directly to log any events.
+> @@ -147,6 +266,9 @@ static void cmci_discover(int banks)
+>  			continue;
+>  		}
+>  
+> +		if ((val & MCI_CTL2_CMCI_THRESHOLD_MASK) == CMCI_STORM_THRESHOLD)
+
+This is silly: you have at least two per-cpu bools which record which
+banks are in storm mode. Why don't you query them?
+
+> +			goto storm;
+> +
+>  		if (!mca_cfg.bios_cmci_threshold) {
+>  			val &= ~MCI_CTL2_CMCI_THRESHOLD_MASK;
+>  			val |= CMCI_THRESHOLD;
+> @@ -159,7 +281,7 @@ static void cmci_discover(int banks)
+>  			bios_zero_thresh = 1;
+>  			val |= CMCI_THRESHOLD;
+>  		}
+> -
+> +storm:
+
+That piece from here on wants to be a separate helper - that function is
+becoming huge and unwieldy, doing a bunch of things.
+
+Thx.
+
 -- 
-2.34.1
+Regards/Gruss,
+    Boris.
 
+https://people.kernel.org/tglx/notes-about-netiquette
