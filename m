@@ -2,106 +2,93 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C8BFB72C5A1
-	for <lists+linux-edac@lfdr.de>; Mon, 12 Jun 2023 15:17:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C4EA072DE58
+	for <lists+linux-edac@lfdr.de>; Tue, 13 Jun 2023 11:55:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232732AbjFLNRW (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Mon, 12 Jun 2023 09:17:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50488 "EHLO
+        id S240787AbjFMJzo (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Tue, 13 Jun 2023 05:55:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233750AbjFLNRV (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Mon, 12 Jun 2023 09:17:21 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7D5DDF;
-        Mon, 12 Jun 2023 06:17:18 -0700 (PDT)
-Received: from mail.alien8.de (mail.alien8.de [IPv6:2a01:4f9:3051:3f93::2])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 5D5721EC0136;
-        Mon, 12 Jun 2023 15:17:17 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1686575837;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=p1jMhdnMp62aySYIVTb8CY0oWf+ccrEVsVT8LxVTgvY=;
-        b=gOzscRjLdmbNXOlFBIfa+SF5Zr/QE50QSFLzlP65JW8iLP7NpEM3qcxgQIV3Jqpf24Pxzi
-        zU+e6n5mmtBvMe1UkpSSMUorv3/u+f69uItGtQFOdRD142/fvirqf/kohoY8dKLMkFwtCM
-        cqJiSNI5LlfWPlGenWiCO2NNvcdFrEU=
-X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
-Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
-        header.d=alien8.de
-Received: from mail.alien8.de ([127.0.0.1])
-        by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id f6qNxyF1R1JZ; Mon, 12 Jun 2023 13:17:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-        t=1686575835; bh=p1jMhdnMp62aySYIVTb8CY0oWf+ccrEVsVT8LxVTgvY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=aM9OwiY3oDxFNNvqNPD/xGoAK7ODf7Yl0w1ziohg6Q9Cg4hdJb02hwePMknXOB4ec
-         h3O0+geL92fZCR65L54p8msSLGOPi15Tu/KbYBdk/TLpqGcDBeSjVg2wdaSZ7RepFu
-         7BGW3OQQ3tivF2a7meYRQZHFAjV5XaO4MuvoN3ILl5UmKJt00Cg4FzaYgN4DJ2Enza
-         vtVRdZA5PdfHkbPEXgG0k+LsV4M5fS3YJnxvaBZEBCbizw/0DtyBWcPzmwJJsHcy+x
-         yuEhyvFyNgDR3L/M98jjTtbh6vXJ9GcY93Q1Lm1NSqWo4U+OEyqrB/i/Nh7erzfuu0
-         HteNxH7KYUwXJKa0Udvfe0R6QLtzIWOVM8qVuSkEXF/EEIRsZC4ZinS2Hl8rvIVOSg
-         rbvlD6EwdPOg7chyFWkUc3DMZSwgi5MFbKNmjkal26jQgE/abZCJmdfe7f3Z43p2vW
-         MVNc9mxUi68baly5zdmQkONn/Pfh+oG7H5LncfUgLrdi9YvAW90/VDhmlACHLrgftX
-         ATPpjLxCXfx84KKWgdTJtqggnGGVzdGH3MnASmcHncxmm4MCcvoZJ8yPDxvGmPCcxl
-         YoVr6win5fxfIk1J7wOI/uTpOEjdK3Bx02rRx1nIqRJ8roNjTLhCNYQsZncXX+IQyg
-         cGsArU8aUSPRk1pK5B/E1zZ4=
-Received: from zn.tnic (p200300eA971Dc5F0329c23ffFEa6A903.dip0.t-ipconnect.de [IPv6:2003:ea:971d:c5f0:329c:23ff:fea6:a903])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
-        (No client certificate requested)
-        by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 0714C40E00EA;
-        Mon, 12 Jun 2023 13:16:53 +0000 (UTC)
-Date:   Mon, 12 Jun 2023 15:16:49 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Marvin Lin <milkfafa@gmail.com>, robh+dt@kernel.org,
-        tony.luck@intel.com, james.morse@arm.com, mchehab@kernel.org,
-        rric@kernel.org, benjaminfair@google.com, yuenn@google.com,
-        venture@google.com, avifishman70@gmail.com, tmaimon77@gmail.com,
-        tali.perry1@gmail.com, linux-edac@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        openbmc@lists.ozlabs.org, KWLIU@nuvoton.com, YSCHU@nuvoton.com,
-        ctcchien@nuvoton.com, kflin@nuvoton.com
-Subject: Re: [PATCH v18 1/3] ARM: dts: nuvoton: Add node for NPCM memory
- controller
-Message-ID: <20230612131649.GHZIcawTKBMIQpFD6I@fat_crate.local>
-References: <20230111093245.318745-1-milkfafa@gmail.com>
- <20230111093245.318745-2-milkfafa@gmail.com>
- <20230612110401.GPZIb7oZPdsPGFzSDc@fat_crate.local>
- <38c30778-9526-cba6-4ddb-00bcefeb5647@linaro.org>
- <20230612120107.GFZIcJA3zktkiyTS2+@fat_crate.local>
- <99795947-0584-df42-a28a-aa89d7e21c7e@linaro.org>
- <20230612123925.GGZIcR/dUrcu03z6V+@fat_crate.local>
- <e0171cb6-54e7-41bd-4b08-fa667fe58ff4@linaro.org>
+        with ESMTP id S239267AbjFMJzk (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Tue, 13 Jun 2023 05:55:40 -0400
+Received: from mail-ua1-x92e.google.com (mail-ua1-x92e.google.com [IPv6:2607:f8b0:4864:20::92e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEC3AE3;
+        Tue, 13 Jun 2023 02:55:39 -0700 (PDT)
+Received: by mail-ua1-x92e.google.com with SMTP id a1e0cc1a2514c-78a3e1ed1deso342144241.1;
+        Tue, 13 Jun 2023 02:55:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686650139; x=1689242139;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=fwWyCUDuegx+tvkvTGStT67ElUFA4N+9n715czI5oMM=;
+        b=EFOAAGfykMNiEdEIHAfYE+irtvjkVom+OCnYLYU3kU0Rke9e1gCAxYxpvkxgFfDTLq
+         /IGjpl7MZuDj83JotVbsEk/YqixsvEiYQi9bAp5n+JdxO9Gan3tNXKEjF8mziH+PnJOn
+         BmpvoPMpX+6oz9ORNEtky4ww3U8A5SZcXqmNrrEhtttLMzWwv0QhxCEZ7OgZ+ev2oBvi
+         kOCmX5nZHqiY1dNRMiAX0ahKpTUrN9Mw65Wz8vfmCnilGw1vLLBSlw8MUU4u2JlMWwAP
+         sivKbPprB2Nuk9rdmuuNeg6dQhUREKl2Kq59cBj7z1/ZpHtczZGoI8qP4L72MB6/b7wd
+         z8XA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686650139; x=1689242139;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=fwWyCUDuegx+tvkvTGStT67ElUFA4N+9n715czI5oMM=;
+        b=aefybr+O8DXwHvJpRXR8mZoZsLw5YfRYVleiW+Vn3LNs8rE5awNXi1+IMTuJx2HUE3
+         V726KFdmIVT96pr6DEBXBi21YAhlCpJyy5F1PLAxZAFlMiWCNecKd39j5t98BIMhJWaz
+         7nzEhmn6+VBSi0mgmM8hl+EvajQA5mPAS3bEyy7X2+Wjr9Ari5yBtTrUwcbxXF3/6pJq
+         kJ95oSljMbJfNe4bOPht5qhGivCXvEsuSazMLvQRAQK3H5bk9EAM14WEQr4XQES55jVu
+         GdR7eKmY3yPgmPWqJ8931Gx8GdYAtRPAiVLMefFV8cERPx8gUSzTJIqLm/jl5q6b4un5
+         26mA==
+X-Gm-Message-State: AC+VfDyjZWrkw64HiOnkeZDb6p89qRzMy0kRbbFsAUDVZBcB/0iQ4VQR
+        jrjoEFTutNYbc0GDI5kNmHOPeapyTTrPYmZqjpOlNFqxFRg=
+X-Google-Smtp-Source: ACHHUZ7e9IsqIAz0PgLSkxZe5wg7yRy8uMMFUo1OILtylLbe/RXl7LMH2ceasVjVOwYCrnYhfuIfG6I7+3mrqQZSYJg=
+X-Received: by 2002:a67:b904:0:b0:43b:3978:2434 with SMTP id
+ q4-20020a67b904000000b0043b39782434mr4872625vsn.22.1686650138870; Tue, 13 Jun
+ 2023 02:55:38 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <e0171cb6-54e7-41bd-4b08-fa667fe58ff4@linaro.org>
+References: <20230111093245.318745-1-milkfafa@gmail.com> <20230111093245.318745-2-milkfafa@gmail.com>
+ <20230612110401.GPZIb7oZPdsPGFzSDc@fat_crate.local> <38c30778-9526-cba6-4ddb-00bcefeb5647@linaro.org>
+ <20230612120107.GFZIcJA3zktkiyTS2+@fat_crate.local> <99795947-0584-df42-a28a-aa89d7e21c7e@linaro.org>
+ <20230612123925.GGZIcR/dUrcu03z6V+@fat_crate.local> <e0171cb6-54e7-41bd-4b08-fa667fe58ff4@linaro.org>
+ <20230612131649.GHZIcawTKBMIQpFD6I@fat_crate.local>
+In-Reply-To: <20230612131649.GHZIcawTKBMIQpFD6I@fat_crate.local>
+From:   Kun-Fa Lin <milkfafa@gmail.com>
+Date:   Tue, 13 Jun 2023 17:55:27 +0800
+Message-ID: <CADnNmFqhNKoV5EfaiMSo9yz-hTaTm+0pGUJyFNH_V8pNVEU36w@mail.gmail.com>
+Subject: Re: [PATCH v18 1/3] ARM: dts: nuvoton: Add node for NPCM memory controller
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, tony.luck@intel.com,
+        James Morse <james.morse@arm.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>, rric@kernel.org,
+        Benjamin Fair <benjaminfair@google.com>,
+        Nancy Yuen <yuenn@google.com>,
+        Patrick Venture <venture@google.com>,
+        Avi Fishman <avifishman70@gmail.com>,
+        Tomer Maimon <tmaimon77@gmail.com>,
+        Tali Perry <tali.perry1@gmail.com>,
+        linux-edac <linux-edac@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        OpenBMC Maillist <openbmc@lists.ozlabs.org>,
+        CS20 KWLiu <KWLIU@nuvoton.com>, YSCHU@nuvoton.com,
+        ctcchien@nuvoton.com, Marvin Lin <kflin@nuvoton.com>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Mon, Jun 12, 2023 at 03:00:19PM +0200, Krzysztof Kozlowski wrote:
-> No, the DTS is always independent because it describes the hardware.
-> Linux should work fine regardless of hardware description. Tying Linux
-> to specific DTS is usually sign of an ABI break.
+> Marvin,
+> Please route the DTS (1/3) via Nuvoton SoC tree.
 
-Ok, I see.
+OK, will route the DTS via Nuvoton SoC tree.
+Thanks, Krzysztof!
 
-Patches 2 and 3 queued for 6.5.
-
-Thx.
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+> Patches 2 and 3 queued for 6.5.
+Thanks, Boris!
