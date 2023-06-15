@@ -2,153 +2,86 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E33B9730D37
-	for <lists+linux-edac@lfdr.de>; Thu, 15 Jun 2023 04:26:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 58409731090
+	for <lists+linux-edac@lfdr.de>; Thu, 15 Jun 2023 09:30:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241619AbjFOC0J (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Wed, 14 Jun 2023 22:26:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60248 "EHLO
+        id S243968AbjFOHap (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Thu, 15 Jun 2023 03:30:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230144AbjFOC0J (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Wed, 14 Jun 2023 22:26:09 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 606F31FE2;
-        Wed, 14 Jun 2023 19:26:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686795968; x=1718331968;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=SLNeuotNLMI/3Ntsow9FV7NDL8oIwObXrmZLtFT8TiM=;
-  b=mw9jnnXZpW/gxR3XJ6B6tpMogArfMSMdbiMyfwVWqos9VmrAI/fBytLz
-   IhZufN43JlH14MOAOu4V4rRU3qiVsEtor56JrbHhYCD1MoLzTFp1G4IE2
-   UZbSNNQ1U8CLChe8JBH+Pe12QFkDXKoEd/A6nlhk+HQY3CIv6728mhn5q
-   4eg0jRcCleEfyyLVQDJh44R6s3jsQhHQg120LW5mHiAP4oUl+3Jaa1biQ
-   aVk8diLklYVKMQJ5GCg7E6cFURH2y/yzhE4mehz/60KvtluZDf3pIHZ2/
-   wscIApdVITuHWgltac8VKARIQQZ78ZVs1xt2yjram6hJfTwUbejF7ieKf
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10741"; a="361270562"
-X-IronPort-AV: E=Sophos;i="6.00,243,1681196400"; 
-   d="scan'208";a="361270562"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jun 2023 19:26:01 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10741"; a="856753144"
-X-IronPort-AV: E=Sophos;i="6.00,243,1681196400"; 
-   d="scan'208";a="856753144"
-Received: from unknown (HELO localhost.localdomain) ([10.226.216.116])
-  by fmsmga001.fm.intel.com with ESMTP; 14 Jun 2023 19:25:59 -0700
-From:   niravkumar.l.rabara@intel.com
-To:     niravkumar.l.rabara@intel.com
-Cc:     bp@alien8.de, dinguyen@kernel.org, james.morse@arm.com,
-        linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
-        mchehab@kernel.org, rric@kernel.org, tony.luck@intel.com
-Subject: [PATCH v4 1/1] EDAC/altera: Check previous DDR DBE during driver probe
-Date:   Thu, 15 Jun 2023 10:25:34 +0800
-Message-Id: <20230615022534.4163918-2-niravkumar.l.rabara@intel.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230615022534.4163918-1-niravkumar.l.rabara@intel.com>
-References: <20230503061000.3279381-1-niravkumar.l.rabara@intel.com>
- <20230615022534.4163918-1-niravkumar.l.rabara@intel.com>
+        with ESMTP id S238540AbjFOHan (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Thu, 15 Jun 2023 03:30:43 -0400
+X-Greylist: delayed 10287 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 15 Jun 2023 00:30:41 PDT
+Received: from mail.sitirkam.com (mail.aurorateknoglobal.com [103.126.10.58])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2898312E;
+        Thu, 15 Jun 2023 00:30:41 -0700 (PDT)
+Received: from localhost (localhost.localdomain [127.0.0.1])
+        by mail.sitirkam.com (Postfix) with ESMTP id 137E24E7BE86;
+        Thu, 15 Jun 2023 08:32:09 +0700 (WIB)
+Received: from mail.sitirkam.com ([127.0.0.1])
+        by localhost (mail.sitirkam.com [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id TI0pmiUZZ583; Thu, 15 Jun 2023 08:32:08 +0700 (WIB)
+Received: from localhost (localhost.localdomain [127.0.0.1])
+        by mail.sitirkam.com (Postfix) with ESMTP id 9AE184E7B19D;
+        Thu, 15 Jun 2023 08:32:03 +0700 (WIB)
+DKIM-Filter: OpenDKIM Filter v2.10.3 mail.sitirkam.com 9AE184E7B19D
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sitirkam.com;
+        s=B8AB377C-ED3B-11EA-8736-9248CAEF674E; t=1686792723;
+        bh=q7vDHy+gLAr4GKZUDI+hjt8I93kvW09nNmGJORUTyfg=;
+        h=MIME-Version:To:From:Date:Message-Id;
+        b=dFdTPJycpJmgou/MhEbWyDym6M0WdU7NrsxT8ZckOfUSB2oGAZE0XYGX/SF+sDMxv
+         4eitajis0BU5mQm3ZSquoz13vgtOn6XXefenT3O7CdhmzdL/uPYXXfg/2d3MXc9aZK
+         OOmEzeXxeB/9bw3LwcawQuNVjyyTJdN1zs9HyzUsINWKOgW4TmpOfMgciHQYg3GbUB
+         sJ/xiki6lWhxJRs7M+vfnQxi8d8IF82+vIcxJXMPou7rOG6G9QT+/dJVRMnDU5xTHg
+         55V8oKqEZu8Ws1oCurj43MyJqDsrnfLSlgpQQCsDrAWnkTbP3tSRecNiuybK3gGO17
+         9DcgiALydjzGA==
+X-Virus-Scanned: amavisd-new at mail.sitirkam.com
+Received: from mail.sitirkam.com ([127.0.0.1])
+        by localhost (mail.sitirkam.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id 09RgNCqtcJrY; Thu, 15 Jun 2023 08:32:03 +0700 (WIB)
+Received: from [185.169.4.111] (unknown [185.169.4.111])
+        by mail.sitirkam.com (Postfix) with ESMTPSA id D830A4E7ACFF;
+        Thu, 15 Jun 2023 08:31:55 +0700 (WIB)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+Content-Description: Mail message body
+Subject: Spende
+To:     Recipients <admin@sitirkam.com>
+From:   "Maria-Elisabeth Schaeffler" <admin@sitirkam.com>
+Date:   Wed, 14 Jun 2023 18:34:03 -0700
+Reply-To: schaefflermariaelisabeth1941@gmail.com
+Message-Id: <20230615013155.D830A4E7ACFF@mail.sitirkam.com>
+X-Spam-Status: Yes, score=5.9 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FORGED_REPLYTO,
+        FREEMAIL_REPLYTO_END_DIGIT,NIXSPAM_IXHASH,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5000]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [schaefflermariaelisabeth1941[at]gmail.com]
+        * -0.0 SPF_HELO_PASS SPF: HELO matches SPF record
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        *  3.0 NIXSPAM_IXHASH http://www.nixspam.org/
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  2.1 FREEMAIL_FORGED_REPLYTO Freemail in Reply-To, but not From
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-From: Niravkumar L Rabara <niravkumar.l.rabara@intel.com>
+Your email account has been selected for a donation of =E2=82=AC1,700,000. =
+Please contact me for more information.
 
-Add DDR DBE check during driver probe to notify user if previous
-reboot cause by DDR DBE and print DBE error related information.
-
-Signed-off-by: Niravkumar L Rabara <niravkumar.l.rabara@intel.com>
----
- drivers/edac/altera_edac.c                   | 29 ++++++++++++++++----
- include/linux/firmware/intel/stratix10-smc.h | 20 ++++++++++++++
- 2 files changed, 44 insertions(+), 5 deletions(-)
-
-diff --git a/drivers/edac/altera_edac.c b/drivers/edac/altera_edac.c
-index 8b31cd54bdb6..04c0675adc8c 100644
---- a/drivers/edac/altera_edac.c
-+++ b/drivers/edac/altera_edac.c
-@@ -2159,6 +2159,7 @@ static int altr_edac_a10_probe(struct platform_device *pdev)
- #ifdef CONFIG_64BIT
- 	{
- 		int dberror, err_addr;
-+		struct arm_smccc_res result;
- 
- 		edac->panic_notifier.notifier_call = s10_edac_dberr_handler;
- 		atomic_notifier_chain_register(&panic_notifier_list,
-@@ -2168,11 +2169,29 @@ static int altr_edac_a10_probe(struct platform_device *pdev)
- 		regmap_read(edac->ecc_mgr_map, S10_SYSMGR_UE_VAL_OFST,
- 			    &dberror);
- 		if (dberror) {
--			regmap_read(edac->ecc_mgr_map, S10_SYSMGR_UE_ADDR_OFST,
--				    &err_addr);
--			edac_printk(KERN_ERR, EDAC_DEVICE,
--				    "Previous Boot UE detected[0x%X] @ 0x%X\n",
--				    dberror, err_addr);
-+			/* Bit-31 is set if previous DDR UE happened */
-+			if (dberror & (1 << 31)) {
-+				/* Read previous DDR UE info */
-+				arm_smccc_smc(INTEL_SIP_SMC_READ_SEU_ERR, 0,
-+					      0, 0, 0, 0, 0, 0, &result);
-+
-+				if (!result.a0) {
-+					edac_printk(KERN_ERR, EDAC_DEVICE,
-+						    "Previous DDR UE:Count=0x%X,Address=0x%X,ErrorData=0x%X\n"
-+						    , (unsigned int)result.a1
-+						    , (unsigned int)result.a2
-+						    , (unsigned int)result.a3);
-+				} else {
-+					edac_printk(KERN_ERR, EDAC_DEVICE,
-+						    "INTEL_SIP_SMC_SEU_ERR_STATUS failed\n");
-+				}
-+			} else {
-+				regmap_read(edac->ecc_mgr_map, S10_SYSMGR_UE_ADDR_OFST,
-+					    &err_addr);
-+				edac_printk(KERN_ERR, EDAC_DEVICE,
-+					    "Previous Boot UE detected[0x%X] @ 0x%X\n",
-+					    dberror, err_addr);
-+			}
- 			/* Reset the sticky registers */
- 			regmap_write(edac->ecc_mgr_map,
- 				     S10_SYSMGR_UE_VAL_OFST, 0);
-diff --git a/include/linux/firmware/intel/stratix10-smc.h b/include/linux/firmware/intel/stratix10-smc.h
-index a718f853d457..48810c39f612 100644
---- a/include/linux/firmware/intel/stratix10-smc.h
-+++ b/include/linux/firmware/intel/stratix10-smc.h
-@@ -595,4 +595,24 @@ INTEL_SIP_SMC_FAST_CALL_VAL(INTEL_SIP_SMC_FUNCID_FPGA_CONFIG_COMPLETED_WRITE)
- #define INTEL_SIP_SMC_FCS_GET_PROVISION_DATA \
- 	INTEL_SIP_SMC_FAST_CALL_VAL(INTEL_SIP_SMC_FUNCID_FCS_GET_PROVISION_DATA)
- 
-+/**
-+ * Request INTEL_SIP_SMC_READ_SEU_ERR
-+ * Sync call to get Single Event Upset Error information
-+ * SEU detects both corrected and uncorrected error
-+ *
-+ * Call register usage:
-+ * a0 INTEL_SIP_SMC_READ_SEU_ERR
-+ * a1-7 not used
-+ *
-+ * Return status:
-+ * a0 INTEL_SIP_SMC_STATUS_OK, INTEL_SIP_SMC_STATUS_NOT_SUPPORTED or
-+ *    INTEL_SIP_SMC_STATUS_ERROR
-+ * a1 error count of response data
-+ * a2 sector address of response data
-+ * a3 error data
-+ */
-+#define INTEL_SIP_SMC_FUNCID_SEU_ERR_STATUS 153
-+#define INTEL_SIP_SMC_READ_SEU_ERR \
-+		INTEL_SIP_SMC_FAST_CALL_VAL(INTEL_SIP_SMC_FUNCID_SEU_ERR_STATUS)
-+
- #endif
--- 
-2.25.1
-
+Mrs Maria Elisabeth Schaeffler
+CEO SCHAEFFLER.
