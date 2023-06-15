@@ -2,43 +2,43 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08778731D55
-	for <lists+linux-edac@lfdr.de>; Thu, 15 Jun 2023 18:03:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EBABB731D5B
+	for <lists+linux-edac@lfdr.de>; Thu, 15 Jun 2023 18:03:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234782AbjFOQDv (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Thu, 15 Jun 2023 12:03:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50080 "EHLO
+        id S235755AbjFOQDx (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Thu, 15 Jun 2023 12:03:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233430AbjFOQDt (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Thu, 15 Jun 2023 12:03:49 -0400
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2080.outbound.protection.outlook.com [40.107.244.80])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23638273E;
-        Thu, 15 Jun 2023 09:03:48 -0700 (PDT)
+        with ESMTP id S231713AbjFOQDu (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Thu, 15 Jun 2023 12:03:50 -0400
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2076.outbound.protection.outlook.com [40.107.223.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C6B8E4;
+        Thu, 15 Jun 2023 09:03:49 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=eQiQEBVVmC5qcLRWc4EBv7lo6Vb37CRuh4SLBiweNqQxxrkNdO4Qugm8ZSqlseaIwDn5KmCZyrYkJdCkmITPnZAoIEd5KEV/NTlsb8ov+2lGTDFbiFIpn1msJYSIOigEyyxVWmxW72tMS6GGFEsJvzLaqCnDK3AnlCMrDfmpjy7k/nqE6tnYxNmafUDx9AltUpf4GjBy7JI+tJDozfU41345GFB4vt1HDDsq5Bx4w0KidC3k82Vn7gDwsoNioAUtK9LHy2qq1aFQUeTDKemoLWR/zCmuC7FguG0mxRVr0KBME4Z4cpuV9x0Nsukqp/1TkvAwHEf5ljeTETiLyF/DXQ==
+ b=OE2q1YgsVuHWmuYpMSOyAt7nLHFg4BniCyDISezhTM5rn/fggr7G3M7syb3x7HklbUs87eosDkJe5CudoqK+a1e9bpyICXJUpVnqeIdlN4Ofoz21jZX9QlwZrMlzEZjIUevlCtKhf9PWZyu7jSdQIQJeCL5p0cm/uynzK87IJShEar+4vFe/DCk0pBak2BPS2rBCQak5Mi2sZJXYhy+N/Y9YErBy67/4CHiR3oRRQLd9Saa/cVxpKVQQ/wO6iTW96UXYS/RhvaPaYj+IIpAoOGKerEpmFaK+9ybFopANxtEPWzX3IdzOKZHlgv6SpXRjT7jfmQCiVWkaGomxlRF1kw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=VtJwBKizAGp9kKoGXBrxKv24NxCNB76IKoZe2sOvSII=;
- b=h/g3Ld2B9ZN5Hk5lgZhe7t7a7yyTP7TS6Wu3hXK/T2wyM4rqrwI7WsGsJStQZS3USCeq53bMvX0eCf7X/MCSRURSKOGvYaX2TWRFKINurjIyA3lpZJPuFuGdDUrg/8EehAf28wYSVb0dQMaWGHlOb/SFNE5ZUOcgqhp9Xed8MSCxgOFb+fNz5L+99RmrEKi+yBGtyi8rrTxB6Tq6PKebuUsmKvBt0kNEDqVNhZpCPbqy27HzFUBosr0/U6BUWdmGf9kbsvS9DP8W/4ytz9YVNRnkMHIr9dbK0nj52oRixlTBhpwgxp/L+C65PiO9zqJ1hwJn5ueREJ2RnILbQZMaDw==
+ bh=8n6pR0SsFdo/0r+QsQhrVNyQ/1Xi+TgwPwV7FJp1+qs=;
+ b=JImipQ81VQELXjuNiVMArYqNDql3ZCHwjEHOnyX/DE9xdfUFBaDrUXVKUPA1ZZVOsr9pafRUB2OTHBEv8klleQYJTjGbI2FfdgbMWsnO20YAQI9prttuXFEhThmW8cB7HNHoOI6i2dQ6/bDVzXLUotCwf/EUT/JdW7Qc29qFKm6I9ZnsZfC0FEypeVCf1h7RNeYQx3IML1FXLfVIXTUyClP21Ga2OrbFnIdo+aTUL//g54aHLJpy+ifZTFNAKLDgo4QSfGZKAM+24mxgpgDh49Sd80re3bnfy7nal4fLUm9GjF93ITQZtFTg6EVHEuJEV5ixDZpUAv40LfH+GYvx9Q==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
  (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
  dkim=none (message not signed); arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=VtJwBKizAGp9kKoGXBrxKv24NxCNB76IKoZe2sOvSII=;
- b=2kebBYgGvs9IYW/QfCUCEHXnp5QUg7G4jm3NOEV87XPCvfCOTYKD4RcfW9KTGdq1zLXHz9Hg9lxXD/pvEtNslT4curoHW+AfDN/WoOdypQWZT91kQycYJc68YlF7TUPemBy+R1Imio63rcrxzkFwzbWD2C99ZCePqy8piiunPv8=
-Received: from MW4PR03CA0257.namprd03.prod.outlook.com (2603:10b6:303:b4::22)
- by PH0PR12MB5468.namprd12.prod.outlook.com (2603:10b6:510:ea::23) with
+ bh=8n6pR0SsFdo/0r+QsQhrVNyQ/1Xi+TgwPwV7FJp1+qs=;
+ b=yHiFiUK7SfMBkxGXNc33KwfEJAZvZfYWA/962gYvMXxpV0sL/RW9YTqKB5YyAWiNZNXiovXzIr6DvfrE1e7Yi9IWptq4AKmLsg9kUY84w9K8PbJku3WN3BYaSVtblvN+FEM2z7NMKHEGe78Wp0Lre5K1h9067ZIVQpyVHmRfpb0=
+Received: from MW4PR03CA0265.namprd03.prod.outlook.com (2603:10b6:303:b4::30)
+ by BY5PR12MB4870.namprd12.prod.outlook.com (2603:10b6:a03:1de::9) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6500.25; Thu, 15 Jun
- 2023 16:03:45 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6500.27; Thu, 15 Jun
+ 2023 16:03:46 +0000
 Received: from MWH0EPF000989E8.namprd02.prod.outlook.com
- (2603:10b6:303:b4:cafe::fa) by MW4PR03CA0257.outlook.office365.com
- (2603:10b6:303:b4::22) with Microsoft SMTP Server (version=TLS1_2,
+ (2603:10b6:303:b4:cafe::f1) by MW4PR03CA0265.outlook.office365.com
+ (2603:10b6:303:b4::30) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6500.27 via Frontend
- Transport; Thu, 15 Jun 2023 16:03:45 +0000
+ Transport; Thu, 15 Jun 2023 16:03:46 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
  smtp.mailfrom=amd.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=amd.com;
@@ -48,7 +48,7 @@ Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
 Received: from SATLEXMB04.amd.com (165.204.84.17) by
  MWH0EPF000989E8.mail.protection.outlook.com (10.167.241.135) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6500.27 via Frontend Transport; Thu, 15 Jun 2023 16:03:45 +0000
+ 15.20.6500.27 via Frontend Transport; Thu, 15 Jun 2023 16:03:46 +0000
 Received: from quartz-7b1chost.amd.com (10.180.168.240) by SATLEXMB04.amd.com
  (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Thu, 15 Jun
@@ -62,9 +62,9 @@ CC:     <linux-kernel@vger.kernel.org>,
         <jdelvare@suse.com>, <linux@roeck-us.net>,
         <linux-hwmon@vger.kernel.org>, <mario.limonciello@amd.com>,
         <babu.moger@amd.com>, Yazen Ghannam <yazen.ghannam@amd.com>
-Subject: [PATCH v2 4/6] x86/amd_nb: Enhance SMN access error checking
-Date:   Thu, 15 Jun 2023 11:03:26 -0500
-Message-ID: <20230615160328.419610-5-yazen.ghannam@amd.com>
+Subject: [PATCH v2 5/6] hwmon: (k10temp) Define helper function to read CCD temp
+Date:   Thu, 15 Jun 2023 11:03:27 -0500
+Message-ID: <20230615160328.419610-6-yazen.ghannam@amd.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230615160328.419610-1-yazen.ghannam@amd.com>
 References: <20230615160328.419610-1-yazen.ghannam@amd.com>
@@ -76,23 +76,23 @@ X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
  (10.181.40.145)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MWH0EPF000989E8:EE_|PH0PR12MB5468:EE_
-X-MS-Office365-Filtering-Correlation-Id: 713b32c8-d8eb-4953-fccb-08db6dba18fb
+X-MS-TrafficTypeDiagnostic: MWH0EPF000989E8:EE_|BY5PR12MB4870:EE_
+X-MS-Office365-Filtering-Correlation-Id: 8df0a458-a603-414c-b8df-08db6dba19ba
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: BfRbm1fwZ1UO996pszlvpmGUyFis1+N4dVI7Kf7DnU1PJZgcZsubX4SouNcsgsDxslchoD/0gqF981z7bavyIt4XI8cOVu8SiyFT3KpRAQ5CZm9csDvXKJ2aO0neTKLNSB2HmAKK7w5wDuLKPuBUkWUOJrhXAncQhIamHv7etbV4jU2dk+dUAt8Xow7jv6azD0U/J2Q3tLXEPJjY7CMYQFETgsjpmHsuyqWcixY4Kpn/2CrNjHafm2QE1tnBDNIDQZKRA9A5kvTMKJ57sJJIP5RUjIcmUAhk0mDBQ74cyQ+C3Pc7BtIOif+mT9zeebIoVJMH4qwojRntKyxJgG3PzT6/0yD615JVpEA16jqxfm2AZ4ApsE5/LJ2VrZ+B4kl6z3f1Lel9/ct6Igcnex96Fj5rYp2EF/kxWLLRN5VLsknClxlqAA+dhVfzgHcCVK0LTgnPyo4lBHJAsNWNqEDMU6yOELScHNPbswStbA5VIh5LU+Rjg2ZflnNn/q/xLLV3cAzEeK8PuVaLsA5NNEivR5J5jw+QapDndL9DEq8tImhcGFGWPARz/WF5iA9SsscynlA2oNXtj3uM6fBoFaAXy5f/SrJVlx+wg+9T1EYaJbuPmqZ5bBzeq1A4nLop598vrDh2BLjs7EnB0PS/Sw/feFSRjG/SFX4nfKUmxNOT2nz9N0JnGmr1etDLzGsRh/zagjemHMCmiJghhhGwZouYMYAE+nGk/CEHxI8yKbYtQwrzXM7FgTZYdQFwuFHewM2aTMvY0oZYfzl1B2w0ACj+BA==
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(376002)(346002)(136003)(39860400002)(396003)(451199021)(40470700004)(46966006)(36840700001)(40460700003)(5660300002)(82740400003)(966005)(81166007)(356005)(336012)(2616005)(83380400001)(426003)(1076003)(186003)(16526019)(2906002)(26005)(36860700001)(7416002)(47076005)(44832011)(478600001)(40480700001)(6916009)(70206006)(316002)(6666004)(8936002)(8676002)(41300700001)(7696005)(86362001)(82310400005)(70586007)(36756003)(4326008)(54906003)(36900700001);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: DqFWcK1R9Qd2DxQxtloXZVhdXn5dvE57vA71bbu4PzQFQxpc5HJ2qD+31rn0BHzZymxwGzvffHBE+dxVeS3GkTDiOdNHSIi4EY0EuIebMqv3T1s4JCegcvEaJS8xK2IzIwGPMxHOVv9QHulAd8GU26kkwdnKchlwc+8/jYVHcRsTlMn0dhOoucyR7BAnPV+htYLDKW5BU1ZOy57OR5wm+rGIHhk3m+dVxUTPRz4nAZNL8//habS+PIG5OG/tN5zx0hBrMc4RjYEzP0vd3knaxXh2jFN/W71+Dly59XSKNqElrg3YIzCJOEfN8az80NBvAReEu5b5pv6vSmbNIKc0YogY86kgz/aiBGNLkK2cnDxWH3r6H7CVPf9WYTV5Y+HYb53VATeyEw+Tebu9Fd//Pdi/V8YkqsKVLKE1eM/iB2baUnSIVAeHE7wgQ7SM/uHJbN19pH+JuFgH23CHXeAEk3mLY7pM2PXHWnIPUPC5SJbZ4CgCCko7Ob9V+tWrjZIvl/CMlH6J8FdqS7moRzUXe6lmia5Kkyvvey1HtNySHVa3RFttv2T6F0KW2N0i5LeCChRpxe9duglj7PDPhPeJrluG+r4RX9MHN8Zm3Q9Z8ueqIFN9b1n7SQ3CLf9kh0AdwW/g0NL02PldIAkMeY3ZIZIUq3b/HStNwgAmqlse4ndL2+P9nFWEklPKn3KeFz8DVw6D6Qgnpnr81WxvRuMO6J9/VidkbST5HzfWdoNIyzB20ITRVqlgZJ/FBzK3+tV9
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(136003)(396003)(376002)(346002)(39860400002)(451199021)(46966006)(36840700001)(40470700004)(2616005)(336012)(54906003)(83380400001)(426003)(36756003)(70586007)(47076005)(4326008)(356005)(82740400003)(478600001)(81166007)(70206006)(6916009)(2906002)(6666004)(16526019)(316002)(186003)(7696005)(26005)(36860700001)(8676002)(8936002)(86362001)(7416002)(82310400005)(966005)(41300700001)(5660300002)(40460700003)(44832011)(40480700001)(1076003)(36900700001);DIR:OUT;SFP:1101;
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Jun 2023 16:03:45.2006
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Jun 2023 16:03:46.4662
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 713b32c8-d8eb-4953-fccb-08db6dba18fb
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8df0a458-a603-414c-b8df-08db6dba19ba
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
 X-MS-Exchange-CrossTenant-AuthSource: MWH0EPF000989E8.namprd02.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR12MB5468
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR12MB4870
 X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
         RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
@@ -103,139 +103,65 @@ Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-AMD Zen-based systems use a System Management Network (SMN) that
-provides access to implementation-specific registers.
+The CCD temperature register is read in two places. These reads are done
+using an AMD SMN access, and a number of parameters are needed for the
+operation.
 
-SMN accesses are done indirectly through an index/data pair in PCI
-config space. The PCI config access may fail and return an error code.
-This would prevent the "read" value from being updated, and it would
-give an indication to the caller that the read or write operation failed.
+Move the SMN access and parameter gathering into a helper function in
+order to simply the code flow. This also has a benefit of centralizing
+the hardware register access in a single place in case fixes or special
+decoding is required.
 
-However for reads, the PCI config access may succeed, but the return
-value may be invalid. This is in similar fashion to PCI bad reads, i.e.
-return all bits set.
-
-Most systems will return 0 for SMN addresses that are not accessible.
-This is in line with AMD convention that unavailable registers are
-Read-as-Zero/Writes-Ignored.
-
-However, some systems will return a "PCI Error Response" instead. This
-value, along with an error code of 0 from the PCI config access, will
-confuse callers of the amd_smn_read() function.
-
-Check for this condition and set a proper error code for SMN reads.
-
-Furthermore, require error checking for callers of amd_smn_read() and
-amd_smn_write(). This is needed because many error conditions cannot
-be checked by these functions.
-
-Also, drop the extern keyword as it's not needed. And remove a warning
-that will not be trigger in many cases.
-
-Fixes: ddfe43cdc0da ("x86/amd_nb: Add SMN and Indirect Data Fabric access for AMD Fam17h")
 Signed-off-by: Yazen Ghannam <yazen.ghannam@amd.com>
-Cc: stable@vger.kernel.org
 ---
 Link:
-https://lore.kernel.org/r/20230516202430.4157216-5-yazen.ghannam@amd.com
+https://lore.kernel.org/r/20230516202430.4157216-6-yazen.ghannam@amd.com
 
 v1->v2:
-* No changes.
+* Address comments from Guenter.
 
- arch/x86/include/asm/amd_nb.h |  4 +--
- arch/x86/kernel/amd_nb.c      | 46 ++++++++++++++++++++++++++++++-----
- 2 files changed, 42 insertions(+), 8 deletions(-)
+ drivers/hwmon/k10temp.c | 14 +++++++++-----
+ 1 file changed, 9 insertions(+), 5 deletions(-)
 
-diff --git a/arch/x86/include/asm/amd_nb.h b/arch/x86/include/asm/amd_nb.h
-index ed0eaf65c437..e6fe405aa567 100644
---- a/arch/x86/include/asm/amd_nb.h
-+++ b/arch/x86/include/asm/amd_nb.h
-@@ -21,8 +21,8 @@ extern int amd_numa_init(void);
- extern int amd_get_subcaches(int);
- extern int amd_set_subcaches(int, unsigned long);
- 
--extern int amd_smn_read(u16 node, u32 address, u32 *value);
--extern int amd_smn_write(u16 node, u32 address, u32 value);
-+int __must_check amd_smn_read(u16 node, u32 address, u32 *value);
-+int __must_check amd_smn_write(u16 node, u32 address, u32 value);
- 
- struct amd_l3_cache {
- 	unsigned indices;
-diff --git a/arch/x86/kernel/amd_nb.c b/arch/x86/kernel/amd_nb.c
-index 035a3db5330b..60bebf6d4a37 100644
---- a/arch/x86/kernel/amd_nb.c
-+++ b/arch/x86/kernel/amd_nb.c
-@@ -163,6 +163,38 @@ static struct pci_dev *next_northbridge(struct pci_dev *dev,
- 	return dev;
+diff --git a/drivers/hwmon/k10temp.c b/drivers/hwmon/k10temp.c
+index 70f7b77e6ece..dfbba8b72f43 100644
+--- a/drivers/hwmon/k10temp.c
++++ b/drivers/hwmon/k10temp.c
+@@ -150,6 +150,13 @@ static void read_tempreg_nb_zen(struct pci_dev *pdev, u32 *regval)
+ 		*regval = 0;
  }
  
-+/*
-+ * SMN accesses may fail in ways that are difficult to detect here in the called
-+ * functions smn_read() and smn_write(). Therefore, callers of these functions
-+ * must do their own checking based on what behavior they expect.
-+ *
-+ * For SMN reads, the returned SMN value may be zero if the register is
-+ * Read-as-Zero . Or it may be a "PCI Error Response", e.g. all 0xFFs. The "PCI
-+ * Error Response" can be checked here, and a proper error code can be returned.
-+ * But the Read-as-Zero response cannot be verified here. A value of 0 may be
-+ * correct in some cases, so callers must check that this correct is for the
-+ * register/fields they need.
-+ *
-+ * For SMN writes, success can be determined through a "write and read back"
-+ * procedure. However, this is not robust when done here.
-+ *
-+ * Possible issues:
-+ * 1) Bits that are "Write-1-to-Clear". In this case, the read value should
-+ *    *not* match the write value.
-+ * 2) Bits that are "Read-as-Zero"/"Writes-Ignored". This information cannot be
-+ *    known here.
-+ * 3) Bits that are "Reserved / Set to 1". Ditto above.
-+ *
-+ * Callers of amd_smn_write() should do the "write and read back" check themselves,
-+ * if needed.
-+ *
-+ * For #1, they can see if their target bits got cleared.
-+ *
-+ * For #2 and #3, they can check if their target bits got set as intended.
-+ *
-+ * This matches what is done for rdmsr/wrmsr. As long as there's no #GP, then
-+ * the operation is considered a success, and the caller does their own checking.
-+ */
- static int __amd_smn_rw(u16 node, u32 address, u32 *value, bool write)
- {
- 	struct pci_dev *root;
-@@ -185,9 +217,6 @@ static int __amd_smn_rw(u16 node, u32 address, u32 *value, bool write)
- 
- 	err = (write ? pci_write_config_dword(root, 0x64, *value)
- 		     : pci_read_config_dword(root, 0x64, value));
--	if (err)
--		pr_warn("Error %s SMN address 0x%x.\n",
--			(write ? "writing to" : "reading from"), address);
- 
- out_unlock:
- 	mutex_unlock(&smn_mutex);
-@@ -196,13 +225,18 @@ static int __amd_smn_rw(u16 node, u32 address, u32 *value, bool write)
- 	return err;
- }
- 
--int amd_smn_read(u16 node, u32 address, u32 *value)
-+int __must_check amd_smn_read(u16 node, u32 address, u32 *value)
- {
--	return __amd_smn_rw(node, address, value, false);
-+	int err = __amd_smn_rw(node, address, value, false);
++static int read_ccd_temp_reg(struct k10temp_data *data, int ccd, u32 *regval)
++{
++	u16 node_id = amd_pci_dev_to_node_id(data->pdev);
 +
-+	if (PCI_POSSIBLE_ERROR(*value))
-+		err = -ENODEV;
++	return amd_smn_read(node_id, ZEN_CCD_TEMP(data->ccd_offset, ccd), regval);
++}
 +
-+	return err;
- }
- EXPORT_SYMBOL_GPL(amd_smn_read);
- 
--int amd_smn_write(u16 node, u32 address, u32 value)
-+int __must_check amd_smn_write(u16 node, u32 address, u32 value)
+ static long get_raw_temp(struct k10temp_data *data)
  {
- 	return __amd_smn_rw(node, address, &value, true);
- }
+ 	u32 regval;
+@@ -215,9 +222,7 @@ static int k10temp_read_temp(struct device *dev, u32 attr, int channel,
+ 				*val = 0;
+ 			break;
+ 		case 2 ... 13:		/* Tccd{1-12} */
+-			ret = amd_smn_read(amd_pci_dev_to_node_id(data->pdev),
+-					   ZEN_CCD_TEMP(data->ccd_offset, channel - 2),
+-					   &regval);
++			ret = read_ccd_temp_reg(data, channel - 2, &regval);
+ 
+ 			if (ret)
+ 				return ret;
+@@ -389,8 +394,7 @@ static void k10temp_get_ccd_support(struct pci_dev *pdev,
+ 		 * the register value. And this will incorrectly pass the TEMP_VALID
+ 		 * bit check.
+ 		 */
+-		if (amd_smn_read(amd_pci_dev_to_node_id(pdev),
+-				 ZEN_CCD_TEMP(data->ccd_offset, i), &regval))
++		if (read_ccd_temp_reg(data, i, &regval))
+ 			continue;
+ 
+ 		if (regval & ZEN_CCD_TEMP_VALID)
 -- 
 2.34.1
 
