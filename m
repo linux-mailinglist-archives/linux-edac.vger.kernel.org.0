@@ -2,58 +2,47 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 233CF732032
-	for <lists+linux-edac@lfdr.de>; Thu, 15 Jun 2023 20:49:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD0E67324F2
+	for <lists+linux-edac@lfdr.de>; Fri, 16 Jun 2023 03:59:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229767AbjFOStN (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Thu, 15 Jun 2023 14:49:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46578 "EHLO
+        id S237188AbjFPB7Z (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Thu, 15 Jun 2023 21:59:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229658AbjFOStL (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Thu, 15 Jun 2023 14:49:11 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EA371715;
-        Thu, 15 Jun 2023 11:49:10 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D48ED6006F;
-        Thu, 15 Jun 2023 18:49:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 237F1C433C8;
-        Thu, 15 Jun 2023 18:49:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686854949;
-        bh=k1BrEmpYIXWtIaiqc1FiaqGCg4LfEpw0l7lGiSlOcmU=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=FNmDZ0Hksi+nESkzoqQsBgBMP2ThQ7UzlQwBpbSyFPjd7IQCkGSfRUSkgvN9MXxmW
-         2zqZCaZIgKubGnRWSa6ZnE6MBG+SungmIwC3ClNxnWxDjgvoVB67F2cMcdtUlOt1QZ
-         Df+yNViV+Nk0L+GGdk15xUGkePYoYN/G/Tul+RD6RC1yGYePyMu0A1uIxJt4Yp3JlG
-         whlPIXptPZ52O//+tml7SIJ2ZuSGwg4Sug/mUBPFbHAx7rx1VI2WZsIqU074HytdRp
-         pHJHH36ibsuA3Hca43TwOc83UoyBSqBvPMbpcCw7+gq2Cg/aDVcHlqvk7NQeFmP0Hr
-         jZM5IXkwegfzg==
-Message-ID: <b76a8803-57aa-fa6b-ac33-b9d85f3398f9@kernel.org>
-Date:   Thu, 15 Jun 2023 13:49:06 -0500
+        with ESMTP id S229662AbjFPB7Y (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Thu, 15 Jun 2023 21:59:24 -0400
+Received: from out30-112.freemail.mail.aliyun.com (out30-112.freemail.mail.aliyun.com [115.124.30.112])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 693AC296E;
+        Thu, 15 Jun 2023 18:59:16 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R161e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045170;MF=xueshuai@linux.alibaba.com;NM=1;PH=DS;RN=11;SR=0;TI=SMTPD_---0VlDx9Js_1686880751;
+Received: from 30.240.112.107(mailfrom:xueshuai@linux.alibaba.com fp:SMTPD_---0VlDx9Js_1686880751)
+          by smtp.aliyun-inc.com;
+          Fri, 16 Jun 2023 09:59:12 +0800
+Message-ID: <5428166a-2a27-b400-f013-541309dcee5c@linux.alibaba.com>
+Date:   Fri, 16 Jun 2023 09:59:08 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v4 1/1] EDAC/altera: Check previous DDR DBE during driver
- probe
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.11.1
+Subject: Re: [PATCH 2/3] x86/mce: Define amd_mce_usable_address()
 Content-Language: en-US
-To:     niravkumar.l.rabara@intel.com
-Cc:     bp@alien8.de, james.morse@arm.com, linux-edac@vger.kernel.org,
-        linux-kernel@vger.kernel.org, mchehab@kernel.org, rric@kernel.org,
-        tony.luck@intel.com
-References: <20230503061000.3279381-1-niravkumar.l.rabara@intel.com>
- <20230615022534.4163918-1-niravkumar.l.rabara@intel.com>
- <20230615022534.4163918-2-niravkumar.l.rabara@intel.com>
-From:   Dinh Nguyen <dinguyen@kernel.org>
-In-Reply-To: <20230615022534.4163918-2-niravkumar.l.rabara@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+To:     Yazen Ghannam <yazen.ghannam@amd.com>, linux-edac@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, tony.luck@intel.com, x86@kernel.org,
+        muralidhara.mk@amd.com, joao.m.martins@oracle.com,
+        william.roche@oracle.com, boris.ostrovsky@oracle.com,
+        john.allen@amd.com, baolin.wang@linux.alibaba.com
+References: <20230613141142.36801-1-yazen.ghannam@amd.com>
+ <20230613141142.36801-3-yazen.ghannam@amd.com>
+ <31fdaacc-cc2b-5ea5-8a0e-e5ccfe674834@linux.alibaba.com>
+ <1e9b1a0c-564d-6a3c-c253-1b1da1773ecc@amd.com>
+ <31816165-e3fc-5bb2-71ad-6fe77ecd64a7@linux.alibaba.com>
+ <1171078d-fec3-297e-05f3-dc2e58bf2886@amd.com>
+From:   Shuai Xue <xueshuai@linux.alibaba.com>
+In-Reply-To: <1171078d-fec3-297e-05f3-dc2e58bf2886@amd.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-10.0 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,94 +52,93 @@ X-Mailing-List: linux-edac@vger.kernel.org
 
 
 
-On 6/14/23 21:25, niravkumar.l.rabara@intel.com wrote:
-> From: Niravkumar L Rabara <niravkumar.l.rabara@intel.com>
+On 2023/6/15 23:15, Yazen Ghannam wrote:
+> On 6/14/2023 10:12 PM, Shuai Xue wrote:
+>>
+>>
+>> On 2023/6/14 23:09, Yazen Ghannam wrote:
+>>> On 6/13/2023 10:19 PM, Shuai Xue wrote:
+>>>>
+>>>>
+>>>> On 2023/6/13 22:11, Yazen Ghannam wrote:
+>>>>> Currently, all valid MCA_ADDR values are assumed to be usable on AMD
+>>>>> systems. However, this is not correct in most cases. Notifiers expecting
+>>>>> usable addresses may then operate on inappropriate values.
+>>>>>
+>>>>> Define a helper function to do AMD-specific checks for a usable memory
+>>>>> address. List out all known cases.
+>>>>>
+>>>>> Signed-off-by: Yazen Ghannam <yazen.ghannam@amd.com>
+>>>>> ---
+>>>>>    arch/x86/kernel/cpu/mce/amd.c      | 38 ++++++++++++++++++++++++++++++
+>>>>>    arch/x86/kernel/cpu/mce/core.c     |  3 +++
+>>>>>    arch/x86/kernel/cpu/mce/internal.h |  2 ++
+>>>>>    3 files changed, 43 insertions(+)
+>>>>>
+>>>>> diff --git a/arch/x86/kernel/cpu/mce/amd.c b/arch/x86/kernel/cpu/mce/amd.c
+>>>>> index 1ccfb0c9257f..ca79fa10b844 100644
+>>>>> --- a/arch/x86/kernel/cpu/mce/amd.c
+>>>>> +++ b/arch/x86/kernel/cpu/mce/amd.c
+>>>>> @@ -746,6 +746,44 @@ bool amd_mce_is_memory_error(struct mce *m)
+>>>>>        return legacy_mce_is_memory_error(m);
+>>>>>    }
+>>>>>    +/*
+>>>>> + * AMD systems do not have an explicit indicator that the value in MCA_ADDR is
+>>>>> + * a system physical address. Therefore individual cases need to be detected.
+>>>>> + * Future cases and checks will be added as needed.
+>>>>> + *
+>>>>> + * 1) General case
+>>>>> + *    a) Assume address is not usable.
+>>>>> + * 2) "Poison" errors
+>>>>> + *    a) Indicated by MCA_STATUS[43]: POISON. Defined for all banks except legacy
+>>>>> + *       Northbridge (bank 4).
+>>>>> + *    b) Refers to poison consumption in the Core. Does not include "no action",
+>>>>> + *       "action optional", or "deferred" error severities.
+>>>>> + *    c) Will include a usuable address so that immediate action can be taken.
+>>>>> + * 3) Northbridge DRAM ECC errors
+>>>>> + *    a) Reported in legacy bank 4 with XEC 8.
+>>>>> + *    b) MCA_STATUS[43] is *not* defined as POISON in legacy bank 4. Therefore,
+>>>>> + *       this bit should not be checked.
+>>>> [nit]
+>>>>
+>>>>> + *
+>>>>> + * NOTE: SMCA UMC memory errors fall into case #1.
+>>>>
+>>>> hi, Yazen
+>>>>
+>>>> The address for SMCA UMC memory error is not system physical address, it make sense
+>>>> to be not usable. But how we deal with the SMCA address? The MCE chain like
+>>>> uc_decode_notifier will do a sanity check with mce_usable_address and it will not
+>>>> handle SMCA address.
+>>>>
+>>>
+>>> Hi Shuai,
+>>>
+>>> That's correct.
+>>>
+>>> There isn't a good solution today. This will be handled in future changes.
+>>
+>> Hi, Yazen,
+>>
+>> Do you have plan to address it? If not, I can help. We meet this problem in our products.
+>>
 > 
-> Add DDR DBE check during driver probe to notify user if previous
-> reboot cause by DDR DBE and print DBE error related information.
-> 
-> Signed-off-by: Niravkumar L Rabara <niravkumar.l.rabara@intel.com>
-> ---
->   drivers/edac/altera_edac.c                   | 29 ++++++++++++++++----
->   include/linux/firmware/intel/stratix10-smc.h | 20 ++++++++++++++
->   2 files changed, 44 insertions(+), 5 deletions(-)
-> 
-> diff --git a/drivers/edac/altera_edac.c b/drivers/edac/altera_edac.c
-> index 8b31cd54bdb6..04c0675adc8c 100644
-> --- a/drivers/edac/altera_edac.c
-> +++ b/drivers/edac/altera_edac.c
-> @@ -2159,6 +2159,7 @@ static int altr_edac_a10_probe(struct platform_device *pdev)
->   #ifdef CONFIG_64BIT
->   	{
->   		int dberror, err_addr;
-> +		struct arm_smccc_res result;
->   
->   		edac->panic_notifier.notifier_call = s10_edac_dberr_handler;
->   		atomic_notifier_chain_register(&panic_notifier_list,
-> @@ -2168,11 +2169,29 @@ static int altr_edac_a10_probe(struct platform_device *pdev)
->   		regmap_read(edac->ecc_mgr_map, S10_SYSMGR_UE_VAL_OFST,
->   			    &dberror);
->   		if (dberror) {
-> -			regmap_read(edac->ecc_mgr_map, S10_SYSMGR_UE_ADDR_OFST,
-> -				    &err_addr);
-> -			edac_printk(KERN_ERR, EDAC_DEVICE,
-> -				    "Previous Boot UE detected[0x%X] @ 0x%X\n",
-> -				    dberror, err_addr);
-> +			/* Bit-31 is set if previous DDR UE happened */
-> +			if (dberror & (1 << 31)) {
-> +				/* Read previous DDR UE info */
-> +				arm_smccc_smc(INTEL_SIP_SMC_READ_SEU_ERR, 0,
-> +					      0, 0, 0, 0, 0, 0, &result);
-> +
-> +				if (!result.a0) {
-> +					edac_printk(KERN_ERR, EDAC_DEVICE,
-> +						    "Previous DDR UE:Count=0x%X,Address=0x%X,ErrorData=0x%X\n"
-> +						    , (unsigned int)result.a1
-> +						    , (unsigned int)result.a2
-> +						    , (unsigned int)result.a3);
-> +				} else {
-> +					edac_printk(KERN_ERR, EDAC_DEVICE,
-> +						    "INTEL_SIP_SMC_SEU_ERR_STATUS failed\n");
-> +				}
-> +			} else {
-> +				regmap_read(edac->ecc_mgr_map, S10_SYSMGR_UE_ADDR_OFST,
-> +					    &err_addr);
-> +				edac_printk(KERN_ERR, EDAC_DEVICE,
-> +					    "Previous Boot UE detected[0x%X] @ 0x%X\n",
-> +					    dberror, err_addr);
-> +			}
->   			/* Reset the sticky registers */
->   			regmap_write(edac->ecc_mgr_map,
->   				     S10_SYSMGR_UE_VAL_OFST, 0);
-> diff --git a/include/linux/firmware/intel/stratix10-smc.h b/include/linux/firmware/intel/stratix10-smc.h
-> index a718f853d457..48810c39f612 100644
-> --- a/include/linux/firmware/intel/stratix10-smc.h
-> +++ b/include/linux/firmware/intel/stratix10-smc.h
-> @@ -595,4 +595,24 @@ INTEL_SIP_SMC_FAST_CALL_VAL(INTEL_SIP_SMC_FUNCID_FPGA_CONFIG_COMPLETED_WRITE)
->   #define INTEL_SIP_SMC_FCS_GET_PROVISION_DATA \
->   	INTEL_SIP_SMC_FAST_CALL_VAL(INTEL_SIP_SMC_FUNCID_FCS_GET_PROVISION_DATA)
->   
-> +/**
-> + * Request INTEL_SIP_SMC_READ_SEU_ERR
-> + * Sync call to get Single Event Upset Error information
-> + * SEU detects both corrected and uncorrected error
-> + *
-> + * Call register usage:
-> + * a0 INTEL_SIP_SMC_READ_SEU_ERR
-> + * a1-7 not used
-> + *
-> + * Return status:
-> + * a0 INTEL_SIP_SMC_STATUS_OK, INTEL_SIP_SMC_STATUS_NOT_SUPPORTED or
-> + *    INTEL_SIP_SMC_STATUS_ERROR
-> + * a1 error count of response data
-> + * a2 sector address of response data
-> + * a3 error data
-> + */
-> +#define INTEL_SIP_SMC_FUNCID_SEU_ERR_STATUS 153
-> +#define INTEL_SIP_SMC_READ_SEU_ERR \
-> +		INTEL_SIP_SMC_FAST_CALL_VAL(INTEL_SIP_SMC_FUNCID_SEU_ERR_STATUS)
-> +
->   #endif
+> Yes, definitely. The first step is to update the address translation code; this is progress. Afterwards, we can find a way to leverage this in the MCE notifier flows.
 
+Look forward to it.
 
-Acked-by: Dinh Nguyen <dinguyen@kernel.org>
+> 
+> Just curious, how big is the benefit of this preemptive page offline in your use cases? That is, compared to page offline as part of poison data consumption.
+
+There are three aspects of benefits if SMCA address detected by scrubber is offlined
+in advance:
+
+- Free page: it should be isolated and not allocated by buddy so that the poison data
+  will never be consumed.
+- In-use page: the heath VMs could be migrated into other heath node if many UCE occurs.
+- Mitigate the possibility of nested MCE which is a fatal error.
+
+Thank you.
+
+Best Regards,
+Shuai.
