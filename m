@@ -2,143 +2,204 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD0E67324F2
-	for <lists+linux-edac@lfdr.de>; Fri, 16 Jun 2023 03:59:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E29F732530
+	for <lists+linux-edac@lfdr.de>; Fri, 16 Jun 2023 04:21:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237188AbjFPB7Z (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Thu, 15 Jun 2023 21:59:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35526 "EHLO
+        id S240650AbjFPCVk (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Thu, 15 Jun 2023 22:21:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229662AbjFPB7Y (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Thu, 15 Jun 2023 21:59:24 -0400
-Received: from out30-112.freemail.mail.aliyun.com (out30-112.freemail.mail.aliyun.com [115.124.30.112])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 693AC296E;
-        Thu, 15 Jun 2023 18:59:16 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R161e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045170;MF=xueshuai@linux.alibaba.com;NM=1;PH=DS;RN=11;SR=0;TI=SMTPD_---0VlDx9Js_1686880751;
-Received: from 30.240.112.107(mailfrom:xueshuai@linux.alibaba.com fp:SMTPD_---0VlDx9Js_1686880751)
-          by smtp.aliyun-inc.com;
-          Fri, 16 Jun 2023 09:59:12 +0800
-Message-ID: <5428166a-2a27-b400-f013-541309dcee5c@linux.alibaba.com>
-Date:   Fri, 16 Jun 2023 09:59:08 +0800
+        with ESMTP id S231742AbjFPCVk (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Thu, 15 Jun 2023 22:21:40 -0400
+Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 079DD2683;
+        Thu, 15 Jun 2023 19:21:39 -0700 (PDT)
+Received: by mail-pg1-x535.google.com with SMTP id 41be03b00d2f7-544c0d768b9so239702a12.0;
+        Thu, 15 Jun 2023 19:21:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686882098; x=1689474098;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=+4N7B70/Rv7BZa0SRzL9Af0Cexudd4LOxkULscQwulc=;
+        b=ih7VP9eLFtU45PXs4IJnZ9z9j4G6J5rlbveKnJheJbRja1IdfK1B0UMLuINP703fZf
+         ArFswEtxYRVWp5D++oNTqwSc9xSUWp581amaALmzoZRHcokQAh8mS52AxSGRJIZ/kzzh
+         ANU5TnuEyP09iuPjmy1pDypXlPySbifM3i5SNy+X4+Rc39z1m934QQ3bvNfdUoLyhZWb
+         gc7YBW2nxdDcSDi/JooaiFt2LVdUeAQAtgwAfvMhEHnWjrq4CrNBmWtlQFB3283Kvbjx
+         kTMvBN99G+6v9rSSx2kvuKO670h6DLszdz9pEAEdyZlPeMwgRDLM15Gb54zQDuhN3afA
+         +Ntw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686882098; x=1689474098;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=+4N7B70/Rv7BZa0SRzL9Af0Cexudd4LOxkULscQwulc=;
+        b=TxP5YB+X2c8YbA2bCuLMZPqrqECd5vPVtek2HCVfiOWTARlwUaMRySsFvE47vGCTXq
+         0SXaGamd7PcVbYAtKMRS6mfc6RdM8f6xgUiMyssqtM2/SCVlNpMYTp679j4ylTFDdgw9
+         8iXVR1LV0fq3nF6A9vd1+ec2JW2HxVtko50TvqTcIu5EfVwRVBst8M+tKpCE/GWq2rhw
+         IUF23gG0R7fAluwaIBBFlzPClSSHePR0ojZVNvIt5AlTq4/tMQbelJMTVL40Z97fl6df
+         wmAvZkFDrM7SXjixXIfWJdWGYFyWqIYg+YxdB9+FwIHSK/hqNiyBEUapThqSK2Ofx9zG
+         6jrg==
+X-Gm-Message-State: AC+VfDwX6+XJJXQpMWBzsR3LGZcMKHGiz+ip0uvkuGiMBJCs2cyHJU8o
+        X65zn4pM0/znUu+WcTfWB3c=
+X-Google-Smtp-Source: ACHHUZ7v4dc+4lIw84np7JkL1X+Nb2OA35xK70EZgiClGOKBg6ohZoxnfl8hdOF3Pl7ho0vy9SyKyw==
+X-Received: by 2002:a05:6a20:9192:b0:10f:be0:4dce with SMTP id v18-20020a056a20919200b0010f0be04dcemr1522678pzd.8.1686882098320;
+        Thu, 15 Jun 2023 19:21:38 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id r9-20020a62e409000000b00666a83bd544sm1371070pfh.23.2023.06.15.19.21.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 15 Jun 2023 19:21:37 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <a144a969-fa29-bc05-3daf-c6346dae644c@roeck-us.net>
+Date:   Thu, 15 Jun 2023 19:21:35 -0700
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.11.1
-Subject: Re: [PATCH 2/3] x86/mce: Define amd_mce_usable_address()
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v2 3/6] hwmon: (k10temp) Check return value of
+ amd_smn_read()
 Content-Language: en-US
-To:     Yazen Ghannam <yazen.ghannam@amd.com>, linux-edac@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, tony.luck@intel.com, x86@kernel.org,
-        muralidhara.mk@amd.com, joao.m.martins@oracle.com,
-        william.roche@oracle.com, boris.ostrovsky@oracle.com,
-        john.allen@amd.com, baolin.wang@linux.alibaba.com
-References: <20230613141142.36801-1-yazen.ghannam@amd.com>
- <20230613141142.36801-3-yazen.ghannam@amd.com>
- <31fdaacc-cc2b-5ea5-8a0e-e5ccfe674834@linux.alibaba.com>
- <1e9b1a0c-564d-6a3c-c253-1b1da1773ecc@amd.com>
- <31816165-e3fc-5bb2-71ad-6fe77ecd64a7@linux.alibaba.com>
- <1171078d-fec3-297e-05f3-dc2e58bf2886@amd.com>
-From:   Shuai Xue <xueshuai@linux.alibaba.com>
-In-Reply-To: <1171078d-fec3-297e-05f3-dc2e58bf2886@amd.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-10.0 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+To:     Yazen Ghannam <yazen.ghannam@amd.com>, x86@kernel.org
+Cc:     linux-kernel@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        markgross@kernel.org, hdegoede@redhat.com,
+        Shyam-sundar.S-k@amd.com, linux-edac@vger.kernel.org,
+        clemens@ladisch.de, jdelvare@suse.com, linux-hwmon@vger.kernel.org,
+        mario.limonciello@amd.com, babu.moger@amd.com
+References: <20230615160328.419610-1-yazen.ghannam@amd.com>
+ <20230615160328.419610-4-yazen.ghannam@amd.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <20230615160328.419610-4-yazen.ghannam@amd.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-
-
-On 2023/6/15 23:15, Yazen Ghannam wrote:
-> On 6/14/2023 10:12 PM, Shuai Xue wrote:
->>
->>
->> On 2023/6/14 23:09, Yazen Ghannam wrote:
->>> On 6/13/2023 10:19 PM, Shuai Xue wrote:
->>>>
->>>>
->>>> On 2023/6/13 22:11, Yazen Ghannam wrote:
->>>>> Currently, all valid MCA_ADDR values are assumed to be usable on AMD
->>>>> systems. However, this is not correct in most cases. Notifiers expecting
->>>>> usable addresses may then operate on inappropriate values.
->>>>>
->>>>> Define a helper function to do AMD-specific checks for a usable memory
->>>>> address. List out all known cases.
->>>>>
->>>>> Signed-off-by: Yazen Ghannam <yazen.ghannam@amd.com>
->>>>> ---
->>>>>    arch/x86/kernel/cpu/mce/amd.c      | 38 ++++++++++++++++++++++++++++++
->>>>>    arch/x86/kernel/cpu/mce/core.c     |  3 +++
->>>>>    arch/x86/kernel/cpu/mce/internal.h |  2 ++
->>>>>    3 files changed, 43 insertions(+)
->>>>>
->>>>> diff --git a/arch/x86/kernel/cpu/mce/amd.c b/arch/x86/kernel/cpu/mce/amd.c
->>>>> index 1ccfb0c9257f..ca79fa10b844 100644
->>>>> --- a/arch/x86/kernel/cpu/mce/amd.c
->>>>> +++ b/arch/x86/kernel/cpu/mce/amd.c
->>>>> @@ -746,6 +746,44 @@ bool amd_mce_is_memory_error(struct mce *m)
->>>>>        return legacy_mce_is_memory_error(m);
->>>>>    }
->>>>>    +/*
->>>>> + * AMD systems do not have an explicit indicator that the value in MCA_ADDR is
->>>>> + * a system physical address. Therefore individual cases need to be detected.
->>>>> + * Future cases and checks will be added as needed.
->>>>> + *
->>>>> + * 1) General case
->>>>> + *    a) Assume address is not usable.
->>>>> + * 2) "Poison" errors
->>>>> + *    a) Indicated by MCA_STATUS[43]: POISON. Defined for all banks except legacy
->>>>> + *       Northbridge (bank 4).
->>>>> + *    b) Refers to poison consumption in the Core. Does not include "no action",
->>>>> + *       "action optional", or "deferred" error severities.
->>>>> + *    c) Will include a usuable address so that immediate action can be taken.
->>>>> + * 3) Northbridge DRAM ECC errors
->>>>> + *    a) Reported in legacy bank 4 with XEC 8.
->>>>> + *    b) MCA_STATUS[43] is *not* defined as POISON in legacy bank 4. Therefore,
->>>>> + *       this bit should not be checked.
->>>> [nit]
->>>>
->>>>> + *
->>>>> + * NOTE: SMCA UMC memory errors fall into case #1.
->>>>
->>>> hi, Yazen
->>>>
->>>> The address for SMCA UMC memory error is not system physical address, it make sense
->>>> to be not usable. But how we deal with the SMCA address? The MCE chain like
->>>> uc_decode_notifier will do a sanity check with mce_usable_address and it will not
->>>> handle SMCA address.
->>>>
->>>
->>> Hi Shuai,
->>>
->>> That's correct.
->>>
->>> There isn't a good solution today. This will be handled in future changes.
->>
->> Hi, Yazen,
->>
->> Do you have plan to address it? If not, I can help. We meet this problem in our products.
->>
+On 6/15/23 09:03, Yazen Ghannam wrote:
+> Check the return value of amd_smn_read() before saving a value. This
+> ensures invalid values aren't saved or used.
 > 
-> Yes, definitely. The first step is to update the address translation code; this is progress. Afterwards, we can find a way to leverage this in the MCE notifier flows.
-
-Look forward to it.
-
+> There are three cases here with slightly different behavior.
 > 
-> Just curious, how big is the benefit of this preemptive page offline in your use cases? That is, compared to page offline as part of poison data consumption.
+> 1) read_tempreg_nb_zen():
+> 	This is a function pointer which does not include a return code.
+> 	In this case, set the register value to 0 on failure. This
+> 	enforces Read-as-Zero behavior.
+> 
+> 2) k10temp_read_temp():
+> 	This function does have return codes, so return the error code
+> 	from the failed register read. Continued operation is not
+> 	necessary, since there is no valid data from the register.
+> 	Furthermore, if the register value was set to 0, then the
+> 	following operation would underflow.
+> 
+> 3) k10temp_get_ccd_support():
+> 	This function reads the same register from multiple CCD
+> 	instances in a loop. And a bitmask is formed if a specific bit
+> 	is set in each register instance. The loop should continue on a
+> 	failed register read, skipping the bit check.
+> 
+> Furthermore, the __must_check attribute will be added to amd_smn_read().
+> Therefore, this change is required to avoid compile-time warnings.
+> 
+> Signed-off-by: Yazen Ghannam <yazen.ghannam@amd.com>
+> Cc: stable@vger.kernel.org
 
-There are three aspects of benefits if SMCA address detected by scrubber is offlined
-in advance:
+Acked-by: Guenter Roeck <linux@roeck-us.net>
 
-- Free page: it should be isolated and not allocated by buddy so that the poison data
-  will never be consumed.
-- In-use page: the heath VMs could be migrated into other heath node if many UCE occurs.
-- Mitigate the possibility of nested MCE which is a fatal error.
+> ---
+> Link:
+> https://lore.kernel.org/r/20230516202430.4157216-4-yazen.ghannam@amd.com
+> 
+> v1->v2:
+> * Address comments from Guenter.
+> 
+>   drivers/hwmon/k10temp.c | 36 +++++++++++++++++++++++++++---------
+>   1 file changed, 27 insertions(+), 9 deletions(-)
+> 
+> diff --git a/drivers/hwmon/k10temp.c b/drivers/hwmon/k10temp.c
+> index 7b177b9fbb09..70f7b77e6ece 100644
+> --- a/drivers/hwmon/k10temp.c
+> +++ b/drivers/hwmon/k10temp.c
+> @@ -145,8 +145,9 @@ static void read_tempreg_nb_f15(struct pci_dev *pdev, u32 *regval)
+>   
+>   static void read_tempreg_nb_zen(struct pci_dev *pdev, u32 *regval)
+>   {
+> -	amd_smn_read(amd_pci_dev_to_node_id(pdev),
+> -		     ZEN_REPORTED_TEMP_CTRL_BASE, regval);
+> +	if (amd_smn_read(amd_pci_dev_to_node_id(pdev),
+> +			 ZEN_REPORTED_TEMP_CTRL_BASE, regval))
+> +		*regval = 0;
+>   }
+>   
+>   static long get_raw_temp(struct k10temp_data *data)
+> @@ -197,6 +198,7 @@ static int k10temp_read_temp(struct device *dev, u32 attr, int channel,
+>   			     long *val)
+>   {
+>   	struct k10temp_data *data = dev_get_drvdata(dev);
+> +	int ret = -EOPNOTSUPP;
+>   	u32 regval;
+>   
+>   	switch (attr) {
+> @@ -213,13 +215,17 @@ static int k10temp_read_temp(struct device *dev, u32 attr, int channel,
+>   				*val = 0;
+>   			break;
+>   		case 2 ... 13:		/* Tccd{1-12} */
+> -			amd_smn_read(amd_pci_dev_to_node_id(data->pdev),
+> -				     ZEN_CCD_TEMP(data->ccd_offset, channel - 2),
+> -						  &regval);
+> +			ret = amd_smn_read(amd_pci_dev_to_node_id(data->pdev),
+> +					   ZEN_CCD_TEMP(data->ccd_offset, channel - 2),
+> +					   &regval);
+> +
+> +			if (ret)
+> +				return ret;
+> +
+>   			*val = (regval & ZEN_CCD_TEMP_MASK) * 125 - 49000;
+>   			break;
+>   		default:
+> -			return -EOPNOTSUPP;
+> +			return ret;
+>   		}
+>   		break;
+>   	case hwmon_temp_max:
+> @@ -235,7 +241,7 @@ static int k10temp_read_temp(struct device *dev, u32 attr, int channel,
+>   			- ((regval >> 24) & 0xf)) * 500 + 52000;
+>   		break;
+>   	default:
+> -		return -EOPNOTSUPP;
+> +		return ret;
+>   	}
+>   	return 0;
+>   }
+> @@ -373,8 +379,20 @@ static void k10temp_get_ccd_support(struct pci_dev *pdev,
+>   	int i;
+>   
+>   	for (i = 0; i < limit; i++) {
+> -		amd_smn_read(amd_pci_dev_to_node_id(pdev),
+> -			     ZEN_CCD_TEMP(data->ccd_offset, i), &regval);
+> +		/*
+> +		 * Ignore inaccessible CCDs.
+> +		 *
+> +		 * Some systems will return a register value of 0, and the TEMP_VALID
+> +		 * bit check below will naturally fail.
+> +		 *
+> +		 * Other systems will return a PCI_ERROR_RESPONSE (0xFFFFFFFF) for
+> +		 * the register value. And this will incorrectly pass the TEMP_VALID
+> +		 * bit check.
+> +		 */
+> +		if (amd_smn_read(amd_pci_dev_to_node_id(pdev),
+> +				 ZEN_CCD_TEMP(data->ccd_offset, i), &regval))
+> +			continue;
+> +
+>   		if (regval & ZEN_CCD_TEMP_VALID)
+>   			data->show_temp |= BIT(TCCD_BIT(i));
+>   	}
 
-Thank you.
-
-Best Regards,
-Shuai.
