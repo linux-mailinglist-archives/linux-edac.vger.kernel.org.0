@@ -2,90 +2,90 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3595F73557C
-	for <lists+linux-edac@lfdr.de>; Mon, 19 Jun 2023 13:07:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B9EF737A03
+	for <lists+linux-edac@lfdr.de>; Wed, 21 Jun 2023 06:01:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229563AbjFSLHo (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Mon, 19 Jun 2023 07:07:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38920 "EHLO
+        id S229659AbjFUEBQ (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Wed, 21 Jun 2023 00:01:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229905AbjFSLHf (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Mon, 19 Jun 2023 07:07:35 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21C53FA;
-        Mon, 19 Jun 2023 04:07:24 -0700 (PDT)
-Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 5AA611EC0978;
-        Mon, 19 Jun 2023 13:07:23 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1687172843;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=AzXBLSMUzdGSpkuYbpw2n9gPhEv7jeKEK0oheqBR6v0=;
-        b=bbd+4OCrcTzzN7ewtXwwg7eMas3ODEG4qxC0Enu5OFPzZdD5IDaZqWsoFmTvOyThzLZnD2
-        gG0SEQGmVM0DSsib6NCafWcv33AplxtxwKdxO+MfX4M5nJoMdp0/QTgNIyNsjOqd94WkW0
-        kTzKeZzXB+2EBxi2F4fxpHOlinnJVnQ=
-X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
-Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
-        header.d=alien8.de
-Received: from mail.alien8.de ([127.0.0.1])
-        by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id CIGfTPVhJV9s; Mon, 19 Jun 2023 11:07:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-        t=1687172841; bh=AzXBLSMUzdGSpkuYbpw2n9gPhEv7jeKEK0oheqBR6v0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=cbrzuFfU4W66bUfpIKucnaoi414Jg/WJ+Qa6KWBdzfSbdtvPJ488p/eCFvxDxL1Mo
-         CZKTIVUxY4LWn5GbeCGnmd/+hXpqHpdGvpP/TosdcSYRQK5HlEsK2m4JvkM8YNF5Op
-         pc8SpYCU9VHmhYlH4f7cfmzM8YkxQceaAodyAAMg+MKGaypW/+VtoQ0V6B0oqKVxqi
-         qLtZAooqzxr2+OnJhqkCYUPnruIO3HHXJy+ZfdLZWEQGr58D0jLqtmLKxh4H8zIiON
-         n4+BHmYJvBuLbyrHJo73dNvUK8cKEvGdddnQ8D6xKdVbVxpO/98ti5Pzen7KTXYdAH
-         TyNUg6tAKqeVcJFRlIrVm/COP/m671kd9dVmHUJQA1QBTr7KmmXL9Ii/+dAhn0ne2l
-         bGDUV7aYIlO9ovheO5WK5dRMgWTX/VSPNsK1H4A+M0Av2bFPgw9r+ySsxvHAyOHoDz
-         CqoDGEiHAffHdcfZUnigr9FXJ9rpwnDe+N91dA1328auDDaWvb34IoGBxRxFKNkv+n
-         MKPs51Cqw4JkDkS18zWkIdN9uFGiXuB3LoU8kxi/athrf0k0k0i7SSyVSD04ICS0pI
-         ATui8664uksDNBnrCsv0cB8er1fMpo/5ambr4CjQJ+D4XrMVF4xxY90peQ51mT9Lg0
-         SGdwyzfzdt9NikJEj76iCDKQ=
-Received: from zn.tnic (p200300eA971Dc5d9329C23FffEA6A903.dip0.t-ipconnect.de [IPv6:2003:ea:971d:c5d9:329c:23ff:fea6:a903])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
-        (No client certificate requested)
-        by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 088D540E01D0;
-        Mon, 19 Jun 2023 11:07:12 +0000 (UTC)
-Date:   Mon, 19 Jun 2023 13:07:04 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Yazen Ghannam <yazen.ghannam@amd.com>
-Cc:     Tom Rix <trix@redhat.com>, tony.luck@intel.com,
-        james.morse@arm.com, mchehab@kernel.org, rric@kernel.org,
-        linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] EDAC/amd64: set variable gpu_node_map
- storage-class-specifier to static
-Message-ID: <20230619110704.GAZJA22FpkwY108vUh@fat_crate.local>
-References: <20230610210930.174074-1-trix@redhat.com>
- <89a67e4d-cada-ff57-f702-d5579ea8b39c@amd.com>
+        with ESMTP id S229952AbjFUEBE (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Wed, 21 Jun 2023 00:01:04 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 364401BD9;
+        Tue, 20 Jun 2023 21:00:45 -0700 (PDT)
+Received: from canpemm500002.china.huawei.com (unknown [172.30.72.53])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4Qm8tD6qc1z1FDhn;
+        Wed, 21 Jun 2023 12:00:36 +0800 (CST)
+Received: from [10.174.151.185] (10.174.151.185) by
+ canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.27; Wed, 21 Jun 2023 12:00:43 +0800
+Subject: Re: [PATCH] EDAC/mc: fix potential memoryleak in edac_mc_alloc()
+To:     <tony.luck@intel.com>, <bp@alien8.de>
+CC:     <james.morse@arm.com>, <mchehab@kernel.org>, <rric@kernel.org>,
+        <linux-edac@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <20230603144131.832804-1-linmiaohe@huawei.com>
+From:   Miaohe Lin <linmiaohe@huawei.com>
+Message-ID: <e9d1f449-17ad-c4d9-05b0-779c7160433e@huawei.com>
+Date:   Wed, 21 Jun 2023 12:00:42 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <89a67e4d-cada-ff57-f702-d5579ea8b39c@amd.com>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR
-        autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20230603144131.832804-1-linmiaohe@huawei.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.151.185]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ canpemm500002.china.huawei.com (7.192.104.244)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Wed, Jun 14, 2023 at 11:21:46AM -0400, Yazen Ghannam wrote:
-> Also, would a Fixes tag be appropriate?
+On 2023/6/3 22:41, Miaohe Lin wrote:
+> When fails to allocate memory for layers or pvt_info, _edac_mc_free()
+> will be called to release the resource of edac mc but mci->dev is not
+> even initialized at that time. _edac_mc_free() will fail to release
+> the allocated memory.
 
-No need. I've squashed this with the topmost commit in tip:ras/core
-which introduced gpu_node_map in the first place.
+friendly ping.. :)
 
--- 
-Regards/Gruss,
-    Boris.
+> 
+> Fixes: 0bbb265f7089 ("EDAC/mc: Get rid of silly one-shot struct allocation in edac_mc_alloc()")
+> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
+> ---
+>  drivers/edac/edac_mc.c | 5 ++---
+>  1 file changed, 2 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/edac/edac_mc.c b/drivers/edac/edac_mc.c
+> index 6faeb2ab3960..89dc5954d19e 100644
+> --- a/drivers/edac/edac_mc.c
+> +++ b/drivers/edac/edac_mc.c
+> @@ -364,6 +364,8 @@ struct mem_ctl_info *edac_mc_alloc(unsigned int mc_num,
+>  	mci = kzalloc(sizeof(struct mem_ctl_info), GFP_KERNEL);
+>  	if (!mci)
+>  		return NULL;
+> +	mci->dev.release = mci_release;
+> +	device_initialize(&mci->dev);
+>  
+>  	mci->layers = kcalloc(n_layers, sizeof(struct edac_mc_layer), GFP_KERNEL);
+>  	if (!mci->layers)
+> @@ -373,9 +375,6 @@ struct mem_ctl_info *edac_mc_alloc(unsigned int mc_num,
+>  	if (!mci->pvt_info)
+>  		goto error;
+>  
+> -	mci->dev.release = mci_release;
+> -	device_initialize(&mci->dev);
+> -
+>  	/* setup index and various internal pointers */
+>  	mci->mc_idx = mc_num;
+>  	mci->tot_dimms = tot_dimms;
+> 
 
-https://people.kernel.org/tglx/notes-about-netiquette
