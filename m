@@ -2,75 +2,101 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA00173EED6
-	for <lists+linux-edac@lfdr.de>; Tue, 27 Jun 2023 00:54:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 53B0B73F123
+	for <lists+linux-edac@lfdr.de>; Tue, 27 Jun 2023 05:05:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229913AbjFZWyF (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Mon, 26 Jun 2023 18:54:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47440 "EHLO
+        id S229670AbjF0DFr (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Mon, 26 Jun 2023 23:05:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230224AbjFZWyD (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Mon, 26 Jun 2023 18:54:03 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52BC71B1;
-        Mon, 26 Jun 2023 15:54:02 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3079560F9B;
-        Mon, 26 Jun 2023 22:54:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 93F25C433C8;
-        Mon, 26 Jun 2023 22:54:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687820041;
-        bh=7NrI+R0CJ53BqUcNv8qwUmv+sivwME0iGAI+yWgXV58=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=EWwxXCdpglYoaPLB4Zvbt5ymq8koYOnjuKRblCPmqMNfeBPZXAAeYW8U0RgY3/O4x
-         qMZUo9gD8Ka1jGVE5jOXfgiQduRzNOC1+t5uyClrp5+dAUfIMfkW04DrIq1+eFcJ4a
-         rtKyV73cSrf+6lxNOBr0jt5doODMaAHJLjeAvgq7DJnMlAhtRH1vuYGlSY2bfMFyH4
-         2oiErKoS2LbNf/xHVn+PBHJUw7RY1vT2pD61I4VM854ZcJC1RTzly33BuhNO+2nVdG
-         bP+xuWTdIR2i8RiUn+Nifg33OBL8UMZm+4BiuLRPs2hLeDCpn9CletyEXJLvD6wH0h
-         kKBl/DeXqtJ1A==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 819A1C43170;
-        Mon, 26 Jun 2023 22:54:01 +0000 (UTC)
-Subject: Re: [GIT PULL] EDAC updates for 6.5
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20230626114842.GAZJl7GsleaEc2+cU1@fat_crate.local>
-References: <20230626114842.GAZJl7GsleaEc2+cU1@fat_crate.local>
-X-PR-Tracked-List-Id: <linux-edac.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20230626114842.GAZJl7GsleaEc2+cU1@fat_crate.local>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/ras/ras.git tags/edac_updates_for_v6.5
-X-PR-Tracked-Commit-Id: 852667c317ae23f366cfaade3b9269b1943888dd
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: e5ce2f196fb9ab35fe18dcfd2bc17883db7bbe33
-Message-Id: <168782004152.10634.6649441276896881332.pr-tracker-bot@kernel.org>
-Date:   Mon, 26 Jun 2023 22:54:01 +0000
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-edac <linux-edac@vger.kernel.org>,
-        lkml <linux-kernel@vger.kernel.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        with ESMTP id S229562AbjF0DFq (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Mon, 26 Jun 2023 23:05:46 -0400
+Received: from lobo.ruivo.org (lobo.ruivo.org [173.14.175.98])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7C04BB
+        for <linux-edac@vger.kernel.org>; Mon, 26 Jun 2023 20:05:42 -0700 (PDT)
+Received: by lobo.ruivo.org (Postfix, from userid 1011)
+        id B811753150; Mon, 26 Jun 2023 23:05:41 -0400 (EDT)
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Level: 
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
+Received: from jake.ruivo.org (bob.qemu.ruivo [192.168.72.19])
+        by lobo.ruivo.org (Postfix) with ESMTPA id 7C7CC529A0;
+        Mon, 26 Jun 2023 23:05:23 -0400 (EDT)
+Received: by jake.ruivo.org (Postfix, from userid 1000)
+        id 57DC6220039; Mon, 26 Jun 2023 23:05:23 -0400 (EDT)
+Date:   Mon, 26 Jun 2023 23:05:23 -0400
+From:   Aristeu Rozanski <aris@ruivo.org>
+To:     "Luck, Tony" <tony.luck@intel.com>
+Cc:     "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
+        Borislav Petkov <bp@alien8.de>,
+        "aris@redhat.com" <aris@redhat.com>
+Subject: Re: [PATCH v2] mce: prevent concurrent polling of MCE events
+Message-ID: <20230627030523.GY4090740@cathedrallabs.org>
+References: <20230626203712.GW4090740@cathedrallabs.org>
+ <ZJn8lbn5DzV0k+UR@agluck-desk3>
+ <20230626223220.GX4090740@cathedrallabs.org>
+ <SJ1PR11MB6083D9C80B75F32AAB52A939FC26A@SJ1PR11MB6083.namprd11.prod.outlook.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <SJ1PR11MB6083D9C80B75F32AAB52A939FC26A@SJ1PR11MB6083.namprd11.prod.outlook.com>
+User-Agent: Mutt/2.2.9 (2022-11-12)
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-The pull request you sent on Mon, 26 Jun 2023 13:48:42 +0200:
+On Mon, Jun 26, 2023 at 10:52:01PM +0000, Luck, Tony wrote:
+> topology_physical_package_id(cpu);
+> 
+> But it seems like that adds a lot of work to find out how many packages there
+> are and initialize a spin lock for each one. Just to reduce what is likely to be
+> quite low contention on a lock in a rare code path.
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/ras/ras.git tags/edac_updates_for_v6.5
+OK, I'll update the description then.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/e5ce2f196fb9ab35fe18dcfd2bc17883db7bbe33
+> > Or is this OK because this will always return false on AMD?
+> >
+> > That was my intention. I could use a static to only call
+> > cmci_supported_hw() once (that in fact could be useful for users of
+> > cmci_supported() that actually just want cmci_supported_hw() but I didn't
+> > want to mix it with this change) if you prefer:
+> 
+> Maybe the function just needs a better name. Calling something
+> with an "intel_cmci_" prefix from generic code is what's causing me
+> to step back.
+> 
+> What if the code read:
+> 
+> 	if (mce_available(this_cpu_ptr(&cpu_info))) {
+> +		bool locked = serialize_mc_bank_access();
+>  		machine_check_poll(0, this_cpu_ptr(&mce_poll_banks));
+> +		unserialize_mc_bank_access(locked);
+> 
+> As an intermediate functions. With core.c declaring:
+> 
+> static bool serialize_mc_bank_access(void)
+> {
+> 	if (boot_cpu_data.x86_vendor != X86_VENDOR_INTEL)
+> 		return false;
+> 
+> 	return intel_cmci_poll_lock();
+> }
+> 
+> static void unserialize_mc_bank_access(bool locked)
+> {
+> 	if (!locked || boot_cpu_data.x86_vendor != X86_VENDOR_INTEL)
+> 		return false;
+> 
+> 	return intel_cmci_poll_unlock();
+> }
+> 
+> That would be in-lined and almost all disappear for CONFIG_X86_MCE_INTEL=n
 
-Thank you!
+Ah, I see. Makes sense. I'll update and send it tomorrow.
 
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+Aristeu
+
