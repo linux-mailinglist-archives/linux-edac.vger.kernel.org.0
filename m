@@ -2,116 +2,133 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9255D740A44
-	for <lists+linux-edac@lfdr.de>; Wed, 28 Jun 2023 10:01:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A18EA740C82
+	for <lists+linux-edac@lfdr.de>; Wed, 28 Jun 2023 11:18:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231419AbjF1IA7 (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Wed, 28 Jun 2023 04:00:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34152 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232186AbjF1H5z (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Wed, 28 Jun 2023 03:57:55 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A483619B0
-        for <linux-edac@vger.kernel.org>; Wed, 28 Jun 2023 00:56:48 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1qEPNL-0006qG-NW; Wed, 28 Jun 2023 09:14:03 +0200
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1qEPNG-00AcM7-1r; Wed, 28 Jun 2023 09:13:58 +0200
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1qEPNF-000SZ8-3b; Wed, 28 Jun 2023 09:13:57 +0200
-From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-To:     Avi Fishman <avifishman70@gmail.com>,
-        Tomer Maimon <tmaimon77@gmail.com>,
-        Tali Perry <tali.perry1@gmail.com>,
-        Borislav Petkov <bp@alien8.de>, Tony Luck <tony.luck@intel.com>
-Cc:     kernel@pengutronix.de, Patrick Venture <venture@google.com>,
-        Nancy Yuen <yuenn@google.com>,
-        Benjamin Fair <benjaminfair@google.com>,
-        Marvin Lin <kflin@nuvoton.com>,
-        Stanley Chu <yschu@nuvoton.com>,
+        id S233055AbjF1JS1 (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Wed, 28 Jun 2023 05:18:27 -0400
+Received: from smtp-relay-internal-1.canonical.com ([185.125.188.123]:56570
+        "EHLO smtp-relay-internal-1.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S233822AbjF1Ix0 (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>);
+        Wed, 28 Jun 2023 04:53:26 -0400
+Received: from mail-pf1-f198.google.com (mail-pf1-f198.google.com [209.85.210.198])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id E36E34139B
+        for <linux-edac@vger.kernel.org>; Wed, 28 Jun 2023 08:52:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1687942379;
+        bh=g+Vzq7623MxsGxq8ObiiEY8MrsR0kmj8nphAIedVAvI=;
+        h=From:To:Subject:Date:Message-Id:MIME-Version;
+        b=BV5P4q4Lb8e7ysPmJjuCvcNnav9rnvTwFV6L1bVdMhPXT5i4RkA0VDyaxNM0jWVyU
+         3HSZrlbgXvqUDy64YIEVWmnkfmUIlWZrlLYJoLgxEj/BTbEDtStJqdXJBlGRSmFcHL
+         9RCY7yYSmTOdc0ZwXY6HMdVbp646djzcWaZQpqtH/ktwQ+BIutI2XR5RNAg+SYCz9L
+         7E/w4u2VyqpynCFn7t+s7lg/d+ef/pxM2BffA09AWdnfVCCGak74GoIpSVUjUmBHoc
+         M8zxashXMjh6L1CbDXIxqqCvtDGopQpLxuunALOPQwJ2CLOq13M+63Wy/Zp7KvoiOU
+         tGRgVZH9j33lg==
+Received: by mail-pf1-f198.google.com with SMTP id d2e1a72fcca58-666e87eff0eso4646011b3a.3
+        for <linux-edac@vger.kernel.org>; Wed, 28 Jun 2023 01:52:59 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687942378; x=1690534378;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=g+Vzq7623MxsGxq8ObiiEY8MrsR0kmj8nphAIedVAvI=;
+        b=kZGsWdyPKOjWY57FOw5nhTPQGZdaimVx/5lCD37alxhpdhwwYOELymIaxjz84TtYB4
+         J87mDo+n9X6NU1sKO52+lwgdsWRsBlCRZQfHrv8gDPOgV+X8sUPES74JcpUAN2/gQoy7
+         tUleyeoWu7wdfwY/oMr+FQdy6H8WtpZa6N7mSvNCRqj3BR9EwhTBwpVX2G4qIc9grm7k
+         QJHen+rhzOkOr7PWf+n3OBQYldlSync8/Aiwk4B1tYBaKeo6HasKH9rO38jRBzMKsxv4
+         yAam42nwmimdGxKDpGp3i8A7GkICvt9/rymp0yeMJhqafxxxQEIKRdXsSO2/wSmWSYWl
+         TbKQ==
+X-Gm-Message-State: AC+VfDzHZ2VfPWpH3lCN+Z+y3krX+uTZQX5BobaO/fFbp1eMajmI3uKe
+        zoRFCrbBGj8ZpgLox8GDtJAnodXRtR+2T3hZ77baIaOt7eW0WDTiOawFkoEtvVs++MfunFnw1Le
+        u+c85FLq+ya7df9DELPiKJ1qFXjeuT6L+Il5M+1o=
+X-Received: by 2002:a05:6a00:841:b0:680:98c:c5a5 with SMTP id q1-20020a056a00084100b00680098cc5a5mr2938769pfk.32.1687942377894;
+        Wed, 28 Jun 2023 01:52:57 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ6/Hz7/NrJVz/DhdYrrAKlsklzx7nk+HlL2OxoEz1r6nU5Lo1EjYDj7MUsFbVB6Bcy7ec5wuA==
+X-Received: by 2002:a05:6a00:841:b0:680:98c:c5a5 with SMTP id q1-20020a056a00084100b00680098cc5a5mr2938754pfk.32.1687942377527;
+        Wed, 28 Jun 2023 01:52:57 -0700 (PDT)
+Received: from canonical.com (211-75-139-218.hinet-ip.hinet.net. [211.75.139.218])
+        by smtp.gmail.com with ESMTPSA id b26-20020aa7811a000000b00666b3706be6sm6632178pfi.107.2023.06.28.01.52.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 28 Jun 2023 01:52:56 -0700 (PDT)
+From:   Koba Ko <koba.ko@canonical.com>
+To:     Borislav Petkov <bp@alien8.de>, Tony Luck <tony.luck@intel.com>,
         James Morse <james.morse@arm.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Robert Richter <rric@kernel.org>, openbmc@lists.ozlabs.org,
-        linux-edac@vger.kernel.org
-Subject: [PATCH] EDAC/npcm: Convert to platform remove callback returning void
-Date:   Wed, 28 Jun 2023 09:13:54 +0200
-Message-Id: <20230628071354.665300-1-u.kleine-koenig@pengutronix.de>
-X-Mailer: git-send-email 2.39.2
+        Robert Richter <rric@kernel.org>, linux-edac@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] EDAC/i10nm: shift exponent is negative
+Date:   Wed, 28 Jun 2023 16:52:53 +0800
+Message-Id: <20230628085253.1013799-1-koba.ko@canonical.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1865; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=Z5VlEYFVTMCKv6py0+3EUoJZ7CM3olvJ56dcIZC7FCk=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBkm92xkCKLPLRWSJk3lLBZPSoINkyY/w5Wh9S/R N6CTstpJ4aJATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZJvdsQAKCRCPgPtYfRL+ TsExB/0f9C8Eq/t/mXoP1dH07/J1aNIWngw63zKEny/Z7dxC9/9OjUAA8JL0OVNCrROt55/4snH AZYYbIIIi0E5LVrX7JNaUJM7KsuFr9i93TQHCDcnmpozaFnXZMl7uh54txehthNnnrmLLOJxtP4 I9gpMO68r0d53INizCbHjeO1jRAOjQ5txssPlUiE2akh0EH7hEsJa6xsHdN7n/WZSHDEB3z8q1Q B2VVHMulh0Z/LBu7ewfQdh+g7ne1zH7iQpwTwJUu80mTDMCfhj79lxmRNgooFnvGpNVd5Ao6Jy7 6YVXv8LwEUxIAg31vUmziyg3ZSy/yVTCeHdTHHAPjGpjpUZo
-X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
 Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-edac@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
-        lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-The .remove() callback for a platform driver returns an int which makes
-many driver authors wrongly assume it's possible to do error handling by
-returning an error code. However the value returned is (mostly) ignored
-and this typically results in resource leaks. To improve here there is a
-quest to make the remove callback return void. In the first step of this
-quest all drivers are converted to .remove_new() which already returns
-void.
+UBSAN complains this error
+~~~
+ UBSAN: shift-out-of-bounds in drivers/edac/skx_common.c:369:16
+ shift exponent -66 is negative
+ Call Trace:
+  <TASK>
+  dump_stack_lvl+0x48/0x70
+  dump_stack+0x10/0x20
+  __ubsan_handle_shift_out_of_bounds+0x1ac/0x360
+  skx_get_dimm_info.cold+0x91/0x175 [i10nm_edac]
+  ? kvasprintf_const+0x2a/0xb0
+  i10nm_get_dimm_config+0x23c/0x340 [i10nm_edac]
+  skx_register_mci+0x139/0x1e0 [i10nm_edac]
+  ? __pfx_i10nm_get_dimm_config+0x10/0x10 [i10nm_edac]
+  i10nm_init+0x403/0xd10 [i10nm_edac]
+  ? __pfx_i10nm_init+0x10/0x10 [i10nm_edac]
+  do_one_initcall+0x5b/0x250
+  do_init_module+0x68/0x260
+  load_module+0xb45/0xcd0
+  ? kernel_read_file+0x2a4/0x320
+  __do_sys_finit_module+0xc4/0x140
+  ? __do_sys_finit_module+0xc4/0x140
+  __x64_sys_finit_module+0x18/0x30
+  do_syscall_64+0x58/0x90
+  ? syscall_exit_to_user_mode+0x29/0x50
+  ? do_syscall_64+0x67/0x90
+  ? syscall_exit_to_user_mode+0x29/0x50
+  ? do_syscall_64+0x67/0x90
+  ? do_syscall_64+0x67/0x90
+  ? __flush_smp_call_function_queue+0x122/0x1f0
+  ? exit_to_user_mode_prepare+0x30/0xb0
+  ? irqentry_exit_to_user_mode+0x9/0x20
+  ? irqentry_exit+0x43/0x50
+  ? sysvec_call_function+0x4b/0xd0
+  entry_SYSCALL_64_after_hwframe+0x72/0xdc
+~~~
 
-Trivially convert this driver from always returning zero in the remove
-callback to the void returning variant.
+when get rows, cols and ranks, the returned error value doesn't be
+handled.
 
-Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+check the return value is EINVAL, if yes, directly return 0.
+
+Signed-off-by: Koba Ko <koba.ko@canonical.com>
 ---
- drivers/edac/npcm_edac.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+ drivers/edac/skx_common.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/edac/npcm_edac.c b/drivers/edac/npcm_edac.c
-index 12b95be3e989..2edd13dc5c3b 100644
---- a/drivers/edac/npcm_edac.c
-+++ b/drivers/edac/npcm_edac.c
-@@ -409,7 +409,7 @@ static int edac_probe(struct platform_device *pdev)
- 	return rc;
- }
+diff --git a/drivers/edac/skx_common.c b/drivers/edac/skx_common.c
+index 2a00e0503f0d5..98baed1617c9f 100644
+--- a/drivers/edac/skx_common.c
++++ b/drivers/edac/skx_common.c
+@@ -351,6 +351,8 @@ int skx_get_dimm_info(u32 mtr, u32 mcmtr, u32 amap, struct dimm_info *dimm,
+ 	ranks = numrank(mtr);
+ 	rows = numrow(mtr);
+ 	cols = imc->hbm_mc ? 6 : numcol(mtr);
++	if (ranks == -EINVAL || rows == -EINVAL || cols == -EINVAL)
++		return 0;
  
--static int edac_remove(struct platform_device *pdev)
-+static void edac_remove(struct platform_device *pdev)
- {
- 	struct mem_ctl_info *mci = platform_get_drvdata(pdev);
- 	struct priv_data *priv = mci->pvt_info;
-@@ -425,8 +425,6 @@ static int edac_remove(struct platform_device *pdev)
- 	regmap_write(npcm_regmap, pdata->ctl_int_mask_master,
- 		     pdata->int_mask_master_global_mask);
- 	regmap_update_bits(npcm_regmap, pdata->ctl_ecc_en, pdata->ecc_en_mask, 0);
--
--	return 0;
- }
- 
- static const struct npcm_platform_data npcm750_edac = {
-@@ -532,7 +530,7 @@ static struct platform_driver npcm_edac_driver = {
- 		.of_match_table = npcm_edac_of_match,
- 	},
- 	.probe = edac_probe,
--	.remove = edac_remove,
-+	.remove_new = edac_remove,
- };
- 
- module_platform_driver(npcm_edac_driver);
-
-base-commit: d244c610f1d9a9d2976192c1d7e114a59fba02e0
+ 	if (imc->hbm_mc) {
+ 		banks = 32;
 -- 
-2.39.2
+2.34.1
 
