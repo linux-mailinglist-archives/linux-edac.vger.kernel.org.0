@@ -2,76 +2,76 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4877374689D
-	for <lists+linux-edac@lfdr.de>; Tue,  4 Jul 2023 06:59:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A75B746B71
+	for <lists+linux-edac@lfdr.de>; Tue,  4 Jul 2023 10:06:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230028AbjGDE7h (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Tue, 4 Jul 2023 00:59:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58370 "EHLO
+        id S231250AbjGDIGK (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Tue, 4 Jul 2023 04:06:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229938AbjGDE7h (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Tue, 4 Jul 2023 00:59:37 -0400
+        with ESMTP id S231423AbjGDIGE (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Tue, 4 Jul 2023 04:06:04 -0400
 Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 154BC1B0
-        for <linux-edac@vger.kernel.org>; Mon,  3 Jul 2023 21:59:35 -0700 (PDT)
-Received: from mail-qv1-f71.google.com (mail-qv1-f71.google.com [209.85.219.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A765710C4
+        for <linux-edac@vger.kernel.org>; Tue,  4 Jul 2023 01:05:57 -0700 (PDT)
+Received: from mail-pf1-f197.google.com (mail-pf1-f197.google.com [209.85.210.197])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id BB09A3F84D
-        for <linux-edac@vger.kernel.org>; Tue,  4 Jul 2023 04:59:29 +0000 (UTC)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 9CF4F3F16E
+        for <linux-edac@vger.kernel.org>; Tue,  4 Jul 2023 08:05:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1688446769;
-        bh=4oXmtSzlPkbqT3hFau3fNKFgcjtLAPmoKdlRgdjPPm0=;
+        s=20210705; t=1688457954;
+        bh=KyUic+k3lhFGyHcIl3np2CuPrA8HfLweP+3Dqn477ss=;
         h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
          To:Cc:Content-Type;
-        b=horGp1Z0Pf1frv7jNAEjCgwABM2W5pu/MgiMN7+C9mOWLwXqerO0yLDw6ugFlW+TR
-         nzTM/uWSQP5igxBQsvA7Lkm/CTvzK9tkVdbBZyJID5c8PTuGlT8jc9NK3eE1ZpqpxU
-         CYQ7koWvAIib6xyNg+y9o0CDVVa0WU5TGYJVEQLIbIHmARGGWjuUWSlGLnnjR0ymZN
-         QfXqEvQ6dPVrB+uGH08uNpTl6QORfb5mpG8+P1qaBqg3PQy2wo3n3AlBiO1AVvT6iL
-         lpIcRcEvriIsQCtu3vUB+e/fN4BTBGIw/G55p4PeBKZBYMTuWLnOSBJVruF5Z42jBI
-         La/mgecsGMT5g==
-Received: by mail-qv1-f71.google.com with SMTP id 6a1803df08f44-63511adcf45so56261806d6.2
-        for <linux-edac@vger.kernel.org>; Mon, 03 Jul 2023 21:59:29 -0700 (PDT)
+        b=UNmp3wb2uhYjNFHl0eb63ZRxJTOsqDTaqaW563LyLcJVnrJcBip9hnjNK1mWPJoX8
+         /9LztpcVHpplf69OzVrP8hZ1iyv2vqYKf06qiv64NxERpGj3ATC8CKaUEoMkVSeTlP
+         MQey4Ns5vZFxMs4PBvIZMAK9LQuU6HZHJapeaODK0oqEZDA1vkSbvDMsWVi5jQ3f1W
+         z/wkbndIK1LaqTPrrl2hw1zQfcX/4pRF+jAWAmGh6mnyexR7OY5gODfTdWPIGbdgJA
+         UczWm5RftFF7/z0M4KX58pO6wPNIWe4BzH6GT8ci61g7o/gRll5xy0A9FXg2scdzq/
+         ZFwpIJYn6R2GQ==
+Received: by mail-pf1-f197.google.com with SMTP id d2e1a72fcca58-66872889417so4896259b3a.1
+        for <linux-edac@vger.kernel.org>; Tue, 04 Jul 2023 01:05:54 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688446767; x=1691038767;
+        d=1e100.net; s=20221208; t=1688457953; x=1691049953;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=4oXmtSzlPkbqT3hFau3fNKFgcjtLAPmoKdlRgdjPPm0=;
-        b=EaK2ypZTCVQuVeeKOj6okZ37SLQIAzYDfAaNgLxeP3zRk7Wk06qQFDbWS20BHOw9js
-         ZDVZJUzozlaxWaC6PN0ykw60vKJz/JOAg6p9s3wBJF2e/LoOxDmbh3j/+Nw//0JxQ7FU
-         FYHIvpgiH/9jm69TsfZQ7iw1uwbNZTKxWkMDDHtMjEuvGk9bHcX2ts6v1Q0wLHNzblt/
-         l4epZGBu1ydzRVssqrhcUCx6PAcOnI2YNxzDBa6fFlUnuOPX3+69jhfm4lVIxNlkovHm
-         bkJQNoUt5F9MXOtraUF2/rX2Ds2dYYs4xEklvxvjLsOH4wf7Cgcd+E5RSOqYIRJk1Ids
-         5TpA==
-X-Gm-Message-State: ABy/qLZbPbmwMK9qqYeVwGy5/6xfUuNptYrXKonjG2BRU1+N/Swyt1hE
-        G+wZvjK/FNZO4Q3AU2e/OCe84EPnaiz+rOl3YaKi5nI3k+uNDB6cR3s2FCjMeG5FtEFczA+FhJy
-        fej01vIeWPWotjI5dsmQYo9JEvesdYVJ8+DgQ1eNiIg+zL0O7tgsV0q4=
-X-Received: by 2002:a05:6214:519b:b0:636:afa1:344f with SMTP id kl27-20020a056214519b00b00636afa1344fmr8702941qvb.47.1688446767681;
-        Mon, 03 Jul 2023 21:59:27 -0700 (PDT)
-X-Google-Smtp-Source: APBJJlF0NeRcpMsBFd4h4OhOM4RIDKJOeBGhCaLbmgR9HoFkVj7U+6XpiFFaJvllsUpGiieMdfn5RfkHGa96P4XPNuk=
-X-Received: by 2002:a05:6214:519b:b0:636:afa1:344f with SMTP id
- kl27-20020a056214519b00b00636afa1344fmr8702934qvb.47.1688446767466; Mon, 03
- Jul 2023 21:59:27 -0700 (PDT)
+        bh=KyUic+k3lhFGyHcIl3np2CuPrA8HfLweP+3Dqn477ss=;
+        b=czfkTKdZxWGXqmfzNweoe3+6239Ok/bN/GVHViqRfFWiSqYDIndHH/kGW83rocvhNb
+         oMnXgBXMvdu34/nypSYCRWpBYSgUGM5VYXdjmszWo+XUWpC2o891nTMcI5HvQdCQ9i+p
+         lv6k8t1zID299IrSMzQ5yOccujvsVAstaUe8+6AmNXsTN0KXH2GXHNm+vHnyKBwY3wk3
+         +xSXMoMkzKmNMwpioHnfhTqJW/81R1cOMtX7cGuTJ4fQKUqtPH5c+Zb49X0LZrRVEEP4
+         GN7VDiJx5d0NHhIZumc4WIxclFLtLf64fYcsRAqmx1MUcOdVsyZ1B/JYQXz3zeAm3pFx
+         wiiA==
+X-Gm-Message-State: ABy/qLbx3tqUy0gexal+K45SPqHEpBs8+h5taa7D7E3pnrZTu94W7LOc
+        EFNAJbibbXmJsaOhytvE96XWXVHAIF/z7SORjgbypsekevA7Ppgg1HYFUw4zz/bCkhjS5g6I24/
+        hCyZlu2z7ISt+ggqkXtb3zz0y8CZJko5l4XYFkCwce65xyOXWk7jiYRA=
+X-Received: by 2002:a05:6a00:b93:b0:668:711a:7d93 with SMTP id g19-20020a056a000b9300b00668711a7d93mr9939036pfj.19.1688457953208;
+        Tue, 04 Jul 2023 01:05:53 -0700 (PDT)
+X-Google-Smtp-Source: APBJJlE+DtMALYuvUVAQkIm0rXF85n4mhV6VFoX/V08J0R9uCauuzQTrB6GKCpw4T1vFGkR0Uiv+L/35HYKv+EN6td0=
+X-Received: by 2002:a05:6a00:b93:b0:668:711a:7d93 with SMTP id
+ g19-20020a056a000b9300b00668711a7d93mr9939021pfj.19.1688457952804; Tue, 04
+ Jul 2023 01:05:52 -0700 (PDT)
 MIME-Version: 1.0
 References: <20230703162509.77828-1-koba.ko@canonical.com> <4ec2b7d2-11a5-6ab6-087a-175ed31faca4@web.de>
  <SJ1PR11MB60839A0FC6B5E79E3E5A7997FC29A@SJ1PR11MB6083.namprd11.prod.outlook.com>
  <CAJB-X+X+09-m57JcZcb-_9dKUG3CtAbLXxGTEg7R0bB8pyJx9Q@mail.gmail.com>
-In-Reply-To: <CAJB-X+X+09-m57JcZcb-_9dKUG3CtAbLXxGTEg7R0bB8pyJx9Q@mail.gmail.com>
+ <CAJB-X+XVO29wVxVezjFrgCyXigqEJxAzb0K0wueXNto5K_x2tA@mail.gmail.com> <9c27530e-21f9-15ce-5116-5af5b0c25f53@web.de>
+In-Reply-To: <9c27530e-21f9-15ce-5116-5af5b0c25f53@web.de>
 From:   Koba Ko <koba.ko@canonical.com>
-Date:   Tue, 4 Jul 2023 12:59:15 +0800
-Message-ID: <CAJB-X+XVO29wVxVezjFrgCyXigqEJxAzb0K0wueXNto5K_x2tA@mail.gmail.com>
+Date:   Tue, 4 Jul 2023 16:05:41 +0800
+Message-ID: <CAJB-X+Wu-Zd6pCrK54aR9iaeS7PW2VmwB+Y+Qeci7Ut0YcdsRg@mail.gmail.com>
 Subject: Re: [PATCH v2] EDAC/i10nm: shift exponent is negative
-To:     "Luck, Tony" <tony.luck@intel.com>
-Cc:     Markus Elfring <Markus.Elfring@web.de>,
-        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
-        "kernel-janitors@vger.kernel.org" <kernel-janitors@vger.kernel.org>,
+To:     Markus Elfring <Markus.Elfring@web.de>
+Cc:     linux-edac@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>,
         Borislav Petkov <bp@alien8.de>,
         James Morse <james.morse@arm.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         Robert Richter <rric@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
+        Tony Luck <tony.luck@intel.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -84,97 +84,95 @@ Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-As per suggestions, i modified V3.
-could you please take a look
-
-Subject: [PATCH][V3] EDAC/i10nm: shift exponent is negative
-
-Because failed to read from DIMM, get the negative value for shift
-operation.
-`EDAC DEBUG: skx_get_dimm_attr: bad ranks =3D 3 (raw=3D0xffffffff)
- EDAC DEBUG: skx_get_dimm_attr: bad rows =3D 7 (raw=3D0xffffffff)
- EDAC DEBUG: skx_get_dimm_attr: bad cols =3D 3 (raw=3D0xffffffff)
- EDAC DEBUG: i10nm_get_dimm_config: dimmmtr 0xffffffff mcddrtcfg
-0xffffffff (mc1 ch0 dimm1)`
-
-UBSAN complains this error
-`UBSAN: shift-out-of-bounds in drivers/edac/skx_common.c:369:16
- shift exponent -66 is negative`
-
-when get rows, cols and ranks, the returned error value doesn't be
-handled.
-
-check the return value is EINVAL, if yes, directly return 0 and
-show error message explicitly.
-
-Fixes: 4ec656bdf43a13) EDAC, skx_edac: Add EDAC driver for Skylake
-Signed-off-by: Koba Ko <koba.ko@canonical.com>
----
-V2 -> V3: simplify the summary and add 'Fixes:'
-V1 -> V2: make error-print explicitly
-
-On Tue, Jul 4, 2023 at 10:20=E2=80=AFAM Koba Ko <koba.ko@canonical.com> wro=
-te:
+On Tue, Jul 4, 2023 at 3:16=E2=80=AFPM Markus Elfring <Markus.Elfring@web.d=
+e> wrote:
 >
-> On Tue, Jul 4, 2023 at 5:51=E2=80=AFAM Luck, Tony <tony.luck@intel.com> w=
-rote:
+> > As per suggestions, i modified V3.
+> > could you please take a look
 > >
-> > > > UBSAN complains this error
-> > > > ~~~
-> > > >  UBSAN: shift-out-of-bounds in drivers/edac/skx_common.c:369:16
-> > > =E2=80=A6
-> > > > ~~~
-> > > >
-> > > > when get rows, cols and ranks, the returned error value doesn't be
-> > > > handled.
-> > > >
-> > > > check the return value is EINVAL, if yes, directly return 0.
-> > > =E2=80=A6
-> > >
-> > > * Please improve this change description further.
-> >
-> > To be specific. Initially you reported this because of the UBSAN error
-> > report. But, after community discussion you now know that the problem
-> > is that one or more of the rows/cols/ranks has a value that the EDAC dr=
-iver
-> > doesn't expect and probably can handle.
-> >
-> > So, in V2, the commit message should start with the information these
-> > values are out of range and mention this was discovered when UBSAN
-> > put out a warning about a negative shift. No need to include the whole
-> > of the UBSAN stack trace.
-> >
-> > Then describe the two fixes that this patch includes. One is to change =
-the
-> > edac debug message into a console error message to enable further
-> > debug of this issue. The other is to skip the unrecognized DIMM.
-> >
-> > > * How do you think about to add the tag =E2=80=9CFixes=E2=80=9D?
-> >
-> > This is a good idea.  Use git blame, or dig into the GIT history to
-> > find the commit where this code was introduced (hint .. git blame
-> > says:
-> > 88a242c98740 ("EDAC, skx_common: Separate common code out from skx_edac=
-")
-> > but that obviously just refactored code, so you should dig back more in=
-to
-> > the history.
-> There are two parts,
-> 1. @get_dimm_attr, edac_dbg was added since e235dd43d8b0f0
-> 2. get num of ranks, rows and cols, 4ec656bdf43a13
+> > Subject: [PATCH][V3] EDAC/i10nm: shift exponent is negative
 >
-> Should I add all of them prefixes with "Fixes"?
+> Would you like to put the text =E2=80=9C[PATCH v4] EDAC/i10nm: Fix an ina=
+ppropriate shift exponent=E2=80=9D
+> into a subsequent patch?
+
+I didn't send V3 so the suggestions could be put in V3.
+
 >
+> I would find further wording variants nicer.
+>
+>
+> > Because failed to read from DIMM, get the negative value for shift
+> > operation.
+>
+> A surprising value was determined after a read failure from a DIMM.
+>
+>
+> =E2=80=A6
+> > UBSAN complains this error
+>
+> Software analyses pointed a data processing issue out.
+>
+>
+> > `UBSAN: shift-out-of-bounds in drivers/edac/skx_common.c:369:16
+> >  shift exponent -66 is negative`
 > >
-> > > > V2: make error-print explicitly
-> > > > ---
-> > >
-> > > Would you like to avoid a misplaced marker line here?
-> > >
-> > > See also:
-> > > https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tr=
-ee/Documentation/process/submitting-patches.rst?h=3Dv6.4#n686
-> >
-> > That's an excellent resource.
-> >
-> > -Tony
+> > when get rows, cols and ranks, the returned error value doesn't be
+> > handled.
+>
+> A special value combination could not be handled so far.
+>
+>
+> > check the return value is EINVAL, if yes, directly return 0 and
+> > show error message explicitly.
+>
+> Check if an invalid value was detected by a call of the function =E2=80=
+=9Cskx_get_dimm_attr=E2=80=9D.
+>
+> * Print a corresponding error message in this case.
+>
+> * Return zero then directly from the function =E2=80=9Cskx_get_dimm_info=
+=E2=80=9D.
+>
+>
+> =E2=80=A6
+> @@ -351,6 +351,8 @@ int skx_get_dimm_info(u32 mtr, u32 mcmtr, u32 amap, s=
+truct dimm_info *dimm,
+>         ranks =3D numrank(mtr);
+>         rows =3D numrow(mtr);
+>         cols =3D imc->hbm_mc ? 6 : numcol(mtr);
+> +       if (ranks =3D=3D -EINVAL || rows =3D=3D -EINVAL || cols =3D=3D -E=
+INVAL)
+> +               return 0;
+> =E2=80=A6
+>
+>
+> Can it be nicer to perform a check for such an error code directly
+> after each variable assignment?
+> (May this condition check be split?)
+>
+>
+> > Fixes: 4ec656bdf43a13) EDAC, skx_edac: Add EDAC driver for Skylake
+>
+> Please properly apply parentheses and double quotes for this tag.
+>
+> See also:
+> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/D=
+ocumentation/process/submitting-patches.rst?h=3Dv6.4#n145
+>
+>
+> > V2 -> V3: simplify the summary and add 'Fixes:'
+> > V1 -> V2: make error-print explicitly
+>
+> How do you think about to use more succinct version identifiers
+> for such descriptions?
+>
+> V4:
+> =E2=80=A6
+>
+> V3:
+> =E2=80=A6
+>
+>
+> Regards,
+> Markus
