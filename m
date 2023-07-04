@@ -2,65 +2,65 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 071B67466F9
-	for <lists+linux-edac@lfdr.de>; Tue,  4 Jul 2023 03:50:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E399974673F
+	for <lists+linux-edac@lfdr.de>; Tue,  4 Jul 2023 04:20:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231296AbjGDBux (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Mon, 3 Jul 2023 21:50:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50464 "EHLO
+        id S229450AbjGDCUi (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Mon, 3 Jul 2023 22:20:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230521AbjGDBuw (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Mon, 3 Jul 2023 21:50:52 -0400
+        with ESMTP id S229534AbjGDCUh (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Mon, 3 Jul 2023 22:20:37 -0400
 Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3361DE59
-        for <linux-edac@vger.kernel.org>; Mon,  3 Jul 2023 18:50:51 -0700 (PDT)
-Received: from mail-pf1-f199.google.com (mail-pf1-f199.google.com [209.85.210.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E11A9136
+        for <linux-edac@vger.kernel.org>; Mon,  3 Jul 2023 19:20:36 -0700 (PDT)
+Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com [209.85.218.72])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 413DD3F850
-        for <linux-edac@vger.kernel.org>; Tue,  4 Jul 2023 01:50:49 +0000 (UTC)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 218EA3F84D
+        for <linux-edac@vger.kernel.org>; Tue,  4 Jul 2023 02:20:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1688435449;
-        bh=xRjzAE0n5uIgT1izeqo8Qt3qb3EDeNKGoRxIM7nbkoA=;
+        s=20210705; t=1688437235;
+        bh=gPUh1UKYRUTDUZfqtjt41zw9iPe9y1sFpRCgNtjp5pI=;
         h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
          To:Cc:Content-Type;
-        b=hXnvkuZHEcUSafnrh/pSpuJDALIlW+RGqIlur+ntwTK3it7xupfWiC/I6ZcOKRm4e
-         RvndnPpp4E+yxm5ndEZ+By0Fqs6EEtjveQzDE+5PK0G96pK+AbK+eX/sMdVytZD537
-         MIEdpQTgGpBO+rI9+CB+T3l9xMIOiiWK0DMdfMuMttF6tzr6zDJCWwzeg7Kx7g3BHW
-         TPD0plzgNUDK1HFtz2oy7PWjKF9IV6G9OZJ4E//VuUiS+EfXzz7WdliZvWEiHfBD8L
-         YSTvv3+ok0iPeyzfhiViy3weZXTudbNMAiGi63aWb8nbBxLdnu/t3rID6oxPqEfvJ+
-         FyVjfGijhGw2A==
-Received: by mail-pf1-f199.google.com with SMTP id d2e1a72fcca58-67c2f6fb908so5142224b3a.0
-        for <linux-edac@vger.kernel.org>; Mon, 03 Jul 2023 18:50:49 -0700 (PDT)
+        b=WvH9r4jjWfvpUGN+M3Px0UjxpcJHUZSeu1YRqT6UyT17gOEQpZw0HkLFq24ZsPNIQ
+         XdcFriAHz4wcBzFrW+U8AYk85VXF0HqiTkar6FvI9H9OVhF1qBkumkAcAYAEqX+Kee
+         L4u9ZxujGjGjnd47o+RXsL+eYbkf0+vVoCjEmCc7G2lQOFbP8mEZLK1xkvH8vOkRk8
+         a3Ygjwi7HbL1GmXYFZJBlX0g3cCCMKVJTTQW7h/o43FClsgGT/qSGDSE+83QhlkRls
+         FeEAQgotRXYPfyMyaqXs1HuhEGRalNTh4FTnV7vN2Bl3uSDG0rBLHTgiYjcvyZnOiv
+         Tg2aXF04CpoNA==
+Received: by mail-ej1-f72.google.com with SMTP id a640c23a62f3a-988643252e0so354529666b.2
+        for <linux-edac@vger.kernel.org>; Mon, 03 Jul 2023 19:20:35 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688435446; x=1691027446;
+        d=1e100.net; s=20221208; t=1688437234; x=1691029234;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=xRjzAE0n5uIgT1izeqo8Qt3qb3EDeNKGoRxIM7nbkoA=;
-        b=booHtKGD1nKs52jiTCZt3bNUXE0MNaPFXHv+vnviBC+d3DqCw+G5+eP0Euw+juHt1r
-         XQ/XEkD8XN1zgBVojJLj4TK/b0J1blLlNbOMyQdBcNHAfzsKCIkXPTpixuD1GN1H06Y9
-         DCiKsKHkZjay6r58I2u10j/ErQUHsqRF/SPjTDT9mKm5pOvTbx4N9WClIUuyvwuaRTiu
-         JkWFK7vAaHSHqVeiCmq4WyU9eMtx8UvwZGcQruaWMASbQHboRyOzFzQ4hNwSYvylKKUw
-         CBBE/3CmLOYkyfNVvDUvVQTVvwUFcltbpcs2yEKORUuMa9xhSBG2dwIz/ZhxSP3Y8ZVh
-         eaCg==
-X-Gm-Message-State: ABy/qLYqvB79hhPyhfi1lr3JaByULE1UU/WwVmWUmba5uEzN7pbdXb37
-        xMxsHAeoCqIruawPaoDRT54L0bdJp6tR4Pbd+tQ+M8z0dg/fWX+tNTWzmdyV/1MpBxrzQG81RDN
-        pwB4+0Bn9GMtfDJQJ4NlPbX2ILw+iNilApxmIPNkP0jabY9dzgLyXaJY=
-X-Received: by 2002:a05:6a00:c91:b0:657:f26e:b01a with SMTP id a17-20020a056a000c9100b00657f26eb01amr12396886pfv.26.1688435446045;
-        Mon, 03 Jul 2023 18:50:46 -0700 (PDT)
-X-Google-Smtp-Source: APBJJlHX437TWfJBK7YTXwsR6fw6ywkRfC1jA00N3tmzfj+k09vE6RLFcxGk2IJ0KTcV5UzDvOiDWYCDWDyp3EUiYP8=
-X-Received: by 2002:a05:6a00:c91:b0:657:f26e:b01a with SMTP id
- a17-20020a056a000c9100b00657f26eb01amr12396872pfv.26.1688435445547; Mon, 03
- Jul 2023 18:50:45 -0700 (PDT)
+        bh=gPUh1UKYRUTDUZfqtjt41zw9iPe9y1sFpRCgNtjp5pI=;
+        b=mIDyr+7JYsaf22Ugz7k6Kjw7taeQoGRO2XbJH9+YoT2at3KgsZwVuR0fmFKny+D6yH
+         F4VfQCRCN2zprZeurmy3USxCZWcMemJS8eJlAmX6UE7PaohvwcMjx/ahQDvGps3hRH6d
+         LXfnPD/L0i3telEllgqww0c3Hv3PmaE822wrNZScj0g0YF1Ut3Z8VXSOqnSTihgRcU6H
+         V3EmvIgyJBwd6GaJG0DbM8NRtokEn0sLj1sKHxWfrz+BuQzIrNoo4JKXZY6An0/0HtR/
+         NiGhVuWoyk/XTE1GY83SgprzTTZWgh/oYlDcaxaHQTd9RS+aItn5H9RAF3Eq5UkMZMw4
+         wGVA==
+X-Gm-Message-State: ABy/qLY8xUi7TMCbk0x+TxcPVI9TeY4uScAP0d+YRT/19lMy+94v7+xC
+        SqKmW2GRSPxFMPUGav9jSvyyPYJ0z+C+K+KPehrHPo9ScflYBEHBOzL8x3w+qsj2Lvl+P+V1Q4/
+        ThJHsDsdNn26CRF5w1QXzLggTaFcriisykOMQEVJjhxX6E4TN0qvK9rE=
+X-Received: by 2002:a17:907:9850:b0:993:3556:b7ed with SMTP id jj16-20020a170907985000b009933556b7edmr5359538ejc.6.1688437233881;
+        Mon, 03 Jul 2023 19:20:33 -0700 (PDT)
+X-Google-Smtp-Source: APBJJlFfr+4nSObV9okaYd8nc1mjdTLkRmk1774yuvQp5tR7ZGFYw29tiQlOXSBPPnbWZ8jRWJg5yiQCcEgEHmT8oiA=
+X-Received: by 2002:a17:907:9850:b0:993:3556:b7ed with SMTP id
+ jj16-20020a170907985000b009933556b7edmr5359526ejc.6.1688437233447; Mon, 03
+ Jul 2023 19:20:33 -0700 (PDT)
 MIME-Version: 1.0
 References: <20230703162509.77828-1-koba.ko@canonical.com> <4ec2b7d2-11a5-6ab6-087a-175ed31faca4@web.de>
  <SJ1PR11MB60839A0FC6B5E79E3E5A7997FC29A@SJ1PR11MB6083.namprd11.prod.outlook.com>
 In-Reply-To: <SJ1PR11MB60839A0FC6B5E79E3E5A7997FC29A@SJ1PR11MB6083.namprd11.prod.outlook.com>
 From:   Koba Ko <koba.ko@canonical.com>
-Date:   Tue, 4 Jul 2023 09:50:33 +0800
-Message-ID: <CAJB-X+UB+eYoYOOVH2bqnnVEJcLrxaj5A7-zyfgBM7hOf4y8zw@mail.gmail.com>
+Date:   Tue, 4 Jul 2023 10:20:20 +0800
+Message-ID: <CAJB-X+X+09-m57JcZcb-_9dKUG3CtAbLXxGTEg7R0bB8pyJx9Q@mail.gmail.com>
 Subject: Re: [PATCH v2] EDAC/i10nm: shift exponent is negative
 To:     "Luck, Tony" <tony.luck@intel.com>
 Cc:     Markus Elfring <Markus.Elfring@web.de>,
@@ -124,6 +124,12 @@ e
 > 88a242c98740 ("EDAC, skx_common: Separate common code out from skx_edac")
 > but that obviously just refactored code, so you should dig back more into
 > the history.
+There are two parts,
+1. @get_dimm_attr, edac_dbg was added since e235dd43d8b0f0
+2. get num of ranks, rows and cols, 4ec656bdf43a13
+
+Should I add all of them prefixes with "Fixes"?
+
 >
 > > > V2: make error-print explicitly
 > > > ---
@@ -135,48 +141,5 @@ e
 /Documentation/process/submitting-patches.rst?h=3Dv6.4#n686
 >
 > That's an excellent resource.
-
-Thanks for your advices and I will modify.
-here's part of dmesg enabled EDAC_DEBUG
-~~~
-[    4.032332] EDAC DEBUG: skx_register_mci: MC#1: mci =3D 00000000799db99e
-[    4.032334] EDAC DEBUG: i10nm_get_dimm_config: dimmmtr 0xffffffff
-mcddrtcfg 0xffffffff (mc1 ch0 dimm0)
-[    4.032335] EDAC DEBUG: skx_get_dimm_attr: bad ranks =3D 3 (raw=3D0xffff=
-ffff)
-[    4.032337] EDAC DEBUG: skx_get_dimm_attr: bad rows =3D 7 (raw=3D0xfffff=
-fff)
-[    4.032338] EDAC DEBUG: skx_get_dimm_attr: bad cols =3D 3 (raw=3D0xfffff=
-fff)
-[    4.032339] EDAC DEBUG: i10nm_get_dimm_config: dimmmtr 0xffffffff
-mcddrtcfg 0xffffffff (mc1 ch0 dimm1)
-[    4.032340] EDAC DEBUG: skx_get_dimm_attr: bad ranks =3D 3 (raw=3D0xffff=
-ffff)
-[    4.032341] EDAC DEBUG: skx_get_dimm_attr: bad rows =3D 7 (raw=3D0xfffff=
-fff)
-[    4.032341] EDAC DEBUG: skx_get_dimm_attr: bad cols =3D 3 (raw=3D0xfffff=
-fff)
-[    4.032343] EDAC DEBUG: i10nm_get_dimm_config: dimmmtr 0xffffffff
-mcddrtcfg 0xffffffff (mc1 ch1 dimm0)
-[    4.032344] EDAC DEBUG: skx_get_dimm_attr: bad ranks =3D 3 (raw=3D0xffff=
-ffff)
-[    4.032345] EDAC DEBUG: skx_get_dimm_attr: bad rows =3D 7 (raw=3D0xfffff=
-fff)
-[    4.032346] EDAC DEBUG: skx_get_dimm_attr: bad cols =3D 3 (raw=3D0xfffff=
-fff)
-[    4.032347] EDAC DEBUG: i10nm_get_dimm_config: dimmmtr 0xffffffff
-mcddrtcfg 0xffffffff (mc1 ch1 dimm1)
-[    4.032348] EDAC DEBUG: skx_get_dimm_attr: bad ranks =3D 3 (raw=3D0xffff=
-ffff)
-[    4.032349] EDAC DEBUG: skx_get_dimm_attr: bad rows =3D 7 (raw=3D0xfffff=
-fff)
-[    4.032349] EDAC DEBUG: skx_get_dimm_attr: bad cols =3D 3 (raw=3D0xfffff=
-fff)
-~~~
-
-I shared the whole dmesg through g-drive.
-https://drive.google.com/file/d/1epnDZNezGiJsK1eT4UNOi8_igcBSXtiF/view?usp=
-=3Dsharing
-
 >
 > -Tony
