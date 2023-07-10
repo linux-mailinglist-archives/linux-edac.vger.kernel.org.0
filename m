@@ -2,182 +2,99 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 420C374C99F
-	for <lists+linux-edac@lfdr.de>; Mon, 10 Jul 2023 03:38:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7728B74CCDB
+	for <lists+linux-edac@lfdr.de>; Mon, 10 Jul 2023 08:26:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230274AbjGJBh5 (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Sun, 9 Jul 2023 21:37:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60754 "EHLO
+        id S231176AbjGJG0u (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Mon, 10 Jul 2023 02:26:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230011AbjGJBh4 (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Sun, 9 Jul 2023 21:37:56 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDB49F1;
-        Sun,  9 Jul 2023 18:37:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1688953062; x=1720489062;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references;
-  bh=7wSBK4N8j7ayhRfNDW/D4i6cAQi0AIQIDpCI8hZX3s8=;
-  b=MrajgvgOYfwcHJxTp0UZA6QhnF3akYNB6/mfAOJUHyLQaAvEG/MU9Eq3
-   cEHdz0X/hICbLZfWk+UEe0f9zqvfoE0RyRfx9ID/2PATcDY9xlr7Zz+Gp
-   U5DuiCQq9Q1mtd6ERsPImQBCiMF4Yd+Ur8hTLt2qKX2tyCI5CJr3OGCgr
-   gKeZVUq56a5KwTvXIQ0BeJKC/yke14Pd0aCLoP8J1XlzeUoJpqpwCp+Y7
-   iZp4mFstWklAhuz2lMfxs7pwop3KybDG7PPGT4dDECOzNaR0udPuo495/
-   JeGtmTKpKUw+ip5E1BhX/FJmvt/7Ul14yUj45IcKRuit8o8V3XYF1HeJD
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10766"; a="364273925"
-X-IronPort-AV: E=Sophos;i="6.01,193,1684825200"; 
-   d="scan'208";a="364273925"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jul 2023 18:37:42 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10766"; a="844723906"
-X-IronPort-AV: E=Sophos;i="6.01,193,1684825200"; 
-   d="scan'208";a="844723906"
-Received: from qiuxu-clx.sh.intel.com ([10.239.53.109])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jul 2023 18:37:39 -0700
-From:   Qiuxu Zhuo <qiuxu.zhuo@intel.com>
-To:     Tony Luck <tony.luck@intel.com>
-Cc:     Qiuxu Zhuo <qiuxu.zhuo@intel.com>, Borislav Petkov <bp@alien8.de>,
-        Aristeu Rozanski <aris@redhat.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        with ESMTP id S231207AbjGJG0B (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Mon, 10 Jul 2023 02:26:01 -0400
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D62A10CB
+        for <linux-edac@vger.kernel.org>; Sun,  9 Jul 2023 23:25:54 -0700 (PDT)
+Received: by mail-wr1-x42c.google.com with SMTP id ffacd0b85a97d-3158a5e64b6so2335907f8f.0
+        for <linux-edac@vger.kernel.org>; Sun, 09 Jul 2023 23:25:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1688970353; x=1691562353;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=RTGPRaTPsW1oLolTdR1W2eMZbk+GEZzuxjroyHe18Es=;
+        b=flOhQFeZ/g7IAS0o/33S3qkJ2Pu3MgxVosOMBDHErB6MylnolQt+eSCQqNfaiTNL51
+         y5ouTWnFs6r4BWVtVOjrW7di8BqRRLkZLXX+ghMbnuqE83Bk+8+Fh1UauD+VFFgwBGYD
+         cb1iq3pGmW6f5AGRjAqMI5NmHn/ruKENY6qorrmHSb2Zf+bkdRckYKVf58/DGRduaTGe
+         C2Hhhz+0GimNMQ9I1g493hapvlmW/olUyKv8ilA3MOumkLzJL8mnSLkLtP+Hz2Ksr5Pw
+         C8OQXCsDLOplFYvOgRu8M/64gk4DAbnkrK8DWTLkSa66HmapEABdp0Zd1UH9gqu278R6
+         XNkg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688970353; x=1691562353;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=RTGPRaTPsW1oLolTdR1W2eMZbk+GEZzuxjroyHe18Es=;
+        b=O343VhzMPipHIm8d+cHWhbqYcKDqyvjD++Plz9ApSbOeFqCniZx6Li1Y7r4RIaxbUd
+         AWsjuOkBXKzntvV35AaS0IVWOz3M61w0LWZH+4Bljx85xlY8czXlkzDIA+lpIhLnJIgD
+         uzTN8q5GHgdO6/CFc0ze8fA3XNG5n3tRd2eSUXqBl9lcZqL7CHCAcbJ2vt9K1IHk26zz
+         ksbotTQGTarhgl5Z/JESUzFFYe7g41i2R07lmYXEItfKsO4qsRmvNaslEogR2NJVq6Qr
+         FVdBUjawX3nBZ4ffLFgq4DJyWwQa1BO23AiWMNy6MHKVy6dkSsAT4aTo/mcu31+6LZbM
+         Ho6w==
+X-Gm-Message-State: ABy/qLbhuTh3UocU46gy8yn7Gb6c0l+MpYUzdiZwPxjcO3SuD2v61WBt
+        eOY4XdNli15Xx0uN/ZHumfd/eDh0PovoofDUK24=
+X-Google-Smtp-Source: APBJJlHe/ztQIOxhO5hduzvHISVsuPEATfvAy0wCgXbWJfUZ/z31/ad58Nmvho+qW0BLywAisppqAA==
+X-Received: by 2002:a5d:6205:0:b0:313:f676:8343 with SMTP id y5-20020a5d6205000000b00313f6768343mr10235179wru.60.1688970352878;
+        Sun, 09 Jul 2023 23:25:52 -0700 (PDT)
+Received: from localhost ([102.36.222.112])
+        by smtp.gmail.com with ESMTPSA id i18-20020adfefd2000000b0031272fced4dsm10767459wrp.52.2023.07.09.23.25.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 09 Jul 2023 23:25:50 -0700 (PDT)
+Date:   Mon, 10 Jul 2023 09:25:47 +0300
+From:   Dan Carpenter <dan.carpenter@linaro.org>
+To:     Koba Ko <koba.ko@canonical.com>
+Cc:     "Zhuo, Qiuxu" <qiuxu.zhuo@intel.com>,
+        "Luck, Tony" <tony.luck@intel.com>,
         Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        Koba Ko <koba.ko@canonical.com>, linux-edac@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2 1/1] EDAC/i10nm: Skip the absent memory controllers
-Date:   Mon, 10 Jul 2023 09:32:32 +0800
-Message-Id: <20230710013232.59712-1-qiuxu.zhuo@intel.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <CAAd53p6J8usSi+rHnd9+714mUqZ2zTdhFSEWUtiK7aNzcAZ8CA@mail.gmail.com>
-References: <CAAd53p6J8usSi+rHnd9+714mUqZ2zTdhFSEWUtiK7aNzcAZ8CA@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Markus Elfring <Markus.Elfring@web.de>,
+        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
+        "kernel-janitors@vger.kernel.org" <kernel-janitors@vger.kernel.org>,
+        Borislav Petkov <bp@alien8.de>,
+        James Morse <james.morse@arm.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Robert Richter <rric@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2] EDAC/i10nm: shift exponent is negative
+Message-ID: <dbfac4bd-a9e4-403d-86de-c70668f6e676@kadam.mountain>
+References: <4ec2b7d2-11a5-6ab6-087a-175ed31faca4@web.de>
+ <SJ1PR11MB60839A0FC6B5E79E3E5A7997FC29A@SJ1PR11MB6083.namprd11.prod.outlook.com>
+ <CAJB-X+UB+eYoYOOVH2bqnnVEJcLrxaj5A7-zyfgBM7hOf4y8zw@mail.gmail.com>
+ <SJ1PR11MB608383A5841E4AE8D3A64B79FC2FA@SJ1PR11MB6083.namprd11.prod.outlook.com>
+ <CAJB-X+VFYyTiQ7yhX=Z8-Q4QW-GMsGXMuEWxLjuoZ1aDB98qXg@mail.gmail.com>
+ <SJ1PR11MB60832C7FFEF98EE33F255B9DFC2FA@SJ1PR11MB6083.namprd11.prod.outlook.com>
+ <CY8PR11MB713495A12DE47EDC3B7C5E20892CA@CY8PR11MB7134.namprd11.prod.outlook.com>
+ <CAJB-X+X_KW=T4WOe2AS3SFFQKjt7VcQRFUCGYFcjipi5-aXdrw@mail.gmail.com>
+ <CY8PR11MB71346D8945AAC57D3614CBE2892DA@CY8PR11MB7134.namprd11.prod.outlook.com>
+ <CAJB-X+Xe9H0O=-2o3hL+pz=aGdSRYX+hD0bAxUS11CZDRVZLKg@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAJB-X+Xe9H0O=-2o3hL+pz=aGdSRYX+hD0bAxUS11CZDRVZLKg@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-Some Sapphire Rapids workstations' absent memory controllers
-still appear as PCIe devices that fool the i10nm_edac driver
-and result in "shift exponent -66 is negative" call traces
-from skx_get_dimm_info().
+On Sun, Jul 09, 2023 at 11:42:22PM +0800, Koba Ko wrote:
+> tested-by: koba.ko@canonical.com
 
-Skip the absent memory controllers to avoid the call traces.
+It's better if you put the tag in the correct format.  There are a bunch
+of tools which automatically add tags, but they only work if the tag is
+in the correct format.
 
-Reported-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
-Closes: https://lore.kernel.org/linux-edac/CAAd53p41Ku1m1rapeqb1xtD+kKuk+BaUW=dumuoF0ZO3GhFjFA@mail.gmail.com/T/#m5de16dce60a8c836ec235868c7c16e3fefad0cc2
-Tested-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
-Reported-by: Koba Ko <koba.ko@canonical.com>
-Closes: https://lore.kernel.org/linux-edac/SA1PR11MB71305B71CCCC3D9305835202892AA@SA1PR11MB7130.namprd11.prod.outlook.com/T/#t
-Tested-by: Koba Ko <koba.ko@canonical.com>
-Fixes: d4dc89d069aa ("EDAC, i10nm: Add a driver for Intel 10nm server processors")
-Signed-off-by: Qiuxu Zhuo <qiuxu.zhuo@intel.com>
----
-v1->v2:
- - No function changes.
- - s/exponet/exponent/ in the commit message.
- - Add two tags of "Tested-by".
-
- drivers/edac/i10nm_base.c | 54 +++++++++++++++++++++++++++++++++++----
- 1 file changed, 49 insertions(+), 5 deletions(-)
-
-diff --git a/drivers/edac/i10nm_base.c b/drivers/edac/i10nm_base.c
-index a897b6aff368..349ff6cfb379 100644
---- a/drivers/edac/i10nm_base.c
-+++ b/drivers/edac/i10nm_base.c
-@@ -658,13 +658,49 @@ static struct pci_dev *get_ddr_munit(struct skx_dev *d, int i, u32 *offset, unsi
- 	return mdev;
- }
- 
-+/**
-+ * i10nm_imc_absent() - Check whether the memory controller @imc is absent
-+ *
-+ * @imc    : The pointer to the structure of memory controller EDAC device.
-+ *
-+ * RETURNS : true if the memory controller EDAC device is absent, false otherwise.
-+ */
-+static bool i10nm_imc_absent(struct skx_imc *imc)
-+{
-+	u32 mcmtr;
-+	int i;
-+
-+	switch (res_cfg->type) {
-+	case SPR:
-+		for (i = 0; i < res_cfg->ddr_chan_num; i++) {
-+			mcmtr = I10NM_GET_MCMTR(imc, i);
-+			edac_dbg(1, "ch%d mcmtr reg %x\n", i, mcmtr);
-+			if (mcmtr != ~0)
-+				return false;
-+		}
-+
-+		/*
-+		 * Some workstations' absent memory controllers still
-+		 * appear as PCIe devices, misleading the EDAC driver.
-+		 * By observing that the MMIO registers of these absent
-+		 * memory controllers consistently hold the value of ~0.
-+		 *
-+		 * We identify a memory controller as absent by checking
-+		 * if its MMIO register "mcmtr" == ~0 in all its channels.
-+		 */
-+		return true;
-+	default:
-+		return false;
-+	}
-+}
-+
- static int i10nm_get_ddr_munits(void)
- {
- 	struct pci_dev *mdev;
- 	void __iomem *mbase;
- 	unsigned long size;
- 	struct skx_dev *d;
--	int i, j = 0;
-+	int i, lmc, j = 0;
- 	u32 reg, off;
- 	u64 base;
- 
-@@ -690,7 +726,7 @@ static int i10nm_get_ddr_munits(void)
- 		edac_dbg(2, "socket%d mmio base 0x%llx (reg 0x%x)\n",
- 			 j++, base, reg);
- 
--		for (i = 0; i < res_cfg->ddr_imc_num; i++) {
-+		for (lmc = 0, i = 0; i < res_cfg->ddr_imc_num; i++) {
- 			mdev = get_ddr_munit(d, i, &off, &size);
- 
- 			if (i == 0 && !mdev) {
-@@ -700,8 +736,6 @@ static int i10nm_get_ddr_munits(void)
- 			if (!mdev)
- 				continue;
- 
--			d->imc[i].mdev = mdev;
--
- 			edac_dbg(2, "mc%d mmio base 0x%llx size 0x%lx (reg 0x%x)\n",
- 				 i, base + off, size, reg);
- 
-@@ -712,7 +746,17 @@ static int i10nm_get_ddr_munits(void)
- 				return -ENODEV;
- 			}
- 
--			d->imc[i].mbase = mbase;
-+			d->imc[lmc].mbase = mbase;
-+			if (i10nm_imc_absent(&d->imc[lmc])) {
-+				pci_dev_put(mdev);
-+				iounmap(mbase);
-+				d->imc[lmc].mbase = NULL;
-+				edac_dbg(2, "Skip absent mc%d\n", i);
-+				continue;
-+			} else {
-+				d->imc[lmc].mdev = mdev;
-+				lmc++;
-+			}
- 		}
- 	}
- 
--- 
-2.17.1
+regards,
+dan carpenter
 
