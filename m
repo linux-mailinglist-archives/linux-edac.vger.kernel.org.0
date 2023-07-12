@@ -2,62 +2,82 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD93D7500BF
-	for <lists+linux-edac@lfdr.de>; Wed, 12 Jul 2023 10:09:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 401ED7503CD
+	for <lists+linux-edac@lfdr.de>; Wed, 12 Jul 2023 11:49:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229909AbjGLIJJ (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Wed, 12 Jul 2023 04:09:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43634 "EHLO
+        id S233255AbjGLJtK (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Wed, 12 Jul 2023 05:49:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229470AbjGLIJH (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Wed, 12 Jul 2023 04:09:07 -0400
-Received: from mail.lokoho.com (mail.lokoho.com [217.61.105.98])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5D96DC
-        for <linux-edac@vger.kernel.org>; Wed, 12 Jul 2023 01:09:06 -0700 (PDT)
-Received: by mail.lokoho.com (Postfix, from userid 1002)
-        id 344D78694F; Wed, 12 Jul 2023 10:05:29 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=lokoho.com; s=mail;
-        t=1689149130; bh=Z0N5VlX9/JlryGOL5I747Le9USomZJCRNNGRT3LbbKc=;
-        h=Date:From:To:Subject:From;
-        b=pb0HBsEapgIsjSsA8eyq6bMtnVnVQRfv8FBwnCeMZMox9F3J5wXtUSc93FYS38u4y
-         /FboaTNN5wYqQs8tjK3dloBQqbggzkOoRT7J5R9pkNWIS95IKc8zI5QcjjIfIniBkP
-         RdAP+pKbn6pEwg/AD9//nUTbU4n9Px9L9f9qNgY0/LSK2UmRYvDefDc1f5eVE4q2il
-         u5tXPFNU+0Fr3hmMubAi3FtHzTMl0FgDCwHMZHXtlG05G6UI2qeV/eo/wcY4VSlXS6
-         8hozF6VWdp24bj6pmOBp+mb0G5yLEjnFP7yqqY9iDHQP+LPjslRdjR2w3LPzxIhlJt
-         BUE7f/AHsJoTw==
-Received: by mail.lokoho.com for <linux-edac@vger.kernel.org>; Wed, 12 Jul 2023 08:05:10 GMT
-Message-ID: <20230712084501-0.1.9.2ip0.0.ilgpbdzq40@lokoho.com>
-Date:   Wed, 12 Jul 2023 08:05:10 GMT
-From:   "Adam Charachuta" <adam.charachuta@lokoho.com>
-To:     <linux-edac@vger.kernel.org>
-Subject: =?UTF-8?Q?S=C5=82owa_kluczowe_do_wypozycjonowania?=
-X-Mailer: mail.lokoho.com
+        with ESMTP id S233184AbjGLJtJ (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Wed, 12 Jul 2023 05:49:09 -0400
+Received: from mail.208.org (unknown [183.242.55.162])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91EA4B0
+        for <linux-edac@vger.kernel.org>; Wed, 12 Jul 2023 02:49:08 -0700 (PDT)
+Received: from mail.208.org (email.208.org [127.0.0.1])
+        by mail.208.org (Postfix) with ESMTP id 4R1Ccf14nzzBR7b3
+        for <linux-edac@vger.kernel.org>; Wed, 12 Jul 2023 17:49:06 +0800 (CST)
+Authentication-Results: mail.208.org (amavisd-new); dkim=pass
+        reason="pass (just generated, assumed good)" header.d=208.org
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=208.org; h=
+        content-transfer-encoding:content-type:message-id:user-agent
+        :references:in-reply-to:subject:to:from:date:mime-version; s=
+        dkim; t=1689155346; x=1691747347; bh=f0lIyFBFjPx0IprcathWHFRn+Oz
+        vzscZlcDubsXRrY4=; b=m8ZRZK2k2cDJ2b78uLbLKkZ8ed6dEjffdRdltZir1F/
+        EQ/jnO0JDlE0Xyksiq87OARq7cvL6HDnFyll+GOZZUii4FIWSEsrPXiJC4YXTCSt
+        GU7hDXRAgJjX+yBPH8Mv8y7PpCaEAjIJRP9iZxUmDAbS/ZZR4nfIz3JDrVMrRDP7
+        NlJCKC9j4w5H1Bf8DnWDmluM6X39TRxDo2i2xxjg6MUqwNozIo9cC+Pt6PGKk3Et
+        tj8zp6bo0Xb809DlX2ZfImak9G4zAtV1fo6nLqO5KCytMATVlteKZ0O7XJdTeQ9D
+        bLsZMHnVFyQMNyroJWxJGgEMKpbOj4I0n/ZKm2aaYtw==
+X-Virus-Scanned: amavisd-new at mail.208.org
+Received: from mail.208.org ([127.0.0.1])
+        by mail.208.org (mail.208.org [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id vWQrYivzN0vy for <linux-edac@vger.kernel.org>;
+        Wed, 12 Jul 2023 17:49:06 +0800 (CST)
+Received: from localhost (email.208.org [127.0.0.1])
+        by mail.208.org (Postfix) with ESMTPSA id 4R1Ccd64HfzBR7b0;
+        Wed, 12 Jul 2023 17:49:05 +0800 (CST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Date:   Wed, 12 Jul 2023 17:49:05 +0800
+From:   pangzizhen001@208suo.com
+To:     dinguyen@kernel.org, bp@alien8.de, tony.luck@intel.com
+Cc:     linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Fwd: [PATCH] drivers/edac: Fix comment typo
+In-Reply-To: <20230712094640.24445-1-wangjianli@cdjrlc.com>
+References: <20230712094640.24445-1-wangjianli@cdjrlc.com>
+User-Agent: Roundcube Webmail
+Message-ID: <c3f79bcc93dc4090e88a36fc9fadf26b@208suo.com>
+X-Sender: pangzizhen001@208suo.com
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RDNS_NONE,SPF_HELO_FAIL,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-Dzie=C5=84 dobry,
+Delete duplicate word "the"
 
-zapozna=C5=82em si=C4=99 z Pa=C5=84stwa ofert=C4=85 i z przyjemno=C5=9Bci=
-=C4=85 przyznaj=C4=99, =C5=BCe przyci=C4=85ga uwag=C4=99 i zach=C4=99ca d=
-o dalszych rozm=C3=B3w.=20
+Signed-off-by: wangjianli <wangjianli@cdjrlc.com>
+---
+  drivers/edac/altera_edac.c | 2 +-
+  1 file changed, 1 insertion(+), 1 deletion(-)
 
-Pomy=C5=9Bla=C5=82em, =C5=BCe mo=C5=BCe m=C3=B3g=C5=82bym mie=C4=87 sw=C3=
-=B3j wk=C5=82ad w Pa=C5=84stwa rozw=C3=B3j i pom=C3=B3c dotrze=C4=87 z t=C4=
-=85 ofert=C4=85 do wi=C4=99kszego grona odbiorc=C3=B3w. Pozycjonuj=C4=99 =
-strony www, dzi=C4=99ki czemu generuj=C4=85 =C5=9Bwietny ruch w sieci.
-
-Mo=C5=BCemy porozmawia=C4=87 w najbli=C5=BCszym czasie?
-
-
-Pozdrawiam
-Adam Charachuta
+diff --git a/drivers/edac/altera_edac.c b/drivers/edac/altera_edac.c
+index 8b31cd54bdb6..a3b17813eb9b 100644
+--- a/drivers/edac/altera_edac.c
++++ b/drivers/edac/altera_edac.c
+@@ -168,7 +168,7 @@ static ssize_t altr_sdr_mc_err_inject_write(struct 
+file *file,
+      /*
+       * To trigger the error, we need to read the data back
+       * (the data was written with errors above).
+-     * The READ_ONCE macros and printk are used to prevent the
++     * The READ_ONCE macros and printk are used to prevent
+       * the compiler optimizing these reads out.
+       */
+      reg = READ_ONCE(ptemp[0]);
