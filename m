@@ -2,52 +2,52 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CB33753010
-	for <lists+linux-edac@lfdr.de>; Fri, 14 Jul 2023 05:40:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CEC89753030
+	for <lists+linux-edac@lfdr.de>; Fri, 14 Jul 2023 05:53:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234867AbjGNDkI (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Thu, 13 Jul 2023 23:40:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48880 "EHLO
+        id S234932AbjGNDxo (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Thu, 13 Jul 2023 23:53:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234872AbjGNDkE (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Thu, 13 Jul 2023 23:40:04 -0400
+        with ESMTP id S234935AbjGNDxf (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Thu, 13 Jul 2023 23:53:35 -0400
 Received: from mail.208.org (unknown [183.242.55.162])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B48830CD
-        for <linux-edac@vger.kernel.org>; Thu, 13 Jul 2023 20:39:59 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D79012D65
+        for <linux-edac@vger.kernel.org>; Thu, 13 Jul 2023 20:53:22 -0700 (PDT)
 Received: from mail.208.org (email.208.org [127.0.0.1])
-        by mail.208.org (Postfix) with ESMTP id 4R2HKn37DKzBRSVN
-        for <linux-edac@vger.kernel.org>; Fri, 14 Jul 2023 11:39:57 +0800 (CST)
+        by mail.208.org (Postfix) with ESMTP id 4R2HdD4pwGzBRSVd
+        for <linux-edac@vger.kernel.org>; Fri, 14 Jul 2023 11:53:20 +0800 (CST)
 Authentication-Results: mail.208.org (amavisd-new); dkim=pass
         reason="pass (just generated, assumed good)" header.d=208.org
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=208.org; h=
         content-transfer-encoding:content-type:message-id:user-agent
         :references:in-reply-to:subject:to:from:date:mime-version; s=
-        dkim; t=1689305997; x=1691897998; bh=AWHTAkZRkjR1ieZ+VfDcALBX0gH
-        03nLgnO5QP0evr1o=; b=wZgyKLkYA3Sgz7+jQOBoNarATB82iFT3I3KC96eSqVq
-        34SZT4c0k05+jRVHBSmh4flTgnLmIHM+RVde8L+oee2erdWHIlUug6oeI4DujN7a
-        qvMdppR9rj3lL/j4HcSVpAkDCtv+m47taxY5YM//aHUofAEqKsyoy0oiy+CFob4h
-        xLBXKjN8JVlThQwY4TWrrQxc2HkIhn3y0snZvq7M+hbJH5eQGKWqceI3zL2uSvQo
-        iAlaoX0uQU+hdTgbqW2ViL+LF6Gm9PjG7JDJZTCiPxyeVZkfOEizdUDkuLrZO/5I
-        3zkeH655e4raUQQi8fp6lZzId61fgL4EBU3bEFJVQCQ==
+        dkim; t=1689306800; x=1691898801; bh=H7Hb8eUO+kbWVHQppS8k4ZwpO67
+        +dUJb9HgXomBv17g=; b=OKBRLz93NvnK/HMQrs9SRiM4YwwG72eR+vXj/WQXmtZ
+        g+0OOPP3XKahriNdb7BBHhRNZvrK1EoT53aMDWTY8jHVZu1lcHFAMNo8AecAswHG
+        MIOpijx7LlxaG+BK11pWcZOiN5laImOlWzfXyGiQyrsGxQZyvdCFADmm7Z9oOiNA
+        yNvQ6Ye6B9vIcXsKksqGdhYNU9VaJeN17lWaYJ8Jbv0nYO+8stlLyyDIFCIITS9f
+        QEyDfLArGSNzBFtj8yVuP47UH1/H9NuDXSOcRPJCp1NulGcbVem0tobbGUd5ut3e
+        fcYS7OFgCzREUodkwjYHcoTvmsmCXOrBsF1TD9FLAGw==
 X-Virus-Scanned: amavisd-new at mail.208.org
 Received: from mail.208.org ([127.0.0.1])
         by mail.208.org (mail.208.org [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id KEOLIApu_OoE for <linux-edac@vger.kernel.org>;
-        Fri, 14 Jul 2023 11:39:57 +0800 (CST)
+        with ESMTP id l4dtpuvyh1MU for <linux-edac@vger.kernel.org>;
+        Fri, 14 Jul 2023 11:53:20 +0800 (CST)
 Received: from localhost (email.208.org [127.0.0.1])
-        by mail.208.org (Postfix) with ESMTPSA id 4R2HKm6ql1zBHXhN;
-        Fri, 14 Jul 2023 11:39:56 +0800 (CST)
+        by mail.208.org (Postfix) with ESMTPSA id 4R2HdD21wDzBJk54;
+        Fri, 14 Jul 2023 11:53:20 +0800 (CST)
 MIME-Version: 1.0
-Date:   Fri, 14 Jul 2023 11:39:56 +0800
+Date:   Fri, 14 Jul 2023 11:53:20 +0800
 From:   hanyu001@208suo.com
 To:     bp@alien8.de, tony.luck@intel.com, james.morse@arm.com,
         mchehab@kernel.org, rric@kernel.org
 Cc:     linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org
 Subject: [PATCH] drivers: edac: add missing spaces after ','
-In-Reply-To: <tencent_3DB677F4CD0F222D2C0E29A2858205A5D80A@qq.com>
-References: <tencent_3DB677F4CD0F222D2C0E29A2858205A5D80A@qq.com>
+In-Reply-To: <tencent_9292C0A2AD2275684250A6AD5447F83C1706@qq.com>
+References: <tencent_9292C0A2AD2275684250A6AD5447F83C1706@qq.com>
 User-Agent: Roundcube Webmail
-Message-ID: <12fb0185376456c91666476e9949c54f@208suo.com>
+Message-ID: <89259619b487552623c8ab80c143e550@208suo.com>
 X-Sender: hanyu001@208suo.com
 Content-Type: text/plain; charset=US-ASCII;
  format=flowed
@@ -64,11 +64,9 @@ X-Mailing-List: linux-edac@vger.kernel.org
 
 Fixes checkpatch.pl error:
 
-drivers/edac/edac_device_sysfs.c:480: ERROR: space required after that 
+drivers/edac/edac_device_sysfs.c:322: ERROR: space required after that 
 ',' (ctx:VxV)
-drivers/edac/edac_device_sysfs.c:480: ERROR: space required after that 
-',' (ctx:VxV)
-drivers/edac/edac_device_sysfs.c:480: ERROR: space required after that 
+drivers/edac/edac_device_sysfs.c:322: ERROR: space required after that 
 ',' (ctx:VxV)
 
 Signed-off-by: maqimei <2433033762@qq.com>
@@ -78,17 +76,19 @@ Signed-off-by: maqimei <2433033762@qq.com>
 
 diff --git a/drivers/edac/edac_device_sysfs.c 
 b/drivers/edac/edac_device_sysfs.c
-index 010c26b..95e4249 100644
+index 95e4249..05d4353 100644
 --- a/drivers/edac/edac_device_sysfs.c
 +++ b/drivers/edac/edac_device_sysfs.c
-@@ -477,7 +477,7 @@ static ssize_t edac_dev_block_store(struct kobject 
-*kobj,
-      .store = edac_dev_block_store
-  };
+@@ -319,7 +319,7 @@ static ssize_t instance_ce_count_show(struct 
+edac_device_instance *instance,
+  }
 
--#define BLOCK_ATTR(_name,_mode,_show,_store)        \
-+#define BLOCK_ATTR(_name, _mode, _show, _store)        \
-  static struct edac_dev_sysfs_block_attribute attr_block_##_name = {    
-\
-      .attr = {.name = __stringify(_name), .mode = _mode },   \
-      .show   = _show,                                        \
+  #define to_instance(k) container_of(k, struct edac_device_instance, 
+kobj)
+-#define to_instance_attr(a) container_of(a,struct 
+instance_attribute,attr)
++#define to_instance_attr(a) container_of(a, struct instance_attribute, 
+attr)
+
+  /* DEVICE instance kobject release() function */
+  static void edac_device_ctrl_instance_release(struct kobject *kobj)
