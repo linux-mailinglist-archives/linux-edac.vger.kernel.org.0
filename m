@@ -2,52 +2,52 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F129752F88
-	for <lists+linux-edac@lfdr.de>; Fri, 14 Jul 2023 04:50:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A5163752FC5
+	for <lists+linux-edac@lfdr.de>; Fri, 14 Jul 2023 05:13:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234143AbjGNCuX (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Thu, 13 Jul 2023 22:50:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58208 "EHLO
+        id S234688AbjGNDNz (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Thu, 13 Jul 2023 23:13:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234448AbjGNCuW (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Thu, 13 Jul 2023 22:50:22 -0400
+        with ESMTP id S234410AbjGNDNy (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Thu, 13 Jul 2023 23:13:54 -0400
 Received: from mail.208.org (unknown [183.242.55.162])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D44CD2D4B
-        for <linux-edac@vger.kernel.org>; Thu, 13 Jul 2023 19:50:18 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A5772D69
+        for <linux-edac@vger.kernel.org>; Thu, 13 Jul 2023 20:13:51 -0700 (PDT)
 Received: from mail.208.org (email.208.org [127.0.0.1])
-        by mail.208.org (Postfix) with ESMTP id 4R2GDP5D0mzBHXhN
-        for <linux-edac@vger.kernel.org>; Fri, 14 Jul 2023 10:50:13 +0800 (CST)
+        by mail.208.org (Postfix) with ESMTP id 4R2Glc3jZrzBJk54
+        for <linux-edac@vger.kernel.org>; Fri, 14 Jul 2023 11:13:48 +0800 (CST)
 Authentication-Results: mail.208.org (amavisd-new); dkim=pass
         reason="pass (just generated, assumed good)" header.d=208.org
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=208.org; h=
         content-transfer-encoding:content-type:message-id:user-agent
         :references:in-reply-to:subject:to:from:date:mime-version; s=
-        dkim; t=1689303013; x=1691895014; bh=5I3UgUQXgtcwA4fB/8ofF8DzG0N
-        PaPrYz+o/ATGeLLs=; b=j+qJAwA4LakA3Q0pk6yKqzcooJbaJAbEZVKp5o3LfsB
-        /FWfR8nXmf5oqZFUXNfZglYdjpjp6g4GzFcVJR9jlAE0dV7wX4U4J1eBQycTlGIl
-        paQmg3TN1dMCoaNmjcRt/1sxEeqo5fD/1qrlWv0ZGKSTE1Zjn20CiAk34VajZV9V
-        NvdUFBLCyvSSN3nrW9kSUyNbiFsnMpy8e2Fu+oszCd2bmV1HhhIP0b9DSEC0uC8V
-        na4elv6YaFayhe8swEnk+Dv6tKG4McjbjDcAU+l5HNuTb4GsT96kHlUhHoXQ+qiu
-        /mrJzhnLxz8U77tK7GD1HYIpQ13E3MyOelnsHQeKQWw==
+        dkim; t=1689304428; x=1691896429; bh=tJ3pfxfwg/0mU23GPX8ocn8sdp0
+        ++B+RjM+EwDPz9us=; b=WSuj9BjG9Gizt7p9utfYJU/32UME9SPpx8XkeSsNeTj
+        xAVWJdo2KBCkgleuFztX3FSuzqKtmNMC/Gx9Z8dA8udCD5Vo8nC27tRZkwKdUq9R
+        APSeyY/Vfr77jWsn1gsyLNcxVEYkDjWcqvGJqanbrN9B7vLKndipnbaIwXj8XEOo
+        /7+dZCzXgi9zf6lrub17LXlTyI9t0a5jnGlaQtJnGH8OVoa+ByNlSrnHICNJ3IKa
+        WrzQnLE/b9cpVO4mdYXwfAr8Q05BfiVqAbfD3P7LClQpCYlmT/OHdAzcX+Y+V0VK
+        84KRCPjzheFBiSkYwS0E5bSDOHJ7EwX1j0LiywNUfXA==
 X-Virus-Scanned: amavisd-new at mail.208.org
 Received: from mail.208.org ([127.0.0.1])
         by mail.208.org (mail.208.org [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id DUbSAVx83rpl for <linux-edac@vger.kernel.org>;
-        Fri, 14 Jul 2023 10:50:13 +0800 (CST)
+        with ESMTP id VBSlSkkgbzxw for <linux-edac@vger.kernel.org>;
+        Fri, 14 Jul 2023 11:13:48 +0800 (CST)
 Received: from localhost (email.208.org [127.0.0.1])
-        by mail.208.org (Postfix) with ESMTPSA id 4R2GDP2Vv5zBHXR9;
-        Fri, 14 Jul 2023 10:50:13 +0800 (CST)
+        by mail.208.org (Postfix) with ESMTPSA id 4R2Glc0lpJzBJk52;
+        Fri, 14 Jul 2023 11:13:48 +0800 (CST)
 MIME-Version: 1.0
-Date:   Fri, 14 Jul 2023 10:50:13 +0800
+Date:   Fri, 14 Jul 2023 11:13:47 +0800
 From:   hanyu001@208suo.com
 To:     yazen.ghannam@amd.com, bp@alien8.de, tony.luck@intel.com,
-        james.morse@arm.com, mchehab@kernel.org
+        james.morse@arm.com, mchehab@kernel.org, rric@kernel.org
 Cc:     linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] drivers: edac 'unsigned int' to bare use of 'unsigned'
-In-Reply-To: <tencent_1109A4B8453E45F850A4A038DBF78E91F907@qq.com>
-References: <tencent_1109A4B8453E45F850A4A038DBF78E91F907@qq.com>
+Subject: [PATCH] rivers: edac Change 'unsigned' to 'unsigned int'
+In-Reply-To: <tencent_2B68DB16B103727E0949749158313DF42F05@qq.com>
+References: <tencent_2B68DB16B103727E0949749158313DF42F05@qq.com>
 User-Agent: Roundcube Webmail
-Message-ID: <56065773c390ef4f6575bda9b855a63a@208suo.com>
+Message-ID: <68c3d51c4cbb17442ea522192ac1aaf2@208suo.com>
 X-Sender: hanyu001@208suo.com
 Content-Type: text/plain; charset=US-ASCII;
  format=flowed
@@ -62,10 +62,10 @@ Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-Use of 'unsigned int' instead of bare use of 'unsigned'. Fix this for
-edac_mc*, ghes and the i5100 driver as reported by checkpatch.pl.
 
-drivers/edac/amd64_edac.c:2097: WARNING: Prefer 'unsigned int' to bare 
+Fixes checkpatch.pl warning:
+
+./drivers/edac/amd64_edac.c:2099: WARNING: Prefer 'unsigned int' to bare 
 use of 'unsigned'
 
 Signed-off-by: maqimei <2433033762@qq.com>
@@ -74,15 +74,16 @@ Signed-off-by: maqimei <2433033762@qq.com>
   1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/drivers/edac/amd64_edac.c b/drivers/edac/amd64_edac.c
-index 62b7611..5d2c9bb 100644
+index 5d2c9bb..d99828d 100644
 --- a/drivers/edac/amd64_edac.c
 +++ b/drivers/edac/amd64_edac.c
-@@ -2094,7 +2094,7 @@ static void k8_map_sysaddr_to_csrow(struct 
+@@ -2096,7 +2096,7 @@ static void k8_map_sysaddr_to_csrow(struct 
 mem_ctl_info *mci, u64 sys_addr,
-      }
-  }
 
--static int ddr2_cs_size(unsigned i, bool dct_width)
-+static int ddr2_cs_size(unsigned int i, bool dct_width)
+  static int ddr2_cs_size(unsigned int i, bool dct_width)
   {
-      unsigned shift = 0;
+-    unsigned shift = 0;
++    unsigned int shift = 0;
+
+      if (i <= 2)
+          shift = i;
