@@ -2,52 +2,52 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 290B4752F33
-	for <lists+linux-edac@lfdr.de>; Fri, 14 Jul 2023 04:12:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 26DBA752F6C
+	for <lists+linux-edac@lfdr.de>; Fri, 14 Jul 2023 04:33:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233677AbjGNCMB (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Thu, 13 Jul 2023 22:12:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47970 "EHLO
+        id S229580AbjGNCdD (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Thu, 13 Jul 2023 22:33:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233674AbjGNCL6 (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Thu, 13 Jul 2023 22:11:58 -0400
+        with ESMTP id S232833AbjGNCdC (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Thu, 13 Jul 2023 22:33:02 -0400
 Received: from mail.208.org (unknown [183.242.55.162])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82CA02701
-        for <linux-edac@vger.kernel.org>; Thu, 13 Jul 2023 19:11:54 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4480271C
+        for <linux-edac@vger.kernel.org>; Thu, 13 Jul 2023 19:33:00 -0700 (PDT)
 Received: from mail.208.org (email.208.org [127.0.0.1])
-        by mail.208.org (Postfix) with ESMTP id 4R2FN21MLVzBRSVW
-        for <linux-edac@vger.kernel.org>; Fri, 14 Jul 2023 10:11:46 +0800 (CST)
+        by mail.208.org (Postfix) with ESMTP id 4R2FrT3kcFzBRSV5
+        for <linux-edac@vger.kernel.org>; Fri, 14 Jul 2023 10:32:57 +0800 (CST)
 Authentication-Results: mail.208.org (amavisd-new); dkim=pass
         reason="pass (just generated, assumed good)" header.d=208.org
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=208.org; h=
         content-transfer-encoding:content-type:message-id:user-agent
         :references:in-reply-to:subject:to:from:date:mime-version; s=
-        dkim; t=1689300706; x=1691892707; bh=qpbUutfhWSEGYJ0tZoBTgWWOCO2
-        ajKc9xPlTE67rB2c=; b=ZlZAHih8w6Wg+xJrjQiRHgs8Wu6K55BH6BTT1wdBtyw
-        eZeSA9EcbMpbwwPAEOP1eq1rfIZ9aTrpzwlhaATmbH/ByQ5j1jTpeEpNy6jv9XoK
-        1UC0xXieDgD09MHjKo0Dbo7rQ9NLI/+NzS84SPwVQYrZWYhEtBS4OQWGcmij0cxl
-        oG6NSnuL8+U6wi0/MbIUo+ppYx2usgcMOYQ8OknJ5jnr9veuHXu8N/TSgEah2H8L
-        Rn8vuEWh0Vvk3MACNUHTT+W2gI4243b5RF9qitev6bXJIPVYJoqQF8eFRuM1UKmv
-        BrH+KV8YvtJBV3S0FNNYDu+6i8pToKxbNlU1JnxEq3A==
+        dkim; t=1689301977; x=1691893978; bh=nJEWEdmcaA5AHkvy4YNc3CzyARG
+        mYSWiIBQ/FSGBulU=; b=0I6TiDrz+pWKev7GZKEsmt/xq0Gq7dgaeptB0Wk1WJo
+        Ms+5CryTGuwzA1Wv37MYJsD9qIdoNENEZvAG68vRpyh1sqQrIWqsFiOlbbWuuFDG
+        bHDSfe5atwy+JJJXO6oW27BYoPdI+lYRk5HZOxu3QDdckgcJR0yKEIphOwunHIqw
+        AdRpmhccyC01FeRcFzPr0M0b8KKiV+GBbn3enCWpnZKO8F9ujPChw9uftnKSQiJ4
+        kfs9LCPL7Ua9C7H3tV6HgzFM7YSCHI5EwUSOlo1cAnRnpSMrR+F1/ZA6uej5Gxv9
+        aLR2KUZ1wgpSHkTsHzNnEtJuwmyOaEfqmW62PqQ2kqg==
 X-Virus-Scanned: amavisd-new at mail.208.org
 Received: from mail.208.org ([127.0.0.1])
         by mail.208.org (mail.208.org [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id XAAqCmHyhAjI for <linux-edac@vger.kernel.org>;
-        Fri, 14 Jul 2023 10:11:46 +0800 (CST)
+        with ESMTP id WbOaqsSaWvoN for <linux-edac@vger.kernel.org>;
+        Fri, 14 Jul 2023 10:32:57 +0800 (CST)
 Received: from localhost (email.208.org [127.0.0.1])
-        by mail.208.org (Postfix) with ESMTPSA id 4R2FN15gbHzBHXkF;
-        Fri, 14 Jul 2023 10:11:45 +0800 (CST)
+        by mail.208.org (Postfix) with ESMTPSA id 4R2FrT06qGzBHXR9;
+        Fri, 14 Jul 2023 10:32:56 +0800 (CST)
 MIME-Version: 1.0
-Date:   Fri, 14 Jul 2023 10:11:45 +0800
+Date:   Fri, 14 Jul 2023 10:32:56 +0800
 From:   hanyu001@208suo.com
-To:     yazen.ghannam@amd.com, bp@alien8.de, tony.luck@intel.com,
-        james.morse@arm.com, mchehab@kernel.org, rric@kernel.org
+To:     rric@kernel.org, mchehab@kernel.org, james.morse@arm.com,
+        tony.luck@intel.com, bp@alien8.de, yazen.ghannam@amd.com
 Cc:     linux-kernel@vger.kernel.org, linux-edac@vger.kernel.org
-Subject: [PATCH] drivers/edac: amd64_edac: Add space after ','
-In-Reply-To: <tencent_542F76295685CA05E1D9B274D0CE0B21450A@qq.com>
-References: <tencent_542F76295685CA05E1D9B274D0CE0B21450A@qq.com>
+Subject: [PATCH] drivers: edac 'unsigned int' to bare use of 'unsigned'
+In-Reply-To: <tencent_1729A1084117B6691D94F35D48218BA78A08@qq.com>
+References: <tencent_1729A1084117B6691D94F35D48218BA78A08@qq.com>
 User-Agent: Roundcube Webmail
-Message-ID: <f26979e296237d188d4035e3eb6e9ea0@208suo.com>
+Message-ID: <075f691cb489f3f480340203921a5eba@208suo.com>
 X-Sender: hanyu001@208suo.com
 Content-Type: text/plain; charset=US-ASCII;
  format=flowed
@@ -62,37 +62,28 @@ Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-Fix a warning from checkpatch.pl.
+Use of 'unsigned int' instead of bare use of 'unsigned'. Fix this for
+edac_mc*, ghes and the i5100 driver as reported by checkpatch.pl.
 
-drivers/edac/amd64_edac.c:413: ERROR: space required after that ',' 
-(ctx:VxV)
-drivers/edac/amd64_edac.c:413: ERROR: space required after that ',' 
-(ctx:VxV)
-drivers/edac/amd64_edac.c:416: ERROR: space required after that ',' 
-(ctx:VxV)
-drivers/edac/amd64_edac.c:416: ERROR: space required after that ',' 
-(ctx:VxV)
+drivers/edac/amd64_edac.c:2112: WARNING: Prefer 'unsigned int' to bare 
+use of 'unsigned'
 
+Signed-off-byC: Prefer 'unsigned int' to bare use of 'unsigned'
 Signed-off-by: maqimei <2433033762@qq.com>
 ---
-  drivers/edac/amd64_edac.c | 4 ++--
-  1 file changed, 2 insertions(+), 2 deletions(-)
+  drivers/edac/amd64_edac.c | 2 +-
+  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/drivers/edac/amd64_edac.c b/drivers/edac/amd64_edac.c
-index 5d7c080..ddb9bf3 100644
+index ddb9bf3..62b7611 100644
 --- a/drivers/edac/amd64_edac.c
 +++ b/drivers/edac/amd64_edac.c
-@@ -410,10 +410,10 @@ static void get_cs_base_and_mask(struct amd64_pvt 
-*pvt, int csrow, u8 dct,
+@@ -2109,7 +2109,7 @@ static int ddr2_cs_size(unsigned i, bool 
+dct_width)
+  }
 
-          if (pvt->fam == 0x15)
-              base_bits = mask_bits =
--                GENMASK_ULL(30,19) | GENMASK_ULL(13,5);
-+                GENMASK_ULL(30, 19) | GENMASK_ULL(13, 5);
-          else
-              base_bits = mask_bits =
--                GENMASK_ULL(28,19) | GENMASK_ULL(13,5);
-+                GENMASK_ULL(28, 19) | GENMASK_ULL(13, 5);
-      }
-
-      *base  = (csbase & base_bits) << addr_shift;
+  static int k8_dbam_to_chip_select(struct amd64_pvt *pvt, u8 dct,
+-                  unsigned cs_mode, int cs_mask_nr)
++                  unsigned int  cs_mode, int cs_mask_nr)
+  {
+      u32 dclr = dct ? pvt->dclr1 : pvt->dclr0;
