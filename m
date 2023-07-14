@@ -2,52 +2,52 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DBDC7531AF
-	for <lists+linux-edac@lfdr.de>; Fri, 14 Jul 2023 08:02:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 840757531F6
+	for <lists+linux-edac@lfdr.de>; Fri, 14 Jul 2023 08:31:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235104AbjGNGCr (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Fri, 14 Jul 2023 02:02:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45032 "EHLO
+        id S235166AbjGNGb4 (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Fri, 14 Jul 2023 02:31:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235060AbjGNGCh (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Fri, 14 Jul 2023 02:02:37 -0400
+        with ESMTP id S234660AbjGNGbz (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Fri, 14 Jul 2023 02:31:55 -0400
 Received: from mail.208.org (unknown [183.242.55.162])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE14C2D4B
-        for <linux-edac@vger.kernel.org>; Thu, 13 Jul 2023 23:02:33 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62DC71734
+        for <linux-edac@vger.kernel.org>; Thu, 13 Jul 2023 23:31:52 -0700 (PDT)
 Received: from mail.208.org (email.208.org [127.0.0.1])
-        by mail.208.org (Postfix) with ESMTP id 4R2LVH11N4zBR9tK
-        for <linux-edac@vger.kernel.org>; Fri, 14 Jul 2023 14:02:31 +0800 (CST)
+        by mail.208.org (Postfix) with ESMTP id 4R2M853T2mzBJYck
+        for <linux-edac@vger.kernel.org>; Fri, 14 Jul 2023 14:31:49 +0800 (CST)
 Authentication-Results: mail.208.org (amavisd-new); dkim=pass
         reason="pass (just generated, assumed good)" header.d=208.org
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=208.org; h=
         content-transfer-encoding:content-type:message-id:user-agent
         :references:in-reply-to:subject:to:from:date:mime-version; s=
-        dkim; t=1689314550; x=1691906551; bh=BOqlYj16pxE1yFsKTH0Iq6Rg1ib
-        Vab+e8hUqx1RutTQ=; b=a7VfDQ262bMzB5dy5iF4D2O+quHEzP71E4t3KZ0xcwd
-        c2M6NkwGp8X/7bZp49SPbEwXKU29kiOyArQLh4OLULmfyBx8dZ7fJb4aOkowly0I
-        VKKfYvf5IzYVBI6ivTr9v/jiooftX+NxggeD/BBjF9d4euyX2/j558Q1jEf7nsKt
-        tCPWnAjXqc66aOgSMMZZekpay6KpVA2qPsaNb+C4TLmWtu6of0wO/mhS9ftVseFq
-        wZi/aQw6wyeZNjQJm+f2ZTAx7bBmpwbnN/ajYcAW/ktN9iJXMbyQUvndX8+p+itV
-        dHB6T6L0i3Flfv5/j7NZ6vD5WFPvhYBQlX60oq88axA==
+        dkim; t=1689316309; x=1691908310; bh=vePWjMFUPigKMP/Y7MTmNpJd9lY
+        4lk8B7VT/afW3fa4=; b=p5p9A2N1fQp6lrCUFOkXMtQ0HVZvoctYELwS8dQ+Jo9
+        bT5pwEq/S4LRNPp+C+n0E1yUPnyS+UgyesR7pn7lz8AaVbd7S/PT8E5dxxW7KTsv
+        qNc52d5wdWI2r7dqnL4jI7DIzR1vbB4r+q2LAcYyRlQMZgzBl0qzbZkda9fQ06P+
+        2pgSIPwpQ8leNtqUfA6OLLrLJGrCb/NCszQcpsfpwtK8/TnVQ1fRBRa6JV5yDzbc
+        W7+Aso0usHkHXBaekmpw6pXYJRc/85KKHxDCXL2vy8h9QHQEL4ZCdgc6Lu7Hc62X
+        ui96ni3lYb9EeustMECz6xl4vBZwxQhKySMKReYkRvQ==
 X-Virus-Scanned: amavisd-new at mail.208.org
 Received: from mail.208.org ([127.0.0.1])
         by mail.208.org (mail.208.org [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id QOXVsri4XIR0 for <linux-edac@vger.kernel.org>;
-        Fri, 14 Jul 2023 14:02:30 +0800 (CST)
+        with ESMTP id xxVIBI1X2ZjP for <linux-edac@vger.kernel.org>;
+        Fri, 14 Jul 2023 14:31:49 +0800 (CST)
 Received: from localhost (email.208.org [127.0.0.1])
-        by mail.208.org (Postfix) with ESMTPSA id 4R2LVG5M24zBR9t9;
-        Fri, 14 Jul 2023 14:02:30 +0800 (CST)
+        by mail.208.org (Postfix) with ESMTPSA id 4R2M850jHjzBJFS7;
+        Fri, 14 Jul 2023 14:31:49 +0800 (CST)
 MIME-Version: 1.0
-Date:   Fri, 14 Jul 2023 14:02:30 +0800
+Date:   Fri, 14 Jul 2023 14:31:49 +0800
 From:   hanyu001@208suo.com
 To:     bp@alien8.de, tony.luck@intel.com, james.morse@arm.com,
         mchehab@kernel.org, rric@kernel.org
 Cc:     linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] drivers: edac: add missing spaces after ','
-In-Reply-To: <tencent_58287290BBAD4107FE7C2992CB229A625106@qq.com>
-References: <tencent_58287290BBAD4107FE7C2992CB229A625106@qq.com>
+Subject: [PATCH] drivers/edac: Use unsigned int instead of unsigned
+In-Reply-To: <tencent_7104C9739158112DF43868C9F6A2C36E3E05@qq.com>
+References: <tencent_7104C9739158112DF43868C9F6A2C36E3E05@qq.com>
 User-Agent: Roundcube Webmail
-Message-ID: <1793c783600cfd750100cfad8c47cfea@208suo.com>
+Message-ID: <07f86d127c9ac5688d68ce8541e0e007@208suo.com>
 X-Sender: hanyu001@208suo.com
 Content-Type: text/plain; charset=US-ASCII;
  format=flowed
@@ -61,48 +61,30 @@ Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-Fixes checkpatch.pl error
+Fix the checkpatch.pl issue:
 
-./drivers/edac/edac_device_sysfs.c:114: ERROR: space required after that 
-',' (ctx:VxV)
-./drivers/edac/edac_device_sysfs.c:114: ERROR: space required after that 
-',' (ctx:VxV)
-./drivers/edac/edac_device_sysfs.c:147: ERROR: space required after that 
-',' (ctx:VxV)
-./drivers/edac/edac_device_sysfs.c:147: ERROR: space required after that 
-',' (ctx:VxV)
-./drivers/edac/edac_device_sysfs.c:147: ERROR: space required after that 
-',' (ctx:VxV)
+./drivers/edac/ppc4xx_edac.c:199: WARNING: Prefer 'unsigned int' to bare 
+use of 'unsigned'
+./drivers/edac/ppc4xx_edac.c:200: WARNING: Prefer 'unsigned int' to bare 
+use of 'unsigned'
 
 Signed-off-by: maqimei <2433033762@qq.com>
 ---
-  drivers/edac/edac_device_sysfs.c | 4 ++--
+  drivers/edac/ppc4xx_edac.c | 4 ++--
   1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/edac/edac_device_sysfs.c 
-b/drivers/edac/edac_device_sysfs.c
-index 05d4353..f6d42bc 100644
---- a/drivers/edac/edac_device_sysfs.c
-+++ b/drivers/edac/edac_device_sysfs.c
-@@ -111,7 +111,7 @@ struct ctl_info_attribute {
-  };
+diff --git a/drivers/edac/ppc4xx_edac.c b/drivers/edac/ppc4xx_edac.c
+index 046969b..16dd9ff 100644
+--- a/drivers/edac/ppc4xx_edac.c
++++ b/drivers/edac/ppc4xx_edac.c
+@@ -196,8 +196,8 @@ struct ppc4xx_ecc_status {
+   * TODO: The row and channel parameters likely need to be dynamically
+   * set based on the aforementioned variant controller realizations.
+   */
+-static const unsigned ppc4xx_edac_nr_csrows = 2;
+-static const unsigned ppc4xx_edac_nr_chans = 1;
++static const unsigned int  ppc4xx_edac_nr_csrows = 2;
++static const unsigned int  ppc4xx_edac_nr_chans = 1;
 
-  #define to_ctl_info(k) container_of(k, struct edac_device_ctl_info, 
-kobj)
--#define to_ctl_info_attr(a) container_of(a,struct 
-ctl_info_attribute,attr)
-+#define to_ctl_info_attr(a) container_of(a, struct ctl_info_attribute, 
-attr)
-
-  /* Function to 'show' fields from the edac_dev 'ctl_info' structure */
-  static ssize_t edac_dev_ctl_info_show(struct kobject *kobj,
-@@ -144,7 +144,7 @@ static ssize_t edac_dev_ctl_info_store(struct 
-kobject *kobj,
-      .store = edac_dev_ctl_info_store
-  };
-
--#define CTL_INFO_ATTR(_name,_mode,_show,_store)        \
-+#define CTL_INFO_ATTR(_name, _mode, _show, _store)        \
-  static struct ctl_info_attribute attr_ctl_info_##_name = {      \
-      .attr = {.name = __stringify(_name), .mode = _mode },   \
-      .show   = _show,                                        \
+  /*
+   * Strings associated with PLB master IDs capable of being posted in
