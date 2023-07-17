@@ -2,116 +2,197 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D141A75675F
-	for <lists+linux-edac@lfdr.de>; Mon, 17 Jul 2023 17:18:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 20D8A7567C3
+	for <lists+linux-edac@lfdr.de>; Mon, 17 Jul 2023 17:24:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231191AbjGQPSI (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Mon, 17 Jul 2023 11:18:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51192 "EHLO
+        id S231288AbjGQPYO (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Mon, 17 Jul 2023 11:24:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231161AbjGQPSH (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Mon, 17 Jul 2023 11:18:07 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BF2ABD;
-        Mon, 17 Jul 2023 08:18:06 -0700 (PDT)
-Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id DFB901EC0CBE;
-        Mon, 17 Jul 2023 17:18:04 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1689607084;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=GB8ejgjhA70Q76dj14dxnlSp31yxy/iE1gMzhIvNvaE=;
-        b=nFJqUpXRyiHFDQheJQqjW7xgOvbsa0A4x8/ZC59usRZIF0NPk+ZoaGvYQjz5EOZtkPYIxc
-        3eelbE4a0boewk9HimCkyB7qjaL4vIDxLNJlNXTgmLEK9zmgsjWQNW3OO1uKewGcLOEMrL
-        ao7qqxi5d9NijDRkbDEpfbHJExWn+YA=
-X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
-Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
-        header.d=alien8.de
-Received: from mail.alien8.de ([127.0.0.1])
-        by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id lxppULFFWiiy; Mon, 17 Jul 2023 15:18:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-        t=1689607081; bh=GB8ejgjhA70Q76dj14dxnlSp31yxy/iE1gMzhIvNvaE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=jYFTOMbbkO0gVoEp7V5l+xFsb/UOxvhN1riz4Avre4hkHjf6kURfkXtTstTJlk3xm
-         CUL5QIPmhHloT8BIGWNmttxDfkxJgVCMifxcBR5vk72gzcq1RbBRtE+UJF1UqFy5If
-         4tHv/+HVFdIyQZkCz6jyGM2m6YIPXVK8H2lzvfBvP2AQ5F9sBTRoMYW30dlJDONMNM
-         W6wPUf8fIqSiveT3YfGMwlnUrmrn2WrqG/jRCnO5OY5ecStnAMy9KT3Wj5p84AJler
-         lloYUbf3AGk7+KrokpPn1OhhfdDulYaaTDHTcYlv4ORHRP/dhHYloZlulin93eq1uj
-         zGssPzAvhE1ZfcyQn4ls17E3m+593o+d+NrkoOjNDG5XWhztzreQmcRHol+M66ZYql
-         YG3/XWV3975+fw+7dGHVFYDosRjqFBMbh7Q4ljfu0/8YP4TxKIUsZ/TFomWMMN/0gb
-         qrGn4WhB0BBs0qM7qVvX8uCVLZO8F2WkXuJ47NHQFac+xCSHeEDqHsR15sMXsoG8SZ
-         uVu3jmHiF5mMi9/pQIQtPbUedp0UlH+5dvRhmLKtAKc0k2hJKQi9qH/3XfLswI5RvQ
-         XLOYL0esE7VmY6LlXyj2T/989sSdoDYgygHnuLxawiS0+qCp+cp8xsRqaHQ5EKUjg4
-         U1ZhRl8QGNp+2bVB05o+eoug=
-Received: from zn.tnic (pd9530d32.dip0.t-ipconnect.de [217.83.13.50])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
-        (No client certificate requested)
-        by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 8BF6340E0185;
-        Mon, 17 Jul 2023 15:17:47 +0000 (UTC)
-Date:   Mon, 17 Jul 2023 17:17:42 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     "Datta, Shubhrajyoti" <shubhrajyoti.datta@amd.com>
-Cc:     "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
-        "git (AMD-Xilinx)" <git@amd.com>,
-        "krzysztof.kozlowski@linaro.org" <krzysztof.kozlowski@linaro.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "tony.luck@intel.com" <tony.luck@intel.com>,
-        "james.morse@arm.com" <james.morse@arm.com>,
-        "mchehab@kernel.org" <mchehab@kernel.org>,
-        "rric@kernel.org" <rric@kernel.org>,
-        "Simek, Michal" <michal.simek@amd.com>,
-        "sboyd@kernel.org" <sboyd@kernel.org>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "conor+dt@kernel.org" <conor+dt@kernel.org>
-Subject: Re: [PATCH v7 2/2] EDAC/versal: Add a Xilinx Versal memory
- controller driver
-Message-ID: <20230717151742.GHZLVblh4Wj2XpCXoC@fat_crate.local>
-References: <20230614042852.5575-1-shubhrajyoti.datta@amd.com>
- <20230614042852.5575-3-shubhrajyoti.datta@amd.com>
- <20230717081841.GDZLT5Yc/PT77hZ+Xa@fat_crate.local>
- <BY5PR12MB49024D6631D16B3BA68840FD813BA@BY5PR12MB4902.namprd12.prod.outlook.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <BY5PR12MB49024D6631D16B3BA68840FD813BA@BY5PR12MB4902.namprd12.prod.outlook.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S231403AbjGQPYG (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Mon, 17 Jul 2023 11:24:06 -0400
+Received: from lobo.ruivo.org (lobo.ruivo.org [173.14.175.98])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 736BB199
+        for <linux-edac@vger.kernel.org>; Mon, 17 Jul 2023 08:23:49 -0700 (PDT)
+Received: by lobo.ruivo.org (Postfix, from userid 1011)
+        id DEC3752E14; Mon, 17 Jul 2023 11:23:35 -0400 (EDT)
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Level: 
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
+Received: from jake.ruivo.org (bob.qemu.ruivo [192.168.72.19])
+        by lobo.ruivo.org (Postfix) with ESMTPA id A4E2B52998;
+        Mon, 17 Jul 2023 11:23:17 -0400 (EDT)
+Received: by jake.ruivo.org (Postfix, from userid 1000)
+        id 930E622007F; Mon, 17 Jul 2023 11:23:17 -0400 (EDT)
+Date:   Mon, 17 Jul 2023 11:23:17 -0400
+From:   Aristeu Rozanski <aris@ruivo.org>
+To:     Tony Luck <tony.luck@intel.com>
+Cc:     "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
+        Borislav Petkov <bp@alien8.de>,
+        "aris@redhat.com" <aris@redhat.com>
+Subject: [PATCH v4] mce: prevent concurrent polling of MCE events
+Message-ID: <20230717152317.GA94963@cathedrallabs.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/2.2.9 (2022-11-12)
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Mon, Jul 17, 2023 at 12:31:09PM +0000, Datta, Shubhrajyoti wrote:
-> We disable all the interrupts and enable only the correctable and
-> non-correctable errors. The disable takes care of the issue that if
-> other interrupts are enabled then there is no one to handle the
-> interrupts.
+On Intel microarchitectures that support CMCI but have it disabled (BIOS,
+kernel option or CMCI storm code) the kernel will resort to polling for MCEs.
+In these microarchitectures the IMC registers are shared by all CPUs in the
+same package and despite the fact that the polling is set up in the kernel to
+prevent all CPUs to poll at the same time, it's still possible they'll overlap
+and report the same MCE multiple times.
 
-What if someone else has enabled an interrupt line for them and you
-disable it?
+This patch fixes this by introducing synchronization during polling only for
+the affected microarchitectures.
 
-That doesn't make any sense.
+v4: get rid of unneeded variable on intel_cmci_poll_unlock() and simplify unserialize_mc_bank_access()
+v3: add {,un}serialize_mc_bank_access() as intermediate functions as requested by Tony Luck
 
-> Also the enable interrupts are needed for the driver to work. The
-> debug for error injection to test the notification.
+Signed-off-by: Aristeu Rozanski <aris@ruivo.org>
+Reviewed-by: Tony Luck <tony.luck@intel.com>
+Cc: Tony Luck <tony.luck@intel.com>
+Cc: Aristeu Rozanski <aris@redhat.com>
+Cc: Borislav Petkov <bp@alien8.de>
+Cc: linux-edac@vger.kernel.org
 
-The fact that it is not obvious why you're toggling the interrupts there
-means you need a big fat comment explaining what you're doing.
+---
+ arch/x86/kernel/cpu/mce/core.c     |   18 +++++++++++++++
+ arch/x86/kernel/cpu/mce/intel.c    |   44 +++++++++++++++++++++++++++++++------
+ arch/x86/kernel/cpu/mce/internal.h |    4 +++
+ 3 files changed, 59 insertions(+), 7 deletions(-)
 
-Thx.
+--- linus-2.6.orig/arch/x86/kernel/cpu/mce/core.c	2023-06-26 12:37:12.972386600 -0400
++++ linus-2.6/arch/x86/kernel/cpu/mce/core.c	2023-06-27 15:09:11.812208744 -0400
+@@ -1578,6 +1578,22 @@ return 0;
+ }
+ #endif
+ 
++static bool serialize_mc_bank_access(void)
++{
++	if (boot_cpu_data.x86_vendor != X86_VENDOR_INTEL)
++		return false;
++
++	return intel_cmci_poll_lock();
++}
++
++static void unserialize_mc_bank_access(bool locked)
++{
++	if (!locked)
++		return;
++
++	intel_cmci_poll_unlock();
++}
++
+ /*
+  * Periodic polling timer for "silent" machine check errors.  If the
+  * poller finds an MCE, poll 2x faster.  When the poller finds no more
+@@ -1618,7 +1634,9 @@ static void mce_timer_fn(struct timer_li
+ 	iv = __this_cpu_read(mce_next_interval);
+ 
+ 	if (mce_available(this_cpu_ptr(&cpu_info))) {
++		bool locked = serialize_mc_bank_access();
+ 		machine_check_poll(0, this_cpu_ptr(&mce_poll_banks));
++		unserialize_mc_bank_access(locked);
+ 
+ 		if (mce_intel_cmci_poll()) {
+ 			iv = mce_adjust_timer(iv);
+--- linus-2.6.orig/arch/x86/kernel/cpu/mce/intel.c	2023-06-26 12:37:12.972386600 -0400
++++ linus-2.6/arch/x86/kernel/cpu/mce/intel.c	2023-06-27 15:09:31.672032470 -0400
+@@ -73,13 +73,8 @@ enum {
+ 
+ static atomic_t cmci_storm_on_cpus;
+ 
+-static int cmci_supported(int *banks)
++static bool cmci_supported_hw(void)
+ {
+-	u64 cap;
+-
+-	if (mca_cfg.cmci_disabled || mca_cfg.ignore_ce)
+-		return 0;
+-
+ 	/*
+ 	 * Vendor check is not strictly needed, but the initial
+ 	 * initialization is vendor keyed and this
+@@ -87,10 +82,24 @@ return 0;
+ 	 */
+ 	if (boot_cpu_data.x86_vendor != X86_VENDOR_INTEL &&
+ 	    boot_cpu_data.x86_vendor != X86_VENDOR_ZHAOXIN)
+-		return 0;
++		return false;
+ 
+ 	if (!boot_cpu_has(X86_FEATURE_APIC) || lapic_get_maxlvt() < 6)
++		return false;
++
++	return true;
++}
++
++static int cmci_supported(int *banks)
++{
++	u64 cap;
++
++	if (mca_cfg.cmci_disabled || mca_cfg.ignore_ce)
++		return 0;
++
++	if (!cmci_supported_hw())
+ 		return 0;
++
+ 	rdmsrl(MSR_IA32_MCG_CAP, cap);
+ 	*banks = min_t(unsigned, MAX_NR_BANKS, cap & 0xff);
+ 	return !!(cap & MCG_CMCI_P);
+@@ -519,3 +528,24 @@ ((m->status & 0xa0000000ffffffff) == 0x8
+ 
+ 	return false;
+ }
++
++/*
++ * On systems that do support CMCI but it's disabled, polling for MCEs can
++ * cause the same event to be reported multiple times because IA32_MCi_STATUS
++ * is shared by the same package.
++ */
++static DEFINE_SPINLOCK(cmci_poll_lock);
++bool intel_cmci_poll_lock(void)
++{
++	if (!cmci_supported_hw())
++		return false;
++
++	spin_lock(&cmci_poll_lock);
++
++	return true;
++}
++
++void intel_cmci_poll_unlock(void)
++{
++	spin_unlock(&cmci_poll_lock);
++}
+--- linus-2.6.orig/arch/x86/kernel/cpu/mce/internal.h	2023-06-26 12:37:12.972386600 -0400
++++ linus-2.6/arch/x86/kernel/cpu/mce/internal.h	2023-06-27 15:09:53.180841560 -0400
+@@ -49,6 +49,8 @@ void intel_init_cmci(void);
+ void intel_init_lmce(void);
+ void intel_clear_lmce(void);
+ bool intel_filter_mce(struct mce *m);
++bool intel_cmci_poll_lock(void);
++void intel_cmci_poll_unlock(void);
+ #else
+ # define cmci_intel_adjust_timer mce_adjust_timer_default
+ static inline bool mce_intel_cmci_poll(void) { return false; }
+@@ -58,6 +60,8 @@ static inline void intel_init_cmci(void)
+ static inline void intel_init_lmce(void) { }
+ static inline void intel_clear_lmce(void) { }
+ static inline bool intel_filter_mce(struct mce *m) { return false; }
++static inline bool intel_cmci_poll_lock(void) { return false; }
++static inline void intel_cmci_poll_unlock(void) { }
+ #endif
+ 
+ void mce_timer_kick(unsigned long interval);
 
 -- 
-Regards/Gruss,
-    Boris.
+Aristeu
 
-https://people.kernel.org/tglx/notes-about-netiquette
