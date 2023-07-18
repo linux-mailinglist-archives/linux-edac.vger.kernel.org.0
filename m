@@ -2,84 +2,132 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F043A75823B
-	for <lists+linux-edac@lfdr.de>; Tue, 18 Jul 2023 18:35:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 34B63758685
+	for <lists+linux-edac@lfdr.de>; Tue, 18 Jul 2023 23:09:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232037AbjGRQfd (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Tue, 18 Jul 2023 12:35:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47760 "EHLO
+        id S230140AbjGRVJC (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Tue, 18 Jul 2023 17:09:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231425AbjGRQfc (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Tue, 18 Jul 2023 12:35:32 -0400
-Received: from mail.208.org (unknown [183.242.55.162])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A274A124
-        for <linux-edac@vger.kernel.org>; Tue, 18 Jul 2023 09:35:31 -0700 (PDT)
-Received: from mail.208.org (email.208.org [127.0.0.1])
-        by mail.208.org (Postfix) with ESMTP id 4R54Lm6BJVzBR9sr
-        for <linux-edac@vger.kernel.org>; Wed, 19 Jul 2023 00:35:28 +0800 (CST)
-Authentication-Results: mail.208.org (amavisd-new); dkim=pass
-        reason="pass (just generated, assumed good)" header.d=208.org
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=208.org; h=
-        content-transfer-encoding:content-type:message-id:user-agent
-        :references:in-reply-to:subject:to:from:date:mime-version; s=
-        dkim; t=1689698128; x=1692290129; bh=f0lIyFBFjPx0IprcathWHFRn+Oz
-        vzscZlcDubsXRrY4=; b=N15vQrHMJhMkwLbFlcB4hasBYuYlEcBhtzhXs4e/G8Z
-        vR0tlAM6YLD39x3j0RpuvcdwKQ4QmG3CJMP2Wiu22I3HGsrvokV1Qk6Ihu2qVH1E
-        bJqpylG5sUp/wxgnioy9BbWt45t1G0ytyBVUA98kcOAeHNbLJlaXu++DtoFoHifT
-        kwk/yLjGkTvdAFltjoLEQEsqfOwI/LUQUta5Hj2iWiAGXLPRMfWYHbeeojAe5sP5
-        az5lvVQx2WuwIo23etgHZIAxU4L86YLb8QvgO1KhkGvk+wRuiGwV37n05rXGHBmm
-        PGY7wGz71dlsQ2TpDmQevYg2Hp+DcRA10ftKMhK3nqA==
-X-Virus-Scanned: amavisd-new at mail.208.org
-Received: from mail.208.org ([127.0.0.1])
-        by mail.208.org (mail.208.org [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id rejBM2WLlzbI for <linux-edac@vger.kernel.org>;
-        Wed, 19 Jul 2023 00:35:28 +0800 (CST)
-Received: from localhost (email.208.org [127.0.0.1])
-        by mail.208.org (Postfix) with ESMTPSA id 4R54Lm4bZfzBR1PQ;
-        Wed, 19 Jul 2023 00:35:28 +0800 (CST)
+        with ESMTP id S230226AbjGRVJB (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Tue, 18 Jul 2023 17:09:01 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34EF4EC;
+        Tue, 18 Jul 2023 14:08:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1689714539; x=1721250539;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=jD0ikaOVy5BVJjtayK1+12kc2csGinS7MH/OORdIRbU=;
+  b=Ta+4ekeOGc4j6LAY/vSAA8G+cW/QsDKG6zsqQ16h9GGrHcNpXVOnZkg2
+   9QgEsCm5h/jdPOlzz6zSoaElZgGiU45RcXFeVlgyGi/NuT3kBFaiWnNZ7
+   UWfbb4hTeDpMFmx23gyQTFWWc53Sy9Ad+nhpnpGJmsOZhqpiQFFovu5hW
+   y8NQtLnX/FmQa/w+fvbDB4plCvCM0e+DRiY5XupSaz00g6Flz6IuLMu28
+   C2zOr+pQzlivXyUuUwSsWQbJfZ58HUAiYBi1nGKRuM88vcn7pamUluXG5
+   sKKu/r/rsKqNc72LdGZI0470paUyoyxtL7jaJVzPfQ2t0M+4JCiUmf7Ll
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10775"; a="369872196"
+X-IronPort-AV: E=Sophos;i="6.01,215,1684825200"; 
+   d="scan'208";a="369872196"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jul 2023 14:08:58 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10775"; a="813897793"
+X-IronPort-AV: E=Sophos;i="6.01,215,1684825200"; 
+   d="scan'208";a="813897793"
+Received: from agluck-desk3.sc.intel.com ([172.25.222.74])
+  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jul 2023 14:08:58 -0700
+From:   Tony Luck <tony.luck@intel.com>
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     Yazen Ghannam <yazen.ghannam@amd.com>,
+        Smita.KoralahalliChannabasappa@amd.com,
+        dave.hansen@linux.intel.com, x86@kernel.org,
+        linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
+        patches@lists.linux.dev, Tony Luck <tony.luck@intel.com>
+Subject: [PATCH v7 0/3] Handle corrected machine check interrupt storms
+Date:   Tue, 18 Jul 2023 14:08:10 -0700
+Message-Id: <20230718210813.291190-1-tony.luck@intel.com>
+X-Mailer: git-send-email 2.40.1
+In-Reply-To: <20230616182744.17632-1-tony.luck@intel.com>
+References: <20230616182744.17632-1-tony.luck@intel.com>
 MIME-Version: 1.0
-Date:   Wed, 19 Jul 2023 00:35:28 +0800
-From:   pangzizhen001@208suo.com
-To:     dinguyen@kernel.org, bp@alien8.de, tony.luck@intel.com
-Cc:     linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] drivers/edac: Fix comment typo
-In-Reply-To: <c3f79bcc93dc4090e88a36fc9fadf26b@208suo.com>
-References: <20230712094640.24445-1-wangjianli@cdjrlc.com>
- <c3f79bcc93dc4090e88a36fc9fadf26b@208suo.com>
-User-Agent: Roundcube Webmail
-Message-ID: <562575dc60e79aab479f1d83ffc54ecb@208suo.com>
-X-Sender: pangzizhen001@208suo.com
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_DNSWL_BLOCKED,RDNS_NONE,SPF_HELO_FAIL,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-Delete duplicate word "the"
+Linux CMCI storm mitigation is a big hammer that just disables the CMCI
+interrupt globally and switches to polling all banks.
 
-Signed-off-by: wangjianli <wangjianli@cdjrlc.com>
----
-  drivers/edac/altera_edac.c | 2 +-
-  1 file changed, 1 insertion(+), 1 deletion(-)
+There are two problems with this:
+1) It really is a big hammer. It means that errors reported in other
+banks from different functional units are all subject to the same
+polling delay before being processed.
+2) Intel systems signal some uncorrected errors using CMCI (e.g.
+memory controller patrol scrub on Icelake Xeon and newer). Delaying
+processing these error reports negates some of the benefit of the patrol
+scrubber providing early notice of errors before they are consumed and
+cause a machine check.
 
-diff --git a/drivers/edac/altera_edac.c b/drivers/edac/altera_edac.c
-index 8b31cd54bdb6..a3b17813eb9b 100644
---- a/drivers/edac/altera_edac.c
-+++ b/drivers/edac/altera_edac.c
-@@ -168,7 +168,7 @@ static ssize_t altr_sdr_mc_err_inject_write(struct 
-file *file,
-      /*
-       * To trigger the error, we need to read the data back
-       * (the data was written with errors above).
--     * The READ_ONCE macros and printk are used to prevent the
-+     * The READ_ONCE macros and printk are used to prevent
-       * the compiler optimizing these reads out.
-       */
-      reg = READ_ONCE(ptemp[0]);
+This series throws away the old storm implementation and replaces it
+with one that keeps track of the weather on each separate machine check
+bank. When a storm is detected from a bank. On Intel the storm is
+mitigated by setting a very high threshold for corrected errors to
+signal CMCI. This threshold does not affect signaling CMCI for
+uncorrected errors.
+
+Changes since last version:
+
+0) Rebased to v6.5-rc2
+1) Yazen & Boris - dropped AMD patch pending integration of AMD
+   machine check bank scanning with the core machine_check_poll()
+   function.
+2) Boris - rename track_cmci_storm() as track_storm() in prep for
+   the day when AMD joins in - they don't call the interrupt "CMCI".
+   This function is now "static" and local to core.c.
+3) Boris - Define new "struct storm_bank" for all the storm tracking
+   arrays.
+4) Move the storm_poll_mode per-CPU tracker into the storm_desc
+   structure.
+5) Define STORM_END_POLL_THRESHOLD as "29" instead of "30" with comment
+   that it is used as high end of a bitmask that counts from zero. Drop
+   the " - 1" where it is used.
+6) Don't user kernel-doc format comments in mce/internal.h.
+
+Suggested change NOT taken:
+> +      * If this is the first bank on this CPU to enter storm mode
+> +      * start polling
+> +      */
+> +     if (++storm->stormy_bank_count == 1)
+
+        if (++storm->stormy_bank_count)
+
+> +             mce_timer_kick(true);
+
+As the comment above this code says, only want to "kick" the timer when
+first bank on a core goes into storm mode. If another bank also goes
+into storm while the first storm is active, then no need to "start
+polling" that's already happening for the first storm.
+
+Tony Luck (3):
+  x86/mce: Remove old CMCI storm mitigation code
+  x86/mce: Add per-bank CMCI storm mitigation
+  x86/mce: Handle Intel threshold interrupt storms
+
+ arch/x86/kernel/cpu/mce/internal.h |  49 ++++-
+ arch/x86/kernel/cpu/mce/core.c     | 131 +++++++++---
+ arch/x86/kernel/cpu/mce/intel.c    | 333 +++++++++++++----------------
+ 3 files changed, 290 insertions(+), 223 deletions(-)
+
+
+base-commit: fdf0eaf11452d72945af31804e2a1048ee1b574c
+-- 
+2.40.1
+
