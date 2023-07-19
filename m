@@ -2,74 +2,157 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7661759186
-	for <lists+linux-edac@lfdr.de>; Wed, 19 Jul 2023 11:27:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E2D1759C6A
+	for <lists+linux-edac@lfdr.de>; Wed, 19 Jul 2023 19:33:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229529AbjGSJ1I (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Wed, 19 Jul 2023 05:27:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38784 "EHLO
+        id S229540AbjGSRdN (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Wed, 19 Jul 2023 13:33:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229681AbjGSJ1H (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Wed, 19 Jul 2023 05:27:07 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06E792136
-        for <linux-edac@vger.kernel.org>; Wed, 19 Jul 2023 02:26:38 -0700 (PDT)
-Received: from mail.alien8.de (mail.alien8.de [IPv6:2a01:4f9:3051:3f93::2])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 5266C1EC0749;
-        Wed, 19 Jul 2023 11:26:36 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1689758796;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=RuWwEY8ozVhSJgpHgVIKGv/y+4yzJUxoxm+bWe5PvGQ=;
-        b=aF0z+X37nFdlemehpDoAzAw7OZ/Ku92Lq3aAVNgQQXsbkWHuvv4pzWG8fzWSfVpVxt5tcr
-        HG+JF3+qDM4CMse5nCstIafF+jKpR8T16fwx3Nxc/oKGX77HrUWUJ89wH9ESCT4FpdL/wO
-        nmyyRhgk2iXtnGqp5EVi23lQZcS8xZo=
-X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
-Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
-        header.d=alien8.de
-Received: from mail.alien8.de ([127.0.0.1])
-        by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id nAtB7gpW3nf6; Wed, 19 Jul 2023 09:26:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-        t=1689758788; bh=RuWwEY8ozVhSJgpHgVIKGv/y+4yzJUxoxm+bWe5PvGQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=KSB+OPf6BFYGCwC+YmUIM2yxxu5+YLmdV05rPw0XgIOsEHddLww3n7vqglDRMw00e
-         4lv8j+VjtUmjXrU0w0c2J7+w4Rcb8MdYby126O2BUe+mLxHHIxvgsJXhE1K3hXJ/fs
-         LX4R7xhHJjyHZA5nMlXEVZgqqF1AhTx2X0MRqnMCkli/64+O0OEhcUIfshKDrf3Z/F
-         U5DJ3+pbm50ph6o0zie9ZiYVjM0ggpBrVNdJ269MuX70wdVzkABQJOvDnbv5itgFix
-         Bqjk3r4BKv5KNVcjPkf/bwb3nuR7jsVK2nAIIbvBeURfIFe5f2hQV/rmswzKX7O1DP
-         m62EctMCkHeRVXo2RCaV56zTGzrg4FkrdiQUUhCroq542fm568jZwpFnHIJprzN3ry
-         i7Fs6bLOObtoubUp7AP83xEfI8i28gFSl3k7E2E/drdE8EnVKCHfH7dT26M/W8epYx
-         2qXWVQfNEVDv7J8zSAd512Q2QG+zteX/+hbrDKblZRKGVezQNvOo7TxFUaxshq5dHG
-         oNUEPIe16WlhY8QzLvd9p/BjAHcjiGFZGrnWTbDHm3OC7kdnqGDl4poguQ2jP3QmKs
-         iLlIZOXVTWjqOuqw47DUu6Uq2QLdsUnFRDaMTZPkqrnB/Ka8YDxofeGqMRPd6IP5jn
-         NZCnauAUQikORO9L/HkNuGtA=
-Received: from zn.tnic (pd9530d32.dip0.t-ipconnect.de [217.83.13.50])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
-        (No client certificate requested)
-        by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 1F90B40E01EB;
-        Wed, 19 Jul 2023 09:26:24 +0000 (UTC)
-Date:   Wed, 19 Jul 2023 11:26:19 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Aristeu Rozanski <aris@ruivo.org>
-Cc:     Tony Luck <tony.luck@intel.com>,
-        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
+        with ESMTP id S229531AbjGSRdM (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Wed, 19 Jul 2023 13:33:12 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 370EB18D
+        for <linux-edac@vger.kernel.org>; Wed, 19 Jul 2023 10:33:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1689787991; x=1721323991;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=VmLOmQLSyKZ15Ak9pfhpzv1Z2m2SK15bTpEpqWrC8K0=;
+  b=fUaoiPrRP0no88W+w+cP48x6UNOvEPFXyxgNa1PiWwzGNSGSLk4J72aW
+   LgUz9y6Zr1YjddUIf80+OrYs5FEhkBmEX3ZagxdMlPjAybdwKfdOMwONm
+   LdbfRqE0AVG8l/KDBm9DRm+PKkEfhCF3vSvtZ1EVCy1qejLZ1qoEG32cH
+   U2ioOjUEIB65h+SKRvZqwYhRsmI7l1MlC1O2P4y29/QVCkWyUnZm8JEN4
+   lTui5i8ZFx+K73migCtXNTBl4hlV3bCA1AujwyU1HnWpy3AyMJBGYXvvf
+   CMalxNg+0J+PLnEZsLxsuVEfJ+FiIBvevkLFo/c5pXpmAgU6iH8fGxE7z
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10776"; a="363990865"
+X-IronPort-AV: E=Sophos;i="6.01,216,1684825200"; 
+   d="scan'208";a="363990865"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jul 2023 10:33:09 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10776"; a="674393375"
+X-IronPort-AV: E=Sophos;i="6.01,216,1684825200"; 
+   d="scan'208";a="674393375"
+Received: from orsmsx602.amr.corp.intel.com ([10.22.229.15])
+  by orsmga003.jf.intel.com with ESMTP; 19 Jul 2023 10:33:09 -0700
+Received: from orsmsx611.amr.corp.intel.com (10.22.229.24) by
+ ORSMSX602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.27; Wed, 19 Jul 2023 10:33:09 -0700
+Received: from orsmsx603.amr.corp.intel.com (10.22.229.16) by
+ ORSMSX611.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.27; Wed, 19 Jul 2023 10:33:08 -0700
+Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
+ orsmsx603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.27 via Frontend Transport; Wed, 19 Jul 2023 10:33:08 -0700
+Received: from NAM02-SN1-obe.outbound.protection.outlook.com (104.47.57.48) by
+ edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.27; Wed, 19 Jul 2023 10:33:03 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Ohc0Or4aOLLb3qAa5tOd+nNNxnQZzIFlCBoLRr9GrbIlWAxsuho6eAeuxvVreufoHaMyXNFkfg4h92yWZVWDqAxSpYskBB+pWM16WRCheepqLxUyF//wF2rfcNQv5UMaW5ATO+IJh4sGwFLUaCSpxQ+44NsdA+iCduWOaeJxBV7LhoaEU717YZ3pKiNInwhTNh9oVWVsI3udmrrvk7QKUFZOpxSCL21cwglnCWQ3W/FRNfvidE0xMfbndLf1PKNBb5C2bYS2PrulLwQjYtDY+Targ4Yx1gD8yQ+tWCiMj7s/nZ2LeYAtGVPGHNFAl3a/vmfETMcUCNK50RdB7qd9Zw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=VmLOmQLSyKZ15Ak9pfhpzv1Z2m2SK15bTpEpqWrC8K0=;
+ b=Klq3yAJaMbwonoviFCYHRj7seUO1wV/eYvisSxlUhquKc9NYQZigaByTJ7FsfBLSNK5dsimvYZIoOTIbuK2vMip8navY6s9k4U1xliUtnkoqYVLtmk5NOCxf9aIbS8dXR4m6siqVjP4imTCU5Uz8JK7z1YOa6LEd7G0gJMiagm5698Pjclvwwi+IHcWUNAF7oZ13LANEDkIOPWhwW75A5oQzJUkjwHIjkVcrxihm9/4iNcGttgRr5neOF7AeWeSfBG8BZzK4y86DYdnBkjEVa547cLpunLzQiXaEbKv3jGoyS6ckOEeCNvTpz15xSLvtC0GP7HWWkEOP2jTsNwImSQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from SJ1PR11MB6083.namprd11.prod.outlook.com (2603:10b6:a03:48a::9)
+ by CH3PR11MB7722.namprd11.prod.outlook.com (2603:10b6:610:122::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6588.33; Wed, 19 Jul
+ 2023 17:32:56 +0000
+Received: from SJ1PR11MB6083.namprd11.prod.outlook.com
+ ([fe80::6c4d:b433:cf0b:8a5]) by SJ1PR11MB6083.namprd11.prod.outlook.com
+ ([fe80::6c4d:b433:cf0b:8a5%7]) with mapi id 15.20.6588.031; Wed, 19 Jul 2023
+ 17:32:53 +0000
+From:   "Luck, Tony" <tony.luck@intel.com>
+To:     Borislav Petkov <bp@alien8.de>, Aristeu Rozanski <aris@ruivo.org>
+CC:     "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
         "aris@redhat.com" <aris@redhat.com>
-Subject: Re: [PATCH v4] mce: prevent concurrent polling of MCE events
-Message-ID: <20230719092619.GJZLesOyHrL8JQyDZN@fat_crate.local>
+Subject: RE: [PATCH v4] mce: prevent concurrent polling of MCE events
+Thread-Topic: [PATCH v4] mce: prevent concurrent polling of MCE events
+Thread-Index: AQHZuMKuvVFae45rU0O06dz/GcPawq/A1KCAgACHuNA=
+Date:   Wed, 19 Jul 2023 17:32:53 +0000
+Message-ID: <SJ1PR11MB6083D965F431FBF43B36FDFBFC39A@SJ1PR11MB6083.namprd11.prod.outlook.com>
 References: <20230717152317.GA94963@cathedrallabs.org>
+ <20230719092619.GJZLesOyHrL8JQyDZN@fat_crate.local>
+In-Reply-To: <20230719092619.GJZLesOyHrL8JQyDZN@fat_crate.local>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: SJ1PR11MB6083:EE_|CH3PR11MB7722:EE_
+x-ms-office365-filtering-correlation-id: c9acc3e6-f727-471a-96c5-08db887e2e8b
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: Z/lrI+B4s7yPEls08J5ItRaRG6cLFRo5JaIBXwVrxAOU4kUALjhPZiIJCLl3i0Ao5MqX7JodArcmZnGeidfyqyF8rid3pcpGwSmUQUpzOlJyksqgmKsW1qIlKUDRn2D7vvgHZYp1j4c7Q2L48dQjfDsBXcIthah4AwRxqOMbiUW95UwVi+o34bkCRJbF7XyZOli4p0/HWW+zTYbYFYBw8yDXbaL1xAqVQ4t9FCX+sTrgVNcwi6YGVDylVhljYvfrEMAOxTTbE1SQhANpPBrsv/2Dz7f/55NTUEcCKF2WYeqYWrYe0B9dUjQG6M7xdvK8IuNrRa/IpMPLvDiI2IkwYPs8/tcz8PG1F9xorzocCWwIkvt1usB6+jCQkIp4V0avh+NkA3I0Ugj6xHoRNVk3vSJ77CMJ53RLejFpGQCrlSDOufVfDQ92hq86aVqXoAJc9DCZ5Uq/bPQ0WoqbHwTZoLR972/7dqXKXvE5eXgZox5nZK4jfeZPd4a33+wae639ziQsgGsMNPilz4fO/QMt7L9ufX4LkMOdGOPCyDos0CH7Nz11uoz+JFRcyhHf/+0dbbniMpYuSht/tusVmaPq32QDC4POL9aX1P7oK+UBLkmlx9Si1uEg2kuztG1LYaE1
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ1PR11MB6083.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(136003)(396003)(39860400002)(366004)(346002)(376002)(451199021)(7696005)(9686003)(71200400001)(33656002)(558084003)(186003)(86362001)(38100700002)(38070700005)(82960400001)(122000001)(6506007)(26005)(55016003)(316002)(52536014)(5660300002)(8936002)(41300700001)(8676002)(66556008)(66946007)(76116006)(4326008)(66476007)(64756008)(66446008)(478600001)(54906003)(110136005)(2906002);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?TWQ4MENMS2JQb25EcGkvNEZvRlVSbitPaVk1d3BkL3RNMnRrSlJwYWE5Y1E5?=
+ =?utf-8?B?bVhIWFFDa3ZpSXVaUDltZ2FFVXo3eGtxamcrd0JJRk5xbTlMV1ZWVTZVc1or?=
+ =?utf-8?B?ZmNiTjJlUVl2djFPSjYxeUEvYis1dCtuTk1hbWJUdFlZTXhZY20raGVTS0ha?=
+ =?utf-8?B?Mk00OEhZbVAwK29YbGczZHRoTTVDbnB4R3daSnUxZFlpUDdhVzY4bCsxUDRC?=
+ =?utf-8?B?YlZSZVkveUJ2Q0dHL2ZRNGU0dDBlcEpsMlBnKzk0WkpvNVVyTVBKUFd2M29G?=
+ =?utf-8?B?MWdFMmdqekJWQVdzTVFkTnhNWTJTZWcySmxrYnc4QnJmMUc0QWl6MlRWU2xJ?=
+ =?utf-8?B?SzlaTEFOVTk1T2R3SUllMVFUK1JaRCs4VkpnZnRzQ241RS9qekE0VGhMZEhq?=
+ =?utf-8?B?V2s1Z2Q5THpoWkZZS1RoRCtqcVZoKzB3K29KRzJvdVFpdmxhQmdWYWpta1gy?=
+ =?utf-8?B?M1ZtMnJZUHdhMGxvRVA5SlB2MFZEOFR5Z0xxbTJWRkJDMWxTY1p1Y050UHNq?=
+ =?utf-8?B?ZzJNKzJRUkR6RXhac1lieVI0Uk54a2p4VVFHN2pyWUs4QTB4OUQ0bGg4cHpm?=
+ =?utf-8?B?U2RZTTNhZHNsZjNXRkZBYUNCK00wUW9uOTBWQXFQdGhkM3hhTjF0TEdYWFA4?=
+ =?utf-8?B?ZEszWm44TnhqTnZLbWVXL056SW5ORGNLRERZejVjbmxiZnBoYXBEUk8reWVq?=
+ =?utf-8?B?emtock55cVdTSWRWYmMvb3dwM21TMldKNHFKWmtMSmxUVUVBSTFoUC9sczc5?=
+ =?utf-8?B?eTdaM1doSU8yMVJXQTlhdkJnazVVTDVJWTI3cjgyT1g3Y25jakt0TEFJNTcx?=
+ =?utf-8?B?UjBRL2lwQnkwdVJHY2NQMmJWSkhIbnkzRVN2YjE5N05PRHFqSXpuUzlmeUl2?=
+ =?utf-8?B?RmN4VEZqc3JqV2VFUnBIQ0hnOWU3eUdJV2w5QmFLVzc1UWJKb2p2dUZWemht?=
+ =?utf-8?B?a3VIck81bFJreEpzb3R6eGE5ajNITnhHNzBCZ2NiMW5hanJITVMxQ1RHK0lD?=
+ =?utf-8?B?VU9KQkx3eGl3OGRXOUNnOEpqZm5GVWpYZ0p3d3NUNFJlWFlZbDdRbUtGdm1w?=
+ =?utf-8?B?MFFhNmJMT3B4TUFINWhaZitRYkRJZkRaR1ViVjZ3bVlsdVh6Q1lDODBySjBE?=
+ =?utf-8?B?YlJrMEZ2UmcreUtKTDY5cUR1YTNTU1hpVEo1eFFQbVpmaSsvT2VIWld1YVRG?=
+ =?utf-8?B?eVpUUklIZmVaYzhCUElpcW9mSlFWK2NkaXZhNi9wMi9CdVVzRzJDQVZPMzNo?=
+ =?utf-8?B?UnBJMCtDWGdibEFyOGZFTUpJN0d6UVdkb1lwS0lMaUJma2swM1JIUWFlTkNy?=
+ =?utf-8?B?d2xMOVYrc0JNU1dQeFVvODNGdVF5NDFYMFRyRU9wMVVvQlV5RmNaOVpST0V5?=
+ =?utf-8?B?c2FOWk4vemQ2NXlMeHp6emtNRE4rNEtUT3dBQnIvZXJ0NzdtRzYyTVgzNTkz?=
+ =?utf-8?B?L2kwNVAvNEJLaDNaTTBoWHZOMGpNa2c2TUV0TGx6TFN6dlBTdzA0NnZTYlVs?=
+ =?utf-8?B?M25Mam10ckh0dWdsb3MxbnIzWGpWRkdaSGl3THNHSFdxd0xtV0lNeUFZc1lN?=
+ =?utf-8?B?SWNWOExhTXhZMU1nRGNKS0ZUZmVkcGlzcmRVeG02eFUxRzhKa3NFYmpmZ1VQ?=
+ =?utf-8?B?MHE3b3JSV0FheEc4RVZTUE1GSHp6dHJQWXpKMzhjWHNhSDN0VWlJZnRqVE9Z?=
+ =?utf-8?B?eC9wTW5PR3daUUc5Y3g0QkNlVTRtOTJQMnNUdFE4NVYwemE1b0IxUnRobmZa?=
+ =?utf-8?B?aTQrL2tmUUZSbDBELzIyTmlEK2NwdjdaTWdjeEY5NU9wRWg4NmhXWEQxTjZV?=
+ =?utf-8?B?dDNtYTVUcWhZN2hsUUhxV3c4Z1hBQVQzTC9zWmR3SXF4MkJmTFpXaGJBU0hx?=
+ =?utf-8?B?cDAzWlYyN2EzS0p1QnVuSTZyVFBOenNieGFwYWc2Wmh1UEZDTzVRV0Y3QlVa?=
+ =?utf-8?B?dFZ4eGd2czFOcWNkUTVISjlqY2daa2pxVHJucnBnRFZzSFNZTDBFMTBVY2Vi?=
+ =?utf-8?B?cHJWaW9IZlZRek13SVpPUTRVdWZacTJNTGlETTVLWnh1WTFNUy9yWFFJZ0c3?=
+ =?utf-8?B?NzIvN1pLQlorS3RaZWNoQ3VWWEMyUFFPdFQwY0RoWGkwOVR5a1BiWE05OG8v?=
+ =?utf-8?Q?LWQQ=3D?=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230717152317.GA94963@cathedrallabs.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: SJ1PR11MB6083.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c9acc3e6-f727-471a-96c5-08db887e2e8b
+X-MS-Exchange-CrossTenant-originalarrivaltime: 19 Jul 2023 17:32:53.0982
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: TUhicLklBOdfcYKF/YcKP0BYowuDbOZZt+QHDwxgZioUryb286XyjlYYzbJPE/upqjHHiPZbWHGNNN+xYQNi5w==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR11MB7722
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,119 +160,5 @@ Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Mon, Jul 17, 2023 at 11:23:17AM -0400, Aristeu Rozanski wrote:
-> On Intel microarchitectures that support CMCI but have it disabled (BIOS,
-> kernel option or CMCI storm code) the kernel will resort to polling for MCEs.
-> In these microarchitectures the IMC registers are shared by all CPUs in the
-> same package and despite the fact that the polling is set up in the kernel to
-> prevent all CPUs to poll at the same time, it's still possible they'll overlap
-> and report the same MCE multiple times.
-> 
-> This patch fixes this by introducing synchronization during polling only for
-> the affected microarchitectures.
-> 
-> v4: get rid of unneeded variable on intel_cmci_poll_unlock() and simplify unserialize_mc_bank_access()
-> v3: add {,un}serialize_mc_bank_access() as intermediate functions as requested by Tony Luck
-> 
-> Signed-off-by: Aristeu Rozanski <aris@ruivo.org>
-> Reviewed-by: Tony Luck <tony.luck@intel.com>
-> Cc: Tony Luck <tony.luck@intel.com>
-> Cc: Aristeu Rozanski <aris@redhat.com>
-> Cc: Borislav Petkov <bp@alien8.de>
-> Cc: linux-edac@vger.kernel.org
-> 
-> ---
->  arch/x86/kernel/cpu/mce/core.c     |   18 +++++++++++++++
->  arch/x86/kernel/cpu/mce/intel.c    |   44 +++++++++++++++++++++++++++++++------
->  arch/x86/kernel/cpu/mce/internal.h |    4 +++
->  3 files changed, 59 insertions(+), 7 deletions(-)
-
-Does this work?
-
----
-
-diff --git a/arch/x86/kernel/cpu/mce/core.c b/arch/x86/kernel/cpu/mce/core.c
-index 89e2aab5d34d..b8ad5a5b4026 100644
---- a/arch/x86/kernel/cpu/mce/core.c
-+++ b/arch/x86/kernel/cpu/mce/core.c
-@@ -1608,6 +1608,13 @@ static void __start_timer(struct timer_list *t, unsigned long interval)
- 	local_irq_restore(flags);
- }
- 
-+static void mc_poll_banks_default(void)
-+{
-+	machine_check_poll(0, this_cpu_ptr(&mce_poll_banks));
-+}
-+
-+void (*mc_poll_banks)(void) = mc_poll_banks_default;
-+
- static void mce_timer_fn(struct timer_list *t)
- {
- 	struct timer_list *cpu_t = this_cpu_ptr(&mce_timer);
-@@ -1618,7 +1625,7 @@ static void mce_timer_fn(struct timer_list *t)
- 	iv = __this_cpu_read(mce_next_interval);
- 
- 	if (mce_available(this_cpu_ptr(&cpu_info))) {
--		machine_check_poll(0, this_cpu_ptr(&mce_poll_banks));
-+		mc_poll_banks();
- 
- 		if (mce_intel_cmci_poll()) {
- 			iv = mce_adjust_timer(iv);
-diff --git a/arch/x86/kernel/cpu/mce/intel.c b/arch/x86/kernel/cpu/mce/intel.c
-index 95275a5e57e0..f5323551c1a9 100644
---- a/arch/x86/kernel/cpu/mce/intel.c
-+++ b/arch/x86/kernel/cpu/mce/intel.c
-@@ -56,6 +56,13 @@ static DEFINE_PER_CPU(int, cmci_backoff_cnt);
-  */
- static DEFINE_RAW_SPINLOCK(cmci_discover_lock);
- 
-+/*
-+ * On systems that do support CMCI but it's disabled, polling for MCEs can
-+ * cause the same event to be reported multiple times because IA32_MCi_STATUS
-+ * is shared by the same package.
-+ */
-+static DEFINE_SPINLOCK(cmci_poll_lock);
-+
- #define CMCI_THRESHOLD		1
- #define CMCI_POLL_INTERVAL	(30 * HZ)
- #define CMCI_STORM_INTERVAL	(HZ)
-@@ -426,12 +433,22 @@ void cmci_disable_bank(int bank)
- 	raw_spin_unlock_irqrestore(&cmci_discover_lock, flags);
- }
- 
-+/* Bank polling function when CMCI is disabled. */
-+static void cmci_mc_poll_banks(void)
-+{
-+	spin_lock(&cmci_poll_lock);
-+	machine_check_poll(0, this_cpu_ptr(&mce_poll_banks));
-+	spin_unlock(&cmci_poll_lock);
-+}
-+
- void intel_init_cmci(void)
- {
- 	int banks;
- 
--	if (!cmci_supported(&banks))
-+	if (!cmci_supported(&banks)) {
-+		mc_poll_banks = cmci_mc_poll_banks;
- 		return;
-+	}
- 
- 	mce_threshold_vector = intel_threshold_interrupt;
- 	cmci_discover(banks);
-diff --git a/arch/x86/kernel/cpu/mce/internal.h b/arch/x86/kernel/cpu/mce/internal.h
-index d2412ce2d312..ed4a71c0f093 100644
---- a/arch/x86/kernel/cpu/mce/internal.h
-+++ b/arch/x86/kernel/cpu/mce/internal.h
-@@ -274,4 +274,5 @@ static __always_inline u32 mca_msr_reg(int bank, enum mca_msr reg)
- 	return 0;
- }
- 
-+extern void (*mc_poll_banks)(void);
- #endif /* __X86_MCE_INTERNAL_H__ */
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+PiBEb2VzIHRoaXMgd29yaz8NCg0KWWVzLg0KDQpUZXN0ZWQtYnk6IFRvbnkgTHVjayA8dG9ueS5s
+dWNrQGludGVsLmNvbT4NCg0KLVRvbnkNCg==
