@@ -2,138 +2,201 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6973675A06E
-	for <lists+linux-edac@lfdr.de>; Wed, 19 Jul 2023 23:16:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F9F275A5E4
+	for <lists+linux-edac@lfdr.de>; Thu, 20 Jul 2023 07:49:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229862AbjGSVQn (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Wed, 19 Jul 2023 17:16:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57508 "EHLO
+        id S229706AbjGTFt0 (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Thu, 20 Jul 2023 01:49:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229670AbjGSVQm (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Wed, 19 Jul 2023 17:16:42 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EAB81FC1;
-        Wed, 19 Jul 2023 14:16:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1689801401; x=1721337401;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=KOlYhSQQf0n27vCrrgt8YCZyUuX7bCxCVC7N0wOP1Jw=;
-  b=C1jv2hadUjV4P8vdlE5j63P43iT5wbq3KrOr5iSZPg/jDmtaE6PtFAk5
-   PN1JUvB3JS9FGyLn99UUnE6R/b7tM3m9SsB9JcrJ/8fipJkpqQupzwAyn
-   PdtNqOfLo5/wKe1mF7oY//ABwmd4g/HEzv4kKCm3NAQLGYkQiqj/PCTwA
-   gUhHBHmmSpt8xsvEQd9RXsORmbQhsKzDzBohk0RaL/LnHOoWH7K8RPM1u
-   MgeQ4WIAZp8rgcoCtKxyxNunF/xW6PQnbkpCKRAKg5KWHjfp1EHKpmSlp
-   u2FxFx6PvnuedpPR2ebe4XZoTl6z5MUbwiMkhPFLIN2dE3Ev/aOSbhwKo
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10776"; a="351435329"
-X-IronPort-AV: E=Sophos;i="6.01,216,1684825200"; 
-   d="scan'208";a="351435329"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jul 2023 14:16:40 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10776"; a="724150548"
-X-IronPort-AV: E=Sophos;i="6.01,216,1684825200"; 
-   d="scan'208";a="724150548"
-Received: from agluck-desk3.sc.intel.com ([172.25.222.74])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jul 2023 14:16:40 -0700
-From:   Tony Luck <tony.luck@intel.com>
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     HORIGUCHI NAOYA <naoya.horiguchi@nec.com>,
-        "Li, Zhiquan1" <zhiquan1.li@intel.com>,
-        "Song, Youquan" <youquan.song@intel.com>, x86@kernel.org,
-        linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
-        patches@lists.linux.dev, Tony Luck <tony.luck@intel.com>
-Subject: [PATCH v2] x86/mce: Set PG_hwpoison page flag to avoid the capture kernel panic
-Date:   Wed, 19 Jul 2023 14:16:25 -0700
-Message-Id: <20230719211625.298785-1-tony.luck@intel.com>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20230127015030.30074-1-tony.luck@intel.com>
-References: <20230127015030.30074-1-tony.luck@intel.com>
+        with ESMTP id S229605AbjGTFt0 (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Thu, 20 Jul 2023 01:49:26 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 495FA171B
+        for <linux-edac@vger.kernel.org>; Wed, 19 Jul 2023 22:49:24 -0700 (PDT)
+Received: from mail.alien8.de (mail.alien8.de [IPv6:2a01:4f9:3051:3f93::2])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id D4F561EC0A91;
+        Thu, 20 Jul 2023 07:49:22 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1689832162;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=/pte+ackR+Ax7idRUSrfcHMjDXUqcyRY8yBODT3njEk=;
+        b=HTSnfIUPpV1Lm8lbzZGIkm618p1Fb85Wh28oXYTIzD+RQ/xNN6HgWlH12UZTIyO7mG6s0m
+        bYdVB7H47cgaks5YwpCf30PJTEYd0HhsQR+0SxiTxpV8R+910n/Lc+dQvuh66AeZEv2s7f
+        5+qyHjkDu9ZjPCKj3+Pm0gZgKFy6JCE=
+X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
+Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
+        header.d=alien8.de
+Received: from mail.alien8.de ([127.0.0.1])
+        by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id hQmiggtoRu6C; Thu, 20 Jul 2023 05:49:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
+        t=1689832158; bh=/pte+ackR+Ax7idRUSrfcHMjDXUqcyRY8yBODT3njEk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=FTTLN4hJmGTjOPZEi831gg03IvtaGP9DFSq42iiJSHVmojcahKFqEEm5fufU0iXMo
+         0d71YzkLEg2UtT23s/uRMN0zd/JhGl1hUiYdFYJuo9yiGNL42xorsG74EdKbrixbLh
+         rJlAUMKj/MoawiObjRfhtD2QhwL2Wc0iN7G2Q/pxbEmhPfBffhlMqeFZfIm0iMWyQg
+         1ivTug+/4IuhcQUOpF6GdPdpCcg2/xF+XiTKm1485L/qZP4X3LlXeStI7m1OSdbwKl
+         cs4pX9v34VOXg1w4g8Yo/jMLIET6uW8V1nxNE7EC51JYiuoi6lihkROCvjPPdOnv8g
+         Gmp9ybe+EGTmV7tgnUQHk18xSDNAyS/DfHz8PU0wBhyeaTENthR422oX67D736JQXB
+         X4zlDmfFVPCFjKxg+0cGJ/uGm8YksTrl1x8AY4gwkN59rlxVBSz4PsdVr6Z/9soP+a
+         la84BYtm3j+1x7pdqUeZofX1e/TmWJuJ7dxz7IyJazL731NT8yLxN+dqQJzRCQ/p+3
+         /Du77rrysi5QjC7kJFxQo5PkdzMd2ohv1HonB8siQU0ZVklR4ZLyz0uZ1SSgm/JnTh
+         +DKlSrxvMR819zbWZ80EyHUmGiPBZDaZuxLyxM8+x/+l9sQHYZHKFC/YsfW8UDidWK
+         ZH8xUj14x0w9lwqhraUgQoi4=
+Received: from zn.tnic (pd9530d32.dip0.t-ipconnect.de [217.83.13.50])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
+        (No client certificate requested)
+        by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 4A8B340E0185;
+        Thu, 20 Jul 2023 05:49:14 +0000 (UTC)
+Date:   Thu, 20 Jul 2023 07:49:08 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Aristeu Rozanski <aris@ruivo.org>
+Cc:     Tony Luck <tony.luck@intel.com>,
+        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
+        "aris@redhat.com" <aris@redhat.com>
+Subject: [PATCH] x86/mce: Prevent duplicate error records
+Message-ID: <20230720054908.GAZLjK1CSIrioNSI/f@fat_crate.local>
+References: <20230717152317.GA94963@cathedrallabs.org>
+ <20230719092619.GJZLesOyHrL8JQyDZN@fat_crate.local>
+ <20230719180723.GB94963@cathedrallabs.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230719180723.GB94963@cathedrallabs.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-From: Zhiquan Li <zhiquan1.li@intel.com>
+From: "Borislav Petkov (AMD)" <bp@alien8.de>
+Date: Wed, 19 Jul 2023 14:19:50 +0200
 
-Kdump can exclude the HWPosion page to avoid touch the error page
-again, the prerequisite is the PG_hwpoison page flag is set.
-However, for some MCE fatal error cases, there are no opportunity
-to queue a task for calling memory_failure(), as a result,
-the capture kernel touches the error page again and panics.
+A legitimate use case of the MCA infrastructure is to have the firmware
+log all uncorrectable errors and also, have the OS see all correctable
+errors.
 
-Add function mce_set_page_hwpoison_now() which mark a page as
-HWPoison before kernel panic() for MCE error, so that the dump
-program can check and skip the error page and prevent the capture
-kernel panic.
+The uncorrectable, UCNA errors are usually configured to be reported
+through an SMI. CMCI, which is the correctable error reporting
+interrupt, uses SMI too and having both enabled, leads to unnecessary
+overhead.
 
-[Tony: Changed TestSetPageHWPoison() to SetPageHWPoison()]
+So what ends up happening is, people disable CMCI in the wild and leave
+on only the UCNA SMI.
 
-Co-developed-by: Youquan Song <youquan.song@intel.com>
-Signed-off-by: Youquan Song <youquan.song@intel.com>
-Signed-off-by: Zhiquan Li <zhiquan1.li@intel.com>
-Signed-off-by: Tony Luck <tony.luck@intel.com>
+When CMCI is disabled, the MCA infrastructure resorts to polling the MCA
+banks. If a MCA MSR is shared between the logical threads, one error
+ends up getting logged multiple times as the polling runs on every
+logical thread.
+
+Therefore, introduce locking on the Intel side of the polling routine to
+prevent such duplicate error records from appearing.
+
+Based on a patch by Aristeu Rozanski <aris@ruivo.org>.
+
+Signed-off-by: Borislav Petkov (AMD) <bp@alien8.de>
+Tested-by: Tony Luck <tony.luck@intel.com>
+Link: https://lore.kernel.org/r/20230515143225.GC4090740@cathedrallabs.org
 ---
-
-v2: Replaced "TODO" comment in code with comments based on mailing
-list discussion on the lack of value in covering other page types
-
- arch/x86/kernel/cpu/mce/core.c | 26 ++++++++++++++++++++++++++
- 1 file changed, 26 insertions(+)
+ arch/x86/kernel/cpu/mce/core.c     |  9 ++++++++-
+ arch/x86/kernel/cpu/mce/intel.c    | 19 ++++++++++++++++++-
+ arch/x86/kernel/cpu/mce/internal.h |  1 +
+ 3 files changed, 27 insertions(+), 2 deletions(-)
 
 diff --git a/arch/x86/kernel/cpu/mce/core.c b/arch/x86/kernel/cpu/mce/core.c
-index 89e2aab5d34d..766f64fade51 100644
+index 89e2aab5d34d..b8ad5a5b4026 100644
 --- a/arch/x86/kernel/cpu/mce/core.c
 +++ b/arch/x86/kernel/cpu/mce/core.c
-@@ -156,6 +156,30 @@ void mce_unregister_decode_chain(struct notifier_block *nb)
+@@ -1608,6 +1608,13 @@ static void __start_timer(struct timer_list *t, unsigned long interval)
+ 	local_irq_restore(flags);
  }
- EXPORT_SYMBOL_GPL(mce_unregister_decode_chain);
  
-+/*
-+ * Kdump can exclude the HWPosion page to avoid touch the error page again,
-+ * the prerequisite is the PG_hwpoison page flag is set. However, for some
-+ * MCE fatal error cases, there are no opportunity to queue a task
-+ * for calling memory_failure(), as a result, the capture kernel panic.
-+ * This function mark the page as HWPoison before kernel panic() for MCE.
-+ *
-+ * This covers normal 4KByte pages. There is little/no value in covering
-+ * other page types. E.g.
-+ * SGX: These cannot be dumped.
-+ * PMEM: Pointless to dump these. Persistent memory contents remain
-+ * available across reboots.
-+ * HugeTLB: These are user pages. Generally filtered out of the kdump
-+ * to keep size small. Not helpful to debug kernel issues.
-+ */
-+static void mce_set_page_hwpoison_now(unsigned long pfn)
++static void mc_poll_banks_default(void)
 +{
-+	struct page *p;
-+
-+	p = pfn_to_online_page(pfn);
-+	if (p)
-+		SetPageHWPoison(p);
++	machine_check_poll(0, this_cpu_ptr(&mce_poll_banks));
 +}
 +
- static void __print_mce(struct mce *m)
++void (*mc_poll_banks)(void) = mc_poll_banks_default;
++
+ static void mce_timer_fn(struct timer_list *t)
  {
- 	pr_emerg(HW_ERR "CPU %d: Machine Check%s: %Lx Bank %d: %016Lx\n",
-@@ -286,6 +310,8 @@ static noinstr void mce_panic(const char *msg, struct mce *final, char *exp)
- 	if (!fake_panic) {
- 		if (panic_timeout == 0)
- 			panic_timeout = mca_cfg.panic_timeout;
-+		if (final && (final->status & MCI_STATUS_ADDRV))
-+			mce_set_page_hwpoison_now(final->addr >> PAGE_SHIFT);
- 		panic(msg);
- 	} else
- 		pr_emerg(HW_ERR "Fake kernel panic: %s\n", msg);
+ 	struct timer_list *cpu_t = this_cpu_ptr(&mce_timer);
+@@ -1618,7 +1625,7 @@ static void mce_timer_fn(struct timer_list *t)
+ 	iv = __this_cpu_read(mce_next_interval);
+ 
+ 	if (mce_available(this_cpu_ptr(&cpu_info))) {
+-		machine_check_poll(0, this_cpu_ptr(&mce_poll_banks));
++		mc_poll_banks();
+ 
+ 		if (mce_intel_cmci_poll()) {
+ 			iv = mce_adjust_timer(iv);
+diff --git a/arch/x86/kernel/cpu/mce/intel.c b/arch/x86/kernel/cpu/mce/intel.c
+index 95275a5e57e0..f5323551c1a9 100644
+--- a/arch/x86/kernel/cpu/mce/intel.c
++++ b/arch/x86/kernel/cpu/mce/intel.c
+@@ -56,6 +56,13 @@ static DEFINE_PER_CPU(int, cmci_backoff_cnt);
+  */
+ static DEFINE_RAW_SPINLOCK(cmci_discover_lock);
+ 
++/*
++ * On systems that do support CMCI but it's disabled, polling for MCEs can
++ * cause the same event to be reported multiple times because IA32_MCi_STATUS
++ * is shared by the same package.
++ */
++static DEFINE_SPINLOCK(cmci_poll_lock);
++
+ #define CMCI_THRESHOLD		1
+ #define CMCI_POLL_INTERVAL	(30 * HZ)
+ #define CMCI_STORM_INTERVAL	(HZ)
+@@ -426,12 +433,22 @@ void cmci_disable_bank(int bank)
+ 	raw_spin_unlock_irqrestore(&cmci_discover_lock, flags);
+ }
+ 
++/* Bank polling function when CMCI is disabled. */
++static void cmci_mc_poll_banks(void)
++{
++	spin_lock(&cmci_poll_lock);
++	machine_check_poll(0, this_cpu_ptr(&mce_poll_banks));
++	spin_unlock(&cmci_poll_lock);
++}
++
+ void intel_init_cmci(void)
+ {
+ 	int banks;
+ 
+-	if (!cmci_supported(&banks))
++	if (!cmci_supported(&banks)) {
++		mc_poll_banks = cmci_mc_poll_banks;
+ 		return;
++	}
+ 
+ 	mce_threshold_vector = intel_threshold_interrupt;
+ 	cmci_discover(banks);
+diff --git a/arch/x86/kernel/cpu/mce/internal.h b/arch/x86/kernel/cpu/mce/internal.h
+index d2412ce2d312..ed4a71c0f093 100644
+--- a/arch/x86/kernel/cpu/mce/internal.h
++++ b/arch/x86/kernel/cpu/mce/internal.h
+@@ -274,4 +274,5 @@ static __always_inline u32 mca_msr_reg(int bank, enum mca_msr reg)
+ 	return 0;
+ }
+ 
++extern void (*mc_poll_banks)(void);
+ #endif /* __X86_MCE_INTERNAL_H__ */
 -- 
-2.40.1
+2.41.0
 
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
