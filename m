@@ -2,166 +2,146 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4231775AEC3
-	for <lists+linux-edac@lfdr.de>; Thu, 20 Jul 2023 14:53:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 22FD775AECC
+	for <lists+linux-edac@lfdr.de>; Thu, 20 Jul 2023 14:54:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229691AbjGTMx4 (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Thu, 20 Jul 2023 08:53:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53644 "EHLO
+        id S229777AbjGTMys (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Thu, 20 Jul 2023 08:54:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229774AbjGTMxz (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Thu, 20 Jul 2023 08:53:55 -0400
-Received: from lobo.ruivo.org (lobo.ruivo.org [173.14.175.98])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58DE62135
-        for <linux-edac@vger.kernel.org>; Thu, 20 Jul 2023 05:53:54 -0700 (PDT)
-Received: by lobo.ruivo.org (Postfix, from userid 1011)
-        id 4F47952C15; Thu, 20 Jul 2023 08:53:53 -0400 (EDT)
+        with ESMTP id S229774AbjGTMyr (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Thu, 20 Jul 2023 08:54:47 -0400
+Received: from NAM02-BN1-obe.outbound.protection.outlook.com (mail-bn1nam02on20603.outbound.protection.outlook.com [IPv6:2a01:111:f400:7eb2::603])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B62313E;
+        Thu, 20 Jul 2023 05:54:46 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=lt74DN0yGl5R5AeuQ9dq6Ir/oTOY+HI1oSCv+nBOZRUVps7W7DRe9yCl+CRryl6YtEsV/WnzhouoK3ZU/kDaN4oeJhFLE+Y+XuBQdrjs8bH6BujZwL5TBfPRhm8XzXFKKXjP6Jzn1wW9OX0ofxCvGfejwEiCAzXWroAa+ahueQiCACMRpwowVtlS8GFyVyoZFOkA61jUeyI5C2iyfqFO9MDajTtg/2ITItjCITq4qaaQv5jAU8E5HY1zVwiE+rFhbYqAOx11NDJ0R0GChggSGBIu3mo6Mq5c6SZWY3YFokC8jS+mbj2sS9gjl9q1gC+RCywOB9ouN0u+h6mn3EU7cg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=ZuhxecYpTZOjLHLR+ghoSHnBw84FK0gpK4VYQOzTl9s=;
+ b=ewOUtdaERpt/2k6N3Kxjq2JNmreYPUdx7Mnnw5YonT0Oam6IReyEuTzvbpk6YhxAgiawp2Z3LNI8oiilrqfcrXSVFgAzEfaD8pBbIHNw26a4wSJk0GebkaBwKkjkUKyJjyRfFWcv6KxcWy6+y5IfMcvn6ei3khbMmaFnpHOLJkmZiPIA2IWTtz52/sCnaAiMKQxjx/nkAq9XThtjSAaK5wMRVrhN5Z7zgIQamJA7APlLxxrn5JldmUD13AtQHUVmAAf0vSXSMPzys1pzPd5/mP07dhDgkZcTnIWdUBAzUWb9DkJAbEPuI38KkSGPKmJDhqCW62bFNJG2eN3TlvDXJQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ZuhxecYpTZOjLHLR+ghoSHnBw84FK0gpK4VYQOzTl9s=;
+ b=y0K/hv1CBT2rtzBI55Qo7EcsiPAVkNsXTvHKhrxJMRV1UgPrUkK2ul/hIQtryiV+ae4+oE+XDidUS3BhVkhEzobihUV9qJbVbBmKkHI2u7YG6Bwk9GbfdLfcqrmayoH3qlv4mRPdlbbZdJJKyLBzaurrZAJAtKSfxy9l/lX8hos=
+Received: from BN0PR04CA0144.namprd04.prod.outlook.com (2603:10b6:408:ed::29)
+ by MW6PR12MB9019.namprd12.prod.outlook.com (2603:10b6:303:23f::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6588.28; Thu, 20 Jul
+ 2023 12:54:42 +0000
+Received: from BN8NAM11FT051.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:ed:cafe::23) by BN0PR04CA0144.outlook.office365.com
+ (2603:10b6:408:ed::29) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6609.28 via Frontend
+ Transport; Thu, 20 Jul 2023 12:54:42 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ BN8NAM11FT051.mail.protection.outlook.com (10.13.177.66) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.6588.34 via Frontend Transport; Thu, 20 Jul 2023 12:54:42 +0000
+Received: from amd.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Thu, 20 Jul
+ 2023 07:54:39 -0500
+From:   Muralidhara M K <muralimk@amd.com>
+To:     <linux-edac@vger.kernel.org>, <x86@kernel.org>
+CC:     <linux-kernel@vger.kernel.org>, <bp@alien8.de>, <mingo@redhat.com>,
+        <mchehab@kernel.org>, <nchatrad@amd.com>, <yazen.ghannam@amd.com>,
+        Muralidhara M K <muralimk@amd.com>
+Subject: [PATCH 0/7] AMD Family 19h Models 90h-9fh EDAC Support
+Date:   Thu, 20 Jul 2023 12:54:18 +0000
+Message-ID: <20230720125425.3735538-1-muralimk@amd.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN8NAM11FT051:EE_|MW6PR12MB9019:EE_
+X-MS-Office365-Filtering-Correlation-Id: 8d85a8c4-ac35-42c7-119a-08db89207c8d
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: k2PVq2782o20B894OOxmQpitpT0thjB2zbyXuFVgTunij129rHAcZjsBobU2HfB6P1pJrksvs9R31X8VvDCHWdhXV/b45Wz6IJkEmyRKnn8Tp8pHPeflDesnMava7HUnAeFzu0nHakCKJGL7MtoEJjfps/2Ve9m6z5TZF+UrA0FBO9giypjsBmcTyIRwexgY5rkCyNEUX2BGUIzpbbYbfUm52aMeAtII0OCkQFuVYFZMfERs4+ZoUmTrkU8WlBEIKOHC3V+s+jaivY84S27M3buicsL49OU+FOQ+C122KdB6lrSsSUVjSbNrcmmAIKXbhjGuiHdVhh3C5ngBaLNbzP+ybSbEKiSfKnyPISSfM7SARyXD5bblHCzHm7+JCKrkIYL9hu5BHx7weTES437/sK4ysUgG1RgddksBY4sePHKLdecrt+3kW7MlYBg51VL75yKc620gmyfbaP2pbkwIT1xfL/GkQCj5nqf9ZeeZ1Md5f4HY2i7RcRUJZneewJulHjz1R9wqezJM8YBdoIvsrXwKzL7adPi/FC1FJeiosVce/6QF2YfZS/X4vzOFxD+08X49j2eQNiC3Zz2VcL4QwdvvYiZgHr2iTV3GlAoSaY6mCO4f9ftaaYbuvgaz6L+DCMER0ZNFwAii5bgixWxtl44pPdmj27VAn6DsS879VSkSK6J7JDhTdaBPyCr4SLcodFWHz5AKa+x5fMjp1MsPBqDZsMeSFp4lvDmT6aukl5IPlBt69/oO15EW/IaNWbmsU1Qe43yU8JOOOToa15kE+Q==
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(396003)(39860400002)(376002)(346002)(136003)(82310400008)(451199021)(40470700004)(46966006)(36840700001)(7696005)(6666004)(40460700003)(356005)(186003)(336012)(47076005)(16526019)(36756003)(40480700001)(426003)(2616005)(1076003)(83380400001)(82740400003)(36860700001)(26005)(81166007)(110136005)(54906003)(5660300002)(70586007)(70206006)(316002)(4326008)(8676002)(478600001)(8936002)(2906002)(41300700001)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Jul 2023 12:54:42.4167
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8d85a8c4-ac35-42c7-119a-08db89207c8d
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT051.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW6PR12MB9019
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Level: 
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
-Received: from jake.ruivo.org (bob.qemu.ruivo [192.168.72.19])
-        by lobo.ruivo.org (Postfix) with ESMTPA id AD0C35297F;
-        Thu, 20 Jul 2023 08:53:34 -0400 (EDT)
-Received: by jake.ruivo.org (Postfix, from userid 1000)
-        id 13C2E220030; Thu, 20 Jul 2023 08:53:34 -0400 (EDT)
-Date:   Thu, 20 Jul 2023 08:53:34 -0400
-From:   Aristeu Rozanski <aris@ruivo.org>
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     Tony Luck <tony.luck@intel.com>,
-        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
-        "aris@redhat.com" <aris@redhat.com>
-Subject: Re: [PATCH] x86/mce: Prevent duplicate error records
-Message-ID: <20230720125334.GD94963@cathedrallabs.org>
-References: <20230717152317.GA94963@cathedrallabs.org>
- <20230719092619.GJZLesOyHrL8JQyDZN@fat_crate.local>
- <20230719180723.GB94963@cathedrallabs.org>
- <20230720054908.GAZLjK1CSIrioNSI/f@fat_crate.local>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230720054908.GAZLjK1CSIrioNSI/f@fat_crate.local>
-User-Agent: Mutt/2.2.9 (2022-11-12)
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Thu, Jul 20, 2023 at 07:49:08AM +0200, Borislav Petkov wrote:
-> A legitimate use case of the MCA infrastructure is to have the firmware
-> log all uncorrectable errors and also, have the OS see all correctable
-> errors.
-> 
-> The uncorrectable, UCNA errors are usually configured to be reported
-> through an SMI. CMCI, which is the correctable error reporting
-> interrupt, uses SMI too and having both enabled, leads to unnecessary
-> overhead.
-> 
-> So what ends up happening is, people disable CMCI in the wild and leave
-> on only the UCNA SMI.
-> 
-> When CMCI is disabled, the MCA infrastructure resorts to polling the MCA
-> banks. If a MCA MSR is shared between the logical threads, one error
-> ends up getting logged multiple times as the polling runs on every
-> logical thread.
-> 
-> Therefore, introduce locking on the Intel side of the polling routine to
-> prevent such duplicate error records from appearing.
-> 
-> Based on a patch by Aristeu Rozanski <aris@ruivo.org>.
-> 
-> Signed-off-by: Borislav Petkov (AMD) <bp@alien8.de>
-> Tested-by: Tony Luck <tony.luck@intel.com>
-> Link: https://lore.kernel.org/r/20230515143225.GC4090740@cathedrallabs.org
-> ---
->  arch/x86/kernel/cpu/mce/core.c     |  9 ++++++++-
->  arch/x86/kernel/cpu/mce/intel.c    | 19 ++++++++++++++++++-
->  arch/x86/kernel/cpu/mce/internal.h |  1 +
->  3 files changed, 27 insertions(+), 2 deletions(-)
-> 
-> diff --git a/arch/x86/kernel/cpu/mce/core.c b/arch/x86/kernel/cpu/mce/core.c
-> index 89e2aab5d34d..b8ad5a5b4026 100644
-> --- a/arch/x86/kernel/cpu/mce/core.c
-> +++ b/arch/x86/kernel/cpu/mce/core.c
-> @@ -1608,6 +1608,13 @@ static void __start_timer(struct timer_list *t, unsigned long interval)
->  	local_irq_restore(flags);
->  }
->  
-> +static void mc_poll_banks_default(void)
-> +{
-> +	machine_check_poll(0, this_cpu_ptr(&mce_poll_banks));
-> +}
-> +
-> +void (*mc_poll_banks)(void) = mc_poll_banks_default;
-> +
->  static void mce_timer_fn(struct timer_list *t)
->  {
->  	struct timer_list *cpu_t = this_cpu_ptr(&mce_timer);
-> @@ -1618,7 +1625,7 @@ static void mce_timer_fn(struct timer_list *t)
->  	iv = __this_cpu_read(mce_next_interval);
->  
->  	if (mce_available(this_cpu_ptr(&cpu_info))) {
-> -		machine_check_poll(0, this_cpu_ptr(&mce_poll_banks));
-> +		mc_poll_banks();
->  
->  		if (mce_intel_cmci_poll()) {
->  			iv = mce_adjust_timer(iv);
-> diff --git a/arch/x86/kernel/cpu/mce/intel.c b/arch/x86/kernel/cpu/mce/intel.c
-> index 95275a5e57e0..f5323551c1a9 100644
-> --- a/arch/x86/kernel/cpu/mce/intel.c
-> +++ b/arch/x86/kernel/cpu/mce/intel.c
-> @@ -56,6 +56,13 @@ static DEFINE_PER_CPU(int, cmci_backoff_cnt);
->   */
->  static DEFINE_RAW_SPINLOCK(cmci_discover_lock);
->  
-> +/*
-> + * On systems that do support CMCI but it's disabled, polling for MCEs can
-> + * cause the same event to be reported multiple times because IA32_MCi_STATUS
-> + * is shared by the same package.
-> + */
-> +static DEFINE_SPINLOCK(cmci_poll_lock);
-> +
->  #define CMCI_THRESHOLD		1
->  #define CMCI_POLL_INTERVAL	(30 * HZ)
->  #define CMCI_STORM_INTERVAL	(HZ)
-> @@ -426,12 +433,22 @@ void cmci_disable_bank(int bank)
->  	raw_spin_unlock_irqrestore(&cmci_discover_lock, flags);
->  }
->  
-> +/* Bank polling function when CMCI is disabled. */
-> +static void cmci_mc_poll_banks(void)
-> +{
-> +	spin_lock(&cmci_poll_lock);
-> +	machine_check_poll(0, this_cpu_ptr(&mce_poll_banks));
-> +	spin_unlock(&cmci_poll_lock);
-> +}
-> +
->  void intel_init_cmci(void)
->  {
->  	int banks;
->  
-> -	if (!cmci_supported(&banks))
-> +	if (!cmci_supported(&banks)) {
-> +		mc_poll_banks = cmci_mc_poll_banks;
->  		return;
-> +	}
->  
->  	mce_threshold_vector = intel_threshold_interrupt;
->  	cmci_discover(banks);
-> diff --git a/arch/x86/kernel/cpu/mce/internal.h b/arch/x86/kernel/cpu/mce/internal.h
-> index d2412ce2d312..ed4a71c0f093 100644
-> --- a/arch/x86/kernel/cpu/mce/internal.h
-> +++ b/arch/x86/kernel/cpu/mce/internal.h
-> @@ -274,4 +274,5 @@ static __always_inline u32 mca_msr_reg(int bank, enum mca_msr reg)
->  	return 0;
->  }
->  
-> +extern void (*mc_poll_banks)(void);
->  #endif /* __X86_MCE_INTERNAL_H__ */
+Add Support for AMD Family 19h Models 90h-9fh.
 
-Acked-by: Aristeu Rozanski <aris@ruivo.org>
+Patch 1:
+Add MI300 PCI IDs to the AMD NB code.
+
+Patch 2:
+Remove SMCA Extended Error code descriptions, because some of the
+existing bit definitions in the CTL register of SMCA bank type
+are reassigned without defining new HWID and McaType.
+
+Patch 3:
+Add New SMCA bank types MALL, USR_DP, USR_CP.
+
+Patch 4:
+Add HBM3 memory in the enum.
+
+Patch 5:
+Add Family 19h and Models 90h-9fh Enumeration support.
+
+Patch 6:
+Decode error instance get_inst_id() to pvt->ops
+
+Patch 7:
+Convert ondie ECC DRAM decoded address to Normalized address
+
+Muralidhara M K (7):
+  x86/amd_nb: Add AMD Family 19h Models(80h-80fh) and (90h-9fh) PCI IDs
+  EDAC/mce_amd: Remove SMCA Extended Error code descriptions
+  x86/MCE/AMD: Add new MA_LLC, USR_DP, and USR_CP bank types
+  EDAC/mc: Add new HBM3 memory type
+  EDAC/amd64: Add MI300 Enumeration support
+  EDAC/amd64: Add error instance get_err_info() to pvt->ops
+  EDAC/amd64: Add Error address conversion for UMC
+
+ arch/x86/include/asm/mce.h    |   3 +
+ arch/x86/kernel/amd_nb.c      |   5 +
+ arch/x86/kernel/cpu/mce/amd.c |   6 +
+ drivers/edac/amd64_edac.c     | 261 +++++++++++++++++-
+ drivers/edac/amd64_edac.h     |   2 +
+ drivers/edac/edac_mc.c        |   1 +
+ drivers/edac/mce_amd.c        | 480 ----------------------------------
+ include/linux/edac.h          |   3 +
+ include/linux/pci_ids.h       |   1 +
+ 9 files changed, 269 insertions(+), 493 deletions(-)
 
 -- 
-Aristeu
+2.25.1
 
