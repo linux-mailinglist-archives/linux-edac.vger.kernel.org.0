@@ -2,288 +2,168 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0841F75FAB8
-	for <lists+linux-edac@lfdr.de>; Mon, 24 Jul 2023 17:24:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8805F75FB82
+	for <lists+linux-edac@lfdr.de>; Mon, 24 Jul 2023 18:10:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230121AbjGXPYZ (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Mon, 24 Jul 2023 11:24:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47262 "EHLO
+        id S229502AbjGXQKB (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Mon, 24 Jul 2023 12:10:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229486AbjGXPYZ (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Mon, 24 Jul 2023 11:24:25 -0400
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F88A1B3;
-        Mon, 24 Jul 2023 08:24:23 -0700 (PDT)
-Received: by mail-lf1-x134.google.com with SMTP id 2adb3069b0e04-4fddd4e942eso6322040e87.3;
-        Mon, 24 Jul 2023 08:24:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1690212261; x=1690817061;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=jb1AZLdeo1z+1jWoJg0jC2cfacR/CrHBIYgRy/5PsR0=;
-        b=C+XSSIKlbL5TvOfVDMq0DeY6Oo9N+dhuJH0//3ZPWIyryu5RzQhNm+5th3r76px9wV
-         d8TKExRIhcVW7xNCkLWApABddBEbCTIN8n4JIz6TzrW6ZjRoqX0tkxEEHd/HWkGmuiHo
-         9zWJUtuVgSSu3OCVPEm9oQF4Ol7qrJ4jkaCvjnsxtDN83nchWlrvS7xBMNt5q1QwLi+6
-         uKsU/oXANu+JV2eOSJMYRwoycIWNo66KEenCbKPTcXsDOwZ0aE16TY0aYh810eblQvQ8
-         y966tXuG+PWSXXwOgjEl4Fa4jLb6r/yd4T5e9nf5Ox+qEsxXYaAoWfpqccK6KjAPAKDG
-         51Mw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690212261; x=1690817061;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=jb1AZLdeo1z+1jWoJg0jC2cfacR/CrHBIYgRy/5PsR0=;
-        b=hAf0LT2dppRfg6HosJjRqJaNgwGVs19qfcBy6rI7a6YMfEPnWqGmdqad1JRhqn2yE5
-         JfFQv4slqQsXZDGVQhiUMp/zYmiqQPNqJaAxeixO1K1Xl8S3xfKCtVCMCg/MD2T1VJda
-         FQJ8R0uBgpdFMI9wJx2kbKlE/62u4neYMW1P9bfWcm595yXxAGpM6VZgPWxL2SrPwSXA
-         fm3hCal5rdQifOVsbD6THqPtLI7dWDro/hHyeC1soBUxzfG8p0gdY3fX2tWy0mUQiEjs
-         aLkV+2hedL47a2++rqbWZicFwhJXhQYvU9GkiIN76TM8r39/HbVhncHWNENOAl88FGnS
-         ZjLA==
-X-Gm-Message-State: ABy/qLaLSUmqGjEpL9+y0il3X3DL0BGqsPEs2Q+dY5uiZW+7Y1apQVT6
-        h+/pNkFGseFN36aOdh/V3gM=
-X-Google-Smtp-Source: APBJJlGm4nB2CAS91epgKZXy55YFO74venLk2LJUXKkXcQweu28w1FnK1/EO0qh00tYzbkhPVsGYOQ==
-X-Received: by 2002:a05:6512:2252:b0:4fd:da95:6f39 with SMTP id i18-20020a056512225200b004fdda956f39mr7662194lfu.68.1690212260869;
-        Mon, 24 Jul 2023 08:24:20 -0700 (PDT)
-Received: from mobilestation ([93.157.254.210])
-        by smtp.gmail.com with ESMTPSA id b5-20020a056512024500b004fb73bea65esm2272713lfo.25.2023.07.24.08.24.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Jul 2023 08:24:20 -0700 (PDT)
-Date:   Mon, 24 Jul 2023 18:24:14 +0300
-From:   Serge Semin <fancer.lancer@gmail.com>
-To:     Alexander Stein <alexander.stein@ew.tq-group.com>
-Cc:     Michal Simek <michal.simek@xilinx.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Tony Luck <tony.luck@intel.com>,
-        Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Michail Ivanov <Michail.Ivanov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        Punnaiah Choudary Kalluri 
-        <punnaiah.choudary.kalluri@xilinx.com>,
-        Manish Narani <manish.narani@xilinx.com>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Robert Richter <rric@kernel.org>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 00/19] EDAC/mc/synopsys: Various fixes and cleanups
-Message-ID: <4thyfyadmlmbj4taelvxswxrmqen6vlbmab65hl7lepvec3ava@suy7s5i3n7dl>
-References: <20220910194237.10142-1-Sergey.Semin@baikalelectronics.ru>
- <4488875.LvFx2qVVIh@steina-w>
- <20230525102434.lqhwtgxqfd2d3356@mobilestation>
- <y6j735uysubwyyzfs7vabz46ewhe7hfmp5aauk3cktduh2r6zt@lxesd43mzfyl>
+        with ESMTP id S229485AbjGXQKA (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Mon, 24 Jul 2023 12:10:00 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3000131;
+        Mon, 24 Jul 2023 09:09:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1690214999; x=1721750999;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=gpQAA3ReL8cYqiTAFeVGiUuErNJ+UsxdozhEdWA3gMo=;
+  b=i3nJWNSG3x/PDcIK+xDOkLVs82Fc1Un1q8GA85AoOD1oQEV3eNoeD/yb
+   yoT3Gx71BiH/FMDSFeHxcq4Rrd3vtKlrdH0WzN/RuHD4AH2o5JrBBx+0Z
+   1yNFH767IKl4Gu7C2artlyPj7cyufQNZLwhLrunOylCRP7ZcEivFiRzKb
+   LF1VZoIguSlKmIXKiVr1CFOcf9Zsba4x3B8KKYOOHib5FQa4AxEAOeeSH
+   zYW4Ap7MtCYGDPC0kAN59fJ2wWQM7PQpKtbJWgLeED4dfV9Xm+CV5Omvo
+   nAC6H0ZAmWX4/LdNxQXxojxbb7o7n04Fp9tbIyEzHpcsZ85HnvPhagba6
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10781"; a="453861268"
+X-IronPort-AV: E=Sophos;i="6.01,228,1684825200"; 
+   d="scan'208";a="453861268"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jul 2023 09:09:58 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10781"; a="839511887"
+X-IronPort-AV: E=Sophos;i="6.01,228,1684825200"; 
+   d="scan'208";a="839511887"
+Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
+  by fmsmga002.fm.intel.com with ESMTP; 24 Jul 2023 09:09:58 -0700
+Received: from orsmsx611.amr.corp.intel.com (10.22.229.24) by
+ ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.27; Mon, 24 Jul 2023 09:09:58 -0700
+Received: from orsmsx601.amr.corp.intel.com (10.22.229.14) by
+ ORSMSX611.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.27; Mon, 24 Jul 2023 09:09:58 -0700
+Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
+ orsmsx601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.27 via Frontend Transport; Mon, 24 Jul 2023 09:09:58 -0700
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (104.47.58.169)
+ by edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.27; Mon, 24 Jul 2023 09:09:57 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=F8PVpHP91ne9qnCQ84bJK8XKhZntHY07t6jwtCriCZfWBJooMKcO2QC/4NmRoskQQNlx7FmhkiVrTy4oC8gYlE748KxKEhVL5u6GZ5h4InoJrk6mCcyUyxAwADRMfCe9+v/utAGV7PDbWUbTJNn1sjXv9KqGncnf+uFM9K6ishQoH9j/oO4439xtoILhSOCqR/BXe4zTyOmpOZHPB9/YAJKic7/eSG8KGtRPpstB3AiLwFLQ+ws0eio5DVzlqgwcKudZ+JKiHNBMpwTMRQou/MHlzYxYUrUwAfZLftt2EOAkDvsmoYcAwgS3E6/nGNxuabXj95sF8xX9glQrMFbqyg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=gpQAA3ReL8cYqiTAFeVGiUuErNJ+UsxdozhEdWA3gMo=;
+ b=VNUIcbxSvq0znacJljt3tjum83e8wKa12oF4T2XRN/X3ZE3usUXrTSUAzQGulJnb5xdT8clFMkgb1pyBEXQeMcZbzvrfi5tAdp01r8ZpyzOT3PnLmT+Fsynu71mPRWOAC+QXCW3FEdePoct+YlvH5gnZ7xPSttTVxUiGoYh9ay2Hkizl4XOklvvSd9QtLgxYCRkqU9YTww9uWkbBOIG8s1MbRfgy0QmT7RPTv/Z7BxU+GGIBCy0huOA1RdxqhLH79uwoMnTUNAAq6/U7YWDMipipMjUEli+yQ629w2EYpdOoFM858wRDeOgcoiMhM3o/2jVbCOiDyDmyVRUmm9O7WA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from SJ1PR11MB6083.namprd11.prod.outlook.com (2603:10b6:a03:48a::9)
+ by PH0PR11MB4903.namprd11.prod.outlook.com (2603:10b6:510:36::6) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6609.32; Mon, 24 Jul
+ 2023 16:09:56 +0000
+Received: from SJ1PR11MB6083.namprd11.prod.outlook.com
+ ([fe80::6c4d:b433:cf0b:8a5]) by SJ1PR11MB6083.namprd11.prod.outlook.com
+ ([fe80::6c4d:b433:cf0b:8a5%7]) with mapi id 15.20.6609.031; Mon, 24 Jul 2023
+ 16:09:55 +0000
+From:   "Luck, Tony" <tony.luck@intel.com>
+To:     "Zhuo, Qiuxu" <qiuxu.zhuo@intel.com>
+CC:     Borislav Petkov <bp@alien8.de>, Aristeu Rozanski <aris@redhat.com>,
+        "Mauro Carvalho Chehab" <mchehab@kernel.org>,
+        Kai-Heng Feng <kai.heng.feng@canonical.com>,
+        Koba Ko <koba.ko@canonical.com>,
+        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH v2 1/1] EDAC/i10nm: Skip the absent memory controllers
+Thread-Topic: [PATCH v2 1/1] EDAC/i10nm: Skip the absent memory controllers
+Thread-Index: AQHZss8iubWsf70ZJUS2YrBy3XFYsq/JLKuw
+Date:   Mon, 24 Jul 2023 16:09:55 +0000
+Message-ID: <SJ1PR11MB6083C2E1587E3D7046D0A652FC02A@SJ1PR11MB6083.namprd11.prod.outlook.com>
+References: <CAAd53p6J8usSi+rHnd9+714mUqZ2zTdhFSEWUtiK7aNzcAZ8CA@mail.gmail.com>
+ <20230710013232.59712-1-qiuxu.zhuo@intel.com>
+In-Reply-To: <20230710013232.59712-1-qiuxu.zhuo@intel.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: SJ1PR11MB6083:EE_|PH0PR11MB4903:EE_
+x-ms-office365-filtering-correlation-id: de055fa0-fd70-4629-a2a6-08db8c606be4
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: g1FwZA8FxP1VePgdX3suzetFGgNTrJu1blcTLDwgFK6sbRt/aFY0oSwt6ZjsbxczZ6jEHtAbnASDqw4upn48eTkG0YfLG1Rm7rByyUjR3tHAjDkhMRHQ48o+rt4FJs2shDyIapULsT6iNEelpT2F+5iY7yeI2F3f9N2BnND+4WAyDDnN1Hwxfs2k9JInnXRVLfN9REU7Hs/IM6vsuvo4xJRMRYghjThadFLJmA6k4sY9KSkdas15GNuGYmuzsvigN4muG1XaZgfutfJx3AcDwAZk//S2V4qbkQT410qw7vRee5o2q4+6zAiqEVlvQFEMUCDAskcp7tQki4cZmkFQ9M2VwffEXv2yihQtDuopzCgQt0h3+WxD9H9W521MSyWIsocWfyM8ELKhNEz4em07GSZ4afGy2CkwiFxJc4JfZKJPLRkT1N8/nlFI3veNPYbD3P+7hhSEzdtZ7VHkvW2O4kSJiNlwt7LsQm0EOSsB+QB+NdIr39evWAuXqb7+VMv2Orl+UKV8SfF4exbthXKFmwrfAd6DP6MCPsuHqlcKz3yn5Fn6HtyJ/lHtwc5wFcLxwrW0GYfCaGUFzWiCuIWvZg6WeW3frBVbhUSpqLzCUKn+zSqn/wQmoVqrXWUqkExU
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ1PR11MB6083.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(376002)(346002)(366004)(396003)(136003)(39860400002)(451199021)(4744005)(2906002)(55016003)(6636002)(4326008)(9686003)(316002)(7696005)(76116006)(64756008)(66446008)(66476007)(66946007)(66556008)(41300700001)(38070700005)(478600001)(33656002)(71200400001)(86362001)(54906003)(52536014)(38100700002)(186003)(122000001)(82960400001)(6862004)(8676002)(8936002)(6506007)(5660300002)(26005);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?KnHC5WTdiRDWA9uFA7ExyPU80ZLpSlAHQ9nUCqtHgWF8JhbFco7flxVwrZ0s?=
+ =?us-ascii?Q?Tb3McrhtFKu+z4vA8FM7i2gCV+KZjH5IcbFgTxl5Ur5nQEUfQVXD34HyPJzn?=
+ =?us-ascii?Q?jNavOlS+1U0s5O7VcHNiTBAlnQtt0zwlzOZKJToMFENgftnyIiNAVcQHiAKg?=
+ =?us-ascii?Q?TEOpCGgG6ua7nuFEC//76FOqMcVqElcT3bv5xbJ2WD4A/V7DD/4iIwrjux2g?=
+ =?us-ascii?Q?znfmADXttpr1tXaierXCI2i91DG3GfW40O5NkHvsvfUWSONJsulZIGWuAvBW?=
+ =?us-ascii?Q?Jy02D5WWUP5+nHpADwW/S6DZp9grFCmm9nU4LLRVfX+473GNkCCNNyv3jYca?=
+ =?us-ascii?Q?KrjWLxvDPZh0egPO4Vi/+feoXTq2y81KmAWcPzg0w3uq/1FTJCrv1+5QE2QQ?=
+ =?us-ascii?Q?TNIFUEdZZ5Vz4Ez5h6EwfguTOl7HrZZmneaEI7afrGFyfcL3KnhQNEV8WR+N?=
+ =?us-ascii?Q?RzBj6Xq0M8IcyHBua/XeltuseqSbWPXEWTuwO8C/qszOVzV6F2GUq27Q3oyP?=
+ =?us-ascii?Q?+HatdHGdAqfzaUbBSXes+EZf+GPbnpKsGBxPVRLoJ8JV4n92Gts2Dr4T1GLn?=
+ =?us-ascii?Q?lpW226LEt2yPqed5OOpvmb9l8T5NnouUxbVUG7YOeMtEMqWODDh09TU3JYhM?=
+ =?us-ascii?Q?d39w+zGWO0hq2cTTuHlKv2x/DRU0H2+0D39boNw7VL4cJWIKNnnTKmgderaU?=
+ =?us-ascii?Q?4yZDLGYvTh1xgXMEFayAXLSCZBN2jOtwRtlSMb3hZjUhiY9EmSiccSG6blHp?=
+ =?us-ascii?Q?Jrm56SSjwblAt1DkbJpjXYS/5vQoAbn7cl4uUUxEWUKG2w0tKN2xbIKFeRY/?=
+ =?us-ascii?Q?OWmmS2ccv1AGDuR+Dum14n5CJ7thptZ41WxcxXykvdwqg3JYAmTQg1cRuQLJ?=
+ =?us-ascii?Q?7jQYCxXDdl2Pm9gXYJONDxFkvgTSMxbZoHILVepQ09PxMsLseD1MAZgjGQjF?=
+ =?us-ascii?Q?9SL/qxM5Xpnukw0T4WE0xqP+URtcveSgihCYXOL60+2b3WywbxG13nagZXD2?=
+ =?us-ascii?Q?fWC1u+tIdzf8IE5hzf3mjtWAPky4woOT/ZLnzlOcQ0Fsmc0RNUFeHNGfW4yI?=
+ =?us-ascii?Q?Om02Ulg7YPasHtgvGSxp0yzlyeWGwTHcTyS1LbeNpKxO+zCf6gMQfk0nx9OW?=
+ =?us-ascii?Q?RYxT6bmcv0Vn2tp2S3h1d3jyrLq26PzqbOfA8NwIVxLDQWeSAMPJ49CkLGyg?=
+ =?us-ascii?Q?a1QN+keMVIkLDvKcuJc2ivQP53WzZznWN/Fts1YT6aXwdq/QjEbD4tB1on3p?=
+ =?us-ascii?Q?j4FbPQx7CbiEQfO1FnudbZHJyCqBIIEmMcjlif1Hd7y1aoL7pnspD0KNJC0z?=
+ =?us-ascii?Q?6XimbQHWVkvTCPnB3ansI8cBeaEM6NNjV82U4ynqLk/MDvhJIWYLkK8dgF7p?=
+ =?us-ascii?Q?p90EZ4jOXjDpRxGdcVcmyH639lr1xV1dfLloSldUKUbDMeJIxBcaJPLNnweE?=
+ =?us-ascii?Q?0jH93nTGoYA2rfiWTh/qYkC7cPynA4qlXfzZt5xlZF+b9uIBAcIdnSUsesV+?=
+ =?us-ascii?Q?GGmu9t3EwOEFTT8GP7e/tEF1Joo6dbqosvxYEr4DJmmPxU9vp+xVuQn/WXnF?=
+ =?us-ascii?Q?lqawCCZPwJqHJF4vsCU=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <y6j735uysubwyyzfs7vabz46ewhe7hfmp5aauk3cktduh2r6zt@lxesd43mzfyl>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: SJ1PR11MB6083.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: de055fa0-fd70-4629-a2a6-08db8c606be4
+X-MS-Exchange-CrossTenant-originalarrivaltime: 24 Jul 2023 16:09:55.7379
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: RDzjYAQ5chAVATMr6ZEtYIXg/qmARy/d8mToLfAyuEJubbTbvuul1x/JxVWZIbAxuIDnuYG7ZPm2UBKynbugdQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR11MB4903
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-Hello Alexander
+> Some Sapphire Rapids workstations' absent memory controllers
+> still appear as PCIe devices that fool the i10nm_edac driver
+> and result in "shift exponent -66 is negative" call traces
+> from skx_get_dimm_info().
+>
+> Skip the absent memory controllers to avoid the call traces.
 
-On Mon, Jul 03, 2023 at 02:58:06PM +0300, Serge Semin wrote:
-> Hi Alexander
-> 
-> On Thu, May 25, 2023 at 01:24:37PM +0300, Serge Semin wrote:
-> > Hi Alexander,
-> > 
-> > On Thu, May 25, 2023 at 08:35:59AM +0200, Alexander Stein wrote:
-> > > Hi,
-> > > 
-> > > Am Samstag, 10. September 2022, 21:42:18 CEST schrieb Serge Semin:
-> > > > This patchset is a first one in the series created in the framework of
-> > > > my Baikal-T1 DDRC-related work:
-> > > > 
-> > > > [1: In-progress] EDAC/mc/synopsys: Various fixes and cleanups
-> > > > Link: ---you are looking at it---
-> > > > [2: In-progress] EDAC/synopsys: Add generic DDRC info and address mapping
-> > > > Link:
-> > > > https://lore.kernel.org/linux-edac/20220822191427.27969-1-Sergey.Semin@baik
-> > > > alelectronics.ru [3: In-progress] EDAC/synopsys: Add generic resources and
-> > > > Baikal-T1 support Link:
-> > > > https://lore.kernel.org/linux-edac/20220822191957.28546-1-Sergey.Semin@baik
-> > > > alelectronics.ru
-> > > > 
-> > > > Note the patchsets above must be merged in the same order as they are
-> > > > placed in the list in order to prevent conflicts. Nothing prevents them
-> > > > from being reviewed synchronously though. Any tests are very welcome.
-> > > > Thanks in advance.
-> > > 
-> > > What is the state of this/these series? AFAICS only the DT patches got 
-> > > applied.
-> > > The synopsys driver got refactored quite a lot, so adding proper support for 
-> > > imx8mp from current state will conflict quite a lot.
-> > > It's a Synopsys V3.70a (without HW poisoning support!), refer to commit 
-> > > 68b7cf5d91d4c ("arm64: dts: imx8mp: add ddr controller node to support EDAC on 
-> > > imx8mp").
-> > 
-> > I has been quite busy lately in DW PCIe RP/EP/eDMA driver and my own
-> > deeds. But I am going to get back to this series within a month.
-> > Could you meanwhile have a look at it (review and tests are very
-> > welcome) and if possible start adding the imx8mp support based on the
-> > suggested patchsets (see the lore links above)?
-> > 
-> > The main goal of my changes is to generalize the driver code and make
-> > it working for the original Synopsys DW uMCTL2 device only with as much
-> > compatibility as possible with the various IP-core configs. Most
-> > likely adding your imx8mp DW uMCTL2 V3.70a on top of my changes will
-> > be much easier than writing your own changes.
-> > 
-> > Note recently I've rebased my patches on top of the latest kernel
-> > (6.4-rc1). Can't remember any major conflict so most likely it won't
-> > cause much difficulties for you too. The resultant driver works well
-> > for my system: DDR-phys memory space back-and-forth mapping, errors
-> > poisoning scrubbing, etc.
-> > 
-> > -Serge(y)
-> 
-> Just to let you know. I need two more weeks to settle down my current
-> work and then I am getting back to this series. Once again sorry for
-> the delay.
+Applied to RAS tree for next merge window.
 
-Terribly sorry for the delay again. But I need two more weeks to
-finish my work. Then I'll finally get back to this patchset.
+Thanks
 
--Serge(y)
-
-> 
-> -Serge(y)
-> 
-> > 
-> > > 
-> > > Best regards,
-> > > Alexander
-> > > 
-> > > > Regarding this series content. It's an initial patchset which
-> > > > traditionally provides various fixes, cleanups and modifications required
-> > > > for the more comfortable further features development. The main goal of it
-> > > > though is to detach the Xilinx Zynq A05 DDRC related code into the
-> > > > dedicated driver since first it has nothing to do with the Synopsys DW
-> > > > uMCTL2 DDR controller and second it will be a great deal obstacle on the
-> > > > way of extending the Synopsys-part functionality.
-> > > > 
-> > > > The series starts with fixes patches, which in short concern the next
-> > > > aspects: touching the ZynqMP-specific CSRs on the Xilinx ZinqMP platform
-> > > > only, serializing an access to the ECCCLR register, adding correct memory
-> > > > devices type detection, setting a correct value to the
-> > > > mem_ctl_info.scrub_cap field, dropping an erroneous ADDRMAP[4] parsing and
-> > > > getting back a correct order of the ECC errors info detection procedure.
-> > > > 
-> > > > Afterwards the patchset provides several cleanup patches required for the
-> > > > more coherent code splitting up (Xilinx Zynq A05 and Synopsys DW uMCTL2)
-> > > > so the provided modifications would be useful in both drivers. First we
-> > > > get to replace the platform resource manual IO-remapping with the
-> > > > devm_platform_ioremap_resource() method call. Secondly we suggest to drop:
-> > > > internal CE/UE errors counters, local to_mci() macros definition, some
-> > > > redundant ecc_error_info structure fields and redundant info from the
-> > > > error message, duplicated dimm->nr_pages debug printout and spaces from
-> > > > the MEM_TYPE flags declarations. (The later two updates concern the MCI
-> > > > core part.) Thirdly before splitting up the driver we need to add an
-> > > > unique MC index allocation infrastructure to the MCI core.  It's required
-> > > > since after splitting the driver up we'll need to make sure both device
-> > > > types could be correctly probed on the same platform. Finally the Xilinx
-> > > > Zynq A05 part of the driver is moved out to a dedicated driver where it
-> > > > should been originally placed. After that the platform-specific setups API
-> > > > is removed from the Synopsys DW uMCTL2 DDRC driver since it's no longer
-> > > > required.
-> > > > 
-> > > > Finally as the cherry on the cake we suggest to unify the DW uMCTL2 DDRC
-> > > > driver entities naming and replace the open-coded "shift/mask" patter with
-> > > > the kernel helpers like BIT/GENMASK/FIELD_x in there. It shall
-> > > > significantly improve the code readability.
-> > > > 
-> > > > Link:
-> > > > https://lore.kernel.org/linux-edac/20220822190730.27277-1-Sergey.Semin@baik
-> > > > alelectronics.ru/ Changelog 2:
-> > > > - Move Synopsys DW uMCTL2 DDRC bindings file renaming to a separate patch.
-> > > >   (@Krzysztof)
-> > > > - Introduce a new compatible string "snps,dw-umctl2-ddrc" matching the new
-> > > >   DT-schema name.
-> > > > - Forgot to fix some of the prefix of the SYNPS_ZYNQMP_IRQ_REGS macro
-> > > >   in several places. (@tbot)
-> > > > - Drop the no longer used "priv" pointer from the mc_init() function.
-> > > >   (@tbot)
-> > > > - Include "linux/bitfield.h" header file to get the FIELD_GET macro
-> > > >   definition. (@tbot)
-> > > > - Drop the already merged in patches:
-> > > > [PATCH 12/20] EDAC/mc: Replace spaces with tabs in memtype flags definition
-> > > > [PATCH 13/20] EDAC/mc: Drop duplicated dimm->nr_pages debug printout
-> > > > 
-> > > > Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> > > > Cc: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
-> > > > Cc: Michail Ivanov <Michail.Ivanov@baikalelectronics.ru>
-> > > > Cc: Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>
-> > > > Cc: Punnaiah Choudary Kalluri <punnaiah.choudary.kalluri@xilinx.com>
-> > > > Cc: Manish Narani <manish.narani@xilinx.com>
-> > > > Cc: Dinh Nguyen <dinguyen@kernel.org>
-> > > > Cc: James Morse <james.morse@arm.com>
-> > > > Cc: Robert Richter <rric@kernel.org>
-> > > > Cc: Rob Herring <robh@kernel.org>
-> > > > Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> > > > Cc: devicetree@vger.kernel.org
-> > > > Cc: linux-arm-kernel@lists.infradead.org
-> > > > Cc: linux-edac@vger.kernel.org
-> > > > Cc: linux-kernel@vger.kernel.org
-> > > > 
-> > > > Serge Semin (19):
-> > > >   EDAC/synopsys: Fix native uMCTL2 IRQs handling procedure
-> > > >   EDAC/synopsys: Fix generic device type detection procedure
-> > > >   EDAC/synopsys: Fix mci->scrub_cap field setting
-> > > >   EDAC/synopsys: Drop erroneous ADDRMAP4.addrmap_col_b10 parse
-> > > >   EDAC/synopsys: Fix reading errors count before ECC status
-> > > >   EDAC/synopsys: Use platform device devm ioremap method
-> > > >   EDAC/synopsys: Drop internal CE and UE counters
-> > > >   EDAC/synopsys: Drop local to_mci macro implementation
-> > > >   EDAC/synopsys: Drop struct ecc_error_info.blknr field
-> > > >   EDAC/synopsys: Shorten out struct ecc_error_info.bankgrpnr field name
-> > > >   EDAC/synopsys: Drop redundant info from error message
-> > > >   EDAC/mc: Init DIMM labels in MC registration method
-> > > >   EDAC/mc: Add MC unique index allocation procedure
-> > > >   dt-bindings: memory: snps: Detach Zynq DDRC controller support
-> > > >   dt-bindings: memory: snps: Use more descriptive device name
-> > > >   EDAC/synopsys: Detach Zynq DDRC controller support
-> > > >   EDAC/synopsys: Drop unused platform-specific setup API
-> > > >   EDAC/synopsys: Unify the driver entities naming
-> > > >   EDAC/synopsys: Convert to using BIT/GENMASK/FIELD_x macros
-> > > > 
-> > > >  .../snps,dw-umctl2-ddrc.yaml                  |  56 ++
-> > > >  .../memory-controllers/synopsys,ddrc-ecc.yaml |  76 --
-> > > >  .../xlnx,zynq-ddrc-a05.yaml                   |  38 +
-> > > >  MAINTAINERS                                   |   3 +
-> > > >  drivers/edac/Kconfig                          |   9 +-
-> > > >  drivers/edac/Makefile                         |   1 +
-> > > >  drivers/edac/edac_mc.c                        | 135 ++-
-> > > >  drivers/edac/edac_mc.h                        |   4 +
-> > > >  drivers/edac/synopsys_edac.c                  | 903 ++++++------------
-> > > >  drivers/edac/zynq_edac.c                      | 504 ++++++++++
-> > > >  10 files changed, 1026 insertions(+), 703 deletions(-)
-> > > >  create mode 100644
-> > > > Documentation/devicetree/bindings/memory-controllers/snps,dw-umctl2-ddrc.ya
-> > > > ml delete mode 100644
-> > > > Documentation/devicetree/bindings/memory-controllers/synopsys,ddrc-ecc.yaml
-> > > > create mode 100644
-> > > > Documentation/devicetree/bindings/memory-controllers/xlnx,zynq-ddrc-a05.yam
-> > > > l create mode 100644 drivers/edac/zynq_edac.c
-> > > 
-> > > 
-> > > -- 
-> > > TQ-Systems GmbH | Mühlstraße 2, Gut Delling | 82229 Seefeld, Germany
-> > > Amtsgericht München, HRB 105018
-> > > Geschäftsführer: Detlef Schneider, Rüdiger Stahl, Stefan Schneider
-> > > http://www.tq-group.com/
-> > > 
-> > > 
+-Tony
