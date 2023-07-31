@@ -2,421 +2,356 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36CB676696D
-	for <lists+linux-edac@lfdr.de>; Fri, 28 Jul 2023 11:54:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 93E7A768C87
+	for <lists+linux-edac@lfdr.de>; Mon, 31 Jul 2023 09:02:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234190AbjG1Jy1 (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Fri, 28 Jul 2023 05:54:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60106 "EHLO
+        id S230342AbjGaHCA (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Mon, 31 Jul 2023 03:02:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233554AbjG1Jy0 (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Fri, 28 Jul 2023 05:54:26 -0400
-Received: from NAM02-BN1-obe.outbound.protection.outlook.com (mail-bn1nam02on2040.outbound.protection.outlook.com [40.107.212.40])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 519591FF5;
-        Fri, 28 Jul 2023 02:54:24 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=hOiRnEwmIcPd141xmkSnv/5xUTN3whEPvquUmMuaYvb1UdDkx3YBY0kcprFk/R+2yK4ycdeS8Ej+zYYFYH0HXikkKXqtqy5XOcAWbGjXei1zhN6lffGdc3uxCYf96Dmwqm0yRb5ythruH/psTUcTqyqCgF/ElRRf7Uda3HhrUtqjBq7ha1wfEwVGh2hO8gsqUKdu8lNwQoEsoGmurGwAjjmTddWQeH9zlU1ngmZZT8aOR5gMLZFA2UiCYe/6zRiOrVZxjkmgD6gcvuQb57F9pBlG9pw/nn+N4SDEdeZy8mbR2ziqR75gX+2jA3+n7NPOcSixP5AilTjGyAIa2dFW8w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=HMqa0n9bFoHl7hzK9wPRKnG5YOiXC3bMF5kUyIN0OUI=;
- b=goi9VraYl75aXH0sjn6QNVsXTsI97zsn9mlyo02g0S25SZiUcb8PbLUXcAMrINgEAgV65ZK9wd8Yo80r+na65bD2fhPbmL4GjDhZjG6o7Zd14/qPbEHjY1aaxnulw0xrXA2lMkTbu//o1JxEpb3VXxo7ZX310/dpkPrjFQxjyZAQAYAry4EfEEaQa9mhKAwbrq+fSV/nBfzTeYD/e2SPumrSDu8r5vX/y0bLpW5cZf1O1H6Zi3NaQfIuB3T3mOnVo/02yuw2gMdgk4AuE778/KAgXja80MER61eUyGAhaFr3sr2g/fVhY5bfP82s4TlYMkYo4Xg9TYY7TIzyaei9Ag==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.118.232) smtp.rcpttodomain=arm.com smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=HMqa0n9bFoHl7hzK9wPRKnG5YOiXC3bMF5kUyIN0OUI=;
- b=TFY84x7iEv1ll3OQvYa9kQuKvCywyknT1sFfUOdmaKQPGFm6DZdv9aNzFOEFazzondBquFyxSkgp6DUxyUxqou5zmqI2lRoOlz5UiuFMzBLRaSvf+cHidvoSF9Pjzay97KaKMAe6rlrAeQeksLjBzIN7Ut18Uc4p8fhAVjE7NVShiMXNR25X+htEsGFD7Bqex1Ev+1kLR3YgW1ZJm8k+iJycRBKV5sZkC+d45Hv0YbEFasvF9LvMir55DtdoyzOPrGZkAI2kv6qRitJu8Ucusi1YKmYGJk+CdY0D/T2LGMYP6rXPADd24NiQu3KVUcqJ4vKWqYD6hwNe27WwwpG1Uw==
-Received: from BN9PR03CA0670.namprd03.prod.outlook.com (2603:10b6:408:10e::15)
- by CH3PR12MB8305.namprd12.prod.outlook.com (2603:10b6:610:12e::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6631.29; Fri, 28 Jul
- 2023 09:54:22 +0000
-Received: from BN8NAM11FT057.eop-nam11.prod.protection.outlook.com
- (2603:10b6:408:10e:cafe::2f) by BN9PR03CA0670.outlook.office365.com
- (2603:10b6:408:10e::15) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6631.34 via Frontend
- Transport; Fri, 28 Jul 2023 09:54:22 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.118.232)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.118.232 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.118.232; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.118.232) by
- BN8NAM11FT057.mail.protection.outlook.com (10.13.177.49) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6631.29 via Frontend Transport; Fri, 28 Jul 2023 09:54:21 +0000
-Received: from drhqmail201.nvidia.com (10.126.190.180) by mail.nvidia.com
- (10.127.129.5) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5; Fri, 28 Jul 2023
- 02:54:08 -0700
-Received: from drhqmail202.nvidia.com (10.126.190.181) by
- drhqmail201.nvidia.com (10.126.190.180) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.37; Fri, 28 Jul 2023 02:54:07 -0700
-Received: from vdi.nvidia.com (10.127.8.14) by mail.nvidia.com
- (10.126.190.181) with Microsoft SMTP Server id 15.2.986.37 via Frontend
- Transport; Fri, 28 Jul 2023 02:54:06 -0700
-From:   Shravan Kumar Ramani <shravankr@nvidia.com>
-To:     James Morse <james.morse@arm.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Robert Richter <rric@kernel.org>
-CC:     Shravan Kumar Ramani <shravankr@nvidia.com>,
-        <linux-edac@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH v0 RESEND] EDAC/bluefield_edac: Add SMC support
-Date:   Fri, 28 Jul 2023 05:53:47 -0400
-Message-ID: <0512fa0c173f446b62e8503e0f308359b64aa679.1690537719.git.shravankr@nvidia.com>
-X-Mailer: git-send-email 2.30.1
+        with ESMTP id S229981AbjGaHB7 (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Mon, 31 Jul 2023 03:01:59 -0400
+Received: from mgamail.intel.com (unknown [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6C6D136;
+        Mon, 31 Jul 2023 00:01:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1690786917; x=1722322917;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=2x+aDBKIgjBRpBNelsbYxqc0kMz8OS2Y/LweincpM90=;
+  b=gRsBxE9Sm7X3LlawcVR4PKUJCtm1PkQDLbQfAxN1s6hiJ64PQlapwvQ3
+   cjCbxZqciFj++WGN+YxsGT86QTYmJYlz7x5B/GH/nyxeFWcJY/ZdSMixF
+   E1f1YsWmdWioq/zG/eOwn3iIMvgHg1Jd3E4km4zhRwr2iYuMuz95g3n84
+   2CVS4Nrs2FQo1X0YyZ3+GlGGLqlrZ/1rrpeLe3CHHd5j3tFAEEop9nFiS
+   UaxXcvmXHKsqdMwyO88m2b/zLjP9O2iI9g4S69mVkiF5v1x5k6FQGEhIu
+   V4oBucdSLb5oS4tT+1+WxRuLQbV9uLkYIJSUF2eKi/Snho1dPfEUa4uZn
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10787"; a="371648571"
+X-IronPort-AV: E=Sophos;i="6.01,244,1684825200"; 
+   d="scan'208";a="371648571"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jul 2023 00:01:50 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.01,202,1684825200"; 
+   d="scan'208";a="871543329"
+Received: from unknown (HELO fred..) ([172.25.112.68])
+  by fmsmga001.fm.intel.com with ESMTP; 31 Jul 2023 00:01:50 -0700
+From:   Xin Li <xin3.li@intel.com>
+To:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-edac@vger.kernel.org, linux-hyperv@vger.kernel.org,
+        kvm@vger.kernel.org, xen-devel@lists.xenproject.org
+Cc:     Jonathan Corbet <corbet@lwn.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Oleg Nesterov <oleg@redhat.com>,
+        Tony Luck <tony.luck@intel.com>,
+        "K . Y . Srinivasan" <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juergen Gross <jgross@suse.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Kim Phillips <kim.phillips@amd.com>,
+        Xin Li <xin3.li@intel.com>,
+        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
+        "Liam R . Howlett" <Liam.Howlett@Oracle.com>,
+        Sebastian Reichel <sebastian.reichel@collabora.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
+        Jiaxi Chen <jiaxi.chen@linux.intel.com>,
+        Babu Moger <babu.moger@amd.com>,
+        Jim Mattson <jmattson@google.com>,
+        Sandipan Das <sandipan.das@amd.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Reinette Chatre <reinette.chatre@intel.com>,
+        Daniel Sneddon <daniel.sneddon@linux.intel.com>,
+        Breno Leitao <leitao@debian.org>,
+        Nikunj A Dadhania <nikunj@amd.com>,
+        Brian Gerst <brgerst@gmail.com>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        Alexander Potapenko <glider@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        "Eric W . Biederman" <ebiederm@xmission.com>,
+        Kees Cook <keescook@chromium.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Ze Gao <zegao2021@gmail.com>, Fei Li <fei1.li@intel.com>,
+        Conghui <conghui.chen@intel.com>,
+        Ashok Raj <ashok.raj@intel.com>,
+        "Jason A . Donenfeld" <Jason@zx2c4.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Jacob Pan <jacob.jun.pan@linux.intel.com>,
+        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
+        Jane Malalane <jane.malalane@citrix.com>,
+        David Woodhouse <dwmw@amazon.co.uk>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Arnaldo Carvalho de Melo <acme@redhat.com>,
+        Yantengsi <siyanteng@loongson.cn>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Sathvika Vasireddy <sv@linux.ibm.com>
+Subject: [PATCH v9 00/36] x86: enable FRED for x86-64
+Date:   Sun, 30 Jul 2023 23:32:41 -0700
+Message-Id: <20230731063317.3720-1-xin3.li@intel.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-NV-OnPremToCloud: ExternallySecured
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN8NAM11FT057:EE_|CH3PR12MB8305:EE_
-X-MS-Office365-Filtering-Correlation-Id: cca0665b-9a00-4780-c003-08db8f509e5c
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: zFqvhz/mCyJRDjXJGpogorSdYO4lHTbvAJKrW6UJ9PrC4AJ2JbaDfB7umOsYEMFHYlbM+R++OBjea8/pCbUrdoqd1mUMJK+3q9yYpGAK8Q5jWUVmQu2/Uh3C+XRWSDctFPk+7vPE3cP+DYJ0mmE0cNXJQkMuN5/pH9v7wfRg9IT3QNLgIun/4qdlIzznzo7aHPUJ+cdkF/zifsvxlHdumsJWxVyBBN/Xs4/S4hoNgcRlQV57+3xSEZCwgJNdJKyLjnAAFwC/6pvOJnaKN5KNJVr8nGTkTIKHhugJn/h4CYNt5VAeO0CTdRLjTReW8qulvY9UQos4dye60GnGOAOLM+zq6i19kD15Oo3hmrQxX+usnpe8LGNZVNl28SizYaX/MSmKd0GfZc9XcD1zaDGhFiygJe9lX5uawAvWkkQMhh2PEBUUpP6MhhGM5lauaN+9alWWj34Ba9VW+4JJaTjJyxuKL+mVtZLnQbR2OBNMSwaZEvLBLPwEHfSK1Yx2B2gLal69cjfC5Z2vx46AgfxxOAv4Dc6m7NPfhUS4UPXPqNvJA7B/LWXnO2iOQDr0fxY1ruGGUm8Vlw2o6LWDm5QTdKLYZsp2GYePZvcE/oING5jU3A+j6VQiv4eis8GBh4tj3Gx+9iHm00dbWC0aCQrXRSrZBIRxctvRLjt0kedVxmkW3mo6h21o0C9H+HxGsWQRNjfiQZbV6P3kd8mKUAGan1G1pb7oe5d6dJmDVSDnEaV5RCbrIt9nvj5kga7kZhPa
-X-Forefront-Antispam-Report: CIP:216.228.118.232;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc7edge1.nvidia.com;CAT:NONE;SFS:(13230028)(4636009)(136003)(376002)(39860400002)(396003)(346002)(451199021)(82310400008)(46966006)(36840700001)(40470700004)(36756003)(86362001)(2906002)(40460700003)(40480700001)(2616005)(426003)(83380400001)(336012)(36860700001)(47076005)(186003)(26005)(7636003)(478600001)(6666004)(7696005)(356005)(54906003)(110136005)(82740400003)(70586007)(8936002)(316002)(70206006)(41300700001)(8676002)(4326008)(5660300002);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Jul 2023 09:54:21.8059
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: cca0665b-9a00-4780-c003-08db8f509e5c
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.118.232];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT057.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR12MB8305
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-Add secure read/write calls to bluefield_edac. The ACPI
-table entry decides whether the secure calls need to be
-used for accessing the EMI registers.
+This patch set enables the Intel flexible return and event delivery
+(FRED) architecture for x86-64.
 
-Signed-off-by: Shravan Kumar Ramani <shravankr@nvidia.com>
----
- drivers/edac/bluefield_edac.c | 176 ++++++++++++++++++++++++++++++----
- 1 file changed, 156 insertions(+), 20 deletions(-)
+The FRED architecture defines simple new transitions that change
+privilege level (ring transitions). The FRED architecture was
+designed with the following goals:
 
-diff --git a/drivers/edac/bluefield_edac.c b/drivers/edac/bluefield_edac.c
-index e4736eb37bfb..cb9e42ef64d1 100644
---- a/drivers/edac/bluefield_edac.c
-+++ b/drivers/edac/bluefield_edac.c
-@@ -47,13 +47,25 @@
- #define MLXBF_EDAC_MAX_DIMM_PER_MC	2
- #define MLXBF_EDAC_ERROR_GRAIN		8
- 
-+#define MLXBF_WRITE_REG_32		(0x82000009)
-+#define MLXBF_READ_REG_32		(0x8200000A)
-+#define MLXBF_WRITE_REG_64		(0x8200000B)
-+#define MLXBF_READ_REG_64		(0x8200000C)
-+#define MLXBF_SIP_SVC_UID		(0x8200ff01)
-+#define MLXBF_SIP_SVC_VERSION		(0x8200ff03)
-+
-+#define MLXBF_SMCCC_ACCESS_VIOLATION	(-4)
-+
-+#define MLXBF_SVC_REQ_MAJOR		0
-+#define MLXBF_SVC_REQ_MINOR		3
-+
- /*
-- * Request MLNX_SIP_GET_DIMM_INFO
-+ * Request MLXBF_SIP_GET_DIMM_INFO
-  *
-  * Retrieve information about DIMM on a certain slot.
-  *
-  * Call register usage:
-- * a0: MLNX_SIP_GET_DIMM_INFO
-+ * a0: MLXBF_SIP_GET_DIMM_INFO
-  * a1: (Memory controller index) << 16 | (Dimm index in memory controller)
-  * a2-7: not used.
-  *
-@@ -61,7 +73,7 @@
-  * a0: MLXBF_DIMM_INFO defined below describing the DIMM.
-  * a1-3: not used.
-  */
--#define MLNX_SIP_GET_DIMM_INFO		0x82000008
-+#define MLXBF_SIP_GET_DIMM_INFO		0x82000008
- 
- /* Format for the SMC response about the memory information */
- #define MLXBF_DIMM_INFO__SIZE_GB GENMASK_ULL(15, 0)
-@@ -72,9 +84,12 @@
- #define MLXBF_DIMM_INFO__PACKAGE_X GENMASK_ULL(31, 24)
- 
- struct bluefield_edac_priv {
-+	struct device *dev;
- 	int dimm_ranks[MLXBF_EDAC_MAX_DIMM_PER_MC];
- 	void __iomem *emi_base;
- 	int dimm_per_mc;
-+	bool svc_sreg_support;
-+	u32 sreg_tbl_edac;
- };
- 
- static u64 smc_call1(u64 smc_op, u64 smc_arg)
-@@ -86,6 +101,71 @@ static u64 smc_call1(u64 smc_op, u64 smc_arg)
- 	return res.a0;
- }
- 
-+static int secure_readl(void __iomem *addr, uint32_t *result, uint32_t sreg_tbl)
-+{
-+	struct arm_smccc_res res;
-+	int status;
-+
-+	arm_smccc_smc(MLXBF_READ_REG_32, sreg_tbl, (uintptr_t)addr,
-+		      0, 0, 0, 0, 0, &res);
-+
-+	status = res.a0;
-+
-+	switch (status) {
-+	case SMCCC_RET_NOT_SUPPORTED:
-+	case MLXBF_SMCCC_ACCESS_VIOLATION:
-+		return -1;
-+	default:
-+		*result = (uint32_t)res.a1;
-+		return 0;
-+	}
-+}
-+
-+static int secure_writel(void __iomem *addr, uint32_t data, uint32_t sreg_tbl)
-+{
-+	struct arm_smccc_res res;
-+	int status;
-+
-+	arm_smccc_smc(MLXBF_WRITE_REG_32, sreg_tbl, data, (uintptr_t)addr,
-+		      0, 0, 0, 0, &res);
-+
-+	status = res.a0;
-+
-+	switch (status) {
-+	case SMCCC_RET_NOT_SUPPORTED:
-+	case MLXBF_SMCCC_ACCESS_VIOLATION:
-+		return -1;
-+	default:
-+		return 0;
-+	}
-+}
-+
-+static int edac_readl(void __iomem *addr, uint32_t *result,
-+		      bool sreg_support, uint32_t sreg_tbl)
-+{
-+	int err = 0;
-+
-+	if (sreg_support)
-+		err = secure_readl(addr, result, sreg_tbl);
-+	else
-+		*result = readl(addr);
-+
-+	return err;
-+}
-+
-+static int edac_writel(void __iomem *addr, uint32_t data,
-+		       bool sreg_support, uint32_t sreg_tbl)
-+{
-+	int err = 0;
-+
-+	if (sreg_support)
-+		err = secure_writel(addr, data, sreg_tbl);
-+	else
-+		writel(data, addr);
-+
-+	return err;
-+}
-+
- /*
-  * Gather the ECC information from the External Memory Interface registers
-  * and report it to the edac handler.
-@@ -99,7 +179,7 @@ static void bluefield_gather_report_ecc(struct mem_ctl_info *mci,
- 	u32 ecc_latch_select, dram_syndrom, serr, derr, syndrom;
- 	enum hw_event_mc_err_type ecc_type;
- 	u64 ecc_dimm_addr;
--	int ecc_dimm;
-+	int ecc_dimm, err;
- 
- 	ecc_type = is_single_ecc ? HW_EVENT_ERR_CORRECTED :
- 				   HW_EVENT_ERR_UNCORRECTED;
-@@ -109,14 +189,22 @@ static void bluefield_gather_report_ecc(struct mem_ctl_info *mci,
- 	 * registers with information about the last ECC error occurrence.
- 	 */
- 	ecc_latch_select = MLXBF_ECC_LATCH_SEL__START;
--	writel(ecc_latch_select, priv->emi_base + MLXBF_ECC_LATCH_SEL);
-+	err = edac_writel(priv->emi_base + MLXBF_ECC_LATCH_SEL,
-+			  ecc_latch_select, priv->svc_sreg_support,
-+			  priv->sreg_tbl_edac);
-+	if (err)
-+		dev_err(priv->dev, "ECC latch select write failed.\n");
- 
- 	/*
- 	 * Verify that the ECC reported info in the registers is of the
- 	 * same type as the one asked to report. If not, just report the
- 	 * error without the detailed information.
- 	 */
--	dram_syndrom = readl(priv->emi_base + MLXBF_SYNDROM);
-+	err = edac_readl(priv->emi_base + MLXBF_SYNDROM, &dram_syndrom,
-+			 priv->svc_sreg_support, priv->sreg_tbl_edac);
-+	if (err)
-+		dev_err(priv->dev, "DRAM syndrom read failed.\n");
-+
- 	serr = FIELD_GET(MLXBF_SYNDROM__SERR, dram_syndrom);
- 	derr = FIELD_GET(MLXBF_SYNDROM__DERR, dram_syndrom);
- 	syndrom = FIELD_GET(MLXBF_SYNDROM__SYN, dram_syndrom);
-@@ -127,13 +215,24 @@ static void bluefield_gather_report_ecc(struct mem_ctl_info *mci,
- 		return;
- 	}
- 
--	dram_additional_info = readl(priv->emi_base + MLXBF_ADD_INFO);
-+	err = edac_readl(priv->emi_base + MLXBF_ADD_INFO, &dram_additional_info,
-+			 priv->svc_sreg_support, priv->sreg_tbl_edac);
-+	if (err)
-+		dev_err(priv->dev, "DRAM additional info read failed.\n");
-+
- 	err_prank = FIELD_GET(MLXBF_ADD_INFO__ERR_PRANK, dram_additional_info);
- 
- 	ecc_dimm = (err_prank >= 2 && priv->dimm_ranks[0] <= 2) ? 1 : 0;
- 
--	edea0 = readl(priv->emi_base + MLXBF_ERR_ADDR_0);
--	edea1 = readl(priv->emi_base + MLXBF_ERR_ADDR_1);
-+	err = edac_readl(priv->emi_base + MLXBF_ERR_ADDR_0, &edea0,
-+			 priv->svc_sreg_support, priv->sreg_tbl_edac);
-+	if (err)
-+		dev_err(priv->dev, "Error addr 0 read failed.\n");
-+
-+	err = edac_readl(priv->emi_base + MLXBF_ERR_ADDR_1, &edea1,
-+			 priv->svc_sreg_support, priv->sreg_tbl_edac);
-+	if (err)
-+		dev_err(priv->dev, "Error addr 1 read failed.\n");
- 
- 	ecc_dimm_addr = ((u64)edea1 << 32) | edea0;
- 
-@@ -147,6 +246,7 @@ static void bluefield_edac_check(struct mem_ctl_info *mci)
- {
- 	struct bluefield_edac_priv *priv = mci->pvt_info;
- 	u32 ecc_count, single_error_count, double_error_count, ecc_error = 0;
-+	int err;
- 
- 	/*
- 	 * The memory controller might not be initialized by the firmware
-@@ -155,7 +255,11 @@ static void bluefield_edac_check(struct mem_ctl_info *mci)
- 	if (mci->edac_cap == EDAC_FLAG_NONE)
- 		return;
- 
--	ecc_count = readl(priv->emi_base + MLXBF_ECC_CNT);
-+	err = edac_readl(priv->emi_base + MLXBF_ECC_CNT, &ecc_count,
-+			 priv->svc_sreg_support, priv->sreg_tbl_edac);
-+	if (err)
-+		dev_err(priv->dev, "ECC count read failed.\n");
-+
- 	single_error_count = FIELD_GET(MLXBF_ECC_CNT__SERR_CNT, ecc_count);
- 	double_error_count = FIELD_GET(MLXBF_ECC_CNT__DERR_CNT, ecc_count);
- 
-@@ -172,15 +276,19 @@ static void bluefield_edac_check(struct mem_ctl_info *mci)
- 	}
- 
- 	/* Write to clear reported errors. */
--	if (ecc_count)
--		writel(ecc_error, priv->emi_base + MLXBF_ECC_ERR);
-+	if (ecc_count) {
-+		err = edac_writel(priv->emi_base + MLXBF_ECC_ERR, ecc_error,
-+				  priv->svc_sreg_support, priv->sreg_tbl_edac);
-+		if (err)
-+			dev_err(priv->dev, "ECC Error write failed.\n");
-+	}
- }
- 
- /* Initialize the DIMMs information for the given memory controller. */
- static void bluefield_edac_init_dimms(struct mem_ctl_info *mci)
- {
- 	struct bluefield_edac_priv *priv = mci->pvt_info;
--	int mem_ctrl_idx = mci->mc_idx;
-+	u64 mem_ctrl_idx = mci->mc_idx;
- 	struct dimm_info *dimm;
- 	u64 smc_info, smc_arg;
- 	int is_empty = 1, i;
-@@ -189,7 +297,7 @@ static void bluefield_edac_init_dimms(struct mem_ctl_info *mci)
- 		dimm = mci->dimms[i];
- 
- 		smc_arg = mem_ctrl_idx << 16 | i;
--		smc_info = smc_call1(MLNX_SIP_GET_DIMM_INFO, smc_arg);
-+		smc_info = smc_call1(MLXBF_SIP_GET_DIMM_INFO, smc_arg);
- 
- 		if (!FIELD_GET(MLXBF_DIMM_INFO__SIZE_GB, smc_info)) {
- 			dimm->mtype = MEM_EMPTY;
-@@ -244,6 +352,7 @@ static int bluefield_edac_mc_probe(struct platform_device *pdev)
- 	struct bluefield_edac_priv *priv;
- 	struct device *dev = &pdev->dev;
- 	struct edac_mc_layer layers[1];
-+	struct arm_smccc_res res;
- 	struct mem_ctl_info *mci;
- 	struct resource *emi_res;
- 	unsigned int mc_idx, dimm_count;
-@@ -280,12 +389,40 @@ static int bluefield_edac_mc_probe(struct platform_device *pdev)
- 
- 	priv = mci->pvt_info;
- 
-+	/*
-+	 * ACPI indicates whether we use SMCs to access registers or not.
-+	 * If sreg_tbl_perf is not present, just assume we're not using SMCs.
-+	 */
-+	if (device_property_read_u32(dev,
-+				     "sec_reg_block", &priv->sreg_tbl_edac)) {
-+		priv->svc_sreg_support = false;
-+	} else {
-+		/*
-+		 * Check service version to see if we actually do support the
-+		 * needed SMCs. If we have the calls we need, mark support for
-+		 * them in the pmc struct.
-+		 */
-+		arm_smccc_smc(MLXBF_SIP_SVC_VERSION, 0, 0, 0, 0, 0, 0, 0, &res);
-+		if (res.a0 == MLXBF_SVC_REQ_MAJOR &&
-+		    res.a1 >= MLXBF_SVC_REQ_MINOR) {
-+			priv->svc_sreg_support = true;
-+		} else {
-+			dev_err(dev, "Required SMCs are not supported.\n");
-+			ret = -EINVAL;
-+			goto err;
-+		}
-+	}
-+
- 	priv->dimm_per_mc = dimm_count;
--	priv->emi_base = devm_ioremap_resource(dev, emi_res);
--	if (IS_ERR(priv->emi_base)) {
--		dev_err(dev, "failed to map EMI IO resource\n");
--		ret = PTR_ERR(priv->emi_base);
--		goto err;
-+	if (!priv->svc_sreg_support) {
-+		priv->emi_base = devm_ioremap_resource(dev, emi_res);
-+		if (IS_ERR(priv->emi_base)) {
-+			dev_err(dev, "failed to map EMI IO resource\n");
-+			ret = PTR_ERR(priv->emi_base);
-+			goto err;
-+		}
-+	} else {
-+		priv->emi_base = (void __iomem *)emi_res->start;
- 	}
- 
- 	mci->pdev = dev;
-@@ -320,7 +457,6 @@ static int bluefield_edac_mc_probe(struct platform_device *pdev)
- 	edac_mc_free(mci);
- 
- 	return ret;
--
- }
- 
- static int bluefield_edac_mc_remove(struct platform_device *pdev)
+1) Improve overall performance and response time by replacing event
+   delivery through the interrupt descriptor table (IDT event
+   delivery) and event return by the IRET instruction with lower
+   latency transitions.
+
+2) Improve software robustness by ensuring that event delivery
+   establishes the full supervisor context and that event return
+   establishes the full user context.
+
+The new transitions defined by the FRED architecture are FRED event
+delivery and, for returning from events, two FRED return instructions.
+FRED event delivery can effect a transition from ring 3 to ring 0, but
+it is used also to deliver events incident to ring 0. One FRED
+instruction (ERETU) effects a return from ring 0 to ring 3, while the
+other (ERETS) returns while remaining in ring 0. Collectively, FRED
+event delivery and the FRED return instructions are FRED transitions.
+
+Search for the latest FRED spec in most search engines with this search pattern:
+
+  site:intel.com FRED (flexible return and event delivery) specification
+
+As of now there is no publicly avaiable CPU supporting FRED, thus the Intel
+Simics® Simulator is used as software development and testing vehicles. And
+it can be downloaded from:
+  https://www.intel.com/content/www/us/en/developer/articles/tool/simics-simulator.html
+
+To enable FRED, the Simics package 8112 QSP-CPU needs to be installed with CPU
+model configured as:
+	$cpu_comp_class = "x86-experimental-fred"
+
+
+Changes since v8:
+* Move the FRED initialization patch after all required changes are in
+  place (Thomas Gleixner).
+* Don't do syscall early out in fred_entry_from_user() before there are
+  proper performance numbers and justifications (Thomas Gleixner).
+* Add the control exception handler to the FRED exception handler table
+  (Thomas Gleixner).
+* Introduce a macro sysvec_install() to derive the asm handler name from
+  a C handler, which simplifies the code and avoids an ugly typecast
+  (Thomas Gleixner).
+* Remove junk code that assumes no local APIC on x86_64 (Thomas Gleixner).
+* Put IDTENTRY changes in a separate patch (Thomas Gleixner).
+* Use high-order 48 bits above the lowest 16 bit SS only when FRED is
+  enabled (Thomas Gleixner).
+* Explain why writing directly to the IA32_KERNEL_GS_BASE MSR is
+  doing the right thing (Thomas Gleixner).
+* Reword some patch descriptions (Thomas Gleixner).
+* Add a new macro VMX_DO_FRED_EVENT_IRQOFF for FRED instead of
+  refactoring VMX_DO_EVENT_IRQOFF (Sean Christopherson).
+* Do NOT use a trampoline, just LEA+PUSH the return RIP, PUSH the error
+  code, and jump to the FRED kernel entry point for NMI or call
+  external_interrupt() for IRQs (Sean Christopherson).
+* Call external_interrupt() only when FRED is enabled, and convert the
+  non-FRED handling to external_interrupt() after FRED lands (Sean
+  Christopherson).
+* Use __packed instead of __attribute__((__packed__)) (Borislav Petkov).
+* Put all comments above the members, like the rest of the file does
+  (Borislav Petkov).
+* Reflect the FRED spec 5.0 change that ERETS and ERETU add 8 to %rsp
+  before popping the return context from the stack.
+* Reflect stack frame definition changes from FRED spec 3.0 to 5.0.
+* Add ENDBR to the FRED_ENTER asm macro after kernel IBT is added to
+  FRED base line in FRED spec 5.0.
+* Add a document which briefly introduces FRED features.
+* Remove 2 patches, "allow FRED systems to use interrupt vectors
+  0x10-0x1f" and "allow dynamic stack frame size", from this patch set,
+  as they are "optimizations" only.
+* Send 2 patches, "header file for event types" and "do not modify the
+  DPL bits for a null selector", as pre-FRED patches.
+
+Changes since v7:
+* Always call external_interrupt() for VMX IRQ handling on x86_64, thus avoid
+  re-entering the noinstr code.
+* Create a FRED stack frame when FRED is compiled-in but not enabled, which
+  uses some extra stack space but simplifies the code.
+* Add a log message when FRED is enabled.
+
+Changes since v6:
+* Add a comment to explain why it is safe to write to a previous FRED stack
+  frame. (Lai Jiangshan).
+* Export fred_entrypoint_kernel(), required when kvm-intel built as a module.
+* Reserve a REDZONE for CALL emulation and Align RSP to a 64-byte boundary
+  before pushing a new FRED stack frame.
+* Replace pt_regs csx flags prefix FRED_CSL_ with FRED_CSX_.
+
+Changes since v5:
+* Initialize system_interrupt_handlers with dispatch_table_spurious_interrupt()
+  instead of NULL to get rid of a branch (Peter Zijlstra).
+* Disallow #DB inside #MCE for robustness sake (Peter Zijlstra).
+* Add a comment for FRED stack level settings (Lai Jiangshan).
+* Move the NMI bit from an invalid stack frame, which caused ERETU to fault,
+  to the fault handler's stack frame, thus to unblock NMI ASAP if NMI is blocked
+  (Lai Jiangshan).
+* Refactor VMX_DO_EVENT_IRQOFF to handle IRQ/NMI in IRQ/NMI induced VM exits
+  when FRED is enabled (Sean Christopherson).
+
+Changes since v4:
+* Do NOT use the term "injection", which in the KVM context means to
+  reinject an event into the guest (Sean Christopherson).
+* Add the explanation of why to execute "int $2" to invoke the NMI handler
+  in NMI caused VM exits (Sean Christopherson).
+* Use cs/ss instead of csx/ssx when initializing the pt_regs structure
+  for calling external_interrupt(), otherwise it breaks i386 build.
+
+Changes since v3:
+* Call external_interrupt() to handle IRQ in IRQ caused VM exits.
+* Execute "int $2" to handle NMI in NMI caused VM exits.
+* Rename csl/ssl of the pt_regs structure to csx/ssx (x for extended)
+  (Andrew Cooper).
+
+Changes since v2:
+* Improve comments for changes in arch/x86/include/asm/idtentry.h.
+
+Changes since v1:
+* call irqentry_nmi_{enter,exit}() in both IDT and FRED debug fault kernel
+  handler (Peter Zijlstra).
+* Initialize a FRED exception handler to fred_bad_event() instead of NULL
+  if no FRED handler defined for an exception vector (Peter Zijlstra).
+* Push calling irqentry_{enter,exit}() and instrumentation_{begin,end}()
+  down into individual FRED exception handlers, instead of in the dispatch
+  framework (Peter Zijlstra).
+
+H. Peter Anvin (Intel) (22):
+  x86/fred: Add Kconfig option for FRED (CONFIG_X86_FRED)
+  x86/fred: Disable FRED support if CONFIG_X86_FRED is disabled
+  x86/cpufeatures: Add the cpu feature bit for FRED
+  x86/opcode: Add ERETU, ERETS instructions to x86-opcode-map
+  x86/objtool: Teach objtool about ERETU and ERETS
+  x86/cpu: Add X86_CR4_FRED macro
+  x86/cpu: Add MSR numbers for FRED configuration
+  x86/fred: Make unions for the cs and ss fields in struct pt_regs
+  x86/fred: Add a new header file for FRED definitions
+  x86/fred: Reserve space for the FRED stack frame
+  x86/fred: Update MSR_IA32_FRED_RSP0 during task switch
+  x86/fred: Let ret_from_fork_asm() jmp to fred_exit_user when FRED is
+    enabled
+  x86/fred: Disallow the swapgs instruction when FRED is enabled
+  x86/fred: No ESPFIX needed when FRED is enabled
+  x86/fred: Allow single-step trap and NMI when starting a new task
+  x86/fred: Add a page fault entry stub for FRED
+  x86/fred: Add a debug fault entry stub for FRED
+  x86/fred: Add a NMI entry stub for FRED
+  x86/traps: Add a system interrupt handler table for system interrupt
+    dispatch
+  x86/traps: Add external_interrupt() to dispatch external interrupts
+  x86/fred: FRED entry/exit and dispatch code
+  x86/fred: FRED initialization code
+
+Xin Li (14):
+  Documentation/x86/64: Add documentation for FRED
+  x86/fred: Define a common function type fred_handler
+  x86/fred: Add a machine check entry stub for FRED
+  x86/fred: Add a double fault entry stub for FRED
+  x86/entry: Remove idtentry_sysvec from entry_{32,64}.S
+  x86/idtentry: Incorporate definitions/declarations of the FRED
+    external interrupt handler type
+  x86/traps: Add sysvec_install() to install a system interrupt handler
+  x86/idtentry: Incorporate declaration/definition of the FRED exception
+    handler type
+  x86/fred: Fixup fault on ERETU by jumping to fred_entrypoint_user
+  x86/traps: Export external_interrupt() for handling IRQ in IRQ induced
+    VM exits
+  x86/fred: Export fred_entrypoint_kernel() for handling NMI in NMI
+    induced VM exits
+  KVM: VMX: Add VMX_DO_FRED_EVENT_IRQOFF for IRQ/NMI handling
+  x86/syscall: Split IDT syscall setup code into idt_syscall_init()
+  x86/fred: Disable FRED by default in its early stage
+
+ .../admin-guide/kernel-parameters.txt         |   4 +
+ Documentation/arch/x86/x86_64/fred.rst        | 102 ++++++++
+ Documentation/arch/x86/x86_64/index.rst       |   1 +
+ arch/x86/Kconfig                              |   9 +
+ arch/x86/entry/Makefile                       |   5 +-
+ arch/x86/entry/entry_32.S                     |   4 -
+ arch/x86/entry/entry_64.S                     |  14 +-
+ arch/x86/entry/entry_64_fred.S                |  58 +++++
+ arch/x86/entry/entry_fred.c                   | 220 ++++++++++++++++++
+ arch/x86/entry/vsyscall/vsyscall_64.c         |   2 +-
+ arch/x86/include/asm/asm-prototypes.h         |   1 +
+ arch/x86/include/asm/cpufeatures.h            |   1 +
+ arch/x86/include/asm/disabled-features.h      |   8 +-
+ arch/x86/include/asm/extable_fixup_types.h    |   4 +-
+ arch/x86/include/asm/fred.h                   | 157 +++++++++++++
+ arch/x86/include/asm/idtentry.h               | 115 ++++++++-
+ arch/x86/include/asm/msr-index.h              |  13 +-
+ arch/x86/include/asm/ptrace.h                 |  57 ++++-
+ arch/x86/include/asm/switch_to.h              |  11 +-
+ arch/x86/include/asm/thread_info.h            |  12 +-
+ arch/x86/include/asm/traps.h                  |  23 ++
+ arch/x86/include/uapi/asm/processor-flags.h   |   2 +
+ arch/x86/kernel/Makefile                      |   1 +
+ arch/x86/kernel/cpu/acrn.c                    |   5 +-
+ arch/x86/kernel/cpu/common.c                  |  47 +++-
+ arch/x86/kernel/cpu/mce/core.c                |  15 ++
+ arch/x86/kernel/cpu/mshyperv.c                |  16 +-
+ arch/x86/kernel/espfix_64.c                   |   8 +
+ arch/x86/kernel/fred.c                        |  67 ++++++
+ arch/x86/kernel/irqinit.c                     |   7 +-
+ arch/x86/kernel/kvm.c                         |   2 +-
+ arch/x86/kernel/nmi.c                         |  19 ++
+ arch/x86/kernel/process_64.c                  |  31 ++-
+ arch/x86/kernel/traps.c                       | 153 ++++++++++--
+ arch/x86/kvm/vmx/vmenter.S                    |  88 +++++++
+ arch/x86/kvm/vmx/vmx.c                        |  19 +-
+ arch/x86/lib/x86-opcode-map.txt               |   2 +-
+ arch/x86/mm/extable.c                         |  79 +++++++
+ arch/x86/mm/fault.c                           |  18 +-
+ drivers/xen/events/events_base.c              |   3 +-
+ tools/arch/x86/include/asm/cpufeatures.h      |   1 +
+ .../arch/x86/include/asm/disabled-features.h  |   8 +-
+ tools/arch/x86/include/asm/msr-index.h        |  13 +-
+ tools/arch/x86/lib/x86-opcode-map.txt         |   2 +-
+ tools/objtool/arch/x86/decode.c               |  19 +-
+ 45 files changed, 1348 insertions(+), 98 deletions(-)
+ create mode 100644 Documentation/arch/x86/x86_64/fred.rst
+ create mode 100644 arch/x86/entry/entry_64_fred.S
+ create mode 100644 arch/x86/entry/entry_fred.c
+ create mode 100644 arch/x86/include/asm/fred.h
+ create mode 100644 arch/x86/kernel/fred.c
+
 -- 
-2.30.1
+2.34.1
 
