@@ -2,148 +2,106 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 239BF76A42A
-	for <lists+linux-edac@lfdr.de>; Tue,  1 Aug 2023 00:29:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3274B76A439
+	for <lists+linux-edac@lfdr.de>; Tue,  1 Aug 2023 00:40:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231786AbjGaW3M (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Mon, 31 Jul 2023 18:29:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48186 "EHLO
+        id S229890AbjGaWku (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Mon, 31 Jul 2023 18:40:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229991AbjGaW3I (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Mon, 31 Jul 2023 18:29:08 -0400
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B61D81981
-        for <linux-edac@vger.kernel.org>; Mon, 31 Jul 2023 15:29:06 -0700 (PDT)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-57320c10635so59922187b3.3
-        for <linux-edac@vger.kernel.org>; Mon, 31 Jul 2023 15:29:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1690842546; x=1691447346;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=1Q8GvYD+4dtlsTwSTiHUPQzTJlHbTbzrpGF3h1vVBww=;
-        b=wjwMM2KWT8HU0SHDHdNRxn0t00ajJ3rnXd0KHF3IvjHCM9C9HEucQqbNqO3DdnlESa
-         nz4NidPHfLZdlM97AQO2l5R9cvi5qOsP8Ijvq8FdyQ975MNIp/vKfJQp4Fn/KRaq6Jwk
-         4kloVUH4EDmpWV0M/Jbjnxx6ZpxxBUBTWBZfCkK7wrUfN/3hE3YtfIlsy05XGvIcQMBR
-         YwOaTVtyj5jc9ti6xzcRvjvMofBrcZ2GDu27qgywzvVHzJ4o32YZtNXzHqvcANqA6/YW
-         sTLo8o8faSsSn6oqDWZE2/b1jMu9Jj3r8qqQ2mBwBCqkSpgBEgjiP8UrfNG7IjOkrlZB
-         RMgg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690842546; x=1691447346;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=1Q8GvYD+4dtlsTwSTiHUPQzTJlHbTbzrpGF3h1vVBww=;
-        b=Pp3i+BWIsSBzdnXbf+ZMXZhJOEsUmcHWFMKSqyLT6W6FPMGqOoO8UvL1facJG5STrE
-         Yt+aPR6+BFwgdvJQnpr44mh887oStSsLtZtNFS3bKdjkR4gO6ItMqcwK62O4Gq7mP2t3
-         dcNvSyWBxbTUOzWrUPg9zl/Ehcskhyao/Ig6VwLfuw081k7caUFAxl9WEWqKBrQqfN/s
-         aWlv97ogzpEiB/BPKYhNHoSsTXn/iMWvXv17ejDLVyhk9BytOLqVKcaFDymU63oBJgvM
-         Yw0LJhk1cAgznXv7y+MuiOifF1s/kCsdvv6Btk3tVDRVb3QterwWPSfB+qEl+0AaqiwO
-         tisQ==
-X-Gm-Message-State: ABy/qLb3verbjY9vkk0VpP80b8rdqM5EgsGp0EN+7nn0+V0JXp0il7tS
-        lKENtUH8SMBQKoXUHMMCnMWqTN1oJWE=
-X-Google-Smtp-Source: APBJJlGgIomNHDqU6KhEMJb1Ck8ilBU2ctVZYZehyK88j/kbenJFHvBGJ75gfwK64a/yrr50dO0Jiu4+k6c=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a81:b109:0:b0:56d:502:9eb0 with SMTP id
- p9-20020a81b109000000b0056d05029eb0mr90305ywh.6.1690842545957; Mon, 31 Jul
- 2023 15:29:05 -0700 (PDT)
-Date:   Mon, 31 Jul 2023 15:29:04 -0700
-In-Reply-To: <20230731063317.3720-1-xin3.li@intel.com>
-Mime-Version: 1.0
-References: <20230731063317.3720-1-xin3.li@intel.com>
-Message-ID: <ZMg1sD7IamB0INVs@google.com>
-Subject: Re: [PATCH v9 00/36] x86: enable FRED for x86-64
-From:   Sean Christopherson <seanjc@google.com>
-To:     Xin Li <xin3.li@intel.com>
-Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-edac@vger.kernel.org, linux-hyperv@vger.kernel.org,
-        kvm@vger.kernel.org, xen-devel@lists.xenproject.org,
-        Jonathan Corbet <corbet@lwn.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Oleg Nesterov <oleg@redhat.com>,
-        Tony Luck <tony.luck@intel.com>,
-        "K . Y . Srinivasan" <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juergen Gross <jgross@suse.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        "Paul E . McKenney" <paulmck@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Kim Phillips <kim.phillips@amd.com>,
-        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
-        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
-        Sebastian Reichel <sebastian.reichel@collabora.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
-        Jiaxi Chen <jiaxi.chen@linux.intel.com>,
-        Babu Moger <babu.moger@amd.com>,
-        Jim Mattson <jmattson@google.com>,
-        Sandipan Das <sandipan.das@amd.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Reinette Chatre <reinette.chatre@intel.com>,
-        Daniel Sneddon <daniel.sneddon@linux.intel.com>,
-        Breno Leitao <leitao@debian.org>,
-        Nikunj A Dadhania <nikunj@amd.com>,
-        Brian Gerst <brgerst@gmail.com>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        Alexander Potapenko <glider@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        "Eric W . Biederman" <ebiederm@xmission.com>,
-        Kees Cook <keescook@chromium.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Ze Gao <zegao2021@gmail.com>, Fei Li <fei1.li@intel.com>,
-        Conghui <conghui.chen@intel.com>,
-        Ashok Raj <ashok.raj@intel.com>,
-        "Jason A . Donenfeld" <Jason@zx2c4.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Jacob Pan <jacob.jun.pan@linux.intel.com>,
-        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
-        Jane Malalane <jane.malalane@citrix.com>,
-        David Woodhouse <dwmw@amazon.co.uk>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Arnaldo Carvalho de Melo <acme@redhat.com>,
-        Yantengsi <siyanteng@loongson.cn>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Sathvika Vasireddy <sv@linux.ibm.com>
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        with ESMTP id S229379AbjGaWkt (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Mon, 31 Jul 2023 18:40:49 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56E51198D;
+        Mon, 31 Jul 2023 15:40:44 -0700 (PDT)
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 36VMbxgh016037;
+        Mon, 31 Jul 2023 22:40:26 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=rIlBLIb6J29dQChrALBuoQv3IUru+Su4cNGIp9R6VBM=;
+ b=CQpCVOceVSzG/zkrcdzTVAgLDszSm3tfp9irZVQZTmTWZbETwbWwjSdg9shLTHxpvGxc
+ hcyIvCBR11ZzB7F+Wwv7G7oJRInRYbgOPl4DIJZM9Uy0AeQ/QYNTROpDqAyMKsm1OssL
+ 9ViwfxnkRniBJ0FPGMBQZafbmS/3oD+izUch9ZAISqN01SEaw39BUQDkno0fMhSgyNQI
+ 7O69hbMmZLvER7tm/nLQEK/B3y42LgKmnOB/h+nzFwKv6IJ3TuSmwRg7EI5rA5SebjLI
+ TiZ8ObDuBsYDDpDSASP+6mPuZyBwr/vav3tS1Wxgi6pKyYel3nDhWXUH4/kCIYUiLE5B vA== 
+Received: from nasanppmta02.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3s6ckfhnqq-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 31 Jul 2023 22:40:26 +0000
+Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
+        by NASANPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 36VMePaK021667
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 31 Jul 2023 22:40:25 GMT
+Received: from [10.110.3.154] (10.80.80.8) by nasanex01a.na.qualcomm.com
+ (10.52.223.231) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.30; Mon, 31 Jul
+ 2023 15:40:23 -0700
+Message-ID: <3e2bf03e-2bc1-445e-d8ce-4975c044eea0@quicinc.com>
+Date:   Mon, 31 Jul 2023 15:40:23 -0700
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH] EDAC/device: Add sysfs notification for UE,CE count
+ change
+Content-Language: en-US
+To:     Deepti Jaggi <quic_djaggi@quicinc.com>, <james.morse@arm.com>,
+        <mchehab@kernel.org>, <rric@kernel.org>, <bp@alien8.de>,
+        <tony.luck@intel.com>
+CC:     <linux-edac@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <kernel@quicinc.com>, <quic_psodagud@quicinc.com>
+References: <20230731220059.28474-1-quic_djaggi@quicinc.com>
+From:   Trilok Soni <quic_tsoni@quicinc.com>
+In-Reply-To: <20230731220059.28474-1-quic_djaggi@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: P3kjkgWgpgSkJneTiXXD32nX3aszakiC
+X-Proofpoint-ORIG-GUID: P3kjkgWgpgSkJneTiXXD32nX3aszakiC
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-07-31_15,2023-07-31_02,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 malwarescore=0
+ lowpriorityscore=0 priorityscore=1501 impostorscore=0 adultscore=0
+ bulkscore=0 mlxlogscore=416 spamscore=0 clxscore=1011 mlxscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2306200000 definitions=main-2307310206
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Sun, Jul 30, 2023, Xin Li wrote:
-> This patch set enables the Intel flexible return and event delivery
-> (FRED) architecture for x86-64.
+On 7/31/2023 3:00 PM, Deepti Jaggi wrote:
+> A daemon running in user space collects information on correctable
+> and uncorrectable errors from EDAC driver by reading corresponding
+> sysfs entries and takes appropriate action.
 
-...
+Which daemon we are referring here? Can you please provide the link to 
+the project?
 
-> -- 
-> 2.34.1
+Are you using this daemon?
 
-What is this based on?	FYI, you're using a version of git that will (mostly)
-automatically generate the based, e.g. I do 
+https://mcelog.org/ - It is for x86, but is your daemon project different?
 
-  git format-patch --base=HEAD~$nr ...
+> This patch adds support for user space daemon to wait on poll() until
+> the sysfs entries for UE count and CE count change and then read updated
+> counts instead of continuously monitoring the sysfs entries for
+> any changes.
 
-in my scripts, where $nr is the number of patches I am sending.  My specific
-approaches requires HEAD-$nr to be a publicly visible object/commit, but that
-should be the case the vast majority of the time anyways.
+The modifications below are architecture agnostic so I really want to 
+know what exactly we are fixing and if there is a problem.
+
+
+-- 
+---Trilok Soni
+
