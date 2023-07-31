@@ -2,155 +2,216 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FE5976A33F
-	for <lists+linux-edac@lfdr.de>; Mon, 31 Jul 2023 23:47:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E49D76A3D8
+	for <lists+linux-edac@lfdr.de>; Tue,  1 Aug 2023 00:01:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231459AbjGaVrq (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Mon, 31 Jul 2023 17:47:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57064 "EHLO
+        id S230204AbjGaWBZ (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Mon, 31 Jul 2023 18:01:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229486AbjGaVrp (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Mon, 31 Jul 2023 17:47:45 -0400
-Received: from mail.zytor.com (unknown [IPv6:2607:7c80:54:3::138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C174114;
-        Mon, 31 Jul 2023 14:47:43 -0700 (PDT)
-Received: from [192.168.105.249] ([75.104.94.137])
-        (authenticated bits=0)
-        by mail.zytor.com (8.17.1/8.17.1) with ESMTPSA id 36VLiSLD3093143
-        (version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
-        Mon, 31 Jul 2023 14:44:34 -0700
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 36VLiSLD3093143
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
-        s=2023071101; t=1690839952;
-        bh=Hg2XSL3316ANoXYXjd63x+cCNIVtiqBW14cv6sKLqfM=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=OJyzPW65vrM8sDH6eNGy+5kWbcB7PMYBpzWhQpIWkaAZClwYLyiR8q3r0h24DHa+i
-         plc1tYwGV1X0jnVZoHyMcH21g4d3T5nrZNciwkD9pXyPp9eyd7deKj5//687qepUUN
-         GajcQAPfiwt5T7KF3w3EDPjhuU+UOb+SXF0Ey3xPLdCdh2vlXfVnIDfD1LR2iQn1Q3
-         +p5bLyY/BkC4u9rExXSQvakREpl4pn+K6rV/GzfnNnDvo8xR1x7/0XAWYi0JZGxsUi
-         6sYcbHmh6hzcml78uw2uhAQKsHCzb+/6sFfciH7vXjmIcsvNRtd0H0JUkcPZnEheRh
-         J+lI/W952JXBg==
-Message-ID: <4ccbf0e9-716d-dfe0-537c-210e5455418c@zytor.com>
-Date:   Mon, 31 Jul 2023 14:44:20 -0700
+        with ESMTP id S230163AbjGaWBZ (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Mon, 31 Jul 2023 18:01:25 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE3B3E7;
+        Mon, 31 Jul 2023 15:01:23 -0700 (PDT)
+Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 36VLwXFS016950;
+        Mon, 31 Jul 2023 22:01:08 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=ZKuuw9w5ifG4P0sHYJV7PKrRqM0pn2V9g4jGAH/q1CQ=;
+ b=fuiSU7iq5XKvlvNBrfwQH14XzxpoOU8iR+DYG1yLgpvXXlUAfE6fo8xRN/XNlafASsG+
+ u1nhgJ1f1mky4ylpqo/m3+TJwnpXWYlHL95NRj2Fle8anFt7evBDYT6fTP5Em7JyfP85
+ YbcSlnMa9C0ZS1oticyN5bdPX0mFds0nGrnKBX3wPPHhdYzPVMx8yLiQJqiml4w+R0uM
+ Rn/sKiD+3xaepphilqNQCtT4+O4yf+bCY2racprOQJ/UYC/ljkeKU60VtSr7xSw+It8n
+ 5zM9Calmn9bTHRVZNItXUD//epDkbUGV+liC/bIGcnfvqJhNjrenk328T9VWBacAiQlH yA== 
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3s6a2va2uu-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 31 Jul 2023 22:01:08 +0000
+Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
+        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 36VM17gN020773
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 31 Jul 2023 22:01:07 GMT
+Received: from hu-djaggi-lv.qualcomm.com (10.49.16.6) by
+ nalasex01c.na.qualcomm.com (10.47.97.35) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.30; Mon, 31 Jul 2023 15:01:05 -0700
+From:   Deepti Jaggi <quic_djaggi@quicinc.com>
+To:     <james.morse@arm.com>, <mchehab@kernel.org>, <rric@kernel.org>,
+        <bp@alien8.de>, <tony.luck@intel.com>
+CC:     <linux-edac@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <kernel@quicinc.com>, <quic_psodagud@quicinc.com>
+Subject: [PATCH] EDAC/device: Add sysfs notification for UE,CE count change
+Date:   Mon, 31 Jul 2023 15:00:59 -0700
+Message-ID: <20230731220059.28474-1-quic_djaggi@quicinc.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Subject: Re: [PATCH v9 29/36] x86/fred: FRED entry/exit and dispatch code
-Content-Language: en-US
-To:     Xin Li <xin3.li@intel.com>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-edac@vger.kernel.org,
-        linux-hyperv@vger.kernel.org, kvm@vger.kernel.org,
-        xen-devel@lists.xenproject.org
-Cc:     Jonathan Corbet <corbet@lwn.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        Andy Lutomirski <luto@kernel.org>,
-        Oleg Nesterov <oleg@redhat.com>,
-        Tony Luck <tony.luck@intel.com>,
-        "K . Y . Srinivasan" <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juergen Gross <jgross@suse.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        "Paul E . McKenney" <paulmck@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Kim Phillips <kim.phillips@amd.com>,
-        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
-        "Liam R . Howlett" <Liam.Howlett@Oracle.com>,
-        Sebastian Reichel <sebastian.reichel@collabora.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
-        Jiaxi Chen <jiaxi.chen@linux.intel.com>,
-        Babu Moger <babu.moger@amd.com>,
-        Jim Mattson <jmattson@google.com>,
-        Sandipan Das <sandipan.das@amd.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Reinette Chatre <reinette.chatre@intel.com>,
-        Daniel Sneddon <daniel.sneddon@linux.intel.com>,
-        Breno Leitao <leitao@debian.org>,
-        Nikunj A Dadhania <nikunj@amd.com>,
-        Brian Gerst <brgerst@gmail.com>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        Alexander Potapenko <glider@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        "Eric W . Biederman" <ebiederm@xmission.com>,
-        Kees Cook <keescook@chromium.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Ze Gao <zegao2021@gmail.com>, Fei Li <fei1.li@intel.com>,
-        Conghui <conghui.chen@intel.com>,
-        Ashok Raj <ashok.raj@intel.com>,
-        "Jason A . Donenfeld" <Jason@zx2c4.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Jacob Pan <jacob.jun.pan@linux.intel.com>,
-        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
-        Jane Malalane <jane.malalane@citrix.com>,
-        David Woodhouse <dwmw@amazon.co.uk>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Arnaldo Carvalho de Melo <acme@redhat.com>,
-        Yantengsi <siyanteng@loongson.cn>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Sathvika Vasireddy <sv@linux.ibm.com>
-References: <20230731064119.3870-1-xin3.li@intel.com>
-From:   "H. Peter Anvin" <hpa@zytor.com>
-In-Reply-To: <20230731064119.3870-1-xin3.li@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.49.16.6]
+X-ClientProxiedBy: nalasex01c.na.qualcomm.com (10.47.97.35) To
+ nalasex01c.na.qualcomm.com (10.47.97.35)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: _V7HVJ6fP_rLUG02FJu5wXEzZdadHSUy
+X-Proofpoint-GUID: _V7HVJ6fP_rLUG02FJu5wXEzZdadHSUy
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-07-31_15,2023-07-31_02,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 suspectscore=0
+ priorityscore=1501 impostorscore=0 malwarescore=0 adultscore=0 bulkscore=0
+ spamscore=0 phishscore=0 mlxscore=0 mlxlogscore=849 lowpriorityscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2306200000
+ definitions=main-2307310200
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On 7/30/23 23:41, Xin Li wrote:
-> +
-> +static DEFINE_FRED_HANDLER(fred_sw_interrupt_user)
-> +{
-> +	/*
-> +	 * In compat mode INT $0x80 (32bit system call) is
-> +	 * performance-critical. Handle it first.
-> +	 */
-> +	if (IS_ENABLED(CONFIG_IA32_EMULATION) &&
-> +	    likely(regs->vector == IA32_SYSCALL_VECTOR)) {
-> +		regs->orig_ax = regs->ax;
-> +		regs->ax = -ENOSYS;
-> +		return do_int80_syscall_32(regs);
-> +	}
+A daemon running in user space collects information on correctable
+and uncorrectable errors from EDAC driver by reading corresponding
+sysfs entries and takes appropriate action.
+This patch adds support for user space daemon to wait on poll() until
+the sysfs entries for UE count and CE count change and then read updated
+counts instead of continuously monitoring the sysfs entries for
+any changes.
 
-We can presumably drop the early out here as well...
+Signed-off-by: Deepti Jaggi <quic_djaggi@quicinc.com>
+---
+ drivers/edac/edac_device.c       | 16 ++++++++++++++++
+ drivers/edac/edac_device.h       |  8 ++++++++
+ drivers/edac/edac_device_sysfs.c | 20 ++++++++++++++++++++
+ 3 files changed, 44 insertions(+)
 
-> +
-> +	/*
-> +	 * Some software exceptions can also be triggered as
-> +	 * int instructions, for historical reasons.
-> +	 */
-> +	switch (regs->vector) {
-> +	case X86_TRAP_BP:
-> +	case X86_TRAP_OF:
-> +		fred_emulate_trap(regs);
-> +		break;
-> +	default:
-> +		regs->vector = X86_TRAP_GP;
-> +		fred_emulate_fault(regs);
-> +		break;
-> +	}
-> +}
-> +
+diff --git a/drivers/edac/edac_device.c b/drivers/edac/edac_device.c
+index 8c4d947fb848..7b7aec4da6b9 100644
+--- a/drivers/edac/edac_device.c
++++ b/drivers/edac/edac_device.c
+@@ -587,12 +587,20 @@ void edac_device_handle_ce_count(struct edac_device_ctl_info *edac_dev,
+ 	if (instance->nr_blocks > 0) {
+ 		block = instance->blocks + block_nr;
+ 		block->counters.ce_count += count;
++
++		/* Notify block sysfs attribute change */
++		if (block->kn_ce)
++			sysfs_notify_dirent(block->kn_ce);
+ 	}
+ 
+ 	/* Propagate the count up the 'totals' tree */
+ 	instance->counters.ce_count += count;
+ 	edac_dev->counters.ce_count += count;
+ 
++	/* Notify instance sysfs attribute change */
++	if (instance->kn_ce)
++		sysfs_notify_dirent(instance->kn_ce);
++
+ 	if (edac_device_get_log_ce(edac_dev))
+ 		edac_device_printk(edac_dev, KERN_WARNING,
+ 				   "CE: %s instance: %s block: %s count: %d '%s'\n",
+@@ -633,12 +641,20 @@ void edac_device_handle_ue_count(struct edac_device_ctl_info *edac_dev,
+ 	if (instance->nr_blocks > 0) {
+ 		block = instance->blocks + block_nr;
+ 		block->counters.ue_count += count;
++
++		/* Notify block sysfs attribute change */
++		if (block->kn_ue)
++			sysfs_notify_dirent(block->kn_ue);
+ 	}
+ 
+ 	/* Propagate the count up the 'totals' tree */
+ 	instance->counters.ue_count += count;
+ 	edac_dev->counters.ue_count += count;
+ 
++	/* Notify instance sysfs attribute change */
++	if (instance->kn_ue)
++		sysfs_notify_dirent(instance->kn_ue);
++
+ 	if (edac_device_get_log_ue(edac_dev))
+ 		edac_device_printk(edac_dev, KERN_EMERG,
+ 				   "UE: %s instance: %s block: %s count: %d '%s'\n",
+diff --git a/drivers/edac/edac_device.h b/drivers/edac/edac_device.h
+index fc2d2c218064..459514ea549e 100644
+--- a/drivers/edac/edac_device.h
++++ b/drivers/edac/edac_device.h
+@@ -127,6 +127,10 @@ struct edac_device_block {
+ 
+ 	/* edac sysfs device control */
+ 	struct kobject kobj;
++
++	/* kern fs node for block ue_count and ce count attributes*/
++	struct kernfs_node *kn_ue;
++	struct kernfs_node *kn_ce;
+ };
+ 
+ /* device instance control structure */
+@@ -141,6 +145,10 @@ struct edac_device_instance {
+ 
+ 	/* edac sysfs device control */
+ 	struct kobject kobj;
++
++	/* kern fs node for block ue_count and ce count attributes*/
++	struct kernfs_node *kn_ue;
++	struct kernfs_node *kn_ce;
+ };
+ 
+ 
+diff --git a/drivers/edac/edac_device_sysfs.c b/drivers/edac/edac_device_sysfs.c
+index 5e7593753799..d1e04a9296c7 100644
+--- a/drivers/edac/edac_device_sysfs.c
++++ b/drivers/edac/edac_device_sysfs.c
+@@ -562,6 +562,13 @@ static int edac_device_create_block(struct edac_device_ctl_info *edac_dev,
+ 	}
+ 	kobject_uevent(&block->kobj, KOBJ_ADD);
+ 
++	/*
++	 * Save kernfs pointer for ue count and ce count
++	 * to notify from any context when attributes change
++	 */
++	block->kn_ue = sysfs_get_dirent(block->kobj.sd, "ue_count");
++	block->kn_ce = sysfs_get_dirent(block->kobj.sd, "ce_count");
++
+ 	return 0;
+ 
+ 	/* Error unwind stack */
+@@ -594,6 +601,9 @@ static void edac_device_delete_block(struct edac_device_ctl_info *edac_dev,
+ 		}
+ 	}
+ 
++	block->kn_ue = NULL;
++	block->kn_ce = NULL;
++
+ 	/* unregister this block's kobject, SEE:
+ 	 *	edac_device_ctrl_block_release() callback operation
+ 	 */
+@@ -660,6 +670,13 @@ static int edac_device_create_instance(struct edac_device_ctl_info *edac_dev,
+ 	edac_dbg(4, "Registered instance %d '%s' kobject\n",
+ 		 idx, instance->name);
+ 
++	/*
++	 * Save kernfs pointer for ue count and ce count
++	 * to notify from any context when attributes change
++	 */
++	instance->kn_ue = sysfs_get_dirent(instance->kobj.sd, "ue_count");
++	instance->kn_ce = sysfs_get_dirent(instance->kobj.sd, "ce_count");
++
+ 	return 0;
+ 
+ 	/* error unwind stack */
+@@ -682,6 +699,9 @@ static void edac_device_delete_instance(struct edac_device_ctl_info *edac_dev,
+ 
+ 	instance = &edac_dev->instances[idx];
+ 
++	instance->kn_ue = NULL;
++	instance->kn_ce = NULL;
++
+ 	/* unregister all blocks in this instance */
+ 	for (i = 0; i < instance->nr_blocks; i++)
+ 		edac_device_delete_block(edac_dev, &instance->blocks[i]);
+-- 
+2.31.1
 
