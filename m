@@ -2,109 +2,82 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 68B7F76BB83
-	for <lists+linux-edac@lfdr.de>; Tue,  1 Aug 2023 19:41:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6051D76BD2D
+	for <lists+linux-edac@lfdr.de>; Tue,  1 Aug 2023 21:01:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230116AbjHARll (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Tue, 1 Aug 2023 13:41:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44102 "EHLO
+        id S231378AbjHATBZ (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Tue, 1 Aug 2023 15:01:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229452AbjHARlj (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Tue, 1 Aug 2023 13:41:39 -0400
-Received: from mgamail.intel.com (unknown [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E331E4E;
-        Tue,  1 Aug 2023 10:41:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1690911698; x=1722447698;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=qS4CPA9EKW0OJfbbVJ1lseYCR6nfbdaDN/hUHotm144=;
-  b=Ska6zS/SioYYYh0A4C5iCgldfdlmvYF2KoPV2iiFpAtrgZrXhm0s0j4z
-   a9l5htXTIQcufZi5DkX57Xy4rKECSDjT7BsowmNGDmsEiUuh1Gq6TptZL
-   ZYpO6b6bqTBzcAD283Znw49NcLRkLmiIQUYqlo6PxFRyKNiCJnhzKcs5j
-   frMFsbXIGwfc3kP4WcTPb5B/qM2GxpW/MQaF5TtepTnm/Nu9kGn8BeXZe
-   yuYxCkm1RzgoGXzQq30EiVXm2PSDZSVe1Pp2Hri/5MCVq5GKo7RbFwyFx
-   dCze2NusxLBFtaUBCmX5JwHjX1VHoo/+IGMkFE33czqxPGioGFu7neE7K
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10789"; a="455741884"
-X-IronPort-AV: E=Sophos;i="6.01,247,1684825200"; 
-   d="scan'208";a="455741884"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Aug 2023 10:41:37 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10789"; a="798769997"
-X-IronPort-AV: E=Sophos;i="6.01,247,1684825200"; 
-   d="scan'208";a="798769997"
-Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
-  by fmsmga004.fm.intel.com with ESMTP; 01 Aug 2023 10:41:37 -0700
-Received: from fmsmsx612.amr.corp.intel.com (10.18.126.92) by
- fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.27; Tue, 1 Aug 2023 10:41:36 -0700
-Received: from fmsmsx601.amr.corp.intel.com (10.18.126.81) by
- fmsmsx612.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.27; Tue, 1 Aug 2023 10:41:36 -0700
-Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
- fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.27 via Frontend Transport; Tue, 1 Aug 2023 10:41:36 -0700
-Received: from NAM04-MW2-obe.outbound.protection.outlook.com (104.47.73.172)
- by edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.27; Tue, 1 Aug 2023 10:41:36 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=WwlyRzHtPWPBWGy8ggnGXWwtcrp8MX+Xf1eokRZNd4nAt1o6ipc44ZvEvAkl7YETGQVtvbbVW3050FLPH+zvbdjlXMs7YmqCE+n7AJe5sVTDJoufe21b6tTRUR8wUNo1uyAZVeM/c4nyaRTJJnFXOHJ8/gbIdYY7roS1XxW7gZZioNkk13HzMMDIZYDS/S5hQAuLNlwg82l9Q61r1OiSR+dXf+efQMbV+5z9yb+FnudPM/0VdZyatRBsn8+911E5DLq3n0xmzsoG96/Hfz2s4ncejFsRWCcO2v5DpBOdQBWy45P78tgASpo0/NglAXnKJV/wuC+vDLNY/1hfYpRLQA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=/oGFI5LY6O1zy/8NOdL5CXeIwuqJxl0Y5UaYhyX0+40=;
- b=HzIbP6eKwQE8AZmyUY533nfBewWcmY1wPA3r+3SyVBdm/hhEffA6OeV/v3Qfth/uEXqmdJ7RVs28m80cyEQbV3YPz09lS2T9RqONhfcqWsHow3m9Cb6m9qempvxwZsCjaHYDycfE3sOSoZ6G2rtoMN7brYMk35sYVzu2Q530hcg9k3Ia/os2ZRg2V6mVrLT2vb/MfNApYKAdD8smK2ONGF/6jA+YM9iQzuBc9GyjfWLxP14NNi1Tt70+3EaY1Cc0UXIu4gLJRuBt5i89zyU5vXyvmERZg4mydGCQGDAo4QT1cjQns97bDbO3nciM+EXSoIKFOgpxrw/+v1vYrj0dMw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from SA1PR11MB6734.namprd11.prod.outlook.com (2603:10b6:806:25d::22)
- by CO1PR11MB5027.namprd11.prod.outlook.com (2603:10b6:303:9d::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6631.40; Tue, 1 Aug
- 2023 17:41:32 +0000
-Received: from SA1PR11MB6734.namprd11.prod.outlook.com
- ([fe80::50e4:2cb8:4529:af04]) by SA1PR11MB6734.namprd11.prod.outlook.com
- ([fe80::50e4:2cb8:4529:af04%7]) with mapi id 15.20.6631.043; Tue, 1 Aug 2023
- 17:41:32 +0000
-From:   "Li, Xin3" <xin3.li@intel.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-CC:     "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "xen-devel@lists.xenproject.org" <xen-devel@lists.xenproject.org>,
+        with ESMTP id S231174AbjHATBW (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Tue, 1 Aug 2023 15:01:22 -0400
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AE2918E
+        for <linux-edac@vger.kernel.org>; Tue,  1 Aug 2023 12:01:18 -0700 (PDT)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-5843fed1e88so74443317b3.0
+        for <linux-edac@vger.kernel.org>; Tue, 01 Aug 2023 12:01:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1690916477; x=1691521277;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=6dm7mDs/QRbe10huX8K6gEhxhyCrqJzyAo9u27HeE6w=;
+        b=J5GQt97bUuhSZbWtCfXdnF37hw3zRFmggpgXFePbfydkgIO7T1qEq3TC7f2qz7LLlB
+         4S49rV6qgmg3/1l7yVS022ikDEXmKlfxNhAqIDWvOchRNowXWLLBy8iIxpAA/cT2wvOj
+         0Jut4JR9bEMoTT1P2cTZf83PChcuoKX14DaGcu7FEuFVDg3mxNwmKtE3VgJDMNgE7MkD
+         qC/oqkmws4pn49hZ8CNZrDufM0eGNvp8S3xY09c5Nn1FRHXe1bqAvy/+d7JqHlPxTLKn
+         yaIphA2Z9J7Icu9PWR1Vc38L8VhqePDOXgAC9cI1GdFOazdrFTAWSjBwE0/ppSeYpBGV
+         xMeA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1690916477; x=1691521277;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=6dm7mDs/QRbe10huX8K6gEhxhyCrqJzyAo9u27HeE6w=;
+        b=P/fIYfKTWqFhYJznRhihPiuMDr+1VmeamE+OYPZWb38+c8PZ7wek/Cv7BKtN+mxy45
+         HJArdQ1CjlcOiDKBYiM/LE1oSNcVu5NJ4VPMNzwTCtOtAVUpxHkRA1VHWtQBx/J76NhI
+         oRf+fle0Di+YmpBjZlZmPcsHiEC1RYLVHzklxAI6/gy051mlWCdyyLG0AmpyIJoplueg
+         EoFi8Uuke0M+8Bd3Q2kwD7NmojuWXkeS2MgPSZPZaD1Dtwr/ujeTHSKRJQPyq4O3BeE3
+         O3aqJNxgSyH4KHMiSc4cSyD09hQdOLrynhylz0A9yzBM/qF2t57160SXsqQxrxQhs/mf
+         OVfg==
+X-Gm-Message-State: ABy/qLbAAXjBAsszruLxDJUmWvHV8KxTuzZqYzSRnh8kZQGsxvkCVjvN
+        DUdiQIvHIdnx7fb0pJbZ7JBaN4iaHzY=
+X-Google-Smtp-Source: APBJJlGmS9vDxvKMs0vj75dQg8WdrWLo21/ggGbLQ/stLSWTeYc5YOHqkncZwnm3qxat2TVzW25JPR0Oz6k=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a25:ad15:0:b0:d12:d6e4:a08f with SMTP id
+ y21-20020a25ad15000000b00d12d6e4a08fmr86035ybi.6.1690916477204; Tue, 01 Aug
+ 2023 12:01:17 -0700 (PDT)
+Date:   Tue, 1 Aug 2023 19:01:15 +0000
+In-Reply-To: <20230801083553.8468-7-xin3.li@intel.com>
+Mime-Version: 1.0
+References: <20230801083553.8468-1-xin3.li@intel.com> <20230801083553.8468-7-xin3.li@intel.com>
+Message-ID: <ZMlWe5TgS6HM98Mg@google.com>
+Subject: Re: [PATCH RESEND v9 33/36] KVM: VMX: Add VMX_DO_FRED_EVENT_IRQOFF
+ for IRQ/NMI handling
+From:   Sean Christopherson <seanjc@google.com>
+To:     Xin Li <xin3.li@intel.com>
+Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-edac@vger.kernel.org, linux-hyperv@vger.kernel.org,
+        kvm@vger.kernel.org, xen-devel@lists.xenproject.org,
         Jonathan Corbet <corbet@lwn.net>,
-        "Thomas Gleixner" <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        "Borislav Petkov" <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "x86@kernel.org" <x86@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
         "H . Peter Anvin" <hpa@zytor.com>,
-        "Lutomirski, Andy" <luto@kernel.org>,
+        Andy Lutomirski <luto@kernel.org>,
         Oleg Nesterov <oleg@redhat.com>,
-        "Luck, Tony" <tony.luck@intel.com>,
+        Tony Luck <tony.luck@intel.com>,
         "K . Y . Srinivasan" <kys@microsoft.com>,
         Haiyang Zhang <haiyangz@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>,
-        "Cui, Dexuan" <decui@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
         Paolo Bonzini <pbonzini@redhat.com>,
-        "Wanpeng Li" <wanpengli@tencent.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
         Vitaly Kuznetsov <vkuznets@redhat.com>,
-        "Christopherson,, Sean" <seanjc@google.com>,
-        "Gross, Jurgen" <jgross@suse.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juergen Gross <jgross@suse.com>,
         Stefano Stabellini <sstabellini@kernel.org>,
-        "Oleksandr Tyshchenko" <oleksandr_tyshchenko@epam.com>,
+        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
         Josh Poimboeuf <jpoimboe@kernel.org>,
         "Paul E . McKenney" <paulmck@kernel.org>,
-        "Catalin Marinas" <catalin.marinas@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
         Randy Dunlap <rdunlap@infradead.org>,
         Steven Rostedt <rostedt@goodmis.org>,
         Kim Phillips <kim.phillips@amd.com>,
@@ -119,120 +92,549 @@ CC:     "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
         Sandipan Das <sandipan.das@amd.com>,
         Lai Jiangshan <jiangshanlai@gmail.com>,
         Hans de Goede <hdegoede@redhat.com>,
-        "Chatre, Reinette" <reinette.chatre@intel.com>,
-        "Daniel Sneddon" <daniel.sneddon@linux.intel.com>,
+        Reinette Chatre <reinette.chatre@intel.com>,
+        Daniel Sneddon <daniel.sneddon@linux.intel.com>,
         Breno Leitao <leitao@debian.org>,
         Nikunj A Dadhania <nikunj@amd.com>,
         Brian Gerst <brgerst@gmail.com>,
-        "Sami Tolvanen" <samitolvanen@google.com>,
+        Sami Tolvanen <samitolvanen@google.com>,
         Alexander Potapenko <glider@google.com>,
         Andrew Morton <akpm@linux-foundation.org>,
         Arnd Bergmann <arnd@arndb.de>,
         "Eric W . Biederman" <ebiederm@xmission.com>,
         Kees Cook <keescook@chromium.org>,
         Masami Hiramatsu <mhiramat@kernel.org>,
-        "Masahiro Yamada" <masahiroy@kernel.org>,
-        Ze Gao <zegao2021@gmail.com>, "Li, Fei1" <fei1.li@intel.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Ze Gao <zegao2021@gmail.com>, Fei Li <fei1.li@intel.com>,
         Conghui <conghui.chen@intel.com>,
-        "Raj, Ashok" <ashok.raj@intel.com>,
+        Ashok Raj <ashok.raj@intel.com>,
         "Jason A . Donenfeld" <Jason@zx2c4.com>,
         Mark Rutland <mark.rutland@arm.com>,
         Jacob Pan <jacob.jun.pan@linux.intel.com>,
-        "Jiapeng Chong" <jiapeng.chong@linux.alibaba.com>,
+        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
         Jane Malalane <jane.malalane@citrix.com>,
-        "Woodhouse, David" <dwmw@amazon.co.uk>,
-        "Ostrovsky, Boris" <boris.ostrovsky@oracle.com>,
+        David Woodhouse <dwmw@amazon.co.uk>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
         Arnaldo Carvalho de Melo <acme@redhat.com>,
         Yantengsi <siyanteng@loongson.cn>,
         Christophe Leroy <christophe.leroy@csgroup.eu>,
         Sathvika Vasireddy <sv@linux.ibm.com>
-Subject: RE: [PATCH RESEND v9 00/36] x86: enable FRED for x86-64
-Thread-Topic: [PATCH RESEND v9 00/36] x86: enable FRED for x86-64
-Thread-Index: AQHZxFK8XA18LlhFCECR8aoFrmHwB6/VQ+oAgAAkVwCAAExQ8A==
-Date:   Tue, 1 Aug 2023 17:41:32 +0000
-Message-ID: <SA1PR11MB67343841FFBAB71F005B0440A80AA@SA1PR11MB6734.namprd11.prod.outlook.com>
-References: <20230801083318.8363-1-xin3.li@intel.com>
- <20230801105236.GB79828@hirez.programming.kicks-ass.net>
- <20230801130240.GA80967@hirez.programming.kicks-ass.net>
-In-Reply-To: <20230801130240.GA80967@hirez.programming.kicks-ass.net>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: SA1PR11MB6734:EE_|CO1PR11MB5027:EE_
-x-ms-office365-filtering-correlation-id: 816e65fe-dfe9-4a81-1eb4-08db92b68b91
-x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: hbZBEgrMrSkukRlhRInro59naLc8vtW89qNg99W/JoEDrg1vZPjqBg/u4FEzRpbdt5HO9n3YhZ+s60rOGWaeJ4JvOlhgRK+NI7ATnneSDZB4P8FcKWam+yYn+En8JNkDAbgqyuyC8QakgKIZA+D2KeDhu2oDW8/ROyrASOQ0qZPC4SM/XL86ffPCul1P99rEXmh2yIGFw4NmyzfwsB53noi5Oztj+ERI1eXQioteUH1Dx9amYk7hAuohNJvRuAPS/Cw/Nn0Wsv8Gq4/j6OJz+tfFCoQdTVI6HdhBphRkuxsen359RArg0aFjQNikQGKVaAdBoZrM6xLtq+9olf4YyDzbCu8Qf5nAnAKU8owMWW0g0sICXRfQ4E9HnBu0TCHEeVybq3g3jaCItPv+dzkyu68aba2LVGF2V+0gcweu8WMWQl8erzUZy8WRgvZ/cZ7GRPjhmkB6xHaMyER/roQfGUOdqQYe8SGUUIDsj2CsdtdJR5qYu30cretfK62yJ1S/V0dF38SEyrrokSZlroSm70S6Xs6cLk2XOaUSqe3FCFdx1vubUU8nImxh+1JwOHanjOveg9TNGYl4WfBQYGv2UmadFzty42nWii5hQE4E0dI=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA1PR11MB6734.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(376002)(136003)(396003)(39860400002)(366004)(346002)(451199021)(38100700002)(66476007)(86362001)(316002)(8676002)(8936002)(64756008)(5660300002)(66446008)(4326008)(6916009)(41300700001)(54906003)(7416002)(7366002)(122000001)(33656002)(52536014)(76116006)(66946007)(66556008)(82960400001)(7406005)(38070700005)(478600001)(4744005)(2906002)(71200400001)(966005)(9686003)(7696005)(6506007)(26005)(186003)(55016003);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?9S376hmpo4BhJC85NLrvpSb+4HNunXLP+7Y/90z2sNCXPaYTJCGYBVP69XP3?=
- =?us-ascii?Q?R38CnDhUy12iDryXj356vd70qWLvkFEPPnKs9QSXPMeQn9e1+2KDwqV5q1Ad?=
- =?us-ascii?Q?UDxSob9WX8WY5Rtl5bQxzb8q43+ay5YjBdtj76fpa8ly1YR79IVBcSwzkpAC?=
- =?us-ascii?Q?ONS0Wt7DqTJVkYUCmW45kipLv/LJEt/VplBKs4VRqiKojV+gFelT8ruP5nju?=
- =?us-ascii?Q?nnf5u+xEQPYQC7ARPBaHqo67gm41GaHZOmBAXDSMqrJkK15mVHhsHS8Q1RcJ?=
- =?us-ascii?Q?9R8DdjEl7GpIFZGQT+UQ6glJDwBAjckQLOFcdegodVfGebaP9eJF0kpni/1I?=
- =?us-ascii?Q?TxkRJCJTi32sMkOsW+MDfkvrCLGohEBY5TiR+5Dd4gofRICcWePlLVn8eK76?=
- =?us-ascii?Q?6VEaCKB+Uo/ItV6nsCtMBinmbMpiYwUs2m6Va1RrhpSpUnKw+II8QMMD+Slv?=
- =?us-ascii?Q?qNZoVjjTb+Gaj8rUaMOevgnXQ46B2zEGomEFpRVrw0VIoQ+sojxKTqfshlJB?=
- =?us-ascii?Q?3xLN4uYWs5jdDjENcukBUdQXmmtkq4AWnYiXUZ9JZBo/dE3dYIve6PWU6U/G?=
- =?us-ascii?Q?JoGzKouwiw/GrEo08HPIsaDkguQnlTgeNW1BypWbTfs5uS+pLoVwgosokYg2?=
- =?us-ascii?Q?eaHu7sk+9s7T9eQSBLZCjSQ7YNvm5oSJiMmBAV77CTZTRTRxtiMY4Y2e6h4M?=
- =?us-ascii?Q?tWHJkxUT2TMBpHX8bp8IMbTv0tzcTSJQG8ZCgHdnQzZudDK0/9g1ZTGziQiL?=
- =?us-ascii?Q?mOPoWDyiAcqbAu1Mxa54pTkvbdivC5ItrM7AQvQt0TG6Cc/Bgg2ZIYV3ZgGK?=
- =?us-ascii?Q?YKvRfjt2S5aPMkboAPOv2U3CZTAHmkyXHKZpqPz+ulJ5sZHaB3BB3rGPLcl5?=
- =?us-ascii?Q?ilQ9REuSRMtvNsq/JFBqm2KRd8RYP9GRxuU25ydzTFzcoOV/uxDEf5NFI0jn?=
- =?us-ascii?Q?mVRrXjWMPe+saQ/jDa7+UUS5l5cAHHgLuOHs0P+RuuLBZqKMotgu/acYbUlE?=
- =?us-ascii?Q?UUiVrd2ERZXQFJWhxcr2SpULzLqLe6ik5r1JB0NTnJ7UuCIxDOSgYDQbVqYm?=
- =?us-ascii?Q?EmdfFu/TTfFaBjUmkoecNcArt3qFdhTkBS/CIjcJPCChqHu3WP0K2p28/5WA?=
- =?us-ascii?Q?hSvl68zkyS+e1TkrvKNYXQ6gGiz5I9c6eVFSgdxPB47mtia4F6L+cKf9QxhM?=
- =?us-ascii?Q?/hgaq9FZsNxiEKICf/WTsNBxI3SF5Y7t28bNWGghrCMEQ/Zdt0Xu1ThATuwp?=
- =?us-ascii?Q?Y8V9WxSVmsqHHf3l6P0jVmEx5RXzwLbnjmxRj0agul8u9RaQtfTPVv3rOS+3?=
- =?us-ascii?Q?RA28LWVNpXQZ8hQs229ahH7zwrWqwyKmb13SCjTGTZZIFQeC8sx4TQI4EXn8?=
- =?us-ascii?Q?tDtzWwZWbU/8KFRZ2dLW6QZQGJN+IRFztg6CZB0aBRP5UNYu9sfwYOFkOuOn?=
- =?us-ascii?Q?I8xzAm74L+de8SMApxaOSFrNIJ+0LmJ5Uq4Z3dyzvyMwXOYkQrzqfC7+z/Sr?=
- =?us-ascii?Q?sitm0GKIm9ob3fuTsribPqNmnLDJOkM8J1XMIM300Vn2svzZIuiCVYdC5tc0?=
- =?us-ascii?Q?c5H/mL8qbblKNUsarks=3D?=
 Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
-MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SA1PR11MB6734.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 816e65fe-dfe9-4a81-1eb4-08db92b68b91
-X-MS-Exchange-CrossTenant-originalarrivaltime: 01 Aug 2023 17:41:32.5745
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: Kr0p4GM7rbulXd6menIn/NIkH7YsL0JXwhFRCBBrfmbU0hxYTP9IhCqLJRY2JshGhxJ/9DwLX/odK2AoYSxrYw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO1PR11MB5027
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-> > I also believe there is a kernel.org service for sending patch series,
-> > but i'm not sure I remember the details.
->=20
-> https://b4.docs.kernel.org/en/latest/contributor/send.html
+On Tue, Aug 01, 2023, Xin Li wrote:
+> 
+> diff --git a/arch/x86/kvm/vmx/vmenter.S b/arch/x86/kvm/vmx/vmenter.S
+> index 07e927d4d099..5ee6a57b59a5 100644
+> --- a/arch/x86/kvm/vmx/vmenter.S
+> +++ b/arch/x86/kvm/vmx/vmenter.S
+> @@ -2,12 +2,14 @@
+>  #include <linux/linkage.h>
+>  #include <asm/asm.h>
+>  #include <asm/bitsperlong.h>
+> +#include <asm/fred.h>
+>  #include <asm/kvm_vcpu_regs.h>
+>  #include <asm/nospec-branch.h>
+>  #include <asm/percpu.h>
+>  #include <asm/segment.h>
+>  #include "kvm-asm-offsets.h"
+>  #include "run_flags.h"
+> +#include "../../entry/calling.h"
 
-It says:
-The kernel.org endpoint can only be used for kernel.org-hosted projects.
-If there are no recognized mailing lists in the to/cc headers, then the
-submission will be rejected.
+Rather than do the low level PUSH_REGS and POP_REGS, I vote to have core code
+expose a FRED-specific wrapper for invoking external_interrupt().  More below.
 
-If I want to test the email sending service, how could I test it with sendi=
-ng
-just to myself?  Maybe it allows only sending to the sender.
+>  
+>  #define WORD_SIZE (BITS_PER_LONG / 8)
+>  
+> @@ -31,6 +33,80 @@
+>  #define VCPU_R15	__VCPU_REGS_R15 * WORD_SIZE
+>  #endif
+>  
+> +#ifdef CONFIG_X86_FRED
+> +.macro VMX_DO_FRED_EVENT_IRQOFF branch_insn branch_target nmi=0
+
+objtool isn't happy.
+
+arch/x86/kvm/vmx/vmenter.o: warning: objtool: vmx_do_fred_interrupt_irqoff+0x6c: return with modified stack frame
+arch/x86/kvm/vmx/vmenter.o: warning: objtool: vmx_do_fred_nmi_irqoff+0x37: sibling call from callable instruction with modified stack frame
+
+The "return with modified stack frame" goes away with my suggested changes, but
+the sibling call remains for the NMI case due to the JMP instead of a call.
+
+> +	/*
+> +	 * Unconditionally create a stack frame, getting the correct RSP on the
+> +	 * stack (for x86-64) would take two instructions anyways, and RBP can
+> +	 * be used to restore RSP to make objtool happy (see below).
+> +	 */
+> +	push %_ASM_BP
+> +	mov %_ASM_SP, %_ASM_BP
+
+The frame stuff is worth throwing in a macro, if only to avoid a copy+pasted
+comment, which by the by, is wrong.  (a) it's ERETS, not IRET.  (b) the IRQ does
+a vanilla RET, not ERETS.  E.g. like so:
+
+.macro VMX_DO_EVENT_FRAME_BEGIN
+	/*
+	 * Unconditionally create a stack frame, getting the correct RSP on the
+	 * stack (for x86-64) would take two instructions anyways, and RBP can
+	 * be used to restore RSP to make objtool happy (see below).
+	 */
+	push %_ASM_BP
+	mov %_ASM_SP, %_ASM_BP
+.endm
+
+.macro VMX_DO_EVENT_FRAME_END
+	/*
+	 * "Restore" RSP from RBP, even though {E,I}RET has already unwound RSP
+	 * to the correct value *in most cases*.  KVM's IRQ handling with FRED
+	 * doesn't do ERETS, and objtool doesn't know the callee will IRET/ERET
+	 * and, without the explicit restore, thinks the stack is getting walloped.
+	 * Using an unwind hint is problematic due to x86-64's dynamic alignment.
+	 */
+	mov %_ASM_BP, %_ASM_SP
+	pop %_ASM_BP
+.endm
+
+> +
+> +	/*
+> +	 * Don't check the FRED stack level, the call stack leading to this
+> +	 * helper is effectively constant and shallow (relatively speaking).
+> +	 *
+> +	 * Emulate the FRED-defined redzone and stack alignment.
+> +	 */
+> +	sub $(FRED_CONFIG_REDZONE_AMOUNT << 6), %rsp
+> +	and $FRED_STACK_FRAME_RSP_MASK, %rsp
+> +
+> +	/*
+> +	 * A FRED stack frame has extra 16 bytes of information pushed at the
+> +	 * regular stack top compared to an IDT stack frame.
+
+There is pretty much no chance that anyone remembers the layout of an IDT stack
+frame off the top of their head.  I.e. saying "FRED has 16 bytes more" isn't all
+that useful.  It also fails to capture the fact that FRED stuff a hell of a lot
+more information in those "common" 48 bytes.
+
+It'll be hard/impossible to capture all of the overload info in a comment, but
+showing the actual layout of the frame would be super helpful, e.g. something like
+this
+
+	/*
+	 * FRED stack frames are always 64 bytes:
+	 *
+	 * ------------------------------
+	 * | Bytes  | Usage             |
+	 * -----------------------------|
+	 * | 63:56  | Reserved          |
+	 * | 55:48  | Event Data        | 
+         * | 47:40  | SS + Event Info   |
+         * | 39:32  | RSP               |
+	 * | 31:24  | RFLAGS            |
+         * | 23:16  | CS + Aux Info     |
+         * |  15:8  | RIP               |
+         * |   7:0  | Error Code        |    
+         * ------------------------------           
+	 */
+
+> +	 */
+> +	push $0		/* Reserved by FRED, must be 0 */
+> +	push $0		/* FRED event data, 0 for NMI and external interrupts */
+> +
+> +	shl $32, %rdi				/* FRED event type and vector */
+> +	.if \nmi
+> +	bts $FRED_SSX_NMI_BIT, %rdi		/* Set the NMI bit */
+
+The spec I have from May 2022 says the NMI bit colocated with CS, not SS.  And
+the cover letter's suggestion to use a search engine to find the spec ain't
+exactly helpful, that just gives me the same "May 2022 Revision 3.0" spec.  So
+either y'all have a spec that I can't find, or this is wrong.
+
+> +	.endif
+> +	bts $FRED_SSX_64_BIT_MODE_BIT, %rdi	/* Set the 64-bit mode */
+> +	or $__KERNEL_DS, %rdi
+> +	push %rdi
+> +	push %rbp
+> +	pushf
+> +	mov $__KERNEL_CS, %rax
+> +	push %rax
+> +
+> +	/*
+> +	 * Unlike the IDT event delivery, FRED _always_ pushes an error code
+> +	 * after pushing the return RIP, thus the CALL instruction CANNOT be
+> +	 * used here to push the return RIP, otherwise there is no chance to
+> +	 * push an error code before invoking the IRQ/NMI handler.
+> +	 *
+> +	 * Use LEA to get the return RIP and push it, then push an error code.
+> +	 */
+> +	lea 1f(%rip), %rax
+
+This is quite misleading for IRQs.  It took me a while to figure out that the only
+reason it's functionally ok is that external_interrupt() will do RET, not ERETS,
+i.e. the RIP that's pushed here isn't used for IRQs!  Expanding the above comment
+would be quite helpful, e.g.
+
+	 *
+	 * Use LEA to get the return RIP and push it, then push an error code.
+	 * Note, only NMI handling does an ERETS to the target!  IRQ handling
+	 * doesn't need to unmask NMIs and so simply uses CALL+RET, i.e. the
+	 * RIP pushed here is only truly consumed for NMIs!
+
+> +	push %rax
+> +	push $0		/* FRED error code, 0 for NMI and external interrupts */
+> +
+> +	.if \nmi == 0
+> +	PUSH_REGS
+> +	mov %rsp, %rdi
+
+Nit, *if* this stays in KVM, please use %_ASM_ARG1 instead of %rdi.  I normally
+dislike unnecessary abstraction, but in this case using _ASM_ARG1 makes it clear
+(without a comment) that this code is loading a param for a funciton call, *not*
+for some FRED magic.
+
+> +	.endif
+
+Jumping way back to providing a wrapper for FRED, if we do that, then there's no
+need to include calling.h, and the weird wrinkle about the ERET target kinda goes
+away too.  E.g. provide this in arch/x86/entry/entry_64_fred.S
+
+	.section .text, "ax"
+
+/* Note, this is instrumentation safe, and returns via RET, not ERETS! */
+#if IS_ENABLED(CONFIG_KVM_INTEL)
+SYM_CODE_START(fred_irq_entry_from_kvm)
+	FRED_ENTER
+	call external_interrupt
+	FRED_EXIT
+	RET
+SYM_CODE_END(fred_irq_entry_from_kvm)
+EXPORT_SYMBOL_GPL(fred_irq_entry_from_kvm);
+#endif
+
+and then the KVM side for this particular chunk is more simply:
+
+	lea 1f(%rip), %rax
+	push %rax
+	push $0		/* FRED error code, 0 for NMI and external interrupts */
+
+	\branch_insn \branch_target
+1:
+	VMX_DO_EVENT_FRAME_END
+	RET
+
+
+Alternatively, the whole thing could be shoved into arch/x86/entry/entry_64_fred.S,
+but at a glance I don't think that would be a net positive due to the need to handle
+IRQs vs. NMIs.
+
+> +	\branch_insn \branch_target
+> +
+> +	.if \nmi == 0
+> +	POP_REGS
+> +	.endif
+> +
+> +1:
+> +	/*
+> +	 * "Restore" RSP from RBP, even though IRET has already unwound RSP to
+
+As mentioned above, this is incorrect on two fronts.
+
+> diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
+> index 0ecf4be2c6af..4e90c69a92bf 100644
+> --- a/arch/x86/kvm/vmx/vmx.c
+> +++ b/arch/x86/kvm/vmx/vmx.c
+> @@ -6890,6 +6890,14 @@ static void vmx_apicv_post_state_restore(struct kvm_vcpu *vcpu)
+>  	memset(vmx->pi_desc.pir, 0, sizeof(vmx->pi_desc.pir));
+>  }
+>  
+> +#ifdef CONFIG_X86_FRED
+> +void vmx_do_fred_interrupt_irqoff(unsigned int vector);
+> +void vmx_do_fred_nmi_irqoff(unsigned int vector);
+> +#else
+> +#define vmx_do_fred_interrupt_irqoff(x) BUG()
+> +#define vmx_do_fred_nmi_irqoff(x) BUG()
+> +#endif
+
+My slight preference is to open code the BUG() as a ud2 in assembly, purely to
+avoid more #ifdefs.
+
+> +
+>  void vmx_do_interrupt_irqoff(unsigned long entry);
+>  void vmx_do_nmi_irqoff(void);
+>  
+> @@ -6932,14 +6940,16 @@ static void handle_external_interrupt_irqoff(struct kvm_vcpu *vcpu)
+>  {
+>  	u32 intr_info = vmx_get_intr_info(vcpu);
+>  	unsigned int vector = intr_info & INTR_INFO_VECTOR_MASK;
+> -	gate_desc *desc = (gate_desc *)host_idt_base + vector;
+>  
+>  	if (KVM_BUG(!is_external_intr(intr_info), vcpu->kvm,
+>  	    "unexpected VM-Exit interrupt info: 0x%x", intr_info))
+>  		return;
+>  
+>  	kvm_before_interrupt(vcpu, KVM_HANDLING_IRQ);
+> -	vmx_do_interrupt_irqoff(gate_offset(desc));
+> +	if (cpu_feature_enabled(X86_FEATURE_FRED))
+> +		vmx_do_fred_interrupt_irqoff(vector);	/* Event type is 0 */
+
+I strongly prefer to use code to document what's going on.  E.g. the tail comment
+just left me wondering, what event type is 0?  Whereas this makes it quite clear
+that KVM is signaling a hardware interrupt.  The fact that it's a nop as far as
+code generation goes is irrelevant.
+
+	vmx_do_fred_interrupt_irqoff((EVENT_TYPE_HWINT << 16) | vector);
+
+> +	else
+> +		vmx_do_interrupt_irqoff(gate_offset((gate_desc *)host_idt_base + vector));
+>  	kvm_after_interrupt(vcpu);
+>  
+>  	vcpu->arch.at_instruction_boundary = true;
+
+Here's a diff for (hopefully) everything I've suggested above.
+
+---
+ arch/x86/entry/entry_64_fred.S | 17 ++++++-
+ arch/x86/kernel/traps.c        |  5 --
+ arch/x86/kvm/vmx/vmenter.S     | 84 +++++++++++++++-------------------
+ arch/x86/kvm/vmx/vmx.c         |  7 +--
+ 4 files changed, 55 insertions(+), 58 deletions(-)
+
+diff --git a/arch/x86/entry/entry_64_fred.S b/arch/x86/entry/entry_64_fred.S
+index 12063267d2ac..a973c0bd29f6 100644
+--- a/arch/x86/entry/entry_64_fred.S
++++ b/arch/x86/entry/entry_64_fred.S
+@@ -10,7 +10,6 @@
+ #include "calling.h"
+ 
+ 	.code64
+-	.section ".noinstr.text", "ax"
+ 
+ .macro FRED_ENTER
+ 	UNWIND_HINT_END_OF_STACK
+@@ -24,6 +23,22 @@
+ 	POP_REGS
+ .endm
+ 
++	.section .text, "ax"
++
++/* Note, this is instrumentation safe, and returns via RET, not ERETS! */
++#if IS_ENABLED(CONFIG_KVM_INTEL)
++SYM_CODE_START(fred_irq_entry_from_kvm)
++	FRED_ENTER
++	call external_interrupt
++	FRED_EXIT
++	RET
++SYM_CODE_END(fred_irq_entry_from_kvm)
++EXPORT_SYMBOL_GPL(fred_irq_entry_from_kvm);
++#endif
++
++	.section ".noinstr.text", "ax"
++
++
+ /*
+  * The new RIP value that FRED event delivery establishes is
+  * IA32_FRED_CONFIG & ~FFFH for events that occur in ring 3.
+diff --git a/arch/x86/kernel/traps.c b/arch/x86/kernel/traps.c
+index 21eeba7b188f..cbcb83c71dab 100644
+--- a/arch/x86/kernel/traps.c
++++ b/arch/x86/kernel/traps.c
+@@ -1566,11 +1566,6 @@ int external_interrupt(struct pt_regs *regs)
+ 	return 0;
+ }
+ 
+-#if IS_ENABLED(CONFIG_KVM_INTEL)
+-/* For KVM VMX to handle IRQs in IRQ induced VM exits. */
+-EXPORT_SYMBOL_GPL(external_interrupt);
+-#endif
+-
+ #endif /* CONFIG_X86_64 */
+ 
+ void __init trap_init(void)
+diff --git a/arch/x86/kvm/vmx/vmenter.S b/arch/x86/kvm/vmx/vmenter.S
+index 79a4c91d9434..e25df565c3f8 100644
+--- a/arch/x86/kvm/vmx/vmenter.S
++++ b/arch/x86/kvm/vmx/vmenter.S
+@@ -9,7 +9,6 @@
+ #include <asm/segment.h>
+ #include "kvm-asm-offsets.h"
+ #include "run_flags.h"
+-#include "../../entry/calling.h"
+ 
+ #define WORD_SIZE (BITS_PER_LONG / 8)
+ 
+@@ -33,15 +32,31 @@
+ #define VCPU_R15	__VCPU_REGS_R15 * WORD_SIZE
+ #endif
+ 
++.macro VMX_DO_EVENT_FRAME_BEGIN
++	/*
++	 * Unconditionally create a stack frame, getting the correct RSP on the
++	 * stack (for x86-64) would take two instructions anyways, and RBP can
++	 * be used to restore RSP to make objtool happy (see below).
++	 */
++	push %_ASM_BP
++	mov %_ASM_SP, %_ASM_BP
++.endm
++
++.macro VMX_DO_EVENT_FRAME_END
++	/*
++	 * "Restore" RSP from RBP, even though {E,I}RET has already unwound RSP
++	 * to the correct value *in most cases*.  KVM's IRQ handling with FRED
++	 * doesn't do ERETS, and objtool doesn't know the callee will IRET/ERET
++	 * and, without the explicit restore, thinks the stack is getting walloped.
++	 * Using an unwind hint is problematic due to x86-64's dynamic alignment.
++	 */
++	mov %_ASM_BP, %_ASM_SP
++	pop %_ASM_BP
++.endm
++
+ #ifdef CONFIG_X86_FRED
+ .macro VMX_DO_FRED_EVENT_IRQOFF branch_insn branch_target nmi=0
+-	/*
+-	 * Unconditionally create a stack frame, getting the correct RSP on the
+-	 * stack (for x86-64) would take two instructions anyways, and RBP can
+-	 * be used to restore RSP to make objtool happy (see below).
+-	 */
+-	push %_ASM_BP
+-	mov %_ASM_SP, %_ASM_BP
++	VMX_DO_EVENT_FRAME_BEGIN
+ 
+ 	/*
+ 	 * Don't check the FRED stack level, the call stack leading to this
+@@ -78,43 +93,23 @@
+ 	 * push an error code before invoking the IRQ/NMI handler.
+ 	 *
+ 	 * Use LEA to get the return RIP and push it, then push an error code.
++	 * Note, only NMI handling does an ERETS to the target!  IRQ handling
++	 * doesn't need to unmask NMIs and so simply uses CALL+RET, i.e. the
++	 * RIP pushed here is only truly consumed for NMIs!
+ 	 */
+ 	lea 1f(%rip), %rax
+ 	push %rax
+ 	push $0		/* FRED error code, 0 for NMI and external interrupts */
+ 
+-	.if \nmi == 0
+-	PUSH_REGS
+-	mov %rsp, %rdi
+-	.endif
+-
+ 	\branch_insn \branch_target
+-
+-	.if \nmi == 0
+-	POP_REGS
+-	.endif
+-
+ 1:
+-	/*
+-	 * "Restore" RSP from RBP, even though IRET has already unwound RSP to
+-	 * the correct value.  objtool doesn't know the callee will IRET and,
+-	 * without the explicit restore, thinks the stack is getting walloped.
+-	 * Using an unwind hint is problematic due to x86-64's dynamic alignment.
+-	 */
+-	mov %_ASM_BP, %_ASM_SP
+-	pop %_ASM_BP
++	VMX_DO_EVENT_FRAME_END
+ 	RET
+ .endm
+ #endif
+ 
+ .macro VMX_DO_EVENT_IRQOFF call_insn call_target
+-	/*
+-	 * Unconditionally create a stack frame, getting the correct RSP on the
+-	 * stack (for x86-64) would take two instructions anyways, and RBP can
+-	 * be used to restore RSP to make objtool happy (see below).
+-	 */
+-	push %_ASM_BP
+-	mov %_ASM_SP, %_ASM_BP
++	VMX_DO_EVENT_FRAME_BEGIN
+ 
+ #ifdef CONFIG_X86_64
+ 	/*
+@@ -129,14 +124,7 @@
+ 	push $__KERNEL_CS
+ 	\call_insn \call_target
+ 
+-	/*
+-	 * "Restore" RSP from RBP, even though IRET has already unwound RSP to
+-	 * the correct value.  objtool doesn't know the callee will IRET and,
+-	 * without the explicit restore, thinks the stack is getting walloped.
+-	 * Using an unwind hint is problematic due to x86-64's dynamic alignment.
+-	 */
+-	mov %_ASM_BP, %_ASM_SP
+-	pop %_ASM_BP
++	VMX_DO_EVENT_FRAME_END
+ 	RET
+ .endm
+ 
+@@ -375,11 +363,13 @@ SYM_INNER_LABEL_ALIGN(vmx_vmexit, SYM_L_GLOBAL)
+ 
+ SYM_FUNC_END(__vmx_vcpu_run)
+ 
+-#ifdef CONFIG_X86_FRED
+ SYM_FUNC_START(vmx_do_fred_nmi_irqoff)
++#ifdef CONFIG_X86_FRED
+ 	VMX_DO_FRED_EVENT_IRQOFF jmp fred_entrypoint_kernel nmi=1
++#else
++	ud2
++#endif
+ SYM_FUNC_END(vmx_do_fred_nmi_irqoff)
+-#endif
+ 
+ SYM_FUNC_START(vmx_do_nmi_irqoff)
+ 	VMX_DO_EVENT_IRQOFF call asm_exc_nmi_kvm_vmx
+@@ -438,11 +428,13 @@ SYM_FUNC_END(vmread_error_trampoline)
+ #endif
+ 
+ .section .text, "ax"
+-#ifdef CONFIG_X86_FRED
+ SYM_FUNC_START(vmx_do_fred_interrupt_irqoff)
+-	VMX_DO_FRED_EVENT_IRQOFF call external_interrupt
++#ifdef CONFIG_X86_FRED
++	VMX_DO_FRED_EVENT_IRQOFF call fred_irq_entry_from_kvm
++#else
++	ud2
++#endif
+ SYM_FUNC_END(vmx_do_fred_interrupt_irqoff)
+-#endif
+ 
+ SYM_FUNC_START(vmx_do_interrupt_irqoff)
+ 	VMX_DO_EVENT_IRQOFF CALL_NOSPEC _ASM_ARG1
+diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
+index bf757f5071e4..cb4675dd87df 100644
+--- a/arch/x86/kvm/vmx/vmx.c
++++ b/arch/x86/kvm/vmx/vmx.c
+@@ -6919,13 +6919,8 @@ static void vmx_apicv_post_state_restore(struct kvm_vcpu *vcpu)
+ 	memset(vmx->pi_desc.pir, 0, sizeof(vmx->pi_desc.pir));
+ }
+ 
+-#ifdef CONFIG_X86_FRED
+ void vmx_do_fred_interrupt_irqoff(unsigned int vector);
+ void vmx_do_fred_nmi_irqoff(unsigned int vector);
+-#else
+-#define vmx_do_fred_interrupt_irqoff(x) BUG()
+-#define vmx_do_fred_nmi_irqoff(x) BUG()
+-#endif
+ 
+ void vmx_do_interrupt_irqoff(unsigned long entry);
+ void vmx_do_nmi_irqoff(void);
+@@ -6976,7 +6971,7 @@ static void handle_external_interrupt_irqoff(struct kvm_vcpu *vcpu)
+ 
+ 	kvm_before_interrupt(vcpu, KVM_HANDLING_IRQ);
+ 	if (cpu_feature_enabled(X86_FEATURE_FRED))
+-		vmx_do_fred_interrupt_irqoff(vector);	/* Event type is 0 */
++		vmx_do_fred_interrupt_irqoff((EVENT_TYPE_HWINT << 16) | vector);
+ 	else
+ 		vmx_do_interrupt_irqoff(gate_offset((gate_desc *)host_idt_base + vector));
+ 	kvm_after_interrupt(vcpu);
+
+base-commit: 8961078ffe509a97ec7803b17912e57c47b93fa2
+-- 
 
