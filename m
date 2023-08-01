@@ -2,149 +2,183 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7C6C76BE16
-	for <lists+linux-edac@lfdr.de>; Tue,  1 Aug 2023 21:49:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3435576C07E
+	for <lists+linux-edac@lfdr.de>; Wed,  2 Aug 2023 00:37:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231774AbjHATtH (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Tue, 1 Aug 2023 15:49:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37326 "EHLO
+        id S230390AbjHAWhj (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Tue, 1 Aug 2023 18:37:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231481AbjHATtE (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Tue, 1 Aug 2023 15:49:04 -0400
-Received: from mail-pl1-x649.google.com (mail-pl1-x649.google.com [IPv6:2607:f8b0:4864:20::649])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C68B2102
-        for <linux-edac@vger.kernel.org>; Tue,  1 Aug 2023 12:49:02 -0700 (PDT)
-Received: by mail-pl1-x649.google.com with SMTP id d9443c01a7336-1bbb97d27d6so42581215ad.1
-        for <linux-edac@vger.kernel.org>; Tue, 01 Aug 2023 12:49:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1690919342; x=1691524142;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ymMuGbXslfyJGs4W/pBqFuGxl9xUvy7q5fX4QbBoOtQ=;
-        b=CydE6ofDFbki4OoGOG75dPf8HjmzdP4bx8vverzkUAQVtD69mMn7n68FWR8AAp7DXQ
-         w+dl1y5zJGShPu6hUhv3xWgs0RLuDKkU1QeFVeAkGndzTQF4ejZ1rYTen/R2bDlQiGdt
-         p2JE4NI74wSzCDPayw3C3EPUnZHQ6AwVPX7+Hr/id3ZzAXZ75VD1wArInmjbenyfG79V
-         cEByprzGAc4WBhBRZXFreyy3tDtKJhpsG+vPyPTXY7LVerieG5d/K0kioNLl2WhELfBY
-         ntCCC/ISdhA9syO12Y1PCPSKi59/fx8iNJKpcw07IuHVOLESRbk7CVIj2E7rNQ0Q4Awv
-         rGdg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690919342; x=1691524142;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ymMuGbXslfyJGs4W/pBqFuGxl9xUvy7q5fX4QbBoOtQ=;
-        b=BFSQcwFfpjcMkOoVqwvDgnQW9WqHCRcb+icwIxHF/h1pExsV+1ToJtINBGm45gSZf6
-         ktngf+BHVRxOz8honZ0EYuUVodILgaChXuvxuKUY/BkmV7ZyxxeD9S1M1Z2FpwkoKgf1
-         pcLiGtvjdD4kmMHj28Wq3fNHFfE2A9uGAs4U5rB8jVpLV5VCjmzblFgjNRMsTTN2uhp/
-         ZcpCfrEUqUS39Bq9gSLhemec67fIpatKIE59eomBV/TcmR/SRT41+E6aQ3IyHRthSWnP
-         1iiKvYZXOwaXyWLBiyvmnimixAQGpl8JSqsMDp8LZCOja34NG/lBbvZSBhU7z+kYj9Vl
-         52WQ==
-X-Gm-Message-State: ABy/qLYb1vzxf8SrB++i5JkMOcD7J9hvLwxwCXGZ8WHAO+rybINvvyST
-        bLZEEbU+YsbP3it2er9Tpl5R+Kef+2s=
-X-Google-Smtp-Source: APBJJlHzs/CPjAfxg4yY07jd2lFS2uJwEiSQkwxUoufms67SS+axZJeOfATbgdLU+XSQqEOfpNJp/uAu49A=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a17:902:f683:b0:1b8:a54c:61ef with SMTP id
- l3-20020a170902f68300b001b8a54c61efmr67559plg.9.1690919341844; Tue, 01 Aug
- 2023 12:49:01 -0700 (PDT)
-Date:   Tue, 1 Aug 2023 19:49:00 +0000
-In-Reply-To: <20230801193750.GA119080@hirez.programming.kicks-ass.net>
-Mime-Version: 1.0
-References: <20230801083553.8468-1-xin3.li@intel.com> <20230801083553.8468-7-xin3.li@intel.com>
- <ZMlWe5TgS6HM98Mg@google.com> <20230801193750.GA119080@hirez.programming.kicks-ass.net>
-Message-ID: <ZMlhrHv1c9P6HQXw@google.com>
-Subject: Re: [PATCH RESEND v9 33/36] KVM: VMX: Add VMX_DO_FRED_EVENT_IRQOFF
- for IRQ/NMI handling
-From:   Sean Christopherson <seanjc@google.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Xin Li <xin3.li@intel.com>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-edac@vger.kernel.org,
-        linux-hyperv@vger.kernel.org, kvm@vger.kernel.org,
-        xen-devel@lists.xenproject.org, Jonathan Corbet <corbet@lwn.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Oleg Nesterov <oleg@redhat.com>,
-        Tony Luck <tony.luck@intel.com>,
-        "K . Y . Srinivasan" <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Juergen Gross <jgross@suse.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        "Paul E . McKenney" <paulmck@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Kim Phillips <kim.phillips@amd.com>,
-        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
-        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
-        Sebastian Reichel <sebastian.reichel@collabora.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
-        Babu Moger <babu.moger@amd.com>,
-        Jim Mattson <jmattson@google.com>,
-        Sandipan Das <sandipan.das@amd.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Reinette Chatre <reinette.chatre@intel.com>,
-        Daniel Sneddon <daniel.sneddon@linux.intel.com>,
-        Breno Leitao <leitao@debian.org>,
-        Nikunj A Dadhania <nikunj@amd.com>,
-        Brian Gerst <brgerst@gmail.com>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        Alexander Potapenko <glider@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        "Eric W . Biederman" <ebiederm@xmission.com>,
-        Kees Cook <keescook@chromium.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Ze Gao <zegao2021@gmail.com>, Fei Li <fei1.li@intel.com>,
-        Conghui <conghui.chen@intel.com>,
-        Ashok Raj <ashok.raj@intel.com>,
-        "Jason A . Donenfeld" <Jason@zx2c4.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Jacob Pan <jacob.jun.pan@linux.intel.com>,
-        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
-        Jane Malalane <jane.malalane@citrix.com>,
-        David Woodhouse <dwmw@amazon.co.uk>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Arnaldo Carvalho de Melo <acme@redhat.com>,
-        Yantengsi <siyanteng@loongson.cn>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Sathvika Vasireddy <sv@linux.ibm.com>
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,
-        USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        with ESMTP id S229685AbjHAWhh (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Tue, 1 Aug 2023 18:37:37 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E4801BE3;
+        Tue,  1 Aug 2023 15:37:34 -0700 (PDT)
+Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 371MGlnn007551;
+        Tue, 1 Aug 2023 22:37:19 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=bhrIWGIneu9mmTul72Q6nGdWxkny8cxueses2kgomZo=;
+ b=Oqe0uVIUrWD6ZIMZ9GVnzkK1O1ug+5g00ZIXefb2vZ2zPrPw0pqZNShYkjnFrtcKMzPV
+ yDiznCJiAa2Z6cfG32lYLQ5SSdRTWCkR0+QdT9lCM2uW4vG0Mv9it1XuI1rxonefGsEe
+ UVEee56RhtZEp1lA5uWP/mblnzbfldVHhKr35E99f45BjJd0EOgRNhw5qdDmCupZJ0Xb
+ 7R0Q4K8ha/3K3sUoUMOE7NiXXP9c0dOaOG8ArzA29ti9pdZ//knTBNae6LW4UmLRgrq0
+ x2xmpmP2JlG6J8dwZ044lT2TyDyAqO0QaSZDdKR0o7bJLGfWriLrMUoQmty46PPpyvq4 8A== 
+Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3s6rhate9x-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 01 Aug 2023 22:37:19 +0000
+Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
+        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 371MbIjv026939
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 1 Aug 2023 22:37:18 GMT
+Received: from [10.110.118.24] (10.80.80.8) by nalasex01c.na.qualcomm.com
+ (10.47.97.35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.30; Tue, 1 Aug
+ 2023 15:37:16 -0700
+Message-ID: <2fa11648-6d51-feb7-4d75-6429b13c682f@quicinc.com>
+Date:   Tue, 1 Aug 2023 15:37:15 -0700
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] EDAC/device: Add sysfs notification for UE,CE count
+ change
+Content-Language: en-US
+To:     Trilok Soni <quic_tsoni@quicinc.com>, <james.morse@arm.com>,
+        <mchehab@kernel.org>, <rric@kernel.org>, <bp@alien8.de>,
+        <tony.luck@intel.com>
+CC:     <linux-edac@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <kernel@quicinc.com>, <quic_psodagud@quicinc.com>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>
+References: <20230731220059.28474-1-quic_djaggi@quicinc.com>
+ <3e2bf03e-2bc1-445e-d8ce-4975c044eea0@quicinc.com>
+ <ce06c845-f3c8-a733-dc21-ee0ba4b4ca68@quicinc.com>
+From:   Deepti Jaggi <quic_djaggi@quicinc.com>
+In-Reply-To: <ce06c845-f3c8-a733-dc21-ee0ba4b4ca68@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01c.na.qualcomm.com (10.47.97.35)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: f8InXImUNaZNPOnQEieOOEdblc2wZdtl
+X-Proofpoint-ORIG-GUID: f8InXImUNaZNPOnQEieOOEdblc2wZdtl
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-08-01_19,2023-08-01_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 malwarescore=0
+ priorityscore=1501 adultscore=0 clxscore=1011 impostorscore=0 spamscore=0
+ bulkscore=0 phishscore=0 mlxlogscore=619 lowpriorityscore=0 suspectscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2306200000
+ definitions=main-2308010202
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Tue, Aug 01, 2023, Peter Zijlstra wrote:
-> On Tue, Aug 01, 2023 at 07:01:15PM +0000, Sean Christopherson wrote:
-> > The spec I have from May 2022 says the NMI bit colocated with CS, not SS.  And
-> > the cover letter's suggestion to use a search engine to find the spec ain't
-> > exactly helpful, that just gives me the same "May 2022 Revision 3.0" spec.  So
-> > either y'all have a spec that I can't find, or this is wrong.
+On 7/31/2023 10:48 PM, Trilok Soni wrote:
+> On 7/31/2023 3:40 PM, Trilok Soni wrote:
+>> On 7/31/2023 3:00 PM, Deepti Jaggi wrote:
+>>> A daemon running in user space collects information on correctable
+>>> and uncorrectable errors from EDAC driver by reading corresponding
+>>> sysfs entries and takes appropriate action.
+>>
+>> Which daemon we are referring here? Can you please provide the link to 
+>> the project?
+>>
+>> Are you using this daemon?
+>>
+>> https://mcelog.org/ - It is for x86, but is your daemon project 
+>> different?
+>>
+
+No this daemon is not used. Daemon is under development and it is more 
+specific to Qualcomm use cases.
+Based on my limited understanding of mcelog, this daemon is handling 
+errors in an architecture specific way.
+By adding support for sysfs notification in EDAC framework, drivers 
+which are not using any custom sysfs attributes can take advantage of 
+this modification to notify the user space daemon polling on ue_count 
+and/or ce_count attributes.
+
+>>> This patch adds support for user space daemon to wait on poll() until
+>>> the sysfs entries for UE count and CE count change and then read updated
+>>> counts instead of continuously monitoring the sysfs entries for
+>>> any changes.
+>>
+>> The modifications below are architecture agnostic so I really want to 
+>> know what exactly we are fixing and if there is a problem.
 > 
-> https://intel.com/sdm
+
+In the change set, adding support for user space to poll on the ue_count 
+and/or ce_count sysfs attributes.
+On changes in ue_count,ce_count attributes, unblock user space poll from 
+EDAC driver framework and user space can read the changed ce_count, 
+ue_count.
+
+As an example from user space perform the following steps:
+	1. Open the sysfs attribute file for UE count and CE count
+	2. Read the initial CE count and UE count
+	3. Poll on any changes on CE count, UE count fds.
+	4. Once poll unblocks, Read the updated count.
+         5.Take appropriate action on the changed counts.
+
+#####################################################################
+Example Simple User space code Snippet:
+
+#define MAX_POLL_FDS     2
+char ue_count_file[] = 
+"/sys/devices/system/edac/qcom-llcc/qcom-llcc0/ue_count";
+char ce_count_file[] = 
+"/sys/devices/system/edac/qcom-llcc/qcom-llcc0/ce_count";
+
+struct pollfd *p_poll_fds = NULL;	
+struct pollfd poll_fds[MAX_POLL_FDS] =  {0};
+char data[100];
+
+  poll_fds[0].fd = open(ue_count_file, O_RDONLY);
+  poll_fds[1].fd = open(ce_count_file, O_RDONLY);
+
+/*Read Initial value before poll and set poll events*/	
+for (int i = 0; i < MAX_POLL_FDS; i++)	
+  {	
+	ret = read(poll_fds[i].fd, data, 100);	
+         poll_fds[i].events = POLLPRI ;	
+  }
+p_poll_fds = &poll_fds[0];
+while(1)	
+  {	
+     /*Block on poll until ue_count or ce_count change
+     ret = poll(p_poll_fds, sizeof(poll_fds)/sizeof(struct pollfd) , -1);
+     /*
+      * Read the changed UE/CE count. lseek()
+      * or close/re-open the changed fd
+      */
+     for(int i = 0; i < MAX_POLL_FDS; i++) {	
+	 if( poll_fds[i].revents & POLLPRI)  {
+
+	   ret = read(poll_fds[i].fd, data, 100);
+
+            /*Take an appropriate action*/
+
+	}
+      }
+}
+######################################################################
+
+> + CC linux-arm-msm
 > 
-> is a useful shorthand I've recently been told about.
+> Please keep linux-arm-msm in CC if there is a next revision.
+> 
 
-Hallelujah!
+Noted.
 
-> On that page is also "Flexible Return and Event Delivery Specification", when
-> clicked it will gift you a FRED v5.0 PDF.
 
-Worked for me, too.  Thanks!
+--Deepti
