@@ -2,171 +2,89 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47F3D770F35
-	for <lists+linux-edac@lfdr.de>; Sat,  5 Aug 2023 12:11:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 624DE77145F
+	for <lists+linux-edac@lfdr.de>; Sun,  6 Aug 2023 12:16:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229607AbjHEKLU (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Sat, 5 Aug 2023 06:11:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44740 "EHLO
+        id S229592AbjHFKQp (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Sun, 6 Aug 2023 06:16:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229477AbjHEKLT (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Sat, 5 Aug 2023 06:11:19 -0400
-X-Greylist: delayed 160370 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 05 Aug 2023 03:11:18 PDT
-Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E2C3E57;
-        Sat,  5 Aug 2023 03:11:18 -0700 (PDT)
-Received: from localhost (localhost.localdomain [127.0.0.1])
-        by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id BDDC940E01E4;
-        Sat,  5 Aug 2023 10:11:16 +0000 (UTC)
-X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
-Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
-        header.d=alien8.de
-Received: from mail.alien8.de ([127.0.0.1])
-        by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id 8Lrv6NCeWlWM; Sat,  5 Aug 2023 10:11:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-        t=1691230274; bh=6jxNM2HNJ2OmJ6Whx9AWVm7NZoxYaNzRw9xh2dqnHXw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=CPT8C4GXPU91sdp4HpxN+XFKNSsmPAfuR0+FLLu5SjICpkJG+JTwtLHSIPl3QousD
-         g05mrs/L0KCPsHlB9h7Ie56uhv/OG7PQALHGlgcA5NOrSocz1noXPFZvonGkdeaOeg
-         zS9CmY51Fnr8V4CTqtBw0QHeec8dcloQStTW/hDHpvST0XeXAKZF0huYANdfGceRGG
-         arkVuLP+PJ2fHD3kcXcIiZ6/0p3aoMQ6QoRMGAyPFiix01u7zV3SXUtT47FyFL8iFi
-         qKJ7/Mu7s2TewSX5Ueo4pZ2H84SBq8e4lh+pGtcAax4o1XU4qmbebmtOVN0L0hFnNt
-         YvNnJr+8nTKdzuWdKyBrqVVuddyb4ydNR8lZg2UEWfdhu1uel6MJ9gC/IoTwpJ9h4V
-         K0zHMD+r85CGSK2g8WY2Eu71778K1b+LbvRxWTEBPXOZRCqLoCkHi9ZgTk4Qk0voBp
-         GTc7jC22ED2TUyNq/KVhsK8WENhQiRy02gZLommCEH0rrS4ZwrxdPwVkvicb5TViXs
-         c5waEVdrP1RU0YX0BD1LkW01D6BAoWib/9OYIa3vUVeC8noXAixFg7Nzf1sD/UGzkN
-         C7nV+eHBFTOCixd6H/Nc9jGYWAlKK7hPY8VQTLqEhPBTAvqjl7dsBIfpj9vJcaFUiG
-         t18mkmP4K2jtOGzR0dUD5sh4=
-Received: from zn.tnic (pd9530d32.dip0.t-ipconnect.de [217.83.13.50])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
-        (No client certificate requested)
-        by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id D9F4A40E019D;
-        Sat,  5 Aug 2023 10:11:04 +0000 (UTC)
-Date:   Sat, 5 Aug 2023 12:10:59 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Muralidhara M K <muralimk@amd.com>
-Cc:     linux-edac@vger.kernel.org, x86@kernel.org,
-        linux-kernel@vger.kernel.org, mingo@redhat.com, mchehab@kernel.org,
-        nchatrad@amd.com, yazen.ghannam@amd.com,
-        Muralidhara M K <muralidhara.mk@amd.com>
-Subject: Re: [PATCH 5/7] EDAC/amd64: Add Fam19h Model 90h ~ 9fh enumeration
- support
-Message-ID: <20230805101059.GMZM4gM4yA9AgBSEpw@fat_crate.local>
-References: <20230720125425.3735538-1-muralimk@amd.com>
- <20230720125425.3735538-6-muralimk@amd.com>
+        with ESMTP id S229483AbjHFKQo (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Sun, 6 Aug 2023 06:16:44 -0400
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84551131
+        for <linux-edac@vger.kernel.org>; Sun,  6 Aug 2023 03:16:43 -0700 (PDT)
+Received: by mail-wm1-x335.google.com with SMTP id 5b1f17b1804b1-3fe5695b180so4368965e9.2
+        for <linux-edac@vger.kernel.org>; Sun, 06 Aug 2023 03:16:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1691317002; x=1691921802;
+        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=8q/bagFOvN6qezTjY/Fc6ELUIBJT91rhylGykx1oo1s=;
+        b=mi9q4KvckOuN6R+R6A0qZ30bPiuk962bBbq0ThwvrxKvXZ+C3/fiJLJZ53AYsAstb7
+         APwGZpczhsHsHyQCtvmLz76AQ0kX0iogCT39wVky69zc+tyliNabt8t2QuerBnsTgxgh
+         uEqstQCaWN2dsdgW/o1CAx04gH7ZR/b2IaDkp8XJG/Fhd/N58CuyeSZqFop8/uKxBRoM
+         9Rwy5DEZ8VvhE5BLbjXjnS6+/iUw1Bp15PGhQKW3xTsnHJrd3UepY2hUiXcjZZPugfq8
+         +RZldhxymYumsv3CRlpkEqQIdf3CKAOjUJMS8l/pJ3UBm+KT4oh1BGF5n4LO5+P3Ei+9
+         Ft6Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1691317002; x=1691921802;
+        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=8q/bagFOvN6qezTjY/Fc6ELUIBJT91rhylGykx1oo1s=;
+        b=RMXvefxiszU14UtI6ZD5T6rGYihswsV3AX0mE7Z89qvJDW1jj3yIqmzNaTx3ARp8pS
+         /bCS+f3URCs/cL0XIx5kfjnLooMymfKFET1zg5DrUCA4svbGQ9Kky+aWSs3Rki60Ohv+
+         WBP4HGzBYSU6xLtequEIRdcFRbbkKi/Kna2yCqs9gkPjY5OTg6+ZGiuyuOkArDOjhe0e
+         dYQxuc/O8wbnXMO/8pwRgWftrF6T1rc5cfZoO1AkFQtgPHQgk4+5WVjprN4CFUIWppl9
+         4dHsUDl0GQWjbmzQFM3PAkXeSCGNnwnDNzKJsVlIYJIlI/QJMwJaPs1IQW+Ec6li2tx2
+         mU2Q==
+X-Gm-Message-State: AOJu0YzGEhxlIhkWMtRW0I/gVzU+z7zgaYGJ0TV7NYswctAl3g2ZBt72
+        XanGcPfDhtgR59LTJ+Q/D8ieTGsnF9uPMh63+RUw8Xi3Lfqlf9gB
+X-Google-Smtp-Source: AGHT+IHiCd6Beq5v1jF1PlbpIumMmMJ81XBEqTb5+rcMarPSlBkdMak78RiUFRG/aZ7dM065wlDHRUKefAWPCLhfWJA=
+X-Received: by 2002:a7b:c8d4:0:b0:3fb:e189:3532 with SMTP id
+ f20-20020a7bc8d4000000b003fbe1893532mr4366512wml.20.1691317001565; Sun, 06
+ Aug 2023 03:16:41 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230720125425.3735538-6-muralimk@amd.com>
+From:   Raz <raziebe@gmail.com>
+Date:   Sun, 6 Aug 2023 13:16:30 +0300
+Message-ID: <CAPB=Z-pEto2T+WbA8_nEk2GyVo70_gZDCGLjdm1GgNJ9vH8OFg@mail.gmail.com>
+Subject: EDAC device notification
+To:     linux-edac@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Thu, Jul 20, 2023 at 12:54:23PM +0000, Muralidhara M K wrote:
-> From: Muralidhara M K <muralidhara.mk@amd.com>
-> 
-> Add AMD family 19h Model 90h-9fh. Models 90h-9fh are APUs, and
-> they have built-in HBM3 memory. ECC support is enabled by default.
-> 
-> APU models have a single Data Fabric (DF) per Package. Each DF is
-> visible to the OS in the same way as chiplet-based systems like
-> Rome and later. However, the Unified Memory Controllers (UMCs) are
-> arranged in the same way as GPU-based MI200 devices rather than
-> CPU-based systems.
-> So, it uses the gpu_ops for enumeration and adds a few fixups.
+Hello
+I wish to extend the EDAC interface to register device drivers.
+I want the device driver to be able to be notified when an error occurred.
+I want the EDAC to get notified when a device registers.
+Here is my suggestion:
 
-s/it uses/use/
+edac.c
+~~~~~~
 
-Imperative tone:
+// edac_notifier_chain may be used by any device driver
+static BLOCKING_NOTIFIER_HEAD(edac_notifier_chain);
 
-Pls read section "2) Describe your changes" in
-Documentation/process/submitting-patches.rst for more details.
+//
+// This is called from each device to EDAC to perform
+// any special configuration, if required.
+int edac_register_device(struct device_driver *dev)
+{
+                list_for_each(item, &mc_devices) {
+                                mci = list_entry(item, struct
+mem_ctl_info, link);
+                                rc |= mci->register_device(dev);
+                }
+                return rc;
+}
 
-> 
-> Signed-off-by: Muralidhara M K <muralidhara.mk@amd.com>
-> ---
->  drivers/edac/amd64_edac.c | 65 +++++++++++++++++++++++++++++++--------
->  1 file changed, 53 insertions(+), 12 deletions(-)
-> 
-> diff --git a/drivers/edac/amd64_edac.c b/drivers/edac/amd64_edac.c
-> index 597dae7692b1..45d8093c117a 100644
-> --- a/drivers/edac/amd64_edac.c
-> +++ b/drivers/edac/amd64_edac.c
-> @@ -996,12 +996,16 @@ static struct local_node_map {
->  #define LNTM_NODE_COUNT				GENMASK(27, 16)
->  #define LNTM_BASE_NODE_ID			GENMASK(11, 0)
->  
-> -static int gpu_get_node_map(void)
-> +static int gpu_get_node_map(struct amd64_pvt *pvt)
->  {
->  	struct pci_dev *pdev;
->  	int ret;
->  	u32 tmp;
->  
-> +	/* return early for non heterogeneous systems */
-
-Superfluous comment.
-
-> +	if (pvt->F3->device != PCI_DEVICE_ID_AMD_MI200_DF_F3)
-> +		return 0;
-> +
->  	/*
->  	 * Node ID 0 is reserved for CPUs.
->  	 * Therefore, a non-zero Node ID means we've already cached the values.
-> @@ -3851,7 +3855,7 @@ static void gpu_init_csrows(struct mem_ctl_info *mci)
->  
->  			dimm->nr_pages = gpu_get_csrow_nr_pages(pvt, umc, cs);
->  			dimm->edac_mode = EDAC_SECDED;
-> -			dimm->mtype = MEM_HBM2;
-> +			dimm->mtype = pvt->dram_type;
->  			dimm->dtype = DEV_X16;
->  			dimm->grain = 64;
->  		}
-> @@ -3880,6 +3884,9 @@ static bool gpu_ecc_enabled(struct amd64_pvt *pvt)
->  	return true;
->  }
->  
-> +/* Base address used for channels selection on GPUs */
-> +static u32 gpu_umc_base = 0x50000;
-
-Why isn't this part of amd64_pvt like the rest of the fields?
-
-> +
->  static inline u32 gpu_get_umc_base(u8 umc, u8 channel)
->  {
->  	/*
-> @@ -3893,13 +3900,32 @@ static inline u32 gpu_get_umc_base(u8 umc, u8 channel)
->  	 * On GPU nodes channels are selected in 3rd nibble
->  	 * HBM chX[3:0]= [Y  ]5X[3:0]000;
->  	 * HBM chX[7:4]= [Y+1]5X[3:0]000
-> +	 *
-> +	 * On APU nodes, same as GPU but with diff base 0x90000;
-
-"diff"?
-
->  	 */
->  	umc *= 2;
->  
->  	if (channel >= 4)
->  		umc++;
->  
-> -	return 0x50000 + (umc << 20) + ((channel % 4) << 12);
-> +	return gpu_umc_base + (umc << 20) + ((channel % 4) << 12);
-> +}
-> +
-
-...
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+Kind regards
+Raz
