@@ -2,45 +2,47 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A00C7728AD
-	for <lists+linux-edac@lfdr.de>; Mon,  7 Aug 2023 17:08:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EB9C772D20
+	for <lists+linux-edac@lfdr.de>; Mon,  7 Aug 2023 19:37:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229736AbjHGPIn (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Mon, 7 Aug 2023 11:08:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39674 "EHLO
+        id S231156AbjHGRhL convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-edac@lfdr.de>); Mon, 7 Aug 2023 13:37:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229591AbjHGPIm (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Mon, 7 Aug 2023 11:08:42 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 547B11FC9;
-        Mon,  7 Aug 2023 08:08:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Type:MIME-Version:References:
-        Subject:Cc:To:From:Date:Message-ID:Sender:Reply-To:Content-Transfer-Encoding:
-        Content-ID:Content-Description:In-Reply-To;
-        bh=FsGLstpvkSVmBkgu77rL1Iiy2ks7bnKLLUqwpkys3+c=; b=ccMB1SjDD/dV/XdmrvdlHzl7vb
-        864L3C27FVT1g+tUqxfFZj0idVnGgVhyYy5i8cEr75czsjVJGaGjuGWFIrFcX2ZbcMrMg3ZdoABq3
-        K8tbhG06vFtbvYiUKths0+iXbFw269a4chcUKDqJE8o9YUDEoyEXiwS7raprI7nEh8rejmqXWYuzt
-        VweDhbU+5WSUkYKueWaANZhTIE8wVDXVKBWAA4BecfgbOEUdHOg/nvj8Xu/RIcBJXpAO9+zwZlIWq
-        C62kXusZ3AZyvQd10T+G/sB2YEQ6cI7ZyErLzmILMRQLJL2YnlSly/Ku7zz2Uw0dwNcXTQKA1f/A/
-        nJBNMx2w==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1qT1pQ-00BlpE-1v; Mon, 07 Aug 2023 15:07:28 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id A4A9B3006F1;
-        Mon,  7 Aug 2023 17:07:27 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 0)
-        id 84F30201F3C6C; Mon,  7 Aug 2023 17:07:27 +0200 (CEST)
-Message-ID: <20230807150405.828551866@infradead.org>
-User-Agent: quilt/0.66
-Date:   Mon, 07 Aug 2023 14:38:09 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     x86@kernel.org
-Cc:     peterz@infradead.org, mingo@redhat.com, acme@kernel.org,
+        with ESMTP id S229776AbjHGRhK (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Mon, 7 Aug 2023 13:37:10 -0400
+Received: from mail-oo1-f46.google.com (mail-oo1-f46.google.com [209.85.161.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4ED24107;
+        Mon,  7 Aug 2023 10:37:09 -0700 (PDT)
+Received: by mail-oo1-f46.google.com with SMTP id 006d021491bc7-56d67c5e87cso205878eaf.0;
+        Mon, 07 Aug 2023 10:37:09 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1691429828; x=1692034628;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=sCQUve8Vagg2X8vXCVBWX8BBtpGA+YDuLqqwWNPe/Hk=;
+        b=LCK+j3NiS0Psxm0qT1ueIUxL44NNg9nwMphk3YLPrVNU89/uqEy9ujULlWykEv17us
+         9z4hR5Kx1ZQKWnOus7aoAidENmaumKsPtTEbRPC2Zkvo27drN97/y5ImWUrV5J3Qj4GP
+         9eqQMx4hde8Upj6UJBCP0ulXlc9Ic1q9YpBUV3uLAaINgTmRlR63QW9gZTfaCYrLBnaV
+         ybMicM9ErQtxlZR+3LlAwHIHurXUJRNbkAxXz0X0MQdYRLkzgHQfPzB8LEVxK/HaKAUV
+         r7j2G7DDEjveUyGiORnIWcnpR26e1UPkIWheMdYDNmAAoXLrI7IH5np6o0ImJBRFwpe3
+         VJIg==
+X-Gm-Message-State: ABy/qLazrHJDWv6W1ch9WWpoW9htZhby675Awou8QQeUjaJd8F4SEOhT
+        Cwqc/LIGv79KiEdmSlPcBiT5XTCNpJvbQk8dRtM=
+X-Google-Smtp-Source: APBJJlGStwyqYpvysRXo2djgk7GfihDl4coG+Oo8uIUh8grNj7h6POAG56vsYq86TwUCm2yDGnlGpZoxeCTj1OjCd6k=
+X-Received: by 2002:a4a:d027:0:b0:563:3b56:5dc1 with SMTP id
+ w7-20020a4ad027000000b005633b565dc1mr19522081oor.0.1691429828594; Mon, 07 Aug
+ 2023 10:37:08 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230807123806.700370534@infradead.org>
+In-Reply-To: <20230807123806.700370534@infradead.org>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Mon, 7 Aug 2023 19:36:57 +0200
+Message-ID: <CAJZ5v0i0t-cTSBG=_i9b84CqBBZd3A_N_iu-WBw37nDsLFk0dA@mail.gmail.com>
+Subject: Re: [PATCH 0/3] x86/cpu: Cleanup of INTEL_FAM6_foo
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     x86@kernel.org, mingo@redhat.com, acme@kernel.org,
         mark.rutland@arm.com, alexander.shishkin@linux.intel.com,
         jolsa@kernel.org, namhyung@kernel.org, irogers@google.com,
         adrian.hunter@intel.com, tglx@linutronix.de, bp@alien8.de,
@@ -55,69 +57,24 @@ Cc:     peterz@infradead.org, mingo@redhat.com, acme@kernel.org,
         linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-edac@vger.kernel.org, linux-pm@vger.kernel.org,
         platform-driver-x86@vger.kernel.org
-Subject: [PATCH 3/3] x86/cpu: Update Hybrids
-References: <20230807123806.700370534@infradead.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-Give the hybrid thingies their own section, appropriately between Core
-and Atom.
+On Mon, Aug 7, 2023 at 5:07 PM Peter Zijlstra <peterz@infradead.org> wrote:
+>
+> Hi,
+>
+> I seem to have missed 'spring' but here goes...
 
-Add the Raptor Lake uarch names.
+FWIW
 
-Put Lunar Lake after Arrow Lake per interweb guidance.
-
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
----
- arch/x86/include/asm/intel-family.h |   12 +++++++-----
- 1 file changed, 7 insertions(+), 5 deletions(-)
-
---- a/arch/x86/include/asm/intel-family.h
-+++ b/arch/x86/include/asm/intel-family.h
-@@ -98,8 +98,6 @@
- #define INTEL_FAM6_ICELAKE_L		0x7E	/* Sunny Cove */
- #define INTEL_FAM6_ICELAKE_NNPI		0x9D	/* Sunny Cove */
- 
--#define INTEL_FAM6_LAKEFIELD		0x8A	/* Sunny Cove / Tremont */
--
- #define INTEL_FAM6_ROCKETLAKE		0xA7	/* Cypress Cove */
- 
- #define INTEL_FAM6_TIGERLAKE_L		0x8C	/* Willow Cove */
-@@ -112,20 +110,24 @@
- #define INTEL_FAM6_GRANITERAPIDS_X	0xAD
- #define INTEL_FAM6_GRANITERAPIDS_D	0xAE
- 
-+/* "Hybrid" Processors (P-Core/E-Core) */
-+
-+#define INTEL_FAM6_LAKEFIELD		0x8A	/* Sunny Cove / Tremont */
-+
- #define INTEL_FAM6_ALDERLAKE		0x97	/* Golden Cove / Gracemont */
- #define INTEL_FAM6_ALDERLAKE_L		0x9A	/* Golden Cove / Gracemont */
- 
--#define INTEL_FAM6_RAPTORLAKE		0xB7
-+#define INTEL_FAM6_RAPTORLAKE		0xB7	/* Raptor Cove / Enhanced Gracemont */
- #define INTEL_FAM6_RAPTORLAKE_P		0xBA
- #define INTEL_FAM6_RAPTORLAKE_S		0xBF
- 
- #define INTEL_FAM6_METEORLAKE		0xAC
- #define INTEL_FAM6_METEORLAKE_L		0xAA
- 
--#define INTEL_FAM6_LUNARLAKE_M		0xBD
--
- #define INTEL_FAM6_ARROWLAKE		0xC6
- 
-+#define INTEL_FAM6_LUNARLAKE_M		0xBD
-+
- /* "Small Core" Processors (Atom/E-Core) */
- 
- #define INTEL_FAM6_ATOM_BONNELL		0x1C /* Diamondville, Pineview */
-
-
+Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
