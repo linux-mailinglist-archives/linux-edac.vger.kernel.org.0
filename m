@@ -2,99 +2,166 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38925774AC9
-	for <lists+linux-edac@lfdr.de>; Tue,  8 Aug 2023 22:35:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C3610774DFF
+	for <lists+linux-edac@lfdr.de>; Wed,  9 Aug 2023 00:09:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232479AbjHHUft (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Tue, 8 Aug 2023 16:35:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58590 "EHLO
+        id S229997AbjHHWJJ (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Tue, 8 Aug 2023 18:09:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232125AbjHHUfg (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Tue, 8 Aug 2023 16:35:36 -0400
-Received: from mail.alien8.de (mail.alien8.de [IPv6:2a01:4f9:3051:3f93::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 818731A776;
-        Tue,  8 Aug 2023 10:06:13 -0700 (PDT)
-Received: from localhost (localhost.localdomain [127.0.0.1])
-        by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id C086D40E01A2;
-        Tue,  8 Aug 2023 14:37:46 +0000 (UTC)
-X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
-Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
-        header.d=alien8.de
-Received: from mail.alien8.de ([127.0.0.1])
-        by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id iOGadB4WTIeI; Tue,  8 Aug 2023 14:37:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-        t=1691505464; bh=RnwN9On2kYCW9ShSPXeXJUgGMNKP19hlGSAZXu85hPs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Y4p2yn7OdX7hMDsJj4EtycNDY6a31nhcuq2+a4boa3uEI9pAGgLL+NRqzROGW7As2
-         sCalnbdyOMBQSfGrgWpCpaPODC+vFyIfYZWv7Yb7vJXbEuBRxZewPSroaQVQ6+hDHi
-         xUekxj+dT14iNrNH3slTZ3RidWswTCUmt5qTfu/eKQ35sm6YEDOpMgnJZS1Q7c5jra
-         p7+VfswwxMwhXMwYxuXLObkGLFKGqxitXZtRFTQ0E+BLfp+UqwFpIsUlDYQX3MJWy0
-         zd4SRELRdlLQvqoXXcrzITnDT9DmW98ISESR1MxY+5Vy7CbCx9yugzuS9FTFP/YkJe
-         yWJOD872Uy5HnE+zxIawqIsUpdoIvpaAPD04AZAbDuimDEVVOQz0+xnVqya79Evp42
-         LJv2p08WgoOy9X3lHzEx7IkR6M6Yjw+ugAmhyST4AC3SI7geotDbdIRv2ZwjZt5zGE
-         mvobHNL8TkjiJwqzESJE1PyMsbuQbYzsFT2PnnYMVK2C+B/CrbLf3dsSmK6Lc3jePc
-         DoMd6azNkmC7N7A6jqp9qKboRb5loWxnDMjrhJURRsy/kT4/CFSTB6yriWAKARC72X
-         eitHrwaaRyFkJGKf4UkpvK28jzztjirgKMUUy4E/l203eTbUOBj9UuknVaY2HS5oJZ
-         jkFgqKizq+zLbJ+iXexP0daY=
-Received: from zn.tnic (pd9530d32.dip0.t-ipconnect.de [217.83.13.50])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
-        (No client certificate requested)
-        by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id C5ABE40E01A3;
-        Tue,  8 Aug 2023 14:37:35 +0000 (UTC)
-Date:   Tue, 8 Aug 2023 16:37:35 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Yazen Ghannam <yazen.ghannam@amd.com>
-Cc:     "Limonciello, Mario" <mario.limonciello@amd.com>,
-        linux-edac@vger.kernel.org, hdegoede@redhat.com,
-        markgross@kernel.org, platform-driver-x86@vger.kernel.org,
-        "Luck, Tony" <tony.luck@intel.com>, linux-kernel@vger.kernel.org,
-        avadhut.naik@amd.com
-Subject: Re: [PATCH 1/2] platform/x86/amd: Introduce AMD Address Translation
- Library
-Message-ID: <20230808143735.GDZNJTL0DlJd3225db@fat_crate.local>
-References: <20230802185504.606855-1-yazen.ghannam@amd.com>
- <20230802185504.606855-2-yazen.ghannam@amd.com>
- <58934edf-4fad-48e0-bc5d-62712b11e607@amd.com>
- <894b3737-1a0a-4139-9c73-686a95481795@amd.com>
- <B3BE6B56-FBAB-4878-A45D-E95AFAC86AB1@alien8.de>
- <f989cd56-a066-409a-8d82-40d0bc6ff89b@amd.com>
- <20230808142007.GCZNJPFy8PqTJgTAN5@fat_crate.local>
- <a62282e0-3784-4d96-b632-fdd6d2627ca3@amd.com>
+        with ESMTP id S231802AbjHHWIq (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Tue, 8 Aug 2023 18:08:46 -0400
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2083.outbound.protection.outlook.com [40.107.93.83])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B64DE72;
+        Tue,  8 Aug 2023 15:08:46 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=KPa+G4YXzABcILqS+nAsuCgUTYQcHSsWMRI888GMqwn1Fh9b+VbzI9ve3BKCi6QFS1YvCgvcieOr0hMEpFruJBRuJkQGy+l3ptknHsPH1MyHvkGF39PLbE4Sz9cQRjTQsw2+eDodoeOCkPcJTXS35NtzOY+Nzpd6rLd32PAraXi3aFvaYD5hoUewa4ZZYe2gQ+emeEtFcZp6qKVJlFsavIUGpQyCeCribCubX7OL74EFgXgY542eKlbiAPplF0JGWQqH3hMdBakuHT3fL7jFBqksCPJucs1z2PlRasiaMhkREikTJJWvUu7QTiI/Wg3dgdGCiH8AHIo7rmJMAD5IvQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Fh75j7M5vUV6ksQqLdSM2ySPCzs+5xTywmD3orORUSk=;
+ b=Or6g/PsldXip1jt/8WgaV4TyMW0RLjbKr13Db4MSf0lsGgsqYKJrFcRg5qFEHyVbr9wSSyUVjml+yQWwytBLyT1PWYCO2E//0EgXL1ctYAeDkhnOYIICTJiDJ+rhADVp/VPkvOVeBcrquNanfFv9lgYvLnLX6XzfS+CP30ZBGui2zXAlKspnZTjPMjebiyL2SgF71g5Ara4LVwUiIgtcN0oRmU7C9YASKDtYhh1JhGma5+W4XpxB/5nkGOiw2cWrOqydrQClXttKn/MxX5K5DS4UfJpDYjRpKORyuXvo0Jzifj1uQCfTTZrXrYQ9ngx1MQyBLby/eqiNM85x8mUk9A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Fh75j7M5vUV6ksQqLdSM2ySPCzs+5xTywmD3orORUSk=;
+ b=fJnQIeDnhRiV6nNZt9NPS4f0DoEmhjcnV68kKu/ZSnTufICfkMT/2ZJL4DpJOk7JF9rlcRjbp4fIFXZr26tpNf5rYNtVQddsDkJVKLhy73g+8FbMoXRjVRYMtRHh/ezz+a7ImQU6KRCFJFhBKMHlSEmcG4lL7XTb16oVa9Fck5Y=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from CY5PR12MB6203.namprd12.prod.outlook.com (2603:10b6:930:24::17)
+ by BN9PR12MB5177.namprd12.prod.outlook.com (2603:10b6:408:11a::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6652.27; Tue, 8 Aug
+ 2023 22:08:43 +0000
+Received: from CY5PR12MB6203.namprd12.prod.outlook.com
+ ([fe80::48cb:8b61:d51e:3582]) by CY5PR12MB6203.namprd12.prod.outlook.com
+ ([fe80::48cb:8b61:d51e:3582%7]) with mapi id 15.20.6652.026; Tue, 8 Aug 2023
+ 22:08:43 +0000
+Message-ID: <2a8ece3c-76cb-c922-1ecc-3a4515aa406f@amd.com>
+Date:   Tue, 8 Aug 2023 17:08:40 -0500
+User-Agent: Mozilla Thunderbird
+Subject: [PATCH v1 3/3] EDAC/amd64: Add support for AMD Family 1Ah Models
+ 00h-1Fh and 40h-4Fh
+Content-Language: en-US
+To:     Yazen Ghannam <yazen.ghannam@amd.com>,
+        "Limonciello, Mario" <mario.limonciello@amd.com>,
+        Avadhut Naik <avadhut.naik@amd.com>, bp@alien8.de,
+        linux@roeck-us.net, x86@kernel.org, linux-hwmon@vger.kernel.org,
+        linux-edac@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org
+References: <20230706171323.3722900-1-avadhut.naik@amd.com>
+ <20230706171323.3722900-4-avadhut.naik@amd.com>
+ <e5b0063a-ae41-41ab-b3a7-2084dfa7f816@amd.com>
+ <1606f9f9-5d5a-788d-b058-ec218fb73712@amd.com>
+ <36bff484-f41a-4eed-bcd6-a96539b905b8@amd.com>
+From:   Avadhut Naik <avadnaik@amd.com>
+In-Reply-To: <36bff484-f41a-4eed-bcd6-a96539b905b8@amd.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: DM6PR11CA0011.namprd11.prod.outlook.com
+ (2603:10b6:5:190::24) To CY5PR12MB6203.namprd12.prod.outlook.com
+ (2603:10b6:930:24::17)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <a62282e0-3784-4d96-b632-fdd6d2627ca3@amd.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CY5PR12MB6203:EE_|BN9PR12MB5177:EE_
+X-MS-Office365-Filtering-Correlation-Id: e0d54ad2-150f-4341-8624-08db985c0743
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 2Wygd9e/eNZTzEZOC8pKbPsOciOyJ6tCLmQXZZ6fbWpTNnQXIHUqv5ci5Sdv7HyouaeZJ3ZToeWGYZwD92yyhSftrLKPX0U8r/cigD6ld07996uuYmWFvOftWLTPtwBmsWeYnxZFBHSEuyODD3ECc7rVz29msgjff6GHI6967JO9P0w4dU+n0ZiQLnNEUmdvvi3wnUvmUYBuEIVhhj6RBa5d2kwooYbDGm0gWUeX9As+EnZiuGeEcpV9sfVNTms0aKjhmgI7FhHApkrZ+oEdG0XWc1hieGbGIb7tuJEreFW1Nc6LthpP7ZMVplyBbgOQ/x0T0MDvnlpSjyMGyB64xegv2CAxOf+Kd4TOMedu2YMDA3br3B/tH2/kk2970yg8BXrKP5HIYVIsswK5YoGABspaQQZarwfHMG9IvrULtxO9i54/pl0pSjfRm7VyRGnuJgXEZncehKA2rlJ20Km2V8UFSxyinzwLaITrGt1wQkCJDosgUjEMsNHrsPmwERPk3gMRcK4ttUzWRV/uliuQUyjmtorrK5bWZTZpVX/dMgnNaVyxE/eg/LpIRQap8BulKGI/0BtIXVozCdMvSuQrqg6qIukt4Q3VNzAJ4l7WQ40xQ+DcdKqcxeHbNYDD7WiOlDN2sDOmsfj0gf1VSrAalQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY5PR12MB6203.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(366004)(376002)(39860400002)(346002)(136003)(451199021)(1800799003)(186006)(4744005)(2906002)(83380400001)(41300700001)(5660300002)(8676002)(8936002)(36756003)(31696002)(110136005)(478600001)(38100700002)(31686004)(6512007)(26005)(6486002)(53546011)(6506007)(66476007)(66556008)(66946007)(4326008)(2616005)(316002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?VHJ0UGNxR296Ui9RaXk4OHFwSW8xTCtReWUrWG5ZeG92ME9na0tKbDVMc296?=
+ =?utf-8?B?SXJBdHdnUVN2ZmFBYzJUeWpmaU5DSHR0THNMdnRFdlpTUFZxalJ1emRUeXlw?=
+ =?utf-8?B?UFUwd1QyaDZsdFY1VjdsVDAxOUtyMGthZnhxSVpFTFRtSXlqK3FqR0tZcHlp?=
+ =?utf-8?B?M0VhdGtZQUtXZ3k1cU45VjlRSVV1dmxFYTQvUnl3RFVOYXoxeDhaWFZQQVNx?=
+ =?utf-8?B?ODVVZ1U3eDVDY0hFblF2UkdXMVdVa2s4OGhQQVRPeCtnSnBmeExLanBJbDhX?=
+ =?utf-8?B?aXRiNVBGclFrUTdmTHE3SVRNWXlvRml2SURwUTBjRkdVUUpmaWlYM1htOUM5?=
+ =?utf-8?B?a1N2aFZBL1RYTWthTG5qUERUZmhTa2lrTWpLY1hyNHVoeGQ3QStnSWdhaWZk?=
+ =?utf-8?B?cVo5cnkvQ1dneVdzUGlpRE52MU9rZmtCUEZyTVpJS1J6ZG5wSTVVWE9BbGtW?=
+ =?utf-8?B?emtobGpSTVdacWdPUFhDR1pIS2x5Z2hORUNtbkYwZ3VJWit2SC9GMnZkbVky?=
+ =?utf-8?B?U1p0QncrdXNFekhQWk5ZMW45aWJOZmhWTVBpcUVRSllVTXhxaDRVektmaUZz?=
+ =?utf-8?B?Y2swRk4zWmg3NzVpNWI3Y0dYWmhKVDJFUERoMHBRRjIveTNnc3ZwZm5IRUs0?=
+ =?utf-8?B?Zmp1TjVLRTEwOXJlaWJCNjFBK2g5cjNZN1M4QnVyWnUySy91YURuQldoTDN1?=
+ =?utf-8?B?MGhUZG9XRUFCSk52KzgwMzRoeXFrTDY3akNOZ0E4YjFGQ1BxUzJVZEZ5R0ZY?=
+ =?utf-8?B?NDVWMWxrNFA0R3ZhUEhoVTQwbUVJbFZ0YUZqditVLzNvT2Y0bWN4K05DdEh5?=
+ =?utf-8?B?THYvQ2VrRDAyT2JFeC9XQ1RNcEd1TWpiclR5Q2dreEtMTkQwMHdCSTJCYVQx?=
+ =?utf-8?B?aTZVZXJTM21nbm5WM1ExN3h4M2J4S0JoSENlMFdoTllaWVNjNEY2T2VON2Jo?=
+ =?utf-8?B?a2dwUGFTWU4yQ0R6YmxkS3dEMVJUOEk4bWZQOHFwRXQyeWdiRFlxWmMzeHVB?=
+ =?utf-8?B?WVZYUUVXaTVEdXEzV2U5RE0xUVpsVUxRZEhkRFVPUjZueFJyZVR1dDFwbFZj?=
+ =?utf-8?B?a0o4UnE0NlAra2dQL0RrU0xmenJQSEFnUmJQMGhnYzYxdlBVd3NzaGQyNEMx?=
+ =?utf-8?B?SWRhNWU0aExWT1dpN21OVlFlRXE0MWVQN0M0OEZhM3Z1UXIwL2RNWFBtM2la?=
+ =?utf-8?B?cHppQUtUODBSdlhDbmErbGpUZ1hJQ09lcWNGbjVLZTUxeHl6WUpjZXE2UFZF?=
+ =?utf-8?B?U3FPcTc2L0VpcmNsMlB6NzJESjFzTjYrNkFHUGdNNUdrK3lCZjZ2eUNhOVBS?=
+ =?utf-8?B?S1Aya05CWS9XL2hBNlRkS05VejF4aDBmc2dBbEZWRURZdjN3cHlMVTBhd2U2?=
+ =?utf-8?B?ZTM4K0dXWmFDMFgxMWVoTzM2TTZObDFlSFpiaENVRUowSitLVXhvUDl4cE9s?=
+ =?utf-8?B?RUJqWlB3WUdoWWRkR0c2SVlrMk94RldBa1h0SWNCOXNYQ0hEWUZGb01QK0Js?=
+ =?utf-8?B?T09xN05HY3BnYkFCK1k5UzR1OG1jM2NjU3R2UVV1VzdmM0c5cE05ckpVZVlK?=
+ =?utf-8?B?cExtWXU1YTVkVmtKUWNob25odmJqTVFTVm1JbGV5L2xXRW5MRVdBRWZja3dz?=
+ =?utf-8?B?QW1lcTdrMGdlSExScHExMGxMTnFUQ2ZuU2JucnphVHJsak0ranlYNElETzFh?=
+ =?utf-8?B?VUQ1a2NHTWdrV1hxU0xmWFlsblRXWnhDSVNkZXRXV2xQL2ZDSTlhQjR5Y0Rs?=
+ =?utf-8?B?dmVQeGVhYUYwcEJoNmhXRTMySTdqR0NaV0lpaE1xN2xFM3dIU2NTYXlRZHBM?=
+ =?utf-8?B?amVPUklQZjR5MVovTjVZYlhJa3dRdHZmWHNTcmc1ZWpoT0pHc3dDTHE4UXAr?=
+ =?utf-8?B?WFBoMS8zVlhtbVpwQ2dJYXVsNzRId2hyei91bzZIc01vZnNBSW5kSldobm9M?=
+ =?utf-8?B?Nm85bC9iUFdQN2hYZU9vdXZLT2tLaGV0MVBjWlVETHUwalNqbnJVWk1XOHM1?=
+ =?utf-8?B?UmRKb1dUNTFsZURISzR0MUJoZWk0QUZidG5GbklEeVhjNzVvRm9saFh2dkZL?=
+ =?utf-8?B?dFdkRzdEWDY2dkJJc29LY0hxVEVDUk4xOVZOeUlrN2tpKzdxNUNZN0pqMEJz?=
+ =?utf-8?Q?2WEnxpwinN4zk34czghKSV48M?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: e0d54ad2-150f-4341-8624-08db985c0743
+X-MS-Exchange-CrossTenant-AuthSource: CY5PR12MB6203.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Aug 2023 22:08:43.0798
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: KWp9SVIhSyVvDxM0I/VCGaygzgD5gr2jwC54WvFOv43S829V3lxZmdZO2hN5ovGgZrrHawL/8rlGBy8D3XE4kg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN9PR12MB5177
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Tue, Aug 08, 2023 at 10:28:51AM -0400, Yazen Ghannam wrote:
-> Because this isn't intended to be only for MCA errors. The translation code
-> is related to the AMD Data Fabric. And it'll be a common back-end for memory
-> errors coming from MCA and CXL.
+Hi,
 
-But EDAC is not only about memory errors. Why not extend this into
-something which does other RAS functionality instead of doing a second
-one which is more or less related?
-
-mce_amd is already loaded on the system, why add a second module if it
-can be part of the first one just the same?
-
-Strictly speaking, this all should've been drivers/ras/ from the very
-beginning and all EDAC should move there but that's going to be madness
-to do now.
-
-Thx.
+On 8/7/2023 08:48, Yazen Ghannam wrote:
+> On 8/4/2023 12:03 PM, Limonciello, Mario wrote:
+>>
+>>
+>> On 8/3/2023 7:25 PM, Yazen Ghannam wrote:
+>>> On 7/6/2023 1:13 PM, Avadhut Naik wrote:
+>>>> From: Avadhut Naik <Avadhut.Naik@amd.com>
+>>>>
+>>>> Add the necessary support in the module for AMD's new Family 1Ah-based
+>>>> models 00h-1Fh and 40h-4Fh.
+>>>>
+>>>
+>>> The first patch in this set adds PCI IDs for models starting at 20h. And this patch adds support for models 40h-4Fh.
+>>>
+>>> Can you please elaborate on the discrepancy?
+>>>
+>>> Thanks,
+>>> Yazen
+>>>
+>>
+>> Model 40h-4fh shares some of the same design as some other platforms.
+>>
+>> The root port ID PCI_DEVICE_ID_AMD_19H_M60H_ROOT and DF_F3 ID PCI_DEVICE_ID_AMD_19H_M60H_DF_F3 covers it.
+> 
+> That's fair. Can these details be included in the commit message?
+> 
+	Sure thing! Will include these details in the commit message of the first patch where PCI IDs are being defined.
+> Thanks,
+> Yazen
 
 -- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+Thanks,
+Avadhut Naik
