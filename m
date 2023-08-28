@@ -2,45 +2,71 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BF2B78B0CF
-	for <lists+linux-edac@lfdr.de>; Mon, 28 Aug 2023 14:44:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0576E78B213
+	for <lists+linux-edac@lfdr.de>; Mon, 28 Aug 2023 15:37:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229485AbjH1Mnp (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Mon, 28 Aug 2023 08:43:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36340 "EHLO
+        id S229523AbjH1NhG (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Mon, 28 Aug 2023 09:37:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230422AbjH1MnU (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Mon, 28 Aug 2023 08:43:20 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6719100
-        for <linux-edac@vger.kernel.org>; Mon, 28 Aug 2023 05:43:16 -0700 (PDT)
-Received: from kwepemi500008.china.huawei.com (unknown [172.30.72.54])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4RZ9BD3qcnzLp67;
-        Mon, 28 Aug 2023 20:40:04 +0800 (CST)
-Received: from huawei.com (10.90.53.73) by kwepemi500008.china.huawei.com
- (7.221.188.139) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.31; Mon, 28 Aug
- 2023 20:43:14 +0800
-From:   Jinjie Ruan <ruanjinjie@huawei.com>
-To:     <linux-edac@vger.kernel.org>, Dinh Nguyen <dinguyen@kernel.org>,
-        Borislav Petkov <bp@alien8.de>,
-        Tony Luck <tony.luck@intel.com>,
-        James Morse <james.morse@arm.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Robert Richter <rric@kernel.org>
-CC:     <ruanjinjie@huawei.com>
-Subject: [PATCH -next] EDAC: Use list_for_each_entry() helper
-Date:   Mon, 28 Aug 2023 20:43:02 +0800
-Message-ID: <20230828124303.361666-1-ruanjinjie@huawei.com>
-X-Mailer: git-send-email 2.34.1
+        with ESMTP id S232018AbjH1NhE (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Mon, 28 Aug 2023 09:37:04 -0400
+Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DCA912D;
+        Mon, 28 Aug 2023 06:36:30 -0700 (PDT)
+Received: by mail-pg1-x52f.google.com with SMTP id 41be03b00d2f7-56c2e840e70so1902997a12.3;
+        Mon, 28 Aug 2023 06:36:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1693229755; x=1693834555;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=auACfXGCbbFOjB74ybEF5PVfXFncMm7FKTVCup4nmSo=;
+        b=pkRtKdz88GxIDbRaMkj5fW3vKxh/MAV7cl5mx7RZiLDySt3g7Yb6VnnFbv28BKybqh
+         r+79lVauJuvdY1+lqzPPzfiqWCVOlNgr0+LciOjJzvRGiwAste4+er+0J96hKdpAz1f7
+         Yio3aKqzQezji6rhTpQilqhJoBZNHjaZbrwv48Kepy397tcfropdqNMlBH7GsKq2LcbT
+         Jw6CGEFS8HA5nB7+knscdH1ieuHGFa/wSG6KG2DyQD09MEFAdkTvDwzF1Yrrq1yH4SQ5
+         kfHlZ4Q91aq3jOZ5iKO86uGBUo3lM/HpQ7J92m6eOmlQ2HCvu0xwjk9TQVm5uvk7NiqN
+         7+CQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1693229755; x=1693834555;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=auACfXGCbbFOjB74ybEF5PVfXFncMm7FKTVCup4nmSo=;
+        b=BemgNB2Q1mt2ZfbQDCduIAAAxIxyKR1fx1mRHmABYH+LujCxiLaXMSfywSb52PiPR1
+         YL7rIuTdWAaQJnVraAEKYRv3p74ku3TVAchMhl1nSHxxe06EOWDwTM470p/K6dZ+cg5c
+         Yt6F73vkATf3hoxz2ALEoSa3a3SivTPSHXV+Byum2pXT+PoyASOEeVNWNOZx1Y59WSIJ
+         DXxx2QTFWPOICmn5h6mFellkpG+PQUt/KER0PGUuhqMTXbX6Yt01DLcjcMYofntNaZJs
+         79j0zp7nV6JChTTBBdKeC2mF/QMAxG0rwuntW562YP9L3arHf5yl8U8m5qdyJrICo4wo
+         My7A==
+X-Gm-Message-State: AOJu0YzjpJBnrEkwK5J/UUvSUA93PrABQkd6mznbCcmYC+W1mF8JO7iu
+        LmBS0bIrzZNdtspKnOWuQj0=
+X-Google-Smtp-Source: AGHT+IGIKxvNNfzWtwnnWnDF807M3LgxxR/+xOoa0ANvJEePdvoDZBASveP8tGfSRLviYuVgBl1ICA==
+X-Received: by 2002:a17:90b:14d:b0:26d:17d6:399d with SMTP id em13-20020a17090b014d00b0026d17d6399dmr24900491pjb.38.1693229755484;
+        Mon, 28 Aug 2023 06:35:55 -0700 (PDT)
+Received: from atom0118 ([2405:201:6815:d8ef:d0d4:95e1:652c:465b])
+        by smtp.gmail.com with ESMTPSA id o7-20020a17090a4b4700b0025be7b69d73sm7099991pjl.12.2023.08.28.06.35.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 28 Aug 2023 06:35:54 -0700 (PDT)
+Date:   Mon, 28 Aug 2023 19:05:47 +0530
+From:   Atul Kumar Pant <atulpant.linux@gmail.com>
+To:     Michal Simek <michal.simek@amd.com>
+Cc:     shubhrajyoti.datta@amd.com, sai.krishna.potthuri@amd.com,
+        bp@alien8.de, tony.luck@intel.com, james.morse@arm.com,
+        mchehab@kernel.org, rric@kernel.org, linux-edac@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        shuah@kernel.org
+Subject: Re: [PATCH v1] drivers: edac: Drop unnecessary error check for
+ debugfs_create_dir
+Message-ID: <20230828133547.GA58271@atom0118>
+References: <20230815203826.51792-1-atulpant.linux@gmail.com>
+ <723e803b-6f8b-ceb3-e987-4a6f83d89222@amd.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.90.53.73]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- kwepemi500008.china.huawei.com (7.221.188.139)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <723e803b-6f8b-ceb3-e987-4a6f83d89222@amd.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -49,132 +75,53 @@ Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-Convert list_for_each() to list_for_each_entry() so that the position/item
-list_head pointer and list_entry() call are no longer needed, which can
-reduce a few lines of code. No functional changed.
+On Fri, Aug 25, 2023 at 09:31:54AM +0200, Michal Simek wrote:
+> 
+> 
+> On 8/15/23 22:38, Atul Kumar Pant wrote:
+> > This patch removes the error checking for debugfs_create_dir.
+> 
+> Avoid using "This patch".
 
-Signed-off-by: Jinjie Ruan <ruanjinjie@huawei.com>
----
- drivers/edac/altera_edac.c |  5 +----
- drivers/edac/edac_device.c |  5 +----
- drivers/edac/edac_mc.c     | 16 +++-------------
- drivers/edac/edac_pci.c    |  5 +----
- 4 files changed, 6 insertions(+), 25 deletions(-)
+	Thanks for pointing this out. I'll remember this.
 
-diff --git a/drivers/edac/altera_edac.c b/drivers/edac/altera_edac.c
-index 8b31cd54bdb6..9296c0244ed2 100644
---- a/drivers/edac/altera_edac.c
-+++ b/drivers/edac/altera_edac.c
-@@ -2083,14 +2083,11 @@ static int s10_edac_dberr_handler(struct notifier_block *this,
- 		    &dberror);
- 	regmap_write(edac->ecc_mgr_map, S10_SYSMGR_UE_VAL_OFST, dberror);
- 	if (dberror & S10_DBE_IRQ_MASK) {
--		struct list_head *position;
- 		struct altr_edac_device_dev *ed;
- 		struct arm_smccc_res result;
- 
- 		/* Find the matching DBE in the list of devices */
--		list_for_each(position, &edac->a10_ecc_devices) {
--			ed = list_entry(position, struct altr_edac_device_dev,
--					next);
-+		list_for_each_entry(ed, &edac->a10_ecc_devices, next) {
- 			if (!(BIT(ed->db_irq) & dberror))
- 				continue;
- 
-diff --git a/drivers/edac/edac_device.c b/drivers/edac/edac_device.c
-index 0689e1510721..551b4e10551e 100644
---- a/drivers/edac/edac_device.c
-+++ b/drivers/edac/edac_device.c
-@@ -218,13 +218,10 @@ EXPORT_SYMBOL_GPL(edac_device_free_ctl_info);
- static struct edac_device_ctl_info *find_edac_device_by_dev(struct device *dev)
- {
- 	struct edac_device_ctl_info *edac_dev;
--	struct list_head *item;
- 
- 	edac_dbg(0, "\n");
- 
--	list_for_each(item, &edac_device_list) {
--		edac_dev = list_entry(item, struct edac_device_ctl_info, link);
--
-+	list_for_each_entry(edac_dev, &edac_device_list, link) {
- 		if (edac_dev->dev == dev)
- 			return edac_dev;
- 	}
-diff --git a/drivers/edac/edac_mc.c b/drivers/edac/edac_mc.c
-index 6faeb2ab3960..e632dde92327 100644
---- a/drivers/edac/edac_mc.c
-+++ b/drivers/edac/edac_mc.c
-@@ -428,13 +428,10 @@ EXPORT_SYMBOL_GPL(edac_has_mcs);
- static struct mem_ctl_info *__find_mci_by_dev(struct device *dev)
- {
- 	struct mem_ctl_info *mci;
--	struct list_head *item;
- 
- 	edac_dbg(3, "\n");
- 
--	list_for_each(item, &mc_devices) {
--		mci = list_entry(item, struct mem_ctl_info, link);
--
-+	list_for_each_entry(mci, &mc_devices, link) {
- 		if (mci->pdev == dev)
- 			return mci;
- 	}
-@@ -495,21 +492,16 @@ static void edac_mc_workq_function(struct work_struct *work_req)
- void edac_mc_reset_delay_period(unsigned long value)
- {
- 	struct mem_ctl_info *mci;
--	struct list_head *item;
- 
- 	mutex_lock(&mem_ctls_mutex);
- 
--	list_for_each(item, &mc_devices) {
--		mci = list_entry(item, struct mem_ctl_info, link);
--
-+	list_for_each_entry(mci, &mc_devices, link) {
- 		if (mci->op_state == OP_RUNNING_POLL)
- 			edac_mod_work(&mci->work, value);
- 	}
- 	mutex_unlock(&mem_ctls_mutex);
- }
- 
--
--
- /* Return 0 on success, 1 on failure.
-  * Before calling this function, caller must
-  * assign a unique value to mci->mc_idx.
-@@ -573,12 +565,10 @@ static int del_mc_from_global_list(struct mem_ctl_info *mci)
- struct mem_ctl_info *edac_mc_find(int idx)
- {
- 	struct mem_ctl_info *mci;
--	struct list_head *item;
- 
- 	mutex_lock(&mem_ctls_mutex);
- 
--	list_for_each(item, &mc_devices) {
--		mci = list_entry(item, struct mem_ctl_info, link);
-+	list_for_each_entry(mci, &mc_devices, link) {
- 		if (mci->mc_idx == idx)
- 			goto unlock;
- 	}
-diff --git a/drivers/edac/edac_pci.c b/drivers/edac/edac_pci.c
-index 64c142aecca7..0ee1e0a9ce21 100644
---- a/drivers/edac/edac_pci.c
-+++ b/drivers/edac/edac_pci.c
-@@ -71,13 +71,10 @@ EXPORT_SYMBOL_GPL(edac_pci_free_ctl_info);
- static struct edac_pci_ctl_info *find_edac_pci_by_dev(struct device *dev)
- {
- 	struct edac_pci_ctl_info *pci;
--	struct list_head *item;
- 
- 	edac_dbg(1, "\n");
- 
--	list_for_each(item, &edac_pci_list) {
--		pci = list_entry(item, struct edac_pci_ctl_info, link);
--
-+	list_for_each_entry(pci, &edac_pci_list, link) {
- 		if (pci->dev == dev)
- 			return pci;
- 	}
--- 
-2.34.1
+> 
+> > Even if we get an error from this function, other debugfs APIs will
+> > handle the error value and doesn't crash in that case. Hence caller can
+> > safely ignore the errors that occur during the creation of debugfs nodes.
+> 
+> First of all which issue do you have? Did you see that folder is not created?
 
+	I have not seen any issue as such. But going by the comments before
+	the debugfs_create_dir API (https://elixir.bootlin.com/linux/latest/source/fs/debugfs/inode.c#L583),
+	we can ignore safely ignore the return value from this API.
+
+> 
+> I am not quite sure if this is the right behavior.
+> In the code there is
+> 135         if (!parent)
+> 136                 parent = edac_debugfs;
+> 
+> It means you are right that if creating ocm folder can fail and properties
+> will be still created under edac_debugfs but is this the right behavior?
+> 
+> altera_edac/armada_xp_edac/i10nm/i5100/igen6/others are checking return
+> value that's why I can't see any reason to remove this checking from one
+> driver.
+> 
+> If you want to fix all please send patch for all but I don't think it will
+> improve situation and it will just hide different issue if creating folder
+> fails.
+
+	Understood your point. Are you suggesting that we should keep these
+	checks as it is, or should I fix for all the drivers and upload the
+	patch ?
+
+> And debugfs will be disabled in production system anyway.
+> 
+> Thanks,
+> Michal
+> 
+> 
+> 
+> 
