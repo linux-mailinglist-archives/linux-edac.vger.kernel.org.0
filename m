@@ -2,81 +2,75 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31CF078DD9A
-	for <lists+linux-edac@lfdr.de>; Wed, 30 Aug 2023 20:56:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A1EF78E50A
+	for <lists+linux-edac@lfdr.de>; Thu, 31 Aug 2023 05:20:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237799AbjH3Sw1 (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Wed, 30 Aug 2023 14:52:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40366 "EHLO
+        id S242887AbjHaDUv (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Wed, 30 Aug 2023 23:20:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243707AbjH3LeS (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Wed, 30 Aug 2023 07:34:18 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B498132;
-        Wed, 30 Aug 2023 04:34:16 -0700 (PDT)
-Received: from nazgul.tnic (unknown [78.130.214.203])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        with ESMTP id S244915AbjHaDUu (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Wed, 30 Aug 2023 23:20:50 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8004ECF1;
+        Wed, 30 Aug 2023 20:20:37 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 6D4D81EC08F9;
-        Wed, 30 Aug 2023 13:34:14 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1693395254;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=kyrJuOePM6iTnqDG/fqXmuj6BgFDXnc1OpummGdqoKk=;
-        b=Rv5vok3kkjHpodzGz6dXlJ08m3i9Xxymtas3l8jZ+cnHwNA7rBknQfHyQA8I1G2ZBVSw1n
-        3WeBwD7f19u4zN6vw8Te1ShmYUlNvJ/BpHRkKrqvMHO7oTGGBanvzdZ9WeIq1aoTRSA2jf
-        ZDaTb1N7DYuqzLqBhvCeufB9+Ju4h5I=
-Date:   Wed, 30 Aug 2023 13:34:21 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Shravan Kumar Ramani <shravankr@nvidia.com>
-Cc:     James Morse <james.morse@arm.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Robert Richter <rric@kernel.org>, linux-edac@vger.kernel.org,
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3FF32B82172;
+        Thu, 31 Aug 2023 03:20:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 13FF5C433C7;
+        Thu, 31 Aug 2023 03:20:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1693452035;
+        bh=yOuGmPkxw1I3boCORhF94UtvrRj1Uf3GXVOILfcBtHA=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=EkVjsmDWIY/ptEzc4I8dm7Ra64s/FERfpC02wnHWCMFcQS7XXsqcxAv/C5FEw7kJA
+         VjWl62LwU7cC7cooQ/DaX+nRGY6peXeWYuXg1DvyNk3PMpWasRtMIYmTJYVMlZGYa+
+         Hv+kXCShXcPxI5Qj/vuCYJPJwiASP6kmOh+LtVzBXXTfxdjxRr471xN7yEkQfSoaoz
+         KzCQ1vMGkTaPgQWmvGFBAMAHWzUNBKG8wi7cdQfyDTZyuXWT1+HJOJyjvgNrwBdib8
+         Sl1CHKvf9D7sB/pfHdF+KLWa57Opxnu3JcA+IUrleynBOwIGwgucTAUme8GRIrMhzC
+         kwFgsyyVg8ykw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 00E5FC595D2;
+        Thu, 31 Aug 2023 03:20:35 +0000 (UTC)
+Subject: Re: [GIT PULL] EDAC drivers
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <ZO55fLRfOawcoxQt@agluck-desk3>
+References: <ZO55fLRfOawcoxQt@agluck-desk3>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <ZO55fLRfOawcoxQt@agluck-desk3>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/ras/ras.git tags/edac_updates_for_v6.6
+X-PR-Tracked-Commit-Id: ce53ad81ed36c24aff075f94474adecfabfcf239
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: bb511d4b25a75bd67c4db4dcb570b2ca3b42c926
+Message-Id: <169345203499.31998.16048958411977496589.pr-tracker-bot@kernel.org>
+Date:   Thu, 31 Aug 2023 03:20:34 +0000
+To:     Tony Luck <tony.luck@intel.com>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Borislav Petkov <bp@alien8.de>, linux-edac@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1] EDAC/bluefield_edac: Use ARM SMC for EMI access
-Message-ID: <20230830113421.GBZO8pPUILVoBUVlki@fat_crate.local>
-References: <7a67e5fd25664f4c2277283e15b438e826b3c163.1693392576.git.shravankr@nvidia.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <7a67e5fd25664f4c2277283e15b438e826b3c163.1693392576.git.shravankr@nvidia.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Wed, Aug 30, 2023 at 06:56:14AM -0400, Shravan Kumar Ramani wrote:
-> Add secure read/write calls (arm_smccc_smc) to bluefield_edac.
-> The ACPI table entry decides whether SMC is need for accessing
+The pull request you sent on Tue, 29 Aug 2023 16:04:28 -0700:
 
-SMC? Self-Modifying Code?
+> git://git.kernel.org/pub/scm/linux/kernel/git/ras/ras.git tags/edac_updates_for_v6.6
 
-> the registers in the External Memory Interface block. If not,
-> the registers may be mapped and accessed directly.
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/bb511d4b25a75bd67c4db4dcb570b2ca3b42c926
 
-I'm sure there's a human readable explanation for the above.
-
-> v0 -> v1
-> Updated commit message
-
-I still have no clue what those secure calls are.
-
-I'm sure there's some ARM documentation which you use in order to
-explain why those are needed.
-
-> +static int edac_readl(void __iomem *addr, uint32_t *result,
-
-No "edac_" previxes to driver-local functions. They belong to the EDAC
-subsystem.
+Thank you!
 
 -- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
