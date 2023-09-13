@@ -2,125 +2,93 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5246679DD91
-	for <lists+linux-edac@lfdr.de>; Wed, 13 Sep 2023 03:30:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DDAE479DDCB
+	for <lists+linux-edac@lfdr.de>; Wed, 13 Sep 2023 03:43:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238040AbjIMBa3 (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Tue, 12 Sep 2023 21:30:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50206 "EHLO
+        id S238068AbjIMBne (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Tue, 12 Sep 2023 21:43:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238055AbjIMBa2 (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Tue, 12 Sep 2023 21:30:28 -0400
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A42E51718
-        for <linux-edac@vger.kernel.org>; Tue, 12 Sep 2023 18:30:24 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id 4fb4d7f45d1cf-52bcb8b199aso8068180a12.3
-        for <linux-edac@vger.kernel.org>; Tue, 12 Sep 2023 18:30:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1694568623; x=1695173423; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=NS8SEj+1zaeA13vnr/L8JD68DOc4KH8YhBKHOXjjHQI=;
-        b=0CKsJXsxQ8TswVwNwUNdDH7eLV67PcFnQSsd6nrwoVNNT/T5txHT+CSsm5tFWRHcaI
-         vei6NMkoP25iFoBCh23Rv5/tnX0iZsy7eI2ZOnq7lMVA+vqeowkFUhpVohO1rrwPmRng
-         vpb5jmF9eH/RqDAn6IfJYFBbAdjL2SLMEfNeTxEqVy3iLJ1X1o80qP+5N+q1uJ5Gz1oX
-         YOkx0BdbtO9Q+hwnOc+/lP1UlYejo2pCEob92QWEfFsZ+MozWpS2d7iRp+VyXKSQkNnn
-         tG3S9KEmddNSRVgYJIoo/naXGPQ9l0ztchsQLRwrt0xyDzjTM0yqMNwNqbhgv9+ZqwL6
-         DkGQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694568623; x=1695173423;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=NS8SEj+1zaeA13vnr/L8JD68DOc4KH8YhBKHOXjjHQI=;
-        b=tmb7XMSFMbGJ9+NUffdo4wtse9e5a3dKtB8PRe5ayRsOORRzVz8/yomhszd2cWlVqy
-         tO2PIUKv1fJedUTunV9EGi8JHmNY/gyblVfxY3fGXokShMCrhbxqsBBQ7AcTYdo0sr34
-         01QGoeL8DWmYgAJpXJNaHxls6G42ga2rvHuirzuqn4ev5jTNb5/5S7d8Ov8D+UjAFHsZ
-         jN9d1u2q9uY622o/5kQNmvTvq/uEsiD7vxRiP+TbeJTCfuFAJlvFE0fDi4iXyMH1zSOx
-         72w1cgSWPoDtSOyycJXwQJgddJ0oOEurraa49GQ2Omjq10gCePqWGlrPPzMIN/qnWPNy
-         6Avw==
-X-Gm-Message-State: AOJu0YxJBkNh1F1pFKOsXL1yi2nAmwNIAsx8REiR0dFUSKNt/B7n5SCd
-        9lYuUco75S8zcNJ0TyniCCEGuUMKPZJ70FqLsDc1fQ==
-X-Google-Smtp-Source: AGHT+IF+8PrFLp3wpewuEVn+bHYYKVvRzHZnMOswySbpEt5vKlsjn5f/ngk42dnNqgqMGcsc86hGujDbw+1tV3NCYD8=
-X-Received: by 2002:a17:907:762f:b0:9a9:fb1c:34ff with SMTP id
- jy15-20020a170907762f00b009a9fb1c34ffmr682229ejc.73.1694568622990; Tue, 12
- Sep 2023 18:30:22 -0700 (PDT)
+        with ESMTP id S231204AbjIMBnd (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Tue, 12 Sep 2023 21:43:33 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB7F6115;
+        Tue, 12 Sep 2023 18:43:29 -0700 (PDT)
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 38CMfnKN022593;
+        Wed, 13 Sep 2023 01:43:01 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=KgnrvvmpqVf8ybI9GD5xikjAqw2tZ8lUw09C/wzwsf8=;
+ b=U0L/ZrttT9mZCtvNzxPRQOOoc2kBb2Qd+J892xTa32ZpfZ6lj+lGvTcqGu8Q7remO100
+ oZxcJ/6Jd07aXfod6mMnWO0dQQ/U2hqGIz91AaxzFrDGbnHgDIEnBRdwYVr8KEK4/e4r
+ 9Yix0kFT3khoFvp8aUZnRaDpmfxdqt794qOYl3NSF2QPJr5jTho4y7LyS+hmm9d84277
+ NRWjU54kdfTeZ4/Yzti8B+Qu7kkUYE03sbH8kIscNIa5VK5gdD++Jy8RgsCxEG/rmWO3
+ BHZ2yE+6igiAjoVXXv+ooC2a8tP5aNxfvlMh2ij4DDJOEnBVqtKINWHh1gFmmGHV0Vjp eg== 
+Received: from nasanppmta05.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3t2y7u8ey0-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 13 Sep 2023 01:43:01 +0000
+Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
+        by NASANPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 38D1h0qg029321
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 13 Sep 2023 01:43:00 GMT
+Received: from [10.110.7.172] (10.80.80.8) by nasanex01a.na.qualcomm.com
+ (10.52.223.231) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.36; Tue, 12 Sep
+ 2023 18:42:57 -0700
+Message-ID: <ed4de855-12e9-7f57-b384-aeed71b4afb3@quicinc.com>
+Date:   Tue, 12 Sep 2023 18:42:56 -0700
 MIME-Version: 1.0
-References: <20230913-strncpy-drivers-edac-edac_mc_sysfs-c-v1-1-d232891b05b0@google.com>
-In-Reply-To: <20230913-strncpy-drivers-edac-edac_mc_sysfs-c-v1-1-d232891b05b0@google.com>
-From:   Justin Stitt <justinstitt@google.com>
-Date:   Tue, 12 Sep 2023 18:30:12 -0700
-Message-ID: <CAFhGd8pGikrizmQPF7qD6C4NcYqBVqECEUqb0j_4fuS3rqeeXA@mail.gmail.com>
-Subject: Re: [PATCH] EDAC/mc_sysfs: refactor deprecated strncpy
-To:     Borislav Petkov <bp@alien8.de>, Tony Luck <tony.luck@intel.com>,
-        James Morse <james.morse@arm.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Robert Richter <rric@kernel.org>
-Cc:     linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-hardening@vger.kernel.org
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH RESEND] EDAC/device: Add sysfs notification for UE,CE
+ count change
+Content-Language: en-US
+To:     Deepti Jaggi <quic_djaggi@quicinc.com>, <james.morse@arm.com>,
+        <mchehab@kernel.org>, <rric@kernel.org>, <bp@alien8.de>,
+        <tony.luck@intel.com>
+CC:     <linux-edac@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <kernel@quicinc.com>, <quic_psodagud@quicinc.com>,
+        <linux-arm-msm@vger.kernel.org>
+References: <20230912212508.4691-1-quic_djaggi@quicinc.com>
+From:   Trilok Soni <quic_tsoni@quicinc.com>
+In-Reply-To: <20230912212508.4691-1-quic_djaggi@quicinc.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: VX00M3KnQ5x8I8-bFcAl1XkBCvGoevDg
+X-Proofpoint-ORIG-GUID: VX00M3KnQ5x8I8-bFcAl1XkBCvGoevDg
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.267,Aquarius:18.0.957,Hydra:6.0.601,FMLib:17.11.176.26
+ definitions=2023-09-12_24,2023-09-05_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 adultscore=0
+ mlxlogscore=624 impostorscore=0 suspectscore=0 priorityscore=1501
+ malwarescore=0 phishscore=0 bulkscore=0 clxscore=1011 spamscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2308100000 definitions=main-2309130012
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Tue, Sep 12, 2023 at 6:26=E2=80=AFPM Justin Stitt <justinstitt@google.co=
-m> wrote:
->
-> `strncpy` is deprecated for use on NUL-terminated destination strings [1]=
-.
->
-> We should prefer more robust and less ambiguous string interfaces.
->
-> A suitable replacement is `strscpy_pad` [2] due to the fact that it guara=
-ntees
-> NUL-termination on the destination buffer whilst maintaining the
-> NUL-padding behavior that `strncpy` provides. This may not be strictly
-> necessary but as I couldn't understand what this code does I wanted to
-> ensure that the functionality is the same.
->
-> Link: https://www.kernel.org/doc/html/latest/process/deprecated.html#strn=
-cpy-on-nul-terminated-strings [1]
-> Link: https://manpages.debian.org/testing/linux-manual-4.8/strscpy.9.en.h=
-tml [2]
-> Link: https://github.com/KSPP/linux/issues/90
-> Cc: linux-hardening@vger.kernel.org
-> Signed-off-by: Justin Stitt <justinstitt@google.com>
-> ---
-> Note: build-tested only.
-> ---
->  drivers/edac/edac_mc_sysfs.c | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
->
-> diff --git a/drivers/edac/edac_mc_sysfs.c b/drivers/edac/edac_mc_sysfs.c
-> index 15f63452a9be..b303309a63cf 100644
-> --- a/drivers/edac/edac_mc_sysfs.c
-> +++ b/drivers/edac/edac_mc_sysfs.c
-> @@ -229,8 +229,7 @@ static ssize_t channel_dimm_label_store(struct device=
- *dev,
->         if (copy_count =3D=3D 0 || copy_count >=3D sizeof(rank->dimm->lab=
-el))
->                 return -EINVAL;
->
-> -       strncpy(rank->dimm->label, data, copy_count);
-> -       rank->dimm->label[copy_count] =3D '\0';
-> +       strscpy_pad(rank->dimm->label, data, copy_count);
->
->         return count;
->  }
->
-> ---
-> base-commit: 2dde18cd1d8fac735875f2e4987f11817cc0bc2c
-> change-id: 20230913-strncpy-drivers-edac-edac_mc_sysfs-c-e619b00124a3
->
-> Best regards,
-> --
-> Justin Stitt <justinstitt@google.com>
->
+On 9/12/2023 2:25 PM, Deepti Jaggi wrote:
+> A daemon running in user space collects information on correctable
+> and uncorrectable errors from EDAC driver by reading corresponding
+> sysfs entries and takes appropriate action.
+> This patch adds support for user space daemon to wait on poll() until
+> the sysfs entries for UE count and CE count change and then read updated
+> counts instead of continuously monitoring the sysfs entries for
+> any changes.
+> 
+> Signed-off-by: Deepti Jaggi <quic_djaggi@quicinc.com>
 
-I typo'd my grep and initially missed refactoring another instance of
-strncpy in this same file. v2 [1] resolves this.
+Can we please continue the discussion on the original thread? I don't see need of doing RESEND. 
 
-[1]: https://lore.kernel.org/r/20230913-strncpy-drivers-edac-edac_mc_sysfs-=
-c-v2-1-2d2e6bd43642@google.com
+-- 
+---Trilok Soni
+
