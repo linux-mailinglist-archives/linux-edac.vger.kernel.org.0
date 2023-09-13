@@ -2,131 +2,138 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E3ACC79F051
-	for <lists+linux-edac@lfdr.de>; Wed, 13 Sep 2023 19:20:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E1F479F057
+	for <lists+linux-edac@lfdr.de>; Wed, 13 Sep 2023 19:22:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230327AbjIMRVB (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Wed, 13 Sep 2023 13:21:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60674 "EHLO
+        id S229660AbjIMRWw (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Wed, 13 Sep 2023 13:22:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230281AbjIMRVA (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Wed, 13 Sep 2023 13:21:00 -0400
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88F0BA3
-        for <linux-edac@vger.kernel.org>; Wed, 13 Sep 2023 10:20:56 -0700 (PDT)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-58ee4df08fbso562917b3.3
-        for <linux-edac@vger.kernel.org>; Wed, 13 Sep 2023 10:20:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1694625656; x=1695230456; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=SCfSG6mCnW0qyfFGMhWtptM2uKei1bLEhKpvdaKI0EM=;
-        b=mbVlcO2zidVtaVhja0n27bJA5JUPBLrMqWLDu03p6zWIreTemgObvDj2JT3YXbp/PP
-         0mERMOgi5CZPe/zPpHIIsl4oIdAA/iQA5Gopi8qOGHAGhdwuCn7h3JzzQ7lAeFU0Q6ET
-         ac3b5t98vS0KIuDXViyhVC3p/SsvxTBEIqf4PsnysO8Sl1u9elhWDKui4ghQ2Hd8WWwQ
-         NoiBRhvUrlvtXhtYRr7AHNiQdvYCDwkx6acthwaz3n/B7yzzGyPhz4FG4jKWrDYTI0xB
-         7fMt7l7YkfJkbjO8oqZ1XSZfozRa9mojuFm/M6hQSkzdkA7eoglfhg+ZaLmBkmwPNSrn
-         tAFg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694625656; x=1695230456;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=SCfSG6mCnW0qyfFGMhWtptM2uKei1bLEhKpvdaKI0EM=;
-        b=P0PL28E+UrMU39tZm8s8s0arstLNBILYlrvBDM7qR3G+qiNT2tT1uwgg6u86WMVJ3b
-         m57zQ+tQZmdnWDXn/jGCe7XdrKkve1dXDv6PoLx/AZfasBR6fZQenjNZGJaSDeYZ2dA9
-         ihNjn3oEiadz21CKz5a89sZaH1UE/rkDAESf0d4glr544bmSYsIK74569zEsgf3q1NRr
-         +58xSvEUDMlaCiJt/fHqJXDoU6ksjidy65Xnl0ukFiMbqNjHkr4dpRkKvJ9AXmXLchwy
-         q/VE+iw7+bIQzVR33jso0RpOA32CsYfD3Z9CoES4F5y57fBI2q86MRBvwCGEkpJbZNWz
-         sKlg==
-X-Gm-Message-State: AOJu0YwBsDH1gyxglebgyIul9Kqdk6bPc5ogMp8jYXPd5EjAF0w5aMLt
-        kdGFuoUAkdCKuUu1UdYSvczrRXhjpuzQX3aADw==
-X-Google-Smtp-Source: AGHT+IHmZqG7+RKPg5oWQee0z9k9bPQgJZLAzA5rk6LcXiW5RHunFlSaUBTGy88s7nRwnv+MUI+mv7kvTmKVj2ZfyQ==
-X-Received: from jstitt-linux1.c.googlers.com ([fda3:e722:ac3:cc00:2b:ff92:c0a8:23b5])
- (user=justinstitt job=sendgmr) by 2002:a81:4522:0:b0:59b:ca80:919e with SMTP
- id s34-20020a814522000000b0059bca80919emr50177ywa.0.1694625655805; Wed, 13
- Sep 2023 10:20:55 -0700 (PDT)
-Date:   Wed, 13 Sep 2023 17:20:50 +0000
-Mime-Version: 1.0
-X-B4-Tracking: v=1; b=H4sIAHHvAWUC/52NwQqDMBAFf0VybkqysVJ76n+UIiZZNVCNZCU0i
- P/e6K3H9vJg3mFmZYTBIbFbsbKA0ZHzUwZ1KpgZ2qlH7mxmBgKUqKXitITJzInb4CIG4mhbc0w
- zmoYSdcQzV7LWQkgoW8Wyag7YufeReTwzD44WH9JRjXJ/fwxEySW3oOBaSy0uWtx77/sXno0f2 V6I8I8VshUsYKVtqaoSvqzbtn0AqJbMzS8BAAA=
-X-Developer-Key: i=justinstitt@google.com; a=ed25519; pk=tC3hNkJQTpNX/gLKxTNQKDmiQl6QjBNCGKJINqAdJsE=
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1694625654; l=2145;
- i=justinstitt@google.com; s=20230717; h=from:subject:message-id;
- bh=rHRbEEg76Fmzd3MgqtwO/Ydw/98CvZy1Bgwo8SLGEU8=; b=t9+RA3S3Zt+d24hZNYz4lNO+qJ9Nkfkp9t7nbfQbXU15aWNksTlAFug+khYhTUHKD5Ak2gdAU
- vZ9gixMYyYUB2tnTzpUBemu2Ekkb7/ti0NUblWa/3B8a28wJup3ZbE6
-X-Mailer: b4 0.12.3
-Message-ID: <20230913-strncpy-drivers-edac-edac_mc_sysfs-c-v3-1-38c1db7d207f@google.com>
-Subject: [PATCH v3] EDAC/mc_sysfs: refactor deprecated strncpy
-From:   Justin Stitt <justinstitt@google.com>
-To:     Borislav Petkov <bp@alien8.de>, Tony Luck <tony.luck@intel.com>,
-        James Morse <james.morse@arm.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Robert Richter <rric@kernel.org>
-Cc:     linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-hardening@vger.kernel.org,
-        Justin Stitt <justinstitt@google.com>
-Content-Type: text/plain; charset="utf-8"
+        with ESMTP id S230327AbjIMRWv (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Wed, 13 Sep 2023 13:22:51 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29181A3;
+        Wed, 13 Sep 2023 10:22:46 -0700 (PDT)
+Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 38DCVEi6016097;
+        Wed, 13 Sep 2023 17:22:31 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=hvCVL4Af4zagYv23G23r8OybsiJ9AMifzesX0uokHy4=;
+ b=aXaynT4iAd0eQlmE3oVU0KPcCYUpFbl6wCDiJNFPDbcvuE5n74kIW+RrOxQuv+E80gdN
+ USEV2VhTdtz3Oowi3gjTs2/RnvM8l8wSuXATTz9hU4ZP4QywJvZYw3hdjwrtanlYz/ip
+ Rma8zDrA+1GUmOWOWDSx6pUBJfiNHg3MU/CXWgkUVDVOjb0QCdkbRd1kVs+wcOmlMxuF
+ UfX7Amvs5H07UtC3iUshauJU8+CacBrX/zi5MJGGOlIU9bcgztWA/a+erM0BtrA8+/KL
+ EUORGuizeEalT1mA7t8XDYVHEXfCGaR97oumvlFhAjDqtKzbj7iZEtfzUOSYaPikct/X ng== 
+Received: from nasanppmta03.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3t3003j83v-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 13 Sep 2023 17:22:31 +0000
+Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
+        by NASANPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 38DHMUOp029014
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 13 Sep 2023 17:22:30 GMT
+Received: from [10.110.7.172] (10.80.80.8) by nasanex01a.na.qualcomm.com
+ (10.52.223.231) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.36; Wed, 13 Sep
+ 2023 10:22:27 -0700
+Message-ID: <d7b5fd59-8e35-79c8-cf6f-63a8b188593a@quicinc.com>
+Date:   Wed, 13 Sep 2023 10:22:26 -0700
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH] EDAC/device: Add sysfs notification for UE,CE count
+ change
+Content-Language: en-US
+To:     Deepti Jaggi <quic_djaggi@quicinc.com>, <james.morse@arm.com>,
+        <mchehab@kernel.org>, <rric@kernel.org>, <bp@alien8.de>,
+        <tony.luck@intel.com>
+CC:     <linux-edac@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <kernel@quicinc.com>, <quic_psodagud@quicinc.com>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>
+References: <20230731220059.28474-1-quic_djaggi@quicinc.com>
+ <3e2bf03e-2bc1-445e-d8ce-4975c044eea0@quicinc.com>
+ <ce06c845-f3c8-a733-dc21-ee0ba4b4ca68@quicinc.com>
+ <2fa11648-6d51-feb7-4d75-6429b13c682f@quicinc.com>
+From:   Trilok Soni <quic_tsoni@quicinc.com>
+In-Reply-To: <2fa11648-6d51-feb7-4d75-6429b13c682f@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: LN7Q61oFen1MjrVjZPA_sug_q1HWMtg1
+X-Proofpoint-GUID: LN7Q61oFen1MjrVjZPA_sug_q1HWMtg1
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.267,Aquarius:18.0.980,Hydra:6.0.601,FMLib:17.11.176.26
+ definitions=2023-09-13_10,2023-09-13_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=672 clxscore=1015
+ adultscore=0 malwarescore=0 priorityscore=1501 lowpriorityscore=0
+ spamscore=0 phishscore=0 bulkscore=0 suspectscore=0 mlxscore=0
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2308100000 definitions=main-2309130145
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-`strncpy` is deprecated for use on NUL-terminated destination strings [1].
+On 8/1/2023 3:37 PM, Deepti Jaggi wrote:
+> On 7/31/2023 10:48 PM, Trilok Soni wrote:
+>> On 7/31/2023 3:40 PM, Trilok Soni wrote:
+>>> On 7/31/2023 3:00 PM, Deepti Jaggi wrote:
+>>>> A daemon running in user space collects information on correctable
+>>>> and uncorrectable errors from EDAC driver by reading corresponding
+>>>> sysfs entries and takes appropriate action.
+>>>
+>>> Which daemon we are referring here? Can you please provide the link to the project?
+>>>
+>>> Are you using this daemon?
+>>>
+>>> https://mcelog.org/ - It is for x86, but is your daemon project different?
+>>>
+> 
+> No this daemon is not used. Daemon is under development and it is more specific to Qualcomm use cases.
+> Based on my limited understanding of mcelog, this daemon is handling errors in an architecture specific way.
+> By adding support for sysfs notification in EDAC framework, drivers which are not using any custom sysfs attributes can take advantage of this modification to notify the user space daemon polling on ue_count and/or ce_count attributes.
 
-We should prefer more robust and less ambiguous string interfaces.
 
-A suitable replacement is `strscpy` [2] due to the fact that it
-guarantees NUL-termination on the destination buffer without needlessly
-NUL-padding.
+Did you look at the rasdaemon then?
 
-Link: https://www.kernel.org/doc/html/latest/process/deprecated.html#strncpy-on-nul-terminated-strings [1]
-Link: https://manpages.debian.org/testing/linux-manual-4.8/strscpy.9.en.html [2]
-Link: https://github.com/KSPP/linux/issues/90
-Cc: linux-hardening@vger.kernel.org
-Signed-off-by: Justin Stitt <justinstitt@google.com>
----
-Changes in v3:
-- prefer strscpy to strscpy_pad (thanks Tony)
-- Link to v2: https://lore.kernel.org/r/20230913-strncpy-drivers-edac-edac_mc_sysfs-c-v2-1-2d2e6bd43642@google.com
+https://github.com/mchehab/rasdaemon - rasdaemon is also used on more than one architecture including ARM. 
 
-Changes in v2:
-- included refactor of another strncpy in same file
-- Link to v1: https://lore.kernel.org/r/20230913-strncpy-drivers-edac-edac_mc_sysfs-c-v1-1-d232891b05b0@google.com
----
-Note: build-tested only.
----
- drivers/edac/edac_mc_sysfs.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/edac/edac_mc_sysfs.c b/drivers/edac/edac_mc_sysfs.c
-index 15f63452a9be..9a5b4bbd8191 100644
---- a/drivers/edac/edac_mc_sysfs.c
-+++ b/drivers/edac/edac_mc_sysfs.c
-@@ -229,8 +229,7 @@ static ssize_t channel_dimm_label_store(struct device *dev,
- 	if (copy_count == 0 || copy_count >= sizeof(rank->dimm->label))
- 		return -EINVAL;
- 
--	strncpy(rank->dimm->label, data, copy_count);
--	rank->dimm->label[copy_count] = '\0';
-+	strscpy(rank->dimm->label, data, copy_count);
- 
- 	return count;
- }
-@@ -535,7 +534,7 @@ static ssize_t dimmdev_label_store(struct device *dev,
- 	if (copy_count == 0 || copy_count >= sizeof(dimm->label))
- 		return -EINVAL;
- 
--	strncpy(dimm->label, data, copy_count);
-+	strscpy(dimm->label, data, copy_count);
- 	dimm->label[copy_count] = '\0';
- 
- 	return count;
+> 
+>>>> This patch adds support for user space daemon to wait on poll() until
+>>>> the sysfs entries for UE count and CE count change and then read updated
+>>>> counts instead of continuously monitoring the sysfs entries for
+>>>> any changes.
+>>>
+>>> The modifications below are architecture agnostic so I really want to know what exactly we are fixing and if there is a problem.
+>>
+> 
+> In the change set, adding support for user space to poll on the ue_count and/or ce_count sysfs attributes.
+> On changes in ue_count,ce_count attributes, unblock user space poll from EDAC driver framework and user space can read the changed ce_count, ue_count.
+> 
+> As an example from user space perform the following steps:
+>     1. Open the sysfs attribute file for UE count and CE count
+>     2. Read the initial CE count and UE count
+>     3. Poll on any changes on CE count, UE count fds.
+>     4. Once poll unblocks, Read the updated count.
+>         5.Take appropriate action on the changed counts.
+> 
+> #####################################################################
+> Example Simple User space code Snippet:
 
----
-base-commit: 2dde18cd1d8fac735875f2e4987f11817cc0bc2c
-change-id: 20230913-strncpy-drivers-edac-edac_mc_sysfs-c-e619b00124a3
+All of this resolved in the EDAC framework by tracing per my understanding. If any changes required
+we should extend the rasdaemon and show the usecase to explain the it better?
 
-Best regards,
---
-Justin Stitt <justinstitt@google.com>
+This is very old link but if you follow this patch series you will understand the tracing events in the EDAC
+and latest EDAC framework code will help. 
+
+https://lkml.indiana.edu/hypermail/linux/kernel/1205.1/01751.html
+
+-- 
+---Trilok Soni
 
