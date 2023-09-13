@@ -2,140 +2,131 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94B4579F048
-	for <lists+linux-edac@lfdr.de>; Wed, 13 Sep 2023 19:18:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E3ACC79F051
+	for <lists+linux-edac@lfdr.de>; Wed, 13 Sep 2023 19:20:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231818AbjIMRSk (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Wed, 13 Sep 2023 13:18:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37472 "EHLO
+        id S230327AbjIMRVB (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Wed, 13 Sep 2023 13:21:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231871AbjIMRS1 (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Wed, 13 Sep 2023 13:18:27 -0400
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FAE91BEA
-        for <linux-edac@vger.kernel.org>; Wed, 13 Sep 2023 10:17:57 -0700 (PDT)
-Received: by mail-ed1-x529.google.com with SMTP id 4fb4d7f45d1cf-52f33659d09so5550082a12.1
-        for <linux-edac@vger.kernel.org>; Wed, 13 Sep 2023 10:17:56 -0700 (PDT)
+        with ESMTP id S230281AbjIMRVA (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Wed, 13 Sep 2023 13:21:00 -0400
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88F0BA3
+        for <linux-edac@vger.kernel.org>; Wed, 13 Sep 2023 10:20:56 -0700 (PDT)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-58ee4df08fbso562917b3.3
+        for <linux-edac@vger.kernel.org>; Wed, 13 Sep 2023 10:20:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1694625475; x=1695230275; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=5pAP4KF+8eSt4DS+aDaiAbwkQFXc4IntKwjogbQWvkE=;
-        b=Zkizt3K/6JQhbNbiAQSCK4oPKwYNqHSmLhPylAGwL2oX0qAUlhRt3jiUWzBi4Tw6mH
-         ji3Avi8ct1iybwrg7L+RJfHyOb130/ppqJtkbk/t12LPcrAXUZ1TenPOnIzPmF5i2e6x
-         n4/ttav8vVvTfn/vDFMvLzxRJSMU/4nKU4HktGcwYw/v9kz6KWA7VNa5Xu+G2UI82WAn
-         R1fiQ8dYMAjfzocejtWQtomzdcrzs64q42C4+5XbY1ewS/jAyXCcNVPYZU5r9Aw/48NA
-         qQ2aLTaUnhq02jxuSJkNpoZ3zMjO477ywKFUfZWlEXO3kQOn9V1sEyH4dwP6+8WvxP6R
-         iK1w==
+        d=google.com; s=20230601; t=1694625656; x=1695230456; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=SCfSG6mCnW0qyfFGMhWtptM2uKei1bLEhKpvdaKI0EM=;
+        b=mbVlcO2zidVtaVhja0n27bJA5JUPBLrMqWLDu03p6zWIreTemgObvDj2JT3YXbp/PP
+         0mERMOgi5CZPe/zPpHIIsl4oIdAA/iQA5Gopi8qOGHAGhdwuCn7h3JzzQ7lAeFU0Q6ET
+         ac3b5t98vS0KIuDXViyhVC3p/SsvxTBEIqf4PsnysO8Sl1u9elhWDKui4ghQ2Hd8WWwQ
+         NoiBRhvUrlvtXhtYRr7AHNiQdvYCDwkx6acthwaz3n/B7yzzGyPhz4FG4jKWrDYTI0xB
+         7fMt7l7YkfJkbjO8oqZ1XSZfozRa9mojuFm/M6hQSkzdkA7eoglfhg+ZaLmBkmwPNSrn
+         tAFg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694625475; x=1695230275;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=5pAP4KF+8eSt4DS+aDaiAbwkQFXc4IntKwjogbQWvkE=;
-        b=o42xVZ5GJhdZYjmIjH+Q/E+QJBlfhBH2KRIpM/AgpQAWKiNqPNO1oVgrJj/y6b/8Gn
-         Bjn8pnxL3KUr2VLzw1yeqtgMDecKwkRXhb/2u35+9lCKAaC7s+t7nFEj7iDgr8i4Jpjh
-         qAkX/GnbXeqHIZwPn5yzwfd6j28reG+wNy/Ks1Ald5uSVeofSLDrPImY7a6aTq4MGx1x
-         BKj8Q9w31AhTEs9KAeIuJnPnPrfrscDTCnqHtetswy7XTsBkGdmgYtz+zDTF7zw3iYW+
-         5Lq/5Ox4Ke4oGHhpoi50At7vKth6as5Dih02zQWiox7ghYYT3WsIa+KDCW1GnMvTQiWH
-         zJqQ==
-X-Gm-Message-State: AOJu0Yzkef+lH3m9R0g1O8SOrsaS10iEq4FJI5bd1Mmazdm6L4kQCFtW
-        TOb9T0/1yQlPI6h+5F58oXKbvWN6m7XeC8jCY+Mw/g==
-X-Google-Smtp-Source: AGHT+IFqxcXMoA6E1GUkSWls1FWKy8HwJzuDU4KTCHVS+I4u5BDYFDfxxCW1WjC6TToCE7Uzc7DOgsV532Bh4nDloHk=
-X-Received: by 2002:a05:6402:3708:b0:52f:f696:197b with SMTP id
- ek8-20020a056402370800b0052ff696197bmr1293082edb.1.1694625475236; Wed, 13 Sep
- 2023 10:17:55 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230913-strncpy-drivers-edac-edac_mc_sysfs-c-v1-1-d232891b05b0@google.com>
- <CAFhGd8pGikrizmQPF7qD6C4NcYqBVqECEUqb0j_4fuS3rqeeXA@mail.gmail.com> <SJ1PR11MB6083BEE91F07BC4077FE38F5FCF0A@SJ1PR11MB6083.namprd11.prod.outlook.com>
-In-Reply-To: <SJ1PR11MB6083BEE91F07BC4077FE38F5FCF0A@SJ1PR11MB6083.namprd11.prod.outlook.com>
+        d=1e100.net; s=20230601; t=1694625656; x=1695230456;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=SCfSG6mCnW0qyfFGMhWtptM2uKei1bLEhKpvdaKI0EM=;
+        b=P0PL28E+UrMU39tZm8s8s0arstLNBILYlrvBDM7qR3G+qiNT2tT1uwgg6u86WMVJ3b
+         m57zQ+tQZmdnWDXn/jGCe7XdrKkve1dXDv6PoLx/AZfasBR6fZQenjNZGJaSDeYZ2dA9
+         ihNjn3oEiadz21CKz5a89sZaH1UE/rkDAESf0d4glr544bmSYsIK74569zEsgf3q1NRr
+         +58xSvEUDMlaCiJt/fHqJXDoU6ksjidy65Xnl0ukFiMbqNjHkr4dpRkKvJ9AXmXLchwy
+         q/VE+iw7+bIQzVR33jso0RpOA32CsYfD3Z9CoES4F5y57fBI2q86MRBvwCGEkpJbZNWz
+         sKlg==
+X-Gm-Message-State: AOJu0YwBsDH1gyxglebgyIul9Kqdk6bPc5ogMp8jYXPd5EjAF0w5aMLt
+        kdGFuoUAkdCKuUu1UdYSvczrRXhjpuzQX3aADw==
+X-Google-Smtp-Source: AGHT+IHmZqG7+RKPg5oWQee0z9k9bPQgJZLAzA5rk6LcXiW5RHunFlSaUBTGy88s7nRwnv+MUI+mv7kvTmKVj2ZfyQ==
+X-Received: from jstitt-linux1.c.googlers.com ([fda3:e722:ac3:cc00:2b:ff92:c0a8:23b5])
+ (user=justinstitt job=sendgmr) by 2002:a81:4522:0:b0:59b:ca80:919e with SMTP
+ id s34-20020a814522000000b0059bca80919emr50177ywa.0.1694625655805; Wed, 13
+ Sep 2023 10:20:55 -0700 (PDT)
+Date:   Wed, 13 Sep 2023 17:20:50 +0000
+Mime-Version: 1.0
+X-B4-Tracking: v=1; b=H4sIAHHvAWUC/52NwQqDMBAFf0VybkqysVJ76n+UIiZZNVCNZCU0i
+ P/e6K3H9vJg3mFmZYTBIbFbsbKA0ZHzUwZ1KpgZ2qlH7mxmBgKUqKXitITJzInb4CIG4mhbc0w
+ zmoYSdcQzV7LWQkgoW8Wyag7YufeReTwzD44WH9JRjXJ/fwxEySW3oOBaSy0uWtx77/sXno0f2 V6I8I8VshUsYKVtqaoSvqzbtn0AqJbMzS8BAAA=
+X-Developer-Key: i=justinstitt@google.com; a=ed25519; pk=tC3hNkJQTpNX/gLKxTNQKDmiQl6QjBNCGKJINqAdJsE=
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1694625654; l=2145;
+ i=justinstitt@google.com; s=20230717; h=from:subject:message-id;
+ bh=rHRbEEg76Fmzd3MgqtwO/Ydw/98CvZy1Bgwo8SLGEU8=; b=t9+RA3S3Zt+d24hZNYz4lNO+qJ9Nkfkp9t7nbfQbXU15aWNksTlAFug+khYhTUHKD5Ak2gdAU
+ vZ9gixMYyYUB2tnTzpUBemu2Ekkb7/ti0NUblWa/3B8a28wJup3ZbE6
+X-Mailer: b4 0.12.3
+Message-ID: <20230913-strncpy-drivers-edac-edac_mc_sysfs-c-v3-1-38c1db7d207f@google.com>
+Subject: [PATCH v3] EDAC/mc_sysfs: refactor deprecated strncpy
 From:   Justin Stitt <justinstitt@google.com>
-Date:   Wed, 13 Sep 2023 10:17:43 -0700
-Message-ID: <CAFhGd8r1u+u-6j0eLSSy-dB5SuQdJr4_0faOeAFiTk_P4kXg5g@mail.gmail.com>
-Subject: Re: [PATCH] EDAC/mc_sysfs: refactor deprecated strncpy
-To:     "Luck, Tony" <tony.luck@intel.com>
-Cc:     Borislav Petkov <bp@alien8.de>, James Morse <james.morse@arm.com>,
+To:     Borislav Petkov <bp@alien8.de>, Tony Luck <tony.luck@intel.com>,
+        James Morse <james.morse@arm.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Robert Richter <rric@kernel.org>,
-        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-hardening@vger.kernel.org" <linux-hardening@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        Robert Richter <rric@kernel.org>
+Cc:     linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hardening@vger.kernel.org,
+        Justin Stitt <justinstitt@google.com>
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Wed, Sep 13, 2023 at 8:13=E2=80=AFAM Luck, Tony <tony.luck@intel.com> wr=
-ote:
->
-> > `strncpy` is deprecated for use on NUL-terminated destination strings [=
-1].
-> >
-> > We should prefer more robust and less ambiguous string interfaces.
-> >
-> > A suitable replacement is `strscpy_pad` [2] due to the fact that it gua=
-rantees
-> > NUL-termination on the destination buffer whilst maintaining the
-> > NUL-padding behavior that `strncpy` provides. This may not be strictly
-> > necessary but as I couldn't understand what this code does I wanted to
-> > ensure that the functionality is the same.
-> >
-> > Link: https://www.kernel.org/doc/html/latest/process/deprecated.html#st=
-rncpy-on-nul-terminated-strings [1]
-> > Link: https://manpages.debian.org/testing/linux-manual-4.8/strscpy.9.en=
-.html [2]
-> > Link: https://github.com/KSPP/linux/issues/90
-> > Cc: linux-hardening@vger.kernel.org
-> > Signed-off-by: Justin Stitt <justinstitt@google.com>
-> > ---
-> > Note: build-tested only.
-> > ---
-> >  drivers/edac/edac_mc_sysfs.c | 3 +--
-> >  1 file changed, 1 insertion(+), 2 deletions(-)
-> >
-> > diff --git a/drivers/edac/edac_mc_sysfs.c b/drivers/edac/edac_mc_sysfs.=
-c
-> > index 15f63452a9be..b303309a63cf 100644
-> > --- a/drivers/edac/edac_mc_sysfs.c
-> > +++ b/drivers/edac/edac_mc_sysfs.c
-> > @@ -229,8 +229,7 @@ static ssize_t channel_dimm_label_store(struct devi=
-ce *dev,
-> >         if (copy_count =3D=3D 0 || copy_count >=3D sizeof(rank->dimm->l=
-abel))
-> >                 return -EINVAL;
-> >
-> > -       strncpy(rank->dimm->label, data, copy_count);
-> > -       rank->dimm->label[copy_count] =3D '\0';
-> > +       strscpy_pad(rank->dimm->label, data, copy_count);
->
-> That doc page says the problem with strncpy() is that it doesn't guarante=
-e to
-> NUL terminate the target string. But this code is aware of that limitatio=
-n and
-> zaps a '\0' at the end to be sure.
->
-> So this code doesn't suffer from the potential problems.
+`strncpy` is deprecated for use on NUL-terminated destination strings [1].
 
-Right, the original code did not have an existing bug due to the
-reason you mentioned. However, I'm pretty keen on eliminating uses of
-this interface treewide as there is always a more robust and less
-ambiguous option.
+We should prefer more robust and less ambiguous string interfaces.
 
+A suitable replacement is `strscpy` [2] due to the fact that it
+guarantees NUL-termination on the destination buffer without needlessly
+NUL-padding.
 
->
-> If it is going to be fixed, then some further analysis of the original co=
-de
-> would be wise. Just replacing with strscpy_pad() means the code probably
-> still suffers from the "needless performance penalty" also mentioned in
-> the deprecation document.
-Got it, sending a v2 that prefers `strscpy` to `strscpy_pad` resolving
-the performance issue.
+Link: https://www.kernel.org/doc/html/latest/process/deprecated.html#strncpy-on-nul-terminated-strings [1]
+Link: https://manpages.debian.org/testing/linux-manual-4.8/strscpy.9.en.html [2]
+Link: https://github.com/KSPP/linux/issues/90
+Cc: linux-hardening@vger.kernel.org
+Signed-off-by: Justin Stitt <justinstitt@google.com>
+---
+Changes in v3:
+- prefer strscpy to strscpy_pad (thanks Tony)
+- Link to v2: https://lore.kernel.org/r/20230913-strncpy-drivers-edac-edac_mc_sysfs-c-v2-1-2d2e6bd43642@google.com
 
->
-> -Tony
->
+Changes in v2:
+- included refactor of another strncpy in same file
+- Link to v1: https://lore.kernel.org/r/20230913-strncpy-drivers-edac-edac_mc_sysfs-c-v1-1-d232891b05b0@google.com
+---
+Note: build-tested only.
+---
+ drivers/edac/edac_mc_sysfs.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-Thanks for the timely review!
-Justin
+diff --git a/drivers/edac/edac_mc_sysfs.c b/drivers/edac/edac_mc_sysfs.c
+index 15f63452a9be..9a5b4bbd8191 100644
+--- a/drivers/edac/edac_mc_sysfs.c
++++ b/drivers/edac/edac_mc_sysfs.c
+@@ -229,8 +229,7 @@ static ssize_t channel_dimm_label_store(struct device *dev,
+ 	if (copy_count == 0 || copy_count >= sizeof(rank->dimm->label))
+ 		return -EINVAL;
+ 
+-	strncpy(rank->dimm->label, data, copy_count);
+-	rank->dimm->label[copy_count] = '\0';
++	strscpy(rank->dimm->label, data, copy_count);
+ 
+ 	return count;
+ }
+@@ -535,7 +534,7 @@ static ssize_t dimmdev_label_store(struct device *dev,
+ 	if (copy_count == 0 || copy_count >= sizeof(dimm->label))
+ 		return -EINVAL;
+ 
+-	strncpy(dimm->label, data, copy_count);
++	strscpy(dimm->label, data, copy_count);
+ 	dimm->label[copy_count] = '\0';
+ 
+ 	return count;
+
+---
+base-commit: 2dde18cd1d8fac735875f2e4987f11817cc0bc2c
+change-id: 20230913-strncpy-drivers-edac-edac_mc_sysfs-c-e619b00124a3
+
+Best regards,
+--
+Justin Stitt <justinstitt@google.com>
+
