@@ -2,144 +2,190 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C242A7A0B2C
-	for <lists+linux-edac@lfdr.de>; Thu, 14 Sep 2023 19:02:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 814ED7A1156
+	for <lists+linux-edac@lfdr.de>; Fri, 15 Sep 2023 01:00:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231695AbjINRCW (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Thu, 14 Sep 2023 13:02:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41136 "EHLO
+        id S229499AbjINXAs (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Thu, 14 Sep 2023 19:00:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232442AbjINRCW (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Thu, 14 Sep 2023 13:02:22 -0400
-Received: from mailhost.m5p.com (mailhost.m5p.com [74.104.188.4])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBB9E1FE1
-        for <linux-edac@vger.kernel.org>; Thu, 14 Sep 2023 10:02:17 -0700 (PDT)
-Received: from m5p.com (mailhost.m5p.com [IPv6:2001:470:1f07:15ff:0:0:0:f7])
-        by mailhost.m5p.com (8.17.1/8.15.2) with ESMTPS id 38EH252b038701
-        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NO);
-        Thu, 14 Sep 2023 13:02:11 -0400 (EDT)
-        (envelope-from ehem@m5p.com)
-Received: (from ehem@localhost)
-        by m5p.com (8.17.1/8.15.2/Submit) id 38EH25Ba038700;
-        Thu, 14 Sep 2023 10:02:05 -0700 (PDT)
-        (envelope-from ehem)
-Date:   Thu, 14 Sep 2023 10:02:05 -0700
-From:   Elliott Mitchell <ehem+xen@m5p.com>
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     "Luck, Tony" <tony.luck@intel.com>,
-        Yazen Ghannam <yazen.ghannam@amd.com>,
-        smita.koralahallichannabasappa@amd.com, linux-edac@vger.kernel.org,
-        linux-kernel@vger.kernel.org, x86@kernel.org,
-        xen-devel@lists.xenproject.org, rric@kernel.org,
-        james.morse@arm.com
-Subject: Re: [PATCH] Revert "EDAC/mce_amd: Do not load edac_mce_amd module on
- guests"
-Message-ID: <ZQM8jRx8uKEbEo00@mattapan.m5p.com>
-References: <20210628172740.245689-1-Smita.KoralahalliChannabasappa@amd.com>
- <ZPqQEHXgmak1LMNh@mattapan.m5p.com>
- <20230908035911.GAZPqcD/EjfKZ0ISrZ@fat_crate.local>
+        with ESMTP id S229818AbjINXAr (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Thu, 14 Sep 2023 19:00:47 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EA63E6A;
+        Thu, 14 Sep 2023 16:00:43 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1694732439;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Y9UPmbkXZRNuioCyvMTxakQr1LFj1kbpXONIFu2xSbU=;
+        b=lg2xYIiFHmDQ94KTGhglBSA6Z0t67NpbKHOIiF7u/MK/QNmaP++hoHuiLV+K+pCpRbvrny
+        3/iljaw4BlgVWi/Axp6VS4fmMqKGyXg21eMc5ZV4tP/U4RlYANeOwmzU8va1MEOljqy3TT
+        btUeGlhB3sh0EMaUYvltsYDxwKSXnXEylIIdoo/fFFa9bHszzToBmfF7mWfvAeUCCTtYF7
+        dLVR6DZAro2zzE9j6g8fxSwh1UCUDJaHZwjyB+5Hh3UOpHfdYzQSP58MDIwDkxgh0AroPW
+        ApRPA6r3z/oN2U1ADa5bw8cimXbGYP6+gkTTb8YmUICXl2qp0JQtDGwblbFK+A==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1694732439;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Y9UPmbkXZRNuioCyvMTxakQr1LFj1kbpXONIFu2xSbU=;
+        b=48C9u5FtSr/8YhitFLfTJzZIuTnlSrzcd0C4TaCewwtRO7Oehv/gGi/6/V2pnG6aVMDDrx
+        +xZpy5dDgM7R8iDQ==
+To:     andrew.cooper3@citrix.com, Xin Li <xin3.li@intel.com>,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-edac@vger.kernel.org, linux-hyperv@vger.kernel.org,
+        kvm@vger.kernel.org, xen-devel@lists.xenproject.org
+Cc:     mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+        x86@kernel.org, hpa@zytor.com, luto@kernel.org,
+        pbonzini@redhat.com, seanjc@google.com, peterz@infradead.org,
+        jgross@suse.com, ravi.v.shankar@intel.com, mhiramat@kernel.org,
+        jiangshanlai@gmail.com
+Subject: Re: [PATCH v10 03/38] x86/msr: Add the WRMSRNS instruction support
+In-Reply-To: <6f5678ff-f8b1-9ada-c8c7-f32cfb77263a@citrix.com>
+References: <20230914044805.301390-1-xin3.li@intel.com>
+ <20230914044805.301390-4-xin3.li@intel.com>
+ <6f5678ff-f8b1-9ada-c8c7-f32cfb77263a@citrix.com>
+Date:   Fri, 15 Sep 2023 01:00:39 +0200
+Message-ID: <87y1h81ht4.ffs@tglx>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230908035911.GAZPqcD/EjfKZ0ISrZ@fat_crate.local>
-X-Spam-Status: No, score=0.4 required=10.0 tests=KHOP_HELO_FCRDNS autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on mattapan.m5p.com
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Fri, Sep 08, 2023 at 05:59:11AM +0200, Borislav Petkov wrote:
-> On Thu, Sep 07, 2023 at 08:08:00PM -0700, Elliott Mitchell wrote:
-> > This reverts commit 767f4b620edadac579c9b8b6660761d4285fa6f9.
-> > 
-> > There are at least 3 valid reasons why a VM may see MCE events/registers.
-> 
-> Hmm, so they all read like a bunch of handwaving to me, with those
-> probable hypothetical "may" formulations.
+Andrew!
 
-Indeed.  At what point is the lack of information and response long
-enough to simply commit a revert due to those lacks?
+On Thu, Sep 14 2023 at 15:05, andrew wrote:
+> On 14/09/2023 5:47 am, Xin Li wrote:
+>> +static __always_inline void wrmsrns(u32 msr, u64 val)
+>> +{
+>> +	__wrmsrns(msr, val, val >> 32);
+>> +}
+>
+> This API works in terms of this series where every WRMSRNS is hidden
+> behind a FRED check, but it's an awkward interface to use anywhere else
+> in the kernel.
 
-Even with the commit message having been rewritten and the link to:
-https://lkml.kernel.org/r/20210628172740.245689-1-Smita.KoralahalliChannabasappa@amd.com
-added, this still reads as roughly:
+Agreed.
 
-"A hypothetical bug on a hypothetivisor"
+> I fully understand that you expect all FRED capable systems to have
+> WRMSRNS, but it is not a hard requirement and you will end up with
+> simpler (and therefore better) logic by deleting the dependency.
 
-I rather suspect a genuine issue was observed, but with absolutely no
-detail this is useless.  I can make some guesses, but those guesses
-relation to reality is dubious.
+According to the CPU folks FRED systems are guaranteed to have WRMSRNS -
+I asked for that :). It's just not yet documented.
 
+But that I aside, I agree that we should opt for the safe side with a
+fallback like the one you have in XEN even for the places which are
+strictly FRED dependent.
 
-On Wed, Sep 13, 2023 at 03:50:12PM +0000, Luck, Tony wrote:
-> > Also, please note that the EDAC modules don't handle MCE events
-> > directly. They act on information passed from the MCE subsystem.
-> >
-> > Furthermore, there are other EDAC modules that have the same !hypervisor
-> > check, so why change only this one?
-> 
-> The older Intel EDAC drivers translated system physical addresses to DIMM
-> addresses by digging around in the CONFIG and MMIO space of the memory
-> controller devices. It would seem unwise for a VMM to give access to those
-> addresses to a guest (in general ... perhaps OK for a Xen style "DOM0" guest that is
-> handling many tasks for the VMM?).
+> As a "normal" user of the WRMSR APIs, the programmer only cares about:
+>
+> 1) wrmsr() -> needs to be serialising
+> 2) wrmsr_ns() -> safe to be non-serialising
 
-Which seems oddly similar to:
-"the Linux kernel may be handling adminstrative duties/hardware
-for a hypervisor.  In this case, the events need to be processed and
-potentially passed back through the hypervisor."
+Correct.
 
+> In Xen, I added something of the form:
+>
+> /* Non-serialising WRMSR, when available.=C2=A0 Falls back to a serialisi=
+ng
+> WRMSR. */
+> static inline void wrmsr_ns(uint32_t msr, uint32_t lo, uint32_t hi)
+> {
+> =C2=A0=C2=A0=C2=A0 /*
+> =C2=A0=C2=A0=C2=A0=C2=A0 * WRMSR is 2 bytes.=C2=A0 WRMSRNS is 3 bytes.=C2=
+=A0 Pad WRMSR with a redundant CS
+> =C2=A0=C2=A0=C2=A0=C2=A0 * prefix to avoid a trailing NOP.
+> =C2=A0=C2=A0=C2=A0=C2=A0 */
+> =C2=A0=C2=A0=C2=A0 alternative_input(".byte 0x2e; wrmsr",
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 ".byte 0x0f,0x01,0xc=
+6", X86_FEATURE_WRMSRNS,
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 "c" (msr), "a" (lo),=
+ "d" (hi));
+> }
+>
+> and despite what Juergen said, I'm going to recommend that you do wire
+> this through the paravirt infrastructure, for the benefit of regular
+> users having a nice API, not because XenPV is expecting to do something
+> wildly different here.
 
-On Wed, Sep 13, 2023 at 12:21:50PM -0400, Yazen Ghannam wrote:
-> The MCE decoder may access some newer MCA registers, or request info
-> from the MCE subsystem. But this is for informational error decoding. It
-> won't support any actions that a guest could take.
-> 
-> The AMD64 EDAC module reads system-specific memory controller registers
-> through non-architectural interfaces. So also unwise or not useful for a
-> guest to access.
+I fundamentaly hate adding this to the PV infrastructure. We don't want
+more PV ops, quite the contrary.
 
-This could be emulated.  With it not being officially specified the
-emulation may not be too accurate, but it is possible.  Admittedly VMware
-may have abandoned this level of perfect emulation accuracy, but one
-could do it.  Which would be "full virtualization of MCE events."
+For the initial use case at hand, there is an explicit FRED dependency
+and the code in question really wants to use WRMSRNS directly and not
+through a PV function call.
 
+I agree with your reasoning for the more generic use case where we can
+gain performance independent of FRED by using WRMSRNS for cases where
+the write has no serialization requirements.
 
-On Wed, Sep 13, 2023 at 10:36:50AM -0400, Yazen Ghannam wrote:
-> Furthermore, there are other EDAC modules that have the same !hypervisor
-> check, so why change only this one?
+But this made me look into PV ops some more. For actual performance
+relevant code the current PV ops mechanics are a horrorshow when the op
+defaults to the native instruction.
 
-Indeed.  Those will also need similar treatment, but that wouldn't be a
-revert of 767f4b620eda.  I found 767f4b620eda in the process of looking
-for the correct hook point.
+Let's look at wrmsrl():
 
+wrmsrl(msr, val
+ wrmsr(msr, (u32)val, (u32)val >> 32))
+  paravirt_write_msr(msr, low, high)
+    PVOP_VCALL3(cpu.write_msr, msr, low, high)
 
+Which results in
 
-There are at least two, and possibly more, points of view with regards
-to MCE and virtualization.  I keep noticing most implementers are
-strictly thinking of perfect, full virtualization of hardware, and
-missing what is actually desired.
+	mov	$msr, %edi
+	mov	$val, %rdx
+	mov	%edx, %esi
+	shr	$0x20, %rdx
+	call	native_write_msr
 
-Full virtualization is where you are renting an actual physical slice of
-actual hardware, proper virtualization of CEs and UEs is desireable.
+and native_write_msr() does at minimum:
 
-In reality most clients merely want to rent the processing power the
-hardware provides and not deal with actually owning the hardware.  To
-them, CEs are an annoyance since they clutter logs and they're not
-something they're in a position to deal with.  Instead the owner of the
-hardware wants the CEs so they can monitor hardware health.
+	mov    %edi,%ecx
+	mov    %esi,%eax
+	wrmsr
+        ret
 
-What you want depends on your SLAs, but the most prominent authors keep
-missing that many clients (VM owners) don't actually want to deal with
-CEs.  A SLA could also state a single UE means discarding current VM
-state and rolling back to the last known good checkpoint.
+In the worst case 'ret' is going through the return thunk. Not to talk
+about function prologues and whatever.
 
+This becomes even more silly for trivial instructions like STI/CLI or in
+the worst case paravirt_nop().
 
--- 
-(\___(\___(\______          --=> 8-) EHM <=--          ______/)___/)___/)
- \BS (    |         ehem+sigmsg@m5p.com  PGP 87145445         |    )   /
-  \_CS\   |  _____  -O #include <stddisclaimer.h> O-   _____  |   /  _/
-8A19\___\_|_/58D2 7E3D DDF4 7BA6 <-PGP-> 41D1 B375 37D0 8714\_|_/___/5445
+The call makes only sense, when the native default is an actual
+function, but for the trivial cases it's a blatant engineering
+trainwreck.
 
+I wouldn't care at all if CONFIG_PARAVIRT_XXL would be the esoteric use
+case, but AFAICT it's default enabled on all major distros.
 
+So no. I'm fundamentally disagreeing with your recommendation. The way
+forward is:
+
+  1) Provide the native variant for wrmsrns(), i.e. rename the proposed
+     wrmsrns() to native_wrmsr_ns() and have the X86_FEATURE_WRMSRNS
+     safety net as you pointed out.
+
+     That function can be used in code which is guaranteed to be not
+     affected by the PV_XXL madness.
+
+  2) Come up with a sensible solution for the PV_XXL horrorshow
+
+  3) Implement a sane general variant of wrmsr_ns() which handles
+     both X86_FEATURE_WRMSRNS and X86_MISFEATURE_PV_XXL
+
+  4) Convert other code which benefits from the non-serializing variant
+     to wrmsr_ns()
+
+Thanks,
+
+        tglx
