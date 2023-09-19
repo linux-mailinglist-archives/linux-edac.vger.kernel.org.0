@@ -2,120 +2,120 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 163EE7A69D4
-	for <lists+linux-edac@lfdr.de>; Tue, 19 Sep 2023 19:45:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B8A0F7A6A54
+	for <lists+linux-edac@lfdr.de>; Tue, 19 Sep 2023 19:59:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232078AbjISRps (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Tue, 19 Sep 2023 13:45:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53790 "EHLO
+        id S229853AbjISR7c (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Tue, 19 Sep 2023 13:59:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232705AbjISRph (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Tue, 19 Sep 2023 13:45:37 -0400
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2081.outbound.protection.outlook.com [40.107.92.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9797C6;
-        Tue, 19 Sep 2023 10:45:05 -0700 (PDT)
+        with ESMTP id S229690AbjISR7b (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Tue, 19 Sep 2023 13:59:31 -0400
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2078.outbound.protection.outlook.com [40.107.243.78])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93F1F8F;
+        Tue, 19 Sep 2023 10:59:23 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=PQuAnk+A5SjHv26zA3sbP9DqZpfNNitT6KaVuI4JwRDzd6Fb7DiEseb06NPKDjZciGWBgu+EmFEJyaPz5aprVazKh4VlkpLXGWUBNTY771Z3AiHYmOc6B2P2OWGlzrsIBvt29fg4AkGYqmrs4hFaKbwtfoX5WX9KXV4zxqSxpaxOcv1y6NvwPQfAHknbMujUWVZvdpBD+OIb1gkWd7DDxOrTZfrwXlIjk8E3WuKgufcbRrV6WBDuhEGKxe56ATJNO9lvNVZZogV1/SEv+BkXEQtIq/K1xB3PYqAvLoh3h5TSq4dFcx4yK6/HlDMGu+gqVpx3e1oYTxvuUnvnOnkiqw==
+ b=GUe1o6khAKdZIpBIQAjFi6qOk1X9wYvBReY+PSFEDsyo1b1ciJQ+jYri/9xf1ciEjz9CRjZu2gHQ2Cs8yacvIyz9J0MXXQ1VVWKZklgRCGg96yxQsQvY7vw3n9n2oe6V5YmZdW1ZhfKB0eqdtiKz449g0ZzvvDCdLPzw2z8x4StqeHd2W/qvSDhzVHIOj4pFwCfkfTgpNnWYxWgw5GP2fMZvzCB3IOkzkCUZIJlF+yV1ZsUaHzOHMWzR2f9w1KFt6uurtcBgz70XVkCPFlFZ6dJEhGlb0FcAynYaINOvDMQG7PQLAkwaFRoRIW8owQPCjdGKqJ2WPU5SmbU7GfIn5Q==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=e0v37NUo3S7z060/x8d+eAXfbKvb8OPvcTylCoGs7iY=;
- b=B9MmniqQ2mcqbX6SYGgPfYqm/uxxdUs01h4/udbJ+/embKoliXIo+gPB5JF8cn8n1h+973RTOVcHuemaxsImvrfiULUjYEF5u4EsUqflZSVBwW+Tl8G0iQoyv7YyEG1HdI8XxWwyRh7ZnBSD4s2dF8pKRgdHqnBPFQEV4Q4kQ4hnIG1hAL6xKDVwpv0rKPnQizA0hYQFL6oda7eCTQXwlJaAAXIuLzlCxoRKWkJ6dAG9dO8fOoEXtDPFcrwJRwp3ewfx3cocrT8vdyzVUP8h9+DSnSuU8i4FnQmaUPPLk5WqnBRdZ691gYp3Ef1mRAcBogJAgGmJbKnWAurYbSwd+g==
+ bh=bqRWDPPOTw4wWILbxcg8mrULLa1jJrj9ucJQnZF3PIY=;
+ b=Ek8lTU+A+wyLLXfFPnX5u4JKotmh+nrgWQYXn0PZyfzwZSXr5sNtPyrvB3KkPksPH5UttAHw7R/peU2h1slR6MKJG9l3qbnTGSr81B0jd0axoWhDhY3+10XTlJvaJHAh/kEY0rrDbNu2e7jsv2cBWHsshnF2HvqVfVS5YuBdO3rbIvY1t4bf25HWK5apNYTzrcd6RVjPw0jmeUkMdaD0oJbEhzrFJXp4Z9ZYQ0SdvccqwC/1W2WZNw+CsGJG5IpnKBIuPAsqqdLU1MZ8ZGabIt4q43e3SqTegQua8bVwSlLnR+ppjx2hTJHVigdjBxj1X534t42izEBOrQuKbr5buA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
  header.d=amd.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=e0v37NUo3S7z060/x8d+eAXfbKvb8OPvcTylCoGs7iY=;
- b=kWnJoz0j0x8DZ6Kw5g8jrP+jAPptYjyotQHLAivdk9gA8uE16ChgpZG491Fm93pC4+EJ5DJVg92iuv912BqW7WzRHtmChucZsCuGeeaHNeDr/5CAP+fgvQH80UbZn1Dbr6iYRUAW6MVw9wGrzS1BzISsYIRJytnTc3PqPejsAjk=
+ bh=bqRWDPPOTw4wWILbxcg8mrULLa1jJrj9ucJQnZF3PIY=;
+ b=Jkx5jEkut8RtzmH7GFvPOKHYHt3Cay9/pAv6zX3CqUZ+DIIKQoErXbjTMYghpx3ZjOBu7FNSpX3H6X/wzPoD30FCP6Sa5VERBRJEPZVZ9K9UGpsj9VDNcm16Myt5pG96v9kuPHMDt1VTXcHzPq3jFXX2AtPYjLOMiNgX+ypiO5Y=
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=amd.com;
 Received: from BN8PR12MB3108.namprd12.prod.outlook.com (2603:10b6:408:40::20)
- by SA1PR12MB7040.namprd12.prod.outlook.com (2603:10b6:806:24f::13) with
+ by IA1PR12MB6209.namprd12.prod.outlook.com (2603:10b6:208:3e7::22) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6792.26; Tue, 19 Sep
- 2023 17:44:58 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6792.27; Tue, 19 Sep
+ 2023 17:59:14 +0000
 Received: from BN8PR12MB3108.namprd12.prod.outlook.com
  ([fe80::3043:e5d2:42f4:a231]) by BN8PR12MB3108.namprd12.prod.outlook.com
  ([fe80::3043:e5d2:42f4:a231%6]) with mapi id 15.20.6792.026; Tue, 19 Sep 2023
- 17:44:58 +0000
-Message-ID: <c76723df-f2f1-4888-9e05-61917145503c@amd.com>
-Date:   Tue, 19 Sep 2023 13:44:55 -0400
+ 17:59:14 +0000
+Message-ID: <6ae4df67-ba0b-4b50-8c1d-a5d382105ad2@amd.com>
+Date:   Tue, 19 Sep 2023 13:59:11 -0400
 User-Agent: Mozilla Thunderbird
 Cc:     yazen.ghannam@amd.com, Smita.KoralahalliChannabasappa@amd.com,
         dave.hansen@linux.intel.com, x86@kernel.org,
         linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
         patches@lists.linux.dev
-Subject: Re: [PATCH v7 2/3] x86/mce: Add per-bank CMCI storm mitigation
+Subject: Re: [PATCH v7 3/3] x86/mce: Handle Intel threshold interrupt storms
+Content-Language: en-US
 To:     Tony Luck <tony.luck@intel.com>, Borislav Petkov <bp@alien8.de>
 References: <20230616182744.17632-1-tony.luck@intel.com>
  <20230718210813.291190-1-tony.luck@intel.com>
- <20230718210813.291190-3-tony.luck@intel.com>
-Content-Language: en-US
+ <20230718210813.291190-4-tony.luck@intel.com>
 From:   Yazen Ghannam <yazen.ghannam@amd.com>
-In-Reply-To: <20230718210813.291190-3-tony.luck@intel.com>
+In-Reply-To: <20230718210813.291190-4-tony.luck@intel.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: BN9PR03CA0235.namprd03.prod.outlook.com
- (2603:10b6:408:f8::30) To BN8PR12MB3108.namprd12.prod.outlook.com
+X-ClientProxiedBy: BN9PR03CA0931.namprd03.prod.outlook.com
+ (2603:10b6:408:108::6) To BN8PR12MB3108.namprd12.prod.outlook.com
  (2603:10b6:408:40::20)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN8PR12MB3108:EE_|SA1PR12MB7040:EE_
-X-MS-Office365-Filtering-Correlation-Id: 90157ecd-8324-4eab-c767-08dbb938244a
+X-MS-TrafficTypeDiagnostic: BN8PR12MB3108:EE_|IA1PR12MB6209:EE_
+X-MS-Office365-Filtering-Correlation-Id: f988666f-d4c7-4164-6a97-08dbb93a2260
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: sOw6d5u9j2QNJr03wqeXIAgQC/dHVMbUobCpFzV0LxGnl9HzTf1/dep//MF/tMNI1PcnjJ81A9uWGc0rC83lJ8foB/pPHChilKqtQIuqi5UxtHr4a6EbE9BQG731glYGyHVsnVS15ffRn/tZSYIXkiCgyr3Qijpd2hYcYH7EpBJCw3TPfwJjucP1O3ml8gazwoLXGVHFul4BjC8kJloFYRlzoL1/CnqrEX4OCJ4ha/flQpe8+Tx9jGaKWwwNkwvfgUx2hOsVAM3aNyPoMVjwipvHgt0YjfCTq9/dPCOQ83YyNiLljlXGvYFwQFn1Knvar2pLoNLk05+20sF7K06IvIkLEpU0OHnmyczhaES7KML9AnFnEgFi5O+7eXNLublWZnEL3Lbcd6KHV1G0WLwZ70khJ3608i3u645+p3T8NVqRjZjSegL19vO2BAdtq9r0DfAxyASt7qHsD893cI43g7nsOJfI5I+FHl9/7vW0qvHYxbAWtyB7tbQV0B82sl9CzJAse1N8NcR9tc3YV/gAbSziXlcWPdpG+Yaz/tG0fr6d/2Tl28VWdjM+r0jodeNqu66yNbYq6Bh6/6XZBTlPHhts04HmFGwQKpyI79xgR6nYQMIFyoi7zZmUxgIKm11aIBCxMGtGW+/ZLH7vFDj9Qw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3108.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(376002)(366004)(346002)(396003)(136003)(39860400002)(186009)(1800799009)(451199024)(5660300002)(26005)(8676002)(4326008)(8936002)(2616005)(15650500001)(2906002)(31696002)(36756003)(86362001)(38100700002)(83380400001)(44832011)(66476007)(66946007)(6506007)(6486002)(66556008)(53546011)(110136005)(31686004)(6666004)(478600001)(6512007)(41300700001)(316002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: M/nBZqkJX7gMncFBH1BuCneVSHqZnVaaAoJVZBVSQ/TlWLJrNHxl49chk4loFcSKBNgtejUAd+KqZGXbckOKG3TWTFKVnhT6iF9bxQPb4h85B3ESDZJACGbVbMtFZArcyrbgymqK5x2JIcj35rw5OyQcp32HeDS7N1JpOMHBYIYkjCYQ4MNio3WJZE7RU1HIIqEzSjtOT6PeZ5bfjkw3uojzmpziPT6YdgJdH6ROBVkgb2mfawgtUI2Z5Kpg1z2rsfHWdJgseEDNotDXMT4LPhwLG10cJng0+JfmohH0i7gPwaNGOA+u8im0O/r5YxATGaypFSOWTrc9Vq6QmtAwJM/9GSUcgqdkdamjJtB2SmGl0zbEssdxcqupB/HAP+CNBsiRDZvVcNnMz1O4YHM3z/Rluez/+mbQh7zPiKL9JkHpDeSEzdNfaBBPlGiFjN1KnhH7tgYtAyWudlaikkFQN/LBw2frBiR4jd7Ko3ThM5JrA/PhK8muQQS/8UPF2h5pWxD9hxIWMpwTtWklEDVVxZj+P0S5P8q+FoHJd65GXJeqRc78d6Nm5VVhdaE4GD0IZevyabo11O1e7c2c7BHRRyUw+EQMVp/sSM/nDS4ZbQDM59FOCwpyqzUv+sBMnO59VRZBrwMKz0kDcdUauaYfaQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3108.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(346002)(366004)(39860400002)(396003)(136003)(376002)(186009)(1800799009)(451199024)(2616005)(26005)(6486002)(6506007)(53546011)(6512007)(86362001)(36756003)(31696002)(38100700002)(83380400001)(44832011)(5660300002)(478600001)(30864003)(41300700001)(66946007)(66556008)(66476007)(110136005)(316002)(4326008)(8676002)(8936002)(31686004)(6666004)(2906002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?bXpmWVNVMysxUy9sb3F0ZmNac0s5WXE1SkpCUjlYTkNjRSsxSzlqdkxIK2xO?=
- =?utf-8?B?SCtMNkVubFgwQ3E4SGR2OXJlL3J2S2tzdXV1eUo0SllRNjQ1NUZIejNBV3RO?=
- =?utf-8?B?QUJwUnV3OXNYR0FPbzBTNkFReXlodjI2U3JsTHNnYUZ6Z3B5TlBrTURPYUgw?=
- =?utf-8?B?M1BKUVp4ek00TXlLTkFJR3lOVnJPL2NweERjdG0rNXFyYlR0QzhJNTBURHYy?=
- =?utf-8?B?d3JKQnQrQzNyNDlxWklPSCs2OWVTa1pBU1gxNGhmbkl5bWozTFpGT2xRRGQz?=
- =?utf-8?B?YmUrRFdzaS9CUWxEVTdscDNBbm91NllJQis0d0lhSlpncENPQzhSd1VnQ2FY?=
- =?utf-8?B?TDVDcE5oOEZNNVhtdE55cGdnRDlOY0NQckNvQWt0ZG9aWW9GVmpuTUlrV2d0?=
- =?utf-8?B?QndzdFFvN0g4N09lcXU3Ris4c0Z5YnFJWjNTNitkdEhHbDJLUHJ1M25Ca0tK?=
- =?utf-8?B?VlJhS3d5RHA0RFpYc1dpTXp4QXBlZGZZVE5xNGROOVV2WnorY3YzcE1EYzZO?=
- =?utf-8?B?b2syT0NwaWVSRS9MYkE5eXBMRkdmZGg0ejBNUVFsUWZic3NRbkxFVWRlR1pS?=
- =?utf-8?B?cEp0bm56ZzdSemtaVzNnMEZ2QnhhN0ttY0VyYTREUHZNMkU0am8vcDAvVWVr?=
- =?utf-8?B?bDMzcUFSUEJYSno3c1BFdnJ3Z21TSmdERnBHS0tZdFFUQysxT3l6ajN3VzI4?=
- =?utf-8?B?azB2TzBsLytmNHUzcHg2TVdSYlRmNktQWVNYNlN0U1FBWGNKb3RRd2ZieHNm?=
- =?utf-8?B?ZzNFOWVMb0NTT0k1U2NJeWg0N2lTalBEcndhQzAxVGNHeG1LYU5zOFJ2Y3hH?=
- =?utf-8?B?MElneTJhdzlKbVZYMTZVYUxCKzNpRkhIOTVqdmtaeHJYcmJOMnFTTHkwMElF?=
- =?utf-8?B?eml1MVRiM0hvbzFKRFp3UXY0VWtDU1huNGgwdlp6cE9ydytkdXFuekxreTFW?=
- =?utf-8?B?MEtuVzNWRVpNRm93eWp0V21HN1VNZDZUeWVISXViUU40dVo5dStIVXEybUs3?=
- =?utf-8?B?QzUxUThsRCtXUnFyaDFGVUJNTkI3SGk3SDIrUW1aNjRob29TUlBpMXY1MXlN?=
- =?utf-8?B?VWJnZ3pLVDMxQzZMd3hzUGVOOXYwQkdxTFhQN1hITlBSU2huL1NkZUJLV1Na?=
- =?utf-8?B?WmNYRmQ3Q1FxSk1mWVR0a0NyVHBmTDhmVnd3SlYzMEw2U2xyaW1wc1FoSElx?=
- =?utf-8?B?MjE5VnduRVBoNW91Yy9DZExlcUFOWmZlMXVHalZZdlNlenVEeG1sZU9OaGpW?=
- =?utf-8?B?S0tjcktNNEZ2QlhuWVY3VVBpeitHb2RmWERreVdoT2lNZEpSOVhpYjBhOUZF?=
- =?utf-8?B?eTJGODg1bC9wMlNyVnBTY1RQOWxEdE5KVWtTbmpnMjFYQUN2ZEk2dUFXVDha?=
- =?utf-8?B?L0tCWGt5NWsrOGRiUTg2L1dmYWc5OHI1U2JTYVcrMk1abDJpSHEybnJxWEJ2?=
- =?utf-8?B?T25kYWRvSGFwZFlxNG4wRlZIb0FWcTVJdFk1TlIvaVlJQkhHcW9zT0xvWC9y?=
- =?utf-8?B?U3NzOWdwSTdNSFpLbks2MXpzZXJtdGF4Y3dEUGdWa01zSnEralZscmZWd0sr?=
- =?utf-8?B?bDhGK0RsVG9teklyUU81K1VnZnlneDY5azNjOXJUbUVXREFNSVA3aDM3K2lI?=
- =?utf-8?B?WW1zUEpCVWU2RDJkclBza0tzTitHZDE1WlNzOFBMSHJnT2pkY2VQOWtVaG9r?=
- =?utf-8?B?RXIrNmw3Q00xV1Y0bjFFM2JKd2Q2Q1pnRVR5UGM2cTJCbEJKMDNxL05ZOVN5?=
- =?utf-8?B?Njd4dFJiQ2VwbkxoNURRbGxPUnFHaVRKczNTTUtHcnFRak5zZEVUd3hsUXI4?=
- =?utf-8?B?QkxUZFEzMVdLcUNncVhEK0x6dlpXUzE1SVB6MkQzb2VrNitpb2dTakR2bXkz?=
- =?utf-8?B?RzNsajhiUmgxUEFjeEZKNldZSEpLVVRzYzFIYkhFQUtDMUI2M2RiWEFzTk5j?=
- =?utf-8?B?TDY4eVlPdnNVS2xueStQTVZ5TkpHd05WRWYvN0pTU3RvMGI3akxDTmZyVnBo?=
- =?utf-8?B?YTVmMkJJY2d0cE5veERnMStvVWw5bjhjaHhiQ3hlanlGZ3JvRERHNHVsK1Fo?=
- =?utf-8?B?V1doTms0YURFVk1QYmZSeE1IMFk2TW0zYSs1a3RwUklMYWcvckxhZmlmOTlW?=
- =?utf-8?Q?0C4v83UMVdUfI1ZaSmGqcxAzv?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?UWJKRjkzUlZYM25jSWszZW1jN0xIZFRuSS9ZN3hvZzNweXc2YzgwTS9PMmdF?=
+ =?utf-8?B?d1RUbTZpdWNJTElRZGlpaHZNQ3hzaC82a1hydGx1aUdva1dKdXZwblFpQ3hH?=
+ =?utf-8?B?cXY2YnFEbkhpZlNqU2FRVUdURjI3NGNZQ2ZhbElmc3NOOEp3ekFoR1RUMC8w?=
+ =?utf-8?B?emxreUxjcm1IODdkQXNvREllcGRmMldwWFlQWnBCbFhGU24wQklybkhyNitI?=
+ =?utf-8?B?RDJzNzh6TGUxQjJkU3ZHK0FOelNxY1NBQU53OTQzcm1ISzJFVWlmdFVpT0VR?=
+ =?utf-8?B?dkN5UVY4S0NjK08yRENpWE0rUUF4M2p1KzZKVTBoNzlCY3VuT1gvUDFONUp4?=
+ =?utf-8?B?cWZvSVBKbFd1Z2lDRGVLSkNWblpEYWlaNUdvdCsxUERsbXZKWUhubTQvZUZC?=
+ =?utf-8?B?OG5ib0dTQkJVZVBtNS8vN0FPS2M4NWlFdUxmclBmQXR2Z2NNYkgyWDQ0Y2Fm?=
+ =?utf-8?B?WE55akhsQm40enVwQjdEM2ZZS1NiYzYrdG9lS3NEYnExcGYzMVBLQ093K01S?=
+ =?utf-8?B?Y05xcFVneE1Pak9jQ3VrVWI0b1R4R3YxMEtKUGdoek1OSzhzQTdaZDJBakQy?=
+ =?utf-8?B?SDZseU9UY1Vzb1JjU0VSN0RLckRpZGZEZkVyWThiRVlYcGY2bGc3Uys1Ykty?=
+ =?utf-8?B?QUorMFkweGs2NVQxNXNneVZEZGV1ZUk5Z3RiMmViK2t6U3o1ZWpXUEJ3ZVRN?=
+ =?utf-8?B?WXlZeTVZU2JzNVVFVzZYQmNzQ1FnMVluNkd2K0hwdXFBMlNmQUZob3RZOExU?=
+ =?utf-8?B?RVVXNmY0clBKTU00c2JrSUtPa0lSRHpEbTk4MFJpYi8rdDliTTN2bHZpTWV3?=
+ =?utf-8?B?QWE5TUN0NWp3Rk4vTGZxM2NpQWlyTXBWR0pZdFJiSkRRNUJrZVd2SkdYd3FZ?=
+ =?utf-8?B?SEpvdHJQdGh6dXZZa1c1cUVGdVAyL2NiM09VZWNTNm80S2QrZ0JhbHo0ZEg0?=
+ =?utf-8?B?TkV1TEZtdEU2aU1mVU51N21JMllhV0NBZDZNdk5YeXZHVmhhcENMaHVmbnc1?=
+ =?utf-8?B?b1M4LzBCeVRJQmpYeUdCZ05zdkdzL0ZkOUs5MmRwUmdhNCtvaVFaVXB6STRy?=
+ =?utf-8?B?c0hNbmFLL3NmaDJFRlR6SkJqRU55K3laSFlPRC90a1NHcEdua1ErOW9oQW94?=
+ =?utf-8?B?Q3ZnSzViRDlPT1hNRmtJVDFJWXlxR2hyY21RMnJiZ21JeWJPbzRrdHNlVFdI?=
+ =?utf-8?B?QlVCTVdjVXoyTzRscFkzQ2t2ZFRwVlZrcXFvNFZudnNKekkwelljNUZkbUNM?=
+ =?utf-8?B?QWV3VGlKL2ZZdk1HRUQ4Sm5oUDFtWWIzRnZqbE1tdWVOSHhtaTB2TWFucHhO?=
+ =?utf-8?B?dFk0WnFDbzl4OGkxaTNlUVBMdzhaZDdoVDcyNDhmdmdTL1NFZTdRdzEraUE1?=
+ =?utf-8?B?WGJKOWM3QkozVHY0UGkrMG1uL1NxWWdvdTViQmc1bGhvUUxySUhPUkgwZXhv?=
+ =?utf-8?B?V2RSeDFBN2JOUE9YaVdaMHF2bVJKRUJLT3QzaHA0WTZRd21BZDEvcGxjamI2?=
+ =?utf-8?B?ZW8zSEQyVS9JUHBuVjJDTkRUQThCcWRhNU5lZlR0U0l6ekpjb0JtQjh2dTFp?=
+ =?utf-8?B?bWJHS3NHWllIdEtyN2NqR2FSSVcvajg4eHBmbU1tVlhHOThaREJMd255clFM?=
+ =?utf-8?B?V0IrRTFrNjdBTzNaYWJYd0d5QTFyYy9Mb2k4dWpzUkZwL0JFb09ic2hqZWFW?=
+ =?utf-8?B?VUtHdXpDM2FXZmpuN3hJb1ltb2QzMnBQVk05YW43MTg2alRGaWM0dmlDdEhL?=
+ =?utf-8?B?Y3VrUVZtbkZwYUdpblY0bjYxQzFKL3JxcXJ2YWRSZGRaY2RacnNJVWtBZG5F?=
+ =?utf-8?B?QVZiUjVCY3Q2SUU5S0pSbkVud2k4b3QyVW55ZVE5eUtFTW90QzFVaVhpKzRs?=
+ =?utf-8?B?L2g0OHdMcExQQ1BDOHpQSzZNZXArM2I1Zk9aa2FNZmhRRWdnWE9KdlUzY1VL?=
+ =?utf-8?B?VVRVaWMvYzA2ZzFXcDNnM3Y0M1pFbUlIcHpSZFFlSEIwdzZhamRqWHNPU0JP?=
+ =?utf-8?B?a2JET1JEcHZjaDBZcVNoOFFqdnRPZCt6dUUzM2cyRm9WRmNqT2wwMUhkRW1Y?=
+ =?utf-8?B?NnNxUUNsd1RrdGZLWHh3UXNraXlWbEFQMGNwV21JbzFhVUw0aHNVczRoVHZQ?=
+ =?utf-8?Q?ic2jX3hqXf55eTUjFwZ7CYZC9?=
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 90157ecd-8324-4eab-c767-08dbb938244a
+X-MS-Exchange-CrossTenant-Network-Message-Id: f988666f-d4c7-4164-6a97-08dbb93a2260
 X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3108.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Sep 2023 17:44:58.3205
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Sep 2023 17:59:14.1053
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: xsnIEo+viqe/GZ+VD0/74hPykG/QGvgiyh3UjcwG7nWHB3l/nqMy2lKSB26wdN/CHEhN+jpvewIOWWaI/ydafw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR12MB7040
+X-MS-Exchange-CrossTenant-UserPrincipalName: POjH0lpZkktTl/RbL4vGbo7u/2yZ2e48VlyFD4geR/5oyIFimuG0Ao5DUREJG1ODyFK54da+undF6OR0Ov1Cjg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB6209
 X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
         RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
@@ -127,319 +127,363 @@ List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
 On 7/18/23 5:08 PM, Tony Luck wrote:
-> This is the core functionality to track CMCI storms at the
-> machine check bank granularity. Subsequent patches will add
-> the vendor specific hooks to supply input to the storm
-> detection and take actions on the start/end of a storm.
+> Add an Intel specific hook into machine_check_poll() to keep track
+> of per-CPU, per-bank corrected error logs (with a stub for the
+> CONFIG_MCE_INTEL=n case).
 > 
-> Maintain a bitmap history for each bank showing whether the bank
-> logged an corrected error or not each time it is polled.
+> When a storm is observed the Rate of interrupts is reduced by setting
+
+Rate -> rate
+
+> a large threshold value for this bank in IA32_MCi_CTL2. This bank is
+> added to the bitmap of banks for this CPU to poll. The polling rate
+> is increased to once per second.
 > 
-> In normal operation the interval between polls of this banks
-> determines how far to shift the history. The 64 bit width corresponds
-> to about one second.
+> When a storm ends reset the
+
+Spurious newline?
+
+> threshold in IA32_MCi_CTL2 back to 1, removes the bank from the bitmap
+
+removes -> remove
+
+> for polling, and changes the polling rate back to the default.
+
+changes -> change
+
 > 
-> When a storm is observed a CPU vendor specific action is taken to reduce
-> or stop CMCI from the bank that is the source of the storm.  The bank
-> is added to the bitmap of banks for this CPU to poll. The polling rate
-> is increased to once per second.  During a storm each bit in the history
-> indicates the status of the bank each time it is polled. Thus the history
-> covers just over a minute.
+> If a CPU with banks in storm mode is taken offline, the new CPU
+> that inherits ownership of those banks takes over management of
+> storm(s) in the inherited bank(s).
 > 
-> Declare a storm for that bank if the number of corrected interrupts
-> seen in that history is above some threshold (defined as 5 in this
-> series, could be tuned later if there is data to suggest a better
-> value).
-> 
-> A storm on a bank ends if enough consecutive polls of the bank show
-> no corrected errors (defined as 30, may also change). That calls the
-> CPU vendor specific function to revert to normal operational mode,
-> and changes the polling rate back to the default.
+> The cmci_discover() function was already very large. These changes
+> pushed it well over the top. Refactor with three helper functions
+> to braing it back under control.
+
+braing -> bring
+
 > 
 > Signed-off-by: Tony Luck <tony.luck@intel.com>
 > ---
->  arch/x86/kernel/cpu/mce/internal.h |  41 ++++++++++-
->  arch/x86/kernel/cpu/mce/core.c     | 108 ++++++++++++++++++++++++++---
->  2 files changed, 140 insertions(+), 9 deletions(-)
+>  arch/x86/kernel/cpu/mce/internal.h |   2 +
+>  arch/x86/kernel/cpu/mce/core.c     |   3 +
+>  arch/x86/kernel/cpu/mce/intel.c    | 202 +++++++++++++++++++++--------
+>  3 files changed, 156 insertions(+), 51 deletions(-)
 > 
 > diff --git a/arch/x86/kernel/cpu/mce/internal.h b/arch/x86/kernel/cpu/mce/internal.h
-> index 9dcad55835fa..da790d13d010 100644
+> index da790d13d010..e641c991beb1 100644
 > --- a/arch/x86/kernel/cpu/mce/internal.h
 > +++ b/arch/x86/kernel/cpu/mce/internal.h
-> @@ -54,7 +54,46 @@ static inline void intel_clear_lmce(void) { }
->  static inline bool intel_filter_mce(struct mce *m) { return false; }
->  #endif
+> @@ -41,12 +41,14 @@ struct dentry *mce_get_debugfs_dir(void);
+>  extern mce_banks_t mce_banks_ce_disabled;
 >  
-> -void mce_timer_kick(unsigned long interval);
-> +void mce_timer_kick(bool storm);
-> +void mce_handle_storm(int bank, bool on);
-> +void cmci_storm_begin(int bank);
-> +void cmci_storm_end(int bank);
-
-We usually use "unsigned int" for bank numbers. Can we also do so for
-these functions?
-
-> +
-> +/*
-> + * history:	bitmask tracking whether errors were seen or not seen in
-> + *		the most recent polls of a bank.
-> + * timestamp:	last time (in jiffies) that the bank was polled
-> + * storm:	Is this bank in storm mode?
-> + */
-> +struct storm_bank {
-> +	u64 history;
-> +	u64 timestamp;
-> +	bool storm;
-> +};
-> +
-> +/*
-> + * banks:		per-cpu, per-bank details
-> + * stormy_bank_count:	count of MC banks in storm state
-> + * poll_mode:		CPU is in poll mode
-> + */
-> +struct mca_storm_desc {
-> +	struct storm_bank	banks[MAX_NR_BANKS];
-> +	int			stormy_bank_count;
-
-Can we use unsigned values for stormy_bank_count? I'm not clear on the
-restrictions for the inc/dec functions.
-
-The maximum possible MCA bank count is 255, i.e. MCG_CAP[Count] = 0xFF.
-So stormy_bank_count can be a u8, I think.
-
-> +	bool			poll_mode;
-> +};
-> +DECLARE_PER_CPU(struct mca_storm_desc, storm_desc);
-> +
-> +/*
-> + * How many errors within the history buffer mark the start of a storm
-> + */
-
-This should use single-line style comments.
-
-> +#define STORM_BEGIN_THRESHOLD	5
-> +
-> +/*
-> + * How many polls of machine check bank without an error before declaring
-> + * the storm is over. Since it is tracked by the bitmaks in the history
-> + * field of struct storm_bank the mask is 30 bits [0 ... 29]
-
-Should have a (.) at the end of this sentence, and also the one above.
-
-> + */
-> +#define STORM_END_POLL_THRESHOLD	29
->  
->  #ifdef CONFIG_ACPI_APEI
->  int apei_write_mce(struct mce *m);
+>  #ifdef CONFIG_X86_MCE_INTEL
+> +void mce_intel_handle_storm(int bank, bool on);
+>  void cmci_disable_bank(int bank);
+>  void intel_init_cmci(void);
+>  void intel_init_lmce(void);
+>  void intel_clear_lmce(void);
+>  bool intel_filter_mce(struct mce *m);
+>  #else
+> +static inline void mce_intel_handle_storm(int bank, bool on) { }
+>  static inline void cmci_disable_bank(int bank) { }
+>  static inline void intel_init_cmci(void) { }
+>  static inline void intel_init_lmce(void) { }
 > diff --git a/arch/x86/kernel/cpu/mce/core.c b/arch/x86/kernel/cpu/mce/core.c
-> index b45c5008df34..6a44e15d74fe 100644
+> index 6a44e15d74fe..0a287998e62f 100644
 > --- a/arch/x86/kernel/cpu/mce/core.c
 > +++ b/arch/x86/kernel/cpu/mce/core.c
-> @@ -607,6 +607,83 @@ static struct notifier_block mce_default_nb = {
->  	.priority	= MCE_PRIO_LOWEST,
->  };
+> @@ -2054,6 +2054,9 @@ static void mce_zhaoxin_feature_clear(struct cpuinfo_x86 *c)
+>  void mce_handle_storm(int bank, bool on)
+>  {
+>  	switch (boot_cpu_data.x86_vendor) {
+> +	case X86_VENDOR_INTEL:
+> +		mce_intel_handle_storm(bank, on);
+> +		break;
+>  	}
+>  }
 >  
-> +DEFINE_PER_CPU(struct mca_storm_desc, storm_desc);
+> diff --git a/arch/x86/kernel/cpu/mce/intel.c b/arch/x86/kernel/cpu/mce/intel.c
+> index 052bf2708391..55643c5944e1 100644
+> --- a/arch/x86/kernel/cpu/mce/intel.c
+> +++ b/arch/x86/kernel/cpu/mce/intel.c
+> @@ -47,8 +47,27 @@ static DEFINE_PER_CPU(mce_banks_t, mce_banks_owned);
+>   */
+>  static DEFINE_RAW_SPINLOCK(cmci_discover_lock);
+>  
+> +/* Linux non-storm CMCI threshold (may be overridden by BIOS) */
+>  #define CMCI_THRESHOLD		1
+
+Just curious, but why use '1' for the default? We have a lot of code to
+hide corrected errors. So why not just use the maximum limit? This would
+effectively hide the corrected errors. And if not the maximum, maybe some
+other intermediate value?
+
+>  
+> +/*
+> + * MCi_CTL2 threshold for each bank when there is no storm.
+> + * Default value for each bank may have been set by BIOS.
+> + */
+> +static int cmci_threshold[MAX_NR_BANKS];
+
+Can this be a 'u16', since the max threshold for Intel is 0x7FFF?
+
 > +
-> +void cmci_storm_begin(int bank)
+> +/*
+> + * High threshold to limit CMCI rate during storms. Max supported is
+> + * 0x7FFF. Use this slightly smaller value so it has a distinctive
+> + * signature when some asks "Why am I not seeing all corrected errors?"
+
+Maybe this answers my question above.
+
+> + * A high threshold is used instead of just disabling CMCI for a
+> + * bank because both corrected and uncorrected errors may be logged
+> + * in the same bank and signalled with CMCI. The threshold only applies
+> + * to corrected errors, so keeping CMCI enabled means that uncorrected
+> + * errors will still be processed in a timely fashion.
+> + */
+> +#define CMCI_STORM_THRESHOLD	32749
+> +
+>  static int cmci_supported(int *banks)
+>  {
+>  	u64 cap;
+> @@ -103,6 +122,31 @@ static bool lmce_supported(void)
+>  	return tmp & FEAT_CTL_LMCE_ENABLED;
+>  }
+>  
+> +/*
+> + * Set a new CMCI threshold value. Preserve the state of the
+> + * MCI_CTL2_CMCI_EN bit in case this happens during a
+> + * cmci_rediscover() operation.
+> + */
+> +static void cmci_set_threshold(int bank, int thresh)
 > +{
-> +	struct mca_storm_desc *storm = this_cpu_ptr(&storm_desc);
+> +	unsigned long flags;
+> +	u64 val;
 > +
-> +	__set_bit(bank, this_cpu_ptr(mce_poll_banks));
-
-This assumes that mce_poll_banks does not include banks with correctable
-interrupts. This is true for Intel, but not for AMD. 
-
-I'll include a change for AMD to match the Intel behavior. I don't think
-there's a good reason for the difference. Also, it may be good to save a
-few cycles by disabling polling when interrupts are enabled.
-
-There will be an action for me to make sure AMD users are aware of this.
-
-> +	storm->banks[bank].storm = true;
-> +
-> +	/*
-> +	 * If this is the first bank on this CPU to enter storm mode
-> +	 * start polling
-
-Need (.) here.
-
-> +	 */
-> +	if (++storm->stormy_bank_count == 1)
-> +		mce_timer_kick(true);
+> +	raw_spin_lock_irqsave(&cmci_discover_lock, flags);
+> +	rdmsrl(MSR_IA32_MCx_CTL2(bank), val);
+> +	val &= ~MCI_CTL2_CMCI_THRESHOLD_MASK;
+> +	wrmsrl(MSR_IA32_MCx_CTL2(bank), val | thresh);
+> +	raw_spin_unlock_irqrestore(&cmci_discover_lock, flags);
 > +}
 > +
-> +void cmci_storm_end(int bank)
+> +void mce_intel_handle_storm(int bank, bool on)
 > +{
-> +	struct mca_storm_desc *storm = this_cpu_ptr(&storm_desc);
-> +
-> +	__clear_bit(bank, this_cpu_ptr(mce_poll_banks));
-> +	storm->banks[bank].history = 0ull;
-
-Why is the "ull" needed?
-
-> +	storm->banks[bank].storm = false;
-> +
-> +	/* If no banks left in storm mode, stop polling */
-
-Need (.) here.
-
-> +	if (!this_cpu_dec_return(storm_desc.stormy_bank_count))
-> +		mce_timer_kick(false);
+> +	if (on)
+> +		cmci_set_threshold(bank, CMCI_STORM_THRESHOLD);
+> +	else
+> +		cmci_set_threshold(bank, cmci_threshold[bank]);
 > +}
 > +
-> +static void track_storm(int bank, u64 status)
+>  /*
+>   * The interrupt handler. This is called on every event.
+>   * Just call the poller directly to log any events.
+> @@ -114,72 +158,126 @@ static void intel_threshold_interrupt(void)
+>  	machine_check_poll(MCP_TIMESTAMP, this_cpu_ptr(&mce_banks_owned));
+>  }
+>  
+> +/*
+> + * Check all the reasons why current CPU cannot claim
+> + * ownership of a bank.
+> + * 1: CPU already owns this bank
+> + * 2: BIOS owns this bank
+> + * 3: Some other CPU owns this bank
+> + */
+> +static bool cmci_skip_bank(int bank, u64 *val)
 > +{
-> +	struct mca_storm_desc *storm = this_cpu_ptr(&storm_desc);
-> +	unsigned long now = jiffies, delta;
-> +	unsigned int shift = 1;
-> +	u64 history;
+> +	unsigned long *owned = (void *)this_cpu_ptr(&mce_banks_owned);
 > +
-> +	/*
-> +	 * When a bank is in storm mode it is polled once per second and
-> +	 * the history mask will record about the last minute of poll results.
-> +	 * If it is not in storm mode, then the bank is only checked when
-> +	 * there is a CMCI interrupt. Check how long it has been since
-> +	 * this bank was last checked, and adjust the amount of "shift"
-> +	 * to apply to history.
-> +	 */
-> +	if (!storm->banks[bank].storm) {
-> +		delta = now - storm->banks[bank].timestamp;
-> +		shift = (delta + HZ) / HZ;
+> +	if (test_bit(bank, owned))
+> +		return true;
+> +
+> +	/* Skip banks in firmware first mode */
+> +	if (test_bit(bank, mce_banks_ce_disabled))
+> +		return true;
+> +
+> +	rdmsrl(MSR_IA32_MCx_CTL2(bank), *val);
+> +
+> +	/* Already owned by someone else? */
+> +	if (*val & MCI_CTL2_CMCI_EN) {
+> +		clear_bit(bank, owned);
+> +		__clear_bit(bank, this_cpu_ptr(mce_poll_banks));
+> +		return true;
 > +	}
 > +
-> +	/* If has been a long time since the last poll, clear history */
+> +	return false;
+> +}
+> +
+> +/*
+> + * Decide which CMCI interrupt threshold to use:
+> + * 1: If this bank is in storm mode from whichever CPU was
+> + *    the previous owner, stay in storm mode.
+> + * 2: If ignoring any threshold set by BIOS, set Linux default
+> + * 3: Try to honor BIOS threshold (unless buggy BIOS set it at zero).
+> + */
+> +static u64 cmci_pick_threshold(u64 val, int *bios_zero_thresh)
+> +{
+> +	if ((val & MCI_CTL2_CMCI_THRESHOLD_MASK) == CMCI_STORM_THRESHOLD)
+> +		return val;
+> +
+> +	if (!mca_cfg.bios_cmci_threshold) {
 
-"If it has..." and need (.) here.
+Are there many users of this option? Maybe this is something we should
+also include in the AMD threshold code. But I don't think anyone has
+asked me about it yet.
 
-> +	if (shift >= 64)
-> +		history = 0;
-
-Can this be initialized to '0' up top, then set "if (shift < 64)"?
-
-> +	else
-> +		history = storm->banks[bank].history << shift;
+> +		val &= ~MCI_CTL2_CMCI_THRESHOLD_MASK;
+> +		val |= CMCI_THRESHOLD;
+> +	} else if (!(val & MCI_CTL2_CMCI_THRESHOLD_MASK)) {
+> +		/*
+> +		 * If bios_cmci_threshold boot option was specified
+> +		 * but the threshold is zero, we'll try to initialize
+> +		 * it to 1.
+> +		 */
+> +		*bios_zero_thresh = 1;
+> +		val |= CMCI_THRESHOLD;
+> +	}
+> +
+> +	return val;
+> +}
+> +
+> +/*
+> + * Try to claim ownership of a bank.
+> + */
+> +static void cmci_claim_bank(int bank, u64 val, int bios_zero_thresh, int *bios_wrong_thresh)
+> +{
+> +	struct mca_storm_desc *storm = this_cpu_ptr(&storm_desc);
+> +
+> +	val |= MCI_CTL2_CMCI_EN;
+> +	wrmsrl(MSR_IA32_MCx_CTL2(bank), val);
+> +	rdmsrl(MSR_IA32_MCx_CTL2(bank), val);
+> +
+> +	/* Did the enable bit stick? -- the bank supports CMCI */
+> +	if (val & MCI_CTL2_CMCI_EN) {
+> +		set_bit(bank, (void *)this_cpu_ptr(&mce_banks_owned));
 
 Newline here, please.
 
-> +	storm->banks[bank].timestamp = now;
-> +
-> +	/* History keeps track of corrected errors. VAL=1 && UC=0 */
-> +	if ((status & (MCI_STATUS_VAL | MCI_STATUS_UC)) == MCI_STATUS_VAL)
-
-This should be a call to mce_is_correctable(). The VALID bit check isn't
-included, but this can be handled by moving the track_storm() call.
-Please see below.
-
-...Actually, I wrote this and the comment in the polling function, but
-then realized that may not work as intended.
-
-We want the per-bank history to 'tick' every time we enter the polling
-function, not just for "valid" errors, correct? You mention this in the
-commit message, but it didn't click for me until later... :P
-
-> +		history |= 1;
+> +		if ((val & MCI_CTL2_CMCI_THRESHOLD_MASK) == CMCI_STORM_THRESHOLD) {
+> +			pr_notice("CPU%d BANK%d CMCI inherited storm\n", smp_processor_id(), bank);
+> +			storm->banks[bank].history = ~0ull;
+> +			storm->banks[bank].timestamp = jiffies;
+> +			cmci_storm_begin(bank);
+> +		} else {
+> +			__clear_bit(bank, this_cpu_ptr(mce_poll_banks));
+> +		}
 
 Newline here, please.
 
-> +	storm->banks[bank].history = history;
+> +		/*
+> +		 * We are able to set thresholds for some banks that
+> +		 * had a threshold of 0. This means the BIOS has not
+> +		 * set the thresholds properly or does not work with
+> +		 * this boot option. Note down now and report later.
+> +		 */
+> +		if (mca_cfg.bios_cmci_threshold && bios_zero_thresh &&
+> +		    (val & MCI_CTL2_CMCI_THRESHOLD_MASK))
+> +			*bios_wrong_thresh = 1;
 > +
-> +	if (storm->banks[bank].storm) {
-> +		if (history & GENMASK_ULL(STORM_END_POLL_THRESHOLD, 0))
-> +			return;
-> +		pr_notice("CPU%d BANK%d CMCI storm subsided\n", smp_processor_id(), bank);
-> +		mce_handle_storm(bank, false);
-> +		cmci_storm_end(bank);
+> +		/* Save default threshold for each bank */
+> +		if (cmci_threshold[bank] == 0)
+> +			cmci_threshold[bank] = val & MCI_CTL2_CMCI_THRESHOLD_MASK;
 > +	} else {
-> +		if (hweight64(history) < STORM_BEGIN_THRESHOLD)
-> +			return;
-> +		pr_notice("CPU%d BANK%d CMCI storm detected\n", smp_processor_id(), bank);
-> +		mce_handle_storm(bank, true);
-> +		cmci_storm_begin(bank);
+> +		WARN_ON(!test_bit(bank, this_cpu_ptr(mce_poll_banks)));
+
+Could you invert the "MCI_CTL2_CMCI_EN" check and WARN/return early?
+This could save an indentation level.
+
 > +	}
 > +}
 > +
 >  /*
->   * Read ADDR and MISC registers.
+>   * Enable CMCI (Corrected Machine Check Interrupt) for available MCE banks
+>   * on this CPU. Use the algorithm recommended in the SDM to discover shared
+> - * banks.
+> + * banks. Called during initial bootstrap, and also for hotplug CPU operations
+> + * to rediscover/reassign machine check banks.
 >   */
-> @@ -680,6 +757,8 @@ bool machine_check_poll(enum mcp_flags flags, mce_banks_t *b)
->  		barrier();
->  		m.status = mce_rdmsrl(mca_msr_reg(i, MCA_STATUS));
+>  static void cmci_discover(int banks)
+>  {
+> -	unsigned long *owned = (void *)this_cpu_ptr(&mce_banks_owned);
+> -	unsigned long flags;
+> -	int i;
+>  	int bios_wrong_thresh = 0;
+> +	unsigned long flags;
+> +	int i;
 >  
-> +		track_storm(i, m.status);
-
-This can go after the VALID bit check below.
-
-Also, the "status" parameter can be dropped if the correctable check is
-done here...
-
-> +
->  		/* If this entry is not valid, ignore it */
->  		if (!(m.status & MCI_STATUS_VAL))
+>  	raw_spin_lock_irqsave(&cmci_discover_lock, flags);
+>  	for (i = 0; i < banks; i++) {
+>  		u64 val;
+>  		int bios_zero_thresh = 0;
+>  
+> -		if (test_bit(i, owned))
+> +		if (cmci_skip_bank(i, &val))
 >  			continue;
-
-...like this.
-
-		if (mce_is_correctable(&m))
-			track_storm(i);
-
-
-...please disregard this comment, if my realization above was correct
-about the "history tick". If so, then I think it'd be better to pass
-struct mce to track_storm(), because it'll have both the bank number and
-status register. And it can then be passed to mce_is_correctable().
-
-> @@ -1622,22 +1701,29 @@ static void mce_timer_fn(struct timer_list *t)
->  	else
->  		iv = min(iv * 2, round_jiffies_relative(check_interval * HZ));
 >  
-> -	__this_cpu_write(mce_next_interval, iv);
-> -	__start_timer(t, iv);
-> +	if (__this_cpu_read(storm_desc.poll_mode)) {
-> +		__start_timer(t, HZ);
-> +	} else {
-> +		__this_cpu_write(mce_next_interval, iv);
-> +		__start_timer(t, iv);
-> +	}
+> -		/* Skip banks in firmware first mode */
+> -		if (test_bit(i, mce_banks_ce_disabled))
+> -			continue;
+> -
+> -		rdmsrl(MSR_IA32_MCx_CTL2(i), val);
+> -
+> -		/* Already owned by someone else? */
+> -		if (val & MCI_CTL2_CMCI_EN) {
+> -			clear_bit(i, owned);
+> -			__clear_bit(i, this_cpu_ptr(mce_poll_banks));
+> -			continue;
+> -		}
+> -
+> -		if (!mca_cfg.bios_cmci_threshold) {
+> -			val &= ~MCI_CTL2_CMCI_THRESHOLD_MASK;
+> -			val |= CMCI_THRESHOLD;
+> -		} else if (!(val & MCI_CTL2_CMCI_THRESHOLD_MASK)) {
+> -			/*
+> -			 * If bios_cmci_threshold boot option was specified
+> -			 * but the threshold is zero, we'll try to initialize
+> -			 * it to 1.
+> -			 */
+> -			bios_zero_thresh = 1;
+> -			val |= CMCI_THRESHOLD;
+> -		}
+> -
+> -		val |= MCI_CTL2_CMCI_EN;
+> -		wrmsrl(MSR_IA32_MCx_CTL2(i), val);
+> -		rdmsrl(MSR_IA32_MCx_CTL2(i), val);
+> -
+> -		/* Did the enable bit stick? -- the bank supports CMCI */
+> -		if (val & MCI_CTL2_CMCI_EN) {
+> -			set_bit(i, owned);
+> -			__clear_bit(i, this_cpu_ptr(mce_poll_banks));
+> -			/*
+> -			 * We are able to set thresholds for some banks that
+> -			 * had a threshold of 0. This means the BIOS has not
+> -			 * set the thresholds properly or does not work with
+> -			 * this boot option. Note down now and report later.
+> -			 */
+> -			if (mca_cfg.bios_cmci_threshold && bios_zero_thresh &&
+> -					(val & MCI_CTL2_CMCI_THRESHOLD_MASK))
+> -				bios_wrong_thresh = 1;
+> -		} else {
+> -			WARN_ON(!test_bit(i, this_cpu_ptr(mce_poll_banks)));
+> -		}
+> +		val = cmci_pick_threshold(val, &bios_zero_thresh);
+> +		cmci_claim_bank(i, val, bios_zero_thresh, &bios_wrong_thresh);
+>  	}
+>  	raw_spin_unlock_irqrestore(&cmci_discover_lock, flags);
+>  	if (mca_cfg.bios_cmci_threshold && bios_wrong_thresh) {
+> @@ -218,6 +316,8 @@ static void __cmci_disable_bank(int bank)
+>  	val &= ~MCI_CTL2_CMCI_EN;
+>  	wrmsrl(MSR_IA32_MCx_CTL2(bank), val);
+>  	__clear_bit(bank, this_cpu_ptr(mce_banks_owned));
+
+Newline here, please.
+
+> +	if ((val & MCI_CTL2_CMCI_THRESHOLD_MASK) == CMCI_STORM_THRESHOLD)
+> +		cmci_storm_end(bank);
 >  }
 >  
 >  /*
-> - * Ensure that the timer is firing in @interval from now.
-> + * When a storm starts on any bank on this CPU, switch to polling
-> + * once per second. When the storm ends, revert to the default
-> + * polling interval.
->   */
-> -void mce_timer_kick(unsigned long interval)
-> +void mce_timer_kick(bool storm)
->  {
->  	struct timer_list *t = this_cpu_ptr(&mce_timer);
-> -	unsigned long iv = __this_cpu_read(mce_next_interval);
->  
-> -	__start_timer(t, interval);
-> +	__this_cpu_write(storm_desc.poll_mode, storm);
->  
-> -	if (interval < iv)
-> -		__this_cpu_write(mce_next_interval, interval);
-> +	if (storm)
-> +		__start_timer(t, HZ);
-> +	else
-> +		__this_cpu_write(mce_next_interval, check_interval * HZ);
->  }
->  
->  /* Must not be called in IRQ context where del_timer_sync() can deadlock */
-> @@ -1965,6 +2051,12 @@ static void mce_zhaoxin_feature_clear(struct cpuinfo_x86 *c)
->  	intel_clear_lmce();
->  }
->  
-> +void mce_handle_storm(int bank, bool on)
-> +{
-> +	switch (boot_cpu_data.x86_vendor) {
-> +	}
-> +}
-> +
->  static void __mcheck_cpu_init_vendor(struct cpuinfo_x86 *c)
->  {
->  	switch (c->x86_vendor) {
 
 Thanks,
 Yazen
