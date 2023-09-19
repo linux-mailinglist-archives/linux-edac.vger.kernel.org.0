@@ -2,238 +2,232 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C81957A5138
-	for <lists+linux-edac@lfdr.de>; Mon, 18 Sep 2023 19:47:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED8847A5750
+	for <lists+linux-edac@lfdr.de>; Tue, 19 Sep 2023 04:21:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229484AbjIRRra (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Mon, 18 Sep 2023 13:47:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54052 "EHLO
+        id S230520AbjISCVq (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Mon, 18 Sep 2023 22:21:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229693AbjIRRr3 (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Mon, 18 Sep 2023 13:47:29 -0400
-Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F5B5FA
-        for <linux-edac@vger.kernel.org>; Mon, 18 Sep 2023 10:47:23 -0700 (PDT)
-Received: by mail-yb1-xb2c.google.com with SMTP id 3f1490d57ef6-d7f0a60a159so4159913276.0
-        for <linux-edac@vger.kernel.org>; Mon, 18 Sep 2023 10:47:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1695059242; x=1695664042; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=jacBNNhmnoa4Ag6t2eGllJTMGaWz698hP3YqxfydkyQ=;
-        b=wCugR8c+r5h/3scPPwVyopeDvMuFZLRXWRX0qpIn1ff+n8xPRQdwVHego5dw0715x/
-         ylmpVxUqs+y58E6epJNj+RTj2MXnM3nMMrw1KFt/pMZiVRe1l/f18dRFcXIbV39GHYuV
-         6OQoEH+1jlgGt7m200ZSm6+kEOCgWd50D6YHSEujnTdLhT6vQckpEWPJgbeOXAR4eUOI
-         /vH1COKVsECIkeuvOUbn0zg9ejKc9O5NtOMWoKrNpzFxyTSWi3yFU2FNQa4Cpg8w9GhU
-         a5RX9DC5kIThKMynPaJ3imeJQl6Ba9fKTRp6bxrPuQ1zrxhcVeY+B5JilB3r5Q576DuX
-         Yg2g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695059242; x=1695664042;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=jacBNNhmnoa4Ag6t2eGllJTMGaWz698hP3YqxfydkyQ=;
-        b=EfmWT6yXXmbzEqKO2eHdXqvAU8GA8A1nfkcz9gFnu4u4bv4e4vqP6VBBGSOZf6Apap
-         +MZJMHzcQxcu7TGgt/YpiLanAHdM469elk2mOmW45O3drB/+m54OiWMiXpo37i7F9LPM
-         PdwODM1OWbjGeZvTm6u2WJyAdwWzoPGlk7KnqyibZCrmfAS6qllzEWl5Dtq+fTma9Gy+
-         LoPI2UWsjJ9B2JUGUpfHZZ9jDMx/tWRzeHgUVKimpkV24eWYbn6faWCjVn/LmOOGYRWV
-         mYAOjdj6/rn1ezXBRAsR03M0tW8qM/nMFALGszVZski8TNIcSpCpCxDF/Y5v0GT4b5jt
-         1ZFw==
-X-Gm-Message-State: AOJu0YwmzmLGwymIRnKrHqhsjCRvvOIDsa2dn9R9yBRyWvKSs9nrPXan
-        E2zAVIlfl82+yxTDkfNlmsuL7UcjgwnOUa5PG8iksA==
-X-Google-Smtp-Source: AGHT+IHvGYI7M1DS+eOS2wkF6sbDnAPbUKSQ9jKcvcwOVAvS5cajZgrPKVsEOgAa/KNKI+4KPpXnxCOITEpioXonPG0=
-X-Received: by 2002:a25:b298:0:b0:d78:2383:4427 with SMTP id
- k24-20020a25b298000000b00d7823834427mr9184475ybj.9.1695059242242; Mon, 18 Sep
- 2023 10:47:22 -0700 (PDT)
+        with ESMTP id S230453AbjISCVp (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Mon, 18 Sep 2023 22:21:45 -0400
+Received: from out30-98.freemail.mail.aliyun.com (out30-98.freemail.mail.aliyun.com [115.124.30.98])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5549210F;
+        Mon, 18 Sep 2023 19:21:37 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R201e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046049;MF=xueshuai@linux.alibaba.com;NM=1;PH=DS;RN=35;SR=0;TI=SMTPD_---0VsPUahO_1695090088;
+Received: from localhost.localdomain(mailfrom:xueshuai@linux.alibaba.com fp:SMTPD_---0VsPUahO_1695090088)
+          by smtp.aliyun-inc.com;
+          Tue, 19 Sep 2023 10:21:33 +0800
+From:   Shuai Xue <xueshuai@linux.alibaba.com>
+To:     rafael@kernel.org, wangkefeng.wang@huawei.com,
+        tanxiaofei@huawei.com, mawupeng1@huawei.com, tony.luck@intel.com,
+        linmiaohe@huawei.com, naoya.horiguchi@nec.com, james.morse@arm.com,
+        gregkh@linuxfoundation.org, will@kernel.org
+Cc:     linux-acpi@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, akpm@linux-foundation.org,
+        linux-edac@vger.kernel.org, acpica-devel@lists.linuxfoundation.org,
+        stable@vger.kernel.org, x86@kernel.org, xueshuai@linux.alibaba.com,
+        justin.he@arm.com, ardb@kernel.org, ying.huang@intel.com,
+        ashish.kalra@amd.com, baolin.wang@linux.alibaba.com, bp@alien8.de,
+        tglx@linutronix.de, mingo@redhat.com, dave.hansen@linux.intel.com,
+        jarkko@kernel.org, lenb@kernel.org, hpa@zytor.com,
+        robert.moore@intel.com, lvying6@huawei.com, xiexiuqi@huawei.com,
+        zhuo.song@linux.alibaba.com
+Subject: [RESEND PATCH v8 0/2] ACPI: APEI: handle synchronous errors in task work with proper si_code
+Date:   Tue, 19 Sep 2023 10:21:25 +0800
+Message-Id: <20230919022127.69732-1-xueshuai@linux.alibaba.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20221027042445.60108-1-xueshuai@linux.alibaba.com>
+References: <20221027042445.60108-1-xueshuai@linux.alibaba.com>
 MIME-Version: 1.0
-References: <20230915172818.761-1-shiju.jose@huawei.com> <CACw3F50Edbk7uemvS-ZCNABKSz=3VMaRdPjzoYp9XE-hkOUKBg@mail.gmail.com>
- <e8a20cf946354312b865c1d69a18a81c@huawei.com>
-In-Reply-To: <e8a20cf946354312b865c1d69a18a81c@huawei.com>
-From:   Jiaqi Yan <jiaqiyan@google.com>
-Date:   Mon, 18 Sep 2023 10:47:08 -0700
-Message-ID: <CACw3F51eSVKybNWKvf_YULfQPhuQWZRDKvP23oOJo=HeNBgGCA@mail.gmail.com>
-Subject: Re: [RFC PATCH 0/9] ACPI:RASF: Add support for ACPI RASF, ACPI RAS2
- and configure scrubbers
-To:     Shiju Jose <shiju.jose@huawei.com>
-Cc:     "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "rafael@kernel.org" <rafael@kernel.org>,
-        "lenb@kernel.org" <lenb@kernel.org>,
-        "naoya.horiguchi@nec.com" <naoya.horiguchi@nec.com>,
-        "tony.luck@intel.com" <tony.luck@intel.com>,
-        "james.morse@arm.com" <james.morse@arm.com>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "david@redhat.com" <david@redhat.com>,
-        "jthoughton@google.com" <jthoughton@google.com>,
-        "somasundaram.a@hpe.com" <somasundaram.a@hpe.com>,
-        "erdemaktas@google.com" <erdemaktas@google.com>,
-        "pgonda@google.com" <pgonda@google.com>,
-        "rientjes@google.com" <rientjes@google.com>,
-        "duenwen@google.com" <duenwen@google.com>,
-        "Vilas.Sridharan@amd.com" <Vilas.Sridharan@amd.com>,
-        "mike.malvestuto@intel.com" <mike.malvestuto@intel.com>,
-        "gthelen@google.com" <gthelen@google.com>,
-        Linuxarm <linuxarm@huawei.com>,
-        Jonathan Cameron <jonathan.cameron@huawei.com>,
-        tanxiaofei <tanxiaofei@huawei.com>,
-        "Zengtao (B)" <prime.zeng@hisilicon.com>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "mchehab@kernel.org" <mchehab@kernel.org>,
-        "rric@kernel.org" <rric@kernel.org>,
-        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
+        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Mon, Sep 18, 2023 at 3:20=E2=80=AFAM Shiju Jose <shiju.jose@huawei.com> =
-wrote:
->
-> [+cc linux-edac@vger.kernel.org]
->
-> Hello,
->
-> >-----Original Message-----
-> >From: Jiaqi Yan <jiaqiyan@google.com>
-> >Sent: 17 September 2023 22:14
-> >To: Shiju Jose <shiju.jose@huawei.com>
-> >Cc: linux-acpi@vger.kernel.org; linux-mm@kvack.org; linux-
-> >kernel@vger.kernel.org; rafael@kernel.org; lenb@kernel.org;
-> >naoya.horiguchi@nec.com; tony.luck@intel.com; james.morse@arm.com;
-> >dave.hansen@linux.intel.com; david@redhat.com; jthoughton@google.com;
-> >somasundaram.a@hpe.com; erdemaktas@google.com; pgonda@google.com;
-> >rientjes@google.com; duenwen@google.com; Vilas.Sridharan@amd.com;
-> >mike.malvestuto@intel.com; gthelen@google.com; Linuxarm
-> ><linuxarm@huawei.com>; Jonathan Cameron
-> ><jonathan.cameron@huawei.com>; tanxiaofei <tanxiaofei@huawei.com>;
-> >Zengtao (B) <prime.zeng@hisilicon.com>
-> >Subject: Re: [RFC PATCH 0/9] ACPI:RASF: Add support for ACPI RASF, ACPI =
-RAS2
-> >and configure scrubbers
-> >
-> >On Fri, Sep 15, 2023 at 10:29=E2=80=AFAM <shiju.jose@huawei.com> wrote:
-> >>
-> >> From: Shiju Jose <shiju.jose@huawei.com>
-> >>
-> >> This series add,
-> >> 1. support for ACPI RASF(RAS feature table) PCC interfaces to
-> >> communicate with the HW patrol scrubber in the platform, as per ACPI
-> >> 5.1 & upwards revision. Section 5.2.20.
-> >>
-> >> 2. support for ACPI RAS2(RAS2 feature table), as per ACPI 6.5 &
-> >> upwards revision. Section 5.2.21.
-> >>
-> >> 3. scrub driver supports configuring parameters of the memory
-> >> scrubbers in the system. This driver has been implemented based on the
-> >> hwmon subsystem.
-> >>
-> >> The features have tested with RASF and RAS2 emulation in the QEMU.
-> >
-> >I am very curious how the test is done. Does the hw patrol scrubber on h=
-ost
-> >actually been driven by the driver to scrub memory DIMMs (doesn't seem s=
-o to
-> >me, but do correct me)? Or it is like to a VM scrubbing is simulated and=
- no real
-> >op to DIMMs?
-> Intent here is hardware scrubber on host as far as we are concerned.
+Hi, ALL,
 
-Sorry maybe my question was not clear, so let me try again.
+I have rewritten the cover letter with the hope that the maintainer will truly
+understand the necessity of this patch. Both Alibaba and Huawei met the same
+issue in products, and we hope it could be fixed ASAP.
 
-Does the driver being tested on a machine and directly or indirectly
-control (start/stop) hardware patrol scrubber to scrub physical
-memory? what are the CPU chip, memory controller, and DIMM chips?
+changes since v7:
+- rebase to Linux v6.6-rc2 (no code changed)
+- rewritten the cover letter to explain the motivation of this patchset
 
-> Could be used for VM too perhaps. We did it with QEMU emulation for now
->  to get the flexibility of configuration. However there will be other scr=
-ub controls
-> over time, such as DDR5 ECS.
-> https://media-www.micron.com/-/media/client/global/documents/products/whi=
-te-paper/ddr5_new_features_white_paper.pdf?rev=3Db98f4977d9334b4aa5d0d211a9=
-2bf14a
->
-> Also found there is very simple support for scrub control in edac, and an=
- alternative path
-> would be to look at extending that to sufficient complexity to support re=
-gion based scanning.
-> https://elixir.bootlin.com/linux/latest/source/include/linux/edac.h#L512
->
-> >
-> >>
-> >> Previous references to the memory scub and RASF topics.
-> >> https://lore.kernel.org/all/20221103155029.2451105-1-jiaqiyan@google.c
-> >> om/
-> >> https://patchwork.kernel.org/project/linux-arm-kernel/patch/CS1PR84MB0
-> >>
-> >038718F49DBC0FF03919E1184390@CS1PR84MB0038.NAMPRD84.PROD.OUTLO
-> >OK.COM/
-> >>
-> >> A Somasundaram (2):
-> >>   ACPI:RASF: Add extract RASF table to register RASF platform devices
-> >>   ACPI:RASF: Add common library for RASF and RAS2 PCC interfaces
-> >>
-> >> Shiju Jose (7):
-> >>   memory: scrub: Add scrub driver supports configuring memory scrubber=
-s
-> >>     in the system
-> >>   memory: scrub: sysfs: Add Documentation entries for set of scrub
-> >>     attributes
-> >>   Documentation/scrub-configure.rst: Add documentation for scrub drive=
-r
-> >>   memory: RASF: Add memory RASF driver
-> >>   ACPICA: ACPI 6.5: Add support for RAS2 table
-> >>   ACPI:RAS2: Add driver for ACPI RAS2 feature table (RAS2)
-> >>   memory: RAS2: Add memory RAS2 driver
-> >>
-> >>  .../ABI/testing/sysfs-class-scrub-configure   |  82 ++++
-> >>  Documentation/scrub-configure.rst             |  55 +++
-> >>  drivers/acpi/Kconfig                          |  15 +
-> >>  drivers/acpi/Makefile                         |   1 +
-> >>  drivers/acpi/ras2_acpi.c                      |  97 ++++
-> >>  drivers/acpi/rasf_acpi.c                      |  71 +++
-> >>  drivers/acpi/rasf_acpi_common.c               | 272 +++++++++++
-> >>  drivers/memory/Kconfig                        |  15 +
-> >>  drivers/memory/Makefile                       |   3 +
-> >>  drivers/memory/ras2.c                         | 334 +++++++++++++
-> >>  drivers/memory/rasf.c                         | 335 +++++++++++++
-> >>  drivers/memory/rasf_common.c                  | 251 ++++++++++
-> >>  drivers/memory/scrub/Kconfig                  |  11 +
-> >>  drivers/memory/scrub/Makefile                 |   6 +
-> >>  drivers/memory/scrub/memory-scrub.c           | 452 +++++++++++++++++=
-+
-> >>  include/acpi/actbl2.h                         |  55 +++
-> >>  include/acpi/rasf_acpi.h                      |  59 +++
-> >>  include/memory/memory-scrub.h                 |  85 ++++
-> >>  include/memory/rasf.h                         |  82 ++++
-> >>  19 files changed, 2281 insertions(+)
-> >>  create mode 100644
-> >> Documentation/ABI/testing/sysfs-class-scrub-configure
-> >>  create mode 100644 Documentation/scrub-configure.rst  create mode
-> >> 100755 drivers/acpi/ras2_acpi.c  create mode 100755
-> >> drivers/acpi/rasf_acpi.c  create mode 100755
-> >> drivers/acpi/rasf_acpi_common.c  create mode 100644
-> >> drivers/memory/ras2.c  create mode 100644 drivers/memory/rasf.c
-> >> create mode 100644 drivers/memory/rasf_common.c  create mode 100644
-> >> drivers/memory/scrub/Kconfig  create mode 100644
-> >> drivers/memory/scrub/Makefile  create mode 100755
-> >> drivers/memory/scrub/memory-scrub.c
-> >>  create mode 100755 include/acpi/rasf_acpi.h  create mode 100755
-> >> include/memory/memory-scrub.h  create mode 100755
-> >> include/memory/rasf.h
-> >>
-> >> --
-> >> 2.34.1
-> >>
->
-> Thanks,
-> Shiju
+changes since v6:
+- add more explicty error message suggested by Xiaofei
+- pick up reviewed-by tag from Xiaofei
+- pick up internal reviewed-by tag from Baolin
+
+changes since v5 by addressing comments from Kefeng:
+- document return value of memory_failure()
+- drop redundant comments in call site of memory_failure() 
+- make ghes_do_proc void and handle abnormal case within it
+- pick up reviewed-by tag from Kefeng Wang 
+
+changes since v4 by addressing comments from Xiaofei:
+- do a force kill only for abnormal sync errors
+
+changes since v3 by addressing comments from Xiaofei:
+- do a force kill for abnormal memory failure error such as invalid PA,
+unexpected severity, OOM, etc
+- pcik up tested-by tag from Ma Wupeng
+
+changes since v2 by addressing comments from Naoya:
+- rename mce_task_work to sync_task_work
+- drop ACPI_HEST_NOTIFY_MCE case in is_hest_sync_notify()
+- add steps to reproduce this problem in cover letter
+
+changes since v1:
+- synchronous events by notify type
+- Link: https://lore.kernel.org/lkml/20221206153354.92394-3-xueshuai@linux.alibaba.com/
+
+
+There are two major types of uncorrected recoverable (UCR) errors :
+
+- Action Required (AR): The error is detected and the processor already
+  consumes the memory. OS requires to take action (for example, offline
+  failure page/kill failure thread) to recover this error.
+
+- Action Optional (AO): The error is detected out of processor execution
+  context. Some data in the memory are corrupted. But the data have not
+  been consumed. OS is optional to take action to recover this error.
+
+The main difference between AR and AO errors is that AR errors are synchronous
+events, while AO errors are asynchronous events. Synchronous exceptions, such as
+Machine Check Exception (MCE) on X86 and Synchronous External Abort (SEA) on
+Arm64, are signaled by the hardware when an error is detected and the memory
+access has architecturally been executed.
+
+Currently, both synchronous and asynchronous errors are queued as AO errors and
+handled by a dedicated kernel thread in a work queue on the ARM64 platform. For
+synchronous errors, memory_failure() is synced using a cancel_work_sync trick to
+ensure that the corrupted page is unmapped and poisoned. Upon returning to
+user-space, the process resumes at the current instruction, triggering a page
+fault. As a result, the kernel sends a SIGBUS signal to the current process due
+to VM_FAULT_HWPOISON.
+
+However, this trick is not always be effective, this patch set improves the
+recovery process in three specific aspects:
+
+1. Handle synchronous exceptions with proper si_code
+
+ghes_handle_memory_failure() queue both synchronous and asynchronous errors with
+flag=0. Then the kernel will notify the process by sending a SIGBUS signal in
+memory_failure() with wrong si_code: BUS_MCEERR_AO to the actual user-space
+process instead of BUS_MCEERR_AR. The user-space processes rely on the si_code
+to distinguish to handle memory failure.
+
+For example, hwpoison-aware user-space processes use the si_code:
+BUS_MCEERR_AO for 'action optional' early notifications, and BUS_MCEERR_AR
+for 'action required' synchronous/late notifications. Specifically, when a
+signal with SIGBUS_MCEERR_AR is delivered to QEMU, it will inject a vSEA to
+Guest kernel. In contrast, a signal with SIGBUS_MCEERR_AO will be ignored
+by QEMU.[1]
+
+Fix it by seting memory failure flags as MF_ACTION_REQUIRED on synchronous events. (PATCH 1)
+
+2. Handle memory_failure() abnormal fails to avoid a unnecessary reboot
+
+If process mapping fault page, but memory_failure() abnormal return before
+try_to_unmap(), for example, the fault page process mapping is KSM page.
+In this case, arm64 cannot use the page fault process to terminate the
+synchronous exception loop.[4]
+
+This loop can potentially exceed the platform firmware threshold or even trigger
+a kernel hard lockup, leading to a system reboot. However, kernel has the
+capability to recover from this error.
+
+Fix it by performing a force kill when memory_failure() abnormal fails or when
+other abnormal synchronous errors occur. These errors can include situations
+such as invalid PA, unexpected severity, no memory failure config support,
+invalid GUID section, OOM, etc. (PATCH 2)
+
+3. Handle memory_failure() in current process context which consuming poison
+
+When synchronous errors occur, memory_failure() assume that current process
+context is exactly that consuming poison synchronous error.
+
+For example, kill_accessing_process() holds mmap locking of current->mm, does
+pagetable walk to find the error virtual address, and sends SIGBUS to the
+current process with error info. However, the mm of kworker is not valid,
+resulting in a null-pointer dereference. I have fixed this in[3].
+
+    commit 77677cdbc2aa mm,hwpoison: check mm when killing accessing process
+
+Another example is that collect_procs()/kill_procs() walk the task list, only
+collect and send sigbus to task which consuming poison. But memory_failure() is
+queued and handled by a dedicated kernel thread on arm64 platform.
+
+Fix it by queuing memory_failure() as a task work which runs in current
+execution context to synchronously send SIGBUS before ret_to_user. (PATCH 2)
+
+** In summary, this patch set handles synchronous errors in task work with
+proper si_code so that hwpoison-aware process can recover from errors, and
+fixes (potentially)abnormal cases. **
+
+Lv Ying and XiuQi from Huawei also proposed to address similar problem[2][4].
+Acknowledge to discussion with them.
+
+To reproduce this problem:
+
+	# STEP1: enable early kill mode
+	#sysctl -w vm.memory_failure_early_kill=1
+	vm.memory_failure_early_kill = 1
+
+	# STEP2: inject an UCE error and consume it to trigger a synchronous error
+	#einj_mem_uc single
+	0: single   vaddr = 0xffffb0d75400 paddr = 4092d55b400
+	injecting ...
+	triggering ...
+	signal 7 code 5 addr 0xffffb0d75000
+	page not present
+	Test passed
+
+The si_code (code 5) from einj_mem_uc indicates that it is BUS_MCEERR_AO error
+and it is not fact.
+
+After this patch set:
+
+	# STEP1: enable early kill mode
+	#sysctl -w vm.memory_failure_early_kill=1
+	vm.memory_failure_early_kill = 1
+
+	# STEP2: inject an UCE error and consume it to trigger a synchronous error
+	#einj_mem_uc single
+	0: single   vaddr = 0xffffb0d75400 paddr = 4092d55b400
+	injecting ...
+	triggering ...
+	signal 7 code 4 addr 0xffffb0d75000
+	page not present
+	Test passed
+
+The si_code (code 4) from einj_mem_uc indicates that it is BUS_MCEERR_AR error
+as we expected.
+
+[1] Add ARMv8 RAS virtualization support in QEMU https://patchew.org/QEMU/20200512030609.19593-1-gengdongjiu@huawei.com/
+[2] https://lore.kernel.org/lkml/20221205115111.131568-3-lvying6@huawei.com/
+[3] https://lkml.kernel.org/r/20220914064935.7851-1-xueshuai@linux.alibaba.com
+[4] https://lore.kernel.org/lkml/20221209095407.383211-1-lvying6@huawei.com/
+
+Shuai Xue (2):
+  ACPI: APEI: set memory failure flags as MF_ACTION_REQUIRED on
+    synchronous events
+  ACPI: APEI: handle synchronous exceptions in task work
+
+ arch/x86/kernel/cpu/mce/core.c |   9 +--
+ drivers/acpi/apei/ghes.c       | 113 ++++++++++++++++++++++-----------
+ include/acpi/ghes.h            |   3 -
+ mm/memory-failure.c            |  17 +----
+ 4 files changed, 79 insertions(+), 63 deletions(-)
+
+-- 
+2.39.3
+
