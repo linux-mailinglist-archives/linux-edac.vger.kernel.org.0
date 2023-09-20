@@ -2,53 +2,52 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 268477A8C75
-	for <lists+linux-edac@lfdr.de>; Wed, 20 Sep 2023 21:13:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 161607A8CC4
+	for <lists+linux-edac@lfdr.de>; Wed, 20 Sep 2023 21:28:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229922AbjITTNL (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Wed, 20 Sep 2023 15:13:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43484 "EHLO
+        id S230031AbjITT23 (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Wed, 20 Sep 2023 15:28:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230116AbjITTMt (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Wed, 20 Sep 2023 15:12:49 -0400
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 614A8E5E;
-        Wed, 20 Sep 2023 12:12:24 -0700 (PDT)
-Received: by mail-lf1-x132.google.com with SMTP id 2adb3069b0e04-503065c4b25so339581e87.1;
-        Wed, 20 Sep 2023 12:12:24 -0700 (PDT)
+        with ESMTP id S230057AbjITT22 (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Wed, 20 Sep 2023 15:28:28 -0400
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE381D9;
+        Wed, 20 Sep 2023 12:28:19 -0700 (PDT)
+Received: by mail-lf1-x134.google.com with SMTP id 2adb3069b0e04-50308217223so364437e87.3;
+        Wed, 20 Sep 2023 12:28:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1695237142; x=1695841942; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=1gewAssQsy3DL4fnx2jYYjoNFT27/4qEDJvjdzsaw8U=;
-        b=VDEHjv416neOGmxpt/NCv+PTFNZFA04u7Ea8azAgZS7IaPPI4ofJ0jBYp0z1g1LtpE
-         KMjzaQPPw5FxopXNwfzjZ3cX3C9SrCOyBykI7acYtr34bUDiZxoprPpu5CA4wYpS4kU7
-         GzXgwvlUzeehqoUNRz+GXUOmlxl6WTWLAk7H65L+Vz1nBgrQDvUV36QsiI1lsNEKGNMq
-         5PdjCjO2qV3v+XgML7tubvzGlx8Uo9imS6uo9zQcAZjIWbO3BTBG3Z2f3QqQJgDp2eBt
-         eSzdeOBmlLfxsvaXaaYGU6QTsVkPRaddI5UZNKA9j+eKXmr5xDUtkyjr7FMzCX3QfyFn
-         DiwA==
+        d=gmail.com; s=20230601; t=1695238098; x=1695842898; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=MLaSQY0QnZ/ukJSWJ+Kvy6hVpCuZzcRmlORhC3MCfR0=;
+        b=aIKLohhzJLfoJLwYF6tCeMNDS/IXmxnaOBr5CNqMBhUi9wGVE5NvFEBfGGpd46IyTo
+         DankXsGvVqabYFc4/YHy2utENzwSvdllYWQTf0QaFsdWnOkzU2L+kxXkznXHfe08wzbg
+         iKSgMA1KdiLtv/OtW3DVTB9TbS+aGeu4GbgxrB9QCcE1ICoj2w08mu1l0t6BApeC2z5E
+         Z7M7QgbDCE/ryrCnybMsJCEv9kzgofWdaOxc8Bz/rpwvJ7LS3MB8wcWguyEcwcpvViEK
+         5P6jkjl+8qYzRvSOoyxtR+lzWF8AU0azSa7AgsB0UN7ajRZXDhixdzGEOseswL4/PmAG
+         Er8Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695237142; x=1695841942;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=1gewAssQsy3DL4fnx2jYYjoNFT27/4qEDJvjdzsaw8U=;
-        b=I1ikIS5arIUN/CBy9K0yu4ZFY1MIDyralo0WgDsmMb9jC7TYIAhxlLeYHTuPY+7LWB
-         ZNiRNsq29e8trgSZNo2qdDUxKFNEhFf97sXV2k3YG9tK1asaC/3wFgyUrpMJxpPU0qHL
-         zS/nU/3oUFiwRg3w/PVtkpr5RYqMRgU4hx4n3VyaFEXVE0XKJ4EF6FQR12PlT69uN6Ez
-         /dQI9rqRQu30FMrM/7SeDZ9mN7VUN3YiVumNBFgU4GvPREeLyprJXcZoEw/mJL2bkutb
-         yQglLR/5/4EYRUhH3yduXUJkFAVrDye3rHyRrrxaUxzbDj9iSkiFbDige3HGibv76/HW
-         CF4w==
-X-Gm-Message-State: AOJu0YzIRgheKUJ14CKsH2n2La/dHU4fOiPcqTv4Vvl4N3f64xA/XcS5
-        AKeTMKUzw5z+4LyO0k4RtUw=
-X-Google-Smtp-Source: AGHT+IFBow7TY/rA6kICI6lM0bMeycNtU15JfCtI1e8+Skt/16OLRm+ILMx+BgukQcMUiRHZD3QaLQ==
-X-Received: by 2002:a05:6512:3292:b0:503:9eb:d277 with SMTP id p18-20020a056512329200b0050309ebd277mr2529333lfe.49.1695237142256;
-        Wed, 20 Sep 2023 12:12:22 -0700 (PDT)
-Received: from localhost ([178.176.82.53])
-        by smtp.gmail.com with ESMTPSA id w18-20020a05651203d200b004fe15a2f0f6sm2801194lfp.62.2023.09.20.12.12.21
+        d=1e100.net; s=20230601; t=1695238098; x=1695842898;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=MLaSQY0QnZ/ukJSWJ+Kvy6hVpCuZzcRmlORhC3MCfR0=;
+        b=UUbY1NBxRmD8J62rS/XFic15Q3s2DxSSNHExCIXzRGqs6bBspRsVbVIiNFI2sEUW1X
+         cQTokiby1orEAEsI4zv20CMvdJZED2ktPsWi5RAlTBCYc9vnndaIgdqSn4y+OM7J4dNa
+         w+g7DEqfW3rZWdIgZntg7sPOP9ZqOCa+zgv4IANQ8dRA+FOu2gvsmaCl+rzD31Ol9+FJ
+         odDo/vOvSIBxZQIcoS3WWhOiNty5vNoOup/3KxvaVOvFx3xSKAlnIsst1/ZqK46moJ86
+         4tr0ol4dKaGKKFMWhdY9Ep7s0Rdry1oAR162JIFAnz4iLK40+V71gdBknAbOR0sxk9gV
+         8u1g==
+X-Gm-Message-State: AOJu0YyskrqwWHLwKSVG1tMshu7q7dyer1wzb3vrplnb/P/aQ4afL3VE
+        xdFwoM5NDgCAA0kXKZeDY1c=
+X-Google-Smtp-Source: AGHT+IEaWIiVATO1+Zc4H+znUEy7d3TkUxnL+wJ1ZMk+wbjCbYWyfRUG8/94NoQ34PZcdKItisCiCg==
+X-Received: by 2002:a05:6512:702:b0:4fb:7559:aea3 with SMTP id b2-20020a056512070200b004fb7559aea3mr2902394lfs.39.1695238097654;
+        Wed, 20 Sep 2023 12:28:17 -0700 (PDT)
+Received: from localhost ([85.140.6.205])
+        by smtp.gmail.com with ESMTPSA id t26-20020ac2549a000000b004fe09e6d1e7sm2785403lfk.110.2023.09.20.12.28.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 Sep 2023 12:12:21 -0700 (PDT)
+        Wed, 20 Sep 2023 12:28:16 -0700 (PDT)
 From:   Serge Semin <fancer.lancer@gmail.com>
 To:     Michal Simek <michal.simek@amd.com>,
         Alexander Stein <alexander.stein@ew.tq-group.com>,
@@ -65,12 +64,10 @@ Cc:     Serge Semin <fancer.lancer@gmail.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-arm-kernel@lists.infradead.org, linux-edac@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v4 20/20] EDAC/synopsys: Convert to using BIT/GENMASK/FIELD_x macros
-Date:   Wed, 20 Sep 2023 22:10:44 +0300
-Message-ID: <20230920191059.28395-21-fancer.lancer@gmail.com>
+Subject: [PATCH v4 00/18] EDAC/synopsys: Add generic DDRC info and address mapping
+Date:   Wed, 20 Sep 2023 22:26:45 +0300
+Message-ID: <20230920192806.29960-1-fancer.lancer@gmail.com>
 X-Mailer: git-send-email 2.41.0
-In-Reply-To: <20230920191059.28395-1-fancer.lancer@gmail.com>
-References: <20230920191059.28395-1-fancer.lancer@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -83,266 +80,133 @@ Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-Instead of using the very handy helpers denoted in the subject the driver
-has been created with the open-coded {mask,shift} statements. It makes the
-code bulky, prone to mistakes and much harder to read. Seeing there are
-many places in the driver implementing the CSR fields get/set pattern use
-the FIELD_GET()/FIELD_PREP() macros introduced in the kernel specifically
-for that case. In addition use the BIT() and GENMASK() macros to generate
-the CSR flags/masks. While at it unify the row, column, rank, bank and
-bank group macros names to be having a suffix similar to the
-snps_ecc_error_info structure fields name.
+This patchset is a second one in the series created in the framework of
+my Synopsys DW uMCTL2 DDRC-related work:
+
+[1: In-progress v4] EDAC/mc/synopsys: Various fixes and cleanups
+Link: https://lore.kernel.org/linux-edac/20230920191059.28395-1-fancer.lancer@gmail.com
+[2: In-progress v4] EDAC/synopsys: Add generic DDRC info and address mapping
+Link: ---you are looking at it---
+[3: In-progress v4] EDAC/synopsys: Add generic resources and Scrub support
+Link: ---to be submitted---
+
+Note the patchsets above must be merged in the same order as they are
+placed in the list in order to prevent conflicts. Nothing prevents them
+from being reviewed synchronously though. Any tests are very welcome.
+Thanks in advance.
+
+The second patchset mainly concerns converting the DW uMCTL2 DDRC driver
+to being more generic, supporting wider range of the DW uMCTL2 DDRC IP-core
+compilations and thus being utilized with more versions of the Synopsys
+DDR controllers.
+
+The series starts with the Error-injection functionality movement to
+DebugFS. Indeed the Debug-parts should be in the dedicated DebugFS. SysFS
+is not a place for it. Moreover a bit later here some more debug nodes
+will be added.
+
+Afterwards even though it isn't advertised but even at this stage the DW
+uMCTL2 DDRC driver supports a bit more DDR protocols than it is actually
+specified in the mem_ctrl_info.mtype_cap field. So first the EDAC MCI core
+memory types enumeration is extended with LPDDR (mDDR) and LPDDR2, which
+support can be enabled in the DW uMCTL2 DDR controller. Second the driver
+is fixed to properly detected the new and older DDR protocol types during
+the DW uMCTL DDRC probe procedure.
+
+Then a bit painful patch goes. Alas we have to deviate the driver from the
+EDAC standard private data allocation/initialization pattern. Since we are
+going to add the DW uMCTL2 IP-core specific parameters detection procedure
+and later on implement additional platform resources requests, there is no
+other choice but to allocate the driver private data at the early stage of
+the device probe procedure, even before it's possible to allocate the MCI
+descriptor. The DW uMCTL2 DDRC platform resources and configuration info
+will be then utilized to properly allocate and initialize the
+mem_ctrl_info structure instance.
+
+Fifth patch in the series is very important. It provides the DW uMCTL2
+DDRC parameters detection procedure. The DDRC and ECC parameters detected
+at this stage will be then utilized to make the driver working with much
+wider set of the DW uMCTL2 revisions and configurations. In particular
+from now the driver will retrieve the next DDRC info at the probe stage:
+ECC type, SDRAM protocol (DDR type), Full and actual DQ-bus width, SDRAM
+and HIF burst length, Core/SDRAM frequency ration, number of SDRAM ranks.
+The DDRC parameters structure will be extended with some more fields later
+in this and the next patchset. The provided private DDRC parameters
+infrastructure can be utilized to implement the platform-specific
+capabilities so the platform data and its quirks are replaced with it.
+
+The detected at the probe stage DW uMCTL2 DDRC parameters can be now used
+to implement the configuration specific functionality. In particular first
+we introduce the conditional ADDRMAP* CSRs parsing since some of these
+CSRs and their fields are left unused by the controller in some cases.
+Secondly actual DIMM ECC errors grain, ECC corrected bit, syndrome and
+full data+ecc pattern are determined based on the DDRC parameters.
+
+Afterwards goes a series of the patches which introduce an interface to
+generically determine the system address based on the SDRAM address and
+vice-versa. Thus we'll be able to report actual PFN and offset in case of
+the corrected and uncorrected errors. So first we get to convert the
+currently available HIF/SDRAM mapping table utilized for the
+errors-injection functionality into a more generic Sys<->SDRAM address
+translation interface. Secondly we suggest to conform the SDRAM column
+address mapping detection algorithm with what is defined in the DW uMCTL2
+DDRC hw reference manual thus simplifying the ADDRMAP* CSRs parsing
+procedure. After adding a handy DebugFS node to read the HIF/SDRAM mapping
+and the system address regions support, we finally introduce the erroneous
+page-frame/offset reporting to the MCI core. Since the full SDRAM address
+mapping is now always available we suggest to use it for the attached
+memory size calculation, which is a more correct approach rather than the
+si_meminfo()-based one.
+
+Changelog v2:
+- Rebase onto the latest version of the patchset:
+[PATCH v2 00/19] EDAC/mc/synopsys: Various fixes and cleanups
+- Just resend.
+
+Changelog v3:
+- Just resend.
+
+Changelog v4:
+- Get syndrome from the ECCSTAT.ecc_corrected_bit_num field rather than
+  from ECCCSYN2. The later CSR in fact contains ECC.
+- On correctable and uncorrectable errors retrieve ECC aside with the
+  erroneous data.
+- Rebase onto the kernel v6.6-rcX.
 
 Signed-off-by: Serge Semin <fancer.lancer@gmail.com>
----
- drivers/edac/synopsys_edac.c | 137 +++++++++++++++++------------------
- 1 file changed, 67 insertions(+), 70 deletions(-)
+Cc: Punnaiah Choudary Kalluri <punnaiah.choudary.kalluri@xilinx.com>
+Cc: Dinh Nguyen <dinguyen@kernel.org>
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: linux-arm-kernel@lists.infradead.org
+Cc: linux-edac@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
 
-diff --git a/drivers/edac/synopsys_edac.c b/drivers/edac/synopsys_edac.c
-index bf23ed6e1779..327023e35d42 100644
---- a/drivers/edac/synopsys_edac.c
-+++ b/drivers/edac/synopsys_edac.c
-@@ -6,6 +6,8 @@
-  * Copyright (C) 2012 - 2014 Xilinx, Inc.
-  */
- 
-+#include <linux/bitfield.h>
-+#include <linux/bits.h>
- #include <linux/edac.h>
- #include <linux/module.h>
- #include <linux/platform_device.h>
-@@ -90,33 +92,29 @@
- #define ZYNQMP_DDR_QOS_IRQ_DB_OFST	0x2020C
- 
- /* DDR Master register definitions */
--#define DDR_MSTR_DEV_CFG_MASK		0xC0000000
--#define DDR_MSTR_DEV_CFG_SHIFT		30
-+#define DDR_MSTR_DEV_CFG_MASK		GENMASK(31, 30)
- #define DDR_MSTR_DEV_X4			0
- #define DDR_MSTR_DEV_X8			1
- #define DDR_MSTR_DEV_X16		2
- #define DDR_MSTR_DEV_X32		3
--#define DDR_MSTR_BUSWIDTH_MASK		0x3000
--#define DDR_MSTR_BUSWIDTH_SHIFT		12
-+#define DDR_MSTR_BUSWIDTH_MASK		GENMASK(13, 12)
- #define DDR_MSTR_BUSWIDTH_16		2
- #define DDR_MSTR_BUSWIDTH_32		1
- #define DDR_MSTR_BUSWIDTH_64		0
--#define DDR_MSTR_MEM_LPDDR4		0x20
--#define DDR_MSTR_MEM_DDR4		0x10
--#define DDR_MSTR_MEM_LPDDR3		0x8
--#define DDR_MSTR_MEM_DDR2		0x4
--#define DDR_MSTR_MEM_DDR3		0x1
-+#define DDR_MSTR_MEM_LPDDR4		BIT(5)
-+#define DDR_MSTR_MEM_DDR4		BIT(4)
-+#define DDR_MSTR_MEM_LPDDR3		BIT(3)
-+#define DDR_MSTR_MEM_DDR2		BIT(2)
-+#define DDR_MSTR_MEM_DDR3		BIT(0)
- 
- /* ECC CFG0 register definitions */
--#define ECC_CFG0_MODE_MASK		0x7
-+#define ECC_CFG0_MODE_MASK		GENMASK(2, 0)
- #define ECC_CFG0_MODE_SECDED		0x4
- 
- /* ECC status register definitions */
--#define ECC_STAT_UECNT_MASK		0xF0000
--#define ECC_STAT_UECNT_SHIFT		16
--#define ECC_STAT_CECNT_MASK		0xF00
--#define ECC_STAT_CECNT_SHIFT		8
--#define ECC_STAT_BITNUM_MASK		0x7F
-+#define ECC_STAT_UE_MASK		GENMASK(23, 16)
-+#define ECC_STAT_CE_MASK		GENMASK(15, 8)
-+#define ECC_STAT_BITNUM_MASK		GENMASK(6, 0)
- 
- /* ECC control/clear register definitions */
- #define ECC_CTRL_CLR_CE_ERR		BIT(0)
-@@ -127,34 +125,26 @@
- #define ECC_CTRL_EN_UE_IRQ		BIT(9)
- 
- /* ECC error count register definitions */
--#define ECC_ERRCNT_UECNT_MASK		0xFFFF0000
--#define ECC_ERRCNT_UECNT_SHIFT		16
--#define ECC_ERRCNT_CECNT_MASK		0xFFFF
--
--/* ECC Corrected Error Register Mask and Shifts*/
--#define ECC_CEADDR0_RW_MASK		0x3FFFF
--#define ECC_CEADDR0_RNK_MASK		BIT(24)
--#define ECC_CEADDR1_BNKGRP_MASK		0x3000000
--#define ECC_CEADDR1_BNKNR_MASK		0x70000
--#define ECC_CEADDR1_COL_MASK		0xFFF
--#define ECC_CEADDR1_BNKGRP_SHIFT	24
--#define ECC_CEADDR1_BNKNR_SHIFT		16
--
--/* ECC Poison register shifts */
--#define ECC_POISON0_RANK_SHIFT		24
--#define ECC_POISON0_RANK_MASK		BIT(24)
--#define ECC_POISON0_COLUMN_SHIFT	0
--#define ECC_POISON0_COLUMN_MASK		0xFFF
--#define ECC_POISON1_BG_SHIFT		28
--#define ECC_POISON1_BG_MASK		0x30000000
--#define ECC_POISON1_BANKNR_SHIFT	24
--#define ECC_POISON1_BANKNR_MASK		0x7000000
--#define ECC_POISON1_ROW_SHIFT		0
--#define ECC_POISON1_ROW_MASK		0x3FFFF
-+#define ECC_ERRCNT_UECNT_MASK		GENMASK(31, 16)
-+#define ECC_ERRCNT_CECNT_MASK		GENMASK(15, 0)
-+
-+/* ECC Corrected Error register definitions */
-+#define ECC_CEADDR0_RANK_MASK		GENMASK(27, 24)
-+#define ECC_CEADDR0_ROW_MASK		GENMASK(17, 0)
-+#define ECC_CEADDR1_BANKGRP_MASK	GENMASK(25, 24)
-+#define ECC_CEADDR1_BANK_MASK		GENMASK(23, 16)
-+#define ECC_CEADDR1_COL_MASK		GENMASK(11, 0)
-+
-+/* ECC Poison register definitions */
-+#define ECC_POISON0_RANK_MASK		GENMASK(27, 24)
-+#define ECC_POISON0_COL_MASK		GENMASK(11, 0)
-+#define ECC_POISON1_BANKGRP_MASK	GENMASK(29, 28)
-+#define ECC_POISON1_BANK_MASK		GENMASK(26, 24)
-+#define ECC_POISON1_ROW_MASK		GENMASK(17, 0)
- 
- /* DDRC ECC CE & UE poison mask */
--#define ECC_CEPOISON_MASK		0x3
--#define ECC_UEPOISON_MASK		0x1
-+#define ECC_CEPOISON_MASK		GENMASK(1, 0)
-+#define ECC_UEPOISON_MASK		BIT(0)
- 
- /* DDRC Device config shifts/masks */
- #define DDR_MAX_ROW_SHIFT		18
-@@ -210,9 +200,9 @@
- #define RANK_B0_BASE			6
- 
- /* ZynqMP DDR QOS Interrupt register definitions */
--#define ZYNQMP_DDR_QOS_UE_MASK		0x4
--#define ZYNQMP_DDR_QOS_CE_MASK		0x2
--#define ZYNQMP_DDR_QOS_IRQ_MASK		0x6
-+#define ZYNQMP_DDR_QOS_UE_MASK		BIT(2)
-+#define ZYNQMP_DDR_QOS_CE_MASK		BIT(1)
-+#define ZYNQMP_DDR_QOS_IRQ_MASK		(ZYNQMP_DDR_QOS_UE_MASK | ZYNQMP_DDR_QOS_CE_MASK)
- 
- /**
-  * struct snps_ecc_error_info - ECC error log information.
-@@ -304,38 +294,40 @@ static int snps_get_error_info(struct snps_edac_priv *priv)
- 	if (!regval)
- 		return 1;
- 
--	p->ceinfo.bitpos = (regval & ECC_STAT_BITNUM_MASK);
-+	p->ceinfo.bitpos = FIELD_GET(ECC_STAT_BITNUM_MASK, regval);
- 
- 	regval = readl(base + ECC_ERRCNT_OFST);
--	p->ce_cnt = regval & ECC_ERRCNT_CECNT_MASK;
--	p->ue_cnt = (regval & ECC_ERRCNT_UECNT_MASK) >> ECC_ERRCNT_UECNT_SHIFT;
-+	p->ce_cnt = FIELD_GET(ECC_ERRCNT_CECNT_MASK, regval);
-+	p->ue_cnt = FIELD_GET(ECC_ERRCNT_UECNT_MASK, regval);
- 	if (!p->ce_cnt)
- 		goto ue_err;
- 
- 	regval = readl(base + ECC_CEADDR0_OFST);
--	p->ceinfo.row = (regval & ECC_CEADDR0_RW_MASK);
-+	p->ceinfo.row = FIELD_GET(ECC_CEADDR0_ROW_MASK, regval);
-+
- 	regval = readl(base + ECC_CEADDR1_OFST);
--	p->ceinfo.bank = (regval & ECC_CEADDR1_BNKNR_MASK) >>
--					ECC_CEADDR1_BNKNR_SHIFT;
--	p->ceinfo.bankgrp = (regval & ECC_CEADDR1_BNKGRP_MASK) >>
--					ECC_CEADDR1_BNKGRP_SHIFT;
--	p->ceinfo.col = (regval & ECC_CEADDR1_COL_MASK);
-+	p->ceinfo.bank = FIELD_GET(ECC_CEADDR1_BANK_MASK, regval);
-+	p->ceinfo.bankgrp = FIELD_GET(ECC_CEADDR1_BANKGRP_MASK, regval);
-+	p->ceinfo.col = FIELD_GET(ECC_CEADDR1_COL_MASK, regval);
-+
- 	p->ceinfo.data = readl(base + ECC_CSYND0_OFST);
-+
- 	edac_dbg(2, "ECCCSYN0: 0x%08X ECCCSYN1: 0x%08X ECCCSYN2: 0x%08X\n",
- 		 readl(base + ECC_CSYND0_OFST), readl(base + ECC_CSYND1_OFST),
- 		 readl(base + ECC_CSYND2_OFST));
-+
- ue_err:
- 	if (!p->ue_cnt)
- 		goto out;
- 
- 	regval = readl(base + ECC_UEADDR0_OFST);
--	p->ueinfo.row = (regval & ECC_CEADDR0_RW_MASK);
-+	p->ueinfo.row = FIELD_GET(ECC_CEADDR0_ROW_MASK, regval);
-+
- 	regval = readl(base + ECC_UEADDR1_OFST);
--	p->ueinfo.bankgrp = (regval & ECC_CEADDR1_BNKGRP_MASK) >>
--					ECC_CEADDR1_BNKGRP_SHIFT;
--	p->ueinfo.bank = (regval & ECC_CEADDR1_BNKNR_MASK) >>
--					ECC_CEADDR1_BNKNR_SHIFT;
--	p->ueinfo.col = (regval & ECC_CEADDR1_COL_MASK);
-+	p->ueinfo.bankgrp = FIELD_GET(ECC_CEADDR1_BANKGRP_MASK, regval);
-+	p->ueinfo.bank = FIELD_GET(ECC_CEADDR1_BANK_MASK, regval);
-+	p->ueinfo.col = FIELD_GET(ECC_CEADDR1_COL_MASK, regval);
-+
- 	p->ueinfo.data = readl(base + ECC_UESYND0_OFST);
- out:
- 	spin_lock_irqsave(&priv->reglock, flags);
-@@ -484,7 +476,7 @@ static enum dev_type snps_get_dtype(const void __iomem *base)
- 	if (!(regval & DDR_MSTR_MEM_DDR4))
- 		return DEV_UNKNOWN;
- 
--	regval = (regval & DDR_MSTR_DEV_CFG_MASK) >> DDR_MSTR_DEV_CFG_SHIFT;
-+	regval = FIELD_GET(DDR_MSTR_DEV_CFG_MASK, regval);
- 	switch (regval) {
- 	case DDR_MSTR_DEV_X4:
- 		return DEV_X4;
-@@ -511,7 +503,8 @@ static bool snps_get_ecc_state(void __iomem *base)
- {
- 	u32 regval;
- 
--	regval = readl(base + ECC_CFG0_OFST) & ECC_CFG0_MODE_MASK;
-+	regval = readl(base + ECC_CFG0_OFST);
-+	regval = FIELD_GET(ECC_CFG0_MODE_MASK, regval);
- 
- 	return (regval == ECC_CFG0_MODE_SECDED);
- }
-@@ -698,13 +691,13 @@ static void snps_data_poison_setup(struct snps_edac_priv *priv)
- 	if (priv->rank_shift[0])
- 		rank = (hif_addr >> priv->rank_shift[0]) & BIT(0);
- 
--	regval = (rank << ECC_POISON0_RANK_SHIFT) & ECC_POISON0_RANK_MASK;
--	regval |= (col << ECC_POISON0_COLUMN_SHIFT) & ECC_POISON0_COLUMN_MASK;
-+	regval = FIELD_PREP(ECC_POISON0_RANK_MASK, rank) |
-+		 FIELD_PREP(ECC_POISON0_COL_MASK, col);
- 	writel(regval, priv->baseaddr + ECC_POISON0_OFST);
- 
--	regval = (bankgrp << ECC_POISON1_BG_SHIFT) & ECC_POISON1_BG_MASK;
--	regval |= (bank << ECC_POISON1_BANKNR_SHIFT) & ECC_POISON1_BANKNR_MASK;
--	regval |= (row << ECC_POISON1_ROW_SHIFT) & ECC_POISON1_ROW_MASK;
-+	regval = FIELD_PREP(ECC_POISON1_BANKGRP_MASK, bankgrp) |
-+		 FIELD_PREP(ECC_POISON1_BANK_MASK, bank) |
-+		 FIELD_PREP(ECC_POISON1_ROW_MASK, row);
- 	writel(regval, priv->baseaddr + ECC_POISON1_OFST);
- }
- 
-@@ -743,10 +736,14 @@ static ssize_t inject_data_poison_show(struct device *dev,
- {
- 	struct mem_ctl_info *mci = to_mci(dev);
- 	struct snps_edac_priv *priv = mci->pvt_info;
-+	const char *errstr;
-+	u32 regval;
-+
-+	regval = readl(priv->baseaddr + ECC_CFG1_OFST);
-+	errstr = FIELD_GET(ECC_CEPOISON_MASK, regval) == ECC_CEPOISON_MASK ?
-+		 "Correctable Error" : "UnCorrectable Error";
- 
--	return sprintf(data, "Data Poisoning: %s\n\r",
--			(((readl(priv->baseaddr + ECC_CFG1_OFST)) & 0x3) == 0x3)
--			? ("Correctable Error") : ("UnCorrectable Error"));
-+	return sprintf(data, "Data Poisoning: %s\n\r", errstr);
- }
- 
- static ssize_t inject_data_poison_store(struct device *dev,
-@@ -853,7 +850,7 @@ static void snps_setup_column_address_map(struct snps_edac_priv *priv, u32 *addr
- 	int index;
- 
- 	memtype = readl(priv->baseaddr + DDR_MSTR_OFST);
--	width = (memtype & DDR_MSTR_BUSWIDTH_MASK) >> DDR_MSTR_BUSWIDTH_SHIFT;
-+	width = FIELD_GET(DDR_MSTR_BUSWIDTH_MASK, memtype);
- 
- 	priv->col_shift[0] = 0;
- 	priv->col_shift[1] = 1;
+Serge Semin (18):
+  EDAC/synopsys: Convert sysfs nodes to debugfs ones
+  EDAC/mc: Extend memtypes with LPDDR(mDDR) and LPDDR2
+  EDAC/synopsys: Extend memtypes supported by controller
+  EDAC/synopsys: Detach private data from mci instance
+  EDAC/synopsys: Add DDRC basic parameters infrastructure
+  EDAC/synopsys: Convert plat-data to plat-init function
+  EDAC/synopsys: Parse ADDRMAP[7-8] CSRs for (LP)DDR4 only
+  EDAC/synopsys: Parse ADDRMAP[0] CSR for multi-ranks case only
+  EDAC/synopsys: Set actual DIMM ECC errors grain
+  EDAC/synopsys: Get corrected bit position
+  EDAC/synopsys: Pass syndrome to EDAC error handler
+  EDAC/synopsys: Read full data+ecc pattern on errors
+  EDAC/synopsys: Introduce System/SDRAM address translation interface
+  EDAC/synopsys: Simplify HIF/SDRAM column mapping get procedure
+  EDAC/synopsys: Add HIF/SDRAM mapping debugfs node
+  EDAC/synopsys: Add erroneous page-frame/offset reporting
+  EDAC/synopsys: Add system address regions support
+  EDAC/synopsys: Add mapping-based memory size calculation
+
+ drivers/edac/edac_mc.c       |    2 +
+ drivers/edac/synopsys_edac.c | 1828 ++++++++++++++++++++++++----------
+ include/linux/edac.h         |    6 +
+ 3 files changed, 1321 insertions(+), 515 deletions(-)
+
 -- 
 2.41.0
 
