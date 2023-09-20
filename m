@@ -2,146 +2,229 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 259987A8AF5
-	for <lists+linux-edac@lfdr.de>; Wed, 20 Sep 2023 19:55:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D2B487A8C49
+	for <lists+linux-edac@lfdr.de>; Wed, 20 Sep 2023 21:11:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229587AbjITRz5 (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Wed, 20 Sep 2023 13:55:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36868 "EHLO
+        id S229645AbjITTLZ (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Wed, 20 Sep 2023 15:11:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229585AbjITRz5 (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Wed, 20 Sep 2023 13:55:57 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15582DE
-        for <linux-edac@vger.kernel.org>; Wed, 20 Sep 2023 10:55:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1695232507;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=NnqOeIozWLoSx9J0xtQeCKdqhemo3EjzKycC15MNaXI=;
-        b=SzKDMcCNnBBP6byCzE2SirR83Sn6/tTo6qEk0byuZHezX5Sv9AN+4nKmL/sIZDvJlgdGJs
-        H0R64p7wYptixyOx9rgL4GzGBr/H07NpCQevtkJkLNHgUrQLD3SSUjkRfFRpBFg0Yxwase
-        dwKc2S6KA2/NgZZcnSbD5ZBbirOKUww=
-Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
- [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-90-5Tfz8Gv7MiqKmwcCwGTdLQ-1; Wed, 20 Sep 2023 13:55:05 -0400
-X-MC-Unique: 5Tfz8Gv7MiqKmwcCwGTdLQ-1
-Received: by mail-wr1-f71.google.com with SMTP id ffacd0b85a97d-31fed999e27so58526f8f.2
-        for <linux-edac@vger.kernel.org>; Wed, 20 Sep 2023 10:55:05 -0700 (PDT)
+        with ESMTP id S229498AbjITTLY (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Wed, 20 Sep 2023 15:11:24 -0400
+Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDE668F;
+        Wed, 20 Sep 2023 12:11:17 -0700 (PDT)
+Received: by mail-lj1-x229.google.com with SMTP id 38308e7fff4ca-2c00b37ad84so2579871fa.0;
+        Wed, 20 Sep 2023 12:11:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1695237076; x=1695841876; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=0XSP0EPbm9YvKR6mPo23h+dPn77vhjtSt75IDiGzGvk=;
+        b=JWEfbkeNxxHXrxpkBOEFIT+U6OEGkLLSIM7wf+g5qYuP1nZ/iRMJmdIvtZ/bdEP4YC
+         18ZYee+9tlhWp1tXBUzbadknMBeSe5/S8N01104d3v+NwomWDdWk3wHFd1PYl0fGf2iI
+         4vPQ76LRORAinhzUjUZB4V7GMsSQacAih6YovFmQ0ct+HZBaw1bJEBrbCLFnjvR19+eq
+         OJDrm7Atu2S9NgQLIUSonLipWETTO/3saNOxp/yoYJHrfuA55Yb9bLXViAnSgO/Cpxz+
+         52Oxu1U6XwzXwao2Jt8gAWGSYes51VIeWh7fMCcx9ejBajUlhO/JU0nJ299TxBHp3HZr
+         rWZg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695232504; x=1695837304;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=NnqOeIozWLoSx9J0xtQeCKdqhemo3EjzKycC15MNaXI=;
-        b=I+nr2TVVhz9Zdgtgdm8fas/zSLy+Rra9aTx6KH32ADb3yV8ceukz0lCIJWXvdO+9wK
-         HGI+tGG6BuY06N32UhuhC8FzNv3KYtWCIo7JmS6CtHRzrkdLbEgCHVVEdWeod5SOxh8H
-         Qd8NXAAeQc9XIpSdFx55XKEU7ixz8cnAhf39tA1H33AIebkBBiSUnoOob1ez8JQWAfbj
-         e3ekIamYubd9sRZ+ChyffFLPLxg4noHiwTml0Yp37TeXovbvav6eC7524Pdj41yDvp7f
-         Rir0aXNlA1mATUuYEyNgM4JUeSetYCLdP84KztHzOdMb1fESe1ejX2uX8uaccxxpoD7d
-         9sTg==
-X-Gm-Message-State: AOJu0YxHHSy/DVEE0aQhYw/axKF4JUoGUIaKSv0v5TOI1hz/MmLcJvRc
-        yU2wud40wOCmNFiVRJ1bOdkua6C5j7gS2BIlKVSSzEBYStkBsio/FQT1TiQRfvAa3j2fM702BaP
-        hcIPSiHVUgcsplbGmV80VGw==
-X-Received: by 2002:adf:ee88:0:b0:313:ecd3:7167 with SMTP id b8-20020adfee88000000b00313ecd37167mr2737765wro.42.1695232504616;
-        Wed, 20 Sep 2023 10:55:04 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IG0pIzmkmEwrfJkDIWYrHXNUyhISLDh7IqFEh0BjNiUe37zgzv0CZuijHzQCZR9e7yYqC6CoA==
-X-Received: by 2002:adf:ee88:0:b0:313:ecd3:7167 with SMTP id b8-20020adfee88000000b00313ecd37167mr2737745wro.42.1695232504286;
-        Wed, 20 Sep 2023 10:55:04 -0700 (PDT)
-Received: from ?IPV6:2001:b07:6468:f312:9af8:e5f5:7516:fa89? ([2001:b07:6468:f312:9af8:e5f5:7516:fa89])
-        by smtp.googlemail.com with ESMTPSA id w11-20020a5d608b000000b0031ad5fb5a0fsm10876963wrt.58.2023.09.20.10.55.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 20 Sep 2023 10:55:03 -0700 (PDT)
-Message-ID: <26b92bbb-0519-8b94-07fc-75d900fde600@redhat.com>
-Date:   Wed, 20 Sep 2023 19:54:59 +0200
+        d=1e100.net; s=20230601; t=1695237076; x=1695841876;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=0XSP0EPbm9YvKR6mPo23h+dPn77vhjtSt75IDiGzGvk=;
+        b=MFPI18jo2298j98DJTnw2HCrI+PPCj0DteB1j1ydBmMzLnYB5QxMTOFgzFVTrA2/Yj
+         UkmBW5oHtxftHaXMIT5qzW+TXrDCAcyZCbiVMBiwy63CCzeIPZnAPIakFSeslCT2eZJL
+         jb1vtOyRqvhD5EEF2gqZ18HiWw/nJcTukeimx2EoxiFh4pWkMR2+A6udH4UjYw5Fg4sH
+         l3p3KYTLSLZ3g14XltNFOQUfyXpz7m5ZTsFF+XJvswyQSy7GA4pwMIIT0dD4+TYNva6O
+         5N9+lh9l6y2QUpAMHoy9hC29CO4gX7HSJ5Rt0cRCTM8ZEeR8G8iSW1wwuylX42o1B/BJ
+         JqyQ==
+X-Gm-Message-State: AOJu0YwhdF0iZkmB8k52cMx2e7Ww0RIj7NY2eat+jg0dAyUrkfIf7jXS
+        LDUY8pZo3jtiaq4xbZLkU0UJ/w63Hag=
+X-Google-Smtp-Source: AGHT+IF/ZcMhoEpv4WOnm45w2MfZcJM/lpOWwlu3Qmbv76cWC/Oh09WqjdpyRUc6f4APUSu64lxJug==
+X-Received: by 2002:a2e:9cd4:0:b0:2c0:32a1:71dd with SMTP id g20-20020a2e9cd4000000b002c032a171ddmr3055632ljj.28.1695237075493;
+        Wed, 20 Sep 2023 12:11:15 -0700 (PDT)
+Received: from localhost ([85.26.234.178])
+        by smtp.gmail.com with ESMTPSA id by33-20020a05651c1a2100b002bfec05a693sm2376201ljb.22.2023.09.20.12.11.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 20 Sep 2023 12:11:14 -0700 (PDT)
+From:   Serge Semin <fancer.lancer@gmail.com>
+To:     Michal Simek <michal.simek@amd.com>,
+        Alexander Stein <alexander.stein@ew.tq-group.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Tony Luck <tony.luck@intel.com>,
+        James Morse <james.morse@arm.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Robert Richter <rric@kernel.org>
+Cc:     Serge Semin <fancer.lancer@gmail.com>,
+        Punnaiah Choudary Kalluri 
+        <punnaiah.choudary.kalluri@xilinx.com>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-arm-kernel@lists.infradead.org, linux-edac@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v4 00/20] EDAC/mc/synopsys: Various fixes and cleanups
+Date:   Wed, 20 Sep 2023 22:10:24 +0300
+Message-ID: <20230920191059.28395-1-fancer.lancer@gmail.com>
+X-Mailer: git-send-email 2.41.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Subject: Re: [PATCH v10 34/38] KVM: VMX: Call fred_entry_from_kvm() for
- IRQ/NMI handling
-Content-Language: en-US
-To:     Xin Li <xin3.li@intel.com>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-edac@vger.kernel.org,
-        linux-hyperv@vger.kernel.org, kvm@vger.kernel.org,
-        xen-devel@lists.xenproject.org
-Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-        luto@kernel.org, seanjc@google.com, peterz@infradead.org,
-        jgross@suse.com, ravi.v.shankar@intel.com, mhiramat@kernel.org,
-        andrew.cooper3@citrix.com, jiangshanlai@gmail.com
-References: <20230914044805.301390-1-xin3.li@intel.com>
- <20230914044805.301390-35-xin3.li@intel.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <20230914044805.301390-35-xin3.li@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On 9/14/23 06:48, Xin Li wrote:
-> When FRED is enabled, call fred_entry_from_kvm() to handle IRQ/NMI in
-> IRQ/NMI induced VM exits.
-> 
-> Tested-by: Shan Kang <shan.kang@intel.com>
-> Signed-off-by: Xin Li <xin3.li@intel.com>
+This patchset is a first one in the series created in the framework of
+my Synopsys DW uMCTL2 DDRC-related work:
 
-Acked-by: Paolo Bonzini <pbonzini@redhat.com>
+[1: In-progress v4] EDAC/mc/synopsys: Various fixes and cleanups
+Link: ---you are looking at it---
+[2: In-progress v4] EDAC/synopsys: Add generic DDRC info and address mapping
+Link: ---to be submitted---
+[3: In-progress v4] EDAC/synopsys: Add generic resources and Scrub support
+Link: ---to be submitted---
 
-> ---
->   arch/x86/kvm/vmx/vmx.c | 12 +++++++++---
->   1 file changed, 9 insertions(+), 3 deletions(-)
-> 
-> diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
-> index 72e3943f3693..db55b8418fa3 100644
-> --- a/arch/x86/kvm/vmx/vmx.c
-> +++ b/arch/x86/kvm/vmx/vmx.c
-> @@ -38,6 +38,7 @@
->   #include <asm/desc.h>
->   #include <asm/fpu/api.h>
->   #include <asm/fpu/xstate.h>
-> +#include <asm/fred.h>
->   #include <asm/idtentry.h>
->   #include <asm/io.h>
->   #include <asm/irq_remapping.h>
-> @@ -6962,14 +6963,16 @@ static void handle_external_interrupt_irqoff(struct kvm_vcpu *vcpu)
->   {
->   	u32 intr_info = vmx_get_intr_info(vcpu);
->   	unsigned int vector = intr_info & INTR_INFO_VECTOR_MASK;
-> -	gate_desc *desc = (gate_desc *)host_idt_base + vector;
->   
->   	if (KVM_BUG(!is_external_intr(intr_info), vcpu->kvm,
->   	    "unexpected VM-Exit interrupt info: 0x%x", intr_info))
->   		return;
->   
->   	kvm_before_interrupt(vcpu, KVM_HANDLING_IRQ);
-> -	vmx_do_interrupt_irqoff(gate_offset(desc));
-> +	if (cpu_feature_enabled(X86_FEATURE_FRED))
-> +		fred_entry_from_kvm(EVENT_TYPE_EXTINT, vector);
-> +	else
-> +		vmx_do_interrupt_irqoff(gate_offset((gate_desc *)host_idt_base + vector));
->   	kvm_after_interrupt(vcpu);
->   
->   	vcpu->arch.at_instruction_boundary = true;
-> @@ -7262,7 +7265,10 @@ static noinstr void vmx_vcpu_enter_exit(struct kvm_vcpu *vcpu,
->   	if ((u16)vmx->exit_reason.basic == EXIT_REASON_EXCEPTION_NMI &&
->   	    is_nmi(vmx_get_intr_info(vcpu))) {
->   		kvm_before_interrupt(vcpu, KVM_HANDLING_NMI);
-> -		vmx_do_nmi_irqoff();
-> +		if (cpu_feature_enabled(X86_FEATURE_FRED))
-> +			fred_entry_from_kvm(EVENT_TYPE_NMI, NMI_VECTOR);
-> +		else
-> +			vmx_do_nmi_irqoff();
->   		kvm_after_interrupt(vcpu);
->   	}
->   
+Note the patchsets above must be merged in the same order as they are
+placed in the list in order to prevent conflicts. Nothing prevents them
+from being reviewed synchronously though. Any tests are very welcome.
+Thanks in advance.
+
+The main goal of the entire set of the changes provided in the mentioned
+patchsets is to as much as possible specialise the synopsys_edac.c driver
+to be working with the Synopsys DW uMCTL2 DDR controllers of various
+versions and synthesized parameters, and add useful error-detection
+features.
+
+Regarding this series content. It's an initial patchset which
+traditionally provides various fixes, cleanups and modifications required
+for the more comfortable further features development. The main goal of it
+though is to detach the Xilinx Zynq A05 DDRC related code into the
+dedicated driver since first it has nothing to do with the Synopsys DW
+uMCTL2 DDR controller and second it will be a great deal obstacle on the
+way of extending the Synopsys-part functionality.
+
+The series starts with the fixes patches, which in short concern the next
+aspects: touching the ZynqMP-specific CSRs on the Xilinx ZinqMP platform
+only, serializing an access to the ECCCLR/ECCCTL register, adding correct memory
+devices type detection, setting a correct value to the
+mem_ctl_info.scrub_cap field, dropping an erroneous ADDRMAP[4] parsing and
+getting back a correct order of the ECC errors info detection procedure.
+
+Afterwards the patchset provides several cleanup patches required for the
+more coherent code splitting up (Xilinx Zynq A05 and Synopsys DW uMCTL2
+DDRCs) so the provided modifications would be useful in both drivers.
+First the platform resource open-coded IO-space remapping is replaced with
+the devm_platform_ioremap_resource() method call for the sake of the code
+simplification. Secondly the next redundant entities are dropped: internal
+CE/UE errors counters, local to_mci() macros definition, some redundant
+ecc_error_info structure fields and redundant info from the error message,
+duplicated dimm->nr_pages debug printout and spaces from the MEM_TYPE
+flags declarations. (The later two updates concern the MCI core part.)
+Thirdly before detaching the Zynq A05-related code an unique MC index
+allocation infrastructure is added to the MCI core. It's required since
+after splitting the driver up both supported types of memory devices could
+be correctly probed on the same platform. Note even though it's currently
+unsupported by the synsopsys_edac.c driver it's claimed to be possible by
+the original driver author (it was a reason of having two unrelated
+devices supported in a single driver). Finally the Xilinx Zynq A05 part of
+the driver is moved out to a dedicated driver. After that the
+platform-specific setups API is removed from the Synopsys DW uMCTL2 DDRC
+driver since it's no longer required.
+
+Finally as the cherry on the cake a set of the local coding style
+cleanups are provided: unify the DW uMCTL2 DDRC driver entities naming and
+replace the open-coded "shift/mask" pattern with the kernel helpers like
+BIT/GENMASK/FIELD_x in there. It shall significantly improve the code
+readability.
+
+Changelog v2:
+- Move Synopsys DW uMCTL2 DDRC bindings file renaming to a separate patch.
+  (@Krzysztof)
+- Introduce a new compatible string "snps,dw-umctl2-ddrc" matching the new
+  DT-schema name.
+- Forgot to fix some of the prefix of the SYNPS_ZYNQMP_IRQ_REGS macro
+  in several places. (@tbot)
+- Drop the no longer used "priv" pointer from the mc_init() function.
+  (@tbot)
+- Include "linux/bitfield.h" header file to get the FIELD_GET macro
+  definition. (@tbot)
+- Drop the already merged in patches:
+[PATCH 12/20] EDAC/mc: Replace spaces with tabs in memtype flags definition
+[PATCH 13/20] EDAC/mc: Drop duplicated dimm->nr_pages debug printout
+
+Changelog v3:
+- Drop the no longer used "priv" pointer from the mc_init() function.
+  (@tbot)
+- Drop the merged in patches:
+[PATCH v2 14/19] dt-bindings: memory: snps: Detach Zynq DDRC controller support
+[PATCH v2 15/19] dt-bindings: memory: snps: Use more descriptive device name
+  (@Krzysztof)
+
+Changelog v4:
+- Remove Rob, Krzysztof and DT-mailing list from Cc since the respective
+  patches have already been merged in.
+- Add a new patch
+  [PATCH v4 6/20] EDAC/synopsys: Fix misleading IRQ self-cleared quirk flag
+  detached from the very first patch of the series.
+- Add a new patch
+  [PATCH v4 15/20] EDAC/mc: Re-use generic unique MC index allocation procedure
+- Add a new patch
+  [PATCH v4 18/20] EDAC/synopsys: Unify CSRs macro declarations
+  collecting the changes from various patches of the series.
+- Drop redundant empty lines left by mistake.
+- Drop private counters access from the check_errors() method too.
+- Rebase onto the kernel v6.6-rcX.
+
+Signed-off-by: Serge Semin <fancer.lancer@gmail.com>
+Cc: Punnaiah Choudary Kalluri <punnaiah.choudary.kalluri@xilinx.com>
+Cc: Dinh Nguyen <dinguyen@kernel.org>
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: linux-arm-kernel@lists.infradead.org
+Cc: linux-edac@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+
+Serge Semin (20):
+  EDAC/synopsys: Fix ECC status data and IRQ disable race condition
+  EDAC/synopsys: Fix generic device type detection procedure
+  EDAC/synopsys: Fix mci->scrub_cap field setting
+  EDAC/synopsys: Drop erroneous ADDRMAP4.addrmap_col_b10 parse
+  EDAC/synopsys: Fix reading errors count before ECC status
+  EDAC/synopsys: Fix misleading IRQ self-cleared quirk flag
+  EDAC/synopsys: Use platform device devm ioremap method
+  EDAC/synopsys: Drop internal CE and UE counters
+  EDAC/synopsys: Drop local to_mci() macro definition
+  EDAC/synopsys: Drop struct ecc_error_info.blknr field
+  EDAC/synopsys: Shorten out struct ecc_error_info.bankgrpnr field name
+  EDAC/synopsys: Drop redundant info from the error messages
+  EDAC/mc: Init DIMM labels in MC registration method
+  EDAC/mc: Add generic unique MC index allocation procedure
+  EDAC/mc: Re-use generic unique MC index allocation procedure
+  EDAC/synopsys: Detach Zynq A05 DDRC support to separate driver
+  EDAC/synopsys: Drop unused platform-specific setup API
+  EDAC/synopsys: Unify CSRs macro declarations
+  EDAC/synopsys: Unify struct/macro/function prefixes
+  EDAC/synopsys: Convert to using BIT/GENMASK/FIELD_x macros
+
+ MAINTAINERS                  |   1 +
+ drivers/edac/Kconfig         |   9 +-
+ drivers/edac/Makefile        |   1 +
+ drivers/edac/dmc520_edac.c   |   4 +-
+ drivers/edac/edac_mc.c       | 135 ++++-
+ drivers/edac/edac_mc.h       |   4 +
+ drivers/edac/pasemi_edac.c   |   5 +-
+ drivers/edac/ppc4xx_edac.c   |   5 +-
+ drivers/edac/synopsys_edac.c | 966 ++++++++++++-----------------------
+ drivers/edac/zynq_edac.c     | 501 ++++++++++++++++++
+ 10 files changed, 962 insertions(+), 669 deletions(-)
+ create mode 100644 drivers/edac/zynq_edac.c
+
+-- 
+2.41.0
 
