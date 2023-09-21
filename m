@@ -2,84 +2,175 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B3607A9F57
-	for <lists+linux-edac@lfdr.de>; Thu, 21 Sep 2023 22:21:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 40A2C7AA0E0
+	for <lists+linux-edac@lfdr.de>; Thu, 21 Sep 2023 22:49:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231654AbjIUUVV (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Thu, 21 Sep 2023 16:21:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49308 "EHLO
+        id S231487AbjIUUti (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Thu, 21 Sep 2023 16:49:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231596AbjIUUUy (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Thu, 21 Sep 2023 16:20:54 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3BDB51018;
-        Thu, 21 Sep 2023 10:15:29 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1695290903;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=MGuV725+A52UkxEuSgzeQeAhaGDz2ANft+qmFiacDG8=;
-        b=Uc1XkSaloHBlxYQ1zN6hh9geAvtQDrA6rzrrOm0XEDhASCCuiOJd0ZUQDVk5pu7smVlZfM
-        YcyVj5MIlW6dCw0gZAVps0Rws2yHAHtHT3yI0KmpTXMdgnz/3Z1IfNIMpPSXeG2C1xVIZa
-        RVC8GvYWzw2wNPbssRcVWZprhIJD5GCzDZQZel4mnlA7NNIdTJN8FZXnfD5refPia6Z4Ep
-        NvWaLlqsVp24Afci/BqY4B8bDTeZUFFOfG/ZbjsHOCaUcJSGcTEfuO29KH+o6OntuQsdt1
-        Yeu0DTomo1WSKteeMcOT97KH0jVECo7ht6Xx698kxrEZHO2MRgqhLwxglLtcag==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1695290903;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=MGuV725+A52UkxEuSgzeQeAhaGDz2ANft+qmFiacDG8=;
-        b=YhxFLYB1hUEgCK9ZzqoixCOcdsJ9EkBa/RsLR3qBRdXVZTcXsEUrSFZvzIKcv5QclewR1g
-        FaT5gQjP7YRGAsBA==
-To:     Nikolay Borisov <nik.borisov@suse.com>, Xin Li <xin3.li@intel.com>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-edac@vger.kernel.org, linux-hyperv@vger.kernel.org,
-        kvm@vger.kernel.org, xen-devel@lists.xenproject.org
-Cc:     mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
-        x86@kernel.org, hpa@zytor.com, luto@kernel.org,
-        pbonzini@redhat.com, seanjc@google.com, peterz@infradead.org,
-        jgross@suse.com, ravi.v.shankar@intel.com, mhiramat@kernel.org,
-        andrew.cooper3@citrix.com, jiangshanlai@gmail.com
-Subject: Re: [PATCH v10 28/38] x86/fred: FRED entry/exit and dispatch code
-In-Reply-To: <22921663-0e5e-58c0-c6c8-c45f991790ea@suse.com>
-References: <20230914044805.301390-1-xin3.li@intel.com>
- <20230914044805.301390-29-xin3.li@intel.com>
- <22921663-0e5e-58c0-c6c8-c45f991790ea@suse.com>
-Date:   Thu, 21 Sep 2023 12:08:23 +0200
-Message-ID: <871qerj0tk.ffs@tglx>
+        with ESMTP id S232556AbjIUUtI (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Thu, 21 Sep 2023 16:49:08 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E82315809E;
+        Thu, 21 Sep 2023 10:49:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1695318593; x=1726854593;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=4Ne+vrsW5UtAXBNbbGZuiUIqq3ylSla3sj1CH7LF+fA=;
+  b=mppSSCJfWVdhupr/av+7YMV6WwjSB6DV7MocoSfQELXuGEJ/rVLyCeaB
+   Bda198HO87Tn1fPzPgJmNkcf6tUHfd/Pt+IcnVRSJg3mnfIY6/j7Kd0om
+   VGiYNOMFYua4YZ9smiqLDr/2bIsNJ0kHdwAdkGPj6rLn6N6tSrAgpLFnq
+   emB6SqTABERKcBYxsbiJ91TAMmr8r1XSPYRCg7Efz5PyZhuEAJEB+bAYf
+   XvgzBKOt5QO3X1K9TNjoqddS7GupHl20uhkgZBhjlCMqXCn8oO2K7VJDQ
+   iPhHCUR48yUjZwfroyPEJ3IYldNJvRxXMX/oLHoG/XKE0qXEABHZpsN+I
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10839"; a="446964126"
+X-IronPort-AV: E=Sophos;i="6.03,165,1694761200"; 
+   d="scan'208";a="446964126"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Sep 2023 04:26:27 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10839"; a="862425479"
+X-IronPort-AV: E=Sophos;i="6.03,165,1694761200"; 
+   d="scan'208";a="862425479"
+Received: from lkp-server02.sh.intel.com (HELO 9ef86b2655e5) ([10.239.97.151])
+  by fmsmga002.fm.intel.com with ESMTP; 21 Sep 2023 04:26:23 -0700
+Received: from kbuild by 9ef86b2655e5 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1qjHp7-0009uu-2J;
+        Thu, 21 Sep 2023 11:26:21 +0000
+Date:   Thu, 21 Sep 2023 19:26:04 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Serge Semin <fancer.lancer@gmail.com>,
+        Michal Simek <monstr@monstr.eu>,
+        Alexander Stein <alexander.stein@ew.tq-group.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Tony Luck <tony.luck@intel.com>,
+        James Morse <james.morse@arm.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Robert Richter <rric@kernel.org>
+Cc:     oe-kbuild-all@lists.linux.dev, linux-media@vger.kernel.org,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Punnaiah Choudary Kalluri 
+        <punnaiah.choudary.kalluri@xilinx.com>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-arm-kernel@lists.infradead.org, linux-edac@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 16/20] EDAC/synopsys: Detach Zynq A05 DDRC support to
+ separate driver
+Message-ID: <202309211954.M7wyhXyv-lkp@intel.com>
+References: <20230920191059.28395-17-fancer.lancer@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DATE_IN_PAST_06_12,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230920191059.28395-17-fancer.lancer@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Thu, Sep 21 2023 at 12:48, Nikolay Borisov wrote:
-> On 14.09.23 =D0=B3. 7:47 =D1=87., Xin Li wrote:
->> +
->> +	/* INT80 */
->> +	case IA32_SYSCALL_VECTOR:
->> +		if (likely(IS_ENABLED(CONFIG_IA32_EMULATION))) {
->
-> Since future kernels will support boottime toggling of whether 32bit=20
-> syscall interface should be enabled or not as per:
-> https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git/commit/?h=3Dx=
-86/entry&id=3D1da5c9bc119d3a749b519596b93f9b2667e93c4a
->
-> It will make more sense to replace this with ia32_enabled() invocation.=20
-> I guess this could be done as a follow-up patch based on when this is=20
-> merged as the ia32_enbaled changes are going to be merged in 6.7.
+Hi Serge,
 
-The simplest solution is to rebase the series to tip x86/entry and just
-do it right away :)
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on v6.5]
+[also build test WARNING on next-20230921]
+[cannot apply to linus/master v6.6-rc2 v6.6-rc1]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Serge-Semin/EDAC-synopsys-Fix-ECC-status-data-and-IRQ-disable-race-condition/20230921-031420
+base:   v6.5
+patch link:    https://lore.kernel.org/r/20230920191059.28395-17-fancer.lancer%40gmail.com
+patch subject: [PATCH v4 16/20] EDAC/synopsys: Detach Zynq A05 DDRC support to separate driver
+config: i386-allyesconfig (https://download.01.org/0day-ci/archive/20230921/202309211954.M7wyhXyv-lkp@intel.com/config)
+compiler: gcc-12 (Debian 12.2.0-14) 12.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20230921/202309211954.M7wyhXyv-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202309211954.M7wyhXyv-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/edac/zynq_edac.c:194: warning: expecting prototype for handle_error(). Prototype was for zynq_handle_error() instead
+>> drivers/edac/zynq_edac.c:233: warning: expecting prototype for check_errors(). Prototype was for zynq_check_errors() instead
+
+
+vim +194 drivers/edac/zynq_edac.c
+
+   185	
+   186	/**
+   187	 * handle_error - Handle Correctable and Uncorrectable errors.
+   188	 * @mci:	EDAC memory controller instance.
+   189	 * @p:		Zynq ECC status structure.
+   190	 *
+   191	 * Handles ECC correctable and uncorrectable errors.
+   192	 */
+   193	static void zynq_handle_error(struct mem_ctl_info *mci, struct zynq_ecc_status *p)
+ > 194	{
+   195		struct zynq_edac_priv *priv = mci->pvt_info;
+   196		struct zynq_ecc_error_info *pinf;
+   197	
+   198		if (p->ce_cnt) {
+   199			pinf = &p->ceinfo;
+   200	
+   201			snprintf(priv->message, ZYNQ_EDAC_MSG_SIZE,
+   202				 "Row %d Bank %d Col %d Bit %d Data 0x%08x",
+   203				 pinf->row, pinf->bank, pinf->col,
+   204				 pinf->bitpos, pinf->data);
+   205	
+   206			edac_mc_handle_error(HW_EVENT_ERR_CORRECTED, mci,
+   207					     p->ce_cnt, 0, 0, 0, 0, 0, -1,
+   208					     priv->message, "");
+   209		}
+   210	
+   211		if (p->ue_cnt) {
+   212			pinf = &p->ueinfo;
+   213	
+   214			snprintf(priv->message, ZYNQ_EDAC_MSG_SIZE,
+   215				 "Row %d Bank %d Col %d",
+   216				 pinf->row, pinf->bank, pinf->col);
+   217	
+   218			edac_mc_handle_error(HW_EVENT_ERR_UNCORRECTED, mci,
+   219					     p->ue_cnt, 0, 0, 0, 0, 0, -1,
+   220					     priv->message, "");
+   221		}
+   222	
+   223		memset(p, 0, sizeof(*p));
+   224	}
+   225	
+   226	/**
+   227	 * check_errors - Check controller for ECC errors.
+   228	 * @mci:	EDAC memory controller instance.
+   229	 *
+   230	 * Check and post ECC errors. Called by the polling thread.
+   231	 */
+   232	static void zynq_check_errors(struct mem_ctl_info *mci)
+ > 233	{
+   234		struct zynq_edac_priv *priv = mci->pvt_info;
+   235		int status;
+   236	
+   237		status = zynq_get_error_info(priv);
+   238		if (status)
+   239			return;
+   240	
+   241		zynq_handle_error(mci, &priv->stat);
+   242	}
+   243	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
