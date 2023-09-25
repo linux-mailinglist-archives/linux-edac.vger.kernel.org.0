@@ -2,148 +2,178 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E525E7AD825
-	for <lists+linux-edac@lfdr.de>; Mon, 25 Sep 2023 14:36:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EAEE7ADA35
+	for <lists+linux-edac@lfdr.de>; Mon, 25 Sep 2023 16:43:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230270AbjIYMg7 (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Mon, 25 Sep 2023 08:36:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48206 "EHLO
+        id S229718AbjIYOnb (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Mon, 25 Sep 2023 10:43:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230514AbjIYMg4 (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Mon, 25 Sep 2023 08:36:56 -0400
-Received: from NAM04-MW2-obe.outbound.protection.outlook.com (mail-mw2nam04on2062.outbound.protection.outlook.com [40.107.101.62])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 157F6196;
-        Mon, 25 Sep 2023 05:36:46 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=dJ81iAmVM9zK2cBR1UBSXMcoXwch6p+HnWEXT/1h3GqWwuzOseHSxcyYxZ1YNVaf49A3K3Coq2Lrsj+UnwwGaHrTe7DOIfYYpmDwN6vfz9TYeE/AtvNpZzCVO7AY8iSdKqa5S4J7KVzXQSZBFV3qfGV1AoZjkmvRzr/P+/0c+ZWgNX3tTyz42DiZmoab9v2iS3f3fwDoHdcW7Agk/lqKmzNji2z6AdkQXvpICXZNhTHhCR6kUR16RL2AHTkinL2HNTXZk54Ap3BiatRLzcf+KovlVWl3aM4W/Y0z5PZTi/ONrQvy84yo/5sHpjy7ZeFV4ltopo2mYqQnuQcnP538BA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Fwe2msUXZKiapJQgvhzmeZFyXeal5jRNVuzAo7FCQ6g=;
- b=S3pGf2RO+IzXVHAiAmM8ufgV9CGgqI9vkisxTMef9Yv7mCrwHxCahBqpQRbrN7Nm712tPKRzdwfWUTO0mCWYbiqjzPZf3dlvnZfaRE7zo+YWfB+HWmuTiwG5Idz/ZUEieQytI6e/I4IWjguK9Cgr0sIQxb9CwmxG1X41KVx0n6hsqTCBD4PtZ1RGaS8dloaL6rUbPpnQ7///R/Z1G4afAG2NSj2nxFDwEhwCKoKYOWLvAhSzswFr9Wjo2wYxTwXbpq+j+udJ2UB1/cJOWnxgmJ/bayC4p33gn4J3GgWsHpbAH9v33OLJDWtz77Z/EOzB2mulXBwQIexz7x3T2+3fVw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Fwe2msUXZKiapJQgvhzmeZFyXeal5jRNVuzAo7FCQ6g=;
- b=Jcry3DQxkZi0kAeiGscpIRSy8bV/1teeMCQ6k3yX9DRzR16JcfI+s0Slpnx8BxuK4Ne/5dULNXZE2H0MU8u0H/CglHySu8fhvs8WF75ZP8kYOP1FVlLzLEExY1/6IZ/4GCQslr4zGo8J/AOhjzE3ax4fAo2NNN06xVNd0LNiOjPwaYAGRxzExK7xtbfUQRgf2k5j5PGZylLZaM6B1JAa4kAdzqOrCKepKSqro5XMOQjvV/WKtIPw8e7/H9U7P2Q4/y38FCpnF9suahQXVX4KHUR8jtNbdM13xP2w1CELLkVqvbyDvW1DeWbTLJMsZanMKtkZeWknI916mFt60jp7hw==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
- by BY5PR12MB4276.namprd12.prod.outlook.com (2603:10b6:a03:20f::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6813.28; Mon, 25 Sep
- 2023 12:36:44 +0000
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::faf:4cd0:ae27:1073]) by LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::faf:4cd0:ae27:1073%6]) with mapi id 15.20.6792.026; Mon, 25 Sep 2023
- 12:36:42 +0000
-Date:   Mon, 25 Sep 2023 09:36:41 -0300
-From:   Jason Gunthorpe <jgg@nvidia.com>
-To:     Miaohe Lin <linmiaohe@huawei.com>
-Cc:     ankita@nvidia.com, aniketa@nvidia.com, cjia@nvidia.com,
-        kwankhede@nvidia.com, targupta@nvidia.com, vsethi@nvidia.com,
-        acurrid@nvidia.com, anuaggarwal@nvidia.com,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-edac@vger.kernel.org, kvm@vger.kernel.org,
-        alex.williamson@redhat.com, akpm@linux-foundation.org,
-        tony.luck@intel.com, bp@alien8.de, naoya.horiguchi@nec.com
-Subject: Re: [PATCH v1 1/4] mm: handle poisoning of pfn without struct pages
-Message-ID: <20230925123641.GX13733@nvidia.com>
-References: <20230920140210.12663-1-ankita@nvidia.com>
- <20230920140210.12663-2-ankita@nvidia.com>
- <878264ae-f6f6-04d9-2d52-fb7ae29dca85@huawei.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <878264ae-f6f6-04d9-2d52-fb7ae29dca85@huawei.com>
-X-ClientProxiedBy: BL0PR0102CA0060.prod.exchangelabs.com
- (2603:10b6:208:25::37) To LV2PR12MB5869.namprd12.prod.outlook.com
- (2603:10b6:408:176::16)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|BY5PR12MB4276:EE_
-X-MS-Office365-Filtering-Correlation-Id: cbc7a267-591d-45ab-3ee9-08dbbdc4127a
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: bFR9peb8PE0v2XjEx01yoPXRbXXXTrMRLC2Dk99RQeZYFjd3O+TiKMrh4r8gKtU+PsCOpnBHotxANBY38Abj0v6TnE+I3ENvS6ux7jbvlprHIWu8kyHB0FOLNbcGx2TEJ07aXQOm+t4/SwTCqsYMco9JL11xeEiW1qFBN2v7DjFWL0UMVhLhUPNbduq2bjLUD2yxdGjItgwwdJKrpo/csBHlXyzeNpuDnyPssCA67A0vIsMSOh/TA7YIFxK/aPc08GTic2/MC5zZGEZQBh1ON6/JlgdLlQlNOJS2W0X3mcB+9gmwqNh1ZmV/5nyFxZEz9OCXPvlYSuEk04QiOuSM3NRIAIa/AkUsTOfKgCnKN4MKYVMkpBk3WoFGB1xlWjMG5+BWVQR8ytkmP+WoIJk7xcaYGLOTqEfhBILCC5H+orXEWyD56hUz7hl9p1tPcwEZSpoKZ90zSfIOHer6aPcWy7eCwMDFZJCFTxsXeR84YvF6mSUlrPqYPsbLpCA5j5Vs3B9/85pIl61Hed30+qDGCUFLEGvngdsWmRnnhkvH4pFt/ZT8FJVHAeSqRaxTIu2j
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(136003)(39850400004)(396003)(376002)(346002)(366004)(230922051799003)(451199024)(1800799009)(186009)(7416002)(26005)(83380400001)(4744005)(2906002)(5660300002)(316002)(6916009)(41300700001)(8676002)(8936002)(36756003)(4326008)(2616005)(66476007)(66556008)(66946007)(33656002)(1076003)(86362001)(6486002)(6512007)(6506007)(38100700002)(478600001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?kAJkv1iUAWXbRU+GcSdIJgWjiftCX4DneZgjN9D0bBwz2IP1XdGr4YtleY7A?=
- =?us-ascii?Q?afVO6erBAJnE46fhL9on885ep+ulKTeGmf0P6ByGKWyL+ZOSbxHRLVDheppz?=
- =?us-ascii?Q?46P8cW6PRvaoZ0OBrUpxCrwAqzyKFfapJY1+u3uJDDYs5MBe0JwxDHLMJRW6?=
- =?us-ascii?Q?JNlc5jSpfogAvI2J0ZQsIMmGW8PDr4GkxQcyYJpFp+Rg0p/kb6lCsvFnQTfD?=
- =?us-ascii?Q?AnkVUybC7Bg75W2JRxb8bzVXbFWCVwwr4xTFJMJmXYOtsFlWou4EbJb6tSZq?=
- =?us-ascii?Q?IhaMMsugvrYdti00Uq+Y2WeBrNqUvMxHjRqPVfGjxCg93utIfl5Uy4Q5pB52?=
- =?us-ascii?Q?McQPBbiJoevgKI3QjH+4Dqcw+GsUaFPHhJPOIMtGDuCJQI/i0LaHhIN3rj+/?=
- =?us-ascii?Q?DosqFjyQNqyLtTTZJwkLR7XOSB3Vtm6YlTlvmG0BZtDJW6fWqaLzDz1pkFl+?=
- =?us-ascii?Q?NHkNGRXacZWvXCXar2eRBPk4UDlgpVvSsRpVWLQhqK64fIKr+hcsyACbO+kh?=
- =?us-ascii?Q?v1dw+OfLXj5iiu08WejqntzHKxiem6hG5DWAwYcb4lwAfMkakMhAasi05ryg?=
- =?us-ascii?Q?B0koTXX3taWc5FbWc38CT+2reCihAiRk8j1A+nFbzCEebFmXw5C6hL1qPcDv?=
- =?us-ascii?Q?1PThtlrL9NRpcKSDZDq1uL1evAXTx3h4Uf76el1oj8QGjRBHj2dp/yqyCd7b?=
- =?us-ascii?Q?2mDdQtPF6xH9anZROH/oNKKCtV5/EyUlCrDMJXoC0hqkccUZ885UUJaGqbp3?=
- =?us-ascii?Q?EvJndIg0To4qA4mCTR5FWEOOL4mdNX9JAIjAUEghgQ5eisKKPQzcwyARsgGE?=
- =?us-ascii?Q?Y5JPsNU3A8+zclpHcgP03EXTgasFNlD2UKkC2fzp9OlfpRprJRV7Ld2lt9jS?=
- =?us-ascii?Q?jCz/OouDYDFUgb3ut5yMf4/a87AwMBRNRsYn+oYw8Gy1iNw7T2BP6Qzwracw?=
- =?us-ascii?Q?IiUa31bc4PpuOwHzqy0RAAnxQMl805o6zuE9NSXoA1iGCIJzHZUKbnCdkiCq?=
- =?us-ascii?Q?HPJeues0z8Si+Y0Uqx0lW72UfP1KQrgC6NmpRwSR41VmHBHLoAR57aozRI1R?=
- =?us-ascii?Q?6gqVyVKqIiAayh+SQDuFdquprR4AMuUscGdLSWo9OC+NPhZBuK0qyRBMlRgi?=
- =?us-ascii?Q?PieeVaQr45Dlo+Kox/8pRY68KBegHPMFtX7N0e7p+NSaJJ0hNEckmOmphfcO?=
- =?us-ascii?Q?6Bl0vCw2ZhQWZ53c8InPtKEaAD7aox6d82J3/98/4INXwLgI5Lt/BAsTfr1a?=
- =?us-ascii?Q?FesdsaiEHctKHFu0isSVsrBFV4F+/Z2fibHIWToVHk2CSsRXAmxqWKKvqOyQ?=
- =?us-ascii?Q?nUi1AS5Ns1DY6xZb5UkffxWB2GWuju7ZQuJI4XwxEXAQgnoMvGHWpLRkxG2c?=
- =?us-ascii?Q?DfjK3w7oGD/u8zvrvumo5LYXRZqgUpy6gdCR3FQp7i9nD/SP2d4GyJBXj3V0?=
- =?us-ascii?Q?ogwuW9SLzSeT4MQui2C2sLdcqimHVz3ELQnZH+e0IhsbynXeIAQmmNrKU+42?=
- =?us-ascii?Q?PyzE79M8DOegvbE3oye/b+o+p6hgwq+KjXGMXC1eRGRUFr+WhWv44wAtGppd?=
- =?us-ascii?Q?fl7VtHlAq4M9cpgnPfE=3D?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: cbc7a267-591d-45ab-3ee9-08dbbdc4127a
-X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Sep 2023 12:36:42.6785
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: WHXSUcOaMPoHQaoeDEDvZAGOYksj7Oz0+nRYVhwF2Doqktcj1fVxaLi9sgAGn4pA
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR12MB4276
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+        with ESMTP id S229450AbjIYOna (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Mon, 25 Sep 2023 10:43:30 -0400
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FAC8101;
+        Mon, 25 Sep 2023 07:43:24 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 693E4C433C7;
+        Mon, 25 Sep 2023 14:43:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1695653004;
+        bh=zLu+VnRpIsjtnAXABy7BDzCTOqyINaVoPvsO++Hkwow=;
+        h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
+        b=qw77X9fkt0hBOpDdvTU2WKmu46P3XwVZXqEmHv04wqXA/tZs4NgonJaHKf7T8MZAC
+         oPNae1MmhWZ3eOq+eqzdXMUr7j7oPNnBXePU3V/yvxGYt+LT2sEv94UA86N3ssa4p9
+         fz6Z0JVoPlrWpHUK4hmHg0rA8lKjUp3uYG452ywN2dkQxUZlpqN4ML0W/HvnTG/LnR
+         mQw58kFoNZmb/HPdqzWT0XPfhg/ijXT/GT5Lcx89pnr12GhQ1x5zAlOPlUT4HhfwTS
+         xy1RrnkmKut5d1yXF7k93DE2LrJT+5zXjmyv4CnjDdS+Abrr+nZp1g5CeFrS7FcnLD
+         QhF4td3R7tIOg==
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date:   Mon, 25 Sep 2023 17:43:15 +0300
+Message-Id: <CVS2TK6J4193.2X0455FSP2MLQ@suppilovahvero>
+Cc:     <linux-acpi@vger.kernel.org>, <linux-mm@kvack.org>,
+        <linux-kernel@vger.kernel.org>, <akpm@linux-foundation.org>,
+        <linux-edac@vger.kernel.org>,
+        <acpica-devel@lists.linuxfoundation.org>, <stable@vger.kernel.org>,
+        <x86@kernel.org>, <justin.he@arm.com>, <ardb@kernel.org>,
+        <ying.huang@intel.com>, <ashish.kalra@amd.com>,
+        <baolin.wang@linux.alibaba.com>, <bp@alien8.de>,
+        <tglx@linutronix.de>, <mingo@redhat.com>,
+        <dave.hansen@linux.intel.com>, <lenb@kernel.org>, <hpa@zytor.com>,
+        <robert.moore@intel.com>, <lvying6@huawei.com>,
+        <xiexiuqi@huawei.com>, <zhuo.song@linux.alibaba.com>
+Subject: Re: [RESEND PATCH v8 1/2] ACPI: APEI: set memory failure flags as
+ MF_ACTION_REQUIRED on synchronous events
+From:   "Jarkko Sakkinen" <jarkko@kernel.org>
+To:     "Shuai Xue" <xueshuai@linux.alibaba.com>, <rafael@kernel.org>,
+        <wangkefeng.wang@huawei.com>, <tanxiaofei@huawei.com>,
+        <mawupeng1@huawei.com>, <tony.luck@intel.com>,
+        <linmiaohe@huawei.com>, <naoya.horiguchi@nec.com>,
+        <james.morse@arm.com>, <gregkh@linuxfoundation.org>,
+        <will@kernel.org>
+X-Mailer: aerc 0.14.0
+References: <20221027042445.60108-1-xueshuai@linux.alibaba.com>
+ <20230919022127.69732-2-xueshuai@linux.alibaba.com>
+In-Reply-To: <20230919022127.69732-2-xueshuai@linux.alibaba.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Sat, Sep 23, 2023 at 11:20:19AM +0800, Miaohe Lin wrote:
+On Tue Sep 19, 2023 at 5:21 AM EEST, Shuai Xue wrote:
+> There are two major types of uncorrected recoverable (UCR) errors :
+>
+> - Action Required (AR): The error is detected and the processor already
+>   consumes the memory. OS requires to take action (for example, offline
+>   failure page/kill failure thread) to recover this uncorrectable error.
+>
+> - Action Optional (AO): The error is detected out of processor execution
+>   context. Some data in the memory are corrupted. But the data have not
+>   been consumed. OS is optional to take action to recover this
+>   uncorrectable error.
+>
+> The essential difference between AR and AO errors is that AR is a
+> synchronous event, while AO is an asynchronous event. The hardware will
+> signal a synchronous exception (Machine Check Exception on X86 and
+> Synchronous External Abort on Arm64) when an error is detected and the
+> memory access has been architecturally executed.
+>
+> When APEI firmware first is enabled, a platform may describe one error
+> source for the handling of synchronous errors (e.g. MCE or SEA notificati=
+on
+> ), or for handling asynchronous errors (e.g. SCI or External Interrupt
+> notification). In other words, we can distinguish synchronous errors by
+> APEI notification. For AR errors, kernel will kill current process
+> accessing the poisoned page by sending SIGBUS with BUS_MCEERR_AR. In
+> addition, for AO errors, kernel will notify the process who owns the
+> poisoned page by sending SIGBUS with BUS_MCEERR_AO in early kill mode.
+> However, the GHES driver always sets mf_flags to 0 so that all UCR errors
+> are handled as AO errors in memory failure.
+>
+> To this end, set memory failure flags as MF_ACTION_REQUIRED on synchronou=
+s
+> events.
+>
+> Fixes: ba61ca4aab47 ("ACPI, APEI, GHES: Add hardware memory error recover=
+y support")'
+> Signed-off-by: Shuai Xue <xueshuai@linux.alibaba.com>
+> Tested-by: Ma Wupeng <mawupeng1@huawei.com>
+> Reviewed-by: Kefeng Wang <wangkefeng.wang@huawei.com>
+> Reviewed-by: Xiaofei Tan <tanxiaofei@huawei.com>
+> Reviewed-by: Baolin Wang <baolin.wang@linux.alibaba.com>
+> ---
+>  drivers/acpi/apei/ghes.c | 29 +++++++++++++++++++++++------
+>  1 file changed, 23 insertions(+), 6 deletions(-)
+>
+> diff --git a/drivers/acpi/apei/ghes.c b/drivers/acpi/apei/ghes.c
+> index ef59d6ea16da..88178aa6222d 100644
+> --- a/drivers/acpi/apei/ghes.c
+> +++ b/drivers/acpi/apei/ghes.c
+> @@ -101,6 +101,20 @@ static inline bool is_hest_type_generic_v2(struct gh=
+es *ghes)
+>  	return ghes->generic->header.type =3D=3D ACPI_HEST_TYPE_GENERIC_ERROR_V=
+2;
+>  }
+> =20
+> +/*
+> + * A platform may describe one error source for the handling of synchron=
+ous
+> + * errors (e.g. MCE or SEA), or for handling asynchronous errors (e.g. S=
+CI
+> + * or External Interrupt). On x86, the HEST notifications are always
+> + * asynchronous, so only SEA on ARM is delivered as a synchronous
+> + * notification.
+> + */
+> +static inline bool is_hest_sync_notify(struct ghes *ghes)
+> +{
+> +	u8 notify_type =3D ghes->generic->notify.type;
+> +
+> +	return notify_type =3D=3D ACPI_HEST_NOTIFY_SEA;
+> +}
+> +
+>  /*
+>   * This driver isn't really modular, however for the time being,
+>   * continuing to use module_param is the easiest way to remain
+> @@ -475,7 +489,7 @@ static bool ghes_do_memory_failure(u64 physical_addr,=
+ int flags)
+>  }
+> =20
+>  static bool ghes_handle_memory_failure(struct acpi_hest_generic_data *gd=
+ata,
+> -				       int sev)
+> +				       int sev, bool sync)
+>  {
+>  	int flags =3D -1;
+>  	int sec_sev =3D ghes_severity(gdata->error_severity);
+> @@ -489,7 +503,7 @@ static bool ghes_handle_memory_failure(struct acpi_he=
+st_generic_data *gdata,
+>  	    (gdata->flags & CPER_SEC_ERROR_THRESHOLD_EXCEEDED))
+>  		flags =3D MF_SOFT_OFFLINE;
+>  	if (sev =3D=3D GHES_SEV_RECOVERABLE && sec_sev =3D=3D GHES_SEV_RECOVERA=
+BLE)
+> -		flags =3D 0;
+> +		flags =3D sync ? MF_ACTION_REQUIRED : 0;
 
-> >  /**
-> >   * memory_failure - Handle memory failure of a page.
-> >   * @pfn: Page Number of the corrupted page
-> > @@ -2183,6 +2271,11 @@ int memory_failure(unsigned long pfn, int flags)
-> >  	if (!(flags & MF_SW_SIMULATED))
-> >  		hw_memory_failure = true;
-> >  
-> > +	if (!pfn_valid(pfn) && !arch_is_platform_page(PFN_PHYS(pfn))) {
-> 
-> Could it be better to add a helper here to detect the pfns without
-> struct page?
+Not my territory but this branching looks a bit weird to my
+eyes so just in case putting a comment.
 
-pfn_valid is supposed to do that.
+What *if* the previous condition sets MF_SOFT_OFFLINE and
+this condition overwrites the value?
 
-This arch_is_platform_page stuff is actually detecting Intel SGX
-memory and routing it to arch_memory_failure()
+I know that earlier it could have been overwritten by zero.
 
-It would have been more accurately named
-arch_is_arch_memory_failure_pfn() or something
+Neither the function comment has any explanation why it is
+ok overwrite like this.
 
-Actually that SGX stuff could probably be changed over to use the
-interval tree of this series. Modify sgx_setup_epc_section() to
-register tree nodes per-section and remove all this arch stuff
-entirely.
+Or if these cannot happen simultaenously why there is not
+immediate return after settting MF_SOFT_OFFLINE?
 
-Jason
+For someone like me the functions logic is tediously hard
+to understand tbh.
+
+BR, Jarkko
