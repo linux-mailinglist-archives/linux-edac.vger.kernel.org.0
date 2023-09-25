@@ -2,93 +2,108 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD3A17AC654
-	for <lists+linux-edac@lfdr.de>; Sun, 24 Sep 2023 04:52:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BC8E7AD213
+	for <lists+linux-edac@lfdr.de>; Mon, 25 Sep 2023 09:44:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229712AbjIXCwH (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Sat, 23 Sep 2023 22:52:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57478 "EHLO
+        id S231816AbjIYHoq (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Mon, 25 Sep 2023 03:44:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbjIXCwH (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Sat, 23 Sep 2023 22:52:07 -0400
-Received: from mail-oi1-x22c.google.com (mail-oi1-x22c.google.com [IPv6:2607:f8b0:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8604E10C
-        for <linux-edac@vger.kernel.org>; Sat, 23 Sep 2023 19:52:00 -0700 (PDT)
-Received: by mail-oi1-x22c.google.com with SMTP id 5614622812f47-3ab3aa9ae33so2945464b6e.2
-        for <linux-edac@vger.kernel.org>; Sat, 23 Sep 2023 19:52:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1695523920; x=1696128720; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=qoxOpoYwwbcXvP8AhdHBWCEQ7XvmIo4NgjxEavDKJS0=;
-        b=R7+78uPj1vsN9ArLH0OMzIGPyTzfVp7iVwptGLxavDM/4VWGPINkimkMWDGhYsJLLA
-         KPLMZ/osNzryQT/bOFE2YrFLhsv5W1qWrGIgc+K6wycrLBQMNxtGOYN15t0Ewsl6cHcD
-         nCBea44ociJPStjlivuIrUJ/jNR6rTgPiY/E0=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695523920; x=1696128720;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=qoxOpoYwwbcXvP8AhdHBWCEQ7XvmIo4NgjxEavDKJS0=;
-        b=XfNnioY8NJFC/tMBQm2LSsZs1z0iRzPM8FA2hmksosvPDAGoIMxfWrd0UO7LdpUXDO
-         pyB6/tNmSICSWq/E1olKSApvhTZjn4kBNw/eMB/LkTUcNhSRwNzv173EI906PWSmBSws
-         WDYHNi6xThe5FZaj0ULQSQwMjXlLuX3Ya8BPCAvK3vEPtS5zvo09tSvO2HVqnoWKa4+D
-         umzvZg8UqA/XUDrwyLi8B0wU6naytlb9n+H5h8SL3w5dNg0MADC8GCUmcowIXDT0CPD6
-         wjSjLDdhaBRIIYc/0PDYtJyNLT8plParc/NcAKy/2hWbAlBpfwr/KDBr4DLy15+y3O0y
-         w/Yw==
-X-Gm-Message-State: AOJu0YyQnLOZGXfzK/xrccx/EYsAHU7ev3xdsFeRFv+alS9sA1kYuhln
-        FWxchBswjpxirURSxkGnQ4Tbmg==
-X-Google-Smtp-Source: AGHT+IHcUoAikiUF1QqzgTagOroRwcP1YpmHmYrwno+IIkRbBhz92pli07wtVSNBbwi76ORGeUjvtg==
-X-Received: by 2002:aca:1c14:0:b0:3a7:aa1:f883 with SMTP id c20-20020aca1c14000000b003a70aa1f883mr3738720oic.29.1695523919867;
-        Sat, 23 Sep 2023 19:51:59 -0700 (PDT)
-Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id jg13-20020a17090326cd00b001bba669a7eesm6038250plb.52.2023.09.23.19.51.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 23 Sep 2023 19:51:58 -0700 (PDT)
-Date:   Sat, 23 Sep 2023 19:51:58 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Justin Stitt <justinstitt@google.com>
-Cc:     Borislav Petkov <bp@alien8.de>, Tony Luck <tony.luck@intel.com>,
-        James Morse <james.morse@arm.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Robert Richter <rric@kernel.org>, linux-edac@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH v4] EDAC/mc_sysfs: refactor deprecated strncpy
-Message-ID: <202309231950.698026E687@keescook>
-References: <20230918-strncpy-drivers-edac-edac_mc_sysfs-c-v4-1-38a23d2fcdd8@google.com>
+        with ESMTP id S232486AbjIYHon (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Mon, 25 Sep 2023 03:44:43 -0400
+Received: from out30-113.freemail.mail.aliyun.com (out30-113.freemail.mail.aliyun.com [115.124.30.113])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49A8EDA;
+        Mon, 25 Sep 2023 00:44:35 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R101e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045176;MF=xueshuai@linux.alibaba.com;NM=1;PH=DS;RN=22;SR=0;TI=SMTPD_---0VsmvswX_1695627867;
+Received: from localhost.localdomain(mailfrom:xueshuai@linux.alibaba.com fp:SMTPD_---0VsmvswX_1695627867)
+          by smtp.aliyun-inc.com;
+          Mon, 25 Sep 2023 15:44:31 +0800
+From:   Shuai Xue <xueshuai@linux.alibaba.com>
+To:     keescook@chromium.org, tony.luck@intel.com, gpiccoli@igalia.com,
+        rafael@kernel.org, lenb@kernel.org, james.morse@arm.com,
+        bp@alien8.de, tglx@linutronix.de, mingo@redhat.com,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+        ardb@kernel.org, robert.moore@intel.com
+Cc:     linux-hardening@vger.kernel.org, linux-acpi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-edac@vger.kernel.org,
+        linux-efi@vger.kernel.org, acpica-devel@lists.linuxfoundation.org,
+        xueshuai@linux.alibaba.com, baolin.wang@linux.alibaba.com
+Subject: [RFC PATCH v2 0/9] Use ERST for persistent storage of MCE and APEI errors 
+Date:   Mon, 25 Sep 2023 15:44:17 +0800
+Message-Id: <20230925074426.97856-1-xueshuai@linux.alibaba.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230918-strncpy-drivers-edac-edac_mc_sysfs-c-v4-1-38a23d2fcdd8@google.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
+        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Mon, Sep 18, 2023 at 07:47:29AM +0000, Justin Stitt wrote:
-> `strncpy` is deprecated for use on NUL-terminated destination strings [1].
-> 
-> We've already calculated bounds, possible truncation with '\0' or '\n'
-> and manually NUL-terminated. The situation is now just a literal byte
-> copy from one buffer to another, let's treat it as such and use a less
-> ambiguous interface in memcpy.
-> 
-> Link: https://www.kernel.org/doc/html/latest/process/deprecated.html#strncpy-on-nul-terminated-strings [1]
-> Link: https://github.com/KSPP/linux/issues/90
-> Cc: linux-hardening@vger.kernel.org
-> Signed-off-by: Justin Stitt <justinstitt@google.com>
+changes log since v1:
+- fix a compile waring by dereferencing rcd pointer before memset
+- add a compile error by add CONFIG_X86_MCE
+- Link: https://lore.kernel.org/all/20230916130316.65815-3-xueshuai@linux.alibaba.com/
 
-Yeah, I think this looks good now. If a v5 is needed, a tiny improvement
-would be to update the Subject: to "...: replace strncpy with memcpy".
+In certain scenarios (ie. hosts/guests with root filesystems on NFS/iSCSI
+where networking software and/or hardware fails, and thus kdump fails), it
+is necessary to serialize hardware error information available for
+post-mortem debugging. Save the hardware error log into flash via ERST
+before go panic, the hardware error log can be gotten from the flash after
+system boot successful again, which is very useful in production.
 
-Reviewed-by: Kees Cook <keescook@chromium.org>
+On X86 platform, the kernel has supported to serialize and deserialize MCE
+error record by commit 482908b49ebf ("ACPI, APEI, Use ERST for persistent
+storage of MCE"). The process involves two steps:
 
--Kees
+- MCE Producer: When a hardware error is detected, MCE raised and its
+  handler writes MCE error record into flash via ERST before panic
+- MCE Consumor: After system reboot, /sbin/mcelog run, it reads /dev/mcelog
+  to check flash for error record of previous boot via ERST
+
+After /dev/mcelog character device deprecated by commit 5de97c9f6d85
+("x86/mce: Factor out and deprecate the /dev/mcelog driver"), the
+serialized MCE error record, of previous boot in persistent storage is not
+collected via APEI ERST.
+
+This patch set include two part:
+
+- PATCH 1-3: rework apei_{read,write}_mce to use pstore data structure and emit
+  the mce_record tracepoint, enabling the collection of MCE records by the
+  rasdaemon tool.
+- PATCH 4-9: use ERST for persistent storage of APEI errors, and emit
+  tracepoints for CPER sections, enabling the collection of MCE records by the
+  rasdaemon tool.
+
+Shuai Xue (9):
+  pstore: move pstore creator id, section type and record struct to
+    common header
+  ACPI: APEI: Use common ERST struct to read/write serialized MCE record
+  ACPI: APEI: ERST: Emit the mce_record tracepoint
+  ACPI: tables: change section_type of generic error data as guid_t
+  ACPI: APEI: GHES: Use ERST to serialize APEI generic error before
+    panic
+  ACPI: APEI: GHES: export ghes_report_chain
+  ACPI: APEI: ESRT: kick ghes_report_chain notifier to report serialized
+    memory errors
+  ACPI: APEI: ESRT: print AER to report serialized PCIe errors
+  ACPI: APEI: ESRT: log ARM processor error
+
+ arch/x86/kernel/cpu/mce/apei.c | 82 +++++++++++++++-------------------
+ drivers/acpi/acpi_extlog.c     |  2 +-
+ drivers/acpi/apei/erst.c       | 55 ++++++++++++++---------
+ drivers/acpi/apei/ghes.c       | 48 +++++++++++++++++++-
+ drivers/firmware/efi/cper.c    |  2 +-
+ fs/pstore/platform.c           |  3 ++
+ include/acpi/actbl1.h          |  5 ++-
+ include/acpi/ghes.h            |  2 +-
+ include/linux/pstore.h         | 29 ++++++++++++
+ 9 files changed, 154 insertions(+), 74 deletions(-)
 
 -- 
-Kees Cook
+2.41.0
+
