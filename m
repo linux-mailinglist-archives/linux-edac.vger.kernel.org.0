@@ -2,131 +2,82 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A87E17AE786
-	for <lists+linux-edac@lfdr.de>; Tue, 26 Sep 2023 10:11:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 436227AE861
+	for <lists+linux-edac@lfdr.de>; Tue, 26 Sep 2023 10:56:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233835AbjIZILI (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Tue, 26 Sep 2023 04:11:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54886 "EHLO
+        id S233904AbjIZI4W (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Tue, 26 Sep 2023 04:56:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233818AbjIZILH (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Tue, 26 Sep 2023 04:11:07 -0400
-Received: from EUR04-DB3-obe.outbound.protection.outlook.com (mail-db3eur04on2040.outbound.protection.outlook.com [40.107.6.40])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCD51FC;
-        Tue, 26 Sep 2023 01:11:00 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=mJIiNVnIi1U9Gun+B5TKso75IXXKPeqFiqfKgkSr+CD/Ht+FavBSUI2qkPuyrqFFkF5+wKorbHqtt0yYUaCS7brK64Qq/uyDLWLIYguFw7mDdxxyeRuQ5+rfnmPMjAohrAyhQ+bs78++draT+5QApwpWpG1XBBxTsa2F1DkTKprKmW5njIkSQop2z+6G6RkgGemMc0AW5IqGrBUdwCZzsJwPpqGwJ4SvxEp+OiTG6FZGpltkSNoxsZHn47Tgo9Ds6GBHNfu4mm4RjMX0psThqZjfa9Ehuy51NyDKjoC9/3dN6T/UZR9+utgmehJoVW1B180GrKHPdzfyAUHaMX4Uqw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=TyZEe6WbNYUl0OlEuOpwvuzVbgy4StGtpHEjSLuTn/I=;
- b=Eqan70rzVaXbRYv8THfTRE3yN7h7D3ApmrK6Q/rYKBTahB/SkTta4kJmNRRS8kbTBVA5+Cj9nacRwZ76uVF59nBPW5GbiHP0vvnlWE7WIC2wcp9ELTDA5RXkadXlZ1lHMx5IsBJq5/3tCCC5H3H36idXpz0uTq+s8QebPKVj76gINCAJ4MEmWBnxa01E7UKQinRd5P3N/okL0UmAhuxxAwWnwtIEFSB2VQLB9xOKN8b5eo6gM2lHuJz8C6QihwA1pIQIB3UgvmFBfMrTE5YOdOBRaISSvluKRzeSxrnFRpwRFkJENkdcEE3pg7nCdt1bVA0SaoOScpQD/o1vubSzpg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=suse.com; dmarc=pass action=none header.from=suse.com;
- dkim=pass header.d=suse.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=TyZEe6WbNYUl0OlEuOpwvuzVbgy4StGtpHEjSLuTn/I=;
- b=cuw5VU3ZvbBN3If06lGMF0LrgE6QKNg2SAE2+a3PVQQnOGDbT+XJnuHiVBovgxLqprlA/Q2B2zrTtbAtE792xsZcuRf5801QkUFKDMagyukbExfSe5C2IOOnOeF6KQ4QUAHPr47VActxtreXX0Xd69OrDe+1wvadCUwnAwUlNaCJcpbGCuN5LEWgJQeHYF+FPvAmG06nu07HScRksNhXj4mMfWTvMcIhCTbNTTXoRkENbKooFmb5E760sXXGypTjMdSsbJG+1nSOoI70tFGBukAgBWBfZKlJY33oKR28YKnFebSTtMsEsSIbLkaHHrGk0Zq2wAZe+LPOKDwuE/Ee3g==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=suse.com;
-Received: from PA4PR04MB7790.eurprd04.prod.outlook.com (2603:10a6:102:cc::8)
- by PR3PR04MB7308.eurprd04.prod.outlook.com (2603:10a6:102:80::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6813.28; Tue, 26 Sep
- 2023 08:10:57 +0000
-Received: from PA4PR04MB7790.eurprd04.prod.outlook.com
- ([fe80::edd3:f00:3088:6e61]) by PA4PR04MB7790.eurprd04.prod.outlook.com
- ([fe80::edd3:f00:3088:6e61%4]) with mapi id 15.20.6813.027; Tue, 26 Sep 2023
- 08:10:57 +0000
-Message-ID: <7acd7bb3-0406-4fd9-8396-835bfd951d87@suse.com>
-Date:   Tue, 26 Sep 2023 11:10:51 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.15.1
-Content-Language: en-US
-To:     Xin Li <xin3.li@intel.com>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-edac@vger.kernel.org,
-        linux-hyperv@vger.kernel.org, kvm@vger.kernel.org,
-        xen-devel@lists.xenproject.org
-Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-        luto@kernel.org, pbonzini@redhat.com, seanjc@google.com,
-        peterz@infradead.org, jgross@suse.com, ravi.v.shankar@intel.com,
-        mhiramat@kernel.org, andrew.cooper3@citrix.com,
-        jiangshanlai@gmail.com
-References: <20230923094212.26520-1-xin3.li@intel.com>
- <20230923094212.26520-6-xin3.li@intel.com>
-From:   Nikolay Borisov <nik.borisov@suse.com>
-Subject: Re: [PATCH v11 05/37] x86/trapnr: Add event type macros to
- <asm/trapnr.h>
-In-Reply-To: <20230923094212.26520-6-xin3.li@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: VI1PR07CA0137.eurprd07.prod.outlook.com
- (2603:10a6:802:16::24) To PA4PR04MB7790.eurprd04.prod.outlook.com
- (2603:10a6:102:cc::8)
+        with ESMTP id S229685AbjIZI4V (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Tue, 26 Sep 2023 04:56:21 -0400
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42663DD;
+        Tue, 26 Sep 2023 01:56:14 -0700 (PDT)
+Received: by mail-lf1-x12d.google.com with SMTP id 2adb3069b0e04-50435ad51bbso11346234e87.2;
+        Tue, 26 Sep 2023 01:56:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1695718572; x=1696323372; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=0gjw7VpIsI24FsGpgI1LIRHokyuddV6bL4UWQKqi1zo=;
+        b=Yj7j9YGbANxoc9aBer3oUOXOr4RfYPxGBCdVpdSru3IjydOkHCHulSyLD9tkc9k4GF
+         s5B8jPIxmp6A/teqTbqRcNhp1VjlNzHRDyqnMMMrpL+wi3JwPyv0xKH9x01HkaDNWxeU
+         eD14m3c3i49D5JeDXh7csBqLVt4aX6kBnPO2wJOFTyMvOwUiC5Sz44KmatY3uemwGBm/
+         d989AYEB/coy7JVLoVSMPXAfjgaG+gFculfTqBRXJ51OaoBEC/+6BX//+ozHTjnZtZti
+         p0SnMDWMOH29YZbtg+Waa7Yf6TXiXxEW/ztadDjtXLH2FBfDBiwFnEmCxIUCV79vrxUa
+         pUmw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1695718572; x=1696323372;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=0gjw7VpIsI24FsGpgI1LIRHokyuddV6bL4UWQKqi1zo=;
+        b=BmAvk7j9OD/Dja21+kIMDqSpBHUMUFN19QC5M6yd1VUJhhM1PDKZLMeRUCGOjqcJYV
+         DZwl0efud+I6fMLOPQfg4R8VM7mmAhOBjKOx7ODYRNjFzp60N50ASnVsMhVk3OnXZn7m
+         +f2glsxKYGG1CfYgKrpxswL+OmyuODTas8AOoWTsc2fEWc5youON7itrGAdyMwoephim
+         Xd9yiMadJIEKmc5ShsvAXVYcFS+n7VlIljCKZEQzIhy+j8jln5TS1Iu0sS56DVJUwi/5
+         JrgBO3bYRa2+ZeKPtJ2Roknj8k3bE4aeonbnYkyPmH4pTv2Dz26uqu872oCaMiQXf2AB
+         LcZQ==
+X-Gm-Message-State: AOJu0YxbX6JFjv6Rqz0YSdg1rN/WlnsaxaMJ2BArJVabCKO58pZy76A0
+        lOk8Xkkwa9qViKcCoalwrhd239gFXfH4cg==
+X-Google-Smtp-Source: AGHT+IFe/z24ooLWaNmEm2q+tfoIOpZ0ZitAPQIFlC7dpmZD0mw6bI5lxv0spRkMJKW0xNl0wCj9ig==
+X-Received: by 2002:a19:6905:0:b0:503:26b0:e126 with SMTP id e5-20020a196905000000b0050326b0e126mr6168408lfc.59.1695718572192;
+        Tue, 26 Sep 2023 01:56:12 -0700 (PDT)
+Received: from mobilestation ([178.176.56.174])
+        by smtp.gmail.com with ESMTPSA id a7-20020a19f807000000b004fe36b790a1sm2153202lff.128.2023.09.26.01.56.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 26 Sep 2023 01:56:11 -0700 (PDT)
+Date:   Tue, 26 Sep 2023 11:56:09 +0300
+From:   Serge Semin <fancer.lancer@gmail.com>
+To:     kernel test robot <yujie.liu@intel.com>
+Cc:     Michal Simek <monstr@monstr.eu>,
+        Alexander Stein <alexander.stein@ew.tq-group.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Tony Luck <tony.luck@intel.com>,
+        James Morse <james.morse@arm.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Robert Richter <rric@kernel.org>,
+        oe-kbuild-all@lists.linux.dev, linux-media@vger.kernel.org,
+        Punnaiah Choudary Kalluri 
+        <punnaiah.choudary.kalluri@xilinx.com>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-arm-kernel@lists.infradead.org, linux-edac@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 05/18] EDAC/synopsys: Add DDRC basic parameters
+ infrastructure
+Message-ID: <pd3loh247nevscvcajxx2xyugfve3lhu6ydf3gmzsedwlbixrc@ng7bv2adqv2d>
+References: <20230920192806.29960-6-fancer.lancer@gmail.com>
+ <202309241117.1QIu7Ipb-lkp@intel.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PA4PR04MB7790:EE_|PR3PR04MB7308:EE_
-X-MS-Office365-Filtering-Correlation-Id: 61b92aee-8ee6-488e-04d1-08dbbe681ca8
-X-LD-Processed: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba,ExtFwd
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Bj4NER64y4VtiS3kn8raEFPN1DmEnYc55dWznaSvLP1k5Ik/7yTT95+eNZLQqP57km+Z+rvuCZMiImSZb9D+Z/mh/vmwMX2jk7lJYynhUjH8eIwKE8CUVWurRrMYL8cB2+7IghuboC5K1LsIGbCJwJ3gPwWDvrW6ps6EEuAkeRCdfPA9k3Vt9MpuJk63dnOP6kDemUbX11hNTKMR4WKapcXvfCSOzVBztEtWV4pVShDNFDA7/EtRv81el3GO5CuiEl26X2ObgzsRCc84B7wR6wcIyEojVO/eJesUcHOLFxBzZP30RNW5Bc/TMijzfJx3g32joWywDBdr8VcsE/AQZsX6Z3gHf3pV99AOMzpunK9d6UaWrkj4TpRd6q+2M7x68TOHsZA1Su5qyc3cFalxSdBMW9tIxgFSUza4wyrfOAYht0YjBqLhFG+iOw+u8/+UDhsyPtWKBDJNGmf+ec1rW2fU03BeE6uBh1IrkaphroUqI/7KBHFmZ9Swl5YwEwXGcrjGQIswOcRUmut4SkCRFxlqQh+FUOL/7fOn2CJ0A1IRLJZP4UK7M9Pn9FYBeDN8lv+rVcKarssroBek6Lmh0PiX1p+kz3PmX+E2WCwq8gKVvyigt9HhCbL3o4EVw2xpWqfj1FiiZ+TkNe30gLvAYw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PA4PR04MB7790.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(346002)(396003)(136003)(366004)(376002)(39860400002)(230922051799003)(451199024)(1800799009)(186009)(83380400001)(31686004)(5660300002)(66476007)(66556008)(41300700001)(66946007)(4326008)(6486002)(7416002)(478600001)(316002)(2906002)(86362001)(38100700002)(6666004)(31696002)(8676002)(8936002)(2616005)(6506007)(36756003)(6512007)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?dkltcHBQNVc0dFFiVWdKQ1BHbWU2TjNEWnJHb093aE02TnVZekhDKzJLTTdI?=
- =?utf-8?B?U2lJYVVBZkhobk4zcVUvMlZzOVAyQzBHbjlTWjJQSXUwN2psVnRvYnBabkV0?=
- =?utf-8?B?L08yKzF1UFlOU1ZjZnMrc05TcFkxUEkvbURHUHJYcTY5QjlaMVNxekpTM0Mv?=
- =?utf-8?B?ZXdqaGpBMyt6ekRwZE5nbjNjbzBVTWpxZjk5anFtSWlJTlh2RU5EemxteTNn?=
- =?utf-8?B?bFlLOXJPNFR4NXpHeUorMkpLRFdLcDRQV0hwaXNHM1ZINmNxdjFDMHg4VUx5?=
- =?utf-8?B?bVhDU0JzM0MzdlR2WG5zRERxMG42TEFoc1VDZDg3R2lsb0pjdTRvUnFIRTNt?=
- =?utf-8?B?YmVJeFhhZ0RIU1BsdVRpYUJ5c004VjZINEZpeCt2ZnYrRVJEVkc5aXhpR2pQ?=
- =?utf-8?B?ODFUNURDUkd5eXBpMmJoZG9Uc3U4V2hzRy96NEhENzBDTFZ3LzhkcEFIRGFx?=
- =?utf-8?B?OXliZm0vbEJTaUlJaldOWGJkWlB0YWFva1YyYjQvVDFmKzVRblIvRkFQN0ZP?=
- =?utf-8?B?YzFVbEdJeWh4YXBOdU9OT3c2YW9UbFNnbUpFbGhjM2kwS09OTlFqd0RYc0Jm?=
- =?utf-8?B?MGJIZVhsY3lIVWdxVzRUdlFmWCtBWk1KOTV6VTdjUmlocER4VzBOS1BGTFFq?=
- =?utf-8?B?WXZlNDdEQTU0ZmpnNEpYNUlRWWh6ZG5peC9wMUFDMjFnWHQraTBobWNMQkVM?=
- =?utf-8?B?UlBBbkgzT3lVVDh5eDJyNVU1Snd1RnpIWXVwQ3gyQXNROEpBSU4zck5NTDZR?=
- =?utf-8?B?N1pUbHlhVThmUWJSR2ZlUWJOTnB5RkRBOFl3WU5rYThwR2JiWTR3RFIyMFE4?=
- =?utf-8?B?QnNwUGdDREk2ZUQzWnFWR3NhWm9kbWE0MDY4V1FmWmR4WjlSMGRDbXRJaWVy?=
- =?utf-8?B?UXZRalFYYk9HcXF4WlRRWG5LdUNJdlBwb2JFK2ZITzlPOVZCOUZiSUN3NVVt?=
- =?utf-8?B?RkxJNTVBa3Q2OS9tL1FLL2xFTnZqOXBQNTQ0Y0FWT2F3MmlZSTgwejNnUVdW?=
- =?utf-8?B?RWRwcjJ2eGpTa2llWXdNRWM0QjF0aGNrRFl5a3o1MWpCTy9id2IybFpGZ0pi?=
- =?utf-8?B?RXVQeGNSY1lWMFRRZ210MUhnbGV3bUszc25iMjdSTWZ1WTVrNmFxTnRCS2t5?=
- =?utf-8?B?MGJnRk04aG9jV3ZEOFVDN0dBM21LakpHQUtFSUZYN1NFcTRSUWpDcldZL0w1?=
- =?utf-8?B?MW1UaTVTM3Yxc3B4K1JDaXpkOTZmZzA3R2c4bkxuVm55YmpyRmg5aHJIUFJN?=
- =?utf-8?B?Vk5SSGg5UHlaL1Y0bHY3QUdKVTRpbVIvZHg3cnF6T3hwU2dQTXZjb3lvdllH?=
- =?utf-8?B?UElvdUNlQWorVzN0SHZGc1Vld1VkR3U1bXFRRzA2WWJYZElvVTFoSk9kUjdX?=
- =?utf-8?B?aE1weWNrTXhKN05WKzBITysweDF1ZUZuUlM2VEtzeHhqTTBaSFFBTGFpYW1I?=
- =?utf-8?B?d2FSaDBESDBVOThhWXIrOTB3YU1lN29nZFZiZTFtT2hqTWI4MzRmVWNtSDhF?=
- =?utf-8?B?aGpzVU55NmRJYlVzMmhkdUY2OXh4RkNGMUJBRGFCSXg0MTRnSGJTZzlQaWFT?=
- =?utf-8?B?cWdsNXlWQkx0SmZzaVA2UTNmckkwNDZoYXoyejB6aGl6b2F0Nml2a0tmRHFG?=
- =?utf-8?B?SXVoRThKMjRiZTA2NmxhOHBIdysxaEZMM3pSNi9XK3F6VDg0YWtBMzdqYzls?=
- =?utf-8?B?NnVWTnB0eXNXVkE2V1dxTisxcFVkN0FxcEkrZFFaZkpQdklUaGNNZDI2Yk1j?=
- =?utf-8?B?SUNUWGhrZ3ZQOXdjdk11QTFVK1REbnBYYmpxNUxqU3ZtUlFtMW00RHV4Z0xT?=
- =?utf-8?B?cDF3YVNXVUNUOGY0NElTTTVwYTR1SmV1RkJrdWRhUnBLQUh0bC9hTlQ2UUZp?=
- =?utf-8?B?d2NkRlVDWEZQRHVSdUFZTnBUWU1XSGtlQmJGaVVvcWtvRUYvUi8vZHVPOCtz?=
- =?utf-8?B?UGpzYmJZbEtIM25nS3ZzN1gvNzloWTlCcTNra1NVRGx3U1h1RXFIY29wYTFW?=
- =?utf-8?B?b1d5a04xUEhndEliSk1CVmhudUZ0NGt4ajNTWE9GenVUWE5MYlR2OWRFZGw0?=
- =?utf-8?B?eU90ZnlCc2xvRlpoRUwwaFY3anpHSUhuZVVDOFNFanVYMHp1QVFQRUFzMUQ4?=
- =?utf-8?B?ZjZRWFNLK0RhN05aTUJTV0lDcjF2QlJhTGxTT0wrRnBhYmM5Qnd6MnZrNEFx?=
- =?utf-8?Q?jbAeNkLMfloYBTj4wqmF3Ql9JKkm4nQdxLEbNxuUnYAs?=
-X-OriginatorOrg: suse.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 61b92aee-8ee6-488e-04d1-08dbbe681ca8
-X-MS-Exchange-CrossTenant-AuthSource: PA4PR04MB7790.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Sep 2023 08:10:57.1043
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: fQQtphp/I8e249xxRsoJ1ChPtcaMKCw4h8sW1UCNb4HN53zVtTsdbziEYYiHhNSUdT7OUsfbM9whycS58j6DCQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PR3PR04MB7308
-X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <202309241117.1QIu7Ipb-lkp@intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -134,47 +85,60 @@ Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-
-
-On 23.09.23 г. 12:41 ч., Xin Li wrote:
-> Intel VT-x classifies events into eight different types, which is
-> inherited by FRED for event identification. As such, event type
-> becomes a common x86 concept, and should be defined in a common x86
-> header.
+On Tue, Sep 26, 2023 at 04:07:49PM +0800, kernel test robot wrote:
+> Hi Serge,
 > 
-> Add event type macros to <asm/trapnr.h>, and use it in <asm/vmx.h>.
+> kernel test robot noticed the following build warnings:
 > 
-> Suggested-by: H. Peter Anvin (Intel) <hpa@zytor.com>
-> Tested-by: Shan Kang <shan.kang@intel.com>
-> Signed-off-by: Xin Li <xin3.li@intel.com>
-> ---
+> [auto build test WARNING on ras/edac-for-next]
+> [also build test WARNING on linus/master v6.6-rc2 next-20230921]
+> [cannot apply to xilinx-xlnx/master bp/for-next]
+> [If your patch is applied to the wrong git tree, kindly drop us a note.
+> And when submitting patch, we suggest to use '--base' as documented in
+> https://git-scm.com/docs/git-format-patch#_base_tree_information]
 > 
-> Changes since v10:
-> * A few comment fixes and improvements (Andrew Cooper).
-> ---
->   arch/x86/include/asm/trapnr.h | 12 ++++++++++++
->   arch/x86/include/asm/vmx.h    | 17 +++++++++--------
->   2 files changed, 21 insertions(+), 8 deletions(-)
+> url:    https://github.com/intel-lab-lkp/linux/commits/Serge-Semin/EDAC-synopsys-Convert-sysfs-nodes-to-debugfs-ones/20230921-035302
+> base:   https://git.kernel.org/pub/scm/linux/kernel/git/ras/ras.git edac-for-next
+> patch link:    https://lore.kernel.org/r/20230920192806.29960-6-fancer.lancer%40gmail.com
+> patch subject: [PATCH v4 05/18] EDAC/synopsys: Add DDRC basic parameters infrastructure
+> config: arm64-randconfig-003-20230924 (https://download.01.org/0day-ci/archive/20230924/202309241117.1QIu7Ipb-lkp@intel.com/config)
+> compiler: aarch64-linux-gcc (GCC) 13.2.0
+> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20230924/202309241117.1QIu7Ipb-lkp@intel.com/reproduce)
 > 
-> diff --git a/arch/x86/include/asm/trapnr.h b/arch/x86/include/asm/trapnr.h
-> index f5d2325aa0b7..8d1154cdf787 100644
-> --- a/arch/x86/include/asm/trapnr.h
-> +++ b/arch/x86/include/asm/trapnr.h
-> @@ -2,6 +2,18 @@
->   #ifndef _ASM_X86_TRAPNR_H
->   #define _ASM_X86_TRAPNR_H
->   
-> +/*
-> + * Event type codes used by FRED, Intel VT-x and AMD SVM
-> + */
-> +#define EVENT_TYPE_EXTINT	0	// External interrupt
-> +#define EVENT_TYPE_RESERVED	1
-> +#define EVENT_TYPE_NMI		2	// NMI
-> +#define EVENT_TYPE_HWEXC	3	// Hardware originated traps, exceptions
-> +#define EVENT_TYPE_SWINT	4	// INT n
-> +#define EVENT_TYPE_PRIV_SWEXC	5	// INT1
-> +#define EVENT_TYPE_SWEXC	6	// INTO, INT3
+> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <yujie.liu@intel.com>
+> | Closes: https://lore.kernel.org/r/202309241117.1QIu7Ipb-lkp@intel.com/
+> 
+> All warnings (new ones prefixed by >>):
+> 
+> >> drivers/edac/synopsys_edac.c:224: warning: Enum value 'SNPS_DQ_32' not described in enum 'snps_dq_width'
+> >> drivers/edac/synopsys_edac.c:224: warning: Enum value 'SNPS_DQ_64' not described in enum 'snps_dq_width'
+> 
+> 
+> vim +224 drivers/edac/synopsys_edac.c
+> 
+> c85ef1323d2330 Serge Semin 2023-09-20  215  
+> 9e617225f1d8ba Serge Semin 2023-09-20  216  /**
+> 9e617225f1d8ba Serge Semin 2023-09-20  217   * enum snps_dq_width - SDRAM DQ bus width (ECC capable).
+> 9e617225f1d8ba Serge Semin 2023-09-20  218   * SNPS_DQ_32:	32-bit memory data width.
+> 9e617225f1d8ba Serge Semin 2023-09-20  219   * SNPS_DQ_64:	64-bit memory data width.
+> 
+> a @ char is required in front of each name
+> 
+> 9e617225f1d8ba Serge Semin 2023-09-20  220   */
+> 9e617225f1d8ba Serge Semin 2023-09-20  221  enum snps_dq_width {
+> 9e617225f1d8ba Serge Semin 2023-09-20  222  	SNPS_DQ_32 = 2,
+> 9e617225f1d8ba Serge Semin 2023-09-20  223  	SNPS_DQ_64 = 3,
+> 9e617225f1d8ba Serge Semin 2023-09-20 @224  };
+> 9e617225f1d8ba Serge Semin 2023-09-20  225  
 
-nit: This turned into INTO (Oh) rather than INT0( zero) in v11
+Got it. Thank you kind kernel roBot. I'll fix it in v5.
 
-<nit>
+-Serge(y)
+
+> 
+> -- 
+> 0-DAY CI Kernel Test Service
+> https://github.com/intel/lkp-tests/wiki
+> 
