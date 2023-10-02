@@ -2,57 +2,151 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 292267B3B06
-	for <lists+linux-edac@lfdr.de>; Fri, 29 Sep 2023 22:13:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5ED5B7B5ABF
+	for <lists+linux-edac@lfdr.de>; Mon,  2 Oct 2023 21:04:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233418AbjI2UN5 (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Fri, 29 Sep 2023 16:13:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52378 "EHLO
+        id S238588AbjJBTDj (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Mon, 2 Oct 2023 15:03:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233365AbjI2UN5 (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Fri, 29 Sep 2023 16:13:57 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C10A1113;
-        Fri, 29 Sep 2023 13:13:54 -0700 (PDT)
+        with ESMTP id S238578AbjJBTDf (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Mon, 2 Oct 2023 15:03:35 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4913B8;
+        Mon,  2 Oct 2023 12:03:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1696018434; x=1727554434;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=44GGa5u85n68sCCpI9/I0KKYcCZytYXWstRVKtyBfx4=;
-  b=KRuYrD2HZEImA2YAzVeI/ytDV5FLUUfztUfaJE3Gx4/G5qUvhvKytBFY
-   346w5M8e3QJk67gWpCBE8C2qOMZpzSdqdFqRfM21sYo0pjFqJYQsg+TZl
-   o3MucD/3nrFgrAShcLWasI4HrqCDv40lZFMuqGZivfYd2krEf+BjIpqVU
-   Xdcczwnv5Jq0pcSdDNbYoV0D4CmjNsYBZDXTGOvPnCCH7weOgQB3STMvV
-   m3EERLFsKlck3pwtVkbTT8/H1bR6XlkDTzWgZ+KpKgWT9RwV/bV7CVA6c
-   Fdcw8jN4yrMxvP9+ZgdmF1tfj5GlIupfBWeWSoKttADGKsyJ1+sWXODaL
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10848"; a="362604250"
-X-IronPort-AV: E=Sophos;i="6.03,188,1694761200"; 
-   d="scan'208";a="362604250"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Sep 2023 11:16:35 -0700
+  t=1696273413; x=1727809413;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=xY4UZ9z8FRYHPgixMshdAfpdxltjUzQBo5VJtQ/GXU8=;
+  b=jmtU1NLMY7Ihl92QoC2CYe814ZwXGBWOIJtOwiUgW7j9jaFI+sus7Xeh
+   LNHWEJYPeVeznBkjTkrJKmXeMU+/ycxFahUrJhFYgWDLuYVoERhengsx5
+   g92MNxofUy8tCdcwj/97wmBMSSU4Nn+TSkkohFynDZu84WQ3dlOMWZ/e6
+   FEnIUpiRTdiMCCMwJxVD6ZQ6XvGQCIMrzksvBlw9l2GwL2uJjgYt0M0xC
+   w8vFYQUZcxtxcPMsag3Xn8Q3/0bs3gAlQxv9dzu8EZA0EUIQUHNymA6ss
+   8ES++toR/IiftSW/lrR4m2nuO2rR+JOw1ROMsjDwUcl5RdMKJEgLexQ2y
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10851"; a="1287189"
+X-IronPort-AV: E=Sophos;i="6.03,194,1694761200"; 
+   d="scan'208";a="1287189"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Oct 2023 10:57:39 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.03,188,1694761200"; 
-   d="scan'208";a="921803"
-Received: from agluck-desk3.sc.intel.com ([172.25.222.74])
-  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Sep 2023 11:16:37 -0700
-From:   Tony Luck <tony.luck@intel.com>
+X-IronPort-AV: E=McAfee;i="6600,9927,10851"; a="874435271"
+X-IronPort-AV: E=Sophos;i="6.03,194,1694761200"; 
+   d="scan'208";a="874435271"
+Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
+  by orsmga004.jf.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 02 Oct 2023 10:57:38 -0700
+Received: from orsmsx611.amr.corp.intel.com (10.22.229.24) by
+ ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.32; Mon, 2 Oct 2023 10:57:38 -0700
+Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
+ ORSMSX611.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.32; Mon, 2 Oct 2023 10:57:37 -0700
+Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
+ orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.32 via Frontend Transport; Mon, 2 Oct 2023 10:57:37 -0700
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (104.47.57.171)
+ by edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.32; Mon, 2 Oct 2023 10:57:37 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=oTM8GEetFY14e0kcrzOU59BqKoK/cyumLeeS9yYXqkh436dCaMws810YJOYARGVgfZyF3ZkyCp/jti1LLMXOk/vqO1IHBZx3yZz7c2kUUyMSmg4el+3NmQ/1NQRaQk8xlTg8JDMK3gJYzs6IGbWN2ialj4fVglf58p/X0LkyzQBiDyiIPsHV63T7chYip6K4CsHO7EslKTbKF/853/CgIY5+Sy9GSGyNqM71aJlWbHUTDTd1lX/zFzFID+RD+SRlzdl6FuZnBO7BSddSdnpMwwel1C4Bm673V0bB/uPcEII0Yo5InMnNI3NfPwGBzmwAcbTxASCDIGDkvHmVRUM53w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=xY4UZ9z8FRYHPgixMshdAfpdxltjUzQBo5VJtQ/GXU8=;
+ b=ccKxsuUFq7M/YKvW9eyeyrCkeHsyHMAjmPFPwHXzLPOdos3uP6pZ6El5E7OROGf+zF6dEr+j4fmpPLmaiFoV1nhEsIlo3T/Njvf6+py3Y5NEBYTS8O8jz7K+8EOKEb+mNUncauL3SWcN3+u9yYukAuPm7nPY7UOLjG9sBHeVCLFrZELmQsOm9uJKd54IiCVJ+Ff6JPbm/k/N9Da6rEApt1g9XpaJ/LVpLFxFQIZcj8Cg3J0g/hHwdogjS7oC0TPD6gdoFcSrpeE3vSVj4gjvdVl0y0H91WyMAxyJRq4sZL8VgGmPjQ48ajONvckeqDbsRlmMbsFX5GoGcx5hR/Z1Ag==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from SJ1PR11MB6083.namprd11.prod.outlook.com (2603:10b6:a03:48a::9)
+ by CY5PR11MB6512.namprd11.prod.outlook.com (2603:10b6:930:40::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6838.30; Mon, 2 Oct
+ 2023 17:57:35 +0000
+Received: from SJ1PR11MB6083.namprd11.prod.outlook.com
+ ([fe80::7316:13b0:88bc:b3c8]) by SJ1PR11MB6083.namprd11.prod.outlook.com
+ ([fe80::7316:13b0:88bc:b3c8%4]) with mapi id 15.20.6838.030; Mon, 2 Oct 2023
+ 17:57:35 +0000
+From:   "Luck, Tony" <tony.luck@intel.com>
 To:     Borislav Petkov <bp@alien8.de>
-Cc:     Yazen Ghannam <yazen.ghannam@amd.com>,
-        Smita.KoralahalliChannabasappa@amd.com,
-        dave.hansen@linux.intel.com, x86@kernel.org,
-        linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
-        patches@lists.linux.dev, Tony Luck <tony.luck@intel.com>
-Subject: [PATCH v8 3/3] x86/mce: Handle Intel threshold interrupt storms
-Date:   Fri, 29 Sep 2023 11:16:26 -0700
-Message-ID: <20230929181626.210782-4-tony.luck@intel.com>
-X-Mailer: git-send-email 2.41.0
-In-Reply-To: <20230929181626.210782-1-tony.luck@intel.com>
+CC:     Yazen Ghannam <yazen.ghannam@amd.com>,
+        "Smita.KoralahalliChannabasappa@amd.com" 
+        <Smita.KoralahalliChannabasappa@amd.com>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "patches@lists.linux.dev" <patches@lists.linux.dev>
+Subject: RE: [PATCH v8 0/3] Handle corrected machine check interrupt storms
+Thread-Topic: [PATCH v8 0/3] Handle corrected machine check interrupt storms
+Thread-Index: AQHZ8wEYb+mKCqp50kGumaGvWObFUrA2yrPQ
+Date:   Mon, 2 Oct 2023 17:57:35 +0000
+Message-ID: <SJ1PR11MB6083447BB15B0D0535D77C68FCC5A@SJ1PR11MB6083.namprd11.prod.outlook.com>
 References: <20230718210813.291190-1-tony.luck@intel.com>
  <20230929181626.210782-1-tony.luck@intel.com>
+In-Reply-To: <20230929181626.210782-1-tony.luck@intel.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: SJ1PR11MB6083:EE_|CY5PR11MB6512:EE_
+x-ms-office365-filtering-correlation-id: d7d3eea8-83e4-4f93-8df9-08dbc3710f05
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: UsKQhsKNBnuuvXn2clxeLroameDnZCae4L1iVaYuwV3EqGQc2O/U5MDEfFfoQPDAa5iHPUYHljdOO/2wdxrQ97cb8+GoGq8zmxvQzWlddDRgjsV4vDss1C5Mzz2ECfuwbeaj0/xENLvZFzg6X3LUgvR9ObB59gKTlsdsC+VyBBveZT3QiJSgoFR5bBQbUSSLxkDLQjw+JGyqdw8qoPTWn5ImKTHgk0AxPy5lSLqRbI4aPoFdqPOGNSJ6JexiFOdO9bM9/VpQPPNh+8nmvg9P4la3AFs4c1WTxsHeDug1sBGaKSVnA3RnMoiNvLNskNOIukNRbnah/QZo2hLDVW+qN8HOAn0ydaI32hi3jS3q8faOXCE7Bqrzpf+WJHrJPpHzT09L3P/OD+M/x3X1uih2rHdB8KLbeVrfTOYQozmLpF9R2OEbhoeMuDDAFZTjx77bORfnUQE1AWeE7LuQBaFAcLpGwVXRQQYFVciqrDr7JlinxO5RtGu43AKTPr3vl+IvZAEWwcSPI9ZOpcd2mikSnW0POm2pvHm8op1N2tnEdqGlUwmT0zz7WNpgNbb4QvSJhsO2b2KQ+8nvTtlL13cp0ozbdosbOUHAeg4yJdZovOe6qvFUDWtAoZ5JKP/MM/Xz
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ1PR11MB6083.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(136003)(396003)(366004)(346002)(376002)(39860400002)(230922051799003)(64100799003)(186009)(1800799009)(451199024)(71200400001)(7696005)(478600001)(6506007)(33656002)(26005)(9686003)(41300700001)(4744005)(2906002)(5660300002)(66556008)(64756008)(66446008)(66476007)(316002)(66946007)(54906003)(4326008)(76116006)(8676002)(52536014)(8936002)(6916009)(86362001)(38070700005)(38100700002)(122000001)(82960400001)(55016003);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?q9YtRUb+jDqof5O6VY4aC6gIuy9jwU7j7cOXcFMQ4pd9FpLZHE5RIRaIWGAb?=
+ =?us-ascii?Q?OriinfJkUi72M9FFqjl+yMUnLcR482Hva8o7Jdgy5U/dZdPlAh8K6hCMyBqi?=
+ =?us-ascii?Q?WiIbw93P1Y/eVNRZ4lx384aLgH6kjZZc0FQ0E2etGZgwkMm6p/FhpsoXbMx3?=
+ =?us-ascii?Q?dcisZcTkR9cQ26o1Y4zZU/nX6WsLzGJWcbJZIFCYjt68v04ZS/p6YM6v1/Nu?=
+ =?us-ascii?Q?Tw8caQ/NqWuSbRnFIhuzKgqUDONGlCim6SiG4j+Ixt/Qyjxd0NIy+Ldq1J3b?=
+ =?us-ascii?Q?olHqScRmuDFb8r1Dtk2o5Hqik6pI1qe/8ZgdgZ50Sl/P7k4I/UVXmD5uW8U8?=
+ =?us-ascii?Q?Y75NNiNdkxavODgtG0oDuRChOp1FGuOyUVoeIdtqKMXzIw8wbLiJELu4l57X?=
+ =?us-ascii?Q?0TZ+VR6c5kqeno9tYzoAkq/fLN79LxTJyCd7E6zEhVFzMggqzzdMTqr5ZVQ+?=
+ =?us-ascii?Q?15LhxSoV9WLpY0UuO+QEFR0oq3sKupDnBkAkzZyrkDl7BGJcsUmK4/+WRrJP?=
+ =?us-ascii?Q?exVzxn+Xx9dwAacgXkUyxxMFdWHfdjAZPuezljgY3WeY+/rBOhVs1UxbQUdM?=
+ =?us-ascii?Q?66UNYAJGTcz6axDDX4wo8NBY24BYRa0v/0KbW1f+lLpQolT5Rf1fhoqMwIBA?=
+ =?us-ascii?Q?Zs3hm/hsnWM/A6aVZjlFrYjR+ecsba/5g2TC+vqlDKlUNXYx/lBaTGAjJo/h?=
+ =?us-ascii?Q?PXvJnQAR3InwopTjxdteO7QTADfaLwg9e7+wKIM1AHoyVrL+6AYtP9RRt4Ub?=
+ =?us-ascii?Q?SG/6qKmZPCHE2NmbmalcLXzI0oasJUDtE3jZQflpaX6jMcz7l5k+I91UnD8f?=
+ =?us-ascii?Q?ARXR+yNW++Q8lVg5XVfGNiXxyyRAziiH5S2Xl9nxJg1r3GgM/27q/qI6m6PW?=
+ =?us-ascii?Q?2geW8O8/4uCbaJeM/ej7KLs/P6Gi9pPsThyIhbaJ5oN9mkGx0c9QzxZOJQ19?=
+ =?us-ascii?Q?xEfE0XTmb8u4eP0p3n2BZwu5pFzLwqx34fU3XJtmmYjaE7Lo8HxeFzvmGdEn?=
+ =?us-ascii?Q?d6YGVIs5uS2LamOLHLpmc17qHGBTF6BrciNobMNggulgZjlDWO6ntUwTVZ+5?=
+ =?us-ascii?Q?Exeb7hDzArCIHHj5g6nnaMTzqpVtB7PHCZG2Cnp2mxx4VfeHHcGInLHp4T9i?=
+ =?us-ascii?Q?6DifXQ1C7cQaCu5AjaG8kM8EcXgkDjx+Cir+pZpDk3fDw9jV6enuj1mGZ7ww?=
+ =?us-ascii?Q?3z0V3XZ5LyezjngmjDaYGZX3/o5ZIWeXIsdUdktCv24mwu5SiI+ocOfhZGVX?=
+ =?us-ascii?Q?rNvfdqkRVFfrice6WpAeE+fArsFtZmV6rCsqGJWUWFZ8ZMxjdKx4iTacou6F?=
+ =?us-ascii?Q?i6VD6Q5z1KNIULZftmHbuVgiKJ5Dz/lNGbMGMtUIAvMQffGqJvzLHBvtTzyJ?=
+ =?us-ascii?Q?FYdYrlvrcxaSvEJ6snKej1PuJHc3T0XMxPyTzWKx7nFjUAYH4aF4qx+zjTgA?=
+ =?us-ascii?Q?u2q6WwW3j1Zpuql5D322r1MXdVrYP9movEnQ2tO73Bj0+cVf5BCFRS0IehZN?=
+ =?us-ascii?Q?t11nqCwjI+OY2tp4mV+pZaZTMQMck+PLdhlREf4uhCPCSM4Xe/YwR7pYgijm?=
+ =?us-ascii?Q?w5k3NE2DIpcPmWLQJN0CazoyIN7XjvSmjXW4DZtL?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: SJ1PR11MB6083.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: d7d3eea8-83e4-4f93-8df9-08dbc3710f05
+X-MS-Exchange-CrossTenant-originalarrivaltime: 02 Oct 2023 17:57:35.3642
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: Z1Hzxp2I8ZmjJJghQyF+5j1LN7HhiXWGEc+v8egecJI93U3hnbfjxCFiw1GITmqje1VPazXJ6Wu8cZfrn/kIBA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY5PR11MB6512
+X-OriginatorOrg: intel.com
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE autolearn=ham
@@ -63,326 +157,29 @@ Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-Add an Intel specific hook into machine_check_poll() to keep track
-of per-CPU, per-bank corrected error logs (with a stub for the
-CONFIG_MCE_INTEL=n case).
+> Including placing most of the storm tracking code into threshold.c
+> instead of bloating core.c.
 
-When a storm is observed the rate of interrupts is reduced by setting
-a large threshold value for this bank in IA32_MCi_CTL2. This bank is
-added to the bitmap of banks for this CPU to poll. The polling rate
-is increased to once per second.
+The lkp test robot complains on a randconfig build with:
 
-When a storm ends reset the threshold in IA32_MCi_CTL2 back to 1, remove
-the bank from the bitmap for polling, and change the polling rate back
-to the default.
+# CONFIG_X86_MCE_INTEL is not set
+# CONFIG_X86_MCE_AMD is not set
 
-If a CPU with banks in storm mode is taken offline, the new CPU
-that inherits ownership of those banks takes over management of
-storm(s) in the inherited bank(s).
+about some undefined symbols.=20
 
-The cmci_discover() function was already very large. These changes
-pushed it well over the top. Refactor with three helper functions
-to bring it back under control.
+>> core.c:(.text+0x1130): undefined reference to `storm_desc'
+>> core.c:(.text+0x1634): undefined reference to `mce_track_storm'
 
-Updated with review comments from Yazen.
-Link: https://lore.kernel.org/r/6ae4df67-ba0b-4b50-8c1d-a5d382105ad2@amd.com
+Simple fix would be to move definition of storm_desc into core.c
+and provide a stub:
 
-Signed-off-by: Tony Luck <tony.luck@intel.com>
----
- arch/x86/kernel/cpu/mce/internal.h  |   2 +
- arch/x86/kernel/cpu/mce/intel.c     | 207 +++++++++++++++++++++-------
- arch/x86/kernel/cpu/mce/threshold.c |   3 +
- 3 files changed, 161 insertions(+), 51 deletions(-)
+static inline void mce_track_storm(struct mce *mce) { }
 
-diff --git a/arch/x86/kernel/cpu/mce/internal.h b/arch/x86/kernel/cpu/mce/internal.h
-index 5e75f5f81464..90a7bc3e1cb5 100644
---- a/arch/x86/kernel/cpu/mce/internal.h
-+++ b/arch/x86/kernel/cpu/mce/internal.h
-@@ -41,12 +41,14 @@ struct dentry *mce_get_debugfs_dir(void);
- extern mce_banks_t mce_banks_ce_disabled;
- 
- #ifdef CONFIG_X86_MCE_INTEL
-+void mce_intel_handle_storm(int bank, bool on);
- void cmci_disable_bank(int bank);
- void intel_init_cmci(void);
- void intel_init_lmce(void);
- void intel_clear_lmce(void);
- bool intel_filter_mce(struct mce *m);
- #else
-+static inline void mce_intel_handle_storm(int bank, bool on) { }
- static inline void cmci_disable_bank(int bank) { }
- static inline void intel_init_cmci(void) { }
- static inline void intel_init_lmce(void) { }
-diff --git a/arch/x86/kernel/cpu/mce/intel.c b/arch/x86/kernel/cpu/mce/intel.c
-index b07656408f67..970c94240600 100644
---- a/arch/x86/kernel/cpu/mce/intel.c
-+++ b/arch/x86/kernel/cpu/mce/intel.c
-@@ -54,8 +54,27 @@ static DEFINE_RAW_SPINLOCK(cmci_discover_lock);
-  */
- static DEFINE_SPINLOCK(cmci_poll_lock);
- 
-+/* Linux non-storm CMCI threshold (may be overridden by BIOS) */
- #define CMCI_THRESHOLD		1
- 
-+/*
-+ * MCi_CTL2 threshold for each bank when there is no storm.
-+ * Default value for each bank may have been set by BIOS.
-+ */
-+static u16 cmci_threshold[MAX_NR_BANKS];
-+
-+/*
-+ * High threshold to limit CMCI rate during storms. Max supported is
-+ * 0x7FFF. Use this slightly smaller value so it has a distinctive
-+ * signature when some asks "Why am I not seeing all corrected errors?"
-+ * A high threshold is used instead of just disabling CMCI for a
-+ * bank because both corrected and uncorrected errors may be logged
-+ * in the same bank and signalled with CMCI. The threshold only applies
-+ * to corrected errors, so keeping CMCI enabled means that uncorrected
-+ * errors will still be processed in a timely fashion.
-+ */
-+#define CMCI_STORM_THRESHOLD	32749
-+
- static int cmci_supported(int *banks)
- {
- 	u64 cap;
-@@ -110,6 +129,31 @@ static bool lmce_supported(void)
- 	return tmp & FEAT_CTL_LMCE_ENABLED;
- }
- 
-+/*
-+ * Set a new CMCI threshold value. Preserve the state of the
-+ * MCI_CTL2_CMCI_EN bit in case this happens during a
-+ * cmci_rediscover() operation.
-+ */
-+static void cmci_set_threshold(int bank, int thresh)
-+{
-+	unsigned long flags;
-+	u64 val;
-+
-+	raw_spin_lock_irqsave(&cmci_discover_lock, flags);
-+	rdmsrl(MSR_IA32_MCx_CTL2(bank), val);
-+	val &= ~MCI_CTL2_CMCI_THRESHOLD_MASK;
-+	wrmsrl(MSR_IA32_MCx_CTL2(bank), val | thresh);
-+	raw_spin_unlock_irqrestore(&cmci_discover_lock, flags);
-+}
-+
-+void mce_intel_handle_storm(int bank, bool on)
-+{
-+	if (on)
-+		cmci_set_threshold(bank, CMCI_STORM_THRESHOLD);
-+	else
-+		cmci_set_threshold(bank, cmci_threshold[bank]);
-+}
-+
- /*
-  * The interrupt handler. This is called on every event.
-  * Just call the poller directly to log any events.
-@@ -121,72 +165,130 @@ static void intel_threshold_interrupt(void)
- 	machine_check_poll(MCP_TIMESTAMP, this_cpu_ptr(&mce_banks_owned));
- }
- 
-+/*
-+ * Check all the reasons why current CPU cannot claim
-+ * ownership of a bank.
-+ * 1: CPU already owns this bank
-+ * 2: BIOS owns this bank
-+ * 3: Some other CPU owns this bank
-+ */
-+static bool cmci_skip_bank(int bank, u64 *val)
-+{
-+	unsigned long *owned = (void *)this_cpu_ptr(&mce_banks_owned);
-+
-+	if (test_bit(bank, owned))
-+		return true;
-+
-+	/* Skip banks in firmware first mode */
-+	if (test_bit(bank, mce_banks_ce_disabled))
-+		return true;
-+
-+	rdmsrl(MSR_IA32_MCx_CTL2(bank), *val);
-+
-+	/* Already owned by someone else? */
-+	if (*val & MCI_CTL2_CMCI_EN) {
-+		clear_bit(bank, owned);
-+		__clear_bit(bank, this_cpu_ptr(mce_poll_banks));
-+		return true;
-+	}
-+
-+	return false;
-+}
-+
-+/*
-+ * Decide which CMCI interrupt threshold to use:
-+ * 1: If this bank is in storm mode from whichever CPU was
-+ *    the previous owner, stay in storm mode.
-+ * 2: If ignoring any threshold set by BIOS, set Linux default
-+ * 3: Try to honor BIOS threshold (unless buggy BIOS set it at zero).
-+ */
-+static u64 cmci_pick_threshold(u64 val, int *bios_zero_thresh)
-+{
-+	if ((val & MCI_CTL2_CMCI_THRESHOLD_MASK) == CMCI_STORM_THRESHOLD)
-+		return val;
-+
-+	if (!mca_cfg.bios_cmci_threshold) {
-+		val &= ~MCI_CTL2_CMCI_THRESHOLD_MASK;
-+		val |= CMCI_THRESHOLD;
-+	} else if (!(val & MCI_CTL2_CMCI_THRESHOLD_MASK)) {
-+		/*
-+		 * If bios_cmci_threshold boot option was specified
-+		 * but the threshold is zero, we'll try to initialize
-+		 * it to 1.
-+		 */
-+		*bios_zero_thresh = 1;
-+		val |= CMCI_THRESHOLD;
-+	}
-+
-+	return val;
-+}
-+
-+/*
-+ * Try to claim ownership of a bank.
-+ */
-+static void cmci_claim_bank(int bank, u64 val, int bios_zero_thresh, int *bios_wrong_thresh)
-+{
-+	struct mca_storm_desc *storm = this_cpu_ptr(&storm_desc);
-+
-+	val |= MCI_CTL2_CMCI_EN;
-+	wrmsrl(MSR_IA32_MCx_CTL2(bank), val);
-+	rdmsrl(MSR_IA32_MCx_CTL2(bank), val);
-+
-+	/* If the enable bit did not stick, this bank should be polled. */
-+	if (!(val & MCI_CTL2_CMCI_EN)) {
-+		WARN_ON(!test_bit(bank, this_cpu_ptr(mce_poll_banks)));
-+		return;
-+	}
-+
-+	/* This CPU successfully set the enable bit. */
-+	set_bit(bank, (void *)this_cpu_ptr(&mce_banks_owned));
-+
-+	if ((val & MCI_CTL2_CMCI_THRESHOLD_MASK) == CMCI_STORM_THRESHOLD) {
-+		pr_notice("CPU%d BANK%d CMCI inherited storm\n", smp_processor_id(), bank);
-+		storm->banks[bank].history = ~0ull;
-+		storm->banks[bank].timestamp = jiffies;
-+		cmci_storm_begin(bank);
-+	} else {
-+		__clear_bit(bank, this_cpu_ptr(mce_poll_banks));
-+	}
-+
-+	/*
-+	 * We are able to set thresholds for some banks that
-+	 * had a threshold of 0. This means the BIOS has not
-+	 * set the thresholds properly or does not work with
-+	 * this boot option. Note down now and report later.
-+	 */
-+	if (mca_cfg.bios_cmci_threshold && bios_zero_thresh &&
-+	    (val & MCI_CTL2_CMCI_THRESHOLD_MASK))
-+		*bios_wrong_thresh = 1;
-+
-+	/* Save default threshold for each bank */
-+	if (cmci_threshold[bank] == 0)
-+		cmci_threshold[bank] = val & MCI_CTL2_CMCI_THRESHOLD_MASK;
-+}
-+
- /*
-  * Enable CMCI (Corrected Machine Check Interrupt) for available MCE banks
-  * on this CPU. Use the algorithm recommended in the SDM to discover shared
-- * banks.
-+ * banks. Called during initial bootstrap, and also for hotplug CPU operations
-+ * to rediscover/reassign machine check banks.
-  */
- static void cmci_discover(int banks)
- {
--	unsigned long *owned = (void *)this_cpu_ptr(&mce_banks_owned);
--	unsigned long flags;
--	int i;
- 	int bios_wrong_thresh = 0;
-+	unsigned long flags;
-+	int i;
- 
- 	raw_spin_lock_irqsave(&cmci_discover_lock, flags);
- 	for (i = 0; i < banks; i++) {
- 		u64 val;
- 		int bios_zero_thresh = 0;
- 
--		if (test_bit(i, owned))
-+		if (cmci_skip_bank(i, &val))
- 			continue;
- 
--		/* Skip banks in firmware first mode */
--		if (test_bit(i, mce_banks_ce_disabled))
--			continue;
--
--		rdmsrl(MSR_IA32_MCx_CTL2(i), val);
--
--		/* Already owned by someone else? */
--		if (val & MCI_CTL2_CMCI_EN) {
--			clear_bit(i, owned);
--			__clear_bit(i, this_cpu_ptr(mce_poll_banks));
--			continue;
--		}
--
--		if (!mca_cfg.bios_cmci_threshold) {
--			val &= ~MCI_CTL2_CMCI_THRESHOLD_MASK;
--			val |= CMCI_THRESHOLD;
--		} else if (!(val & MCI_CTL2_CMCI_THRESHOLD_MASK)) {
--			/*
--			 * If bios_cmci_threshold boot option was specified
--			 * but the threshold is zero, we'll try to initialize
--			 * it to 1.
--			 */
--			bios_zero_thresh = 1;
--			val |= CMCI_THRESHOLD;
--		}
--
--		val |= MCI_CTL2_CMCI_EN;
--		wrmsrl(MSR_IA32_MCx_CTL2(i), val);
--		rdmsrl(MSR_IA32_MCx_CTL2(i), val);
--
--		/* Did the enable bit stick? -- the bank supports CMCI */
--		if (val & MCI_CTL2_CMCI_EN) {
--			set_bit(i, owned);
--			__clear_bit(i, this_cpu_ptr(mce_poll_banks));
--			/*
--			 * We are able to set thresholds for some banks that
--			 * had a threshold of 0. This means the BIOS has not
--			 * set the thresholds properly or does not work with
--			 * this boot option. Note down now and report later.
--			 */
--			if (mca_cfg.bios_cmci_threshold && bios_zero_thresh &&
--					(val & MCI_CTL2_CMCI_THRESHOLD_MASK))
--				bios_wrong_thresh = 1;
--		} else {
--			WARN_ON(!test_bit(i, this_cpu_ptr(mce_poll_banks)));
--		}
-+		val = cmci_pick_threshold(val, &bios_zero_thresh);
-+		cmci_claim_bank(i, val, bios_zero_thresh, &bios_wrong_thresh);
- 	}
- 	raw_spin_unlock_irqrestore(&cmci_discover_lock, flags);
- 	if (mca_cfg.bios_cmci_threshold && bios_wrong_thresh) {
-@@ -225,6 +327,9 @@ static void __cmci_disable_bank(int bank)
- 	val &= ~MCI_CTL2_CMCI_EN;
- 	wrmsrl(MSR_IA32_MCx_CTL2(bank), val);
- 	__clear_bit(bank, this_cpu_ptr(mce_banks_owned));
-+
-+	if ((val & MCI_CTL2_CMCI_THRESHOLD_MASK) == CMCI_STORM_THRESHOLD)
-+		cmci_storm_end(bank);
- }
- 
- /*
-diff --git a/arch/x86/kernel/cpu/mce/threshold.c b/arch/x86/kernel/cpu/mce/threshold.c
-index c9e32d92cf8f..1460259ad8b3 100644
---- a/arch/x86/kernel/cpu/mce/threshold.c
-+++ b/arch/x86/kernel/cpu/mce/threshold.c
-@@ -35,6 +35,9 @@ DEFINE_PER_CPU(struct mca_storm_desc, storm_desc);
- static void mce_handle_storm(unsigned int bank, bool on)
- {
- 	switch (boot_cpu_data.x86_vendor) {
-+	case X86_VENDOR_INTEL:
-+		mce_intel_handle_storm(bank, on);
-+		break;
- 	}
- }
- 
--- 
-2.41.0
+for the case where neither INTEL nor AMD is configured.
+
+in internal.h
+
+-Tony
+
+
 
