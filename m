@@ -2,167 +2,217 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB2227B647D
-	for <lists+linux-edac@lfdr.de>; Tue,  3 Oct 2023 10:39:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB1927B65F3
+	for <lists+linux-edac@lfdr.de>; Tue,  3 Oct 2023 12:00:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231232AbjJCIjk (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Tue, 3 Oct 2023 04:39:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43684 "EHLO
+        id S239828AbjJCKAC (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Tue, 3 Oct 2023 06:00:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239368AbjJCIjj (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Tue, 3 Oct 2023 04:39:39 -0400
-X-Greylist: delayed 613 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 03 Oct 2023 01:39:31 PDT
-Received: from out-202.mta0.migadu.com (out-202.mta0.migadu.com [91.218.175.202])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3000EE4
-        for <linux-edac@vger.kernel.org>; Tue,  3 Oct 2023 01:39:31 -0700 (PDT)
-Date:   Tue, 3 Oct 2023 17:28:58 +0900
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1696321756;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=SvHEdL127DkwY1o1/aHJZdaismZDLKyIFOf23kZMKII=;
-        b=SnZnaakkCBrskHWe8xJL1L5kXJ04u9tThP9M8iKTR/CDUx+XLVjReoLcedlF6WCxvIyGD6
-        OhdcyIniVLeOQ4Kzd3U+6O26XoRzrW7252N8bpgQy1lQ/Hvcody5jaKDq/8yQ6j4TdM4hz
-        ijfc3ipmQGWFZBIAd/Eq8b9RfxVpS2E=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Naoya Horiguchi <naoya.horiguchi@linux.dev>
-To:     Shuai Xue <xueshuai@linux.alibaba.com>
-Cc:     rafael@kernel.org, wangkefeng.wang@huawei.com,
-        tanxiaofei@huawei.com, mawupeng1@huawei.com, tony.luck@intel.com,
-        linmiaohe@huawei.com, naoya.horiguchi@nec.com, james.morse@arm.com,
-        gregkh@linuxfoundation.org, will@kernel.org,
-        linux-acpi@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, akpm@linux-foundation.org,
-        linux-edac@vger.kernel.org, acpica-devel@lists.linuxfoundation.org,
-        stable@vger.kernel.org, x86@kernel.org, justin.he@arm.com,
-        ardb@kernel.org, ying.huang@intel.com, ashish.kalra@amd.com,
-        baolin.wang@linux.alibaba.com, bp@alien8.de, tglx@linutronix.de,
-        mingo@redhat.com, dave.hansen@linux.intel.com, jarkko@kernel.org,
-        lenb@kernel.org, hpa@zytor.com, robert.moore@intel.com,
-        lvying6@huawei.com, xiexiuqi@huawei.com,
-        zhuo.song@linux.alibaba.com
-Subject: Re: [RESEND PATCH v8 2/2] ACPI: APEI: handle synchronous exceptions
- in task work
-Message-ID: <20231003082858.GA750796@ik1-406-35019.vs.sakura.ne.jp>
-References: <20221027042445.60108-1-xueshuai@linux.alibaba.com>
- <20230919022127.69732-3-xueshuai@linux.alibaba.com>
+        with ESMTP id S239782AbjJCKAB (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Tue, 3 Oct 2023 06:00:01 -0400
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A319A91;
+        Tue,  3 Oct 2023 02:59:58 -0700 (PDT)
+Received: by mail-pl1-x635.google.com with SMTP id d9443c01a7336-1c3bd829b86so5451065ad.0;
+        Tue, 03 Oct 2023 02:59:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1696327198; x=1696931998; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=7mfj166RZXa6+OGlC23mV90s8HoMj5oVIl7zgyFgTFU=;
+        b=H5pXYzVKJ1cluuOdb6AzUVrEXCvkaWBzOpmca0uk5N55iZ4vdfEjt5Pqg3U4hUXfUh
+         k0BE9clJEXJclFb6rs0iBJk3Lfm+mxF1wQYieUdwZNxaa/c7sF1p70UvDDOPCS4KeUbu
+         mEhSLN6plucjtGDRvTRmRTpTKkFbq7fhkEXmXf9ios1Z/kS1iTy4G6/FPuIJRVDpJkIK
+         3IgcFyyY3Vd/qgW9teFdF9q3SC2PPAFqZgWTxUTAt8Wg09/bG6RawnmlmOHQVlNVUq1t
+         VUxEJrkvdfDXxW4zXcKKKq/z8+Qr0pWZt/q1ys0Yv0ndqdBP+BFDu09h7w/ZR8ddArqL
+         4A8w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1696327198; x=1696931998;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=7mfj166RZXa6+OGlC23mV90s8HoMj5oVIl7zgyFgTFU=;
+        b=NXjpIHWUwIMVFX0NqvhwrNBbVHFjVwtzz6ijJcIvnt5K0dE7q7loW3vOTjhXFqnQKc
+         zLP8y+W3fEPXKL7FUi1/hcHzUVJ482q6vMZaQqE7FJOwWDw0ZYerGAjWW9L2c842hIIj
+         Nn7Wk/y4ZZy08h4HAmzOc/Dqu8buv26P24MKq2W0er+RI7G4sCvyCbbwgsoTDGmBFnWI
+         d+/D07qZrlcmNelPEthdDnxjlntYgTu5Y50K2B7TsMy97+gP4sGSUmSiEqurfahbTqjx
+         Gb9yhqC3LCsfrlguBHNFITzog2UnVg9wm0As9+BbqKQe9Gr6CACn9q3H7jgc8Gx4owVm
+         Da5g==
+X-Gm-Message-State: AOJu0YyKJuNf7c3avwY2A7GEHiUBRKvGWOVaMThIh9mSFJbsZM5q/+6v
+        oNz69SvU3kju2P2hvd1F5GI=
+X-Google-Smtp-Source: AGHT+IEcFB0/Nf7z2acAywtjf22FDYWrA9IDkrD58mbuzHGOwLkPwm0grCEuAMx9zkt09wQq3hfj/Q==
+X-Received: by 2002:a17:902:d2cb:b0:1c4:fae:bf28 with SMTP id n11-20020a170902d2cb00b001c40faebf28mr14401254plc.32.1696327197979;
+        Tue, 03 Oct 2023 02:59:57 -0700 (PDT)
+Received: from debian.me ([103.131.18.64])
+        by smtp.gmail.com with ESMTPSA id u9-20020a17090341c900b001c1f161949fsm1088243ple.96.2023.10.03.02.59.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 03 Oct 2023 02:59:57 -0700 (PDT)
+Received: by debian.me (Postfix, from userid 1000)
+        id CEF7581193F1; Tue,  3 Oct 2023 16:59:52 +0700 (WIB)
+Date:   Tue, 3 Oct 2023 16:59:52 +0700
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     Xin Li <xin3.li@intel.com>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-edac@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, kvm@vger.kernel.org,
+        xen-devel@lists.xenproject.org
+Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+        luto@kernel.org, pbonzini@redhat.com, seanjc@google.com,
+        peterz@infradead.org, jgross@suse.com, ravi.v.shankar@intel.com,
+        mhiramat@kernel.org, andrew.cooper3@citrix.com,
+        jiangshanlai@gmail.com, nik.borisov@suse.com
+Subject: Re: [PATCH v12 06/37] Documentation/x86/64: Add a documentation for
+ FRED
+Message-ID: <ZRvmGNRZ4IvmguAY@debian.me>
+References: <20231003062458.23552-1-xin3.li@intel.com>
+ <20231003062458.23552-7-xin3.li@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="LN8xCBDRRuLQePIA"
 Content-Disposition: inline
-In-Reply-To: <20230919022127.69732-3-xueshuai@linux.alibaba.com>
-X-Migadu-Flow: FLOW_OUT
+In-Reply-To: <20231003062458.23552-7-xin3.li@intel.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Tue, Sep 19, 2023 at 10:21:27AM +0800, Shuai Xue wrote:
-> Hardware errors could be signaled by synchronous interrupt, e.g.  when an
-> error is detected by a background scrubber, or signaled by synchronous
-> exception, e.g. when an uncorrected error is consumed. Both synchronous and
-> asynchronous error are queued and handled by a dedicated kthread in
-> workqueue.
-> 
-> commit 7f17b4a121d0 ("ACPI: APEI: Kick the memory_failure() queue for
-> synchronous errors") keep track of whether memory_failure() work was
-> queued, and make task_work pending to flush out the workqueue so that the
-> work for synchronous error is processed before returning to user-space.
-> The trick ensures that the corrupted page is unmapped and poisoned. And
-> after returning to user-space, the task starts at current instruction which
-> triggering a page fault in which kernel will send SIGBUS to current process
-> due to VM_FAULT_HWPOISON.
-> 
-> However, the memory failure recovery for hwpoison-aware mechanisms does not
-> work as expected. For example, hwpoison-aware user-space processes like
-> QEMU register their customized SIGBUS handler and enable early kill mode by
-> seting PF_MCE_EARLY at initialization. Then the kernel will directy notify
-> the process by sending a SIGBUS signal in memory failure with wrong
-> si_code: the actual user-space process accessing the corrupt memory
-> location, but its memory failure work is handled in a kthread context, so
-> it will send SIGBUS with BUS_MCEERR_AO si_code to the actual user-space
-> process instead of BUS_MCEERR_AR in kill_proc().
-> 
-> To this end, separate synchronous and asynchronous error handling into
-> different paths like X86 platform does:
-> 
-> - valid synchronous errors: queue a task_work to synchronously send SIGBUS
->   before ret_to_user.
-> - valid asynchronous errors: queue a work into workqueue to asynchronously
->   handle memory failure.
-> - abnormal branches such as invalid PA, unexpected severity, no memory
->   failure config support, invalid GUID section, OOM, etc.
-> 
-> Then for valid synchronous errors, the current context in memory failure is
-> exactly belongs to the task consuming poison data and it will send SIBBUS
-> with proper si_code.
-> 
-> Fixes: 7f17b4a121d0 ("ACPI: APEI: Kick the memory_failure() queue for synchronous errors")
-> Signed-off-by: Shuai Xue <xueshuai@linux.alibaba.com>
-> Tested-by: Ma Wupeng <mawupeng1@huawei.com>
-> Reviewed-by: Kefeng Wang <wangkefeng.wang@huawei.com>
-> Reviewed-by: Xiaofei Tan <tanxiaofei@huawei.com>
-> Reviewed-by: Baolin Wang <baolin.wang@linux.alibaba.com>
-> ---
->  arch/x86/kernel/cpu/mce/core.c |  9 +---
->  drivers/acpi/apei/ghes.c       | 84 +++++++++++++++++++++-------------
->  include/acpi/ghes.h            |  3 --
->  mm/memory-failure.c            | 17 ++-----
->  4 files changed, 56 insertions(+), 57 deletions(-)
-> 
-...
 
-> diff --git a/mm/memory-failure.c b/mm/memory-failure.c
-> index 4d6e43c88489..80e1ea1cc56d 100644
-> --- a/mm/memory-failure.c
-> +++ b/mm/memory-failure.c
-> @@ -2163,7 +2163,9 @@ static int memory_failure_dev_pagemap(unsigned long pfn, int flags,
->   *
->   * Return: 0 for successfully handled the memory error,
->   *         -EOPNOTSUPP for hwpoison_filter() filtered the error event,
-> - *         < 0(except -EOPNOTSUPP) on failure.
-> + *         -EHWPOISON for already sent SIGBUS to the current process with
-> + *         the proper error info,
+--LN8xCBDRRuLQePIA
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-The meaning of this comment is understood, but the sentence seems to be
-a little too long. Could you sort this out with bullet points (like below)?
+On Mon, Oct 02, 2023 at 11:24:27PM -0700, Xin Li wrote:
+> diff --git a/Documentation/arch/x86/x86_64/fred.rst b/Documentation/arch/=
+x86/x86_64/fred.rst
+> new file mode 100644
+> index 000000000000..9f57e7b91f7e
+> --- /dev/null
+> +++ b/Documentation/arch/x86/x86_64/fred.rst
+> @@ -0,0 +1,96 @@
+> +.. SPDX-License-Identifier: GPL-2.0
+> +
+> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> +Flexible Return and Event Delivery (FRED)
+> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> +
+> +Overview
+> +=3D=3D=3D=3D=3D=3D=3D=3D
+> +
+> +The FRED architecture defines simple new transitions that change
+> +privilege level (ring transitions). The FRED architecture was
+> +designed with the following goals:
+> +
+> +1) Improve overall performance and response time by replacing event
+> +   delivery through the interrupt descriptor table (IDT event
+> +   delivery) and event return by the IRET instruction with lower
+> +   latency transitions.
+> +
+> +2) Improve software robustness by ensuring that event delivery
+> +   establishes the full supervisor context and that event return
+> +   establishes the full user context.
+> +
+> +The new transitions defined by the FRED architecture are FRED event
+> +delivery and, for returning from events, two FRED return instructions.
+> +FRED event delivery can effect a transition from ring 3 to ring 0, but
+> +it is used also to deliver events incident to ring 0. One FRED
+> +instruction (ERETU) effects a return from ring 0 to ring 3, while the
+> +other (ERETS) returns while remaining in ring 0. Collectively, FRED
+> +event delivery and the FRED return instructions are FRED transitions.
+> +
+> +In addition to these transitions, the FRED architecture defines a new
+> +instruction (LKGS) for managing the state of the GS segment register.
+> +The LKGS instruction can be used by 64-bit operating systems that do
+> +not use the new FRED transitions.
+> +
+> +Furthermore, the FRED architecture is easy to extend for future CPU
+> +architectures.
+> +
+> +Software based event dispatching
+> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D
+> +
+> +FRED operates differently from IDT in terms of event handling. Instead
+> +of directly dispatching an event to its handler based on the event
+> +vector, FRED requires the software to dispatch an event to its handler
+> +based on both the event's type and vector. Therefore, an event dispatch
+> +framework must be implemented to facilitate the event-to-handler
+> +dispatch process. The FRED event dispatch framework takes control
+> +once an event is delivered, and employs a two-level dispatch.
+> +
+> +The first level dispatching is event type based, and the second level
+> +dispatching is event vector based.
+> +
+> +Full supervisor/user context
+> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D
+> +
+> +FRED event delivery atomically save and restore full supervisor/user
+> +context upon event delivery and return. Thus it avoids the problem of
+> +transient states due to %cr2 and/or %dr6, and it is no longer needed
+> +to handle all the ugly corner cases caused by half baked entry states.
+> +
+> +FRED allows explicit unblock of NMI with new event return instructions
+> +ERETS/ERETU, avoiding the mess caused by IRET which unconditionally
+> +unblocks NMI, e.g., when an exception happens during NMI handling.
+> +
+> +FRED always restores the full value of %rsp, thus ESPFIX is no longer
+> +needed when FRED is enabled.
+> +
+> +LKGS
+> +=3D=3D=3D=3D
+> +
+> +LKGS behaves like the MOV to GS instruction except that it loads the
+> +base address into the IA32_KERNEL_GS_BASE MSR instead of the GS
+> +segment=E2=80=99s descriptor cache. With LKGS, it ends up with avoiding
+> +mucking with kernel GS, i.e., an operating system can always operate
+> +with its own GS base address.
+> +
+> +Because FRED event delivery from ring 3 and ERETU both swap the value
+> +of the GS base address and that of the IA32_KERNEL_GS_BASE MSR, plus
+> +the introduction of LKGS instruction, the SWAPGS instruction is no
+> +longer needed when FRED is enabled, thus is disallowed (#UD).
+> +
+> +Stack levels
+> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> +
+> +4 stack levels 0~3 are introduced to replace the nonreentrant IST for
+> +event handling, and each stack level should be configured to use a
+> +dedicated stack.
+> +
+> +The current stack level could be unchanged or go higher upon FRED
+> +event delivery. If unchanged, the CPU keeps using the current event
+> +stack. If higher, the CPU switches to a new event stack specified by
+> +the MSR of the new stack level, i.e., MSR_IA32_FRED_RSP[123].
+> +
+> +Only execution of a FRED return instruction ERET[US], could lower the
+> +current stack level, causing the CPU to switch back to the stack it was
+> +on before a previous event delivery that promoted the stack level.
 
- * Return values:
- *   0             - success
- *   -EOPNOTSUPP   - hwpoison_filter() filtered the error event.
- *   -EHWPOISON    - sent SIGBUS to the current process with the proper
- *                   error info by kill_accessing_process().
- *   other negative values - failure
+LGTM, thanks!
 
-> + *         other negative error code on failure.
->   */
->  int memory_failure(unsigned long pfn, int flags)
->  {
-> @@ -2445,19 +2447,6 @@ static void memory_failure_work_func(struct work_struct *work)
->  	}
->  }
->  
-> -/*
-> - * Process memory_failure work queued on the specified CPU.
-> - * Used to avoid return-to-userspace racing with the memory_failure workqueue.
-> - */
-> -void memory_failure_queue_kick(int cpu)
-> -{
-> -	struct memory_failure_cpu *mf_cpu;
-> -
-> -	mf_cpu = &per_cpu(memory_failure_cpu, cpu);
-> -	cancel_work_sync(&mf_cpu->work);
-> -	memory_failure_work_func(&mf_cpu->work);
-> -}
-> -
+Reviewed-by: Bagas Sanjaya <bagasdotme@gmail.com>
 
-The declaration of memory_failure_queue_kick() still remains in include/linux/mm.h,
-so you can remove it together.
+--=20
+An old man doll... just what I always wanted! - Clara
 
-Thanks,
-Naoya Horiguchi
+--LN8xCBDRRuLQePIA
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCZRvmEwAKCRD2uYlJVVFO
+o5qOAQDw8M+2297q5X5j+JlTjJmKURsOh0vN4+TkT6xGTw1/oAEA7lexKTaNoRJm
+dwxTvxrQ6FWCfYMKDNZLsLpxSIwB3AQ=
+=e3m/
+-----END PGP SIGNATURE-----
+
+--LN8xCBDRRuLQePIA--
