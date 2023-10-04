@@ -2,48 +2,47 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2D557B804D
-	for <lists+linux-edac@lfdr.de>; Wed,  4 Oct 2023 15:13:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D6DD7B804E
+	for <lists+linux-edac@lfdr.de>; Wed,  4 Oct 2023 15:13:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242551AbjJDNNZ (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        id S242559AbjJDNNZ (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
         Wed, 4 Oct 2023 09:13:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33868 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242559AbjJDNNX (ORCPT
+        with ESMTP id S242556AbjJDNNX (ORCPT
         <rfc822;linux-edac@vger.kernel.org>); Wed, 4 Oct 2023 09:13:23 -0400
 Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [IPv6:2a0a:edc0:2:b01:1d::104])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D84D3B0
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99AC1A9
         for <linux-edac@vger.kernel.org>; Wed,  4 Oct 2023 06:13:20 -0700 (PDT)
 Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
         by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <ukl@pengutronix.de>)
-        id 1qo1gY-0006rL-4t; Wed, 04 Oct 2023 15:13:06 +0200
+        id 1qo1gY-0006u9-QD; Wed, 04 Oct 2023 15:13:06 +0200
 Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
         by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
         (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1qo1gX-00B2hD-IC; Wed, 04 Oct 2023 15:13:05 +0200
+        id 1qo1gY-00B2hI-DS; Wed, 04 Oct 2023 15:13:06 +0200
 Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1qo1gX-008zCH-8l; Wed, 04 Oct 2023 15:13:05 +0200
+        id 1qo1gY-008zCL-4B; Wed, 04 Oct 2023 15:13:06 +0200
 From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
         <u.kleine-koenig@pengutronix.de>
 To:     Borislav Petkov <bp@alien8.de>, Tony Luck <tony.luck@intel.com>
-Cc:     Shravan Kumar Ramani <shravankr@nvidia.com>,
-        James Morse <james.morse@arm.com>,
+Cc:     James Morse <james.morse@arm.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         Robert Richter <rric@kernel.org>, linux-edac@vger.kernel.org,
         kernel@pengutronix.de
-Subject: [PATCH 04/21] EDAC/bluefield: Convert to platform remove callback returning void
-Date:   Wed,  4 Oct 2023 15:12:37 +0200
-Message-Id: <20231004131254.2673842-5-u.kleine-koenig@pengutronix.de>
+Subject: [PATCH 05/21] EDAC/cell: Convert to platform remove callback returning void
+Date:   Wed,  4 Oct 2023 15:12:38 +0200
+Message-Id: <20231004131254.2673842-6-u.kleine-koenig@pengutronix.de>
 X-Mailer: git-send-email 2.40.1
 In-Reply-To: <20231004131254.2673842-1-u.kleine-koenig@pengutronix.de>
 References: <20231004131254.2673842-1-u.kleine-koenig@pengutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1803; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=PMBI6qSiajpSYrnMxm0jS+FOpcUkXI9dxvfsSxctGP4=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBlHWSRV3B7b99Hl31TeGR/NFmJ5SWO/kH+sjw7r F76y1ysROOJATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZR1kkQAKCRCPgPtYfRL+ ToayB/44PV8pXNo+Hx8l03egFTgSflUWUTcijM5I+KyP9VrLCa6NDjtaQQG9pNxQ+JNH3txBtoT ff2kuNksLXY92rxoeYErnYNj80/7BYSVolWOxM1llVWfrkkvgsAF/jJJRTzJKQsYeAKB1fvkZKQ a4MCTCAAobi7DDePhzq26ZFrfPqdvH2YJC8QGr+hUK5gZ88ZJE+e81oqbG3e9ASJWNHP+dsKGNA livHscPW89Rb3iKj82NLM3vGarooQp78+BchE+ycdWBjV2DMaA6urKyDcy7//QqdM4w83fexpKQ LK78hkbs351tH17XriY5MYYDEohixlJeGYB7+qKmj8YHz9Lv
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1662; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=PnQNVdNQ2vWfcp61GZbI9oORO4my2PKzMEo+pgjYL4k=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBlHWSSHiDxX6IMHL5FAN+h9mUC1svQNVXqqGk9G KCI7bjzF7KJATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZR1kkgAKCRCPgPtYfRL+ TtESB/4/6CYCGVA7Tx/U5DrJhILmymS4M5Sg4/909UEEh9FXjcDx0bOqjw0NHqKl0dZPkfsllb9 n1FsKavzdb083rN7JNvYlDeQBFWnthn9DDJ2XOzxy3oiitUeiEqL3mi6RiymmxW2DMJ+haJdUXL pnSN62iXsg0eR9kmtofNjdrTCKymQvZQNV5nmRsLFYbl4DQsLmWoDvZyicu4GUZahNhtVIrFHhr 81GN437Dd8Qt9wLC3JiMkcT1SUde/wBynYt/HIlzzWGtWOGr9nYZP08+5gpy+IJRfXUjDuaZIzU R84Ho4MbqrNMFYtdFWvtrvzPlsZ2bEvnh0QxolTTiR/yCVXE
 X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
 Content-Transfer-Encoding: 8bit
 X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
@@ -73,38 +72,36 @@ callback to the void returning variant.
 
 Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 ---
- drivers/edac/bluefield_edac.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+ drivers/edac/cell_edac.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/edac/bluefield_edac.c b/drivers/edac/bluefield_edac.c
-index e4736eb37bfb..5b3164560648 100644
---- a/drivers/edac/bluefield_edac.c
-+++ b/drivers/edac/bluefield_edac.c
-@@ -323,14 +323,12 @@ static int bluefield_edac_mc_probe(struct platform_device *pdev)
- 
+diff --git a/drivers/edac/cell_edac.c b/drivers/edac/cell_edac.c
+index bc1f3416400e..2000f66fbf5c 100644
+--- a/drivers/edac/cell_edac.c
++++ b/drivers/edac/cell_edac.c
+@@ -234,12 +234,11 @@ static int cell_edac_probe(struct platform_device *pdev)
+ 	return 0;
  }
  
--static int bluefield_edac_mc_remove(struct platform_device *pdev)
-+static void bluefield_edac_mc_remove(struct platform_device *pdev)
+-static int cell_edac_remove(struct platform_device *pdev)
++static void cell_edac_remove(struct platform_device *pdev)
  {
- 	struct mem_ctl_info *mci = platform_get_drvdata(pdev);
- 
- 	edac_mc_del_mc(&pdev->dev);
- 	edac_mc_free(mci);
--
+ 	struct mem_ctl_info *mci = edac_mc_del_mc(&pdev->dev);
+ 	if (mci)
+ 		edac_mc_free(mci);
 -	return 0;
  }
  
- static const struct acpi_device_id bluefield_mc_acpi_ids[] = {
-@@ -346,7 +344,7 @@ static struct platform_driver bluefield_edac_mc_driver = {
- 		.acpi_match_table = bluefield_mc_acpi_ids,
+ static struct platform_driver cell_edac_driver = {
+@@ -247,7 +246,7 @@ static struct platform_driver cell_edac_driver = {
+ 		.name	= "cbe-mic",
  	},
- 	.probe = bluefield_edac_mc_probe,
--	.remove = bluefield_edac_mc_remove,
-+	.remove_new = bluefield_edac_mc_remove,
+ 	.probe		= cell_edac_probe,
+-	.remove		= cell_edac_remove,
++	.remove_new	= cell_edac_remove,
  };
  
- module_platform_driver(bluefield_edac_mc_driver);
+ static int __init cell_edac_init(void)
 -- 
 2.40.1
 
