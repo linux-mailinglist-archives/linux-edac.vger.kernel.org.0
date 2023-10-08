@@ -2,121 +2,95 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A4BB7BCD2B
-	for <lists+linux-edac@lfdr.de>; Sun,  8 Oct 2023 10:06:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C18447BCDEA
+	for <lists+linux-edac@lfdr.de>; Sun,  8 Oct 2023 12:58:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234215AbjJHIGn (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Sun, 8 Oct 2023 04:06:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37670 "EHLO
+        id S1344652AbjJHK6H (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Sun, 8 Oct 2023 06:58:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234247AbjJHIGm (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Sun, 8 Oct 2023 04:06:42 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE7FEF0;
-        Sun,  8 Oct 2023 01:06:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1696752397; x=1728288397;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references;
-  bh=8S2MqqTgJdBHZ66P8fTZI04cW1lUao8eGVoF7GOEfAc=;
-  b=Ug5sNrMQsoMSAp5DTIYlz2v7Ow9txHGQma4KJYJXv/DQjfHhiWoqvrP2
-   DMbhPmLRY37DJZA5x2+zyw1JU+ZhRZoxwQpXAs2lQbBhIsulU2re4ufDY
-   ngN62LQ2qhDFidUXLQ+VFQRuP9rwIC8I8bFPR+rRWo4yLGFTnGqrFVhj3
-   Ea2TVj9Ar1KZGF+kJOMctrK0WIgeizzN6WZYFOJx7cF3c1jgT8van7Ls/
-   1WyssNo8ix2lzaY19t93Dq7nSMLVrPitoXh71nh2dc/ItYSCZeXvyo8L3
-   Pv1J9TMnC6Xb9lu1zPoQzW19JahUlRyfBLS+tiL7GLupYJFD4sEB5NgFN
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10856"; a="383864116"
-X-IronPort-AV: E=Sophos;i="6.03,207,1694761200"; 
-   d="scan'208";a="383864116"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Oct 2023 01:06:37 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10856"; a="876475017"
-X-IronPort-AV: E=Sophos;i="6.03,207,1694761200"; 
-   d="scan'208";a="876475017"
-Received: from qiuxu-clx.sh.intel.com ([10.239.53.109])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Oct 2023 01:06:34 -0700
-From:   Qiuxu Zhuo <qiuxu.zhuo@intel.com>
-To:     Borislav Petkov <bp@alien8.de>, Tony Luck <tony.luck@intel.com>
-Cc:     Lili Li <lili.li@intel.com>, James Morse <james.morse@arm.com>,
+        with ESMTP id S1344621AbjJHK6E (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Sun, 8 Oct 2023 06:58:04 -0400
+Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6C9EAC
+        for <linux-edac@vger.kernel.org>; Sun,  8 Oct 2023 03:58:02 -0700 (PDT)
+Received: from localhost (localhost.localdomain [127.0.0.1])
+        by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id C062C40E0196;
+        Sun,  8 Oct 2023 10:57:57 +0000 (UTC)
+X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
+Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
+        header.d=alien8.de
+Received: from mail.alien8.de ([127.0.0.1])
+        by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id 5arru0iT7ia8; Sun,  8 Oct 2023 10:57:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
+        t=1696762675; bh=X6ZMUHp9c0/lKZrCVID+buHxxwyZLP+KkA6PO63U5Jc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=f6qF9xC4LoGLKhyeIwWl/ySAyKDKERual4fweyCH4YsIpcIawySjtoYOmXZzCHKcg
+         exEEbsU8L3NfxSxmb1EEK9PILPG4GlYYQc/bJZBb77vd4IP7h8fptR+zwI9B39IQNu
+         8DuBqwRXqKfeOMXK18/qJjsW1DKwMm+8rhxDoMTbhhGy9UyhxhSlkNUK8UPPmpu0qD
+         N2U7tfsa2vt4O1n64a71l6/PTpJuD+HaGeGi8dd2TArrpiWfMJDd9tPnB1ctIBZ00q
+         p359fJ9gTmnyc7FafbxQxOzoHDZB4C3MIu6Pi88yY9qOawOlZRgXo8AUmcEiXIVQXN
+         GfmpaxbjDS/cuYHWUNU8ncZ8hbgzHfwzl5TjsG5QWtA+WmlegvI2Zdg1Z9Y+OvlpOq
+         CePjkZGjmeWKurDzrHFezkCGPZzc1V8XdnlOHBWSImq1Ba3nV+jBVY3elTBHQh14H7
+         Ns53vQpS24RLrHt66UWmdgZOLQLOl5ukpXaCaOtOhkadVOTKdJh4sgGtYS9vaesxnQ
+         NBpUMyiHRyC7wI/QpvA5nnwswi74B6fdjfjc40HQ5Tev7CQyZyNIYBc9tDvUNKhvDB
+         bUFjxt6BXT1gHUkwU8Uukw/kGCu7xpKPu42KDLDyhWrIroEJhHZFmuh2MmFnyktMDm
+         CafwVGZAJSJEdlGPIwHA4O2o=
+Received: from zn.tnic (pd953036a.dip0.t-ipconnect.de [217.83.3.106])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
+        (No client certificate requested)
+        by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id C1CDA40E0177;
+        Sun,  8 Oct 2023 10:57:47 +0000 (UTC)
+Date:   Sun, 8 Oct 2023 12:57:40 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Qiuxu Zhuo <qiuxu.zhuo@intel.com>
+Cc:     Tony Luck <tony.luck@intel.com>, Lili Li <lili.li@intel.com>,
+        James Morse <james.morse@arm.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Robert Richter <rric@kernel.org>,
-        Qiuxu Zhuo <qiuxu.zhuo@intel.com>, linux-edac@vger.kernel.org,
+        Robert Richter <rric@kernel.org>, linux-edac@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 3/3] EDAC/pci: Fix a potential memory leak
-Date:   Sun,  8 Oct 2023 16:02:31 +0800
-Message-Id: <20231008080231.51917-3-qiuxu.zhuo@intel.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20231008080231.51917-1-qiuxu.zhuo@intel.com>
+Subject: Re: [PATCH 1/3] EDAC/igen6: Fix slab-use-after-free in
+ igen6_unregister_mci()
+Message-ID: <20231008105740.GAZSKLJMLfbiDbZlm8@fat_crate.local>
 References: <20231008080231.51917-1-qiuxu.zhuo@intel.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20231008080231.51917-1-qiuxu.zhuo@intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-From: Lili Li <lili.li@intel.com>
+On Sun, Oct 08, 2023 at 04:02:29PM +0800, Qiuxu Zhuo wrote:
+> When unloading the igen6_edac driver, the EDAC core wrongly kfreed
+> 'pvt_info,' which was private data and managed by the igen6_edac
+> driver. This resulted in a slab-use-after-free bug. Fix it by adding
+> a flag to indicate whether 'pvt_info' is managed by the EDAC core.
+> The EDAC core will only kfree 'pvt_info' when the flag is set to true.
 
-The EDAC PCI core misses kfreeing 'pvt_info' which may result in a memory
-leak. Fix it by adding a flag to indicate whether 'pvt_info' is allocated
-by the EDAC PCI core and kfreeing 'pvt_info' by the EDAC PCI core when the
-flag is set to true.
+That's because your silly driver is wrongly allocating stuff:
 
-Fixes: fb8cd45ca39b ("EDAC/pci: Get rid of the silly one-shot memory allocation in edac_pci_alloc_ctl_info()")
-Suggested-by: Qiuxu Zhuo <qiuxu.zhuo@intel.com>
-Signed-off-by: Lili Li <lili.li@intel.com>
----
- drivers/edac/edac_pci.c       | 1 +
- drivers/edac/edac_pci.h       | 5 +++++
- drivers/edac/edac_pci_sysfs.c | 2 ++
- 3 files changed, 8 insertions(+)
+igen6_probe() allocates the whole pvt struct and then
+igen6_register_mci() assigns it piece-meal-wise to each MC's ->pvt_info.
 
-diff --git a/drivers/edac/edac_pci.c b/drivers/edac/edac_pci.c
-index 64c142aecca7..7c9d1d9115c4 100644
---- a/drivers/edac/edac_pci.c
-+++ b/drivers/edac/edac_pci.c
-@@ -40,6 +40,7 @@ struct edac_pci_ctl_info *edac_pci_alloc_ctl_info(unsigned int sz_pvt,
- 		pci->pvt_info = kzalloc(sz_pvt, GFP_KERNEL);
- 		if (!pci->pvt_info)
- 			goto free;
-+		pci->pvt_managed_by_edac_core = true;
- 	}
- 
- 	pci->op_state = OP_ALLOC;
-diff --git a/drivers/edac/edac_pci.h b/drivers/edac/edac_pci.h
-index 5175f5724cfa..27fecf6bfafc 100644
---- a/drivers/edac/edac_pci.h
-+++ b/drivers/edac/edac_pci.h
-@@ -69,6 +69,11 @@ struct edac_pci_ctl_info {
- 	const char *dev_name;	/* pci/platform/etc... name */
- 
- 	void *pvt_info;		/* pointer to 'private driver' info */
-+	/*
-+	 * Indicate whether the resource pointed by pvt_info is managed by
-+	 * EDAC core
-+	 */
-+	bool pvt_managed_by_edac_core;
- 
- 	unsigned long start_time;	/* edac_pci load start time (jiffies) */
- 
-diff --git a/drivers/edac/edac_pci_sysfs.c b/drivers/edac/edac_pci_sysfs.c
-index 287cc51dbc86..520fb2fa9411 100644
---- a/drivers/edac/edac_pci_sysfs.c
-+++ b/drivers/edac/edac_pci_sysfs.c
-@@ -83,6 +83,8 @@ static void edac_pci_instance_release(struct kobject *kobj)
- 	/* decrement reference count on top main kobj */
- 	kobject_put(edac_pci_top_main_kobj);
- 
-+	if (pci->pvt_managed_by_edac_core)
-+		kfree(pci->pvt_info);
- 	kfree(pci);	/* Free the control struct */
- }
- 
+On the unreg path, you then call edac_mc_free(), it frees ->mct_info and
+then you do wonder why it complains when you call kfree(igen6_pvt) in
+igen6_remove().
+
+You should do the exact opposite of the allocation steps on the unreg
+path and it'll all work fine. Definitely not add ugly hacks to the
+EDAC core.
+
 -- 
-2.17.1
+Regards/Gruss,
+    Boris.
 
+https://people.kernel.org/tglx/notes-about-netiquette
