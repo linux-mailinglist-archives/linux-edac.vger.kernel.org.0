@@ -2,167 +2,102 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20F107BF5D4
-	for <lists+linux-edac@lfdr.de>; Tue, 10 Oct 2023 10:29:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E6E037BFEA8
+	for <lists+linux-edac@lfdr.de>; Tue, 10 Oct 2023 16:02:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1442717AbjJJI3H (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Tue, 10 Oct 2023 04:29:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54922 "EHLO
+        id S232601AbjJJOC4 (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Tue, 10 Oct 2023 10:02:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1442800AbjJJI2x (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Tue, 10 Oct 2023 04:28:53 -0400
-Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B03AC9;
-        Tue, 10 Oct 2023 01:28:49 -0700 (PDT)
-Received: from localhost (localhost.localdomain [127.0.0.1])
-        by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 50F2A40E0187;
-        Tue, 10 Oct 2023 08:28:47 +0000 (UTC)
-X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
-Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
-        header.d=alien8.de
-Received: from mail.alien8.de ([127.0.0.1])
-        by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id jobyFDhhothj; Tue, 10 Oct 2023 08:28:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-        t=1696926525; bh=DYiV+Ej1tarfC6A9PK5bqkKaTuLXYHPLvB0ukzNjf98=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=jRcQuJtnZglx2Sk9NaC7dZV11XzZ+MKNLUjw7z8fux0RAqVLiZOA8P1TyCQg0UGwH
-         6/ShC1fHFmE+DFJZHe/8vei5LJCqvMSwQLssAp14S9lybecyjvxRO0C4xplzru86pi
-         oXwbPWx0OugsqkoXze0bGjyn+hvDn0jjNNO0Q5EzxU/HXGrC24z905gR0v+Crj1YfR
-         TFV9VbEcT2LaO/n/UeJTF2xGuTnVQ+KSxpT3j/pLZvjBsgxy4d/0VBBNT9k3W60C4M
-         BGtstg7ypXHCj9rv49L5aTUQyIXGDta0aUcvmWBc01llmM9YoElgvJsOsF7yU+QdTF
-         PK8fznCwexHjwbyEpkExR6/FTZa7JTKkEY1bzjDy7AZEW2nLzFfK/l/1+ZOT229Nks
-         VEqwHIgPfyxeZ9zdGqfZRR3F7jsRanGs0gVYhg50xwAd0fetdeSY3NPqaIBZmS+WJY
-         5vO87kJD58QRSzphSPhTCdDJgLXbi+tnhiMJtklsXHnhQI2VN+CADaChpakGVF4n1y
-         bHF2sBOjTfaKcq1zOpUfFd022cL4nRxA5XUhIcqEh2FTBIbkYqfi5ygQvtt6DCqgr4
-         2FpmPjFCYOdyVswOpKwdqegokRlo0PgQHdChCyE1N6jI1R5zBiT/byu5oB03hbL7OV
-         HmOVC0x6r2tnLBVVsv2MNv5U=
-Received: from zn.tnic (pd953036a.dip0.t-ipconnect.de [217.83.3.106])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
-        (No client certificate requested)
-        by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 11AC540E01AD;
-        Tue, 10 Oct 2023 08:28:37 +0000 (UTC)
-Date:   Tue, 10 Oct 2023 10:28:36 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Zhiquan Li <zhiquan1.li@intel.com>
-Cc:     x86@kernel.org, linux-edac@vger.kernel.org,
-        linux-kernel@vger.kernel.org, patches@lists.linux.dev,
-        tony.luck@intel.com, naoya.horiguchi@nec.com,
-        Youquan Song <youquan.song@intel.com>
-Subject: Re: [PATCH RESEND v2] x86/mce: Set PG_hwpoison page flag to avoid
- the capture kernel panic
-Message-ID: <20231010082836.GDZSULNGto0cPRPU26@fat_crate.local>
-References: <20230914030539.1622477-1-zhiquan1.li@intel.com>
+        with ESMTP id S232081AbjJJOCz (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Tue, 10 Oct 2023 10:02:55 -0400
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96BB7A4
+        for <linux-edac@vger.kernel.org>; Tue, 10 Oct 2023 07:02:53 -0700 (PDT)
+Received: by mail-wm1-x32e.google.com with SMTP id 5b1f17b1804b1-40651a726acso52837255e9.1
+        for <linux-edac@vger.kernel.org>; Tue, 10 Oct 2023 07:02:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1696946572; x=1697551372; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=8nfDNCtMcEPuI4DO7wfn0711gh7d8cHHJ+9EAn1Xevw=;
+        b=P1hoExbnXD7XqB22VHfvsD/m+i2O2l6wCv/C17BF0pva9UxYAQaFGCizlVGY5Sr2mc
+         Y5lfuJeV1CVSTt9IYcu/iLpzbUzLASw1bt/hhfNXjGHzbEWm5Y63v3fClLyIrSWLmHJr
+         P9mcwTvRRZa8q5VUJSku9RDOLDHHjNt6JbvnkLaVJz+/5J3W3e6CoojTSGgmMidX/RAZ
+         E+31xQMgBBR6fNE65ZI7VyEXzx58TFtIfQ+UyE9J+1W2dGxIfmCDQ5z+fSNXRwztuT3B
+         xWoSoaVle4e3ZfKQ7BlO+QuxsSsBaoX+BD8Ixw/gfoPjc1CoRHvTxDz5gQuL3qByDHNW
+         7rEg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1696946572; x=1697551372;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=8nfDNCtMcEPuI4DO7wfn0711gh7d8cHHJ+9EAn1Xevw=;
+        b=NDYCTSq+qy+EMwiWuTQsj8vQxTeauahz6zR5dCTssiJGKiyocz7LU0DBZQrWcklAKc
+         jOyzDj2JtjvgoYQ/nli+AOHW0qCF1Ico88UEt7nWo0NEieOrYCFehAQ90MUg21obWCLn
+         RQvUan3OJ1RAv01KJ0NE6Qx09Z6aoMvrjFG07z6SAEXX4sgwwVka597hT4kbi2U5xceY
+         t1UxtHLrSfKYmPBhW9dEhRr39b/9DuRXpBevxHsVApTTHlWi1PjQ1h1KBaGQISQgfcSa
+         QL2LaJgEjaJ1Agfkr/4rKjplToO4MWnMFu0Nsvk4TIG93ScRCNPYmBrIhJNo0LrWrsIE
+         m0Ag==
+X-Gm-Message-State: AOJu0YwFD2jXjLqITEi3stTt3TtRZjKw/I+PM8lwJAthdMkZc9ozw38R
+        H/9OSxpCBOXE6Mohmd/Lh5+CRg==
+X-Google-Smtp-Source: AGHT+IHWxyt/1W1tRrDF1CtE5KlbqalqgsPVsrNOykm+j7UtsSYfbxIclsR6wQS9Bns886X6Oz60zg==
+X-Received: by 2002:a05:600c:2044:b0:402:e68f:8896 with SMTP id p4-20020a05600c204400b00402e68f8896mr16373209wmg.0.1696946571416;
+        Tue, 10 Oct 2023 07:02:51 -0700 (PDT)
+Received: from [192.168.69.115] (aif79-h01-176-172-113-148.dsl.sta.abo.bbox.fr. [176.172.113.148])
+        by smtp.gmail.com with ESMTPSA id u7-20020a7bc047000000b004063cced50bsm14302912wmc.23.2023.10.10.07.02.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 10 Oct 2023 07:02:51 -0700 (PDT)
+Message-ID: <9ef5dbf2-c103-608c-9e57-98eaa36aa894@linaro.org>
+Date:   Tue, 10 Oct 2023 16:02:49 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230914030539.1622477-1-zhiquan1.li@intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.15.1
+Subject: Re: [PATCH 13/21] EDAC/octeon-lmc: Convert to platform remove
+ callback returning void
+Content-Language: en-US
+To:     =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
+        Borislav Petkov <bp@alien8.de>, Tony Luck <tony.luck@intel.com>
+Cc:     Ralf Baechle <ralf@linux-mips.org>,
+        James Morse <james.morse@arm.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Robert Richter <rric@kernel.org>, linux-edac@vger.kernel.org,
+        linux-mips@vger.kernel.org, kernel@pengutronix.de
+References: <20231004131254.2673842-1-u.kleine-koenig@pengutronix.de>
+ <20231004131254.2673842-14-u.kleine-koenig@pengutronix.de>
+From:   =?UTF-8?Q?Philippe_Mathieu-Daud=c3=a9?= <philmd@linaro.org>
+In-Reply-To: <20231004131254.2673842-14-u.kleine-koenig@pengutronix.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Thu, Sep 14, 2023 at 11:05:39AM +0800, Zhiquan Li wrote:
-> Kdump can exclude the HWPosion page to avoid touch the error page
-> again, the prerequisite is the PG_hwpoison page flag is set.
-> However, for some MCE fatal error cases, there is no opportunity
-> to queue a task for calling memory_failure(), as a result,
-> the capture kernel touches the error page again and panics.
+On 4/10/23 15:12, Uwe Kleine-König wrote:
+> The .remove() callback for a platform driver returns an int which makes
+> many driver authors wrongly assume it's possible to do error handling by
+> returning an error code. However the value returned is ignored (apart
+> from emitting a warning) and this typically results in resource leaks.
 > 
-> Add function mce_set_page_hwpoison_now() which marks a page as
-> HWPoison before kernel panic() for MCE error, so that the dump
-> program can check and skip the error page and prevent the capture
-> kernel panic.
-
-This commit message should explain the full scenario, like you did in
-your other reply.
-
-Also explain how the poison flag is consumed by the kdump kernel and put
-that in the comment below.
-
-> [Tony: Changed TestSetPageHWPoison() to SetPageHWPoison()]
+> To improve here there is a quest to make the remove callback return
+> void. In the first step of this quest all drivers are converted to
+> .remove_new(), which already returns void. Eventually after all drivers
+> are converted, .remove_new() will be renamed to .remove().
 > 
-> Co-developed-by: Youquan Song <youquan.song@intel.com>
-> Signed-off-by: Youquan Song <youquan.song@intel.com>
-> Signed-off-by: Zhiquan Li <zhiquan1.li@intel.com>
-> Signed-off-by: Tony Luck <tony.luck@intel.com>
-
-What does Tony's SOB mean here?
-
-If I read it correctly, it is him sending this patch now. But you're
-sending it so you folks need to read up on SOB chains.
-
-> Reviewed-by: Naoya Horiguchi <naoya.horiguchi@nec.com>
+> Trivially convert this driver from always returning zero in the remove
+> callback to the void returning variant.
 > 
+> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 > ---
-> V2 RESEND notes:
-> - No changes on this, just rebasing as v6.6-rc1 is out.
-> - Added the tag from Naoya.
->   Link: https://lore.kernel.org/all/20230719211625.298785-1-tony.luck@intel.com/#t
-> 
-> Changes since V1:
-> - Revised the commit message as per Naoya's suggestion.
-> - Replaced "TODO" comment in code with comments based on mailing list
->   discussion on the lack of value in covering other page types.
->   Link: https://lore.kernel.org/all/20230127015030.30074-1-tony.luck@intel.com/
-> ---
->  arch/x86/kernel/cpu/mce/core.c | 18 ++++++++++++++++++
->  1 file changed, 18 insertions(+)
-> 
-> diff --git a/arch/x86/kernel/cpu/mce/core.c b/arch/x86/kernel/cpu/mce/core.c
-> index 6f35f724cc14..2725698268f3 100644
-> --- a/arch/x86/kernel/cpu/mce/core.c
-> +++ b/arch/x86/kernel/cpu/mce/core.c
-> @@ -156,6 +156,22 @@ void mce_unregister_decode_chain(struct notifier_block *nb)
->  }
->  EXPORT_SYMBOL_GPL(mce_unregister_decode_chain);
->  
-> +/*
-> + * Kdump can exclude the HWPosion page to avoid touch the error page again,
-> + * the prerequisite is the PG_hwpoison page flag is set. However, for some
-> + * MCE fatal error cases, there are no opportunity to queue a task
-> + * for calling memory_failure(), as a result, the capture kernel panics.
-> + * This function marks the page as HWPoison before kernel panic() for MCE.
-> + */
-> +static void mce_set_page_hwpoison_now(unsigned long pfn)
-> +{
-> +	struct page *p;
-> +
-> +	p = pfn_to_online_page(pfn);
-> +	if (p)
-> +		SetPageHWPoison(p);
-> +}
+>   drivers/edac/octeon_edac-lmc.c | 5 ++---
+>   1 file changed, 2 insertions(+), 3 deletions(-)
 
-there's no need for that function - just put everything...
+Reviewed-by: Philippe Mathieu-Daudé <philmd@linaro.org>
 
-> +
->  static void __print_mce(struct mce *m)
->  {
->  	pr_emerg(HW_ERR "CPU %d: Machine Check%s: %Lx Bank %d: %016Lx\n",
-> @@ -286,6 +302,8 @@ static noinstr void mce_panic(const char *msg, struct mce *final, char *exp)
->  	if (!fake_panic) {
->  		if (panic_timeout == 0)
->  			panic_timeout = mca_cfg.panic_timeout;
-> +		if (final && (final->status & MCI_STATUS_ADDRV))
-> +			mce_set_page_hwpoison_now(final->addr >> PAGE_SHIFT);
-
-... here, along with the comment.
-
->  		panic(msg);
->  	} else
->  		pr_emerg(HW_ERR "Fake kernel panic: %s\n", msg);
-> -- 
-
-Thx.
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
