@@ -2,256 +2,120 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C10CF7CFD9B
-	for <lists+linux-edac@lfdr.de>; Thu, 19 Oct 2023 17:12:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5865D7D10BC
+	for <lists+linux-edac@lfdr.de>; Fri, 20 Oct 2023 15:46:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345525AbjJSPMf (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Thu, 19 Oct 2023 11:12:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38632 "EHLO
+        id S1377465AbjJTNqL (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Fri, 20 Oct 2023 09:46:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345800AbjJSPMc (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Thu, 19 Oct 2023 11:12:32 -0400
-Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B10811B
-        for <linux-edac@vger.kernel.org>; Thu, 19 Oct 2023 08:12:30 -0700 (PDT)
-Received: from localhost (localhost.localdomain [127.0.0.1])
-        by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id DDCF440E01AA;
-        Thu, 19 Oct 2023 15:12:25 +0000 (UTC)
-X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
-Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
-        header.d=alien8.de
-Received: from mail.alien8.de ([127.0.0.1])
-        by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id XMEjBrjQIxp8; Thu, 19 Oct 2023 15:12:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-        t=1697728344; bh=jxWvDYhu22xzXY4/jglAUcc8tHFvy0xIj8ki/7s994w=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=JAppBAXN6lwZkpxtfgd8rsdlFj5Lxzzj/RouJYHQMl6fngJnH782OjdcxZUDKJcyn
-         /QO6WMpy8i77Qw71ARthIN6vNaXSwBCqyBfP428JPNLJNx73BhLj9T+WyInIv8lUK+
-         Nbz0UjxyjLcCTgUkCPMSIN9xZZ8+61ADKCf5viYy8/e7/pyuW4NQr4uNVb7snak08H
-         0gTKZJ/khlF8SIkM47KU+u7IEfyAuqm6iOU7fjMAVZd/DOU5u3++zVcjZCWjWONGeX
-         mfWQ8wbq/bAB19yK35pOpffq61hOrdELMoulHndDvq/MMkCgwxj/lfV/TJ9zp4TMYy
-         mTaA/c9VXa1IhA7Z5RSEX8tgoNmGxAukpCFxv9vd4Im7RpzX1dYyj+F8R8Ugpib1mY
-         SloruW+8t3cI0KtPNpe62aclXnN7bfdeXeazgvsu8XGqzk5xqPVirHjg0j+kzPoeLJ
-         7Lp/g4c4AndFlAes5dxkrbqCEjlvfPfX10W0Wzf4QYJ2WDXh7WmeSyL0CVBI2CyWwb
-         PAOmRmsF4C34rNuqpE6Mjv6iQxFNISIZkZATohInJ/m5nkoHs6rXd8PD1wFWSCQpd7
-         SwpW2Qr7QKAq9nTQehxgRzW18kfVbyXFEcr95mMqZzpFAEE9QwhM+13aR3O//dNU67
-         ro6XtzLOAGHQcqROHb0f5TPM=
-Received: from zn.tnic (pd95304da.dip0.t-ipconnect.de [217.83.4.218])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
-        (No client certificate requested)
-        by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id EFB4640E0196;
-        Thu, 19 Oct 2023 15:12:15 +0000 (UTC)
-Date:   Thu, 19 Oct 2023 17:12:11 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Tony Luck <tony.luck@intel.com>
-Cc:     Yazen Ghannam <yazen.ghannam@amd.com>,
-        Smita.KoralahalliChannabasappa@amd.com,
-        dave.hansen@linux.intel.com, x86@kernel.org,
-        linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
-        patches@lists.linux.dev
-Subject: Re: [PATCH v9 2/3] x86/mce: Add per-bank CMCI storm mitigation
-Message-ID: <20231019151211.GHZTFHS3osBIL1IJbF@fat_crate.local>
-References: <20230929181626.210782-1-tony.luck@intel.com>
- <20231004183623.17067-1-tony.luck@intel.com>
- <20231004183623.17067-3-tony.luck@intel.com>
+        with ESMTP id S1377468AbjJTNqJ (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Fri, 20 Oct 2023 09:46:09 -0400
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBAE7D57
+        for <linux-edac@vger.kernel.org>; Fri, 20 Oct 2023 06:46:03 -0700 (PDT)
+Received: by mail-wr1-x432.google.com with SMTP id ffacd0b85a97d-3296b49c546so584782f8f.3
+        for <linux-edac@vger.kernel.org>; Fri, 20 Oct 2023 06:46:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1697809562; x=1698414362; darn=vger.kernel.org;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=gHVhoC4aJNqHMdmaog4zjDlQuyve5LeloxRKNNeALag=;
+        b=k1+SBx3nPRB/meL8xBfV9Tupf7q+vr65SGil5q7g4xzzjg6dxolbWXHlbPbKYov0aG
+         8SYrVqEM//1O9t8ZQGq7AsRQ4PDcJ8bmxz18uh83bubyXYWNTAI5wNBj/LFhBwq+0i0s
+         4meEPpEcPbsHpKLmYJ+mLuMFe4L3TcRDkuEDenpD+BGr1FmSDPVqNG8bsk2G119wXrkC
+         ZS3CurIyPYaswC1RoPARISSibzX+YK7//i9y9JS40aDXywiKdiW255KGg+CIm/tT4Qs6
+         JutbeyfQch11t8jV17VL+WEvblvIr6KNUb79sW6O/pkCwnRygY7IYqDlUHn0swAOU9MA
+         39TQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1697809562; x=1698414362;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=gHVhoC4aJNqHMdmaog4zjDlQuyve5LeloxRKNNeALag=;
+        b=XR/1vLP77uQH3Cya4UZht/qGoaENzw6vRWa6QX0zdJSMwVS5tpng2hjNZJy1RTDDod
+         1OckXMZkGMj3Z6txqEV/QovKQywKge0IXoCX/1cvqkzMtrh+X+cmZUBVSIDcpodir4y+
+         N9HKDn9vPlIVZZ6XbbhXtWm1jkIa50oezVr0x9s3S5cKIDleBucp9hVsiNwjdxcVS2IE
+         UUHHQh73sHMC3A45iKZLmdBdMGUc6+XgECSUMrFkjCN78/I+MDZZAYhZ60kK5XFQeBkY
+         H6luA8hFat0+LcduwkivNbj06fooJIFuReRbYXcv/RrQUNErMqKLfeOOxSRvt+RVaCJw
+         enBA==
+X-Gm-Message-State: AOJu0Ywv6QSIsrICCDOFBIlaQ/8VcmReLEP0OUj9CeJUhhv4nIn9kxzv
+        N9Z8eiWU/ZV/rCefBC3VKdDTYQ==
+X-Google-Smtp-Source: AGHT+IGp6O+0ki4n/9p7WUhIugUPiLy7GgW3aOtHkH6Fnhbyj2vPF2UxUu0DcoZpKbyZbB8kEByrAg==
+X-Received: by 2002:adf:ec47:0:b0:32d:9718:b32a with SMTP id w7-20020adfec47000000b0032d9718b32amr1193218wrn.0.1697809562131;
+        Fri, 20 Oct 2023 06:46:02 -0700 (PDT)
+Received: from localhost ([102.36.222.112])
+        by smtp.gmail.com with ESMTPSA id n15-20020adfe78f000000b003197869bcd7sm1742635wrm.13.2023.10.20.06.46.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 20 Oct 2023 06:46:01 -0700 (PDT)
+Date:   Fri, 20 Oct 2023 16:45:57 +0300
+From:   Dan Carpenter <dan.carpenter@linaro.org>
+To:     shubhrajyoti.datta@amd.com
+Cc:     linux-edac@vger.kernel.org
+Subject: [bug report] EDAC/versal: Add a Xilinx Versal memory controller
+ driver
+Message-ID: <a4db6f93-8e5f-4d55-a7b8-b5a987d48a58@moroto.mountain>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20231004183623.17067-3-tony.luck@intel.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-On Wed, Oct 04, 2023 at 11:36:22AM -0700, Tony Luck wrote:
-> +/*
-> + * history:	bitmask tracking whether errors were seen or not seen in
-> + *		the most recent polls of a bank.
+Hello Shubhrajyoti Datta,
 
-		each bit in that bitmask represents an error seen.
+The patch 0fd934580ea3: "EDAC/versal: Add a Xilinx Versal memory
+controller driver" from Oct 5, 2023 (linux-next), leads to the
+following Smatch static checker warning:
 
-> + * timestamp:	last time (in jiffies) that the bank was polled
-> + * storm:	Is this bank in storm mode?
-> + */
-> +struct storm_bank {
-> +	u64 history;
-> +	u64 timestamp;
-> +	bool storm;
+	drivers/edac/versal_edac.c:967 mc_probe()
+	warn: unsigned 'edac_mc_id' is never less than zero.
 
-I guess "in_storm_mode" is even more descriptive:
+drivers/edac/versal_edac.c
+    944 static int mc_probe(struct platform_device *pdev)
+    945 {
+    946         void __iomem *ddrmc_baseaddr, *ddrmc_noc_baseaddr;
+    947         struct edac_mc_layer layers[2];
+    948         struct mem_ctl_info *mci;
+    949         u8 num_chans, num_csrows;
+    950         struct edac_priv *priv;
+    951         u32 edac_mc_id, regval;
+                ^^^^^^^^^^^^^^
 
-	storm->banks[bank].in_storm_mode = false;
+    952         int rc;
+    953 
+    954         ddrmc_baseaddr = devm_platform_ioremap_resource_byname(pdev, "base");
+    955         if (IS_ERR(ddrmc_baseaddr))
+    956                 return PTR_ERR(ddrmc_baseaddr);
+    957 
+    958         ddrmc_noc_baseaddr = devm_platform_ioremap_resource_byname(pdev, "noc");
+    959         if (IS_ERR(ddrmc_noc_baseaddr))
+    960                 return PTR_ERR(ddrmc_noc_baseaddr);
+    961 
+    962         if (!get_ecc_state(ddrmc_baseaddr))
+    963                 return -ENXIO;
+    964 
+    965         /* Allocate ID number for our EMIF controller */
+    966         edac_mc_id = emif_get_id(pdev->dev.of_node);
+--> 967         if (edac_mc_id < 0)
 
-etc.
+emif_get_id() doesn't return error pointers and edac_mc_id is unsigned
+so this won't work.
 
-> +};
-> +
-> +/* How many errors within the history buffer mark the start of a storm. */
-> +#define STORM_BEGIN_THRESHOLD	5
-> +
-> +/*
-> + * How many polls of machine check bank without an error before declaring
-> + * the storm is over. Since it is tracked by the bitmaks in the history
-> + * field of struct storm_bank the mask is 30 bits [0 ... 29].
-> + */
-> +#define STORM_END_POLL_THRESHOLD	29
->  
->  #ifdef CONFIG_ACPI_APEI
->  int apei_write_mce(struct mce *m);
-> diff --git a/arch/x86/kernel/cpu/mce/core.c b/arch/x86/kernel/cpu/mce/core.c
-> index f6e87443b37a..7c931f0c9251 100644
-> --- a/arch/x86/kernel/cpu/mce/core.c
-> +++ b/arch/x86/kernel/cpu/mce/core.c
-> @@ -680,6 +680,8 @@ bool machine_check_poll(enum mcp_flags flags, mce_banks_t *b)
->  		barrier();
->  		m.status = mce_rdmsrl(mca_msr_reg(i, MCA_STATUS));
->  
-> +		mce_track_storm(&m);
+    968                 return -EINVAL;
+    969 
+    970         regval = readl(ddrmc_baseaddr + XDDR_REG_CONFIG0_OFFSET);
+    971         num_chans = FIELD_PREP(XDDR_REG_CONFIG0_NUM_CHANS_MASK, regval);
+    972         num_chans++;
+    973 
+    974         num_csrows = FIELD_PREP(XDDR_REG_CONFIG0_NUM_RANKS_MASK, regval);
+    975         num_csrows *= 2;
+    976         if (!num_csrows)
+    977                 num_csrows = 1;
 
-Lemme see if I understand the idea here:
-
-the default polling interval is 5 mins. So the storm tracking is called
-every 5 mins once to see how are banks "doing", so to speak and to get
-them in or out of storm mode. So far so good...
-
-> +
->  		/* If this entry is not valid, ignore it */
->  		if (!(m.status & MCI_STATUS_VAL))
->  			continue;
-
-Btw, you're tracking storm even if the error is not valid - conditional
-above here. Why?
-
-> @@ -1652,22 +1654,29 @@ static void mce_timer_fn(struct timer_list *t)
->  	else
->  		iv = min(iv * 2, round_jiffies_relative(check_interval * HZ));
->  
-> -	__this_cpu_write(mce_next_interval, iv);
-> -	__start_timer(t, iv);
-> +	if (mce_is_storm()) {
-> +		__start_timer(t, HZ);
-> +	} else {
-> +		__this_cpu_write(mce_next_interval, iv);
-> +		__start_timer(t, iv);
-> +	}
-
-... this is where it becomes, hm, interesting: the check interval will
-be halved if an error has been seen during this round but then if we're
-in storm mode, that check interval doesn't matter - you'll run the timer
-each second.
-
-Then you need to restructure this to check the storm condition and not
-do anything to iv if storm.
-
-Or, am I missing something?
-
-> diff --git a/arch/x86/kernel/cpu/mce/threshold.c b/arch/x86/kernel/cpu/mce/threshold.c
-> index ef4e7bb5fd88..ecdf13f1bb7d 100644
-> --- a/arch/x86/kernel/cpu/mce/threshold.c
-> +++ b/arch/x86/kernel/cpu/mce/threshold.c
-> @@ -29,3 +29,115 @@ DEFINE_IDTENTRY_SYSVEC(sysvec_threshold)
->  	trace_threshold_apic_exit(THRESHOLD_APIC_VECTOR);
->  	apic_eoi();
->  }
-> +
-> +/*
-> + * banks:		per-cpu, per-bank details
-> + * stormy_bank_count:	count of MC banks in storm state
-> + * poll_mode:		CPU is in poll mode
-> + */
-> +struct mca_storm_desc {
-> +	struct storm_bank	banks[MAX_NR_BANKS];
-> +	u8			stormy_bank_count;
-> +	bool			poll_mode;
-> +};
-
-Yeah, put the struct definition into internal.h pls.
-
-> +static DEFINE_PER_CPU(struct mca_storm_desc, storm_desc);
-> +
-> +void mce_inherit_storm(unsigned int bank)
-> +{
-> +	struct mca_storm_desc *storm = this_cpu_ptr(&storm_desc);
-> +
-> +	storm->banks[bank].history = ~0ull;
-
-So upon inheriting a bank, you set its history that it has seen errors
-each time?
-
-That's weird.
-
-> +	storm->banks[bank].timestamp = jiffies;
-> +}
-> +
-> +bool mce_is_storm(void)
-
-That's a weird name. mce_get_storm_mode() perhaps?
-
-> +{
-> +	return __this_cpu_read(storm_desc.poll_mode);
-> +}
-> +
-> +void mce_set_storm(bool storm)
-
-mce_set_storm_mode()
-
-> +{
-> +	__this_cpu_write(storm_desc.poll_mode, storm);
-> +}
-> +
-> +static void mce_handle_storm(unsigned int bank, bool on)
-> +{
-> +	switch (boot_cpu_data.x86_vendor) {
-> +	}
-> +}
-
-...
-
-> +void mce_track_storm(struct mce *mce)
-> +{
-> +	struct mca_storm_desc *storm = this_cpu_ptr(&storm_desc);
-> +	unsigned long now = jiffies, delta;
-> +	unsigned int shift = 1;
-> +	u64 history = 0;
-> +
-> +	/*
-> +	 * When a bank is in storm mode it is polled once per second and
-> +	 * the history mask will record about the last minute of poll results.
-> +	 * If it is not in storm mode, then the bank is only checked when
-> +	 * there is a CMCI interrupt. Check how long it has been since
-> +	 * this bank was last checked, and adjust the amount of "shift"
-> +	 * to apply to history.
-> +	 */
-> +	if (!storm->banks[mce->bank].storm) {
-
-Yeah, if this were
-
-	if (!storm->banks[mce->bank].in_storm_mode)
-
-it would've been perfectly clear what the condition tests.
-
-> +		delta = now - storm->banks[mce->bank].timestamp;
-> +		shift = (delta + HZ) / HZ;
-> +	}
-> +
-> +	/* If it has been a long time since the last poll, clear history. */
-> +	if (shift < 64)
-
-Use a properly named define instead of a naked number.
-
-...
-
-Thx.
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+regards,
+dan carpenter
