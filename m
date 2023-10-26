@@ -2,118 +2,119 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0964B7D83EE
-	for <lists+linux-edac@lfdr.de>; Thu, 26 Oct 2023 15:55:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE5A57D84C0
+	for <lists+linux-edac@lfdr.de>; Thu, 26 Oct 2023 16:31:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235028AbjJZNzL (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Thu, 26 Oct 2023 09:55:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60324 "EHLO
+        id S1345240AbjJZObQ (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Thu, 26 Oct 2023 10:31:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233035AbjJZNzJ (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Thu, 26 Oct 2023 09:55:09 -0400
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2043.outbound.protection.outlook.com [40.107.243.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 463141BE;
-        Thu, 26 Oct 2023 06:55:06 -0700 (PDT)
+        with ESMTP id S1345244AbjJZObN (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Thu, 26 Oct 2023 10:31:13 -0400
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2046.outbound.protection.outlook.com [40.107.237.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D327D1B2;
+        Thu, 26 Oct 2023 07:31:09 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=DICij4fXd4Dzi9IBEpNSBn34G2zYiLFO8gazEDWNO/CtpgqxQ/TmFnW3NPVX82TzHp/iPhVokm41ASYWF7HsOc4aaZk91IhLzrmJVRP6w8FN9kxQfUxbD4E5xiBNMHdlyaF53z7+BjXDchzaiVMPgflkkwJ+admhztDM25sCfargVWAUGU/zb0X9p2ZDmr+bMwlXak7NWrHO3sWYGxeLyZAvY7g3pbJygIW2bEI2oPYdsMEMs6AsPPl0ytxZzsvxRTnEV9sRhyAru1qpjm/zSN1pVA7NeM4daqcssgYM1GhUvGxmBmkJ4qSyFrHeyWdtW9ogbVNwFHckZcAOhVJbQg==
+ b=fBXPT7VBirFsBTAMyCX3NANTnftM1ESwTyb2rl2GE/bdCMq5WciK0xViLfFK1cJYSH/iZQcCI+NpaemymVUyE431emuTrov5N4tPcT2/mfRfK0r/+AmDrOmBmcf8SbNx3QvwKIZErNafLT6Y9yzpW7gMBO6FqbjxG063wOxLfUEfiDOJaBJZgmRrMunxYIkzfzuI9TORdZHME2xd2W6ng5Jo3w3Lj7JzLKQNCOgnCSrDe1W0Zsb1wVIikXu/sUGMa/Q+WiaD0eyovMee85ZZRWW0snGSMkDoVTeGExSOAJq1oYjp3n79/Byax8g6Iy7xouOBH4zyY0z1BGynTIKfhg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=l6O8fY/tuNBE65th767q9JF51iR9X9QuxQCTxZe0iOw=;
- b=muwr1rIbT12RvcNvzhJyu4tKyOCwOQTz58ImVxWmgfzQM5xLtdMOBEj/n/PNhHb9yNs6jE2noqRwBs8oSKhSWONd91uRzuWSGKv2ebRgLsCsP7l1Spndb7ny0t0Ia0Pte5fKVVNWqcAnlQaU3RjZ9XaXDX6grOOMrJn8EHMTe4vT2jB7T7d8So99ld6ff3wDk8QsvlFTKUEsFL/M8yLOud9cJbFqikq42PS4al2VmJPVM8FU8L0ByxidIrhjviaNbCjDba4OwCWP4V8B1QWGQRL8ePx1LdxB6Aot8npXt61pel/ZORWgYmzmrJpXlZQAqbWP/q/dbZvgOWLYKTrqtA==
+ bh=PHj9VT8qqDU71zzW3/KgGH/x0PvGnERDikf2Wjmel7c=;
+ b=MZrr6ovMhKtnmOG4mzcge4vLe6pNEMRBGndj68ppPeH471pmAkBz7M1f75jMu3mWpyOCwmdEu/hK9CqnkSVJXLeIGdLu3sIGRRBjdvDVOzanoeVayXfLU9QFdDpKyFjyQJqBQpjiUSqqe2WvPPsaIUDF3aOS0ShT+guilM6okU3FPH37UyxynmmwRb3rj/6nvCC1O0IB8xLjY42qs7oZzKsAaCtWGAk8hYp1cZGhvE+/8W+I8+VbJIrUTcJVa+svdqkbnBLy2EUE5JQHfUEkts2+t4DF1OI4/6LKAdSU21b8/GdADVVa7uJMJd/JPbGAfw1AqzwoqP25a3y3HOb/5Q==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
  header.d=amd.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=l6O8fY/tuNBE65th767q9JF51iR9X9QuxQCTxZe0iOw=;
- b=vHhutLkq1+boJqMuC5Z51oUZkl8n9r4Bgrn3rE3/LA3Sfapk9eICSskFDkJP/6Golt1Zd9ni154EiixBPK8V4x0ZfBoqa+lZL7x86wq2SV0JLSnwkgH0kE9Au4IdIcsDFpnEXYpoW7zIOm1Q/8em3KGBxI9Lt+Jhc0rnWS19Vjc=
+ bh=PHj9VT8qqDU71zzW3/KgGH/x0PvGnERDikf2Wjmel7c=;
+ b=HEFTzNY9RVil+dsIHHVFv/BIgXc9oNPD0U/Nf40XUfVWTIWty1a1skafe5G+FWb45ManJYJAVUdUA1GwTPnKhUcIBFJG1GddirkjoACCDdN57qnFKRl5svij2TEZJ4RpXM1MkeYu43IgMkWIxEKUYKeGuYkwRhnxaRhgdfiTGZA=
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=amd.com;
 Received: from BN8PR12MB3108.namprd12.prod.outlook.com (2603:10b6:408:40::20)
- by MW4PR12MB7142.namprd12.prod.outlook.com (2603:10b6:303:220::6) with
+ by SJ0PR12MB6685.namprd12.prod.outlook.com (2603:10b6:a03:478::17) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6907.33; Thu, 26 Oct
- 2023 13:55:03 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6933.22; Thu, 26 Oct
+ 2023 14:31:07 +0000
 Received: from BN8PR12MB3108.namprd12.prod.outlook.com
  ([fe80::9799:80fa:a7de:cbb1]) by BN8PR12MB3108.namprd12.prod.outlook.com
  ([fe80::9799:80fa:a7de:cbb1%4]) with mapi id 15.20.6933.019; Thu, 26 Oct 2023
- 13:55:03 +0000
-Message-ID: <0e62013a-1819-460e-8d19-697273d63367@amd.com>
-Date:   Thu, 26 Oct 2023 09:55:01 -0400
+ 14:31:07 +0000
+Message-ID: <f9e2d199-1813-4b4a-83fd-bf93919a3411@amd.com>
+Date:   Thu, 26 Oct 2023 10:31:04 -0400
 User-Agent: Mozilla Thunderbird
 Cc:     yazen.ghannam@amd.com, linux-kernel@vger.kernel.org, bp@alien8.de,
         mchehab@kernel.org, Muralidhara M K <muralidhara.mk@amd.com>
-Subject: Re: [PATCH 6/7] RAS: Get CS fabirc ID register bit fields
+Subject: Re: [PATCH 7/7] EDAC/amd64: RAS: platform/x86/amd: Identify all
+ physical pages in row
 Content-Language: en-US
 To:     Muralidhara M K <muralimk@amd.com>, linux-edac@vger.kernel.org,
         x86@kernel.org
 References: <20231025073339.630093-1-muralimk@amd.com>
- <20231025073339.630093-7-muralimk@amd.com>
+ <20231025073339.630093-8-muralimk@amd.com>
 From:   Yazen Ghannam <yazen.ghannam@amd.com>
-In-Reply-To: <20231025073339.630093-7-muralimk@amd.com>
+In-Reply-To: <20231025073339.630093-8-muralimk@amd.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: BN1PR10CA0007.namprd10.prod.outlook.com
- (2603:10b6:408:e0::12) To BN8PR12MB3108.namprd12.prod.outlook.com
+X-ClientProxiedBy: BN8PR07CA0019.namprd07.prod.outlook.com
+ (2603:10b6:408:ac::32) To BN8PR12MB3108.namprd12.prod.outlook.com
  (2603:10b6:408:40::20)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN8PR12MB3108:EE_|MW4PR12MB7142:EE_
-X-MS-Office365-Filtering-Correlation-Id: 88de47b2-0759-4bbb-8f14-08dbd62b2749
+X-MS-TrafficTypeDiagnostic: BN8PR12MB3108:EE_|SJ0PR12MB6685:EE_
+X-MS-Office365-Filtering-Correlation-Id: 321acce6-5b41-402d-5a01-08dbd63030bf
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: FcM2jcTsniYECFfG76Cansdze0oFRdHAdKw8etWcZW3s9+Hg/JJZZ+Jznf5JEhw2znHBrfkzodzsumk3A00DU5RyFoqs/BFk7Tuwq6i8yIcBbCjonrRYwkPvO5wR+E9MV8sU3SaCyvhnxzEatW247b8+jGOiuTmB/sIno7MSkbsuhZBsEkEDGSQpd402RA/XGbtYKj1XRA9jeldUOtaF6nIiw5zHBUZ/ja93G1O84GEQbGcF8aoTZ6EpDJBwLtsvOWGqpHUqk1BgAAFgC+PhbdCQXbUZ7mvwlbtrz/Afqi13Sr0AwfoZxDOw08JFi9bVE65BTS/7CqZN4CeIV3cT4BJdS8py/CJrgN3fXxTyqsOkY7nu4mqNmLtM82Kk//gxX0Jd296MtsLnflq7ytl9ZmCTdEGkgv72qFvgPs6DGuD0kGgQ6K0Z1Vr1C6QTBhm6HudYXLY/gIKBLisa7Jl8TrmOC5vvTkIj1qaC7rWqU0T8THShLCMehNBEvI8hkk0ovS7ZyLSdOGxWIpjQmimnUHmrg5xz40b/HZOwFuYf6ySA+dWyCGsx824DPuAO2QQqhNH6T5n6NBZIcwTs+zvsAKzjmbF4cRtfxm+x+iumAGLwNdoMvX7/dRgIb1S2ZyWLbc0BjucaesKIB5yxPCJ09g==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3108.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(376002)(346002)(136003)(396003)(39860400002)(366004)(230922051799003)(186009)(451199024)(1800799009)(64100799003)(26005)(31686004)(38100700002)(2906002)(44832011)(31696002)(86362001)(41300700001)(5660300002)(36756003)(4326008)(8676002)(8936002)(478600001)(66556008)(2616005)(6506007)(66476007)(316002)(66946007)(83380400001)(53546011)(6486002)(6512007)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: K602QA2jUIDVW691LZeg1AvUxn1NeI5yn1ZyRvWT0eYSDFuQimnBpxmI4EeDgm4h+pCcWSqg9c8fJPmVyWv/ViEpljzVzFHu9pFDazK94u34hcckkR6wjTFoMYfkQdme8a2agjyxNEGQeRMAqsLwGuJWlfdSFPjCi8axfe2kO/IzbjeIoohf+A9sM3YODIj/yRu7SlcQ+cBYBdy2drC+8TLqnX/EBAbG6K8FXoWgr/s4gxV0vRmjLeORtOmUzjCm/dQCMiZ3HIXHi7cgDJkMTqRRXW56aM3Bv1exoRnB5zxk2qJwol0Gc8cKogVDwqMxheoAVk31XyOJtNg/PESwD3BmNavUChBGUWcxU6HaCgDMBWAcRdkbiTabxssB6OjfJ4+F/73zZhHU/R1yRDyJ7lTq4SHsHhDHROlWOnxuwhHC+W5auW3+kaNl+Oseoxr+hCwPMLftKszP8oYX8PnEhRo0uTRLNx4SwwGAsO/WF/UTpoir4+6f2K/H4xeRb7TjmpBM+ET87Dlb0ttCNlpy17FgRffo0dPFBELF72gPk2gosM8+s7QbckwV1K47AEGOTDDI52n8ja7gvx7aVZppOlAM+ary7cmIrA/BAbk1olQ4jpfZjrL2Qkp605j+mdcBVX4tLCisvBPbOdk6Az2voA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3108.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(366004)(376002)(346002)(39860400002)(136003)(396003)(230922051799003)(64100799003)(1800799009)(186009)(451199024)(31696002)(41300700001)(5660300002)(44832011)(66476007)(66946007)(66556008)(316002)(8936002)(4326008)(8676002)(36756003)(2906002)(86362001)(83380400001)(38100700002)(26005)(2616005)(31686004)(6486002)(478600001)(6512007)(6666004)(6506007)(53546011)(45980500001)(43740500002);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?M2paKy9HZkhFMndqWk1RWXFETXdxdXp1bjBjRTJvNUZBR20rcE9ZWmtxZnNz?=
- =?utf-8?B?MGxDclpLQUlvRTZ4dVRJUFVrN0d0VmYwaVBEMjZKQmVrWXJ5YUNTeHRpVWRX?=
- =?utf-8?B?Q2dOTURMbXdpcGFCZksyQWhlbXc3eEZuWTJUVmE4YXFGU29KZzlGL0Vic1VF?=
- =?utf-8?B?bU1BKzltc01Scnh0VEliMFk1TEE3RDZOYzlzN3hMVkRvZUFXRkF1NDhUVStv?=
- =?utf-8?B?N3d2RGpFZC83MDJwUTdySDFWQ2NyZnNHTC92Y0t4WjhwZ2lrcFNPcmx6VUtX?=
- =?utf-8?B?dnFUMnZmY0R4TWdkdU05aExCOHhsUjlNQy90d3k1RUhveEl1RnUxQ0xLa08y?=
- =?utf-8?B?TTZ6RGMzcmhkSGp6UzQ4dGc3eWNmMW4rRXRxTVhJN3EvUVl4a3pzQ2luZDFD?=
- =?utf-8?B?UHg1LzlTYVgrb3J0bnNuR3BtcDB4SjhabStqY1FxSXFlNm9BaGxWbFBmZ2Iy?=
- =?utf-8?B?ZHR3UXRtK1FxbVMvMm1ZSFZSY3B3elREbHp0MGpXeWxpUjJ2ZEU5N3M1ZmN4?=
- =?utf-8?B?RjNrc2lZbi93aFBUWW8xT2hJMG5teWd4ZktaZGNvOUVHZlJtU1lWRWMyNTBu?=
- =?utf-8?B?ZXZUVTZpUFN4b0sxMmFWMkNVYXh2VEIvK3UrYmt1Q2xDVWlNOHhqSlkyMWZu?=
- =?utf-8?B?ZXpjTUpseGxoUkVITnRKMnRZY1YvelVyRUZSOGw3aHBjRVllK2RwNWdDWDg3?=
- =?utf-8?B?RHZnTXhWM214Wno5Z0pFQUdSbnpxODY5aFdWajl6ZUl5ekErWXYzeFpCWlAv?=
- =?utf-8?B?N3I2VmFPMHoycDNBbnBOSnRHZDBrTUYyTzFpMHlQZk1BeGsxTk9SUzF3dWhh?=
- =?utf-8?B?b0hMVEhKNmt5U1JDQXpqbzBKY0RLM2QydUQ1d28vVC85V2pTdlR0TnJxaExR?=
- =?utf-8?B?bVdpeEVnSEY1dFRQY3l0Qmk1eGdlTUFzTXZvektXcW9KNjV4QmhRbmZaNDRK?=
- =?utf-8?B?ZTM3TmNodnpWY2dSTmpYdDB5SEpkemdmRVZ0dGI0cGo5dysrUHNDelFHSHVC?=
- =?utf-8?B?N3dNMUVTa0ZVOUhlZllzdkhFVUF2YTZSWHdyV0dqVS9hTTh5NlVkbVpjc2FV?=
- =?utf-8?B?dmtMQnl4MVBvczZWRm1lMjlrcWxSWnJuY0tCRGhNVlpkQ3pFd3VqOWx5RXpy?=
- =?utf-8?B?NTFxTlRyY3ZWdHpPR1IzbUcxZndWeFRVamlaOWdFMXYwa2I2Nkh0eFZtOHV0?=
- =?utf-8?B?MnBMVXlCWktPdFZ0OUt4NDhVWjY1T1hJRFEwcHZCSUZBbHpIYTJIMFBDUEp5?=
- =?utf-8?B?dzdqREtXSkJDL1I2RFRoUHUyNnJOT1FuWFRRc3MwSGFaaGVoSHE5QmVwVjlj?=
- =?utf-8?B?RXZrMHVoM0VaS3VtN2VXNGJvcDBnSUd6bHVmajFLZHhoMGRjREdFWTlWc3pq?=
- =?utf-8?B?OVU5QzIwbUFxa0I0WjdhN2d0V3pwMlRjcXhnYlpvVm45Z2t6Q0I2eHd1cHBD?=
- =?utf-8?B?MDhkRFBtUGlmd0h1WEZKaHd5SVplVkVhYXg0Q29HUEtSN2d3OExWK0xZN3ps?=
- =?utf-8?B?WFJNQnBYN3NtOEVwY2t6Y1FPRzdDcGV6UXBLWjlyYTBjb3NBdHdSY1d0QmZv?=
- =?utf-8?B?TmhTaDltZ2pqZituTjdwZ1hGdWxlQU83SEM0ZnlEc2VibHFSclVoa0ZNRktX?=
- =?utf-8?B?dWRNd2dVKzRFR0QyZ3NsYU1UcUd6dGJDM2dxTnJvajZlbllnb3BIRVBRd1Vh?=
- =?utf-8?B?azVQdVVvZExXRXVMeVRjS09WdjFNNkpsR1J3Z3Q4Zm1NMUFQOWY0WElFazdi?=
- =?utf-8?B?Q3JYZTV4OEJlQXVnd2R2bHNRdC8rQWJLdWdaRkl2QzdxcGYwNnlWNFRqZ3Ev?=
- =?utf-8?B?aFE1a0dBTmZhcHE3VXVzZGxzUUtRODMyeDdsaUFFMk5ZN2ZEL1dYTEt2VmVs?=
- =?utf-8?B?M1pVN3VaUjY2eWNOUWtEWEsrbHRlemxDeFE4QXh0Nkl1c1l4c283aEtJbFRm?=
- =?utf-8?B?cDZnK0NnZlpNVjhrUDBNMDFwUDhXUExlbnh6cEtUSDk0TzZjRllLdmxxelBO?=
- =?utf-8?B?Q2xsVFAzKzJkWGNLUUdGeUo4ZzQxMjdRNGxVUk5HNzEzUEhBZ0x5ai8yMlBs?=
- =?utf-8?B?eWRzVVhoMk9hV1FYRVpBRzVYQm56eDRMUVFmWkUrVlI1S2MwR0FodTVtMmdO?=
- =?utf-8?Q?qJJTy/O8OtMVvw9flW8TnWRT8?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?ZFpaSzhkck1DM2Q3a2xKVjBhNnRpMUI2bnBsUWwzVlo2YTFoVE5TYnZFV2ZW?=
+ =?utf-8?B?MnpXekJ3VVZpV2ZrZDJiRDI5MFphY0o2eUZ3OGM4cmljSzRCSnpLaWVRa1dT?=
+ =?utf-8?B?M2p0MktQZjBvdjVFdnI0ZVRCYjk4QmptVnJLZ2pFT2FTTTBvRW9NUmwrS0lU?=
+ =?utf-8?B?N05ob2FQaXY1bzhSWDgzMWRrUTZyMlFQcUR4RXFNUnFKdjhZNkN3bzgxc0la?=
+ =?utf-8?B?S1ZERkF4ZEVBVlF4ZUg5amVqeTV1YWdxSldxODhwaE9RT1g1dHVoN2Qxazd5?=
+ =?utf-8?B?M3JhYlFmWlJuNkh6ZzBNTVg2MEJDdndZWDE2UnlqMVhpTUVJb0QvY0FLNnJP?=
+ =?utf-8?B?dVZNNEJ5YW5ON3JOZTVnbFJrZmhzRU80QWtYQlk5MVVNN1ZSU09OckUrSWNI?=
+ =?utf-8?B?QlhULy9KL2R4eXFUSkhKcVdoTkZlN3FBVnVJRENGeitpQjIvS081VUlxaW9m?=
+ =?utf-8?B?WlBjdG9sU1Q1dkEyclNiZzhJNTg3N0lJb0RCdjFjWEk5T29zQ0lXOStzYUNN?=
+ =?utf-8?B?eG04akgxYjJUU0hEeHVMeGw5L09DL0M2a0EwYlBqaDkvb0JkSHo0RWFQVytp?=
+ =?utf-8?B?NmJuNllweWtqWkpWQ2pvK0hmOWdJekJEbUxCUi9FTWRId1hSWmZ3R1VMK1R2?=
+ =?utf-8?B?N1dFL1l5Mk1paTl1QzRaUDRTWEh1MmZDSWd3OXpNa2xlclEyd05hZ0hBTmJS?=
+ =?utf-8?B?UVU2Y0tPS2xxaTRoSjlGdG5RcjMrNWFtOGs2M1VZOGJYbk9NcEtwUTZSU2Ir?=
+ =?utf-8?B?M2l5NVZiZG5hWGxHaUlvNlBVUU1tdHh2ZjFjZ2NvRzJEQXA0OHd0aWRvaUlz?=
+ =?utf-8?B?T1VZV0ppdFpnbkNDVjZQWHVNNFdmWnBOZUZJU0l1T3BMSjRJS01MbFdoMEdG?=
+ =?utf-8?B?V1hXUnlEY2JNTGJMSk5Cc1d3OUtvTUMzUVdJY2crcnJZZjY0d1JnTUlaM2JR?=
+ =?utf-8?B?blE5R2hvRDcyc0lmRW1ZVVFCRGIwSkFjTmtuQWJhVFVnekg3Sm43eGduM0dY?=
+ =?utf-8?B?V2wrWFJDcVhNK05rWmozM0VUOVBzRDRyTXBxcWJqaFJhbldHTU42WVg3c2FI?=
+ =?utf-8?B?VENQUEZqZWFCOVRPREZ2RzZZTU40VGVVL2Z6S0t6WWNncDlobUhoNW41cmdI?=
+ =?utf-8?B?QWlhcmEySSt2VEllUGlmN2lIOGtOaDU2cUUxZzRxMzc5dzM5MWh5ekVXeHJ6?=
+ =?utf-8?B?MEdpM0xzWnlsYVA3dEhvOWZseUVOM2dXYk5GMER0ZTVkNEpsZE1BaTVtandv?=
+ =?utf-8?B?WnpWcWlzUE1jdkJPWW9tNHFwRTJrd1pMT3crMm9MNFMyTnBKdldyalBzN3FF?=
+ =?utf-8?B?QjdYQzBLUTF3cGwwSzZWK3p3SUhjZTZoNjBETHFuUzhTbm9vSHpWTEFPbWNn?=
+ =?utf-8?B?ZFhUVnZlQmpxaFN3aUpnSlJTMDBBMkxoeGE0YyttQ09DaEgxZHJzZ3JlQWFV?=
+ =?utf-8?B?cmpVbkIzWUVxZXEyRm4wZmtlRjh5OFVHcnNmYy9HN2kzQmg2NGNkZVFPTDZS?=
+ =?utf-8?B?dFdNM0RNTk53RUpBd2xTRjgzalUxenlMRDAxS1prUE1lMEt0L05DOUVOSVgz?=
+ =?utf-8?B?V2ZkRGJXSTgveG9FV1FBQXVuVVQyMlFEdHdKNFpkZGRFNkhtaWhxNGRPcTBv?=
+ =?utf-8?B?Tk5sMVFQT0lXdzk5RGh6WjBhWTVoT0JRTGExdUN5ckdzalQyZXY5V0F2VGlx?=
+ =?utf-8?B?a3VkdS9uc0xjTitMVVBtUHI1OHozSTJiSDV4aUJLR05XRWZKVjF0NFpXN3Zk?=
+ =?utf-8?B?dWVXMHNLSm15SGMrMG1MbGNXcDBhaWo2QVRCSHpuMzAybnZZdEhWTmVpc213?=
+ =?utf-8?B?SUFVcFlsYktGZFdoWUx5Nk96bW8rYm1Ub3JqU2ZHbWdaMXZGd3dSR2FvR0tt?=
+ =?utf-8?B?NFk0TUFMNDhxT0I5TlkxMEFvMDRDQkt5YkVDUjBoVDRnWGE0VlN1VG5WL1Av?=
+ =?utf-8?B?eTkvYzNIbWhLVTVRRXZMeHJBMVJ4QTBHOEthK1JWM1VBK0RpbGp1VFJ3M1lF?=
+ =?utf-8?B?bElsTHVjUHMzWXRLNUNrd2ZMNFFTejV5UnJ0clhqaTJZQTRHWC96RUVNWURE?=
+ =?utf-8?B?T0o4b3A1bXc1SU1JaVQ3Q1NvSUd6a25hc05YZ2pGRjNjcEFTaWNPbFV3WTlL?=
+ =?utf-8?Q?TCQGJ8RZDYE59IWpiIaMJFurh?=
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 88de47b2-0759-4bbb-8f14-08dbd62b2749
+X-MS-Exchange-CrossTenant-Network-Message-Id: 321acce6-5b41-402d-5a01-08dbd63030bf
 X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3108.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Oct 2023 13:55:03.5738
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Oct 2023 14:31:06.9759
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 8HVi9Z+qIcTgDh8kHisI3FZkiw76oCHGhMTiID3oQh+tYwyUGbu5NJiaiec3GBpntpk/2MjBSyyi9t+PQTROFw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR12MB7142
+X-MS-Exchange-CrossTenant-UserPrincipalName: fKlJNI8EZfakjtmzVCl+y2V5vrdABrJqJTp1lYQXfArjPI5flH1HAVRsj1mAdrA488tgs46ni7cycaSA6tdooQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR12MB6685
 X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
         RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
@@ -126,56 +127,224 @@ X-Mailing-List: linux-edac@vger.kernel.org
 
 On 10/25/2023 3:33 AM, Muralidhara M K wrote:
 > From: Muralidhara M K <muralidhara.mk@amd.com>
+
+
+The $SUBJECT needs to be updated.
+
 > 
-> Read correct register bit fields for cs_fabric_id for
-> address translation to work.
+> AMD systems have HBM memory embedded with the chips, The entire memory
+> is managed by host OS. Error containment needs to be reliable, because
+> HBM memory cannot be replaced.
+> 
+> Persist all UMC DRAM ECC errors, the OS can make the bad or poisoned page
+> state persistent so that it will not use the memory upon the next boot.
 > 
 
-What is the problem exactly?
+There is nothing in this patch regarding persistence. It finds all 
+system physical addresses covering a DRAM row and request their pages to 
+be retired.
+
+> The reported MCA error address in HBM in the format PC/SID/Bank/ROW/COL
+> For example, In MI300A C1/C0 (column bits 1-0) is at SPA bit 6-5. Assuming
+> PFN only looks at SPA bit 12 or higher, column bits 1-0 could be skipped.
+> For PFN, SPA bits higher or equal than 12 matters. So column bits c2, c3
+> and c4 gives 8 possible combination of addresses in a row.
+> 
+> So, Identify all physical pages in a HBM row and retire all the pages
+> to get rid of intermittent or recurrent memory errors.
+> 
+
+There are a number of grammatical errors in the commit message. Please 
+fix them.
 
 > Signed-off-by: Muralidhara M K <muralidhara.mk@amd.com>
 > ---
->   drivers/ras/amd/atl/reg_fields.h | 8 ++++----
->   1 file changed, 4 insertions(+), 4 deletions(-)
+>   drivers/edac/amd64_edac.c |   5 ++
+>   drivers/ras/amd/atl/umc.c | 103 ++++++++++++++++++++++++++++++++++++++
+>   include/linux/amd-atl.h   |   2 +
+>   3 files changed, 110 insertions(+)
 > 
-> diff --git a/drivers/ras/amd/atl/reg_fields.h b/drivers/ras/amd/atl/reg_fields.h
-> index c3853a25217b..6b60091f235b 100644
-> --- a/drivers/ras/amd/atl/reg_fields.h
-> +++ b/drivers/ras/amd/atl/reg_fields.h
-> @@ -28,14 +28,14 @@
->    *	Rev	Fieldname	Bits
->    *
->    *	D18F0x50 [Fabric Block Instance Information 3]
-> - *	DF2	BlockFabricId	[19:8]
-> + *	DF2	BlockFabricId	[13:8]
-
-DF2 should be [15:8]
-
->    *	DF3	BlockFabricId	[19:8]
-
-DF3 should be [13:8]
-
->    *	DF3p5	BlockFabricId	[19:8]
->    *	DF4	BlockFabricId	[19:8]
-> - *	DF4p5	BlockFabricId	[15:8]
-> + *	DF4p5	BlockFabricId	[19:8]
-
-DF4p5 is correctly listed as [15:8].
-
-Special cases can be listed separately.
-
->    */
-> -#define DF2_CS_FABRIC_ID	GENMASK(19, 8)
-> -#define DF4p5_CS_FABRIC_ID	GENMASK(15, 8)
-> +#define DF2_CS_FABRIC_ID	GENMASK(13, 8)
-> +#define DF4p5_CS_FABRIC_ID	GENMASK(19, 8)
+> diff --git a/drivers/edac/amd64_edac.c b/drivers/edac/amd64_edac.c
+> index 79c6c552ee14..d0db11e19a46 100644
+> --- a/drivers/edac/amd64_edac.c
+> +++ b/drivers/edac/amd64_edac.c
+> @@ -2838,6 +2838,11 @@ static void decode_umc_error(int node_id, struct mce *m)
 >   
+>   	error_address_to_page_and_offset(sys_addr, &err);
+>   
+> +	if (pvt->fam == 0x19 && (pvt->model >= 0x90 && pvt->model <= 0x9f)) {
+> +		if (identify_poison_pages_retire_row(m))
+> +			return;
 
-Even though the most significant bit changes between DF versions, it 
-looks like the upper bits are all reserved/Read-as-Zero. So we can 
-document the correct field, and use an expanded/inclusive field (like 
-[19:8]) for code simplification. And make a note of this for reference.
+EDAC can still log the original error. So why return early here?
+
+> +	}
+> +
+>   log_error:
+>   	__log_ecc_error(mci, &err, ecc_type);
+>   }
+> diff --git a/drivers/ras/amd/atl/umc.c b/drivers/ras/amd/atl/umc.c
+> index 52247a7949fb..d31ad7680ff1 100644
+> --- a/drivers/ras/amd/atl/umc.c
+> +++ b/drivers/ras/amd/atl/umc.c
+> @@ -255,3 +255,106 @@ int umc_mca_addr_to_sys_addr(struct mce *m, u64 *sys_addr)
+>   	return 0;
+>   }
+>   EXPORT_SYMBOL_GPL(umc_mca_addr_to_sys_addr);
+> +
+> +/*
+> + * High Bandwidth Memory (HBM v3) has fixed number of columns in a
+> + * row (8 columns in one HBM row).
+> + * Extract column bits to find all the combination of masks to retire
+> + * all the poison pages in a row.
+> + */
+> +#define MAX_COLUMNS_IN_HBM_ROW	8
+
+Is this true in general? Or is it specific to a product?
+
+> +
+> +/* The C2 bit in CH NA address */
+> +#define UMC_NA_C2_BIT	BIT(8)
+> +/* The C3 bit in CH NA address */
+> +#define UMC_NA_C3_BIT	BIT(9)
+> +/* The C4 bit in CH NA address */
+> +#define UMC_NA_C4_BIT	BIT(14)
+> +
+
+C2/C3/C4 is unclear in the comments. Please expand these to be more 
+explicit, like Column 2 bit, etc.
+
+> +/* masks to get all possible combinations of column addresses */
+> +#define C_1_1_1_MASK	(UMC_NA_C4_BIT | UMC_NA_C3_BIT | UMC_NA_C2_BIT)
+> +#define C_1_1_0_MASK	(UMC_NA_C4_BIT | UMC_NA_C3_BIT)
+> +#define C_1_0_1_MASK	(UMC_NA_C4_BIT | UMC_NA_C2_BIT)
+> +#define C_1_0_0_MASK	(UMC_NA_C4_BIT)
+> +#define C_0_1_1_MASK	(UMC_NA_C3_BIT | UMC_NA_C2_BIT)
+> +#define C_0_1_0_MASK	(UMC_NA_C3_BIT)
+> +#define C_0_0_1_MASK	(UMC_NA_C2_BIT)
+> +#define C_0_0_0_MASK	~C_1_1_1_MASK
+> +
+> +/* Identify all combination of column address physical pages in a row */
+
+This comment is not clear to me.
+
+> +static int amd_umc_identify_pages_in_row(struct mce *m, u64 *spa_addr)
+
+Also, this function does not identify pages. It identifies system 
+physical addresses.
+
+Additionally, this function seems very much specific to this 
+implementation of HBM3. So the function name should indicate this.
+
+> +{
+> +	u8 cs_inst_id = get_cs_inst_id(m);
+> +	u8 socket_id = get_socket_id(m);
+> +	u64 norm_addr = get_norm_addr(m);
+> +	u8 die_id = get_die_id(m);
+> +	u16 df_acc_id = get_df_acc_id(m);
+> +
+> +	u64 retire_addr, column;
+> +	u64 column_masks[] = { 0, C_0_0_1_MASK, C_0_1_0_MASK, C_0_1_1_MASK,
+> +			C_1_0_0_MASK, C_1_0_1_MASK, C_1_1_0_MASK, C_1_1_1_MASK };
+> +
+> +	/* clear and loop for all possibilities of [c4 c3 c2] */
+> +	norm_addr &= C_0_0_0_MASK;
+> +
+> +	for (column = 0; column < ARRAY_SIZE(column_masks); column++) {
+> +		retire_addr = norm_addr | column_masks[column];
+> +
+> +		if (norm_to_sys_addr(df_acc_id, socket_id, die_id, cs_inst_id, &retire_addr))
+> +			return -EINVAL;
+
+Why return if a single translation fails? What if the other seven can 
+succeed? Wouldn't it be better to find and offline 7/8 possible bad 
+addresses than 0/8?
+
+> +		*(spa_addr + column) = retire_addr;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +/* Find any duplicate addresses in all combination of column address */
+> +static void amd_umc_find_duplicate_spa(u64 arr[], int *size)
+> +{
+> +	int i, j, k;
+> +
+> +	/* use nested for loop to find the duplicate elements in array */
+> +	for (i = 0; i < *size; i++) {
+> +		for (j = i + 1; j < *size; j++) {
+> +			/* check duplicate element */
+> +			if (arr[i] == arr[j]) {
+> +				/* delete the current position of the duplicate element */
+> +				for (k = j; k < (*size - 1); k++)
+> +					arr[k] = arr[k + 1];
+> +
+> +			/* decrease the size of array after removing duplicate element */
+> +				(*size)--;
+> +
+> +			/* if the position of the elements is changes, don't increase index j */
+> +				j--;
+> +			}
+> +		}
+> +	}
+> +}
+
+Is it really necessary to de-duplicate this array?
+
+This data is discarded after the page retirement step. So checking for 
+duplicates can be done there.
+
+> +
+> +int identify_poison_pages_retire_row(struct mce *m)
+> +{
+> +	int i, ret, addr_range;
+> +	unsigned long pfn;
+> +	u64 col[MAX_COLUMNS_IN_HBM_ROW];
+> +	u64 *spa_addr = col;
+> +
+
+Just use "col[]"; *spa_addr is not needed.
+
+Also, please order variable declarations from longest to shortest by 
+line length.
+
+> +	/* Identify all pages in a row */
+
+Comment is not needed.
+
+> +	pr_info("Identify all physical Pages in a row for MCE addr:0x%llx\n", m->addr);
+> +	ret = amd_umc_identify_pages_in_row(m, spa_addr);
+> +	if (!ret) {
+
+If this succeeds, then you print info. And if it fails, then you don't 
+print, but continue to process information. This doesn't seem correct.
+
+> +		for (i = 0; i < MAX_COLUMNS_IN_HBM_ROW; i++)
+> +			pr_info("col[%d]_addr:0x%llx ", i, spa_addr[i]);
+> +	}
+> +	/* Find duplicate entries from all 8 physical addresses in a row */
+> +	addr_range = ARRAY_SIZE(col);
+
+You already know the array size; you defined it above.
+
+> +	amd_umc_find_duplicate_spa(spa_addr, &addr_range);
+> +	/* do page retirement on all system physical addresses */
+> +	for (i = 0; i < addr_range; i++) {
+
+You can check for duplicates here. If a value is a duplicate, then 
+continue the loop.
+
+> +		pfn = PHYS_PFN(spa_addr[i]);
+> +		memory_failure(pfn, 0);
+> +	}
+> +
+> +	return ret;
+> +}
+> +EXPORT_SYMBOL(identify_poison_pages_retire_row);
+
+A namespace prefix is needed for exported functions, i.e. amd_atl_* or 
+similar.
 
 Thanks,
 Yazen
-
