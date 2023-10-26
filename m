@@ -2,218 +2,206 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D7107D7EDA
-	for <lists+linux-edac@lfdr.de>; Thu, 26 Oct 2023 10:49:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DA587D7FD5
+	for <lists+linux-edac@lfdr.de>; Thu, 26 Oct 2023 11:42:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344631AbjJZItp (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Thu, 26 Oct 2023 04:49:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35998 "EHLO
+        id S229710AbjJZJmi (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Thu, 26 Oct 2023 05:42:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344612AbjJZIto (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Thu, 26 Oct 2023 04:49:44 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31C77128;
-        Thu, 26 Oct 2023 01:49:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1698310182; x=1729846182;
-  h=date:from:to:cc:subject:message-id:in-reply-to:
-   mime-version;
-  bh=oszUzAAFR9OuzdPZDMUs2bII/i6SxGDCw4dv32plYKc=;
-  b=Lx1e1Ae43Yww3ohr1rJ3gTCIdBgOncXvK25w+pilbtlGLo1h41kHvFJL
-   9slvWDjIvvT8PtWgy48NleqSiA5lLrC9lti7ZhTHQqka41FvAdLzoCyI5
-   CqdQN/S79EkRAG4EgxGcmXtI3t+c9vxjQtTKauJ2EUuhsq4j4MjHjUC5N
-   ZtZrVj61yLdaZv0/9aHEE/bHuaOFOn2YGQbzsfpQzmByFv3VkkTRFmUw6
-   Q4eSx7BeDxsCR+g+QJoBcnznWeS4E/pGriQdp6gtxh+MjrWa9EtprBv11
-   Mcm+Q6PV/ZKIwpgDcojsYqIOOEjMPiKntcEcI5hi45pwso9FT8QMMGgEA
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10874"; a="9048516"
-X-IronPort-AV: E=Sophos;i="6.03,253,1694761200"; 
-   d="scan'208";a="9048516"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Oct 2023 01:49:41 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10874"; a="1090529676"
-X-IronPort-AV: E=Sophos;i="6.03,253,1694761200"; 
-   d="scan'208";a="1090529676"
-Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
-  by fmsmga005.fm.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 26 Oct 2023 01:49:40 -0700
-Received: from orsmsx612.amr.corp.intel.com (10.22.229.25) by
- ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.34; Thu, 26 Oct 2023 01:49:40 -0700
-Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
- ORSMSX612.amr.corp.intel.com (10.22.229.25) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.34; Thu, 26 Oct 2023 01:49:39 -0700
-Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
- orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.34 via Frontend Transport; Thu, 26 Oct 2023 01:49:39 -0700
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (104.47.57.169)
- by edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.34; Thu, 26 Oct 2023 01:49:39 -0700
+        with ESMTP id S229611AbjJZJmh (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Thu, 26 Oct 2023 05:42:37 -0400
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2066.outbound.protection.outlook.com [40.107.244.66])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FFC0193;
+        Thu, 26 Oct 2023 02:42:34 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=cyx3zWTEpJH0PYgvfy+rG5bnovP1DP2A3EZTwMNR9+5KrtN+O1VKLz3JPqSQHkV3nE0yzyh5VoaSDgy6VkgoNvxpNf/hISU/qf+8dGZDUjaH5QWOjWZKTrJAWvdD1Wy34KTZfGSx4hZY1KF8luj6Jt9Lgi9zDdlmjsWJCZ0WL2jTGI4nOxlRHPpxHmJNkOqJNrBamcPxrtd70ta0G+TpktGq6irj/5/fCcEGD4neB6bvBCgjxziE/PDR5QXN0Jccc3abtYROpiULXjEW1NZ3QYrhF4ilFbX6tvdt2fC8YchB6Rcf30ILBz7GquGFWha2t7lu1xYfiMQDgZwVsfn7fA==
+ b=LywyxE01fiEJkGDqjVNR92GmUbkgtkIe3FuER3jCbo1sn6MkJxPNzPLT3Aflb3XOEXZKp9JHpfiZqukmOnQMnl8t5Pv68J00gVc0s5V51CSDARyP6aNCAf7IHpXtLdEv7Vs+nnZubQ5dnK4Rzs9fAN3ZPc3iyKFxqCoQg6EmCTl5npU4k92+LK0P5fgv2u79SUcFWcv+YoFBHqS5ShiwkOaNjXLzOtRdiYINC8Jo3LKwLPWOdQTxknXk1JU8YxHJId62qkMemycCjv8Ad1+TfK6uyujjEX/O3F8Sx7Am9M32wiBWlG/mUX+DjqTdYPizbnGNFqmXJzO9YIeiFReJUw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Nl1OONGIxA1kkTt0qPOImIaCrEOcBoBrva//MXTBwsM=;
- b=lKMCnu8TNQ8w70CHSdCZ1oKgqYXn++9cZ+roN9AN4DphRX/QV1euYF++NOgvhDDBKZSQneA50aiNJb45l5c65pXKGU3sMgYAdyQ740Rka0v9c4P0VF9jET/0ENqzfKsIrxbOX+fQnXjFKWnsqwDkpvMIgy8CThsq2QY2Qr7NVmpoi3uOJ3dOIuHepAGFlx8IlKcTQfF5BIPwv00n5M0uhksZ73sYws6rsVvmQtUDqekn3UY4wxxUu8T8Nr5AETA6sKf/lhnKVuNSzCDr/VB4vf4XLePDLL8eE3hKM1bkHrSidG4+pZWeiPAgS9/mpuwHZncqE7Ng5zFsEBDDNKkI9A==
+ bh=bx339yV9VKTNlA4VWh4k7ZTgLvfzrqCVENvZBBSgiRo=;
+ b=imswy8TmPqGIVE+jeecxbS0krsmiI2TIw9gUSpS6447ek3gKDXuYI4f5HC2Wy/hDEz3m0TR4uGdkMpXyVSEdigshobyHMYQ4PxurMU8gVv05L+8ldH9zacuLdNNWN5oww1QmecA4D0Il2prBmR6iRlz9mNIrsdAVO/2eGLLaet4C9EdWZpqvIeWaojWI1Ecf7qKzTrgne3ewJe96WIYNT2YIL01Gy8IZ1A5vwCK8acQw0i1B8BN1+Xtzw+0HbFSQJLsV9ST6wmQJHWoR2LpS3MdAF0GGLLCVarLz9lA15sp760I9purknfx+QtrfqUmzrlD8Ks/KKqVTLHJBAd9TNQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=bx339yV9VKTNlA4VWh4k7ZTgLvfzrqCVENvZBBSgiRo=;
+ b=jcvcUECWAekoQiPGdCiCOLRG3nAYVqZeeeeUMs/69AB1M420J5ZnN3+u2e52+7xwM4JiTc7DZ/EOfiKEDOC7R/vFIWhGrwE+zY4mnEjqsVxUn/xpAOl1aiuyFMzK0r3RrMMFJJofyOYWB43dTXrjpNATrmg0O1pSHc9y4j2c83w=
 Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from CY5PR11MB6392.namprd11.prod.outlook.com (2603:10b6:930:37::15)
- by CY8PR11MB7826.namprd11.prod.outlook.com (2603:10b6:930:76::17) with
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from PH8PR12MB7325.namprd12.prod.outlook.com (2603:10b6:510:217::19)
+ by PH7PR12MB9204.namprd12.prod.outlook.com (2603:10b6:510:2e7::14) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6933.22; Thu, 26 Oct
- 2023 08:49:32 +0000
-Received: from CY5PR11MB6392.namprd11.prod.outlook.com
- ([fe80::15d3:7425:a09e:1c86]) by CY5PR11MB6392.namprd11.prod.outlook.com
- ([fe80::15d3:7425:a09e:1c86%4]) with mapi id 15.20.6907.032; Thu, 26 Oct 2023
- 08:49:32 +0000
-Date:   Thu, 26 Oct 2023 16:44:44 +0800
-From:   kernel test robot <yujie.liu@intel.com>
-To:     Muralidhara M K <muralimk@amd.com>, <linux-edac@vger.kernel.org>,
-        <x86@kernel.org>
-CC:     <oe-kbuild-all@lists.linux.dev>, <linux-kernel@vger.kernel.org>,
-        <bp@alien8.de>, <mchehab@kernel.org>,
-        Muralidhara M K <muralidhara.mk@amd.com>,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6907.29; Thu, 26 Oct
+ 2023 09:42:32 +0000
+Received: from PH8PR12MB7325.namprd12.prod.outlook.com
+ ([fe80::bd00:6f1a:9bd5:3b48]) by PH8PR12MB7325.namprd12.prod.outlook.com
+ ([fe80::bd00:6f1a:9bd5:3b48%6]) with mapi id 15.20.6907.032; Thu, 26 Oct 2023
+ 09:42:31 +0000
+Message-ID: <b3b21eaa-226f-e78f-14e3-09e2e02e38d6@amd.com>
+Date:   Thu, 26 Oct 2023 15:12:22 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Content-Language: en-US
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
+        mchehab@kernel.org, Muralidhara M K <muralidhara.mk@amd.com>,
         Yazen Ghannam <yazen.ghannam@amd.com>
-Subject: Re: [PATCH 1/7] RAS: Add Address Translation support for MI200
-Message-ID: <202310261444.Z20oGCyr-lkp@intel.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20231025073339.630093-2-muralimk@amd.com>
-X-ClientProxiedBy: SI1PR02CA0022.apcprd02.prod.outlook.com
- (2603:1096:4:1f4::16) To CY5PR11MB6392.namprd11.prod.outlook.com
- (2603:10b6:930:37::15)
+References: <20231025051455.101424-1-muralimk@amd.com>
+ <20231025051455.101424-2-muralimk@amd.com>
+ <20231025190818.GDZTlnomnaT8zxnbxX@fat_crate.local>
+From:   "M K, Muralidhara" <muralimk@amd.com>
+Subject: Re: [PATCH v2 1/4] EDAC/mce_amd: Remove SMCA Extended Error code
+ descriptions
+In-Reply-To: <20231025190818.GDZTlnomnaT8zxnbxX@fat_crate.local>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: BM1P287CA0020.INDP287.PROD.OUTLOOK.COM
+ (2603:1096:b00:40::23) To PH8PR12MB7325.namprd12.prod.outlook.com
+ (2603:10b6:510:217::19)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CY5PR11MB6392:EE_|CY8PR11MB7826:EE_
-X-MS-Office365-Filtering-Correlation-Id: ef9dbd75-6051-4c11-7f21-08dbd6007927
+X-MS-TrafficTypeDiagnostic: PH8PR12MB7325:EE_|PH7PR12MB9204:EE_
+X-MS-Office365-Filtering-Correlation-Id: 41ac6d17-c39e-4ee9-f2e9-08dbd607dfca
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: roHQ2YHp1UN1pf851pVYG7fOw8VLpmuVQRtmTXHyPEvcfur7XEUiAeA9S8lkUdmSNgo6uC3QAILKQ6+m4aDY8JqQ+pP+ddlwZFolLSWyMPwj3cpGvhzQr2AbDT/lNUiYJTQCtNs0cAQlPhF5MdMZE+Q/oFZE8lnW1fmebfzSro/Pqu41SMyso1aiJ5TlE7rkS8f//gYVdEQOf+FaiSr6GO5I3jAn5GsbebMeahih6t+LOA+/BkqZ1js/JWYIj/YLJG9dguAmi1PVTmviIt7UkZQl759imV/REyTNedXB0rjx0CnM+VNN4U8eImmXKf4DOM55zaQ0/H90pXWmI3LkHexk3oazb3BoHEZiHthjw0Si/lLQyym7OLm2W8mUxsCWsZ49TEwrjoRp56JnnRD7hREF7YVvA17eg591Mh4xoxAAin5qGM52Q/DQ6DEGw7Lgyg+/wSYiGMDP8r5HMUAZEm0zE+dh2V6mFzA8Sp6HpyHfuJZyBZlqt1HIx50GqKfRSd/p3MTjUjZGmgG6YsuwZgI01TQAmL/kxLk4TztlHzxAvZMlqtutPsInYWG3yoVJ/M1CNBqA9K/o0gFGyftItw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY5PR11MB6392.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(366004)(396003)(346002)(136003)(39860400002)(376002)(230922051799003)(451199024)(186009)(1800799009)(64100799003)(966005)(6486002)(6512007)(82960400001)(1076003)(2616005)(38100700002)(478600001)(26005)(83380400001)(6666004)(66946007)(66476007)(6506007)(316002)(66556008)(54906003)(8676002)(8936002)(4326008)(5660300002)(41300700001)(2906002)(86362001)(4001150100001)(36756003);DIR:OUT;SFP:1102;
+X-Microsoft-Antispam-Message-Info: OncLR0zOVsDTwBe3SqbWTqh9HJiKbqGSU9E/Wo4LkqsQsL15GPX0bRektgHg8eQ/YzwwtP1HFvhFMu17ZHoi/+TB8CFnl0JRLV/l7BJf0Ou4BlOY+GRtS8fnm3FbMUrKNvgFIIA85qAtNEg/sNdqv+nXFklP5TJaVbEDkBnOY8koJOu2eAdC6A3gE7uvCV86/lY7mvnWuLYV9fRov0DB2yvXppLCpPjxK6Qjh8M+mv6b13dbYDXV+e+wF6t6LfbxSRK+XB/+V+OjhPV3NpGH3Nnanm8xL3hVqE3su+Z5Bp/16O+6nHUkvYFFhWS5KXq0I5ZfijV3gld9lS23jvQqyINjapKoMLIQsBhBIoLj/ddWmiHoUzABBqFwsblL7HmfOrCAag3Ugfbu/oh5K0jitsrM7jAIV4YIPpc+mytDcw6uji1H/qJX99YtGYAFUj1lIObix/fiWl51cwqnKiLlZHebRrfZ1GFGwjSxqjFsuR0uPyO9sj0Kfn/G68PUBoetX8uMj3rrzdJ+lYHAwZjVD5l9i6avs+6ucu0wPWvc7ye5A9tRyGXCUr0IL6/Bwm77oDabXD+46WtFvXLy4PuK94LQ6HH9uwLBVlEy7ud6Pdus+pgEmZPtsPcmyted2v/3eYAzpPErhaC0idc7q9oZ7IoUeixvH+JcCLp+5TMD4dT8r6sx5EeHCE7xq256Xhyi
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH8PR12MB7325.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(39860400002)(396003)(346002)(136003)(376002)(366004)(230922051799003)(186009)(64100799003)(451199024)(1800799009)(54906003)(6512007)(2616005)(41300700001)(26005)(6506007)(6666004)(53546011)(83380400001)(8676002)(4326008)(966005)(6486002)(4001150100001)(2906002)(8936002)(478600001)(5660300002)(316002)(66556008)(38100700002)(66476007)(66946007)(6916009)(31696002)(36756003)(31686004)(45980500001)(43740500002);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?uCEER6KSA58SY+vCRP711H6tLaWzqAWShzLF4A9hQFgPEhpdupMYMaejOeYn?=
- =?us-ascii?Q?KCqPNpeZJdMqEJVVfxYLAHRC24AxR1Swiu1MEUNKSJy3zIDo2ZXHGJ7tCkMd?=
- =?us-ascii?Q?+lH9+Ym63nykhvjH9LYb7J8CDayfHo5cW6cLyFE88nMQ2zwIZ3AxiRzqoYOH?=
- =?us-ascii?Q?g64eIrjcnnsrVic0BQBtYEfQgFTussEL4/4l8XbHgVwO2kyz09UAHvoLBxU9?=
- =?us-ascii?Q?JLAS4I7KHtFvA2sMoPBtlER7BLqXzDrHw/UKXI1ELCcNqaVlJj1eJ2GbyDyX?=
- =?us-ascii?Q?VXEzsEJXA9kt1lO0BML/Ry2qA4I50j1TJYd1mBmbIcTkCakU8ZaniG9Lyu4+?=
- =?us-ascii?Q?Yag7whfiH8bTOMDeBTSDNiYAqqdXGbDOlcb25WxSPAy/O537xkgIIclnTWnf?=
- =?us-ascii?Q?Rd+o1KZAH3qJ+OxlLj6PpShBl6byJUk0Tgn6Ii2A4MXpbJlyMv9ha7zz4O81?=
- =?us-ascii?Q?e4U/yHnalVMhfYjrkiZKrbtarLaOthya9PSwkN3mgaXJ0OithlxH8dSTu04m?=
- =?us-ascii?Q?2EFx023drR6Fm29p58KOlhgWGE4llDTt5tTaUFrWLpy5o/IL0FsPf3F0DDie?=
- =?us-ascii?Q?KqLL1Lcks0BCQhiZPMfef5hRreOOEzgoyf33oeEvMywMWcRgrA/ANTM2y7Vm?=
- =?us-ascii?Q?6usOcSAqdltbzwIRcCGsd5Rb2S+1CQq5Z1IU4ep+ihyA2jjTvnyQjEhGuGwA?=
- =?us-ascii?Q?j3AZSkctfTdwqAoiUknEKZpfhD8YxJVe9WCyXEF4cpuT0p6NNEVWpJ57OtAT?=
- =?us-ascii?Q?vda/ITh7+X5e4siiqBiZTPNPc7N+SKE2rUs0bKzNXl+kXjqSQF9v46E7DPnQ?=
- =?us-ascii?Q?Ff6LaDl5MFA3MjR+q+TY6ENAhd+fW096tVKq8NJGREskVE6fu1goGyvbVD+F?=
- =?us-ascii?Q?oTHUbW2mcPiG0fMa6k9eVxWYZpYS2JPkxtdKWC+EyS5jCyrhd42eFp69Ad1r?=
- =?us-ascii?Q?aJHUglUWgo/R4au/UMUviUk3JyHEWW+x+JzjrryYyHF6ZlptIQZHV0DZAUSl?=
- =?us-ascii?Q?YuKGznJLzlDo3u/IjkIWLcx52eJAgFUPcHr0DdNC5S+8m6mqOU/8vfXqgDpr?=
- =?us-ascii?Q?MujT0qp8otlDw7rqhxAbNLWWgQIHAURvoayPjViI55PwvK06/+71STb81H3n?=
- =?us-ascii?Q?+4FSeJLc4/8eB1PSqEBp3gmN/4xatcqLzK3SUlo4WfrcmAcQa6qPMhKT4poU?=
- =?us-ascii?Q?bbTev1kNg39loBoNBPx0Gp9LahDlbofN7EGfCrt6V8F5Z5LKGOvTBgJyPnw6?=
- =?us-ascii?Q?BUzHHWN/q6yXa9nR6y7bLHzyV0QHeJQ2SfUm2CXIdzq3vUIYJaWFX1FceJxk?=
- =?us-ascii?Q?SBSFmCgFr5TZaOWNx0aTN4Sh7IajsqOn46fkNzYROFmEx6+d/rWkGzHVpHD/?=
- =?us-ascii?Q?spfDG2UMD7gTVfGiPL9Ve6YvzsOKVy6yHeBnnpja4maWGtsR5Sz7QW2sfVE7?=
- =?us-ascii?Q?nvnEnmf6jGyOhuGZipt86Xxnbw7sLSw6sG64MCSgN+t6KOkd/eDUMNK2Wtyv?=
- =?us-ascii?Q?M04A1GaKLS6a2ZY5gQNQxnpOS70DgSPJ1T11/Ch3C6EREzRlWDfI4sVEFVvC?=
- =?us-ascii?Q?G5CCqZx0IcbeQBMOwmzTtFD4X+1o1OlcDwi/7ldM?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: ef9dbd75-6051-4c11-7f21-08dbd6007927
-X-MS-Exchange-CrossTenant-AuthSource: CY5PR11MB6392.namprd11.prod.outlook.com
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?elArUkFiRElGbWt5dGRxRkVHUWFBSkt3RWdYZUQ4TG9UYkNWWElnNDdwRnpu?=
+ =?utf-8?B?cm9sZHZURjBGY3lCVDdXK3EvTDA5dmYwYkt5ZGUyRTdjbU1MNDVIQWVpZGtz?=
+ =?utf-8?B?SU1VaU9SZmFQVDBSMEZLR25aUzRJOUcrb1VPZHNZTGxVNXhVU2liV244dG5m?=
+ =?utf-8?B?YStIZkl5MzRqZ2s5cTNjQUZvbHVyM1FONktkZFNqaHRnbUExZlNqbjk5Q3RJ?=
+ =?utf-8?B?R090elVwbnc0emI5OWhpT2dBODhuaUhiRHBaOCsvanBGL2liaW5PTXZuVmJ4?=
+ =?utf-8?B?S2puYUt0dm52bnM5UmlHNEhxL29vcVl0Z1E4ZDlNRk5adU52bmQzaHZmQ2h4?=
+ =?utf-8?B?aGR3Ym1HTkNydDZlS0Fnc2RnWndXa3UzOGNNbUdBMDMyTzdLYkZ5bC84dWlN?=
+ =?utf-8?B?QjFKcGFhRk9oUENaRVZRS05CbFlhRzlWaVdJRmxjLzV2L0ZudUFLeHZobGdw?=
+ =?utf-8?B?VEhIRGptNVlZWjlCN0tBZStveUtrY3huRnp0ajF2eHVCakNuSFpoTTA5MUta?=
+ =?utf-8?B?dzkrTjRhanloRFNnNE9mYy9jbHBZSktnb0c1cVJ6RUxRR0xNOFBYbnhIaEdt?=
+ =?utf-8?B?RFVKS0FLTGVyNXlwYUJWeWl6Q2FHY3Z3aTMzTkk2ZzI2OHhMcGNiRmpVR3Nr?=
+ =?utf-8?B?Zy9WK29DZlhOZXV5V3ZrNDZHc0VSb0FveFFxR2daVHZHbUtoaXBNakJnMThG?=
+ =?utf-8?B?dXRQR09WTFZjcXk1YksrSCtmRnk1bUxYdTQ4U2VGdUREMVZpbHRONGVybE9w?=
+ =?utf-8?B?N1doekpwaGovZGlSR3pvRW5NYXJmWDl1WWdWK0dTM2NjMU5FNmRlRTAwWnZw?=
+ =?utf-8?B?Zm1WTmcydnZENTV3bjRIY0xTd0w2NUVtd1BpRGJ2VjhFOUFYVDhlR0lQUGc4?=
+ =?utf-8?B?cmZTc0NGY0JmN3R2enU4TU5ZelNkeWl4di80ZFhZNmdyVFp6NlppL0s0SVdO?=
+ =?utf-8?B?cHBUdWN5cFpoNjlKbW1IRTJhaFAwK2RCUmMwalVhczJEZmJkbHdpZE5qOE9z?=
+ =?utf-8?B?cE9Bajd6dUNicFNkNEhoZ3YrY2xPMlFYYXZkUVk0NUNnbW4zWGJJcTJTRzVq?=
+ =?utf-8?B?NlE0MUhpOGdaY3R0THZRcVZmNFhZS3phT3F5c3dwOXZSc2RnaGRpUlVIcEpF?=
+ =?utf-8?B?T0tDVnA5clJHSnBZd3hIbml0Y1FHTG1qOSt0WGt4ZUQ3bEY1N2Iwb0R3SW5K?=
+ =?utf-8?B?Q2RlSTI3SWp0OWRLUEJqZFFKQ2hrUHZnc3picWprMXd4QmljdjBiVmhWbmda?=
+ =?utf-8?B?V25mQzNldkVmZC9EMlRVUGkvOVhNc2QzZHk2Y3U1ZTRIMnVETHhtallTK3Vz?=
+ =?utf-8?B?VzFYNzR6MHNZU1Y0TVoxQ0NFZnBvREF2WStidU80cXNabDR3dlBsekp3Ymxo?=
+ =?utf-8?B?eEo0MHFiOGZwTCttZ1NKVHJzZU5Gb2ZKMUhxOUZYTGpleERSZDVhb2VpbzFl?=
+ =?utf-8?B?SlRpQm9KNzVLQkV3WjhSU0JEWWtQTGNWQ3FYQ280SlhGOVZ1RkV1VmdrSlln?=
+ =?utf-8?B?NnlZUHFDbDZURUhMVGtmRHhGM2RaWDNuek5COVJ6VFlaSkJrZzJDY2ZDWDd5?=
+ =?utf-8?B?NE0vRmZVSDkrbXBaNllXRWJTMk1Xa2Z4WTBHTjZ6bSt6eXRxQkxYMTNBUWpn?=
+ =?utf-8?B?L1Jmang1WGhLQSt1TTZSL3ovSnYvNElZeTNzbTNFbk8waVFLL2h6TUkxTk1M?=
+ =?utf-8?B?UE52QmFZQk9zdHJEMDRuaW14YnBSWHNPeWJHSlJhdVZLQ2h6b3U4L1RXM0JP?=
+ =?utf-8?B?U1F4R2JVZEF4SlNFMzg4aU5FejNkL0FpSU41RXdBMEllNVlPTDFzL3UwUkls?=
+ =?utf-8?B?V1AySHo0MXhXajZpSng0MCtmN3hiTmpWTUt4c3pkcy82bzY0RURwd0V6VGNw?=
+ =?utf-8?B?VXdNTGtpclBJWHU1UnZBN1V0WnErUExNUW1SS3VLUW9xcStyUEpKbXQyWVEy?=
+ =?utf-8?B?a2lCRUZ6TDdHeWVFOFNEbG9WMWZVYkdqSVYzbUw5dVEwSUJrWVR6UXAraHJH?=
+ =?utf-8?B?ZjdFSWFtS3lXK3MxaURZZk1qTjBRSHhGNGVIQVFBUko5SFIrZFpKRUVVbE95?=
+ =?utf-8?B?ZjZ0QWRHemZUdU00Vk1tdjR2THBxVFpyVDR0M0thUVcyM08xQ2pZVTBseWVW?=
+ =?utf-8?Q?JkuhAtwbYJtFPU84ntdECGw+n?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 41ac6d17-c39e-4ee9-f2e9-08dbd607dfca
+X-MS-Exchange-CrossTenant-AuthSource: PH8PR12MB7325.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Oct 2023 08:49:32.7963
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Oct 2023 09:42:31.4330
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: FTCXRY6hWOKOPTzGNJFo3PP3Rt6UgotF/aF0c1L0MFN1iLoPa83lYt2woPWtbMfhSlspymcZUf5t49YWegAYSw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY8PR11MB7826
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-UserPrincipalName: hEfSdFHrqYXaw+koxEisajMX/nezefl8z6SNY1rAmOcqNQOI1GRg+XkRPMYiMfmewLTSUS+RT1pjYNf1/XM/Jw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB9204
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-Hi Muralidhara,
+Hi Boris,
 
-kernel test robot noticed the following build warnings:
+On 10/26/2023 12:38 AM, Borislav Petkov wrote:
+> Caution: This message originated from an External Source. Use proper caution when opening attachments, clicking links, or responding.
+> 
+> 
+> On Wed, Oct 25, 2023 at 05:14:52AM +0000, Muralidhara M K wrote:
+>> The SMCA error decoding already exists in rasdaemon and future bank decoding
+>> is supported from below patches merged in rasdaemon.
+>> https://github.com/mchehab/rasdaemon/commit/1f74a59ee33b7448b00d7ba13d5ecd4918b9853c rasdaemon: Add new MA_LLC, USR_DP, and USR_CP bank types
+>> https://github.com/mchehab/rasdaemon/commit/2d15882a0cbfce0b905039bebc811ac8311cd739 rasdaemon: Handle reassigned bit definitions for UMC bank
+>>
+> 
+> I'm still missing here the exact steps a user needs to do in order to
+> decode such an error.
+> 
+> Please inject an error, catch the error message and show me how one is
+> supposed to decode it with rasdaemon in case the daemon is not running
+> while the error happens or the error is fatal and the machine doesn't
+> even get to run userspace.
+> 
+> If that is not possible with rasdaemon yet, then this patch should not
+> remove the error descriptions but limit them only to the families for
+> which they're valid.
+> 
+> Bottom line is, I don't want to have the situation mcelog is in where
+> decoding errors with it is a total disaster.
+> 
+> IOW, I'd like error decoding on AMD to always work and be trivially easy
+> to do.
+> 
 
-[auto build test WARNING on ras/edac-for-next]
-[also build test WARNING on tip/master linus/master tip/auto-latest v6.6-rc7 next-20231025]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+I have injected error, dmesg log below
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Muralidhara-M-K/RAS-Add-Address-Translation-support-for-MI200/20231025-154756
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/ras/ras.git edac-for-next
-patch link:    https://lore.kernel.org/r/20231025073339.630093-2-muralimk%40amd.com
-patch subject: [PATCH 1/7] RAS: Add Address Translation support for MI200
-config: x86_64-randconfig-071-20231026 (https://download.01.org/0day-ci/archive/20231026/202310261444.Z20oGCyr-lkp@intel.com/config)
-compiler: gcc-12 (Debian 12.2.0-14) 12.2.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231026/202310261444.Z20oGCyr-lkp@intel.com/reproduce)
+[ 3991.560180] mce: [Hardware Error]: Machine check events logged
+[ 3991.560195] [Hardware Error]: Corrected error, no action required.
+[ 3991.567119] [Hardware Error]: CPU:2 (19:90:0) 
+MC25_STATUS[Over|CE|MiscV|AddrV|-|-|SyndV|CECC|-|-|-]: 0xdc2040000000011b
+[ 3991.579205] [Hardware Error]: Error Addr: 0x0000000000000040
+[ 3991.585546] [Hardware Error]: PPIN: 0xabcdef0000000000
+[ 3991.591302] [Hardware Error]: IPID: 0x0000009600792f00, Syndrome: 
+0x000000000a000000
+[ 3991.599977] [Hardware Error]: Unified Memory Controller Ext. Error 
+Code: 0
+[ 3991.599985] [Hardware Error]: cache level: L3/GEN, tx: GEN, mem-tx: RD
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <yujie.liu@intel.com>
-| Closes: https://lore.kernel.org/r/202310261444.Z20oGCyr-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> drivers/ras/amd/atl/map.c:416:5: warning: no previous prototype for 'get_umc_to_cs_mapping' [-Wmissing-prototypes]
-     416 | int get_umc_to_cs_mapping(struct addr_ctx *ctx)
-         |     ^~~~~~~~~~~~~~~~~~~~~
+ From above logs, "Ext. Error Code: 0"  here we are printing only the 
+error code and from this patch error strings have been removed.
+User can refer the PPR to check what the error code refers to.
+or rasdaemon tool can print the respective error string for particular 
+error code.
 
 
-vim +/get_umc_to_cs_mapping +416 drivers/ras/amd/atl/map.c
 
-ea0e1d9c3eaf5d Muralidhara M K 2023-10-25  403  
-ea0e1d9c3eaf5d Muralidhara M K 2023-10-25  404  /* UMC to CS mapping for MI200 die[0]s */
-ea0e1d9c3eaf5d Muralidhara M K 2023-10-25  405  u8 umc_to_cs_mapping_mi200_die0[] = { 28, 20, 24, 16, 12, 4, 8, 0,
-ea0e1d9c3eaf5d Muralidhara M K 2023-10-25  406  					6, 30, 2, 26, 22, 14, 18, 10,
-ea0e1d9c3eaf5d Muralidhara M K 2023-10-25  407  					19, 11, 15, 7, 3, 27, 31, 23,
-ea0e1d9c3eaf5d Muralidhara M K 2023-10-25  408  					9, 1, 5, 29, 25, 17, 21, 13};
-ea0e1d9c3eaf5d Muralidhara M K 2023-10-25  409  
-ea0e1d9c3eaf5d Muralidhara M K 2023-10-25  410  /* UMC to CS mapping for MI200 die[1]s */
-ea0e1d9c3eaf5d Muralidhara M K 2023-10-25  411  u8 umc_to_cs_mapping_mi200_die1[] = { 19, 11, 15, 7, 3, 27, 31, 23,
-ea0e1d9c3eaf5d Muralidhara M K 2023-10-25  412  					9, 1, 5, 29, 25, 17, 21, 13,
-ea0e1d9c3eaf5d Muralidhara M K 2023-10-25  413  					28, 20, 24, 16, 12, 4, 8, 0,
-ea0e1d9c3eaf5d Muralidhara M K 2023-10-25  414  					6, 30, 2, 26, 22, 14, 18, 10};
-ea0e1d9c3eaf5d Muralidhara M K 2023-10-25  415  
-ea0e1d9c3eaf5d Muralidhara M K 2023-10-25 @416  int get_umc_to_cs_mapping(struct addr_ctx *ctx)
-ea0e1d9c3eaf5d Muralidhara M K 2023-10-25  417  {
-ea0e1d9c3eaf5d Muralidhara M K 2023-10-25  418  	if (ctx->inst_id >= sizeof(umc_to_cs_mapping_mi200_die0))
-ea0e1d9c3eaf5d Muralidhara M K 2023-10-25  419  		return -EINVAL;
-ea0e1d9c3eaf5d Muralidhara M K 2023-10-25  420  
-ea0e1d9c3eaf5d Muralidhara M K 2023-10-25  421  	/*
-ea0e1d9c3eaf5d Muralidhara M K 2023-10-25  422  	 * MI200 has 2 dies and are enumerated alternatively
-ea0e1d9c3eaf5d Muralidhara M K 2023-10-25  423  	 * die0's are enumerated as node 2, 4, 6 and 8
-ea0e1d9c3eaf5d Muralidhara M K 2023-10-25  424  	 * die1's are enumerated as node 1, 3, 5 and 7
-ea0e1d9c3eaf5d Muralidhara M K 2023-10-25  425  	 */
-ea0e1d9c3eaf5d Muralidhara M K 2023-10-25  426  	if (ctx->node_id % 2)
-ea0e1d9c3eaf5d Muralidhara M K 2023-10-25  427  		ctx->inst_id = umc_to_cs_mapping_mi200_die1[ctx->inst_id];
-ea0e1d9c3eaf5d Muralidhara M K 2023-10-25  428  	else
-ea0e1d9c3eaf5d Muralidhara M K 2023-10-25  429  		ctx->inst_id = umc_to_cs_mapping_mi200_die0[ctx->inst_id];
-ea0e1d9c3eaf5d Muralidhara M K 2023-10-25  430  
-ea0e1d9c3eaf5d Muralidhara M K 2023-10-25  431  	return 0;
-ea0e1d9c3eaf5d Muralidhara M K 2023-10-25  432  }
-ea0e1d9c3eaf5d Muralidhara M K 2023-10-25  433  
+Executed rasdaemon:
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+rasdaemon: Listening to events for cpus 0 to 191
+            <...>-1420  [002] ....     0.000399 mce_record 2023-10-26 
+04:28:37 -0500 Unified Memory Controller (bank=25), status= 
+dc2040000000011b, Corrected error, no action required., 
+mci=Error_overflow CECC, mca=DRAM On Die ECC error. Ext Err Code: 0 
+Memory Error 'mem-tx: generic read, tx: generic, level: L3/generic', 
+memory_die_id=0, cpu_type= AMD Scalable MCA, cpu= 2, socketid= 0, misc= 
+d01a000201000000, addr= 40, synd= a000000, ipid= 9600792f00, 
+mcgstatus=0, mcgcap= 140, apicid= 4
 
+ From logs,  We can see "DRAM On Die ECC error" which is for Ext Err Code: 0
+So, in rasdaemon Error strings are maintained.
+
+
+> Thx.
+> 
+> --
+> Regards/Gruss,
+>      Boris.
+> 
+> https://people.kernel.org/tglx/notes-about-netiquette
+> 
