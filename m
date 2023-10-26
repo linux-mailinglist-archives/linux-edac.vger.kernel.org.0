@@ -2,152 +2,147 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BD927D7FEB
-	for <lists+linux-edac@lfdr.de>; Thu, 26 Oct 2023 11:46:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D9A2C7D8099
+	for <lists+linux-edac@lfdr.de>; Thu, 26 Oct 2023 12:21:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229653AbjJZJqR (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Thu, 26 Oct 2023 05:46:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41828 "EHLO
+        id S229785AbjJZKVv (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Thu, 26 Oct 2023 06:21:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229518AbjJZJqQ (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Thu, 26 Oct 2023 05:46:16 -0400
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2042.outbound.protection.outlook.com [40.107.243.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB448191;
-        Thu, 26 Oct 2023 02:46:11 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=M2mc7Lp6koMpZIA57zO5+QBZ+OIBKdGtiblKs+z3sCBUND+M8WzJAYugjdfyOocxxdnU1zJXKSUZcutT27zeBeFO1cOexJ3OKh0zw1gzW6B7+Kj1tefNHt4J8Jl/lFZDUAFZ0q/+xE2hT+RMfyIaNFdomBEk7nvqCIb/SBlWc1r9B5f0O3nFjAPeC1P5jyWz2p10WXZHH1gWqR4W7WEUMtqu7w1HBTtvFTjn1oNj0awheqR1OtOo9jbiKL2nJ29Oc37Jtm8jjKLZjI0Aohk/NJ+a52jy+lOD8+RzXhHusA/dQEyvMd5mZ/i6CMOnLeK8AVVA0BzKNRjdI1hBCfXJ7g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=jSTq0hLTgBG5Ep/Z4i/pwCQmzUFnC0T9b66dG9xkluE=;
- b=F/CaHNvatXn2dFFKJ08L/PjBTLh0Xws5WYl3wAiZqq0ZsKZbrlaR43RPwf/V2cRguazaHpKSbySnKWiRwhDcKiGE1tQSfJer8SswiWxrpZmiXkZUEPZn3uJc4ukjWaVYbbW2MVr7c7k9RFP5fCM1ULemF7oWh/hWoqnt/YA+IAqrZh7J84noBpXt33LWz4E2lJwiGsTtEUNNLHsAFmx/D3QwRMSDJDQCFTYEc92TEkajziG6SCoJQNlwrshDjQXK1NL9PfnYOJXouLnASUOnqTi8WfHSyT2+gJIOvcrwGsJe8AiWX4drlgdwaQinLaZs0l13zcDG9z7sUGdW0aezvg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=jSTq0hLTgBG5Ep/Z4i/pwCQmzUFnC0T9b66dG9xkluE=;
- b=qbK4BDmbuJ2tyZhHxRWeC8tV0cifZsdA2v5KnUq6C4dp3vJpUhGRQzk9xayFkZi4wAAcnd9ugQEYoSkNm+h+7b5ZCpjdZI9TXfoWHpOPDT8mOJlDwARKNiI1SoFJMbFLsmWpcNTKO7rIL4Lnou6vBXjk7EIMbMR/x0cacwIdNwo=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from PH8PR12MB7325.namprd12.prod.outlook.com (2603:10b6:510:217::19)
- by IA0PR12MB9011.namprd12.prod.outlook.com (2603:10b6:208:488::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6933.19; Thu, 26 Oct
- 2023 09:46:09 +0000
-Received: from PH8PR12MB7325.namprd12.prod.outlook.com
- ([fe80::bd00:6f1a:9bd5:3b48]) by PH8PR12MB7325.namprd12.prod.outlook.com
- ([fe80::bd00:6f1a:9bd5:3b48%6]) with mapi id 15.20.6907.032; Thu, 26 Oct 2023
- 09:46:08 +0000
-Message-ID: <44dd915b-4b8d-1532-9ff2-521d02bc22df@amd.com>
-Date:   Thu, 26 Oct 2023 15:16:00 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: [PATCH v2 2/4] x86/MCE/AMD: Add new MA_LLC, USR_DP, and USR_CP
- bank types
-Content-Language: en-US
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
-        mchehab@kernel.org, Muralidhara M K <muralidhara.mk@amd.com>
-References: <20231025051455.101424-1-muralimk@amd.com>
- <20231025051455.101424-3-muralimk@amd.com>
- <20231026081911.GEZTog/4+zbd2wRK6u@fat_crate.local>
-From:   "M K, Muralidhara" <muralimk@amd.com>
-In-Reply-To: <20231026081911.GEZTog/4+zbd2wRK6u@fat_crate.local>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: PN3PR01CA0178.INDPRD01.PROD.OUTLOOK.COM
- (2603:1096:c01:be::12) To PH8PR12MB7325.namprd12.prod.outlook.com
- (2603:10b6:510:217::19)
+        with ESMTP id S235094AbjJZKVf (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Thu, 26 Oct 2023 06:21:35 -0400
+Received: from out30-130.freemail.mail.aliyun.com (out30-130.freemail.mail.aliyun.com [115.124.30.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9592199;
+        Thu, 26 Oct 2023 03:21:27 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R881e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046059;MF=xueshuai@linux.alibaba.com;NM=1;PH=DS;RN=21;SR=0;TI=SMTPD_---0Vuxb1G0_1698315681;
+Received: from 30.240.112.233(mailfrom:xueshuai@linux.alibaba.com fp:SMTPD_---0Vuxb1G0_1698315681)
+          by smtp.aliyun-inc.com;
+          Thu, 26 Oct 2023 18:21:23 +0800
+Message-ID: <8093ceb3-0857-4c36-8856-72a158e47b6c@linux.alibaba.com>
+Date:   Thu, 26 Oct 2023 18:21:19 +0800
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH8PR12MB7325:EE_|IA0PR12MB9011:EE_
-X-MS-Office365-Filtering-Correlation-Id: 6dc7cb64-88e9-4a70-2cbc-08dbd608615c
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Bx9tWphTzeQV517ZKti08tBmL1J9T6eqAArIWLgeSrUZ2EnUkNguX1Ttpurb9tMx7ZhgtgzzZOAAie+Zo3Z9TIqo6ljQqQaiZ3SKijLZNiZboR0qKhYCETnCE/Gsimrf1CTR1FORdfRxN7wgFY852wk5pUpTRmqO0dfFE3umuvAzydEy8g22jTn0aQ7JKVUmF1c5rlzpsb2LiNG6K0pnVTnaUdIQu5IPdt0we5vLRzetXFgFxIVWQiBTectno2BMXah/oUNZQSTBR3INH+b2l+FHYHFLzMy/j3rSJ4ECrFADpehtM3pOgHSh7zoSr7eM2Wsuid2EuDiI069LUz5NfRlnrEpXKYKQRHVW5NdOjNCAhr7ZzRPJPbNlNHH/BvRG0PaLz+GXGC1efvj6q7vsWfGueW+UUek9IruffOif8lp3UjQ3fGCQnD0Sc8fNBuyKxeaaITakdS/Y0utur4Gi/3FAx08BDJD0u+2jwc9teLozAgQGMLeTapwhfTRJsapE0k44l3c3Ryw4S+Fg9wxaHfx8dUUSPJ2qhp6kmxrO77wAIw1pOKi9ITVGQzafc2QYz60W6VKrNyR7Iby6prMgg0hjOo5rXR9UVRzXrA9xadovitmpWyfxUn5y5kwmIIdx0xdH2LEXZjdY93RBCXwkow==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH8PR12MB7325.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(136003)(376002)(366004)(396003)(39860400002)(346002)(230922051799003)(1800799009)(64100799003)(451199024)(186009)(31696002)(15650500001)(4744005)(6486002)(8676002)(966005)(8936002)(31686004)(6666004)(66476007)(66946007)(66556008)(41300700001)(4326008)(478600001)(6916009)(5660300002)(316002)(2906002)(6506007)(53546011)(36756003)(38100700002)(2616005)(26005)(6512007)(83380400001)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?QWtpaUt1NEoyTTJNeCtQaWtaSkx0MEE2MzRxWjhnRFphLzNjek1jUXVsZXdy?=
- =?utf-8?B?NzBXR1Mvejh1Qyt6KzlkZDJnS0tpTWVNLzR3bzVsMlQrOG1kcGhqK0Q3bEZT?=
- =?utf-8?B?Q3BPdmhkTndtMGk5VTJVaHFhajg0MEwvb3Z1VWRla3hNanJDZC9FcTI3c0Ux?=
- =?utf-8?B?SzNoK2x4clNqYnAzdlBvWk1pLzdVU0ZzRW9ubzBtU2xQN1NXbmpmN0tlWmRW?=
- =?utf-8?B?K3BFV0liMG8zV3lIdklZbU1acFl3N1Vod08xSEM5OE5kUW9aekRyQlpYVXo3?=
- =?utf-8?B?VDdIYnUxYlQvSm05SGR5alhEUVZ2T3BPdFhBanhGaFI1TWVpeUJtck5VUGxu?=
- =?utf-8?B?MUdodEFoM2xiSEJtclNuTkJvaDIyUGpIUXNXOVBrdkkvSEtXZ1dsVWdRQWw2?=
- =?utf-8?B?c1h2dDkvcklmSkJySGk4RUJDRWhjUnJob2dRZVcwNkpaWGpUL1pycHhETDFw?=
- =?utf-8?B?R3k5cTJFcDVrWmRYcEd5RjNlWTZkc2RzSFAzWUVrdGRNZFhvUUw1UklVTFoy?=
- =?utf-8?B?TFF1aExRajk5QUw1QkFlTlJ0UGlxcW00Vzk4Q2x2MGxxVlduQWNMWFk5a2Ir?=
- =?utf-8?B?c05wWDJTeVhsTGhUendmbjNETWlVMCtodEN1c0wzZithMFRKTEJIak90QTcr?=
- =?utf-8?B?aGh5V04rNSttaTY4YTkrSEs0NnFrUTV1OER1K1U5bE4xeFR2SnZhZ3BLUDNa?=
- =?utf-8?B?cVNJY2UwQXA4Rzdid2JvQWdwMVpqUUtBc2NMY0sxNnRGUkRyVGZ6U2QyT1RP?=
- =?utf-8?B?NXJUOWYzR0lFVHl6Q2plRW9xN2xNMEM0ekZrWDdLS1RmQVlyQWRtWUtSdDg4?=
- =?utf-8?B?T3dmRGVJM0FuSlNVTk5VRnk0YWl1U1JmemR3RVMrVjlNMngveUQzQlFRM3hI?=
- =?utf-8?B?eEpUbEZ2TW1TamQ2c1lZbEEwMEZRZGptR0M5d2J4TlBnSGhXZTJFQTB0enZL?=
- =?utf-8?B?V09mZ0xxR2wzTDdiKzh1Tk0vZm93ejVRUW9EcldOTVRKeGhjMkhQZE40RzRw?=
- =?utf-8?B?RWpVWnlBVGdDTjBNYklwQ0pmV3dCdkQrNkY4ZWRZemZiZnZuYVlwdUlrcGRr?=
- =?utf-8?B?UjU2V1dTYTNnRkNoOWVqOTZsME1SejdKQ01MTWRCT1NuSEJkRjUwTVZQRUZw?=
- =?utf-8?B?R1EwL2tXY3NSLzNySGlmZVhnYmJQQnNkZ2xzVlZqL2dpZUo4MFpDT05RbUd2?=
- =?utf-8?B?dEVCTkJVdE9aVkJZS3NiazgyVWdrUTBjRjZNQWhDaENIWTc2UmJCNHVjd1c2?=
- =?utf-8?B?S0hOZERRbFFuMDY1eXpuWnN6aDNmZFUyK0QxSFlCakMwTGNMQnlwdzNrQU94?=
- =?utf-8?B?Ui80dTJ6Q2ZYa1BSLzdWbFlWTE9TU1RCaDcvcVZQTHA3WmJTTzN2OUNUaThG?=
- =?utf-8?B?Z09XYkpoRjB1Q3luMncwZ1pULytlZEcycTZUT2ZOMUExdGt4Z0dqUkdZNmJN?=
- =?utf-8?B?TEpJVTFINklUWFJESXl0NC9oYjJrMmFTZnk0bWtMSzRHaG5yaFpmc0k0T3hm?=
- =?utf-8?B?ZHVpVHMvVFl0RTR2R1JMdmttOWgzb29FZitZWkhyaElwUXhGSDBaZ1JyQ2tn?=
- =?utf-8?B?U2xEMDIrUGpWQ1JMRzBZUkZBVkp1UmFSREgwbU9WVUFURmxCcXBLNFFKb2l2?=
- =?utf-8?B?Q0VJRThpT1dRVHRVVzJnNTFYbTVOd0RXaHBnOFdTa0V0SFNNcEREQ3BjVGNz?=
- =?utf-8?B?TER0UXJTVWxuUGdGMVZuSWFaZ3NYeVk4Z2NWQjRkeVI1dm1JaGVMZjdxb1g1?=
- =?utf-8?B?YXlQVEJvSG5YRHBiaGVBd2VTRWg0RkV2aVhZYUhzZXcyZDAvcFZoYXJuT0px?=
- =?utf-8?B?eVhETFNLQmxhZmhJLzd4R2p2VzJPcG93QnFoaWFQMy9RNGJjNUUrYmlDM2xj?=
- =?utf-8?B?eWtrc1gxUHVTRHY3emxHUDcvdWRkU09BNnAvaXY1VUhhR1gwWWFjTmR4S25Q?=
- =?utf-8?B?TC9EYzVibEhtRGkyb3JxOWZ4VzhKMVdMVW5YZmt4dTZDM3VWOUh5RS9wNkFK?=
- =?utf-8?B?QlA1YnlFbnZNKzhzekdGZ0JTTDhCSUQxbkcrZTdmVWE3V1QrdllmdHJyZ3lY?=
- =?utf-8?B?VldGcFRCbmoreDRvMmluMlBaeUdVd0dHNUZQZ0FIY01neWtRQk5MaTlHNmJD?=
- =?utf-8?Q?CjrBHZ2ABMgvwW4OlQNMNTCT/?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6dc7cb64-88e9-4a70-2cbc-08dbd608615c
-X-MS-Exchange-CrossTenant-AuthSource: PH8PR12MB7325.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Oct 2023 09:46:08.7834
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 6PbyArLRnvo99PpV06UZ48IY+bAQoIG+yZ77B5/K3oW3jIPKBZatzsGqNFRQOSzCtWMgOGUmnby8NyKQXDxG/Q==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA0PR12MB9011
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC PATCH v2 0/9] Use ERST for persistent storage of MCE and
+ APEI errors
+From:   Shuai Xue <xueshuai@linux.alibaba.com>
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     keescook@chromium.org, tony.luck@intel.com, gpiccoli@igalia.com,
+        rafael@kernel.org, lenb@kernel.org, james.morse@arm.com,
+        tglx@linutronix.de, mingo@redhat.com, dave.hansen@linux.intel.com,
+        x86@kernel.org, hpa@zytor.com, ardb@kernel.org,
+        robert.moore@intel.com, linux-hardening@vger.kernel.org,
+        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-edac@vger.kernel.org, linux-efi@vger.kernel.org,
+        acpica-devel@lists.linuxfoundation.org,
+        baolin.wang@linux.alibaba.com
+References: <20230925074426.97856-1-xueshuai@linux.alibaba.com>
+ <20230928144345.GAZRWRIXH1Tfgn5EpO@fat_crate.local>
+ <f654be8f-aa98-1bed-117b-ebdf96d23df1@linux.alibaba.com>
+Content-Language: en-US
+In-Reply-To: <f654be8f-aa98-1bed-117b-ebdf96d23df1@linux.alibaba.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
+        UNPARSEABLE_RELAY,URIBL_BLOCKED,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-Hi Boris,
 
-On 10/26/2023 1:49 PM, Borislav Petkov wrote:
-> Caution: This message originated from an External Source. Use proper caution when opening attachments, clicking links, or responding.
-> 
-> 
-> On Wed, Oct 25, 2023 at 05:14:53AM +0000, Muralidhara M K wrote:
->> @@ -119,6 +120,8 @@ static struct smca_bank_name smca_names[] = {
->>        [SMCA_SHUB]                     = { "shub",             "System Hub Unit" },
->>        [SMCA_SATA]                     = { "sata",             "SATA Unit" },
->>        [SMCA_USB]                      = { "usb",              "USB Unit" },
->> +     [SMCA_USR_DP]                   = { "usr_dp_pcs",       "Ultra Short Reach Data Plane Controller" },
->> +     [SMCA_USR_CP]                   = { "usr_cp_pcs",       "Ultra Short Reach Control Plane Controller" },
-> 
-> Why aren't those strings "usr_dp" and "usr_cp" too?
-> 
 
-Sure. I will modify them
+On 2023/10/7 15:15, Shuai Xue wrote:
+> 
+> 
+> On 2023/9/28 22:43, Borislav Petkov wrote:
+>> On Mon, Sep 25, 2023 at 03:44:17PM +0800, Shuai Xue wrote:
+>>> After /dev/mcelog character device deprecated by commit 5de97c9f6d85
+>>> ("x86/mce: Factor out and deprecate the /dev/mcelog driver"), the
+>>> serialized MCE error record, of previous boot in persistent storage is not
+>>> collected via APEI ERST.
+>>
+>> You lost me here. /dev/mcelog is deprecated but you can still use it and
+>> apei_write_mce() still happens.
+> 
+> Yes, you are right. apei_write_mce() still happens so that MCE records are
+> written to persistent storage and the MCE records can be retrieved by
+> apei_read_mce(). Previously, the task was performed by the mcelog package.
+> However, it has been deprecated, some distributions like Arch kernels are
+> not even compiled with the necessary configuration option
+> CONFIG_X86_MCELOG_LEGACY.[1]
+> 
+> So, IMHO, it's better to add a way to retrieve MCE records through switching
+> to the new generation rasdaemon solution.
+> 
+>>
+>> Looking at your patches, you're adding this to ghes so how about you sit
+>> down first and explain your exact use case and what exactly you wanna
+>> do?
+>>
+>> Thx.
+>>
+> 
+> Sorry for the poor cover letter. I hope the following response can clarify
+> the matter.
+> 
+> Q1: What is the exact problem?
+> 
+> Traditionally, fatal hardware errors will cause Linux print error log to
+> console, e.g. print_mce() or __ghes_print_estatus(), then reboot. With
+> Linux, the primary method for obtaining debugging information of a serious
+> error or fault is via the kdump mechanism. Kdump captures a wealth of
+> kernel and machine state and writes it to a file for post-mortem debugging.
+> 
+> In certain scenarios, ie. hosts/guests with root filesystems on NFS/iSCSI
+> where networking software and/or hardware fails, and thus kdump fails to
+> collect the hardware error context, leaving us unaware of what actually
+> occurred. In the public cloud scenario, multiple virtual machines run on a
+> single physical server, and if that server experiences a failure, it can
+> potentially impact multiple tenants. It is crucial for us to thoroughly
+> analyze the root causes of each instance failure in order to:
+> 
+> - Provide customers with a detailed explanation of the outage to reassure them.
+> - Collect the characteristics of the failures, such as ECC syndrome, to enable fault prediction.
+> - Explore potential solutions to prevent widespread outages.
+> 
+> In short, it is necessary to serialize hardware error information available
+> for post-mortem debugging.
+> 
+> Q2: What exactly I wanna do:
+> 
+> The MCE handler, do_machine_check(), saves the MCE record to persistent
+> storage and it is retrieved by mcelog. Mcelog has been deprecated when
+> kernel 4.12 released in 2017, and the help of the configuration option
+> CONFIG_X86_MCELOG_LEGACY suggest to consider switching to the new
+> generation rasdaemon solution. The GHES handler does not support APEI error
+> record now.
+> 
+> To serialize hardware error information available for post-mortem
+> debugging:
+> - add support to save APEI error record into flash via ERST before go panic,
+> - add support to retrieve MCE or APEI error record from the flash and emit
+> the related tracepoint after system boot successful again so that rasdaemon
+> can collect them
+> 
+> 
+> Best Regards,
+> Shuai
+> 
+> 
+> [1] https://wiki.archlinux.org/title/Machine-check_exception
 
-> --
-> Regards/Gruss,
->      Boris.
-> 
-> https://people.kernel.org/tglx/notes-about-netiquette
-> 
+
+Hi, Borislav,
+
+I would like to inquire about your satisfaction with the motivation
+provided. If you have no objections, I am prepared to address Kees's
+comments, update the cover letter, and proceed with sending a new version.
+
+Thank you.
+
+Best Regards,
+Shuai
+
