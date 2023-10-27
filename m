@@ -2,195 +2,109 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 652D57D8DF4
-	for <lists+linux-edac@lfdr.de>; Fri, 27 Oct 2023 07:05:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A34D7D94CB
+	for <lists+linux-edac@lfdr.de>; Fri, 27 Oct 2023 12:09:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230178AbjJ0FFu (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Fri, 27 Oct 2023 01:05:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43512 "EHLO
+        id S1345671AbjJ0KJi (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Fri, 27 Oct 2023 06:09:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234816AbjJ0FFs (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Fri, 27 Oct 2023 01:05:48 -0400
-Received: from NAM02-DM3-obe.outbound.protection.outlook.com (mail-dm3nam02on2049.outbound.protection.outlook.com [40.107.95.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 092831B3;
-        Thu, 26 Oct 2023 22:05:46 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Dmy2a8nknQvP8nv+DdpkhdQgXQFO6yqY62DjBY+TZ9m7P336pG6c7t/nTNjCf2Q0ZNtZ8kLmdQ3/6xu5M8qF18+hhrwG3QL20xnoZCpj4VuhzcRkXK7tjp2bksp4x4i1iVpf/m/pA+SLAb8GP/onGBwOXP4H+IOEJQKoCfMJ/8xNZN8E7biuygFq/2lZz37iPjGtzoAcywPslNq2i3TwCugJXAOLYbaMJTn1GWCNxDeGSp7AYqcr+8a3x9mO/EOaXRzwivwMwojaGito1MSmg5z4VYC0092haJvYROiJqhCbg0NuiMEGzoViT05Lfx4+09HvAWhwxAy1nx/c+ftzKg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=f2K6gj88dBi8ehtgGrg7VZ4FwTXBqyhc65RMvhTbS08=;
- b=b7Suzhl6LgfSd4l/jb80RAOiI0T3U+2XLPnMuo6+Exc9qj7d4s4OqvlPC308JVvWNUJIpUWi34L1KyQXksuihDt3MX7wP+zYTRdHnu2GwSkIPcLjZYPZQwcZUV+ky6wV/t4JNDduALDwAiy1t78GxTTI7Ha/uLrJVSiLi2foVQ7xBKRA40HBTARkM8CEw/wq2J2xMQEQwFuEDB/HIJ6ebnKTRTCxJreCHNbMCaSaFp26kWLZ7+TtwpH9pHpJOUjlx6VKZ6VNjFyQSGTUS3P/y8N1cXX9BJEU51lRY5q38mIAXpSTkA6RV2tuhBS+R+qeHU4GclRZyXbd+sBzk5d95w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=f2K6gj88dBi8ehtgGrg7VZ4FwTXBqyhc65RMvhTbS08=;
- b=ENfzeKQkxI1Hva39P1xlK2o7CUMsXS43Z0hF0MO6aCYqcY+H8T9endlDfeD5tTeu/b3952uJICoLfgfbW47nN18a5CsqODvHbliA/UVcFfge67xEcVffqq2B4jX3wA9ymgKrATa/16qZHceZhj1DqVkCYXIEuKlgyzNME/zWHqs=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from PH8PR12MB7325.namprd12.prod.outlook.com (2603:10b6:510:217::19)
- by DM4PR12MB6662.namprd12.prod.outlook.com (2603:10b6:8:b5::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6933.19; Fri, 27 Oct
- 2023 05:05:43 +0000
-Received: from PH8PR12MB7325.namprd12.prod.outlook.com
- ([fe80::bd00:6f1a:9bd5:3b48]) by PH8PR12MB7325.namprd12.prod.outlook.com
- ([fe80::bd00:6f1a:9bd5:3b48%6]) with mapi id 15.20.6907.032; Fri, 27 Oct 2023
- 05:05:43 +0000
-Message-ID: <ba6eea97-116a-4678-7800-d24692c65cd6@amd.com>
-Date:   Fri, 27 Oct 2023 10:35:33 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Content-Language: en-US
-To:     Borislav Petkov <bp@alien8.de>,
-        Yazen Ghannam <yazen.ghannam@amd.com>
-Cc:     linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
-        mchehab@kernel.org, Muralidhara M K <muralidhara.mk@amd.com>,
-        Avadhut Naik <Avadhut.Naik@amd.com>
-References: <20231025051455.101424-1-muralimk@amd.com>
- <20231025051455.101424-2-muralimk@amd.com>
- <20231025190818.GDZTlnomnaT8zxnbxX@fat_crate.local>
- <b3b21eaa-226f-e78f-14e3-09e2e02e38d6@amd.com>
- <20231026111448.GAZTpKKLI6LG1/COFE@fat_crate.local>
- <850a3e78-f663-c696-2141-7aefb043b6da@amd.com>
- <20231026123754.GBZTpdojw+pNuZMyJy@fat_crate.local>
- <dd13363e-fd7e-4e88-8c23-91cfffe11dc3@amd.com>
- <20231026134016.GDZTpsQDYU4Ll6sAA3@fat_crate.local>
-From:   "M K, Muralidhara" <muralimk@amd.com>
-Subject: Re: [PATCH v2 1/4] EDAC/mce_amd: Remove SMCA Extended Error code
- descriptions
-In-Reply-To: <20231026134016.GDZTpsQDYU4Ll6sAA3@fat_crate.local>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: PN2PR01CA0037.INDPRD01.PROD.OUTLOOK.COM
- (2603:1096:c01:22::12) To PH8PR12MB7325.namprd12.prod.outlook.com
- (2603:10b6:510:217::19)
+        with ESMTP id S1345670AbjJ0KJh (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Fri, 27 Oct 2023 06:09:37 -0400
+Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5936AB0;
+        Fri, 27 Oct 2023 03:09:35 -0700 (PDT)
+Received: from localhost (localhost.localdomain [127.0.0.1])
+        by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 65C4A40E01A3;
+        Fri, 27 Oct 2023 10:09:33 +0000 (UTC)
+X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
+Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
+        header.d=alien8.de
+Received: from mail.alien8.de ([127.0.0.1])
+        by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id Y3oUyM1dWbPJ; Fri, 27 Oct 2023 10:09:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
+        t=1698401371; bh=L8XedwDqBaH4e+x9C7cw85DjpNUpE28RmOdNZJ+MI24=;
+        h=Date:From:To:Cc:Subject:From;
+        b=YdJFbx3ZIowdFziEfnR1FYn/Ve+8gd4I+9I7Ahvmer9lg/l3Jn5Xhmfib6fmU1O5p
+         yXvfbay/hHkpBglowNovNiyQxH1+nGAhhbaiVdJbzTlmo0nv3cj9hCpL8ZNZ08qye2
+         K9KPvUsyibnZ6Zh61a4EJqeFUq5KbDFs/xk/GvZJBOyb8eFmEEgpRw7NRH0cmzmoZ+
+         H+roLmtOBJu9daIh9U9rsX14euJ2MmGHwln57mu1TU+LFpXFY9qdbqtCJxEWjbpEWS
+         /g9Sa3a48jMKUCm8Xr5RjWJHviCVcoeKvTbIPSMLhAQ5YiwLfpzGXn7l0ip25hxsdv
+         1TFxBn3sDYbuz7vSlRh6TxCI9zGCxoX5QVEH0LEgUlqLiYHwi07zVOc6XuXGNXD0Jo
+         Moqe3eTG+Ks6YzOWZuylxtWmqneZQboRy4jNLhtnImFXt+PmBffoe/gpWkStBwOa/3
+         n6WhNaw8FZFrxX0FyA+hiUfnBHAMnnaNo+NGDfFu7MNnxK52ZwMeeugVLIRRLu3rBk
+         bKxIH/l0wZA2PProMAGc2b9HjRZmXpPvUgkDs7FJGEswADPKgtApEsnTLVR9BX8/+f
+         hZbZztoHPit+z+iJiNZ3EKsgJM5i3vGHoLEPG77zI42NJPeoTAsRJSIpQOPP5KIIBr
+         mFBZwxMz4VCqEC1s2dXrkW4Y=
+Received: from zn.tnic (pd95304da.dip0.t-ipconnect.de [217.83.4.218])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
+        (No client certificate requested)
+        by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 1F9E440E018F;
+        Fri, 27 Oct 2023 10:09:28 +0000 (UTC)
+Date:   Fri, 27 Oct 2023 12:09:20 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-edac <linux-edac@vger.kernel.org>,
+        lkml <linux-kernel@vger.kernel.org>
+Subject: [GIT PULL] EDAC updates for v6.7
+Message-ID: <20231027100920.GAZTuMUJEP5LI7mZ+S@fat_crate.local>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH8PR12MB7325:EE_|DM4PR12MB6662:EE_
-X-MS-Office365-Filtering-Correlation-Id: b0e5af5b-37b5-4f2d-cb50-08dbd6aa5eba
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 6kuOlfboQRiQTtxWbjQC4ZxPVG2Ynr3TJXvk6YhHUvNjspaPQDmkIqkAp9fR+HZr0YXLl1i/Dgt2YM1/RTHuC+l4KA6hGfqx8FjxsSq9SxKvxDdu6pD2OX8Rnm+X0DS9ENIZssKk5mCcKgZyinOUYgma8j1kpvtZGNAipTsVztEJc8UszzB1iYm/dL3PlvQ9rM6SAqKfAm+gsGz3QVhfpnlcQNqJ6yzpmeHD8t8NHn+Y5AdEAdnAfjpWUAXA0ttvhzTviRxPesXmJfSRwofAblrJX/XnHTZ/coCQ2Xh6GV78iesA5rAbS7U/cSdiuKIsvVKWJL3fH3LrMGWrsooFbSTr5Edm7Kuv4DmbI8f0H0ujIHJDuW+GB86ziPLOb3GMjdobBWWKDfK2ojajUnrNlifbWgOlJDZNyZHMXvEb0uVPw9aVud4m7fu6NGPO95EERhYCPoOui6B0QECmcon46xPqpbDYvPil9Qqq0tq7ge2JihqBXKOaB0kZXpLBi2tpN5ChrKS1FWCcacz06UJXAW52ed9Sd/5NQBNOJn0d9obOFggGypueg7Gzu/iuAYGFdPB8UFcQrcs9rovEp6YGFnaht3h9y61YhiU2dlS6QqVhcrSBTpiPU1ovux3GunmtbZf3imEZj4N0JY1ShaDPAK0ip21ymk4GEPsJ6xFOFzqfZ/v3i+9o1OzMTjNiWPi7
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH8PR12MB7325.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(376002)(39860400002)(396003)(136003)(346002)(366004)(230173577357003)(230922051799003)(230273577357003)(1800799009)(186009)(64100799003)(451199024)(31686004)(41300700001)(31696002)(38100700002)(53546011)(83380400001)(4326008)(36756003)(8676002)(8936002)(4001150100001)(2906002)(5660300002)(54906003)(66556008)(66476007)(66946007)(6636002)(316002)(26005)(2616005)(110136005)(6512007)(478600001)(6666004)(6486002)(966005)(6506007)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?TVVtZnRLZWhDZkxWL0tvYnUzclg1MThjbkpKSXVad2cxS3REenhkNmNuenRk?=
- =?utf-8?B?MzQxZW5jcmhmVEZwbC85UklUcW5iVSt0aHZKS3B4R1dtdkdzUGhDZlMwMVpD?=
- =?utf-8?B?azY1SjRtV1Q5and6SksrczZnNEFqNkFNZDM0MEw2RWRYeG1mNGFVUUdpL2hV?=
- =?utf-8?B?eG1NTkJaSWFSekpDaXdGa3ZZWlNob291cWpZZUVZOEZSUXVncHQyRzZMMnVj?=
- =?utf-8?B?bitUeEdXQ1ZEU050Z21uMTVTcU85blY5L2E3UGRhNXBVOWJYV09MZzBkaTlh?=
- =?utf-8?B?RU9tc09yOXFWVzBFc0hHK2dtblZ3VzJ0MFliUXY4TFk5VWJsY1I4dG5Mc2VN?=
- =?utf-8?B?QlBwZlJhVVU1N0NaZnhhdE92bXJML2VaaUJ2VHZTYmhJQ08vc1ZDRjlpL0Nq?=
- =?utf-8?B?d01JYnNMWjFUVHJsZEQ3SGw1TzhScW00ZERmcWtpUElBTzNJUTA1VXQ5ZHpZ?=
- =?utf-8?B?VzFBNzdqdzdadFNIb0Q4bHQ5MjJRR3B6Vmk4REhYVDNldk1Rb0hTbmMxQ0Jn?=
- =?utf-8?B?NlgrcHlWaDhxYXpWbWwyWUltZTBTTUh6NkUvUERCQU1ZbGdXRTFlTlBLa2N5?=
- =?utf-8?B?cUdENXFTL0V0OVhtbjcyUjhkQzFoYUR1dkdWSGQxNGpuL3lSZ3BUV0dENFBa?=
- =?utf-8?B?TGdQL3dWUnBMalpYclgyeHlCQXVab29UakNNbVo0VkpoY0FiTEpkTmRzYmpB?=
- =?utf-8?B?VUw4WWVPL3FWeWE1VTd3R1FqOVNHRXBKNmNvZ3IxcHBxd0xXcDhUTnh1Rnoz?=
- =?utf-8?B?c1VvMU9lOStNZTV3SWtmMEk5NDdSQmpYdHgrczEzaUNrd2FTMUNmeWdLR0Nv?=
- =?utf-8?B?Vlozd0Q5WndmQ0tyMHJLRVBZamdGeTFVdGV5aVh5cStycTF0MnU4eURHTTNQ?=
- =?utf-8?B?V1NjTjZWNkFvdUlQd0tUL2JLczNwZmRYSkVQWVQzV1pDeFBnYlA4VmhQanRx?=
- =?utf-8?B?Rk1pMkZ2ZWdhd1lEQmVjQ3JLR2hFNzlIc2sxQ0JUYktCQitPM3EzSXI3NFdP?=
- =?utf-8?B?d1RTdTdSb0tDL1h1ZVo0b1dLZlpEc0lxeW1PUGdZT2VtQnAxR2ZjTFBzOXo0?=
- =?utf-8?B?eEZRaTRlelQwZHg4QzRKMCtxR3BVWnU5VG40eWM3K2VCUFF4dFZUNlYyZGZk?=
- =?utf-8?B?clUwY0RTOEtodUpXdTlHRmU5aFE3dnNtbGJoRktFMXowSURzVHhuVHRvcS9v?=
- =?utf-8?B?WTJwRDQvbFN4OVJtRnRxUUtaMDdvSG9meSs2Rkt5UnNRbks3SGR6c0JsNHAw?=
- =?utf-8?B?YjA1R1BscTJOVHQrT2tyRlJDQ1NrY2VBSlE0a25zMUtHUHVKbENoUXdDUktH?=
- =?utf-8?B?cVpaTkNNd3U5eXkvd0tqNGhtb2RvTXRtVUFWL2w0eUtxVlJocnkrVWJjeStm?=
- =?utf-8?B?WFI2aXQ4U2hZai9ackdWVmdNSTFJVGcvZEdJMXYxbmRtZVJNU2hQNEJNL0Y5?=
- =?utf-8?B?cCtISU1GYUl3UmV4dHZNbXFzQjF0TWZTUmhneTBXZUpXcmltVmxzVUlORTc0?=
- =?utf-8?B?TDFzUlRCL0lTTWVidXBoYWNxbjN0QkpXTWViWmtqRi8wb0ZCWkQ0TUJlVXpz?=
- =?utf-8?B?b0hLTHBNb29GT0xHaFNMb2ZIRFl0N3VhUW9USno4WklodGlaRnFrQVZpRzRS?=
- =?utf-8?B?bFIwUGZ2YUhrWDEzRnIvaHk1MjdleXo1ZEREZVBrdVhzcWNmTDZUZ1Zrcnow?=
- =?utf-8?B?OFYzUUNUUDRETjhRL0VZT0R4ZDQzOWoxTTNTbjhlOW95Y3hUK1FtN29rVitv?=
- =?utf-8?B?SjY0ZjdhZ0xnMnZ0NjRRYXM0a0FnVlhNd3pzWjAzeHhpa245dUJUbnY2Q3Zt?=
- =?utf-8?B?Nm5vbDlhOVhJb3ZTZ2lIcEJlWlFWd3BQUjFVY3M5M1h2NlE1Umt6aEtwWHJi?=
- =?utf-8?B?bHU5aHNrMzJZMjFmOU9HSGFlZGNIeEppcWFXMVNkbHBJekUwWTZ4Z1RTdWNh?=
- =?utf-8?B?NkFEY2pDZEtPRkUxYlJIZ1Mza2xpS1BBZWhOTzExMmFpekZwQ3ZwSUJyVFEv?=
- =?utf-8?B?WlRwT1p5d05PUTlMMEUwWEwwVmltN1Nlb3lhOU5FdnZTMWdSWHZabW5yTGVq?=
- =?utf-8?B?citXeWFNaTEwL1RiRDRYUG8rS0JOcDc0OUw0SWExNDZrS21XUW5HamRNQXU5?=
- =?utf-8?Q?N91+irnSLiXW19UlgAa8HTNIP?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b0e5af5b-37b5-4f2d-cb50-08dbd6aa5eba
-X-MS-Exchange-CrossTenant-AuthSource: PH8PR12MB7325.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Oct 2023 05:05:42.8920
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 4zgPL3EBmE35ps3ND5/ih5Eb+pZcTvZLMY0pBLlZ/smTWrLgAK0PNHIdoRyPiE0E4UlbCpHQSXpzD7olG6coZg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB6662
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
+Hi Linus,
 
+please pull EDAC updates for 6.7. I know, the merge window hasn't opened
+yet but lemme send you the stuff which is ready anyway and since you
+prefer early pull requests...
 
-On 10/26/2023 7:10 PM, Borislav Petkov wrote:
-> Caution: This message originated from an External Source. Use proper caution when opening attachments, clicking links, or responding.
-> 
-> 
-> On Thu, Oct 26, 2023 at 09:05:51AM -0400, Yazen Ghannam wrote:
->> Post-processing is one of the features that Avadhut implemented.
->>
->> https://github.com/mchehab/rasdaemon/commit/932118b04a04104dfac6b8536419803f236e6118
-> 
+Thx.
 
-Hi Yazen, Thanks for pointing to this commit. Yes I do remember.
+---
 
+The following changes since commit 8a749fd1a8720d4619c91c8b6e7528c0a355c0aa:
 
-> Yes, now try to decode the error with rasdaemon this way, by supplying
-> the fields.
-> 
-> Then explain step-by-step what you've done in the commit message and in
-> a documentation file in Documentation/ras/ so that people can find it
-> and can actually do the decoding themselves.
-> 
-> It needs to be absolutely easy to decode those errors. Not tell people:
-> "go look for the error description in the PPR".
-> 
-Yes, we have offline decoding option in rasdaemon
+  Linux 6.6-rc4 (2023-10-01 14:15:13 -0700)
 
-For example:
-$ rasdaemon -p --status 0xdc2040000000011b --ipid 0x0000609600092f00 --smca
-2023-10-26 23:51:34 -0500, Unified Memory Controller (bank=0), mca: DRAM 
-ECC error. Ext Err Code: 0 Memory Error 'mem-tx: generic read, tx: 
-generic, level: L3/generic', mci: Error_overflow CECC, Locn: 
-memory_channel=0,csrow=0, Error Msg: Corrected error, no action required.
+are available in the Git repository at:
 
-Observed the error string "mca: DRAM ECC error. Ext Err Code: 0"
+  git://git.kernel.org/pub/scm/linux/kernel/git/ras/ras.git tags/edac_updates_for_v6.7
 
+for you to fetch changes up to 6f15b178cd6315c997981f76c6ebed7ad39144c5:
 
-Also, we can pass particular family/model to decode, Ex:for MI300A
+  EDAC/versal: Add a Xilinx Versal memory controller driver (2023-10-23 19:41:27 +0200)
 
-$ rasdaemon -p --status 0xdc2040000000011b --ipid 0x0000609600092f00 
---smca --family 0x19 --model 0x90 --bank 19
-2023-10-26 23:52:09 -0500, Unified Memory Controller (bank=19), mca: 
-DRAM On Die ECC error. Ext Err Code: 0 Memory Error 'mem-tx: generic 
-read, tx: generic, level: L3/generic', mci: Error_overflow CECC, Locn: 
-memory_die_id=1, Error Msg: Corrected error, no action required.
+----------------------------------------------------------------
+- A new EDAC driver for Xilinx's Versal integrated memory controller
 
-Observed the error string as "mca: DRAM On Die ECC error. Ext Err Code: 0"
+----------------------------------------------------------------
+Shubhrajyoti Datta (2):
+      dt-bindings: memory-controllers: Add support for Xilinx Versal EDAC for DDRMC
+      EDAC/versal: Add a Xilinx Versal memory controller driver
 
-Thanks for the inputs. I will add the steps in commit message and in 
-Documentation as well.
+ .../memory-controllers/xlnx,versal-ddrmc-edac.yaml |   57 ++
+ MAINTAINERS                                        |    7 +
+ drivers/edac/Kconfig                               |   12 +
+ drivers/edac/Makefile                              |    1 +
+ drivers/edac/versal_edac.c                         | 1069 ++++++++++++++++++++
+ include/linux/firmware/xlnx-zynqmp.h               |   12 +
+ 6 files changed, 1158 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/memory-controllers/xlnx,versal-ddrmc-edac.yaml
+ create mode 100644 drivers/edac/versal_edac.c
 
+-- 
+Regards/Gruss,
+    Boris.
 
-> Thx.
-> 
-> --
-> Regards/Gruss,
->      Boris.
-> 
-> https://people.kernel.org/tglx/notes-about-netiquette
-> 
+https://people.kernel.org/tglx/notes-about-netiquette
