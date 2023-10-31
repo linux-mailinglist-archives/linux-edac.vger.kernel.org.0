@@ -2,68 +2,94 @@ Return-Path: <linux-edac-owner@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37B647DC355
-	for <lists+linux-edac@lfdr.de>; Tue, 31 Oct 2023 01:02:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 780807E0DD5
+	for <lists+linux-edac@lfdr.de>; Sat,  4 Nov 2023 05:52:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235996AbjJ3XuJ (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
-        Mon, 30 Oct 2023 19:50:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47032 "EHLO
+        id S229936AbjKDEwu (ORCPT <rfc822;lists+linux-edac@lfdr.de>);
+        Sat, 4 Nov 2023 00:52:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235990AbjJ3XuI (ORCPT
-        <rfc822;linux-edac@vger.kernel.org>); Mon, 30 Oct 2023 19:50:08 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB693100;
-        Mon, 30 Oct 2023 16:50:04 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 76035C433CB;
-        Mon, 30 Oct 2023 23:50:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1698709804;
-        bh=yE6TPz07cDO8yRD2PpcD18BEK8ueT/K071kpiowAJKo=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=vJFs/nHfghpq/cU1KKxbJalV5rB6ouHVcjcXrkG0HYLkYslMJrHCPUWf0Z23Geb7s
-         hDtPBRhArOIkzk3hB+tGdWHkP0vqOi546KyOt5LibPCEtKEk6MXFOC41+hGPNVkVPq
-         wcl83Wh/fjDFOzr8gPSYqPM4kNY1DENtHFUaI+gZRpFif4N+X8ddV8EkFLkBmAHTde
-         b5itA/VSC7AGCHiDbzq99z7XOZOVOh6FlLol0JMNC3mwXkHgK+pd2I6ch0/5si8Je0
-         tVZJem+p8fjp6j99D5PHzBaqUg/W6B9ZM0Q+pa1sqEvtMB1MKNrkGRINrDwHWzrsCW
-         24inCgdz/voMg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 4B02BE0008F;
-        Mon, 30 Oct 2023 23:50:04 +0000 (UTC)
-Subject: Re: [GIT PULL] EDAC updates for v6.7
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20231027100920.GAZTuMUJEP5LI7mZ+S@fat_crate.local>
-References: <20231027100920.GAZTuMUJEP5LI7mZ+S@fat_crate.local>
-X-PR-Tracked-List-Id: <linux-edac.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20231027100920.GAZTuMUJEP5LI7mZ+S@fat_crate.local>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/ras/ras.git tags/edac_updates_for_v6.7
-X-PR-Tracked-Commit-Id: 6f15b178cd6315c997981f76c6ebed7ad39144c5
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 66cc8838c72b165048f49f88fc9d1be996abd35b
-Message-Id: <169870980425.17163.4367361186365175089.pr-tracker-bot@kernel.org>
-Date:   Mon, 30 Oct 2023 23:50:04 +0000
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-edac <linux-edac@vger.kernel.org>,
-        lkml <linux-kernel@vger.kernel.org>
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S229509AbjKDEwt (ORCPT
+        <rfc822;linux-edac@vger.kernel.org>); Sat, 4 Nov 2023 00:52:49 -0400
+X-Greylist: delayed 4317 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 03 Nov 2023 21:52:47 PDT
+Received: from mail.profitpathwaygo.com (mail.profitpathwaygo.com [141.94.21.238])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12441E5
+        for <linux-edac@vger.kernel.org>; Fri,  3 Nov 2023 21:52:47 -0700 (PDT)
+Received: by mail.profitpathwaygo.com (Postfix, from userid 1002)
+        id 9195050A52; Tue, 31 Oct 2023 08:31:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=profitpathwaygo.com;
+        s=mail; t=1698741180;
+        bh=qp3Ofokho6Ql+WtI8ZPVilyHYhskXL7fod7u9CWs8W4=;
+        h=Date:From:To:Subject:From;
+        b=EvcwakcmeoHFtNgVg+EIk8UCuvH17Nnzajd2eFEKe9Z4zRp7mZcSP/uEWIF441bK9
+         TCgdj4nQ6cKw+/GTsZ+LK8iuQJdZKtNV7Tbs30wZ9m5x7OcznUjwaeGqo4wYWOoAvs
+         zQX0HpuXbdD9IiBcDVMyPmrwAfz/oowf/CxTk5E/GU6X8EYpCXjB5jxBzbTKzEU0Uf
+         tWDHcfm13vYXSnUc2uRpuUdyVILhVF7zqi92sjkIZ17GBRAbG/whGAhOm1QvxcjAch
+         iTLA5fXgklrJiyHhsxSu7ibIGC/Y/wJ6gQ3PfDTIW6Uz95HQtBh2EuGZiEEIHgiyIy
+         uWlCSqxagRAzA==
+Received: by mail.profitpathwaygo.com for <linux-edac@vger.kernel.org>; Tue, 31 Oct 2023 08:30:48 GMT
+Message-ID: <20231031074500-0.1.2t.15sc9.0.ebl8fug8fw@profitpathwaygo.com>
+Date:   Tue, 31 Oct 2023 08:30:48 GMT
+From:   "Adam Charachuta" <adam.charachuta@profitpathwaygo.com>
+To:     <linux-edac@vger.kernel.org>
+Subject: =?UTF-8?Q?S=C5=82owa_kluczowe_do_wypozycjonowania_?=
+X-Mailer: mail.profitpathwaygo.com
+MIME-Version: 1.0
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: Yes, score=6.5 required=5.0 tests=BAYES_05,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_SBL_CSS,
+        RCVD_IN_VALIDITY_RPBL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED,URIBL_CSS_A,URIBL_DBL_SPAM autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Report: *  0.0 URIBL_BLOCKED ADMINISTRATOR NOTICE: The query to URIBL was
+        *      blocked.  See
+        *      http://wiki.apache.org/spamassassin/DnsBlocklists#dnsbl-block
+        *      for more information.
+        *      [URIs: profitpathwaygo.com]
+        *  2.5 URIBL_DBL_SPAM Contains a spam URL listed in the Spamhaus DBL
+        *      blocklist
+        *      [URIs: profitpathwaygo.com]
+        *  3.3 RCVD_IN_SBL_CSS RBL: Received via a relay in Spamhaus SBL-CSS
+        *      [141.94.21.238 listed in zen.spamhaus.org]
+        *  0.1 URIBL_CSS_A Contains URL's A record listed in the Spamhaus CSS
+        *      blocklist
+        *      [URIs: profitpathwaygo.com]
+        * -0.5 BAYES_05 BODY: Bayes spam probability is 1 to 5%
+        *      [score: 0.0155]
+        *  1.3 RCVD_IN_VALIDITY_RPBL RBL: Relay in Validity RPBL,
+        *      https://senderscore.org/blocklistlookup/
+        *      [141.94.21.238 listed in bl.score.senderscore.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+X-Spam-Level: ******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-edac.vger.kernel.org>
 X-Mailing-List: linux-edac@vger.kernel.org
 
-The pull request you sent on Fri, 27 Oct 2023 12:09:20 +0200:
+Dzie=C5=84 dobry,
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/ras/ras.git tags/edac_updates_for_v6.7
+zapozna=C5=82em si=C4=99 z Pa=C5=84stwa ofert=C4=85 i z przyjemno=C5=9Bci=
+=C4=85 przyznaj=C4=99, =C5=BCe przyci=C4=85ga uwag=C4=99 i zach=C4=99ca d=
+o dalszych rozm=C3=B3w.=20
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/66cc8838c72b165048f49f88fc9d1be996abd35b
+Pomy=C5=9Bla=C5=82em, =C5=BCe mo=C5=BCe m=C3=B3g=C5=82bym mie=C4=87 sw=C3=
+=B3j wk=C5=82ad w Pa=C5=84stwa rozw=C3=B3j i pom=C3=B3c dotrze=C4=87 z t=C4=
+=85 ofert=C4=85 do wi=C4=99kszego grona odbiorc=C3=B3w. Pozycjonuj=C4=99 =
+strony www, dzi=C4=99ki czemu generuj=C4=85 =C5=9Bwietny ruch w sieci.
 
-Thank you!
+Mo=C5=BCemy porozmawia=C4=87 w najbli=C5=BCszym czasie?
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+
+Pozdrawiam serdecznie
+Adam Charachuta
