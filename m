@@ -1,81 +1,102 @@
-Return-Path: <linux-edac+bounces-2-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-3-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 846DE7E3850
-	for <lists+linux-edac@lfdr.de>; Tue,  7 Nov 2023 10:55:33 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A192C7E3B69
+	for <lists+linux-edac@lfdr.de>; Tue,  7 Nov 2023 13:02:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B552A1C202ED
-	for <lists+linux-edac@lfdr.de>; Tue,  7 Nov 2023 09:55:32 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5B55B280F51
+	for <lists+linux-edac@lfdr.de>; Tue,  7 Nov 2023 12:02:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 25B7E12E6D;
-	Tue,  7 Nov 2023 09:55:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B86A42D7BE;
+	Tue,  7 Nov 2023 12:02:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=okerlenbiz.com header.i=@okerlenbiz.com header.b="R0VBpqdd"
+	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="VWngGHjO"
 X-Original-To: linux-edac@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 413AE12E40
-	for <linux-edac@vger.kernel.org>; Tue,  7 Nov 2023 09:55:24 +0000 (UTC)
-Received: from mail.okerlenbiz.com (mail.okerlenbiz.com [54.36.101.41])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2920910EC
-	for <linux-edac@vger.kernel.org>; Tue,  7 Nov 2023 01:55:13 -0800 (PST)
-Received: by mail.okerlenbiz.com (Postfix, from userid 1002)
-	id ABB62A2691; Tue,  7 Nov 2023 09:55:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=okerlenbiz.com;
-	s=mail; t=1699350911;
-	bh=KorkMB2s0lNIQC703engCKXUBxfwrpxAwUPCDE6XfQc=;
-	h=Date:From:To:Subject:From;
-	b=R0VBpqddOQ8a8KYcRNfF84PXygaeXTGij0xrluTB+ptqXqoSwiTvR9OsjAdHjP/HR
-	 Xm5GlMGARS14tiDa6gGZMddoJAs0S5oLVwvVMxMvJnRRZZ6VbypruSD0iStmX2sf05
-	 RT6YYE+3Wq4FnQ4aG2zOAplDUyRU5tGpOb7AI1sPMUD8SmB0k79MYj4hWjycpSEeiZ
-	 xMJQzhGnc40wJz8+AAQ2znXcPS8KR1Mtf6gmKhdtZF8wtjrvv5JV9zN3CwNPE0gDd6
-	 dKdCpcbk2CcdRC1dDaqo4haxPBZczCr1OmvmJomurn5QQsPO6ODusvAyPgHleR59Jw
-	 nZsygRBxoY51A==
-Received: by mail.okerlenbiz.com for <linux-edac@vger.kernel.org>; Tue,  7 Nov 2023 09:55:09 GMT
-Message-ID: <20231107085701-0.1.6p.8zya.0.z7nucd4mvv@okerlenbiz.com>
-Date: Tue,  7 Nov 2023 09:55:09 GMT
-From: "Witold Hradecki" <witold.hradecki@okerlenbiz.com>
-To: <linux-edac@vger.kernel.org>
-Subject: =?UTF-8?Q?System_o=C5=9Bwietlenia_w_abonamencie?=
-X-Mailer: mail.okerlenbiz.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F263F2D7B3
+	for <linux-edac@vger.kernel.org>; Tue,  7 Nov 2023 12:02:34 +0000 (UTC)
+Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFE4410A;
+	Tue,  7 Nov 2023 04:02:32 -0800 (PST)
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id E96D940E0191;
+	Tue,  7 Nov 2023 12:02:29 +0000 (UTC)
+X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
+Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
+	header.d=alien8.de
+Received: from mail.alien8.de ([127.0.0.1])
+	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
+	with ESMTP id lE1Uhn93tP6E; Tue,  7 Nov 2023 12:02:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
+	t=1699358547; bh=lxN1TuhcCJQeqTAeGqqpjQdztFGsAxuhyyTGBRhcVEg=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=VWngGHjOYgMTx4sASyd1/D4oZhFMjPizYdc01Siqc8pcBxFiVQOw+prM2T7Eu47eU
+	 HlsyrIc/1ammlhA+6Uf9PcDq3jf06akyB2rnbRMAwbYOHq7ryjtZGCn1ejATF6nQBn
+	 4lEQ2NUKcnt0cNcmelHEx1nTn9xqjd4LKqILd0UBPtSdf0FptaepDVbKKxEFBmst1U
+	 LaItEo8ryqD+0k2vlDmC7H3yDXjHOn2KDYPZBAHoyAc/u+/u4fCQrjWclXM60W6g8K
+	 cUs3Gbi6h4kQst5nf0dq/n6dIRJCDxzof0a16QGgxXHcyxgJzQLgVYjaRN8+/HSyvN
+	 MlM5qsZCDIoeiQE1f6OTJ9+hOhwBGpq/C55Nz3ScHC4mchSd172jnBEyDBOS6fC00D
+	 tkeofrmpnBIky04Vw0LS9//VDRymUTZeYHMC+AkgmjFwb5U8rGiOHNFGyHaR4UVLoR
+	 0ycu1xjRoOQhPKvRtC+GOgtkQQLcIjRh4lkURb7lD2eJmSb+7ZQ10kZrpMZTWd/fp+
+	 y2RLwTQgcZM8iUoIP+JQQkgDYndFUTputGY7jjZnoI8QqzHQPaP2N2PEi0Rdz2lG82
+	 2KTN6+TNPXIZTM6BFRfhbo3qUbY957M/WjP4CfXB33vLZqB7VKLdDMiANGShERuWXj
+	 BgpYTeJvq4ypNYekJxOFMNVU=
+Received: from zn.tnic (pd95304da.dip0.t-ipconnect.de [217.83.4.218])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
+	(No client certificate requested)
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id A5CCC40E0176;
+	Tue,  7 Nov 2023 12:02:18 +0000 (UTC)
+Date: Tue, 7 Nov 2023 13:02:12 +0100
+From: Borislav Petkov <bp@alien8.de>
+To: Yazen Ghannam <yazen.ghannam@amd.com>
+Cc: kernel test robot <lkp@intel.com>, linux-edac@vger.kernel.org,
+	tony.luck@intel.com, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org, avadhut.naik@amd.com,
+	john.allen@amd.com, william.roche@oracle.com
+Subject: Re: [PATCH v2 1/2] RAS: Introduce AMD Address Translation Library
+Message-ID: <20231107120212.GAZUonREyEeClfT5Tf@fat_crate.local>
+References: <20231005173526.42831-2-yazen.ghannam@amd.com>
+ <202310162015.fuitGuiJ-lkp@intel.com>
+ <935d6e08-3754-4c06-ab25-69bda3fd8ea1@amd.com>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <935d6e08-3754-4c06-ab25-69bda3fd8ea1@amd.com>
 
-Szanowni Pa=C5=84stwo,
+On Tue, Oct 24, 2023 at 11:30:01AM -0400, Yazen Ghannam wrote:
+> Any thoughts?
 
-chcia=C5=82bym przybli=C5=BCy=C4=87 Pa=C5=84stwu temat zwi=C4=85zany z be=
-zkosztow=C4=85 wymian=C4=85 o=C5=9Bwietlenia i zwr=C3=B3ci=C4=87 uwag=C4=99=
- na piln=C4=85 kwesti=C4=99.=20
+Yes, no one cares about 32-bit:
 
-Od 25 sierpnia konserwacja starego o=C5=9Bwietlenia w zak=C5=82adzie b=C4=
-=99dzie mocno utrudniona, gdy=C5=BC na terenie Unii Europejskiej nie mo=C5=
-=BCna ju=C5=BC produkowa=C4=87 popularnych =C5=9Bwietl=C3=B3wek T5 i T8.
+---
+diff --git a/drivers/ras/amd/atl/Kconfig b/drivers/ras/amd/atl/Kconfig
+index 88324c1978d8..6ddb9ac7ea30 100644
+--- a/drivers/ras/amd/atl/Kconfig
++++ b/drivers/ras/amd/atl/Kconfig
+@@ -9,7 +9,7 @@
+ 
+ config AMD_ATL
+ 	tristate "AMD Address Translation Library"
+-	depends on AMD_NB
++	depends on AMD_NB && X86_64
+ 	help
+ 	  This library includes support for implementation-specific
+ 	  address translation procedures needed for various error
 
-Mieli=C5=9Bmy przyjemno=C5=9B=C4=87 wsp=C3=B3=C5=82pracowa=C4=87 z wiod=C4=
-=85c=C4=85 firm=C4=85 z sektora motoryzacyjnego, kt=C3=B3ra przez zbyt wy=
-sokie koszty obecnego o=C5=9Bwietlenia straci=C5=82a a=C5=BC 468 900 z=C5=
-=82 w ci=C4=85gu 9 miesi=C4=99cy!  Zapewnili=C5=9Bmy im nowoczesne rozwi=C4=
-=85zanie w abonamencie za 0 z=C5=82, generuj=C4=85ce oszcz=C4=99dno=C5=9B=
-ci na poziomie 54 250 z=C5=82/msc.
+-- 
+Regards/Gruss,
+    Boris.
 
-Nasz model abonamentowy pozwoli Pa=C5=84stwu cieszy=C4=87 si=C4=99 efekty=
-wnym o=C5=9Bwietleniem bez obaw o przysz=C5=82=C4=85 konserwacj=C4=99 i b=
-ez =C5=BCadnych dodatkowych nak=C5=82ad=C3=B3w finansowych.=20
-
-Czy s=C4=85 Pa=C5=84stwo zainteresowani kalkulacj=C4=85 potencjalnych osz=
-cz=C4=99dno=C5=9Bci?
-
-
-Pozdrawiam
-Witold Hradecki
+https://people.kernel.org/tglx/notes-about-netiquette
 
