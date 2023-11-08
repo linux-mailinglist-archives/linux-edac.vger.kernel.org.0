@@ -1,94 +1,157 @@
-Return-Path: <linux-edac+bounces-4-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-5-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id AC6DF7E466A
-	for <lists+linux-edac@lfdr.de>; Tue,  7 Nov 2023 17:55:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 360197E5662
+	for <lists+linux-edac@lfdr.de>; Wed,  8 Nov 2023 13:37:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D8DD41C20A65
-	for <lists+linux-edac@lfdr.de>; Tue,  7 Nov 2023 16:55:39 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 56F9A1C208CF
+	for <lists+linux-edac@lfdr.de>; Wed,  8 Nov 2023 12:37:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DC177315BC;
-	Tue,  7 Nov 2023 16:55:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 65D354C7F;
+	Wed,  8 Nov 2023 12:37:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="UyvKFRK2"
+	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="TvJ0WBDn"
 X-Original-To: linux-edac@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85A0B1C684
-	for <linux-edac@vger.kernel.org>; Tue,  7 Nov 2023 16:55:35 +0000 (UTC)
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9B0693;
-	Tue,  7 Nov 2023 08:55:34 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 629C228F9;
+	Wed,  8 Nov 2023 12:37:21 +0000 (UTC)
+Received: from mail.alien8.de (mail.alien8.de [IPv6:2a01:4f9:3051:3f93::2])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F72B1BF1;
+	Wed,  8 Nov 2023 04:37:20 -0800 (PST)
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 3A29040E014B;
+	Wed,  8 Nov 2023 12:37:18 +0000 (UTC)
+X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
+Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
+	header.d=alien8.de
+Received: from mail.alien8.de ([127.0.0.1])
+	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
+	with ESMTP id ylmaVhlMjPnP; Wed,  8 Nov 2023 12:37:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
+	t=1699447035; bh=JGXN64F+EUfo32di/qzr7XJX6YhtI0kCKBdmlkk0BD4=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=TvJ0WBDn88XZJSOLPKeBzSaIg4ZPz1IduqLQr53XH3ovVo/hZmQ/7qnmiswO7BGtx
+	 PMCIoJ9WO6nDiyOoV/02KzCX7x1Q0/crkvUE7T1VRyZPIeDgVlwG5/yNhE8kbjOjSh
+	 7YDP4FcWDCaCLP368K++Tc4DVUfAc8/ffhEyDp4cjDx7tiEGmplWqUT5viSviZKOpt
+	 XpkoDDXjdUu8/LvFpKPzbUljp1FrwuFV9MIjmXD7X+ePTvaWXU8bkdtkjs+TNo5+5l
+	 +qK+kMmFvo80J94vCmGjAff4kKG9bGyib+5sSirNQZHKKeoKY/RjVWOAjh0BIcqWRi
+	 b5t+bmnFsOhw6MfZxre9u7/yNmNIEBRbFxetQsXqI2NIgToEIMlLwpWwx5Fs3pVc16
+	 j/h/DqBPvi1p/I1ogjoiFljq/w/BKBx+JlwsRlWuhff58qS68dmQemA8xadsZ7rB//
+	 kgcM9kzbjOjVwqT71Z0F3DllCOlZJ902Ql3HPIQaG/Fb+e3XPqqbzu69KJ5ZGsS+eE
+	 dpsW8IQpabr8hL1zD9ChK+gb2V4dZG7RzK5NHSZi6dF6JnBXV5eZB/gysZW1mjy2Y6
+	 /5wqnnIVI6bDU93P9+RGZ6da6x+ciyDbamihhSLWCGr7q/fpqQCm6Wa4aj7HSuZkG3
+	 DoN6cZcFKtxhzRrn+xkPfql4=
+Received: from zn.tnic (pd95304da.dip0.t-ipconnect.de [217.83.4.218])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
 	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id 434CC1F37C;
-	Tue,  7 Nov 2023 16:55:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-	t=1699376133; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-	bh=8YR5IGNzGB11lqau+yV+L6ykZhJX5tp/evzkhWrEHQk=;
-	b=UyvKFRK2tBb95knrq8Oe+GkLZujLkjmbW2yLtFKf3/4cx65dyc3yWLdWDOIIo76wEZ2VuX
-	3DS42Kma4cdafZJxNH/NM7sjKQYgZ3mWCp2GppuYmKLmfTnnVVvlGOTzs8lZllvorIcCxT
-	U78DUmg41RgGMTT7KTAKly4UirgYjx8=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-	(No client certificate requested)
-	by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id E1658132FD;
-	Tue,  7 Nov 2023 16:55:32 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-	by imap2.suse-dmz.suse.de with ESMTPSA
-	id y2KmNARsSmUURwAAMHmgww
-	(envelope-from <nik.borisov@suse.com>); Tue, 07 Nov 2023 16:55:32 +0000
-From: Nikolay Borisov <nik.borisov@suse.com>
-To: bp@alien8.de
-Cc: linux-edac@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	x86@kernel.org,
-	Nikolay Borisov <nik.borisov@suse.com>
-Subject: [PATCH] x86/mce: Remove redundant check from  mce_device_create()
-Date: Tue,  7 Nov 2023 18:55:29 +0200
-Message-Id: <20231107165529.407349-1-nik.borisov@suse.com>
-X-Mailer: git-send-email 2.34.1
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 31DC540E0032;
+	Wed,  8 Nov 2023 12:36:53 +0000 (UTC)
+Date: Wed, 8 Nov 2023 13:36:47 +0100
+From: Borislav Petkov <bp@alien8.de>
+To: Xin Li <xin3.li@intel.com>
+Cc: linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-edac@vger.kernel.org, linux-hyperv@vger.kernel.org,
+	kvm@vger.kernel.org, xen-devel@lists.xenproject.org,
+	tglx@linutronix.de, mingo@redhat.com, dave.hansen@linux.intel.com,
+	x86@kernel.org, hpa@zytor.com, luto@kernel.org, pbonzini@redhat.com,
+	seanjc@google.com, peterz@infradead.org, jgross@suse.com,
+	ravi.v.shankar@intel.com, mhiramat@kernel.org,
+	andrew.cooper3@citrix.com, jiangshanlai@gmail.com,
+	nik.borisov@suse.com
+Subject: Re: [PATCH v12 01/37] x86/cpufeatures: Add the cpu feature bit for
+ WRMSRNS
+Message-ID: <20231108123647.GBZUuA31zntox0W0gu@fat_crate.local>
+References: <20231003062458.23552-1-xin3.li@intel.com>
+ <20231003062458.23552-2-xin3.li@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20231003062458.23552-2-xin3.li@intel.com>
 
-mce_device_create() is called only from mce_cpu_online() which in turn
-will be called iff mce is available. That is, at the time of
-mce_device_create() call it's guaranteed that mce is available. No need
-to duplicate this check so let's remove it.
+On Mon, Oct 02, 2023 at 11:24:22PM -0700, Xin Li wrote:
+> Subject: Re: [PATCH v12 01/37] x86/cpufeatures: Add the cpu feature bit for WRMSRNS
+							  ^^^^
 
-Signed-off-by: Nikolay Borisov <nik.borisov@suse.com>
----
- arch/x86/kernel/cpu/mce/core.c | 3 ---
- 1 file changed, 3 deletions(-)
+For all your text:
 
-diff --git a/arch/x86/kernel/cpu/mce/core.c b/arch/x86/kernel/cpu/mce/core.c
-index 7b397370b4d6..71999f97a3c8 100644
---- a/arch/x86/kernel/cpu/mce/core.c
-+++ b/arch/x86/kernel/cpu/mce/core.c
-@@ -2568,9 +2568,6 @@ static int mce_device_create(unsigned int cpu)
- 	int err;
- 	int i, j;
- 
--	if (!mce_available(&boot_cpu_data))
--		return -EIO;
--
- 	dev = per_cpu(mce_device, cpu);
- 	if (dev)
- 		return 0;
+s/cpu/CPU/g
+
+> WRMSRNS is an instruction that behaves exactly like WRMSR, with
+> the only difference being that it is not a serializing instruction
+> by default. Under certain conditions, WRMSRNS may replace WRMSR to
+> improve performance.
+> 
+> Add the CPU feature bit for WRMSRNS.
+> 
+> Tested-by: Shan Kang <shan.kang@intel.com>
+> Signed-off-by: Xin Li <xin3.li@intel.com>
+> ---
+>  arch/x86/include/asm/cpufeatures.h       | 1 +
+>  tools/arch/x86/include/asm/cpufeatures.h | 1 +
+>  2 files changed, 2 insertions(+)
+
+It looks to me like you can merge the first three patches into one as
+all they do is add that insn support.
+
+Then, further down in the patchset, it says:
+
++	if (cpu_feature_enabled(X86_FEATURE_FRED)) {
++		/* WRMSRNS is a baseline feature for FRED. */
+
+but WRMSRNS is not mentioned in the FRED spec "Document Number:
+346446-005US, Revision: 5.0" which, according to
+
+https://www.intel.com/content/www/us/en/content-details/780121/flexible-return-and-event-delivery-fred-specification.html
+
+is the latest.
+
+Am I looking at the wrong one?
+
+> diff --git a/arch/x86/include/asm/cpufeatures.h b/arch/x86/include/asm/cpufeatures.h
+> index 58cb9495e40f..330876d34b68 100644
+> --- a/arch/x86/include/asm/cpufeatures.h
+> +++ b/arch/x86/include/asm/cpufeatures.h
+> @@ -322,6 +322,7 @@
+>  #define X86_FEATURE_FSRS		(12*32+11) /* "" Fast short REP STOSB */
+>  #define X86_FEATURE_FSRC		(12*32+12) /* "" Fast short REP {CMPSB,SCASB} */
+>  #define X86_FEATURE_LKGS		(12*32+18) /* "" Load "kernel" (userspace) GS */
+> +#define X86_FEATURE_WRMSRNS		(12*32+19) /* "" Non-Serializing Write to Model Specific Register instruction */
+
+						  /* "" Non-serializing WRMSR */
+
+is more than enough.
+
+And now I'm wondering: when you're adding a separate CPUID bit, then the
+above should be
+
++       if (cpu_feature_enabled(X86_FEATURE_WRMSRNS)) {
++               /* WRMSRNS is a baseline feature for FRED. */
+
+I see that you're adding a dependency:
+
++	{ X86_FEATURE_FRED,			X86_FEATURE_WRMSRNS   },
+
+which then means you don't need the X86_FEATURE_WRMSRNS definition at
+all and can use X86_FEATURE_FRED only.
+
+So, what's up?
+
+Thx.
+
 -- 
-2.34.1
+Regards/Gruss,
+    Boris.
 
+https://people.kernel.org/tglx/notes-about-netiquette
 
