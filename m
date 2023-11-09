@@ -1,62 +1,62 @@
-Return-Path: <linux-edac+bounces-6-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-7-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 229777E737D
-	for <lists+linux-edac@lfdr.de>; Thu,  9 Nov 2023 22:20:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 0D4567E738D
+	for <lists+linux-edac@lfdr.de>; Thu,  9 Nov 2023 22:22:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D0ADE280FAD
-	for <lists+linux-edac@lfdr.de>; Thu,  9 Nov 2023 21:20:50 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B49162811EE
+	for <lists+linux-edac@lfdr.de>; Thu,  9 Nov 2023 21:22:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0C2E4374EE;
-	Thu,  9 Nov 2023 21:20:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DD71B374F8;
+	Thu,  9 Nov 2023 21:22:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hr0ngwDK"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cR8vOH2Z"
 X-Original-To: linux-edac@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F10C374E3
-	for <linux-edac@vger.kernel.org>; Thu,  9 Nov 2023 21:20:46 +0000 (UTC)
-Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF5BCD68;
-	Thu,  9 Nov 2023 13:20:45 -0800 (PST)
-Received: by mail-pg1-x533.google.com with SMTP id 41be03b00d2f7-5bde026c1e1so149076a12.1;
-        Thu, 09 Nov 2023 13:20:45 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6268A374EE
+	for <linux-edac@vger.kernel.org>; Thu,  9 Nov 2023 21:22:13 +0000 (UTC)
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75FEA4205;
+	Thu,  9 Nov 2023 13:22:12 -0800 (PST)
+Received: by mail-pf1-x436.google.com with SMTP id d2e1a72fcca58-6bf20d466cdso296493b3a.1;
+        Thu, 09 Nov 2023 13:22:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1699564845; x=1700169645; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1699564932; x=1700169732; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
         bh=KsvShR7q5/4puO4BbnmQ13+xfWAhOYuyw8hfh0n1j6s=;
-        b=hr0ngwDKtuLG3BwGzpPLDWUj17ttk0oML/34OSK2P5U/RYr6WJowESlh9cVU60c6mQ
-         JweRIIwD4/x6hFZrFZ7xZnBpnNkrXw+i0cqFEC4z3+3ucNurFHtDLsELEIBB5TeST5dk
-         TwNDrk/CgoOZdf3VISI/LbRMTNnW97IRfE4zPNOK+09xi2le0laXHwI0pjNRWaLSXYKG
-         MxrQ+877TzBmcqRSnq3qz5LMG4HPM43fTDJLiwlUj8CBc9MHLU/Jt3dWntemO+Rc4yNi
-         H2AzSVw1hQOINQqKUPkt7KqdK3mjQa8bZdaYAwZ8KljwLW5KJB6bQICdGrHGiLov7XHc
-         6b5g==
+        b=cR8vOH2ZhJ9rtVbQuqfxuaX/AgsQCIhyCAwMNqwNEyLxX1VNSPdZVjRhuCZHvIvz7X
+         RMFswhSkqyWAqpNLFgDgoBwnb0lHN1jRi+VfLHhNQ18tLRt8HmJrZMt2vXN8mBEGX6NC
+         /W4CIJemCzW8n+u0ploN5t3S71OsupC+EU/tMMvKZOaMJAiA08dcuytcBviqlC7ADD9Q
+         tkjiIdq70UvKEqWddeJrsxNcnZT6ugBOvTFRwhIz+dQq2Dv80uNw2vHgEoAX/C1DW09K
+         LOLb/gnOd3JzKmFzLPdT2tls1MC/hLP2fdX1TdmyEDzwE21RxIJnjQJ5HLX23iaeLs8H
+         NPqg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1699564845; x=1700169645;
+        d=1e100.net; s=20230601; t=1699564932; x=1700169732;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
         bh=KsvShR7q5/4puO4BbnmQ13+xfWAhOYuyw8hfh0n1j6s=;
-        b=dKWHxQZU5w1btNSQ7qV5IC/uxhbVwxtiToQO4RRuzKqOBQ8IwfqDgQBiCkg78jG30I
-         wf+sbGOo03iPEU/DB3zZxaq9pejZmJ42TJUkvNrY9ppxOceiVgQwcG2/TEN1pENcmo30
-         xxyKTz1jwNBESI6w7Key3Wd5LIqS9jaeWtejYJ3ft1SGfQdxnG4gGwd5t1KtxvlIRi9W
-         CR9o+jy11UgIhpUpm3vCJx3S0Rn6wOW6v9vePdVs6q8CEdVLLsiPcK2JdSB9+yN5ws0c
-         T44H/FoAAndtAeWSIdF7FI9gO+MEjs/ZhaCzpEbt7XdqBdNWEM6XMFBnjDuANe3GvkmE
-         GS/w==
-X-Gm-Message-State: AOJu0YzO/Zpw/8CehvGhErlCPZ7qH3eALMDA4mIpA2m0vCT9mWkdPXjL
-	G6lGwUDk7AYAn/5t5hQwuk3GsSUb/N0=
-X-Google-Smtp-Source: AGHT+IFgm9s5BJ8A4WmpafDzV+inKywWIDHS3J5XE0Fqk/WXMqrelwI8cWkN8XKAAxeEdnzeibTwJg==
-X-Received: by 2002:a05:6a20:431a:b0:13d:fff1:c672 with SMTP id h26-20020a056a20431a00b0013dfff1c672mr6814252pzk.4.1699564845270;
-        Thu, 09 Nov 2023 13:20:45 -0800 (PST)
+        b=nR/8R7FZ8vOcIuzHIw6b6BzMXWjEDRDxa2ybrNh+D7RsR6k2cRp8tlAwG7wD0vekY9
+         Clv3jfiY532wp5Vz3jgOiYcuhF0hEnWItydT7NUoEyTOeCsO27Nx8nRs6jKwN0xHw98J
+         4+QBHZ4QkNICY28lmRykvasKGSHZsuoulWKjjQin1GGxpck/tULoXB+nYFZrPqVkqWWe
+         4izZeBldLrG1xaw6UawDld9b1Ai9w/vyWlh3V2uZcP2CKoyuY0HFwJMPrF2WAZAssjwA
+         joDfW7W4scVIh9yqwLSa+ltwVoby9Zx33lPXqto1OxpJTVMIztO102WLNq5YWP+n0/qf
+         mCKw==
+X-Gm-Message-State: AOJu0YxiyqY/lluEVUkJWjjCbn1ouazFdzEJ8tzPrUKNfEiRWjlIPKoy
+	QpKdRVL6yLngLK4EOJepPu8=
+X-Google-Smtp-Source: AGHT+IHvE/Tj6YL2R7oWzgCsSiWW0ZECdbesF+CSMBXb/FGlg4VeXbmCo+Mt4qdyXbf+h2M2Oz76IQ==
+X-Received: by 2002:a05:6a21:3293:b0:16c:b514:a4bc with SMTP id yt19-20020a056a21329300b0016cb514a4bcmr6964603pzb.4.1699564931925;
+        Thu, 09 Nov 2023 13:22:11 -0800 (PST)
 Received: from abhinav.. ([2402:3a80:196c:ea3:aee5:8832:917a:55b9])
-        by smtp.gmail.com with ESMTPSA id z10-20020a17090a8b8a00b0026b3f76a063sm213769pjn.44.2023.11.09.13.20.40
+        by smtp.gmail.com with ESMTPSA id bk11-20020a17090b080b00b002807ec010e3sm249653pjb.48.2023.11.09.13.22.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Nov 2023 13:20:44 -0800 (PST)
+        Thu, 09 Nov 2023 13:22:11 -0800 (PST)
 From: Abhinav Singh <singhabhinav9051571833@gmail.com>
 To: tony.luck@intel.com,
 	qiuxu.zhuo@intel.com,
@@ -68,9 +68,9 @@ Cc: linux-edac@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	linux-kernel-mentees@lists.linuxfoundation.org,
 	Abhinav Singh <singhabhinav9051571833@gmail.com>
-Subject: [PATCH] driver : edac Fix warning using plain integer as NULL
-Date: Fri, 10 Nov 2023 02:50:29 +0530
-Message-Id: <20231109212029.1454684-1-singhabhinav9051571833@gmail.com>
+Subject: [PATCH] driver : edac : Fix warning using plain integer as NULL
+Date: Fri, 10 Nov 2023 02:51:57 +0530
+Message-Id: <20231109212157.1454726-1-singhabhinav9051571833@gmail.com>
 X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
