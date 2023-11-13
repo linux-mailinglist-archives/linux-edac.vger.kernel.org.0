@@ -1,151 +1,121 @@
-Return-Path: <linux-edac+bounces-14-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-15-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 43AD57E9834
-	for <lists+linux-edac@lfdr.de>; Mon, 13 Nov 2023 09:55:36 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 957757E9923
+	for <lists+linux-edac@lfdr.de>; Mon, 13 Nov 2023 10:38:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id EDCEF1F20C21
-	for <lists+linux-edac@lfdr.de>; Mon, 13 Nov 2023 08:55:35 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 41F2D280C3F
+	for <lists+linux-edac@lfdr.de>; Mon, 13 Nov 2023 09:38:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2FC971643A;
-	Mon, 13 Nov 2023 08:55:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D3EC71A587;
+	Mon, 13 Nov 2023 09:38:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jJHpNT3r"
+	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="dZ7yBNVN"
 X-Original-To: linux-edac@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C223E18628
-	for <linux-edac@vger.kernel.org>; Mon, 13 Nov 2023 08:55:27 +0000 (UTC)
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEBC410FE;
-	Mon, 13 Nov 2023 00:55:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1699865727; x=1731401727;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references;
-  bh=qyp+DhyGWDZjjRWexUcOxHl4CjPLxvuvw8u9oumPVVQ=;
-  b=jJHpNT3rOHvGiuONWm1bwDpr6vbxE/Qj+OYbTMbfjYZkNJ6QpHdUy903
-   gcgiAW+KZHsiErEgcqbHGJukwVTAomYddIJq1ZDkVbLHb03PVTAv/26XV
-   tmOL8rNDXFZug17bPO12nFcrgliFhSIpgEmtcUPom3TH7m6JwgcF7/qQb
-   bGrzHcoJIElEFOr1qusMXxbWIYwbzGlPHh326tNLxCFcDF3ujr2rPR2Cg
-   i+dl+IxdE5hrYSSwvQFJ1nVBmz4W8m9B8+I4SYJYDiOhdD4wZGQDvm+hK
-   RFXQ2kDKvCSWF5fzSQ3+cjzLRrwtg1u+9o6SUbwQP06I5DXSxwmBrN8+n
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10892"; a="9044648"
-X-IronPort-AV: E=Sophos;i="6.03,299,1694761200"; 
-   d="scan'208";a="9044648"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Nov 2023 00:55:27 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10892"; a="937688289"
-X-IronPort-AV: E=Sophos;i="6.03,299,1694761200"; 
-   d="scan'208";a="937688289"
-Received: from qiuxu-clx.sh.intel.com ([10.239.53.109])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Nov 2023 00:55:24 -0800
-From: Qiuxu Zhuo <qiuxu.zhuo@intel.com>
-To: Tony Luck <tony.luck@intel.com>
-Cc: Qiuxu Zhuo <qiuxu.zhuo@intel.com>,
-	Borislav Petkov <bp@alien8.de>,
-	Aristeu Rozanski <aris@redhat.com>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	linux-edac@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH 5/5] EDAC/igen6: Add Intel Meteor Lake-P SoCs support
-Date: Mon, 13 Nov 2023 16:53:18 +0800
-Message-Id: <20231113085318.26783-6-qiuxu.zhuo@intel.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20231113085318.26783-1-qiuxu.zhuo@intel.com>
-References: <20231113085318.26783-1-qiuxu.zhuo@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2F87125A8;
+	Mon, 13 Nov 2023 09:38:18 +0000 (UTC)
+Received: from mail.alien8.de (mail.alien8.de [IPv6:2a01:4f9:3051:3f93::2])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E038210D0;
+	Mon, 13 Nov 2023 01:38:16 -0800 (PST)
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 216AA40E0032;
+	Mon, 13 Nov 2023 09:38:14 +0000 (UTC)
+X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
+Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
+	header.d=alien8.de
+Received: from mail.alien8.de ([127.0.0.1])
+	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
+	with ESMTP id yDn-4aWbgcao; Mon, 13 Nov 2023 09:38:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
+	t=1699868290; bh=pvZneiKXZP1AFwrVjpjgX9SfPXvcKcXDRiBYzBlWCUE=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=dZ7yBNVNpQh+FSzVVPUvU1KiPOgYrTKreyHA8+5W4D1e1NVGVZU6gh4GtZqYjwac5
+	 7mXHFs8411yRJlwvUxdWXR4tVSMr2V05ppNWa2jneFjQ76RZ8AiWkt0PTe9lQg53x8
+	 StmLiD/0my+6PMYw1LCK/P7zdWALpzfMYgh1fVSmK/x+RNi+xjdK7e9F4pHZSH9V4N
+	 //0C5YpGFuES/WJNPnwTymvdqteTiiXiFmAosHN3nDMvoaVE23uyvrUDBPYlXRZ2yC
+	 zo/XBmjZafaL7zOQg8nuRRUMiWXsD3y/jtAA3OYjU1gzm+jLuEZk790OjLEW6BxlOV
+	 PXMHE1ijr3rLunuaIe7wPDDckNuNcoWSlSjqaWjx3LQIC2/5bMXHEplkpaONiNXnU+
+	 QLatLdlOoS0pqZJyyPEbMxm5Wrd5YQgTBx+RitlTVRTngSD/EyTPSPMFfwy30fjvs4
+	 Ar55249kf9xxyEytyXCGcLBLIEGKahsFxSMl4aZujzNDDFedLNWet7qfiEmBEcMKA7
+	 KY0o7bJF/2doThAtRXGMIWrb22pt8N88EcVVC99JIy6ziyh+gT7GxewGFeNSQhOJqz
+	 LjbBfNVJw03e/S7CKwwgYIN6BgSrxS4DQA9buYUX3Z8XPsMTypEr9l2BooGtvGdtxZ
+	 TSsh+cXS+Iag9abKXKBGqaBU=
+Received: from zn.tnic (pd95304da.dip0.t-ipconnect.de [217.83.4.218])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
+	(No client certificate requested)
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 96E9040E0171;
+	Mon, 13 Nov 2023 09:37:48 +0000 (UTC)
+Date: Mon, 13 Nov 2023 10:37:42 +0100
+From: Borislav Petkov <bp@alien8.de>
+To: Xin Li <xin3.li@intel.com>
+Cc: linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-edac@vger.kernel.org, linux-hyperv@vger.kernel.org,
+	kvm@vger.kernel.org, xen-devel@lists.xenproject.org,
+	tglx@linutronix.de, mingo@redhat.com, dave.hansen@linux.intel.com,
+	x86@kernel.org, hpa@zytor.com, luto@kernel.org, pbonzini@redhat.com,
+	seanjc@google.com, peterz@infradead.org, jgross@suse.com,
+	ravi.v.shankar@intel.com, mhiramat@kernel.org,
+	andrew.cooper3@citrix.com, jiangshanlai@gmail.com,
+	nik.borisov@suse.com
+Subject: Re: [PATCH v12 19/37] x86/fred: Update MSR_IA32_FRED_RSP0 during
+ task switch
+Message-ID: <20231113093742.GAZVHuZk9CGTRIfAWb@fat_crate.local>
+References: <20231003062458.23552-1-xin3.li@intel.com>
+ <20231003062458.23552-20-xin3.li@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20231003062458.23552-20-xin3.li@intel.com>
 
-Add Intel Meteor Lake-P SoC compute die IDs for EDAC support.
-These Meteor Lake-P SoCs share similar IBECC registers with
-Alder Lake-P SoCs.
+On Mon, Oct 02, 2023 at 11:24:40PM -0700, Xin Li wrote:
+> From: "H. Peter Anvin (Intel)" <hpa@zytor.com>
+> 
+> MSR_IA32_FRED_RSP0 is used during ring 3 event delivery, and needs to
+> be updated to point to the top of next task stack during task switch.
+> 
+> Signed-off-by: H. Peter Anvin (Intel) <hpa@zytor.com>
+> Tested-by: Shan Kang <shan.kang@intel.com>
+> Signed-off-by: Xin Li <xin3.li@intel.com>
+> ---
+>  arch/x86/include/asm/switch_to.h | 8 ++++++--
+>  1 file changed, 6 insertions(+), 2 deletions(-)
+> 
+> diff --git a/arch/x86/include/asm/switch_to.h b/arch/x86/include/asm/switch_to.h
+> index f42dbf17f52b..c3bd0c0758c9 100644
+> --- a/arch/x86/include/asm/switch_to.h
+> +++ b/arch/x86/include/asm/switch_to.h
+> @@ -70,9 +70,13 @@ static inline void update_task_stack(struct task_struct *task)
+>  #ifdef CONFIG_X86_32
+>  	this_cpu_write(cpu_tss_rw.x86_tss.sp1, task->thread.sp0);
+>  #else
+> -	/* Xen PV enters the kernel on the thread stack. */
+> -	if (cpu_feature_enabled(X86_FEATURE_XENPV))
+> +	if (cpu_feature_enabled(X86_FEATURE_FRED)) {
+> +		/* WRMSRNS is a baseline feature for FRED. */
+> +		wrmsrns(MSR_IA32_FRED_RSP0, (unsigned long)task_stack_page(task) + THREAD_SIZE);
 
-Signed-off-by: Qiuxu Zhuo <qiuxu.zhuo@intel.com>
----
- drivers/edac/igen6_edac.c | 30 ++++++++++++++++++++++++++++++
- 1 file changed, 30 insertions(+)
+If this non-serializing write happens now and, AFAICT, the CR3 write
+during the task switch has already happened in switch_mm* earlier, what
+is the serialization point that's going to make sure that write is
+committed before the new task starts executing?
 
-diff --git a/drivers/edac/igen6_edac.c b/drivers/edac/igen6_edac.c
-index d336ba53e67c..2b0ecdeba5cd 100644
---- a/drivers/edac/igen6_edac.c
-+++ b/drivers/edac/igen6_edac.c
-@@ -58,6 +58,7 @@
- /* Capability register E */
- #define CAPID_E_OFFSET			0xf0
- #define CAPID_E_IBECC			BIT(12)
-+#define CAPID_E_IBECC_BIT18		BIT(18)
- 
- /* Error Status */
- #define ERRSTS_OFFSET			0xc8
-@@ -251,6 +252,11 @@ static struct work_struct ecclog_work;
- #define DID_MTL_PS_SKU3	0x7d23
- #define DID_MTL_PS_SKU4	0x7d24
- 
-+/* Compute die IDs for Meteor Lake-P with IBECC */
-+#define DID_MTL_P_SKU1	0x7d01
-+#define DID_MTL_P_SKU2	0x7d02
-+#define DID_MTL_P_SKU3	0x7d14
-+
- static int get_mchbar(struct pci_dev *pdev, u64 *mchbar)
- {
- 	union  {
-@@ -331,6 +337,16 @@ static bool tgl_ibecc_available(struct pci_dev *pdev)
- 	return !(CAPID_E_IBECC & v);
- }
- 
-+static bool mtl_p_ibecc_available(struct pci_dev *pdev)
-+{
-+	u32 v;
-+
-+	if (pci_read_config_dword(pdev, CAPID_E_OFFSET, &v))
-+		return false;
-+
-+	return !(CAPID_E_IBECC_BIT18 & v);
-+}
-+
- static bool mtl_ps_ibecc_available(struct pci_dev *pdev)
- {
- #define MCHBAR_MEMSS_IBECCDIS	0x13c00
-@@ -524,6 +540,17 @@ static struct res_config mtl_ps_cfg = {
- 	.err_addr_to_imc_addr	= adl_err_addr_to_imc_addr,
- };
- 
-+static struct res_config mtl_p_cfg = {
-+	.machine_check		= true,
-+	.num_imc		= 2,
-+	.imc_base		= 0xd800,
-+	.ibecc_base		= 0xd400,
-+	.ibecc_error_log_offset	= 0x170,
-+	.ibecc_available	= mtl_p_ibecc_available,
-+	.err_addr_to_sys_addr	= adl_err_addr_to_sys_addr,
-+	.err_addr_to_imc_addr	= adl_err_addr_to_imc_addr,
-+};
-+
- static const struct pci_device_id igen6_pci_tbl[] = {
- 	{ PCI_VDEVICE(INTEL, DID_EHL_SKU5), (kernel_ulong_t)&ehl_cfg },
- 	{ PCI_VDEVICE(INTEL, DID_EHL_SKU6), (kernel_ulong_t)&ehl_cfg },
-@@ -565,6 +592,9 @@ static const struct pci_device_id igen6_pci_tbl[] = {
- 	{ PCI_VDEVICE(INTEL, DID_MTL_PS_SKU2), (kernel_ulong_t)&mtl_ps_cfg },
- 	{ PCI_VDEVICE(INTEL, DID_MTL_PS_SKU3), (kernel_ulong_t)&mtl_ps_cfg },
- 	{ PCI_VDEVICE(INTEL, DID_MTL_PS_SKU4), (kernel_ulong_t)&mtl_ps_cfg },
-+	{ PCI_VDEVICE(INTEL, DID_MTL_P_SKU1), (kernel_ulong_t)&mtl_p_cfg },
-+	{ PCI_VDEVICE(INTEL, DID_MTL_P_SKU2), (kernel_ulong_t)&mtl_p_cfg },
-+	{ PCI_VDEVICE(INTEL, DID_MTL_P_SKU3), (kernel_ulong_t)&mtl_p_cfg },
- 	{ },
- };
- MODULE_DEVICE_TABLE(pci, igen6_pci_tbl);
+Thx.
+
 -- 
-2.17.1
+Regards/Gruss,
+    Boris.
 
+https://people.kernel.org/tglx/notes-about-netiquette
 
