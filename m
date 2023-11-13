@@ -1,112 +1,114 @@
-Return-Path: <linux-edac+bounces-16-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-17-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7DDBC7E99AD
-	for <lists+linux-edac@lfdr.de>; Mon, 13 Nov 2023 11:02:22 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 482537EA200
+	for <lists+linux-edac@lfdr.de>; Mon, 13 Nov 2023 18:37:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0E3C2B2051F
-	for <lists+linux-edac@lfdr.de>; Mon, 13 Nov 2023 10:02:20 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7980F1C20756
+	for <lists+linux-edac@lfdr.de>; Mon, 13 Nov 2023 17:37:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BB3A11BDCB;
-	Mon, 13 Nov 2023 10:02:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dkim=none
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 79E49224DD;
+	Mon, 13 Nov 2023 17:37:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b="yDdz7RU+"
 X-Original-To: linux-edac@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE453F9F8
-	for <linux-edac@vger.kernel.org>; Mon, 13 Nov 2023 10:02:13 +0000 (UTC)
-Received: from albert.telenet-ops.be (albert.telenet-ops.be [IPv6:2a02:1800:110:4::f00:1a])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A68CD75
-	for <linux-edac@vger.kernel.org>; Mon, 13 Nov 2023 02:02:11 -0800 (PST)
-Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed40:e81:b3d6:4f11:ac28])
-	by albert.telenet-ops.be with bizsmtp
-	id 9m292B0030WpEYl06m29vw; Mon, 13 Nov 2023 11:02:09 +0100
-Received: from geert (helo=localhost)
-	by ramsan.of.borg with local-esmtp (Exim 4.95)
-	(envelope-from <geert@linux-m68k.org>)
-	id 1r2Tlh-009BsO-30;
-	Mon, 13 Nov 2023 11:02:09 +0100
-Date: Mon, 13 Nov 2023 11:02:09 +0100 (CET)
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-To: linux-kernel@vger.kernel.org
-cc: Shubhrajyoti Datta <shubhrajyoti.datta@amd.com>, 
-    Sai Krishna Potthuri <sai.krishna.potthuri@amd.com>, 
-    linux-edac@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, 
-    linux-sh@vger.kernel.org
-Subject: Re: Build regressions/improvements in v6.7-rc1
-In-Reply-To: <20231113093630.4164101-1-geert@linux-m68k.org>
-Message-ID: <60ca157e-6eff-d12c-9dc0-8aeab125edda@linux-m68k.org>
-References: <CAHk-=whuO0zmuxp_yorYFWdcrALpqjRPhWkmEy+7wcCnnDcPNA@mail.gmail.com> <20231113093630.4164101-1-geert@linux-m68k.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4C54224D3;
+	Mon, 13 Nov 2023 17:37:10 +0000 (UTC)
+Received: from mail.zytor.com (unknown [IPv6:2607:7c80:54:3::138])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BED2810F4;
+	Mon, 13 Nov 2023 09:37:09 -0800 (PST)
+Received: from [127.0.0.1] ([12.191.197.195])
+	(authenticated bits=0)
+	by mail.zytor.com (8.17.1/8.17.1) with ESMTPSA id 3ADHaD5Q2879261
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
+	Mon, 13 Nov 2023 09:36:14 -0800
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 3ADHaD5Q2879261
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
+	s=2023111101; t=1699896975;
+	bh=SCbNEaKysaDENzp7ym8rKe0t6E54PmQIYjGt+gUaVHA=;
+	h=Date:From:To:CC:Subject:In-Reply-To:References:From;
+	b=yDdz7RU+C8v9nYIEBzCAWgRm3F1WpeF12wJgCrA6ccgmNshH+SnO2sPhDYH9PySHL
+	 YyqF7gWVqnOyr+dQAlGtnI9JasuK7AwYlLy1Tt2yJ1F5ZtYRCDnhW+aPvp3RGHfPVB
+	 ysKh2MIXuyuYvp9nlGkCXC0QcYduFhDiMoxcqjQi9RkcMYie4H2Kw3TzoAxlI6tvXV
+	 rrRKQ+lxLK4B2iaxhdShSn2TR4kmpimd9HhJX0jQ6J/xPqAgC0pG4q/9GwQchMAeUS
+	 VQv4HAjGvUZ+w8UYh6+zktz0G+ELn42zjvoiL9UHu2Nr46sqxDE142BCoNIRfAyLDl
+	 nQ9dbCgQdGOGA==
+Date: Mon, 13 Nov 2023 12:36:04 -0500
+From: "H. Peter Anvin" <hpa@zytor.com>
+To: Borislav Petkov <bp@alien8.de>, Xin Li <xin3.li@intel.com>
+CC: linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-edac@vger.kernel.org, linux-hyperv@vger.kernel.org,
+        kvm@vger.kernel.org, xen-devel@lists.xenproject.org,
+        tglx@linutronix.de, mingo@redhat.com, dave.hansen@linux.intel.com,
+        x86@kernel.org, luto@kernel.org, pbonzini@redhat.com,
+        seanjc@google.com, peterz@infradead.org, jgross@suse.com,
+        ravi.v.shankar@intel.com, mhiramat@kernel.org,
+        andrew.cooper3@citrix.com, jiangshanlai@gmail.com,
+        nik.borisov@suse.com
+Subject: =?US-ASCII?Q?Re=3A_=5BPATCH_v12_19/37=5D_x86/fred=3A_Update?= =?US-ASCII?Q?_MSR=5FIA32=5FFRED=5FRSP0_during_task_switch?=
+User-Agent: K-9 Mail for Android
+In-Reply-To: <20231113093742.GAZVHuZk9CGTRIfAWb@fat_crate.local>
+References: <20231003062458.23552-1-xin3.li@intel.com> <20231003062458.23552-20-xin3.li@intel.com> <20231113093742.GAZVHuZk9CGTRIfAWb@fat_crate.local>
+Message-ID: <3BFEBDE8-6F90-43A5-AE34-07B0ED0CAAAE@zytor.com>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII; format=flowed
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, 13 Nov 2023, Geert Uytterhoeven wrote:
-> Below is the list of build error/warning regressions/improvements in
-> v6.7-rc1[1] compared to v6.6[2].
+On November 13, 2023 4:37:42 AM EST, Borislav Petkov <bp@alien8=2Ede> wrote=
+:
+>On Mon, Oct 02, 2023 at 11:24:40PM -0700, Xin Li wrote:
+>> From: "H=2E Peter Anvin (Intel)" <hpa@zytor=2Ecom>
+>>=20
+>> MSR_IA32_FRED_RSP0 is used during ring 3 event delivery, and needs to
+>> be updated to point to the top of next task stack during task switch=2E
+>>=20
+>> Signed-off-by: H=2E Peter Anvin (Intel) <hpa@zytor=2Ecom>
+>> Tested-by: Shan Kang <shan=2Ekang@intel=2Ecom>
+>> Signed-off-by: Xin Li <xin3=2Eli@intel=2Ecom>
+>> ---
+>>  arch/x86/include/asm/switch_to=2Eh | 8 ++++++--
+>>  1 file changed, 6 insertions(+), 2 deletions(-)
+>>=20
+>> diff --git a/arch/x86/include/asm/switch_to=2Eh b/arch/x86/include/asm/=
+switch_to=2Eh
+>> index f42dbf17f52b=2E=2Ec3bd0c0758c9 100644
+>> --- a/arch/x86/include/asm/switch_to=2Eh
+>> +++ b/arch/x86/include/asm/switch_to=2Eh
+>> @@ -70,9 +70,13 @@ static inline void update_task_stack(struct task_str=
+uct *task)
+>>  #ifdef CONFIG_X86_32
+>>  	this_cpu_write(cpu_tss_rw=2Ex86_tss=2Esp1, task->thread=2Esp0);
+>>  #else
+>> -	/* Xen PV enters the kernel on the thread stack=2E */
+>> -	if (cpu_feature_enabled(X86_FEATURE_XENPV))
+>> +	if (cpu_feature_enabled(X86_FEATURE_FRED)) {
+>> +		/* WRMSRNS is a baseline feature for FRED=2E */
+>> +		wrmsrns(MSR_IA32_FRED_RSP0, (unsigned long)task_stack_page(task) + T=
+HREAD_SIZE);
 >
-> Summarized:
->  - build errors: +20/-7
->  - build warnings: +24/-8
+>If this non-serializing write happens now and, AFAICT, the CR3 write
+>during the task switch has already happened in switch_mm* earlier, what
+>is the serialization point that's going to make sure that write is
+>committed before the new task starts executing?
 >
-> Note that there may be false regressions, as some logs are incomplete.
-> Still, they're build errors/warnings.
+>Thx=2E
 >
-> Happy fixing! ;-)
->
-> Thanks to the linux-next team for providing the build service.
->
-> [1] http://kisskb.ellerman.id.au/kisskb/branch/linus/head/b85ea95d086471afb4ad062012a4d73cd328fa86/ (238 out of 239 configs)
-> [2] http://kisskb.ellerman.id.au/kisskb/branch/linus/head/ffc253263a1375a65fa6c9f62a893e9767fbebfa/ (all 239 configs)
->
->
-> *** ERRORS ***
->
-> 20 error regressions:
->  + /kisskb/src/include/linux/compiler_types.h: error: call to '__compiletime_assert_654' declared with attribute error: FIELD_PREP: value too large for the field:  => 435:38
 
-powerpc-gcc5/powerpc-allyesconfig
-drivers/edac/versal_edac.c: In function 'mc_probe':
-num_chans = FIELD_PREP(XDDR_REG_CONFIG0_NUM_CHANS_MASK, regval);
+A resource cannot be consumed after the value has been written; this is th=
+e only necessary level of serialization, equivalent to, say, RAX=2E
 
->  + {standard input}: Error: displacement to undefined symbol .L100 overflows 8-bit field :  => 588
->  + {standard input}: Error: displacement to undefined symbol .L104 overflows 8-bit field :  => 588
->  + {standard input}: Error: displacement to undefined symbol .L105 overflows 8-bit field :  => 593
->  + {standard input}: Error: displacement to undefined symbol .L134 overflows 8-bit field :  => 598
->  + {standard input}: Error: displacement to undefined symbol .L72 overflows 12-bit field:  => 589
->  + {standard input}: Error: displacement to undefined symbol .L73 overflows 8-bit field :  => 580
->  + {standard input}: Error: displacement to undefined symbol .L75 overflows 12-bit field:  => 586, 589, 606
->  + {standard input}: Error: displacement to undefined symbol .L76 overflows 8-bit field :  => 577, 580
->  + {standard input}: Error: displacement to undefined symbol .L77 overflows 8-bit field : 582 => 607, 585
->  + {standard input}: Error: displacement to undefined symbol .L78 overflows 8-bit field :  => 610
->  + {standard input}: Error: displacement to undefined symbol .L80 overflows 8-bit field :  => 607, 601
->  + {standard input}: Error: displacement to undefined symbol .L81 overflows 8-bit field : 606 => 604, 610
->  + {standard input}: Error: displacement to undefined symbol .L96 overflows 12-bit field:  => 602
->  + {standard input}: Error: displacement to undefined symbol .L97 overflows 12-bit field:  => 607
->  + {standard input}: Error: displacement to undefined symbol .L98 overflows 12-bit field:  => 602
->  + {standard input}: Error: invalid operands for opcode:  => 612
->  + {standard input}: Error: missing operand:  => 612
->  + {standard input}: Error: pcrel too far: 601, 598, 604, 577, 595, 574 => 590, 598, 599, 577, 596, 569, 604, 610, 572, 593
->  + {standard input}: Error: unknown pseudo-op: `.l':  => 609
-
-sh4-gcc1[123]/sh-all{mod,yes}config ICE
-
-Gr{oetje,eeting}s,
-
- 						Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
- 							    -- Linus Torvalds
+A serializing instruction stops the entire pipeline until everything has r=
+etired and any stores have become globally visible=2E
 
