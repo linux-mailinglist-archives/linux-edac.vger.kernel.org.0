@@ -1,40 +1,55 @@
-Return-Path: <linux-edac+bounces-65-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-66-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 587047F1886
-	for <lists+linux-edac@lfdr.de>; Mon, 20 Nov 2023 17:22:07 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id E791F7F19BF
+	for <lists+linux-edac@lfdr.de>; Mon, 20 Nov 2023 18:22:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 89E7A1C21868
-	for <lists+linux-edac@lfdr.de>; Mon, 20 Nov 2023 16:22:06 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A3AE828179D
+	for <lists+linux-edac@lfdr.de>; Mon, 20 Nov 2023 17:22:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CE7F11E508;
-	Mon, 20 Nov 2023 16:22:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dkim=none
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6D52B208B8;
+	Mon, 20 Nov 2023 17:22:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=fail reason="signature verification failed" (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="OWwEBM9P"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [IPv6:2a0a:edc0:2:b01:1d::104])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2E1093
-	for <linux-edac@vger.kernel.org>; Mon, 20 Nov 2023 08:22:01 -0800 (PST)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <ukl@pengutronix.de>)
-	id 1r571A-0004hc-4H; Mon, 20 Nov 2023 17:21:00 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <ukl@pengutronix.de>)
-	id 1r5715-00AOMM-7d; Mon, 20 Nov 2023 17:20:55 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-	(envelope-from <ukl@pengutronix.de>)
-	id 1r5714-004V52-S7; Mon, 20 Nov 2023 17:20:54 +0100
-Date: Mon, 20 Nov 2023 17:20:54 +0100
-From: Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To: Borislav Petkov <bp@alien8.de>, Tony Luck <tony.luck@intel.com>
-Cc: Tomer Maimon <tmaimon77@gmail.com>, linux-aspeed@lists.ozlabs.org,
-	Tali Perry <tali.perry1@gmail.com>,
+Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F37B1BE;
+	Mon, 20 Nov 2023 09:22:31 -0800 (PST)
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 3339640E0031;
+	Mon, 20 Nov 2023 17:22:29 +0000 (UTC)
+X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
+Received: from mail.alien8.de ([127.0.0.1])
+	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
+	with ESMTP id Giv1lRArfQMf; Mon, 20 Nov 2023 17:22:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
+	t=1700500946; bh=T5VVznuzCd2a8UX5KPiD1fC5qSKUkPIUpjwSGVtPbk4=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=OWwEBM9PkqTrnSvy4yDjYJ0ZhJryM/rAtmW/2s6oM+uOMLP0V9mr1ejXHu0BEE53e
+	 suV84gojqesjvwuhW3/YAOjJ53YgayY1R8mlJZC1Uw34To88V0MHACS8KPGph30ooq
+	 eA//+1ShMxFZ7UdW3O+RxL59JN+yv5ZKCJsavenToPhh9ZWGortQGauczkkBwUevb/
+	 YNoKrf59reRxf+zjxpMIzTjAbdFEC/l7SGA8Urv7knXFnfoa+8TO+z7WO/HvAW+BMg
+	 MtW52+j6bh37JbYXT140+t4iZL0ZYN9pOeqK7CxFotFGUdt+M9IdWM3m3IYkAQp7/d
+	 eDKZBwSqtlOwk73mKp+PdthwPavh4ySD60MXTP/3VgPdq5iUCh0BUhIu3BgiefrED7
+	 G0tsdv06DhMl1z/ntDDxJubu6smwekD53rIJQpZ1q8eaa4+IYLTQ6fUAGIz9nMGahN
+	 Lscr1Nn0M0uV1rdbKoUxb2So+egniBwR42zxfHYPq0WEzGawD7zqygG1oECSILT6OP
+	 JHhOLTRu8N+oM9f3FCR1Wbc6z7VzUPSLVsyRQijLtVK0qC3ribaI3rufTRfHVObTiJ
+	 pJJND1HyEYqIrI2aK/tFe9D3cFDkIMP/dBZpa4Nb/YPDJ2NvsDW8aKkBTjEVk4/kmU
+	 DIUtoZbg/SxzMYPiFqR1xsnc=
+Received: from zn.tnic (pd95304da.dip0.t-ipconnect.de [217.83.4.218])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
+	(No client certificate requested)
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id BB74940E01A5;
+	Mon, 20 Nov 2023 17:21:46 +0000 (UTC)
+Date: Mon, 20 Nov 2023 18:21:45 +0100
+From: Borislav Petkov <bp@alien8.de>
+To: Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+Cc: Tony Luck <tony.luck@intel.com>, Tomer Maimon <tmaimon77@gmail.com>,
+	linux-aspeed@lists.ozlabs.org, Tali Perry <tali.perry1@gmail.com>,
 	Shubhrajyoti Datta <shubhrajyoti.datta@amd.com>,
 	Sai Krishna Potthuri <sai.krishna.potthuri@amd.com>,
 	Khuong Dinh <khuong@os.amperecomputing.com>,
@@ -63,76 +78,28 @@ Cc: Tomer Maimon <tmaimon77@gmail.com>, linux-aspeed@lists.ozlabs.org,
 	Marvin Lin <kflin@nuvoton.com>
 Subject: Re: [PATCH 00/21] EDAC: Convert to platform remove callback
  returning void
-Message-ID: <20231120162054.haryuye4qedlfd7j@pengutronix.de>
+Message-ID: <20231120172145.GHZVuVqXpKtX2nbTE4@fat_crate.local>
 References: <20231004131254.2673842-1-u.kleine-koenig@pengutronix.de>
+ <20231120162054.haryuye4qedlfd7j@pengutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="bdo7vk2aw267ud5x"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20231004131254.2673842-1-u.kleine-koenig@pengutronix.de>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-edac@vger.kernel.org
-
-
---bdo7vk2aw267ud5x
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+In-Reply-To: <20231120162054.haryuye4qedlfd7j@pengutronix.de>
 Content-Transfer-Encoding: quoted-printable
 
-Hello Boris, hello Tony,
+On Mon, Nov 20, 2023 at 05:20:54PM +0100, Uwe Kleine-K=C3=B6nig wrote:
+> Any news on this series? Would a resend help?
 
-On Wed, Oct 04, 2023 at 03:12:33PM +0200, Uwe Kleine-K=F6nig wrote:
-> this series converts all platform drivers below drivers/edac to use
-> .remove_new(). The motivation is to get rid of an integer return code
-> that is (mostly) ignored by the platform driver core and error prone on
-> the driver side. However none of the edac drivers suffered from the easy
-> to make bug, so all drivers are converted in a trivial way.
->=20
-> See commit 5c5a7680e67b ("platform: Provide a remove callback that
-> returns no value") for an extended explanation and the eventual goal.
->=20
-> The patch for npcm was already sent back in June
-> (https://lore.kernel.org/linux-edac/20230628071354.665300-1-u.kleine-koen=
-ig@pengutronix.de)
-> but didn't result in enthusiastic review comments and it wasn't picked
-> up.
->=20
-> There are no interdependencies between the patches. As there are still
-> quite a few drivers to convert, I'm happy about every patch that makes
-> it in. So even if there is a merge conflict with one patch until you
-> apply, please apply the remainder of this series anyhow. I'll come back
-> to the part that you (maybe) skipped at a later point.
-
-Any news on this series? Would a resend help?
-
-Best regards
-Uwe
+Nah, lemme have a look.
 
 --=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+Regards/Gruss,
+    Boris.
 
---bdo7vk2aw267ud5x
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmVbh2UACgkQj4D7WH0S
-/k6t1gf+IirGoYLuqK5VC0fzJxyTYO4mc7qBgbuVM3P88Pu7qVConC4mkUSNPgCW
-a7DFKrJNIsbwS61Eghc30hxINTLVzt+m50w6+m2eY4Crm6LkSu18fuweiDte3B8B
-ECiAFB0EvPbNR8tv4Javms5+AKRVP5bAdREtoIeRWgFglceoVXOx/6NB//OwwPDp
-1owt4JZbVUJH0axsnyKBzt5PMXyo3thq6Y7eTqQIjikbEvBA9tvA3PN51btMbJsO
-6ttXmOnx7UO99+rXeL6VaKUzyRPTVvJxR3O70xJA36pnmSwm4oJ/LCcN/vX2kZpb
-TeEQgFrvHjNBLraJcD3rqO+wNIxdXQ==
-=WE4E
------END PGP SIGNATURE-----
-
---bdo7vk2aw267ud5x--
+https://people.kernel.org/tglx/notes-about-netiquette
 
