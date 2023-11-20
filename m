@@ -1,107 +1,125 @@
-Return-Path: <linux-edac+bounces-68-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-69-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id CB1FE7F1B4A
-	for <lists+linux-edac@lfdr.de>; Mon, 20 Nov 2023 18:45:30 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5F7EF7F2070
+	for <lists+linux-edac@lfdr.de>; Mon, 20 Nov 2023 23:37:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7FF691F255D9
-	for <lists+linux-edac@lfdr.de>; Mon, 20 Nov 2023 17:45:30 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id BF8A4B2189B
+	for <lists+linux-edac@lfdr.de>; Mon, 20 Nov 2023 22:37:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 071F6225D6;
-	Mon, 20 Nov 2023 17:45:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dkim=none
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7DB2536B0E;
+	Mon, 20 Nov 2023 22:37:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=fail reason="signature verification failed" (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="dg1hNBY0"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTP id 68F2010E
-	for <linux-edac@vger.kernel.org>; Mon, 20 Nov 2023 09:45:24 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 5FDF11692;
-	Mon, 20 Nov 2023 09:46:10 -0800 (PST)
-Received: from donnerap.manchester.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 0C9FC3F7A6;
-	Mon, 20 Nov 2023 09:45:22 -0800 (PST)
-Date: Mon, 20 Nov 2023 17:45:20 +0000
-From: Andre Przywara <andre.przywara@arm.com>
-To: Uwe =?UTF-8?B?S2xlaW5lLUvDtm5pZw==?= <u.kleine-koenig@pengutronix.de>
-Cc: Borislav Petkov <bp@alien8.de>, Tony Luck <tony.luck@intel.com>, James
- Morse <james.morse@arm.com>, Mauro Carvalho Chehab <mchehab@kernel.org>,
- Robert Richter <rric@kernel.org>, linux-edac@vger.kernel.org,
- kernel@pengutronix.de
-Subject: Re: [PATCH 08/21] EDAC/highbank_l2: Convert to platform remove
- callback returning void
-Message-ID: <20231120174520.18865e87@donnerap.manchester.arm.com>
-In-Reply-To: <20231004131254.2673842-9-u.kleine-koenig@pengutronix.de>
+Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08863A2;
+	Mon, 20 Nov 2023 14:37:42 -0800 (PST)
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 2A8FC40E0031;
+	Mon, 20 Nov 2023 22:37:40 +0000 (UTC)
+X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
+Received: from mail.alien8.de ([127.0.0.1])
+	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
+	with ESMTP id Qlr3bOPqbg-W; Mon, 20 Nov 2023 22:37:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
+	t=1700519856; bh=x9IsRR5+1IkHxb6g4ZF6VKh5RWuwsZ6e/RDXJfhFiD8=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=dg1hNBY0wesA8gF8gY062vLM00Xkf87s/irWgAp0+1T2yNZoU2eVnkYYyVrxkfpHz
+	 v/CDNxZDsCqarhLXL027s+pfyo+cb00NQ+heMcdDK5qHf4eCmwP5AC8Ko4XXrEvh0h
+	 qy5WiIgPjMvMtCy9MzPe9CYO9L00hoz00Ae8YDNpQaCpMJbiDtn3ldGtOYWTHCJcOd
+	 POUfqOEZmCTk+RCnJetbB71ya+N0vBNuO4UOEIjbyEAX7/qMJhNBUyhUeOKBaWpdr9
+	 YXlgbmJesULfeTbywn5O1jZW+CDsSN28Moe7bkZurTMsNjeVqFfIeDunus09ODlB+9
+	 fEfyLgKfgFGkHZ6pJpHYRJey0eezKUVcZ8Qc59gKQ92a1zr76WREbMpAypqCcPtj97
+	 vg1YoUfOfTbsDQ+D2jCCoGLNi+iEV1PzyzEn3Z73VmCGWfY4BbSsFShjd77tGlbqKQ
+	 izFw8wSSMT1BGhfp+Ro1kCZ/D2RdiArgVse5ESOch3H+PRJc2DiRB/eSKimWYc0Imc
+	 51ftFCVoExnkhJIHP6oIv23Ozazu8LiNp7aCnA5yDl3BAJl0GeAJMZXNjZcEFeADub
+	 rKKadA08E2hrF5E+9USWuVi6IRhECjsE9szf2Lan9eZJvUIChphm7NPyJeVdCD+kcQ
+	 vrlIcs/4QTTXJRxGHEKkBd/w=
+Received: from zn.tnic (pd95304da.dip0.t-ipconnect.de [217.83.4.218])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
+	(No client certificate requested)
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id EC2FE40E01AD;
+	Mon, 20 Nov 2023 22:36:56 +0000 (UTC)
+Date: Mon, 20 Nov 2023 23:36:51 +0100
+From: Borislav Petkov <bp@alien8.de>
+To: Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+Cc: Tony Luck <tony.luck@intel.com>, Dinh Nguyen <dinguyen@kernel.org>,
+	James Morse <james.morse@arm.com>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Robert Richter <rric@kernel.org>, linux-edac@vger.kernel.org,
+	kernel@pengutronix.de, Jan Luebbe <jlu@pengutronix.de>,
+	Stefan Schaeckeler <sschaeck@cisco.com>,
+	Joel Stanley <joel@jms.id.au>, Andrew Jeffery <andrew@aj.id.au>,
+	linux-arm-kernel@lists.infradead.org, linux-aspeed@lists.ozlabs.org,
+	Shravan Kumar Ramani <shravankr@nvidia.com>,
+	Lei Wang <lewan@microsoft.com>,
+	Andre Przywara <andre.przywara@arm.com>,
+	Johannes Thumshirn <morbidrsa@gmail.com>,
+	Avi Fishman <avifishman70@gmail.com>,
+	Tomer Maimon <tmaimon77@gmail.com>,
+	Tali Perry <tali.perry1@gmail.com>,
+	Patrick Venture <venture@google.com>, Nancy Yuen <yuenn@google.com>,
+	Benjamin Fair <benjaminfair@google.com>,
+	Marvin Lin <kflin@nuvoton.com>, Stanley Chu <yschu@nuvoton.com>,
+	openbmc@lists.ozlabs.org, Ralf Baechle <ralf@linux-mips.org>,
+	linux-mips@vger.kernel.org, Manivannan Sadhasivam <mani@kernel.org>,
+	Andy Gross <agross@kernel.org>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Konrad Dybcio <konrad.dybcio@linaro.org>,
+	linux-arm-msm@vger.kernel.org, Michal Simek <michal.simek@amd.com>,
+	Tero Kristo <kristo@kernel.org>,
+	Khuong Dinh <khuong@os.amperecomputing.com>,
+	Shubhrajyoti Datta <shubhrajyoti.datta@amd.com>,
+	Sai Krishna Potthuri <sai.krishna.potthuri@amd.com>
+Subject: Re: [PATCH 00/21] EDAC: Convert to platform remove callback
+ returning void
+Message-ID: <20231120223651.GIZVvfg1amJyXdmYKQ@fat_crate.local>
 References: <20231004131254.2673842-1-u.kleine-koenig@pengutronix.de>
-	<20231004131254.2673842-9-u.kleine-koenig@pengutronix.de>
-Organization: ARM
-X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.32; aarch64-unknown-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20231004131254.2673842-1-u.kleine-koenig@pengutronix.de>
 Content-Transfer-Encoding: quoted-printable
 
-On Wed,  4 Oct 2023 15:12:41 +0200
-Uwe Kleine-K=C3=B6nig <u.kleine-koenig@pengutronix.de> wrote:
+On Wed, Oct 04, 2023 at 03:12:33PM +0200, Uwe Kleine-K=C3=B6nig wrote:
+> Uwe Kleine-K=C3=B6nig (21):
+>   EDAC/altera: Convert to platform remove callback returning void
+>   EDAC/armada_xp: Convert to platform remove callback returning void
+>   EDAC/aspeed: Convert to platform remove callback returning void
+>   EDAC/bluefield: Convert to platform remove callback returning void
+>   EDAC/cell: Convert to platform remove callback returning void
+>   EDAC/cpc925: Convert to platform remove callback returning void
+>   EDAC/dmc520: Convert to platform remove callback returning void
+>   EDAC/highbank_l2: Convert to platform remove callback returning void
+>   EDAC/highbank_mc: Convert to platform remove callback returning void
+>   EDAC/mpc85xx: Convert to platform remove callback returning void
+>   EDAC/npcm: Convert to platform remove callback returning void
+>   EDAC/octeon-l2c: Convert to platform remove callback returning void
+>   EDAC/octeon-lmc: Convert to platform remove callback returning void
+>   EDAC/octeon-pc: Convert to platform remove callback returning void
+>   EDAC/octeon-pci: Convert to platform remove callback returning void
+>   EDAC/ppc4xx: Convert to platform remove callback returning void
+>   EDAC/qcom: Convert to platform remove callback returning void
+>   EDAC/synopsys: Convert to platform remove callback returning void
+>   EDAC/ti: Convert to platform remove callback returning void
+>   EDAC/xgene: Convert to platform remove callback returning void
+>   EDAC/zynqmp: Convert to platform remove callback returning void
 
-Hi,
+All applied, thanks.
 
-> The .remove() callback for a platform driver returns an int which makes
-> many driver authors wrongly assume it's possible to do error handling by
-> returning an error code. However the value returned is ignored (apart
-> from emitting a warning) and this typically results in resource leaks.
->=20
-> To improve here there is a quest to make the remove callback return
-> void. In the first step of this quest all drivers are converted to
-> .remove_new(), which already returns void. Eventually after all drivers
-> are converted, .remove_new() will be renamed to .remove().
->=20
-> Trivially convert this driver from always returning zero in the remove
-> callback to the void returning variant.
->=20
-> Signed-off-by: Uwe Kleine-K=C3=B6nig <u.kleine-koenig@pengutronix.de>
+--=20
+Regards/Gruss,
+    Boris.
 
-Reviewed-by: Andre Przywara <andre.przywara@arm.com>
-
-Cheers,
-Andre
-
-> ---
->  drivers/edac/highbank_l2_edac.c | 5 ++---
->  1 file changed, 2 insertions(+), 3 deletions(-)
->=20
-> diff --git a/drivers/edac/highbank_l2_edac.c b/drivers/edac/highbank_l2_e=
-dac.c
-> index 140d4431bd0d..5646c049a934 100644
-> --- a/drivers/edac/highbank_l2_edac.c
-> +++ b/drivers/edac/highbank_l2_edac.c
-> @@ -118,18 +118,17 @@ static int highbank_l2_err_probe(struct platform_de=
-vice *pdev)
->  	return res;
->  }
-> =20
-> -static int highbank_l2_err_remove(struct platform_device *pdev)
-> +static void highbank_l2_err_remove(struct platform_device *pdev)
->  {
->  	struct edac_device_ctl_info *dci =3D platform_get_drvdata(pdev);
-> =20
->  	edac_device_del_device(&pdev->dev);
->  	edac_device_free_ctl_info(dci);
-> -	return 0;
->  }
-> =20
->  static struct platform_driver highbank_l2_edac_driver =3D {
->  	.probe =3D highbank_l2_err_probe,
-> -	.remove =3D highbank_l2_err_remove,
-> +	.remove_new =3D highbank_l2_err_remove,
->  	.driver =3D {
->  		.name =3D "hb_l2_edac",
->  		.of_match_table =3D hb_l2_err_of_match,
-
+https://people.kernel.org/tglx/notes-about-netiquette
 
