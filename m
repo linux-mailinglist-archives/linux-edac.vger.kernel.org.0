@@ -1,119 +1,138 @@
-Return-Path: <linux-edac+bounces-62-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-65-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 38A927F1564
-	for <lists+linux-edac@lfdr.de>; Mon, 20 Nov 2023 15:13:15 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 587047F1886
+	for <lists+linux-edac@lfdr.de>; Mon, 20 Nov 2023 17:22:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B7D7EB21905
-	for <lists+linux-edac@lfdr.de>; Mon, 20 Nov 2023 14:13:12 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 89E7A1C21868
+	for <lists+linux-edac@lfdr.de>; Mon, 20 Nov 2023 16:22:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 64ECB1C287;
-	Mon, 20 Nov 2023 14:13:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="iO19RStE"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CE7F11E508;
+	Mon, 20 Nov 2023 16:22:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dkim=none
 X-Original-To: linux-edac@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.100])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90F9DA0;
-	Mon, 20 Nov 2023 06:13:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1700489587; x=1732025587;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=XKZFQUi+U4ersNqM4YmQM70MnyE4Os/TQpc7j9Ab95o=;
-  b=iO19RStEWjyQLAwIbTLZEi7AOOE4fHs1zJvBjy5sUCbH5AH+5KktXaSm
-   Y7SJzDPSMDuC2qf0xiDtVR/Gq0AVUCv2wjEyN22RRB0nI2Cu5tlr92gBv
-   bVL9HOjngVvrRsPGUwmyfQGFM0dbNsofAuN4rpOYbc+RKuWR0ge7S8UVi
-   At3/LhgF238bvxXwQ1gcSGp4AR/YpNZTA3X8yLLmJ0kCKG0Gg5YYddUXU
-   olmlHWz7ExltKUGiUNQKtxiE/tlrhGRm/p8BqSWyOJbl15YTbRDtjtVar
-   QeQkM+w7sW0DTPPYV83TM+ZgVZrcXtw6OAPGeowQ6S0sATogxUJ32bOIf
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10900"; a="458121755"
-X-IronPort-AV: E=Sophos;i="6.04,214,1695711600"; 
-   d="scan'208";a="458121755"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Nov 2023 06:12:37 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10900"; a="801184239"
-X-IronPort-AV: E=Sophos;i="6.04,214,1695711600"; 
-   d="scan'208";a="801184239"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga001.jf.intel.com with ESMTP; 20 Nov 2023 06:12:34 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-	id 3DA4E4F8; Mon, 20 Nov 2023 16:12:33 +0200 (EET)
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	linux-edac@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: Tony Luck <tony.luck@intel.com>,
-	Borislav Petkov <bp@alien8.de>,
-	James Morse <james.morse@arm.com>,
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [IPv6:2a0a:edc0:2:b01:1d::104])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2E1093
+	for <linux-edac@vger.kernel.org>; Mon, 20 Nov 2023 08:22:01 -0800 (PST)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <ukl@pengutronix.de>)
+	id 1r571A-0004hc-4H; Mon, 20 Nov 2023 17:21:00 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <ukl@pengutronix.de>)
+	id 1r5715-00AOMM-7d; Mon, 20 Nov 2023 17:20:55 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+	(envelope-from <ukl@pengutronix.de>)
+	id 1r5714-004V52-S7; Mon, 20 Nov 2023 17:20:54 +0100
+Date: Mon, 20 Nov 2023 17:20:54 +0100
+From: Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To: Borislav Petkov <bp@alien8.de>, Tony Luck <tony.luck@intel.com>
+Cc: Tomer Maimon <tmaimon77@gmail.com>, linux-aspeed@lists.ozlabs.org,
+	Tali Perry <tali.perry1@gmail.com>,
+	Shubhrajyoti Datta <shubhrajyoti.datta@amd.com>,
+	Sai Krishna Potthuri <sai.krishna.potthuri@amd.com>,
+	Khuong Dinh <khuong@os.amperecomputing.com>,
+	Benjamin Fair <benjaminfair@google.com>,
+	Dinh Nguyen <dinguyen@kernel.org>, openbmc@lists.ozlabs.org,
+	Nancy Yuen <yuenn@google.com>, Andy Gross <agross@kernel.org>,
+	Joel Stanley <joel@jms.id.au>, linux-arm-msm@vger.kernel.org,
+	Stanley Chu <yschu@nuvoton.com>, Robert Richter <rric@kernel.org>,
+	Jan Luebbe <jlu@pengutronix.de>,
+	Shravan Kumar Ramani <shravankr@nvidia.com>,
+	Manivannan Sadhasivam <mani@kernel.org>,
+	Andre Przywara <andre.przywara@arm.com>,
 	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Robert Richter <rric@kernel.org>,
-	Qiuxu Zhuo <qiuxu.zhuo@intel.com>
-Subject: [PATCH v2 4/4] EDAC, pnd2: Sort headers alphabetically
-Date: Mon, 20 Nov 2023 16:10:48 +0200
-Message-ID: <20231120141231.1638240-4-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.43.0.rc1.1.gbec44491f096
-In-Reply-To: <20231120141231.1638240-1-andriy.shevchenko@linux.intel.com>
-References: <20231120141231.1638240-1-andriy.shevchenko@linux.intel.com>
+	Michal Simek <michal.simek@amd.com>,
+	linux-arm-kernel@lists.infradead.org, linux-edac@vger.kernel.org,
+	Johannes Thumshirn <morbidrsa@gmail.com>,
+	Tero Kristo <kristo@kernel.org>,
+	Avi Fishman <avifishman70@gmail.com>,
+	Patrick Venture <venture@google.com>,
+	Bjorn Andersson <andersson@kernel.org>, linux-mips@vger.kernel.org,
+	Ralf Baechle <ralf@linux-mips.org>,
+	Konrad Dybcio <konrad.dybcio@linaro.org>,
+	Andrew Jeffery <andrew@aj.id.au>, James Morse <james.morse@arm.com>,
+	kernel@pengutronix.de, Lei Wang <lewan@microsoft.com>,
+	Stefan Schaeckeler <sschaeck@cisco.com>,
+	Marvin Lin <kflin@nuvoton.com>
+Subject: Re: [PATCH 00/21] EDAC: Convert to platform remove callback
+ returning void
+Message-ID: <20231120162054.haryuye4qedlfd7j@pengutronix.de>
+References: <20231004131254.2673842-1-u.kleine-koenig@pengutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="bdo7vk2aw267ud5x"
+Content-Disposition: inline
+In-Reply-To: <20231004131254.2673842-1-u.kleine-koenig@pengutronix.de>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-edac@vger.kernel.org
 
-Sort the headers in alphabetic order in order to ease
-the maintenance for this part.
 
-Reviewed-by: Qiuxu Zhuo <qiuxu.zhuo@intel.com>
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
-v2: added tag (Qiuxu) 
+--bdo7vk2aw267ud5x
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
- drivers/edac/pnd2_edac.c | 19 ++++++++++---------
- 1 file changed, 10 insertions(+), 9 deletions(-)
+Hello Boris, hello Tony,
 
-diff --git a/drivers/edac/pnd2_edac.c b/drivers/edac/pnd2_edac.c
-index 969fb2465edb..2afcd148fcf8 100644
---- a/drivers/edac/pnd2_edac.c
-+++ b/drivers/edac/pnd2_edac.c
-@@ -16,19 +16,20 @@
-  * rank, bank, row and column using the appropriate "dunit_ops" functions/parameters.
-  */
- 
--#include <linux/module.h>
--#include <linux/init.h>
--#include <linux/pci.h>
--#include <linux/pci_ids.h>
--#include <linux/slab.h>
-+#include <linux/bitmap.h>
- #include <linux/delay.h>
- #include <linux/edac.h>
--#include <linux/mmzone.h>
--#include <linux/sizes.h>
--#include <linux/smp.h>
--#include <linux/bitmap.h>
-+#include <linux/init.h>
- #include <linux/math64.h>
-+#include <linux/mmzone.h>
- #include <linux/mod_devicetable.h>
-+#include <linux/module.h>
-+#include <linux/pci.h>
-+#include <linux/pci_ids.h>
-+#include <linux/sizes.h>
-+#include <linux/slab.h>
-+#include <linux/smp.h>
-+
- #include <linux/platform_data/x86/p2sb.h>
- 
- #include <asm/cpu_device_id.h>
--- 
-2.43.0.rc1.1.gbec44491f096
+On Wed, Oct 04, 2023 at 03:12:33PM +0200, Uwe Kleine-K=F6nig wrote:
+> this series converts all platform drivers below drivers/edac to use
+> .remove_new(). The motivation is to get rid of an integer return code
+> that is (mostly) ignored by the platform driver core and error prone on
+> the driver side. However none of the edac drivers suffered from the easy
+> to make bug, so all drivers are converted in a trivial way.
+>=20
+> See commit 5c5a7680e67b ("platform: Provide a remove callback that
+> returns no value") for an extended explanation and the eventual goal.
+>=20
+> The patch for npcm was already sent back in June
+> (https://lore.kernel.org/linux-edac/20230628071354.665300-1-u.kleine-koen=
+ig@pengutronix.de)
+> but didn't result in enthusiastic review comments and it wasn't picked
+> up.
+>=20
+> There are no interdependencies between the patches. As there are still
+> quite a few drivers to convert, I'm happy about every patch that makes
+> it in. So even if there is a merge conflict with one patch until you
+> apply, please apply the remainder of this series anyhow. I'll come back
+> to the part that you (maybe) skipped at a later point.
 
+Any news on this series? Would a resend help?
+
+Best regards
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--bdo7vk2aw267ud5x
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmVbh2UACgkQj4D7WH0S
+/k6t1gf+IirGoYLuqK5VC0fzJxyTYO4mc7qBgbuVM3P88Pu7qVConC4mkUSNPgCW
+a7DFKrJNIsbwS61Eghc30hxINTLVzt+m50w6+m2eY4Crm6LkSu18fuweiDte3B8B
+ECiAFB0EvPbNR8tv4Javms5+AKRVP5bAdREtoIeRWgFglceoVXOx/6NB//OwwPDp
+1owt4JZbVUJH0axsnyKBzt5PMXyo3thq6Y7eTqQIjikbEvBA9tvA3PN51btMbJsO
+6ttXmOnx7UO99+rXeL6VaKUzyRPTVvJxR3O70xJA36pnmSwm4oJ/LCcN/vX2kZpb
+TeEQgFrvHjNBLraJcD3rqO+wNIxdXQ==
+=WE4E
+-----END PGP SIGNATURE-----
+
+--bdo7vk2aw267ud5x--
 
