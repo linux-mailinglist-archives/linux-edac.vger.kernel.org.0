@@ -1,240 +1,88 @@
-Return-Path: <linux-edac+bounces-56-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-59-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5C6907F028E
-	for <lists+linux-edac@lfdr.de>; Sat, 18 Nov 2023 20:33:30 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id A73FD7F0E90
+	for <lists+linux-edac@lfdr.de>; Mon, 20 Nov 2023 10:09:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 11DC9280FCA
-	for <lists+linux-edac@lfdr.de>; Sat, 18 Nov 2023 19:33:29 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 37365B20F7B
+	for <lists+linux-edac@lfdr.de>; Mon, 20 Nov 2023 09:09:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 405101E502;
-	Sat, 18 Nov 2023 19:33:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 39C53107A3;
+	Mon, 20 Nov 2023 09:09:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="pSL56HmF"
+	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="BnLufiub"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2044.outbound.protection.outlook.com [40.107.94.44])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E60461AD;
-	Sat, 18 Nov 2023 11:33:15 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=fF/yd7QZiBdwtDJouGjUmv0GIxbw1RrINtdiwKKYKV2OaFZjRU7bNmXubOY68MPIbctEl7QXRTcI1Q9smtyj/xdrbuY+Fp+T8fwNDG21Yq2NswvPesxtKci1rpr/vbqHAXghy9BgyoBm+rYKNmBjsHK6ITCXEAHNZ1nQi0yM87nwBsVBjxGqKpVWCzaZ6dnd7RZf5gn73u2pZhjApXRPFU0dFeLfpr7uBi1nUFV8z2nBYHs0i5ioIOdJ6nb1osreMDi5a0N20mRJjIsbMp/f5LGpIVxS1ppDWi+KRTnBPkdFJtOCSw4atETzDzBgF5AHgNJ3Fkf6yNAnifOZUm7PVw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=J6G0oyUjQOnR9yTjZokWWwMk1/gMR9SRf8LNA54A4Hs=;
- b=B0VY0cDBxM+dJnbk2t4g+bxvZm9XPvZg2/V14JdZimRmmiBDa2yQBxsH1fmV3gDh+TJDx4MCTDtvvc4jjPSX1rg+xf9Fg4ZBiMpko5q0Yv2IhkUtvG4OsIDeYYxQjIe9kBQhUWBBAHJnqk+awdehkckdejecPK1bkfULnj7iMMAjjbmUh53CpU6/pRIZy+bOtVm0D9z8TnT57S96vHskP3kH1Hpja91VrgR1dckW1lGO2zpH1sZwVJxMOrfUj7059UKpdzqMEp+6R9igjTJxYrgVeOsmmv5SWN+nTwSEAL77ApHaGvLhaxnKLVll7IHleULRs/RtQb34Ax0iT05Sow==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=J6G0oyUjQOnR9yTjZokWWwMk1/gMR9SRf8LNA54A4Hs=;
- b=pSL56HmFVAbynIwbsaAnFQwusv5G4hfpMGDffwp1UCbqPoW5TnJXO2imAMYmiY4xIRLqp6EgBKAp+xhr0ksfWRUoQqUDVZJ58V8Zxohe1uA7NU/4yCCBddWPOMQfq7Un6vIItGoBj4GiS7voILXIWv9o46SrTRqq3QFZqqjDVX4=
-Received: from BLAP220CA0018.NAMP220.PROD.OUTLOOK.COM (2603:10b6:208:32c::23)
- by LV2PR12MB5895.namprd12.prod.outlook.com (2603:10b6:408:173::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7002.23; Sat, 18 Nov
- 2023 19:33:12 +0000
-Received: from BL6PEPF0001AB4E.namprd04.prod.outlook.com
- (2603:10b6:208:32c:cafe::5b) by BLAP220CA0018.outlook.office365.com
- (2603:10b6:208:32c::23) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7002.23 via Frontend
- Transport; Sat, 18 Nov 2023 19:33:12 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- BL6PEPF0001AB4E.mail.protection.outlook.com (10.167.242.72) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.7025.12 via Frontend Transport; Sat, 18 Nov 2023 19:33:12 +0000
-Received: from quartz-7b1chost.amd.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.34; Sat, 18 Nov
- 2023 13:33:11 -0600
-From: Yazen Ghannam <yazen.ghannam@amd.com>
-To: <linux-edac@vger.kernel.org>
-CC: <linux-kernel@vger.kernel.org>, <tony.luck@intel.com>, <x86@kernel.org>,
-	<Avadhut.Naik@amd.com>, <Smita.KoralahalliChannabasappa@amd.com>,
-	<amd-gfx@lists.freedesktop.org>, <linux-trace-kernel@vger.kernel.org>, "Yazen
- Ghannam" <yazen.ghannam@amd.com>
-Subject: [PATCH 20/20] EDAC/mce_amd: Add support for FRU Text in MCA
-Date: Sat, 18 Nov 2023 13:32:48 -0600
-Message-ID: <20231118193248.1296798-21-yazen.ghannam@amd.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20231118193248.1296798-1-yazen.ghannam@amd.com>
-References: <20231118193248.1296798-1-yazen.ghannam@amd.com>
+Received: from mail.alien8.de (mail.alien8.de [IPv6:2a01:4f9:3051:3f93::2])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E988AA;
+	Mon, 20 Nov 2023 01:09:03 -0800 (PST)
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 0D20540E0191;
+	Mon, 20 Nov 2023 09:09:02 +0000 (UTC)
+X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
+Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
+	header.d=alien8.de
+Received: from mail.alien8.de ([127.0.0.1])
+	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
+	with ESMTP id NIZxxt3lKTWI; Mon, 20 Nov 2023 09:09:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
+	t=1700471340; bh=1PeZhKr9FNO+V97mL9x/+VpJfeePD/XPT8/+rHdaj3A=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=BnLufiubUKKmAmitL3/r/UjPfjPAN0+KObrW+hWDYQQ6Qfu4pIsXXIU6dZ6S2BMFn
+	 jzFJIq6kqIa9/QPT9KcVqMH9b7o30Jje30LWzBl26JNM/1s2a//5yZ9rGy138k7k9H
+	 rP3PvvXUwH3YkgtX91fgywjuc+UaqcRgX22O3aIgNmxMYxNg/qiC3By+sMg2hYojwS
+	 IKW0UZt1YZD3O0Q2hvXfsnHCoevv6m48Pcq1q5gADkVSRlVbVQg7SPp3c6/E4TfOLZ
+	 HThyhkBGieWH8Ugpd/AkUO+2+XTmTpw9ny5mIspUmSGz9isgIelzufcyNyqWfy1GBT
+	 Req3VC61pg18LHuTJCvSLaQ1JdOo5trC1jMqV9HU29QfkWrxwYwsBXAzvXwMHT+4I9
+	 +YE/pAjTGTuO1HBWkOTKWCQ57AHImYkQPWcKf9RPSlIBmempislgKqMydqqIM/cld7
+	 yVNcNZxgd4ffHEX1tWg0kln9jQJrabZ4zGgUndEMpIP5X3tcfxL98Id5XU5DT+hcoG
+	 OYbPDCby8j0C0WqHRN9a7jb1yZZ1QpCIwlBVik2DMwhe88/Y3VaVLZV4jHFeHhzoYE
+	 DUaEYm68EYwA1Gc9EX5sWg7J0xlNCq8JG0Q+PT/fBX2bTcicyn2NUBartPsPQqNCzX
+	 QOanwVRKr2Rv7AmzBEz4rQ5U=
+Received: from zn.tnic (pd95304da.dip0.t-ipconnect.de [217.83.4.218])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
+	(No client certificate requested)
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id CCB9640E0030;
+	Mon, 20 Nov 2023 09:08:51 +0000 (UTC)
+Date: Mon, 20 Nov 2023 10:08:46 +0100
+From: Borislav Petkov <bp@alien8.de>
+To: Rob Herring <robh@kernel.org>
+Cc: Dinh Nguyen <dinguyen@kernel.org>, Tony Luck <tony.luck@intel.com>,
+	James Morse <james.morse@arm.com>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Robert Richter <rric@kernel.org>, linux-edac@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [RESEND PATCH] EDAC: altera: Use device_get_match_data()
+Message-ID: <20231120090846.GBZVsiHstd6fCuFaQy@fat_crate.local>
+References: <20231115210201.3743564-1-robh@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BL6PEPF0001AB4E:EE_|LV2PR12MB5895:EE_
-X-MS-Office365-Filtering-Correlation-Id: e159d9d2-14ea-4c17-4f41-08dbe86d3419
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	7fFQPBD/cpnZIiwtbYIsa1KOZ4JahrumpknEqmlYjESdjFe0ak7kC+VGmlJCIuyIQz58AIVAVSiQSg+htlxHRvEnxtPs9F+mDmWpyMPVKt04n2mWqYMBf4PV0jEhjarTxi/sLle8UUbnKO/MdcC7YAHH9x4kbFwD2kMStrgAskqEux8ycHbv/V2IXFbXzXzbNnap54O6AaR2pEcT1EnhjOOJjvgZcQrmTeyn8iLJjpuYxFJobHvzw1fk6L3o87LcQxxLt2E7sJ2UyiCJFdhoWt7EaHf1Ii5fjdC9ONsceLyEmdO3Y09RnmwWcmMPRC9ATO7iSWYDR7N8vhlHp6sYbiZxdlub8QoGVGs3ZiP3dAxuyIxN9DSEwOxAWvw7y5BIGPixhGuAyzUJvacty+1gXI6kimU3/OH9CCWZs/Zyq7jh5oc73SxPy0/IT3cQNP/mOTjJ4Yi+ie3uZmEvng5QRgU62WuYF11tATqdgQ+lJoy03ypnWe1+dGrQIML7dsLxS5Pv9CiJgIB+YBNsyZeGlgswC9HfVqbTAc/LtJsZCLxTks/wtpx4fHXCzEO57sfOTlaxyL01CbstLY+Z5qf2EhMqIXh20O5tnBS9IfMNTPT3K6dbEHV3n1nhDHDrszEVt8/GbfiKcCej2Y+VuHXYoniF7WxDqoyL3AuryRSgizUs3N9LBFmABhPuKzeT2+qPt8JhrgSv9z6HZKhvxN9F58r0D6kbHk+brFU9n//NKgy7/UdyhnPivELjvtwq8UrQoDbMZQqTEMjxG+xdvs93VIHmyEM6N0REtVdsNNvY9rU=
-X-Forefront-Antispam-Report:
-	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230031)(4636009)(396003)(136003)(39860400002)(346002)(376002)(230922051799003)(230173577357003)(230273577357003)(451199024)(1800799012)(186009)(82310400011)(64100799003)(46966006)(36840700001)(478600001)(36756003)(26005)(336012)(426003)(7696005)(41300700001)(2616005)(6666004)(81166007)(356005)(16526019)(36860700001)(86362001)(47076005)(82740400003)(83380400001)(1076003)(2906002)(4326008)(8676002)(8936002)(70206006)(70586007)(54906003)(44832011)(316002)(6916009)(40480700001)(5660300002)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Nov 2023 19:33:12.5741
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: e159d9d2-14ea-4c17-4f41-08dbe86d3419
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	BL6PEPF0001AB4E.namprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: LV2PR12MB5895
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20231115210201.3743564-1-robh@kernel.org>
 
-A new "FRU Text in MCA" feature is defined where the Field Replaceable
-Unit (FRU) Text for a device is represented by a string in the new
-MCA_SYND1 and MCA_SYND2 registers. This feature is supported per MCA
-bank, and it is advertised by the McaFruTextInMca bit (MCA_CONFIG[9]).
+On Wed, Nov 15, 2023 at 03:02:01PM -0600, Rob Herring wrote:
+> Use preferred device_get_match_data() instead of of_match_device() to
+> get the driver match data. With this, adjust the includes to explicitly
+> include the correct headers.
+> 
+> Signed-off-by: Rob Herring <robh@kernel.org>
+> ---
+>  drivers/edac/altera_edac.c | 9 ++-------
+>  1 file changed, 2 insertions(+), 7 deletions(-)
 
-The FRU Text is populated dynamically for each individual error state
-(MCA_STATUS, MCA_ADDR, et al.). This handles the case where an MCA bank
-covers multiple devices, for example, a Unified Memory Controller (UMC)
-bank that manages two DIMMs.
+Applied, thanks.
 
-Print the FRU Text string, if available, when decoding an MCA error.
-
-Also, add field for MCA_CONFIG MSR in struct mce_hw_err as vendor specific
-error information and save the value of the MSR. The very value can then be
-exported through tracepoint for userspace tools like rasdaemon to print FRU
-Text, if available.
-
- Note: Checkpatch checks/warnings are ignored to maintain coding style.
-
-[Yazen: Add Avadhut as co-developer for wrapper changes. ]
-
-Co-developed-by: Avadhut Naik <Avadhut.Naik@amd.com>
-Signed-off-by: Avadhut Naik <Avadhut.Naik@amd.com>
-Signed-off-by: Yazen Ghannam <yazen.ghannam@amd.com>
----
- arch/x86/include/asm/mce.h     |  2 ++
- arch/x86/kernel/cpu/mce/apei.c |  2 ++
- arch/x86/kernel/cpu/mce/core.c |  3 +++
- drivers/edac/mce_amd.c         | 21 ++++++++++++++-------
- 4 files changed, 21 insertions(+), 7 deletions(-)
-
-diff --git a/arch/x86/include/asm/mce.h b/arch/x86/include/asm/mce.h
-index 1bd3f1e41dbb..7e2a3dba0cf3 100644
---- a/arch/x86/include/asm/mce.h
-+++ b/arch/x86/include/asm/mce.h
-@@ -59,6 +59,7 @@
-  *  - TCC bit is present in MCx_STATUS.
-  */
- #define MCI_CONFIG_MCAX		0x1
-+#define MCI_CONFIG_FRUTEXT	BIT_ULL(9)
- #define MCI_IPID_MCATYPE_OLD	0xFFFF0000
- #define MCI_IPID_HWID_OLD	0xFFF
- #define MCI_IPID_MCATYPE	GENMASK_ULL(63, 48)
-@@ -199,6 +200,7 @@ struct mce_hw_err {
- 		struct {
- 			u64 synd1;
- 			u64 synd2;
-+			u64 config;
- 		} amd;
- 	} vi;
- };
-diff --git a/arch/x86/kernel/cpu/mce/apei.c b/arch/x86/kernel/cpu/mce/apei.c
-index d01c9b272e2f..c8312e160117 100644
---- a/arch/x86/kernel/cpu/mce/apei.c
-+++ b/arch/x86/kernel/cpu/mce/apei.c
-@@ -155,6 +155,8 @@ int apei_smca_report_x86_error(struct cper_ia_proc_ctx *ctx_info, u64 lapic_id)
- 		fallthrough;
- 	/* MCA_CONFIG */
- 	case 4:
-+		err.vi.amd.config = *(i_mce + 3);
-+		fallthrough;
- 	/* MCA_MISC0 */
- 	case 3:
- 		m->misc = *(i_mce + 2);
-diff --git a/arch/x86/kernel/cpu/mce/core.c b/arch/x86/kernel/cpu/mce/core.c
-index e153a21bdb1b..b9da1cd0fb88 100644
---- a/arch/x86/kernel/cpu/mce/core.c
-+++ b/arch/x86/kernel/cpu/mce/core.c
-@@ -204,6 +204,8 @@ static void __print_mce(struct mce_hw_err *err)
- 			pr_cont("SYND2 %llx ", err->vi.amd.synd2);
- 		if (m->ipid)
- 			pr_cont("IPID %llx ", m->ipid);
-+		if (err->vi.amd.config)
-+			pr_cont("CONFIG %llx ", err->vi.amd.config);
- 	}
- 
- 	pr_cont("\n");
-@@ -661,6 +663,7 @@ static noinstr void mce_read_aux(struct mce_hw_err *err, int i)
- 
- 	if (mce_flags.smca) {
- 		m->ipid = mce_rdmsrl(MSR_AMD64_SMCA_MCx_IPID(i));
-+		err->vi.amd.config = mce_rdmsrl(MSR_AMD64_SMCA_MCx_CONFIG(i));
- 
- 		if (m->status & MCI_STATUS_SYNDV) {
- 			m->synd = mce_rdmsrl(MSR_AMD64_SMCA_MCx_SYND(i));
-diff --git a/drivers/edac/mce_amd.c b/drivers/edac/mce_amd.c
-index 4d2929770620..2b738bd7889b 100644
---- a/drivers/edac/mce_amd.c
-+++ b/drivers/edac/mce_amd.c
-@@ -1278,6 +1278,7 @@ amd_decode_mce(struct notifier_block *nb, unsigned long val, void *data)
- 	struct mce_hw_err *err = (struct mce_hw_err *)data;
- 	struct mce *m = &err->m;
- 	unsigned int fam = x86_family(m->cpuid);
-+	u64 mca_config = err->vi.amd.config;
- 	int ecc;
- 
- 	if (m->kflags & MCE_HANDLED_CEC)
-@@ -1297,11 +1298,7 @@ amd_decode_mce(struct notifier_block *nb, unsigned long val, void *data)
- 		((m->status & MCI_STATUS_PCC)	? "PCC"	  : "-"));
- 
- 	if (boot_cpu_has(X86_FEATURE_SMCA)) {
--		u32 low, high;
--		u32 addr = MSR_AMD64_SMCA_MCx_CONFIG(m->bank);
--
--		if (!rdmsr_safe(addr, &low, &high) &&
--		    (low & MCI_CONFIG_MCAX))
-+		if (mca_config & MCI_CONFIG_MCAX)
- 			pr_cont("|%s", ((m->status & MCI_STATUS_TCC) ? "TCC" : "-"));
- 
- 		pr_cont("|%s", ((m->status & MCI_STATUS_SYNDV) ? "SyndV" : "-"));
-@@ -1336,8 +1333,18 @@ amd_decode_mce(struct notifier_block *nb, unsigned long val, void *data)
- 
- 		if (m->status & MCI_STATUS_SYNDV) {
- 			pr_cont(", Syndrome: 0x%016llx\n", m->synd);
--			pr_emerg(HW_ERR "Syndrome1: 0x%016llx, Syndrome2: 0x%016llx",
--				 err->vi.amd.synd1, err->vi.amd.synd2);
-+			if (mca_config & MCI_CONFIG_FRUTEXT) {
-+				char frutext[17];
-+
-+				memset(frutext, 0, sizeof(frutext));
-+				memcpy(&frutext[0], &err->vi.amd.synd1, 8);
-+				memcpy(&frutext[8], &err->vi.amd.synd2, 8);
-+
-+				pr_emerg(HW_ERR "FRU Text: %s", frutext);
-+			} else {
-+				pr_emerg(HW_ERR "Syndrome1: 0x%016llx, Syndrome2: 0x%016llx",
-+					 err->vi.amd.synd1, err->vi.amd.synd2);
-+			}
- 		}
- 
- 		pr_cont("\n");
 -- 
-2.34.1
+Regards/Gruss,
+    Boris.
 
+https://people.kernel.org/tglx/notes-about-netiquette
 
