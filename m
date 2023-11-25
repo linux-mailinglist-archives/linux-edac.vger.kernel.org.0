@@ -1,174 +1,147 @@
-Return-Path: <linux-edac+bounces-92-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-93-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7563C7F88A8
-	for <lists+linux-edac@lfdr.de>; Sat, 25 Nov 2023 07:45:09 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 04E047F8A9E
+	for <lists+linux-edac@lfdr.de>; Sat, 25 Nov 2023 13:11:50 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 21E0B2815B2
-	for <lists+linux-edac@lfdr.de>; Sat, 25 Nov 2023 06:45:08 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B4F60281291
+	for <lists+linux-edac@lfdr.de>; Sat, 25 Nov 2023 12:11:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 198B417C3;
-	Sat, 25 Nov 2023 06:45:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dkim=none
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5D594FBE4;
+	Sat, 25 Nov 2023 12:11:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="QVHMXdIM"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from out30-119.freemail.mail.aliyun.com (out30-119.freemail.mail.aliyun.com [115.124.30.119])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFDC7C1;
-	Fri, 24 Nov 2023 22:44:59 -0800 (PST)
-X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R171e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046059;MF=xueshuai@linux.alibaba.com;NM=1;PH=DS;RN=34;SR=0;TI=SMTPD_---0Vx3Rwaa_1700894693;
-Received: from 30.240.112.178(mailfrom:xueshuai@linux.alibaba.com fp:SMTPD_---0Vx3Rwaa_1700894693)
-          by smtp.aliyun-inc.com;
-          Sat, 25 Nov 2023 14:44:57 +0800
-Message-ID: <9e92e600-86a4-4456-9de4-b597854b107c@linux.alibaba.com>
-Date: Sat, 25 Nov 2023 14:44:52 +0800
+Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0894DD;
+	Sat, 25 Nov 2023 04:11:43 -0800 (PST)
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id D5AE540E0258;
+	Sat, 25 Nov 2023 12:11:40 +0000 (UTC)
+X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
+Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
+	header.d=alien8.de
+Received: from mail.alien8.de ([127.0.0.1])
+	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
+	with ESMTP id EdH3TiqjZDCa; Sat, 25 Nov 2023 12:11:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
+	t=1700914299; bh=lXipk2MsKuURRyBeamrn5qlUVJSdVw3qeIkGplBQFJ4=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=QVHMXdIMPncOpYh8vp/Gt8sIPjBAhGxxgzfTsGMtNrIzT8wggTgyMqTzF2sMopuvJ
+	 fFocbJt5u7vYk1KWv2aXXVIr+ZlGQdemphn2IjeEZlMNX0WFHnavg4TVFKJX+y18ez
+	 cGcKjNKw5uyFoU8GV4dxNJitJcyu6bHt4Q3NL7Ub0RAmIgtZQFowBZ+9vs4E3mRv63
+	 j3kQtwGnNTtSQpMx3YZ2kgU5qWkTJue3GIaK522+AR1akEkGhSjE/IzPx/J739Dov3
+	 GKP34gBAwkG8NZmyP8EMPhRuXxjo8bwsBko/EnPpLtDzKrN2PpSn+6sTb3Isz3k+dc
+	 xiBoseG1C8zdPMi12qMElb25fLR3LiwuhduajcqG07p77ecV2hpEf8/RMEKNQOSb+q
+	 Fh5sKrg5PzV6wG/L87hZX7wthXNkMnLuqxroMgEt0endDC1W3e7q9o8LAD41eFhoFX
+	 NrczcQWH9c/CVIRiuviiNVgBODS68QaH4Z2D3BbMdQNIjHrpTiFjwFXREF2dv3Vdf3
+	 6X8CQd6plNpIxOXVhOPK2VJQ7TmE5frF/KYBOFrXbiiWjNtxFbJC0KR+PRRTMTyMXB
+	 LQ2SG6apkA4OeV23g3JZke+5tCvHsC6UZOPft/wPnNk7lgN5nU9iO1om3rcaxCvA3l
+	 Rbb6RjLody3WRP8nJoG+7R/Q=
+Received: from zn.tnic (pd95304da.dip0.t-ipconnect.de [217.83.4.218])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
+	(No client certificate requested)
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 7EDAB40E01A5;
+	Sat, 25 Nov 2023 12:11:04 +0000 (UTC)
+Date: Sat, 25 Nov 2023 13:10:59 +0100
+From: Borislav Petkov <bp@alien8.de>
+To: Shuai Xue <xueshuai@linux.alibaba.com>
+Cc: rafael@kernel.org, wangkefeng.wang@huawei.com, tanxiaofei@huawei.com,
+	mawupeng1@huawei.com, tony.luck@intel.com, linmiaohe@huawei.com,
+	naoya.horiguchi@nec.com, james.morse@arm.com,
+	gregkh@linuxfoundation.org, will@kernel.org, jarkko@kernel.org,
+	linux-acpi@vger.kernel.org, linux-mm@kvack.org,
+	linux-kernel@vger.kernel.org, akpm@linux-foundation.org,
+	linux-edac@vger.kernel.org, acpica-devel@lists.linuxfoundation.org,
+	stable@vger.kernel.org, x86@kernel.org, justin.he@arm.com,
+	ardb@kernel.org, ying.huang@intel.com, ashish.kalra@amd.com,
+	baolin.wang@linux.alibaba.com, tglx@linutronix.de, mingo@redhat.com,
+	dave.hansen@linux.intel.com, lenb@kernel.org, hpa@zytor.com,
+	robert.moore@intel.com, lvying6@huawei.com, xiexiuqi@huawei.com,
+	zhuo.song@linux.alibaba.com
+Subject: Re: [PATCH v9 0/2] ACPI: APEI: handle synchronous errors in task
+ work with proper si_code
+Message-ID: <20231125121059.GAZWHkU27odMLns7TZ@fat_crate.local>
+References: <20221027042445.60108-1-xueshuai@linux.alibaba.com>
+ <20231007072818.58951-1-xueshuai@linux.alibaba.com>
+ <20231123150710.GEZV9qnkWMBWrggGc1@fat_crate.local>
+ <9e92e600-86a4-4456-9de4-b597854b107c@linux.alibaba.com>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v9 0/2] ACPI: APEI: handle synchronous errors in task work
- with proper si_code
-Content-Language: en-US
-To: Borislav Petkov <bp@alien8.de>
-Cc: rafael@kernel.org, wangkefeng.wang@huawei.com, tanxiaofei@huawei.com,
- mawupeng1@huawei.com, tony.luck@intel.com, linmiaohe@huawei.com,
- naoya.horiguchi@nec.com, james.morse@arm.com, gregkh@linuxfoundation.org,
- will@kernel.org, jarkko@kernel.org, linux-acpi@vger.kernel.org,
- linux-mm@kvack.org, linux-kernel@vger.kernel.org, akpm@linux-foundation.org,
- linux-edac@vger.kernel.org, acpica-devel@lists.linuxfoundation.org,
- stable@vger.kernel.org, x86@kernel.org, justin.he@arm.com, ardb@kernel.org,
- ying.huang@intel.com, ashish.kalra@amd.com, baolin.wang@linux.alibaba.com,
- tglx@linutronix.de, mingo@redhat.com, dave.hansen@linux.intel.com,
- lenb@kernel.org, hpa@zytor.com, robert.moore@intel.com, lvying6@huawei.com,
- xiexiuqi@huawei.com, zhuo.song@linux.alibaba.com
-References: <20221027042445.60108-1-xueshuai@linux.alibaba.com>
- <20231007072818.58951-1-xueshuai@linux.alibaba.com>
- <20231123150710.GEZV9qnkWMBWrggGc1@fat_crate.local>
-From: Shuai Xue <xueshuai@linux.alibaba.com>
-In-Reply-To: <20231123150710.GEZV9qnkWMBWrggGc1@fat_crate.local>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <9e92e600-86a4-4456-9de4-b597854b107c@linux.alibaba.com>
 
+On Sat, Nov 25, 2023 at 02:44:52PM +0800, Shuai Xue wrote:
+> - an AR error consumed by current process is deferred to handle in a
+>   dedicated kernel thread, but memory_failure() assumes that it runs in the
+>   current context
 
+On x86? ARM?
 
-On 2023/11/23 23:07, Borislav Petkov wrote:
+Please point to the exact code flow.
 
-Hi, Borislav,
+> - another page fault is not unnecessary, we can send sigbus to current
+>   process in the first Synchronous External Abort SEA on arm64 (analogy
+>   Machine Check Exception on x86)
 
-Thank you for your reply and advice.
+I have no clue what that means. What page fault?
 
+> I just give an example that the user space process *really* relys on the
+> si_code of signal to handle hardware errors
 
-> On Sat, Oct 07, 2023 at 03:28:16PM +0800, Shuai Xue wrote:
->> However, this trick is not always be effective
-> 
-> So far so good.
-> 
-> What's missing here is why "this trick" is not always effective.
+No, don't give examples.
 
-> 
-> Basically to explain what exactly the problem is.
+Explain what the exact problem is you're seeing, in your use case, point
+to the code and then state how you think it should be fixed and why.
 
-I think the main point is that this trick for AR error is not effective,
-because:
+Right now your text is "all over the place" and I have no clue what you
+even want.
 
-- an AR error consumed by current process is deferred to handle in a
-  dedicated kernel thread, but memory_failure() assumes that it runs in the
-  current context
-- another page fault is not unnecessary, we can send sigbus to current
-  process in the first Synchronous External Abort SEA on arm64 (analogy
-  Machine Check Exception on x86)
+> The SIGBUS si_codes defined in include/uapi/asm-generic/siginfo.h says:
+> 
+>     /* hardware memory error consumed on a machine check: action required */
+>     #define BUS_MCEERR_AR	4
+>     /* hardware memory error detected in process but not consumed: action optional*/
+>     #define BUS_MCEERR_AO	5
+> 
+> When a synchronous error is consumed by Guest, the kernel should send a
+> signal with BUS_MCEERR_AR instead of BUS_MCEERR_AO.
 
-> 
->> For example, hwpoison-aware user-space processes use the si_code:
->> BUS_MCEERR_AO for 'action optional' early notifications, and BUS_MCEERR_AR
->> for 'action required' synchronous/late notifications. Specifically, when a
->> signal with SIGBUS_MCEERR_AR is delivered to QEMU, it will inject a vSEA to
->> Guest kernel. In contrast, a signal with SIGBUS_MCEERR_AO will be ignored
->> by QEMU.[1]
->>
->> Fix it by seting memory failure flags as MF_ACTION_REQUIRED on synchronous events. (PATCH 1)
-> 
-> So you're fixing qemu by "fixing" the kernel?
-> 
-> This doesn't make any sense.
+Can you drop this "synchronous" bla and concentrate on the error
+*severity*?
 
-I just give an example that the user space process *really* relys on the
-si_code of signal to handle hardware errors
+I think you want to say that there are some types of errors for which
+error handling needs to happen immediately and for some reason that
+doesn't happen.
 
-> 
-> Make errors which are ACPI_HEST_NOTIFY_SEA type return
-> MF_ACTION_REQUIRED so that it *happens* to fix your use case.
-> 
-> Sounds like a lot of nonsense to me.
-> 
-> What is the issue here you're trying to solve?
+Which errors are those? Types?
 
-The SIGBUS si_codes defined in include/uapi/asm-generic/siginfo.h says:
+Why do you need them to be handled immediately?
 
-    /* hardware memory error consumed on a machine check: action required */
-    #define BUS_MCEERR_AR	4
-    /* hardware memory error detected in process but not consumed: action optional*/
-    #define BUS_MCEERR_AO	5
+> Exactly.
 
-When a synchronous error is consumed by Guest, the kernel should send a
-signal with BUS_MCEERR_AR instead of BUS_MCEERR_AO.
+No, not exactly. Why is it ok to do that? What are the implications of
+this?
 
-> 
->> 2. Handle memory_failure() abnormal fails to avoid a unnecessary reboot
->>
->> If process mapping fault page, but memory_failure() abnormal return before
->> try_to_unmap(), for example, the fault page process mapping is KSM page.
->> In this case, arm64 cannot use the page fault process to terminate the
->> synchronous exception loop.[4]
->>
->> This loop can potentially exceed the platform firmware threshold or even trigger
->> a kernel hard lockup, leading to a system reboot. However, kernel has the
->> capability to recover from this error.
->>
->> Fix it by performing a force kill when memory_failure() abnormal fails or when
->> other abnormal synchronous errors occur.
-> 
-> Just like that?
-> 
-> Without giving the process the opportunity to even save its other data?
+Is immediate killing the right decision?
 
-Exactly.
+Is this ok for *every* possible kernel running out there - not only for
+your use case?
 
-> 
-> So this all is still very confusing, patches definitely need splitting
-> and this whole thing needs restraint.
-> 
-> You go and do this: you split *each* issue you're addressing into
-> a separate patch and explain it like this:
-> 
-> ---
-> 1. Prepare the context for the explanation briefly.
-> 
-> 2. Explain the problem at hand.
-> 
-> 3. "It happens because of <...>"
-> 
-> 4. "Fix it by doing X"
-> 
-> 5. "(Potentially do Y)."
-> ---
-> 
-> and each patch explains *exactly* *one* issue, what happens, why it
-> happens and just the fix for it and *why* it is needed.
-> 
-> Otherwise, this is unreviewable.
+And so on and so on...
 
-Thank you for your valuable suggestion, I will split the patches and
-resubmit a new patch set.
+-- 
+Regards/Gruss,
+    Boris.
 
-> 
-> Thx.
-> 
-
-Best Regards,
-Shuai
+https://people.kernel.org/tglx/notes-about-netiquette
 
