@@ -1,60 +1,28 @@
-Return-Path: <linux-edac+bounces-94-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-95-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 074417F8E13
-	for <lists+linux-edac@lfdr.de>; Sat, 25 Nov 2023 20:37:58 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3E3B57F9291
+	for <lists+linux-edac@lfdr.de>; Sun, 26 Nov 2023 13:25:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1B1ECB20FBD
-	for <lists+linux-edac@lfdr.de>; Sat, 25 Nov 2023 19:37:55 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F093D2810F8
+	for <lists+linux-edac@lfdr.de>; Sun, 26 Nov 2023 12:25:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 57B052FE00;
-	Sat, 25 Nov 2023 19:37:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WlXf1p1j"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F2115CA70;
+	Sun, 26 Nov 2023 12:25:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dkim=none
 X-Original-To: linux-edac@vger.kernel.org
-Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 916DC129;
-	Sat, 25 Nov 2023 11:37:47 -0800 (PST)
-Received: by mail-pg1-x52d.google.com with SMTP id 41be03b00d2f7-55b5a37acb6so520467a12.0;
-        Sat, 25 Nov 2023 11:37:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1700941066; x=1701545866; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=lDIBxA9kD5zfBqSmoblE0Q36en0y2Rsc1kRyQf2RpvI=;
-        b=WlXf1p1jlk3AMMhP2i9eFj7NsDJBibJt6WmdME16HTYcuM0NroEVBPoqQlqyxKEF/1
-         p3LFb3/5pQaejmLc90eNvFN49iD2KnO2ep4je11g/Bc3PQHR63Onr1CBjaS4lAl6ws/Z
-         JXhc5xrVSnbVOaXPee5Fq//1TanZST6UbS1HkLXbW/+N5YF3Pqj7S+q3ZQUW3hcuJczP
-         MjeSxzridUlB2clrWojSgrGK+2qct5gjYmRrQJFvm+dsZsvvqJT12BRsAmxAOGqbDyIU
-         EICYy4RWxMfIru5r5nVaxedUZTUybX78OePh9Yv++uWTsCYGOfF3HbL7vGLjDqA+ANwf
-         LSUA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1700941066; x=1701545866;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=lDIBxA9kD5zfBqSmoblE0Q36en0y2Rsc1kRyQf2RpvI=;
-        b=NaHJKarIqhuNvI2KB61nP56r5elBgSa0WVCOz5j3h+xtZrqi7loTrF48apSGxvMrTA
-         23xCKBZ8/klitmJrFCUMPbUgrVfPs4Q3vXjSBvpUNhWk14BTNykPwXaBydk14hSYVO9a
-         1a7OkPdmTs+p3GEqmjQrmPIUQMIErpRREPzXG85Bpim0PhFW11kEQhARDH1tFhfv2kWG
-         Necd6XoHyoALhWF83YjMHz8SH1nmWfzDwvdSToV5+xyIgMzNHcCnexVEOLNLfA0CbSB3
-         eKMgf+Qnf5y0eSKWQw4wsXZ7of7dCAUvXklg9eiHapLTN/ZBPP5D2KKgmWXcFP9RNlQ2
-         5e7Q==
-X-Gm-Message-State: AOJu0YwLyvahz6DHCiygH+TwCZyeaHR/FNNpFdWzPUzeus6ZP3/HTdFy
-	HdgsNqvuFKvGQuKEkzGOC8c=
-X-Google-Smtp-Source: AGHT+IENJDWPrj2AQtMqCZGty34ui9ZnqiqL7t6IzyBzgSeVGbG1NqW6Cf2dyMipIYQ2x4bWMQ504g==
-X-Received: by 2002:a05:6a00:1514:b0:6cb:d24b:894c with SMTP id q20-20020a056a00151400b006cbd24b894cmr8555929pfu.2.1700941066463;
-        Sat, 25 Nov 2023 11:37:46 -0800 (PST)
-Received: from [192.168.0.152] ([103.75.161.210])
-        by smtp.gmail.com with ESMTPSA id x23-20020aa793b7000000b006cb638ba1aasm4610588pff.49.2023.11.25.11.37.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 25 Nov 2023 11:37:46 -0800 (PST)
-Message-ID: <af53864a-39df-4530-bf3f-5277be8f0d4d@gmail.com>
-Date: Sun, 26 Nov 2023 01:07:42 +0530
+Received: from out30-113.freemail.mail.aliyun.com (out30-113.freemail.mail.aliyun.com [115.124.30.113])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0436DDE;
+	Sun, 26 Nov 2023 04:25:48 -0800 (PST)
+X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R181e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045192;MF=xueshuai@linux.alibaba.com;NM=1;PH=DS;RN=34;SR=0;TI=SMTPD_---0Vx6Gb4W_1701001542;
+Received: from 30.27.123.85(mailfrom:xueshuai@linux.alibaba.com fp:SMTPD_---0Vx6Gb4W_1701001542)
+          by smtp.aliyun-inc.com;
+          Sun, 26 Nov 2023 20:25:45 +0800
+Message-ID: <1048123e-b608-4db1-8d5f-456dd113d06f@linux.alibaba.com>
+Date: Sun, 26 Nov 2023 20:25:38 +0800
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
@@ -62,94 +30,228 @@ List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] driver : edac : Fix warning using plain integer as NULL
+Subject: Re: [PATCH v9 0/2] ACPI: APEI: handle synchronous errors in task work
+ with proper si_code
 Content-Language: en-US
-To: tony.luck@intel.com, qiuxu.zhuo@intel.com, bp@alien8.de,
- james.morse@arm.com, mchehab@kernel.org, rric@kernel.org
-Cc: linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-kernel-mentees@lists.linuxfoundation.org
-References: <20231109212157.1454726-1-singhabhinav9051571833@gmail.com>
-From: Abhinav Singh <singhabhinav9051571833@gmail.com>
-In-Reply-To: <20231109212157.1454726-1-singhabhinav9051571833@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+To: Borislav Petkov <bp@alien8.de>
+Cc: rafael@kernel.org, wangkefeng.wang@huawei.com, tanxiaofei@huawei.com,
+ mawupeng1@huawei.com, tony.luck@intel.com, linmiaohe@huawei.com,
+ naoya.horiguchi@nec.com, james.morse@arm.com, gregkh@linuxfoundation.org,
+ will@kernel.org, jarkko@kernel.org, linux-acpi@vger.kernel.org,
+ linux-mm@kvack.org, linux-kernel@vger.kernel.org, akpm@linux-foundation.org,
+ linux-edac@vger.kernel.org, acpica-devel@lists.linuxfoundation.org,
+ stable@vger.kernel.org, x86@kernel.org, justin.he@arm.com, ardb@kernel.org,
+ ying.huang@intel.com, ashish.kalra@amd.com, baolin.wang@linux.alibaba.com,
+ tglx@linutronix.de, mingo@redhat.com, dave.hansen@linux.intel.com,
+ lenb@kernel.org, hpa@zytor.com, robert.moore@intel.com, lvying6@huawei.com,
+ xiexiuqi@huawei.com, zhuo.song@linux.alibaba.com
+References: <20221027042445.60108-1-xueshuai@linux.alibaba.com>
+ <20231007072818.58951-1-xueshuai@linux.alibaba.com>
+ <20231123150710.GEZV9qnkWMBWrggGc1@fat_crate.local>
+ <9e92e600-86a4-4456-9de4-b597854b107c@linux.alibaba.com>
+ <20231125121059.GAZWHkU27odMLns7TZ@fat_crate.local>
+From: Shuai Xue <xueshuai@linux.alibaba.com>
+In-Reply-To: <20231125121059.GAZWHkU27odMLns7TZ@fat_crate.local>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On 11/10/23 02:51, Abhinav Singh wrote:
-> Sparse static analysis tools generate a warning with this message
-> "Using plain integer as NULL pointer". In this case this warning is
-> being shown because we are trying to initialize  pointer to NULL using
-> integer value 0.
-> 
-> Signed-off-by: Abhinav Singh <singhabhinav9051571833@gmail.com>
-> ---
->   drivers/edac/i7core_edac.c |  2 +-
->   drivers/edac/sb_edac.c     | 10 +++++-----
->   2 files changed, 6 insertions(+), 6 deletions(-)
-> 
-> diff --git a/drivers/edac/i7core_edac.c b/drivers/edac/i7core_edac.c
-> index 23d25724bae4..08bf20c60111 100644
-> --- a/drivers/edac/i7core_edac.c
-> +++ b/drivers/edac/i7core_edac.c
-> @@ -376,7 +376,7 @@ static const struct pci_id_table pci_dev_table[] = {
->   	PCI_ID_TABLE_ENTRY(pci_dev_descr_i7core_nehalem),
->   	PCI_ID_TABLE_ENTRY(pci_dev_descr_lynnfield),
->   	PCI_ID_TABLE_ENTRY(pci_dev_descr_i7core_westmere),
-> -	{0,}			/* 0 terminated list. */
-> +	{NULL,}			/* 0 terminated list. */
->   };
->   
->   /*
-> diff --git a/drivers/edac/sb_edac.c b/drivers/edac/sb_edac.c
-> index 0c779a0326b6..a3f50a66de33 100644
-> --- a/drivers/edac/sb_edac.c
-> +++ b/drivers/edac/sb_edac.c
-> @@ -439,7 +439,7 @@ static const struct pci_id_descr pci_dev_descr_sbridge[] = {
->   
->   static const struct pci_id_table pci_dev_descr_sbridge_table[] = {
->   	PCI_ID_TABLE_ENTRY(pci_dev_descr_sbridge, ARRAY_SIZE(pci_dev_descr_sbridge), 1, SANDY_BRIDGE),
-> -	{0,}			/* 0 terminated list. */
-> +	{NULL,}			/* 0 terminated list. */
->   };
->   
->   /* This changes depending if 1HA or 2HA:
-> @@ -505,7 +505,7 @@ static const struct pci_id_descr pci_dev_descr_ibridge[] = {
->   
->   static const struct pci_id_table pci_dev_descr_ibridge_table[] = {
->   	PCI_ID_TABLE_ENTRY(pci_dev_descr_ibridge, 12, 2, IVY_BRIDGE),
-> -	{0,}			/* 0 terminated list. */
-> +	{NULL,}			/* 0 terminated list. */
->   };
->   
->   /* Haswell support */
-> @@ -576,7 +576,7 @@ static const struct pci_id_descr pci_dev_descr_haswell[] = {
->   
->   static const struct pci_id_table pci_dev_descr_haswell_table[] = {
->   	PCI_ID_TABLE_ENTRY(pci_dev_descr_haswell, 13, 2, HASWELL),
-> -	{0,}			/* 0 terminated list. */
-> +	{NULL,}			/* 0 terminated list. */
->   };
->   
->   /* Knight's Landing Support */
-> @@ -620,7 +620,7 @@ static const struct pci_id_descr pci_dev_descr_knl[] = {
->   
->   static const struct pci_id_table pci_dev_descr_knl_table[] = {
->   	PCI_ID_TABLE_ENTRY(pci_dev_descr_knl, ARRAY_SIZE(pci_dev_descr_knl), 1, KNIGHTS_LANDING),
-> -	{0,}
-> +	{NULL,}
->   };
->   
->   /*
-> @@ -686,7 +686,7 @@ static const struct pci_id_descr pci_dev_descr_broadwell[] = {
->   
->   static const struct pci_id_table pci_dev_descr_broadwell_table[] = {
->   	PCI_ID_TABLE_ENTRY(pci_dev_descr_broadwell, 10, 2, BROADWELL),
-> -	{0,}			/* 0 terminated list. */
-> +	{NULL,}			/* 0 terminated list. */
->   };
->   
->   
-Hello maintainers, any reviews or comments
 
-Thank You,
-Abhinav Singh
+
+On 2023/11/25 20:10, Borislav Petkov wrote:
+
+Hi, Borislav,
+
+Thank you for your reply, and sorry for the confusion I made. Please see my rely
+inline.
+
+Best Regards,
+Shuai
+
+> On Sat, Nov 25, 2023 at 02:44:52PM +0800, Shuai Xue wrote:
+>> - an AR error consumed by current process is deferred to handle in a
+>>   dedicated kernel thread, but memory_failure() assumes that it runs in the
+>>   current context
+> 
+> On x86? ARM?
+> 
+> Pease point to the exact code flow.
+
+An AR error consumed by current process is deferred to handle in a
+dedicated kernel thread on ARM platform. The AR error is handled in bellow
+flow:
+
+-----------------------------------------------------------------------------
+[usr space task einj_mem_uc consumd data poison, CPU 3]         STEP 0
+
+-----------------------------------------------------------------------------
+[ghes_sdei_critical_callback: current einj_mem_uc, CPU 3]		STEP 1
+ghes_sdei_critical_callback
+    => __ghes_sdei_callback
+        => ghes_in_nmi_queue_one_entry 		// peak and read estatus
+        => irq_work_queue(&ghes_proc_irq_work) <=> ghes_proc_in_irq // irq_work
+[ghes_sdei_critical_callback: return]
+-----------------------------------------------------------------------------
+[ghes_proc_in_irq: current einj_mem_uc, CPU 3]			        STEP 2
+            => ghes_do_proc
+                => ghes_handle_memory_failure
+                    => ghes_do_memory_failure
+                        => memory_failure_queue	 // put work task on current CPU
+                            => if (kfifo_put(&mf_cpu->fifo, entry))
+                                  schedule_work_on(smp_processor_id(), &mf_cpu->work);
+            => task_work_add(current, &estatus_node->task_work, TWA_RESUME);
+[ghes_proc_in_irq: return]
+-----------------------------------------------------------------------------
+// kworker preempts einj_mem_uc on CPU 3 due to RESCHED flag	STEP 3
+[memory_failure_work_func: current kworker, CPU 3]	
+     => memory_failure_work_func(&mf_cpu->work)
+        => while kfifo_get(&mf_cpu->fifo, &entry);	// until get no work
+            => memory_failure(entry.pfn, entry.flags);
+-----------------------------------------------------------------------------
+[ghes_kick_task_work: current einj_mem_uc, other cpu]           STEP 4
+                => memory_failure_queue_kick
+                    => cancel_work_sync - waiting memory_failure_work_func finish
+                    => memory_failure_work_func(&mf_cpu->work)
+                        => kfifo_get(&mf_cpu->fifo, &entry); // no work
+-----------------------------------------------------------------------------
+[einj_mem_uc resume at the same PC, trigger a page fault        STEP 5
+
+STEP 0: A user space task, named einj_mem_uc consume a poison. The firmware
+notifies hardware error to kernel through is SDEI
+(ACPI_HEST_NOTIFY_SOFTWARE_DELEGATED).
+
+STEP 1: The swapper running on CPU 3 is interrupted. irq_work_queue() rasie
+a irq_work to handle hardware errors in IRQ context
+
+STEP2: In IRQ context, ghes_proc_in_irq() queues memory failure work on
+current CPU in workqueue and add task work to sync with the workqueue.
+
+STEP3: The kworker preempts the current running thread and get CPU 3. Then
+memory_failure() is processed in kworker.
+
+STEP4: ghes_kick_task_work() is called as task_work to ensure any queued
+workqueue has been done before returning to user-space.
+
+STEP5: Upon returning to user-space, the task einj_mem_uc resumes at the
+current instruction, because the poison page is unmapped by
+memory_failure() in step 3, so a page fault will be triggered.
+
+memory_failure() assumes that it runs in the current context on both x86
+and ARM platform.
+
+
+for example:
+	memory_failure() in mm/memory-failure.c:
+
+		if (flags & MF_ACTION_REQUIRED) {
+			folio = page_folio(p);
+			res = kill_accessing_process(current, folio_pfn(folio), flags);
+		}
+
+> 
+>> - another page fault is not unnecessary, we can send sigbus to current
+>>   process in the first Synchronous External Abort SEA on arm64 (analogy
+>>   Machine Check Exception on x86)
+> 
+> I have no clue what that means. What page fault?
+
+I mean page fault in step 5. We can simplify the above flow by queuing
+memory_failure() as a task work for AR errors in step 3 directly.
+
+> 
+>> I just give an example that the user space process *really* relys on the
+>> si_code of signal to handle hardware errors
+> 
+> No, don't give examples.
+> 
+> Explain what the exact problem is you're seeing, in your use case, point
+> to the code and then state how you think it should be fixed and why.
+> 
+> Right now your text is "all over the place" and I have no clue what you
+> even want.
+
+Ok, got it. Thank you.
+
+> 
+>> The SIGBUS si_codes defined in include/uapi/asm-generic/siginfo.h says:
+>>
+>>     /* hardware memory error consumed on a machine check: action required */
+>>     #define BUS_MCEERR_AR	4
+>>     /* hardware memory error detected in process but not consumed: action optional*/
+>>     #define BUS_MCEERR_AO	5
+>>
+>> When a synchronous error is consumed by Guest, the kernel should send a
+>> signal with BUS_MCEERR_AR instead of BUS_MCEERR_AO.
+> 
+> Can you drop this "synchronous" bla and concentrate on the error
+> *severity*?
+> 
+> I think you want to say that there are some types of errors for which
+> error handling needs to happen immediately and for some reason that
+> doesn't happen.
+> 
+> Which errors are those? Types?
+> 
+> Why do you need them to be handled immediately?
+
+Well, the severity defined on x86 and ARM platform is quite different. I
+guess you mean taxonomy of producer error types.
+
+- X86: Software recoverable action required (SRAR)
+
+    A UCR error that *requires* system software to take a recovery action on
+    this processor *before scheduling another stream of execution on this
+    processor*.
+    (15.6.3 UCR Error Classification in Intel® 64 and IA-32 Architectures
+    Software Developer’s Manual Volume 3)
+
+- ARM: Recoverable state (UER)
+
+    The PE determines that software *must* take action to locate and repair
+    the error to successfully recover execution. This might be because the
+    exception was taken before the error was architecturally consumed by
+    the PE, at the point when the PE was not be able to make correct
+    progress without either consuming the error or *otherwise making the
+    state of the PE unrecoverable*.
+    (2.3.2 PE error state classification in Arm RAS Supplement
+    https://documentation-service.arm.com/static/63185614f72fad1903828eda)
+
+I think above two types of error need to be handled immediately.
+
+> 
+>> Exactly.
+> 
+> No, not exactly. Why is it ok to do that? What are the implications of
+> this?
+> 
+> Is immediate killing the right decision?
+> 
+> Is this ok for *every* possible kernel running out there - not only for
+> your use case?
+> 
+> And so on and so on...
+> 
+
+I don't have a clear answer here. I guess the poison data only effects the
+user space task which triggers exception. A panic is not necessary.
+
+On x86 platform, the current error handling of memory_failure() in
+kill_me_maybe() is just send a sigbus forcely.
+
+    kill_me_maybe():
+
+        ret = memory_failure(pfn, flags);
+        if (ret == -EHWPOISON || ret == -EOPNOTSUPP)
+        return;
+
+        pr_err("Memory error not recovered");
+        kill_me_now(cb);
+
+Do you have any comments or suggestion about this? I don't change x86
+behavior.
+
+For arm64 platform, step 3 in above flow, memory_failure_work_func(), the
+call site of memory_failure(), does not handle the return code of
+memory_failure(). I just add the same behavior.
+
+
 
