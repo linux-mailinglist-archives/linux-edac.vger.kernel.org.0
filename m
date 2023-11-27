@@ -1,93 +1,97 @@
-Return-Path: <linux-edac+bounces-104-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-105-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 013B57FA82E
-	for <lists+linux-edac@lfdr.de>; Mon, 27 Nov 2023 18:36:36 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id CBCB37FA8E8
+	for <lists+linux-edac@lfdr.de>; Mon, 27 Nov 2023 19:23:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9EAF51F20CA6
-	for <lists+linux-edac@lfdr.de>; Mon, 27 Nov 2023 17:36:35 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6BD9AB20EBD
+	for <lists+linux-edac@lfdr.de>; Mon, 27 Nov 2023 18:23:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 34F6739FE2;
-	Mon, 27 Nov 2023 17:36:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1C6343C46E;
+	Mon, 27 Nov 2023 18:23:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="jSVuDUXn"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bs/8rJOX"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A101E198;
-	Mon, 27 Nov 2023 09:36:28 -0800 (PST)
-Received: from localhost (localhost.localdomain [127.0.0.1])
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id CE00340E024E;
-	Mon, 27 Nov 2023 17:36:26 +0000 (UTC)
-X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
-Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
-	header.d=alien8.de
-Received: from mail.alien8.de ([127.0.0.1])
-	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-	with ESMTP id UVu3Syl5LlkR; Mon, 27 Nov 2023 17:36:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-	t=1701106584; bh=fXeNq8uj+nYXQQwj1hJlpkSJlDEw/i6llRh8605Z9QE=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=jSVuDUXnx15IPUzU1CHgYrL2rbzydK5udJF5wy4RepcKg55kRqtGMh+3GXTKw4XDR
-	 I96/ngHpf1cDvsaoDSbp4Dv+VBoSQMjdIxh6z4wJzuMnAmD2tniFsR1iDDG2Y41H8P
-	 DgVQxRKDEevJ9dRREdXzXhM7i2+P9ReVusEI5S+MIVFHNdRO97m7BugZfWnIgL4CCG
-	 iIOl/JmXhlOJ5BkhRIYInKPm2y+W1JN6V8dXiAkGjUH4Elo+xqUodo7rQmoXxt+eo7
-	 6i3873rWhXG/nKYQKdwFWkmw9HOe/LQtkg+E0+amMeapYlYbTnKtnHjMTvZgs0py2z
-	 sHyAHchMjYbDZPhROWanqtVrQzciWFsJf4jbDgvJOrDz0g32MlsYpzgGtC4cvg1Cer
-	 /OI2efemu8pq8jqrGlUNJ1iI4aFvt0D4D5XJmLYJahZQc+/OrUNbrXkK2DU+ZELdXE
-	 X1SsiJeDPhkRiRn6ZJUBvrjEQnQuXbfdJbIBFErOkS2yfgwY7MY786PJuOsMHsmtfb
-	 NBATAOzVirxmLu5rnMDv3Pu6fzZWitqNM8D75QU8/WwUzZl3IcZjmRoqODDaIoTt2G
-	 WfUkbB6zjj3y+Ym8tMBcnQyIniEozTL/UiiHuP7o6YHf3tOuJTzLT4BT2vI+adx3Z2
-	 /aLV0ydJ88B1UY3FEwOP+Y+A=
-Received: from zn.tnic (pd95304da.dip0.t-ipconnect.de [217.83.4.218])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
-	(No client certificate requested)
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 9406840E01B1;
-	Mon, 27 Nov 2023 17:36:16 +0000 (UTC)
-Date: Mon, 27 Nov 2023 18:36:10 +0100
-From: Borislav Petkov <bp@alien8.de>
-To: Rob Herring <robh@kernel.org>
-Cc: Jan Luebbe <jlu@pengutronix.de>, Tony Luck <tony.luck@intel.com>,
-	James Morse <james.morse@arm.com>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Robert Richter <rric@kernel.org>, linux-edac@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] EDAC: armada_xp: Explicitly include correct DT includes
-Message-ID: <20231127173610.GDZWTTigD7tzi3jVJk@fat_crate.local>
-References: <20231013190342.246973-1-robh@kernel.org>
+Received: from mail-il1-x132.google.com (mail-il1-x132.google.com [IPv6:2607:f8b0:4864:20::132])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 256A5198;
+	Mon, 27 Nov 2023 10:23:09 -0800 (PST)
+Received: by mail-il1-x132.google.com with SMTP id e9e14a558f8ab-35cb8fe4666so760335ab.1;
+        Mon, 27 Nov 2023 10:23:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1701109388; x=1701714188; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=HRI7cWlvOkyNkuDPrfXGivTVffcdI2V+Vot+f9MkWGg=;
+        b=bs/8rJOXj01g00QbejC60avn/iUjsYjCtQhtXbHpyfQ7ZHrYAiAbjc9DBYnYZrMXT9
+         CUUuBsgOfnJOO/24mx2iEtkvoR16YLjnf5V8OZGhmvTUa5R0SpfMeytD6h6ZBo+xOJTk
+         JIUfuNlAq06JFKYmGGXqopBbVFWgjUXIfCoAl1TQqDh8Tvx+cTkw7SOMxBYnNtYplYE1
+         Rh8nhYpsB2754mAuKKVF/KRZBgjJL8CFgEkLia44CC7Uz9Rt8WANJ2uiex+MmVUn72HQ
+         PjSNVRfbmxjp8OTYFWGOKEFnvwv4Onvkx+t72EAszDThDxubAZV5VAXCalUyI+i1ou+H
+         Dabw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1701109388; x=1701714188;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=HRI7cWlvOkyNkuDPrfXGivTVffcdI2V+Vot+f9MkWGg=;
+        b=LjFc9mO9cfipKADJrztI3C/BnWfuRt2aYPMx263+gsrWQf+VTGfbDDZqC5Faqux3qD
+         I0eNSodmsHrGLkERcOBST/79rIrTHXQLjKZixuHuAv6HVTJSJtRSrY0jzddry3Vn/ATd
+         n3x5IC9eMXhi/XSKPahXqbSY+dw8nRdf3T/ZZS6YjdTdGKWULlHBJKggnGRJIZIXRzeu
+         E1+qtOjquqpeJEdPNGk9vs67KCPab4X8j+Cqsbmsb2S1i+Flsu86Pg98dLn6yUyEmmtb
+         Q/yKoFf0g54QBf+C2QT8B4vHNkBDXQmxIqoYmOUUjJj6c/V5A9gSClH+wgCEW6gJ60tv
+         L0wA==
+X-Gm-Message-State: AOJu0YyDSfd3uc+8Bq380Ma9uPqE3DYMvPttsmdSSoQE0dk1STAGtKbF
+	XyP/o95IsorjfUBe3sYkVO1Ptjg9iCo=
+X-Google-Smtp-Source: AGHT+IFw2AHP+33vEEsm3DpKrdLapr09lmZwO4DhjBB6CLzAkroRuckY0uVMI7Ec4ltxP/lFPFc8uQ==
+X-Received: by 2002:a05:6e02:12b2:b0:35c:963b:a018 with SMTP id f18-20020a056e0212b200b0035c963ba018mr6289252ilr.0.1701109388238;
+        Mon, 27 Nov 2023 10:23:08 -0800 (PST)
+Received: from [192.168.0.152] ([103.75.161.210])
+        by smtp.gmail.com with ESMTPSA id v1-20020a632f01000000b005898df17ea4sm7863665pgv.27.2023.11.27.10.23.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 27 Nov 2023 10:23:07 -0800 (PST)
+Message-ID: <dfb5b4cd-935c-445b-aaa7-bcce962a143d@gmail.com>
+Date: Mon, 27 Nov 2023 23:53:02 +0530
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20231013190342.246973-1-robh@kernel.org>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] driver : edac : Fix warning using plain integer as NULL
+Content-Language: en-US
+To: Borislav Petkov <bp@alien8.de>
+Cc: tony.luck@intel.com, qiuxu.zhuo@intel.com, james.morse@arm.com,
+ mchehab@kernel.org, rric@kernel.org, linux-edac@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-kernel-mentees@lists.linuxfoundation.org
+References: <20231109212157.1454726-1-singhabhinav9051571833@gmail.com>
+ <20231127171435.GCZWTOe+DQSy4kkuKO@fat_crate.local>
+From: Abhinav Singh <singhabhinav9051571833@gmail.com>
+In-Reply-To: <20231127171435.GCZWTOe+DQSy4kkuKO@fat_crate.local>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Fri, Oct 13, 2023 at 02:03:42PM -0500, Rob Herring wrote:
-> The DT of_device.h and of_platform.h date back to the separate
-> of_platform_bus_type before it was merged into the regular platform bus.
-> As part of that merge prepping Arm DT support 13 years ago, they
-> "temporarily" include each other. They also include platform_device.h
-> and of.h. As a result, there's a pretty much random mix of those include
-> files used throughout the tree. In order to detangle these headers and
-> replace the implicit includes with struct declarations, users need to
-> explicitly include the correct includes.
+On 11/27/23 22:44, Borislav Petkov wrote:
+> On Fri, Nov 10, 2023 at 02:51:57AM +0530, Abhinav Singh wrote:
+>> Sparse static analysis tools generate a warning with this message
+>> "Using plain integer as NULL pointer". In this case this warning is
+>> being shown because we are trying to initialize  pointer to NULL using
+>> integer value 0.
 > 
-> Signed-off-by: Rob Herring <robh@kernel.org>
-> ---
->  drivers/edac/armada_xp_edac.c | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
+> And that is a problem because?
+> 
 
-Applied, thanks.
+Hello, thanks for reviewing this. As of now this is only a warning issue 
+in kernel. I saw this post by linus 
+https://www.spinics.net/lists/linux-sparse/msg10066.html and thought of 
+submitting a patch. Also a similar patch of mine got accepted 
+https://www.mail-archive.com/linux-kernel@vger.kernel.org/msg2560740.html, 
+so thought about opening this one as well.
 
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+Thank You,
+Abhinav Singh
 
