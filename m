@@ -1,109 +1,114 @@
-Return-Path: <linux-edac+bounces-107-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-108-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6C7517FA951
-	for <lists+linux-edac@lfdr.de>; Mon, 27 Nov 2023 19:54:07 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9AB797FAA99
+	for <lists+linux-edac@lfdr.de>; Mon, 27 Nov 2023 20:50:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id ECE2E1F202CA
-	for <lists+linux-edac@lfdr.de>; Mon, 27 Nov 2023 18:54:06 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id F27F1B20C52
+	for <lists+linux-edac@lfdr.de>; Mon, 27 Nov 2023 19:50:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C67D03A8DE;
-	Mon, 27 Nov 2023 18:54:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BCC77446B6;
+	Mon, 27 Nov 2023 19:50:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XOD9gqhQ"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="gCObUKfT"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68F8BD5A;
-	Mon, 27 Nov 2023 10:54:00 -0800 (PST)
-Received: by mail-pl1-x635.google.com with SMTP id d9443c01a7336-1cfa7be5650so7754735ad.0;
-        Mon, 27 Nov 2023 10:54:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1701111240; x=1701716040; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=jBWX+tBMrXJ5sqEB3xXR9ubJgmb8By6ql2/SbCpyp68=;
-        b=XOD9gqhQwvp0sQZjxtBE3AV5Wrx+wU9zVN+OHCqTbPmaAPFORwVMbwNpMvUswCay2p
-         1ykV/VU2fksuC6jKHEa5jVBNFE2wOjKXBkXSPosit0ZtELhgyK6MfB5O8/FCMrkrFb5j
-         7bVN2PCm4EAWJhNUPRru6AQKM+AhjPTvCbDsKSmFtyDQggWCI+lMpxT1y98yhoP5gisD
-         4pQfJ3SK6R3dorNjDjDOlhDQz0gj5XYMNJNEfz6xein7N1mJhGUPHv7jSwsbgJW19uys
-         DiLt6PdbGoM41ewcD8Nbiwh1Oo6/oQiIIIr+5I4z2xX0+JtHzBqP5sD/Moo0QZCf3kcP
-         2GaQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701111240; x=1701716040;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=jBWX+tBMrXJ5sqEB3xXR9ubJgmb8By6ql2/SbCpyp68=;
-        b=G+itHPcQmSh3l0DLO9uLlR6jS+iGgVEYb+cr8b4WNa3GPCvukeLCejkgUZGmhUi09+
-         O/9GIntK/t7XqjJLlapjmTgItyQp+PkloMAXHnozuk6ah7pRNKLOY6mjOPa87Kj2CyNY
-         bbZi7OfBXk0aErqEFfhxqUlBlo6LCo9bCjuQuj7E4doiMjSRRX1+WViIuLBMcmIYd7Eh
-         jeRth4qTo7zLx2voKMIJ9jnjMt+4xTEIAGH6idcwPAFQy52Bmwg0uDnbVaDDAySyW/7g
-         dPHebxaOwkNKWnAAo9J9uVJDdtbnlcKm27JVBSAebO4XVufpxGGNsnKYMONh9R0wUf1V
-         2o1Q==
-X-Gm-Message-State: AOJu0Yz6qBqUNXvMu36SV21b1kprK2/QQPNTrX2CgYezI2Vdihofr+o+
-	/JmyZTVlkQ0UsXbOGZjw5fw=
-X-Google-Smtp-Source: AGHT+IEL2mSrxdY6F1NZfGrVfQaW55mhAea9zjXPu/JNUyVOdoxUfVr1DXnyvjZYtrzmbHotbpt7aQ==
-X-Received: by 2002:a17:903:183:b0:1ce:5b6e:bae1 with SMTP id z3-20020a170903018300b001ce5b6ebae1mr15606570plg.3.1701111239836;
-        Mon, 27 Nov 2023 10:53:59 -0800 (PST)
-Received: from [192.168.0.152] ([103.75.161.211])
-        by smtp.gmail.com with ESMTPSA id a5-20020a170902ecc500b001cfc50e5afesm3145347plh.23.2023.11.27.10.53.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 27 Nov 2023 10:53:59 -0800 (PST)
-Message-ID: <95fc95c8-dac6-4137-a9cd-29f27da64e41@gmail.com>
-Date: Tue, 28 Nov 2023 00:23:54 +0530
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.93])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE7371B4;
+	Mon, 27 Nov 2023 11:50:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1701114628; x=1732650628;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=FOWlBJuI1QWETMszMwBkYk25m1g8XF0ebe/+lRpK/Yg=;
+  b=gCObUKfTaJZdrOdFp7nSPUlKYVaHXKwxM4Ib2kwUkf/AyO8UOxcrYknA
+   uZnA47b8xdfi8hPOez76FhBEHIygWJDkNgmBs4lUZnLm1me/JUoG/UsAU
+   10j89ErBIwrikmgmoF29llZP1QjTnWKsaU37s6uir64TLsArK/yNwhEVA
+   5oXXzJhDg5tmRTW1vid8kuG9mRRTrq8fYA2KEcWMJcruDVVvk0Rzhe1eq
+   k7n9Fyf3uAM+VidsAC9KaHiS5dEvSrkKxGAR78tmKOSv8023GrpNcJ9rR
+   gjZfGiMkDUckR1Sgf6btmUk1GDAhOfRHybL0AgsicTcU0DBxM+2f6jmwh
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10907"; a="389930690"
+X-IronPort-AV: E=Sophos;i="6.04,231,1695711600"; 
+   d="scan'208";a="389930690"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Nov 2023 11:50:28 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10907"; a="744669420"
+X-IronPort-AV: E=Sophos;i="6.04,231,1695711600"; 
+   d="scan'208";a="744669420"
+Received: from agluck-desk3.sc.intel.com (HELO agluck-desk3) ([172.25.222.74])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Nov 2023 11:50:28 -0800
+Date: Mon, 27 Nov 2023 11:50:26 -0800
+From: Tony Luck <tony.luck@intel.com>
+To: Borislav Petkov <bp@alien8.de>
+Cc: Yazen Ghannam <yazen.ghannam@amd.com>,
+	Smita.KoralahalliChannabasappa@amd.com, dave.hansen@linux.intel.com,
+	x86@kernel.org, linux-edac@vger.kernel.org,
+	linux-kernel@vger.kernel.org, patches@lists.linux.dev
+Subject: Re: [PATCH v9 2/3] x86/mce: Add per-bank CMCI storm mitigation
+Message-ID: <ZWTzAujHdrJ950F3@agluck-desk3>
+References: <20230929181626.210782-1-tony.luck@intel.com>
+ <20231004183623.17067-1-tony.luck@intel.com>
+ <20231004183623.17067-3-tony.luck@intel.com>
+ <20231019151211.GHZTFHS3osBIL1IJbF@fat_crate.local>
+ <ZTa37L2nlnbok8dz@agluck-desk3>
+ <20231114192324.GAZVPJLGZmfJBS181/@fat_crate.local>
+ <ZVPu/hX9b7lUkrBY@agluck-desk3>
+ <20231121115448.GCZVyaiNkNvb4t2NxB@fat_crate.local>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] driver : edac : Fix warning using plain integer as NULL
-Content-Language: en-US
-To: Borislav Petkov <bp@alien8.de>
-Cc: tony.luck@intel.com, qiuxu.zhuo@intel.com, james.morse@arm.com,
- mchehab@kernel.org, rric@kernel.org, linux-edac@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-kernel-mentees@lists.linuxfoundation.org
-References: <20231109212157.1454726-1-singhabhinav9051571833@gmail.com>
- <20231127171435.GCZWTOe+DQSy4kkuKO@fat_crate.local>
- <dfb5b4cd-935c-445b-aaa7-bcce962a143d@gmail.com>
- <20231127183941.GGZWTibScFM4lgbqkG@fat_crate.local>
-From: Abhinav Singh <singhabhinav9051571833@gmail.com>
-In-Reply-To: <20231127183941.GGZWTibScFM4lgbqkG@fat_crate.local>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231121115448.GCZVyaiNkNvb4t2NxB@fat_crate.local>
 
-On 11/28/23 00:09, Borislav Petkov wrote:
-> On Mon, Nov 27, 2023 at 11:53:02PM +0530, Abhinav Singh wrote:
->> Hello, thanks for reviewing this. As of now this is only a warning issue in
->> kernel. I saw this post by linus
->> https://www.spinics.net/lists/linux-sparse/msg10066.html and thought of
->> submitting a patch. Also a similar patch of mine got accepted
->> https://www.mail-archive.com/linux-kernel@vger.kernel.org/msg2560740.html,
->> so thought about opening this one as well.
+On Tue, Nov 21, 2023 at 12:54:48PM +0100, Borislav Petkov wrote:
+> On Tue, Nov 14, 2023 at 02:04:46PM -0800, Tony Luck wrote:
+> > Whichever of the timer and the CMCI happens first will run. Second to
+> > arrive will pend the interrupt and be handled when interrupts are
+> > enabled as the first completes.
 > 
-> Lemme try to understand what you're saying: just because someone
-> accepted a patch of yours, then others should not ask you to improve
-> your commit message so that it explains *why* a change should be done.
-> 
-> How about you put the gist of what Linus is saying in your commit
-> message? Don't you think it would be a much better commit message then?
-> 
-> Especially if it explains why, even if it is the case that 0 == NULL, we
-> don't want those in the kernel.
-> 
-> Hmmm?
-> 
-Hello, my sincere apologies, I wrongly interpreted that you were asking 
-for a reason in reply rather than in the commit message itself. Yeah I 
-agree putting a reason in the commit message will make more sense. Just 
-to be correct this time, I need to put a reason why this needs to be 
-fixed, in the patch itself, right?
+> So I still don't like the timer calling machine_check_poll() and
+> cmci_mc_poll_banks() doing the same without any proper synchronization
+> between the two.
 
-Thank You,
-Abhinav Singh
+But it isn't doing the same thing.  The timer calls:
+
+	machine_check_poll(0, this_cpu_ptr(&mce_poll_banks));
+
+and cmci_mc_poll_banks() calls:
+
+	machine_check_poll(0, this_cpu_ptr(&mce_poll_banks));
+
+A bank is either in the bitmap of banks to poll from the timer,
+or in one of the per-cpu bitmaps of banks "owned" by that CPU to
+be checked when a CMCI occurs. But it can't be in both.
+
+> Yes, when you get a CMCI interrupt, you poll and do the call the storm
+> code. Now what happens if the polling runs from softirq context and you
+> get a CMCI interrupt at exactly the same time. I.e., is
+> machine_check_poll() reentrant and audited properly?
+
+So nothing bad happens. If Linux was polling some set of banks from
+the timer and is interrupted by CMCI, the interrupt will check some
+disjoint set of banks. All the history tracking code is done per-bank,
+so there is no overlap.
+
+> I hope I'm making more sense.
+
+Yes. Totally making sense. I was under the mistaken impression that
+the mce timers used TIMER_IRQSAFE and the nested CMCI while processing
+a timed poll couldn't happen. So I learned something here too.
+
+I'll think of some comment to add to the history tracking code
+to summarize this thread.
+
+-Tony
 
