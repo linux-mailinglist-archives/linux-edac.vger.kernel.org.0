@@ -1,138 +1,109 @@
-Return-Path: <linux-edac+bounces-96-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-97-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9A82F7F9AE6
-	for <lists+linux-edac@lfdr.de>; Mon, 27 Nov 2023 08:26:27 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 962FC7F9EDB
+	for <lists+linux-edac@lfdr.de>; Mon, 27 Nov 2023 12:44:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 56066280C8C
-	for <lists+linux-edac@lfdr.de>; Mon, 27 Nov 2023 07:26:26 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 38151B20EDF
+	for <lists+linux-edac@lfdr.de>; Mon, 27 Nov 2023 11:44:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E8D31101D0;
-	Mon, 27 Nov 2023 07:26:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8A36C1A710;
+	Mon, 27 Nov 2023 11:44:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="hDRlHv8T"
+	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="F9s9/X26"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6901412D;
-	Sun, 26 Nov 2023 23:26:20 -0800 (PST)
-Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3AR6Y2P6016850;
-	Mon, 27 Nov 2023 07:26:03 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-transfer-encoding;
- s=corp-2023-11-20; bh=nfPRoM43naBHTjzsRwQ3luSTvIcWFtQTc4Nk6Xy4q0Y=;
- b=hDRlHv8TI6GI7DBqtoKP1+qqNjKQaqz3+dM3eUcjRBy3NdjcHCHje4jekK/ymBpiE1Wm
- LpjGc7/5/lC4boyQbpTHGCBfGC+/5ZesCWCRcc7Sqwbvrc001fiIGBNMEXBj8OW/jMMG
- IHtPX5HpO9d+AZ65RXBebIHec7QODyjp4/tMVexPiDSuaSlxfuElW9ZVmPw8eDnN2iR1
- 5WOf2HiS4n0sDqBKBNzPGr2SEg3IMOuuL8XCaXQ0Nt72cbMfy2TQIJsm8D1zmF3ASnNn
- jbotjyu+/6lHt2zoie5Oi0DFSVtPaYcGVzxkXsqGRvdyc7tVGu6+yWgy8sHaQ6hjWlvO 4g== 
-Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.appoci.oracle.com [147.154.114.232])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3uk7q4294n-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Mon, 27 Nov 2023 07:26:03 +0000
-Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 3AR6xMvD009302;
-	Mon, 27 Nov 2023 07:26:02 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3uk7c4p5yg-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Mon, 27 Nov 2023 07:26:02 +0000
-Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 3AR7Q1DM034619;
-	Mon, 27 Nov 2023 07:26:01 GMT
-Received: from ca-dev112.us.oracle.com (ca-dev112.us.oracle.com [10.129.136.47])
-	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 3uk7c4p5y2-1;
-	Mon, 27 Nov 2023 07:26:01 +0000
-From: Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
-To: Borislav Petkov <bp@alien8.de>, Tony Luck <tony.luck@intel.com>,
-        James Morse <james.morse@arm.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Robert Richter <rric@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc: dan.carpenter@linaro.org, kernel-janitors@vger.kernel.org,
-        error27@gmail.com, harshit.m.mogalapalli@oracle.com
-Subject: [PATCH] EDAC/sysfs: Fix calling kobj_put() with ->state_initialized unset
-Date: Sun, 26 Nov 2023 23:25:58 -0800
-Message-ID: <20231127072558.2999920-1-harshit.m.mogalapalli@oracle.com>
-X-Mailer: git-send-email 2.42.0
+Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1648D13A;
+	Mon, 27 Nov 2023 03:44:09 -0800 (PST)
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 1A39440E0031;
+	Mon, 27 Nov 2023 11:44:07 +0000 (UTC)
+X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
+Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
+	header.d=alien8.de
+Received: from mail.alien8.de ([127.0.0.1])
+	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
+	with ESMTP id jX3lP-NCWyzG; Mon, 27 Nov 2023 11:44:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
+	t=1701085444; bh=ELUYa989rs/Q1r1rMywu+qeroXaCS1TWL2jrEJWHU/c=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=F9s9/X26C/Ph1w0ByD8+3ZfuBni82sHS+PZZQGhOjHo9mS2lG7eNWR7Mz9XD9Vq5j
+	 6MQHqt5O4u4aOadL7lRzoCplG+zmulYwF/G+CRspKgli0frzKixPTswX14g3g+/0ZE
+	 OQN/byGnJnVOcN1nI6bWr3+x6ddxiZMZ8AN17FaA2PEoCOU9XTfmcfd8ivhtBwDnqb
+	 pomyoGGn1gr/5sf9AAwphLVxZGUHcWyT2AWOeoc/4OyAt7DXuoXc0jmkpm1Nttr6PD
+	 ci5h+Pm3DlG43yZZDCyPytiFb/IenmIJRaEGNL1IyHVviTaYi3TEF5ehHhZftQBGHu
+	 16tcvitSASIsfZnUmHuXkV77jy/7rFOThAUN8pfWfB9VZjCZu3w12LuAOsRqHU0C3d
+	 gikrjfbunIk0FIJ9vI22EJJ5M/Rhevcfqt0UCs6YYq2VmQhRS3lg7ZFAXOVvwwxZNO
+	 iAJMuNhjfO6dKtnasl2JFTeFzg8QM5v2XODy4bTPU3B4fBQTlnzOqApZxQwEZa5WE+
+	 Rd4xZRXD2BcRNH24H68NeDFDa/lOFb/erIsa3dd5bv9a92AGTAjj6AtyWEnrCUBPuB
+	 GLx1ity7vFD0pgYZNsnCBG+zrDKnb26rRb4AorjVAnfjCT9hyk39bvBCI2wSchU5Vj
+	 p7vWocI9Ym1Ad0c6dGO4QaY4=
+Received: from zn.tnic (pd95304da.dip0.t-ipconnect.de [217.83.4.218])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
+	(No client certificate requested)
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 84EA040E01A5;
+	Mon, 27 Nov 2023 11:43:55 +0000 (UTC)
+Date: Mon, 27 Nov 2023 12:43:49 +0100
+From: Borislav Petkov <bp@alien8.de>
+To: Yazen Ghannam <yazen.ghannam@amd.com>
+Cc: linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
+	tony.luck@intel.com, x86@kernel.org, Avadhut.Naik@amd.com,
+	Smita.KoralahalliChannabasappa@amd.com,
+	amd-gfx@lists.freedesktop.org, linux-trace-kernel@vger.kernel.org
+Subject: Re: [PATCH 05/20] x86/mce/amd: Use helper for UMC bank type check
+Message-ID: <20231127114349.GMZWSA9QADGqCXnTYe@fat_crate.local>
+References: <20231118193248.1296798-1-yazen.ghannam@amd.com>
+ <20231118193248.1296798-6-yazen.ghannam@amd.com>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.987,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-11-27_05,2023-11-22_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 spamscore=0
- adultscore=0 suspectscore=0 phishscore=0 bulkscore=0 malwarescore=0
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2311060000 definitions=main-2311270051
-X-Proofpoint-ORIG-GUID: fc-arH-CXMoGs7vLR2cpWWHa3D19-A8A
-X-Proofpoint-GUID: fc-arH-CXMoGs7vLR2cpWWHa3D19-A8A
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20231118193248.1296798-6-yazen.ghannam@amd.com>
 
-In edac_device_register_sysfs_main_kobj(), when dev_root is NULL,
-kobject_init_and_add() is not called.
+On Sat, Nov 18, 2023 at 01:32:33PM -0600, Yazen Ghannam wrote:
+> @@ -714,14 +721,10 @@ static bool legacy_mce_is_memory_error(struct mce *m)
+>   */
+>  static bool smca_mce_is_memory_error(struct mce *m)
+>  {
+> -	enum smca_bank_types bank_type;
+> -
+>  	if (XEC(m->status, 0x3f))
+>  		return false;
+>  
+> -	bank_type = smca_get_bank_type(m->extcpu, m->bank);
+> -
+> -	return bank_type == SMCA_UMC || bank_type == SMCA_UMC_V2;
+> +	return smca_umc_bank_type(m->ipid);
 
-	if (err) { // err = -ENODEV
-		edac_dbg(1, "Failed to register '.../edac/%s'\n",
-	                 edac_dev->name);
-		goto err_kobj_reg; // This calls kobj_put()
-	}
+	return FIELD_GET(MCI_IPID_HWID, ipid) == IPID_TYPE_UMC;
 
-This will cause a runtime warning in kobject_put() if the above happens.
-Warning:
-"kobject: '%s' (%p): is not initialized, yet kobject_put() is being called."
+after having done:
 
-Fix the error handling to avoid the above possible situation.
+#define IPID_TYPE_UMC	0x96;
 
-Fixes: cb4a0bec0bb9 ("EDAC/sysfs: move to use bus_get_dev_root()")
-Signed-off-by: Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
----
-This is only compile tested and based on static analysis with Smatch.
----
- drivers/edac/edac_device_sysfs.c | 14 ++++++++------
- 1 file changed, 8 insertions(+), 6 deletions(-)
+and you don't need that silly helper.
 
-diff --git a/drivers/edac/edac_device_sysfs.c b/drivers/edac/edac_device_sysfs.c
-index 010c26be5846..4cac14cbdb60 100644
---- a/drivers/edac/edac_device_sysfs.c
-+++ b/drivers/edac/edac_device_sysfs.c
-@@ -253,11 +253,13 @@ int edac_device_register_sysfs_main_kobj(struct edac_device_ctl_info *edac_dev)
- 
- 	/* register */
- 	dev_root = bus_get_dev_root(edac_subsys);
--	if (dev_root) {
--		err = kobject_init_and_add(&edac_dev->kobj, &ktype_device_ctrl,
--					   &dev_root->kobj, "%s", edac_dev->name);
--		put_device(dev_root);
--	}
-+	if (!dev_root)
-+		goto module_put;
-+
-+	err = kobject_init_and_add(&edac_dev->kobj, &ktype_device_ctrl,
-+				   &dev_root->kobj, "%s", edac_dev->name);
-+	put_device(dev_root);
-+
- 	if (err) {
- 		edac_dbg(1, "Failed to register '.../edac/%s'\n",
- 			 edac_dev->name);
-@@ -276,8 +278,8 @@ int edac_device_register_sysfs_main_kobj(struct edac_device_ctl_info *edac_dev)
- 	/* Error exit stack */
- err_kobj_reg:
- 	kobject_put(&edac_dev->kobj);
-+module_put:
- 	module_put(edac_dev->owner);
--
- err_out:
- 	return err;
- }
+And then you can do more cleanups ontop by doing
+
+        /* Unified Memory Controller MCA type */
+        { SMCA_UMC,      HWID_MCATYPE(IPID_TYPE_UMC, 0x0)        },
+        { SMCA_UMC_V2,   HWID_MCATYPE(IPID_TYPE_UMC, 0x1)        },
+
+and have all the numbering properly defined and abstracted away.
+
+Thx.
+
 -- 
-2.39.3
+Regards/Gruss,
+    Boris.
 
+https://people.kernel.org/tglx/notes-about-netiquette
 
