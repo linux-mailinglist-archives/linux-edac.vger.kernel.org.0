@@ -1,53 +1,53 @@
-Return-Path: <linux-edac+bounces-118-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-119-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 12E597FB4DA
-	for <lists+linux-edac@lfdr.de>; Tue, 28 Nov 2023 09:52:05 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id DF3E37FB65D
+	for <lists+linux-edac@lfdr.de>; Tue, 28 Nov 2023 10:54:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BE642281662
-	for <lists+linux-edac@lfdr.de>; Tue, 28 Nov 2023 08:52:03 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 98DEE2826AA
+	for <lists+linux-edac@lfdr.de>; Tue, 28 Nov 2023 09:54:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CAD472E3E1;
-	Tue, 28 Nov 2023 08:51:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1D1414BA81;
+	Tue, 28 Nov 2023 09:54:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="Q08NRJnA"
+	dkim=fail reason="signature verification failed" (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="SDs4/28U"
 X-Original-To: linux-edac@vger.kernel.org
 Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D78AA7;
-	Tue, 28 Nov 2023 00:51:55 -0800 (PST)
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A164109;
+	Tue, 28 Nov 2023 01:54:01 -0800 (PST)
 Received: from localhost (localhost.localdomain [127.0.0.1])
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 1AEFA40E0195;
-	Tue, 28 Nov 2023 08:51:53 +0000 (UTC)
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id D8A4C40E01B1;
+	Tue, 28 Nov 2023 09:53:58 +0000 (UTC)
 X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
-Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
-	header.d=alien8.de
+Authentication-Results: mail.alien8.de (amavisd-new); dkim=fail (4096-bit key)
+	reason="fail (body has been altered)" header.d=alien8.de
 Received: from mail.alien8.de ([127.0.0.1])
 	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-	with ESMTP id ChluQ_0bI5c3; Tue, 28 Nov 2023 08:51:51 +0000 (UTC)
+	with ESMTP id bH8nQNUDPbpB; Tue, 28 Nov 2023 09:53:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-	t=1701161510; bh=b8kwNDDb/tymHpQVlkI8A91DHBnyujPGQHRX1wsU7tw=;
+	t=1701165236; bh=aoMnhTr7jFd65n5Bx4KqYKvZ0RjDqIT+i/qp/fJf9sY=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Q08NRJnAt21ZSfXI9PipunbDM7nORGQfk8q2MESUfrbhwdKcDNj/lvfrYaXQO6WrR
-	 Uu/ou1jioWe9ismICRfRUVg3d+FQm/wPx6FZWqYIkuOj00lA7FTXRPgomSFC12JB9p
-	 jx/Z+egKyrd9s+V6EUpP+PM29kiHtGxAEP6D+mj4x/WjUbMc5t6epBadUQmbQ6T59d
-	 OHk9CXHFlXeMht5fKmdxwhaqaJsJcYjQcCwAG14XuoCwOAs3qO/8qwx/JlqJ47/JYv
-	 +APDpeBEVPM7yMnVxkTaHX1cKKlYOzNJVz9G0G08aIT//tOtvT3TSq6/suZGzKM0iW
-	 3xkbwEKeMxRkIQ1+WXUKcxmhbpGn8ST23QukmzUcDnTznWywJX4RBZBJ8xABUD/x/q
-	 LpqrCLx8GqTQcvX46p79XCA7vm/VHTiyKe0iNeXxQqdC6Df8FkqJr0G6fi36OCuyGb
-	 m5Jnl1QGqjQufT6g7fBC7LdpVg2DsriyG5b8QRGrNW+ZxiZWZHnDQ/wPnEwrzPEhcD
-	 M/86WHzJqxUVJPuatkx67BNxXkgs8VEkb78/GQIFTZBVSPRw+rz5eNeMgEWAoMpQX2
-	 q2gDBvCHdO54qtQ99xUVX3BvzTocJHZahfSUqyeY3gOuejIEZg/bj1NCSFqFY7mArL
-	 sGFHikREKV+Z0TDiEnXHYFYs=
+	b=SDs4/28UNi7ssKZUpSxEQAK1JKNEFUDteBwUljeJdP1EjxfBr73XRShv17qhnE29j
+	 Nf09IzxD+prQAm/Q4rOhBt85lPfBZiCTMRhQ9NoX5QIPwbFEix/+iBCG5+vxIOX98q
+	 /NHeUoHAO18Of1mgtQH8/PuVEmf5Fb+rl0mDobbU5qiD7ptINcz2Eq73gPYwBCpH9C
+	 qA9uASBrO9JaCtJT5E7ahhCs1Xie3EWLOLbdfWofmx5MGdX4g6Xwo2IHyGDRyw/So1
+	 8UVeLkmc2VUZvqwlkbkNpjOoqkVxGhEcW7dgbGQtUoU+BaSRpcTEyZyFn58R0xAI7G
+	 AjTaLWdZXbOi0lvAQE79lhCDmmqS+oLctYcxTJ82oWH0j5RPue1TUtCPisLSB3xEJZ
+	 cMLZz3hOt6Np+xbUrFWqu3iZjOSrlFaxohNLV4uoAuto/1l8eJGgz9lFzdRTj+OdAT
+	 FOHxijYdEySTKyj/1+Q/EKl3+WvDTXVazCchOy4n78gFYKZe8SiP7bmrdyIhdRcItk
+	 DWXt4pwBXpMxosc56Zeo1QiMHBq5iDNcisNfkHf0Dk57xnhOlBt9kvuONbMGmiJ0RW
+	 CEkO7XTK28htgUb78Jk8jfxji1wVzlYL7VOje+gqe5m1pSejuzet3rgDYLIblYpcfH
+	 fFzIm7U20KE3ud/SyQRiGiIs=
 Received: from zn.tnic (pd95304da.dip0.t-ipconnect.de [217.83.4.218])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
 	(No client certificate requested)
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 2C26740E0031;
-	Tue, 28 Nov 2023 08:51:28 +0000 (UTC)
-Date: Tue, 28 Nov 2023 09:51:22 +0100
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 9763840E0195;
+	Tue, 28 Nov 2023 09:53:34 +0000 (UTC)
+Date: Tue, 28 Nov 2023 10:53:29 +0100
 From: Borislav Petkov <bp@alien8.de>
 To: Xin Li <xin3.li@intel.com>
 Cc: linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
@@ -59,11 +59,11 @@ Cc: linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
 	ravi.v.shankar@intel.com, mhiramat@kernel.org,
 	andrew.cooper3@citrix.com, jiangshanlai@gmail.com,
 	nik.borisov@suse.com
-Subject: Re: [PATCH v12 16/37] x86/ptrace: Add FRED additional information to
- the pt_regs structure
-Message-ID: <20231128085122.GPZWWqCrPYnzB8BqFB@fat_crate.local>
+Subject: Re: [PATCH v12 20/37] x86/fred: Disallow the swapgs instruction when
+ FRED is enabled
+Message-ID: <20231128095329.GQZWW4mTdTdmhZ+wS4@fat_crate.local>
 References: <20231003062458.23552-1-xin3.li@intel.com>
- <20231003062458.23552-17-xin3.li@intel.com>
+ <20231003062458.23552-21-xin3.li@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
@@ -72,59 +72,20 @@ List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20231003062458.23552-17-xin3.li@intel.com>
+In-Reply-To: <20231003062458.23552-21-xin3.li@intel.com>
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, Oct 02, 2023 at 11:24:37PM -0700, Xin Li wrote:
-> FRED defines additional information in the upper 48 bits of cs/ss
-> fields. Therefore add the information definitions into the pt_regs
-> structure.
-> 
-> Specially introduce a new structure fred_ss to denote the FRED flags
-> above SS selector, which avoids FRED_SSX_ macros and makes the code
-> simpler and easier to read.
-> 
-> Signed-off-by: H. Peter Anvin (Intel) <hpa@zytor.com>
+On Mon, Oct 02, 2023 at 11:24:41PM -0700, Xin Li wrote:
+> +	 * Note, LKGS loads the GS base address into the IA32_KERNEL_GS_BASE
+> +	 * MSR instead of the GS segment=E2=80=99s descriptor cache. As such,=
+ the
 
-You and hpa need to go through all the patches and figure out who's the
-author that's going to land in git.
+:verify_diff: WARNING: Unicode char [=E2=80=99] (0x8217 in line: +     * =
+MSR instead of the GS segment=E2=80=99s descriptor cache. As such, the
 
-Because this and others have hpa's SOB first, suggesting he's the
-author. However, the mail doesn't start with
+Just do a normal ' - char number 0x27.
 
-From: H. Peter Anvin (Intel) <hpa@zytor.com>
-
-and then git will make *you* the author.
-
-> Tested-by: Shan Kang <shan.kang@intel.com>
-> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-> Signed-off-by: Xin Li <xin3.li@intel.com>
-
-...
-
->  	union {
-> -		u64	ssx;	// The full 64-bit data slot containing SS
-> -		u16	ss;	// SS selector
-> +		/* SS selector */
-> +		u16		ss;
-> +		/* The extended 64-bit data slot containing SS */
-> +		u64		ssx;
-> +		/* The FRED SS extension */
-> +		struct fred_ss	fred_ss;
-
-Aha, sanity about the right comments has come to your mind in this next
-patch. :-P
-
-Just do them right in the previous one.
-
->  	/*
-> -	 * Top of stack on IDT systems.
-> +	 * Top of stack on IDT systems, while FRED systems have extra fields
-> +	 * defined above for storing exception related information, e.g. CR2 or
-> +	 * DR6.
-
-Btw, I really appreciate the good commenting - thanks for that!
-
--- 
+--=20
 Regards/Gruss,
     Boris.
 
