@@ -1,156 +1,94 @@
-Return-Path: <linux-edac+bounces-114-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-115-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8BD187FACC5
-	for <lists+linux-edac@lfdr.de>; Mon, 27 Nov 2023 22:48:04 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1CF157FAF31
+	for <lists+linux-edac@lfdr.de>; Tue, 28 Nov 2023 01:42:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3F72C281997
-	for <lists+linux-edac@lfdr.de>; Mon, 27 Nov 2023 21:48:03 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CC8852813B7
+	for <lists+linux-edac@lfdr.de>; Tue, 28 Nov 2023 00:42:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D54C046534;
-	Mon, 27 Nov 2023 21:48:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 012DCEA0;
+	Tue, 28 Nov 2023 00:42:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kRLBlIWk"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="evhprX2L"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC08C95;
-	Mon, 27 Nov 2023 13:47:57 -0800 (PST)
-Received: by mail-pj1-x1029.google.com with SMTP id 98e67ed59e1d1-280cd4e6f47so821981a91.1;
-        Mon, 27 Nov 2023 13:47:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1701121677; x=1701726477; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=yENf5zK8npnEq3zXzznQUfMJ+TQe/R8aXuxIDKQvB2c=;
-        b=kRLBlIWkEO2IAGP4e+aeXkezW9FH4YZLLimCqu/bS0U/nm91PZcvLgJLOhFgZPk0nL
-         Nx4DVMTtaaxDsiiWqjl27eV9j+aCL/4wzOfqh6Vb1iaw0bDuUAwZsYNXNMru0Emh+Od/
-         YL5pQF3OFSofIfCuA2PHCcvUlI01SkX1t0N59bkMY2SAfnAvQ+u/4XKyEKRgxFoQQJPo
-         bHWevMnoPGED7Mi/rjt75dnI6Z/3CYTr/eeM872Rx9SOZ9zQ/OUp1r4vz4PspN7sjm5x
-         ibRr4SMdzpie9hOw0ERl8O/74l2y2azz2V/ll8IGkB0R1L41301U2F8Zrm56ITU8hVwI
-         7dHg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701121677; x=1701726477;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=yENf5zK8npnEq3zXzznQUfMJ+TQe/R8aXuxIDKQvB2c=;
-        b=iY8ZJLZhqkRC+a9xV95OHMF5c/m2tWyax9A23ygTCEqtYSzcEDL2I+Xv+c4clxfzr7
-         KUgOEqMxm2rJ0647qlxd7bnqINgUO8C3yBjk/mbr4iYfyKLbDWYz/6u5vjTw0DstyMEq
-         wE41UNGo7MkfBV+CkEl6uiHlaeeqaE7Kiibow3CF/vWAyQioKlBxGkV0PMNlfBADRUL9
-         vCrxyH2gBID42+/2o9B9/ShGXJtyRC8kueriBccKRfpGQwgHO64FNzPWDiACGjUBe8Cg
-         2KPtk1xKsbkW6Jd3+oJKudgFWykataAOGk6OTuw3vyeceZEfP10RnVCXKqRCESW2XTBF
-         W/CA==
-X-Gm-Message-State: AOJu0YyFobCCET7CWEPfkgWfxyMD0ShBaOGMlAPy+uHA23JGv/JEEbhi
-	MdT7w2FOYN6YOfMr2UOMgK4=
-X-Google-Smtp-Source: AGHT+IEOSnhIcLBo96G7tVBzj7G7TEY3gt/PrGp7hjwInGYPB+a6key28Rd+N+mtFsDYB9Dn3jgLWg==
-X-Received: by 2002:a17:90b:2388:b0:285:e55:68b8 with SMTP id mr8-20020a17090b238800b002850e5568b8mr13652253pjb.1.1701121677347;
-        Mon, 27 Nov 2023 13:47:57 -0800 (PST)
-Received: from [192.168.0.152] ([103.75.161.210])
-        by smtp.gmail.com with ESMTPSA id e4-20020a170902d38400b001cf6d5a034dsm8700276pld.209.2023.11.27.13.47.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 27 Nov 2023 13:47:56 -0800 (PST)
-Message-ID: <916abed0-23f7-482c-b7a1-c2a081ac2122@gmail.com>
-Date: Tue, 28 Nov 2023 03:17:51 +0530
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.93])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E31C1A7;
+	Mon, 27 Nov 2023 16:42:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1701132123; x=1732668123;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=3VfU9NwhaNjLoj9hTq3TLLG+FPVaZX89uWfoXGqjeb8=;
+  b=evhprX2L20vxQey8za4eyWxz5yy/359HRsNAVPVOcS+/IRjRWVF9Ikj6
+   eVoVtzSMwYSXmn8vOoO9OrrxTOksJvoS3UGbrpXt5s9GbXTLyXIHz3YJa
+   TQC/eNKRG1lTYF6i/Ww7eU66lN7lmprzRCdfU5lH91818uLN37+P7tb5a
+   ojsI4BgDQF327QUsTEnfS3fbXmZ1FDLVNUcBPHSlArns3H/hDcbgWJzC9
+   oUFTmp6CnRYPQMgrLtPkWOzMaddZ+zk2BA1ULynwHuxx07svlO1iA8cKX
+   1sVMWDFJGjMYTrDnWueT0Y5QqJGBeJ4ZPU709fzaOP4mRfaOSgSH1jKqS
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10907"; a="389976671"
+X-IronPort-AV: E=Sophos;i="6.04,232,1695711600"; 
+   d="scan'208";a="389976671"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Nov 2023 16:42:02 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10907"; a="834483743"
+X-IronPort-AV: E=Sophos;i="6.04,232,1695711600"; 
+   d="scan'208";a="834483743"
+Received: from agluck-desk3.sc.intel.com (HELO agluck-desk3) ([172.25.222.74])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Nov 2023 16:42:03 -0800
+Date: Mon, 27 Nov 2023 16:42:02 -0800
+From: Tony Luck <tony.luck@intel.com>
+To: Borislav Petkov <bp@alien8.de>
+Cc: Yazen Ghannam <yazen.ghannam@amd.com>,
+	Smita.KoralahalliChannabasappa@amd.com, dave.hansen@linux.intel.com,
+	x86@kernel.org, linux-edac@vger.kernel.org,
+	linux-kernel@vger.kernel.org, patches@lists.linux.dev
+Subject: Re: [PATCH v9 2/3] x86/mce: Add per-bank CMCI storm mitigation
+Message-ID: <ZWU3WkmUMz3Wk9wT@agluck-desk3>
+References: <20230929181626.210782-1-tony.luck@intel.com>
+ <20231004183623.17067-1-tony.luck@intel.com>
+ <20231004183623.17067-3-tony.luck@intel.com>
+ <20231019151211.GHZTFHS3osBIL1IJbF@fat_crate.local>
+ <ZTa37L2nlnbok8dz@agluck-desk3>
+ <20231114192324.GAZVPJLGZmfJBS181/@fat_crate.local>
+ <ZVPu/hX9b7lUkrBY@agluck-desk3>
+ <20231121115448.GCZVyaiNkNvb4t2NxB@fat_crate.local>
+ <ZWTzAujHdrJ950F3@agluck-desk3>
+ <ZWT4pAJ6g0i78wec@agluck-desk3>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] driver : edac : Fix warning using plain integer as
- NULL
-Content-Language: en-US
-To: mchehab@kernel.org, bp@alien8.de, tony.luck@intel.com,
- james.morse@arm.com, rric@kernel.org, qiuxu.zhuo@intel.com
-Cc: linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20231127202906.GIZWT8EgKxGzLQTRtw@fat_crate.local>
- <20231127214156.432669-1-singhabhinav9051571833@gmail.com>
-From: Abhinav Singh <singhabhinav9051571833@gmail.com>
-In-Reply-To: <20231127214156.432669-1-singhabhinav9051571833@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZWT4pAJ6g0i78wec@agluck-desk3>
 
-On 11/28/23 03:11, Abhinav Singh wrote:
-> Sparse static analysis tools generate a warning with this message
-> "Using plain integer as NULL pointer". In this case this warning is
-> being shown because we are trying to initialize  pointer to NULL using
-> integer value 0.
-> 
-> The reason for this change is that use of numeric 0 for a null pointer is
-> unacceptable. See this link for the long description why:
-> Link: https://www.spinics.net/lists/linux-sparse/msg10066.html
-> 
-> Signed-off-by: Abhinav Singh <singhabhinav9051571833@gmail.com>
-> ---
-> v1 -> v2: 1. Fixed the comment section descrbing the current code.
-> 	  2. Added a reason for why this change is required.
-> 
->   drivers/edac/i7core_edac.c | 4 ++--
->   drivers/edac/sb_edac.c     | 6 +++---
->   2 files changed, 5 insertions(+), 5 deletions(-)
-> 
-> diff --git a/drivers/edac/i7core_edac.c b/drivers/edac/i7core_edac.c
-> index 08bf20c60111..4c76d0f180ec 100644
-> --- a/drivers/edac/i7core_edac.c
-> +++ b/drivers/edac/i7core_edac.c
-> @@ -376,7 +376,7 @@ static const struct pci_id_table pci_dev_table[] = {
->   	PCI_ID_TABLE_ENTRY(pci_dev_descr_i7core_nehalem),
->   	PCI_ID_TABLE_ENTRY(pci_dev_descr_lynnfield),
->   	PCI_ID_TABLE_ENTRY(pci_dev_descr_i7core_westmere),
-> -	{NULL,}			/* 0 terminated list. */
-> +	{NULL,}			/* NULL terminated list. */
->   };
->   
->   /*
-> @@ -385,7 +385,7 @@ static const struct pci_id_table pci_dev_table[] = {
->   static const struct pci_device_id i7core_pci_tbl[] = {
->   	{PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_X58_HUB_MGMT)},
->   	{PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_LYNNFIELD_QPI_LINK0)},
-> -	{0,}			/* 0 terminated list. */
-> +	{0,}			/* NULL terminated list. */
->   };
->   
->   /****************************************************************************
-> diff --git a/drivers/edac/sb_edac.c b/drivers/edac/sb_edac.c
-> index a3f50a66de33..5d9a2963dc54 100644
-> --- a/drivers/edac/sb_edac.c
-> +++ b/drivers/edac/sb_edac.c
-> @@ -439,7 +439,7 @@ static const struct pci_id_descr pci_dev_descr_sbridge[] = {
->   
->   static const struct pci_id_table pci_dev_descr_sbridge_table[] = {
->   	PCI_ID_TABLE_ENTRY(pci_dev_descr_sbridge, ARRAY_SIZE(pci_dev_descr_sbridge), 1, SANDY_BRIDGE),
-> -	{NULL,}			/* 0 terminated list. */
-> +	{NULL,}			/* NULL terminated list. */
->   };
->   
->   /* This changes depending if 1HA or 2HA:
-> @@ -576,7 +576,7 @@ static const struct pci_id_descr pci_dev_descr_haswell[] = {
->   
->   static const struct pci_id_table pci_dev_descr_haswell_table[] = {
->   	PCI_ID_TABLE_ENTRY(pci_dev_descr_haswell, 13, 2, HASWELL),
-> -	{NULL,}			/* 0 terminated list. */
-> +	{NULL,}			/* NULL terminated list. */
->   };
->   
->   /* Knight's Landing Support */
-> @@ -686,7 +686,7 @@ static const struct pci_id_descr pci_dev_descr_broadwell[] = {
->   
->   static const struct pci_id_table pci_dev_descr_broadwell_table[] = {
->   	PCI_ID_TABLE_ENTRY(pci_dev_descr_broadwell, 10, 2, BROADWELL),
-> -	{NULL,}			/* 0 terminated list. */
-> +	{NULL,}			/* NULL terminated list. */
->   };
->   
->   
-Thank You, for explaining me what needs to be done. Yeah without a 
-proper reason a change is never really clear which can be confusing to 
-anyone looking. I will make sure I add a reason in every patch from now on.
+On Mon, Nov 27, 2023 at 12:14:28PM -0800, Tony Luck wrote:
+> On Mon, Nov 27, 2023 at 11:50:26AM -0800, Tony Luck wrote:
+> > On Tue, Nov 21, 2023 at 12:54:48PM +0100, Borislav Petkov wrote:
+> > > On Tue, Nov 14, 2023 at 02:04:46PM -0800, Tony Luck wrote:
+> > But it isn't doing the same thing.  The timer calls:
+> > 
+> > 	machine_check_poll(0, this_cpu_ptr(&mce_poll_banks));
+> > 
+> > and cmci_mc_poll_banks() calls:
+> > 
+> > 	machine_check_poll(0, this_cpu_ptr(&mce_poll_banks));
 
-Thank You,
-Abhinav Singh
+        machine_check_poll(0, this_cpu_ptr(&mce_banks_owned));
+
+> 
+> Bah ... I've cut & pasted the same thing ... but I think there
+> are separate bit maps ... maybe I'm wrong. Will go back and
+> look again.
+> 
+> -Tony
 
