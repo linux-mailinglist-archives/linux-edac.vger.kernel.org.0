@@ -1,113 +1,129 @@
-Return-Path: <linux-edac+bounces-121-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-122-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DE4517FB6C1
-	for <lists+linux-edac@lfdr.de>; Tue, 28 Nov 2023 11:09:46 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 92A2D7FBAF9
+	for <lists+linux-edac@lfdr.de>; Tue, 28 Nov 2023 14:10:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 92AFD282909
-	for <lists+linux-edac@lfdr.de>; Tue, 28 Nov 2023 10:09:45 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C36231C21063
+	for <lists+linux-edac@lfdr.de>; Tue, 28 Nov 2023 13:10:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 277BE4D128;
-	Tue, 28 Nov 2023 10:09:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3076156475;
+	Tue, 28 Nov 2023 13:10:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="WqvcBgi4"
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="bxTo9+80"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D418DC;
-	Tue, 28 Nov 2023 02:09:39 -0800 (PST)
-Received: from localhost (localhost.localdomain [127.0.0.1])
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 882A740E01B1;
-	Tue, 28 Nov 2023 10:09:36 +0000 (UTC)
-X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
-Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
-	header.d=alien8.de
-Received: from mail.alien8.de ([127.0.0.1])
-	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-	with ESMTP id n6vaYX6mQPGx; Tue, 28 Nov 2023 10:09:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-	t=1701166173; bh=ZbOAIQjytTHlygvBJZdtmYHZgd+py/hKn6bkyMaazjs=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=WqvcBgi4X9QIQCMq9rbbSQ5yckzcUFi2nYsW5MeInmATYRTahKqBugagSn2r6mcCf
-	 0OKLl1fUw7IGcqogaH5K60o9MnxTMAwqVZcoLJj+TMs/KT0za6Zq7t1tW2/Ky9ATC4
-	 pMaezQt2tstNf5o+V8MgG9hsMUIkDdRe8+AHDweomKer8/hpIZOyUDVdCsCvQm3EJp
-	 R8fH+CyGxdZZedQ8ges+Y8u0LMmQYV3AqbrSkYKdbd1u6YGggNSvJV8KIpYwS/MrtT
-	 8NLKg58ZHCK194AabA4fUcsX2l5x6TPCAG6E8WunhkXo7OyDI18O5HIsYKRlEnF2xz
-	 DK+vBY+Etna4jLAt3huPcAlHSrV/TsprLkW+MM74k+XziphA6FKIN0HOJarlWLhol2
-	 K0F1NhYJ5bIokwuhXGJqZ0FXH/v94Ul/8v435Jva0XF3m/skw6ISeuyDuv7kpDbOhT
-	 fXNefHnI2Dc5iXbQpfiCXIb74g9FH7zPTXzsEMG2ez0G3YN8cMrrFRtDqZT7WQJUuc
-	 CX3jZGcfJrp5UiW8OoFEM4FajOlEuVTcNzPYei0+052dHmkxO7AbDriA2oZOklc953
-	 dej16pz5yYo1mdKVZaGNo/ODqFn8nXdYtyFEtOfQEi8eCl0wau/qz0RlzdveGBe5Mv
-	 d2OWeQiMp1IFOzr8SWk0eIUk=
-Received: from zn.tnic (pd95304da.dip0.t-ipconnect.de [217.83.4.218])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
-	(No client certificate requested)
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 8B4B840E01A5;
-	Tue, 28 Nov 2023 10:09:11 +0000 (UTC)
-Date: Tue, 28 Nov 2023 11:09:10 +0100
-From: Borislav Petkov <bp@alien8.de>
-To: Xin Li <xin3.li@intel.com>
-Cc: linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-edac@vger.kernel.org, linux-hyperv@vger.kernel.org,
-	kvm@vger.kernel.org, xen-devel@lists.xenproject.org,
-	tglx@linutronix.de, mingo@redhat.com, dave.hansen@linux.intel.com,
-	x86@kernel.org, hpa@zytor.com, luto@kernel.org, pbonzini@redhat.com,
-	seanjc@google.com, peterz@infradead.org, jgross@suse.com,
-	ravi.v.shankar@intel.com, mhiramat@kernel.org,
-	andrew.cooper3@citrix.com, jiangshanlai@gmail.com,
-	nik.borisov@suse.com
-Subject: Re: [PATCH v12 24/37] x86/idtentry: Incorporate
- definitions/declarations of the FRED entries
-Message-ID: <20231128100910.GSZWW8RnyhX0YQjwDm@fat_crate.local>
-References: <20231003062458.23552-1-xin3.li@intel.com>
- <20231003062458.23552-25-xin3.li@intel.com>
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C60BD51;
+	Tue, 28 Nov 2023 05:10:16 -0800 (PST)
+Received: from pps.filterd (m0333520.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3ASBT54N000874;
+	Tue, 28 Nov 2023 13:09:58 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding;
+ s=corp-2023-11-20; bh=BzNJ9iRGfz25bP31jKWHUOIixIrbax65I5/G31Hvt9w=;
+ b=bxTo9+80AYbBVv/Kv7UPx0/iXHVVu2a993TxlSvclY+1J1j5/O3pmGUw2d7QKJc6d+On
+ lsm7lEMkO5knNkvIP4IDQGTelfq3zp9Fk2Nkn6LjnqefgcyZPsdvsPjIsIw1vgEhdj99
+ +W+VBKg3LQUSFUnxsFVfhzdlN9zVN0Wu617l3XL86ltVgIUCUXHZcvxQHfM4G+8BXjo6
+ zkWwp9DQFrNCtvE5wazZw2tPPG9/RhpZr7CNUp2Q5eMTTNScR7msIDoSspozSqs1YiT6
+ iZ72fYFZ1sfdgEDQbIgRUDmNP7xXhpCQZaYU4R8qagV9WfZhwTjO9auU/DDc8DHw5gmj CQ== 
+Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.appoci.oracle.com [130.35.100.223])
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3uk8yd5rqa-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Tue, 28 Nov 2023 13:09:58 +0000
+Received: from pps.filterd (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 3ASD0uB9027071;
+	Tue, 28 Nov 2023 13:09:57 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3uk7cd34ne-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Tue, 28 Nov 2023 13:09:57 +0000
+Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 3ASD9vau005694;
+	Tue, 28 Nov 2023 13:09:57 GMT
+Received: from ca-dev112.us.oracle.com (ca-dev112.us.oracle.com [10.129.136.47])
+	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 3uk7cd34m3-1;
+	Tue, 28 Nov 2023 13:09:57 +0000
+From: Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
+To: Borislav Petkov <bp@alien8.de>, Tony Luck <tony.luck@intel.com>,
+        James Morse <james.morse@arm.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Robert Richter <rric@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc: dan.carpenter@linaro.org, kernel-janitors@vger.kernel.org,
+        error27@gmail.com, harshit.m.mogalapalli@oracle.com
+Subject: [PATCH] EDAC/sysfs: Fix calling kobject_put() without kobj initialization
+Date: Tue, 28 Nov 2023 05:09:52 -0800
+Message-ID: <20231128130952.3372794-1-harshit.m.mogalapalli@oracle.com>
+X-Mailer: git-send-email 2.42.0
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20231003062458.23552-25-xin3.li@intel.com>
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2023-11-28_14,2023-11-27_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 malwarescore=0
+ suspectscore=0 spamscore=0 mlxlogscore=999 mlxscore=0 phishscore=0
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2311060000 definitions=main-2311280105
+X-Proofpoint-ORIG-GUID: OjPUr0MfaKZ5C1yf0Hi4U5w1zAH6OmQ9
+X-Proofpoint-GUID: OjPUr0MfaKZ5C1yf0Hi4U5w1zAH6OmQ9
 
-On Mon, Oct 02, 2023 at 11:24:45PM -0700, Xin Li wrote:
-> FRED and IDT can share most of the definitions and declarations so
-> that in the majority of cases the actual handler implementation is the
-> same.
-> 
-> The differences are the exceptions where FRED stores exception related
-> information on the stack and the sysvec implementations as FRED can
-> handle irqentry/exit() in the dispatcher instead of having it in each
-> handler.
-> 
-> Also add stub defines for vectors which are not used due to Kconfig
-> decisions to spare the ifdeffery in the actual FRED dispatch code.
-> 
-> Tested-by: Shan Kang <shan.kang@intel.com>
-> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-> Signed-off-by: Xin Li <xin3.li@intel.com>
+In edac_pci_main_kobj_setup() when dev_root is NULL,
+kobject_init_and_add() is not called.
 
-This makes me wonder too who the author is. The commit message text
-sounds like tglx. :)
+        if (err) { // err = -ENODEV;
+                edac_dbg(1, "Failed to register '.../edac/pci'\n");
+                goto kobject_init_and_add_fail; // call to kobject_put()
+        }
 
-> @@ -137,6 +141,17 @@ static __always_inline void __##func(struct pt_regs *regs,		\
->  #define DEFINE_IDTENTRY_RAW(func)					\
->  __visible noinstr void func(struct pt_regs *regs)
->  
-> +/**
-> + * DEFINE_FREDENTRY_RAW - Emit code for raw FRED entry points
+This will cause a runtime warning in kobject_put() if the above happens.
+Warning:
+"kobject: '%s' (%p): is not initialized, yet kobject_put() is being called."
 
-LOL, "FREDENTRY"
+Fix the error handling to avoid the above possible situation.
 
-...
+Fixes: cb4a0bec0bb9 ("EDAC/sysfs: move to use bus_get_dev_root()")
+Signed-off-by: Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
+---
+This is based on static analysis with Smatch and only compile tested.
+---
+ drivers/edac/edac_pci_sysfs.c | 14 ++++++++------
+ 1 file changed, 8 insertions(+), 6 deletions(-)
 
+diff --git a/drivers/edac/edac_pci_sysfs.c b/drivers/edac/edac_pci_sysfs.c
+index 901d4cd3ca38..71a0d4b9c2cf 100644
+--- a/drivers/edac/edac_pci_sysfs.c
++++ b/drivers/edac/edac_pci_sysfs.c
+@@ -370,12 +370,14 @@ static int edac_pci_main_kobj_setup(void)
+ 
+ 	/* Instanstiate the pci object */
+ 	dev_root = bus_get_dev_root(edac_subsys);
+-	if (dev_root) {
+-		err = kobject_init_and_add(edac_pci_top_main_kobj,
+-					   &ktype_edac_pci_main_kobj,
+-					   &dev_root->kobj, "pci");
+-		put_device(dev_root);
+-	}
++	if (!dev_root)
++		goto kzalloc_fail;
++
++	err = kobject_init_and_add(edac_pci_top_main_kobj,
++				   &ktype_edac_pci_main_kobj,
++				   &dev_root->kobj, "pci");
++	put_device(dev_root);
++
+ 	if (err) {
+ 		edac_dbg(1, "Failed to register '.../edac/pci'\n");
+ 		goto kobject_init_and_add_fail;
 -- 
-Regards/Gruss,
-    Boris.
+2.39.3
 
-https://people.kernel.org/tglx/notes-about-netiquette
 
