@@ -1,94 +1,146 @@
-Return-Path: <linux-edac+bounces-130-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-131-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7C2DE7FBFF4
-	for <lists+linux-edac@lfdr.de>; Tue, 28 Nov 2023 18:04:38 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 99D1A7FC029
+	for <lists+linux-edac@lfdr.de>; Tue, 28 Nov 2023 18:19:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9CF691C20D21
-	for <lists+linux-edac@lfdr.de>; Tue, 28 Nov 2023 17:04:37 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4D259282B5F
+	for <lists+linux-edac@lfdr.de>; Tue, 28 Nov 2023 17:19:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 359EA54BE0;
-	Tue, 28 Nov 2023 17:04:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 472595B5A2;
+	Tue, 28 Nov 2023 17:19:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="G/2XhO33"
+	dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b="6XE+gwUS"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AD8210F0;
-	Tue, 28 Nov 2023 09:04:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-	Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-	Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-	bh=/89j1WGuOEhmXDZoAr89HAOtI8MBBJgAUvR0nYQq0uo=; b=G/2XhO33W4alzsVgatxhkuF5Ik
-	diPRGUuTND1Zgj2NbdUNI6RtWqDOu1MqUYsIwrEPaDT9cmShRs0AHkfoQn/EnNf/Qnwc8cSWTUT/6
-	KoYcj7Etw1II8BHVeX+/IojXl2Oki7ZpsVYPuSpWjprnIJO5hyhUoUnF5s8p5HnaL0eoNJBvGDlmL
-	0PqXELudFq+zLsHuYvaBmsvLyyq0mU4TWqycFECLZ1UGGU14jRV/BPfG/djPyXaHV0g9UuXm56kTZ
-	cvQPCn+mSZN0vjlM0RHfvv5iwO6zcaXAXUkHPcMBTPlrEV3LWRhZlk3laLOqatEPHdjEmNOwdnD+X
-	dbYyjY8Q==;
-Received: from [50.53.46.231] (helo=[192.168.254.15])
-	by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-	id 1r81VX-005sqQ-0v;
-	Tue, 28 Nov 2023 17:04:23 +0000
-Message-ID: <7c5c3634-7a89-48b3-96fa-4d9f3be3ba05@infradead.org>
-Date: Tue, 28 Nov 2023 09:04:22 -0800
+Received: from mail.zytor.com (unknown [IPv6:2607:7c80:54:3::138])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B8F410CB;
+	Tue, 28 Nov 2023 09:19:17 -0800 (PST)
+Received: from [127.0.0.1] ([98.35.210.218])
+	(authenticated bits=0)
+	by mail.zytor.com (8.17.2/8.17.1) with ESMTPSA id 3ASHIMck585558
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
+	Tue, 28 Nov 2023 09:18:23 -0800
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 3ASHIMck585558
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
+	s=2023111101; t=1701191904;
+	bh=f6l68iGv5eAcjwGj55E8OL6CF5X9iU8J74t2PrTG5YA=;
+	h=Date:From:To:CC:Subject:In-Reply-To:References:From;
+	b=6XE+gwUSIscmXlxZmR/obyqPnRdyFc9SgOdDhOLZ5zIn1Qj3I3XIlJN7R91edhLqJ
+	 3ATaGYKTRv7hC69ocMawcn/GiY4V77tWz594FEnWHS1T/g+UF3/dc6k9z0gaybTIHl
+	 sdQV9dZqS9FscMeWhYHdMnochTHoBUVyrWGiTY2zNzeuYMHsP9gBs5xV7h8+eLlOz8
+	 5O5NkXqRyj9mjLrHrEoT9mG7b2dvs/x/bc4pP1UavUy6IAgToEPxAtQdtXqZvS6W9m
+	 YOJM6Xe1gTSAM8HoXUXn+o/WwGXl2uufOA2uqrbGW6boguYBo3j4/dND+m2saj1FAf
+	 JdMK7bWrvWlow==
+Date: Tue, 28 Nov 2023 09:18:21 -0800
+From: "H. Peter Anvin" <hpa@zytor.com>
+To: Borislav Petkov <bp@alien8.de>, Xin Li <xin3.li@intel.com>
+CC: linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-edac@vger.kernel.org, linux-hyperv@vger.kernel.org,
+        kvm@vger.kernel.org, xen-devel@lists.xenproject.org,
+        tglx@linutronix.de, mingo@redhat.com, dave.hansen@linux.intel.com,
+        x86@kernel.org, luto@kernel.org, pbonzini@redhat.com,
+        seanjc@google.com, peterz@infradead.org, jgross@suse.com,
+        ravi.v.shankar@intel.com, mhiramat@kernel.org,
+        andrew.cooper3@citrix.com, jiangshanlai@gmail.com,
+        nik.borisov@suse.com
+Subject: =?US-ASCII?Q?Re=3A_=5BPATCH_v12_16/37=5D_x86/ptrace=3A_Add_FRED_ad?= =?US-ASCII?Q?ditional_information_to_the_pt=5Fregs_structure?=
+User-Agent: K-9 Mail for Android
+In-Reply-To: <20231128085122.GPZWWqCrPYnzB8BqFB@fat_crate.local>
+References: <20231003062458.23552-1-xin3.li@intel.com> <20231003062458.23552-17-xin3.li@intel.com> <20231128085122.GPZWWqCrPYnzB8BqFB@fat_crate.local>
+Message-ID: <E5913DD8-7C41-4658-9E42-63C01E2209B2@zytor.com>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] Documentation: Begin a RAS section
-Content-Language: en-US
-To: Borislav Petkov <bp@alien8.de>, Tony Luck <tony.luck@intel.com>,
- Yazen Ghannam <yazen.ghannam@amd.com>
-Cc: Muralidhara M K <muralimk@amd.com>, linux-edac@vger.kernel.org,
- linux-kernel@vger.kernel.org, Muralidhara M K <muralidhara.mk@amd.com>,
- linux-doc@vger.kernel.org
-References: <20231102114225.2006878-1-muralimk@amd.com>
- <20231102114225.2006878-2-muralimk@amd.com>
- <20231128142049.GTZWX3QQTSaQk/+u53@fat_crate.local>
-From: Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20231128142049.GTZWX3QQTSaQk/+u53@fat_crate.local>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-Hi,
+On November 28, 2023 12:51:22 AM PST, Borislav Petkov <bp@alien8=2Ede> wrot=
+e:
+>On Mon, Oct 02, 2023 at 11:24:37PM -0700, Xin Li wrote:
+>> FRED defines additional information in the upper 48 bits of cs/ss
+>> fields=2E Therefore add the information definitions into the pt_regs
+>> structure=2E
+>>=20
+>> Specially introduce a new structure fred_ss to denote the FRED flags
+>> above SS selector, which avoids FRED_SSX_ macros and makes the code
+>> simpler and easier to read=2E
+>>=20
+>> Signed-off-by: H=2E Peter Anvin (Intel) <hpa@zytor=2Ecom>
+>
+>You and hpa need to go through all the patches and figure out who's the
+>author that's going to land in git=2E
+>
+>Because this and others have hpa's SOB first, suggesting he's the
+>author=2E However, the mail doesn't start with
+>
+>From: H=2E Peter Anvin (Intel) <hpa@zytor=2Ecom>
+>
+>and then git will make *you* the author=2E
+>
+>> Tested-by: Shan Kang <shan=2Ekang@intel=2Ecom>
+>> Signed-off-by: Thomas Gleixner <tglx@linutronix=2Ede>
+>> Signed-off-by: Xin Li <xin3=2Eli@intel=2Ecom>
+>
+>=2E=2E=2E
+>
+>>  	union {
+>> -		u64	ssx;	// The full 64-bit data slot containing SS
+>> -		u16	ss;	// SS selector
+>> +		/* SS selector */
+>> +		u16		ss;
+>> +		/* The extended 64-bit data slot containing SS */
+>> +		u64		ssx;
+>> +		/* The FRED SS extension */
+>> +		struct fred_ss	fred_ss;
+>
+>Aha, sanity about the right comments has come to your mind in this next
+>patch=2E :-P
+>
+>Just do them right in the previous one=2E
+>
+>>  	/*
+>> -	 * Top of stack on IDT systems=2E
+>> +	 * Top of stack on IDT systems, while FRED systems have extra fields
+>> +	 * defined above for storing exception related information, e=2Eg=2E =
+CR2 or
+>> +	 * DR6=2E
+>
+>Btw, I really appreciate the good commenting - thanks for that!
+>
 
-On 11/28/23 06:20, Borislav Petkov wrote:
-> On Thu, Nov 02, 2023 at 11:42:22AM +0000, Muralidhara M K wrote:
->> From: Muralidhara M K <muralidhara.mk@amd.com>
->>
->> AMD systems with Scalable MCA, each machine check error of a SMCA bank
->> type has an associated bit position in the bank's control (CTL) register.
-> 
-> Ontop of this. It is long overdue:
-> 
-> ---
-> From: "Borislav Petkov (AMD)" <bp@alien8.de>
-> Date: Tue, 28 Nov 2023 14:37:56 +0100
-> 
-> Add some initial RAS documentation. The expectation is for this to
-> collect all the user-visible features for interacting with the RAS
-> features of the kernel.
-> 
+For Xin, mainly:
 
-In general, does RAS include EDAC and MCE?
+Standard practice is:
 
-Thanks.
+1=2E For a patch with relatively small modifications, or where the changes=
+ are mainly in comments or the patch message:
 
-> Signed-off-by: Borislav Petkov (AMD) <bp@alien8.de>
-> ---
->  Documentation/RAS/ras.rst | 26 ++++++++++++++++++++++++++
->  Documentation/index.rst   |  1 +
->  2 files changed, 27 insertions(+)
->  create mode 100644 Documentation/RAS/ras.rst
-> 
+Keep the authorship, but put a description of what you have changed in bra=
+ckets with your username at the bottom of the description, immediately befo=
+re Signed-off-by:
+
+[ xin: changed foo, bar, baz ]
 
 
--- 
-~Randy
+2=2E For a patch with major rewrites:
+
+Take authorship on the From: line, but have an Originally-by: tag (rather =
+than a Signed-off-by: by the original author):
+
+Originally-by: Someone Else <someone@elsewhere=2Edom>
+
+
+3=2E For a patch which is fully or nearly fully your own work (a total rew=
+rite, or based on a concept idea rather than actual code), credit the origi=
+nal in the patch comment:
+
+Based on an idea by Someone Else <someone@elsewhere=2Edom> (optional link =
+to lore=2Ekernel=2Eorg)=2E
 
