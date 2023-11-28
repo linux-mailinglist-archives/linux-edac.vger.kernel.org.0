@@ -1,165 +1,146 @@
-Return-Path: <linux-edac+bounces-123-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-124-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id C8B3F7FBC8B
-	for <lists+linux-edac@lfdr.de>; Tue, 28 Nov 2023 15:17:23 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 243567FBC9E
+	for <lists+linux-edac@lfdr.de>; Tue, 28 Nov 2023 15:21:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7F968282280
-	for <lists+linux-edac@lfdr.de>; Tue, 28 Nov 2023 14:17:22 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5505C1C20A66
+	for <lists+linux-edac@lfdr.de>; Tue, 28 Nov 2023 14:21:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F12995ABAC;
-	Tue, 28 Nov 2023 14:17:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0636A5ABB3;
+	Tue, 28 Nov 2023 14:21:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gS6gEyD9"
+	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="lQQbbVM5"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73CABD5B;
-	Tue, 28 Nov 2023 06:17:17 -0800 (PST)
-Received: by mail-pf1-x430.google.com with SMTP id d2e1a72fcca58-6cbcc42e9d4so482313b3a.0;
-        Tue, 28 Nov 2023 06:17:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1701181037; x=1701785837; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=QHJtFqAleD7W7XromXIqrJ2RQq+grf3ccSCOU/zLUZM=;
-        b=gS6gEyD910SHYksTUIO9sZiFzgGl+cgkJIxbM4UROnBgxkZ6hkrsZy2clcRHWW1lHL
-         SLU5ObZeQY4SHfKycrZ4M35i1/NKS0CpfUeZPdEfyvkwGqrQdeRUKhcoGnT2kApraASn
-         6rDGnROgrAc6Nui2G0ezIpoLRylr5q8vJD0KVKimAqle4bv3xQEvjXRBQmcnKpjKNfPG
-         BgEmfR/T2Rjf+Lq9MrMnC7Eh+8sYI8iD5IEE7wngatBpmfMfEVovwDBHUS0GIVpuxNuq
-         aZzjk7GU1Dwgg8zPGdw+0ZUkSzq5DdxWve1285dSIEqaUOKjpWPHvH+vKrjKHyKpBI3t
-         Hdmw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701181037; x=1701785837;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=QHJtFqAleD7W7XromXIqrJ2RQq+grf3ccSCOU/zLUZM=;
-        b=T2QkpMotwJ0v6dI65uguzXmR2efdibSXcIkLyz61xa/MdMFyLqQWFCQAJt58WVkhCU
-         B4r//2tErWEr4/SZ+8BL4wr0wFRji+sanXs1zQ+u6JrojbksNx2gFM+nfTTnh6EBAhEf
-         Q9WyaQURt+VdFDB+kDg24+Z6DTCLRhoQ0ERE3nsySskhFPo0InECw/5bnGeDwernRvt2
-         d0G9d8d97pScAhi25L5ATUMd1Y1yVWbSRfwvx522NUS2xVVmLUc8UsRti8y+W1DXRp/4
-         5fV+BeQfXhIlANphA3i+2uvD9XFgKBurdOtdsWk2fxGfwnfxUBNsgbt5evdMXjvK3HQO
-         SmyQ==
-X-Gm-Message-State: AOJu0YyRnWV1beefyLB1HNy7OrEpuM/U+uCmr9AdRHEhda7MI0lC2MBr
-	0CEX5L/oNmo2WSLF53Gi6j12TXCJTm8=
-X-Google-Smtp-Source: AGHT+IFgYLBF9c7I/u4+gYLhdlAjgi35N42VpKPkgvH4bCIUAWhCQoSZ2CBOymPkZVt7ZInzOUN+tg==
-X-Received: by 2002:a05:6a20:7348:b0:187:ccb6:ddf1 with SMTP id v8-20020a056a20734800b00187ccb6ddf1mr17917163pzc.0.1701181036502;
-        Tue, 28 Nov 2023 06:17:16 -0800 (PST)
-Received: from abhinav.. ([103.75.161.211])
-        by smtp.gmail.com with ESMTPSA id m7-20020a62f207000000b006cd950a38e4sm2919564pfh.94.2023.11.28.06.17.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Nov 2023 06:17:15 -0800 (PST)
-From: Abhinav Singh <singhabhinav9051571833@gmail.com>
-To: mchehab@kernel.org,
-	bp@alien8.de,
-	tony.luck@intel.com,
-	james.morse@arm.com,
-	rric@kernel.org,
-	qiuxu.zhuo@intel.com
-Cc: linux-edac@vger.kernel.org,
+Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF877C1;
+	Tue, 28 Nov 2023 06:21:09 -0800 (PST)
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id A5C4F40E0031;
+	Tue, 28 Nov 2023 14:21:07 +0000 (UTC)
+X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
+Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
+	header.d=alien8.de
+Received: from mail.alien8.de ([127.0.0.1])
+	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
+	with ESMTP id FkzHQZ5LqZ19; Tue, 28 Nov 2023 14:21:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
+	t=1701181262; bh=djgexPykShCCOWmlqzQx+qXNGN05nNP+MDkkppHP5vk=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=lQQbbVM53H/aJ4N6bEkQJVcO39J/ja2tSgX0+UKo4glNWsK1sRo6EyH/7vu4JrU/M
+	 2WiDTGS7ddwGD8InQN2D0MqmxbYK0++1EKCoCMHc63DH3Xb1BdZ8rO0EEB8NuSCkH1
+	 kFefNmZnA9w7gtNhal55lIUuA7THvTekO9Bh/arDViTpE2ExivXbojg5OL2/wivvxE
+	 HQGiuD9BtypuL9wt2iwuQbOek0NXg7HsqqJ0C9RKFC+rt/qJ9Ldzwnq5HSB9N7DKLO
+	 0IaquxV3lWw7dNgZw8eoFtkGOvWLEx8QZy+aqVgzZcZmlLVVNIZDyAR4XE6w4r99c1
+	 xc9X548TgjfaIRKSkOmU58I6eW6bLkIYxaYmejprmT9j8Zrbfm7CrkAAUBe6EWYKrA
+	 UyP+EK72F/bHMsT8K60Yw+BwaVg87EYxPa/3UKmYnPpSB2pj773f1x7r9ggrw0caJv
+	 p1NxT1a3P6w5z9eY+d4/KE4gTcIghWfKWQzvSGoJWr0+Tec+BqUeT7sj1Vh8pp7AVE
+	 QxvJk71VZEco5RkCVOvz2xGs1wlQTvpO7h9WS1b5GkwPhAy6p8xNg2CY1N7Z/9g16T
+	 pv0V88ZHfrbneNVmtodespieQ0pmK+l2xefiE33pDiLzJmS8KoQVs3Hyu8ajDDdLls
+	 8y3W0AiTuTZvZx0aS6tCfkXI=
+Received: from zn.tnic (pd95304da.dip0.t-ipconnect.de [217.83.4.218])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
+	(No client certificate requested)
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 7DF9040E01A5;
+	Tue, 28 Nov 2023 14:20:55 +0000 (UTC)
+Date: Tue, 28 Nov 2023 15:20:49 +0100
+From: Borislav Petkov <bp@alien8.de>
+To: Tony Luck <tony.luck@intel.com>, Yazen Ghannam <yazen.ghannam@amd.com>
+Cc: Muralidhara M K <muralimk@amd.com>, linux-edac@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
-	Abhinav Singh <singhabhinav9051571833@gmail.com>
-Subject: [PATCH v3] driver : edac : Fix warning using plain integer as NULL
-Date: Tue, 28 Nov 2023 19:47:03 +0530
-Message-Id: <20231128141703.614605-1-singhabhinav9051571833@gmail.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <CY8PR11MB7134D203710F24755B7651E889BCA@CY8PR11MB7134.namprd11.prod.outlook.com>
-References: <CY8PR11MB7134D203710F24755B7651E889BCA@CY8PR11MB7134.namprd11.prod.outlook.com>
+	Muralidhara M K <muralidhara.mk@amd.com>, linux-doc@vger.kernel.org
+Subject: [PATCH] Documentation: Begin a RAS section
+Message-ID: <20231128142049.GTZWX3QQTSaQk/+u53@fat_crate.local>
+References: <20231102114225.2006878-1-muralimk@amd.com>
+ <20231102114225.2006878-2-muralimk@amd.com>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20231102114225.2006878-2-muralimk@amd.com>
 
-Sparse static analysis tools generate a warning with this message
-"Using plain integer as NULL pointer". In this case this warning is
-being shown because we are trying to initialize  pointer to NULL using
-integer value 0.
+On Thu, Nov 02, 2023 at 11:42:22AM +0000, Muralidhara M K wrote:
+> From: Muralidhara M K <muralidhara.mk@amd.com>
+> 
+> AMD systems with Scalable MCA, each machine check error of a SMCA bank
+> type has an associated bit position in the bank's control (CTL) register.
 
-The reason for this change is that use of numeric 0 for a null pointer is
-unacceptable. See this link for the long description why:
-Link: https://www.spinics.net/lists/linux-sparse/msg10066.html
+Ontop of this. It is long overdue:
 
-Signed-off-by: Abhinav Singh <singhabhinav9051571833@gmail.com>
 ---
-v1 -> v2: 1. Fixed the comment section descrbing the current code.
-          2. Added a reason for why this change is required.
+From: "Borislav Petkov (AMD)" <bp@alien8.de>
+Date: Tue, 28 Nov 2023 14:37:56 +0100
 
-v2 -> v3: 1. Reversed change made in comments by mistake.
+Add some initial RAS documentation. The expectation is for this to
+collect all the user-visible features for interacting with the RAS
+features of the kernel.
 
- drivers/edac/i7core_edac.c |  2 +-
- drivers/edac/sb_edac.c     | 10 +++++-----
- 2 files changed, 6 insertions(+), 6 deletions(-)
+Signed-off-by: Borislav Petkov (AMD) <bp@alien8.de>
+---
+ Documentation/RAS/ras.rst | 26 ++++++++++++++++++++++++++
+ Documentation/index.rst   |  1 +
+ 2 files changed, 27 insertions(+)
+ create mode 100644 Documentation/RAS/ras.rst
 
-diff --git a/drivers/edac/i7core_edac.c b/drivers/edac/i7core_edac.c
-index 23d25724bae4..1177da186eea 100644
---- a/drivers/edac/i7core_edac.c
-+++ b/drivers/edac/i7core_edac.c
-@@ -376,7 +376,7 @@ static const struct pci_id_table pci_dev_table[] = {
- 	PCI_ID_TABLE_ENTRY(pci_dev_descr_i7core_nehalem),
- 	PCI_ID_TABLE_ENTRY(pci_dev_descr_lynnfield),
- 	PCI_ID_TABLE_ENTRY(pci_dev_descr_i7core_westmere),
--	{0,}			/* 0 terminated list. */
-+	{NULL,}			/* NULL terminated list. */
- };
+diff --git a/Documentation/RAS/ras.rst b/Documentation/RAS/ras.rst
+new file mode 100644
+index 000000000000..2556b397cd27
+--- /dev/null
++++ b/Documentation/RAS/ras.rst
+@@ -0,0 +1,26 @@
++.. SPDX-License-Identifier: GPL-2.0
++
++Reliability, Availability and Serviceability features
++=====================================================
++
++This documents different aspects of the RAS functionality present in the
++kernel.
++
++Error decoding
++---------------
++
++* x86
++
++Error decoding on AMD systems should be done using the rasdaemon tool:
++https://github.com/mchehab/rasdaemon/
++
++While the daemon is running, it would automatically log and decode
++errors. If not, one can still decode such errors by supplying the
++hardware information from the error::
++
++        $ rasdaemon -p --status <STATUS> --ipid <IPID> --smca
++
++Also, the user can pass particular family and model to decode the error
++string::
++
++        $ rasdaemon -p --status <STATUS> --ipid <IPID> --smca --family <CPU Family> --model <CPU Model> --bank <BANK_NUM>
+diff --git a/Documentation/index.rst b/Documentation/index.rst
+index 9dfdc826618c..36e61783437c 100644
+--- a/Documentation/index.rst
++++ b/Documentation/index.rst
+@@ -113,6 +113,7 @@ to ReStructured Text format, or are simply too old.
+    :maxdepth: 1
  
- /*
-diff --git a/drivers/edac/sb_edac.c b/drivers/edac/sb_edac.c
-index 0c779a0326b6..24ee6f28cfbe 100644
---- a/drivers/edac/sb_edac.c
-+++ b/drivers/edac/sb_edac.c
-@@ -439,7 +439,7 @@ static const struct pci_id_descr pci_dev_descr_sbridge[] = {
- 
- static const struct pci_id_table pci_dev_descr_sbridge_table[] = {
- 	PCI_ID_TABLE_ENTRY(pci_dev_descr_sbridge, ARRAY_SIZE(pci_dev_descr_sbridge), 1, SANDY_BRIDGE),
--	{0,}			/* 0 terminated list. */
-+	{NULL,}			/* NULL terminated list. */
- };
- 
- /* This changes depending if 1HA or 2HA:
-@@ -505,7 +505,7 @@ static const struct pci_id_descr pci_dev_descr_ibridge[] = {
- 
- static const struct pci_id_table pci_dev_descr_ibridge_table[] = {
- 	PCI_ID_TABLE_ENTRY(pci_dev_descr_ibridge, 12, 2, IVY_BRIDGE),
--	{0,}			/* 0 terminated list. */
-+	{NULL,}			/* NULL terminated list. */
- };
- 
- /* Haswell support */
-@@ -576,7 +576,7 @@ static const struct pci_id_descr pci_dev_descr_haswell[] = {
- 
- static const struct pci_id_table pci_dev_descr_haswell_table[] = {
- 	PCI_ID_TABLE_ENTRY(pci_dev_descr_haswell, 13, 2, HASWELL),
--	{0,}			/* 0 terminated list. */
-+	{NULL,}			/* NULL terminated list. */
- };
- 
- /* Knight's Landing Support */
-@@ -620,7 +620,7 @@ static const struct pci_id_descr pci_dev_descr_knl[] = {
- 
- static const struct pci_id_table pci_dev_descr_knl_table[] = {
- 	PCI_ID_TABLE_ENTRY(pci_dev_descr_knl, ARRAY_SIZE(pci_dev_descr_knl), 1, KNIGHTS_LANDING),
--	{0,}
-+	{NULL,}
- };
- 
- /*
-@@ -686,7 +686,7 @@ static const struct pci_id_descr pci_dev_descr_broadwell[] = {
- 
- static const struct pci_id_table pci_dev_descr_broadwell_table[] = {
- 	PCI_ID_TABLE_ENTRY(pci_dev_descr_broadwell, 10, 2, BROADWELL),
--	{0,}			/* 0 terminated list. */
-+	{NULL,}			/* NULL terminated list. */
- };
+    staging/index
++   RAS/ras
  
  
+ Translations
 -- 
-2.39.2
+2.42.0.rc0.25.ga82fb66fed25
 
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
 
