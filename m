@@ -1,168 +1,142 @@
-Return-Path: <linux-edac+bounces-128-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-129-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3428B7FBE1D
-	for <lists+linux-edac@lfdr.de>; Tue, 28 Nov 2023 16:32:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id CC5207FBF2F
+	for <lists+linux-edac@lfdr.de>; Tue, 28 Nov 2023 17:29:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id BA91BB20F92
-	for <lists+linux-edac@lfdr.de>; Tue, 28 Nov 2023 15:32:20 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 16853B2115B
+	for <lists+linux-edac@lfdr.de>; Tue, 28 Nov 2023 16:29:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 62C315D4BC;
-	Tue, 28 Nov 2023 15:32:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A343F35287;
+	Tue, 28 Nov 2023 16:29:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="E+ula4Nv"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="sirOE4d+"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2040.outbound.protection.outlook.com [40.107.92.40])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDEC510DF;
-	Tue, 28 Nov 2023 07:32:13 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=cXLV28lfN6NmYCf0xXqZQpBnq7dn1/0CIxRsB7Ma+qxjhsf3qme0yUkJTSC2X9EIUMefFHjsogYQlgm1vYc2+qTUX4SHL8iYPTEzkRUxnrvvnpkuEH39mrruazDTTlEdK3wxc74wDWbwrfyzFktVSwDpoLejW8Y+SI1YTZlIjpGrEO1lJBr5E9DJHBT7HedguQYpqKV5y6u89QEU9ouCgR/E7nQEQxelyLjUk/yjXHRknOq3xSn6eL2N6n9JXDPYESML1oYundBQlOrNj+yv0aykFUWONOJQosd1KDNQjH0cFVtvMDyBWFRZHBUvUAuppdXvCgHYM5z8ylxzgBUzow==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=sB2e4M8QACtP5WLdv5mq79IxX3VIbmeBUEG6yKMzcgM=;
- b=EyZfexGF3LuIsj08UrQjb0ST4iEbJqE0YfOAOpMYjqbGc8/u1AKCm++3oL/88W40FRV+50kuskw6AAUbK7yiJRiYWuaSUggE1HJGhgv8OCP9MDQWzn+w/NUOE/E+brgYBEDwl62LlLeWQyY/KzXAfwpNXu0o2DBr6TaV5VSmMccg2jH0qCbJ48bUZc68j/u6/admbseTFWm7ARMLu8a9e43cAiDlUKy3gXMtX/jdMp8EghyUqsCvLA+ec3spZjqKBjH9yc4qEPd0jCKKwYJ9kZLCr6Aj7fRuHFAb2WReB9yTIAw80DD+EYSbgTfuRt34paWFdlGbFtQnuUCY1gINGQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=sB2e4M8QACtP5WLdv5mq79IxX3VIbmeBUEG6yKMzcgM=;
- b=E+ula4NvEB0H498vs6YPBMZAzoF6S8QBzOewJ7/osSqWT2aIiw7BPp+8yYq5RiJQlvCxDvCQaP1aNUy/85p8SqAeoLLTqIAKDzjxgYw4xpiB7NIYr9kaFWApmx1E2KomITtSGCcnzPvPSl5UzJF+aXEocKyHQudN7PYYwN4g2DI=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from BN8PR12MB3108.namprd12.prod.outlook.com (2603:10b6:408:40::20)
- by BL1PR12MB5030.namprd12.prod.outlook.com (2603:10b6:208:313::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7025.28; Tue, 28 Nov
- 2023 15:32:10 +0000
-Received: from BN8PR12MB3108.namprd12.prod.outlook.com
- ([fe80::a9cf:f8b8:27bd:74d0]) by BN8PR12MB3108.namprd12.prod.outlook.com
- ([fe80::a9cf:f8b8:27bd:74d0%3]) with mapi id 15.20.7046.015; Tue, 28 Nov 2023
- 15:32:10 +0000
-Message-ID: <addebe1d-c08a-434e-9146-b6c10418a9d2@amd.com>
-Date: Tue, 28 Nov 2023 10:32:08 -0500
-User-Agent: Mozilla Thunderbird
-Cc: yazen.ghannam@amd.com, Smita.KoralahalliChannabasappa@amd.com,
- dave.hansen@linux.intel.com, x86@kernel.org, linux-edac@vger.kernel.org,
- linux-kernel@vger.kernel.org, patches@lists.linux.dev
-Subject: Re: [PATCH v9 2/3] x86/mce: Add per-bank CMCI storm mitigation
-Content-Language: en-US
-To: Tony Luck <tony.luck@intel.com>, Borislav Petkov <bp@alien8.de>
-References: <20230929181626.210782-1-tony.luck@intel.com>
- <20231004183623.17067-1-tony.luck@intel.com>
- <20231004183623.17067-3-tony.luck@intel.com>
- <20231019151211.GHZTFHS3osBIL1IJbF@fat_crate.local>
- <ZTa37L2nlnbok8dz@agluck-desk3>
- <20231114192324.GAZVPJLGZmfJBS181/@fat_crate.local>
- <ZVPu/hX9b7lUkrBY@agluck-desk3>
- <20231121115448.GCZVyaiNkNvb4t2NxB@fat_crate.local>
- <ZWTzAujHdrJ950F3@agluck-desk3> <ZWT4pAJ6g0i78wec@agluck-desk3>
- <ZWU3WkmUMz3Wk9wT@agluck-desk3>
-From: Yazen Ghannam <yazen.ghannam@amd.com>
-In-Reply-To: <ZWU3WkmUMz3Wk9wT@agluck-desk3>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: BN9PR03CA0440.namprd03.prod.outlook.com
- (2603:10b6:408:113::25) To BN8PR12MB3108.namprd12.prod.outlook.com
- (2603:10b6:408:40::20)
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A67637D22;
+	Tue, 28 Nov 2023 16:29:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B0D74C433C7;
+	Tue, 28 Nov 2023 16:29:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1701188942;
+	bh=mXCYtJybktTvUcwZQ3lRqv8LehqnyJb7pxdRFjMyvM8=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=sirOE4d+QSF1Xl8kCiAmMwh0c4Ifo6V/m0IMgnATnemqcHHCHPzwiQCePwNzdciEF
+	 29PQMD+MEHTQqtIMYdH3xK6n8hWEUed9XC0fQp9JS1LQXbdgfC76lAo7jSV4HVChq7
+	 m39Fy1piWhX4Rz2rp541eT1WZEgrW+Hqq8F+b5ic=
+Date: Tue, 28 Nov 2023 16:28:59 +0000
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
+Cc: Borislav Petkov <bp@alien8.de>, Tony Luck <tony.luck@intel.com>,
+	James Morse <james.morse@arm.com>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Robert Richter <rric@kernel.org>, linux-edac@vger.kernel.org,
+	linux-kernel@vger.kernel.org, dan.carpenter@linaro.org,
+	kernel-janitors@vger.kernel.org, error27@gmail.com
+Subject: Re: [PATCH] EDAC/sysfs: Fix calling kobject_put() without kobj
+ initialization
+Message-ID: <2023112824-cupbearer-salvage-b064@gregkh>
+References: <20231128130952.3372794-1-harshit.m.mogalapalli@oracle.com>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN8PR12MB3108:EE_|BL1PR12MB5030:EE_
-X-MS-Office365-Filtering-Correlation-Id: 81c8d6ed-a32f-48ee-5b03-08dbf027300e
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	hh6c7TyXGL44uU1iVwwEQ1X1K2gmYDItTe9WCSgVEOn0qlW9wHVsLCYY/QseUUFKHB8nPFthoTl4BuB4z1ZYv4K97/hkYzFueKTrD4vWaXntfh+toy1Dr4CBaiAvrF+OLbF/g+R6MvQstyBFigCQ4UofcfHosbF7DqNeZpW7JUE/hD8fxjsxMYuF9+m7BNkL6OJv3DLfiIqYFJjd6X0e3XOpD0NqSnqjlXp8mFEYDNKgnHIOmYFXAyi4/2uSft0yc+Sv08fZIll602hZGb85WjoKtl7X6V4BeP6kWY4XvXdyTn4aN16rEaqIpalL00e6v7yUXVs25xrymQ+5Gel9aMz0AV49CR7penuL7REW07nXYKEiz1b0fxcj9j2x5Nm/MACNF5bc5xen/Wz6jqyvi1melPVU8ftHcVrp5fA8UxGtwdubBwQf+8uY5WrILoGRQcRdSvhL/beR0TBXqg+DHqlaTTv0FcdVC1orBjxCQlU0PQoQoWcNgT7/Tvn1VU1oWJwM/A18DMSFNHY8p0+BoJIFFfuct4WdaN+V0i0v8UVcrny5n25c4hkkC1kBvUcwYaubVOCxOtXQIsL0NKIVi5PsJE4euv4gEPOdJVoUO5Tqe8p9q2l6nqEf73RxbuOn3w+b4dPmpDSsRQjZ+TRzlw==
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3108.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(366004)(39860400002)(396003)(376002)(136003)(346002)(230922051799003)(186009)(64100799003)(451199024)(1800799012)(2616005)(8936002)(6506007)(6512007)(66946007)(4326008)(8676002)(478600001)(44832011)(5660300002)(15650500001)(31696002)(86362001)(6486002)(110136005)(66556008)(316002)(53546011)(66476007)(38100700002)(26005)(83380400001)(31686004)(41300700001)(2906002)(4744005)(36756003)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?azJpM21SRUtCWmdIdkdZTUZUSGEvWitrbEFOODR5elFVR0t0VGMzaGc0YndW?=
- =?utf-8?B?c2RDTWdiSDc4NG90bk5vYWtCVU01MDFpb3RxUWpMbXZJU0R5b0xWR3VRR2ti?=
- =?utf-8?B?VGkxZDhZb05rcDVzUU5aWlNuMmNiaWtZNVFDZDVTSEpLN0o2eDg2UHZJdnVj?=
- =?utf-8?B?R1NQbjBDWEJVSTBDT25RVGk2eWlkUmg3NWUxUVF1MXMyMnkvUnkyam9lekVO?=
- =?utf-8?B?T01EcUZFSlpmcit4TVJybzEzenFaYlROeGtRZEg1aEdKaXl5SkRKMVNQV1h2?=
- =?utf-8?B?R3o3NU4wOXF4QjR2TjhYdnlQKytwTWx4QzlzaUMyRjJ0TytKcFpSbXpkeDFF?=
- =?utf-8?B?NU5JRlNRZXd1azJScGU2blVHYmhrVnpvTDZtc2JoRE9XRmZNejh1OFVsKzQ4?=
- =?utf-8?B?TFllVFN3RXBUZVlWUGVpd1FNemZwRitzbGtyU2ZGYll2ZFgwb3p6ZjV4WjJJ?=
- =?utf-8?B?TTRZWldTbFQwV0s5Z25YbXlodEh1ZUR1dmU5T2hwcmFrTjFWYTY4eFJPb2ti?=
- =?utf-8?B?WkFVVnJVaU5GRnUyRDNNQ3ZsNmtmWkkwMXNuTnF5Qm9jNk9DRlR3ZWpCNnBO?=
- =?utf-8?B?enI0WFZBQkUrUjVNMTFKdFN2OFNRTUh0TWwvRlFXTStXVUZ3TU1pYndxMnNI?=
- =?utf-8?B?aEpVOGMwR2Izb3NzalBXTnBOQlJZQ0RzdGp4TkF4VXdvdm5zR3RYa2FIYjFF?=
- =?utf-8?B?QUFrSkFqbDVjemgvWDlUeXhrdmZuWXBKVmkrTllXOEx6aHhPTjBIRkNucTFk?=
- =?utf-8?B?dWhMQUtRNE02bElaYmtjeW9MZWY0dXphakRzYzVPUjEzcWtlektRZlhrYUJZ?=
- =?utf-8?B?RGJZUnNxckp4SzdvUkJ5eVMvL3M3emovWnEvR1g5OGhGbExhbzBOYUl1R1F1?=
- =?utf-8?B?WWtOWXBPYjRsd2tNeDBrM0JZY3R4NnljVktKVXhScENmWWRCSy9MbnBrOXNz?=
- =?utf-8?B?dmxENmdlRFBOQlpkTHU1dFE5QTJoeE9COGE5SS9qUlhsbUZ3KysvRXZCVWNG?=
- =?utf-8?B?eG41dS9JaVJ5N3ZZL0IzdVN5ZFJ0M09uQVFoVk9vNUNHYmRjZDhkbU9KcXl3?=
- =?utf-8?B?dW5MZ2p1Smw1TUVMUTdBSEFYQmg1ekQ3b1FENTlhUFU0Yy9NczZDWjRBQ0Zp?=
- =?utf-8?B?UmpnTjdaTlMrQXI1RDVLTWVCNGhaUzhBbW85NXlvSmkwS1l6U3VkcmY5OVYw?=
- =?utf-8?B?QmloaFpjZHJtS05CTVdweG1LRC9IWEpQZVNHamRDbWhRSkgrcVh1OTAwVHVq?=
- =?utf-8?B?ZG1hNzdUVkRjSDg3cUVja0M0b1lTdkNZRWo4YkRqWjkzZmp3QkpzTXNldzdS?=
- =?utf-8?B?cFArcHV5UlZnTW5RZEtUV1lJRTRjTlpHTzN3S3VseC9tajBKSldjR2NvYllo?=
- =?utf-8?B?ekNFV0EyTEFuTUhsWjJKN2IxTTAvaW1zQlppaTI4bEZSM05kY2RoZWdVNHl3?=
- =?utf-8?B?Z2VCUmhtQjloc3dDR3E3d0RsOHUrNHRleCtDcWtRWndMRDdBNUFZOEc2ekZr?=
- =?utf-8?B?ZFF3aDdWajZqMm1RdnhjYi94VWVpcklGNTYzQUR3TC9rRTROS2s2VFJjbmJr?=
- =?utf-8?B?N25zTHdVNmFyRVlteVBCTlkxYkRNV1RpNUFPMnk5WUt1Lzc3azd4cEpKSEt6?=
- =?utf-8?B?WmxIMlJKajFmMW0veDRNUHhWZWRPaEwxbE5zS3VjMTVZYXcvdTA4eThkWW03?=
- =?utf-8?B?WngrZGtwK3RCZi9Qb3lQS3RjWDhqS09lSkZoUmdyaU5jNExVYkhsZVg3Wjdk?=
- =?utf-8?B?cURCaGwyeTVOemRjWUxldkhBVG1pZlpiTEVrYnNuNFl5dGlJS2ZYdWk5UlA0?=
- =?utf-8?B?WGQ4bU9ac3RSbjc0R21xemZpZWxvRGF6TisrYjNOZ05vZjgxVEpqTW1qNEtV?=
- =?utf-8?B?OW9ZZmpWcEVNdFNlUzZYSCtYQjE2K0hMdTFreW9NZEpPcXBNa3ZQTW1KdHpq?=
- =?utf-8?B?MGQrL29JRXNJeGFoOWN0cFBiejJwYzE2UHFsYlBwcVNYREQ3b1RRNWN0L3B1?=
- =?utf-8?B?c2RnKzUydkN1UEtvbGVQUnZTZGhpVk1Wd294TFkyUGF1YXB2MHhVTjlMVVZM?=
- =?utf-8?B?Z1E3ZmxZWFhmYTRvRFFTdnQ0L1FmVmloQTRvZjVlZFF2ZXpuLzk2UksvTmNB?=
- =?utf-8?Q?+b8350ErmcvcqMbB2ys+tluYi?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 81c8d6ed-a32f-48ee-5b03-08dbf027300e
-X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3108.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Nov 2023 15:32:10.4776
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: F81mPL2qVXqTHusNj07gmQQjrn5MyEvfE6dmR9KhrgX5lFFknwQKHqI06C5LsHKchj8qqsukXgXGjMApgCcpWQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR12MB5030
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231128130952.3372794-1-harshit.m.mogalapalli@oracle.com>
 
-On 11/27/2023 7:42 PM, Tony Luck wrote:
-> On Mon, Nov 27, 2023 at 12:14:28PM -0800, Tony Luck wrote:
->> On Mon, Nov 27, 2023 at 11:50:26AM -0800, Tony Luck wrote:
->>> On Tue, Nov 21, 2023 at 12:54:48PM +0100, Borislav Petkov wrote:
->>>> On Tue, Nov 14, 2023 at 02:04:46PM -0800, Tony Luck wrote:
->>> But it isn't doing the same thing.  The timer calls:
->>>
->>> 	machine_check_poll(0, this_cpu_ptr(&mce_poll_banks));
->>>
->>> and cmci_mc_poll_banks() calls:
->>>
->>> 	machine_check_poll(0, this_cpu_ptr(&mce_poll_banks));
+On Tue, Nov 28, 2023 at 05:09:52AM -0800, Harshit Mogalapalli wrote:
+> In edac_pci_main_kobj_setup() when dev_root is NULL,
+> kobject_init_and_add() is not called.
 > 
->          machine_check_poll(0, this_cpu_ptr(&mce_banks_owned));
+>         if (err) { // err = -ENODEV;
+>                 edac_dbg(1, "Failed to register '.../edac/pci'\n");
+>                 goto kobject_init_and_add_fail; // call to kobject_put()
+>         }
 > 
->>
->> Bah ... I've cut & pasted the same thing ... but I think there
->> are separate bit maps ... maybe I'm wrong. Will go back and
->> look again.
->>
+> This will cause a runtime warning in kobject_put() if the above happens.
+> Warning:
+> "kobject: '%s' (%p): is not initialized, yet kobject_put() is being called."
+> 
+> Fix the error handling to avoid the above possible situation.
+> 
+> Fixes: cb4a0bec0bb9 ("EDAC/sysfs: move to use bus_get_dev_root()")
+> Signed-off-by: Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
+> ---
+> This is based on static analysis with Smatch and only compile tested.
+> ---
+>  drivers/edac/edac_pci_sysfs.c | 14 ++++++++------
+>  1 file changed, 8 insertions(+), 6 deletions(-)
+> 
+> diff --git a/drivers/edac/edac_pci_sysfs.c b/drivers/edac/edac_pci_sysfs.c
+> index 901d4cd3ca38..71a0d4b9c2cf 100644
+> --- a/drivers/edac/edac_pci_sysfs.c
+> +++ b/drivers/edac/edac_pci_sysfs.c
+> @@ -370,12 +370,14 @@ static int edac_pci_main_kobj_setup(void)
+>  
+>  	/* Instanstiate the pci object */
+>  	dev_root = bus_get_dev_root(edac_subsys);
+> -	if (dev_root) {
+> -		err = kobject_init_and_add(edac_pci_top_main_kobj,
+> -					   &ktype_edac_pci_main_kobj,
+> -					   &dev_root->kobj, "pci");
+> -		put_device(dev_root);
+> -	}
+> +	if (!dev_root)
+> +		goto kzalloc_fail;
+> +
+> +	err = kobject_init_and_add(edac_pci_top_main_kobj,
+> +				   &ktype_edac_pci_main_kobj,
+> +				   &dev_root->kobj, "pci");
+> +	put_device(dev_root);
+> +
+>  	if (err) {
+>  		edac_dbg(1, "Failed to register '.../edac/pci'\n");
+>  		goto kobject_init_and_add_fail;
+> -- 
+> 2.39.3
+> 
 
-This mutually exclusive behavior is not enforced on AMD systems. A bank 
-can be polled and signaled using hardware interrupts.
+Hi,
 
-I've been thinking to change this in order to save polling cycles. Now 
-it seems there's another reason. :)
+This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
+a patch that has triggered this response.  He used to manually respond
+to these common problems, but in order to save his sanity (he kept
+writing the same thing over and over, yet to different people), I was
+created.  Hopefully you will not take offence and will fix the problem
+in your patch and resubmit it so that it can be accepted into the Linux
+kernel tree.
 
-Thanks,
-Yazen
+You are receiving this message because of the following common error(s)
+as indicated below:
 
+- This looks like a new version of a previously submitted patch, but you
+  did not list below the --- line any changes from the previous version.
+  Please read the section entitled "The canonical patch format" in the
+  kernel file, Documentation/process/submitting-patches.rst for what
+  needs to be done here to properly describe this.
+
+- You have marked a patch with a "Fixes:" tag for a commit that is in an
+  older released kernel, yet you do not have a cc: stable line in the
+  signed-off-by area at all, which means that the patch will not be
+  applied to any older kernel releases.  To properly fix this, please
+  follow the documented rules in the
+  Documentation/process/stable-kernel-rules.rst file for how to resolve
+  this.
+
+If you wish to discuss this problem further, or you have questions about
+how to resolve this issue, please feel free to respond to this email and
+Greg will reply once he has dug out from the pending patches received
+from other developers.
+
+thanks,
+
+greg k-h's patch email bot
 
