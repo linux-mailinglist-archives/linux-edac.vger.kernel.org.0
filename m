@@ -1,48 +1,47 @@
-Return-Path: <linux-edac+bounces-147-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-148-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 101907FCFF7
-	for <lists+linux-edac@lfdr.de>; Wed, 29 Nov 2023 08:36:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id A7B427FD015
+	for <lists+linux-edac@lfdr.de>; Wed, 29 Nov 2023 08:51:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 40B8A1C209F2
-	for <lists+linux-edac@lfdr.de>; Wed, 29 Nov 2023 07:36:04 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D9A191C20889
+	for <lists+linux-edac@lfdr.de>; Wed, 29 Nov 2023 07:51:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6AC6910A0F;
-	Wed, 29 Nov 2023 07:36:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 751F21119F;
+	Wed, 29 Nov 2023 07:51:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="eT4YHBWw"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="Gu5aoVh9"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2067.outbound.protection.outlook.com [40.107.93.67])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A1841AD;
-	Tue, 28 Nov 2023 23:35:59 -0800 (PST)
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2082.outbound.protection.outlook.com [40.107.237.82])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BE6610D7;
+	Tue, 28 Nov 2023 23:50:58 -0800 (PST)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=R+D1chwr2waQQB/4gqvj0BSadp4d8PLAGoEGjRD3+nBmPnc2p8FZSAjkmSiE94hxXROWpTvRUF1FSrSBkvTIZPE1FSN5mDP2CBi5lDJKJTrtXOy6nf8zioSUfH8YmEgKjVfQmJO4+un9CsJE5u+urplMTtl+HZgwx0e/PKMkzsAEaD/9HLCGVBdNBzwEniPCZfRuBSZ1OpTf29v3IWhEJx+OafK4iHk1mhNLbOhCHvilm7sRdxkZ6kS42vqfW0onaUDeSf/4FZzzumbwsl9lisO3i37Rl8cMT4xVEeDdQ1fZATp5eVQE+hN1syvaO+Hlo0MrgjhXa9JrW3cpEeA59Q==
+ b=Ph0X4XcL6KO5KbiHnb3+mbRq7AJZf9qlKiO/YuntSmS1u5xrJ1NQyxhQ43M5eu/ko8zN1KY/ju4TH73kjxvno7Rhz07XXa0BSJp9/a9fnV9Jqpr/BLOXUKyKMN6K7VlxTGllCM+ONkKXxNCz/2MVgWPIEcyqzcDRQ8tZiyhCxhgEADlPkteGq9D7yD1oRXuW1sa2v1hgibRA22v5jLKiRno1XNO7M+q5pRCyY7yMuksilJUMDmuintBS9lOrRRuMZxnnchU72TdEQD2DyZWCdogRcT62Q375K+3QONnC3k3zvvFFVs12DOq7+hpK8RU8yu+g54zIZxo96B1tnuBrrw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=YwwuCJ/th4Ym/fVFD26+MLyJv2rIe36VZBEymKaqOmo=;
- b=B1QmQpAB6AFSvBaz2wtf/miTiRpnUIVandZl1hr/gIo0icYc2D4NiWpNDg6GA/85AIvUIXIVglVzqnXWNi4XNYZox77fcqBsZZFl4ceujT8WGJqDVC4nKPYxyL3TYjOYSQ8wXDIlW0qjO1n8zkgMxSGML2Zm2qKEqmitBygQIjVIDhTcD8fwlop5etT3MdItfTPI5opTZzRb9AOWQ/oT7tGyArUfi2qzXWS23eBRHLf9RSj5r+HO5Jn8r/leenOgak1kpofRBGbvjpnzbzF8vGQTqT5Ie5c4iDE0c/JRoTfZaWJ64KNYZ8BYw28WsAibQCO2VjZP+9NOXLuOHrXOSA==
+ bh=jotPp52wsy68XXO/cJ+xg/jwKymaHZM4+6Rfjd+XuXI=;
+ b=N9fQqluMj0JEIAOUBMBK929Q7l1Gk2LKMC6SLoyjZW+9OmBO4qqvp5QErHJStPKKXTQV5sI4Z1dyhXMm9RSnFPGq8n9HIveA9XpJg+Kj1QZlYxcbmW/s0X+ZhKmjm6SUqhbDML86C99Lx+ABYpxFh8rvCxpWsCxpX3nGgHLY9grZL+VM0/bIqHECJPFLR/ExuLdwZF/FJz84x9k+S+KN8yrnC0Lbdyvv21kiK5SYt0eXLwFuSeVrwmGSf7qk3UBddpv/OQRurYNNQ9tnKPvcc7Ehf6CcLNQdvk6cavC3IoE2fFwBbjcqcWiathROdqHTDu4UTXgAuyBFYNb15OuPBQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
  dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
  header.from=amd.com; dkim=none (message not signed); arc=none (0)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=YwwuCJ/th4Ym/fVFD26+MLyJv2rIe36VZBEymKaqOmo=;
- b=eT4YHBWwWIYG59PyMLecnVR4/xDfMxG7mLAE6k6A63lvvp1ChQ+c6wDzUlMAyY/1Jp03E2bKZjWriuG0nDl4Vz3Y+vNuWIOgdERRE2B6zHPVz/7IadEIYtKaCGRmf3NgSHrFBCheFMEQradK3BdL7RY7ssWC7qK4BZmCXbL9uGc=
-Received: from SJ0PR03CA0222.namprd03.prod.outlook.com (2603:10b6:a03:39f::17)
- by PH8PR12MB7446.namprd12.prod.outlook.com (2603:10b6:510:216::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7025.27; Wed, 29 Nov
- 2023 07:35:57 +0000
-Received: from CO1PEPF000042A7.namprd03.prod.outlook.com
- (2603:10b6:a03:39f:cafe::a1) by SJ0PR03CA0222.outlook.office365.com
- (2603:10b6:a03:39f::17) with Microsoft SMTP Server (version=TLS1_2,
+ bh=jotPp52wsy68XXO/cJ+xg/jwKymaHZM4+6Rfjd+XuXI=;
+ b=Gu5aoVh9GInweMmqIuSyVdh6DGetg5pill5OabGozU0W9H2Gpf7DplDK1Oe65mTOwnywdMkdXm1PhN0yTYqiVHibZJVo0d4E5OVSyX74oMH0FVCgg8yxO5tdqRzmjPp2qSD0+U3qtX3xo6X+6qm9Rk3kSpiNpTCoNdOov+O3r00=
+Received: from DM6PR07CA0047.namprd07.prod.outlook.com (2603:10b6:5:74::24) by
+ DM6PR12MB4545.namprd12.prod.outlook.com (2603:10b6:5:2a3::15) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.7046.22; Wed, 29 Nov 2023 07:50:54 +0000
+Received: from CY4PEPF0000FCC0.namprd03.prod.outlook.com
+ (2603:10b6:5:74:cafe::86) by DM6PR07CA0047.outlook.office365.com
+ (2603:10b6:5:74::24) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7025.29 via Frontend
- Transport; Wed, 29 Nov 2023 07:35:56 +0000
+ Transport; Wed, 29 Nov 2023 07:50:54 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
  smtp.mailfrom=amd.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=amd.com;
@@ -50,23 +49,21 @@ Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
  165.204.84.17 as permitted sender) receiver=protection.outlook.com;
  client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
 Received: from SATLEXMB04.amd.com (165.204.84.17) by
- CO1PEPF000042A7.mail.protection.outlook.com (10.167.243.36) with Microsoft
+ CY4PEPF0000FCC0.mail.protection.outlook.com (10.167.242.102) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.7046.17 via Frontend Transport; Wed, 29 Nov 2023 07:35:56 +0000
+ 15.20.7046.17 via Frontend Transport; Wed, 29 Nov 2023 07:50:54 +0000
 Received: from amd.amd.com (10.180.168.240) by SATLEXMB04.amd.com
  (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.34; Wed, 29 Nov
- 2023 01:35:54 -0600
+ 2023 01:50:52 -0600
 From: Muralidhara M K <muralimk@amd.com>
 To: <linux-edac@vger.kernel.org>
 CC: <linux-kernel@vger.kernel.org>, <bp@alien8.de>, <mchehab@kernel.org>,
 	Muralidhara M K <muralidhara.mk@amd.com>
-Subject: [PATCH v2 6/6] RAS: EDAC/amd64: Retire all system physical address from HBM3 row
-Date: Wed, 29 Nov 2023 07:35:21 +0000
-Message-ID: <20231129073521.2127403-7-muralimk@amd.com>
+Subject: [PATCH 0/4] Persist FRU memory poisons
+Date: Wed, 29 Nov 2023 07:50:30 +0000
+Message-ID: <20231129075034.2159223-1-muralimk@amd.com>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20231129073521.2127403-1-muralimk@amd.com>
-References: <20231129073521.2127403-1-muralimk@amd.com>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
@@ -79,160 +76,81 @@ X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
  (10.181.40.145)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO1PEPF000042A7:EE_|PH8PR12MB7446:EE_
-X-MS-Office365-Filtering-Correlation-Id: d3ad1ab6-cc56-49ec-f140-08dbf0add348
+X-MS-TrafficTypeDiagnostic: CY4PEPF0000FCC0:EE_|DM6PR12MB4545:EE_
+X-MS-Office365-Filtering-Correlation-Id: 3f2f8436-f149-4da5-9f9b-08dbf0afea73
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
 X-Microsoft-Antispam-Message-Info:
-	jL8fX1p4W3fEBZm/ep2dUnuEx50ZGCJhWwB1o1S3DO0p5yiI3GgIgPjCqC2rfYQ7iJIfmgpi93Bb6RHMKOGO+f6t6vEJ27JIRy/0D0yorKGQp16EKCJv1Y12qHgTlvwP7CNBeScDVXnrSYvKmr8+YkCrx3e9TGFfehLFSIz5MuvGbIVuhSZM30ND7/1gYDf5GzgfHONkLVGfuSTMxWLYHKusfY/RlqhfrgE9Da0sxu/ztQKKVi0recQp94gaJtBhGETXl+wgCg1xszfEJuOKUQJt+b2fnBz7LSz9bV/8iLmo3TmhDOxQ73g4eWa/sMMkZT72b4cAQyYbJka/KKjBpRoPipNR6ZYzyY/rsZflI1EiLjRk2T19cQKYXZH+vycOxrb1TpGohLa4HGgNkuv0FXydyqZgkuKCmdNjdzq9Bp9Bz/1E8cRFl2Mxyar+geqLtyKwA2B7Nv5hh7yW7n0LBslhQoBCDIc8AzuozpNn1DP4dBIz3XVyzalU53eJ70MO21qh4/vqZANXPj6kHk0OGLCMw909LEPI12Bmyos9QfdeK2WufRsopdKbLV0Xit0X2JvOL37e7VrFdTqnTCMgCutSDmamV1iL1neQ7k4MnxZQqi9ZecjBSzzaDouBE1DmzbyUWSUbqZlQLBINjVTO7nF0KTFklr+GlMRVXtutCKD/yuvC4W9UV5bfxQ5M5ExizS6lilGGu7IsadJRMT40zCHyZ0+A6e+me0YwcYDWWD0P5cjE/LDhRYQ2CE6fYxVov310pxDVXPaLzCAdXPLLpg==
+	cNWRMmrAkokjAe/XhqM9DNNaKAxfS+Ccj58C0qnlBS32I/YM85hyiQvp5LuJzY7owi14kz2DemKBLezcgaGyy97ddKFU65vNIf9aNiX1sMQFmb3mf0paXI43Oo05ZfftF9IkGE2ohLQmr8u7IP4Px2oBDrFqWQGIyLz1kI0NQFMO9+q1Z8yYCGgF/RBHTuuc8bWBxQ03MH3LFBV2z0YsYRshkuLldFjq2LdbWoo4MoVBa3qS7SkT8BI4OsdCTm6krPWYWQYqUiWQKS1joT82/NvOzmJAOBTM+a9aKvwjwj20kxo1/gUVRU7S2gTxFOpp28gPV7d2DcSfpZVm7FcIMY5F8WFn5Ye9/xf4q70klDZ8v3QbhaZ4RItLbnmmTY4jiRlsPZ8eJb0Vm++8M92eycaGExnT7/5f+45vBFxJiW6V9R1HrfzzXGQbtVEaHXMp1NzX/EdeOplL0ZQre8SIAfplFBnzGc1WLDONhM984SrYr74x1JRCvumZaCvJXm3StP5npUPK/nny3Wb7c38OT0+CcnKlGULGZ862wwgsM4WlrDbcRoXUxP2KSHM1oMXRdGXay92h6jZG+YMhhrpsFftx5jrcL+SxhbdfQDdxiF9Jp9YJlWkkNjSVbH82qcuV4V04uMtpwHuEgntvsj56v1Xhxnc4v9fJw9bWdxzdPtRnK8eLhhwA3Ou+orgDFrdpBRnQiYkJdrmI2YemaBjXWIrp9BT66KYijtzopEUMD2ZIRaMxEyUIci8BlKJjOrAI1HhSWAnY+33KJWOoi66slw==
 X-Forefront-Antispam-Report:
-	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230031)(4636009)(346002)(136003)(376002)(39860400002)(396003)(230922051799003)(82310400011)(186009)(64100799003)(1800799012)(451199024)(36840700001)(46966006)(40470700004)(36756003)(41300700001)(2906002)(81166007)(356005)(47076005)(82740400003)(83380400001)(40480700001)(5660300002)(336012)(426003)(26005)(1076003)(16526019)(2616005)(36860700001)(8936002)(8676002)(4326008)(6666004)(7696005)(478600001)(40460700003)(316002)(54906003)(70586007)(70206006)(6916009)(36900700001);DIR:OUT;SFP:1101;
+	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230031)(4636009)(376002)(136003)(396003)(39860400002)(346002)(230922051799003)(451199024)(186009)(82310400011)(1800799012)(64100799003)(40470700004)(36840700001)(46966006)(356005)(47076005)(81166007)(40460700003)(26005)(16526019)(1076003)(2616005)(54906003)(70206006)(70586007)(6916009)(316002)(2906002)(4326008)(8676002)(8936002)(5660300002)(7696005)(41300700001)(6666004)(36756003)(478600001)(966005)(82740400003)(426003)(336012)(40480700001)(36860700001)(36900700001);DIR:OUT;SFP:1101;
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Nov 2023 07:35:56.6276
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Nov 2023 07:50:54.5352
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: d3ad1ab6-cc56-49ec-f140-08dbf0add348
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3f2f8436-f149-4da5-9f9b-08dbf0afea73
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
 X-MS-Exchange-CrossTenant-AuthSource:
-	CO1PEPF000042A7.namprd03.prod.outlook.com
+	CY4PEPF0000FCC0.namprd03.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH8PR12MB7446
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB4545
 
 From: Muralidhara M K <muralidhara.mk@amd.com>
 
-AMD systems have HBM memory embedded within the chip, The entire memory
-is managed by host OS. Error containment needs to be reliable, because
-HBM memory cannot be replaced.
+This patch set is based on the patches submitted
+https://lore.kernel.org/linux-edac/20231129073521.2127403-1-muralimk@amd.com/T/#t
 
-HBM3 memory has 8 columns in each row and column bits are c2, c3 and c4
-which gives 8 possible combination of addresses in each row.
+MI300A has on-die HBMv3 memory embedded on to socket. Upon reaching threshold
+of memory errors socket has to be replaced. Define the criteria to identify the
+Field Replicable Unit(FRU) based on number of poisoned pages in the socket by
+persisting them in a non-volatile storage.
 
-Identify all these system physical addresses in a HBM row and retire all
-system physical address to get rid of intermittent or recurrent memory
-errors.
+Notifier is registered to handle the FRU memory poisons and poison count
+incremented based on injected MCE errors until it reaches maximum number of
+fru poison entries.
+Sysfs entry per FRU will ease the use to look into the poison details.
 
-Signed-off-by: Muralidhara M K <muralidhara.mk@amd.com>
----
-Changes:
-v1 -> v2 : Rename and modify function amd_umc_retire_column_spa_from_row() 
+During boot, Read the ERST records for identifying the poison address and
+retire all system physical addresses in that HBM row.
 
- drivers/edac/amd64_edac.c |  3 ++
- drivers/ras/amd/atl/umc.c | 77 +++++++++++++++++++++++++++++++++++++++
- include/linux/amd-atl.h   |  2 +
- 3 files changed, 82 insertions(+)
+Patch 1:
+Add an API to get the maximum CPER record size to be stored in NV storage
 
-diff --git a/drivers/edac/amd64_edac.c b/drivers/edac/amd64_edac.c
-index 623f84c53d2d..9872ede7eca9 100644
---- a/drivers/edac/amd64_edac.c
-+++ b/drivers/edac/amd64_edac.c
-@@ -2831,6 +2831,9 @@ static void decode_umc_error(int node_id, struct mce *m)
- 
- 	error_address_to_page_and_offset(sys_addr, &err);
- 
-+	if (pvt->fam == 0x19 && (pvt->model >= 0x90 && pvt->model <= 0x9f))
-+		amd_umc_retire_column_spa_from_row(m);
-+
- log_error:
- 	__log_ecc_error(mci, &err, ecc_type);
- }
-diff --git a/drivers/ras/amd/atl/umc.c b/drivers/ras/amd/atl/umc.c
-index 3533db279cec..de51b666b20e 100644
---- a/drivers/ras/amd/atl/umc.c
-+++ b/drivers/ras/amd/atl/umc.c
-@@ -255,3 +255,80 @@ int umc_mca_addr_to_sys_addr(struct mce *m, u64 *sys_addr)
- 	return 0;
- }
- EXPORT_SYMBOL_GPL(umc_mca_addr_to_sys_addr);
-+
-+/*
-+ * High Bandwidth Memory (HBM v3) has fixed number of columns in a row.
-+ * In specific, HBMv3 has 8 columns in one row.
-+ * Extract column bits in a row to find all the combination of masks and
-+ * to retire all the system physical addresses in that particular row.
-+ */
-+#define MAX_COLUMNS_IN_HBM_ROW	8
-+
-+/* Column 2, 3 and 4th bits in Normalized Address */
-+#define UMC_NA_C2_BIT	BIT(8)
-+#define UMC_NA_C3_BIT	BIT(9)
-+#define UMC_NA_C4_BIT	BIT(14)
-+
-+/* Possible combinations of column address masks in a HBM v3 row */
-+#define C_1_1_1_MASK	(UMC_NA_C4_BIT | UMC_NA_C3_BIT | UMC_NA_C2_BIT)
-+#define C_1_1_0_MASK	(UMC_NA_C4_BIT | UMC_NA_C3_BIT)
-+#define C_1_0_1_MASK	(UMC_NA_C4_BIT | UMC_NA_C2_BIT)
-+#define C_1_0_0_MASK	(UMC_NA_C4_BIT)
-+#define C_0_1_1_MASK	(UMC_NA_C3_BIT | UMC_NA_C2_BIT)
-+#define C_0_1_0_MASK	(UMC_NA_C3_BIT)
-+#define C_0_0_1_MASK	(UMC_NA_C2_BIT)
-+#define C_0_0_0_MASK	~C_1_1_1_MASK
-+
-+/* Identify system address physical addresses of all columns in a HBM v3 row */
-+static void identify_column_spa_from_row(struct mce *m, u64 *col)
-+{
-+	u8 cs_inst_id = get_cs_inst_id(m);
-+	u8 socket_id = get_socket_id(m);
-+	u64 norm_addr = get_norm_addr(m);
-+	u8 die_id = get_die_id(m);
-+	u16 df_acc_id = get_df_acc_id(m);
-+
-+	u64 retire_addr, column;
-+	u64 column_masks[] = { 0, C_0_0_1_MASK, C_0_1_0_MASK, C_0_1_1_MASK,
-+			C_1_0_0_MASK, C_1_0_1_MASK, C_1_1_0_MASK, C_1_1_1_MASK };
-+
-+	/* clear and loop for all possibilities of [c4 c3 c2] */
-+	norm_addr &= C_0_0_0_MASK;
-+
-+	for (column = 0; column < ARRAY_SIZE(column_masks); column++) {
-+		retire_addr = norm_addr | column_masks[column];
-+
-+		if (norm_to_sys_addr(df_acc_id, socket_id, die_id, cs_inst_id, &retire_addr))
-+			pr_warn("Failed norm_to_sys_addr for column[%lld]\n", column);
-+		else
-+			col[column] = retire_addr;
-+	}
-+}
-+
-+void amd_umc_retire_column_spa_from_row(struct mce *m)
-+{
-+	u64 col[MAX_COLUMNS_IN_HBM_ROW];
-+	u64 tmp[MAX_COLUMNS_IN_HBM_ROW];
-+	int i, j, count = 0;
-+	unsigned long pfn;
-+
-+	pr_info("Identify SPA of all columns from row for MCE Addr:0x%llx\n", m->addr);
-+	identify_column_spa_from_row(m, col);
-+
-+	/* Find duplicate column SPA in a row */
-+	for (i = 0; i < MAX_COLUMNS_IN_HBM_ROW; i++) {
-+		for (j = 0; j < count; j++) {
-+			if (col[i] == tmp[j])
-+				break;
-+		}
-+		if (j == count) {
-+			tmp[count] = col[i];
-+			/* do page retirement, except for duplicate addresses */
-+			pr_debug("Retire column spa:0x%llx ", tmp[count]);
-+			pfn = PHYS_PFN(tmp[count]);
-+			memory_failure(pfn, 0);
-+			count++;
-+		}
-+	}
-+}
-+EXPORT_SYMBOL(amd_umc_retire_column_spa_from_row);
-diff --git a/include/linux/amd-atl.h b/include/linux/amd-atl.h
-index c625ea3ab5d0..6cba39be63ca 100644
---- a/include/linux/amd-atl.h
-+++ b/include/linux/amd-atl.h
-@@ -25,4 +25,6 @@ static inline int amd_umc_mca_addr_to_sys_addr(struct mce *m, u64 *sys_addr)
- 	return umc_mca_addr_to_sys_addr(m, sys_addr);
- }
- 
-+void amd_umc_retire_column_spa_from_row(struct mce *m);
-+
- #endif /* _AMD_ATL_H */
+Patch 2:
+Add FRU memory poison module
+
+Patch 3:
+Add sysfs entry to print the required error information from poison records
+
+Patch 4:
+Add documentation on FRU memory poisons.
+
+Muralidhara M K (4):
+  ACPI/APEI: Add erst_get_size() API
+  RAS/fmp: Add FRU memory poison CPER support for Error persistence
+  EDAC/amd64: Add sysfs entry to read FRU poison data
+  RAS/fmp: Add Documentation on Persistence of FRU memory poisons
+
+ Documentation/RAS/ras.rst        | 122 +++++++
+ MAINTAINERS                      |   8 +
+ drivers/acpi/apei/erst.c         |   9 +
+ drivers/edac/amd64_edac.c        |  25 ++
+ drivers/ras/Kconfig              |   1 +
+ drivers/ras/Makefile             |   1 +
+ drivers/ras/fmp/Kconfig          |  18 +
+ drivers/ras/fmp/Makefile         |  10 +
+ drivers/ras/fmp/fru_mem_poison.c | 595 +++++++++++++++++++++++++++++++
+ include/acpi/apei.h              |   1 +
+ include/linux/cper.h             |  24 ++
+ include/linux/fru_mem_poison.h   |  17 +
+ 12 files changed, 831 insertions(+)
+ create mode 100644 drivers/ras/fmp/Kconfig
+ create mode 100644 drivers/ras/fmp/Makefile
+ create mode 100644 drivers/ras/fmp/fru_mem_poison.c
+ create mode 100644 include/linux/fru_mem_poison.h
+
 -- 
 2.25.1
 
