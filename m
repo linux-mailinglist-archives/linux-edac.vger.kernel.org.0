@@ -1,71 +1,53 @@
-Return-Path: <linux-edac+bounces-157-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-158-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7A0E27FF29A
-	for <lists+linux-edac@lfdr.de>; Thu, 30 Nov 2023 15:40:49 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E39667FF879
+	for <lists+linux-edac@lfdr.de>; Thu, 30 Nov 2023 18:39:57 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 33695281FC9
-	for <lists+linux-edac@lfdr.de>; Thu, 30 Nov 2023 14:40:48 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1257B1C20AA2
+	for <lists+linux-edac@lfdr.de>; Thu, 30 Nov 2023 17:39:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ACF2551008;
-	Thu, 30 Nov 2023 14:40:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="GWzzjqgr"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 43AE65810A;
+	Thu, 30 Nov 2023 17:39:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dkim=none
 X-Original-To: linux-edac@vger.kernel.org
-Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B46BE93;
-	Thu, 30 Nov 2023 06:40:44 -0800 (PST)
-Received: from localhost (localhost.localdomain [127.0.0.1])
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 308F540E0030;
-	Thu, 30 Nov 2023 14:40:42 +0000 (UTC)
-X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
-Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
-	header.d=alien8.de
-Received: from mail.alien8.de ([127.0.0.1])
-	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-	with ESMTP id zijeYWMRN7vv; Thu, 30 Nov 2023 14:40:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-	t=1701355240; bh=h0qwow19NdKO2+/XrBUXodPBR9R3/3gl99cArdMrp3w=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=GWzzjqgrfLnSQPKE0qba0s7RZ54I13eojfslwg0fAcYdiA12TK8XDBQkvoWks8ifV
-	 I/yj7qWWWt/1cAXrL47wvl7R8T+q92wFeUxThqrGyBhZR/nOY+C4kOdocjFX8QDPW9
-	 5pMzCLDVv0Eo4mV2tmNgKzmW4FS3wVIJY/N9UFnqGkBC+jGDUr4zOdTcIjf3gdkvY6
-	 jwwLd9C8220jj6W2G2Or6BPmSgHfieZDFr3c1ty9L5wT8DQGy7Zx3QzMrGG4L2AXTq
-	 nhPgnFKeBSmw07LAqri0Nb1tVmz61+BFWIzv7cJdR+hMneNc0P4mLwnpa4UHUCt/Iw
-	 MuyOazyjjadjifxvdSTZh8eoneG99HjiXzyKutoeeJbx3QAGmbmwhpN3vIXekbloO6
-	 BlgMN+uq7i5R/MspJgGDqd3kiZef3NPj+AsB3belkSCDi9JCWZDFjsPf2V3sibVtsL
-	 GZ7VzV0khKEj8Hv9onSX8M/mxE5V5JBLDG2bmVsrftboqiwmJ4Poz8G6nHCRFwGHhe
-	 IRhefBSFLNt0Gi07+wz3ZUdQZGbPzhi7AMQSBrstDjHh6AL+qdkQAKzBBAST3zvqSb
-	 F/9pY96ebjtRJNzPjBLqh+C8bNUgF03g7PFxxytDL6OYAEc6gaiU7pq/ubtpmHMs4D
-	 1ueM1ZNR66s0O69R14YftBV4=
-Received: from zn.tnic (pd95304da.dip0.t-ipconnect.de [217.83.4.218])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
-	(No client certificate requested)
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 9862640E0239;
-	Thu, 30 Nov 2023 14:40:05 +0000 (UTC)
-Date: Thu, 30 Nov 2023 15:40:01 +0100
-From: Borislav Petkov <bp@alien8.de>
-To: Shuai Xue <xueshuai@linux.alibaba.com>
-Cc: james.morse@arm.com, rafael@kernel.org, wangkefeng.wang@huawei.com,
-	tanxiaofei@huawei.com, mawupeng1@huawei.com, tony.luck@intel.com,
-	linmiaohe@huawei.com, naoya.horiguchi@nec.com,
-	gregkh@linuxfoundation.org, will@kernel.org, jarkko@kernel.org,
-	linux-acpi@vger.kernel.org, linux-mm@kvack.org,
-	linux-kernel@vger.kernel.org, akpm@linux-foundation.org,
-	linux-edac@vger.kernel.org, acpica-devel@lists.linuxfoundation.org,
-	stable@vger.kernel.org, x86@kernel.org, justin.he@arm.com,
-	ardb@kernel.org, ying.huang@intel.com, ashish.kalra@amd.com,
-	baolin.wang@linux.alibaba.com, tglx@linutronix.de, mingo@redhat.com,
-	dave.hansen@linux.intel.com, lenb@kernel.org, hpa@zytor.com,
-	robert.moore@intel.com, lvying6@huawei.com, xiexiuqi@huawei.com,
-	zhuo.song@linux.alibaba.com
-Subject: Re: [PATCH v9 0/2] ACPI: APEI: handle synchronous errors in task
- work with proper si_code
-Message-ID: <20231130144001.GGZWiewYtvMSJir62f@fat_crate.local>
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8CE4710D9;
+	Thu, 30 Nov 2023 09:39:50 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id AEC541042;
+	Thu, 30 Nov 2023 09:40:36 -0800 (PST)
+Received: from [10.1.197.60] (eglon.cambridge.arm.com [10.1.197.60])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C07AD3F6C4;
+	Thu, 30 Nov 2023 09:39:45 -0800 (PST)
+Message-ID: <1758585c-219b-c5df-a3cd-35be8b020fd2@arm.com>
+Date: Thu, 30 Nov 2023 17:39:40 +0000
+Precedence: bulk
+X-Mailing-List: linux-edac@vger.kernel.org
+List-Id: <linux-edac.vger.kernel.org>
+List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
+List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Subject: Re: [PATCH v9 0/2] ACPI: APEI: handle synchronous errors in task work
+ with proper si_code
+Content-Language: en-GB
+To: Borislav Petkov <bp@alien8.de>, Shuai Xue <xueshuai@linux.alibaba.com>
+Cc: rafael@kernel.org, wangkefeng.wang@huawei.com, tanxiaofei@huawei.com,
+ mawupeng1@huawei.com, tony.luck@intel.com, linmiaohe@huawei.com,
+ naoya.horiguchi@nec.com, gregkh@linuxfoundation.org, will@kernel.org,
+ jarkko@kernel.org, linux-acpi@vger.kernel.org, linux-mm@kvack.org,
+ linux-kernel@vger.kernel.org, akpm@linux-foundation.org,
+ linux-edac@vger.kernel.org, acpica-devel@lists.linuxfoundation.org,
+ stable@vger.kernel.org, x86@kernel.org, justin.he@arm.com, ardb@kernel.org,
+ ying.huang@intel.com, ashish.kalra@amd.com, baolin.wang@linux.alibaba.com,
+ tglx@linutronix.de, mingo@redhat.com, dave.hansen@linux.intel.com,
+ lenb@kernel.org, hpa@zytor.com, robert.moore@intel.com, lvying6@huawei.com,
+ xiexiuqi@huawei.com, zhuo.song@linux.alibaba.com
 References: <20221027042445.60108-1-xueshuai@linux.alibaba.com>
  <20231007072818.58951-1-xueshuai@linux.alibaba.com>
  <20231123150710.GEZV9qnkWMBWrggGc1@fat_crate.local>
@@ -73,45 +55,163 @@ References: <20221027042445.60108-1-xueshuai@linux.alibaba.com>
  <20231125121059.GAZWHkU27odMLns7TZ@fat_crate.local>
  <1048123e-b608-4db1-8d5f-456dd113d06f@linux.alibaba.com>
  <20231129185406.GBZWeIzqwgRQe7XDo/@fat_crate.local>
- <a3cd9b79-4be5-4f77-b32a-51a624a65ec0@linux.alibaba.com>
-Precedence: bulk
-X-Mailing-List: linux-edac@vger.kernel.org
-List-Id: <linux-edac.vger.kernel.org>
-List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
-List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <a3cd9b79-4be5-4f77-b32a-51a624a65ec0@linux.alibaba.com>
+From: James Morse <james.morse@arm.com>
+In-Reply-To: <20231129185406.GBZWeIzqwgRQe7XDo/@fat_crate.local>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-FTR, this is starting to make sense, thanks for explaining.
+Hi Boris, Shuai,
 
-Replying only to this one for now:
+On 29/11/2023 18:54, Borislav Petkov wrote:
+> On Sun, Nov 26, 2023 at 08:25:38PM +0800, Shuai Xue wrote:
+>>> On Sat, Nov 25, 2023 at 02:44:52PM +0800, Shuai Xue wrote:
+>>>> - an AR error consumed by current process is deferred to handle in a
+>>>>   dedicated kernel thread, but memory_failure() assumes that it runs in the
+>>>>   current context
+>>>
+>>> On x86? ARM?
+>>>
+>>> Pease point to the exact code flow.
 
-On Thu, Nov 30, 2023 at 10:58:53AM +0800, Shuai Xue wrote:
-> To reproduce this problem:
+
+>> An AR error consumed by current process is deferred to handle in a
+>> dedicated kernel thread on ARM platform. The AR error is handled in bellow
+>> flow:
+
+Please don't think of errors as "action required" - that's a user-space signal code. If
+the page could be fixed by memory-failure(), you may never get a signal. (all this was the
+fix for always sending an action-required signal)
+
+I assume you mean the CPU accessed a poisoned location and took a synchronous error.
+
+
+>> -----------------------------------------------------------------------------
+>> [usr space task einj_mem_uc consumd data poison, CPU 3]         STEP 0
+>>
+>> -----------------------------------------------------------------------------
+>> [ghes_sdei_critical_callback: current einj_mem_uc, CPU 3]		STEP 1
+>> ghes_sdei_critical_callback
+>>     => __ghes_sdei_callback
+>>         => ghes_in_nmi_queue_one_entry 		// peak and read estatus
+>>         => irq_work_queue(&ghes_proc_irq_work) <=> ghes_proc_in_irq // irq_work
+>> [ghes_sdei_critical_callback: return]
+>> -----------------------------------------------------------------------------
+>> [ghes_proc_in_irq: current einj_mem_uc, CPU 3]			        STEP 2
+>>             => ghes_do_proc
+>>                 => ghes_handle_memory_failure
+>>                     => ghes_do_memory_failure
+>>                         => memory_failure_queue	 // put work task on current CPU
+>>                             => if (kfifo_put(&mf_cpu->fifo, entry))
+>>                                   schedule_work_on(smp_processor_id(), &mf_cpu->work);
+>>             => task_work_add(current, &estatus_node->task_work, TWA_RESUME);
+>> [ghes_proc_in_irq: return]
+>> -----------------------------------------------------------------------------
+>> // kworker preempts einj_mem_uc on CPU 3 due to RESCHED flag	STEP 3
+>> [memory_failure_work_func: current kworker, CPU 3]	
+>>      => memory_failure_work_func(&mf_cpu->work)
+>>         => while kfifo_get(&mf_cpu->fifo, &entry);	// until get no work
+>>             => memory_failure(entry.pfn, entry.flags);
 > 
-> 	# STEP1: enable early kill mode
-> 	#sysctl -w vm.memory_failure_early_kill=1
-> 	vm.memory_failure_early_kill = 1
+> From the comment above that function:
 > 
-> 	# STEP2: inject an UCE error and consume it to trigger a synchronous error
+>  * The function is primarily of use for corruptions that
+>  * happen outside the current execution context (e.g. when
+>  * detected by a background scrubber)
+>  *
+>  * Must run in process context (e.g. a work queue) with interrupts
+>  * enabled and no spinlocks held.
+> 
+>> -----------------------------------------------------------------------------
+>> [ghes_kick_task_work: current einj_mem_uc, other cpu]           STEP 4
+>>                 => memory_failure_queue_kick
+>>                     => cancel_work_sync - waiting memory_failure_work_func finish
+>>                     => memory_failure_work_func(&mf_cpu->work)
+>>                         => kfifo_get(&mf_cpu->fifo, &entry); // no work
+>> -----------------------------------------------------------------------------
+>> [einj_mem_uc resume at the same PC, trigger a page fault        STEP 5
+>>
+>> STEP 0: A user space task, named einj_mem_uc consume a poison. The firmware
+>> notifies hardware error to kernel through is SDEI
+>> (ACPI_HEST_NOTIFY_SOFTWARE_DELEGATED).
+>>
+>> STEP 1: The swapper running on CPU 3 is interrupted. irq_work_queue() rasie
+>> a irq_work to handle hardware errors in IRQ context
+>>
+>> STEP2: In IRQ context, ghes_proc_in_irq() queues memory failure work on
+>> current CPU in workqueue and add task work to sync with the workqueue.
+>>
+>> STEP3: The kworker preempts the current running thread and get CPU 3. Then
+>> memory_failure() is processed in kworker.
+> 
+> See above.
+> 
+>> STEP4: ghes_kick_task_work() is called as task_work to ensure any queued
+>> workqueue has been done before returning to user-space.
+>>
+>> STEP5: Upon returning to user-space, the task einj_mem_uc resumes at the
+>> current instruction, because the poison page is unmapped by
+>> memory_failure() in step 3, so a page fault will be triggered.
+>>
+>> memory_failure() assumes that it runs in the current context on both x86
+>> and ARM platform.
+>>
+>>
+>> for example:
+>> 	memory_failure() in mm/memory-failure.c:
+>>
+>> 		if (flags & MF_ACTION_REQUIRED) {
+>> 			folio = page_folio(p);
+>> 			res = kill_accessing_process(current, folio_pfn(folio), flags);
+>> 		}
+> 
+> And?
+> 
+> Do you see the check above it?
+> 
+> 	if (TestSetPageHWPoison(p)) {
+> 
+> test_and_set_bit() returns true only when the page was poisoned already.
+> 
+>  * This function is intended to handle "Action Required" MCEs on already
+>  * hardware poisoned pages. They could happen, for example, when
+>  * memory_failure() failed to unmap the error page at the first call, or
+>  * when multiple local machine checks happened on different CPUs.
+> 
+> And that's kill_accessing_process().
+> 
+> So AFAIU, the kworker running memory_failure() would only mark the page
+> as poison.
+> 
+> The killing happens when memory_failure() runs again and the process
+> touches the page again.
+> 
+> But I'd let James confirm here.
 
-So this is for ARM folks to deal with, BUT:
+Yes, this is what is expected to happen with the existing code.
 
-A consumed uncorrectable error on x86 means panic. On some hw like on
-AMD, that error doesn't even get seen by the OS but the hw does
-something called syncflood to prevent further error propagation. So
-there's no any action required - the hw does that.
+The first pass will remove the pages from all processes that have it mapped before this
+user-space task can restart. Restarting the task will make it access a poisoned page,
+kicking off the second path which delivers the signal.
 
-But I'd like to hear from ARM folks whether consuming an uncorrectable
-error even lets software run. Dunno.
+The reason for two passes is send_sig_mceerr() likes to clear_siginfo(), so even if you
+queued action-required before leaving GHES, memory-failure() would stomp on it.
 
-Thx.
 
--- 
-Regards/Gruss,
-    Boris.
+> I still don't know what you're fixing here.
 
-https://people.kernel.org/tglx/notes-about-netiquette
+The problem is if the user-space process registered for early messages, it gets a signal
+on the first pass. If it returns from that signal, it will access the poisoned page and
+get the action-required signal.
+
+How is this making Qemu go wrong?
+
+
+As to how this works for you given Boris' comments above: kill_procs() is also called from
+hwpoison_user_mappings(), which takes the flags given to memory-failure(). This is where
+the action-optional signals come from.
+
+
+Thanks,
+
+James
 
