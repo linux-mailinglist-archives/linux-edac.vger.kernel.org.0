@@ -1,289 +1,194 @@
-Return-Path: <linux-edac+bounces-155-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-156-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5B0027FE776
-	for <lists+linux-edac@lfdr.de>; Thu, 30 Nov 2023 03:59:12 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1D6817FE8E9
+	for <lists+linux-edac@lfdr.de>; Thu, 30 Nov 2023 07:02:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8B7061C20A74
-	for <lists+linux-edac@lfdr.de>; Thu, 30 Nov 2023 02:59:11 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 883ABB20FDD
+	for <lists+linux-edac@lfdr.de>; Thu, 30 Nov 2023 06:02:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 172C9F9E7;
-	Thu, 30 Nov 2023 02:59:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dkim=none
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 864501C69D;
+	Thu, 30 Nov 2023 06:01:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="aC+u6x+L"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from out30-119.freemail.mail.aliyun.com (out30-119.freemail.mail.aliyun.com [115.124.30.119])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3CE0CC;
-	Wed, 29 Nov 2023 18:59:03 -0800 (PST)
-X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R121e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046049;MF=xueshuai@linux.alibaba.com;NM=1;PH=DS;RN=34;SR=0;TI=SMTPD_---0VxQ.im6_1701313137;
-Received: from 30.240.112.131(mailfrom:xueshuai@linux.alibaba.com fp:SMTPD_---0VxQ.im6_1701313137)
-          by smtp.aliyun-inc.com;
-          Thu, 30 Nov 2023 10:59:00 +0800
-Message-ID: <a3cd9b79-4be5-4f77-b32a-51a624a65ec0@linux.alibaba.com>
-Date: Thu, 30 Nov 2023 10:58:53 +0800
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.65])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42C1BD66;
+	Wed, 29 Nov 2023 22:01:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1701324113; x=1732860113;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=OQH0nvmEJSvasFIaO1fOumPkczomqch7ZkEg2gd4lN0=;
+  b=aC+u6x+LuRphhD5zq+9NXrxHERVMQp6V8EbZ8n0EhkyzcNs+XlwRYwdt
+   gDfQ0PMsN2uGhBoUTKsvNYHTu4NqgzLhq9ZtVzlOlkFStT8VH+i9bv41x
+   iSR9ern92BoV0MX/5f2A2PwX95h7epff5byofjXZLlgB0aBA08A4eUQqy
+   m0DoVXu0RIBt8bei/zbi66l6ikqREVLy1bdDB6xfnP8AE42/bTV9qRcbD
+   0WCuPzrUQnKIB5681Hc8P+J2D5M5f5rkotWhcUlvgdVEaYjXSG/62qpvV
+   q3tNlVUksqw69rOtjA79g5XNMESbRQn422UizUnja1u4iw9kF8IOkkJlh
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10909"; a="397166402"
+X-IronPort-AV: E=Sophos;i="6.04,237,1695711600"; 
+   d="scan'208";a="397166402"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Nov 2023 22:01:52 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10909"; a="892699411"
+X-IronPort-AV: E=Sophos;i="6.04,237,1695711600"; 
+   d="scan'208";a="892699411"
+Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
+  by orsmga004.jf.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 29 Nov 2023 22:01:52 -0800
+Received: from orsmsx611.amr.corp.intel.com (10.22.229.24) by
+ ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.34; Wed, 29 Nov 2023 22:01:52 -0800
+Received: from orsmsx603.amr.corp.intel.com (10.22.229.16) by
+ ORSMSX611.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.34; Wed, 29 Nov 2023 22:01:51 -0800
+Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
+ orsmsx603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.34 via Frontend Transport; Wed, 29 Nov 2023 22:01:51 -0800
+Received: from NAM04-BN8-obe.outbound.protection.outlook.com (104.47.74.40) by
+ edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.34; Wed, 29 Nov 2023 22:01:51 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=b2Tb+VzD5d3XP4bpgKI4pyd7iYsHLR1A8zDsDxyHeOx4U95bnWZie1c7sLQ28sSUwzpQdclwd3Bd87d1QcW/fgE7c2V0RhBGCQKue/rJsHcafzuz76Rb62grqfsr8wi256BPG18irK3Uix0V7EfoU8gNTPETtYb40WUKp6anosqH+z+0QFtbnpR678PMdnFPpJwE7fVdO/uR0Ai24UrD9VwtjBMPi97pmulbqntfeKJM27nfWN81q7FkeqaZTYlr16W3hCeQB64G/Ep7NUOYpUkCelq65Jd/FIwDeSdhUDgGBjqZUjRimD61Mz+/CqnzmvCm4a73Etjy6UGOAm2sVA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=OQH0nvmEJSvasFIaO1fOumPkczomqch7ZkEg2gd4lN0=;
+ b=YEAK3RGg8VacNN+bq572Wjdg98LZ0Mz4MLHuJAU/c58MLzvdLgpitWJQAxBCGgv6Pv/eFc8hp7TXZOxQpabrSh7JbB4DghffwTdK6kF2q4v18m6WciqH1ExIlFcNGtSEkYoX+IQ8TErT7AMxuBcLY0fvtksE5yrx7AmKCbZJR6XSL2FMZj7NHMas1EWXwjZYhGMC43snc3WTnlMBgNgBWjfjBp2e+AVReIsk//EvqIKnnmIFXCzLB6/vFL1lgaZp2TtuSFgYm86rPNdKe2UNZ+Qs1AkOiaNUsuJ3VY/vS/CxWuRPtnK9SCQ/J8+B0UnFyfG8lX6tZr1Om3JQBhcHrQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from SA1PR11MB6734.namprd11.prod.outlook.com (2603:10b6:806:25d::22)
+ by SN7PR11MB6677.namprd11.prod.outlook.com (2603:10b6:806:26b::6) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7046.24; Thu, 30 Nov
+ 2023 06:01:42 +0000
+Received: from SA1PR11MB6734.namprd11.prod.outlook.com
+ ([fe80::3d98:6afd:a4b2:49e3]) by SA1PR11MB6734.namprd11.prod.outlook.com
+ ([fe80::3d98:6afd:a4b2:49e3%7]) with mapi id 15.20.7046.023; Thu, 30 Nov 2023
+ 06:01:42 +0000
+From: "Li, Xin3" <xin3.li@intel.com>
+To: "Li, Xin3" <xin3.li@intel.com>, "linux-doc@vger.kernel.org"
+	<linux-doc@vger.kernel.org>, "linux-kernel@vger.kernel.org"
+	<linux-kernel@vger.kernel.org>, "linux-edac@vger.kernel.org"
+	<linux-edac@vger.kernel.org>, "linux-hyperv@vger.kernel.org"
+	<linux-hyperv@vger.kernel.org>, "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+	"xen-devel@lists.xenproject.org" <xen-devel@lists.xenproject.org>
+CC: "tglx@linutronix.de" <tglx@linutronix.de>, "mingo@redhat.com"
+	<mingo@redhat.com>, "bp@alien8.de" <bp@alien8.de>,
+	"dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>, "x86@kernel.org"
+	<x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>, "Lutomirski, Andy"
+	<luto@kernel.org>, "pbonzini@redhat.com" <pbonzini@redhat.com>,
+	"Christopherson,, Sean" <seanjc@google.com>, "peterz@infradead.org"
+	<peterz@infradead.org>, "Gross, Jurgen" <jgross@suse.com>, "Shankar, Ravi V"
+	<ravi.v.shankar@intel.com>, "mhiramat@kernel.org" <mhiramat@kernel.org>,
+	"andrew.cooper3@citrix.com" <andrew.cooper3@citrix.com>,
+	"jiangshanlai@gmail.com" <jiangshanlai@gmail.com>, "nik.borisov@suse.com"
+	<nik.borisov@suse.com>
+Subject: RE: [PATCH v12 02/37] x86/opcode: Add the WRMSRNS instruction to the
+ x86 opcode map
+Thread-Topic: [PATCH v12 02/37] x86/opcode: Add the WRMSRNS instruction to the
+ x86 opcode map
+Thread-Index: AQHZ9caNSRx22/0yzUeT4gY0IluMT7CSuCFQ
+Date: Thu, 30 Nov 2023 06:01:41 +0000
+Message-ID: <SA1PR11MB6734FFBF0BE0CCC7532C2505A882A@SA1PR11MB6734.namprd11.prod.outlook.com>
+References: <20231003062458.23552-1-xin3.li@intel.com>
+ <20231003062458.23552-3-xin3.li@intel.com>
+In-Reply-To: <20231003062458.23552-3-xin3.li@intel.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: SA1PR11MB6734:EE_|SN7PR11MB6677:EE_
+x-ms-office365-filtering-correlation-id: c08f1d2b-35a9-4d61-2be6-08dbf169d32d
+x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: TFRUNe31D7vVoVgVLE+Kbom2vwVKUpnUkidp9KDdYw46D5LDR6Dubx7t3YEmIhnHyGdqRDDKydcr25n6/3FdEeTC0DWoLeKlyuKugJMP4WGHdAiRtxzWLPpaToUQCm4c/FQkEYp6oXa6B+OVTNa2MujfrnBwwhPiUTC4b2rWX12FHZ3AYUl67yFJr365/imMuWOIomqMIesVXgByBcQCoReCK+UlsacWehP2eH94rlYWBmsCKf1rn+TJGTu1aCWLz89w1hc8wWOrE+jZfx84niB5QzREPnigqPMxdjBVTrY6zUzyy/BEySisDcy6KGee8md4aH/INaz7HKjkpEMSHVS9sb2/CplqZzk7r15fAWgflNvA2nm0rDzaeK0imGEdqr8iCd4Nncanv1Qyj60qNFRPJioBXHa8atYoaAwKxzodV8vt7MGtd8rMu8XIj5l14XAZHXbDwCUTnFB+oO/Xs4R5+O533q3yDxhe2sEjCd35hI0BMPLo5JkjqLb7mrYNrEc/yLtuysMRAjnrp4WMUCBjndpwcEubKwH35FBBK/7dTbSP9cRZE1z56N9OazSXjy+8vEdjBGaEGHQfssukqF84BMdaUdxuG+cCw9cxDIZFbVB5LPkRBl/9MQGbP+tu9PCvWdPfE9KwY1vLRw/GAWNiyEcn8kpJsKSumKbcglk=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA1PR11MB6734.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(39860400002)(396003)(366004)(346002)(136003)(376002)(230922051799003)(1800799012)(186009)(64100799003)(451199024)(26005)(83380400001)(6506007)(7696005)(9686003)(122000001)(5660300002)(4326008)(8676002)(52536014)(8936002)(41300700001)(4744005)(7416002)(2906002)(966005)(478600001)(316002)(110136005)(71200400001)(54906003)(64756008)(66446008)(66476007)(66556008)(66946007)(76116006)(202311291699003)(86362001)(33656002)(38100700002)(82960400001)(38070700009)(55016003)(133343001);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?ajZieWlzQVVtWVNLT1JEWWIvTlBtOGw3b3ZjK3Jka0VaU081QVcxaStReDNh?=
+ =?utf-8?B?Sy9SWWdPWmhESU1GZUxpTVk2Vk5NY1dQNUw5cGE1T0IwMWRhYlZBM05lUEI1?=
+ =?utf-8?B?WXRBZU1XdWJhZUFDcXIrenovcDRPclp2RndXK1llUzlxdmE0dmp5WDVta2hB?=
+ =?utf-8?B?SUl4Q2xYSTlMWStFMjFyU296ZXJNQnl2K3R4SDhuOU5vUkRBVXNBM01Ec2xa?=
+ =?utf-8?B?Zm9xN2ZnSEMwSDRYcnpKOVhzQm1KVFFKdi9QdFJRZUhRNDRzeXA1YTFwMHZY?=
+ =?utf-8?B?TU1uckxQUGtIUG1SN3duQUlFWkpWSVRoeUIrd1hvL3ZjeHdkSFJKOXpmUEN2?=
+ =?utf-8?B?bk9aUVJqWWNWUDFEdmxoVXhLNGxzOXRweHJqWFlYM3FnSGErcS9FN3pkYzQx?=
+ =?utf-8?B?NkhlUnNlKzNxelFoQkxIUzZPd2t1Rm5Gbkh4MHZVRlhvTWIwdGRUSzQ0ZjdT?=
+ =?utf-8?B?OVNUVm5vclhnd3lDZG9mTlN2eG9rWm1XditqS3UzQ0ZJcUxDYjdtWG9iTGJx?=
+ =?utf-8?B?NUZBeUFYcWxDRUxtTFlrbEp4d1NCSVJOUHVhVmUreXhBWjFZOWh3bmloOEE1?=
+ =?utf-8?B?MWFQQUI4MFd2L0VNOWxJbXVPZDRKS1lESVF5STQvZ3cxU3lZRyt1a1JDTmRq?=
+ =?utf-8?B?QnRNL0FCUUhsY3h2WVp1OTk0MS9ZVHAzMUZpUmk0MUMvVHJ3QUdjMFZvbnlM?=
+ =?utf-8?B?Z1QrUDhNV3M3SmV2Qnk5NlZXWW5MZXhjbFlNLzl5NGFpNVlLTGdTOWlqM3Z2?=
+ =?utf-8?B?Y1N1c2lGQ3I2UzlvaDJQQkIrdkZlKzBFVnJFYXQ2NGkxeWxTOXh3TTdsbmFX?=
+ =?utf-8?B?QTBRYmFGcFp4SFRtTm10dVZzWCtwd2pSVUlieGJsM3BJQittVnp6NjRQQ2Rj?=
+ =?utf-8?B?eSt1di9QMk9GM09PSEZKMkMvYzNUUUYvcEdQL1IydUNzT1NPOGVkZVpIYUNz?=
+ =?utf-8?B?RWMzM2dJSWNEK0d2MlE1NFVuWHVoNzkxSWxmaDNYL1ZkVnBVbGhmQ2FTR0o5?=
+ =?utf-8?B?MUFTUk5jTWVBUkpGWGlXa2xsSDBjVHErOGlxTjhEQWxuM0JHOCs1QStCSGRq?=
+ =?utf-8?B?WWNDS1FqR2lVL05MU0c2alMrc3hLVXRCT3pUdElhVERRSGowNFNLMEtObmJ4?=
+ =?utf-8?B?V3k2OTlJK0FTUmxHcy90SFVMdG5zckNqVTJXbFJFbHJKU3hlbGZWS2d6RDlK?=
+ =?utf-8?B?V1FGYTBjek85OWRqaC9YWnBhanBtbm5lcTlURVc1SnFDeEJTSmEwT0hGSU44?=
+ =?utf-8?B?MTNEYUFmbDczN2F3ajhyTDlRQ1VCQXVXelZmbzlRL0hsbUpad1d1eWFpWGJI?=
+ =?utf-8?B?emZmaTJqRzEvUkJ6dVA4aGxpblpZS1FCRytjTWViYTk0c1UrUTc5K2JaTk9K?=
+ =?utf-8?B?enZrYTFBaHREWTN2NVI2em5aNDZucjZEVFJyKzE1TnlVWFl5VFNvM2w3Sytr?=
+ =?utf-8?B?bWtPcDEzOWE5SGNObkhzMEFsVlNJNnB0YWYrd1gxVnNOMHJvV3hWdEtlaHFa?=
+ =?utf-8?B?OFY2eVNqSzJ0em4zSm5RenZWbFd1TEwyOEcvSVgvVSttbzVVUUZUVE1ESmIx?=
+ =?utf-8?B?eTdLN215RHQ0d1RLbjNGTjNCd1N3a0VUaWEyMVNmMGp3VUlIRXpLalJDNmdn?=
+ =?utf-8?B?akNncU9lem9YUi9ZS05vcmhaSjR4eFd3RE1nMEtKQnBYVlpaVEZDd1lDaTBk?=
+ =?utf-8?B?Q2JJeDZCOURJdGExcXdlTHpqWmRaVUJjRXNhaHNVMzQzaEE5SVhIdlFmUHZn?=
+ =?utf-8?B?TGdrV3RwQ1AzOHE2dXlHNXIwM2ovOXdUakRkRld6NWRMamVRQmlSajQ4MkxU?=
+ =?utf-8?B?b2M0blBjNWQzcjFpU3kvYVFQTm5HWmpIQjE5L2h2VnZ4Mkx1RFpMWkE3NWZw?=
+ =?utf-8?B?dU1lUlVCalRWb0t2ZmphRHNQTmp4VE9RYW45bXB0bEoxWmNjQmFBRXpyY1h6?=
+ =?utf-8?B?dnNJM09nc25idnhHV3FzdjVRK2ljaXNBYUY5dG1nNFMzdG9ITXJvYTdwbW4w?=
+ =?utf-8?B?elNCR3NvT0FoRUd6QTdYVlpBcnh5OWJlVCt0Mk1HV0hzdThZWE51UC9FTFRw?=
+ =?utf-8?B?bVpoS3A3djZ3VjI3SGNWM2xaeGNqUmF6OUNSbG5sVnJPZmphaUFRc2VDOWpl?=
+ =?utf-8?Q?ZvZw=3D?=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v9 0/2] ACPI: APEI: handle synchronous errors in task work
- with proper si_code
-To: Borislav Petkov <bp@alien8.de>, james.morse@arm.com
-Cc: rafael@kernel.org, wangkefeng.wang@huawei.com, tanxiaofei@huawei.com,
- mawupeng1@huawei.com, tony.luck@intel.com, linmiaohe@huawei.com,
- naoya.horiguchi@nec.com, gregkh@linuxfoundation.org, will@kernel.org,
- jarkko@kernel.org, linux-acpi@vger.kernel.org, linux-mm@kvack.org,
- linux-kernel@vger.kernel.org, akpm@linux-foundation.org,
- linux-edac@vger.kernel.org, acpica-devel@lists.linuxfoundation.org,
- stable@vger.kernel.org, x86@kernel.org, justin.he@arm.com, ardb@kernel.org,
- ying.huang@intel.com, ashish.kalra@amd.com, baolin.wang@linux.alibaba.com,
- tglx@linutronix.de, mingo@redhat.com, dave.hansen@linux.intel.com,
- lenb@kernel.org, hpa@zytor.com, robert.moore@intel.com, lvying6@huawei.com,
- xiexiuqi@huawei.com, zhuo.song@linux.alibaba.com
-References: <20221027042445.60108-1-xueshuai@linux.alibaba.com>
- <20231007072818.58951-1-xueshuai@linux.alibaba.com>
- <20231123150710.GEZV9qnkWMBWrggGc1@fat_crate.local>
- <9e92e600-86a4-4456-9de4-b597854b107c@linux.alibaba.com>
- <20231125121059.GAZWHkU27odMLns7TZ@fat_crate.local>
- <1048123e-b608-4db1-8d5f-456dd113d06f@linux.alibaba.com>
- <20231129185406.GBZWeIzqwgRQe7XDo/@fat_crate.local>
-Content-Language: en-US
-From: Shuai Xue <xueshuai@linux.alibaba.com>
-In-Reply-To: <20231129185406.GBZWeIzqwgRQe7XDo/@fat_crate.local>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: SA1PR11MB6734.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c08f1d2b-35a9-4d61-2be6-08dbf169d32d
+X-MS-Exchange-CrossTenant-originalarrivaltime: 30 Nov 2023 06:01:41.9607
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: ueZgCKrh2BKcoTuAHXRNZWTShdBNzYIqtxArp/3ASZC+XHP78B6JtcTYEW5b7VQssVvk8jvpKVF3Pw3Jq85GKQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR11MB6677
+X-OriginatorOrg: intel.com
 
-
-
-On 2023/11/30 02:54, Borislav Petkov wrote:
-> Moving James to To:
-> 
-> On Sun, Nov 26, 2023 at 08:25:38PM +0800, Shuai Xue wrote:
->>> On Sat, Nov 25, 2023 at 02:44:52PM +0800, Shuai Xue wrote:
->>>> - an AR error consumed by current process is deferred to handle in a
->>>>   dedicated kernel thread, but memory_failure() assumes that it runs in the
->>>>   current context
->>>
->>> On x86? ARM?
->>>
->>> Pease point to the exact code flow.
->>
->> An AR error consumed by current process is deferred to handle in a
->> dedicated kernel thread on ARM platform. The AR error is handled in bellow
->> flow:
->>
->> -----------------------------------------------------------------------------
->> [usr space task einj_mem_uc consumd data poison, CPU 3]         STEP 0
->>
->> -----------------------------------------------------------------------------
->> [ghes_sdei_critical_callback: current einj_mem_uc, CPU 3]		STEP 1
->> ghes_sdei_critical_callback
->>     => __ghes_sdei_callback
->>         => ghes_in_nmi_queue_one_entry 		// peak and read estatus
->>         => irq_work_queue(&ghes_proc_irq_work) <=> ghes_proc_in_irq // irq_work
->> [ghes_sdei_critical_callback: return]
->> -----------------------------------------------------------------------------
->> [ghes_proc_in_irq: current einj_mem_uc, CPU 3]			        STEP 2
->>             => ghes_do_proc
->>                 => ghes_handle_memory_failure
->>                     => ghes_do_memory_failure
->>                         => memory_failure_queue	 // put work task on current CPU
->>                             => if (kfifo_put(&mf_cpu->fifo, entry))
->>                                   schedule_work_on(smp_processor_id(), &mf_cpu->work);
->>             => task_work_add(current, &estatus_node->task_work, TWA_RESUME);
->> [ghes_proc_in_irq: return]
->> -----------------------------------------------------------------------------
->> // kworker preempts einj_mem_uc on CPU 3 due to RESCHED flag	STEP 3
->> [memory_failure_work_func: current kworker, CPU 3]	
->>      => memory_failure_work_func(&mf_cpu->work)
->>         => while kfifo_get(&mf_cpu->fifo, &entry);	// until get no work
->>             => memory_failure(entry.pfn, entry.flags);
-> 
-> From the comment above that function:
-> 
->  * The function is primarily of use for corruptions that
->  * happen outside the current execution context (e.g. when
->  * detected by a background scrubber)
->  *
->  * Must run in process context (e.g. a work queue) with interrupts
->  * enabled and no spinlocks held.
-
-Hi, Borislav,
-
-Thank you for your comments.
-
-But we are talking about Action Required error, it does happen *inside the
-current execution context*.  The Action Required error does not meet the
-function comments.
-
-> 
->> -----------------------------------------------------------------------------
->> [ghes_kick_task_work: current einj_mem_uc, other cpu]           STEP 4
->>                 => memory_failure_queue_kick
->>                     => cancel_work_sync - waiting memory_failure_work_func finish
->>                     => memory_failure_work_func(&mf_cpu->work)
->>                         => kfifo_get(&mf_cpu->fifo, &entry); // no work
->> -----------------------------------------------------------------------------
->> [einj_mem_uc resume at the same PC, trigger a page fault        STEP 5
->>
->> STEP 0: A user space task, named einj_mem_uc consume a poison. The firmware
->> notifies hardware error to kernel through is SDEI
->> (ACPI_HEST_NOTIFY_SOFTWARE_DELEGATED).
->>
->> STEP 1: The swapper running on CPU 3 is interrupted. irq_work_queue() rasie
->> a irq_work to handle hardware errors in IRQ context
->>
->> STEP2: In IRQ context, ghes_proc_in_irq() queues memory failure work on
->> current CPU in workqueue and add task work to sync with the workqueue.
->>
->> STEP3: The kworker preempts the current running thread and get CPU 3. Then
->> memory_failure() is processed in kworker.
-> 
-> See above.
-> 
->> STEP4: ghes_kick_task_work() is called as task_work to ensure any queued
->> workqueue has been done before returning to user-space.
->>
->> STEP5: Upon returning to user-space, the task einj_mem_uc resumes at the
->> current instruction, because the poison page is unmapped by
->> memory_failure() in step 3, so a page fault will be triggered.
->>
->> memory_failure() assumes that it runs in the current context on both x86
->> and ARM platform.
->>
->>
->> for example:
->> 	memory_failure() in mm/memory-failure.c:
->>
->> 		if (flags & MF_ACTION_REQUIRED) {
->> 			folio = page_folio(p);
->> 			res = kill_accessing_process(current, folio_pfn(folio), flags);
->> 		}
-> 
-> And?
-> 
-> Do you see the check above it?
-> 
-> 	if (TestSetPageHWPoison(p)) {
-> 
-> test_and_set_bit() returns true only when the page was poisoned already.
-> 
->  * This function is intended to handle "Action Required" MCEs on already
->  * hardware poisoned pages. They could happen, for example, when
->  * memory_failure() failed to unmap the error page at the first call, or
->  * when multiple local machine checks happened on different CPUs.
-> 
-> And that's kill_accessing_process().
-> 
-> So AFAIU, the kworker running memory_failure() would only mark the page
-> as poison.
-> 
-> The killing happens when memory_failure() runs again and the process
-> touches the page again.
-
-When a Action Required error occurs, it triggers a MCE-like exception
-(SEA).  In the first call of memory_failure(), it will poison the page. If
-it failed to unmap the error page, the user space task resumes at the
-current PC and triggers another SEA exception, then the second call of
-memory_failure() will run into kill_accessing_process() which do nothing
-and just return -EFAULT. As a result, a third SEA exception will be
-triggered.  Finally, a exception loop happens resulting a hard lockup
-panic.
-
-> 
-> But I'd let James confirm here.
->
-> 
-> I still don't know what you're fixing here.
-
-In ARM64 platform, when a Action Required error occurs, the kernel should
-send SIGBUS with si_code BUS_MCEERR_AR instead of BUS_MCEERR_AO. (It is
-also the subject of this thread)
-
-> 
-> Is this something you're encountering on some machine or you simply
-> stared at code?
-
-I met the wrong si_code problem on Yitian 710 machine which is based on
-ARM64 platform. And I think it is gernel on ARM64 platfrom.
-
-To reproduce this problem:
-
-	# STEP1: enable early kill mode
-	#sysctl -w vm.memory_failure_early_kill=1
-	vm.memory_failure_early_kill = 1
-
-	# STEP2: inject an UCE error and consume it to trigger a synchronous error
-	#einj_mem_uc single
-	0: single   vaddr = 0xffffb0d75400 paddr = 4092d55b400
-	injecting ...
-	triggering ...
-	signal 7 code 5 addr 0xffffb0d75000
-	page not present
-	Test passed
-
-The si_code (code 5) from einj_mem_uc indicates that it is BUS_MCEERR_AO error
-and it is not fact.
-
-After this patch set:
-
-	# STEP1: enable early kill mode
-	#sysctl -w vm.memory_failure_early_kill=1
-	vm.memory_failure_early_kill = 1
-
-	# STEP2: inject an UCE error and consume it to trigger a synchronous error
-	#einj_mem_uc single
-	0: single   vaddr = 0xffffb0d75400 paddr = 4092d55b400
-	injecting ...
-	triggering ...
-	signal 7 code 4 addr 0xffffb0d75000
-	page not present
-	Test passed
-
-The si_code (code 4) from einj_mem_uc indicates that it is BUS_MCEERR_AR error
-as we expected.
-
-
-> 
-> What does that
-> 
-> "Both Alibaba and Huawei met the same issue in products, and we hope it
-> could be fixed ASAP."
-> 
-> mean?
-> 
-> What did you meet?
-> 
-> What was the problem?
-
-We both got wrong si_code of SIGBUS from kernel side on ARM64 platform.
-
-The VMM in our product relies on the si_code of SIGBUS to handle memory
-failure in userspace.
-
-- For BUS_MCEERR_AO, we regard that the corruptions happen *outside the
-  current execution context* e.g. detected by a background scrubber, the
-  VMM will ignore the error and the VM will not be killed immediately.
-- For BUS_MCEERR_AR, we regard that the corruptions happen *insdie the
-  current execution context*, e.g. when a data poison is consumed, the VMM
-  will kill the VM immediately to avoid any further potential data
-  propagation.
-
-> 
-> I still note that you're avoiding answering the question what the issue
-> is and if you keep avoiding it, I'll ignore this whole thread.
-> 
-
-Sorry, Borislav, thank you for your patient and time. I really appreciate
-that you are involving in to review this patchset. But I have to say it is
-not the truth, I am avoiding anything. I tried my best to answer every comments
-you raised, give the details of ARM RAS specific and code flow.
-
-Best Regards,
-Shuai
-
+PiBBZGQgdGhlIG9wY29kZSB1c2VkIGJ5IFdSTVNSTlMsIHdoaWNoIGlzIHRoZSBub24tc2VyaWFs
+aXppbmcgdmVyc2lvbiBvZg0KPiBXUk1TUiBhbmQgbWF5IHJlcGxhY2UgaXQgdG8gaW1wcm92ZSBw
+ZXJmb3JtYW5jZSwgdG8gdGhlIHg4NiBvcGNvZGUgbWFwLg0KPiANCj4gVGVzdGVkLWJ5OiBTaGFu
+IEthbmcgPHNoYW4ua2FuZ0BpbnRlbC5jb20+DQo+IFNpZ25lZC1vZmYtYnk6IFhpbiBMaSA8eGlu
+My5saUBpbnRlbC5jb20+DQo+IEFja2VkLWJ5OiBNYXNhbWkgSGlyYW1hdHN1IChHb29nbGUpIDxt
+aGlyYW1hdEBrZXJuZWwub3JnPg0KDQpIaSBNYXNhbWksDQoNCkJvcmlzIHByZWZlcnMgdG8gbWVy
+Z2UgdGhlIGZpcnN0IDMgcGF0Y2hlcyBpbnRvIG9uZToNCmh0dHBzOi8vbG9yZS5rZXJuZWwub3Jn
+L2xrbWwvMjAyMzExMDgxMjM2NDcuR0JaVXVBMzF6bnRveDBXMGd1QGZhdF9jcmF0ZS5sb2NhbC8j
+dA0KDQpTbyBJJ20gdGhpbmtpbmcgY291bGQgeW91IHBsZWFzZSBhbHNvIGFjayB0aGUgb3RoZXIg
+MiBwYXRjaGVzICgxc3QgYW5kIDNyZA0Kb2YgdGhpcyBwYXRjaCBzZXQpPw0KDQpUaHVzIEkgY2Fu
+IGtlZXAgeW91ciBhY2tlZC1ieSDwn5iKDQoNClRoYW5rcyENCiAgICBYaW4NCg0KPiAtLS0NCj4g
+IGFyY2gveDg2L2xpYi94ODYtb3Bjb2RlLW1hcC50eHQgICAgICAgfCAyICstDQo+ICB0b29scy9h
+cmNoL3g4Ni9saWIveDg2LW9wY29kZS1tYXAudHh0IHwgMiArLQ0KPiAgMiBmaWxlcyBjaGFuZ2Vk
+LCAyIGluc2VydGlvbnMoKyksIDIgZGVsZXRpb25zKC0pDQo=
 
