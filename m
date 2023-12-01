@@ -1,42 +1,38 @@
-Return-Path: <linux-edac+bounces-161-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-162-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 336B17FF8A3
-	for <lists+linux-edac@lfdr.de>; Thu, 30 Nov 2023 18:43:56 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1B7128001C9
+	for <lists+linux-edac@lfdr.de>; Fri,  1 Dec 2023 03:59:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E32D82817BD
-	for <lists+linux-edac@lfdr.de>; Thu, 30 Nov 2023 17:43:54 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CB55D281608
+	for <lists+linux-edac@lfdr.de>; Fri,  1 Dec 2023 02:58:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0D98258137;
-	Thu, 30 Nov 2023 17:43:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dkim=none
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1BEE117E1;
+	Fri,  1 Dec 2023 02:58:57 +0000 (UTC)
 X-Original-To: linux-edac@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTP id D2F7210FC;
-	Thu, 30 Nov 2023 09:43:48 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3E42F1756;
-	Thu, 30 Nov 2023 09:44:35 -0800 (PST)
-Received: from [10.1.197.60] (eglon.cambridge.arm.com [10.1.197.60])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B012C3F6C4;
-	Thu, 30 Nov 2023 09:43:44 -0800 (PST)
-Message-ID: <d83545f0-af15-10bc-0f5d-9b531b54b9dd@arm.com>
-Date: Thu, 30 Nov 2023 17:43:38 +0000
+Received: from out30-124.freemail.mail.aliyun.com (out30-124.freemail.mail.aliyun.com [115.124.30.124])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6DBB1717;
+	Thu, 30 Nov 2023 18:58:50 -0800 (PST)
+X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R141e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046050;MF=xueshuai@linux.alibaba.com;NM=1;PH=DS;RN=34;SR=0;TI=SMTPD_---0VxTrXdf_1701399524;
+Received: from 30.240.114.121(mailfrom:xueshuai@linux.alibaba.com fp:SMTPD_---0VxTrXdf_1701399524)
+          by smtp.aliyun-inc.com;
+          Fri, 01 Dec 2023 10:58:47 +0800
+Message-ID: <8cefd789-36da-4208-9511-f826a4508612@linux.alibaba.com>
+Date: Fri, 1 Dec 2023 10:58:42 +0800
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
+User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH v9 0/2] ACPI: APEI: handle synchronous errors in task work
  with proper si_code
-Content-Language: en-GB
-To: Borislav Petkov <bp@alien8.de>, Shuai Xue <xueshuai@linux.alibaba.com>
+Content-Language: en-US
+To: James Morse <james.morse@arm.com>, Borislav Petkov <bp@alien8.de>
 Cc: rafael@kernel.org, wangkefeng.wang@huawei.com, tanxiaofei@huawei.com,
  mawupeng1@huawei.com, tony.luck@intel.com, linmiaohe@huawei.com,
  naoya.horiguchi@nec.com, gregkh@linuxfoundation.org, will@kernel.org,
@@ -57,60 +53,101 @@ References: <20221027042445.60108-1-xueshuai@linux.alibaba.com>
  <20231129185406.GBZWeIzqwgRQe7XDo/@fat_crate.local>
  <a3cd9b79-4be5-4f77-b32a-51a624a65ec0@linux.alibaba.com>
  <20231130144001.GGZWiewYtvMSJir62f@fat_crate.local>
-From: James Morse <james.morse@arm.com>
-In-Reply-To: <20231130144001.GGZWiewYtvMSJir62f@fat_crate.local>
+ <d83545f0-af15-10bc-0f5d-9b531b54b9dd@arm.com>
+From: Shuai Xue <xueshuai@linux.alibaba.com>
+In-Reply-To: <d83545f0-af15-10bc-0f5d-9b531b54b9dd@arm.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-Hi Boris,
 
-On 30/11/2023 14:40, Borislav Petkov wrote:
-> FTR, this is starting to make sense, thanks for explaining.
+
+On 2023/12/1 01:43, James Morse wrote:
+> Hi Boris,
 > 
-> Replying only to this one for now:
-> 
-> On Thu, Nov 30, 2023 at 10:58:53AM +0800, Shuai Xue wrote:
->> To reproduce this problem:
+> On 30/11/2023 14:40, Borislav Petkov wrote:
+>> FTR, this is starting to make sense, thanks for explaining.
 >>
->> 	# STEP1: enable early kill mode
->> 	#sysctl -w vm.memory_failure_early_kill=1
->> 	vm.memory_failure_early_kill = 1
+>> Replying only to this one for now:
 >>
->> 	# STEP2: inject an UCE error and consume it to trigger a synchronous error
+>> On Thu, Nov 30, 2023 at 10:58:53AM +0800, Shuai Xue wrote:
+>>> To reproduce this problem:
+>>>
+>>> 	# STEP1: enable early kill mode
+>>> 	#sysctl -w vm.memory_failure_early_kill=1
+>>> 	vm.memory_failure_early_kill = 1
+>>>
+>>> 	# STEP2: inject an UCE error and consume it to trigger a synchronous error
+>>
+>> So this is for ARM folks to deal with, BUT:
+>>
+>> A consumed uncorrectable error on x86 means panic. On some hw like on
+>> AMD, that error doesn't even get seen by the OS but the hw does
+>> something called syncflood to prevent further error propagation. So
+>> there's no any action required - the hw does that.
+
+The "consume" is at the application point of view, e.g. a memory read. If
+poison is enable, then a SRAR error will be detected and a MCE raised
+at the point of the consumption in the execution flow.
+
+A generic Intel x86 hw behaves like below:
+
+1. UE Error Inject at a known Physical Address. (by einj_mem_uc through EINJ interface)
+2. Core Issue a Memory Read to the same Physical Address (by a singe memory read)
+3. iMC Detects the error.
+4. HA logs UCA error and signals CMCI if enabled
+5. HA Forward data with poison indication bit set.
+6. CBo detects the Poison data. Does not log any error.
+7. MLC detects the Poison data.
+8. DCU detects the Poison data, logs SRAR error and trigger MCERR if recoverable
+9. OS/VMM takes corresponding recovery action based on affected state.
+
+In our example:
+-  step 2 is triggered by a singe memory read.
+-  step 8: UCR errors detected on data load, MCACOD 134H, triggering MCERR
+-  step 9: the kernel is excepted to send sigbus with si_code BUS_MCEERR_AR (code 4)
+
+I also run the same test  in AMD EPYC platform, e.g. Milan, Genoa, which
+behaves the same as Intel Xeon platform, e.g. Icelake, SPR.
+
+The ARMv8.2 RAS extension support similar data poison mechanism, a
+Synchronous External Abort on arm64 (analogy Machine Check Exception on
+x86) will be trigger in setp 8. See James comments for details.  But the
+kernel sends sigbus with si_code BUS_MCEERR_AO (code 5) , tested on
+Alibaba Yitian710 and Huawei Kunepng 920.
+
+
+>>
+>> But I'd like to hear from ARM folks whether consuming an uncorrectable
+>> error even lets software run. Dunno.
 > 
-> So this is for ARM folks to deal with, BUT:
+> I think we mean different things by 'consume' here.
 > 
-> A consumed uncorrectable error on x86 means panic. On some hw like on
-> AMD, that error doesn't even get seen by the OS but the hw does
-> something called syncflood to prevent further error propagation. So
-> there's no any action required - the hw does that.
+> I'd assume Shuai's test is poisoning a cache-line. When the CPU tries to access that
+> cache-line it will get an 'external abort' signal back from the memory system. Shuai - is
+> this what you mean by 'consume' - the CPU received external abort from the poisoned cache
+> line?
 > 
-> But I'd like to hear from ARM folks whether consuming an uncorrectable
-> error even lets software run. Dunno.
 
-I think we mean different things by 'consume' here.
+Yes, exactly. Thank you for point it out. We are talking about synchronous errors.
 
-I'd assume Shuai's test is poisoning a cache-line. When the CPU tries to access that
-cache-line it will get an 'external abort' signal back from the memory system. Shuai - is
-this what you mean by 'consume' - the CPU received external abort from the poisoned cache
-line?
+> It's then up to the CPU whether it can put the world back in order to take this as
+> synchronous-external-abort or asynchronous-external-abort, which for arm64 are two
+> different interrupt/exception types.
+> The synchronous exceptions can't be masked, but the asynchronous one can.
+> If by the time the asynchronous-external-abort interrupt/exception has been unmasked, the
+> CPU has used the poisoned value in some calculation (which is what we usually mean by
+> consume) which has resulted in a memory access - it will report the error as 'uncontained'
+> because the error has been silently propagated. APEI should always report those a 'fatal',
+> and there is little point getting the OS involved at this point. Also in this category are
+> things like 'tag ram corruption', where you can no longer trust anything about memory.
+> 
+> Everything in this thread is about synchronous errors where this can't happen. The CPU
+> stops and does takes an interrupt/exception instead.
+> 
+> 
 
-It's then up to the CPU whether it can put the world back in order to take this as
-synchronous-external-abort or asynchronous-external-abort, which for arm64 are two
-different interrupt/exception types.
-The synchronous exceptions can't be masked, but the asynchronous one can.
-If by the time the asynchronous-external-abort interrupt/exception has been unmasked, the
-CPU has used the poisoned value in some calculation (which is what we usually mean by
-consume) which has resulted in a memory access - it will report the error as 'uncontained'
-because the error has been silently propagated. APEI should always report those a 'fatal',
-and there is little point getting the OS involved at this point. Also in this category are
-things like 'tag ram corruption', where you can no longer trust anything about memory.
+Thank you for explaining.
 
-Everything in this thread is about synchronous errors where this can't happen. The CPU
-stops and does takes an interrupt/exception instead.
-
-
-Thanks,
-
-James
+Best Regards,
+Shuai
 
