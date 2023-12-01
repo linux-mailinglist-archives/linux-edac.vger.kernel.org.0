@@ -1,329 +1,147 @@
-Return-Path: <linux-edac+bounces-165-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-166-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0F0A780044A
-	for <lists+linux-edac@lfdr.de>; Fri,  1 Dec 2023 08:03:51 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8AAD38010B4
+	for <lists+linux-edac@lfdr.de>; Fri,  1 Dec 2023 18:05:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 789C9B211BD
-	for <lists+linux-edac@lfdr.de>; Fri,  1 Dec 2023 07:03:48 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1AE131F20F91
+	for <lists+linux-edac@lfdr.de>; Fri,  1 Dec 2023 17:05:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C2C9F11716;
-	Fri,  1 Dec 2023 07:03:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 235D14D59B;
+	Fri,  1 Dec 2023 17:04:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="noFyjEJv"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from out30-101.freemail.mail.aliyun.com (out30-101.freemail.mail.aliyun.com [115.124.30.101])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BF37103;
-	Thu, 30 Nov 2023 23:03:40 -0800 (PST)
-X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R131e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046050;MF=xueshuai@linux.alibaba.com;NM=1;PH=DS;RN=34;SR=0;TI=SMTPD_---0VxXwK5O_1701414213;
-Received: from 30.240.114.121(mailfrom:xueshuai@linux.alibaba.com fp:SMTPD_---0VxXwK5O_1701414213)
-          by smtp.aliyun-inc.com;
-          Fri, 01 Dec 2023 15:03:37 +0800
-Message-ID: <b56fbae2-0d9b-4c42-94bf-7fd58b3fd738@linux.alibaba.com>
-Date: Fri, 1 Dec 2023 15:03:28 +0800
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 807AC103
+	for <linux-edac@vger.kernel.org>; Fri,  1 Dec 2023 09:04:53 -0800 (PST)
+Received: by mail-yb1-xb49.google.com with SMTP id 3f1490d57ef6-db512266d27so944456276.3
+        for <linux-edac@vger.kernel.org>; Fri, 01 Dec 2023 09:04:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1701450292; x=1702055092; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=YbmCSI5K+Qp+wla/FUZNboDkH6vkaCc9VLdnolKakNc=;
+        b=noFyjEJvzmVlRRLojlSuZXrCrc4Yzgu+xDbrsD/cVPN7F03GE6eMPPp2H+YzBE1dwq
+         R+pO5gCtR8CSLpl9WZGog5pt0o+51OULhEANXl1ORn/9U3Ib3uS4kVhhHjjw+QRjnlQb
+         iTobRKJhTmdnsnzXNvxcmnEVfBYI6g+xvpIe+Tn2XX1MxywHY4ZVtrqQmbs1EYx5S3XX
+         25t/M24RG29rgjcLg+dXhKtukBHzNIg4uz4B7MlaSLZ9EvMhB+pajfNMychzXyjUsg3/
+         fjgGd5Uu1js1Yj+iyPEA6TCAsGuHPdGgKVVNnpCKBgBMYuBiIll9KqM5lW05R0huS1IL
+         COgQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1701450292; x=1702055092;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=YbmCSI5K+Qp+wla/FUZNboDkH6vkaCc9VLdnolKakNc=;
+        b=vMVCL70PdM35YDRFcK2NM8yn+7hyw2kxF45P6Pn1Nlay50PmR1AX59ra6pisx2RjP9
+         CsiBQq7ZAUlR5V1eXUICb6b9yI5vrCU7ZtP34l38NXAFsBS6HG/QypymZTkWJGb+O44v
+         fH8Poxxl61hIVK5hKzfjg+OID+GpSSexh7poNax5yuPxe7xl9b9ZbHrroWn62isYwIER
+         3nxSKDdZo4vx8lzPfnjUuAS2rTNEH2/vORfeeggbC6mUuR42oPHoqlCQJurtky5ykQ4q
+         sNLDxa6o/alCIbBr57WFI7yFYCq+emKn0FGxcg2hX7Qf2iNqKoDjRzsrUIv0vGnZlqQY
+         c3Hw==
+X-Gm-Message-State: AOJu0YzWdOxjr99b3aConoCsHXB+NMOomslY2qcSDMi+VXOD9GGBrg/s
+	4sS7ps3c7ZRt8DVjQc1QWQ05Zb7zCsY=
+X-Google-Smtp-Source: AGHT+IEa3BfWc92nmp+AtwxI8x7qhWNabfXhEQhxlZ9l+TV5/mqVnAJW8EBvcmW340xIWHXBNkD9Ysp+RPg=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a25:6e83:0:b0:d9a:e3d9:99bd with SMTP id
+ j125-20020a256e83000000b00d9ae3d999bdmr780648ybc.5.1701450292702; Fri, 01 Dec
+ 2023 09:04:52 -0800 (PST)
+Date: Fri, 1 Dec 2023 09:04:51 -0800
+In-Reply-To: <20231123003513.24292-3-ankita@nvidia.com>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v9 2/2] ACPI: APEI: handle synchronous exceptions in task
- work
-Content-Language: en-US
-To: James Morse <james.morse@arm.com>, rafael@kernel.org,
- wangkefeng.wang@huawei.com, tanxiaofei@huawei.com, mawupeng1@huawei.com,
- tony.luck@intel.com, linmiaohe@huawei.com, naoya.horiguchi@nec.com,
- gregkh@linuxfoundation.org, will@kernel.org, jarkko@kernel.org
-Cc: linux-acpi@vger.kernel.org, linux-mm@kvack.org,
- linux-kernel@vger.kernel.org, akpm@linux-foundation.org,
- linux-edac@vger.kernel.org, acpica-devel@lists.linuxfoundation.org,
- stable@vger.kernel.org, x86@kernel.org, justin.he@arm.com, ardb@kernel.org,
- ying.huang@intel.com, ashish.kalra@amd.com, baolin.wang@linux.alibaba.com,
- bp@alien8.de, tglx@linutronix.de, mingo@redhat.com,
- dave.hansen@linux.intel.com, lenb@kernel.org, hpa@zytor.com,
- robert.moore@intel.com, lvying6@huawei.com, xiexiuqi@huawei.com,
- zhuo.song@linux.alibaba.com
-References: <20221027042445.60108-1-xueshuai@linux.alibaba.com>
- <20231007072818.58951-3-xueshuai@linux.alibaba.com>
- <874f0170-a829-47db-8882-52b9ed8e869d@arm.com>
-From: Shuai Xue <xueshuai@linux.alibaba.com>
-In-Reply-To: <874f0170-a829-47db-8882-52b9ed8e869d@arm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Mime-Version: 1.0
+References: <20231123003513.24292-1-ankita@nvidia.com> <20231123003513.24292-3-ankita@nvidia.com>
+Message-ID: <ZWoSM_0xLJQo8De5@google.com>
+Subject: Re: [PATCH v2 2/4] mm: Add poison error check in fixup_user_fault()
+ for mapped pfn
+From: Sean Christopherson <seanjc@google.com>
+To: ankita@nvidia.com
+Cc: jgg@nvidia.com, alex.williamson@redhat.com, naoya.horiguchi@nec.com, 
+	akpm@linux-foundation.org, tony.luck@intel.com, bp@alien8.de, 
+	linmiaohe@huawei.com, rafael@kernel.org, lenb@kernel.org, james.morse@arm.com, 
+	shiju.jose@huawei.com, bhelgaas@google.com, pabeni@redhat.com, 
+	yishaih@nvidia.com, shameerali.kolothum.thodi@huawei.com, 
+	kevin.tian@intel.com, aniketa@nvidia.com, cjia@nvidia.com, 
+	kwankhede@nvidia.com, targupta@nvidia.com, vsethi@nvidia.com, 
+	acurrid@nvidia.com, apopple@nvidia.com, anuaggarwal@nvidia.com, 
+	jhubbard@nvidia.com, danw@nvidia.com, mochs@nvidia.com, kvm@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	linux-mm@kvack.org, linux-edac@vger.kernel.org, linux-acpi@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"
 
+On Thu, Nov 23, 2023, ankita@nvidia.com wrote:
+> From: Ankit Agrawal <ankita@nvidia.com>
+> 
+> The fixup_user_fault() currently does not expect a VM_FAULT_HWPOISON
+> and hence does not check for it while calling vm_fault_to_errno(). Since
+> we now have a new code path which can trigger such case, change
+> fixup_user_fault to look for VM_FAULT_HWPOISON.
+> 
+> Also make hva_to_pfn_remapped check for -EHWPOISON and communicate the
+> poison fault up to the user_mem_abort().
 
+I would much prefer the KVM change be split out to its own patch, I see no
+reason why it needs to be bundled with the fixup_user_fault() change.  KVM will
+set pfn to KVM_PFN_ERR_FAULT before and after the fixup_user_fault() change.
 
-On 2023/12/1 01:39, James Morse wrote:
-> Hi Shuai,
+> Signed-off-by: Ankit Agrawal <ankita@nvidia.com>
+> ---
+>  mm/gup.c            | 2 +-
+>  virt/kvm/kvm_main.c | 6 ++++++
+>  2 files changed, 7 insertions(+), 1 deletion(-)
 > 
-> On 07/10/2023 08:28, Shuai Xue wrote:
->> Hardware errors could be signaled by synchronous interrupt,
-> 
-> I'm struggling with 'synchronous interrupt'. Do you mean arm64's 'precise' (all
-> instructions before the exception were executed, and none after).
-> Otherwise, surely any interrupt from a background scrubber is inherently asynchronous!
-> 
+> diff --git a/mm/gup.c b/mm/gup.c
+> index 231711efa390..b78af20a0f52 100644
+> --- a/mm/gup.c
+> +++ b/mm/gup.c
+> @@ -1414,7 +1414,7 @@ int fixup_user_fault(struct mm_struct *mm,
+>  	}
+>  
+>  	if (ret & VM_FAULT_ERROR) {
+> -		int err = vm_fault_to_errno(ret, 0);
+> +		int err = vm_fault_to_errno(ret, FOLL_HWPOISON);
+>  
+>  		if (err)
+>  			return err;
+> diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
+> index 486800a7024b..2ff067f21a7c 100644
+> --- a/virt/kvm/kvm_main.c
+> +++ b/virt/kvm/kvm_main.c
+> @@ -2731,6 +2731,12 @@ kvm_pfn_t hva_to_pfn(unsigned long addr, bool atomic, bool interruptible,
+>  		r = hva_to_pfn_remapped(vma, addr, write_fault, writable, &pfn);
+>  		if (r == -EAGAIN)
+>  			goto retry;
+> +
+> +		if (r == -EHWPOISON) {
+> +			pfn = KVM_PFN_ERR_HWPOISON;
+> +			goto exit;
+> +		}
+> +
+>  		if (r < 0)
+>  			pfn = KVM_PFN_ERR_FAULT;
 
-I am sorry, this is typo. I mean asynchronous interrupt.
+I vote for
 
-> 
->> e.g.  when an
->> error is detected by a background scrubber, or signaled by synchronous
->> exception, e.g. when an uncorrected error is consumed. Both synchronous and
->> asynchronous error are queued and handled by a dedicated kthread in
->> workqueue.
->>
->> commit 7f17b4a121d0 ("ACPI: APEI: Kick the memory_failure() queue for
->> synchronous errors") keep track of whether memory_failure() work was
->> queued, and make task_work pending to flush out the workqueue so that the
->> work for synchronous error is processed before returning to user-space.
-> 
-> It does it regardless, if user-space was interrupted by APEI any work queued as a result
-> of that should be completed before we go back to user-space. Otherwise we can bounce
-> between user-space and firmware, with the kernel only running the APEI code, and never
-> making progress.
-> 
+		if (r == -EHWPOISON)
+			pfn = KVM_PFN_ERR_HWPOISON;
+		else if (r < 0)
+			pfn = KVM_PFN_ERR_FAULT;
 
-Agreed.
+or even opportunstically fix the < 0 weirdness:
 
-> 
->> The trick ensures that the corrupted page is unmapped and poisoned. And
->> after returning to user-space, the task starts at current instruction which
->> triggering a page fault in which kernel will send SIGBUS to current process
->> due to VM_FAULT_HWPOISON.
->>
->> However, the memory failure recovery for hwpoison-aware mechanisms does not
->> work as expected. For example, hwpoison-aware user-space processes like
->> QEMU register their customized SIGBUS handler and enable early kill mode by
->> seting PF_MCE_EARLY at initialization. Then the kernel will directly notify
-> 
-> (setting, directly)
+		if (r == -EHWPOISON)
+			pfn = KVM_PFN_ERR_HWPOISON;
+		else if (r)
+			pfn = KVM_PFN_ERR_FAULT;
 
-Thank you. Will fix it.
-
-> 
->> the process by sending a SIGBUS signal in memory failure with wrong
-> 
->> si_code: the actual user-space process accessing the corrupt memory
->> location, but its memory failure work is handled in a kthread context, so
->> it will send SIGBUS with BUS_MCEERR_AO si_code to the actual user-space
->> process instead of BUS_MCEERR_AR in kill_proc().
-> 
-> This is hard to parse, "the user-space process is accessing"? (dropping 'actual' and
-> adding 'is')
-
-Will fix it.
-
-
-> 
-> 
-> Wasn't this behaviour fixed by the previous patch?
-> 
-> What problem are you fixing here?
-
-
-Nope. The memory_failure() runs in a kthread context, but not the
-user-space process which consuming poison data.
-
-
-    // kill_proc() in memory-failure.c
-
-	if ((flags & MF_ACTION_REQUIRED) && (t == current))
-		ret = force_sig_mceerr(BUS_MCEERR_AR,
-				 (void __user *)tk->addr, addr_lsb);
-	else
-		ret = send_sig_mceerr(BUS_MCEERR_AO, (void __user *)tk->addr,
-				      addr_lsb, t);
-
-So, even we queue memory_failure() with MF_ACTION_REQUIRED flags in
-previous patch, it will still send a sigbus with BUS_MCEERR_AO in the else
-branch of kill_proc().
-
-> 
-> 
->> To this end, separate synchronous and asynchronous error handling into
->> different paths like X86 platform does:
->>
->> - valid synchronous errors: queue a task_work to synchronously send SIGBUS
->>   before ret_to_user.
-> 
->> - valid asynchronous errors: queue a work into workqueue to asynchronously
->>   handle memory failure.
-> 
-> Why? The signal issue was fixed by the previous patch. Why delay the handling of a
-> poisoned memory location further?
-
-The signal issue is not fixed completely. See my reply above.
-
-> 
-> 
->> - abnormal branches such as invalid PA, unexpected severity, no memory
->>   failure config support, invalid GUID section, OOM, etc.
-> 
-> ... do what?
-
-If no memory failure work is queued for abnormal errors, do a force kill.
-Will also add this comment to commit log.
-
-> 
-> 
->> Then for valid synchronous errors, the current context in memory failure is
->> exactly belongs to the task consuming poison data and it will send SIBBUS
->> with proper si_code.
-> 
-> 
->> diff --git a/arch/x86/kernel/cpu/mce/core.c b/arch/x86/kernel/cpu/mce/core.c
->> index 6f35f724cc14..1675ff77033d 100644
->> --- a/arch/x86/kernel/cpu/mce/core.c
->> +++ b/arch/x86/kernel/cpu/mce/core.c
->> @@ -1334,17 +1334,10 @@ static void kill_me_maybe(struct callback_head *cb)
->>  		return;
->>  	}
->>  
->> -	/*
->> -	 * -EHWPOISON from memory_failure() means that it already sent SIGBUS
->> -	 * to the current process with the proper error info,
->> -	 * -EOPNOTSUPP means hwpoison_filter() filtered the error event,
->> -	 *
->> -	 * In both cases, no further processing is required.
->> -	 */
->>  	if (ret == -EHWPOISON || ret == -EOPNOTSUPP)
->>  		return;
->>  
->> -	pr_err("Memory error not recovered");
->> +	pr_err("Sending SIGBUS to current task due to memory error not recovered");
->>  	kill_me_now(cb);
->>  }
->>  
-> 
-> I'm not sure how this hunk is relevant to the commit message.
-
-I handle memory_failure() error code in its arm64 call site
-memory_failure_cb() with some comments, similar to x86 call site
-kill_me_maybe(). I moved these two part comments to function declaration,
-followed by review comments from Kefeng.
-
-I should split this into a separate patch. Will do it in next version.
-
-> 
-> 
->> diff --git a/drivers/acpi/apei/ghes.c b/drivers/acpi/apei/ghes.c
->> index 88178aa6222d..014401a65ed5 100644
->> --- a/drivers/acpi/apei/ghes.c
->> +++ b/drivers/acpi/apei/ghes.c
->> @@ -484,6 +497,18 @@ static bool ghes_do_memory_failure(u64 physical_addr, int flags)
->>  		return false;
->>  	}
->>  
->> +	if (flags == MF_ACTION_REQUIRED && current->mm) {
->> +		twcb = kmalloc(sizeof(*twcb), GFP_ATOMIC);
->> +		if (!twcb)
->> +			return false;
-> 
-> Yuck - New failure modes! This is why the existing code always has this memory allocated
-> in struct ghes_estatus_node.
-
-Are you suggesting to move fields of struct sync_task_work to struct
-ghes_estatus_node, and use ghes_estatus_node here? Or we can just alloc
-struct sync_task_work with gen_pool_alloc from ghes_estatus_pool.
-
-> 
-> 
->> +		twcb->pfn = pfn;
->> +		twcb->flags = flags;
->> +		init_task_work(&twcb->twork, memory_failure_cb);
->> +		task_work_add(current, &twcb->twork, TWA_RESUME);
->> +		return true;
->> +	}
->> +
->>  	memory_failure_queue(pfn, flags);
->>  	return true;
->>  }
-> 
-> [..]
-> 
->> @@ -696,7 +721,14 @@ static bool ghes_do_proc(struct ghes *ghes,
->>  		}
->>  	}
->>  
->> -	return queued;
->> +	/*
->> +	 * If no memory failure work is queued for abnormal synchronous
->> +	 * errors, do a force kill.
->> +	 */
->> +	if (sync && !queued) {
->> +		pr_err("Sending SIGBUS to current task due to memory error not recovered");
->> +		force_sig(SIGBUS);
->> +	}
->>  }
-> 
-> I think this is a lot of churn, and this hunk is the the only meaningful change in
-> behaviour. Can you explain how this happens?
-
-For example:
-- invalid GUID section in ghes_do_proc()
-- CPER_MEM_VALID_PA is not set, unexpected severity in
-  ghes_handle_memory_failure().
-- CONFIG_ACPI_APEI_MEMORY_FAILURE is not enabled, !pfn_vaild(pfn) in
-  ghes_do_memory_failure()
-
-> 
-> 
-> Wouldn't it be simpler to split ghes_kick_task_work() to have a sync/async version.
-> The synchronous version can unconditionally force_sig_mceerr(BUS_MCEERR_AR, ...) after
-> memory_failure_queue_kick() - but that still means memory_failure() is unable to disappear
-> errors that it fixed - see MF_RECOVERED.
-
-Sorry, I don't think so. Unconditionally send a sigbus is not a good
-choice.  For example, if a sync memory error detected in instruction memory
-error, the kernel should transparently fix and no signal should be send.
-
-    ./einj_mem_uc instr
-    [168522.751671] Memory failure: 0x89dedd: corrupted page was clean: dropped without side effects
-    [168522.751679] Memory failure: 0x89dedd: recovery action for clean LRU page: Recovered
-
-With this patch set, the instr case behaves consistently on both the arm64 and x86 platforms.
-
-The complex page error_states are handled in memory_failure(). IMHO, we
-should left this part to it.
-
-> 
->> diff --git a/mm/memory-failure.c b/mm/memory-failure.c
->> index 4d6e43c88489..0d02f8a0b556 100644
->> --- a/mm/memory-failure.c
->> +++ b/mm/memory-failure.c
->> @@ -2161,9 +2161,12 @@ static int memory_failure_dev_pagemap(unsigned long pfn, int flags,
->>   * Must run in process context (e.g. a work queue) with interrupts
->>   * enabled and no spinlocks held.
->>   *
->> - * Return: 0 for successfully handled the memory error,
->> - *         -EOPNOTSUPP for hwpoison_filter() filtered the error event,
->> - *         < 0(except -EOPNOTSUPP) on failure.
->> + * Return values:
->> + *   0             - success
->> + *   -EOPNOTSUPP   - hwpoison_filter() filtered the error event.
->> + *   -EHWPOISON    - sent SIGBUS to the current process with the proper
->> + *                   error info by kill_accessing_process().
->> + *   other negative values - failure
->>   */
->>  int memory_failure(unsigned long pfn, int flags)
->>  {
-> 
-> I'm not sure how this hunk is relevant to the commit message.
-
-
-As mentioned, I will split this into a separate patch.
-
-> 
-> 
-> Thanks,
-> 
-> James
-
-
-Thank you for valuable comments.
-Best Regards,
-Shuai
+It's rather confusing to see a goto in one error path but an effective fallthrough
+in a different error path, i.e. gives the impression that KVM_PFN_ERR_HWPOISON
+has some special behavior that doesn't apply to KVM_PFN_ERR_FAULT.
 
