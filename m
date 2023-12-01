@@ -1,27 +1,27 @@
-Return-Path: <linux-edac+bounces-164-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-165-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8D7B98002FB
-	for <lists+linux-edac@lfdr.de>; Fri,  1 Dec 2023 06:22:44 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0F0A780044A
+	for <lists+linux-edac@lfdr.de>; Fri,  1 Dec 2023 08:03:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B835E1C20D53
-	for <lists+linux-edac@lfdr.de>; Fri,  1 Dec 2023 05:22:43 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 789C9B211BD
+	for <lists+linux-edac@lfdr.de>; Fri,  1 Dec 2023 07:03:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3D45B747E;
-	Fri,  1 Dec 2023 05:22:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C2C9F11716;
+	Fri,  1 Dec 2023 07:03:46 +0000 (UTC)
 X-Original-To: linux-edac@vger.kernel.org
-Received: from out30-98.freemail.mail.aliyun.com (out30-98.freemail.mail.aliyun.com [115.124.30.98])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A950C10FC;
-	Thu, 30 Nov 2023 21:22:35 -0800 (PST)
-X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R201e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046049;MF=xueshuai@linux.alibaba.com;NM=1;PH=DS;RN=34;SR=0;TI=SMTPD_---0VxVHB4Y_1701408150;
-Received: from 30.240.114.121(mailfrom:xueshuai@linux.alibaba.com fp:SMTPD_---0VxVHB4Y_1701408150)
+Received: from out30-101.freemail.mail.aliyun.com (out30-101.freemail.mail.aliyun.com [115.124.30.101])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BF37103;
+	Thu, 30 Nov 2023 23:03:40 -0800 (PST)
+X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R131e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046050;MF=xueshuai@linux.alibaba.com;NM=1;PH=DS;RN=34;SR=0;TI=SMTPD_---0VxXwK5O_1701414213;
+Received: from 30.240.114.121(mailfrom:xueshuai@linux.alibaba.com fp:SMTPD_---0VxXwK5O_1701414213)
           by smtp.aliyun-inc.com;
-          Fri, 01 Dec 2023 13:22:32 +0800
-Message-ID: <c89342d5-79a2-47cb-b1dc-e69f0d528862@linux.alibaba.com>
-Date: Fri, 1 Dec 2023 13:22:26 +0800
+          Fri, 01 Dec 2023 15:03:37 +0800
+Message-ID: <b56fbae2-0d9b-4c42-94bf-7fd58b3fd738@linux.alibaba.com>
+Date: Fri, 1 Dec 2023 15:03:28 +0800
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
@@ -29,8 +29,8 @@ List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v9 1/2] ACPI: APEI: set memory failure flags as
- MF_ACTION_REQUIRED on synchronous events
+Subject: Re: [PATCH v9 2/2] ACPI: APEI: handle synchronous exceptions in task
+ work
 Content-Language: en-US
 To: James Morse <james.morse@arm.com>, rafael@kernel.org,
  wangkefeng.wang@huawei.com, tanxiaofei@huawei.com, mawupeng1@huawei.com,
@@ -46,10 +46,10 @@ Cc: linux-acpi@vger.kernel.org, linux-mm@kvack.org,
  robert.moore@intel.com, lvying6@huawei.com, xiexiuqi@huawei.com,
  zhuo.song@linux.alibaba.com
 References: <20221027042445.60108-1-xueshuai@linux.alibaba.com>
- <20231007072818.58951-2-xueshuai@linux.alibaba.com>
- <c77e1909-8e03-6b2f-ecaf-c5b395642688@arm.com>
+ <20231007072818.58951-3-xueshuai@linux.alibaba.com>
+ <874f0170-a829-47db-8882-52b9ed8e869d@arm.com>
 From: Shuai Xue <xueshuai@linux.alibaba.com>
-In-Reply-To: <c77e1909-8e03-6b2f-ecaf-c5b395642688@arm.com>
+In-Reply-To: <874f0170-a829-47db-8882-52b9ed8e869d@arm.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
@@ -59,120 +59,271 @@ On 2023/12/1 01:39, James Morse wrote:
 > Hi Shuai,
 > 
 > On 07/10/2023 08:28, Shuai Xue wrote:
->> There are two major types of uncorrected recoverable (UCR) errors :
+>> Hardware errors could be signaled by synchronous interrupt,
 > 
-> Is UCR a well known x86 acronym? It's best to just spell this out each time,
-> there is enough jargon in this area already.
+> I'm struggling with 'synchronous interrupt'. Do you mean arm64's 'precise' (all
+> instructions before the exception were executed, and none after).
+> Otherwise, surely any interrupt from a background scrubber is inherently asynchronous!
+> 
 
-Quite agreed, will replace the commit log with "uncorrected recoverable error".
+I am sorry, this is typo. I mean asynchronous interrupt.
 
 > 
+>> e.g.  when an
+>> error is detected by a background scrubber, or signaled by synchronous
+>> exception, e.g. when an uncorrected error is consumed. Both synchronous and
+>> asynchronous error are queued and handled by a dedicated kthread in
+>> workqueue.
 >>
->> - Action Required (AR): The error is detected and the processor already
->>   consumes the memory. OS requires to take action (for example, offline
->>   failure page/kill failure thread) to recover this uncorrectable error.
+>> commit 7f17b4a121d0 ("ACPI: APEI: Kick the memory_failure() queue for
+>> synchronous errors") keep track of whether memory_failure() work was
+>> queued, and make task_work pending to flush out the workqueue so that the
+>> work for synchronous error is processed before returning to user-space.
+> 
+> It does it regardless, if user-space was interrupted by APEI any work queued as a result
+> of that should be completed before we go back to user-space. Otherwise we can bounce
+> between user-space and firmware, with the kernel only running the APEI code, and never
+> making progress.
+> 
+
+Agreed.
+
+> 
+>> The trick ensures that the corrupted page is unmapped and poisoned. And
+>> after returning to user-space, the task starts at current instruction which
+>> triggering a page fault in which kernel will send SIGBUS to current process
+>> due to VM_FAULT_HWPOISON.
 >>
->> - Action Optional (AO): The error is detected out of processor execution
->>   context. Some data in the memory are corrupted. But the data have not
->>   been consumed. OS is optional to take action to recover this
->>   uncorrectable error.
+>> However, the memory failure recovery for hwpoison-aware mechanisms does not
+>> work as expected. For example, hwpoison-aware user-space processes like
+>> QEMU register their customized SIGBUS handler and enable early kill mode by
+>> seting PF_MCE_EARLY at initialization. Then the kernel will directly notify
 > 
-> As elsewhere, please don't think of errors as 'action required', this is how
-> things get reported to user-space. Action-required for one thread may be
-> action-optional for another that has the same page mapped - its really not a
-> property of the error.
-> It would be better to describe this as synchronous and asynchronous, or in-band
-> and out-of-band.
+> (setting, directly)
 
-Thank you for explanation. I will change to "synchronous and asynchronous".
+Thank you. Will fix it.
 
 > 
+>> the process by sending a SIGBUS signal in memory failure with wrong
 > 
->> The essential difference between AR and AO errors is that AR is a
->> synchronous event, while AO is an asynchronous event. The hardware will
->> signal a synchronous exception (Machine Check Exception on X86 and
->> Synchronous External Abort on Arm64) when an error is detected and the
->> memory access has been architecturally executed.
+>> si_code: the actual user-space process accessing the corrupt memory
+>> location, but its memory failure work is handled in a kthread context, so
+>> it will send SIGBUS with BUS_MCEERR_AO si_code to the actual user-space
+>> process instead of BUS_MCEERR_AR in kill_proc().
 > 
->> When APEI firmware first is enabled, a platform may describe one error
->> source for the handling of synchronous errors (e.g. MCE or SEA notification
->> ), or for handling asynchronous errors (e.g. SCI or External Interrupt
->> notification). In other words, we can distinguish synchronous errors by
->> APEI notification. For AR errors, kernel will kill current process
->> accessing the poisoned page by sending SIGBUS with BUS_MCEERR_AR. In
->> addition, for AO errors, kernel will notify the process who owns the
->> poisoned page by sending SIGBUS with BUS_MCEERR_AO in early kill mode.
->> However, the GHES driver always sets mf_flags to 0 so that all UCR errors
->> are handled as AO errors in memory failure.
-> 
-> To make this easier to read:
->  UCR and AR -> synchronous
->  AO -> asynchronous
-> 
+> This is hard to parse, "the user-space process is accessing"? (dropping 'actual' and
+> adding 'is')
 
-Will do that.
+Will fix it.
+
 
 > 
->> To this end, set memory failure flags as MF_ACTION_REQUIRED on synchronous
->> events.
 > 
->> Fixes: ba61ca4aab47 ("ACPI, APEI, GHES: Add hardware memory error recovery support")'
+> Wasn't this behaviour fixed by the previous patch?
 > 
-> Erm, this predates arm64 support, and what you have here doesn't change the behaviour on x86.
-> 
-> You can blame 7f17b4a121d0d50 ("ACPI: APEI: Kick the memory_failure() queue for
-> synchronous errors"), which should have covered this.
+> What problem are you fixing here?
 
-Do you mean just drop the "Fixes" tags?
+
+Nope. The memory_failure() runs in a kthread context, but not the
+user-space process which consuming poison data.
+
+
+    // kill_proc() in memory-failure.c
+
+	if ((flags & MF_ACTION_REQUIRED) && (t == current))
+		ret = force_sig_mceerr(BUS_MCEERR_AR,
+				 (void __user *)tk->addr, addr_lsb);
+	else
+		ret = send_sig_mceerr(BUS_MCEERR_AO, (void __user *)tk->addr,
+				      addr_lsb, t);
+
+So, even we queue memory_failure() with MF_ACTION_REQUIRED flags in
+previous patch, it will still send a sigbus with BUS_MCEERR_AO in the else
+branch of kill_proc().
 
 > 
->> diff --git a/drivers/acpi/apei/ghes.c b/drivers/acpi/apei/ghes.c
->> index ef59d6ea16da..88178aa6222d 100644
->> --- a/drivers/acpi/apei/ghes.c
->> +++ b/drivers/acpi/apei/ghes.c
->> @@ -101,6 +101,20 @@ static inline bool is_hest_type_generic_v2(struct ghes *ghes)
->>  	return ghes->generic->header.type == ACPI_HEST_TYPE_GENERIC_ERROR_V2;
+> 
+>> To this end, separate synchronous and asynchronous error handling into
+>> different paths like X86 platform does:
+>>
+>> - valid synchronous errors: queue a task_work to synchronously send SIGBUS
+>>   before ret_to_user.
+> 
+>> - valid asynchronous errors: queue a work into workqueue to asynchronously
+>>   handle memory failure.
+> 
+> Why? The signal issue was fixed by the previous patch. Why delay the handling of a
+> poisoned memory location further?
+
+The signal issue is not fixed completely. See my reply above.
+
+> 
+> 
+>> - abnormal branches such as invalid PA, unexpected severity, no memory
+>>   failure config support, invalid GUID section, OOM, etc.
+> 
+> ... do what?
+
+If no memory failure work is queued for abnormal errors, do a force kill.
+Will also add this comment to commit log.
+
+> 
+> 
+>> Then for valid synchronous errors, the current context in memory failure is
+>> exactly belongs to the task consuming poison data and it will send SIBBUS
+>> with proper si_code.
+> 
+> 
+>> diff --git a/arch/x86/kernel/cpu/mce/core.c b/arch/x86/kernel/cpu/mce/core.c
+>> index 6f35f724cc14..1675ff77033d 100644
+>> --- a/arch/x86/kernel/cpu/mce/core.c
+>> +++ b/arch/x86/kernel/cpu/mce/core.c
+>> @@ -1334,17 +1334,10 @@ static void kill_me_maybe(struct callback_head *cb)
+>>  		return;
+>>  	}
+>>  
+>> -	/*
+>> -	 * -EHWPOISON from memory_failure() means that it already sent SIGBUS
+>> -	 * to the current process with the proper error info,
+>> -	 * -EOPNOTSUPP means hwpoison_filter() filtered the error event,
+>> -	 *
+>> -	 * In both cases, no further processing is required.
+>> -	 */
+>>  	if (ret == -EHWPOISON || ret == -EOPNOTSUPP)
+>>  		return;
+>>  
+>> -	pr_err("Memory error not recovered");
+>> +	pr_err("Sending SIGBUS to current task due to memory error not recovered");
+>>  	kill_me_now(cb);
 >>  }
 >>  
->> +/*
->> + * A platform may describe one error source for the handling of synchronous
->> + * errors (e.g. MCE or SEA), or for handling asynchronous errors (e.g. SCI
->> + * or External Interrupt). On x86, the HEST notifications are always
->> + * asynchronous, so only SEA on ARM is delivered as a synchronous
->> + * notification.
->> + */
->> +static inline bool is_hest_sync_notify(struct ghes *ghes)
->> +{
->> +	u8 notify_type = ghes->generic->notify.type;
+> 
+> I'm not sure how this hunk is relevant to the commit message.
+
+I handle memory_failure() error code in its arm64 call site
+memory_failure_cb() with some comments, similar to x86 call site
+kill_me_maybe(). I moved these two part comments to function declaration,
+followed by review comments from Kefeng.
+
+I should split this into a separate patch. Will do it in next version.
+
+> 
+> 
+>> diff --git a/drivers/acpi/apei/ghes.c b/drivers/acpi/apei/ghes.c
+>> index 88178aa6222d..014401a65ed5 100644
+>> --- a/drivers/acpi/apei/ghes.c
+>> +++ b/drivers/acpi/apei/ghes.c
+>> @@ -484,6 +497,18 @@ static bool ghes_do_memory_failure(u64 physical_addr, int flags)
+>>  		return false;
+>>  	}
+>>  
+>> +	if (flags == MF_ACTION_REQUIRED && current->mm) {
+>> +		twcb = kmalloc(sizeof(*twcb), GFP_ATOMIC);
+>> +		if (!twcb)
+>> +			return false;
+> 
+> Yuck - New failure modes! This is why the existing code always has this memory allocated
+> in struct ghes_estatus_node.
+
+Are you suggesting to move fields of struct sync_task_work to struct
+ghes_estatus_node, and use ghes_estatus_node here? Or we can just alloc
+struct sync_task_work with gen_pool_alloc from ghes_estatus_pool.
+
+> 
+> 
+>> +		twcb->pfn = pfn;
+>> +		twcb->flags = flags;
+>> +		init_task_work(&twcb->twork, memory_failure_cb);
+>> +		task_work_add(current, &twcb->twork, TWA_RESUME);
+>> +		return true;
+>> +	}
 >> +
->> +	return notify_type == ACPI_HEST_NOTIFY_SEA;
->> +}
+>>  	memory_failure_queue(pfn, flags);
+>>  	return true;
+>>  }
 > 
-> and as you had in earlier versions, sometimes SDEI.
-> SDEI can report by synchronous and asynchronous errors, I wouldn't too surprised if the
-> hardware NMI can be used for the same. It would be good to chase up having a hint of this
-> in the CPER records and pass that in here as a hint.> 
-> Unfortunately, its not safe to assume either way for SDEI.
+> [..]
+> 
+>> @@ -696,7 +721,14 @@ static bool ghes_do_proc(struct ghes *ghes,
+>>  		}
+>>  	}
+>>  
+>> -	return queued;
+>> +	/*
+>> +	 * If no memory failure work is queued for abnormal synchronous
+>> +	 * errors, do a force kill.
+>> +	 */
+>> +	if (sync && !queued) {
+>> +		pr_err("Sending SIGBUS to current task due to memory error not recovered");
+>> +		force_sig(SIGBUS);
+>> +	}
+>>  }
+> 
+> I think this is a lot of churn, and this hunk is the the only meaningful change in
+> behaviour. Can you explain how this happens?
 
-For SDEI notification, only x0-x17 has preserved by firmware.  As SDEI
-TRM[1] describes "the dispatcher can simulate an exception-like entry into
-the client, **with the client providing an additional asynchronous entry
-point similar to an interrupt entry point**".  The client (kernel) lacks
-complete synchronous context, e.g. system register (ELR, ESR, etc). So I
-think SDEI notification should not be used for asynchronous error, can you
-help to confirm this?
-
-For NMI notification, as far as I know, AArch64 (aka arm64 in the Linux
-tree) does not provide architected NMIs.
+For example:
+- invalid GUID section in ghes_do_proc()
+- CPER_MEM_VALID_PA is not set, unexpected severity in
+  ghes_handle_memory_failure().
+- CONFIG_ACPI_APEI_MEMORY_FAILURE is not enabled, !pfn_vaild(pfn) in
+  ghes_do_memory_failure()
 
 > 
-> Reviewed-by: James Morse <james.morse@arm.com>
 > 
+> Wouldn't it be simpler to split ghes_kick_task_work() to have a sync/async version.
+> The synchronous version can unconditionally force_sig_mceerr(BUS_MCEERR_AR, ...) after
+> memory_failure_queue_kick() - but that still means memory_failure() is unable to disappear
+> errors that it fixed - see MF_RECOVERED.
+
+Sorry, I don't think so. Unconditionally send a sigbus is not a good
+choice.  For example, if a sync memory error detected in instruction memory
+error, the kernel should transparently fix and no signal should be send.
+
+    ./einj_mem_uc instr
+    [168522.751671] Memory failure: 0x89dedd: corrupted page was clean: dropped without side effects
+    [168522.751679] Memory failure: 0x89dedd: recovery action for clean LRU page: Recovered
+
+With this patch set, the instr case behaves consistently on both the arm64 and x86 platforms.
+
+The complex page error_states are handled in memory_failure(). IMHO, we
+should left this part to it.
+
+> 
+>> diff --git a/mm/memory-failure.c b/mm/memory-failure.c
+>> index 4d6e43c88489..0d02f8a0b556 100644
+>> --- a/mm/memory-failure.c
+>> +++ b/mm/memory-failure.c
+>> @@ -2161,9 +2161,12 @@ static int memory_failure_dev_pagemap(unsigned long pfn, int flags,
+>>   * Must run in process context (e.g. a work queue) with interrupts
+>>   * enabled and no spinlocks held.
+>>   *
+>> - * Return: 0 for successfully handled the memory error,
+>> - *         -EOPNOTSUPP for hwpoison_filter() filtered the error event,
+>> - *         < 0(except -EOPNOTSUPP) on failure.
+>> + * Return values:
+>> + *   0             - success
+>> + *   -EOPNOTSUPP   - hwpoison_filter() filtered the error event.
+>> + *   -EHWPOISON    - sent SIGBUS to the current process with the proper
+>> + *                   error info by kill_accessing_process().
+>> + *   other negative values - failure
+>>   */
+>>  int memory_failure(unsigned long pfn, int flags)
+>>  {
+> 
+> I'm not sure how this hunk is relevant to the commit message.
+
+
+As mentioned, I will split this into a separate patch.
+
+> 
+> 
+> Thanks,
+> 
+> James
+
 
 Thank you for valuable comments.
-
 Best Regards,
 Shuai
-
-[1] https://developer.arm.com/documentation/den0054/latest/
 
