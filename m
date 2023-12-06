@@ -1,161 +1,135 @@
-Return-Path: <linux-edac+bounces-212-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-213-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 281338062F4
-	for <lists+linux-edac@lfdr.de>; Wed,  6 Dec 2023 00:26:08 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id F26E8806434
+	for <lists+linux-edac@lfdr.de>; Wed,  6 Dec 2023 02:40:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8B256B20FD5
-	for <lists+linux-edac@lfdr.de>; Tue,  5 Dec 2023 23:26:05 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AAF33281C6E
+	for <lists+linux-edac@lfdr.de>; Wed,  6 Dec 2023 01:40:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 03DAE4121A;
-	Tue,  5 Dec 2023 23:26:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EFD6BEC4;
+	Wed,  6 Dec 2023 01:40:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="SkLeUlCU"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="dHDFB5xW"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.151])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 575F6122;
-	Tue,  5 Dec 2023 15:26:01 -0800 (PST)
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.120])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D79C91B5;
+	Tue,  5 Dec 2023 17:40:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1701818761; x=1733354761;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=01vhjvExvCyDnUWI+HUuNgQ6ve0OkqHkG7WtL9E5hsI=;
-  b=SkLeUlCUZdOMDioh93isr4142saiqejpU6a1h4c8It5R0+uvdtyPNvdu
-   fQhQE6+giiIAjv4TTc1wj3xiLLC3AuGQdJhhZBwkKjRF4eKkObDZsIeAy
-   HC5+tGstn449bSQYk9v3MjMAO3mIDPLsYcMuLiOYy/rlqSyX/c19w99wr
-   li5dNWeybbJZrpmZPOwyL6UGagCLZByYwW+Vx0KNwjh1JAR7xIYAXG1kT
-   H3YGFvm51i61LeriJKKNFEaFEsK2EFR55o8fXouD/AAqUoXy2XFsOkiFI
-   z3RcF5D5i9ACAVvhb0jIoIupKjfriElmxjw3jenKAaWKiWyE19RzePDWE
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10915"; a="374156631"
-X-IronPort-AV: E=Sophos;i="6.04,253,1695711600"; 
-   d="scan'208";a="374156631"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Dec 2023 15:26:01 -0800
+  t=1701826822; x=1733362822;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=84aGtB/DLStDTk9sSVHU7L8uXgDTgViYEQou2kivFBY=;
+  b=dHDFB5xWYL4BuIGHCn7sYe3QNtUaFlANmiOYQ12hfleOVOZPY/FPLgcs
+   7btnEl64C3rd2hl8iHPB/JX19qE6KgBWm/39xg2f4/nLlTx93Rrx2/Paj
+   MeV0ipXRf/+C9WnJ3gJBBdBvrsR/CJsE8UblKPmhavV1wESgX9pvvWncL
+   5yG4MZe7/ev346GmRNDrBgwrlsVEvi0BKDc6JJ7eibR2E03wp3eDK0SBA
+   4bSLCBRoLCm+5U4mPmwZIaOSWyqJwrtKQMyviF66TTxTeOzXdyeU6eWaC
+   RF6KdaoAdwUeI1KZGnJbL4dH3KhQI5jn1y+YdnwNO2WE0WaPBbeNBn2Sm
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10915"; a="392853023"
+X-IronPort-AV: E=Sophos;i="6.04,254,1695711600"; 
+   d="scan'208";a="392853023"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Dec 2023 17:40:06 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10915"; a="914971272"
-X-IronPort-AV: E=Sophos;i="6.04,253,1695711600"; 
-   d="scan'208";a="914971272"
-Received: from orsmsx602.amr.corp.intel.com ([10.22.229.15])
-  by fmsmga001.fm.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 05 Dec 2023 15:26:00 -0800
-Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
- ORSMSX602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.35; Tue, 5 Dec 2023 15:26:00 -0800
-Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
- orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.35 via Frontend Transport; Tue, 5 Dec 2023 15:26:00 -0800
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (104.47.70.100)
- by edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.34; Tue, 5 Dec 2023 15:25:59 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=f3ilY+bbKacsB+E59yF1FpmciAPJaAVTfFVe50N4j9ruMu2fnOgM94fRCx6TdUMcIEW1UicCWHuhxxmpGc0S2+W5Ch65NR0e9n5HUqaUGVIGtHZ9G4CSU1S0GXztJNZiYy412XU1heV6bP408RDj0FnmnKX9Yh98cqK8NNdGsxeRvzaAY21sTQZlqUcfRnwvgcdJYgVti8YOr9L3G9I7/HbuPWVdgADAUpdCx900i5iUSc/9OelJy075r9SwpO+fdtNehDiHzhW58j48v+yUAyba1RzAfL/EP89g4EKevM9sxCaRmRQFtp8PViqEREVLxZUceRuuzc4iPB/oEcmLGg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ApewfYvbvG+QR4ErLJaJtcKjMHgTP6UhzylUui4XeU0=;
- b=d9mw2wLaDoJMblGD+uZviz+Yi3+PMmujRQzGCAJFfiQtzQ7yBjrDkgq0B0sqQ6gZ4/F8jDjEwFX0uuIGrPgVCEHxrl97DNeF5PnS9qDYLDpTTcAEeX6pn0bbvyofiEB6wnSI8q7ABm9JIt95DXic8kszt6YPURp4HxKNvG2hBkZoJIMjantCGUo5p/HY7DA5Bx4Y3/0eixWPGNH5OGZc86NQRPlbt8W9r6Kh6D5f0IpLGnQ36B2LpQaA/zx92O4vxOrpZ9mr5WmpEQMVsYT3moQFSByR3bCk+7I2ixjS9hIDFiHZRrpzpkh8F1a1lj/qPdZ+srAOHg4KgAPegCccxg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from SJ1PR11MB6083.namprd11.prod.outlook.com (2603:10b6:a03:48a::9)
- by IA1PR11MB7680.namprd11.prod.outlook.com (2603:10b6:208:3fb::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7046.34; Tue, 5 Dec
- 2023 23:25:52 +0000
-Received: from SJ1PR11MB6083.namprd11.prod.outlook.com
- ([fe80::2b58:930f:feba:8848]) by SJ1PR11MB6083.namprd11.prod.outlook.com
- ([fe80::2b58:930f:feba:8848%6]) with mapi id 15.20.7046.034; Tue, 5 Dec 2023
- 23:25:52 +0000
-From: "Luck, Tony" <tony.luck@intel.com>
-To: "Zhuo, Qiuxu" <qiuxu.zhuo@intel.com>
-CC: Borislav Petkov <bp@alien8.de>, Aristeu Rozanski <aris@redhat.com>, "Mauro
- Carvalho Chehab" <mchehab@kernel.org>, "linux-edac@vger.kernel.org"
-	<linux-edac@vger.kernel.org>, "linux-kernel@vger.kernel.org"
-	<linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH 0/5] EDAC/igen6: Add EDAC support for several Intel SoCs
- with IBECC
-Thread-Topic: [PATCH 0/5] EDAC/igen6: Add EDAC support for several Intel SoCs
- with IBECC
-Thread-Index: AQHaFg79xlMaldO9dEGBYjF4lzIXLLCbeH7Q
-Date: Tue, 5 Dec 2023 23:25:52 +0000
-Message-ID: <SJ1PR11MB60835628D38AD099BE401C47FC85A@SJ1PR11MB6083.namprd11.prod.outlook.com>
-References: <20231113085318.26783-1-qiuxu.zhuo@intel.com>
-In-Reply-To: <20231113085318.26783-1-qiuxu.zhuo@intel.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: SJ1PR11MB6083:EE_|IA1PR11MB7680:EE_
-x-ms-office365-filtering-correlation-id: beb33b83-73f4-470f-fa2c-08dbf5e985db
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: ZRGl5I8D4tJjotFVH4+eMgeIuyErsTT+QLkp7PgkiNtjimZXvemXkVGuIsLo5RSYggBcxQAJa1pSBuWnRihqL+s3whq4eok360aVWerUgjJ6B04yv2HEDgObM34b056OHFeyp50Sw0fbWUYhFu88jGvGBQ2k6XyfBYVIKffj6OEaAZ41YzO/DwU9EImSx2JYD4rutdDc682Q2Dd8NptKVJu7E9B46Fo74c5va5RhKUdfTzMa9CeFz62fpRH6By4x9Bma+jwk1iXApH8Pz3Zeo79ojQeTUjZn7zMTaRVfTNHR5QG0x66D4/fIRfXzh+tdtZYW80muJEYNQKLLRFLskQdF6i5bicHj7h5BozTw3IQhwzu0oCYTQADzAXZfoMt6OwbiHq1d3I3P9pcJJ6L09keaXfnpz98UvZj1tD9ZK4Ju0SymcPfxDXDgmLD03Z+e0HZXmhspE320xpJ1XARY3wlEXTeBpuTdC0RU4GA6ZK/jSaoKvdyoYVYCZCVJufCwrNmaHRY1WxeNT5+7W99MbLEIpW9V5wQOBNs/OZPXwLbLfr6jdAop84ncX35ITiG2VTQVQtuOGB/2n4pkAaW/jQDQg5Jd1CemTmtpjtqBA9zKhXA0AsEceP+7PlLaTcgS
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ1PR11MB6083.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(6029001)(39860400002)(366004)(136003)(396003)(346002)(376002)(230922051799003)(64100799003)(451199024)(1800799012)(186009)(66476007)(6636002)(316002)(66446008)(66946007)(76116006)(54906003)(64756008)(66556008)(478600001)(71200400001)(5660300002)(41300700001)(38070700009)(2906002)(33656002)(4744005)(86362001)(52536014)(4326008)(6862004)(8936002)(38100700002)(83380400001)(82960400001)(26005)(122000001)(8676002)(55016003)(6506007)(9686003)(7696005);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?9cvjX9f8IrPal82htcxsjRfxnLpY59VrKOqMWQ6IABRE+QhEdZEfeV237mQo?=
- =?us-ascii?Q?6X68DksrS8Q1DUgKm6KNeeySM6fzANfdXStMhsT5ZhIp84IyQU4S+PW1SL1p?=
- =?us-ascii?Q?EUHPNXnmQo91KLHP/trrVrxSx/i0Jj3qQEmayT9by8e5tdf7VKVpgppE56RT?=
- =?us-ascii?Q?i/cA/ivqeDLKz4wDlAxvJx0TOVJnGggw0uYpZ3e121s8/rwEj37cIL1TBfNu?=
- =?us-ascii?Q?svjdSQSajCVxWASUovLHB13xgp2XUKeI2h4ruon0Ou6mti/uOPG565ouUlOz?=
- =?us-ascii?Q?6hSFfbkZNddixpQvaFEkwU7u4nSEBY2weQiFBVR+3cLhWEhpALQCcRNFRVzp?=
- =?us-ascii?Q?aYIRFLDrW8bfbKJ0OYKUFbQqz0JNawh5rT96yDePeFBhghWrSzB2fYs+AO6b?=
- =?us-ascii?Q?25Lj//aqXAu+AJ7ZohnrCjM6ZlIe4MS8jBk/GjbypB1G4eb5qXrO+x53AAUE?=
- =?us-ascii?Q?hTERRTXf6zQ2WX6Royt0X886avkjSqa8J7uczApohspbxjQ9JqkrtSqU789v?=
- =?us-ascii?Q?hfJ0mGlS+gzd8QCe4HcIOCGmEnWqV2C7E0Bw5blfUXcpwGM0ZA6I7/dwuBUA?=
- =?us-ascii?Q?35DjR0S1fvesjzjXErQpadRAijNpqhsmUCwRPcJ6CUSunaViASL8IAYXpw+h?=
- =?us-ascii?Q?7kOXyjOy1X0GOkeTnVl1bOXBAWRy+KsyTKqNeCcBpE1YlmOgVn2WIYYl8hId?=
- =?us-ascii?Q?IaeZzHrBvHi1lGn/u4s79i6sPNV/YbSfZlsJWOkF2epNnGq2Eb3MiBnCZH/i?=
- =?us-ascii?Q?PBFsc7VJJu3hdGcyWtLmbbg0Bj4r1WWJEiBRvmm5n5JKcPZxZA91+5x0xm0d?=
- =?us-ascii?Q?5Q8u2OnbttnkQjl4VLoBV3ctSKpiTxBGomb1BwskOmHVBZ136FZPWuDPeWG4?=
- =?us-ascii?Q?DTTDFMoHjzU4koseDJh0V9gJ1hZf6tk42M6aIXqpjEnAwxqCwXSxv0RDdvSl?=
- =?us-ascii?Q?Qw8PHQMe/4agev6pUgXAtX7jYoYI9/hgnHjgYh6zXiRjkiMhoIN5ONDD/nDx?=
- =?us-ascii?Q?H74sfnUXZV7bvCTgY/2AzF4j7M+udWKQ8axabXYpGUM3ANPyWxhAouPd8b2S?=
- =?us-ascii?Q?1MWxGtMSJxLUYFyIW5dxTmhTMriIj5igEk4f+I6WqGzIUfe7xAyKx52Nl/2N?=
- =?us-ascii?Q?qACson6+lX1V+13NoPnGOlOXNA9asI/uE2OTtkRhRAJ09Qozp/ahNnJrKqE9?=
- =?us-ascii?Q?mH2VoDVE8GlweP7zfrY3atqnG35dexREZULn7Hfy0V/cezJxSi8j2uQJoFA2?=
- =?us-ascii?Q?KAkRNpEjn5SRlMq9YyabMJU5dmF+YVnJpIfySnJ46F67VIQ5WSuE9kXp8c88?=
- =?us-ascii?Q?gno4jUTHtOAuLlHQufHnJpBRMhBysoKA4b7YZbYpatkzLwUiEGWr/kuZ+7AA?=
- =?us-ascii?Q?8ss0CQnyfuMeJ4CvKc3YHRXmgZwk5+BhKp/QCc1PkTxrDlE/D2ONSsjFiN2t?=
- =?us-ascii?Q?+4XJlJE5FmInS9SDaMGAUbMD6VzEh5hXgcNDwDmmO9Vp0ofzD4tBm+ivAmJB?=
- =?us-ascii?Q?0uzYubw1PI//Z/0/aD8OeSDN2wARLltSzbPDU9rXRQkrcKm0tacvUjAtTxYW?=
- =?us-ascii?Q?VvD3viX0D9jPuQpqEcTU12Lcm4OU7hoM+Cn8+ZXA?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+X-IronPort-AV: E=McAfee;i="6600,9927,10915"; a="1018406103"
+X-IronPort-AV: E=Sophos;i="6.04,254,1695711600"; 
+   d="scan'208";a="1018406103"
+Received: from sohilmeh.sc.intel.com ([172.25.103.65])
+  by fmsmga006.fm.intel.com with ESMTP; 05 Dec 2023 17:40:06 -0800
+From: Sohil Mehta <sohil.mehta@intel.com>
+To: x86@kernel.org
+Cc: Thomas Gleixner <tglx@linutronix.de>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Ingo Molnar <mingo@redhat.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	"H . Peter Anvin" <hpa@zytor.com>,
+	Tony Luck <tony.luck@intel.com>,
+	Sohil Mehta <sohil.mehta@intel.com>,
+	Yazen Ghannam <yazen.ghannam@amd.com>,
+	Arnd Bergmann <arnd@arndb.de>,
+	linux-kernel@vger.kernel.org,
+	linux-edac@vger.kernel.org
+Subject: [PATCH] x86/mce: Update references to the Intel SDM
+Date: Wed,  6 Dec 2023 01:38:46 +0000
+Message-Id: <20231206013846.1859347-1-sohil.mehta@intel.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SJ1PR11MB6083.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: beb33b83-73f4-470f-fa2c-08dbf5e985db
-X-MS-Exchange-CrossTenant-originalarrivaltime: 05 Dec 2023 23:25:52.4871
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: dfVBGTM59YfBLtznMChr17tLbd/TJHwRJnBrKqusRzyKXPIGz6pHNGGdqNlshZb6wxv+KpnagXZSjFprtlyOaw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR11MB7680
-X-OriginatorOrg: intel.com
+Content-Transfer-Encoding: 8bit
 
-> As these SoCs share similar IBECC registers, most of them are having
-> compute die IDs added for EDAC support. There are some minor differences
-> among them regarding IBECC presence detection, the number of memory
-> controllers, and the most significant bit of the error address.
+Chapter numbers in the SDM are not expected to be stable. In case of
+Machine-Check Architecture, it has moved from chapter 15 to chapter 16
+with the recent SDM updates.
 
-Applied series.  Thanks.
+Instead of changing the chapter number and having to do it again later,
+update the comments with 'Chapter name -> "Sub-section name"' to keep it
+easy enough to find the specific reference. Note, this intentionally
+skips the intermediate section names to avoid making the comments
+unnecessarily wordy.
 
--Tony
+Signed-off-by: Sohil Mehta <sohil.mehta@intel.com>
+---
+There are other places in arch/x86 that have stale references to the SDM as
+well. I am sending an MCE specific patch first to get a pulse. I can send out
+more patches if this approach seems reasonable.
+
+I am open to suggestions, is there a better way to do this? Or should we get
+rid of the references all together (expect for really the obscure text that
+would be hard to find otherwise)?
+---
+ arch/x86/include/asm/mce.h     | 2 +-
+ arch/x86/kernel/cpu/mce/core.c | 6 ++++--
+ 2 files changed, 5 insertions(+), 3 deletions(-)
+
+diff --git a/arch/x86/include/asm/mce.h b/arch/x86/include/asm/mce.h
+index 6de6e1d95952..35fa25eb815b 100644
+--- a/arch/x86/include/asm/mce.h
++++ b/arch/x86/include/asm/mce.h
+@@ -72,7 +72,7 @@
+  */
+ #define MCACOD		  0xefff     /* MCA Error Code */
+ 
+-/* Architecturally defined codes from SDM Vol. 3B Chapter 15 */
++/* Architecturally defined error codes from SDM: Machine-Check Architecture */
+ #define MCACOD_SCRUB	0x00C0	/* 0xC0-0xCF Memory Scrubbing */
+ #define MCACOD_SCRUBMSK	0xeff0	/* Skip bit 12 ('F' bit) */
+ #define MCACOD_L3WB	0x017A	/* L3 Explicit Writeback */
+diff --git a/arch/x86/kernel/cpu/mce/core.c b/arch/x86/kernel/cpu/mce/core.c
+index 7b397370b4d6..d42122b1afea 100644
+--- a/arch/x86/kernel/cpu/mce/core.c
++++ b/arch/x86/kernel/cpu/mce/core.c
+@@ -482,7 +482,8 @@ bool mce_is_memory_error(struct mce *m)
+ 	case X86_VENDOR_INTEL:
+ 	case X86_VENDOR_ZHAOXIN:
+ 		/*
+-		 * Intel SDM Volume 3B - 15.9.2 Compound Error Codes
++		 * Intel SDM: Machine-Check Architecture -> "Compound Error
++		 * Codes"
+ 		 *
+ 		 * Bit 7 of the MCACOD field of IA32_MCi_STATUS is used for
+ 		 * indicating a memory error. Bit 8 is used for indicating a
+@@ -698,7 +699,8 @@ bool machine_check_poll(enum mcp_flags flags, mce_banks_t *b)
+ 			goto log_it;
+ 
+ 		/*
+-		 * Log UCNA (SDM: 15.6.3 "UCR Error Classification")
++		 * Log UCNA (Intel SDM: Machine-Check Architecture -> "UCR
++		 * Error Classification")
+ 		 * UC == 1 && PCC == 0 && S == 0
+ 		 */
+ 		if (!(m.status & MCI_STATUS_PCC) && !(m.status & MCI_STATUS_S))
+-- 
+2.34.1
+
 
