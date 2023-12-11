@@ -1,189 +1,149 @@
-Return-Path: <linux-edac+bounces-230-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-231-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8009880C098
-	for <lists+linux-edac@lfdr.de>; Mon, 11 Dec 2023 06:14:17 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 88BAC80CE39
+	for <lists+linux-edac@lfdr.de>; Mon, 11 Dec 2023 15:21:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9F1BA1C2084E
-	for <lists+linux-edac@lfdr.de>; Mon, 11 Dec 2023 05:14:16 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 182B1B20DA5
+	for <lists+linux-edac@lfdr.de>; Mon, 11 Dec 2023 14:21:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 200501C6B7;
-	Mon, 11 Dec 2023 05:14:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 62221487A8;
+	Mon, 11 Dec 2023 14:21:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="j1k87/K7"
+	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="TFgvBWqB"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7CFF386D;
+	Mon, 11 Dec 2023 06:21:15 -0800 (PST)
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 5903040E01AB;
+	Mon, 11 Dec 2023 14:21:13 +0000 (UTC)
+X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
+Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
+	header.d=alien8.de
+Received: from mail.alien8.de ([127.0.0.1])
+	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
+	with ESMTP id Z2N06UjmoT9y; Mon, 11 Dec 2023 14:21:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
+	t=1702304470; bh=gezEdtYhaIxe/fWsl459Ba6u1C7m+8fj9hdgHURkMxg=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=TFgvBWqBOCSqAp+bJFiNyhAooxk12oHs3vH9E9Cg3ZmHNguLYvSVhEIRD97Hvmc8o
+	 kLzfTbTOIzwHP3k2a50131kbU0dEMV/o7G8X9aK0nrfyZ8QBft/1nRoPesV4dMPVy6
+	 nlF0zlmo9tUNHGIAlCNHaeO0OfWvwlPW+81hsK4M1nA4IuonRZIqSS2Vv44ZozrbXJ
+	 lz+QkTJbt0+qmyQvtj5WO1UvCQjmnBSOH31GrChFmwu+PR7WnlRJBWudwK0C6cc2uu
+	 gYyckDwW+XS7nXoAsnFmXl4LidAr1qoROTj0rAWKJgDM5060hNLt+W3L2EVd9bgAld
+	 BrF7EgV14xqBKdUbvYJB2KVr4wXGXb/dAZ7Gdplh2yy2MvscQBSLL8NIuqI4c9cOWp
+	 zJDocthdv5rjz1xnDxAJ4C8ggV1mJNAYERvej7IjX4uGVYC/MvP3o7wKFgcCsDHvA6
+	 zJGs/EcX6k/9Uj2t4fYY/elzU54h6gpcOl5lykXd6BaC0UG6S/E4vzRww/9Lr24WDg
+	 6feMSI1ob7sR2A6TQ7A6A6Evr/wZUuLhA4pDWC3UScayh7ASC7rwk6aJ4lCkPBq2X3
+	 vAdoAd0rp/KzRVxxiZmh3ajduLm6MEkyQkyPvsYNlD2eZXJ6HZL79SAbtnGaaF552Z
+	 rdtb1vSmCQLsr1nLejEqXvzU=
+Received: from zn.tnic (pd95304da.dip0.t-ipconnect.de [217.83.4.218])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D716F1C29E;
-	Mon, 11 Dec 2023 05:14:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D0966C433C8;
-	Mon, 11 Dec 2023 05:14:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1702271651;
-	bh=1RaacpWnTkL7X+JkkZCzrmMSUdmiLmbVja5/lwCyjQE=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=j1k87/K7XA8EUz7Zf98AZPRZyBK3naglI6189/lN0rxULeWuXjMdwpoAWl6KaQDu7
-	 3blzWA81dIIb5kC62NvxjL2YeGPGNpo134fVU1OIWCZ8wISzfCfIHLmlVGVMjdoPZG
-	 ypL9U5OwRcNAf1U7n98XUq7ZJFwB4M6SkzSNXqE+3pRpe0S0TGnprKad8mHpY0EmG7
-	 5em7IPy2y3vOan4UyOPX4/fva1R2mmdUqcqVGk1AiRcjfacx76VCU6M0WuYEAjcXh4
-	 T6ORZDmE3uH9ZfnxzMcYRaWZ9lpYmUfPqCmUtVmz1kaPKNOxj7IfYhmyOtAPd0VHzM
-	 xA7qcayxQqJ7Q==
-Date: Mon, 11 Dec 2023 14:14:03 +0900
-From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-To: Xin Li <xin3.li@intel.com>
-Cc: linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-edac@vger.kernel.org, linux-hyperv@vger.kernel.org,
- kvm@vger.kernel.org, xen-devel@lists.xenproject.org, tglx@linutronix.de,
- mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
- x86@kernel.org, hpa@zytor.com, luto@kernel.org, pbonzini@redhat.com,
- seanjc@google.com, peterz@infradead.org, jgross@suse.com,
- ravi.v.shankar@intel.com, mhiramat@kernel.org, andrew.cooper3@citrix.com,
- jiangshanlai@gmail.com, nik.borisov@suse.com, shan.kang@intel.com
-Subject: Re: [PATCH v13 01/35] x86/cpufeatures,opcode,msr: Add the WRMSRNS
- instruction support
-Message-Id: <20231211141403.09e3f2d81eb499ba44035fef@kernel.org>
-In-Reply-To: <20231205105030.8698-2-xin3.li@intel.com>
-References: <20231205105030.8698-1-xin3.li@intel.com>
-	<20231205105030.8698-2-xin3.li@intel.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 4F69440E0140;
+	Mon, 11 Dec 2023 14:21:01 +0000 (UTC)
+Date: Mon, 11 Dec 2023 15:20:55 +0100
+From: Borislav Petkov <bp@alien8.de>
+To: Yazen Ghannam <yazen.ghannam@amd.com>
+Cc: linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
+	tony.luck@intel.com, x86@kernel.org, avadhut.naik@amd.com,
+	john.allen@amd.com, william.roche@oracle.com,
+	muralidhara.mk@amd.com
+Subject: Re: [PATCH v3 1/3] RAS: Introduce AMD Address Translation Library
+Message-ID: <20231211142055.GHZXcax0W+WD5/YBgm@fat_crate.local>
+References: <20231210194932.43992-1-yazen.ghannam@amd.com>
+ <20231210194932.43992-2-yazen.ghannam@amd.com>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20231210194932.43992-2-yazen.ghannam@amd.com>
 
-On Tue,  5 Dec 2023 02:49:50 -0800
-Xin Li <xin3.li@intel.com> wrote:
-
-> WRMSRNS is an instruction that behaves exactly like WRMSR, with
-> the only difference being that it is not a serializing instruction
-> by default. Under certain conditions, WRMSRNS may replace WRMSR to
-> improve performance.
-> 
-> Add its CPU feature bit, opcode to the x86 opcode map, and an
-> always inline API __wrmsrns() to embed WRMSRNS into the code.
-> 
-> Tested-by: Shan Kang <shan.kang@intel.com>
-> Signed-off-by: Xin Li <xin3.li@intel.com>
-
-Looks good to me.
-
-Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-
-Thanks,
-
-> ---
-> 
-> Changes since v12:
-> * Merge the 3 WRMSRNS patches into one (Borislav Petkov).
-> * s/cpu/CPU/g (Borislav Petkov).
-> * Shorten the WRMSRNS description (Borislav Petkov).
-> ---
->  arch/x86/include/asm/cpufeatures.h       |  1 +
->  arch/x86/include/asm/msr.h               | 18 ++++++++++++++++++
->  arch/x86/lib/x86-opcode-map.txt          |  2 +-
->  tools/arch/x86/include/asm/cpufeatures.h |  1 +
->  tools/arch/x86/lib/x86-opcode-map.txt    |  2 +-
->  5 files changed, 22 insertions(+), 2 deletions(-)
-> 
-> diff --git a/arch/x86/include/asm/cpufeatures.h b/arch/x86/include/asm/cpufeatures.h
-> index 149cc5d5c2ae..a903fc130e49 100644
-> --- a/arch/x86/include/asm/cpufeatures.h
-> +++ b/arch/x86/include/asm/cpufeatures.h
-> @@ -325,6 +325,7 @@
->  #define X86_FEATURE_FSRS		(12*32+11) /* "" Fast short REP STOSB */
->  #define X86_FEATURE_FSRC		(12*32+12) /* "" Fast short REP {CMPSB,SCASB} */
->  #define X86_FEATURE_LKGS		(12*32+18) /* "" Load "kernel" (userspace) GS */
-> +#define X86_FEATURE_WRMSRNS		(12*32+19) /* "" Non-serializing WRMSR */
->  #define X86_FEATURE_AMX_FP16		(12*32+21) /* "" AMX fp16 Support */
->  #define X86_FEATURE_AVX_IFMA            (12*32+23) /* "" Support for VPMADD52[H,L]UQ */
->  #define X86_FEATURE_LAM			(12*32+26) /* Linear Address Masking */
-> diff --git a/arch/x86/include/asm/msr.h b/arch/x86/include/asm/msr.h
-> index 65ec1965cd28..c284ff9ebe67 100644
-> --- a/arch/x86/include/asm/msr.h
-> +++ b/arch/x86/include/asm/msr.h
-> @@ -97,6 +97,19 @@ static __always_inline void __wrmsr(unsigned int msr, u32 low, u32 high)
->  		     : : "c" (msr), "a"(low), "d" (high) : "memory");
->  }
->  
-> +/*
-> + * WRMSRNS behaves exactly like WRMSR with the only difference being
-> + * that it is not a serializing instruction by default.
-> + */
-> +static __always_inline void __wrmsrns(u32 msr, u32 low, u32 high)
-> +{
-> +	/* Instruction opcode for WRMSRNS; supported in binutils >= 2.40. */
-> +	asm volatile("1: .byte 0x0f,0x01,0xc6\n"
-> +		     "2:\n"
-> +		     _ASM_EXTABLE_TYPE(1b, 2b, EX_TYPE_WRMSR)
-> +		     : : "c" (msr), "a"(low), "d" (high));
-> +}
+On Sun, Dec 10, 2023 at 01:49:30PM -0600, Yazen Ghannam wrote:
+> diff --git a/drivers/ras/amd/atl/Kconfig b/drivers/ras/amd/atl/Kconfig
+> new file mode 100644
+> index 000000000000..fcff387faa33
+> --- /dev/null
+> +++ b/drivers/ras/amd/atl/Kconfig
+> @@ -0,0 +1,41 @@
+> +# SPDX-License-Identifier: GPL-2.0-or-later
+> +#
+> +# AMD Address Translation Library Kconfig
+> +#
+> +# Copyright (c) 2023, Advanced Micro Devices, Inc.
+> +# All Rights Reserved.
+> +#
+> +# Author: Yazen Ghannam <Yazen.Ghannam@amd.com>
 > +
->  #define native_rdmsr(msr, val1, val2)			\
->  do {							\
->  	u64 __val = __rdmsr((msr));			\
-> @@ -297,6 +310,11 @@ do {							\
->  
->  #endif	/* !CONFIG_PARAVIRT_XXL */
->  
-> +static __always_inline void wrmsrns(u32 msr, u64 val)
-> +{
-> +	__wrmsrns(msr, val, val >> 32);
-> +}
+> +config AMD_ATL
+> +	tristate "AMD Address Translation Library"
+> +	depends on AMD_NB
+> +	imply AMD_ATL_MOD
+> +	select AMD_ATL_STUB
+> +	default N
+> +	help
+> +	  This library includes support for implementation-specific
+> +	  address translation procedures needed for various error
+> +	  handling cases.
 > +
->  /*
->   * 64-bit version of wrmsr_safe():
->   */
-> diff --git a/arch/x86/lib/x86-opcode-map.txt b/arch/x86/lib/x86-opcode-map.txt
-> index 5168ee0360b2..1efe1d9bf5ce 100644
-> --- a/arch/x86/lib/x86-opcode-map.txt
-> +++ b/arch/x86/lib/x86-opcode-map.txt
-> @@ -1051,7 +1051,7 @@ GrpTable: Grp6
->  EndTable
->  
->  GrpTable: Grp7
-> -0: SGDT Ms | VMCALL (001),(11B) | VMLAUNCH (010),(11B) | VMRESUME (011),(11B) | VMXOFF (100),(11B) | PCONFIG (101),(11B) | ENCLV (000),(11B)
-> +0: SGDT Ms | VMCALL (001),(11B) | VMLAUNCH (010),(11B) | VMRESUME (011),(11B) | VMXOFF (100),(11B) | PCONFIG (101),(11B) | ENCLV (000),(11B) | WRMSRNS (110),(11B)
->  1: SIDT Ms | MONITOR (000),(11B) | MWAIT (001),(11B) | CLAC (010),(11B) | STAC (011),(11B) | ENCLS (111),(11B)
->  2: LGDT Ms | XGETBV (000),(11B) | XSETBV (001),(11B) | VMFUNC (100),(11B) | XEND (101)(11B) | XTEST (110)(11B) | ENCLU (111),(11B)
->  3: LIDT Ms
-> diff --git a/tools/arch/x86/include/asm/cpufeatures.h b/tools/arch/x86/include/asm/cpufeatures.h
-> index 4af140cf5719..26a73ae18a86 100644
-> --- a/tools/arch/x86/include/asm/cpufeatures.h
-> +++ b/tools/arch/x86/include/asm/cpufeatures.h
-> @@ -322,6 +322,7 @@
->  #define X86_FEATURE_FSRS		(12*32+11) /* "" Fast short REP STOSB */
->  #define X86_FEATURE_FSRC		(12*32+12) /* "" Fast short REP {CMPSB,SCASB} */
->  #define X86_FEATURE_LKGS		(12*32+18) /* "" Load "kernel" (userspace) GS */
-> +#define X86_FEATURE_WRMSRNS		(12*32+19) /* "" Non-serializing WRMSR */
->  #define X86_FEATURE_AMX_FP16		(12*32+21) /* "" AMX fp16 Support */
->  #define X86_FEATURE_AVX_IFMA            (12*32+23) /* "" Support for VPMADD52[H,L]UQ */
->  #define X86_FEATURE_LAM			(12*32+26) /* Linear Address Masking */
-> diff --git a/tools/arch/x86/lib/x86-opcode-map.txt b/tools/arch/x86/lib/x86-opcode-map.txt
-> index 5168ee0360b2..1efe1d9bf5ce 100644
-> --- a/tools/arch/x86/lib/x86-opcode-map.txt
-> +++ b/tools/arch/x86/lib/x86-opcode-map.txt
-> @@ -1051,7 +1051,7 @@ GrpTable: Grp6
->  EndTable
->  
->  GrpTable: Grp7
-> -0: SGDT Ms | VMCALL (001),(11B) | VMLAUNCH (010),(11B) | VMRESUME (011),(11B) | VMXOFF (100),(11B) | PCONFIG (101),(11B) | ENCLV (000),(11B)
-> +0: SGDT Ms | VMCALL (001),(11B) | VMLAUNCH (010),(11B) | VMRESUME (011),(11B) | VMXOFF (100),(11B) | PCONFIG (101),(11B) | ENCLV (000),(11B) | WRMSRNS (110),(11B)
->  1: SIDT Ms | MONITOR (000),(11B) | MWAIT (001),(11B) | CLAC (010),(11B) | STAC (011),(11B) | ENCLS (111),(11B)
->  2: LGDT Ms | XGETBV (000),(11B) | XSETBV (001),(11B) | VMFUNC (100),(11B) | XEND (101)(11B) | XTEST (110)(11B) | ENCLU (111),(11B)
->  3: LIDT Ms
-> -- 
-> 2.43.0
-> 
+> +	  Enable this option if using DRAM ECC on Zen-based systems
+> +	  and OS-based error handling.
+> +
+> +config AMD_ATL_MOD
+> +	tristate "AMD Address Translation Library module"
+> +	depends on X86_64
+> +	default N
+> +	help
+> +	  This option provides the module component of the AMD Address
+> +	  Translation Library. It will be selected automatically if
+> +	  building the library. Minimal dependencies are given to avoid
+> +	  build errors for modules using the library.
+> +
+> +config AMD_ATL_STUB
+> +	bool "AMD Address Translation Library stub"
+> +	default N
+> +	help
+> +	  This option provides minimal built-in code to support the
+> +	  AMD Address Translation Library module. It will be selected
+> +	  automatically if building the library. No dependencies are given
+> +	  to avoid build errors for modules using the library.
 
+So, provided this stub thing even makes sense (I need to continue
+looking first since this is a huge diff), you don't need the help text
+and the bool prompt: a stub is prompt-less and is selected
+automatically.
+
+IOW:
+
+diff --git a/drivers/ras/amd/atl/Kconfig b/drivers/ras/amd/atl/Kconfig
+index fcff387faa33..348498d49b01 100644
+--- a/drivers/ras/amd/atl/Kconfig
++++ b/drivers/ras/amd/atl/Kconfig
+@@ -32,10 +32,4 @@ config AMD_ATL_MOD
+ 	  build errors for modules using the library.
+ 
+ config AMD_ATL_STUB
+-	bool "AMD Address Translation Library stub"
+-	default N
+-	help
+-	  This option provides minimal built-in code to support the
+-	  AMD Address Translation Library module. It will be selected
+-	  automatically if building the library. No dependencies are given
+-	  to avoid build errors for modules using the library.
++	def_bool N
 
 -- 
-Masami Hiramatsu (Google) <mhiramat@kernel.org>
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
 
