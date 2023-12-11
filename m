@@ -1,211 +1,305 @@
-Return-Path: <linux-edac+bounces-232-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-233-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1502480CF86
-	for <lists+linux-edac@lfdr.de>; Mon, 11 Dec 2023 16:28:32 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id EE5ED80DB27
+	for <lists+linux-edac@lfdr.de>; Mon, 11 Dec 2023 20:58:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 457EDB212AF
-	for <lists+linux-edac@lfdr.de>; Mon, 11 Dec 2023 15:28:29 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 069611C21634
+	for <lists+linux-edac@lfdr.de>; Mon, 11 Dec 2023 19:58:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3CF804B5A6;
-	Mon, 11 Dec 2023 15:28:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C39AF537F1;
+	Mon, 11 Dec 2023 19:58:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="4wePEfhZ"
+	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="jFPwmABA"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2067.outbound.protection.outlook.com [40.107.93.67])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A032BD6;
-	Mon, 11 Dec 2023 07:28:24 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ERp2QNtrqzyJGvnc7WjIJeL0cYHNBkOhCC/FQ6P7ZBZ61oQSxklFN69jHjI8upwCf12SS7jrQVI9B9mPTZZozehKrJ1pst3h2uKcY3tjTMcFtVBV2HJoMJsDFGYfsRA+hxJws4nlaC9u/g5agTm/w9BmGo502LFqKc1ymH7XRtq6CLvwIGtl6asSd/qFJRTk2o7qdxl9i7bwPzmZRIhrj7i/KU55+Xp384SccvcrLHGX/tfNfFjaDaTo/cHDSgS99p5ONy2/Jfo4/gxZPnUfjM0/Bfh0GoK1P+LdOd5j81mpFROKQjvZyc0uRInis8xnXr2I00FB5/R9Wmlf/nL9pw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=jf474CfQzEatd1XD11s2zMEvecXr7Uxncf8kYgeMpYc=;
- b=W0LXteA0+rzwyM62Rd3jm1yBVtDE8lgvLcdiOKxwoLy/n5u6rak5tup69n4NhTlDLFq6Z8AsVNZjJS6DgKpSKMevL+RirXD1ylvMvLg4hzz2ilc708HXFoPwRXNXm+atSJAp3YgszXM6mduaQgtIZB7YfL9qxA7gXpLNXEn5nRqJJkO7IVobyG2dwNSgY2CUoO7e7bbbb+kzRt+JKYmhhHpXfa7mRkshzapnpzaz8fcD6ZrEXqJqEMourzlncCI+TOF2++qzhP2xffNMU0ImYMRBeTCDITayE3EdzOe6e7hoOmVQnlzi3+t0akZjW3UbfhvpQFqFWhC9kYB21adPcg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=jf474CfQzEatd1XD11s2zMEvecXr7Uxncf8kYgeMpYc=;
- b=4wePEfhZgmS2St5+ROQ3y2RKEsP4J9WbERze/3aXVY6xJzQcyu0p/wKpBqs9WvYXj9/QUmAWMDShshaUkhTai9Cwe1Dl1FYdwnX3wLINFgSoJvclCMtyhtN9NxMoP1lN2BQwujK/VQdsT3P2bq3TQQrHJdp8ov/ipyOknAS9V/8=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from BN8PR12MB3108.namprd12.prod.outlook.com (2603:10b6:408:40::20)
- by CY8PR12MB7362.namprd12.prod.outlook.com (2603:10b6:930:52::5) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7068.32; Mon, 11 Dec
- 2023 15:28:22 +0000
-Received: from BN8PR12MB3108.namprd12.prod.outlook.com
- ([fe80::a9cf:f8b8:27bd:74d0]) by BN8PR12MB3108.namprd12.prod.outlook.com
- ([fe80::a9cf:f8b8:27bd:74d0%3]) with mapi id 15.20.7068.031; Mon, 11 Dec 2023
- 15:28:22 +0000
-Message-ID: <5581434e-92e6-4a67-a68b-1abb56bc0d99@amd.com>
-Date: Mon, 11 Dec 2023 10:28:19 -0500
-User-Agent: Mozilla Thunderbird
-Cc: yazen.ghannam@amd.com, linux-edac@vger.kernel.org,
- linux-kernel@vger.kernel.org, tony.luck@intel.com, x86@kernel.org,
- avadhut.naik@amd.com, john.allen@amd.com, william.roche@oracle.com,
- muralidhara.mk@amd.com
+Received: from mail.alien8.de (mail.alien8.de [IPv6:2a01:4f9:3051:3f93::2])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BC63D5;
+	Mon, 11 Dec 2023 11:58:01 -0800 (PST)
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 12BBA40E00CC;
+	Mon, 11 Dec 2023 19:57:58 +0000 (UTC)
+X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
+Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
+	header.d=alien8.de
+Received: from mail.alien8.de ([127.0.0.1])
+	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
+	with ESMTP id Zj-MLt3KMPAk; Mon, 11 Dec 2023 19:57:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
+	t=1702324675; bh=IVpOW3xZoonpLNrLg9Is3P4VLEpRfDjVNUSGnDcGk3U=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=jFPwmABA+SdHS4h79qRKi8hIpca46T03af5ECVgolQ9Jpi5dThDVQsccNh0pW96hE
+	 RNQj1C5Cst6+HseJi9QHo2xMkzFY3CiA40/gdu64eK8AgisbuaomM/BZIL9fa2b5sN
+	 Wa2xBl5itkXRlpkMHgsp38mnJqHxzwOLmyp+rb0j1fUc+Jt1fjS+kZbL3MefYdcmTF
+	 +KkT3EVvOOBihHynbQC7/5vGJF2qfymZ42qhUVW7EAioHvhgT9WRhAuCgkDzrLsMHC
+	 ArK2jwYNeOOmJ3YKJT+JYJHRrPV4M5pyED20csf4MZlXQTvl/niqo393/nVnspyv+g
+	 g+P3vTPV+tCnDgu/jYUr3GgSyWdKNdtAY5Q+2qG1B5cclZkh0azBw0t2MRHJfKzJeI
+	 c4BBZe1/G0i8V9+5MHoSl2x2+6JCUBjnE31+qR5CvEl9qENX0AhRLu3Xh0JSaVdcm3
+	 EaKWVMvX1TMpxEgedkTucL00Mcf6dSbAir2kPhTCkbpQoogS0iHE25y4EKs7IVAdeC
+	 wazPWnbIhSvZaQPnqLmxLaAThjolpNKt/wd9Qhj7cEKTebsVXCe8JPIC/00vc+XERj
+	 Z2isvMQJTifBYQNj02hZUOjZlqTJp6khIe/OTbVV3+kEWDhCpF/91lW9xoZw0YD9n2
+	 JR0zJyaE7CASCalQ+ruPNBS8=
+Received: from zn.tnic (pd95304da.dip0.t-ipconnect.de [217.83.4.218])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
+	(No client certificate requested)
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id B5A0B40E00C6;
+	Mon, 11 Dec 2023 19:57:45 +0000 (UTC)
+Date: Mon, 11 Dec 2023 20:57:39 +0100
+From: Borislav Petkov <bp@alien8.de>
+To: Yazen Ghannam <yazen.ghannam@amd.com>
+Cc: linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
+	tony.luck@intel.com, x86@kernel.org, avadhut.naik@amd.com,
+	john.allen@amd.com, william.roche@oracle.com,
+	muralidhara.mk@amd.com
 Subject: Re: [PATCH v3 1/3] RAS: Introduce AMD Address Translation Library
-To: Borislav Petkov <bp@alien8.de>
+Message-ID: <20231211195739.GIZXdps9DNvOgCR5Xs@fat_crate.local>
 References: <20231210194932.43992-1-yazen.ghannam@amd.com>
  <20231210194932.43992-2-yazen.ghannam@amd.com>
- <20231211142055.GHZXcax0W+WD5/YBgm@fat_crate.local>
-Content-Language: en-US
-From: Yazen Ghannam <yazen.ghannam@amd.com>
-In-Reply-To: <20231211142055.GHZXcax0W+WD5/YBgm@fat_crate.local>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: BN9PR03CA0286.namprd03.prod.outlook.com
- (2603:10b6:408:f5::21) To BN8PR12MB3108.namprd12.prod.outlook.com
- (2603:10b6:408:40::20)
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN8PR12MB3108:EE_|CY8PR12MB7362:EE_
-X-MS-Office365-Filtering-Correlation-Id: 9580a98f-16f0-4c40-dad0-08dbfa5dcf4a
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	duGj4726WoWUirDoBqXlEV5QHG0E9loWEkqBQ2ZcQVYOh6SYrRiNRQJIBd+R6/QV+kCsuCrtr7HZOIAMNXZwwlHhte8xyU9NcS4YR4JeENXfnFXgoXg6clALdfuiKUBhDonesJqRDJ5B4G3yg7t0t3p4rjmMNEm1leKlPHzVktFYnPDZF7Gbd3NWBjzx8UJjYCthDZeiA6UDoWydtit39Z+sQlDj2q3m4wgq/EVJAd53kzBhgiP31i/+j1wfdDOWxwm9+3aQqSSuep6evtcXM/wBFG+ZKz/d2Ml1MCV+9kRCeQnag8kRtHFN82qQF6JJvwvxEkXGLtUbtjHFVV7PhCH9B9u2T8U4pyzACymbLj9TVPEagh/DS/wTU3Vc1g02jCn72UxYMUXwTwetmJpUaSDRba3OsacKtdsMS/Q3muRZ2hZxKJM3m88Lc6QExX4rf0/OyVTOlqKCpadindG9+FHFzA4fpuI4iC2gR6gSMVCQ1Nk0+VV5sZu4N3l3jjHRIRVNICEj6gI4qWCmgVqa1nv1qo/8LtQvf7sTHtDKLA4/CdqVvZON11njVkzKc9kC7Q0ACAwpJW2maMNKjgArsVXJFkoWiFO2hOJEd7ywRVMTkRL0a3l/2t4daVmLxnS0RlnnA92l3kdMQbJqpJFMLA==
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3108.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(366004)(396003)(346002)(376002)(39860400002)(136003)(230922051799003)(1800799012)(186009)(64100799003)(451199024)(31686004)(66899024)(26005)(2616005)(66556008)(36756003)(38100700002)(31696002)(86362001)(44832011)(5660300002)(6512007)(53546011)(6506007)(6666004)(8936002)(8676002)(6486002)(66946007)(66476007)(316002)(6916009)(2906002)(4326008)(41300700001)(478600001)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?OTlCZEZJdXFvTTJDN3NZaENScm1YZ05OOS9BcUFUMmh1RjBmNUNQSWFmQkl2?=
- =?utf-8?B?cmhmdlBLN05HRnBzb0txTk41cjNwbnhSZEtQUktOVmphS2NPNGpWMHppSGRl?=
- =?utf-8?B?aGxWZ2E4eUI1d3ZoYXk1M01GWW1IWE1aRUV6RGMySU00Q2NBSWhYZzlJMk96?=
- =?utf-8?B?ZFhkTTFNRWRMS0hGandXU0JQS3ROUklVVFg5WG5yZTZaNVRGMFZwbmdrelQ2?=
- =?utf-8?B?K0Y0dnZDTERhSEJKY0MyMUg0emRIbmZVK25pT2dnMGV2SU9rdkRFQjdEZEx6?=
- =?utf-8?B?WlpzZVAvOTJJaGJpTTVvNURtakpEc3hmRWtWdjdkanJXNGdKaWx6aTVsdXU1?=
- =?utf-8?B?djFLTjRSWFduMkN6L0pFQ2ZxdG1TemZsOHVKOHA3K0hocTZEN3ZjTGpBczl5?=
- =?utf-8?B?TU1xSWRQN0lBeFVEZHdDZDFzVWh3RlNGTjRpNDRQMmJVM1cxYUZQZ1V3Vyto?=
- =?utf-8?B?dGdveCs3MmVoMjVKS2lWdFoweG1qSWtmTW5kTjNlTkFrR0hQYW5DZHdhNXMr?=
- =?utf-8?B?eEhKWFh6dnhCNG5YbUROZVpGZlkwby84emM2YWtnUG9jUmRUMUVkNGNNU3N5?=
- =?utf-8?B?Nmw5SDhBWjhlUlVWeFY0d00zRG5icERmdy9ac1hLYTVkVGtuWnpZVGRoMG14?=
- =?utf-8?B?YktDL2FCNlJIVzlPWU5wTmE0NjJmSjR6c3o1UWprKzVhYzhyTHF3dWtIdUQ2?=
- =?utf-8?B?WmQwQk0xVWVDWlM4eFhxOG9sc2l5UUc5WDJNbkcwcDMvSERPQUxycHBvRW5x?=
- =?utf-8?B?ZUhVQmlkRkJLbE10RW9OZnEzTXdFWDBGdUFaakMvNEgxS2ZURklJV1VNWjdX?=
- =?utf-8?B?RXorVXZtcTBXaUhLdXdPSGNaZ1B3ZjRSMFY1dWRJU3dwaWJSSFhxSFNzNjJ3?=
- =?utf-8?B?aXVjcUNYdkExSHdTMWxZbEp2U2Vyc0xac3QxUE5uMC8wTm40YTVrNGJpeXJs?=
- =?utf-8?B?NW4zc2NCUjNVV1hKTjJ4Z2VBRmFmczY1RDNMTzZOZ1U0d2xEVW53N2RoTVVp?=
- =?utf-8?B?V1dYa2d2VEVyeW1kQTJ0VTRUVXJ4b2NCKys4OE1xcTk1WGtra0FmbFlWYjUx?=
- =?utf-8?B?K3ZzRk53MXBzNGZXbHoxbU03WjdhKytFTDk4eTFLWmZteldjVDdtRHVLTGli?=
- =?utf-8?B?ZnRjcis3NXRvWHZlL2FLLzUrdE56MlhDb2I2VVIvRDVYdXVaM1lOdW5RQ20x?=
- =?utf-8?B?bWFnL0JlSGVCaGtyd2l6cCs4c1c5TmJmU2JRNk9PdXVodWpYbnJweHcrNTNL?=
- =?utf-8?B?cnFsWUIray9pVjY4MCtLZWV6Ri9WU2xSdWZIcVRDZkJRWStBNmtKM2wxMW5k?=
- =?utf-8?B?Rnh1WTlaeDlmTTQyRitndWEzS1l2SUpGSzZpVk00QVhtSDZ6OXFHcWR1SWpO?=
- =?utf-8?B?QXlxMXViQTRXODBneWE5UjZTaGkrcDl1WWR5U0VjSE90ZVZsSG9BVFRDV215?=
- =?utf-8?B?OU1KOHUxc01KdjNYSkJOMkZLODNESzVITUsydmJHTGJpSlZaNS9pTDg0b2tN?=
- =?utf-8?B?cDRUSWNmeUlqL0JVZndjNmxLVVhxUkU2TzJjWHgza1orRFlidXRWa3ljOGZz?=
- =?utf-8?B?V1pzaDI0bmhLZHhqMUFNbVBhZkl6bjFXK2RMN2tYWUs1eWZsR1Z0WTBzc1JT?=
- =?utf-8?B?YXRzVGZ3MlRRWlRoWklFYjdHb3k4MW1MT0FCWnBCaCtyWDNUWDdManZibkVo?=
- =?utf-8?B?a1FQVDdEYTZaR1F2cFd6ZGl4Y1dGRVIxdVRNeWNlZHI1WWltRmI2T0p4ZFkz?=
- =?utf-8?B?TCs5aEhYYmNmNFQ5VnBUNkNMNVNKNGNkaXJ4N3NNalByNzM5eVpzc1pwN093?=
- =?utf-8?B?Y3FBUHJRRXlEWjlvcFFGczVJYW1nV3MrYUcxazQ2cjFEU3E3THhlNXBURHE0?=
- =?utf-8?B?ckRmTHlFM1ppWHZ4NVc3ZVBXLzBUUEQ4SzJiV25NNzE0REVDOVViNDRHWGc2?=
- =?utf-8?B?WmV5a3IrVnVXUUpDRmpuaWh0R1N5WFdhMmRpclQ0TGJ2dFYzU3ZzOTFPaTBa?=
- =?utf-8?B?b3h0cGVJT3FYWXY2c25oSGt5N0lrbTZ4VUdIRmFPNlpzWWdFcnV0dy9kM1pz?=
- =?utf-8?B?NGVXcHVjVEtRZHBnQWFQOWFBczZaaTExbUVFMUwzODZhT01BMk9iZFRnVTIw?=
- =?utf-8?Q?UIQfxhNFmYLl8qCjRbEvNiXvy?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9580a98f-16f0-4c40-dad0-08dbfa5dcf4a
-X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3108.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Dec 2023 15:28:22.2925
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: NZSG5KV0govBRgrozzYs3clq/YV5ohlz6THjLcnYcjHxCv+7U7QQBNSEO0CkPGbp858D5FTnzqw5Z4xVj+sPMQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY8PR12MB7362
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20231210194932.43992-2-yazen.ghannam@amd.com>
 
-On 12/11/2023 9:20 AM, Borislav Petkov wrote:
-> On Sun, Dec 10, 2023 at 01:49:30PM -0600, Yazen Ghannam wrote:
->> diff --git a/drivers/ras/amd/atl/Kconfig b/drivers/ras/amd/atl/Kconfig
->> new file mode 100644
->> index 000000000000..fcff387faa33
->> --- /dev/null
->> +++ b/drivers/ras/amd/atl/Kconfig
->> @@ -0,0 +1,41 @@
->> +# SPDX-License-Identifier: GPL-2.0-or-later
->> +#
->> +# AMD Address Translation Library Kconfig
->> +#
->> +# Copyright (c) 2023, Advanced Micro Devices, Inc.
->> +# All Rights Reserved.
->> +#
->> +# Author: Yazen Ghannam <Yazen.Ghannam@amd.com>
->> +
->> +config AMD_ATL
->> +	tristate "AMD Address Translation Library"
->> +	depends on AMD_NB
->> +	imply AMD_ATL_MOD
->> +	select AMD_ATL_STUB
->> +	default N
->> +	help
->> +	  This library includes support for implementation-specific
->> +	  address translation procedures needed for various error
->> +	  handling cases.
->> +
->> +	  Enable this option if using DRAM ECC on Zen-based systems
->> +	  and OS-based error handling.
->> +
->> +config AMD_ATL_MOD
->> +	tristate "AMD Address Translation Library module"
->> +	depends on X86_64
->> +	default N
->> +	help
->> +	  This option provides the module component of the AMD Address
->> +	  Translation Library. It will be selected automatically if
->> +	  building the library. Minimal dependencies are given to avoid
->> +	  build errors for modules using the library.
->> +
->> +config AMD_ATL_STUB
->> +	bool "AMD Address Translation Library stub"
->> +	default N
->> +	help
->> +	  This option provides minimal built-in code to support the
->> +	  AMD Address Translation Library module. It will be selected
->> +	  automatically if building the library. No dependencies are given
->> +	  to avoid build errors for modules using the library.
-> 
-> So, provided this stub thing even makes sense (I need to continue
-> looking first since this is a huge diff), you don't need the help text
-> and the bool prompt: a stub is prompt-less and is selected
-> automatically.
-> 
-> IOW:
-> 
-> diff --git a/drivers/ras/amd/atl/Kconfig b/drivers/ras/amd/atl/Kconfig
-> index fcff387faa33..348498d49b01 100644
-> --- a/drivers/ras/amd/atl/Kconfig
-> +++ b/drivers/ras/amd/atl/Kconfig
-> @@ -32,10 +32,4 @@ config AMD_ATL_MOD
->   	  build errors for modules using the library.
->   
->   config AMD_ATL_STUB
-> -	bool "AMD Address Translation Library stub"
-> -	default N
-> -	help
-> -	  This option provides minimal built-in code to support the
-> -	  AMD Address Translation Library module. It will be selected
-> -	  automatically if building the library. No dependencies are given
-> -	  to avoid build errors for modules using the library.
-> +	def_bool N
-> 
+On Sun, Dec 10, 2023 at 01:49:30PM -0600, Yazen Ghannam wrote:
+> diff --git a/drivers/ras/amd/atl/core.c b/drivers/ras/amd/atl/core.c
+> new file mode 100644
+> index 000000000000..6a6220fef81f
+> --- /dev/null
+> +++ b/drivers/ras/amd/atl/core.c
+> @@ -0,0 +1,217 @@
+> +// SPDX-License-Identifier: GPL-2.0-or-later
+> +/*
+> + * AMD Address Translation Library
+> + *
+> + * core.c : Module init and base translation functions
+> + *
+> + * Copyright (c) 2023, Advanced Micro Devices, Inc.
+> + * All Rights Reserved.
+> + *
+> + * Author: Yazen Ghannam <Yazen.Ghannam@amd.com>
+> + */
+> +
+> +#include <linux/module.h>
+> +#include <asm/cpu_device_id.h>
+> +
+> +#include "internal.h"
+> +
+> +struct df_config df_cfg __read_mostly;
+> +
+> +static int addr_over_limit(struct addr_ctx *ctx)
+> +{
+> +	u64 dram_limit_addr;
+> +
+> +	if (df_cfg.rev >= DF4)
+> +		dram_limit_addr  = FIELD_GET(DF4_DRAM_LIMIT_ADDR, ctx->map.limit);
+> +	else
+> +		dram_limit_addr  = FIELD_GET(DF2_DRAM_LIMIT_ADDR, ctx->map.limit);
 
-Ah good deal. Better than padding to meet a minimum length. :)
+One too many spaces before the '='.
 
-Thanks,
-Yazen
+> +
+> +	dram_limit_addr <<= DF_DRAM_BASE_LIMIT_LSB;
+> +	dram_limit_addr |= GENMASK(DF_DRAM_BASE_LIMIT_LSB - 1, 0);
+> +
+> +	/* Is calculated system address above DRAM limit address? */
+> +	if (ctx->ret_addr > dram_limit_addr) {
+> +		warn_on_assert("Calculated address (0x%016llx) > DRAM limit (0x%016llx)",
+
+Hmm, where is the "assert" aspect of that macro?
+
+It looks to me more like atl_warn() type thing which you define for your
+driver to do special stuff.
+
+Also, are you sure you want to dump it here on every attempted SPA
+conversion?
+
+I guess yes. I'm just worried that it might become too noisy but we'll
+fix it later if that turns out to be the case...
+
+> +			       ctx->ret_addr, dram_limit_addr);
+> +		return -EINVAL;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static bool legacy_hole_en(struct addr_ctx *ctx)
+> +{
+> +	u32 reg = ctx->map.base;
+> +
+> +	if (df_cfg.rev >= DF4)
+> +		reg = ctx->map.ctl;
+> +
+> +	return FIELD_GET(DF_LEGACY_MMIO_HOLE_EN, reg);
+> +}
+> +
+> +static int add_legacy_hole(struct addr_ctx *ctx)
+> +{
+> +	u32 dram_hole_base;
+> +	u8 func = 0;
+> +
+> +	if (!legacy_hole_en(ctx))
+> +		return 0;
+> +
+> +	if (df_cfg.rev >= DF4)
+> +		func = 7;
+> +
+> +	if (df_indirect_read_broadcast(ctx->node_id, func, 0x104, &dram_hole_base))
+> +		return -EINVAL;
+> +
+> +	dram_hole_base &= DF_DRAM_HOLE_BASE_MASK;
+> +
+> +	if (ctx->ret_addr >= dram_hole_base)
+> +		ctx->ret_addr += (BIT_ULL(32) - dram_hole_base);
+> +
+> +	return 0;
+> +}
+> +
+> +static u64 get_base_addr(struct addr_ctx *ctx)
+> +{
+> +	u64 base_addr;
+> +
+> +	if (df_cfg.rev >= DF4)
+> +		base_addr = FIELD_GET(DF4_BASE_ADDR, ctx->map.base);
+> +	else
+> +		base_addr = FIELD_GET(DF2_BASE_ADDR, ctx->map.base);
+> +
+> +	return base_addr << DF_DRAM_BASE_LIMIT_LSB;
+> +}
+> +
+> +static int add_base_and_hole(struct addr_ctx *ctx)
+> +{
+> +	ctx->ret_addr += get_base_addr(ctx);
+> +
+> +	if (add_legacy_hole(ctx))
+> +		return -EINVAL;
+> +
+> +	return 0;
+> +}
+> +
+> +static bool late_hole_remove(struct addr_ctx *ctx)
+> +{
+> +	if (df_cfg.rev == DF3p5)
+> +		return true;
+> +
+> +	if (df_cfg.rev == DF4)
+> +		return true;
+> +
+> +	if (ctx->map.intlv_mode == DF3_6CHAN)
+> +		return true;
+> +
+> +	return false;
+> +}
+> +
+> +int norm_to_sys_addr(u8 socket_id, u8 die_id, u8 cs_inst_id, u64 *addr)
+								^^^^^^^^^
+
+Can we not do that? Output function parameters.
+
+Are all addr values valid or is there an invalid one - -1 for example
+- which you can use as an error value?
+
+And then you can turn this into:
+
+unsigned long norm_to_sys_addr(u8 socket_id, u8 die_id, u8 cs_inst_id, unsigned long addr)
+
+and callers can do IS_ERR_VALUE(ret) on the return value.
+
+See include/linux/err.h
+
+> +{
+> +	struct addr_ctx ctx;
+> +
+> +	if (df_cfg.rev == UNKNOWN)
+> +		return -EINVAL;
+> +
+> +	memset(&ctx, 0, sizeof(ctx));
+> +
+> +	/* We start from the normalized address */
+
+s/We start/Start/
+
+> +	ctx.ret_addr = *addr;
+> +	ctx.inst_id = cs_inst_id;
+> +
+> +	ctx.inputs.norm_addr = *addr;
+> +	ctx.inputs.socket_id = socket_id;
+> +	ctx.inputs.die_id = die_id;
+> +	ctx.inputs.cs_inst_id = cs_inst_id;
+> +
+> +	if (determine_node_id(&ctx, socket_id, die_id))
+> +		return -EINVAL;
+> +
+> +	if (get_address_map(&ctx))
+> +		return -EINVAL;
+> +
+> +	if (denormalize_address(&ctx))
+> +		return -EINVAL;
+> +
+> +	if (!late_hole_remove(&ctx) && add_base_and_hole(&ctx))
+> +		return -EINVAL;
+> +
+> +	if (dehash_address(&ctx))
+> +		return -EINVAL;
+> +
+> +	if (late_hole_remove(&ctx) && add_base_and_hole(&ctx))
+> +		return -EINVAL;
+> +
+> +	if (addr_over_limit(&ctx))
+> +		return -EINVAL;
+> +
+> +	*addr = ctx.ret_addr;
+> +	return 0;
+> +}
+> +
+> +static void check_for_legacy_df_access(void)
+> +{
+> +	/*
+> +	 * All Zen-based systems before Family 19h use the legacy
+> +	 * DF Indirect Access (FICAA/FICAD) offsets.
+> +	 */
+> +	if (boot_cpu_data.x86 < 0x19) {
+> +		df_cfg.flags.legacy_ficaa = true;
+> +		return;
+> +	}
+> +
+> +	/* All systems after Family 19h use the current offsets. */
+> +	if (boot_cpu_data.x86 > 0x19)
+> +		return;
+> +
+> +	/* Some Family 19h systems use the legacy offsets. */
+> +	switch (boot_cpu_data.x86_model) {
+> +	case 0x00 ... 0x0f:
+> +	case 0x20 ... 0x5f:
+> +	       df_cfg.flags.legacy_ficaa = true;
+> +	}
+> +}
+> +
+> +static const struct x86_cpu_id amd_atl_cpuids[] = {
+> +	X86_MATCH_FEATURE(X86_FEATURE_SMCA, NULL),
+
+I'd expect for only this one to be needed, but not those below.
+
+> +	X86_MATCH_FEATURE(X86_FEATURE_ZEN, NULL),
+> +	X86_MATCH_FEATURE(X86_FEATURE_ZEN2, NULL),
+> +	X86_MATCH_FEATURE(X86_FEATURE_ZEN3, NULL),
+> +	X86_MATCH_FEATURE(X86_FEATURE_ZEN4, NULL),
+> +	{ }
+> +};
+
+To be continued...
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
 
