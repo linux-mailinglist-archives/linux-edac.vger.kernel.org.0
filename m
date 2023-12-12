@@ -1,91 +1,135 @@
-Return-Path: <linux-edac+bounces-238-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-239-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 71A3380F1E1
-	for <lists+linux-edac@lfdr.de>; Tue, 12 Dec 2023 17:07:51 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7E49C80F735
+	for <lists+linux-edac@lfdr.de>; Tue, 12 Dec 2023 20:52:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0F4572817D1
-	for <lists+linux-edac@lfdr.de>; Tue, 12 Dec 2023 16:07:50 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1F09D281F91
+	for <lists+linux-edac@lfdr.de>; Tue, 12 Dec 2023 19:52:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 650BA7764A;
-	Tue, 12 Dec 2023 16:07:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 242AA63595;
+	Tue, 12 Dec 2023 19:52:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="byJ8D8Fs"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="TvQRiW1r"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from mail.alien8.de (mail.alien8.de [IPv6:2a01:4f9:3051:3f93::2])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DAF39A;
-	Tue, 12 Dec 2023 08:07:44 -0800 (PST)
-Received: from localhost (localhost.localdomain [127.0.0.1])
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 3FEAB40E00CB;
-	Tue, 12 Dec 2023 16:07:42 +0000 (UTC)
-X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
-Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
-	header.d=alien8.de
-Received: from mail.alien8.de ([127.0.0.1])
-	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-	with ESMTP id 2m3sbeLmrXGA; Tue, 12 Dec 2023 16:07:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-	t=1702397260; bh=rgF4Bgt2FHI1I0QLn6tARPDHJomiCukB+MTc8kUTHCg=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=byJ8D8FsTyNpvxUZjs4ALFLRufhgmqjViMKCOkAEp3MN2VbLsxqMvEycxTSFi1Qjh
-	 SkaVPhWr7Beyu2L9Kv2+JsLa7fyowipiGd79zvxWi320JYgncpS1pDIpR+Y0+DSd1y
-	 6cX0tkbSN4GV4PPTuxWkwc598pqxiMOwdTinIjdYhJ36/sp5POHv7JZfWBJ9Sa+dSZ
-	 PBshqXXLOAxZli6UqaWf9pjCDnpd/T5GZcsGMaUlcU+jeeoR5h9u6OHNGrOzSQ6J71
-	 jreQSHBTNVo1dHM4FCQjyPlI6tccI9W/zRQTk1hu7SNHQwlanmmbnsg5kbYcZaJ3+e
-	 sqY2Jx5fBWadZYw1ADwRY7HIDNOhnY6TFpNkddDboUy+MhQwNWTNEnIiQvEchD7MP+
-	 G2pXbS3CJmI4FUPoc89jO0pGfZZHuisLSIuu5KoK+2uY8XO3qfiqGXE+rkCGef8yBv
-	 hh7Ex7YTQ+0qHGLSVKppVL19jbd/DJg4QtOnMvzzxLDs3NtlWIVNyflVJ+q/hLbbJX
-	 g+HjTI+Vt4ZxF9d1i4Bbn2VRtIBcFllKQK9pcUQyUzjqveVTjKO5encLCludSGFwIu
-	 TXF9keHxu7l3dMniCyTPs9TJEyiIJlmytsoi6C4rONXNnu9xsknmjV8sshrLmx1lfo
-	 5J+R73fjrQliO4AY5dzotRPQ=
-Received: from zn.tnic (pd95304da.dip0.t-ipconnect.de [217.83.4.218])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
-	(No client certificate requested)
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 050FD40E00CC;
-	Tue, 12 Dec 2023 16:07:30 +0000 (UTC)
-Date: Tue, 12 Dec 2023 17:07:25 +0100
-From: Borislav Petkov <bp@alien8.de>
-To: Yazen Ghannam <yazen.ghannam@amd.com>
-Cc: linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
-	tony.luck@intel.com, x86@kernel.org, avadhut.naik@amd.com,
-	john.allen@amd.com, william.roche@oracle.com,
-	muralidhara.mk@amd.com
-Subject: Re: [PATCH v3 1/3] RAS: Introduce AMD Address Translation Library
-Message-ID: <20231212160725.GFZXiFPSeoGwmRenpq@fat_crate.local>
-References: <20231210194932.43992-1-yazen.ghannam@amd.com>
- <20231210194932.43992-2-yazen.ghannam@amd.com>
- <20231212132907.GJZXhgIyss9eT1MsNb@fat_crate.local>
- <a3305a97-4936-4cfd-b706-10b7792acdad@amd.com>
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2079.outbound.protection.outlook.com [40.107.92.79])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 196019A;
+	Tue, 12 Dec 2023 11:52:35 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=k0aLrDY3J6MGfRkstAIzF/tkNPjR9FR2WID5f5Jds6SZO3N7X2L0SW8ja7PA12PuarPUXKcSN5JjB0nRVszllwF7zBkHsU9aCtrJ8SdqxALb5pO2N0fXGVRNu4w4KGY+DriaiwGfRCISr1ljKb2jUw/40X2U4mRYK5/jDS2TfSLQBiH2J7F05suRmEn8SNYo7ubFpYbvsbQlNikpx1NApYAt2eYdOryw1Z7ggT1TeSbSxdZAxuLCCe6vLPnkuCKo6gbUx1u+8J94/oipot3subg0kXDjLvZPzD7rXEH4uI5ewUrBXsan5SL+rurJ0pVCKtXNnqmOJIJ85Z/xS0mpzQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=NCa5NqkaJeBpWPopOR5Jxf9F+fy0B3qL3L79FO1rkZ0=;
+ b=A5LvHcFI+BhUomPa6sJCLXSfOpTJerHVGJPgCo3pilJ3a+Tv3A7pRdDIpUkHGvv8A34ysYAgcwtGRmiQEb3+OI6Fz6y8DT/JTto2Gbga/BdUMUFqPK8kclm/pUTiBOfL2dF8u7jB9/YpG2HWp6c3h6KyDSSx9P/u6ie7gHCw5+9cfkUZUae5nlsElAUCzREKFqYjlop1QN+MnYdtK1dlXbAhQg8XLBWzldzVl4jAf7yN2OPwDaMvR9xmOWjlMPlZ6P2InpmuZCU41fsOBmYFuJbIU5+zy1SbpTVJHBUvFkuHriGrj8+ytHErh5/b0tteRoncnZlolegRwMkF5celWA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=NCa5NqkaJeBpWPopOR5Jxf9F+fy0B3qL3L79FO1rkZ0=;
+ b=TvQRiW1rCiLn1PPqVVWVsbZu1WXEwoepmDUr1PY7mb4DH468F6sDozpzplCTGNKP/uZ3KcSoDF7oOQr6sKqAv/V/jQBi68GBJGcT8vxVihIAtsDDeu/+o57A2eguwErIVSbL7tuZDI9JIiM5XLRnfXw4emHJaelwXzDSFOlda98=
+Received: from BYAPR11CA0078.namprd11.prod.outlook.com (2603:10b6:a03:f4::19)
+ by DS0PR12MB7803.namprd12.prod.outlook.com (2603:10b6:8:144::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7068.32; Tue, 12 Dec
+ 2023 19:52:32 +0000
+Received: from MWH0EPF000971E2.namprd02.prod.outlook.com
+ (2603:10b6:a03:f4:cafe::40) by BYAPR11CA0078.outlook.office365.com
+ (2603:10b6:a03:f4::19) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7068.32 via Frontend
+ Transport; Tue, 12 Dec 2023 19:52:31 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ MWH0EPF000971E2.mail.protection.outlook.com (10.167.243.69) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.7091.18 via Frontend Transport; Tue, 12 Dec 2023 19:52:31 +0000
+Received: from titanite-d354host.amd.com (10.180.168.240) by
+ SATLEXMB04.amd.com (10.181.40.145) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.34; Tue, 12 Dec 2023 13:52:28 -0600
+From: Avadhut Naik <avadhut.naik@amd.com>
+To: <linux-acpi@vger.kernel.org>, <linux-edac@vger.kernel.org>
+CC: <linux-kernel@vger.kernel.org>, <yazen.ghannam@amd.com>,
+	<avadnaik@amd.com>
+Subject: [PATCH 0/1] Tool for parsing the ACPI PHAT Table
+Date: Tue, 12 Dec 2023 13:52:18 -0600
+Message-ID: <20231212195219.2348858-1-avadhut.naik@amd.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <a3305a97-4936-4cfd-b706-10b7792acdad@amd.com>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: MWH0EPF000971E2:EE_|DS0PR12MB7803:EE_
+X-MS-Office365-Filtering-Correlation-Id: 078cf8d1-51ae-42ee-0dc7-08dbfb4be0e5
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	bRBRcTG+0lkvLkHiaSxiCZYQCReEYqa/+vTqAldToXYIsptqsfmIoML84nJb4mqbEnrPzSYCfN3GxnXlks1K7r6AUZ851Y2u705tSAnDdxl/1rx+C38F2yz3uTbeK6EKEg+ylrakAjuYSjWfXZJ++IvA6NifPbGOmwWv0wrgM9DE/ekxFVyN4qs7PJkrbXa9QZ/cLK5q8UP3mYzR2P2QqU3Q36GIdj6+XSyfJPqqWt1qnEqBnKfEPPbswBRCpQL0Ef/6YHajXDH/xCA8XRVojwMUIOtYS715G6Cs1lRspD0GDoAjHmntZWbGgwVZ3ysT9uWZfgCSeGUkVS4u9mjogwbP+8LKeICM/A9Q29D1Uet/GWUZ+4Z08KcxZ6jHnB4ppLhyzvKDSeWh7xX7hOyWPK0co6vEeE86LCZFvcRVTyqX6N3Oob550BdRccVdsfKyFxzCLLnwLNC1JNStabL2OFmcCOLvsSvElIY77YXrbCgTd0ru9F9M0+nqzOgGiwbkct+LEZ66RZDP9FKgmTZ94L8q9DZunZYQRVCardGcAY9LrjF5WZj+FlEPSmPPlsTK73nK431zYFyTVjV8AyVfkny81k9oPrXxGcKSovIIo+sN/Y0hPlDPFmg9XZVw9pDcVEnh34tiFvCIvDpDcpFnzRHvuvG6h0AEK38xe9UESheFr5nxc1JW2ub1eZ2Yj5+FSXw3ecbKOHLViv3fI8dTNRzDk/VVq+S0FIJiybqAnaqkcbT1QMY6WP83D6xSkMk29104Va8vFInvWc4h2n78sw==
+X-Forefront-Antispam-Report:
+	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230031)(4636009)(39860400002)(346002)(376002)(136003)(396003)(230922051799003)(451199024)(1800799012)(186009)(64100799003)(82310400011)(40470700004)(46966006)(36840700001)(40460700003)(426003)(26005)(2616005)(16526019)(1076003)(336012)(6666004)(36860700001)(5660300002)(44832011)(4326008)(47076005)(478600001)(2906002)(41300700001)(7696005)(8676002)(8936002)(450100002)(70586007)(54906003)(110136005)(70206006)(316002)(82740400003)(86362001)(81166007)(356005)(36756003)(40480700001)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Dec 2023 19:52:31.5877
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 078cf8d1-51ae-42ee-0dc7-08dbfb4be0e5
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	MWH0EPF000971E2.namprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB7803
 
-On Tue, Dec 12, 2023 at 09:33:44AM -0500, Yazen Ghannam wrote:
-> That's mostly how it was in the previous revision. Should I go back to that
-> then?
 
-Yes please. We should avoid doing homegrown stuff and use the kernel
-facilities which are already there.
+Hi,
 
-> Okay, can do. This can drop the assert_*() helpers like the comments above.
+Future AMD SOCs will support the ACPI Platform Health Assessment Table
+(PHAT) to export an extensible set of platform health related telemetry
+through Firmware Version and Firmware Health Data Records.
 
-Yap.
+The table will also export the Reset Reason Health Record which highlights
+the cause of the last system reset in case of both expected and unexpected
+events. Vendor-specific data capturing the underlying state of the system
+during reset will also be exported through the record.
 
-Thx.
+As such, the table, in general, provides important debugging information,
+supplementing the existing error reporting mechanisms on the platform viz.
+BERT, CPER, etc., especially when debugging unexpected resets.[1]
+
+With that end in view, we developed this tool for parsing the PHAT table
+on SOCs that support it. However, we were somewhat confused about existing,
+appropriate projects through which this tool can be shared.
+
+Any recommendations on / pointers to projects through which this tool can be
+shared with end users? Will personally work with the project maintainers to
+have this tool incorporated there.
+
+TIA!
+
+[1] ACPI specification 6.5, section 5.2.31.5
+
+Avadhut Naik (1):
+  parse_phat: Add support for ACPI PHAT Table parsing
 
 -- 
-Regards/Gruss,
-    Boris.
+2.34.1
 
-https://people.kernel.org/tglx/notes-about-netiquette
 
