@@ -1,53 +1,53 @@
-Return-Path: <linux-edac+bounces-249-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-250-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 55238812DC9
-	for <lists+linux-edac@lfdr.de>; Thu, 14 Dec 2023 11:55:02 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id E3782813324
+	for <lists+linux-edac@lfdr.de>; Thu, 14 Dec 2023 15:30:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F09F2282292
-	for <lists+linux-edac@lfdr.de>; Thu, 14 Dec 2023 10:55:00 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2130F1C21BA3
+	for <lists+linux-edac@lfdr.de>; Thu, 14 Dec 2023 14:30:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E68F03D961;
-	Thu, 14 Dec 2023 10:54:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 72FE459E5C;
+	Thu, 14 Dec 2023 14:30:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="ihUCP6pf"
+	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="BFYbKciB"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F9AF172C;
-	Thu, 14 Dec 2023 02:54:32 -0800 (PST)
+Received: from mail.alien8.de (mail.alien8.de [IPv6:2a01:4f9:3051:3f93::2])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A190132;
+	Thu, 14 Dec 2023 06:30:25 -0800 (PST)
 Received: from localhost (localhost.localdomain [127.0.0.1])
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 7840F40E00A9;
-	Thu, 14 Dec 2023 10:54:30 +0000 (UTC)
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 1393F40E0140;
+	Thu, 14 Dec 2023 14:30:23 +0000 (UTC)
 X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
 Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
 	header.d=alien8.de
 Received: from mail.alien8.de ([127.0.0.1])
 	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-	with ESMTP id 8arKyVspqgjI; Thu, 14 Dec 2023 10:54:28 +0000 (UTC)
+	with ESMTP id gAPdoYuNOTGW; Thu, 14 Dec 2023 14:30:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-	t=1702551267; bh=PmUrwYFObXJQWVp8txpK7w/dwTwMpdw31maROJ94SIw=;
+	t=1702564221; bh=LK/AU/A+aF7T8cXp3zZKCi7x8DkBYfCbgQoPPthBTN8=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=ihUCP6pfwbpL2lW0/K2c1rPJV8QLcaaax0KMA705ZC7EgP/UpEyyBKZ7e+/9FueJ5
-	 uV5hj7bBLvHs1RTKQc3zyhWI9ivzI+jbUTRvJVGEoM34HY0iiSL81HIxRm/Y4+HKGl
-	 lKb5rQB2PynTCOr8LYt25pI8jZHHmQB2OyofIKKTAduCRep2LFtZksspqJcJNi4lA5
-	 xUeMO8ktYKetOj7SEPIByiznA4dHNiTrABqTRu4NThjOkddoOuvq5y+kabDmutI/sE
-	 9y7/tAcYsAFe7JTp5p0qAfI91AERJbglTyQIOt8XibB1TmXD5dLGHODNybtK3ppqyv
-	 0RSrDKuenezw7DVK+KmMq4ksPVZX/hUwL2cX/Ej8sFwPMPp+bmFyajxQQxw3slmVWG
-	 n7W3wUcS/p4ZvKF2qxHU9aBY9Q1eLTXPC9XFQWg57RwkH1AwdcJzSCCuc0NpuhO9Te
-	 r1MHjTHn8blClQ8ThW+tYmTPvasDbequEQNSgjSViALp19RZO8DC0ZH3iHOr5rHBe3
-	 kmmHrrk46+bGXhK9tWRRg1XCBBSqgIDdjdExzEFHdhaSuXiH6IpBJ7e/Jptv3n1U/F
-	 4CTY4unsKyh13ABcKBeUY9yp8JSQKafmJvLuY+6Bk7poJzJcv2JgyK+22HkFXq7pXt
-	 AWHzgUs89QKGP6vbXa2fz1fc=
+	b=BFYbKciB1F2hqGU/NaNH5wSl7D3an8RkGmtHn38OvfNloOSgg0pPqMr85BKCRE6kO
+	 WmIVFxZdB/VHOqrDLnxcJ0iK2Pd03njhB/oP4gLuzZ+yLqQld3GdQ1Ij/R0uCJ4v25
+	 wdGQ2RMZ6BCfDvw89suYoIgtikqSax2S4vJkIj5RyCww9EP/JDx27tA1Uqkea12lLH
+	 L3JX7WMElth6Zl+X0+E3C0e2FmcCagartPcHZHBLRkHBNWS8uzxskk12wjT7tJwLX1
+	 P998+6ZfEfTbreH2d1l3p91gfQLPPBJB0Rxkb+K68Rt+A9qwK1tGjVFoF+uOhoo3fW
+	 xJASeqqZOrGbzOi+XBPRPdlzDjDf8o+IU+M4rCp76BWsJqKKu3iruQXXdVzaKyYkmY
+	 +u5Yg8v5vge7UtNSoRqQ0AaCJ7sOvj1qwKRknZSv06hHlHh2j7AmGEuiGFQipQs6Xh
+	 1CVnsLo4H4b3ecLkmc19s+z8Spgb1l4jTEK+VeH9HNUHCKsSeakj+2wvcomAYf6MdR
+	 KuFoiR76UesmnaMLZAhmVUfCx5NXIdyU2C7vQ2Wbcf8RwGEJqN5BVufCAEUavdpsl2
+	 Ti513mNkem82OebKfJuoc0NJv9QmdZuenHULqBfBG1O5RBlbKqKas/f/OQI3O4IpSE
+	 Yn2JtH4oW7qbYSoDD4GCBN08=
 Received: from zn.tnic (pd95304da.dip0.t-ipconnect.de [217.83.4.218])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
 	(No client certificate requested)
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 17E7440E0140;
-	Thu, 14 Dec 2023 10:54:18 +0000 (UTC)
-Date: Thu, 14 Dec 2023 11:54:17 +0100
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id E8B0C40E00CD;
+	Thu, 14 Dec 2023 14:30:11 +0000 (UTC)
+Date: Thu, 14 Dec 2023 15:30:05 +0100
 From: Borislav Petkov <bp@alien8.de>
 To: Yazen Ghannam <yazen.ghannam@amd.com>
 Cc: linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
@@ -55,7 +55,7 @@ Cc: linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
 	john.allen@amd.com, william.roche@oracle.com,
 	muralidhara.mk@amd.com
 Subject: Re: [PATCH v3 1/3] RAS: Introduce AMD Address Translation Library
-Message-ID: <20231214105417.GMZXre2UNGMiXbyiym@fat_crate.local>
+Message-ID: <20231214143005.GNZXsRbcALa1/TW2OK@fat_crate.local>
 References: <20231210194932.43992-1-yazen.ghannam@amd.com>
  <20231210194932.43992-2-yazen.ghannam@amd.com>
 Precedence: bulk
@@ -69,108 +69,170 @@ Content-Disposition: inline
 In-Reply-To: <20231210194932.43992-2-yazen.ghannam@amd.com>
 
 On Sun, Dec 10, 2023 at 01:49:30PM -0600, Yazen Ghannam wrote:
-> diff --git a/drivers/ras/amd/atl/internal.h b/drivers/ras/amd/atl/internal.h
-> new file mode 100644
-> index 000000000000..08bc46f7cabf
-> --- /dev/null
-> +++ b/drivers/ras/amd/atl/internal.h
-> @@ -0,0 +1,312 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
 > +/*
-> + * AMD Address Translation Library
-> + *
-> + * internal.h : Helper functions and common defines
-> + *
-> + * Copyright (c) 2023, Advanced Micro Devices, Inc.
-> + * All Rights Reserved.
-> + *
-> + * Author: Yazen Ghannam <Yazen.Ghannam@amd.com>
+> + * Some, but not all, cases have asserts.
+> + * So use return values to indicate failure where needed.
 > + */
-> +
-> +#ifndef __AMD_ATL_INTERNAL_H__
-> +#define __AMD_ATL_INTERNAL_H__
-> +
-> +#include <linux/bitfield.h>
-> +#include <linux/bitops.h>
-> +
-> +#include <asm/amd_nb.h>
-> +
-> +#include "reg_fields.h"
-> +#include "stub.h"
-> +
-> +/* Maximum possible number of Coherent Stations within a single Data Fabric. */
-> +#define MAX_CS_CHANNELS			32
 
-Hmm, that's coherent stations and not chip select. Can we differentiate
-between the two pls?
+No need for that comment.
 
-In my mind "cs" is chip select so can we call the other thing "coh_st"
-or so?
-
-...
-
-> +/*
-> + * Make a gap in 'data' that is 'num_bits' long starting at 'bit_num.
-
-@data, @num_bits, @bit_num
-
-This is the kernel-doc notation. You don't need make this function
-kernel-doc yet but might as well get accustomed to the syntax. :)
-
-> + * e.g. data		= 11111111'b
-> + *	bit_num		= 3
-> + *	num_bits	= 2
-> + *	result		= 1111100111'b
-> + */
-> +static inline u64 expand_bits(u8 bit_num, u8 num_bits, u64 data)
+> +static int get_intlv_mode(struct addr_ctx *ctx)
 > +{
-> +	u64 temp1, temp2;
-> +
-> +	/*
-> +	 * Return the original data if the "space" needed is '0'.
-> +	 * This helps avoid the need to check for '0' at each
-> +	 * caller.
-> +	 */
+> +	switch (df_cfg.rev) {
+> +	case DF2:	return df2_get_intlv_mode(ctx);
+> +	case DF3:	return df3_get_intlv_mode(ctx);
+> +	case DF3p5:	return df3p5_get_intlv_mode(ctx);
+> +	case DF4:	return df4_get_intlv_mode(ctx);
+> +	case DF4p5:	return df4p5_get_intlv_mode(ctx);
+> +	default:
+> +			warn_on_bad_df_rev();
+> +			return -EINVAL;
+> +	}
 
-Yeah, you don't need that comment - it is kinda obvious that the
-function should check for nonsensical inputs.
+You can warn once here instead of the callers:
 
-> +	if (!num_bits)
-> +		return data;
-> +
-> +	if (!bit_num)
-> +		return data << num_bits;
+	int ret;
 
-Like here: I was gonna say that num_bits cannot be more than
-BITS_PER_LONG (approximating here on 64-bit) because it'll turn @data
-into 0 but people get what they asked for.
+	switch () {
+		... ret = ...get_intlv_mode();
+		...
+	default:
+		ret = -EINVAL;
+	}
 
-Might do here at least a warn or so:
+	if (ret)
+		warn_on_bad_df_rev();
 
-	WARN_ON_ONCE(num_bits >= BITS_PER_LONG);
+	return ret;
 
-The same thing for the upper limit of bit_num.
+and save some text lines.
 
-> +	temp1 = data & GENMASK_ULL(bit_num - 1, 0);
-> +
-> +	temp2 = data & GENMASK_ULL(63, bit_num);
-> +	temp2 <<= num_bits;
-> +
-> +	return temp1 | temp2;
 > +}
 > +
-> +/*
-> + * Remove bits in 'data' between low_bit and high_bit inclusive.
-> + * e.g. data		= XXXYYZZZ'b
-> + *	low_bit		= 3
-> + *	high_bit	= 4
-> + *	result		= XXXZZZ'b
-> + */
-> +static inline u64 remove_bits(u8 low_bit, u8 high_bit, u64 data)
+> +static u64 get_hi_addr_offset(u32 reg_dram_offset)
+> +{
+> +	u8 shift = DF_DRAM_BASE_LIMIT_LSB;
+> +	u64 hi_addr_offset = 0;
 
-Ditto for this one.
+Move that assignment to 0...
+
+> +
+> +	switch (df_cfg.rev) {
+> +	case DF2:
+> +		hi_addr_offset = FIELD_GET(DF2_HI_ADDR_OFFSET, reg_dram_offset);
+> +		break;
+> +	case DF3:
+> +	case DF3p5:
+> +		hi_addr_offset = FIELD_GET(DF3_HI_ADDR_OFFSET, reg_dram_offset);
+> +		break;
+> +	case DF4:
+> +	case DF4p5:
+> +		hi_addr_offset = FIELD_GET(DF4_HI_ADDR_OFFSET, reg_dram_offset);
+> +		break;
+> +	default:
+
+... here.
+
+<---
+
+> +		warn_on_bad_df_rev();
+> +	}
+> +
+> +	return hi_addr_offset << shift;
+> +}
+> +
+> +static int get_dram_offset(struct addr_ctx *ctx, bool *enabled, u64 *norm_offset)
+> +{
+
+You don't need *enabled. The retval can be:
+
+< 0: fail
+0: disabled
+>0: enabled
+
+and then you get rid of the IO param.
+
+> +	u32 reg_dram_offset;
+> +	u8 map_num;
+> +
+> +	/* Should not be called for map 0. */
+> +	if (!ctx->map.num) {
+> +		warn_on_assert("Trying to find DRAM offset for map 0");
+> +		return -EINVAL;
+> +	}
+> +
+> +	/*
+> +	 * DramOffset registers don't exist for map 0, so the base register
+> +	 * actually refers to map 1.
+> +	 * Adjust the map_num for the register offsets.
+> +	 */
+> +	map_num = ctx->map.num - 1;
+> +
+> +	if (df_cfg.rev >= DF4) {
+> +		/* Read D18F7x140 (DramOffset) */
+> +		if (df_indirect_read_instance(ctx->node_id, 7, 0x140 + (4 * map_num),
+> +					      ctx->inst_id, &reg_dram_offset))
+> +			return -EINVAL;
+> +
+> +	} else {
+> +		/* Read D18F0x1B4 (DramOffset) */
+> +		if (df_indirect_read_instance(ctx->node_id, 0, 0x1B4 + (4 * map_num),
+> +					      ctx->inst_id, &reg_dram_offset))
+> +			return -EINVAL;
+> +	}
+> +
+> +	if (!FIELD_GET(DF_HI_ADDR_OFFSET_EN, reg_dram_offset))
+> +		return 0;
+> +
+> +	*enabled = true;
+> +	*norm_offset = get_hi_addr_offset(reg_dram_offset);
+> +
+> +	return 0;
+> +}
 
 ...
+
+> +static int get_cs_fabric_id(struct addr_ctx *ctx)
+> +{
+> +	return lookup_cs_fabric_id(ctx);
+> +}
+
+Get rid of that silly helper.
+
+> +
+> +static bool valid_map(struct addr_ctx *ctx)
+> +{
+> +	if (df_cfg.rev >= DF4)
+> +		return FIELD_GET(DF_ADDR_RANGE_VAL, ctx->map.ctl);
+> +
+> +	return FIELD_GET(DF_ADDR_RANGE_VAL, ctx->map.base);
+
+	if (... )
+		return
+	else
+		return
+
+Balanced.
+
+
+> +int get_address_map(struct addr_ctx *ctx)
+> +{
+> +	int ret = 0;
+> +
+> +	ret = get_address_map_common(ctx);
+> +	if (ret)
+> +		return ret;
+> +
+> +	if (get_global_map_data(ctx))
+> +		return -EINVAL;
+
+Use ret here too.
+
+> +
+> +	dump_address_map(&ctx->map);
+> +
+> +	return ret;
+> +}
 
 -- 
 Regards/Gruss,
