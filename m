@@ -1,63 +1,71 @@
-Return-Path: <linux-edac+bounces-250-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-251-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id E3782813324
-	for <lists+linux-edac@lfdr.de>; Thu, 14 Dec 2023 15:30:39 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 91BF081371B
+	for <lists+linux-edac@lfdr.de>; Thu, 14 Dec 2023 17:59:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2130F1C21BA3
-	for <lists+linux-edac@lfdr.de>; Thu, 14 Dec 2023 14:30:39 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3B9EC1F216A4
+	for <lists+linux-edac@lfdr.de>; Thu, 14 Dec 2023 16:59:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 72FE459E5C;
-	Thu, 14 Dec 2023 14:30:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 025B861FD8;
+	Thu, 14 Dec 2023 16:59:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="BFYbKciB"
+	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="dFbgypeJ"
 X-Original-To: linux-edac@vger.kernel.org
 Received: from mail.alien8.de (mail.alien8.de [IPv6:2a01:4f9:3051:3f93::2])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A190132;
-	Thu, 14 Dec 2023 06:30:25 -0800 (PST)
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BEFAB7;
+	Thu, 14 Dec 2023 08:59:04 -0800 (PST)
 Received: from localhost (localhost.localdomain [127.0.0.1])
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 1393F40E0140;
-	Thu, 14 Dec 2023 14:30:23 +0000 (UTC)
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 4511140E014B;
+	Thu, 14 Dec 2023 16:59:02 +0000 (UTC)
 X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
 Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
 	header.d=alien8.de
 Received: from mail.alien8.de ([127.0.0.1])
 	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-	with ESMTP id gAPdoYuNOTGW; Thu, 14 Dec 2023 14:30:21 +0000 (UTC)
+	with ESMTP id XaqjZfZWziAL; Thu, 14 Dec 2023 16:59:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-	t=1702564221; bh=LK/AU/A+aF7T8cXp3zZKCi7x8DkBYfCbgQoPPthBTN8=;
+	t=1702573139; bh=CRyA3kt/MINT0pQrhYvKMWzWXjiH97CfyNBCklL4uuM=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=BFYbKciB1F2hqGU/NaNH5wSl7D3an8RkGmtHn38OvfNloOSgg0pPqMr85BKCRE6kO
-	 WmIVFxZdB/VHOqrDLnxcJ0iK2Pd03njhB/oP4gLuzZ+yLqQld3GdQ1Ij/R0uCJ4v25
-	 wdGQ2RMZ6BCfDvw89suYoIgtikqSax2S4vJkIj5RyCww9EP/JDx27tA1Uqkea12lLH
-	 L3JX7WMElth6Zl+X0+E3C0e2FmcCagartPcHZHBLRkHBNWS8uzxskk12wjT7tJwLX1
-	 P998+6ZfEfTbreH2d1l3p91gfQLPPBJB0Rxkb+K68Rt+A9qwK1tGjVFoF+uOhoo3fW
-	 xJASeqqZOrGbzOi+XBPRPdlzDjDf8o+IU+M4rCp76BWsJqKKu3iruQXXdVzaKyYkmY
-	 +u5Yg8v5vge7UtNSoRqQ0AaCJ7sOvj1qwKRknZSv06hHlHh2j7AmGEuiGFQipQs6Xh
-	 1CVnsLo4H4b3ecLkmc19s+z8Spgb1l4jTEK+VeH9HNUHCKsSeakj+2wvcomAYf6MdR
-	 KuFoiR76UesmnaMLZAhmVUfCx5NXIdyU2C7vQ2Wbcf8RwGEJqN5BVufCAEUavdpsl2
-	 Ti513mNkem82OebKfJuoc0NJv9QmdZuenHULqBfBG1O5RBlbKqKas/f/OQI3O4IpSE
-	 Yn2JtH4oW7qbYSoDD4GCBN08=
+	b=dFbgypeJeubtWY1fTt8gDNOF+r3uoa1KG/GZnxSe3a9Y723iEJogp94cSIrFGVeD8
+	 Dggv0EUFpL/UkFDpT/t0sZrPS5Er00xWFGqnUZw67xh/dZHJv21s9L76po+FumIudf
+	 I3/IApGn/+07anBqY09HVxLdyMltDh+uWjUgC5m4dfuTHo7mC3sfAI1x7+psYXPbns
+	 K4HkXy3VeEPDq8PJrYwgKPBqaHDkePt9Yyf5aOOmnLqWzKRjYRaICVrGBmh0NK2eHP
+	 dnlbBBLNtTuYpK+YId+8AQPDWNEVEN0s+/f1+oNYIyWSbureRQ1sJGftxduSII1efr
+	 Slfk8Caw1/zwVr6BmpNcqm02/ZMg4+bBjKogxWqZSQlMS0f8zpv3qeqdoJjkWh4H8f
+	 kt+vJNd7uDCLigefgz8X1rvP/yvL8VcQWAxPgGHMssgey0JsII7/YmX6fN41ruairK
+	 futeoT+wWP7/ArNa3FizB5gl2Nx9EeE7qgDeQ73xMCMtzJrMFFJ2cvkVvdbH51CLLO
+	 1FVVp/RKuqCjXT3NxoUJ4F5fvNJZhBeeMF+pFht9stUkSlwrM3ay3b0V1pIsMQK+XE
+	 5+RWvVRT9IdfSmMVuND1Erged0kJF/RN+GXcWkmXNNUgaMvI1MiX1/5G/5gxsJZwuZ
+	 g/S60tySQoi0NVWfBam5h82o=
 Received: from zn.tnic (pd95304da.dip0.t-ipconnect.de [217.83.4.218])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
 	(No client certificate requested)
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id E8B0C40E00CD;
-	Thu, 14 Dec 2023 14:30:11 +0000 (UTC)
-Date: Thu, 14 Dec 2023 15:30:05 +0100
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id A6E9440E00CB;
+	Thu, 14 Dec 2023 16:58:51 +0000 (UTC)
+Date: Thu, 14 Dec 2023 17:58:46 +0100
 From: Borislav Petkov <bp@alien8.de>
-To: Yazen Ghannam <yazen.ghannam@amd.com>
-Cc: linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
-	tony.luck@intel.com, x86@kernel.org, avadhut.naik@amd.com,
-	john.allen@amd.com, william.roche@oracle.com,
-	muralidhara.mk@amd.com
-Subject: Re: [PATCH v3 1/3] RAS: Introduce AMD Address Translation Library
-Message-ID: <20231214143005.GNZXsRbcALa1/TW2OK@fat_crate.local>
-References: <20231210194932.43992-1-yazen.ghannam@amd.com>
- <20231210194932.43992-2-yazen.ghannam@amd.com>
+To: Tony Luck <tony.luck@intel.com>
+Cc: Yazen Ghannam <yazen.ghannam@amd.com>,
+	Smita.KoralahalliChannabasappa@amd.com, dave.hansen@linux.intel.com,
+	x86@kernel.org, linux-edac@vger.kernel.org,
+	linux-kernel@vger.kernel.org, patches@lists.linux.dev
+Subject: Re: [PATCH v9 2/3] x86/mce: Add per-bank CMCI storm mitigation
+Message-ID: <20231214165846.GOZXs0RqkbpovdQWKH@fat_crate.local>
+References: <20231004183623.17067-1-tony.luck@intel.com>
+ <20231004183623.17067-3-tony.luck@intel.com>
+ <20231019151211.GHZTFHS3osBIL1IJbF@fat_crate.local>
+ <ZTa37L2nlnbok8dz@agluck-desk3>
+ <20231114192324.GAZVPJLGZmfJBS181/@fat_crate.local>
+ <ZVPu/hX9b7lUkrBY@agluck-desk3>
+ <20231121115448.GCZVyaiNkNvb4t2NxB@fat_crate.local>
+ <ZWTzAujHdrJ950F3@agluck-desk3>
+ <ZWT4pAJ6g0i78wec@agluck-desk3>
+ <ZWU3WkmUMz3Wk9wT@agluck-desk3>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
@@ -66,173 +74,66 @@ List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20231210194932.43992-2-yazen.ghannam@amd.com>
+In-Reply-To: <ZWU3WkmUMz3Wk9wT@agluck-desk3>
 
-On Sun, Dec 10, 2023 at 01:49:30PM -0600, Yazen Ghannam wrote:
-> +/*
-> + * Some, but not all, cases have asserts.
-> + * So use return values to indicate failure where needed.
-> + */
+On Mon, Nov 27, 2023 at 04:42:02PM -0800, Tony Luck wrote:
+> On Mon, Nov 27, 2023 at 12:14:28PM -0800, Tony Luck wrote:
+> > On Mon, Nov 27, 2023 at 11:50:26AM -0800, Tony Luck wrote:
+> > > On Tue, Nov 21, 2023 at 12:54:48PM +0100, Borislav Petkov wrote:
+> > > > On Tue, Nov 14, 2023 at 02:04:46PM -0800, Tony Luck wrote:
+> > > But it isn't doing the same thing.  The timer calls:
+> > > 
+> > > 	machine_check_poll(0, this_cpu_ptr(&mce_poll_banks));
+> > > 
+> > > and cmci_mc_poll_banks() calls:
+> > > 
+> > > 	machine_check_poll(0, this_cpu_ptr(&mce_poll_banks));
+> 
+>         machine_check_poll(0, this_cpu_ptr(&mce_banks_owned));
 
-No need for that comment.
+Hmm, so I applied your v10 and this call with mce_banks_owned is done in
+cmci_recheck() only. Which is on some init path.
 
-> +static int get_intlv_mode(struct addr_ctx *ctx)
-> +{
-> +	switch (df_cfg.rev) {
-> +	case DF2:	return df2_get_intlv_mode(ctx);
-> +	case DF3:	return df3_get_intlv_mode(ctx);
-> +	case DF3p5:	return df3p5_get_intlv_mode(ctx);
-> +	case DF4:	return df4_get_intlv_mode(ctx);
-> +	case DF4p5:	return df4p5_get_intlv_mode(ctx);
-> +	default:
-> +			warn_on_bad_df_rev();
-> +			return -EINVAL;
-> +	}
+The thresholding interrupt calls it too.
 
-You can warn once here instead of the callers:
+The timer ends up calling mc_poll_banks_default() which does
 
-	int ret;
+	machine_check_poll(0, this_cpu_ptr(&mce_poll_banks));
 
-	switch () {
-		... ret = ...get_intlv_mode();
-		...
-	default:
-		ret = -EINVAL;
-	}
+I presume we don't do:
 
-	if (ret)
-		warn_on_bad_df_rev();
+        if (!cmci_supported(&banks)) {
+                mc_poll_banks = cmci_mc_poll_banks;
+                return;
+        }
 
-	return ret;
+usually on Intel. And even if we did, cmci_mc_poll_banks() calls
 
-and save some text lines.
+	machine_check_poll(0, this_cpu_ptr(&mce_poll_banks));
 
-> +}
-> +
-> +static u64 get_hi_addr_offset(u32 reg_dram_offset)
-> +{
-> +	u8 shift = DF_DRAM_BASE_LIMIT_LSB;
-> +	u64 hi_addr_offset = 0;
+too.
 
-Move that assignment to 0...
+So regardless what machine you have, you do call the mc_poll_banks
+pointer which in both cases does
 
-> +
-> +	switch (df_cfg.rev) {
-> +	case DF2:
-> +		hi_addr_offset = FIELD_GET(DF2_HI_ADDR_OFFSET, reg_dram_offset);
-> +		break;
-> +	case DF3:
-> +	case DF3p5:
-> +		hi_addr_offset = FIELD_GET(DF3_HI_ADDR_OFFSET, reg_dram_offset);
-> +		break;
-> +	case DF4:
-> +	case DF4p5:
-> +		hi_addr_offset = FIELD_GET(DF4_HI_ADDR_OFFSET, reg_dram_offset);
-> +		break;
-> +	default:
+	machine_check_poll(0, this_cpu_ptr(&mce_poll_banks));
 
-... here.
+The *thresholding* interrupt does
 
-<---
+	machine_check_poll(0, this_cpu_ptr(&mce_banks_owned));
 
-> +		warn_on_bad_df_rev();
-> +	}
-> +
-> +	return hi_addr_offset << shift;
-> +}
-> +
-> +static int get_dram_offset(struct addr_ctx *ctx, bool *enabled, u64 *norm_offset)
-> +{
+and you're saying
 
-You don't need *enabled. The retval can be:
+	mce_poll_banks and mce_banks_owned
 
-< 0: fail
-0: disabled
->0: enabled
+are disjoint.
 
-and then you get rid of the IO param.
+That's what you mean, right?
 
-> +	u32 reg_dram_offset;
-> +	u8 map_num;
-> +
-> +	/* Should not be called for map 0. */
-> +	if (!ctx->map.num) {
-> +		warn_on_assert("Trying to find DRAM offset for map 0");
-> +		return -EINVAL;
-> +	}
-> +
-> +	/*
-> +	 * DramOffset registers don't exist for map 0, so the base register
-> +	 * actually refers to map 1.
-> +	 * Adjust the map_num for the register offsets.
-> +	 */
-> +	map_num = ctx->map.num - 1;
-> +
-> +	if (df_cfg.rev >= DF4) {
-> +		/* Read D18F7x140 (DramOffset) */
-> +		if (df_indirect_read_instance(ctx->node_id, 7, 0x140 + (4 * map_num),
-> +					      ctx->inst_id, &reg_dram_offset))
-> +			return -EINVAL;
-> +
-> +	} else {
-> +		/* Read D18F0x1B4 (DramOffset) */
-> +		if (df_indirect_read_instance(ctx->node_id, 0, 0x1B4 + (4 * map_num),
-> +					      ctx->inst_id, &reg_dram_offset))
-> +			return -EINVAL;
-> +	}
-> +
-> +	if (!FIELD_GET(DF_HI_ADDR_OFFSET_EN, reg_dram_offset))
-> +		return 0;
-> +
-> +	*enabled = true;
-> +	*norm_offset = get_hi_addr_offset(reg_dram_offset);
-> +
-> +	return 0;
-> +}
+Because if so, yes, that makes sense. If the sets of MCA banks polled
+and handled in the thresholding interrupt are disjoint, we should be ok.
 
-...
-
-> +static int get_cs_fabric_id(struct addr_ctx *ctx)
-> +{
-> +	return lookup_cs_fabric_id(ctx);
-> +}
-
-Get rid of that silly helper.
-
-> +
-> +static bool valid_map(struct addr_ctx *ctx)
-> +{
-> +	if (df_cfg.rev >= DF4)
-> +		return FIELD_GET(DF_ADDR_RANGE_VAL, ctx->map.ctl);
-> +
-> +	return FIELD_GET(DF_ADDR_RANGE_VAL, ctx->map.base);
-
-	if (... )
-		return
-	else
-		return
-
-Balanced.
-
-
-> +int get_address_map(struct addr_ctx *ctx)
-> +{
-> +	int ret = 0;
-> +
-> +	ret = get_address_map_common(ctx);
-> +	if (ret)
-> +		return ret;
-> +
-> +	if (get_global_map_data(ctx))
-> +		return -EINVAL;
-
-Use ret here too.
-
-> +
-> +	dump_address_map(&ctx->map);
-> +
-> +	return ret;
-> +}
+Thx.
 
 -- 
 Regards/Gruss,
