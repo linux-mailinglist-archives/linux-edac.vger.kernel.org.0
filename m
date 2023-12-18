@@ -1,51 +1,74 @@
-Return-Path: <linux-edac+bounces-277-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-279-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 022BB816800
-	for <lists+linux-edac@lfdr.de>; Mon, 18 Dec 2023 09:24:57 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4519D817A8B
+	for <lists+linux-edac@lfdr.de>; Mon, 18 Dec 2023 20:04:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id AB5C91F23043
-	for <lists+linux-edac@lfdr.de>; Mon, 18 Dec 2023 08:24:56 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B8628281698
+	for <lists+linux-edac@lfdr.de>; Mon, 18 Dec 2023 19:04:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EFDE1101D3;
-	Mon, 18 Dec 2023 08:24:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 446155A843;
+	Mon, 18 Dec 2023 19:04:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="Upg9iYj4"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2080.outbound.protection.outlook.com [40.107.94.80])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97CA3101FE;
-	Mon, 18 Dec 2023 08:24:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.19.88.105])
-	by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4SttBS22vKzYspP;
-	Mon, 18 Dec 2023 16:23:28 +0800 (CST)
-Received: from kwepemm000017.china.huawei.com (unknown [7.193.23.46])
-	by mail.maildlp.com (Postfix) with ESMTPS id 6CEDA140120;
-	Mon, 18 Dec 2023 16:24:20 +0800 (CST)
-Received: from localhost.localdomain (10.175.112.125) by
- kwepemm000017.china.huawei.com (7.193.23.46) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.35; Mon, 18 Dec 2023 16:24:19 +0800
-From: Tong Tiangen <tongtiangen@huawei.com>
-To: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
-	Borislav Petkov <bp@alien8.de>, <wangkefeng.wang@huawei.com>, Dave Hansen
-	<dave.hansen@linux.intel.com>, <x86@kernel.org>, "H. Peter Anvin"
-	<hpa@zytor.com>, Tony Luck <tony.luck@intel.com>, Andy Lutomirski
-	<luto@kernel.org>, Peter Zijlstra <peterz@infradead.org>, Andrew Morton
-	<akpm@linux-foundation.org>, Naoya Horiguchi <naoya.horiguchi@nec.com>
-CC: <linux-kernel@vger.kernel.org>, <linux-edac@vger.kernel.org>,
-	<linux-mm@kvack.org>, Tong Tiangen <tongtiangen@huawei.com>, Guohanjun
-	<guohanjun@huawei.com>
-Subject: [PATCH -next v3 3/3] x86/mce: set MCE_IN_KERNEL_COPY_MC for DEFAULT_MCE_SAFE exception
-Date: Mon, 18 Dec 2023 16:24:00 +0800
-Message-ID: <20231218082400.2694698-4-tongtiangen@huawei.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20231218082400.2694698-1-tongtiangen@huawei.com>
-References: <20231218082400.2694698-1-tongtiangen@huawei.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94402495DE;
+	Mon, 18 Dec 2023 19:04:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=D8XzmvWyFnPTarTDmce3OR/KtYCHJnFOT8wYLJhIMdQbfPW2d+KDa0a+ROL9lG7WfTcElKaJaGpxsb3o5TEjZey/YE9W8rDRIfozJLc+lnJF+Cjy+WW0rSiFFDdSg2dov6PhHmJQImiN3txlhz/1b4g2kan9KGJu0POOdO9JcY9tIzuqSi4xoLjS9Z3dNyoqTIjpNrAM3dX5OYYUJQW+Spl91tUiwcxl2fHVV+8pBoBuCaThLqr54dYZ6grQ1fjaKcDvYahUCuZuc02E6AGaObkU1s/IrE1I+ZmhHPMIa/IzxhBvsPVFVZtKXHRG1lfyte2eq+ek7FdLYmq+RJSrXQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=W2AUZAAWKVgQ5xSwKSbw+igZoRERnQMnfYj15B8a0Gw=;
+ b=bRNT/dxMAGJ1TdJsVzFwt6DS7opkLK39OvBXmTwscsSHBx+KEqLhwnW0XxYM+HD7zUUxANXa5O52AhMbrkWwrBbMXy0+ONyYrb8imvXB68aJ4jnJhCSHfkYAsxxxtNv9Xnfnwhm6znTUPq3PzHRfZF8Z3oV/tT1IG/m+VavzrbKEWhYkcq4+HVEwcj+jr1E4Xt7g74VB8VO34ykTRh9r00EN0ipJR0cqzXrNWLrv79xotOoEYO90bTP1am1RmliaDMYRPU0t3TxZIUpk20dLnKvcI4ch+Etf2sYC6wwCcBDu95CtRQLFdIcQcUw+iSqp0x31KVG2G6ldy4ZodwaD1A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=alien8.de smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=W2AUZAAWKVgQ5xSwKSbw+igZoRERnQMnfYj15B8a0Gw=;
+ b=Upg9iYj4cS2iG+7ylHgIDxqpmMl7EtAB2HYWelkbZGrVzmS0U1rjRdEa4Pf6C5i4XLF9YdP4E3pVLCR6oZNIRWi0CFg9IRxg4gPMBsl1cG4I2O6JwYddJST0XQOjlcEiHBXcM58UohuiildQx0GLQlgbLYv7ufdY92XhY2esSb0=
+Received: from DM6PR13CA0003.namprd13.prod.outlook.com (2603:10b6:5:bc::16) by
+ DM4PR12MB5087.namprd12.prod.outlook.com (2603:10b6:5:38a::17) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.7091.38; Mon, 18 Dec 2023 19:04:20 +0000
+Received: from DS3PEPF000099D5.namprd04.prod.outlook.com
+ (2603:10b6:5:bc:cafe::79) by DM6PR13CA0003.outlook.office365.com
+ (2603:10b6:5:bc::16) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7113.17 via Frontend
+ Transport; Mon, 18 Dec 2023 19:04:20 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ DS3PEPF000099D5.mail.protection.outlook.com (10.167.17.6) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.7113.14 via Frontend Transport; Mon, 18 Dec 2023 19:04:19 +0000
+Received: from quartz-7b1chost.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.34; Mon, 18 Dec
+ 2023 13:04:18 -0600
+From: Yazen Ghannam <yazen.ghannam@amd.com>
+To: <bp@alien8.de>, <linux-edac@vger.kernel.org>
+CC: <linux-kernel@vger.kernel.org>, <avadhut.naik@amd.com>,
+	<tony.luck@intel.com>, <john.allen@amd.com>, <william.roche@oracle.com>,
+	<muralidhara.mk@amd.com>, Yazen Ghannam <yazen.ghannam@amd.com>
+Subject: [PATCH v4 0/3] AMD Address Translation Library
+Date: Mon, 18 Dec 2023 13:04:03 -0600
+Message-ID: <20231218190406.27479-1-yazen.ghannam@amd.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
@@ -54,118 +77,85 @@ List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- kwepemm000017.china.huawei.com (7.193.23.46)
+X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DS3PEPF000099D5:EE_|DM4PR12MB5087:EE_
+X-MS-Office365-Filtering-Correlation-Id: c842b539-2adb-475c-9e4b-08dbfffc236c
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	g5VKz1qelI8ttUjQhdj1oaH09CCKiCDE1Hc5+WFrtnqMWWgTcukPnocGXnwtuf0vRG4pc3u66buTD8jafrk1kWQ+alRgLW5cEhhho/wF5ZA86dftplHq4nmhVnDVE5Ji5gCqoYhVmcvA9OAaLhJxNvSbriM3JNkBzY/3DpHqLHeZu/z0pO5BO8WSm+cmpHs+pvLnCdZ10JiKB5NAybs754rEcahv9KUfTMypQCwopRdXM1M1juYSePwYVEmJwsIgtz08yK4xhZqe78AgYlx8LNssQRTrv4nyyuJSEBskJEyW+hEQFCJw9zBy/gvM0WvLrhKueMpq2SlARwiHuPv/GbE9IGmNBbg5uslH/Mrf3l8X6DSioDxeSvY7Uocpg4e/6FvhYCx3cbJnZtAms9f7vfF6ljRoCAuymHoxrpi19rULi0/3QaLwXnx7astQHL/omyuDBFAtUQAYoPliXqWeG8G88nkXIIpdNG36oCBgJmRUchbO3MU9DJjeuKnq37XMAiKBkZwZNRuPYLa2zDGC/SQfx18XdA2grm3ujJTYc4LCEA2DUf6i1vvmCvP7xRms5FKdKuTJ2jGyXdpbqCu2DFNmoetI+w6ef7gzHYuu+jtobvwiuHnQZe5c+dT21KZAwQKBKt3+DqaM8azmmI0sok9obwCTipYbiL1pLRcf1T5zvBBIovvT2l1Ibw8LC7hVYqhHW5yPbdrF/paa1gfQDaDho3hWeXF1yZJCCqWrruz4um5OBKvhQBeNNnnEUYPWMgGW2KOKwSjOJAlRhMCKMw==
+X-Forefront-Antispam-Report:
+	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230031)(4636009)(396003)(376002)(346002)(136003)(39860400002)(230922051799003)(1800799012)(451199024)(82310400011)(64100799003)(186009)(46966006)(40470700004)(36840700001)(83380400001)(16526019)(336012)(426003)(7696005)(2616005)(36860700001)(1076003)(4326008)(44832011)(47076005)(5660300002)(26005)(41300700001)(6666004)(110136005)(316002)(2906002)(478600001)(8676002)(8936002)(54906003)(70586007)(70206006)(82740400003)(36756003)(86362001)(81166007)(356005)(40480700001)(40460700003)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Dec 2023 19:04:19.2500
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: c842b539-2adb-475c-9e4b-08dbfffc236c
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	DS3PEPF000099D5.namprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB5087
 
-From: Kefeng Wang <wangkefeng.wang@huawei.com>
+Hi all,
 
-If an MCE has happened in kernel space and the kernel can recover,
-mce.kflags MCE_IN_KERNEL_RECOV will set in error_context().
+This revision addresses comments from Boris for v3. The most substantial
+change is the removal of the library "stub".
 
-With the setting of MCE_IN_KERNEL_RECOV, the MCE is handled in
-do_machine_check(). But due to lack of MCE_IN_KERNEL_COPY_MC, although the
-kernel won't panic, the corrupted page don't be isolated, new one maybe
-consume it again, which is not what we expected.
+Thanks,
+Yazen
 
-In order to avoid above issue, some hwpoison recover process[1][2][3][4],
-memory_failure_queue() is called to cope with such unhandled corrupted
-pages, also there are some other already existed MC-safe copy scenarios,
-eg, nvdimm, dm-writecache, dax, which don't isolate corrupted pages.
+Yazen Ghannam (3):
+  RAS: Introduce AMD Address Translation Library
+  EDAC/amd64: Use new AMD Address Translation Library
+  Documentation: RAS: Add index and address translation section
 
-The best way to fix them is set MCE_IN_KERNEL_COPY_MC for MC-Safe Copy,
-then let the core do_machine_check() to isolate corrupted page instead
-of doing it one-by-one.
+ Documentation/RAS/address-translation.rst     |  24 +
+ .../RAS/{ras.rst => error-decoding.rst}       |  11 +-
+ Documentation/RAS/index.rst                   |  14 +
+ Documentation/index.rst                       |   2 +-
+ MAINTAINERS                                   |   7 +
+ drivers/edac/Kconfig                          |   1 +
+ drivers/edac/amd64_edac.c                     | 282 +-------
+ drivers/ras/Kconfig                           |   1 +
+ drivers/ras/Makefile                          |   2 +
+ drivers/ras/amd/atl/Kconfig                   |  20 +
+ drivers/ras/amd/atl/Makefile                  |  18 +
+ drivers/ras/amd/atl/access.c                  | 106 +++
+ drivers/ras/amd/atl/core.c                    | 225 ++++++
+ drivers/ras/amd/atl/dehash.c                  | 416 +++++++++++
+ drivers/ras/amd/atl/denormalize.c             | 616 ++++++++++++++++
+ drivers/ras/amd/atl/internal.h                | 297 ++++++++
+ drivers/ras/amd/atl/map.c                     | 667 ++++++++++++++++++
+ drivers/ras/amd/atl/reg_fields.h              | 603 ++++++++++++++++
+ drivers/ras/amd/atl/system.c                  | 283 ++++++++
+ drivers/ras/amd/atl/umc.c                     |  41 ++
+ drivers/ras/ras.c                             |  31 +
+ include/linux/ras.h                           |  11 +
+ 22 files changed, 3392 insertions(+), 286 deletions(-)
+ create mode 100644 Documentation/RAS/address-translation.rst
+ rename Documentation/RAS/{ras.rst => error-decoding.rst} (73%)
+ create mode 100644 Documentation/RAS/index.rst
+ create mode 100644 drivers/ras/amd/atl/Kconfig
+ create mode 100644 drivers/ras/amd/atl/Makefile
+ create mode 100644 drivers/ras/amd/atl/access.c
+ create mode 100644 drivers/ras/amd/atl/core.c
+ create mode 100644 drivers/ras/amd/atl/dehash.c
+ create mode 100644 drivers/ras/amd/atl/denormalize.c
+ create mode 100644 drivers/ras/amd/atl/internal.h
+ create mode 100644 drivers/ras/amd/atl/map.c
+ create mode 100644 drivers/ras/amd/atl/reg_fields.h
+ create mode 100644 drivers/ras/amd/atl/system.c
+ create mode 100644 drivers/ras/amd/atl/umc.c
 
-EX_TYPE_FAULT_MCE_SAFE is used for the FPU. Here, we do not touch the logic
-of FPU. We only modify the logic of EX_TYPE_DEFAULT_MCE_SAFE which is used
-in the scenarios described above.
 
-[1] commit d302c2398ba2 ("mm, hwpoison: when copy-on-write hits poison, take page offline")
-[2] commit 1cb9dc4b475c ("mm: hwpoison: support recovery from HugePage copy-on-write faults")
-[3] commit 6b970599e807 ("mm: hwpoison: support recovery from ksm_might_need_to_copy()")
-[4] commit 1cb9dc4b475c ("mm: hwpoison: support recovery from HugePage copy-on-write faults")
-
-Reviewed-by: Naoya Horiguchi <naoya.horiguchi@nec.com>
-Reviewed-by: Tony Luck <tony.luck@intel.com>
-Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
-Signed-off-by: Tong Tiangen <tongtiangen@huawei.com>
----
- arch/x86/kernel/cpu/mce/severity.c |  4 ++--
- mm/ksm.c                           |  1 -
- mm/memory.c                        | 12 +++---------
- 3 files changed, 5 insertions(+), 12 deletions(-)
-
-diff --git a/arch/x86/kernel/cpu/mce/severity.c b/arch/x86/kernel/cpu/mce/severity.c
-index df67a7a13034..b4b1d028cbb3 100644
---- a/arch/x86/kernel/cpu/mce/severity.c
-+++ b/arch/x86/kernel/cpu/mce/severity.c
-@@ -292,11 +292,11 @@ static noinstr int error_context(struct mce *m, struct pt_regs *regs)
- 	case EX_TYPE_UACCESS:
- 		if (!copy_user)
- 			return IN_KERNEL;
-+		fallthrough;
-+	case EX_TYPE_DEFAULT_MCE_SAFE:
- 		m->kflags |= MCE_IN_KERNEL_COPY_MC;
- 		fallthrough;
--
- 	case EX_TYPE_FAULT_MCE_SAFE:
--	case EX_TYPE_DEFAULT_MCE_SAFE:
- 		m->kflags |= MCE_IN_KERNEL_RECOV;
- 		return IN_KERNEL_RECOV;
- 
-diff --git a/mm/ksm.c b/mm/ksm.c
-index ae05fb438ac5..01e3a7ef1b9d 100644
---- a/mm/ksm.c
-+++ b/mm/ksm.c
-@@ -3075,7 +3075,6 @@ struct folio *ksm_might_need_to_copy(struct folio *folio,
- 		if (copy_mc_user_highpage(folio_page(new_folio, 0), page,
- 								addr, vma)) {
- 			folio_put(new_folio);
--			memory_failure_queue(folio_pfn(folio), 0);
- 			return ERR_PTR(-EHWPOISON);
- 		}
- 		folio_set_dirty(new_folio);
-diff --git a/mm/memory.c b/mm/memory.c
-index 809746555827..9f0d875b1d3f 100644
---- a/mm/memory.c
-+++ b/mm/memory.c
-@@ -2836,10 +2836,8 @@ static inline int __wp_page_copy_user(struct page *dst, struct page *src,
- 	unsigned long addr = vmf->address;
- 
- 	if (likely(src)) {
--		if (copy_mc_user_highpage(dst, src, addr, vma)) {
--			memory_failure_queue(page_to_pfn(src), 0);
-+		if (copy_mc_user_highpage(dst, src, addr, vma))
- 			return -EHWPOISON;
--		}
- 		return 0;
- 	}
- 
-@@ -6168,10 +6166,8 @@ static int copy_user_gigantic_page(struct folio *dst, struct folio *src,
- 
- 		cond_resched();
- 		if (copy_mc_user_highpage(dst_page, src_page,
--					  addr + i*PAGE_SIZE, vma)) {
--			memory_failure_queue(page_to_pfn(src_page), 0);
-+					  addr + i*PAGE_SIZE, vma))
- 			return -EHWPOISON;
--		}
- 	}
- 	return 0;
- }
-@@ -6187,10 +6183,8 @@ static int copy_subpage(unsigned long addr, int idx, void *arg)
- 	struct copy_subpage_arg *copy_arg = arg;
- 
- 	if (copy_mc_user_highpage(copy_arg->dst + idx, copy_arg->src + idx,
--				  addr, copy_arg->vma)) {
--		memory_failure_queue(page_to_pfn(copy_arg->src + idx), 0);
-+				  addr, copy_arg->vma))
- 		return -EHWPOISON;
--	}
- 	return 0;
- }
- 
+base-commit: ba7d5744cf6fac619fd0bf1165c90ee930956ebc
 -- 
-2.25.1
+2.34.1
 
 
