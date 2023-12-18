@@ -1,71 +1,223 @@
-Return-Path: <linux-edac+bounces-265-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-266-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4F1EA81614A
-	for <lists+linux-edac@lfdr.de>; Sun, 17 Dec 2023 18:38:18 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 286408166A3
+	for <lists+linux-edac@lfdr.de>; Mon, 18 Dec 2023 07:45:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A990228131F
-	for <lists+linux-edac@lfdr.de>; Sun, 17 Dec 2023 17:38:16 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 45D871C20B38
+	for <lists+linux-edac@lfdr.de>; Mon, 18 Dec 2023 06:45:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 64FAA46445;
-	Sun, 17 Dec 2023 17:38:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Xx011+dj"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 469AD6FB5;
+	Mon, 18 Dec 2023 06:45:34 +0000 (UTC)
 X-Original-To: linux-edac@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out30-131.freemail.mail.aliyun.com (out30-131.freemail.mail.aliyun.com [115.124.30.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4769046B82;
-	Sun, 17 Dec 2023 17:38:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 20318C433C8;
-	Sun, 17 Dec 2023 17:38:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1702834690;
-	bh=7omZI5avzk14YeFcrTpugJNQisBEuPz+5Qz14EH58a4=;
-	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-	b=Xx011+dj+GbTYtkQaZwOLIXwJUsOIgQqC0+OG24GoPZ6hqQrOQW21i2qrHRvLnasd
-	 jeIqjXzPMrugg/6QeCpd1C0m0pGZFEjUnFTrXlQUzaIPTrs7vHO10nXKCa5DOTg0My
-	 6lVIO4aihpRJFKiGR/cI/m6/VRljS4f/4PKQQSHNVqMsQVXIuohf+Sv/T7Ed92e7Jr
-	 TAJTC6FuNKopiP9fHBqUyNoaE9sjARy0nRP0fllnZoyt3H/Oh12CvfJBD8fQIw5lPy
-	 TT88jiAI5lBldYRLzVyHUuIjrXpq5Rc35ZeWTlULQExs2yVTTQCTb0JzZoSDDaAW4M
-	 6kx2XxdcjViug==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 0E12CC4314C;
-	Sun, 17 Dec 2023 17:38:10 +0000 (UTC)
-Subject: Re: [GIT PULL] EDAC/urgent for v6.7-rc6
-From: pr-tracker-bot@kernel.org
-In-Reply-To: <20231217115937.GAZX7iqX6fhyiF1mMZ@fat_crate.local>
-References: <20231217115937.GAZX7iqX6fhyiF1mMZ@fat_crate.local>
-X-PR-Tracked-List-Id: <linux-edac.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20231217115937.GAZX7iqX6fhyiF1mMZ@fat_crate.local>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/ras/ras.git tags/edac_urgent_for_v6.7_rc6
-X-PR-Tracked-Commit-Id: 9483aa44912f26da2b69dade6099c2bf4b50a8c3
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: ef6a7c27db54f06cc5c79f5a756d649828d42f3d
-Message-Id: <170283469005.25242.2081033780994860999.pr-tracker-bot@kernel.org>
-Date: Sun, 17 Dec 2023 17:38:10 +0000
-To: Borislav Petkov <bp@alien8.de>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>, linux-edac <linux-edac@vger.kernel.org>, lkml <linux-kernel@vger.kernel.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5EB0C6FA3;
+	Mon, 18 Dec 2023 06:45:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
+X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R961e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046059;MF=xueshuai@linux.alibaba.com;NM=1;PH=DS;RN=35;SR=0;TI=SMTPD_---0VygHaxt_1702881922;
+Received: from localhost.localdomain(mailfrom:xueshuai@linux.alibaba.com fp:SMTPD_---0VygHaxt_1702881922)
+          by smtp.aliyun-inc.com;
+          Mon, 18 Dec 2023 14:45:26 +0800
+From: Shuai Xue <xueshuai@linux.alibaba.com>
+To: bp@alien8.de,
+	rafael@kernel.org,
+	wangkefeng.wang@huawei.com,
+	tanxiaofei@huawei.com,
+	mawupeng1@huawei.com,
+	tony.luck@intel.com,
+	linmiaohe@huawei.com,
+	naoya.horiguchi@nec.com,
+	james.morse@arm.com,
+	gregkh@linuxfoundation.org,
+	will@kernel.org,
+	jarkko@kernel.org
+Cc: linux-acpi@vger.kernel.org,
+	linux-mm@kvack.org,
+	linux-kernel@vger.kernel.org,
+	akpm@linux-foundation.org,
+	linux-edac@vger.kernel.org,
+	acpica-devel@lists.linuxfoundation.org,
+	stable@vger.kernel.org,
+	x86@kernel.org,
+	xueshuai@linux.alibaba.com,
+	justin.he@arm.com,
+	ardb@kernel.org,
+	ying.huang@intel.com,
+	ashish.kalra@amd.com,
+	baolin.wang@linux.alibaba.com,
+	tglx@linutronix.de,
+	mingo@redhat.com,
+	dave.hansen@linux.intel.com,
+	lenb@kernel.org,
+	hpa@zytor.com,
+	robert.moore@intel.com,
+	lvying6@huawei.com,
+	xiexiuqi@huawei.com,
+	zhuo.song@linux.alibaba.com
+Subject: [PATCH v10 0/4] ACPI: APEI: handle synchronous errors in task work with proper si_code
+Date: Mon, 18 Dec 2023 14:45:17 +0800
+Message-Id: <20231218064521.37324-1-xueshuai@linux.alibaba.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20221027042445.60108-1-xueshuai@linux.alibaba.com>
+References: <20221027042445.60108-1-xueshuai@linux.alibaba.com>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-The pull request you sent on Sun, 17 Dec 2023 12:59:37 +0100:
+## Changes Log
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/ras/ras.git tags/edac_urgent_for_v6.7_rc6
+changes since v9:
+- split patch 2 to address exactly one issue in one patch (per Borislav)
+- rewrite commit log according to template (per Borislav)
+- pickup reviewed-by tag of patch 1 from James Morse
+- alloc and free twcb through gen_pool_{alloc, free) (Per James)
+- rewrite cover letter
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/ef6a7c27db54f06cc5c79f5a756d649828d42f3d
+changes since v8:
+- remove the bug fix tag of patch 2 (per Jarkko Sakkinen)
+- remove the declaration of memory_failure_queue_kick (per Naoya Horiguchi)
+- rewrite the return value comments of memory_failure (per Naoya Horiguchi)
 
-Thank you!
+changes since v7:
+- rebase to Linux v6.6-rc2 (no code changed)
+- rewritten the cover letter to explain the motivation of this patchset
+
+changes since v6:
+- add more explicty error message suggested by Xiaofei
+- pick up reviewed-by tag from Xiaofei
+- pick up internal reviewed-by tag from Baolin
+
+changes since v5 by addressing comments from Kefeng:
+- document return value of memory_failure()
+- drop redundant comments in call site of memory_failure() 
+- make ghes_do_proc void and handle abnormal case within it
+- pick up reviewed-by tag from Kefeng Wang 
+
+changes since v4 by addressing comments from Xiaofei:
+- do a force kill only for abnormal sync errors
+
+changes since v3 by addressing comments from Xiaofei:
+- do a force kill for abnormal memory failure error such as invalid PA,
+unexpected severity, OOM, etc
+- pcik up tested-by tag from Ma Wupeng
+
+changes since v2 by addressing comments from Naoya:
+- rename mce_task_work to sync_task_work
+- drop ACPI_HEST_NOTIFY_MCE case in is_hest_sync_notify()
+- add steps to reproduce this problem in cover letter
+
+changes since v1:
+- synchronous events by notify type
+- Link: https://lore.kernel.org/lkml/20221206153354.92394-3-xueshuai@linux.alibaba.com/
+
+## Cover Letter
+
+There are two major types of uncorrected recoverable (UCR) errors :
+
+- Synchronous error: The error is detected and raised at the point of the
+  consumption in the execution flow, e.g. when a CPU tries to access
+  a poisoned cache line. The CPU will take a synchronous error exception
+  such as Synchronous External Abort (SEA) on Arm64 and Machine Check
+  Exception (MCE) on X86. OS requires to take action (for example, offline
+  failure page/kill failure thread) to recover this uncorrectable error.
+
+- Asynchronous error: The error is detected out of processor execution
+  context, e.g. when an error is detected by a background scrubber. Some data
+  in the memory are corrupted. But the data have not been consumed. OS is
+  optional to take action to recover this uncorrectable error.
+
+Currently, both synchronous and asynchronous errors are queued by
+ghes_handle_memory_failure() with flag 0, and handled by a dedicated kernel
+thread in a work queue on the ARM64 platform. As a result, the memory
+failure recovery sends SIBUS with wrong BUS_MCEERR_AO si_code for
+synchronous errors in early kill mode. The main problem is that the
+memory_failure() work is handled in kthread context but not the user-space
+process context which is accessing the corrupt memory location, so it will
+send SIGBUS with BUS_MCEERR_AO si_code to the user-space process instead of
+BUS_MCEERR_AR in kill_proc().
+
+Fix the problem by:
+- Patch 1: seting memory_failure() flags as MF_ACTION_REQUIRED on synchronous
+	   errors.
+- Patch 2: performing a force kill if no memory_failure() work is queued for
+	   synchronous errors.
+- Patch 3: a minor comments improve.
+- Patch 4: queueing memory_failure() as a task_work so that the current
+	   context in memory_failure() exactly belongs to the process
+	   consuming poison data.
+
+Lv Ying and XiuQi from Huawei also proposed to address similar problem[2][4].
+Acknowledge to discussion with them.
+
+## Steps to Reproduce This Problem
+
+To reproduce this problem:
+
+	# STEP1: enable early kill mode
+	#sysctl -w vm.memory_failure_early_kill=1
+	vm.memory_failure_early_kill = 1
+
+	# STEP2: inject an UCE error and consume it to trigger a synchronous error
+	#einj_mem_uc single
+	0: single   vaddr = 0xffffb0d75400 paddr = 4092d55b400
+	injecting ...
+	triggering ...
+	signal 7 code 5 addr 0xffffb0d75000
+	page not present
+	Test passed
+
+The si_code (code 5) from einj_mem_uc indicates that it is BUS_MCEERR_AO error
+and it is not fact.
+
+After this patch set:
+
+	# STEP1: enable early kill mode
+	#sysctl -w vm.memory_failure_early_kill=1
+	vm.memory_failure_early_kill = 1
+
+	# STEP2: inject an UCE error and consume it to trigger a synchronous error
+	#einj_mem_uc single
+	0: single   vaddr = 0xffffb0d75400 paddr = 4092d55b400
+	injecting ...
+	triggering ...
+	signal 7 code 4 addr 0xffffb0d75000
+	page not present
+	Test passed
+
+The si_code (code 4) from einj_mem_uc indicates that it is BUS_MCEERR_AR error
+as we expected.
+
+[1] Add ARMv8 RAS virtualization support in QEMU https://patchew.org/QEMU/20200512030609.19593-1-gengdongjiu@huawei.com/
+[2] https://lore.kernel.org/lkml/20221205115111.131568-3-lvying6@huawei.com/
+[3] https://lkml.kernel.org/r/20220914064935.7851-1-xueshuai@linux.alibaba.com
+[4] https://lore.kernel.org/lkml/20221209095407.383211-1-lvying6@huawei.com/
+
+Shuai Xue (4):
+  ACPI: APEI: set memory failure flags as MF_ACTION_REQUIRED on
+    synchronous events
+  ACPI: APEI: send SIGBUS to current task if synchronous memory error
+    not recovered
+  mm: memory-failure: move memory_failure() return value documentation
+    to function declaration
+  ACPI: APEI: handle synchronous exceptions in task work
+
+ arch/x86/kernel/cpu/mce/core.c |   9 +--
+ drivers/acpi/apei/ghes.c       | 113 ++++++++++++++++++++++-----------
+ include/acpi/ghes.h            |   3 -
+ mm/memory-failure.c            |  22 ++-----
+ 4 files changed, 82 insertions(+), 65 deletions(-)
 
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+2.39.3
+
 
