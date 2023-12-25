@@ -1,44 +1,44 @@
-Return-Path: <linux-edac+bounces-298-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-299-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 90D1B81E1CF
-	for <lists+linux-edac@lfdr.de>; Mon, 25 Dec 2023 18:41:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id CA53F81E1D4
+	for <lists+linux-edac@lfdr.de>; Mon, 25 Dec 2023 18:42:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 05C5F1F220BE
-	for <lists+linux-edac@lfdr.de>; Mon, 25 Dec 2023 17:41:23 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 600341F2147D
+	for <lists+linux-edac@lfdr.de>; Mon, 25 Dec 2023 17:42:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1CF0A52F88;
-	Mon, 25 Dec 2023 17:41:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C51E952F8B;
+	Mon, 25 Dec 2023 17:42:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b="Znrfeoeo"
+	dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b="GUGCLXGK"
 X-Original-To: linux-edac@vger.kernel.org
 Received: from mout.web.de (mout.web.de [217.72.192.78])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1ED8C524CB;
-	Mon, 25 Dec 2023 17:41:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0280152F81;
+	Mon, 25 Dec 2023 17:42:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=web.de
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=web.de; s=s29768273;
-	t=1703526027; x=1704130827; i=markus.elfring@web.de;
-	bh=YNeHa6/Vcg1bfEGgSJaOADhspsb8ftwtO+I9y532uhg=;
+	t=1703526136; x=1704130936; i=markus.elfring@web.de;
+	bh=DN1DZ8Q4gr5JZBxx9y14h9ITgGHp31mL41Pkj2olJ1A=;
 	h=X-UI-Sender-Class:Date:Subject:From:To:Cc:References:
 	 In-Reply-To;
-	b=Znrfeoeoa59CuOHeUzQmncuMsM1Y4VQ0XkncIqn7XtNZGwrtQMF0faBI9ovmnqhb
-	 h/IHugT7JuSXCf4E+y4fjj0rYIIvdkf1cCMmGyf8+AQkhS+0eA5E4Z/3elC6imRjy
-	 V7kWsL/8CGR+aPU5krKuRgqnQ+Y5tWEjeEVwqlmLJ25PBA1g8NExBt62VKYURorZM
-	 dTs9/rZZOVKBb2hL4ZyAbAISHEpyy6hQ7C+3Y4Ata3jU8VICSyBJKyImuK8iRJ0Uh
-	 o5B5vGcHSdv1SZbrKm0QPtorK5vAUjto67uD6jmhspT4ABLR8UO7dtVvW3fuzUzSE
-	 ysn0oxYpMnauUtVUyw==
+	b=GUGCLXGK50GeUpvRJtg0JnwjPvlj9KjLdZ6hnHgCZ7nV6QgNCMmrcpzpwAQ70Ol7
+	 qO5R2gtqkc1MNHYTdwh7d631z7rgPuH2OicMr6JTF90SXOG9dLzxaT/JfmECvkJ8n
+	 +0mXs/5ehrzdTNqomfoAgwGC75lvL2pKxtYdyxt7mokmr4xuIL79ohwQ3iIEyBYcD
+	 bv9ryRjlgYqFi+ShqU8vXjnryXZgF3Bx6RraD0a2Ac4H2IeSRg/WW2aeyVQuGTRS8
+	 NH2qxhdbeSThfunmlodBXo4K3C1c1ULC1iqhOTD0sqeW4py2h7F6AG+MAk8RM+/dH
+	 xmVAZbuSnYkTz+9Ikw==
 X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6
 Received: from [192.168.178.21] ([94.31.85.95]) by smtp.web.de (mrweb105
- [213.165.67.124]) with ESMTPSA (Nemesis) id 1MJFhJ-1rXYP22PGN-00KnpZ; Mon, 25
- Dec 2023 18:40:27 +0100
-Message-ID: <0dcdeebf-46f1-41c1-b5c8-050bca5d8e1f@web.de>
-Date: Mon, 25 Dec 2023 18:40:26 +0100
+ [213.165.67.124]) with ESMTPSA (Nemesis) id 1N4eGT-1rAHrb34j9-011WsV; Mon, 25
+ Dec 2023 18:42:16 +0100
+Message-ID: <8ecc9bd5-9001-4844-a3ea-f2b522a73cd3@web.de>
+Date: Mon, 25 Dec 2023 18:42:15 +0100
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
@@ -46,7 +46,8 @@ List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: [PATCH 4/7] EDAC/amd64: Adjust error handling in probe_one_instance()
+Subject: [PATCH 5/7] EDAC/amd64: Improve two size determinations in
+ probe_one_instance()
 Content-Language: en-GB
 From: Markus Elfring <Markus.Elfring@web.de>
 To: linux-edac@vger.kernel.org, kernel-janitors@vger.kernel.org,
@@ -60,78 +61,60 @@ References: <8c9e2c01-9ed0-4392-af40-4e8eb393cb67@web.de>
 In-Reply-To: <8c9e2c01-9ed0-4392-af40-4e8eb393cb67@web.de>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:f5Qp4CpqwjoAivwiBL1Lm2FPsM4kPStagXR0AuWP/yqBlb8rDYh
- TGsTJqc0JXESt00jJjej09r/B1RehbaWI5IBVPdDpmTTnq45BahACNmZVWDn3FRx81Zd019
- sESxkopVNXd9Li6wxaD1yUB92f3FCdgKHeIglGnCgXc6E1LV6H5BYmGXsNPYoA/2fk0nR41
- 0g2SrHJ1AFtRe0pu1y22g==
+X-Provags-ID: V03:K1:2mmKeyB1681GDxQi1sKnPOxPX+IaW+IkMgtER2YiMnejmtGjbMk
+ 3Ko4EESXm92JaHnCN2m0nvkIeD/9+qCD+PJ9jEuMQFRWqwRgx9ByNpHoyRtd04L46Zb3wRx
+ 8tOs7YLcV+gQktydVjndK5GQX9qI3SopK+lN2So6YhhfQavedtD+5w3lBQZQlf5FXXlZ8JP
+ y4KJGoSkRArEGQ/wJuD7w==
 X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:EXXReGOboJ8=;cYxIzNPVpcl2/7PE0W8rYHHT23K
- BzTu8iAVmMVC7ICXKdmlrhf1+juIOFkpxKHhAykqEVNbiExeP0gZssJg6NzdclPsMBh6LJF1x
- mIxgYlLHxqoBWJqzpF0vdgU9R2+iTKzphHRkGUosCZBzGll/YH0nSvjQsOWHEAXFu6oT3EC5u
- nuyUsgqWKhBv0jOVdTmAHVwaxqpH94S7Dar+yqFbrrD8VC7cs/OSDy8m9bPPas+i/tHT+H5pH
- 4XjWXm5kWqYhvLE6n65QgB6XjAqzMHMV4757NmtWVLIzusA0qlD6oV45WxXTfQC/lfPz2WJFP
- 9ye4LuYvVeoFxkGUXVITr/RtOg6pQUY8oDxc0+YHDD70q9XBnlHDeYX0y3M+tTyVJSpXWjxwk
- EN8zpC1QQ8jA/8mfEbUx1RJtd3B3J78tWamplcbKK7I95d79y8Xhr8YhcQ6KOoCZkqE/xI011
- F8WYA3GJL7/n1zCpSAD/Z5P8AeaNjtG/szFImOiX+ksczPROIWHLbKib1pR1gNtXtVPGAqFML
- 4gOcDedLhpp7+pQLytALS+BGZFHQrr0AKmSxMFUHEF94rsTQkK5IK6PAwk7Td7PvTPGB75kbh
- dt79zorB+Q0fV1XFV0UGTQvoqedZDpWORXBLzhLSlNHJdUalzadfwfyWtUjuvqW7iJNp3Ayfu
- T1UabhreQACqC6XAmL5EU0AaFUvoEqAhesKe5+u8BcNONrzvFLifujRAiGwZgPCAj561M1Cnc
- 61a+MBK4CtxqADV5ZPNwCEbh7Dai2QyzcSTjwSAONNwPRvW9lSAiDlFcC9sZw8nxcKPEVOGAd
- AzLs5sHV0dUEkRRIwxQmVjO/L/Q7Jwak7ZGQbi9G7vj5nzoUuohs+d9bTBo3vQTwCfHW6WQAP
- wfS7MGcL1PMl2Ip5LTgx9bNF5T/Ruy1jQ9sSSnKWuGwEPQmHUrQXfW5z210US20r7rOIm6uqe
- yNp/Ig==
+UI-OutboundReport: notjunk:1;M01:P0:DHtw6zTu/ns=;qWnu/Dj6l7S/ReZRUeGYnZubsgz
+ alUOx57ZHhmLeJNK3u+AxhyisQjpXkeYOr6Gk7Z571mItKHhBpGwrNi8hyJERGTCZOoo74tyn
+ XxlyWNa2uBWxaYlboMZyHOZA3myfX7qOurv1LV4JKj9UeSClXSm762HBvIqzW03e0YRAwrPJo
+ 9RO5Ds4F6U52TZ/tzrfojla58eW+qLPlwJy0FENYXfA14+nZefXeivvyAXhHtPkSRR6nje5Fq
+ NKA7RSZaO+IZJJFIG/Q3NmB7g+t7kh7uWR2ENHwolyNC1Cj+3lymkqVd/PcLqptQScIHi3h8O
+ ePASCHgyQHiTW9wH170nnayAtHFkUApWmPFfx1wAFnJOkbiBVjvjN3xlWmGJWe66EZuQ2Jlsn
+ ytZcneh96QyDJr0OgSZFMjZcL0cJ+O2vGTcfSBXxzwQIucogVgAlJbTbr6i3KdGfMwdeAsc3m
+ 0fO8qO7dR88x2fpB/VcxflEXabc3CLC+RtwTKpkR4/sPEWII1dlGxwIsh/A13oupumo2LNmVO
+ t48TTbPeZISVqp9P8VcIpb7WsVeh/y0DCf4Jb2pAD5eOZvmZZfjXZgGHYSOv79Z8wZGSC/vyu
+ tJgfBmMZHQdheZA3Txh5l681+c4OcDEGaKUI5eNRu5ShvlwCOD8cNSDJLyK6itGTkZdVgi6/W
+ GyA46ziiIrgBci4qobkuYwcqOXVl1mhj1Lw1WMj3FgTfm/2v8MJLbCRIGu79Pljgoc9BK5dam
+ JttUoHilFg6GBKKd4jvxqXP3OEMwX5xWP6EjpxwsQk/tTv2z5hj1lMWVhneS9kw97rdluJVf6
+ IHUQM4vSFqaqolLsxdf8niYTzHpbUIydjqkZZcrTRC6DjwaEauwFzkOxjft37bqSicfIqThyr
+ qp6eK8wrRm8pNkINAZ5EutPoVfwQbJ71wXjOUQ2BXQkSv5LS/8NyAWA6V/5wkZrV6UyNSoiKu
+ oI0Sky7sHiQiGaCKjaiv2bUrz1s=
 
 From: Markus Elfring <elfring@users.sourceforge.net>
-Date: Mon, 25 Dec 2023 17:18:14 +0100
+Date: Mon, 25 Dec 2023 17:24:37 +0100
 
-1. Return directly after a call of the function =E2=80=9Ckzalloc=E2=80=9D =
-failed
-   at the beginning.
-
-2. Delete the label =E2=80=9Cerr_out=E2=80=9D which became unnecessary
-   with this refactoring.
-
-3. Move an error code assignment into an if branch.
+Replace the specification of data structures by pointer dereferences
+as the parameter for the operator =E2=80=9Csizeof=E2=80=9D to make the cor=
+responding size
+determination a bit safer according to the Linux coding style convention.
 
 Signed-off-by: Markus Elfring <elfring@users.sourceforge.net>
 =2D--
- drivers/edac/amd64_edac.c | 9 ++++-----
- 1 file changed, 4 insertions(+), 5 deletions(-)
+ drivers/edac/amd64_edac.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/edac/amd64_edac.c b/drivers/edac/amd64_edac.c
-index 49f3d9b54902..64680de47cab 100644
+index 64680de47cab..7536236df542 100644
 =2D-- a/drivers/edac/amd64_edac.c
 +++ b/drivers/edac/amd64_edac.c
-@@ -4268,16 +4268,17 @@ static int probe_one_instance(unsigned int nid)
+@@ -4268,13 +4268,13 @@ static int probe_one_instance(unsigned int nid)
  	struct ecc_settings *s;
  	int ret;
 
--	ret =3D -ENOMEM;
- 	s =3D kzalloc(sizeof(struct ecc_settings), GFP_KERNEL);
+-	s =3D kzalloc(sizeof(struct ecc_settings), GFP_KERNEL);
++	s =3D kzalloc(sizeof(*s), GFP_KERNEL);
  	if (!s)
--		goto err_out;
-+		return -ENOMEM;
+ 		return -ENOMEM;
 
  	ecc_stngs[nid] =3D s;
 
- 	pvt =3D kzalloc(sizeof(struct amd64_pvt), GFP_KERNEL);
--	if (!pvt)
-+	if (!pvt) {
-+		ret =3D -ENOMEM;
+-	pvt =3D kzalloc(sizeof(struct amd64_pvt), GFP_KERNEL);
++	pvt =3D kzalloc(sizeof(*pvt), GFP_KERNEL);
+ 	if (!pvt) {
+ 		ret =3D -ENOMEM;
  		goto err_settings;
-+	}
-
- 	pvt->mc_node_id	=3D nid;
- 	pvt->F3 =3D F3;
-@@ -4336,8 +4337,6 @@ static int probe_one_instance(unsigned int nid)
- err_settings:
- 	kfree(s);
- 	ecc_stngs[nid] =3D NULL;
--
--err_out:
- 	return ret;
- }
-
 =2D-
 2.43.0
 
