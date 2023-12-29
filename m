@@ -1,45 +1,68 @@
-Return-Path: <linux-edac+bounces-304-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-305-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id C3E5C81FE7C
-	for <lists+linux-edac@lfdr.de>; Fri, 29 Dec 2023 10:10:10 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E75EE81FEB2
+	for <lists+linux-edac@lfdr.de>; Fri, 29 Dec 2023 10:29:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F38941C222C0
-	for <lists+linux-edac@lfdr.de>; Fri, 29 Dec 2023 09:10:09 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A1C752818E3
+	for <lists+linux-edac@lfdr.de>; Fri, 29 Dec 2023 09:29:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ADE12107B9;
-	Fri, 29 Dec 2023 09:10:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A4EBB10A00;
+	Fri, 29 Dec 2023 09:29:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="i+ebZHQb"
+	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="aMJyCzf4"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 893AE10A01;
-	Fri, 29 Dec 2023 09:10:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77A6FC433C8;
-	Fri, 29 Dec 2023 09:10:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1703841005;
-	bh=ZgKa79LLzP6vIZslFUxfcIsAQWCsAAzIuqv/5/SkYOk=;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 473D811184;
+	Fri, 29 Dec 2023 09:29:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 5D84640E01A1;
+	Fri, 29 Dec 2023 09:29:16 +0000 (UTC)
+X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
+Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
+	header.d=alien8.de
+Received: from mail.alien8.de ([127.0.0.1])
+	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
+	with ESMTP id wnHWluQJn0sJ; Fri, 29 Dec 2023 09:29:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
+	t=1703842154; bh=4N7Kr/MGSg7tikDeaMTSR6yCealwOw+LHZRbN09RIsU=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=i+ebZHQb8M2+duW8p5ZIVBk3J0HimypcUPVvOwh+5SnHbPOXEsqJoB1KsY8HCvzYa
-	 QPBf/9sP00l702LU/dWOjP2dqPgflWJ8o+d/yvucSZDMeRX5Ql0AaN5h85BY5IxldX
-	 WrRZIm5q9EtVeLVV/17l4uTbWe3/YL1qZiFNVdUg=
-Date: Fri, 29 Dec 2023 09:10:02 +0000
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Borislav Petkov <bp@alien8.de>
+	b=aMJyCzf4v7ql2qBmsCvnNfdzwM6/znzmWeVs3SNkzOR6Gnf+gqtceacA6hDUteVqa
+	 Q77PMNMe3A4DsCyCsI8WkrrSB+vaBg6gewhx4p7RnoNZw0qWfTjJARmvgTMTS0FRwx
+	 8k5YharTbMf2jdEFNfVxCsAmRCc58bQo7cZKKpu51Be9PyGGpJ28qedYt1MOU7DPkU
+	 kALk7BCAmahZhoZXeVr96hFe8W3wmldFYeKFiEgvfA70bE9b3PhKJuHloB7EUvE4nj
+	 46XkE1m1+dQApy9WsaR6N8RlxctGaUFtog7hs3fiYMjpjuiaKcVihplY6uTVRJOAVh
+	 NQ5WkTsiBbLnAZN2id6Sc03jIe8XuLTMQ4nmKjm/7bfwutMwpgeP2W5NHgSWEUAOhj
+	 PKqnafZywXmFBRLDD4gqWvmFBWjq0c45XeHoUb7wBF33YurZi3r4LFoypt5Oj70hPI
+	 bk4AnFPYubi6XC3ogzRjUeEaTaTNOopzK2XwW2EHUppckA6JOcHRFHUrgHRumb+xBc
+	 gbx5cAToPFHji2eBBHYGHqYrd+O0HECI6UNXTOxndl2rimNBQje01YPTfnw2oDotVU
+	 ovBNbnqDIYI6QDRsW/jsYNWiR8+1cK2iPOSmmxI+3Fk/709/Aio3qfCeDezQeaoMlp
+	 I+/AAFNNAvV9iKGZRZ3zC0yU=
+Received: from zn.tnic (pd9530f8c.dip0.t-ipconnect.de [217.83.15.140])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
+	(No client certificate requested)
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 1C0A540E00CB;
+	Fri, 29 Dec 2023 09:29:07 +0000 (UTC)
+Date: Fri, 29 Dec 2023 10:29:01 +0100
+From: Borislav Petkov <bp@alien8.de>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Cc: tony.luck@intel.com, linux-kernel@vger.kernel.org,
 	James Morse <james.morse@arm.com>,
 	Mauro Carvalho Chehab <mchehab@kernel.org>,
 	Robert Richter <rric@kernel.org>, linux-edac@vger.kernel.org
 Subject: Re: [PATCH] EDAC: constantify the struct bus_type usage
-Message-ID: <2023122918-tiring-isolating-3f4a@gregkh>
+Message-ID: <20231229092901.GAZY6RXUVHsq1d8gEI@fat_crate.local>
 References: <2023121909-tribute-punctuate-4b22@gregkh>
  <20231228150003.GAZY2Nc38sAIa0bat/@fat_crate.local>
+ <2023122918-tiring-isolating-3f4a@gregkh>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
@@ -48,43 +71,28 @@ List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20231228150003.GAZY2Nc38sAIa0bat/@fat_crate.local>
+In-Reply-To: <2023122918-tiring-isolating-3f4a@gregkh>
 
-On Thu, Dec 28, 2023 at 04:00:03PM +0100, Borislav Petkov wrote:
-> On Tue, Dec 19, 2023 at 02:13:10PM +0100, Greg Kroah-Hartman wrote:
-> > In many places in the edac code, struct bus_type pointers are passed
-> > around and then eventually sent to the driver core, which can handle a
-> > constant pointer.  So constantify all of the edac usage of these as well
-> > because the data in them is never modified by the edac code either.
-> 
-> "constantify", huh? Not enough words in the English language so let's do
-> new ones?
-> 
-> :-)
+On Fri, Dec 29, 2023 at 09:10:02AM +0000, Greg Kroah-Hartman wrote:
+> Hey, we could be using German and then it would be something like
+> "Konstantifizierung" :)
 
-Hey, we could be using German and then it would be something like
-"Konstantifizierung" :)
+Ewww. Or to say in German: "Oh nee". :-P
 
-> So what's the plan with this "constantification"?
-> 
-> Because:
-> 
-> drivers/edac/edac_module.c: In function ‘edac_subsys_init’:
-> drivers/edac/edac_module.c:80:38: warning: passing argument 1 of ‘subsys_system_register’ discards ‘const’ qualifier from pointer target type [-Wdiscarded-qualifiers]
->    80 |         err = subsys_system_register(&edac_subsys, NULL);
->       |                                      ^~~~~~~~~~~~
-> In file included from ./include/linux/edac.h:16,
->                  from drivers/edac/edac_module.c:13:
-> ./include/linux/device.h:75:45: note: expected ‘struct bus_type *’ but argument is of type ‘const struct bus_type *’
->    75 | int subsys_system_register(struct bus_type *subsys,
->       |
+Lemme guess, that must sound similar in Dutch. google translate says
+"constantificatie". Fun.
 
-Ah, oops, that means this depends on a patch in my trees already that
-fix this up.  You can wait until after 6.8-rc1 to get to this, or I can
-take it in my tree if you want now, which ever is easiest for you.
+> Ah, oops, that means this depends on a patch in my trees already that
+> fix this up.  You can wait until after 6.8-rc1 to get to this, or I can
+> take it in my tree if you want now, which ever is easiest for you.
 
-thanks,
+Either's fine with me so I leave it up to you.
 
-greg k-h
+Thx.
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
 
