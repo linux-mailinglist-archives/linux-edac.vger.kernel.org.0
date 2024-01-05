@@ -1,39 +1,39 @@
-Return-Path: <linux-edac+bounces-312-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-313-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5F7E08242B4
-	for <lists+linux-edac@lfdr.de>; Thu,  4 Jan 2024 14:34:51 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id A6CD78250AA
+	for <lists+linux-edac@lfdr.de>; Fri,  5 Jan 2024 10:17:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id F29561F22857
-	for <lists+linux-edac@lfdr.de>; Thu,  4 Jan 2024 13:34:50 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 38B24285436
+	for <lists+linux-edac@lfdr.de>; Fri,  5 Jan 2024 09:17:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A2F6A219FC;
-	Thu,  4 Jan 2024 13:34:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B7EB822F06;
+	Fri,  5 Jan 2024 09:17:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="fmttV+Fw"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="eAGbYa45"
 X-Original-To: linux-edac@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 895F7224C2
-	for <linux-edac@vger.kernel.org>; Thu,  4 Jan 2024 13:34:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7CFA9C433C8;
-	Thu,  4 Jan 2024 13:34:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F44E22F03
+	for <linux-edac@vger.kernel.org>; Fri,  5 Jan 2024 09:17:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1E197C433C7;
+	Fri,  5 Jan 2024 09:17:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1704375287;
-	bh=LTyKe+k64m7X+ARP0Ap7IAKr34oUbJv+H5+g0s4HNAU=;
+	s=korg; t=1704446268;
+	bh=SMyEykfTIwRSNPjMtmb9UVjbMMwML2DMjeJrkE+n+wo=;
 	h=Subject:To:From:Date:From;
-	b=fmttV+Fwme+gz0pnzqnF5+KbZfprJWBPO2kqduN42KYUQ0EmdRsWZRacFjYCREqDa
-	 TqlKnM5YHUL6gmKF4khfIKn53w8ncSLFTLiCW6XdTUuKCQYAiDNzILs5j0J/AUVCGa
-	 MPNtUEhEO2M/En/VbBsV7G5mnuOERXxE0cNQQLMo=
-Subject: patch "EDAC: constantify the struct bus_type usage" added to driver-core-testing
+	b=eAGbYa45O/iDxUWoogSlqYEn/Rs+ZBO7R4nL+teiyHYaLRwcG2h3tupK2mffWgEOo
+	 y9Bx/iCKmOvoKBqhzL3voHvhypE6a7jMDUD7HUYCZ4yahCAuAzy85u99aaX0nGLqIG
+	 gWrwHM7IS1EeATtx0jydyFLCD7iHq74f6eMcZvu8=
+Subject: patch "EDAC: constantify the struct bus_type usage" added to driver-core-next
 To: gregkh@linuxfoundation.org,bp@alien8.de,james.morse@arm.com,linux-edac@vger.kernel.org,mchehab@kernel.org,rric@kernel.org,tony.luck@intel.com
 From: <gregkh@linuxfoundation.org>
-Date: Thu, 04 Jan 2024 14:34:44 +0100
-Message-ID: <2024010443-paramedic-limping-ac0f@gregkh>
+Date: Fri, 05 Jan 2024 10:17:23 +0100
+Message-ID: <2024010523-radial-skeleton-e0cf@gregkh>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
@@ -50,13 +50,13 @@ This is a note to let you know that I've just added the patch titled
 
 to my driver-core git tree which can be found at
     git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/driver-core.git
-in the driver-core-testing branch.
+in the driver-core-next branch.
 
 The patch will show up in the next release of the linux-next tree
 (usually sometime within the next 24 hours during the week.)
 
-The patch will be merged to the driver-core-next branch sometime soon,
-after it passes testing, and the merge window is open.
+The patch will also be merged in the next major kernel release
+during the merge window.
 
 If you have any questions about this process, please let me know.
 
